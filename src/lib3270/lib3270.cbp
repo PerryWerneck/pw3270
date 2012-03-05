@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="lib3270" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output=".bin/Debug/lib3270" prefix_auto="1" extension_auto="1" />
+				<Option object_output=".obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-DDEBUG=1" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output=".bin/Release/lib3270" prefix_auto="1" extension_auto="1" />
+				<Option object_output=".obj/Release/" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Option createStaticLib="1" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-DLIB3270=1" />
+			<Add directory="../include" />
+			<Add directory="../include/lib3270" />
+		</Compiler>
+		<Unit filename="Makefile.in" />
+		<Unit filename="XtGlue.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="actions.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="actionsc.h" />
+		<Unit filename="ansi.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="ansic.h" />
+		<Unit filename="apl.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="aplc.h" />
+		<Unit filename="appres.h" />
+		<Unit filename="arpa_telnet.h" />
+		<Unit filename="cg.h" />
+		<Unit filename="charset.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="charsetc.h" />
+		<Unit filename="childc.h" />
+		<Unit filename="control.in" />
+		<Unit filename="ctlr.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="ctlr.h" />
+		<Unit filename="ctlrc.h" />
+		<Unit filename="dialogc.h" />
+		<Unit filename="falbacks.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="ft.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="ft_cut.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="ft_cut_ds.h" />
+		<Unit filename="ft_cutc.h" />
+		<Unit filename="ft_dft.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="ft_dft_ds.h" />
+		<Unit filename="ft_dftc.h" />
+		<Unit filename="ftc.h" />
+		<Unit filename="globals.h" />
+		<Unit filename="glue.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="gluec.h" />
+		<Unit filename="host.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="hostc.h" />
+		<Unit filename="icmdc.h" />
+		<Unit filename="keypadc.h" />
+		<Unit filename="kybd.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="kybdc.h" />
+		<Unit filename="localdefs.h" />
+		<Unit filename="log.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="macros.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="menubarc.h" />
+		<Unit filename="mkversion.sh.in" />
+		<Unit filename="objects.h" />
+		<Unit filename="paste.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="popupsc.h" />
+		<Unit filename="print.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="printc.h" />
+		<Unit filename="printer.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="printerc.h" />
+		<Unit filename="proxy.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="proxyc.h" />
+		<Unit filename="resolver.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="resolverc.h" />
+		<Unit filename="resources.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="resources.h" />
+		<Unit filename="rpq.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="savec.h" />
+		<Unit filename="screen.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="screen.h" />
+		<Unit filename="screenc.h" />
+		<Unit filename="scrollc.h" />
+		<Unit filename="see.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="seec.h" />
+		<Unit filename="selectc.h" />
+		<Unit filename="session.h" />
+		<Unit filename="sf.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="sfc.h" />
+		<Unit filename="shlobj_missing.h" />
+		<Unit filename="statusc.h" />
+		<Unit filename="tables.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="tablesc.h" />
+		<Unit filename="telnet.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="telnetc.h" />
+		<Unit filename="testprogram.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="tn3270e.h" />
+		<Unit filename="toggles.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="togglesc.h" />
+		<Unit filename="trace_ds.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="trace_dsc.h" />
+		<Unit filename="utf8.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="utf8c.h" />
+		<Unit filename="util.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="utilc.h" />
+		<Unit filename="version.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="w3misc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="w3miscc.h" />
+		<Unit filename="widec.h" />
+		<Unit filename="winvers.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="winversc.h" />
+		<Unit filename="xio.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="xioc.h" />
+		<Unit filename="xl.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
