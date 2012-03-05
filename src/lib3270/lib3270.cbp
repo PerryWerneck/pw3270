@@ -7,8 +7,8 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output=".bin/Debug/lib3270" prefix_auto="1" extension_auto="1" />
-				<Option object_output=".obj/Debug/" />
+				<Option output=".bin\Debug\lib3270" prefix_auto="1" extension_auto="1" />
+				<Option object_output=".obj\Debug\" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
@@ -17,8 +17,8 @@
 				</Compiler>
 			</Target>
 			<Target title="Release">
-				<Option output=".bin/Release/lib3270" prefix_auto="1" extension_auto="1" />
-				<Option object_output=".obj/Release/" />
+				<Option output=".bin\Release\lib3270" prefix_auto="1" extension_auto="1" />
+				<Option object_output=".obj\Release\" />
 				<Option type="3" />
 				<Option compiler="gcc" />
 				<Option createDefFile="1" />
@@ -32,10 +32,14 @@
 			</Target>
 		</Build>
 		<Compiler>
+			<Add option="-Wshadow" />
+			<Add option="-Wredundant-decls" />
+			<Add option="-Wunreachable-code" />
+			<Add option="-Wmissing-declarations" />
 			<Add option="-Wall" />
 			<Add option="-DLIB3270=1" />
-			<Add directory="../include" />
-			<Add directory="../include/lib3270" />
+			<Add directory="..\include" />
+			<Add directory="..\include\lib3270" />
 		</Compiler>
 		<Unit filename="Makefile.in" />
 		<Unit filename="XtGlue.c">

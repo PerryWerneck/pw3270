@@ -142,12 +142,9 @@ enum iaction {
 	IA_IDLE
 };
 
-/* Simple global variables - At some point in the future they'll be moved to the session structure */
-
 LIB3270_INTERNAL int		COLS;
 LIB3270_INTERNAL int		ROWS;
-
-#include "session.h"
+LIB3270_INTERNAL H3270		h3270;
 
 #if defined(X3270_DISPLAY) /*[*/
 	LIB3270_INTERNAL Atom		a_3270, a_registry, a_encoding;
@@ -346,6 +343,14 @@ enum state_change
 	#define PT_OFF_THE_SPOT		"OffTheSpot"
 	#define PT_ON_THE_SPOT		"OnTheSpot"
 #endif /*]*/
+
+/** input key type */
+enum keytype
+{
+	KT_STD,
+	KT_GE
+};
+
 
 /* Library internal calls */
 void key_ACharacter(unsigned char c, enum keytype keytype, enum iaction cause,Boolean *skipped);

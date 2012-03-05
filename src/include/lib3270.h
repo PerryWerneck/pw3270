@@ -469,6 +469,34 @@
 	 */
 	LIB3270_EXPORT int lib3270_get_ssl_state(H3270 *h);
 
+	/** I/O callback table
+	 *
+	 * Structure with GUI unblocking I/O calls, used to replace the lib3270´s internal ones.
+	 *
+	 */
+	struct lib3270_io_callbacks
+	{
+		unsigned short sz;
+
+		unsigned long (*AddTimeOut)(unsigned long interval_ms, H3270 *session, void (*proc)(H3270 *session));
+		void 			(*RemoveTimeOut)(unsigned long timer);
+
+		unsigned long (*AddInput)(int source, H3270 *session, void (*fn)(H3270 *session));
+		void			(*RemoveInput)(unsigned long id);
+
+		unsigned long (*AddExcept)(int source, H3270 *session, void (*fn)(H3270 *session));
+
+		#if !defined(_WIN32) /*[*/
+			unsigned long (*AddOutput)(int source, H3270 *session, void (*fn)(H3270 *session));
+		#endif /*]*/
+
+		int 			(*callthread)(int(*callback)(H3270 *, void *), H3270 *session, void *parm);
+
+		int				(*Wait)(int seconds);
+		int 			(*RunPendingEvents)(int wait);
+
+	};
+
 	/**
 	 * Register application I/O Handlers.
 	 *
