@@ -1,0 +1,61 @@
+{
+   libfontconfig.so.Addr4
+   Memcheck:Addr4
+   obj:/usr/lib/libfontconfig.so.*
+}
+
+{
+   libfontconfig.so.malloc
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libfontconfig.so.*
+}
+
+{
+   libglib-calloc
+   Memcheck:Leak
+   fun:calloc
+   obj:/usr/lib/libglib-*
+}
+
+{
+   g_type_register_fundamental
+   Memcheck:Leak
+   ...
+   fun:g_type_register_fundamental
+}
+
+{
+   g_vfs_get_file_for_path
+   Memcheck:Leak
+   ...
+   fun:g_vfs_get_file_for_path
+}
+
+{
+   g_type_register_static
+   Memcheck:Leak
+   ...
+   fun:g_type_register_static
+}
+
+{
+   libxcb.so.malloc
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/libxcb.so.*
+}
+
+{
+   gtk_module_init
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/libgtk-*
+}
+
+{
+   g_type_create_instance
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/libgobject-*
+}

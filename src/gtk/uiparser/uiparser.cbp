@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="uiparser" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output=".bin\Debug\uiparser" prefix_auto="1" extension_auto="1" />
+				<Option object_output=".obj\Debug\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-DDEBUG=1" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output=".bin\Release\uiparser" prefix_auto="1" extension_auto="1" />
+				<Option object_output=".obj\Release\" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="`pkg-config gtk+-2.0 lib3270 --cflags`" />
+			<Add directory="..\..\include" />
+		</Compiler>
+		<Linker>
+			<Add option="`pkg-config gtk+-2.0 lib3270 --libs`" />
+		</Linker>
+		<Unit filename="..\common\config.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\globals.h" />
+		<Unit filename="accelerator.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="action.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="menu.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="menubar.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="menuitem.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="parsefile.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="parser.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="parser.h" />
+		<Unit filename="popup.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="private.h" />
+		<Unit filename="script.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="separator.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="sources.mak" />
+		<Unit filename="testprogram.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="toolbar.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="toolitem.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Extensions>
+			<code_completion />
+			<debugger />
+			<envvars />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

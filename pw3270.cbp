@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="pw3270" />
+		<Option makefile_is_custom="1" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output=".bin/Debug/pw3270" prefix_auto="1" extension_auto="1" />
+				<Option object_output=".obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Option use_console_runner="0" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-DDEBUG=1" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output=".bin/Release/pw3270" prefix_auto="1" extension_auto="1" />
+				<Option object_output=".obj/Release/" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="`pkg-config gtk+-3.0 lib3270 --cflags`" />
+			<Add directory="src/include" />
+		</Compiler>
+		<Linker>
+			<Add option="`pkg-config gtk+-3.0 lib3270 --libs`" />
+		</Linker>
+		<Unit filename="Makefile.in" />
+		<Unit filename="configure.ac" />
+		<Unit filename="src/gtk/Makefile.in" />
+		<Unit filename="src/gtk/actions.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/gtk/common/common.h" />
+		<Unit filename="src/gtk/common/config.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/gtk/fonts.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/gtk/globals.h" />
+		<Unit filename="src/gtk/main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/gtk/mainwindow.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/gtk/uiparser/accelerator.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/gtk/uiparser/action.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/gtk/uiparser/menu.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/gtk/uiparser/menubar.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/gtk/uiparser/menuitem.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/gtk/uiparser/parsefile.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/gtk/uiparser/parser.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/gtk/uiparser/parser.h" />
+		<Unit filename="src/gtk/uiparser/private.h" />
+		<Unit filename="src/gtk/uiparser/separator.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/gtk/uiparser/sources.mak" />
+		<Unit filename="src/gtk/uiparser/testprogram.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/gtk/uiparser/toolbar.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/gtk/uiparser/toolitem.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/gtk/v3270/draw.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/gtk/v3270/genmarshal" />
+		<Unit filename="src/gtk/v3270/iocallback.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/gtk/v3270/keyboard.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/gtk/v3270/oia.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/gtk/v3270/private.h" />
+		<Unit filename="src/gtk/v3270/sources.mak" />
+		<Unit filename="src/gtk/v3270/v3270.h" />
+		<Unit filename="src/gtk/v3270/widget.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/include/lib3270/config.h.in" />
+		<Unit filename="src/include/pw3270.h" />
+		<Unit filename="src/include/rules.mak.in" />
+		<Unit filename="valgrind.suppression" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+			<envvars />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
