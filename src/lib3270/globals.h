@@ -33,6 +33,7 @@
 /* Autoconf settings. */
 #include <lib3270/config.h>		/* autoconf settings */
 #include <lib3270.h>			/* lib3270 API calls and defs */
+#include "api.h"
 
 /* From glibconfig.h */
 #if defined(__SUNPRO_C) && (__SUNPRO_C >= 0x550)

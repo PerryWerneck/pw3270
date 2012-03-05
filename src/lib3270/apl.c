@@ -39,7 +39,7 @@
 
 #if defined(X3270_APL) /*[*/
 
-#include <X11/keysym.h>
+// #include <X11/keysym.h>
 
 #include "aplc.h"
 

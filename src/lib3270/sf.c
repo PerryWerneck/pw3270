@@ -62,7 +62,7 @@
 #include "trace_dsc.h"
 #include "utilc.h"
 
-#include <lib3270/api.h>
+#include "api.h"
 
 /* Externals: ctlr.c */
 // extern Boolean  screen_alt;

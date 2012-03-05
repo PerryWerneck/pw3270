@@ -33,6 +33,7 @@
 /* glue for missing Xt code */
 
 #include "globals.h"
+#include "api.h"
 #if defined(_WIN32) /*[*/
 #include "appres.h"
 #include "trace_dsc.h"
@@ -43,7 +44,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
-#include <X11/keysym.h>
+// #include <X11/keysym.h>
 
 #include <sys/time.h>
 #include <sys/types.h>
@@ -587,12 +588,6 @@ Free(void *p)
 }
 
 /*
-char *
-NewString(const char *s)
-{
-	return strcpy(Malloc(strlen(s) + 1), s);
-}
-*/
 
 static struct {
 	const char *name;
@@ -794,18 +789,16 @@ static struct {
 	{ "thorn", XK_thorn },
 	{ "ydiaeresis", XK_ydiaeresis },
 
-	/*
-	 * The following are, umm, hacks to allow symbolic names for
-	 * control codes.
-	 */
-#if !defined(_WIN32) /*[*/
+	// The following are, umm, hacks to allow symbolic names for
+	// control codes.
+#if !defined(_WIN32)
 	{ "BackSpace", 0x08 },
 	{ "Tab", 0x09 },
 	{ "Linefeed", 0x0a },
 	{ "Return", 0x0d },
 	{ "Escape", 0x1b },
 	{ "Delete", 0x7f },
-#endif /*]*/
+#endif
 
 	{ (char *)NULL, NoSymbol }
 };
@@ -824,7 +817,6 @@ StringToKeysym(char *s)
 	return NoSymbol;
 }
 
-/*
 char *
 KeysymToString(KeySym k)
 {

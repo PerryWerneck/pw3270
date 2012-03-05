@@ -57,7 +57,7 @@
 #include "resources.h"
 
 #include "utilc.h"
-#include <lib3270/api.h>
+#include "api.h"
 
 #define my_isspace(c)	isspace((unsigned char)c)
 

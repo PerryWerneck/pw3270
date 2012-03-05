@@ -39,7 +39,7 @@
 #if defined(X3270_APL) /*[*/
 #define XK_APL
 #endif /*]*/
-#include <X11/keysym.h>
+//#include <X11/keysym.h>
 
 #include <fcntl.h>
 #include "3270ds.h"
@@ -74,7 +74,7 @@
 #if defined(X3270_DBCS) /*[*/
 #include "widec.h"
 #endif /*]*/
-#include <lib3270/api.h>
+#include "api.h"
 
 /*---[ Struct ]-------------------------------------------------------------------------------------------------*/
 

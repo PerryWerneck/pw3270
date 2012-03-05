@@ -40,7 +40,7 @@
 #include "actionsc.h"
 #include "hostc.h"
 #include "telnetc.h"
-#include <toggle.h>
+#include "toggle.h"
 #include "utilc.h"
 #include "xioc.h"
 

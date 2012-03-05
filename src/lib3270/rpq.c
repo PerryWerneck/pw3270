@@ -48,7 +48,7 @@
 #include <netdb.h>
 #endif /*]*/
 
-#include <lib3270/api.h>
+#include "api.h"
 
 #include <assert.h>
 #include <stdarg.h>

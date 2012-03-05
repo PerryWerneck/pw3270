@@ -60,7 +60,7 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <lib3270/api.h>
+#include "api.h"
 
 #include "resolverc.h"
 #include "w3miscc.h"

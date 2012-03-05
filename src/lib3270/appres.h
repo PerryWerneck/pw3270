@@ -20,7 +20,7 @@
  *		tcl3270.
  */
 
-#include <lib3270/toggle.h>
+#include "toggle.h"
 
 /* Toggles */
 

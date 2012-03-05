@@ -83,7 +83,7 @@
 #include "winversc.h"
 #endif /*]*/
 
-#include "session.h"
+// #include "session.h"
 
 #if defined WIN32
 	BOOL WINAPI DllMain(HANDLE hinst, DWORD dwcallpurpose, LPVOID lpvResvd);

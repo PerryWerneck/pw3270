@@ -68,7 +68,7 @@
 #include <sys/stat.h>
 #endif /*]*/
 
-#include <lib3270/api.h>
+#include "api.h"
 
 /* Statics */
 

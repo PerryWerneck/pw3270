@@ -41,7 +41,7 @@
 
 #if defined(X3270_FT) /*[*/
 
-#include <lib3270/api.h>
+// #include <lib3270/api.h>
 
 #include "appres.h"
 #include "ctlr.h"

@@ -49,10 +49,7 @@
 #include "screenc.h"
 #include "trace_dsc.h"
 #include "togglesc.h"
-
-#if defined(LIB3270)
-	#include <lib3270/api.h>
-#endif
+#include "api.h"
 
 
 

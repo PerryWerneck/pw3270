@@ -117,23 +117,6 @@
 		#define LUNAME_SIZE				16
 		#define FULL_MODEL_NAME_SIZE	13
 
-
-		/* State change IDs. */
-		typedef enum _lib3270_state
-		{
-			LIB3270_STATE_RESOLVING,
-			LIB3270_STATE_HALF_CONNECT,
-			LIB3270_STATE_CONNECT,
-			LIB3270_STATE_3270_MODE,
-			LIB3270_STATE_LINE_MODE,
-			LIB3270_STATE_REMODEL,
-			LIB3270_STATE_PRINTER,
-			LIB3270_STATE_EXITING,
-			LIB3270_STATE_CHARSET,
-
-			LIB3270_STATE_USER				// Always the last one
-		} LIB3270_STATE;
-
 		#define ST_RESOLVING			LIB3270_STATE_RESOLVING
 		#define ST_HALF_CONNECT			LIB3270_STATE_HALF_CONNECT
 		#define ST_CONNECT				LIB3270_STATE_CONNECT
@@ -299,13 +282,6 @@
 			PW3270_DIALOG_USER
 		} PW3270_DIALOG;
 
-		/** input key type */
-		enum keytype
-		{
-			KT_STD,
-			KT_GE
-		};
-
 		/**  extended attributes */
 		struct ea
 		{
@@ -391,8 +367,6 @@
 
 		LIB3270_EXPORT int RegisterFTCallbacks(const struct filetransfer_callbacks *cbk);
 
-//		#define QueryCstate() lib3270_get_connection_state(NULL)
-
 		#define PCONNECTED		lib3270_pconnected(NULL)
 		#define HALF_CONNECTED	lib3270_half_connected(NULL)
 		#define CONNECTED		lib3270_connected(NULL)
@@ -406,44 +380,9 @@
 
 		#ifndef LIB3270
 
-
 			LIB3270_EXPORT enum ft_state	QueryFTstate(void);
 
-//			#define PCONNECTED	((int) QueryCstate() >= (int)RESOLVING)
-//			#define HALF_CONNECTED	(QueryCstate() == RESOLVING || QueryCstate() == PENDING)
-//			#define CONNECTED	((int) QueryCstate() >= (int)CONNECTED_INITIAL)
-//			#define IN_NEITHER	(QueryCstate() == CONNECTED_INITIAL)
-//			#define IN_ANSI		(QueryCstate() == CONNECTED_ANSI || QueryCstate() == CONNECTED_NVT)
-//			#define IN_3270		(QueryCstate() == CONNECTED_3270 || QueryCstate() == CONNECTED_TN3270E || QueryCstate() == CONNECTED_SSCP)
-//			#define IN_SSCP		(QueryCstate() == CONNECTED_SSCP)
-//			#define IN_TN3270E	(QueryCstate() == CONNECTED_TN3270E)
-//			#define IN_E		(QueryCstate() >= CONNECTED_INITIAL_E)
-
 		#endif
-
-		/* I/O processing */
-		struct lib3270_io_callbacks
-		{
-			unsigned short sz;
-
-			unsigned long (*AddTimeOut)(unsigned long interval_ms, H3270 *session, void (*proc)(H3270 *session));
-			void 			(*RemoveTimeOut)(unsigned long timer);
-
-			unsigned long (*AddInput)(int source, H3270 *session, void (*fn)(H3270 *session));
-			void			(*RemoveInput)(unsigned long id);
-
-			unsigned long (*AddExcept)(int source, H3270 *session, void (*fn)(H3270 *session));
-
-			#if !defined(_WIN32) /*[*/
-				unsigned long (*AddOutput)(int source, H3270 *session, void (*fn)(H3270 *session));
-			#endif /*]*/
-
-			int 			(*callthread)(int(*callback)(H3270 *, void *), H3270 *session, void *parm);
-
-			int				(*Wait)(int seconds);
-			int 			(*RunPendingEvents)(int wait);
-
-		};
 
 		#define Register3270IOCallbacks(x) lib3270_register_io_handlers(x)
 
@@ -608,12 +547,6 @@
 		LIB3270_EXPORT void screen_suspend(H3270 *session);
 		LIB3270_EXPORT void screen_disp(H3270 *session);
 
-		/* Console calls */
-		LIB3270_EXPORT HCONSOLE	  console_window_new(const char *title, const char *label);
-		LIB3270_EXPORT void	  console_window_delete(HCONSOLE hwnd);
-		LIB3270_EXPORT int		  console_window_append(HCONSOLE hwnd, const char *fmt, ...);
-		LIB3270_EXPORT char	* console_window_wait_for_user_entry(HCONSOLE hwnd);
-
         /* Cursor calls */
 		#define cursor_get_addr(void)	lib3270_get_cursor_address(NULL)
 		#define cursor_set_addr(x)		lib3270_set_cursor_address(NULL,x)
@@ -625,7 +558,6 @@
 		#define host_reconnect(w) lib3270_reconnect(NULL,w)
 
 		#define register_schange(tx,func) lib3270_register_schange(NULL,tx,func,NULL)
-		LIB3270_EXPORT void lib3270_register_schange(H3270 *h,LIB3270_STATE tx, void (*func)(H3270 *, int, void *),void *user_data);
 
 		/* Console/Trace window */
 		LIB3270_EXPORT HCONSOLE	  console_window_new(const char *title, const char *label);

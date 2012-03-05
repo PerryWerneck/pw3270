@@ -3392,11 +3392,11 @@ continue_tls(unsigned char *sbbuf, int len)
 #endif /*]*/
 
 /* Return the local address for the socket. */
-int net_getsockname(const H3270 *h3270, void *buf, int *len)
+int net_getsockname(const H3270 *session, void *buf, int *len)
 {
-	if (h3270->sock < 0)
+	if (session->sock < 0)
 		return -1;
-	return getsockname(h3270->sock, buf, (socklen_t *)(void *)len);
+	return getsockname(session->sock, buf, (socklen_t *)(void *)len);
 }
 
 /* Return a text version of the current proxy type, or NULL. */

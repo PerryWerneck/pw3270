@@ -60,7 +60,7 @@
 #include "errno.h"
 #include "statusc.h"
 #include "togglesc.h"
-#include <lib3270/api.h>
+#include "api.h"
 
 #if defined(_WIN32)
 	#include <windows.h>

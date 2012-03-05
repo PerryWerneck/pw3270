@@ -30,6 +30,7 @@
  *
  */
 
+ #include <errno.h>
  #include <string.h>
  #include <stdio.h>
  #include <lib3270.h>
@@ -59,15 +60,6 @@
  	return macro_list;
  }
 
-/*
- static char * value_as_string(int val)
- {
- 	char buffer[10];
- 	snprintf(buffer,9,"%d",val);
- 	return strdup(buffer);
- }
-*/
-
  static const char * get_state(H3270 *h)
  {
  	#define DECLARE_XLAT_STATE(x) { x, #x }
@@ -77,16 +69,16 @@
 		const char		* ret;
 	} xlat_state[] =
 	{
-		DECLARE_XLAT_STATE( NOT_CONNECTED 		),
-		DECLARE_XLAT_STATE( RESOLVING			),
-		DECLARE_XLAT_STATE( PENDING				),
-		DECLARE_XLAT_STATE( CONNECTED_INITIAL	),
-		DECLARE_XLAT_STATE( CONNECTED_ANSI		),
-		DECLARE_XLAT_STATE( CONNECTED_3270		),
-		DECLARE_XLAT_STATE( CONNECTED_INITIAL_E	),
-		DECLARE_XLAT_STATE( CONNECTED_NVT		),
-		DECLARE_XLAT_STATE( CONNECTED_SSCP		),
-		DECLARE_XLAT_STATE( CONNECTED_TN3270E	)
+		DECLARE_XLAT_STATE( LIB3270_NOT_CONNECTED 		),
+		DECLARE_XLAT_STATE( LIB3270_RESOLVING			),
+		DECLARE_XLAT_STATE( LIB3270_PENDING				),
+		DECLARE_XLAT_STATE( LIB3270_CONNECTED_INITIAL	),
+		DECLARE_XLAT_STATE( LIB3270_CONNECTED_ANSI		),
+		DECLARE_XLAT_STATE( LIB3270_CONNECTED_3270		),
+		DECLARE_XLAT_STATE( LIB3270_CONNECTED_INITIAL_E	),
+		DECLARE_XLAT_STATE( LIB3270_CONNECTED_NVT		),
+		DECLARE_XLAT_STATE( LIB3270_CONNECTED_SSCP		),
+		DECLARE_XLAT_STATE( LIB3270_CONNECTED_TN3270E	)
 	};
 
 	int f;
@@ -182,7 +174,7 @@
  {
  	const char *str = NULL;
 
-	if(query_3270_terminal_status() != LIB3270_STATUS_BLANK)
+	if(query_3270_terminal_status() != LIB3270_MESSAGE_NONE)
 	{
 		errno = EBUSY;
 		return NULL;

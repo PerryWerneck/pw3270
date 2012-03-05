@@ -17,7 +17,7 @@
  *		Global declarations for host.c.
  */
 
-#include <lib3270/api.h>
+#include "api.h"
 
 /*
 	struct host {

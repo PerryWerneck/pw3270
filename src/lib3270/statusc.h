@@ -13,7 +13,7 @@
 
 /* c3270 verson of statusc.h */
 
-#include <lib3270/api.h>
+#include "api.h"
 
 LIB3270_INTERNAL void 		status_compose(int on, unsigned char c, enum keytype keytype);
 LIB3270_INTERNAL void 		status_ctlr_done(H3270 *session);

@@ -44,7 +44,7 @@
 #if defined(X3270_APL) /*[*/
 #define XK_APL
 #endif /*]*/
-#include <X11/keysym.h>
+// #include <X11/keysym.h>
 
 #include <fcntl.h>
 #include "3270ds.h"
@@ -76,7 +76,7 @@
 #if defined(X3270_DBCS) /*[*/
 #include "widec.h"
 #endif /*]*/
-#include <lib3270/api.h>
+#include "api.h"
 
 
 /*#define KYBDLOCK_TRACE	1*/
@@ -3439,22 +3439,10 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *session, char *s, int len, int p
 					state = XGE;
 				break;
 			    case '[':	/* APL left bracket */
-				if (pasting && appres.apl_mode)
-					key_ACharacter(
-					    (unsigned char) XK_Yacute,
-					    KT_GE, ia, &skipped);
-				else
-					key_ACharacter((unsigned char) c,
-					    KT_STD, ia, &skipped);
+					key_ACharacter((unsigned char) c, KT_STD, ia, &skipped);
 				break;
 			    case ']':	/* APL right bracket */
-				if (pasting && appres.apl_mode)
-					key_ACharacter(
-					    (unsigned char) XK_diaeresis,
-					    KT_GE, ia, &skipped);
-				else
-					key_ACharacter((unsigned char) c,
-					    KT_STD, ia, &skipped);
+					key_ACharacter((unsigned char) c, KT_STD, ia, &skipped);
 				break;
 			default:
 #if defined(X3270_DBCS) /*[*/
