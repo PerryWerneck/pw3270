@@ -31,6 +31,7 @@
 
  #include "globals.h"
  #include "uiparser/parser.h"
+ #include <lib3270/actions.h>
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 

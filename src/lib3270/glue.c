@@ -181,7 +181,7 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 	hSession->cstate = NOT_CONNECTED;
 	hSession->oia_status = -1;
 
-	strncpy(hSession->full_model_name,"IBM-",FULL_MODEL_NAME_SIZE);
+	strncpy(hSession->full_model_name,"IBM-",LIB3270_FULL_MODEL_NAME_LENGTH);
 	hSession->model_name = &hSession->full_model_name[4];
 
 	/*

@@ -28,6 +28,8 @@
  */
 
  #include <gtk/gtk.h>
+ #include <lib3270.h>
+ #include <lib3270/session.h>
  #include "v3270.h"
  #include "private.h"
 

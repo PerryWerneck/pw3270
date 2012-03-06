@@ -109,8 +109,8 @@
 		#endif
 
 		/** 3270 connection handle */
-		#define LUNAME_SIZE				16
-		#define FULL_MODEL_NAME_SIZE	13
+//		#define LUNAME_SIZE				16
+//		#define FULL_MODEL_NAME_SIZE	13
 
 		#define ST_RESOLVING			LIB3270_STATE_RESOLVING
 		#define ST_HALF_CONNECT			LIB3270_STATE_HALF_CONNECT
@@ -168,97 +168,7 @@
 
 		typedef struct _h3270 H3270;
 
-		struct _h3270
-		{
-			unsigned short 	  sz;				/**< Struct size */
-
-			// Connection info
-			int					  secure_connection;
-			int      			  sock;					/**< Network socket */
-			int					  net_sock;
-			LIB3270_CSTATE		  cstate;				/**< Connection state */
-
-			#if defined(_WIN32) /*[*/
-			HANDLE				  sock_handle;
-			#endif /*]*/
-
-			char    			* hostname;
-			char				* connected_type;
-			char				* connected_lu;
-			char				  luname[LUNAME_SIZE+1];
-
-			char				  full_model_name[FULL_MODEL_NAME_SIZE+1];
-			char				* model_name;
-			int					  model_num;
-			char       	    	* termtype;
-
-			char				* current_host;			/**< the hostname part, stripped of qualifiers, luname and port number */
-			char           		* full_current_host;	/**< the entire string, for use in reconnecting */
-			char	       		* reconnect_host;
-			char	       		* qualified_host;
-			char	 			  auto_reconnect_inprogress;
-
-			LIB3270_MESSAGE		  oia_status;
-
-			unsigned char 		  oia_flag[LIB3270_FLAG_COUNT];
-
-			unsigned short		  current_port;
-
-			// screen info
-			int					  ov_rows;
-			int					  ov_cols;
-//			int					  first_changed;
-//			int					  last_changed;
-			int					  maxROWS;
-			int					  maxCOLS;
-			unsigned short		  rows;
-			unsigned short		  cols;
-			int					  cursor_addr;
-			char				  flipped;
-			int					  screen_alt;			/**< alternate screen? */
-			int					  is_altbuffer;
-
-			int					  formatted;			/**< set in screen_disp */
-
-			// host.c
-			char 				  std_ds_host;
-			char 				  no_login_host;
-			char 				  non_tn3270e_host;
-			char 				  passthru_host;
-			char 				  ssl_host;
-			char 				  ever_3270;
-
-			// Widget info
-			void				* widget;
-
-			// xio
-			unsigned long		  ns_read_id;
-			unsigned long		  ns_exception_id;
-			char				  reading;
-			char				  excepting;
-
-			/* State change callbacks. */
-			struct lib3270_state_callback *st_callbacks[N_ST];
-			struct lib3270_state_callback *st_last[N_ST];
-
-			/* Session based callbacks */
-			void (*configure)(H3270 *session, unsigned short rows, unsigned short cols);
-			void (*update)(H3270 *session, int baddr, unsigned char c, unsigned short attr, unsigned char cursor);
-			void (*changed)(H3270 *session, int bstart, int bend);
-
-			void (*update_cursor)(H3270 *session, unsigned short row, unsigned short col, unsigned char c, unsigned short attr);
-			void (*update_oia)(H3270 *session, OIA_FLAG id, unsigned char on);
-			void (*update_toggle)(H3270 *session, LIB3270_TOGGLE ix, unsigned char value, LIB3270_TOGGLE_TYPE reason, const char *name);
-			void (*update_luname)(H3270 *session, const char *name);
-			void (*update_status)(H3270 *session, LIB3270_STATUS id);
-			void (*update_connect)(H3270 *session, unsigned char connected);
-			void (*update_model)(H3270 *session, const char *name, int model, int rows, int cols);
-
-			void (*set_timer)(H3270 *session, unsigned char on);
-			void (*erase)(H3270 *session);
-			void (*cursor)(H3270 *session, LIB3270_CURSOR id);
-
-		};
+		#include <lib3270/session.h>
 
 		struct lib3270_state_callback
 		{

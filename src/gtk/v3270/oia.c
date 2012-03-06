@@ -28,6 +28,8 @@
  */
 
  #include <pw3270.h>
+ #include <lib3270.h>
+ #include <lib3270/session.h>
  #include <lib3270/config.h>
  #include <gtk/gtk.h>
  #include <string.h>
@@ -914,7 +916,7 @@ void v3270_stop_timer(GtkWidget *widget)
 
 }
 
-void v3270_update_oia(H3270 *session, OIA_FLAG id, unsigned char on)
+void v3270_update_oia(H3270 *session, LIB3270_FLAG id, unsigned char on)
 {
 	cairo_t *cr;
 	GdkRectangle *r;

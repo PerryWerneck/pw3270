@@ -71,7 +71,7 @@ $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT):	$(foreach SRC, $(basename $(SOURCES
 
 	@echo $@ ...
 	@$(MKDIR) `dirname $@`
-	@$(LD) -Wl,--rpath,.bin/Debug -o $@ $^ $(LIBS) $(LIB3270_LIBS)
+	@$(LD) -Wl,--rpath,.bin/Debug/lib -o $@ $^ $(LIBS) $(LIB3270_LIBS)
 
 run: $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
 	@cd "$(ROOTDIR)" ; .bin/Debug/$(PACKAGE_TARNAME)$(EXEEXT)

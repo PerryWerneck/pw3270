@@ -31,6 +31,8 @@
  */
 
  #include <pw3270.h>
+ #include <lib3270.h>
+ #include <lib3270/actions.h>
  #include <gtk/gtk.h>
  #include <string.h>
  #include <gdk/gdk.h>

@@ -339,7 +339,7 @@ split_host(char *s, char *ansi, char *std_ds, char *passthru,
 				}
 				break;
 			}
-			if (t - s < LUNAME_SIZE) {
+			if (t - s < LIB3270_LUNAME_LENGTH) {
 				xluname[t - s] = *t;
 			}
 		}

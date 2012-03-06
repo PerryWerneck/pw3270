@@ -946,6 +946,12 @@ LIB3270_EXPORT int lib3270_in_e(H3270 *h)
 	return (h->cstate >= CONNECTED_INITIAL_E);
 }
 
+LIB3270_EXPORT void * lib3270_get_widget(H3270 *h)
+{
+	CHECK_SESSION_HANDLE(h);
+	return h->widget;
+}
+
 LIB3270_EXPORT int lib3270_call_thread(int(*callback)(H3270 *h, void *), H3270 *h, void *parm)
 {
 	int rc;

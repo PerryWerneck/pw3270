@@ -48,7 +48,7 @@ sysconfdir=@sysconfdir@
 OBJDIR=.obj
 BINDIR=.bin
 
-DEPENDS=src/include/lib3270/* src/include/* Makefile
+DBGLIB=-L../../$(BINDIR)/Debug/lib -l3270
 
 #---[ Tools ]------------------------------------------------------------------
 
@@ -59,11 +59,11 @@ MKDIR=@MKDIR_P@
 
 Debug: $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
 
-$(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT): src/gtk/* $(DEPENDS) $(BINDIR)/Debug/lib/@DLLPREFIX@3270@DLLEXT@
-	@$(MAKE) ROOTDIR="../.." -C src/gtk ../../$(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
+$(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT): src/gtk/* $(BINDIR)/Debug/lib/@DLLPREFIX@3270@DLLEXT@ $(DEPENDS)
+	@$(MAKE) ROOTDIR="../.." LIB3270_LIBS="$(DBGLIB)" LIB3270_CFLAGS="-I../../src/include" -C src/gtk ../../$(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
 
-$(BINDIR)/Debug/lib/@DLLPREFIX@3270@DLLEXT@: src/lib3270/* $(DEPENDS)
-	@echo $(MAKE) ROOTDIR="../.." BINDBG=../../.bin/Debug/lib -C src/lib3270 ../../.bin/Debug/lib/@DLLPREFIX@3270@DLLEXT@
+$(BINDIR)/Debug/lib/@DLLPREFIX@3270@DLLEXT@: src/lib3270/* src/include/lib3270/* src/include/* Makefile
+	@$(MAKE) ROOTDIR="../.." BINDBG=../../.bin/Debug/lib -C src/lib3270 ../../.bin/Debug/lib/@DLLPREFIX@3270@DLLEXT@
 
 #---[ Targets ]----------------------------------------------------------------
 

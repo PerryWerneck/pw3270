@@ -564,6 +564,18 @@
 	 */
 	LIB3270_EXPORT int lib3270_call_thread(int(*callback)(H3270 *h, void *), H3270 *h, void *parm);
 
+	/**
+	 * Get the session's widget.
+	 *
+	 * Get the handle to the GtkWidget who's handling this session.
+	 *
+	 * @param h		Session handle
+	 *
+	 * @return Associated GtkWidget (can be null)
+	 *
+	 */
+	 LIB3270_EXPORT void * lib3270_get_widget(H3270 *h);
+
 #ifdef __cplusplus
 	}
 #endif
