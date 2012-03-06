@@ -429,9 +429,6 @@
 		#define set_3270_model(h,m)	lib3270_set_model(h,m)
 		#define get_3270_model(h) lib3270_get_model(h)
 
-		LOCAL_EXTERN int			  lib3270_set_model(H3270 *session, int model);
-		LOCAL_EXTERN int			  lib3270_get_model(H3270 *session);
-
 		/* Get connection info */
 		#define get_connected_lu(h) lib3270_get_luname(h)
 		#define get_current_host(h) lib3270_get_host(h)

@@ -576,6 +576,9 @@
 	 */
 	 LIB3270_EXPORT void * lib3270_get_widget(H3270 *h);
 
+	 LIB3270_EXPORT int lib3270_set_model(H3270 *session, int model);
+	 LIB3270_EXPORT int	lib3270_get_model(H3270 *session);
+
 #ifdef __cplusplus
 	}
 #endif

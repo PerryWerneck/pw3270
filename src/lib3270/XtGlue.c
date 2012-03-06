@@ -581,8 +581,7 @@ Realloc(void *p, size_t len)
 	return p;
 }
 
-void
-Free(void *p)
+void Free(void *p)
 {
 	if (p != NULL)
 		free(p);

@@ -391,7 +391,7 @@ static void update_model(H3270 *session, const char *name, int model, int rows, 
 static void v3270_init(v3270 *widget)
 {
 	trace("%s",__FUNCTION__);
-	widget->host = new_3270_session("");
+	widget->host = lib3270_session_new("");
 	widget->host->widget = widget;
 
 	widget->host->update			= v3270_update_char;

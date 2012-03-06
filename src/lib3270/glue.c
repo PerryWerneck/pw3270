@@ -419,10 +419,12 @@ static void initialize(void)
 	appres.highlight_underline = True;
 #endif /*]*/
 
-#if defined(C3270) && !defined(_WIN32) && !defined(LIB3270) /*[*/
-	/* Merge in the profile. */
+/*
+#if defined(C3270) && !defined(_WIN32) && !defined(LIB3270)
+	// Merge in the profile.
 	merge_profile();
-#endif /*]*/
+#endif
+*/
 
 }
 
