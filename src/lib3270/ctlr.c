@@ -1910,7 +1910,7 @@ ctlr_write_sscp_lu(unsigned char buf[], int buflen)
 	unsigned char *cp = buf;
 	int s_row;
 	unsigned char c;
-	int baddr;
+//	int baddr;
 
 	/*
 	 * The 3174 Functionl Description says that anything but NL, NULL, FM,
@@ -1956,8 +1956,8 @@ ctlr_write_sscp_lu(unsigned char buf[], int buflen)
 			    rcba(buffer_addr));
 			break;
 		case ORDER_SBA:
-			baddr = DECODE_BADDR(*(cp+1), *(cp+2));
-			trace_ds(" SetBufferAddress%s [ignored]\n", rcba(baddr));
+//			baddr = DECODE_BADDR(*(cp+1), *(cp+2));
+			trace_ds(" SetBufferAddress%s [ignored]\n", rcba(DECODE_BADDR(*(cp+1), *(cp+2))));
 			cp += 2;
 			i += 2;
 			break;

@@ -26,10 +26,15 @@
 # kraucer@bb.com.br			(Kraucer Fernandes Mazuco)
 #
 
+PACKAGE=@PACKAGE_NAME@
+
 CFLAGS=@CFLAGS@ -DAPPDATA=\"$(datarootdir)/$(PACKAGE_NAME)\" -I../../src/include
 SSL_CFLAGS=@SSL_CFLAGS@
 
-LIBS=@LIBS@ @SSL_LIBS@
+DLL_FLAGS=@DLL_FLAGS@
+LDFLAGS=@LDFLAGS@
+
+LIBS=@LIBS@ @SSL_LIBS@ @SOCKET_LIBS@
 
 DEBUG_CFLAGS=-DDEBUG=1 -g
 DEPENDS ?= *.h ../../src/include/*.h
@@ -50,6 +55,10 @@ OBJEXT=.o
 ROOTDIR ?= .
 OBJDIR  ?= $(ROOTDIR)/.obj
 BINDIR  ?= $(ROOTDIR)/.bin
+DEPENDS ?= *.h Makefile
+BINDBG  ?= $(BINDIR)/Debug
+
+OBJDBG = $(OBJDIR)/Debug
 
 #---[ Rules ]------------------------------------------------------------------
 
@@ -69,6 +78,14 @@ SOURCES = XtGlue.c actions.c ansi.c charset.c ctlr.c \
 
 #---[ Misc targets ]-----------------------------------------------------------
 
+Debug: $(BINDBG)/@DLLPREFIX@3270@DLLEXT@
+	
+
+$(BINDBG)/@DLLPREFIX@3270@DLLEXT@: $(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC)@OBJEXT@)
+	@echo $@ ...
+	@$(MKDIR) `dirname $@`
+	@$(LD) $(DLL_FLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
+
 version.c: ./mkversion.sh
 	@echo $@ ...
 	@chmod +x ./mkversion.sh
@@ -80,7 +97,7 @@ fallbacks.c: $(BINDIR)/mkfb@EXEEXT@ X3270.xad
 
 $(BINDIR)/mkfb@EXEEXT@: mkfb.c Makefile
 	@echo $@ ...
-	@$(MKDIR) $(BINDIR)
+	@$(MKDIR) `dirname $@`
 	@$(HOST_CC) -g -o $@ -D_WIN32 mkfb.c
 
 clean:

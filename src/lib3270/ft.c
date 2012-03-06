@@ -102,7 +102,7 @@ static const struct filetransfer_callbacks	*callbacks = NULL;		// Callbacks to m
 	register_schange(ST_3270_MODE, ft_in3270);
  }
 
- enum ft_state	QueryFTstate(void)
+ enum ft_state QueryFTstate(void)
  {
  	return ft_state;
  }
@@ -124,12 +124,12 @@ static const struct filetransfer_callbacks	*callbacks = NULL;		// Callbacks to m
  	return errcode;
  }
 
- LIB3270_EXPORT enum ft_state GetFileTransferState(void)
+ enum ft_state GetFileTransferState(void)
  {
 	return ft_state;
  }
 
- LIB3270_EXPORT int CancelFileTransfer(int force)
+ int CancelFileTransfer(int force)
  {
 	if (ft_state == FT_RUNNING)
 	{
@@ -148,7 +148,7 @@ static const struct filetransfer_callbacks	*callbacks = NULL;		// Callbacks to m
 	return ECANCELED;
  }
 
- LIB3270_EXPORT int BeginFileTransfer(unsigned short flags, const char *local, const char *remote, int lrecl, int blksize, int primspace, int secspace, int dft)
+ int BeginFileTransfer(unsigned short flags, const char *local, const char *remote, int lrecl, int blksize, int primspace, int secspace, int dft)
  {
  	static const char	*rec	= "fvu";
  	static const char	*un[]	= { "tracks", "cylinders", "avblock" };

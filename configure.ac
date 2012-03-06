@@ -75,7 +75,8 @@ AC_SUBST(PACKAGE_REVISION, "SVN_REV")
 
 #--[ Set host based options ]---------------------------------------------------------------------------------------------------------------------------------
 
-DLL_LIBS="-shared -Wl,-soname,\$(@F)"
+DLL_FLAGS="-shared -Wl,-soname,\$(@F)"
+SOCKET_LIBS=""
 
 DLLEXT=".so"
 OBJEXT=".o"
@@ -89,8 +90,26 @@ else
 	HOST_CC=$CC
 fi
 
+case "$host" in
+	*-mingw32)
+		DLLEXT=".dll"
+		EXEEXT=".exe"
+		SOCKET_LIBS="-lws2_32"
+		AC_PATH_TOOL([STRIP], [strip])
+		;;
+
+	*)
+		AC_PATH_TOOL([STRIP], [strip])
+
+esac
+
+
 AC_SUBST(HOST_CC)
 AC_SUBST(EXEEXT)
+AC_SUBST(DLLPREFIX)
+AC_SUBST(DLLEXT)
+AC_SUBST(DLL_FLAGS)
+AC_SUBST(SOCKET_LIBS)
 
 #--[ Debug/Release ]------------------------------------------------------------------------------------------------------------------------------------------
 

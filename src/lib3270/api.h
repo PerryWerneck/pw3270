@@ -44,12 +44,10 @@
 		#if defined(_WIN32)
 			#include <windows.h>
 
-			#define LIB3270_EXPORT	__declspec (dllexport)
-
 			#if defined (HAVE_GNUC_VISIBILITY)
-					#define LOCAL_EXTERN	__attribute__((visibility("hidden"))) extern
+				#define LOCAL_EXTERN	__attribute__((visibility("hidden"))) extern
 			#else
-					#define LOCAL_EXTERN extern
+				#define LOCAL_EXTERN extern
 			#endif
 
 		#else
@@ -57,14 +55,11 @@
 
 			// http://gcc.gnu.org/wiki/Visibility
 			#if defined(__SUNPRO_C) && (__SUNPRO_C >= 0x550)
-					#define LOCAL_EXTERN __hidden extern
-					#define LIB3270_EXPORT
+				#define LOCAL_EXTERN __hidden extern
 			#elif defined (HAVE_GNUC_VISIBILITY)
-					#define LOCAL_EXTERN	__attribute__((visibility("hidden"))) extern
-					#define LIB3270_EXPORT	__attribute__((visibility("default"))) extern
+				#define LOCAL_EXTERN	__attribute__((visibility("hidden"))) extern
 			#else
-					#define LOCAL_EXTERN extern
-					#define LIB3270_EXPORT
+				#define LOCAL_EXTERN extern
 			#endif
 
 
@@ -103,9 +98,9 @@
 		#endif
 
 
-		LIB3270_EXPORT int Set3270Log(const char *filename);
-		LIB3270_EXPORT int WriteLog(const char *module, const char *fmt, ...);
-		LIB3270_EXPORT int WriteRCLog(const char *module, int rc, const char *fmt, ...);
+		LOCAL_EXTERN int Set3270Log(const char *filename);
+		LOCAL_EXTERN int WriteLog(const char *module, const char *fmt, ...);
+		LOCAL_EXTERN int WriteRCLog(const char *module, int rc, const char *fmt, ...);
 
 		#ifdef LIB3270_MODULE_NAME
 			#define Log(fmt, ...)		WriteLog(LIB3270_MODULE_NAME,fmt,__VA_ARGS__)
@@ -314,12 +309,12 @@
 		/**
 		 * Return a "malloced" copy of the device buffer, set number of elements
 		 */
-		LIB3270_EXPORT struct ea * copy_device_buffer(int *el);
+//		LOCAL_EXTERN struct ea * copy_device_buffer(int *el);
 
 		/**
 		 * Set the contents of the device buffer for debugging purposes
 		 */
-		LIB3270_EXPORT int  set_device_buffer(struct ea *src, int el);
+//		LOCAL_EXTERN int  set_device_buffer(struct ea *src, int el);
 
 		/* File transfer */
 		#define FT_FLAG_RECEIVE					0x0001
@@ -348,9 +343,9 @@
 			FT_ABORT_SENT	/**< Abort sent; awaiting response */
 		};
 
-		LIB3270_EXPORT int 				BeginFileTransfer(unsigned short flags, const char *local, const char *remote, int lrecl, int blksize, int primspace, int secspace, int dft);
-		LIB3270_EXPORT int 				CancelFileTransfer(int force);
-		LIB3270_EXPORT enum ft_state	GetFileTransferState(void);
+		LOCAL_EXTERN int 				BeginFileTransfer(unsigned short flags, const char *local, const char *remote, int lrecl, int blksize, int primspace, int secspace, int dft);
+		LOCAL_EXTERN int 				CancelFileTransfer(int force);
+		LOCAL_EXTERN enum ft_state	GetFileTransferState(void);
 
 		struct filetransfer_callbacks
 		{
@@ -365,7 +360,7 @@
 
 		};
 
-		LIB3270_EXPORT int RegisterFTCallbacks(const struct filetransfer_callbacks *cbk);
+		LOCAL_EXTERN int RegisterFTCallbacks(const struct filetransfer_callbacks *cbk);
 
 		#define PCONNECTED		lib3270_pconnected(NULL)
 		#define HALF_CONNECTED	lib3270_half_connected(NULL)
@@ -380,7 +375,7 @@
 
 		#ifndef LIB3270
 
-			LIB3270_EXPORT enum ft_state	QueryFTstate(void);
+			LOCAL_EXTERN enum ft_state	QueryFTstate(void);
 
 		#endif
 
@@ -411,7 +406,7 @@
 			COUNTER_ID_USER
 		} COUNTER_ID;
 
-		LIB3270_EXPORT int query_counter(COUNTER_ID id);
+		LOCAL_EXTERN int query_counter(COUNTER_ID id);
 
 		#define	query_screen_change_counter() query_counter(COUNTER_ID_CTLR_DONE)
 
@@ -485,67 +480,67 @@
 			const char		*description;
 		};
 
-		LIB3270_EXPORT int Register3270ScreenCallbacks(const struct lib3270_screen_callbacks *cbk);
+		LOCAL_EXTERN int Register3270ScreenCallbacks(const struct lib3270_screen_callbacks *cbk);
 
 		#define new_3270_session(m) lib3270_session_new(m)
 
-		LIB3270_EXPORT const struct lib3270_option * get_3270_option_table(int sz);
+		LOCAL_EXTERN const struct lib3270_option * get_3270_option_table(int sz);
 
 		/* Popups */
-		LIB3270_EXPORT void Error(const char *fmt, ...);
-		LIB3270_EXPORT void Warning(const char *fmt, ...);
-		LIB3270_EXPORT void show_3270_popup_dialog(H3270 *session, PW3270_DIALOG type, const char *title, const char *msg, const char *fmt, ...);
+		LOCAL_EXTERN void Error(const char *fmt, ...);
+		LOCAL_EXTERN void Warning(const char *fmt, ...);
+		LOCAL_EXTERN void show_3270_popup_dialog(H3270 *session, PW3270_DIALOG type, const char *title, const char *msg, const char *fmt, ...);
 
 		/* Set/Get screen contents */
-		LIB3270_EXPORT int find_field_attribute(H3270 *session, int baddr);
-		LIB3270_EXPORT int find_field_length(H3270 *session, int baddr);
-		LIB3270_EXPORT unsigned char get_field_attribute(H3270 *session, int baddr);
-		LIB3270_EXPORT int screen_read(char *dest, int baddr, int count);
-		LIB3270_EXPORT void Input_String(const unsigned char *str);
-		LIB3270_EXPORT void screen_size(int *rows, int *cols);
+		LOCAL_EXTERN int find_field_attribute(H3270 *session, int baddr);
+		LOCAL_EXTERN int find_field_length(H3270 *session, int baddr);
+		LOCAL_EXTERN unsigned char get_field_attribute(H3270 *session, int baddr);
+		LOCAL_EXTERN int screen_read(char *dest, int baddr, int count);
+		LOCAL_EXTERN void Input_String(const unsigned char *str);
+		LOCAL_EXTERN void screen_size(int *rows, int *cols);
 
 		#define query_secure_connection(h) lib3270_get_ssl_state(h)
 		#define lib3270_paste_string(str) lib3270_set_string(NULL,str)
 		#define get_3270_terminal_size(h,r,c) lib3270_get_screen_size(h,r,c)
 
 		/* Keyboard */
-		LIB3270_EXPORT int			  emulate_input(char *s, int len, int pasting);
+		LOCAL_EXTERN int			  emulate_input(char *s, int len, int pasting);
 
 		/* Network related calls */
-		LIB3270_EXPORT int 			  Get3270Socket(void);
+		LOCAL_EXTERN int 			  Get3270Socket(void);
 
         /* Misc calls */
-		LIB3270_EXPORT void 		  popup_an_error(const char *fmt, ...);
-		LIB3270_EXPORT void 		  popup_system_error(const char *title, const char *message, const char *system);
-		LIB3270_EXPORT void 		  popup_a_sockerr(char *fmt, ...);
+		LOCAL_EXTERN void 		  popup_an_error(const char *fmt, ...);
+		LOCAL_EXTERN void 		  popup_system_error(const char *title, const char *message, const char *system);
+		LOCAL_EXTERN void 		  popup_a_sockerr(char *fmt, ...);
 
 		#define query_3270_terminal_status(void) lib3270_get_program_message(NULL)
 
 		#define set_3270_model(h,m)	lib3270_set_model(h,m)
 		#define get_3270_model(h) lib3270_get_model(h)
 
-		LIB3270_EXPORT int			  lib3270_set_model(H3270 *session, int model);
-		LIB3270_EXPORT int			  lib3270_get_model(H3270 *session);
+		LOCAL_EXTERN int			  lib3270_set_model(H3270 *session, int model);
+		LOCAL_EXTERN int			  lib3270_get_model(H3270 *session);
 
 		/* Get connection info */
 		#define get_connected_lu(h) lib3270_get_luname(h)
 		#define get_current_host(h) lib3270_get_host(h)
 
-		LIB3270_EXPORT SCRIPT_STATE status_script(SCRIPT_STATE state);
+		LOCAL_EXTERN SCRIPT_STATE status_script(SCRIPT_STATE state);
 
 		#define Toggled(ix) lib3270_get_toggle(NULL,ix)
 		#define CallAndWait(c,h,p) lib3270_call_thread(c,h,p)
 
-		LIB3270_EXPORT void RunPendingEvents(int wait);
-		LIB3270_EXPORT int Wait(int seconds);
+		LOCAL_EXTERN void RunPendingEvents(int wait);
+		LOCAL_EXTERN int Wait(int seconds);
 
-        LIB3270_EXPORT int ctlr_get_cols(void) __attribute__ ((deprecated));
-        LIB3270_EXPORT int ctlr_get_rows(void) __attribute__ ((deprecated));
+        LOCAL_EXTERN int ctlr_get_cols(void) __attribute__ ((deprecated));
+        LOCAL_EXTERN int ctlr_get_rows(void) __attribute__ ((deprecated));
 
         /* Screen calls */
-		LIB3270_EXPORT void screen_resume(H3270 *session);
-		LIB3270_EXPORT void screen_suspend(H3270 *session);
-		LIB3270_EXPORT void screen_disp(H3270 *session);
+		LOCAL_EXTERN void screen_resume(H3270 *session);
+		LOCAL_EXTERN void screen_suspend(H3270 *session);
+		LOCAL_EXTERN void screen_disp(H3270 *session);
 
         /* Cursor calls */
 		#define cursor_get_addr(void)	lib3270_get_cursor_address(NULL)
@@ -560,10 +555,10 @@
 		#define register_schange(tx,func) lib3270_register_schange(NULL,tx,func,NULL)
 
 		/* Console/Trace window */
-		LIB3270_EXPORT HCONSOLE	  console_window_new(const char *title, const char *label);
-		LIB3270_EXPORT void	  console_window_delete(HCONSOLE hwnd);
-		LIB3270_EXPORT int		  console_window_append(HCONSOLE hwnd, const char *fmt, ...);
-		LIB3270_EXPORT char	* console_window_wait_for_user_entry(HCONSOLE hwnd);
+		LOCAL_EXTERN HCONSOLE	  console_window_new(const char *title, const char *label);
+		LOCAL_EXTERN void	  console_window_delete(HCONSOLE hwnd);
+		LOCAL_EXTERN int		  console_window_append(HCONSOLE hwnd, const char *fmt, ...);
+		LOCAL_EXTERN char	* console_window_wait_for_user_entry(HCONSOLE hwnd);
 
 #ifdef __cplusplus
 	}

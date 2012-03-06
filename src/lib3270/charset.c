@@ -63,10 +63,6 @@
 #define EURO_SUFFIX	"-euro"
 #define ES_SIZE		(sizeof(EURO_SUFFIX) - 1)
 
-#if defined(_WIN32) || defined(LIB3270) /*[*/
-extern void set_display_charset(char *dcs);
-#endif /*]*/
-
 /* Globals. */
 Boolean charset_changed = False;
 #define DEFAULT_CGEN	0x02b90000
@@ -431,23 +427,27 @@ resource_charset(char *csname, char *cs, char *ftcs)
 	}
 #endif /*]*/
 
-#if defined(X3270_DISPLAY) || (defined(C3270) && !defined(_WIN32) && !defined(LIB3270)) /*[*/
+
+/*
+#if defined(X3270_DISPLAY) || (defined(C3270) && !defined(_WIN32) && !defined(LIB3270))
 	if (!screen_new_display_charsets(
 		    rcs? rcs: default_display_charset,
 		    csname)) {
 		return CS_PREREQ;
 	}
-#else /*][*/
-#if !defined(_WIN32) /*[*/
+#else
+*/
+
+#if !defined(_WIN32)
 	utf8_set_display_charsets(rcs? rcs: default_display_charset, csname);
-#endif /*]*/
-#if defined(X3270_DBCS) /*[*/
+#endif
+#if defined(X3270_DBCS)
 	if (n_rcs > 1)
 		dbcs = True;
 	else
 		dbcs = False;
-#endif /*]*/
-#endif /*]*/
+#endif
+/* #endif */
 
 	/* Set up the cgcsgid. */
 	set_cgcsgids(get_fresource("%s.%s", ResCodepage, csname));

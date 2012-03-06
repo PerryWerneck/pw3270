@@ -391,7 +391,7 @@ static union {
 socklen_t ha_len = sizeof(haddr);
 
 #if defined(_WIN32)
-LIB3270_EXPORT void popup_a_sockerr(char *fmt, ...)
+void popup_a_sockerr(char *fmt, ...)
 {
 	va_list args;
 	char buffer[4096];
@@ -404,7 +404,7 @@ LIB3270_EXPORT void popup_a_sockerr(char *fmt, ...)
 
 }
 #else
-LIB3270_EXPORT void popup_a_sockerr(char *fmt, ...)
+void popup_a_sockerr(char *fmt, ...)
 {
 	va_list args;
 	char buffer[4096];

@@ -61,6 +61,7 @@
 #include "statusc.h"
 #include "togglesc.h"
 #include "api.h"
+#include "charsetc.h"
 
 #if defined(_WIN32)
 	#include <windows.h>
@@ -79,7 +80,7 @@ extern char *profile_name;
 #endif
 
 static const struct lib3270_screen_callbacks *callbacks = NULL;
-static SCRIPT_STATE script_state = SCRIPT_STATE_NONE;
+// static SCRIPT_STATE script_state = SCRIPT_STATE_NONE;
 
 
 int lib3270_event_counter[COUNTER_ID_USER] = { 0, 0 };
@@ -699,12 +700,14 @@ static void status_printer(H3270 *session, int on, void *dunno)
 	set_status(session,OIA_FLAG_PRINTER,on);
 }
 
-LIB3270_EXPORT SCRIPT_STATE status_script(SCRIPT_STATE state)
+/*
+SCRIPT_STATE status_script(SCRIPT_STATE state)
 {
 	if(state != script_state && callbacks && callbacks->set_script)
 		callbacks->set_script(state);
 	return script_state = state;
 }
+*/
 
 void status_timing(H3270 *session, struct timeval *t0, struct timeval *t1)
 {
@@ -781,7 +784,7 @@ int Register3270ScreenCallbacks(const struct lib3270_screen_callbacks *cbk)
 	return 0;
 }
 
-LIB3270_EXPORT void show_3270_popup_dialog(H3270 *session, PW3270_DIALOG type, const char *title, const char *msg, const char *fmt, ...)
+void show_3270_popup_dialog(H3270 *session, PW3270_DIALOG type, const char *title, const char *msg, const char *fmt, ...)
 {
 	if(!fmt)
 		fmt = "";
@@ -887,7 +890,7 @@ extern void popup_an_error(const char *fmt, ...)
 
 }
 
-LIB3270_EXPORT void popup_system_error(const char *title, const char *message, const char *system)
+void popup_system_error(const char *title, const char *message, const char *system)
 {
 	if(callbacks && callbacks->SysError)
 	{
@@ -898,7 +901,8 @@ LIB3270_EXPORT void popup_system_error(const char *title, const char *message, c
 	popup_an_error("%s\n%s\n%s",title,message,system);
 }
 
-LIB3270_EXPORT int set_device_buffer(struct ea *src, int el)
+/*
+int set_device_buffer(struct ea *src, int el)
 {
 
 	if(el > (h3270.maxROWS * h3270.maxCOLS))
@@ -910,6 +914,7 @@ LIB3270_EXPORT int set_device_buffer(struct ea *src, int el)
 
 	return 0;
 }
+*/
 
 LIB3270_ACTION( testpattern )
 {
@@ -997,6 +1002,7 @@ LIB3270_ACTION( testpattern )
 	return 0;
 }
 
+/*
 LIB3270_EXPORT struct ea * copy_device_buffer(int *el)
 {
 	int			sz		=  sizeof(struct ea) * (h3270.maxROWS * h3270.maxCOLS);
@@ -1006,7 +1012,9 @@ LIB3270_EXPORT struct ea * copy_device_buffer(int *el)
 		*el = (h3270.maxROWS * h3270.maxCOLS);
 	return ret;
 }
+*/
 
+/*
 LIB3270_EXPORT HCONSOLE console_window_new(const char *title, const char *label)
 {
 	if(callbacks && callbacks->console_new )
@@ -1041,5 +1049,5 @@ LIB3270_EXPORT char * console_window_wait_for_user_entry(HCONSOLE hwnd)
 		return callbacks->console_entry(hwnd);
 	return NULL;
 }
-
+*/
 

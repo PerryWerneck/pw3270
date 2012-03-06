@@ -39,6 +39,7 @@
 #include "trace_dsc.h"
 #include "xioc.h"
 #endif /*]*/
+#include "utilc.h"
 
 #include <stdio.h>
 #include <stdlib.h>

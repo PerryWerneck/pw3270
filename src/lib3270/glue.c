@@ -96,7 +96,7 @@
 	static int init_calls = 0;
 #endif
 
-// extern void usage(char *);
+ static void lib3270_session_init(H3270 *hSession, const char *model);
 
  #define LAST_ARG	"--"
 
@@ -166,7 +166,7 @@ void lib3270_session_free(H3270 *h)
 
 }
 
-void lib3270_session_init(H3270 *hSession, const char *model)
+static void lib3270_session_init(H3270 *hSession, const char *model)
 {
 	int 	ovc, ovr;
 	char	junk;

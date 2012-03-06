@@ -11,6 +11,9 @@
  * FOR A PARTICULAR PURPOSE.  See the file LICENSE for more details.
  */
 
+#ifndef SCREENC_H_INCLUDED
+
+#define SCREENC_H_INCLUDED 1
 /* c3270 version of screenc.h */
 
 #define blink_start()
@@ -65,3 +68,5 @@ LIB3270_INTERNAL int windows_cp;
 */
 
 LIB3270_INTERNAL void screen_title(char *text);
+
+#endif // SCREENC_H_INCLUDED
