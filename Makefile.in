@@ -64,6 +64,9 @@ $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT): src/gtk/* $(BINDIR)/Debug/lib/@DLLP
 $(BINDIR)/Debug/lib/@DLLPREFIX@3270@DLLEXT@: src/lib3270/* src/include/lib3270/* src/include/* Makefile
 	@$(MAKE) BINDBG=../../.bin/Debug/lib -C src/lib3270 ../../.bin/Debug/lib/@DLLPREFIX@3270@DLLEXT@
 
+run: $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
+	$(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
+
 #---[ Targets ]----------------------------------------------------------------
 
 
