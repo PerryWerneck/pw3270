@@ -46,7 +46,7 @@ docdir=@docdir@
 sysconfdir=@sysconfdir@
 
 BINDIR=.bin
-
+EXEEXT=@EXEEXT@
 DBGLIB=-L../../$(BINDIR)/Debug/lib -l3270
 
 #---[ Tools ]------------------------------------------------------------------
@@ -65,7 +65,7 @@ $(BINDIR)/Debug/lib/@DLLPREFIX@3270@DLLEXT@: src/lib3270/* src/include/lib3270/*
 	@$(MAKE) BINDBG=../../.bin/Debug/lib -C src/lib3270 ../../.bin/Debug/lib/@DLLPREFIX@3270@DLLEXT@
 
 run: $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
-	$(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
+	@PATH="$(BINDIR)/Debug/lib:$(PATH)" "$(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)"
 
 #---[ Targets ]----------------------------------------------------------------
 

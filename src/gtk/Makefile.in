@@ -41,6 +41,8 @@ localedir=@localedir@
 docdir=@docdir@
 sysconfdir=@sysconfdir@
 
+EXEEXT=@EXEEXT@
+
 #---[ Sources ]----------------------------------------------------------------
 
 include common/sources.mak
