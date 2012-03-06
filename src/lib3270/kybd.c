@@ -1292,15 +1292,15 @@ retry:
 void key_ACharacter(unsigned char c, enum keytype keytype, enum iaction cause,Boolean *skipped)
 {
 //	register int i;
-	struct akeysym ak;
+//	struct akeysym ak;
 
 //	reset_idle_timer();
 
 	if (skipped != NULL)
 		*skipped = False;
 
-	ak.keysym = c;
-	ak.keytype = keytype;
+//	ak.keysym = c;
+//	ak.keytype = keytype;
 
 /*
 	switch (composing) {
@@ -2322,7 +2322,7 @@ LIB3270_CURSOR_ACTION( newline )
 
 /*
  * DUP key
- */
+ */ /*
 void
 Dup_action(Widget w unused, XEvent *event, String *params, Cardinal *num_params)
 {
@@ -2331,18 +2331,18 @@ Dup_action(Widget w unused, XEvent *event, String *params, Cardinal *num_params)
 		enq_ta(Dup_action, CN, CN);
 		return;
 	}
-#if defined(X3270_ANSI) /*[*/
+#if defined(X3270_ANSI)
 	if (IN_ANSI)
 		return;
-#endif /*]*/
+#endif
 	if (key_Character(EBC_dup, False, False, NULL))
 		cursor_move(next_unprotected(h3270.cursor_addr));
 }
-
+*/
 
 /*
  * FM key
- */
+ */ /*
 void
 FieldMark_action(Widget w unused, XEvent *event, String *params, Cardinal *num_params)
 {
@@ -2351,12 +2351,12 @@ FieldMark_action(Widget w unused, XEvent *event, String *params, Cardinal *num_p
 		enq_ta(FieldMark_action, CN, CN);
 		return;
 	}
-#if defined(X3270_ANSI) /*[*/
+#if defined(X3270_ANSI)
 	if (IN_ANSI)
 		return;
-#endif /*]*/
+#endif
 	(void) key_Character(EBC_fm, False, False, NULL);
-}
+} */
 
 /**
  * Send an "Enter" action.

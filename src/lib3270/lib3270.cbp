@@ -7,8 +7,8 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output=".bin\Debug\lib3270" prefix_auto="1" extension_auto="1" />
-				<Option object_output=".obj\Debug\" />
+				<Option output=".bin/Debug/lib3270" prefix_auto="1" extension_auto="1" />
+				<Option object_output=".obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
@@ -17,8 +17,8 @@
 				</Compiler>
 			</Target>
 			<Target title="Release">
-				<Option output=".bin\Release\lib3270" prefix_auto="1" extension_auto="1" />
-				<Option object_output=".obj\Release\" />
+				<Option output=".bin/Release/lib3270" prefix_auto="1" extension_auto="1" />
+				<Option object_output=".obj/Release/" />
 				<Option type="3" />
 				<Option compiler="gcc" />
 				<Option createDefFile="1" />
@@ -38,10 +38,12 @@
 			<Add option="-Wmissing-declarations" />
 			<Add option="-Wall" />
 			<Add option="-DLIB3270=1" />
-			<Add directory="..\include" />
-			<Add directory="..\include\lib3270" />
+			<Add directory="../include" />
+			<Add directory="../include/lib3270" />
 		</Compiler>
+		<Unit filename="../include/lib3270/config.h.in" />
 		<Unit filename="Makefile.in" />
+		<Unit filename="X11keysym.h" />
 		<Unit filename="XtGlue.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -65,14 +67,13 @@
 		</Unit>
 		<Unit filename="charsetc.h" />
 		<Unit filename="childc.h" />
-		<Unit filename="control.in" />
 		<Unit filename="ctlr.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="ctlr.h" />
 		<Unit filename="ctlrc.h" />
 		<Unit filename="dialogc.h" />
-		<Unit filename="falbacks.c">
+		<Unit filename="fallbacks.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="ft.c">

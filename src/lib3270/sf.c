@@ -685,11 +685,6 @@ do_query_reply(unsigned char code)
 			obptr_len = obuf + obptr0;
 			len = (obptr - obuf) - obptr0;
 			SET16(obptr_len, len);
-#ifdef DEBUG
-			trace_ds("\tStructuredField len=%d\n",len);
-			trace_netdata('\t', obuf + obptr0, len);
-#endif
-
 		} else {
 			/* Back over the header. */
 			obptr -= 4;

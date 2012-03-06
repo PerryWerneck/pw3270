@@ -33,8 +33,11 @@
  #include <errno.h>
  #include <string.h>
  #include <stdio.h>
+ #include <malloc.h>
  #include <lib3270.h>
  #include <lib3270/macros.h>
+ #include <stdlib.h>
+ #include "api.h"
 
  #define LIB3270_MACRO_ENTRY( name )  { #name, lib3270_macro_ ## name }
 
@@ -107,11 +110,9 @@
 	switch(argc)
 	{
 	case 1:	// Get entire screen
-		get_3270_terminal_size(hSession,&rows,&cols);
+		lib3270_get_screen_size(hSession,&rows,&cols);
 		qtd = (rows*(cols+1)+1);
 		buffer = malloc(qtd+2);
-
-		Trace("Screen buffer size: %d (%dx%d)",qtd,rows,cols);
 
 		memset(buffer,0,qtd+1);
 		start = qtd = 0;
@@ -124,7 +125,6 @@
 		}
 		buffer[qtd] = 0;
 
-		Trace("Bytes read: %d",qtd);
 		return buffer;
 
 	case 2:	// Just size, get current cursor position
@@ -138,7 +138,7 @@
 		break;
 
 	case 4:	// Get start position from row/col
-		get_3270_terminal_size(hSession,&rows,&cols);
+		lib3270_get_screen_size(hSession,&rows,&cols);
 
 		row = atoi(argv[1])-1;
 		col = atoi(argv[2])-1;
@@ -173,12 +173,15 @@
  LIB3270_MACRO( set )
  {
  	const char *str = NULL;
+ 	int rows, cols;
 
-	if(query_3270_terminal_status() != LIB3270_MESSAGE_NONE)
+	if(lib3270_get_program_message(hSession) != LIB3270_MESSAGE_NONE)
 	{
 		errno = EBUSY;
 		return NULL;
 	}
+
+	lib3270_get_screen_size(hSession,&rows,&cols);
 
 	switch(argc)
 	{
@@ -191,12 +194,12 @@
 		break;
 
 	case 3:
-        cursor_set_addr(atoi(argv[1]));
+        lib3270_set_cursor_address(hSession,atoi(argv[1]));
 		str = argv[2];
         break;
 
     case 4:
-        cursor_set_addr((atoi(argv[1])-1) * ctlr_get_cols() + (atoi(argv[2])-1));
+        lib3270_set_cursor_address(hSession,(atoi(argv[1])-1) * cols + (atoi(argv[2])-1));
 		str = argv[3];
         break;
 
@@ -213,9 +216,9 @@
 
  LIB3270_MACRO( status )
  {
-	const char	* luname	= (const char *) get_connected_lu(hSession);
- 	const char	* cstate	= get_state(hSession);
- 	const char	* host		= (const char *) get_current_host(hSession);
+	const char	* luname	= (const char *) lib3270_get_luname(hSession);
+ 	const char	* state		= get_state(hSession);
+ 	const char	* host		= (const char *) lib3270_get_host(hSession);
  	char		* rsp;
  	size_t		  sz;
 
@@ -225,9 +228,9 @@
 	if(!host)
 		host = "-";
 
-	sz = strlen(luname)+strlen(cstate)+strlen(host)+4;
+	sz = strlen(luname)+strlen(state)+strlen(host)+4;
 	rsp = malloc(sz+1);
- 	snprintf(rsp,sz,"%s %s %s",cstate,luname,host);
+ 	snprintf(rsp,sz,"%s %s %s",state,luname,host);
  	return rsp;
  }
 
@@ -238,7 +241,7 @@
 
  LIB3270_MACRO( luname )
  {
-	const char	* luname = (const char *) get_connected_lu(hSession);
+	const char	* luname = (const char *) lib3270_get_luname(hSession);
 	return strdup(luname ? luname : "none" );
  }
 
@@ -286,15 +289,15 @@
 	switch(argc)
 	{
 	case 1:
-		rc = host_reconnect(0);
+		rc = lib3270_reconnect(hSession,0);
 		break;
 
 	case 2:
-		rc = host_connect(argv[1],0);
+		rc = lib3270_connect(hSession,argv[1],0);
 		break;
 
 	case 3:
-		rc = host_connect(argv[1],atoi(argv[2]));
+		rc = lib3270_connect(hSession,argv[1],atoi(argv[2]));
 		break;
 
 	default:

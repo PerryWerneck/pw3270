@@ -68,7 +68,13 @@ AC_SUBST(REXXC)
 AC_PATH_TOOL([VALGRIND], [valgrind], [no])
 AC_PATH_TOOL([REXXCONFIG], [oorexx-config], [no])
 
-#--[ OS ]-----------------------------------------------------------------------------------------------------------------------------------------------------
+#--[ Version & Revision ]-------------------------------------------------------------------------------------------------------------------------------------
+
+AC_DEFINE(PACKAGE_REVISION,"SVN_REV")
+AC_SUBST(PACKAGE_REVISION, "SVN_REV")
+
+#--[ Set host based options ]---------------------------------------------------------------------------------------------------------------------------------
+
 DLL_LIBS="-shared -Wl,-soname,\$(@F)"
 
 DLLEXT=".so"
@@ -77,6 +83,13 @@ EXEEXT=""
 DLLPREFIX="lib"
 
 
+if test $host != $build; then
+	AC_CHECK_PROGS(HOST_CC, gcc cc)
+else
+	HOST_CC=$CC
+fi
+
+AC_SUBST(HOST_CC)
 AC_SUBST(EXEEXT)
 
 #--[ Debug/Release ]------------------------------------------------------------------------------------------------------------------------------------------
@@ -170,6 +183,8 @@ AC_CONFIG_FILES([
 
 	Makefile
 	src/include/rules.mak
+	src/lib3270/Makefile
+	src/lib3270/mkversion.sh
 	src/gtk/Makefile
 	src/gtk/uiparser/Makefile
 

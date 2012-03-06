@@ -44,7 +44,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
-// #include <X11/keysym.h>
+#include "X11keysym.h"
 
 #include <sys/time.h>
 #include <sys/types.h>
@@ -587,8 +587,6 @@ Free(void *p)
 		free(p);
 }
 
-/*
-
 static struct {
 	const char *name;
 	KeySym keysym;
@@ -803,8 +801,7 @@ static struct {
 	{ (char *)NULL, NoSymbol }
 };
 
-KeySym
-StringToKeysym(char *s)
+KeySym StringToKeysym(char *s)
 {
 	int i;
 
@@ -817,8 +814,7 @@ StringToKeysym(char *s)
 	return NoSymbol;
 }
 
-char *
-KeysymToString(KeySym k)
+const char * KeysymToString(KeySym k)
 {
 	int i;
 
@@ -828,7 +824,7 @@ KeysymToString(KeySym k)
 	}
 	return (char *)NULL;
 }
-*/
+
 
 /* Timeouts. */
 

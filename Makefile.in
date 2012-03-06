@@ -24,7 +24,6 @@
 # erico.mendonca@gmail.com	(Erico Mascarenhas de Mendonça)
 # licinio@bb.com.br		(Licínio Luis Branco)
 # kraucer@bb.com.br		(Kraucer Fernandes Mazuco)
-# macmiranda@bb.com.br		(Marco Aurélio Caldas Miranda)
 #
 
 #---[ Configuration values ]---------------------------------------------------
@@ -32,8 +31,6 @@
 PACKAGE_NAME=@PACKAGE_NAME@
 PACKAGE_VERSION=@PACKAGE_VERSION@
 PACKAGE_TARNAME=@PACKAGE_TARNAME@
-
-EXEEXT=@EXEEXT@
 
 #---[ Paths ]------------------------------------------------------------------
 
@@ -65,12 +62,10 @@ $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT): src/gtk/* src/include/lib3270/* src
 
 #---[ Targets ]----------------------------------------------------------------
 
-run:
-	@$(MAKE) ROOTDIR="../.." -C src/gtk run
-
 clean:
 	@rm -fr $(OBJDIR)
 	@rm -fr $(BINDIR)
+	@make -C src/lib3270 clean
 	@make -C src/gtk clean
 
 distclean: clean
