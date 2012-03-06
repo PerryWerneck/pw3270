@@ -114,7 +114,9 @@
 		<Unit filename="src/gtk/v3270/widget.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/include/lib3270.h" />
 		<Unit filename="src/include/lib3270/config.h.in" />
+		<Unit filename="src/include/lib3270/session.h" />
 		<Unit filename="src/include/pw3270.h" />
 		<Unit filename="src/include/rules.mak.in" />
 		<Unit filename="src/lib3270/3270ds.h" />
