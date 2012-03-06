@@ -778,9 +778,12 @@ H3270 * v3270_get_session(GtkWidget *widget)
 	return GTK_V3270(widget)->host;
 }
 
-void v3270_connect(GtkWidget *widget, const gchar *host)
+int v3270_connect(GtkWidget *widget, const gchar *host)
 {
 	v3270 * terminal;
+	int		rc = -1;
+
+	trace("%s widget=%p host=%p",__FUNCTION__,widget,host);
 
 	g_return_if_fail(GTK_IS_V3270(widget));
 
@@ -789,20 +792,23 @@ void v3270_connect(GtkWidget *widget, const gchar *host)
 	if(host)
 	{
 		set_string_to_config("host","uri","%s",host);
+		rc = lib3270_connect(terminal->host,host,0);
 	}
 	else
 	{
 		gchar *hs = get_string_from_config("host","uri","");
 
+		trace("[%s]",hs);
+
 		if(*hs)
-			lib3270_connect(terminal->host,hs,0);
+			rc = lib3270_connect(terminal->host,hs,0);
 
 		g_free(hs);
-		return;
 	}
 
-	lib3270_connect(terminal->host,host,0);
+	trace("%s exits with rc=%d (%s)",__FUNCTION__,rc,strerror(rc));
 
+	return rc;
 }
 
 gboolean v3270_focus_in_event(GtkWidget *widget, GdkEventFocus *event)

@@ -75,8 +75,16 @@ clean:
 	@rm -fr .bin
 	@make -C src/lib3270 clean
 	@make -C src/gtk clean
+	@rm -f *.log
 
 distclean: clean
 	@rm -f src/gtk/Makefile
 	@rm -f config.status
-	@rm -f *.log
+	@rm -f src/lib3270/mkversion.sh
+	@rm -f src/lib3270/Makefile
+	@rm -f src/include/lib3270/config.h
+	@rm -f src/gtk/uiparser/Makefile
+	@rm -fr autom4te.cache
+
+	@rm -f Makefile
+

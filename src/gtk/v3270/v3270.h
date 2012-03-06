@@ -194,7 +194,7 @@
 
  H3270			* v3270_get_session(GtkWidget *widget);
 
- void			  v3270_connect(GtkWidget *widget, const gchar *host);
+ int			  v3270_connect(GtkWidget *widget, const gchar *host);
  void			  v3270_disconnect(GtkWidget *widget);
 
 G_END_DECLS

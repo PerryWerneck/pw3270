@@ -516,22 +516,8 @@ static int do_connect(H3270 *hSession, const char *n)
 		    &hSession->passthru_host, &hSession->non_tn3270e_host, &hSession->ssl_host,
 		    &hSession->no_login_host, hSession->luname, &port,
 		    &needed)) == CN)
-			return -1;
+			return EINVAL;
 
-		/* Look up the name in the hosts file. */ /*
-		if (!needed && hostfile_lookup(s, &target_name, &ps)) {
-			//
-			// Rescan for qualifiers.
-			// Qualifiers, LU names, and ports are all overridden
-			// by the hosts file.
-			//
-			Free(s);
-			if (!(s = split_host(target_name, &ansi_host,
-			    &std_ds_host, &passthru_host, &non_tn3270e_host,
-			    &ssl_host, &no_login_host, hSession->luname, &port,
-			    &needed)))
-				return -1;
-		} */
 		chost = s;
 
 		/* Default the port. */
@@ -620,8 +606,9 @@ static int do_connect(H3270 *hSession, const char *n)
 
 int lib3270_connect(H3270 *h, const char *n, int wait)
 {
-	if(!h)
-		h = &h3270;
+	int rc;
+
+	CHECK_SESSION_HANDLE(h);
 
 	RunPendingEvents(0);
 
@@ -631,8 +618,9 @@ int lib3270_connect(H3270 *h, const char *n, int wait)
 	if(PCONNECTED)
 		return EBUSY;
 
-	if(do_connect(h,n))
-		return -1;
+	rc = do_connect(h,n);
+	if(rc)
+		return rc;
 
 	if(wait)
 	{
@@ -647,7 +635,7 @@ int lib3270_connect(H3270 *h, const char *n, int wait)
 		}
 	}
 
-	return 0;
+	return rc;
 }
 
 /*
