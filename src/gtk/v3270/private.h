@@ -82,6 +82,8 @@ G_BEGIN_DECLS
 
 /*--[ Prototipes ]-----------------------------------------------------------------------------------*/
 
+const GtkWidgetClass	* v3270_get_parent_class(void);
+
 gboolean	  v3270_draw(GtkWidget * widget, cairo_t * cr);
 void 		  v3270_draw_oia(cairo_t *cr, H3270 *host, int row, int cols, struct v3270_metrics *metrics, GdkColor *color, GdkRectangle *rect);
 
@@ -123,5 +125,6 @@ gboolean	  v3270_key_release_event(GtkWidget *widget, GdkEventKey *event);
 void 	 	  v3270_key_commit(GtkIMContext *imcontext, gchar *str, v3270 *widget);
 gboolean	  v3270_button_press_event(GtkWidget *widget, GdkEventButton *event);
 gboolean	  v3270_button_release_event(GtkWidget *widget, GdkEventButton*event);
+gboolean	  v3270_motion_notify_event(GtkWidget *widget, GdkEventMotion *event);
 
 G_END_DECLS

@@ -35,12 +35,12 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
-static int decode_position(v3270 *widget, GdkPoint *point, GdkEventButton *event)
+static int decode_position(v3270 *widget, GdkPoint *point, gdouble x, gdouble y)
 {
 	int r,c;
 
-	point->x = ((event->x-widget->metrics.left)/widget->metrics.width);
-	point->y = ((event->y-widget->metrics.top)/widget->metrics.spacing);
+	point->x = ((x-widget->metrics.left)/widget->metrics.width);
+	point->y = ((y-widget->metrics.top)/widget->metrics.spacing);
 
 	lib3270_get_screen_size(widget->host,&r,&c);
 
@@ -53,7 +53,7 @@ static int decode_position(v3270 *widget, GdkPoint *point, GdkEventButton *event
 gboolean v3270_button_press_event(GtkWidget *widget, GdkEventButton *event)
 {
 	GdkPoint	point;
-	int			baddr = decode_position(GTK_V3270(widget),&point,event);
+	int			baddr = decode_position(GTK_V3270(widget),&point,event->x,event->y);
 
 	if(baddr < 0)
 		return FALSE;
@@ -76,6 +76,15 @@ gboolean v3270_button_press_event(GtkWidget *widget, GdkEventButton *event)
 gboolean v3270_button_release_event(GtkWidget *widget, GdkEventButton*event)
 {
 //	trace("%s button=%d",__FUNCTION__,event->button);
+
+
+	return FALSE;
+}
+
+
+gboolean v3270_motion_notify_event(GtkWidget *widget, GdkEventMotion *event)
+{
+//	trace("%s",__FUNCTION__);
 
 
 	return FALSE;

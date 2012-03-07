@@ -42,13 +42,6 @@
  #define CONTENTS_WIDTH(terminal) (cols * terminal->metrics.width)
  #define CONTENTS_HEIGHT(terminal) (((rows+1) * terminal->metrics.spacing)+OIA_TOP_MARGIN+2)
 
-
-/*
- * http://gnomejournal.org/article/34/writing-a-widget-using-cairo-and-gtk28
- * http://developer.gnome.org/gtk3/3.3/ch25s02.html
- * http://zetcode.com/tutorials/cairographicstutorial/cairotext
- */
-
 /*--[ Widget definition ]----------------------------------------------------------------------------*/
 
  G_DEFINE_TYPE(v3270, v3270, GTK_TYPE_WIDGET);
@@ -128,6 +121,7 @@ static void v3270_class_init(v3270Class *klass)
 	widget_class->focus_out_event		= v3270_focus_out_event;
 	widget_class->button_press_event	= v3270_button_press_event;
 	widget_class->button_release_event	= v3270_button_release_event;
+	widget_class->motion_notify_event	= v3270_motion_notify_event;
 
 	klass->activate						= v3270_activate;
 	klass->toggle_changed 				= v3270_toggle_changed;
@@ -853,4 +847,9 @@ static void v3270_activate(GtkWidget *widget)
 		lib3270_enter(terminal->host);
 	else
 		v3270_connect(widget,NULL);
+}
+
+const GtkWidgetClass * v3270_get_parent_class(void)
+{
+	return GTK_WIDGET_CLASS(v3270_parent_class);
 }

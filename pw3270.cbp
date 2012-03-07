@@ -105,6 +105,9 @@
 		<Unit filename="src/gtk/v3270/keyboard.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/gtk/v3270/mouse.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/gtk/v3270/oia.c">
 			<Option compilerVar="CC" />
 		</Unit>
