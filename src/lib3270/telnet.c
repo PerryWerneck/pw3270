@@ -475,7 +475,7 @@ int net_connect(const char *host, char *portname, Boolean ls, Boolean *resolving
 
 		hp = gethostbyname(hn);
 		if (hp == (struct hostent *) 0) {
-			popup_an_error("Unknown passthru host: %s", hn);
+			popup_an_error(NULL,"Unknown passthru host: %s", hn);
 			return -1;
 		}
 		(void) memmove(passthru_haddr, hp->h_addr, hp->h_length);
@@ -497,7 +497,7 @@ int net_connect(const char *host, char *portname, Boolean ls, Boolean *resolving
 			if (ptr == portname || *ptr != '\0' || lport == 0L ||
 				    lport & ~0xffff) {
 				if (!(sp = getservbyname(portname, "tcp"))) {
-					popup_an_error("Unknown port number "
+					popup_an_error(NULL,"Unknown port number "
 						"or service: %s", portname);
 					return -1;
 				}
@@ -657,7 +657,7 @@ int net_connect(const char *host, char *portname, Boolean ls, Boolean *resolving
 				output_id = AddOutput(h3270.sock, &h3270, output_possible);
 #endif /*]*/
 			} else {
-				popup_a_sockerr( N_( "Can't connect to %s:%d" ),h3270.hostname, h3270.current_port);
+				popup_a_sockerr(NULL, N_( "Can't connect to %s:%d" ),h3270.hostname, h3270.current_port);
 				close_fail;
 			}
 		} else {
@@ -1029,7 +1029,7 @@ void net_input(H3270 *session)
 */
 			trace_dsn("RCVD socket error %d\n", errno);
 			if (HALF_CONNECTED) {
-				popup_a_sockerr( N_( "%s:%d" ),h3270.hostname, h3270.current_port);
+				popup_a_sockerr(NULL, N_( "%s:%d" ),h3270.hostname, h3270.current_port);
 			} else if (socket_errno() != SE_ECONNRESET) {
 				popup_a_sockerr(NULL, N_( "Socket read error" ) );
 			}
@@ -3179,14 +3179,14 @@ non_blocking(Boolean on)
 	int i = on ? 1 : 0;
 
 	if (SOCK_IOCTL(h3270.sock, FIONBIO, (int *) &i) < 0) {
-		popup_a_sockerr( N_( "ioctl(%s)" ), "FIONBIO");
+		popup_a_sockerr(NULL, N_( "ioctl(%s)" ), "FIONBIO");
 		return -1;
 	}
 # else /*][*/
 	int f;
 
 	if ((f = fcntl(sock, F_GETFL, 0)) == -1) {
-		popup_an_errno(errno, N_( "fcntl(%s)" ), "F_GETFL" );
+		popup_an_errno(NULL,errno, N_( "fcntl(%s)" ), "F_GETFL" );
 		return -1;
 	}
 	if (on)
@@ -3194,7 +3194,7 @@ non_blocking(Boolean on)
 	else
 		f &= ~O_NDELAY;
 	if (fcntl(sock, F_SETFL, f) < 0) {
-		popup_an_errno(errno, N_( "fcntl(%s)" ), "F_GETFL");
+		popup_an_errno(NULL,errno, N_( "fcntl(%s)" ), "F_GETFL");
 		return -1;
 	}
 # endif /*]*/

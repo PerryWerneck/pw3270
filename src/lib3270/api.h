@@ -26,7 +26,6 @@
  * erico.mendonca@gmail.com	(Erico Mascarenhas de Mendonça)
  * licinio@bb.com.br		(Licínio Luis Branco)
  * kraucer@bb.com.br		(Kraucer Fernandes Mazuco)
- * macmiranda@bb.com.br		(Marco Aurélio Caldas Miranda)
  *
  */
 
@@ -179,15 +178,7 @@
 
 
 		/** Type of dialog boxes */
-		typedef enum _LIB3270_NOTIFY
-		{
-			LIB3270_NOTIFY_INFO,		/**< Simple information dialog */
-			LIB3270_NOTIFY_WARNING,
-			LIB3270_NOTIFY_ERROR,
-			LIB3270_NOTIFY_CRITICAL,	/**< Critical error, user can abort application */
-
-			LIB3270_NOTIFY_USER			/**< Reserver, always the last one */
-		} LIB3270_NOTIFY;
+		#include <lib3270/popup.h>
 
 		#define PW3270_DIALOG_INFO		LIB3270_NOTIFY_INFO
 		#define PW3270_DIALOG_CRITICAL	LIB3270_NOTIFY_CRITICAL

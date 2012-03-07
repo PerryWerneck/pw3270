@@ -116,6 +116,8 @@
 		</Unit>
 		<Unit filename="src/include/lib3270.h" />
 		<Unit filename="src/include/lib3270/config.h.in" />
+		<Unit filename="src/include/lib3270/log.h" />
+		<Unit filename="src/include/lib3270/popup.h" />
 		<Unit filename="src/include/lib3270/session.h" />
 		<Unit filename="src/include/pw3270.h" />
 		<Unit filename="src/include/rules.mak.in" />

@@ -108,10 +108,17 @@ static void v3270_toggle_changed(v3270 *widget,LIB3270_TOGGLE toggle_id, gboolea
 
 }
 
+static void loghandler(H3270 *session, const char *module, int rc, const char *fmt, va_list args)
+{
+	g_logv(module,rc ? G_LOG_LEVEL_WARNING : G_LOG_LEVEL_MESSAGE, fmt, args);
+}
+
 static void v3270_class_init(v3270Class *klass)
 {
 	GObjectClass	* gobject_class	= G_OBJECT_CLASS(klass);
 	GtkWidgetClass	* widget_class	= GTK_WIDGET_CLASS(klass);
+
+	lib3270_set_log_handler(loghandler);
 
 	widget_class->realize 				= v3270_realize;
 	widget_class->size_allocate			= v3270_size_allocate;
@@ -395,7 +402,7 @@ static void v3270_init(v3270 *widget)
 
 	if(widget->host->sz != sizeof(H3270))
 	{
-		g_critical(N_( "Unexpected signature in H3270 object, possible version mismatch in lib3270") );
+		g_error(N_( "Unexpected signature in H3270 object, possible version mismatch in lib3270") );
 		return;
 	}
 

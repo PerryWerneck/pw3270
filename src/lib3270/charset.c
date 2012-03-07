@@ -410,7 +410,7 @@ resource_charset(char *csname, char *cs, char *ftcs)
 #endif /*]*/
 			    break;
 			default:
-			    popup_an_error("Extra %s value(s), ignoring",
+			    popup_an_error(NULL,"Extra %s value(s), ignoring",
 				ResDisplayCharset);
 			    break;
 			}
@@ -421,7 +421,7 @@ resource_charset(char *csname, char *cs, char *ftcs)
 #if defined(X3270_DBCS) /*[*/
 	/* Can't swap DBCS modes while connected. */
 	if (IN_3270 && (n_rcs == 2) != dbcs) {
-		popup_an_error("Can't change DBCS modes while connected");
+		popup_an_error(NULL,"Can't change DBCS modes while connected");
 		return CS_ILLEGAL;
 	}
 #endif /*]*/
@@ -646,7 +646,7 @@ remap_chars(char *csname, char *spec, remap_scope scope, int *ne)
 			s = CN;
 		}
 		if (ebc != 256) {
-			popup_an_error("Charset has %d entries, need 256", ebc);
+			popup_an_error(NULL,"Charset has %d entries, need 256", ebc);
 			rc = CS_BAD;
 		} else {
 			/*
@@ -679,7 +679,7 @@ remap_chars(char *csname, char *spec, remap_scope scope, int *ne)
 			    ((ebc = strtoul(ebcs, &ptr, 0)),
 			     ptr == ebcs || *ptr != '\0') ||
 			    (iso = parse_keysym(isos, True)) == NoSymbol) {
-				popup_an_error("Cannot parse %s \"%s\", entry %d",
+				popup_an_error(NULL,"Cannot parse %s \"%s\", entry %d",
 				    ResCharset, csname, *ne);
 				rc = CS_BAD;
 				break;

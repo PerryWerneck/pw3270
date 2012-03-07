@@ -31,22 +31,61 @@
 
 #include "globals.h"
 #include "v3270/v3270.h"
+#include <lib3270/popup.h>
 #include <stdlib.h>
+
+/*--[ Statics ]--------------------------------------------------------------------------------------*/
+
+ static GtkWidget *toplevel = NULL;
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
+static int popup_handler(H3270 *session, LIB3270_NOTIFY type, const char *title, const char *msg, const char *fmt, va_list args)
+{
+	GtkWidget		* dialog;
+	GtkMessageType	  msgtype	= GTK_MESSAGE_WARNING;
+	GtkButtonsType	  buttons	= GTK_BUTTONS_OK;
+	gchar 			* text		= g_strdup_vprintf(fmt,args);
+
+	if(type == LIB3270_NOTIFY_CRITICAL)
+	{
+		msgtype	= GTK_MESSAGE_ERROR;
+		buttons = GTK_BUTTONS_CLOSE;
+	}
+
+	if(msg)
+	{
+		dialog = gtk_message_dialog_new_with_markup(GTK_WINDOW(toplevel),GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,msgtype,buttons,"%s",msg);
+		gtk_message_dialog_format_secondary_markup(GTK_MESSAGE_DIALOG(dialog),"%s",text);
+	}
+	else
+	{
+		dialog = gtk_message_dialog_new_with_markup(GTK_WINDOW(toplevel),GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,msgtype,buttons,"%s",text);
+	}
+
+	g_free(text);
+
+	gtk_window_set_title(GTK_WINDOW(dialog),title ? title : "Error");
+
+	gtk_dialog_run(GTK_DIALOG (dialog));
+	gtk_widget_destroy(dialog);
+
+
+	return 0;
+}
+
 int main (int argc, char *argv[])
 {
-	GtkWidget *window;
-
 	gtk_init(&argc, &argv);
+
 	configuration_init();
+	lib3270_set_popup_handler(popup_handler);
 
-	window = create_main_window();
+	toplevel = create_main_window();
 
-	if(window)
+	if(toplevel)
 	{
-		gtk_widget_show(window);
+		gtk_widget_show(toplevel);
 		gtk_main();
 	}
 

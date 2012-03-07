@@ -198,7 +198,7 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 	model_number = parse_model_number(model);
 	if (model_number < 0)
 	{
-		popup_an_error("Invalid model number: %s", model);
+		popup_an_error(NULL,"Invalid model number: %s", model);
 		model_number = 0;
 	}
 
@@ -268,7 +268,7 @@ H3270 * lib3270_session_new(const char *model)
 	Trace("Charset: %s",appres.charset);
 	if (charset_init(appres.charset) != CS_OKAY)
 	{
-		Warning( _( "Cannot find charset \"%s\", using defaults" ), appres.charset);
+		Warning(NULL, _( "Cannot find charset \"%s\", using defaults" ), appres.charset);
 		(void) charset_init(CN);
 	}
 

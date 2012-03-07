@@ -228,7 +228,7 @@ proxy_setup(char **phost, char **pport)
 		    	*pport = NewString(PORT_SOCKS5D);
 		return PT_SOCKS5D;
 	}
-	popup_an_error("Invalid proxy type '%.*s'", sl, proxy);
+	popup_an_error(NULL,"Invalid proxy type '%.*s'", sl, proxy);
 	return -1;
 }
 
@@ -695,7 +695,7 @@ proxy_socks5(int fd, char *host, unsigned short port, int force_d)
 		if (rv == -2)
 		    	use_name = 1;
 		else if (rv < 0) {
-			popup_an_error("SOCKS5 proxy: %s/%u: %s", host, port,
+			popup_an_error(NULL,"SOCKS5 proxy: %s/%u: %s", host, port,
 				errmsg);
 			return -1;
 		}
@@ -863,7 +863,7 @@ proxy_socks5(int fd, char *host, unsigned short port, int force_d)
 		switch (nread++) {
 		case 0:
 		    	if (r != 0x05) {
-			    	popup_an_error("SOCKS5 Proxy: incorrect "
+			    	popup_an_error(NULL,"SOCKS5 Proxy: incorrect "
 					"reply version 0x%02x", r);
 #if defined(X3270_TRACE) /*[*/
 				if (nread)
@@ -932,7 +932,7 @@ proxy_socks5(int fd, char *host, unsigned short port, int force_d)
 				break;
 #endif /*]*/
 			default:
-				popup_an_error("SOCKS5 Proxy: unknown server "
+				popup_an_error(NULL,"SOCKS5 Proxy: unknown server "
 					"address type 0x%02x", r);
 #if defined(X3270_TRACE) /*[*/
 				if (nread)

@@ -3245,7 +3245,7 @@ static void
 do_pa(unsigned n)
 {
 	if (n < 1 || n > PA_SZ) {
-		popup_an_error( _( "Unknown PA key %d" ), n);
+		popup_an_error(NULL, _( "Unknown PA key %d" ), n);
 		return;
 	}
 
@@ -3257,7 +3257,7 @@ do_pa(unsigned n)
 static void do_pf(unsigned n)
 {
 	if (n < 1 || n > PF_SZ) {
-		popup_an_error( _( "Unknown PF key %d" ), n);
+		popup_an_error(NULL, _( "Unknown PF key %d" ), n);
 		return;
 	}
 
@@ -3471,8 +3471,7 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *session, char *s, int len, int p
 		    case BACKSLASH:	/* last character was a backslash */
 			switch (c) {
 			    case 'a':
-				popup_an_error("%s: Bell not supported",
-				    action_name(String_action));
+				popup_an_error(NULL,"%s: Bell not supported",action_name(String_action));
 //				cancel_if_idle_command();
 				state = BASE;
 				break;
@@ -3520,7 +3519,7 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *session, char *s, int len, int p
 				state = BASE;
 				break;
 			    case 'v':
-				popup_an_error("%s: Vertical tab not supported",action_name(String_action));
+				popup_an_error(NULL,"%s: Vertical tab not supported",action_name(String_action));
 //				cancel_if_idle_command();
 				state = BASE;
 				break;
@@ -3561,8 +3560,7 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *session, char *s, int len, int p
 				state = BACKPF;
 				break;
 			    default:
-				popup_an_error("%s: Unknown character "
-						"after \\p",
+				popup_an_error(NULL,"%s: Unknown character after \\p",
 				    action_name(String_action));
 //				cancel_if_idle_command();
 				state = BASE;
@@ -3574,8 +3572,7 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *session, char *s, int len, int p
 				literal = (literal * 10) + (c - '0');
 				nc++;
 			} else if (!nc) {
-				popup_an_error("%s: Unknown character "
-						"after \\pf",
+				popup_an_error(NULL,"%s: Unknown character after \\pf",
 				    action_name(String_action));
 //				cancel_if_idle_command();
 				state = BASE;
@@ -3593,8 +3590,7 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *session, char *s, int len, int p
 				literal = (literal * 10) + (c - '0');
 				nc++;
 			} else if (!nc) {
-				popup_an_error("%s: Unknown character "
-						"after \\pa",
+				popup_an_error(NULL,"%s: Unknown character after \\pa",
 				    action_name(String_action));
 //				cancel_if_idle_command();
 				state = BASE;
@@ -3614,7 +3610,7 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *session, char *s, int len, int p
 				nc = 0;
 				continue;
 			} else {
-				popup_an_error("%s: Missing hex digits after \\x",
+				popup_an_error(NULL,"%s: Missing hex digits after \\x",
 				    action_name(String_action));
 //				cancel_if_idle_command();
 				state = BASE;
@@ -3691,7 +3687,7 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *session, char *s, int len, int p
 		}
 		break;
 	    default:
-		popup_an_error("%s: Missing data after \\",
+		popup_an_error(NULL,"%s: Missing data after \\",
 		    action_name(String_action));
 //		cancel_if_idle_command();
 		break;
