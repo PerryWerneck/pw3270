@@ -46,6 +46,7 @@ docdir=@docdir@
 sysconfdir=@sysconfdir@
 
 BINDIR=.bin
+TMPDIR=.tmp
 EXEEXT=@EXEEXT@
 DBGLIB=-L../../$(BINDIR)/Debug/lib -l3270
 
@@ -69,10 +70,24 @@ run: $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
 
 #---[ Targets ]----------------------------------------------------------------
 
+tgz: $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz
+
+$(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz: clean
+	@rm -fr $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
+	@$(MKDIR) $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
+	@cp *.m4 $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
+	@cp configure.ac $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
+	@cp configure $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
+	@cp *.in $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
+	@cp -r src $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
+	@cp -r scripts $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
+	@tar --create --gzip --verbose --directory $(TMPDIR) --exclude-vcs --file=$@ $(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
+	@echo $@
 
 clean:
 	@rm -fr .obj
 	@rm -fr .bin
+	@rm -fr .tmp
 	@make -C src/lib3270 clean
 	@make -C src/gtk clean
 	@rm -f *.log

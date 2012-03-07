@@ -63,7 +63,6 @@ $(OBJDIR)/Debug/%.o: %.c $(DEPENDS)
 	@$(MKDIR) `dirname $@`
 	@$(CC) $(DEBUG_CFLAGS) $(CFLAGS) $(LIB3270_CFLAGS) -o $@ -c $<
 
-
 #---[ Targets ]----------------------------------------------------------------
 
 clean-common:

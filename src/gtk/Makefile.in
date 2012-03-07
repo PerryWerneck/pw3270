@@ -89,11 +89,11 @@ endif
 #---[ Misc targets ]-----------------------------------------------------------
 
 v3270/marshal.h: v3270/genmarshal
-	@mkdir -p `dirname $@`
+	@$(MKDIR) `dirname $@`
 	@glib-genmarshal --prefix=$(PACKAGE_NAME) --header v3270/genmarshal > $@
 
 v3270/marshal.c: v3270/genmarshal v3270/marshal.h
-	@mkdir -p `dirname $@`
+	@$(MKDIR) `dirname $@`
 	@glib-genmarshal --prefix=$(PACKAGE_NAME) --body v3270/genmarshal > $@
 
 clean: clean-common
