@@ -54,7 +54,6 @@
 #endif /*]*/
 #if defined(X3270_DISPLAY) /*[*/
 #include "keypadc.h"
-// #include "menubarc.h"
 #endif /*]*/
 #if defined(X3270_DISPLAY) || defined(C3270) || defined(WC3270) /*[*/
 #include "screenc.h"

@@ -17,25 +17,11 @@
  *		Global declarations for host.c.
  */
 
-#include "api.h"
-
-/*
-	struct host {
-		char *name;
-		char **parents;
-		char *hostname;
-		enum { PRIMARY, ALIAS, RECENT } entry_type;
-		char *loginstring;
-		time_t connect_time;
-		struct host *prev, *next;
-	};
-	extern struct host *hosts;
-*/
+	#include "api.h"
 
 	#define st_changed(tx,mode) lib3270_st_changed(NULL,tx,mode)
 
 	LIB3270_INTERNAL void lib3270_st_changed(H3270 *h, int tx, int mode);
-//	LIB3270_INTERNAL void hostfile_init(void);
 	LIB3270_INTERNAL void host_connected(H3270 *session);
 	LIB3270_INTERNAL void host_disconnected(H3270 *session);
 	LIB3270_INTERNAL void host_in3270(H3270 *session, LIB3270_CSTATE);
