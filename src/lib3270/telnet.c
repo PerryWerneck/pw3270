@@ -1009,7 +1009,7 @@ void net_input(H3270 *session)
 				trace_dsn("RCVD SSL_read error %ld (%s)\n", e,
 				    err_buf);
 
-				popup_an_error("SSL_read:\n%s", err_buf);
+				popup_an_error(NULL,"SSL_read:\n%s", err_buf);
 				host_disconnect(session,True);
 				return;
 			}
@@ -2019,7 +2019,7 @@ net_rawout(unsigned const char *buf, int len)
 				e = ERR_get_error();
 				(void) ERR_error_string(e, err_buf);
 				trace_dsn("RCVD SSL_write error %ld (%s)\n", e,err_buf);
-				popup_an_error("SSL_write:\n%s", err_buf);
+				popup_an_error(NULL,"SSL_write:\n%s", err_buf);
 				host_disconnect(&h3270,False);
 				return;
 			}
@@ -3216,7 +3216,7 @@ ssl_init(void)
 		ssl_initted = True;
 		ssl_ctx = SSL_CTX_new(SSLv23_method());
 		if (ssl_ctx == NULL) {
-			popup_an_error("SSL_CTX_new failed");
+			popup_an_error(NULL,"SSL_CTX_new failed");
 			h3270.ssl_host = False;
 			return;
 		}
@@ -3225,7 +3225,7 @@ ssl_init(void)
 
 	ssl_con = SSL_new(ssl_ctx);
 	if (ssl_con == NULL) {
-		popup_an_error("SSL_new failed");
+		popup_an_error(NULL,"SSL_new failed");
 		h3270.ssl_host = False;
 	}
 	SSL_set_verify(ssl_con, 0/*xxx*/, NULL);
@@ -3243,7 +3243,7 @@ ssl_init(void)
 			e = ERR_get_error();
 			(void) ERR_error_string(e, err_buf);
 
-			popup_an_error("SSL_CTX_use_certificate_chain_file("
+			popup_an_error(NULL,"SSL_CTX_use_certificate_chain_file("
 					"\"%s\") failed:\n%s",
 					appres.cert_file, err_buf);
 		}
@@ -3338,7 +3338,7 @@ continue_tls(unsigned char *sbbuf, int len)
 	if (len < 2 || sbbuf[1] != TLS_FOLLOWS) {
 		/* Trace the junk. */
 		trace_dsn("%s ? %s\n", opt(TELOPT_STARTTLS), cmd(SE));
-		popup_an_error("TLS negotiation failure");
+		popup_an_error(NULL,"TLS negotiation failure");
 		net_disconnect();
 		return;
 	}

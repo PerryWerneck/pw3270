@@ -29,15 +29,15 @@
 PACKAGE=@PACKAGE_NAME@
 
 CFLAGS=@CFLAGS@ -DAPPDATA=\"$(datarootdir)/$(PACKAGE_NAME)\" -I../../src/include
-SSL_CFLAGS=@SSL_CFLAGS@
+SSL_CFLAGS=@LIBSSL_CFLAGS@
 
 DLL_FLAGS=@DLL_FLAGS@
 LDFLAGS=@LDFLAGS@
 
-LIBS=@LIBS@ @SSL_LIBS@ @SOCKET_LIBS@
+LIBS=@LIBS@ @LIBSSL_LIBS@ @SOCKET_LIBS@
 
 DEBUG_CFLAGS=-DDEBUG=1 -g
-DEPENDS ?= *.h ../../src/include/*.h
+DEPENDS ?= *.h ../../src/include/*.h Makefile
 
 #---[ Tools ]------------------------------------------------------------------
 
@@ -79,7 +79,7 @@ SOURCES = XtGlue.c actions.c ansi.c charset.c ctlr.c \
 #---[ Misc targets ]-----------------------------------------------------------
 
 Debug: $(BINDBG)/@DLLPREFIX@3270@DLLEXT@
-	
+
 
 $(BINDBG)/@DLLPREFIX@3270@DLLEXT@: $(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC)@OBJEXT@)
 	@echo $@ ...

@@ -188,10 +188,10 @@ AC_SUBST(GTK_CFLAGS)
 
 #--[ SSL ]----------------------------------------------------------------------------------------------------------------------------------------------------
 
-PKG_CHECK_MODULES( [SSL], [libssl], AC_DEFINE(HAVE_SSL), AC_MSG_NOTICE([libssl not present.]) )
+PKG_CHECK_MODULES( [LIBSSL], [libssl], AC_DEFINE(HAVE_LIBSSL), AC_MSG_NOTICE([libssl not present.]) )
 
-AC_SUBST(SSL_LIBS)
-AC_SUBST(SSL_CFLAGS)
+AC_SUBST(LIBSSL_LIBS)
+AC_SUBST(LIBSSL_CFLAGS)
 
 #--[ Libraries ]----------------------------------------------------------------------------------------------------------------------------------------------
 AC_SEARCH_LIBS( [sin], [m], AC_DEFINE(HAVE_LIBM), AC_MSG_NOTICE([libm not present.]))

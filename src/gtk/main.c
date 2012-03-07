@@ -70,7 +70,6 @@ static int popup_handler(H3270 *session, LIB3270_NOTIFY type, const char *title,
 	gtk_dialog_run(GTK_DIALOG (dialog));
 	gtk_widget_destroy(dialog);
 
-
 	return 0;
 }
 

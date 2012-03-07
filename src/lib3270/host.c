@@ -258,8 +258,10 @@ split_host(H3270 *hSession, char *s, char *ansi, char *std_ds, char *passthru,
 	/* Strip leading whitespace. */
 	while (*s && isspace(*s))
 		s++;
-	if (!*s) {
-		popup_an_error(NULL,_( "Empty hostname" ));
+
+	if (!*s)
+	{
+		popup_an_error(hSession,_( "Empty hostname" ));
 		goto split_fail;
 	}
 
@@ -286,18 +288,32 @@ split_host(H3270 *hSession, char *s, char *ansi, char *std_ds, char *passthru,
 		case 'N':
 			*non_e = True;
 			break;
-#if defined(HAVE_LIBSSL) /*[*/
+#if defined(HAVE_LIBSSL)
 		case 'l':
 		case 'L':
 			*secure = True;
 			break;
-#endif /*]*/
+#else
+		case 'l':
+		case 'L':
+			popup_system_error(hSession,	_( "SSL error" ),
+											_( "Unable to connect to secure hosts" ),
+											"%s",
+											_( "This version of " PACKAGE_NAME " was built without support for secure sockets layer (SSL)." )
+											);
+
+			goto split_fail;
+#endif // HAVE_LIBSSL
 		case 'c':
 		case 'C':
 			*no_login = True;
 			break;
 		default:
-			popup_system_error(hSession,NULL,_("Hostname syntax error"),_("Option '%c:' not supported"),*s);
+			popup_system_error(hSession,	_( "Hostname syntax error" ),
+											_( "Can't connect to host" ),
+											_( "Option '%c:' is not supported" ),
+											*s );
+
 			goto split_fail;
 		}
 		*needed = True;
