@@ -225,7 +225,7 @@ parse_localprocess(const char *s)
  * Returns NULL if there is a syntax error.
  */
 static char *
-split_host(char *s, char *ansi, char *std_ds, char *passthru,
+split_host(H3270 *hSession, char *s, char *ansi, char *std_ds, char *passthru,
 	char *non_e, char *secure, char *no_login, char *xluname,
 	char **port, char *needed)
 {
@@ -259,7 +259,7 @@ split_host(char *s, char *ansi, char *std_ds, char *passthru,
 	while (*s && isspace(*s))
 		s++;
 	if (!*s) {
-		popup_an_error("Empty hostname");
+		popup_an_error(NULL,_( "Empty hostname" ));
 		goto split_fail;
 	}
 
@@ -297,8 +297,7 @@ split_host(char *s, char *ansi, char *std_ds, char *passthru,
 			*no_login = True;
 			break;
 		default:
-			popup_an_error("Hostname syntax error:\n"
-					"Option '%c:' not supported", *s);
+			popup_system_error(hSession,NULL,_("Hostname syntax error"),_("Option '%c:' not supported"),*s);
 			goto split_fail;
 		}
 		*needed = True;
@@ -319,8 +318,7 @@ split_host(char *s, char *ansi, char *std_ds, char *passthru,
 		char *lu_last = at - 1;
 
 		if (at == s) {
-			popup_an_error("Hostname syntax error:\n"
-					"Empty LU name");
+			popup_system_error(hSession,NULL,_("Hostname syntax error"),"%s",_("Empty LU name"));
 			goto split_fail;
 		}
 		while (lu_last < s && isspace(*lu_last))
@@ -332,9 +330,7 @@ split_host(char *s, char *ansi, char *std_ds, char *passthru,
 				while (isspace(*u))
 					u++;
 				if (*u != '@') {
-					popup_an_error("Hostname syntax "
-							"error:\n"
-							"Space in LU name");
+					popup_system_error(hSession,NULL,_("Hostname syntax error"),"%s",_("Space in LU name"));
 					goto split_fail;
 				}
 				break;
@@ -360,8 +356,7 @@ split_host(char *s, char *ansi, char *std_ds, char *passthru,
 
 		/* Check for junk before the '['. */
 		if (lbracket != s) {
-			popup_an_error("Hostname syntax error:\n"
-					"Text before '['");
+			popup_system_error(hSession,NULL,_("Hostname syntax error"),"%s",_("Text before '['"));
 			goto split_fail;
 		}
 
@@ -373,12 +368,11 @@ split_host(char *s, char *ansi, char *std_ds, char *passthru,
 		 */
 		rbracket = strchr(s, ']');
 		if (rbracket == CN) {
-			popup_an_error("Hostname syntax error:\n"
-					"Missing ']'");
+			popup_system_error(hSession,NULL,_("Hostname syntax error"),"%s",_("Missing ']'"));
 			goto split_fail;
 		}
 		if (rbracket == s) {
-			popup_an_error("Empty hostname");
+			popup_system_error(hSession,NULL,_("Hostname syntax error"),"%s",_("Empty hostname"));
 			goto split_fail;
 		}
 		*rbracket = '\0';
@@ -395,7 +389,7 @@ split_host(char *s, char *ansi, char *std_ds, char *passthru,
 
 		/* Check for an empty string. */
 		if (!*s || *s == ':') {
-			popup_an_error("Empty hostname");
+			popup_an_error(hSession,"Empty hostname");
 			goto split_fail;
 		}
 
@@ -431,8 +425,7 @@ split_host(char *s, char *ansi, char *std_ds, char *passthru,
 		while (*s && isspace(*s))
 			s++;
 		if (!*s) {
-			popup_an_error("Hostname syntax error:\n"
-					"Empty port name");
+			popup_system_error(hSession,NULL,_("Hostname syntax error"),"%s",_("Empty port name"));
 			goto split_fail;
 		}
 	}
@@ -447,8 +440,7 @@ split_host(char *s, char *ansi, char *std_ds, char *passthru,
 	while (*s && !isspace(*s) && *s != ':')
 		s++;
 	if (*s != '\0') {
-		popup_an_error("Hostname syntax error:\n"
-				"Multiple port names");
+		popup_system_error(hSession,NULL,_("Hostname syntax error"),"%s",_("Multiple port names"));
 		goto split_fail;
 	}
 	goto split_success;
@@ -482,7 +474,7 @@ static int do_connect(H3270 *hSession, const char *n)
 	while (*n == ' ')
 		n++;
 	if (!*n) {
-		popup_an_error("Invalid (empty) hostname");
+		popup_an_error(hSession,_( "Invalid (empty) hostname" ));
 		return -1;
 	}
 
@@ -512,7 +504,7 @@ static int do_connect(H3270 *hSession, const char *n)
 		Boolean needed;
 
 		/* Strip off and remember leading qualifiers. */
-		if ((s = split_host(nb, &ansi_host, &hSession->std_ds_host,
+		if ((s = split_host(hSession, nb, &ansi_host, &hSession->std_ds_host,
 		    &hSession->passthru_host, &hSession->non_tn3270e_host, &hSession->ssl_host,
 		    &hSession->no_login_host, hSession->luname, &port,
 		    &needed)) == CN)

@@ -30,122 +30,56 @@
  *
  */
 
-
-#include <string.h>
 #include <stdio.h>
 #include <stdarg.h>
-#include <errno.h>
-#include <time.h>
-#include <fcntl.h>
 #include <lib3270/config.h>
 #include <lib3270.h>
+#include <lib3270/log.h>
+#include "api.h"
+
+/*---[ Prototipes ]-----------------------------------------------------------------------------------------*/
+
+ static void defaultlog(H3270 *session, const char *module, int rc, const char *fmt, va_list arg_ptr);
 
 /*---[ Constants ]------------------------------------------------------------------------------------------*/
 
- static char logfile[FILENAME_MAX] = PACKAGE_NAME ".log";
+ static void (*loghandler)(H3270 *session, const char *module, int rc, const char *fmt, va_list arg_ptr) = defaultlog;
 
 /*---[ Implementacao ]--------------------------------------------------------------------------------------*/
 
- int Set3270Log(const char *filename)
+ LIB3270_EXPORT void lib3270_set_log_handler(void (*handler)(H3270 *, const char *, int, const char *, va_list))
  {
- 	FILE *out;
-
- 	if(strlen(filename) >= FILENAME_MAX)
-		return EINVAL;
-
-	out = fopen(filename,"a");
-
-	if(out)
-	{
-		strcpy(logfile,filename);
-		fclose(out);
-#if defined(linux)
-		printf("Logfile set to %s\n",logfile);
-#endif
-		return 0;
-	}
-
-	return errno;
+	loghandler = handler ? handler : defaultlog;
  }
 
- static void writetime(FILE *out, const char *module)
+ LIB3270_EXPORT int lib3270_write_log(H3270 *session, const char *module, const char *fmt, ...)
  {
-    time_t		ltime;
-    char		wrk[40];
-
-    time(&ltime);
-    strftime(wrk, 39, "%d/%m/%Y %H:%M:%S", localtime(&ltime));
-    fprintf(out,"%s %-8s\t",wrk,module);
- }
-
- static FILE *prefix(const char *module)
- {
-    FILE *out = fopen(logfile,"a");
-    if(out)
-		writetime(out,module);
-	return out;
- }
-
- /**
-  * Grava uma entrada no arquivo de log.
-  *
-  * @param	module	Identificador do modulo para gravacao no arquivo
-  * @param	fmt		String de formatacao para a mensagem no mesmo formato da funcao printf()
-  * @param	...		Argumentos de acordo com a string de formatacao
-  */
- int WriteLog(const char *module, const char *fmt, ...)
- {
-    va_list arg_ptr;
-    FILE    *out;
-
-    out = prefix(module);
-    if(!out)
-       return -1;
-
-    va_start(arg_ptr, fmt);
-    vfprintf(out, fmt, arg_ptr);
-    va_end(arg_ptr);
-    fprintf(out,"\n");
-
-    fclose(out);
-
+	va_list arg_ptr;
+	va_start(arg_ptr, fmt);
+	loghandler(session,module,0,fmt,arg_ptr);
+	va_end(arg_ptr);
     return 0;
  }
 
- /**
-  * Grava mensagem de erro.
-  *
-  * Grava uma mensagem de erro no arquivo de log.
-  *
-  * @param	module	Identificador do modulo para gravacao no arquivo
-  * @param	rc		Codigo de erro ou -1 para usar o valor de errno
-  * @param	fmt		String de formatacao para a mensagem no mesmo formato da funcao printf()
-  * @param	...		Argumentos de acordo com a string de formatacao
-  */
- int WriteRCLog(const char *module, int rc, const char *fmt, ...)
+ LIB3270_EXPORT int lib3270_write_rc(H3270 *session, const char *module, int rc, const char *fmt, ...)
  {
-    FILE    *out;
-    va_list arg_ptr;
-
-	if(rc == -1)
-	   rc = errno;
-
-    if(!rc)
-       return 0;
-
-    out = prefix(module);
-    if(!out)
-		return -1;
-
-    va_start(arg_ptr, fmt);
-    vfprintf(out, fmt, arg_ptr);
-    va_end(arg_ptr);
-
-	fprintf(out,": %s (rc=%d)\n",strerror(rc),rc);
-
-    fclose(out);
-
+	va_list arg_ptr;
+	va_start(arg_ptr, fmt);
+	loghandler(session,module,rc,fmt,arg_ptr);
+	va_end(arg_ptr);
     return rc;
  }
 
+ LIB3270_EXPORT void lib3270_write_va_log(H3270 *session, const char *module, const char *fmt, va_list arg)
+ {
+	loghandler(session,module,0,fmt,arg);
+ }
+
+ static void defaultlog(H3270 *session, const char *module, int rc, const char *fmt, va_list arg_ptr)
+ {
+ 	fprintf(stderr,"%s:\t",module);
+	vfprintf(stderr,fmt,arg_ptr);
+	fprintf(stderr,"\n");
+	fflush(stderr);
+ }
 

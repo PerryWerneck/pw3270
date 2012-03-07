@@ -213,7 +213,7 @@ do_qr_rpqnames(void)
 			break;
 
 		default:		/* unsupported ID, (can't happen) */
-			Error("Unsupported RPQ term");
+			Error(NULL,"Unsupported RPQ term");
 			break;
 		}
 
@@ -752,7 +752,7 @@ rpq_dump_warnings(void)
 {
 	/* If there's something to complain about, only complain once. */
 	if (!rpq_complained && rpq_wbcnt) {
-		popup_an_error(rpq_warnbuf);
+		popup_an_error(NULL,rpq_warnbuf);
 		rpq_wbcnt = 0;
 		rpq_complained = True;
 

@@ -157,13 +157,13 @@ printer_start(const char *lu)
 
 	/* Can't start two. */
 	if (printer_pid != -1) {
-		popup_an_error("printer is already running");
+		popup_an_error(NULL,"printer is already running");
 		return;
 	}
 
 	/* Gotta be in 3270 mode. */
 	if (!IN_3270) {
-		popup_an_error("Not in 3270 mode");
+		popup_an_error(NULL,"Not in 3270 mode");
 		return;
 	}
 
@@ -173,13 +173,13 @@ printer_start(const char *lu)
 
 		/* Gotta be in TN3270E mode. */
 		if (!IN_TN3270E) {
-			popup_an_error("Not in TN3270E mode");
+			popup_an_error(NULL,"Not in TN3270E mode");
 			return;
 		}
 
 		/* Gotta be connected to an LU. */
 		if (h3270.connected_lu == CN) {
-			popup_an_error("Not connected to a specific LU");
+			popup_an_error(NULL,"Not connected to a specific LU");
 			return;
 		}
 		lu = h3270.connected_lu;
@@ -192,13 +192,13 @@ printer_start(const char *lu)
 	/* Fetch the command line and command resources. */
 	cmdline = get_resource(cmdlineName);
 	if (cmdline == CN) {
-		popup_an_error("%s resource not defined", cmdlineName);
+		popup_an_error(NULL,"%s resource not defined", cmdlineName);
 		return;
 	}
 #if !defined(_WIN32) /*[*/
 	cmd = get_resource(ResPrinterCommand);
 	if (cmd == CN) {
-		popup_an_error("printer.command resource not defined");
+		popup_an_error(NULL,"printer.command resource not defined");
 		return;
 	}
 #else /*][*/
@@ -496,7 +496,7 @@ printer_data(struct pr3o *p, Boolean is_err)
 				p->count = PRINTER_BUF - 1;
 			printer_dump(p, True, True);
 		} else {
-			popup_an_error(exitmsg);
+			popup_an_error(NULL,exitmsg);
 		}
 		printer_stop();
 		return;

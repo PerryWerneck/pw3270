@@ -428,7 +428,7 @@ utf8_set_display_charsets(char *cslist, char *csname)
 		break;
 	}
 	if (tok == CN) {
-	    	popup_an_error("Invalid displayCharset specification");
+	    	popup_an_error(NULL,"Invalid displayCharset specification");
 		Free(dup);
 		return False;
 	}
@@ -439,7 +439,7 @@ utf8_set_display_charsets(char *cslist, char *csname)
 		    	break;
 	}
 	if (dcs[i] == CN) {
-	    	popup_an_error("Unknown displayCharset specification '%s'",
+	    	popup_an_error(NULL,"Unknown displayCharset specification '%s'",
 			csname);
 		Free(dup);
 		return False;

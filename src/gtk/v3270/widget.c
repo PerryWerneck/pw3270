@@ -392,6 +392,13 @@ static void v3270_init(v3270 *widget)
 {
 	trace("%s",__FUNCTION__);
 	widget->host = lib3270_session_new("");
+
+	if(widget->host->sz != sizeof(H3270))
+	{
+		g_critical(N_( "Unexpected signature in H3270 object, possible version mismatch in lib3270") );
+		return;
+	}
+
 	widget->host->widget = widget;
 
 	widget->host->update			= v3270_update_char;

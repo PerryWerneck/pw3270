@@ -52,14 +52,14 @@ OBJEXT=.o
 
 #---[ Paths ]------------------------------------------------------------------
 
-ROOTDIR ?= "."
+ROOTDIR ?= .
 OBJDIR  ?= $(ROOTDIR)/.obj
 BINDIR  ?= $(ROOTDIR)/.bin
 
 #---[ Rules ]------------------------------------------------------------------
 
 $(OBJDIR)/Debug/%.o: %.c $(DEPENDS)
-	@echo $< ...
+	@echo `basename $@` ...
 	@$(MKDIR) `dirname $@`
 	@$(CC) $(DEBUG_CFLAGS) $(CFLAGS) $(LIB3270_CFLAGS) -o $@ -c $<
 

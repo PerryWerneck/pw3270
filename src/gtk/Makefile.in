@@ -56,7 +56,7 @@ SOURCES=main.c mainwindow.c actions.c fonts.c \
 		$(foreach SRC, $(COMMON_SRC), common/$(SRC)) \
 		$(foreach SRC, $(UI_PARSER_SRC), uiparser/$(SRC))
 
-DEPENDS=*.h common/*.h uiparser/*.h v3270/*.h Makefile
+DEPENDS=*.h common/*.h uiparser/*.h v3270/*.h
 
 VALGRIND=@VALGRIND@
 

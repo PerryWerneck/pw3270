@@ -159,7 +159,7 @@ int screen_init(H3270 *session)
 
 		if(callbacks->init())
 		{
-			popup_an_error("Can't initialize terminal.");
+			popup_an_error(session,"Can't initialize terminal.");
 			return -1;
 		}
 	}
@@ -784,41 +784,95 @@ int Register3270ScreenCallbacks(const struct lib3270_screen_callbacks *cbk)
 	return 0;
 }
 
-void show_3270_popup_dialog(H3270 *session, PW3270_DIALOG type, const char *title, const char *msg, const char *fmt, ...)
+void show_3270_popup_dialog(H3270 *session, LIB3270_NOTIFY type, const char *title, const char *msg, const char *fmt, ...)
 {
+	CHECK_SESSION_HANDLE(session);
+
 	if(!fmt)
 		fmt = "";
 
 	va_list arg_ptr;
 	va_start(arg_ptr, fmt);
 
-	if(callbacks && callbacks->popup_dialog)
-		callbacks->popup_dialog(session,type,title,msg,fmt,arg_ptr);
+	if(callbacks && callbacks->notify)
+		callbacks->notify(session,type,title,msg,fmt,arg_ptr);
+	else
+		lib3270_write_va_log(session,"lib3270",fmt,arg_ptr);
 
 	va_end(arg_ptr);
 
 }
 
-void Error(const char *fmt, ...)
+
+void Error(H3270 *session, const char *fmt, ...)
 {
 	va_list arg_ptr;
 
+	CHECK_SESSION_HANDLE(session);
+
 	va_start(arg_ptr, fmt);
 
-	if(callbacks && callbacks->Warning)
-		callbacks->Warning(fmt,arg_ptr);
+	if(callbacks && callbacks->notify)
+		callbacks->notify(session,LIB3270_NOTIFY_ERROR, _( "3270 Error" ),NULL,fmt,arg_ptr);
+	else
+		lib3270_write_va_log(&h3270,"lib3270",fmt,arg_ptr);
 
 	va_end(arg_ptr);
 
 }
 
-/*
-void notify_toggle_changed(H3270 *session, LIB3270_TOGGLE ix, unsigned char value, LIB3270_TOGGLE_TYPE reason)
+void Warning(H3270 *session, const char *fmt, ...)
 {
-	if(callbacks && callbacks->toggle_changed)
-		callbacks->toggle_changed(session,ix,value,reason,toggle_names[ix]);
+	va_list arg_ptr;
+
+	CHECK_SESSION_HANDLE(session);
+
+	va_start(arg_ptr, fmt);
+
+	if(callbacks && callbacks->notify)
+		callbacks->notify(session,LIB3270_NOTIFY_WARNING, _( "3270 Warning" ),NULL,fmt,arg_ptr);
+	else
+		lib3270_write_va_log(&h3270,"lib3270",fmt,arg_ptr);
+
+	va_end(arg_ptr);
+
 }
-*/
+
+/* Pop up an error dialog. */
+extern void popup_an_error(H3270 *session, const char *fmt, ...)
+{
+	va_list	args;
+
+	CHECK_SESSION_HANDLE(session);
+
+	va_start(args, fmt);
+
+	if(callbacks && callbacks->notify)
+		callbacks->notify(session,LIB3270_NOTIFY_ERROR,_( "3270 Error" ),NULL,fmt,args);
+	else
+		lib3270_write_va_log(&h3270,"lib3270",fmt,args);
+
+	va_end(args);
+
+}
+
+void popup_system_error(H3270 *session, const char *title, const char *message, const char *fmt, ...)
+{
+	va_list	args;
+
+	CHECK_SESSION_HANDLE(session);
+
+	va_start(args, fmt);
+
+	if(callbacks && callbacks->notify)
+		callbacks->notify(session,LIB3270_NOTIFY_ERROR,title ? title : _( "3270 Error" ), message,fmt,args);
+	else
+		lib3270_write_va_log(&h3270,"lib3270",fmt,args);
+
+	va_end(args);
+}
+
+
 
 LIB3270_EXPORT void update_toggle_actions(void)
 {
@@ -831,19 +885,6 @@ LIB3270_EXPORT void update_toggle_actions(void)
 	}
 }
 
-void Warning(const char *fmt, ...)
-{
-	va_list arg_ptr;
-
-	va_start(arg_ptr, fmt);
-
-	if(callbacks && callbacks->Warning)
-		callbacks->Warning(fmt,arg_ptr);
-
-	va_end(arg_ptr);
-
-}
-
 void mcursor_set(H3270 *session,LIB3270_CURSOR m)
 {
 	CHECK_SESSION_HANDLE(session);
@@ -851,70 +892,6 @@ void mcursor_set(H3270 *session,LIB3270_CURSOR m)
 	if(session->cursor)
 		session->cursor(session,m);
 }
-
-/*
-void mcursor_locked(H3270 *session)
-{
-	CHECK_SESSION_HANDLE(session);
-
-	if(callbacks && callbacks->cursor)
-		callbacks->cursor(CURSOR_MODE_LOCKED);
-}
-
-extern void mcursor_normal(H3270 *session)
-{
-	CHECK_SESSION_HANDLE(session);
-
-	if(callbacks && callbacks->cursor)
-		callbacks->cursor(CURSOR_MODE_NORMAL);
-}
-
-extern void mcursor_waiting(H3270 *session)
-{
-	CHECK_SESSION_HANDLE(session);
-
-	if(callbacks && callbacks->cursor)
-		callbacks->cursor(CURSOR_MODE_WAITING);
-}
-*/
-
-/* Pop up an error dialog. */
-extern void popup_an_error(const char *fmt, ...)
-{
-	va_list	args;
-
-	va_start(args, fmt);
-	if(callbacks && callbacks->Error)
-		callbacks->Error(fmt,args);
-	va_end(args);
-
-}
-
-void popup_system_error(const char *title, const char *message, const char *system)
-{
-	if(callbacks && callbacks->SysError)
-	{
-		callbacks->SysError(title,message,system);
-		return;
-	}
-
-	popup_an_error("%s\n%s\n%s",title,message,system);
-}
-
-/*
-int set_device_buffer(struct ea *src, int el)
-{
-
-	if(el > (h3270.maxROWS * h3270.maxCOLS))
-		return EINVAL;
-
-	memcpy(ea_buf,src,sizeof(struct ea) * el);
-
-	screen_disp(&h3270);
-
-	return 0;
-}
-*/
 
 LIB3270_ACTION( testpattern )
 {

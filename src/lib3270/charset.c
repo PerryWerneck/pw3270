@@ -333,14 +333,13 @@ set_cgcsgids(char *spec)
 			    break;
 #endif /*]*/
 			default:
-			    popup_an_error("Extra CGCSGID(s), ignoring");
+			    popup_an_error(NULL,"Extra CGCSGID(s), ignoring");
 			    break;
 			}
 			if (idp == NULL)
 				break;
 			if (set_cgcsgid(token, idp) < 0) {
-				popup_an_error("Invalid CGCSGID '%s', ignoring",
-				    token);
+				popup_an_error(NULL,"Invalid CGCSGID '%s', ignoring",token);
 				n_ids = -1;
 				break;
 			}
@@ -620,8 +619,7 @@ remap_chars(char *csname, char *spec, remap_scope scope, int *ne)
 
 		while ((tok = strtok(s, " \t\n")) != CN) {
 			if (ebc >= 256) {
-				popup_an_error("Charset has more than 256 "
-				    "entries");
+				popup_an_error(NULL,"Charset has more than 256 entries");
 				rc = CS_BAD;
 				break;
 			}
@@ -635,7 +633,7 @@ remap_chars(char *csname, char *spec, remap_scope scope, int *ne)
 				if (strlen(tok) == 1)
 					iso = tok[0] & 0xff;
 				else {
-					popup_an_error("Invalid charset "
+					popup_an_error(NULL,"Invalid charset "
 					    "entry '%s' (#%d)",
 					    tok, ebc);
 					rc = CS_BAD;

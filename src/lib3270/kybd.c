@@ -313,7 +313,7 @@ Boolean run_ta(void)
 */
 
 	default:
-		popup_an_error( _( "Unexpected type %d in typeahead queue" ), ta->type);
+		popup_an_error(NULL, _( "Unexpected type %d in typeahead queue" ), ta->type);
 
 	}
 

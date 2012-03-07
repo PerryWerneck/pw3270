@@ -988,7 +988,7 @@ read_resource_file(const char *filename, Boolean fatal)
 		if (*s == '#') {
 			(void) sprintf(where, "%s:%d: Invalid profile "
 			    "syntax ('#' ignored)", filename, lno);
-			Warning(where);
+			Warning(NULL,where);
 			ilen = 0;
 			continue;
 		}
@@ -999,7 +999,7 @@ read_resource_file(const char *filename, Boolean fatal)
 			if (ilen >= sizeof(buf) - 1) {
 				(void) sprintf(where, "%s:%d: Line too long\n",
 				    filename, lno);
-				Warning(where);
+				Warning(NULL,where);
 				break;
 			}
 			continue;
@@ -1045,8 +1045,7 @@ Boolean error_popup_visible = False;
 
 
 /* Pop up an error dialog, based on an error number. */
-void
-popup_an_errno(int errn, const char *fmt, ...)
+void popup_an_errno(int errn, const char *fmt, ...)
 {
 	char 	vmsgbuf[4096];
 	va_list	args;
@@ -1057,7 +1056,7 @@ popup_an_errno(int errn, const char *fmt, ...)
 
 	WriteLog("3270", "Error Popup:\n%s\nrc=%d (%s)",vmsgbuf,errn,strerror(errn));
 
-	Error(vmsgbuf);
+	Error(NULL,vmsgbuf);
 }
 
 #ifdef DEBUG

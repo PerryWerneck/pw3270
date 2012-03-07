@@ -98,14 +98,14 @@
 		#endif
 
 
-		LOCAL_EXTERN int Set3270Log(const char *filename);
-		LOCAL_EXTERN int WriteLog(const char *module, const char *fmt, ...);
-		LOCAL_EXTERN int WriteRCLog(const char *module, int rc, const char *fmt, ...);
+		#include <lib3270/log.h>
+		#define WriteLog(module,fmt, ...) 		lib3270_write_log(NULL,module,fmt,__VA_ARGS__)
+		#define WriteRCLog(module,rc,fmt, ...)	lib3270_write_rc(NULL,module,fmt,__VA_ARGS__)
 
 		#ifdef LIB3270_MODULE_NAME
-			#define Log(fmt, ...)		WriteLog(LIB3270_MODULE_NAME,fmt,__VA_ARGS__)
+			#define Log(fmt, ...)		lib3270_write_log(NULL,LIB3270_MODULE_NAME,fmt,__VA_ARGS__)
 		#else
-			#define Log(fmt, ...)		WriteLog("MSG",fmt,__VA_ARGS__)
+			#define Log(fmt, ...)		lib3270_write_log(NULL,"MSG",fmt,__VA_ARGS__)
 		#endif
 
 		/** 3270 connection handle */
@@ -179,13 +179,19 @@
 
 
 		/** Type of dialog boxes */
-		typedef enum _PW3270_DIALOG
+		typedef enum _LIB3270_NOTIFY
 		{
-			PW3270_DIALOG_INFO,		/**< Simple information dialog */
-			PW3270_DIALOG_CRITICAL,	/**< Critical error, user can abort application */
+			LIB3270_NOTIFY_INFO,		/**< Simple information dialog */
+			LIB3270_NOTIFY_WARNING,
+			LIB3270_NOTIFY_ERROR,
+			LIB3270_NOTIFY_CRITICAL,	/**< Critical error, user can abort application */
 
-			PW3270_DIALOG_USER
-		} PW3270_DIALOG;
+			LIB3270_NOTIFY_USER			/**< Reserver, always the last one */
+		} LIB3270_NOTIFY;
+
+		#define PW3270_DIALOG_INFO		LIB3270_NOTIFY_INFO
+		#define PW3270_DIALOG_CRITICAL	LIB3270_NOTIFY_CRITICAL
+		#define PW3270_DIALOG			LIB3270_NOTIFY
 
 		/**  extended attributes */
 		struct ea
@@ -336,10 +342,7 @@
 			unsigned short	sz;
 
 			int		(*init)(void);
-			int		(*popup_dialog)(H3270 *session, PW3270_DIALOG type, const char *title, const char *msg, const char *fmt, va_list arg);
-			void	(*Error)(const char *fmt, va_list arg);
-			void	(*Warning)(const char *fmt, va_list arg);
-			void	(*SysError)(const char *title, const char *message, const char *system);
+			int		(*notify)(H3270 *session, LIB3270_NOTIFY type, const char *title, const char *msg, const char *fmt, va_list arg);
 			void 	(*model_changed)(H3270 *session, const char *name, int model, int rows, int cols);
 			int		(*addch)(int row, int col, unsigned char c, unsigned short attr);
 			void	(*charset)(char *dcs);
@@ -397,8 +400,8 @@
 		LOCAL_EXTERN const struct lib3270_option * get_3270_option_table(int sz);
 
 		/* Popups */
-		LOCAL_EXTERN void Error(const char *fmt, ...);
-		LOCAL_EXTERN void Warning(const char *fmt, ...);
+		LOCAL_EXTERN void Error(H3270 *session, const char *fmt, ...);
+		LOCAL_EXTERN void Warning(H3270 *session, const char *fmt, ...);
 		LOCAL_EXTERN void show_3270_popup_dialog(H3270 *session, PW3270_DIALOG type, const char *title, const char *msg, const char *fmt, ...);
 
 		/* Set/Get screen contents */
@@ -420,9 +423,9 @@
 		LOCAL_EXTERN int 			  Get3270Socket(void);
 
         /* Misc calls */
-		LOCAL_EXTERN void 		  popup_an_error(const char *fmt, ...);
-		LOCAL_EXTERN void 		  popup_system_error(const char *title, const char *message, const char *system);
-		LOCAL_EXTERN void 		  popup_a_sockerr(char *fmt, ...);
+		LOCAL_EXTERN void 		  popup_an_error(H3270 *session, const char *fmt, ...);
+		LOCAL_EXTERN void		  popup_system_error(H3270 *session, const char *title, const char *message, const char *fmt, ...);
+		LOCAL_EXTERN void 		  popup_a_sockerr(H3270 *session, char *fmt, ...);
 
 		#define query_3270_terminal_status(void) lib3270_get_program_message(NULL)
 

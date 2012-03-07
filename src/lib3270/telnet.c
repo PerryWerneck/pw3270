@@ -404,7 +404,7 @@ void popup_a_sockerr(char *fmt, ...)
 
 }
 #else
-void popup_a_sockerr(char *fmt, ...)
+void popup_a_sockerr(H3270 *session, char *fmt, ...)
 {
 	va_list args;
 	char buffer[4096];
@@ -413,7 +413,7 @@ void popup_a_sockerr(char *fmt, ...)
 	vsprintf(buffer, fmt, args);
 	va_end(args);
 
-	popup_system_error( N_( "Network error" ), buffer, strerror(errno));
+	popup_system_error(session, N_( "Network error" ), buffer, strerror(errno));
 
 }
 #endif
@@ -522,7 +522,7 @@ int net_connect(const char *host, char *portname, Boolean ls, Boolean *resolving
 	    	if (resolve_host_and_port(proxy_host, proxy_portname,
 			    &proxy_port, &haddr.sa, &ha_len, errmsg,
 			    sizeof(errmsg)) < 0) {
-		    	popup_an_error(errmsg);
+		    	popup_an_error(NULL,errmsg);
 				status_resolving(&h3270,0);
 		    	return -1;
 			status_resolving(&h3270,0);
@@ -542,7 +542,7 @@ int net_connect(const char *host, char *portname, Boolean ls, Boolean *resolving
 			if (resolve_host_and_port(host, portname,
 				    &h3270.current_port, &haddr.sa, &ha_len,
 				    errmsg, sizeof(errmsg)) < 0) {
-			    	popup_an_error(errmsg);
+			    	popup_an_error(NULL,errmsg);
 					status_resolving(&h3270,0);
 			    	return -1;
 			status_resolving(&h3270,0);
@@ -600,19 +600,19 @@ int net_connect(const char *host, char *portname, Boolean ls, Boolean *resolving
 */
 		/* create the socket */
 		if ((h3270.sock = socket(haddr.sa.sa_family, SOCK_STREAM, 0)) == -1) {
-			popup_a_sockerr( N_( "socket" ) );
+			popup_a_sockerr(NULL, N_( "socket" ) );
 			return -1;
 		}
 
 		/* set options for inline out-of-band data and keepalives */
 		if (setsockopt(h3270.sock, SOL_SOCKET, SO_OOBINLINE, (char *)&on,
 			    sizeof(on)) < 0) {
-			popup_a_sockerr( N_( "setsockopt(%s)" ), "SO_OOBINLINE");
+			popup_a_sockerr(NULL, N_( "setsockopt(%s)" ), "SO_OOBINLINE");
 			close_fail;
 		}
 		if (setsockopt(h3270.sock, SOL_SOCKET, SO_KEEPALIVE, (char *)&on,
 			    sizeof(on)) < 0) {
-			popup_a_sockerr( N_( "setsockopt(%s)" ), "SO_KEEPALIVE");
+			popup_a_sockerr(NULL, N_( "setsockopt(%s)" ), "SO_KEEPALIVE");
 			close_fail;
 		}
 #if defined(OMTU) /*[*/
@@ -1031,7 +1031,7 @@ void net_input(H3270 *session)
 			if (HALF_CONNECTED) {
 				popup_a_sockerr( N_( "%s:%d" ),h3270.hostname, h3270.current_port);
 			} else if (socket_errno() != SE_ECONNRESET) {
-				popup_a_sockerr( N_( "Socket read error" ) );
+				popup_a_sockerr(NULL, N_( "Socket read error" ) );
 			}
 			host_disconnect(session,True);
 			return;
@@ -1249,7 +1249,7 @@ telnet_fsm(unsigned char c)
 				if (process_eor())
 					return -1;
 			} else
-				Warning( _( "EOR received when not in 3270 mode, ignored." ));
+				Warning(NULL, _( "EOR received when not in 3270 mode, ignored." ));
 			trace_dsn("RCVD EOR\n");
 			ibptr = ibuf;
 			telnet_state = TNS_DATA;
@@ -1441,8 +1441,7 @@ telnet_fsm(unsigned char c)
 				    telquals[sbbuf[1]]);
 				if (lus != (char **)NULL && try_lu == CN) {
 					/* None of the LUs worked. */
-					popup_an_error("Cannot connect to "
-						"specified LU");
+					popup_an_error(NULL,"Cannot connect to specified LU");
 					return -1;
 				}
 
@@ -2032,7 +2031,7 @@ net_rawout(unsigned const char *buf, int len)
 			} else if (socket_errno() == SE_EINTR) {
 				goto bot;
 			} else {
-				popup_a_sockerr( N_( "Socket write error" ) );
+				popup_a_sockerr(NULL, N_( "Socket write error" ) );
 				host_disconnect(&h3270,True);
 				return;
 			}

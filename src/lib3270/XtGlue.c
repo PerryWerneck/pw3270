@@ -461,7 +461,7 @@ static int DefaultProcessEvents(int block)
 	if (ns < 0)
 	{
 		if (errno != EINTR)
-			Warning( "process_events: select() failed" );
+			Warning(NULL, "process_events: select() failed" );
 #endif
 		return processed_any;
 	}
@@ -555,7 +555,7 @@ Malloc(size_t len)
 
 	r = malloc(len);
 	if (r == (char *)NULL)
-		Error("Out of memory");
+		Error(NULL,"Out of memory");
 	return r;
 }
 
@@ -566,7 +566,7 @@ Calloc(size_t nelem, size_t elsize)
 	char	*r = malloc(sz);
 
 	if(!r)
-		Error("Out of memory");
+		Error(NULL,"Out of memory");
 
 	memset(r, 0, sz);
 	return r;
@@ -577,7 +577,7 @@ Realloc(void *p, size_t len)
 {
 	p = realloc(p, len);
 	if (p == NULL)
-		Error("Out of memory");
+		Error(NULL,"Out of memory");
 	return p;
 }
 

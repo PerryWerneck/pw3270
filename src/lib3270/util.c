@@ -172,7 +172,7 @@ xs_vsprintf(const char *fmt, va_list args)
 
 	nc = vsprintf(buf, fmt, args);
 	if (nc > sizeof(buf))
-		Error("Internal buffer overflow");
+		Error(NULL,"Internal buffer overflow");
 	r = Malloc(nc + 1);
 	return strcpy(r, buf);
 #endif /*]*/
@@ -205,7 +205,7 @@ xs_warning(const char *fmt, ...)
 	va_start(args, fmt);
 	r = xs_vsprintf(fmt, args);
 	va_end(args);
-	Warning(r);
+	Warning(NULL,r);
 	Free(r);
 }
 
@@ -218,7 +218,7 @@ xs_error(const char *fmt, ...)
 	va_start(args, fmt);
 	r = xs_vsprintf(fmt, args);
 	va_end(args);
-	Error(r);
+	Error(NULL,r);
 	Free(r);
 }
 
@@ -856,7 +856,7 @@ rpf(rpf_t *r, char *fmt, ...)
 	ns = vsprintf(tbuf, fmt, a); /* XXX: dangerous, but so is vsnprintf */
 	va_end(a);
 	if (ns >= SP_TMP_LEN)
-	    Error("rpf overrun");
+	    Error(NULL,"rpf overrun");
 
 	/* Make sure we have that. */
 	while (r->alloc_len - r->cur_len < ns + 1) {
