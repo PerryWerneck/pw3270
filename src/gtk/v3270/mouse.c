@@ -32,28 +32,29 @@
  #include <pw3270.h>
  #include "v3270.h"
  #include "private.h"
+ #include <lib3270/selection.h>
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
-static int decode_position(v3270 *widget, GdkPoint *point, gdouble x, gdouble y)
+static int decode_position(v3270 *widget, gdouble x, gdouble y)
 {
+	GdkPoint point;
 	int r,c;
 
-	point->x = ((x-widget->metrics.left)/widget->metrics.width);
-	point->y = ((y-widget->metrics.top)/widget->metrics.spacing);
+	point.x = ((x-widget->metrics.left)/widget->metrics.width);
+	point.y = ((y-widget->metrics.top)/widget->metrics.spacing);
 
 	lib3270_get_screen_size(widget->host,&r,&c);
 
-	if(point->x >= 0 && point->y >= 0 && point->x < c && point->y < r)
-		return (point->y * c) + point->x;
+	if(point.x >= 0 && point.y >= 0 && point.x < c && point.y < r)
+		return (point.y * c) + point.x;
 
 	return -1;
 }
 
 gboolean v3270_button_press_event(GtkWidget *widget, GdkEventButton *event)
 {
-	GdkPoint	point;
-	int			baddr = decode_position(GTK_V3270(widget),&point,event->x,event->y);
+	int baddr = decode_position(GTK_V3270(widget),event->x,event->y);
 
 	if(baddr < 0)
 		return FALSE;
@@ -64,6 +65,8 @@ gboolean v3270_button_press_event(GtkWidget *widget, GdkEventButton *event)
 	{
 	case 1:
 		lib3270_set_cursor_address(GTK_V3270(widget)->host,baddr);
+		GTK_V3270(widget)->selecting = 1;
+		lib3270_clear_selection(GTK_V3270(widget)->host);
 		break;
 
 	default:
@@ -75,7 +78,15 @@ gboolean v3270_button_press_event(GtkWidget *widget, GdkEventButton *event)
 
 gboolean v3270_button_release_event(GtkWidget *widget, GdkEventButton*event)
 {
-//	trace("%s button=%d",__FUNCTION__,event->button);
+	switch(event->button)
+	{
+	case 1:
+		GTK_V3270(widget)->selecting = 0;
+		break;
+
+	default:
+		trace("%s button=%d type=%d",__FUNCTION__,event->button,event->type);
+	}
 
 
 	return FALSE;
@@ -84,8 +95,13 @@ gboolean v3270_button_release_event(GtkWidget *widget, GdkEventButton*event)
 
 gboolean v3270_motion_notify_event(GtkWidget *widget, GdkEventMotion *event)
 {
-//	trace("%s",__FUNCTION__);
+	int baddr = decode_position(GTK_V3270(widget),event->x,event->y);
 
+	if(baddr < 0)
+		return FALSE;
+
+	if(GTK_V3270(widget)->selecting)
+		lib3270_select_to(GTK_V3270(widget)->host,baddr);
 
 	return FALSE;
 }

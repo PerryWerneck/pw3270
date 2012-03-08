@@ -99,6 +99,13 @@
 		// Widget info
 		void				* widget;
 
+		// selection
+		struct
+		{
+			int begin;
+			int end;
+		} selected;
+
 		// xio
 		unsigned long		  ns_read_id;
 		unsigned long		  ns_exception_id;

@@ -121,6 +121,7 @@
 		<Unit filename="src/include/lib3270/config.h.in" />
 		<Unit filename="src/include/lib3270/log.h" />
 		<Unit filename="src/include/lib3270/popup.h" />
+		<Unit filename="src/include/lib3270/selection.h" />
 		<Unit filename="src/include/lib3270/session.h" />
 		<Unit filename="src/include/pw3270.h" />
 		<Unit filename="src/include/rules.mak.in" />
@@ -240,6 +241,9 @@
 		</Unit>
 		<Unit filename="src/lib3270/seec.h" />
 		<Unit filename="src/lib3270/selectc.h" />
+		<Unit filename="src/lib3270/selection.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/lib3270/sf.c">
 			<Option compilerVar="CC" />
 		</Unit>

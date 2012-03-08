@@ -627,8 +627,6 @@ void v3270_update_cursor(H3270 *session, unsigned short row, unsigned short col,
 	GdkRectangle		  saved;
 	char 				  buffer[10];
 
-	trace("%s",__FUNCTION__);
-
 	if(!terminal->surface)
 		return;
 

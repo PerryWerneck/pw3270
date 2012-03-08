@@ -94,13 +94,23 @@ gboolean v3270_expose(GtkWidget *widget, GdkEventExpose *event)
 
 void v3270_draw_element(cairo_t *cr, unsigned char chr, unsigned short attr, const struct v3270_metrics *metrics, GdkRectangle *rect, GdkColor *color)
 {
-	GdkColor *fg = color+((attr & 0x00F0) >> 4);
+	GdkColor *fg;
 	GdkColor *bg;
 
-	if(attr & LIB3270_ATTR_FIELD)
-		bg = color+(attr & 0x0003)+V3270_COLOR_FIELD;
+	if(attr & LIB3270_ATTR_SELECTED)
+	{
+		fg = color+V3270_COLOR_SELECTED_FG;
+		bg = color+V3270_COLOR_SELECTED_BG;
+	}
 	else
-		bg = color+(attr & 0x000F);
+	{
+		fg = color+((attr & 0x00F0) >> 4);
+
+		if(attr & LIB3270_ATTR_FIELD)
+			bg = color+(attr & 0x0003)+V3270_COLOR_FIELD;
+		else
+			bg = color+(attr & 0x000F);
+	}
 
 	v3270_draw_char(cr,chr,attr,metrics,rect,fg,bg);
 }

@@ -740,9 +740,9 @@ void popup_system_error(H3270 *session, const char *title, const char *message, 
 	va_end(args);
 }
 
+/*
 LIB3270_EXPORT void update_toggle_actions(void)
 {
-/*
 	int f;
 
 	if(callbacks && callbacks->toggle_changed)
@@ -750,8 +750,8 @@ LIB3270_EXPORT void update_toggle_actions(void)
 		for(f=0;f< N_TOGGLES;f++)
 			callbacks->toggle_changed(&h3270,f,appres.toggle[f].value,TT_UPDATE,toggle_names[f]);
 	}
-*/
 }
+*/
 
 void mcursor_set(H3270 *session,LIB3270_CURSOR m)
 {

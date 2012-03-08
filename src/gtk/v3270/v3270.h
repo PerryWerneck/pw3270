@@ -143,6 +143,7 @@
 	GtkWidget parent;
 
 	/* private */
+	int selecting : 1;
 #if GTK_CHECK_VERSION(3,0,0)
 
 #else

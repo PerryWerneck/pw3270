@@ -175,10 +175,11 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 	hSession->sz = sizeof(H3270);
 	hSession->sock = -1;
 	hSession->model_num = -1;
-//	hSession->first_changed = -1;
-//	hSession->last_changed = -1;
 	hSession->cstate = NOT_CONNECTED;
 	hSession->oia_status = -1;
+
+	hSession->selected.begin	= -1;
+	hSession->selected.end	= -1;
 
 	strncpy(hSession->full_model_name,"IBM-",LIB3270_FULL_MODEL_NAME_LENGTH);
 	hSession->model_name = &hSession->full_model_name[4];
