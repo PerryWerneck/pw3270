@@ -166,8 +166,6 @@ LIB3270_EXPORT void lib3270_clear_selection(H3270 *session)
 
 	for(a = 0; a < session->rows*session->cols; a++)
 	{
-		unsigned short attr = ea_buf[a].attr;
-
 		if(ea_buf[a].attr & LIB3270_ATTR_SELECTED)
 		{
 			ea_buf[a].attr &= ~LIB3270_ATTR_SELECTED;

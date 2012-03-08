@@ -145,7 +145,7 @@ enum iaction {
 
 LIB3270_INTERNAL int		COLS;
 LIB3270_INTERNAL int		ROWS;
-LIB3270_INTERNAL H3270		h3270;
+extern H3270		h3270;
 
 #if defined(X3270_DISPLAY) /*[*/
 	LIB3270_INTERNAL Atom		a_3270, a_registry, a_encoding;
@@ -209,7 +209,7 @@ LIB3270_INTERNAL Boolean		no_login_host;
 LIB3270_INTERNAL Boolean		non_tn3270e_host;
 // LIB3270_INTERNAL int			ov_cols, ov_rows;
  LIB3270_INTERNAL Boolean		passthru_host;
-LIB3270_INTERNAL const char	*programname;
+extern const char	*programname;
 LIB3270_INTERNAL char			*qualified_host;
 LIB3270_INTERNAL char			*reconnect_host;
 LIB3270_INTERNAL int			screen_depth;

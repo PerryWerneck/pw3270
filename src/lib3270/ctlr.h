@@ -17,8 +17,5 @@
  *		External declarations for ctlr.c data structures.
  */
 
-LIB3270_INTERNAL int			buffer_addr;	/**< buffer address */
-// LIB3270_INTERNAL int			cursor_addr;	/**< cursor address */
-LIB3270_INTERNAL struct ea	*ea_buf;			/**< 3270 device buffer */
-//LIB3270_INTERNAL Boolean		formatted;		/**< contains at least one field? */
-//LIB3270_INTERNAL Boolean		is_altbuffer;	/**< in alternate-buffer mode? */
+extern int			buffer_addr;	/**< buffer address */
+extern struct ea	*ea_buf;			/**< 3270 device buffer */

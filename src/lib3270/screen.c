@@ -688,6 +688,7 @@ void show_3270_popup_dialog(H3270 *session, LIB3270_NOTIFY type, const char *tit
 static int logpopup(H3270 *session, LIB3270_NOTIFY type, const char *title, const char *msg, const char *fmt, va_list arg)
 {
 	lib3270_write_va_log(session,"lib3270",fmt,arg);
+	return 0;
 }
 
 void Error(H3270 *session, const char *fmt, ...)

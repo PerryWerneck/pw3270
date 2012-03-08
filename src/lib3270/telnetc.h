@@ -20,7 +20,8 @@
  */
 
 /* Output buffer. */
-LIB3270_INTERNAL unsigned char *obuf, *obptr;
+extern unsigned char *obuf;
+extern unsigned char *obptr;
 
 /* Spelled-out tty control character. */
 struct ctl_char {

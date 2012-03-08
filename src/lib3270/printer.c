@@ -438,8 +438,7 @@ printer_start(const char *lu)
 	    NULL,
 	    &startupinfo,
 	    &process_information) == 0) {
-		popup_an_error("CreateProcess(%s) failed: %s", subcommand,
-			win32_strerror(GetLastError()));
+		popup_an_error(NULL,"CreateProcess(%s) failed: %s", subcommand,win32_strerror(GetLastError()));
 	}
 	printer_handle = process_information.hProcess;
 	CloseHandle(process_information.hThread);
@@ -599,8 +598,7 @@ printer_check(void)
 
 		st_changed(ST_PRINTER, False);
 
-		popup_an_error("Printer process exited with status %d",
-		    exit_code);
+		popup_an_error(NULL,"Printer process exited with status %d",exit_code);
 	}
 }
 #endif /*]*/

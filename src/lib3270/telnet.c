@@ -390,33 +390,23 @@ static union {
 } haddr;
 socklen_t ha_len = sizeof(haddr);
 
-#if defined(_WIN32)
-void popup_a_sockerr(char *fmt, ...)
-{
-	va_list args;
-	char buffer[4096];
-
-	va_start(args, fmt);
-	vsprintf(buffer, fmt, args);
-	va_end(args);
-
-	popup_system_error( N_( "Network error" ), buffer, win32_strerror(socket_errno()));
-
-}
-#else
 void popup_a_sockerr(H3270 *session, char *fmt, ...)
 {
+#if defined(_WIN32)
+	const char *msg = win32_strerror(socket_errno());
+#else
+	const char *msg = strerror(errno)
+#endif // WIN32
 	va_list args;
 	char buffer[4096];
 
 	va_start(args, fmt);
-	vsprintf(buffer, fmt, args);
+	vsnprintf(buffer, 4095, fmt, args);
 	va_end(args);
 
-	popup_system_error(session, N_( "Network error" ), buffer, strerror(errno));
+	popup_system_error(session, N_( "Network error" ), buffer, "%s", msg);
 
 }
-#endif
 
 /*
  * net_connect
@@ -2780,8 +2770,7 @@ tn3270e_nak(enum pds rv)
 	}
 	rsp_buf[rsp_len++] = IAC;
 	rsp_buf[rsp_len++] = EOR;
-	trace_dsn("SENT TN3270E(RESPONSE NEGATIVE-RESPONSE %u) %s\n",
-		h_in->seq_number[0] << 8 | h_in->seq_number[1], neg);
+	trace_dsn("SENT TN3270E(RESPONSE NEGATIVE-RESPONSE %u) %s\n",h_in->seq_number[0] << 8 | h_in->seq_number[1], neg);
 	net_rawout(rsp_buf, rsp_len);
 }
 

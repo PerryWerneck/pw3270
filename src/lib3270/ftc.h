@@ -24,7 +24,7 @@ LIB3270_INTERNAL Boolean ascii_flag;
 LIB3270_INTERNAL Boolean cr_flag;
 LIB3270_INTERNAL unsigned long ft_length;
 LIB3270_INTERNAL FILE *ft_local_file;
-LIB3270_INTERNAL char *ft_local_filename;
+extern char *ft_local_filename;
 
 LIB3270_INTERNAL Boolean ft_last_cr;
 LIB3270_INTERNAL Boolean remap_flag;

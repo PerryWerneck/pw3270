@@ -2841,6 +2841,7 @@ toggle_nop(H3270 *session, struct toggle *t unused, LIB3270_TOGGLE_TYPE tt unuse
 {
 }
 
+/*
 int ctlr_get_rows(void)
 {
     return h3270.rows;
@@ -2850,4 +2851,4 @@ int ctlr_get_cols(void)
 {
     return h3270.cols;
 }
-
+*/
