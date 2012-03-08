@@ -175,6 +175,9 @@ LIB3270_EXPORT void lib3270_clear_selection(H3270 *session)
 				session->update(session,a,ea_buf[a].chr,ea_buf[a].attr,a == session->cursor_addr);
 		}
 	}
+
+	session->set_selection(session,0);
+
 }
 
 
@@ -182,10 +185,13 @@ LIB3270_EXPORT void lib3270_select_to(H3270 *session, int baddr)
 {
 	CHECK_SESSION_HANDLE(session);
 
-	if(session->selected.begin < 0)
-		session->selected.begin = session->selected.end = session->cursor_addr;
-
 	lib3270_set_cursor_address(session,session->selected.end = baddr);
+
+	if(session->selected.begin < 0)
+	{
+		session->selected.begin = session->cursor_addr;
+		session->set_selection(session,1);
+	}
 
 	update_selection(session);
 

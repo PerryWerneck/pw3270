@@ -97,6 +97,12 @@
 	set_integer_to_config("terminal","model",id);
  }
 
+ static void selecting(GtkWidget *widget, gboolean on, GtkActionGroup **group)
+ {
+	trace("Widget %p selection state changed to %s",widget,on ? "Yes" : "No");
+	gtk_action_group_set_sensitive(group[ACTION_GROUP_SELECTION],on);
+ }
+
  static void setup_input_method(GtkWidget *widget, GtkWidget *obj)
  {
 	GtkWidget *menu	= gtk_menu_new();
@@ -212,6 +218,7 @@
 	g_signal_connect(terminal,"connected",G_CALLBACK(connected),group);
 	g_signal_connect(terminal,"update_config",G_CALLBACK(update_config),0);
 	g_signal_connect(terminal,"model_changed",G_CALLBACK(update_model),0);
+	g_signal_connect(terminal,"selecting",G_CALLBACK(selecting),group);
 
 	g_free(path);
 	gtk_widget_grab_focus(terminal);
