@@ -364,13 +364,22 @@ void v3270_update_cursor_surface(v3270 *widget,unsigned char chr,unsigned short 
 	{
 		GdkRectangle	  rect	= widget->cursor.rect;
 		cairo_t			* cr 	= cairo_create(widget->cursor.surface);
-		GdkColor		* fg	= widget->color+((attr & 0x00F0) >> 4);
+		GdkColor		* fg;
 		GdkColor 		* bg;
 
-		if(attr & LIB3270_ATTR_FIELD)
-			bg = widget->color+(attr & 0x0003)+V3270_COLOR_FIELD;
+		if(attr & LIB3270_ATTR_SELECTED)
+		{
+			fg = widget->color+V3270_COLOR_SELECTED_FG;
+			bg = widget->color+V3270_COLOR_SELECTED_BG;
+		}
 		else
-			bg = widget->color+(attr & 0x000F);
+		{
+			fg = widget->color+((attr & 0x00F0) >> 4);
+			if(attr & LIB3270_ATTR_FIELD)
+				bg = widget->color+(attr & 0x0003)+V3270_COLOR_FIELD;
+			else
+				bg = widget->color+(attr & 0x000F);
+		}
 
 		cairo_set_scaled_font(cr,widget->font_scaled);
 

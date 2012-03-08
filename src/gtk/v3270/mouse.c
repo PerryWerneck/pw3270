@@ -52,6 +52,30 @@ static int decode_position(v3270 *widget, gdouble x, gdouble y)
 	return -1;
 }
 
+static void button_1_press(GtkWidget *widget, GdkEventType type, int baddr)
+{
+	GTK_V3270(widget)->selecting = 1;
+
+	switch(type)
+	{
+	case GDK_BUTTON_PRESS: 		// Single click - Just move cursor
+		lib3270_set_cursor_address(GTK_V3270(widget)->host,baddr);
+		lib3270_clear_selection(GTK_V3270(widget)->host);
+		break;
+
+	case GDK_2BUTTON_PRESS:		// Double click - Select work
+		break;
+
+	case GDK_3BUTTON_PRESS:		// Triple clock - Select field
+		break;
+
+#ifdef DEBUG
+	default:
+		trace("Unexpected button 1 type %d",type);
+#endif
+	}
+}
+
 gboolean v3270_button_press_event(GtkWidget *widget, GdkEventButton *event)
 {
 	int baddr = decode_position(GTK_V3270(widget),event->x,event->y);
@@ -59,14 +83,15 @@ gboolean v3270_button_press_event(GtkWidget *widget, GdkEventButton *event)
 	if(baddr < 0)
 		return FALSE;
 
-	trace("%s button=%d type=%d",__FUNCTION__,event->button,event->type);
+//	trace("%s button=%d type=%d",__FUNCTION__,event->button,event->type);
 
 	switch(event->button)
 	{
 	case 1:
-		lib3270_set_cursor_address(GTK_V3270(widget)->host,baddr);
-		GTK_V3270(widget)->selecting = 1;
-		lib3270_clear_selection(GTK_V3270(widget)->host);
+		button_1_press(widget,event->type,baddr);
+//		lib3270_set_cursor_address(GTK_V3270(widget)->host,baddr);
+//		GTK_V3270(widget)->selecting = 1;
+//		lib3270_clear_selection(GTK_V3270(widget)->host);
 		break;
 
 	default:

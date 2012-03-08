@@ -78,6 +78,20 @@ static void 	v3270_destroy		(GtkObject		* object);
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
+static void v3270_cursor_draw(v3270 *widget)
+{
+	int 			pos = lib3270_get_cursor_address(widget->host);
+	unsigned char	c;
+	unsigned short	attr;
+
+	lib3270_get_contents(widget->host,pos,pos,&c,&attr);
+	v3270_update_cursor_surface(widget,c,attr);
+	gtk_widget_queue_draw_area(	GTK_WIDGET(widget),
+								widget->cursor.rect.x,widget->cursor.rect.y,
+								widget->cursor.rect.width,widget->cursor.rect.height);
+
+}
+
 static void v3270_toggle_changed(v3270 *widget,LIB3270_TOGGLE toggle_id, gboolean toggle_state,const gchar *toggle_name)
 {
 	trace("%s: toggle %d (%s)=%s",__FUNCTION__,toggle_id,toggle_name,toggle_state ? "Yes" : "No");
@@ -92,6 +106,10 @@ static void v3270_toggle_changed(v3270 *widget,LIB3270_TOGGLE toggle_id, gboolea
 
 	case LIB3270_TOGGLE_CURSOR_BLINK:
 		widget->cursor.show |= 1;
+		break;
+
+	case LIB3270_TOGGLE_INSERT:
+		v3270_cursor_draw(widget);
 		break;
 
 	default:

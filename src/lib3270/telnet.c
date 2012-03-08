@@ -395,7 +395,7 @@ void popup_a_sockerr(H3270 *session, char *fmt, ...)
 #if defined(_WIN32)
 	const char *msg = win32_strerror(socket_errno());
 #else
-	const char *msg = strerror(errno)
+	const char *msg = strerror(errno);
 #endif // WIN32
 	va_list args;
 	char buffer[4096];
