@@ -431,11 +431,11 @@
 		#define Toggled(ix) lib3270_get_toggle(NULL,ix)
 		#define CallAndWait(c,h,p) lib3270_call_thread(c,h,p)
 
-		LOCAL_EXTERN void RunPendingEvents(int wait);
-		LOCAL_EXTERN int Wait(int seconds);
+//		#define RunPendingEvents(x) lib3270_main_iterate(x)
+//		#define Wait(s) lib3270_wait(x)
 
-        LOCAL_EXTERN int ctlr_get_cols(void) __attribute__ ((deprecated));
-        LOCAL_EXTERN int ctlr_get_rows(void) __attribute__ ((deprecated));
+//        LOCAL_EXTERN int ctlr_get_cols(void) __attribute__ ((deprecated));
+//        LOCAL_EXTERN int ctlr_get_rows(void) __attribute__ ((deprecated));
 
         /* Screen calls */
 		LOCAL_EXTERN void screen_resume(H3270 *session);

@@ -970,13 +970,13 @@ LIB3270_EXPORT int lib3270_call_thread(int(*callback)(H3270 *h, void *), H3270 *
 	return rc;
 }
 
-void RunPendingEvents(int wait)
+LIB3270_EXPORT void lib3270_main_iterate(int wait)
 {
 	if(callbacks->RunPendingEvents)
 		callbacks->RunPendingEvents(wait);
 }
 
-int Wait(int seconds)
+LIB3270_EXPORT int lib3270_wait(seconds)
 {
 	time_t end;
 
@@ -988,7 +988,7 @@ int Wait(int seconds)
 
 	while(time(0) < end)
 	{
-		RunPendingEvents(1);
+		lib3270_main_iterate(1);
 	}
 
 	return 0;

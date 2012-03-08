@@ -565,6 +565,25 @@
 	 */
 	LIB3270_EXPORT int lib3270_call_thread(int(*callback)(H3270 *h, void *), H3270 *h, void *parm);
 
+
+	/**
+	 * Run main iteration.
+	 *
+	 * Run lib3270 internal iterations, check for network inputs, process signals.
+	 *
+	 * @param wait	Wait for signal if not available.
+	 *
+	 */
+	LIB3270_EXPORT void lib3270_main_iterate(int wait);
+
+	/**
+	 * Wait for "N" seconds keeping main loop active.
+	 *
+	 * @param seconds	Number of seconds to wait.
+	 *
+	 */
+	LIB3270_EXPORT int lib3270_wait(int seconds);
+
 	/**
 	 * Get the session's widget.
 	 *

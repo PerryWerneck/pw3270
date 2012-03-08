@@ -618,7 +618,7 @@ int lib3270_connect(H3270 *h, const char *n, int wait)
 
 	CHECK_SESSION_HANDLE(h);
 
-	RunPendingEvents(0);
+	lib3270_main_iterate(0);
 
 	if(h->auto_reconnect_inprogress)
 		return EAGAIN;
@@ -634,7 +634,7 @@ int lib3270_connect(H3270 *h, const char *n, int wait)
 	{
 		while(!IN_ANSI && !IN_3270)
 		{
-			RunPendingEvents(1);
+			lib3270_main_iterate(1);
 
 			if(!PCONNECTED)
 			{

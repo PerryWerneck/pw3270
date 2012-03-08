@@ -7,20 +7,22 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output=".bin\Debug\lib3270" prefix_auto="1" extension_auto="1" />
-				<Option object_output=".obj\Debug\" />
-				<Option type="3" />
+				<Option output=".bin/Debug/lib3270" prefix_auto="1" extension_auto="1" />
+				<Option object_output=".obj/Debug/" />
+				<Option type="1" />
 				<Option compiler="gcc" />
-				<Option createDefFile="1" />
-				<Option createStaticLib="1" />
+				<Option use_console_runner="0" />
 				<Compiler>
 					<Add option="-g" />
 					<Add option="-DDEBUG=1" />
 				</Compiler>
+				<Linker>
+					<Add library="pthread" />
+				</Linker>
 			</Target>
 			<Target title="Release">
-				<Option output=".bin\Release\lib3270" prefix_auto="1" extension_auto="1" />
-				<Option object_output=".obj\Release\" />
+				<Option output=".bin/Release/lib3270" prefix_auto="1" extension_auto="1" />
+				<Option object_output=".obj/Release/" />
 				<Option type="3" />
 				<Option compiler="gcc" />
 				<Option createDefFile="1" />
@@ -33,8 +35,8 @@
 				</Linker>
 			</Target>
 			<Target title="testprogram">
-				<Option output=".bin\Debug\lib3270" prefix_auto="1" extension_auto="1" />
-				<Option object_output=".obj\testprogram\" />
+				<Option output=".bin/Debug/lib3270" prefix_auto="1" extension_auto="1" />
+				<Option object_output=".obj/testprogram/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Option use_console_runner="0" />
@@ -51,10 +53,11 @@
 			<Add option="-Wmissing-declarations" />
 			<Add option="-Wall" />
 			<Add option="-DLIB3270=1" />
-			<Add directory="..\include" />
-			<Add directory="..\include\lib3270" />
+			<Add directory="../include" />
+			<Add directory="../include/lib3270" />
 		</Compiler>
-		<Unit filename="..\include\lib3270\config.h.in" />
+		<Unit filename="../include/lib3270/config.h.in" />
+		<Unit filename="3270ds.h" />
 		<Unit filename="Makefile.in" />
 		<Unit filename="X11keysym.h" />
 		<Unit filename="XtGlue.c">
@@ -68,6 +71,7 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="ansic.h" />
+		<Unit filename="api.h" />
 		<Unit filename="apl.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -165,6 +169,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="seec.h" />
+		<Unit filename="selection.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="sf.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -181,9 +188,9 @@
 		<Unit filename="telnetc.h" />
 		<Unit filename="testprogram.c">
 			<Option compilerVar="CC" />
-			<Option target="testprogram" />
 		</Unit>
 		<Unit filename="tn3270e.h" />
+		<Unit filename="toggle.h" />
 		<Unit filename="toggles.c">
 			<Option compilerVar="CC" />
 		</Unit>
