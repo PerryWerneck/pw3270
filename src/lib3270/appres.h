@@ -220,12 +220,8 @@ typedef struct {
 LIB3270_INTERNAL AppRes appres;
 
 // FIXME (perry#2#): Check for right implementation
-#if defined(LIB3270)
-	#define _( x ) x
-	#define N_( x ) x
-	#define MSG_( c, s )	s
-#else
-	#define _( x ) x
-	#define N_( x ) x
-	#define MSG_( c, s )	get_message(c)
-#endif
+#define _( x ) x
+#define N_( x ) x
+#define MSG_( c, s )	s
+
+void toggle_rectselect(H3270 *session, struct toggle *t, LIB3270_TOGGLE_TYPE tt);

@@ -165,6 +165,11 @@ void lib3270_session_free(H3270 *h)
 
 }
 
+static void update_char(H3270 *session, int addr, unsigned char chr, unsigned short attr, unsigned char cursor)
+{
+
+}
+
 static void lib3270_session_init(H3270 *hSession, const char *model)
 {
 	int 	ovc, ovr;
@@ -173,6 +178,11 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 
 	memset(hSession,0,sizeof(H3270));
 	hSession->sz = sizeof(H3270);
+
+	// A few dummy calls to avoid "ifs"
+	hSession->update = update_char;
+
+
 	hSession->sock = -1;
 	hSession->model_num = -1;
 	hSession->cstate = NOT_CONNECTED;

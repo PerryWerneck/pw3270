@@ -197,7 +197,6 @@
 		<Unit filename="src/lib3270/macros.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/lib3270/menubarc.h" />
 		<Unit filename="src/lib3270/mkfb.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -240,7 +239,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/lib3270/seec.h" />
-		<Unit filename="src/lib3270/selectc.h" />
 		<Unit filename="src/lib3270/selection.c">
 			<Option compilerVar="CC" />
 		</Unit>

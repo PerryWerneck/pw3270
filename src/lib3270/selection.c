@@ -29,11 +29,133 @@
 
  #include "globals.h"
  #include "ctlr.h"
+ #include "appres.h"
  #include <lib3270.h>
  #include <lib3270/session.h>
  #include <lib3270/selection.h>
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
+
+static void update_selected_rectangle(H3270 *session)
+{
+	struct
+	{
+		int row;
+		int col;
+	} p[2];
+
+	int begin	= session->selected.begin;
+	int end		= session->selected.end;
+	int row, col, baddr;
+
+	if(begin > end)
+	{
+		baddr 	= end;
+		end		= begin;
+		begin	= baddr;
+	}
+
+	// Get start & end posision
+	p[0].row = (begin/session->cols);
+	p[0].col = (begin%session->cols);
+	p[1].row = (end/session->cols);
+	p[1].col = (end%session->cols);
+
+	// First remove unselected areas
+	baddr = 0;
+	for(row=0;row < session->rows;row++)
+	{
+		for(col = 0; col < session->cols;col++)
+		{
+			if(!(row >= p[0].row && row <= p[1].row && col >= p[0].col && col <= p[1].col) && (ea_buf[baddr].attr & LIB3270_ATTR_SELECTED))
+			{
+				ea_buf[baddr].attr &= ~LIB3270_ATTR_SELECTED;
+				session->update(session,baddr,ea_buf[baddr].chr,ea_buf[baddr].attr,baddr == session->cursor_addr);
+			}
+			baddr++;
+		}
+	}
+
+	// Then, draw selected ones
+	baddr = 0;
+	for(row=0;row < session->rows;row++)
+	{
+		for(col = 0; col < session->cols;col++)
+		{
+			if((row >= p[0].row && row <= p[1].row && col >= p[0].col && col <= p[1].col) && !(ea_buf[baddr].attr & LIB3270_ATTR_SELECTED))
+			{
+				ea_buf[baddr].attr |= LIB3270_ATTR_SELECTED;
+				session->update(session,baddr,ea_buf[baddr].chr,ea_buf[baddr].attr,baddr == session->cursor_addr);
+			}
+			baddr++;
+		}
+	}
+
+}
+
+static void update_selected_region(H3270 *session)
+{
+	int baddr;
+	int begin	= session->selected.begin;
+	int end		= session->selected.end;
+	int len 	= session->rows*session->cols;
+
+	if(begin > end)
+	{
+		baddr 	= end;
+		end		= begin;
+		begin	= baddr;
+	}
+
+	// First remove unselected areas
+	for(baddr = 0; baddr < begin; baddr++)
+	{
+		if(ea_buf[baddr].attr & LIB3270_ATTR_SELECTED)
+		{
+			ea_buf[baddr].attr &= ~LIB3270_ATTR_SELECTED;
+			session->update(session,baddr,ea_buf[baddr].chr,ea_buf[baddr].attr,baddr == session->cursor_addr);
+		}
+	}
+
+	for(baddr = end+1; baddr < len; baddr++)
+	{
+		if(ea_buf[baddr].attr & LIB3270_ATTR_SELECTED)
+		{
+			ea_buf[baddr].attr &= ~LIB3270_ATTR_SELECTED;
+			session->update(session,baddr,ea_buf[baddr].chr,ea_buf[baddr].attr,baddr == session->cursor_addr);
+		}
+	}
+
+	// Then draw the selected ones
+	for(baddr = begin; baddr <= end; baddr++)
+	{
+		if(!(ea_buf[baddr].attr & LIB3270_ATTR_SELECTED))
+		{
+			ea_buf[baddr].attr |= LIB3270_ATTR_SELECTED;
+			session->update(session,baddr,ea_buf[baddr].chr,ea_buf[baddr].attr,baddr == session->cursor_addr);
+		}
+	}
+
+}
+
+void update_selection(H3270 *session)
+{
+	if(lib3270_get_toggle(session,LIB3270_TOGGLE_RECTANGLE_SELECT))
+		update_selected_rectangle(session);
+	else
+		update_selected_region(session);
+}
+
+void toggle_rectselect(H3270 *session, struct toggle *t, LIB3270_TOGGLE_TYPE tt)
+{
+	if(session->selected.begin < 0)
+		return;
+
+	if(t->value)
+		update_selected_rectangle(session);
+	else
+		update_selected_region(session);
+}
 
 LIB3270_EXPORT void lib3270_clear_selection(H3270 *session)
 {
@@ -55,6 +177,7 @@ LIB3270_EXPORT void lib3270_clear_selection(H3270 *session)
 	}
 }
 
+
 LIB3270_EXPORT void lib3270_select_to(H3270 *session, int baddr)
 {
 	CHECK_SESSION_HANDLE(session);
@@ -62,32 +185,9 @@ LIB3270_EXPORT void lib3270_select_to(H3270 *session, int baddr)
 	if(session->selected.begin < 0)
 		session->selected.begin = session->selected.end = session->cursor_addr;
 
-	if(baddr > session->cursor_addr)
-	{
-		session->selected.begin	= session->cursor_addr;
-		session->selected.end	= baddr;
-	}
-	else
-	{
-		session->selected.begin = baddr;
-		session->selected.end 	= session->cursor_addr;
-	}
+	lib3270_set_cursor_address(session,session->selected.end = baddr);
 
-	// Update screen contents
-	for(baddr = 0; baddr < session->rows*session->cols; baddr++)
-	{
-		unsigned short attr = ea_buf[baddr].attr;
+	update_selection(session);
 
-		if(baddr >= session->selected.begin && baddr <= session->selected.end)
-			attr |= LIB3270_ATTR_SELECTED;
-		else
-			attr &= ~LIB3270_ATTR_SELECTED;
-
-		if(attr != ea_buf[baddr].attr && session->update)
-		{
-			ea_buf[baddr].attr = attr;
-			session->update(session,baddr,ea_buf[baddr].chr,attr,baddr == session->cursor_addr);
-		}
-	}
 }
 

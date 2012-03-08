@@ -26,7 +26,6 @@
  * erico.mendonca@gmail.com	(Erico Mascarenhas de Mendonça)
  * licinio@bb.com.br		(Licínio Luis Branco)
  * kraucer@bb.com.br		(Kraucer Fernandes Mazuco)
- * macmiranda@bb.com.br		(Marco Aurélio Caldas Miranda)
  *
  */
 
@@ -67,20 +66,8 @@
 
 	#define LIB3270_TOGGLE_ID LIB3270_TOGGLE
 
-
 	#define register_3270_toggle_monitor(ix,callback) lib3270_register_tchange(NULL,ix,callback)
-
-	// LIB3270_EXPORT void					  register_3270_toggle_monitor(LIB3270_TOGGLE_ID ix, void (*callback)(int value, LIB3270_TOGGLE_TYPE reason));
-//	LIB3270_EXPORT int					  lib3270_toggle(H3270 *session, LIB3270_TOGGLE_ID ix);
-
-	LIB3270_EXPORT int					  set_3270_toggle(LIB3270_TOGGLE_ID ix, int value);
-
-//	LIB3270_EXPORT const char			* get_3270_toggle_name(LIB3270_TOGGLE_ID ix);
-//	LIB3270_EXPORT LIB3270_TOGGLE_ID	  get_3270_toggle_by_name(const char *name);
 	#define get_3270_toggle_by_name(x)	  lib3270_get_toggle_id(x)
-
-
-	LIB3270_EXPORT void					  update_toggle_actions(void);
 
 	// Compatibility macros
 	#define register_tchange(ix,callback) register_3270_toggle_monitor(ix,callback)

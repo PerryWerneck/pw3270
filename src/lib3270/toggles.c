@@ -107,8 +107,6 @@ static void do_toggle_reason(H3270 *session, LIB3270_TOGGLE ix, LIB3270_TOGGLE_T
 	if(session->update_toggle)
 		session->update_toggle(session,ix,t->value,reason,toggle_names[ix]);
 
-//	notify_toggle_changed(session, ix, t->value, reason);
-
 }
 
 LIB3270_EXPORT int lib3270_set_toggle(H3270 *session, LIB3270_TOGGLE ix, int value)
@@ -156,6 +154,8 @@ void initialize_toggles(H3270 *session, struct toggle *toggle)
 		toggle[f].callback	= no_callback;
 		toggle[f].upcall	= toggle_nop;
 	}
+
+	toggle[LIB3270_TOGGLE_RECTANGLE_SELECT].upcall = toggle_rectselect;
 
 #if defined(X3270_TRACE)
 	toggle[DS_TRACE].upcall			= toggle_dsTrace;
