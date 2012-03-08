@@ -143,7 +143,7 @@ typedef struct {
 #endif /*]*/
 	char	*conf_dir;
 	char	*model;
-	char	*hostsfile;
+//	char	*hostsfile;
 	char	*port;
 	char	*charset;
 	char	*termname;
@@ -156,9 +156,12 @@ typedef struct {
 	char	*trace_file;
 	char	*screentrace_file;
 	char	*trace_file_size;
-#if defined(X3270_DISPLAY) || defined(WC3270) /*[*/
+/*
+#if defined(X3270_DISPLAY) || defined(WC3270)
 	char	trace_monitor;
-#endif /*]*/
+#endif
+*/
+
 #endif /*]*/
 	char	*oversize;
 #if defined(X3270_FT) /*[*/
@@ -169,9 +172,13 @@ typedef struct {
 	char	*idle_command;
 	char	idle_command_enabled;
 	char	*idle_timeout;
-#if defined(X3270_SCRIPT) /*[*/
+
+/*
+#if defined(X3270_SCRIPT)
 	char	*plugin_command;
-#endif /*]*/
+#endif
+*/
+
 #if defined(HAVE_LIBSSL) /*[*/
 	char	*cert_file;
 #endif /*]*/
@@ -206,14 +213,18 @@ typedef struct {
 	char	*hostname;
 #endif
 
-#if defined(WC3270) /*[*/
+/*
+#if defined(WC3270)
 	char	*title;
-#endif /*]*/
+#endif
+*/
 
-#if defined(USE_APP_DEFAULTS) /*[*/
-	/* App-defaults version */
+/*
+#if defined(USE_APP_DEFAULTS)
+	// App-defaults version
 	char	*ad_version;
-#endif /*]*/
+#endif
+*/
 
 } AppRes, *AppResptr;
 

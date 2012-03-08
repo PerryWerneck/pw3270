@@ -90,8 +90,7 @@
 
 		/* Debug & log */
 		#if defined( DEBUG )
-			#define Trace( fmt, ... )		fprintf(stderr, "%s(%d) " fmt "\n", __FILE__, __LINE__, __VA_ARGS__ ); fflush(stderr); \
-											WriteLog("TRACE", "%s(%d) " fmt , __FILE__, __LINE__, __VA_ARGS__ )
+			#define Trace( fmt, ... )		fprintf(stderr, "%s(%d) " fmt "\n", __FILE__, __LINE__, __VA_ARGS__ ); fflush(stderr);
 		#else
 			#define Trace( fmt, ... )	/* __VA_ARGS__ */
 		#endif

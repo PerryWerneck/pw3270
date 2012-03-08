@@ -357,7 +357,7 @@ static void initialize(void)
 #endif /*]*/
 
 	appres.model = "";
-	appres.hostsfile = CN;
+//	appres.hostsfile = CN;
 	appres.port = "telnet";
 
 #if !defined(_WIN32) /*[*/
@@ -490,7 +490,7 @@ static const struct lib3270_option options[] =
 #if defined(X3270_TRACE) /*[*/
     { OptDsTrace,  OPT_BOOLEAN, True,  ResDsTrace,   toggle_offset(DS_TRACE), NULL },
 #endif /*]*/
-    { OptHostsFile,OPT_STRING,  False, ResHostsFile, offset(hostsfile), NULL },
+//    { OptHostsFile,OPT_STRING,  False, ResHostsFile, offset(hostsfile), NULL },
 //#if defined(C3270)
 //    { OptKeymap,   OPT_STRING,  False, ResKeymap,    offset(key_map), N_( "Specifies a keymap name and optional modifiers." ) },
 // #endif
@@ -647,7 +647,7 @@ static struct {
 #if defined(WC3270) /*[*/
 	{ "hostname",	offset(hostname),	XRM_STRING },
 #endif /*]*/
-	{ ResHostsFile,	offset(hostsfile),	XRM_STRING },
+//	{ ResHostsFile,	offset(hostsfile),	XRM_STRING },
 #if defined(X3270_ANSI) /*[*/
 	{ ResIcrnl,	offset(icrnl),		XRM_BOOLEAN },
 	{ ResInlcr,	offset(inlcr),		XRM_BOOLEAN },

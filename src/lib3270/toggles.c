@@ -142,6 +142,11 @@ LIB3270_EXPORT int lib3270_toggle(H3270 *session, LIB3270_TOGGLE ix)
 	return 0;
 }
 
+static void toggle_monocase(H3270 *session, struct toggle *t, LIB3270_TOGGLE_TYPE tt)
+{
+	screen_disp(session);
+}
+
 /*
  * Called from system initialization code to handle initial toggle settings.
  */
@@ -155,7 +160,8 @@ void initialize_toggles(H3270 *session, struct toggle *toggle)
 		toggle[f].upcall	= toggle_nop;
 	}
 
-	toggle[LIB3270_TOGGLE_RECTANGLE_SELECT].upcall = toggle_rectselect;
+	toggle[LIB3270_TOGGLE_RECTANGLE_SELECT].upcall	= toggle_rectselect;
+	toggle[LIB3270_TOGGLE_MONOCASE].upcall 			= toggle_monocase;
 
 #if defined(X3270_TRACE)
 	toggle[DS_TRACE].upcall			= toggle_dsTrace;

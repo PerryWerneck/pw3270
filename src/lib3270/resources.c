@@ -125,30 +125,39 @@ add_resource(const char *name, char *value)
 	drdb_next = &d->next;
 }
 
-char *
-get_resource(const char *name)
+const char * get_resource(const char *name)
 {
 	struct dresource *d;
 	int i;
 
-	for (d = drdb; d != NULL; d = d->next) {
-		if (!strcmp(d->name, name)) {
+	for (d = drdb; d != NULL; d = d->next)
+	{
+		if (!strcmp(d->name, name))
+		{
+			lib3270_write_log(&h3270,"resource","%s=\"%s\"",name,d->value);
 			return d->value;
 		}
 	}
 
-	for (i = 0; fallbacks[i] != NULL; i++) {
-		if (!strncmp(fallbacks[i], name, strlen(name)) &&
-		    *(fallbacks[i] + strlen(name)) == ':') {
-			return fallbacks[i] + strlen(name) + 2;
+	for (i = 0; fallbacks[i] != NULL; i++)
+	{
+		if (!strncmp(fallbacks[i], name, strlen(name)) && *(fallbacks[i] + strlen(name)) == ':')
+		{
+			const char *ret =  fallbacks[i] + strlen(name) + 2;
+			lib3270_write_log(&h3270,"resource","%s=\"%s\"",name,ret);
+			return ret;
 		}
 	}
-#if defined(C3270) /*[*/
-	for (i = 0; rdb[i].name != (char *)NULL; i++) {
-		if (!strcmp(rdb[i].name, name)) {
+
+#if defined(C3270)
+	for (i = 0; rdb[i].name != (char *)NULL; i++)
+	{
+		if (!strcmp(rdb[i].name, name))
+		{
+			lib3270_write_log(&h3270,"resource","%s=\"%s\"",name,rdb[i].value);
 			return rdb[i].value;
 		}
 	}
-#endif /*]*/
+#endif
 	return NULL;
 }

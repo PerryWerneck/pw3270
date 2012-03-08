@@ -45,9 +45,7 @@
 #include "actionsc.h"
 #include "ctlrc.h"
 #include "hostc.h"
-// #include "keymapc.h"
 #include "kybdc.h"
-// #include "macrosc.h"
 #include "screenc.h"
 #include "tablesc.h"
 #include "trace_dsc.h"
@@ -329,7 +327,7 @@ static void screen_update(H3270 *session, int bstart, int bend)
 	a  		= color_from_fa(fa);
 	fa_addr = find_field_attribute(session,bstart); // may be -1, that's okay
 
-	Trace("%s ea_buf=%p",__FUNCTION__,ea_buf);
+//	Trace("%s ea_buf=%p",__FUNCTION__,ea_buf);
 
 	for(baddr = bstart; baddr < bend; baddr++)
 	{
