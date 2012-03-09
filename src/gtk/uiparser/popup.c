@@ -35,7 +35,10 @@
 
  GObject * ui_create_popup(GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error)
  {
- 	GtkWidget *widget = NULL;
+ 	GtkWidget	* widget 	= NULL;
+ 	const gchar * id;
+ 	int 		  pos		= -1;
+ 	int			  f;
 
  	if(info->element)
 	{
@@ -44,9 +47,39 @@
 	}
 
 	if(action)
-		widget = gtk_action_create_menu(action);
-	else
-		widget = gtk_menu_new();
+	{
+		*error = g_error_new(ERROR_DOMAIN,EINVAL,"%s", _( "Unexpected action attribute in <popup>"));
+		return NULL;
+	}
+
+	id = ui_get_attribute("group",names,values);
+	if(!id)
+		id = ui_get_attribute("type",names,values);
+
+	if(!id)
+	{
+		*error = g_error_new(ERROR_DOMAIN,ENOENT,"%s", _( "<popup> needs a type or group attribute"));
+		return NULL;
+	}
+
+	for(f=0;info->popup[f] && pos < 0;pos++)
+	{
+		if(!g_strcasecmp(info->popup[f],id))
+		{
+			pos = f;
+			break;
+		}
+	}
+
+	if(pos < 0)
+	{
+		*error = g_error_new(ERROR_DOMAIN,EINVAL,_( "Unknown popup type \"%s\""),id);
+		return NULL;
+	}
+
+	widget = gtk_menu_new();
+
+	g_object_set_data(G_OBJECT(widget),"popup_id",(gpointer) pos);
 
 	return G_OBJECT(ui_insert_element(info, action, UI_ELEMENT_POPUP, names, values, G_OBJECT(widget), error));
  }

@@ -58,6 +58,7 @@
  	GtkWidget		*  center_widget;
  	GStringChunk	*  strings;
 	const gchar 	** group;			/**< Action group list */
+	const gchar 	** popup;			/**< Popup names */
 	GHashTable	 	*  actions;			/**< List of actions */
 	GHashTable		*  element_list[UI_ELEMENT_COUNT];
  };
