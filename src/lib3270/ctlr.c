@@ -320,11 +320,7 @@ static void ctlr_connect(H3270 *session, int ignored unused, void *dunno)
 
 
 
-/*
- * Find the buffer address of the field attribute for a given buffer address.
- * Returns -1 if the screen isn't formatted.
- */
-int find_field_attribute(H3270 *h, int baddr)
+LIB3270_EXPORT int lib3270_field_addr(H3270 *h, int baddr)
 {
 	int sbaddr;
 
@@ -334,18 +330,20 @@ int find_field_attribute(H3270 *h, int baddr)
 		return -1;
 
 	sbaddr = baddr;
-	do {
+	do
+	{
 		if (ea_buf[baddr].fa)
 			return baddr;
 		DEC_BA(baddr);
 	} while (baddr != sbaddr);
+
 	return -1;
 }
 
 /*
  * Get Field width
  */
-int find_field_length(H3270 *h, int baddr)
+int lib3270_field_length(H3270 *h, int baddr)
 {
 	int saddr;
 	int addr;

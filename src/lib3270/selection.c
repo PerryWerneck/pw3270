@@ -178,7 +178,6 @@ LIB3270_EXPORT void lib3270_clear_selection(H3270 *session)
 
 }
 
-
 LIB3270_EXPORT void lib3270_select_to(H3270 *session, int baddr)
 {
 	CHECK_SESSION_HANDLE(session);
@@ -195,3 +194,40 @@ LIB3270_EXPORT void lib3270_select_to(H3270 *session, int baddr)
 
 }
 
+LIB3270_EXPORT void lib3270_select_word(H3270 *session, int baddr)
+{
+	int pos, len;
+
+	CHECK_SESSION_HANDLE(session);
+
+	for(pos = baddr; pos > 0 && !isspace(ea_buf[pos].chr);pos--);
+	session->selected.begin = pos;
+
+	len = session->rows * session->cols;
+	for(pos = baddr; pos < len && !isspace(ea_buf[pos].chr);pos++);
+	session->selected.end = pos;
+
+	update_selected_region(session);
+}
+
+LIB3270_EXPORT int lib3270_select_field(H3270 *session, int baddr)
+{
+	int start;
+
+	CHECK_SESSION_HANDLE(session);
+
+	start = lib3270_field_addr(session,baddr);
+
+	if(start < 0)
+	{
+		ring_bell();
+		return -1;
+	}
+
+	session->selected.begin	= start;
+	session->selected.end	= start + lib3270_field_length(session,start);
+
+	update_selected_region(session);
+
+	return 0;
+}

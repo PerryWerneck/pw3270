@@ -33,8 +33,9 @@
 
 	#define LIB3270_SELECTION_H_INCLUDED 1
 
-	LIB3270_EXPORT void lib3270_clear_selection(H3270 *session);
-	LIB3270_EXPORT void lib3270_select_to(H3270 *session, int baddr);
-
+	LIB3270_EXPORT void	  lib3270_clear_selection(H3270 *session);
+	LIB3270_EXPORT void	  lib3270_select_to(H3270 *session, int baddr);
+	LIB3270_EXPORT void	  lib3270_select_word(H3270 *session, int baddr);
+	LIB3270_EXPORT int	  lib3270_select_field(H3270 *session, int baddr);
 
  #endif // LIB3270_SELECTION_H_INCLUDED
