@@ -285,8 +285,6 @@
 
 		#endif
 
-		#define Register3270IOCallbacks(x) lib3270_register_io_handlers(x)
-
 
 		/* Screen processing */
 
@@ -327,6 +325,7 @@
 
 		#define CHAR_ATTR_UNCONVERTED	CHAR_ATTR_CG
 
+/*
 		struct lib3270_screen_callbacks
 		{
 			unsigned short	sz;
@@ -363,6 +362,7 @@
 			char *		(*console_entry)(HCONSOLE hwnd);
 
 		};
+*/
 
 		struct lib3270_option
 		{
@@ -383,8 +383,7 @@
 			const char		*description;
 		};
 
-		// LOCAL_EXTERN int Register3270ScreenCallbacks(const struct lib3270_screen_callbacks *cbk);
-		LOCAL_EXTERN void ring_bell(void);
+		LIB3270_EXPORT void lib3270_ring_bell(void);
 
 		#define new_3270_session(m) lib3270_session_new(m)
 

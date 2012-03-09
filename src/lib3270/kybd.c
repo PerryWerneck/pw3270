@@ -182,7 +182,7 @@ static int enq_chk(void)
 	/* If operator error, complain and drop it. */
 	if (kybdlock & KL_OERR_MASK)
 	{
-		ring_bell();
+		lib3270_ring_bell();
 		trace_event("  dropped (operator error)\n");
 		return -1;
 	}
@@ -190,7 +190,7 @@ static int enq_chk(void)
 	/* If scroll lock, complain and drop it. */
 	if (kybdlock & KL_SCROLLED)
 	{
-		ring_bell();
+		lib3270_ring_bell();
 		trace_event("  dropped (scrolled)\n");
 		return -1;
 	}
@@ -471,7 +471,7 @@ operator_error(int error_type)
 		kybdlock_set((unsigned int)error_type, "operator_error");
 		(void) flush_ta();
 	} else {
-		ring_bell();
+		lib3270_ring_bell();
 	}
 }
 
@@ -1317,7 +1317,7 @@ void key_ACharacter(unsigned char c, enum keytype keytype, enum iaction cause,Bo
 			composing = FIRST;
 			status_compose(True, c, keytype);
 		} else {
-			ring_bell();
+			lib3270_ring_bell();
 			composing = NONE;
 			status_compose(False, 0, KT_STD);
 		}
@@ -1335,7 +1335,7 @@ void key_ACharacter(unsigned char c, enum keytype keytype, enum iaction cause,Bo
 			c = composites[i].translation.keysym;
 			keytype = composites[i].translation.keytype;
 		} else {
-			ring_bell();
+			lib3270_ring_bell();
 			return;
 		}
 		break;
@@ -2449,7 +2449,7 @@ lightpen_select(int baddr)
 	faddr = find_field_attribute(baddr);
 	fa = ea_buf[faddr].fa;
 	if (!FA_IS_SELECTABLE(fa)) {
-		ring_bell();
+		lib3270_ring_bell();
 		return;
 	}
 	designator = faddr;
@@ -2464,7 +2464,7 @@ lightpen_select(int baddr)
 			     ea_buf[designator].db != DBCS_LEFT_WRAP) &&
 			    (ea_buf[designator2].db != DBCS_RIGHT &&
 			     ea_buf[designator2].db != DBCS_RIGHT_WRAP)) {
-				ring_bell();
+				lib3270_ring_bell();
 				return;
 			}
 			if (ea_buf[designator].cc == 0x42 &&
@@ -2487,7 +2487,7 @@ lightpen_select(int baddr)
 				mdt_set(faddr);
 				key_AID(AID_ENTER);
 			} else {
-				ring_bell();
+				lib3270_ring_bell();
 			}
 			return;
 		}
@@ -2513,7 +2513,7 @@ lightpen_select(int baddr)
 		key_AID(AID_ENTER);
 		break;
 	    default:
-		ring_bell();
+		lib3270_ring_bell();
 		break;
 	}
 }

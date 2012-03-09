@@ -632,10 +632,6 @@ void status_untiming(H3270 *session)
 		session->set_timer(session,0);
 }
 
-void ring_bell(void)
-{
-}
-
 /* Set the window title. */ /*
 void screen_title(char *text)
 {

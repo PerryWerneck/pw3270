@@ -94,9 +94,14 @@ static void DefaultRemoveInput(unsigned long id);
 
 static int DefaultProcessEvents(int block);
 
-static const struct lib3270_io_callbacks default_io_callbacks =
+static void	dunno(void)
 {
-	sizeof(struct lib3270_io_callbacks),
+
+}
+
+static const struct lib3270_callbacks default_callbacks =
+{
+	sizeof(struct lib3270_callbacks),
 
 	DefaultAddTimeOut, 		// unsigned long (*AddTimeOut)(unsigned long interval_ms, void (*proc)(void));
 	DefaultRemoveTimeOut,	// void (*RemoveTimeOut)(unsigned long timer);
@@ -114,10 +119,12 @@ static const struct lib3270_io_callbacks default_io_callbacks =
 
 	NULL, 		// int (*Wait)(int seconds);
 	DefaultProcessEvents,	// int (*RunPendingEvents)(int wait);
+	dunno
+
 
 };
 
-static const struct lib3270_io_callbacks *callbacks = &default_io_callbacks;
+static const struct lib3270_callbacks *callbacks = &default_callbacks;
 
 /*---[ Implement default calls ]----------------------------------------------------------------------------*/
 
@@ -870,14 +877,12 @@ void RemoveInput(unsigned long id)
 		callbacks->RemoveInput(id);
 }
 
-#define Register3270IOCallbacks(x) lib3270_register_io_handlers(x)
-
-int LIB3270_EXPORT lib3270_register_io_handlers(const struct lib3270_io_callbacks *cbk)
+int LIB3270_EXPORT lib3270_register_handlers(const struct lib3270_callbacks *cbk)
 {
 	if(!cbk)
 		return EINVAL;
 
-	if(cbk->sz != sizeof(struct lib3270_io_callbacks))
+	if(cbk->sz != sizeof(struct lib3270_callbacks))
 		return EINVAL;
 
 	callbacks = cbk;
@@ -993,3 +998,10 @@ LIB3270_EXPORT int lib3270_wait(seconds)
 
 	return 0;
 }
+
+LIB3270_EXPORT void lib3270_ring_bell(void)
+{
+	callbacks->ring_bell();
+}
+
+
