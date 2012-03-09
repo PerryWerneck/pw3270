@@ -47,6 +47,16 @@
 	ACTION_GROUP_MAX
  };
 
+ enum popup_group
+ {
+ 	POPUP_DEFAULT,
+ 	POPUP_ONLINE,
+ 	POPUP_OFFLINE,
+ 	POPUP_SELECTION,
+
+ 	POPUP_MAX
+ };
+
  static const gchar *groupname[ACTION_GROUP_MAX+1] = {	"default",
 														"online",
 														"offline",
@@ -54,6 +64,13 @@
 														"clipboard",
 														"filetransfer",
 														"paste",
+														NULL
+														};
+
+ static const gchar *popupname[POPUP_MAX+1] = {			"default",
+														"online",
+														"offline",
+														"selection",
 														NULL
 														};
 /*--[ Implement ]------------------------------------------------------------------------------------*/
@@ -208,7 +225,7 @@
 	}
 
 	// Create window
-	window = ui_parse_xml_folder(path,groupname,terminal,widget_setup);
+	window = ui_parse_xml_folder(path,groupname,popupname,terminal,widget_setup);
 	group = g_object_get_data(G_OBJECT(window),"action_groups");
 
 	// Setup action groups

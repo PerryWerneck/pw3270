@@ -31,13 +31,12 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add option="`pkg-config gtk+-2.0 lib3270 --cflags`" />
+			<Add option="`pkg-config gtk+-2.0 --cflags`" />
 			<Add directory="../../include" />
 		</Compiler>
 		<Linker>
-			<Add option="`pkg-config gtk+-2.0 lib3270 --libs`" />
+			<Add option="`pkg-config gtk+-2.0 --libs`" />
 		</Linker>
-		<Unit filename="../common/common.h" />
 		<Unit filename="../common/common.h.in" />
 		<Unit filename="../common/config.c">
 			<Option compilerVar="CC" />
