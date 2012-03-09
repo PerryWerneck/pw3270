@@ -255,8 +255,11 @@ GtkWidget * ui_parse_xml_folder(const gchar *path, const gchar ** groupname, con
 	p.toplevel 		= gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	p.center_widget	= widget;
 	p.group 		= groupname;
-	p.popup			= popupname;
+	p.popupname		= popupname;
 	p.strings		= g_string_chunk_new(0);
+	p.popup 		= g_new0(GtkWidget *,(g_strv_length((gchar **) p.popupname)+1));
+
+	g_object_set_data_full(G_OBJECT(p.toplevel),"popup_menus",(gpointer) p.popup, g_free);
 
 	for(current = g_list_first(file);current;current = g_list_next(current))
 	{

@@ -58,6 +58,7 @@
 		<Unit filename="src/gtk/mainwindow.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/gtk/uiparser/Makefile.in" />
 		<Unit filename="src/gtk/uiparser/accelerator.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -80,7 +81,13 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/gtk/uiparser/parser.h" />
+		<Unit filename="src/gtk/uiparser/popup.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/gtk/uiparser/private.h" />
+		<Unit filename="src/gtk/uiparser/script.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/gtk/uiparser/separator.c">
 			<Option compilerVar="CC" />
 		</Unit>

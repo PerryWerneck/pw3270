@@ -62,9 +62,9 @@
 		return NULL;
 	}
 
-	for(f=0;info->popup[f] && pos < 0;pos++)
+	for(f=0;info->popupname[f] && pos < 0;f++)
 	{
-		if(!g_strcasecmp(info->popup[f],id))
+		if(!g_strcasecmp(info->popupname[f],id))
 		{
 			pos = f;
 			break;
@@ -76,10 +76,18 @@
 		*error = g_error_new(ERROR_DOMAIN,EINVAL,_( "Unknown popup type \"%s\""),id);
 		return NULL;
 	}
+	else
+	{
+		widget = info->popup[pos];
+	}
 
-	widget = gtk_menu_new();
+	if(!widget)
+	{
+		info->popup[pos] = widget = gtk_menu_new();
+		gtk_widget_show_all(widget);
+	}
 
-	g_object_set_data(G_OBJECT(widget),"popup_id",(gpointer) pos);
+	trace("popup(%s): %p id=\"%s\" (%d)",id,widget,info->popupname[pos],pos);
 
 	return G_OBJECT(ui_insert_element(info, action, UI_ELEMENT_POPUP, names, values, G_OBJECT(widget), error));
  }

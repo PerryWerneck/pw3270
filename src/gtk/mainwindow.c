@@ -114,9 +114,30 @@
 	set_integer_to_config("terminal","model",id);
  }
 
- static gboolean popup(GtkWidget *widget, gboolean selected, gboolean online, GdkEventButton *event, gpointer popup)
+ static gboolean popup_menu(GtkWidget *widget, gboolean selected, gboolean online, GdkEventButton *event, GtkWidget **popup)
  {
- 	trace("Popup on widget %p online=%s selected=%s",widget,online ? "Yes" : "No", selected ? "Yes" : "No");
+ 	GtkWidget *menu = NULL;
+
+	if(!online)
+		menu = popup[POPUP_OFFLINE] ? popup[POPUP_OFFLINE] : popup[POPUP_DEFAULT];
+	else if(selected && popup[POPUP_SELECTION])
+		menu = popup[POPUP_SELECTION];
+	else if(popup[POPUP_ONLINE])
+		menu = popup[POPUP_ONLINE];
+	else
+		menu = popup[POPUP_DEFAULT];
+
+ 	trace("Popup %p on widget %p online=%s selected=%s",menu,widget,online ? "Yes" : "No", selected ? "Yes" : "No");
+
+	if(!menu)
+		return FALSE;
+
+	trace("Showing popup \"%s\"",gtk_widget_get_name(menu));
+
+	gtk_widget_show_all(menu);
+	gtk_menu_set_screen(GTK_MENU(menu), gtk_widget_get_screen(widget));
+	gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, event->button,event->time);
+
  	return TRUE;
  }
 
@@ -205,6 +226,7 @@
 	H3270			* host 		= v3270_get_session(terminal);
 	gchar			* path		= build_data_filename("ui",NULL);
 	GtkActionGroup	**group;
+	GtkWidget		**popup;
 	int			  	  f;
 
 	// Initialize terminal config
@@ -226,7 +248,8 @@
 
 	// Create window
 	window = ui_parse_xml_folder(path,groupname,popupname,terminal,widget_setup);
-	group = g_object_get_data(G_OBJECT(window),"action_groups");
+	group  = g_object_get_data(G_OBJECT(window),"action_groups");
+	popup  = g_object_get_data(G_OBJECT(window),"popup_menus");
 
 	// Setup action groups
 	gtk_action_group_set_sensitive(group[ACTION_GROUP_SELECTION],FALSE);
@@ -242,7 +265,7 @@
 	g_signal_connect(terminal,"update_config",G_CALLBACK(update_config),0);
 	g_signal_connect(terminal,"model_changed",G_CALLBACK(update_model),0);
 	g_signal_connect(terminal,"selecting",G_CALLBACK(selecting),group);
-	g_signal_connect(terminal,"popup",G_CALLBACK(popup),NULL);
+	g_signal_connect(terminal,"popup",G_CALLBACK(popup_menu),popup);
 
 	g_free(path);
 	gtk_widget_grab_focus(terminal);

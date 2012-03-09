@@ -56,9 +56,10 @@
  	GtkWidget		*  toplevel;
  	GObject			*  element;
  	GtkWidget		*  center_widget;
+ 	GtkWidget		** popup;			/**< Popup widgets */
  	GStringChunk	*  strings;
 	const gchar 	** group;			/**< Action group list */
-	const gchar 	** popup;			/**< Popup names */
+	const gchar 	** popupname;		/**< Popup names */
 	GHashTable	 	*  actions;			/**< List of actions */
 	GHashTable		*  element_list[UI_ELEMENT_COUNT];
  };
