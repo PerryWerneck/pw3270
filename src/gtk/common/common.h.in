@@ -27,6 +27,33 @@
  *
  */
 
+#ifndef COMMON_H_INCLUDED
+
+ #define COMMON_H_INCLUDED 1
+
+ // "PW" Standards
+ #include <gtk/gtk.h>
+ #include <errno.h>
+
+ #ifndef PACKAGE_NAME
+	#define PACKAGE_NAME	"@PACKAGE_NAME@"
+ #endif
+
+ #define ENABLE_NLS
+
+ #ifndef GETTEXT_PACKAGE
+	#define GETTEXT_PACKAGE PACKAGE_NAME
+ #endif
+
+ #include <libintl.h>
+ #include <glib/gi18n.h>
+
+ #if defined( DEBUG )
+	#define trace(x, ...)	fprintf(stderr,"%s(%d):\t" x "\n",__FILE__,__LINE__, __VA_ARGS__); fflush(stderr);
+ #else
+	#define trace(x, ...)	/* */
+ #endif
+
  // Configuration
  void		  configuration_init(void);
  void		  configuration_deinit(void);
@@ -41,3 +68,4 @@
 
  gchar 		* build_data_filename(const gchar *first_element, ...);
 
+#endif

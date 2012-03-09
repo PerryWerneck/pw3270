@@ -30,14 +30,7 @@
  */
 
  #include <lib3270/config.h>
-
- #include <gtk/gtk.h>
-
- #define ENABLE_NLS
- #define GETTEXT_PACKAGE PACKAGE_NAME
-
- #include <libintl.h>
- #include <glib/gi18n.h>
+ #include "../common/common.h"
 
  #define ERROR_DOMAIN g_quark_from_static_string("uiparser")
 

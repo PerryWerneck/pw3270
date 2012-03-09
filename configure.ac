@@ -206,6 +206,7 @@ AC_CONFIG_FILES([
 	src/lib3270/mkversion.sh
 	src/gtk/Makefile
 	src/gtk/uiparser/Makefile
+	src/gtk/common/common.h
 
 ])
 

@@ -1,5 +1,6 @@
 
-#include "../globals.h"
+#include <gtk/gtk.h>
+#include "../common/common.h"
 #include "parser.h"
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
@@ -45,6 +46,11 @@ int main (int argc, char *argv[])
 										"filetransfer",
 										"paste",
 										NULL };
+
+	static const gchar *popupname[] = {	"default",
+										"selection",
+										"offline",
+										NULL };
 	GtkWidget 	* window;
 	gchar		* path;
 
@@ -52,7 +58,7 @@ int main (int argc, char *argv[])
 	configuration_init();
 
 	path   = build_data_filename("ui",NULL);
-	window = ui_parse_xml_folder(path,groupname,NULL,NULL);
+	window = ui_parse_xml_folder(path,groupname,popupname,NULL,NULL);
 	g_free(path);
 
 	if(window)

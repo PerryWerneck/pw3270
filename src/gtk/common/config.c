@@ -30,7 +30,8 @@
  *
  */
 
- #include "../globals.h"
+ #include <gtk/gtk.h>
+ #include "common.h"
  #include <stdarg.h>
  #include <glib/gstdio.h>
 

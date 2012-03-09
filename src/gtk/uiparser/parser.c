@@ -29,7 +29,6 @@
  *
  */
 
- #include "../globals.h"
  #include "private.h"
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
@@ -207,7 +206,7 @@ void parser_build(struct parser *p, GtkWidget *widget)
 
 }
 
-GtkWidget * ui_parse_xml_folder(const gchar *path, const gchar ** groupname, GtkWidget *widget, const SETUP_ITEM *setup)
+GtkWidget * ui_parse_xml_folder(const gchar *path, const gchar ** groupname, const gchar **popupname, GtkWidget *widget, const SETUP_ITEM *setup)
 {
 	struct parser	  p;
 	GDir 			* dir;

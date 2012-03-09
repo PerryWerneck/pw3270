@@ -35,7 +35,7 @@
 	void		  (*setup)(GtkWidget *widget, GtkWidget *obj);
  } SETUP_ITEM;
 
- GtkWidget 		* ui_parse_xml_folder(const gchar *path, const gchar ** groupname, GtkWidget *widget, const SETUP_ITEM *itn);
+ GtkWidget 		* ui_parse_xml_folder(const gchar *path, const gchar ** groupname, const gchar **popupname, GtkWidget *widget, const SETUP_ITEM *itn);
  void			  ui_connect_action(GtkAction *action, GtkWidget *widget, const gchar *name, const gchar *id);
  void			  ui_connect_toggle(GtkAction *action, GtkWidget *widget, const gchar *name, const gchar *id);
  void			  ui_connect_pfkey(GtkAction *action, GtkWidget *widget, const gchar *name, const gchar *id);
