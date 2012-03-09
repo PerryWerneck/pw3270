@@ -33,15 +33,14 @@ PACKAGE_NAME=@PACKAGE_NAME@
 prefix=@prefix@
 exec_prefix=@exec_prefix@
 bindir=@bindir@
-sbindir=@sbindir@
-libdir=@libdir@
-includedir=@includedir@
 datarootdir=@datarootdir@
 localedir=@localedir@
-docdir=@docdir@
-sysconfdir=@sysconfdir@
 
 EXEEXT=@EXEEXT@
+STRIP=@STRIP@
+INSTALL=@INSTALL@
+INSTALL_PROGRAM=@INSTALL_PROGRAM@
+INSTALL_DATA=@INSTALL_DATA@
 
 #---[ Sources ]----------------------------------------------------------------
 
@@ -64,6 +63,21 @@ CFLAGS=@CFLAGS@ @GTK_CFLAGS@ -DAPPDATA=\"$(datarootdir)/$(PACKAGE_NAME)\" -I../.
 LIBS=@LIBS@ @GTK_LIBS@
 
 include ../include/rules.mak
+
+#---[ Release targets ]--------------------------------------------------------
+
+Release: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
+	@$(STRIP) $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
+
+install: Release
+	@$(MKDIR) $(DESTDIR)$(bindir)
+	@$(INSTALL_PROGRAM) $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) $(DESTDIR)$(bindir)
+
+$(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT):	$(foreach SRC, $(basename $(SOURCES)), $(OBJDIR)/Release/$(SRC)$(OBJEXT))
+
+	@echo $@ ...
+	@$(MKDIR) `dirname $@`
+	@$(LD) -Wl,--rpath,.bin/Debug/lib -o $@ $^ $(LIBS) $(LIB3270_LIBS)
 
 #---[ Debug targets ]----------------------------------------------------------
 

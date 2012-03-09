@@ -175,7 +175,7 @@ static void setup_luname_position(GdkRectangle *rect, struct v3270_metrics *metr
 #ifdef DEBUG
 	cairo_set_source_rgb(cr,0.1,0.1,0.1);
 #else
-	gdk_cairo_set_source_color(cr,terminal->color+V3270_COLOR_OIA_BACKGROUND);
+	gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_BACKGROUND);
 #endif
 
 	cairo_rectangle(cr, rect->x, rect->y, rect->width, rect->height);
@@ -305,7 +305,7 @@ void v3270_draw_ssl_status(cairo_t *cr, H3270 *host, struct v3270_metrics *metri
 #ifdef DEBUG
 	cairo_set_source_rgb(cr,0.1,0.1,0.1);
 #else
-	gdk_cairo_set_source_color(cr,terminal->color+V3270_COLOR_OIA_BACKGROUND);
+	gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_BACKGROUND);
 #endif
 
 	cairo_translate(cr, rect->x, rect->y);

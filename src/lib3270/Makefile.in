@@ -39,12 +39,24 @@ LIBS=@LIBS@ @LIBSSL_LIBS@ @SOCKET_LIBS@
 DEBUG_CFLAGS=-DDEBUG=1 -g
 DEPENDS ?= *.h ../../src/include/*.h Makefile
 
+#---[ Paths ]------------------------------------------------------------------
+
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+localedir=@localedir@
+
 #---[ Tools ]------------------------------------------------------------------
 
 MKDIR=@MKDIR_P@
 CC=@CC@
 LD=@CC@
 HOST_CC=@HOST_CC@
+STRIP=@STRIP@
+INSTALL=@INSTALL@
+INSTALL_PROGRAM=@INSTALL_PROGRAM@
+INSTALL_DATA=@INSTALL_DATA@
 
 #---[       ]------------------------------------------------------------------
 
@@ -56,17 +68,24 @@ ROOTDIR ?= .
 OBJDIR  ?= $(ROOTDIR)/.obj
 BINDIR  ?= $(ROOTDIR)/.bin
 DEPENDS ?= *.h Makefile
+
 BINDBG  ?= $(BINDIR)/Debug
+BINRLS  ?= $(BINDIR)/Release
 
 OBJDBG = $(OBJDIR)/Debug
+OBJRLS = $(OBJDIR)/Release
 
 #---[ Rules ]------------------------------------------------------------------
 
-$(OBJDIR)/Debug/%.o: %.c $(DEPENDS)
+$(OBJDBG)/%.o: %.c $(DEPENDS)
 	@echo $< ...
 	@$(MKDIR) `dirname $@`
 	@$(CC) $(DEBUG_CFLAGS) $(CFLAGS) $(SSL_CFLAGS) -o $@ -c $<
 
+$(OBJRLS)/%.o: %.c $(DEPENDS)
+	@echo $< ...
+	@$(MKDIR) `dirname $@`
+	@$(CC) $(CFLAGS) $(SSL_CFLAGS) -o $@ -c $<
 
 #---[ Sources ]----------------------------------------------------------------
 
@@ -79,13 +98,24 @@ SOURCES = XtGlue.c actions.c ansi.c charset.c ctlr.c \
 
 #---[ Misc targets ]-----------------------------------------------------------
 
-Debug: $(BINDBG)/@DLLPREFIX@3270@DLLEXT@
+Release: $(BINRLS)/@DLLPREFIX@3270@DLLEXT@
 
+install: Release
+	@$(MKDIR) $(DESTDIR)$(libdir)
+	@$(INSTALL_PROGRAM) $(BINRLS)/@DLLPREFIX@3270@DLLEXT@ $(DESTDIR)$(libdir)
+
+Debug: $(BINDBG)/@DLLPREFIX@3270@DLLEXT@
 
 $(BINDBG)/@DLLPREFIX@3270@DLLEXT@: $(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC)@OBJEXT@)
 	@echo $@ ...
 	@$(MKDIR) `dirname $@`
 	@$(LD) $(DLL_FLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
+
+$(BINRLS)/@DLLPREFIX@3270@DLLEXT@: $(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SRC)@OBJEXT@)
+	@echo $@ ...
+	@$(MKDIR) `dirname $@`
+	@$(LD) $(DLL_FLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
+	@$(STRIP) $@
 
 version.c: ./mkversion.sh
 	@echo $@ ...

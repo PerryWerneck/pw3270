@@ -49,11 +49,22 @@ BINDIR=.bin
 TMPDIR=.tmp
 EXEEXT=@EXEEXT@
 DBGLIB=-L../../$(BINDIR)/Debug/lib -l3270
+RLSLIB=-L../../$(BINDIR)/Release/lib -l3270
 
 #---[ Tools ]------------------------------------------------------------------
 
 VALGRIND=@VALGRIND@
 MKDIR=@MKDIR_P@
+
+#---[ Release targets ]--------------------------------------------------------
+
+Release: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
+
+$(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT): src/gtk/* $(BINDIR)/Release/lib/@DLLPREFIX@3270@DLLEXT@ $(DEPENDS)
+	@$(MAKE) BINDIR="../../$(BINDIR)" LIB3270_LIBS="$(RLSLIB)" LIB3270_CFLAGS="-I../../src/include" -C src/gtk ../../$(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
+
+$(BINDIR)/Release/lib/@DLLPREFIX@3270@DLLEXT@: src/lib3270/* src/include/lib3270/* src/include/* Makefile
+	@$(MAKE) BINRLS=../../.bin/Release/lib -C src/lib3270 ../../.bin/Release/lib/@DLLPREFIX@3270@DLLEXT@
 
 #---[ Debug targets ]----------------------------------------------------------
 
@@ -83,6 +94,10 @@ $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz: clean
 	@cp -r scripts $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@tar --create --gzip --verbose --directory $(TMPDIR) --exclude-vcs --file=$@ $(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@echo $@
+
+install:
+	@make BINRLS="../../.bin/Release/lib" -C src/lib3270 install
+	@make BINDIR="../../$(BINDIR)" LIB3270_LIBS="$(RLSLIB)" LIB3270_CFLAGS="-I../../src/include" -C src/gtk install
 
 clean:
 	@rm -fr .obj

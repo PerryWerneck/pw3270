@@ -56,12 +56,23 @@ ROOTDIR ?= .
 OBJDIR  ?= $(ROOTDIR)/.obj
 BINDIR  ?= $(ROOTDIR)/.bin
 
+BINDBG  ?= $(BINDIR)/Debug
+BINRLS  ?= $(BINDIR)/Release
+
+OBJDBG = $(OBJDIR)/Debug
+OBJRLS = $(OBJDIR)/Release
+
 #---[ Rules ]------------------------------------------------------------------
 
-$(OBJDIR)/Debug/%.o: %.c $(DEPENDS)
+$(OBJDBG)/%.o: %.c $(DEPENDS)
 	@echo `basename $@` ...
 	@$(MKDIR) `dirname $@`
 	@$(CC) $(DEBUG_CFLAGS) $(CFLAGS) $(LIB3270_CFLAGS) -o $@ -c $<
+
+$(OBJRLS)/%.o: %.c $(DEPENDS)
+	@echo `basename $@` ...
+	@$(MKDIR) `dirname $@`
+	@$(CC) $(CFLAGS) $(LIB3270_CFLAGS) -o $@ -c $<
 
 #---[ Targets ]----------------------------------------------------------------
 
