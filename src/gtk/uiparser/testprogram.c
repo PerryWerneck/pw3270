@@ -3,6 +3,10 @@
 #include "../common/common.h"
 #include "parser.h"
 
+/*--[ Globals ]--------------------------------------------------------------------------------------*/
+
+ static GtkWidget **popup = NULL;
+
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
 void activated(GtkAction *action, GtkWidget *widget)
@@ -36,6 +40,16 @@ void ui_connect_pakey(GtkAction *action, GtkWidget *widget, const gchar *name, c
 	g_signal_connect(action,"activate",G_CALLBACK(activated),widget);
 }
 
+void show_popup(GtkWidget *button, GtkWidget *menu)
+{
+	trace("Showing popup %p",popup);
+
+	gtk_widget_show_all(menu);
+	gtk_menu_set_screen(GTK_MENU(menu), gtk_widget_get_screen(button));
+	gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, 0, 0);
+
+}
+
 int main (int argc, char *argv[])
 {
 	static const gchar *groupname[] = {	"default",
@@ -50,16 +64,38 @@ int main (int argc, char *argv[])
 	static const gchar *popupname[] = {	"default",
 										"selection",
 										"offline",
+										"dock",
 										NULL };
+	int			  f;
 	GtkWidget 	* window;
 	gchar		* path;
+	GtkWidget	* vbox;
+	GtkWidget	* hbox;
 
 	gtk_init(&argc, &argv);
 	configuration_init();
 
+	hbox   = gtk_hbox_new(FALSE,5);
+	vbox   = gtk_vbox_new(FALSE,5);
 	path   = build_data_filename("ui",NULL);
-	window = ui_parse_xml_folder(path,groupname,popupname,NULL,NULL);
+	window = ui_parse_xml_folder(path,groupname,popupname,vbox,NULL);
 	g_free(path);
+
+	popup = g_object_get_data(G_OBJECT(window),"popup_menus");
+
+	for(f=0;popupname[f];f++)
+	{
+		if(popup[f])
+		{
+			GtkWidget *button = gtk_button_new_with_label(popupname[f]);
+			gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,FALSE,5);
+			g_signal_connect(button,"clicked",G_CALLBACK(show_popup),popup[f]);
+		}
+	}
+
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,FALSE,FALSE,5);
+
+	gtk_widget_show_all(vbox);
 
 	if(window)
 	{

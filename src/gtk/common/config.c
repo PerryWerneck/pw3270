@@ -36,6 +36,7 @@
  #include <glib/gstdio.h>
 
 #ifdef WIN32
+	#include <windows.h>
 	#define WIN_REGISTRY_ENABLED 1
 #endif // WIN32
 
