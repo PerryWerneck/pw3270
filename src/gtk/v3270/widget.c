@@ -124,6 +124,23 @@ static void loghandler(H3270 *session, const char *module, int rc, const char *f
 	g_logv(module,rc ? G_LOG_LEVEL_WARNING : G_LOG_LEVEL_MESSAGE, fmt, args);
 }
 
+static gboolean v3270_popup_menu(GtkWidget * widget)
+{
+	GdkEventButton event;
+
+	memset(&event,0,sizeof(event));
+
+	event.time	 = gtk_get_current_event_time();
+	event.button = 3;
+	event.type 	 = GDK_BUTTON_PRESS;
+
+	v3270_emit_popup(	GTK_V3270(widget),
+						lib3270_get_cursor_address(GTK_V3270(widget)->host),
+						&event );
+
+	return TRUE;
+}
+
 static void v3270_class_init(v3270Class *klass)
 {
 	GObjectClass	* gobject_class	= G_OBJECT_CLASS(klass);
@@ -140,6 +157,7 @@ static void v3270_class_init(v3270Class *klass)
 	widget_class->button_press_event	= v3270_button_press_event;
 	widget_class->button_release_event	= v3270_button_release_event;
 	widget_class->motion_notify_event	= v3270_motion_notify_event;
+	widget_class->popup_menu			= v3270_popup_menu;
 
 	klass->activate						= v3270_activate;
 	klass->toggle_changed 				= v3270_toggle_changed;
@@ -262,6 +280,15 @@ static void v3270_class_init(v3270Class *klass)
 						NULL, NULL,
 						pw3270_VOID__VOID_BOOL,
 						G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
+
+	v3270_widget_signal[SIGNAL_POPUP] =
+		g_signal_new(	"popup",
+						G_OBJECT_CLASS_TYPE (gobject_class),
+						G_SIGNAL_RUN_FIRST,
+						0,
+						NULL, NULL,
+						pw3270_VOID__VOID_BOOL_BOOL_POINTER,
+						G_TYPE_NONE, 3, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN, G_TYPE_POINTER);
 }
 
 void v3270_update_font_metrics(v3270 *terminal, cairo_t *cr, int width, int height)

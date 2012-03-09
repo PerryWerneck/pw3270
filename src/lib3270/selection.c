@@ -182,6 +182,9 @@ LIB3270_EXPORT void lib3270_select_to(H3270 *session, int baddr)
 {
 	CHECK_SESSION_HANDLE(session);
 
+	if(!lib3270_connected(session))
+		return;
+
 	lib3270_set_cursor_address(session,session->selected.end = baddr);
 
 	if(session->selected.begin < 0)
@@ -200,21 +203,33 @@ LIB3270_EXPORT void lib3270_select_word(H3270 *session, int baddr)
 
 	CHECK_SESSION_HANDLE(session);
 
+	if(!lib3270_connected(session) || isspace(ea_buf[baddr].chr))
+	{
+		ring_bell();
+		return;
+	}
+
 	for(pos = baddr; pos > 0 && !isspace(ea_buf[pos].chr);pos--);
-	session->selected.begin = pos;
+	session->selected.begin = pos > 0 ? pos+1 : 0;
 
 	len = session->rows * session->cols;
 	for(pos = baddr; pos < len && !isspace(ea_buf[pos].chr);pos++);
-	session->selected.end = pos;
+	session->selected.end = pos < len ? pos-1 : len;
 
 	update_selected_region(session);
 }
 
 LIB3270_EXPORT int lib3270_select_field(H3270 *session, int baddr)
 {
-	int start;
+	int start,len;
 
 	CHECK_SESSION_HANDLE(session);
+
+	if(!lib3270_connected(session))
+	{
+		ring_bell();
+		return;
+	}
 
 	start = lib3270_field_addr(session,baddr);
 
@@ -224,8 +239,13 @@ LIB3270_EXPORT int lib3270_select_field(H3270 *session, int baddr)
 		return -1;
 	}
 
-	session->selected.begin	= start;
+	session->selected.begin	= (start+1);
+
+	len = (session->rows * session->cols)-1;
+
 	session->selected.end	= start + lib3270_field_length(session,start);
+	if(session->selected.end > len)
+		session->selected.end = len;
 
 	update_selected_region(session);
 

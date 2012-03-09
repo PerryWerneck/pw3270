@@ -63,10 +63,12 @@ static void button_1_press(GtkWidget *widget, GdkEventType type, int baddr)
 		lib3270_clear_selection(GTK_V3270(widget)->host);
 		break;
 
-	case GDK_2BUTTON_PRESS:		// Double click - Select work
+	case GDK_2BUTTON_PRESS:		// Double click - Select word
+		lib3270_select_word(GTK_V3270(widget)->host,baddr);
 		break;
 
 	case GDK_3BUTTON_PRESS:		// Triple clock - Select field
+		lib3270_select_field(GTK_V3270(widget)->host,baddr);
 		break;
 
 #ifdef DEBUG
@@ -74,6 +76,26 @@ static void button_1_press(GtkWidget *widget, GdkEventType type, int baddr)
 		trace("Unexpected button 1 type %d",type);
 #endif
 	}
+}
+
+void v3270_emit_popup(v3270 *widget, int baddr, GdkEventButton *event)
+{
+	unsigned char	  chr = 0;
+	unsigned short	  attr;
+	gboolean		  handled = FALSE;
+
+	lib3270_get_contents(widget->host,baddr,baddr,&chr,&attr);
+
+	g_signal_emit(GTK_WIDGET(widget), v3270_widget_signal[SIGNAL_POPUP], 0,
+									(attr & LIB3270_ATTR_SELECTED) ? TRUE : FALSE,
+									lib3270_connected(widget->host) ? TRUE : FALSE,
+									event,
+									&handled);
+
+	if(handled)
+		return;
+
+	gdk_beep();
 }
 
 gboolean v3270_button_press_event(GtkWidget *widget, GdkEventButton *event)
@@ -87,11 +109,13 @@ gboolean v3270_button_press_event(GtkWidget *widget, GdkEventButton *event)
 
 	switch(event->button)
 	{
-	case 1:
+	case 1:		// Left button
 		button_1_press(widget,event->type,baddr);
-//		lib3270_set_cursor_address(GTK_V3270(widget)->host,baddr);
-//		GTK_V3270(widget)->selecting = 1;
-//		lib3270_clear_selection(GTK_V3270(widget)->host);
+		break;
+
+	case 3:		// Right button
+		if(event->type == GDK_BUTTON_PRESS)
+			v3270_emit_popup(GTK_V3270(widget),baddr,event);
 		break;
 
 	default:

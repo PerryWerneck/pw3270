@@ -97,6 +97,12 @@
 	set_integer_to_config("terminal","model",id);
  }
 
+ static gboolean popup(GtkWidget *widget, gboolean selected, gboolean online, GdkEventButton *event, gpointer popup)
+ {
+ 	trace("Popup on widget %p online=%s selected=%s",widget,online ? "Yes" : "No", selected ? "Yes" : "No");
+ 	return TRUE;
+ }
+
  static void selecting(GtkWidget *widget, gboolean on, GtkActionGroup **group)
  {
 	trace("Widget %p selection state changed to %s",widget,on ? "Yes" : "No");
@@ -219,6 +225,7 @@
 	g_signal_connect(terminal,"update_config",G_CALLBACK(update_config),0);
 	g_signal_connect(terminal,"model_changed",G_CALLBACK(update_model),0);
 	g_signal_connect(terminal,"selecting",G_CALLBACK(selecting),group);
+	g_signal_connect(terminal,"popup",G_CALLBACK(popup),NULL);
 
 	g_free(path);
 	gtk_widget_grab_focus(terminal);

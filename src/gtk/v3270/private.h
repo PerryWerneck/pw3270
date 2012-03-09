@@ -73,6 +73,7 @@ G_BEGIN_DECLS
  	SIGNAL_UPDATE_CONFIG,
  	SIGNAL_MODEL_CHANGED,
  	SIGNAL_SELECTING,
+ 	SIGNAL_POPUP,
 
  	LAST_SIGNAL
  };
@@ -127,5 +128,6 @@ void 	 	  v3270_key_commit(GtkIMContext *imcontext, gchar *str, v3270 *widget);
 gboolean	  v3270_button_press_event(GtkWidget *widget, GdkEventButton *event);
 gboolean	  v3270_button_release_event(GtkWidget *widget, GdkEventButton*event);
 gboolean	  v3270_motion_notify_event(GtkWidget *widget, GdkEventMotion *event);
+void		  v3270_emit_popup(v3270 *widget, int baddr, GdkEventButton *event);
 
 G_END_DECLS
