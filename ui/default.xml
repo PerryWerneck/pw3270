@@ -1,0 +1,232 @@
+<!-----------------------------------------------------------------------------
+
+ "Software pw3270, desenvolvido com base nos códigos fontes do WC3270  e X3270
+ (Paul Mattes Paul.Mattes@usa.net), de emulação de terminal 3270 para acesso a
+ aplicativos mainframe. Registro no INPI sob o nome G3270.
+
+  Copyright (C) <2008> <Banco do Brasil S.A.>
+
+ Este programa é software livre. Você pode redistribuí-lo e/ou modificá-lo sob
+ os termos da GPL v.2 - Licença Pública Geral  GNU,  conforme  publicado  pela
+ Free Software Foundation.
+
+ Este programa é distribuído na expectativa de  ser  útil,  mas  SEM  QUALQUER
+ GARANTIA; sem mesmo a garantia implícita de COMERCIALIZAÇÃO ou  de  ADEQUAÇÃO
+ A QUALQUER PROPÓSITO EM PARTICULAR. Consulte a Licença Pública Geral GNU para
+ obter mais detalhes.
+
+ Você deve ter recebido uma cópia da Licença Pública Geral GNU junto com este
+ programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple
+ Place, Suite 330, Boston, MA, 02111-1307, USA
+
+ Contatos:
+
+ perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
+ erico.mendonca@gmail.com	(Erico Mascarenhas Mendonça)
+ licinio@bb.com.br			(Licínio Luis Branco)
+ kraucer@bb.com.br			(Kraucer Fernandes Mazuco)
+ macmiranda@bb.com.br		(Marco Aurélio Caldas Miranda)
+
+------------------------------------------------------------------------------>
+
+<ui>
+	<menubar name='topmenu' topmenu='yes'>
+
+		<menu name='FileMenu' label='_File' >
+			<menuitem action='SaveScreen' group='online' label='Save screen' />
+			<menuitem action='SaveSelected' group='selection' label='Save selected' />
+			<menuitem action='SaveClipboard' group='clipboard' label='Save copy' />
+			<separator/>
+			<menuitem action='PrintScreen' key='Print' icon='print' group='online' label='Print' />
+			<menuitem action='PrintSelected' group='selection' label='Print selected' />
+			<menuitem action='PrintClipboard' group='clipboard' label='Print copy' />
+			<separator/>
+			<menu name='FTMenu' group='filetransfer' label='Send/Receive' >
+				<menuitem action='Download' key='<alt>d' group='filetransfer' label='Receive file' />
+				<menuitem action='Upload' key='<alt>u' group='filetransfer' label='Send file' />
+			</menu>
+			<menuitem action='Quit' key='<ctrl>q' icon="quit" />
+		</menu>
+
+		<menu name='EditMenu' label='_Edit' >
+			<menuitem action='Copy' key='<ctrl>c' icon='copy' group='selection' label='Copy' />
+			<menuitem action='CopyAsTable' key='<ctrl><alt>c' group='selection' label='Copy as table' />
+			<menuitem action='CopyAsImage' group='selection' label='Copy as image' />
+			<menuitem action='Append' key='<shift><ctrl>c' group='selection' label='Add to copy' />
+			<menuitem action='Paste' key='<ctrl>v' icon='paste' group='paste' label='Paste' />
+			<menuitem action='PasteNext' key='<shift><ctrl>v' label='Paste next' />
+			<menuitem action='PasteTextFile' group='online' label='Paste text file' />
+
+			<separator/>
+			<menuitem action='SelectAll' key='<ctrl>a' icon='select-all' group='online' label='Select all' />
+
+			<menuitem action='SelectField' key='<Ctrl>f' group='online' label='Select Field' />
+			<menuitem action='Unselect' group='selection' label='Unselect' />
+			<menuitem action='Reselect' key='<Ctrl>r' group='online' label='Reselect' />
+
+			<separator/>
+			<menuitem action='Clear' group='online' key='Pause' label='Clear' />
+			<menuitem action='EraseInput' icon='clear' group='online' label='Erase input' />
+<!---			<menuitem action='EraseField' key='<Ctrl>u' group='online' /> -->
+			<menuitem action='EraseEOF' group='online' label='Erase to end of field' />
+			<menuitem action='EraseEOL' group='online' label='Erase to end of line' />
+		</menu>
+
+		<!--- Special action - View menu will be populated with labeled toolbars, menubars and keypads --->
+		<menu name='View' label='_View' />
+
+		<menu name='ScriptsMenu' label='Scripts' />
+
+		<menu name='NetworkMenu' label='_Network' >
+			<menuitem action='SetHostname' icon='home' group='offline' label='Set hostname' />
+			<menuitem action='Connect' icon='connect' group='offline' label='_Connect' />
+			<menuitem action='Disconnect' icon='disconnect' group='online' label='_Disconnect' />
+		</menu>
+
+		<menu name='SettingsMenu' label='Settings' sysmenu='yes' >
+			<menuitem action='SelectColors' icon='select-color' label='Colors' />
+
+			<!--- Special action - The fontselect menu will be populated with all available monospaced fonts --->
+			<menuitem name='fontselect' icon='select-font' label='Select font' />
+
+			<!--- Special action - The Scrensize menu will be populate with the available screen sizes --->
+			<menuitem name='ScreenSizes' group='offline' label='Screen size' />
+
+			<menu name='OptionsMenu' label='_Options' >
+				<menuitem action='Toggle' id='AutoConnect' label='Connect on startup' />
+				<menuitem action='Toggle' id='CursorBlink' label='Blinking Cursor' />
+				<menuitem action='Toggle' id='Monocase' label='Monocase' />
+				<menuitem action='Toggle' id='CursorPos'  label='Track Cursor' />
+				<menuitem action='Toggle' id='FullScreen' key='<alt>Home' label='Full Screen' />
+				<menuitem action='Toggle' id='MarginedPaste'  label='Paste with left margin' />
+				<menuitem action='Toggle' id='CrossHair' key='<alt>x' label='Cross Hair Cursor' />
+				<menuitem action='Toggle' id='BlankFill' label='Blank Fill' />
+				<menuitem action='Toggle' id='RectSelect'  label='Select by rectangles' />
+				<menuitem action='Toggle' id='Reconnect' label='Auto-Reconnect'  />
+				<menuitem action='Toggle' id='Bold' label='Bold'  />
+				<menuitem action='Toggle' id='Underline' label='Show Underline'  />
+				<menuitem action='Toggle' id='KeepSelected' label='Keep selected' />
+				<menuitem action='Toggle' id='SmartPaste' label='Smart paste' />
+				<menuitem action='Toggle' id='Beep' label='Alert sound' />
+				<menuitem action='Toggle' id='KPAlternative' label='Use +/- for field navigation' />
+			</menu>
+
+			<!--- Special action - InputMethod menu will be populated with Gtk input_method menu items --->
+			<menuitem name='InputMethod' label='Input method' />
+
+		</menu>
+
+		<menu name='HelpMenu' label='Help' >
+			<menuitem action='About' icon='about' sysmenu='yes' />
+		</menu>
+
+	</menubar>
+
+	<toolbar name='toolbar.default' label='Toolbar' key='<alt>t' >
+		<toolitem action='SelectAll' />
+		<toolitem action='Copy' />
+		<toolitem action='Paste' />
+		<toolitem action='EraseInput' />
+
+		<separator/>
+		<toolitem action='Connect' />
+		<toolitem action='Disconnect' />
+
+		<separator/>
+		<toolitem action='ToggleSet' id='FullScreen' icon='fullscreen' label='Full Screen' />
+		<toolitem action='ToggleReset' id='FullScreen' icon='leave-fullscreen' label='Window' />
+		<toolitem action='SelectColors' />
+		<toolitem action='PrintScreen' />
+		<toolitem action='Quit' />
+	</toolbar>
+
+	<popup name='selectionpopup' type='selection'>
+		<menuitem action='Copy'/>
+		<menuitem action='Append'/>
+		<menuitem action='Unselect'/>
+		<menuitem action='SelectAll'/>
+
+		<separator />
+		<menuitem action='PrintScreen'/>
+		<menuitem action='PrintSelected'/>
+		<menuitem action='PrintClipboard'/>
+
+		<separator />
+		<menuitem action='Quit'/>
+	</popup>
+
+	<popup name='defaultpopup' type="default">
+		<menuitem action='Paste'/>
+		<menuitem action='PasteNext'/>
+		<menuitem action='SelectAll'/>
+		<menuitem action='PrintScreen'/>
+		<menuitem action='PrintClipboard'/>
+
+		<separator />
+		<menuitem action='PreviousField' label='Previous field' />
+		<menuitem action='NextField' label='Next field'/>
+		<menuitem action='Return' label='Return' />
+
+		<separator />
+		<menuitem action='Quit'/>
+
+	</popup>
+
+	<accelerator action='Toggle' id='Insert' key='Insert' group='online' />
+
+	<accelerator action='Home' key='Home' group='online' />
+	<accelerator action='Reset' key='<Shift><Ctrl>r' group='online' />
+	<accelerator action='Return' key='Return' />
+	<accelerator action='Enter' key='KP_Enter' />
+	<accelerator action='Break' key='Escape' group='online' />
+	<accelerator action='Attn' key='<shift>Escape' group='online' />
+
+	<accelerator action='DeleteWord' key='<Ctrl>w' group='online' />
+	<accelerator action='Delete' key='Delete' group='online' />
+	<accelerator action='Erase' key='BackSpace' group='online' />
+	<accelerator action='EraseEOF' key='End' group='online' />
+
+	<accelerator action='SysREQ' key='Sys_Req' group='online' />
+	<accelerator action='SysREQ' key='<shift>Print' group='online' />
+
+	<accelerator action='SelectRight' key='<Shift>Right' group='online' />
+	<accelerator action='SelectLeft' key='<Shift>Left' group='online' />
+	<accelerator action='SelectUp' key='<Shift>Up' group='online' />
+	<accelerator action='SelectDown' key='<Shift>Down' group='online' />
+
+	<accelerator action='SelectionRight' key='<alt>Right' />
+	<accelerator action='SelectionLeft' key='<alt>Left' />
+	<accelerator action='SelectionUp' key='<alt>Up' />
+	<accelerator action='SelectionDown' key='<alt>Down' />
+
+	<accelerator action='CursorRight' key='Right' group='online' />
+	<accelerator action='CursorLeft' key='Left' group='online' />
+	<accelerator action='CursorUp' key='Up' group='online' />
+	<accelerator action='CursorDown' key='Down' group='online' />
+
+	<accelerator action='PreviousField' key='ISO_Left_Tab' group='online' />
+	<accelerator action='NextField' key='Tab' group='online' />
+
+	<!--- Mouse actions --->
+	<scroll direction='up' action='pfkey' id='7' />
+	<scroll direction='down' action='pfkey' id='8' />
+
+	<!---
+	<scroll direction='left' />
+	<scroll direction='right' />
+	--->
+
+	<accelerator name='PageDown' action='pfkey' id='8' group='online' key='Page_Down' />
+	<accelerator name='ShiftPageDown' action='pfkey' id='24' group='online' key='<Shift>Page_Down' />
+
+	<accelerator name='PageUP' action='pfkey' id='7' group='online' key='Page_Up' />
+	<accelerator name='ShiftPageUP' action='pfkey' id='23' group='online' key='<Shift>Page_Up' />
+
+	<accelerator name='SKP-' action='PreviousField' key='<shift>KP_Subtract' group='online' />
+	<accelerator name='SKP+' action='NextField' key='<shift>KP_Add' group='online' />
+
+	<accelerator name='KPsubtract' action='kpsubtract' key='KP_Subtract' group='online' />
+	<accelerator name='KPadd' action='kpadd' key='KP_Add' group='online' />
+
+</ui>
+
