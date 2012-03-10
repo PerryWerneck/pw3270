@@ -155,7 +155,7 @@
 		<menuitem action='Quit'/>
 	</popup>
 
-	<popup name='defaultpopup' type="default">
+	<popup name='defaultpopup' type='default'>
 		<menuitem action='Paste'/>
 		<menuitem action='PasteNext'/>
 		<menuitem action='SelectAll'/>

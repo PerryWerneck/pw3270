@@ -89,7 +89,7 @@
 
 	gtk_menu_shell_append((GtkMenuShell *) menu, widget);
 
-	return G_OBJECT(ui_insert_element(info, action, UI_ELEMENT_MENUITEM, names, values, G_OBJECT(widget), error));
+	return G_OBJECT(widget);
  }
 
  void ui_end_menuitem(GObject *widget,struct parser *info,GError **error)

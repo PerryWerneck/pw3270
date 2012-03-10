@@ -7,8 +7,8 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output=".bin/Debug/uiparser" prefix_auto="1" extension_auto="1" />
-				<Option object_output=".obj/Debug/" />
+				<Option output=".bin\Debug\uiparser" prefix_auto="1" extension_auto="1" />
+				<Option object_output=".obj\Debug\" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
@@ -17,8 +17,8 @@
 				</Compiler>
 			</Target>
 			<Target title="Release">
-				<Option output=".bin/Release/uiparser" prefix_auto="1" extension_auto="1" />
-				<Option object_output=".obj/Release/" />
+				<Option output=".bin\Release\uiparser" prefix_auto="1" extension_auto="1" />
+				<Option object_output=".obj\Release\" />
 				<Option type="0" />
 				<Option compiler="gcc" />
 				<Compiler>
@@ -32,13 +32,13 @@
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="`pkg-config gtk+-2.0 --cflags`" />
-			<Add directory="../../include" />
+			<Add directory="..\..\include" />
 		</Compiler>
 		<Linker>
 			<Add option="`pkg-config gtk+-2.0 --libs`" />
 		</Linker>
-		<Unit filename="../common/common.h.in" />
-		<Unit filename="../common/config.c">
+		<Unit filename="..\common\common.h.in" />
+		<Unit filename="..\common\config.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="accelerator.c">
@@ -83,6 +83,7 @@
 		<Unit filename="toolitem.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\..\ui\default.xml" />
 		<Extensions>
 			<code_completion />
 			<debugger />
