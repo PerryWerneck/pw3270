@@ -94,7 +94,7 @@ static void DefaultRemoveInput(unsigned long id);
 
 static int DefaultProcessEvents(int block);
 
-static void	dunno(void)
+static void	dunno(H3270 *session)
 {
 
 }
@@ -999,9 +999,10 @@ LIB3270_EXPORT int lib3270_wait(seconds)
 	return 0;
 }
 
-LIB3270_EXPORT void lib3270_ring_bell(void)
+LIB3270_EXPORT void lib3270_ring_bell(H3270 *session)
 {
-	callbacks->ring_bell();
+	CHECK_SESSION_HANDLE(session);
+	callbacks->ring_bell(session);
 }
 
 

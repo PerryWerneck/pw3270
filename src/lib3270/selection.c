@@ -205,7 +205,7 @@ LIB3270_EXPORT void lib3270_select_word(H3270 *session, int baddr)
 
 	if(!lib3270_connected(session) || isspace(ea_buf[baddr].chr))
 	{
-		lib3270_ring_bell();
+		lib3270_ring_bell(session);
 		return;
 	}
 
@@ -227,15 +227,15 @@ LIB3270_EXPORT int lib3270_select_field(H3270 *session, int baddr)
 
 	if(!lib3270_connected(session))
 	{
-		lib3270_ring_bell();
-		return;
+		lib3270_ring_bell(session);
+		return -1;
 	}
 
 	start = lib3270_field_addr(session,baddr);
 
 	if(start < 0)
 	{
-		lib3270_ring_bell();
+		lib3270_ring_bell(session);
 		return -1;
 	}
 

@@ -206,7 +206,7 @@ void parser_build(struct parser *p, GtkWidget *widget)
 
 }
 
-GtkWidget * ui_parse_xml_folder(const gchar *path, const gchar ** groupname, const gchar **popupname, GtkWidget *widget, const SETUP_ITEM *setup)
+GtkWidget * ui_parse_xml_folder(const gchar *path, const gchar ** groupname, const gchar **popupname, GtkWidget *widget, const UI_WIDGET_SETUP *setup)
 {
 	struct parser	  p;
 	GDir 			* dir;
@@ -258,6 +258,7 @@ GtkWidget * ui_parse_xml_folder(const gchar *path, const gchar ** groupname, con
 	p.popupname		= popupname;
 	p.strings		= g_string_chunk_new(0);
 	p.popup 		= g_new0(GtkWidget *,(g_strv_length((gchar **) p.popupname)+1));
+	p.setup			= setup;
 
 	g_object_set_data_full(G_OBJECT(p.toplevel),"popup_menus",(gpointer) p.popup, g_free);
 

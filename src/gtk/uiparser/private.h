@@ -29,8 +29,10 @@
  *
  */
 
+ #include <gtk/gtk.h>
  #include <lib3270/config.h>
  #include "../common/common.h"
+ #include "parser.h"
 
  #define ERROR_DOMAIN g_quark_from_static_string("uiparser")
 
@@ -52,16 +54,17 @@
 
  struct parser
  {
- 	int				   disabled;
- 	GtkWidget		*  toplevel;
- 	GObject			*  element;
- 	GtkWidget		*  center_widget;
- 	GtkWidget		** popup;			/**< Popup widgets */
- 	GStringChunk	*  strings;
-	const gchar 	** group;			/**< Action group list */
-	const gchar 	** popupname;		/**< Popup names */
-	GHashTable	 	*  actions;			/**< List of actions */
-	GHashTable		*  element_list[UI_ELEMENT_COUNT];
+ 	int						   disabled;
+ 	GtkWidget				*  toplevel;
+ 	GObject					*  element;
+ 	GtkWidget				*  center_widget;
+ 	GtkWidget				** popup;			/**< Popup widgets */
+ 	GStringChunk			*  strings;
+	const gchar 			** group;			/**< Action group list */
+	const gchar 			** popupname;		/**< Popup names */
+	GHashTable	 			*  actions;			/**< List of actions */
+	GHashTable				*  element_list[UI_ELEMENT_COUNT];
+	const UI_WIDGET_SETUP	*  setup;
  };
 
  const gchar	* ui_get_attribute(const gchar *key, const gchar **name, const gchar **value);

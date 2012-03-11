@@ -29,14 +29,32 @@
  *
  */
 
- typedef struct _setup_item
- {
-	const gchar * name;
-	void		  (*setup)(GtkWidget *widget, GtkWidget *obj);
- } SETUP_ITEM;
+#ifndef UI_PARSER_H_INCLUDED
 
- GtkWidget 		* ui_parse_xml_folder(const gchar *path, const gchar ** groupname, const gchar **popupname, GtkWidget *widget, const SETUP_ITEM *itn);
- void			  ui_connect_action(GtkAction *action, GtkWidget *widget, const gchar *name, const gchar *id);
- void			  ui_connect_toggle(GtkAction *action, GtkWidget *widget, const gchar *name, const gchar *id);
- void			  ui_connect_pfkey(GtkAction *action, GtkWidget *widget, const gchar *name, const gchar *id);
- void			  ui_connect_pakey(GtkAction *action, GtkWidget *widget, const gchar *name, const gchar *id);
+	#define UI_PARSER_H_INCLUDED 1
+
+	/**
+	 * Callback list for specil widget.
+	 *
+	 * Struct used to define a list of calls to setup some specialized widgets.
+	 *
+	 */
+	typedef struct _ui_widget_setup
+	{
+		const gchar * name;											/**< Widget name */
+		/**
+		 * Widget setup call.
+		 *
+		 * @param widget	Widget to setup.
+		 * @param obj		UI´s center widget.
+		 */
+		void		  (*setup)(GtkWidget *widget, GtkWidget *obj);
+	} UI_WIDGET_SETUP;
+
+	GtkWidget 		* ui_parse_xml_folder(const gchar *path, const gchar ** groupname, const gchar **popupname, GtkWidget *widget, const UI_WIDGET_SETUP *itn);
+	void			  ui_connect_action(GtkAction *action, GtkWidget *widget, const gchar *name, const gchar *id);
+	void			  ui_connect_toggle(GtkAction *action, GtkWidget *widget, const gchar *name, const gchar *id);
+	void			  ui_connect_pfkey(GtkAction *action, GtkWidget *widget, const gchar *name, const gchar *id);
+	void			  ui_connect_pakey(GtkAction *action, GtkWidget *widget, const gchar *name, const gchar *id);
+
+#endif // UI_PARSER_H_INCLUDED

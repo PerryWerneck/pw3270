@@ -353,13 +353,13 @@ void set_boolean_to_config(const gchar *group, const gchar *key, gboolean val)
 
  	HKEY	hKey;
  	DWORD	disp;
-	gchar * path = g_strdup_printf("%s\\%s",registry_path,group);
+	gchar * path = g_strdup_printf("%s\\%s\\%s",registry_path,group,key);
 
-//	trace("Creating key %s",path);
+	trace("Creating key %s",path);
 	if(RegCreateKeyEx(HKEY_CURRENT_USER,path,0,NULL,REG_OPTION_NON_VOLATILE,KEY_SET_VALUE,NULL,&hKey,&disp) == ERROR_SUCCESS)
 	{
 		DWORD	value = val ? 1 : 0;
-		LONG	rc = RegSetValueEx(hKey, key, 0, REG_DWORD,(const BYTE *) &value,sizeof(value));
+		LONG	rc = RegSetValueEx(hKey, NULL, 0, REG_DWORD,(const BYTE *) &value,sizeof(value));
 
 		SetLastError(rc);
 

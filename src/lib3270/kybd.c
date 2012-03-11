@@ -182,7 +182,7 @@ static int enq_chk(void)
 	/* If operator error, complain and drop it. */
 	if (kybdlock & KL_OERR_MASK)
 	{
-		lib3270_ring_bell();
+		lib3270_ring_bell(NULL);
 		trace_event("  dropped (operator error)\n");
 		return -1;
 	}
@@ -190,7 +190,7 @@ static int enq_chk(void)
 	/* If scroll lock, complain and drop it. */
 	if (kybdlock & KL_SCROLLED)
 	{
-		lib3270_ring_bell();
+		lib3270_ring_bell(NULL);
 		trace_event("  dropped (scrolled)\n");
 		return -1;
 	}
@@ -471,7 +471,7 @@ operator_error(int error_type)
 		kybdlock_set((unsigned int)error_type, "operator_error");
 		(void) flush_ta();
 	} else {
-		lib3270_ring_bell();
+		lib3270_ring_bell(NULL);
 	}
 }
 

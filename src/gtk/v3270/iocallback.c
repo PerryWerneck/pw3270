@@ -312,6 +312,11 @@ static int static_RunPendingEvents(int wait)
 	return rc;
 }
 
+static void beep(H3270 *session)
+{
+	gdk_beep();
+}
+
 void v3270_register_io_handlers(v3270Class *cls)
 {
 	static const struct lib3270_callbacks hdl =
@@ -338,7 +343,7 @@ void v3270_register_io_handlers(v3270Class *cls)
 
 		static_Sleep,
 		static_RunPendingEvents,
-		gdk_beep
+		beep
 
 	};
 

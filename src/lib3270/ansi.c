@@ -917,7 +917,7 @@ ansi_sgr(int ig1 unused, int ig2 unused)
 static enum state
 ansi_bell(int ig1 unused, int ig2 unused)
 {
-	lib3270_ring_bell();
+	lib3270_ring_bell(NULL);
 	return DATA;
 }
 

@@ -31,6 +31,8 @@
  #include <pw3270.h>
  #include <lib3270.h>
  #include <lib3270/session.h>
+ #include <lib3270/actions.h>
+ #include <lib3270/log.h>
  #include "v3270.h"
  #include "private.h"
  #include "marshal.h"
@@ -284,11 +286,11 @@ static void v3270_class_init(v3270Class *klass)
 	v3270_widget_signal[SIGNAL_POPUP] =
 		g_signal_new(	"popup",
 						G_OBJECT_CLASS_TYPE (gobject_class),
-						G_SIGNAL_RUN_FIRST,
+						G_SIGNAL_RUN_LAST,
 						0,
 						NULL, NULL,
-						pw3270_VOID__VOID_BOOL_BOOL_POINTER,
-						G_TYPE_NONE, 3, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN, G_TYPE_POINTER);
+						pw3270_BOOL__VOID_BOOL_BOOL_POINTER,
+						G_TYPE_BOOLEAN, 3, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN, G_TYPE_POINTER);
 }
 
 void v3270_update_font_metrics(v3270 *terminal, cairo_t *cr, int width, int height)
@@ -852,7 +854,7 @@ int v3270_connect(GtkWidget *widget, const gchar *host)
 
 	trace("%s widget=%p host=%p",__FUNCTION__,widget,host);
 
-	g_return_if_fail(GTK_IS_V3270(widget));
+	g_return_val_if_fail(GTK_IS_V3270(widget),EINVAL);
 
 	terminal = GTK_V3270(widget);
 

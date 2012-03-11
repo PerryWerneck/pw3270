@@ -1871,7 +1871,7 @@ ctlr_write(unsigned char buf[], int buflen, Boolean erase)
 		status_syswait();
 	}
 	if (wcc_sound_alarm)
-		lib3270_ring_bell();
+		lib3270_ring_bell(NULL);
 
 	/* Set up the DBCS state. */
 	if (ctlr_dbcs_postprocess() < 0 && rv == PDS_OKAY_NO_OUTPUT)

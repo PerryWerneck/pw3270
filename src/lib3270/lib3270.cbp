@@ -57,8 +57,14 @@
 			<Add directory="..\include\lib3270" />
 		</Compiler>
 		<Unit filename="..\include\lib3270.h" />
+		<Unit filename="..\include\lib3270\action_table.h" />
+		<Unit filename="..\include\lib3270\actions.h" />
 		<Unit filename="..\include\lib3270\config.h.in" />
+		<Unit filename="..\include\lib3270\log.h" />
+		<Unit filename="..\include\lib3270\macros.h" />
+		<Unit filename="..\include\lib3270\popup.h" />
 		<Unit filename="..\include\lib3270\selection.h" />
+		<Unit filename="..\include\lib3270\session.h" />
 		<Unit filename="3270ds.h" />
 		<Unit filename="Makefile.in" />
 		<Unit filename="X11keysym.h" />

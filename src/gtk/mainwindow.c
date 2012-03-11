@@ -119,7 +119,7 @@
  	GtkWidget *menu = NULL;
 
 	if(!online)
-		menu = popup[POPUP_OFFLINE] ? popup[POPUP_OFFLINE] : popup[POPUP_DEFAULT];
+		menu = popup[POPUP_OFFLINE];
 	else if(selected && popup[POPUP_SELECTION])
 		menu = popup[POPUP_SELECTION];
 	else if(popup[POPUP_ONLINE])
@@ -203,7 +203,7 @@
 
  GtkWidget * create_main_window(void)
  {
- 	static const SETUP_ITEM widget_setup[] =
+ 	static const UI_WIDGET_SETUP widget_setup[] =
  	{
  		{ "inputmethod",	setup_input_method	},
  		{ "screensizes",	setup_screen_sizes	},

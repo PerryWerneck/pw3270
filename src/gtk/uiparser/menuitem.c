@@ -89,6 +89,26 @@
 
 	gtk_menu_shell_append((GtkMenuShell *) menu, widget);
 
+	// Setup menuitem
+	if(info->setup)
+	{
+		const gchar *name = ui_get_attribute("name",names,values);
+
+		if(name)
+		{
+			int f;
+			for(f=0;info->setup[f].name;f++)
+			{
+				if(!g_strcasecmp(name,info->setup[f].name))
+				{
+					info->setup[f].setup(widget,info->center_widget);
+					break;
+				}
+			}
+		}
+	}
+
+
 	return G_OBJECT(widget);
  }
 

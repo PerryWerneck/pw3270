@@ -495,7 +495,7 @@
 
 		int				(*Wait)(int seconds);
 		int 			(*RunPendingEvents)(int wait);
-		void			(*ring_bell)(void);
+		void			(*ring_bell)(H3270 *);
 
 	};
 
@@ -595,6 +595,16 @@
 	 *
 	 */
 	 LIB3270_EXPORT void * lib3270_get_widget(H3270 *h);
+
+	/**
+	 * "beep" to notify user.
+	 *
+	 * If available play a sound signal do alert user.
+	 *
+	 * @param h		Session handle
+	 *
+	 */
+	 LIB3270_EXPORT void lib3270_ring_bell(H3270 *session);
 
 	 LIB3270_EXPORT int lib3270_set_model(H3270 *session, int model);
 	 LIB3270_EXPORT int	lib3270_get_model(H3270 *session);

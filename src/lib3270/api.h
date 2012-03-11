@@ -383,8 +383,6 @@
 			const char		*description;
 		};
 
-		LIB3270_EXPORT void lib3270_ring_bell(void);
-
 		#define new_3270_session(m) lib3270_session_new(m)
 
 		LOCAL_EXTERN const struct lib3270_option * get_3270_option_table(int sz);

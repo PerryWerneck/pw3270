@@ -31,11 +31,11 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add option="`pkg-config lib3270 gtk+-2.0 --cflags`" />
+			<Add option="`pkg-config lib3270 gtk+-2.0 lib3270 --cflags`" />
 			<Add directory="..\include" />
 		</Compiler>
 		<Linker>
-			<Add option="`pkg-config lib3270 gtk+-2.0 --libs`" />
+			<Add option="`pkg-config lib3270 gtk+-2.0 lib3270 --libs`" />
 		</Linker>
 		<Unit filename="Makefile.in" />
 		<Unit filename="actions.c">
