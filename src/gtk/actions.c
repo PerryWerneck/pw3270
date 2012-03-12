@@ -60,6 +60,12 @@ static void activate_action(GtkAction *action, GtkWidget *widget)
 	gtk_widget_activate(widget);
 }
 
+static void copy_action(GtkAction *action, GtkWidget *widget)
+{
+	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
+	v3270_copy(GTK_V3270(widget));
+}
+
 void ui_connect_action(GtkAction *action, GtkWidget *widget, const gchar *name, const gchar *id)
 {
 	#undef DECLARE_LIB3270_ACTION
@@ -92,6 +98,7 @@ void ui_connect_action(GtkAction *action, GtkWidget *widget, const gchar *name, 
 	{
 		{ "activate", 	activate_action		},
 		{ "connect", 	connect_action		},
+		{ "copy", 		copy_action			},
 		{ "disconnect", disconnect_action	},
 	};
 

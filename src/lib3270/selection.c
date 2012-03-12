@@ -172,6 +172,9 @@ LIB3270_ACTION(unselect)
 
 	CHECK_SESSION_HANDLE(hSession);
 
+	if(!hSession->selected)
+		return;
+
 	hSession->selected = 0;
 
 	for(a = 0; a < hSession->rows*hSession->cols; a++)
