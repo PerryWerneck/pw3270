@@ -117,31 +117,6 @@
 char			*profile_name = CN;
 #endif /*]*/
 
-const char *toggle_names[N_TOGGLES] =
-{
-	"Monocase",
-	"AltCursor",
-	"CursorBlink",
-	"ShowTiming",
-	"CursorPos",
-	"DSTrace",
-	"ScrollBar",
-	"LineWrap",
-	"BlankFill",
-	"ScreenTrace",
-	"EventTrace",
-	"MarginedPaste",
-	"RectSelect",
-	"CrossHair",
-	"VisibleControl",
-	"AidWait",
-	"FullScreen",
-	"Reconnect",
-	"Insert",
-	"Keypad",
-	"SmartPaste"
-};
-
 void lib3270_session_free(H3270 *h)
 {
 	int f;
@@ -319,6 +294,7 @@ static void initialize(void)
 	Trace("Initializing library (calls: %d)",init_calls);
 #endif
 
+	h3270.selected.begin = h3270.selected.end = -1;
 	initialize_toggles(&h3270,appres.toggle);
 
 #if defined(_WIN32)

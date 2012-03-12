@@ -54,6 +54,12 @@ static void disconnect_action(GtkAction *action, GtkWidget *widget)
 	v3270_disconnect(widget);
 }
 
+static void activate_action(GtkAction *action, GtkWidget *widget)
+{
+	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
+	gtk_widget_activate(widget);
+}
+
 void ui_connect_action(GtkAction *action, GtkWidget *widget, const gchar *name, const gchar *id)
 {
 	#undef DECLARE_LIB3270_ACTION
@@ -84,6 +90,7 @@ void ui_connect_action(GtkAction *action, GtkWidget *widget, const gchar *name, 
 	}
 	gtk_action[] =
 	{
+		{ "activate", 	activate_action		},
 		{ "connect", 	connect_action		},
 		{ "disconnect", disconnect_action	},
 	};

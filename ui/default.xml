@@ -58,11 +58,11 @@
 			<menuitem action='PasteTextFile' group='online' label='Paste text file' />
 
 			<separator/>
-			<menuitem action='SelectAll' key='<ctrl>a' icon='select-all' group='online' label='Select all' />
+			<menuitem action='selectall' key='<ctrl>a' icon='select-all' group='online' label='Select all' />
 
-			<menuitem action='SelectField' key='<Ctrl>f' group='online' label='Select Field' />
-			<menuitem action='Unselect' group='selection' label='Unselect' />
-			<menuitem action='Reselect' key='<Ctrl>r' group='online' label='Reselect' />
+			<menuitem action='selectfield' key='<Ctrl>f' group='online' label='Select Field' />
+			<menuitem action='unselect' group='selection' label='unselect' />
+			<!--- menuitem action='Reselect' key='<Ctrl>r' group='online' label='Reselect' /--->
 
 			<separator/>
 			<menuitem action='Clear' group='online' key='Pause' label='Clear' />
@@ -123,7 +123,7 @@
 	</menubar>
 
 	<toolbar name='toolbar.default' label='Toolbar' key='<alt>t' >
-		<toolitem action='SelectAll' />
+		<toolitem action='selectall' />
 		<toolitem action='Copy' />
 		<toolitem action='Paste' />
 		<toolitem action='EraseInput' />
@@ -144,7 +144,7 @@
 		<menuitem action='Copy'/>
 		<menuitem action='Append'/>
 		<menuitem action='Unselect'/>
-		<menuitem action='SelectAll'/>
+		<menuitem action='selectall'/>
 
 		<separator />
 		<menuitem action='PrintScreen'/>
@@ -158,14 +158,14 @@
 	<popup name='defaultpopup' type='default'>
 		<menuitem action='Paste'/>
 		<menuitem action='PasteNext'/>
-		<menuitem action='SelectAll'/>
+		<menuitem action='selectall'/>
 		<menuitem action='PrintScreen'/>
 		<menuitem action='PrintClipboard'/>
 
 		<separator />
-		<menuitem action='PreviousField' label='Previous field' />
-		<menuitem action='NextField' label='Next field'/>
-		<menuitem action='Return' label='Return' />
+		<menuitem action='backtab' label='Previous field' />
+		<menuitem action='tab' label='Next field'/>
+		<menuitem action='activate' label='Return' />
 
 		<separator />
 		<menuitem action='Quit'/>

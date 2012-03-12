@@ -219,7 +219,7 @@ LIB3270_EXPORT void lib3270_select_word(H3270 *session, int baddr)
 	update_selected_region(session);
 }
 
-LIB3270_EXPORT int lib3270_select_field(H3270 *session, int baddr)
+LIB3270_EXPORT int lib3270_select_field_at(H3270 *session, int baddr)
 {
 	int start,len;
 
@@ -251,3 +251,41 @@ LIB3270_EXPORT int lib3270_select_field(H3270 *session, int baddr)
 
 	return 0;
 }
+
+LIB3270_ACTION( selectfield )
+{
+	lib3270_select_field_at(hSession,hSession->cursor_addr);
+}
+
+LIB3270_ACTION( selectall )
+{
+	int len = hSession->rows*hSession->cols;
+	int baddr;
+
+	// First remove unselected areas
+	for(baddr = 0; baddr < len; baddr++)
+	{
+		if(!(ea_buf[baddr].attr & LIB3270_ATTR_SELECTED))
+		{
+			ea_buf[baddr].attr |= LIB3270_ATTR_SELECTED;
+			hSession->update(hSession,baddr,ea_buf[baddr].chr,ea_buf[baddr].attr,baddr == hSession->cursor_addr);
+		}
+	}
+}
+
+LIB3270_ACTION( unselect )
+{
+	int len = hSession->rows*hSession->cols;
+	int baddr;
+
+	// First remove unselected areas
+	for(baddr = 0; baddr < len; baddr++)
+	{
+		if(ea_buf[baddr].attr & LIB3270_ATTR_SELECTED)
+		{
+			ea_buf[baddr].attr &= ~LIB3270_ATTR_SELECTED;
+			hSession->update(hSession,baddr,ea_buf[baddr].chr,ea_buf[baddr].attr,baddr == hSession->cursor_addr);
+		}
+	}
+}
+

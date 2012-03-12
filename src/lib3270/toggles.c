@@ -52,6 +52,33 @@
 
 
 
+static const char *toggle_names[LIB3270_TOGGLE_COUNT] =
+{
+		"monocase",
+		"cursorblink",
+		"showtiming",
+		"cursorpos",
+		"dstrace",
+		"linewrap",
+		"blankfill",
+		"screentrace",
+		"eventtrace",
+		"marginedpaste",
+		"rectselect",
+		"crosshair",
+		"fullscreen",
+		"reconnect",
+		"insert",
+		"smartpaste",
+		"bold",
+		"keepselected",
+		"underline",
+		"autoconnect",
+		"kpalternative",              /**< Keypad +/- move to next/previous field */
+		"beep",										/**< Beep on errors */
+};
+
+
 static void no_callback(H3270 *h, int value, LIB3270_TOGGLE_TYPE reason)
 {
 }
@@ -154,7 +181,7 @@ void initialize_toggles(H3270 *session, struct toggle *toggle)
 {
 	int f;
 
-	for(f=0;f<N_TOGGLES;f++)
+	for(f=0;f<LIB3270_TOGGLE_COUNT;f++)
 	{
 		toggle[f].callback	= no_callback;
 		toggle[f].upcall	= toggle_nop;
@@ -164,33 +191,35 @@ void initialize_toggles(H3270 *session, struct toggle *toggle)
 	toggle[LIB3270_TOGGLE_MONOCASE].upcall 			= toggle_monocase;
 
 #if defined(X3270_TRACE)
-	toggle[DS_TRACE].upcall			= toggle_dsTrace;
-	toggle[SCREEN_TRACE].upcall		= toggle_screenTrace;
-	toggle[EVENT_TRACE].upcall		= toggle_eventTrace;
+	toggle[LIB3270_TOGGLE_DS_TRACE].upcall			= toggle_dsTrace;
+	toggle[LIB3270_TOGGLE_SCREEN_TRACE].upcall		= toggle_screenTrace;
+	toggle[LIB3270_TOGGLE_EVENT_TRACE].upcall		= toggle_eventTrace;
 #endif
 
 #if defined(X3270_ANSI)
-	toggle[LINE_WRAP].upcall		= toggle_lineWrap;
+	toggle[LIB3270_TOGGLE_LINE_WRAP].upcall			= toggle_lineWrap;
 #endif
 
-#if defined(X3270_TRACE)
-	if(toggle[DS_TRACE].value)
-		toggle[DS_TRACE].upcall(session, &toggle[DS_TRACE],TT_INITIAL);
+	static const LIB3270_TOGGLE active_by_default[] =
+	{
+		LIB3270_TOGGLE_CURSOR_BLINK,
+		LIB3270_TOGGLE_CURSOR_POS,
+		LIB3270_TOGGLE_BEEP,
 
-	if(toggle[EVENT_TRACE].value)
-		toggle[EVENT_TRACE].upcall(session, &toggle[EVENT_TRACE],TT_INITIAL);
+		(LIB3270_TOGGLE) -1
+	};
 
-	if(toggle[SCREEN_TRACE].value)
-		toggle[SCREEN_TRACE].upcall(session, &toggle[SCREEN_TRACE],TT_INITIAL);
-#endif
+	for(f=0;active_by_default[f] != (LIB3270_TOGGLE) -1; f++)
+	{
+		toggle[active_by_default[f]].value = True;
+	}
 
-#if defined(DEFAULT_TOGGLE_CURSOR_POS)
-	toggle[CURSOR_POS].value = True;
-#endif /*]*/
 
-#if defined(DEFAULT_TOGGLE_RECTANGLE_SELECT)
-	toggle[RECTANGLE_SELECT].value = True;
-#endif
+	for(f=0;f<LIB3270_TOGGLE_COUNT;f++)
+	{
+		if(toggle[f].value)
+			toggle[f].upcall(session,&toggle[f],TT_INITIAL);
+	}
 
 }
 

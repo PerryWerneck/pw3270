@@ -651,7 +651,7 @@ static Boolean ins_prep(int faddr, int baddr, int count)
 	while (need && (xaddr != next_faddr)) {
 		if (ea_buf[xaddr].cc == EBC_null)
 			need--;
-		else if (toggled(BLANK_FILL) &&
+		else if (toggled(LIB3270_TOGGLE_BLANK_FILL) &&
 			((ea_buf[xaddr].cc == EBC_space) ||
 			 (ea_buf[xaddr].cc == EBC_underscore))) {
 			if (tb_start == -1)
@@ -3652,4 +3652,5 @@ clear_xks(void)
 		nxk = 0;
 	}
 }
+
 

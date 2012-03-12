@@ -124,6 +124,8 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/include/lib3270.h" />
+		<Unit filename="src/include/lib3270/action_table.h" />
+		<Unit filename="src/include/lib3270/actions.h" />
 		<Unit filename="src/include/lib3270/config.h.in" />
 		<Unit filename="src/include/lib3270/log.h" />
 		<Unit filename="src/include/lib3270/popup.h" />
@@ -300,6 +302,7 @@
 		</Unit>
 		<Unit filename="src/lib3270/xioc.h" />
 		<Unit filename="src/lib3270/xl.h" />
+		<Unit filename="ui/default.xml" />
 		<Unit filename="valgrind.suppression" />
 		<Extensions>
 			<code_completion />

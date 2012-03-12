@@ -68,7 +68,7 @@ static void button_1_press(GtkWidget *widget, GdkEventType type, int baddr)
 		break;
 
 	case GDK_3BUTTON_PRESS:		// Triple clock - Select field
-		lib3270_select_field(GTK_V3270(widget)->host,baddr);
+		lib3270_select_field_at(GTK_V3270(widget)->host,baddr);
 		break;
 
 #ifdef DEBUG
