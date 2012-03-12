@@ -206,6 +206,19 @@ void parser_build(struct parser *p, GtkWidget *widget)
 
 }
 
+static void release_popups(GtkWidget **popup)
+{
+	int f;
+	for(f=0;popup[f] != ((GtkWidget *) -1);f++)
+	{
+		trace("%s[%d]=%p",__FUNCTION__,f,popup[f]);
+		if(popup[f])
+			g_object_unref(popup[f]);
+	}
+
+	g_free(popup);
+}
+
 GtkWidget * ui_parse_xml_folder(const gchar *path, const gchar ** groupname, const gchar **popupname, GtkWidget *widget, const UI_WIDGET_SETUP *setup)
 {
 	struct parser	  p;
@@ -214,6 +227,7 @@ GtkWidget * ui_parse_xml_folder(const gchar *path, const gchar ** groupname, con
 	gchar			* ptr;
 	GList			* file		= NULL;
 	GList			* current;
+	size_t			  sz;
 
 	dir = g_dir_open(path,0,&error);
 
@@ -257,10 +271,12 @@ GtkWidget * ui_parse_xml_folder(const gchar *path, const gchar ** groupname, con
 	p.group 		= groupname;
 	p.popupname		= popupname;
 	p.strings		= g_string_chunk_new(0);
-	p.popup 		= g_new0(GtkWidget *,(g_strv_length((gchar **) p.popupname)+1));
 	p.setup			= setup;
 
-	g_object_set_data_full(G_OBJECT(p.toplevel),"popup_menus",(gpointer) p.popup, g_free);
+	sz				= (g_strv_length((gchar **) p.popupname));
+	p.popup 		= g_new0(GtkWidget *,sz+1);
+	p.popup[sz]		= (GtkWidget *) -1;
+	g_object_set_data_full(G_OBJECT(p.toplevel),"popup_menus",(gpointer) p.popup, (GDestroyNotify) release_popups);
 
 	for(current = g_list_first(file);current;current = g_list_next(current))
 	{

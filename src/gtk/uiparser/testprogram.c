@@ -85,12 +85,12 @@ int main (int argc, char *argv[])
 
 	for(f=0;popupname[f];f++)
 	{
+		GtkWidget *button = gtk_button_new_with_label(popupname[f]);
+		gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,FALSE,5);
 		if(popup[f])
-		{
-			GtkWidget *button = gtk_button_new_with_label(popupname[f]);
-			gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,FALSE,5);
 			g_signal_connect(button,"clicked",G_CALLBACK(show_popup),popup[f]);
-		}
+		else
+			gtk_widget_set_sensitive(button,FALSE);
 	}
 
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,FALSE,FALSE,5);

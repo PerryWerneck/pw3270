@@ -84,6 +84,7 @@
 	if(!widget)
 	{
 		info->popup[pos] = widget = gtk_menu_new();
+		g_object_ref(widget);
 		gtk_widget_show_all(widget);
 	}
 
