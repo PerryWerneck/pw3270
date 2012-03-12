@@ -183,23 +183,6 @@
 		#define PW3270_DIALOG_CRITICAL	LIB3270_NOTIFY_CRITICAL
 		#define PW3270_DIALOG			LIB3270_NOTIFY
 
-		/**  extended attributes */
-		struct ea
-		{
-			unsigned char cc;		/**< EBCDIC or ASCII character code */
-			unsigned char fa;		/**< field attribute, it nonzero */
-			unsigned char fg;		/**< foreground color (0x00 or 0xf<n>) */
-			unsigned char bg;		/**< background color (0x00 or 0xf<n>) */
-			unsigned char gr;		/**< ANSI graphics rendition bits */
-			unsigned char cs;		/**< character set (GE flag, or 0..2) */
-			unsigned char ic;		/**< input control (DBCS) */
-			unsigned char db;		/**< DBCS state */
-
-			/* Updated by addch() */
-			unsigned char  chr;		/**< ASCII character code */
-			unsigned short attr;	/**< Converted character attribute (color & etc) */
-
-		};
 		#define GR_BLINK		0x01
 		#define GR_REVERSE		0x02
 		#define GR_UNDERLINE	0x04

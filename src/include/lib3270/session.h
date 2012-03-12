@@ -36,6 +36,24 @@
 	#define LIB3270_LUNAME_LENGTH			16
 	#define LIB3270_FULL_MODEL_NAME_LENGTH	13
 
+	/**  extended attributes */
+	struct ea
+	{
+		unsigned char cc;		/**< EBCDIC or ASCII character code */
+		unsigned char fa;		/**< field attribute, it nonzero */
+		unsigned char fg;		/**< foreground color (0x00 or 0xf<n>) */
+		unsigned char bg;		/**< background color (0x00 or 0xf<n>) */
+		unsigned char gr;		/**< ANSI graphics rendition bits */
+		unsigned char cs;		/**< character set (GE flag, or 0..2) */
+		unsigned char ic;		/**< input control (DBCS) */
+		unsigned char db;		/**< DBCS state */
+
+		/* Updated by addch() */
+		unsigned char  chr;		/**< ASCII character code */
+		unsigned short attr;	/**< Converted character attribute (color & etc) */
+
+	};
+
 	struct _h3270
 	{
 		unsigned short 	  	  sz;					/**< Struct size */
@@ -79,8 +97,6 @@
 		// screen info
 		int					  ov_rows;
 		int					  ov_cols;
-//			int					  first_changed;
-//			int					  last_changed;
 		int					  maxROWS;
 		int					  maxCOLS;
 		unsigned short		  rows;
@@ -91,6 +107,8 @@
 		int					  is_altbuffer;
 
 		int					  formatted;			/**< set in screen_disp */
+
+		struct ea      		* ea_buf;				/**< 3270 device buffer. ea_buf[-1] is the dummy default field attribute */
 
 		// host.c
 		char 				  std_ds_host;

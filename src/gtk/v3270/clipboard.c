@@ -83,6 +83,8 @@ gboolean v3270_copy(v3270 *widget)
 	{
 		gtk_clipboard_set_can_store(clipboard,targets,1);
 		trace("%s: Clipboard set",__FUNCTION__);
+		return TRUE;
 	}
+	return FALSE;
 }
 

@@ -276,7 +276,7 @@ download_convert(unsigned const char *buf, unsigned len, unsigned char *xobuf)
 void
 ft_cut_data(void)
 {
-	switch (ea_buf[O_FRAME_TYPE].cc) {
+	switch (h3270.ea_buf[O_FRAME_TYPE].cc) {
 	    case FT_CONTROL_CODE:
 		cut_control_code();
 		break;
@@ -308,8 +308,7 @@ cut_control_code(void)
 	int i;
 
 	trace_ds("< FT CONTROL_CODE ");
-	code = (ea_buf[O_CC_STATUS_CODE].cc << 8) |
-		ea_buf[O_CC_STATUS_CODE + 1].cc;
+	code = (h3270.ea_buf[O_CC_STATUS_CODE].cc << 8) | h3270.ea_buf[O_CC_STATUS_CODE + 1].cc;
 	switch (code) {
 	    case SC_HOST_ACK:
 		trace_ds("HOST_ACK\n");
@@ -338,7 +337,7 @@ cut_control_code(void)
 		} else {
 			bp = buf = Malloc(81);
 			for (i = 0; i < 80; i++)
-				*bp++ = ebc2asc[ea_buf[O_CC_MESSAGE + i].cc];
+				*bp++ = ebc2asc[h3270.ea_buf[O_CC_MESSAGE + i].cc];
 			*bp-- = '\0';
 			while (bp >= buf && *bp == ' ')
 				*bp-- = '\0';
@@ -365,7 +364,7 @@ cut_control_code(void)
 static void
 cut_data_request(void)
 {
-	unsigned char seq = ea_buf[O_DR_FRAME_SEQ].cc;
+	unsigned char seq = h3270.ea_buf[O_DR_FRAME_SEQ].cc;
 	int count;
 	unsigned char cs;
 	int c;
@@ -413,13 +412,13 @@ cut_data_request(void)
 	ctlr_add(O_UP_FRAME_SEQ, seq, 0);
 	cs = 0;
 	for (i = 0; i < count; i++)
-		cs ^= ea_buf[O_UP_DATA + i].cc;
+		cs ^= h3270.ea_buf[O_UP_DATA + i].cc;
 	ctlr_add(O_UP_CSUM, asc2ebc[(int)table6[cs & 0x3f]], 0);
 	ctlr_add(O_UP_LEN, asc2ebc[(int)table6[(count >> 6) & 0x3f]], 0);
 	ctlr_add(O_UP_LEN+1, asc2ebc[(int)table6[count & 0x3f]], 0);
 
 	/* XXX: Change the data field attribute so it doesn't display. */
-	attr = ea_buf[O_DR_SF].fa;
+	attr = h3270.ea_buf[O_DR_SF].fa;
 	attr = (attr & ~FA_INTENSITY) | FA_INT_ZERO_NSEL;
 	ctlr_add_fa(O_DR_SF, attr, 0);
 
@@ -474,14 +473,14 @@ cut_data(void)
 	}
 
 	/* Copy and convert the data. */
-	raw_length = from6(ea_buf[O_DT_LEN].cc) << 6 |
-		     from6(ea_buf[O_DT_LEN + 1].cc);
+	raw_length = from6(h3270.ea_buf[O_DT_LEN].cc) << 6 |
+		     from6(h3270.ea_buf[O_DT_LEN + 1].cc);
 	if ((int)raw_length > O_RESPONSE - O_DT_DATA) {
 		cut_abort(MSG_("ftCutOversize","Illegal frame length"), SC_ABORT_XMIT);
 		return;
 	}
 	for (i = 0; i < (int)raw_length; i++)
-		cvbuf[i] = ea_buf[O_DT_DATA + i].cc;
+		cvbuf[i] = h3270.ea_buf[O_DT_DATA + i].cc;
 
 	if (raw_length == 2 && cvbuf[0] == EOF_DATA1 && cvbuf[1] == EOF_DATA2) {
 		trace_ds("< FT EOF\n");
@@ -527,7 +526,7 @@ cut_abort(const char *s, unsigned short reason)
 
 	/* Send the abort sequence. */
 	ctlr_add(RO_FRAME_TYPE, RFT_CONTROL_CODE, 0);
-	ctlr_add(RO_FRAME_SEQ, ea_buf[O_DT_FRAME_SEQ].cc, 0);
+	ctlr_add(RO_FRAME_SEQ, h3270.ea_buf[O_DT_FRAME_SEQ].cc, 0);
 	ctlr_add(RO_REASON_CODE, HIGH8(reason), 0);
 	ctlr_add(RO_REASON_CODE+1, LOW8(reason), 0);
 	trace_ds("> FT CONTROL_CODE ABORT\n");

@@ -151,7 +151,7 @@ fprint_screen(FILE *f, Boolean even_if_empty, Boolean use_html)
 	int nr = 0;
 	Boolean any = False;
 	int fa_addr = find_field_attribute(&h3270,0);
-	unsigned char fa = ea_buf[fa_addr].fa;
+	unsigned char fa = h3270.ea_buf[fa_addr].fa;
 	int fa_color, current_color;
 	Bool fa_high, current_high;
 
@@ -159,13 +159,13 @@ fprint_screen(FILE *f, Boolean even_if_empty, Boolean use_html)
 		even_if_empty = True;
 	}
 
-	if (ea_buf[fa_addr].fg)
-		fa_color = ea_buf[fa_addr].fg & 0x0f;
+	if (h3270.ea_buf[fa_addr].fg)
+		fa_color = h3270.ea_buf[fa_addr].fg & 0x0f;
 	else
 		fa_color = color_from_fa(fa);
 	current_color = fa_color;
 
-	if (ea_buf[fa_addr].gr & GR_INTENSIFY)
+	if (h3270.ea_buf[fa_addr].gr & GR_INTENSIFY)
 		fa_high = True;
 	else
 		fa_high = FA_IS_HIGH(fa);
@@ -181,14 +181,14 @@ fprint_screen(FILE *f, Boolean even_if_empty, Boolean use_html)
 			nr++;
 			ns = 0;
 		}
-		if (ea_buf[i].fa) {
+		if (h3270.ea_buf[i].fa) {
 			c = ' ';
-			fa = ea_buf[i].fa;
-			if (ea_buf[i].fg)
-				fa_color = ea_buf[i].fg & 0x0f;
+			fa = h3270.ea_buf[i].fa;
+			if (h3270.ea_buf[i].fg)
+				fa_color = h3270.ea_buf[i].fg & 0x0f;
 			else
 				fa_color = color_from_fa(fa);
-			if (ea_buf[i].gr & GR_INTENSIFY)
+			if (h3270.ea_buf[i].gr & GR_INTENSIFY)
 				fa_high = True;
 			else
 				fa_high = FA_IS_HIGH(fa);
@@ -215,7 +215,7 @@ fprint_screen(FILE *f, Boolean even_if_empty, Boolean use_html)
 		}
 #else /*][*/
 		else
-			c = ebc2asc[ea_buf[i].cc];
+			c = ebc2asc[h3270.ea_buf[i].cc];
 #endif /*]*/
 		if (c == ' ')
 			ns++;
@@ -232,8 +232,8 @@ fprint_screen(FILE *f, Boolean even_if_empty, Boolean use_html)
 				int color;
 				Bool high;
 
-				if (ea_buf[i].fg)
-					color = ea_buf[i].fg & 0x0f;
+				if (h3270.ea_buf[i].fg)
+					color = h3270.ea_buf[i].fg & 0x0f;
 				else
 					color = fa_color;
 				if (color != current_color) {
@@ -242,7 +242,7 @@ fprint_screen(FILE *f, Boolean even_if_empty, Boolean use_html)
 							html_color(color));
 					current_color = color;
 				}
-				if (ea_buf[i].gr & GR_INTENSIFY)
+				if (h3270.ea_buf[i].gr & GR_INTENSIFY)
 					high = True;
 				else
 					high = fa_high;

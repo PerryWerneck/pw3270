@@ -112,7 +112,7 @@
 			}
 
 			faddr = find_field_attribute(&h3270,baddr);
-			fa = ea_buf[faddr].fa;
+			fa = h3270.ea_buf[faddr].fa;
 			if (faddr == baddr || FA_IS_PROTECTED(fa))
 			{
 				baddr = next_unprotected(baddr);
@@ -133,7 +133,7 @@
 	if(toggled(SMART_PASTE))
 	{
 		int faddr = find_field_attribute(&h3270,h3270.cursor_addr);
-		if(FA_IS_PROTECTED(ea_buf[faddr].fa))
+		if(FA_IS_PROTECTED(h3270.ea_buf[faddr].fa))
 			h3270.cursor_addr++;
 		else
 			key_ACharacter(c, KT_STD, IA_PASTE, NULL);
@@ -191,7 +191,7 @@ LIB3270_EXPORT int lib3270_set_string(H3270 *h, const unsigned char *str)
 				baddr = (h->cursor_addr + h->cols) % (h->cols * h->rows);   /* down */
 				baddr = (baddr / h->cols) * h->cols;               /* 1st col */
 				faddr = find_field_attribute(h,baddr);
-				fa = ea_buf[faddr].fa;
+				fa = h3270.ea_buf[faddr].fa;
 				if (faddr != baddr && !FA_IS_PROTECTED(fa))
 					cursor_move(baddr);
 				else

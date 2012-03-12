@@ -99,12 +99,12 @@ void set_display_charset(char *dcs)
 
 static void addch(H3270 *session, int baddr, unsigned char c, unsigned short attr)
 {
-	if(ea_buf[baddr].chr == c && ea_buf[baddr].attr == attr)
+	if(session->ea_buf[baddr].chr == c && session->ea_buf[baddr].attr == attr)
 			return;
 
 	/* Converted char has changed, update it */
-	ea_buf[baddr].chr  = c;
-	ea_buf[baddr].attr = attr;
+	session->ea_buf[baddr].chr  = c;
+	session->ea_buf[baddr].attr = attr;
 
 	if(session->update)
 		session->update(session,baddr,c,attr,baddr == session->cursor_addr);
@@ -161,10 +161,10 @@ static unsigned short calc_attrs(int baddr, int fa_addr, int fa)
 
 	/* Monochrome is easy, and so is color if nothing is specified. */
 	if (!appres.m3279 ||
-		(!ea_buf[baddr].fg &&
-		 !ea_buf[fa_addr].fg &&
-		 !ea_buf[baddr].bg &&
-		 !ea_buf[fa_addr].bg))
+		(!h3270.ea_buf[baddr].fg &&
+		 !h3270.ea_buf[fa_addr].fg &&
+		 !h3270.ea_buf[baddr].bg &&
+		 !h3270.ea_buf[fa_addr].bg))
 	{
 		a = color_from_fa(fa);
 	}
@@ -172,23 +172,23 @@ static unsigned short calc_attrs(int baddr, int fa_addr, int fa)
 	{
 
 		/* The current location or the fa specifies the fg or bg. */
-		if (ea_buf[baddr].fg)
+		if (h3270.ea_buf[baddr].fg)
 		{
-			fg = ea_buf[baddr].fg & 0x0f;
+			fg = h3270.ea_buf[baddr].fg & 0x0f;
 		}
-		else if (ea_buf[fa_addr].fg)
+		else if (h3270.ea_buf[fa_addr].fg)
 		{
-			fg = ea_buf[fa_addr].fg & 0x0f;
+			fg = h3270.ea_buf[fa_addr].fg & 0x0f;
 		}
 		else
 		{
 			fg = DEFCOLOR_MAP(fa);
 		}
 
-		if (ea_buf[baddr].bg)
-			bg = ea_buf[baddr].bg & 0x0f;
-		else if (ea_buf[fa_addr].bg)
-			bg = ea_buf[fa_addr].bg & 0x0f;
+		if (h3270.ea_buf[baddr].bg)
+			bg = h3270.ea_buf[baddr].bg & 0x0f;
+		else if (h3270.ea_buf[fa_addr].bg)
+			bg = h3270.ea_buf[fa_addr].bg & 0x0f;
 		else
 			bg = 0;
 
@@ -197,10 +197,10 @@ static unsigned short calc_attrs(int baddr, int fa_addr, int fa)
 
 	/* Compute the display attributes. */
 
-	if (ea_buf[baddr].gr)
-		gr = ea_buf[baddr].gr;
-	else if (ea_buf[fa_addr].gr)
-		gr = ea_buf[fa_addr].gr;
+	if (h3270.ea_buf[baddr].gr)
+		gr = h3270.ea_buf[baddr].gr;
+	else if (h3270.ea_buf[fa_addr].gr)
+		gr = h3270.ea_buf[fa_addr].gr;
 	else
 		gr = 0;
 
@@ -271,8 +271,8 @@ LIB3270_EXPORT int lib3270_get_contents(H3270 *h, int first, int last, unsigned 
 
 	for(baddr = first; baddr <= last;baddr++)
 	{
-		*(chr++)  = ea_buf[baddr].chr ? ea_buf[baddr].chr : ' ';
-		*(attr++) = ea_buf[baddr].attr;
+		*(chr++)  = h3270.ea_buf[baddr].chr ? h3270.ea_buf[baddr].chr : ' ';
+		*(attr++) = h3270.ea_buf[baddr].attr;
 	}
 
 	return 0;
@@ -294,13 +294,13 @@ int screen_read(char *dest, int baddr, int count)
 			return EFAULT;
 		}
 
-		if (ea_buf[baddr].fa)
-			fa = ea_buf[baddr].fa;
+		if (h3270.ea_buf[baddr].fa)
+			fa = h3270.ea_buf[baddr].fa;
 
 		if(FA_IS_ZERO(fa))
 			*dest = ' ';
-		else if(ea_buf[baddr].cc)
-			*dest = ebc2asc[ea_buf[baddr].cc];
+		else if(h3270.ea_buf[baddr].cc)
+			*dest = ebc2asc[h3270.ea_buf[baddr].cc];
 		else
 			*dest = ' ';
 
@@ -329,11 +329,11 @@ static void screen_update(H3270 *session, int bstart, int bend)
 
 	for(baddr = bstart; baddr < bend; baddr++)
 	{
-		if(ea_buf[baddr].fa)
+		if(session->ea_buf[baddr].fa)
 		{
 			// Field attribute.
 			fa_addr = baddr;
-			fa = ea_buf[baddr].fa;
+			fa = session->ea_buf[baddr].fa;
 			a = calc_attrs(baddr, baddr, fa);
 			addch(session,baddr,' ',(attr = COLOR_GREEN)|CHAR_ATTR_MARKER);
 		}
@@ -345,7 +345,7 @@ static void screen_update(H3270 *session, int bstart, int bend)
 		else
 		{
 			// Normal text.
-			if (!(ea_buf[baddr].gr || ea_buf[baddr].fg || ea_buf[baddr].bg))
+			if (!(session->ea_buf[baddr].gr || session->ea_buf[baddr].fg || session->ea_buf[baddr].bg))
 			{
 				attr = a;
 			}
@@ -361,20 +361,20 @@ static void screen_update(H3270 *session, int bstart, int bend)
 				attr = calc_attrs(baddr, fa_addr, fa);
 			}
 
-			if (ea_buf[baddr].cs == CS_LINEDRAW)
+			if (session->ea_buf[baddr].cs == CS_LINEDRAW)
 			{
-				addch(session,baddr,ea_buf[baddr].cc,attr);
+				addch(session,baddr,session->ea_buf[baddr].cc,attr);
 			}
-			else if (ea_buf[baddr].cs == CS_APL || (ea_buf[baddr].cs & CS_GE))
+			else if (session->ea_buf[baddr].cs == CS_APL || (session->ea_buf[baddr].cs & CS_GE))
 			{
-				addch(session,baddr,ea_buf[baddr].cc,attr|CHAR_ATTR_CG);
+				addch(session,baddr,session->ea_buf[baddr].cc,attr|CHAR_ATTR_CG);
 			}
 			else
 			{
 				if (toggled(MONOCASE))
-					addch(session,baddr,asc2uc[ebc2asc[ea_buf[baddr].cc]],attr);
+					addch(session,baddr,asc2uc[ebc2asc[session->ea_buf[baddr].cc]],attr);
 				else
-					addch(session,baddr,ebc2asc[ea_buf[baddr].cc],attr);
+					addch(session,baddr,ebc2asc[session->ea_buf[baddr].cc],attr);
 			}
 		}
 
@@ -419,7 +419,7 @@ LIB3270_EXPORT int lib3270_set_cursor_address(H3270 *h, int baddr)
 	h->cursor_addr = baddr;
 
 	if(h->update_cursor)
-		h->update_cursor(h,(unsigned short) (baddr/h->cols),(unsigned short) (baddr%h->cols),ea_buf[baddr].chr,ea_buf[baddr].attr);
+		h->update_cursor(h,(unsigned short) (baddr/h->cols),(unsigned short) (baddr%h->cols),h->ea_buf[baddr].chr,h->ea_buf[baddr].attr);
 
     return ret;
 }
@@ -778,10 +778,10 @@ LIB3270_ACTION( testpattern )
 			}
 			pos = 0;
 		}
-		ea_buf[f].fg = fg;
-		ea_buf[f].bg = (fg == COLOR_BLACK) ? COLOR_WHITE : COLOR_BLACK;
-		ea_buf[f].cs = pat[row].cs;
-		ea_buf[f].cc = pat[row].cc[pos++];
+		hSession->ea_buf[f].fg = fg;
+		hSession->ea_buf[f].bg = (fg == COLOR_BLACK) ? COLOR_WHITE : COLOR_BLACK;
+		hSession->ea_buf[f].cs = pat[row].cs;
+		hSession->ea_buf[f].cc = pat[row].cc[pos++];
 	}
 
 	Trace("%s display",__FUNCTION__);

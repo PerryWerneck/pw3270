@@ -95,6 +95,9 @@
 		<Unit filename="uiparser\toolitem.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="v3270\clipboard.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="v3270\draw.c">
 			<Option compilerVar="CC" />
 		</Unit>
