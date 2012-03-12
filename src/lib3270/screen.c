@@ -84,8 +84,6 @@ static int (*popup_handler)(H3270 *, LIB3270_NOTIFY, const char *, const char *,
 // static SCRIPT_STATE script_state = SCRIPT_STATE_NONE;
 
 
-int lib3270_event_counter[COUNTER_ID_USER] = { 0, 0 };
-
 enum ts { TS_AUTO, TS_ON, TS_OFF };
 
 static void screen_update(H3270 *session, int bstart, int bend);
@@ -445,8 +443,8 @@ void set_status(H3270 *session, LIB3270_FLAG id, Boolean on)
 void status_ctlr_done(H3270 *session)
 {
 	CHECK_SESSION_HANDLE(session);
-	lib3270_event_counter[COUNTER_ID_CTLR_DONE]++;
 	set_status(session,OIA_FLAG_UNDERA,True);
+	session->ctlr_done(session);
 }
 
 void status_oerr(H3270 *session, int error_type)
@@ -631,41 +629,6 @@ void status_untiming(H3270 *session)
 	if(session->set_timer)
 		session->set_timer(session,0);
 }
-
-/* Set the window title. */ /*
-void screen_title(char *text)
-{
-}
-
-static void
-relabel(H3270 *session, int ignored unused, void *dunno)
-{
-#if defined(WC3270)
-	if (appres.title != CN)
-	    	return;
-#endif
-
-	if (PCONNECTED)
-	{
-#if defined(WC3270)
-		if (profile_name != CN)
-			screen_title(profile_name);
-		else
-#endif
-			screen_title(session->reconnect_host);
-
-	}
-	else
-	{
-	    	screen_title(0);
-	}
-}
-
-int query_counter(COUNTER_ID id)
-{
-	return lib3270_event_counter[id];
-}
-*/
 
 void show_3270_popup_dialog(H3270 *session, LIB3270_NOTIFY type, const char *title, const char *msg, const char *fmt, ...)
 {

@@ -137,6 +137,7 @@
 		void (*erase)(H3270 *session);
 		void (*cursor)(H3270 *session, LIB3270_CURSOR id);
 		void (*set_selection)(H3270 *session, unsigned char on);
+		void (*ctlr_done)(H3270 *session);
 
 	};
 

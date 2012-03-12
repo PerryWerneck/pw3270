@@ -39,5 +39,3 @@ LIB3270_INTERNAL void 		set_status(H3270 *session, OIA_FLAG id, Boolean on);
 #define status_syswait()		status_changed(NULL,LIB3270_STATUS_SYSWAIT)
 #define status_minus()			status_changed(NULL,LIB3270_STATUS_MINUS)
 
-
-extern int lib3270_event_counter[COUNTER_ID_USER];

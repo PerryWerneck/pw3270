@@ -143,7 +143,7 @@
 
  static void selecting(GtkWidget *widget, gboolean on, GtkActionGroup **group)
  {
-	trace("Widget %p selection state changed to %s",widget,on ? "Yes" : "No");
+//	trace("Widget %p selection state changed to %s",widget,on ? "Yes" : "No");
 	gtk_action_group_set_sensitive(group[ACTION_GROUP_SELECTION],on);
  }
 

@@ -1567,12 +1567,6 @@ do_reset(Boolean explicit)
 	status_reset(NULL);
 	mcursor_normal(&h3270);
 
-//	composing = NONE;
-//	status_compose(False, 0, KT_STD);
-
-	lib3270_event_counter[COUNTER_ID_RESET]++;
-	Trace("Reset counter updated to %d",lib3270_event_counter[COUNTER_ID_RESET]);
-
 }
 
 LIB3270_CLEAR_SELECTION_ACTION( reset )

@@ -150,6 +150,11 @@ static void nop_char(H3270 *session, unsigned char chr)
 
 }
 
+static void nop(H3270 *session)
+{
+
+}
+
 static void lib3270_session_init(H3270 *hSession, const char *model)
 {
 	int 	ovc, ovr;
@@ -162,7 +167,7 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 	// A few dummy calls to avoid "ifs"
 	hSession->update 		= update_char;
 	hSession->set_selection = nop_char;
-
+	hSession->ctlr_done		= nop;
 
 	hSession->sock = -1;
 	hSession->model_num = -1;

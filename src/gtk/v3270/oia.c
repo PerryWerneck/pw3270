@@ -585,7 +585,7 @@ void v3270_update_luname(GtkWidget *widget,const gchar *name)
 	if(!terminal->surface)
 		return;
 
-	trace("%s",__FUNCTION__);
+//	trace("%s",__FUNCTION__);
 
 	cr = set_update_region(terminal,&rect,V3270_OIA_LUNAME);
 
@@ -695,7 +695,7 @@ struct timer_info
 
 static void release_timer(struct timer_info *info)
 {
-	trace("Timer %p stops",info);
+//	trace("Timer %p stops",info);
 	info->terminal->timer = NULL;
 
 	if(info->terminal->surface)
@@ -905,7 +905,7 @@ void v3270_stop_timer(GtkWidget *widget)
 	if(!terminal->timer)
 		return;
 
-	trace("Timer=%p",terminal->timer);
+//	trace("Timer=%p",terminal->timer);
 	if(terminal->timer->ref_count < 2)
 		g_source_destroy(terminal->timer);
 
