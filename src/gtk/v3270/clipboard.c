@@ -53,7 +53,7 @@ static void clipboard_clear(GtkClipboard *clipboard, GObject *obj)
 
 }
 
-void clipboard_get(GtkClipboard *clipboard, GtkSelectionData *selection_data, guint target, GObject *obj)
+void clipboard_get(GtkClipboard *clipboard, GtkSelectionData *selection, guint target, GObject *obj)
 {
 	v3270 *widget = GTK_V3270(obj);
 
@@ -62,7 +62,7 @@ void clipboard_get(GtkClipboard *clipboard, GtkSelectionData *selection_data, gu
 	switch(target)
 	{
 	case CLIPBOARD_TYPE_TEXT:
-		gtk_clipboard_set_text(clipboard,"TESTE",-1);
+		gtk_selection_data_set_text(selection,"teste",-1);
 		break;
 
 	default:
