@@ -169,9 +169,6 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 	hSession->cstate = NOT_CONNECTED;
 	hSession->oia_status = -1;
 
-	hSession->selected.begin	= -1;
-	hSession->selected.end	= -1;
-
 	strncpy(hSession->full_model_name,"IBM-",LIB3270_FULL_MODEL_NAME_LENGTH);
 	hSession->model_name = &hSession->full_model_name[4];
 
@@ -294,7 +291,8 @@ static void initialize(void)
 	Trace("Initializing library (calls: %d)",init_calls);
 #endif
 
-	h3270.selected.begin = h3270.selected.end = -1;
+	h3270.selected = 0;
+	h3270.select.begin = h3270.select.end = 0;
 	initialize_toggles(&h3270,appres.toggle);
 
 #if defined(_WIN32)

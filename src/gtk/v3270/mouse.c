@@ -60,7 +60,7 @@ static void button_1_press(GtkWidget *widget, GdkEventType type, int baddr)
 	{
 	case GDK_BUTTON_PRESS: 		// Single click - Just move cursor
 		lib3270_set_cursor_address(GTK_V3270(widget)->host,baddr);
-		lib3270_clear_selection(GTK_V3270(widget)->host);
+		lib3270_unselect(GTK_V3270(widget)->host);
 		break;
 
 	case GDK_2BUTTON_PRESS:		// Double click - Select word

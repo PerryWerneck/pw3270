@@ -62,11 +62,11 @@
 
 			<menuitem action='selectfield' key='<Ctrl>f' group='online' label='Select Field' />
 			<menuitem action='unselect' group='selection' label='unselect' />
-			<!--- menuitem action='Reselect' key='<Ctrl>r' group='online' label='Reselect' /--->
+			<menuitem action='reselect' key='<Ctrl>r' group='online' label='Reselect' />
 
 			<separator/>
-			<menuitem action='Clear' group='online' key='Pause' label='Clear' />
-			<menuitem action='EraseInput' icon='clear' group='online' label='Erase input' />
+			<menuitem action='clear' group='online' key='Pause' label='Clear' />
+			<menuitem action='eraseinput' icon='clear' group='online' label='Erase input' />
 <!---			<menuitem action='EraseField' key='<Ctrl>u' group='online' /> -->
 			<menuitem action='EraseEOF' group='online' label='Erase to end of field' />
 			<menuitem action='EraseEOL' group='online' label='Erase to end of line' />

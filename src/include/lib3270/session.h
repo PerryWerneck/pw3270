@@ -38,7 +38,7 @@
 
 	struct _h3270
 	{
-		unsigned short 	  sz;				/**< Struct size */
+		unsigned short 	  	  sz;					/**< Struct size */
 
 		// Connection info
 		int					  secure_connection;
@@ -50,6 +50,10 @@
 		HANDLE				  sock_handle;
 		#endif /*]*/
 
+		// flags
+		int					  selected	: 1;
+
+		// Network & Termtype
 		char    			* hostname;
 		char				* connected_type;
 		char				* connected_lu;
@@ -104,7 +108,7 @@
 		{
 			int begin;
 			int end;
-		} selected;
+		} select;
 
 		// xio
 		unsigned long		  ns_read_id;
