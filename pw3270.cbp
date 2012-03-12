@@ -101,6 +101,9 @@
 		<Unit filename="src/gtk/uiparser/toolitem.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/gtk/v3270/clipboard.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/gtk/v3270/draw.c">
 			<Option compilerVar="CC" />
 		</Unit>
