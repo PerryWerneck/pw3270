@@ -45,7 +45,7 @@
 char *locale_codeset = CN;
 
 static int utf8_ix = -1;
-static Boolean is_utf8 = False;
+// static Boolean is_utf8 = False;
 #if defined(X3270_DBCS) /*[*/
 static Boolean is_gb18030 = False;
 #endif /*]*/
@@ -73,8 +73,8 @@ enum UTF_IX {
 /*
  * Names of the above (real) character sets.  These are the names used in
  * displayCharset resources.
- */
-static char *dcs[] = {		/* same order as enum UTF_IX and utf8_tab[] */
+ */ /*
+static char *dcs[] = {		// same order as enum UTF_IX and utf8_tab[]
 	"iso8859-1",
 	"iso8859-2",
 	"iso8859-7",
@@ -85,6 +85,7 @@ static char *dcs[] = {		/* same order as enum UTF_IX and utf8_tab[] */
 	"koi8-r",
 	CN
 };
+*/
 
 /*
  * UTF-8 translation tables.
@@ -336,33 +337,34 @@ static char *utf8_tab[U_MAX][96] = {
 
 /*
  * Save the codeset from the locale, and set globals based on known values.
- */
+ */ /*
 void
 set_codeset(char *codeset_name)
 {
 	char *new_codeset;
 
-#if defined(X3270_DBCS) /*[*/
+#if defined(X3270_DBCS)
     	is_gb18030 = !strcasecmp(codeset_name, "gb18030");
-#endif /*]*/
+#endif
 
-#if !defined(TCL3270) /*[*/
+#if !defined(TCL3270)
     	is_utf8 = (!strcasecmp(codeset_name, "utf-8") ||
 	           !strcasecmp(codeset_name, "utf8") ||
 		   !strcasecmp(codeset_name, "utf_8"));
-#else /*][*/
-	/*
-	 * tcl3270 is always in UTF-8 mode, because it needs to
-	 * supply UTF-8 strings to libtcl.
-	 */
+#else
+	//
+	// tcl3270 is always in UTF-8 mode, because it needs to
+	// supply UTF-8 strings to libtcl.
+	//
 	is_utf8 = 1;
-#endif /*]*/
+#endif
 
 	Trace("%s locale_codeset: %p new_codeset: %p (%s)",__FUNCTION__,locale_codeset,codeset_name,codeset_name);
 	new_codeset = NewString(codeset_name);
 	Replace(locale_codeset, new_codeset);
 	Trace("%s",__FUNCTION__);
 }
+*/
 
 /*
  * Set globals based on an x3270 character set list.
@@ -371,7 +373,7 @@ set_codeset(char *codeset_name)
  * used by utf8_expand() below.
  *
  * set_codeset, above, must be called _before_ this function.
- */
+ */ /*
 Boolean
 utf8_set_display_charsets(char *cslist, char *csname)
 {
@@ -382,44 +384,44 @@ utf8_set_display_charsets(char *cslist, char *csname)
 
 	utf8_ix = -1;
 
-#if defined(X3270_DBCS) /*[*/
+#if defined(X3270_DBCS)
 	if (strchr(cslist, '+') != CN)
 	    	dbcs = True;
-#endif /*]*/
+#endif
 
     	if (!is_utf8) {
-#if defined(X3270_DBCS) /*[*/
+#if defined(X3270_DBCS)
 	    	if (is_gb18030) {
-		    	/*
-			 * A convenient lie.
-			 * If the locale is GB18030, use the UTF-8
-			 * expansion mechanism to translate 0xa0 through
-			 * 0xff, using a table entry that expands to GB18030
-			 * multi-byte sequences rather than UTF-8.
-			 *
-			 * Note that there appears to be a bug in ncursesw
-			 * (or something it depends on) that turns these
-			 * characters into garbage.  Hopefully this bug will
-			 * be fixed and this code will start working properly.
-			 *
-			 * As a workarond, everything works properly in a
-			 * Chinese UTF-8 locale.
-			 */
+			//
+			// A convenient lie.
+			// If the locale is GB18030, use the UTF-8
+			// expansion mechanism to translate 0xa0 through
+			// 0xff, using a table entry that expands to GB18030
+			// multi-byte sequences rather than UTF-8.
+			//
+			// Note that there appears to be a bug in ncursesw
+			// (or something it depends on) that turns these
+			// characters into garbage.  Hopefully this bug will
+			// be fixed and this code will start working properly.
+			//
+			// As a workarond, everything works properly in a
+			// Chinese UTF-8 locale.
+			//
 		    	utf8_ix = PSEUDO_GB18030;
 		}
-#endif /*]*/
+#endif
 	    	return True;
 	}
 
-#if defined(X3270_DBCS) /*[*/
-	/* For DBCS, map 0xa0..0xff as Latin-1. */
+#if defined(X3270_DBCS)
+	// For DBCS, map 0xa0..0xff as Latin-1.
 	if (dbcs) {
 	    	utf8_ix = U_ISO8859_1;
 		return True;
 	}
-#endif /*]*/
+#endif
 
-	/* Skip 3270cg sets. */
+	// Skip 3270cg sets.
     	ptr = dup = NewString(cslist);
 	while ((tok = strtok(ptr, ",")) != CN) {
 		ptr = NULL;
@@ -433,7 +435,7 @@ utf8_set_display_charsets(char *cslist, char *csname)
 		return False;
 	}
 
-	/* Look up the charset. */
+	// Look up the charset.
 	for (i = 0; dcs[i] != CN; i++) {
 	    	if (!strcasecmp(dcs[i], tok))
 		    	break;
@@ -448,7 +450,7 @@ utf8_set_display_charsets(char *cslist, char *csname)
 	Free(dup);
 	return True;
 }
-
+*/
 /* Expand an 8-bit character in the 'implied' character set. */
 char *
 utf8_expand(unsigned char c)
@@ -483,8 +485,7 @@ utf8_expand(unsigned char c)
  * character set.
  * Returns 0 if the lookup fails.
  */
-unsigned char
-utf8_lookup(char *mbs, enum ulfail *fail, int *consumed)
+unsigned char utf8_lookup(char *mbs, enum ulfail *fail, int *consumed)
 {
     	int i;
 	int mblen = strlen(mbs);

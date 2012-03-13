@@ -24,9 +24,9 @@ enum ulfail {
 	ULFAIL_INVALID		/* invalid sequence */
 };
 
-LIB3270_INTERNAL char *locale_codeset;
+// LIB3270_INTERNAL char *locale_codeset;
 
-LIB3270_INTERNAL void set_codeset(char *codeset_name);
-LIB3270_INTERNAL Boolean utf8_set_display_charsets(char *cslist, char *csname);
-LIB3270_INTERNAL char *utf8_expand(unsigned char c);
-LIB3270_INTERNAL unsigned char utf8_lookup(char *mbs, enum ulfail *fail, int *consumed);
+// LIB3270_INTERNAL void set_codeset(char *codeset_name);
+// LIB3270_INTERNAL Boolean utf8_set_display_charsets(char *cslist, char *csname);
+ LIB3270_INTERNAL char *utf8_expand(unsigned char c);
+ LIB3270_INTERNAL unsigned char utf8_lookup(char *mbs, enum ulfail *fail, int *consumed);

@@ -793,11 +793,13 @@ do_screentrace(void)
 {
 	register int i;
 
+/*
 	if (fprint_screen(screentracef, False, False)) {
 		for (i = 0; i < h3270.cols; i++)
 			(void) fputc('=', screentracef);
 		(void) fputc('\n', screentracef);
 	}
+*/
 }
 
 void

@@ -44,19 +44,27 @@
 #include "charsetc.h"
 #include "kybdc.h"
 #include "popupsc.h"
-#if defined(X3270_DISPLAY) || (defined(C3270) && !defined(_WIN32)) /*[*/
+
+/*
+#if defined(X3270_DISPLAY) || (defined(C3270) && !defined(_WIN32))
 #include "screenc.h"
-#endif /*]*/
+#endif
+*/
+
 #include "tablesc.h"
 #include "utf8c.h"
 #include "utilc.h"
 #include "widec.h"
 
 #include <errno.h>
-#include <locale.h>
-#if !defined(_WIN32) /*[*/
+
+//#include <locale.h>
+
+/*
+#if !defined(_WIN32)
 #include <langinfo.h>
-#endif /*]*/
+#endif
+*/
 
 // #include <lib3270/api.h>
 
@@ -72,9 +80,13 @@ unsigned long cgcsgid_dbcs = 0L;
 char *default_display_charset = "3270cg-1a,3270cg-1,iso8859-1";
 char *converter_names;
 char *encoding;
-#if defined(X3270_DISPLAY) /*[*/
+
+/*
+#if defined(X3270_DISPLAY)
 unsigned char xk_selector = 0;
 #endif
+*/
+
 unsigned char auto_keymap = 0;
 
 /* Statics. */
@@ -82,12 +94,13 @@ static enum cs_result resource_charset(char *csname, char *cs, char *ftcs);
 typedef enum { CS_ONLY, FT_ONLY, BOTH } remap_scope;
 static enum cs_result remap_chars(char *csname, char *spec, remap_scope scope,
     int *ne);
-static void remap_one(unsigned char ebc, KeySym iso, remap_scope scope,
-    Boolean one_way);
+static void remap_one(unsigned char ebc, KeySym iso, remap_scope scope,Boolean one_way);
+
 #if defined(DEBUG_CHARSET) /*[*/
 static enum cs_result check_charset(void);
 static char *char_if_ascii7(unsigned long l);
 #endif /*]*/
+
 static void set_cgcsgids(char *spec);
 static int set_cgcsgid(char *spec, unsigned long *idp);
 
@@ -113,6 +126,7 @@ static unsigned char save_ebc2cg[256];
 static unsigned char save_cg2ebc[256];
 static unsigned char save_ebc2asc[256];
 static unsigned char save_asc2ebc[256];
+
 #if defined(X3270_FT) /*[*/
 static unsigned char save_ft2asc[256];
 static unsigned char save_asc2ft[256];
@@ -145,8 +159,7 @@ restore_charset(void)
 }
 
 /* Get a character set definition. */
-static char *
-get_charset_def(const char *csname)
+static char * get_charset_def(const char *csname)
 {
 	return get_fresource("%s.%s", ResCharset, csname);
 }
@@ -183,9 +196,11 @@ enum cs_result charset_init(H3270 *session, char *csname)
 	char *cs, *ftcs;
 	enum cs_result rc;
 	char *ccs, *cftcs;
-#if defined(X3270_DISPLAY) /*[*/
+/*
+#if defined(X3270_DISPLAY)
 	char *xks;
-#endif /*]*/
+#endif
+*/
 	char *ak;
 
 /*

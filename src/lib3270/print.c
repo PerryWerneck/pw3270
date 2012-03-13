@@ -85,15 +85,15 @@ static char *print_window_command = CN;
 
 /*
  * Map default 3279 colors.  This code is duplicated three times. ;-(
- */
+ */ /*
 static int
 color_from_fa(unsigned char fa)
 {
 	static int field_colors[4] = {
-		COLOR_GREEN,        /* default */
-		COLOR_RED,          /* intensified */
-		COLOR_BLUE,         /* protected */
-		COLOR_WHITE         /* protected, intensified */
+		COLOR_GREEN,        // default
+		COLOR_RED,          // intensified
+		COLOR_BLUE,         // protected
+		COLOR_WHITE         // protected, intensified
 #       define DEFCOLOR_MAP(f) \
 		((((f) & FA_PROTECT) >> 4) | (((f) & FA_INT_HIGH_SEL) >> 3))
 	};
@@ -103,10 +103,10 @@ color_from_fa(unsigned char fa)
 	else
 		return COLOR_GREEN;
 }
-
+*/
 /*
  * Map 3279 colors onto HTML colors.
- */
+ */ /*
 static char *
 html_color(int color)
 {
@@ -133,7 +133,7 @@ html_color(int color)
 	else
 		return "black";
 }
-
+*/
 
 /*
  * Print the ASCIIfied contents of the screen onto a stream.
@@ -145,6 +145,9 @@ html_color(int color)
 Boolean
 fprint_screen(FILE *f, Boolean even_if_empty, Boolean use_html)
 {
+	return False;
+
+/*
 	register int i;
 	char c;
 	int ns = 0;
@@ -172,10 +175,10 @@ fprint_screen(FILE *f, Boolean even_if_empty, Boolean use_html)
 	current_high = fa_high;
 
 	for (i = 0; i < h3270.rows*h3270.cols; i++) {
-#if defined(X3270_DBCS) /*[*/
+#if defined(X3270_DBCS)
 		char mb[16];
 		Boolean is_dbcs = False;
-#endif /*]*/
+#endif
 
 		if (i && !(i % h3270.cols)) {
 			nr++;
@@ -195,9 +198,9 @@ fprint_screen(FILE *f, Boolean even_if_empty, Boolean use_html)
 		}
 		if (FA_IS_ZERO(fa))
 			c = ' ';
-#if defined(X3270_DBCS) /*[*/
+#if defined(X3270_DBCS)
 		else {
-			/* XXX: DBCS/html interactions are not done */
+			// XXX: DBCS/html interactions are not done
 			switch (ctlr_dbcs_state(i)) {
 			case DBCS_NONE:
 			case DBCS_SB:
@@ -213,10 +216,10 @@ fprint_screen(FILE *f, Boolean even_if_empty, Boolean use_html)
 				break;
 			}
 		}
-#else /*][*/
+#else
 		else
 			c = ebc2asc[h3270.ea_buf[i].cc];
-#endif /*]*/
+#endif
 		if (c == ' ')
 			ns++;
 		else {
@@ -270,13 +273,13 @@ fprint_screen(FILE *f, Boolean even_if_empty, Boolean use_html)
 				}
 			}
 			any = True;
-#if defined(X3270_DBCS) /*[*/
+#if defined(X3270_DBCS)
 			if (is_dbcs) {
 				(void) fputs(mb, f);
 				i++;
 			}
 			else
-#endif /*]*/
+#endif
 			{
 				if (use_html && c == '<')
 					fprintf(f, "&lt;");
@@ -300,6 +303,7 @@ fprint_screen(FILE *f, Boolean even_if_empty, Boolean use_html)
 			   current_high? "</b>": "");
 	}
 	return True;
+*/
 }
 
 /* Termination code for print text process. */ /*
