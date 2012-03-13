@@ -882,17 +882,17 @@ rpf_free(rpf_t *r)
 	r->cur_len = 0;
 }
 
-#if defined(X3270_DISPLAY) /*[*/
-
-/* Glue between x3270 and the X libraries. */
-
 /*
- * A way to work around problems with Xt resources.  It seems to be impossible
- * to get arbitrarily named resources.  Someday this should be hacked to
- * add classes too.
- */
-char *
-get_resource(const char *name)
+#if defined(X3270_DISPLAY)
+
+// Glue between x3270 and the X libraries.
+
+//
+// A way to work around problems with Xt resources.  It seems to be impossible
+// to get arbitrarily named resources.  Someday this should be hacked to
+// add classes too.
+//
+char * get_resource(const char *name)
 {
 	XrmValue value;
 	char *type;
@@ -903,12 +903,15 @@ get_resource(const char *name)
 	if ((XrmGetResource(rdb, str, 0, &type, &value) == True) && *value.addr)
 		r = value.addr;
 	XtFree(str);
+
+	lib3270_write_log(&h3270,"resource","%s=\"%s\"",name,r);
+
 	return r;
 }
 
-/*
- * Input callbacks.
- */
+//
+// Input callbacks.
+//
 typedef void voidfn(void);
 
 typedef struct iorec {
@@ -1001,9 +1004,9 @@ RemoveInput(unsigned long cookie)
 	}
 }
 
-/*
- * Timer callbacks.
- */
+//
+/ Timer callbacks.
+//
 
 typedef struct torec {
 	voidfn		*fn;
@@ -1029,17 +1032,17 @@ to_fn(XtPointer closure, XtIntervalId *id)
 
 	if (torec != NULL) {
 
-	    	/* Remember the record. */
+    	// Remember the record.
 		fn = torec->fn;
 
-		/* Free the record. */
+		// Free the record.
 		if (prev != NULL)
 			prev->next = torec->next;
 		else
 			torecs = torec->next;
 		XtFree((XtPointer)torec);
 
-		/* Call the function. */
+		// Call the function.
 		(*fn)();
 	}
 }
@@ -1087,4 +1090,5 @@ StringToKeysym(char *s)
 {
 	return XStringToKeysym(s);
 }
-#endif /*]*/
+#endif
+*/

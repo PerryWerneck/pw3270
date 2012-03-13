@@ -90,9 +90,9 @@ static char *char_if_ascii7(unsigned long l);
 #endif /*]*/
 static void set_cgcsgids(char *spec);
 static int set_cgcsgid(char *spec, unsigned long *idp);
-static void set_charset_name(char *csname);
 
-static char *charset_name = CN;
+// static void set_charset_name(char *csname);
+// static char *charset_name = CN;
 
 static void
 charset_defaults(void)
@@ -187,27 +187,30 @@ enum cs_result charset_init(H3270 *session, char *csname)
 	char *xks;
 #endif /*]*/
 	char *ak;
-#if !defined(_WIN32) /*[*/
+
+/*
+#if !defined(_WIN32)
 	char *codeset_name;
-#endif /*]*/
+#endif
 
-#if !defined(_WIN32) /*[*/
-	/* Get all of the locale stuff right. */
-//	setlocale(LC_ALL, "");
+#if !defined(_WIN32)
+	// Get all of the locale stuff right.
 
-	/* Figure out the locale code set (character set encoding). */
+	// Figure out the locale code set (character set encoding).
 	codeset_name = nl_langinfo(CODESET);
 	Trace("codeset_name: %s",codeset_name);
 	set_codeset(codeset_name);
-#endif /*]*/
+#endif
+*/
+
 
 	/* Do nothing, successfully. */
-	if (csname == CN || !strcasecmp(csname, "us")) {
+	if (csname == CN || !strcasecmp(csname, "us"))
+	{
 		charset_defaults();
 		set_cgcsgids(CN);
-		set_charset_name(CN);
+//		set_charset_name(CN);
 		set_display_charset(session, "ISO-8859-1");
-
 		return CS_OKAY;
 	}
 
@@ -265,15 +268,16 @@ enum cs_result charset_init(H3270 *session, char *csname)
 	}
 #endif /*]*/
 
-#if defined(X3270_DISPLAY) /*[*/
-	/* Check for an XK selector. */
+/*
+#if defined(X3270_DISPLAY)
+	// Check for an XK selector.
 	xks = get_fresource("%s.%s", ResXkSelector, csname);
 	if (xks != NULL)
 		xk_selector = (unsigned char) strtoul(xks, NULL, 0);
 	else
 		xk_selector = 0;
-#endif /*]*/
-
+#endif
+*/
 	return rc;
 }
 
@@ -345,7 +349,7 @@ set_cgcsgids(char *spec)
 #endif /*]*/
 }
 
-/* Set the global charset name. */
+/* Set the global charset name. */ /*
 static void
 set_charset_name(char *csname)
 {
@@ -360,6 +364,7 @@ set_charset_name(char *csname)
 		charset_changed = True;
 	}
 }
+*/
 
 /* Define a charset from resources. */
 static enum cs_result resource_charset(char *csname, char *cs, char *ftcs)
@@ -368,9 +373,7 @@ static enum cs_result resource_charset(char *csname, char *cs, char *ftcs)
 	int ne = 0;
 	char *rcs = CN;
 	int n_rcs = 0;
-#if defined(_WIN32) /*[*/
 	char *dcs;
-#endif /*]*/
 
 	/* Interpret the spec. */
 	rc = remap_chars(csname, cs, (ftcs == NULL)? BOTH: CS_ONLY, &ne);
@@ -414,17 +417,7 @@ static enum cs_result resource_charset(char *csname, char *cs, char *ftcs)
 	}
 #endif /*]*/
 
-
 /*
-#if defined(X3270_DISPLAY) || (defined(C3270) && !defined(_WIN32) && !defined(LIB3270))
-	if (!screen_new_display_charsets(
-		    rcs? rcs: default_display_charset,
-		    csname)) {
-		return CS_PREREQ;
-	}
-#else
-*/
-
 #if !defined(_WIN32)
 	utf8_set_display_charsets(rcs? rcs: default_display_charset, csname);
 #endif
@@ -434,25 +427,20 @@ static enum cs_result resource_charset(char *csname, char *cs, char *ftcs)
 	else
 		dbcs = False;
 #endif
-/* #endif */
+*/
 
 	/* Set up the cgcsgid. */
 	set_cgcsgids(get_fresource("%s.%s", ResCodepage, csname));
 
-#if defined(_WIN32) /*[*/
-       /* See about changing the console output code page. */
-       dcs = get_fresource("%s.%s", ResDisplayCharset, csname);
-       if (dcs != NULL)
-	   {
-	       set_display_charset(dcs);
-       } else
-       {
-	       set_display_charset("ISO-8859-1");
-       }
-#endif /*]*/
+	dcs = get_fresource("%s.%s", ResDisplayCharset, csname);
+
+	if (dcs != NULL)
+		set_display_charset(&h3270,dcs);
+	else
+		set_display_charset(&h3270,"ISO-8859-1");
 
 	/* Set up the character set name. */
-	set_charset_name(csname);
+//	set_charset_name(csname);
 
 	return CS_OKAY;
 }

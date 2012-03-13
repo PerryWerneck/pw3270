@@ -264,7 +264,7 @@ fprint_screen(FILE *f, Boolean even_if_empty, Boolean use_html)
 						   "  <table border=0>"
 						   "<tr bgcolor=black><td>"
 						   "<pre><font color=%s>%s",
-						   locale_codeset,
+						   lib3270_get_charset(&h3270),
 						   html_color(current_color),
 						   current_high? "<b>": "");
 				}
