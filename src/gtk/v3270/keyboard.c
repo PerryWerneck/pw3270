@@ -194,7 +194,7 @@
 
  void v3270_key_commit(GtkIMContext *imcontext, gchar *str, v3270 *widget)
  {
-	gchar *utf = g_convert((char *) str, -1, "ISO-8859-1", "UTF-8", NULL, NULL, NULL);
+	gchar *utf = g_convert((char *) str, -1, lib3270_get_charset(widget->host), "UTF-8", NULL, NULL, NULL);
 
 	if(utf)
 	{
@@ -203,7 +203,7 @@
 	}
 	else
 	{
-		gdk_beep();
+		lib3270_ring_bell(widget->host);
 	}
  }
 

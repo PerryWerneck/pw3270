@@ -554,6 +554,12 @@ static void v3270_destroy(GtkObject *widget)
 		terminal->input_method = NULL;
 	}
 
+	if(terminal->clipboard)
+	{
+		g_free(terminal->clipboard);
+		terminal->clipboard = NULL;
+	}
+
 #if GTK_CHECK_VERSION(3,0,0)
 	GTK_WIDGET_CLASS(v3270_parent_class)->destroy(widget);
 #else

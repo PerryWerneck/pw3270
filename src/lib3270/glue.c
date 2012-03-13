@@ -138,6 +138,13 @@ void lib3270_session_free(H3270 *h)
 		}
 	}
 
+	// Release memory
+	if(h->charset)
+	{
+		free(h->charset);
+		h->charset = NULL;
+	}
+
 }
 
 static void update_char(H3270 *session, int addr, unsigned char chr, unsigned short attr, unsigned char cursor)
@@ -259,10 +266,10 @@ H3270 * lib3270_session_new(const char *model)
 		return NULL;
 
 	Trace("Charset: %s",appres.charset);
-	if (charset_init(appres.charset) != CS_OKAY)
+	if (charset_init(hSession,appres.charset) != CS_OKAY)
 	{
-		Warning(NULL, _( "Cannot find charset \"%s\", using defaults" ), appres.charset);
-		(void) charset_init(CN);
+		Warning(hSession, _( "Cannot find charset \"%s\", using defaults" ), appres.charset);
+		(void) charset_init(hSession,CN);
 	}
 
 	kybd_init();

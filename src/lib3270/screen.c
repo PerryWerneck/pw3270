@@ -91,11 +91,6 @@ static void status_connect(H3270 *session, int ignored, void *dunno);
 static void status_3270_mode(H3270 *session, int ignored, void *dunno);
 static void status_printer(H3270 *session, int on, void *dunno);
 static unsigned short color_from_fa(unsigned char fa);
-// static void relabel(H3270 *session, int ignored, void *dunno);
-
-void set_display_charset(char *dcs)
-{
-}
 
 static void addch(H3270 *session, int baddr, unsigned char c, unsigned short attr)
 {

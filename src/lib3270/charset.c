@@ -178,8 +178,7 @@ wide_resource_init(char *csname)
 /*
  * Change character sets.
  */
-enum cs_result
-charset_init(char *csname)
+enum cs_result charset_init(H3270 *session, char *csname)
 {
 	char *cs, *ftcs;
 	enum cs_result rc;
@@ -207,17 +206,7 @@ charset_init(char *csname)
 		charset_defaults();
 		set_cgcsgids(CN);
 		set_charset_name(CN);
-		set_display_charset("iso8859-1");
-
-/*
-#if defined(_WIN32) || defined(LIB3270)
-		set_display_charset("iso8859-1");
-#elif defined(X3270_DISPLAY) || (defined(C3270) && !defined(_WIN32))
-		(void) screen_new_display_charsets(default_display_charset,"us");
-#else
-		utf8_set_display_charsets(default_display_charset, "us");
-#endif
-*/
+		set_display_charset(session, "ISO-8859-1");
 
 		return CS_OKAY;
 	}
@@ -373,8 +362,7 @@ set_charset_name(char *csname)
 }
 
 /* Define a charset from resources. */
-static enum cs_result
-resource_charset(char *csname, char *cs, char *ftcs)
+static enum cs_result resource_charset(char *csname, char *cs, char *ftcs)
 {
 	enum cs_result rc;
 	int ne = 0;
@@ -454,10 +442,12 @@ resource_charset(char *csname, char *cs, char *ftcs)
 #if defined(_WIN32) /*[*/
        /* See about changing the console output code page. */
        dcs = get_fresource("%s.%s", ResDisplayCharset, csname);
-       if (dcs != NULL) {
+       if (dcs != NULL)
+	   {
 	       set_display_charset(dcs);
-       } else {
-	       set_display_charset("iso8859-1");
+       } else
+       {
+	       set_display_charset("ISO-8859-1");
        }
 #endif /*]*/
 
@@ -744,10 +734,13 @@ check_charset(void)
 }
 #endif /*]*/
 
-/* Return the current character set name. */
-char *
-get_charset_name(void)
+void set_display_charset(H3270 *session, char *dcs)
 {
-	return (charset_name != CN)? charset_name:
-	    ((appres.charset != CN)? appres.charset: "us");
+	session->charset = strdup(dcs);
+}
+
+LIB3270_EXPORT const char * lib3270_get_charset(H3270 *session)
+{
+	CHECK_SESSION_HANDLE(session);
+	return session->charset ? session->charset : "ISO-8859-1";
 }

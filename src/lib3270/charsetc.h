@@ -35,7 +35,8 @@ LIB3270_INTERNAL char *default_display_charset;
 
 enum cs_result { CS_OKAY, CS_NOTFOUND, CS_BAD, CS_PREREQ, CS_ILLEGAL };
 
-LIB3270_INTERNAL enum cs_result charset_init(char *csname);
-LIB3270_INTERNAL char *get_charset_name(void);
-LIB3270_INTERNAL void set_display_charset(char *dcs);
+LIB3270_INTERNAL enum cs_result charset_init(H3270 *session, char *csname);
+// LIB3270_INTERNAL char *get_charset_name(void);
+
+LIB3270_INTERNAL void set_display_charset(H3270 *session, char *dcs);
 

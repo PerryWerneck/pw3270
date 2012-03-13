@@ -99,7 +99,7 @@
 
  LIB3270_MACRO( encoding )
  {
- 	return strdup("ISO-8859-1");
+ 	return strdup(lib3270_get_charset(hSession));
  }
 
  LIB3270_MACRO( get )

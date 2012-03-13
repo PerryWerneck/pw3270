@@ -144,6 +144,7 @@
 
 	/* private */
 	int selecting : 1;
+
 #if GTK_CHECK_VERSION(3,0,0)
 
 #else
@@ -154,6 +155,7 @@
 	GSource					* timer;
 	GtkIMContext			* input_method;
 	unsigned short			  keyflags;
+	gchar					* clipboard;					/**< Clipboard contents (text only) */
 
 	/* Font info */
 	gchar * font_family;

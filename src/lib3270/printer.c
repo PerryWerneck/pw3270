@@ -314,7 +314,7 @@ printer_start(const char *lu)
 		    "for pr3287\n");
 		(void) fprintf(f, "# Created by %s\n", build);
 		(void) fprintf(f, "# Chararter set is '%s'\n",
-		    get_charset_name());
+		    lib3270_get_charset(&h3270));
 		(void) fprintf(f, "cgcsgid=0x%08lx\n", cgcsgid);
 #if defined(X3270_DBCS) /*[*/
 		if (dbcs) {

@@ -36,6 +36,20 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
+static void get_selected_addr(H3270 *session, int *begin, int *end)
+{
+	if(session->select.begin > session->select.end)
+	{
+		*end   = session->select.begin;
+		*begin = session->select.end;
+	}
+	else
+	{
+		*begin = session->select.begin;
+		*end   = session->select.end;
+	}
+}
+
 static void update_selected_rectangle(H3270 *session)
 {
 	struct
@@ -44,16 +58,10 @@ static void update_selected_rectangle(H3270 *session)
 		int col;
 	} p[2];
 
-	int begin	= session->select.begin;
-	int end		= session->select.end;
-	int row, col, baddr;
 
-	if(begin > end)
-	{
-		baddr 	= end;
-		end		= begin;
-		begin	= baddr;
-	}
+	int begin, end, row, col, baddr;
+
+	get_selected_addr(session,&begin,&end);
 
 	// Get start & end posision
 	p[0].row = (begin/session->cols);
@@ -95,17 +103,10 @@ static void update_selected_rectangle(H3270 *session)
 
 static void update_selected_region(H3270 *session)
 {
-	int baddr;
-	int begin	= session->select.begin;
-	int end		= session->select.end;
-	int len 	= session->rows*session->cols;
+	int baddr,begin,end;
+	int len = session->rows*session->cols;
 
-	if(begin > end)
-	{
-		baddr 	= end;
-		end		= begin;
-		begin	= baddr;
-	}
+	get_selected_addr(session,&begin,&end);
 
 	// First remove unselected areas
 	for(baddr = 0; baddr < begin; baddr++)
@@ -310,3 +311,36 @@ LIB3270_ACTION( reselect )
 	return 0;
 }
 
+LIB3270_EXPORT char * lib3270_get_selected(H3270 *hSession)
+{
+	int	row, col, baddr;
+	char *ret;
+	size_t	  sz = 0;
+
+	if(!hSession->selected || hSession->select.begin == hSession->select.end)
+		return NULL;
+
+	ret = malloc(hSession->rows * (hSession->cols+1));
+
+	baddr = 0;
+	for(row=0;row < hSession->rows;row++)
+	{
+		int cr = 0;
+
+		for(col = 0; col < hSession->cols;col++)
+		{
+			if(hSession->ea_buf[baddr].attr & LIB3270_ATTR_SELECTED)
+			{
+				cr++;
+				ret[sz++] = hSession->ea_buf[baddr].chr;
+			}
+			baddr++;
+		}
+
+		if(cr)
+			ret[sz++] = '\n';
+	}
+	ret[sz] = 0;
+
+	return realloc(ret,sz+1);
+}

@@ -29,6 +29,7 @@
 
  #include <gtk/gtk.h>
  #include <pw3270.h>
+ #include <malloc.h>
  #include "v3270.h"
  #include "private.h"
 
@@ -55,14 +56,17 @@ static void clipboard_clear(GtkClipboard *clipboard, GObject *obj)
 
 static void clipboard_get(GtkClipboard *clipboard, GtkSelectionData *selection, guint target, GObject *obj)
 {
-//	v3270 *widget = GTK_V3270(obj);
+	v3270 * widget = GTK_V3270(obj);
 
 	trace("%s: widget=%p target=\"%s\"",__FUNCTION__,obj,targets[target].target);
 
 	switch(target)
 	{
 	case CLIPBOARD_TYPE_TEXT:
-		gtk_selection_data_set_text(selection,"teste de clipboard",-1);
+		if(!widget->clipboard)
+			lib3270_ring_bell(widget->host);
+		else
+			gtk_selection_data_set_text(selection,widget->clipboard,-1);
 		break;
 
 	default:
@@ -72,7 +76,26 @@ static void clipboard_get(GtkClipboard *clipboard, GtkSelectionData *selection, 
 
 void v3270_copy_clipboard(v3270 *widget)
 {
+	char *text;
 	GtkClipboard * clipboard = gtk_widget_get_clipboard(GTK_WIDGET(widget),GDK_SELECTION_CLIPBOARD);
+
+	if(widget->clipboard)
+	{
+		g_free(widget->clipboard);
+		widget->clipboard = NULL;
+	}
+
+	text = lib3270_get_selected(widget->host);
+
+	if(!text)
+	{
+		lib3270_ring_bell(widget->host);
+		return;
+	}
+
+	widget->clipboard = g_convert(text, -1, "UTF-8", lib3270_get_charset(widget->host), NULL, NULL, NULL);
+
+	free(text);
 
 	if(gtk_clipboard_set_with_owner(	clipboard,
 										targets,

@@ -429,7 +429,7 @@ create_tracefile_header(const char *mode)
 	if (appres.extended)
 		wtrace(", extended data stream");
 	wtrace(", %s emulation", appres.m3279 ? "color" : "monochrome");
-	wtrace(", %s charset", get_charset_name());
+	wtrace(", %s charset", lib3270_get_charset(&h3270));
 	if (appres.apl_mode)
 		wtrace(", APL mode");
 	wtrace("\n");

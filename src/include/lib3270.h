@@ -596,7 +596,7 @@
 	 *
 	 * Get the handle to the GtkWidget who's handling this session.
 	 *
-	 * @param h		Session handle
+	 * @param h		Session handle.
 	 *
 	 * @return Associated GtkWidget (can be null)
 	 *
@@ -608,10 +608,32 @@
 	 *
 	 * If available play a sound signal do alert user.
 	 *
-	 * @param h		Session handle
+	 * @param h		Session handle.
 	 *
 	 */
 	 LIB3270_EXPORT void lib3270_ring_bell(H3270 *session);
+
+
+	/**
+	 * Get lib3270's charset.
+	 *
+	 * @param h Session handle.
+	 *
+	 * @return String with current encoding.
+	 *
+	 */
+	 LIB3270_EXPORT const char * lib3270_get_charset(H3270 *session);
+
+	/**
+	 * Get selected area.
+	 *
+	 * @param h	Session Handle.
+	 *
+	 * @return selected text if available, or NULL. Release it with free()
+	 *
+	 */
+	LIB3270_EXPORT char * lib3270_get_selected(H3270 *h);
+
 
 	 LIB3270_EXPORT int lib3270_set_model(H3270 *session, int model);
 	 LIB3270_EXPORT int	lib3270_get_model(H3270 *session);

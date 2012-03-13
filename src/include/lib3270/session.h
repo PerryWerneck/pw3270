@@ -95,6 +95,7 @@
 		unsigned short		  current_port;
 
 		// screen info
+		char				* charset;
 		int					  ov_rows;
 		int					  ov_cols;
 		int					  maxROWS;
