@@ -61,11 +61,18 @@ static void activate_action(GtkAction *action, GtkWidget *widget)
 	gtk_widget_activate(widget);
 }
 
+static void reload_action(GtkAction *action, GtkWidget *widget)
+{
+	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
+	v3270_reload(widget);
+}
+
 static void copy_action(GtkAction *action, GtkWidget *widget)
 {
 	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
 	v3270_copy_clipboard(GTK_V3270(widget));
 }
+
 
 void ui_connect_action(GtkAction *action, GtkWidget *widget, const gchar *name, const gchar *id)
 {
@@ -98,6 +105,7 @@ void ui_connect_action(GtkAction *action, GtkWidget *widget, const gchar *name, 
 	gtk_action[] =
 	{
 		{ "activate", 	activate_action		},
+		{ "reload",		reload_action		},
 		{ "connect", 	connect_action		},
 		{ "copy", 		copy_action			},
 		{ "disconnect", disconnect_action	},

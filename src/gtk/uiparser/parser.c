@@ -211,7 +211,7 @@ static void release_popups(GtkWidget **popup)
 	int f;
 	for(f=0;popup[f] != ((GtkWidget *) -1);f++)
 	{
-		trace("%s[%d]=%p",__FUNCTION__,f,popup[f]);
+//		trace("%s[%d]=%p",__FUNCTION__,f,popup[f]);
 		if(popup[f])
 			g_object_unref(popup[f]);
 	}

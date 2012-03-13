@@ -273,6 +273,10 @@
 	if(lib3270_get_toggle(host,LIB3270_TOGGLE_FULL_SCREEN))
 		gtk_window_fullscreen(GTK_WINDOW(window));
 
+#ifdef DEBUG
+	lib3270_testpattern(host);
+#endif
+
  	return window;
  }
 

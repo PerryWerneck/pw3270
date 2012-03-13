@@ -72,17 +72,9 @@
 #define get_color_pair(fg,bg) (((bg&0x0F) << 4) | (fg&0x0F))
 #define DEFCOLOR_MAP(f) ((((f) & FA_PROTECT) >> 4) | (((f) & FA_INT_HIGH_SEL) >> 3))
 
-// #if defined(WC3270)
-// extern char *profile_name;
-// #endif
-
 static int logpopup(H3270 *session, LIB3270_NOTIFY type, const char *title, const char *msg, const char *fmt, va_list arg);
 
 static int (*popup_handler)(H3270 *, LIB3270_NOTIFY, const char *, const char *, const char *, va_list) = logpopup;
-
-// static const struct lib3270_screen_callbacks *callbacks = NULL;
-// static SCRIPT_STATE script_state = SCRIPT_STATE_NONE;
-
 
 enum ts { TS_AUTO, TS_ON, TS_OFF };
 
@@ -755,12 +747,14 @@ LIB3270_ACTION( testpattern )
 	};
 
 	int row = 0;
-	int max = (hSession->maxROWS * hSession->maxCOLS);
+	int max;
 	int pos = 0;
 	int f;
 	int fg = COLOR_BLUE;
 
-	Trace("%s begins",__FUNCTION__);
+	CHECK_SESSION_HANDLE(hSession);
+
+	max = (hSession->maxROWS * hSession->maxCOLS);
 	for(f=0;f<max;f++)
 	{
 		if(!pat[row].cc[pos])
@@ -779,11 +773,8 @@ LIB3270_ACTION( testpattern )
 		hSession->ea_buf[f].cc = pat[row].cc[pos++];
 	}
 
-	Trace("%s display",__FUNCTION__);
-
 	screen_disp(hSession);
 
-	Trace("%s ends",__FUNCTION__);
 	return 0;
 }
 

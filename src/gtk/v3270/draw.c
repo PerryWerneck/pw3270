@@ -28,6 +28,7 @@
  */
 
  #include <gtk/gtk.h>
+ #include <pw3270.h>
  #include <lib3270.h>
  #include <lib3270/session.h>
  #include "v3270.h"

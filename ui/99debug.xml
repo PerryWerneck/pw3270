@@ -40,6 +40,7 @@
 
 		<menu name='debugmenu' label='Debug' >
 			<menuitem action='testpattern' group='offline' label='Show test pattern' />
+			<menuitem action='reload' label='Reload buffer contents' />
 		</menu>
 
 	</menubar>
