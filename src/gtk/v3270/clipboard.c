@@ -41,8 +41,8 @@
 
  static const GtkTargetEntry targets[] =
  {
-	{ "STRING", 	0, CLIPBOARD_TYPE_TEXT },
-	{ "text/plain", 0, CLIPBOARD_TYPE_TEXT },
+	{ "COMPOUND_TEXT", 	0, CLIPBOARD_TYPE_TEXT },
+	{ "UTF8_STRING", 	0, CLIPBOARD_TYPE_TEXT },
  };
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
@@ -53,16 +53,16 @@ static void clipboard_clear(GtkClipboard *clipboard, GObject *obj)
 
 }
 
-void clipboard_get(GtkClipboard *clipboard, GtkSelectionData *selection, guint target, GObject *obj)
+static void clipboard_get(GtkClipboard *clipboard, GtkSelectionData *selection, guint target, GObject *obj)
 {
-	v3270 *widget = GTK_V3270(obj);
+//	v3270 *widget = GTK_V3270(obj);
 
 	trace("%s: widget=%p target=\"%s\"",__FUNCTION__,obj,targets[target].target);
 
 	switch(target)
 	{
 	case CLIPBOARD_TYPE_TEXT:
-		gtk_selection_data_set_text(selection,"teste",-1);
+		gtk_selection_data_set_text(selection,"teste de clipboard",-1);
 		break;
 
 	default:
@@ -70,9 +70,10 @@ void clipboard_get(GtkClipboard *clipboard, GtkSelectionData *selection, guint t
 	}
 }
 
-gboolean v3270_copy(v3270 *widget)
+void v3270_copy_clipboard(v3270 *widget)
 {
-	GtkClipboard *clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
+	GtkClipboard * clipboard = gtk_widget_get_clipboard(GTK_WIDGET(widget),GDK_SELECTION_CLIPBOARD);
+
 	if(gtk_clipboard_set_with_owner(	clipboard,
 										targets,
 										G_N_ELEMENTS(targets),
@@ -82,9 +83,6 @@ gboolean v3270_copy(v3270 *widget)
 										))
 	{
 		gtk_clipboard_set_can_store(clipboard,targets,1);
-		trace("%s: Clipboard set",__FUNCTION__);
-		return TRUE;
 	}
-	return FALSE;
 }
 

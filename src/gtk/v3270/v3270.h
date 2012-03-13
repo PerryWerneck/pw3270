@@ -198,8 +198,10 @@
  int			  v3270_connect(GtkWidget *widget, const gchar *host);
  void			  v3270_disconnect(GtkWidget *widget);
 
- // Clipboard
- gboolean		  v3270_copy(v3270 *widget);
+// Clipboard
+ void			  v3270_copy_clipboard(v3270 *widget);
+ void 			  v3270_paste_clipboard(v3270 *widget);
+
 
 G_END_DECLS
 

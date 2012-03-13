@@ -33,6 +33,7 @@
  #include "v3270.h"
  #include "private.h"
  #include <lib3270/selection.h>
+ #include <lib3270/actions.h>
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 

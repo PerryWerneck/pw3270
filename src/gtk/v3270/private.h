@@ -121,10 +121,6 @@ void		  v3270_update_message(v3270 *widget, LIB3270_MESSAGE id);
 void		  v3270_update_cursor(H3270 *session, unsigned short row, unsigned short col, unsigned char c, unsigned short attr);
 void		  v3270_update_oia(H3270 *session, LIB3270_FLAG id, unsigned char on);
 
-// Clipboard
-void		  v3270_clipboard_set(v3270 *widget);
-void		  v3270_clipboard_clear(v3270 *widget);
-
 // Keyboard & Mouse
 gboolean	  v3270_key_press_event(GtkWidget *widget, GdkEventKey *event);
 gboolean	  v3270_key_release_event(GtkWidget *widget, GdkEventKey *event);

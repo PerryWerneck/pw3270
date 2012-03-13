@@ -31,6 +31,7 @@
 
  #include "globals.h"
  #include "uiparser/parser.h"
+ #include "v3270/v3270.h"
  #include <lib3270/actions.h>
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
@@ -63,7 +64,7 @@ static void activate_action(GtkAction *action, GtkWidget *widget)
 static void copy_action(GtkAction *action, GtkWidget *widget)
 {
 	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
-	v3270_copy(GTK_V3270(widget));
+	v3270_copy_clipboard(GTK_V3270(widget));
 }
 
 void ui_connect_action(GtkAction *action, GtkWidget *widget, const gchar *name, const gchar *id)
