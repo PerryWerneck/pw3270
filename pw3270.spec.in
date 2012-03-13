@@ -1,0 +1,112 @@
+#
+# "Software pw3270, desenvolvido com base nos códigos fontes do WC3270  e X3270
+# (Paul Mattes Paul.Mattes@usa.net), de emulação de terminal 3270 para acesso a
+# aplicativos mainframe. Registro no INPI sob o nome G3270.
+#
+#  Copyright (C) <2008> <Banco do Brasil S.A.>
+#
+# Este programa é software livre. Você pode redistribuí-lo e/ou modificá-lo sob
+# os termos da GPL v.2 - Licença Pública Geral  GNU,  conforme  publicado  pela
+# Free Software Foundation.
+#
+# Este programa é distribuído na expectativa de  ser  útil,  mas  SEM  QUALQUER
+# GARANTIA; sem mesmo a garantia implícita de COMERCIALIZAÇÃO ou  de  ADEQUAÇÃO
+# A QUALQUER PROPÓSITO EM PARTICULAR. Consulte a Licença Pública Geral GNU para
+# obter mais detalhes.
+#
+# Você deve ter recebido uma cópia da Licença Pública Geral GNU junto com este
+# programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple
+# Place, Suite 330, Boston, MA, 02111-1307, USA
+#
+# Contatos:
+#
+# perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
+# erico.mendonca@gmail.com	(Erico Mascarenhas Mendonça)
+# licinio@bb.com.br		(Licínio Luis Branco)
+# kraucer@bb.com.br		(Kraucer Fernandes Mazuco)
+#
+
+
+#---[ Check for distro ]----------------------------------------------------------------------------------------------
+
+%define _release	%{_rel}
+%define _distro		Linux
+
+%if 0%{?suse_version}
+	%define _release %{_rel}.suse%{suse_version}
+	%define _distro SuSE Linux %{suse_version}
+%endif
+
+%if 0%{?mdkversion}
+	%define _release %{_rel}.mdv%{mandriva_release}
+	%define _redhat 0
+	%define _distro Mandriva Linux %{mandriva_release}
+%endif
+
+%if 0%{?fedora_version}
+	%define _release %{_rel}.fc%{fedora_version}
+	%define _redhat 0
+	%define _distro Fedora %{fedora_version}
+%endif
+
+%if 0%{?_redhat}
+	%define _redhat_prefix      %(grep -q "Red Hat Linux" /etc/redhat-release && echo rhl || echo el)
+	%define _redhat_vernum      %(rpm -qf --queryformat %{VERSION} /etc/redhat-release|tr -d '.')
+	%define _release          	%{_rel}.%{_redhat_prefix}%{_redhat_vernum}
+	%define _distro %{_redhat_prefix} %{_redhat_vernum}
+%endif
+
+#---[ Packaging ]-----------------------------------------------------------------------------------------------------
+
+Name:           @PACKAGE@
+License:        LGPL
+Group:          System/X11/Terminals
+Version:        @PACKAGE_VERSION@
+Release:        %_release
+Summary:        IBM 3270 Terminal emulator for gtk.
+Source:         %{name}-%{version}.tar.gz
+BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+Requires:       openssl shared-mime-info libgnome libgnomeui %{name}-lib = @PACKAGE_VERSION@
+Distribution:    %_distro
+BuildRequires:  autoconf automake gcc-c++ sed pkgconfig gtk2-devel libgnome-devel gettext-devel
+
+%description
+IBM 3270 terminal emulator gtk. It can be used to communicate with
+any IBM host that supports 3270-style connections over TELNET.
+
+SVN Revision:		@PACKAGE_REVISION@
+SVN sources from:	@PACKAGE_SOURCE@
+
+#---[ Build & Install ]-----------------------------------------------------------------------------------------------
+
+%prep
+
+%setup -q -n %{name}-%{version}
+aclocal
+autoconf
+%configure
+
+%install
+rm -rf $RPM_BUILD_ROOT
+cd %{_builddir}/%{name}-%{version}
+make DESTDIR=$RPM_BUILD_ROOT install
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+#---[ Files ]---------------------------------------------------------------------------------------------------------
+
+%files
+%defattr(-,root,root)
+%doc ChangeLog AUTHORS LICENSE
+
+
+#---[ Scripts ]-------------------------------------------------------------------------------------------------------
+
+%post
+exit 0
+
+%postun
+exit 0
+
+

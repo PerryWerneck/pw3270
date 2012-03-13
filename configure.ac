@@ -201,6 +201,7 @@ AC_SEARCH_LIBS( [sin], [m], AC_DEFINE(HAVE_LIBM), AC_MSG_NOTICE([libm not presen
 AC_CONFIG_FILES([
 
 	Makefile
+	lib3270.pc
 	src/include/rules.mak
 	src/lib3270/Makefile
 	src/lib3270/mkversion.sh

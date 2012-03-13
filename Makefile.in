@@ -115,6 +115,7 @@ distclean: clean
 	@rm -f src/include/lib3270/config.h
 	@rm -f src/gtk/uiparser/Makefile
 	@rm -fr autom4te.cache
+	@rm -f *.pc
 
 	@rm -f Makefile
 
