@@ -227,7 +227,8 @@
 		#define LIB3270_EXPORT	__attribute__((visibility("default"))) extern
 
 	#else
-		#define LIB3270_EXPORT
+		
+		#error Unable to set visibility attribute
 
 	#endif
 
