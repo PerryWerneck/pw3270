@@ -62,7 +62,7 @@ Source:         %{name}-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 Requires:       openssl shared-mime-info libgnome libgnomeui %{name}-lib = @PACKAGE_VERSION@
 Distribution:    %_distro
-BuildRequires:  autoconf automake gcc-c++ sed pkgconfig gtk2-devel libgnome-devel gettext-devel
+BuildRequires:  autoconf automake gcc-c++ sed pkgconfig gtk2-devel libgnome-devel gettext-devel libopenssl-devel
 
 %description
 IBM 3270 terminal emulator gtk. It can be used to communicate with
@@ -79,6 +79,10 @@ SVN sources from:	@PACKAGE_SOURCE@
 aclocal
 autoconf
 %configure
+
+%build
+make clean
+make Release
 
 %install
 rm -rf $RPM_BUILD_ROOT

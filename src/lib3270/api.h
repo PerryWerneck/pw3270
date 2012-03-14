@@ -164,8 +164,6 @@
 
 		struct lib3270_state_callback;
 
-		typedef struct _h3270 H3270;
-
 		#include <lib3270/session.h>
 
 		struct lib3270_state_callback

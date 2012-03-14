@@ -77,7 +77,8 @@ $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT):	$(foreach SRC, $(basename $(SOURC
 
 	@echo $@ ...
 	@$(MKDIR) `dirname $@`
-	@$(LD) -Wl,--rpath,.bin/Debug/lib -o $@ $^ $(LIBS) $(LIB3270_LIBS)
+	ls -l ../../.bin/Release/lib
+	$(LD) -o $@ $^ $(LIBS) $(LIB3270_LIBS)
 
 #---[ Debug targets ]----------------------------------------------------------
 
