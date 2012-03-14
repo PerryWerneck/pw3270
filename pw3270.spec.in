@@ -29,18 +29,12 @@
 
 #---[ Check for distro ]----------------------------------------------------------------------------------------------
 
-%define _release	%{_rel}
-%define _distro		Linux
+%define _rel	0
+%define _distro	Linux
 
 %if 0%{?suse_version}
 	%define _release %{_rel}.suse%{suse_version}
 	%define _distro SuSE Linux %{suse_version}
-%endif
-
-%if 0%{?mdkversion}
-	%define _release %{_rel}.mdv%{mandriva_release}
-	%define _redhat 0
-	%define _distro Mandriva Linux %{mandriva_release}
 %endif
 
 %if 0%{?fedora_version}
@@ -98,8 +92,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root)
-%doc ChangeLog AUTHORS LICENSE
-
+%doc AUTHORS LICENSE
+%{_libdir}/lib3270.so
+%{_bindir}/@PACKAGE_NAME@
+%{_datadir}/@PACKAGE_NAME@/ui/00default.xml
+%{_datadir}/@PACKAGE_NAME@/ui/99debug.xml
 
 #---[ Scripts ]-------------------------------------------------------------------------------------------------------
 

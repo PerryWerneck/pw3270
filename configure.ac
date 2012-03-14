@@ -202,6 +202,7 @@ AC_CONFIG_FILES([
 
 	Makefile
 	lib3270.pc
+	pw3270.spec
 	src/include/rules.mak
 	src/lib3270/Makefile
 	src/lib3270/mkversion.sh

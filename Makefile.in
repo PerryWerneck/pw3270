@@ -46,15 +46,18 @@ docdir=@docdir@
 sysconfdir=@sysconfdir@
 
 BINDIR=.bin
-TMPDIR=.tmp
 EXEEXT=@EXEEXT@
 DBGLIB=-L../../$(BINDIR)/Debug/lib -l3270
 RLSLIB=-L../../$(BINDIR)/Release/lib -l3270
+TMPDIR=$(PWD)/.tmp
 
 #---[ Tools ]------------------------------------------------------------------
 
 VALGRIND=@VALGRIND@
 MKDIR=@MKDIR_P@
+INSTALL=@INSTALL@
+INSTALL_PROGRAM=@INSTALL_PROGRAM@
+INSTALL_DATA=@INSTALL_DATA@
 
 #---[ Release targets ]--------------------------------------------------------
 
@@ -83,6 +86,9 @@ run: $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
 
 tgz: $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz
 
+rpm: $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz
+	@rpmbuild -ta $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz
+
 $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz: clean
 	@rm -fr $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@$(MKDIR) $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
@@ -90,14 +96,25 @@ $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz: clean
 	@cp configure.ac $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@cp configure $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@cp *.in $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
+	@cp AUTHORS LICENSE $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@cp -r src $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@cp -r scripts $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
-	@tar --create --gzip --verbose --directory $(TMPDIR) --exclude-vcs --file=$@ $(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
+	@cp $(PACKAGE_TARNAME).spec $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
+
+	@$(MKDIR) $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/ui
+	@cp ui/* $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/ui
+
+	@tar --create --gzip --directory $(TMPDIR) --exclude-vcs --file=$@ $(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
+
+	@rm -fr $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@echo $@
 
 install:
 	@make BINRLS="../../.bin/Release/lib" -C src/lib3270 install
 	@make BINDIR="../../$(BINDIR)" LIB3270_LIBS="$(RLSLIB)" LIB3270_CFLAGS="-I../../src/include" -C src/gtk install
+
+	@$(MKDIR) $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/ui
+	@$(INSTALL_DATA) ui/*.xml $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/ui
 
 clean:
 	@rm -fr .obj
