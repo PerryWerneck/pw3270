@@ -28,7 +28,7 @@
 
 PACKAGE=@PACKAGE_NAME@
 
-CFLAGS=@CFLAGS@ -DAPPDATA=\"$(datarootdir)/$(PACKAGE_NAME)\" -I../../src/include
+CFLAGS=@CFLAGS@ @DLL_CFLAGS@ -DAPPDATA=\"$(datarootdir)/$(PACKAGE_NAME)\" -I../../src/include
 SSL_CFLAGS=@LIBSSL_CFLAGS@
 
 DLL_FLAGS=@DLL_FLAGS@

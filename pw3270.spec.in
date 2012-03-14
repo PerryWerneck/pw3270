@@ -57,10 +57,10 @@ License:        LGPL
 Group:          System/X11/Terminals
 Version:        @PACKAGE_VERSION@
 Release:        %_release
-Summary:        IBM 3270 Terminal emulator for gtk.
+Summary:        IBM 3270 Terminal emulator for gtk
 Source:         %{name}-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-Requires:       openssl shared-mime-info libgnome libgnomeui
+Requires:       openssl shared-mime-info
 Distribution:    %_distro
 BuildRequires:  autoconf automake gcc-c++ sed pkgconfig gtk2-devel libgnome-devel gettext-devel libopenssl-devel findutils
 
@@ -98,7 +98,14 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root)
 %doc AUTHORS LICENSE
+
+# Library
 %{_libdir}/lib3270.so
+
+# Main application
+%dir %{_datadir}/@PACKAGE_NAME@
+%dir %{_datadir}/@PACKAGE_NAME@/ui
+
 %{_bindir}/@PACKAGE_NAME@
 %{_datadir}/@PACKAGE_NAME@/ui/00default.xml
 %{_datadir}/@PACKAGE_NAME@/ui/99debug.xml

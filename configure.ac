@@ -75,6 +75,7 @@ AC_SUBST(PACKAGE_REVISION, "SVN_REV")
 
 #--[ Set host based options ]---------------------------------------------------------------------------------------------------------------------------------
 
+DLL_CFLAGS=""
 DLL_FLAGS="-shared -Wl,-soname,\$(@F)"
 SOCKET_LIBS=""
 
@@ -82,7 +83,6 @@ DLLEXT=".so"
 OBJEXT=".o"
 EXEEXT=""
 DLLPREFIX="lib"
-
 
 if test $host != $build; then
 	AC_CHECK_PROGS(HOST_CC, gcc cc)
@@ -102,14 +102,6 @@ case "$host" in
 		AC_PATH_TOOL([STRIP], [strip])
 
 esac
-
-
-AC_SUBST(HOST_CC)
-AC_SUBST(EXEEXT)
-AC_SUBST(DLLPREFIX)
-AC_SUBST(DLLEXT)
-AC_SUBST(DLL_FLAGS)
-AC_SUBST(SOCKET_LIBS)
 
 #--[ Debug/Release ]------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -172,6 +164,35 @@ AC_MSG_RESULT($app_cv_fvisibility_ok)
 if test $app_cv_fvisibility_ok = yes; then
   CFLAGS="$CFLAGS -fvisibility=hidden"
 fi
+
+#--[ Options ]------------------------------------------------------------------------------------------------------------------------------------------------
+
+AC_ARG_ENABLE([pic],
+	[AS_HELP_STRING([--enable-pic], [enable support for PIC libraries (required to compile PW3270 on some systems)])],
+[
+	app_cv_pic="$enableval"
+],[
+
+	if test "$host_cpu" = "x86_64"; then
+		app_cv_pic="yes"
+	else
+		app_cv_pic="no"
+	fi
+])
+
+if test "$app_cv_pic" == "yes"; then
+	DLL_CFLAGS="$DLL_CFLAGS -fPIC"
+fi
+
+#--[ Headers ]------------------------------------------------------------------------------------------------------------------------------------------------
+
+AC_SUBST(HOST_CC)
+AC_SUBST(EXEEXT)
+AC_SUBST(DLLPREFIX)
+AC_SUBST(DLLEXT)
+AC_SUBST(DLL_FLAGS)
+AC_SUBST(DLL_CFLAGS)
+AC_SUBST(SOCKET_LIBS)
 
 #--[ Headers ]------------------------------------------------------------------------------------------------------------------------------------------------
 
