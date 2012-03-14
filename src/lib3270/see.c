@@ -1,27 +1,27 @@
-/* 
+/*
  * "Software pw3270, desenvolvido com base nos códigos fontes do WC3270  e X3270
  * (Paul Mattes Paul.Mattes@usa.net), de emulação de terminal 3270 para acesso a
  * aplicativos mainframe. Registro no INPI sob o nome G3270.
- * 
+ *
  * Copyright (C) <2008> <Banco do Brasil S.A.>
- * 
+ *
  * Este programa é software livre. Você pode redistribuí-lo e/ou modificá-lo sob
  * os termos da GPL v.2 - Licença Pública Geral  GNU,  conforme  publicado  pela
  * Free Software Foundation.
- * 
+ *
  * Este programa é distribuído na expectativa de  ser  útil,  mas  SEM  QUALQUER
  * GARANTIA; sem mesmo a garantia implícita de COMERCIALIZAÇÃO ou  de  ADEQUAÇÃO
  * A QUALQUER PROPÓSITO EM PARTICULAR. Consulte a Licença Pública Geral GNU para
  * obter mais detalhes.
- * 
+ *
  * Você deve ter recebido uma cópia da Licença Pública Geral GNU junto com este
  * programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple
  * Place, Suite 330, Boston, MA, 02111-1307, USA
- * 
+ *
  * Este programa está nomeado como see.c e possui 489 linhas de código.
- * 
- * Contatos: 
- * 
+ *
+ * Contatos:
+ *
  * perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
  * erico.mendonca@gmail.com	(Erico Mascarenhas Mendonça)
  * licinio@bb.com.br		(Licínio Luis Branco)
@@ -90,16 +90,24 @@ see_ebc(unsigned char ch)
 	    case FCORDER_SO:
 		return "SO";
 	}
+
+	if (ebc2asc[ch])
+		(void) sprintf(buf,"%c", ebc2asc[ch]);
+	else
+		(void) sprintf(buf, "\\%o", ch);
+
+/*
 	if (ebc2asc[ch])
 		(void) sprintf(buf,
-#if !defined(PR3287) /*[*/
+#if !defined(PR3287)
 			       "%s", utf8_expand(ebc2asc[ch])
-#else /*][*/
+#else
 			       "%c", ebc2asc[ch]
-#endif /*]*/
+#endif
 			       );
 	else
 		(void) sprintf(buf, "\\%o", ch);
+*/
 	return buf;
 }
 
@@ -107,77 +115,77 @@ const char *
 see_aid(unsigned char code)
 {
 	switch (code) {
-	case AID_NO: 
+	case AID_NO:
 		return "NoAID";
-	case AID_ENTER: 
+	case AID_ENTER:
 		return "Enter";
-	case AID_PF1: 
+	case AID_PF1:
 		return "PF1";
-	case AID_PF2: 
+	case AID_PF2:
 		return "PF2";
-	case AID_PF3: 
+	case AID_PF3:
 		return "PF3";
-	case AID_PF4: 
+	case AID_PF4:
 		return "PF4";
-	case AID_PF5: 
+	case AID_PF5:
 		return "PF5";
-	case AID_PF6: 
+	case AID_PF6:
 		return "PF6";
-	case AID_PF7: 
+	case AID_PF7:
 		return "PF7";
-	case AID_PF8: 
+	case AID_PF8:
 		return "PF8";
-	case AID_PF9: 
+	case AID_PF9:
 		return "PF9";
-	case AID_PF10: 
+	case AID_PF10:
 		return "PF10";
-	case AID_PF11: 
+	case AID_PF11:
 		return "PF11";
-	case AID_PF12: 
+	case AID_PF12:
 		return "PF12";
-	case AID_PF13: 
+	case AID_PF13:
 		return "PF13";
-	case AID_PF14: 
+	case AID_PF14:
 		return "PF14";
-	case AID_PF15: 
+	case AID_PF15:
 		return "PF15";
-	case AID_PF16: 
+	case AID_PF16:
 		return "PF16";
-	case AID_PF17: 
+	case AID_PF17:
 		return "PF17";
-	case AID_PF18: 
+	case AID_PF18:
 		return "PF18";
-	case AID_PF19: 
+	case AID_PF19:
 		return "PF19";
-	case AID_PF20: 
+	case AID_PF20:
 		return "PF20";
-	case AID_PF21: 
+	case AID_PF21:
 		return "PF21";
-	case AID_PF22: 
+	case AID_PF22:
 		return "PF22";
-	case AID_PF23: 
+	case AID_PF23:
 		return "PF23";
-	case AID_PF24: 
+	case AID_PF24:
 		return "PF24";
-	case AID_OICR: 
+	case AID_OICR:
 		return "OICR";
-	case AID_MSR_MHS: 
+	case AID_MSR_MHS:
 		return "MSR_MHS";
-	case AID_SELECT: 
+	case AID_SELECT:
 		return "Select";
-	case AID_PA1: 
+	case AID_PA1:
 		return "PA1";
-	case AID_PA2: 
+	case AID_PA2:
 		return "PA2";
-	case AID_PA3: 
+	case AID_PA3:
 		return "PA3";
-	case AID_CLEAR: 
+	case AID_CLEAR:
 		return "Clear";
-	case AID_SYSREQ: 
+	case AID_SYSREQ:
 		return "SysReq";
 	case AID_QREPLY:
 		return "QueryReplyAID";
-	default: 
+	default:
 		return unknown(code);
 	}
 }

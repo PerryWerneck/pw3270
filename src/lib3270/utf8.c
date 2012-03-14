@@ -42,9 +42,10 @@
 #include "popupsc.h"
 #include "utf8c.h"
 
-char *locale_codeset = CN;
+// char *locale_codeset = CN;
 
-static int utf8_ix = -1;
+// static int utf8_ix = -1;
+
 // static Boolean is_utf8 = False;
 #if defined(X3270_DBCS) /*[*/
 static Boolean is_gb18030 = False;
@@ -452,33 +453,38 @@ utf8_set_display_charsets(char *cslist, char *csname)
 }
 */
 /* Expand an 8-bit character in the 'implied' character set. */
-char *
-utf8_expand(unsigned char c)
+/*
+char * utf8_expand(unsigned char c)
 {
-    	static char nox[2];
+	static char nox[2];
 
-	if (c & 0x80) {
-	    	if (utf8_ix >= 0) {
+	if (c & 0x80)
+	{
+		if (utf8_ix >= 0)
+		{
 			if (c >= 0xa0)
 				return utf8_tab[utf8_ix][c - 0xa0];
 			else
 				return " ";
-#if defined(X3270_DBCS) /*[*/
-		} else if (dbcs) {
-		    	/*
-			 * GB18030 it treated as a special case of UTF-8,
-			 * above.  GB2312 does not support these characters.
-			 * Other DBCS encodings will need to be added as they
-			 * are better understood.
-			 */
-		    	return " ";
-#endif /*]*/
 		}
+#if defined(X3270_DBCS)
+		else if (dbcs)
+		{
+			//
+			// GB18030 it treated as a special case of UTF-8,
+			// above.  GB2312 does not support these characters.
+			// Other DBCS encodings will need to be added as they
+			// are better understood.
+			//
+			return " ";
+		}
+#endif
 	}
 	nox[0] = c;
 	nox[1] = '\0';
 	return nox;
 }
+*/
 
 /*
  * Look up a multi-byte UTF-8 string and return its value in the 'implied'
@@ -487,34 +493,45 @@ utf8_expand(unsigned char c)
  */
 unsigned char utf8_lookup(char *mbs, enum ulfail *fail, int *consumed)
 {
-    	int i;
+	if (fail != NULL)
+		*fail = ULFAIL_NOUTF8;
+
+/*
+	int i;
 	int mblen = strlen(mbs);
 
-    	if (utf8_ix < 0) {
-	    	if (fail != NULL)
-		    	*fail = ULFAIL_NOUTF8;
-	    	return 0;
+	if (utf8_ix < 0)
+	{
+		if (fail != NULL)
+			*fail = ULFAIL_NOUTF8;
+		return 0;
 	}
-	for (i = 0; i < HI_SIZE; i++) {
-	    	int tlen = strlen(utf8_tab[utf8_ix][i]);
 
-		/* Check for dummy " " entry. */
+	for (i = 0; i < HI_SIZE; i++)
+	{
+		int tlen = strlen(utf8_tab[utf8_ix][i]);
+
+		// Check for dummy " " entry.
 		if (tlen == 1)
-		    	continue;
+			continue;
 
-		/* Check for incomplete string. */
-		if (mblen < tlen) {
+		// Check for incomplete string.
+		if (mblen < tlen)
+		{
 			if (fail != NULL)
 				*fail = ULFAIL_INCOMPLETE;
 			return 0;
 		}
-	    	if (!strncmp(mbs, utf8_tab[utf8_ix][i], tlen)) {
-		    	if (consumed != NULL)
-			    	*consumed = tlen;
-		    	return 0xa0 + i;
+
+		if (!strncmp(mbs, utf8_tab[utf8_ix][i], tlen))
+		{
+			if (consumed != NULL)
+				*consumed = tlen;
+			return 0xa0 + i;
 		}
 	}
 	if (fail != NULL)
-	    	*fail = ULFAIL_INVALID;
+		*fail = ULFAIL_INVALID;
+*/
 	return 0;
 }

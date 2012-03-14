@@ -1215,12 +1215,12 @@ ansi_multibyte(int ig1, int ig2)
 
 	ch = utf8_lookup(mbs, &fail, NULL);
 	if (ch != 0) {
-	    	/* Success! */
+	    	// Success!
 	    	ansi_ch = ch;
 		return ansi_printing(ig1, ig2);
 	}
 	if (fail == ULFAIL_INCOMPLETE) {
-	    	/* Go get more. */
+	    	// Go get more.
 	    	pending_mbs[pmi++] = (char)ansi_ch;
 		return MBPEND;
 	}
