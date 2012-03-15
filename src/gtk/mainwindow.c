@@ -75,6 +75,7 @@
 														};
 
  static const gchar *actionname[ACTION_COUNT+1] = {		"pastenext",
+														"reselect",
 														"setfullscreen",
 														"resetfullscreen"
  													};
@@ -88,14 +89,6 @@
 
 	if(id == LIB3270_TOGGLE_FULL_SCREEN)
 	{
-		GtkAction **action = (GtkAction **) g_object_get_data(G_OBJECT(toplevel),"named_actions");
-
-		if(action[ACTION_FULLSCREEN])
-			gtk_action_set_visible(action[ACTION_FULLSCREEN],!toggled);
-
-		if(action[ACTION_UNFULLSCREEN])
-			gtk_action_set_visible(action[ACTION_UNFULLSCREEN],toggled);
-
 		if(toggled)
 			gtk_window_fullscreen(GTK_WINDOW(toplevel));
 		else
@@ -104,6 +97,23 @@
 
 	#warning TODO: Update toggle actions.
 
+ }
+
+ static gboolean window_state_event(GtkWidget *window, GdkEventWindowState *event, GtkWidget *widget)
+ {
+	gboolean	  fullscreen = event->new_window_state & GDK_WINDOW_STATE_FULLSCREEN ? TRUE : FALSE;
+	GtkAction	**action = (GtkAction **) g_object_get_data(G_OBJECT(window),"named_actions");
+
+	// Update fullscreen toggles
+	if(action[ACTION_FULLSCREEN])
+		gtk_action_set_visible(action[ACTION_FULLSCREEN],!fullscreen);
+
+	if(action[ACTION_UNFULLSCREEN])
+		gtk_action_set_visible(action[ACTION_UNFULLSCREEN],fullscreen);
+
+	lib3270_set_toggle(v3270_get_session(widget),LIB3270_TOGGLE_FULL_SCREEN,fullscreen);
+
+	return 0;
  }
 
  static void disconnected(GtkWidget *widget, GtkActionGroup **group)
@@ -158,8 +168,12 @@
 
  static void selecting(GtkWidget *widget, gboolean on, GtkActionGroup **group)
  {
-//	trace("Widget %p selection state changed to %s",widget,on ? "Yes" : "No");
+	GtkAction **action = (GtkAction **) g_object_get_data(G_OBJECT(widget),"named_actions");
 	gtk_action_group_set_sensitive(group[ACTION_GROUP_SELECTION],on);
+
+	if(action[ACTION_RESELECT])
+		gtk_action_set_sensitive(action[ACTION_RESELECT],!on);
+
  }
 
  static void setup_input_method(GtkWidget *widget, GtkWidget *obj)
@@ -268,6 +282,8 @@
 	popup  = g_object_get_data(G_OBJECT(window),"popup_menus");
 	action = (GtkAction **) g_object_get_data(G_OBJECT(window),"named_actions");
 
+	g_object_set_data(G_OBJECT(terminal),"named_actions",action);
+
 	// Setup action groups
 	gtk_action_group_set_sensitive(group[ACTION_GROUP_SELECTION],FALSE);
 	gtk_action_group_set_sensitive(group[ACTION_GROUP_CLIPBOARD],FALSE);
@@ -281,6 +297,15 @@
 
 	if(action[ACTION_UNFULLSCREEN])
 		gtk_action_set_visible(action[ACTION_UNFULLSCREEN],lib3270_get_toggle(host,LIB3270_TOGGLE_FULL_SCREEN));
+
+	if(action[ACTION_PASTENEXT])
+		gtk_action_set_sensitive(action[ACTION_PASTENEXT],FALSE);
+
+	if(action[ACTION_RESELECT])
+		gtk_action_set_sensitive(action[ACTION_RESELECT],FALSE);
+
+	// Connect window signals
+	g_signal_connect(window,"window_state_event",G_CALLBACK(window_state_event),terminal);
 
 	// Connect widget signals
 	g_signal_connect(terminal,"toggle_changed",G_CALLBACK(toggle_changed),window);
