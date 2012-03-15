@@ -86,6 +86,10 @@ static unsigned short color_from_fa(unsigned char fa);
 
 static void addch(H3270 *session, int baddr, unsigned char c, unsigned short attr)
 {
+	// If set to keep selection adjust corresponding flag based on the current state
+	if(lib3270_get_toggle(session,LIB3270_TOGGLE_KEEP_SELECTED))
+		attr |= (session->ea_buf[baddr].attr & LIB3270_ATTR_SELECTED);
+
 	if(session->ea_buf[baddr].chr == c && session->ea_buf[baddr].attr == attr)
 			return;
 

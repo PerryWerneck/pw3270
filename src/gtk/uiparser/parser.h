@@ -51,8 +51,9 @@
 		void		  (*setup)(GtkWidget *widget, GtkWidget *obj);
 	} UI_WIDGET_SETUP;
 
-	GtkWidget 		* ui_parse_xml_folder(const gchar *path, const gchar ** groupname, const gchar **popupname, GtkWidget *widget, const UI_WIDGET_SETUP *itn);
+	GtkWidget 		* ui_parse_xml_folder(const gchar *path, const gchar ** groupname, const gchar **popupname, const gchar **actionname, GtkWidget *widget, const UI_WIDGET_SETUP *itn);
 	void			  ui_connect_action(GtkAction *action, GtkWidget *widget, const gchar *name, const gchar *id);
+	void			  ui_connect_index_action(GtkAction *action, GtkWidget *widget, int ix, GtkAction **lst);
 	void			  ui_connect_toggle(GtkAction *action, GtkWidget *widget, const gchar *name, const gchar *id);
 	void			  ui_connect_pfkey(GtkAction *action, GtkWidget *widget, const gchar *name, const gchar *id);
 	void			  ui_connect_pakey(GtkAction *action, GtkWidget *widget, const gchar *name, const gchar *id);

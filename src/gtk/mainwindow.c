@@ -73,22 +73,37 @@
 														"selection",
 														NULL
 														};
+
+ static const gchar *actionname[ACTION_COUNT+1] = {		"pastenext",
+														"setfullscreen",
+														"resetfullscreen"
+ 													};
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
- static void save_toggle(GtkWidget *widget, LIB3270_TOGGLE id, gboolean toggled, const gchar *name, GtkWindow *toplevel)
+ static void toggle_changed(GtkWidget *widget, LIB3270_TOGGLE id, gboolean toggled, const gchar *name, GtkWindow *toplevel)
  {
  	gchar *nm = g_ascii_strdown(name,-1);
- 	trace("Toggle \"%s\" in widget %p is %s toplevel=%p",nm,widget,toggled ? "Active" : "Inactive",toplevel);
 	set_boolean_to_config("toggle",nm,toggled);
 	g_free(nm);
 
 	if(id == LIB3270_TOGGLE_FULL_SCREEN)
 	{
+		GtkAction **action = (GtkAction **) g_object_get_data(G_OBJECT(toplevel),"named_actions");
+
+		if(action[ACTION_FULLSCREEN])
+			gtk_action_set_visible(action[ACTION_FULLSCREEN],!toggled);
+
+		if(action[ACTION_UNFULLSCREEN])
+			gtk_action_set_visible(action[ACTION_UNFULLSCREEN],toggled);
+
 		if(toggled)
 			gtk_window_fullscreen(GTK_WINDOW(toplevel));
 		else
 			gtk_window_unfullscreen(GTK_WINDOW(toplevel));
 	}
+
+	#warning TODO: Update toggle actions.
+
  }
 
  static void disconnected(GtkWidget *widget, GtkActionGroup **group)
@@ -226,6 +241,7 @@
 	H3270			* host 		= v3270_get_session(terminal);
 	gchar			* path		= build_data_filename("ui",NULL);
 	GtkActionGroup	**group;
+	GtkAction 		**action;
 	GtkWidget		**popup;
 	int			  	  f;
 
@@ -247,9 +263,10 @@
 	}
 
 	// Create window
-	window = ui_parse_xml_folder(path,groupname,popupname,terminal,widget_setup);
+	window = ui_parse_xml_folder(path,groupname,popupname,actionname,terminal,widget_setup);
 	group  = g_object_get_data(G_OBJECT(window),"action_groups");
 	popup  = g_object_get_data(G_OBJECT(window),"popup_menus");
+	action = (GtkAction **) g_object_get_data(G_OBJECT(window),"named_actions");
 
 	// Setup action groups
 	gtk_action_group_set_sensitive(group[ACTION_GROUP_SELECTION],FALSE);
@@ -258,8 +275,15 @@
 	gtk_action_group_set_sensitive(group[ACTION_GROUP_PASTE],FALSE);
 	disconnected(terminal, (gpointer) group);
 
+	// Setup actions
+	if(action[ACTION_FULLSCREEN])
+		gtk_action_set_visible(action[ACTION_FULLSCREEN],!lib3270_get_toggle(host,LIB3270_TOGGLE_FULL_SCREEN));
+
+	if(action[ACTION_UNFULLSCREEN])
+		gtk_action_set_visible(action[ACTION_UNFULLSCREEN],lib3270_get_toggle(host,LIB3270_TOGGLE_FULL_SCREEN));
+
 	// Connect widget signals
-	g_signal_connect(terminal,"toggle_changed",G_CALLBACK(save_toggle),window);
+	g_signal_connect(terminal,"toggle_changed",G_CALLBACK(toggle_changed),window);
 	g_signal_connect(terminal,"disconnected",G_CALLBACK(disconnected),group);
 	g_signal_connect(terminal,"connected",G_CALLBACK(connected),group);
 	g_signal_connect(terminal,"update_config",G_CALLBACK(update_config),0);

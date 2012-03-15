@@ -14,6 +14,12 @@ void activated(GtkAction *action, GtkWidget *widget)
 	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
 }
 
+void ui_connect_index_action(GtkAction *action, GtkWidget *widget, int ix, GtkAction **lst)
+{
+	trace("%s: Connecting indexed action %d",__FUNCTION__,ix);
+	g_signal_connect(action,"activate",G_CALLBACK(activated),widget);
+}
+
 void toggled(GtkToggleAction *action, GtkWidget *widget)
 {
 	trace("Action %s toggled on widget %p",gtk_action_get_name(GTK_ACTION(action)),widget);
@@ -52,20 +58,26 @@ void show_popup(GtkWidget *button, GtkWidget *menu)
 
 int main (int argc, char *argv[])
 {
-	static const gchar *groupname[] = {	"default",
-										"online",
-										"offline",
-										"selection",
-										"clipboard",
-										"filetransfer",
-										"paste",
-										NULL };
+	static const gchar *groupname[] = {		"default",
+											"online",
+											"offline",
+											"selection",
+											"clipboard",
+											"filetransfer",
+											"paste",
+											NULL };
 
-	static const gchar *popupname[] = {	"default",
-										"selection",
-										"offline",
-										"dock",
-										NULL };
+	static const gchar *popupname[] = {		"default",
+											"selection",
+											"offline",
+											"dock",
+											NULL };
+
+	static const gchar *actionname[] = {	"pastenext",
+											"setfullscreen",
+											"resetfullscreen",
+											NULL };
+
 	int			  f;
 	GtkWidget 	* window;
 	gchar		* path;
@@ -78,7 +90,7 @@ int main (int argc, char *argv[])
 	hbox   = gtk_hbox_new(FALSE,5);
 	vbox   = gtk_vbox_new(FALSE,5);
 	path   = build_data_filename("ui",NULL);
-	window = ui_parse_xml_folder(path,groupname,popupname,vbox,NULL);
+	window = ui_parse_xml_folder(path,groupname,popupname,actionname,vbox,NULL);
 	g_free(path);
 
 	popup = g_object_get_data(G_OBJECT(window),"popup_menus");

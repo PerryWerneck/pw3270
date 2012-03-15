@@ -182,10 +182,24 @@
 	}
 	else
 	{
+		int ix = -1;
+
 		action = GTK_ACTION(create(nm,NULL,NULL,NULL));
 		g_hash_table_insert(info->actions,nm,action);
 
-		if(g_strcasecmp(name,"quit"))
+		if(info->actionname)
+		{
+			int f;
+			for(f=0;info->actionname[f] && ix < 0;f++)
+			{
+				if(!g_strcasecmp(nm,info->actionname[f]))
+					ix = f;
+			}
+		}
+
+		if(ix >= 0)
+			ui_connect_index_action(info->action[ix] = action,info->center_widget,ix,info->action);
+		else if(g_strcasecmp(name,"quit"))
 			connect(action,info->center_widget,name,id);
 		else
 			g_signal_connect(action,"activate",G_CALLBACK(gtk_main_quit), NULL);

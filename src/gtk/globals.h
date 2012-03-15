@@ -39,6 +39,16 @@
 
  #include "v3270/v3270.h"
 
+ // Special actions
+ enum
+ {
+ 	ACTION_PASTENEXT,
+ 	ACTION_FULLSCREEN,
+ 	ACTION_UNFULLSCREEN,
+
+ 	ACTION_COUNT
+ };
+
  // Configuration
  #include "common/common.h"
 

@@ -186,8 +186,41 @@ static void action_pakey(GtkAction *action, GtkWidget *widget)
 	lib3270_pakey(GTK_V3270(widget)->host,(int) g_object_get_data(G_OBJECT(action),"pakey"));
 }
 
+static void action_fullscreen(GtkAction *action, GtkWidget *widget)
+{
+	lib3270_set_toggle(GTK_V3270(widget)->host,LIB3270_TOGGLE_FULL_SCREEN,1);
+}
+
+static void action_unfullscreen(GtkAction *action, GtkWidget *widget)
+{
+	lib3270_set_toggle(GTK_V3270(widget)->host,LIB3270_TOGGLE_FULL_SCREEN,0);
+}
+
 void ui_connect_pakey(GtkAction *action, GtkWidget *widget, const gchar *name, const gchar *id)
 {
 	g_object_set_data(G_OBJECT(action),"pakey",(gpointer) atoi(id));
 	g_signal_connect(action,"activate",G_CALLBACK(action_pakey),widget);
+}
+
+void ui_connect_index_action(GtkAction *action, GtkWidget *widget, int ix, GtkAction **lst)
+{
+	trace("action(%d): %p",ix,action);
+
+	switch(ix)
+	{
+	case ACTION_PASTENEXT:
+		break;
+
+	case ACTION_FULLSCREEN:
+		g_signal_connect(action,"activate",G_CALLBACK(action_fullscreen),widget);
+		break;
+
+	case ACTION_UNFULLSCREEN:
+		g_signal_connect(action,"activate",G_CALLBACK(action_unfullscreen),widget);
+		break;
+
+	default:
+		g_warning("Action \"%s\" has unexpected id %d",gtk_action_get_name(action),ix);
+		gtk_action_set_sensitive(action,FALSE);
+	}
 }
