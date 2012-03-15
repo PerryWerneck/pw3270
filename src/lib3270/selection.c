@@ -302,8 +302,8 @@ LIB3270_ACTION( reselect )
 {
 	CHECK_SESSION_HANDLE(hSession);
 
-	if(hSession->selected || hSession->select.begin == hSession->select.end)
-		return 0;
+	if(!lib3270_connected(hSession) || hSession->select.begin == hSession->select.end || hSession->selected)
+		return;
 
 	update_selection(hSession);
 	set_selected(hSession);

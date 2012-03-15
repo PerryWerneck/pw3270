@@ -33,6 +33,7 @@
  #include "uiparser/parser.h"
  #include "v3270/v3270.h"
  #include <lib3270/actions.h>
+ #include <lib3270/selection.h>
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
@@ -191,6 +192,11 @@ static void action_fullscreen(GtkAction *action, GtkWidget *widget)
 	lib3270_set_toggle(GTK_V3270(widget)->host,LIB3270_TOGGLE_FULL_SCREEN,1);
 }
 
+static void action_reselect(GtkAction *action, GtkWidget *widget)
+{
+	lib3270_reselect(GTK_V3270(widget)->host);
+}
+
 static void action_unfullscreen(GtkAction *action, GtkWidget *widget)
 {
 	lib3270_set_toggle(GTK_V3270(widget)->host,LIB3270_TOGGLE_FULL_SCREEN,0);
@@ -217,6 +223,10 @@ void ui_connect_index_action(GtkAction *action, GtkWidget *widget, int ix, GtkAc
 
 	case ACTION_UNFULLSCREEN:
 		g_signal_connect(action,"activate",G_CALLBACK(action_unfullscreen),widget);
+		break;
+
+	case ACTION_RESELECT:
+		g_signal_connect(action,"activate",G_CALLBACK(action_reselect),widget);
 		break;
 
 	default:

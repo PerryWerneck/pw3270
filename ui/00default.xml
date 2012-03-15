@@ -61,7 +61,7 @@
 			<menuitem action='selectall' key='<ctrl>a' icon='select-all' group='online' label='Select all' />
 
 			<menuitem action='selectfield' key='<Ctrl>f' group='online' label='Select Field' />
-			<menuitem action='unselect' group='selection' label='unselect' />
+			<menuitem action='unselect' group='selection' label='Remove selection' />
 			<menuitem action='reselect' key='<Ctrl>r' group='online' label='Reselect' />
 
 			<separator/>
