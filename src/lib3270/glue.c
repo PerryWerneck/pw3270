@@ -139,11 +139,10 @@ void lib3270_session_free(H3270 *h)
 	}
 
 	// Release memory
-	if(h->charset)
-	{
-		free(h->charset);
-		h->charset = NULL;
-	}
+	#define RELEASE_BUFFER(x) if(x) { free(x); x = NULL; }
+
+	RELEASE_BUFFER(h->charset);
+	RELEASE_BUFFER(h->paste_buffer);
 
 }
 

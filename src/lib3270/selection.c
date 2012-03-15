@@ -344,3 +344,30 @@ LIB3270_EXPORT char * lib3270_get_selected(H3270 *hSession)
 
 	return realloc(ret,sz+1);
 }
+
+LIB3270_EXPORT int lib3270_paste(H3270 *h, const char *str)
+{
+	CHECK_SESSION_HANDLE(h);
+
+	if(!lib3270_connected(h))
+	{
+		lib3270_ring_bell(h);
+		return 0;
+	}
+
+	return 0;
+}
+
+LIB3270_EXPORT int lib3270_pastenext(H3270 *h)
+{
+	CHECK_SESSION_HANDLE(h);
+
+	if(!(lib3270_connected(h) && h->paste_buffer))
+	{
+		lib3270_ring_bell(h);
+		return 0;
+	}
+
+
+	return 0;
+}

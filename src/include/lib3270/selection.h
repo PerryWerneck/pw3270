@@ -38,4 +38,30 @@
 	LIB3270_EXPORT void	  lib3270_select_word(H3270 *session, int baddr);
 	LIB3270_EXPORT int	  lib3270_select_field_at(H3270 *session, int baddr);
 
+	/**
+	 * "Paste" supplied string.
+	 *
+	 * @param h		Session handle.
+	 * @param str	String to paste.
+	 *
+	 * @see lib3270_pastenext.
+	 *
+	 * @return Non 0 if there's more to paste with lib3270_pastenext
+	 *
+	 */
+	 LIB3270_EXPORT int lib3270_paste(H3270 *h, const char *str);
+
+	 /**
+	  * Paste remaining string.
+	  *
+	  * @param h	Session handle.
+	  *
+	  * @see lib3270_paste.
+	  *
+	  * @return Non 0 if there's more to paste.
+	  *
+	  */
+	  LIB3270_EXPORT int lib3270_pastenext(H3270 *h);
+
+
  #endif // LIB3270_SELECTION_H_INCLUDED

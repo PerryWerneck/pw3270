@@ -123,6 +123,7 @@
 		void				* widget;
 
 		// selection
+		char				* paste_buffer;
 		struct
 		{
 			int begin;

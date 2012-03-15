@@ -210,7 +210,7 @@ void ui_connect_pakey(GtkAction *action, GtkWidget *widget, const gchar *name, c
 
 void ui_connect_index_action(GtkAction *action, GtkWidget *widget, int ix, GtkAction **lst)
 {
-	trace("action(%d): %p",ix,action);
+//	trace("action(%d): %p",ix,action);
 
 	switch(ix)
 	{
