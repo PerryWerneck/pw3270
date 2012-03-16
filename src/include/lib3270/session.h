@@ -104,6 +104,7 @@
 		unsigned short		  rows;
 		unsigned short		  cols;
 		int					  cursor_addr;
+		int					  buffer_addr;
 		char				  flipped;
 		int					  screen_alt;			/**< alternate screen? */
 		int					  is_altbuffer;
@@ -141,11 +142,11 @@
 		char				  reading;
 		char				  excepting;
 
-		/* State change callbacks. */
+		// State change callbacks.
 		struct lib3270_state_callback *st_callbacks[LIB3270_STATE_USER];
 		struct lib3270_state_callback *st_last[LIB3270_STATE_USER];
 
-		/* Session based callbacks */
+		// Session based callbacks
 		void (*configure)(H3270 *session, unsigned short rows, unsigned short cols);
 		void (*update)(H3270 *session, int baddr, unsigned char c, unsigned short attr, unsigned char cursor);
 		void (*changed)(H3270 *session, int bstart, int bend);

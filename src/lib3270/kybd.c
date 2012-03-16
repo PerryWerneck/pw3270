@@ -522,9 +522,10 @@ key_AID(unsigned char aid_code)
 			return;
 		}
 	}
-	if (IN_SSCP && aid_code == AID_ENTER) {
+	if (IN_SSCP && aid_code == AID_ENTER)
+	{
 		/* Act as if the host had written our input. */
-		buffer_addr = h3270.cursor_addr;
+		h3270.buffer_addr = h3270.cursor_addr;
 	}
 	if (!IN_SSCP || aid_code != AID_CLEAR) {
 		status_twait(&h3270);
@@ -863,7 +864,7 @@ key_Character(int code, Boolean with_ge, Boolean pasting, Boolean *skipped)
 				 */
 				xaddr = baddr;
 				DEC_BA(xaddr);
-				if (ea_buf[xaddr].cc == EBC_so) {
+				if (h3270.ea_buf[xaddr].cc == EBC_so) {
 					DEC_BA(baddr);
 					if (!ins_prep(faddr, baddr, 1))
 						return False;
@@ -892,7 +893,7 @@ key_Character(int code, Boolean with_ge, Boolean pasting, Boolean *skipped)
 				INC_BA(xaddr);
 				INC_BA(baddr);
 				INC_BA(xaddr);
-				was_si = (ea_buf[xaddr].cc == EBC_si);
+				was_si = (h3270.ea_buf[xaddr].cc == EBC_si);
 				ctlr_add(xaddr, EBC_space, CS_BASE);
 				ctlr_add_fg(xaddr, 0);
 				ctlr_add_gr(xaddr, 0);
@@ -2414,7 +2415,7 @@ LIB3270_ACTION( clear )
 		return 0;
 	}
 #endif /*]*/
-	buffer_addr = 0;
+	h3270.buffer_addr = 0;
 	ctlr_clear(&h3270,True);
 	cursor_move(0);
 	if (CONNECTED)

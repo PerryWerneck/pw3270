@@ -17,5 +17,5 @@
  *		External declarations for ctlr.c data structures.
  */
 
-extern int			buffer_addr;	/**< buffer address */
-extern struct ea	*ea_buf;			/**< 3270 device buffer */
+// extern int			buffer_addr;	/**< buffer address */
+// extern struct ea	*ea_buf;			/**< 3270 device buffer */

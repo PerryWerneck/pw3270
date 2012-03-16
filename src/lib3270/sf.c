@@ -573,7 +573,7 @@ sf_create_partition(unsigned char buf[], int buflen)
 	trace_ds(")\n");
 
 	cursor_move(0);
-	buffer_addr = 0;
+	h3270.buffer_addr = 0;
 
 	return PDS_OKAY_NO_OUTPUT;
 }
