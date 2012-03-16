@@ -118,17 +118,14 @@ static void setup_cursor_position(GdkRectangle *rect, struct v3270_metrics *metr
 {
 	int addr = lib3270_get_cursor_address(host);
 	char buffer[10];
-	cairo_text_extents_t extents;
 
 	short2string(buffer,(addr/cols)+1,3);
 	buffer[3] = '/';
 	short2string(buffer+4,(addr%cols)+1,3);
 	buffer[7] = 0;
 
-	cairo_text_extents(cr,buffer,&extents);
-	rect->width = ((int) extents.width + 2);
+	rect->width = metrics->width * 8;
 	rect->x -= rect->width;
-
 
 	if(lib3270_get_toggle(host,LIB3270_TOGGLE_CURSOR_POS))
 	{
@@ -666,12 +663,16 @@ void v3270_update_cursor(H3270 *session, unsigned short row, unsigned short col,
 	if(lib3270_get_toggle(session,LIB3270_TOGGLE_CURSOR_POS))
 	{
 		// Update OIA
+		cairo_text_extents_t extents;
+
 		cr = set_update_region(terminal,&rect,V3270_OIA_CURSOR_POSITION);
 
 		short2string(buffer,row+1,3);
 		buffer[3] = '/';
 		short2string(buffer+4,col+1,3);
 		buffer[7] = 0;
+
+		cairo_text_extents(cr,buffer,&extents);
 
 		cairo_move_to(cr,rect->x,rect->y+terminal->metrics.height);
 		cairo_show_text(cr, buffer);
