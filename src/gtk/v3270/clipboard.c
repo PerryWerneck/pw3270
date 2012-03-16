@@ -109,21 +109,23 @@ void v3270_copy_clipboard(v3270 *widget)
 	}
 }
 
-static void paste_text(GtkWidget *widget, const gchar *text, const gchar *encoding)
+void v3270_paste_string(GtkWidget *widget, const gchar *text, const gchar *encoding)
 {
- 	gchar 	*buffer = NULL;
- 	gchar 	*ptr;
- 	GError	*error = NULL;
- 	H3270	*session = v3270_get_session(widget);
+ 	gchar 		* buffer 	= NULL;
+ 	H3270		* session 	= v3270_get_session(widget);
+	const gchar * charset 	= lib3270_get_charset(session);
+ 	gboolean	  next;
 
  	if(!text)
 		return;
-
-	buffer = g_convert(text, -1, lib3270_get_charset(session), encoding, NULL, NULL, &error);
+	else if(g_strcasecmp(encoding,charset))
+		buffer = g_convert(text, -1, charset, encoding, NULL, NULL, NULL);
+	else
+		buffer = g_strdup(text);
 
     if(!buffer)
     {
-    	/* Falhou ao converter - Reajusta e tenta de novo */
+    	/* Conversion failed, update special chars and try again */
     	int f;
 
     	static const struct _xlat
@@ -150,12 +152,6 @@ static void paste_text(GtkWidget *widget, const gchar *text, const gchar *encodi
 
 		gchar *string = g_strdup(text);
 
-		if(error)
-		{
-			g_error_free(error);
-			error = NULL;
-		}
-
 		// FIXME (perry#1#): Is there any better way for a "sed" here?
 		for(f=0;f<G_N_ELEMENTS(xlat);f++)
 		{
@@ -171,21 +167,17 @@ static void paste_text(GtkWidget *widget, const gchar *text, const gchar *encodi
 			}
 		}
 
-		buffer = g_convert(string, -1, lib3270_get_charset(session), encoding, NULL, NULL, &error);
+		buffer = g_convert(string, -1, charset, encoding, NULL, NULL, NULL);
 
 		if(!buffer)
 		{
+			// Still failing, convert line by line
 			gchar **ln = g_strsplit(string,"\n",-1);
 
 			for(f=0;ln[f];f++)
 			{
-				gchar *str = g_convert(ln[f], -1, lib3270_get_charset(session), encoding, NULL, NULL, &error);
-
-				if(error)
-				{
-					g_error_free(error);
-					error = 0;
-				}
+				GError	*error	= NULL;
+				gchar	*str	= g_convert(ln[f], -1, charset, encoding, NULL, NULL, &error);
 
 				if(!str)
 				{
@@ -193,86 +185,57 @@ static void paste_text(GtkWidget *widget, const gchar *text, const gchar *encodi
 																GTK_DIALOG_DESTROY_WITH_PARENT,
 																GTK_MESSAGE_ERROR,
 																GTK_BUTTONS_OK,
-																_(  "Can't convert line %d from %s to %s" ),f+1, encoding, lib3270_get_charset(session));
+																_(  "Can't convert line %d from %s to %s" ),f+1, encoding, charset);
 
 					gtk_window_set_title(GTK_WINDOW(dialog), _( "Charset error" ) );
-					if(error)
-					{
-						gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),"%s\n%s", error->message ? error->message : N_( "Unexpected error" ), ln[f]);
-						g_error_free(error);
-						error = 0;
-					}
-					else
-					{
-						gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),"%s", ln[f]);
-					}
+					gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),"%s\n%s",error->message, ln[f]);
+
 					gtk_dialog_run(GTK_DIALOG (dialog));
 					gtk_widget_destroy(dialog);
-					return;
 
+					break;
 				}
 				else
 				{
 					g_free(str);
 				}
-			}
 
+			}
 			g_strfreev(ln);
-			g_free(string);
+
 		}
 
 		g_free(string);
+    }
 
-		if(error)
+	if(buffer)
+	{
+		/* Remove TABS */
+		gchar *ptr;
+
+		for(ptr = buffer;*ptr;ptr++)
 		{
-			g_error_free(error);
-			error = 0;
+			if(*ptr == '\t')
+				*ptr = ' ';
 		}
+	}
+    else
+	{
+		g_signal_emit(widget,v3270_widget_signal[SIGNAL_PASTENEXT], 0, FALSE);
+		return;
+	}
 
-
-    	if(!buffer)
-    	{
-			GtkWidget *dialog = gtk_message_dialog_new(	GTK_WINDOW( gtk_widget_get_toplevel(widget)),
-														GTK_DIALOG_DESTROY_WITH_PARENT,
-														GTK_MESSAGE_ERROR,
-														GTK_BUTTONS_OK,
-														_(  "Can't convert text from %s to %s" ), encoding, lib3270_get_charset(session));
-
-			gtk_window_set_title(GTK_WINDOW(dialog), _( "Charset error" ) );
-			if(error)
-			{
-				gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),"%s", error->message ? error->message : N_( "Unexpected error" ));
-				g_error_free(error);
-				error = 0;
-			}
-			gtk_dialog_run(GTK_DIALOG (dialog));
-			gtk_widget_destroy(dialog);
-
-			return;
-    	}
-    }
-
-	if(error)
-		g_error_free(error);
-
-    /* Remove TABS */
-    for(ptr = buffer;*ptr;ptr++)
-    {
-		if(*ptr == '\t')
-			*ptr = ' ';
-    }
-
-	trace("Received text:%p (%d bytes)",buffer,(int) strlen(buffer));
-
-//	paste_string(buffer);
+	next = lib3270_paste(session,buffer) ? TRUE : FALSE;
 
 	g_free(buffer);
+
+	g_signal_emit(widget,v3270_widget_signal[SIGNAL_PASTENEXT], 0, next);
 
 }
 
 static void text_received(GtkClipboard *clipboard, const gchar *text, GtkWidget *widget)
 {
-	paste_text(widget,text,"UTF-8");
+	v3270_paste_string(widget,text,"UTF-8");
 }
 
 void v3270_paste_clipboard(v3270 *widget)

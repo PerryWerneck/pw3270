@@ -291,6 +291,16 @@ static void v3270_class_init(v3270Class *klass)
 						NULL, NULL,
 						pw3270_BOOL__VOID_BOOL_BOOL_POINTER,
 						G_TYPE_BOOLEAN, 3, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN, G_TYPE_POINTER);
+
+	v3270_widget_signal[SIGNAL_PASTENEXT] =
+		g_signal_new(	"pastenext",
+						G_OBJECT_CLASS_TYPE (gobject_class),
+						G_SIGNAL_RUN_FIRST,
+						0,
+						NULL, NULL,
+						pw3270_VOID__VOID_BOOL,
+						G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
+
 }
 
 void v3270_update_font_metrics(v3270 *terminal, cairo_t *cr, int width, int height)
@@ -456,7 +466,7 @@ static void v3270_init(v3270 *widget)
 
 	if(widget->host->sz != sizeof(H3270))
 	{
-		g_error(N_( "Unexpected signature in H3270 object, possible version mismatch in lib3270") );
+		g_error( _( "Unexpected signature in H3270 object, possible version mismatch in lib3270") );
 		return;
 	}
 

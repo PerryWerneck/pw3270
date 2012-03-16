@@ -202,8 +202,8 @@
 
  // Clipboard
  void			  v3270_copy_clipboard(v3270 *widget);
+ void 			  v3270_paste_string(GtkWidget *widget, const gchar *text, const gchar *encoding);
  void 			  v3270_paste_clipboard(v3270 *widget);
-
 
 G_END_DECLS
 
