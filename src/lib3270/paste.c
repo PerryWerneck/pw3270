@@ -190,7 +190,7 @@ LIB3270_EXPORT int lib3270_set_string(H3270 *h, const unsigned char *str)
 	if(kybdlock)
 		return -EINVAL;
 
-	screen_suspend(h);
+	h->suspend(h);
 
 	while(*str && last && !kybdlock && h->cursor_addr >= data.orig_addr)
 	{
@@ -230,7 +230,7 @@ LIB3270_EXPORT int lib3270_set_string(H3270 *h, const unsigned char *str)
 		}
 	}
 
-	screen_resume(h);
+	h->resume(h);
 	return data.qtd;
 }
 

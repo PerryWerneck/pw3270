@@ -50,7 +50,7 @@ EXEEXT=@EXEEXT@
 DBGLIB=-L../../$(BINDIR)/Debug/lib -l3270
 RLSLIB=-L../../$(BINDIR)/Release/lib -l3270
 TMPDIR=$(PWD)/.tmp
-
+GLOBAL_DEPS=$(PWD)/include/*.h $(PWD)/include/lib3270/*.h
 #---[ Tools ]------------------------------------------------------------------
 
 VALGRIND=@VALGRIND@

@@ -26,7 +26,6 @@
  * erico.mendonca@gmail.com	(Erico Mascarenhas de Mendonça)
  * licinio@bb.com.br		(Licínio Luis Branco)
  * kraucer@bb.com.br		(Kraucer Fernandes Mazuco)
- * macmiranda@bb.com.br		(Marco Aurélio Caldas Miranda)
  *
  */
 
@@ -204,8 +203,6 @@
 		LIB3270_CONNECTED_SSCP,			/**< connected in TN3270E mode, SSCP-LU mode */
 		LIB3270_CONNECTED_TN3270E		/**< connected in TN3270E mode, 3270 mode */
 	} LIB3270_CSTATE;
-
-//	#include <lib3270/api.h>
 
 #ifdef __cplusplus
 	extern "C" {

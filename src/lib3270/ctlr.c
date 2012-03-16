@@ -90,7 +90,7 @@ unsigned char	crm_attr[16];
 Boolean			dbcs = False;
 
 /* Statics */
-static struct ea *aea_buf;	/* alternate 3270 extended attribute buffer */
+// static struct ea *aea_buf;	/* alternate 3270 extended attribute buffer */
 static unsigned char *zero_buf;	// empty buffer, for area clears
 static void set_formatted(H3270 *session);
 static void ctlr_blanks(void);
@@ -174,7 +174,7 @@ void ctlr_reinit(H3270 *session, unsigned cmask)
 		session->ea_buf = tmp + 1;
 
 		session->buffer[1] = tmp = lib3270_calloc(sizeof(struct ea),sz+1,session->buffer[1]);
-		aea_buf = tmp + 1;
+		session->aea_buf = tmp + 1;
 
 		session->text = lib3270_calloc(sizeof(struct lib3270_text),sz,session->text);
 
@@ -1945,8 +1945,7 @@ ctlr_write_sscp_lu(unsigned char buf[], int buflen)
 			/* Some hosts forget they're talking SSCP-LU. */
 			cp++;
 			i++;
-			trace_ds(" StartField%s %s [translated to space]\n",
-			    rcba(buffer_addr), see_attr(*cp));
+			trace_ds(" StartField%s %s [translated to space]\n",rcba(buffer_addr), see_attr(*cp));
 			ctlr_add(buffer_addr, EBC_space, default_cs);
 			ctlr_add_fg(buffer_addr, default_fg);
 			ctlr_add_bg(buffer_addr, default_bg);
@@ -2619,20 +2618,20 @@ void changed(H3270 *session, int bstart, int bend)
  */
 void ctlr_altbuffer(H3270 *session, int alt)
 {
-	struct ea *etmp;
-
     CHECK_SESSION_HANDLE(session);
 
 	if (alt != session->is_altbuffer)
 	{
+		struct ea *etmp;
 
 		etmp = session->ea_buf;
-		session->ea_buf = aea_buf;
-		aea_buf = etmp;
+		session->ea_buf  = session->aea_buf;
+		session->aea_buf = etmp;
 
 		session->is_altbuffer = alt;
+		lib3270_unselect(session);
+
 		ALL_CHANGED;
-		// unselect(0, ROWS*COLS);
 
 		/*
 		 * There may be blinkers on the alternate screen; schedule one

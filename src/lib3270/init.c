@@ -77,17 +77,30 @@ void lib3270_session_free(H3270 *h)
 
 static void update_char(H3270 *session, int addr, unsigned char chr, unsigned short attr, unsigned char cursor)
 {
-
 }
 
 static void nop_char(H3270 *session, unsigned char chr)
 {
-
 }
 
 static void nop(H3270 *session)
 {
+}
 
+static void update_model(H3270 *session, const char *name, int model, int rows, int cols)
+{
+}
+
+static void changed(H3270 *session, int bstart, int bend)
+{
+}
+
+static void update_cursor(H3270 *session, unsigned short row, unsigned short col, unsigned char c, unsigned short attr)
+{
+}
+
+static void update_oia(H3270 *session, LIB3270_FLAG id, unsigned char on)
+{
 }
 
 static void lib3270_session_init(H3270 *hSession, const char *model)
@@ -99,10 +112,17 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 	memset(hSession,0,sizeof(H3270));
 	hSession->sz = sizeof(H3270);
 
-	// A few dummy calls to avoid "ifs"
+	// Dummy calls to avoid "ifs"
 	hSession->update 		= update_char;
+	hSession->update_model	= update_model;
+	hSession->update_cursor	= update_cursor;
 	hSession->set_selection = nop_char;
 	hSession->ctlr_done		= nop;
+	hSession->changed		= changed;
+	hSession->erase			= screen_disp;
+	hSession->suspend		= nop;
+	hSession->resume		= screen_disp;
+	hSession->update_oia	= update_oia;
 
 	hSession->sock = -1;
 	hSession->model_num = -1;

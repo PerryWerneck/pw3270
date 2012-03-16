@@ -306,45 +306,6 @@
 
 		#define CHAR_ATTR_UNCONVERTED	CHAR_ATTR_CG
 
-/*
-		struct lib3270_screen_callbacks
-		{
-			unsigned short	sz;
-
-			int		(*init)(void);
-			int		(*notify)(H3270 *session, LIB3270_NOTIFY type, const char *title, const char *msg, const char *fmt, va_list arg);
-			void 	(*model_changed)(H3270 *session, const char *name, int model, int rows, int cols);
-			int		(*addch)(int row, int col, unsigned char c, unsigned short attr);
-			void	(*charset)(char *dcs);
-			void	(*title)(char *text);
-			void	(*ring_bell)(void);
-			void	(*redraw)(void);
-			void	(*move_cursor)(H3270 *session, unsigned short row, unsigned short col, unsigned char c, unsigned short attr);
-			int		(*set_suspended)(int state);
-			void	(*set_script)(SCRIPT_STATE state);
-			void	(*reset)(int lock);
-			void	(*status)(H3270 *session, LIB3270_STATUS id);
-			void	(*cursor)(H3270 *session, LIB3270_CURSOR mode);
-			void	(*lu)(H3270 *session, const char *lu);
-			void	(*set_oia)(H3270 *session, OIA_FLAG id, unsigned char on);
-
-			void	(*erase)(H3270 *session);
-			void	(*display)(H3270 *session);
-			void 	(*set_viewsize)(H3270 *session, unsigned short rows, unsigned short cols);
-
-
-			void	(*toggle_changed)(H3270 *session, LIB3270_TOGGLE ix, unsigned char value, LIB3270_TOGGLE_TYPE reason, const char *name);
-			void	(*show_timer)(long seconds);
-
-			// Console/Trace window
-			HCONSOLE	(*console_new)(const char *title, const char *label);
-			void		(*console_delete)(HCONSOLE hwnd);
-			int			(*console_append)(HCONSOLE hwnd, const char *fmt, va_list 	args);
-			char *		(*console_entry)(HCONSOLE hwnd);
-
-		};
-*/
-
 		struct lib3270_option
 		{
 			const char *name;
@@ -392,7 +353,7 @@
 
 
 		LOCAL_EXTERN unsigned char get_field_attribute(H3270 *session, int baddr);
-		LOCAL_EXTERN int screen_read(char *dest, int baddr, int count);
+//		LOCAL_EXTERN int screen_read(char *dest, int baddr, int count);
 		LOCAL_EXTERN void Input_String(const unsigned char *str);
 		LOCAL_EXTERN void screen_size(int *rows, int *cols);
 
@@ -432,8 +393,8 @@
 //        LOCAL_EXTERN int ctlr_get_rows(void) __attribute__ ((deprecated));
 
         /* Screen calls */
-		LOCAL_EXTERN void screen_resume(H3270 *session);
-		LOCAL_EXTERN void screen_suspend(H3270 *session);
+//		LOCAL_EXTERN void screen_resume(H3270 *session);
+//		LOCAL_EXTERN void screen_suspend(H3270 *session);
 		LOCAL_EXTERN void screen_disp(H3270 *session);
 
         /* Cursor calls */

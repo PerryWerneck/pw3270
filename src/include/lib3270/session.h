@@ -113,6 +113,7 @@
 		// Screen contents
 		void 				* buffer[2];			/**< Internal buffers */
 		struct ea      		* ea_buf;				/**< 3270 device buffer. ea_buf[-1] is the dummy default field attribute */
+		struct ea 			* aea_buf;				/** alternate 3270 extended attribute buffer */
 		struct lib3270_text	* text;					/**< Converted 3270 chars */
 
 		// host.c
@@ -159,6 +160,8 @@
 
 		void (*set_timer)(H3270 *session, unsigned char on);
 		void (*erase)(H3270 *session);
+		void (*suspend)(H3270 *session);
+		void (*resume)(H3270 *session);
 		void (*cursor)(H3270 *session, LIB3270_CURSOR id);
 		void (*set_selection)(H3270 *session, unsigned char on);
 		void (*ctlr_done)(H3270 *session);

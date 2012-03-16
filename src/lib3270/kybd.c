@@ -1750,10 +1750,9 @@ do_delete(void)
 
 LIB3270_ACTION( delete )
 {
-//	reset_idle_timer();
-	if (kybdlock) {
+	if (kybdlock)
+	{
 		ENQUEUE_ACTION(lib3270_delete);
-//		enq_ta(Delete_action, CN, CN);
 		return 0;
 	}
 #if defined(X3270_ANSI) /*[*/
@@ -1781,8 +1780,8 @@ LIB3270_ACTION( delete )
  */
 LIB3270_ACTION( backspace )
 {
-//	reset_idle_timer();
-	if (kybdlock) {
+	if (kybdlock)
+	{
 		ENQUEUE_ACTION( lib3270_backspace );
 		return 0;
 	}
@@ -2316,13 +2315,12 @@ LIB3270_CURSOR_ACTION( newline )
 
 /*
  * DUP key
- */ /*
-void
-Dup_action(Widget w unused, XEvent *event, String *params, Cardinal *num_params)
+ */
+LIB3270_ACTION( dup )
 {
-//	reset_idle_timer();
-	if (kybdlock) {
-		enq_ta(Dup_action, CN, CN);
+	if (kybdlock)
+	{
+		ENQUEUE_ACTION(lib3270_enter);
 		return;
 	}
 #if defined(X3270_ANSI)
@@ -2330,10 +2328,9 @@ Dup_action(Widget w unused, XEvent *event, String *params, Cardinal *num_params)
 		return;
 #endif
 	if (key_Character(EBC_dup, False, False, NULL))
-		cursor_move(next_unprotected(h3270.cursor_addr));
+		cursor_move(next_unprotected(hSession->cursor_addr));
 }
-*/
-
+
 /*
  * FM key
  */ /*

@@ -104,8 +104,9 @@
 
  LIB3270_MACRO( get )
  {
-	int start, qtd, rows, cols, row, col;
 	char *buffer = NULL;
+/*
+	int start, qtd, rows, cols, row, col;
 
 	switch(argc)
 	{
@@ -167,6 +168,7 @@
 	buffer = malloc(qtd+1);
 	screen_read(buffer, start, qtd);
 
+*/
 	return buffer;
  }
 

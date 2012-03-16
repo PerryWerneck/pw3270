@@ -26,8 +26,9 @@
 #define screen_132()	/* */
 #define screen_80()		/* */
 
+#define screen_erase(x) x->erase(x)
+// LIB3270_INTERNAL void screen_erase(H3270 *session);
 
-LIB3270_INTERNAL void screen_erase(H3270 *session);
 LIB3270_INTERNAL void screen_changed(H3270 *session, int bstart, int bend);
 LIB3270_INTERNAL int screen_init(H3270 *session);
 // LIB3270_INTERNAL void screen_flip(void);

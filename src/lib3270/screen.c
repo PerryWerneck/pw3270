@@ -96,9 +96,7 @@ static void addch(H3270 *session, int baddr, unsigned char c, unsigned short att
 	/* Converted char has changed, update it */
 	session->text[baddr].chr  = c;
 	session->text[baddr].attr = attr;
-
-	if(session->update)
-		session->update(session,baddr,c,attr,baddr == session->cursor_addr);
+	session->update(session,baddr,c,attr,baddr == session->cursor_addr);
 }
 
 /**
@@ -116,16 +114,12 @@ int screen_init(H3270 *session)
 	lib3270_register_schange(session,ST_3270_MODE, status_3270_mode,0);
 	lib3270_register_schange(session,ST_PRINTER, status_printer,0);
 
-//	lib3270_register_schange(session,ST_HALF_CONNECT, relabel,0);
-//	lib3270_register_schange(session,ST_CONNECT, relabel,0);
-//	lib3270_register_schange(session,ST_3270_MODE, relabel,0);
-
 	/* Set up the controller. */
 	ctlr_init(session,-1);
 	ctlr_reinit(session,-1);
 
 	/* Finish screen initialization. */
-	screen_suspend(session);
+	session->suspend(session);
 
 	return 0;
 }
@@ -143,7 +137,7 @@ static unsigned short color_from_fa(unsigned char fa)
 /*
  * Find the display attributes for a baddr, fa_addr and fa.
  */
-static unsigned short calc_attrs(int baddr, int fa_addr, int fa)
+static unsigned short calc_attrs(H3270 *session, int baddr, int fa_addr, int fa)
 {
 	unsigned short fg=0, bg=0, a;
 	int gr;
@@ -152,10 +146,10 @@ static unsigned short calc_attrs(int baddr, int fa_addr, int fa)
 
 	/* Monochrome is easy, and so is color if nothing is specified. */
 	if (!appres.m3279 ||
-		(!h3270.ea_buf[baddr].fg &&
-		 !h3270.ea_buf[fa_addr].fg &&
-		 !h3270.ea_buf[baddr].bg &&
-		 !h3270.ea_buf[fa_addr].bg))
+		(!session->ea_buf[baddr].fg &&
+		 !session->ea_buf[fa_addr].fg &&
+		 !session->ea_buf[baddr].bg &&
+		 !session->ea_buf[fa_addr].bg))
 	{
 		a = color_from_fa(fa);
 	}
@@ -163,23 +157,23 @@ static unsigned short calc_attrs(int baddr, int fa_addr, int fa)
 	{
 
 		/* The current location or the fa specifies the fg or bg. */
-		if (h3270.ea_buf[baddr].fg)
+		if (session->ea_buf[baddr].fg)
 		{
-			fg = h3270.ea_buf[baddr].fg & 0x0f;
+			fg = session->ea_buf[baddr].fg & 0x0f;
 		}
-		else if (h3270.ea_buf[fa_addr].fg)
+		else if (session->ea_buf[fa_addr].fg)
 		{
-			fg = h3270.ea_buf[fa_addr].fg & 0x0f;
+			fg = session->ea_buf[fa_addr].fg & 0x0f;
 		}
 		else
 		{
 			fg = DEFCOLOR_MAP(fa);
 		}
 
-		if (h3270.ea_buf[baddr].bg)
-			bg = h3270.ea_buf[baddr].bg & 0x0f;
-		else if (h3270.ea_buf[fa_addr].bg)
-			bg = h3270.ea_buf[fa_addr].bg & 0x0f;
+		if (session->ea_buf[baddr].bg)
+			bg = session->ea_buf[baddr].bg & 0x0f;
+		else if (session->ea_buf[fa_addr].bg)
+			bg = session->ea_buf[fa_addr].bg & 0x0f;
 		else
 			bg = 0;
 
@@ -188,10 +182,10 @@ static unsigned short calc_attrs(int baddr, int fa_addr, int fa)
 
 	/* Compute the display attributes. */
 
-	if (h3270.ea_buf[baddr].gr)
-		gr = h3270.ea_buf[baddr].gr;
-	else if (h3270.ea_buf[fa_addr].gr)
-		gr = h3270.ea_buf[fa_addr].gr;
+	if (session->ea_buf[baddr].gr)
+		gr = session->ea_buf[baddr].gr;
+	else if (session->ea_buf[fa_addr].gr)
+		gr = session->ea_buf[fa_addr].gr;
 	else
 		gr = 0;
 
@@ -216,16 +210,6 @@ static unsigned short calc_attrs(int baddr, int fa_addr, int fa)
 	return a;
 }
 
-/* Erase screen */
-void screen_erase(H3270 *session)
-{
-	/* If the application supplies a callback use it!, if not just redraw with blanks */
-	if(session->erase)
-		session->erase(session);
-	else
-		screen_update(session,0,session->rows * session->cols);
-}
-
 LIB3270_EXPORT void lib3270_get_screen_size(H3270 *h, int *r, int *c)
 {
 	*r = h->rows;
@@ -244,8 +228,7 @@ void update_model_info(H3270 *session, int model, int cols, int rows)
 	/* Update the model name. */
 	(void) sprintf(session->model_name, "327%c-%d%s",appres.m3279 ? '9' : '8',session->model_num,appres.extended ? "-E" : "");
 
-	if(session->update_model)
-		session->update_model(session, session->model_name,session->model_num,rows,cols);
+	session->update_model(session, session->model_name,session->model_num,rows,cols);
 }
 
 LIB3270_EXPORT int lib3270_get_contents(H3270 *h, int first, int last, unsigned char *chr, unsigned short *attr)
@@ -269,40 +252,6 @@ LIB3270_EXPORT int lib3270_get_contents(H3270 *h, int first, int last, unsigned 
 	return 0;
 }
 
-/* Get screen contents */
-int screen_read(char *dest, int baddr, int count)
-{
-	unsigned char fa	= get_field_attribute(&h3270,baddr);
-	int 			max = (h3270.maxROWS * h3270.maxCOLS);
-
-	*dest = 0;
-
-	while(count-- > 0)
-	{
-		if(baddr > max)
-		{
-			*dest = 0;
-			return EFAULT;
-		}
-
-		if (h3270.ea_buf[baddr].fa)
-			fa = h3270.ea_buf[baddr].fa;
-
-		if(FA_IS_ZERO(fa))
-			*dest = ' ';
-		else if(h3270.ea_buf[baddr].cc)
-			*dest = ebc2asc[h3270.ea_buf[baddr].cc];
-		else
-			*dest = ' ';
-
-		dest++;
-		baddr++;
-	}
-	*dest = 0;
-
-	return 0;
-}
-
 /* Display what's in the buffer. */
 static void screen_update(H3270 *session, int bstart, int bend)
 {
@@ -316,8 +265,6 @@ static void screen_update(H3270 *session, int bstart, int bend)
 	a  		= color_from_fa(fa);
 	fa_addr = find_field_attribute(session,bstart); // may be -1, that's okay
 
-//	Trace("%s ea_buf=%p",__FUNCTION__,ea_buf);
-
 	for(baddr = bstart; baddr < bend; baddr++)
 	{
 		if(session->ea_buf[baddr].fa)
@@ -325,7 +272,7 @@ static void screen_update(H3270 *session, int bstart, int bend)
 			// Field attribute.
 			fa_addr = baddr;
 			fa = session->ea_buf[baddr].fa;
-			a = calc_attrs(baddr, baddr, fa);
+			a = calc_attrs(session, baddr, baddr, fa);
 			addch(session,baddr,' ',(attr = COLOR_GREEN)|CHAR_ATTR_MARKER);
 		}
 		else if (FA_IS_ZERO(fa))
@@ -342,14 +289,7 @@ static void screen_update(H3270 *session, int bstart, int bend)
 			}
 			else
 			{
-//				unsigned short b;
-				//
-				// Override some of the field
-				// attributes.
-				//
-//				attr = b = calc_attrs(baddr, fa_addr, fa);
-
-				attr = calc_attrs(baddr, fa_addr, fa);
+				attr = calc_attrs(session, baddr, fa_addr, fa);
 			}
 
 			if (session->ea_buf[baddr].cs == CS_LINEDRAW)
@@ -370,24 +310,12 @@ static void screen_update(H3270 *session, int bstart, int bend)
 		}
 
 	}
-
-	if(session->changed)
-		session->changed(session,bstart,bend);
-
+	session->changed(session,bstart,bend);
 }
 
 void screen_disp(H3270 *session)
 {
 	screen_update(session,0,session->rows*session->cols);
-}
-
-void screen_suspend(H3270 *session)
-{
-}
-
-void screen_resume(H3270 *session)
-{
-	screen_disp(session);
 }
 
 LIB3270_EXPORT int lib3270_get_cursor_address(H3270 *h)
@@ -408,9 +336,7 @@ LIB3270_EXPORT int lib3270_set_cursor_address(H3270 *h, int baddr)
 		return ret;
 
 	h->cursor_addr = baddr;
-
-	if(h->update_cursor)
-		h->update_cursor(h,(unsigned short) (baddr/h->cols),(unsigned short) (baddr%h->cols),h->text[baddr].chr,h->text[baddr].attr);
+	h->update_cursor(h,(unsigned short) (baddr/h->cols),(unsigned short) (baddr%h->cols),h->text[baddr].chr,h->text[baddr].attr);
 
     return ret;
 }
@@ -421,13 +347,8 @@ void set_status(H3270 *session, LIB3270_FLAG id, Boolean on)
 {
 	CHECK_SESSION_HANDLE(session);
 
-	if(id < LIB3270_FLAG_COUNT)
-	{
-		session->oia_flag[id] = (on != 0);
-
-		if(session->update_oia)
-			session->update_oia(session,id,session->oia_flag[id]);
-	}
+	session->oia_flag[id] = (on != 0);
+	session->update_oia(session,id,session->oia_flag[id]);
 
 }
 
