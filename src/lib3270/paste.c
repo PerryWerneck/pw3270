@@ -32,14 +32,17 @@
 
 #include "globals.h"
 
-#if defined(X3270_DISPLAY) /*[*/
-#include <X11/Xatom.h>
+/*
+#if defined(X3270_DISPLAY)
+	#include <X11/Xatom.h>
 #endif
+*/
+
 #define XK_3270
-#if defined(X3270_APL) /*[*/
-#define XK_APL
-#endif /*]*/
-//#include <X11/keysym.h>
+
+#if defined(X3270_APL)
+	#define XK_APL
+#endif
 
 #include <fcntl.h>
 #include "3270ds.h"
@@ -53,17 +56,18 @@
 #include "ctlrc.h"
 #include "ftc.h"
 #include "hostc.h"
-// #include "idlec.h"
-// #include "keymapc.h"
 #include "keypadc.h"
 #include "kybdc.h"
-// #include "macrosc.h"
 #include "popupsc.h"
 #include "printc.h"
 #include "screenc.h"
-// #if defined(X3270_DISPLAY) /*[*/
-// #include "selectc.h"
-// #endif /*]*/
+
+/*
+#if defined(X3270_DISPLAY)
+	#include "selectc.h"
+#endif
+*/
+
 #include "statusc.h"
 #include "tablesc.h"
 #include "telnetc.h"
@@ -75,6 +79,8 @@
 #include "widec.h"
 #endif /*]*/
 #include "api.h"
+
+#include <lib3270/popup.h>
 
 /*---[ Struct ]-------------------------------------------------------------------------------------------------*/
 
@@ -157,6 +163,15 @@
  	return c;
  }
 
+/**
+ * Set string at cursor position.
+ *
+ * @param h		Session handle.
+ * @param str	String to set
+ *
+ * @return Number of characters inserted; <0 in case of error.
+ *
+ */
 LIB3270_EXPORT int lib3270_set_string(H3270 *h, const unsigned char *str)
 {
 	PASTE_DATA data;
@@ -217,4 +232,63 @@ LIB3270_EXPORT int lib3270_set_string(H3270 *h, const unsigned char *str)
 
 	screen_resume(h);
 	return data.qtd;
+}
+
+LIB3270_EXPORT int lib3270_paste(H3270 *h, const char *str)
+{
+	int sz;
+	CHECK_SESSION_HANDLE(h);
+
+	if(!lib3270_connected(h))
+	{
+		lib3270_ring_bell(h);
+		return 0;
+	}
+
+	if(h->paste_buffer)
+	{
+		free(h->paste_buffer);
+		h->paste_buffer = NULL;
+	}
+
+	sz = lib3270_set_string(h,str);
+	if(sz < 0)
+	{
+		// Can´t paste
+		lib3270_popup_dialog(h,LIB3270_NOTIFY_WARNING,
+										_( "Action failed" ),
+										_( "Unable to paste text" ),
+										"%s", sz == -EINVAL ? _( "Keyboard is locked" ) : _( "Unexpected error" ) );
+		return 0;
+	}
+
+	if(strlen(str) > sz)
+	{
+		h->paste_buffer = strdup(str+sz);
+		return 1;
+	}
+
+	return 0;
+}
+
+LIB3270_EXPORT int lib3270_pastenext(H3270 *h)
+{
+	char	* ptr;
+	int		  rc;
+
+	CHECK_SESSION_HANDLE(h);
+
+	if(!(lib3270_connected(h) && h->paste_buffer))
+	{
+		lib3270_ring_bell(h);
+		return 0;
+	}
+
+	ptr = h->paste_buffer;
+	h->paste_buffer = NULL;
+
+	rc = lib3270_paste(h,ptr);
+
+	free(ptr);
+	return rc;
 }

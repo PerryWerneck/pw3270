@@ -109,3 +109,174 @@ void v3270_copy_clipboard(v3270 *widget)
 	}
 }
 
+static void paste_text(GtkWidget *widget, const gchar *text, const gchar *encoding)
+{
+ 	gchar 	*buffer = NULL;
+ 	gchar 	*ptr;
+ 	GError	*error = NULL;
+ 	H3270	*session = v3270_get_session(widget);
+
+ 	if(!text)
+		return;
+
+	buffer = g_convert(text, -1, lib3270_get_charset(session), encoding, NULL, NULL, &error);
+
+    if(!buffer)
+    {
+    	/* Falhou ao converter - Reajusta e tenta de novo */
+    	int f;
+
+    	static const struct _xlat
+    	{
+    		const gchar *from;
+    		const gchar *to;
+    	} xlat[] =
+    	{
+    		{ "–",		"-"		},
+    		{ "→",		"->"	},
+    		{ "←",		"<-" 	},
+    		{ "©",		"(c)"	},
+    		{ "↔",		"<->"	},
+    		{ "™",		"(TM)"	},
+    		{ "®",		"(R)"	},
+    		{ "“",		"\""	},
+    		{ "”",		"\""	},
+    		{ "…",		"..."	},
+    		{ "•",		"*"		},
+    		{ "․",		"."		},
+    		{ "·",		"*"		},
+
+    	};
+
+		gchar *string = g_strdup(text);
+
+		if(error)
+		{
+			g_error_free(error);
+			error = NULL;
+		}
+
+		// FIXME (perry#1#): Is there any better way for a "sed" here?
+		for(f=0;f<G_N_ELEMENTS(xlat);f++)
+		{
+			gchar *ptr = g_strstr_len(string,-1,xlat[f].from);
+
+			if(ptr)
+			{
+				gchar *old = string;
+				gchar **tmp = g_strsplit(old,xlat[f].from,-1);
+				string = g_strjoinv(xlat[f].to,tmp);
+				g_strfreev(tmp);
+				g_free(old);
+			}
+		}
+
+		buffer = g_convert(string, -1, lib3270_get_charset(session), encoding, NULL, NULL, &error);
+
+		if(!buffer)
+		{
+			gchar **ln = g_strsplit(string,"\n",-1);
+
+			for(f=0;ln[f];f++)
+			{
+				gchar *str = g_convert(ln[f], -1, lib3270_get_charset(session), encoding, NULL, NULL, &error);
+
+				if(error)
+				{
+					g_error_free(error);
+					error = 0;
+				}
+
+				if(!str)
+				{
+					GtkWidget *dialog = gtk_message_dialog_new(	GTK_WINDOW( gtk_widget_get_toplevel(widget)),
+																GTK_DIALOG_DESTROY_WITH_PARENT,
+																GTK_MESSAGE_ERROR,
+																GTK_BUTTONS_OK,
+																_(  "Can't convert line %d from %s to %s" ),f+1, encoding, lib3270_get_charset(session));
+
+					gtk_window_set_title(GTK_WINDOW(dialog), _( "Charset error" ) );
+					if(error)
+					{
+						gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),"%s\n%s", error->message ? error->message : N_( "Unexpected error" ), ln[f]);
+						g_error_free(error);
+						error = 0;
+					}
+					else
+					{
+						gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),"%s", ln[f]);
+					}
+					gtk_dialog_run(GTK_DIALOG (dialog));
+					gtk_widget_destroy(dialog);
+					return;
+
+				}
+				else
+				{
+					g_free(str);
+				}
+			}
+
+			g_strfreev(ln);
+			g_free(string);
+		}
+
+		g_free(string);
+
+		if(error)
+		{
+			g_error_free(error);
+			error = 0;
+		}
+
+
+    	if(!buffer)
+    	{
+			GtkWidget *dialog = gtk_message_dialog_new(	GTK_WINDOW( gtk_widget_get_toplevel(widget)),
+														GTK_DIALOG_DESTROY_WITH_PARENT,
+														GTK_MESSAGE_ERROR,
+														GTK_BUTTONS_OK,
+														_(  "Can't convert text from %s to %s" ), encoding, lib3270_get_charset(session));
+
+			gtk_window_set_title(GTK_WINDOW(dialog), _( "Charset error" ) );
+			if(error)
+			{
+				gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),"%s", error->message ? error->message : N_( "Unexpected error" ));
+				g_error_free(error);
+				error = 0;
+			}
+			gtk_dialog_run(GTK_DIALOG (dialog));
+			gtk_widget_destroy(dialog);
+
+			return;
+    	}
+    }
+
+	if(error)
+		g_error_free(error);
+
+    /* Remove TABS */
+    for(ptr = buffer;*ptr;ptr++)
+    {
+		if(*ptr == '\t')
+			*ptr = ' ';
+    }
+
+	trace("Received text:%p (%d bytes)",buffer,(int) strlen(buffer));
+
+//	paste_string(buffer);
+
+	g_free(buffer);
+
+}
+
+static void text_received(GtkClipboard *clipboard, const gchar *text, GtkWidget *widget)
+{
+	paste_text(widget,text,"UTF-8");
+}
+
+void v3270_paste_clipboard(v3270 *widget)
+{
+	gtk_clipboard_request_text(gtk_widget_get_clipboard(GTK_WIDGET(widget),GDK_SELECTION_CLIPBOARD),(GtkClipboardTextReceivedFunc) text_received,(gpointer) widget);
+}
+

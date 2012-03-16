@@ -787,3 +787,13 @@ LIB3270_EXPORT void lib3270_set_popup_handler(int (*handler)(H3270 *, LIB3270_NO
 	popup_handler = handler ? handler : logpopup;
 }
 
+LIB3270_EXPORT lib3270_popup_dialog(H3270 *session, LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, ...)
+{
+	va_list	args;
+
+	CHECK_SESSION_HANDLE(session);
+
+	va_start(args, fmt);
+	popup_handler(session,id,title ? title : _( "3270 Error" ), message,fmt,args);
+	va_end(args);
+}

@@ -227,7 +227,7 @@
 		#define LIB3270_EXPORT	__attribute__((visibility("default"))) extern
 
 	#else
-		
+
 		#error Unable to set visibility attribute
 
 	#endif
@@ -636,8 +636,8 @@
 	LIB3270_EXPORT char * lib3270_get_selected(H3270 *h);
 
 
-	 LIB3270_EXPORT int lib3270_set_model(H3270 *session, int model);
-	 LIB3270_EXPORT int	lib3270_get_model(H3270 *session);
+	LIB3270_EXPORT int lib3270_set_model(H3270 *session, int model);
+	LIB3270_EXPORT int	lib3270_get_model(H3270 *session);
 
 #ifdef __cplusplus
 	}

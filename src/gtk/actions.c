@@ -74,6 +74,11 @@ static void copy_action(GtkAction *action, GtkWidget *widget)
 	v3270_copy_clipboard(GTK_V3270(widget));
 }
 
+static void paste_action(GtkAction *action, GtkWidget *widget)
+{
+	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
+	v3270_paste_clipboard(GTK_V3270(widget));
+}
 
 void ui_connect_action(GtkAction *action, GtkWidget *widget, const gchar *name, const gchar *id)
 {
@@ -110,6 +115,7 @@ void ui_connect_action(GtkAction *action, GtkWidget *widget, const gchar *name, 
 		{ "connect", 	connect_action		},
 		{ "copy", 		copy_action			},
 		{ "disconnect", disconnect_action	},
+		{ "paste", 		paste_action		},
 	};
 
 	int f;
