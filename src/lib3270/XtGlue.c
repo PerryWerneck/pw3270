@@ -555,8 +555,7 @@ static int DefaultProcessEvents(int block)
 
 /*---[ Implement external calls ]---------------------------------------------------------------------------*/
 
-void *
-Malloc(size_t len)
+void * Malloc(size_t len)
 {
 	char *r;
 
@@ -566,11 +565,10 @@ Malloc(size_t len)
 	return r;
 }
 
-void *
-Calloc(size_t nelem, size_t elsize)
+void * Calloc(size_t nelem, size_t elsize)
 {
-	int		sz = nelem * elsize;
-	char	*r = malloc(sz);
+	int		  sz = nelem * elsize;
+	char	* r = malloc(sz);
 
 	if(!r)
 		Error(NULL,"Out of memory");
@@ -579,8 +577,7 @@ Calloc(size_t nelem, size_t elsize)
 	return r;
 }
 
-void *
-Realloc(void *p, size_t len)
+void * Realloc(void *p, size_t len)
 {
 	p = realloc(p, len);
 	if (p == NULL)
@@ -590,9 +587,27 @@ Realloc(void *p, size_t len)
 
 void Free(void *p)
 {
-	if (p != NULL)
+	if(p)
 		free(p);
 }
+
+void * lib3270_calloc(size_t elsize, size_t nelem, void *ptr)
+{
+	size_t sz = nelem * elsize;
+
+	if(ptr)
+		ptr = realloc(ptr,sz);
+	else
+		ptr = malloc(sz);
+
+	if(ptr)
+		memset(ptr,0,sz);
+	else
+		Error(NULL,"Out of memory");
+
+	return ptr;
+}
+
 
 static struct {
 	const char *name;

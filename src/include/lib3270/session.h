@@ -47,11 +47,12 @@
 		unsigned char cs;		/**< character set (GE flag, or 0..2) */
 		unsigned char ic;		/**< input control (DBCS) */
 		unsigned char db;		/**< DBCS state */
+	};
 
-		/* Updated by addch() */
+	struct lib3270_text
+	{
 		unsigned char  chr;		/**< ASCII character code */
 		unsigned short attr;	/**< Converted character attribute (color & etc) */
-
 	};
 
 	struct _h3270
@@ -109,7 +110,10 @@
 
 		int					  formatted;			/**< set in screen_disp */
 
+		// Screen contents
+		void 				* buffer[2];			/**< Internal buffers */
 		struct ea      		* ea_buf;				/**< 3270 device buffer. ea_buf[-1] is the dummy default field attribute */
+		struct lib3270_text	* text;					/**< Converted 3270 chars */
 
 		// host.c
 		char 				  std_ds_host;

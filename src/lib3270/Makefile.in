@@ -89,7 +89,7 @@ $(OBJRLS)/%.o: %.c $(DEPENDS)
 
 #---[ Sources ]----------------------------------------------------------------
 
-SOURCES = XtGlue.c actions.c ansi.c charset.c ctlr.c \
+SOURCES = XtGlue.c init.c actions.c ansi.c charset.c ctlr.c \
 		ft.c ft_cut.c ft_dft.c glue.c host.c kybd.c \
 		print.c printer.c proxy.c resources.c rpq.c screen.c see.c \
 		sf.c tables.c telnet.c toggles.c trace_ds.c utf8.c util.c \

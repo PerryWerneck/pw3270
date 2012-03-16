@@ -91,7 +91,7 @@ Boolean			dbcs = False;
 
 /* Statics */
 static struct ea *aea_buf;	/* alternate 3270 extended attribute buffer */
-static unsigned char *zero_buf;	/* empty buffer, for area clears */
+static unsigned char *zero_buf;	// empty buffer, for area clears
 static void set_formatted(H3270 *session);
 static void ctlr_blanks(void);
 static Boolean  trace_primed = False;
@@ -160,22 +160,28 @@ void ctlr_init(H3270 *session, unsigned cmask unused)
  */
 void ctlr_reinit(H3270 *session, unsigned cmask)
 {
-	static struct ea *real_ea_buf = NULL;
-	static struct ea *real_aea_buf = NULL;
+//	static struct ea *real_ea_buf = NULL;
+//	static struct ea *real_aea_buf = NULL;
 
-	if (cmask & MODEL_CHANGE) {
+	if (cmask & MODEL_CHANGE)
+	{
 		/* Allocate buffers */
-		if (real_ea_buf)
-			Free((char *)real_ea_buf);
-		real_ea_buf = (struct ea *)Calloc(sizeof(struct ea),(session->maxROWS * session->maxCOLS) + 1);
-		session->ea_buf = real_ea_buf + 1;
-		if (real_aea_buf)
-			Free((char *)real_aea_buf);
-		real_aea_buf = (struct ea *)Calloc(sizeof(struct ea),(session->maxROWS * session->maxCOLS) + 1);
-		aea_buf = real_aea_buf + 1;
-		Replace(zero_buf, (unsigned char *)Calloc(sizeof(struct ea),session->maxROWS * session->maxCOLS));
-		session->cursor_addr = 0;
-		buffer_addr = 0;
+		struct ea *tmp;
+		size_t sz = (session->maxROWS * session->maxCOLS);
+
+
+		session->buffer[0] = tmp = lib3270_calloc(sizeof(struct ea),sz+1, session->buffer[0]);
+		session->ea_buf = tmp + 1;
+
+		session->buffer[1] = tmp = lib3270_calloc(sizeof(struct ea),sz+1,session->buffer[1]);
+		aea_buf = tmp + 1;
+
+		session->text = lib3270_calloc(sizeof(struct lib3270_text),sz,session->text);
+
+		Replace(zero_buf, (unsigned char *)Calloc(sizeof(struct ea),sz));
+
+		session->cursor_addr	= 0;
+		buffer_addr 		 	= 0;
 	}
 }
 
@@ -2551,8 +2557,7 @@ ctlr_bcopy(int baddr_from, int baddr_to, int count, int move_ea)
  * Erase a region of the 3270 buffer, optionally clearing extended attributes
  * as well.
  */
-void
-ctlr_aclear(int baddr, int count, int clear_ea)
+void ctlr_aclear(int baddr, int count, int clear_ea)
 {
 	if (memcmp((char *) &h3270.ea_buf[baddr], (char *) zero_buf,
 		    count * sizeof(struct ea))) {

@@ -140,7 +140,7 @@
 	gtk_action_group_set_sensitive(group[ACTION_GROUP_PASTE],TRUE);
 #else
 	gtk_action_group_set_sensitive(group[ACTION_GROUP_PASTE],FALSE);
-	gtk_clipboard_request_text(gtk_widget_get_clipboard(widget,GDK_SELECTION_CLIPBOARD),clipboard_text_check,(gpointer) group);
+	gtk_clipboard_request_text(gtk_widget_get_clipboard(widget,GDK_SELECTION_CLIPBOARD),(GtkClipboardTextReceivedFunc) clipboard_text_check,(gpointer) group);
 #endif
 
  }

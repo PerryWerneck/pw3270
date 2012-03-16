@@ -75,10 +75,10 @@ static void update_selected_rectangle(H3270 *session)
 	{
 		for(col = 0; col < session->cols;col++)
 		{
-			if(!(row >= p[0].row && row <= p[1].row && col >= p[0].col && col <= p[1].col) && (session->ea_buf[baddr].attr & LIB3270_ATTR_SELECTED))
+			if(!(row >= p[0].row && row <= p[1].row && col >= p[0].col && col <= p[1].col) && (session->text[baddr].attr & LIB3270_ATTR_SELECTED))
 			{
-				session->ea_buf[baddr].attr &= ~LIB3270_ATTR_SELECTED;
-				session->update(session,baddr,session->ea_buf[baddr].chr,session->ea_buf[baddr].attr,baddr == session->cursor_addr);
+				session->text[baddr].attr &= ~LIB3270_ATTR_SELECTED;
+				session->update(session,baddr,session->text[baddr].chr,session->text[baddr].attr,baddr == session->cursor_addr);
 			}
 			baddr++;
 		}
@@ -90,10 +90,10 @@ static void update_selected_rectangle(H3270 *session)
 	{
 		for(col = 0; col < session->cols;col++)
 		{
-			if((row >= p[0].row && row <= p[1].row && col >= p[0].col && col <= p[1].col) && !(session->ea_buf[baddr].attr & LIB3270_ATTR_SELECTED))
+			if((row >= p[0].row && row <= p[1].row && col >= p[0].col && col <= p[1].col) && !(session->text[baddr].attr & LIB3270_ATTR_SELECTED))
 			{
-				session->ea_buf[baddr].attr |= LIB3270_ATTR_SELECTED;
-				session->update(session,baddr,session->ea_buf[baddr].chr,session->ea_buf[baddr].attr,baddr == session->cursor_addr);
+				session->text[baddr].attr |= LIB3270_ATTR_SELECTED;
+				session->update(session,baddr,session->text[baddr].chr,session->text[baddr].attr,baddr == session->cursor_addr);
 			}
 			baddr++;
 		}
@@ -111,29 +111,29 @@ static void update_selected_region(H3270 *session)
 	// First remove unselected areas
 	for(baddr = 0; baddr < begin; baddr++)
 	{
-		if(session->ea_buf[baddr].attr & LIB3270_ATTR_SELECTED)
+		if(session->text[baddr].attr & LIB3270_ATTR_SELECTED)
 		{
-			session->ea_buf[baddr].attr &= ~LIB3270_ATTR_SELECTED;
-			session->update(session,baddr,session->ea_buf[baddr].chr,session->ea_buf[baddr].attr,baddr == session->cursor_addr);
+			session->text[baddr].attr &= ~LIB3270_ATTR_SELECTED;
+			session->update(session,baddr,session->text[baddr].chr,session->text[baddr].attr,baddr == session->cursor_addr);
 		}
 	}
 
 	for(baddr = end+1; baddr < len; baddr++)
 	{
-		if(session->ea_buf[baddr].attr & LIB3270_ATTR_SELECTED)
+		if(session->text[baddr].attr & LIB3270_ATTR_SELECTED)
 		{
-			session->ea_buf[baddr].attr &= ~LIB3270_ATTR_SELECTED;
-			session->update(session,baddr,session->ea_buf[baddr].chr,session->ea_buf[baddr].attr,baddr == session->cursor_addr);
+			session->text[baddr].attr &= ~LIB3270_ATTR_SELECTED;
+			session->update(session,baddr,session->text[baddr].chr,session->text[baddr].attr,baddr == session->cursor_addr);
 		}
 	}
 
 	// Then draw the selected ones
 	for(baddr = begin; baddr <= end; baddr++)
 	{
-		if(!(session->ea_buf[baddr].attr & LIB3270_ATTR_SELECTED))
+		if(!(session->text[baddr].attr & LIB3270_ATTR_SELECTED))
 		{
-			session->ea_buf[baddr].attr |= LIB3270_ATTR_SELECTED;
-			session->update(session,baddr,session->ea_buf[baddr].chr,session->ea_buf[baddr].attr,baddr == session->cursor_addr);
+			session->text[baddr].attr |= LIB3270_ATTR_SELECTED;
+			session->update(session,baddr,session->text[baddr].chr,session->text[baddr].attr,baddr == session->cursor_addr);
 		}
 	}
 
@@ -180,11 +180,11 @@ LIB3270_ACTION(unselect)
 
 	for(a = 0; a < hSession->rows*hSession->cols; a++)
 	{
-		if(hSession->ea_buf[a].attr & LIB3270_ATTR_SELECTED)
+		if(hSession->text[a].attr & LIB3270_ATTR_SELECTED)
 		{
-			hSession->ea_buf[a].attr &= ~LIB3270_ATTR_SELECTED;
+			hSession->text[a].attr &= ~LIB3270_ATTR_SELECTED;
 			if(hSession->update)
-				hSession->update(hSession,a,hSession->ea_buf[a].chr,hSession->ea_buf[a].attr,a == hSession->cursor_addr);
+				hSession->update(hSession,a,hSession->text[a].chr,hSession->text[a].attr,a == hSession->cursor_addr);
 		}
 	}
 
@@ -218,17 +218,17 @@ LIB3270_EXPORT void lib3270_select_word(H3270 *session, int baddr)
 
 	CHECK_SESSION_HANDLE(session);
 
-	if(!lib3270_connected(session) || isspace(session->ea_buf[baddr].chr))
+	if(!lib3270_connected(session) || isspace(session->text[baddr].chr))
 	{
 		lib3270_ring_bell(session);
 		return;
 	}
 
-	for(pos = baddr; pos > 0 && !isspace(session->ea_buf[pos].chr);pos--);
+	for(pos = baddr; pos > 0 && !isspace(session->text[pos].chr);pos--);
 	session->select.begin = pos > 0 ? pos+1 : 0;
 
 	len = session->rows * session->cols;
-	for(pos = baddr; pos < len && !isspace(session->ea_buf[pos].chr);pos++);
+	for(pos = baddr; pos < len && !isspace(session->text[pos].chr);pos++);
 	session->select.end = pos < len ? pos-1 : len;
 
 	set_selected(session);
@@ -286,10 +286,10 @@ LIB3270_ACTION( selectall )
 	// First remove unselected areas
 	for(baddr = 0; baddr < len; baddr++)
 	{
-		if(!(hSession->ea_buf[baddr].attr & LIB3270_ATTR_SELECTED))
+		if(!(hSession->text[baddr].attr & LIB3270_ATTR_SELECTED))
 		{
-			hSession->ea_buf[baddr].attr |= LIB3270_ATTR_SELECTED;
-			hSession->update(hSession,baddr,hSession->ea_buf[baddr].chr,hSession->ea_buf[baddr].attr,baddr == hSession->cursor_addr);
+			hSession->text[baddr].attr |= LIB3270_ATTR_SELECTED;
+			hSession->update(hSession,baddr,hSession->text[baddr].chr,hSession->text[baddr].attr,baddr == hSession->cursor_addr);
 		}
 	}
 
@@ -329,10 +329,10 @@ LIB3270_EXPORT char * lib3270_get_selected(H3270 *hSession)
 
 		for(col = 0; col < hSession->cols;col++)
 		{
-			if(hSession->ea_buf[baddr].attr & LIB3270_ATTR_SELECTED)
+			if(hSession->text[baddr].attr & LIB3270_ATTR_SELECTED)
 			{
 				cr++;
-				ret[sz++] = hSession->ea_buf[baddr].chr;
+				ret[sz++] = hSession->text[baddr].chr;
 			}
 			baddr++;
 		}

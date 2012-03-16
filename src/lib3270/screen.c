@@ -88,14 +88,14 @@ static void addch(H3270 *session, int baddr, unsigned char c, unsigned short att
 {
 	// If set to keep selection adjust corresponding flag based on the current state
 	if(lib3270_get_toggle(session,LIB3270_TOGGLE_KEEP_SELECTED))
-		attr |= (session->ea_buf[baddr].attr & LIB3270_ATTR_SELECTED);
+		attr |= (session->text[baddr].attr & LIB3270_ATTR_SELECTED);
 
-	if(session->ea_buf[baddr].chr == c && session->ea_buf[baddr].attr == attr)
+	if(session->text[baddr].chr == c && session->text[baddr].attr == attr)
 			return;
 
 	/* Converted char has changed, update it */
-	session->ea_buf[baddr].chr  = c;
-	session->ea_buf[baddr].attr = attr;
+	session->text[baddr].chr  = c;
+	session->text[baddr].attr = attr;
 
 	if(session->update)
 		session->update(session,baddr,c,attr,baddr == session->cursor_addr);
@@ -262,8 +262,8 @@ LIB3270_EXPORT int lib3270_get_contents(H3270 *h, int first, int last, unsigned 
 
 	for(baddr = first; baddr <= last;baddr++)
 	{
-		*(chr++)  = h3270.ea_buf[baddr].chr ? h3270.ea_buf[baddr].chr : ' ';
-		*(attr++) = h3270.ea_buf[baddr].attr;
+		*(chr++)  = h->text[baddr].chr ? h->text[baddr].chr : ' ';
+		*(attr++) = h->text[baddr].attr;
 	}
 
 	return 0;
@@ -410,7 +410,7 @@ LIB3270_EXPORT int lib3270_set_cursor_address(H3270 *h, int baddr)
 	h->cursor_addr = baddr;
 
 	if(h->update_cursor)
-		h->update_cursor(h,(unsigned short) (baddr/h->cols),(unsigned short) (baddr%h->cols),h->ea_buf[baddr].chr,h->ea_buf[baddr].attr);
+		h->update_cursor(h,(unsigned short) (baddr/h->cols),(unsigned short) (baddr%h->cols),h->text[baddr].chr,h->text[baddr].attr);
 
     return ret;
 }

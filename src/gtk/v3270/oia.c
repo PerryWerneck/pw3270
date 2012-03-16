@@ -41,6 +41,10 @@
  #include "v3270.h"
  #include "private.h"
 
+/*--[ Prototipes ]-----------------------------------------------------------------------------------*/
+
+static void draw_cursor_position(cairo_t *cr, GdkRectangle *rect, struct v3270_metrics *metrics, int row, int col);
+
 /*--[ Statics ]--------------------------------------------------------------------------------------*/
 
  #include "locked.xbm"
@@ -116,24 +120,14 @@ static gint draw_spinner(cairo_t *cr, GdkRectangle *r, GdkColor *color, gint ste
 
 static void setup_cursor_position(GdkRectangle *rect, struct v3270_metrics *metrics, cairo_t *cr, H3270 *host, int cols, GdkColor *color)
 {
-	int addr = lib3270_get_cursor_address(host);
-	char buffer[10];
-
-	short2string(buffer,(addr/cols)+1,3);
-	buffer[3] = '/';
-	short2string(buffer+4,(addr%cols)+1,3);
-	buffer[7] = 0;
-
 	rect->width = metrics->width * 8;
 	rect->x -= rect->width;
 
 	if(lib3270_get_toggle(host,LIB3270_TOGGLE_CURSOR_POS))
 	{
-		cairo_move_to(cr,rect->x,rect->y+metrics->height);
-		cairo_show_text(cr, buffer);
-		cairo_stroke(cr);
+		int addr = lib3270_get_cursor_address(host);
+		draw_cursor_position(cr,rect,metrics,addr/cols,addr%cols);
 	}
-
 }
 
 static void setup_timer_position(GdkRectangle *rect, struct v3270_metrics *metrics, cairo_t *cr, H3270 *host, int cols, GdkColor *color)
@@ -616,13 +610,27 @@ void v3270_update_message(v3270 *widget, LIB3270_MESSAGE id)
 	gtk_widget_queue_draw_area(GTK_WIDGET(widget),rect->x,rect->y,rect->width,rect->height);
 }
 
+static void draw_cursor_position(cairo_t *cr, GdkRectangle *rect, struct v3270_metrics *metrics, int row, int col)
+{
+	cairo_text_extents_t extents;
+	char buffer[10];
+
+	short2string(buffer,row+1,3);
+	buffer[3] = '/';
+	short2string(buffer+4,col+1,3);
+	buffer[7] = 0;
+
+	cairo_text_extents(cr,buffer,&extents);
+
+	cairo_move_to(cr,(rect->x+rect->width)-(extents.width+2),rect->y+metrics->height);
+	cairo_show_text(cr, buffer);
+	cairo_stroke(cr);
+}
+
 void v3270_update_cursor(H3270 *session, unsigned short row, unsigned short col, unsigned char c, unsigned short attr)
 {
 	v3270				* terminal = GTK_V3270(session->widget);
-	cairo_t 			* cr;
-	GdkRectangle		* rect;
 	GdkRectangle		  saved;
-	char 				  buffer[10];
 
 	if(!terminal->surface)
 		return;
@@ -663,20 +671,12 @@ void v3270_update_cursor(H3270 *session, unsigned short row, unsigned short col,
 	if(lib3270_get_toggle(session,LIB3270_TOGGLE_CURSOR_POS))
 	{
 		// Update OIA
-		cairo_text_extents_t extents;
+		GdkRectangle	* rect;
+		cairo_t 		* cr;
 
 		cr = set_update_region(terminal,&rect,V3270_OIA_CURSOR_POSITION);
 
-		short2string(buffer,row+1,3);
-		buffer[3] = '/';
-		short2string(buffer+4,col+1,3);
-		buffer[7] = 0;
-
-		cairo_text_extents(cr,buffer,&extents);
-
-		cairo_move_to(cr,rect->x,rect->y+terminal->metrics.height);
-		cairo_show_text(cr, buffer);
-		cairo_stroke(cr);
+		draw_cursor_position(cr,rect,&terminal->metrics,row,col);
 
 		cairo_destroy(cr);
 
