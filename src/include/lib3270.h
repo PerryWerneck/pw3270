@@ -449,7 +449,7 @@
 	 * @param h		Session handle.
 	 * @param ix	Toggle id.
 	 *
-	 * @return 0 if the toggle was changed, errno code if not.
+	 * @return Toggle status.
 	 */
 	LIB3270_EXPORT int lib3270_toggle(H3270 *h, LIB3270_TOGGLE ix);
 

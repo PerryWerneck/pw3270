@@ -78,37 +78,6 @@ static const char *toggle_names[LIB3270_TOGGLE_COUNT] =
 		"beep",										/**< Beep on errors */
 };
 
-
-/*
-static void no_callback(H3270 *h, int value, LIB3270_TOGGLE_TYPE reason)
-{
-}
-
-LIB3270_EXPORT int lib3270_register_tchange(H3270 *h, LIB3270_TOGGLE_ID ix, void (*func)(H3270 *, int, LIB3270_TOGGLE_TYPE))
-{
-	struct toggle *t;
-
-	CHECK_SESSION_HANDLE(h);
-
-	if(ix < 0 || ix >= LIB3270_TOGGLE_COUNT)
-		return EINVAL;
-
-	t = &appres.toggle[ix];
-
-	if(func)
-	{
-		t->callback = func;
-		t->callback(h, t->value, (int) TT_INITIAL);
-	}
-	else
-	{
-		t->callback = no_callback;
-	}
-
-	return 0;
-}
-*/
-
 LIB3270_EXPORT unsigned char lib3270_get_toggle(H3270 *session, LIB3270_TOGGLE ix)
 {
 	CHECK_SESSION_HANDLE(session);
@@ -124,7 +93,6 @@ LIB3270_EXPORT unsigned char lib3270_get_toggle(H3270 *session, LIB3270_TOGGLE i
 static void toggle_notify(H3270 *session, struct toggle *t, LIB3270_TOGGLE ix)
 {
 	t->upcall(session, t, TT_INTERACTIVE);
-//	t->callback(session,t->value, (int) TT_INTERACTIVE);
 
 	if(session->update_toggle)
 		session->update_toggle(session,ix,t->value,TT_INTERACTIVE,toggle_names[ix]);
@@ -133,7 +101,8 @@ static void toggle_notify(H3270 *session, struct toggle *t, LIB3270_TOGGLE ix)
 
 LIB3270_EXPORT void lib3270_set_toggle(H3270 *session, LIB3270_TOGGLE ix, int value)
 {
-	struct toggle	*t;
+	char 			  v = value ? True : False;
+	struct toggle	* t;
 
 	CHECK_SESSION_HANDLE(session);
 
@@ -141,7 +110,11 @@ LIB3270_EXPORT void lib3270_set_toggle(H3270 *session, LIB3270_TOGGLE ix, int va
 		return;
 
 	t = &appres.toggle[ix];
-	t->value = (value != 0);
+
+	if(v == t->value)
+		return;
+
+	t->value = v;
 
 	toggle_notify(session,t,ix);
 }
@@ -153,14 +126,14 @@ LIB3270_EXPORT int lib3270_toggle(H3270 *session, LIB3270_TOGGLE ix)
 	CHECK_SESSION_HANDLE(session);
 
 	if(ix < 0 || ix >= LIB3270_TOGGLE_COUNT)
-		return;
+		return 0;
 
 	t = &appres.toggle[ix];
 
-	t->value = !t->value;
+	t->value = t->value ? False : True;
 	toggle_notify(session,t,ix);
 
-	return 0;
+	return (int) t->value;
 }
 
 static void toggle_monocase(H3270 *session, struct toggle *t, LIB3270_TOGGLE_TYPE tt)
@@ -176,10 +149,7 @@ void initialize_toggles(H3270 *session, struct toggle *toggle)
 	int f;
 
 	for(f=0;f<LIB3270_TOGGLE_COUNT;f++)
-	{
-//		toggle[f].callback	= no_callback;
 		toggle[f].upcall	= toggle_nop;
-	}
 
 	toggle[LIB3270_TOGGLE_RECTANGLE_SELECT].upcall	= toggle_rectselect;
 	toggle[LIB3270_TOGGLE_MONOCASE].upcall 			= toggle_monocase;
@@ -199,11 +169,9 @@ void initialize_toggles(H3270 *session, struct toggle *toggle)
 		LIB3270_TOGGLE_CURSOR_BLINK,
 		LIB3270_TOGGLE_CURSOR_POS,
 		LIB3270_TOGGLE_BEEP,
-
-		(LIB3270_TOGGLE) -1
 	};
 
-	for(f=0;active_by_default[f] != (LIB3270_TOGGLE) -1; f++)
+	for(f=0;f< (sizeof(active_by_default)/sizeof(active_by_default[0])); f++)
 	{
 		toggle[active_by_default[f]].value = True;
 	}
@@ -223,6 +191,26 @@ void initialize_toggles(H3270 *session, struct toggle *toggle)
 void shutdown_toggles(H3270 *session, struct toggle *toggle)
 {
 #if defined(X3270_TRACE)
+	static const LIB3270_TOGGLE disable_on_shutdown[] = {DS_TRACE, EVENT_TRACE, SCREEN_TRACE};
+
+	int f;
+
+	for(f=0;f< (sizeof(disable_on_shutdown)/sizeof(disable_on_shutdown[0])); f++)
+	{
+		LIB3270_TOGGLE	  ix	= disable_on_shutdown[f];
+		struct toggle	* t		= &toggle[ix];
+
+		if(t->value)
+		{
+			t->value = False;
+			t->upcall(session,&toggle[f],TT_FINAL);
+
+			if(session->update_toggle)
+				session->update_toggle(session,ix,t->value,TT_FINAL,toggle_names[ix]);
+		}
+	}
+
+/*
 	// Clean up the data stream trace monitor window.
 	if(toggle[DS_TRACE].value)
 	{
@@ -242,6 +230,7 @@ void shutdown_toggles(H3270 *session, struct toggle *toggle)
 		toggle[SCREEN_TRACE].value = False;
 		toggle_screenTrace(session, &toggle[SCREEN_TRACE], TT_FINAL);
 	}
+*/
 #endif
 }
 
