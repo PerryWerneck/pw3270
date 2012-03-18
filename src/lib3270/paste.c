@@ -133,14 +133,14 @@
 	return -1;
  }
 
- static int paste_char(PASTE_DATA *data, unsigned char c)
+ static int paste_char(H3270 *session, PASTE_DATA *data, unsigned char c)
  {
 
 	if(toggled(SMART_PASTE))
 	{
-		int faddr = find_field_attribute(&h3270,h3270.cursor_addr);
-		if(FA_IS_PROTECTED(h3270.ea_buf[faddr].fa))
-			h3270.cursor_addr++;
+		int faddr = find_field_attribute(session,session->cursor_addr);
+		if(FA_IS_PROTECTED(session->ea_buf[faddr].fa))
+			session->cursor_addr++;
 		else
 			key_ACharacter(c, KT_STD, IA_PASTE, NULL);
 	}
@@ -197,7 +197,7 @@ LIB3270_EXPORT int lib3270_set_string(H3270 *h, const unsigned char *str)
 		switch(*str)
 		{
 		case '\t':
-			last = paste_char(&data, ' ');
+			last = paste_char(h,&data, ' ');
 			break;
 
 		case '\n':
@@ -218,7 +218,7 @@ LIB3270_EXPORT int lib3270_set_string(H3270 *h, const unsigned char *str)
 			break;
 
 		default:
-			last = paste_char(&data, *str);
+			last = paste_char(h,&data, *str);
 
 		}
 		str++;

@@ -79,6 +79,7 @@ static const char *toggle_names[LIB3270_TOGGLE_COUNT] =
 };
 
 
+/*
 static void no_callback(H3270 *h, int value, LIB3270_TOGGLE_TYPE reason)
 {
 }
@@ -106,6 +107,7 @@ LIB3270_EXPORT int lib3270_register_tchange(H3270 *h, LIB3270_TOGGLE_ID ix, void
 
 	return 0;
 }
+*/
 
 LIB3270_EXPORT unsigned char lib3270_get_toggle(H3270 *session, LIB3270_TOGGLE ix)
 {
@@ -117,54 +119,46 @@ LIB3270_EXPORT unsigned char lib3270_get_toggle(H3270 *session, LIB3270_TOGGLE i
 }
 
 /*
- * Generic toggle stuff
+ * Call the internal update routine
  */
-static void do_toggle_reason(H3270 *session, LIB3270_TOGGLE ix, LIB3270_TOGGLE_TYPE reason)
+static void toggle_notify(H3270 *session, struct toggle *t, LIB3270_TOGGLE ix)
 {
-	struct toggle *t = &appres.toggle[ix];
-
-	/*
-	 * Change the value, call the internal update routine, and reset the
-	 * menu label(s).
-	 */
-	toggle_toggle(t);
-	t->upcall(session, t, reason);
-	t->callback(session,t->value, (int) reason);
+	t->upcall(session, t, TT_INTERACTIVE);
+//	t->callback(session,t->value, (int) TT_INTERACTIVE);
 
 	if(session->update_toggle)
-		session->update_toggle(session,ix,t->value,reason,toggle_names[ix]);
+		session->update_toggle(session,ix,t->value,TT_INTERACTIVE,toggle_names[ix]);
 
 }
 
-LIB3270_EXPORT int lib3270_set_toggle(H3270 *session, LIB3270_TOGGLE ix, int value)
+LIB3270_EXPORT void lib3270_set_toggle(H3270 *session, LIB3270_TOGGLE ix, int value)
 {
-	Boolean v = ((Boolean) (value != 0)); // Convert int in Boolean
-
 	struct toggle	*t;
 
 	CHECK_SESSION_HANDLE(session);
 
 	if(ix < 0 || ix >= LIB3270_TOGGLE_COUNT)
-		return 0;
+		return;
 
 	t = &appres.toggle[ix];
+	t->value = (value != 0);
 
-	if(t->value == v)
-		return 0;
-
-	do_toggle_reason(session, ix, TT_INTERACTIVE);
-
-	return -1;
+	toggle_notify(session,t,ix);
 }
 
 LIB3270_EXPORT int lib3270_toggle(H3270 *session, LIB3270_TOGGLE ix)
 {
+	struct toggle	*t;
+
 	CHECK_SESSION_HANDLE(session);
 
 	if(ix < 0 || ix >= LIB3270_TOGGLE_COUNT)
-		return EINVAL;
+		return;
 
-	do_toggle_reason(session, ix, TT_INTERACTIVE);
+	t = &appres.toggle[ix];
+
+	t->value = !t->value;
+	toggle_notify(session,t,ix);
 
 	return 0;
 }
@@ -183,7 +177,7 @@ void initialize_toggles(H3270 *session, struct toggle *toggle)
 
 	for(f=0;f<LIB3270_TOGGLE_COUNT;f++)
 	{
-		toggle[f].callback	= no_callback;
+//		toggle[f].callback	= no_callback;
 		toggle[f].upcall	= toggle_nop;
 	}
 

@@ -111,6 +111,7 @@ static void v3270_toggle_changed(v3270 *widget,LIB3270_TOGGLE toggle_id, gboolea
 		break;
 
 	case LIB3270_TOGGLE_INSERT:
+		v3270_draw_ins_status(widget);
 		v3270_cursor_draw(widget);
 		break;
 

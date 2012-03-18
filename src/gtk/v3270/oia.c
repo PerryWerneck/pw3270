@@ -421,7 +421,22 @@ static void draw_status_message(cairo_t *cr, LIB3270_MESSAGE id, struct v3270_me
 		cairo_show_text(cr,gettext(msg));
 	}
 
-//	trace("%s ends",__FUNCTION__);
+}
+
+static void draw_insert(cairo_t *cr, H3270 *host, GdkColor *color, GdkRectangle *rect)
+{
+	if(lib3270_get_toggle(host,LIB3270_TOGGLE_INSERT))
+	{
+		double y = rect->y+(rect->height-2);
+
+		gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_FOREGROUND);
+
+		cairo_move_to(cr,rect->x,y);
+		cairo_rel_line_to(cr,rect->width/2,-(rect->height/1.7));
+		cairo_line_to(cr,rect->x+rect->width,y);
+		cairo_stroke(cr);
+	}
+
 }
 
 void v3270_draw_oia(cairo_t *cr, H3270 *host, int row, int cols, struct v3270_metrics *metrics, GdkColor *color, GdkRectangle *rect)
@@ -445,8 +460,6 @@ void v3270_draw_oia(cairo_t *cr, H3270 *host, int row, int cols, struct v3270_me
 		{ V3270_OIA_ALT,				setup_single_char_right		},
 		{ V3270_OIA_SSL,				setup_double_char_position	},
 	};
-
-//	static const V3270_OIA_FIELD left[] = { V3270_OIA_UNDERA, V3270_OIA_CONNECTION };
 
 	int f;
 	int rCol = metrics->left+(cols*metrics->width);
@@ -514,8 +527,6 @@ void v3270_draw_oia(cairo_t *cr, H3270 *host, int row, int cols, struct v3270_me
 
 	memset(rect+V3270_OIA_MESSAGE,0,sizeof(GdkRectangle));
 
-//	trace("%s lcol=%d rcol=%d",__FUNCTION__,lCol,rCol);
-
 	if(lCol < rCol)
 	{
 		GdkRectangle *r = rect+V3270_OIA_MESSAGE;
@@ -528,6 +539,10 @@ void v3270_draw_oia(cairo_t *cr, H3270 *host, int row, int cols, struct v3270_me
 
 	cairo_save(cr);
 	v3270_draw_ssl_status(cr,host,metrics,color,rect+V3270_OIA_SSL);
+	cairo_restore(cr);
+
+	cairo_save(cr);
+	draw_insert(cr,host,color,rect+V3270_OIA_INSERT);
 	cairo_restore(cr);
 }
 
@@ -808,6 +823,23 @@ static void update_text_field(v3270 *terminal, gboolean flag, V3270_OIA_FIELD id
 void v3270_draw_alt_status(v3270 *terminal)
 {
 	update_text_field(terminal,terminal->keyflags & KEY_FLAG_ALT,V3270_OIA_ALT,"A");
+}
+
+void v3270_draw_ins_status(v3270 *terminal)
+{
+	GdkRectangle *r;
+	cairo_t *cr;
+
+	if(!terminal->surface)
+		return;
+
+	cr = set_update_region(terminal,&r,V3270_OIA_INSERT);
+
+	draw_insert(cr,terminal->host,terminal->color,r);
+
+    cairo_destroy(cr);
+	gtk_widget_queue_draw_area(GTK_WIDGET(terminal),r->x,r->y,r->width,r->height);
+
 }
 
 static gboolean update_timer(struct timer_info *info)

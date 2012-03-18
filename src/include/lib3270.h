@@ -294,17 +294,6 @@
 	LIB3270_EXPORT void lib3270_register_schange(H3270 *h,LIB3270_STATE tx, void (*func)(H3270 *, int, void *),void *data);
 
 	/**
-	 * Register a toggle change callback.
-	 *
-	 * @param h		Session handle.
-	 * @param ix	Toggle id
-	 * @param func	Function to call when toggle changes.
-	 *
-	 * @return 0 if ok, EINVAL if the toggle id is invalid.
-	 */
-	LIB3270_EXPORT int lib3270_register_tchange(H3270 *h, LIB3270_TOGGLE ix, void (*func)(H3270 *h, int, LIB3270_TOGGLE_TYPE reason));
-
-	/**
 	 * Network connect operation, keep main loop running
 	 *
 	 * Sets 'reconnect_host', 'current_host' and 'full_current_host' as
@@ -431,10 +420,8 @@
 	 * @param ix	Toggle id.
 	 * @param value	New toggle state (non zero for true).
 	 *
-	 * @return 0 if the toggle wasn't changed, non zero if it was changed.
-	 *
 	 */
-	LIB3270_EXPORT int lib3270_set_toggle(H3270 *h, LIB3270_TOGGLE ix, int value);
+	LIB3270_EXPORT void lib3270_set_toggle(H3270 *h, LIB3270_TOGGLE ix, int value);
 
 	/**
 	 * Translate a string toggle name to the corresponding value.

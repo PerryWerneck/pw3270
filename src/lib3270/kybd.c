@@ -18,7 +18,7 @@
  * programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple
  * Place, Suite 330, Boston, MA, 02111-1307, USA
  *
- * Este programa está nomeado como kybd.c e possui 4414 linhas de código.
+ * Este programa está nomeado como kybd.c e possui - linhas de código.
  *
  * Contatos:
  *
@@ -98,8 +98,7 @@ static unsigned char pa_xlate[] = {
 static unsigned long unlock_id;
 static time_t unlock_delay_time;
 #define UNLOCK_MS		350	/* 0.35s after last unlock */
-static Boolean key_Character(int code, Boolean with_ge, Boolean pasting,
-			     Boolean *skipped);
+static Boolean key_Character(int code, Boolean with_ge, Boolean pasting,Boolean *skipped);
 static Boolean flush_ta(void);
 static void key_AID(unsigned char aid_code);
 static void kybdlock_set(unsigned int bits, const char *cause);
@@ -527,10 +526,11 @@ key_AID(unsigned char aid_code)
 		/* Act as if the host had written our input. */
 		h3270.buffer_addr = h3270.cursor_addr;
 	}
-	if (!IN_SSCP || aid_code != AID_CLEAR) {
+	if (!IN_SSCP || aid_code != AID_CLEAR)
+	{
 		status_twait(&h3270);
 		mcursor_waiting(&h3270);
-		set_toggle(INSERT,0);
+		lib3270_set_toggle(&h3270,LIB3270_TOGGLE_INSERT,0);
 		kybdlock_set(KL_OIA_TWAIT | KL_OIA_LOCKED, "key_AID");
 	}
 	aid = aid_code;
@@ -745,14 +745,11 @@ key_Character_wrapper(Widget w unused, XEvent *event unused, String *params,
  * Handle an ordinary displayable character key.  Lots of stuff to handle
  * insert-mode, protected fields and etc.
  */
-static Boolean
-key_Character(int code, Boolean with_ge, Boolean pasting, Boolean *skipped)
+static Boolean key_Character(int code, Boolean with_ge, Boolean pasting, Boolean *skipped)
 {
 	register int	baddr, faddr, xaddr;
 	register unsigned char	fa;
 	enum dbcs_why why;
-
-//	reset_idle_timer();
 
 	if (skipped != NULL)
 		*skipped = False;
@@ -798,7 +795,7 @@ key_Character(int code, Boolean with_ge, Boolean pasting, Boolean *skipped)
 	/* Add the character. */
 	if (h3270.ea_buf[baddr].cc == EBC_so) {
 
-		if (toggled(INSERT)) {
+		if (toggled(LIB3270_TOGGLE_INSERT)) {
 			if (!ins_prep(faddr, baddr, 1))
 				return False;
 		} else {
@@ -835,7 +832,7 @@ key_Character(int code, Boolean with_ge, Boolean pasting, Boolean *skipped)
 		/* fall through... */
 	case DBCS_LEFT:
 		if (why == DBCS_ATTRIBUTE) {
-			if (toggled(INSERT)) {
+			if (toggled(LIB3270_TOGGLE_INSERT)) {
 				if (!ins_prep(faddr, baddr, 1))
 					return False;
 			} else {
@@ -852,7 +849,7 @@ key_Character(int code, Boolean with_ge, Boolean pasting, Boolean *skipped)
 		} else {
 			Boolean was_si;
 
-			if (toggled(INSERT)) {
+			if (toggled(LIB3270_TOGGLE_INSERT)) {
 				/*
 				 * Inserting SBCS into a DBCS subfield.
 				 * If this is the first position, we
@@ -909,7 +906,7 @@ key_Character(int code, Boolean with_ge, Boolean pasting, Boolean *skipped)
 		break;
 	default:
 	case DBCS_NONE:
-		if (toggled(INSERT) && !ins_prep(faddr, baddr, 1))
+		if (toggled(LIB3270_TOGGLE_INSERT) && !ins_prep(faddr, baddr, 1))
 			return False;
 		break;
 	}
@@ -1292,73 +1289,28 @@ retry:
  */
 void key_ACharacter(unsigned char c, enum keytype keytype, enum iaction cause,Boolean *skipped)
 {
-//	register int i;
-//	struct akeysym ak;
-
-//	reset_idle_timer();
-
 	if (skipped != NULL)
 		*skipped = False;
 
-//	ak.keysym = c;
-//	ak.keytype = keytype;
+	trace_event(" %s -> Key(\"%s\")\n",ia_name[(int) cause], ctl_see((int) c));
 
-/*
-	switch (composing) {
-	    case NONE:
-		break;
-	    case COMPOSE:
-		for (i = 0; i < n_composites; i++)
-			if (ak_eq(composites[i].k1, ak) ||
-			    ak_eq(composites[i].k2, ak))
-				break;
-		if (i < n_composites) {
-			cc_first.keysym = c;
-			cc_first.keytype = keytype;
-			composing = FIRST;
-			status_compose(True, c, keytype);
-		} else {
-			lib3270_ring_bell();
-			composing = NONE;
-			status_compose(False, 0, KT_STD);
-		}
-		return;
-	    case FIRST:
-		composing = NONE;
-		status_compose(False, 0, KT_STD);
-		for (i = 0; i < n_composites; i++)
-			if ((ak_eq(composites[i].k1, cc_first) &&
-			     ak_eq(composites[i].k2, ak)) ||
-			    (ak_eq(composites[i].k1, ak) &&
-			     ak_eq(composites[i].k2, cc_first)))
-				break;
-		if (i < n_composites) {
-			c = composites[i].translation.keysym;
-			keytype = composites[i].translation.keytype;
-		} else {
-			lib3270_ring_bell();
-			return;
-		}
-		break;
-	}
-*/
-
-	trace_event(" %s -> Key(\"%s\")\n",
-	    ia_name[(int) cause], ctl_see((int) c));
-	if (IN_3270) {
-		if (c < ' ') {
+	if (IN_3270)
+	{
+		if (c < ' ')
+		{
 			trace_event("  dropped (control char)\n");
 			return;
 		}
-		(void) key_Character((int) asc2ebc[c], keytype == KT_GE, False,
-				     skipped);
+		(void) key_Character((int) asc2ebc[c], keytype == KT_GE, False, skipped);
 	}
 #if defined(X3270_ANSI) /*[*/
-	else if (IN_ANSI) {
+	else if (IN_ANSI)
+	{
 		net_sendc((char) c);
 	}
 #endif /*]*/
-	else {
+	else
+	{
 		trace_event("  dropped (not connected)\n");
 	}
 }
@@ -1533,7 +1485,7 @@ do_reset(Boolean explicit)
 	}
 
 	/* Always clear insert mode. */
-	set_toggle(INSERT,0);
+	lib3270_set_toggle(&h3270,LIB3270_TOGGLE_INSERT,0);
 
 	/* Otherwise, if not connect, reset is a no-op. */
 	if (!CONNECTED)

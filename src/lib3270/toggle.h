@@ -59,14 +59,14 @@
 	#define AID_WAIT			LIB3270_TOGGLE_AID_WAIT
 	#define FULL_SCREEN			LIB3270_TOGGLE_FULL_SCREEN
 	#define RECONNECT			LIB3270_TOGGLE_RECONNECT
-	#define INSERT				LIB3270_TOGGLE_INSERT
+//	#define INSERT				LIB3270_TOGGLE_INSERT
 	#define KEYPAD				LIB3270_TOGGLE_KEYPAD
 	#define SMART_PASTE			LIB3270_TOGGLE_SMART_PASTE
 	#define N_TOGGLES			LIB3270_TOGGLE_COUNT
 
 	#define LIB3270_TOGGLE_ID LIB3270_TOGGLE
 
-	#define register_3270_toggle_monitor(ix,callback) lib3270_register_tchange(NULL,ix,callback)
+//	#define register_3270_toggle_monitor(ix,callback) lib3270_register_tchange(NULL,ix,callback)
 	#define get_3270_toggle_by_name(x)	  lib3270_get_toggle_id(x)
 
 	// Compatibility macros
@@ -75,7 +75,7 @@
 
 	#define get_3270_toggle_name(ix)	lib3270_get_toggle_name(ix)
 	#define get_toggle_name(ix)			lib3270_get_toggle_name(ix)
-	#define set_toggle(ix,value)		lib3270_set_toggle(NULL,ix,value)
+//	#define set_toggle(ix,value)		lib3270_set_toggle(NULL,ix,value)
 	#define get_toggle_by_name(name)	lib3270_get_toggle_id(name)
 
 #endif /* TOGGLE3270_H_INCLUDED */
