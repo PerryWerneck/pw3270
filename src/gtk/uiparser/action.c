@@ -97,6 +97,12 @@
 		{
 			g_object_set_data_full(G_OBJECT(action),"accel_attr",g_strdup(value[f]),g_free);
 		}
+		else if(!g_strcasecmp(name[f],"target"))
+		{
+		}
+		else if(!g_strcasecmp(name[f],"direction"))
+		{
+		}
 		else if(!g_strcasecmp(name[f],"id"))
 		{
 			g_object_set_data(G_OBJECT(action),"action_id",(gpointer) atoi(value[f]));

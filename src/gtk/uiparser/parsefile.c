@@ -139,7 +139,9 @@
 
  static GtkAction * get_action(const gchar *name, struct parser *info, const gchar **names, const gchar **values, GError **error)
  {
-	const gchar	* id = ui_get_attribute("id",names,values);
+	const gchar * target   	= NULL;
+	const gchar * direction	= NULL;
+	const gchar	* id		= ui_get_attribute("id",names,values);
 	GtkAction	* action;
 	gchar		* nm;
 	void		  (*connect)(GtkAction *action, GtkWidget *widget, const gchar *name, const gchar *id)		= ui_connect_action;
@@ -150,6 +152,19 @@
 		nm 		= g_strconcat(name,id,NULL);
 		create	= (GtkAction * (*)(const gchar *,const gchar *,const gchar *,const gchar *)) gtk_toggle_action_new;
 		connect = ui_connect_toggle;
+	}
+	else if(!g_strcasecmp(name,"move"))
+	{
+		const gchar *target    = ui_get_attribute("target",names,values);
+		const gchar *direction = ui_get_attribute("direction",names,values);
+
+		if(!(target && direction))
+		{
+			*error = g_error_new(ERROR_DOMAIN,EINVAL,"%s",_("Move action needs target & direction attributes" ));
+			return NULL;
+		}
+
+		nm = g_strconcat("move",target,direction,NULL);
 	}
 	else if(!g_strcasecmp(name,"toggleset"))
 	{
@@ -201,6 +216,8 @@
 			ui_connect_index_action(info->action[ix] = action,info->center_widget,ix,info->action);
 		else if(g_strcasecmp(name,"quit"))
 			connect(action,info->center_widget,name,id);
+		else if(target)
+			ui_connect_target_action(action,info->center_widget,target,direction,error);
 		else
 			g_signal_connect(action,"activate",G_CALLBACK(gtk_main_quit), NULL);
 

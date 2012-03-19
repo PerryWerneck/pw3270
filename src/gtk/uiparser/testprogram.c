@@ -30,6 +30,11 @@ void ui_connect_action(GtkAction *action, GtkWidget *widget, const gchar *name, 
 	g_signal_connect(action,"activate",G_CALLBACK(activated),widget);
 }
 
+void ui_connect_target_action(GtkAction *action, GtkWidget *widget, const gchar *target, const gchar *direction, GError **error)
+{
+	g_signal_connect(action,"activate",G_CALLBACK(activated),widget);
+}
+
 void ui_connect_toggle(GtkAction *action, GtkWidget *widget, const gchar *name, const gchar *id)
 {
 	trace("Connecting action %s with toggle %s and widget %p",gtk_action_get_name(action),id,widget);
