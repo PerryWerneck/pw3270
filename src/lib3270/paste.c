@@ -81,6 +81,7 @@
 #include "api.h"
 
 #include <lib3270/popup.h>
+#include <lib3270/selection.h>
 
 /*---[ Struct ]-------------------------------------------------------------------------------------------------*/
 
@@ -234,7 +235,7 @@ LIB3270_EXPORT int lib3270_set_string(H3270 *h, const unsigned char *str)
 	return data.qtd;
 }
 
-LIB3270_EXPORT int lib3270_paste(H3270 *h, const char *str)
+LIB3270_EXPORT int lib3270_paste(H3270 *h, const unsigned char *str)
 {
 	int sz;
 	CHECK_SESSION_HANDLE(h);
@@ -262,9 +263,9 @@ LIB3270_EXPORT int lib3270_paste(H3270 *h, const char *str)
 		return 0;
 	}
 
-	if(strlen(str) > sz)
+	if(strlen((char *) str) > sz)
 	{
-		h->paste_buffer = strdup(str+sz);
+		h->paste_buffer = strdup((char *) (str+sz));
 		return 1;
 	}
 
@@ -287,7 +288,7 @@ LIB3270_EXPORT int lib3270_pastenext(H3270 *h)
 	ptr = h->paste_buffer;
 	h->paste_buffer = NULL;
 
-	rc = lib3270_paste(h,ptr);
+	rc = lib3270_paste(h,(unsigned char *) ptr);
 
 	free(ptr);
 	return rc;

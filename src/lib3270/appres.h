@@ -24,18 +24,21 @@
 
 /* Toggles */
 
+/*
 struct toggle {
-	char	value;		/* toggle value */
-//	char	changed;	/* has the value changed since init */
-//	Widget	w[2];		/* the menu item widgets */
-//	const char *label[2];	/* labels */
-	void (*upcall)(H3270 *, struct toggle *, LIB3270_TOGGLE_TYPE); /* change value */
+	char	value;		// toggle value
+//	char	changed;	// has the value changed since init
+//	Widget	w[2];		// the menu item widgets
+//	const char *label[2];	// labels
+	void (*upcall)(H3270 *, struct toggle *, LIB3270_TOGGLE_TYPE); // change value
 //	void (*callback)(H3270 *, int, LIB3270_TOGGLE_TYPE);
 
 };
 
-#define toggled(ix)		(appres.toggle[ix].value)
 // #define toggle_toggle(t) { (t)->value = !(t)->value; }
+*/
+
+#define toggled(ix)		lib3270_get_toggle(NULL,ix)
 
 /* Application resources */
 
@@ -184,7 +187,7 @@ typedef struct {
 	char	*proxy;
 
 	/* Toggles */
-	struct toggle toggle[N_TOGGLES];
+//	struct toggle toggle[N_TOGGLES];
 /*
 #if defined(X3270_DISPLAY)
 	// Simple widget resources
@@ -234,4 +237,4 @@ extern AppRes appres;
 #define N_( x ) x
 #define MSG_( c, s )	s
 
-void toggle_rectselect(H3270 *session, struct toggle *t, LIB3270_TOGGLE_TYPE tt);
+void toggle_rectselect(H3270 *session, struct lib3270_toggle *t, LIB3270_TOGGLE_TYPE tt);

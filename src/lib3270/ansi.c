@@ -1825,7 +1825,7 @@ ansi_send_pa(int nn)
 	net_sends(fn_buf);
 }
 
-void toggle_lineWrap(H3270 *session, struct toggle *t unused, LIB3270_TOGGLE_TYPE type unused)
+void toggle_lineWrap(H3270 *session, struct lib3270_toggle *t unused, LIB3270_TOGGLE_TYPE type unused)
 {
 	if (toggled(LIB3270_TOGGLE_LINE_WRAP))
 		wraparound_mode = 1;

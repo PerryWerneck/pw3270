@@ -34,6 +34,8 @@
  #include <lib3270/session.h>
  #include <lib3270/selection.h>
 
+ static void update_selection(H3270 *session);
+
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
 static void get_selected_addr(H3270 *session, int *begin, int *end)
@@ -156,7 +158,7 @@ static void set_selected(H3270 *session)
 	session->set_selection(session,1);
 }
 
-void toggle_rectselect(H3270 *session, struct toggle *t, LIB3270_TOGGLE_TYPE tt)
+void toggle_rectselect(H3270 *session, struct lib3270_toggle *t, LIB3270_TOGGLE_TYPE tt)
 {
 	if(!session->selected)
 		return;
@@ -303,7 +305,7 @@ LIB3270_ACTION( reselect )
 	CHECK_SESSION_HANDLE(hSession);
 
 	if(!lib3270_connected(hSession) || hSession->select.begin == hSession->select.end || hSession->selected)
-		return;
+		return 0;
 
 	update_selection(hSession);
 	set_selected(hSession);

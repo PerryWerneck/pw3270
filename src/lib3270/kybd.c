@@ -2274,11 +2274,11 @@ LIB3270_ACTION( dup )
 	if (kybdlock)
 	{
 		ENQUEUE_ACTION(lib3270_enter);
-		return;
+		return 0;
 	}
 #if defined(X3270_ANSI)
 	if (IN_ANSI)
-		return;
+		return 0;
 #endif
 	if (key_Character(EBC_dup, False, False, NULL))
 		cursor_move(next_unprotected(hSession->cursor_addr));

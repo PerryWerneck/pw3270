@@ -49,7 +49,7 @@
 	 * @return Non 0 if there's more to paste with lib3270_pastenext
 	 *
 	 */
-	 LIB3270_EXPORT int lib3270_paste(H3270 *h, const char *str);
+	 LIB3270_EXPORT int lib3270_paste(H3270 *h, const unsigned char *str);
 
 	 /**
 	  * Paste remaining string.

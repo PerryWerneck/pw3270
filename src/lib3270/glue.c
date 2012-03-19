@@ -127,7 +127,7 @@ static void initialize(void)
 
 	h3270.selected = 0;
 	h3270.select.begin = h3270.select.end = 0;
-	initialize_toggles(&h3270,appres.toggle);
+//	initialize_toggles(&h3270);
 
 #if defined(_WIN32)
 	(void) get_version_info();
@@ -148,11 +148,13 @@ static void initialize(void)
 	appres.modified_sel = False;
 	appres.apl_mode = False;
 
-#if defined(C3270) || defined(TCL3270) /*[*/
-//	appres.scripted = False;
-#else /*][*/
+/*
+#if defined(C3270) || defined(TCL3270)
+	appres.scripted = False;
+#else
 	appres.scripted = True;
-#endif /*]*/
+#endif
+*/
 
 	appres.numeric_lock = False;
 //	appres.secure = False;
@@ -193,9 +195,11 @@ static void initialize(void)
 	appres.trace_dir = "/tmp";
 #endif /*]*/
 
-#if defined(X3270_DISPLAY) || defined(WC3270) /*[*/
+/*
+#if defined(X3270_DISPLAY) || defined(WC3270)
 	appres.trace_monitor = True;
-#endif /*]*/
+#endif
+*/
 
 #endif /*]*/
 
@@ -227,17 +231,23 @@ static void initialize(void)
 	appres.dft_buffer_size = DFT_BUF;
 #endif /*]*/
 
-#if defined(C3270) && !defined(LIB3270) /*[*/
+/*
+#if defined(C3270) && !defined(LIB3270)
 	appres.toggle[CURSOR_POS].value = True;
-#endif /*]*/
+#endif
+*/
 
-#if defined(X3270_SCRIPT) || defined(TCL3270) /*[*/
+/*
+#if defined(X3270_SCRIPT) || defined(TCL3270)
 	appres.toggle[AID_WAIT].value = True;
-#endif /*]*/
+#endif
+*/
 
-#if defined(C3270) && defined(X3270_SCRIPT) /*[*/
+/*
+#if defined(C3270) && defined(X3270_SCRIPT)
 	appres.plugin_command = "x3270hist.pl";
-#endif /*]*/
+#endif
+*/
 
 #if defined(C3270) && defined(_WIN32) /*[*/
 	appres.highlight_underline = True;

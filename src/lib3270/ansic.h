@@ -29,7 +29,7 @@ LIB3270_INTERNAL void ansi_send_pa(int nn);
 LIB3270_INTERNAL void ansi_send_pf(int nn);
 LIB3270_INTERNAL void ansi_send_right(void);
 LIB3270_INTERNAL void ansi_send_up(void);
-LIB3270_INTERNAL void toggle_lineWrap(H3270 *session, struct toggle *t, LIB3270_TOGGLE_TYPE type);
+LIB3270_INTERNAL void toggle_lineWrap(H3270 *session, struct lib3270_toggle *t, LIB3270_TOGGLE_TYPE type);
 
 #else /*][*/
 

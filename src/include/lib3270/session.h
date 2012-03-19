@@ -55,81 +55,89 @@
 		unsigned short attr;	/**< Converted character attribute (color & etc) */
 	};
 
+	struct lib3270_toggle
+	{
+		char value;				/**< toggle value */
+		void (*upcall)(H3270 *, struct lib3270_toggle *, LIB3270_TOGGLE_TYPE); /**< change value */
+	};
+
 	struct _h3270
 	{
-		unsigned short 	  	  sz;					/**< Struct size */
+		unsigned short 		  	  sz;					/**< Struct size */
 
 		// Connection info
-		int					  secure_connection;
-		int      			  sock;					/**< Network socket */
-		int					  net_sock;
-		LIB3270_CSTATE		  cstate;				/**< Connection state */
+		int						  secure_connection;
+		int   	 	  			  sock;					/**< Network socket */
+		int						  net_sock;
+		LIB3270_CSTATE			  cstate;				/**< Connection state */
 
-		#if defined(_WIN32) /*[*/
-		HANDLE				  sock_handle;
-		#endif /*]*/
+		#if defined(_WIN32)
+		HANDLE					  sock_handle;
+		#endif
 
 		// flags
-		int					  selected	: 1;
+		int					  	  selected	: 1;
+
+		struct lib3270_toggle	  toggle[LIB3270_TOGGLE_COUNT];
 
 		// Network & Termtype
-		char    			* hostname;
-		char				* connected_type;
-		char				* connected_lu;
-		char				  luname[LIB3270_LUNAME_LENGTH+1];
+		char   		 			* hostname;
+		char					* connected_type;
+		char					* connected_lu;
+		char					  luname[LIB3270_LUNAME_LENGTH+1];
 
-		char				  full_model_name[LIB3270_FULL_MODEL_NAME_LENGTH+1];
-		char				* model_name;
-		int					  model_num;
-		char       	    	* termtype;
+		char					  full_model_name[LIB3270_FULL_MODEL_NAME_LENGTH+1];
+		char					* model_name;
+		int						  model_num;
+		char  	     	    	* termtype;
 
-		char				* current_host;			/**< the hostname part, stripped of qualifiers, luname and port number */
-		char           		* full_current_host;	/**< the entire string, for use in reconnecting */
-		char	       		* reconnect_host;
-		char	       		* qualified_host;
-		char	 			  auto_reconnect_inprogress;
+		char					* current_host;			/**< the hostname part, stripped of qualifiers, luname and port number */
+		char 	          		* full_current_host;	/**< the entire string, for use in reconnecting */
+		char		       		* reconnect_host;
+		char		       		* qualified_host;
+		char		 			  auto_reconnect_inprogress;
 
-		LIB3270_MESSAGE		  oia_status;
+		LIB3270_MESSAGE			  oia_status;
 
-		unsigned char 		  oia_flag[LIB3270_FLAG_COUNT];
+		unsigned char	 		  oia_flag[LIB3270_FLAG_COUNT];
 
-		unsigned short		  current_port;
+		unsigned short			  current_port;
 
 		// screen info
-		char				* charset;
-		int					  ov_rows;
-		int					  ov_cols;
-		int					  maxROWS;
-		int					  maxCOLS;
-		unsigned short		  rows;
-		unsigned short		  cols;
-		int					  cursor_addr;
-		int					  buffer_addr;
-		char				  flipped;
-		int					  screen_alt;			/**< alternate screen? */
-		int					  is_altbuffer;
+		char					* charset;
+		int						  ov_rows;
+		int						  ov_cols;
+		int						  maxROWS;
+		int						  maxCOLS;
+		unsigned short			  rows;
+		unsigned short			  cols;
+		int						  cursor_addr;
+		int						  buffer_addr;
+		char					  flipped;
+		int						  screen_alt;			/**< alternate screen? */
+		int						  is_altbuffer;
 
-		int					  formatted;			/**< set in screen_disp */
+		int						  formatted;			/**< set in screen_disp */
 
 		// Screen contents
-		void 				* buffer[2];			/**< Internal buffers */
-		struct ea      		* ea_buf;				/**< 3270 device buffer. ea_buf[-1] is the dummy default field attribute */
-		struct ea 			* aea_buf;				/** alternate 3270 extended attribute buffer */
-		struct lib3270_text	* text;					/**< Converted 3270 chars */
+		void 					* buffer[2];			/**< Internal buffers */
+		struct ea  	    		* ea_buf;				/**< 3270 device buffer. ea_buf[-1] is the dummy default field attribute */
+		struct ea 				* aea_buf;				/** alternate 3270 extended attribute buffer */
+		struct lib3270_text		* text;					/**< Converted 3270 chars */
 
 		// host.c
-		char 				  std_ds_host;
-		char 				  no_login_host;
-		char 				  non_tn3270e_host;
-		char 				  passthru_host;
-		char 				  ssl_host;
-		char 				  ever_3270;
+		char	 				  std_ds_host;
+		char 					  no_login_host;
+		char 					  non_tn3270e_host;
+		char 					  passthru_host;
+		char 					  ssl_host;
+		char 					  ever_3270;
 
 		// Widget info
-		void				* widget;
+		void					* widget;
 
 		// selection
-		char				* paste_buffer;
+		char					* paste_buffer;
 		struct
 		{
 			int begin;
@@ -137,10 +145,10 @@
 		} select;
 
 		// xio
-		unsigned long		  ns_read_id;
-		unsigned long		  ns_exception_id;
-		char				  reading;
-		char				  excepting;
+		unsigned long			  ns_read_id;
+		unsigned long			  ns_exception_id;
+		char					  reading;
+		char					  excepting;
 
 		// State change callbacks.
 		struct lib3270_state_callback *st_callbacks[LIB3270_STATE_USER];

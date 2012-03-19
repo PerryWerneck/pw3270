@@ -196,6 +196,30 @@ static void setup_single_char_right(GdkRectangle *rect, struct v3270_metrics *me
 
 }
 
+static void setup_insert_position(GdkRectangle *rect, struct v3270_metrics *metrics, cairo_t *cr, H3270 *host, int cols, GdkColor *color)
+{
+	if(rect->width > rect->height)
+	{
+		rect->width = rect->height;
+	}
+	else if(rect->height > rect->width)
+	{
+		rect->y += (rect->height - rect->width)/2;
+		rect->height = rect->width;
+	}
+
+	rect->x -= rect->width;
+
+#ifdef DEBUG
+	cairo_set_source_rgb(cr,0.1,0.1,0.1);
+	cairo_rectangle(cr, rect->x, rect->y, rect->width, rect->height);
+	cairo_fill(cr);
+#endif
+
+}
+
+
+
 static void setup_double_char_position(GdkRectangle *rect, struct v3270_metrics *metrics, cairo_t *cr, H3270 *host, int cols, GdkColor *color)
 {
 	rect->width <<= 1;
@@ -429,6 +453,9 @@ static void draw_insert(cairo_t *cr, H3270 *host, GdkColor *color, GdkRectangle 
 	{
 		double y = rect->y+(rect->height-2);
 
+		cairo_rectangle(cr, rect->x, rect->y, rect->width, rect->height);
+		cairo_clip(cr);
+
 		gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_FOREGROUND);
 
 		cairo_move_to(cr,rect->x,y);
@@ -453,7 +480,7 @@ void v3270_draw_oia(cairo_t *cr, H3270 *host, int row, int cols, struct v3270_me
 		{ V3270_OIA_LUNAME, 			setup_luname_position		},
 		{ V3270_OIA_PRINTER,			setup_single_char_right		},
 		{ V3270_OIA_SCRIPT,				setup_single_char_right		},
-		{ V3270_OIA_INSERT,				setup_single_char_right		},
+		{ V3270_OIA_INSERT,				setup_insert_position		},
 		{ V3270_OIA_TYPEAHEAD,			setup_single_char_right		},
 		{ V3270_OIA_SHIFT,				setup_double_char_position	},
 		{ V3270_OIA_CAPS,				setup_single_char_right		},

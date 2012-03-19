@@ -49,7 +49,7 @@ void lib3270_session_free(H3270 *h)
 	if(lib3270_connected(h))
 		lib3270_disconnect(h);
 
-	shutdown_toggles(h,appres.toggle);
+	shutdown_toggles(h);
 
 	// Release state change callbacks
 	for(f=0;f<N_ST;f++)
@@ -111,6 +111,9 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 
 	memset(hSession,0,sizeof(H3270));
 	hSession->sz = sizeof(H3270);
+
+	// Initialize toggles
+	initialize_toggles(hSession);
 
 	// Dummy calls to avoid "ifs"
 	hSession->update 		= update_char;

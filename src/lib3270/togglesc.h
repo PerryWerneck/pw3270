@@ -25,5 +25,5 @@
 
 // extern const char *toggle_names[N_TOGGLES];
 
- LIB3270_INTERNAL void initialize_toggles(H3270 *session, struct toggle *toggle);
- LIB3270_INTERNAL void shutdown_toggles(H3270 *session, struct toggle *toggle);
+ LIB3270_INTERNAL void initialize_toggles(H3270 *session);
+ LIB3270_INTERNAL void shutdown_toggles(H3270 *session);
