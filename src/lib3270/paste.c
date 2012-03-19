@@ -99,7 +99,7 @@
  * Move the cursor back within the legal paste area.
  * Returns a Boolean indicating success.
  */
- static int remargin(int lmargin)
+ static int remargin(H3270 *session, int lmargin)
  {
 	int ever = False;
 	int baddr, b0 = 0;
@@ -108,7 +108,7 @@
 
 	if(toggled(MARGINED_PASTE))
 	{
-		baddr = h3270.cursor_addr;
+		baddr = session->cursor_addr;
 		while(BA_TO_COL(baddr) < lmargin)
 		{
 			baddr = ROWCOL_TO_BA(BA_TO_ROW(baddr), lmargin);
@@ -118,8 +118,8 @@
 				ever = True;
 			}
 
-			faddr = find_field_attribute(&h3270,baddr);
-			fa = h3270.ea_buf[faddr].fa;
+			faddr = find_field_attribute(session,baddr);
+			fa = session->ea_buf[faddr].fa;
 			if (faddr == baddr || FA_IS_PROTECTED(fa))
 			{
 				baddr = next_unprotected(baddr);
@@ -152,12 +152,12 @@
 
 	data->qtd++;
 
- 	if(BA_TO_ROW(h3270.cursor_addr) != data->row)
+ 	if(BA_TO_ROW(session->cursor_addr) != data->row)
  	{
- 		Trace("Row changed from %d to %d",data->row,BA_TO_ROW(h3270.cursor_addr));
-		if(!remargin(data->orig_col))
+ 		Trace("Row changed from %d to %d",data->row,BA_TO_ROW(session->cursor_addr));
+		if(!remargin(session,data->orig_col))
 			return 0;
-		data->row = BA_TO_ROW(h3270.cursor_addr);
+		data->row = BA_TO_ROW(session->cursor_addr);
  		return '\n';
  	}
 
@@ -177,9 +177,6 @@ LIB3270_EXPORT int lib3270_set_string(H3270 *h, const unsigned char *str)
 {
 	PASTE_DATA data;
 	unsigned char last = 1;
-	int baddr;
-	int faddr;
-	unsigned char fa;
 
 	CHECK_SESSION_HANDLE(h);
 
@@ -204,10 +201,14 @@ LIB3270_EXPORT int lib3270_set_string(H3270 *h, const unsigned char *str)
 		case '\n':
 			if(last != '\n')
 			{
+				int baddr;
+				int faddr;
+				unsigned char fa;
+
 				baddr = (h->cursor_addr + h->cols) % (h->cols * h->rows);   /* down */
 				baddr = (baddr / h->cols) * h->cols;               /* 1st col */
 				faddr = find_field_attribute(h,baddr);
-				fa = h3270.ea_buf[faddr].fa;
+				fa = h->ea_buf[faddr].fa;
 				if (faddr != baddr && !FA_IS_PROTECTED(fa))
 					cursor_move(baddr);
 				else
@@ -226,12 +227,16 @@ LIB3270_EXPORT int lib3270_set_string(H3270 *h, const unsigned char *str)
 
 		if(IN_3270 && toggled(MARGINED_PASTE) && BA_TO_COL(h->cursor_addr) < data.orig_col)
 		{
-			if(!remargin(data.orig_col))
+			if(!remargin(h,data.orig_col))
 				last = 0;
 		}
+
+		if(h->cursor_addr == data.orig_addr)
+			break;
 	}
 
 	h->resume(h);
+
 	return data.qtd;
 }
 

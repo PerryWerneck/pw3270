@@ -123,6 +123,7 @@
 	gtk_action_group_set_sensitive(group[ACTION_GROUP_OFFLINE],TRUE);
  }
 
+/*
 #ifndef WIN32
  static void clipboard_text_check(GtkClipboard *clipboard, const gchar *text, GtkActionGroup **group)
  {
@@ -130,18 +131,22 @@
 	gtk_action_group_set_sensitive(group[ACTION_GROUP_PASTE],text != NULL);
  }
 #endif
+*/
 
  static void connected(GtkWidget *widget, GtkActionGroup **group)
  {
 	gtk_action_group_set_sensitive(group[ACTION_GROUP_ONLINE],TRUE);
 	gtk_action_group_set_sensitive(group[ACTION_GROUP_OFFLINE],FALSE);
+	gtk_action_group_set_sensitive(group[ACTION_GROUP_PASTE],TRUE);
 
+/*
 #ifdef WIN32
 	gtk_action_group_set_sensitive(group[ACTION_GROUP_PASTE],TRUE);
 #else
 	gtk_action_group_set_sensitive(group[ACTION_GROUP_PASTE],FALSE);
 	gtk_clipboard_request_text(gtk_widget_get_clipboard(widget,GDK_SELECTION_CLIPBOARD),(GtkClipboardTextReceivedFunc) clipboard_text_check,(gpointer) group);
 #endif
+*/
 
  }
 
@@ -191,6 +196,11 @@
 	if(action[ACTION_RESELECT])
 		gtk_action_set_sensitive(action[ACTION_RESELECT],!on);
 
+ }
+
+ static void pastenext(GtkWidget *widget, gboolean on, GtkAction **action)
+ {
+	gtk_action_set_sensitive(action[ACTION_PASTENEXT],on);
  }
 
  static void setup_input_method(GtkWidget *widget, GtkWidget *obj)
@@ -316,7 +326,10 @@
 		gtk_action_set_visible(action[ACTION_UNFULLSCREEN],lib3270_get_toggle(host,LIB3270_TOGGLE_FULL_SCREEN));
 
 	if(action[ACTION_PASTENEXT])
+	{
 		gtk_action_set_sensitive(action[ACTION_PASTENEXT],FALSE);
+		g_signal_connect(terminal,"pastenext",G_CALLBACK(pastenext),action);
+	}
 
 	if(action[ACTION_RESELECT])
 		gtk_action_set_sensitive(action[ACTION_RESELECT],FALSE);

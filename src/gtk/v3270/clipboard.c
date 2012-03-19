@@ -227,6 +227,8 @@ void v3270_paste_string(GtkWidget *widget, const gchar *text, const gchar *encod
 
 	next = lib3270_paste(session,buffer) ? TRUE : FALSE;
 
+	trace("Pastenext is %s",next ? "On" : "Off");
+
 	g_free(buffer);
 
 	g_signal_emit(widget,v3270_widget_signal[SIGNAL_PASTENEXT], 0, next);
