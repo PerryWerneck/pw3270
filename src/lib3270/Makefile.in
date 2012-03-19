@@ -57,6 +57,7 @@ STRIP=@STRIP@
 INSTALL=@INSTALL@
 INSTALL_PROGRAM=@INSTALL_PROGRAM@
 INSTALL_DATA=@INSTALL_DATA@
+VALGRIND=@VALGRIND@
 
 #---[       ]------------------------------------------------------------------
 
@@ -116,6 +117,23 @@ $(BINRLS)/@DLLPREFIX@3270@DLLEXT@: $(foreach SRC, $(basename $(SOURCES)), $(OBJR
 	@$(MKDIR) `dirname $@`
 	@$(LD) $(DLL_FLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
 	@$(STRIP) $@
+
+$(BINDIR)/Debug/testprogram$(EXEEXT): testprogram.o $(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC)@OBJEXT@)
+
+	@echo $@ ...
+	@$(MKDIR) `dirname $@`
+	$(LD) -o $@ $^ $(LIBS)
+
+
+run: $(BINDBG)/testprogram$(EXEEXT)
+	$(BINDBG)/testprogram$(EXEEXT)
+
+memchk: $(BINDBG)/testprogram$(EXEEXT)
+ifeq ($(VALGRIND),no)
+	@cd "$(ROOTDIR)" ; .bin/Debug/testprogram$(EXEEXT)
+else
+	@cd "$(ROOTDIR)" ; G_DEBUG=gc-friendly G_SLICE=always-malloc \$(VALGRIND) --leak-check=full --gen-suppressions=all $(BINDBG)/testprogram$(EXEEXT)
+endif
 
 version.c: ./mkversion.sh
 	@echo $@ ...
