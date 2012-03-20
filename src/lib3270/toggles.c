@@ -222,14 +222,15 @@ LIB3270_EXPORT const char * lib3270_get_toggle_name(LIB3270_TOGGLE_ID ix)
 
 LIB3270_EXPORT LIB3270_TOGGLE lib3270_get_toggle_id(const char *name)
 {
-	int f;
-
-	for(f=0;f<N_TOGGLES;f++)
+	if(name)
 	{
-		if(!strcasecmp(name,toggle_names[f]))
-			return f;
+		int f;
+		for(f=0;f<N_TOGGLES;f++)
+		{
+			if(!strcasecmp(name,toggle_names[f]))
+				return f;
+		}
 	}
-
 	return -1;
 }
 

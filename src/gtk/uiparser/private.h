@@ -69,8 +69,6 @@
 	const UI_WIDGET_SETUP	*  setup;
  };
 
- const gchar	* ui_get_attribute(const gchar *key, const gchar **name, const gchar **value);
- gboolean		  ui_get_bool_attribute(const gchar *key, const gchar **name, const gchar **value, gboolean def);
  int 			  ui_parse_file(struct parser *info, const gchar *filename);
  void 			  ui_action_set_options(GtkAction *action, struct parser *info, const gchar **names, const gchar **values, GError **error);
 

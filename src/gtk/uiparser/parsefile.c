@@ -139,32 +139,33 @@
 
  static GtkAction * get_action(const gchar *name, struct parser *info, const gchar **names, const gchar **values, GError **error)
  {
+ 	GtkAction *action;
+
+ 	if(!g_strcasecmp(name,"quit"))
+	{
+		action = g_hash_table_lookup(info->actions,name);
+		if(!action)
+		{
+			action = gtk_action_new(name,NULL,NULL,NULL);
+			g_signal_connect(action,"activate",G_CALLBACK(gtk_main_quit), NULL);
+		}
+	}
+ 	else
+	{
+		action = ui_get_action(info->center_widget,name,info->actions,names,values,error);
+	}
+
+	if(!action)
+		return action;
+
+/*
 	const gchar		* target   	= NULL;
 	const gchar		* direction	= ui_get_attribute("direction",names,values);
 	const gchar		* id		= ui_get_attribute("id",names,values);
-	unsigned short	  flags		= 0;
 	GtkAction		* action;
 	gchar			* nm;
 	void			  (*connect)(GtkAction *action, GtkWidget *widget, const gchar *name, const gchar *id)		= ui_connect_action;
 	GtkAction		* (*create)(const gchar *,const gchar *,const gchar *,const gchar *)						= gtk_action_new;
-
-	if(direction)
-	{
-		static const gchar *dirname[] = {	"up", "down", "left", "right" };
-		int f;
-
-		for(f=0;f<G_N_ELEMENTS(dirname);f++)
-		{
-			if(!g_strcasecmp(direction,dirname[f]))
-			{
-				flags |= f;
-				break;
-			}
-		}
-	}
-
-	if(ui_get_bool_attribute("selecting",names,values,FALSE))
-		flags |= 0x80;
 
 	if(!g_strcasecmp(name,"toggle"))
 	{
@@ -241,7 +242,7 @@
 			g_signal_connect(action,"activate",G_CALLBACK(gtk_main_quit), NULL);
 
 	}
-
+*/
 	ui_action_set_options(action,info,names,values,error);
 
 	return action;

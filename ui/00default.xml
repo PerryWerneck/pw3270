@@ -93,22 +93,22 @@
 			<menuitem name='ScreenSizes' group='offline' label='Screen size' />
 
 			<menu name='OptionsMenu' label='_Options' >
-				<menuitem action='Toggle' id='AutoConnect' label='Connect on startup' />
-				<menuitem action='Toggle' id='CursorBlink' label='Blinking Cursor' />
-				<menuitem action='Toggle' id='Monocase' label='Monocase' />
-				<menuitem action='Toggle' id='CursorPos'  label='Track Cursor' />
-				<menuitem action='Toggle' id='FullScreen' key='<alt>Home' label='Full Screen' />
-				<menuitem action='Toggle' id='MarginedPaste'  label='Paste with left margin' />
-				<menuitem action='Toggle' id='CrossHair' key='<alt>x' label='Cross Hair Cursor' />
-				<menuitem action='Toggle' id='BlankFill' label='Blank Fill' />
-				<menuitem action='Toggle' id='RectSelect'  label='Select by rectangles' />
-				<menuitem action='Toggle' id='Reconnect' label='Auto-Reconnect'  />
-				<menuitem action='Toggle' id='Bold' label='Bold'  />
-				<menuitem action='Toggle' id='Underline' label='Show Underline'  />
-				<menuitem action='Toggle' id='KeepSelected' label='Keep selected' />
-				<menuitem action='Toggle' id='SmartPaste' label='Smart paste' />
-				<menuitem action='Toggle' id='Beep' label='Alert sound' />
-				<menuitem action='Toggle' id='KPAlternative' label='Use +/- for field navigation' />
+				<menuitem action='toggle' id='AutoConnect' label='Connect on startup' />
+				<menuitem action='toggle' id='CursorBlink' label='Blinking Cursor' />
+				<menuitem action='toggle' id='Monocase' label='Monocase' />
+				<menuitem action='toggle' id='CursorPos'  label='Track Cursor' />
+				<menuitem action='toggle' id='FullScreen' key='<alt>Home' label='Full Screen' />
+				<menuitem action='toggle' id='MarginedPaste'  label='Paste with left margin' />
+				<menuitem action='toggle' id='CrossHair' key='<alt>x' label='Cross Hair Cursor' />
+				<menuitem action='toggle' id='BlankFill' label='Blank Fill' />
+				<menuitem action='toggle' id='RectSelect'  label='Select by rectangles' />
+				<menuitem action='toggle' id='Reconnect' label='Auto-Reconnect'  />
+				<menuitem action='toggle' id='Bold' label='Bold'  />
+				<menuitem action='toggle' id='Underline' label='Show Underline'  />
+				<menuitem action='toggle' id='KeepSelected' label='Keep selected' />
+				<menuitem action='toggle' id='SmartPaste' label='Smart paste' />
+				<menuitem action='toggle' id='Beep' label='Alert sound' />
+				<menuitem action='toggle' id='KPAlternative' label='Use +/- for field navigation' />
 			</menu>
 
 			<!--- Special action - InputMethod menu will be populated with Gtk input_method menu items --->
@@ -133,8 +133,8 @@
 		<toolitem action='Disconnect' />
 
 		<separator/>
-		<toolitem action='ToggleSet' id='FullScreen' icon='fullscreen' label='Full Screen' />
-		<toolitem action='ToggleReset' id='FullScreen' icon='leave-fullscreen' label='Window' />
+		<toolitem action='set' toggle='fullscreen' icon='fullscreen' label='Full Screen' />
+		<toolitem action='reset' toggle='fullscreen' icon='leave-fullscreen' label='Window' />
 		<toolitem action='SelectColors' />
 		<toolitem action='PrintScreen' />
 		<toolitem action='Quit' />
@@ -175,7 +175,7 @@
 	<accelerator action='Toggle' id='Insert' key='Insert' group='online' />
 
 	<accelerator action='Home' key='Home' group='online' />
-	<accelerator action='Reset' key='<Shift><Ctrl>r' group='online' />
+	<!-- accelerator action='Reset' key='<Shift><Ctrl>r' group='online' /-->
 	<accelerator action='Return' key='Return' />
 	<accelerator action='Enter' key='KP_Enter' />
 	<accelerator action='Break' key='Escape' group='online' />

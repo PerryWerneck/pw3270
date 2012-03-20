@@ -52,11 +52,16 @@
 	} UI_WIDGET_SETUP;
 
 	GtkWidget 		* ui_parse_xml_folder(const gchar *path, const gchar ** groupname, const gchar **popupname, const gchar **actionname, GtkWidget *widget, const UI_WIDGET_SETUP *itn);
-	void			  ui_connect_action(GtkAction *action, GtkWidget *widget, const gchar *name, const gchar *id);
-	void			  ui_connect_target_action(GtkAction *action, GtkWidget *widget, const gchar *target, unsigned short flags, GError **error);
-	void			  ui_connect_index_action(GtkAction *action, GtkWidget *widget, int ix, GtkAction **lst);
-	void			  ui_connect_toggle(GtkAction *action, GtkWidget *widget, const gchar *name, const gchar *id);
-	void			  ui_connect_pfkey(GtkAction *action, GtkWidget *widget, const gchar *name, const gchar *id);
-	void			  ui_connect_pakey(GtkAction *action, GtkWidget *widget, const gchar *name, const gchar *id);
+	const gchar		* ui_get_attribute(const gchar *key, const gchar **name, const gchar **value);
+	gboolean		  ui_get_bool_attribute(const gchar *key, const gchar **name, const gchar **value, gboolean def);
+	GtkAction		* ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash, const gchar **names, const gchar **values, GError **error);
+
+
+//	void			  ui_connect_action(GtkAction *action, GtkWidget *widget, const gchar *name, const gchar *id);
+//	void			  ui_connect_target_action(GtkAction *action, GtkWidget *widget, const gchar *target, unsigned short flags, GError **error);
+//	void			  ui_connect_index_action(GtkAction *action, GtkWidget *widget, int ix, GtkAction **lst);
+//	void			  ui_connect_toggle(GtkAction *action, GtkWidget *widget, const gchar *name, const gchar *id);
+//	void			  ui_connect_pfkey(GtkAction *action, GtkWidget *widget, const gchar *name, const gchar *id);
+//	void			  ui_connect_pakey(GtkAction *action, GtkWidget *widget, const gchar *name, const gchar *id);
 
 #endif // UI_PARSER_H_INCLUDED
