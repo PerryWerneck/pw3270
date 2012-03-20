@@ -14,5 +14,5 @@
 
 /* Non-display version of scrollc.h */
 
-#define scroll_save(n, trim_blanks)
-#define scroll_to_bottom()
+// #define scroll_save(n, trim_blanks)
+// #define scroll_to_bottom()

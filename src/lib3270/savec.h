@@ -14,6 +14,9 @@
 
 /* Non-display version of savec.h */
 
+/*
+
 #define save_yourself()
 
 LIB3270_INTERNAL char *command_string;
+*/

@@ -163,6 +163,8 @@ void ui_connect_toggle(GtkAction *action, GtkWidget *widget, const gchar *name, 
 
 	if(toggle != -1)
 	{
+		GtkAction **list = (GtkAction **) g_object_get_data(G_OBJECT(widget),"toggle_actions");
+		list[toggle] = action;
 		g_object_set_data(G_OBJECT(action),"toggle_id",(gpointer) toggle);
 		gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action),(lib3270_get_toggle(GTK_V3270(widget)->host,toggle) != 0));
 		g_signal_connect(action,"toggled",G_CALLBACK(lib3270_toggle_action),widget);
@@ -173,6 +175,11 @@ void ui_connect_toggle(GtkAction *action, GtkWidget *widget, const gchar *name, 
 
 	// Not found, disable action
 	gtk_action_set_sensitive(action,FALSE);
+}
+
+void ui_connect_target_action(GtkAction *action, GtkWidget *widget, const gchar *target, const gchar *direction, GError **error)
+{
+	#warning TODO: Implementar
 }
 
 static void action_pfkey(GtkAction *action, GtkWidget *widget)
@@ -208,6 +215,11 @@ static void action_unfullscreen(GtkAction *action, GtkWidget *widget)
 	lib3270_set_toggle(GTK_V3270(widget)->host,LIB3270_TOGGLE_FULL_SCREEN,0);
 }
 
+static void action_pastnext(GtkAction *action, GtkWidget *widget)
+{
+	lib3270_pastenext(GTK_V3270(widget)->host);
+}
+
 void ui_connect_pakey(GtkAction *action, GtkWidget *widget, const gchar *name, const gchar *id)
 {
 	g_object_set_data(G_OBJECT(action),"pakey",(gpointer) atoi(id));
@@ -221,6 +233,7 @@ void ui_connect_index_action(GtkAction *action, GtkWidget *widget, int ix, GtkAc
 	switch(ix)
 	{
 	case ACTION_PASTENEXT:
+		g_signal_connect(action,"activate",G_CALLBACK(action_pastnext),widget);
 		break;
 
 	case ACTION_FULLSCREEN:

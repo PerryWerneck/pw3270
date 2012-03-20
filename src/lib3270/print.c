@@ -39,7 +39,7 @@
 
 #include "appres.h"
 #include "3270ds.h"
-#include "ctlr.h"
+// #include "ctlr.h"
 
 #include "ctlrc.h"
 #include "tablesc.h"

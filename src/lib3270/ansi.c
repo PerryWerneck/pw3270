@@ -44,7 +44,7 @@
 #endif /*]*/
 
 #include "appres.h"
-#include "ctlr.h"
+// #include "ctlr.h"
 #if defined(X3270_DBCS) /*[*/
 #include "3270ds.h"
 #endif /*]*/
@@ -714,8 +714,7 @@ ansi_erase_in_display(int nn, int ig2 unused)
 		ctlr_aclear(0, h3270.cursor_addr + 1, 1);
 		break;
 	    case 2:	/* all (without moving cursor) */
-		if (h3270.cursor_addr == 0 && !h3270.is_altbuffer)
-			scroll_save(h3270.rows, True);
+//		if (h3270.cursor_addr == 0 && !h3270.is_altbuffer) scroll_save(h3270.rows, True);
 		ctlr_aclear(0, h3270.rows * h3270.cols, 1);
 		break;
 	}
@@ -1663,9 +1662,10 @@ ansi_scroll(void)
 	held_wrap = False;
 
 	/* Save the top line */
-	if (scroll_top == 1 && scroll_bottom == h3270.rows) {
-		if (!h3270.is_altbuffer)
-			scroll_save(1, False);
+	if (scroll_top == 1 && scroll_bottom == h3270.rows)
+	{
+//		if (!h3270.is_altbuffer)
+//			scroll_save(1, False);
 		ctlr_scroll();
 		return;
 	}
@@ -1720,7 +1720,7 @@ ansi_process(unsigned int c)
 	c &= 0xff;
 	ansi_ch = c;
 
-	scroll_to_bottom();
+//	scroll_to_bottom();
 
 #if defined(X3270_TRACE) /*[*/
 	if (toggled(SCREEN_TRACE))

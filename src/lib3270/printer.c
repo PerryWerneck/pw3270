@@ -54,7 +54,7 @@
 #include "appres.h"
 #include "objects.h"
 #include "resources.h"
-#include "ctlr.h"
+// #include "ctlr.h"
 
 #include "charsetc.h"
 #include "ctlrc.h"

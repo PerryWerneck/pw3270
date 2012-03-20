@@ -105,6 +105,13 @@
 
 	} LIB3270_TOGGLE;
 
+	typedef enum _lib3270_direction
+	{
+		LIB3270_DIR_UP,
+		LIB3270_DIR_DOWN,
+		LIB3270_DIR_LEFT,
+		LIB3270_DIR_RIGHT
+	} LIB3270_DIRECTION;
 
 	/**
 	 * Toggle types.

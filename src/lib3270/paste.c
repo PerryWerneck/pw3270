@@ -47,7 +47,7 @@
 #include <fcntl.h>
 #include "3270ds.h"
 #include "appres.h"
-#include "ctlr.h"
+// #include "ctlr.h"
 #include "resources.h"
 
 #include "actionsc.h"
@@ -56,7 +56,7 @@
 #include "ctlrc.h"
 #include "ftc.h"
 #include "hostc.h"
-#include "keypadc.h"
+// #include "keypadc.h"
 #include "kybdc.h"
 #include "popupsc.h"
 #include "printc.h"

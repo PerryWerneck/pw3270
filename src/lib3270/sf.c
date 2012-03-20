@@ -45,7 +45,7 @@
 #include "3270ds.h"
 #include "appres.h"
 #include "screen.h"
-#include "ctlr.h"
+// #include "ctlr.h"
 #include "resources.h"
 
 #include "charsetc.h"

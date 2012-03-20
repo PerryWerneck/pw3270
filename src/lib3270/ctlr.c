@@ -42,7 +42,7 @@
 #include <errno.h>
 #include "3270ds.h"
 #include "appres.h"
-#include "ctlr.h"
+// #include "ctlr.h"
 #include "screen.h"
 #include "resources.h"
 
@@ -503,7 +503,7 @@ process_ds(unsigned char *buf, int buflen)
 	if (!buflen)
 		return PDS_OKAY_NO_OUTPUT;
 
-	scroll_to_bottom();
+//	scroll_to_bottom();
 
 	trace_ds("< ");
 
@@ -2329,7 +2329,7 @@ ctlr_clear(H3270 *session, Boolean can_snap)
 		if (can_snap && !trace_skipping && toggled(SCREEN_TRACE))
 			trace_screen();
 #endif /*]*/
-		scroll_save(session->maxROWS, ever_3270 ? False : True);
+//		scroll_save(session->maxROWS, ever_3270 ? False : True);
 	}
 #if defined(X3270_TRACE) /*[*/
 	trace_skipping = False;
@@ -2389,7 +2389,7 @@ ctlr_add(int baddr, unsigned char c, unsigned char cs)
 			if (toggled(SCREEN_TRACE))
 				trace_screen();
 #endif /*]*/
-			scroll_save(session->maxROWS, False);
+//			scroll_save(session->maxROWS, False);
 			trace_primed = False;
 		}
 		/*

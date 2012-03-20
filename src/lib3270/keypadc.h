@@ -17,17 +17,14 @@
  *		Global declarations for keypad.c.
  */
 
-LIB3270_INTERNAL Boolean keypad_changed;
+// LIB3270_INTERNAL Boolean keypad_changed;
+/*
+#if defined(X3270_KEYPAD)
 
-#if defined(X3270_KEYPAD) /*[*/
-
-LIB3270_INTERNAL enum kp_placement {
-	kp_right, kp_left, kp_bottom, kp_integral, kp_inside_right
-} kp_placement;
+LIB3270_INTERNAL enum kp_placement { kp_right, kp_left, kp_bottom, kp_integral, kp_inside_right } kp_placement;
 
 LIB3270_INTERNAL void keypad_first_up(void);
-LIB3270_INTERNAL Widget keypad_init(Widget container, Dimension voffset,
-    Dimension screen_width, Boolean floating, Boolean vert);
+LIB3270_INTERNAL Widget keypad_init(Widget container, Dimension voffset, Dimension screen_width, Boolean floating, Boolean vert);
 LIB3270_INTERNAL void keypad_move(void);
 LIB3270_INTERNAL void keypad_placement_init(void);
 LIB3270_INTERNAL void keypad_popup_init(void);
@@ -37,7 +34,7 @@ LIB3270_INTERNAL void keypad_set_temp_keymap(XtTranslations trans);
 LIB3270_INTERNAL void keypad_shift(void);
 LIB3270_INTERNAL Dimension min_keypad_width(void);
 
-#else /*][*/
+#else
 
 #define keypad_qheight()	0
 #define min_keypad_width()	0
@@ -50,4 +47,5 @@ LIB3270_INTERNAL Dimension min_keypad_width(void);
 #define keypad_set_temp_keymap(n)
 #define keypad_shift()
 
-#endif /*]*/
+#endif
+*/

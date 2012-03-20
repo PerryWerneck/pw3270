@@ -17,10 +17,12 @@
  *		Global declarations for child.c.
  */
 
-#if defined(X3270_DISPLAY) || defined(C3270) /*[*/
+/*
+#if defined(X3270_DISPLAY) || defined(C3270)
 LIB3270_INTERNAL int fork_child(void);
 LIB3270_INTERNAL void child_ignore_output(void);
-#else /*][*/
+#else
 #define fork_child()	fork()
 #define child_ignore_output()
-#endif /*]*/
+#endif
+*/

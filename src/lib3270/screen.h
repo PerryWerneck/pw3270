@@ -14,9 +14,9 @@
 
 /* Non-display version of screen.h */
 
-#define SELECTED(baddr)	False
+// #define SELECTED(baddr)	False
 LIB3270_INTERNAL int *char_width, *char_height;
-LIB3270_INTERNAL Boolean screen_has_changes;
+// LIB3270_INTERNAL Boolean screen_has_changes;
 
 // LIB3270_INTERNAL void screen_update(H3270 *session, int bstart, int bend);
 

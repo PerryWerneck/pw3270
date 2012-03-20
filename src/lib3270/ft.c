@@ -43,7 +43,7 @@
 #include "ft_cutc.h"
 #include "ft_dftc.h"
 #include "ftc.h"
-#include "dialogc.h"
+// #include "dialogc.h"
 #include "hostc.h"
 #if defined(C3270) || defined(WC3270)
 #include "icmdc.h"

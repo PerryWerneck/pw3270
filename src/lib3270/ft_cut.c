@@ -44,7 +44,7 @@
 // #include <lib3270/api.h>
 
 #include "appres.h"
-#include "ctlr.h"
+// #include "ctlr.h"
 #include "3270ds.h"
 
 #include "actionsc.h"

@@ -83,6 +83,7 @@
 
  static void toggle_changed(GtkWidget *widget, LIB3270_TOGGLE id, gboolean toggled, const gchar *name, GtkWindow *toplevel)
  {
+	GtkAction **list = (GtkAction **) g_object_get_data(G_OBJECT(widget),"toggle_actions");
  	gchar *nm = g_ascii_strdown(name,-1);
 	set_boolean_to_config("toggle",nm,toggled);
 	g_free(nm);
@@ -95,7 +96,8 @@
 			gtk_window_unfullscreen(GTK_WINDOW(toplevel));
 	}
 
-	#warning TODO: Update toggle actions.
+	if(list[id])
+		gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(list[id]),toggled);
 
  }
 
@@ -286,6 +288,7 @@
 	GtkWidget		**popup;
 	int			  	  f;
 
+	g_object_set_data_full(G_OBJECT(terminal),"toggle_actions",g_new0(GtkAction *,LIB3270_TOGGLE_COUNT),g_free);
 	// Initialize terminal config
 	for(f=0;f<G_N_ELEMENTS(widget_config);f++)
 	{

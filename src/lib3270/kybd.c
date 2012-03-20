@@ -49,7 +49,7 @@
 #include <fcntl.h>
 #include "3270ds.h"
 #include "appres.h"
-#include "ctlr.h"
+// #include "ctlr.h"
 #include "resources.h"
 
 #include "actionsc.h"
@@ -58,7 +58,7 @@
 #include "ctlrc.h"
 #include "ftc.h"
 #include "hostc.h"
-#include "keypadc.h"
+// #include "keypadc.h"
 #include "kybdc.h"
 #include "popupsc.h"
 #include "printc.h"
@@ -232,7 +232,7 @@ static int enq_chk(void)
 	else
 	{
 		ta_head = ta;
-		status_typeahead(True);
+		status_typeahead(&h3270,True);
 	}
 	ta_tail = ta;
 
@@ -263,7 +263,7 @@ static void enq_ta(XtActionProc fn, char *parm1, char *parm2)
 		ta_tail->next = ta;
 	else {
 		ta_head = ta;
-		status_typeahead(True);
+		status_typeahead(&h3270,True);
 	}
 	ta_tail = ta;
 
@@ -282,7 +282,7 @@ Boolean run_ta(void)
 
 	if ((ta_head = ta->next) == (struct ta *)NULL) {
 		ta_tail = (struct ta *)NULL;
-		status_typeahead(False);
+		status_typeahead(&h3270,False);
 	}
 
 	switch(ta->type)
@@ -337,7 +337,7 @@ flush_ta(void)
 		any = True;
 	}
 	ta_head = ta_tail = (struct ta *) NULL;
-	status_typeahead(False);
+	status_typeahead(&h3270,False);
 	return any;
 }
 

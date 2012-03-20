@@ -17,10 +17,10 @@
  *		x3270 object names.
  */
 
-#define ObjConfirmButton	"confirmButton"
-#define ObjConfirm2Button	"confirm2Button"
-#define ObjCancelButton		"cancelButton"
+// #define ObjConfirmButton	"confirmButton"
+// #define ObjConfirm2Button	"confirm2Button"
+// #define ObjCancelButton		"cancelButton"
 #define ObjDialog		"dialog"
-#define ObjSmallLabel		"smallLabel"
+// #define ObjSmallLabel		"smallLabel"
 #define ObjNameLabel		"nameLabel"
 #define ObjDataLabel		"dataLabel"

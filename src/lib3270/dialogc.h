@@ -16,3 +16,5 @@
  *	dialogc.h
  *		Empty definitions for dialog.c.
  */
+
+#warning deprecated dialogc.h

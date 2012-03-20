@@ -56,7 +56,7 @@
 #include "appres.h"
 #include "objects.h"
 #include "resources.h"
-#include "ctlr.h"
+// #include "ctlr.h"
 
 #include "charsetc.h"
 #include "childc.h"
@@ -422,7 +422,7 @@ create_tracefile_header(const char *mode)
 	clk = time((time_t *)0);
 	wtrace("Trace %s %s", mode, ctime(&clk));
 	wtrace(" Version: %s\n", build);
-	save_yourself();
+//	save_yourself();
 //	wtrace(" Command: %s\n", command_string);
 	wtrace(" Model %s", h3270.model_name);
 	wtrace(", %s display", appres.mono ? "monochrome" : "color");

@@ -28,7 +28,7 @@
  */
 
  #include "globals.h"
- #include "ctlr.h"
+// #include "ctlr.h"
  #include "appres.h"
  #include <lib3270.h>
  #include <lib3270/session.h>
@@ -347,3 +347,45 @@ LIB3270_EXPORT char * lib3270_get_selected(H3270 *hSession)
 	return realloc(ret,sz+1);
 }
 
+LIB3270_EXPORT int lib3270_move_selection(H3270 *hSession, LIB3270_DIRECTION dir)
+{
+	if(!hSession->selected || hSession->select.begin == hSession->select.end)
+		return ENOENT;
+
+	switch(dir)
+	{
+	case LIB3270_DIR_UP:
+		if(hSession->select.begin <= hSession->cols)
+			return EINVAL;
+		hSession->select.begin -= hSession->cols;
+		hSession->select.end   -= hSession->cols;
+		break;
+
+	case LIB3270_DIR_DOWN:
+		if(hSession->select.end >= (hSession->cols * (hSession->rows-1)))
+			return EINVAL;
+		hSession->select.begin += hSession->cols;
+		hSession->select.end   += hSession->cols;
+		break;
+
+	case LIB3270_DIR_LEFT:
+		if( (hSession->select.begin % hSession->cols) < 1)
+			return EINVAL;
+		hSession->select.begin--;
+		hSession->select.end--;
+		break;
+
+	case LIB3270_DIR_RIGHT:
+		if( (hSession->select.end % hSession->cols) >= hSession->cols)
+			return EINVAL;
+		hSession->select.begin++;
+		hSession->select.end++;
+		break;
+
+	default:
+		return -1;
+	}
+
+	update_selection(hSession);
+	return 0;
+}

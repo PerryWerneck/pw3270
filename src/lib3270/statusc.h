@@ -34,7 +34,7 @@ LIB3270_INTERNAL void 		status_changed(H3270 *session, LIB3270_STATUS id);
 LIB3270_INTERNAL void 		set_status(H3270 *session, OIA_FLAG id, Boolean on);
 
 
-#define status_typeahead(on)	set_status(NULL,OIA_FLAG_TYPEAHEAD,on)
+#define status_typeahead(h,on)	set_status(h,OIA_FLAG_TYPEAHEAD,on)
 #define status_kybdlock()		status_changed(NULL,LIB3270_STATUS_KYBDLOCK)
 #define status_syswait()		status_changed(NULL,LIB3270_STATUS_SYSWAIT)
 #define status_minus()			status_changed(NULL,LIB3270_STATUS_MINUS)

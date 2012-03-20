@@ -17,5 +17,7 @@
  *		External declarations for ctlr.c data structures.
  */
 
+ #warning Deprecated ctlr.h, please remove it
+
 // extern int			buffer_addr;	/**< buffer address */
 // extern struct ea	*ea_buf;			/**< 3270 device buffer */
