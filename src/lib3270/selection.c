@@ -202,13 +202,13 @@ LIB3270_EXPORT void lib3270_select_to(H3270 *session, int baddr)
 	if(!lib3270_connected(session))
 		return;
 
-	lib3270_set_cursor_address(session,session->select.end = baddr);
-
 	if(!session->selected)
 	{
 		session->select.begin = session->cursor_addr;
 		set_selected(session);
 	}
+
+	lib3270_set_cursor_address(session,session->select.end = baddr);
 
 	update_selection(session);
 
@@ -390,4 +390,48 @@ LIB3270_EXPORT int lib3270_move_selection(H3270 *hSession, LIB3270_DIRECTION dir
 	lib3270_set_cursor_address(hSession,hSession->select.end);
 
 	return 0;
+}
+
+LIB3270_EXPORT int lib3270_move_cursor(H3270 *hSession, LIB3270_DIRECTION dir, unsigned char sel)
+{
+	int cursor_addr = hSession->cursor_addr;
+
+	if(!lib3270_connected(hSession))
+		return -1;
+
+	switch(dir)
+	{
+	case LIB3270_DIR_UP:
+		if(cursor_addr <= hSession->cols)
+			return EINVAL;
+		cursor_addr -= hSession->cols;
+		break;
+
+	case LIB3270_DIR_DOWN:
+		if(cursor_addr >= (hSession->cols * (hSession->rows-1)))
+			return EINVAL;
+		cursor_addr += hSession->cols;
+		break;
+
+	case LIB3270_DIR_LEFT:
+		if( (cursor_addr % hSession->cols) < 1)
+			return EINVAL;
+		cursor_addr--;
+		break;
+
+	case LIB3270_DIR_RIGHT:
+		if( (cursor_addr % hSession->cols) >= (hSession->cols-1))
+			return EINVAL;
+		cursor_addr++;
+		break;
+
+	default:
+		return -1;
+	}
+
+	if(sel)
+		lib3270_select_to(hSession,cursor_addr);
+	else
+		lib3270_set_cursor_address(hSession,cursor_addr);
+
 }

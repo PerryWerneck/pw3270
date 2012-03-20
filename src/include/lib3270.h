@@ -388,6 +388,17 @@
 	LIB3270_EXPORT int lib3270_set_cursor_address(H3270 *h, int baddr);
 
 	/**
+	 * Move cursor
+	 *
+	 * @param h		Session handle.
+	 * @param dir	Direction to move
+	 * @param sel	Non zero to move and selected to the current cursor position
+	 *
+	 * @return 0 if the movement can be done, non zero if failed.
+	 */
+	 LIB3270_EXPORT int lib3270_move_cursor(H3270 *h, LIB3270_DIRECTION dir, unsigned char sel);
+
+	/**
 	 * get cursor address.
 	 *
 	 * @param h		Session handle.

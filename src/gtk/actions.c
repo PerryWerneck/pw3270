@@ -183,41 +183,32 @@ static void selection_move_action(GtkAction *action, GtkWidget *widget)
 	lib3270_move_selection(GTK_V3270(widget)->host,(LIB3270_DIRECTION) g_object_get_data(G_OBJECT(action),"direction"));
 }
 
-void ui_connect_target_action(GtkAction *action, GtkWidget *widget, const gchar *target, const gchar *direction, GError **error)
+static void cursor_move_action(GtkAction *action, GtkWidget *widget)
 {
-	static const gchar *dirname[] = {	"up", "down", "left", "right" };
+	int flags = (int) g_object_get_data(G_OBJECT(action),"move_flags");
+	trace("Action %s activated on widget %p flags=%04x",gtk_action_get_name(action),widget,g_object_get_data(G_OBJECT(action),"move_flags"));
+	lib3270_move_cursor(GTK_V3270(widget)->host,(LIB3270_DIRECTION) (flags & 0x03), (flags & 0x80) );
+}
 
-	LIB3270_DIRECTION dir = (LIB3270_DIRECTION) -1;
+void ui_connect_target_action(GtkAction *action, GtkWidget *widget, const gchar *target, unsigned short flags, GError **error)
+{
 	int f;
 
-	if(!(direction && target))
+	if(!target)
 	{
 		gtk_action_set_sensitive(action,FALSE);
 		return;
 	}
 
-	for(f=0;f<G_N_ELEMENTS(dirname) && dir == -1;f++)
-	{
-		if(!g_strcasecmp(direction,dirname[f]))
-		{
-			dir = f;
-			break;
-		}
-	}
-
-	if(dir == -1)
-	{
-		*error = g_error_new(	g_quark_from_static_string(PACKAGE_NAME),
-								ENOENT,
-								_( "Unexpected direction \"%s\""),
-								direction);
-	}
-
 	if(!g_strcasecmp(target,"selection"))
 	{
-		g_object_set_data(G_OBJECT(action),"direction",(gpointer) dir);
+		g_object_set_data(G_OBJECT(action),"direction",(gpointer) (flags & 3));
 		g_signal_connect(action,"activate",G_CALLBACK(selection_move_action),widget);
-
+	}
+	else if(!g_strcasecmp(target,"cursor"))
+	{
+		g_object_set_data(G_OBJECT(action),"move_flags",(gpointer) ((int) flags));
+		g_signal_connect(action,"activate",G_CALLBACK(cursor_move_action),widget);
 	}
 	else
 	{

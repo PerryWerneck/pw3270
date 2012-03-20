@@ -189,20 +189,20 @@
 	<accelerator action='SysREQ' key='Sys_Req' group='online' />
 	<accelerator action='SysREQ' key='<shift>Print' group='online' />
 
-	<accelerator action='SelectRight' key='<Shift>Right' group='online' />
-	<accelerator action='SelectLeft' key='<Shift>Left' group='online' />
-	<accelerator action='SelectUp' key='<Shift>Up' group='online' />
-	<accelerator action='SelectDown' key='<Shift>Down' group='online' />
+	<accelerator action='move' target='cursor' direction='right' selecting='yes' key='<Shift>Right' group='online' />
+	<accelerator action='move' target='cursor' direction='left' selecting='yes' key='<Shift>Left' group='online' />
+	<accelerator action='move' target='cursor' direction='up' selecting='yes' key='<Shift>Up' group='online' />
+	<accelerator action='move' target='cursor' direction='down' selecting='yes' key='<Shift>Down' group='online' />
 
 	<accelerator action='move' target='selection' direction='right' key='<alt>Right' />
 	<accelerator action='move' target='selection' direction='left' key='<alt>Left' />
 	<accelerator action='move' target='selection' direction='up' key='<alt>Up' />
 	<accelerator action='move' target='selection' direction='down' key='<alt>Down' />
 
-	<accelerator action='CursorRight' key='Right' group='online' />
-	<accelerator action='CursorLeft' key='Left' group='online' />
-	<accelerator action='CursorUp' key='Up' group='online' />
-	<accelerator action='CursorDown' key='Down' group='online' />
+	<accelerator action='move' target='cursor' direction='right' key='Right' group='online' />
+	<accelerator action='move' target='cursor' direction='left' key='Left' group='online' />
+	<accelerator action='move' target='cursor' direction='up' key='Up' group='online' />
+	<accelerator action='move' target='cursor' direction='down' key='Down' group='online' />
 
 	<accelerator action='PreviousField' key='ISO_Left_Tab' group='online' />
 	<accelerator action='NextField' key='Tab' group='online' />

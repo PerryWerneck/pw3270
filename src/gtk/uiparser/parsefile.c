@@ -139,13 +139,32 @@
 
  static GtkAction * get_action(const gchar *name, struct parser *info, const gchar **names, const gchar **values, GError **error)
  {
-	const gchar * target   	= NULL;
-	const gchar * direction	= NULL;
-	const gchar	* id		= ui_get_attribute("id",names,values);
-	GtkAction	* action;
-	gchar		* nm;
-	void		  (*connect)(GtkAction *action, GtkWidget *widget, const gchar *name, const gchar *id)		= ui_connect_action;
-	GtkAction	* (*create)(const gchar *,const gchar *,const gchar *,const gchar *)						= gtk_action_new;
+	const gchar		* target   	= NULL;
+	const gchar		* direction	= ui_get_attribute("direction",names,values);
+	const gchar		* id		= ui_get_attribute("id",names,values);
+	unsigned short	  flags		= 0;
+	GtkAction		* action;
+	gchar			* nm;
+	void			  (*connect)(GtkAction *action, GtkWidget *widget, const gchar *name, const gchar *id)		= ui_connect_action;
+	GtkAction		* (*create)(const gchar *,const gchar *,const gchar *,const gchar *)						= gtk_action_new;
+
+	if(direction)
+	{
+		static const gchar *dirname[] = {	"up", "down", "left", "right" };
+		int f;
+
+		for(f=0;f<G_N_ELEMENTS(dirname);f++)
+		{
+			if(!g_strcasecmp(direction,dirname[f]))
+			{
+				flags |= f;
+				break;
+			}
+		}
+	}
+
+	if(ui_get_bool_attribute("selecting",names,values,FALSE))
+		flags |= 0x80;
 
 	if(!g_strcasecmp(name,"toggle"))
 	{
@@ -155,8 +174,7 @@
 	}
 	else if(!g_strcasecmp(name,"move"))
 	{
-		target    = ui_get_attribute("target",names,values);
-		direction = ui_get_attribute("direction",names,values);
+		target = ui_get_attribute("target",names,values);
 
 		if(!(target && direction))
 		{
@@ -164,7 +182,8 @@
 			return NULL;
 		}
 
-		nm = g_strconcat("move",target,direction,NULL);
+		nm = g_strconcat((flags & 0x80) ? "select" : "move",target,direction, NULL);
+
 	}
 	else if(!g_strcasecmp(name,"toggleset"))
 	{
@@ -215,7 +234,7 @@
 		if(ix >= 0)
 			ui_connect_index_action(info->action[ix] = action,info->center_widget,ix,info->action);
 		else if(target)
-			ui_connect_target_action(action,info->center_widget,target,direction,error);
+			ui_connect_target_action(action,info->center_widget,target,flags,error);
 		else if(g_strcasecmp(name,"quit"))
 			connect(action,info->center_widget,name,id);
 		else
