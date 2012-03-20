@@ -376,7 +376,7 @@ LIB3270_EXPORT int lib3270_move_selection(H3270 *hSession, LIB3270_DIRECTION dir
 		break;
 
 	case LIB3270_DIR_RIGHT:
-		if( (hSession->select.end % hSession->cols) >= hSession->cols)
+		if( (hSession->select.end % hSession->cols) >= (hSession->cols-1))
 			return EINVAL;
 		hSession->select.begin++;
 		hSession->select.end++;
@@ -387,5 +387,7 @@ LIB3270_EXPORT int lib3270_move_selection(H3270 *hSession, LIB3270_DIRECTION dir
 	}
 
 	update_selection(hSession);
+	lib3270_set_cursor_address(hSession,hSession->select.end);
+
 	return 0;
 }

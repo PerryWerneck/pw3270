@@ -177,9 +177,56 @@ void ui_connect_toggle(GtkAction *action, GtkWidget *widget, const gchar *name, 
 	gtk_action_set_sensitive(action,FALSE);
 }
 
+static void selection_move_action(GtkAction *action, GtkWidget *widget)
+{
+	trace("Action %s activated on widget %p dir=%d",gtk_action_get_name(action),widget,g_object_get_data(G_OBJECT(action),"direction"));
+	lib3270_move_selection(GTK_V3270(widget)->host,(LIB3270_DIRECTION) g_object_get_data(G_OBJECT(action),"direction"));
+}
+
 void ui_connect_target_action(GtkAction *action, GtkWidget *widget, const gchar *target, const gchar *direction, GError **error)
 {
-	#warning TODO: Implementar
+	static const gchar *dirname[] = {	"up", "down", "left", "right" };
+
+	LIB3270_DIRECTION dir = (LIB3270_DIRECTION) -1;
+	int f;
+
+	if(!(direction && target))
+	{
+		gtk_action_set_sensitive(action,FALSE);
+		return;
+	}
+
+	for(f=0;f<G_N_ELEMENTS(dirname) && dir == -1;f++)
+	{
+		if(!g_strcasecmp(direction,dirname[f]))
+		{
+			dir = f;
+			break;
+		}
+	}
+
+	if(dir == -1)
+	{
+		*error = g_error_new(	g_quark_from_static_string(PACKAGE_NAME),
+								ENOENT,
+								_( "Unexpected direction \"%s\""),
+								direction);
+	}
+
+	if(!g_strcasecmp(target,"selection"))
+	{
+		g_object_set_data(G_OBJECT(action),"direction",(gpointer) dir);
+		g_signal_connect(action,"activate",G_CALLBACK(selection_move_action),widget);
+
+	}
+	else
+	{
+		*error = g_error_new(	g_quark_from_static_string(PACKAGE_NAME),
+								ENOENT,
+								_( "Unexpected target \"%s\""),
+								target);
+	}
+
 }
 
 static void action_pfkey(GtkAction *action, GtkWidget *widget)

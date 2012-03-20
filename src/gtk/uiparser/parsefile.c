@@ -155,8 +155,8 @@
 	}
 	else if(!g_strcasecmp(name,"move"))
 	{
-		const gchar *target    = ui_get_attribute("target",names,values);
-		const gchar *direction = ui_get_attribute("direction",names,values);
+		target    = ui_get_attribute("target",names,values);
+		direction = ui_get_attribute("direction",names,values);
 
 		if(!(target && direction))
 		{
@@ -214,10 +214,10 @@
 
 		if(ix >= 0)
 			ui_connect_index_action(info->action[ix] = action,info->center_widget,ix,info->action);
-		else if(g_strcasecmp(name,"quit"))
-			connect(action,info->center_widget,name,id);
 		else if(target)
 			ui_connect_target_action(action,info->center_widget,target,direction,error);
+		else if(g_strcasecmp(name,"quit"))
+			connect(action,info->center_widget,name,id);
 		else
 			g_signal_connect(action,"activate",G_CALLBACK(gtk_main_quit), NULL);
 
