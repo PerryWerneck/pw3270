@@ -146,7 +146,7 @@
 		action = g_hash_table_lookup(info->actions,name);
 		if(!action)
 		{
-			action = gtk_action_new(name,NULL,NULL,NULL);
+			action = gtk_action_new(name,NULL,NULL,GTK_STOCK_QUIT);
 			g_signal_connect(action,"activate",G_CALLBACK(gtk_main_quit), NULL);
 		}
 	}
@@ -155,95 +155,8 @@
 		action = ui_get_action(info->center_widget,name,info->actions,names,values,error);
 	}
 
-	if(!action)
-		return action;
-
-/*
-	const gchar		* target   	= NULL;
-	const gchar		* direction	= ui_get_attribute("direction",names,values);
-	const gchar		* id		= ui_get_attribute("id",names,values);
-	GtkAction		* action;
-	gchar			* nm;
-	void			  (*connect)(GtkAction *action, GtkWidget *widget, const gchar *name, const gchar *id)		= ui_connect_action;
-	GtkAction		* (*create)(const gchar *,const gchar *,const gchar *,const gchar *)						= gtk_action_new;
-
-	if(!g_strcasecmp(name,"toggle"))
-	{
-		nm 		= g_strconcat(name,id,NULL);
-		create	= (GtkAction * (*)(const gchar *,const gchar *,const gchar *,const gchar *)) gtk_toggle_action_new;
-		connect = ui_connect_toggle;
-	}
-	else if(!g_strcasecmp(name,"move"))
-	{
-		target = ui_get_attribute("target",names,values);
-
-		if(!(target && direction))
-		{
-			*error = g_error_new(ERROR_DOMAIN,EINVAL,"%s",_("Move action needs target & direction attributes" ));
-			return NULL;
-		}
-
-		nm = g_strconcat((flags & 0x80) ? "select" : "move",target,direction, NULL);
-
-	}
-	else if(!g_strcasecmp(name,"toggleset"))
-	{
-		nm = g_strconcat("set",id,NULL);
-	}
-	else if(!g_strcasecmp(name,"togglereset"))
-	{
-		nm = g_strconcat("reset",id,NULL);
-	}
-	else if(!g_strcasecmp(name,"pfkey"))
-	{
-		nm = g_strdup_printf("pf%02d",atoi(id ? id : "0"));
-		connect = ui_connect_pfkey;
-	}
-	else if(!g_strcasecmp(name,"pakey"))
-	{
-		nm = g_strdup_printf("pa%02d",atoi(id ? id : "0"));
-		connect = ui_connect_pakey;
-	}
-	else
-	{
-		nm = g_strdup(name);
-	}
-
-	action = g_hash_table_lookup(info->actions,nm);
-
 	if(action)
-	{
-		g_free(nm);
-	}
-	else
-	{
-		int ix = -1;
-
-		action = GTK_ACTION(create(nm,NULL,NULL,NULL));
-		g_hash_table_insert(info->actions,nm,action);
-
-		if(info->actionname)
-		{
-			int f;
-			for(f=0;info->actionname[f] && ix < 0;f++)
-			{
-				if(!g_strcasecmp(nm,info->actionname[f]))
-					ix = f;
-			}
-		}
-
-		if(ix >= 0)
-			ui_connect_index_action(info->action[ix] = action,info->center_widget,ix,info->action);
-		else if(target)
-			ui_connect_target_action(action,info->center_widget,target,flags,error);
-		else if(g_strcasecmp(name,"quit"))
-			connect(action,info->center_widget,name,id);
-		else
-			g_signal_connect(action,"activate",G_CALLBACK(gtk_main_quit), NULL);
-
-	}
-*/
-	ui_action_set_options(action,info,names,values,error);
+		ui_action_set_options(action,info,names,values,error);
 
 	return action;
  }

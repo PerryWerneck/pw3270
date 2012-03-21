@@ -32,6 +32,10 @@
 #include "globals.h"
 #include "uiparser/parser.h"
 
+#ifdef DEBUG
+	#include <lib3270/actions.h>
+#endif
+
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
  enum action_group
@@ -74,11 +78,6 @@
 														NULL
 														};
 
- static const gchar *actionname[ACTION_COUNT+1] = {		"pastenext",
-														"reselect",
-														"setfullscreen",
-														"resetfullscreen"
- 													};
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
  static void toggle_changed(GtkWidget *widget, LIB3270_TOGGLE id, gboolean toggled, const gchar *name, GtkWindow *toplevel)
@@ -104,7 +103,7 @@
  static gboolean window_state_event(GtkWidget *window, GdkEventWindowState *event, GtkWidget *widget)
  {
 	gboolean	  fullscreen = event->new_window_state & GDK_WINDOW_STATE_FULLSCREEN ? TRUE : FALSE;
-	GtkAction	**action = (GtkAction **) g_object_get_data(G_OBJECT(window),"named_actions");
+	GtkAction	**action = (GtkAction **) g_object_get_data(G_OBJECT(widget),"named_actions");
 
 	// Update fullscreen toggles
 	if(action[ACTION_FULLSCREEN])
@@ -284,11 +283,13 @@
 	H3270			* host 		= v3270_get_session(terminal);
 	gchar			* path		= build_data_filename("ui",NULL);
 	GtkActionGroup	**group;
-	GtkAction 		**action;
+	GtkAction 		**action	= g_new0(GtkAction *,ACTION_COUNT);
 	GtkWidget		**popup;
 	int			  	  f;
 
 	g_object_set_data_full(G_OBJECT(terminal),"toggle_actions",g_new0(GtkAction *,LIB3270_TOGGLE_COUNT),g_free);
+	g_object_set_data_full(G_OBJECT(terminal),"named_actions",(gpointer) action, (GDestroyNotify) g_free);
+
 	// Initialize terminal config
 	for(f=0;f<G_N_ELEMENTS(widget_config);f++)
 	{
@@ -307,12 +308,9 @@
 	}
 
 	// Create window
-	window = ui_parse_xml_folder(path,groupname,popupname,actionname,terminal,widget_setup);
+	window = ui_parse_xml_folder(path,groupname,popupname,terminal,widget_setup);
 	group  = g_object_get_data(G_OBJECT(window),"action_groups");
 	popup  = g_object_get_data(G_OBJECT(window),"popup_menus");
-	action = (GtkAction **) g_object_get_data(G_OBJECT(window),"named_actions");
-
-	g_object_set_data(G_OBJECT(terminal),"named_actions",action);
 
 	// Setup action groups
 	gtk_action_group_set_sensitive(group[ACTION_GROUP_SELECTION],FALSE);
@@ -359,6 +357,7 @@
 	lib3270_testpattern(host);
 #endif
 
+	trace("%s ends",__FUNCTION__);
  	return window;
  }
 

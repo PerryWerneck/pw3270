@@ -240,11 +240,21 @@ static void action_pakey(GtkAction *action, GtkWidget *widget)
 	lib3270_pakey(GTK_V3270(widget)->host,(int) g_object_get_data(G_OBJECT(action),"pakey"));
 }
 
-/*
-static void action_fullscreen(GtkAction *action, GtkWidget *widget)
+static void action_set_toggle(GtkAction *action, GtkWidget *widget)
 {
-	lib3270_set_toggle(GTK_V3270(widget)->host,LIB3270_TOGGLE_FULL_SCREEN,1);
+	LIB3270_TOGGLE id = (LIB3270_TOGGLE) g_object_get_data(G_OBJECT(action),"toggle_id");
+	trace("Action %s activated on widget %p toggle=%d",gtk_action_get_name(action),widget,id);
+	lib3270_set_toggle(GTK_V3270(widget)->host,id,1);
 }
+
+static void action_reset_toggle(GtkAction *action, GtkWidget *widget)
+{
+	LIB3270_TOGGLE id = (LIB3270_TOGGLE) g_object_get_data(G_OBJECT(action),"toggle_id");
+	trace("Action %s activated on widget %p toggle=%d",gtk_action_get_name(action),widget,id);
+	lib3270_set_toggle(GTK_V3270(widget)->host,id,0);
+}
+
+/*
 
 static void action_reselect(GtkAction *action, GtkWidget *widget)
 {
@@ -259,12 +269,6 @@ static void action_unfullscreen(GtkAction *action, GtkWidget *widget)
 static void action_pastnext(GtkAction *action, GtkWidget *widget)
 {
 	lib3270_pastenext(GTK_V3270(widget)->host);
-}
-
-void ui_connect_pakey(GtkAction *action, GtkWidget *widget, const gchar *name, const gchar *id)
-{
-	g_object_set_data(G_OBJECT(action),"pakey",(gpointer) atoi(id));
-	g_signal_connect(action,"activate",G_CALLBACK(action_pakey),widget);
 }
 
 void ui_connect_index_action(GtkAction *action, GtkWidget *widget, int ix, GtkAction **lst)
@@ -298,6 +302,11 @@ void ui_connect_index_action(GtkAction *action, GtkWidget *widget, int ix, GtkAc
 
 GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash, const gchar **names, const gchar **values, GError **error)
 {
+	static const gchar *actionname[ACTION_COUNT] = {	"pastenext",
+														"reselect",
+														"setfullscreen",
+														"resetfullscreen"
+ 													};
  	GtkAction		* action 		= NULL;
 	GtkAction 		**toggle_action	= (GtkAction **) g_object_get_data(G_OBJECT(widget),"toggle_actions");
 	const gchar		* direction		= ui_get_attribute("direction",names,values);
@@ -305,6 +314,7 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 	const gchar		* attr;
 	int				  id			= 0;
 	gchar			* nm			= NULL;
+	int				  f;
 
 	enum _action_type
 	{
@@ -365,6 +375,7 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 	}
 	else if(!g_strcasecmp(name,"set"))
 	{
+		action_type	= ACTION_TYPE_SET;
 		attr		= ui_get_attribute("toggle",names,values);
 		id			= lib3270_get_toggle_id(attr);
 		if(id < 0)
@@ -376,6 +387,7 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 	}
 	else if(!g_strcasecmp(name,"reset"))
 	{
+		action_type	= ACTION_TYPE_RESET;
 		attr		= ui_get_attribute("toggle",names,values);
 		id			= lib3270_get_toggle_id(attr);
 		if(id < 0)
@@ -455,11 +467,25 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 
 	case ACTION_TYPE_SET:
 		action = gtk_action_new(nm,NULL,NULL,NULL);
+		g_object_set_data(G_OBJECT(action),"toggle_id",(gpointer) id);
+		g_signal_connect(action,"activate",G_CALLBACK(action_set_toggle),widget);
 		break;
 
 	case ACTION_TYPE_RESET:
 		action = gtk_action_new(nm,NULL,NULL,NULL);
+		g_object_set_data(G_OBJECT(action),"toggle_id",(gpointer) id);
+		g_signal_connect(action,"activate",G_CALLBACK(action_reset_toggle),widget);
 		break;
+	}
+
+	for(f=0;f<ACTION_COUNT;f++)
+	{
+		if(!g_strcasecmp(actionname[f],nm))
+		{
+			GtkAction **named_action = (GtkAction **) g_object_get_data(G_OBJECT(widget),"named_actions");
+			named_action[f] = action;
+			break;
+		}
 	}
 
 	g_hash_table_insert(hash,nm,action);

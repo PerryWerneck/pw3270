@@ -328,7 +328,6 @@ void v3270_update_font_metrics(v3270 *terminal, cairo_t *cr, int width, int heig
 
 	cairo_set_font_size(cr,size);
 
-
 /*
 	double sx, sy;
 	cairo_matrix_t font_matrix;
@@ -832,6 +831,8 @@ void v3270_set_font_family(GtkWidget *widget, const gchar *name)
 		// TODO (perry#3#): Get default font family from currrent style
 		name = "courier new";
 	}
+
+	trace("%s(%s)",__FUNCTION__,name);
 
 	terminal->font_family = g_strdup(name);
 	terminal->font_weight = CAIRO_FONT_WEIGHT_NORMAL;

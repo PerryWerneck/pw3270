@@ -32,6 +32,7 @@
  #include <malloc.h>
  #include "v3270.h"
  #include "private.h"
+ #include <lib3270/selection.h>
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
@@ -225,7 +226,7 @@ void v3270_paste_string(GtkWidget *widget, const gchar *text, const gchar *encod
 		return;
 	}
 
-	next = lib3270_paste(session,buffer) ? TRUE : FALSE;
+	next = lib3270_paste(session,(unsigned char *) buffer) ? TRUE : FALSE;
 
 	trace("Pastenext is %s",next ? "On" : "Off");
 
