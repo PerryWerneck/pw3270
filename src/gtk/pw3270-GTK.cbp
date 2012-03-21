@@ -46,6 +46,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="common\sources.mak" />
+		<Unit filename="dialog.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="fonts.c">
 			<Option compilerVar="CC" />
 		</Unit>

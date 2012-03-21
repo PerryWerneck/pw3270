@@ -49,7 +49,6 @@ static void lib3270_action(GtkAction *action, GtkWidget *widget)
 static void connect_action(GtkAction *action, GtkWidget *widget)
 {
 	gchar *host = (gchar *) g_object_get_data(G_OBJECT(action),"host");
-	int f;
 
 	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
 
@@ -69,6 +68,11 @@ static void connect_action(GtkAction *action, GtkWidget *widget)
 	g_free(host);
 
 	hostname_action(action,widget);
+}
+
+static void nop_action(GtkAction *action, GtkWidget *widget)
+{
+	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
 }
 
 static void disconnect_action(GtkAction *action, GtkWidget *widget)
@@ -200,8 +204,6 @@ static void cursor_move_action(GtkAction *action, GtkWidget *widget)
 
 static void connect_move_action(GtkAction *action, GtkWidget *widget, const gchar *target, unsigned short flags, GError **error)
 {
-	int f;
-
 	if(!target)
 	{
 		gtk_action_set_sensitive(action,FALSE);
@@ -366,6 +368,37 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 			static const gchar 		* src[] = { "clipboard",
 												"next",
 												"file",
+												NULL
+												};
+			id = id_from_array(attr,src,error);
+			if(id < 0)
+				return NULL;
+
+			callback = cbk;
+		}
+
+		nm = g_strconcat(name,attr, NULL);
+
+	}
+	else if(!(g_strcasecmp(name,"save") && g_strcasecmp(name,"print")))
+	{
+		action_type	= ACTION_TYPE_TABLE;
+		attr		= ui_get_attribute("src",names,values);
+
+		if(!attr)
+		{
+			*error = g_error_new(ERROR_DOMAIN,EINVAL,_("%s action needs src attribute" ), name);
+			return NULL;
+		}
+		else
+		{
+			static const GCallback cbk[] = {	G_CALLBACK(nop_action),
+												G_CALLBACK(nop_action),
+												G_CALLBACK(nop_action)
+											};
+			static const gchar 		* src[] = { "all",
+												"selected",
+												"copy",
 												NULL
 												};
 			id = id_from_array(attr,src,error);
