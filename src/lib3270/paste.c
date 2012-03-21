@@ -277,23 +277,23 @@ LIB3270_EXPORT int lib3270_paste(H3270 *h, const unsigned char *str)
 	return 0;
 }
 
-LIB3270_EXPORT int lib3270_pastenext(H3270 *h)
+LIB3270_ACTION(pastenext)
 {
 	char	* ptr;
 	int		  rc;
 
-	CHECK_SESSION_HANDLE(h);
+	CHECK_SESSION_HANDLE(hSession);
 
-	if(!(lib3270_connected(h) && h->paste_buffer))
+	if(!(lib3270_connected(hSession) && hSession->paste_buffer))
 	{
-		lib3270_ring_bell(h);
+		lib3270_ring_bell(hSession);
 		return 0;
 	}
 
-	ptr = h->paste_buffer;
-	h->paste_buffer = NULL;
+	ptr = hSession->paste_buffer;
+	hSession->paste_buffer = NULL;
 
-	rc = lib3270_paste(h,(unsigned char *) ptr);
+	rc = lib3270_paste(hSession,(unsigned char *) ptr);
 
 	free(ptr);
 	return rc;

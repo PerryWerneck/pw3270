@@ -82,6 +82,13 @@ $(BINDIR)/Debug/lib/@DLLPREFIX@3270@DLLEXT@: src/lib3270/* src/include/lib3270/*
 run: $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
 	@PATH="$(BINDIR)/Debug/lib:$(PATH)" "$(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)"
 
+memchk: $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
+ifeq ($(VALGRIND),no)
+	@PATH="$(BINDIR)/Debug/lib:$(PATH)" "$(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)"
+else
+	@PATH="$(BINDIR)/Debug/lib:$(PATH)" G_DEBUG=gc-friendly G_SLICE=always-malloc \$(VALGRIND) --leak-check=full --suppressions=src/gtk/valgrind.suppression --gen-suppressions=all $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
+endif
+
 #---[ Targets ]----------------------------------------------------------------
 
 tgz: $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz

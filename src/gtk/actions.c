@@ -39,7 +39,6 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
-/*
 static void lib3270_action(GtkAction *action, GtkWidget *widget)
 {
 	int	(*call)(H3270 *h) = (int (*)(H3270 *h)) g_object_get_data(G_OBJECT(action),"lib3270_call");
@@ -83,7 +82,7 @@ static void paste_action(GtkAction *action, GtkWidget *widget)
 	v3270_paste_clipboard(GTK_V3270(widget));
 }
 
-void ui_connect_action(GtkAction *action, GtkWidget *widget, const gchar *name, const gchar *id)
+static void connect_standard_action(GtkAction *action, GtkWidget *widget, const gchar *name)
 {
 	#undef DECLARE_LIB3270_ACTION
 	#undef DECLARE_LIB3270_CLEAR_SELECTION_ACTION
@@ -150,7 +149,7 @@ void ui_connect_action(GtkAction *action, GtkWidget *widget, const gchar *name, 
 	// Not-found, disable action
 	gtk_action_set_sensitive(action,FALSE);
 }
-*/
+
 
 static void lib3270_toggle_action(GtkToggleAction *action,GtkWidget *widget)
 {
@@ -161,29 +160,6 @@ static void lib3270_toggle_action(GtkToggleAction *action,GtkWidget *widget)
 	lib3270_set_toggle(GTK_V3270(widget)->host,toggle,gtk_toggle_action_get_active(action));
 }
 
-/*
-void ui_connect_toggle(GtkAction *action, GtkWidget *widget, const gchar *name, const gchar *id)
-{
-	LIB3270_TOGGLE toggle = lib3270_get_toggle_id(id);
-
-	if(toggle != -1)
-	{
-		GtkAction **list = (GtkAction **) g_object_get_data(G_OBJECT(widget),"toggle_actions");
-		list[toggle] = action;
-		g_object_set_data(G_OBJECT(action),"toggle_id",(gpointer) toggle);
-		gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action),(lib3270_get_toggle(GTK_V3270(widget)->host,toggle) != 0));
-		g_signal_connect(action,"toggled",G_CALLBACK(lib3270_toggle_action),widget);
-		return;
-	}
-
-	trace("Action %s with toggle %s on widget %p",gtk_action_get_name(action),id,widget);
-
-	// Not found, disable action
-	gtk_action_set_sensitive(action,FALSE);
-}
-*/
-
-/*
 static void selection_move_action(GtkAction *action, GtkWidget *widget)
 {
 	trace("Action %s activated on widget %p dir=%d",gtk_action_get_name(action),widget,g_object_get_data(G_OBJECT(action),"direction"));
@@ -197,7 +173,7 @@ static void cursor_move_action(GtkAction *action, GtkWidget *widget)
 	lib3270_move_cursor(GTK_V3270(widget)->host,(LIB3270_DIRECTION) (flags & 0x03), (flags & 0x80) );
 }
 
-void ui_connect_target_action(GtkAction *action, GtkWidget *widget, const gchar *target, unsigned short flags, GError **error)
+static void connect_move_action(GtkAction *action, GtkWidget *widget, const gchar *target, unsigned short flags, GError **error)
 {
 	int f;
 
@@ -219,14 +195,13 @@ void ui_connect_target_action(GtkAction *action, GtkWidget *widget, const gchar 
 	}
 	else
 	{
-		*error = g_error_new(	g_quark_from_static_string(PACKAGE_NAME),
+		*error = g_error_new(	ERROR_DOMAIN,
 								ENOENT,
 								_( "Unexpected target \"%s\""),
 								target);
 	}
 
 }
-*/
 
 static void action_pfkey(GtkAction *action, GtkWidget *widget)
 {
@@ -253,52 +228,6 @@ static void action_reset_toggle(GtkAction *action, GtkWidget *widget)
 	trace("Action %s activated on widget %p toggle=%d",gtk_action_get_name(action),widget,id);
 	lib3270_set_toggle(GTK_V3270(widget)->host,id,0);
 }
-
-/*
-
-static void action_reselect(GtkAction *action, GtkWidget *widget)
-{
-	lib3270_reselect(GTK_V3270(widget)->host);
-}
-
-static void action_unfullscreen(GtkAction *action, GtkWidget *widget)
-{
-	lib3270_set_toggle(GTK_V3270(widget)->host,LIB3270_TOGGLE_FULL_SCREEN,0);
-}
-
-static void action_pastnext(GtkAction *action, GtkWidget *widget)
-{
-	lib3270_pastenext(GTK_V3270(widget)->host);
-}
-
-void ui_connect_index_action(GtkAction *action, GtkWidget *widget, int ix, GtkAction **lst)
-{
-//	trace("action(%d): %p",ix,action);
-
-	switch(ix)
-	{
-	case ACTION_PASTENEXT:
-		g_signal_connect(action,"activate",G_CALLBACK(action_pastnext),widget);
-		break;
-
-	case ACTION_FULLSCREEN:
-		g_signal_connect(action,"activate",G_CALLBACK(action_fullscreen),widget);
-		break;
-
-	case ACTION_UNFULLSCREEN:
-		g_signal_connect(action,"activate",G_CALLBACK(action_unfullscreen),widget);
-		break;
-
-	case ACTION_RESELECT:
-		g_signal_connect(action,"activate",G_CALLBACK(action_reselect),widget);
-		break;
-
-	default:
-		g_warning("Action \"%s\" has unexpected id %d",gtk_action_get_name(action),ix);
-		gtk_action_set_sensitive(action,FALSE);
-	}
- }
-*/
 
 GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash, const gchar **names, const gchar **values, GError **error)
 {
@@ -439,6 +368,7 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 	{
 	case ACTION_TYPE_DEFAULT:
 		action = gtk_action_new(nm,NULL,NULL,NULL);
+		connect_standard_action(action,widget,nm);
 		break;
 
 	case ACTION_TYPE_TOGGLE:
@@ -451,6 +381,7 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 
 	case ACTION_TYPE_MOVE:
 		action = gtk_action_new(nm,NULL,NULL,NULL);
+		connect_move_action(action,widget,attr,flags,error);
 		break;
 
 	case ACTION_TYPE_PFKEY:
@@ -489,7 +420,6 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 	}
 
 	g_hash_table_insert(hash,nm,action);
-	g_free(nm);
 
 	return action;
 }
