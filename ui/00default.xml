@@ -33,13 +33,13 @@
 	<menubar name='topmenu' topmenu='yes'>
 
 		<menu name='FileMenu' label='_File' >
-			<menuitem action='SaveScreen' group='online' label='Save screen' />
-			<menuitem action='SaveSelected' group='selection' label='Save selected' />
-			<menuitem action='SaveClipboard' group='clipboard' label='Save copy' />
+			<menuitem action='save' src='all' group='online' label='Save screen' />
+			<menuitem action='save' src='selected' group='selection' label='Save selected' />
+			<menuitem action='save' src='copy' group='clipboard' label='Save copy' />
 			<separator/>
-			<menuitem action='PrintScreen' key='Print' icon='print' group='online' label='Print' />
-			<menuitem action='PrintSelected' group='selection' label='Print selected' />
-			<menuitem action='PrintClipboard' group='clipboard' label='Print copy' />
+			<menuitem action='print' src='all' key='Print' icon='print' group='online' label='Print' />
+			<menuitem action='print' src='selected' group='selection' label='Print selected' />
+			<menuitem action='print' src='copy' group='clipboard' label='Print copy' />
 			<separator/>
 			<menu name='FTMenu' group='filetransfer' label='Send/Receive' >
 				<menuitem action='Download' key='<alt>d' group='filetransfer' label='Receive file' />
@@ -53,9 +53,9 @@
 			<menuitem action='CopyAsTable' key='<ctrl><alt>c' group='selection' label='Copy as table' />
 			<menuitem action='CopyAsImage' group='selection' label='Copy as image' />
 			<menuitem action='Append' key='<shift><ctrl>c' group='selection' label='Add to copy' />
-			<menuitem action='Paste' key='<ctrl>v' icon='paste' group='paste' label='Paste' />
-			<menuitem action='PasteNext' key='<shift><ctrl>v' label='Paste next' />
-			<menuitem action='PasteTextFile' group='online' label='Paste text file' />
+			<menuitem action='paste' src='clipboard' key='<ctrl>v' icon='paste' group='paste' label='Paste' />
+			<menuitem action='paste' src='next' key='<shift><ctrl>v' label='Paste next' />
+			<menuitem action='paste' src='file' group='online' label='Paste text file' />
 
 			<separator/>
 			<menuitem action='selectall' key='<ctrl>a' icon='select-all' group='online' label='Select all' />
@@ -125,7 +125,7 @@
 	<toolbar name='toolbar.default' label='Toolbar' key='<alt>t' >
 		<toolitem action='selectall' />
 		<toolitem action='Copy' />
-		<toolitem action='Paste' />
+		<toolitem action='paste' src='clipboard' />
 		<toolitem action='EraseInput' />
 
 		<separator/>
@@ -136,7 +136,7 @@
 		<toolitem action='set' toggle='fullscreen' icon='fullscreen' label='Full Screen' />
 		<toolitem action='reset' toggle='fullscreen' icon='leave-fullscreen' label='Window' />
 		<toolitem action='SelectColors' />
-		<toolitem action='PrintScreen' />
+		<toolitem action='print' src='all' />
 		<toolitem action='Quit' />
 	</toolbar>
 
@@ -147,20 +147,20 @@
 		<menuitem action='selectall'/>
 
 		<separator />
-		<menuitem action='PrintScreen'/>
-		<menuitem action='PrintSelected'/>
-		<menuitem action='PrintClipboard'/>
+		<menuitem action='print' src='all'/>
+		<menuitem action='print' src='selected'/>
+		<menuitem action='print' src='copy'/>
 
 		<separator />
 		<menuitem action='Quit'/>
 	</popup>
 
 	<popup name='defaultpopup' type='default'>
-		<menuitem action='Paste'/>
-		<menuitem action='PasteNext'/>
+		<menuitem action='paste' src='clipboard'/>
+		<menuitem action='paste' src='next'/>
 		<menuitem action='selectall'/>
-		<menuitem action='PrintScreen'/>
-		<menuitem action='PrintClipboard'/>
+		<menuitem action='print' src='all'/>
+		<menuitem action='print' src='copy'/>
 
 		<separator />
 		<menuitem action='backtab' label='Previous field' />

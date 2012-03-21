@@ -76,10 +76,21 @@ static void copy_action(GtkAction *action, GtkWidget *widget)
 	v3270_copy_clipboard(GTK_V3270(widget));
 }
 
-static void paste_action(GtkAction *action, GtkWidget *widget)
+static void paste_clipboard_action(GtkAction *action, GtkWidget *widget)
 {
 	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
 	v3270_paste_clipboard(GTK_V3270(widget));
+}
+
+static void paste_next_action(GtkAction *action, GtkWidget *widget)
+{
+	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
+	lib3270_pastenext(GTK_V3270(widget)->host);
+}
+
+static void paste_file_action(GtkAction *action, GtkWidget *widget)
+{
+	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
 }
 
 static void connect_standard_action(GtkAction *action, GtkWidget *widget, const gchar *name)
@@ -117,7 +128,6 @@ static void connect_standard_action(GtkAction *action, GtkWidget *widget, const 
 		{ "connect", 	connect_action		},
 		{ "copy", 		copy_action			},
 		{ "disconnect", disconnect_action	},
-		{ "paste", 		paste_action		},
 	};
 
 	int f;
@@ -229,6 +239,21 @@ static void action_reset_toggle(GtkAction *action, GtkWidget *widget)
 	lib3270_set_toggle(GTK_V3270(widget)->host,id,0);
 }
 
+static int id_from_array(const gchar *key, const gchar **array, GError **error)
+{
+	int f;
+
+	for(f = 0;array[f];f++)
+	{
+		if(!g_strcasecmp(key,array[f]))
+			return f;
+	}
+
+	*error = g_error_new(ERROR_DOMAIN,EINVAL, _("Unexpected or invalid attribute value \"%s\""), key );
+
+	return -1;
+}
+
 GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash, const gchar **names, const gchar **values, GError **error)
 {
 	static const gchar *actionname[ACTION_COUNT] = {	"pastenext",
@@ -240,6 +265,7 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 	GtkAction 		**toggle_action	= (GtkAction **) g_object_get_data(G_OBJECT(widget),"toggle_actions");
 	const gchar		* direction		= ui_get_attribute("direction",names,values);
 	unsigned short	  flags			= 0;
+	const GCallback * callback		= NULL;
 	const gchar		* attr;
 	int				  id			= 0;
 	gchar			* nm			= NULL;
@@ -254,6 +280,7 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 		ACTION_TYPE_PAKEY,
 		ACTION_TYPE_SET,
 		ACTION_TYPE_RESET,
+		ACTION_TYPE_TABLE,
 
 	} action_type = ACTION_TYPE_DEFAULT;
 
@@ -300,6 +327,37 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 		}
 
 		nm = g_strconcat((flags & 0x80) ? "select" : "move",attr,direction, NULL);
+
+	}
+	else if(!g_strcasecmp(name,"paste"))
+	{
+		action_type	= ACTION_TYPE_TABLE;
+		attr		= ui_get_attribute("src",names,values);
+
+		if(!attr)
+		{
+			*error = g_error_new(ERROR_DOMAIN,EINVAL,"%s",_("Paste action needs src attribute" ));
+			return NULL;
+		}
+		else
+		{
+			static const GCallback cbk[] = {	G_CALLBACK(paste_clipboard_action),
+												G_CALLBACK(paste_next_action),
+												G_CALLBACK(paste_file_action)
+											};
+			static const gchar 		* src[] = { "clipboard",
+												"next",
+												"file",
+												NULL
+												};
+			id = id_from_array(attr,src,error);
+			if(id < 0)
+				return NULL;
+
+			callback = cbk;
+		}
+
+		nm = g_strconcat(name,attr, NULL);
 
 	}
 	else if(!g_strcasecmp(name,"set"))
@@ -406,6 +464,11 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 		action = gtk_action_new(nm,NULL,NULL,NULL);
 		g_object_set_data(G_OBJECT(action),"toggle_id",(gpointer) id);
 		g_signal_connect(action,"activate",G_CALLBACK(action_reset_toggle),widget);
+		break;
+
+	case ACTION_TYPE_TABLE:
+		action = gtk_action_new(nm,NULL,NULL,NULL);
+		g_signal_connect(action,"activate",callback[id],widget);
 		break;
 	}
 
