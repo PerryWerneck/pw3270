@@ -56,6 +56,7 @@
  GtkWidget	* create_main_window(void);
  void		  setup_font_list(GtkWidget *widget, GtkWidget *obj);
 
-
-
+ // actions
+ void paste_file_action(GtkAction *action, GtkWidget *widget);
+ void hostname_action(GtkAction *action, GtkWidget *widget);
 

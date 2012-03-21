@@ -48,8 +48,27 @@ static void lib3270_action(GtkAction *action, GtkWidget *widget)
 
 static void connect_action(GtkAction *action, GtkWidget *widget)
 {
+	gchar *host = (gchar *) g_object_get_data(G_OBJECT(action),"host");
+	int f;
+
 	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
-	v3270_connect(widget,g_object_get_data(G_OBJECT(action),"host"));
+
+	if(host)
+	{
+		v3270_connect(widget,host);
+		return;
+	}
+
+	host = get_string_from_config("host","uri","");
+	if(*host)
+	{
+		v3270_connect(widget,host);
+		g_free(host);
+		return;
+	}
+	g_free(host);
+
+	hostname_action(action,widget);
 }
 
 static void disconnect_action(GtkAction *action, GtkWidget *widget)
@@ -88,11 +107,6 @@ static void paste_next_action(GtkAction *action, GtkWidget *widget)
 	lib3270_pastenext(GTK_V3270(widget)->host);
 }
 
-static void paste_file_action(GtkAction *action, GtkWidget *widget)
-{
-	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
-}
-
 static void connect_standard_action(GtkAction *action, GtkWidget *widget, const gchar *name)
 {
 	#undef DECLARE_LIB3270_ACTION
@@ -128,6 +142,7 @@ static void connect_standard_action(GtkAction *action, GtkWidget *widget, const 
 		{ "connect", 	connect_action		},
 		{ "copy", 		copy_action			},
 		{ "disconnect", disconnect_action	},
+		{ "hostname",	hostname_action		}
 	};
 
 	int f;
@@ -307,10 +322,13 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 	{
 		action_type	= ACTION_TYPE_TOGGLE;
 		attr		= ui_get_attribute("id",names,values);
-		id			= lib3270_get_toggle_id(attr);
+		if(!attr)
+			attr = ui_get_attribute("toggle",names,values);
+
+		id = lib3270_get_toggle_id(attr);
 		if(id < 0)
 		{
-			*error = g_error_new(ERROR_DOMAIN,EINVAL,"%s",_("Toggle action needs a valid toggle id" ));
+			*error = g_error_new(ERROR_DOMAIN,EINVAL,_("%s action needs a valid toggle name" ), name);
 			return NULL;
 		}
 		nm 	= g_strconcat(name,attr,NULL);
@@ -336,7 +354,7 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 
 		if(!attr)
 		{
-			*error = g_error_new(ERROR_DOMAIN,EINVAL,"%s",_("Paste action needs src attribute" ));
+			*error = g_error_new(ERROR_DOMAIN,EINVAL,_("%s action needs src attribute" ), name);
 			return NULL;
 		}
 		else
@@ -367,7 +385,7 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 		id			= lib3270_get_toggle_id(attr);
 		if(id < 0)
 		{
-			*error = g_error_new(ERROR_DOMAIN,EINVAL,"%s",_("Set action needs a valid toggle name" ));
+			*error = g_error_new(ERROR_DOMAIN,EINVAL,_("%s action needs a valid toggle name" ), name);
 			return NULL;
 		}
 		nm 	 = g_strconcat("set",attr,NULL);
@@ -379,7 +397,7 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 		id			= lib3270_get_toggle_id(attr);
 		if(id < 0)
 		{
-			*error = g_error_new(ERROR_DOMAIN,EINVAL,"%s",_("Reset action needs a valid toggle name" ));
+			*error = g_error_new(ERROR_DOMAIN,EINVAL,_("%s action needs a valid toggle name" ), name);
 			return NULL;
 		}
 		nm = g_strconcat("reset",attr,NULL);
@@ -390,7 +408,7 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 		attr 		= ui_get_attribute("id",names,values);
 		if(!attr)
 		{
-			*error = g_error_new(ERROR_DOMAIN,EINVAL,"%s",_("pf action needs a valid id attribute" ));
+			*error = g_error_new(ERROR_DOMAIN,EINVAL,_("%s action needs a valid id attribute" ),name);
 			return NULL;
 		}
 		id   = atoi(attr);
@@ -402,7 +420,7 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 		attr 		= ui_get_attribute("id",names,values);
 		if(!attr)
 		{
-			*error = g_error_new(ERROR_DOMAIN,EINVAL,"%s",_("pf action needs a valid id attribute" ));
+			*error = g_error_new(ERROR_DOMAIN,EINVAL,_("%s action needs a valid id attribute" ),name);
 			return NULL;
 		}
 		id   = atoi(attr);
@@ -410,7 +428,8 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 	}
 	else
 	{
-		nm = g_strdup(name);
+		attr = ui_get_attribute("name",names,values);
+		nm = g_strdup(attr ? attr : name);
 	}
 
 	// Check if action is available
@@ -426,7 +445,7 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 	{
 	case ACTION_TYPE_DEFAULT:
 		action = gtk_action_new(nm,NULL,NULL,NULL);
-		connect_standard_action(action,widget,nm);
+		connect_standard_action(action,widget,name);
 		break;
 
 	case ACTION_TYPE_TOGGLE:

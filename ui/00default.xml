@@ -78,9 +78,18 @@
 		<menu name='ScriptsMenu' label='Scripts' />
 
 		<menu name='NetworkMenu' label='_Network' >
-			<menuitem action='SetHostname' icon='home' group='offline' label='Set hostname' />
-			<menuitem action='Connect' icon='connect' group='offline' label='_Connect' />
-			<menuitem action='Disconnect' icon='disconnect' group='online' label='_Disconnect' />
+			<menuitem action='hostname' icon='home' group='offline' label='Set hostname' />
+
+			<!--
+				If you want to connect to specific host use host='uri' to set it
+
+				Examples:
+
+				<menuitem name='IBMlink' action='connect' icon='connect' group='offline' label='IBMlink' host='ibmlink.advantis.com' />
+				<menuitem name='fandezhi' action='connect' icon='connect' group='offline' label='Fan DeZhi Mainframe System' host='fandezhi.efglobe.com:23' />
+			-->
+			<menuitem action='connect' icon='connect' group='offline' label='_Connect' />
+			<menuitem action='disconnect' icon='disconnect' group='online' label='_Disconnect' />
 		</menu>
 
 		<menu name='SettingsMenu' label='Settings' sysmenu='yes' >
@@ -89,7 +98,7 @@
 			<!--- Special action - The fontselect menu will be populated with all available monospaced fonts --->
 			<menuitem name='fontselect' icon='select-font' label='Select font' />
 
-			<!--- Special action - The Scrensize menu will be populate with the available screen sizes --->
+			<!--- Special action - The Scrensizes menu will be populate with the available screen sizes --->
 			<menuitem name='ScreenSizes' group='offline' label='Screen size' />
 
 			<menu name='OptionsMenu' label='_Options' >
@@ -129,8 +138,8 @@
 		<toolitem action='EraseInput' />
 
 		<separator/>
-		<toolitem action='Connect' />
-		<toolitem action='Disconnect' />
+		<toolitem action='connect' />
+		<toolitem action='disconnect' />
 
 		<separator/>
 		<toolitem action='set' toggle='fullscreen' icon='fullscreen' label='Full Screen' />
