@@ -910,8 +910,7 @@ static Boolean key_Character(int code, Boolean with_ge, Boolean pasting, Boolean
 			return False;
 		break;
 	}
-	ctlr_add(baddr, (unsigned char)code,
-	    (unsigned char)(with_ge ? CS_GE : 0));
+	ctlr_add(baddr, (unsigned char)code,(unsigned char)(with_ge ? CS_GE : 0));
 	ctlr_add_fg(baddr, 0);
 	ctlr_add_gr(baddr, 0);
 	INC_BA(baddr);
@@ -2273,7 +2272,7 @@ LIB3270_ACTION( dup )
 {
 	if (kybdlock)
 	{
-		ENQUEUE_ACTION(lib3270_enter);
+		ENQUEUE_ACTION(lib3270_dup);
 		return 0;
 	}
 #if defined(X3270_ANSI)
@@ -2286,13 +2285,12 @@ LIB3270_ACTION( dup )
 
 /*
  * FM key
- */ /*
-void
-FieldMark_action(Widget w unused, XEvent *event, String *params, Cardinal *num_params)
+ */
+LIB3270_ACTION( fieldmark )
 {
-//	reset_idle_timer();
-	if (kybdlock) {
-		enq_ta(FieldMark_action, CN, CN);
+	if (kybdlock)
+	{
+		ENQUEUE_ACTION(lib3270_fieldmark);
 		return;
 	}
 #if defined(X3270_ANSI)
@@ -2300,7 +2298,7 @@ FieldMark_action(Widget w unused, XEvent *event, String *params, Cardinal *num_p
 		return;
 #endif
 	(void) key_Character(EBC_fm, False, False, NULL);
-} */
+}
 
 /**
  * Send an "Enter" action.

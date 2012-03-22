@@ -2376,8 +2376,7 @@ ctlr_blanks(void)
  * Change a character in the 3270 buffer.
  * Removes any field attribute defined at that location.
  */
-void
-ctlr_add(int baddr, unsigned char c, unsigned char cs)
+void ctlr_add(int baddr, unsigned char c, unsigned char cs)
 {
 	unsigned char oc = 0;
 
@@ -2389,13 +2388,9 @@ ctlr_add(int baddr, unsigned char c, unsigned char cs)
 			if (toggled(SCREEN_TRACE))
 				trace_screen();
 #endif /*]*/
-//			scroll_save(session->maxROWS, False);
 			trace_primed = False;
 		}
-		/*
-		if (SELECTED(baddr))
-			unselect(baddr, 1);
-		*/
+
 		h3270.ea_buf[baddr].cc = c;
 		h3270.ea_buf[baddr].cs = cs;
 		h3270.ea_buf[baddr].fa = 0;
