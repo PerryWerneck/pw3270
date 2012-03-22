@@ -275,6 +275,27 @@ static int id_from_array(const gchar *key, const gchar **array, GError **error)
 	return -1;
 }
 
+static int setup_block_action(const gchar *name, const gchar *attr, GError **error)
+{
+	int id = -1;
+
+	if(!attr)
+	{
+		*error = g_error_new(ERROR_DOMAIN,EINVAL,_("%s action needs src attribute" ), name);
+	}
+	else
+	{
+		static const gchar * src[] = { "all", "selected", "copy", NULL };
+
+		id = id_from_array(attr,src,error);
+		if(id < 0)
+		{
+			*error = g_error_new(ERROR_DOMAIN,EINVAL,_("Unexpected or invalid src attribute: \"%s\"" ), attr);
+		}
+	}
+	return id;
+}
+
 GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash, const gchar **names, const gchar **values, GError **error)
 {
 	static const gchar *actionname[ACTION_COUNT] = {	"pastenext",
@@ -376,11 +397,8 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 												G_CALLBACK(paste_next_action),
 												G_CALLBACK(paste_file_action)
 											};
-			static const gchar 		* src[] = { "clipboard",
-												"next",
-												"file",
-												NULL
-												};
+			static const gchar 		* src[] = { "clipboard", "next", "file", NULL };
+
 			id = id_from_array(attr,src,error);
 			if(id < 0)
 				return NULL;
@@ -391,36 +409,35 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 		nm = g_strconcat(name,attr, NULL);
 
 	}
-	else if(!(g_strcasecmp(name,"save") && g_strcasecmp(name,"print")))
+	else if(!g_strcasecmp(name,"save"))
 	{
-		action_type	= ACTION_TYPE_TABLE;
-		attr		= ui_get_attribute("src",names,values);
-
-		if(!attr)
-		{
-			*error = g_error_new(ERROR_DOMAIN,EINVAL,_("%s action needs src attribute" ), name);
-			return NULL;
-		}
-		else
-		{
-			static const GCallback cbk[] = {	G_CALLBACK(nop_action),
-												G_CALLBACK(nop_action),
-												G_CALLBACK(nop_action)
+		static const GCallback cbk[] = {	G_CALLBACK(save_all_action),
+											G_CALLBACK(save_selected_action),
+											G_CALLBACK(save_copy_action)
 											};
-			static const gchar 		* src[] = { "all",
-												"selected",
-												"copy",
-												NULL
-												};
-			id = id_from_array(attr,src,error);
-			if(id < 0)
-				return NULL;
 
-			callback = cbk;
-		}
+		callback	= cbk;
+		action_type	= ACTION_TYPE_TABLE;
+		attr 		= ui_get_attribute("src",names,values);
+		id			= setup_block_action(name,attr,error);
+		if(*error)
+			return NULL;
+		nm = g_strconcat(name,attr,NULL);
+	}
+	else if(!g_strcasecmp(name,"print"))
+	{
+		static const GCallback cbk[] = {	G_CALLBACK(nop_action),
+											G_CALLBACK(nop_action),
+											G_CALLBACK(nop_action)
+											};
 
-		nm = g_strconcat(name,attr, NULL);
-
+		callback	= cbk;
+		action_type	= ACTION_TYPE_TABLE;
+		attr 		= ui_get_attribute("src",names,values);
+		id			= setup_block_action(name,attr,error);
+		if(*error)
+			return NULL;
+		nm = g_strconcat(name,attr,NULL);
 	}
 	else if(!g_strcasecmp(name,"set"))
 	{

@@ -18,51 +18,37 @@
  * programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple
  * Place, Suite 330, Boston, MA, 02111-1307, USA
  *
- * Este programa está nomeado como globals.c e possui - linhas de código.
+ * Este programa está nomeado como dialog.c e possui - linhas de código.
  *
  * Contatos:
  *
  * perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
  * erico.mendonca@gmail.com	(Erico Mascarenhas Mendonça)
+ * licinio@bb.com.br		(Licínio Luis Branco)
+ * kraucer@bb.com.br		(Kraucer Fernandes Mazuco)
  *
  */
 
- #include <pw3270.h>
- #include <lib3270/config.h>
- #include <gtk/gtk.h>
-
- #define ENABLE_NLS
- #define GETTEXT_PACKAGE PACKAGE_NAME
-
- #include <libintl.h>
- #include <glib/gi18n.h>
-
+ #include "globals.h"
  #include "v3270/v3270.h"
 
- // Special actions
- enum
+/*--[ Implement ]------------------------------------------------------------------------------------*/
+
+ void print_all_action(GtkAction *action, GtkWidget *widget)
  {
- 	ACTION_PASTENEXT,
- 	ACTION_RESELECT,
- 	ACTION_FULLSCREEN,
- 	ACTION_UNFULLSCREEN,
+	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
 
- 	ACTION_COUNT
- };
+ }
 
- // Configuration
- #include "common/common.h"
+ void print_selected_action(GtkAction *action, GtkWidget *widget)
+ {
+	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
 
- GtkWidget	* create_main_window(void);
- void		  setup_font_list(GtkWidget *widget, GtkWidget *obj);
+ }
 
- // actions
- void paste_file_action(GtkAction *action, GtkWidget *widget);
- void hostname_action(GtkAction *action, GtkWidget *widget);
- void save_all_action(GtkAction *action, GtkWidget *widget);
- void save_selected_action(GtkAction *action, GtkWidget *widget);
- void save_copy_action(GtkAction *action, GtkWidget *widget);
- void print_all_action(GtkAction *action, GtkWidget *widget);
- void print_selected_action(GtkAction *action, GtkWidget *widget);
- void print_copy_action(GtkAction *action, GtkWidget *widget);
+ void print_copy_action(GtkAction *action, GtkWidget *widget)
+ {
+	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
+
+ }
 

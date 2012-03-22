@@ -34,6 +34,50 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
+ static int save_dialog(GtkAction *action, GtkWidget *widget, const gchar *title, const gchar *errmsg, gchar *text)
+ {
+ 	GtkWindow	* toplevel		= GTK_WINDOW(gtk_widget_get_toplevel(widget));
+ 	const gchar * user_title	= g_object_get_data(G_OBJECT(action),"title");
+
+	GtkWidget *dialog = gtk_file_chooser_dialog_new( gettext(user_title ? user_title : title),
+                                                     toplevel,
+                                                     GTK_FILE_CHOOSER_ACTION_SAVE,
+                                                     GTK_STOCK_CANCEL,	GTK_RESPONSE_CANCEL,
+                                                     GTK_STOCK_SAVE,	GTK_RESPONSE_ACCEPT,
+                                                     NULL );
+
+
+	if(gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
+	{
+		GError	*error 		= NULL;
+		gchar	*filename	= gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+
+		if(!g_file_set_contents(filename,text,-1,&error))
+		{
+			GtkWidget *popup = gtk_message_dialog_new_with_markup(
+												toplevel,
+												GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
+												GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,
+												gettext(errmsg),filename);
+
+			gtk_window_set_title(GTK_WINDOW(popup),_("Can´t save file"));
+
+			gtk_message_dialog_format_secondary_markup(GTK_MESSAGE_DIALOG(popup),"%s",error->message);
+			g_error_free(error);
+
+			gtk_dialog_run(GTK_DIALOG(popup));
+			gtk_widget_destroy(popup);
+
+		}
+
+		g_free(filename);
+	}
+
+	gtk_widget_destroy(dialog);
+ 	return 0;
+ }
+
+
  void paste_file_action(GtkAction *action, GtkWidget *widget)
  {
 	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
@@ -114,6 +158,8 @@
  		{
 		case GTK_RESPONSE_ACCEPT:
 
+			#warning Work in progress
+
 /*
 			gtk_widget_set_sensitive(dialog,FALSE);
 
@@ -126,8 +172,7 @@
 			strncat(buffer,":",1023);
 			strncat(buffer,gtk_entry_get_text(port),1023);
 
-			#warning Need more work
-			if(!host_connect(buffer,1))
+			if(!lib3270_connect(GTK_V3270(widget)->host,host,1))
 			{
 				// Connection OK
 				again = FALSE;
@@ -148,3 +193,20 @@
 	g_free(cfghost);
  }
 
+ void save_all_action(GtkAction *action, GtkWidget *widget)
+ {
+	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
+
+ }
+
+ void save_selected_action(GtkAction *action, GtkWidget *widget)
+ {
+	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
+
+ }
+
+ void save_copy_action(GtkAction *action, GtkWidget *widget)
+ {
+	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
+
+ }

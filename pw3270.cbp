@@ -62,6 +62,9 @@
 		<Unit filename="src\gtk\mainwindow.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src\gtk\print.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src\gtk\uiparser\Makefile.in" />
 		<Unit filename="src\gtk\uiparser\accelerator.c">
 			<Option compilerVar="CC" />
