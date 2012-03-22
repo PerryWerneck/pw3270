@@ -75,29 +75,44 @@ static void clipboard_get(GtkClipboard *clipboard, GtkSelectionData *selection, 
 	}
 }
 
-void v3270_copy_clipboard(v3270 *widget)
+const gchar * v3270_get_selected_text(GtkWidget *widget)
 {
-	char *text;
-	GtkClipboard * clipboard = gtk_widget_get_clipboard(GTK_WIDGET(widget),GDK_SELECTION_CLIPBOARD);
+	v3270 *terminal;
+	gchar *text;
 
-	if(widget->clipboard)
+	g_return_val_if_fail(GTK_IS_V3270(widget),NULL);
+
+	terminal = GTK_V3270(widget);
+
+	if(terminal->clipboard)
 	{
-		g_free(widget->clipboard);
-		widget->clipboard = NULL;
+		g_free(terminal->clipboard);
+		terminal->clipboard = NULL;
 	}
 
-	text = lib3270_get_selected(widget->host);
+	text = lib3270_get_selected(terminal->host);
 
 	if(!text)
 	{
 		g_signal_emit(widget,v3270_widget_signal[SIGNAL_CLIPBOARD], 0, FALSE);
-		lib3270_ring_bell(widget->host);
-		return;
+		lib3270_ring_bell(terminal->host);
+		return NULL;
 	}
 
-	widget->clipboard = g_convert(text, -1, "UTF-8", lib3270_get_charset(widget->host), NULL, NULL, NULL);
+	terminal->clipboard = g_convert(text, -1, "UTF-8", lib3270_get_charset(terminal->host), NULL, NULL, NULL);
 
 	free(text);
+
+	return terminal->clipboard;
+}
+
+void v3270_copy_clipboard(GtkWidget *widget)
+{
+	const gchar		* text		= v3270_get_selected_text(widget);
+	GtkClipboard	* clipboard	= gtk_widget_get_clipboard(widget,GDK_SELECTION_CLIPBOARD);
+
+	if(!text)
+		return;
 
 	if(gtk_clipboard_set_with_owner(	clipboard,
 										targets,
@@ -245,8 +260,8 @@ static void text_received(GtkClipboard *clipboard, const gchar *text, GtkWidget 
 	v3270_paste_string(widget,text,"UTF-8");
 }
 
-void v3270_paste_clipboard(v3270 *widget)
+void v3270_paste_clipboard(GtkWidget *widget)
 {
-	gtk_clipboard_request_text(gtk_widget_get_clipboard(GTK_WIDGET(widget),GDK_SELECTION_CLIPBOARD),(GtkClipboardTextReceivedFunc) text_received,(gpointer) widget);
+	gtk_clipboard_request_text(gtk_widget_get_clipboard(widget,GDK_SELECTION_CLIPBOARD),(GtkClipboardTextReceivedFunc) text_received,(gpointer) widget);
 }
 

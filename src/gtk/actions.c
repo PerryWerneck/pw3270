@@ -97,13 +97,13 @@ static void reload_action(GtkAction *action, GtkWidget *widget)
 static void copy_action(GtkAction *action, GtkWidget *widget)
 {
 	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
-	v3270_copy_clipboard(GTK_V3270(widget));
+	v3270_copy_clipboard(widget);
 }
 
 static void paste_clipboard_action(GtkAction *action, GtkWidget *widget)
 {
 	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
-	v3270_paste_clipboard(GTK_V3270(widget));
+	v3270_paste_clipboard(widget);
 }
 
 static void paste_next_action(GtkAction *action, GtkWidget *widget)
@@ -189,7 +189,7 @@ static void lib3270_toggle_action(GtkToggleAction *action,GtkWidget *widget)
 
 	if(toggle == TOGGLE_GDKDEBUG)
 		gdk_window_set_debug_updates(gtk_toggle_action_get_active(action));
-	else
+	else if(toggle < LIB3270_TOGGLE_COUNT)
 		lib3270_set_toggle(GTK_V3270(widget)->host,toggle,gtk_toggle_action_get_active(action));
 }
 
@@ -511,7 +511,8 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 
 	case ACTION_TYPE_TOGGLE:
 		action = GTK_ACTION(gtk_toggle_action_new(nm,NULL,NULL,NULL));
-		toggle_action[id] = action;
+		if(id < LIB3270_TOGGLE_COUNT)
+			toggle_action[id] = action;
 		g_object_set_data(G_OBJECT(action),"toggle_id",(gpointer) id);
 		gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action),(lib3270_get_toggle(GTK_V3270(widget)->host,id) != 0));
 		g_signal_connect(action,"toggled",G_CALLBACK(lib3270_toggle_action),widget);

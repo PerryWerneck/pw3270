@@ -34,17 +34,22 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
- static int save_dialog(GtkAction *action, GtkWidget *widget, const gchar *title, const gchar *errmsg, gchar *text)
+ static int save_dialog(GtkAction *action, GtkWidget *widget, const gchar *title, const gchar *errmsg, const gchar *text)
  {
  	GtkWindow	* toplevel		= GTK_WINDOW(gtk_widget_get_toplevel(widget));
  	const gchar * user_title	= g_object_get_data(G_OBJECT(action),"title");
+	GtkWidget	* dialog;
 
-	GtkWidget *dialog = gtk_file_chooser_dialog_new( gettext(user_title ? user_title : title),
-                                                     toplevel,
-                                                     GTK_FILE_CHOOSER_ACTION_SAVE,
-                                                     GTK_STOCK_CANCEL,	GTK_RESPONSE_CANCEL,
-                                                     GTK_STOCK_SAVE,	GTK_RESPONSE_ACCEPT,
-                                                     NULL );
+
+	if(!text)
+		return;
+
+	dialog = gtk_file_chooser_dialog_new( 	gettext(user_title ? user_title : title),
+											toplevel,
+											GTK_FILE_CHOOSER_ACTION_SAVE,
+											GTK_STOCK_CANCEL,	GTK_RESPONSE_CANCEL,
+											GTK_STOCK_SAVE,		GTK_RESPONSE_ACCEPT,
+											NULL );
 
 
 	if(gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
@@ -95,7 +100,7 @@
  	GtkEntry		* host		= GTK_ENTRY(gtk_entry_new());
  	GtkEntry		* port		= GTK_ENTRY(gtk_entry_new());
  	GtkToggleButton	* checkbox	= GTK_TOGGLE_BUTTON(gtk_check_button_new_with_label( _( "Secure connection" ) ));
- 	GtkWidget 		* dialog 	= gtk_dialog_new_with_buttons(	gettext(title ? title : "Select hostname"),
+ 	GtkWidget 		* dialog 	= gtk_dialog_new_with_buttons(	gettext(title ? title : N_( "Select hostname" )),
 																GTK_WINDOW(gtk_widget_get_toplevel(widget)),
 																GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
 																GTK_STOCK_CONNECT,	GTK_RESPONSE_ACCEPT,
@@ -104,7 +109,7 @@
 
 	gtk_window_set_icon_name(GTK_WINDOW(dialog),GTK_STOCK_HOME);
 	gtk_entry_set_max_length(host,0xFF);
-	gtk_entry_set_width_chars(host,60);
+	gtk_entry_set_width_chars(host,50);
 
 	gtk_entry_set_max_length(port,6);
 	gtk_entry_set_width_chars(port,7);
@@ -119,7 +124,7 @@
 
 	gtk_container_set_border_width(GTK_CONTAINER(table),5);
 
-	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox),GTK_WIDGET(table),FALSE,FALSE,2);
+	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),GTK_WIDGET(table),FALSE,FALSE,2);
 
 	hostname = cfghost;
 
@@ -157,29 +162,23 @@
  		switch(gtk_dialog_run(GTK_DIALOG(dialog)))
  		{
 		case GTK_RESPONSE_ACCEPT:
-
-			#warning Work in progress
-
-/*
 			gtk_widget_set_sensitive(dialog,FALSE);
 
-			if(gtk_toggle_button_get_active(checkbox))
-				strcpy(buffer,"L:");
-			else
-				*buffer = 0;
+			hostname = g_strconcat(	gtk_toggle_button_get_active(checkbox) ? "L:" : "",
+									gtk_entry_get_text(host),
+									":",
+									gtk_entry_get_text(port),
+									NULL
+								);
 
-			strncat(buffer,gtk_entry_get_text(host),1023);
-			strncat(buffer,":",1023);
-			strncat(buffer,gtk_entry_get_text(port),1023);
-
-			if(!lib3270_connect(GTK_V3270(widget)->host,host,1))
+			if(!lib3270_connect(v3270_get_session(widget),hostname,1))
 			{
 				// Connection OK
+				set_string_to_config("host","uri","%s",hostname);
 				again = FALSE;
-				set_string_to_config("host","uri","%s",buffer);
-				SetString("Network","Hostname",buffer);
 			}
-*/
+
+			g_free(hostname);
 			break;
 
 		case GTK_RESPONSE_REJECT:
@@ -203,6 +202,11 @@
  {
 	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
 
+	save_dialog(	action,
+					widget,
+					N_( "Save selection to file" ),
+					N_( "Can't save selection to file \n%s" ),
+					v3270_get_selected_text(widget));
  }
 
  void save_copy_action(GtkAction *action, GtkWidget *widget)

@@ -626,6 +626,9 @@ int lib3270_connect(H3270 *h, const char *n, int wait)
 	if(PCONNECTED)
 		return EBUSY;
 
+	if(!n)
+		return ENOENT;
+
 	rc = do_connect(h,n);
 	if(rc)
 		return rc;
