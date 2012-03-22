@@ -199,6 +199,11 @@
 
  }
 
+ static void has_text(GtkWidget *widget, gboolean on, GtkActionGroup **group)
+ {
+	gtk_action_group_set_sensitive(group[ACTION_GROUP_CLIPBOARD],on);
+ }
+
  static void pastenext(GtkWidget *widget, gboolean on, GtkAction **action)
  {
 	gtk_action_set_sensitive(action[ACTION_PASTENEXT],on);
@@ -346,9 +351,10 @@
 	g_signal_connect(terminal,"model_changed",G_CALLBACK(update_model),0);
 	g_signal_connect(terminal,"selecting",G_CALLBACK(selecting),group);
 	g_signal_connect(terminal,"popup",G_CALLBACK(popup_menu),popup);
+	g_signal_connect(terminal,"has_text",G_CALLBACK(has_text),group);
 
 	g_free(path);
-	gtk_widget_grab_focus(terminal);
+//	gtk_widget_grab_focus(terminal);
 
 	if(lib3270_get_toggle(host,LIB3270_TOGGLE_FULL_SCREEN))
 		gtk_window_fullscreen(GTK_WINDOW(window));
@@ -358,6 +364,7 @@
 #endif
 
 	trace("%s ends",__FUNCTION__);
+	gtk_window_set_focus(GTK_WINDOW(window),terminal);
  	return window;
  }
 

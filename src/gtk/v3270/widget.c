@@ -302,6 +302,14 @@ static void v3270_class_init(v3270Class *klass)
 						pw3270_VOID__VOID_BOOL,
 						G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 
+	v3270_widget_signal[SIGNAL_CLIPBOARD] =
+		g_signal_new(	"has_text",
+						G_OBJECT_CLASS_TYPE (gobject_class),
+						G_SIGNAL_RUN_FIRST,
+						0,
+						NULL, NULL,
+						pw3270_VOID__VOID_BOOL,
+						G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 }
 
 void v3270_update_font_metrics(v3270 *terminal, cairo_t *cr, int width, int height)
@@ -875,12 +883,8 @@ int v3270_connect(GtkWidget *widget, const gchar *host)
 	g_return_val_if_fail(GTK_IS_V3270(widget),EINVAL);
 
 
-
 	terminal = GTK_V3270(widget);
 
-	rc = lib3270_connect(terminal->host,host,0);
-
-/*
 	if(host)
 	{
 		set_string_to_config("host","uri","%s",host);
@@ -897,7 +901,7 @@ int v3270_connect(GtkWidget *widget, const gchar *host)
 
 		g_free(hs);
 	}
-*/
+
 	trace("%s exits with rc=%d (%s)",__FUNCTION__,rc,strerror(rc));
 
 	return rc;

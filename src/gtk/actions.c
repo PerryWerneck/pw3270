@@ -36,6 +36,7 @@
  #include <lib3270/selection.h>
 
  #define ERROR_DOMAIN g_quark_from_static_string(PACKAGE_NAME)
+ #define TOGGLE_GDKDEBUG LIB3270_TOGGLE_COUNT+1
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
@@ -186,7 +187,10 @@ static void lib3270_toggle_action(GtkToggleAction *action,GtkWidget *widget)
 
 	trace("Action %s toggled on widget %p (id=%d)",gtk_action_get_name(GTK_ACTION(action)),widget,(int) toggle);
 
-	lib3270_set_toggle(GTK_V3270(widget)->host,toggle,gtk_toggle_action_get_active(action));
+	if(toggle == TOGGLE_GDKDEBUG)
+		gdk_window_set_debug_updates(gtk_toggle_action_get_active(action));
+	else
+		lib3270_set_toggle(GTK_V3270(widget)->host,toggle,gtk_toggle_action_get_active(action));
 }
 
 static void selection_move_action(GtkAction *action, GtkWidget *widget)
@@ -327,11 +331,18 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 		if(!attr)
 			attr = ui_get_attribute("toggle",names,values);
 
-		id = lib3270_get_toggle_id(attr);
-		if(id < 0)
+		if(g_strcasecmp(attr,"gdkdebug"))
 		{
-			*error = g_error_new(ERROR_DOMAIN,EINVAL,_("%s action needs a valid toggle name" ), name);
-			return NULL;
+			id = lib3270_get_toggle_id(attr);
+			if(id < 0)
+			{
+				*error = g_error_new(ERROR_DOMAIN,EINVAL,_("%s action needs a valid toggle name" ), name);
+				return NULL;
+			}
+		}
+		else
+		{
+			id = TOGGLE_GDKDEBUG;
 		}
 		nm 	= g_strconcat(name,attr,NULL);
 	}

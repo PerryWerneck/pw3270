@@ -90,6 +90,7 @@ void v3270_copy_clipboard(v3270 *widget)
 
 	if(!text)
 	{
+		g_signal_emit(widget,v3270_widget_signal[SIGNAL_CLIPBOARD], 0, FALSE);
 		lib3270_ring_bell(widget->host);
 		return;
 	}
@@ -108,6 +109,9 @@ void v3270_copy_clipboard(v3270 *widget)
 	{
 		gtk_clipboard_set_can_store(clipboard,targets,1);
 	}
+
+	g_signal_emit(widget,v3270_widget_signal[SIGNAL_CLIPBOARD], 0, TRUE);
+
 }
 
 void v3270_paste_string(GtkWidget *widget, const gchar *text, const gchar *encoding)

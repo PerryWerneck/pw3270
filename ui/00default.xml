@@ -181,7 +181,7 @@
 
 	</popup>
 
-	<accelerator action='Toggle' id='Insert' key='Insert' group='online' />
+	<accelerator action='toggle' id='insert' key='Insert' group='online' />
 
 	<accelerator action='Home' key='Home' group='online' />
 	<!-- accelerator action='Reset' key='<Shift><Ctrl>r' group='online' /-->
