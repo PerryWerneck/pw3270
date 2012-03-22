@@ -127,26 +127,66 @@ const gchar * v3270_get_selected_text(GtkWidget *widget)
 	return terminal->clipboard;
 }
 
-void v3270_copy_clipboard(GtkWidget *widget)
+const gchar * v3270_copy_append(GtkWidget *widget)
+{
+	v3270			* terminal;
+	char 			* str;
+	gchar			* text;
+	gchar 			* clip;
+
+	g_return_val_if_fail(GTK_IS_V3270(widget),NULL);
+
+	terminal = GTK_V3270(widget);
+
+	if(!terminal->clipboard)
+		return v3270_get_selected_text(widget);
+
+	str = lib3270_get_selected(terminal->host);
+
+	if(!str)
+		return terminal->clipboard;
+
+	text = g_convert(str, -1, "UTF-8", lib3270_get_charset(terminal->host), NULL, NULL, NULL);
+
+	free(str);
+
+	clip = g_strconcat(terminal->clipboard,"\n",text,NULL);
+
+	g_free(text);
+	g_free(terminal->clipboard);
+
+	terminal->clipboard = clip;
+
+	gtk_clipboard_set_text(gtk_widget_get_clipboard(widget,GDK_SELECTION_CLIPBOARD),terminal->clipboard,-1);
+
+	g_signal_emit(widget,v3270_widget_signal[SIGNAL_CLIPBOARD], 0, TRUE);
+
+
+	return terminal->clipboard;
+}
+
+const gchar * v3270_copy(GtkWidget *widget)
 {
 	const gchar		* text		= v3270_get_selected_text(widget);
 	GtkClipboard	* clipboard	= gtk_widget_get_clipboard(widget,GDK_SELECTION_CLIPBOARD);
 
-	if(!text)
-		return;
-
-	if(gtk_clipboard_set_with_owner(	clipboard,
-										targets,
-										G_N_ELEMENTS(targets),
-										(GtkClipboardGetFunc)	clipboard_get,
-										(GtkClipboardClearFunc) clipboard_clear,
-										G_OBJECT(widget)
-										))
+	if(text)
 	{
-		gtk_clipboard_set_can_store(clipboard,targets,1);
+		if(gtk_clipboard_set_with_owner(	clipboard,
+											targets,
+											G_N_ELEMENTS(targets),
+											(GtkClipboardGetFunc)	clipboard_get,
+											(GtkClipboardClearFunc) clipboard_clear,
+											G_OBJECT(widget)
+											))
+		{
+			gtk_clipboard_set_can_store(clipboard,targets,1);
+		}
+
+		g_signal_emit(widget,v3270_widget_signal[SIGNAL_CLIPBOARD], 0, TRUE);
 	}
 
-	g_signal_emit(widget,v3270_widget_signal[SIGNAL_CLIPBOARD], 0, TRUE);
+	return text;
 
 }
 
@@ -281,7 +321,7 @@ static void text_received(GtkClipboard *clipboard, const gchar *text, GtkWidget 
 	v3270_paste_string(widget,text,"UTF-8");
 }
 
-void v3270_paste_clipboard(GtkWidget *widget)
+void v3270_paste(GtkWidget *widget)
 {
 	gtk_clipboard_request_text(gtk_widget_get_clipboard(widget,GDK_SELECTION_CLIPBOARD),(GtkClipboardTextReceivedFunc) text_received,(gpointer) widget);
 }

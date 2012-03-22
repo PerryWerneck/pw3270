@@ -97,13 +97,19 @@ static void reload_action(GtkAction *action, GtkWidget *widget)
 static void copy_action(GtkAction *action, GtkWidget *widget)
 {
 	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
-	v3270_copy_clipboard(widget);
+	v3270_copy(widget);
+}
+
+static void append_action(GtkAction *action, GtkWidget *widget)
+{
+	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
+	v3270_copy_append(widget);
 }
 
 static void paste_clipboard_action(GtkAction *action, GtkWidget *widget)
 {
 	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
-	v3270_paste_clipboard(widget);
+	v3270_paste(widget);
 }
 
 static void paste_next_action(GtkAction *action, GtkWidget *widget)
@@ -145,7 +151,6 @@ static void connect_standard_action(GtkAction *action, GtkWidget *widget, const 
 		{ "activate", 	activate_action		},
 		{ "reload",		reload_action		},
 		{ "connect", 	connect_action		},
-		{ "copy", 		copy_action			},
 		{ "disconnect", disconnect_action	},
 		{ "hostname",	hostname_action		}
 	};
@@ -408,6 +413,33 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 
 		nm = g_strconcat(name,attr, NULL);
 
+	}
+	else if(!g_strcasecmp(name,"copy"))
+	{
+		static const gchar * src[] = 	{	"begin",
+											"table",
+											"image",
+											"append",
+											NULL
+											};
+
+		static const GCallback cbk[] =	{	G_CALLBACK(copy_action),
+											G_CALLBACK(nop_action),
+											G_CALLBACK(nop_action),
+											G_CALLBACK(append_action)
+											};
+		callback	= cbk;
+		action_type	= ACTION_TYPE_TABLE;
+		attr 		= ui_get_attribute("mode",names,values);
+
+		id = id_from_array(attr,src,error);
+		if(id < 0)
+		{
+			*error = g_error_new(ERROR_DOMAIN,EINVAL,_("Unexpected or invalid mode attribute: \"%s\"" ), attr);
+			return NULL;
+		}
+
+		nm = g_strconcat(name,attr,NULL);
 	}
 	else if(!g_strcasecmp(name,"save"))
 	{
