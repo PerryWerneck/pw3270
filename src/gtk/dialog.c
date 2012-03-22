@@ -194,7 +194,20 @@
 
  void save_all_action(GtkAction *action, GtkWidget *widget)
  {
+ 	gchar *text = v3270_get_text(widget);
+
 	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
+
+	if(!text)
+		return;
+
+	save_dialog(	action,
+					widget,
+					N_( "Save screen to file" ),
+					N_( "Can't save screen to file \n%s" ),
+					text);
+
+	g_free(text);
 
  }
 

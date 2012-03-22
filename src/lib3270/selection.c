@@ -313,13 +313,13 @@ LIB3270_ACTION( reselect )
 	return 0;
 }
 
-LIB3270_EXPORT char * lib3270_get_selected(H3270 *hSession)
+static char * get_text(H3270 *hSession,unsigned char all)
 {
 	int	row, col, baddr;
 	char *ret;
 	size_t	  sz = 0;
 
-	if(!hSession->selected || hSession->select.begin == hSession->select.end)
+	if(!lib3270_connected(hSession))
 		return NULL;
 
 	ret = malloc(hSession->rows * (hSession->cols+1));
@@ -331,7 +331,7 @@ LIB3270_EXPORT char * lib3270_get_selected(H3270 *hSession)
 
 		for(col = 0; col < hSession->cols;col++)
 		{
-			if(hSession->text[baddr].attr & LIB3270_ATTR_SELECTED)
+			if(all || hSession->text[baddr].attr & LIB3270_ATTR_SELECTED)
 			{
 				cr++;
 				ret[sz++] = hSession->text[baddr].chr;
@@ -345,6 +345,19 @@ LIB3270_EXPORT char * lib3270_get_selected(H3270 *hSession)
 	ret[sz] = 0;
 
 	return realloc(ret,sz+1);
+}
+
+LIB3270_EXPORT char * lib3270_get_text(H3270 *hSession)
+{
+	return get_text(hSession,1);
+}
+
+LIB3270_EXPORT char * lib3270_get_selected(H3270 *hSession)
+{
+	if(!hSession->selected || hSession->select.begin == hSession->select.end)
+		return NULL;
+
+	return get_text(hSession,0);
 }
 
 LIB3270_EXPORT int lib3270_move_selection(H3270 *hSession, LIB3270_DIRECTION dir)

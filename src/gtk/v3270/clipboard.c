@@ -75,6 +75,27 @@ static void clipboard_get(GtkClipboard *clipboard, GtkSelectionData *selection, 
 	}
 }
 
+gchar * v3270_get_text(GtkWidget *widget)
+{
+	v3270	* terminal;
+	gchar	* text;
+	char	* str;
+
+	g_return_val_if_fail(GTK_IS_V3270(widget),NULL);
+
+	terminal = GTK_V3270(widget);
+
+	str = lib3270_get_text(terminal->host);
+
+	if(!str)
+		return NULL;
+
+	text = g_convert(str, -1, "UTF-8", lib3270_get_charset(terminal->host), NULL, NULL, NULL);
+
+	free(str);
+	return text;
+}
+
 const gchar * v3270_get_selected_text(GtkWidget *widget)
 {
 	v3270 *terminal;

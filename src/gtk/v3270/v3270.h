@@ -202,6 +202,7 @@
 
  // Clipboard
  const gchar	* v3270_get_selected_text(GtkWidget *widget);
+ gchar			* v3270_get_text(GtkWidget *widget);
  void			  v3270_copy_clipboard(GtkWidget *widget);
  void 			  v3270_paste_string(GtkWidget *widget, const gchar *text, const gchar *encoding);
  void 			  v3270_paste_clipboard(GtkWidget *widget);

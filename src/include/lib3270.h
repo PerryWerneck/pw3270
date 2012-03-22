@@ -637,6 +637,15 @@
 	 */
 	LIB3270_EXPORT char * lib3270_get_selected(H3270 *h);
 
+	/**
+	 * Get all text inside the terminal.
+	 *
+	 * @param h	Session Handle.
+	 *
+	 * @return All text if available, or NULL. Release it with free()
+	 *
+	 */
+	LIB3270_EXPORT char * lib3270_get_text(H3270 *h);
 
 	LIB3270_EXPORT int lib3270_set_model(H3270 *session, int model);
 	LIB3270_EXPORT int	lib3270_get_model(H3270 *session);
