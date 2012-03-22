@@ -2280,7 +2280,10 @@ LIB3270_ACTION( dup )
 		return 0;
 #endif
 	if (key_Character(EBC_dup, False, False, NULL))
+	{
+		screen_disp(hSession);
 		cursor_move(next_unprotected(hSession->cursor_addr));
+	}
 }
 
 /*
