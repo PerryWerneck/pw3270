@@ -127,6 +127,17 @@ const gchar * v3270_get_selected_text(GtkWidget *widget)
 	return terminal->clipboard;
 }
 
+const gchar	* v3270_get_copy(GtkWidget *widget)
+{
+	v3270 *terminal;
+
+	g_return_val_if_fail(GTK_IS_V3270(widget),NULL);
+
+	terminal = GTK_V3270(widget);
+
+	return terminal->clipboard;
+}
+
 const gchar * v3270_copy_append(GtkWidget *widget)
 {
 	v3270			* terminal;
@@ -160,7 +171,6 @@ const gchar * v3270_copy_append(GtkWidget *widget)
 	gtk_clipboard_set_text(gtk_widget_get_clipboard(widget,GDK_SELECTION_CLIPBOARD),terminal->clipboard,-1);
 
 	g_signal_emit(widget,v3270_widget_signal[SIGNAL_CLIPBOARD], 0, TRUE);
-
 
 	return terminal->clipboard;
 }

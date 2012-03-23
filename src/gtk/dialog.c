@@ -34,54 +34,103 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
+ static void save_text(GtkWindow *toplevel,const gchar *filename, const gchar *text, const gchar *errmsg)
+ {
+	GError *error = NULL;
+
+	if(!g_file_set_contents(filename,text,-1,&error))
+	{
+		GtkWidget *popup = gtk_message_dialog_new_with_markup(
+											toplevel,
+											GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
+											GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,
+											gettext(errmsg),filename);
+
+		gtk_window_set_title(GTK_WINDOW(popup),_("Can´t save file"));
+
+		gtk_message_dialog_format_secondary_markup(GTK_MESSAGE_DIALOG(popup),"%s",error->message);
+		g_error_free(error);
+
+		gtk_dialog_run(GTK_DIALOG(popup));
+		gtk_widget_destroy(popup);
+
+	}
+
+ }
+
+ static GtkFileChooserConfirmation confirm_overwrite(GtkFileChooser *chooser, GtkAction *action)
+ {
+	gchar						* filename	= gtk_file_chooser_get_filename(chooser);
+	const gchar					* attr		= g_object_get_data(G_OBJECT(action),"overwrite");
+	GtkFileChooserConfirmation	  ret 		= GTK_FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME;
+	GtkWidget					* dialog;
+
+	if(attr && !g_strcasecmp(attr,"yes"))
+		return ret;
+
+	dialog = gtk_message_dialog_new_with_markup(	GTK_WINDOW(chooser),
+													GTK_DIALOG_DESTROY_WITH_PARENT,
+													GTK_MESSAGE_QUESTION,GTK_BUTTONS_OK_CANCEL,
+													"%s",_("The file already exists. Replace it?"));
+
+
+	if(gtk_dialog_run(GTK_DIALOG(dialog)) != GTK_RESPONSE_OK)
+		ret = GTK_FILE_CHOOSER_CONFIRMATION_SELECT_AGAIN;
+
+	gtk_widget_destroy(dialog);
+
+	return ret;
+
+ }
+
  static int save_dialog(GtkAction *action, GtkWidget *widget, const gchar *title, const gchar *errmsg, const gchar *text)
  {
  	GtkWindow	* toplevel		= GTK_WINDOW(gtk_widget_get_toplevel(widget));
  	const gchar * user_title	= g_object_get_data(G_OBJECT(action),"title");
-	GtkWidget	* dialog;
-
+ 	const gchar * filename		= g_object_get_data(G_OBJECT(action),"filename");
 
 	if(!text)
 		return;
 
-	dialog = gtk_file_chooser_dialog_new( 	gettext(user_title ? user_title : title),
-											toplevel,
-											GTK_FILE_CHOOSER_ACTION_SAVE,
-											GTK_STOCK_CANCEL,	GTK_RESPONSE_CANCEL,
-											GTK_STOCK_SAVE,		GTK_RESPONSE_ACCEPT,
-											NULL );
-
-
-	if(gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
+	if(filename)
 	{
-		GError	*error 		= NULL;
-		gchar	*filename	= gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+		save_text(toplevel,filename,text,errmsg);
+	}
+	else
+	{
+		GtkWidget	* dialog;
+		gchar		* ptr;
 
-		if(!g_file_set_contents(filename,text,-1,&error))
-		{
-			GtkWidget *popup = gtk_message_dialog_new_with_markup(
+		dialog = gtk_file_chooser_dialog_new( 	gettext(user_title ? user_title : title),
 												toplevel,
-												GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
-												GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,
-												gettext(errmsg),filename);
+												GTK_FILE_CHOOSER_ACTION_SAVE,
+												GTK_STOCK_CANCEL,	GTK_RESPONSE_CANCEL,
+												GTK_STOCK_SAVE,		GTK_RESPONSE_ACCEPT,
+												NULL );
 
-			gtk_window_set_title(GTK_WINDOW(popup),_("Can´t save file"));
+		gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(dialog), TRUE);
+		g_signal_connect(GTK_FILE_CHOOSER(dialog), "confirm-overwrite", G_CALLBACK(confirm_overwrite), action);
 
-			gtk_message_dialog_format_secondary_markup(GTK_MESSAGE_DIALOG(popup),"%s",error->message);
-			g_error_free(error);
+		ptr = get_string_from_config("save",gtk_action_get_name(action),"");
+		if(*ptr)
+			gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog),ptr);
+		g_free(ptr);
 
-			gtk_dialog_run(GTK_DIALOG(popup));
-			gtk_widget_destroy(popup);
-
+		if(gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
+		{
+			ptr = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+			if(ptr)
+			{
+				trace("Saving \"%s\"",ptr);
+				set_string_to_config("save",gtk_action_get_name(action),"%s",ptr);
+				save_text(toplevel,ptr,text,errmsg);
+				g_free(ptr);
+			}
 		}
 
-		g_free(filename);
+		gtk_widget_destroy(dialog);
 	}
-
-	gtk_widget_destroy(dialog);
- 	return 0;
  }
-
 
  void paste_file_action(GtkAction *action, GtkWidget *widget)
  {
@@ -204,7 +253,7 @@
 	save_dialog(	action,
 					widget,
 					N_( "Save screen to file" ),
-					N_( "Can't save screen to file \n%s" ),
+					N_( "Can't save screen to file\n%s" ),
 					text);
 
 	g_free(text);
@@ -218,7 +267,7 @@
 	save_dialog(	action,
 					widget,
 					N_( "Save selection to file" ),
-					N_( "Can't save selection to file \n%s" ),
+					N_( "Can't save selection to file\n%s" ),
 					v3270_get_selected_text(widget));
  }
 
@@ -226,4 +275,9 @@
  {
 	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
 
+	save_dialog(	action,
+					widget,
+					N_( "Save copy to file" ),
+					N_( "Can't save copy to file\n%s" ),
+					v3270_get_copy(widget));
  }
