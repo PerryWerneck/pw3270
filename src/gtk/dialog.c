@@ -332,14 +332,19 @@
 		} list[] =
 		{
 			// http://en.wikipedia.org/wiki/Character_encoding
-			{ "ISO-8859-1", N_( "Western Europe (ISO 8859-1)" ) },
+			{ "ISO-8859-1", N_( "Western Europe (ISO 8859-1)" ) 		},
+			{ "CP1252",		N_( "Windows Western languages (CP1252)" )	},
 
 			{ NULL, NULL }
 		};
 
 		GtkWidget	* label 	= gtk_label_new_with_mnemonic (_("C_haracter Coding:"));
 		const gchar	* charset	= NULL;
+#if GTK_CHECK_VERSION(2,24,0)
 		GtkWidget	* menu		= gtk_combo_box_text_new();
+#else
+		GtkWidget	* menu		= gtk_combo_box_new();
+#endif // GTK(2,24)
 		gchar		* text;
 		int			  f;
 		int			  p = 0;
@@ -348,7 +353,12 @@
 		*encoding = g_strdup(charset);
 
 		text = g_strdup_printf(_("Current (%s)"),charset);
+
+#if GTK_CHECK_VERSION(2,24,0)
 		gtk_combo_box_text_insert(GTK_COMBO_BOX_TEXT(menu),p,charset,text);
+#else
+
+#endif // GTK(2,24)
 		g_free(text);
 
 		gtk_combo_box_set_active(GTK_COMBO_BOX(menu),p++);
@@ -356,7 +366,13 @@
 		for(f=0;list[f].charset;f++)
 		{
 			if(strcasecmp(charset,list[f].charset))
+			{
+#if GTK_CHECK_VERSION(2,24,0)
 				gtk_combo_box_text_insert(GTK_COMBO_BOX_TEXT(menu),p++,list[f].charset,gettext(list[f].text));
+#else
+
+#endif	// GTK(2,24)
+			}
 		}
 
 
