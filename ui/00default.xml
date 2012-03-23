@@ -218,6 +218,8 @@
 	<accelerator action='PreviousField' key='ISO_Left_Tab' group='online' />
 	<accelerator action='NextField' key='Tab' group='online' />
 
+	<accelerator action='dup' key='<Shift>KP_Multiply' group='online' />
+
 	<!--- Mouse actions --->
 	<scroll direction='up' action='pfkey' id='7' />
 	<scroll direction='down' action='pfkey' id='8' />
