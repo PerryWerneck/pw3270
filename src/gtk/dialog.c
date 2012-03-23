@@ -132,12 +132,6 @@
 	}
  }
 
- void paste_file_action(GtkAction *action, GtkWidget *widget)
- {
-	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
-
- }
-
  void hostname_action(GtkAction *action, GtkWidget *widget)
  {
  	const gchar 	* title 	= g_object_get_data(G_OBJECT(action),"title");
@@ -281,3 +275,115 @@
 					N_( "Can't save copy to file\n%s" ),
 					v3270_get_copy(widget));
  }
+
+ static void paste_filename(GtkWidget *widget, const gchar *filename, const gchar *encoding)
+ {
+	GError *error = NULL;
+	gchar *text = NULL;
+
+	trace("Loading \"%s\"",filename);
+
+	if(!g_file_get_contents(filename,&text,NULL,&error))
+	{
+		GtkWidget *popup = gtk_message_dialog_new_with_markup(
+											GTK_WINDOW(gtk_widget_get_toplevel(widget)),
+											GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
+											GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,
+											_( "Error loading %s" ),filename);
+
+		gtk_window_set_title(GTK_WINDOW(popup),_("Can´t load file"));
+
+		gtk_message_dialog_format_secondary_markup(GTK_MESSAGE_DIALOG(popup),"%s",error->message);
+		g_error_free(error);
+
+		gtk_dialog_run(GTK_DIALOG(popup));
+		gtk_widget_destroy(popup);
+
+	}
+
+	if(text)
+	{
+		v3270_paste_string(widget,text,encoding);
+		g_free(text);
+	}
+
+ }
+
+ static void add_encoding(GtkWidget *widget, const gchar **attr)
+ {
+// 	GtkWidget	*box;
+// 	GtkWidget	*combo;
+ 	const gchar	**charset	= NULL;
+// 	int f;
+
+	if(g_get_filename_charsets(&charset))
+	{
+		*attr = "UTF-8";
+		return;
+	}
+
+#ifdef WIN32
+
+	#warning Confirmar necessidade em windows
+
+ 	box = gtk_hbox_new(FALSE,2);
+ 	combo = gtk_combo_box_text_new();
+
+	gtk_box_pack_start(GTK_BOX(box),gtk_label_new(_("Encoding:")),FALSE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(box),combo,FALSE,FALSE,0);
+
+	gtk_widget_show_all(box);
+	gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(widget),box);
+
+#endif
+}
+
+ void paste_file_action(GtkAction *action, GtkWidget *widget)
+ {
+ 	const gchar * user_title	= g_object_get_data(G_OBJECT(action),"title");
+ 	const gchar * filename		= g_object_get_data(G_OBJECT(action),"filename");
+ 	const gchar * encattr		= g_object_get_data(G_OBJECT(action),"encoding");
+	GtkWidget	* dialog;
+	gchar		* ptr;
+
+	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
+
+	if(filename)
+	{
+		paste_filename(widget,filename,encattr ? encattr : "UTF-8");
+		return;
+	}
+
+	dialog = gtk_file_chooser_dialog_new( 	gettext(user_title ? user_title : N_( "Paste text file contents" )),
+											GTK_WINDOW(gtk_widget_get_toplevel(widget)),
+											GTK_FILE_CHOOSER_ACTION_OPEN,
+											GTK_STOCK_CANCEL,	GTK_RESPONSE_CANCEL,
+											GTK_STOCK_OPEN,		GTK_RESPONSE_ACCEPT,
+											NULL );
+
+	if(!encattr)
+		add_encoding(dialog, &encattr);
+
+	ptr = get_string_from_config("load",gtk_action_get_name(action),"");
+	if(*ptr)
+		gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog),ptr);
+	g_free(ptr);
+
+	if(gtk_dialog_run(GTK_DIALOG(dialog)) != GTK_RESPONSE_ACCEPT)
+	{
+		gtk_widget_destroy(dialog);
+		return;
+	}
+
+	ptr = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+
+	gtk_widget_destroy(dialog);
+
+	if(ptr)
+	{
+		set_string_to_config("load",gtk_action_get_name(action),"%s",ptr);
+		paste_filename(widget,ptr,encattr);
+		g_free(ptr);
+	}
+ }
+
