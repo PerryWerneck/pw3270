@@ -34,11 +34,151 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
- static void save_text(GtkWindow *toplevel,const gchar *filename, const gchar *text, const gchar *errmsg)
+ static void charset_changed(GtkComboBox *widget,gchar **encoding)
  {
-	GError *error = NULL;
+ 	gchar *new_encoding = NULL;
 
-	if(!g_file_set_contents(filename,text,-1,&error))
+#if GTK_CHECK_VERSION(3,0,0)
+
+	new_encoding = g_strdup(gtk_combo_box_get_active_id(GTK_COMBO_BOX(widget)));
+
+#else
+
+	GValue		value	= { 0, };
+	GtkTreeIter iter;
+
+	if(!gtk_combo_box_get_active_iter(widget,&iter))
+		return;
+
+	gtk_tree_model_get_value(gtk_combo_box_get_model(widget),&iter,1,&value);
+	new_encoding = g_strdup(g_value_get_string(&value));
+
+#endif
+
+	if(!new_encoding)
+		return;
+
+	trace("%s: %s->%s",__FUNCTION__,*encoding,new_encoding);
+	if(*encoding)
+		g_free(*encoding);
+
+	*encoding = new_encoding;
+ }
+
+ static void add_option_menus(GtkWidget *widget, GtkAction *action, gchar **encoding)
+ {
+ 	GtkWidget	*box = gtk_hbox_new(FALSE,6);
+ 	gchar		*ptr = g_object_get_data(G_OBJECT(action),"charset");
+
+	if(ptr)
+	{
+		*encoding = g_strdup(ptr);
+	}
+	else
+	{
+		// Add charset options
+		static const struct _list
+		{
+			const gchar *charset;
+			const gchar *text;
+		} list[] =
+		{
+			// http://en.wikipedia.org/wiki/Character_encoding
+			{ "ISO-8859-1", N_( "Western Europe (ISO 8859-1)" ) 		},
+			{ "CP1252",		N_( "Windows Western languages (CP1252)" )	},
+
+			{ NULL, NULL }
+		};
+
+		GtkWidget		* label 	= gtk_label_new_with_mnemonic (_("C_haracter Coding:"));
+		const gchar		* charset	= NULL;
+#if GTK_CHECK_VERSION(3,0,0)
+		GtkWidget		* menu		= gtk_combo_box_text_new();
+#else
+		GtkTreeModel	* model		= (GtkTreeModel *) gtk_list_store_new(2,G_TYPE_STRING,G_TYPE_STRING);
+		GtkWidget		* menu		= gtk_combo_box_new_with_model(model);
+		GtkCellRenderer * renderer	= gtk_cell_renderer_text_new();
+		GtkTreeIter		  iter;
+#endif // GTK(3,0,0)
+		gchar			* text;
+		int			  f;
+		int			  p = 0;
+
+		g_get_charset(&charset);
+		*encoding = g_strdup(charset);
+
+		text = g_strdup_printf(_("Current (%s)"),charset);
+
+#if GTK_CHECK_VERSION(3,0,0)
+
+		gtk_combo_box_text_insert(GTK_COMBO_BOX_TEXT(menu),p,charset,text);
+
+#else
+
+		gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(menu), renderer, TRUE);
+		gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(menu), renderer, "text", 0, NULL);
+
+		gtk_list_store_append((GtkListStore *) model,&iter);
+		gtk_list_store_set((GtkListStore *) model, &iter, 0, text, 1, charset, -1);
+
+#endif // GTK(3,0,0)
+
+		g_free(text);
+
+		gtk_combo_box_set_active(GTK_COMBO_BOX(menu),p++);
+
+		for(f=0;list[f].charset;f++)
+		{
+			if(strcasecmp(charset,list[f].charset))
+			{
+#if GTK_CHECK_VERSION(3,0,0)
+				gtk_combo_box_text_insert(GTK_COMBO_BOX_TEXT(menu),p++,list[f].charset,gettext(list[f].text));
+#else
+				gtk_list_store_append((GtkListStore *) model,&iter);
+				gtk_list_store_set((GtkListStore *) model, &iter, 0, gettext(list[f].text), 1, list[f].charset, -1);
+#endif // GTK(3,0,0)
+			}
+		}
+
+
+		gtk_label_set_mnemonic_widget(GTK_LABEL(label), menu);
+
+		gtk_box_pack_start(GTK_BOX(box),label,FALSE,FALSE,0);
+
+		gtk_box_pack_start(GTK_BOX(box),menu,TRUE,TRUE,0);
+
+		g_signal_connect(G_OBJECT(menu),"changed",G_CALLBACK(charset_changed),encoding);
+
+	}
+
+
+	gtk_widget_show_all(box);
+	gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(widget),box);
+
+}
+
+ static void save_text(GtkWindow *toplevel,const gchar *filename, const gchar *text, const gchar *encoding, const gchar *errmsg)
+ {
+	GError * error = NULL;
+
+	if(g_strcasecmp(encoding,"UTF-8"))
+	{
+		// Convert to target charset and save
+		gsize	  bytes_written;
+		gchar	* converted = g_convert_with_fallback(text,-1,encoding,"UTF-8",NULL,NULL,&bytes_written,&error);
+
+		if(!error)
+			g_file_set_contents(filename,converted,-1,&error);
+
+		g_free(converted);
+	}
+	else
+	{
+		// Same charset, save file
+		g_file_set_contents(filename,text,-1,&error);
+	}
+
+	if(error)
 	{
 		GtkWidget *popup = gtk_message_dialog_new_with_markup(
 											toplevel,
@@ -60,7 +200,6 @@
 
  static GtkFileChooserConfirmation confirm_overwrite(GtkFileChooser *chooser, GtkAction *action)
  {
-	gchar						* filename	= gtk_file_chooser_get_filename(chooser);
 	const gchar					* attr		= g_object_get_data(G_OBJECT(action),"overwrite");
 	GtkFileChooserConfirmation	  ret 		= GTK_FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME;
 	GtkWidget					* dialog;
@@ -90,16 +229,17 @@
  	const gchar * filename		= g_object_get_data(G_OBJECT(action),"filename");
 
 	if(!text)
-		return;
+		return 0;
 
 	if(filename)
 	{
-		save_text(toplevel,filename,text,errmsg);
+		save_text(toplevel,filename,text,g_object_get_data(G_OBJECT(action),"encoding"),errmsg);
 	}
 	else
 	{
 		GtkWidget	* dialog;
 		gchar		* ptr;
+		gchar 		* encattr		= NULL;
 
 		dialog = gtk_file_chooser_dialog_new( 	gettext(user_title ? user_title : title),
 												toplevel,
@@ -110,6 +250,8 @@
 
 		gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(dialog), TRUE);
 		g_signal_connect(GTK_FILE_CHOOSER(dialog), "confirm-overwrite", G_CALLBACK(confirm_overwrite), action);
+
+		add_option_menus(dialog, action, &encattr);
 
 		ptr = get_string_from_config("save",gtk_action_get_name(action),"");
 		if(*ptr)
@@ -123,13 +265,18 @@
 			{
 				trace("Saving \"%s\"",ptr);
 				set_string_to_config("save",gtk_action_get_name(action),"%s",ptr);
-				save_text(toplevel,ptr,text,errmsg);
+				save_text(toplevel,ptr,text,encattr,errmsg);
 				g_free(ptr);
 			}
 		}
 
+		if(encattr)
+			g_free(encattr);
+
 		gtk_widget_destroy(dialog);
 	}
+
+	return 0;
  }
 
  void hostname_action(GtkAction *action, GtkWidget *widget)
@@ -312,83 +459,6 @@
 
  }
 
- static void add_option_menus(GtkWidget *widget, GtkAction *action, gchar **encoding)
- {
- 	GtkWidget	*box = gtk_hbox_new(FALSE,6);
- 	gchar		*ptr = g_object_get_data(G_OBJECT(action),"encoding");
- 	int f;
-
-	if(ptr)
-	{
-		*encoding = g_strdup(ptr);
-	}
-	else
-	{
-		// Add charset options
-		static const struct _list
-		{
-			const gchar *charset;
-			const gchar *text;
-		} list[] =
-		{
-			// http://en.wikipedia.org/wiki/Character_encoding
-			{ "ISO-8859-1", N_( "Western Europe (ISO 8859-1)" ) 		},
-			{ "CP1252",		N_( "Windows Western languages (CP1252)" )	},
-
-			{ NULL, NULL }
-		};
-
-		GtkWidget	* label 	= gtk_label_new_with_mnemonic (_("C_haracter Coding:"));
-		const gchar	* charset	= NULL;
-#if GTK_CHECK_VERSION(2,24,0)
-		GtkWidget	* menu		= gtk_combo_box_text_new();
-#else
-		GtkWidget	* menu		= gtk_combo_box_new();
-#endif // GTK(2,24)
-		gchar		* text;
-		int			  f;
-		int			  p = 0;
-
-		g_get_charset(&charset);
-		*encoding = g_strdup(charset);
-
-		text = g_strdup_printf(_("Current (%s)"),charset);
-
-#if GTK_CHECK_VERSION(2,24,0)
-		gtk_combo_box_text_insert(GTK_COMBO_BOX_TEXT(menu),p,charset,text);
-#else
-
-#endif // GTK(2,24)
-		g_free(text);
-
-		gtk_combo_box_set_active(GTK_COMBO_BOX(menu),p++);
-
-		for(f=0;list[f].charset;f++)
-		{
-			if(strcasecmp(charset,list[f].charset))
-			{
-#if GTK_CHECK_VERSION(2,24,0)
-				gtk_combo_box_text_insert(GTK_COMBO_BOX_TEXT(menu),p++,list[f].charset,gettext(list[f].text));
-#else
-
-#endif	// GTK(2,24)
-			}
-		}
-
-
-		gtk_label_set_mnemonic_widget(GTK_LABEL(label), menu);
-
-		gtk_box_pack_start(GTK_BOX(box),label,FALSE,FALSE,0);
-
-		gtk_box_pack_start(GTK_BOX(box),menu,TRUE,TRUE,0);
-
-	}
-
-	gtk_widget_show_all(box);
-	gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(widget),box);
-
-}
-
  void paste_file_action(GtkAction *action, GtkWidget *widget)
  {
  	const gchar * user_title	= g_object_get_data(G_OBJECT(action),"title");
@@ -401,7 +471,7 @@
 
 	if(filename)
 	{
-		ptr = g_object_get_data(G_OBJECT(action),"encoding");
+		ptr = g_object_get_data(G_OBJECT(action),"charset");
 		paste_filename(widget,filename,ptr);
 		return;
 	}
