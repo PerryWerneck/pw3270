@@ -112,7 +112,6 @@ void		  v3270_stop_timer(GtkWidget *terminal);
 void		  v3270_draw_connection(cairo_t *cr, H3270 *host, struct v3270_metrics *metrics, GdkColor *color, GdkRectangle *rect);
 void		  v3270_draw_ssl_status(cairo_t *cr, H3270 *host, struct v3270_metrics *metrics, GdkColor *color, GdkRectangle *rect);
 
-void		  v3270_reload(GtkWidget * widget);
 void		  v3270_update_char(H3270 *session, int addr, unsigned char chr, unsigned short attr, unsigned char cursor);
 
 void		  v3270_update_font_metrics(v3270 *terminal, cairo_t *cr, int width, int height);

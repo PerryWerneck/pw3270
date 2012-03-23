@@ -189,6 +189,8 @@
  GtkWidget		* v3270_new(void);
  GType 			  v3270_get_type(void);
 
+ void		  	  v3270_reload(GtkWidget * widget);
+
  void			  v3270_set_colors(GtkWidget *widget, const gchar *);
  void			  v3270_set_color(GtkWidget *widget, enum V3270_COLOR id, const gchar *name);
 

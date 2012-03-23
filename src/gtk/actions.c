@@ -34,6 +34,7 @@
  #include "v3270/v3270.h"
  #include <lib3270/actions.h>
  #include <lib3270/selection.h>
+ #include <stdlib.h>
 
  #define ERROR_DOMAIN g_quark_from_static_string(PACKAGE_NAME)
  #define TOGGLE_GDKDEBUG LIB3270_TOGGLE_COUNT+1
@@ -200,7 +201,7 @@ static void lib3270_toggle_action(GtkToggleAction *action,GtkWidget *widget)
 
 static void selection_move_action(GtkAction *action, GtkWidget *widget)
 {
-	trace("Action %s activated on widget %p dir=%d",gtk_action_get_name(action),widget,g_object_get_data(G_OBJECT(action),"direction"));
+	trace("Action %s activated on widget %p dir=%s",gtk_action_get_name(action),widget,g_object_get_data(G_OBJECT(action),"direction"));
 	lib3270_move_selection(GTK_V3270(widget)->host,(LIB3270_DIRECTION) g_object_get_data(G_OBJECT(action),"direction"));
 }
 
@@ -241,13 +242,13 @@ static void connect_move_action(GtkAction *action, GtkWidget *widget, const gcha
 
 static void action_pfkey(GtkAction *action, GtkWidget *widget)
 {
-	trace("Action %s activated on widget %p key=%d",gtk_action_get_name(action),widget,g_object_get_data(G_OBJECT(action),"pfkey"));
+	trace("Action %s activated on widget %p key=%p",gtk_action_get_name(action),widget,g_object_get_data(G_OBJECT(action),"pfkey"));
 	lib3270_pfkey(GTK_V3270(widget)->host,(int) g_object_get_data(G_OBJECT(action),"pfkey"));
 }
 
 static void action_pakey(GtkAction *action, GtkWidget *widget)
 {
-	trace("Action %s activated on widget %p key=%d",gtk_action_get_name(action),widget,g_object_get_data(G_OBJECT(action),"pakey"));
+	trace("Action %s activated on widget %p key=%p",gtk_action_get_name(action),widget,g_object_get_data(G_OBJECT(action),"pakey"));
 	lib3270_pakey(GTK_V3270(widget)->host,(int) g_object_get_data(G_OBJECT(action),"pakey"));
 }
 
