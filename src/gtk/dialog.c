@@ -281,7 +281,7 @@
 	GError *error = NULL;
 	gchar *text = NULL;
 
-	trace("Loading \"%s\"",filename);
+	trace("Loading \"%s\" encoding=%s",filename,encoding);
 
 	if(!g_file_get_contents(filename,&text,NULL,&error))
 	{
@@ -316,11 +316,10 @@
  	const gchar	**charset	= NULL;
 // 	int f;
 
+	g_get_charset(attr);
+
 	if(g_get_filename_charsets(&charset))
-	{
-		*attr = "UTF-8";
 		return;
-	}
 
 #ifdef WIN32
 
