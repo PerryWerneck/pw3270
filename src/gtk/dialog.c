@@ -281,6 +281,9 @@
 	GError *error = NULL;
 	gchar *text = NULL;
 
+	if(!encoding)
+		g_get_charset(&encoding);
+
 	trace("Loading \"%s\" encoding=%s",filename,encoding);
 
 	if(!g_file_get_contents(filename,&text,NULL,&error))
@@ -309,15 +312,17 @@
 
  }
 
- static void add_option_menus(GtkWidget *widget, GtkAction *action, const gchar **encoding)
+ static void add_option_menus(GtkWidget *widget, GtkAction *action, gchar **encoding)
  {
- 	GtkWidget	*box		= gtk_hbox_new(FALSE,6);
+ 	GtkWidget	*box = gtk_hbox_new(FALSE,6);
+ 	gchar		*ptr = g_object_get_data(G_OBJECT(action),"encoding");
  	int f;
 
-//	http://people.gnome.org/~icq/scan-build/report-KvV84s.html
-
-	*encoding = g_object_get_data(G_OBJECT(action),"encoding");
-	if(!*encoding)
+	if(ptr)
+	{
+		*encoding = g_strdup(ptr);
+	}
+	else
 	{
 		// Add charset options
 		static const struct _list
@@ -340,7 +345,7 @@
 		int			  p = 0;
 
 		g_get_charset(&charset);
-		*encoding = charset;
+		*encoding = g_strdup(charset);
 
 		text = g_strdup_printf(_("Current (%s)"),charset);
 		gtk_combo_box_text_insert(GTK_COMBO_BOX_TEXT(menu),p,charset,text);
@@ -372,7 +377,7 @@
  {
  	const gchar * user_title	= g_object_get_data(G_OBJECT(action),"title");
  	const gchar * filename		= g_object_get_data(G_OBJECT(action),"filename");
- 	const gchar * encattr;
+ 	gchar 		* encattr		= NULL;
 	GtkWidget	* dialog;
 	gchar		* ptr;
 
@@ -380,7 +385,8 @@
 
 	if(filename)
 	{
-		paste_filename(widget,filename,encattr ? encattr : "UTF-8");
+		ptr = g_object_get_data(G_OBJECT(action),"encoding");
+		paste_filename(widget,filename,ptr);
 		return;
 	}
 
@@ -398,21 +404,20 @@
 		gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog),ptr);
 	g_free(ptr);
 
-	if(gtk_dialog_run(GTK_DIALOG(dialog)) != GTK_RESPONSE_ACCEPT)
+	if(gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
 	{
-		gtk_widget_destroy(dialog);
-		return;
+		ptr = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+
+		if(ptr)
+		{
+			set_string_to_config("load",gtk_action_get_name(action),"%s",ptr);
+			paste_filename(widget,ptr,encattr);
+			g_free(ptr);
+		}
 	}
-
-	ptr = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
-
 	gtk_widget_destroy(dialog);
 
-	if(ptr)
-	{
-		set_string_to_config("load",gtk_action_get_name(action),"%s",ptr);
-		paste_filename(widget,ptr,encattr);
-		g_free(ptr);
-	}
+	if(encattr)
+		g_free(encattr);
  }
 
