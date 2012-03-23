@@ -37,7 +37,7 @@
  static void begin_print(GtkPrintOperation *prt, GtkPrintContext *context, gpointer user_data)
  {
  	trace("%s",__FUNCTION__);
-
+	gtk_print_operation_cancel(prt);
  }
 
  static void draw_page(GtkPrintOperation *prt, GtkPrintContext *context, gint pg, gpointer user_data)
@@ -69,18 +69,20 @@
  	GtkPrintOperation	* print 	= gtk_print_operation_new();
 //	GtkPrintSettings 	* settings	= gtk_print_settings_new();
 //	GtkPageSetup 		* setup 	= gtk_page_setup_new();
- 	gchar				* ptr;
+// 	gchar				* ptr;
 
 	// Basic setup
 	gtk_print_operation_set_allow_async(print,FALSE);
 
+/*
 	ptr = g_strconcat(PACKAGE_NAME,".",gtk_action_get_name(action),NULL);
 	gtk_print_operation_set_job_name(print,ptr);
 	g_free(ptr);
+*/
 
-	gtk_print_operation_set_custom_tab_label(print,_( "Style" ));
+//	gtk_print_operation_set_custom_tab_label(print,_( "Style" ));
 
-	gtk_print_operation_set_show_progress(print,TRUE);
+//	gtk_print_operation_set_show_progress(print,TRUE);
 
 	// Common signals
     g_signal_connect(print,"begin_print",G_CALLBACK(begin_print),0);
