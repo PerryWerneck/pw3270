@@ -309,39 +309,70 @@
 
  }
 
- static void add_encoding(GtkWidget *widget, const gchar **attr)
+ static void add_option_menus(GtkWidget *widget, GtkAction *action, const gchar **encoding)
  {
-// 	GtkWidget	*box;
-// 	GtkWidget	*combo;
- 	const gchar	**charset	= NULL;
-// 	int f;
+ 	GtkWidget	*box		= gtk_hbox_new(FALSE,6);
+ 	int f;
 
-	g_get_charset(attr);
+//	http://people.gnome.org/~icq/scan-build/report-KvV84s.html
 
-	if(g_get_filename_charsets(&charset))
-		return;
+	*encoding = g_object_get_data(G_OBJECT(action),"encoding");
+	if(!*encoding)
+	{
+		// Add charset options
+		static const struct _list
+		{
+			const gchar *charset;
+			const gchar *text;
+		} list[] =
+		{
+			// http://en.wikipedia.org/wiki/Character_encoding
+			{ "ISO-8859-1", N_( "Western Europe (ISO 8859-1)" ) },
 
-#ifdef WIN32
+			{ NULL, NULL }
+		};
 
-	#warning Confirmar necessidade em windows
+		GtkWidget	* label 	= gtk_label_new_with_mnemonic (_("C_haracter Coding:"));
+		const gchar	* charset	= NULL;
+		GtkWidget	* menu		= gtk_combo_box_text_new();
+		gchar		* text;
+		int			  f;
+		int			  p = 0;
 
- 	box = gtk_hbox_new(FALSE,2);
- 	combo = gtk_combo_box_text_new();
+		g_get_charset(&charset);
+		*encoding = charset;
 
-	gtk_box_pack_start(GTK_BOX(box),gtk_label_new(_("Encoding:")),FALSE,FALSE,0);
-	gtk_box_pack_start(GTK_BOX(box),combo,FALSE,FALSE,0);
+		text = g_strdup_printf(_("Current (%s)"),charset);
+		gtk_combo_box_text_insert(GTK_COMBO_BOX_TEXT(menu),p,charset,text);
+		g_free(text);
+
+		gtk_combo_box_set_active(GTK_COMBO_BOX(menu),p++);
+
+		for(f=0;list[f].charset;f++)
+		{
+			if(strcasecmp(charset,list[f].charset))
+				gtk_combo_box_text_insert(GTK_COMBO_BOX_TEXT(menu),p++,list[f].charset,gettext(list[f].text));
+		}
+
+
+		gtk_label_set_mnemonic_widget(GTK_LABEL(label), menu);
+
+		gtk_box_pack_start(GTK_BOX(box),label,FALSE,FALSE,0);
+
+		gtk_box_pack_start(GTK_BOX(box),menu,TRUE,TRUE,0);
+
+	}
 
 	gtk_widget_show_all(box);
 	gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(widget),box);
 
-#endif
 }
 
  void paste_file_action(GtkAction *action, GtkWidget *widget)
  {
  	const gchar * user_title	= g_object_get_data(G_OBJECT(action),"title");
  	const gchar * filename		= g_object_get_data(G_OBJECT(action),"filename");
- 	const gchar * encattr		= g_object_get_data(G_OBJECT(action),"encoding");
+ 	const gchar * encattr;
 	GtkWidget	* dialog;
 	gchar		* ptr;
 
@@ -360,8 +391,7 @@
 											GTK_STOCK_OPEN,		GTK_RESPONSE_ACCEPT,
 											NULL );
 
-	if(!encattr)
-		add_encoding(dialog, &encattr);
+	add_option_menus(dialog, action, &encattr);
 
 	ptr = get_string_from_config("load",gtk_action_get_name(action),"");
 	if(*ptr)
