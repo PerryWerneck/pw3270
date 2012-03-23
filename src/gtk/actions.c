@@ -458,9 +458,9 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 	}
 	else if(!g_strcasecmp(name,"print"))
 	{
-		static const GCallback cbk[] = {	G_CALLBACK(nop_action),
-											G_CALLBACK(nop_action),
-											G_CALLBACK(nop_action)
+		static const GCallback cbk[] = {	G_CALLBACK(print_all_action),
+											G_CALLBACK(print_selected_action),
+											G_CALLBACK(print_copy_action)
 											};
 
 		callback	= cbk;
