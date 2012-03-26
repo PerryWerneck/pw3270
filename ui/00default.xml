@@ -152,9 +152,9 @@
 	</toolbar>
 
 	<popup name='selectionpopup' type='selection'>
-		<menuitem action='Copy'/>
-		<menuitem action='Append'/>
-		<menuitem action='Unselect'/>
+		<menuitem action='copy' mode='begin' />
+		<menuitem action='copy' mode='append' />
+		<menuitem action='unselect'/>
 		<menuitem action='selectall'/>
 
 		<separator />

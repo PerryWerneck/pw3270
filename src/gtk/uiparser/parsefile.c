@@ -312,7 +312,7 @@ trace("%s ----",__FUNCTION__);
 		return -1;
 	}
 
-	context = g_markup_parse_context_new(&parser,G_MARKUP_TREAT_CDATA_AS_TEXT,info,NULL);
+	context = g_markup_parse_context_new(&parser,G_MARKUP_TREAT_CDATA_AS_TEXT|G_MARKUP_PREFIX_ERROR_POSITION,info,NULL);
 
 	if(!g_markup_parse_context_parse(context,text,strlen(text),&error))
 	{

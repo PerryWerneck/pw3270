@@ -270,6 +270,9 @@ static int id_from_array(const gchar *key, const gchar **array, GError **error)
 {
 	int f;
 
+	if(!key)
+		return -1;
+
 	for(f = 0;array[f];f++)
 	{
 		if(!g_strcasecmp(key,array[f]))
