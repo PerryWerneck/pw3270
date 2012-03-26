@@ -191,9 +191,6 @@
 
  void		  	  v3270_reload(GtkWidget * widget);
 
- void			  v3270_set_colors(GtkWidget *widget, const gchar *);
- void			  v3270_set_color(GtkWidget *widget, enum V3270_COLOR id, const gchar *name);
-
  void			  v3270_set_font_family(GtkWidget *widget, const gchar *name);
  const gchar	* v3270_get_font_family(GtkWidget *widget);
 
@@ -211,6 +208,12 @@
 
  void 			  v3270_paste(GtkWidget *widget);
  void 			  v3270_paste_string(GtkWidget *widget, const gchar *text, const gchar *encoding);
+
+ // Colors
+ void			  v3270_set_colors(GtkWidget *widget, const gchar *);
+ void			  v3270_set_color(GtkWidget *widget, enum V3270_COLOR id, const gchar *name);
+ int 			  v3270_set_color_entry(GdkColor *clr, enum V3270_COLOR id, const gchar *name);
+ void 			  v3270_set_color_table(GdkColor *table, const gchar *colors);
 
 G_END_DECLS
 

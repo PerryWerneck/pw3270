@@ -721,9 +721,7 @@ static void v3270_send_configure(v3270 * terminal)
 
 void v3270_set_colors(GtkWidget *widget, const gchar *colors)
 {
- 	gchar	**clr;
- 	guint	  cnt;
- 	int		  f;
+	g_return_if_fail(GTK_IS_V3270(widget));
 
 	if(!colors)
 	{
@@ -764,6 +762,19 @@ void v3270_set_colors(GtkWidget *widget, const gchar *colors)
 
 	}
 
+	v3270_set_color_table(GTK_V3270(widget)->color,colors);
+
+	g_signal_emit(widget,v3270_widget_signal[SIGNAL_UPDATE_CONFIG], 0, "colors", colors);
+	v3270_reload(widget);
+
+}
+
+void v3270_set_color_table(GdkColor *table, const gchar *colors)
+{
+ 	gchar	**clr;
+ 	guint	  cnt;
+ 	int		  f;
+
  	clr = g_strsplit(colors,",",V3270_COLOR_COUNT+1);
  	cnt = g_strv_length(clr);
  	switch(cnt)
@@ -774,52 +785,58 @@ void v3270_set_colors(GtkWidget *widget, const gchar *colors)
 
 	case 29:
 		for(f=0;f < V3270_COLOR_SELECTED_BORDER;f++)
-			v3270_set_color(widget,f,clr[f]);
+			v3270_set_color_entry(table,f,clr[f]);
 
-		v3270_set_color(widget,V3270_COLOR_SELECTED_BORDER,clr[V3270_COLOR_SELECTED_BG]);
+		v3270_set_color_entry(table,V3270_COLOR_SELECTED_BORDER,clr[V3270_COLOR_SELECTED_BG]);
 
 		for(f=V3270_COLOR_SELECTED_BORDER+1;f < V3270_COLOR_COUNT;f++)
-			v3270_set_color(widget,f,clr[f-1]);
+			v3270_set_color_entry(table,f,clr[f-1]);
 
 		break;
 
 	case V3270_COLOR_COUNT:	// Complete string
 		for(f=0;f < V3270_COLOR_COUNT;f++)
-			v3270_set_color(widget,f,clr[f]);
+			v3270_set_color_entry(table,f,clr[f]);
 		break;
 
 	default:
 		for(f=0;f < cnt;f++)
-			v3270_set_color(widget,f,clr[f]);
+			v3270_set_color_entry(table,f,clr[f]);
 		for(f=cnt; f < V3270_COLOR_COUNT;f++)
-			v3270_set_color(widget,f,clr[cnt-1]);
+			v3270_set_color_entry(table,f,clr[cnt-1]);
 
-		v3270_set_color(widget,V3270_COLOR_OIA_BACKGROUND,clr[0]);
-		v3270_set_color(widget,V3270_COLOR_SELECTED_BG,clr[0]);
+		v3270_set_color_entry(table,V3270_COLOR_OIA_BACKGROUND,clr[0]);
+		v3270_set_color_entry(table,V3270_COLOR_SELECTED_BG,clr[0]);
 
  	}
 
 	g_strfreev(clr);
 
-	g_signal_emit(widget,v3270_widget_signal[SIGNAL_UPDATE_CONFIG], 0, "colors", colors);
+}
 
-	v3270_reload(widget);
+int v3270_set_color_entry(GdkColor *clr, enum V3270_COLOR id, const gchar *name)
+{
+	if(id >= V3270_COLOR_COUNT)
+		return -1;
+
+	gdk_color_parse(name,clr+id);
+
+	return 0;
 }
 
 void v3270_set_color(GtkWidget *widget, enum V3270_COLOR id, const gchar *name)
 {
 	v3270 * terminal = GTK_V3270(widget);
 
-	if(id >= V3270_COLOR_COUNT)
+	if(v3270_set_color_entry(terminal->color,id,name))
 		return;
-
-	gdk_color_parse(name,terminal->color+id);
 
 #if(GTK_CHECK_VERSION(3,0,0))
 
 #else
 	gdk_colormap_alloc_color(gtk_widget_get_default_colormap(),terminal->color+id,TRUE,TRUE);
 #endif
+
 
 }
 

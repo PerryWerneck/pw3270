@@ -115,38 +115,70 @@
 	trace("Font set to \"%s\"",info->font);
  }
 
+ static void color_scheme_changed(GtkComboBox *widget,PRINT_INFO *info)
+ {
+ 	gchar *new_colors = NULL;
+
+#if GTK_CHECK_VERSION(3,0,0)
+
+	new_colors = g_strdup(gtk_combo_box_get_active_id(GTK_COMBO_BOX(widget)));
+
+#else
+
+	GValue		value	= { 0, };
+	GtkTreeIter iter;
+
+	if(!gtk_combo_box_get_active_iter(widget,&iter))
+		return;
+
+	gtk_tree_model_get_value(gtk_combo_box_get_model(widget),&iter,1,&value);
+	new_colors = g_strdup(g_value_get_string(&value));
+
+#endif
+
+	if(!info->colorname)
+		return;
+
+	trace("%s: %s->%s",__FUNCTION__,info->colorname,new_colors);
+
+	if(*info->colorname)
+		g_free(info->colorname);
+
+	info->colorname = new_colors;
+ }
+
  static GObject * create_custom_widget(GtkPrintOperation *prt, PRINT_INFO *info)
  {
-	static const gchar *def_colors =	"white,"
-										"black,"
-										"black,"
-										"black,"
-										"black,"
-										"black,"
-										"black,"
-										"black,"
-										"black,"
-										"black,"
-										"black,"
-										"black,"
-										"black,"
-										"black,"
-										"black,"
-										"black,"
-										"black,"
-										"black,"
-										"black,"
-										"black,"
-										"black,"
-										"white,"
-										"black,"
-										"black,"
-										"black,"
-										"white,"
-										"black,"
-										"black,"
-										"black,"
-										"black";
+	static const gchar *def_colors =	"white," // V3270_COLOR_BACKGROUND
+										"black," // V3270_COLOR_BLUE
+										"black," // V3270_COLOR_RED
+										"black," // V3270_COLOR_PINK
+										"black," // V3270_COLOR_GREEN
+										"black," // V3270_COLOR_TURQUOISE
+										"black," // V3270_COLOR_YELLOW
+										"black," // V3270_COLOR_WHITE
+										"black," // V3270_COLOR_BLACK
+										"black," // V3270_COLOR_DARK_BLUE
+										"black," // V3270_COLOR_ORANGE
+										"black," // V3270_COLOR_PURPLE
+										"black," // V3270_COLOR_DARK_GREEN
+										"black," // V3270_COLOR_DARK_TURQUOISE
+										"black," // V3270_COLOR_MUSTARD
+										"black," // V3270_COLOR_GRAY
+										"black," // V3270_COLOR_FIELD_DEFAULT
+										"black," // V3270_COLOR_FIELD_INTENSIFIED
+										"black," // V3270_COLOR_FIELD_PROTECTED
+										"black," // V3270_COLOR_FIELD_PROTECTED_INTENSIFIED
+										"black," // V3270_COLOR_SELECTED_BG
+										"white," // V3270_COLOR_SELECTED_FG
+										"black," // V3270_COLOR_SELECTED_BORDER
+										"black," // V3270_COLOR_CURSOR
+										"black," // V3270_COLOR_CROSS_HAIR
+										"white," // V3270_COLOR_OIA_BACKGROUND
+										"black," // V3270_COLOR_OIA
+										"black," // V3270_COLOR_OIA_SEPARATOR
+										"black," // V3270_COLOR_OIA_STATUS_OK
+										"black"; // V3270_COLOR_OIA_STATUS_INVALID
 
  	static const gchar	* label[]	= { N_( "Font:" ), N_( "Color scheme:" ) };
 	GtkWidget			* container = gtk_table_new(2,2,FALSE);
@@ -180,6 +212,9 @@
 
 	info->colorname = get_string_from_config("print","colors",def_colors);
 	load_color_schemes(widget,info->colorname);
+
+	g_signal_connect(G_OBJECT(widget),"changed",G_CALLBACK(color_scheme_changed),info);
+
 	gtk_table_attach(GTK_TABLE(container),widget,1,2,1,2,GTK_EXPAND|GTK_FILL,GTK_FILL,5,0);
 
 	// Show and return
