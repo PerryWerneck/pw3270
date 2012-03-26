@@ -55,6 +55,7 @@
 
  GtkWidget	* create_main_window(void);
  void		  setup_font_list(GtkWidget *widget, GtkWidget *obj);
+ void		  load_color_schemes(GtkWidget *widget, gchar **target);
 
  // actions
  void paste_file_action(GtkAction *action, GtkWidget *widget);

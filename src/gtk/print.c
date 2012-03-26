@@ -39,6 +39,7 @@
 	GdkColor				  color[V3270_COLOR_COUNT];
 	H3270					* session;
 	gchar					* font;
+	gchar					* colorname;
 	int						  rows;
 	int						  cols;
 	int						  pages;
@@ -91,6 +92,9 @@
 	if(info->font)
 		g_free(info->font);
 
+	if(info->colorname)
+		g_free(info->colorname);
+
 	g_free(info);
  }
 
@@ -128,7 +132,7 @@
 	// Font selection button
 	widget = gtk_font_button_new();
 #if GTK_CHECK_VERSION(3,2,0)
-	gtk_font_chooser_set_filter_func(widget,filter_monospaced,0);
+	gtk_font_chooser_set_filter_func((GtkFontChooser *) widget,filter_monospaced,NULL,NULL);
 #endif // GTK(3,2,0)
 	gtk_table_attach(GTK_TABLE(container),widget,1,2,0,1,GTK_EXPAND|GTK_FILL,GTK_FILL,5,0);
 
@@ -137,6 +141,14 @@
     g_signal_connect(G_OBJECT(widget),"font-set",G_CALLBACK(font_set),info);
 
 	// Color scheme dropdown
+#if GTK_CHECK_VERSION(3,0,0)
+	widget = gtk_combo_box_text_new();
+#else
+	widget = gtk_combo_box_new();
+#endif // GTK(3,0,0)
+
+	load_color_schemes(widget,&info->colorname);
+	gtk_table_attach(GTK_TABLE(container),widget,1,2,1,2,GTK_EXPAND|GTK_FILL,GTK_FILL,5,0);
 
 	// Show and return
 	gtk_widget_show_all(container);

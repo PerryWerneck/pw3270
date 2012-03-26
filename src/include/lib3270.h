@@ -647,8 +647,21 @@
 	 */
 	LIB3270_EXPORT char * lib3270_get_text(H3270 *h);
 
+	/**
+	 * Get a terminal character and attribute.
+	 *
+	 * @param h		Session Handle.
+	 * @param baddr	Element address ((element_row*cols)+element_col)
+	 * @param c		Pointer to character.
+	 * @param attr	Pointer to attribute.
+	 *
+	 * @return 0 if ok or error code.
+	 *
+	 */
+	LIB3270_EXPORT int lib3270_get_element(H3270 *h, int baddr, unsigned char *c, unsigned short *attr);
+
 	LIB3270_EXPORT int lib3270_set_model(H3270 *session, int model);
-	LIB3270_EXPORT int	lib3270_get_model(H3270 *session);
+	LIB3270_EXPORT int lib3270_get_model(H3270 *session);
 
 #ifdef __cplusplus
 	}

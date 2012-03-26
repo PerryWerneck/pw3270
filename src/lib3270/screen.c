@@ -99,6 +99,19 @@ static void addch(H3270 *session, int baddr, unsigned char c, unsigned short att
 	session->update(session,baddr,c,attr,baddr == session->cursor_addr);
 }
 
+LIB3270_EXPORT int lib3270_get_element(H3270 *h, int baddr, unsigned char *c, unsigned short *attr)
+{
+	CHECK_SESSION_HANDLE(h);
+
+	if(!h->text || baddr < 0 || baddr > (h->rows*h->cols))
+		return EINVAL;
+
+	*c		= h->text[baddr].chr;
+	*attr	= h->text[baddr].attr;
+
+	return 0;
+}
+
 /**
  * Initialize the screen.
  *

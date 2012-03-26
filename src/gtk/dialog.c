@@ -84,6 +84,7 @@
 		} list[] =
 		{
 			// http://en.wikipedia.org/wiki/Character_encoding
+			{ "UTF-8",		N_( "UTF-8"	)								},
 			{ "ISO-8859-1", N_( "Western Europe (ISO 8859-1)" ) 		},
 			{ "CP1252",		N_( "Windows Western languages (CP1252)" )	},
 
