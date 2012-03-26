@@ -117,7 +117,38 @@
 
  static GObject * create_custom_widget(GtkPrintOperation *prt, PRINT_INFO *info)
  {
- 	static const gchar	* label[]	= { N_( "Font:" ), N_( "Colors:" ) };
+	static const gchar *def_colors =	"white,"
+										"black,"
+										"black,"
+										"black,"
+										"black,"
+										"black,"
+										"black,"
+										"black,"
+										"black,"
+										"black,"
+										"black,"
+										"black,"
+										"black,"
+										"black,"
+										"black,"
+										"black,"
+										"black,"
+										"black,"
+										"black,"
+										"black,"
+										"black,"
+										"white,"
+										"black,"
+										"black,"
+										"black,"
+										"white,"
+										"black,"
+										"black,"
+										"black,"
+										"black";
+
+ 	static const gchar	* label[]	= { N_( "Font:" ), N_( "Color scheme:" ) };
 	GtkWidget			* container = gtk_table_new(2,2,FALSE);
 	GtkWidget			* widget;
 	int					  f;
@@ -147,6 +178,7 @@
 	widget = gtk_combo_box_new();
 #endif // GTK(3,0,0)
 
+	info->colorname = get_string_from_config("print","colors",def_colors);
 	load_color_schemes(widget,info->colorname);
 	gtk_table_attach(GTK_TABLE(container),widget,1,2,1,2,GTK_EXPAND|GTK_FILL,GTK_FILL,5,0);
 
