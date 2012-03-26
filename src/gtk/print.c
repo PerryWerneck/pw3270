@@ -147,7 +147,7 @@
 	widget = gtk_combo_box_new();
 #endif // GTK(3,0,0)
 
-	load_color_schemes(widget,&info->colorname);
+	load_color_schemes(widget,info->colorname);
 	gtk_table_attach(GTK_TABLE(container),widget,1,2,1,2,GTK_EXPAND|GTK_FILL,GTK_FILL,5,0);
 
 	// Show and return

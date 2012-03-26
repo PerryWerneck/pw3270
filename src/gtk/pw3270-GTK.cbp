@@ -41,6 +41,9 @@
 		<Unit filename="actions.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="colors.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="common/common.h" />
 		<Unit filename="common/config.c">
 			<Option compilerVar="CC" />

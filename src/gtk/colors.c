@@ -32,7 +32,7 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
- void load_color_schemes(GtkWidget *widget, gchar **target)
+ void load_color_schemes(GtkWidget *widget, gchar *active)
  {
 	gchar *filename = build_data_filename("colors.conf",NULL);
 
@@ -88,7 +88,7 @@
 												1, str,
 												-1);
 
-			if(*target && !g_strcasecmp(*target,str))
+			if(active && !g_strcasecmp(active,str))
 			{
 				found = TRUE;
 				gtk_combo_box_set_active_iter(GTK_COMBO_BOX(widget),&iter);
@@ -102,13 +102,13 @@
 		g_strfreev(group);
 		g_key_file_free(conf);
 
-		if(!found)
+		if(active && !found)
 		{
 #if GTK_CHECK_VERSION(3,0,0)
 
 			gtk_combo_box_text_insert(		GTK_COMBO_BOX_TEXT(widget),
 											0,
-											*target,
+											active,
 											_( "Custom colors") );
 
 #else
@@ -116,7 +116,7 @@
 			gtk_list_store_append((GtkListStore *) model,&iter);
 			gtk_list_store_set((GtkListStore *) model, &iter,
 												0, _( "Custom colors" ),
-												1, *target,
+												1, active,
 												-1);
 
 			gtk_combo_box_set_active_iter(GTK_COMBO_BOX(widget),&iter);
