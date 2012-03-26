@@ -201,14 +201,14 @@ static void lib3270_toggle_action(GtkToggleAction *action,GtkWidget *widget)
 
 static void selection_move_action(GtkAction *action, GtkWidget *widget)
 {
-	trace("Action %s activated on widget %p dir=%s",gtk_action_get_name(action),widget,g_object_get_data(G_OBJECT(action),"direction"));
+	trace("Action %s activated on widget %p dir=%s",gtk_action_get_name(action),widget,(const gchar *) g_object_get_data(G_OBJECT(action),"direction"));
 	lib3270_move_selection(GTK_V3270(widget)->host,(LIB3270_DIRECTION) g_object_get_data(G_OBJECT(action),"direction"));
 }
 
 static void cursor_move_action(GtkAction *action, GtkWidget *widget)
 {
 	int flags = (int) g_object_get_data(G_OBJECT(action),"move_flags");
-	trace("Action %s activated on widget %p flags=%04x",gtk_action_get_name(action),widget,g_object_get_data(G_OBJECT(action),"move_flags"));
+	trace("Action %s activated on widget %p flags=%04x",gtk_action_get_name(action),widget,(unsigned short) g_object_get_data(G_OBJECT(action),"move_flags"));
 	lib3270_move_cursor(GTK_V3270(widget)->host,(LIB3270_DIRECTION) (flags & 0x03), (flags & 0x80) );
 }
 

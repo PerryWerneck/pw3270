@@ -36,28 +36,60 @@
 
  typedef struct _print_info
  {
-	GdkColor	color[V3270_COLOR_COUNT];
+	GdkColor				  color[V3270_COLOR_COUNT];
+	H3270					* session;
+	gchar					* font;
+	int						  rows;
+	int						  cols;
+	int						  pages;
+	cairo_font_extents_t	  extents;
+	cairo_scaled_font_t		* font_scaled;
 
  } PRINT_INFO;
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
- static void begin_print(GtkPrintOperation *prt, GtkPrintContext *context, PRINT_INFO *info)
+ static void setup_font(cairo_t *cr, PRINT_INFO *info)
  {
- 	trace("%s",__FUNCTION__);
-	gtk_print_operation_cancel(prt);
+	cairo_select_font_face(cr, info->font, CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL);
+
+	info->font_scaled = cairo_get_scaled_font(cr);
+	cairo_scaled_font_reference(info->font_scaled);
+	cairo_scaled_font_extents(info->font_scaled,&info->extents);
+
+ }
+
+ static void begin_print_all(GtkPrintOperation *prt, GtkPrintContext *context, PRINT_INFO *info)
+ {
+ 	cairo_t *cr = gtk_print_context_get_cairo_context(context);
+
+ 	lib3270_get_screen_size(info->session,&info->rows,&info->cols);
+ 	setup_font(cr,info);
+
+	gtk_print_operation_set_n_pages(prt,1);
  }
 
  static void draw_page(GtkPrintOperation *prt, GtkPrintContext *context, gint pg, PRINT_INFO *info)
  {
- 	trace("%s",__FUNCTION__);
+	cairo_t *cr = gtk_print_context_get_cairo_context(context);
 
+	cairo_set_scaled_font(cr,info->font_scaled);
+
+	cairo_move_to(cr,0,0);
+	cairo_show_text(cr, "Teste");
+
+	cairo_stroke(cr);
  }
 
  static void done(GtkPrintOperation *prt, GtkPrintOperationResult result, PRINT_INFO *info)
  {
  	trace("%s",__FUNCTION__);
 
+	if(info->font_scaled)
+		cairo_scaled_font_destroy(info->font_scaled);
+
+	if(info->font)
+		g_free(info->font);
 
 	g_free(info);
  }
@@ -69,27 +101,40 @@
  }
 #endif // GTK(3,2,0)
 
+ static void font_set(GtkFontButton *widget, PRINT_INFO *info)
+ {
+ 	if(info->font)
+		g_free(info->font);
+
+	info->font = g_strdup(gtk_font_button_get_font_name(widget));
+	set_string_to_config("print","font","%s",info->font);
+	trace("Font set to \"%s\"",info->font);
+ }
+
  static GObject * create_custom_widget(GtkPrintOperation *prt, PRINT_INFO *info)
  {
- 	static const gchar	* label[]	= { "Font:", "Colors:" };
+ 	static const gchar	* label[]	= { N_( "Font:" ), N_( "Colors:" ) };
 	GtkWidget			* container = gtk_table_new(2,2,FALSE);
 	GtkWidget			* widget;
 	int					  f;
 
 	for(f=0;f<G_N_ELEMENTS(label);f++)
 	{
-		widget = gtk_label_new(label[f]);
+		widget = gtk_label_new(gettext(label[f]));
 		gtk_misc_set_alignment(GTK_MISC(widget),0,0.5);
 		gtk_table_attach(GTK_TABLE(container),widget,0,1,f,f+1,GTK_FILL,GTK_FILL,0,0);
 	}
 
 	// Font selection button
 	widget = gtk_font_button_new();
-	gtk_font_button_set_show_size(GTK_FONT_BUTTON(widget),FALSE);
 #if GTK_CHECK_VERSION(3,2,0)
 	gtk_font_chooser_set_filter_func(widget,filter_monospaced,0);
 #endif // GTK(3,2,0)
 	gtk_table_attach(GTK_TABLE(container),widget,1,2,0,1,GTK_EXPAND|GTK_FILL,GTK_FILL,5,0);
+
+	info->font = get_string_from_config("print","font","Courier 10");
+	gtk_font_button_set_font_name((GtkFontButton *) widget,info->font);
+    g_signal_connect(G_OBJECT(widget),"font-set",G_CALLBACK(font_set),info);
 
 	// Color scheme dropdown
 
@@ -103,33 +148,39 @@
  	trace("%s",__FUNCTION__);
  }
 
- static GtkPrintOperation * begin_print_operation(GtkAction *action, GtkWidget *widget)
+ static GtkPrintOperation * begin_print_operation(GtkAction *action, GtkWidget *widget, PRINT_INFO **info)
  {
- 	PRINT_INFO			* info		= g_new0(PRINT_INFO,1);
  	GtkPrintOperation	* print 	= gtk_print_operation_new();
 //	GtkPrintSettings 	* settings	= gtk_print_settings_new();
 //	GtkPageSetup 		* setup 	= gtk_page_setup_new();
-// 	gchar				* ptr;
+ 	const gchar 		* attr;
+
+ 	*info = g_new0(PRINT_INFO,1);
+ 	(*info)->session = v3270_get_session(widget);
 
 	// Basic setup
 	gtk_print_operation_set_allow_async(print,TRUE);
 
-/*
-	ptr = g_strconcat(PACKAGE_NAME,".",gtk_action_get_name(action),NULL);
-	gtk_print_operation_set_job_name(print,ptr);
-	g_free(ptr);
-*/
+	attr = (const gchar *) g_object_get_data(G_OBJECT(action),"jobname");
+	if(attr)
+	{
+		gtk_print_operation_set_job_name(print,attr);
+	}
+	else
+	{
+		gchar *ptr = g_strconcat(PACKAGE_NAME,".",gtk_action_get_name(action),NULL);
+		gtk_print_operation_set_job_name(print,ptr);
+		g_free(ptr);
+	}
 
 	gtk_print_operation_set_custom_tab_label(print,_( "Style" ));
 
 //	gtk_print_operation_set_show_progress(print,TRUE);
 
 	// Common signals
-    g_signal_connect(print,"begin_print",G_CALLBACK(begin_print),info);
-    g_signal_connect(print,"draw_page",G_CALLBACK(draw_page),info);
-    g_signal_connect(print,"done",G_CALLBACK(done),info);
-	g_signal_connect(print,"create-custom-widget",G_CALLBACK(create_custom_widget),	info);
-	g_signal_connect(print,"custom-widget-apply",G_CALLBACK(custom_widget_apply), info);
+    g_signal_connect(print,"done",G_CALLBACK(done),*info);
+	g_signal_connect(print,"create-custom-widget",G_CALLBACK(create_custom_widget),	*info);
+	g_signal_connect(print,"custom-widget-apply",G_CALLBACK(custom_widget_apply), *info);
 
 	// Finish settings
 	// gtk_print_operation_set_print_settings(print,settings);
@@ -140,9 +191,13 @@
 
  void print_all_action(GtkAction *action, GtkWidget *widget)
  {
- 	GtkPrintOperation *print = begin_print_operation(action,widget);
+ 	PRINT_INFO			* info = NULL;
+ 	GtkPrintOperation 	* print = begin_print_operation(action,widget,&info);
 
 	trace("Action %s activated on widget %p print=%p",gtk_action_get_name(action),widget,print);
+
+    g_signal_connect(print,"begin_print",G_CALLBACK(begin_print_all),info);
+    g_signal_connect(print,"draw_page",G_CALLBACK(draw_page),info);
 
 	// Run Print dialog
 	gtk_print_operation_run(print,GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,GTK_WINDOW(gtk_widget_get_toplevel(widget)),NULL);
