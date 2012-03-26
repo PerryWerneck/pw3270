@@ -108,7 +108,6 @@
 		}
 	}
 
-
 	return G_OBJECT(widget);
  }
 

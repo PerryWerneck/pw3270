@@ -93,7 +93,7 @@ gboolean v3270_expose(GtkWidget *widget, GdkEventExpose *event)
 #endif // GTk3
 
 
-void v3270_draw_element(cairo_t *cr, unsigned char chr, unsigned short attr, const struct v3270_metrics *metrics, GdkRectangle *rect, GdkColor *color)
+void v3270_draw_element(cairo_t *cr, unsigned char chr, unsigned short attr, H3270 *session, guint height, GdkRectangle *rect, GdkColor *color)
 {
 	GdkColor *fg;
 	GdkColor *bg;
@@ -113,10 +113,10 @@ void v3270_draw_element(cairo_t *cr, unsigned char chr, unsigned short attr, con
 			bg = color+(attr & 0x000F);
 	}
 
-	v3270_draw_char(cr,chr,attr,metrics,rect,fg,bg);
+	v3270_draw_char(cr,chr,attr,session,height,rect,fg,bg);
 }
 
-void v3270_draw_char(cairo_t *cr, unsigned char chr, unsigned short attr, const struct v3270_metrics *metrics, GdkRectangle *rect, GdkColor *fg, GdkColor *bg)
+void v3270_draw_char(cairo_t *cr, unsigned char chr, unsigned short attr, H3270 *session, guint height, GdkRectangle *rect, GdkColor *fg, GdkColor *bg)
 {
 	// Clear element area
 	gdk_cairo_set_source_color(cr,fg);
@@ -201,27 +201,27 @@ void v3270_draw_char(cairo_t *cr, unsigned char chr, unsigned short attr, const 
 			break;
 
 		case 0x8c: // CG 0xf7, less or equal "≤"
-			cairo_move_to(cr,rect->x,rect->y+metrics->height);
+			cairo_move_to(cr,rect->x,rect->y+height);
 			cairo_show_text(cr, "≤");
 			break;
 
 		case 0xae: // CG 0xd9, greater or equal "≥"
-			cairo_move_to(cr,rect->x,rect->y+metrics->height);
+			cairo_move_to(cr,rect->x,rect->y+height);
 			cairo_show_text(cr, "≥");
 			break;
 
 		case 0xbe: // CG 0x3e, not equal "≠"
-			cairo_move_to(cr,rect->x,rect->y+metrics->height);
+			cairo_move_to(cr,rect->x,rect->y+height);
 			cairo_show_text(cr, "≠");
 			break;
 
 		case 0xad: // "["
-			cairo_move_to(cr,rect->x,rect->y+metrics->height);
+			cairo_move_to(cr,rect->x,rect->y+height);
 			cairo_show_text(cr, "[");
 			break;
 
 		case 0xbd: // "]"
-			cairo_move_to(cr,rect->x,rect->y+metrics->height);
+			cairo_move_to(cr,rect->x,rect->y+height);
 			cairo_show_text(cr, "]");
 			break;
 
@@ -231,11 +231,11 @@ void v3270_draw_char(cairo_t *cr, unsigned char chr, unsigned short attr, const 
 	}
 	else if(chr)
 	{
-		gchar *utf = g_convert((char *) &chr, 1, "UTF-8", "ISO-8859-1", NULL, NULL, NULL);
+		gchar *utf = g_convert((char *) &chr, 1, "UTF-8", lib3270_get_charset(session), NULL, NULL, NULL);
 
 		if(utf)
 		{
-			cairo_move_to(cr,rect->x,rect->y+metrics->height);
+			cairo_move_to(cr,rect->x,rect->y+height);
 			cairo_show_text(cr, utf);
 			g_free(utf);
 		}
@@ -304,7 +304,7 @@ void v3270_reload(GtkWidget *widget)
 			if(addr == cursor)
 				v3270_update_cursor_rect(terminal,&rect,chr,attr);
 
-			v3270_draw_element(cr,chr,attr,&terminal->metrics,&rect,terminal->color);
+			v3270_draw_element(cr,chr,attr,terminal->host,terminal->metrics.height,&rect,terminal->color);
 
 			addr++;
 			rect.x += rect.width;
@@ -349,7 +349,7 @@ void v3270_update_char(H3270 *session, int addr, unsigned char chr, unsigned sho
 
 	cr = cairo_create(terminal->surface);
 	cairo_set_scaled_font(cr,terminal->font_scaled);
-	v3270_draw_element(cr, chr, attr, &terminal->metrics, &rect,terminal->color);
+	v3270_draw_element(cr, chr, attr, terminal->host, terminal->metrics.height, &rect,terminal->color);
     cairo_destroy(cr);
 
 	if(cursor)
@@ -386,7 +386,7 @@ void v3270_update_cursor_surface(v3270 *widget,unsigned char chr,unsigned short 
 
 		rect.x = 0;
 		rect.y = 0;
-		v3270_draw_char(cr,chr,attr,&widget->metrics,&rect,bg,fg);
+		v3270_draw_char(cr,chr,attr,widget->host,widget->metrics.height,&rect,bg,fg);
 
 		cairo_destroy(cr);
 	}

@@ -39,11 +39,15 @@
 	GdkColor				  color[V3270_COLOR_COUNT];
 	H3270					* session;
 	gchar					* font;
+	guint					  fontsize;
+	cairo_font_weight_t		  fontweight;
 	gchar					* colorname;
 	int						  rows;
 	int						  cols;
 	int						  pages;
 	cairo_font_extents_t	  extents;
+	double					  width;
+	double					  height;
 	cairo_scaled_font_t		* font_scaled;
 
  } PRINT_INFO;
@@ -52,11 +56,14 @@
 
  static void setup_font(cairo_t *cr, PRINT_INFO *info)
  {
-	cairo_select_font_face(cr, info->font, CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL);
+	cairo_select_font_face(cr, info->font, CAIRO_FONT_SLANT_NORMAL, info->fontweight);
 
 	info->font_scaled = cairo_get_scaled_font(cr);
 	cairo_scaled_font_reference(info->font_scaled);
 	cairo_scaled_font_extents(info->font_scaled,&info->extents);
+
+	info->width  = ((double) info->cols) * info->extents.max_x_advance;
+	info->height = ((double) info->rows) * (info->extents.height + info->extents.descent);
 
  }
 
@@ -72,14 +79,47 @@
 
  static void draw_page(GtkPrintOperation *prt, GtkPrintContext *context, gint pg, PRINT_INFO *info)
  {
-	cairo_t *cr = gtk_print_context_get_cairo_context(context);
+ 	int				  row;
+ 	int				  col;
+	cairo_t			* cr 	= gtk_print_context_get_cairo_context(context);
+	int		  		  baddr	= 0;
+	GdkRectangle	  rect;
 
 	cairo_set_scaled_font(cr,info->font_scaled);
 
-	cairo_move_to(cr,0,0);
-	cairo_show_text(cr, "Teste");
+	memset(&rect,0,sizeof(rect));
 
+	rect.x		= 0;
+	rect.y		= 0;
+	rect.height	= (info->extents.height + info->extents.descent);
+	rect.width	= info->extents.max_x_advance;
+
+/*
+	gdk_cairo_set_source_color(cr,info->color+V3270_COLOR_BACKGROUND);
+	cairo_rectangle(cr, 0, 0, rect.width*info->cols, rect.height*info->rows);
+	cairo_fill(cr);
 	cairo_stroke(cr);
+*/
+
+	rect.width++;
+	rect.height++;
+
+	for(row = 0; row < info->rows; row++)
+	{
+		rect.x = 0;
+		for(col = 0; col < info->cols; col++)
+		{
+			unsigned char	c;
+			unsigned short	attr;
+
+			if(!lib3270_get_element(info->session,baddr++,&c,&attr))
+				v3270_draw_element(cr,c,attr,info->session,info->extents.height,&rect,info->color);
+
+			rect.x += (rect.width-1);
+		}
+		rect.y += (rect.height-1);
+
+	}
  }
 
  static void done(GtkPrintOperation *prt, GtkPrintOperationResult result, PRINT_INFO *info)
@@ -107,12 +147,33 @@
 
  static void font_set(GtkFontButton *widget, PRINT_INFO *info)
  {
+ 	const gchar *name = gtk_font_button_get_font_name(widget);
+
  	if(info->font)
 		g_free(info->font);
 
-	info->font = g_strdup(gtk_font_button_get_font_name(widget));
-	set_string_to_config("print","font","%s",info->font);
-	trace("Font set to \"%s\"",info->font);
+#if GTK_CHECK_VERSION(3,2,0)
+
+	info->font		= g_strdup(name);
+	info->fontsize	= gtk_font_chooser_get_font_size((GtkFontChooser *) widget);
+
+#else
+	{
+		PangoFontDescription *descr = pango_font_description_from_string(name);
+
+		info->font			= g_strdup(pango_font_description_get_family(descr));
+		info->fontsize		= pango_font_description_get_size(descr);
+		info->fontweight	= CAIRO_FONT_WEIGHT_NORMAL;
+
+		if(pango_font_description_get_weight(descr) == PANGO_WEIGHT_BOLD)
+			info->fontweight = CAIRO_FONT_WEIGHT_BOLD;
+
+		pango_font_description_free(descr);
+	}
+#endif // GTK(3,2,0)
+
+	set_string_to_config("print","font",name);
+	trace("Font set to \"%s\" with size %d",info->font,info->fontsize);
  }
 
  static void color_scheme_changed(GtkComboBox *widget,PRINT_INFO *info)
@@ -139,12 +200,13 @@
 	if(!info->colorname)
 		return;
 
-	trace("%s: %s->%s",__FUNCTION__,info->colorname,new_colors);
+//	trace("%s: %s->%s",__FUNCTION__,info->colorname,new_colors);
 
 	if(*info->colorname)
 		g_free(info->colorname);
 
 	info->colorname = new_colors;
+
  }
 
  static GObject * create_custom_widget(GtkPrintOperation *prt, PRINT_INFO *info)
@@ -201,6 +263,7 @@
 
 	info->font = get_string_from_config("print","font","Courier 10");
 	gtk_font_button_set_font_name((GtkFontButton *) widget,info->font);
+	font_set((GtkFontButton *) widget,info);
     g_signal_connect(G_OBJECT(widget),"font-set",G_CALLBACK(font_set),info);
 
 	// Color scheme dropdown
@@ -222,9 +285,11 @@
  	return G_OBJECT(container);
  }
 
- static void custom_widget_apply(GtkPrintOperation *prt, GtkWidget *font_dialog, gpointer user_data)
+ static void custom_widget_apply(GtkPrintOperation *prt, GtkWidget *widget, PRINT_INFO *info)
  {
  	trace("%s",__FUNCTION__);
+	set_string_to_config("print","colors",info->colorname);
+	v3270_set_color_table(info->color,info->colorname);
  }
 
  static GtkPrintOperation * begin_print_operation(GtkAction *action, GtkWidget *widget, PRINT_INFO **info)
@@ -236,6 +301,7 @@
 
  	*info = g_new0(PRINT_INFO,1);
  	(*info)->session = v3270_get_session(widget);
+ 	(*info)->fontweight = CAIRO_FONT_WEIGHT_NORMAL;
 
 	// Basic setup
 	gtk_print_operation_set_allow_async(print,TRUE);

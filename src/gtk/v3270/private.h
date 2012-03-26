@@ -103,8 +103,7 @@ void		  v3270_update_cursor_surface(v3270 *widget,unsigned char chr,unsigned sho
 
 void		  v3270_register_io_handlers(v3270Class *cls);
 
-void		  v3270_draw_element(cairo_t *cr, unsigned char chr, unsigned short attr, const struct v3270_metrics *metrics, GdkRectangle *rect, GdkColor *color);
-void		  v3270_draw_char(cairo_t *cr, unsigned char chr, unsigned short attr, const struct v3270_metrics *metrics, GdkRectangle *rect, GdkColor *fg, GdkColor *bg);
+void 		  v3270_draw_char(cairo_t *cr, unsigned char chr, unsigned short attr, H3270 *session, guint height, GdkRectangle *rect, GdkColor *fg, GdkColor *bg);
 
 void		  v3270_start_timer(GtkWidget *terminal);
 void		  v3270_stop_timer(GtkWidget *terminal);

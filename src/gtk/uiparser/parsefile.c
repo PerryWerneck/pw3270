@@ -115,6 +115,7 @@
 	const gchar * name = NULL;
 	gchar		* key;
 
+trace("%s ----",__FUNCTION__);
 	if(action)
 		name = gtk_action_get_name(action);
 
@@ -133,7 +134,6 @@
 	g_object_ref(G_OBJECT(widget));
 	g_hash_table_insert(info->element_list[id],key,widget);
 
-//	trace("%s - %s",__FUNCTION__,name);
 	return widget;
  }
 
