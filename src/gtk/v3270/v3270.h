@@ -166,7 +166,7 @@
 	struct v3270_metrics	  metrics;
 
 	/* Colors */
-	GdkColor				  color[V3270_COLOR_COUNT+1];	/**< Terminal widget colors */
+	GdkColor				  color[V3270_COLOR_COUNT];	/**< Terminal widget colors */
 
 	/* Regions */
 	GdkRectangle			  oia_rect[V3270_OIA_FIELD_COUNT];
