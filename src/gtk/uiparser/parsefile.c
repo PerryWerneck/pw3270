@@ -115,7 +115,6 @@
 	const gchar * name = NULL;
 	gchar		* key;
 
-trace("%s ----",__FUNCTION__);
 	if(action)
 		name = gtk_action_get_name(action);
 

@@ -284,6 +284,32 @@ static int id_from_array(const gchar *key, const gchar **array, GError **error)
 	return -1;
 }
 
+static int get_attribute_id(const gchar *name, const gchar *key, gchar **nm, const gchar **src, const gchar **names, const gchar **values, GError **error)
+{
+ 	const gchar *attr = ui_get_attribute(key,names,values);
+ 	int			 id;
+
+ 	if(!attr)
+	{
+		*error = g_error_new(ERROR_DOMAIN,EINVAL,_("Attribute \"%s\" is invalid or undefined" ), key);
+		return -1;
+	}
+
+	id = id_from_array(attr,src,error);
+	if(id >= 0)
+	{
+		if(*nm)
+			g_free(*nm);
+		*nm = g_strconcat(name,attr,NULL);
+		return id;
+	}
+
+	if(!*error)
+		*error = g_error_new(ERROR_DOMAIN,EINVAL,_("Unexpected or invalid %s attribute: \"%s\"" ), key, attr);
+
+	return -1;
+}
+
 static int setup_block_action(const gchar *name, const gchar *attr, GError **error)
 {
 	int id = -1;
@@ -392,30 +418,20 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 	}
 	else if(!g_strcasecmp(name,"paste"))
 	{
+		static const GCallback cbk[] = {	G_CALLBACK(paste_clipboard_action),
+											G_CALLBACK(paste_next_action),
+											G_CALLBACK(paste_file_action)
+										};
+		static const gchar 		* src[] = { "clipboard", "next", "file", NULL };
+
+		callback	= cbk;
 		action_type	= ACTION_TYPE_TABLE;
-		attr		= ui_get_attribute("src",names,values);
 
-		if(!attr)
-		{
-			*error = g_error_new(ERROR_DOMAIN,EINVAL,_("%s action needs src attribute" ), name);
+		trace("%s",__FUNCTION__);
+		id = get_attribute_id(name,"src",&nm,src,names,values,error);
+		trace("%s",__FUNCTION__);
+		if(id < 0)
 			return NULL;
-		}
-		else
-		{
-			static const GCallback cbk[] = {	G_CALLBACK(paste_clipboard_action),
-												G_CALLBACK(paste_next_action),
-												G_CALLBACK(paste_file_action)
-											};
-			static const gchar 		* src[] = { "clipboard", "next", "file", NULL };
-
-			id = id_from_array(attr,src,error);
-			if(id < 0)
-				return NULL;
-
-			callback = cbk;
-		}
-
-		nm = g_strconcat(name,attr, NULL);
 
 	}
 	else if(!g_strcasecmp(name,"copy"))
@@ -434,16 +450,9 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 											};
 		callback	= cbk;
 		action_type	= ACTION_TYPE_TABLE;
-		attr 		= ui_get_attribute("mode",names,values);
-
-		id = id_from_array(attr,src,error);
+		id = get_attribute_id(name,"mode",&nm,src,names,values,error);
 		if(id < 0)
-		{
-			*error = g_error_new(ERROR_DOMAIN,EINVAL,_("Unexpected or invalid mode attribute: \"%s\"" ), attr);
 			return NULL;
-		}
-
-		nm = g_strconcat(name,attr,NULL);
 	}
 	else if(!g_strcasecmp(name,"save"))
 	{

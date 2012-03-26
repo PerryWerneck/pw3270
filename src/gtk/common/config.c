@@ -84,11 +84,11 @@ gchar * get_last_error_msg(void)
 #endif // WIN32
 
 #ifdef WIN_REGISTRY_ENABLED
- static BOOL registry_open_key(const gchar *group, const gchar *key, REGSAM samDesired, HKEY *hKey)
+ static BOOL registry_open_key(const gchar *group, REGSAM samDesired, HKEY *hKey)
  {
  	static HKEY	  predefined[] = { HKEY_CURRENT_USER, HKEY_USERS, HKEY_LOCAL_MACHINE };
  	int			  f;
-	gchar		* path = g_strdup_printf("%s\\%s\\%s",registry_path,group,key);
+	gchar		* path = g_strdup_printf("%s\\%s",registry_path,group);
 
 	for(f=0;f<G_N_ELEMENTS(predefined);f++)
 	{
@@ -99,7 +99,9 @@ gchar * get_last_error_msg(void)
 		}
 	}
 
+	trace("Cant open \"%s\"",path);
 	g_free(path);
+
 	return FALSE;
  }
 #else
@@ -164,14 +166,14 @@ gchar * get_last_error_msg(void)
 
 	HKEY key_handle;
 
-	if(registry_open_key(group,key,KEY_READ,&key_handle))
+	if(registry_open_key(group,KEY_READ,&key_handle))
 	{
 		DWORD			  data;
 		gboolean		  ret 		= def;
 		unsigned long	  datalen	= sizeof(data);
 		unsigned long	  datatype;
 
-		if(RegQueryValueExA(key_handle,NULL,NULL,&datatype,(BYTE *) &data,&datalen) == ERROR_SUCCESS)
+		if(RegQueryValueExA(key_handle,key,NULL,&datatype,(BYTE *) &data,&datalen) == ERROR_SUCCESS)
 		{
 			if(datatype == REG_DWORD)
 				ret = data ? TRUE : FALSE;
@@ -207,14 +209,14 @@ gchar * get_last_error_msg(void)
 
 	HKEY key_handle;
 
-	if(registry_open_key(group,key,KEY_READ,&key_handle))
+	if(registry_open_key(group,KEY_READ,&key_handle))
 	{
 		DWORD			data;
 		gint			ret = def;
 		unsigned long	datalen	= sizeof(data);
 		unsigned long	datatype;
 
-		if(RegQueryValueExA(key_handle,NULL,NULL,&datatype,(BYTE *) &data,&datalen) == ERROR_SUCCESS)
+		if(RegQueryValueExA(key_handle,key,NULL,&datatype,(BYTE *) &data,&datalen) == ERROR_SUCCESS)
 		{
 			if(datatype == REG_DWORD)
 				ret = (gint) data;
@@ -255,14 +257,16 @@ gchar * get_last_error_msg(void)
 	unsigned long datalen 	= sizeof(data);
 	gchar *ret				= NULL;
 
-	if(!registry_open_key(group,key,KEY_READ,&key_handle))
+	if(!registry_open_key(group,KEY_READ,&key_handle))
 		return g_strdup(def);
 
-	if(RegQueryValueExA(key_handle,NULL,NULL,&datatype,data,&datalen) == ERROR_SUCCESS)
+	if(RegQueryValueExA(key_handle,key,NULL,&datatype,data,&datalen) == ERROR_SUCCESS)
 	{
 		ret = (char *) malloc(datalen+1);
+
 		memcpy(ret,data,datalen);
 		ret[datalen+1] = 0;
+		trace("%s\\%s=\"%s\"",group,key,ret);
 	}
 	else if(def)
 	{
@@ -353,13 +357,13 @@ void set_boolean_to_config(const gchar *group, const gchar *key, gboolean val)
 
  	HKEY	hKey;
  	DWORD	disp;
-	gchar * path = g_strdup_printf("%s\\%s\\%s",registry_path,group,key);
+	gchar * path = g_strdup_printf("%s\\%s",registry_path,group);
 
 	trace("Creating key %s",path);
 	if(RegCreateKeyEx(HKEY_CURRENT_USER,path,0,NULL,REG_OPTION_NON_VOLATILE,KEY_SET_VALUE,NULL,&hKey,&disp) == ERROR_SUCCESS)
 	{
 		DWORD	value = val ? 1 : 0;
-		LONG	rc = RegSetValueEx(hKey, NULL, 0, REG_DWORD,(const BYTE *) &value,sizeof(value));
+		LONG	rc = RegSetValueEx(hKey, key, 0, REG_DWORD,(const BYTE *) &value,sizeof(value));
 
 		SetLastError(rc);
 
