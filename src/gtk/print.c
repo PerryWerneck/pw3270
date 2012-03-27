@@ -147,30 +147,23 @@
 
  static void font_set(GtkFontButton *widget, PRINT_INFO *info)
  {
- 	const gchar *name = gtk_font_button_get_font_name(widget);
+ 	const gchar				* name  = gtk_font_button_get_font_name(widget);
+ 	PangoFontDescription	* descr = pango_font_description_from_string(name);
+
+	if(!descr)
+		return;
 
  	if(info->font)
 		g_free(info->font);
 
-#if GTK_CHECK_VERSION(3,2,0)
+	info->font			= g_strdup(pango_font_description_get_family(descr));
+	info->fontsize		= pango_font_description_get_size(descr);
+	info->fontweight	= CAIRO_FONT_WEIGHT_NORMAL;
 
-	info->font		= g_strdup(name);
-	info->fontsize	= gtk_font_chooser_get_font_size((GtkFontChooser *) widget);
+	if(pango_font_description_get_weight(descr) == PANGO_WEIGHT_BOLD)
+		info->fontweight = CAIRO_FONT_WEIGHT_BOLD;
 
-#else
-	{
-		PangoFontDescription *descr = pango_font_description_from_string(name);
-
-		info->font			= g_strdup(pango_font_description_get_family(descr));
-		info->fontsize		= pango_font_description_get_size(descr);
-		info->fontweight	= CAIRO_FONT_WEIGHT_NORMAL;
-
-		if(pango_font_description_get_weight(descr) == PANGO_WEIGHT_BOLD)
-			info->fontweight = CAIRO_FONT_WEIGHT_BOLD;
-
-		pango_font_description_free(descr);
-	}
-#endif // GTK(3,2,0)
+	pango_font_description_free(descr);
 
 	set_string_to_config("print","font",name);
 	trace("Font set to \"%s\" with size %d",info->font,info->fontsize);
@@ -256,6 +249,7 @@
 
 	// Font selection button
 	widget = gtk_font_button_new();
+
 #if GTK_CHECK_VERSION(3,2,0)
 	gtk_font_chooser_set_filter_func((GtkFontChooser *) widget,filter_monospaced,NULL,NULL);
 #endif // GTK(3,2,0)

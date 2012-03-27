@@ -7,8 +7,8 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output=".bin/Debug/pw3270-GTK" prefix_auto="1" extension_auto="1" />
-				<Option object_output=".obj/Debug/" />
+				<Option output=".bin\Debug\pw3270-GTK" prefix_auto="1" extension_auto="1" />
+				<Option object_output=".obj\Debug\" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
@@ -17,8 +17,8 @@
 				</Compiler>
 			</Target>
 			<Target title="Release">
-				<Option output=".bin/Release/pw3270-GTK" prefix_auto="1" extension_auto="1" />
-				<Option object_output=".obj/Release/" />
+				<Option output=".bin\Release\pw3270-GTK" prefix_auto="1" extension_auto="1" />
+				<Option object_output=".obj\Release\" />
 				<Option type="0" />
 				<Option compiler="gcc" />
 				<Compiler>
@@ -32,7 +32,7 @@
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="`pkg-config lib3270 gtk+-2.0 lib3270 --cflags`" />
-			<Add directory="../include" />
+			<Add directory="..\include" />
 		</Compiler>
 		<Linker>
 			<Add option="`pkg-config lib3270 gtk+-2.0 lib3270 --libs`" />
@@ -44,11 +44,12 @@
 		<Unit filename="colors.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="common/common.h" />
-		<Unit filename="common/config.c">
+		<Unit filename="common\common.h" />
+		<Unit filename="common\common.h.in" />
+		<Unit filename="common\config.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="common/sources.mak" />
+		<Unit filename="common\sources.mak" />
 		<Unit filename="dialog.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -65,74 +66,74 @@
 		<Unit filename="print.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="uiparser/accelerator.c">
+		<Unit filename="uiparser\accelerator.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="uiparser/action.c">
+		<Unit filename="uiparser\action.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="uiparser/menu.c">
+		<Unit filename="uiparser\menu.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="uiparser/menubar.c">
+		<Unit filename="uiparser\menubar.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="uiparser/menuitem.c">
+		<Unit filename="uiparser\menuitem.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="uiparser/parsefile.c">
+		<Unit filename="uiparser\parsefile.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="uiparser/parser.c">
+		<Unit filename="uiparser\parser.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="uiparser/parser.h" />
-		<Unit filename="uiparser/popup.c">
+		<Unit filename="uiparser\parser.h" />
+		<Unit filename="uiparser\popup.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="uiparser/private.h" />
-		<Unit filename="uiparser/script.c">
+		<Unit filename="uiparser\private.h" />
+		<Unit filename="uiparser\script.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="uiparser/separator.c">
+		<Unit filename="uiparser\separator.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="uiparser/sources.mak" />
-		<Unit filename="uiparser/toolbar.c">
+		<Unit filename="uiparser\sources.mak" />
+		<Unit filename="uiparser\toolbar.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="uiparser/toolitem.c">
+		<Unit filename="uiparser\toolitem.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="v3270/clipboard.c">
+		<Unit filename="v3270\clipboard.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="v3270/draw.c">
+		<Unit filename="v3270\draw.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="v3270/genmarshal" />
-		<Unit filename="v3270/iocallback.c">
+		<Unit filename="v3270\genmarshal" />
+		<Unit filename="v3270\iocallback.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="v3270/keyboard.c">
+		<Unit filename="v3270\keyboard.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="v3270/locked.xbm" />
-		<Unit filename="v3270/marshal.c">
+		<Unit filename="v3270\locked.xbm" />
+		<Unit filename="v3270\marshal.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="v3270/marshal.h" />
-		<Unit filename="v3270/mouse.c">
+		<Unit filename="v3270\marshal.h" />
+		<Unit filename="v3270\mouse.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="v3270/oia.c">
+		<Unit filename="v3270\oia.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="v3270/private.h" />
-		<Unit filename="v3270/sources.mak" />
-		<Unit filename="v3270/unlocked.xbm" />
-		<Unit filename="v3270/v3270.h" />
-		<Unit filename="v3270/widget.c">
+		<Unit filename="v3270\private.h" />
+		<Unit filename="v3270\sources.mak" />
+		<Unit filename="v3270\unlocked.xbm" />
+		<Unit filename="v3270\v3270.h" />
+		<Unit filename="v3270\widget.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="valgrind.suppression" />

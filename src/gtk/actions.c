@@ -427,9 +427,7 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 		callback	= cbk;
 		action_type	= ACTION_TYPE_TABLE;
 
-		trace("%s",__FUNCTION__);
 		id = get_attribute_id(name,"src",&nm,src,names,values,error);
-		trace("%s",__FUNCTION__);
 		if(id < 0)
 			return NULL;
 
