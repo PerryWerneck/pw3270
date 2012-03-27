@@ -73,5 +73,17 @@
 	 */
 	 LIB3270_EXPORT int lib3270_move_selection(H3270 *h, LIB3270_DIRECTION dir);
 
+	/**
+	 * Get addresses of selected area.
+	 *
+	 * @param h		Session handle.
+	 * @param begin	Pointer to the begin value.
+	 * @param end	Pointer to the end value.
+	 *
+	 * @return 0 if the selected area was get, non zero if unselected or unavailable.
+	 *
+	 */
+	 LIB3270_EXPORT int lib3270_get_selected_addr(H3270 *hSession, int *begin, int *end);
+
 
  #endif // LIB3270_SELECTION_H_INCLUDED

@@ -37,6 +37,9 @@
  typedef struct _print_info
  {
 	GdkColor				  color[V3270_COLOR_COUNT];
+	int 					  show_selection : 1;
+	int						  all : 1;
+
 	H3270					* session;
 	gchar					* font;
 	guint					  fontsize;
@@ -77,9 +80,8 @@
 
  }
 
- static void begin_print_all(GtkPrintOperation *prt, GtkPrintContext *context, PRINT_INFO *info)
+ static void begin_print(GtkPrintOperation *prt, GtkPrintContext *context, PRINT_INFO *info)
  {
- 	lib3270_get_screen_size(info->session,&info->rows,&info->cols);
  	setup_font(context,info);
 	gtk_print_operation_set_n_pages(prt,1);
  }
@@ -115,8 +117,12 @@
 			unsigned char	c;
 			unsigned short	attr;
 
-			if(!lib3270_get_element(info->session,baddr++,&c,&attr))
+			if(!lib3270_get_element(info->session,baddr++,&c,&attr) && (info->all || (attr & LIB3270_ATTR_SELECTED)))
+			{
+				if(!info->show_selection)
+					attr &= ~LIB3270_ATTR_SELECTED;
 				v3270_draw_element(cr,c,attr,info->session,info->extents.height,&rect,info->color);
+			}
 
 			rect.x += (rect.width-1);
 		}
@@ -205,6 +211,13 @@
 
  }
 
+ static void toggle_show_selection(GtkToggleButton *togglebutton,PRINT_INFO *info)
+ {
+ 	gboolean active = gtk_toggle_button_get_active(togglebutton);
+ 	info->show_selection = active ? 1 : 0;
+ 	set_boolean_to_config("print","selection",active);
+ }
+
  static GObject * create_custom_widget(GtkPrintOperation *prt, PRINT_INFO *info)
  {
 	static const gchar *def_colors =	"white," // V3270_COLOR_BACKGROUND
@@ -239,7 +252,7 @@
 										"black"; // V3270_COLOR_OIA_STATUS_INVALID
 
  	static const gchar	* label[]	= { N_( "Font:" ), N_( "Color scheme:" ) };
-	GtkWidget			* container = gtk_table_new(2,2,FALSE);
+	GtkWidget			* container = gtk_table_new(3,2,FALSE);
 	GtkWidget			* widget;
 	int					  f;
 
@@ -276,6 +289,22 @@
 	g_signal_connect(G_OBJECT(widget),"changed",G_CALLBACK(color_scheme_changed),info);
 
 	gtk_table_attach(GTK_TABLE(container),widget,1,2,1,2,GTK_EXPAND|GTK_FILL,GTK_FILL,5,0);
+
+	// Selection checkbox
+	widget = gtk_check_button_new_with_label(_("Print selection box"));
+
+	if(info->all)
+	{
+		info->show_selection = get_boolean_from_config("print","selection",FALSE);
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),info->show_selection);
+		g_signal_connect(G_OBJECT(widget),"toggled",G_CALLBACK(toggle_show_selection),info);
+	}
+	else
+	{
+		gtk_widget_set_sensitive(widget,FALSE);
+	}
+
+	gtk_table_attach(GTK_TABLE(container),widget,1,2,2,3,GTK_EXPAND|GTK_FILL,GTK_FILL,5,0);
 
 	// Show and return
 	gtk_widget_show_all(container);
@@ -315,9 +344,8 @@
 		g_free(ptr);
 	}
 
-	gtk_print_operation_set_custom_tab_label(print,_( "Style" ));
-
-//	gtk_print_operation_set_show_progress(print,TRUE);
+	gtk_print_operation_set_custom_tab_label(print,_( "Options" ));
+	gtk_print_operation_set_show_progress(print,TRUE);
 
 	// Common signals
     g_signal_connect(print,"done",G_CALLBACK(done),*info);
@@ -338,7 +366,10 @@
 
 	trace("Action %s activated on widget %p print=%p",gtk_action_get_name(action),widget,print);
 
-    g_signal_connect(print,"begin_print",G_CALLBACK(begin_print_all),info);
+ 	lib3270_get_screen_size(info->session,&info->rows,&info->cols);
+
+	info->all = 1;
+    g_signal_connect(print,"begin_print",G_CALLBACK(begin_print),info);
     g_signal_connect(print,"draw_page",G_CALLBACK(draw_page),info);
 
 	// Run Print dialog
@@ -350,8 +381,35 @@
 
  void print_selected_action(GtkAction *action, GtkWidget *widget)
  {
+ 	PRINT_INFO			* info = NULL;
+ 	int					  start, end, rows;
+ 	GtkPrintOperation 	* print = begin_print_operation(action,widget,&info);;
+
 	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
 
+ 	if(lib3270_get_selected_addr(info->session,&start,&end))
+	{
+		g_warning("Can't get selected addresses for action %s",gtk_action_get_name(action));
+		g_object_unref(print);
+		return;
+	}
+
+	info->baddr = start;
+ 	lib3270_get_screen_size(info->session,&rows,&info->cols);
+
+	info->rows = ((end / info->cols) - (start / info->cols))+1;
+
+	trace("First row: %d  End row: %d  Num rows: %d",(start / info->cols),(end / info->cols),info->rows);
+
+	info->all = 0;
+    g_signal_connect(print,"begin_print",G_CALLBACK(begin_print),info);
+    g_signal_connect(print,"draw_page",G_CALLBACK(draw_page),info);
+
+	// Run Print dialog
+	gtk_print_operation_run(print,GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,GTK_WINDOW(gtk_widget_get_toplevel(widget)),NULL);
+
+
+	g_object_unref(print);
  }
 
  void print_copy_action(GtkAction *action, GtkWidget *widget)

@@ -93,26 +93,30 @@ gboolean v3270_expose(GtkWidget *widget, GdkEventExpose *event)
 #endif // GTk3
 
 
+static void get_element_colors(unsigned short attr, GdkColor **fg, GdkColor **bg, GdkColor *color)
+{
+	if(attr & LIB3270_ATTR_SELECTED)
+	{
+		*fg = color+V3270_COLOR_SELECTED_FG;
+		*bg = color+V3270_COLOR_SELECTED_BG;
+	}
+	else
+	{
+		*bg = color+((attr & 0x00F0) >> 4);
+
+		if(attr & LIB3270_ATTR_FIELD)
+			*fg = color+(attr & 0x0003)+V3270_COLOR_FIELD;
+		else
+			*fg = color+(attr & 0x000F);
+	}
+}
+
 void v3270_draw_element(cairo_t *cr, unsigned char chr, unsigned short attr, H3270 *session, guint height, GdkRectangle *rect, GdkColor *color)
 {
 	GdkColor *fg;
 	GdkColor *bg;
 
-	if(attr & LIB3270_ATTR_SELECTED)
-	{
-		fg = color+V3270_COLOR_SELECTED_FG;
-		bg = color+V3270_COLOR_SELECTED_BG;
-	}
-	else
-	{
-		bg = color+((attr & 0x00F0) >> 4);
-
-		if(attr & LIB3270_ATTR_FIELD)
-			fg = color+(attr & 0x0003)+V3270_COLOR_FIELD;
-		else
-			fg = color+(attr & 0x000F);
-	}
-
+	get_element_colors(attr,&fg,&bg,color);
 	v3270_draw_char(cr,chr,attr,session,height,rect,fg,bg);
 }
 
@@ -368,19 +372,7 @@ void v3270_update_cursor_surface(v3270 *widget,unsigned char chr,unsigned short 
 		GdkColor		* fg;
 		GdkColor 		* bg;
 
-		if(attr & LIB3270_ATTR_SELECTED)
-		{
-			fg = widget->color+V3270_COLOR_SELECTED_FG;
-			bg = widget->color+V3270_COLOR_SELECTED_BG;
-		}
-		else
-		{
-			fg = widget->color+((attr & 0x00F0) >> 4);
-			if(attr & LIB3270_ATTR_FIELD)
-				bg = widget->color+(attr & 0x0003)+V3270_COLOR_FIELD;
-			else
-				bg = widget->color+(attr & 0x000F);
-		}
+		get_element_colors(attr,&fg,&bg,widget->color);
 
 		cairo_set_scaled_font(cr,widget->font_scaled);
 

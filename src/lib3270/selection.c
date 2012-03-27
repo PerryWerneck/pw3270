@@ -360,6 +360,26 @@ LIB3270_EXPORT char * lib3270_get_selected(H3270 *hSession)
 	return get_text(hSession,0);
 }
 
+LIB3270_EXPORT int lib3270_get_selected_addr(H3270 *hSession, int *begin, int *end)
+{
+	if(!hSession->selected || hSession->select.begin == hSession->select.end)
+		return -1;
+
+	if(hSession->select.end > hSession->select.begin)
+	{
+		*begin = hSession->select.begin;
+		*end   = hSession->select.end;
+	}
+	else
+	{
+		*begin = hSession->select.end;
+		*end   = hSession->select.begin;
+	}
+
+	return 0;
+}
+
+
 LIB3270_EXPORT int lib3270_move_selection(H3270 *hSession, LIB3270_DIRECTION dir)
 {
 	if(!hSession->selected || hSession->select.begin == hSession->select.end)
