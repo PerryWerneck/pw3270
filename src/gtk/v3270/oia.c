@@ -478,12 +478,14 @@ void v3270_draw_oia(cairo_t *cr, H3270 *host, int row, int cols, struct v3270_me
 		{ V3270_OIA_TIMER,				setup_timer_position		},
 		{ V3270_OIA_SPINNER, 			setup_spinner_position		},
 		{ V3270_OIA_LUNAME, 			setup_luname_position		},
+#ifdef X3270_PRINTER
 		{ V3270_OIA_PRINTER,			setup_single_char_right		},
+#endif // X3270_PRINTER
 		{ V3270_OIA_SCRIPT,				setup_single_char_right		},
 		{ V3270_OIA_INSERT,				setup_insert_position		},
 		{ V3270_OIA_TYPEAHEAD,			setup_single_char_right		},
 		{ V3270_OIA_SHIFT,				setup_double_char_position	},
-		{ V3270_OIA_CAPS,				setup_single_char_right		},
+//		{ V3270_OIA_CAPS,				setup_single_char_right		},
 		{ V3270_OIA_ALT,				setup_single_char_right		},
 		{ V3270_OIA_SSL,				setup_double_char_position	},
 	};
@@ -1011,7 +1013,7 @@ void v3270_update_oia(H3270 *session, LIB3270_FLAG id, unsigned char on)
 		update_text_field(terminal,on,V3270_OIA_TYPEAHEAD,"T");
 		break;
 
-#ifdef LIB3270_FLAG_PRINTER
+#if defined(LIB3270_FLAG_PRINTER) && defined(X3270_PRINTER)
 	case LIB3270_FLAG_PRINTER:
 		update_text_field(terminal,on,V3270_OIA_PRINTER,"P");
 		break;

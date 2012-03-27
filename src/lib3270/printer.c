@@ -39,13 +39,18 @@
 #include "globals.h"
 
 #if (defined(C3270) || defined(X3270_DISPLAY)) && defined(X3270_PRINTER) /*[*/
-#if defined(X3270_DISPLAY) /*[*/
+
+/*
+#if defined(X3270_DISPLAY)
 #include <X11/StringDefs.h>
 #include <X11/Xaw/Dialog.h>
-#endif /*]*/
-#if defined(_WIN32) /*[*/
-#include "windows.h"
-#endif /*]*/
+#endif
+*/
+
+#if defined(_WIN32)
+	#include "windows.h"
+#endif
+
 #include <errno.h>
 #include <signal.h>
 #include <stdarg.h>
@@ -54,7 +59,6 @@
 #include "appres.h"
 #include "objects.h"
 #include "resources.h"
-// #include "ctlr.h"
 
 #include "charsetc.h"
 #include "ctlrc.h"
@@ -63,9 +67,11 @@
 #include "printerc.h"
 #include "printc.h"
 #include "savec.h"
-#if defined(C3270) /*[*/
-#include "screenc.h"
-#endif /*]*/
+
+#if defined(C3270)
+	#include "screenc.h"
+#endif
+
 #include "tablesc.h"
 #include "telnetc.h"
 #include "trace_dsc.h"

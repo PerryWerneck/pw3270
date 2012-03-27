@@ -31,6 +31,7 @@
 
 #ifndef V3270_H_INCLUDED
 
+ #include <lib3270/config.h>
  #include <lib3270.h>
 
  #define V3270_H_INCLUDED 1
@@ -101,16 +102,20 @@
 	V3270_OIA_ALT,				/**< Alt indication ("A" or blank) */
 								/**< Compose indication ("C" or blank) */
 								/**< Compose first character */
-	V3270_OIA_CAPS,				/**< Caps indication ("A" or blank) */
 	V3270_OIA_SHIFT,			/**< Shift Status */
 	V3270_OIA_TYPEAHEAD,		/**< Typeahead indication ("T" or blank) */
 	V3270_OIA_INSERT,			/**< Insert mode indication (Special symbol/"I" or blank) */
 	V3270_OIA_SCRIPT,			/**< Script indication  ("S" or blank) */
-	V3270_OIA_PRINTER,			/**< Printer indication ("P" or blank) */
 	V3270_OIA_LUNAME,			/**< LU Name */
 	V3270_OIA_SPINNER,			/**< command timing spinner */
 	V3270_OIA_TIMER,			/**< command timing (mmm:ss, or blank) */
 	V3270_OIA_CURSOR_POSITION,	/**< cursor position (rrr/ccc or blank) */
+
+//	V3270_OIA_CAPS,				/**< Caps indication ("A" or blank) */
+
+#ifdef X3270_PRINTER
+	V3270_OIA_PRINTER,			/**< Printer indication ("P" or blank) */
+#endif // X3270_PRINTER
 
 	V3270_OIA_FIELD_COUNT
 

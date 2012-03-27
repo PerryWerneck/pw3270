@@ -26,7 +26,6 @@
  * erico.mendonca@gmail.com	(Erico Mascarenhas de Mendonça)
  * licinio@bb.com.br		(Licínio Luis Branco)
  * kraucer@bb.com.br		(Kraucer Fernandes Mazuco)
- * macmiranda@bb.com.br		(Marco Aurélio Caldas Miranda)
  *
  */
 
@@ -52,9 +51,8 @@
 	#define X3270_ANSI
 	#define X3270_APL
 	#define X3270_FT
-	#define X3270_PRINTER
+	/* #define X3270_PRINTER */
 
-	#undef HAVE_ALTSCREEN
 	#undef HAVE_IGEMAC
 	#undef HAVE_MACUI
 	#undef HAVE_MALLOC_H
