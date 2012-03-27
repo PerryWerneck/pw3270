@@ -105,12 +105,12 @@ void v3270_draw_element(cairo_t *cr, unsigned char chr, unsigned short attr, H32
 	}
 	else
 	{
-		fg = color+((attr & 0x00F0) >> 4);
+		bg = color+((attr & 0x00F0) >> 4);
 
 		if(attr & LIB3270_ATTR_FIELD)
-			bg = color+(attr & 0x0003)+V3270_COLOR_FIELD;
+			fg = color+(attr & 0x0003)+V3270_COLOR_FIELD;
 		else
-			bg = color+(attr & 0x000F);
+			fg = color+(attr & 0x000F);
 	}
 
 	v3270_draw_char(cr,chr,attr,session,height,rect,fg,bg);
@@ -119,12 +119,12 @@ void v3270_draw_element(cairo_t *cr, unsigned char chr, unsigned short attr, H32
 void v3270_draw_char(cairo_t *cr, unsigned char chr, unsigned short attr, H3270 *session, guint height, GdkRectangle *rect, GdkColor *fg, GdkColor *bg)
 {
 	// Clear element area
-	gdk_cairo_set_source_color(cr,fg);
+	gdk_cairo_set_source_color(cr,bg);
 	cairo_rectangle(cr, rect->x, rect->y, rect->width, rect->height);
 	cairo_fill(cr);
 
 	// Set foreground color
-	gdk_cairo_set_source_color(cr,bg);
+	gdk_cairo_set_source_color(cr,fg);
 
 	// Draw char
 	if(attr & LIB3270_ATTR_CG)

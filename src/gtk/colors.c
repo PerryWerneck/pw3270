@@ -44,9 +44,9 @@
 	else
 	{
 		gchar 		** group;
-		GKeyFile	*  conf = g_key_file_new();
-		int			   f;
-		gboolean	   found = FALSE;
+		GKeyFile	*  conf 	= g_key_file_new();
+		int			   f		= 0;
+		gboolean	   found 	= FALSE;
 
 #if !GTK_CHECK_VERSION(3,0,0)
 		GtkTreeModel	* model		= (GtkTreeModel *) gtk_list_store_new(2,G_TYPE_STRING,G_TYPE_STRING);
@@ -76,10 +76,16 @@
 #if GTK_CHECK_VERSION(3,0,0)
 
 			gtk_combo_box_text_insert(		GTK_COMBO_BOX_TEXT(widget),
-											0,
+											f,
 											str,
 											g_key_file_get_locale_string(conf,group[f],"Label",NULL,NULL));
 
+
+			if(active && !g_strcasecmp(active,str))
+			{
+				found = TRUE;
+				gtk_combo_box_set_active(GTK_COMBO_BOX(widget),f);
+			}
 #else
 
 			gtk_list_store_append((GtkListStore *) model,&iter);
@@ -110,6 +116,7 @@
 											0,
 											active,
 											_( "Custom colors") );
+			gtk_combo_box_set_active(GTK_COMBO_BOX(widget),0);
 
 #else
 

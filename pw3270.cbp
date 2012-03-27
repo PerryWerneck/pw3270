@@ -46,6 +46,9 @@
 		<Unit filename="src/gtk/actions.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/gtk/colors.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/gtk/common/common.h" />
 		<Unit filename="src/gtk/common/config.c">
 			<Option compilerVar="CC" />

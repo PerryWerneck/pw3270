@@ -18,7 +18,7 @@
  * programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple
  * Place, Suite 330, Boston, MA, 02111-1307, USA
  *
- * Este programa está nomeado como dialog.c e possui - linhas de código.
+ * Este programa está nomeado como print.c e possui - linhas de código.
  *
  * Contatos:
  *
@@ -42,10 +42,12 @@
 	guint					  fontsize;
 	cairo_font_weight_t		  fontweight;
 	gchar					* colorname;
+	int						  baddr;
 	int						  rows;
 	int						  cols;
 	int						  pages;
 	cairo_font_extents_t	  extents;
+	double					  left;
 	double					  width;
 	double					  height;
 	cairo_scaled_font_t		* font_scaled;
@@ -54,8 +56,10 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
- static void setup_font(cairo_t *cr, PRINT_INFO *info)
+ static void setup_font(GtkPrintContext * context, PRINT_INFO *info)
  {
+ 	cairo_t *cr = gtk_print_context_get_cairo_context(context);
+
 	cairo_select_font_face(cr, info->font, CAIRO_FONT_SLANT_NORMAL, info->fontweight);
 
 	info->font_scaled = cairo_get_scaled_font(cr);
@@ -65,15 +69,18 @@
 	info->width  = ((double) info->cols) * info->extents.max_x_advance;
 	info->height = ((double) info->rows) * (info->extents.height + info->extents.descent);
 
+	// Center image
+	info->left = (gtk_print_context_get_width(context)-info->width)/2;
+	if(info->left < 2)
+		info->left = 2;
+
+
  }
 
  static void begin_print_all(GtkPrintOperation *prt, GtkPrintContext *context, PRINT_INFO *info)
  {
- 	cairo_t *cr = gtk_print_context_get_cairo_context(context);
-
  	lib3270_get_screen_size(info->session,&info->rows,&info->cols);
- 	setup_font(cr,info);
-
+ 	setup_font(context,info);
 	gtk_print_operation_set_n_pages(prt,1);
  }
 
@@ -82,31 +89,27 @@
  	int				  row;
  	int				  col;
 	cairo_t			* cr 	= gtk_print_context_get_cairo_context(context);
-	int		  		  baddr	= 0;
+	int		  		  baddr	= info->baddr;
 	GdkRectangle	  rect;
 
 	cairo_set_scaled_font(cr,info->font_scaled);
 
 	memset(&rect,0,sizeof(rect));
-
-	rect.x		= 0;
-	rect.y		= 0;
+	rect.y 		= 2;
 	rect.height	= (info->extents.height + info->extents.descent);
 	rect.width	= info->extents.max_x_advance;
 
-/*
 	gdk_cairo_set_source_color(cr,info->color+V3270_COLOR_BACKGROUND);
-	cairo_rectangle(cr, 0, 0, rect.width*info->cols, rect.height*info->rows);
+	cairo_rectangle(cr, info->left-2, 0, (rect.width*info->cols)+4, (rect.height*info->rows)+4);
 	cairo_fill(cr);
 	cairo_stroke(cr);
-*/
 
 	rect.width++;
 	rect.height++;
 
 	for(row = 0; row < info->rows; row++)
 	{
-		rect.x = 0;
+		rect.x = info->left;
 		for(col = 0; col < info->cols; col++)
 		{
 			unsigned char	c;
