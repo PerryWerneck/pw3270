@@ -115,6 +115,12 @@ static void v3270_toggle_changed(v3270 *widget,LIB3270_TOGGLE toggle_id, gboolea
 		v3270_cursor_draw(widget);
 		break;
 
+	case LIB3270_TOGGLE_BOLD:
+		widget->font_weight = lib3270_get_toggle(widget->host,LIB3270_TOGGLE_BOLD) ? CAIRO_FONT_WEIGHT_BOLD : CAIRO_FONT_WEIGHT_NORMAL;
+		v3270_reload(GTK_WIDGET(widget));
+		gtk_widget_queue_draw(GTK_WIDGET(widget));
+		break;
+
 	default:
 		return;
 
@@ -860,7 +866,7 @@ void v3270_set_font_family(GtkWidget *widget, const gchar *name)
 	trace("%s(%s)",__FUNCTION__,name);
 
 	terminal->font_family = g_strdup(name);
-	terminal->font_weight = CAIRO_FONT_WEIGHT_NORMAL;
+	terminal->font_weight = lib3270_get_toggle(terminal->host,LIB3270_TOGGLE_BOLD) ? CAIRO_FONT_WEIGHT_BOLD : CAIRO_FONT_WEIGHT_NORMAL;
 
 	g_signal_emit(widget,v3270_widget_signal[SIGNAL_UPDATE_CONFIG], 0, "font-family", name);
 

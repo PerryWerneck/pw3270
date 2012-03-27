@@ -25,7 +25,6 @@
  erico.mendonca@gmail.com	(Erico Mascarenhas Mendonça)
  licinio@bb.com.br			(Licínio Luis Branco)
  kraucer@bb.com.br			(Kraucer Fernandes Mazuco)
- macmiranda@bb.com.br		(Marco Aurélio Caldas Miranda)
 
 ------------------------------------------------------------------------------>
 
@@ -50,19 +49,20 @@
 
 		<menu name='EditMenu' label='_Edit' >
 			<menuitem action='copy' mode='begin' key='<ctrl>c' icon='copy' group='selection' label='Copy' />
-			<menuitem action='copy' mode='table' key='<ctrl><alt>c' group='selection' label='Copy as table' />
-			<menuitem action='copy' mode='image' group='selection' label='Copy as image' />
+			<!-- menuitem action='copy' mode='table' key='<ctrl><alt>c' group='selection' label='Copy as table' /-->
+			<!-- menuitem action='copy' mode='image' group='selection' label='Copy as image' /-->
 			<menuitem action='copy' mode='append' key='<shift><ctrl>c' group='selection' label='Add to copy' />
 			<menuitem action='paste' src='clipboard' key='<ctrl>v' icon='paste' group='paste' label='Paste' />
 			<menuitem action='paste' src='next' key='<shift><ctrl>v' label='Paste next' />
+
+			<!-- If you want to paste a predefined file use the attribute filename='FULL_PATH' -->
 			<menuitem action='paste' src='file' group='online' label='Paste text file' />
 
 			<separator/>
-			<menuitem action='selectall' key='<ctrl>a' icon='select-all' group='online' label='Select all' />
-
-			<menuitem action='selectfield' key='<Ctrl>f' group='online' label='Select Field' />
-			<menuitem action='unselect' group='selection' label='Remove selection' />
-			<menuitem action='reselect' key='<Ctrl>r' group='online' label='Reselect' />
+			<menuitem action='select' target='all' key='<ctrl>a' icon='select-all' group='online' label='Select all' />
+			<menuitem action='select' target='field' key='<Ctrl>f' group='online' label='Select Field' />
+			<menuitem action='select' target='none' group='selection' label='Remove selection' />
+			<menuitem action='select' target='last' key='<Ctrl>r' group='online' label='Reselect' />
 
 			<separator/>
 			<menuitem action='clear' group='online' key='Pause' label='Clear' />
@@ -154,8 +154,8 @@
 	<popup name='selectionpopup' type='selection'>
 		<menuitem action='copy' mode='begin' />
 		<menuitem action='copy' mode='append' />
-		<menuitem action='unselect'/>
-		<menuitem action='selectall'/>
+		<menuitem action='select' target='none'/>
+		<menuitem action='select' target='all'/>
 
 		<separator />
 		<menuitem action='print' src='all'/>
@@ -169,16 +169,23 @@
 	<popup name='defaultpopup' type='default'>
 		<menuitem action='paste' src='clipboard'/>
 		<menuitem action='paste' src='next'/>
-		<menuitem action='selectall'/>
+		<menuitem action='select' target='all'/>
 		<menuitem action='print' src='all'/>
 		<menuitem action='print' src='copy'/>
 
 		<separator />
 		<menuitem action='backtab' label='Previous field' />
 		<menuitem action='tab' label='Next field'/>
-		<menuitem action='activate' label='Return' />
+		<menuitem name="return" action='activate' label='Return' key='return' />
 
 		<separator />
+		<menuitem action='Quit'/>
+
+	</popup>
+
+	<popup name='connectpopup' type='offline'>
+
+		<menuitem action='connect' />
 		<menuitem action='Quit'/>
 
 	</popup>
@@ -187,8 +194,8 @@
 
 	<accelerator action='Home' key='Home' group='online' />
 	<!-- accelerator action='Reset' key='<Shift><Ctrl>r' group='online' /-->
-	<accelerator action='Return' key='Return' />
-	<accelerator action='Enter' key='KP_Enter' />
+	<!-- accelerator name="return" action='activate' key='return' /-->
+	<accelerator name="KP_enter" action='activate' key='KP_Enter' />
 	<accelerator action='Break' key='Escape' group='online' />
 	<accelerator action='Attn' key='<shift>Escape' group='online' />
 
@@ -215,8 +222,8 @@
 	<accelerator action='move' target='cursor' direction='up' key='Up' group='online' />
 	<accelerator action='move' target='cursor' direction='down' key='Down' group='online' />
 
-	<accelerator action='PreviousField' key='ISO_Left_Tab' group='online' />
-	<accelerator action='NextField' key='Tab' group='online' />
+	<accelerator action='PreviousField' key='ISO_Left_Tab' group='online' label='Previous field' />
+	<accelerator action='NextField' key='Tab' group='online' label='Next field'/>
 
 	<accelerator action='dup' key='<Shift>KP_Multiply' group='online' />
 

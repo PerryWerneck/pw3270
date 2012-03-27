@@ -40,6 +40,8 @@
 	#undef HAVE_GNUC_VISIBILITY
 	#undef HAVE_LIBM
 
+	#undef HAVE_GNOME
+
 	#undef HAVE_LIBSSL
 
 	/* Optional parts. */

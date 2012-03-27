@@ -201,7 +201,7 @@ static void lib3270_toggle_action(GtkToggleAction *action,GtkWidget *widget)
 
 static void selection_move_action(GtkAction *action, GtkWidget *widget)
 {
-	trace("Action %s activated on widget %p dir=%s",gtk_action_get_name(action),widget,(const gchar *) g_object_get_data(G_OBJECT(action),"direction"));
+	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
 	lib3270_move_selection(GTK_V3270(widget)->host,(LIB3270_DIRECTION) g_object_get_data(G_OBJECT(action),"direction"));
 }
 
@@ -264,6 +264,26 @@ static void action_reset_toggle(GtkAction *action, GtkWidget *widget)
 	LIB3270_TOGGLE id = (LIB3270_TOGGLE) g_object_get_data(G_OBJECT(action),"toggle_id");
 	trace("Action %s activated on widget %p toggle=%d",gtk_action_get_name(action),widget,id);
 	lib3270_set_toggle(GTK_V3270(widget)->host,id,0);
+}
+
+static void action_select_all(GtkAction *action, GtkWidget *widget)
+{
+	lib3270_selectall(GTK_V3270(widget)->host);
+}
+
+static void action_select_field(GtkAction *action, GtkWidget *widget)
+{
+	lib3270_selectfield(GTK_V3270(widget)->host);
+}
+
+static void action_select_none(GtkAction *action, GtkWidget *widget)
+{
+	lib3270_unselect(GTK_V3270(widget)->host);
+}
+
+static void action_select_last(GtkAction *action, GtkWidget *widget)
+{
+	lib3270_reselect(GTK_V3270(widget)->host);
 }
 
 static int id_from_array(const gchar *key, const gchar **array, GError **error)
@@ -449,6 +469,26 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 		callback	= cbk;
 		action_type	= ACTION_TYPE_TABLE;
 		id = get_attribute_id(name,"mode",&nm,src,names,values,error);
+		if(id < 0)
+			return NULL;
+	}
+	else if(!g_strcasecmp(name,"select"))
+	{
+		static const gchar * src[] = 	{	"all",
+											"field",
+											"none",
+											"last",
+											NULL
+											};
+
+		static const GCallback cbk[] =	{	G_CALLBACK(action_select_all),
+											G_CALLBACK(action_select_field),
+											G_CALLBACK(action_select_none),
+											G_CALLBACK(action_select_last)
+										};
+		callback	= cbk;
+		action_type	= ACTION_TYPE_TABLE;
+		id = get_attribute_id(name,"target",&nm,src,names,values,error);
 		if(id < 0)
 			return NULL;
 	}
