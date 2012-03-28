@@ -318,8 +318,8 @@ static void v3270_class_init(v3270Class *klass)
 						G_SIGNAL_RUN_FIRST,
 						0,
 						NULL, NULL,
-						pw3270_VOID__VOID,
-						G_TYPE_NONE, 0);
+						pw3270_VOID__POINTER,
+						G_TYPE_NONE, 1, G_TYPE_STRING);
 
 	v3270_widget_signal[SIGNAL_DISCONNECTED] =
 		g_signal_new(	"disconnected",
@@ -524,7 +524,7 @@ static void update_connect(H3270 *session, unsigned char connected)
 	if(connected)
 	{
 		widget->cursor.show |= 2;
-		g_signal_emit(GTK_WIDGET(widget), v3270_widget_signal[SIGNAL_CONNECTED], 0);
+		g_signal_emit(GTK_WIDGET(widget), v3270_widget_signal[SIGNAL_CONNECTED], 0, session->full_current_host);
 	}
 	else
 	{

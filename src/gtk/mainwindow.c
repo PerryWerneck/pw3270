@@ -122,33 +122,15 @@
 	gtk_action_group_set_sensitive(group[ACTION_GROUP_PASTE],FALSE);
 	gtk_action_group_set_sensitive(group[ACTION_GROUP_ONLINE],FALSE);
 	gtk_action_group_set_sensitive(group[ACTION_GROUP_OFFLINE],TRUE);
+	gtk_window_set_title(GTK_WINDOW(gtk_widget_get_toplevel(widget)),g_get_application_name());
  }
 
-/*
-#ifndef WIN32
- static void clipboard_text_check(GtkClipboard *clipboard, const gchar *text, GtkActionGroup **group)
+ static void connected(GtkWidget *widget, const gchar *host, GtkActionGroup **group)
  {
- 	trace("%s called with text=%p",__FUNCTION__,text);
-	gtk_action_group_set_sensitive(group[ACTION_GROUP_PASTE],text != NULL);
- }
-#endif
-*/
-
- static void connected(GtkWidget *widget, GtkActionGroup **group)
- {
+	gtk_window_set_title(GTK_WINDOW(gtk_widget_get_toplevel(widget)),host);
 	gtk_action_group_set_sensitive(group[ACTION_GROUP_ONLINE],TRUE);
 	gtk_action_group_set_sensitive(group[ACTION_GROUP_OFFLINE],FALSE);
 	gtk_action_group_set_sensitive(group[ACTION_GROUP_PASTE],TRUE);
-
-/*
-#ifdef WIN32
-	gtk_action_group_set_sensitive(group[ACTION_GROUP_PASTE],TRUE);
-#else
-	gtk_action_group_set_sensitive(group[ACTION_GROUP_PASTE],FALSE);
-	gtk_clipboard_request_text(gtk_widget_get_clipboard(widget,GDK_SELECTION_CLIPBOARD),(GtkClipboardTextReceivedFunc) clipboard_text_check,(gpointer) group);
-#endif
-*/
-
  }
 
  static void update_config(GtkWidget *widget, const gchar *name, const gchar *value)

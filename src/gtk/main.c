@@ -107,11 +107,46 @@ static int initialize(void)
 
 int main(int argc, char *argv[])
 {
-	int rc = 0;
+	static const gchar	* appname	= PACKAGE_NAME;
+	int 				  rc 		= 0;
 
-	g_set_application_name(PACKAGE_NAME);
+	// Process command-line options
+	{
+		static const GOptionEntry app_options[] =
+		{
+			{ "appname", 'a', 0, G_OPTION_ARG_STRING, &appname,	N_( "Application name" ), PACKAGE_NAME },
 
-	gtk_init(&argc, &argv);
+			{ NULL }
+		};
+
+		GOptionContext	* options	= g_option_context_new (_("- 3270 Emulator for Gtk"));
+		GError			* error		= NULL;
+
+		g_option_context_add_main_entries(options, app_options, NULL);
+
+		gtk_init(&argc, &argv);
+
+		if(!g_option_context_parse( options, &argc, &argv, &error ))
+		{
+			GtkWidget *dialog = gtk_message_dialog_new(	NULL,
+														GTK_DIALOG_DESTROY_WITH_PARENT,
+														GTK_MESSAGE_ERROR,
+														GTK_BUTTONS_CANCEL,
+														"%s", _(  "Option parsing failed." ));
+
+			gtk_window_set_title(GTK_WINDOW(dialog),_( "Parse error" ));
+			gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), "%s", error->message);
+
+			gtk_dialog_run(GTK_DIALOG (dialog));
+			gtk_widget_destroy(dialog);
+
+			g_error_free(error);
+
+			return -1;
+		}
+	}
+
+	g_set_application_name(appname);
 
 	rc = initialize();
 	if(!rc)
