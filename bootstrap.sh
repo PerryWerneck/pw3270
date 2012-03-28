@@ -18,11 +18,14 @@ if test -d ".svn" ; then
 
 	if test -x "$SVN" ; then
 
-		TEMPFILE=$(mktemp)
+		TEMPFILE=.bootstrap.tmp
 		LANG="EN_US"
-		$SVN info > $TEMPFILE 2> /dev/null
-		PACKAGE_REVISION=$(cat $TEMPFILE | grep "^Revision: " | cut -d" " -f2)
-		PACKAGE_SOURCE=$(cat $TEMPFILE | grep "^URL: " | cut -d" " -f2)
+		"$SVN" info > $TEMPFILE 2>&1
+
+		if [ "$?" == "0" ]; then
+			PACKAGE_REVISION=$(cat $TEMPFILE | grep "^Revision: " | cut -d" " -f2)
+			PACKAGE_SOURCE=$(cat $TEMPFILE | grep "^URL: " | cut -d" " -f2)
+		fi
 
 		rm -f $TEMPFILE
 	fi
