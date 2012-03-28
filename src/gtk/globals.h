@@ -50,20 +50,25 @@
  	ACTION_COUNT
  };
 
- // Configuration
+
+/*--[ Statics ]--------------------------------------------------------------------------------------*/
+
+
+/*--[ Global prototipes ]----------------------------------------------------------------------------*/
+
  #include "common/common.h"
 
- GtkWidget	* create_main_window(void);
- void		  setup_font_list(GtkWidget *widget, GtkWidget *obj);
- void		  load_color_schemes(GtkWidget *widget, gchar *active);
+ G_GNUC_INTERNAL GtkWidget	* create_main_window(void);
+ G_GNUC_INTERNAL void		  setup_font_list(GtkWidget *widget, GtkWidget *obj);
+ G_GNUC_INTERNAL void		  load_color_schemes(GtkWidget *widget, gchar *active);
 
  // actions
- void paste_file_action(GtkAction *action, GtkWidget *widget);
- void hostname_action(GtkAction *action, GtkWidget *widget);
- void save_all_action(GtkAction *action, GtkWidget *widget);
- void save_selected_action(GtkAction *action, GtkWidget *widget);
- void save_copy_action(GtkAction *action, GtkWidget *widget);
- void print_all_action(GtkAction *action, GtkWidget *widget);
- void print_selected_action(GtkAction *action, GtkWidget *widget);
- void print_copy_action(GtkAction *action, GtkWidget *widget);
+ G_GNUC_INTERNAL void paste_file_action(GtkAction *action, GtkWidget *widget);
+ G_GNUC_INTERNAL void hostname_action(GtkAction *action, GtkWidget *widget);
+ G_GNUC_INTERNAL void save_all_action(GtkAction *action, GtkWidget *widget);
+ G_GNUC_INTERNAL void save_selected_action(GtkAction *action, GtkWidget *widget);
+ G_GNUC_INTERNAL void save_copy_action(GtkAction *action, GtkWidget *widget);
+ G_GNUC_INTERNAL void print_all_action(GtkAction *action, GtkWidget *widget);
+ G_GNUC_INTERNAL void print_selected_action(GtkAction *action, GtkWidget *widget);
+ G_GNUC_INTERNAL void print_copy_action(GtkAction *action, GtkWidget *widget);
 

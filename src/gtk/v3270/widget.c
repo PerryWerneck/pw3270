@@ -171,7 +171,7 @@ void get_preferred_height(GtkWidget *widget, gint *minimum_height, gint *natural
 		*minimum_height = height ? height : 10;
 
 	if(natural_height)
-		*natural_height = height ? height : 200;
+		*natural_height = 400;
 
 }
 
@@ -183,7 +183,7 @@ void get_preferred_width(GtkWidget *widget, gint *minimum_width, gint *natural_w
 		*minimum_width = width ? width : 10;
 
 	if(natural_width)
-		*natural_width = width ? width : 320;
+		*natural_width = 600;
 }
 
 /*

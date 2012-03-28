@@ -51,9 +51,9 @@
 		void		  (*setup)(GtkWidget *widget, GtkWidget *obj);
 	} UI_WIDGET_SETUP;
 
-	GtkWidget 		* ui_parse_xml_folder(const gchar *path, const gchar ** groupname, const gchar **popupname, GtkWidget *widget, const UI_WIDGET_SETUP *itn);
-	const gchar		* ui_get_attribute(const gchar *key, const gchar **name, const gchar **value);
-	gboolean		  ui_get_bool_attribute(const gchar *key, const gchar **name, const gchar **value, gboolean def);
-	GtkAction		* ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash, const gchar **names, const gchar **values, GError **error);
+	int			  ui_parse_xml_folder(GtkWindow *toplevel, const gchar *path, const gchar ** groupname, const gchar **popupname, GtkWidget *widget, const UI_WIDGET_SETUP *itn);
+	const gchar	* ui_get_attribute(const gchar *key, const gchar **name, const gchar **value);
+	gboolean	  ui_get_bool_attribute(const gchar *key, const gchar **name, const gchar **value, gboolean def);
+	GtkAction	* ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash, const gchar **names, const gchar **values, GError **error);
 
 #endif // UI_PARSER_H_INCLUDED

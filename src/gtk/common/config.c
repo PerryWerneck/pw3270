@@ -43,12 +43,12 @@
 
 #ifdef WIN_REGISTRY_ENABLED
 
- 	static const gchar *registry_path = "SOFTWARE\\"PACKAGE_NAME;
+ 	static const gchar *registry_path = "SOFTWARE\\";
 
 #else
 
 	static GKeyFile		* program_config = NULL;
- 	static const gchar	* mask = "%s" G_DIR_SEPARATOR_S PACKAGE_NAME ".conf";
+ 	static const gchar	* mask = "%s" G_DIR_SEPARATOR_S "%s.conf";
 
 #endif // WIN_REGISTRY_ENABLED
 
@@ -87,7 +87,7 @@ gchar * get_last_error_msg(void)
  {
  	static HKEY	  predefined[] = { HKEY_CURRENT_USER, HKEY_USERS, HKEY_LOCAL_MACHINE };
  	int			  f;
-	gchar		* path = g_strdup_printf("%s\\%s",registry_path,group);
+	gchar		* path = g_strdup_printf("%s\\%s\\%s",registry_path,g_get_application_name(),group);
 
 	for(f=0;f<G_N_ELEMENTS(predefined);f++)
 	{
@@ -119,7 +119,7 @@ gchar * get_last_error_msg(void)
 	const gchar * const *sysconfig;
 
 #ifdef DEBUG
-	filename = g_strdup_printf(mask,".");
+	filename = g_strdup_printf(mask,".",g_get_application_name());
 	trace("Checking for %s",filename);
 	if(g_file_test(filename,G_FILE_TEST_IS_REGULAR))
 		return filename;
@@ -128,7 +128,7 @@ gchar * get_last_error_msg(void)
 
  	for(f=0;f<G_N_ELEMENTS(dir);f++)
 	{
-		filename = g_strdup_printf(mask,dir[f]());
+		filename = g_strdup_printf(mask,dir[f](),g_get_application_name());
 		trace("Checking for %s",filename);
 		if(g_file_test(filename,G_FILE_TEST_IS_REGULAR))
 			return filename;
@@ -138,7 +138,7 @@ gchar * get_last_error_msg(void)
 	sysconfig = g_get_system_config_dirs();
  	for(f=0;sysconfig[f];f++)
 	{
-		filename = g_strdup_printf(mask,sysconfig[f]);
+		filename = g_strdup_printf(mask,sysconfig[f],g_get_application_name());
 		trace("Checking for %s",filename);
 		if(g_file_test(filename,G_FILE_TEST_IS_REGULAR))
 			return filename;
@@ -148,14 +148,14 @@ gchar * get_last_error_msg(void)
 	sysconfig = g_get_system_data_dirs();
  	for(f=0;sysconfig[f];f++)
 	{
-		filename = g_strdup_printf(mask,sysconfig[f]);
+		filename = g_strdup_printf(mask,sysconfig[f],g_get_application_name());
 		trace("Checking for %s",filename);
 		if(g_file_test(filename,G_FILE_TEST_IS_REGULAR))
 			return filename;
 		g_free(filename);
 	}
 
- 	return g_strdup_printf(mask,g_get_user_config_dir());
+ 	return g_strdup_printf(mask,g_get_user_config_dir(),g_get_application_name());
  }
 #endif  //  #ifdef WIN_REGISTRY_ENABLED
 
@@ -177,7 +177,7 @@ gchar * get_last_error_msg(void)
 			if(datatype == REG_DWORD)
 				ret = data ? TRUE : FALSE;
 			else
-				g_warning("Unexpected registry data type in %s\\%s\\%s",registry_path,group,key);
+				g_warning("Unexpected registry data type in %s\\%s\\%s\\%s",registry_path,g_get_application_name(),group,key);
 		}
 
 		RegCloseKey(key_handle);
@@ -220,7 +220,7 @@ gchar * get_last_error_msg(void)
 			if(datatype == REG_DWORD)
 				ret = (gint) data;
 			else
-				g_warning("Unexpected registry data type in %s\\%s\\%s",registry_path,group,key);
+				g_warning("Unexpected registry data type in %s\\%s\\%s\\%s",registry_path,g_get_application_name(),group,key);
 		}
 
 		RegCloseKey(key_handle);
@@ -321,7 +321,7 @@ static void set_string(const gchar *group, const gchar *key, const gchar *fmt, v
 
 #ifdef WIN_REGISTRY_ENABLED
 
-	gchar * path = g_strdup_printf("%s\\%s",registry_path,group);
+	gchar * path = g_strdup_printf("%s\\%s\\%s",registry_path,g_get_application_name(),group);
  	HKEY	hKey;
  	DWORD	disp;
 
@@ -356,7 +356,7 @@ void set_boolean_to_config(const gchar *group, const gchar *key, gboolean val)
 
  	HKEY	hKey;
  	DWORD	disp;
-	gchar * path = g_strdup_printf("%s\\%s",registry_path,group);
+	gchar * path = g_strdup_printf("%s\\%s\\%s",registry_path,g_get_application_name(),group);
 
 	trace("Creating key %s",path);
 	if(RegCreateKeyEx(HKEY_CURRENT_USER,path,0,NULL,REG_OPTION_NON_VOLATILE,KEY_SET_VALUE,NULL,&hKey,&disp) == ERROR_SUCCESS)
@@ -398,7 +398,7 @@ void set_integer_to_config(const gchar *group, const gchar *key, gint val)
 
  	HKEY	hKey;
  	DWORD	disp;
-	gchar * path = g_strdup_printf("%s\\%s",registry_path,group);
+	gchar * path = g_strdup_printf("%s\\%s\\%s",registry_path,g_get_application_name(),group);
 
 	trace("Creating key %s",path);
 	if(RegCreateKeyEx(HKEY_CURRENT_USER,path,0,NULL,REG_OPTION_NON_VOLATILE,KEY_SET_VALUE,NULL,&hKey,&disp) == ERROR_SUCCESS)
@@ -449,7 +449,7 @@ void configuration_deinit(void)
 
 	if(text)
 	{
-		gchar *filename = g_strdup_printf(mask,g_get_user_config_dir());
+		gchar *filename = g_strdup_printf(mask,g_get_user_config_dir(),g_get_application_name());
 
 		trace("Saving configuration in \"%s\"",filename);
 

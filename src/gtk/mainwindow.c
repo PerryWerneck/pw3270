@@ -313,7 +313,11 @@
 	}
 
 	// Create window
-	window = ui_parse_xml_folder(path,groupname,popupname,terminal,widget_setup);
+	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	gtk_window_set_position(GTK_WINDOW(window),GTK_WIN_POS_CENTER);
+	gtk_window_set_role(GTK_WINDOW(window),"toplevel");
+
+	ui_parse_xml_folder(GTK_WINDOW(window),path,groupname,popupname,terminal,widget_setup);
 	group  = g_object_get_data(G_OBJECT(window),"action_groups");
 	popup  = g_object_get_data(G_OBJECT(window),"popup_menus");
 

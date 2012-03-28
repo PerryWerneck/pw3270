@@ -217,7 +217,7 @@ static void release_list(GObject **obj)
 	g_free(obj);
 }
 
-GtkWidget * ui_parse_xml_folder(const gchar *path, const gchar ** groupname, const gchar **popupname, GtkWidget *widget, const UI_WIDGET_SETUP *setup)
+int ui_parse_xml_folder(GtkWindow *toplevel, const gchar *path, const gchar ** groupname, const gchar **popupname, GtkWidget *widget, const UI_WIDGET_SETUP *setup)
 {
 	struct parser	  p;
 	GDir 			* dir;
@@ -248,7 +248,7 @@ GtkWidget * ui_parse_xml_folder(const gchar *path, const gchar ** groupname, con
 		gtk_dialog_run(GTK_DIALOG (dialog));
 		gtk_widget_destroy(dialog);
 
-		return NULL;
+		return -1;
 	}
 
 	while( (ptr = (gchar *) g_dir_read_name(dir)) != NULL)
@@ -264,7 +264,7 @@ GtkWidget * ui_parse_xml_folder(const gchar *path, const gchar ** groupname, con
 	g_dir_close(dir);
 
 	parser_init(&p);
-	p.toplevel 		= gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	p.toplevel 		= GTK_WIDGET(toplevel);
 	p.center_widget	= widget;
 	p.group 		= groupname;
 	p.popupname		= popupname;
@@ -303,5 +303,5 @@ GtkWidget * ui_parse_xml_folder(const gchar *path, const gchar ** groupname, con
 
 	parser_destroy(&p);
 
-	return p.toplevel;
+	return 0;
 }

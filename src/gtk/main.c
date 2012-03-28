@@ -105,25 +105,32 @@ static int initialize(void)
 	return 0;
 }
 
-int main (int argc, char *argv[])
+int main(int argc, char *argv[])
 {
+	int rc = 0;
+
+	g_set_application_name(PACKAGE_NAME);
+
 	gtk_init(&argc, &argv);
 
-	if(initialize())
-		return -1;
-
-	configuration_init();
-	lib3270_set_popup_handler(popup_handler);
-
-	toplevel = create_main_window();
-
-	if(toplevel)
+	rc = initialize();
+	if(!rc)
 	{
-		gtk_widget_show(toplevel);
-		gtk_main();
+		configuration_init();
+
+		lib3270_set_popup_handler(popup_handler);
+
+		toplevel = create_main_window();
+
+		if(toplevel)
+		{
+			gtk_window_present(GTK_WINDOW(toplevel));
+			gtk_main();
+		}
+
+		configuration_deinit();
 	}
 
-	configuration_deinit();
-	return 0;
+	return rc;
 }
 
