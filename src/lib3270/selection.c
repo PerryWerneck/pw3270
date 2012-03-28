@@ -317,12 +317,13 @@ static char * get_text(H3270 *hSession,unsigned char all)
 {
 	int	row, col, baddr;
 	char *ret;
-	size_t	  sz = 0;
+	size_t buflen = (hSession->rows * (hSession->cols+1))+1;
+	size_t sz = 0;
 
 	if(!lib3270_connected(hSession))
 		return NULL;
 
-	ret = malloc(hSession->rows * (hSession->cols+1));
+	ret = malloc(buflen);
 
 	baddr = 0;
 	for(row=0;row < hSession->rows;row++)
@@ -342,9 +343,19 @@ static char * get_text(H3270 *hSession,unsigned char all)
 		if(cr)
 			ret[sz++] = '\n';
 	}
-	ret[sz] = 0;
 
-	return realloc(ret,sz+1);
+	if(!sz)
+	{
+		free(ret);
+		return NULL;
+	}
+
+	ret[sz++] = 0;
+
+	if(sz != buflen)
+		ret = realloc(ret,sz);
+
+	return ret;
 }
 
 LIB3270_EXPORT char * lib3270_get_text(H3270 *hSession)

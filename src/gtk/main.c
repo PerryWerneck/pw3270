@@ -102,13 +102,14 @@ static int initialize(void)
 			return EINVAL;
 	}
 
+	return 0;
 }
 
 int main (int argc, char *argv[])
 {
 	gtk_init(&argc, &argv);
 
-	if(!initialize())
+	if(initialize())
 		return -1;
 
 	configuration_init();

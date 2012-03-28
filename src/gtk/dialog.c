@@ -387,10 +387,13 @@
  {
  	gchar *text = v3270_get_text(widget);
 
-	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
+	trace("Action %s activated on widget %p text=%p",gtk_action_get_name(action),widget,text);
 
 	if(!text)
+	{
+		g_warning("%s","Buffer contents was NULL");
 		return;
+	}
 
 	save_dialog(	action,
 					widget,
