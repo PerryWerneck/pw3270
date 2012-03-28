@@ -70,8 +70,11 @@ AC_PATH_TOOL([REXXCONFIG], [oorexx-config], [no])
 
 #--[ Version & Revision ]-------------------------------------------------------------------------------------------------------------------------------------
 
-AC_DEFINE(PACKAGE_REVISION,"SVN_REV")
-AC_SUBST(PACKAGE_REVISION, "SVN_REV")
+AC_DEFINE(PACKAGE_REVISION,"SVN_REVISION")
+AC_SUBST(PACKAGE_REVISION,"SVN_REVISION")
+
+AC_DEFINE(PACKAGE_SOURCE,"SVN_URL")
+AC_SUBST(PACKAGE_SOURCE,"SVN_URL")
 
 #--[ Set host based options ]---------------------------------------------------------------------------------------------------------------------------------
 
@@ -202,10 +205,11 @@ AC_CHECK_HEADER(malloc.h, AC_DEFINE(HAVE_MALLOC_H,,[do we have malloc.h?]))
 
 PKG_CHECK_EXISTS
 
-PKG_CHECK_MODULES( [GTK], [gtk+-3.0], [ ], [ PKG_CHECK_MODULES( [GTK], [gtk+-2.0 >= 2.8]) ], [ ] )
+PKG_CHECK_MODULES( [GTK], [gtk+-3.0], [ GTK_VERSION="3" ], [ PKG_CHECK_MODULES( [GTK], [gtk+-2.0 >= 2.8], [ GTK_VERSION="2" ] ) ], [  ] )
 
 AC_SUBST(GTK_LIBS)
 AC_SUBST(GTK_CFLAGS)
+AC_SUBST(GTK_VERSION)
 
 #--[ SSL ]----------------------------------------------------------------------------------------------------------------------------------------------------
 
