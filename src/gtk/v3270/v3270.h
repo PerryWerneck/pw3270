@@ -170,6 +170,9 @@
 
 	struct v3270_metrics	  metrics;
 
+	gint     				  minimum_width;
+	gint					  minimum_height;
+
 	/* Colors */
 	GdkColor				  color[V3270_COLOR_COUNT];	/**< Terminal widget colors */
 

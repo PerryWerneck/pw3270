@@ -116,7 +116,6 @@ static void v3270_toggle_changed(v3270 *widget,LIB3270_TOGGLE toggle_id, gboolea
 		break;
 
 	case LIB3270_TOGGLE_BOLD:
-		widget->font_weight = lib3270_get_toggle(widget->host,LIB3270_TOGGLE_BOLD) ? CAIRO_FONT_WEIGHT_BOLD : CAIRO_FONT_WEIGHT_NORMAL;
 		v3270_reload(GTK_WIDGET(widget));
 		gtk_widget_queue_draw(GTK_WIDGET(widget));
 		break;
@@ -150,6 +149,70 @@ static gboolean v3270_popup_menu(GtkWidget * widget)
 	return TRUE;
 }
 
+#if GTK_CHECK_VERSION(3,0,0)
+
+static GtkSizeRequestMode get_request_mode(GtkWidget *widget)
+{
+	int rows, cols;
+
+	trace("%s",__FUNCTION__);
+
+	lib3270_get_screen_size(GTK_V3270(widget)->host,&rows,&cols);
+
+	return rows > cols ? GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT : GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
+
+}
+
+void get_preferred_height(GtkWidget *widget, gint *minimum_height, gint *natural_height)
+{
+	int height = GTK_V3270(widget)->minimum_height;
+
+	if(minimum_height)
+		*minimum_height = height ? height : 10;
+
+	if(natural_height)
+		*natural_height = height ? height : 200;
+
+}
+
+void get_preferred_width(GtkWidget *widget, gint *minimum_width, gint *natural_width)
+{
+	int width = GTK_V3270(widget)->minimum_width;
+
+	if(minimum_width)
+		*minimum_width = width ? width : 10;
+
+	if(natural_width)
+		*natural_width = width ? width : 320;
+}
+
+/*
+void get_preferred_height_for_width(GtkWidget *widget, gint width, gint *minimum_height, gint *natural_height)
+{
+	trace("%s",__FUNCTION__);
+
+	if(minimum_height)
+		*minimum_height = 10;
+
+	if(natural_height)
+		*natural_height = 10;
+}
+
+static void get_preferred_width_for_height(GtkWidget *widget,gint height, gint *minimum_width, gint *natural_width)
+{
+	trace("%s",__FUNCTION__);
+
+	if(minimum_width)
+		*minimum_width = 10;
+
+	if(natural_width)
+		*natural_width = 10;
+
+}
+*/
+
+#endif // GTK(3,0,0)
+
 static void v3270_class_init(v3270Class *klass)
 {
 	GObjectClass	* gobject_class	= G_OBJECT_CLASS(klass);
@@ -157,26 +220,31 @@ static void v3270_class_init(v3270Class *klass)
 
 	lib3270_set_log_handler(loghandler);
 
-	widget_class->realize 				= v3270_realize;
-	widget_class->size_allocate			= v3270_size_allocate;
-	widget_class->key_press_event		= v3270_key_press_event;
-	widget_class->key_release_event		= v3270_key_release_event;
-	widget_class->focus_in_event		= v3270_focus_in_event;
-	widget_class->focus_out_event		= v3270_focus_out_event;
-	widget_class->button_press_event	= v3270_button_press_event;
-	widget_class->button_release_event	= v3270_button_release_event;
-	widget_class->motion_notify_event	= v3270_motion_notify_event;
-	widget_class->popup_menu			= v3270_popup_menu;
+	widget_class->realize 							= v3270_realize;
+	widget_class->size_allocate						= v3270_size_allocate;
+	widget_class->key_press_event					= v3270_key_press_event;
+	widget_class->key_release_event					= v3270_key_release_event;
+	widget_class->focus_in_event					= v3270_focus_in_event;
+	widget_class->focus_out_event					= v3270_focus_out_event;
+	widget_class->button_press_event				= v3270_button_press_event;
+	widget_class->button_release_event				= v3270_button_release_event;
+	widget_class->motion_notify_event				= v3270_motion_notify_event;
+	widget_class->popup_menu						= v3270_popup_menu;
 
-	klass->activate						= v3270_activate;
-	klass->toggle_changed 				= v3270_toggle_changed;
-	klass->message_changed 				= v3270_update_message;
-	klass->luname_changed				= v3270_update_luname;
+	klass->activate									= v3270_activate;
+	klass->toggle_changed 							= v3270_toggle_changed;
+	klass->message_changed 							= v3270_update_message;
+	klass->luname_changed							= v3270_update_luname;
 
 #if GTK_CHECK_VERSION(3,0,0)
 
-	widget_class->destroy 				= v3270_destroy;
-	widget_class->draw 					= v3270_draw;
+	widget_class->get_preferred_height				= get_preferred_height;
+	widget_class->get_preferred_width				= get_preferred_width;
+//	widget_class->get_preferred_width_for_height	= get_preferred_width_for_height;
+//	widget_class->get_preferred_height_for_width	= get_preferred_height_for_width;
+
+	widget_class->destroy 							= v3270_destroy;
+	widget_class->draw 								= v3270_draw;
 
 #else
 
@@ -192,7 +260,6 @@ static void v3270_class_init(v3270Class *klass)
 #endif // GTK3
 
 	v3270_register_io_handlers(klass);
-
 
 	// Cursors
 	v3270_cursor[LIB3270_CURSOR_NORMAL] 	= gdk_cursor_new(GDK_XTERM);
@@ -329,6 +396,8 @@ void v3270_update_font_metrics(v3270 *terminal, cairo_t *cr, int width, int heig
 
 	lib3270_get_screen_size(terminal->host,&rows,&cols);
 
+	terminal->font_weight = lib3270_get_toggle(terminal->host,LIB3270_TOGGLE_BOLD) ? CAIRO_FONT_WEIGHT_BOLD : CAIRO_FONT_WEIGHT_NORMAL;
+
 	cairo_select_font_face(cr, terminal->font_family, CAIRO_FONT_SLANT_NORMAL,terminal->font_weight);
 
  	for(f=0;font_size[f];f++)
@@ -336,11 +405,21 @@ void v3270_update_font_metrics(v3270 *terminal, cairo_t *cr, int width, int heig
         cairo_set_font_size(cr,font_size[f]);
         cairo_font_extents(cr,&extents);
 
+		if(f == 0)
+		{
+			terminal->minimum_width  = (cols * extents.max_x_advance);
+			terminal->minimum_height = ((rows+1) * (extents.height + extents.descent)) + (OIA_TOP_MARGIN+2);
+		}
+
 		if( HEIGHT_IN_PIXELS(terminal,(extents.height+extents.descent)) < height && WIDTH_IN_PIXELS(terminal,extents.max_x_advance) < width )
 			size = font_size[f];
  	}
 
 	cairo_set_font_size(cr,size);
+
+#if !GTK_CHECK_VERSION(3,0,0)
+	gtk_widget_set_size_request(GTK_WIDGET(terminal),terminal->minimum_width,terminal->minimum_height);
+#endif // !GTK(3,0,0)
 
 /*
 	double sx, sy;
