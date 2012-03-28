@@ -94,3 +94,10 @@
    ...
 }
 
+{
+   gdk_window_get_root_coords
+   Memcheck:Cond
+   fun:gdk_window_get_root_coords
+   ...
+}
+

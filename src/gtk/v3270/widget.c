@@ -934,7 +934,12 @@ void v3270_set_font_family(GtkWidget *widget, const gchar *name)
 	terminal = GTK_V3270(widget);
 
 	if(terminal->font_family)
+	{
+		if(!g_strcasecmp(terminal->font_family,name))
+			return;
 		g_free(terminal->font_family);
+		terminal->font_family = NULL;
+	}
 
 	if(!name)
 	{
@@ -942,10 +947,10 @@ void v3270_set_font_family(GtkWidget *widget, const gchar *name)
 		name = "courier new";
 	}
 
-	trace("%s(%s)",__FUNCTION__,name);
-
 	terminal->font_family = g_strdup(name);
 	terminal->font_weight = lib3270_get_toggle(terminal->host,LIB3270_TOGGLE_BOLD) ? CAIRO_FONT_WEIGHT_BOLD : CAIRO_FONT_WEIGHT_NORMAL;
+
+	trace("%s: %s (%p)",__FUNCTION__,terminal->font_family,terminal->font_family);
 
 	g_signal_emit(widget,v3270_widget_signal[SIGNAL_UPDATE_CONFIG], 0, "font-family", name);
 
@@ -958,7 +963,6 @@ void v3270_set_font_family(GtkWidget *widget, const gchar *name)
 const gchar	* v3270_get_font_family(GtkWidget *widget)
 {
 	g_return_val_if_fail(GTK_IS_V3270(widget),NULL);
-
 	return GTK_V3270(widget)->font_family;
 }
 

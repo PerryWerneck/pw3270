@@ -32,9 +32,18 @@
 	<menubar name='topmenu' topmenu='yes'>
 
 		<menu name='FileMenu' label='_File' >
+
+			<!---
+				Extended attributes for 'save' actions:
+
+				* overwrite='yes' to always overwrite file
+				* filename='PATH' to save to a predefined file (no user save dialog)
+
+			--->
 			<menuitem action='save' src='all' group='online' label='Save screen' />
 			<menuitem action='save' src='selected' group='selection' label='Save selected' />
 			<menuitem action='save' src='copy' group='clipboard' label='Save copy' />
+
 			<separator/>
 			<menuitem action='print' src='all' key='Print' icon='print' label='Print' />
 			<menuitem action='print' src='selected' group='selection' label='Print selected' />
@@ -176,7 +185,7 @@
 		<separator />
 		<menuitem action='backtab' label='Previous field' />
 		<menuitem action='tab' label='Next field'/>
-		<menuitem name="return" action='activate' label='Return' key='return' />
+		<menuitem name="return" action='activate' label='Return' key='Return' />
 
 		<separator />
 		<menuitem action='Quit'/>

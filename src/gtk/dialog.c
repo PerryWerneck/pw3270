@@ -274,6 +274,7 @@
 		if(encattr)
 			g_free(encattr);
 
+		trace("Removing dialog %p",dialog);
 		gtk_widget_destroy(dialog);
 	}
 

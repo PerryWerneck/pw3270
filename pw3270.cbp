@@ -134,6 +134,7 @@
 		<Unit filename="src/gtk/v3270/widget.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/gtk/valgrind.suppression" />
 		<Unit filename="src/include/lib3270.h" />
 		<Unit filename="src/include/lib3270/action_table.h" />
 		<Unit filename="src/include/lib3270/actions.h" />
