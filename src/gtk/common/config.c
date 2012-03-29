@@ -522,83 +522,6 @@ gchar * build_data_filename(const gchar *first_element, ...)
 	}
 #endif // WIN_REGISTRY_ENABLED
 
-/*
-#if defined( WIN_REGISTRY_ENABLED )
-
-	gchar *reg_datadir = g_strconcat("SOFTWARE\\",g_get_application_name(),"\\datadir",NULL);
-
- 	HKEY	hKey = 0;
- 	LONG	rc = 0;
-
-	// Note: This could be needed: http://support.microsoft.com/kb/556009
-	// http://msdn.microsoft.com/en-us/library/windows/desktop/aa384129(v=vs.85).aspx
-
-	rc = RegOpenKeyEx(HKEY_LOCAL_MACHINE,reg_datadir,0,KEY_QUERY_VALUE|KEY_WOW64_64KEY,&hKey);
-	SetLastError(rc);
-
-	if(rc == ERROR_SUCCESS)
-	{
-		char			data[4096];
-		unsigned long	datalen	= sizeof(data);		// data field length(in), data returned length(out)
-		unsigned long	datatype;					// #defined in winnt.h (predefined types 0-11)
-
-		if(RegQueryValueExA(hKey,NULL,NULL,&datatype,(LPBYTE) data,&datalen) == ERROR_SUCCESS)
-		{
-			result = g_string_new(g_strchomp(data));
-		}
-		else
-		{
-			gchar *msg = get_last_error_msg();
-			g_warning("Error \"%s\" getting value from HKLM\\%s",msg,reg_datadir);
-			g_free(msg);
-			result = g_string_new(".");
-		}
-		RegCloseKey(hKey);
-	}
-	else
-	{
-		static const gchar *datadir = NULL;
-
-		gchar *msg = get_last_error_msg();
-		g_warning("Error \"%s\" opening HKLM\\%s, searching system config dirs",msg,reg_datadir);
-		g_free(msg);
-
-		if(!datadir)
-		{
-			const gchar * const * dir = g_get_system_config_dirs();
-			int f;
-
-			for(f=0;dir[f] && !datadir;f++)
-			{
-				gchar *name = g_build_filename(dir[f],PACKAGE_NAME,NULL);
-
-				trace("Searching for \"%s\"",name);
-
-				if(g_file_test(name,G_FILE_TEST_IS_DIR))
-					datadir = name;
-				else
-					g_free(name);
-			}
-
-			if(!datadir)
-			{
-				datadir = g_get_current_dir();
-				g_warning("Unable to find application datadir, using %s",datadir);
-			}
-
-		}
-
-		result = g_string_new(datadir);
-
-	}
-
-#elif defined(APPDATA) && !defined(WIN32)
-
-	result = g_string_new(APPDATA);
-
-#endif
-
-*/
 
 	if(!result)
 	{
@@ -613,8 +536,9 @@ gchar * build_data_filename(const gchar *first_element, ...)
 			for(f=0;dir[f] && !datadir;f++)
 			{
 				gchar *name = g_build_filename(dir[f],appname[p],NULL);
+				trace("Searching for %s: %s",name,g_file_test(name,G_FILE_TEST_IS_DIR) ? "Ok" : "Not found");
 				if(g_file_test(name,G_FILE_TEST_IS_DIR))
-					datadir = name;
+					result = g_string_new(datadir = name);
 				else
 					g_free(name);
 			}
