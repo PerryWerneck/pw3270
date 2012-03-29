@@ -153,7 +153,8 @@ static void connect_standard_action(GtkAction *action, GtkWidget *widget, const 
 		{ "reload",		reload_action		},
 		{ "connect", 	connect_action		},
 		{ "disconnect", disconnect_action	},
-		{ "hostname",	hostname_action		}
+		{ "hostname",	hostname_action		},
+		{ "editcolors",	editcolors_action	},
 	};
 
 	int f;

@@ -834,9 +834,7 @@ void v3270_set_colors(GtkWidget *widget, const gchar *colors)
 
 					"#404040,"			// V3270_COLOR_SELECTED_BG
 					"#FFFFFF,"			// V3270_COLOR_SELECTED_FG,
-					"#FFFF00,"			// V3270_COLOR_SELECTED_BORDER
 
-					"#00FF00," 			// V3270_COLOR_CURSOR
 					"#00FF00," 			// V3270_COLOR_CROSS_HAIR
 
 					"#000000,"	 		// V3270_COLOR_OIA_BACKGROUND
@@ -864,27 +862,15 @@ void v3270_set_color_table(GdkColor *table, const gchar *colors)
  	cnt = g_strv_length(clr);
  	switch(cnt)
  	{
-	case 0:
-	case 1:
-		break;
-
-	case 29:
-		for(f=0;f < V3270_COLOR_SELECTED_BORDER;f++)
-			v3270_set_color_entry(table,f,clr[f]);
-
-		v3270_set_color_entry(table,V3270_COLOR_SELECTED_BORDER,clr[V3270_COLOR_SELECTED_BG]);
-
-		for(f=V3270_COLOR_SELECTED_BORDER+1;f < V3270_COLOR_COUNT;f++)
-			v3270_set_color_entry(table,f,clr[f-1]);
-
-		break;
-
 	case V3270_COLOR_COUNT:	// Complete string
 		for(f=0;f < V3270_COLOR_COUNT;f++)
 			v3270_set_color_entry(table,f,clr[f]);
 		break;
 
 	default:
+
+		g_warning("Color table has %d elements; should be %d.",cnt,V3270_COLOR_COUNT);
+
 		for(f=0;f < cnt;f++)
 			v3270_set_color_entry(table,f,clr[f]);
 		for(f=cnt; f < V3270_COLOR_COUNT;f++)

@@ -104,7 +104,7 @@
 		</menu>
 
 		<menu name='SettingsMenu' label='Settings' sysmenu='yes' >
-			<menuitem action='SelectColors' icon='select-color' label='Colors' />
+			<menuitem action='editcolors' icon='select-color' label='Colors' />
 
 			<!--- Special action - The fontselect menu will be populated with all available monospaced fonts --->
 			<menuitem name='fontselect' icon='select-font' label='Select font' />
@@ -155,7 +155,7 @@
 		<separator/>
 		<toolitem action='set' toggle='fullscreen' icon='fullscreen' label='Full Screen' />
 		<toolitem action='reset' toggle='fullscreen' icon='leave-fullscreen' label='Window' />
-		<toolitem action='SelectColors' />
+		<toolitem action='editcolors' />
 		<toolitem action='print' src='all' />
 		<toolitem action='Quit' />
 	</toolbar>

@@ -137,4 +137,159 @@
 	g_free(filename);
  }
 
+ static void color_selected(GtkTreeSelection *selection, GtkWidget *widget)
+ {
+	GtkTreeModel	* model;
+	GtkTreeIter		  iter;
+	GValue			  value	= { 0, };
+	int				  id;
+
+	gtk_widget_set_sensitive(widget,FALSE);
+
+	if(!gtk_tree_selection_get_selected(selection,&model,&iter))
+		return;
+
+	gtk_tree_model_get_value(model,&iter,1,&value);
+
+	id = g_value_get_int(&value);
+
+	if(id < 0 || id >= V3270_COLOR_COUNT)
+		return;
+
+
+	gtk_widget_set_sensitive(widget,TRUE);
+ }
+
+ void editcolors_action(GtkAction *action, GtkWidget *widget)
+ {
+ 	static const gchar *custom = N_( "Custom colors" );
+
+ 	static const struct _node
+ 	{
+ 		int			id;
+ 		const char	*text;
+ 	} node[] =
+ 	{
+ 		{ V3270_COLOR_BACKGROUND,		N_( "Terminal" )			},
+ 		{ V3270_COLOR_FIELD,			N_( "Fields" )				},
+ 		{ V3270_COLOR_SELECTED_BG,		N_( "Other" )				},
+
+ 	};
+
+	static const gchar *color_name[V3270_COLOR_COUNT] =
+	{
+		N_( "Background" ),					// V3270_COLOR_BACKGROUND
+		N_( "Blue" ),						// V3270_COLOR_BLUE
+		N_( "Red" ),						// V3270_COLOR_RED
+		N_( "Pink" ),						// V3270_COLOR_PINK
+		N_( "Green" ),						// V3270_COLOR_GREEN
+		N_( "Turquoise" ),					// V3270_COLOR_TURQUOISE
+		N_( "Yellow" ),						// V3270_COLOR_YELLOW
+		N_( "White" ),						// V3270_COLOR_WHITE
+		N_( "Black" ),						// V3270_COLOR_BLACK
+		N_( "Dark Blue" ),					// V3270_COLOR_DARK_BLUE
+		N_( "Orange" ),						// V3270_COLOR_ORANGE
+		N_( "Purple" ),						// V3270_COLOR_PURPLE
+		N_( "Dark Green" ),					// V3270_COLOR_DARK_GREEN
+		N_( "Turquoise" ),					// V3270_COLOR_DARK_TURQUOISE
+		N_( "Mustard" ),					// V3270_COLOR_MUSTARD
+		N_( "Gray" ),						// V3270_COLOR_GRAY
+
+		N_( "Normal/Unprotected" ),			// V3270_COLOR_FIELD
+		N_( "Intensified/Unprotected" ),	// V3270_COLOR_FIELD_INTENSIFIED
+		N_( "Normal/Protected" ),			// V3270_COLOR_FIELD_PROTECTED
+		N_( "Intensified/Protected" ),		// V3270_COLOR_FIELD_PROTECTED_INTENSIFIED
+
+		N_( "Selection background" ),		// TERMINAL_COLOR_SELECTED_BG
+		N_( "Selection foreground" ),		// TERMINAL_COLOR_SELECTED_FG
+
+		N_( "Cross-hair cursor" ),			// TERMINAL_COLOR_CROSS_HAIR
+
+		// Oia Colors
+		N_( "OIA background" ),				// TERMINAL_COLOR_OIA_BACKGROUND
+		N_( "OIA foreground" ),				// TERMINAL_COLOR_OIA_FOREGROUND
+		N_( "OIA separator" ),				// TERMINAL_COLOR_OIA_SEPARATOR
+		N_( "OIA status ok" ),				// TERMINAL_COLOR_OIA_STATUS_OK
+		N_( "OIA status invalid" ),			// TERMINAL_COLOR_OIA_STATUS_INVALID
+
+	};
+
+ 	const gchar * title  = g_object_get_data(G_OBJECT(action),"title");
+	GtkWidget	* dialog = gtk_dialog_new_with_buttons (	gettext(title ? title : N_( "Color setup") ),
+															GTK_WINDOW(gtk_widget_get_toplevel(widget)),
+															GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+															GTK_STOCK_OK,		GTK_RESPONSE_ACCEPT,
+															GTK_STOCK_CANCEL,	GTK_RESPONSE_REJECT,
+															NULL );
+	GtkWidget	* panned = gtk_hbox_new(FALSE,2);
+	GtkWidget	* tree;
+	GtkWidget	* color;
+
+	{
+		// Color dialog setup
+		color = gtk_color_selection_new();
+		gtk_widget_set_sensitive(color,0);
+		gtk_color_selection_set_has_opacity_control(GTK_COLOR_SELECTION(color),FALSE);
+		gtk_color_selection_set_has_palette(GTK_COLOR_SELECTION(color),TRUE);
+		gtk_box_pack_end(GTK_BOX(panned),color,TRUE,TRUE,0);
+	}
+
+	// Tree view with all available colors
+	{
+		GtkTreeModel		* model		= (GtkTreeModel *) gtk_tree_store_new(2,G_TYPE_STRING,G_TYPE_INT);
+		GtkWidget			* box;
+		GtkTreeIter			  iter;
+		GtkTreeIter			  parent;
+		GtkTreeSelection	* select;
+		int					  f;
+		int					  title = 0;
+
+		tree = gtk_tree_view_new_with_model(model);
+
+		gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tree),FALSE);
+		gtk_tree_view_insert_column_with_attributes(	GTK_TREE_VIEW(tree),
+														-1,
+														"color",gtk_cell_renderer_text_new(),"text",
+														0, NULL );
+
+		gtk_tree_store_append((GtkTreeStore *) model,&parent,NULL);
+		gtk_tree_store_set((GtkTreeStore *) model, &parent, 0, gettext(node[title++].text), 1, V3270_COLOR_COUNT, -1);
+
+
+		select = gtk_tree_view_get_selection(GTK_TREE_VIEW (tree));
+		gtk_tree_selection_set_mode(select, GTK_SELECTION_SINGLE);
+		g_signal_connect(G_OBJECT (select),"changed",G_CALLBACK(color_selected),color);
+
+		for(f=0;f<V3270_COLOR_COUNT;f++)
+		{
+			if(f == node[title].id)
+			{
+				gtk_tree_store_append((GtkTreeStore *) model,&parent,NULL);
+				gtk_tree_store_set((GtkTreeStore *) model, &parent, 0, gettext(node[title++].text), 1, V3270_COLOR_COUNT, -1);
+			}
+			gtk_tree_store_append((GtkTreeStore *) model,&iter,&parent);
+			gtk_tree_store_set((GtkTreeStore *) model, &iter, 0, gettext(color_name[f]), 1, f, -1);
+		}
+
+		gtk_tree_view_expand_all(GTK_TREE_VIEW(tree));
+
+		box = gtk_scrolled_window_new(NULL,NULL);
+		gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(box),GTK_POLICY_NEVER,GTK_POLICY_ALWAYS);
+		gtk_container_add(GTK_CONTAINER(box),tree);
+		gtk_box_pack_start(GTK_BOX(panned),box,TRUE,TRUE,0);
+
+
+	}
+
+	// Run dialog
+	gtk_widget_show_all(panned);
+	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),GTK_WIDGET(panned),TRUE,TRUE,2);
+
+	gtk_dialog_run(GTK_DIALOG(dialog));
+
+
+	gtk_widget_destroy(dialog);
+
+ }
+
 

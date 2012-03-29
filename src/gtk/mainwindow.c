@@ -299,7 +299,12 @@
 	gtk_window_set_position(GTK_WINDOW(window),GTK_WIN_POS_CENTER);
 	gtk_window_set_role(GTK_WINDOW(window),"toplevel");
 
-	ui_parse_xml_folder(GTK_WINDOW(window),path,groupname,popupname,terminal,widget_setup);
+	if(ui_parse_xml_folder(GTK_WINDOW(window),path,groupname,popupname,terminal,widget_setup))
+	{
+		g_object_unref(terminal);
+		g_object_unref(window);
+		return NULL;
+	}
 	group  = g_object_get_data(G_OBJECT(window),"action_groups");
 	popup  = g_object_get_data(G_OBJECT(window),"popup_menus");
 

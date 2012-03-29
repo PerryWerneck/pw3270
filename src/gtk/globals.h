@@ -71,4 +71,5 @@
  G_GNUC_INTERNAL void print_all_action(GtkAction *action, GtkWidget *widget);
  G_GNUC_INTERNAL void print_selected_action(GtkAction *action, GtkWidget *widget);
  G_GNUC_INTERNAL void print_copy_action(GtkAction *action, GtkWidget *widget);
+ G_GNUC_INTERNAL void editcolors_action(GtkAction *action, GtkWidget *widget);
 

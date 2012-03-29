@@ -10,27 +10,30 @@ if test -e revision ; then
 	. revision
 fi
 
-PACKAGE_REVISION=`date +%y%m%d`
+SVN=`which svn 2> /dev/null`
 
-if test -d ".svn" ; then
+if test -x "$SVN" ; then
 
-	SVN=`which svn 2> /dev/null`
+	TEMPFILE=.bootstrap.tmp
+	LANG="EN_US"
+	"$SVN" info > $TEMPFILE 2>&1
 
-	if test -x "$SVN" ; then
-
-		TEMPFILE=.bootstrap.tmp
-		LANG="EN_US"
-		"$SVN" info > $TEMPFILE 2>&1
-
-		if [ "$?" == "0" ]; then
-			PACKAGE_REVISION=$(cat $TEMPFILE | grep "^Revision: " | cut -d" " -f2)
-			PACKAGE_SOURCE=$(cat $TEMPFILE | grep "^URL: " | cut -d" " -f2)
-		fi
-
-		rm -f $TEMPFILE
+	if [ "$?" == "0" ]; then
+		PACKAGE_REVISION=$(cat $TEMPFILE | grep "^Revision: " | cut -d" " -f2)
+		PACKAGE_SOURCE=$(cat $TEMPFILE | grep "^URL: " | cut -d" " -f2)
 	fi
 
+	rm -f $TEMPFILE
+fi
 
+if test -z $PACKAGE_REVISION ; then
+	echo "Can´t detect package revision, using current date"
+	PACKAGE_REVISION=`date +%y%m%d`
+fi
+
+if test -z $PACKAGE_SOURCE ; then
+	echo "Can´t detect package source, using default one"
+	PACKAGE_SOURCE="http://www.softwarepublico.gov.br/dotlrn/clubs/pw3270"
 fi
 
 echo "PACKAGE_REVISION=$PACKAGE_REVISION" > $out/revision
