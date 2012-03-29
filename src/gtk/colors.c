@@ -317,7 +317,17 @@
 
 	if(gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
 	{
-		// Acepted, save in configuration file
+		// Accepted, save in configuration file
+		int f;
+		GString *str = g_string_new("");
+		for(f=0;f<V3270_COLOR_COUNT;f++)
+		{
+			if(f)
+				g_string_append_c(str,',');
+			g_string_append_printf(str,"%s",gdk_color_to_string(v3270_get_color(widget,f)));
+		}
+		set_string_to_config("terminal","colors","%s",str->str);
+		g_string_free(str,TRUE);
 	}
 	else
 	{
