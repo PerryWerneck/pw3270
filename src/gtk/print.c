@@ -179,6 +179,7 @@
 	trace("Font set to \"%s\" with size %d",info->font,info->fontsize);
  }
 
+/*
  static void color_scheme_changed(GtkComboBox *widget,PRINT_INFO *info)
  {
  	gchar *new_colors = NULL;
@@ -211,6 +212,7 @@
 	info->colorname = new_colors;
 
  }
+*/
 
  static void toggle_show_selection(GtkToggleButton *togglebutton,PRINT_INFO *info)
  {
@@ -284,10 +286,10 @@
 	widget = gtk_combo_box_new();
 #endif // GTK(3,0,0)
 
-	info->colorname = get_string_from_config("print","colors",def_colors);
-	load_color_schemes(widget,info->colorname);
-
-	g_signal_connect(G_OBJECT(widget),"changed",G_CALLBACK(color_scheme_changed),info);
+	gtk_widget_set_sensitive(widget,FALSE);
+//	info->colorname = get_string_from_config("print","colors",def_colors);
+//	load_color_schemes(widget,info->colorname);
+//	g_signal_connect(G_OBJECT(widget),"changed",G_CALLBACK(color_scheme_changed),info);
 
 	gtk_table_attach(GTK_TABLE(container),widget,1,2,1,2,GTK_EXPAND|GTK_FILL,GTK_FILL,5,0);
 

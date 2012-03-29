@@ -32,6 +32,7 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
+/*
  void load_color_schemes(GtkWidget *widget, gchar *active)
  {
 	gchar *filename = build_data_filename("colors.conf",NULL);
@@ -135,6 +136,25 @@
 	}
 
 	g_free(filename);
+ }
+*/
+
+/**
+ * Create a color scheme dropdown button
+ *
+ * @param clr	Pointer to current color table
+ *
+ */
+ GtkWidget * color_scheme_new(GdkColor *clr)
+ {
+#if GTK_CHECK_VERSION(3,0,0)
+	GtkWidget *widget = gtk_combo_box_text_new();
+#else
+	GtkWidget *widget = gtk_combo_box_new();
+#endif // GTK(3,0,0)
+
+
+	return widget;
  }
 
  static void color_changed(GtkColorSelection *colorselection, GtkWidget *widget)
@@ -311,9 +331,21 @@
 
 	}
 
-	// Run dialog
 	gtk_widget_show_all(panned);
 	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),GTK_WIDGET(panned),TRUE,TRUE,2);
+
+	// Color scheme combo
+	{
+		GtkWidget * box		= gtk_hbox_new(FALSE,2);
+		GtkWidget * button	= color_scheme_new(NULL);
+
+		gtk_box_pack_start(GTK_BOX(box),gtk_label_new(_("Color scheme:")),FALSE,FALSE,2);
+		gtk_box_pack_start(GTK_BOX(box),button,TRUE,TRUE,2);
+		gtk_widget_show_all(box);
+		gtk_box_pack_end(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),box,TRUE,TRUE,2);
+	}
+
+	// Run dialog
 
 	if(gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
 	{
