@@ -35,13 +35,7 @@
 /*
  void load_color_schemes(GtkWidget *widget, gchar *active)
  {
-	gchar *filename = build_data_filename("colors.conf",NULL);
 
- 	if(!g_file_test(filename,G_FILE_TEST_IS_REGULAR))
-	{
-		gtk_widget_set_sensitive(widget,FALSE);
-		g_warning("Unable to load color schemes in \"%s\"",filename);
-	}
 	else
 	{
 		gchar 		** group;
@@ -139,6 +133,167 @@
  }
 */
 
+static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
+{
+	#define V3270_COLOR_BASE V3270_COLOR_GRAY+1
+
+	const gchar	* val;
+	int		  	  f;
+
+	// Load base colors
+	val = g_key_file_get_string(conf,group,"base",NULL);
+	if(val)
+	{
+		// Process base colors
+		gchar **str = g_strsplit(val,",",V3270_COLOR_BASE);
+
+		switch(g_strv_length(str))
+		{
+		case 2:	// Only 2 colors, create monocromatic table
+			gdk_color_parse(str[0],clr);
+			gdk_color_parse(str[1],clr+1);
+
+			trace("%s color table is: monocromatic",group);
+
+			for(f=2;f<V3270_COLOR_BASE;f++)
+				clr[f] = clr[1];
+			clr[V3270_COLOR_BLACK] = *clr;
+			break;
+
+		case V3270_COLOR_BASE:	// All colors, update it
+			trace("%s color table is: complete",group);
+			for(f=0;f<V3270_COLOR_BASE;f++)
+				gdk_color_parse(str[f],clr+f);
+			break;
+
+		default:
+
+			// Unexpected size, load new colors over the defaults
+			g_warning("base color list in %s has %d elements, should have %d",group,g_strv_length(str),V3270_COLOR_GRAY);
+
+			gdk_color_parse(str[0],clr);
+			gdk_color_parse(str[1],clr+1);
+
+			for(f=2;f<V3270_COLOR_BASE;f++)
+				clr[f] = clr[1];
+
+			clr[V3270_COLOR_BLACK] = *clr;
+
+			for(f=2;f<MIN(g_strv_length(str),V3270_COLOR_BASE-1);f++)
+				gdk_color_parse(str[f],clr+f);
+
+		}
+		g_strfreev(str);
+
+	}
+	else
+	{
+		g_warning("Color scheme [%d] has no \"base\" entry, using green on black",group);
+
+		gdk_color_parse("black",clr);
+		gdk_color_parse("green",clr+1);
+
+		for(f=2;f<V3270_COLOR_BASE;f++)
+			clr[f] = clr[1];
+		clr[V3270_COLOR_BLACK] = *clr;
+	}
+
+	// Load field colors
+	clr[V3270_COLOR_FIELD]							= clr[V3270_COLOR_GREEN];
+	clr[V3270_COLOR_FIELD_INTENSIFIED]				= clr[V3270_COLOR_RED];
+	clr[V3270_COLOR_FIELD_PROTECTED]				= clr[V3270_COLOR_BLUE];
+	clr[V3270_COLOR_FIELD_PROTECTED_INTENSIFIED]	= clr[V3270_COLOR_WHITE];
+
+	val = g_key_file_get_string(conf,group,"field",NULL);
+	if(val)
+	{
+		gchar **str = g_strsplit(val,",",5);
+
+		for(f=0;f< MIN(g_strv_length(str),4); f++)
+			gdk_color_parse(str[f],clr+V3270_COLOR_FIELD+f);
+
+		g_strfreev(str);
+	}
+
+	// Load selection colors
+	clr[V3270_COLOR_SELECTED_BG]	= clr[V3270_COLOR_WHITE];
+	clr[V3270_COLOR_SELECTED_FG]	= clr[V3270_COLOR_BLACK];
+	val = g_key_file_get_string(conf,group,"selection",NULL);
+	if(val)
+	{
+		gchar **str = g_strsplit(val,",",3);
+
+		for(f=0;f< MIN(g_strv_length(str),2); f++)
+			gdk_color_parse(str[f],clr+V3270_COLOR_SELECTED_BG+f);
+
+		g_strfreev(str);
+	}
+
+	// Load OIA colors
+	clr[V3270_COLOR_OIA_BACKGROUND]		= clr[V3270_COLOR_BACKGROUND];
+	clr[V3270_COLOR_OIA_FOREGROUND]		= clr[V3270_COLOR_GREEN];
+	clr[V3270_COLOR_OIA_SEPARATOR]		= clr[V3270_COLOR_GREEN];
+	clr[V3270_COLOR_OIA_STATUS_OK]		= clr[V3270_COLOR_GREEN];
+	clr[V3270_COLOR_OIA_STATUS_INVALID]	= clr[V3270_COLOR_RED];
+
+	val = g_key_file_get_string(conf,group,"OIA",NULL);
+	if(val)
+	{
+		gchar **str = g_strsplit(val,",",5);
+
+		for(f=0;f< MIN(g_strv_length(str),4); f++)
+			gdk_color_parse(str[f],clr+V3270_COLOR_OIA_BACKGROUND+f);
+
+		g_strfreev(str);
+	}
+
+	// Setup extended elements
+	clr[V3270_COLOR_CROSS_HAIR] = clr[V3270_COLOR_GREEN];
+
+	val = g_key_file_get_string(conf,group,"cross-hair",NULL);
+	if(val)
+		gdk_color_parse(val,clr+V3270_COLOR_CROSS_HAIR);
+
+}
+
+ static void color_scheme_changed(GtkComboBox *combo,gpointer dunno)
+ {
+	GtkWidget	* terminal	= (GtkWidget *) g_object_get_data(G_OBJECT(combo),"terminal_widget");
+	GtkWidget	* colorsel	= (GtkWidget *) g_object_get_data(G_OBJECT(combo),"color_selection_widget");
+	GdkColor	* clr		= NULL;
+	GValue		  value	= { 0, };
+	GtkTreeIter	  iter;
+
+	if(!gtk_combo_box_get_active_iter(combo,&iter))
+		return;
+
+	gtk_tree_model_get_value(gtk_combo_box_get_model(combo),&iter,1,&value);
+
+	clr = g_value_get_pointer(&value);
+	g_object_set_data(G_OBJECT(combo),"selected",clr);
+
+	if(terminal)
+	{
+		// Update terminal colors
+		int f;
+		for(f=0;f<V3270_COLOR_COUNT;f++)
+			v3270_set_color(terminal,f,clr+f);
+
+		v3270_reload(terminal);
+		gtk_widget_queue_draw(terminal);
+
+	}
+
+	if(colorsel)
+	{
+		// Update color selection widget
+		int	id = (int) g_object_get_data(G_OBJECT(colorsel),"colorid");
+		if(id >= 0 && id < V3270_COLOR_COUNT)
+			gtk_color_selection_set_current_color(GTK_COLOR_SELECTION(colorsel),clr+id);
+	}
+
+ }
+
 /**
  * Create a color scheme dropdown button
  *
@@ -147,12 +302,74 @@
  */
  GtkWidget * color_scheme_new(GdkColor *clr)
  {
-#if GTK_CHECK_VERSION(3,0,0)
-	GtkWidget *widget = gtk_combo_box_text_new();
-#else
-	GtkWidget *widget = gtk_combo_box_new();
-#endif // GTK(3,0,0)
+	gchar			* filename	= build_data_filename("colors.conf",NULL);
+	GtkTreeModel	* model		= (GtkTreeModel *) gtk_list_store_new(2,G_TYPE_STRING,G_TYPE_POINTER);
+	GtkCellRenderer * renderer	= gtk_cell_renderer_text_new();
+	GtkWidget 		* widget	= gtk_combo_box_new_with_model(model);
+	GtkTreeIter		  iter;
 
+	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(widget), renderer, TRUE);
+	gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(widget), renderer, "text", 0, NULL);
+
+	gtk_widget_set_sensitive(widget,FALSE);
+
+ 	if(!g_file_test(filename,G_FILE_TEST_IS_REGULAR))
+	{
+		g_warning("Unable to load color schemes in \"%s\"",filename);
+	}
+	else
+	{
+		GKeyFile	* conf 		= g_key_file_new();
+		GError		* err		= NULL;
+
+		g_key_file_load_from_file(conf,filename,G_KEY_FILE_NONE,&err);
+		if(err)
+		{
+			g_warning("Error \"%s\" loading %s",err->message,filename);
+			g_error_free(err);
+		}
+		else
+		{
+			gsize   	len		= 0;
+			gchar		**group = g_key_file_get_groups(conf,&len);
+			GdkColor	* table	= g_new0(GdkColor,(len*V3270_COLOR_COUNT));
+			int			  pos	= 0;
+			int			  g;
+
+			g_signal_connect(G_OBJECT(widget),"changed",G_CALLBACK(color_scheme_changed),table);
+
+			g_object_set_data_full(G_OBJECT(widget),"colortable",table,g_free);
+
+			for(g=0;g<len;g++)
+			{
+				// Setup colors for current entry
+				GdkColor	* clr	= table+pos;
+				const gchar	* label	= g_key_file_get_locale_string(conf,group[g],"label",NULL,NULL);
+
+				load_color_scheme(conf,group[g],clr);
+
+				// Set it in the combobox
+				gtk_list_store_append((GtkListStore *) model,&iter);
+				gtk_list_store_set((GtkListStore *) model, &iter,
+													0, label ? label : group[g],
+													1, clr,
+													-1);
+
+				// move to next color list
+				pos += V3270_COLOR_COUNT;
+			}
+
+
+			g_strfreev(group);
+
+			gtk_widget_set_sensitive(widget,TRUE);
+		}
+
+
+		g_key_file_free(conf);
+
+	}
+	g_free(filename);
 
 	return widget;
  }
@@ -258,8 +475,12 @@
 
  	const gchar * title  = g_object_get_data(G_OBJECT(action),"title");
 	GtkWidget	* dialog = gtk_dialog_new_with_buttons (	gettext(title ? title : N_( "Color setup") ),
+#if GTK_CHECK_VERSION(3,0,0)
+															NULL,
+#else
 															GTK_WINDOW(gtk_widget_get_toplevel(widget)),
-															GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+#endif // GTK(3,0,0)
+															GTK_DIALOG_DESTROY_WITH_PARENT,
 															GTK_STOCK_OK,		GTK_RESPONSE_ACCEPT,
 															GTK_STOCK_CANCEL,	GTK_RESPONSE_REJECT,
 															NULL );
@@ -339,10 +560,13 @@
 		GtkWidget * box		= gtk_hbox_new(FALSE,2);
 		GtkWidget * button	= color_scheme_new(NULL);
 
+		g_object_set_data(G_OBJECT(button),"terminal_widget",widget);
+		g_object_set_data(G_OBJECT(button),"color_selection_widget",color);
+
 		gtk_box_pack_start(GTK_BOX(box),gtk_label_new(_("Color scheme:")),FALSE,FALSE,2);
 		gtk_box_pack_start(GTK_BOX(box),button,TRUE,TRUE,2);
 		gtk_widget_show_all(box);
-		gtk_box_pack_end(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),box,TRUE,TRUE,2);
+		gtk_box_pack_end(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),box,FALSE,FALSE,2);
 	}
 
 	// Run dialog
