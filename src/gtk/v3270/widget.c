@@ -846,10 +846,26 @@ void v3270_set_colors(GtkWidget *widget, const gchar *colors)
 	}
 
 	v3270_set_color_table(GTK_V3270(widget)->color,colors);
-
 	g_signal_emit(widget,v3270_widget_signal[SIGNAL_UPDATE_CONFIG], 0, "colors", colors);
 	v3270_reload(widget);
 
+}
+
+void v3270_set_color(GtkWidget *widget, enum V3270_COLOR id, GdkColor *color)
+{
+	g_return_if_fail(GTK_IS_V3270(widget));
+
+	GTK_V3270(widget)->color[id] = *color;
+
+#if !GTK_CHECK_VERSION(3,0,0)
+	gdk_colormap_alloc_color(gtk_widget_get_default_colormap(),color,TRUE,TRUE);
+#endif // !GTK(3,0,0)
+
+}
+GdkColor * v3270_get_color(GtkWidget *widget, enum V3270_COLOR id)
+{
+	g_return_val_if_fail(GTK_IS_V3270(widget),NULL);
+ 	return GTK_V3270(widget)->color+id;
 }
 
 void v3270_set_color_table(GdkColor *table, const gchar *colors)
@@ -864,7 +880,7 @@ void v3270_set_color_table(GdkColor *table, const gchar *colors)
  	{
 	case V3270_COLOR_COUNT:	// Complete string
 		for(f=0;f < V3270_COLOR_COUNT;f++)
-			v3270_set_color_entry(table,f,clr[f]);
+			gdk_color_parse(clr[f],table+f);
 		break;
 
 	default:
@@ -872,42 +888,17 @@ void v3270_set_color_table(GdkColor *table, const gchar *colors)
 		g_warning("Color table has %d elements; should be %d.",cnt,V3270_COLOR_COUNT);
 
 		for(f=0;f < cnt;f++)
-			v3270_set_color_entry(table,f,clr[f]);
-		for(f=cnt; f < V3270_COLOR_COUNT;f++)
-			v3270_set_color_entry(table,f,clr[cnt-1]);
+			gdk_color_parse(clr[f],table+f);
 
-		v3270_set_color_entry(table,V3270_COLOR_OIA_BACKGROUND,clr[0]);
-		v3270_set_color_entry(table,V3270_COLOR_SELECTED_BG,clr[0]);
+		for(f=cnt; f < V3270_COLOR_COUNT;f++)
+			gdk_color_parse(clr[cnt-1],table+f);
+
+		clr[V3270_COLOR_OIA_BACKGROUND] = clr[0];
+		clr[V3270_COLOR_SELECTED_BG] 	= clr[0];
 
  	}
 
 	g_strfreev(clr);
-
-}
-
-int v3270_set_color_entry(GdkColor *clr, enum V3270_COLOR id, const gchar *name)
-{
-	if(id >= V3270_COLOR_COUNT)
-		return -1;
-
-	gdk_color_parse(name,clr+id);
-
-	return 0;
-}
-
-void v3270_set_color(GtkWidget *widget, enum V3270_COLOR id, const gchar *name)
-{
-	v3270 * terminal = GTK_V3270(widget);
-
-	if(v3270_set_color_entry(terminal->color,id,name))
-		return;
-
-#if(GTK_CHECK_VERSION(3,0,0))
-
-#else
-	gdk_colormap_alloc_color(gtk_widget_get_default_colormap(),terminal->color+id,TRUE,TRUE);
-#endif
-
 
 }
 

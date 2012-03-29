@@ -137,14 +137,31 @@
 	g_free(filename);
  }
 
- static void color_selected(GtkTreeSelection *selection, GtkWidget *widget)
+ static void color_changed(GtkColorSelection *colorselection, GtkWidget *widget)
  {
+ 	GdkColor	clr;
+	int			id		= (int) g_object_get_data(G_OBJECT(colorselection),"colorid");
+
+	if(id < 0 || id >= V3270_COLOR_COUNT)
+		return;
+
+	gtk_color_selection_get_current_color(colorselection,&clr);
+	v3270_set_color(widget,id,&clr);
+	v3270_reload(widget);
+	gtk_widget_queue_draw(widget);
+ }
+
+ static void color_selected(GtkTreeSelection *selection, GtkWidget *color)
+ {
+	GtkWidget		* widget	= g_object_get_data(G_OBJECT(selection),"v3270");
+	GdkColor		* saved		= g_object_get_data(G_OBJECT(selection),"lastcolors");
+	GValue			  value		= { 0, };
 	GtkTreeModel	* model;
 	GtkTreeIter		  iter;
-	GValue			  value	= { 0, };
+	GdkColor		* clr;
 	int				  id;
 
-	gtk_widget_set_sensitive(widget,FALSE);
+	gtk_widget_set_sensitive(color,FALSE);
 
 	if(!gtk_tree_selection_get_selected(selection,&model,&iter))
 		return;
@@ -156,8 +173,13 @@
 	if(id < 0 || id >= V3270_COLOR_COUNT)
 		return;
 
+	g_object_set_data(G_OBJECT(color),"colorid",(gpointer) id);
+	clr = v3270_get_color(widget,id);
 
-	gtk_widget_set_sensitive(widget,TRUE);
+	gtk_color_selection_set_previous_color(GTK_COLOR_SELECTION(color),saved+id);
+	gtk_color_selection_set_current_color(GTK_COLOR_SELECTION(color),clr);
+
+	gtk_widget_set_sensitive(color,TRUE);
  }
 
  void editcolors_action(GtkAction *action, GtkWidget *widget)
@@ -224,6 +246,7 @@
 	GtkWidget	* panned = gtk_hbox_new(FALSE,2);
 	GtkWidget	* tree;
 	GtkWidget	* color;
+	GdkColor	  saved[V3270_COLOR_COUNT];
 
 	{
 		// Color dialog setup
@@ -232,6 +255,8 @@
 		gtk_color_selection_set_has_opacity_control(GTK_COLOR_SELECTION(color),FALSE);
 		gtk_color_selection_set_has_palette(GTK_COLOR_SELECTION(color),TRUE);
 		gtk_box_pack_end(GTK_BOX(panned),color,TRUE,TRUE,0);
+		g_object_set_data(G_OBJECT(color),"colorid",(gpointer) -1);
+		g_signal_connect(G_OBJECT(color),"color-changed",G_CALLBACK(color_changed),widget);
 	}
 
 	// Tree view with all available colors
@@ -255,13 +280,18 @@
 		gtk_tree_store_append((GtkTreeStore *) model,&parent,NULL);
 		gtk_tree_store_set((GtkTreeStore *) model, &parent, 0, gettext(node[title++].text), 1, V3270_COLOR_COUNT, -1);
 
-
 		select = gtk_tree_view_get_selection(GTK_TREE_VIEW (tree));
+
+		g_object_set_data(G_OBJECT(select),"v3270",widget);
+		g_object_set_data(G_OBJECT(select),"lastcolors",saved);
+
 		gtk_tree_selection_set_mode(select, GTK_SELECTION_SINGLE);
-		g_signal_connect(G_OBJECT (select),"changed",G_CALLBACK(color_selected),color);
+		g_signal_connect(G_OBJECT(select),"changed",G_CALLBACK(color_selected),color);
 
 		for(f=0;f<V3270_COLOR_COUNT;f++)
 		{
+			saved[f] = *(v3270_get_color(widget,f));
+
 			if(f == node[title].id)
 			{
 				gtk_tree_store_append((GtkTreeStore *) model,&parent,NULL);
@@ -285,10 +315,24 @@
 	gtk_widget_show_all(panned);
 	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),GTK_WIDGET(panned),TRUE,TRUE,2);
 
-	gtk_dialog_run(GTK_DIALOG(dialog));
+	if(gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
+	{
+		// Acepted, save in configuration file
+	}
+	else
+	{
+		// Rejected, restore original colors
+		int f;
 
+		for(f=0;f<V3270_COLOR_COUNT;f++)
+			v3270_set_color(widget,f,saved+f);
+	}
 
 	gtk_widget_destroy(dialog);
+
+	// Redraw widget
+	v3270_reload(widget);
+	gtk_widget_queue_draw(widget);
 
  }
 
