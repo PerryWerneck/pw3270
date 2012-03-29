@@ -32,106 +32,6 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
-/*
- void load_color_schemes(GtkWidget *widget, gchar *active)
- {
-
-	else
-	{
-		gchar 		** group;
-		GKeyFile	*  conf 	= g_key_file_new();
-		int			   f		= 0;
-		gboolean	   found 	= FALSE;
-
-#if !GTK_CHECK_VERSION(3,0,0)
-		GtkTreeModel	* model		= (GtkTreeModel *) gtk_list_store_new(2,G_TYPE_STRING,G_TYPE_STRING);
-		GtkCellRenderer * renderer	= gtk_cell_renderer_text_new();
-		GtkTreeIter		  iter;
-
-		gtk_combo_box_set_model(GTK_COMBO_BOX(widget),model);
-
-		gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(widget), renderer, TRUE);
-		gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(widget), renderer, "text", 0, NULL);
-
-#endif // !GTK(3,0,0)
-
-		g_key_file_load_from_file(conf,filename,G_KEY_FILE_NONE,NULL);
-
-		group = g_key_file_get_groups(conf,NULL);
-
-		for(f=0;group[f];f++)
-		{
-			gchar *str = g_strjoin( ",",	g_key_file_get_string(conf,group[f],"Terminal",NULL),
-											g_key_file_get_string(conf,group[f],"BaseAttributes",NULL),
-											g_key_file_get_string(conf,group[f],"SelectedText",NULL),
-											g_key_file_get_string(conf,group[f],"Cursor",NULL),
-											g_key_file_get_string(conf,group[f],"OIA",NULL),
-											NULL
-								);
-#if GTK_CHECK_VERSION(3,0,0)
-
-			gtk_combo_box_text_insert(		GTK_COMBO_BOX_TEXT(widget),
-											f,
-											str,
-											g_key_file_get_locale_string(conf,group[f],"Label",NULL,NULL));
-
-
-			if(active && !g_strcasecmp(active,str))
-			{
-				found = TRUE;
-				gtk_combo_box_set_active(GTK_COMBO_BOX(widget),f);
-			}
-#else
-
-			gtk_list_store_append((GtkListStore *) model,&iter);
-			gtk_list_store_set((GtkListStore *) model, &iter,
-												0, g_key_file_get_locale_string(conf,group[f],"Label",NULL,NULL),
-												1, str,
-												-1);
-
-			if(active && !g_strcasecmp(active,str))
-			{
-				found = TRUE;
-				gtk_combo_box_set_active_iter(GTK_COMBO_BOX(widget),&iter);
-			}
-
-#endif // GTK(3,0,0)
-
-			g_free(str);
-		}
-
-		g_strfreev(group);
-		g_key_file_free(conf);
-
-		if(active && !found)
-		{
-#if GTK_CHECK_VERSION(3,0,0)
-
-			gtk_combo_box_text_insert(		GTK_COMBO_BOX_TEXT(widget),
-											0,
-											active,
-											_( "Custom colors") );
-			gtk_combo_box_set_active(GTK_COMBO_BOX(widget),0);
-
-#else
-
-			gtk_list_store_append((GtkListStore *) model,&iter);
-			gtk_list_store_set((GtkListStore *) model, &iter,
-												0, _( "Custom colors" ),
-												1, active,
-												-1);
-
-			gtk_combo_box_set_active_iter(GTK_COMBO_BOX(widget),&iter);
-#endif
-		}
-
-		gtk_widget_set_sensitive(widget,TRUE);
-
-	}
-
-	g_free(filename);
- }
-*/
 
 static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
 {
@@ -294,13 +194,28 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
 
  }
 
+ static gboolean compare_colors(const GdkColor *colora, const GdkColor *colorb)
+ {
+ 	int f;
+
+ 	for(f=0;f<V3270_COLOR_COUNT;f++)
+	{
+		if(!gdk_color_equal(colora+f,colorb+f))
+			return FALSE;
+	}
+
+ 	return TRUE;
+ }
+
 /**
  * Create a color scheme dropdown button
  *
  * @param clr	Pointer to current color table
  *
+ * @return Combobox widget with colors.conf loaded and set
+ *
  */
- GtkWidget * color_scheme_new(GdkColor *clr)
+ GtkWidget * color_scheme_new(const GdkColor *current)
  {
 	gchar			* filename	= build_data_filename("colors.conf",NULL);
 	GtkTreeModel	* model		= (GtkTreeModel *) gtk_list_store_new(2,G_TYPE_STRING,G_TYPE_POINTER);
@@ -354,6 +269,13 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
 													0, label ? label : group[g],
 													1, clr,
 													-1);
+
+				if(compare_colors(clr,current) && current)
+				{
+					// It's the same color, select iter
+					trace("Current color scheme is \"%s\"",group[g]);
+					gtk_combo_box_set_active_iter(GTK_COMBO_BOX(widget),&iter);
+				}
 
 				// move to next color list
 				pos += V3270_COLOR_COUNT;
@@ -558,7 +480,7 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
 	// Color scheme combo
 	{
 		GtkWidget * box		= gtk_hbox_new(FALSE,2);
-		GtkWidget * button	= color_scheme_new(NULL);
+		GtkWidget * button	= color_scheme_new(v3270_get_color_table(widget));
 
 		g_object_set_data(G_OBJECT(button),"terminal_widget",widget);
 		g_object_set_data(G_OBJECT(button),"color_selection_widget",color);

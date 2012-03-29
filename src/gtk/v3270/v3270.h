@@ -218,6 +218,7 @@
  // Colors
  void			  v3270_set_colors(GtkWidget *widget, const gchar *);
  void 			  v3270_set_color_table(GdkColor *table, const gchar *colors);
+ const GdkColor	* v3270_get_color_table(GtkWidget *widget);
  void		  	  v3270_draw_element(cairo_t *cr, unsigned char chr, unsigned short attr, H3270 *session, guint height, GdkRectangle *rect, GdkColor *color);
  void			  v3270_set_color(GtkWidget *widget, enum V3270_COLOR id, GdkColor *color);
  GdkColor		* v3270_get_color(GtkWidget *widget, enum V3270_COLOR id);

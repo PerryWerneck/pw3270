@@ -868,6 +868,12 @@ GdkColor * v3270_get_color(GtkWidget *widget, enum V3270_COLOR id)
  	return GTK_V3270(widget)->color+id;
 }
 
+const GdkColor * v3270_get_color_table(GtkWidget *widget)
+{
+	g_return_val_if_fail(GTK_IS_V3270(widget),NULL);
+ 	return GTK_V3270(widget)->color;
+}
+
 void v3270_set_color_table(GdkColor *table, const gchar *colors)
 {
  	gchar	**clr;
