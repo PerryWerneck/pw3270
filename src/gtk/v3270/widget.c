@@ -874,6 +874,24 @@ const GdkColor * v3270_get_color_table(GtkWidget *widget)
  	return GTK_V3270(widget)->color;
 }
 
+void v3270_set_mono_color_table(GdkColor *clr, const gchar *fg, const gchar *bg)
+{
+	int f;
+
+	gdk_color_parse(bg,clr);
+	gdk_color_parse(fg,clr+1);
+
+	for(f=2;f<V3270_COLOR_COUNT;f++)
+		clr[f] = clr[1];
+
+	clr[V3270_COLOR_BLACK]			= *clr;
+	clr[V3270_COLOR_OIA_BACKGROUND]	= *clr;
+	clr[V3270_COLOR_SELECTED_BG]	= clr[V3270_COLOR_WHITE];
+	clr[V3270_COLOR_SELECTED_FG]	= clr[V3270_COLOR_BLACK];
+
+
+}
+
 void v3270_set_color_table(GdkColor *table, const gchar *colors)
 {
  	gchar	**clr;

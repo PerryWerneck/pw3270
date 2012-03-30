@@ -32,7 +32,6 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
-
 static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
 {
 	#define V3270_COLOR_BASE V3270_COLOR_GRAY+1
@@ -50,18 +49,10 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
 		switch(g_strv_length(str))
 		{
 		case 2:	// Only 2 colors, create monocromatic table
-			gdk_color_parse(str[0],clr);
-			gdk_color_parse(str[1],clr+1);
-
-			trace("%s color table is: monocromatic",group);
-
-			for(f=2;f<V3270_COLOR_BASE;f++)
-				clr[f] = clr[1];
-			clr[V3270_COLOR_BLACK] = *clr;
+			v3270_set_mono_color_table(clr,str[1],str[0]);
 			break;
 
 		case V3270_COLOR_BASE:	// All colors, update it
-			trace("%s color table is: complete",group);
 			for(f=0;f<V3270_COLOR_BASE;f++)
 				gdk_color_parse(str[f],clr+f);
 			break;
@@ -156,7 +147,7 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
 
 }
 
- static void color_scheme_changed(GtkComboBox *combo,gpointer dunno)
+ static void color_scheme_changed(GtkComboBox *combo)
  {
 	GtkWidget	* terminal	= (GtkWidget *) g_object_get_data(G_OBJECT(combo),"terminal_widget");
 	GtkWidget	* colorsel	= (GtkWidget *) g_object_get_data(G_OBJECT(combo),"color_selection_widget");
@@ -181,7 +172,6 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
 
 		v3270_reload(terminal);
 		gtk_widget_queue_draw(terminal);
-
 	}
 
 	if(colorsel)
@@ -251,7 +241,7 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
 			int			  pos	= 0;
 			int			  g;
 
-			g_signal_connect(G_OBJECT(widget),"changed",G_CALLBACK(color_scheme_changed),table);
+			g_signal_connect(G_OBJECT(widget),"changed",G_CALLBACK(color_scheme_changed),0);
 
 			g_object_set_data_full(G_OBJECT(widget),"colortable",table,g_free);
 
