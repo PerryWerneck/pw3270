@@ -133,7 +133,17 @@
 
  static void done(GtkPrintOperation *prt, GtkPrintOperationResult result, PRINT_INFO *info)
  {
- 	trace("%s",__FUNCTION__);
+#ifdef WIN32
+
+	#warning Implementar
+
+#else
+	GKeyFile	* conf	= get_application_keyfile();
+
+	gtk_print_settings_to_key_file(gtk_print_operation_get_print_settings(prt),conf,"print_settings");
+	gtk_page_setup_to_key_file(gtk_print_operation_get_default_page_setup(prt),conf,"page_setup");
+
+#endif
 
 	if(info->font_scaled)
 		cairo_scaled_font_destroy(info->font_scaled);
@@ -269,8 +279,8 @@
  static GtkPrintOperation * begin_print_operation(GtkAction *action, GtkWidget *widget, PRINT_INFO **info)
  {
  	GtkPrintOperation	* print 	= gtk_print_operation_new();
-//	GtkPrintSettings 	* settings	= gtk_print_settings_new();
-//	GtkPageSetup 		* setup 	= gtk_page_setup_new();
+	GtkPrintSettings 	* settings	= gtk_print_settings_new();
+	GtkPageSetup 		* setup 	= gtk_page_setup_new();
  	const gchar 		* attr;
 
  	*info = g_new0(PRINT_INFO,1);
@@ -300,9 +310,37 @@
 	g_signal_connect(print,"create-custom-widget",G_CALLBACK(create_custom_widget),	*info);
 	g_signal_connect(print,"custom-widget-apply",G_CALLBACK(custom_widget_apply), *info);
 
+	// Load page and print settings
+	{
+#ifdef WIN32
+
+	#warning Implementar
+
+#else
+		GKeyFile	* conf	= get_application_keyfile();
+		GError		* err	= NULL;
+
+
+		if(!gtk_print_settings_load_key_file(settings,conf,"print_settings",&err))
+		{
+			g_warning("Error getting print settings: %s",err->message);
+			g_error_free(err);
+			err = NULL;
+		}
+
+		if(!gtk_page_setup_load_key_file(setup,conf,"page_setup",&err))
+		{
+			g_warning("Error getting page setup: %s",err->message);
+			g_error_free(err);
+			err = NULL;
+		}
+
+#endif
+	}
+
 	// Finish settings
-	// gtk_print_operation_set_print_settings(print,settings);
-	// gtk_print_operation_set_default_page_setup(print,setup);
+	gtk_print_operation_set_print_settings(print,settings);
+	gtk_print_operation_set_default_page_setup(print,setup);
 
  	return print;
  }

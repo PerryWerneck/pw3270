@@ -564,3 +564,19 @@ gchar * build_data_filename(const gchar *first_element, ...)
 
 	return g_string_free(result, FALSE);
 }
+
+#ifdef WIN_REGISTRY_ENABLED
+HKEY get_registry_handle(const gchar *first_element,REGSAM samDesired)
+{
+	#warning Implementar
+
+	return 0;
+}
+#else
+GKeyFile * get_application_keyfile(void)
+{
+	if(!program_config)
+		configuration_init();
+	return program_config;
+}
+#endif // WIN_REGISTRY_ENABLED

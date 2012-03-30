@@ -35,6 +35,21 @@
  #include <gtk/gtk.h>
  #include <errno.h>
 
+ #ifdef WIN32
+
+	#include <windows.h>
+	#define WIN_REGISTRY_ENABLED 1
+
+	#ifndef KEY_WOW64_64KEY
+		#define KEY_WOW64_64KEY 0x0100
+	#endif // KEY_WOW64_64KEY
+
+	#ifndef KEY_WOW64_32KEY
+		#define KEY_WOW64_32KEY	0x0200
+	#endif // KEY_WOW64_64KEY
+
+ #endif // WIN32
+
  #ifndef PACKAGE_NAME
 	#define PACKAGE_NAME	"@PACKAGE_NAME@"
  #endif
@@ -67,5 +82,11 @@
  void		  set_integer_to_config(const gchar *group, const gchar *key, gint val);
 
  gchar 		* build_data_filename(const gchar *first_element, ...);
+
+#ifdef WIN_REGISTRY_ENABLED
+ HKEY		  get_registry_handle(const gchar *first_element,REGSAM samDesired);
+#else
+ GKeyFile	 * get_application_keyfile(void);
+#endif // WIN_REGISTRY_ENABLED
 
 #endif
