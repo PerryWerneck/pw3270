@@ -353,8 +353,7 @@ static void output_possible(H3270 *session);
 
 
 #if defined(_WIN32) /*[*/
-void
-sockstart(void)
+void sockstart(H3270 *session)
 {
 	static int initted = 0;
 	WORD wVersionRequested;
@@ -367,15 +366,24 @@ sockstart(void)
 
 	wVersionRequested = MAKEWORD(2, 2);
 
-	if (WSAStartup(wVersionRequested, &wsaData) != 0) {
-		#warning Notify User
-		fprintf(stderr, "WSAStartup failed: %s\n",win32_strerror(GetLastError()));
+	if (WSAStartup(wVersionRequested, &wsaData) != 0)
+	{
+		lib3270_popup_dialog(	session,
+								LIB3270_NOTIFY_CRITICAL,
+								N_( "Network startup error" ),
+								N_( "WSAStartup failed" ),
+								"%s", win32_strerror(GetLastError()) );
+
 		_exit(1);
 	}
 
-	if (LOBYTE(wsaData.wVersion) != 2 || HIBYTE(wsaData.wVersion) != 2) {
-		#warning Notify User
-		fprintf(stderr, "Bad winsock version: %d.%d\n",LOBYTE(wsaData.wVersion), HIBYTE(wsaData.wVersion));
+	if (LOBYTE(wsaData.wVersion) != 2 || HIBYTE(wsaData.wVersion) != 2)
+	{
+		lib3270_popup_dialog(	session,
+								LIB3270_NOTIFY_CRITICAL,
+								N_( "Network startup error" ),
+								N_( "Bad winsock version" ),
+								N_( "Can´t use winsock version %d.%d" ), LOBYTE(wsaData.wVersion), HIBYTE(wsaData.wVersion));
 		_exit(1);
 	}
 }
@@ -408,13 +416,18 @@ void popup_a_sockerr(H3270 *session, char *fmt, ...)
 
 }
 
-/*
- * net_connect
- *	Establish a telnet socket to the given host passed as an argument.
+/**
+ *  Establish a telnet socket to the given host passed as an argument.
+ *
  *	Called only once and is responsible for setting up the telnet
- *	variables.  Returns the file descriptor of the connected socket.
+ *	variables.
+ *
+ * @param session	Handle to the session descriptor.
+ *
+ *
+ * @return The file descriptor of the connected socket.
  */
-int net_connect(const char *host, char *portname, Boolean ls, Boolean *resolving, Boolean *pending)
+int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Boolean *resolving, Boolean *pending)
 {
 	struct servent	*sp;
 	struct hostent	*hp;
@@ -427,11 +440,11 @@ int net_connect(const char *host, char *portname, Boolean ls, Boolean *resolving
 	int			mtu = OMTU;
 #endif /*]*/
 
-#	define close_fail	{ (void) SOCK_CLOSE(h3270.sock); h3270.sock = -1; return -1; }
+#define close_fail { (void) SOCK_CLOSE(session->sock); session->sock = -1; return -1; }
 
-#if defined(_WIN32) /*[*/
-	sockstart();
-#endif /*]*/
+#if defined(_WIN32)
+	sockstart(session);
+#endif
 
 	if (netrbuf == (unsigned char *)NULL)
 		netrbuf = (unsigned char *)Malloc(BUFSZ);
@@ -453,10 +466,10 @@ int net_connect(const char *host, char *portname, Boolean ls, Boolean *resolving
 	*resolving = False;
 	*pending = False;
 
-	Replace(h3270.hostname, NewString(host));
+	Replace(session->hostname, NewString(host));
 
 	/* get the passthru host and port number */
-	if (h3270.passthru_host) {
+	if (session->passthru_host) {
 		const char *hn;
 
 		hn = getenv("INTERNET_HOST");
@@ -491,9 +504,9 @@ int net_connect(const char *host, char *portname, Boolean ls, Boolean *resolving
 						"or service: %s", portname);
 					return -1;
 				}
-				h3270.current_port = ntohs(sp->s_port);
+				session->current_port = ntohs(sp->s_port);
 			} else
-				h3270.current_port = (unsigned short)lport;
+				session->current_port = (unsigned short)lport;
 		}
 		if (proxy_type < 0)
 		    	return -1;
@@ -501,199 +514,142 @@ int net_connect(const char *host, char *portname, Boolean ls, Boolean *resolving
 
 	/* fill in the socket address of the given host */
 	(void) memset((char *) &haddr, 0, sizeof(haddr));
-	if (h3270.passthru_host) {
+	if (session->passthru_host) {
 		haddr.sin.sin_family = AF_INET;
 		(void) memmove(&haddr.sin.sin_addr, passthru_haddr,
 			       passthru_len);
 		haddr.sin.sin_port = passthru_port;
 		ha_len = sizeof(struct sockaddr_in);
 	} else if (proxy_type > 0) {
-			status_resolving(&h3270,1);
+			status_resolving(session,1);
 	    	if (resolve_host_and_port(proxy_host, proxy_portname,
 			    &proxy_port, &haddr.sa, &ha_len, errmsg,
 			    sizeof(errmsg)) < 0) {
 		    	popup_an_error(NULL,errmsg);
-				status_resolving(&h3270,0);
+				status_resolving(session,0);
 		    	return -1;
-			status_resolving(&h3270,0);
+			status_resolving(session,0);
 		}
 	} else {
-/*
-#if defined(LOCAL_PROCESS)
-		if (ls) {
-			local_process = True;
-		} else {
-#endif
-#if defined(LOCAL_PROCESS)
-			local_process = False;
-#endif
-*/
-			status_resolving(&h3270,1);
+			status_resolving(session,1);
 			if (resolve_host_and_port(host, portname,
-				    &h3270.current_port, &haddr.sa, &ha_len,
+				    &session->current_port, &haddr.sa, &ha_len,
 				    errmsg, sizeof(errmsg)) < 0) {
-			    	popup_an_error(NULL,errmsg);
+			    	popup_an_error(session,errmsg);
 					status_resolving(&h3270,0);
 			    	return -1;
-			status_resolving(&h3270,0);
+			status_resolving(session,0);
 			}
-/*
-#if defined(LOCAL_PROCESS)
-		}
-#endif
-*/
 	}
 
-/*
-#if defined(LOCAL_PROCESS)
-	if (local_process) {
-		int amaster;
-		struct winsize w;
+	/* create the socket */
+	if ((session->sock = socket(haddr.sa.sa_family, SOCK_STREAM, 0)) == -1) {
+		popup_a_sockerr(session, N_( "socket" ) );
+		return -1;
+	}
 
-		w.ws_row = XMIT_ROWS;
-		w.ws_col = XMIT_COLS;
-		w.ws_xpixel = 0;
-		w.ws_ypixel = 0;
-
-		switch (forkpty(&amaster, NULL, NULL, &w)) {
-		    case -1:	// failed
-			popup_an_errno(errno, "forkpty");
-			close_fail;
-		    case 0:	// child
-			putenv("TERM=xterm");
-			if (strchr(host, ' ') != CN) {
-				(void) execlp("/bin/sh", "sh", "-c", host,
-				    NULL);
-			} else {
-				char *arg1;
-
-				arg1 = strrchr(host, '/');
-				(void) execlp(host,
-					(arg1 == CN) ? host : arg1 + 1,
-					NULL);
-			}
-			perror(host);
-			#warning Notify User
-			_exit(1);
-			break;
-		    default:	// parent
-			sock = amaster;
-#if !defined(_WIN32)
-			(void) fcntl(sock, F_SETFD, 1);
-#endif
-			net_connected();
-			host_in3270(CONNECTED_ANSI);
-			break;
-		}
-	} else {
-#endif
-*/
-		/* create the socket */
-		if ((h3270.sock = socket(haddr.sa.sa_family, SOCK_STREAM, 0)) == -1) {
-			popup_a_sockerr(NULL, N_( "socket" ) );
-			return -1;
-		}
-
-		/* set options for inline out-of-band data and keepalives */
-		if (setsockopt(h3270.sock, SOL_SOCKET, SO_OOBINLINE, (char *)&on,
-			    sizeof(on)) < 0) {
-			popup_a_sockerr(NULL, N_( "setsockopt(%s)" ), "SO_OOBINLINE");
-			close_fail;
-		}
-		if (setsockopt(h3270.sock, SOL_SOCKET, SO_KEEPALIVE, (char *)&on,
-			    sizeof(on)) < 0) {
-			popup_a_sockerr(NULL, N_( "setsockopt(%s)" ), "SO_KEEPALIVE");
-			close_fail;
-		}
+	/* set options for inline out-of-band data and keepalives */
+	if (setsockopt(session->sock, SOL_SOCKET, SO_OOBINLINE, (char *)&on,
+			sizeof(on)) < 0) {
+		popup_a_sockerr(session, N_( "setsockopt(%s)" ), "SO_OOBINLINE");
+		close_fail;
+	}
+	if (setsockopt(session->sock, SOL_SOCKET, SO_KEEPALIVE, (char *)&on,
+			sizeof(on)) < 0) {
+		popup_a_sockerr(session, N_( "setsockopt(%s)" ), "SO_KEEPALIVE");
+		close_fail;
+	}
 #if defined(OMTU) /*[*/
-		if (setsockopt(h3270.sock, SOL_SOCKET, SO_SNDBUF, (char *)&mtu,
-			    sizeof(mtu)) < 0) {
-			popup_a_sockerr( N_( "setsockopt(%s)" ), "SO_SNDBUF");
-			close_fail;
-		}
+	if (setsockopt(session->sock, SOL_SOCKET, SO_SNDBUF, (char *)&mtu,sizeof(mtu)) < 0)
+	{
+		popup_a_sockerr(session, N_( "setsockopt(%s)" ), "SO_SNDBUF");
+		close_fail;
+	}
 #endif /*]*/
 
-		/* set the socket to be non-delaying */
+	/* set the socket to be non-delaying */
 #if defined(_WIN32) /*[*/
-		if (non_blocking(False) < 0)
+	if (non_blocking(False) < 0)
 #else /*][*/
-		if (non_blocking(True) < 0)
+	if (non_blocking(True) < 0)
 #endif /*]*/
-			close_fail;
+		close_fail;
 
 #if !defined(_WIN32) /*[*/
-		/* don't share the socket with our children */
-		(void) fcntl(h3270.sock, F_SETFD, 1);
+	/* don't share the socket with our children */
+	(void) fcntl(session->sock, F_SETFD, 1);
 #endif /*]*/
 
-		/* init ssl */
+	/* init ssl */
 #if defined(HAVE_LIBSSL) /*[*/
-		last_ssl_error = 0;
-		if (h3270.ssl_host)
-			ssl_init();
+	last_ssl_error = 0;
+	if (session->ssl_host)
+		ssl_init();
 #endif /*]*/
 
-		/* connect */
-		status_connecting(&h3270,1);
-		if (connect(h3270.sock, &haddr.sa, ha_len) == -1) {
-			if (socket_errno() == SE_EWOULDBLOCK
+	/* connect */
+	status_connecting(session,1);
+	if (connect(session->sock, &haddr.sa, ha_len) == -1) {
+		if (socket_errno() == SE_EWOULDBLOCK
 #if defined(SE_EINPROGRESS) /*[*/
-			    || socket_errno() == SE_EINPROGRESS
+			|| socket_errno() == SE_EINPROGRESS
 #endif /*]*/
 						   ) {
-				trace_dsn("Connection pending.\n");
-				*pending = True;
+			trace_dsn("Connection pending.\n");
+			*pending = True;
 #if !defined(_WIN32) /*[*/
-				output_id = AddOutput(h3270.sock, &h3270, output_possible);
+			output_id = AddOutput(session->sock, session, output_possible);
 #endif /*]*/
-			} else {
-				popup_a_sockerr(NULL, N_( "Can't connect to %s:%d" ),h3270.hostname, h3270.current_port);
-				close_fail;
-			}
 		} else {
-			if (non_blocking(False) < 0)
-				close_fail;
-			net_connected(&h3270);
+			popup_a_sockerr(session, N_( "Can't connect to %s:%d" ),session->hostname, session->current_port);
+			close_fail;
 		}
-/*
-#if defined(LOCAL_PROCESS)
+	} else {
+		if (non_blocking(False) < 0)
+			close_fail;
+		net_connected(session);
 	}
-#endif
-*/
 
 	/* set up temporary termtype */
-	if (appres.termname == CN && h3270.std_ds_host) {
+	if (appres.termname == CN && session->std_ds_host) {
 		(void) sprintf(ttype_tmpval, "IBM-327%c-%d",
-		    appres.m3279 ? '9' : '8', h3270.model_num);
-		h3270.termtype = ttype_tmpval;
+		    appres.m3279 ? '9' : '8', session->model_num);
+		session->termtype = ttype_tmpval;
 	}
 
 	/* all done */
 #if defined(_WIN32) /*[*/
-	if (h3270.sock_handle == NULL) {
+	if (session->sock_handle == NULL) {
 		char ename[256];
 
 		sprintf(ename, "wc3270-%d", getpid());
 
-		h3270.sock_handle = CreateEvent(NULL, TRUE, FALSE, ename);
-		if (h3270.sock_handle == NULL)
+		session->sock_handle = CreateEvent(NULL, TRUE, FALSE, ename);
+		if (session->sock_handle == NULL)
 		{
-			#warning Notify User
-			Log("Cannot create socket handle: %s\n",win32_strerror(GetLastError()));
+			lib3270_popup_dialog(	session,
+									LIB3270_NOTIFY_CRITICAL,
+									N_( "Network startup error" ),
+									N_( "Cannot create socket handle" ),
+									"%s", win32_strerror(GetLastError()) );
+
 			_exit(1);
 		}
 	}
 
-	if (WSAEventSelect(h3270.sock, h3270.sock_handle, FD_READ | FD_CONNECT | FD_CLOSE) != 0)
+	if (WSAEventSelect(session->sock, session->sock_handle, FD_READ | FD_CONNECT | FD_CLOSE) != 0)
 	{
-		#warning Notify User
-		Log("WSAEventSelect failed: %s\n",win32_strerror(GetLastError()));
+		lib3270_popup_dialog(	session,
+								LIB3270_NOTIFY_CRITICAL,
+								N_( "Network startup error" ),
+								N_( "WSAEventSelect failed" ),
+								"%s", win32_strerror(GetLastError()) );
 		_exit(1);
 	}
 
-	return (int) h3270.sock_handle;
+	return (int) session->sock_handle;
 #else /*][*/
-	return h3270.sock;
+	return session->sock;
 #endif /*]*/
 }
 #undef close_fail
@@ -953,8 +909,11 @@ void net_input(H3270 *session)
 				case WSAEINVAL:
 					return;
 				default:
-					#warning Notify User!
-					Log("second connect() failed: %s\n",win32_strerror(err));
+					lib3270_popup_dialog(	&h3270,
+											LIB3270_NOTIFY_CRITICAL,
+											N_( "Network startup error" ),
+											N_( "Second connect() failed" ),
+											"%s", win32_strerror(GetLastError()) );
 					_exit(1);
 				}
 			}

@@ -34,7 +34,7 @@ LIB3270_INTERNAL Boolean net_add_dummy_tn3270e(void);
 LIB3270_INTERNAL void net_add_eor(unsigned char *buf, int len);
 LIB3270_INTERNAL void net_break(void);
 LIB3270_INTERNAL void net_charmode(void);
-LIB3270_INTERNAL int net_connect(const char *, char *, Boolean, Boolean *, Boolean *);
+LIB3270_INTERNAL int net_connect(H3270 *session, const char *, char *, Boolean, Boolean *, Boolean *);
 LIB3270_INTERNAL void net_disconnect(void);
 LIB3270_INTERNAL void net_exception(H3270 *session);
 LIB3270_INTERNAL void net_hexansi_out(unsigned char *buf, int len);

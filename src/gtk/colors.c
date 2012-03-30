@@ -277,7 +277,6 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
 			gtk_widget_set_sensitive(widget,TRUE);
 		}
 
-
 		g_key_file_free(conf);
 
 	}
@@ -387,11 +386,7 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
 
  	const gchar * title  = g_object_get_data(G_OBJECT(action),"title");
 	GtkWidget	* dialog = gtk_dialog_new_with_buttons (	gettext(title ? title : N_( "Color setup") ),
-#if GTK_CHECK_VERSION(3,0,0)
 															NULL,
-#else
-															GTK_WINDOW(gtk_widget_get_toplevel(widget)),
-#endif // GTK(3,0,0)
 															GTK_DIALOG_DESTROY_WITH_PARENT,
 															GTK_STOCK_OK,		GTK_RESPONSE_ACCEPT,
 															GTK_STOCK_CANCEL,	GTK_RESPONSE_REJECT,

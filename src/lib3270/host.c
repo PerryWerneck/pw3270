@@ -569,7 +569,7 @@ static int do_connect(H3270 *hSession, const char *n)
 
 	/* Attempt contact. */
 	hSession->ever_3270 = False;
-	hSession->net_sock = net_connect(chost, port, localprocess_cmd != CN, &resolving,&pending);
+	hSession->net_sock = net_connect(hSession, chost, port, localprocess_cmd != CN, &resolving,&pending);
 
 	if (hSession->net_sock < 0 && !resolving)
 	{
