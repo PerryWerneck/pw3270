@@ -131,11 +131,98 @@
 	}
  }
 
+#ifdef WIN32
+
+#define save_string(h,k,v) save_settings(k,v,h)
+
+static void save_settings(const gchar *key, const gchar *value, HKEY hKey)
+{
+	RegSetValueEx(hKey,key,0,REG_SZ,(const BYTE *) value,strlen(value)+1);
+}
+
+static void save_double(HKEY hKey, const gchar *key, gdouble value)
+{
+	// Reference: http://git.gnome.org/browse/glib/tree/glib/gkeyfile.c
+	gchar result[G_ASCII_DTOSTR_BUF_SIZE];
+	g_ascii_dtostr (result, sizeof (result), value);
+	save_settings(key,result,hKey);
+}
+
+
+/*
+ * From:	http://git.gnome.org/browse/gtk+/tree/gtk/gtkpagesetup.c
+ *			something like this should really be in gobject!
+ *
+ * I Agree!! (Perry Werneck)
+ *
+ */
+static gchar * enum_to_string(GType type, guint enum_value)
+{
+  GEnumClass *enum_class;
+  GEnumValue *value;
+  gchar	*retval = NULL;
+
+  enum_class = g_type_class_ref (type);
+
+  value = g_enum_get_value(enum_class, enum_value);
+  if (value)
+    retval = g_strdup (value->value_nick);
+
+  g_type_class_unref (enum_class);
+
+  return retval;
+}
+
+#endif // WIN32
+
  static void done(GtkPrintOperation *prt, GtkPrintOperationResult result, PRINT_INFO *info)
  {
 #ifdef WIN32
 
-	#warning Implementar
+	HKEY registry;
+
+	if(get_registry_handle("print",&registry,KEY_SET_VALUE))
+	{
+		HKEY	hKey;
+		DWORD	disp;
+
+		if(RegCreateKeyEx(registry,"settings",0,NULL,REG_OPTION_NON_VOLATILE,KEY_SET_VALUE,NULL,&hKey,&disp) == ERROR_SUCCESS)
+		{
+			gtk_print_settings_foreach(	gtk_print_operation_get_print_settings(prt),
+										(GtkPrintSettingsFunc) save_settings,
+										hKey );
+			RegCloseKey(hKey);
+		}
+
+		if(RegCreateKeyEx(registry,"pagesetup",0,NULL,REG_OPTION_NON_VOLATILE,KEY_SET_VALUE,NULL,&hKey,&disp) == ERROR_SUCCESS)
+		{
+			HKEY			  hPaperSize;
+			GtkPageSetup	* setup			= gtk_print_operation_get_default_page_setup(prt);
+			gchar			* orientation	= enum_to_string(GTK_TYPE_PAGE_ORIENTATION,gtk_page_setup_get_orientation(setup));
+
+			// From http://git.gnome.org/browse/gtk+/tree/gtk/gtkpagesetup.c
+			save_double(hKey, "MarginTop",		gtk_page_setup_get_top_margin(setup, GTK_UNIT_MM));
+			save_double(hKey, "MarginBottom",	gtk_page_setup_get_bottom_margin(setup, GTK_UNIT_MM));
+			save_double(hKey, "MarginLeft",		gtk_page_setup_get_left_margin(setup, GTK_UNIT_MM));
+			save_double(hKey, "MarginRight",	gtk_page_setup_get_right_margin(setup, GTK_UNIT_MM));
+			save_string(hKey, "Orientation", 	orientation);
+
+			g_free (orientation);
+
+			if(RegCreateKeyEx(hKey,"papersize",0,NULL,REG_OPTION_NON_VOLATILE,KEY_SET_VALUE,NULL,&hPaperSize,&disp) == ERROR_SUCCESS)
+			{
+				GtkPaperSize *paper_size = gtk_page_setup_get_paper_size (setup);
+				if(paper_size)
+				{
+					#warning Implement it
+				}
+				RegCloseKey(hPaperSize);
+			}
+			RegCloseKey(hKey);
+		}
+
+		RegCloseKey(registry);
+	}
 
 #else
 	GKeyFile	* conf	= get_application_keyfile();

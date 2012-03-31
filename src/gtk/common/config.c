@@ -566,11 +566,20 @@ gchar * build_data_filename(const gchar *first_element, ...)
 }
 
 #ifdef WIN_REGISTRY_ENABLED
-HKEY get_registry_handle(const gchar *first_element,REGSAM samDesired)
+gboolean get_registry_handle(const gchar *group, HKEY *hKey, REGSAM samDesired)
 {
-	#warning Implementar
+	gboolean	  ret;
+	gchar		* path = g_strdup_printf("%s\\%s\\%s",registry_path,g_get_application_name(),group);
+ 	DWORD		  disp;
 
-	return 0;
+	if(RegCreateKeyEx(HKEY_CURRENT_USER,path,0,NULL,REG_OPTION_NON_VOLATILE,samDesired,NULL,hKey,&disp) == ERROR_SUCCESS)
+		ret = TRUE;
+	else
+		ret = FALSE;
+
+	g_free(path);
+
+	return ret;
 }
 #else
 GKeyFile * get_application_keyfile(void)

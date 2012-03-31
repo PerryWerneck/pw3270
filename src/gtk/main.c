@@ -81,19 +81,17 @@ static int initialize(void)
 	{
 		// Invalid GTK version, notify user
 		int rc;
+
 		GtkWidget *dialog = gtk_message_dialog_new(	NULL,
 													GTK_DIALOG_DESTROY_WITH_PARENT,
 													GTK_MESSAGE_WARNING,
 													GTK_BUTTONS_OK_CANCEL,
-													_( "This program requires GTK version %d.%d.%d" ),GTK_MAJOR_VERSION,GTK_MINOR_VERSION,GTK_MICRO_VERSION );
+													_( "%s requires GTK version %d.%d.%d" ),PACKAGE_NAME,GTK_MAJOR_VERSION,GTK_MINOR_VERSION,GTK_MICRO_VERSION );
 
 
 		gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),"%s",msg);
 		gtk_window_set_title(GTK_WINDOW(dialog),_( "GTK Version mismatch" ));
-
-#if GTK_CHECK_VERSION(2,10,0)
 		gtk_window_set_deletable(GTK_WINDOW(dialog),FALSE);
-#endif
 
         rc = gtk_dialog_run(GTK_DIALOG (dialog));
         gtk_widget_destroy(dialog);
@@ -147,13 +145,12 @@ int main(int argc, char *argv[])
 	}
 
 	g_set_application_name(appname);
+	lib3270_set_popup_handler(popup_handler);
 
 	rc = initialize();
 	if(!rc)
 	{
 		configuration_init();
-
-		lib3270_set_popup_handler(popup_handler);
 
 		toplevel = create_main_window();
 
