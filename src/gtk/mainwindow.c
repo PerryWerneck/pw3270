@@ -117,6 +117,12 @@
 	return 0;
  }
 
+ static gboolean window_destroy(GtkWidget *window, GtkWidget *widget)
+ {
+ 	if(widget)
+		v3270_disconnect(widget);
+ }
+
  static void disconnected(GtkWidget *widget, GtkActionGroup **group)
  {
 	gtk_action_group_set_sensitive(group[ACTION_GROUP_PASTE],FALSE);
@@ -333,6 +339,7 @@
 
 	// Connect window signals
 	g_signal_connect(window,"window_state_event",G_CALLBACK(window_state_event),terminal);
+	g_signal_connect(window,"destroy",G_CALLBACK(window_destroy),terminal);
 
 	// Connect widget signals
 	g_signal_connect(terminal,"toggle_changed",G_CALLBACK(toggle_changed),window);

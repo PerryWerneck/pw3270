@@ -211,10 +211,24 @@ static gchar * enum_to_string(GType type, guint enum_value)
 
 			if(RegCreateKeyEx(hKey,"papersize",0,NULL,REG_OPTION_NON_VOLATILE,KEY_SET_VALUE,NULL,&hPaperSize,&disp) == ERROR_SUCCESS)
 			{
-				GtkPaperSize *paper_size = gtk_page_setup_get_paper_size (setup);
-				if(paper_size)
+				GtkPaperSize *size = gtk_page_setup_get_paper_size(setup);
+				if(size)
 				{
-					#warning Implement it
+					// From http://git.gnome.org/browse/gtk+/tree/gtk/gtkpapersize.c
+					const gchar *name 			= gtk_paper_size_get_name(size);
+					const gchar *display_name	= gtk_paper_size_get_display_name(size);
+					const gchar *ppd_name		= gtk_paper_size_get_ppd_name(size);
+
+					if (ppd_name != NULL)
+						save_string(hPaperSize,"PPDName", ppd_name);
+					else
+						save_string(hPaperSize,"Name", name);
+
+					if (display_name)
+						save_string(hPaperSize,"DisplayName", display_name);
+
+					save_double(hPaperSize, "Width", gtk_paper_size_get_width (size, GTK_UNIT_MM));
+					save_double(hPaperSize, "Height", gtk_paper_size_get_height (size, GTK_UNIT_MM));
 				}
 				RegCloseKey(hPaperSize);
 			}
