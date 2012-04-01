@@ -111,6 +111,18 @@ esac
 DBG_LDFLAGS="-L.bin/Debug/lib"
 RLS_LDFLAGS="-L.bin/Release/lib -Wl,--strip-all"
 
+#--[ Check gettext ]------------------------------------------------------------------------------------------------------------------------------------------
+
+AC_PATH_TOOL([XGETTEXT], [xgettext], [no])
+AC_PATH_TOOL([MSGCAT], [msgcat], [no])
+AC_PATH_TOOL([MSGINIT], [msginit], [no])
+AC_PATH_TOOL([MSGFMT], [msgfmt], [no])
+
+AC_CHECK_HEADER(libintl.h, AC_DEFINE(HAVE_LIBINTL))
+AC_CHECK_LIB(intl, gettext,[INTL_LIBS="-lintl"])
+
+AC_SUBST(INTL_LIBS)
+
 #--[ Check for ELF symbol visibility support ]----------------------------------------------------------------------------------------------------------------
 
 # Try to compile PROGRAM, check for warnings

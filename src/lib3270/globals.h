@@ -53,6 +53,21 @@
 #endif /*]*/
 
 /*
+ * gettext stuff
+ */
+#ifdef HAVE_LIBINTL
+	#include <libintl.h>
+	#define _( x ) 			gettext(x)
+	#define N_( x ) 		x
+	#define MSG_( c, s )	gettext(s)
+#else
+	#define _( x ) 			x
+	#define N_( x ) 		x
+	#define MSG_( c, s )	s
+#endif // HAVE_LIBINTL
+
+
+/*
  * OS-specific #defines.  Except for the blocking-connect workarounds, these
  * should be replaced with autoconf probes as soon as possible.
  */

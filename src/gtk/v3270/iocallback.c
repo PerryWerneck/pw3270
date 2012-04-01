@@ -47,10 +47,7 @@
 	#include <malloc.h>
 #endif
 
-#ifdef G_THREADS_ENABLED
-	static int static_CallAndWait(int(*callback)(H3270 *session, void *), H3270 *session, void *parm);
-#endif
-
+static int 				static_CallAndWait(int(*callback)(H3270 *session, void *), H3270 *session, void *parm);
 static unsigned long	static_AddInput(int source, H3270 *session, void (*fn)(H3270 *session));
 static void				static_RemoveSource(unsigned long id);
 
@@ -242,8 +239,6 @@ static gboolean IO_closure(gpointer data)
 	return 0;
 }
 
-#ifdef G_THREADS_ENABLED
-
 struct bgParameter
 {
 	gboolean	running;
@@ -284,8 +279,6 @@ static int static_CallAndWait(int(*callback)(H3270 *session, void *), H3270 *ses
 
     return p.rc;
 }
-
-#endif
 
 static int static_Sleep(int seconds)
 {

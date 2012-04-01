@@ -232,9 +232,4 @@ typedef struct {
 
 extern AppRes appres;
 
-// FIXME (perry#2#): Check for right implementation
-#define _( x ) x
-#define N_( x ) x
-#define MSG_( c, s )	s
-
 void toggle_rectselect(H3270 *session, struct lib3270_toggle *t, LIB3270_TOGGLE_TYPE tt);

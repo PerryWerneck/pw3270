@@ -39,6 +39,7 @@
 
 	#undef HAVE_GNUC_VISIBILITY
 	#undef HAVE_LIBM
+	#undef HAVE_LIBINTL
 
 	#undef HAVE_GNOME
 

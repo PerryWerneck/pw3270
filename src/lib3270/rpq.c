@@ -644,8 +644,7 @@ get_rpq_address(unsigned char *buf, const int maxlen)
 			/* Give back storage obtained by getaddrinfo */
 			freeaddrinfo(res);
 		} else {
-			rpq_warning("RPQ: can't resolve '%s': %s",
-				rpqtext, gai_strerror(ga_err));
+			rpq_warning("RPQ: can't resolve '%s': %s",rpqtext, gai_strerror(ga_err));
 		}
 #else /*][*/
 		/*

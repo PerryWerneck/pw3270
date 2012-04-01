@@ -101,9 +101,12 @@ static int cresolve_host_and_port(H3270 *h, struct parms *p)
 
 	if (rc)
 	{
-		// FIXME (perry#1#): Correct this: What's wrong with gai_strerror?
-		// snprintf(errmsg, em_len, "%s/%s: %s", host, portname, gai_strerror(rc));
-		snprintf(p->errmsg, p->em_len, "%s/%s: %d", p->host, p->portname, rc);
+#ifdef WIN32
+		#warning gai_strerror on windows is returning message in local_charset, need to set it to utf-8!
+		snprintf(p->errmsg, p->em_len, _( "Error %d resolving %s" ) , rc, p->host);
+#else
+		snprintf(p->errmsg, p->em_len, _( "Error resolving %s: %s" ), p->host, gai_strerror(rc));
+#endif // WIN32
 		return -2;
 	}
 
@@ -116,7 +119,7 @@ static int cresolve_host_and_port(H3270 *h, struct parms *p)
 		*p->pport = ntohs(((struct sockaddr_in6 *)res->ai_addr)->sin6_port);
 		break;
 	default:
-		snprintf(p->errmsg, p->em_len, "%s: unknown family %d", p->host,res->ai_family);
+		snprintf(p->errmsg, p->em_len, _( "%s: unknown family %d" ), p->host,res->ai_family);
 		freeaddrinfo(res);
 		return -1;
 	}
@@ -140,7 +143,7 @@ static int cresolve_host_and_port(H3270 *h, struct parms *p)
 	{
 		if (!(sp = getservbyname(portname, "tcp")))
 		{
-			snprintf(errmsg, em_len,_( "Unknown port number or service: %s" ),portname);
+			snprintf(p->errmsg, p->em_len,_( "Unknown port number or service: %s" ),portname);
 			return -1;
 		}
 		port = sp->s_port;
@@ -159,7 +162,7 @@ static int cresolve_host_and_port(H3270 *h, struct parms *p)
 		sin->sin_addr.s_addr = inet_addr(host);
 		if (sin->sin_addr.s_addr == (unsigned long)-1)
 		{
-			snprintf(errmsg, em_len, _( "Unknown host:\n%s" ), host);
+			snprintf(p->errmsg, p->em_len, _( "Unknown host:\n%s" ), host);
 			return -2;
 		}
 	}
