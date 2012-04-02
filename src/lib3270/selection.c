@@ -71,6 +71,20 @@ static void update_selected_rectangle(H3270 *session)
 	p[1].row = (end/session->cols);
 	p[1].col = (end%session->cols);
 
+	if(p[0].row > p[1].row)
+	{
+		int swp = p[0].row;
+		p[0].row = p[1].row;
+		p[1].row = swp;
+	}
+
+	if(p[0].col > p[1].col)
+	{
+		int swp = p[0].col;
+		p[0].col = p[1].col;
+		p[1].col = swp;
+	}
+
 	// First remove unselected areas
 	baddr = 0;
 	for(row=0;row < session->rows;row++)
@@ -212,6 +226,35 @@ LIB3270_EXPORT void lib3270_select_to(H3270 *session, int baddr)
 
 	update_selection(session);
 
+}
+
+LIB3270_EXPORT unsigned char lib3270_get_selection_flags(H3270 *hSession, int baddr)
+{
+	int row,col;
+	unsigned char rc = 0;
+
+	CHECK_SESSION_HANDLE(hSession);
+
+	if(!(lib3270_connected(hSession) && (hSession->text[baddr].attr & LIB3270_ATTR_SELECTED)))
+		return rc;
+
+	row = baddr / hSession->cols;
+	col = baddr % hSession->cols;
+	rc |= 0x01;
+
+	if( (col == 0) || !(hSession->text[baddr-1].attr & LIB3270_ATTR_SELECTED) )
+		rc |= 0x02;
+
+	if( (row == 0) || !(hSession->text[baddr-hSession->cols].attr & LIB3270_ATTR_SELECTED) )
+		rc |= 0x04;
+
+	if( (col == hSession->cols) || !(hSession->text[baddr+1].attr & LIB3270_ATTR_SELECTED) )
+		rc |= 0x08;
+
+	if( (row == hSession->rows) || !(hSession->text[baddr+hSession->cols].attr & LIB3270_ATTR_SELECTED) )
+		rc |= 0x10;
+
+	return rc;
 }
 
 LIB3270_EXPORT void lib3270_select_word(H3270 *session, int baddr)
@@ -373,6 +416,8 @@ LIB3270_EXPORT char * lib3270_get_selected(H3270 *hSession)
 
 LIB3270_EXPORT int lib3270_get_selected_addr(H3270 *hSession, int *begin, int *end)
 {
+	CHECK_SESSION_HANDLE(hSession);
+
 	if(!hSession->selected || hSession->select.begin == hSession->select.end)
 		return -1;
 
@@ -390,6 +435,12 @@ LIB3270_EXPORT int lib3270_get_selected_addr(H3270 *hSession, int *begin, int *e
 	return 0;
 }
 
+LIB3270_EXPORT int lib3270_move_selected_area(H3270 *hSession, int from, int to)
+{
+
+
+	return from;
+}
 
 LIB3270_EXPORT int lib3270_move_selection(H3270 *hSession, LIB3270_DIRECTION dir)
 {

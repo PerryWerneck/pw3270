@@ -212,9 +212,11 @@ LIB3270_INTERNAL char		*hostname;
 
 #endif /*]*/
 
-#if defined(LOCAL_PROCESS) /*[*/
+/*
+#if defined(LOCAL_PROCESS)
 	LIB3270_INTERNAL Boolean	local_process;
-#endif /*]*/
+#endif
+*/
 
 // LIB3270_INTERNAL int			maxCOLS;
 // LIB3270_INTERNAL int			maxROWS;

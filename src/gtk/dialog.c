@@ -364,11 +364,7 @@
 								);
 
 			if(!lib3270_connect(v3270_get_session(widget),hostname,1))
-			{
-				// Connection OK
-				set_string_to_config("host","uri","%s",hostname);
 				again = FALSE;
-			}
 
 			g_free(hostname);
 			break;

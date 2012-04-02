@@ -53,15 +53,34 @@ static int decode_position(v3270 *widget, gdouble x, gdouble y)
 	return -1;
 }
 
+static void single_click(v3270 *widget, int baddr)
+{
+	switch(lib3270_get_selection_flags(widget->host,baddr))
+	{
+	case 0x00:
+		// Unselected area, move cursor and remove selection
+		lib3270_set_cursor_address(widget->host,baddr);
+		lib3270_unselect(widget->host);
+		widget->selecting = 1;
+		break;
+
+
+	default:
+		// Move selected area
+		trace("%s: default action",__FUNCTION__);
+		widget->selection_addr = baddr;
+		widget->moving = 1;
+	}
+
+
+}
+
 static void button_1_press(GtkWidget *widget, GdkEventType type, int baddr)
 {
-	GTK_V3270(widget)->selecting = 1;
-
 	switch(type)
 	{
-	case GDK_BUTTON_PRESS: 		// Single click - Just move cursor
-		lib3270_set_cursor_address(GTK_V3270(widget)->host,baddr);
-		lib3270_unselect(GTK_V3270(widget)->host);
+	case GDK_BUTTON_PRESS: 		// Single click - set mode
+		single_click(GTK_V3270(widget),baddr);
 		break;
 
 	case GDK_2BUTTON_PRESS:		// Double click - Select word
@@ -132,6 +151,8 @@ gboolean v3270_button_release_event(GtkWidget *widget, GdkEventButton*event)
 	{
 	case 1:
 		GTK_V3270(widget)->selecting = 0;
+		GTK_V3270(widget)->moving	 = 0;
+		GTK_V3270(widget)->resizing	 = 0;
 		break;
 
 	default:
@@ -145,13 +166,76 @@ gboolean v3270_button_release_event(GtkWidget *widget, GdkEventButton*event)
 
 gboolean v3270_motion_notify_event(GtkWidget *widget, GdkEventMotion *event)
 {
-	int baddr = decode_position(GTK_V3270(widget),event->x,event->y);
+	v3270	* terminal = GTK_V3270(widget);
+	int		  baddr = decode_position(terminal,event->x,event->y);
 
 	if(baddr < 0)
 		return FALSE;
 
-	if(GTK_V3270(widget)->selecting)
-		lib3270_select_to(GTK_V3270(widget)->host,baddr);
+	if(terminal->selecting)
+	{
+		// Select area
+		lib3270_select_to(terminal->host,baddr);
+	}
+	else if(terminal->moving)
+	{
+		// Move selected area
+		terminal->selection_addr = lib3270_move_selected_area(terminal->host,terminal->selection_addr,baddr);
+	}
+	else if(terminal->pointer_id == LIB3270_CURSOR_NORMAL)
+	{
+		unsigned char new_pointer = lib3270_get_selection_flags(terminal->host,baddr);
+		if(new_pointer != terminal->pointer)
+		{
+			GdkWindow *window = gtk_widget_get_window(widget);
+			trace("Pointer changes to %04x",new_pointer);
+
+			switch(new_pointer & 0x1F)
+			{
+			case 0x00:
+				gdk_window_set_cursor(window,v3270_cursor[V3270_CURSOR_NORMAL]);
+				break;
+
+			case 0x05:
+				gdk_window_set_cursor(window,v3270_cursor[V3270_CURSOR_SELECTION_TOP]);
+				break;
+
+			case 0x0d:
+				gdk_window_set_cursor(window,v3270_cursor[V3270_CURSOR_SELECTION_TOP_RIGHT]);
+				break;
+
+			case 0x09:
+				gdk_window_set_cursor(window,v3270_cursor[V3270_CURSOR_SELECTION_RIGHT]);
+				break;
+
+			case 0x03:
+				gdk_window_set_cursor(window,v3270_cursor[V3270_CURSOR_SELECTION_LEFT]);
+				break;
+
+			case 0x13:
+				gdk_window_set_cursor(window,v3270_cursor[V3270_CURSOR_SELECTION_BOTTOM_LEFT]);
+				break;
+
+			case 0x11:
+				gdk_window_set_cursor(window,v3270_cursor[V3270_CURSOR_SELECTION_BOTTOM]);
+				break;
+
+			case 0x19:
+				gdk_window_set_cursor(window,v3270_cursor[V3270_CURSOR_SELECTION_BOTTOM_RIGHT]);
+				break;
+
+			case 0x07:
+				gdk_window_set_cursor(window,v3270_cursor[V3270_CURSOR_SELECTION_TOP_LEFT]);
+				break;
+
+			default:
+				gdk_window_set_cursor(window,v3270_cursor[V3270_CURSOR_MOVE_SELECTION]);
+
+			}
+
+			terminal->pointer = new_pointer;
+		}
+	}
 
 	return FALSE;
 }

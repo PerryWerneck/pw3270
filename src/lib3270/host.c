@@ -194,8 +194,9 @@ hostfile_lookup(const char *name, char **hostname, char **loginstring)
 }
 */
 
-#if defined(LOCAL_PROCESS) /*[*/
-/* Recognize and translate "-e" options. */
+/*
+#if defined(LOCAL_PROCESS)
+// Recognize and translate "-e" options.
 static const char *
 parse_localprocess(const char *s)
 {
@@ -216,7 +217,8 @@ parse_localprocess(const char *s)
 	}
 	return CN;
 }
-#endif /*]*/
+#endif
+*/
 
 /*
  * Strip qualifiers from a hostname.
@@ -480,16 +482,18 @@ static int do_connect(H3270 *hSession, const char *n)
 	Boolean resolving;
 	Boolean pending;
 	static Boolean ansi_host;
-	const char *localprocess_cmd = NULL;
+//	const char *localprocess_cmd = NULL;
 	Boolean has_colons = False;
 
-	if (CONNECTED || hSession->auto_reconnect_inprogress)
-		return 0;
+	if (lib3270_connected(hSession) || hSession->auto_reconnect_inprogress)
+		return EBUSY;
 
 	/* Skip leading blanks. */
 	while (*n == ' ')
 		n++;
-	if (!*n) {
+
+	if (!*n)
+	{
 		popup_an_error(hSession,_( "Invalid (empty) hostname" ));
 		return -1;
 	}
@@ -503,19 +507,16 @@ static int do_connect(H3270 *hSession, const char *n)
 		*s-- = '\0';
 
 	/* Remember this hostname, as the last hostname we connected to. */
-	Replace(hSession->reconnect_host, NewString(nb));
+	lib3270_set_host(hSession,nb);
 
-// #if defined(X3270_DISPLAY)
-// 	/* Remember this hostname in the recent connection list and file. */
-// 	save_recent(nb);
-// #endif
-
-#if defined(LOCAL_PROCESS) /*[*/
+/*
+#if defined(LOCAL_PROCESS)
 	if ((localprocess_cmd = parse_localprocess(nb)) != CN) {
 		chost = localprocess_cmd;
 		port = appres.port;
 	} else
-#endif /*]*/
+#endif
+*/
 	{
 		Boolean needed;
 
@@ -541,11 +542,11 @@ static int do_connect(H3270 *hSession, const char *n)
 	 *  full_current_host is the entire string, for use in reconnecting
 	 */
 	if (n != hSession->full_current_host)
-	{
-		Replace(hSession->full_current_host, NewString(n));
-	}
+		lib3270_set_host(hSession,n);
 
 	Replace(hSession->current_host, CN);
+
+/*
 
 	if (localprocess_cmd != CN) {
 		if (hSession->full_current_host[strlen(OptLocalProcess)] != '\0')
@@ -555,6 +556,7 @@ static int do_connect(H3270 *hSession, const char *n)
 	} else {
 		hSession->current_host = s;
 	}
+*/
 
 	has_colons = (strchr(chost, ':') != NULL);
 
@@ -569,7 +571,7 @@ static int do_connect(H3270 *hSession, const char *n)
 
 	/* Attempt contact. */
 	hSession->ever_3270 = False;
-	hSession->net_sock = net_connect(hSession, chost, port, localprocess_cmd != CN, &resolving,&pending);
+	hSession->net_sock = net_connect(hSession, chost, port, 0, &resolving,&pending);
 
 	if (hSession->net_sock < 0 && !resolving)
 	{
@@ -612,6 +614,16 @@ static int do_connect(H3270 *hSession, const char *n)
 	return 0;
 }
 
+/**
+ * Connect to selected host.
+ *
+ * @param h		Session handle.
+ * @param n		Hostname (null to reconnect to the last one;
+ * @param wait	Wait for connection ok before return.
+ *
+ * @return 0 if the connection was ok, non zero on error.
+ *
+ */
 int lib3270_connect(H3270 *h, const char *n, int wait)
 {
 	int rc;
@@ -627,7 +639,11 @@ int lib3270_connect(H3270 *h, const char *n, int wait)
 		return EBUSY;
 
 	if(!n)
-		return ENOENT;
+	{
+		n = h->full_current_host;
+		if(!n)
+			return EINVAL;
+	}
 
 	rc = do_connect(h,n);
 	if(rc)
@@ -654,7 +670,7 @@ int lib3270_connect(H3270 *h, const char *n, int wait)
  */
 static void try_reconnect(H3270 *session)
 {
-	WriteLog("3270","Starting auto-reconnect (Host: %s)",session->reconnect_host ? session->reconnect_host : "-");
+	WriteLog("3270","Starting auto-reconnect (Host: %s)",session->full_current_host ? session->full_current_host : "-");
 	session->auto_reconnect_inprogress = False;
 	lib3270_reconnect(session,0);
 }
@@ -758,6 +774,29 @@ void lib3270_st_changed(H3270 *h, int tx, int mode)
 	}
 }
 
+LIB3270_EXPORT const char * lib3270_set_host(H3270 *h, const char *n)
+{
+    CHECK_SESSION_HANDLE(h);
+
+	Trace("%s: %p",__FUNCTION__,n);
+
+    if(!n)
+		return NULL;
+
+	if(h->full_current_host)
+		free(h->full_current_host);
+
+	h->full_current_host = strdup(n);
+
+	return h->full_current_host;
+}
+
+LIB3270_EXPORT const char * lib3270_get_host(H3270 *h)
+{
+    CHECK_SESSION_HANDLE(h);
+	return h->full_current_host;
+}
+
 LIB3270_EXPORT int lib3270_reconnect(H3270 *h,int wait)
 {
 	int rc;
@@ -767,13 +806,13 @@ LIB3270_EXPORT int lib3270_reconnect(H3270 *h,int wait)
 	if (CONNECTED || HALF_CONNECTED)
 		return EBUSY;
 
-	if (h->current_host == CN)
-		return ENOENT;
+	if (h->full_current_host == CN)
+		return EINVAL;
 
 	if (h->auto_reconnect_inprogress)
 		return EBUSY;
 
-	rc = lib3270_connect(h,h->reconnect_host,wait);
+	rc = lib3270_connect(h,h->full_current_host,wait);
 
 	if(rc)
 	{
@@ -790,8 +829,3 @@ LIB3270_EXPORT const char * lib3270_get_luname(H3270 *h)
 	return h->connected_lu;
 }
 
-LIB3270_EXPORT const char * lib3270_get_host(H3270 *h)
-{
-    CHECK_SESSION_HANDLE(h);
-	return h->current_host;
-}

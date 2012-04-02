@@ -50,8 +50,8 @@
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
- guint				  v3270_widget_signal[LAST_SIGNAL]	= { 0 };
- static GdkCursor	* v3270_cursor[LIB3270_CURSOR_USER]	= { 0 };
+ guint		  v3270_widget_signal[LAST_SIGNAL]	= { 0 };
+ GdkCursor	* v3270_cursor[V3270_CURSOR_COUNT]	= { 0 };
 
 /*--[ Prototipes ]-----------------------------------------------------------------------------------*/
 
@@ -262,9 +262,58 @@ static void v3270_class_init(v3270Class *klass)
 	v3270_register_io_handlers(klass);
 
 	// Cursors
-	v3270_cursor[LIB3270_CURSOR_NORMAL] 	= gdk_cursor_new(GDK_XTERM);
-	v3270_cursor[LIB3270_CURSOR_WAITING]	= gdk_cursor_new(GDK_WATCH);
-	v3270_cursor[LIB3270_CURSOR_LOCKED]		= gdk_cursor_new(GDK_X_CURSOR);
+	{
+#ifdef WIN32
+		static const gchar	* cr[V3270_CURSOR_COUNT] =
+		{
+			"arrow",
+			"wait",
+			"arrow",
+			"sizeall",
+			"sizenwse",	// Top-left
+			"sizenesw",	// Top-right
+			"sizens",	// Top
+			"sizenesw",	// Bottom-left
+			"sizenwse",	// Bottom-right
+			"sizens",	// Bottom
+			"sizewe",	// Left
+			"sizewe",	// Right
+		}
+#else
+		static const int	  cr[V3270_CURSOR_COUNT] =
+		{
+			GDK_XTERM,
+			GDK_WATCH,
+			GDK_X_CURSOR,
+			GDK_FLEUR,
+			GDK_TOP_LEFT_CORNER, 		// Top-left
+			GDK_TOP_RIGHT_CORNER,		// Top-right
+			GDK_TOP_SIDE,				// Top
+			GDK_BOTTOM_LEFT_CORNER,		// Bottom-left
+			GDK_BOTTOM_RIGHT_CORNER,	// Bottom-right
+			GDK_BOTTOM_SIDE,			// Bottom
+			GDK_LEFT_SIDE,				// Left
+			GDK_RIGHT_SIDE,				// Right
+		};
+#endif // WIN32
+
+		int f;
+
+		for(f=0;f<V3270_CURSOR_COUNT;f++)
+		{
+	#ifdef WIN32
+			v3270_cursor[f] = gdk_cursor_new_from_name(gdk_display_get_default(),cr[f]);
+	#else
+			v3270_cursor[f] = gdk_cursor_new(cr[f]);
+	#endif
+		}
+	}
+/*
+	v3270_cursor[V3270_CURSOR_NORMAL] 	= gdk_cursor_new(GDK_XTERM);
+	v3270_cursor[V3270_CURSOR_WAITING]	= gdk_cursor_new(GDK_WATCH);
+	v3270_cursor[V3270_CURSOR_LOCKED]	= gdk_cursor_new(GDK_X_CURSOR);
+	v3270_cursor[]
+*/
 
 	// Signals
 	widget_class->activate_signal =
@@ -513,6 +562,7 @@ static void select_cursor(H3270 *session, LIB3270_CURSOR id)
 
 	if(gtk_widget_get_realized(widget) && gtk_widget_get_has_window(widget))
 	{
+		GTK_V3270(widget)->pointer_id = id;
 		gdk_window_set_cursor(gtk_widget_get_window(widget),v3270_cursor[id]);
 	}
 }
@@ -989,25 +1039,9 @@ int v3270_connect(GtkWidget *widget, const gchar *host)
 
 	g_return_val_if_fail(GTK_IS_V3270(widget),EINVAL);
 
-
 	terminal = GTK_V3270(widget);
 
-	if(host)
-	{
-		set_string_to_config("host","uri","%s",host);
-		rc = lib3270_connect(terminal->host,host,0);
-	}
-	else
-	{
-		gchar *hs = get_string_from_config("host","uri","");
-
-		trace("[%s]",hs);
-
-		if(*hs)
-			rc = lib3270_connect(terminal->host,hs,0);
-
-		g_free(hs);
-	}
+	rc = lib3270_connect(terminal->host,host,0);
 
 	trace("%s exits with rc=%d (%s)",__FUNCTION__,rc,strerror(rc));
 
@@ -1040,8 +1074,10 @@ static void v3270_activate(GtkWidget *widget)
 
 	if(lib3270_connected(terminal->host))
 		lib3270_enter(terminal->host);
-	else
+	else if(lib3270_get_host(terminal->host))
 		v3270_connect(widget,NULL);
+	else
+		g_warning("Terminal widget %p activated without connection or valid hostname",terminal);
 }
 
 const GtkWidgetClass * v3270_get_parent_class(void)

@@ -133,6 +133,7 @@
 
  static void connected(GtkWidget *widget, const gchar *host, GtkActionGroup **group)
  {
+	set_string_to_config("host","uri","%s",host);
 	gtk_window_set_title(GTK_WINDOW(gtk_widget_get_toplevel(widget)),host);
 	gtk_action_group_set_sensitive(group[ACTION_GROUP_ONLINE],TRUE);
 	gtk_action_group_set_sensitive(group[ACTION_GROUP_OFFLINE],FALSE);
@@ -251,7 +252,7 @@
  }
 
 
- GtkWidget * create_main_window(void)
+ GtkWidget * create_main_window(const gchar *uri)
  {
  	static const UI_WIDGET_SETUP widget_setup[] =
  	{
@@ -279,6 +280,18 @@
 	GtkAction 		**action	= g_new0(GtkAction *,ACTION_COUNT);
 	GtkWidget		**popup;
 	int			  	  f;
+
+	if(uri)
+	{
+		lib3270_set_host(host,uri);
+	}
+	else
+	{
+		gchar *ptr = get_string_from_config("host","uri","");
+		if(*ptr)
+			lib3270_set_host(host,ptr);
+		g_free(ptr);
+	}
 
 	g_object_set_data_full(G_OBJECT(terminal),"toggle_actions",g_new0(GtkAction *,LIB3270_TOGGLE_COUNT),g_free);
 	g_object_set_data_full(G_OBJECT(terminal),"named_actions",(gpointer) action, (GDestroyNotify) g_free);
@@ -352,7 +365,6 @@
 	g_signal_connect(terminal,"has_text",G_CALLBACK(has_text),group);
 
 	g_free(path);
-//	gtk_widget_grab_focus(terminal);
 
 	if(lib3270_get_toggle(host,LIB3270_TOGGLE_FULL_SCREEN))
 		gtk_window_fullscreen(GTK_WINDOW(window));
@@ -363,6 +375,10 @@
 
 	trace("%s ends",__FUNCTION__);
 	gtk_window_set_focus(GTK_WINDOW(window),terminal);
+
+	if(lib3270_get_toggle(host,LIB3270_TOGGLE_CONNECT_ON_STARTUP))
+		lib3270_connect(host,NULL,0);
+
  	return window;
  }
 

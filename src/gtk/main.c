@@ -106,14 +106,15 @@ static int initialize(void)
 int main(int argc, char *argv[])
 {
 	static const gchar	* appname	= PACKAGE_NAME;
+	static const gchar	* host		= NULL;
 	int 				  rc 		= 0;
 
 	// Process command-line options
 	{
 		static const GOptionEntry app_options[] =
 		{
-			{ "appname", 'a', 0, G_OPTION_ARG_STRING, &appname,	N_( "Application name" ), PACKAGE_NAME },
-
+			{ "appname",	'a', 0, G_OPTION_ARG_STRING,	&appname,	N_( "Application name" ),	PACKAGE_NAME	},
+			{ "host",		'h', 0, G_OPTION_ARG_STRING,	&host,		N_( "Host to connect"),		NULL			},
 			{ NULL }
 		};
 
@@ -152,7 +153,7 @@ int main(int argc, char *argv[])
 	{
 		configuration_init();
 
-		toplevel = create_main_window();
+		toplevel = create_main_window(host);
 
 		if(toplevel)
 		{

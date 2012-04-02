@@ -146,7 +146,9 @@
 	GtkWidget parent;
 
 	/* private */
-	int selecting : 1;
+	int selecting	: 1;	/**< Selecting region */
+	int moving		: 1;	/**< Moving selected region */
+	int resizing	: 1;	/**< Resizing selected region */
 
 #if GTK_CHECK_VERSION(3,0,0)
 
@@ -158,7 +160,11 @@
 	GSource					* timer;
 	GtkIMContext			* input_method;
 	unsigned short			  keyflags;
-	gchar					* clipboard;					/**< Clipboard contents (text only) */
+	gchar					* clipboard;			/**< Clipboard contents (text only) */
+
+	LIB3270_CURSOR 			  pointer_id;
+	unsigned char			  pointer;				/** Mouse pointer ID */
+	int						  selection_addr;		/** Selection addr */
 
 	/* Font info */
 	gchar * font_family;

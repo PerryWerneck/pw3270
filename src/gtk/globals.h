@@ -58,7 +58,7 @@
 
  #include "common/common.h"
 
- G_GNUC_INTERNAL GtkWidget	* create_main_window(void);
+ G_GNUC_INTERNAL GtkWidget	* create_main_window(const gchar *uri);
  G_GNUC_INTERNAL void		  setup_font_list(GtkWidget *widget, GtkWidget *obj);
  G_GNUC_INTERNAL void		  load_color_schemes(GtkWidget *widget, gchar *active);
  G_GNUC_INTERNAL GtkWidget	* color_scheme_new(const GdkColor *current);

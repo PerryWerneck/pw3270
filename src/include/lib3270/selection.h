@@ -74,6 +74,18 @@
 	 LIB3270_EXPORT int lib3270_move_selection(H3270 *h, LIB3270_DIRECTION dir);
 
 	/**
+	 * Move selected box.
+	 *
+	 * @param h		Session handle.
+	 * @param from	Address of origin position inside the selected buffer.
+	 * @param to	Address of the new origin position.
+	 *
+	 * @return The new origin position.
+	 *
+	 */
+	 LIB3270_EXPORT int lib3270_move_selected_area(H3270 *h, int from, int to);
+
+	/**
 	 * Get addresses of selected area.
 	 *
 	 * @param h		Session handle.
@@ -85,5 +97,16 @@
 	 */
 	 LIB3270_EXPORT int lib3270_get_selected_addr(H3270 *hSession, int *begin, int *end);
 
+	/**
+	 * Get bitmasked flag for the current selection.
+	 *
+	 * Calculate flags to help drawing of the correct mouse pointer over a selection.
+	 *
+	 * @param h		Session handle.
+	 * @param baddr	Position.
+	 *
+	 * @return bitmask for mouse pointer.
+	 */
+	 LIB3270_EXPORT unsigned char lib3270_get_selection_flags(H3270 *h, int baddr);
 
  #endif // LIB3270_SELECTION_H_INCLUDED

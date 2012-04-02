@@ -93,7 +93,6 @@
 
 		char					* current_host;			/**< the hostname part, stripped of qualifiers, luname and port number */
 		char 	          		* full_current_host;	/**< the entire string, for use in reconnecting */
-		char		       		* reconnect_host;
 		char		       		* qualified_host;
 		char		 			  auto_reconnect_inprogress;
 

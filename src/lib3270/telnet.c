@@ -111,6 +111,7 @@ int             ns_rsent;
 unsigned char  *obuf;		/* 3270 output buffer */
 unsigned char  *obptr = (unsigned char *) NULL;
 int             linemode = 1;
+
 /*
 #if defined(LOCAL_PROCESS)
 Boolean		local_process = False;
@@ -1010,10 +1011,11 @@ void net_input(H3270 *session)
 
 		ns_brcvd += nr;
 		for (cp = netrbuf; cp < (netrbuf + nr); cp++) {
-#if defined(LOCAL_PROCESS) /*[*/
+/*
+#if defined(LOCAL_PROCESS)
 			if (local_process) {
-				/* More to do here, probably. */
-				if (IN_NEITHER) {	/* now can assume ANSI mode */
+				// More to do here, probably.
+				if (IN_NEITHER) {	// now can assume ANSI mode
 					host_in3270(CONNECTED_ANSI);
 					hisopts[TELOPT_ECHO] = 1;
 					check_linemode(False);
@@ -1023,7 +1025,8 @@ void net_input(H3270 *session)
 				}
 				ansi_process((unsigned int) *cp);
 			} else {
-#endif /*]*/
+#endif
+*/
 				if (telnet_fsm(*cp)) {
 					(void) ctlr_dbcs_postprocess();
 					host_disconnect(&h3270,True);
@@ -1891,11 +1894,13 @@ process_eor(void)
  */
 void net_exception(H3270 *session)
 {
-#if defined(LOCAL_PROCESS) /*[*/
+/*
+#if defined(LOCAL_PROCESS)
 	if (local_process) {
 		trace_dsn("RCVD exception\n");
 	} else
-#endif /*[*/
+#endif
+*/
 	{
 		trace_dsn("RCVD urgent data indication\n");
 		if (!syncing) {
@@ -1953,11 +1958,14 @@ net_rawout(unsigned const char *buf, int len)
 			nw = SSL_write(ssl_con, (const char *) buf, n2w);
 		else
 #endif /*]*/
-#if defined(LOCAL_PROCESS) /*[*/
+
+/*
+#if defined(LOCAL_PROCESS)
 		if (local_process)
 			nw = write(sock, (const char *) buf, n2w);
 		else
-#endif /*]*/
+#endif
+*/
 			nw = send(h3270.sock, (const char *) buf, n2w, 0);
 		if (nw < 0) {
 #if defined(HAVE_LIBSSL) /*[*/
@@ -2791,9 +2799,11 @@ void
 net_sendc(char c)
 {
 	if (c == '\r' && !linemode
-#if defined(LOCAL_PROCESS) /*[*/
+/*
+#if defined(LOCAL_PROCESS)
 				   && !local_process
-#endif /*]*/
+#endif
+*/
 						    ) {
 		/* CR must be quoted */
 		net_cookout("\r\0", 2);

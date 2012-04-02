@@ -300,6 +300,28 @@
 	 */
 	LIB3270_EXPORT void lib3270_register_schange(H3270 *h,LIB3270_STATE tx, void (*func)(H3270 *, int, void *),void *data);
 
+
+	/**
+	 * Set host id for the connect/reconnect operations.
+	 *
+	 * @param h		Session handle.
+	 * @param n		Host ID to set.
+	 *
+	 * @return Pointer to host id set (internal data, do not change it)
+	 *
+	 */
+	 LIB3270_EXPORT const char * lib3270_set_host(H3270 *h, const char *n);
+
+	/**
+	 * Get host id for the connect/reconnect operations.
+	 *
+	 * @param h		Session handle.
+	 *
+	 * @return Pointer to host id set (internal data, do not change it)
+	 *
+	 */
+	 LIB3270_EXPORT const char * lib3270_get_host(H3270 *h);
+
 	/**
 	 * Network connect operation, keep main loop running
 	 *
@@ -307,7 +329,7 @@
 	 * side-effects.
 	 *
 	 * @param h		Session handle.
-	 * @param n		Host ID
+	 * @param n		Host ID (NULL to use the last one)
 	 * @param wait	Non zero to wait for connection to be ok.
 	 *
 	 * @return 0 for success, EAGAIN if auto-reconnect is in progress, EBUSY if connected, ENOTCONN if connection has failed, -1 on unexpected failure.
@@ -543,8 +565,6 @@
 	 *
 	 */
 	LIB3270_EXPORT const char		* lib3270_get_luname(H3270 *h);
-
-	LIB3270_EXPORT const char		* lib3270_get_host(H3270 *h);
 
 	#define lib3270_has_printer_session(h) 	(h->oia_flag[LIB3270_FLAG_PRINTER] != 0)
 	#define lib3270_has_active_script(h)	(h->oia_flag[LIB3270_FLAG_SCRIPT] != 0)
