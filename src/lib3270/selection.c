@@ -437,7 +437,25 @@ LIB3270_EXPORT int lib3270_get_selected_addr(H3270 *hSession, int *begin, int *e
 
 LIB3270_EXPORT int lib3270_move_selected_area(H3270 *hSession, int from, int to)
 {
+	int step = (to - from);
+	int first, last, pos, len;
 
+	if(lib3270_get_selected_addr(hSession,&first,&last))
+		return from;
+
+	len = hSession->rows * hSession->cols;
+
+	pos = first+step;
+	trace("first=%d pos=%d step=%d",first,pos,step);
+	if(pos < 0)
+		step -= pos;
+
+	pos = last+step;
+	if(pos > len)
+		step -= (pos - len);
+
+
+	trace("%s step=%d",__FUNCTION__,step);
 
 	return from;
 }
