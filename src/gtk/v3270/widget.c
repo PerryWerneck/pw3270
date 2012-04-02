@@ -269,7 +269,7 @@ static void v3270_class_init(v3270Class *klass)
 			"arrow",
 			"wait",
 			"arrow",
-			"sizeall",
+			"hand",
 			"sizenwse",	// Top-left
 			"sizenesw",	// Top-right
 			"sizens",	// Top
@@ -278,14 +278,14 @@ static void v3270_class_init(v3270Class *klass)
 			"sizens",	// Bottom
 			"sizewe",	// Left
 			"sizewe",	// Right
-		}
+		};
 #else
 		static const int	  cr[V3270_CURSOR_COUNT] =
 		{
 			GDK_XTERM,
 			GDK_WATCH,
 			GDK_X_CURSOR,
-			GDK_FLEUR,
+			GDK_HAND1,
 			GDK_TOP_LEFT_CORNER, 		// Top-left
 			GDK_TOP_RIGHT_CORNER,		// Top-right
 			GDK_TOP_SIDE,				// Top

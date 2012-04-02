@@ -437,27 +437,42 @@ LIB3270_EXPORT int lib3270_get_selected_addr(H3270 *hSession, int *begin, int *e
 
 LIB3270_EXPORT int lib3270_move_selected_area(H3270 *hSession, int from, int to)
 {
-	int step = (to - from);
-	int first, last, pos, len;
+	int pos[2];
+	int rows, cols, f, step;
 
-	if(lib3270_get_selected_addr(hSession,&first,&last))
+	if(lib3270_get_selected_addr(hSession,&pos[0],&pos[1]))
 		return from;
 
-	len = hSession->rows * hSession->cols;
+	rows = (to / hSession->cols) - (from / hSession->cols);
+	cols = (to % hSession->cols) - (from % hSession->cols);
 
-	pos = first+step;
-	trace("first=%d pos=%d step=%d",first,pos,step);
-	if(pos < 0)
-		step -= pos;
+	for(f=0;f<2;f++)
+	{
+		int row  = (pos[f] / hSession->cols) + rows;
+		int col  = (pos[f] % hSession->cols) + cols;
 
-	pos = last+step;
-	if(pos > len)
-		step -= (pos - len);
+		if(row < 0)
+			rows = - (pos[f] / hSession->cols);
 
+		if(col < 0)
+			cols = - (pos[f] % hSession->cols);
 
-	trace("%s step=%d",__FUNCTION__,step);
+		if(row >= (hSession->rows))
+			rows = hSession->rows - ((pos[f] / hSession->cols)+1);
 
-	return from;
+		if(col >= hSession->cols)
+			cols = hSession->cols - ((pos[f] % hSession->cols)+1);
+	}
+
+	step = (rows * hSession->cols) + cols;
+
+	hSession->select.begin += step;
+	hSession->select.end   += step;
+
+	update_selection(hSession);
+	lib3270_set_cursor_address(hSession,hSession->select.end);
+
+	return from+step;
 }
 
 LIB3270_EXPORT int lib3270_move_selection(H3270 *hSession, LIB3270_DIRECTION dir)
