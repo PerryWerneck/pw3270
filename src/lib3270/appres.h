@@ -100,14 +100,16 @@ typedef struct {
 #endif /*]*/
 
 	/* Named resources */
-#if defined(X3270_KEYPAD) /*[*/
+/*
+#if defined(X3270_KEYPAD)
 	char	*keypad;
-#endif /*]*/
-#if defined(X3270_DISPLAY) || defined(C3270) /*[*/
+#endif
+*/
+#if defined(X3270_DISPLAY) || defined(C3270)
 //	char	*key_map;
 	char	*compose_map;
 	char	*printer_lu;
-#endif /*]*/
+#endif
 /*
 #if defined(X3270_DISPLAY)
 	char	*efontname;

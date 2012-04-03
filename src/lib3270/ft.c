@@ -375,14 +375,14 @@ ft_aborting(void)
 static void ft_connected(H3270 *session, int ignored, void *dunno)
 {
 	if (!CONNECTED && ft_state != FT_NONE)
-		ft_complete(MSG_("ftDisconnected","Host disconnected, transfer cancelled"));
+		ft_complete(_("Host disconnected, transfer cancelled"));
 }
 
 /* Process an abort from no longer being in 3270 mode. */
 static void ft_in3270(H3270 *session, int ignored, void *dunno)
 {
 	if (!IN_3270 && ft_state != FT_NONE)
-		ft_complete(MSG_("ftNot3270","Not in 3270 mode, transfer cancelled"));
+		ft_complete(_("Not in 3270 mode, transfer cancelled"));
 }
 
 #endif

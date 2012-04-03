@@ -59,11 +59,9 @@
 	#include <libintl.h>
 	#define _( x ) 			gettext(x)
 	#define N_( x ) 		x
-	#define MSG_( c, s )	gettext(s)
 #else
 	#define _( x ) 			x
 	#define N_( x ) 		x
-	#define MSG_( c, s )	s
 #endif // HAVE_LIBINTL
 
 
@@ -120,23 +118,24 @@
 	#undef X3270_MENUS
 #endif /*]*/
 
-/* Local process (-e) header files. */
-#if defined(X3270_LOCAL_PROCESS) && defined(HAVE_LIBUTIL) /*[*/
+/* Local process (-e) header files. */ /*
+#if defined(X3270_LOCAL_PROCESS) && defined(HAVE_LIBUTIL)
 	#define LOCAL_PROCESS	1
 	#include <termios.h>
 
-	#if defined(HAVE_PTY_H) /*[*/
+	#if defined(HAVE_PTY_H)
 		#include <pty.h>
-	#endif /*]*/
+	#endif
 
-	#if defined(HAVE_LIBUTIL_H) /*[*/
+	#if defined(HAVE_LIBUTIL_H)
 		#include <libutil.h>
-	#endif /*]*/
+	#endif
 
-	#if defined(HAVE_UTIL_H) /*[*/
+	#if defined(HAVE_UTIL_H)
 		#include <util.h>
-	#endif /*]*/
-#endif /*]*/
+	#endif
+#endif
+*/
 
 /* Functions we may need to supply. */
 #if defined(NEED_STRTOK_R) /*[*/
@@ -182,26 +181,28 @@ LIB3270_INTERNAL int				children;
 	LIB3270_INTERNAL int		dft_buffersize;
 #endif /*]*/
 
-LIB3270_INTERNAL char			*efontname;
+// LIB3270_INTERNAL char			*efontname;
 LIB3270_INTERNAL Boolean		ever_3270;
 LIB3270_INTERNAL Boolean		exiting;
 
-#if defined(X3270_DISPLAY) /*[*/
+/*
+#if defined(X3270_DISPLAY)
 	LIB3270_INTERNAL Boolean		*extended_3270font;
 	LIB3270_INTERNAL Font			*fid;
 	LIB3270_INTERNAL Boolean		*font_8bit;
-#endif /*]*/
+#endif
+*/
 
 // LIB3270_INTERNAL Boolean	flipped;
-LIB3270_INTERNAL char		*full_current_host;
-LIB3270_INTERNAL char		*full_efontname;
+// LIB3270_INTERNAL char		*full_current_host;
+// LIB3270_INTERNAL char		*full_efontname;
 
 #if defined(X3270_DBCS) /*[*/
 	LIB3270_INTERNAL char	*full_efontname_dbcs;
 #endif /*]*/
 
-LIB3270_INTERNAL char		*funky_font;
-LIB3270_INTERNAL char		*hostname;
+//LIB3270_INTERNAL char		*funky_font;
+//LIB3270_INTERNAL char		*hostname;
 
 #if defined(X3270_DBCS) /*[*/
 	LIB3270_INTERNAL char	*local_encoding;

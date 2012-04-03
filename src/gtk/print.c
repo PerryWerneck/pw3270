@@ -295,21 +295,23 @@ static gchar * enum_to_string(GType type, guint enum_value)
 
  static GObject * create_custom_widget(GtkPrintOperation *prt, PRINT_INFO *info)
  {
- 	static const gchar	* label[]	= { N_( "Font:" ), N_( "Color scheme:" ) };
+ 	static const gchar	* text[]	= { N_( "_Font:" ), N_( "C_olor scheme:" ) };
 	GtkWidget			* container = gtk_table_new(3,2,FALSE);
+	GtkWidget			* label[G_N_ELEMENTS(text)];
 	GtkWidget			* widget;
 	int					  f;
 	gchar				* ptr;
 
 	for(f=0;f<G_N_ELEMENTS(label);f++)
 	{
-		widget = gtk_label_new(gettext(label[f]));
-		gtk_misc_set_alignment(GTK_MISC(widget),0,0.5);
-		gtk_table_attach(GTK_TABLE(container),widget,0,1,f,f+1,GTK_FILL,GTK_FILL,0,0);
+		label[f] = gtk_label_new_with_mnemonic(gettext(text[f]));
+		gtk_misc_set_alignment(GTK_MISC(label[f]),0,0.5);
+		gtk_table_attach(GTK_TABLE(container),label[f],0,1,f,f+1,GTK_FILL,GTK_FILL,0,0);
 	}
 
 	// Font selection button
 	widget = gtk_font_button_new();
+	gtk_label_set_mnemonic_widget(GTK_LABEL(label[0]),widget);
 
 #if GTK_CHECK_VERSION(3,2,0)
 	gtk_font_chooser_set_filter_func((GtkFontChooser *) widget,filter_monospaced,NULL,NULL);
@@ -330,6 +332,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
 	g_free(ptr);
 
 	widget = color_scheme_new(info->color);
+	gtk_label_set_mnemonic_widget(GTK_LABEL(label[1]),widget);
 
 	g_object_set_data(G_OBJECT(container),"combo",widget);
 	gtk_table_attach(GTK_TABLE(container),widget,1,2,1,2,GTK_EXPAND|GTK_FILL,GTK_FILL,5,0);

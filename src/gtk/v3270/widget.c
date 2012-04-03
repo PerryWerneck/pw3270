@@ -35,8 +35,8 @@
  #include <lib3270/log.h>
  #include "v3270.h"
  #include "private.h"
+ #include "accessible.h"
  #include "marshal.h"
- #include "../common/common.h"
 
  #define WIDTH_IN_PIXELS(terminal,x) (x * cols)
  #define HEIGHT_IN_PIXELS(terminal,x) (x * (rows+1))

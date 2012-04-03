@@ -58,6 +58,7 @@ MKDIR=@MKDIR_P@
 INSTALL=@INSTALL@
 INSTALL_PROGRAM=@INSTALL_PROGRAM@
 INSTALL_DATA=@INSTALL_DATA@
+RPMBUILD=@RPMBUILD@
 
 #---[ Release targets ]--------------------------------------------------------
 
@@ -94,7 +95,15 @@ endif
 tgz: $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz
 
 rpm: $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz
+ifneq ($(RPMBUILD),no)
 	@rpmbuild -ta $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz
+endif
+
+srpm: $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz
+ifneq ($(RPMBUILD),no)
+	@rpmbuild -ts $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz
+endif
+
 
 $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz: clean
 	@rm -fr $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)

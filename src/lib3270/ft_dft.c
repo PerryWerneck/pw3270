@@ -162,7 +162,7 @@ dft_open_request(unsigned short len, unsigned char *cp)
 		GET16(recsz, recszp);
 		name = (char *)cp + 31;
 	} else {
-		dft_abort(MSG_("ftDftUknownOpen","ftDftUknownOpen"), TR_OPEN_REQ);
+		dft_abort( _("ftDftUknownOpen"), TR_OPEN_REQ);
 		return;
 	}
 
@@ -215,7 +215,7 @@ dft_data_insert(struct data_buffer *data_bufr)
 	unsigned char *cp;
 
 	if (!message_flag && ft_state == FT_ABORT_WAIT) {
-		dft_abort( MSG_("ftUserCancel","Transfer cancelled by user"), TR_DATA_INSERT);
+		dft_abort( _("Transfer cancelled by user"), TR_DATA_INSERT);
 		return;
 	}
 
@@ -352,7 +352,7 @@ dft_get_request(void)
 	trace_ds(" Get\n");
 
 	if (!message_flag && ft_state == FT_ABORT_WAIT) {
-		dft_abort(MSG_("ftUserCancel","Transfer cancelled by user"), TR_GET_REQ);
+		dft_abort(_("Transfer cancelled by user"), TR_GET_REQ);
 		return;
 	}
 

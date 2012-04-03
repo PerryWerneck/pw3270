@@ -117,6 +117,7 @@ AC_PATH_TOOL([XGETTEXT], [xgettext], [no])
 AC_PATH_TOOL([MSGCAT], [msgcat], [no])
 AC_PATH_TOOL([MSGINIT], [msginit], [no])
 AC_PATH_TOOL([MSGFMT], [msgfmt], [no])
+AC_PATH_TOOL([RPMBUILD], [rpmbuild], [no])
 
 AC_CHECK_HEADER(libintl.h, AC_DEFINE(HAVE_LIBINTL))
 AC_CHECK_LIB(intl, gettext,[INTL_LIBS="-lintl"])
