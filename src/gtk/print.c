@@ -380,6 +380,13 @@ static gchar * enum_to_string(GType type, guint enum_value)
 	g_object_unref(combo);
  }
 
+#ifdef WIN32
+ void update_settings(const gchar *key, const gchar *val, gpointer *settings)
+ {
+	gtk_print_settings_set(GTK_PRINT_SETTINGS(settings), key, val);
+ }
+#endif // WIN32
+
  static GtkPrintOperation * begin_print_operation(GtkAction *action, GtkWidget *widget, PRINT_INFO **info)
  {
  	GtkPrintOperation	* print 	= gtk_print_operation_new();
@@ -418,12 +425,22 @@ static gchar * enum_to_string(GType type, guint enum_value)
 	{
 #ifdef WIN32
 
-	#warning Implementar
+		HKEY registry;
+
+		if(get_registry_handle("print",&registry,KEY_READ))
+		{
+			registry_foreach(registry,"settings",update_settings,(gpointer) settings);
+
+
+
+
+			#warning Work in progress
+			RegCloseKey(registry);
+		}
 
 #else
 		GKeyFile	* conf	= get_application_keyfile();
 		GError		* err	= NULL;
-
 
 		if(!gtk_print_settings_load_key_file(settings,conf,"print_settings",&err))
 		{

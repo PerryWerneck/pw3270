@@ -113,6 +113,38 @@ gchar * get_last_error_msg(void)
 
 	return FALSE;
  }
+
+ void registry_foreach(HKEY parent, const gchar *name,void (*cbk)(const gchar *key, const gchar *val, gpointer *user_data), gpointer *user_data)
+ {
+	HKEY hKey = 0;
+
+	if(RegOpenKeyEx(parent,name,0,KEY_READ,&hKey) == ERROR_SUCCESS)
+	{
+		#define MAX_KEY_LENGTH 255
+		#define MAX_VALUE_NAME 16383
+
+		TCHAR    	pName[MAX_KEY_LENGTH];
+		DWORD 		cName	= MAX_KEY_LENGTH;
+		int			ix		= 0;
+
+		while(RegEnumValue(hKey,ix++,pName,&cName,NULL,NULL,NULL,NULL) == ERROR_SUCCESS)
+		{
+			BYTE data[4097];
+			unsigned long datatype;
+			unsigned long datalen 	= 4096;
+
+			if(RegQueryValueExA(hKey,pName,NULL,&datatype,data,&datalen) == ERROR_SUCCESS)
+			{
+				data[datalen+1] = 0;
+				cbk(pName,data,user_data);
+			}
+			cName = MAX_KEY_LENGTH;
+		}
+		RegCloseKey(hKey);
+	}
+ }
+
+
 #else
  static gchar * search_for_ini(void)
  {
