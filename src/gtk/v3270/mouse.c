@@ -190,46 +190,46 @@ gboolean v3270_motion_notify_event(GtkWidget *widget, GdkEventMotion *event)
 			GdkWindow *window = gtk_widget_get_window(widget);
 			trace("Pointer changes to %04x",new_pointer);
 
-			switch(new_pointer & 0x0F)
+			switch(new_pointer & 0x1F)
 			{
-			case 0x00:
-				gdk_window_set_cursor(window,v3270_cursor[V3270_CURSOR_NORMAL]);
+			case 0x10:
+				gdk_window_set_cursor(window,v3270_cursor[V3270_CURSOR_MOVE_SELECTION]);
 				break;
 
-			case 0x02:
+			case 0x12:
 				gdk_window_set_cursor(window,v3270_cursor[V3270_CURSOR_SELECTION_TOP]);
 				break;
 
-			case 0x06:
+			case 0x16:
 				gdk_window_set_cursor(window,v3270_cursor[V3270_CURSOR_SELECTION_TOP_RIGHT]);
 				break;
 
-			case 0x04:
+			case 0x14:
 				gdk_window_set_cursor(window,v3270_cursor[V3270_CURSOR_SELECTION_RIGHT]);
 				break;
 
-			case 0x01:
+			case 0x11:
 				gdk_window_set_cursor(window,v3270_cursor[V3270_CURSOR_SELECTION_LEFT]);
 				break;
 
-			case 0x09:
+			case 0x19:
 				gdk_window_set_cursor(window,v3270_cursor[V3270_CURSOR_SELECTION_BOTTOM_LEFT]);
 				break;
 
-			case 0x08:
+			case 0x18:
 				gdk_window_set_cursor(window,v3270_cursor[V3270_CURSOR_SELECTION_BOTTOM]);
 				break;
 
-			case 0x0c:
+			case 0x1c:
 				gdk_window_set_cursor(window,v3270_cursor[V3270_CURSOR_SELECTION_BOTTOM_RIGHT]);
 				break;
 
-			case 0x03:
+			case 0x13:
 				gdk_window_set_cursor(window,v3270_cursor[V3270_CURSOR_SELECTION_TOP_LEFT]);
 				break;
 
 			default:
-				gdk_window_set_cursor(window,v3270_cursor[V3270_CURSOR_MOVE_SELECTION]);
+				gdk_window_set_cursor(window,v3270_cursor[V3270_CURSOR_NORMAL]);
 
 			}
 

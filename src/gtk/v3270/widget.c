@@ -266,7 +266,7 @@ static void v3270_class_init(v3270Class *klass)
 #ifdef WIN32
 		static const gchar	* cr[V3270_CURSOR_COUNT] =
 		{
-			"arrow",
+			"ibeam",
 			"wait",
 			"arrow",
 			"hand",
