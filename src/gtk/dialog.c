@@ -288,10 +288,11 @@
  	gchar			* hostname;
  	gchar			* ptr;
  	gboolean		  again		= TRUE;
+ 	GtkWidget		* label;
  	GtkTable		* table		= GTK_TABLE(gtk_table_new(2,4,FALSE));
  	GtkEntry		* host		= GTK_ENTRY(gtk_entry_new());
  	GtkEntry		* port		= GTK_ENTRY(gtk_entry_new());
- 	GtkToggleButton	* checkbox	= GTK_TOGGLE_BUTTON(gtk_check_button_new_with_label( _( "Secure connection" ) ));
+ 	GtkToggleButton	* checkbox	= GTK_TOGGLE_BUTTON(gtk_check_button_new_with_mnemonic( _( "_Secure connection" ) ));
  	GtkWidget 		* dialog 	= gtk_dialog_new_with_buttons(	gettext(title ? title : N_( "Select hostname" )),
 																GTK_WINDOW(gtk_widget_get_toplevel(widget)),
 																GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -306,10 +307,15 @@
 	gtk_entry_set_max_length(port,6);
 	gtk_entry_set_width_chars(port,7);
 
-	gtk_table_attach(table,gtk_label_new( _( "Hostname:" ) ), 0,1,0,1,0,0,5,0);
+
+	label = gtk_label_new_with_mnemonic( _("_Hostname:") );
+	gtk_label_set_mnemonic_widget(GTK_LABEL(label),GTK_WIDGET(host));
+	gtk_table_attach(table,label,0,1,0,1,0,0,5,0);
 	gtk_table_attach(table,GTK_WIDGET(host), 1,2,0,1,GTK_EXPAND|GTK_FILL,0,0,0);
 
-	gtk_table_attach(table,gtk_label_new( _( "Port:" ) ), 2,3,0,1,0,0,5,0);
+	label = gtk_label_new_with_mnemonic( _( "_Port:" ) );
+	gtk_label_set_mnemonic_widget(GTK_LABEL(label),GTK_WIDGET(port));
+	gtk_table_attach(table, label, 2,3,0,1,0,0,5,0);
 	gtk_table_attach(table,GTK_WIDGET(port), 3,4,0,1,GTK_FILL,0,0,0);
 
 	gtk_table_attach(table,GTK_WIDGET(checkbox), 1,2,1,2,GTK_EXPAND|GTK_FILL,0,0,0);
