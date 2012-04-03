@@ -34,6 +34,12 @@
  #include <lib3270/session.h>
  #include <lib3270/selection.h>
 
+ #define SELECTION_LEFT		0x01
+ #define SELECTION_TOP		0x02
+ #define SELECTION_RIGHT	0x04
+ #define SELECTION_BOTTOM	0x08
+ #define SELECTION_ACTIVE	0x10
+
  static void update_selection(H3270 *session);
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
@@ -240,19 +246,19 @@ LIB3270_EXPORT unsigned char lib3270_get_selection_flags(H3270 *hSession, int ba
 
 	row = baddr / hSession->cols;
 	col = baddr % hSession->cols;
-	rc |= 0x01;
+	rc |= SELECTION_ACTIVE;
 
 	if( (col == 0) || !(hSession->text[baddr-1].attr & LIB3270_ATTR_SELECTED) )
-		rc |= 0x02;
+		rc |= SELECTION_LEFT;
 
 	if( (row == 0) || !(hSession->text[baddr-hSession->cols].attr & LIB3270_ATTR_SELECTED) )
-		rc |= 0x04;
+		rc |= SELECTION_TOP;
 
 	if( (col == hSession->cols) || !(hSession->text[baddr+1].attr & LIB3270_ATTR_SELECTED) )
-		rc |= 0x08;
+		rc |= SELECTION_RIGHT;
 
 	if( (row == hSession->rows) || !(hSession->text[baddr+hSession->cols].attr & LIB3270_ATTR_SELECTED) )
-		rc |= 0x10;
+		rc |= SELECTION_BOTTOM;
 
 	return rc;
 }
@@ -474,6 +480,53 @@ LIB3270_EXPORT int lib3270_move_selected_area(H3270 *hSession, int from, int to)
 
 	return from+step;
 }
+
+LIB3270_EXPORT int lib3270_drag_selection(H3270 *h, unsigned char flag, int origin, int baddr)
+{
+	int first, last, row, col;
+
+	if(lib3270_get_selected_addr(h,&first,&last))
+		return origin;
+
+	flag &= 0x1f;
+
+	if(!flag)
+		return origin;
+	else if(flag == SELECTION_ACTIVE)
+		return lib3270_move_selected_area(h,origin,baddr);
+
+	row = baddr/h->cols;
+	col = baddr%h->cols;
+
+	if(flag & SELECTION_LEFT)		// Update left margin
+		origin = first = ((first/h->cols)*h->cols) + col;
+
+	if(flag & SELECTION_TOP)		// Update top margin
+		origin = first = (row*h->cols) + (first%h->cols);
+
+	if(flag & SELECTION_RIGHT) 		// Update right margin
+		origin = last = ((last/h->cols)*h->cols) + col;
+
+	if(flag & SELECTION_BOTTOM)		// Update bottom margin
+		origin = last = (row*h->cols) + (last%h->cols);
+
+	if(h->select.begin < h->select.end)
+	{
+		h->select.begin = first;
+		h->select.end   = last;
+	}
+	else
+	{
+		h->select.begin = last;
+		h->select.end   = first;
+	}
+
+	update_selection(h);
+	lib3270_set_cursor_address(h,h->select.end);
+
+	return origin;
+}
+
 
 LIB3270_EXPORT int lib3270_move_selection(H3270 *hSession, LIB3270_DIRECTION dir)
 {

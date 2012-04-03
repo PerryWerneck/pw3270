@@ -86,6 +86,21 @@
 	 LIB3270_EXPORT int lib3270_move_selected_area(H3270 *h, int from, int to);
 
 	/**
+	 * Drag selected region.
+	 *
+	 * Move or resize selected box according to the selection flags.
+	 *
+	 * @param h			Session handle.
+	 * @param flag		Selection flag.
+	 * @param origin	Reference position (got from mouse button down or other move action).
+	 * @param baddr		New position.
+	 *
+	 * @return The new reference position.
+	 *
+	 */
+	 LIB3270_EXPORT int lib3270_drag_selection(H3270 *h, unsigned char flag, int origin, int baddr);
+
+	/**
 	 * Get addresses of selected area.
 	 *
 	 * @param h		Session handle.

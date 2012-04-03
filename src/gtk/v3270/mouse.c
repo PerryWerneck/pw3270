@@ -180,7 +180,7 @@ gboolean v3270_motion_notify_event(GtkWidget *widget, GdkEventMotion *event)
 	else if(terminal->moving)
 	{
 		// Move selected area
-		terminal->selection_addr = lib3270_move_selected_area(terminal->host,terminal->selection_addr,baddr);
+		terminal->selection_addr = lib3270_drag_selection(terminal->host,terminal->pointer,terminal->selection_addr,baddr);
 	}
 	else if(terminal->pointer_id == LIB3270_CURSOR_NORMAL)
 	{
@@ -190,41 +190,41 @@ gboolean v3270_motion_notify_event(GtkWidget *widget, GdkEventMotion *event)
 			GdkWindow *window = gtk_widget_get_window(widget);
 			trace("Pointer changes to %04x",new_pointer);
 
-			switch(new_pointer & 0x1F)
+			switch(new_pointer & 0x0F)
 			{
 			case 0x00:
 				gdk_window_set_cursor(window,v3270_cursor[V3270_CURSOR_NORMAL]);
 				break;
 
-			case 0x05:
+			case 0x02:
 				gdk_window_set_cursor(window,v3270_cursor[V3270_CURSOR_SELECTION_TOP]);
 				break;
 
-			case 0x0d:
+			case 0x06:
 				gdk_window_set_cursor(window,v3270_cursor[V3270_CURSOR_SELECTION_TOP_RIGHT]);
 				break;
 
-			case 0x09:
+			case 0x04:
 				gdk_window_set_cursor(window,v3270_cursor[V3270_CURSOR_SELECTION_RIGHT]);
 				break;
 
-			case 0x03:
+			case 0x01:
 				gdk_window_set_cursor(window,v3270_cursor[V3270_CURSOR_SELECTION_LEFT]);
 				break;
 
-			case 0x13:
+			case 0x09:
 				gdk_window_set_cursor(window,v3270_cursor[V3270_CURSOR_SELECTION_BOTTOM_LEFT]);
 				break;
 
-			case 0x11:
+			case 0x08:
 				gdk_window_set_cursor(window,v3270_cursor[V3270_CURSOR_SELECTION_BOTTOM]);
 				break;
 
-			case 0x19:
+			case 0x0c:
 				gdk_window_set_cursor(window,v3270_cursor[V3270_CURSOR_SELECTION_BOTTOM_RIGHT]);
 				break;
 
-			case 0x07:
+			case 0x03:
 				gdk_window_set_cursor(window,v3270_cursor[V3270_CURSOR_SELECTION_TOP_LEFT]);
 				break;
 
