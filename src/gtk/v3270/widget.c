@@ -57,10 +57,11 @@
 
  // http://git.gnome.org/browse/gtk+/tree/gtk/gtkdrawingarea.c?h=gtk-3-0
 
-static void			  v3270_realize				(	GtkWidget		* widget);
+static void			  v3270_realize				(	GtkWidget		* widget) ;
 static void			  v3270_size_allocate		(	GtkWidget		* widget,
-													GtkAllocation	* allocation);
-static void			  v3270_send_configure		(	v3270			* terminal);
+													GtkAllocation	* allocation );
+static void			  v3270_send_configure		(	v3270			* terminal );
+static AtkObject	* v3270_get_accessible		(	GtkWidget 		* widget );
 
 // Signals
 static void v3270_activate			(GtkWidget *widget);
@@ -230,6 +231,9 @@ static void v3270_class_init(v3270Class *klass)
 	widget_class->button_release_event				= v3270_button_release_event;
 	widget_class->motion_notify_event				= v3270_motion_notify_event;
 	widget_class->popup_menu						= v3270_popup_menu;
+
+	/* Accessibility support */
+	widget_class->get_accessible 					= v3270_get_accessible;
 
 	klass->activate									= v3270_activate;
 	klass->toggle_changed 							= v3270_toggle_changed;
@@ -433,15 +437,6 @@ static void v3270_class_init(v3270Class *klass)
 						pw3270_VOID__VOID_BOOL,
 						G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 
-#ifdef DEBUG
-	trace("%s: Acessibility check starts",__FUNCTION__);
-	v3270_accessible_get_type();
-	trace("%s: Acessibility check ends",__FUNCTION__);
-#endif // DEBUG
-
-#if GTK_CHECK_VERSION(3,0,0)
-	gtk_widget_class_set_accessible_type(widget_class, GTK_TYPE_V3270_ACCESSIBLE);
-#endif
 }
 
 void v3270_update_font_metrics(v3270 *terminal, cairo_t *cr, int width, int height)
@@ -1102,4 +1097,18 @@ const GtkWidgetClass * v3270_get_parent_class(void)
 	return GTK_WIDGET_CLASS(v3270_parent_class);
 }
 
+static AtkObject * v3270_get_accessible(GtkWidget * widget)
+{
+	v3270 * terminal = GTK_V3270(widget);
+
+//	trace("%s acc=%p",__FUNCTION__,terminal->accessible);
+
+	if(!terminal->accessible)
+	{
+		terminal->accessible = g_object_new(GTK_TYPE_V3270_ACCESSIBLE,NULL);
+		atk_object_initialize(ATK_OBJECT(terminal->accessible), widget);
+	}
+
+	return ATK_OBJECT(terminal->accessible);
+}
 

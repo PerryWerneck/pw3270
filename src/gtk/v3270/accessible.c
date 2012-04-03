@@ -40,14 +40,17 @@
 
 /*--[ Prototipes ]-----------------------------------------------------------------------------------*/
 
+static void atk_component_interface_init 		(AtkComponentIface		*iface);
 static void atk_editable_text_interface_init	(AtkEditableTextIface	*iface);
+
 static void v3270_accessible_class_init			(v3270AccessibleClass	*klass);
 static void v3270_accessible_init				(v3270Accessible		*widget);
 
 /*--[ Widget definition ]----------------------------------------------------------------------------*/
 
-G_DEFINE_TYPE_WITH_CODE (v3270Accessible, v3270_accessible, GTK_TYPE_V3270_ACCESSIBLE,
-                         G_IMPLEMENT_INTERFACE (ATK_TYPE_EDITABLE_TEXT, atk_editable_text_interface_init) )
+G_DEFINE_TYPE_WITH_CODE (v3270Accessible, v3270_accessible, GTK_TYPE_ACCESSIBLE,
+							G_IMPLEMENT_INTERFACE (ATK_TYPE_COMPONENT, atk_component_interface_init)
+							G_IMPLEMENT_INTERFACE (ATK_TYPE_EDITABLE_TEXT, atk_editable_text_interface_init) )
 
 //                         G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init)
 //                         G_IMPLEMENT_INTERFACE (ATK_TYPE_EDITABLE_TEXT, atk_editable_text_interface_init)
@@ -71,6 +74,20 @@ static void v3270_accessible_class_init(v3270AccessibleClass *klass)
   class->initialize = gtk_widget_accessible_initialize;
   class->get_attributes = gtk_widget_accessible_get_attributes;
   class->focus_event = gtk_widget_accessible_focus_event;
+*/
+}
+
+static void
+atk_component_interface_init(AtkComponentIface *iface)
+{
+/*
+  iface->get_extents = gtk_widget_accessible_get_extents;
+  iface->get_size = gtk_widget_accessible_get_size;
+  iface->get_layer = gtk_widget_accessible_get_layer;
+  iface->grab_focus = gtk_widget_accessible_grab_focus;
+  iface->set_extents = gtk_widget_accessible_set_extents;
+  iface->set_position = gtk_widget_accessible_set_position;
+  iface->set_size = gtk_widget_accessible_set_size;
 */
 }
 

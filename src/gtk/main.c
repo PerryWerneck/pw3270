@@ -31,6 +31,7 @@
 
 #include "globals.h"
 #include "v3270/v3270.h"
+#include "v3270/accessible.h"
 #include <lib3270/popup.h>
 #include <stdlib.h>
 
