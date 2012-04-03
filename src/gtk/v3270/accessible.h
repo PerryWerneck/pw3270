@@ -55,4 +55,7 @@ struct _v3270AccessibleClass
 
 };
 
+GType v3270_accessible_get_type(void);
+
+
 G_END_DECLS

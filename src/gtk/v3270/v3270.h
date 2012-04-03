@@ -145,7 +145,7 @@
  {
 	GtkWidget parent;
 
-	/* private */
+	// private
 	int selecting	: 1;	/**< Selecting region */
 	int moving		: 1;	/**< Moving selected region */
 	int resizing	: 1;	/**< Resizing selected region */
@@ -166,7 +166,7 @@
 	unsigned char			  pointer;				/** Mouse pointer ID */
 	int						  selection_addr;		/** Selection addr */
 
-	/* Font info */
+	// Font info
 	gchar * font_family;
 	cairo_font_weight_t		  font_weight;
 	cairo_scaled_font_t		* font_scaled;
@@ -177,10 +177,10 @@
 	gint     				  minimum_width;
 	gint					  minimum_height;
 
-	/* Colors */
+	// Colors
 	GdkColor				  color[V3270_COLOR_COUNT];	/**< Terminal widget colors */
 
-	/* Regions */
+	// Regions
 	GdkRectangle			  oia_rect[V3270_OIA_FIELD_COUNT];
 
 	struct
@@ -193,7 +193,10 @@
 		cairo_surface_t		* surface;						/**< Cursor image */
 	} cursor;
 
-	/* lib3270 stuff */
+	// Acessibility
+	GtkAccessible			* accessible;
+
+	// lib3270 stuff
 	H3270   				* host;							/**< Related 3270 session */
 
  };
