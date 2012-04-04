@@ -223,8 +223,15 @@ static unsigned short calc_attrs(H3270 *session, int baddr, int fa_addr, int fa)
 	return a;
 }
 
+LIB3270_EXPORT unsigned int lib3270_get_length(H3270 *h)
+{
+	CHECK_SESSION_HANDLE(h);
+	return h->rows * h->cols;
+}
+
 LIB3270_EXPORT void lib3270_get_screen_size(H3270 *h, int *r, int *c)
 {
+	CHECK_SESSION_HANDLE(h);
 	*r = h->rows;
 	*c = h->cols;
 }

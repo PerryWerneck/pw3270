@@ -267,6 +267,8 @@
 	 */
 	LIB3270_EXPORT void lib3270_get_screen_size(H3270 *h, int *r, int *c);
 
+	LIB3270_EXPORT unsigned int lib3270_get_length(H3270 *h);
+
 	/**
 	 * Start a new session (INCOMPLETE).
 	 *
@@ -660,12 +662,14 @@
 	/**
 	 * Get all text inside the terminal.
 	 *
-	 * @param h	Session Handle.
+	 * @param h			Session Handle.
+	 * @param offset	Start position.
+	 * @param len		Text length or -1 to all text.
 	 *
-	 * @return All text if available, or NULL. Release it with free()
+	 * @return Contents at position if available, or NULL. Release it with free()
 	 *
 	 */
-	LIB3270_EXPORT char * lib3270_get_text(H3270 *h);
+	LIB3270_EXPORT char * lib3270_get_text(H3270 *h, int offset, int len);
 
 	/**
 	 * Get a terminal character and attribute.

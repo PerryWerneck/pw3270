@@ -407,15 +407,48 @@ static char * get_text(H3270 *hSession,unsigned char all)
 	return ret;
 }
 
-LIB3270_EXPORT char * lib3270_get_text(H3270 *hSession)
+LIB3270_EXPORT char * lib3270_get_text(H3270 *h, int offset, int len)
 {
-	return get_text(hSession,1);
+	char *buffer;
+	int  col, maxlen;
+	char *ptr;
+
+	CHECK_SESSION_HANDLE(h);
+
+	maxlen = h->rows * (h->cols+1);
+
+	if(len < 0)
+		len = (maxlen - offset);
+	else if(len > maxlen)
+		len = maxlen;
+
+	buffer	= malloc(len+1);
+	col 	= offset%h->cols;
+	ptr		= buffer;
+
+	while(len-- > 0)
+	{
+		*(ptr++) = h->text[offset++].chr;
+		if(col++ >= h->cols && len > 0)
+		{
+			col = 0;
+			*(ptr++) = '\n';
+			len--;
+		}
+	}
+	*ptr = 0;
+
+	return buffer;
 }
 
 LIB3270_EXPORT char * lib3270_get_selected(H3270 *hSession)
 {
 	if(!hSession->selected || hSession->select.begin == hSession->select.end)
 		return NULL;
+
+	if(!lib3270_connected(hSession))
+		return NULL;
+
 
 	return get_text(hSession,0);
 }

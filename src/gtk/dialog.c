@@ -388,7 +388,7 @@
 
  void save_all_action(GtkAction *action, GtkWidget *widget)
  {
- 	gchar *text = v3270_get_text(widget);
+ 	gchar *text = v3270_get_text(widget,0,-1);
 
 	trace("Action %s activated on widget %p text=%p",gtk_action_get_name(action),widget,text);
 

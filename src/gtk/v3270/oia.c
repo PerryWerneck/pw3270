@@ -726,6 +726,10 @@ void v3270_update_cursor(H3270 *session, unsigned short row, unsigned short col,
 
 		gtk_widget_queue_draw_area(GTK_WIDGET(terminal),rect->x,rect->y,rect->width,rect->height);
 	}
+
+	if(terminal->accessible)
+		g_signal_emit_by_name(ATK_TEXT(terminal->accessible),"text-caret-moved",lib3270_get_cursor_address(session));
+
 }
 
 struct timer_info

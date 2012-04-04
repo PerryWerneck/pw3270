@@ -37,7 +37,7 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
-static int decode_position(v3270 *widget, gdouble x, gdouble y)
+gint v3270_get_offset_at_point(v3270 *widget, gint x, gint y)
 {
 	GdkPoint point;
 	int r,c;
@@ -120,7 +120,7 @@ void v3270_emit_popup(v3270 *widget, int baddr, GdkEventButton *event)
 
 gboolean v3270_button_press_event(GtkWidget *widget, GdkEventButton *event)
 {
-	int baddr = decode_position(GTK_V3270(widget),event->x,event->y);
+	int baddr = v3270_get_offset_at_point(GTK_V3270(widget),event->x,event->y);
 
 	if(baddr < 0)
 		return FALSE;
@@ -167,7 +167,7 @@ gboolean v3270_button_release_event(GtkWidget *widget, GdkEventButton*event)
 gboolean v3270_motion_notify_event(GtkWidget *widget, GdkEventMotion *event)
 {
 	v3270	* terminal = GTK_V3270(widget);
-	int		  baddr = decode_position(terminal,event->x,event->y);
+	int		  baddr = v3270_get_offset_at_point(terminal,event->x,event->y);
 
 	if(baddr < 0)
 		return FALSE;

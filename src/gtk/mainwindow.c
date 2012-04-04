@@ -201,7 +201,7 @@
  static void setup_input_method(GtkWidget *widget, GtkWidget *obj)
  {
 	GtkWidget *menu	= gtk_menu_new();
-	gtk_im_multicontext_append_menuitems((GtkIMMulticontext *) GTK_V3270(obj)->input_method,GTK_MENU_SHELL(menu));
+	gtk_im_multicontext_append_menuitems((GtkIMMulticontext *) v3270_get_im_context(obj) ,GTK_MENU_SHELL(menu));
 	gtk_widget_show_all(menu);
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(widget),menu);
  }
@@ -280,6 +280,8 @@
 	GtkAction 		**action	= g_new0(GtkAction *,ACTION_COUNT);
 	GtkWidget		**popup;
 	int			  	  f;
+
+	gtk_widget_set_tooltip_text(terminal,_( "3270 screen"));
 
 	if(uri)
 	{

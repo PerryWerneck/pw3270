@@ -128,79 +128,6 @@
     #define v3270char void
  #endif // v3270_char
 
- struct v3270_metrics
- {
-	guint width;
-	guint height;
-	guint ascent;
-	guint descent;
-
-	guint spacing;
-
-	guint left;
-	guint top;
- };
-
- struct _v3270
- {
-	GtkWidget parent;
-
-	// private
-	int selecting	: 1;	/**< Selecting region */
-	int moving		: 1;	/**< Moving selected region */
-	int resizing	: 1;	/**< Resizing selected region */
-
-#if GTK_CHECK_VERSION(3,0,0)
-
-#else
-    gint width;
-    gint height;
-#endif // GTK_CHECK_VERSION(3,0,0)
-
-	GSource					* timer;
-	GtkIMContext			* input_method;
-	unsigned short			  keyflags;
-	gchar					* clipboard;			/**< Clipboard contents (text only) */
-
-	LIB3270_CURSOR 			  pointer_id;
-	unsigned char			  pointer;				/** Mouse pointer ID */
-	int						  selection_addr;		/** Selection addr */
-
-	// Font info
-	gchar * font_family;
-	cairo_font_weight_t		  font_weight;
-	cairo_scaled_font_t		* font_scaled;
-	cairo_surface_t			* surface;
-
-	struct v3270_metrics	  metrics;
-
-	gint     				  minimum_width;
-	gint					  minimum_height;
-
-	// Colors
-	GdkColor				  color[V3270_COLOR_COUNT];	/**< Terminal widget colors */
-
-	// Regions
-	GdkRectangle			  oia_rect[V3270_OIA_FIELD_COUNT];
-
-	struct
-	{
-		unsigned char 		  show;							/**< Cursor flag */
-		unsigned char 		  chr;							/**< Char at cursor position */
-		unsigned short 		  attr;							/**< Attribute at cursor position */
-		GdkRectangle		  rect;							/**< Cursor rectangle */
-		GSource				* timer;						/**< Cursor blinking timer */
-		cairo_surface_t		* surface;						/**< Cursor image */
-	} cursor;
-
-	// Acessibility
-	GtkAccessible			* accessible;
-
-	// lib3270 stuff
-	H3270   				* host;							/**< Related 3270 session */
-
- };
-
  GtkWidget		* v3270_new(void);
  GType 			  v3270_get_type(void);
 
@@ -217,7 +144,7 @@
  // Clipboard
  const gchar	* v3270_get_selected_text(GtkWidget *widget);
  const gchar	* v3270_get_copy(GtkWidget *widget);
- gchar			* v3270_get_text(GtkWidget *widget);
+ gchar			* v3270_get_text(GtkWidget *widget,int offset, int len);
  const gchar	* v3270_copy(GtkWidget *widget);
  const gchar	* v3270_copy_append(GtkWidget *widget);
 
@@ -232,6 +159,10 @@
  void		  	  v3270_draw_element(cairo_t *cr, unsigned char chr, unsigned short attr, H3270 *session, guint height, GdkRectangle *rect, GdkColor *color);
  void			  v3270_set_color(GtkWidget *widget, enum V3270_COLOR id, GdkColor *color);
  GdkColor		* v3270_get_color(GtkWidget *widget, enum V3270_COLOR id);
+
+ // Misc
+ GtkIMContext	* v3270_get_im_context(GtkWidget *widget);
+
 
 G_END_DECLS
 

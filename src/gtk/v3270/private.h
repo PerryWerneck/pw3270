@@ -37,7 +37,9 @@
 #include <libintl.h>
 #include <glib/gi18n.h>
 
-#include <lib3270.h>
+#ifndef V3270_H_INCLUDED
+	#include "v3270.h"
+#endif
 
 G_BEGIN_DECLS
 
@@ -98,6 +100,84 @@ G_BEGIN_DECLS
 
  #define V3270_CURSOR_COUNT						LIB3270_CURSOR_USER+9
 
+
+ struct v3270_metrics
+ {
+	guint width;
+	guint height;
+	guint ascent;
+	guint descent;
+
+	guint spacing;
+
+	guint left;
+	guint top;
+ };
+
+/*--[ Widget data ]----------------------------------------------------------------------------------*/
+
+ struct _v3270
+ {
+	GtkWidget parent;
+
+	// private
+	int selecting	: 1;	/**< Selecting region */
+	int moving		: 1;	/**< Moving selected region */
+	int resizing	: 1;	/**< Resizing selected region */
+
+#if GTK_CHECK_VERSION(3,0,0)
+
+#else
+    gint width;
+    gint height;
+#endif // GTK_CHECK_VERSION(3,0,0)
+
+	GSource					* timer;
+	GtkIMContext			* input_method;
+	unsigned short			  keyflags;
+	gchar					* clipboard;			/**< Clipboard contents (text only) */
+
+	LIB3270_CURSOR 			  pointer_id;
+	unsigned char			  pointer;				/** Mouse pointer ID */
+	int						  selection_addr;		/** Selection addr */
+
+	// Font info
+	gchar * font_family;
+	cairo_font_weight_t		  font_weight;
+	cairo_scaled_font_t		* font_scaled;
+	cairo_surface_t			* surface;
+
+	struct v3270_metrics	  metrics;
+
+	gint     				  minimum_width;
+	gint					  minimum_height;
+
+	// Colors
+	GdkColor				  color[V3270_COLOR_COUNT];	/**< Terminal widget colors */
+
+	// Regions
+	GdkRectangle			  oia_rect[V3270_OIA_FIELD_COUNT];
+
+	struct
+	{
+		unsigned char 		  show;							/**< Cursor flag */
+		unsigned char 		  chr;							/**< Char at cursor position */
+		unsigned short 		  attr;							/**< Attribute at cursor position */
+		GdkRectangle		  rect;							/**< Cursor rectangle */
+		GSource				* timer;						/**< Cursor blinking timer */
+		cairo_surface_t		* surface;						/**< Cursor image */
+	} cursor;
+
+	// Acessibility
+	GtkAccessible			* accessible;
+
+	// lib3270 stuff
+	H3270   				* host;							/**< Related 3270 session */
+
+ };
+
+/*--[ Globals ]--------------------------------------------------------------------------------------*/
+
  G_GNUC_INTERNAL guint		  v3270_widget_signal[LAST_SIGNAL];
  G_GNUC_INTERNAL GdkCursor	* v3270_cursor[V3270_CURSOR_COUNT];
 
@@ -147,5 +227,6 @@ gboolean	  v3270_button_press_event(GtkWidget *widget, GdkEventButton *event);
 gboolean	  v3270_button_release_event(GtkWidget *widget, GdkEventButton*event);
 gboolean	  v3270_motion_notify_event(GtkWidget *widget, GdkEventMotion *event);
 void		  v3270_emit_popup(v3270 *widget, int baddr, GdkEventButton *event);
+gint 		  v3270_get_offset_at_point(v3270 *widget, gint x, gint y);
 
 G_END_DECLS

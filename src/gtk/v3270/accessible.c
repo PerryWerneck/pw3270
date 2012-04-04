@@ -27,9 +27,18 @@
  *
  */
 
+ #include <lib3270/config.h>
+
+ #define ENABLE_NLS
+ #define GETTEXT_PACKAGE PACKAGE_NAME
+
  #include <gtk/gtk.h>
+ #include <libintl.h>
+ #include <glib/gi18n.h>
+
  #include <pw3270.h>
  #include "v3270.h"
+ #include "private.h"
  #include "accessible.h"
 
 // References:
@@ -41,44 +50,55 @@
 /*--[ Prototipes ]-----------------------------------------------------------------------------------*/
 
 static void atk_component_interface_init 		(AtkComponentIface		*iface);
-static void atk_editable_text_interface_init	(AtkEditableTextIface	*iface);
 
 static void v3270_accessible_class_init			(v3270AccessibleClass	*klass);
 static void v3270_accessible_init				(v3270Accessible		*widget);
+
+static void atk_text_interface_init				(AtkTextIface			*iface);
 
 /*--[ Widget definition ]----------------------------------------------------------------------------*/
 
 G_DEFINE_TYPE_WITH_CODE (v3270Accessible, v3270_accessible, GTK_TYPE_ACCESSIBLE,
 							G_IMPLEMENT_INTERFACE (ATK_TYPE_COMPONENT, atk_component_interface_init)
-							G_IMPLEMENT_INTERFACE (ATK_TYPE_EDITABLE_TEXT, atk_editable_text_interface_init) )
+							G_IMPLEMENT_INTERFACE (ATK_TYPE_TEXT, atk_text_interface_init) )
 
+//							G_IMPLEMENT_INTERFACE (ATK_TYPE_EDITABLE_TEXT, atk_editable_text_interface_init) )
 //                         G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init)
 //                         G_IMPLEMENT_INTERFACE (ATK_TYPE_EDITABLE_TEXT, atk_editable_text_interface_init)
 //                         G_IMPLEMENT_INTERFACE (ATK_TYPE_TEXT, atk_text_interface_init)
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
+/*
+static const gchar * v3270_accessible_get_description(AtkObject *accessible)
+{
+  return _( "3270 screen" );
+}
+*/
+
 static void v3270_accessible_class_init(v3270AccessibleClass *klass)
 {
+	AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
+
 	trace("******************************* %s",__FUNCTION__);
+
 /*
-  AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
+	class->get_description = v3270_accessible_get_description;
 
-  klass->notify_gtk = gtk_widget_accessible_notify_gtk;
 
-  class->get_description = gtk_widget_accessible_get_description;
-  class->get_parent = gtk_widget_accessible_get_parent;
-  class->ref_relation_set = gtk_widget_accessible_ref_relation_set;
-  class->ref_state_set = gtk_widget_accessible_ref_state_set;
-  class->get_index_in_parent = gtk_widget_accessible_get_index_in_parent;
-  class->initialize = gtk_widget_accessible_initialize;
-  class->get_attributes = gtk_widget_accessible_get_attributes;
-  class->focus_event = gtk_widget_accessible_focus_event;
+	klass->notify_gtk = gtk_widget_accessible_notify_gtk;
+
+	class->get_parent = gtk_widget_accessible_get_parent;
+	class->ref_relation_set = gtk_widget_accessible_ref_relation_set;
+	class->ref_state_set = gtk_widget_accessible_ref_state_set;
+	class->get_index_in_parent = gtk_widget_accessible_get_index_in_parent;
+	class->initialize = gtk_widget_accessible_initialize;
+	class->get_attributes = gtk_widget_accessible_get_attributes;
+	class->focus_event = gtk_widget_accessible_focus_event;
 */
 }
 
-static void
-atk_component_interface_init(AtkComponentIface *iface)
+static void atk_component_interface_init(AtkComponentIface *iface)
 {
 /*
   iface->get_extents = gtk_widget_accessible_get_extents;
@@ -91,23 +111,164 @@ atk_component_interface_init(AtkComponentIface *iface)
 */
 }
 
-static void v3270_accessible_init(v3270Accessible *widget)
+static gunichar v3270_accessible_get_character_at_offset(AtkText *atk_text, gint offset)
 {
-	trace("*********************************** %s",__FUNCTION__);
+	GtkWidget *widget = gtk_accessible_get_widget(GTK_ACCESSIBLE (atk_text));
 
+	trace("*********** %s %p",__FUNCTION__,widget);
+
+	if (widget == NULL)
+		return '\0';
+
+	return 'X';
 }
 
-static void atk_editable_text_interface_init(AtkEditableTextIface *iface)
+static gint v3270_accessible_get_caret_offset(AtkText *text)
 {
-	trace("********************************** %s",__FUNCTION__);
+	GtkWidget *widget = gtk_accessible_get_widget(GTK_ACCESSIBLE(text));
+
+	if (widget == NULL)
+		return 0;
+
+	return lib3270_get_cursor_address(GTK_V3270(widget)->host);
+}
+
+static gint v3270_accessible_get_character_count(AtkText *text)
+{
+	int rows,cols;
+	GtkWidget *widget = gtk_accessible_get_widget(GTK_ACCESSIBLE(text));
+
+	trace("*********** %s %p len=%d",__FUNCTION__,widget,lib3270_get_length(GTK_V3270(widget)->host));
+
+	if(!widget)
+		return 0;
+
+	return lib3270_get_length(GTK_V3270(widget)->host);
+}
+
+static gint v3270_accessible_get_offset_at_point(AtkText *atk_text, gint x, gint y, AtkCoordType  coords)
+{
+	GtkWidget *widget = gtk_accessible_get_widget(GTK_ACCESSIBLE (atk_text));
+
+	trace("*********** %s %p",__FUNCTION__,widget);
+
+	if(!widget)
+		return -1;
+
+
+	return 1;
+}
+
+static gchar * v3270_accessible_get_text_at_offset(AtkText *atk_text, gint offset, AtkTextBoundary boundary_type, gint *start_offset, gint *end_offset)
+{
+	GtkWidget	* widget = gtk_accessible_get_widget(GTK_ACCESSIBLE (atk_text));
+	H3270		* host;
+	char		* text;
+	int			  rows,cols,first;
+
+	trace("*********** %s %p offset=%d",__FUNCTION__,widget,offset);
+
+	if(!widget)
+		return NULL;
+
+	host = GTK_V3270(widget)->host;
+	lib3270_get_screen_size(host,&rows,&cols);
+
+	switch(boundary_type)
+	{
+		case ATK_TEXT_BOUNDARY_CHAR:			// Boundary is the boundary between characters
+												// (including non-printing characters)
+
+			text = lib3270_get_text(host,offset,1);
+			break;
+
+		case ATK_TEXT_BOUNDARY_WORD_START:		// Boundary is the start (i.e. first character) of a word.
+			return g_strdup("ATK_TEXT_BOUNDARY_WORD_START");
+			break;
+
+		case ATK_TEXT_BOUNDARY_WORD_END:		// Boundary is the end (i.e. last character) of a word.
+			return g_strdup("ATK_TEXT_BOUNDARY_WORD_END");
+			break;
+
+		case ATK_TEXT_BOUNDARY_SENTENCE_START:	// Boundary is the first character in a sentence.
+			return g_strdup("ATK_TEXT_BOUNDARY_SENTENCE_START");
+			break;
+
+		case ATK_TEXT_BOUNDARY_SENTENCE_END:	// Boundary is the last (terminal) character in
+												// a sentence; in languages which use "sentence stop" punctuation such as English, the boundary is thus the '.', '?', or
+												// similar terminal punctuation character.
+			return g_strdup("ATK_TEXT_BOUNDARY_SENTENCE_END");
+			break;
+
+
+		case ATK_TEXT_BOUNDARY_LINE_START:		// Boundary is the initial character of the content or a character immediately following a newline,
+												// linefeed, or return character.
+			first = (offset/cols)*cols;
+			if(first == offset)
+				offset++;
+			text = lib3270_get_text(host,first,(offset-first));
+			break;
+
+
+		case ATK_TEXT_BOUNDARY_LINE_END:		// Boundary is the linefeed, or return character.
+			return g_strdup("ATK_TEXT_BOUNDARY_LINE_END");
+			break;
+
+	}
+
+	if(text)
+	{
+		gsize	  bytes_written;
+		GError	* error		= NULL;
+		gchar	* utfchar	= g_convert_with_fallback(	text,
+															-1,
+															"UTF-8",
+															lib3270_get_charset(host),
+															" ",
+															NULL,
+															&bytes_written,
+															&error );
+
+		if(error)
+		{
+			g_warning("%s failed: %s",__FUNCTION__,error->message);
+			g_error_free(error);
+		}
+		return utfchar;
+	}
+
+	return NULL;
+}
+
+static void atk_text_interface_init(AtkTextIface *iface)
+{
+	iface->get_character_at_offset	= v3270_accessible_get_character_at_offset;
+	iface->get_caret_offset 		= v3270_accessible_get_caret_offset;
+	iface->get_character_count 		= v3270_accessible_get_character_count;
+	iface->get_offset_at_point 		= v3270_accessible_get_offset_at_point;
+	iface->get_text_at_offset		= v3270_accessible_get_text_at_offset;
 /*
-	iface->set_text_contents = gtk_entry_accessible_set_text_contents;
-	iface->insert_text = gtk_entry_accessible_insert_text;
-	iface->copy_text = gtk_entry_accessible_copy_text;
-	iface->cut_text = gtk_entry_accessible_cut_text;
-	iface->delete_text = gtk_entry_accessible_delete_text;
-	iface->paste_text = gtk_entry_accessible_paste_text;
-	iface->set_run_attributes = NULL;
+	iface->get_text = gtk_entry_accessible_get_text;
+	iface->get_text_before_offset = gtk_entry_accessible_get_text_before_offset;
+	iface->get_text_at_offset = gtk_entry_accessible_get_text_at_offset;
+	iface->get_text_after_offset = gtk_entry_accessible_get_text_after_offset;
+	iface->get_caret_offset = gtk_entry_accessible_get_caret_offset;
+	iface->set_caret_offset = gtk_entry_accessible_set_caret_offset;
+	iface->get_n_selections = gtk_entry_accessible_get_n_selections;
+	iface->get_selection = gtk_entry_accessible_get_selection;
+	iface->add_selection = gtk_entry_accessible_add_selection;
+	iface->remove_selection = gtk_entry_accessible_remove_selection;
+	iface->set_selection = gtk_entry_accessible_set_selection;
+	iface->get_run_attributes = gtk_entry_accessible_get_run_attributes;
+	iface->get_default_attributes = gtk_entry_accessible_get_default_attributes;
+	iface->get_character_extents = gtk_entry_accessible_get_character_extents;
 */
 }
+
+
+static void v3270_accessible_init(v3270Accessible *widget)
+{
+}
+
+
 

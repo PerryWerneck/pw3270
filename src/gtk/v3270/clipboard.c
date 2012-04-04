@@ -75,7 +75,7 @@ static void clipboard_get(GtkClipboard *clipboard, GtkSelectionData *selection, 
 	}
 }
 
-gchar * v3270_get_text(GtkWidget *widget)
+gchar * v3270_get_text(GtkWidget *widget, int offset, int len)
 {
 	v3270	* terminal;
 	gchar	* text;
@@ -85,7 +85,7 @@ gchar * v3270_get_text(GtkWidget *widget)
 
 	terminal = GTK_V3270(widget);
 
-	str = lib3270_get_text(terminal->host);
+	str = lib3270_get_text(terminal->host, offset, len);
 
 	if(!str)
 		return NULL;

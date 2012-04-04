@@ -45,7 +45,7 @@ static void lib3270_action(GtkAction *action, GtkWidget *widget)
 {
 	int	(*call)(H3270 *h) = (int (*)(H3270 *h)) g_object_get_data(G_OBJECT(action),"lib3270_call");
 	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
-	call(GTK_V3270(widget)->host);
+	call(v3270_get_session(widget));
 }
 
 static void connect_action(GtkAction *action, GtkWidget *widget)
@@ -116,7 +116,7 @@ static void paste_clipboard_action(GtkAction *action, GtkWidget *widget)
 static void paste_next_action(GtkAction *action, GtkWidget *widget)
 {
 	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
-	lib3270_pastenext(GTK_V3270(widget)->host);
+	lib3270_pastenext(v3270_get_session(widget));
 }
 
 static void connect_standard_action(GtkAction *action, GtkWidget *widget, const gchar *name)
@@ -197,20 +197,20 @@ static void lib3270_toggle_action(GtkToggleAction *action,GtkWidget *widget)
 	if(toggle == TOGGLE_GDKDEBUG)
 		gdk_window_set_debug_updates(gtk_toggle_action_get_active(action));
 	else if(toggle < LIB3270_TOGGLE_COUNT)
-		lib3270_set_toggle(GTK_V3270(widget)->host,toggle,gtk_toggle_action_get_active(action));
+		lib3270_set_toggle(v3270_get_session(widget),toggle,gtk_toggle_action_get_active(action));
 }
 
 static void selection_move_action(GtkAction *action, GtkWidget *widget)
 {
 	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
-	lib3270_move_selection(GTK_V3270(widget)->host,(LIB3270_DIRECTION) g_object_get_data(G_OBJECT(action),"direction"));
+	lib3270_move_selection(v3270_get_session(widget),(LIB3270_DIRECTION) g_object_get_data(G_OBJECT(action),"direction"));
 }
 
 static void cursor_move_action(GtkAction *action, GtkWidget *widget)
 {
 	int flags = (int) g_object_get_data(G_OBJECT(action),"move_flags");
 	trace("Action %s activated on widget %p flags=%04x",gtk_action_get_name(action),widget,(unsigned short) g_object_get_data(G_OBJECT(action),"move_flags"));
-	lib3270_move_cursor(GTK_V3270(widget)->host,(LIB3270_DIRECTION) (flags & 0x03), (flags & 0x80) );
+	lib3270_move_cursor(v3270_get_session(widget),(LIB3270_DIRECTION) (flags & 0x03), (flags & 0x80) );
 }
 
 static void connect_move_action(GtkAction *action, GtkWidget *widget, const gchar *target, unsigned short flags, GError **error)
@@ -244,47 +244,47 @@ static void connect_move_action(GtkAction *action, GtkWidget *widget, const gcha
 static void action_pfkey(GtkAction *action, GtkWidget *widget)
 {
 	trace("Action %s activated on widget %p key=%p",gtk_action_get_name(action),widget,g_object_get_data(G_OBJECT(action),"pfkey"));
-	lib3270_pfkey(GTK_V3270(widget)->host,(int) g_object_get_data(G_OBJECT(action),"pfkey"));
+	lib3270_pfkey(v3270_get_session(widget),(int) g_object_get_data(G_OBJECT(action),"pfkey"));
 }
 
 static void action_pakey(GtkAction *action, GtkWidget *widget)
 {
 	trace("Action %s activated on widget %p key=%p",gtk_action_get_name(action),widget,g_object_get_data(G_OBJECT(action),"pakey"));
-	lib3270_pakey(GTK_V3270(widget)->host,(int) g_object_get_data(G_OBJECT(action),"pakey"));
+	lib3270_pakey(v3270_get_session(widget),(int) g_object_get_data(G_OBJECT(action),"pakey"));
 }
 
 static void action_set_toggle(GtkAction *action, GtkWidget *widget)
 {
 	LIB3270_TOGGLE id = (LIB3270_TOGGLE) g_object_get_data(G_OBJECT(action),"toggle_id");
 	trace("Action %s activated on widget %p toggle=%d",gtk_action_get_name(action),widget,id);
-	lib3270_set_toggle(GTK_V3270(widget)->host,id,1);
+	lib3270_set_toggle(v3270_get_session(widget),id,1);
 }
 
 static void action_reset_toggle(GtkAction *action, GtkWidget *widget)
 {
 	LIB3270_TOGGLE id = (LIB3270_TOGGLE) g_object_get_data(G_OBJECT(action),"toggle_id");
 	trace("Action %s activated on widget %p toggle=%d",gtk_action_get_name(action),widget,id);
-	lib3270_set_toggle(GTK_V3270(widget)->host,id,0);
+	lib3270_set_toggle(v3270_get_session(widget),id,0);
 }
 
 static void action_select_all(GtkAction *action, GtkWidget *widget)
 {
-	lib3270_selectall(GTK_V3270(widget)->host);
+	lib3270_selectall(v3270_get_session(widget));
 }
 
 static void action_select_field(GtkAction *action, GtkWidget *widget)
 {
-	lib3270_selectfield(GTK_V3270(widget)->host);
+	lib3270_selectfield(v3270_get_session(widget));
 }
 
 static void action_select_none(GtkAction *action, GtkWidget *widget)
 {
-	lib3270_unselect(GTK_V3270(widget)->host);
+	lib3270_unselect(v3270_get_session(widget));
 }
 
 static void action_select_last(GtkAction *action, GtkWidget *widget)
 {
-	lib3270_reselect(GTK_V3270(widget)->host);
+	lib3270_reselect(v3270_get_session(widget));
 }
 
 static int id_from_array(const gchar *key, const gchar **array, GError **error)
@@ -598,7 +598,7 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 		if(id < LIB3270_TOGGLE_COUNT)
 			toggle_action[id] = action;
 		g_object_set_data(G_OBJECT(action),"toggle_id",(gpointer) id);
-		gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action),(lib3270_get_toggle(GTK_V3270(widget)->host,id) != 0));
+		gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action),(lib3270_get_toggle(v3270_get_session(widget),id) != 0));
 		g_signal_connect(action,"toggled",G_CALLBACK(lib3270_toggle_action),widget);
 		break;
 

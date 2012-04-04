@@ -1107,8 +1107,15 @@ static AtkObject * v3270_get_accessible(GtkWidget * widget)
 	{
 		terminal->accessible = g_object_new(GTK_TYPE_V3270_ACCESSIBLE,NULL);
 		atk_object_initialize(ATK_OBJECT(terminal->accessible), widget);
+		gtk_accessible_set_widget(GTK_ACCESSIBLE(terminal->accessible),widget);
+		g_object_ref(terminal->accessible);
 	}
 
 	return ATK_OBJECT(terminal->accessible);
+}
+
+GtkIMContext * v3270_get_im_context(GtkWidget *widget)
+{
+	return GTK_V3270(widget)->input_method;
 }
 
