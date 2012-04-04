@@ -134,20 +134,12 @@
 #ifdef WIN32
 
 #define save_string(h,k,v) save_settings(k,v,h)
+#define save_double(h,k,v) registry_set_double(h,k,v)
 
 static void save_settings(const gchar *key, const gchar *value, HKEY hKey)
 {
 	RegSetValueEx(hKey,key,0,REG_SZ,(const BYTE *) value,strlen(value)+1);
 }
-
-static void save_double(HKEY hKey, const gchar *key, gdouble value)
-{
-	// Reference: http://git.gnome.org/browse/glib/tree/glib/gkeyfile.c
-	gchar result[G_ASCII_DTOSTR_BUF_SIZE];
-	g_ascii_dtostr (result, sizeof (result), value);
-	save_settings(key,result,hKey);
-}
-
 
 /*
  * From:	http://git.gnome.org/browse/gtk+/tree/gtk/gtkpagesetup.c
@@ -429,9 +421,24 @@ static gchar * enum_to_string(GType type, guint enum_value)
 
 		if(get_registry_handle("print",&registry,KEY_READ))
 		{
+			HKEY 	hKey;
+			DWORD	disp;
+
 			registry_foreach(registry,"settings",update_settings,(gpointer) settings);
 
+			if(RegCreateKeyEx(registry,"pagesetup",0,NULL,REG_OPTION_NON_VOLATILE,KEY_READ,NULL,&hKey,&disp) == ERROR_SUCCESS)
+			{
+				gdouble val;
 
+				#define load_double(h,k,s) if(registry_get_double(h,k,&val)) s(setup, val,GTK_UNIT_MM);
+
+				load_double(hKey, "MarginTop",		gtk_page_setup_set_top_margin		);
+				load_double(hKey, "MarginBottom",	gtk_page_setup_set_bottom_margin	);
+				load_double(hKey, "MarginLeft",		gtk_page_setup_set_left_margin		);
+				load_double(hKey, "MarginRight",	gtk_page_setup_set_right_margin		);
+
+				RegCloseKey(hKey);
+			}
 
 
 			#warning Work in progress

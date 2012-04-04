@@ -93,6 +93,7 @@ gchar * get_last_error_msg(void)
 #endif // WIN32
 
 #ifdef WIN_REGISTRY_ENABLED
+
  static BOOL registry_open_key(const gchar *group, REGSAM samDesired, HKEY *hKey)
  {
  	static HKEY	  predefined[] = { HKEY_CURRENT_USER, HKEY_USERS, HKEY_LOCAL_MACHINE };
@@ -143,6 +144,40 @@ gchar * get_last_error_msg(void)
 		RegCloseKey(hKey);
 	}
  }
+
+ void registry_set_double(HKEY hKey, const gchar *key, gdouble value)
+ {
+	// Reference: http://git.gnome.org/browse/glib/tree/glib/gkeyfile.c
+	gchar result[G_ASCII_DTOSTR_BUF_SIZE];
+	g_ascii_dtostr (result, sizeof (result), value);
+
+	RegSetValueEx(hKey,key,0,REG_SZ,(const BYTE *) result,strlen(result)+1);
+ }
+
+ gboolean registry_get_double(HKEY hKey, const gchar *key, gdouble *value)
+ {
+	GError			* error = NULL;
+	BYTE			  data[4096];
+	unsigned long	  datatype;
+	unsigned long	  datalen 	= sizeof(data);
+	gchar 			* end_of_valid_d;
+
+	if(RegQueryValueExA(hKey,key,NULL,&datatype,data,&datalen) != ERROR_SUCCESS)
+		return FALSE;
+
+	data[datalen] = 0;
+
+	* value = g_ascii_strtod(data, &end_of_valid_d);
+
+	if(*end_of_valid_d != '\0' || end_of_valid_d == ((gchar *) data))
+	{
+		g_warning("Key %s on registry isnt a valid double value",key);
+		return FALSE;
+	}
+
+ 	return TRUE;
+ }
+
 
 
 #else
@@ -307,7 +342,7 @@ gchar * get_last_error_msg(void)
 
 		memcpy(ret,data,datalen);
 		ret[datalen+1] = 0;
-		trace("%s\\%s=\"%s\"",group,key,ret);
+//		trace("%s\\%s=\"%s\"",group,key,ret);
 	}
 	else if(def)
 	{

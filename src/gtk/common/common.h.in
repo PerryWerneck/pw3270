@@ -85,6 +85,9 @@
 
 #ifdef WIN_REGISTRY_ENABLED
  HKEY		  get_registry_handle(const gchar *first_element,REGSAM samDesired);
+ void		  registry_foreach(HKEY parent, const gchar *name,void (*cbk)(const gchar *key, const gchar *val, gpointer *user_data), gpointer *user_data);
+ void 		  registry_set_double(HKEY hKey, const gchar *key, gdouble value);
+ gboolean	  registry_get_double(HKEY hKey, const gchar *key, gdouble *value);
 #else
  GKeyFile	 * get_application_keyfile(void);
 #endif // WIN_REGISTRY_ENABLED
