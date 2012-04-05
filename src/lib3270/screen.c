@@ -72,6 +72,8 @@
 #define get_color_pair(fg,bg) (((bg&0x0F) << 4) | (fg&0x0F))
 #define DEFCOLOR_MAP(f) ((((f) & FA_PROTECT) >> 4) | (((f) & FA_INT_HIGH_SEL) >> 3))
 
+/*--[ Implement ]------------------------------------------------------------------------------------*/
+
 static int logpopup(H3270 *session, LIB3270_NOTIFY type, const char *title, const char *msg, const char *fmt, va_list arg);
 
 static int (*popup_handler)(H3270 *, LIB3270_NOTIFY, const char *, const char *, const char *, va_list) = logpopup;
@@ -84,14 +86,20 @@ static void status_3270_mode(H3270 *session, int ignored, void *dunno);
 static void status_printer(H3270 *session, int on, void *dunno);
 static unsigned short color_from_fa(unsigned char fa);
 
-static void addch(H3270 *session, int baddr, unsigned char c, unsigned short attr)
+/*--[ Implement ]------------------------------------------------------------------------------------*/
+
+static void addch(H3270 *session, int baddr, unsigned char c, unsigned short attr, int *first, int *last)
 {
 	// If set to keep selection adjust corresponding flag based on the current state
 	if(lib3270_get_toggle(session,LIB3270_TOGGLE_KEEP_SELECTED))
 		attr |= (session->text[baddr].attr & LIB3270_ATTR_SELECTED);
 
 	if(session->text[baddr].chr == c && session->text[baddr].attr == attr)
-			return;
+		return;
+
+	if(*first < 0)
+		*first = baddr;
+	*last = baddr;
 
 	/* Converted char has changed, update it */
 	session->text[baddr].chr  = c;
@@ -275,11 +283,13 @@ LIB3270_EXPORT int lib3270_get_contents(H3270 *h, int first, int last, unsigned 
 /* Display what's in the buffer. */
 static void screen_update(H3270 *session, int bstart, int bend)
 {
-	int baddr;
-	unsigned short a;
-	int attr = COLOR_GREEN;
-	unsigned char fa;
-	int fa_addr;
+	int				baddr;
+	unsigned short	a;
+	int				attr = COLOR_GREEN;
+	unsigned char	fa;
+	int				fa_addr;
+	int				first	= -1;
+	int				last	= -1;
 
 	fa		= get_field_attribute(session,bstart);
 	a  		= color_from_fa(fa);
@@ -293,12 +303,12 @@ static void screen_update(H3270 *session, int bstart, int bend)
 			fa_addr = baddr;
 			fa = session->ea_buf[baddr].fa;
 			a = calc_attrs(session, baddr, baddr, fa);
-			addch(session,baddr,' ',(attr = COLOR_GREEN)|CHAR_ATTR_MARKER);
+			addch(session,baddr,' ',(attr = COLOR_GREEN)|CHAR_ATTR_MARKER,&first,&last);
 		}
 		else if (FA_IS_ZERO(fa))
 		{
 			// Blank.
-			addch(session,baddr,' ',attr=a);
+			addch(session,baddr,' ',attr=a,&first,&last);
 		}
 		else
 		{
@@ -314,23 +324,37 @@ static void screen_update(H3270 *session, int bstart, int bend)
 
 			if (session->ea_buf[baddr].cs == CS_LINEDRAW)
 			{
-				addch(session,baddr,session->ea_buf[baddr].cc,attr);
+				addch(session,baddr,session->ea_buf[baddr].cc,attr,&first,&last);
 			}
 			else if (session->ea_buf[baddr].cs == CS_APL || (session->ea_buf[baddr].cs & CS_GE))
 			{
-				addch(session,baddr,session->ea_buf[baddr].cc,attr|CHAR_ATTR_CG);
+				addch(session,baddr,session->ea_buf[baddr].cc,attr|LIB3270_ATTR_CG,&first,&last);
 			}
 			else
 			{
 				if (toggled(MONOCASE))
-					addch(session,baddr,asc2uc[ebc2asc[session->ea_buf[baddr].cc]],attr);
+					addch(session,baddr,asc2uc[ebc2asc[session->ea_buf[baddr].cc]],attr,&first,&last);
 				else
-					addch(session,baddr,ebc2asc[session->ea_buf[baddr].cc],attr);
+					addch(session,baddr,ebc2asc[session->ea_buf[baddr].cc],attr,&first,&last);
 			}
 		}
 
+
 	}
-	session->changed(session,bstart,bend);
+
+	if(first >= 0)
+	{
+		int len = (last - first)+1;
+		int f;
+
+		for(f=first;f<last;f++)
+		{
+			if(f%session->cols == 0)
+				len++;
+		}
+
+		session->changed(session,first,len);
+	}
 }
 
 void screen_disp(H3270 *session)

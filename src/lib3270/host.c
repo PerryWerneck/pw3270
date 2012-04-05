@@ -476,13 +476,11 @@ static int do_connect(H3270 *hSession, const char *n)
 	char nb[2048];		/* name buffer */
 	char *s;			/* temporary */
 	const char *chost;	/* to whom we will connect */
-//	char *target_name;
 	char *ps = CN;
 	char *port = CN;
 	Boolean resolving;
 	Boolean pending;
 	static Boolean ansi_host;
-//	const char *localprocess_cmd = NULL;
 	Boolean has_colons = False;
 
 	if (lib3270_connected(hSession) || hSession->auto_reconnect_inprogress)
@@ -499,7 +497,7 @@ static int do_connect(H3270 *hSession, const char *n)
 	}
 
 	/* Save in a modifiable buffer. */
-	(void) strcpy(nb, n);
+	(void) strncpy(nb, n, 2047);
 
 	/* Strip trailing blanks. */
 	s = nb + strlen(nb) - 1;
@@ -509,14 +507,6 @@ static int do_connect(H3270 *hSession, const char *n)
 	/* Remember this hostname, as the last hostname we connected to. */
 	lib3270_set_host(hSession,nb);
 
-/*
-#if defined(LOCAL_PROCESS)
-	if ((localprocess_cmd = parse_localprocess(nb)) != CN) {
-		chost = localprocess_cmd;
-		port = appres.port;
-	} else
-#endif
-*/
 	{
 		Boolean needed;
 
@@ -541,22 +531,7 @@ static int do_connect(H3270 *hSession, const char *n)
 	 *   and port number
 	 *  full_current_host is the entire string, for use in reconnecting
 	 */
-	if (n != hSession->full_current_host)
-		lib3270_set_host(hSession,n);
-
 	Replace(hSession->current_host, CN);
-
-/*
-
-	if (localprocess_cmd != CN) {
-		if (hSession->full_current_host[strlen(OptLocalProcess)] != '\0')
-			hSession->current_host = NewString(hSession->full_current_host + strlen(OptLocalProcess) + 1);
-		else
-			hSession->current_host = NewString("default shell");
-	} else {
-		hSession->current_host = s;
-	}
-*/
 
 	has_colons = (strchr(chost, ':') != NULL);
 
@@ -780,13 +755,18 @@ LIB3270_EXPORT const char * lib3270_set_host(H3270 *h, const char *n)
 
 	Trace("%s: %p",__FUNCTION__,n);
 
-    if(!n)
-		return NULL;
+	if(n && n != h->full_current_host)
+	{
+		char *new_hostname = strdup(n);
 
-	if(h->full_current_host)
-		free(h->full_current_host);
+		trace("new hostname is \"%s\"",new_hostname);
 
-	h->full_current_host = strdup(n);
+		if(h->full_current_host)
+			free(h->full_current_host);
+
+		h->full_current_host = new_hostname;
+
+	}
 
 	return h->full_current_host;
 }

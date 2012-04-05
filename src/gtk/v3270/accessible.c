@@ -37,6 +37,7 @@
  #include <glib/gi18n.h>
 
  #include <pw3270.h>
+ #include <malloc.h>
  #include "v3270.h"
  #include "private.h"
  #include "accessible.h"
@@ -46,6 +47,7 @@
 //	http://git.gnome.org/browse/gtk+/tree/gtk/a11y/gtkwidgetaccessible.c
 //	http://git.gnome.org/browse/gtk+/tree/gtk/a11y/gtkentryaccessible.c
 //
+
 
 /*--[ Prototipes ]-----------------------------------------------------------------------------------*/
 
@@ -68,13 +70,6 @@ G_DEFINE_TYPE_WITH_CODE (v3270Accessible, v3270_accessible, GTK_TYPE_ACCESSIBLE,
 //                         G_IMPLEMENT_INTERFACE (ATK_TYPE_TEXT, atk_text_interface_init)
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
-
-/*
-static const gchar * v3270_accessible_get_description(AtkObject *accessible)
-{
-  return _( "3270 screen" );
-}
-*/
 
 static void v3270_accessible_class_init(v3270AccessibleClass *klass)
 {
@@ -113,14 +108,42 @@ static void atk_component_interface_init(AtkComponentIface *iface)
 
 static gunichar v3270_accessible_get_character_at_offset(AtkText *atk_text, gint offset)
 {
-	GtkWidget *widget = gtk_accessible_get_widget(GTK_ACCESSIBLE (atk_text));
+	GtkWidget * widget = gtk_accessible_get_widget(GTK_ACCESSIBLE (atk_text));
 
-	trace("*********** %s %p",__FUNCTION__,widget);
+	if(widget == NULL)
+	{
+		H3270	* host = v3270_get_session(widget);
+		gchar	* text = lib3270_get_text(host,offset,1);
 
-	if (widget == NULL)
-		return '\0';
+		if(text)
+		{
+			gunichar	  unichar;
+			gsize		  bytes_written;
+			GError		* error		= NULL;
+			gchar		* utfstring	= g_convert_with_fallback(	text,
+																-1,
+																"UTF-8",
+																lib3270_get_charset(host),
+																" ",
+																NULL,
+																&bytes_written,
+																&error );
 
-	return 'X';
+			if(error)
+			{
+				g_warning("%s failed: %s",__FUNCTION__,error->message);
+				g_error_free(error);
+			}
+			unichar = *utfstring;
+
+			g_free(utfstring);
+
+			return unichar;
+		}
+
+	}
+
+	return '\0';
 }
 
 static gint v3270_accessible_get_caret_offset(AtkText *text)
@@ -138,8 +161,6 @@ static gint v3270_accessible_get_character_count(AtkText *text)
 	int rows,cols;
 	GtkWidget *widget = gtk_accessible_get_widget(GTK_ACCESSIBLE(text));
 
-	trace("*********** %s %p len=%d",__FUNCTION__,widget,lib3270_get_length(GTK_V3270(widget)->host));
-
 	if(!widget)
 		return 0;
 
@@ -150,7 +171,7 @@ static gint v3270_accessible_get_offset_at_point(AtkText *atk_text, gint x, gint
 {
 	GtkWidget *widget = gtk_accessible_get_widget(GTK_ACCESSIBLE (atk_text));
 
-	trace("*********** %s %p",__FUNCTION__,widget);
+	g_warning("Call to incomplete function \"%s\"",__FUNCTION__);
 
 	if(!widget)
 		return -1;
@@ -164,9 +185,7 @@ static gchar * v3270_accessible_get_text_at_offset(AtkText *atk_text, gint offse
 	GtkWidget	* widget = gtk_accessible_get_widget(GTK_ACCESSIBLE (atk_text));
 	H3270		* host;
 	char		* text;
-	int			  rows,cols,first;
-
-	trace("*********** %s %p offset=%d",__FUNCTION__,widget,offset);
+	int			  rows,cols,pos;
 
 	if(!widget)
 		return NULL;
@@ -203,10 +222,10 @@ static gchar * v3270_accessible_get_text_at_offset(AtkText *atk_text, gint offse
 
 		case ATK_TEXT_BOUNDARY_LINE_START:		// Boundary is the initial character of the content or a character immediately following a newline,
 												// linefeed, or return character.
-			first = (offset/cols)*cols;
-			if(first == offset)
+			pos = (offset/cols)*cols;
+			if(pos == offset)
 				offset++;
-			text = lib3270_get_text(host,first,(offset-first));
+			text = lib3270_get_text(host,pos,(offset-pos));
 			break;
 
 
@@ -234,6 +253,8 @@ static gchar * v3270_accessible_get_text_at_offset(AtkText *atk_text, gint offse
 			g_warning("%s failed: %s",__FUNCTION__,error->message);
 			g_error_free(error);
 		}
+
+		free(text);
 		return utfchar;
 	}
 

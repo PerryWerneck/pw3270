@@ -33,6 +33,7 @@
  #include <lib3270/session.h>
  #include <lib3270/actions.h>
  #include <lib3270/log.h>
+ #include <malloc.h>
  #include "v3270.h"
  #include "private.h"
  #include "accessible.h"
@@ -437,6 +438,15 @@ static void v3270_class_init(v3270Class *klass)
 						pw3270_VOID__VOID_BOOL,
 						G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 
+	v3270_widget_signal[SIGNAL_CHANGED] =
+		g_signal_new(	"changed",
+						G_OBJECT_CLASS_TYPE (gobject_class),
+						G_SIGNAL_RUN_FIRST,
+						0,
+						NULL, NULL,
+						pw3270_VOID__VOID_UINT_UINT,
+						G_TYPE_NONE, 2, G_TYPE_UINT, G_TYPE_UINT);
+
 }
 
 void v3270_update_font_metrics(v3270 *terminal, cairo_t *cr, int width, int height)
@@ -541,11 +551,6 @@ static void set_timer(H3270 *session, unsigned char on)
 
 }
 
-static void changed(H3270 *session, int bstart, int bend)
-{
-//	gtk_widget_queue_draw(GTK_WIDGET(session->widget));
-}
-
 static void update_toggle(H3270 *session, LIB3270_TOGGLE ix, unsigned char value, LIB3270_TOGGLE_TYPE reason, const char *name)
 {
 	g_signal_emit(GTK_WIDGET(session->widget), v3270_widget_signal[SIGNAL_TOGGLE_CHANGED], 0, (guint) ix, (gboolean) (value != 0), (gchar *) name);
@@ -607,6 +612,51 @@ static void set_selection(H3270 *session, unsigned char status)
 	g_signal_emit(GTK_WIDGET(session->widget),v3270_widget_signal[SIGNAL_SELECTING], 0, status ? TRUE : FALSE);
 }
 
+static void changed(H3270 *session, int offset, int len)
+{
+	GtkWidget * widget	= session->widget;
+	AtkObject * obj		= gtk_widget_get_accessible(widget);
+
+	trace("%s: offset=%d len=%d",__FUNCTION__,offset,len)
+
+//	if(obj)
+	{
+		// Get new text, notify atk
+		gsize	  bytes_written;
+		char	* text 		= lib3270_get_text(session,offset,len);
+
+		if(text)
+		{
+			GError	* error		= NULL;
+			gchar	* utfchar	= g_convert_with_fallback(	text,
+																-1,
+																"UTF-8",
+																lib3270_get_charset(session),
+																" ",
+																NULL,
+																&bytes_written,
+																&error );
+
+			free(text);
+
+			if(error)
+			{
+				g_warning("%s failed: %s",__FUNCTION__,error->message);
+				g_error_free(error);
+			}
+			else
+			{
+	//			g_signal_emit_by_name(obj, "text-insert", offset,len,utfchar);
+				g_free(utfchar);
+			}
+
+		}
+	}
+
+	g_signal_emit(GTK_WIDGET(widget),v3270_widget_signal[SIGNAL_CHANGED], 0, (guint) offset, (guint) len);
+
+}
+
 static void v3270_init(v3270 *widget)
 {
 	trace("%s",__FUNCTION__);
@@ -634,6 +684,7 @@ static void v3270_init(v3270 *widget)
 	widget->host->cursor			= select_cursor;
 	widget->host->update_connect	= update_connect;
 	widget->host->update_model		= update_model;
+	widget->host->changed			= changed;
 
 	// Setup input method
 	widget->input_method 			= gtk_im_multicontext_new();
@@ -1060,13 +1111,22 @@ int v3270_connect(GtkWidget *widget, const gchar *host)
 	return rc;
 }
 
+static gboolean notify_focus(GtkWidget *widget, GdkEventFocus *event)
+{
+	AtkObject *obj = gtk_widget_get_accessible (widget);
+
+	if(obj)
+		g_signal_emit_by_name (obj, "focus-event", event->in);
+
+	return FALSE;
+}
 gboolean v3270_focus_in_event(GtkWidget *widget, GdkEventFocus *event)
 {
 	v3270 * terminal = GTK_V3270(widget);
 
 	gtk_im_context_focus_in(terminal->input_method);
 
-	return 0;
+	return notify_focus(widget,event);
 }
 
 gboolean v3270_focus_out_event(GtkWidget *widget, GdkEventFocus *event)
@@ -1075,7 +1135,7 @@ gboolean v3270_focus_out_event(GtkWidget *widget, GdkEventFocus *event)
 
 	gtk_im_context_focus_out(terminal->input_method);
 
-	return 0;
+	return notify_focus(widget,event);
 }
 
 static void v3270_activate(GtkWidget *widget)

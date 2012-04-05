@@ -409,11 +409,14 @@ static char * get_text(H3270 *hSession,unsigned char all)
 
 LIB3270_EXPORT char * lib3270_get_text(H3270 *h, int offset, int len)
 {
-	char *buffer;
-	int  col, maxlen;
-	char *ptr;
+	char * buffer;
+	int    maxlen;
+	char * ptr;
 
 	CHECK_SESSION_HANDLE(h);
+
+	if(!lib3270_connected(h))
+		return NULL;
 
 	maxlen = h->rows * (h->cols+1);
 
@@ -422,21 +425,28 @@ LIB3270_EXPORT char * lib3270_get_text(H3270 *h, int offset, int len)
 	else if(len > maxlen)
 		len = maxlen;
 
-	buffer	= malloc(len+1);
-	col 	= offset%h->cols;
+	buffer	= malloc(len+2);
 	ptr		= buffer;
 
 	while(len-- > 0)
 	{
-		*(ptr++) = h->text[offset++].chr;
-		if(col++ >= h->cols && len > 0)
+		if(h->text[offset].attr & LIB3270_ATTR_CG)
+			*ptr = ' ';
+		else if(h->text[offset].chr)
+			*ptr = h->text[offset].chr;
+		else
+			*ptr = " ";
+
+		ptr++;
+		offset++;
+
+		if((offset%h->cols) == 0)
 		{
-			col = 0;
 			*(ptr++) = '\n';
 			len--;
 		}
 	}
-	*ptr = 0;
+	buffer[len] = 0;
 
 	return buffer;
 }
