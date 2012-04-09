@@ -7,5 +7,6 @@ Name: lib3270
 Description: TN3270E Library calls used by @PACKAGE@
 Version: @PACKAGE_VERSION@
 Libs: -L\@libdir@ -l3270
+Libs.private: @LIBSSL_LIBS@ @INTL_LIBS@ @SOCKET_LIBS@
 Cflags: -I@includedir@
 
