@@ -428,24 +428,29 @@ LIB3270_EXPORT char * lib3270_get_text(H3270 *h, int offset, int len)
 	buffer	= malloc(len+1);
 	ptr		= buffer;
 
-	while(len-- > 0)
+	trace("len=%d buffer=%p",len,buffer);
+
+	while(len > 0)
 	{
 		if(h->text[offset].attr & LIB3270_ATTR_CG)
 			*ptr = ' ';
 		else if(h->text[offset].chr)
 			*ptr = h->text[offset].chr;
 		else
-			*ptr = " ";
+			*ptr = ' ';
 
 		ptr++;
 		offset++;
+		len--;
 
-		if((offset%h->cols) == 0)
+		if((offset%h->cols) == 0 && len > 0)
 		{
 			*(ptr++) = '\n';
 			len--;
 		}
 	}
+	trace("len=%d buffer=%p pos=%d",len,buffer,ptr-buffer);
+
 	*ptr = 0;
 
 	return buffer;

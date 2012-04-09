@@ -503,14 +503,49 @@ void v3270_accessible_get_extents(AtkComponent *component, gint *x, gint *y,gint
 	}
 }
 
+static void v3270_accessible_get_size(AtkComponent *component,gint *width, gint *height)
+{
+  GtkWidget *widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (component));
+
+  if (widget == NULL)
+    return;
+
+  *width = gtk_widget_get_allocated_width (widget);
+  *height = gtk_widget_get_allocated_height (widget);
+}
+
+static gboolean v3270_accessible_grab_focus(AtkComponent *component)
+{
+	GtkWidget *widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (component));
+	GtkWidget *toplevel;
+
+	if (!widget)
+		return FALSE;
+
+	gtk_widget_grab_focus (widget);
+
+	toplevel = gtk_widget_get_toplevel (widget);
+	if (gtk_widget_is_toplevel (toplevel))
+	{
+		#ifdef GDK_WINDOWING_X11
+			gtk_window_present_with_time (GTK_WINDOW (toplevel),gdk_x11_get_server_time(gtk_widget_get_window(widget)));
+		#else
+			gtk_window_present (GTK_WINDOW (toplevel));
+		#endif
+	}
+
+	return TRUE;
+}
+
+
 static void atk_component_interface_init(AtkComponentIface *iface)
 {
-  iface->get_extents = v3270_accessible_get_extents;
+  iface->get_extents	= v3270_accessible_get_extents;
+  iface->get_size		= v3270_accessible_get_size;
+  iface->grab_focus		= v3270_accessible_grab_focus;
 
 /*
-  iface->get_size = gtk_widget_accessible_get_size;
   iface->get_layer = gtk_widget_accessible_get_layer;
-  iface->grab_focus = gtk_widget_accessible_grab_focus;
   iface->set_extents = gtk_widget_accessible_set_extents;
   iface->set_position = gtk_widget_accessible_set_position;
   iface->set_size = gtk_widget_accessible_set_size;
