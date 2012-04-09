@@ -52,7 +52,7 @@
 /*--[ Prototipes ]-----------------------------------------------------------------------------------*/
 
 static void atk_component_interface_init 		(AtkComponentIface		*iface);
-
+static void atk_action_interface_init        	(AtkActionIface       *iface);
 static void v3270_accessible_class_init			(v3270AccessibleClass	*klass);
 static void v3270_accessible_init				(v3270Accessible		*widget);
 
@@ -62,7 +62,9 @@ static void atk_text_interface_init				(AtkTextIface			*iface);
 
 G_DEFINE_TYPE_WITH_CODE (v3270Accessible, v3270_accessible, GTK_TYPE_ACCESSIBLE,
 							G_IMPLEMENT_INTERFACE (ATK_TYPE_COMPONENT, atk_component_interface_init)
-							G_IMPLEMENT_INTERFACE (ATK_TYPE_TEXT, atk_text_interface_init) )
+							G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init)
+							G_IMPLEMENT_INTERFACE (ATK_TYPE_TEXT, atk_text_interface_init)
+						)
 
 //							G_IMPLEMENT_INTERFACE (ATK_TYPE_EDITABLE_TEXT, atk_editable_text_interface_init) )
 //                         G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init)
@@ -71,12 +73,25 @@ G_DEFINE_TYPE_WITH_CODE (v3270Accessible, v3270_accessible, GTK_TYPE_ACCESSIBLE,
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
+/*
+static const gchar * v3270_accessible_get_description (AtkObject *accessible)
+{
+	GtkWidget *widget = gtk_accessible_get_widget(GTK_ACCESSIBLE (accessible));
+
+	if (widget == NULL)
+		return NULL;
+
+	return _( "3270 screen" );
+}
+*/
+
 static void v3270_accessible_class_init(v3270AccessibleClass *klass)
 {
 	AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
 
+//	class->get_description = v3270_accessible_get_description;
+
 /*
-	class->get_description = v3270_accessible_get_description;
 
 
 	klass->notify_gtk = gtk_widget_accessible_notify_gtk;
@@ -91,16 +106,45 @@ static void v3270_accessible_class_init(v3270AccessibleClass *klass)
 */
 }
 
-static void atk_component_interface_init(AtkComponentIface *iface)
+static gint v3270_accessible_get_n_actions(AtkAction *action)
 {
+  return 1;
+}
+
+static const gchar* v3270_accessible_action_get_name (AtkAction *action, gint i)
+{
+  if (i != 0)
+    return NULL;
+
+  return "activate";
+}
+
+static gboolean v3270_accessible_do_action(AtkAction *action, gint i)
+{
+	GtkWidget *widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (action));
+
+	if(widget == NULL)
+		return FALSE;
+
+	if(!gtk_widget_get_sensitive (widget) || !gtk_widget_get_visible (widget))
+		return FALSE;
+
+	if (i != 0)
+		return FALSE;
+
+	gtk_widget_activate(widget);
+
+	return TRUE;
+}
+
+static void atk_action_interface_init(AtkActionIface *iface)
+{
+	iface->get_name			= v3270_accessible_action_get_name;
+	iface->get_n_actions	= v3270_accessible_get_n_actions;
+	iface->do_action		= v3270_accessible_do_action;
+
 /*
-  iface->get_extents = gtk_widget_accessible_get_extents;
-  iface->get_size = gtk_widget_accessible_get_size;
-  iface->get_layer = gtk_widget_accessible_get_layer;
-  iface->grab_focus = gtk_widget_accessible_grab_focus;
-  iface->set_extents = gtk_widget_accessible_set_extents;
-  iface->set_position = gtk_widget_accessible_set_position;
-  iface->set_size = gtk_widget_accessible_set_size;
+	iface->get_keybinding = gtk_entry_accessible_get_keybinding;
 */
 }
 
@@ -215,8 +259,6 @@ static void v3270_accessible_get_character_extents(	AtkText      *text,
 	GdkWindow	* window;
 	gint 		  x_window, y_window;
 
-	trace("**************************** %s",__FUNCTION__);
-
 	if (widget == NULL)
 		return;
 
@@ -240,6 +282,8 @@ static void v3270_accessible_get_character_extents(	AtkText      *text,
 		*x -= x_window;
 		*y -= y_window;
 	}
+
+	trace("%s: offset=%d x=%d y=%d",__FUNCTION__,offset,x,y);
 
 }
 
@@ -412,10 +456,64 @@ static void atk_text_interface_init(AtkTextIface *iface)
 static void v3270_accessible_init(v3270Accessible *widget)
 {
 	AtkObject *obj = ATK_OBJECT(widget);
-
-
-	obj->role = ATK_ROLE_TEXT;
+	obj->role	= ATK_ROLE_TEXT;
 }
 
 
+void v3270_accessible_get_extents(AtkComponent *component, gint *x, gint *y,gint *width,gint *height, AtkCoordType coord_type)
+{
+	GtkWidget *widget = gtk_accessible_get_widget(GTK_ACCESSIBLE (component));
+	GdkWindow *window;
+	gint x_window, y_window;
+	GtkAllocation allocation;
+
+	if (widget == NULL)
+		return;
+
+	gtk_widget_get_allocation (widget, &allocation);
+	*width	= allocation.width;
+	*height	= allocation.height;
+
+	if(gtk_widget_get_parent(widget))
+	{
+		*x = allocation.x;
+		*y = allocation.y;
+		window = gtk_widget_get_parent_window (widget);
+	}
+	else
+	{
+		*x = 0;
+		*y = 0;
+		window = gtk_widget_get_window (widget);
+	}
+
+	gdk_window_get_origin(window, &x_window, &y_window);
+	*x += x_window;
+	*y += y_window;
+
+	if (coord_type == ATK_XY_WINDOW)
+	{
+		gint x_toplevel, y_toplevel;
+
+		window = gdk_window_get_toplevel (gtk_widget_get_window (widget));
+		gdk_window_get_origin (window, &x_toplevel, &y_toplevel);
+
+		*x -= x_toplevel;
+		*y -= y_toplevel;
+	}
+}
+
+static void atk_component_interface_init(AtkComponentIface *iface)
+{
+  iface->get_extents = v3270_accessible_get_extents;
+
+/*
+  iface->get_size = gtk_widget_accessible_get_size;
+  iface->get_layer = gtk_widget_accessible_get_layer;
+  iface->grab_focus = gtk_widget_accessible_grab_focus;
+  iface->set_extents = gtk_widget_accessible_set_extents;
+  iface->set_position = gtk_widget_accessible_set_position;
+  iface->set_size = gtk_widget_accessible_set_size;
+*/
+}
 
