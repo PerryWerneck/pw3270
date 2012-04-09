@@ -75,8 +75,6 @@ static void v3270_accessible_class_init(v3270AccessibleClass *klass)
 {
 	AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
 
-	trace("******************************* %s",__FUNCTION__);
-
 /*
 	class->get_description = v3270_accessible_get_description;
 
@@ -169,15 +167,80 @@ static gint v3270_accessible_get_character_count(AtkText *text)
 
 static gint v3270_accessible_get_offset_at_point(AtkText *atk_text, gint x, gint y, AtkCoordType  coords)
 {
-	GtkWidget *widget = gtk_accessible_get_widget(GTK_ACCESSIBLE (atk_text));
-
-	g_warning("Call to incomplete function \"%s\"",__FUNCTION__);
+	gint 		x_window,
+				y_window,
+				x_widget,
+				y_widget;
+	GdkWindow * window;
+	GtkWidget * widget = gtk_accessible_get_widget(GTK_ACCESSIBLE(atk_text));
 
 	if(!widget)
 		return -1;
 
+	window = gtk_widget_get_window(widget);
+	gdk_window_get_origin(window, &x_widget, &y_widget);
 
-	return 1;
+	switch(coords)
+	{
+	case ATK_XY_SCREEN:
+		x -= x_widget;
+		y -= y_widget;
+		break;
+
+	case ATK_XY_WINDOW:
+		window = gdk_window_get_toplevel(window);
+		gdk_window_get_origin (window, &x_window, &y_window);
+		x = x - x_widget + x_window;
+		y = y - y_widget + y_window;
+		break;
+
+	default:
+		return -1;
+
+	}
+
+	return v3270_get_offset_at_point(GTK_V3270(widget),x,y);
+}
+
+static void v3270_accessible_get_character_extents(	AtkText      *text,
+													gint          offset,
+													gint         *x,
+													gint         *y,
+													gint         *width,
+													gint         *height,
+													AtkCoordType  coords )
+{
+	v3270		* widget = (v3270 *) gtk_accessible_get_widget(GTK_ACCESSIBLE (text));
+	int 		  rows, cols;
+	GdkWindow	* window;
+	gint 		  x_window, y_window;
+
+	trace("**************************** %s",__FUNCTION__);
+
+	if (widget == NULL)
+		return;
+
+	lib3270_get_screen_size(widget->host,&rows,&cols);
+
+	// Get screen position
+	window = gtk_widget_get_window(GTK_WIDGET(widget));
+	gdk_window_get_origin(window, &x_window, &y_window);
+
+	// Get screen position
+	*x          = x_window + widget->metrics.left + ((offset/cols) * widget->metrics.width);
+	*y          = y_window + widget->metrics.top  + ((offset%cols) * widget->metrics.spacing);
+	*width      = widget->metrics.width;
+	*height     = widget->metrics.height+widget->metrics.descent;
+
+	if (coords == ATK_XY_WINDOW)
+	{
+		// Correct position based on toplevel
+		window = gdk_window_get_toplevel(window);
+		gdk_window_get_origin(window, &x_window, &y_window);
+		*x -= x_window;
+		*y -= y_window;
+	}
+
 }
 
 static gchar * v3270_accessible_get_text_at_offset(AtkText *atk_text, gint offset, AtkTextBoundary boundary_type, gint *start_offset, gint *end_offset)
@@ -261,34 +324,97 @@ static gchar * v3270_accessible_get_text_at_offset(AtkText *atk_text, gint offse
 	return NULL;
 }
 
+static gchar * v3270_accessible_get_text(AtkText *atk_text, gint start_pos, gint end_pos)
+{
+	GtkWidget	* widget	= gtk_accessible_get_widget(GTK_ACCESSIBLE (atk_text));
+	char		* text;
+	H3270		* host;
+	gchar		* utftext	= NULL;
+
+	if(widget == NULL)
+		return NULL;
+
+	host = v3270_get_session(widget);
+	if(!host)
+		return NULL;
+
+	if(!lib3270_connected(host))
+		return g_strdup( "" );
+
+	text = lib3270_get_text(host,start_pos,end_pos < start_pos ? -1 : (end_pos - start_pos));
+
+	if(text)
+	{
+		gsize	  bytes_written;
+		GError	* error		= NULL;
+
+		utftext =  g_convert_with_fallback(text,-1,"UTF-8",lib3270_get_charset(host)," ",NULL,&bytes_written, &error);
+
+		if(error)
+		{
+			g_warning("%s failed: %s",__FUNCTION__,error->message);
+			g_error_free(error);
+		}
+
+		free(text);
+
+		trace("%s:\n%s\n",__FUNCTION__,utftext);
+
+	}
+
+	return utftext;
+}
+
+static gboolean v3270_set_caret_offset(AtkText *text, gint offset)
+{
+	GtkWidget *widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
+	if (widget == NULL)
+	return FALSE;
+
+	trace("%s - offset=%d",__FUNCTION__,offset);
+
+	lib3270_set_cursor_address(GTK_V3270(widget)->host,offset);
+
+	return TRUE;
+}
+
 static void atk_text_interface_init(AtkTextIface *iface)
 {
+	iface->get_text 				= v3270_accessible_get_text;
 	iface->get_character_at_offset	= v3270_accessible_get_character_at_offset;
-	iface->get_caret_offset 		= v3270_accessible_get_caret_offset;
-	iface->get_character_count 		= v3270_accessible_get_character_count;
-	iface->get_offset_at_point 		= v3270_accessible_get_offset_at_point;
+
 	iface->get_text_at_offset		= v3270_accessible_get_text_at_offset;
+
+	iface->get_character_count 		= v3270_accessible_get_character_count;
+	iface->get_caret_offset 		= v3270_accessible_get_caret_offset;
+	iface->set_caret_offset 		= v3270_set_caret_offset;
+
+	iface->get_character_extents 	= v3270_accessible_get_character_extents;
+	iface->get_offset_at_point 		= v3270_accessible_get_offset_at_point;
+
 /*
-	iface->get_text = gtk_entry_accessible_get_text;
-	iface->get_text_before_offset = gtk_entry_accessible_get_text_before_offset;
-	iface->get_text_at_offset = gtk_entry_accessible_get_text_at_offset;
-	iface->get_text_after_offset = gtk_entry_accessible_get_text_after_offset;
-	iface->get_caret_offset = gtk_entry_accessible_get_caret_offset;
-	iface->set_caret_offset = gtk_entry_accessible_set_caret_offset;
-	iface->get_n_selections = gtk_entry_accessible_get_n_selections;
-	iface->get_selection = gtk_entry_accessible_get_selection;
-	iface->add_selection = gtk_entry_accessible_add_selection;
-	iface->remove_selection = gtk_entry_accessible_remove_selection;
-	iface->set_selection = gtk_entry_accessible_set_selection;
-	iface->get_run_attributes = gtk_entry_accessible_get_run_attributes;
-	iface->get_default_attributes = gtk_entry_accessible_get_default_attributes;
-	iface->get_character_extents = gtk_entry_accessible_get_character_extents;
+  iface->get_text_before_offset = gtk_label_accessible_get_text_before_offset;
+
+  iface->get_text_after_offset = gtk_label_accessible_get_text_after_offset;
+
+  iface->get_n_selections = gtk_label_accessible_get_n_selections;
+  iface->get_selection = gtk_label_accessible_get_selection;
+  iface->add_selection = gtk_label_accessible_add_selection;
+  iface->remove_selection = gtk_label_accessible_remove_selection;
+  iface->set_selection = gtk_label_accessible_set_selection;
+
+  iface->get_run_attributes = gtk_label_accessible_get_run_attributes;
+  iface->get_default_attributes = gtk_label_accessible_get_default_attributes;
 */
 }
 
 
 static void v3270_accessible_init(v3270Accessible *widget)
 {
+	AtkObject *obj = ATK_OBJECT(widget);
+
+
+	obj->role = ATK_ROLE_TEXT;
 }
 
 

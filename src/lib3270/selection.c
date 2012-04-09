@@ -425,7 +425,7 @@ LIB3270_EXPORT char * lib3270_get_text(H3270 *h, int offset, int len)
 	else if(len > maxlen)
 		len = maxlen;
 
-	buffer	= malloc(len+2);
+	buffer	= malloc(len+1);
 	ptr		= buffer;
 
 	while(len-- > 0)
@@ -446,7 +446,7 @@ LIB3270_EXPORT char * lib3270_get_text(H3270 *h, int offset, int len)
 			len--;
 		}
 	}
-	buffer[len] = 0;
+	*ptr = 0;
 
 	return buffer;
 }

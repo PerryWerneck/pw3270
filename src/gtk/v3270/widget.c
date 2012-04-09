@@ -619,11 +619,11 @@ static void changed(H3270 *session, int offset, int len)
 
 	trace("%s: offset=%d len=%d",__FUNCTION__,offset,len)
 
-//	if(obj)
+	if(obj)
 	{
 		// Get new text, notify atk
-		gsize	  bytes_written;
-		char	* text 		= lib3270_get_text(session,offset,len);
+		gsize	  bytes_written	= 0;
+		char	* text 			= lib3270_get_text(session,offset,len);
 
 		if(text)
 		{
@@ -644,9 +644,10 @@ static void changed(H3270 *session, int offset, int len)
 				g_warning("%s failed: %s",__FUNCTION__,error->message);
 				g_error_free(error);
 			}
-			else
+
+			if(utfchar)
 			{
-	//			g_signal_emit_by_name(obj, "text-insert", offset,len,utfchar);
+				g_signal_emit_by_name(obj, "text-insert", offset, bytes_written, utfchar);
 				g_free(utfchar);
 			}
 
