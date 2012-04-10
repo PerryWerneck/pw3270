@@ -244,6 +244,16 @@ static gint v3270_accessible_get_offset_at_point(AtkText *atk_text, gint x, gint
 	return v3270_get_offset_at_point(GTK_V3270(widget),x,y);
 }
 
+/*
+text :		an AtkText
+offset :	The offset of the text character for which bounding information is required.
+x :			Pointer for the x cordinate of the bounding box
+y :			Pointer for the y cordinate of the bounding box
+width :		Pointer for the width of the bounding box
+height :	Pointer for the height of the bounding box
+coords :	specify whether coordinates are relative to the screen or widget window
+*/
+
 static void v3270_accessible_get_character_extents(	AtkText      *text,
 													gint          offset,
 													gint         *x,
@@ -255,7 +265,6 @@ static void v3270_accessible_get_character_extents(	AtkText      *text,
 	v3270		* widget = (v3270 *) gtk_accessible_get_widget(GTK_ACCESSIBLE (text));
 	int 		  rows, cols;
 	GdkWindow	* window;
-	gint 		  x_window, y_window;
 
 	if (widget == NULL)
 		return;
@@ -264,24 +273,26 @@ static void v3270_accessible_get_character_extents(	AtkText      *text,
 
 	// Get screen position
 	window = gtk_widget_get_window(GTK_WIDGET(widget));
-	gdk_window_get_origin(window, &x_window, &y_window);
+	gdk_window_get_origin(window, x, y);
 
 	// Get screen position
-	*x          = x_window + widget->metrics.left + ((offset/cols) * widget->metrics.width);
-	*y          = y_window + widget->metrics.top  + ((offset%cols) * widget->metrics.spacing);
-	*width      = widget->metrics.width;
-	*height     = widget->metrics.height+widget->metrics.descent;
+	*x     	+= widget->metrics.left + ((offset%cols) * widget->metrics.width);
+	*y      += widget->metrics.top  + ((offset/cols) * widget->metrics.spacing);
+	*width	 = widget->metrics.width;
+	*height	 = widget->metrics.spacing;
 
 	if(coords == ATK_XY_WINDOW)
 	{
 		// Correct position based on toplevel
+		gint x_window, y_window;
+
 		window = gdk_window_get_toplevel(window);
 		gdk_window_get_origin(window, &x_window, &y_window);
 		*x -= x_window;
 		*y -= y_window;
 	}
 
-	trace("%s: offset=%d x=%d y=%d",__FUNCTION__,offset,x,y);
+	trace("%s: offset=%d x=%d y=%d %s",__FUNCTION__,offset,*x,*y,coords == ATK_XY_WINDOW ? "ATK_XY_WINDOW" : "");
 
 }
 

@@ -408,7 +408,7 @@ static void draw_status_message(cairo_t *cr, LIB3270_MESSAGE id, struct v3270_me
 
 		OIA_MESSAGE(	LIB3270_MESSAGE_KYBDLOCK,
 						V3270_COLOR_OIA_STATUS_INVALID,
-						NULL ),
+						N_( "X") ),
 
 		OIA_MESSAGE(	LIB3270_MESSAGE_X,
 						V3270_COLOR_OIA_STATUS_INVALID,
