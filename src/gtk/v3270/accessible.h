@@ -41,11 +41,22 @@ G_BEGIN_DECLS
 typedef struct _v3270Accessible      v3270Accessible;
 typedef struct _v3270AccessibleClass v3270AccessibleClass;
 
+typedef enum _v3270_state
+{
+	V3270_STATE_NONE			= 0x0000,
+	V3270_STATE_EDITABLE		= 0x0001,
+	V3270_STATE_BUSY			= 0x0002,
+	V3270_STATE_ENABLED			= 0x0004,
+	V3270_STATE_INVALID_ENTRY	= 0x0008,
+
+} V3270_STATE;
+
 struct _v3270Accessible
 {
-  GtkAccessible parent;
+	GtkAccessible	parent;
+	V3270_STATE		state;
 
-  AtkLayer layer;
+//	AtkLayer	layer;
 };
 
 struct _v3270AccessibleClass
@@ -57,5 +68,6 @@ struct _v3270AccessibleClass
 
 GType v3270_accessible_get_type(void);
 
+void v3270_acessible_set_state(GtkAccessible *obj, LIB3270_MESSAGE id);
 
 G_END_DECLS

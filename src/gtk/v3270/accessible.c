@@ -73,7 +73,6 @@ G_DEFINE_TYPE_WITH_CODE (v3270Accessible, v3270_accessible, GTK_TYPE_ACCESSIBLE,
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
-/*
 static const gchar * v3270_accessible_get_description (AtkObject *accessible)
 {
 	GtkWidget *widget = gtk_accessible_get_widget(GTK_ACCESSIBLE (accessible));
@@ -83,16 +82,15 @@ static const gchar * v3270_accessible_get_description (AtkObject *accessible)
 
 	return _( "3270 screen" );
 }
-*/
 
 static void v3270_accessible_class_init(v3270AccessibleClass *klass)
 {
 	AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
 
-//	class->get_description = v3270_accessible_get_description;
+	class->get_description = v3270_accessible_get_description;
 
 /*
-
+	class->focus_event = gtk_widget_accessible_focus_event;
 
 	klass->notify_gtk = gtk_widget_accessible_notify_gtk;
 
@@ -274,7 +272,7 @@ static void v3270_accessible_get_character_extents(	AtkText      *text,
 	*width      = widget->metrics.width;
 	*height     = widget->metrics.height+widget->metrics.descent;
 
-	if (coords == ATK_XY_WINDOW)
+	if(coords == ATK_XY_WINDOW)
 	{
 		// Correct position based on toplevel
 		window = gdk_window_get_toplevel(window);
@@ -550,5 +548,89 @@ static void atk_component_interface_init(AtkComponentIface *iface)
   iface->set_position = gtk_widget_accessible_set_position;
   iface->set_size = gtk_widget_accessible_set_size;
 */
+}
+
+void v3270_acessible_set_state(GtkAccessible *obj, LIB3270_MESSAGE id)
+{
+	#ifdef DEBUG
+		#define STATE_MESSAGE(x,c) { #x, x, c }
+	#else
+		#define STATE_MESSAGE(x,c) { x, c }
+	#endif
+
+	static const struct _state
+	{
+	#ifdef DEBUG
+		const gchar		* dbg;
+	#endif
+		AtkStateType	  atkstate;
+		V3270_STATE		  flag;
+	} table[] =
+	{
+		STATE_MESSAGE(ATK_STATE_BUSY,			V3270_STATE_BUSY			),
+		STATE_MESSAGE(ATK_STATE_EDITABLE,		V3270_STATE_EDITABLE		),
+		STATE_MESSAGE(ATK_STATE_ENABLED,		V3270_STATE_ENABLED			),
+		STATE_MESSAGE(ATK_STATE_INVALID_ENTRY,	V3270_STATE_INVALID_ENTRY	),
+	};
+
+	V3270_STATE state = GTK_V3270_ACCESSIBLE(obj)->state;
+	V3270_STATE bits;
+	int			f;
+
+	switch(id)
+	{
+	case LIB3270_MESSAGE_NONE:
+		state = V3270_STATE_EDITABLE|V3270_STATE_ENABLED;
+		break;
+
+	case LIB3270_MESSAGE_SYSWAIT:
+	case LIB3270_MESSAGE_TWAIT:
+	case LIB3270_MESSAGE_RESOLVING:
+	case LIB3270_MESSAGE_CONNECTING:
+		state = V3270_STATE_BUSY;
+		break;
+
+	case LIB3270_MESSAGE_CONNECTED:
+	case LIB3270_MESSAGE_AWAITING_FIRST:
+		state = V3270_STATE_ENABLED;
+		break;
+
+	case LIB3270_MESSAGE_DISCONNECTED:
+		state = 0;
+		break;
+
+	case LIB3270_MESSAGE_MINUS:
+	case LIB3270_MESSAGE_INHIBIT:
+	case LIB3270_MESSAGE_X:
+		break;
+
+	case LIB3270_MESSAGE_PROTECTED:
+	case LIB3270_MESSAGE_NUMERIC:
+	case LIB3270_MESSAGE_OVERFLOW:
+	case LIB3270_MESSAGE_KYBDLOCK:
+		state = V3270_STATE_INVALID_ENTRY|V3270_STATE_EDITABLE|V3270_STATE_ENABLED;
+		break;
+
+	}
+
+	if(state == GTK_V3270_ACCESSIBLE(obj)->state)
+		return;
+
+	bits = GTK_V3270_ACCESSIBLE(obj)->state ^ state;
+
+	trace("State change from %04x to %04x (bits=%04x)",
+				GTK_V3270_ACCESSIBLE(obj)->state,
+				state, bits );
+
+	for(f=0;f<G_N_ELEMENTS(table);f++)
+	{
+		if(bits & table[f].flag)
+		{
+			trace("State %s is %s",table[f].dbg,(state & table[f].flag) ? "Yes" : "No");
+			atk_object_notify_state_change(ATK_OBJECT(obj),table[f].atkstate,(state & table[f].flag) ? TRUE : FALSE);
+		}
+	}
+
+	GTK_V3270_ACCESSIBLE(obj)->state = state;
 }
 

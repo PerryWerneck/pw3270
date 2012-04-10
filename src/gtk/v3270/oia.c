@@ -652,6 +652,9 @@ void v3270_update_message(v3270 *widget, LIB3270_MESSAGE id)
     cairo_destroy(cr);
 
 	gtk_widget_queue_draw_area(GTK_WIDGET(widget),rect->x,rect->y,rect->width,rect->height);
+
+	if(widget->accessible)
+		v3270_acessible_set_state(widget->accessible,id);
 }
 
 static void draw_cursor_position(cairo_t *cr, GdkRectangle *rect, struct v3270_metrics *metrics, int row, int col)
