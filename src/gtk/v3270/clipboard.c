@@ -438,3 +438,33 @@ void v3270_paste(GtkWidget *widget)
 	gtk_clipboard_request_text(gtk_widget_get_clipboard(widget,GDK_SELECTION_CLIPBOARD),(GtkClipboardTextReceivedFunc) text_received,(gpointer) widget);
 }
 
+void v3270_unselect(GtkWidget *widget)
+{
+	lib3270_unselect(v3270_get_session(widget));
+}
+
+gboolean v3270_get_selection_bounds(GtkWidget *widget, gint *start, gint *end)
+{
+	g_return_val_if_fail(GTK_IS_V3270(widget),FALSE);
+	return lib3270_get_selection_bounds(GTK_V3270(widget)->host,start,end) == 0 ? FALSE : TRUE;
+}
+
+gchar * v3270_get_region(GtkWidget *widget, gint start_pos, gint end_pos, gboolean all)
+{
+	char	* str;
+	gchar	* utftext;
+
+	g_return_val_if_fail(GTK_IS_V3270(widget),NULL);
+
+	str = lib3270_get_region(GTK_V3270(widget)->host,start_pos,end_pos,all);
+	if(!str)
+		return NULL;
+
+	utftext = g_convert(str, -1, "UTF-8", lib3270_get_charset(GTK_V3270(widget)->host), NULL, NULL, NULL);
+
+	free(str);
+
+	return utftext;
+}
+
+

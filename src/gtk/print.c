@@ -501,7 +501,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
 
 	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
 
- 	if(lib3270_get_selected_addr(info->session,&start,&end))
+ 	if(!lib3270_get_selection_bounds(info->session,&start,&end))
 	{
 		g_warning("Can't get selected addresses for action %s",gtk_action_get_name(action));
 		g_object_unref(print);

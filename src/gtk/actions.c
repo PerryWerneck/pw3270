@@ -307,7 +307,7 @@ static void action_select_field(GtkAction *action, GtkWidget *widget)
 
 static void action_select_none(GtkAction *action, GtkWidget *widget)
 {
-	lib3270_unselect(v3270_get_session(widget));
+	v3270_unselect(widget);
 }
 
 static void action_select_last(GtkAction *action, GtkWidget *widget)

@@ -156,7 +156,11 @@
  const gchar	* v3270_get_selected_text(GtkWidget *widget);
  const gchar	* v3270_get_copy(GtkWidget *widget);
  gchar			* v3270_get_text(GtkWidget *widget,int offset, int len);
+ gchar			* v3270_get_region(GtkWidget *widget, gint start_pos, gint end_pos, gboolean all);
 
+ // Cut & Paste
+ gboolean  		  v3270_get_selection_bounds(GtkWidget *widget, gint *start, gint *end);
+ void 			  v3270_unselect(GtkWidget *widget);
  void 			  v3270_paste(GtkWidget *widget);
  void 			  v3270_paste_string(GtkWidget *widget, const gchar *text, const gchar *encoding);
 

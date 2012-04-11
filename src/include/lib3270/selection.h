@@ -101,16 +101,16 @@
 	 LIB3270_EXPORT int lib3270_drag_selection(H3270 *h, unsigned char flag, int origin, int baddr);
 
 	/**
-	 * Get addresses of selected area.
+	 * Gets the selected range of characters in the screen
 	 *
 	 * @param h		Session handle.
-	 * @param begin	Pointer to the begin value.
-	 * @param end	Pointer to the end value.
+	 * @param start	return location for start of selection, as a character offset.
+	 * @param end	return location for end of selection, as a character offset.
 	 *
-	 * @return 0 if the selected area was get, non zero if unselected or unavailable.
+	 * @return Non 0 if selection is non-empty
 	 *
 	 */
-	 LIB3270_EXPORT int lib3270_get_selected_addr(H3270 *hSession, int *begin, int *end);
+	 LIB3270_EXPORT int lib3270_get_selection_bounds(H3270 *hSession, int *start, int *end);
 
 	/**
 	 * Get bitmasked flag for the current selection.
@@ -123,5 +123,18 @@
 	 * @return bitmask for mouse pointer.
 	 */
 	 LIB3270_EXPORT unsigned char lib3270_get_selection_flags(H3270 *h, int baddr);
+
+	/**
+	 * Get a string from required region.
+	 *
+	 * @param h			Session handle.
+	 * @param start_pos	First char to get.
+	 * @param end_pos	Last char to get.
+	 * @param all		zero to get only selected chars.
+	 *
+	 * @return String with selected region (release it with free()
+	 *
+	 */
+	 LIB3270_EXPORT char * lib3270_get_region(H3270 *h, int start_pos, int end_pos, unsigned char all);
 
  #endif // LIB3270_SELECTION_H_INCLUDED

@@ -431,6 +431,40 @@ static gboolean v3270_set_caret_offset(AtkText *text, gint offset)
 	return TRUE;
 }
 
+static gboolean v3270_accessible_remove_selection(AtkText *text, gint selection_num)
+{
+	GtkWidget * widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
+
+	if (widget == NULL || selection_num != 0)
+		return FALSE;
+
+	v3270_unselect(widget);
+
+	return TRUE;
+}
+
+static gint v3270_accessible_get_n_selections (AtkText *text)
+{
+	GtkWidget *widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
+
+	if(!widget)
+		return 0;
+
+	return v3270_get_selection_bounds(widget, NULL, NULL) ? 1 : 0;
+}
+
+static gchar * v3270_accessible_get_selection (AtkText *atk_text, gint selection_num, gint *start_pos, gint *end_pos)
+{
+	GtkWidget *widget = gtk_accessible_get_widget(GTK_ACCESSIBLE (atk_text));
+
+	if (widget == NULL ||selection_num != 0)
+		return NULL;
+
+	if(v3270_get_selection_bounds(widget, start_pos, end_pos))
+		return v3270_get_region(widget, *start_pos, *end_pos, FALSE);
+
+	return NULL;
+}
 static void atk_text_interface_init(AtkTextIface *iface)
 {
 	iface->get_text 				= v3270_accessible_get_text;
@@ -444,14 +478,18 @@ static void atk_text_interface_init(AtkTextIface *iface)
 
 	iface->get_character_extents 	= v3270_accessible_get_character_extents;
 	iface->get_offset_at_point 		= v3270_accessible_get_offset_at_point;
+	iface->remove_selection			= v3270_accessible_remove_selection;
+
+	iface->get_n_selections 		= v3270_accessible_get_n_selections;
+	iface->get_selection			= v3270_accessible_get_selection;
 
 /*
+http://git.gnome.org/browse/gtk+/tree/gtk/a11y/gtklabelaccessible.c
+
   iface->get_text_before_offset = gtk_label_accessible_get_text_before_offset;
 
   iface->get_text_after_offset = gtk_label_accessible_get_text_after_offset;
 
-  iface->get_n_selections = gtk_label_accessible_get_n_selections;
-  iface->get_selection = gtk_label_accessible_get_selection;
   iface->add_selection = gtk_label_accessible_add_selection;
   iface->remove_selection = gtk_label_accessible_remove_selection;
   iface->set_selection = gtk_label_accessible_set_selection;
@@ -461,13 +499,11 @@ static void atk_text_interface_init(AtkTextIface *iface)
 */
 }
 
-
 static void v3270_accessible_init(v3270Accessible *widget)
 {
-	AtkObject *obj = ATK_OBJECT(widget);
-	obj->role	= ATK_ROLE_TEXT;
+	AtkObject *obj	= ATK_OBJECT(widget);
+	obj->role		= ATK_ROLE_TEXT;
 }
-
 
 void v3270_accessible_get_extents(AtkComponent *component, gint *x, gint *y,gint *width,gint *height, AtkCoordType coord_type)
 {
@@ -546,18 +582,33 @@ static gboolean v3270_accessible_grab_focus(AtkComponent *component)
 	return TRUE;
 }
 
+static AtkLayer v3270_accessible_get_layer (AtkComponent *component)
+{
+	return ATK_LAYER_WIDGET;
+}
+
+static gboolean v3270_accessible_set_size(AtkComponent *component, gint width, gint height)
+{
+	GtkWidget *widget = gtk_accessible_get_widget(GTK_ACCESSIBLE (component));
+
+	if (widget == NULL)
+		return FALSE;
+
+	gtk_widget_set_size_request(widget, width, height);
+	return TRUE;
+}
 
 static void atk_component_interface_init(AtkComponentIface *iface)
 {
   iface->get_extents	= v3270_accessible_get_extents;
   iface->get_size		= v3270_accessible_get_size;
   iface->grab_focus		= v3270_accessible_grab_focus;
+  iface->get_layer 		= v3270_accessible_get_layer;
+  iface->set_size 		= v3270_accessible_set_size;
 
 /*
-  iface->get_layer = gtk_widget_accessible_get_layer;
   iface->set_extents = gtk_widget_accessible_set_extents;
   iface->set_position = gtk_widget_accessible_set_position;
-  iface->set_size = gtk_widget_accessible_set_size;
 */
 }
 

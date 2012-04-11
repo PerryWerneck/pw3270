@@ -407,6 +407,41 @@ static char * get_text(H3270 *hSession,unsigned char all)
 	return ret;
 }
 
+LIB3270_EXPORT char * lib3270_get_region(H3270 *h, int start_pos, int end_pos, unsigned char all)
+{
+	char *	text;
+	int 	maxlen;
+	int		sz = 0;
+	int		baddr;
+
+	CHECK_SESSION_HANDLE(h);
+
+	if(!lib3270_connected(h))
+		return NULL;
+
+	maxlen = h->rows * (h->cols+1);
+
+	if(start_pos < 0 || start_pos > maxlen || end_pos < 0 || end_pos > maxlen || end_pos < start_pos)
+		return NULL;
+
+	text = malloc(maxlen);
+
+	for(baddr=start_pos;baddr<end_pos;baddr++)
+	{
+		if(all || h->text[baddr].attr & LIB3270_ATTR_SELECTED)
+			text[sz++] = (h->text[baddr].attr & LIB3270_ATTR_CG) ? ' ' : h->text[baddr].chr;
+
+		if((baddr%h->cols) == 0 && sz > 0)
+			text[sz++] = '\n';
+	}
+	text[sz++] = 0;
+
+	return realloc(text,sz);
+}
+
+
+
+
 LIB3270_EXPORT char * lib3270_get_text(H3270 *h, int offset, int len)
 {
 	char * buffer;
@@ -468,25 +503,33 @@ LIB3270_EXPORT char * lib3270_get_selected(H3270 *hSession)
 	return get_text(hSession,0);
 }
 
-LIB3270_EXPORT int lib3270_get_selected_addr(H3270 *hSession, int *begin, int *end)
+LIB3270_EXPORT int lib3270_get_selection_bounds(H3270 *hSession, int *start, int *end)
 {
+	int first, last;
+
 	CHECK_SESSION_HANDLE(hSession);
 
 	if(!hSession->selected || hSession->select.begin == hSession->select.end)
-		return -1;
+		return 0;
 
 	if(hSession->select.end > hSession->select.begin)
 	{
-		*begin = hSession->select.begin;
-		*end   = hSession->select.end;
+		first = hSession->select.begin;
+		last  = hSession->select.end;
 	}
 	else
 	{
-		*begin = hSession->select.end;
-		*end   = hSession->select.begin;
+		first = hSession->select.end;
+		last  = hSession->select.begin;
 	}
 
-	return 0;
+	if(start)
+		*start = first;
+
+	if(end)
+		*end = last;
+
+	return 1;
 }
 
 LIB3270_EXPORT int lib3270_move_selected_area(H3270 *hSession, int from, int to)
@@ -494,7 +537,7 @@ LIB3270_EXPORT int lib3270_move_selected_area(H3270 *hSession, int from, int to)
 	int pos[2];
 	int rows, cols, f, step;
 
-	if(lib3270_get_selected_addr(hSession,&pos[0],&pos[1]))
+	if(!lib3270_get_selection_bounds(hSession,&pos[0],&pos[1]))
 		return from;
 
 	rows = (to / hSession->cols) - (from / hSession->cols);
@@ -533,7 +576,7 @@ LIB3270_EXPORT int lib3270_drag_selection(H3270 *h, unsigned char flag, int orig
 {
 	int first, last, row, col;
 
-	if(lib3270_get_selected_addr(h,&first,&last))
+	if(!lib3270_get_selection_bounds(h,&first,&last))
 		return origin;
 
 	flag &= 0x1f;
