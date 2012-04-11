@@ -42,6 +42,18 @@ echo "PACKAGE_SOURCE=$PACKAGE_SOURCE" >> $out/revision
 echo "m4_define([SVN_REVISION], $PACKAGE_REVISION)" > $out/revision.m4
 echo "m4_define([SVN_URL], $PACKAGE_SOURCE)" >> $out/revision.m4
 
+aclocal
+if test $? != 0 ; then
+	echo "aclocal failed."
+	exit -1
+fi
+
+autoconf
+if test $? != 0 ; then
+	echo "autoconf failed."
+	exit -1
+fi
+
 echo "Package set to revision $PACKAGE_REVISION and source $PACKAGE_SOURCE"
 echo "./configure to setup"
 
