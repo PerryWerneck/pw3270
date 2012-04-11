@@ -28,7 +28,7 @@
 
 PACKAGE=@PACKAGE_NAME@
 
-CFLAGS=@CFLAGS@ @DLL_CFLAGS@ -DAPPDATA=\"$(datarootdir)/$(PACKAGE_NAME)\" -I../../src/include
+CFLAGS=@CFLAGS@ @DLL_CFLAGS@ -DAPPDATA=\"$(datarootdir)/$(PACKAGE_NAME)\" -I../include
 SSL_CFLAGS=@LIBSSL_CFLAGS@
 
 DLL_FLAGS=@DLL_FLAGS@
@@ -37,7 +37,7 @@ LDFLAGS=@LDFLAGS@
 LIBS=@LIBS@ @LIBSSL_LIBS@ @INTL_LIBS@ @SOCKET_LIBS@
 
 DEBUG_CFLAGS=-DDEBUG=1 -g
-DEPENDS ?= *.h ../../src/include/*.h Makefile
+DEPENDS ?= *.h ../include/*.h Makefile
 
 #---[ Paths ]------------------------------------------------------------------
 
@@ -118,7 +118,7 @@ $(BINRLS)/@DLLPREFIX@3270@DLLEXT@: $(foreach SRC, $(basename $(SOURCES)), $(OBJR
 	@$(LD) $(DLL_FLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
 	@$(STRIP) $@
 
-$(BINDIR)/Debug/testprogram$(EXEEXT): testprogram.o $(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC)@OBJEXT@)
+$(BINDBG)/testprogram$(EXEEXT): $(OBJDBG)/testprogram.o $(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC)@OBJEXT@)
 
 	@echo $@ ...
 	@$(MKDIR) `dirname $@`

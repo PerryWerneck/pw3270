@@ -137,7 +137,7 @@
 		</menu>
 
 		<menu name='HelpMenu' label='Help' >
-			<menuitem action='About' icon='about' sysmenu='yes' />
+			<menuitem action='about' icon='about' sysmenu='yes' />
 		</menu>
 
 	</menubar>

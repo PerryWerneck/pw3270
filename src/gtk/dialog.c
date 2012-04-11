@@ -514,3 +514,44 @@
 		g_free(encattr);
  }
 
+ G_GNUC_INTERNAL void about_dialog_action(GtkAction *action, GtkWidget *widget)
+ {
+ 	static const gchar *authors[]	= {	"Paul Mattes <Paul.Mattes@usa.net>",
+										"GTRC",
+										"Perry Werneck <perry.werneck@gmail.com>",
+										"and others",
+										NULL };
+
+	static const gchar *license		=
+	N_( "This program is free software; you can redistribute it and/or "
+		"modify it under the terms of the GNU General Public License as "
+ 		"published by the Free Software Foundation; either version 2 of the "
+		"License, or (at your option) any later version.\n\n"
+		"This program is distributed in the hope that it will be useful, "
+		"but WITHOUT ANY WARRANTY; without even the implied warranty of "
+		"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the "
+		"GNU General Public License for more details.\n\n"
+		"You should have received a copy of the GNU General Public License "
+		"along with this program; if not, write to the Free Software "
+		"Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02111-1307 "
+		"USA" );
+
+	GtkAboutDialog *dialog = GTK_ABOUT_DIALOG(gtk_about_dialog_new());
+
+	gtk_about_dialog_set_version(dialog, PACKAGE_VERSION );
+	gtk_about_dialog_set_copyright(dialog, "Copyright © 2008 Banco do Brasil S.A." );
+	gtk_about_dialog_set_comments(dialog, _( "3270 terminal emulator for GTK+" ) );
+
+	gtk_about_dialog_set_license(dialog, gettext( license ) );
+	gtk_about_dialog_set_wrap_license(dialog,TRUE);
+
+	gtk_about_dialog_set_website(dialog,"http://www.softwarepublico.gov.br/dotlrn/clubs/pw3270");
+	gtk_about_dialog_set_website_label(dialog,_( "Brazilian Public Software Portal" ));
+
+	gtk_about_dialog_set_authors(dialog,authors);
+	gtk_about_dialog_set_translator_credits(dialog,_("translator-credits"));
+
+	gtk_widget_show_all(GTK_WIDGET(dialog));
+	gtk_dialog_run(GTK_DIALOG(dialog));
+	gtk_widget_destroy(GTK_WIDGET(dialog));
+ }

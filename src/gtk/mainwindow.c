@@ -368,7 +368,7 @@
 
 	g_free(path);
 
-	if(lib3270_get_toggle(host,LIB3270_TOGGLE_FULL_SCREEN))
+	if(v3270_get_toggle(terminal,LIB3270_TOGGLE_FULL_SCREEN))
 		gtk_window_fullscreen(GTK_WINDOW(window));
 
 #ifdef DEBUG
@@ -378,7 +378,7 @@
 	trace("%s ends",__FUNCTION__);
 	gtk_window_set_focus(GTK_WINDOW(window),terminal);
 
-	if(lib3270_get_toggle(host,LIB3270_TOGGLE_CONNECT_ON_STARTUP))
+	if(v3270_get_toggle(terminal,LIB3270_TOGGLE_CONNECT_ON_STARTUP))
 		lib3270_connect(host,NULL,0);
 
  	return window;

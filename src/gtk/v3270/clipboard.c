@@ -96,6 +96,14 @@ gchar * v3270_get_text(GtkWidget *widget, int offset, int len)
 	return text;
 }
 
+/**
+ * Get lib3270 selection as a g_malloc buffer.
+ *
+ * @param widget	Widget containing the desired section.
+ *
+ * @return NULL if error, otherwise the selected buffer contents (release with g_free).
+ *
+ */
 static gchar * v3270_get_selected(v3270 *widget)
 {
 	gchar *text = lib3270_get_selected(widget->host);

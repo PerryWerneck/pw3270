@@ -182,6 +182,7 @@ static void connect_standard_action(GtkAction *action, GtkWidget *widget, const 
 		{ "disconnect", disconnect_action	},
 		{ "hostname",	hostname_action		},
 		{ "editcolors",	editcolors_action	},
+		{ "about",		about_dialog_action	},
 	};
 
 	int f;
@@ -492,12 +493,7 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 	}
 	else if(!g_strcasecmp(name,"select"))
 	{
-		static const gchar * src[] = 	{	"all",
-											"field",
-											"none",
-											"last",
-											NULL
-											};
+		static const gchar * src[] = 	{	"all", "field", "none", "last", NULL };
 
 		static const GCallback cbk[] =	{	G_CALLBACK(action_select_all),
 											G_CALLBACK(action_select_field),
