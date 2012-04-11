@@ -96,6 +96,18 @@ gchar * v3270_get_text(GtkWidget *widget, int offset, int len)
 	return text;
 }
 
+static gchar * v3270_get_selected(v3270 *widget)
+{
+	gchar *text = lib3270_get_selected(widget->host);
+	if(text)
+	{
+		gchar *str = g_strdup(text);
+		free(text);
+		return str;
+	}
+	return NULL;
+}
+
 const gchar * v3270_get_selected_text(GtkWidget *widget)
 {
 	v3270 *terminal;
@@ -111,7 +123,7 @@ const gchar * v3270_get_selected_text(GtkWidget *widget)
 		terminal->clipboard = NULL;
 	}
 
-	text = lib3270_get_selected(terminal->host);
+	text = v3270_get_selected(terminal);
 
 	if(!text)
 	{
@@ -120,9 +132,85 @@ const gchar * v3270_get_selected_text(GtkWidget *widget)
 		return NULL;
 	}
 
+	if(terminal->table)
+	{
+		// Convert text to table
+		gchar 		**ln = g_strsplit(text,"\n",-1);
+		int			  width = lib3270_get_width(terminal->host);
+		gboolean	  cols[width];
+		int 		  l;
+		GString		* buffer;
+
+		memset(cols,0,sizeof(gboolean)*width);
+
+		// Find column delimiters
+		for(l=0;ln[l];l++)
+		{
+			int		  c;
+			gchar 	* ptr = ln[l];
+			GString	* buffer;
+
+			for(c=0;c<width && *ptr;c++)
+			{
+				if(!g_ascii_isspace(*ptr))
+					cols[c] = TRUE;
+
+				ptr++;
+			}
+
+		}
+
+		// Read screen contents
+		buffer = g_string_sized_new(strlen(text));
+		for(l=0;ln[l];l++)
+		{
+			int 	  col	= 0;
+			gchar	* src	= ln[l];
+
+			while(col < width && *src)
+			{
+				if(col)
+					g_string_append_c(buffer,'\t');
+
+				// Find column start
+				while(!cols[col] && col < width && *src)
+				{
+					col++;
+					src++;
+				}
+
+				if(col < width && *src)
+				{
+					gchar	  tmp[width+1];
+					gchar	* dst = tmp;
+
+					// Copy column content
+					while(cols[col] && col < width && *src)
+					{
+						*dst = *src;
+						col++;
+						dst++;
+						src++;
+					}
+					*dst = 0;
+					g_string_append(buffer,g_strstrip(tmp));
+				}
+
+			}
+			g_string_append_c(buffer,'\n');
+
+		}
+
+		g_strfreev(ln);
+		g_free(text);
+
+		text = g_string_free(buffer,FALSE);
+	}
+
 	terminal->clipboard = g_convert(text, -1, "UTF-8", lib3270_get_charset(terminal->host), NULL, NULL, NULL);
 
-	free(text);
+	g_free(text);
+
 
 	return terminal->clipboard;
 }
@@ -175,10 +263,16 @@ const gchar * v3270_copy_append(GtkWidget *widget)
 	return terminal->clipboard;
 }
 
-const gchar * v3270_copy(GtkWidget *widget)
+const gchar * v3270_copy(GtkWidget *widget, V3270_SELECT_FORMAT mode)
 {
-	const gchar		* text		= v3270_get_selected_text(widget);
+	const gchar		* text;
 	GtkClipboard	* clipboard	= gtk_widget_get_clipboard(widget,GDK_SELECTION_CLIPBOARD);
+
+	g_return_val_if_fail(GTK_IS_V3270(widget),NULL);
+
+	GTK_V3270(widget)->table = (mode == V3270_SELECT_TABLE ? 1 : 0);
+
+	text = v3270_get_selected_text(widget);
 
 	if(text)
 	{

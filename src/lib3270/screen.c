@@ -244,6 +244,12 @@ LIB3270_EXPORT void lib3270_get_screen_size(H3270 *h, int *r, int *c)
 	*c = h->cols;
 }
 
+LIB3270_EXPORT int lib3270_get_width(H3270 *h)
+{
+	CHECK_SESSION_HANDLE(h);
+	return h->cols;
+}
+
 void update_model_info(H3270 *session, int model, int cols, int rows)
 {
 	if(model == session->model_num && session->maxROWS == rows && session->maxCOLS == cols)

@@ -97,8 +97,35 @@ static void reload_action(GtkAction *action, GtkWidget *widget)
 
 static void copy_action(GtkAction *action, GtkWidget *widget)
 {
-	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
-	v3270_copy(widget);
+	V3270_SELECT_FORMAT	  mode = V3270_SELECT_TEXT;
+	const gchar 		* str = (const gchar *) g_object_get_data(G_OBJECT(action),"format");
+
+	if(str)
+	{
+		static const struct _format
+		{
+			V3270_SELECT_FORMAT	  mode;
+			const gchar			* name;
+		} format[] =
+		{
+			{ V3270_SELECT_TEXT,	"text"		},
+			{ V3270_SELECT_TABLE,	"table"		},
+		};
+
+		int f;
+
+		for(f=0;f<G_N_ELEMENTS(format);f++)
+		{
+			if(!g_strcasecmp(format[f].name,str))
+			{
+				mode = format[f].mode;
+				break;
+			}
+		}
+	}
+
+	trace("Action %s activated on widget %p mode=%d",gtk_action_get_name(action),widget,(int) mode);
+	v3270_copy(widget,mode);
 }
 
 static void append_action(GtkAction *action, GtkWidget *widget)
@@ -455,23 +482,13 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 	}
 	else if(!g_strcasecmp(name,"copy"))
 	{
-		static const gchar * src[] = 	{	"begin",
-											"table",
-											"image",
-											"append",
-											NULL
-											};
-
 		static const GCallback cbk[] =	{	G_CALLBACK(copy_action),
-											G_CALLBACK(nop_action),
-											G_CALLBACK(nop_action),
 											G_CALLBACK(append_action)
 											};
 		callback	= cbk;
 		action_type	= ACTION_TYPE_TABLE;
-		id = get_attribute_id(name,"mode",&nm,src,names,values,error);
-		if(id < 0)
-			return NULL;
+		id 			= ui_get_bool_attribute("append",names,values,FALSE) ? 1 : 0;
+		nm 			= g_strconcat(id == 0 ? "copy" : "append",ui_get_attribute("format",names,values),NULL);
 	}
 	else if(!g_strcasecmp(name,"select"))
 	{

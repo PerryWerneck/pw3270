@@ -142,11 +142,20 @@
  void			  v3270_disconnect(GtkWidget *widget);
 
  // Clipboard
+ typedef enum _v3270_select_format
+ {
+	V3270_SELECT_TEXT,
+	V3270_SELECT_TABLE,
+
+	V3270_SELECT_MAX
+ } V3270_SELECT_FORMAT;
+
+ const gchar	* v3270_copy(GtkWidget *widget, V3270_SELECT_FORMAT mode);
+ const gchar	* v3270_copy_append(GtkWidget *widget);
+
  const gchar	* v3270_get_selected_text(GtkWidget *widget);
  const gchar	* v3270_get_copy(GtkWidget *widget);
  gchar			* v3270_get_text(GtkWidget *widget,int offset, int len);
- const gchar	* v3270_copy(GtkWidget *widget);
- const gchar	* v3270_copy_append(GtkWidget *widget);
 
  void 			  v3270_paste(GtkWidget *widget);
  void 			  v3270_paste_string(GtkWidget *widget, const gchar *text, const gchar *encoding);

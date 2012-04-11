@@ -121,10 +121,11 @@ G_BEGIN_DECLS
  {
 	GtkWidget parent;
 
-	// private
+	// flags
 	int selecting	: 1;	/**< Selecting region */
 	int moving		: 1;	/**< Moving selected region */
 	int resizing	: 1;	/**< Resizing selected region */
+	int table		: 1;	/**< Copy mode is table */
 
 #if GTK_CHECK_VERSION(3,0,0)
 

@@ -57,10 +57,10 @@
 		</menu>
 
 		<menu name='EditMenu' label='_Edit' >
-			<menuitem action='copy' mode='begin' key='<ctrl>c' icon='copy' group='selection' label='Copy' />
-			<!-- menuitem action='copy' mode='table' key='<ctrl><alt>c' group='selection' label='Copy as table' /-->
+			<menuitem action='copy' append='no' format='text' key='<ctrl>c' icon='copy' group='selection' label='Copy' />
+			<menuitem action='copy' append='no' format='table' key='<ctrl><alt>c' group='selection' label='Copy as table' />
 			<!-- menuitem action='copy' mode='image' group='selection' label='Copy as image' /-->
-			<menuitem action='copy' mode='append' key='<shift><ctrl>c' group='selection' label='Add to copy' />
+			<menuitem action='copy' append='yes' key='<shift><ctrl>c' group='selection' label='Add to copy' />
 			<menuitem action='paste' src='clipboard' key='<ctrl>v' icon='paste' group='paste' label='Paste' />
 			<menuitem action='paste' src='next' key='<shift><ctrl>v' label='Paste next' />
 
@@ -144,7 +144,7 @@
 
 	<toolbar name='toolbar.default' label='Toolbar' key='<alt>t' >
 		<toolitem action='selectall' />
-		<toolitem action='copy' mode='begin'  />
+		<toolitem action='copy' append='no' format='text' />
 		<toolitem action='paste' src='clipboard' />
 		<toolitem action='EraseInput' />
 
@@ -161,8 +161,8 @@
 	</toolbar>
 
 	<popup name='selectionpopup' type='selection'>
-		<menuitem action='copy' mode='begin' />
-		<menuitem action='copy' mode='append' />
+		<menuitem action='copy' append='no' format='text' />
+		<menuitem action='copy' append='yes' />
 		<menuitem action='select' target='none'/>
 		<menuitem action='select' target='all'/>
 
