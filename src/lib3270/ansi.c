@@ -520,7 +520,7 @@ dec_restore_cursor(int ig1 unused, int ig2 unused)
 	fg = saved_fg;
 	bg = saved_bg;
 	gr = saved_gr;
-	cursor_move(saved_cursor);
+	cursor_move(&h3270,saved_cursor);
 	held_wrap = False;
 	return DATA;
 }
@@ -530,10 +530,10 @@ ansi_newline(int ig1 unused, int ig2 unused)
 {
 	int nc;
 
-	cursor_move(h3270.cursor_addr - (h3270.cursor_addr % h3270.cols));
+	cursor_move(&h3270,h3270.cursor_addr - (h3270.cursor_addr % h3270.cols));
 	nc = h3270.cursor_addr + h3270.cols;
 	if (nc < scroll_bottom * h3270.cols)
-		cursor_move(nc);
+		cursor_move(&h3270,nc);
 	else
 		ansi_scroll();
 	held_wrap = False;
@@ -549,9 +549,9 @@ ansi_cursor_up(int nn, int ig2 unused)
 		nn = 1;
 	rr = h3270.cursor_addr / h3270.cols;
 	if (rr - nn < 0)
-		cursor_move(h3270.cursor_addr % h3270.cols);
+		cursor_move(&h3270, h3270.cursor_addr % h3270.cols);
 	else
-		cursor_move(h3270.cursor_addr - (nn * h3270.cols));
+		cursor_move(&h3270, h3270.cursor_addr - (nn * h3270.cols));
 	held_wrap = False;
 	return DATA;
 }
@@ -647,9 +647,9 @@ ansi_cursor_down(int nn, int ig2 unused)
 		nn = 1;
 	rr = h3270.cursor_addr / h3270.cols;
 	if (rr + nn >= h3270.cols)
-		cursor_move((h3270.cols-1)*h3270.cols + (h3270.cursor_addr%h3270.cols));
+		cursor_move(&h3270,(h3270.cols-1)*h3270.cols + (h3270.cursor_addr%h3270.cols));
 	else
-		cursor_move(h3270.cursor_addr + (nn * h3270.cols));
+		cursor_move(&h3270,h3270.cursor_addr + (nn * h3270.cols));
 	held_wrap = False;
 	return DATA;
 }
@@ -666,7 +666,7 @@ ansi_cursor_right(int nn, int ig2 unused)
 		return DATA;
 	if (cc + nn >= h3270.cols)
 		nn = h3270.cols - 1 - cc;
-	cursor_move(h3270.cursor_addr + nn);
+	cursor_move(&h3270,h3270.cursor_addr + nn);
 	held_wrap = False;
 	return DATA;
 }
@@ -687,7 +687,7 @@ ansi_cursor_left(int nn, int ig2 unused)
 		return DATA;
 	if (nn > cc)
 		nn = cc;
-	cursor_move(h3270.cursor_addr - nn);
+	cursor_move(&h3270,h3270.cursor_addr - nn);
 	return DATA;
 }
 
@@ -698,7 +698,7 @@ ansi_cursor_motion(int n1, int n2)
 	if (n1 > h3270.rows) n1 = h3270.rows;
 	if (n2 < 1) n2 = 1;
 	if (n2 > h3270.cols) n2 = h3270.cols;
-	cursor_move((n1 - 1) * h3270.cols + (n2 - 1));
+	cursor_move(&h3270,(n1 - 1) * h3270.cols + (n2 - 1));
 	held_wrap = False;
 	return DATA;
 }
@@ -936,10 +936,10 @@ ansi_backspace(int ig1 unused, int ig2 unused)
 	}
 	if (rev_wraparound_mode) {
 		if (h3270.cursor_addr > (scroll_top - 1) * h3270.cols)
-			cursor_move(h3270.cursor_addr - 1);
+			cursor_move(&h3270,h3270.cursor_addr - 1);
 	} else {
 		if (h3270.cursor_addr % h3270.cols)
-			cursor_move(h3270.cursor_addr - 1);
+			cursor_move(&h3270,h3270.cursor_addr - 1);
 	}
 	return DATA;
 }
@@ -948,7 +948,7 @@ static enum state
 ansi_cr(int ig1 unused, int ig2 unused)
 {
 	if (h3270.cursor_addr % h3270.cols)
-		cursor_move(h3270.cursor_addr - (h3270.cursor_addr % h3270.cols));
+		cursor_move(&h3270,h3270.cursor_addr - (h3270.cursor_addr % h3270.cols));
 	if (auto_newline_mode)
 		(void) ansi_lf(0, 0);
 	held_wrap = False;
@@ -965,12 +965,12 @@ ansi_lf(int ig1 unused, int ig2 unused)
 	/* If we're below the scrolling region, don't scroll. */
 	if ((h3270.cursor_addr / h3270.cols) >= scroll_bottom) {
 		if (nc < h3270.rows * h3270.cols)
-			cursor_move(nc);
+			cursor_move(&h3270,nc);
 		return DATA;
 	}
 
 	if (nc < scroll_bottom * h3270.cols)
-		cursor_move(nc);
+		cursor_move(&h3270,nc);
 	else
 		ansi_scroll();
 	return DATA;
@@ -988,7 +988,7 @@ ansi_htab(int ig1 unused, int ig2 unused)
 	for (i = col+1; i < h3270.cols-1; i++)
 		if (tabs[i/8] & 1<<(i%8))
 			break;
-	cursor_move(h3270.cursor_addr - col + i);
+	cursor_move(&h3270,h3270.cursor_addr - col + i);
 	return DATA;
 }
 
@@ -1007,13 +1007,13 @@ ansi_nop(int ig1 unused, int ig2 unused)
 #define PWRAP { \
     nc = h3270.cursor_addr + 1; \
     if (nc < scroll_bottom * h3270.cols) \
-	    cursor_move(nc); \
+	    cursor_move(&h3270,nc); \
     else { \
 	    if (h3270.cursor_addr / h3270.cols >= scroll_bottom) \
-		    cursor_move(h3270.cursor_addr / h3270.cols * h3270.cols); \
+		    cursor_move(&h3270,h3270.cursor_addr / h3270.cols * h3270.cols); \
 	    else { \
 		    ansi_scroll(); \
-		    cursor_move(nc - h3270.cols); \
+		    cursor_move(&h3270,nc - h3270.cols); \
 	    } \
     } \
 }
@@ -1188,7 +1188,7 @@ ansi_printing(int ig1 unused, int ig2 unused)
 		}
 	} else {
 		if ((h3270.cursor_addr % h3270.cols) != (h3270.cols - 1))
-			cursor_move(h3270.cursor_addr + 1);
+			cursor_move(&h3270,h3270.cursor_addr + 1);
 	}
 	return DATA;
 }
@@ -1554,7 +1554,7 @@ dec_scrolling_region(int top, int bottom)
 	if (top <= bottom && (top > 1 || bottom < h3270.rows)) {
 		scroll_top = top;
 		scroll_bottom = bottom;
-		cursor_move(0);
+		cursor_move(&h3270,0);
 	} else {
 		scroll_top = 1;
 		scroll_bottom = h3270.rows;

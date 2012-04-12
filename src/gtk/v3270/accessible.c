@@ -292,7 +292,7 @@ static void v3270_accessible_get_character_extents(	AtkText      *text,
 		*y -= y_window;
 	}
 
-	trace("%s: offset=%d x=%d y=%d %s",__FUNCTION__,offset,*x,*y,coords == ATK_XY_WINDOW ? "ATK_XY_WINDOW" : "");
+//	trace("%s: offset=%d x=%d y=%d %s",__FUNCTION__,offset,*x,*y,coords == ATK_XY_WINDOW ? "ATK_XY_WINDOW" : "");
 
 }
 
@@ -411,7 +411,7 @@ static gchar * v3270_accessible_get_text(AtkText *atk_text, gint start_pos, gint
 
 		free(text);
 
-		trace("%s:\n%s\n",__FUNCTION__,utftext);
+//		trace("%s:\n%s\n",__FUNCTION__,utftext);
 
 	}
 
@@ -450,21 +450,62 @@ static gint v3270_accessible_get_n_selections (AtkText *text)
 	if(!widget)
 		return 0;
 
+	trace("%s: n_selections=%d",__FUNCTION__,v3270_get_selection_bounds(widget, NULL, NULL) ? 1 : 0);
+
 	return v3270_get_selection_bounds(widget, NULL, NULL) ? 1 : 0;
 }
 
-static gchar * v3270_accessible_get_selection (AtkText *atk_text, gint selection_num, gint *start_pos, gint *end_pos)
+static gchar * v3270_accessible_get_selection(AtkText *atk_text, gint selection_num, gint *start_pos, gint *end_pos)
 {
 	GtkWidget *widget = gtk_accessible_get_widget(GTK_ACCESSIBLE (atk_text));
 
+	trace("%s: selection_num=%d",__FUNCTION__,selection_num);
 	if (widget == NULL ||selection_num != 0)
 		return NULL;
 
 	if(v3270_get_selection_bounds(widget, start_pos, end_pos))
+	{
+		trace("%s: TRUE",__FUNCTION__);
 		return v3270_get_region(widget, *start_pos, *end_pos, FALSE);
+	}
 
+	trace("%s: FALSE",__FUNCTION__);
 	return NULL;
 }
+
+static gboolean v3270_accessible_add_selection(AtkText *text, gint start_pos, gint end_pos)
+{
+	GtkWidget *widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
+
+	if (widget == NULL)
+		return FALSE;
+
+	if(!v3270_get_selection_bounds(widget,NULL,NULL))
+	{
+		v3270_select_region(widget, start_pos, end_pos);
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+static gboolean v3270_accessible_set_selection(AtkText *text, gint selection_num, gint start_pos, gint end_pos)
+{
+	GtkWidget *widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
+	gint start, end;
+
+	if(widget == NULL || selection_num != 0)
+		return FALSE;
+
+	if(!v3270_get_selection_bounds(widget,NULL,NULL))
+	{
+		v3270_select_region(widget, start_pos, end_pos);
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
 static void atk_text_interface_init(AtkTextIface *iface)
 {
 	iface->get_text 				= v3270_accessible_get_text;
@@ -478,9 +519,11 @@ static void atk_text_interface_init(AtkTextIface *iface)
 
 	iface->get_character_extents 	= v3270_accessible_get_character_extents;
 	iface->get_offset_at_point 		= v3270_accessible_get_offset_at_point;
-	iface->remove_selection			= v3270_accessible_remove_selection;
 
 	iface->get_n_selections 		= v3270_accessible_get_n_selections;
+	iface->add_selection 			= v3270_accessible_add_selection;
+	iface->remove_selection			= v3270_accessible_remove_selection;
+	iface->set_selection 			= v3270_accessible_set_selection;
 	iface->get_selection			= v3270_accessible_get_selection;
 
 /*
@@ -490,9 +533,6 @@ http://git.gnome.org/browse/gtk+/tree/gtk/a11y/gtklabelaccessible.c
 
   iface->get_text_after_offset = gtk_label_accessible_get_text_after_offset;
 
-  iface->add_selection = gtk_label_accessible_add_selection;
-  iface->remove_selection = gtk_label_accessible_remove_selection;
-  iface->set_selection = gtk_label_accessible_set_selection;
 
   iface->get_run_attributes = gtk_label_accessible_get_run_attributes;
   iface->get_default_attributes = gtk_label_accessible_get_default_attributes;

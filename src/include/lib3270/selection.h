@@ -137,4 +137,15 @@
 	 */
 	 LIB3270_EXPORT char * lib3270_get_region(H3270 *h, int start_pos, int end_pos, unsigned char all);
 
+
+	/**
+	 * Selects a range of characters in the screen.
+	 *
+	 * @param h				Session handle.
+	 * @param start_offset	Start offset.
+	 * @param end_offset :	End offset.
+	 *
+	 */
+	 LIB3270_EXPORT void lib3270_select_region(H3270 *h, int start, int end);
+
  #endif // LIB3270_SELECTION_H_INCLUDED

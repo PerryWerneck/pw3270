@@ -399,11 +399,6 @@
 //		LOCAL_EXTERN void screen_suspend(H3270 *session);
 		LOCAL_EXTERN void screen_disp(H3270 *session);
 
-        /* Cursor calls */
-		#define cursor_get_addr(void)	lib3270_get_cursor_address(NULL)
-		#define cursor_set_addr(x)		lib3270_set_cursor_address(NULL,x)
-		#define cursor_move(x)			lib3270_set_cursor_address(NULL,x)
-
 		#include <lib3270/actions.h>
 
 		#define host_connect(n,wait) lib3270_connect(NULL,n,wait)

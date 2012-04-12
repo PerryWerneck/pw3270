@@ -246,7 +246,8 @@ LIB3270_INTERNAL Widget			toplevel;
 LIB3270_INTERNAL Boolean		visible_control;
 LIB3270_INTERNAL int			*xtra_width;
 
-#if defined(X3270_DISPLAY) /*[*/
+/*
+#if defined(X3270_DISPLAY)
 	LIB3270_INTERNAL Atom				a_delete_me;
 	LIB3270_INTERNAL Atom				a_save_yourself;
 	LIB3270_INTERNAL Atom				a_state;
@@ -257,7 +258,8 @@ LIB3270_INTERNAL int			*xtra_width;
 	LIB3270_INTERNAL Window				root_window;
 	LIB3270_INTERNAL char				*user_title;
 	LIB3270_INTERNAL unsigned char	xk_selector;
-#endif /*]*/
+#endif
+*/
 
 /* Connection state */
 LIB3270_INTERNAL enum ft_state ft_state;
@@ -372,6 +374,7 @@ enum keytype
 
 
 /* Library internal calls */
-void key_ACharacter(unsigned char c, enum keytype keytype, enum iaction cause,Boolean *skipped);
-void lib3270_initialize(void);
+LIB3270_INTERNAL void key_ACharacter(unsigned char c, enum keytype keytype, enum iaction cause,Boolean *skipped);
+LIB3270_INTERNAL void lib3270_initialize(void);
+LIB3270_INTERNAL int  cursor_move(H3270 *session, int baddr);
 

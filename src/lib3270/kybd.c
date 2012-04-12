@@ -966,7 +966,7 @@ static Boolean key_Character(int code, Boolean with_ge, Boolean pasting, Boolean
 			else
 				INC_BA(baddr);
 		}
-		cursor_move(baddr);
+		cursor_move(&h3270,baddr);
 	}
 
 	(void) ctlr_dbcs_postprocess();
@@ -1387,7 +1387,7 @@ LIB3270_KEY_ACTION( tab )
 		return 0;
 	}
 #endif /*]*/
-	cursor_move(next_unprotected(h3270.cursor_addr));
+	cursor_move(&h3270,next_unprotected(h3270.cursor_addr));
 	return 0;
 }
 
@@ -1427,12 +1427,12 @@ LIB3270_KEY_ACTION( backtab )
 			break;
 		DEC_BA(baddr);
 		if (baddr == sbaddr) {
-			cursor_move(0);
+			cursor_move(&h3270,0);
 			return 0;
 		}
 	}
 	INC_BA(baddr);
-	cursor_move(baddr);
+	cursor_move(&h3270,baddr);
 	return 0;
 }
 
@@ -1546,11 +1546,11 @@ LIB3270_ACTION( firstfield )
 		return 0;
 	}
 #endif /*]*/
-	if (!h3270.formatted) {
-		cursor_move(0);
+	if (!hSession->formatted) {
+		cursor_move(hSession,0);
 		return 0;
 	}
-	cursor_move(next_unprotected(h3270.rows*h3270.cols-1));
+	cursor_move(hSession,next_unprotected(hSession->rows*hSession->cols-1));
 
 	return 0;
 }
@@ -1570,7 +1570,7 @@ do_left(void)
 	d = ctlr_dbcs_state(baddr);
 	if (IS_LEFT(d))
 		DEC_BA(baddr);
-	cursor_move(baddr);
+	cursor_move(&h3270,baddr);
 }
 
 /*
@@ -1603,7 +1603,7 @@ LIB3270_CURSOR_ACTION( left )
 	}
 #endif /*]*/
 
-	if (!h3270.flipped)
+	if (!hSession->flipped)
 	{
 		do_left();
 	}
@@ -1611,10 +1611,10 @@ LIB3270_CURSOR_ACTION( left )
 	{
 		register int	baddr;
 
-		baddr = h3270.cursor_addr;
+		baddr = hSession->cursor_addr;
 		INC_BA(baddr);
 		/* XXX: DBCS? */
-		cursor_move(baddr);
+		lib3270_set_cursor_address(hSession,baddr);
 	}
 	return 0;
 }
@@ -1720,7 +1720,7 @@ LIB3270_ACTION( delete )
 
 		DEC_BA(baddr);
 		if (!hSession->ea_buf[baddr].fa)
-			cursor_move(baddr);
+			cursor_move(hSession,baddr);
 	}
 	screen_disp(hSession);
 	return 0;
@@ -1745,16 +1745,16 @@ LIB3270_ACTION( backspace )
 #endif /*]*/
 	if (reverse)
 		(void) do_delete();
-	else if (!h3270.flipped)
+	else if (!hSession->flipped)
 		do_left();
 	else {
 		register int	baddr;
 
-		baddr = h3270.cursor_addr;
+		baddr = hSession->cursor_addr;
 		DEC_BA(baddr);
-		cursor_move(baddr);
+		cursor_move(hSession,baddr);
 	}
-	screen_disp(&h3270);
+	screen_disp(hSession);
 	return 0;
 }
 
@@ -1784,7 +1784,7 @@ do_erase(void)
 	if (h3270.ea_buf[h3270.cursor_addr].cc == EBC_si) {
 		baddr = h3270.cursor_addr;
 		DEC_BA(baddr);
-		cursor_move(baddr);
+		cursor_move(&h3270,baddr);
 	}
 
 	/*
@@ -1797,7 +1797,7 @@ do_erase(void)
 	if (IS_RIGHT(d)) {
 		baddr = h3270.cursor_addr;
 		DEC_BA(baddr);
-		cursor_move(baddr);
+		cursor_move(&h3270,baddr);
 	}
 
 	/*
@@ -1813,7 +1813,7 @@ do_erase(void)
 	baddr = h3270.cursor_addr;
 	DEC_BA(baddr);
 	if (h3270.ea_buf[baddr].cc == EBC_so && h3270.ea_buf[h3270.cursor_addr].cc == EBC_si) {
-		cursor_move(baddr);
+		cursor_move(&h3270,baddr);
 		(void) do_delete();
 	}
 	screen_disp(&h3270);
@@ -1863,14 +1863,14 @@ LIB3270_CURSOR_ACTION( right )
 		return 0;
 	}
 #endif /*]*/
-	if (!h3270.flipped)
+	if (!hSession->flipped)
 	{
-		baddr = h3270.cursor_addr;
+		baddr = hSession->cursor_addr;
 		INC_BA(baddr);
 		d = ctlr_dbcs_state(baddr);
 		if (IS_RIGHT(d))
 			INC_BA(baddr);
-		cursor_move(baddr);
+		lib3270_set_cursor_address(hSession,baddr);
 	}
 	else
 	{
@@ -1937,30 +1937,30 @@ LIB3270_ACTION( previousword )
 	if (IN_ANSI)
 		return 0;
 #endif /*]*/
-	if (!h3270.formatted)
+	if (!hSession->formatted)
 		return 0;
 
-	baddr = h3270.cursor_addr;
-	prot = FA_IS_PROTECTED(get_field_attribute(&h3270,baddr));
+	baddr = hSession->cursor_addr;
+	prot = FA_IS_PROTECTED(get_field_attribute(hSession,baddr));
 
 	/* Skip to before this word, if in one now. */
 	if (!prot) {
-		c = h3270.ea_buf[baddr].cc;
-		while (!h3270.ea_buf[baddr].fa && c != EBC_space && c != EBC_null) {
+		c = hSession->ea_buf[baddr].cc;
+		while (!hSession->ea_buf[baddr].fa && c != EBC_space && c != EBC_null) {
 			DEC_BA(baddr);
-			if (baddr == h3270.cursor_addr)
+			if (baddr == hSession->cursor_addr)
 				return 0;
-			c = h3270.ea_buf[baddr].cc;
+			c = hSession->ea_buf[baddr].cc;
 		}
 	}
 	baddr0 = baddr;
 
 	/* Find the end of the preceding word. */
 	do {
-		c = h3270.ea_buf[baddr].cc;
-		if (h3270.ea_buf[baddr].fa) {
+		c = hSession->ea_buf[baddr].cc;
+		if (hSession->ea_buf[baddr].fa) {
 			DEC_BA(baddr);
-			prot = FA_IS_PROTECTED(get_field_attribute(&h3270,baddr));
+			prot = FA_IS_PROTECTED(get_field_attribute(hSession,baddr));
 			continue;
 		}
 		if (!prot && c != EBC_space && c != EBC_null)
@@ -1974,13 +1974,13 @@ LIB3270_ACTION( previousword )
 	/* Go it its front. */
 	for (;;) {
 		DEC_BA(baddr);
-		c = h3270.ea_buf[baddr].cc;
-		if (h3270.ea_buf[baddr].fa || c == EBC_space || c == EBC_null) {
+		c = hSession->ea_buf[baddr].cc;
+		if (hSession->ea_buf[baddr].fa || c == EBC_space || c == EBC_null) {
 			break;
 		}
 	}
 	INC_BA(baddr);
-	cursor_move(baddr);
+	cursor_move(hSession,baddr);
 	return 0;
 }
 
@@ -2088,62 +2088,54 @@ LIB3270_ACTION( nextword )
 	if (IN_ANSI)
 		return 0;
 #endif /*]*/
-	if (!h3270.formatted)
+	if (!hSession->formatted)
 		return 0;
 
 	/* If not in an unprotected field, go to the next unprotected word. */
-	if (h3270.ea_buf[h3270.cursor_addr].fa ||
-	    FA_IS_PROTECTED(get_field_attribute(&h3270,h3270.cursor_addr))) {
-		baddr = nu_word(h3270.cursor_addr);
+	if (hSession->ea_buf[hSession->cursor_addr].fa ||
+	    FA_IS_PROTECTED(get_field_attribute(hSession,hSession->cursor_addr))) {
+		baddr = nu_word(hSession->cursor_addr);
 		if (baddr != -1)
-			cursor_move(baddr);
+			cursor_move(hSession,baddr);
 		return 0;
 	}
 
 	/* If there's another word in this field, go to it. */
-	baddr = nt_word(h3270.cursor_addr);
+	baddr = nt_word(hSession->cursor_addr);
 	if (baddr != -1) {
-		cursor_move(baddr);
+		cursor_move(hSession,baddr);
 		return 0;
 	}
 
 	/* If in a word, go to just after its end. */
-	c = h3270.ea_buf[h3270.cursor_addr].cc;
+	c = hSession->ea_buf[hSession->cursor_addr].cc;
 	if (c != EBC_space && c != EBC_null) {
-		baddr = h3270.cursor_addr;
+		baddr = hSession->cursor_addr;
 		do {
-			c = h3270.ea_buf[baddr].cc;
+			c = hSession->ea_buf[baddr].cc;
 			if (c == EBC_space || c == EBC_null) {
-				cursor_move(baddr);
+				cursor_move(hSession,baddr);
 				return 0;
-			} else if (h3270.ea_buf[baddr].fa) {
+			} else if (hSession->ea_buf[baddr].fa) {
 				baddr = nu_word(baddr);
 				if (baddr != -1)
-					cursor_move(baddr);
+					cursor_move(hSession,baddr);
 				return 0;
 			}
 			INC_BA(baddr);
-		} while (baddr != h3270.cursor_addr);
+		} while (baddr != hSession->cursor_addr);
 	}
 	/* Otherwise, go to the next unprotected word. */
 	else {
-		baddr = nu_word(h3270.cursor_addr);
+		baddr = nu_word(hSession->cursor_addr);
 		if (baddr != -1)
-			cursor_move(baddr);
+			cursor_move(hSession,baddr);
 	}
 
 	return 0;
 }
 
 
-/*
- * Cursor up 1 position.
- */ /*
-void Up_action(Widget w unused, XEvent *event, String *params, Cardinal *num_params)
-{
-	action_CursorUp();
-}
-*/
 
 /**
  * Cursor up 1 position.
@@ -2175,23 +2167,12 @@ LIB3270_CURSOR_ACTION( up )
 		return 0;
 	}
 #endif /*]*/
-	baddr = h3270.cursor_addr - h3270.cols;
+	baddr = hSession->cursor_addr - hSession->cols;
 	if (baddr < 0)
-		baddr = (h3270.cursor_addr + (h3270.rows * h3270.cols)) - h3270.cols;
-	cursor_move(baddr);
+		baddr = (hSession->cursor_addr + (hSession->rows * hSession->cols)) - hSession->cols;
+	lib3270_set_cursor_address(hSession,baddr);
 	return 0;
 }
-
-
-/*
- * Cursor down 1 position.
- */ /*
-void
-Down_action(Widget w unused, XEvent *event, String *params, Cardinal *num_params)
-{
-	action_CursorDown();
-}
-*/
 
 /**
  * Cursor down 1 position.
@@ -2224,8 +2205,8 @@ LIB3270_CURSOR_ACTION( down )
 		return 0;
 	}
 #endif /*]*/
-	baddr = (h3270.cursor_addr + h3270.cols) % (h3270.cols * h3270.rows);
-	cursor_move(baddr);
+	baddr = (hSession->cursor_addr + hSession->cols) % (hSession->cols * hSession->rows);
+	lib3270_set_cursor_address(hSession,baddr);
 	return 0;
 }
 
@@ -2252,14 +2233,14 @@ LIB3270_CURSOR_ACTION( newline )
 		return 0;
 	}
 #endif /*]*/
-	baddr = (h3270.cursor_addr + h3270.cols) % (h3270.cols * h3270.rows);	/* down */
-	baddr = (baddr / h3270.cols) * h3270.cols;			/* 1st col */
-	faddr = find_field_attribute(&h3270,baddr);
-	fa = h3270.ea_buf[faddr].fa;
+	baddr = (hSession->cursor_addr + hSession->cols) % (hSession->cols * hSession->rows);	/* down */
+	baddr = (baddr / hSession->cols) * hSession->cols;			/* 1st col */
+	faddr = find_field_attribute(hSession,baddr);
+	fa = hSession->ea_buf[faddr].fa;
 	if (faddr != baddr && !FA_IS_PROTECTED(fa))
-		cursor_move(baddr);
+		cursor_move(hSession,baddr);
 	else
-		cursor_move(next_unprotected(baddr));
+		cursor_move(hSession,next_unprotected(baddr));
 
 	return 0;
 }
@@ -2282,7 +2263,7 @@ LIB3270_ACTION( dup )
 	if (key_Character(EBC_dup, False, False, NULL))
 	{
 		screen_disp(hSession);
-		cursor_move(next_unprotected(hSession->cursor_addr));
+		cursor_move(hSession,next_unprotected(hSession->cursor_addr));
 	}
 }
 
@@ -2369,8 +2350,8 @@ LIB3270_ACTION( clear )
 	}
 #endif /*]*/
 	h3270.buffer_addr = 0;
-	ctlr_clear(&h3270,True);
-	cursor_move(0);
+	ctlr_clear(hSession,True);
+	cursor_move(hSession,0);
 	if (CONNECTED)
 		key_AID(AID_CLEAR);
 	return 0;
@@ -2626,37 +2607,37 @@ LIB3270_ACTION( eraseinput )
 		/* find first field attribute */
 		baddr = 0;
 		do {
-			if (h3270.ea_buf[baddr].fa)
+			if (hSession->ea_buf[baddr].fa)
 				break;
 			INC_BA(baddr);
 		} while (baddr != 0);
 		sbaddr = baddr;
 		f = False;
 		do {
-			fa = h3270.ea_buf[baddr].fa;
+			fa = hSession->ea_buf[baddr].fa;
 			if (!FA_IS_PROTECTED(fa)) {
 				mdt_clear(baddr);
 				do {
 					INC_BA(baddr);
 					if (!f) {
-						cursor_move(baddr);
+						cursor_move(hSession,baddr);
 						f = True;
 					}
-					if (!h3270.ea_buf[baddr].fa) {
+					if (!hSession->ea_buf[baddr].fa) {
 						ctlr_add(baddr, EBC_null, 0);
 					}
-				} while (!h3270.ea_buf[baddr].fa);
+				} while (!hSession->ea_buf[baddr].fa);
 			} else {	/* skip protected */
 				do {
 					INC_BA(baddr);
-				} while (!h3270.ea_buf[baddr].fa);
+				} while (!hSession->ea_buf[baddr].fa);
 			}
 		} while (baddr != sbaddr);
 		if (!f)
-			cursor_move(0);
+			cursor_move(hSession,0);
 	} else {
 		ctlr_clear(hSession,True);
-		cursor_move(0);
+		cursor_move(hSession,0);
 	}
 	screen_disp(hSession);
 	return 0;
@@ -2768,7 +2749,7 @@ LIB3270_ACTION( deletefield )
 		DEC_BA(baddr);
 	INC_BA(baddr);
 	mdt_set(hSession->cursor_addr);
-	cursor_move(baddr);
+	cursor_move(hSession,baddr);
 	while (!hSession->ea_buf[baddr].fa) {
 		ctlr_add(baddr, EBC_null, 0);
 		INC_BA(baddr);
@@ -2883,10 +2864,10 @@ LIB3270_ACTION( fieldend )
 	} else {
 		baddr = last_nonblank;
 		INC_BA(baddr);
-		if (h3270.ea_buf[baddr].fa)
+		if (hSession->ea_buf[baddr].fa)
 			baddr = last_nonblank;
 	}
-	cursor_move(baddr);
+	cursor_move(hSession,baddr);
 	return 0;
 }
 
@@ -2956,7 +2937,7 @@ remargin(int lmargin)
 		}
 	}
 
-	cursor_move(baddr);
+	cursor_move(&h3270,baddr);
 	return True;
 }
 
@@ -3347,112 +3328,6 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *session, char *s, int len, int p
 	return len;
 }
 
-/*
- * Pretend that a sequence of hexadecimal characters was entered at the
- * keyboard.  The input is a sequence of hexadecimal bytes, 2 characters
- * per byte.  If connected in ANSI mode, these are treated as ASCII
- * characters; if in 3270 mode, they are considered EBCDIC.
- *
- * Graphic Escapes are handled as \E.
- */ /*
-void
-hex_input(char *s)
-{
-	char *t;
-	Boolean escaped;
-#if defined(X3270_ANSI)
-	unsigned char *xbuf = (unsigned char *)NULL;
-	unsigned char *tbuf = (unsigned char *)NULL;
-	int nbytes = 0;
-#endif
-
-	// Validate the string.
-	if (strlen(s) % 2) {
-		popup_an_error("%s: Odd number of characters in specification",
-		    action_name(HexString_action));
-//		cancel_if_idle_command();
-		return;
-	}
-	t = s;
-	escaped = False;
-	while (*t) {
-		if (isxdigit(*t) && isxdigit(*(t + 1))) {
-			escaped = False;
-#if defined(X3270_ANSI)
-			nbytes++;
-#endif
-		} else if (!strncmp(t, "\\E", 2) || !strncmp(t, "\\e", 2)) {
-			if (escaped) {
-				popup_an_error("%s: Double \\E",
-				    action_name(HexString_action));
-//				cancel_if_idle_command();
-				return;
-			}
-			if (!IN_3270) {
-				popup_an_error("%s: \\E in ANSI mode",
-				    action_name(HexString_action));
-//				cancel_if_idle_command();
-				return;
-			}
-			escaped = True;
-		} else {
-			popup_an_error("%s: Illegal character in specification",
-			    action_name(HexString_action));
-//			cancel_if_idle_command();
-			return;
-		}
-		t += 2;
-	}
-	if (escaped) {
-		popup_an_error("%s: Nothing follows \\E",
-		    action_name(HexString_action));
-//		cancel_if_idle_command();
-		return;
-	}
-
-#if defined(X3270_ANSI)
-	// Allocate a temporary buffer.
-	if (!IN_3270 && nbytes)
-		tbuf = xbuf = (unsigned char *)Malloc(nbytes);
-#endif
-
-	// Pump it in.
-	t = s;
-	escaped = False;
-	while (*t) {
-		if (isxdigit(*t) && isxdigit(*(t + 1))) {
-			unsigned c;
-
-			c = (FROM_HEX(*t) * 16) + FROM_HEX(*(t + 1));
-			if (IN_3270)
-				key_Character(c, escaped, True, NULL);
-#if defined(X3270_ANSI)
-			else
-				*tbuf++ = (unsigned char)c;
-#endif
-			escaped = False;
-		} else if (!strncmp(t, "\\E", 2) || !strncmp(t, "\\e", 2)) {
-			escaped = True;
-		}
-		t += 2;
-	}
-#if defined(X3270_ANSI)
-	if (!IN_3270 && nbytes) {
-		net_hexansi_out(xbuf, nbytes);
-		Free(xbuf);
-	}
-#endif
-}
-*/
-
-/*
-void
-ignore_action(Widget w unused, XEvent *event, String *params, Cardinal *num_params)
-{
-//	reset_idle_timer();
-}
-*/
-
 #if defined(X3270_FT) /*[*/
 /*
  * Set up the cursor and input field for command input.
@@ -3496,7 +3371,7 @@ kybd_prime(void)
 	}
 
 	/* Move the cursor to the beginning of the field. */
-	cursor_move(baddr);
+	cursor_move(&h3270,baddr);
 
 	/* Erase it. */
 	while (!h3270.ea_buf[baddr].fa) {

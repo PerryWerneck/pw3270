@@ -376,9 +376,17 @@ LIB3270_EXPORT int lib3270_get_cursor_address(H3270 *h)
 
 LIB3270_EXPORT int lib3270_set_cursor_address(H3270 *h, int baddr)
 {
-    int ret;
-
     CHECK_SESSION_HANDLE(h);
+
+	if(h->selected && !lib3270_get_toggle(h,LIB3270_TOGGLE_KEEP_SELECTED))
+		lib3270_unselect(h);
+
+	return cursor_move(h,baddr);
+}
+
+int cursor_move(H3270 *h, int baddr)
+{
+    int ret;
 
     ret = h->cursor_addr;
 

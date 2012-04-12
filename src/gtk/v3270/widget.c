@@ -607,11 +607,6 @@ static void update_model(H3270 *session, const char *name, int model, int rows, 
 	g_signal_emit(GTK_WIDGET(session->widget),v3270_widget_signal[SIGNAL_MODEL_CHANGED], 0, (guint) model, name);
 }
 
-static void set_selection(H3270 *session, unsigned char status)
-{
-	g_signal_emit(GTK_WIDGET(session->widget),v3270_widget_signal[SIGNAL_SELECTING], 0, status ? TRUE : FALSE);
-}
-
 static void changed(H3270 *session, int offset, int len)
 {
 	GtkWidget * widget	= session->widget;
@@ -658,6 +653,23 @@ static void changed(H3270 *session, int offset, int len)
 
 }
 
+static void set_selection(H3270 *session, unsigned char status)
+{
+	GtkWidget	* widget	= GTK_WIDGET(session->widget);
+	g_signal_emit(widget,v3270_widget_signal[SIGNAL_SELECTING], 0, status ? TRUE : FALSE);
+}
+
+static void update_selection(H3270 *session, int start, int end)
+{
+	// Selected region changed
+	GtkWidget	* widget	= GTK_WIDGET(session->widget);
+	AtkObject	* atk_obj	= gtk_widget_get_accessible(widget);
+
+	if(atk_obj)
+		g_signal_emit_by_name(atk_obj,"text-selection-changed");
+
+}
+
 static void v3270_init(v3270 *widget)
 {
 	trace("%s",__FUNCTION__);
@@ -674,7 +686,9 @@ static void v3270_init(v3270 *widget)
 	widget->host->update			= v3270_update_char;
 	widget->host->changed			= changed;
 	widget->host->set_timer 		= set_timer;
+
 	widget->host->set_selection		= set_selection;
+	widget->host->update_selection	= update_selection;
 
 	widget->host->update_luname		= update_luname;
 	widget->host->configure			= update_screen_size;

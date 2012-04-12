@@ -467,4 +467,10 @@ gchar * v3270_get_region(GtkWidget *widget, gint start_pos, gint end_pos, gboole
 	return utftext;
 }
 
+ void v3270_select_region(GtkWidget *widget, gint start, gint end)
+ {
+ 	g_return_if_fail(GTK_IS_V3270(widget));
+ 	lib3270_select_region(GTK_V3270(widget)->host,start,end);
+ }
+
 

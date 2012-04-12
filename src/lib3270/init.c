@@ -103,6 +103,10 @@ static void update_oia(H3270 *session, LIB3270_FLAG id, unsigned char on)
 {
 }
 
+static void update_selection(H3270 *session, int start, int end)
+{
+}
+
 static void lib3270_session_init(H3270 *hSession, const char *model)
 {
 	int 	ovc, ovr;
@@ -116,16 +120,17 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 	initialize_toggles(hSession);
 
 	// Dummy calls to avoid "ifs"
-	hSession->update 		= update_char;
-	hSession->update_model	= update_model;
-	hSession->update_cursor	= update_cursor;
-	hSession->set_selection = nop_char;
-	hSession->ctlr_done		= nop;
-	hSession->changed		= changed;
-	hSession->erase			= screen_disp;
-	hSession->suspend		= nop;
-	hSession->resume		= screen_disp;
-	hSession->update_oia	= update_oia;
+	hSession->update 			= update_char;
+	hSession->update_model		= update_model;
+	hSession->update_cursor		= update_cursor;
+	hSession->set_selection 	= nop_char;
+	hSession->ctlr_done			= nop;
+	hSession->changed			= changed;
+	hSession->erase				= screen_disp;
+	hSession->suspend			= nop;
+	hSession->resume			= screen_disp;
+	hSession->update_oia		= update_oia;
+	hSession->update_selection	= update_selection;
 
 	hSession->sock = -1;
 	hSession->model_num = -1;

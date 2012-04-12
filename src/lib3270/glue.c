@@ -126,7 +126,7 @@ static void initialize(void)
 #endif
 
 	h3270.selected = 0;
-	h3270.select.begin = h3270.select.end = 0;
+	h3270.select.start = h3270.select.end = 0;
 //	initialize_toggles(&h3270);
 
 #if defined(_WIN32)

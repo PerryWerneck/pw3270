@@ -128,7 +128,7 @@
 			}
 
 		}
-		cursor_move(baddr);
+		cursor_move(session,baddr);
 	}
 
 	return -1;
@@ -210,9 +210,9 @@ LIB3270_EXPORT int lib3270_set_string(H3270 *h, const unsigned char *str)
 				faddr = find_field_attribute(h,baddr);
 				fa = h->ea_buf[faddr].fa;
 				if (faddr != baddr && !FA_IS_PROTECTED(fa))
-					cursor_move(baddr);
+					cursor_move(h,baddr);
 				else
-					cursor_move(next_unprotected(baddr));
+					cursor_move(h,next_unprotected(baddr));
 				data.row = BA_TO_ROW(h->cursor_addr);
 			}
 			last = ' ';

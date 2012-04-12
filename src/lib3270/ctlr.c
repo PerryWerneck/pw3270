@@ -1093,7 +1093,7 @@ ctlr_erase_all_unprotected(void)
 				do {
 					INC_BA(baddr);
 					if (!f) {
-						cursor_move(baddr);
+						cursor_move(&h3270,baddr);
 						f = True;
 					}
 					if (!h3270.ea_buf[baddr].fa) {
@@ -1108,7 +1108,7 @@ ctlr_erase_all_unprotected(void)
 			}
 		} while (baddr != sbaddr);
 		if (!f)
-			cursor_move(0);
+			cursor_move(&h3270,0);
 	} else {
 		ctlr_clear(&h3270,True);
 	}
@@ -1264,7 +1264,7 @@ ctlr_write(unsigned char buf[], int buflen, Boolean erase)
 			if (previous != SBA)
 				trace_ds("%s",rcba(buffer_addr));
 			previous = ORDER;
-			cursor_move(h3270.buffer_addr);
+			cursor_move(&h3270,h3270.buffer_addr);
 			last_cmd = True;
 			last_zpt = False;
 			break;
@@ -1989,7 +1989,7 @@ ctlr_write_sscp_lu(unsigned char buf[], int buflen)
 			break;
 		}
 	}
-	cursor_move(h3270.buffer_addr);
+	cursor_move(&h3270,h3270.buffer_addr);
 	sscp_start = h3270.buffer_addr;
 
 	/* Unlock the keyboard. */
@@ -2337,7 +2337,7 @@ ctlr_clear(H3270 *session, Boolean can_snap)
 
 	/* Clear the screen. */
 	(void) memset((char *)session->ea_buf, 0, session->rows*session->cols*sizeof(struct ea));
-	cursor_move(0);
+	cursor_move(&h3270,0);
 	session->buffer_addr = 0;
 	lib3270_unselect(session);
 	session->formatted = False;
@@ -2364,7 +2364,7 @@ ctlr_blanks(void)
 		if (!h3270.ea_buf[baddr].fa)
 			h3270.ea_buf[baddr].cc = EBC_space;
 	}
-	cursor_move(0);
+	cursor_move(&h3270,0);
 	h3270.buffer_addr = 0;
 	lib3270_unselect(&h3270);
 	h3270.formatted = False;

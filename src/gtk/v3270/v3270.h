@@ -163,6 +163,7 @@
  void 			  v3270_unselect(GtkWidget *widget);
  void 			  v3270_paste(GtkWidget *widget);
  void 			  v3270_paste_string(GtkWidget *widget, const gchar *text, const gchar *encoding);
+ void	  		  v3270_select_region(GtkWidget *widget, gint start, gint end);
 
  // Colors
  void			  v3270_set_colors(GtkWidget *widget, const gchar *);
