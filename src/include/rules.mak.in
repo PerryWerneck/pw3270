@@ -65,12 +65,12 @@ OBJRLS = $(OBJDIR)/Release
 #---[ Rules ]------------------------------------------------------------------
 
 $(OBJDBG)/%.o: %.c $(DEPENDS)
-	@echo `basename $@` ...
+	@echo "  CC   `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(CC) $(DEBUG_CFLAGS) $(CFLAGS) $(LIB3270_CFLAGS) -o $@ -c $<
 
 $(OBJRLS)/%.o: %.c $(DEPENDS)
-	@echo `basename $@` ...
+	@echo "  CC   `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(CC) $(CFLAGS) $(LIB3270_CFLAGS) -o $@ -c $<
 

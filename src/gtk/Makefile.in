@@ -85,8 +85,7 @@ $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT):	$(foreach SRC, $(basename $(SOURC
 Debug: $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
 
 $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT):	$(foreach SRC, $(basename $(SOURCES)), $(OBJDIR)/Debug/$(SRC)$(OBJEXT))
-
-	@echo $@ ...
+	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(LD) -Wl,--rpath,.bin/Debug/lib -o $@ $^ $(LIBS) $(LIB3270_LIBS)
 

@@ -79,12 +79,12 @@ OBJRLS = $(OBJDIR)/Release
 #---[ Rules ]------------------------------------------------------------------
 
 $(OBJDBG)/%.o: %.c $(DEPENDS)
-	@echo $< ...
+	@echo "  CC   `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(CC) $(DEBUG_CFLAGS) $(CFLAGS) $(SSL_CFLAGS) -o $@ -c $<
 
 $(OBJRLS)/%.o: %.c $(DEPENDS)
-	@echo $< ...
+	@echo "  CC   `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(CC) $(CFLAGS) $(SSL_CFLAGS) -o $@ -c $<
 
@@ -108,19 +108,18 @@ install: Release
 Debug: $(BINDBG)/@DLLPREFIX@3270@DLLEXT@
 
 $(BINDBG)/@DLLPREFIX@3270@DLLEXT@: $(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC)@OBJEXT@)
-	@echo $@ ...
+	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(LD) $(DLL_FLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
 
 $(BINRLS)/@DLLPREFIX@3270@DLLEXT@: $(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SRC)@OBJEXT@)
-	@echo $@ ...
+	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(LD) $(DLL_FLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
 	@$(STRIP) $@
 
 $(BINDBG)/testprogram$(EXEEXT): $(OBJDBG)/testprogram.o $(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC)@OBJEXT@)
-
-	@echo $@ ...
+	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
 	$(LD) -o $@ $^ $(LIBS)
 
@@ -136,16 +135,16 @@ else
 endif
 
 version.c: ./mkversion.sh
-	@echo $@ ...
+	@echo "  GEN  $@"
 	@chmod +x ./mkversion.sh
 	@./mkversion.sh
 
 fallbacks.c: $(BINDIR)/mkfb@EXEEXT@ X3270.xad
-	@echo $@ ...
+	@echo "  GEN  $@"
 	@$(BINDIR)/mkfb@EXEEXT@ -c X3270.xad $@
 
 $(BINDIR)/mkfb@EXEEXT@: mkfb.c Makefile
-	@echo $@ ...
+	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(HOST_CC) -g -o $@ -D_WIN32 mkfb.c
 
