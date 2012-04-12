@@ -386,7 +386,7 @@
 		LOCAL_EXTERN SCRIPT_STATE status_script(SCRIPT_STATE state);
 
 		#define Toggled(ix) lib3270_get_toggle(NULL,ix)
-		#define CallAndWait(c,h,p) lib3270_call_thread(c,h,p)
+//		#define CallAndWait(c,h,p) lib3270_call_thread(c,h,p)
 
 //		#define RunPendingEvents(x) lib3270_main_iterate(x)
 //		#define Wait(s) lib3270_wait(x)

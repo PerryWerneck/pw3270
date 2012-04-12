@@ -443,14 +443,6 @@ void status_oerr(H3270 *session, int error_type)
 
 }
 
-void status_resolving(H3270 *session, Boolean on)
-{
-	if(session->cursor)
-			session->cursor(session, on ? CURSOR_MODE_LOCKED : CURSOR_MODE_NORMAL);
-
-	status_changed(session, on ? LIB3270_STATUS_RESOLVING : LIB3270_STATUS_BLANK);
-}
-
 void status_connecting(H3270 *session, Boolean on)
 {
 	if(session->cursor)

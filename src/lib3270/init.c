@@ -107,6 +107,10 @@ static void update_selection(H3270 *session, int start, int end)
 {
 }
 
+static void *cursor(H3270 *session, LIB3270_CURSOR id)
+{
+}
+
 static void lib3270_session_init(H3270 *hSession, const char *model)
 {
 	int 	ovc, ovr;
@@ -131,6 +135,7 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 	hSession->resume			= screen_disp;
 	hSession->update_oia		= update_oia;
 	hSession->update_selection	= update_selection;
+	hSession->cursor 			= cursor;
 
 	hSession->sock = -1;
 	hSession->model_num = -1;

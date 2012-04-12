@@ -417,6 +417,40 @@ void popup_a_sockerr(H3270 *session, char *fmt, ...)
 
 }
 
+#pragma pack(1)
+struct connect_parm
+{
+	unsigned short			  sz;
+	int 					  sockfd;
+	const struct sockaddr	* addr;
+	socklen_t 				  addrlen;
+	int						  err;
+};
+#pragma pack()
+
+static int do_connect_sock(H3270 *h, struct connect_parm *p)
+{
+
+	if(connect(p->sockfd, p->addr, p->addrlen) == -1)
+		p->err = socket_errno();
+	else
+		p->err = 0;
+
+	return 0;
+}
+
+static int connect_sock(H3270 *hSession, int sockfd, const struct sockaddr *addr, socklen_t addrlen)
+{
+	struct connect_parm p = { sizeof(struct connect_parm), sockfd, addr, addrlen, -1 };
+
+	trace("%s: Connect begin sock=%d",__FUNCTION__,p.sockfd);
+	lib3270_call_thread((int (*)(H3270 *, void *)) do_connect_sock,hSession,&p);
+	trace("%s: Connect ends, rc=%d",__FUNCTION__,p.err);
+
+	return p.err;
+}
+
+
 /**
  *  Establish a telnet socket to the given host passed as an argument.
  *
@@ -425,18 +459,18 @@ void popup_a_sockerr(H3270 *session, char *fmt, ...)
  *
  * @param session	Handle to the session descriptor.
  *
- *
  * @return The file descriptor of the connected socket.
  */
 int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Boolean *resolving, Boolean *pending)
 {
-	struct servent	*sp;
-	struct hostent	*hp;
-	char	        	passthru_haddr[8];
-	int			passthru_len = 0;
-	unsigned short		passthru_port = 0;
-	int			on = 1;
-	char			errmsg[1024];
+	struct servent	* sp;
+	struct hostent	* hp;
+	char	          passthru_haddr[8];
+	int				  passthru_len = 0;
+	unsigned short	  passthru_port = 0;
+	int				  on = 1;
+	char			  errmsg[1024];
+	int				  rc;
 #if defined(OMTU) /*[*/
 	int			mtu = OMTU;
 #endif /*]*/
@@ -522,85 +556,109 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 		haddr.sin.sin_port = passthru_port;
 		ha_len = sizeof(struct sockaddr_in);
 	} else if (proxy_type > 0) {
-			status_resolving(session,1);
-	    	if (resolve_host_and_port(proxy_host, proxy_portname,
+	    	if (resolve_host_and_port(&h3270,proxy_host, proxy_portname,
 			    &proxy_port, &haddr.sa, &ha_len, errmsg,
 			    sizeof(errmsg)) < 0) {
 		    	popup_an_error(session,errmsg);
-				status_resolving(session,0);
 		    	return -1;
-			status_resolving(session,0);
 		}
 	} else {
-			status_resolving(session,1);
-			if (resolve_host_and_port(host, portname,
+			if (resolve_host_and_port(&h3270,host, portname,
 				    &session->current_port, &haddr.sa, &ha_len,
 				    errmsg, sizeof(errmsg)) < 0) {
 			    	popup_an_error(session,errmsg);
-					status_resolving(session,0);
 			    	return -1;
-			status_resolving(session,0);
 			}
 	}
 
 	/* create the socket */
-	if ((session->sock = socket(haddr.sa.sa_family, SOCK_STREAM, 0)) == -1) {
+	if ((session->sock = socket(haddr.sa.sa_family, SOCK_STREAM, 0)) == -1)
+	{
 		popup_a_sockerr(session, N_( "socket" ) );
 		return -1;
 	}
 
 	/* set options for inline out-of-band data and keepalives */
-	if (setsockopt(session->sock, SOL_SOCKET, SO_OOBINLINE, (char *)&on,
-			sizeof(on)) < 0) {
+	if (setsockopt(session->sock, SOL_SOCKET, SO_OOBINLINE, (char *)&on,sizeof(on)) < 0)
+	{
 		popup_a_sockerr(session, N_( "setsockopt(%s)" ), "SO_OOBINLINE");
 		close_fail;
 	}
-	if (setsockopt(session->sock, SOL_SOCKET, SO_KEEPALIVE, (char *)&on,
-			sizeof(on)) < 0) {
+
+	if (setsockopt(session->sock, SOL_SOCKET, SO_KEEPALIVE, (char *)&on, sizeof(on)) < 0)
+	{
 		popup_a_sockerr(session, N_( "setsockopt(%s)" ), "SO_KEEPALIVE");
 		close_fail;
 	}
-#if defined(OMTU) /*[*/
+
+#if defined(OMTU)
 	if (setsockopt(session->sock, SOL_SOCKET, SO_SNDBUF, (char *)&mtu,sizeof(mtu)) < 0)
 	{
 		popup_a_sockerr(session, N_( "setsockopt(%s)" ), "SO_SNDBUF");
 		close_fail;
 	}
-#endif /*]*/
+#endif
 
 	/* set the socket to be non-delaying */
-#if defined(_WIN32) /*[*/
+#if defined(_WIN32)
 	if (non_blocking(False) < 0)
-#else /*][*/
+#else
 	if (non_blocking(True) < 0)
-#endif /*]*/
+#endif
 		close_fail;
 
-#if !defined(_WIN32) /*[*/
+#if !defined(_WIN32)
 	/* don't share the socket with our children */
 	(void) fcntl(session->sock, F_SETFD, 1);
-#endif /*]*/
+#endif
 
 	/* init ssl */
-#if defined(HAVE_LIBSSL) /*[*/
+#if defined(HAVE_LIBSSL)
 	last_ssl_error = 0;
 	if (session->ssl_host)
 		ssl_init();
-#endif /*]*/
+#endif
 
 	/* connect */
 	status_connecting(session,1);
-	if (connect(session->sock, &haddr.sa, ha_len) == -1) {
+
+	switch(connect_sock(session, session->sock, &haddr.sa,ha_len))
+	{
+	case 0:					// Connected
+		trace_dsn("Connected.\n");
+		if(non_blocking(False) < 0)
+			close_fail;
+		net_connected(session);
+		break;
+
+	case SE_EWOULDBLOCK:	// Connection in progress
+	case SE_EINPROGRESS:
+		*pending = True;
+		trace_dsn("Connection pending.\n");
+#if !defined(_WIN32)
+		output_id = AddOutput(session->sock, session, output_possible);
+#endif
+		break;
+
+	default:
+		popup_a_sockerr(session, N_( "Can't connect to %s:%d" ),session->hostname, session->current_port);
+		close_fail;
+
+	}
+
+/*
+	if (connect(session->sock, &haddr.sa, ha_len) == -1)
+	{
 		if (socket_errno() == SE_EWOULDBLOCK
-#if defined(SE_EINPROGRESS) /*[*/
+#if defined(SE_EINPROGRESS)
 			|| socket_errno() == SE_EINPROGRESS
-#endif /*]*/
+#endif
 						   ) {
 			trace_dsn("Connection pending.\n");
 			*pending = True;
-#if !defined(_WIN32) /*[*/
+#if !defined(_WIN32)
 			output_id = AddOutput(session->sock, session, output_possible);
-#endif /*]*/
+#endif
 		} else {
 			popup_a_sockerr(session, N_( "Can't connect to %s:%d" ),session->hostname, session->current_port);
 			close_fail;
@@ -610,6 +668,7 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 			close_fail;
 		net_connected(session);
 	}
+	*/
 
 	/* set up temporary termtype */
 	if (appres.termname == CN && session->std_ds_host) {
@@ -821,10 +880,12 @@ connection_complete(void)
  */
 static void output_possible(H3270 *session)
 {
+	trace("%s: %s",HALF_CONNECTED ? "Half connected" : "Connected");
 	if (HALF_CONNECTED)
 	{
 		connection_complete();
 	}
+
 	if (output_id)
 	{
 		RemoveInput(output_id);
@@ -3163,8 +3224,7 @@ non_blocking(Boolean on)
 #if defined(HAVE_LIBSSL) /*[*/
 
 /* Initialize the OpenSSL library. */
-static void
-ssl_init(void)
+static void ssl_init(void)
 {
 	static Boolean ssl_initted = False;
 

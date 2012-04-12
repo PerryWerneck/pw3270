@@ -86,6 +86,8 @@ struct parms
  */
 static int cresolve_host_and_port(H3270 *h, struct parms *p)
 {
+#warning Should use configure to detect getaddrinfo and use it if available.
+
 #ifdef AF_INET6
 
 	struct addrinfo	 hints, *res;
@@ -126,6 +128,7 @@ static int cresolve_host_and_port(H3270 *h, struct parms *p)
 
 	(void) memcpy(p->sa, res->ai_addr, res->ai_addrlen);
 	*p->sa_len = res->ai_addrlen;
+
 	freeaddrinfo(res);
 
 #else /*][*/
@@ -179,16 +182,23 @@ static int cresolve_host_and_port(H3270 *h, struct parms *p)
 	return 0;
 }
 
-int resolve_host_and_port(const char *host, char *portname, unsigned short *pport,struct sockaddr *sa, socklen_t *sa_len, char *errmsg, int em_len)
+int resolve_host_and_port(H3270 *hSession, const char *host, char *portname, unsigned short *pport,struct sockaddr *sa, socklen_t *sa_len, char *errmsg, int em_len)
 {
-	int rc;
-	struct parms p = { sizeof(struct parms), host, portname, pport, sa, sa_len, errmsg, em_len };
+	int				rc;
+	LIB3270_STATUS	saved_status	= hSession->oia_status;
+	struct parms	p				= { sizeof(struct parms), host, portname, pport, sa, sa_len, errmsg, em_len };
 
-	Trace("Calling resolver for %s", p.host);
+	trace("Calling resolver for %s", p.host);
 
-	rc = CallAndWait((int (*)(H3270 *, void *)) cresolve_host_and_port,&h3270,&p);
+	status_changed(hSession,LIB3270_STATUS_RESOLVING);
+	hSession->cursor(hSession,CURSOR_MODE_LOCKED);
 
-	Trace("Calling resolver for %s exits with %d", p.host, rc);
+	rc = lib3270_call_thread((int (*)(H3270 *, void *)) cresolve_host_and_port,hSession,&p);
+
+	hSession->cursor(hSession,CURSOR_MODE_NORMAL);
+	status_changed(hSession,saved_status);
+
+	trace("Calling resolver for %s exits with %d", p.host, rc);
 
 	return rc;
 

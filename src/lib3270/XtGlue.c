@@ -979,10 +979,12 @@ LIB3270_EXPORT int lib3270_call_thread(int(*callback)(H3270 *h, void *), H3270 *
 	if(h->set_timer)
 		h->set_timer(h,1);
 
+	lib3270_main_iterate(0);
 	if(callbacks->callthread)
 		rc = callbacks->callthread(callback,h,parm);
 	else
 		rc = callback(h,parm);
+	lib3270_main_iterate(0);
 
 	if(h->set_timer)
 		h->set_timer(h,0);
