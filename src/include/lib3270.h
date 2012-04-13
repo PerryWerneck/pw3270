@@ -695,6 +695,22 @@
 	 */
 	LIB3270_EXPORT int lib3270_get_element(H3270 *h, int baddr, unsigned char *c, unsigned short *attr);
 
+	/**
+	 * Get field region
+	 *
+	 * @param h		Session handle.
+	 * @param baddr	Reference position to get the field start/stop offsets.
+	 * @param start	return location for start of selection, as a character offset.
+	 * @param end	return location for end of selection, as a character offset.
+	 *
+	 * @return Non 0 if invalid
+	 *
+	 */
+	LIB3270_EXPORT int lib3270_get_field_bounds(H3270 *hSession, int baddr, int *start, int *end);
+
+	LIB3270_EXPORT int lib3270_get_word_bounds(H3270 *hSession, int baddr, int *start, int *end);
+
+
 	LIB3270_EXPORT int lib3270_set_model(H3270 *session, int model);
 	LIB3270_EXPORT int lib3270_get_model(H3270 *session);
 

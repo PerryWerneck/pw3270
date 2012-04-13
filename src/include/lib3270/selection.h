@@ -35,7 +35,7 @@
 
 	LIB3270_EXPORT void	  lib3270_clear_selection(H3270 *session);
 	LIB3270_EXPORT void	  lib3270_select_to(H3270 *session, int baddr);
-	LIB3270_EXPORT void	  lib3270_select_word(H3270 *session, int baddr);
+	LIB3270_EXPORT int	  lib3270_select_word_at(H3270 *session, int baddr);
 	LIB3270_EXPORT int	  lib3270_select_field_at(H3270 *session, int baddr);
 
 	/**

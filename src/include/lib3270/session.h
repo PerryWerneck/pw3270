@@ -76,7 +76,8 @@
 		#endif
 
 		// flags
-		int					  	  selected	: 1;
+		int					  	  selected	: 1;	/**< Has selected region? */
+		int						  rectsel	: 1;	/**< Selected region is a rectangle ? */
 
 		struct lib3270_toggle	  toggle[LIB3270_TOGGLE_COUNT];
 

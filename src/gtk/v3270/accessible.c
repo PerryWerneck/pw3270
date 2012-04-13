@@ -506,7 +506,34 @@ static gboolean v3270_accessible_set_selection(AtkText *text, gint selection_num
 	return FALSE;
 }
 
-/*
+static AtkAttributeSet *add_attribute(AtkAttributeSet * attributes, AtkTextAttribute attr, const gchar *value)
+{
+  AtkAttribute *at = g_new(AtkAttribute, 1);
+
+  at->name	= g_strdup (atk_text_attribute_get_name (attr));
+  at->value = g_strdup (value);
+
+  return g_slist_prepend (attributes, at);
+}
+
+static AtkAttributeSet * v3270_accessible_get_default_attributes (AtkText *text)
+{
+	GtkWidget		* widget		= gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
+	AtkAttributeSet	* attributes	= NULL;
+
+	if(!widget)
+		return NULL;
+
+	trace("%s is incomplete ***********************",__FUNCTION__);
+
+	// http://developer.gnome.org/atk/stable/AtkText.html#AtkTextAttribute
+
+	// The direction of the text, if set. Values are "none", "ltr" or "rtl"
+	attributes = add_attribute(attributes, ATK_TEXT_ATTR_DIRECTION,atk_text_attribute_get_value(ATK_TEXT_ATTR_DIRECTION,gtk_widget_get_direction(widget)));
+
+	return attributes;
+}
+
 static AtkAttributeSet * v3270_accessible_get_run_attributes(AtkText *text, gint offset, gint * start_offset, gint * end_offset)
 {
 	GtkWidget		* widget		= gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
@@ -519,14 +546,33 @@ static AtkAttributeSet * v3270_accessible_get_run_attributes(AtkText *text, gint
 
 	// http://developer.gnome.org/atk/stable/AtkText.html#AtkTextAttribute
 
-	attributes = add_attribute (attributes, ATK_TEXT_ATTR_DIRECTION,
-					atk_text_attribute_get_value (ATK_TEXT_ATTR_DIRECTION,
-													gtk_widget_get_direction(widget)));
+	// The direction of the text, if set. Values are "none", "ltr" or "rtl"
+	attributes = add_attribute(attributes, ATK_TEXT_ATTR_DIRECTION,atk_text_attribute_get_value(ATK_TEXT_ATTR_DIRECTION,gtk_widget_get_direction(widget)));
 
+
+	// ATK_TEXT_ATTR_LEFT_MARGIN
+	// The pixel width of the left margin
+
+	// ATK_TEXT_ATTR_RIGHT_MARGIN
+	// The pixel width of the right margin
+
+	// ATK_TEXT_ATTR_INVISIBLE
+	// Either "true" or "false" indicating whether text is visible or not
+
+	// Either "true" or "false" indicating whether text is editable or not
+	// ATK_TEXT_ATTR_EDITABLE
+
+	// The background color. The value is an RGB value of the format "u,u,u"
+	// ATK_TEXT_ATTR_BG_COLOR
+
+	// The foreground color. The value is an RGB value of the format "u,u,u"
+	// ATK_TEXT_ATTR_FG_COLOR
+
+	// The font family name
+	// ATK_TEXT_ATTR_FAMILY_NAME
 
   return attributes;
 }
-*/
 
 static void atk_text_interface_init(AtkTextIface *iface)
 {
@@ -547,6 +593,9 @@ static void atk_text_interface_init(AtkTextIface *iface)
 	iface->remove_selection			= v3270_accessible_remove_selection;
 	iface->set_selection 			= v3270_accessible_set_selection;
 	iface->get_selection			= v3270_accessible_get_selection;
+	iface->get_run_attributes 		= v3270_accessible_get_run_attributes;
+	iface->get_default_attributes	= v3270_accessible_get_default_attributes;
+
 
 /*
 http://git.gnome.org/browse/gtk+/tree/gtk/a11y/gtklabelaccessible.c
@@ -556,8 +605,6 @@ http://git.gnome.org/browse/gtk+/tree/gtk/a11y/gtklabelaccessible.c
   iface->get_text_after_offset = gtk_label_accessible_get_text_after_offset;
 
 
-  iface->get_run_attributes = gtk_label_accessible_get_run_attributes;
-  iface->get_default_attributes = gtk_label_accessible_get_default_attributes;
 */
 }
 
