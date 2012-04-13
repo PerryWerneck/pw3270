@@ -450,7 +450,7 @@ static gint v3270_accessible_get_n_selections (AtkText *text)
 	if(!widget)
 		return 0;
 
-	trace("%s: n_selections=%d",__FUNCTION__,v3270_get_selection_bounds(widget, NULL, NULL) ? 1 : 0);
+//	trace("%s: n_selections=%d",__FUNCTION__,v3270_get_selection_bounds(widget, NULL, NULL) ? 1 : 0);
 
 	return v3270_get_selection_bounds(widget, NULL, NULL) ? 1 : 0;
 }
@@ -459,17 +459,17 @@ static gchar * v3270_accessible_get_selection(AtkText *atk_text, gint selection_
 {
 	GtkWidget *widget = gtk_accessible_get_widget(GTK_ACCESSIBLE (atk_text));
 
-	trace("%s: selection_num=%d",__FUNCTION__,selection_num);
+//	trace("%s: selection_num=%d",__FUNCTION__,selection_num);
 	if (widget == NULL ||selection_num != 0)
 		return NULL;
 
 	if(v3270_get_selection_bounds(widget, start_pos, end_pos))
 	{
-		trace("%s: TRUE",__FUNCTION__);
+//		trace("%s: TRUE",__FUNCTION__);
 		return v3270_get_region(widget, *start_pos, *end_pos, FALSE);
 	}
 
-	trace("%s: FALSE",__FUNCTION__);
+//	trace("%s: FALSE",__FUNCTION__);
 	return NULL;
 }
 
@@ -505,6 +505,28 @@ static gboolean v3270_accessible_set_selection(AtkText *text, gint selection_num
 
 	return FALSE;
 }
+
+/*
+static AtkAttributeSet * v3270_accessible_get_run_attributes(AtkText *text, gint offset, gint * start_offset, gint * end_offset)
+{
+	GtkWidget		* widget		= gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
+	AtkAttributeSet	* attributes	= NULL;
+
+	if(!widget)
+		return NULL;
+
+	trace("%s is incomplete ***********************",__FUNCTION__);
+
+	// http://developer.gnome.org/atk/stable/AtkText.html#AtkTextAttribute
+
+	attributes = add_attribute (attributes, ATK_TEXT_ATTR_DIRECTION,
+					atk_text_attribute_get_value (ATK_TEXT_ATTR_DIRECTION,
+													gtk_widget_get_direction(widget)));
+
+
+  return attributes;
+}
+*/
 
 static void atk_text_interface_init(AtkTextIface *iface)
 {

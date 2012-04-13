@@ -962,7 +962,7 @@ static Boolean key_Character(int code, Boolean with_ge, Boolean pasting, Boolean
 			if (skipped != NULL)
 				*skipped = True;
 			if (FA_IS_SKIP(h3270.ea_buf[baddr].fa))
-				baddr = next_unprotected(baddr);
+				baddr = next_unprotected(&h3270,baddr);
 			else
 				INC_BA(baddr);
 		}
@@ -1269,7 +1269,7 @@ retry:
 			if (skipped != NULL)
 				*skipped = True;
 			if (FA_IS_SKIP(ea_buf[baddr].fa))
-				baddr = next_unprotected(baddr);
+				baddr = next_unprotected(&h3270,baddr);
 			else
 				INC_BA(baddr);
 		}
@@ -1387,7 +1387,7 @@ LIB3270_KEY_ACTION( tab )
 		return 0;
 	}
 #endif /*]*/
-	cursor_move(&h3270,next_unprotected(h3270.cursor_addr));
+	cursor_move(hSession,next_unprotected(hSession,hSession->cursor_addr));
 	return 0;
 }
 
@@ -1550,7 +1550,7 @@ LIB3270_ACTION( firstfield )
 		cursor_move(hSession,0);
 		return 0;
 	}
-	cursor_move(hSession,next_unprotected(hSession->rows*hSession->cols-1));
+	cursor_move(hSession,next_unprotected(hSession,hSession->rows*hSession->cols-1));
 
 	return 0;
 }
@@ -2240,7 +2240,7 @@ LIB3270_CURSOR_ACTION( newline )
 	if (faddr != baddr && !FA_IS_PROTECTED(fa))
 		cursor_move(hSession,baddr);
 	else
-		cursor_move(hSession,next_unprotected(baddr));
+		cursor_move(hSession,next_unprotected(hSession,baddr));
 
 	return 0;
 }
@@ -2263,7 +2263,7 @@ LIB3270_ACTION( dup )
 	if (key_Character(EBC_dup, False, False, NULL))
 	{
 		screen_disp(hSession);
-		cursor_move(hSession,next_unprotected(hSession->cursor_addr));
+		cursor_move(hSession,next_unprotected(hSession,hSession->cursor_addr));
 	}
 }
 
@@ -2931,7 +2931,7 @@ remargin(int lmargin)
 		faddr = find_field_attribute(&h3270,baddr);
 		fa = h3270.ea_buf[faddr].fa;
 		if (faddr == baddr || FA_IS_PROTECTED(fa)) {
-			baddr = next_unprotected(baddr);
+			baddr = next_unprotected(&h3270,baddr);
 			if (baddr <= b0)
 				return False;
 		}
@@ -3354,7 +3354,7 @@ kybd_prime(void)
 		 * The cursor is not in an unprotected field.  Find the
 		 * next one.
 		 */
-		baddr = next_unprotected(h3270.cursor_addr);
+		baddr = next_unprotected(&h3270,h3270.cursor_addr);
 
 		/* If there isn't any, give up. */
 		if (!baddr)

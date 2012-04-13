@@ -122,7 +122,7 @@
 			fa = session->ea_buf[faddr].fa;
 			if (faddr == baddr || FA_IS_PROTECTED(fa))
 			{
-				baddr = next_unprotected(baddr);
+				baddr = next_unprotected(session,baddr);
 				if (baddr <= b0)
 					return 0;
 			}
@@ -212,7 +212,7 @@ LIB3270_EXPORT int lib3270_set_string(H3270 *h, const unsigned char *str)
 				if (faddr != baddr && !FA_IS_PROTECTED(fa))
 					cursor_move(h,baddr);
 				else
-					cursor_move(h,next_unprotected(baddr));
+					cursor_move(h,next_unprotected(h,baddr));
 				data.row = BA_TO_ROW(h->cursor_addr);
 			}
 			last = ' ';

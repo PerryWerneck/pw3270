@@ -53,7 +53,7 @@ LIB3270_INTERNAL struct ea *fa2ea(int baddr);
 LIB3270_INTERNAL Boolean get_bounded_field_attribute(register int baddr, register int bound, unsigned char *fa_out);
 LIB3270_INTERNAL void mdt_clear(int baddr);
 LIB3270_INTERNAL void mdt_set(int baddr);
-LIB3270_INTERNAL int next_unprotected(int baddr0);
+LIB3270_INTERNAL int next_unprotected(H3270 *session, int baddr0);
 LIB3270_INTERNAL enum pds process_ds(unsigned char *buf, int buflen);
 LIB3270_INTERNAL void ps_process(void);
 

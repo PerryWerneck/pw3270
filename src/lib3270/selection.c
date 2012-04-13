@@ -606,6 +606,8 @@ LIB3270_EXPORT int lib3270_drag_selection(H3270 *h, unsigned char flag, int orig
 
 	flag &= 0x1f;
 
+	trace("%s: flag=%04x",__FUNCTION__,flag);
+
 	if(!flag)
 		return origin;
 	else if(flag == SELECTION_ACTIVE)

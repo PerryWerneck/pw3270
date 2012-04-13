@@ -271,34 +271,36 @@ static void v3270_class_init(v3270Class *klass)
 #ifdef WIN32
 		static const gchar	* cr[V3270_CURSOR_COUNT] =
 		{
-			"ibeam",
-			"wait",
-			"arrow",
-			"hand",
-			"sizenwse",	// Top-left
-			"sizenesw",	// Top-right
-			"sizens",	// Top
-			"sizenesw",	// Bottom-left
-			"sizenwse",	// Bottom-right
-			"sizens",	// Bottom
-			"sizewe",	// Left
-			"sizewe",	// Right
+			"ibeam",	//	V3270_CURSOR_UNPROTECTED
+			"wait",		//	V3270_CURSOR_WAITING
+			"arrow",	//	V3270_CURSOR_LOCKED
+			"arrow",	//	V3270_CURSOR_PROTECTED
+			"hand",		//	V3270_CURSOR_MOVE_SELECTION
+			"sizenwse",	//	V3270_CURSOR_SELECTION_TOP_LEFT
+			"sizenesw",	//	V3270_CURSOR_SELECTION_TOP_RIGHT
+			"sizens",	//	V3270_CURSOR_SELECTION_TOP
+			"sizenesw",	//	V3270_CURSOR_SELECTION_BOTTOM_LEFT
+			"sizenwse",	//	V3270_CURSOR_SELECTION_BOTTOM_RIGHT
+			"sizens",	//	V3270_CURSOR_SELECTION_BOTTOM
+			"sizewe",	//	V3270_CURSOR_SELECTION_LEFT
+			"sizewe",	//	V3270_CURSOR_SELECTION_RIGHT
 		};
 #else
 		static const int	  cr[V3270_CURSOR_COUNT] =
 		{
-			GDK_XTERM,
-			GDK_WATCH,
-			GDK_X_CURSOR,
-			GDK_HAND1,
-			GDK_TOP_LEFT_CORNER, 		// Top-left
-			GDK_TOP_RIGHT_CORNER,		// Top-right
-			GDK_TOP_SIDE,				// Top
-			GDK_BOTTOM_LEFT_CORNER,		// Bottom-left
-			GDK_BOTTOM_RIGHT_CORNER,	// Bottom-right
-			GDK_BOTTOM_SIDE,			// Bottom
-			GDK_LEFT_SIDE,				// Left
-			GDK_RIGHT_SIDE,				// Right
+			GDK_XTERM,					// V3270_CURSOR_UNPROTECTED
+			GDK_WATCH,					// V3270_CURSOR_WAITING
+			GDK_X_CURSOR,				// V3270_CURSOR_LOCKED
+			GDK_ARROW,					// V3270_CURSOR_PROTECTED
+			GDK_HAND1,					// V3270_CURSOR_MOVE_SELECTION
+			GDK_TOP_LEFT_CORNER, 		// V3270_CURSOR_SELECTION_TOP_LEFT
+			GDK_TOP_RIGHT_CORNER,		// V3270_CURSOR_SELECTION_TOP_RIGHT
+			GDK_TOP_SIDE,				// V3270_CURSOR_SELECTION_TOP
+			GDK_BOTTOM_LEFT_CORNER,		// V3270_CURSOR_SELECTION_BOTTOM_LEFT
+			GDK_BOTTOM_RIGHT_CORNER,	// V3270_CURSOR_SELECTION_BOTTOM_RIGHT
+			GDK_BOTTOM_SIDE,			// V3270_CURSOR_SELECTION_BOTTOM
+			GDK_LEFT_SIDE,				// V3270_CURSOR_SELECTION_LEFT
+			GDK_RIGHT_SIDE,				// V3270_CURSOR_SELECTION_RIGHT
 		};
 #endif // WIN32
 
@@ -313,12 +315,6 @@ static void v3270_class_init(v3270Class *klass)
 	#endif
 		}
 	}
-/*
-	v3270_cursor[V3270_CURSOR_NORMAL] 	= gdk_cursor_new(GDK_XTERM);
-	v3270_cursor[V3270_CURSOR_WAITING]	= gdk_cursor_new(GDK_WATCH);
-	v3270_cursor[V3270_CURSOR_LOCKED]	= gdk_cursor_new(GDK_X_CURSOR);
-	v3270_cursor[]
-*/
 
 	// Signals
 	widget_class->activate_signal =
@@ -573,8 +569,19 @@ static void select_cursor(H3270 *session, LIB3270_CURSOR id)
 	if(gtk_widget_get_realized(widget) && gtk_widget_get_has_window(widget))
 	{
 		GTK_V3270(widget)->pointer_id = id;
-		gdk_window_set_cursor(gtk_widget_get_window(widget),v3270_cursor[id]);
+		v3270_update_mouse_pointer(widget);
 	}
+}
+
+static void ctlr_done(H3270 *session)
+{
+	GtkWidget *widget = GTK_WIDGET(session->widget);
+
+	if(gtk_widget_get_realized(widget) && gtk_widget_get_has_window(widget))
+	{
+		v3270_update_mouse_pointer(widget);
+	}
+
 }
 
 static void update_connect(H3270 *session, unsigned char connected)
@@ -700,6 +707,8 @@ static void v3270_init(v3270 *widget)
 	widget->host->update_connect	= update_connect;
 	widget->host->update_model		= update_model;
 	widget->host->changed			= changed;
+	widget->host->ctlr_done			= ctlr_done;
+
 
 	// Setup input method
 	widget->input_method 			= gtk_im_multicontext_new();

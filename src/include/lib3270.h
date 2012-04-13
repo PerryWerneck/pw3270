@@ -186,7 +186,7 @@
 	 */
 	typedef enum _LIB3270_CURSOR
 	{
-		LIB3270_CURSOR_NORMAL,		/**< Ready for user actions */
+		LIB3270_CURSOR_EDITABLE,	/**< Ready for user actions */
 		LIB3270_CURSOR_WAITING,		/**< Waiting for host */
 		LIB3270_CURSOR_LOCKED,		/**< Locked, can't receive user actions */
 
@@ -697,6 +697,9 @@
 
 	LIB3270_EXPORT int lib3270_set_model(H3270 *session, int model);
 	LIB3270_EXPORT int lib3270_get_model(H3270 *session);
+
+	LIB3270_EXPORT int lib3270_is_protected(H3270 *h, unsigned int baddr);
+
 
 #ifdef __cplusplus
 	}

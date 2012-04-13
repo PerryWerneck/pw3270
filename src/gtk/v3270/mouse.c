@@ -42,13 +42,16 @@ gint v3270_get_offset_at_point(v3270 *widget, gint x, gint y)
 	GdkPoint point;
 	int r,c;
 
-	point.x = ((x-widget->metrics.left)/widget->metrics.width);
-	point.y = ((y-widget->metrics.top)/widget->metrics.spacing);
+	if(x > 0 && y > 0)
+	{
+		point.x = ((x-widget->metrics.left)/widget->metrics.width);
+		point.y = ((y-widget->metrics.top)/widget->metrics.spacing);
 
-	lib3270_get_screen_size(widget->host,&r,&c);
+		lib3270_get_screen_size(widget->host,&r,&c);
 
-	if(point.x >= 0 && point.y >= 0 && point.x < c && point.y < r)
-		return (point.y * c) + point.x;
+		if(point.x >= 0 && point.y >= 0 && point.x < c && point.y < r)
+			return (point.y * c) + point.x;
+	}
 
 	return -1;
 }
@@ -164,76 +167,93 @@ gboolean v3270_button_release_event(GtkWidget *widget, GdkEventButton*event)
 }
 
 
+static void update_mouse_pointer(GtkWidget *widget, int baddr)
+{
+	v3270 *terminal = GTK_V3270(widget);
+
+	if(baddr >= 0 && terminal->pointer_id == LIB3270_CURSOR_EDITABLE)
+	{
+		int id = terminal->pointer;
+
+		switch(lib3270_get_selection_flags(terminal->host,baddr) & 0x1f)
+		{
+		case 0x10:
+			id = V3270_CURSOR_MOVE_SELECTION;
+			break;
+
+		case 0x12:
+			id = V3270_CURSOR_SELECTION_TOP;
+			break;
+
+		case 0x16:
+			id = V3270_CURSOR_SELECTION_TOP_RIGHT;
+			break;
+
+		case 0x14:
+			id = V3270_CURSOR_SELECTION_RIGHT;
+			break;
+
+		case 0x11:
+			id = V3270_CURSOR_SELECTION_LEFT;
+			break;
+
+		case 0x19:
+			id = V3270_CURSOR_SELECTION_BOTTOM_LEFT;
+			break;
+
+		case 0x18:
+			id = V3270_CURSOR_SELECTION_BOTTOM;
+			break;
+
+		case 0x1c:
+			id = V3270_CURSOR_SELECTION_BOTTOM_RIGHT;
+			break;
+
+		case 0x13:
+			id = V3270_CURSOR_SELECTION_TOP_LEFT;
+			break;
+
+		default:
+			id = lib3270_is_protected(terminal->host,baddr) ? V3270_CURSOR_PROTECTED : V3270_CURSOR_UNPROTECTED;
+
+		}
+
+		gdk_window_set_cursor(gtk_widget_get_window(widget),v3270_cursor[id]);
+	}
+
+}
+
+void v3270_update_mouse_pointer(GtkWidget *widget)
+{
+	gint	  x, y;
+
+#if GTK_CHECK_VERSION(3,4,0)
+	#warning Implement gdk_window_get_device_position
+#endif // GTK(3,4,0)
+
+	gtk_widget_get_pointer(widget,&x,&y);
+	update_mouse_pointer(widget,v3270_get_offset_at_point(GTK_V3270(widget),x,y));
+}
+
 gboolean v3270_motion_notify_event(GtkWidget *widget, GdkEventMotion *event)
 {
-	v3270	* terminal = GTK_V3270(widget);
-	int		  baddr = v3270_get_offset_at_point(terminal,event->x,event->y);
+	v3270	* terminal	= GTK_V3270(widget);
+	int		  baddr		= v3270_get_offset_at_point(terminal,event->x,event->y);
 
-	if(baddr < 0)
-		return FALSE;
-
-	if(terminal->selecting)
+	if(baddr >= 0)
 	{
-		// Select area
-		lib3270_select_to(terminal->host,baddr);
-	}
-	else if(terminal->moving)
-	{
-		// Move selected area
-		terminal->selection_addr = lib3270_drag_selection(terminal->host,terminal->pointer,terminal->selection_addr,baddr);
-	}
-	else if(terminal->pointer_id == LIB3270_CURSOR_NORMAL)
-	{
-		unsigned char new_pointer = lib3270_get_selection_flags(terminal->host,baddr);
-		if(new_pointer != terminal->pointer)
+		if(terminal->selecting)		// Select region
 		{
-			GdkWindow *window = gtk_widget_get_window(widget);
-			trace("Pointer changes to %04x",new_pointer);
-
-			switch(new_pointer & 0x1F)
-			{
-			case 0x10:
-				gdk_window_set_cursor(window,v3270_cursor[V3270_CURSOR_MOVE_SELECTION]);
-				break;
-
-			case 0x12:
-				gdk_window_set_cursor(window,v3270_cursor[V3270_CURSOR_SELECTION_TOP]);
-				break;
-
-			case 0x16:
-				gdk_window_set_cursor(window,v3270_cursor[V3270_CURSOR_SELECTION_TOP_RIGHT]);
-				break;
-
-			case 0x14:
-				gdk_window_set_cursor(window,v3270_cursor[V3270_CURSOR_SELECTION_RIGHT]);
-				break;
-
-			case 0x11:
-				gdk_window_set_cursor(window,v3270_cursor[V3270_CURSOR_SELECTION_LEFT]);
-				break;
-
-			case 0x19:
-				gdk_window_set_cursor(window,v3270_cursor[V3270_CURSOR_SELECTION_BOTTOM_LEFT]);
-				break;
-
-			case 0x18:
-				gdk_window_set_cursor(window,v3270_cursor[V3270_CURSOR_SELECTION_BOTTOM]);
-				break;
-
-			case 0x1c:
-				gdk_window_set_cursor(window,v3270_cursor[V3270_CURSOR_SELECTION_BOTTOM_RIGHT]);
-				break;
-
-			case 0x13:
-				gdk_window_set_cursor(window,v3270_cursor[V3270_CURSOR_SELECTION_TOP_LEFT]);
-				break;
-
-			default:
-				gdk_window_set_cursor(window,v3270_cursor[V3270_CURSOR_NORMAL]);
-
-			}
-
-			terminal->pointer = new_pointer;
+			lib3270_select_to(terminal->host,baddr);
+		}
+		if(terminal->moving) 	// Move selected area
+		{
+			terminal->selection_addr = lib3270_drag_selection(terminal->host,terminal->pointer,terminal->selection_addr,baddr);
+		}
+		else
+		{
+			terminal->pointer = lib3270_get_selection_flags(terminal->host,baddr);
+			update_mouse_pointer(widget,baddr);
 		}
 	}
 

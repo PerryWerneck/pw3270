@@ -768,3 +768,18 @@ LIB3270_EXPORT void lib3270_popup_dialog(H3270 *session, LIB3270_NOTIFY id , con
 	popup_handler(session,id,title ? title : _( "3270 Error" ), message,fmt,args);
 	va_end(args);
 }
+
+LIB3270_EXPORT int lib3270_is_protected(H3270 *h, unsigned int baddr)
+{
+	unsigned char fa;
+
+	CHECK_SESSION_HANDLE(h);
+
+	if(baddr > (h->rows * h->cols))
+		return -1;
+
+	fa = get_field_attribute(h,baddr);
+
+	return FA_IS_PROTECTED(fa);
+}
+

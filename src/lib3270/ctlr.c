@@ -380,7 +380,6 @@ int lib3270_field_length(H3270 *h, int baddr)
  */
 unsigned char get_field_attribute(H3270 *h, int baddr)
 {
-	CHECK_SESSION_HANDLE(h);
 	return h->ea_buf[find_field_attribute(h,baddr)].fa;
 }
 
@@ -435,20 +434,19 @@ fa2ea(int baddr)
  * unprotected attribute byte, or 0 if no nonzero-width unprotected field
  * can be found.
  */
-int
-next_unprotected(int baddr0)
+int next_unprotected(H3270 *session, int baddr0)
 {
 	register int baddr, nbaddr;
 
 	nbaddr = baddr0;
-	do {
+	do
+	{
 		baddr = nbaddr;
 		INC_BA(nbaddr);
-		if (h3270.ea_buf[baddr].fa &&
-		    !FA_IS_PROTECTED(h3270.ea_buf[baddr].fa) &&
-		    !h3270.ea_buf[nbaddr].fa)
+		if(session->ea_buf[baddr].fa &&!FA_IS_PROTECTED(session->ea_buf[baddr].fa) &&!session->ea_buf[nbaddr].fa)
 			return nbaddr;
 	} while (nbaddr != baddr0);
+
 	return 0;
 }
 
@@ -1287,7 +1285,7 @@ ctlr_write(unsigned char buf[], int buflen, Boolean erase)
 			 * Otherwise, advance to the first position of the
 			 * next unprotected field.
 			 */
-			baddr = next_unprotected(h3270.buffer_addr);
+			baddr = next_unprotected(&h3270,h3270.buffer_addr);
 			if (baddr < h3270.buffer_addr)
 				baddr = 0;
 			/*
