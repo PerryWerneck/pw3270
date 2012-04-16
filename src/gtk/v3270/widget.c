@@ -616,8 +616,8 @@ static void update_model(H3270 *session, const char *name, int model, int rows, 
 
 static void changed(H3270 *session, int offset, int len)
 {
-	GtkWidget * widget	= session->widget;
-	AtkObject * obj		= gtk_widget_get_accessible(widget);
+	GtkWidget 		* widget	= session->widget;
+	GtkAccessible	* obj		= GTK_V3270(widget)->accessible;
 
 	trace("%s: offset=%d len=%d",__FUNCTION__,offset,len)
 
@@ -669,8 +669,8 @@ static void set_selection(H3270 *session, unsigned char status)
 static void update_selection(H3270 *session, int start, int end)
 {
 	// Selected region changed
-	GtkWidget	* widget	= GTK_WIDGET(session->widget);
-	AtkObject	* atk_obj	= gtk_widget_get_accessible(widget);
+	GtkWidget		* widget	= GTK_WIDGET(session->widget);
+	GtkAccessible	* atk_obj	= GTK_V3270(widget)->accessible;
 
 	if(atk_obj)
 		g_signal_emit_by_name(atk_obj,"text-selection-changed");
@@ -1137,7 +1137,7 @@ int v3270_connect(GtkWidget *widget, const gchar *host)
 
 static gboolean notify_focus(GtkWidget *widget, GdkEventFocus *event)
 {
-	AtkObject *obj = gtk_widget_get_accessible (widget);
+	GtkAccessible *obj = GTK_V3270(widget)->accessible;
 
 	if(obj)
 		g_signal_emit_by_name (obj, "focus-event", event->in);

@@ -586,6 +586,7 @@ LIB3270_EXPORT int lib3270_drag_selection(H3270 *h, unsigned char flag, int orig
 	if(!lib3270_get_selection_bounds(h,&first,&last))
 		return origin;
 
+/*
 	trace("%s: flag=%04x %s %s %s %s",__FUNCTION__,
 				flag,
 				flag & SELECTION_LEFT	? "Left"	: "-",
@@ -593,6 +594,7 @@ LIB3270_EXPORT int lib3270_drag_selection(H3270 *h, unsigned char flag, int orig
 				flag & SELECTION_RIGHT	? "Right"	: "-",
 				flag & SELECTION_BOTTOM	? "Bottom"	: "-"
 				);
+*/
 
 	if(!flag)
 		return origin;

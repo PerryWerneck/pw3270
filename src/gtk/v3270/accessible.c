@@ -83,24 +83,50 @@ static const gchar * v3270_accessible_get_description (AtkObject *accessible)
 	return _( "3270 screen" );
 }
 
+static void v3270_accessible_focus_event(AtkObject *obj,  gboolean focus_in)
+{
+	AtkObject *focus_obj = g_object_get_data (G_OBJECT (obj), "gail-focus-object");
+
+	if(focus_obj == NULL)
+		focus_obj = obj;
+
+	atk_object_notify_state_change(focus_obj, ATK_STATE_FOCUSED, focus_in);
+}
+
+static AtkAttributeSet * v3270_accessible_get_attributes (AtkObject *obj)
+{
+  AtkAttributeSet	* attributes;
+  AtkAttribute		* toolkit		= g_new(AtkAttribute, 1);
+
+  toolkit->name = g_strdup("toolkit");
+  toolkit->value = g_strdup("gtk");
+
+  attributes = g_slist_append (NULL, toolkit);
+
+  return attributes;
+}
+
+static void v3270_accessible_initialize (AtkObject *obj, gpointer data)
+{
+	obj->role = ATK_ROLE_TEXT;
+}
+
 static void v3270_accessible_class_init(v3270AccessibleClass *klass)
 {
 	AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
 
-	class->get_description = v3270_accessible_get_description;
+	class->get_description	= v3270_accessible_get_description;
+	class->focus_event		= v3270_accessible_focus_event;
+	class->get_attributes	= v3270_accessible_get_attributes;
+	class->initialize		= v3270_accessible_initialize;
 
 /*
-	class->focus_event = gtk_widget_accessible_focus_event;
-
 	klass->notify_gtk = gtk_widget_accessible_notify_gtk;
 
 	class->get_parent = gtk_widget_accessible_get_parent;
 	class->ref_relation_set = gtk_widget_accessible_ref_relation_set;
 	class->ref_state_set = gtk_widget_accessible_ref_state_set;
 	class->get_index_in_parent = gtk_widget_accessible_get_index_in_parent;
-	class->initialize = gtk_widget_accessible_initialize;
-	class->get_attributes = gtk_widget_accessible_get_attributes;
-	class->focus_event = gtk_widget_accessible_focus_event;
 */
 }
 
