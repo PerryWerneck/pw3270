@@ -38,8 +38,9 @@
  #define SELECTION_TOP			0x02
  #define SELECTION_RIGHT		0x04
  #define SELECTION_BOTTOM		0x08
- #define SELECTION_SINGLE_ROW	0x10
- #define SELECTION_SINGLE_COL	0x20
+
+ #define SELECTION_SINGLE_COL	0x10
+ #define SELECTION_SINGLE_ROW	0x20
 
  #define SELECTION_ACTIVE		0x80
 
@@ -285,22 +286,30 @@ LIB3270_EXPORT unsigned char lib3270_get_selection_flags(H3270 *hSession, int ba
 	rc |= SELECTION_ACTIVE;
 
 	if( (hSession->select.start % hSession->cols) == (hSession->select.end % hSession->cols) )
+	{
 		rc |= SELECTION_SINGLE_COL;
+	}
+	else
+	{
+		if( (col == 0) || !(hSession->text[baddr-1].attr & LIB3270_ATTR_SELECTED) )
+			rc |= SELECTION_LEFT;
+
+		if( (col == hSession->cols) || !(hSession->text[baddr+1].attr & LIB3270_ATTR_SELECTED) )
+			rc |= SELECTION_RIGHT;
+	}
 
 	if( (hSession->select.start / hSession->cols) == (hSession->select.end / hSession->cols) )
+	{
 		rc |= SELECTION_SINGLE_ROW;
+	}
+	else
+	{
+		if( (row == 0) || !(hSession->text[baddr-hSession->cols].attr & LIB3270_ATTR_SELECTED) )
+			rc |= SELECTION_TOP;
 
-	if( (col == 0) || !(hSession->text[baddr-1].attr & LIB3270_ATTR_SELECTED) )
-		rc |= SELECTION_LEFT;
-
-	if( (row == 0) || !(hSession->text[baddr-hSession->cols].attr & LIB3270_ATTR_SELECTED) )
-		rc |= SELECTION_TOP;
-
-	if( (col == hSession->cols) || !(hSession->text[baddr+1].attr & LIB3270_ATTR_SELECTED) )
-		rc |= SELECTION_RIGHT;
-
-	if( (row == hSession->rows) || !(hSession->text[baddr+hSession->cols].attr & LIB3270_ATTR_SELECTED) )
-		rc |= SELECTION_BOTTOM;
+		if( (row == hSession->rows) || !(hSession->text[baddr+hSession->cols].attr & LIB3270_ATTR_SELECTED) )
+			rc |= SELECTION_BOTTOM;
+	}
 
 	return rc;
 }
@@ -577,12 +586,20 @@ LIB3270_EXPORT int lib3270_drag_selection(H3270 *h, unsigned char flag, int orig
 	if(!lib3270_get_selection_bounds(h,&first,&last))
 		return origin;
 
-	trace("%s: flag=%04x",__FUNCTION__,flag);
+	trace("%s: flag=%04x %s %s %s %s",__FUNCTION__,
+				flag,
+				flag & SELECTION_LEFT	? "Left"	: "-",
+				flag & SELECTION_TOP	? "Top"		: "-",
+				flag & SELECTION_RIGHT	? "Right"	: "-",
+				flag & SELECTION_BOTTOM	? "Bottom"	: "-"
+				);
 
 	if(!flag)
 		return origin;
-	else if(flag == SELECTION_ACTIVE)
+	else if((flag&0x8F) == SELECTION_ACTIVE)
 		return lib3270_move_selected_area(h,origin,baddr);
+
+	trace("%s",__FUNCTION__);
 
 	row = baddr/h->cols;
 	col = baddr%h->cols;

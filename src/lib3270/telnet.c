@@ -880,7 +880,7 @@ connection_complete(void)
  */
 static void output_possible(H3270 *session)
 {
-	trace("%s: %s",HALF_CONNECTED ? "Half connected" : "Connected");
+	trace("%s: %s",__FUNCTION__,HALF_CONNECTED ? "Half connected" : "Connected");
 	if (HALF_CONNECTED)
 	{
 		connection_complete();
