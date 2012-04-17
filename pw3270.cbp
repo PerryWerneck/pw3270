@@ -67,9 +67,6 @@
 		<Unit filename="src/gtk/main.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/gtk/mainwindow.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/gtk/print.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -117,9 +114,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/gtk/v3270/accessible.h" />
-		<Unit filename="src/gtk/v3270/clipboard.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/gtk/v3270/draw.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -137,12 +131,18 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/gtk/v3270/private.h" />
+		<Unit filename="src/gtk/v3270/selection.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/gtk/v3270/sources.mak" />
 		<Unit filename="src/gtk/v3270/v3270.h" />
 		<Unit filename="src/gtk/v3270/widget.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/gtk/valgrind.suppression" />
+		<Unit filename="src/gtk/window.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/include/lib3270.h" />
 		<Unit filename="src/include/lib3270/action_table.h" />
 		<Unit filename="src/include/lib3270/actions.h" />

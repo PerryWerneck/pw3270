@@ -70,6 +70,26 @@ any IBM host that supports 3270-style connections over TELNET.
 
 Revision @PACKAGE_REVISION@ from @PACKAGE_SOURCE@
 
+%package lib
+Summary:	3270 Communication library for %{name}
+Group:		Development/Libraries
+Requires:       openssl %{name}-lib
+
+%description lib
+tn3270 protocol library for %{name}
+
+Revision @PACKAGE_REVISION@ from @PACKAGE_SOURCE@
+
+%package devel
+Summary:	Devel for 3270 Communication library for %{name}
+Group:		Development/Libraries
+Requires:	%{name}-lib = @PACKAGE_VERSION@
+
+%description devel
+devel for tn3270 protocol library for %{name}
+
+Revision @PACKAGE_REVISION@ from @PACKAGE_SOURCE@
+
 #---[ Build & Install ]-----------------------------------------------------------------------------------------------
 
 %prep
@@ -98,18 +118,23 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root)
 %doc AUTHORS LICENSE
 
-# Library
-%{_libdir}/lib3270.so
-
 # Main application
 %dir %{_datadir}/@PACKAGE_NAME@
 %dir %{_datadir}/@PACKAGE_NAME@/ui
 
 %{_bindir}/@PACKAGE_NAME@
 %{_datadir}/@PACKAGE_NAME@/ui/00default.xml
-%{_datadir}/@PACKAGE_NAME@/ui/99debug.xml
 %{_datadir}/@PACKAGE_NAME@/@PACKAGE_NAME@.png
 %{_datadir}/@PACKAGE_NAME@/@PACKAGE_NAME@-logo.png
+
+%files lib
+%defattr(-,root,root)
+%{_libdir}/lib3270.so
+
+%files devel
+%defattr(-,root,root)
+%{_includedir}
+%{_datadir}/@PACKAGE_NAME@/ui/99debug.xml
 
 #---[ Scripts ]-------------------------------------------------------------------------------------------------------
 
