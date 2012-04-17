@@ -28,7 +28,6 @@
  */
 
  #include "globals.h"
-// #include "ctlr.h"
  #include "appres.h"
  #include <lib3270.h>
  #include <lib3270/session.h>

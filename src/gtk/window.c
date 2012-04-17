@@ -251,6 +251,22 @@
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(widget),menu);
  }
 
+ static void  set_icon_list(GtkWindow *window)
+ {
+ 	gchar	* name		= g_strdup_printf("%s.png",g_get_application_name());
+	gchar	* filename	= build_data_filename(name,NULL);
+	GError	* error		= NULL;
+
+	if(!gtk_window_set_icon_from_file(window,filename,&error))
+	{
+		g_warning("Error %s loading icon from %s",error->message,filename);
+		g_error_free(error);
+	}
+
+	g_free(filename);
+	g_free(name);
+
+ }
 
  GtkWidget * create_main_window(const gchar *uri)
  {
@@ -368,6 +384,9 @@
 
 	g_free(path);
 
+
+
+	// Initialize terminal
 	if(v3270_get_toggle(terminal,LIB3270_TOGGLE_FULL_SCREEN))
 		gtk_window_fullscreen(GTK_WINDOW(window));
 

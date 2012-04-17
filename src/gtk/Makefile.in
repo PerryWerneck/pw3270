@@ -50,7 +50,7 @@ include uiparser/sources.mak
 
 #---[ Targets ]----------------------------------------------------------------
 
-SOURCES=main.c mainwindow.c actions.c fonts.c dialog.c print.c colors.c \
+SOURCES=main.c window.c actions.c fonts.c dialog.c print.c colors.c \
 		$(foreach SRC, $(V3270_SRC), v3270/$(SRC)) \
 		$(foreach SRC, $(COMMON_SRC), common/$(SRC)) \
 		$(foreach SRC, $(UI_PARSER_SRC), uiparser/$(SRC))

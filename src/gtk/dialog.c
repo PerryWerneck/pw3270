@@ -537,10 +537,11 @@
 		"USA" );
 
 	GtkAboutDialog  * dialog 	= GTK_ABOUT_DIALOG(gtk_about_dialog_new());
-	gchar			* filename	= g_strdup_printf("%s-logo.png",g_get_application_name());
-	gchar			* logo		= build_data_filename(filename,NULL);
+	gchar			* text 		= g_strdup_printf("%s-logo.png",g_get_application_name());
+	gchar			* filename	= build_data_filename(text,NULL);
 
-	if(logo && g_file_test(filename,G_FILE_TEST_EXISTS))
+	trace("[%s]",filename);
+	if(g_file_test(filename,G_FILE_TEST_EXISTS))
 	{
 		GError 		* error	= NULL;
 		GdkPixbuf	* pix	= gdk_pixbuf_new_from_file(filename,&error);
@@ -558,10 +559,13 @@
 		}
 	}
 
-	g_free(logo);
 	g_free(filename);
+	g_free(text);
 
-	gtk_about_dialog_set_version(dialog, PACKAGE_VERSION );
+	text = g_strdup_printf(_("Version %s - Revision %s"),PACKAGE_VERSION,PACKAGE_REVISION);
+	gtk_about_dialog_set_version(dialog,text);
+	g_free(text);
+
 	gtk_about_dialog_set_copyright(dialog, "Copyright © 2008 Banco do Brasil S.A." );
 	gtk_about_dialog_set_comments(dialog, _( "3270 terminal emulator for GTK+" ) );
 

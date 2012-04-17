@@ -177,41 +177,41 @@ static void update_mouse_pointer(GtkWidget *widget, int baddr)
 	{
 		int id = terminal->pointer;
 
-		switch(lib3270_get_selection_flags(terminal->host,baddr) & 0x1f)
+		switch(lib3270_get_selection_flags(terminal->host,baddr) & 0x8f)
 		{
-		case 0x10:
+		case 0x80:
 			id = V3270_CURSOR_MOVE_SELECTION;
 			break;
 
-		case 0x12:
+		case 0x82:
 			id = V3270_CURSOR_SELECTION_TOP;
 			break;
 
-		case 0x16:
+		case 0x86:
 			id = V3270_CURSOR_SELECTION_TOP_RIGHT;
 			break;
 
-		case 0x14:
+		case 0x84:
 			id = V3270_CURSOR_SELECTION_RIGHT;
 			break;
 
-		case 0x11:
+		case 0x81:
 			id = V3270_CURSOR_SELECTION_LEFT;
 			break;
 
-		case 0x19:
+		case 0x89:
 			id = V3270_CURSOR_SELECTION_BOTTOM_LEFT;
 			break;
 
-		case 0x18:
+		case 0x88:
 			id = V3270_CURSOR_SELECTION_BOTTOM;
 			break;
 
-		case 0x1c:
+		case 0x8c:
 			id = V3270_CURSOR_SELECTION_BOTTOM_RIGHT;
 			break;
 
-		case 0x13:
+		case 0x83:
 			id = V3270_CURSOR_SELECTION_TOP_LEFT;
 			break;
 
