@@ -542,12 +542,16 @@
 
 	if(logo && g_file_test(filename,G_FILE_TEST_EXISTS))
 	{
-		GError 		*error 	= NULL;
+		GError 		* error	= NULL;
 		GdkPixbuf	* pix	= gdk_pixbuf_new_from_file(filename,&error);
 
 		gtk_about_dialog_set_logo(dialog,pix);
 
-		if(!pix)
+		if(pix)
+		{
+			g_object_unref(pix);
+		}
+		else
 		{
 			g_warning("Can't load %s: %s",filename,error->message);
 			g_error_free(error);
