@@ -137,12 +137,14 @@ $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz: clean $(PACKAGE_NAME).png $(PACKAG
 	@rm -fr $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@echo $@
 
-install:
+install: $(PACKAGE_NAME).png $(PACKAGE_NAME)-logo.png
 	@make BINRLS="../../.bin/Release/lib" -C src/lib3270 install
 	@make BINDIR="../../$(BINDIR)" LIB3270_LIBS="$(RLSLIB)" LIB3270_CFLAGS="-I../../src/include" -C src/gtk install
 
 	@$(MKDIR) $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/ui
 	@$(INSTALL_DATA) ui/*.xml $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/ui
+	@$(INSTALL_DATA) $(PACKAGE_NAME).png $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)
+	@$(INSTALL_DATA) $(PACKAGE_NAME)-logo.png $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)
 
 clean:
 	@rm -fr .obj
