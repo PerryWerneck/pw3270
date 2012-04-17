@@ -68,6 +68,17 @@ AC_SUBST(REXXC)
 AC_PATH_TOOL([VALGRIND], [valgrind], [no])
 AC_PATH_TOOL([REXXCONFIG], [oorexx-config], [no])
 
+AC_CHECK_PROGS(GZIP,[gzip],no)
+export GZIP;
+if test $GZIP = "no" ; then
+        AC_MSG_ERROR([Unable to find the gzip application]);
+fi
+AC_SUBST(GZIP)
+
+AC_CHECK_PROGS(CONVERT,[rsvg-convert],no)
+AC_SUBST(CONVERT)
+
+
 #--[ Version & Revision ]-------------------------------------------------------------------------------------------------------------------------------------
 
 AC_DEFINE(PACKAGE_REVISION,"SVN_REVISION")

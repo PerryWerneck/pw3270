@@ -66,10 +66,7 @@ G_DEFINE_TYPE_WITH_CODE (v3270Accessible, v3270_accessible, GTK_TYPE_ACCESSIBLE,
 							G_IMPLEMENT_INTERFACE (ATK_TYPE_TEXT, atk_text_interface_init)
 						)
 
-//							G_IMPLEMENT_INTERFACE (ATK_TYPE_EDITABLE_TEXT, atk_editable_text_interface_init) )
-//                         G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init)
 //                         G_IMPLEMENT_INTERFACE (ATK_TYPE_EDITABLE_TEXT, atk_editable_text_interface_init)
-//                         G_IMPLEMENT_INTERFACE (ATK_TYPE_TEXT, atk_text_interface_init)
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
@@ -560,13 +557,44 @@ static AtkAttributeSet * v3270_accessible_get_default_attributes (AtkText *text)
 	return attributes;
 }
 
+/**
+ * Creates an AtkAttributeSet which consists of the attributes explicitly
+ * set at the position offset in the text. start_offset and end_offset are set
+ * to the start and end of the range around offset where the attributes are invariant.
+ * Note that end_offset is the offset of the first character after the range.
+ * See the enum AtkTextAttribute for types of text attributes that can be returned.
+ * Note that other attributes may also be returned.
+ *
+ * @param text			an AtkText
+ * @param offset		the offset at which to get the attributes, -1 means the offset of the character to be inserted at the caret location.
+ * @param start_offset	the address to put the start offset of the range
+ * @param end_offset	the address to put the end offset of the range
+ *
+ * @return	an AtkAttributeSet which contains the attributes explicitly set at offset.
+ */
 static AtkAttributeSet * v3270_accessible_get_run_attributes(AtkText *text, gint offset, gint * start_offset, gint * end_offset)
 {
 	GtkWidget		* widget		= gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
+	H3270			* host;
 	AtkAttributeSet	* attributes	= NULL;
+	int				  start, end;
 
-	if(!widget)
+	if(!(widget && GTK_IS_V3270(widget)))
+	{
+		trace("%s called with invalid widget %p ***************************",__FUNCTION__,widget);
 		return NULL;
+	}
+
+	host = v3270_get_session(widget);
+
+	if(offset == -1)
+		offset = lib3270_get_cursor_address(host);
+
+	if(!lib3270_get_field_bounds(host,offset,&start,&end))
+	{
+		*start_offset = start;
+		*end_offset   = end;
+	}
 
 	trace("%s is incomplete ***********************",__FUNCTION__);
 
@@ -574,7 +602,6 @@ static AtkAttributeSet * v3270_accessible_get_run_attributes(AtkText *text, gint
 
 	// The direction of the text, if set. Values are "none", "ltr" or "rtl"
 	attributes = add_attribute(attributes, ATK_TEXT_ATTR_DIRECTION,atk_text_attribute_get_value(ATK_TEXT_ATTR_DIRECTION,gtk_widget_get_direction(widget)));
-
 
 	// ATK_TEXT_ATTR_LEFT_MARGIN
 	// The pixel width of the left margin
@@ -586,7 +613,9 @@ static AtkAttributeSet * v3270_accessible_get_run_attributes(AtkText *text, gint
 	// Either "true" or "false" indicating whether text is visible or not
 
 	// Either "true" or "false" indicating whether text is editable or not
-	// ATK_TEXT_ATTR_EDITABLE
+	attributes = add_attribute(	attributes,
+								ATK_TEXT_ATTR_EDITABLE,
+								lib3270_is_protected(host,offset) ? "false" : "true" );
 
 	// The background color. The value is an RGB value of the format "u,u,u"
 	// ATK_TEXT_ATTR_BG_COLOR
@@ -595,10 +624,30 @@ static AtkAttributeSet * v3270_accessible_get_run_attributes(AtkText *text, gint
 	// ATK_TEXT_ATTR_FG_COLOR
 
 	// The font family name
-	// ATK_TEXT_ATTR_FAMILY_NAME
+	attributes = add_attribute(	attributes,
+								ATK_TEXT_ATTR_FAMILY_NAME,
+								GTK_V3270(widget)->font_family );
 
   return attributes;
 }
+
+/*
+static gchar * v3270_accessible_get_text_after_offset(AtkText *text, gint offset, AtkTextBoundary boundary_type, gint *start_offset, gint *end_offset)
+{
+	// http://developer.gnome.org/atk/stable/AtkText.html#atk-text-get-text-after-offset
+	trace("WARNING: %s is incomplete",__FUNCTION__);
+
+}
+*/
+
+/*
+static gchar * v3270_accessible_get_text_before_offset(AtkText *text,gint offset,AtkTextBoundary boundary_type,gint *start_offset,gint *end_offset)
+{
+	// http://developer.gnome.org/atk/stable/AtkText.html#atk-text-get-text-before-offset
+	trace("WARNING: %s is incomplete",__FUNCTION__);
+
+}
+*/
 
 static void atk_text_interface_init(AtkTextIface *iface)
 {
@@ -621,17 +670,9 @@ static void atk_text_interface_init(AtkTextIface *iface)
 	iface->get_selection			= v3270_accessible_get_selection;
 	iface->get_run_attributes 		= v3270_accessible_get_run_attributes;
 	iface->get_default_attributes	= v3270_accessible_get_default_attributes;
+//	iface->get_text_after_offset	= v3270_accessible_get_text_after_offset;
+//	iface->get_text_before_offset	= v3270_accessible_get_text_before_offset;
 
-
-/*
-http://git.gnome.org/browse/gtk+/tree/gtk/a11y/gtklabelaccessible.c
-
-  iface->get_text_before_offset = gtk_label_accessible_get_text_before_offset;
-
-  iface->get_text_after_offset = gtk_label_accessible_get_text_after_offset;
-
-
-*/
 }
 
 static void v3270_accessible_init(v3270Accessible *widget)
@@ -740,11 +781,6 @@ static void atk_component_interface_init(AtkComponentIface *iface)
   iface->grab_focus		= v3270_accessible_grab_focus;
   iface->get_layer 		= v3270_accessible_get_layer;
   iface->set_size 		= v3270_accessible_set_size;
-
-/*
-  iface->set_extents = gtk_widget_accessible_set_extents;
-  iface->set_position = gtk_widget_accessible_set_position;
-*/
 }
 
 void v3270_acessible_set_state(GtkAccessible *obj, LIB3270_MESSAGE id)

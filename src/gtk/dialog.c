@@ -536,7 +536,26 @@
 		"Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02111-1307 "
 		"USA" );
 
-	GtkAboutDialog *dialog = GTK_ABOUT_DIALOG(gtk_about_dialog_new());
+	GtkAboutDialog  * dialog 	= GTK_ABOUT_DIALOG(gtk_about_dialog_new());
+	gchar			* filename	= g_strdup_printf("%s-logo.png",g_get_application_name());
+	gchar			* logo		= build_data_filename(filename,NULL);
+
+	if(logo && g_file_test(filename,G_FILE_TEST_EXISTS))
+	{
+		GError 		*error 	= NULL;
+		GdkPixbuf	* pix	= gdk_pixbuf_new_from_file(filename,&error);
+
+		gtk_about_dialog_set_logo(dialog,pix);
+
+		if(!pix)
+		{
+			g_warning("Can't load %s: %s",filename,error->message);
+			g_error_free(error);
+		}
+	}
+
+	g_free(logo);
+	g_free(filename);
 
 	gtk_about_dialog_set_version(dialog, PACKAGE_VERSION );
 	gtk_about_dialog_set_copyright(dialog, "Copyright © 2008 Banco do Brasil S.A." );

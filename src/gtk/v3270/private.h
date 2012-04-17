@@ -145,7 +145,7 @@ G_BEGIN_DECLS
 	int						  selection_addr;		/** Selection addr */
 
 	// Font info
-	gchar * font_family;
+	gchar 					* font_family;
 	cairo_font_weight_t		  font_weight;
 	cairo_scaled_font_t		* font_scaled;
 	cairo_surface_t			* surface;

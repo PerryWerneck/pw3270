@@ -1,3 +1,4 @@
+
 #
 # "Software pw3270, desenvolvido com base nos códigos fontes do WC3270  e X3270
 # (Paul Mattes Paul.Mattes@usa.net), de emulação de terminal 3270 para acesso a
@@ -51,6 +52,7 @@ DBGLIB=-L../../$(BINDIR)/Debug/lib -l3270
 RLSLIB=-L../../$(BINDIR)/Release/lib -l3270
 TMPDIR=$(PWD)/.tmp
 GLOBAL_DEPS=$(PWD)/include/*.h $(PWD)/include/lib3270/*.h
+
 #---[ Tools ]------------------------------------------------------------------
 
 VALGRIND=@VALGRIND@
@@ -59,6 +61,14 @@ INSTALL=@INSTALL@
 INSTALL_PROGRAM=@INSTALL_PROGRAM@
 INSTALL_DATA=@INSTALL_DATA@
 RPMBUILD=@RPMBUILD@
+CONVERT=@CONVERT@
+
+#---[ Rules ]------------------------------------------------------------------
+
+%.png: pixmaps/%.svg
+ifneq ($(CONVERT),no)
+	@$(CONVERT) $< --format=png > $@
+endif
 
 #---[ Release targets ]--------------------------------------------------------
 
@@ -104,10 +114,11 @@ ifneq ($(RPMBUILD),no)
 	@rpmbuild -ts $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz
 endif
 
-
-$(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz: clean
+$(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz: clean $(PACKAGE_NAME).png $(PACKAGE_NAME)-logo.png
 	@rm -fr $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@$(MKDIR) $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
+	@cp $(PACKAGE_NAME).png $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
+	@cp $(PACKAGE_NAME)-logo.png $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@cp *.m4 $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@./autogen.sh $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@cp configure.ac $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
