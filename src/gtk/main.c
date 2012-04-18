@@ -154,13 +154,18 @@ int main(int argc, char *argv[])
 	{
 		configuration_init();
 
-		toplevel = create_main_window(host);
+		toplevel = pw3270_new(host);
 
-		if(toplevel)
-		{
-			gtk_window_present(GTK_WINDOW(toplevel));
-			gtk_main();
-		}
+		gtk_window_set_type_hint(GTK_WINDOW(toplevel),GDK_WINDOW_TYPE_HINT_NORMAL);
+		gtk_window_set_position(GTK_WINDOW(toplevel),GTK_WIN_POS_CENTER);
+		gtk_window_set_role(GTK_WINDOW(toplevel),"toplevel");
+
+		gtk_window_present(GTK_WINDOW(toplevel));
+
+		if(pw3270_get_toggle(toplevel,LIB3270_TOGGLE_FULL_SCREEN))
+			gtk_window_fullscreen(GTK_WINDOW(toplevel));
+
+		gtk_main();
 
 		configuration_deinit();
 	}

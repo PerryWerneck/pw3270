@@ -1203,13 +1203,19 @@ GtkIMContext * v3270_get_im_context(GtkWidget *widget)
 	return GTK_V3270(widget)->input_method;
 }
 
- gboolean v3270_get_toggle(GtkWidget *widget, LIB3270_TOGGLE ix)
- {
+gboolean v3270_get_toggle(GtkWidget *widget, LIB3270_TOGGLE ix)
+{
 	g_return_val_if_fail(GTK_IS_V3270(widget),FALSE);
 
 	if(ix < LIB3270_TOGGLE_COUNT)
 		return lib3270_get_toggle(GTK_V3270(widget)->host,ix) ? TRUE : FALSE;
 
 	return FALSE;
- }
+}
 
+void v3270_set_host(GtkWidget *widget, const gchar *uri)
+{
+	g_return_if_fail(GTK_IS_V3270(widget));
+	g_return_if_fail(uri != NULL);
+	lib3270_set_host(GTK_V3270(widget)->host,uri);
+}

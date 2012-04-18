@@ -178,6 +178,7 @@
  GtkIMContext	* v3270_get_im_context(GtkWidget *widget);
  gboolean		  v3270_get_toggle(GtkWidget *widget, LIB3270_TOGGLE ix);
 
+ void 			  v3270_set_host(GtkWidget *widget, const gchar *uri);
 
 
 G_END_DECLS

@@ -32,9 +32,23 @@
 #include "globals.h"
 #include "uiparser/parser.h"
 
-#ifdef DEBUG
-	#include <lib3270/actions.h>
-#endif
+
+/*--[ Widget definition ]----------------------------------------------------------------------------*/
+
+ struct _pw3270
+ {
+	GtkWindow		  parent;
+ 	GtkWidget		* terminal;
+ };
+
+ struct _pw3270Class
+ {
+	GtkWindowClass parent_class;
+
+	int dummy;
+ };
+
+ G_DEFINE_TYPE(pw3270, pw3270, GTK_TYPE_WINDOW);
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
@@ -80,30 +94,25 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
- static void toggle_changed(GtkWidget *widget, LIB3270_TOGGLE id, gboolean toggled, const gchar *name, GtkWindow *toplevel)
+#if GTK_CHECK_VERSION(3,0,0)
+ static void pw3270_destroy(GtkWidget *widget)
+#else
+ static void pw3270_destroy(GtkObject *widget)
+#endif
  {
-	GtkAction **list = (GtkAction **) g_object_get_data(G_OBJECT(widget),"toggle_actions");
- 	gchar *nm = g_ascii_strdown(name,-1);
-	set_boolean_to_config("toggle",nm,toggled);
-	g_free(nm);
+	pw3270 * window = GTK_PW3270(widget);
 
-	if(id == LIB3270_TOGGLE_FULL_SCREEN)
-	{
-		if(toggled)
-			gtk_window_fullscreen(GTK_WINDOW(toplevel));
-		else
-			gtk_window_unfullscreen(GTK_WINDOW(toplevel));
-	}
+	trace("%s %p",__FUNCTION__,widget);
 
-	if(list[id])
-		gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(list[id]),toggled);
+ 	if(window->terminal)
+		v3270_disconnect(window->terminal);
 
  }
 
- static gboolean window_state_event(GtkWidget *window, GdkEventWindowState *event, GtkWidget *widget)
+  static gboolean window_state_event(GtkWidget *window, GdkEventWindowState *event, GtkWidget *widget)
  {
-	gboolean	  fullscreen = event->new_window_state & GDK_WINDOW_STATE_FULLSCREEN ? TRUE : FALSE;
-	GtkAction	**action = (GtkAction **) g_object_get_data(G_OBJECT(widget),"named_actions");
+	gboolean	  fullscreen	= event->new_window_state & GDK_WINDOW_STATE_FULLSCREEN ? TRUE : FALSE;
+	GtkAction	**action		= (GtkAction **) g_object_get_data(G_OBJECT(widget),"named_actions");
 
 	// Update fullscreen toggles
 	if(action[ACTION_FULLSCREEN])
@@ -117,85 +126,55 @@
 	return 0;
  }
 
- static gboolean window_destroy(GtkWidget *window, GtkWidget *widget)
+ static void pw3270_class_init(pw3270Class *klass)
  {
- 	if(widget)
-		v3270_disconnect(widget);
+	GObjectClass	* gobject_class	= G_OBJECT_CLASS(klass);
+	GtkWidgetClass	* widget_class	= GTK_WIDGET_CLASS(klass);
+//	GtkWindowClass	* window_class	= GTK_WINDOW_CLASS(klass);
+
+#if GTK_CHECK_VERSION(3,0,0)
+	widget_class->destroy 							= pw3270_destroy;
+#else
+	{
+		GtkObjectClass *object_class = (GtkObjectClass*) klass;
+		object_class->destroy = pw3270_destroy;
+	}
+#endif // GTK3
+
  }
 
- static void disconnected(GtkWidget *widget, GtkActionGroup **group)
+ GtkWidget * pw3270_new(const gchar *host)
  {
-	gtk_action_group_set_sensitive(group[ACTION_GROUP_PASTE],FALSE);
-	gtk_action_group_set_sensitive(group[ACTION_GROUP_ONLINE],FALSE);
-	gtk_action_group_set_sensitive(group[ACTION_GROUP_OFFLINE],TRUE);
-	gtk_window_set_title(GTK_WINDOW(gtk_widget_get_toplevel(widget)),g_get_application_name());
- }
+ 	GtkWidget *widget = g_object_new(GTK_TYPE_PW3270, NULL);
 
- static void connected(GtkWidget *widget, const gchar *host, GtkActionGroup **group)
- {
-	set_string_to_config("host","uri","%s",host);
-	gtk_window_set_title(GTK_WINDOW(gtk_widget_get_toplevel(widget)),host);
-	gtk_action_group_set_sensitive(group[ACTION_GROUP_ONLINE],TRUE);
-	gtk_action_group_set_sensitive(group[ACTION_GROUP_OFFLINE],FALSE);
-	gtk_action_group_set_sensitive(group[ACTION_GROUP_PASTE],TRUE);
- }
-
- static void update_config(GtkWidget *widget, const gchar *name, const gchar *value)
- {
- 	set_string_to_config("terminal",name,"%s",value);
- }
-
- static void update_model(GtkWidget *widget, guint id, const gchar *name)
- {
- 	trace("Widget %p changed to %s (id=%d)",widget,name,id);
-	set_integer_to_config("terminal","model",id);
- }
-
- static gboolean popup_menu(GtkWidget *widget, gboolean selected, gboolean online, GdkEventButton *event, GtkWidget **popup)
- {
- 	GtkWidget *menu = NULL;
-
-	if(!online)
-		menu = popup[POPUP_OFFLINE];
-	else if(selected && popup[POPUP_SELECTION])
-		menu = popup[POPUP_SELECTION];
-	else if(popup[POPUP_ONLINE])
-		menu = popup[POPUP_ONLINE];
+	if(host)
+	{
+		pw3270_set_host(widget,host);
+	}
 	else
-		menu = popup[POPUP_DEFAULT];
+	{
+		gchar *ptr = get_string_from_config("host","uri","");
+		if(*ptr)
+			pw3270_set_host(widget,ptr);
+		g_free(ptr);
+	}
 
- 	trace("Popup %p on widget %p online=%s selected=%s",menu,widget,online ? "Yes" : "No", selected ? "Yes" : "No");
+	if(pw3270_get_toggle(widget,LIB3270_TOGGLE_CONNECT_ON_STARTUP))
+		v3270_connect(GTK_PW3270(widget)->terminal,NULL);
 
-	if(!menu)
-		return FALSE;
-
-	trace("Showing popup \"%s\"",gtk_widget_get_name(menu));
-
-	gtk_widget_show_all(menu);
-	gtk_menu_set_screen(GTK_MENU(menu), gtk_widget_get_screen(widget));
-	gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, event->button,event->time);
-
- 	return TRUE;
+ 	return widget;
  }
 
- static void selecting(GtkWidget *widget, gboolean on, GtkActionGroup **group)
+ void pw3270_set_host(GtkWidget *widget, const gchar *uri)
  {
-	GtkAction **action = (GtkAction **) g_object_get_data(G_OBJECT(widget),"named_actions");
-	gtk_action_group_set_sensitive(group[ACTION_GROUP_SELECTION],on);
-
-	if(action[ACTION_RESELECT])
-		gtk_action_set_sensitive(action[ACTION_RESELECT],!on);
-
+ 	g_return_if_fail(GTK_IS_PW3270(widget));
+ 	v3270_set_host(GTK_PW3270(widget)->terminal,uri);
  }
 
- static void has_text(GtkWidget *widget, gboolean on, GtkActionGroup **group)
+ gboolean pw3270_get_toggle(GtkWidget *widget, LIB3270_TOGGLE ix)
  {
-	gtk_action_group_set_sensitive(group[ACTION_GROUP_CLIPBOARD],on);
- }
-
- static void pastenext(GtkWidget *widget, gboolean on, GtkAction **action)
- {
-	gtk_action_set_sensitive(action[ACTION_PASTENEXT],on);
+ 	g_return_if_fail(GTK_IS_PW3270(widget));
+ 	return v3270_get_toggle(GTK_PW3270(widget)->terminal,ix);
  }
 
  static void setup_input_method(GtkWidget *widget, GtkWidget *obj)
@@ -251,24 +230,102 @@
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(widget),menu);
  }
 
- static void  set_icon_list(GtkWindow *window)
+ static void pastenext(GtkWidget *widget, gboolean on, GtkAction **action)
  {
- 	gchar	* name		= g_strdup_printf("%s.png",g_get_application_name());
-	gchar	* filename	= build_data_filename(name,NULL);
-	GError	* error		= NULL;
+	gtk_action_set_sensitive(action[ACTION_PASTENEXT],on);
+ }
 
-	if(!gtk_window_set_icon_from_file(window,filename,&error))
-	{
-		g_warning("Error %s loading icon from %s",error->message,filename);
-		g_error_free(error);
-	}
+ static void disconnected(GtkWidget *widget, GtkActionGroup **group)
+ {
+	gtk_action_group_set_sensitive(group[ACTION_GROUP_PASTE],FALSE);
+	gtk_action_group_set_sensitive(group[ACTION_GROUP_ONLINE],FALSE);
+	gtk_action_group_set_sensitive(group[ACTION_GROUP_OFFLINE],TRUE);
+	gtk_window_set_title(GTK_WINDOW(gtk_widget_get_toplevel(widget)),g_get_application_name());
+ }
 
-	g_free(filename);
-	g_free(name);
+  static void connected(GtkWidget *widget, const gchar *host, GtkActionGroup **group)
+ {
+	set_string_to_config("host","uri","%s",host);
+	gtk_window_set_title(GTK_WINDOW(gtk_widget_get_toplevel(widget)),host);
+	gtk_action_group_set_sensitive(group[ACTION_GROUP_ONLINE],TRUE);
+	gtk_action_group_set_sensitive(group[ACTION_GROUP_OFFLINE],FALSE);
+	gtk_action_group_set_sensitive(group[ACTION_GROUP_PASTE],TRUE);
+ }
+
+ static void update_config(GtkWidget *widget, const gchar *name, const gchar *value)
+ {
+ 	set_string_to_config("terminal",name,"%s",value);
+ }
+
+ static void update_model(GtkWidget *widget, guint id, const gchar *name)
+ {
+ 	trace("Widget %p changed to %s (id=%d)",widget,name,id);
+	set_integer_to_config("terminal","model",id);
+ }
+
+ static void selecting(GtkWidget *widget, gboolean on, GtkActionGroup **group)
+ {
+	GtkAction **action = (GtkAction **) g_object_get_data(G_OBJECT(widget),"named_actions");
+	gtk_action_group_set_sensitive(group[ACTION_GROUP_SELECTION],on);
+
+	if(action[ACTION_RESELECT])
+		gtk_action_set_sensitive(action[ACTION_RESELECT],!on);
 
  }
 
- GtkWidget * create_main_window(const gchar *uri)
+ static gboolean popup_menu(GtkWidget *widget, gboolean selected, gboolean online, GdkEventButton *event, GtkWidget **popup)
+ {
+ 	GtkWidget *menu = NULL;
+
+	if(!online)
+		menu = popup[POPUP_OFFLINE];
+	else if(selected && popup[POPUP_SELECTION])
+		menu = popup[POPUP_SELECTION];
+	else if(popup[POPUP_ONLINE])
+		menu = popup[POPUP_ONLINE];
+	else
+		menu = popup[POPUP_DEFAULT];
+
+ 	trace("Popup %p on widget %p online=%s selected=%s",menu,widget,online ? "Yes" : "No", selected ? "Yes" : "No");
+
+	if(!menu)
+		return FALSE;
+
+	trace("Showing popup \"%s\"",gtk_widget_get_name(menu));
+
+	gtk_widget_show_all(menu);
+	gtk_menu_set_screen(GTK_MENU(menu), gtk_widget_get_screen(widget));
+	gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, event->button,event->time);
+
+ 	return TRUE;
+ }
+
+ static void has_text(GtkWidget *widget, gboolean on, GtkActionGroup **group)
+ {
+	gtk_action_group_set_sensitive(group[ACTION_GROUP_CLIPBOARD],on);
+ }
+
+ static void toggle_changed(GtkWidget *widget, LIB3270_TOGGLE id, gboolean toggled, const gchar *name, GtkWindow *toplevel)
+ {
+	GtkAction **list = (GtkAction **) g_object_get_data(G_OBJECT(widget),"toggle_actions");
+ 	gchar *nm = g_ascii_strdown(name,-1);
+	set_boolean_to_config("toggle",nm,toggled);
+	g_free(nm);
+
+	if(id == LIB3270_TOGGLE_FULL_SCREEN)
+	{
+		if(toggled)
+			gtk_window_fullscreen(GTK_WINDOW(toplevel));
+		else
+			gtk_window_unfullscreen(GTK_WINDOW(toplevel));
+	}
+
+	if(list[id])
+		gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(list[id]),toggled);
+
+ }
+
+ static void pw3270_init(pw3270 *widget)
  {
  	static const UI_WIDGET_SETUP widget_setup[] =
  	{
@@ -288,41 +345,22 @@
  		{ "font-family",	v3270_set_font_family	}
  	};
 
-	GtkWidget 		* window;
-	GtkWidget		* terminal	= v3270_new();
-	H3270			* host 		= v3270_get_session(terminal);
-	gchar			* path		= build_data_filename("ui",NULL);
-	GtkActionGroup	**group;
-	GtkAction 		**action	= g_new0(GtkAction *,ACTION_COUNT);
-	GtkWidget		**popup;
-	int			  	  f;
+	int f;
+	GtkAction	**action = g_new0(GtkAction *,ACTION_COUNT);
+	H3270 		* host;
 
-	gtk_widget_set_tooltip_text(terminal,_( "3270 screen"));
+	// Initialize terminal widget
+	widget->terminal = v3270_new();
+	host = v3270_get_session(widget->terminal);
 
-	if(uri)
-	{
-		lib3270_set_host(host,uri);
-	}
-	else
-	{
-		gchar *ptr = get_string_from_config("host","uri","");
-		if(*ptr)
-			lib3270_set_host(host,ptr);
-		g_free(ptr);
-	}
-
-	g_object_set_data_full(G_OBJECT(terminal),"toggle_actions",g_new0(GtkAction *,LIB3270_TOGGLE_COUNT),g_free);
-	g_object_set_data_full(G_OBJECT(terminal),"named_actions",(gpointer) action, (GDestroyNotify) g_free);
-
-	// Initialize terminal config
 	for(f=0;f<G_N_ELEMENTS(widget_config);f++)
 	{
 		gchar *str = get_string_from_config("terminal",widget_config[f].key,NULL);
-		widget_config[f].set(terminal,str);
+		widget_config[f].set(widget->terminal,str);
 		if(str)
 			g_free(str);
 	}
-	lib3270_set_model(host,get_integer_from_config("terminal","model",2));
+	lib3270_set_model(v3270_get_session(widget->terminal),get_integer_from_config("terminal","model",2));
 
 	for(f=0;f<LIB3270_TOGGLE_COUNT;f++)
 	{
@@ -331,78 +369,79 @@
 		g_free(nm);
 	}
 
-	// Create window
-	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_position(GTK_WINDOW(window),GTK_WIN_POS_CENTER);
-	gtk_window_set_role(GTK_WINDOW(window),"toplevel");
+	g_object_set_data_full(G_OBJECT(widget->terminal),"toggle_actions",g_new0(GtkAction *,LIB3270_TOGGLE_COUNT),g_free);
+	g_object_set_data_full(G_OBJECT(widget->terminal),"named_actions",(gpointer) action, (GDestroyNotify) g_free);
 
-	if(ui_parse_xml_folder(GTK_WINDOW(window),path,groupname,popupname,terminal,widget_setup))
+	// Load UI
 	{
-		g_object_unref(terminal);
-		g_object_unref(window);
-		return NULL;
-	}
-	group  = g_object_get_data(G_OBJECT(window),"action_groups");
-	popup  = g_object_get_data(G_OBJECT(window),"popup_menus");
+		gchar *path = build_data_filename("ui",NULL);
 
-	// Setup action groups
-	gtk_action_group_set_sensitive(group[ACTION_GROUP_SELECTION],FALSE);
-	gtk_action_group_set_sensitive(group[ACTION_GROUP_CLIPBOARD],FALSE);
-	gtk_action_group_set_sensitive(group[ACTION_GROUP_FILETRANSFER],FALSE);
-	gtk_action_group_set_sensitive(group[ACTION_GROUP_PASTE],FALSE);
-	disconnected(terminal, (gpointer) group);
+		if(ui_parse_xml_folder(GTK_WINDOW(widget),path,groupname,popupname,widget->terminal,widget_setup))
+		{
+			g_free(path);
+			gtk_widget_set_sensitive(widget->terminal,FALSE);
+			return;
+		}
+
+		g_free(path);
+	}
+
 
 	// Setup actions
-	if(action[ACTION_FULLSCREEN])
-		gtk_action_set_visible(action[ACTION_FULLSCREEN],!lib3270_get_toggle(host,LIB3270_TOGGLE_FULL_SCREEN));
-
-	if(action[ACTION_UNFULLSCREEN])
-		gtk_action_set_visible(action[ACTION_UNFULLSCREEN],lib3270_get_toggle(host,LIB3270_TOGGLE_FULL_SCREEN));
-
-	if(action[ACTION_PASTENEXT])
 	{
-		gtk_action_set_sensitive(action[ACTION_PASTENEXT],FALSE);
-		g_signal_connect(terminal,"pastenext",G_CALLBACK(pastenext),action);
+		GtkWidget		**popup = g_object_get_data(G_OBJECT(widget),"popup_menus");
+		GtkActionGroup	**group	= g_object_get_data(G_OBJECT(widget),"action_groups");
+
+		// Setup action groups
+		gtk_action_group_set_sensitive(group[ACTION_GROUP_SELECTION],FALSE);
+		gtk_action_group_set_sensitive(group[ACTION_GROUP_CLIPBOARD],FALSE);
+		gtk_action_group_set_sensitive(group[ACTION_GROUP_FILETRANSFER],FALSE);
+		gtk_action_group_set_sensitive(group[ACTION_GROUP_PASTE],FALSE);
+
+		disconnected(widget->terminal, (gpointer) group);
+
+		// Setup actions
+		if(action[ACTION_FULLSCREEN])
+			gtk_action_set_visible(action[ACTION_FULLSCREEN],!lib3270_get_toggle(host,LIB3270_TOGGLE_FULL_SCREEN));
+
+		if(action[ACTION_UNFULLSCREEN])
+			gtk_action_set_visible(action[ACTION_UNFULLSCREEN],lib3270_get_toggle(host,LIB3270_TOGGLE_FULL_SCREEN));
+
+		if(action[ACTION_PASTENEXT])
+		{
+			gtk_action_set_sensitive(action[ACTION_PASTENEXT],FALSE);
+			g_signal_connect(widget->terminal,"pastenext",G_CALLBACK(pastenext),action);
+		}
+
+		if(action[ACTION_RESELECT])
+			gtk_action_set_sensitive(action[ACTION_RESELECT],FALSE);
+
+
+		// Connect action signals
+		g_signal_connect(widget->terminal,"disconnected",G_CALLBACK(disconnected),group);
+		g_signal_connect(widget->terminal,"connected",G_CALLBACK(connected),group);
+		g_signal_connect(widget->terminal,"update_config",G_CALLBACK(update_config),0);
+		g_signal_connect(widget->terminal,"model_changed",G_CALLBACK(update_model),0);
+		g_signal_connect(widget->terminal,"selecting",G_CALLBACK(selecting),group);
+		g_signal_connect(widget->terminal,"popup",G_CALLBACK(popup_menu),popup);
+		g_signal_connect(widget->terminal,"has_text",G_CALLBACK(has_text),group);
+
 	}
 
-	if(action[ACTION_RESELECT])
-		gtk_action_set_sensitive(action[ACTION_RESELECT],FALSE);
+	// Connect widget signals
+	g_signal_connect(widget->terminal,"toggle_changed",G_CALLBACK(toggle_changed),widget);
 
 	// Connect window signals
-	g_signal_connect(window,"window_state_event",G_CALLBACK(window_state_event),terminal);
-	g_signal_connect(window,"destroy",G_CALLBACK(window_destroy),terminal);
-
-	// Connect widget signals
-	g_signal_connect(terminal,"toggle_changed",G_CALLBACK(toggle_changed),window);
-	g_signal_connect(terminal,"disconnected",G_CALLBACK(disconnected),group);
-	g_signal_connect(terminal,"connected",G_CALLBACK(connected),group);
-	g_signal_connect(terminal,"update_config",G_CALLBACK(update_config),0);
-	g_signal_connect(terminal,"model_changed",G_CALLBACK(update_model),0);
-	g_signal_connect(terminal,"selecting",G_CALLBACK(selecting),group);
-	g_signal_connect(terminal,"popup",G_CALLBACK(popup_menu),popup);
-	g_signal_connect(terminal,"has_text",G_CALLBACK(has_text),group);
-
-	g_free(path);
+	g_signal_connect(widget,"window_state_event",G_CALLBACK(window_state_event),widget->terminal);
 
 
-
-	// Initialize terminal
-	if(v3270_get_toggle(terminal,LIB3270_TOGGLE_FULL_SCREEN))
-		gtk_window_fullscreen(GTK_WINDOW(window));
-
+	// Finish setup
 #ifdef DEBUG
 	lib3270_testpattern(host);
 #endif
 
 	trace("%s ends",__FUNCTION__);
-	gtk_window_set_focus(GTK_WINDOW(window),terminal);
+	gtk_window_set_focus(GTK_WINDOW(widget),widget->terminal);
 
-	if(v3270_get_toggle(terminal,LIB3270_TOGGLE_CONNECT_ON_STARTUP))
-		lib3270_connect(host,NULL,0);
-
- 	return window;
  }
-
-
-
 

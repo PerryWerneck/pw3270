@@ -40,6 +40,7 @@
 	#endif
 
 	#include <gtk/gtk.h>
+	#include <lib3270.h>
 
 	// Trace
 	#include <stdio.h>
@@ -82,8 +83,24 @@
 
 	#endif
 
+	// pw3270 window
+	G_BEGIN_DECLS
+
+	#define GTK_TYPE_PW3270				(pw3270_get_type ())
+	#define GTK_PW3270(obj)				(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_PW3270, pw3270))
+	#define GTK_PW3270_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_PW3270, pw3270Class))
+	#define GTK_IS_PW3270(obj)			(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_PW3270))
+	#define GTK_IS_PW3270_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PW3270))
+	#define GTK_PW3270_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_PW3270, pw3270Class))
+
+	typedef struct _pw3270			pw3270;
+	typedef struct _pw3270Class		pw3270Class;
 
 
+	GtkWidget	* pw3270_new(const gchar *host);
+	void		  pw3270_set_host(GtkWidget *widget, const gchar *uri);
+	gboolean 	  pw3270_get_toggle(GtkWidget *widget, LIB3270_TOGGLE ix);
 
+	G_END_DECLS
 
 #endif // PW3270_H_INCLUDED
