@@ -579,11 +579,9 @@ static AtkAttributeSet * v3270_accessible_get_run_attributes(AtkText *text, gint
 	AtkAttributeSet	* attributes	= NULL;
 	int				  start, end;
 
-	if(!(widget && GTK_IS_V3270(widget)))
-	{
-		trace("%s called with invalid widget %p ***************************",__FUNCTION__,widget);
-		return NULL;
-	}
+	trace("%s is incomplete ***********************",__FUNCTION__);
+
+	g_return_val_if_fail((widget && GTK_IS_V3270(widget)),NULL);
 
 	host = v3270_get_session(widget);
 
@@ -595,8 +593,6 @@ static AtkAttributeSet * v3270_accessible_get_run_attributes(AtkText *text, gint
 		*start_offset = start;
 		*end_offset   = end;
 	}
-
-	trace("%s is incomplete ***********************",__FUNCTION__);
 
 	// http://developer.gnome.org/atk/stable/AtkText.html#AtkTextAttribute
 
