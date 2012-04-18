@@ -33,5 +33,35 @@
 
 	#define LIB3270_TRACE_H_INCLUDED 1
 
+	/**
+	 * Set trace handle callback.
+	 *
+	 * @param handle	Callback to write in trace file or show trace window (NULL send all trace to stdout).
+	 *
+	 */
+	LIB3270_EXPORT void lib3270_set_trace_handler( void (*handler)(H3270 *session, const char *fmt, va_list args) );
+
+	/**
+	 * Write on trace file.
+	 *
+	 * Write text on trace file, if DStrace is enabled.
+	 *
+	 * @param fmt 	String format.
+	 * @param ...	Arguments.
+	 *
+	 */
+	LIB3270_EXPORT void lib3270_write_dstrace(H3270 *session, const char *fmt, ...);
+
+	/**
+	 * Write on trace file.
+	 *
+	 * Write text on trace file, if event is enabled.
+	 *
+	 * @param fmt 	String format.
+	 * @param ...	Arguments.
+	 *
+	 */
+	LIB3270_EXPORT void lib3270_trace_event(H3270 *session, const char *fmt, ...);
+
 
 #endif // LIB3270_TRACE_H_INCLUDED

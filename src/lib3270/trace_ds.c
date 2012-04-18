@@ -74,14 +74,14 @@
 #define MAX_HEADER_SIZE		(10*1024)
 
 /* Minimum size of a trace file. */
-#define MIN_TRACEFILE_SIZE	(64*1024)
-#define MIN_TRACEFILE_SIZE_NAME	"64K"
+// #define MIN_TRACEFILE_SIZE	(64*1024)
+// #define MIN_TRACEFILE_SIZE_NAME	"64K"
 
 /* System calls which may not be there. */
-#if !defined(HAVE_FSEEKO) /*[*/
-#define fseeko(s, o, w)	fseek(s, (long)o, w)
-#define ftello(s)	(off_t)ftell(s)
-#endif /*]*/
+// #if !defined(HAVE_FSEEKO)
+// #define fseeko(s, o, w)	fseek(s, (long)o, w)
+// #define ftello(s)	(off_t)ftell(s)
+// #endif
 
 // #include <lib3270/api.h>
 
@@ -106,15 +106,21 @@ static int      dscnt = 0;
 // static char    *tracef_midpoint_header = CN;
 // static off_t	tracef_midpoint = 0;
 
-static void __vwtrace(const char *fmt, va_list args);
+static void __vwtrace(H3270 *session, const char *fmt, va_list args);
 static void	wtrace(const char *fmt, ...);
 // static char    *create_tracefile_header(const char *mode);
 static void	stop_tracing(void);
 
 /* Globals */
 struct timeval  ds_ts;
-static void (*vwtrace)(const char *fmt, va_list args) = __vwtrace;
+static void (*vwtrace)(H3270 *session, const char *fmt, va_list args) = __vwtrace;
 Boolean         trace_skipping = False;
+
+
+LIB3270_EXPORT void lib3270_set_trace_handler( void (*handler)(H3270 *session, const char *fmt, va_list args) )
+{
+	vwtrace = handler ? handler : __vwtrace;
+}
 
 /* display a (row,col) */
 const char *
@@ -217,7 +223,7 @@ trace_event(const char *fmt, ...)
 
 	/* print out message */
 	va_start(args, fmt);
-	vwtrace(fmt, args);
+	vwtrace(&h3270,fmt, args);
 	va_end(args);
 }
 
@@ -232,7 +238,7 @@ trace_dsn(const char *fmt, ...)
 
 	/* print out message */
 	va_start(args, fmt);
-	vwtrace(fmt, args);
+	vwtrace(&h3270,fmt, args);
 	va_end(args);
 }
 
@@ -241,9 +247,10 @@ trace_dsn(const char *fmt, ...)
  * This is the only function that actually does output to the trace file --
  * all others are wrappers around this function.
  */
-static void __vwtrace(const char *fmt, va_list args)
+static void __vwtrace(H3270 *session, const char *fmt, va_list args)
 {
 	vfprintf(stdout,fmt,args);
+	fflush(stdout);
 }
 
 /*
@@ -272,9 +279,35 @@ static void wtrace(const char *fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
-	vwtrace(fmt, args);
+	vwtrace(&h3270,fmt, args);
 	va_end(args);
 }
+
+LIB3270_EXPORT void lib3270_write_dstrace(H3270 *session, const char *fmt, ...)
+{
+	va_list args;
+
+	if(!lib3270_get_toggle(session,LIB3270_TOGGLE_DS_TRACE))
+		return;
+
+	va_start(args, fmt);
+	vwtrace(session,fmt, args);
+	va_end(args);
+}
+
+LIB3270_EXPORT void lib3270_trace_event(H3270 *session, const char *fmt, ...)
+{
+	va_list args;
+
+	if(!lib3270_get_toggle(session,LIB3270_TOGGLE_EVENT_TRACE))
+		return;
+
+	va_start(args, fmt);
+	vwtrace(session,fmt, args);
+	va_end(args);
+}
+
+
 
 /*
 static void stop_tracing(void)

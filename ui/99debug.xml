@@ -31,16 +31,11 @@
 <ui>
 	<menubar name='topmenu'>
 
-		<!---
 		<menu name='View' >
-			<menuitem action='Toggle' id='DSTrace' label='DS Trace'/>
-			<menuitem action='Toggle' id='EventTrace' label='Event Trace' />
-		</menu>
-		-->
-
-		<menu name='SettingsMenu' label='Settings' sysmenu='yes' >
-			<menu name='OptionsMenu' label='_Options' >
+			<menu name='TraceOptions' label='Trace' >
 				<menuitem action='toggle' id='dstrace' label='DS Trace' />
+				<!-- menuitem action='toggle' id='screentrace' label='Screen Trace' / -->
+				<menuitem action='toggle' id='eventtrace' label='Event Trace' />
 			</menu>
 		</menu>
 
