@@ -146,6 +146,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/lib3270.h
 %{_includedir}/lib3270
 %{_datadir}/@PACKAGE_NAME@/ui/99debug.xml
+%{_libdir}/pkgconfig/*.pc
 
 #---[ Scripts ]-------------------------------------------------------------------------------------------------------
 

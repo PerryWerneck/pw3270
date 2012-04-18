@@ -311,9 +311,9 @@ static const struct lib3270_option options[] =
     { OptCharset,  OPT_STRING,  False, ResCharset,   offset(charset), NULL },
     { OptClear,    OPT_SKIP2,   False, NULL,         NULL, NULL },
 //    { OptDefScreen,OPT_STRING,  False, ResDefScreen, offset(defscreen), NULL },
-#if defined(X3270_TRACE) /*[*/
-    { OptDsTrace,  OPT_BOOLEAN, True,  ResDsTrace,   toggle_offset(DS_TRACE), NULL },
-#endif /*]*/
+//#if defined(X3270_TRACE)
+//    { OptDsTrace,  OPT_BOOLEAN, True,  ResDsTrace,   toggle_offset(DS_TRACE), NULL },
+//#endif /*]*/
 //    { OptHostsFile,OPT_STRING,  False, ResHostsFile, offset(hostsfile), NULL },
 //#if defined(C3270)
 //    { OptKeymap,   OPT_STRING,  False, ResKeymap,    offset(key_map), N_( "Specifies a keymap name and optional modifiers." ) },

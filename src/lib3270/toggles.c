@@ -155,11 +155,13 @@ void initialize_toggles(H3270 *session)
 	session->toggle[LIB3270_TOGGLE_RECTANGLE_SELECT].upcall	= toggle_rectselect;
 	session->toggle[LIB3270_TOGGLE_MONOCASE].upcall 		= toggle_monocase;
 
+/*
 #if defined(X3270_TRACE)
 	session->toggle[LIB3270_TOGGLE_DS_TRACE].upcall			= toggle_dsTrace;
 	session->toggle[LIB3270_TOGGLE_SCREEN_TRACE].upcall		= toggle_screenTrace;
 	session->toggle[LIB3270_TOGGLE_EVENT_TRACE].upcall		= toggle_eventTrace;
 #endif
+*/
 
 #if defined(X3270_ANSI)
 	session->toggle[LIB3270_TOGGLE_LINE_WRAP].upcall			= toggle_lineWrap;
@@ -197,19 +199,8 @@ void shutdown_toggles(H3270 *session)
 	int f;
 
 	for(f=0;f< (sizeof(disable_on_shutdown)/sizeof(disable_on_shutdown[0])); f++)
-	{
-		LIB3270_TOGGLE	  ix	= disable_on_shutdown[f];
-		struct toggle	* t		= &session->toggle[ix];
+		lib3270_set_toggle(session,disable_on_shutdown[f],0);
 
-		if(t->value)
-		{
-			t->value = False;
-			t->upcall(session,&toggle[f],TT_FINAL);
-
-			if(session->update_toggle)
-				session->update_toggle(session,ix,t->value,TT_FINAL,toggle_names[ix]);
-		}
-	}
 #endif
 }
 

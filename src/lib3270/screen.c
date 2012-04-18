@@ -74,9 +74,9 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
-static int logpopup(H3270 *session, LIB3270_NOTIFY type, const char *title, const char *msg, const char *fmt, va_list arg);
+static int logpopup(H3270 *session, void *widget, LIB3270_NOTIFY type, const char *title, const char *msg, const char *fmt, va_list arg);
 
-static int (*popup_handler)(H3270 *, LIB3270_NOTIFY, const char *, const char *, const char *, va_list) = logpopup;
+static int (*popup_handler)(H3270 *, void *, LIB3270_NOTIFY, const char *, const char *, const char *, va_list) = logpopup;
 
 enum ts { TS_AUTO, TS_ON, TS_OFF };
 
@@ -601,12 +601,12 @@ void show_3270_popup_dialog(H3270 *session, LIB3270_NOTIFY type, const char *tit
 
 	va_list arg_ptr;
 	va_start(arg_ptr, fmt);
-	popup_handler(session,type,title,msg,fmt,arg_ptr);
+	popup_handler(session,session->widget,type,title,msg,fmt,arg_ptr);
 	va_end(arg_ptr);
 
 }
 
-static int logpopup(H3270 *session, LIB3270_NOTIFY type, const char *title, const char *msg, const char *fmt, va_list arg)
+static int logpopup(H3270 *session, void *widget, LIB3270_NOTIFY type, const char *title, const char *msg, const char *fmt, va_list arg)
 {
 	lib3270_write_va_log(session,"lib3270",fmt,arg);
 	return 0;
@@ -619,7 +619,7 @@ void Error(H3270 *session, const char *fmt, ...)
 	CHECK_SESSION_HANDLE(session);
 
 	va_start(arg_ptr, fmt);
-	popup_handler(session,LIB3270_NOTIFY_ERROR, _( "3270 Error" ),NULL,fmt,arg_ptr);
+	popup_handler(session,session->widget,LIB3270_NOTIFY_ERROR, _( "3270 Error" ),NULL,fmt,arg_ptr);
 	va_end(arg_ptr);
 
 }
@@ -631,7 +631,7 @@ void Warning(H3270 *session, const char *fmt, ...)
 	CHECK_SESSION_HANDLE(session);
 
 	va_start(arg_ptr, fmt);
-	popup_handler(session,LIB3270_NOTIFY_WARNING, _( "3270 Warning" ),NULL,fmt,arg_ptr);
+	popup_handler(session,session->widget,LIB3270_NOTIFY_WARNING, _( "3270 Warning" ),NULL,fmt,arg_ptr);
 	va_end(arg_ptr);
 
 }
@@ -644,7 +644,7 @@ extern void popup_an_error(H3270 *session, const char *fmt, ...)
 	CHECK_SESSION_HANDLE(session);
 
 	va_start(args, fmt);
-	popup_handler(session,LIB3270_NOTIFY_ERROR,_( "3270 Error" ),NULL,fmt,args);
+	popup_handler(session,session->widget,LIB3270_NOTIFY_ERROR,_( "3270 Error" ),NULL,fmt,args);
 	va_end(args);
 
 }
@@ -656,7 +656,7 @@ void popup_system_error(H3270 *session, const char *title, const char *message, 
 	CHECK_SESSION_HANDLE(session);
 
 	va_start(args, fmt);
-	popup_handler(session,LIB3270_NOTIFY_ERROR,title ? title : _( "3270 Error" ), message,fmt,args);
+	popup_handler(session,session->widget,LIB3270_NOTIFY_ERROR,title ? title : _( "3270 Error" ), message,fmt,args);
 	va_end(args);
 }
 
@@ -753,7 +753,7 @@ LIB3270_ACTION( testpattern )
 	return 0;
 }
 
-LIB3270_EXPORT void lib3270_set_popup_handler(int (*handler)(H3270 *, LIB3270_NOTIFY, const char *, const char *, const char *, va_list))
+LIB3270_EXPORT void lib3270_set_popup_handler(int (*handler)(H3270 *, void *, LIB3270_NOTIFY, const char *, const char *, const char *, va_list))
 {
 	popup_handler = handler ? handler : logpopup;
 }
@@ -765,7 +765,7 @@ LIB3270_EXPORT void lib3270_popup_dialog(H3270 *session, LIB3270_NOTIFY id , con
 	CHECK_SESSION_HANDLE(session);
 
 	va_start(args, fmt);
-	popup_handler(session,id,title ? title : _( "3270 Error" ), message,fmt,args);
+	popup_handler(session,session->widget,id,title ? title : _( "3270 Error" ), message,fmt,args);
 	va_end(args);
 }
 

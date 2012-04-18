@@ -38,6 +38,12 @@
 		</menu>
 		-->
 
+		<menu name='SettingsMenu' label='Settings' sysmenu='yes' >
+			<menu name='OptionsMenu' label='_Options' >
+				<menuitem action='toggle' id='dstrace' label='DS Trace' />
+			</menu>
+		</menu>
+
 		<menu name='debugmenu' label='Debug' >
 			<menuitem action='testpattern' group='offline' label='Show test pattern' />
 			<menuitem action='reload' label='Reload buffer contents' />

@@ -46,7 +46,7 @@
 	#undef HAVE_LIBSSL
 
 	/* Optional parts. */
-	#undef X3270_TRACE
+	#define X3270_TRACE
 	#undef X3270_DBCS
 	#undef X3270_SCRIPT
 

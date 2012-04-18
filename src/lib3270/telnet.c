@@ -1110,11 +1110,6 @@ void net_input(H3270 *session)
 		}
 #endif /*]*/
 
-#if defined(X3270_TRACE) /*[*/
-		/* See if it's time to roll over the trace file. */
-		trace_rollover_check();
-#endif /*]*/
-
 	}
 
 }

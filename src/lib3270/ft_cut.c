@@ -288,7 +288,7 @@ ft_cut_data(void)
 		cut_data();
 		break;
 	    default:
-		trace_ds("< FT unknown 0x%02x\n", ea_buf[O_FRAME_TYPE].cc);
+		trace_ds("< FT unknown 0x%02x\n", h3270.ea_buf[O_FRAME_TYPE].cc);
 		cut_abort(_(" Unknown frame type from host"), SC_ABORT_XMIT);
 		break;
 	}

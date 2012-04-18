@@ -407,10 +407,10 @@
 		#define register_schange(tx,func) lib3270_register_schange(NULL,tx,func,NULL)
 
 		/* Console/Trace window */
-		LOCAL_EXTERN HCONSOLE	  console_window_new(const char *title, const char *label);
-		LOCAL_EXTERN void	  console_window_delete(HCONSOLE hwnd);
-		LOCAL_EXTERN int		  console_window_append(HCONSOLE hwnd, const char *fmt, ...);
-		LOCAL_EXTERN char	* console_window_wait_for_user_entry(HCONSOLE hwnd);
+//		LOCAL_EXTERN HCONSOLE	  console_window_new(const char *title, const char *label);
+//		LOCAL_EXTERN void	  console_window_delete(HCONSOLE hwnd);
+//		LOCAL_EXTERN int		  console_window_append(HCONSOLE hwnd, const char *fmt, ...);
+//		LOCAL_EXTERN char	* console_window_wait_for_user_entry(HCONSOLE hwnd);
 
 #ifdef __cplusplus
 	}

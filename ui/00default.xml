@@ -40,12 +40,12 @@
 				* filename='PATH' to save to a predefined file whithout user interaction
 
 			--->
-			<menuitem action='save' src='all' label='Save screen' />
+			<menuitem action='save' src='all' group='online' label='Save screen' />
 			<menuitem action='save' src='selected' group='selection' label='Save selected' />
 			<menuitem action='save' src='copy' group='clipboard' label='Save copy' />
 
 			<separator/>
-			<menuitem action='print' src='all' key='Print' icon='print' label='Print' />
+			<menuitem action='print' src='all' key='Print' group='online' icon='print' label='Print' />
 			<menuitem action='print' src='selected' group='selection' label='Print selected' />
 			<menuitem action='print' src='copy' group='clipboard' label='Print copy' />
 			<separator/>

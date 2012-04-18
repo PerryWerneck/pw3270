@@ -32,7 +32,6 @@
 #include "globals.h"
 #include "v3270/v3270.h"
 #include "v3270/accessible.h"
-#include <lib3270/popup.h>
 #include <stdlib.h>
 
 /*--[ Statics ]--------------------------------------------------------------------------------------*/
@@ -40,39 +39,6 @@
  static GtkWidget *toplevel = NULL;
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
-
-static int popup_handler(H3270 *session, LIB3270_NOTIFY type, const char *title, const char *msg, const char *fmt, va_list args)
-{
-	GtkWidget		* dialog;
-	GtkMessageType	  msgtype	= GTK_MESSAGE_WARNING;
-	GtkButtonsType	  buttons	= GTK_BUTTONS_OK;
-	gchar 			* text		= g_strdup_vprintf(fmt,args);
-
-	if(type == LIB3270_NOTIFY_CRITICAL)
-	{
-		msgtype	= GTK_MESSAGE_ERROR;
-		buttons = GTK_BUTTONS_CLOSE;
-	}
-
-	if(msg)
-	{
-		dialog = gtk_message_dialog_new_with_markup(GTK_WINDOW(toplevel),GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,msgtype,buttons,"%s",msg);
-		gtk_message_dialog_format_secondary_markup(GTK_MESSAGE_DIALOG(dialog),"%s",text);
-	}
-	else
-	{
-		dialog = gtk_message_dialog_new_with_markup(GTK_WINDOW(toplevel),GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,msgtype,buttons,"%s",text);
-	}
-
-	g_free(text);
-
-	gtk_window_set_title(GTK_WINDOW(dialog),title ? title : "Error");
-
-	gtk_dialog_run(GTK_DIALOG (dialog));
-	gtk_widget_destroy(dialog);
-
-	return 0;
-}
 
 static int initialize(void)
 {
@@ -102,6 +68,33 @@ static int initialize(void)
 	}
 
 	return 0;
+}
+
+static void toplevel_setup(GtkWindow *window)
+{
+ 	gchar * name		= g_strdup_printf("%s.png",g_get_application_name());
+	gchar * filename 	= build_data_filename(name,NULL);
+
+	gtk_window_set_type_hint(window,GDK_WINDOW_TYPE_HINT_NORMAL);
+	gtk_window_set_position(window,GTK_WIN_POS_CENTER);
+	gtk_window_set_role(window,"toplevel");
+
+	// Set default icon
+	if(g_file_test(filename,G_FILE_TEST_EXISTS))
+	{
+		GError * error = NULL;
+
+		trace("Loading default icon from %s",filename);
+
+		if(!gtk_window_set_default_icon_from_file(filename,&error))
+		{
+			g_warning("Error %s loading default icon from %s",error->message,filename);
+			g_error_free(error);
+		}
+	}
+
+	g_free(filename);
+	g_free(name);
 }
 
 int main(int argc, char *argv[])
@@ -147,7 +140,6 @@ int main(int argc, char *argv[])
 	}
 
 	g_set_application_name(appname);
-	lib3270_set_popup_handler(popup_handler);
 
 	rc = initialize();
 	if(!rc)
@@ -156,9 +148,7 @@ int main(int argc, char *argv[])
 
 		toplevel = pw3270_new(host);
 
-		gtk_window_set_type_hint(GTK_WINDOW(toplevel),GDK_WINDOW_TYPE_HINT_NORMAL);
-		gtk_window_set_position(GTK_WINDOW(toplevel),GTK_WIN_POS_CENTER);
-		gtk_window_set_role(GTK_WINDOW(toplevel),"toplevel");
+		toplevel_setup(GTK_WINDOW(toplevel));
 
 		gtk_window_present(GTK_WINDOW(toplevel));
 

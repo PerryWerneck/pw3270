@@ -18,52 +18,20 @@
  * programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple
  * Place, Suite 330, Boston, MA, 02111-1307, USA
  *
- * Este programa está nomeado como trace_dsc.h e possui - linhas de código.
+ * Este programa está nomeado como session.h e possui - linhas de código.
  *
  * Contatos:
  *
  * perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
  * erico.mendonca@gmail.com	(Erico Mascarenhas Mendonça)
+ * licinio@bb.com.br		(Licínio Luis Branco)
+ * kraucer@bb.com.br		(Kraucer Fernandes Mazuco)
  *
  */
 
-/*
- *	trace_dsc.h
- *		Global declarations for trace_ds.c.
- */
+#ifndef LIB3270_TRACE_H_INCLUDED
 
-#if defined(X3270_TRACE)
+	#define LIB3270_TRACE_H_INCLUDED 1
 
-	LIB3270_INTERNAL Boolean trace_skipping;
 
-	const char *rcba(int baddr);
-
-//	void toggle_dsTrace(H3270 *h, struct toggle *t, LIB3270_TOGGLE_TYPE tt);
-//	void toggle_eventTrace(H3270 *h, struct toggle *t, LIB3270_TOGGLE_TYPE tt);
-//	void toggle_screenTrace(H3270 *h, struct toggle *t, LIB3270_TOGGLE_TYPE tt);
-
-	void trace_ansi_disc(void);
-	void trace_char(char c);
-	void trace_ds(const char *fmt, ...) printflike(1, 2);
-	void trace_ds_nb(const char *fmt, ...) printflike(1, 2);
-	void trace_dsn(const char *fmt, ...) printflike(1, 2);
-	void trace_event(const char *fmt, ...) printflike(1, 2);
-	void trace_screen(void);
-//	void trace_rollover_check(void);
-
-#elif defined(__GNUC__)
-
-	#define trace_ds(format, args...)
-	#define trace_dsn(format, args...)
-	#define trace_ds_nb(format, args...)
-	#define trace_event(format, args...)
-
-#else
-
-	#define trace_ds 0 &&
-	#define trace_ds_nb 0 &&
-	#define trace_dsn 0 &&
-	#define trace_event 0 &&
-	#define rcba 0 &&
-
-#endif
+#endif // LIB3270_TRACE_H_INCLUDED

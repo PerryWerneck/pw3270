@@ -83,33 +83,37 @@
 #define ftello(s)	(off_t)ftell(s)
 #endif /*]*/
 
-#include <lib3270/api.h>
+// #include <lib3270/api.h>
 
 /* Statics */
 static int      dscnt = 0;
 
+/*
 #if defined (LIB3270)
 	HCONSOLE		tracewindow_handle = 0;
-#elif defined(_WIN32) /*[*/
+#elif defined(_WIN32)
 	static HANDLE	tracewindow_handle = NULL;
-#else /*][*/
+#else
 	static int		tracewindow_pid = -1;
-#endif /*]*/
+#endif
+*/
 
-static FILE    *tracef = NULL;
-static FILE    *tracef_pipe = NULL;
-static char    *tracef_bufptr = CN;
-static off_t	tracef_size = 0;
-static off_t	tracef_max = 0;
-static char    *tracef_midpoint_header = CN;
-static off_t	tracef_midpoint = 0;
-static void	vwtrace(const char *fmt, va_list args);
+// static FILE    *tracef = NULL;
+// static FILE    *tracef_pipe = NULL;
+// static char    *tracef_bufptr = CN;
+// static off_t	tracef_size = 0;
+// static off_t	tracef_max = 0;
+// static char    *tracef_midpoint_header = CN;
+// static off_t	tracef_midpoint = 0;
+
+static void __vwtrace(const char *fmt, va_list args);
 static void	wtrace(const char *fmt, ...);
-static char    *create_tracefile_header(const char *mode);
+// static char    *create_tracefile_header(const char *mode);
 static void	stop_tracing(void);
 
 /* Globals */
 struct timeval  ds_ts;
+static void (*vwtrace)(const char *fmt, va_list args) = __vwtrace;
 Boolean         trace_skipping = False;
 
 /* display a (row,col) */
@@ -133,7 +137,7 @@ trace_ds_s(char *s, Boolean can_break)
 	int len = strlen(s);
 	Boolean nl = False;
 
-	if (!toggled(DS_TRACE) || tracef == NULL || !len)
+	if (!toggled(DS_TRACE) || !len)
 		return;
 
 	if (s && s[len-1] == '\n') {
@@ -167,7 +171,7 @@ trace_ds(const char *fmt, ...)
 {
 	va_list args;
 
-	if (!toggled(DS_TRACE) || tracef == NULL)
+	if (!toggled(DS_TRACE))
 		return;
 
 	va_start(args, fmt);
@@ -187,7 +191,7 @@ trace_ds_nb(const char *fmt, ...)
 {
 	va_list args;
 
-	if (!toggled(DS_TRACE) || tracef == NULL)
+	if (!toggled(DS_TRACE))
 		return;
 
 	va_start(args, fmt);
@@ -208,7 +212,7 @@ trace_event(const char *fmt, ...)
 {
 	va_list args;
 
-	if (!toggled(EVENT_TRACE) || tracef == NULL)
+	if (!toggled(EVENT_TRACE))
 		return;
 
 	/* print out message */
@@ -223,7 +227,7 @@ trace_dsn(const char *fmt, ...)
 {
 	va_list args;
 
-	if (!toggled(DS_TRACE) || tracef == NULL)
+	if (!toggled(DS_TRACE))
 		return;
 
 	/* print out message */
@@ -237,6 +241,12 @@ trace_dsn(const char *fmt, ...)
  * This is the only function that actually does output to the trace file --
  * all others are wrappers around this function.
  */
+static void __vwtrace(const char *fmt, va_list args)
+{
+	vfprintf(stdout,fmt,args);
+}
+
+/*
 static void vwtrace(const char *fmt, va_list args)
 {
 	char buf[16384];
@@ -255,20 +265,18 @@ static void vwtrace(const char *fmt, va_list args)
 			popup_an_errno(errno,_( "Write to trace file failed\n%s" ),strerror(errno));
 	}
 }
+*/
 
 /* Write to the trace file. */
-static void
-wtrace(const char *fmt, ...)
+static void wtrace(const char *fmt, ...)
 {
-	if (tracef != NULL) {
-		va_list args;
-
-		va_start(args, fmt);
-		vwtrace(fmt, args);
-		va_end(args);
-	}
+	va_list args;
+	va_start(args, fmt);
+	vwtrace(fmt, args);
+	va_end(args);
 }
 
+/*
 static void stop_tracing(void)
 {
 	if (tracef != NULL && tracef != stdout)
@@ -282,39 +290,30 @@ static void stop_tracing(void)
 	lib3270_set_toggle(&h3270,DS_TRACE,0);
 	lib3270_set_toggle(&h3270,EVENT_TRACE,0);
 
-/*
-	if (toggled(DS_TRACE)) {
-		toggle_toggle(&appres.toggle[DS_TRACE]);
-//		menubar_retoggle(&appres.toggle[DS_TRACE]);
-	}
-	if (toggled(EVENT_TRACE)) {
-		toggle_toggle(&appres.toggle[EVENT_TRACE]);
-//		menubar_retoggle(&appres.toggle[EVENT_TRACE]);
-	}
-*/
 }
+*/
 
-/* Check for a trace file rollover event. */
+/* Check for a trace file rollover event.
 void
 trace_rollover_check(void)
 {
 	if (tracef == NULL || tracef_max == 0)
 		return;
 
-	/* See if we've reached the midpoint. */
+	// See if we've reached the midpoint.
 	if (!tracef_midpoint) {
 		if (tracef_size >= tracef_max / 2) {
 			tracef_midpoint = ftello(tracef);
-#if defined(ROLLOVER_DEBUG) /*[*/
+#if defined(ROLLOVER_DEBUG)
 			printf("midpoint is %lld\n", tracef_midpoint);
-#endif /*]*/
+#endif
 			tracef_midpoint_header =
 			    create_tracefile_header("rolled over");
 		}
 		return;
 	}
 
-	/* See if we've reached a rollover point. */
+	// See if we've reached a rollover point.
 	if (tracef_size >= tracef_max) {
 		char buf[8*1024];
 		int nr;
@@ -322,13 +321,13 @@ trace_rollover_check(void)
 
 		if (!tracef_midpoint)
 			Error("Tracefile rollover logic error");
-#if defined(ROLLOVER_DEBUG) /*[*/
+#if defined(ROLLOVER_DEBUG)
 		printf("rolling over at %lld\n", tracef_size);
-#endif /*]*/
-		/*
-		 * Overwrite the file with the midpoint header, and the data
-		 * which follows the midpoint.
-		 */
+#endif
+		//
+		// Overwrite the file with the midpoint header, and the data
+		// which follows the midpoint.
+		//
 		if (fseeko(tracef, 0, SEEK_SET) < 0) {
 			popup_an_errno(errno, "trace file fseeko(0) failed");
 			stop_tracing();
@@ -347,9 +346,9 @@ trace_rollover_check(void)
 			stop_tracing();
 			return;
 		}
-#if defined(ROLLOVER_DEBUG) /*[*/
+#if defined(ROLLOVER_DEBUG)
 		printf("rpos = %lld, wpos = %lld\n", rpos, wpos);
-#endif /*]*/
+#endif
 		while ((nr = fread(buf, 1, sizeof(buf), tracef)) > 0) {
 			rpos = ftello(tracef);
 			if (fseeko(tracef, wpos, SEEK_SET) < 0) {
@@ -380,9 +379,9 @@ trace_rollover_check(void)
 			stop_tracing();
 			return;
 		}
-#if defined(ROLLOVER_DEBUG) /*[*/
+#if defined(ROLLOVER_DEBUG)
 		printf("final wpos = %lld\n", wpos);
-#endif /*]*/
+#endif
 		if (ftruncate(fileno(tracef), wpos) < 0) {
 			popup_an_errno(errno, "trace file ftruncate(%ld) "
 			    "failed", (long)wpos);
@@ -401,29 +400,29 @@ trace_rollover_check(void)
 		    create_tracefile_header("rolled over"));
 	}
 }
+*/
 
-#if defined(X3270_DISPLAY) /*[*/
+/*
+#if defined(X3270_DISPLAY)
 static Widget trace_shell = (Widget)NULL;
-#endif /*]*/
+#endif
 static int trace_reason;
+*/
 
-/* Create a trace file header. */
-static char *
-create_tracefile_header(const char *mode)
+/* Create a trace file header. */ /*
+static char * create_tracefile_header(const char *mode)
 {
 	char *buf;
 	time_t clk;
 
-	/* Create a buffer and redirect output. */
+	// Create a buffer and redirect output.
 	buf = Malloc(MAX_HEADER_SIZE);
 	tracef_bufptr = buf;
 
-	/* Display current status */
+	// Display current status
 	clk = time((time_t *)0);
 	wtrace("Trace %s %s", mode, ctime(&clk));
 	wtrace(" Version: %s\n", build);
-//	save_yourself();
-//	wtrace(" Command: %s\n", command_string);
 	wtrace(" Model %s", h3270.model_name);
 	wtrace(", %s display", appres.mono ? "monochrome" : "color");
 	if (appres.extended)
@@ -436,27 +435,27 @@ create_tracefile_header(const char *mode)
 	if (CONNECTED)
 		wtrace(" Connected to %s, port %u\n",h3270.current_host, h3270.current_port);
 
-	/* Snap the current TELNET options. */
+	// Snap the current TELNET options.
 	if (net_snap_options()) {
 		wtrace(" TELNET state:\n");
 		trace_netdata('<', obuf, obptr - obuf);
 	}
 
-	/* Dump the screen contents and modes into the trace file. */
+	// Dump the screen contents and modes into the trace file.
 	if (CONNECTED) {
-		/*
-		 * Note that if the screen is not formatted, we do not
-		 * attempt to save what's on it.  However, if we're in
-		 * 3270 SSCP-LU or NVT mode, we'll do a dummy, empty
-		 * write to ensure that the display is in the right
-		 * mode.
-		 */
+		//
+		// Note that if the screen is not formatted, we do not
+		// attempt to save what's on it.  However, if we're in
+		// 3270 SSCP-LU or NVT mode, we'll do a dummy, empty
+		// write to ensure that the display is in the right
+		// mode.
+		//
 		if (h3270.formatted) {
 			wtrace(" Screen contents:\n");
 			obptr = obuf;
-#if defined(X3270_TN3270E) /*[*/
+#if defined(X3270_TN3270E)
 			(void) net_add_dummy_tn3270e();
-#endif /*]*/
+#endif
 			ctlr_snap_buffer();
 			space3270out(2);
 			net_add_eor(obuf, obptr - obuf);
@@ -464,9 +463,9 @@ create_tracefile_header(const char *mode)
 			trace_netdata('<', obuf, obptr - obuf);
 
 			obptr = obuf;
-#if defined(X3270_TN3270E) /*[*/
+#if defined(X3270_TN3270E)
 			(void) net_add_dummy_tn3270e();
-#endif /*]*/
+#endif
 			if (ctlr_snap_modes()) {
 				wtrace(" 3270 modes:\n");
 				space3270out(2);
@@ -475,7 +474,7 @@ create_tracefile_header(const char *mode)
 				trace_netdata('<', obuf, obptr - obuf);
 			}
 		}
-#if defined(X3270_TN3270E) /*[*/
+#if defined(X3270_TN3270E)
 		else if (IN_E) {
 			obptr = obuf;
 			if (net_add_dummy_tn3270e()) {
@@ -486,17 +485,18 @@ create_tracefile_header(const char *mode)
 				trace_netdata('<', obuf, obptr - obuf);
 			}
 		}
-#endif /*]*/
+#endif
 	}
 
 	wtrace(" Data stream:\n");
 
-	/* Return the buffer. */
+	// Return the buffer.
 	tracef_bufptr = CN;
 	return buf;
 }
+*/
 
-/* Calculate the tracefile maximum size. */
+/* Calculate the tracefile maximum size. */ /*
 static void
 get_tracef_max(void)
 {
@@ -538,16 +538,17 @@ get_tracef_max(void)
 
 	if (bad) {
 		tracef_max = MIN_TRACEFILE_SIZE;
-#if defined(X3270_DISPLAY) /*[*/
+#if defined(X3270_DISPLAY)
 		popup_an_info("Invalid %s '%s', assuming "
 		    MIN_TRACEFILE_SIZE_NAME,
 		    ResTraceFileSize,
 		    appres.trace_file_size);
-#endif /*]*/
+#endif
 	} else if (tracef_max < MIN_TRACEFILE_SIZE) {
 		tracef_max = MIN_TRACEFILE_SIZE;
 	}
 }
+*/
 
 /* Parse the name '/dev/fd<n>', so we can simulate it. */
 static int
@@ -564,7 +565,7 @@ get_devfd(const char *pathname)
 	return fd;
 }
 
-/* Callback for "OK" button on trace popup */
+/* Callback for "OK" button on trace popup */ /*
 static void tracefile_callback(Widget w, XtPointer client_data, XtPointer call_data unused)
 {
 	char *tfn = CN;
@@ -590,10 +591,10 @@ static void tracefile_callback(Widget w, XtPointer client_data, XtPointer call_d
 	}
 	else
 	{
-		/* Get the trace file maximum. */
+		// Get the trace file maximum.
 		get_tracef_max();
 
-		/* If there's a limit, the file can't exist. */
+		// If there's a limit, the file can't exist.
 		if (tracef_max && !access(tfn, R_OK))
 		{
 			popup_an_error("Trace file '%s' already exists",tfn);
@@ -601,7 +602,7 @@ static void tracefile_callback(Widget w, XtPointer client_data, XtPointer call_d
 			return;
 		}
 
-		/* Open and configure the file. */
+		// Open and configure the file.
 		if ((devfd = get_devfd(tfn)) >= 0)
 			tracef = fdopen(dup(devfd), "a");
 		else
@@ -613,31 +614,31 @@ static void tracefile_callback(Widget w, XtPointer client_data, XtPointer call_d
 			return;
 		}
 		(void) SETLINEBUF(tracef);
-#if !defined(_WIN32) /*[*/
+#if !defined(_WIN32)
 		(void) fcntl(fileno(tracef), F_SETFD, 1);
-#endif /*]*/
+#endif
 	}
 
-	/* Open pw3270's console window */
+	// Open pw3270's console window
 	if(!tracewindow_handle)
 		tracewindow_handle = console_window_new( tfn, NULL );
 
 	Free(tfn);
 
-	/* We're really tracing, turn the flag on. */
+	// We're really tracing, turn the flag on.
 	appres.toggle[trace_reason].value = True;
 //	appres.toggle[trace_reason].changed = True;
 //	menubar_retoggle(&appres.toggle[trace_reason]);
 
-	/* Display current status. */
+	// Display current status
 	buf = create_tracefile_header("started");
 	wtrace("%s", buf);
 	Free(buf);
 
 }
 
-#if defined(X3270_DISPLAY) /*[*/
-/* Callback for "No File" button on trace popup */
+#if defined(X3270_DISPLAY)
+// Callback for "No File" button on trace popup
 static void
 no_tracefile_callback(Widget w, XtPointer client_data,
 	XtPointer call_data unused)
@@ -645,9 +646,10 @@ no_tracefile_callback(Widget w, XtPointer client_data,
 	tracefile_callback((Widget)NULL, "", PN);
 	XtPopdown(trace_shell);
 }
-#endif /*]*/
+#endif
+*/
 
-/* Open the trace file. */
+/* Open the trace file.
 static void
 tracefile_on(int reason, LIB3270_TOGGLE_TYPE tt)
 {
@@ -668,30 +670,30 @@ tracefile_on(int reason, LIB3270_TOGGLE_TYPE tt)
 	}
 	else
 	{
-#if defined(_WIN32) /*[*/
+#if defined(_WIN32)
 		tracefile_buf = xs_buffer("%sx3trc.%u.txt", PROGRAM_DATA,getpid());
-#else /*][*/
+#else
 
         if(appres.trace_dir)
             tracefile_buf = xs_buffer("%s/x3trc.%u", appres.trace_dir,getpid());
         else
             tracefile_buf = xs_buffer("%s/x3trc.%u", ".",getpid());
 
-#endif /*]*/
+#endif
 		tracefile = tracefile_buf;
 	}
 
 
-#if defined(X3270_DISPLAY) /*[*/
+#if defined(X3270_DISPLAY)
 	if (tt == TT_INITIAL || tt == TT_ACTION)
-#endif /*]*/
+#endif
 	{
 		tracefile_callback((Widget)NULL, tracefile, PN);
 		if (tracefile_buf != NULL)
 		    	Free(tracefile_buf);
 		return;
 	}
-#if defined(X3270_DISPLAY) /*[*/
+#if defined(X3270_DISPLAY)
 	if (trace_shell == NULL) {
 		trace_shell = create_form_popup("trace",
 		    tracefile_callback,
@@ -702,18 +704,18 @@ tracefile_on(int reason, LIB3270_TOGGLE_TYPE tt)
 		    NULL);
 	}
 
-	/* Turn the toggle _off_ until the popup succeeds. */
+	// Turn the toggle _off_ until the popup succeeds.
 	appres.toggle[reason].value = False;
 	appres.toggle[reason].changed = True;
 
 	popup_popup(trace_shell, XtGrabExclusive);
-#endif /*]*/
+#endif
 
 	if (tracefile_buf != NULL)
 		Free(tracefile_buf);
 }
 
-/* Close the trace file. */
+// Close the trace file.
 static void tracefile_off(void)
 {
 	time_t clk;
@@ -729,13 +731,13 @@ static void tracefile_off(void)
 		tracewindow_handle = NULL;
 	}
 
-#elif !defined(_WIN32) /*[*/
+#elif !defined(_WIN32)
 
 	if (tracewindow_pid != -1)
 		(void) kill(tracewindow_pid, SIGKILL);
 	tracewindow_pid = -1;
 
-#else /*][*/
+#else
 
 	if (tracewindow_handle != NULL)
 	{
@@ -744,56 +746,57 @@ static void tracefile_off(void)
 		tracewindow_handle = NULL;
 	}
 
-#endif /*]*/
+#endif
 
 	stop_tracing();
 }
 
+
 void toggle_dsTrace(H3270 *session, struct toggle *t unused, LIB3270_TOGGLE_TYPE tt)
 {
-	/* If turning on trace and no trace file, open one. */
-
 	if (toggled(DS_TRACE) && tracef == NULL)
 		tracefile_on(DS_TRACE, tt);
 
-	/* If turning off trace and not still tracing events, close the
-	   trace file. */
+	// If turning off trace and not still tracing events, close the trace file.
 	else if (!toggled(DS_TRACE) && !toggled(EVENT_TRACE))
 		tracefile_off();
 
 	if (toggled(DS_TRACE))
 		(void) gettimeofday(&ds_ts, (struct timezone *)NULL);
 }
+*/
 
+/*
 void toggle_eventTrace(H3270 *session, struct toggle *t unused, LIB3270_TOGGLE_TYPE tt)
 {
-	/* If turning on event debug, and no trace file, open one. */
+	// If turning on event debug, and no trace file, open one.
 
 	if (toggled(EVENT_TRACE) && tracef == NULL)
 		tracefile_on(EVENT_TRACE, tt);
 
-	/* If turning off event debug, and not tracing the data stream,
-	   close the trace file. */
+	// If turning off event debug, and not tracing the data stream, close the trace file.
 	else if (!toggled(EVENT_TRACE) && !toggled(DS_TRACE))
 		tracefile_off();
 }
+*/
 
 /* Screen trace file support. */
 
-#if defined(X3270_DISPLAY) /*[*/
+/*
+#if defined(X3270_DISPLAY)
 static Widget screentrace_shell = (Widget)NULL;
-#endif /*]*/
+#endif
 static FILE *screentracef = (FILE *)0;
-
+*/
 /*
  * Screen trace function, called when the host clears the screen.
  */
-static void
-do_screentrace(void)
+static void do_screentrace(void)
 {
+	wtrace("\n%s - Not implemented\n",__FUNCTION__);
+/*
 	register int i;
 
-/*
 	if (fprint_screen(screentracef, False, False)) {
 		for (i = 0; i < h3270.cols; i++)
 			(void) fputc('=', screentracef);
@@ -802,23 +805,20 @@ do_screentrace(void)
 */
 }
 
-void
-trace_screen(void)
+void trace_screen(void)
 {
 	trace_skipping = False;
 
-	if (!toggled(SCREEN_TRACE) || !screentracef)
-		return;
-	do_screentrace();
+	if (!toggled(SCREEN_TRACE))
+		do_screentrace();
 }
 
 /* Called from ANSI emulation code to log a single character. */
-void
-trace_char(char c)
+void trace_char(char c)
 {
-	if (!toggled(SCREEN_TRACE) || !screentracef)
-		return;
-	(void) fputc(c, screentracef);
+	if (toggled(SCREEN_TRACE))
+		wtrace("%c",c);
+	return;
 }
 
 /*
@@ -827,15 +827,14 @@ trace_char(char c)
  * (In a gross violation of data hiding and modularity, trace_skipping is
  * manipulated directly in ctlr_clear()).
  */
-void
-trace_ansi_disc(void)
+void trace_ansi_disc(void)
 {
 	int i;
 
-	(void) fputc('\n', screentracef);
+	wtrace("%c",'\n');
 	for (i = 0; i < h3270.cols; i++)
-		(void) fputc('=', screentracef);
-	(void) fputc('\n', screentracef);
+		wtrace("%c",'=');
+	wtrace("%c",'\n');
 
 	trace_skipping = True;
 }
@@ -843,7 +842,7 @@ trace_ansi_disc(void)
 /*
  * Screen tracing callback.
  * Returns True for success, False for failure.
- */
+ */ /*
 static Boolean
 screentrace_cb(char *tfn)
 {
@@ -856,16 +855,17 @@ screentrace_cb(char *tfn)
 	}
 	Free(tfn);
 	(void) SETLINEBUF(screentracef);
-#if !defined(_WIN32) /*[*/
+#if !defined(_WIN32)
 	(void) fcntl(fileno(screentracef), F_SETFD, 1);
-#endif /*]*/
+#endif
 
-	/* We're really tracing, turn the flag on. */
+	// We're really tracing, turn the flag on.
 	appres.toggle[SCREEN_TRACE].value = True;
 //	appres.toggle[SCREEN_TRACE].changed = True;
 //	menubar_retoggle(&appres.toggle[SCREEN_TRACE]);
 	return True;
 }
+*/
 
 /*
 #if defined(X3270_DISPLAY)
@@ -910,8 +910,11 @@ onescreen_callback(Widget w, XtPointer client_data, XtPointer call_data unused)
 }
 #endif */
 
+/*
 void toggle_screenTrace(H3270 *session, struct toggle *t unused, LIB3270_TOGGLE_TYPE tt)
 {
+	wtrace("Screen trace is %s\n",toggled(SCREEN_TRACE),"Enabled" : "Disabled");
+
 	char *tracefile_buf = NULL;
 	char *tracefile;
 
@@ -919,14 +922,14 @@ void toggle_screenTrace(H3270 *session, struct toggle *t unused, LIB3270_TOGGLE_
 		if (appres.screentrace_file)
 			tracefile = appres.screentrace_file;
 		else {
-#if defined(_WIN32) /*[*/
+#if defined(_WIN32)
 			tracefile_buf = xs_buffer("%sx3scr.%u.txt",PROGRAM_DATA, getpid());
-#else /*][*/
+#else
             if(appres.trace_dir)
                 tracefile_buf = xs_buffer("%s/x3scr.%u",appres.trace_dir, getpid());
             else
                 tracefile_buf = xs_buffer("%s/x3scr.%u",".", getpid());
-#endif /*]*/
+#endif
 			tracefile = tracefile_buf;
 		}
 		if (tt == TT_INITIAL || tt == TT_ACTION) {
@@ -935,7 +938,7 @@ void toggle_screenTrace(H3270 *session, struct toggle *t unused, LIB3270_TOGGLE_
 				Free(tracefile_buf);
 			return;
 		}
-#if defined(X3270_DISPLAY) /*[*/
+#if defined(X3270_DISPLAY)
 		if (screentrace_shell == NULL) {
 			screentrace_shell = create_form_popup("screentrace",
 			    screentrace_callback, onescreen_callback,
@@ -948,7 +951,7 @@ void toggle_screenTrace(H3270 *session, struct toggle *t unused, LIB3270_TOGGLE_
 		appres.toggle[SCREEN_TRACE].value = False;
 		appres.toggle[SCREEN_TRACE].changed = True;
 		popup_popup(screentrace_shell, XtGrabExclusive);
-#endif /*]*/
+#endif
 	} else {
 		if (ctlr_any_data() && !trace_skipping)
 			do_screentrace();
@@ -958,5 +961,6 @@ void toggle_screenTrace(H3270 *session, struct toggle *t unused, LIB3270_TOGGLE_
 	if (tracefile_buf != NULL)
 		Free(tracefile_buf);
 }
+*/
 
 #endif /*]*/

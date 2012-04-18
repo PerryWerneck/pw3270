@@ -43,7 +43,7 @@
 		LIB3270_NOTIFY_USER			/**< Reserver, always the last one */
 	} LIB3270_NOTIFY;
 
-	LIB3270_EXPORT void lib3270_set_popup_handler(int (*popup_handler)(H3270 *, LIB3270_NOTIFY, const char *, const char *, const char *, va_list));
+	LIB3270_EXPORT void lib3270_set_popup_handler(int (*popup_handler)(H3270 *, void *, LIB3270_NOTIFY, const char *, const char *, const char *, va_list));
 	LIB3270_EXPORT void lib3270_popup_dialog(H3270 *session, LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, ...);
 
 #endif // LIB3270_POPUP_INCLUDED
