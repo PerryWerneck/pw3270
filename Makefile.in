@@ -153,7 +153,6 @@ install-sdk:
 	@$(INSTALL_DATA) src/include/lib3270.h $(DESTDIR)/$(includedir)
 	@$(INSTALL_DATA) src/include/lib3270/config.h $(DESTDIR)/$(includedir)/lib3270
 	@$(INSTALL_DATA) src/include/lib3270/selection.h $(DESTDIR)/$(includedir)/lib3270
-	@$(INSTALL_DATA) src/include/pw3270.h $(DESTDIR)/$(includedir)/$(PACKAGE_NAME).h
 
 clean:
 	@rm -fr .obj

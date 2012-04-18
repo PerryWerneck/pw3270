@@ -70,22 +70,32 @@ any IBM host that supports 3270-style connections over TELNET.
 
 Revision @PACKAGE_REVISION@ from @PACKAGE_SOURCE@
 
-%package lib
-Summary:	3270 Communication library for %{name}
-Group:		Development/Libraries
-Requires:       openssl %{name}-lib
+%package devel
+Summary:	Files required for development of %{name} plugins
+Group:		Development/Libraries/C and C++
+Requires:	%{name} = @PACKAGE_VERSION@
 
-%description lib
+%description devel
+Development files for %{name}
+
+Revision @PACKAGE_REVISION@ from @PACKAGE_SOURCE@
+
+%package -n lib3270
+Summary:	3270 Communication library for %{name}
+Group:		Development/Libraries/C and C++
+Requires:       openssl
+
+%description -n lib3270
 tn3270 protocol library for %{name}
 
 Revision @PACKAGE_REVISION@ from @PACKAGE_SOURCE@
 
-%package devel
+%package -n lib3270-devel
 Summary:	Devel for 3270 Communication library for %{name}
-Group:		Development/Libraries
-Requires:	%{name}-lib = @PACKAGE_VERSION@
+Group:		Development/Libraries/C and C++
+Requires:	lib3270 = @PACKAGE_VERSION@
 
-%description devel
+%description -n lib3270-devel
 devel for tn3270 protocol library for %{name}
 
 Revision @PACKAGE_REVISION@ from @PACKAGE_SOURCE@
@@ -127,13 +137,14 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/@PACKAGE_NAME@/@PACKAGE_NAME@.png
 %{_datadir}/@PACKAGE_NAME@/@PACKAGE_NAME@-logo.png
 
-%files lib
+%files -n lib3270
 %defattr(-,root,root)
 %{_libdir}/lib3270.so
 
-%files devel
+%files -n lib3270-devel
 %defattr(-,root,root)
-%{_includedir}
+%{_includedir}/lib3270.h
+%{_includedir}/lib3270
 %{_datadir}/@PACKAGE_NAME@/ui/99debug.xml
 
 #---[ Scripts ]-------------------------------------------------------------------------------------------------------

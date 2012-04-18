@@ -196,16 +196,11 @@ fi
 #--[ Options ]------------------------------------------------------------------------------------------------------------------------------------------------
 
 AC_ARG_ENABLE([pic],
-	[AS_HELP_STRING([--enable-pic], [enable support for PIC libraries (required to compile PW3270 on some systems)])],
+	[AS_HELP_STRING([--disable-pic], [disable support for PIC libraries (required to compile PW3270 on some systems)])],
 [
 	app_cv_pic="$enableval"
 ],[
-
-	if test "$host_cpu" = "x86_64"; then
-		app_cv_pic="yes"
-	else
-		app_cv_pic="no"
-	fi
+	app_cv_pic="yes"
 ])
 
 if test "$app_cv_pic" == "yes"; then
