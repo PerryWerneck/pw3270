@@ -36,7 +36,7 @@
 
 	LIB3270_INTERNAL Boolean trace_skipping;
 
-	const char *rcba(int baddr);
+	const char *rcba(H3270 *session, int baddr);
 
 //	void toggle_dsTrace(H3270 *h, struct toggle *t, LIB3270_TOGGLE_TYPE tt);
 //	void toggle_eventTrace(H3270 *h, struct toggle *t, LIB3270_TOGGLE_TYPE tt);

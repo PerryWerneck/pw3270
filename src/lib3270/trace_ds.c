@@ -86,7 +86,7 @@
 // #include <lib3270/api.h>
 
 /* Statics */
-static int      dscnt = 0;
+// static int      dscnt = 0;
 
 /*
 #if defined (LIB3270)
@@ -123,23 +123,22 @@ LIB3270_EXPORT void lib3270_set_trace_handler( void (*handler)(H3270 *session, c
 }
 
 /* display a (row,col) */
-const char *
-rcba(int baddr)
+const char * rcba(H3270 *hSession, int baddr)
 {
 	static char buf[16];
-
-	(void) sprintf(buf, "(%d,%d)", baddr/h3270.cols + 1, baddr%h3270.cols + 1);
+	(void) sprintf(buf, "(%d,%d)", baddr/hSession->cols + 1, baddr%hSession->cols + 1);
 	return buf;
 }
 
 /* Data Stream trace print, handles line wraps */
 
-static char *tdsbuf = CN;
-#define TDS_LEN	75
+// static char *tdsbuf = CN;
+// #define TDS_LEN	75
 
 static void
 trace_ds_s(char *s, Boolean can_break)
 {
+	static int      dscnt = 0;
 	int len = strlen(s);
 	Boolean nl = False;
 
@@ -175,16 +174,13 @@ trace_ds_s(char *s, Boolean can_break)
 void
 trace_ds(const char *fmt, ...)
 {
+	char tdsbuf[4096];
 	va_list args;
 
 	if (!toggled(DS_TRACE))
 		return;
 
 	va_start(args, fmt);
-
-	/* allocate buffer */
-	if (tdsbuf == CN)
-		tdsbuf = Malloc(4096);
 
 	/* print out remainder of message */
 	(void) vsprintf(tdsbuf, fmt, args);
@@ -195,16 +191,13 @@ trace_ds(const char *fmt, ...)
 void
 trace_ds_nb(const char *fmt, ...)
 {
+	char tdsbuf[4096];
 	va_list args;
 
 	if (!toggled(DS_TRACE))
 		return;
 
 	va_start(args, fmt);
-
-	/* allocate buffer */
-	if (tdsbuf == CN)
-		tdsbuf = Malloc(4096);
 
 	/* print out remainder of message */
 	(void) vsprintf(tdsbuf, fmt, args);

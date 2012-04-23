@@ -690,7 +690,7 @@ ctlr_read_modified(unsigned char aid_byte, Boolean all)
 			if (short_read)
 			    goto rm_done;
 			ENCODE_BADDR(obptr, h3270.cursor_addr);
-			trace_ds("%s",rcba(h3270.cursor_addr));
+			trace_ds("%s",rcba(&h3270,h3270.cursor_addr));
 		} else {
 			space3270out(1);	/* just in case */
 		}
@@ -714,7 +714,7 @@ ctlr_read_modified(unsigned char aid_byte, Boolean all)
 				space3270out(3);
 				*obptr++ = ORDER_SBA;
 				ENCODE_BADDR(obptr, baddr);
-				trace_ds(" SetBufferAddress%s (Cols: %d Rows: %d)", rcba(baddr), h3270.cols, h3270.rows);
+				trace_ds(" SetBufferAddress%s (Cols: %d Rows: %d)", rcba(&h3270,baddr), h3270.cols, h3270.rows);
 				while (!h3270.ea_buf[baddr].fa) {
 
 					if (send_data &&
@@ -833,7 +833,7 @@ ctlr_read_buffer(unsigned char aid_byte)
 	space3270out(3);
 	*obptr++ = aid_byte;
 	ENCODE_BADDR(obptr, h3270.cursor_addr);
-	trace_ds("%s%s", see_aid(aid_byte), rcba(h3270.cursor_addr));
+	trace_ds("%s%s", see_aid(aid_byte), rcba(&h3270,h3270.cursor_addr));
 
 	baddr = 0;
 	do {
@@ -854,7 +854,7 @@ ctlr_read_buffer(unsigned char aid_byte)
 				trace_ds("'");
 			trace_ds(" StartField%s%s%s",
 			    (reply_mode == SF_SRM_FIELD) ? "" : "Extended",
-			    rcba(baddr), see_attr(fa));
+			    rcba(&h3270,baddr), see_attr(fa));
 			if (reply_mode != SF_SRM_FIELD) {
 				if (h3270.ea_buf[baddr].fg) {
 					space3270out(2);
@@ -1229,7 +1229,7 @@ ctlr_write(unsigned char buf[], int buflen, Boolean erase)
 		case ORDER_SF:	/* start field */
 			END_TEXT("StartField");
 			if (previous != SBA)
-				trace_ds("%s",rcba(h3270.buffer_addr));
+				trace_ds("%s",rcba(&h3270,h3270.buffer_addr));
 			previous = ORDER;
 			cp++;		/* skip field attribute */
 			START_FIELD(*cp);
@@ -1244,7 +1244,7 @@ ctlr_write(unsigned char buf[], int buflen, Boolean erase)
 			h3270.buffer_addr = DECODE_BADDR(*(cp-1), *cp);
 			END_TEXT("SetBufferAddress");
 			previous = SBA;
-			trace_ds("%s",rcba(h3270.buffer_addr));
+			trace_ds("%s",rcba(&h3270,h3270.buffer_addr));
 			if (h3270.buffer_addr >= h3270.cols * h3270.rows)
 			{
 				ABORT_WRITE("invalid SBA address");
@@ -1256,7 +1256,7 @@ ctlr_write(unsigned char buf[], int buflen, Boolean erase)
 		case ORDER_IC:	/* insert cursor */
 			END_TEXT("InsertCursor");
 			if (previous != SBA)
-				trace_ds("%s",rcba(h3270.buffer_addr));
+				trace_ds("%s",rcba(&h3270,h3270.buffer_addr));
 			previous = ORDER;
 			cursor_move(&h3270,h3270.buffer_addr);
 			last_cmd = True;
@@ -1314,7 +1314,7 @@ ctlr_write(unsigned char buf[], int buflen, Boolean erase)
 			END_TEXT("RepeatToAddress");
 			cp += 2;	/* skip buffer address */
 			baddr = DECODE_BADDR(*(cp-1), *cp);
-			trace_ds("%s",rcba(baddr));
+			trace_ds("%s",rcba(&h3270,baddr));
 			cp++;		/* skip char to repeat */
 			add_dbcs = False;
 			ra_ge = False;
@@ -1418,7 +1418,7 @@ ctlr_write(unsigned char buf[], int buflen, Boolean erase)
 			baddr = DECODE_BADDR(*(cp-1), *cp);
 			END_TEXT("EraseUnprotectedAll");
 			if (previous != SBA)
-				trace_ds("%s",rcba(baddr));
+				trace_ds("%s",rcba(&h3270,baddr));
 			previous = ORDER;
 			if (baddr >= h3270.cols * h3270.rows) {
 				ABORT_WRITE("invalid EUA address");
@@ -1467,7 +1467,7 @@ ctlr_write(unsigned char buf[], int buflen, Boolean erase)
 		case ORDER_MF:	/* modify field */
 			END_TEXT("ModifyField");
 			if (previous != SBA)
-				trace_ds("%s",rcba(h3270.buffer_addr));
+				trace_ds("%s",rcba(&h3270,h3270.buffer_addr));
 			previous = ORDER;
 			cp++;
 			na = *cp;
@@ -1538,7 +1538,7 @@ ctlr_write(unsigned char buf[], int buflen, Boolean erase)
 		case ORDER_SFE:	/* start field extended */
 			END_TEXT("StartFieldExtended");
 			if (previous != SBA)
-				trace_ds("%s",rcba(h3270.buffer_addr));
+				trace_ds("%s",rcba(&h3270,h3270.buffer_addr));
 			previous = ORDER;
 			cp++;	/* skip order */
 			na = *cp;
@@ -1938,7 +1938,7 @@ ctlr_write_sscp_lu(unsigned char buf[], int buflen)
 			/* Some hosts forget they're talking SSCP-LU. */
 			cp++;
 			i++;
-			trace_ds(" StartField%s %s [translated to space]\n",rcba(h3270.buffer_addr), see_attr(*cp));
+			trace_ds(" StartField%s %s [translated to space]\n",rcba(&h3270,h3270.buffer_addr), see_attr(*cp));
 			ctlr_add(h3270.buffer_addr, EBC_space, default_cs);
 			ctlr_add_fg(h3270.buffer_addr, default_fg);
 			ctlr_add_bg(h3270.buffer_addr, default_bg);
@@ -1948,11 +1948,11 @@ ctlr_write_sscp_lu(unsigned char buf[], int buflen)
 			break;
 		case ORDER_IC:
 			trace_ds(" InsertCursor%s [ignored]\n",
-			    rcba(h3270.buffer_addr));
+			    rcba(&h3270,h3270.buffer_addr));
 			break;
 		case ORDER_SBA:
 //			baddr = DECODE_BADDR(*(cp+1), *(cp+2));
-			trace_ds(" SetBufferAddress%s [ignored]\n", rcba(DECODE_BADDR(*(cp+1), *(cp+2))));
+			trace_ds(" SetBufferAddress%s [ignored]\n", rcba(&h3270,DECODE_BADDR(*(cp+1), *(cp+2))));
 			cp += 2;
 			i += 2;
 			break;
