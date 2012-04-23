@@ -1,10 +1,10 @@
 #!/bin/bash
 
-if test -z $1; then
-	out=`dirname $0`
-else
-	out="$1"
-fi
+test -n "$srcdir" || srcdir=`dirname "$0"`
+test -n "$srcdir" || srcdir=.
+
+olddir=`pwd`
+cd "$srcdir"
 
 if test -e revision ; then
 	. revision
@@ -15,8 +15,7 @@ SVN=`which svn 2> /dev/null`
 if test -x "$SVN" ; then
 
 	TEMPFILE=.bootstrap.tmp
-	LANG="EN_US"
-	"$SVN" info > $TEMPFILE 2>&1
+	LANG="EN_US" "$SVN" info > $TEMPFILE 2>&1
 
 	if [ "$?" == "0" ]; then
 		PACKAGE_REVISION=$(cat $TEMPFILE | grep "^Revision: " | cut -d" " -f2)
@@ -36,11 +35,11 @@ if test -z $PACKAGE_SOURCE ; then
 	PACKAGE_SOURCE="http://www.softwarepublico.gov.br/dotlrn/clubs/pw3270"
 fi
 
-echo "PACKAGE_REVISION=$PACKAGE_REVISION" > $out/revision
-echo "PACKAGE_SOURCE=$PACKAGE_SOURCE" >> $out/revision
+echo "PACKAGE_REVISION=$PACKAGE_REVISION" > $srcdir/revision
+echo "PACKAGE_SOURCE=$PACKAGE_SOURCE" >> $srcdir/revision
 
-echo "m4_define([SVN_REVISION], $PACKAGE_REVISION)" > $out/revision.m4
-echo "m4_define([SVN_URL], $PACKAGE_SOURCE)" >> $out/revision.m4
+echo "m4_define([SVN_REVISION], $PACKAGE_REVISION)" > $srcdir/revision.m4
+echo "m4_define([SVN_URL], $PACKAGE_SOURCE)" >> $srcdir/revision.m4
 
 aclocal
 if test $? != 0 ; then
@@ -55,5 +54,7 @@ if test $? != 0 ; then
 fi
 
 echo "Package set to revision $PACKAGE_REVISION and source $PACKAGE_SOURCE"
-echo "./configure to setup"
+
+cd "$olddir"
+test -n "$NOCONFIGURE" || "$srcdir/configure" "$@"
 
