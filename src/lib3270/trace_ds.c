@@ -576,7 +576,7 @@ get_tracef_max(void)
 }
 */
 
-/* Parse the name '/dev/fd<n>', so we can simulate it. */
+/* Parse the name '/dev/fd<n>', so we can simulate it. */ /*
 static int
 get_devfd(const char *pathname)
 {
@@ -590,6 +590,7 @@ get_devfd(const char *pathname)
 		return -1;
 	return fd;
 }
+*/
 
 /* Callback for "OK" button on trace popup */ /*
 static void tracefile_callback(Widget w, XtPointer client_data, XtPointer call_data unused)
