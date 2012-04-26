@@ -139,6 +139,39 @@ int main(int argc, char *argv[])
 		}
 	}
 
+#ifdef LC_ALL
+	setlocale( LC_ALL, "" );
+#endif
+
+#if defined( WIN32 )
+	{
+		gchar * appdir = g_win32_get_package_installation_directory_of_module(NULL);
+		gchar * locdir = g_build_filename(appdir,"locale",NULL);
+
+		g_chdir(appdir);
+		bindtextdomain( PACKAGE_NAME, locdir );
+
+		g_free(locdir);
+		g_free( appdir );
+
+	}
+#elif defined( DATADIR )
+	{
+		gchar * appdir = g_build_filename(DATADIR,PACKAGE_NAME,NULL);
+		gchar * locdir = g_build_filename(DATADIR,"locale",NULL);
+
+		g_chdir(appdir);
+		bindtextdomain( PACKAGE_NAME, locdir);
+
+		g_free(locdir);
+		g_free(appdir);
+
+	}
+#endif // DATADIR
+
+	bind_textdomain_codeset(PACKAGE_NAME, "UTF-8");
+	textdomain(PACKAGE_NAME);
+
 	g_set_application_name(appname);
 
 	rc = initialize();

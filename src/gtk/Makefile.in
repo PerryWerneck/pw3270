@@ -59,7 +59,7 @@ DEPENDS=*.h common/*.h uiparser/*.h v3270/*.h $(GLOBAL_DEPS)
 
 VALGRIND=@VALGRIND@
 
-CFLAGS=@CFLAGS@ @GTK_CFLAGS@ -DAPPDATA=\"$(datarootdir)/$(PACKAGE_NAME)\" -I../../src/include
+CFLAGS=@CFLAGS@ @GTK_CFLAGS@ -DDATADIR=\"$(datarootdir)\" -I../../src/include
 LIBS=@LIBS@ @GTK_LIBS@
 
 include ../include/rules.mak
