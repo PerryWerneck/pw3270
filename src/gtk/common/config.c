@@ -64,6 +64,7 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
+/*
 #ifdef WIN32
 
 gchar * get_last_error_msg(void)
@@ -91,6 +92,7 @@ gchar * get_last_error_msg(void)
 }
 
 #endif // WIN32
+*/
 
 #ifdef WIN_REGISTRY_ENABLED
 
@@ -445,7 +447,7 @@ void set_boolean_to_config(const gchar *group, const gchar *key, gboolean val)
 
 		if(rc != ERROR_SUCCESS)
 		{
-			gchar *msg = get_last_error_msg();
+			gchar *msg = g_win32_error_message(GetLastError());
 			g_warning("Error \"%s\" when setting key HKCU\\%s\\%s",msg,path,key);
 			g_free(msg);
 		}
@@ -453,7 +455,7 @@ void set_boolean_to_config(const gchar *group, const gchar *key, gboolean val)
 	}
 	else
 	{
-		gchar *msg = get_last_error_msg();
+		gchar *msg = g_win32_error_message(GetLastError());
 		g_warning("Error \"%s\" when creating key HKCU\\%s",msg,path);
 		g_free(msg);
 	}

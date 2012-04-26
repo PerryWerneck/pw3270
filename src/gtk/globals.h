@@ -29,13 +29,13 @@
 
  #include <pw3270.h>
  #include <lib3270/config.h>
- #include <gtk/gtk.h>
 
  #define ENABLE_NLS
  #define GETTEXT_PACKAGE PACKAGE_NAME
 
  #include <libintl.h>
  #include <glib/gi18n.h>
+ #include <gtk/gtk.h>
 
  #include "v3270/v3270.h"
 
