@@ -156,6 +156,28 @@ static void paste_next_action(GtkAction *action, GtkWidget *widget)
 	lib3270_pastenext(v3270_get_session(widget));
 }
 
+static void kp_subtract_action(GtkAction *action, GtkWidget *widget)
+{
+	trace_action(action,widget);
+
+	if(v3270_get_toggle(widget,LIB3270_TOGGLE_KP_ALTERNATIVE))
+		v3270_backtab(widget);
+	else
+		v3270_set_string(widget,"-");
+
+}
+
+static void kp_add_action(GtkAction *action, GtkWidget *widget)
+{
+	trace_action(action,widget);
+
+	if(v3270_get_toggle(widget,LIB3270_TOGGLE_KP_ALTERNATIVE))
+		v3270_tab(widget);
+	else
+		v3270_set_string(widget,"+");
+
+}
+
 static void connect_standard_action(GtkAction *action, GtkWidget *widget, const gchar *name)
 {
 	#undef DECLARE_LIB3270_ACTION
@@ -193,6 +215,8 @@ static void connect_standard_action(GtkAction *action, GtkWidget *widget, const 
 		{ "hostname",	hostname_action		},
 		{ "editcolors",	editcolors_action	},
 		{ "about",		about_dialog_action	},
+		{ "kpsubtract", kp_subtract_action	},
+		{ "kpadd",		kp_add_action		},
 	};
 
 	int f;

@@ -192,6 +192,37 @@
 
  }
 
+ void v3270_tab(GtkWidget *widget)
+ {
+	g_return_if_fail(GTK_IS_V3270(widget));
+	lib3270_tab(GTK_V3270(widget)->host);
+ }
+
+ void v3270_backtab(GtkWidget *widget)
+ {
+	g_return_if_fail(GTK_IS_V3270(widget));
+	lib3270_backtab(GTK_V3270(widget)->host);
+ }
+
+ void v3270_set_string(GtkWidget *widget, const gchar *str)
+ {
+ 	H3270 *host;
+	gchar *utf;
+
+	g_return_if_fail(GTK_IS_V3270(widget));
+
+	host = GTK_V3270(widget)->host;
+
+	utf = g_convert((char *) str, -1, lib3270_get_charset(host), "UTF-8", NULL, NULL, NULL);
+
+	if(utf)
+	{
+		lib3270_set_string(host, (const unsigned char *) utf);
+		g_free(utf);
+	}
+
+ }
+
  void v3270_key_commit(GtkIMContext *imcontext, gchar *str, v3270 *widget)
  {
 	gchar *utf = g_convert((char *) str, -1, lib3270_get_charset(widget->host), "UTF-8", NULL, NULL, NULL);

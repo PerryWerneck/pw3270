@@ -158,6 +158,10 @@
  gchar			* v3270_get_text(GtkWidget *widget,int offset, int len);
  gchar			* v3270_get_region(GtkWidget *widget, gint start_pos, gint end_pos, gboolean all);
 
+ void			  v3270_set_string(GtkWidget *widget, const gchar *str);
+ void			  v3270_tab(GtkWidget *widget);
+ void			  v3270_backtab(GtkWidget *widget);
+
  // Cut & Paste
  gboolean  		  v3270_get_selection_bounds(GtkWidget *widget, gint *start, gint *end);
  void 			  v3270_unselect(GtkWidget *widget);
