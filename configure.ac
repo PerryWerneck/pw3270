@@ -245,7 +245,7 @@ AC_SUBST(SOCKET_LIBS)
 
 #--[ Optional ]---------------------------------------------------------------------------------------------------------------------------------------------
 
-AC_ARG_WITH([php-config], [AS_HELP_STRING([--with-php-config], [Path to php-config tool])], [ PHPCONFIG="$withval" ],[ AC_PATH_TOOL(PHPCONFIG, php-configX, , $PATH) ])
+AC_ARG_WITH([php-config], [AS_HELP_STRING([--with-php-config], [Path to php-config tool])], [ PHPCONFIG="$withval" ],[ AC_PATH_TOOL(PHPCONFIG, php-config, , $PATH) ])
 
 if test -z "${PHPCONFIG}"; then
 	AC_MSG_NOTICE([Program php-config not found. Use --with-php-config=path to specify absolute path to the php-config tool.])
