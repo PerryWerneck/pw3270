@@ -3277,7 +3277,7 @@ static void client_info_callback(INFO_CONST SSL *s, int where, int ret)
 		if (ret == 0)
 		{
 			trace_dsn("SSL_connect: failed in %s\n",SSL_state_string_long(s));
-			WriteLog("SSL","connect failed in %s (Alert: %s)",SSL_state_string_long(s),SSL_alert_type_string_long(ret));
+			lib3270_write_log("SSL","connect failed in %s (Alert: %s)",SSL_state_string_long(s),SSL_alert_type_string_long(ret));
 		}
 		else if (ret < 0)
 		{
@@ -3452,7 +3452,9 @@ LIB3270_EXPORT int lib3270_get_ssl_state(H3270 *h)
 #endif
 }
 
+/*
 int Get3270Socket(void)
 {
         return h3270.sock;
 }
+*/

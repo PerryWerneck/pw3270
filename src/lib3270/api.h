@@ -99,8 +99,8 @@
 
 
 		#include <lib3270/log.h>
-		#define WriteLog(module,fmt, ...) 		lib3270_write_log(NULL,module,fmt,__VA_ARGS__)
-		#define WriteRCLog(module,rc,fmt, ...)	lib3270_write_rc(NULL,module,fmt,__VA_ARGS__)
+//		#define WriteLog(module,fmt, ...) 		lib3270_write_log(NULL,module,fmt,__VA_ARGS__)
+//		#define WriteRCLog(module,rc,fmt, ...)	lib3270_write_rc(NULL,module,fmt,__VA_ARGS__)
 
 		#ifdef LIB3270_MODULE_NAME
 			#define Log(fmt, ...)		lib3270_write_log(NULL,LIB3270_MODULE_NAME,fmt,__VA_ARGS__)
@@ -367,7 +367,7 @@
 		LOCAL_EXTERN int			  emulate_input(char *s, int len, int pasting);
 
 		/* Network related calls */
-		LOCAL_EXTERN int 			  Get3270Socket(void);
+//		LOCAL_EXTERN int 			  Get3270Socket(void);
 
         /* Misc calls */
 		LOCAL_EXTERN void 		  popup_an_error(H3270 *session, const char *fmt, ...);

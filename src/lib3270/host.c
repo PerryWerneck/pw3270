@@ -645,7 +645,7 @@ int lib3270_connect(H3270 *h, const char *n, int wait)
  */
 static void try_reconnect(H3270 *session)
 {
-	WriteLog("3270","Starting auto-reconnect (Host: %s)",session->full_current_host ? session->full_current_host : "-");
+	lib3270_write_log("3270","Starting auto-reconnect (Host: %s)",session->full_current_host ? session->full_current_host : "-");
 	session->auto_reconnect_inprogress = False;
 	lib3270_reconnect(session,0);
 }

@@ -448,9 +448,6 @@ LIB3270_EXPORT char * lib3270_get_region(H3270 *h, int start_pos, int end_pos, u
 	return realloc(text,sz);
 }
 
-
-
-
 LIB3270_EXPORT char * lib3270_get_text(H3270 *h, int offset, int len)
 {
 	char * buffer;

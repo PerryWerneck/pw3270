@@ -19,8 +19,7 @@
 #if defined(_WIN32) /*[*/
 
 #if defined(_WS2TCPIP_H) /*[*/
-LIB3270_INTERNAL const char *inet_ntop(int af, const void *src, char *dst,
-	socklen_t cnt);
+LIB3270_INTERNAL const char *inet_ntop(int af, const void *src, char *dst,socklen_t cnt);
 #endif /*]*/
 
 LIB3270_INTERNAL const char *win32_strerror(int e);

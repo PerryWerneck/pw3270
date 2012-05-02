@@ -103,42 +103,7 @@ int main(int argc, char *argv[])
 	static const gchar	* host		= NULL;
 	int 				  rc 		= 0;
 
-	// Process command-line options
-	{
-		static const GOptionEntry app_options[] =
-		{
-			{ "appname",	'a', 0, G_OPTION_ARG_STRING,	&appname,	N_( "Application name" ),	PACKAGE_NAME	},
-			{ "host",		'h', 0, G_OPTION_ARG_STRING,	&host,		N_( "Host to connect"),		NULL			},
-			{ NULL }
-		};
-
-		GOptionContext	* options	= g_option_context_new (_("- 3270 Emulator for Gtk"));
-		GError			* error		= NULL;
-
-		g_option_context_add_main_entries(options, app_options, NULL);
-
-		gtk_init(&argc, &argv);
-
-		if(!g_option_context_parse( options, &argc, &argv, &error ))
-		{
-			GtkWidget *dialog = gtk_message_dialog_new(	NULL,
-														GTK_DIALOG_DESTROY_WITH_PARENT,
-														GTK_MESSAGE_ERROR,
-														GTK_BUTTONS_CANCEL,
-														"%s", _(  "Option parsing failed." ));
-
-			gtk_window_set_title(GTK_WINDOW(dialog),_( "Parse error" ));
-			gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), "%s", error->message);
-
-			gtk_dialog_run(GTK_DIALOG (dialog));
-			gtk_widget_destroy(dialog);
-
-			g_error_free(error);
-
-			return -1;
-		}
-	}
-
+	// Setup locale
 #ifdef LC_ALL
 	setlocale( LC_ALL, "" );
 #endif
@@ -171,6 +136,52 @@ int main(int argc, char *argv[])
 
 	bind_textdomain_codeset(PACKAGE_NAME, "UTF-8");
 	textdomain(PACKAGE_NAME);
+
+
+	// Process command-line options
+	{
+		static const GOptionEntry app_options[] =
+		{
+			{ "appname",	'a', 0, G_OPTION_ARG_STRING,	&appname,	N_( "Application name" ),	PACKAGE_NAME	},
+			{ "host",		'h', 0, G_OPTION_ARG_STRING,	&host,		N_( "Host to connect"),		NULL			},
+			{ NULL }
+		};
+
+		GOptionContext	* options	= g_option_context_new (_("- 3270 Emulator for Gtk"));
+		GError			* error		= NULL;
+
+		g_option_context_add_main_entries(options, app_options, NULL);
+
+		gtk_init(&argc, &argv);
+
+		if(!g_option_context_parse( options, &argc, &argv, &error ))
+		{
+			int f;
+			GString 	* str;
+			GtkWidget 	* dialog = gtk_message_dialog_new(	NULL,
+														GTK_DIALOG_DESTROY_WITH_PARENT,
+														GTK_MESSAGE_ERROR,
+														GTK_BUTTONS_CANCEL,
+														"%s", error->message);
+
+			gtk_window_set_title(GTK_WINDOW(dialog),_( "Parse error" ));
+
+			str = g_string_new( _( "<b>Valid options:</b>\n\n" ) );
+
+			for(f=0;app_options[f].description;f++)
+				g_string_append_printf(str,"--%-20s\t%s\n",app_options[f].long_name,gettext(app_options[f].description));
+
+			gtk_message_dialog_format_secondary_markup(GTK_MESSAGE_DIALOG(dialog), "%s", str->str);
+
+			gtk_dialog_run(GTK_DIALOG (dialog));
+			gtk_widget_destroy(dialog);
+
+			g_error_free(error);
+			g_string_free(str,TRUE);
+
+			return -1;
+		}
+	}
 
 	g_set_application_name(appname);
 
