@@ -810,7 +810,7 @@ Boolean error_popup_visible = False;
 
 
 /* Pop up an error dialog, based on an error number. */
-void popup_an_errno(int errn, const char *fmt, ...)
+void popup_an_errno(H3270 *session, int errn, const char *fmt, ...)
 {
 	char 	vmsgbuf[4096];
 	va_list	args;
@@ -819,7 +819,7 @@ void popup_an_errno(int errn, const char *fmt, ...)
 	(void) vsprintf(vmsgbuf, fmt, args);
 	va_end(args);
 
-	lib3270_write_log("3270", "Error Popup:\n%s\nrc=%d (%s)",vmsgbuf,errn,strerror(errn));
+	lib3270_write_log(session, "3270", "Error Popup:\n%s\nrc=%d (%s)",vmsgbuf,errn,strerror(errn));
 
 	Error(NULL,vmsgbuf);
 }

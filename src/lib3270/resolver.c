@@ -86,9 +86,7 @@ struct parms
  */
 static int cresolve_host_and_port(H3270 *h, struct parms *p)
 {
-#warning Should use configure to detect getaddrinfo and use it if available.
-
-#ifdef AF_INET6
+#ifdef HAVE_GETADDRINFO
 
 	struct addrinfo	 hints, *res;
 	int		 rc;

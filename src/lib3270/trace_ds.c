@@ -246,27 +246,6 @@ static void __vwtrace(H3270 *session, const char *fmt, va_list args)
 	fflush(stdout);
 }
 
-/*
-static void vwtrace(const char *fmt, va_list args)
-{
-	char buf[16384];
-
-	vsnprintf(buf,16384,fmt,args);
-
-	if(!tracewindow_handle)
-		tracewindow_handle = console_window_new( _( "Trace Window" ), NULL );
-
-	if(tracewindow_handle)
-		console_window_append(tracewindow_handle,"%s",buf);
-
-	if(tracef != NULL)
-	{
-		if(fwrite(buf,strlen(buf),1,tracef) != 1)
-			popup_an_errno(errno,_( "Write to trace file failed\n%s" ),strerror(errno));
-	}
-}
-*/
-
 /* Write to the trace file. */
 static void wtrace(const char *fmt, ...)
 {

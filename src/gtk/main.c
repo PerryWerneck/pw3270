@@ -120,10 +120,10 @@ int main(int argc, char *argv[])
 		g_free( appdir );
 
 	}
-#elif defined( DATADIR )
+#elif defined( DATAROOTDIR )
 	{
-		gchar * appdir = g_build_filename(DATADIR,PACKAGE_NAME,NULL);
-		gchar * locdir = g_build_filename(DATADIR,"locale",NULL);
+		gchar * appdir = g_build_filename(DATAROOTDIR,PACKAGE_NAME,NULL);
+		gchar * locdir = g_build_filename(DATAROOTDIR,"locale",NULL);
 
 		g_chdir(appdir);
 		bindtextdomain( PACKAGE_NAME, locdir);
@@ -132,7 +132,7 @@ int main(int argc, char *argv[])
 		g_free(appdir);
 
 	}
-#endif // DATADIR
+#endif // DATAROOTDIR
 
 	bind_textdomain_codeset(PACKAGE_NAME, "UTF-8");
 	textdomain(PACKAGE_NAME);

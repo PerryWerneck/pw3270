@@ -220,6 +220,7 @@ AC_SUBST(DLL_CFLAGS)
 
 AC_CHECK_HEADER(malloc.h, AC_DEFINE(HAVE_MALLOC_H,,[do we have malloc.h?]))
 
+AC_CHECK_FUNCS(getaddrinfo, AC_DEFINE(HAVE_GETADDRINFO) )
 
 #--[ GTK 2/3 check ]------------------------------------------------------------------------------------------------------------------------------------------
 

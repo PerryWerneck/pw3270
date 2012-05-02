@@ -53,7 +53,7 @@ SOURCES=testprogram.c ../common/config.c $(foreach SRC, $(UI_PARSER_SRC), $(SRC)
 
 DEPENDS=*.h ../common/*.h Makefile
 
-CFLAGS=@CFLAGS@ @GTK_CFLAGS@ -DDATADIR=\"$(datarootdir)\" -I../../include
+CFLAGS=@CFLAGS@ @GTK_CFLAGS@ -DDATAROOTDIR=\"$(datarootdir)\" -I../../include
 LIBS=@LIBS@ @GTK_LIBS@
 
 include ../../include/rules.mak
