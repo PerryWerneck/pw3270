@@ -72,6 +72,8 @@ endif
 
 #---[ Release targets ]--------------------------------------------------------
 
+all: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
+
 Release: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
 
 $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT): src/gtk/* $(BINDIR)/Release/lib/@DLLPREFIX@3270@DLLEXT@ $(DEPENDS)

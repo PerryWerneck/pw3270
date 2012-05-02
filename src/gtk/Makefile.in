@@ -75,10 +75,9 @@ install: Release
 
 $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT):	$(foreach SRC, $(basename $(SOURCES)), $(OBJDIR)/Release/$(SRC)$(OBJEXT))
 
-	@echo $@ ...
+	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	ls -l ../../.bin/Release/lib
-	$(LD) -o $@ $^ $(LIBS) $(LIB3270_LIBS)
+	@$(LD) -o $@ $^ $(LIBS) $(LIB3270_LIBS)
 
 #---[ Debug targets ]----------------------------------------------------------
 
