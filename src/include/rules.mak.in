@@ -45,6 +45,8 @@ DEPENDS ?= *.h
 MKDIR=@MKDIR_P@
 CC=@CC@
 LD=@CC@
+MSGCAT=@MSGCAT@
+XGETTEXT=@XGETTEXT@
 
 #---[       ]------------------------------------------------------------------
 
@@ -55,6 +57,7 @@ OBJEXT=.o
 ROOTDIR ?= .
 OBJDIR  ?= $(ROOTDIR)/.obj
 BINDIR  ?= $(ROOTDIR)/.bin
+TMPDIR  ?= $(ROOTDIR)/.tmp
 
 BINDBG  ?= $(BINDIR)/Debug
 BINRLS  ?= $(BINDIR)/Release
@@ -74,11 +77,19 @@ $(OBJRLS)/%.o: %.c $(DEPENDS)
 	@$(MKDIR) `dirname $@`
 	@$(CC) $(CFLAGS) $(LIB3270_CFLAGS) -o $@ -c $<
 
+$(TMPDIR)/pot/%.pot: %.c
+	@echo "  TEXT `basename $@`"
+	@$(MKDIR) `dirname $@`
+	@$(XGETTEXT)	--default-domain=$(PACKAGE_NAME) --language=C \
+			--keyword=_ --keyword=N_ --keyword=MSG_:2 --output=$@ $<
+	@touch $@
+
 #---[ Targets ]----------------------------------------------------------------
 
 clean-common:
 	@rm -fr $(OBJDIR)
 	@rm -fr $(BINDIR)
+	@rm -fr $(TMPDIR)
 	@rm -f *.log
 	@find . -name "*~" -exec rm -f {} \;
 

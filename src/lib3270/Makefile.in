@@ -58,6 +58,8 @@ INSTALL=@INSTALL@
 INSTALL_PROGRAM=@INSTALL_PROGRAM@
 INSTALL_DATA=@INSTALL_DATA@
 VALGRIND=@VALGRIND@
+XGETTEXT=@XGETTEXT@
+MSGCAT=@MSGCAT@
 
 #---[       ]------------------------------------------------------------------
 
@@ -68,6 +70,7 @@ OBJEXT=.o
 ROOTDIR ?= .
 OBJDIR  ?= $(ROOTDIR)/.obj
 BINDIR  ?= $(ROOTDIR)/.bin
+TMPDIR  ?= $(ROOTDIR)/.tmp
 DEPENDS ?= *.h Makefile
 
 BINDBG  ?= $(BINDIR)/Debug
@@ -87,6 +90,14 @@ $(OBJRLS)/%.o: %.c $(DEPENDS)
 	@echo "  CC   `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(CC) $(CFLAGS) $(SSL_CFLAGS) -o $@ -c $<
+
+$(TMPDIR)/pot/%.pot: %.c
+	@echo "  TEXT `basename $@`"
+	@$(MKDIR) `dirname $@`
+	@$(XGETTEXT)	--default-domain=$(PACKAGE) --language=C \
+			--keyword=_ --keyword=N_ --keyword=MSG_:2 --output=$@ $<
+	@touch $@
+
 
 #---[ Sources ]----------------------------------------------------------------
 
@@ -128,6 +139,11 @@ $(DEBDIR)/lib3270.install: Makefile
 	@$(MKDIR) `dirname $@`
 	@echo "$(libdir)/lib3270.so" > $@
 
+$(BINDIR)/pot/lib3270.pot: $(foreach SRC, $(basename $(SOURCES)), $(TMPDIR)/pot/$(SRC).pot)
+	@rm -f $@
+	@mkdir -p `dirname $@`
+	@$(MSGCAT) --sort-output $^ > $@
+
 run: $(BINDBG)/testprogram$(EXEEXT)
 	$(BINDBG)/testprogram$(EXEEXT)
 
@@ -155,6 +171,8 @@ $(BINDIR)/mkfb@EXEEXT@: mkfb.c Makefile
 clean:
 	@rm -fr .obj
 	@rm -fr .bin
+	@rm -fr .tmp
 	@rm -f *.log
 	@rm -f version.c
 	@rm -f fallbacks.c
+	@rm -f lib3270.pot

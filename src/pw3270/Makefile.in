@@ -153,6 +153,11 @@ v3270/marshal.c: v3270/genmarshal v3270/marshal.h
 	@$(MKDIR) `dirname $@`
 	@glib-genmarshal --prefix=$(PACKAGE_NAME) --body v3270/genmarshal > $@
 
+$(BINDIR)/pot/pw3270.pot: $(foreach SRC, $(basename $(SOURCES)), $(TMPDIR)/pot/$(SRC).pot)
+	@rm -f $@
+	@mkdir -p `dirname $@`
+	@$(MSGCAT) --sort-output $^ > $@
+
 clean: clean-common
 	@rm -f v3270/marshal.c
 	@rm -f v3270/marshal.h

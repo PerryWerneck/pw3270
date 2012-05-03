@@ -187,7 +187,7 @@
 											GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,
 											gettext(errmsg),filename);
 
-		gtk_window_set_title(GTK_WINDOW(popup),_("Can´t save file"));
+		gtk_window_set_title(GTK_WINDOW(popup),_("Can't save file"));
 
 		gtk_message_dialog_format_secondary_markup(GTK_MESSAGE_DIALOG(popup),"%s",error->message);
 		g_error_free(error);
@@ -448,7 +448,7 @@
 											GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,
 											_( "Error loading %s" ),filename);
 
-		gtk_window_set_title(GTK_WINDOW(popup),_("Can´t load file"));
+		gtk_window_set_title(GTK_WINDOW(popup),_("Can't load file"));
 
 		gtk_message_dialog_format_secondary_markup(GTK_MESSAGE_DIALOG(popup),"%s",error->message);
 		g_error_free(error);

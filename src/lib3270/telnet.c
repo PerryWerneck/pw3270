@@ -384,7 +384,7 @@ void sockstart(H3270 *session)
 								LIB3270_NOTIFY_CRITICAL,
 								N_( "Network startup error" ),
 								N_( "Bad winsock version" ),
-								N_( "Can´t use winsock version %d.%d" ), LOBYTE(wsaData.wVersion), HIBYTE(wsaData.wVersion));
+								N_( "Can't use winsock version %d.%d" ), LOBYTE(wsaData.wVersion), HIBYTE(wsaData.wVersion));
 		_exit(1);
 	}
 }

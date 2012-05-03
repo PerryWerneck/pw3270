@@ -75,6 +75,9 @@ endif
 debian/%.install: src/%/Makefile
 	@$(MAKE) DEBDIR=../../debian -C $(dir $^) ../../$@
 
+$(BINDIR)/pot/%.pot: src/%/Makefile
+	@$(MAKE) BINDIR=../../$(BINDIR) -C $(dir $^) ../../$@
+
 #---[ Release targets ]--------------------------------------------------------
 
 all: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) filelist
