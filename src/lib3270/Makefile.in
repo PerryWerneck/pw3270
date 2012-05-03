@@ -123,6 +123,10 @@ $(BINDBG)/testprogram$(EXEEXT): $(OBJDBG)/testprogram.o $(foreach SRC, $(basenam
 	@$(MKDIR) `dirname $@`
 	$(LD) -o $@ $^ $(LIBS)
 
+$(DEBDIR)/lib3270.install: Makefile
+	@echo "  GEN  `basename $@`"
+	@$(MKDIR) `dirname $@`
+	@echo "$(libdir)/lib3270.so" > $@
 
 run: $(BINDBG)/testprogram$(EXEEXT)
 	$(BINDBG)/testprogram$(EXEEXT)

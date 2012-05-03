@@ -70,24 +70,39 @@ ifneq ($(CONVERT),no)
 	@$(CONVERT) $< --format=png > $@
 endif
 
+debian/%.install: src/%/Makefile
+	@$(MAKE) DEBDIR=../../debian -C $(dir $^) ../../$@
+
 #---[ Release targets ]--------------------------------------------------------
 
-all: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
+all: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) filelist
 
-Release: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
+Release: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) 
 
-$(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT): src/gtk/* $(BINDIR)/Release/lib/@DLLPREFIX@3270@DLLEXT@ $(DEPENDS)
-	@$(MAKE) BINDIR="../../$(BINDIR)" LIB3270_LIBS="$(RLSLIB)" LIB3270_CFLAGS="-I../../src/include" -C src/gtk ../../$(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
+$(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT): src/pw3270/* $(BINDIR)/Release/lib/@DLLPREFIX@3270@DLLEXT@ $(DEPENDS)
+	@$(MAKE) BINDIR="../../$(BINDIR)" LIB3270_LIBS="$(RLSLIB)" LIB3270_CFLAGS="-I../../src/include" -C src/pw3270 ../../$(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
 
 $(BINDIR)/Release/lib/@DLLPREFIX@3270@DLLEXT@: src/lib3270/* src/include/lib3270/* src/include/* Makefile
 	@$(MAKE) BINRLS=../../.bin/Release/lib -C src/lib3270 ../../.bin/Release/lib/@DLLPREFIX@3270@DLLEXT@
+
+#---[ File lists ]-------------------------------------------------------------
+
+filelist: debian/lib3270.install debian/lib3270-dev.install debian/pw3270.install
+
+debian/lib3270-dev.install: Makefile
+	@echo "  GEN  `basename $@`"
+	@$(MKDIR) `dirname $@`
+	@echo "$(includedir)/lib3270.h" > $@
+	@echo "$(includedir)/lib3270" >> $@
+	@echo "$(datarootdir)/@PACKAGE_NAME@/ui/99debug.xml" >> $@
+	@echo "$(libdir)/pkgconfig/*.pc" >: $@
 
 #---[ Debug targets ]----------------------------------------------------------
 
 Debug: $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
 
-$(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT): src/gtk/* $(BINDIR)/Debug/lib/@DLLPREFIX@3270@DLLEXT@ $(DEPENDS)
-	@$(MAKE) BINDIR="../../$(BINDIR)" LIB3270_LIBS="$(DBGLIB)" LIB3270_CFLAGS="-I../../src/include" -C src/gtk ../../$(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
+$(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT): src/pw3270/* $(BINDIR)/Debug/lib/@DLLPREFIX@3270@DLLEXT@ $(DEPENDS)
+	@$(MAKE) BINDIR="../../$(BINDIR)" LIB3270_LIBS="$(DBGLIB)" LIB3270_CFLAGS="-I../../src/include" -C src/pw3270 ../../$(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
 
 $(BINDIR)/Debug/lib/@DLLPREFIX@3270@DLLEXT@: src/lib3270/* src/include/lib3270/* src/include/* Makefile
 	@$(MAKE) BINDBG=../../.bin/Debug/lib -C src/lib3270 ../../.bin/Debug/lib/@DLLPREFIX@3270@DLLEXT@
@@ -99,7 +114,7 @@ memchk: $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
 ifeq ($(VALGRIND),no)
 	@PATH="$(BINDIR)/Debug/lib:$(PATH)" "$(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)"
 else
-	@PATH="$(BINDIR)/Debug/lib:$(PATH)" G_DEBUG=gc-friendly G_SLICE=always-malloc \$(VALGRIND) --leak-check=full --suppressions=src/gtk/valgrind.suppression --gen-suppressions=all $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
+	@PATH="$(BINDIR)/Debug/lib:$(PATH)" G_DEBUG=gc-friendly G_SLICE=always-malloc \$(VALGRIND) --leak-check=full --suppressions=src/pw3270/valgrind.suppression --gen-suppressions=all $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
 endif
 
 #---[ Targets ]----------------------------------------------------------------
@@ -140,7 +155,7 @@ $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz: clean $(PACKAGE_NAME).png $(PACKAG
 	@echo $@
 
 install: install-sdk install-lib $(PACKAGE_NAME).png $(PACKAGE_NAME)-logo.png
-	@make BINDIR="../../$(BINDIR)" LIB3270_LIBS="$(RLSLIB)" LIB3270_CFLAGS="-I../../src/include" -C src/gtk install
+	@make BINDIR="../../$(BINDIR)" LIB3270_LIBS="$(RLSLIB)" LIB3270_CFLAGS="-I../../src/include" -C src/pw3270 install
 
 	@$(MKDIR) $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/ui
 	@$(INSTALL_DATA) ui/*.xml $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/ui
@@ -163,17 +178,18 @@ clean:
 	@rm -fr .obj
 	@rm -fr .bin
 	@rm -fr .tmp
+	@rm -f debian/*.install
 	@make -C src/lib3270 clean
-	@make -C src/gtk clean
+	@make -C src/pw3270 clean
 	@rm -f *.log
 
 distclean: clean
-	@rm -f src/gtk/Makefile
+	@rm -f src/pw3270/Makefile
 	@rm -f config.status
 	@rm -f src/lib3270/mkversion.sh
 	@rm -f src/lib3270/Makefile
 	@rm -f src/include/lib3270/config.h
-	@rm -f src/gtk/uiparser/Makefile
+	@rm -f src/pw3270/uiparser/Makefile
 	@rm -fr autom4te.cache
 	@rm -f *.pc
 

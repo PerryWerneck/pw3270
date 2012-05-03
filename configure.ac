@@ -269,9 +269,9 @@ AC_CONFIG_FILES([
 	src/include/rules.mak
 	src/lib3270/Makefile
 	src/lib3270/mkversion.sh
-	src/gtk/Makefile
-	src/gtk/uiparser/Makefile
-	src/gtk/common/common.h
+	src/pw3270/Makefile
+	src/pw3270/uiparser/Makefile
+	src/pw3270/common/common.h
 
 ])
 

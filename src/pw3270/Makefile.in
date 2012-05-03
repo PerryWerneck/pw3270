@@ -35,6 +35,7 @@ exec_prefix=@exec_prefix@
 bindir=@bindir@
 datarootdir=@datarootdir@
 localedir=@localedir@
+DEBDIR ?= debian
 
 EXEEXT=@EXEEXT@
 STRIP=@STRIP@
@@ -100,6 +101,14 @@ else
 endif
 
 #---[ Misc targets ]-----------------------------------------------------------
+
+$(DEBDIR)/pw3270.install: Makefile
+	@echo "  GEN  `basename $@`"
+	@$(MKDIR) `dirname $@`
+	@echo "$(bindir)/@PACKAGE_NAME@" >> $@
+	@echo "$(datarootdir)/@PACKAGE_NAME@/ui/00default.xml" >> $@
+	@echo "$(datarootdir)/@PACKAGE_NAME@/@PACKAGE_NAME@.png" >> $@
+	@echo "$(datarootdir)/@PACKAGE_NAME@/@PACKAGE_NAME@-logo.png" >> $@
 
 v3270/marshal.h: v3270/genmarshal
 	@$(MKDIR) `dirname $@`
