@@ -1,12 +1,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
-"POT-Creation-Date: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-05-03 16:30-0300\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: \n"
+"Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Portuguese\n"
 "X-Poedit-Country: BRAZIL\n"
@@ -634,9 +636,10 @@ msgid ""
 "You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02111-1307 USA"
 msgstr ""
 
-#: host.c:304
-msgid "This version of "
-msgstr "Esta versão de"
+#: host.c:303
+#, c-format
+msgid "This version of %s was built without support for secure sockets layer (SSL)."
+msgstr ""
 
 #: ft_cut.c:347
 msgid "Transfer cancelled by host"
@@ -851,14 +854,14 @@ msgstr ""
 #: telnet.c:3196
 #, c-format
 msgid "ioctl(%s)"
-msgstr ""
+msgstr "ioctl(%s)"
 
 #: telnet.c:584
 #: telnet.c:590
 #: telnet.c:597
 #, c-format
 msgid "setsockopt(%s)"
-msgstr ""
+msgstr "setsockopt(%s)"
 
 #: telnet.c:577
 msgid "socket"
@@ -868,3 +871,5 @@ msgstr "socket"
 msgid "translator-credits"
 msgstr ""
 
+#~ msgid "This version of "
+#~ msgstr "Esta versão de"

@@ -101,7 +101,7 @@ static enum cs_result check_charset(void);
 static char *char_if_ascii7(unsigned long l);
 #endif /*]*/
 
-static void set_cgcsgids(char *spec);
+static void set_cgcsgids(const char *spec);
 static int set_cgcsgid(char *spec, unsigned long *idp);
 
 // static void set_charset_name(char *csname);
@@ -159,7 +159,7 @@ restore_charset(void)
 }
 
 /* Get a character set definition. */
-static char * get_charset_def(const char *csname)
+static const char * get_charset_def(const char *csname)
 {
 	return get_fresource("%s.%s", ResCharset, csname);
 }
@@ -193,7 +193,8 @@ wide_resource_init(char *csname)
  */
 enum cs_result charset_init(H3270 *session, char *csname)
 {
-	char *cs, *ftcs;
+	const char *cs;
+	const char *ftcs;
 	enum cs_result rc;
 	char *ccs, *cftcs;
 /*
@@ -201,7 +202,7 @@ enum cs_result charset_init(H3270 *session, char *csname)
 	char *xks;
 #endif
 */
-	char *ak;
+	const char *ak;
 
 /*
 #if !defined(_WIN32)
@@ -317,8 +318,7 @@ set_cgcsgid(char *spec, unsigned long *r)
 }
 
 /* Set the CGCSGIDs. */
-static void
-set_cgcsgids(char *spec)
+static void set_cgcsgids(const char *spec)
 {
 	int n_ids = 0;
 	char *spec_copy;
@@ -386,9 +386,9 @@ static enum cs_result resource_charset(char *csname, char *cs, char *ftcs)
 {
 	enum cs_result rc;
 	int ne = 0;
-	char *rcs = CN;
+	const char *rcs = CN;
 	int n_rcs = 0;
-	char *dcs;
+	const char *dcs;
 
 	/* Interpret the spec. */
 	rc = remap_chars(csname, cs, (ftcs == NULL)? BOTH: CS_ONLY, &ne);
@@ -737,7 +737,7 @@ check_charset(void)
 }
 #endif /*]*/
 
-void set_display_charset(H3270 *session, char *dcs)
+void set_display_charset(H3270 *session, const char *dcs)
 {
 	session->charset = strdup(dcs);
 }

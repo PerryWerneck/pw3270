@@ -232,10 +232,11 @@ H3270 * lib3270_session_new(const char *model)
 	ft_init();
 #endif
 
+/*
 #if defined(X3270_PRINTER)
 	printer_init();
 #endif
-
+*/
 	Trace("%s finished",__FUNCTION__);
 
 	errno = 0;

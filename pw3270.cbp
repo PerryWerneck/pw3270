@@ -237,13 +237,7 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/lib3270/popupsc.h" />
-		<Unit filename="src/lib3270/print.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/lib3270/printc.h" />
-		<Unit filename="src/lib3270/printer.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/lib3270/printerc.h" />
 		<Unit filename="src/lib3270/proxy.c">
 			<Option compilerVar="CC" />

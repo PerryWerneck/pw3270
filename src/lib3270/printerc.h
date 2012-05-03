@@ -17,11 +17,11 @@
  *		Printer session support
  */
 
-LIB3270_INTERNAL void printer_init(void);
-LIB3270_INTERNAL void printer_lu_dialog(void);
-LIB3270_INTERNAL void printer_start(const char *lu);
-LIB3270_INTERNAL void printer_stop(void);
-LIB3270_INTERNAL Boolean printer_running(void);
+// LIB3270_INTERNAL void printer_init(void);
+// LIB3270_INTERNAL void printer_lu_dialog(void);
+// LIB3270_INTERNAL void printer_start(const char *lu);
+// LIB3270_INTERNAL void printer_stop(void);
+// LIB3270_INTERNAL Boolean printer_running(void);
 #if defined(_WIN32) /*[*/
-LIB3270_INTERNAL void printer_check(void);
+// LIB3270_INTERNAL void printer_check(void);
 #endif /*]*/

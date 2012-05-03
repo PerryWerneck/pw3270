@@ -33,7 +33,9 @@
 
 #include <stdio.h>
 #include <string.h>
+
 #include "globals.h"
+#include "utilc.h"
 
 extern String fallbacks[];
 
@@ -103,11 +105,10 @@ static struct {
 static struct dresource {
 	struct dresource *next;
 	const char *name;
-	char *value;
+	const char *value;
 } *drdb = NULL, **drdb_next = &drdb;
 
-void
-add_resource(const char *name, char *value)
+void add_resource(const char *name, const char *value)
 {
 	struct dresource *d;
 
@@ -124,6 +125,7 @@ add_resource(const char *name, char *value)
 	*drdb_next = d;
 	drdb_next = &d->next;
 }
+
 
 const char * get_resource(const char *name)
 {
@@ -161,3 +163,19 @@ const char * get_resource(const char *name)
 #endif
 	return NULL;
 }
+
+/* A version of get_resource that accepts sprintf arguments. */
+const char * get_fresource(const char *fmt, ...)
+{
+	va_list args;
+	char *name;
+	const char *r;
+
+	va_start(args, fmt);
+	name = xs_vsprintf(fmt, args);
+	va_end(args);
+	r = get_resource(name);
+	Free(name);
+	return r;
+}
+

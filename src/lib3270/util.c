@@ -157,8 +157,7 @@ const char * win32_strerror(int e)
 /*
  * Cheesy internal version of sprintf that allocates its own memory.
  */
-static char *
-xs_vsprintf(const char *fmt, va_list args)
+char * xs_vsprintf(const char *fmt, va_list args)
 {
 	char *r;
 #if defined(HAVE_VASPRINTF) /*[*/
@@ -496,6 +495,7 @@ split_lresource(char **st, char **value)
 #endif /*]*/
 
 
+/*
 #if !defined(LIB3270)
 
 const char *
@@ -514,6 +514,7 @@ get_message(const char *key)
 }
 
 #endif
+*/
 
 #define ex_getenv getenv
 
@@ -747,22 +748,6 @@ ctl_see(int c)
 	}
 	*p = '\0';
 	return buf;
-}
-
-/* A version of get_resource that accepts sprintf arguments. */
-char *
-get_fresource(const char *fmt, ...)
-{
-	va_list args;
-	char *name;
-	char *r;
-
-	va_start(args, fmt);
-	name = xs_vsprintf(fmt, args);
-	va_end(args);
-	r = get_resource(name);
-	Free(name);
-	return r;
 }
 
 /*

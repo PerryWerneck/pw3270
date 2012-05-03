@@ -162,7 +162,7 @@ dft_open_request(unsigned short len, unsigned char *cp)
 		GET16(recsz, recszp);
 		name = (char *)cp + 31;
 	} else {
-		dft_abort( _("ftDftUknownOpen"), TR_OPEN_REQ);
+		dft_abort( _("Uknown DFT Open type from host"), TR_OPEN_REQ);
 		return;
 	}
 
@@ -307,8 +307,7 @@ dft_data_insert(struct data_buffer *data_bufr)
 			/* write failed */
 			char *buf;
 
-			buf = xs_buffer("write(%s): %s", ft_local_filename,
-			    strerror(errno));
+			buf = xs_buffer( _( "write(%s): %s" ), ft_local_filename,strerror(errno));
 
 			dft_abort(buf, TR_DATA_INSERT);
 			Free(buf);
