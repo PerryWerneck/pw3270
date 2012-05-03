@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-03 16:30-0300\n"
+"POT-Creation-Date: 2012-05-03 16:52-0300\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: \n"
@@ -309,7 +309,7 @@ msgstr "Cursor mira"
 #: dialog.c:111
 #, c-format
 msgid "Current (%s)"
-msgstr ""
+msgstr "Current (%s)"
 
 #: colors.c:335
 msgid "Custom colors"
@@ -401,7 +401,7 @@ msgstr "Servidor a conectar"
 #: host.c:446
 #: host.c:461
 msgid "Hostname syntax error"
-msgstr ""
+msgstr "Formato inválido no nome do servidor"
 
 #: ft_cut.c:476
 msgid "Illegal frame length"
@@ -446,7 +446,7 @@ msgstr "Ação \"move\" precisa dos atributos \"target\" e \"direction\""
 
 #: host.c:461
 msgid "Multiple port names"
-msgstr ""
+msgstr "Múltiplos nomes de porta"
 
 #: colors.c:365
 msgid "Mustard"
@@ -515,12 +515,12 @@ msgstr ""
 
 #: main.c:167
 msgid "Parse error"
-msgstr ""
+msgstr "Erro de interpretação"
 
 #: uiparser/parsefile.c:325
 #, c-format
 msgid "Parse error in %s"
-msgstr ""
+msgstr "Erro de interpretação em %s"
 
 #: dialog.c:486
 msgid "Paste text file contents"
@@ -536,7 +536,7 @@ msgstr ""
 
 #: glue.c:335
 msgid "Proxy server (type:host[:port])"
-msgstr ""
+msgstr "Servidor proxy (tipo:nome[:port])"
 
 #: colors.c:362
 msgid "Purple"
@@ -588,7 +588,7 @@ msgstr "Modelo de terminal (tamanho da tela)"
 
 #: glue.c:330
 msgid "Sets the screen dimensions to be larger than the default for the chosen model (COLSxROWS)."
-msgstr ""
+msgstr "Define que as dimensões da tela serão maiores do que o padrão para o modelo escolhido (COLSxROWS)."
 
 #: telnet.c:1045
 msgid "Socket read error"
@@ -604,7 +604,7 @@ msgstr "Espaçõ no nome da LU"
 
 #: glue.c:347
 msgid "Specifies the terminal name to be transmitted over the telnet connection."
-msgstr ""
+msgstr "Define o nome do terminal a ser transmitido através da conexão telnet."
 
 #: colors.c:343
 #, fuzzy
@@ -625,7 +625,7 @@ msgstr "Nome da porta TCP para conectar"
 
 #: ft.c:171
 msgid "The remote file name is invalid"
-msgstr ""
+msgstr "O nome do arquivo remoto não é válido"
 
 #: dialog.c:526
 msgid ""
@@ -635,11 +635,16 @@ msgid ""
 "\n"
 "You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02111-1307 USA"
 msgstr ""
+"Este programa é software livre. Você pode redistribuí-lo e/ou modificá-lo sob os termos da GPL v.2 - Licença Pública Geral  GNU,  conforme  publicado  pela  Free Software Foundation.\n"
+"\n"
+"Este programa é distribuído na expectativa de  ser  útil,  mas  SEM  QUALQUER GARANTIA; sem mesmo a garantia implícita de COMERCIALIZAÇÃO ou  de  ADEQUAÇÃO A QUALQUER PROPÓSITO EM PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais detalhes.\n"
+"\n"
+"Você deve ter recebido uma cópia da Licença Pública Geral GNU junto com este programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA, 02111-1307, USA"
 
 #: host.c:303
 #, c-format
 msgid "This version of %s was built without support for secure sockets layer (SSL)."
-msgstr ""
+msgstr "Esta versão do %s foi gerada sem suporte para conexões seguras (SSL)."
 
 #: ft_cut.c:347
 msgid "Transfer cancelled by host"
@@ -648,13 +653,13 @@ msgstr "Transferência cancelada pelo servidor"
 #: ft_cut.c:374
 #: ft_cut.c:468
 #: ft_dft.c:218
-#: ft_dft.c:355
+#: ft_dft.c:354
 msgid "Transfer cancelled by user"
 msgstr "Transferência cancelada pelo usuário"
 
 #: ft_cut.c:437
 msgid "Transmission error"
-msgstr ""
+msgstr "Erro de transmissão"
 
 #: colors.c:356
 #: colors.c:364
@@ -664,6 +669,10 @@ msgstr "Turquesa"
 #: dialog.c:87
 msgid "UTF-8"
 msgstr "UTF-8"
+
+#: ft_dft.c:165
+msgid "Uknown DFT Open type from host"
+msgstr ""
 
 #: host.c:302
 msgid "Unable to connect to secure hosts"
@@ -726,12 +735,12 @@ msgstr ""
 #: kybd.c:2879
 #, c-format
 msgid "Unknown PA key %d"
-msgstr ""
+msgstr "PA %d desconhecida"
 
 #: kybd.c:2891
 #, c-format
 msgid "Unknown PF key %d"
-msgstr ""
+msgstr "PF %d desconhecida"
 
 #: resolver.c:166
 #, c-format
@@ -739,6 +748,8 @@ msgid ""
 "Unknown host:\n"
 "%s"
 msgstr ""
+"Servidor desconhecido:\n"
+"%s"
 
 #: uiparser/popup.c:76
 #, c-format
@@ -748,12 +759,12 @@ msgstr ""
 #: resolver.c:147
 #, c-format
 msgid "Unknown port number or service: %s"
-msgstr ""
+msgstr "Número de porta ou serviço desconhecido: %s"
 
 #: dialog.c:565
 #, c-format
 msgid "Version %s - Revision %s"
-msgstr ""
+msgstr "Versão %s - Revisão %s"
 
 #: telnet.c:705
 msgid "WSAEventSelect failed"
@@ -799,7 +810,7 @@ msgstr "X Desconectado"
 
 #: v3270/oia.c:399
 msgid "X Numeric"
-msgstr ""
+msgstr "X Numérico"
 
 #: v3270/oia.c:403
 msgid "X Overflow"
@@ -845,11 +856,7 @@ msgstr "Conexão _Segura"
 #: telnet.c:3211
 #, c-format
 msgid "fcntl(%s)"
-msgstr ""
-
-#: ft_dft.c:165
-msgid "ftDftUknownOpen"
-msgstr ""
+msgstr "fcntl(%s)"
 
 #: telnet.c:3196
 #, c-format
@@ -870,6 +877,11 @@ msgstr "socket"
 #: dialog.c:579
 msgid "translator-credits"
 msgstr ""
+
+#: ft_dft.c:310
+#, c-format
+msgid "write(%s): %s"
+msgstr "write(%s): %s"
 
 #~ msgid "This version of "
 #~ msgstr "Esta versão de"
