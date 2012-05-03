@@ -300,8 +300,8 @@ split_host(H3270 *hSession, char *s, char *ansi, char *std_ds, char *passthru,
 		case 'L':
 			popup_system_error(hSession,	_( "SSL error" ),
 											_( "Unable to connect to secure hosts" ),
-											"%s",
-											_( "This version of " PACKAGE_NAME " was built without support for secure sockets layer (SSL)." )
+											_( "This version of %s was built without support for secure sockets layer (SSL)." ),
+											PACKAGE_NAME
 											);
 
 			goto split_fail;
