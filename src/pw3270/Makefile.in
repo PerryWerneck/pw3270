@@ -35,6 +35,7 @@ exec_prefix=@exec_prefix@
 bindir=@bindir@
 datarootdir=@datarootdir@
 localedir=@localedir@
+desktopdir=$(datarootdir)/applications
 DEBDIR ?= debian
 
 EXEEXT=@EXEEXT@
@@ -42,6 +43,7 @@ STRIP=@STRIP@
 INSTALL=@INSTALL@
 INSTALL_PROGRAM=@INSTALL_PROGRAM@
 INSTALL_DATA=@INSTALL_DATA@
+CONVERT=@CONVERT@
 
 #---[ Sources ]----------------------------------------------------------------
 
@@ -63,16 +65,35 @@ VALGRIND=@VALGRIND@
 CFLAGS=@CFLAGS@ @GTK_CFLAGS@ -DDATAROOTDIR=\"$(datarootdir)\" -I../../src/include
 LIBS=@LIBS@ @GTK_LIBS@
 
+#---[ Rules ]------------------------------------------------------------------
+
 include ../include/rules.mak
+
+%.png: pixmaps/%.svg
+ifneq ($(CONVERT),no)
+	@echo "  GEN  `basename $@`"
+	@$(MKDIR) `dirname $@`
+	@$(CONVERT) $< --format=png > $@
+endif
+
 
 #---[ Release targets ]--------------------------------------------------------
 
 Release: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
 	@$(STRIP) $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
 
-install: Release
+install: Release $(PACKAGE_NAME).desktop $(PACKAGE_NAME)-logo.png
 	@$(MKDIR) $(DESTDIR)$(bindir)
 	@$(INSTALL_PROGRAM) $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) $(DESTDIR)$(bindir)
+	@$(MKDIR) $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)
+	@$(INSTALL_DATA) $(PACKAGE_NAME).png $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)
+	@$(INSTALL_DATA) $(PACKAGE_NAME)-logo.png $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)
+	@$(MKDIR) $(DESTDIR)$(desktopdir)
+	@desktop-file-install	--mode 644 \
+				--dir $(DESTDIR)/$(desktopdir) \
+				--add-category System \
+				--add-category TerminalEmulator \
+				$(PACKAGE_NAME).desktop
 
 $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT):	$(foreach SRC, $(basename $(SOURCES)), $(OBJDIR)/Release/$(SRC)$(OBJEXT))
 
@@ -102,13 +123,27 @@ endif
 
 #---[ Misc targets ]-----------------------------------------------------------
 
+$(PACKAGE_NAME).desktop: Makefile $(PACKAGE_NAME).png
+	@rm -f $@
+	@echo "[Desktop Entry]" > $@
+	@echo "Encoding=UTF-8" >> $@
+	@echo "GenericName=$(PACKAGE_NAME)" >> $@
+	@echo "Name=3270 Terminal" >> $@
+	@echo "Name[pt_BR]=Terminal 3270" >> $@
+	@echo "Comment=IBM 3270 Terminal emulator" >> $@
+	@echo "Exec=$(bindir)/$(PACKAGE_NAME)@EXEEXT@" >> $@
+	@echo "Icon=$(datarootdir)/$(PACKAGE_NAME)/$(PACKAGE_NAME).png" >> $@
+	@echo "Terminal=false" >> $@
+	@echo "Type=Application" >> $@
+	@echo "StartupNotify=true" >> $@
+
 $(DEBDIR)/pw3270.install: Makefile
 	@echo "  GEN  `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@echo "$(bindir)/@PACKAGE_NAME@" >> $@
-	@echo "$(datarootdir)/@PACKAGE_NAME@/ui/00default.xml" >> $@
-	@echo "$(datarootdir)/@PACKAGE_NAME@/@PACKAGE_NAME@.png" >> $@
-	@echo "$(datarootdir)/@PACKAGE_NAME@/@PACKAGE_NAME@-logo.png" >> $@
+	@echo "$(datarootdir)/$(PACKAGE_NAME)/ui/00default.xml" >> $@
+	@echo "$(datarootdir)/$(PACKAGE_NAME)/$(PACKAGE_NAME).png" >> $@
+	@echo "$(datarootdir)/$(PACKAGE_NAME)/$(PACKAGE_NAME)-logo.png" >> $@
 
 v3270/marshal.h: v3270/genmarshal
 	@$(MKDIR) `dirname $@`
@@ -125,4 +160,7 @@ clean: clean-common
 	@rm -fr uiparser/.obj
 	@rm -fr v3270/.bin
 	@rm -fr v3270/.obj
+	@rm -f $(PACKAGE_NAME).png
+	@rm -f $(PACKAGE_NAME)-logo.png
+	@rm -f $(PACKAGE_NAME).desktop
 

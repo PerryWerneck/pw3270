@@ -131,6 +131,7 @@ rm -rf $RPM_BUILD_ROOT
 # Main application
 %dir %{_datadir}/@PACKAGE_NAME@
 %dir %{_datadir}/@PACKAGE_NAME@/ui
+%{_datadir}/applications/@PACKAGE_NAME@.desktop
 
 %{_bindir}/@PACKAGE_NAME@
 %{_datadir}/@PACKAGE_NAME@/ui/00default.xml

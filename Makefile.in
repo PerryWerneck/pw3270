@@ -65,8 +65,10 @@ CONVERT=@CONVERT@
 
 #---[ Rules ]------------------------------------------------------------------
 
-%.png: pixmaps/%.svg
+src/pw3270/%.png: src/pw3270/pixmaps/%.svg
 ifneq ($(CONVERT),no)
+	@echo "  GEN  `basename $@`"
+	@$(MKDIR) `dirname $@`
 	@$(CONVERT) $< --format=png > $@
 endif
 
@@ -131,11 +133,9 @@ ifneq ($(RPMBUILD),no)
 	@rpmbuild -ts $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz
 endif
 
-$(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz: clean $(PACKAGE_NAME).png $(PACKAGE_NAME)-logo.png
+$(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz: clean src/pw3270/$(PACKAGE_NAME).png src/pw3270/$(PACKAGE_NAME)-logo.png
 	@rm -fr $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@$(MKDIR) $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
-	@cp $(PACKAGE_NAME).png $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
-	@cp $(PACKAGE_NAME)-logo.png $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@cp *.m4 $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@NOCONFIGURE=1 ./autogen.sh $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@cp configure.ac $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
@@ -154,13 +154,11 @@ $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz: clean $(PACKAGE_NAME).png $(PACKAG
 	@rm -fr $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@echo $@
 
-install: install-sdk install-lib $(PACKAGE_NAME).png $(PACKAGE_NAME)-logo.png
+install: install-sdk install-lib
 	@make BINDIR="../../$(BINDIR)" LIB3270_LIBS="$(RLSLIB)" LIB3270_CFLAGS="-I../../src/include" -C src/pw3270 install
 
 	@$(MKDIR) $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/ui
 	@$(INSTALL_DATA) ui/*.xml $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/ui
-	@$(INSTALL_DATA) $(PACKAGE_NAME).png $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)
-	@$(INSTALL_DATA) $(PACKAGE_NAME)-logo.png $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)
 
 install-lib:
 	@make BINRLS="../../.bin/Release/lib" -C src/lib3270 install
