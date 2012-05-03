@@ -50,7 +50,7 @@ BINDIR=.bin
 EXEEXT=@EXEEXT@
 DBGLIB=-L../../$(BINDIR)/Debug/lib -l3270
 RLSLIB=-L../../$(BINDIR)/Release/lib -l3270
-TMPDIR=$(PWD)/.tmp
+TMPDIR=.tmp
 GLOBAL_DEPS=$(PWD)/include/*.h $(PWD)/include/lib3270/*.h
 
 #---[ Tools ]------------------------------------------------------------------
@@ -62,6 +62,9 @@ INSTALL_PROGRAM=@INSTALL_PROGRAM@
 INSTALL_DATA=@INSTALL_DATA@
 RPMBUILD=@RPMBUILD@
 CONVERT=@CONVERT@
+MSGCAT=@MSGCAT@
+MSGINIT=@MSGINIT@
+MSGMERGE=@MSGMERGE@
 
 #---[ Rules ]------------------------------------------------------------------
 
@@ -77,6 +80,14 @@ debian/%.install: src/%/Makefile
 
 $(BINDIR)/pot/%.pot: src/%/Makefile
 	@$(MAKE) BINDIR=../../$(BINDIR) -C $(dir $^) ../../$@
+
+po/%.po: $(PACKAGE_NAME).po
+	@echo "  GEN  `basename $@`"
+	@$(MKDIR) `dirname $@`
+	@$(MKDIR) $(TMPDIR)/po
+	@cp $@ $(TMPDIR)/$@ 2> $(TMPDIR)/cp.err > $(TMPDIR)/cp.out || true
+	@touch $(TMPDIR)/$@
+	@$(MSGMERGE) $(TMPDIR)/$@ $(PACKAGE_NAME).po --output-file=$@
 
 #---[ Release targets ]--------------------------------------------------------
 
@@ -136,6 +147,15 @@ ifneq ($(RPMBUILD),no)
 	@rpmbuild -ts $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz
 endif
 
+$(PACKAGE_NAME).po: $(TMPDIR)/$(PACKAGE_NAME).pot
+	@echo "  INIT `basename $@`"
+	@$(MSGINIT) --no-translator -o $@ -i $^
+
+$(TMPDIR)/$(PACKAGE_NAME).pot: $(BINDIR)/pot/pw3270.pot $(BINDIR)/pot/lib3270.pot
+	@echo "  TEXT `basename $@`"
+	@$(MKDIR) `dirname $@`
+	@$(MSGCAT) --sort-output $^ | sed "s&VERSION&$(PACKAGE_VERSION)&;s&CHARSET&UTF-8&;s&PACKAGE&$(PACKAGE_NAME)&g" > $@
+
 $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz: clean src/pw3270/$(PACKAGE_NAME).png src/pw3270/$(PACKAGE_NAME)-logo.png
 	@rm -fr $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@$(MKDIR) $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
@@ -179,6 +199,7 @@ clean:
 	@rm -fr .obj
 	@rm -fr .bin
 	@rm -fr .tmp
+	@rm -f $(PACKAGE_NAME).po
 	@rm -f debian/*.install
 	@make -C src/lib3270 clean
 	@make -C src/pw3270 clean

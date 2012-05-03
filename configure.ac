@@ -128,6 +128,7 @@ RLS_LDFLAGS="-L.bin/Release/lib -Wl,--strip-all"
 AC_PATH_TOOL([XGETTEXT], [xgettext], [no])
 AC_PATH_TOOL([MSGCAT], [msgcat], [no])
 AC_PATH_TOOL([MSGINIT], [msginit], [no])
+AC_PATH_TOOL([MSGMERGE], [msgmerge], [no])
 AC_PATH_TOOL([MSGFMT], [msgfmt], [no])
 AC_PATH_TOOL([RPMBUILD], [rpmbuild], [no])
 
