@@ -38,13 +38,13 @@
  {
  	if(info->element)
 	{
-		*error = g_error_new(ERROR_DOMAIN,EINVAL,"%s", _( "<accelerator> should be on toplevel"));
+		*error = g_error_new(ERROR_DOMAIN,EINVAL, _( "<%s> should be on toplevel"), "accelerator");
 		return NULL;
 	}
 
  	if(!action)
 	{
-		*error = g_error_new(ERROR_DOMAIN,EINVAL,"%s", _( "<accelerator> should have an action attribute"));
+		*error = g_error_new(ERROR_DOMAIN,ENOENT, _( "<%s> requires %s"),"accelerator",_( "an action attribute" ) );
 		return NULL;
 	}
 

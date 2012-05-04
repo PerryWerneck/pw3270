@@ -90,7 +90,7 @@
 	}
 	else
 	{
-		*error = g_error_new(ERROR_DOMAIN,EINVAL,"%s", _( "<separator> is invalid at this context"));
+		*error = g_error_new(ERROR_DOMAIN,EINVAL,_( "<%s> is invalid at this context"),"separator");
 		return NULL;
 	}
 

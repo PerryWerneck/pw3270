@@ -40,7 +40,7 @@
 
 	if(!(info->element && (GTK_IS_MENU_ITEM(info->element) || GTK_IS_MENU_SHELL(info->element))))
 	{
-		*error = g_error_new(ERROR_DOMAIN,EINVAL,"%s", _( "<menu> is invalid at this context"));
+		*error = g_error_new(ERROR_DOMAIN,EINVAL,_( "<%s> is invalid at this context"),"menu");
 		return NULL;
 	}
 
@@ -54,7 +54,7 @@
 
 		if(!label)
 		{
-			*error = g_error_new(ERROR_DOMAIN,EINVAL,"%s", _( "<menu> requires a label attribute"));
+			*error = g_error_new(ERROR_DOMAIN,ENOENT, _( "<%s> requires %s"),"menu", _( "a label attribute" ) );
 			return NULL;
 		}
 		widget = gtk_menu_item_new_with_mnemonic(gettext(label));

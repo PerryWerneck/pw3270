@@ -52,7 +52,7 @@
 
 	if(action)
 	{
-		*error = g_error_new(ERROR_DOMAIN,EINVAL, _( "Invalid or unexpected action attribute in <%s>"), "toolbar");
+		*error = g_error_new(ERROR_DOMAIN,EINVAL, _( "Unexpected action attribute in <%s>"), "toolbar");
 		return NULL;
 	}
 

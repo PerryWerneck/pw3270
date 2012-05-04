@@ -40,7 +40,7 @@
  {
 	if(!(info->element && action))
 	{
-		*error = g_error_new(ERROR_DOMAIN,EINVAL,"%s", _( "<script> is invalid at this context"));
+		*error = g_error_new(ERROR_DOMAIN,EINVAL,_( "<%s> is invalid at this context"),"script");
 		return NULL;
 	}
 

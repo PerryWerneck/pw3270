@@ -42,13 +42,13 @@
 
  	if(info->element)
 	{
-		*error = g_error_new(ERROR_DOMAIN,EINVAL,"%s", _( "<popup> should be on toplevel"));
+		*error = g_error_new(ERROR_DOMAIN,EINVAL, _( "<%s> should be on toplevel"), "popup");
 		return NULL;
 	}
 
 	if(action)
 	{
-		*error = g_error_new(ERROR_DOMAIN,EINVAL,"%s", _( "Unexpected action attribute in <popup>"));
+		*error = g_error_new(ERROR_DOMAIN,EINVAL, _( "Unexpected action attribute in <%s>"), "popup");
 		return NULL;
 	}
 
@@ -58,7 +58,7 @@
 
 	if(!id)
 	{
-		*error = g_error_new(ERROR_DOMAIN,ENOENT,"%s", _( "<popup> needs a type or group attribute"));
+		*error = g_error_new(ERROR_DOMAIN,ENOENT, _( "<%s> requires %s"),"accelerator",_( "a type or group attribute" ) );
 		return NULL;
 	}
 

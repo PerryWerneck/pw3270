@@ -39,7 +39,7 @@
 
 	if(!(info->element && (GTK_IS_TOOLBAR(info->element))))
 	{
-		*error = g_error_new(ERROR_DOMAIN,EINVAL,"%s", _( "<toolitem> is invalid at this context"));
+		*error = g_error_new(ERROR_DOMAIN,EINVAL,_( "<%s> is invalid at this context"),"toolitem");
 		return NULL;
 	}
 
