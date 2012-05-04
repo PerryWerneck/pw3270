@@ -373,7 +373,7 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
 		N_( "Selection background" ),		// TERMINAL_COLOR_SELECTED_BG
 		N_( "Selection foreground" ),		// TERMINAL_COLOR_SELECTED_FG
 
-		N_( "Cross-hair cursor" ),			// TERMINAL_COLOR_CROSS_HAIR
+		N_( "Cross hair cursor" ),			// TERMINAL_COLOR_CROSS_HAIR
 
 		// Oia Colors
 		N_( "OIA background" ),				// TERMINAL_COLOR_OIA_BACKGROUND

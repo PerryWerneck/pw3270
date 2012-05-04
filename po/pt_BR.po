@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-04 10:01-0300\n"
+"POT-Creation-Date: 2012-05-04 10:10-0300\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: \n"
@@ -80,9 +80,8 @@ msgstr "Emulador 3270 para GTK+"
 #: uiparser/separator.c:93
 #: uiparser/toolitem.c:42
 #: uiparser/script.c:43
-#, fuzzy, c-format
 msgid "<%s> is invalid at this context"
-msgstr "<script> é inválido neste contexto"
+msgstr "<%s> é inválido neste contexto"
 
 #: uiparser/accelerator.c:47
 #: uiparser/menu.c:57
@@ -92,9 +91,9 @@ msgid "<%s> requires %s"
 msgstr "<%s> exige %s"
 
 #: uiparser/menuitem.c:74
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> requires a %s attribute"
-msgstr "Ação %s precisa do atributo src"
+msgstr "<%s> precisa do atributo %s"
 
 #: uiparser/accelerator.c:41
 #: uiparser/menubar.c:40
@@ -151,9 +150,8 @@ msgid "Attribute \"%s\" is invalid or undefined"
 msgstr "Atributo \"%s\" é invalido ou indefinido"
 
 #: ui/00default.xml:175
-#, fuzzy
 msgid "Auto-Reconnect"
-msgstr "Servidor a conectar"
+msgstr "Reconectar automaticamente"
 
 #: colors.c:351
 msgid "Background"
@@ -236,12 +234,12 @@ msgstr ""
 #: uiparser/parser.c:239
 #, c-format
 msgid "Can't parse UI description files in %s"
-msgstr ""
+msgstr "Incapaz de processar arquivos de descrição de UI em %s"
 
 #: uiparser/parsefile.c:100
 #: uiparser/parsefile.c:126
 msgid "Can't parse unnamed element"
-msgstr ""
+msgstr "Incapaz de processar elemento sem nome"
 
 #: dialog.c:429
 #, c-format
@@ -249,6 +247,8 @@ msgid ""
 "Can't save copy to file\n"
 "%s"
 msgstr ""
+"Não foi possível salvar cópia para o arquivo\n"
+"%s"
 
 #: dialog.c:190
 msgid "Can't save file"
@@ -269,6 +269,8 @@ msgid ""
 "Can't save selection to file\n"
 "%s"
 msgstr ""
+"Não foi possível salvar a seleção para o arquivo\n"
+"%s"
 
 #: v3270/iocallback.c:345
 msgid "Can't set lib3270 I/O handlers"
@@ -309,14 +311,12 @@ msgid "Color setup"
 msgstr "Configuração de cores"
 
 #: ui/00default.xml:157
-#, fuzzy
 msgid "Colors"
-msgstr "Configuração de cores"
+msgstr "Cores"
 
 #: ui/00default.xml:166
-#, fuzzy
 msgid "Connect on startup"
-msgstr "Não foi possível conectar ao servidor"
+msgstr "Conectar ao iniciar"
 
 #: ui/00default.xml:110
 msgid "Copy"
@@ -327,12 +327,7 @@ msgid "Copy as table"
 msgstr "Copiar como tabela"
 
 #: ui/00default.xml:172
-#, fuzzy
 msgid "Cross Hair Cursor"
-msgstr "Cursor mira"
-
-#: colors.c:376
-msgid "Cross-hair cursor"
 msgstr "Cursor mira"
 
 #: dialog.c:111
@@ -547,7 +542,7 @@ msgstr "Normal/Desprotegido"
 
 #: ft.c:385
 msgid "Not in 3270 mode, transfer cancelled"
-msgstr ""
+msgstr "Não está no modo 3270, transferência cancelada"
 
 #: colors.c:379
 msgid "OIA background"
@@ -604,9 +599,8 @@ msgid "Paste next"
 msgstr "Colar próximo"
 
 #: ui/00default.xml:118
-#, fuzzy
 msgid "Paste text file"
-msgstr "Não foi possível salvar arquivo"
+msgstr "Colar arquivo texto"
 
 #: dialog.c:486
 msgid "Paste text file contents"
@@ -633,9 +627,8 @@ msgid "Print copy"
 msgstr "Imprimir cópia"
 
 #: ui/00default.xml:99
-#, fuzzy
 msgid "Print selected"
-msgstr "X Protegido"
+msgstr "Imprimir seleção"
 
 #: print.c:333
 msgid "Print selection box"
@@ -662,9 +655,8 @@ msgid "Reload buffer contents"
 msgstr ""
 
 #: ui/00default.xml:123
-#, fuzzy
 msgid "Remove selection"
-msgstr "Salvar seleção para arquivo"
+msgstr "Remover seleção"
 
 #: ui/00default.xml:124
 msgid "Reselect"
@@ -683,59 +675,52 @@ msgid "SSL error"
 msgstr "Erro SSL"
 
 #: ui/00default.xml:95
-#, fuzzy
 msgid "Save copy"
-msgstr "Salvar cópia para arquivo"
+msgstr "Salvar cópia"
 
 #: dialog.c:428
 msgid "Save copy to file"
 msgstr "Salvar cópia para arquivo"
 
 #: ui/00default.xml:93
-#, fuzzy
 msgid "Save screen"
-msgstr "Salvar tela para arquivo"
+msgstr "Salvar tela"
 
 #: dialog.c:403
 msgid "Save screen to file"
 msgstr "Salvar tela para arquivo"
 
 #: ui/00default.xml:94
-#, fuzzy
 msgid "Save selected"
-msgstr "Salvar seleção para arquivo"
+msgstr "Salvar seleção"
 
 #: dialog.c:417
 msgid "Save selection to file"
 msgstr "Salvar seleção para arquivo"
 
 #: ui/00default.xml:163
-#, fuzzy
 msgid "Screen size"
-msgstr "Salvar tela para arquivo"
+msgstr "Tamanho da tela"
 
 #: telnet.c:977
 msgid "Second connect() failed"
 msgstr "Segundo connect() falhou"
 
 #: ui/00default.xml:122
-#, fuzzy
 msgid "Select Field"
-msgstr "WSAEventSelect falhou"
+msgstr "Selecionar campo"
 
 #: ui/00default.xml:121
-#, fuzzy
 msgid "Select all"
-msgstr "Selecione host"
+msgstr "Selecionar tudo"
 
 #: ui/00default.xml:174
 msgid "Select by rectangles"
 msgstr "Seleção retangular"
 
 #: ui/00default.xml:160
-#, fuzzy
 msgid "Select font"
-msgstr "Selecione host"
+msgstr "Selecione fonte"
 
 #: dialog.c:296
 msgid "Select hostname"
@@ -758,7 +743,6 @@ msgid "Send/Receive"
 msgstr "Enviar/Receber"
 
 #: ui/00default.xml:142
-#, fuzzy
 msgid "Set hostname"
 msgstr "Selecione host"
 
@@ -880,7 +864,7 @@ msgstr "UTF-8"
 
 #: ft_dft.c:165
 msgid "Uknown DFT Open type from host"
-msgstr ""
+msgstr "Servidor enviou código de abertura DFT desconhecido"
 
 #: host.c:302
 msgid "Unable to connect to secure hosts"
@@ -888,18 +872,18 @@ msgstr "Não é possível conectar em servidores seguros"
 
 #: paste.c:266
 msgid "Unable to paste text"
-msgstr ""
+msgstr "Incapas de colar texto"
 
 #: ft.c:260
 msgid "Unable to send file-transfer request"
-msgstr ""
+msgstr "Não foi possível enviar a requisição de transferência de arquivo"
 
 #: uiparser/menubar.c:46
 #: uiparser/toolbar.c:55
 #: uiparser/popup.c:51
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected action attribute in <%s>"
-msgstr "Atributo "
+msgstr "Atributo inesperado \"action\" em <%s>"
 
 #: paste.c:267
 msgid "Unexpected error"
@@ -911,6 +895,7 @@ msgid "Unexpected group \"%s\""
 msgstr ""
 
 #: actions.c:396
+#: actions.c:416
 #, c-format
 msgid "Unexpected or invalid %s attribute: \"%s\""
 msgstr "Atributo %s inesperado ou inválido: \"%s\""
@@ -919,11 +904,6 @@ msgstr "Atributo %s inesperado ou inválido: \"%s\""
 #, c-format
 msgid "Unexpected or invalid attribute value \"%s\""
 msgstr "Valor de attributo inesperado ou inválido: \"%s\""
-
-#: actions.c:416
-#, c-format
-msgid "Unexpected or invalid src attribute: \"%s\""
-msgstr ""
 
 #: v3270/widget.c:687
 msgid "Unexpected signature in H3270 object, possible version mismatch in lib3270"
@@ -941,7 +921,7 @@ msgstr ""
 
 #: ft_cut.c:354
 msgid "Unknown FT control code from host"
-msgstr ""
+msgstr "Servidor enviou código de controle FT desconhecido"
 
 #: kybd.c:2879
 #, c-format
@@ -1003,7 +983,7 @@ msgstr ""
 
 #: dialog.c:89
 msgid "Windows Western languages (CP1252)"
-msgstr ""
+msgstr "Windows ocidental (CP1252)"
 
 #: v3270/oia.c:387
 #: v3270/oia.c:411
@@ -1056,14 +1036,12 @@ msgid "Yellow"
 msgstr "Amarelo"
 
 #: ui/00default.xml:152
-#, fuzzy
 msgid "_Connect"
-msgstr "X Conectando"
+msgstr "_Conectar"
 
 #: ui/00default.xml:153
-#, fuzzy
 msgid "_Disconnect"
-msgstr "Servidor a conectar"
+msgstr "_Desconectar"
 
 #: ui/00default.xml:110
 msgid "_Edit"
@@ -1082,12 +1060,10 @@ msgid "_Hostname:"
 msgstr "Nome do _Host:"
 
 #: ui/00default.xml:142
-#, fuzzy
 msgid "_Network"
-msgstr "Erro de rede"
+msgstr "_Rede"
 
 #: ui/00default.xml:166
-#, fuzzy
 msgid "_Options"
 msgstr "Opções"
 
@@ -1104,17 +1080,14 @@ msgid "_View"
 msgstr "_Exibir"
 
 #: uiparser/menu.c:57
-#, fuzzy
 msgid "a label attribute"
 msgstr "um attributo \"label\""
 
 #: uiparser/popup.c:61
-#, fuzzy
 msgid "a type or group attribute"
 msgstr "um atributo \"type\" ou \"group\""
 
 #: uiparser/accelerator.c:47
-#, fuzzy
 msgid "an action attribute"
 msgstr "um atributo \"action\""
 
