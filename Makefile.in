@@ -147,8 +147,6 @@ endif
 
 #---[ Targets ]----------------------------------------------------------------
 
-lang: $(foreach SRC, $(basename $(LANG_FILES)), $(SRC).po)
-
 tgz: $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz
 
 rpm: $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz
@@ -205,6 +203,8 @@ install-app: install-locale
 
 install-lib:
 	@$(MAKE) BINRLS="../../.bin/Release/lib" -C src/lib3270 install
+
+locale: $(foreach SRC, $(basename $(LANG_FILES)), $(SRC).po)
 
 install-locale: $(foreach MO, $(basename $(LANG_FILES)), $(BINDIR)/Release/$(localedir)/$(notdir $(MO))/LC_MESSAGES/$(PACKAGE_NAME).mo)
 	@echo -e $(foreach MO, $(notdir $(basename $(LANG_FILES))), mkdir -p $(DESTDIR)/$(localedir)/$(MO)/LC_MESSAGES\\n$(INSTALL_DATA) $(BINDIR)/Release/$(localedir)/$(MO)/LC_MESSAGES/$(PACKAGE_NAME).mo $(DESTDIR)/$(localedir)/$(MO)/LC_MESSAGES/$(PACKAGE_NAME).mo \\n ) | $(SHELL)

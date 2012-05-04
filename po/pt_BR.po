@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-04 10:26-0300\n"
-"PO-Revision-Date: 2012-05-04 11:54-0300\n"
+"POT-Creation-Date: 2012-05-04 12:01-0300\n"
+"PO-Revision-Date: 2012-05-04 12:00-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português do Brasil <>\n"
 "Language: \n"
@@ -327,7 +327,7 @@ msgstr "Cursor mira"
 #: dialog.c:111
 #, c-format
 msgid "Current (%s)"
-msgstr "Current (%s)"
+msgstr "Atual (%s)"
 
 #: colors.c:335
 msgid "Custom colors"

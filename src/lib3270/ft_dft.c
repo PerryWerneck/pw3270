@@ -88,7 +88,8 @@ static unsigned char *dft_savebuf = NULL;
 static int dft_savebuf_len = 0;
 static int dft_savebuf_max = 0;
 
-static void dft_abort(const char *s, unsigned short code);
+static void dft_abort(unsigned short code, const char *fmt, ...);
+
 static void dft_close_request(void);
 static void dft_data_insert(struct data_buffer *data_bufr);
 static void dft_get_request(void);
@@ -162,7 +163,7 @@ dft_open_request(unsigned short len, unsigned char *cp)
 		GET16(recsz, recszp);
 		name = (char *)cp + 31;
 	} else {
-		dft_abort( _("Uknown DFT Open type from host"), TR_OPEN_REQ);
+		dft_abort(TR_OPEN_REQ, "%s", _("Uknown DFT Open type from host") );
 		return;
 	}
 
@@ -182,7 +183,7 @@ dft_open_request(unsigned short len, unsigned char *cp)
 		message_flag = True;
 	else {
 		message_flag = False;
-		ft_running(False);
+		ft_running(NULL,False);
 	}
 	dft_eof = False;
 	recnum = 1;
@@ -214,8 +215,9 @@ dft_data_insert(struct data_buffer *data_bufr)
 	int my_length;
 	unsigned char *cp;
 
-	if (!message_flag && ft_state == FT_ABORT_WAIT) {
-		dft_abort( _("Transfer cancelled by user"), TR_DATA_INSERT);
+	if (!message_flag && ft_state == FT_ABORT_WAIT)
+	{
+		dft_abort(TR_DATA_INSERT, "%s", _("Transfer cancelled by user") );
 		return;
 	}
 
@@ -254,13 +256,13 @@ dft_data_insert(struct data_buffer *data_bufr)
 		/* If transfer completed ok, use our msg. */
 		if (memcmp(msgp, END_TRANSFER, strlen(END_TRANSFER)) == 0) {
 			Free(msgp);
-			ft_complete((String)NULL);
+			ft_complete(NULL,NULL);
 		} else if (ft_state == FT_ABORT_SENT && abort_string != CN) {
 			Free(msgp);
-			ft_complete(abort_string);
+			ft_complete(NULL,abort_string);
 			Replace(abort_string, CN);
 		} else {
-			ft_complete((char *)msgp);
+			ft_complete(NULL,(char *)msgp);
 			Free(msgp);
 		}
 	} else if (my_length > 0) {
@@ -285,9 +287,9 @@ dft_data_insert(struct data_buffer *data_bufr)
 			while (len) {
 				unsigned l = filter_len(s, len);
 
-				if (l) {
-					rv = fwrite(s, l, (size_t)1,
-					    ft_local_file);
+				if (l)
+				{
+					rv = fwrite(s, l, (size_t)1,ftsession->ft_local_file);
 					if (rv == 0)
 						break;
 					ft_length += l;
@@ -298,23 +300,17 @@ dft_data_insert(struct data_buffer *data_bufr)
 				len -= l;
 			}
 		} else {
-			rv = fwrite((char *)data_bufr->data, my_length,
-				(size_t)1, ft_local_file);
+			rv = fwrite((char *)data_bufr->data, my_length,(size_t)1, ftsession->ft_local_file);
 			ft_length += my_length;
 		}
 
 		if (!rv) {
 			/* write failed */
-			char *buf;
-
-			buf = xs_buffer( _( "write(%s): %s" ), ft_local_filename,strerror(errno));
-
-			dft_abort(buf, TR_DATA_INSERT);
-			Free(buf);
+			dft_abort(TR_DATA_INSERT, _( "Error \"%s\" writing to local file (rc=%d)" ) , strerror(errno), errno);
 		}
 
 		/* Add up amount transferred. */
-		ft_update_length();
+		ft_update_length(ftsession);
 	}
 
 	/* Send an acknowledgement frame back. */
@@ -351,7 +347,7 @@ dft_get_request(void)
 	trace_ds(" Get\n");
 
 	if (!message_flag && ft_state == FT_ABORT_WAIT) {
-		dft_abort(_("Transfer cancelled by user"), TR_GET_REQ);
+		dft_abort(TR_GET_REQ, _( "Transfer cancelled by user" ) );
 		return;
 	}
 
@@ -365,7 +361,7 @@ dft_get_request(void)
 			int c;
 
 			/* Read one byte and do CR/LF translation. */
-			c = fgetc(ft_local_file);
+			c = fgetc(ftsession->ft_local_file);
 			if (c == EOF) {
 				break;
 			}
@@ -375,7 +371,7 @@ dft_get_request(void)
 					 * Not enough room to expand NL to
 					 * CR/LF.
 					 */
-					ungetc(c, ft_local_file);
+					ungetc(c, ftsession->ft_local_file);
 					break;
 				}
 				*bufptr++ = '\r';
@@ -388,7 +384,7 @@ dft_get_request(void)
 			total_read++;
 		} else {
 			/* Binary read. */
-			numread = fread(bufptr, 1, numbytes, ft_local_file);
+			numread = fread(bufptr, 1, numbytes, ftsession->ft_local_file);
 			if (numread <= 0) {
 				break;
 			}
@@ -406,19 +402,15 @@ dft_get_request(void)
 			numbytes -= numread;
 			total_read += numread;
 		}
-		if (feof(ft_local_file) || ferror(ft_local_file)) {
+		if (feof(ftsession->ft_local_file) || ferror(ftsession->ft_local_file)) {
 			break;
 		}
 	}
 
 	/* Check for read error. */
-	if (ferror(ft_local_file)) {
-		char *buf;
-
-		buf = xs_buffer("read(%s): %s", ft_local_filename,
-				strerror(errno));
-		dft_abort(buf, TR_GET_REQ);
-		Free(buf);
+	if (ferror(ftsession->ft_local_file))
+	{
+		dft_abort(TR_GET_REQ, _( "Error \"%s\" reading from local file (rc=%d)" ), strerror(errno), errno);
 		return;
 	}
 
@@ -442,9 +434,11 @@ dft_get_request(void)
 
 		ft_length += total_read;
 
-		if (feof(ft_local_file)) {
+		if (feof(ftsession->ft_local_file))
+		{
 			dft_eof = True;
 		}
+
 	} else {
 		trace_ds("> WriteStructuredField FileTransferData EOF\n");
 		*obptr++ = HIGH8(TR_GET_REQ);
@@ -470,7 +464,7 @@ dft_get_request(void)
 
 	/* Write the data. */
 	net_output();
-	ft_update_length();
+	ft_update_length(ftsession);
 }
 
 /* Process a Close request. */
@@ -493,10 +487,16 @@ dft_close_request(void)
 }
 
 /* Abort a transfer. */
-static void
-dft_abort(const char *s, unsigned short code)
+static void dft_abort(unsigned short code, const char *fmt, ...)
 {
-	Replace(abort_string, NewString(s));
+	va_list args;
+
+	if(abort_string)
+		free(abort_string);
+
+	va_start(args, fmt);
+	abort_string = xs_vsprintf(fmt, args);
+	va_end(args);
 
 	trace_ds("> WriteStructuredField FileTransferData Error\n");
 
@@ -512,7 +512,7 @@ dft_abort(const char *s, unsigned short code)
 	net_output();
 
 	/* Update the pop-up and state. */
-	ft_aborting();
+	ft_aborting(ftsession);
 }
 
 /* Returns the number of bytes in s, limited by len, that aren't CRs or ^Zs. */

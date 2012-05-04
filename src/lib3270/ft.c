@@ -32,9 +32,8 @@
 
 #include <lib3270/config.h>
 #include <lib3270.h>
+#include <lib3270/filetransfer.h>
 #include "globals.h"
-
-#if defined(X3270_FT)
 
 #include <errno.h>
 
@@ -43,13 +42,13 @@
 #include "ft_cutc.h"
 #include "ft_dftc.h"
 #include "ftc.h"
-// #include "dialogc.h"
 #include "hostc.h"
+/*
 #if defined(C3270) || defined(WC3270)
 #include "icmdc.h"
 #endif
+*/
 #include "kybdc.h"
-// #include "macrosc.h"
 #include "objects.h"
 #include "popupsc.h"
 #include "screenc.h"
@@ -57,8 +56,8 @@
 #include "telnetc.h"
 #include "utilc.h"
 
-static void ft_connected(H3270 *session, int ignored, void *dunno);
-static void ft_in3270(H3270 *session, int ignored unused, void *dunno);
+static void ft_connected(H3270 *session, int ignored, H3270FT *ft);
+static void ft_in3270(H3270 *session, int ignored unused, H3270FT *ft);
 
 /* Macros. */
 #define eos(s)	strchr((s), '\0')
@@ -75,9 +74,12 @@ static void ft_in3270(H3270 *session, int ignored unused, void *dunno);
 #define BN	(Boolean *)NULL
 
 // Globals.
+H3270FT *ftsession = NULL;
+
+#define CHECK_FT_HANDLE(x) if(!x) x = ftsession;
+
 enum ft_state ft_state = FT_NONE;		// File transfer state
-char *ft_local_filename;				// Local file to transfer to/from
-FILE *ft_local_file = (FILE *)NULL;		// File descriptor for local file
+// char *ft_local_filename;				// Local file to transfer to/from
 Boolean ft_last_cr = False;				// CR was last char in local file
 Boolean ascii_flag = True;				// Convert to ascii
 Boolean cr_flag = True;					// Add crlf to each line
@@ -95,11 +97,14 @@ static const struct filetransfer_callbacks	*callbacks = NULL;		// Callbacks to m
 
 /*---[ Implement ]-------------------------------------------------------------------------------------------------------*/
 
- void ft_init(void)
+ void ft_init(H3270FT *h)
  {
 	/* Register for state changes. */
-	register_schange(ST_CONNECT, ft_connected);
-	register_schange(ST_3270_MODE, ft_in3270);
+
+	CHECK_FT_HANDLE(h);
+
+	lib3270_register_schange(h->host, ST_CONNECT, ( void (*)(H3270 *, int, void *)) ft_connected, h);
+	lib3270_register_schange(h->host, ST_3270_MODE, ( void (*)(H3270 *, int, void *)) ft_in3270, h);
  }
 
  enum ft_state QueryFTstate(void)
@@ -107,6 +112,7 @@ static const struct filetransfer_callbacks	*callbacks = NULL;		// Callbacks to m
  	return ft_state;
  }
 
+/*
  int RegisterFTCallbacks(const struct filetransfer_callbacks *cbk)
  {
  	if(!(cbk && cbk->sz == sizeof(struct filetransfer_callbacks)) )
@@ -116,20 +122,14 @@ static const struct filetransfer_callbacks	*callbacks = NULL;		// Callbacks to m
 
 	return 0;
  }
-
- static int cant_start(int errcode, const char *errmsg)
- {
-	if(callbacks && callbacks->complete)
-		callbacks->complete(errmsg,0,0,"");
- 	return errcode;
- }
+*/
 
  enum ft_state GetFileTransferState(void)
  {
 	return ft_state;
  }
 
- int CancelFileTransfer(int force)
+ LIB3270_EXPORT int lib3270_ft_cancel(H3270FT *ft, int force)
  {
 	if (ft_state == FT_RUNNING)
 	{
@@ -143,59 +143,72 @@ static const struct filetransfer_callbacks	*callbacks = NULL;		// Callbacks to m
 		return EBUSY;
 
 	// Impatient user or hung host -- just clean up.
-	ft_complete( _("Cancelled by user") );
+	ft_complete(ft, _("Cancelled by user") );
 
 	return ECANCELED;
  }
 
- int BeginFileTransfer(unsigned short flags, const char *local, const char *remote, int lrecl, int blksize, int primspace, int secspace, int dft)
+ LIB3270_EXPORT H3270FT * lib3270_ft_start(H3270 *session, LIB3270_FT_OPTION flags, const char *local, const char *remote, int lrecl, int blksize, int primspace, int secspace, int dft, const char **msg)
  {
- 	static const char	*rec	= "fvu";
- 	static const char	*un[]	= { "tracks", "cylinders", "avblock" };
+ 	H3270FT				* ftHandle		= NULL;
+ 	static const char	* rec			= "fvu";
+ 	static const char	* un[]			= { "tracks", "cylinders", "avblock" };
 
- 	unsigned short	recfm	= (flags & FT_RECORD_FORMAT_MASK) >> 8;
- 	unsigned short	units	= (flags & FT_ALLOCATION_UNITS_MASK) >> 12;
+ 	unsigned short		  recfm			= (flags & FT_RECORD_FORMAT_MASK) >> 8;
+ 	unsigned short		  units			= (flags & FT_ALLOCATION_UNITS_MASK) >> 12;
 
- 	char 				op[4096];
- 	char				buffer[4096];
+ 	FILE				* ft_local_file	= NULL;
 
-	unsigned int		flen;
+ 	char 				  op[4096];
+ 	char				  buffer[4096];
+
+	unsigned int		  flen;
 
 	Trace("%s(%s)",__FUNCTION__,local);
 
-	if(ft_local_file)
-		return cant_start(EBUSY,_( "File transfer is already active"));
-
+	if(ftsession)
+	{
+		*msg  = N_( "File transfer is already active" );
+		errno = EBUSY;
+		return NULL;
+	}
 	// Check remote file
 	if(!*remote)
-		return cant_start(EINVAL,_( "The remote file name is invalid"));
+	{
+		*msg  = N_( "The remote file name is invalid" );
+		errno = EINVAL;
+		return NULL;
+	}
 
 	// Open local file
-	ft_local_file = fopen(local,(flags & FT_FLAG_RECEIVE) ? ((flags & FT_FLAG_APPEND) ? "a" : "w") : "r");
+	ft_local_file = fopen(local,(flags & LIB3270_FT_OPTION_RECEIVE) ? ((flags & LIB3270_FT_OPTION_APPEND) ? "a" : "w") : "r");
 
 	if(!ft_local_file)
-		return cant_start(errno,_( "Can't open local file"));
+	{
+		*msg = N_( "Can't open local file" );
+		return NULL;
+	}
 
 	// Set options
 	dft_buffersize = dft;
 	set_dft_buffersize();
 
-	ascii_flag = ((flags & FT_FLAG_ASCII) != 0);
-	cr_flag = ((flags & FT_FLAG_CRLF) != 0);
-	remap_flag = ((flags & FT_FLAG_REMAP_ASCII) != 0);
+	ascii_flag = ((flags & LIB3270_FT_OPTION_ASCII) != 0);
+	cr_flag    = ((flags & LIB3270_FT_OPTION_CRLF) != 0);
+	remap_flag = ((flags & LIB3270_FT_OPTION_ASCII) != 0);
 
-	Log("%s file \"%s\"",(flags & FT_FLAG_RECEIVE) ? "Receiving" : "Sending", local);
+	lib3270_write_log(session, "%s file \"%s\"",(flags & LIB3270_FT_OPTION_RECEIVE) ? "Receiving" : "Sending", local);
 
  	/* Build the ind$file command */
  	snprintf(op,4095,"%s%s%s",
-						(flags & FT_FLAG_ASCII) 	? " ASCII"	: "",
-						(flags & FT_FLAG_CRLF) 		? " CRLF"	: "",
-						(flags & FT_FLAG_APPEND)	? " APPEND"	: ""
+						(flags & LIB3270_FT_OPTION_ASCII) 	? " ASCII"	: "",
+						(flags & LIB3270_FT_OPTION_CRLF) 	? " CRLF"	: "",
+						(flags & LIB3270_FT_OPTION_APPEND)	? " APPEND"	: ""
 			);
 
-	if(!(flags & FT_FLAG_RECEIVE))
+	if(!(flags & LIB3270_FT_OPTION_RECEIVE))
 	{
-		if(flags & FT_FLAG_TSO)
+		if(flags & LIB3270_FT_OPTION_TSO)
 		{
 			// TSO Host
 			if(recfm > 0)
@@ -237,12 +250,12 @@ static const struct filetransfer_callbacks	*callbacks = NULL;		// Callbacks to m
 	}
 
 	snprintf(buffer,4095,"%s %s %s",	"IND$FILE",
-										(flags & FT_FLAG_RECEIVE) ? "GET" : "PUT",
+										(flags & LIB3270_FT_OPTION_RECEIVE) ? "GET" : "PUT",
 										remote );
 
 	if(*op)
 	{
-		if(flags & FT_FLAG_TSO)
+		if(flags & LIB3270_FT_OPTION_TSO)
 			snconcat(buffer,4095," %s",op+1);
 		else
 			snconcat(buffer,4095," (%s)",op+1);
@@ -254,10 +267,11 @@ static const struct filetransfer_callbacks	*callbacks = NULL;		// Callbacks to m
 	flen = kybd_prime();
 	if (!flen || flen < strlen(buffer) - 1)
 	{
-		Log("Unable to send command \"%s\"",buffer);
+		lib3270_write_log(session, "Unable to send command \"%s\" (flen=%d szBuffer=%d)",buffer,flen,strlen(buffer));
 		fclose(ft_local_file);
-		ft_local_file = NULL;
-		return cant_start(-1,_( "Unable to send file-transfer request"));
+		*msg  = _( "Unable to send file-transfer request" );
+		errno = EINVAL;
+		return NULL;
 	}
 
 	Trace("Command: \"%s\"",buffer);
@@ -268,56 +282,66 @@ static const struct filetransfer_callbacks	*callbacks = NULL;		// Callbacks to m
 	set_ft_state(FT_AWAIT_ACK);
 
 	ft_last_cr = False;
-	ft_is_cut = False;
+	ft_is_cut  = False;
 
-	if(callbacks && callbacks->begin)
-		callbacks->begin(flags,local,remote);
+	ftHandle = malloc(sizeof(H3270FT));
+	memset(ftHandle,0,sizeof(H3270FT));
 
- 	return 0;
+	ftHandle->sz 			= sizeof(H3270FT);
+	ftHandle->host			= session;
+	ftHandle->ft_local_file	= ft_local_file;
+
+ 	return ftsession = ftHandle;
  }
 
 /* External entry points called by ft_dft and ft_cut. */
 
-/* Pop up a message, end the transfer. */
-void
-ft_complete(const char *errmsg)
+/**
+ * Pop up a message, end the transfer, release resources.
+ *
+ */
+void ft_complete(H3270FT *session, const char *errmsg)
 {
 	double kbytes_sec = 0;
 	struct timeval	t1;
+
+	CHECK_FT_HANDLE(session);
 
 	(void) gettimeofday(&t1, (struct timezone *)NULL);
 	kbytes_sec = (double)ft_length / 1024.0 /
 		((double)(t1.tv_sec - starting_time.tv_sec) +
 		 (double)(t1.tv_usec - starting_time.tv_usec) / 1.0e6);
 
-	Trace("%s",__FUNCTION__);
+	trace("%s",__FUNCTION__);
 
 	// Close the local file.
-	if(ft_local_file)
+	if(session->ft_local_file)
 	{
-		fclose(ft_local_file);
-		ft_local_file = NULL;
-	}
-	else
-	{
-		Log("Unexpected call do %s(): ft_local_file is NULL",__FUNCTION__);
+		fclose(session->ft_local_file);
+		session->ft_local_file = NULL;
 	}
 
 	// Clean up the state.
 	set_ft_state(FT_NONE);
 
-	ft_update_length();
+	ft_update_length(session);
 
 	if(callbacks && callbacks->complete)
 		callbacks->complete(errmsg,ft_length,kbytes_sec,ft_is_cut ? "CUT" : "DFT");
 
+	if(session == ftsession)
+		ftsession = NULL;
+
+	free(session);
+
 }
 
-/* Update the bytes-transferred count on the progress pop-up. */
-void
-ft_update_length(void)
+// Update the bytes-transferred count on the progress pop-up.
+void ft_update_length(H3270FT *session)
 {
 	double kbytes_sec = 0;
+
+	CHECK_FT_HANDLE(session);
 
 	if(ft_length > 1024.0)
 	{
@@ -336,11 +360,12 @@ ft_update_length(void)
 
 }
 
-/* Process a transfer acknowledgement. */
-void
-ft_running(Boolean is_cut)
+// Process a transfer acknowledgement.
+void ft_running(H3270FT *h, Boolean is_cut)
 {
-	Trace("%s",__FUNCTION__);
+	trace("%s",__FUNCTION__);
+
+	CHECK_FT_HANDLE(h);
 
 	ft_is_cut = is_cut;
 	ft_length = 0;
@@ -353,15 +378,16 @@ ft_running(Boolean is_cut)
 	if(callbacks && callbacks->running)
 		callbacks->running(is_cut);
 
-	ft_update_length();
+	ft_update_length(h);
 
 }
 
 // Process a protocol-generated abort.
-void
-ft_aborting(void)
+void ft_aborting(H3270FT *h)
 {
 	Trace("%s",__FUNCTION__);
+
+	CHECK_FT_HANDLE(h);
 
 	if (ft_state == FT_RUNNING || ft_state == FT_ABORT_WAIT)
 		set_ft_state(FT_ABORT_SENT);
@@ -372,17 +398,20 @@ ft_aborting(void)
 }
 
 /* Process a disconnect abort. */
-static void ft_connected(H3270 *session, int ignored, void *dunno)
+static void ft_connected(H3270 *session, int ignored, H3270FT *ft)
 {
+	CHECK_FT_HANDLE(ft);
+
 	if (!CONNECTED && ft_state != FT_NONE)
-		ft_complete(_("Host disconnected, transfer cancelled"));
+		ft_complete(ft,_("Host disconnected, transfer cancelled"));
 }
 
 /* Process an abort from no longer being in 3270 mode. */
-static void ft_in3270(H3270 *session, int ignored, void *dunno)
+static void ft_in3270(H3270 *session, int ignored, H3270FT *ft)
 {
+	CHECK_FT_HANDLE(ft);
+
 	if (!IN_3270 && ft_state != FT_NONE)
-		ft_complete(_("Not in 3270 mode, transfer cancelled"));
+		ft_complete(ft,_("Not in 3270 mode, transfer cancelled"));
 }
 
-#endif

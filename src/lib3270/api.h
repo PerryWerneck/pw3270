@@ -206,12 +206,12 @@
 //		LOCAL_EXTERN int  set_device_buffer(struct ea *src, int el);
 
 		/* File transfer */
-		#define FT_FLAG_RECEIVE					0x0001
-		#define FT_FLAG_ASCII					0x0002
-		#define FT_FLAG_CRLF					0x0004
-		#define FT_FLAG_APPEND					0x0008
-		#define FT_FLAG_TSO						0x0010
-		#define FT_FLAG_REMAP_ASCII				0x0020
+		//#define LIB3270_FT_OPTION_RECEIVE					0x0001
+		// #define LIB3270_FT_OPTION_ASCII					0x0002
+		// #define LIB3270_FT_OPTION_CRLF					0x0004
+		// #define LIB3270_FT_OPTION_APPEND					0x0008
+		// #define LIB3270_FT_OPTION_TSO						0x0010
+		// #define LIB3270_FT_OPTION_REMAP_ASCII				0x0020
 
 		#define FT_RECORD_FORMAT_FIXED			0x0100
 		#define FT_RECORD_FORMAT_VARIABLE		0x0200
@@ -232,7 +232,7 @@
 			FT_ABORT_SENT	/**< Abort sent; awaiting response */
 		};
 
-		LOCAL_EXTERN int 				BeginFileTransfer(unsigned short flags, const char *local, const char *remote, int lrecl, int blksize, int primspace, int secspace, int dft);
+//		LOCAL_EXTERN int 				BeginFileTransfer(unsigned short flags, const char *local, const char *remote, int lrecl, int blksize, int primspace, int secspace, int dft);
 		LOCAL_EXTERN int 				CancelFileTransfer(int force);
 		LOCAL_EXTERN enum ft_state	GetFileTransferState(void);
 
