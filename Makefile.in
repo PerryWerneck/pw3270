@@ -52,6 +52,7 @@ DBGLIB=-L../../$(BINDIR)/Debug/lib -l3270
 RLSLIB=-L../../$(BINDIR)/Release/lib -l3270
 TMPDIR=.tmp
 GLOBAL_DEPS=$(PWD)/include/*.h $(PWD)/include/lib3270/*.h
+LANG_FILES=$(wildcard po/*.po)
 
 #---[ Tools ]------------------------------------------------------------------
 
@@ -65,6 +66,7 @@ CONVERT=@CONVERT@
 MSGCAT=@MSGCAT@
 MSGINIT=@MSGINIT@
 MSGMERGE=@MSGMERGE@
+XML2POT=src/tools/xml2pot@EXEEXT@
 
 #---[ Rules ]------------------------------------------------------------------
 
@@ -89,9 +91,12 @@ po/%.po: $(PACKAGE_NAME).po
 	@touch $(TMPDIR)/$@
 	@$(MSGMERGE) $(TMPDIR)/$@ $(PACKAGE_NAME).po --output-file=$@
 
+src/tools/%@EXEEXT@: src/tools/%.c
+	@make -C src/tools $(notdir $@)
+
 #---[ Release targets ]--------------------------------------------------------
 
-all: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) filelist
+all: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) lang filelist
 
 Release: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) 
 
@@ -135,6 +140,8 @@ endif
 
 #---[ Targets ]----------------------------------------------------------------
 
+lang: $(foreach SRC, $(basename $(LANG_FILES)), $(SRC).po)
+
 tgz: $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz
 
 rpm: $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz
@@ -151,7 +158,12 @@ $(PACKAGE_NAME).po: $(TMPDIR)/$(PACKAGE_NAME).pot
 	@echo "  INIT `basename $@`"
 	@$(MSGINIT) --no-translator -o $@ -i $^
 
-$(TMPDIR)/$(PACKAGE_NAME).pot: $(BINDIR)/pot/pw3270.pot $(BINDIR)/pot/lib3270.pot
+$(BINDIR)/pot/ui.pot: $(XML2POT) $(wildcard ui/*.xml)
+	@echo "  TEXT `basename $@`"
+	@$(MKDIR) `dirname $@`
+	@$(XML2POT) $(wildcard ui/*.xml) > $@
+
+$(TMPDIR)/$(PACKAGE_NAME).pot: $(BINDIR)/pot/pw3270.pot $(BINDIR)/pot/lib3270.pot $(BINDIR)/pot/ui.pot
 	@echo "  TEXT `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(MSGCAT) --sort-output $^ | sed "s&VERSION&$(PACKAGE_VERSION)&;s&CHARSET&UTF-8&;s&PACKAGE&$(PACKAGE_NAME)&g" > $@
@@ -203,6 +215,7 @@ clean:
 	@rm -f debian/*.install
 	@make -C src/lib3270 clean
 	@make -C src/pw3270 clean
+	@make -C src/tools clean
 	@rm -f *.log
 
 distclean: clean

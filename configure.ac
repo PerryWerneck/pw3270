@@ -273,6 +273,7 @@ AC_CONFIG_FILES([
 	src/pw3270/Makefile
 	src/pw3270/uiparser/Makefile
 	src/pw3270/common/common.h
+	src/tools/Makefile
 
 ])
 

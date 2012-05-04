@@ -37,13 +37,13 @@
  {
  	if(info->element)
 	{
-		*error = g_error_new(ERROR_DOMAIN,EINVAL,"%s", _( "<menubar> should be on toplevel"));
+		*error = g_error_new(ERROR_DOMAIN,EINVAL, _( "<%s> should be on toplevel"), "menubar");
 		return NULL;
 	}
 
 	if(action)
 	{
-		*error = g_error_new(ERROR_DOMAIN,EINVAL,"%s", _( "Invalid or unexpected action attribute in <menubar>"));
+		*error = g_error_new(ERROR_DOMAIN,EINVAL, _( "Invalid or unexpected action attribute in <%s>"), "menubar");
 		return NULL;
 	}
 

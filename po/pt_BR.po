@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-03 16:52-0300\n"
+"POT-Creation-Date: 2012-05-04 08:17-0300\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: \n"
@@ -18,15 +18,12 @@ msgstr ""
 msgid " Unknown frame type from host"
 msgstr ""
 
-#: actions.c:608
-#: actions.c:620
+#: actions.c:608 actions.c:620
 #, c-format
 msgid "%s action needs a valid id attribute"
 msgstr "Ação %s exige um atributo ID válido"
 
-#: actions.c:483
-#: actions.c:585
-#: actions.c:597
+#: actions.c:483 actions.c:585 actions.c:597
 #, c-format
 msgid "%s action needs a valid toggle name"
 msgstr "Ação %s exige um nome de toggle válido"
@@ -55,10 +52,7 @@ msgstr "%s:%d"
 msgid "- 3270 Emulator for Gtk"
 msgstr "- Emulador 3270 para GTK"
 
-#: screen.c:622
-#: screen.c:647
-#: screen.c:659
-#: screen.c:768
+#: screen.c:622 screen.c:647 screen.c:659 screen.c:768
 #, fuzzy
 msgid "3270 Error"
 msgstr "Erro 3270"
@@ -74,6 +68,11 @@ msgstr "Tela 3270"
 #: dialog.c:570
 msgid "3270 terminal emulator for GTK+"
 msgstr "Emulador 3270 para GTK+"
+
+#: uiparser/menubar.c:40 uiparser/toolbar.c:49
+#, c-format
+msgid "<%s> should be on toplevel"
+msgstr ""
 
 #: uiparser/accelerator.c:41
 msgid "<accelerator> should be on toplevel"
@@ -108,10 +107,6 @@ msgstr "<menu> é inválido nesse contexto"
 msgid "<menu> requires a label attribute"
 msgstr ""
 
-#: uiparser/menubar.c:40
-msgid "<menubar> should be on toplevel"
-msgstr ""
-
 #: uiparser/menuitem.c:60
 msgid "<menuitem> is invalid at this context"
 msgstr ""
@@ -142,11 +137,7 @@ msgstr ""
 
 #: uiparser/separator.c:53
 msgid "<separator> should be inside a <menu> or <toolbar>"
-msgstr ""
-
-#: uiparser/toolbar.c:49
-msgid "<toolbar> should be on toplevel"
-msgstr ""
+msgstr "<separator> só é válido dentro de <menu> ou <toolbar>"
 
 #: uiparser/toolitem.c:42
 msgid "<toolitem> is invalid at this context"
@@ -156,6 +147,14 @@ msgstr ""
 msgid "Action failed"
 msgstr "Ação falhou"
 
+#: ui/00default.xml:113
+msgid "Add to copy"
+msgstr "Adicionar à cópia"
+
+#: ui/00default.xml:180
+msgid "Alert sound"
+msgstr "Aviso sonoro"
+
 #: main.c:145
 msgid "Application name"
 msgstr "Nome da aplicação"
@@ -164,6 +163,11 @@ msgstr "Nome da aplicação"
 #, c-format
 msgid "Attribute \"%s\" is invalid or undefined"
 msgstr "Atributo \"%s\" é invalido ou indefinido"
+
+#: ui/00default.xml:175
+#, fuzzy
+msgid "Auto-Reconnect"
+msgstr "Servidor a conectar"
 
 #: colors.c:351
 msgid "Background"
@@ -177,9 +181,21 @@ msgstr "Versão winsock inválida"
 msgid "Black"
 msgstr "Preto"
 
+#: ui/00default.xml:173
+msgid "Blank Fill"
+msgstr "Completar com espaços"
+
+#: ui/00default.xml:167
+msgid "Blinking Cursor"
+msgstr "Cursor piscante"
+
 #: colors.c:352
 msgid "Blue"
 msgstr "Azul"
+
+#: ui/00default.xml:176
+msgid "Bold"
+msgstr "Negrito"
 
 #: dialog.c:576
 msgid "Brazilian Public Software Portal"
@@ -225,9 +241,7 @@ msgstr "Não foi possível carregar arquivo"
 msgid "Can't open local file"
 msgstr "Não foi possível abrir arquivo local"
 
-#: uiparser/parser.c:241
-#: uiparser/parsefile.c:301
-#: uiparser/parsefile.c:329
+#: uiparser/parser.c:241 uiparser/parsefile.c:301 uiparser/parsefile.c:329
 msgid "Can't parse UI"
 msgstr ""
 
@@ -236,8 +250,7 @@ msgstr ""
 msgid "Can't parse UI description files in %s"
 msgstr ""
 
-#: uiparser/parsefile.c:100
-#: uiparser/parsefile.c:126
+#: uiparser/parsefile.c:100 uiparser/parsefile.c:126
 msgid "Can't parse unnamed element"
 msgstr ""
 
@@ -288,11 +301,15 @@ msgstr ""
 #: init.c:224
 #, c-format
 msgid "Cannot find charset \"%s\", using defaults"
-msgstr ""
+msgstr "Não encontrei codificação \"%s\", usando default"
 
 #: v3270/selection.c:383
 msgid "Charset error"
 msgstr "Erro de codificação de caracteres"
+
+#: ui/00default.xml:127
+msgid "Clear"
+msgstr "Limpar"
 
 #: colors.c:473
 msgid "Color scheme:"
@@ -301,6 +318,29 @@ msgstr "Tema de cores:"
 #: colors.c:388
 msgid "Color setup"
 msgstr "Configuração de cores"
+
+#: ui/00default.xml:157
+#, fuzzy
+msgid "Colors"
+msgstr "Configuração de cores"
+
+#: ui/00default.xml:166
+#, fuzzy
+msgid "Connect on startup"
+msgstr "Não foi possível conectar ao servidor"
+
+#: ui/00default.xml:110
+msgid "Copy"
+msgstr "Copiar"
+
+#: ui/00default.xml:111
+msgid "Copy as table"
+msgstr "Copiar como tabela"
+
+#: ui/00default.xml:172
+#, fuzzy
+msgid "Cross Hair Cursor"
+msgstr "Cursor mira"
 
 #: colors.c:376
 msgid "Cross-hair cursor"
@@ -315,6 +355,10 @@ msgstr "Current (%s)"
 msgid "Custom colors"
 msgstr "Cores personalizadas"
 
+#: ui/99debug.xml:36
+msgid "DS Trace"
+msgstr ""
+
 #: colors.c:360
 msgid "Dark Blue"
 msgstr "Azul Escuro"
@@ -323,10 +367,17 @@ msgstr "Azul Escuro"
 msgid "Dark Green"
 msgstr "Verde Escuro"
 
-#: ft_cut.c:163
-#: ft_cut.c:171
+#: ft_cut.c:163 ft_cut.c:171
 msgid "Data conversion error"
 msgstr "Erro na conversão de dados"
+
+#: ui/99debug.xml:43
+msgid "Debug"
+msgstr ""
+
+#: ui/99debug.xml:45
+msgid "Debug window updates"
+msgstr ""
 
 #: telnet.c:1260
 msgid "EOR received when not in 3270 mode, ignored."
@@ -336,14 +387,25 @@ msgstr ""
 msgid "Empty LU name"
 msgstr "Nome da LU está em branco"
 
-#: host.c:266
-#: host.c:393
+#: host.c:266 host.c:393
 msgid "Empty hostname"
 msgstr "Nome do host em branco"
 
 #: host.c:446
 msgid "Empty port name"
 msgstr "Porta em branco"
+
+#: ui/00default.xml:128
+msgid "Erase input"
+msgstr "Apagar campos"
+
+#: ui/00default.xml:130
+msgid "Erase to end of field"
+msgstr "Apagar até o final do campo"
+
+#: ui/00default.xml:131
+msgid "Erase to end of line"
+msgstr "Apagar até o final da linha"
 
 #: resolver.c:106
 #, c-format
@@ -360,6 +422,10 @@ msgstr "Erro lendo %s"
 msgid "Error resolving %s: %s"
 msgstr "Erro ao resolver %s: %s"
 
+#: ui/99debug.xml:38
+msgid "Event Trace"
+msgstr ""
+
 #: colors.c:344
 msgid "Fields"
 msgstr ""
@@ -371,6 +437,10 @@ msgstr ""
 #: glue.c:327
 msgid "Forces monochrome display"
 msgstr "Força tela monocromática"
+
+#: ui/00default.xml:170
+msgid "Full Screen"
+msgstr ""
 
 #: main.c:60
 msgid "GTK Version mismatch"
@@ -384,6 +454,10 @@ msgstr "Cinza"
 msgid "Green"
 msgstr "Verde"
 
+#: ui/00default.xml:190
+msgid "Help"
+msgstr "Ajuda"
+
 #: ft.c:378
 msgid "Host disconnected, transfer cancelled"
 msgstr "Host desconectou, transferência cancelada"
@@ -392,19 +466,17 @@ msgstr "Host desconectou, transferência cancelada"
 msgid "Host to connect"
 msgstr "Servidor a conectar"
 
-#: host.c:314
-#: host.c:339
-#: host.c:351
-#: host.c:377
-#: host.c:389
-#: host.c:393
-#: host.c:446
-#: host.c:461
+#: host.c:314 host.c:339 host.c:351 host.c:377 host.c:389 host.c:393
+#: host.c:446 host.c:461
 msgid "Hostname syntax error"
 msgstr "Formato inválido no nome do servidor"
 
 #: ft_cut.c:476
 msgid "Illegal frame length"
+msgstr ""
+
+#: ui/00default.xml:185
+msgid "Input method"
 msgstr ""
 
 #: colors.c:371
@@ -419,13 +491,14 @@ msgstr "Intensificado/Desprotegido"
 msgid "Invalid (empty) hostname"
 msgstr "Nome do host é invalido (vazio)"
 
-#: uiparser/menubar.c:46
-msgid "Invalid or unexpected action attribute in <menubar>"
-msgstr ""
+#: uiparser/menubar.c:46 uiparser/toolbar.c:55
+#, fuzzy, c-format
+msgid "Invalid or unexpected action attribute in <%s>"
+msgstr "Atributo "
 
-#: uiparser/toolbar.c:55
-msgid "Invalid or unexpected action attribute in <toolbar>"
-msgstr ""
+#: ui/00default.xml:178
+msgid "Keep selected"
+msgstr "Manter selecionado"
 
 #: paste.c:267
 msgid "Keyboard is locked"
@@ -439,6 +512,10 @@ msgstr "Faltando ']'"
 #, c-format
 msgid "Model %d (%s)"
 msgstr "Modelo %d (%s)"
+
+#: ui/00default.xml:168
+msgid "Monocase"
+msgstr "Só Maiúsculas"
 
 #: actions.c:500
 msgid "Move action needs target & direction attributes"
@@ -456,13 +533,13 @@ msgstr "Mostarda"
 msgid "Network error"
 msgstr "Erro de rede"
 
-#: telnet.c:374
-#: telnet.c:385
-#: telnet.c:692
-#: telnet.c:704
-#: telnet.c:976
+#: telnet.c:374 telnet.c:385 telnet.c:692 telnet.c:704 telnet.c:976
 msgid "Network startup error"
 msgstr "Erro ao iniciar a rede"
+
+#: ui/00default.xml:237
+msgid "Next field"
+msgstr "Próximo campo"
 
 #: colors.c:370
 msgid "Normal/Protected"
@@ -522,13 +599,47 @@ msgstr "Erro de interpretação"
 msgid "Parse error in %s"
 msgstr "Erro de interpretação em %s"
 
+#: ui/00default.xml:114
+msgid "Paste"
+msgstr "Colar"
+
+#: ui/00default.xml:115
+msgid "Paste next"
+msgstr "Colar próximo"
+
+#: ui/00default.xml:118
+#, fuzzy
+msgid "Paste text file"
+msgstr "Não foi possível salvar arquivo"
+
 #: dialog.c:486
 msgid "Paste text file contents"
-msgstr ""
+msgstr "Colar conteúdo de arquivo texto"
+
+#: ui/00default.xml:171
+msgid "Paste with left margin"
+msgstr "Colar com margem esquerda"
 
 #: colors.c:354
 msgid "Pink"
 msgstr "Rosa"
+
+#: ui/00default.xml:236
+msgid "Previous field"
+msgstr "Campo anterior"
+
+#: ui/00default.xml:98
+msgid "Print"
+msgstr "Imprimir"
+
+#: ui/00default.xml:100
+msgid "Print copy"
+msgstr "Imprimir cópia"
+
+#: ui/00default.xml:99
+#, fuzzy
+msgid "Print selected"
+msgstr "X Protegido"
 
 #: print.c:333
 msgid "Print selection box"
@@ -542,9 +653,30 @@ msgstr "Servidor proxy (tipo:nome[:port])"
 msgid "Purple"
 msgstr "Púrpura"
 
+#: ui/00default.xml:103
+msgid "Receive file"
+msgstr ""
+
 #: colors.c:353
 msgid "Red"
 msgstr "Vermelho"
+
+#: ui/99debug.xml:44
+msgid "Reload buffer contents"
+msgstr ""
+
+#: ui/00default.xml:123
+#, fuzzy
+msgid "Remove selection"
+msgstr "Salvar seleção para arquivo"
+
+#: ui/00default.xml:124
+msgid "Reselect"
+msgstr "Reselecionar"
+
+#: ui/00default.xml:238
+msgid "Return"
+msgstr ""
 
 #: telnet.c:3327
 msgid "SSL Connect error"
@@ -554,21 +686,60 @@ msgstr "Erro na conexão SSL"
 msgid "SSL error"
 msgstr "Erro SSL"
 
+#: ui/00default.xml:95
+#, fuzzy
+msgid "Save copy"
+msgstr "Salvar cópia para arquivo"
+
 #: dialog.c:428
 msgid "Save copy to file"
 msgstr "Salvar cópia para arquivo"
+
+#: ui/00default.xml:93
+#, fuzzy
+msgid "Save screen"
+msgstr "Salvar tela para arquivo"
 
 #: dialog.c:403
 msgid "Save screen to file"
 msgstr "Salvar tela para arquivo"
 
+#: ui/00default.xml:94
+#, fuzzy
+msgid "Save selected"
+msgstr "Salvar seleção para arquivo"
+
 #: dialog.c:417
 msgid "Save selection to file"
 msgstr "Salvar seleção para arquivo"
 
+#: ui/00default.xml:163
+#, fuzzy
+msgid "Screen size"
+msgstr "Salvar tela para arquivo"
+
 #: telnet.c:977
 msgid "Second connect() failed"
 msgstr "Segundo connect() falhou"
+
+#: ui/00default.xml:122
+#, fuzzy
+msgid "Select Field"
+msgstr "WSAEventSelect falhou"
+
+#: ui/00default.xml:121
+#, fuzzy
+msgid "Select all"
+msgstr "Selecione host"
+
+#: ui/00default.xml:174
+msgid "Select by rectangles"
+msgstr "Seleção retangular"
+
+#: ui/00default.xml:160
+#, fuzzy
+msgid "Select font"
+msgstr "Selecione host"
 
 #: dialog.c:296
 msgid "Select hostname"
@@ -582,13 +753,46 @@ msgstr "Fundo da seleção"
 msgid "Selection foreground"
 msgstr "Frente da seleção"
 
+#: ui/00default.xml:104
+msgid "Send file"
+msgstr "Enviar arquivo"
+
+#: ui/00default.xml:103
+msgid "Send/Receive"
+msgstr "Enviar/Receber"
+
+#: ui/00default.xml:142
+#, fuzzy
+msgid "Set hostname"
+msgstr "Selecione host"
+
 #: glue.c:325
 msgid "Set terminal model (screen size)"
 msgstr "Modelo de terminal (tamanho da tela)"
 
 #: glue.c:330
-msgid "Sets the screen dimensions to be larger than the default for the chosen model (COLSxROWS)."
-msgstr "Define que as dimensões da tela serão maiores do que o padrão para o modelo escolhido (COLSxROWS)."
+msgid ""
+"Sets the screen dimensions to be larger than the default for the chosen "
+"model (COLSxROWS)."
+msgstr ""
+"Define que as dimensões da tela serão maiores do que o padrão para o modelo "
+"escolhido (COLSxROWS)."
+
+#: ui/00default.xml:157
+msgid "Settings"
+msgstr "Configurações"
+
+#: ui/00default.xml:177
+msgid "Show Underline"
+msgstr ""
+
+#: ui/99debug.xml:43
+msgid "Show test pattern"
+msgstr "Mostrar padrão de teste"
+
+#: ui/00default.xml:179
+msgid "Smart paste"
+msgstr "Colar inteligente"
 
 #: telnet.c:1045
 msgid "Socket read error"
@@ -603,7 +807,8 @@ msgid "Space in LU name"
 msgstr "Espaçõ no nome da LU"
 
 #: glue.c:347
-msgid "Specifies the terminal name to be transmitted over the telnet connection."
+msgid ""
+"Specifies the terminal name to be transmitted over the telnet connection."
 msgstr "Define o nome do terminal a ser transmitido através da conexão telnet."
 
 #: colors.c:343
@@ -629,31 +834,56 @@ msgstr "O nome do arquivo remoto não é válido"
 
 #: dialog.c:526
 msgid ""
-"This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.\n"
+"This program is free software; you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) "
+"any later version.\n"
 "\n"
-"This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.\n"
+"This program is distributed in the hope that it will be useful, but WITHOUT "
+"ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or "
+"FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for "
+"more details.\n"
 "\n"
-"You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02111-1307 USA"
+"You should have received a copy of the GNU General Public License along with "
+"this program; if not, write to the Free Software Foundation, Inc., 51 "
+"Franklin St, Fifth Floor, Boston, MA 02111-1307 USA"
 msgstr ""
-"Este programa é software livre. Você pode redistribuí-lo e/ou modificá-lo sob os termos da GPL v.2 - Licença Pública Geral  GNU,  conforme  publicado  pela  Free Software Foundation.\n"
+"Este programa é software livre. Você pode redistribuí-lo e/ou modificá-lo "
+"sob os termos da GPL v.2 - Licença Pública Geral  GNU,  conforme  publicado  "
+"pela  Free Software Foundation.\n"
 "\n"
-"Este programa é distribuído na expectativa de  ser  útil,  mas  SEM  QUALQUER GARANTIA; sem mesmo a garantia implícita de COMERCIALIZAÇÃO ou  de  ADEQUAÇÃO A QUALQUER PROPÓSITO EM PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais detalhes.\n"
+"Este programa é distribuído na expectativa de  ser  útil,  mas  SEM  "
+"QUALQUER GARANTIA; sem mesmo a garantia implícita de COMERCIALIZAÇÃO ou  de  "
+"ADEQUAÇÃO A QUALQUER PROPÓSITO EM PARTICULAR. Consulte a Licença Pública "
+"Geral GNU para obter mais detalhes.\n"
 "\n"
-"Você deve ter recebido uma cópia da Licença Pública Geral GNU junto com este programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA, 02111-1307, USA"
+"Você deve ter recebido uma cópia da Licença Pública Geral GNU junto com este "
+"programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple "
+"Place, Suite 330, Boston, MA, 02111-1307, USA"
 
 #: host.c:303
 #, c-format
-msgid "This version of %s was built without support for secure sockets layer (SSL)."
+msgid ""
+"This version of %s was built without support for secure sockets layer (SSL)."
 msgstr "Esta versão do %s foi gerada sem suporte para conexões seguras (SSL)."
+
+#: ui/00default.xml:196
+msgid "Toolbar"
+msgstr "Barra de ferramentas"
+
+#: ui/99debug.xml:36
+msgid "Trace"
+msgstr ""
+
+#: ui/00default.xml:169
+msgid "Track Cursor"
+msgstr "Mostrar posição do cursor"
 
 #: ft_cut.c:347
 msgid "Transfer cancelled by host"
 msgstr "Transferência cancelada pelo servidor"
 
-#: ft_cut.c:374
-#: ft_cut.c:468
-#: ft_dft.c:218
-#: ft_dft.c:354
+#: ft_cut.c:374 ft_cut.c:468 ft_dft.c:218 ft_dft.c:354
 msgid "Transfer cancelled by user"
 msgstr "Transferência cancelada pelo usuário"
 
@@ -661,8 +891,7 @@ msgstr "Transferência cancelada pelo usuário"
 msgid "Transmission error"
 msgstr "Erro de transmissão"
 
-#: colors.c:356
-#: colors.c:364
+#: colors.c:356 colors.c:364
 msgid "Turquoise"
 msgstr "Turquesa"
 
@@ -715,8 +944,11 @@ msgid "Unexpected or invalid src attribute: \"%s\""
 msgstr ""
 
 #: v3270/widget.c:687
-msgid "Unexpected signature in H3270 object, possible version mismatch in lib3270"
-msgstr "Assinatura inválida no objeto H3270, possível divergência de versão na lib3270"
+msgid ""
+"Unexpected signature in H3270 object, possible version mismatch in lib3270"
+msgstr ""
+"Assinatura inválida no objeto H3270, possível divergência de versão na "
+"lib3270"
 
 #: actions.c:305
 #, c-format
@@ -761,6 +993,10 @@ msgstr ""
 msgid "Unknown port number or service: %s"
 msgstr "Número de porta ou serviço desconhecido: %s"
 
+#: ui/00default.xml:181
+msgid "Use +/- for field navigation"
+msgstr "Usar teclas +/- para navegar por campos"
+
 #: dialog.c:565
 #, c-format
 msgid "Version %s - Revision %s"
@@ -782,13 +1018,15 @@ msgstr "Europa ocidental (ISO 8859-1)"
 msgid "White"
 msgstr "Branco"
 
+#: ui/00default.xml:207
+msgid "Window"
+msgstr ""
+
 #: dialog.c:89
 msgid "Windows Western languages (CP1252)"
 msgstr ""
 
-#: v3270/oia.c:387
-#: v3270/oia.c:411
-#: v3270/oia.c:415
+#: v3270/oia.c:387 v3270/oia.c:411 v3270/oia.c:415
 msgid "X"
 msgstr ""
 
@@ -836,6 +1074,24 @@ msgstr "X Aguarde"
 msgid "Yellow"
 msgstr "Amarelo"
 
+#: ui/00default.xml:152
+#, fuzzy
+msgid "_Connect"
+msgstr "X Conectando"
+
+#: ui/00default.xml:153
+#, fuzzy
+msgid "_Disconnect"
+msgstr "Servidor a conectar"
+
+#: ui/00default.xml:110
+msgid "_Edit"
+msgstr "_Editar"
+
+#: ui/00default.xml:85
+msgid "_File"
+msgstr "_Arquivo"
+
 #: print.c:290
 msgid "_Font:"
 msgstr "_Fonte:"
@@ -843,6 +1099,16 @@ msgstr "_Fonte:"
 #: dialog.c:311
 msgid "_Hostname:"
 msgstr "Nome do _Host:"
+
+#: ui/00default.xml:142
+#, fuzzy
+msgid "_Network"
+msgstr "Erro de rede"
+
+#: ui/00default.xml:166
+#, fuzzy
+msgid "_Options"
+msgstr "Opções"
 
 #: dialog.c:316
 msgid "_Port:"
@@ -852,8 +1118,11 @@ msgstr "_Porta:"
 msgid "_Secure connection"
 msgstr "Conexão _Segura"
 
-#: telnet.c:3203
-#: telnet.c:3211
+#: ui/00default.xml:135
+msgid "_View"
+msgstr "_Exibir"
+
+#: telnet.c:3203 telnet.c:3211
 #, c-format
 msgid "fcntl(%s)"
 msgstr "fcntl(%s)"
@@ -863,9 +1132,7 @@ msgstr "fcntl(%s)"
 msgid "ioctl(%s)"
 msgstr "ioctl(%s)"
 
-#: telnet.c:584
-#: telnet.c:590
-#: telnet.c:597
+#: telnet.c:584 telnet.c:590 telnet.c:597
 #, c-format
 msgid "setsockopt(%s)"
 msgstr "setsockopt(%s)"

@@ -112,7 +112,7 @@ autoconf
 
 %build
 make clean
-make Release
+make all
 
 %install
 rm -rf $RPM_BUILD_ROOT
