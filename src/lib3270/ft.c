@@ -56,8 +56,8 @@
 #include "telnetc.h"
 #include "utilc.h"
 
-static void ft_connected(H3270 *session, int ignored, H3270FT *ft);
-static void ft_in3270(H3270 *session, int ignored unused, H3270FT *ft);
+static void ft_connected(H3270 *session, int ignored, void *unused);
+static void ft_in3270(H3270 *session, int ignored unused, void *unused);
 
 /* Macros. */
 #define eos(s)	strchr((s), '\0')
@@ -103,8 +103,8 @@ static const struct filetransfer_callbacks	*callbacks = NULL;		// Callbacks to m
 
 	CHECK_FT_HANDLE(h);
 
-	lib3270_register_schange(h->host, ST_CONNECT, ( void (*)(H3270 *, int, void *)) ft_connected, h);
-	lib3270_register_schange(h->host, ST_3270_MODE, ( void (*)(H3270 *, int, void *)) ft_in3270, h);
+	lib3270_register_schange(h->host, ST_CONNECT, ( void (*)(H3270 *, int, void *)) ft_connected, NULL);
+	lib3270_register_schange(h->host, ST_3270_MODE, ( void (*)(H3270 *, int, void *)) ft_in3270, NULL);
  }
 
  enum ft_state QueryFTstate(void)
@@ -398,20 +398,16 @@ void ft_aborting(H3270FT *h)
 }
 
 /* Process a disconnect abort. */
-static void ft_connected(H3270 *session, int ignored, H3270FT *ft)
+static void ft_connected(H3270 *session, int ignored, void *dunno)
 {
-	CHECK_FT_HANDLE(ft);
-
 	if (!CONNECTED && ft_state != FT_NONE)
-		ft_complete(ft,_("Host disconnected, transfer cancelled"));
+		ft_complete(ftsession,_("Host disconnected, transfer cancelled"));
 }
 
 /* Process an abort from no longer being in 3270 mode. */
-static void ft_in3270(H3270 *session, int ignored, H3270FT *ft)
+static void ft_in3270(H3270 *session, int ignored, void *dunno)
 {
-	CHECK_FT_HANDLE(ft);
-
 	if (!IN_3270 && ft_state != FT_NONE)
-		ft_complete(ft,_("Not in 3270 mode, transfer cancelled"));
+		ft_complete(ftsession,_("Not in 3270 mode, transfer cancelled"));
 }
 
