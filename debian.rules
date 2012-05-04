@@ -21,7 +21,7 @@ build-stamp:
 
 	# Add here commands to compile the package.
 	./configure
-	make Release
+	make all
 	# --- end custom part for compiling
 
 	touch build-stamp
