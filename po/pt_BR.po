@@ -1,11 +1,14 @@
+#
+# Perry Werneck <perry.werneck@gmail.com>, 2012.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-05-04 10:26-0300\n"
-"PO-Revision-Date: \n"
+"PO-Revision-Date: 2012-05-04 11:54-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
-"Language-Team: \n"
+"Language-Team: Português do Brasil <>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -13,10 +16,11 @@ msgstr ""
 "X-Poedit-Language: Portuguese\n"
 "X-Poedit-Country: BRAZIL\n"
 "X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
 
 #: ft_cut.c:292
 msgid " Unknown frame type from host"
-msgstr ""
+msgstr "Servidor enviou tipo de frame desconhecido"
 
 #: actions.c:608 actions.c:620
 #, c-format
@@ -184,7 +188,7 @@ msgstr "Tema de c_ores:"
 #: uiparser/parsefile.c:203
 #, c-format
 msgid "Can't accept unnamed %s"
-msgstr ""
+msgstr "Não posso aceitar elemento %s sem nome"
 
 #: telnet.c:644
 #, c-format
@@ -215,7 +219,7 @@ msgstr "Não foi possível abrir arquivo local"
 
 #: uiparser/parser.c:241 uiparser/parsefile.c:301 uiparser/parsefile.c:329
 msgid "Can't parse UI"
-msgstr ""
+msgstr "Não foi possível processar a UI"
 
 #: uiparser/parser.c:239
 #, c-format
@@ -272,7 +276,7 @@ msgstr "Cancelado pelo usuário"
 
 #: telnet.c:693
 msgid "Cannot create socket handle"
-msgstr ""
+msgstr "Não foi possível criar um manipulador de socket"
 
 #: init.c:224
 #, c-format
@@ -355,7 +359,7 @@ msgstr ""
 
 #: telnet.c:1260
 msgid "EOR received when not in 3270 mode, ignored."
-msgstr ""
+msgstr "EOR recebido fora do modo 3270, ignorado."
 
 #: host.c:339
 msgid "Empty LU name"
@@ -447,7 +451,7 @@ msgstr "Formato inválido no nome do servidor"
 
 #: ft_cut.c:476
 msgid "Illegal frame length"
-msgstr ""
+msgstr "Comprimento de frame inválido"
 
 #: ui/00default.xml:185
 msgid "Input method"
@@ -471,7 +475,7 @@ msgstr "Manter selecionado"
 
 #: paste.c:267
 msgid "Keyboard is locked"
-msgstr ""
+msgstr "Teclado está bloqueado"
 
 #: host.c:389
 msgid "Missing ']'"
@@ -885,7 +889,7 @@ msgstr "Erro inesperado"
 #: uiparser/action.c:63
 #, c-format
 msgid "Unexpected group \"%s\""
-msgstr ""
+msgstr "Grupo inesperado \"%s\""
 
 #: actions.c:396 actions.c:416
 #, c-format
@@ -912,7 +916,7 @@ msgstr ""
 #: kybd.c:315
 #, c-format
 msgid "Unexpected type %d in typeahead queue"
-msgstr ""
+msgstr "Tipo inesperado %d na fila de teclado"
 
 #: ft_cut.c:354
 msgid "Unknown FT control code from host"
@@ -982,11 +986,11 @@ msgstr "Windows ocidental (CP1252)"
 
 #: v3270/oia.c:387 v3270/oia.c:411 v3270/oia.c:415
 msgid "X"
-msgstr ""
+msgstr "X"
 
 #: v3270/oia.c:391
 msgid "X -f"
-msgstr ""
+msgstr "X -f"
 
 #: v3270/oia.c:423
 msgid "X Connecting"
@@ -994,7 +998,7 @@ msgstr "X Conectando"
 
 #: v3270/oia.c:407
 msgid "X Inhibit"
-msgstr ""
+msgstr "X Inibido"
 
 #: v3270/oia.c:383
 msgid "X Not Connected"
@@ -1006,7 +1010,7 @@ msgstr "X Numérico"
 
 #: v3270/oia.c:403
 msgid "X Overflow"
-msgstr ""
+msgstr "X Estouro"
 
 #: v3270/oia.c:395
 msgid "X Protected"
