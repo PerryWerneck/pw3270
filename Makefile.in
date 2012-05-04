@@ -103,7 +103,7 @@ src/tools/%@EXEEXT@: src/tools/%.c
 
 #---[ Release targets ]--------------------------------------------------------
 
-all: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) lang filelist
+all: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) locale filelist
 
 Release: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) 
 
@@ -151,7 +151,9 @@ tgz: $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz
 
 rpm: $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz
 ifneq ($(RPMBUILD),no)
-	@rpmbuild -ta $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz
+	@$(MKDIR) $(PWD)/$(TMPDIR)/rpmbuild
+	@TMPDIR=$(PWD)/$(TMPDIR)/rpmbuild rpmbuild -ta --clean $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz
+	@rm -fr $(PWD)/$(TMPDIR)/rpmbuild
 endif
 
 srpm: $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz
@@ -161,7 +163,7 @@ endif
 
 $(PACKAGE_NAME).po: $(TMPDIR)/$(PACKAGE_NAME).pot
 	@echo "  INIT `basename $@`"
-	@$(MSGINIT) --no-translator -o $@ -i $^
+	@$(MSGINIT) --no-translator -o $@ --locale=en_US -i $^
 
 $(BINDIR)/pot/ui.pot: $(XML2POT) $(wildcard ui/*.xml)
 	@echo "  TEXT `basename $@`"
@@ -188,6 +190,9 @@ $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz: clean src/pw3270/$(PACKAGE_NAME).p
 
 	@$(MKDIR) $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/ui
 	@cp ui/* $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/ui
+
+	@$(MKDIR) $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/po
+	@cp po/*.po $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/po
 
 	@tar --create --gzip --directory $(TMPDIR) --exclude-vcs --file=$@ $(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 

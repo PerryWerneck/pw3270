@@ -138,6 +138,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/@PACKAGE_NAME@/@PACKAGE_NAME@.png
 %{_datadir}/@PACKAGE_NAME@/@PACKAGE_NAME@-logo.png
 
+%{_datadir}/locale
+
 %files -n lib3270
 %defattr(-,root,root)
 %{_libdir}/lib3270.so
