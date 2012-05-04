@@ -79,15 +79,15 @@
 		}
 		else if(!g_strcasecmp(name[f],"label"))
 		{
-			gtk_action_set_label(action,value[f]);
+			gtk_action_set_label(action,gettext(value[f]));
 		}
 		else if(!g_strcasecmp(name[f],"short-label"))
 		{
-			gtk_action_set_short_label(action,value[f]);
+			gtk_action_set_short_label(action,gettext(value[f]));
 		}
 		else if(!g_strcasecmp(name[f],"tooltip"))
 		{
-			gtk_action_set_tooltip(action,value[f]);
+			gtk_action_set_tooltip(action,gettext(value[f]));
 		}
 		else if(!g_strcasecmp(name[f],"important"))
 		{
