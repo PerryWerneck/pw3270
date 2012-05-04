@@ -413,7 +413,7 @@ static int setup_block_action(const gchar *name, const gchar *attr, GError **err
 		id = id_from_array(attr,src,error);
 		if(id < 0)
 		{
-			*error = g_error_new(ERROR_DOMAIN,EINVAL,_("Unexpected or invalid src attribute: \"%s\"" ), attr);
+			*error = g_error_new(ERROR_DOMAIN,EINVAL,_("Unexpected or invalid %s attribute: \"%s\"" ), "src", attr);
 		}
 	}
 	return id;
