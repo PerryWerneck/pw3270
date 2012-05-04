@@ -404,7 +404,7 @@ cut_data_request(void)
 			ctlr_add(O_UP_DATA + j, 0, 0);
 
 		/* Abort the transfer. */
-		cut_abort(SC_ABORT_FILE,_( "Error \"%s\" reading local file (rc=%d)" ), strerror(errno), errno);
+		cut_abort(SC_ABORT_FILE,_( "Error \"%s\" reading from local file (rc=%d)" ), strerror(errno), errno);
 		return;
 	}
 
@@ -500,7 +500,7 @@ cut_data(void)
 
 	/* Write it to the file. */
 	if (fwrite((char *)cvbuf, conv_length, 1, ftsession->ft_local_file) == 0) {
-		cut_abort(SC_ABORT_FILE,_( "Error \"%s\" writing to file (rc=%d)" ),strerror(errno),errno);
+		cut_abort(SC_ABORT_FILE,_( "Error \"%s\" writing to local file (rc=%d)" ),strerror(errno),errno);
 	} else {
 		ft_length += conv_length;
 		ft_update_length(NULL);

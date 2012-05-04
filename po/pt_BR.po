@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-04 12:01-0300\n"
-"PO-Revision-Date: 2012-05-04 12:00-0300\n"
+"POT-Creation-Date: 2012-05-04 17:04-0300\n"
+"PO-Revision-Date: 2012-05-04 17:06-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português do Brasil <>\n"
 "Language: pt_BR\n"
@@ -17,10 +17,6 @@ msgstr ""
 "X-Poedit-Country: BRAZIL\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-
-#: ft_cut.c:292
-msgid " Unknown frame type from host"
-msgstr "Servidor enviou tipo de frame desconhecido"
 
 #: actions.c:608 actions.c:620
 #, c-format
@@ -213,7 +209,7 @@ msgstr "Não foi possível carregar %s"
 msgid "Can't load file"
 msgstr "Não foi possível carregar arquivo"
 
-#: ft.c:177
+#: ft.c:188
 msgid "Can't open local file"
 msgstr "Não foi possível abrir arquivo local"
 
@@ -303,6 +299,10 @@ msgstr "Configuração de cores"
 msgid "Colors"
 msgstr "Cores"
 
+#: ft_cut.c:326
+msgid "Complete"
+msgstr "Complete"
+
 #: ui/00default.xml:166
 msgid "Connect on startup"
 msgstr "Conectar ao iniciar"
@@ -385,6 +385,16 @@ msgstr "Apagar até o final do campo"
 msgid "Erase to end of line"
 msgstr "Apagar até o final da linha"
 
+#: ft_cut.c:407 ft_dft.c:413
+#, c-format
+msgid "Error \"%s\" reading from local file (rc=%d)"
+msgstr "Erro \"%s\" lendo arquivo local (rc=%d)"
+
+#: ft_cut.c:503 ft_dft.c:309
+#, c-format
+msgid "Error \"%s\" writing to local file (rc=%d)"
+msgstr "Erro \"%s\" gravando arquivo local (rc=%d)"
+
 #: resolver.c:106
 #, c-format
 msgid "Error %d resolving %s"
@@ -408,7 +418,7 @@ msgstr ""
 msgid "Fields"
 msgstr ""
 
-#: ft.c:167
+#: ft.c:171
 msgid "File transfer is already active"
 msgstr "Transferência de arquivos já está ativa"
 
@@ -436,7 +446,7 @@ msgstr "Verde"
 msgid "Help"
 msgstr "Ajuda"
 
-#: ft.c:378
+#: ft.c:404
 msgid "Host disconnected, transfer cancelled"
 msgstr "Host desconectou, transferência cancelada"
 
@@ -449,7 +459,7 @@ msgstr "Servidor a conectar"
 msgid "Hostname syntax error"
 msgstr "Formato inválido no nome do servidor"
 
-#: ft_cut.c:476
+#: ft_cut.c:486
 msgid "Illegal frame length"
 msgstr "Comprimento de frame inválido"
 
@@ -522,7 +532,7 @@ msgstr "Normal/Protegido"
 msgid "Normal/Unprotected"
 msgstr "Normal/Desprotegido"
 
-#: ft.c:385
+#: ft.c:411
 msgid "Not in 3270 mode, transfer cancelled"
 msgstr "Não está no modo 3270, transferência cancelada"
 
@@ -790,7 +800,7 @@ msgstr "O arquivo já existe, substituir?"
 msgid "The name of the default TCP port to connect"
 msgstr "Nome da porta TCP para conectar"
 
-#: ft.c:171
+#: ft.c:178
 msgid "The remote file name is invalid"
 msgstr "O nome do arquivo remoto não é válido"
 
@@ -841,15 +851,15 @@ msgstr ""
 msgid "Track Cursor"
 msgstr "Mostrar posição do cursor"
 
-#: ft_cut.c:347
+#: ft_cut.c:359
 msgid "Transfer cancelled by host"
 msgstr "Transferência cancelada pelo servidor"
 
-#: ft_cut.c:374 ft_cut.c:468 ft_dft.c:218 ft_dft.c:354
+#: ft_cut.c:387 ft_cut.c:478 ft_dft.c:220 ft_dft.c:350
 msgid "Transfer cancelled by user"
 msgstr "Transferência cancelada pelo usuário"
 
-#: ft_cut.c:437
+#: ft_cut.c:447
 msgid "Transmission error"
 msgstr "Erro de transmissão"
 
@@ -861,7 +871,7 @@ msgstr "Turquesa"
 msgid "UTF-8"
 msgstr "UTF-8"
 
-#: ft_dft.c:165
+#: ft_dft.c:166
 msgid "Uknown DFT Open type from host"
 msgstr "Servidor enviou código de abertura DFT desconhecido"
 
@@ -873,7 +883,7 @@ msgstr "Não é possível conectar em servidores seguros"
 msgid "Unable to paste text"
 msgstr "Incapas de colar texto"
 
-#: ft.c:260
+#: ft.c:272
 msgid "Unable to send file-transfer request"
 msgstr "Não foi possível enviar a requisição de transferência de arquivo"
 
@@ -918,7 +928,7 @@ msgstr ""
 msgid "Unexpected type %d in typeahead queue"
 msgstr "Tipo inesperado %d na fila de teclado"
 
-#: ft_cut.c:354
+#: ft_cut.c:367
 msgid "Unknown FT control code from host"
 msgstr "Servidor enviou código de controle FT desconhecido"
 
@@ -931,6 +941,11 @@ msgstr "PA %d desconhecida"
 #, c-format
 msgid "Unknown PF key %d"
 msgstr "PF %d desconhecida"
+
+#: ft_cut.c:292
+#, fuzzy
+msgid "Unknown frame type from host"
+msgstr "Servidor enviou tipo de frame desconhecido"
 
 #: resolver.c:166
 #, c-format
@@ -1111,7 +1126,11 @@ msgstr "socket"
 msgid "translator-credits"
 msgstr ""
 
-#: ft_dft.c:310
-#, c-format
-msgid "write(%s): %s"
-msgstr "write(%s): %s"
+#~ msgid "Error \"%s\" reading local file (rc=%d)"
+#~ msgstr "Error \"%s\" reading local file (rc=%d)"
+
+#~ msgid "Error \"%s\" writing to file (rc=%d)"
+#~ msgstr "Error \"%s\" writing to file (rc=%d)"
+
+#~ msgid "write(%s): %s"
+#~ msgstr "write(%s): %s"
