@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-05-07 15:12-0300\n"
-"PO-Revision-Date: 2012-05-07 15:26-0300\n"
+"PO-Revision-Date: 2012-05-07 15:30-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português do Brasil <>\n"
 "Language: pt_BR\n"
@@ -1114,7 +1114,7 @@ msgstr "_Fonte:"
 
 #: filetransfer.c:114
 msgid "_Host file name:"
-msgstr "Nome do _Servidor:"
+msgstr "Arquivo no _Servidor:"
 
 #: dialog.c:311
 msgid "_Hostname:"
