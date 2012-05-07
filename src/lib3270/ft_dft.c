@@ -106,7 +106,8 @@ ft_dft_data(unsigned char *data, int length unused)
 	unsigned short data_length, data_type;
 	unsigned char *cp;
 
-	if (ft_state == FT_NONE) {
+	if (lib3270_get_ft_state(&h3270) == FT_NONE)
+	{
 		trace_ds(" (no transfer in progress)\n");
 		return;
 	}
@@ -215,7 +216,7 @@ dft_data_insert(struct data_buffer *data_bufr)
 	int my_length;
 	unsigned char *cp;
 
-	if (!message_flag && ft_state == FT_ABORT_WAIT)
+	if(!message_flag && lib3270_get_ft_state(&h3270) == FT_ABORT_WAIT)
 	{
 		dft_abort(TR_DATA_INSERT, "%s", _("Transfer cancelled by user") );
 		return;
@@ -257,7 +258,7 @@ dft_data_insert(struct data_buffer *data_bufr)
 		if (memcmp(msgp, END_TRANSFER, strlen(END_TRANSFER)) == 0) {
 			Free(msgp);
 			ft_complete(NULL,NULL);
-		} else if (ft_state == FT_ABORT_SENT && abort_string != CN) {
+		} else if (lib3270_get_ft_state(&h3270) == FT_ABORT_SENT && abort_string != CN) {
 			Free(msgp);
 			ft_complete(NULL,abort_string);
 			Replace(abort_string, CN);
@@ -289,7 +290,7 @@ dft_data_insert(struct data_buffer *data_bufr)
 
 				if (l)
 				{
-					rv = fwrite(s, l, (size_t)1,ftsession->ft_local_file);
+					rv = fwrite(s, l, (size_t)1,((H3270FT *) h3270.ft)->ft_local_file);
 					if (rv == 0)
 						break;
 					ft_length += l;
@@ -300,7 +301,7 @@ dft_data_insert(struct data_buffer *data_bufr)
 				len -= l;
 			}
 		} else {
-			rv = fwrite((char *)data_bufr->data, my_length,(size_t)1, ftsession->ft_local_file);
+			rv = fwrite((char *)data_bufr->data, my_length,(size_t)1, ((H3270FT *) h3270.ft)->ft_local_file);
 			ft_length += my_length;
 		}
 
@@ -310,7 +311,7 @@ dft_data_insert(struct data_buffer *data_bufr)
 		}
 
 		/* Add up amount transferred. */
-		ft_update_length(ftsession);
+		ft_update_length((H3270FT *) h3270.ft);
 	}
 
 	/* Send an acknowledgement frame back. */
@@ -346,7 +347,7 @@ dft_get_request(void)
 
 	trace_ds(" Get\n");
 
-	if (!message_flag && ft_state == FT_ABORT_WAIT) {
+	if (!message_flag && lib3270_get_ft_state(&h3270) == FT_ABORT_WAIT) {
 		dft_abort(TR_GET_REQ, _( "Transfer cancelled by user" ) );
 		return;
 	}
@@ -361,7 +362,7 @@ dft_get_request(void)
 			int c;
 
 			/* Read one byte and do CR/LF translation. */
-			c = fgetc(ftsession->ft_local_file);
+			c = fgetc(((H3270FT *) h3270.ft)->ft_local_file);
 			if (c == EOF) {
 				break;
 			}
@@ -371,7 +372,7 @@ dft_get_request(void)
 					 * Not enough room to expand NL to
 					 * CR/LF.
 					 */
-					ungetc(c, ftsession->ft_local_file);
+					ungetc(c, ((H3270FT *) h3270.ft)->ft_local_file);
 					break;
 				}
 				*bufptr++ = '\r';
@@ -384,7 +385,7 @@ dft_get_request(void)
 			total_read++;
 		} else {
 			/* Binary read. */
-			numread = fread(bufptr, 1, numbytes, ftsession->ft_local_file);
+			numread = fread(bufptr, 1, numbytes, ((H3270FT *) h3270.ft)->ft_local_file);
 			if (numread <= 0) {
 				break;
 			}
@@ -402,13 +403,13 @@ dft_get_request(void)
 			numbytes -= numread;
 			total_read += numread;
 		}
-		if (feof(ftsession->ft_local_file) || ferror(ftsession->ft_local_file)) {
+		if (feof(((H3270FT *) h3270.ft)->ft_local_file) || ferror(((H3270FT *) h3270.ft)->ft_local_file)) {
 			break;
 		}
 	}
 
 	/* Check for read error. */
-	if (ferror(ftsession->ft_local_file))
+	if (ferror(((H3270FT *) h3270.ft)->ft_local_file))
 	{
 		dft_abort(TR_GET_REQ, _( "Error \"%s\" reading from local file (rc=%d)" ), strerror(errno), errno);
 		return;
@@ -434,7 +435,7 @@ dft_get_request(void)
 
 		ft_length += total_read;
 
-		if (feof(ftsession->ft_local_file))
+		if (feof(((H3270FT *) h3270.ft)->ft_local_file))
 		{
 			dft_eof = True;
 		}
@@ -464,7 +465,7 @@ dft_get_request(void)
 
 	/* Write the data. */
 	net_output();
-	ft_update_length(ftsession);
+	ft_update_length((H3270FT *) h3270.ft);
 }
 
 /* Process a Close request. */
@@ -512,7 +513,7 @@ static void dft_abort(unsigned short code, const char *fmt, ...)
 	net_output();
 
 	/* Update the pop-up and state. */
-	ft_aborting(ftsession);
+	ft_aborting((H3270FT *) h3270.ft);
 }
 
 /* Returns the number of bytes in s, limited by len, that aren't CRs or ^Zs. */

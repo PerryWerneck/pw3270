@@ -332,7 +332,7 @@ cut_control_code(void)
 		cut_xfer_in_progress = False;
 		cut_ack();
 
-		if (ft_state == FT_ABORT_SENT && saved_errmsg != CN)
+		if (lib3270_get_ft_state(&h3270) == FT_ABORT_SENT && saved_errmsg != CN)
 		{
 			buf = saved_errmsg;
 			saved_errmsg = CN;
@@ -383,8 +383,9 @@ cut_data_request(void)
 	unsigned char attr;
 
 	trace_ds("< FT DATA_REQUEST %u\n", from6(seq));
-	if (ft_state == FT_ABORT_WAIT) {
-		cut_abort(SC_ABORT_FILE,"%s",_("Transfer cancelled by user"));
+	if (lib3270_get_ft_state(&h3270) == FT_ABORT_WAIT)
+	{
+		cut_abort(SC_ABORT_FILE,"%s",N_("Transfer cancelled by user"));
 		return;
 	}
 
@@ -396,7 +397,7 @@ cut_data_request(void)
 	}
 
 	/* Check for errors. */
-	if (ferror(ftsession->ft_local_file)) {
+	if (ferror(((H3270FT *) h3270.ft)->ft_local_file)) {
 		int j;
 
 		/* Clean out any data we may have written. */
@@ -409,7 +410,7 @@ cut_data_request(void)
 	}
 
 	/* Send special data for EOF. */
-	if (!count && feof(ftsession->ft_local_file)) {
+	if (!count && feof(((H3270FT *) h3270.ft)->ft_local_file)) {
 		ctlr_add(O_UP_DATA, EOF_DATA1, 0);
 		ctlr_add(O_UP_DATA+1, EOF_DATA2, 0);
 		count = 2;
@@ -474,7 +475,8 @@ cut_data(void)
 	register int i;
 
 	trace_ds("< FT DATA\n");
-	if (ft_state == FT_ABORT_WAIT) {
+	if (((H3270FT *) h3270.ft)->state == LIB3270_FT_STATE_ABORT_WAIT)
+	{
 		cut_abort(SC_ABORT_FILE,"%s",_("Transfer cancelled by user"));
 		return;
 	}
@@ -499,7 +501,7 @@ cut_data(void)
 		return;
 
 	/* Write it to the file. */
-	if (fwrite((char *)cvbuf, conv_length, 1, ftsession->ft_local_file) == 0) {
+	if (fwrite((char *)cvbuf, conv_length, 1, ((H3270FT *) h3270.ft)->ft_local_file) == 0) {
 		cut_abort(SC_ABORT_FILE,_( "Error \"%s\" writing to local file (rc=%d)" ),strerror(errno),errno);
 	} else {
 		ft_length += conv_length;
@@ -567,7 +569,7 @@ xlate_getc(void)
 	}
 
 	/* Get the next byte from the file. */
-	c = fgetc(ftsession->ft_local_file);
+	c = fgetc(((H3270FT *) h3270.ft)->ft_local_file);
 	if (c == EOF)
 		return c;
 	ft_length++;

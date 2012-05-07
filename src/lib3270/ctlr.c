@@ -2284,10 +2284,10 @@ ps_process(void)
 
 #if defined(X3270_FT) /*[*/
 	/* Process file transfers. */
-	if (ft_state != FT_NONE &&      /* transfer in progress */
-	    h3270.formatted &&          /* screen is formatted */
-	    !h3270.screen_alt &&        /* 24x80 screen */
-	    !kybdlock &&                /* keyboard not locked */
+	if (lib3270_get_ft_state(&h3270) != LIB3270_FT_STATE_NONE &&	/* transfer in progress */
+	    h3270.formatted &&          								/* screen is formatted */
+	    !h3270.screen_alt &&        								/* 24x80 screen */
+	    !kybdlock &&                								/* keyboard not locked */
 	    /* magic field */
 	    h3270.ea_buf[1919].fa && FA_IS_SKIP(h3270.ea_buf[1919].fa)) {
 		ft_cut_data();

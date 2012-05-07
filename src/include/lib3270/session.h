@@ -103,6 +103,9 @@
 
 		unsigned short			  current_port;
 
+		// Misc
+		void					* ft;					/**< Active file transfer data */
+
 		// screen info
 		char					* charset;
 		int						  ov_rows;

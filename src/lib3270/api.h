@@ -223,18 +223,15 @@
 		#define FT_ALLOCATION_UNITS_AVBLOCK		0x3000
 		#define FT_ALLOCATION_UNITS_MASK		FT_ALLOCATION_UNITS_AVBLOCK
 
-		enum ft_state
-		{
-			FT_NONE,		/**< No transfer in progress */
-			FT_AWAIT_ACK,	/**< IND$FILE sent, awaiting acknowledgement message */
-			FT_RUNNING,		/**< Ack received, data flowing */
-			FT_ABORT_WAIT,	/**< Awaiting chance to send an abort */
-			FT_ABORT_SENT	/**< Abort sent; awaiting response */
-		};
+		#define FT_NONE							LIB3270_FT_STATE_NONE
+		#define FT_AWAIT_ACK					LIB3270_FT_STATE_AWAIT_ACK
+		#define FT_RUNNING						LIB3270_FT_STATE_RUNNING
+		#define FT_ABORT_WAIT					LIB3270_FT_STATE_ABORT_WAIT
+		#define FT_ABORT_SENT					LIB3270_FT_STATE_ABORT_SENT
 
 //		LOCAL_EXTERN int 				BeginFileTransfer(unsigned short flags, const char *local, const char *remote, int lrecl, int blksize, int primspace, int secspace, int dft);
 		LOCAL_EXTERN int 				CancelFileTransfer(int force);
-		LOCAL_EXTERN enum ft_state	GetFileTransferState(void);
+//		LOCAL_EXTERN enum ft_state	GetFileTransferState(void);
 
 		struct filetransfer_callbacks
 		{
@@ -264,7 +261,7 @@
 
 		#ifndef LIB3270
 
-			LOCAL_EXTERN enum ft_state	QueryFTstate(void);
+//			LOCAL_EXTERN enum ft_state	QueryFTstate(void);
 
 		#endif
 

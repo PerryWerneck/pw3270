@@ -74,11 +74,11 @@ static void ft_in3270(H3270 *session, int ignored unused, void *unused);
 #define BN	(Boolean *)NULL
 
 // Globals.
-H3270FT *ftsession = NULL;
+static H3270FT *ftsession = NULL;
 
 #define CHECK_FT_HANDLE(x) if(!x) x = ftsession;
 
-enum ft_state ft_state = FT_NONE;		// File transfer state
+// enum ft_state ft_state = FT_NONE;		// File transfer state
 // char *ft_local_filename;				// Local file to transfer to/from
 Boolean ft_last_cr = False;				// CR was last char in local file
 Boolean ascii_flag = True;				// Convert to ascii
@@ -89,28 +89,38 @@ static Boolean ft_is_cut;				// File transfer is CUT-style
 
 static struct timeval starting_time;	// Starting time
 
-static const struct filetransfer_callbacks	*callbacks = NULL;		// Callbacks to main application
+// static const struct filetransfer_callbacks	*callbacks = NULL;		// Callbacks to main application
 
 #define snconcat(x,s,fmt,...) snprintf(x+strlen(x),s-strlen(x),fmt,__VA_ARGS__)
 
-#define set_ft_state(x) ft_state = x
+static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
+
 
 /*---[ Implement ]-------------------------------------------------------------------------------------------------------*/
 
- void ft_init(H3270FT *h)
+ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state)
+ {
+	CHECK_FT_HANDLE(session);
+
+	if(session->state == state)
+		return;
+
+	session->state = state;
+	session->state_changed(session,state);
+
+ }
+
+ void ft_init(H3270 *session)
  {
 	/* Register for state changes. */
-
-	CHECK_FT_HANDLE(h);
-
-	lib3270_register_schange(h->host, ST_CONNECT, ( void (*)(H3270 *, int, void *)) ft_connected, NULL);
-	lib3270_register_schange(h->host, ST_3270_MODE, ( void (*)(H3270 *, int, void *)) ft_in3270, NULL);
+	lib3270_register_schange(session, ST_CONNECT, ( void (*)(H3270 *, int, void *)) ft_connected, NULL);
+	lib3270_register_schange(session, ST_3270_MODE, ( void (*)(H3270 *, int, void *)) ft_in3270, NULL);
  }
 
- enum ft_state QueryFTstate(void)
- {
- 	return ft_state;
- }
+// enum ft_state QueryFTstate(void)
+// {
+// 	return ft_state;
+// }
 
 /*
  int RegisterFTCallbacks(const struct filetransfer_callbacks *cbk)
@@ -124,18 +134,19 @@ static const struct filetransfer_callbacks	*callbacks = NULL;		// Callbacks to m
  }
 */
 
+/*
  enum ft_state GetFileTransferState(void)
  {
 	return ft_state;
  }
+*/
 
  LIB3270_EXPORT int lib3270_ft_cancel(H3270FT *ft, int force)
  {
-	if (ft_state == FT_RUNNING)
+	if (ft->state == LIB3270_FT_STATE_RUNNING)
 	{
-		set_ft_state(FT_ABORT_WAIT);
-		if(callbacks && callbacks->aborting)
-			callbacks->aborting();
+		set_ft_state(ft,LIB3270_FT_STATE_ABORT_WAIT);
+		ft->aborting(ft);
 		return 0;
 	}
 
@@ -143,10 +154,41 @@ static const struct filetransfer_callbacks	*callbacks = NULL;		// Callbacks to m
 		return EBUSY;
 
 	// Impatient user or hung host -- just clean up.
-	ft_complete(ft, _("Cancelled by user") );
+	ft_complete(ft, N_("Cancelled by user") );
 
-	return ECANCELED;
+	return 0;
  }
+
+ static void def_complete(H3270FT *ft, const char *errmsg,unsigned long length,double kbytes_sec,const char *mode)
+ {
+
+ }
+
+ static void def_setlength(H3270FT *ft, unsigned long length)
+ {
+
+ }
+
+ static void def_update(H3270FT *ft, unsigned long length,double kbytes_sec)
+ {
+
+ }
+
+ static void def_running(H3270FT *ft, int is_cut)
+ {
+
+ }
+
+ static void def_aborting(H3270FT *ft)
+ {
+
+ }
+
+ static void def_state_changed(H3270FT *ft, LIB3270_FT_STATE state)
+ {
+
+ }
+
 
  LIB3270_EXPORT H3270FT * lib3270_ft_start(H3270 *session, LIB3270_FT_OPTION flags, const char *local, const char *remote, int lrecl, int blksize, int primspace, int secspace, int dft, const char **msg)
  {
@@ -172,6 +214,14 @@ static const struct filetransfer_callbacks	*callbacks = NULL;		// Callbacks to m
 		errno = EBUSY;
 		return NULL;
 	}
+
+	if(session->ft)
+	{
+		*msg  = N_( "File transfer is already active in this session" );
+		errno = EBUSY;
+		return NULL;
+	}
+
 	// Check remote file
 	if(!*remote)
 	{
@@ -279,7 +329,6 @@ static const struct filetransfer_callbacks	*callbacks = NULL;		// Callbacks to m
 	(void) lib3270_emulate_input(NULL, buffer, strlen(buffer), False);
 
 	// Get this thing started.
-	set_ft_state(FT_AWAIT_ACK);
 
 	ft_last_cr = False;
 	ft_is_cut  = False;
@@ -290,6 +339,15 @@ static const struct filetransfer_callbacks	*callbacks = NULL;		// Callbacks to m
 	ftHandle->sz 			= sizeof(H3270FT);
 	ftHandle->host			= session;
 	ftHandle->ft_local_file	= ft_local_file;
+	ftHandle->state			= LIB3270_FT_STATE_AWAIT_ACK;
+	ftHandle->complete 		= def_complete;
+	ftHandle->setlength 	= def_setlength;
+	ftHandle->update 		= def_update;
+	ftHandle->running 		= def_running;
+	ftHandle->aborting 		= def_aborting;
+	ftHandle->state_changed	= def_state_changed;
+
+	session->ft				= ftHandle;
 
  	return ftsession = ftHandle;
  }
@@ -322,15 +380,17 @@ void ft_complete(H3270FT *session, const char *errmsg)
 	}
 
 	// Clean up the state.
-	set_ft_state(FT_NONE);
+	set_ft_state(session,FT_NONE);
 
 	ft_update_length(session);
 
-	if(callbacks && callbacks->complete)
-		callbacks->complete(errmsg,ft_length,kbytes_sec,ft_is_cut ? "CUT" : "DFT");
+	session->complete(session,errmsg,ft_length,kbytes_sec,ft_is_cut ? "CUT" : "DFT");
 
 	if(session == ftsession)
 		ftsession = NULL;
+
+	if(session->host)
+		session->host->ft = NULL;
 
 	free(session);
 
@@ -355,8 +415,7 @@ void ft_update_length(H3270FT *session)
 
 	Trace("%s",__FUNCTION__);
 
-	if(callbacks && callbacks->update)
-		callbacks->update(ft_length,kbytes_sec);
+	session->update(session,ft_length,kbytes_sec);
 
 }
 
@@ -372,11 +431,10 @@ void ft_running(H3270FT *h, Boolean is_cut)
 
 	(void) gettimeofday(&starting_time, (struct timezone *)NULL);
 
-	if (ft_state == FT_AWAIT_ACK)
-		set_ft_state(FT_RUNNING);
+	if (h->state == FT_AWAIT_ACK)
+		set_ft_state(h,FT_RUNNING);
 
-	if(callbacks && callbacks->running)
-		callbacks->running(is_cut);
+	h->running(h,is_cut);
 
 	ft_update_length(h);
 
@@ -385,29 +443,37 @@ void ft_running(H3270FT *h, Boolean is_cut)
 // Process a protocol-generated abort.
 void ft_aborting(H3270FT *h)
 {
-	Trace("%s",__FUNCTION__);
+//	Trace("%s",__FUNCTION__);
 
 	CHECK_FT_HANDLE(h);
 
-	if (ft_state == FT_RUNNING || ft_state == FT_ABORT_WAIT)
-		set_ft_state(FT_ABORT_SENT);
+	if (h->state == FT_RUNNING || h->state == FT_ABORT_WAIT)
+		set_ft_state(h,FT_ABORT_SENT);
 
-	if(callbacks && callbacks->aborting)
-		callbacks->aborting();
+	h->aborting(h);
 
 }
 
 /* Process a disconnect abort. */
 static void ft_connected(H3270 *session, int ignored, void *dunno)
 {
-	if (!CONNECTED && ft_state != FT_NONE)
-		ft_complete(ftsession,_("Host disconnected, transfer cancelled"));
+	if (!CONNECTED && lib3270_get_ft_state(session) != LIB3270_FT_STATE_NONE)
+		ft_complete(session->ft,_("Host disconnected, transfer cancelled"));
 }
 
 /* Process an abort from no longer being in 3270 mode. */
 static void ft_in3270(H3270 *session, int ignored, void *dunno)
 {
-	if (!IN_3270 && ft_state != FT_NONE)
-		ft_complete(ftsession,_("Not in 3270 mode, transfer cancelled"));
+	if (!IN_3270 && lib3270_get_ft_state(session) != LIB3270_FT_STATE_NONE)
+		ft_complete(session->ft,_("Not in 3270 mode, transfer cancelled"));
 }
 
+LIB3270_EXPORT LIB3270_FT_STATE lib3270_get_ft_state(H3270 *session)
+{
+	CHECK_SESSION_HANDLE(session);
+
+	if(!session->ft)
+		return LIB3270_FT_STATE_NONE;
+
+	return ((H3270FT *) session->ft)->state;
+}

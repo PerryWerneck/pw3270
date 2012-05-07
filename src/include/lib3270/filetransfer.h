@@ -45,12 +45,29 @@
 		LIB3270_FT_OPTION_REMAP_ASCII	= 0x0020
 	} LIB3270_FT_OPTION;
 
+	typedef enum _lib3270_ft_state
+	{
+		LIB3270_FT_STATE_NONE,			/**< No transfer in progress */
+		LIB3270_FT_STATE_AWAIT_ACK,		/**< IND$FILE sent, awaiting acknowledgement message */
+		LIB3270_FT_STATE_RUNNING,		/**< Ack received, data flowing */
+		LIB3270_FT_STATE_ABORT_WAIT,	/**< Awaiting chance to send an abort */
+		LIB3270_FT_STATE_ABORT_SENT		/**< Abort sent; awaiting response */
+	} LIB3270_FT_STATE;
+
 	typedef struct _h3270ft
 	{
-		unsigned short	  sz;					/**< Size of FT data structure */
-		H3270			* host;
-		void			* widget;				/**< File transfer dialog handle */
-		FILE 			* ft_local_file;		/**< File descriptor for local file */
+		unsigned short		  sz;					/**< Size of FT data structure */
+		H3270				* host;
+		void				* widget;				/**< File transfer dialog handle */
+		FILE 				* ft_local_file;		/**< File descriptor for local file */
+		LIB3270_FT_STATE	  state;
+
+		void (*complete)(struct _h3270ft *ft, const char *errmsg,unsigned long length,double kbytes_sec,const char *mode);
+		void (*setlength)(struct _h3270ft *ft, unsigned long length);
+		void (*update)(struct _h3270ft *ft, unsigned long length, double kbytes_sec);
+		void (*running)(struct _h3270ft *ft, int is_cut);
+		void (*aborting)(struct _h3270ft *ft);
+		void (*state_changed)(struct _h3270ft *ft, LIB3270_FT_STATE state);
 
 	} H3270FT;
 
@@ -74,5 +91,9 @@
 	LIB3270_EXPORT H3270FT * lib3270_ft_start(H3270 *session, LIB3270_FT_OPTION flags, const char *local, const char *remote, int lrecl, int blksize, int primspace, int secspace, int dft, const char **msg);
 
 	LIB3270_EXPORT int lib3270_ft_cancel(H3270FT *ft, int force);
+
+
+	LIB3270_EXPORT LIB3270_FT_STATE lib3270_get_ft_state(H3270 *session);
+
 
 #endif // LIB3270_FILETRANSFER_INCLUDED

@@ -229,7 +229,7 @@ H3270 * lib3270_session_new(const char *model)
 	ansi_init();
 
 #if defined(X3270_FT)
-	ft_init();
+	ft_init(hSession);
 #endif
 
 /*

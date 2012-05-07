@@ -262,7 +262,7 @@ LIB3270_INTERNAL int			*xtra_width;
 */
 
 /* Connection state */
-LIB3270_INTERNAL enum ft_state ft_state;
+// LIB3270_INTERNAL enum ft_state ft_state;
 
 /*
 LIB3270_INTERNAL enum cstate cstate;

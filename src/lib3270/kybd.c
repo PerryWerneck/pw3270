@@ -1464,7 +1464,7 @@ do_reset(Boolean explicit)
 
 	if (explicit
 #if defined(X3270_FT) /*[*/
-	    || ft_state != FT_NONE
+	    || lib3270_get_ft_state(&h3270) != LIB3270_FT_STATE_NONE
 #endif /*]*/
 	    ) {
 		Boolean half_reset = False;
@@ -1503,7 +1503,7 @@ do_reset(Boolean explicit)
 	 */
 	if (explicit
 #if defined(X3270_FT) /*[*/
-	    || ft_state != FT_NONE
+	    || lib3270_get_ft_state(&h3270) != LIB3270_FT_STATE_NONE
 #endif /*]*/
 	    || (!appres.unlock_delay) // && !sms_in_macro())
 	    || (unlock_delay_time != 0 && (time(NULL) - unlock_delay_time) > 1)) {
