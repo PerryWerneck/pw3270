@@ -46,7 +46,6 @@
 		<Unit filename="configure.ac" />
 		<Unit filename="pw3270.spec.in" />
 		<Unit filename="src/gtk/Makefile.in" />
-		<Unit filename="src/gtk/common/common.h" />
 		<Unit filename="src/gtk/common/common.h.in" />
 		<Unit filename="src/gtk/globals.h" />
 		<Unit filename="src/gtk/uiparser/Makefile.in" />
@@ -248,6 +247,10 @@
 		<Unit filename="src/pw3270/dialog.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/pw3270/filetransfer.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/pw3270/filetransfer.h" />
 		<Unit filename="src/pw3270/fonts.c">
 			<Option compilerVar="CC" />
 		</Unit>

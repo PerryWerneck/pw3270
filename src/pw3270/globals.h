@@ -74,4 +74,9 @@
  G_GNUC_INTERNAL void print_copy_action(GtkAction *action, GtkWidget *widget);
  G_GNUC_INTERNAL void editcolors_action(GtkAction *action, GtkWidget *widget);
  G_GNUC_INTERNAL void about_dialog_action(GtkAction *action, GtkWidget *widget);
+ G_GNUC_INTERNAL void download_action(GtkAction *action, GtkWidget *widget);
+ G_GNUC_INTERNAL void upload_action(GtkAction *action, GtkWidget *widget);
+
+
+
 

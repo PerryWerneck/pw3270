@@ -32,6 +32,7 @@
  #include "globals.h"
  #include "uiparser/parser.h"
  #include "v3270/v3270.h"
+ #include "filetransfer.h"
  #include <lib3270/actions.h>
  #include <lib3270/selection.h>
  #include <lib3270/trace.h>
@@ -217,6 +218,8 @@ static void connect_standard_action(GtkAction *action, GtkWidget *widget, const 
 		{ "about",		about_dialog_action	},
 		{ "kpsubtract", kp_subtract_action	},
 		{ "kpadd",		kp_add_action		},
+		{ "download",	download_action		},
+		{ "upload",		upload_action		},
 	};
 
 	int f;

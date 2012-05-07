@@ -49,9 +49,9 @@
 			<menuitem action='print' src='selected' group='selection' label='Print selected' />
 			<menuitem action='print' src='copy' group='clipboard' label='Print copy' />
 			<separator/>
-			<menu name='FTMenu' group='filetransfer' label='Send/Receive' >
-				<menuitem action='Download' key='<alt>d' group='filetransfer' label='Receive file' />
-				<menuitem action='Upload' key='<alt>u' group='filetransfer' label='Send file' />
+			<menu name='FTMenu' label='Send/Receive' >
+				<menuitem action='download' key='<alt>d' label='Receive file' />
+				<menuitem action='upload' key='<alt>u' label='Send file' />
 			</menu>
 			<menuitem action='Quit' key='<ctrl>q' icon="quit" />
 		</menu>

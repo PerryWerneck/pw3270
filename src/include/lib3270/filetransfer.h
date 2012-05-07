@@ -35,6 +35,8 @@
 	#define LIB3270_FILETRANSFER_INCLUDED 1
 	#include <stdio.h>
 
+	#define LIB3270_FT_OPTION_SEND 0x0000
+
 	typedef enum _lib3270_FT_FLAG
 	{
 		LIB3270_FT_OPTION_RECEIVE		= 0x0001,

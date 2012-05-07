@@ -62,7 +62,7 @@ Source:         %{name}-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 Requires:       openssl shared-mime-info
 Distribution:    %_distro
-BuildRequires:  autoconf automake gcc-c++ sed pkgconfig gtk@GTK_VERSION@-devel gettext-devel libopenssl-devel findutils coreutils rsvg-view
+BuildRequires:  autoconf automake gcc-c++ sed pkgconfig gtk@GTK_VERSION@-devel gettext-devel libopenssl-devel findutils coreutils rsvg-view desktop-file-utils
 
 %description
 IBM 3270 terminal emulator gtk. It can be used to communicate with
