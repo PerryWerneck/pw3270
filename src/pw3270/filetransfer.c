@@ -228,7 +228,7 @@ static void setup_dft(GObject *action, struct ftdialog *dlg, GtkWidget **label)
 {
 	gchar *val = g_object_get_data(action,"dft");
 
-	*label = gtk_label_new_with_mnemonic( _( "DFT Buffer _size:" ) );
+	*label = gtk_label_new_with_mnemonic( _( "DFT B_uffer size:" ) );
 
 	gtk_misc_set_alignment(GTK_MISC(*label),0,.5);
 
