@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-07 15:12-0300\n"
-"PO-Revision-Date: 2012-05-07 15:30-0300\n"
+"POT-Creation-Date: 2012-05-08 07:23-0300\n"
+"PO-Revision-Date: 2012-05-08 07:19-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português do Brasil <>\n"
 "Language: pt_BR\n"
@@ -264,18 +264,22 @@ msgstr ""
 msgid "Can't set lib3270 I/O handlers"
 msgstr "Não foi possível registrar manipuladores de I/O 3270"
 
-#: filetransfer.c:262
+#: filetransfer.c:307
 msgid "Can't start download"
 msgstr "Não foi possível iniciar o download"
 
-#: filetransfer.c:310
+#: filetransfer.c:284
+msgid "Can't start file transfer"
+msgstr "Não foi possível iniciar transferência de arquivo"
+
+#: filetransfer.c:347
 msgid "Can't start upload"
 msgstr "Não foi possível iniciar upload"
 
 #: telnet.c:387
 #, c-format
 msgid "Can't use winsock version %d.%d"
-msgstr "Não é possível usar a WinSOCK versão %d.%d"
+msgstr "Não é possível usar a Winsock versão %d.%d"
 
 #: ft.c:157
 msgid "Cancelled by user"
@@ -311,6 +315,7 @@ msgid "Colors"
 msgstr "Cores"
 
 #: ft_cut.c:326
+#, fuzzy
 msgid "Complete"
 msgstr "Complete"
 
@@ -432,7 +437,11 @@ msgstr ""
 msgid "Fields"
 msgstr ""
 
-#: filetransfer.c:262 filetransfer.c:310 ft.c:213
+#: filetransfer.c:287
+msgid "File transfer error"
+msgstr "Erro na transferência de arquivos"
+
+#: filetransfer.c:307 filetransfer.c:347 ft.c:213
 msgid "File transfer is already active"
 msgstr "Transferência de arquivos já está ativa"
 
@@ -660,9 +669,9 @@ msgstr "Púrpura"
 msgid "Receive file"
 msgstr "Receber arquivo"
 
-#: filetransfer.c:268
+#: filetransfer.c:313
 msgid "Receive file from host"
-msgstr "Receber arquivo"
+msgstr "Receber arquivo do servidor"
 
 #: colors.c:353
 msgid "Red"
@@ -738,7 +747,7 @@ msgstr "Seleção retangular"
 
 #: filetransfer.c:86
 msgid "Select file to receive"
-msgstr "Select file to receive"
+msgstr "Selecione arquivo a receber"
 
 #: filetransfer.c:86
 msgid "Select file to send"
@@ -770,7 +779,7 @@ msgstr "Enviar/Receber"
 
 #: ui/00default.xml:142
 msgid "Set hostname"
-msgstr "Selecione host"
+msgstr "Selecione servidor"
 
 #: glue.c:325
 msgid "Set terminal model (screen size)"

@@ -206,7 +206,13 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 
 	unsigned int		  flen;
 
-	Trace("%s(%s)",__FUNCTION__,local);
+//	Trace("%s(%s)",__FUNCTION__,local);
+	if(!lib3270_connected(session))
+	{
+		*msg  = N_( "Disconnected from host" );
+		errno = EINVAL;
+		return NULL;
+	}
 
 	if(ftsession)
 	{

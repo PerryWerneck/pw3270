@@ -53,6 +53,14 @@
 	const gchar		* label;
  };
 
+ struct ftmask
+ {
+	unsigned int	  flag;
+	unsigned int	  mask;
+	const gchar		* name;
+	const gchar		* label;
+ };
+
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
 
@@ -186,6 +194,7 @@ static void add_transfer_options(GObject *action, struct ftdialog *dlg)
 
 	GtkTable	* table = GTK_TABLE(gtk_table_new(3,2,TRUE));
 	GtkWidget	* frame = gtk_frame_new( _( "Transfer options" ) );
+	GtkWidget	* label = gtk_frame_get_label_widget(GTK_FRAME(frame));
 	int 		  row, col, f;
 
 	row=0;
@@ -195,6 +204,7 @@ static void add_transfer_options(GObject *action, struct ftdialog *dlg)
 		const gchar	* val		= g_object_get_data(action,option[f].name);
 		GtkWidget 	* widget 	= gtk_check_button_new_with_mnemonic( gettext(option[f].label) );
 		gboolean 	  active	= FALSE;
+
 
 		gtk_widget_set_name(widget,option[f].name);
 
@@ -252,10 +262,54 @@ static void setup_dft(GObject *action, struct ftdialog *dlg, GtkWidget **label)
 
 }
 
+static gboolean run_ft_dialog(GtkWidget *widget, struct ftdialog *dlg)
+{
+	H3270FT		* ft			= NULL;
+	const char	* msg			= NULL;
+
+	gtk_widget_show_all(dlg->dialog);
+
+	if(gtk_dialog_run(GTK_DIALOG(dlg->dialog)) != GTK_RESPONSE_ACCEPT)
+		return FALSE;
+
+	ft = lib3270_ft_start(	v3270_get_session(widget),
+							dlg->option,
+							gtk_entry_get_text(dlg->file[0]),
+							gtk_entry_get_text(dlg->file[1]),
+							0,
+							0,
+							0,
+							0,
+							atoi(gtk_entry_get_text(dlg->dft)),
+							&msg );
+
+	trace("%s ft=%p msg=%p",__FUNCTION__,ft,&msg);
+
+	if(msg)
+	{
+		GtkWidget *popup = gtk_message_dialog_new_with_markup(
+										GTK_WINDOW(gtk_widget_get_toplevel(widget)),
+										GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
+										GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,
+										"%s", _( "Can't start file transfer" ));
+
+		trace("msg=%s",msg);
+		gtk_window_set_title(GTK_WINDOW(popup),_("File transfer error"));
+
+		gtk_message_dialog_format_secondary_markup(GTK_MESSAGE_DIALOG(popup),"%s",gettext(msg));
+
+		gtk_widget_show_all(popup);
+		gtk_dialog_run(GTK_DIALOG(popup));
+		gtk_widget_destroy(popup);
+
+	}
+
+	return ft != NULL;
+}
+
 void download_action(GtkAction *action, GtkWidget *widget)
 {
 	struct ftdialog dlg;
-
 
 	if(lib3270_get_ft_state(v3270_get_session(widget)) != LIB3270_FT_STATE_NONE)
 	{
@@ -289,29 +343,142 @@ void download_action(GtkAction *action, GtkWidget *widget)
 		gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dlg.dialog))),hbox,FALSE,FALSE,2);
 	}
 
-	gtk_widget_show_all(dlg.dialog);
-
-	if(gtk_dialog_run(GTK_DIALOG(dlg.dialog)) == GTK_RESPONSE_ACCEPT)
-	{
-		// Begin file transfer
-	}
-
-
-//	begin_ft_session(action,widget,LIB3270_FT_OPTION_RECEIVE);
+	run_ft_dialog(widget,&dlg);
 
 	gtk_widget_destroy(dlg.dialog);
 
 }
 
+static void toggle_format(GtkToggleButton *button, const struct ftmask *option)
+{
+ 	gboolean		  active	= gtk_toggle_button_get_active(button);
+ 	struct ftdialog	* dlg		= (struct ftdialog *) g_object_get_data(G_OBJECT(button),"dlg");
+	const gchar		* name		= (const gchar *) g_object_get_data(G_OBJECT(button),"setupname");
+
+	dlg->option &= ~option->mask;
+	dlg->option |= option->flag;
+
+	if(active)
+	{
+		set_string_to_config(dlg->name,name,"%s",option->name);
+		trace("%s=%s (flags=%04x)",name,option->name,dlg->option);
+	}
+}
+
 void upload_action(GtkAction *action, GtkWidget *widget)
 {
+	struct ftdialog dlg;
+
 	if(lib3270_get_ft_state(v3270_get_session(widget)) != LIB3270_FT_STATE_NONE)
 	{
 		error_dialog(widget,_( "Can't start upload" ), _( "File transfer is already active" ), NULL);
 		return;
 	}
 
-//	begin_ft_session(action,widget,LIB3270_FT_OPTION_SEND);
+	memset(&dlg,0,sizeof(dlg));
+
+	dlg.dialog = gtk_dialog_new_with_buttons(	_( "Send file to host" ), \
+												GTK_WINDOW(gtk_widget_get_toplevel(widget)),
+												GTK_DIALOG_DESTROY_WITH_PARENT, \
+												GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, \
+												GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, \
+												NULL );
+
+	dlg.name	= "upload";
+	dlg.option	= LIB3270_FT_OPTION_SEND;
+	add_file_fields(G_OBJECT(action),&dlg);
+	add_transfer_options(G_OBJECT(action),&dlg);
+
+	{
+
+		static const struct ftmask recfm[]	=
+		{
+			{	LIB3270_FT_RECORD_FORMAT_DEFAULT, 		LIB3270_FT_RECORD_FORMAT_MASK,		"default", 		N_( "Default" 	)	},
+			{	LIB3270_FT_RECORD_FORMAT_FIXED,			LIB3270_FT_RECORD_FORMAT_MASK,		"fixed", 		N_( "Fixed" 	)	},
+			{	LIB3270_FT_RECORD_FORMAT_VARIABLE,		LIB3270_FT_RECORD_FORMAT_MASK,		"variable", 	N_( "Variable" 	)	},
+			{	LIB3270_FT_RECORD_FORMAT_UNDEFINED,		LIB3270_FT_RECORD_FORMAT_MASK,		"undefined", 	N_( "Undefined" )	},
+		};
+
+		static const struct ftmask units[]	=
+		{
+			{	LIB3270_FT_ALLOCATION_UNITS_DEFAULT,	LIB3270_FT_ALLOCATION_UNITS_MASK,	"default", 		N_( "Default" 	)	},
+			{	LIB3270_FT_ALLOCATION_UNITS_TRACKS,		LIB3270_FT_ALLOCATION_UNITS_MASK,	"tracks", 		N_( "Tracks" 	)	},
+			{	LIB3270_FT_ALLOCATION_UNITS_CYLINDERS,	LIB3270_FT_ALLOCATION_UNITS_MASK,	"cilinders",	N_( "Cylinders"	)	},
+			{	LIB3270_FT_ALLOCATION_UNITS_AVBLOCK,	LIB3270_FT_ALLOCATION_UNITS_MASK,	"avblock", 		N_( "Avblock" 	)	},
+		};
+
+		static const struct _fdesc
+		{
+			const gchar 			* title;
+			const gchar 			* name;
+			const struct ftmask 	* option;
+		} fdesk[] =
+		{
+			{ N_( "Record format" ), 			"recordformat",		recfm	},
+			{ N_( "Space allocation units" ), 	"allocationunits",	units	}
+		};
+
+		GtkWidget *box = gtk_hbox_new(TRUE,2);
+		int f;
+
+		for(f=0;f<2;f++)
+		{
+			GtkWidget	* frame 	= gtk_frame_new(gettext(fdesk[f].title));
+			GtkWidget	* vbox 		= gtk_vbox_new(TRUE,2);
+			GSList		* group		= NULL;
+			const gchar	* attr		= g_object_get_data(G_OBJECT(action),fdesk[f].name);
+			gchar 		* setup;
+			int 		  p;
+
+			if(attr)
+				setup = g_strdup(attr);
+			else
+				setup = get_string_from_config(dlg.name,fdesk[f].name,fdesk[f].option[0].name);
+
+			for(p=0;p<4;p++)
+			{
+				GtkWidget *widget = gtk_radio_button_new_with_label(group,gettext(fdesk[f].option[p].label));
+				g_object_set_data(G_OBJECT(widget),"dlg",(gpointer) &dlg);
+				g_object_set_data(G_OBJECT(widget),"setupname",(gpointer) fdesk[f].name);
+
+				g_signal_connect(G_OBJECT(widget),"toggled", G_CALLBACK(toggle_format),(gpointer) &fdesk[f].option[p]);
+
+				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),!g_strcasecmp(fdesk[f].option[p].name,setup));
+				group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(widget));
+				gtk_box_pack_start(GTK_BOX(vbox),widget,TRUE,TRUE,0);
+			}
+
+			g_free(setup);
+
+			gtk_container_add(GTK_CONTAINER(frame),GTK_WIDGET(vbox));
+			gtk_box_pack_start(GTK_BOX(box),frame,TRUE,TRUE,2);
+		}
+
+
+
+
+		gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dlg.dialog))),box,TRUE,TRUE,2);
+	}
+
+
+
+	{
+		// Add dft option
+		GtkWidget *hbox 	= gtk_hbox_new(FALSE,2);
+		GtkWidget *label	= NULL;
+
+		setup_dft(G_OBJECT(action),&dlg,&label);
+
+		gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,FALSE,0);
+		gtk_box_pack_start(GTK_BOX(hbox),GTK_WIDGET(dlg.dft),FALSE,FALSE,0);
+		gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dlg.dialog))),hbox,FALSE,FALSE,2);
+	}
+
+	run_ft_dialog(widget,&dlg);
+
+	gtk_widget_destroy(dlg.dialog);
+
+
 }
 
 
