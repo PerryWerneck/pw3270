@@ -44,6 +44,7 @@
  	GtkWidget			* dialog;
  	GtkEntry			* file[2];
  	GtkEntry			* parm[5];
+	GtkWidget			* ready;
  };
 
  struct ftoption
@@ -81,10 +82,14 @@ static void error_dialog(GtkWidget *widget, const gchar *title, const gchar *msg
 	gtk_widget_destroy(popup);
 }
 
-static void begin_ft_session(GtkAction *action, GtkWidget *widget, LIB3270_FT_OPTION opt)
+static gchar * get_attribute(GObject *action, struct ftdialog *dlg, const gchar *name)
 {
-	// Create file-transfer options dialog
+	gchar *val = g_object_get_data(action,name);
 
+	if(val)
+		return g_strdup(val);
+
+	return get_string_from_config(dlg->name,name,"");
 }
 
 static void browse_file(GtkButton *button,struct ftdialog *dlg)
@@ -117,6 +122,38 @@ static void browse_file(GtkButton *button,struct ftdialog *dlg)
 
 }
 
+static gboolean is_dialog_ok(GtkEditable *editable, struct ftdialog *dlg)
+{
+	const gchar *local  = gtk_entry_get_text(GTK_ENTRY(dlg->file[0]));
+	const gchar *remote = gtk_entry_get_text(GTK_ENTRY(dlg->file[1]));
+	int			 f;
+
+	if(!(*local && *remote))
+		return FALSE;
+
+	if( (dlg->option&LIB3270_FT_OPTION_RECEIVE) == 0 && !g_file_test(local,G_FILE_TEST_EXISTS))
+		return FALSE;
+
+	for(f=0;f<5;f++)
+	{
+		const gchar *val = gtk_entry_get_text(GTK_ENTRY(dlg->parm[f]));
+
+		while(*val)
+		{
+			if(*val < '0' || *val > '9')
+				return FALSE;
+			val++;
+		}
+	}
+
+	return TRUE;
+}
+
+static void check_entry(GtkEditable *editable, struct ftdialog *dlg)
+{
+	gtk_widget_set_sensitive(dlg->ready,is_dialog_ok(editable,dlg));
+}
+
 static void add_file_fields(GObject *action, struct ftdialog *dlg)
 {
 	static const gchar	* label[]	= { N_( "_Local file name:" ), N_( "_Host file name:" ) };
@@ -129,7 +166,7 @@ static void add_file_fields(GObject *action, struct ftdialog *dlg)
 
 	for(f=0;f<2;f++)
 	{
-		const gchar	*val;
+		gchar	*val;
 
 		widget = gtk_label_new_with_mnemonic(gettext(label[f]));
 
@@ -137,21 +174,13 @@ static void add_file_fields(GObject *action, struct ftdialog *dlg)
 		gtk_table_attach(GTK_TABLE(table),widget,0,1,f,f+1,GTK_FILL,GTK_FILL,2,2);
 
 		dlg->file[f] = GTK_ENTRY(gtk_entry_new());
+		g_signal_connect(G_OBJECT(dlg->file[f]),"changed",G_CALLBACK(check_entry),dlg);
 
 		gtk_widget_set_name(GTK_WIDGET(dlg->file[f]),attr[f]);
 
-		val = g_object_get_data(action,attr[f]);
-
-		if(val)
-		{
-			gtk_entry_set_text(dlg->file[f],val);
-		}
-		else
-		{
-			gchar *name =  get_string_from_config(dlg->name,attr[f],"");
-			gtk_entry_set_text(dlg->file[f],name);
-			g_free(name);
-		}
+		val = get_attribute(action,dlg,attr[f]);
+		gtk_entry_set_text(dlg->file[f],val);
+		g_free(val);
 
 		gtk_entry_set_width_chars(dlg->file[f],40);
 
@@ -266,18 +295,10 @@ static gboolean run_ft_dialog(GObject *action, GtkWidget *widget, struct ftdialo
 	{
 		if(dlg->parm[f])
 		{
-			const gchar *name = gtk_widget_get_name(GTK_WIDGET(dlg->parm[f]));
-			const gchar *attr = g_object_get_data(action,name);
-			if(attr)
-			{
-				gtk_entry_set_text(dlg->parm[f],attr);
-			}
-			else
-			{
-				gchar *ptr = get_string_from_config(dlg->name,name,"");
-				gtk_entry_set_text(dlg->parm[f],ptr);
-				g_free(ptr);
-			}
+			gchar *val = get_attribute(action,dlg,gtk_widget_get_name(GTK_WIDGET(dlg->parm[f])));
+			gtk_entry_set_text(dlg->parm[f],val);
+			g_free(val);
+			g_signal_connect(G_OBJECT(dlg->parm[f]),"changed",G_CALLBACK(check_entry),dlg);
 		}
 	}
 
@@ -311,8 +332,6 @@ static gboolean run_ft_dialog(GObject *action, GtkWidget *widget, struct ftdialo
 							parm[4],	// dft
 							&msg );
 
-	trace("%s ft=%p msg=%p",__FUNCTION__,ft,&msg);
-
 	if(msg)
 	{
 		GtkWidget *popup = gtk_message_dialog_new_with_markup(
@@ -332,8 +351,23 @@ static gboolean run_ft_dialog(GObject *action, GtkWidget *widget, struct ftdialo
 
 	}
 
-	return ft != NULL;
+	if(!ft)
+		return FALSE;
+
+	return TRUE;
 }
+
+static void add_buttons(struct ftdialog *dlg)
+{
+	dlg->ready = gtk_dialog_add_button(GTK_DIALOG(dlg->dialog),
+												dlg->option & LIB3270_FT_OPTION_RECEIVE != 0 ? GTK_STOCK_SAVE : GTK_STOCK_OPEN,
+												GTK_RESPONSE_ACCEPT);
+
+	gtk_widget_set_sensitive(dlg->ready,FALSE);
+
+	gtk_dialog_add_button(GTK_DIALOG(dlg->dialog), GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT);
+}
+
 
 void download_action(GtkAction *action, GtkWidget *widget)
 {
@@ -350,12 +384,12 @@ void download_action(GtkAction *action, GtkWidget *widget)
 	dlg.dialog = gtk_dialog_new_with_buttons(	_( "Receive file from host" ), \
 												GTK_WINDOW(gtk_widget_get_toplevel(widget)),
 												GTK_DIALOG_DESTROY_WITH_PARENT, \
-												GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, \
-												GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, \
 												NULL );
 
 	dlg.name	= gtk_action_get_name(action);
 	dlg.option	= LIB3270_FT_OPTION_RECEIVE;
+
+	add_buttons(&dlg);
 	add_file_fields(G_OBJECT(action),&dlg);
 	add_transfer_options(G_OBJECT(action),&dlg);
 
@@ -410,12 +444,12 @@ void upload_action(GtkAction *action, GtkWidget *widget)
 	dlg.dialog = gtk_dialog_new_with_buttons(	_( "Send file to host" ), \
 												GTK_WINDOW(gtk_widget_get_toplevel(widget)),
 												GTK_DIALOG_DESTROY_WITH_PARENT, \
-												GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, \
-												GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, \
 												NULL );
 
 	dlg.name	= gtk_action_get_name(action);
 	dlg.option	= LIB3270_FT_OPTION_SEND;
+
+	add_buttons(&dlg);
 	add_file_fields(G_OBJECT(action),&dlg);
 	add_transfer_options(G_OBJECT(action),&dlg);
 
@@ -456,14 +490,8 @@ void upload_action(GtkAction *action, GtkWidget *widget)
 			GtkWidget	* frame 	= gtk_frame_new(gettext(fdesk[f].title));
 			GtkWidget	* vbox 		= gtk_vbox_new(TRUE,2);
 			GSList		* group		= NULL;
-			const gchar	* attr		= g_object_get_data(G_OBJECT(action),fdesk[f].name);
-			gchar 		* setup;
+			gchar 		* setup		= get_attribute(G_OBJECT(action),&dlg,fdesk[f].name);
 			int 		  p;
-
-			if(attr)
-				setup = g_strdup(attr);
-			else
-				setup = get_string_from_config(dlg.name,fdesk[f].name,fdesk[f].option[0].name);
 
 			for(p=0;p<4;p++)
 			{
