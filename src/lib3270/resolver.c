@@ -86,7 +86,7 @@ struct parms
  */
 static int cresolve_host_and_port(H3270 *h, struct parms *p)
 {
-#ifdef HAVE_GETADDRINFO
+#if defined( HAVE_GETADDRINFO ) || defined(WIN32)
 
 	struct addrinfo	 hints, *res;
 	int		 rc;
@@ -136,15 +136,15 @@ static int cresolve_host_and_port(H3270 *h, struct parms *p)
 	unsigned short	 port;
 	unsigned long	 lport;
 	char		*ptr;
-	struct sockaddr_in *sin = (struct sockaddr_in *)sa;
+	struct sockaddr_in *sin = (struct sockaddr_in *) p->sa;
 
 	/* Get the port number. */
-	lport = strtoul(portname, &ptr, 0);
-	if (ptr == portname || *ptr != '\0' || lport == 0L || lport & ~0xffff)
+	lport = strtoul(p->portname, &ptr, 0);
+	if (ptr == p->portname || *ptr != '\0' || lport == 0L || lport & ~0xffff)
 	{
-		if (!(sp = getservbyname(portname, "tcp")))
+		if (!(sp = getservbyname(p->portname, "tcp")))
 		{
-			snprintf(p->errmsg, p->em_len,_( "Unknown port number or service: %s" ),portname);
+			snprintf(p->errmsg, p->em_len,_( "Unknown port number or service: %s" ),p->portname);
 			return -1;
 		}
 		port = sp->s_port;
@@ -153,17 +153,17 @@ static int cresolve_host_and_port(H3270 *h, struct parms *p)
 	{
 		port = htons((unsigned short)lport);
 	}
-	*pport = ntohs(port);
+	*p->pport = ntohs(port);
 
 	/* Use gethostbyname() to resolve the hostname. */
-	hp = gethostbyname(host);
+	hp = gethostbyname(p->host);
 	if (hp == (struct hostent *) 0)
 	{
 		sin->sin_family = AF_INET;
-		sin->sin_addr.s_addr = inet_addr(host);
+		sin->sin_addr.s_addr = inet_addr(p->host);
 		if (sin->sin_addr.s_addr == (unsigned long)-1)
 		{
-			snprintf(p->errmsg, p->em_len, _( "Unknown host:\n%s" ), host);
+			snprintf(p->errmsg, p->em_len, _( "Unknown host:\n%s" ), p->host);
 			return -2;
 		}
 	}
@@ -173,7 +173,7 @@ static int cresolve_host_and_port(H3270 *h, struct parms *p)
 		(void) memmove(&sin->sin_addr, hp->h_addr, hp->h_length);
 	}
 	sin->sin_port = port;
-	*sa_len = sizeof(struct sockaddr_in);
+	*p->sa_len = sizeof(struct sockaddr_in);
 
 #endif
 
