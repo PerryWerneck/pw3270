@@ -43,7 +43,7 @@
  	const gchar			* name;
  	GtkWidget			* dialog;
  	GtkEntry			* file[2];
- 	GtkEntry			* dft;
+ 	GtkEntry			* parm[5];
  };
 
  struct ftoption
@@ -124,6 +124,8 @@ static void add_file_fields(GObject *action, struct ftdialog *dlg)
 	GtkTable			* table		= GTK_TABLE(gtk_table_new(2,3,FALSE));
 	GtkWidget			* widget;
 	int					  f;
+
+	gtk_container_set_border_width(GTK_CONTAINER(table),2);
 
 	for(f=0;f<2;f++)
 	{
@@ -242,45 +244,71 @@ static void setup_dft(GObject *action, struct ftdialog *dlg, GtkWidget **label)
 
 	gtk_misc_set_alignment(GTK_MISC(*label),0,.5);
 
-	dlg->dft = GTK_ENTRY(gtk_entry_new());
-	gtk_entry_set_max_length(dlg->dft,10);
-	gtk_entry_set_width_chars(dlg->dft,10);
+	dlg->parm[4] = GTK_ENTRY(gtk_entry_new());
+	gtk_widget_set_name(GTK_WIDGET(dlg->parm[4]),"dftsize");
+	gtk_entry_set_max_length(dlg->parm[4],10);
+	gtk_entry_set_width_chars(dlg->parm[4],10);
 
-	gtk_label_set_mnemonic_widget(GTK_LABEL(*label),GTK_WIDGET(dlg->dft));
-
-	if(val)
-	{
-		gtk_entry_set_text(dlg->dft,val);
-	}
-	else
-	{
-		val = get_string_from_config(dlg->name,"dft","");
-		gtk_entry_set_text(dlg->dft,val);
-		g_free(val);
-	}
-
+	gtk_label_set_mnemonic_widget(GTK_LABEL(*label),GTK_WIDGET(dlg->parm[4]));
 
 }
 
-static gboolean run_ft_dialog(GtkWidget *widget, struct ftdialog *dlg)
+static gboolean run_ft_dialog(GObject *action, GtkWidget *widget, struct ftdialog *dlg)
 {
 	H3270FT		* ft			= NULL;
 	const char	* msg			= NULL;
+	int 		  f;
+	int			  parm[G_N_ELEMENTS(dlg->parm)];
 
 	gtk_widget_show_all(dlg->dialog);
 
+	for(f=0;f<G_N_ELEMENTS(dlg->parm);f++)
+	{
+		if(dlg->parm[f])
+		{
+			const gchar *name = gtk_widget_get_name(GTK_WIDGET(dlg->parm[f]));
+			const gchar *attr = g_object_get_data(action,name);
+			if(attr)
+			{
+				gtk_entry_set_text(dlg->parm[f],attr);
+			}
+			else
+			{
+				gchar *ptr = get_string_from_config(dlg->name,name,"");
+				gtk_entry_set_text(dlg->parm[f],ptr);
+				g_free(ptr);
+			}
+		}
+	}
+
 	if(gtk_dialog_run(GTK_DIALOG(dlg->dialog)) != GTK_RESPONSE_ACCEPT)
 		return FALSE;
+
+	for(f=0;f<G_N_ELEMENTS(dlg->parm);f++)
+	{
+		if(dlg->parm[f])
+		{
+			parm[f] = atoi(gtk_entry_get_text(dlg->parm[f]));
+			set_string_to_config(dlg->name,gtk_widget_get_name(GTK_WIDGET(dlg->parm[f])),"%d",parm[f]);
+		}
+		else
+		{
+			parm[f] = 0;
+		}
+	}
+
+	set_string_to_config(dlg->name,"local","%s",gtk_entry_get_text(dlg->file[0]));
+	set_string_to_config(dlg->name,"remote","%s",gtk_entry_get_text(dlg->file[1]));
 
 	ft = lib3270_ft_start(	v3270_get_session(widget),
 							dlg->option,
 							gtk_entry_get_text(dlg->file[0]),
 							gtk_entry_get_text(dlg->file[1]),
-							0,
-							0,
-							0,
-							0,
-							atoi(gtk_entry_get_text(dlg->dft)),
+							parm[0],	// lrecl
+							parm[2],	// blksize
+							parm[1],	// primspace
+							parm[3],	// secspace
+							parm[4],	// dft
 							&msg );
 
 	trace("%s ft=%p msg=%p",__FUNCTION__,ft,&msg);
@@ -326,7 +354,7 @@ void download_action(GtkAction *action, GtkWidget *widget)
 												GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, \
 												NULL );
 
-	dlg.name	= "download";
+	dlg.name	= gtk_action_get_name(action);
 	dlg.option	= LIB3270_FT_OPTION_RECEIVE;
 	add_file_fields(G_OBJECT(action),&dlg);
 	add_transfer_options(G_OBJECT(action),&dlg);
@@ -336,14 +364,16 @@ void download_action(GtkAction *action, GtkWidget *widget)
 		GtkWidget *hbox 	= gtk_hbox_new(FALSE,2);
 		GtkWidget *label	= NULL;
 
+		gtk_container_set_border_width(GTK_CONTAINER(hbox),4);
+
 		setup_dft(G_OBJECT(action),&dlg,&label);
 
 		gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,FALSE,0);
-		gtk_box_pack_start(GTK_BOX(hbox),GTK_WIDGET(dlg.dft),FALSE,FALSE,0);
+		gtk_box_pack_start(GTK_BOX(hbox),GTK_WIDGET(dlg.parm[4]),FALSE,FALSE,0);
 		gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dlg.dialog))),hbox,FALSE,FALSE,2);
 	}
 
-	run_ft_dialog(widget,&dlg);
+	run_ft_dialog(G_OBJECT(action),widget,&dlg);
 
 	gtk_widget_destroy(dlg.dialog);
 
@@ -384,7 +414,7 @@ void upload_action(GtkAction *action, GtkWidget *widget)
 												GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, \
 												NULL );
 
-	dlg.name	= "upload";
+	dlg.name	= gtk_action_get_name(action);
 	dlg.option	= LIB3270_FT_OPTION_SEND;
 	add_file_fields(G_OBJECT(action),&dlg);
 	add_transfer_options(G_OBJECT(action),&dlg);
@@ -454,27 +484,60 @@ void upload_action(GtkAction *action, GtkWidget *widget)
 			gtk_box_pack_start(GTK_BOX(box),frame,TRUE,TRUE,2);
 		}
 
-
-
-
 		gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dlg.dialog))),box,TRUE,TRUE,2);
 	}
 
-
-
 	{
-		// Add dft option
-		GtkWidget *hbox 	= gtk_hbox_new(FALSE,2);
-		GtkWidget *label	= NULL;
+		// Add options
+		static const struct _fld
+		{
+			const gchar *name;
+			const gchar *label;
+		}
+		fld[] = {	{ "lrecl", 			N_( "LRECL:"			)	},
+					{ "primary",		N_( "Primary space:"	)	},
+					{ "blksize",		N_( "BLKSIZE:"			)	},
+					{ "secondary",		N_( "Secondary space:"	)	},
+					{ "dftsize",		N_( "DFT B_uffer size:"	)	}
+				};
 
-		setup_dft(G_OBJECT(action),&dlg,&label);
+		GtkTable	* table = GTK_TABLE(gtk_table_new(2,2,FALSE));
 
-		gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,FALSE,0);
-		gtk_box_pack_start(GTK_BOX(hbox),GTK_WIDGET(dlg.dft),FALSE,FALSE,0);
-		gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dlg.dialog))),hbox,FALSE,FALSE,2);
+		int 		  row, col, f;
+
+		gtk_container_set_border_width(GTK_CONTAINER(table),2);
+
+		row=0;
+		col=0;
+		for(f=0;f < 5;f++)
+		{
+			GtkWidget *label = gtk_label_new_with_mnemonic(gettext(fld[f].label));
+
+			gtk_misc_set_alignment(GTK_MISC(label),0,.5);
+			dlg.parm[f] = GTK_ENTRY(gtk_entry_new());
+
+			gtk_widget_set_name(GTK_WIDGET(dlg.parm[f]),fld[f].name);
+
+			gtk_label_set_mnemonic_widget(GTK_LABEL(label),GTK_WIDGET(dlg.parm[f]));
+
+			gtk_table_attach(table,label,col,col+1,row,row+1,GTK_EXPAND|GTK_SHRINK|GTK_FILL,GTK_EXPAND|GTK_SHRINK|GTK_FILL,2,2);
+			gtk_table_attach(table,GTK_WIDGET(dlg.parm[f]),col+1,col+2,row,row+1,GTK_EXPAND|GTK_SHRINK|GTK_FILL,GTK_EXPAND|GTK_SHRINK|GTK_FILL,2,2);
+
+			col += 2;
+			if(col++ > 3)
+			{
+				row++;
+				col=0;
+			}
+
+		}
+
+		gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dlg.dialog))),GTK_WIDGET(table),TRUE,TRUE,2);
+
+
 	}
 
-	run_ft_dialog(widget,&dlg);
+	run_ft_dialog(G_OBJECT(action),widget,&dlg);
 
 	gtk_widget_destroy(dlg.dialog);
 
