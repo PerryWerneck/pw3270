@@ -26,5 +26,10 @@
 # kraucer@bb.com.br			(Kraucer Fernandes Mazuco)
 #
 
-V3270_SRC=marshal.c widget.c oia.c iocallback.c keyboard.c draw.c mouse.c selection.c accessible.c
+SOURCES = XtGlue.c init.c actions.c ansi.c charset.c ctlr.c \
+		ft.c ft_cut.c ft_dft.c glue.c host.c kybd.c \
+		proxy.c resources.c rpq.c screen.c see.c \
+		sf.c tables.c telnet.c toggles.c trace_ds.c utf8.c util.c \
+		xio.c resolver.c log.c paste.c macros.c fallbacks.c version.c \
+		selection.c bounds.c
 

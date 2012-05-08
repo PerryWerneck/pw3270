@@ -55,6 +55,11 @@
 /*
  * gettext stuff
  */
+#ifdef ANDROID
+	#undef HAVE_LIBINTL
+	#undef HAVE_LIBSSL
+#endif
+
 #ifdef HAVE_LIBINTL
 	#include <libintl.h>
 	#define _( x ) 			gettext(x)
