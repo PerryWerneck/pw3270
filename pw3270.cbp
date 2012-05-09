@@ -220,6 +220,7 @@
 		</Unit>
 		<Unit filename="src/lib3270/xioc.h" />
 		<Unit filename="src/lib3270/xl.h" />
+		<Unit filename="src/pw3270/Makefile.in" />
 		<Unit filename="src/pw3270/actions.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -320,6 +321,7 @@
 		<Unit filename="src/pw3270/window.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/tools/Makefile.in" />
 		<Unit filename="ui/00default.xml" />
 		<Unit filename="ui/99debug.xml" />
 		<Extensions>

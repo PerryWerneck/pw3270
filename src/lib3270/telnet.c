@@ -37,29 +37,40 @@
  *		the given IBM host.
  */
 
+#include <lib3270/config.h>
+#if defined(HAVE_LIBSSL)
+	#include <openssl/ssl.h>
+	#include <openssl/err.h>
+#endif
+
 #include "globals.h"
 #include <errno.h>
 
-#if defined(_WIN32) /*[*/
-#include <winsock2.h>
-#include <ws2tcpip.h>
-#else /*][*/
-#include <sys/socket.h>
-#include <sys/ioctl.h>
-#include <netinet/in.h>
-#endif /*]*/
+#if defined(_WIN32)
+	#include <winsock2.h>
+	#include <ws2tcpip.h>
+#else
+	#include <sys/socket.h>
+	#include <sys/ioctl.h>
+	#include <netinet/in.h>
+#endif
+
 #define TELCMDS 1
 #define TELOPTS 1
 #include "arpa_telnet.h"
-#if !defined(_WIN32) /*[*/
-#include <arpa/inet.h>
-#endif /*]*/
+
+#if !defined(_WIN32)
+	#include <arpa/inet.h>
+#endif
+
 #include <errno.h>
 #include <fcntl.h>
-#if !defined(_WIN32) /*[*/
-#include <netdb.h>
-#endif /*]*/
-#include <stdarg.h>
+
+#if !defined(_WIN32)
+	#include <netdb.h>
+#endif
+
+// #include <stdarg.h>
 
 #include "tn3270e.h"
 #include "3270ds.h"
@@ -2593,11 +2604,12 @@ check_linemode(Boolean init)
 	 */
 	linemode = !hisopts[TELOPT_ECHO] /* && !hisopts[TELOPT_SGA] */;
 
-	if (init || linemode != wasline) {
+	if (init || linemode != wasline)
+	{
 		st_changed(ST_LINE_MODE, linemode);
-		if (!init) {
-			trace_dsn("Operating in %s mode.\n",
-			    linemode ? "line" : "character-at-a-time");
+		if (!init)
+		{
+			trace_dsn("Operating in %s mode.\n",linemode ? "line" : "character-at-a-time");
 		}
 #if defined(X3270_ANSI) /*[*/
 		if (IN_ANSI && linemode)
@@ -3375,7 +3387,7 @@ static void ssl_info_callback(INFO_CONST SSL *s, int where, int ret)
 		lib3270_write_log(NULL,"SSL","Current state is \"%s\"",SSL_state_string_long(s));
 	}
 
-	trace("%s: where=%04x ret=%d",__FUNCTION__,where,ret);
+	trace("%s: state=%04x where=%04x ret=%d",__FUNCTION__,SSL_state(s),where,ret);
 
 #ifdef DEBUG
 	if(where & SSL_CB_EXIT)

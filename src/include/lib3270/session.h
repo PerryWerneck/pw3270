@@ -36,11 +36,6 @@
 	#define LIB3270_LUNAME_LENGTH			16
 	#define LIB3270_FULL_MODEL_NAME_LENGTH	13
 
-	#if defined(HAVE_LIBSSL)
-		#include <openssl/ssl.h>
-		#include <openssl/err.h>
-	#endif
-
 	/**  extended attributes */
 	struct ea
 	{
@@ -65,6 +60,10 @@
 		char value;				/**< toggle value */
 		void (*upcall)(H3270 *, struct lib3270_toggle *, LIB3270_TOGGLE_TYPE); /**< change value */
 	};
+
+#ifndef HEADER_SSL_H
+	#define SSL void
+#endif // !HEADER_SSL_H
 
 	struct _h3270
 	{
@@ -157,10 +156,9 @@
 		char					  reading;
 		char					  excepting;
 
-#if defined(HAVE_LIBSSL) /*[*/
+		// SSL Data (Always defined to mantain the same structure size
 		unsigned long 			  last_ssl_error;
 		SSL 					* ssl_con;
-#endif
 
 		// State change callbacks.
 		struct lib3270_state_callback *st_callbacks[LIB3270_STATE_USER];
