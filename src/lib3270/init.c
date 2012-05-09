@@ -118,6 +118,10 @@ static void message(H3270 *session, LIB3270_NOTIFY id , const char *title, const
 	lib3270_write_log(session,"%s",text);
 }
 
+static void update_ssl(H3270 *session, LIB3270_SSL_STATE state)
+{
+}
+
 static void lib3270_session_init(H3270 *hSession, const char *model)
 {
 	int 	ovc, ovr;
@@ -144,6 +148,7 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 	hSession->update_selection	= update_selection;
 	hSession->cursor 			= set_cursor;
 	hSession->message			= message;
+	hSession->update_ssl		= update_ssl;
 
 	hSession->sock = -1;
 	hSession->model_num = -1;

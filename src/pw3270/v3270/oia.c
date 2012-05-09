@@ -306,18 +306,10 @@ void v3270_draw_ssl_status(cairo_t *cr, H3270 *host, struct v3270_metrics *metri
 {
 	cairo_surface_t		* icon;
 	double				  sz	= rect->width < rect->height ? rect->width : rect->height;
-	int					  idx	= lib3270_get_ssl_state(host) ? 1 : 0;
-
-	static const struct
-	{
-		unsigned short	  width;
-		unsigned short	  height;
-		unsigned char 	* bits;
-	} bitmap[] =
-	{
-		{ unlocked_width,	unlocked_height,	unlocked_bits	},
-		{ locked_width,		locked_height,		locked_bits 	},
-	};
+	int					  idx	= 0; // lib3270_get_ssl_state(host) ? 1 : 0;
+	unsigned short		  width;
+	unsigned short		  height;
+	unsigned char	 	* bits;
 
 #ifdef DEBUG
 	cairo_set_source_rgb(cr,0.1,0.1,0.1);
@@ -330,15 +322,42 @@ void v3270_draw_ssl_status(cairo_t *cr, H3270 *host, struct v3270_metrics *metri
 	cairo_rectangle(cr, 0, 0, rect->width, rect->height);
 	cairo_fill(cr);
 
-	gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_FOREGROUND);
+	switch(lib3270_get_secure(host))
+	{
+	case LIB3270_SSL_UNSECURE:	/**< No secure connection */
+		gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_FOREGROUND);
+		width   = unlocked_width;
+		height  = unlocked_height;
+		bits	= (unsigned char *) unlocked_bits;
+		break;
 
-	icon = cairo_image_surface_create_for_data(	(unsigned char *) bitmap[idx].bits,
+	case LIB3270_SSL_SECURE:	/**< Connection secure */
+		gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_FOREGROUND);
+		width   = locked_width;
+		height  = locked_height;
+		bits	= (unsigned char *) locked_bits;
+		break;
+
+	case LIB3270_SSL_NEGOTIATING:	/**< Negotiating SSL */
+		gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_STATUS_WARNING);
+		width   = locked_width;
+		height  = locked_height;
+		bits	= (unsigned char *) locked_bits;
+		break;
+
+	default:
+		return;
+
+	}
+
+
+	icon = cairo_image_surface_create_for_data(	bits,
 												CAIRO_FORMAT_A1,
-												bitmap[idx].width,bitmap[idx].height,
+												width,height,
 												cairo_format_stride_for_width(CAIRO_FORMAT_A1,locked_width));
 
-	cairo_scale(cr,	sz / ((double) bitmap[idx].width),
-					sz / ((double) bitmap[idx].height));
+	cairo_scale(cr,	sz / ((double) width),
+					sz / ((double) height));
 
 	cairo_mask_surface(cr,icon,(rect->width-sz)/2,(rect->height-sz)/2);
 
@@ -985,6 +1004,22 @@ void v3270_stop_timer(GtkWidget *widget)
 
 }
 
+void v3270_update_ssl(H3270 *session, LIB3270_SSL_STATE state)
+{
+	v3270 			* terminal = GTK_V3270(session->widget);
+	cairo_t			* cr;
+	GdkRectangle	* r;
+
+	if(!terminal->surface)
+		return;
+
+	cr = set_update_region(terminal,&r,V3270_OIA_SSL);
+	v3270_draw_ssl_status(cr,terminal->host,&terminal->metrics,terminal->color,r);
+	gtk_widget_queue_draw_area(GTK_WIDGET(terminal),r->x,r->y,r->width,r->height);
+	cairo_destroy(cr);
+
+}
+
 void v3270_update_oia(H3270 *session, LIB3270_FLAG id, unsigned char on)
 {
 	cairo_t *cr;
@@ -1011,12 +1046,14 @@ void v3270_update_oia(H3270 *session, LIB3270_FLAG id, unsigned char on)
 		cairo_destroy(cr);
 		break;
 
+/*
 	case LIB3270_FLAG_SECURE:
 		cr = set_update_region(terminal,&r,V3270_OIA_SSL);
 		v3270_draw_ssl_status(cr,terminal->host,&terminal->metrics,terminal->color,r);
 		gtk_widget_queue_draw_area(GTK_WIDGET(terminal),r->x,r->y,r->width,r->height);
 		cairo_destroy(cr);
 		break;
+*/
 
 	case LIB3270_FLAG_TYPEAHEAD:
 		update_text_field(terminal,on,V3270_OIA_TYPEAHEAD,"T");

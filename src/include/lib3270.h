@@ -138,7 +138,7 @@
 	{
 		LIB3270_FLAG_BOXSOLID,	/**< System available */
 		LIB3270_FLAG_UNDERA,	/**< Control Unit STATUS */
-		LIB3270_FLAG_SECURE,	/**< Security status */
+//		LIB3270_FLAG_SECURE,	/**< Security status */
 		LIB3270_FLAG_TYPEAHEAD,
 		LIB3270_FLAG_PRINTER,
 		LIB3270_FLAG_REVERSE,
@@ -211,6 +211,20 @@
 		LIB3270_CONNECTED_TN3270E		/**< connected in TN3270E mode, 3270 mode */
 	} LIB3270_CSTATE;
 
+
+	/**
+	 * SSL state
+	 *
+	 */
+	typedef enum lib3270_ssl_state
+	{
+		LIB3270_SSL_UNSECURE,			/**< No secure connection */
+		LIB3270_SSL_SECURE,				/**< Connection secure */
+		LIB3270_SSL_NEGOTIATING,		/**< Negotiating SSL */
+		LIB3270_SSL_UNDEFINED			/**< Undefined */
+	} LIB3270_SSL_STATE;
+
+	#define LIB3270_SSL_FAILED LIB3270_SSL_UNSECURE
 
 	/**
 	 * Notification message types.
@@ -610,6 +624,9 @@
 	LIB3270_EXPORT int lib3270_in_sscp(H3270 *h);
 	LIB3270_EXPORT int lib3270_in_tn3270e(H3270 *h);
 	LIB3270_EXPORT int lib3270_in_e(H3270 *h);
+
+	LIB3270_EXPORT LIB3270_SSL_STATE lib3270_get_secure(H3270 *session);
+
 
 	/**
 	 * Call non gui function.

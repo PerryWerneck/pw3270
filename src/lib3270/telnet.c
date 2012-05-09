@@ -351,8 +351,19 @@ static void output_possible(H3270 *session);
 #endif /*]*/
 
 
+/*--[ Implement ]------------------------------------------------------------------------------------*/
 
-
+void set_ssl_state(H3270 *session, LIB3270_SSL_STATE state)
+{
+	if(state == session->secure)
+		return;
+
+	trace_dsn("SSL state changes to %d",(int) state);
+	trace("SSL state changes to %d",(int) state);
+
+	session->update_ssl(session,session->secure = state);
+}
+
 #if defined(_WIN32) /*[*/
 void sockstart(H3270 *session)
 {
@@ -476,6 +487,8 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 #endif /*]*/
 
 #define close_fail { (void) SOCK_CLOSE(session->sock); session->sock = -1; return -1; }
+
+	set_ssl_state(session,LIB3270_SSL_UNSECURE);
 
 #if defined(_WIN32)
 	sockstart(session);
@@ -763,44 +776,49 @@ static void net_connected(H3270 *session)
 
 #if defined(HAVE_LIBSSL) /*[*/
 	/* Set up SSL. */
-	if(session->ssl_host && !session->secure_connection)
+	if(session->ssl_con && session->secure == LIB3270_SSL_UNDEFINED)
 	{
 		int rc;
+
+		set_ssl_state(session,LIB3270_SSL_NEGOTIATING);
 
 		if (SSL_set_fd(session->ssl_con, session->sock) != 1)
 		{
 			trace_dsn("Can't set fd!\n");
 			popup_system_error(&h3270,_( "Connection failed" ), _( "Can't set SSL socket file descriptor" ), "%s", SSL_state_string_long(session->ssl_con));
+			set_ssl_state(session,LIB3270_SSL_UNSECURE);
 		}
-
-		non_blocking(False);
-		rc = SSL_connect(session->ssl_con);
-
-		if(rc != 1)
+		else
 		{
-			unsigned long 	  e		= ERR_get_error();
-			const char  	* state	= SSL_state_string_long(session->ssl_con);
+			non_blocking(False);
+			rc = SSL_connect(session->ssl_con);
 
-			trace_dsn("TLS/SSL tunneled connection failed with error %ld, rc=%d and state=%s",e,rc,state);
-
-			host_disconnect(session,True);
-
-			if(e != session->last_ssl_error)
+			if(rc != 1)
 			{
-				session->message(	&h3270,
-									LIB3270_NOTIFY_ERROR,
-									_( "Connection failed" ),
-									_( "SSL negotiation failed" ),
-									state);
-				session->last_ssl_error = e;
+				unsigned long 	  e		= ERR_get_error();
+				const char  	* state	= SSL_state_string_long(session->ssl_con);
+
+				trace_dsn("TLS/SSL tunneled connection failed with error %ld, rc=%d and state=%s",e,rc,state);
+
+				host_disconnect(session,True);
+
+				if(e != session->last_ssl_error)
+				{
+					session->message(	&h3270,
+										LIB3270_NOTIFY_ERROR,
+										_( "Connection failed" ),
+										_( "SSL negotiation failed" ),
+										state);
+					session->last_ssl_error = e;
+				}
+				return;
+
 			}
-			return;
-
+			non_blocking(True);
 		}
-		non_blocking(True);
 
-		session->secure_connection = True;
-		trace_dsn("TLS/SSL tunneled connection complete. Connection is now secure.\n");
+//		session->secure_connection = True;
+//		trace_dsn("TLS/SSL tunneled connection complete. Connection is now secure.\n");
 
 		/* Tell everyone else again. */
 		host_connected(session);
@@ -897,18 +915,22 @@ static void output_possible(H3270 *session)
  */
 void net_disconnect(void)
 {
-#if defined(HAVE_LIBSSL) /*[*/
+#if defined(HAVE_LIBSSL)
 	if (h3270.ssl_con != NULL)
 	{
 		SSL_shutdown(h3270.ssl_con);
 		SSL_free(h3270.ssl_con);
 		h3270.ssl_con = NULL;
 	}
-	h3270.secure_connection = False;
-#endif /*]*/
+#endif
+
+	set_ssl_state(&h3270,LIB3270_SSL_UNSECURE);
+
 	if (CONNECTED)
 		(void) shutdown(h3270.sock, 2);
+
 	(void) SOCK_CLOSE(h3270.sock);
+
 	h3270.sock = -1;
 	trace_dsn("SENT disconnect\n");
 
@@ -3233,6 +3255,8 @@ static void ssl_init(H3270 *session)
 {
 	static SSL_CTX *ssl_ctx = NULL;
 
+	set_ssl_state(session,LIB3270_SSL_UNDEFINED);
+
 	if(ssl_ctx == NULL)
 	{
 		lib3270_write_log(session,"%s","Initializing SSL context");
@@ -3293,6 +3317,9 @@ static void client_info_callback(INFO_CONST SSL *s, int where, int ret)
 		break;
 
 	case SSL_CB_CONNECT_EXIT:
+
+		trace("%s: SSL_CB_CONNECT_EXIT",__FUNCTION__);
+
 		if (ret == 0)
 		{
 			trace_dsn("SSL_connect: failed in %s\n",SSL_state_string_long(s));
@@ -3349,6 +3376,15 @@ static void client_info_callback(INFO_CONST SSL *s, int where, int ret)
 
 	if(where & SSL_CB_ALERT)
 		lib3270_write_log(NULL,"SSL","ALERT: %s",SSL_alert_type_string_long(ret));
+
+	if(where & SSL_CB_HANDSHAKE_DONE)
+	{
+		trace("%s: SSL_CB_HANDSHAKE_DONE state=%04x",__FUNCTION__,SSL_state(s));
+		if(SSL_state(s) == 0x03)
+			set_ssl_state(&h3270,LIB3270_SSL_SECURE);
+		else
+			set_ssl_state(&h3270,LIB3270_SSL_UNSECURE);
+	}
 }
 
 /* Process a STARTTLS subnegotiation. */
@@ -3406,10 +3442,10 @@ static void continue_tls(unsigned char *sbbuf, int len)
 		return;
 	}
 
-	h3270.secure_connection = True;
+//	h3270.secure_connection = True;
 
 	/* Success. */
-	trace_dsn("TLS/SSL negotiated connection complete. Connection is now secure.\n");
+//	trace_dsn("TLS/SSL negotiated connection complete. Connection is now secure.\n");
 
 	/* Tell the world that we are (still) connected, now in secure mode. */
 	host_connected(&h3270);
@@ -3455,6 +3491,13 @@ net_proxy_port(void)
 	    	return NULL;
 }
 
+LIB3270_EXPORT LIB3270_SSL_STATE lib3270_get_secure(H3270 *session)
+{
+	CHECK_SESSION_HANDLE(session);
+	return session->secure;
+}
+
+/*
 LIB3270_EXPORT int lib3270_get_ssl_state(H3270 *h)
 {
 	CHECK_SESSION_HANDLE(h);
@@ -3465,6 +3508,7 @@ LIB3270_EXPORT int lib3270_get_ssl_state(H3270 *h)
 		return 0;
 #endif
 }
+*/
 
 /*
 int Get3270Socket(void)

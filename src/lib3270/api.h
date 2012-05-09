@@ -157,7 +157,7 @@
 
 		#define OIA_FLAG_BOXSOLID	LIB3270_FLAG_BOXSOLID
 		#define OIA_FLAG_UNDERA		LIB3270_FLAG_UNDERA
-		#define OIA_FLAG_SECURE		LIB3270_FLAG_SECURE
+//		#define OIA_FLAG_SECURE		LIB3270_FLAG_SECURE
 		#define OIA_FLAG_TYPEAHEAD	LIB3270_FLAG_TYPEAHEAD
 		#define OIA_FLAG_PRINTER	LIB3270_FLAG_PRINTER
 		#define OIA_FLAG_REVERSE	LIB3270_FLAG_REVERSE
@@ -356,7 +356,7 @@
 		LOCAL_EXTERN void Input_String(const unsigned char *str);
 		LOCAL_EXTERN void screen_size(int *rows, int *cols);
 
-		#define query_secure_connection(h) lib3270_get_ssl_state(h)
+//		#define query_secure_connection(h) lib3270_get_ssl_state(h)
 		#define lib3270_paste_string(str) lib3270_set_string(NULL,str)
 		#define get_3270_terminal_size(h,r,c) lib3270_get_screen_size(h,r,c)
 

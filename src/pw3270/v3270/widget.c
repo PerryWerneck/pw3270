@@ -769,6 +769,7 @@ static void v3270_init(v3270 *widget)
 	widget->host->changed			= changed;
 	widget->host->ctlr_done			= ctlr_done;
 	widget->host->message			= message;
+	widget->host->update_ssl		= v3270_update_ssl;
 
 	// Setup input method
 	widget->input_method 			= gtk_im_multicontext_new();

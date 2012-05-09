@@ -546,15 +546,19 @@ static void status_connect(H3270 *session, int connected, void *dunno)
 		else
 			id = LIB3270_STATUS_CONNECTED;
 
-#if defined(HAVE_LIBSSL) /*[*/
+/*
+#if defined(HAVE_LIBSSL)
 		set_status(session,OIA_FLAG_SECURE,session->secure_connection);
-#endif /*]*/
+#endif
+*/
 
 	}
 	else
 	{
 		set_status(session,OIA_FLAG_BOXSOLID,False);
+/*
 		set_status(session,OIA_FLAG_SECURE,False);
+*/
 
 		id = LIB3270_STATUS_DISCONNECTED;
 	}

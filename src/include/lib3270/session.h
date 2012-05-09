@@ -71,7 +71,7 @@
 		unsigned short 		  	  sz;					/**< Struct size */
 
 		// Connection info
-		int						  secure_connection;
+//		int						  secure_connection;
 		int   	 	  			  sock;					/**< Network socket */
 		int						  net_sock;
 		LIB3270_CSTATE			  cstate;				/**< Connection state */
@@ -80,6 +80,8 @@
 		int						  bgthread	: 1;	/**< Running on a background thread ? */
 		int					  	  selected	: 1;	/**< Has selected region? */
 		int						  rectsel	: 1;	/**< Selected region is a rectangle ? */
+
+		LIB3270_SSL_STATE		  secure;
 
 		struct lib3270_toggle	  toggle[LIB3270_TOGGLE_COUNT];
 
@@ -177,6 +179,7 @@
 		void (*update_connect)(H3270 *session, unsigned char connected);
 		void (*update_model)(H3270 *session, const char *name, int model, int rows, int cols);
 		void (*update_selection)(H3270 *session, int start, int end);
+		void (*update_ssl)(H3270 *session, LIB3270_SSL_STATE state);
 
 		void (*set_timer)(H3270 *session, unsigned char on);
 		void (*erase)(H3270 *session);
