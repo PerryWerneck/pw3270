@@ -913,33 +913,34 @@ static void output_possible(H3270 *session)
  * net_disconnect
  *	Shut down the socket.
  */
-void net_disconnect(void)
+void net_disconnect(H3270 *session)
 {
 #if defined(HAVE_LIBSSL)
-	if (h3270.ssl_con != NULL)
+	if(session->ssl_con != NULL)
 	{
-		SSL_shutdown(h3270.ssl_con);
-		SSL_free(h3270.ssl_con);
-		h3270.ssl_con = NULL;
+		SSL_shutdown(session->ssl_con);
+		SSL_free(session->ssl_con);
+		session->ssl_con = NULL;
 	}
 #endif
 
-	set_ssl_state(&h3270,LIB3270_SSL_UNSECURE);
+	set_ssl_state(session,LIB3270_SSL_UNSECURE);
 
-	if (CONNECTED)
-		(void) shutdown(h3270.sock, 2);
+	if(session->sock >= 0)
+	{
+		shutdown(session->sock, 2);
+		SOCK_CLOSE(session->sock);
+		session->sock = -1;
+	}
 
-	(void) SOCK_CLOSE(h3270.sock);
-
-	h3270.sock = -1;
 	trace_dsn("SENT disconnect\n");
 
 	/* Restore terminal type to its default. */
 	if (appres.termname == CN)
-		h3270.termtype = h3270.full_model_name;
+		session->termtype = session->full_model_name;
 
 	/* We're not connected to an LU any more. */
-	h3270.connected_lu = CN;
+	session->connected_lu = CN;
 	status_lu(&h3270,CN);
 
 #if !defined(_WIN32) /*[*/
@@ -3400,7 +3401,7 @@ static void continue_tls(unsigned char *sbbuf, int len)
 		/* Trace the junk. */
 		trace_dsn("%s ? %s\n", opt(TELOPT_STARTTLS), cmd(SE));
 		popup_an_error(NULL,"TLS negotiation failure");
-		net_disconnect();
+		net_disconnect(&h3270);
 		return;
 	}
 
@@ -3412,7 +3413,7 @@ static void continue_tls(unsigned char *sbbuf, int len)
 	if(h3270.ssl_con == NULL)
 	{
 		/* Failed. */
-		net_disconnect();
+		net_disconnect(&h3270);
 		return;
 	}
 
@@ -3438,7 +3439,7 @@ static void continue_tls(unsigned char *sbbuf, int len)
 	if (rv != 1)
 	{
 		trace_dsn("continue_tls: SSL_connect failed\n");
-		net_disconnect();
+		net_disconnect(&h3270);
 		return;
 	}
 

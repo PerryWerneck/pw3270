@@ -218,8 +218,10 @@ static void connect_standard_action(GtkAction *action, GtkWidget *widget, const 
 		{ "about",		about_dialog_action	},
 		{ "kpsubtract", kp_subtract_action	},
 		{ "kpadd",		kp_add_action		},
+#ifdef DEBUG
 		{ "download",	download_action		},
 		{ "upload",		upload_action		},
+#endif // DEBUG
 	};
 
 	int f;

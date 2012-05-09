@@ -546,9 +546,8 @@ static int do_connect(H3270 *hSession, const char *n)
 
 	/* Attempt contact. */
 	hSession->ever_3270 = False;
-	hSession->net_sock = net_connect(hSession, chost, port, 0, &resolving,&pending);
 
-	if (hSession->net_sock < 0 && !resolving)
+	if(net_connect(hSession, chost, port, 0, &resolving,&pending) < 0 && !resolving)
 	{
 		/* Redundantly signal a disconnect. */
 		host_disconnected(hSession);
@@ -573,7 +572,7 @@ static int do_connect(H3270 *hSession, const char *n)
 //		login_macro(ps);
 
 	/* Prepare Xt for I/O. */
-	x_add_input(hSession,hSession->net_sock);
+	x_add_input(hSession,hSession->sock);
 
 	/* Set state and tell the world. */
 	if (pending)
@@ -662,8 +661,7 @@ void host_disconnect(H3270 *h, int failed)
 	if (CONNECTED || HALF_CONNECTED)
 	{
 		x_remove_input(h);
-		net_disconnect();
-		h->net_sock = -1;
+		net_disconnect(h);
 
 		Trace("Disconnected (Failed: %d Reconnect: %d in_progress: %d)",failed,toggled(RECONNECT),h->auto_reconnect_inprogress);
 		if (toggled(RECONNECT) && !h->auto_reconnect_inprogress)

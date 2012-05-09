@@ -73,7 +73,7 @@
 		// Connection info
 //		int						  secure_connection;
 		int   	 	  			  sock;					/**< Network socket */
-		int						  net_sock;
+//		int						  net_sock;
 		LIB3270_CSTATE			  cstate;				/**< Connection state */
 
 		// flags
