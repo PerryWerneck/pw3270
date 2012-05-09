@@ -66,6 +66,8 @@ void x_add_input(H3270 *h,int net_sock)
  */
 void x_except_off(H3270 *h)
 {
+	CHECK_SESSION_HANDLE(h);
+
 	if(h->excepting)
 	{
 		RemoveInput(h->ns_exception_id);

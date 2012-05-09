@@ -619,7 +619,7 @@ static void changed(H3270 *session, int offset, int len)
 	GtkWidget 		* widget	= session->widget;
 	GtkAccessible	* obj		= GTK_V3270(widget)->accessible;
 
-	trace("%s: offset=%d len=%d",__FUNCTION__,offset,len)
+//	trace("%s: offset=%d len=%d",__FUNCTION__,offset,len)
 
 	if(obj)
 	{

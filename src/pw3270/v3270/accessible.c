@@ -847,15 +847,13 @@ void v3270_acessible_set_state(GtkAccessible *obj, LIB3270_MESSAGE id)
 
 	bits = GTK_V3270_ACCESSIBLE(obj)->state ^ state;
 
-	trace("State change from %04x to %04x (bits=%04x)",
-				GTK_V3270_ACCESSIBLE(obj)->state,
-				state, bits );
+//	trace("State change from %04x to %04x (bits=%04x)",GTK_V3270_ACCESSIBLE(obj)->state,state, bits );
 
 	for(f=0;f<G_N_ELEMENTS(table);f++)
 	{
 		if(bits & table[f].flag)
 		{
-			trace("State %s is %s",table[f].dbg,(state & table[f].flag) ? "Yes" : "No");
+//			trace("State %s is %s",table[f].dbg,(state & table[f].flag) ? "Yes" : "No");
 			atk_object_notify_state_change(ATK_OBJECT(obj),table[f].atkstate,(state & table[f].flag) ? TRUE : FALSE);
 		}
 	}

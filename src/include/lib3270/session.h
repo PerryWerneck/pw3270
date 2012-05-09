@@ -153,6 +153,10 @@
 		char					  reading;
 		char					  excepting;
 
+#if defined(HAVE_LIBSSL) /*[*/
+		unsigned long 			  last_ssl_error;
+#endif
+
 		// State change callbacks.
 		struct lib3270_state_callback *st_callbacks[LIB3270_STATE_USER];
 		struct lib3270_state_callback *st_last[LIB3270_STATE_USER];

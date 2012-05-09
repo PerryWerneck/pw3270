@@ -852,6 +852,7 @@ const char * KeysymToString(KeySym k)
 
 unsigned long AddTimeOut(unsigned long interval_ms, H3270 *session, void (*proc)(H3270 *session))
 {
+	CHECK_SESSION_HANDLE(session);
 	if(callbacks->AddTimeOut)
 		return callbacks->AddTimeOut(interval_ms,session,proc);
 	return 0;
@@ -865,6 +866,7 @@ void RemoveTimeOut(unsigned long timer)
 
 unsigned long AddInput(int source, H3270 *session, void (*fn)(H3270 *session))
 {
+	CHECK_SESSION_HANDLE(session);
 	if(callbacks->AddInput)
 		return callbacks->AddInput(source,session,fn);
 	return 0;
@@ -872,6 +874,7 @@ unsigned long AddInput(int source, H3270 *session, void (*fn)(H3270 *session))
 
 unsigned long AddExcept(int source, H3270 *session, void (*fn)(H3270 *session))
 {
+	CHECK_SESSION_HANDLE(session);
 	if(callbacks->AddExcept)
 		return callbacks->AddExcept(source,session,fn);
 	return 0;
@@ -880,6 +883,7 @@ unsigned long AddExcept(int source, H3270 *session, void (*fn)(H3270 *session))
 #if !defined(_WIN32) /*[*/
 unsigned long AddOutput(int source, H3270 *session, void (*fn)(H3270 *session))
 {
+	CHECK_SESSION_HANDLE(session);
 	if(callbacks->AddOutput)
 		return callbacks->AddOutput(source,session,fn);
 	return 0;
