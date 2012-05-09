@@ -211,6 +211,22 @@
 		LIB3270_CONNECTED_TN3270E		/**< connected in TN3270E mode, 3270 mode */
 	} LIB3270_CSTATE;
 
+
+	/**
+	 * Notification message types.
+	 *
+	 */
+	typedef enum _LIB3270_NOTIFY
+	{
+		LIB3270_NOTIFY_INFO,		/**< Simple information dialog */
+		LIB3270_NOTIFY_WARNING,
+		LIB3270_NOTIFY_ERROR,
+		LIB3270_NOTIFY_CRITICAL,	/**< Critical error, user can abort application */
+
+		LIB3270_NOTIFY_USER			/**< Reserved, always the last one */
+	} LIB3270_NOTIFY;
+
+
 #ifdef __cplusplus
 	extern "C" {
 #endif

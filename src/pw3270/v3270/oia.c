@@ -276,7 +276,7 @@ static void draw_undera(cairo_t *cr, H3270 *host, struct v3270_metrics *metrics,
 void v3270_draw_connection(cairo_t *cr, H3270 *host, struct v3270_metrics *metrics, GdkColor *color, GdkRectangle *rect)
 {
 	cairo_text_extents_t extents;
- 	gchar *str = "?";
+ 	const gchar *str;
 
 	gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_FOREGROUND);
 	cairo_rectangle(cr, rect->x, rect->y, rect->width, rect->height);
@@ -290,9 +290,11 @@ void v3270_draw_connection(cairo_t *cr, H3270 *host, struct v3270_metrics *metri
 	}
 
 	if(lib3270_in_ansi(host))
-		*str = 'N';
+		str = "N";
 	else if(lib3270_in_sscp(host))
-		*str = 'S';
+		str = "S";
+	else
+		str = "?";
 
 	cairo_text_extents(cr,str,&extents);
 	cairo_move_to(cr,rect->x+((rect->width/2)-(extents.width/2)),rect->y+extents.height+( (rect->height/2) - (extents.height/2)));

@@ -36,6 +36,11 @@
 	#define LIB3270_LUNAME_LENGTH			16
 	#define LIB3270_FULL_MODEL_NAME_LENGTH	13
 
+	#if defined(HAVE_LIBSSL)
+		#include <openssl/ssl.h>
+		#include <openssl/err.h>
+	#endif
+
 	/**  extended attributes */
 	struct ea
 	{
@@ -71,11 +76,8 @@
 		int						  net_sock;
 		LIB3270_CSTATE			  cstate;				/**< Connection state */
 
-		#if defined(_WIN32)
-		HANDLE					  sock_handle;
-		#endif
-
 		// flags
+		int						  bgthread	: 1;	/**< Running on a background thread ? */
 		int					  	  selected	: 1;	/**< Has selected region? */
 		int						  rectsel	: 1;	/**< Selected region is a rectangle ? */
 
@@ -155,6 +157,7 @@
 
 #if defined(HAVE_LIBSSL) /*[*/
 		unsigned long 			  last_ssl_error;
+		SSL 					* ssl_con;
 #endif
 
 		// State change callbacks.
@@ -182,6 +185,8 @@
 		void (*cursor)(H3270 *session, LIB3270_CURSOR id);
 		void (*set_selection)(H3270 *session, unsigned char on);
 		void (*ctlr_done)(H3270 *session);
+
+		void (*message)(H3270 *session, LIB3270_NOTIFY id , const char *title, const char *message, const char *text);
 
 	};
 

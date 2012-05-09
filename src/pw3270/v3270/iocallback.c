@@ -251,10 +251,10 @@ struct bgParameter
 
 gpointer BgCall(struct bgParameter *p)
 {
-	trace("%s starts",__FUNCTION__);
+//	trace("%s starts",__FUNCTION__);
 	p->rc = p->callback(p->session, p->parm);
 	p->running = FALSE;
-	trace("%s ends",__FUNCTION__);
+//	trace("%s ends",__FUNCTION__);
 	return 0;
 }
 
@@ -263,7 +263,7 @@ static int static_CallAndWait(int(*callback)(H3270 *session, void *), H3270 *ses
 	struct bgParameter p = { TRUE, session, -1, callback, parm };
 	GThread	*thread;
 
-	trace("Starting auxiliary thread for callback %p",callback);
+//	trace("Starting auxiliary thread for callback %p",callback);
 
 	p.running = TRUE;
     thread = g_thread_create( (GThreadFunc) BgCall, &p, 0, NULL);

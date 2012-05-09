@@ -61,10 +61,6 @@
 #endif /*]*/
 #include <stdarg.h>
 
-#if defined(HAVE_LIBSSL) /*[*/
-	#include <openssl/ssl.h>
-	#include <openssl/err.h>
-#endif /*]*/
 #include "tn3270e.h"
 #include "3270ds.h"
 
@@ -196,7 +192,7 @@ static void net_rawout(unsigned const char *buf, int len);
 static void check_in3270(void);
 static void store3270in(unsigned char c);
 static void check_linemode(Boolean init);
-// static int non_blocking(Boolean on);
+static int non_blocking(Boolean on);
 static void net_connected(H3270 *session);
 #if defined(X3270_TN3270E) /*[*/
 static int tn3270e_negotiate(void);
@@ -308,11 +304,13 @@ static const char *trsp_flag[2] = { "POSITIVE-RESPONSE", "NEGATIVE-RESPONSE" };
 #define XMIT_COLS	h3270.maxCOLS
 // #endif /*]*/
 
+// #if defined(HAVE_LIBSSL)
+// static SSL *ssl_con;
+// #endif
+
 #if defined(HAVE_LIBSSL) /*[*/
-static SSL_CTX *ssl_ctx;
-static SSL *ssl_con;
 static Boolean need_tls_follows = False;
-static void ssl_init(void);
+static void ssl_init(H3270 *session);
 #if OPENSSL_VERSION_NUMBER >= 0x00907000L /*[*/
 #define INFO_CONST const
 #else /*][*/
@@ -600,14 +598,8 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 #endif
 
 	/* set the socket to be non-delaying */
-/*
-#if defined(_WIN32)
-	if (non_blocking(False) < 0)
-#else
 	if (non_blocking(True) < 0)
-#endif
 		close_fail;
-*/
 
 #if !defined(_WIN32)
 	/* don't share the socket with our children */
@@ -616,26 +608,14 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 
 	/* init ssl */
 #if defined(HAVE_LIBSSL)
-	session->last_ssl_error = 0;
+	session->last_ssl_error = !0;
 	if (session->ssl_host)
-		ssl_init();
+		ssl_init(session);
 #endif
 
 	/* connect */
 	status_connecting(session,1);
 
-	if(connect_sock(session, session->sock, &haddr.sa,ha_len) == 0)
-	{
-		trace_dsn("Connected.\n");
-		net_connected(session);
-	}
-	else
-	{
-		popup_a_sockerr(session, N_( "Can't connect to %s:%d" ),session->hostname, session->current_port);
-		close_fail;
-	}
-
-/*
 	switch(connect_sock(session, session->sock, &haddr.sa,ha_len))
 	{
 	case 0:					// Connected
@@ -650,9 +630,9 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 	case SE_EINPROGRESS:
 		*pending = True;
 		trace_dsn("Connection pending.\n");
-#if !defined(_WIN32)
+// #if !defined(_WIN32)
 		output_id = AddOutput(session->sock, session, output_possible);
-#endif
+// #endif
 		break;
 
 	default:
@@ -660,7 +640,6 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 		close_fail;
 
 	}
-*/
 
 	/* set up temporary termtype */
 	if (appres.termname == CN && session->std_ds_host)
@@ -784,25 +763,40 @@ static void net_connected(H3270 *session)
 	/* Set up SSL. */
 	if(session->ssl_host && !session->secure_connection)
 	{
-		if (SSL_set_fd(ssl_con, session->sock) != 1)
+		int rc;
+
+		if (SSL_set_fd(session->ssl_con, session->sock) != 1)
 		{
 			trace_dsn("Can't set fd!\n");
+			popup_system_error(&h3270,_( "Connection failed error" ), _( "Can't set SSL socket file descriptor" ), "%s", SSL_state_string_long(session->ssl_con));
 		}
 
-		if (SSL_connect(ssl_con) != 1)
+		non_blocking(False);
+		rc = SSL_connect(session->ssl_con);
+
+		if(rc != 1)
 		{
-			unsigned long e = ERR_get_error();
+			unsigned long 	  e		= ERR_get_error();
+			const char  	* state	= SSL_state_string_long(session->ssl_con);
+
+			trace_dsn("TLS/SSL tunneled connection failed with error %ld, rc=%d and state=%s",e,rc,state);
+
+			host_disconnect(session,True);
+
 			if(e != session->last_ssl_error)
 			{
-				popup_system_error(&h3270,_( "Connection failed error" ), _( "SSL negotiation failed" ), "%s", SSL_state_string_long(ssl_con));
+				session->message(	&h3270,
+									LIB3270_NOTIFY_ERROR,
+									_( "Connection failed" ),
+									_( "SSL negotiation failed" ),
+									state);
 				session->last_ssl_error = e;
 			}
-
-			trace_dsn("TLS/SSL tunneled connection failed with error %ld.",e);
-			trace("%s: SSL_connect failed with error %ld",__FUNCTION__,e);
-			host_disconnect(session,True);
 			return;
+
 		}
+		non_blocking(True);
+
 		session->secure_connection = True;
 		trace_dsn("TLS/SSL tunneled connection complete. Connection is now secure.\n");
 
@@ -864,15 +858,11 @@ static void net_connected(H3270 *session)
  */
 static void connection_complete(void)
 {
-/*
-#if !defined(_WIN32)
 	if (non_blocking(False) < 0)
 	{
 		host_disconnect(&h3270,True);
 		return;
 	}
-#endif
-*/
 	host_connected(&h3270);
 	net_connected(&h3270);
 }
@@ -903,14 +893,14 @@ static void output_possible(H3270 *session)
  * net_disconnect
  *	Shut down the socket.
  */
-void
-net_disconnect(void)
+void net_disconnect(void)
 {
 #if defined(HAVE_LIBSSL) /*[*/
-	if (ssl_con != NULL) {
-		SSL_shutdown(ssl_con);
-		SSL_free(ssl_con);
-		ssl_con = NULL;
+	if (h3270.ssl_con != NULL)
+	{
+		SSL_shutdown(h3270.ssl_con);
+		SSL_free(h3270.ssl_con);
+		h3270.ssl_con = NULL;
 	}
 	h3270.secure_connection = False;
 #endif /*]*/
@@ -991,13 +981,13 @@ void net_input(H3270 *session)
 		ansi_data = 0;
 #endif /*]*/
 
-#if defined(_WIN32) /*[*/
-		(void) ResetEvent(session->sock_handle);
-#endif /*]*/
+// #if defined(_WIN32)
+//		(void) ResetEvent(session->sock_handle);
+//#endif /*]*/
 
 #if defined(HAVE_LIBSSL)
-		if (ssl_con != NULL)
-			nr = SSL_read(ssl_con, (char *) netrbuf, BUFSZ);
+		if (session->ssl_con != NULL)
+			nr = SSL_read(session->ssl_con, (char *) netrbuf, BUFSZ);
 		else
 #endif // HAVE_LIBSSL
 /*
@@ -1013,7 +1003,7 @@ void net_input(H3270 *session)
 				return;
 			}
 #if defined(HAVE_LIBSSL) /*[*/
-			if (ssl_con != NULL)
+			if(session->ssl_con != NULL)
 			{
 				unsigned long e;
 				char err_buf[120];
@@ -1026,11 +1016,11 @@ void net_input(H3270 *session)
 
 				trace_dsn("RCVD SSL_read error %ld (%s)\n", e,err_buf);
 
-				lib3270_popup_dialog(	session,
-									LIB3270_NOTIFY_CRITICAL,
-									N_( "SSL Error" ),
-									N_( "SSL Read error" ),
-									"%s", err_buf);
+				h3270.message(	&h3270,
+								LIB3270_NOTIFY_ERROR,
+								_( "SSL Error" ),
+								_( "SSL Read error" ),
+								err_buf );
 
 				host_disconnect(session,True);
 				return;
@@ -1074,13 +1064,11 @@ void net_input(H3270 *session)
 
 		if (HALF_CONNECTED)
 		{
-/*
 			if (non_blocking(False) < 0)
 			{
 				host_disconnect(session,True);
 				return;
 			}
-*/
 			host_connected(session);
 			net_connected(session);
 		}
@@ -2022,8 +2010,8 @@ net_rawout(unsigned const char *buf, int len)
 #		define n2w len
 #endif
 #if defined(HAVE_LIBSSL) /*[*/
-		if (ssl_con != NULL)
-			nw = SSL_write(ssl_con, (const char *) buf, n2w);
+		if(h3270.ssl_con != NULL)
+			nw = SSL_write(h3270.ssl_con, (const char *) buf, n2w);
 		else
 #endif /*]*/
 
@@ -2037,7 +2025,8 @@ net_rawout(unsigned const char *buf, int len)
 			nw = send(h3270.sock, (const char *) buf, n2w, 0);
 		if (nw < 0) {
 #if defined(HAVE_LIBSSL) /*[*/
-			if (ssl_con != NULL) {
+			if (h3270.ssl_con != NULL)
+			{
 				unsigned long e;
 				char err_buf[120];
 
@@ -3196,11 +3185,11 @@ net_snap_options(void)
 /*
  * Set blocking/non-blocking mode on the socket.  On error, pops up an error
  * message, but does not close the socket.
- */ /*
-static int
-non_blocking(Boolean on)
+ */
+static int non_blocking(Boolean on)
 {
 #if !defined(BLOCKING_CONNECT_ONLY)
+
 # if defined(FIONBIO)
 	int i = on ? 1 : 0;
 
@@ -3209,7 +3198,9 @@ non_blocking(Boolean on)
 		popup_a_sockerr(NULL, N_( "ioctl(%s)" ), "FIONBIO");
 		return -1;
 	}
+
 # else
+
 	int f;
 
 	if ((f = fcntl(sock, F_GETFL, 0)) == -1)
@@ -3226,42 +3217,52 @@ non_blocking(Boolean on)
 		popup_an_errno(NULL,errno, N_( "fcntl(%s)" ), "F_GETFL");
 		return -1;
 	}
-# endif
-#endif
+#endif // FIONBIO
+
+#endif // !BLOCKING_CONNECT_ONLY
+
 	return 0;
 }
-*/
 
 #if defined(HAVE_LIBSSL) /*[*/
 
 /* Initialize the OpenSSL library. */
-static void ssl_init(void)
+static void ssl_init(H3270 *session)
 {
-	static Boolean ssl_initted = False;
+	static SSL_CTX *ssl_ctx = NULL;
 
-	if (!ssl_initted) {
+	if(ssl_ctx == NULL)
+	{
+		lib3270_write_log(session,"%s","Initializing SSL context");
 		SSL_load_error_strings();
 		SSL_library_init();
-		ssl_initted = True;
 		ssl_ctx = SSL_CTX_new(SSLv23_method());
-		if (ssl_ctx == NULL) {
+		if(ssl_ctx == NULL)
+		{
 			popup_an_error(NULL,"SSL_CTX_new failed");
-			h3270.ssl_host = False;
+			session->ssl_host = False;
 			return;
 		}
 		SSL_CTX_set_options(ssl_ctx, SSL_OP_ALL);
+		SSL_CTX_set_info_callback(ssl_ctx, client_info_callback);
+		SSL_CTX_set_default_verify_paths(ssl_ctx);
 	}
 
-	ssl_con = SSL_new(ssl_ctx);
-	if (ssl_con == NULL) {
-		popup_an_error(NULL,"SSL_new failed");
-		h3270.ssl_host = False;
-	}
-	SSL_set_verify(ssl_con, 0/*xxx*/, NULL);
+	if(session->ssl_con)
+		SSL_free(session->ssl_con);
 
-	SSL_CTX_set_info_callback(ssl_ctx, client_info_callback);
+	session->ssl_con = SSL_new(ssl_ctx);
+	if(session->ssl_con == NULL)
+	{
+		popup_an_error(session,"SSL_new failed");
+		session->ssl_host = False;
+		return;
+	}
+
+	SSL_set_verify(session->ssl_con, 0/*xxx*/, NULL);
 
 	/* XXX: May need to get key file and password. */
+	/*
 	if (appres.cert_file)
 	{
 		if (!(SSL_CTX_use_certificate_chain_file(ssl_ctx,
@@ -3277,8 +3278,7 @@ static void ssl_init(void)
 					appres.cert_file, err_buf);
 		}
 	}
-
-	SSL_CTX_set_default_verify_paths(ssl_ctx);
+	*/
 }
 
 /* Callback for tracing protocol negotiation. */
@@ -3343,8 +3343,7 @@ static void client_info_callback(INFO_CONST SSL *s, int where, int ret)
 }
 
 /* Process a STARTTLS subnegotiation. */
-static void
-continue_tls(unsigned char *sbbuf, int len)
+static void continue_tls(unsigned char *sbbuf, int len)
 {
 	int rv;
 
@@ -3364,15 +3363,17 @@ continue_tls(unsigned char *sbbuf, int len)
 	trace_dsn("%s FOLLOWS %s\n", opt(TELOPT_STARTTLS), cmd(SE));
 
 	/* Initialize the SSL library. */
-	ssl_init();
-	if (ssl_con == NULL) {
+	ssl_init(&h3270);
+	if(h3270.ssl_con == NULL)
+	{
 		/* Failed. */
 		net_disconnect();
 		return;
 	}
 
 	/* Set up the TLS/SSL connection. */
-	if (SSL_set_fd(ssl_con, h3270.sock) != 1) {
+	if(SSL_set_fd(h3270.ssl_con, h3270.sock) != 1)
+	{
 		trace_dsn("Can't set fd!\n");
 	}
 
@@ -3382,7 +3383,7 @@ continue_tls(unsigned char *sbbuf, int len)
 //	(void) non_blocking(False);
 //#endif
 
-	rv = SSL_connect(ssl_con);
+	rv = SSL_connect(h3270.ssl_con);
 
 //#if defined(_WIN32)
 //	// Make the socket non-blocking again for event processing

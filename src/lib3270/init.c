@@ -111,6 +111,13 @@ static void set_cursor(H3270 *session, LIB3270_CURSOR id)
 {
 }
 
+static void message(H3270 *session, LIB3270_NOTIFY id , const char *title, const char *message, const char *text)
+{
+	lib3270_write_log(session,"%s",title);
+	lib3270_write_log(session,"%s",message);
+	lib3270_write_log(session,"%s",text);
+}
+
 static void lib3270_session_init(H3270 *hSession, const char *model)
 {
 	int 	ovc, ovr;
@@ -136,6 +143,7 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 	hSession->update_oia		= update_oia;
 	hSession->update_selection	= update_selection;
 	hSession->cursor 			= set_cursor;
+	hSession->message			= message;
 
 	hSession->sock = -1;
 	hSession->model_num = -1;

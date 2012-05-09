@@ -985,9 +985,17 @@ LIB3270_EXPORT int lib3270_call_thread(int(*callback)(H3270 *h, void *), H3270 *
 
 	lib3270_main_iterate(0);
 	if(callbacks->callthread)
+	{
+		h->bgthread = 1;
+		trace("%s: background thread for %p starts",__FUNCTION__,h);
 		rc = callbacks->callthread(callback,h,parm);
+		trace("%s: background thread for %p ends",__FUNCTION__,h);
+		h->bgthread = 0;
+	}
 	else
+	{
 		rc = callback(h,parm);
+	}
 	lib3270_main_iterate(0);
 
 	if(h->set_timer)

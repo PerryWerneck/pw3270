@@ -215,6 +215,46 @@ static void get_preferred_width_for_height(GtkWidget *widget,gint height, gint *
 
 #endif // GTK(3,0,0)
 
+void v3270_popup_message(GtkWidget *widget, LIB3270_NOTIFY type , const gchar *title, const gchar *message, const gchar *text)
+{
+	GtkWidget		* dialog;
+	GtkWidget		* toplevel	= NULL;
+	GtkMessageType	  msgtype	= GTK_MESSAGE_WARNING;
+	GtkButtonsType	  buttons	= GTK_BUTTONS_OK;
+
+	if(widget && GTK_IS_WIDGET(widget))
+		toplevel = gtk_widget_get_toplevel(GTK_WIDGET(widget));
+
+	if(type == LIB3270_NOTIFY_CRITICAL)
+	{
+		msgtype	= GTK_MESSAGE_ERROR;
+		buttons = GTK_BUTTONS_CLOSE;
+	}
+
+	if(!title)
+		title = _( "Error" );
+
+	if(message)
+	{
+		dialog = gtk_message_dialog_new_with_markup(GTK_WINDOW(toplevel),GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,msgtype,buttons,"%s",message);
+		if(text)
+			gtk_message_dialog_format_secondary_markup(GTK_MESSAGE_DIALOG(dialog),"%s",text);
+	}
+	else if(text)
+	{
+		dialog = gtk_message_dialog_new_with_markup(GTK_WINDOW(toplevel),GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,msgtype,buttons,"%s",text);
+	}
+	else
+	{
+		dialog = gtk_message_dialog_new_with_markup(GTK_WINDOW(toplevel),GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,msgtype,buttons,"%s",title);
+	}
+
+	gtk_window_set_title(GTK_WINDOW(dialog),title);
+	gtk_widget_show_all(dialog);
+	gtk_dialog_run(GTK_DIALOG (dialog));
+	gtk_widget_destroy(dialog);
+}
+
 static void v3270_class_init(v3270Class *klass)
 {
 	GObjectClass	* gobject_class	= G_OBJECT_CLASS(klass);
@@ -240,6 +280,7 @@ static void v3270_class_init(v3270Class *klass)
 	klass->toggle_changed 							= v3270_toggle_changed;
 	klass->message_changed 							= v3270_update_message;
 	klass->luname_changed							= v3270_update_luname;
+	klass->popup_message							= v3270_popup_message;
 
 #if GTK_CHECK_VERSION(3,0,0)
 
@@ -442,6 +483,15 @@ static void v3270_class_init(v3270Class *klass)
 						NULL, NULL,
 						pw3270_VOID__VOID_UINT_UINT,
 						G_TYPE_NONE, 2, G_TYPE_UINT, G_TYPE_UINT);
+
+	v3270_widget_signal[SIGNAL_MESSAGE] =
+		g_signal_new(	"popup_message",
+						G_OBJECT_CLASS_TYPE (gobject_class),
+						G_SIGNAL_RUN_FIRST,
+						G_STRUCT_OFFSET (v3270Class, popup_message),
+						NULL, NULL,
+						pw3270_VOID__VOID_UINT_POINTER_POINTER_POINTER,
+						G_TYPE_NONE, 4, G_TYPE_UINT, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
 
 }
 
@@ -677,6 +727,16 @@ static void update_selection(H3270 *session, int start, int end)
 
 }
 
+static void message(H3270 *session, LIB3270_NOTIFY id , const char *title, const char *message, const char *text)
+{
+	g_signal_emit(	GTK_WIDGET(session->widget), v3270_widget_signal[SIGNAL_MESSAGE], 0,
+							(int) id,
+							(gchar *) title,
+							(gchar *) message,
+							(gchar *) text );
+
+}
+
 static void v3270_init(v3270 *widget)
 {
 	trace("%s",__FUNCTION__);
@@ -708,7 +768,7 @@ static void v3270_init(v3270 *widget)
 	widget->host->update_model		= update_model;
 	widget->host->changed			= changed;
 	widget->host->ctlr_done			= ctlr_done;
-
+	widget->host->message			= message;
 
 	// Setup input method
 	widget->input_method 			= gtk_im_multicontext_new();

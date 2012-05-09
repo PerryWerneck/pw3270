@@ -181,6 +181,7 @@
  // Misc
  GtkIMContext	* v3270_get_im_context(GtkWidget *widget);
  gboolean		  v3270_get_toggle(GtkWidget *widget, LIB3270_TOGGLE ix);
+ void			  v3270_popup_message(GtkWidget *widget, LIB3270_NOTIFY type, const gchar *title, const gchar *message, const gchar *text);
 
  void 			  v3270_set_host(GtkWidget *widget, const gchar *uri);
 

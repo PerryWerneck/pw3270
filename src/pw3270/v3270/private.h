@@ -53,6 +53,7 @@ G_BEGIN_DECLS
 	void 		(*toggle_changed)(v3270 *widget,LIB3270_TOGGLE toggle_id,gboolean toggle_state,const gchar *toggle_name);
 	void 		(*message_changed)(v3270 *widget, LIB3270_MESSAGE id);
 	void 		(*luname_changed)(GtkWidget *widget,const gchar *luname);
+	void 		(*popup_message)(GtkWidget *widget, LIB3270_NOTIFY id , const gchar *title, const gchar *message, const gchar *text);
 	gboolean	(*keypress)(GtkWidget *widget,guint keyval,GdkModifierType state);
 
  };
@@ -79,6 +80,7 @@ G_BEGIN_DECLS
  	SIGNAL_PASTENEXT,
  	SIGNAL_CLIPBOARD,
  	SIGNAL_CHANGED,
+ 	SIGNAL_MESSAGE,
 
  	LAST_SIGNAL
  };
