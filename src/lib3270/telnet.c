@@ -316,7 +316,7 @@ static void ssl_init(H3270 *session);
 #else /*][*/
 #define INFO_CONST
 #endif /*]*/
-static void client_info_callback(INFO_CONST SSL *s, int where, int ret);
+static void ssl_info_callback(INFO_CONST SSL *s, int where, int ret);
 static void continue_tls(unsigned char *sbbuf, int len);
 #endif /*]*/
 
@@ -3271,7 +3271,7 @@ static void ssl_init(H3270 *session)
 			return;
 		}
 		SSL_CTX_set_options(ssl_ctx, SSL_OP_ALL);
-		SSL_CTX_set_info_callback(ssl_ctx, client_info_callback);
+		SSL_CTX_set_info_callback(ssl_ctx, ssl_info_callback);
 		SSL_CTX_set_default_verify_paths(ssl_ctx);
 	}
 
@@ -3309,7 +3309,7 @@ static void ssl_init(H3270 *session)
 }
 
 /* Callback for tracing protocol negotiation. */
-static void client_info_callback(INFO_CONST SSL *s, int where, int ret)
+static void ssl_info_callback(INFO_CONST SSL *s, int where, int ret)
 {
 	switch(where)
 	{
@@ -3374,6 +3374,15 @@ static void client_info_callback(INFO_CONST SSL *s, int where, int ret)
 	default:
 		lib3270_write_log(NULL,"SSL","Current state is \"%s\"",SSL_state_string_long(s));
 	}
+
+	trace("%s: where=%04x ret=%d",__FUNCTION__,where,ret);
+
+#ifdef DEBUG
+	if(where & SSL_CB_EXIT)
+	{
+		trace("%s: SSL_CB_EXIT ret=%d",__FUNCTION__,ret);
+	}
+#endif
 
 	if(where & SSL_CB_ALERT)
 		lib3270_write_log(NULL,"SSL","ALERT: %s",SSL_alert_type_string_long(ret));
