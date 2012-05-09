@@ -350,6 +350,8 @@ static void output_possible(H3270 *session);
 	#define SOCK_IOCTL	ioctl
 #endif /*]*/
 
+
+
 
 #if defined(_WIN32) /*[*/
 void sockstart(H3270 *session)
@@ -768,7 +770,7 @@ static void net_connected(H3270 *session)
 		if (SSL_set_fd(session->ssl_con, session->sock) != 1)
 		{
 			trace_dsn("Can't set fd!\n");
-			popup_system_error(&h3270,_( "Connection failed error" ), _( "Can't set SSL socket file descriptor" ), "%s", SSL_state_string_long(session->ssl_con));
+			popup_system_error(&h3270,_( "Connection failed" ), _( "Can't set SSL socket file descriptor" ), "%s", SSL_state_string_long(session->ssl_con));
 		}
 
 		non_blocking(False);
@@ -3284,12 +3286,13 @@ static void ssl_init(H3270 *session)
 /* Callback for tracing protocol negotiation. */
 static void client_info_callback(INFO_CONST SSL *s, int where, int ret)
 {
-	if (where == SSL_CB_CONNECT_LOOP)
+	switch(where)
 	{
+	case SSL_CB_CONNECT_LOOP:
 		trace_dsn("SSL_connect: %s %s\n",SSL_state_string(s), SSL_state_string_long(s));
-	}
-	else if (where == SSL_CB_CONNECT_EXIT)
-	{
+		break;
+
+	case SSL_CB_CONNECT_EXIT:
 		if (ret == 0)
 		{
 			trace_dsn("SSL_connect: failed in %s\n",SSL_state_string_long(s));
@@ -3297,10 +3300,9 @@ static void client_info_callback(INFO_CONST SSL *s, int where, int ret)
 		}
 		else if (ret < 0)
 		{
-			unsigned long e;
+			unsigned long e = ERR_get_error();
 			char err_buf[1024];
 
-			e = ERR_get_error();
 			while(ERR_peek_error() == e)	// Remove other messages with the same error
 				e = ERR_get_error();
 
@@ -3339,7 +3341,14 @@ static void client_info_callback(INFO_CONST SSL *s, int where, int ret)
 
 
 		}
+
+
+	default:
+		lib3270_write_log(NULL,"SSL","Current state is \"%s\"",SSL_state_string_long(s));
 	}
+
+	if(where & SSL_CB_ALERT)
+		lib3270_write_log(NULL,"SSL","ALERT: %s",SSL_alert_type_string_long(ret));
 }
 
 /* Process a STARTTLS subnegotiation. */
