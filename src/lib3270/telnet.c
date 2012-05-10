@@ -331,9 +331,9 @@ static void ssl_info_callback(INFO_CONST SSL *s, int where, int ret);
 static void continue_tls(unsigned char *sbbuf, int len);
 #endif /*]*/
 
-#if !defined(_WIN32) /*[*/
-static void output_possible(H3270 *session);
-#endif /*]*/
+// #if !defined(_WIN32) /*[*/
+// static void output_possible(H3270 *session);
+// #endif /*]*/
 
 #if defined(_WIN32) /*[*/
 	#define socket_errno()	WSAGetLastError()
@@ -624,7 +624,7 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 #endif
 
 	/* set the socket to be non-delaying */
-	if (non_blocking(session,True) < 0)
+	if (non_blocking(session,False) < 0)
 		close_fail;
 
 #if !defined(_WIN32)
@@ -641,17 +641,19 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 
 	/* connect */
 	status_connecting(session,1);
+	rc = connect_sock(session, session->sock, &haddr.sa,ha_len);
 
-	switch(connect_sock(session, session->sock, &haddr.sa,ha_len))
+	if(!rc)
 	{
-	case 0:					// Connected
 		trace_dsn("Connected.\n");
 
-		if(non_blocking(session,False) < 0)
-			close_fail;
-		net_connected(session);
-		break;
+//		if(non_blocking(session,False) < 0)
+//			close_fail;
 
+		net_connected(session);
+
+/*
+		break;
 	case SE_EWOULDBLOCK:	// Connection in progress
 	case SE_EINPROGRESS:
 		*pending = True;
@@ -660,9 +662,19 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 		output_id = AddOutput(session->sock, session, output_possible);
 #endif
 		break;
+*/
+	}
+	else
+	{
+		char *msg = xs_buffer( _( "Can't connect to %s:%d" ), session->hostname, session->current_port);
 
-	default:
-		popup_a_sockerr(session, N_( "Can't connect to %s:%d" ),session->hostname, session->current_port);
+		lib3270_popup_dialog(	session,
+								LIB3270_NOTIFY_ERROR,
+								_( "Network error" ),
+								msg,
+								"%s",strerror(rc) );
+
+		Free(msg);
 		close_fail;
 
 	}
@@ -801,7 +813,7 @@ static void net_connected(H3270 *session)
 		}
 		else
 		{
-			non_blocking(session,False);
+			// non_blocking(session,False);
 			rc = SSL_connect(session->ssl_con);
 
 			if(rc != 1)
@@ -898,12 +910,13 @@ static void connection_complete(void)
 	net_connected(&h3270);
 }
 
-#if !defined(_WIN32) /*[*/
 /*
- * output_possible
- *	Output is possible on the socket.  Used only when a connection is
- *	pending, to determine that the connection is complete.
- */
+#if !defined(_WIN32)
+//
+// output_possible
+//	Output is possible on the socket.  Used only when a connection is
+//	pending, to determine that the connection is complete.
+//
 static void output_possible(H3270 *session)
 {
 	trace("%s: %s",__FUNCTION__,HALF_CONNECTED ? "Half connected" : "Connected");
@@ -918,7 +931,8 @@ static void output_possible(H3270 *session)
 		output_id = 0L;
 	}
 }
-#endif /*]*/
+#endif
+*/
 
 /*
  * net_disconnect

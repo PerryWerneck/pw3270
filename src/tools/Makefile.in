@@ -30,25 +30,27 @@ PACKAGE_NAME=@PACKAGE_NAME@
 
 EXEEXT=@EXEEXT@
 OBJEXT=@OBJEXT@
-CFLAGS=@CFLAGS@ @GTK_CFLAGS@ -DDATAROOTDIR=\"$(datarootdir)\" -I../../src/include
-LIBS=@LIBS@ @GTK_LIBS@
+
+GTK_CFLAGS=@GTK_CFLAGS@
+GTK_LIBS=@GTK_LIBS@
 
 CC=@CC@
 LD=@CC@
+HOST_CC=@HOST_CC@
 
 #---[ Rules ]------------------------------------------------------------------
 
 $(OBJDBG)/%.o: %.c
 	@echo "  CC   `basename $@`"
-	@$(CC) $(CFLAGS) -o $@ -c $<
+	@$(HOST_CC) -g -o $@ $<
 
 #---[ Targets ]----------------------------------------------------------------
 
 all: xml2pot$(EXEEXT)
 
-xml2pot$(EXEEXT): xml2pot$(OBJEXT)
+xml2pot$(EXEEXT): xml2pot.c Makefile
 	@echo "  CCLD `basename $@`"
-	@$(LD) -o $@ $^ $(LIBS)
+	@$(HOST_CC) $(GTK_CFLAGS) -g -o $@ xml2pot.c $(GTK_LIBS)
 
 clean:
 	@rm -f *.$(OBJEXT)
