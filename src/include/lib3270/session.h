@@ -77,10 +77,12 @@
 		LIB3270_CSTATE			  cstate;				/**< Connection state */
 
 		// flags
-		int						  bgthread	: 1;	/**< Running on a background thread ? */
-		int					  	  selected	: 1;	/**< Has selected region? */
-		int						  rectsel	: 1;	/**< Selected region is a rectangle ? */
-		int						  vcontrol	: 1;	/**< Visible control ? */
+		int						  bgthread		: 1;	/**< Running on a background thread ? */
+		int					  	  selected		: 1;	/**< Has selected region? */
+		int						  rectsel		: 1;	/**< Selected region is a rectangle ? */
+		int						  vcontrol		: 1;	/**< Visible control ? */
+		int						  modified_sel	: 1;
+		int						  m3279			: 1;
 
 
 		LIB3270_SSL_STATE		  secure;

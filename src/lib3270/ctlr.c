@@ -1198,7 +1198,7 @@ ctlr_write(unsigned char buf[], int buflen, Boolean erase)
 		trace_ds("%sresetMDT", paren);
 		paren = ",";
 		baddr = 0;
-		if (appres.modified_sel)
+		if (h3270.modified_sel)
 			ALL_CHANGED;
 		do {
 			if (h3270.ea_buf[baddr].fa) {
@@ -1485,14 +1485,14 @@ ctlr_write(unsigned char buf[], int buflen, Boolean erase)
 						    see_efa(*cp,
 							*(cp + 1)));
 						cp++;
-						if (appres.m3279)
+						if (h3270.m3279)
 							ctlr_add_fg(h3270.buffer_addr, *cp);
 					} else if (*cp == XA_BACKGROUND) {
 						trace_ds("%s",
 						    see_efa(*cp,
 							*(cp + 1)));
 						cp++;
-						if (appres.m3279)
+						if (h3270.m3279)
 							ctlr_add_bg(h3270.buffer_addr, *cp);
 					} else if (*cp == XA_HIGHLIGHTING) {
 						trace_ds("%s",
@@ -1558,12 +1558,12 @@ ctlr_write(unsigned char buf[], int buflen, Boolean erase)
 				} else if (*cp == XA_FOREGROUND) {
 					trace_ds("%s", see_efa(*cp, *(cp + 1)));
 					cp++;
-					if (appres.m3279)
+					if (h3270.m3279)
 						efa_fg = *cp;
 				} else if (*cp == XA_BACKGROUND) {
 					trace_ds("%s", see_efa(*cp, *(cp + 1)));
 					cp++;
-					if (appres.m3279)
+					if (h3270.m3279)
 						efa_bg = *cp;
 				} else if (*cp == XA_HIGHLIGHTING) {
 					trace_ds("%s", see_efa(*cp, *(cp + 1)));
@@ -1608,11 +1608,11 @@ ctlr_write(unsigned char buf[], int buflen, Boolean erase)
 			cp++;
 			if (*cp == XA_FOREGROUND)  {
 				trace_ds("%s", see_efa(*cp, *(cp + 1)));
-				if (appres.m3279)
+				if (h3270.m3279)
 					default_fg = *(cp + 1);
 			} else if (*cp == XA_BACKGROUND)  {
 				trace_ds("%s", see_efa(*cp, *(cp + 1)));
-				if (appres.m3279)
+				if (h3270.m3279)
 					default_bg = *(cp + 1);
 			} else if (*cp == XA_HIGHLIGHTING)  {
 				trace_ds("%s", see_efa(*cp, *(cp + 1)));
@@ -2446,7 +2446,7 @@ ctlr_add_gr(int baddr, unsigned char gr)
 void
 ctlr_add_fg(int baddr, unsigned char color)
 {
-	if (!appres.m3279)
+	if (!h3270.m3279)
 		return;
 	if ((color & 0xf0) != 0xf0)
 		color = 0;
@@ -2463,7 +2463,7 @@ ctlr_add_fg(int baddr, unsigned char color)
 void
 ctlr_add_bg(int baddr, unsigned char color)
 {
-	if (!appres.m3279)
+	if (!h3270.m3279)
 		return;
 	if ((color & 0xf0) != 0xf0)
 		color = 0;
@@ -2639,7 +2639,7 @@ mdt_set(int baddr)
 	faddr = find_field_attribute(&h3270,baddr);
 	if (faddr >= 0 && !(h3270.ea_buf[faddr].fa & FA_MODIFY)) {
 		h3270.ea_buf[faddr].fa |= FA_MODIFY;
-		if (appres.modified_sel)
+		if (h3270.modified_sel)
 			ALL_CHANGED;
 	}
 }
@@ -2652,7 +2652,7 @@ mdt_clear(int baddr)
 	faddr = find_field_attribute(&h3270,baddr);
 	if (faddr >= 0 && (h3270.ea_buf[faddr].fa & FA_MODIFY)) {
 		h3270.ea_buf[faddr].fa &= ~FA_MODIFY;
-		if (appres.modified_sel)
+		if (h3270.modified_sel)
 			ALL_CHANGED;
 	}
 }

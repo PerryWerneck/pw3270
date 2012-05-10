@@ -184,13 +184,15 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 	}
 
 	if(appres.mono)
-		appres.m3279 = False;
+		hSession->m3279 = 0;
+	else
+		hSession->m3279 = 1;
 
 	if(!appres.extended)
 		appres.oversize = CN;
 
 #if defined(RESTRICT_3279)
-	if (appres.m3279 && model_number == 4)
+	if (hSession->m3279 && model_number == 4)
 		model_number = 3;
 #endif
 
@@ -285,11 +287,16 @@ static int parse_model_number(H3270 *session, const char *m)
 		 * If it's longer than one character, it needs to start with
 		 * '327[89]', and it sets the m3279 resource.
 		 */
-		if (!strncmp(m, "3278", 4)) {
-			appres.m3279 = False;
-		} else if (!strncmp(m, "3279", 4)) {
-			appres.m3279 = True;
-		} else {
+		if (!strncmp(m, "3278", 4))
+		{
+			session->m3279 = 0;
+		}
+		else if (!strncmp(m, "3279", 4))
+		{
+			session->m3279 = 1;
+		}
+		else
+		{
 			return -1;
 		}
 		m += 4;

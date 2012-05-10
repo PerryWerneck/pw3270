@@ -52,8 +52,8 @@ typedef struct {
 	/* Options (not toggles) */
 	char mono;
 	char extended;
-	char m3279;
-	char modified_sel;
+//	char m3279;
+//	char modified_sel;
 //	char once;
 //#if defined(X3270_DISPLAY) /*[*/
 //	char visual_bell;

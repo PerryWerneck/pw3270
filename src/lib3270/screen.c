@@ -148,7 +148,7 @@ int screen_init(H3270 *session)
 /* Map a field attribute to its default colors. */
 static unsigned short color_from_fa(unsigned char fa)
 {
-	if (appres.m3279)
+	if (h3270.m3279)
 		return get_color_pair(DEFCOLOR_MAP(fa),0) | COLOR_ATTR_FIELD;
 
 	// Green on black
@@ -166,7 +166,7 @@ static unsigned short calc_attrs(H3270 *session, int baddr, int fa_addr, int fa)
 	/* Compute the color. */
 
 	/* Monochrome is easy, and so is color if nothing is specified. */
-	if (!appres.m3279 ||
+	if (!h3270.m3279 ||
 		(!session->ea_buf[baddr].fg &&
 		 !session->ea_buf[fa_addr].fg &&
 		 !session->ea_buf[baddr].bg &&
@@ -219,10 +219,10 @@ static unsigned short calc_attrs(H3270 *session, int baddr, int fa_addr, int fa)
 			a |= LIB3270_ATTR_UNDERLINE;
 	}
 
-	if(appres.m3279 && (gr & (GR_BLINK | GR_UNDERLINE)) && !(gr & GR_REVERSE) && !bg)
+	if(h3270.m3279 && (gr & (GR_BLINK | GR_UNDERLINE)) && !(gr & GR_REVERSE) && !bg)
     	a |= LIB3270_ATTR_BACKGROUND_INTENSITY;
 
-	if(!appres.m3279 &&	((gr & GR_INTENSIFY) || FA_IS_HIGH(fa)))
+	if(!h3270.m3279 &&	((gr & GR_INTENSIFY) || FA_IS_HIGH(fa)))
 		a |= LIB3270_ATTR_INTENSIFY;
 
 	if (gr & GR_REVERSE)
@@ -260,7 +260,7 @@ void update_model_info(H3270 *session, int model, int cols, int rows)
 	session->model_num	= model;
 
 	/* Update the model name. */
-	(void) sprintf(session->model_name, "327%c-%d%s",appres.m3279 ? '9' : '8',session->model_num,appres.extended ? "-E" : "");
+	(void) sprintf(session->model_name, "327%c-%d%s",session->m3279 ? '9' : '8',session->model_num,appres.extended ? "-E" : "");
 
 	session->update_model(session, session->model_name,session->model_num,rows,cols);
 }

@@ -770,7 +770,7 @@ do_qr_color(void)
 	*obptr++ = 0xf0 + COLOR_GREEN;	/*  green */
 	for (i = 0xf1; i < 0xf1 + color_max - 1; i++) {
 		*obptr++ = i;
-		if (appres.m3279)
+		if (h3270.m3279)
 			*obptr++ = i;
 		else
 			*obptr++ = 0x00;
@@ -779,7 +779,7 @@ do_qr_color(void)
 /*
 #if !defined(X3270_DISPLAY)
 	// Add background color.
-	if (appres.m3279) {
+	if (h3270.m3279) {
 		space3270out(4);
 		*obptr++ = 4;		// length
 		*obptr++ = 0x02;	// background color

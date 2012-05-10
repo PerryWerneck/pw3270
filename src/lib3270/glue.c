@@ -139,12 +139,10 @@ static void initialize(void)
 	appres.extended = True;
 
 #if defined(C3270) /*[*/
-	appres.m3279 = True;
-#else /*][*/
-	appres.m3279 = False;
+	h3270.m3279 = True;
 #endif /*]*/
 
-	appres.modified_sel = False;
+//	appres.modified_sel = False;
 	appres.apl_mode = False;
 
 /*
@@ -430,9 +428,9 @@ static struct {
 	{ ResLnext,	offset(lnext),		XRM_STRING },
 #endif /*]*/
 	{ ResLoginMacro,offset(login_macro),	XRM_STRING },
-	{ ResM3279,	offset(m3279),		XRM_BOOLEAN },
+//	{ ResM3279,	offset(m3279),		XRM_BOOLEAN },
 //	{ ResModel,	offset(model),		XRM_STRING },
-	{ ResModifiedSel, offset(modified_sel),	XRM_BOOLEAN },
+//	{ ResModifiedSel, offset(modified_sel),	XRM_BOOLEAN },
 #if defined(C3270) && !defined(_WIN32) /*[*/
 	{ ResMono,	offset(mono),		XRM_BOOLEAN },
 #endif /*]*/
