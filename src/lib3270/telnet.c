@@ -37,6 +37,11 @@
  *		the given IBM host.
  */
 
+#if defined(_WIN32)
+	#include <winsock2.h>
+	#include <windows.h>
+#endif
+
 #include <lib3270/config.h>
 #if defined(HAVE_LIBSSL)
 	#include <openssl/ssl.h>
@@ -47,7 +52,6 @@
 #include <errno.h>
 
 #if defined(_WIN32)
-	#include <winsock2.h>
 	#include <ws2tcpip.h>
 #else
 	#include <sys/socket.h>
@@ -3163,6 +3167,18 @@ net_snap_options(void)
  */
 static int non_blocking(H3270 *session, Boolean on)
 {
+# if defined(FIONBIO)
+
+	int i = on ? 1 : 0;
+
+	if (SOCK_IOCTL(session->sock, FIONBIO, (int *) &i) < 0)
+	{
+		popup_a_sockerr(session,  N_( "ioctl(%s)" ), "FIONBIO");
+		return -1;
+	}
+
+#else
+
 	int f;
 
 	if ((f = fcntl(session->sock, F_GETFL, 0)) == -1)
@@ -3181,6 +3197,8 @@ static int non_blocking(H3270 *session, Boolean on)
 		popup_an_errno(NULL,errno, N_( "fcntl(%s)" ), "F_GETFL");
 		return -1;
 	}
+
+#endif // FIONBIO
 
 	return 0;
 }
