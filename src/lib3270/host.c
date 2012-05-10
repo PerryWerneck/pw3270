@@ -575,8 +575,8 @@ static int do_connect(H3270 *hSession, const char *n)
 	/* Prepare Xt for I/O. */
 //	x_add_input(hSession);
 #ifdef _WIN32
-	hSession->ns_exception_id	= AddExcept(hSession->sockEvent, hSession, net_exception);
-	hSession->ns_read_id		= AddInput(hSession->sockEvent, hSession, net_input);
+	hSession->ns_exception_id	= AddExcept((int) hSession->sockEvent, hSession, net_exception);
+	hSession->ns_read_id		= AddInput((int) hSession->sockEvent, hSession, net_input);
 #else
 	hSession->ns_exception_id	= AddExcept(hSession->sock, hSession, net_exception);
 	hSession->ns_read_id		= AddInput(hSession->sock, hSession, net_input);

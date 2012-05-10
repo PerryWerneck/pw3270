@@ -31,6 +31,10 @@
  */
 
 /* glue for missing Xt code */
+#if defined(_WIN32)
+	#include <winsock2.h>
+	#include <windows.h>
+#endif // WIN32
 
 #include "globals.h"
 #include "api.h"
@@ -219,9 +223,9 @@ static unsigned long DefaultAddTimeOut(unsigned long interval_ms, H3270 *session
 		prev->next = t_new;
 	}
 
-	Trace("Timeout added: %p",t_new);
+	trace("Timeout added: %p",t_new);
 
-	return (unsigned long)t_new;
+	return (unsigned long) t_new;
 }
 
 static void DefaultRemoveTimeOut(unsigned long timer)
@@ -874,6 +878,9 @@ void RemoveTimeOut(unsigned long timer)
 unsigned long AddInput(int source, H3270 *session, void (*fn)(H3270 *session))
 {
 	CHECK_SESSION_HANDLE(session);
+
+	trace("Adding input %d",source);
+
 	if(callbacks->AddInput)
 		return callbacks->AddInput(source,session,fn);
 	return 0;

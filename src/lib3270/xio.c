@@ -98,11 +98,11 @@ void x_except_on(H3270 *h)
 		RemoveInput(h->ns_read_id);
 
 #ifdef WIN32
-	h->ns_exception_id = AddExcept(h->sockEvent, h, net_exception);
+	h->ns_exception_id = AddExcept((int) h->sockEvent, h, net_exception);
 	h->excepting = True;
 
 	if(h->reading)
-		h->ns_read_id = AddInput(h->sockEvent, h, net_input);
+		h->ns_read_id = AddInput( (int) h->sockEvent, h, net_input);
 #else
 	h->ns_exception_id = AddExcept(h->sock, h, net_exception);
 	h->excepting = True;

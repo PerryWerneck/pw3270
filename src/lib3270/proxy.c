@@ -35,6 +35,10 @@
  *	proxy.c
  *		This module implements various kinds of proxies.
  */
+#ifdef _WIN32
+	#include <winsock2.h>
+	#include <windows.h>
+#endif // _WIN32
 
 #include "globals.h"
 #if !defined(PR3287) /*[*/
@@ -46,10 +50,9 @@
 	#include <stdlib.h>
 #endif
 
-#if defined(_WIN32) /*[*/
-#include <winsock2.h>
-#include <ws2tcpip.h>
-#else /*][*/
+#if defined(_WIN32)
+	#include <ws2tcpip.h>
+#else
 
 #include <malloc.h>
 #include <sys/socket.h>

@@ -35,18 +35,19 @@
  *		Utility functions for x3270/c3270/s3270/tcl3270
  */
 
+#if defined(_WIN32)
+	#include <winsock2.h>
+	#include <windows.h>
+#endif // _WIN32
+
 #include "globals.h"
 
 #if defined(_WIN32)
 
-	#include <windows.h>
 	#include "winversc.h"
-
-	#include <winsock2.h>
 	#include <ws2tcpip.h>
 	#include <stdio.h>
 	#include <errno.h>
-
 	#include "w3miscc.h"
 
 #else

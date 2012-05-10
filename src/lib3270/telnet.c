@@ -473,9 +473,13 @@ static int connect_sock(H3270 *hSession, int sockfd, const struct sockaddr *addr
 {
 	struct connect_parm p = { sizeof(struct connect_parm), sockfd, addr, addrlen, -1 };
 
+#ifdef _WIN32
+	do_connect_sock(hSession,&p);
+#else
 	trace("%s: Connect begin sock=%d",__FUNCTION__,p.sockfd);
 	lib3270_call_thread((int (*)(H3270 *, void *)) do_connect_sock,hSession,&p);
 	trace("%s: Connect ends, rc=%d",__FUNCTION__,p.err);
+#endif	// _WIN32
 
 	return p.err;
 }
@@ -683,7 +687,6 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 
 	/* all done */
 #if defined(_WIN32)
-
 	if(session->sockEvent == NULL)
 	{
 		char ename[256];
@@ -712,7 +715,11 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 		_exit(1);
 	}
 
+	trace("Socket: %d Event: %ld",session->sock,session->sockEvent);
+
 #endif // WIN32
+
+	non_blocking(session,1);
 
 	return 0;
 }
@@ -956,9 +963,9 @@ void net_input(H3270 *session)
 
 	CHECK_SESSION_HANDLE(session);
 
-// #if defined(_WIN32)
+//#if defined(_WIN32)
 // 	for (;;)
-// #endif
+//#endif
 	{
 		if (session->sock < 0)
 			return;
@@ -1008,9 +1015,8 @@ void net_input(H3270 *session)
 		if (nr < 0)
 		{
 			if (socket_errno() == SE_EWOULDBLOCK)
-			{
 				return;
-			}
+
 #if defined(HAVE_LIBSSL) /*[*/
 			if(session->ssl_con != NULL)
 			{
@@ -1064,7 +1070,6 @@ void net_input(H3270 *session)
 		}
 
 		/* Process the data. */
-
 		if (HALF_CONNECTED)
 		{
 			if (non_blocking(session,False) < 0)
@@ -3208,6 +3213,8 @@ static int non_blocking(H3270 *session, Boolean on)
 	}
 
 #endif // FIONBIO
+
+	trace("Socket %d is %s",session->sock, on ? "non-blocking" : "blocking");
 
 	return 0;
 }
