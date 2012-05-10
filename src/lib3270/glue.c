@@ -105,8 +105,6 @@
  int				  children = 0;
  Boolean			  exiting = False;
 // char				* command_string = CN;
- static Boolean	  sfont = False;
- Boolean			* standard_font = &sfont;
 
 #if defined(WC3270) || defined(LIB3270)/*[*/
 char			*profile_name = CN;
@@ -786,14 +784,6 @@ read_resource_file(const char *filename, Boolean fatal)
 	Free(where);
 	return 0;
 }
-
-/* Screen globals. */
-
-static int cw = 7;
-int *char_width = &cw;
-
-static int ch = 7;
-int *char_height = &ch;
 
 // Boolean flipped = False;
 

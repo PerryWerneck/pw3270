@@ -64,11 +64,22 @@
 
 #include "api.h"
 
-/* Externals: ctlr.c */
-// extern Boolean  screen_alt;
+// Externals
 extern unsigned char reply_mode;
 extern int      crm_nattr;
 extern unsigned char crm_attr[];
+
+/* Screen globals. */
+static int		  cw = 7;
+int 			* char_width = &cw;
+
+static int		  ch = 7;
+int 			* char_height = &ch;
+
+/* Globals */
+static Boolean	  sfont = False;
+Boolean			* standard_font = &sfont;
+
 
 /* Statics */
 static Boolean  qr_in_progress = False;
