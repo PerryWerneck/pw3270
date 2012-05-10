@@ -36,6 +36,7 @@
 #include "globals.h"
 
 #include <errno.h>
+#include <malloc.h>
 
 #include "appres.h"
 #include "actionsc.h"

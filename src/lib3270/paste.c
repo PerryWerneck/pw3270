@@ -45,9 +45,10 @@
 #endif
 
 #include <fcntl.h>
+#include <malloc.h>
+
 #include "3270ds.h"
 #include "appres.h"
-// #include "ctlr.h"
 #include "resources.h"
 
 #include "actionsc.h"

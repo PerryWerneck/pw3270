@@ -48,6 +48,8 @@
 #include <netdb.h>
 #endif /*]*/
 
+#include <stdlib.h>
+
 #include "api.h"
 
 #include <assert.h>

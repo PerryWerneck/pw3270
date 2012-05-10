@@ -100,7 +100,6 @@
  #define LAST_ARG	"--"
 
 /*---[ Globals ]--------------------------------------------------------------------------------------------------------------*/
- H3270				  h3270;
  const char		* programname;
  AppRes				  appres;
  int				  children = 0;
@@ -797,8 +796,6 @@ int *char_width = &cw;
 
 static int ch = 7;
 int *char_height = &ch;
-
-Boolean visible_control = False;
 
 // Boolean flipped = False;
 

@@ -106,7 +106,7 @@
  * Prerequisite #includes.
  */
 #include <stdio.h>				/* Unix standard I/O library */
-#include <stdlib.h>				/* Other Unix library functions */
+// #include <stdlib.h>				/* Other Unix library functions */
 #include <unistd.h>				/* Unix system calls */
 #include <ctype.h>				/* Character classes */
 #include <string.h>				/* String manipulations */
@@ -248,7 +248,7 @@ LIB3270_INTERNAL Boolean		*standard_font;
 LIB3270_INTERNAL Boolean		std_ds_host;
 LIB3270_INTERNAL char			*termtype;
 LIB3270_INTERNAL Widget			toplevel;
-LIB3270_INTERNAL Boolean		visible_control;
+// LIB3270_INTERNAL Boolean		visible_control;
 LIB3270_INTERNAL int			*xtra_width;
 
 /*

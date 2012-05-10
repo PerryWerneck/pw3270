@@ -477,7 +477,7 @@ void ctlr_erase(H3270 *session, int alt)
 		/* Going from maximum to 24x80. */
 		if (session->maxROWS > 24 || session->maxCOLS > 80)
 		{
-			if (visible_control)
+			if(session->vcontrol)
 			{
 				ctlr_blanks();
 				screen_disp(session);
@@ -2282,7 +2282,7 @@ ps_process(void)
 		;
 //	sms_continue();
 
-#if defined(X3270_FT) /*[*/
+#if defined(X3270_FT)
 	/* Process file transfers. */
 	if (lib3270_get_ft_state(&h3270) != LIB3270_FT_STATE_NONE &&	/* transfer in progress */
 	    h3270.formatted &&          								/* screen is formatted */
@@ -2292,7 +2292,7 @@ ps_process(void)
 	    h3270.ea_buf[1919].fa && FA_IS_SKIP(h3270.ea_buf[1919].fa)) {
 		ft_cut_data();
 	}
-#endif /*]*/
+#endif
 }
 
 /*
@@ -2666,9 +2666,10 @@ ctlr_shrink(void)
 {
 	int baddr;
 
-	for (baddr = 0; baddr < h3270.rows*h3270.cols; baddr++) {
+	for (baddr = 0; baddr < h3270.rows*h3270.cols; baddr++)
+	{
 		if (!h3270.ea_buf[baddr].fa)
-			h3270.ea_buf[baddr].cc = visible_control? EBC_space : EBC_null;
+			h3270.ea_buf[baddr].cc = h3270.vcontrol ? EBC_space : EBC_null;
 	}
 	ALL_CHANGED;
 	screen_disp(&h3270);

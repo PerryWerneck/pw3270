@@ -80,6 +80,8 @@
 		int						  bgthread	: 1;	/**< Running on a background thread ? */
 		int					  	  selected	: 1;	/**< Has selected region? */
 		int						  rectsel	: 1;	/**< Selected region is a rectangle ? */
+		int						  vcontrol	: 1;	/**< Visible control ? */
+
 
 		LIB3270_SSL_STATE		  secure;
 

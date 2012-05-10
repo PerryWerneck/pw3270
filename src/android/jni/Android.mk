@@ -26,11 +26,14 @@
 LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
-include ../lib3270/sources.mak
+
+# include ../lib3270/sources.mak
+TERMINAL_SOURCES=	bounds.c XtGlue.c ctlr.c util.c toggles.c screen.c selection.c kybd.c telnet.c \
+					host.c sf.c ansi.c log.c resolver.c xio.c tables.c
 
 LOCAL_CFLAGS=-I../include
 LOCAL_MODULE    := lib3270
-LOCAL_SRC_FILES := $(foreach SRC, $(SOURCES), ../../lib3270/$(SRC))
+LOCAL_SRC_FILES := $(foreach SRC, $(TERMINAL_SOURCES), ../../lib3270/$(SRC))
 
 include $(BUILD_SHARED_LIBRARY)
 

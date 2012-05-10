@@ -38,9 +38,13 @@
  */
 
 #if defined(_WIN32)
-       #include <winsock2.h>
-       #include <windows.h>
+	#include <winsock2.h>
+	#include <windows.h>
 #endif
+
+#ifndef ANDROID
+	#include <stdlib.h>
+#endif // !ANDROID
 
 #include <lib3270/config.h>
 #if defined(HAVE_LIBSSL)
@@ -533,9 +537,12 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 
 	/* get the passthru host and port number */
 	if (session->passthru_host) {
-		const char *hn;
+		const char *hn = CN;
 
+#ifndef ANDROID
 		hn = getenv("INTERNET_HOST");
+#endif // ANDROID
+
 		if (hn == CN)
 			hn = "internet-gateway";
 
@@ -3432,7 +3439,7 @@ int net_getsockname(const H3270 *session, void *buf, int *len)
 char *
 net_proxy_type(void)
 {
-    	if (proxy_type > 0)
+   	if (proxy_type > 0)
 	    	return proxy_type_name(proxy_type);
 	else
 	    	return NULL;

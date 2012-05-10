@@ -53,6 +53,10 @@
 	#include <pwd.h>
 #endif // _WIN32
 
+#ifndef ANDROID
+	#include <stdlib.h>
+#endif // !ANDROID
+
 #include <stdarg.h>
 #include "resources.h"
 
@@ -516,7 +520,7 @@ get_message(const char *key)
 #endif
 */
 
-#define ex_getenv getenv
+// #define ex_getenv getenv
 
 /* Variable and tilde substitution functions. */
 static char *
@@ -602,7 +606,10 @@ var_subst(const char *s)
 				vn = Malloc(vn_len + 1);
 				(void) strncpy(vn, vn_start, vn_len);
 				vn[vn_len] = '\0';
-				if ((vv = ex_getenv(vn))) {
+
+#ifndef ANDROID
+				if((vv = getenv(vn)))
+				{
 					*o = '\0';
 					o_len = o_len
 					    - 1			/* '$' */
@@ -615,6 +622,8 @@ var_subst(const char *s)
 					(void) strcpy(o, vv);
 					o += strlen(vv);
 				}
+#endif // !ANDROID
+
 				Free(vn);
 				if (state == VS_VNB) {
 					state = VS_BASE;

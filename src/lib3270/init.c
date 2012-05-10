@@ -35,6 +35,8 @@
 #include "appres.h"
 #include "charsetc.h"
 
+#include <malloc.h>
+
 /*---[ Statics ]--------------------------------------------------------------------------------------------------------------*/
 
  static int parse_model_number(H3270 *session, const char *m);

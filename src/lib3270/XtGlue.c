@@ -34,15 +34,18 @@
 
 #include "globals.h"
 #include "api.h"
-#if defined(_WIN32) /*[*/
-#include "appres.h"
-#include "trace_dsc.h"
-#include "xioc.h"
-#endif /*]*/
+#include <malloc.h>
+
+#if defined(_WIN32)
+	#include "appres.h"
+	#include "trace_dsc.h"
+	#include "xioc.h"
+#endif
+
 #include "utilc.h"
 
 #include <stdio.h>
-#include <stdlib.h>
+// #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
 #include "X11keysym.h"
@@ -77,6 +80,10 @@
 #define InputWriteMask	0x4
 
 #define MILLION		1000000L
+
+/*---[ Globals ]--------------------------------------------------------------------------------------------------------------*/
+
+ H3270				  h3270;
 
 /*---[ Callbacks ]------------------------------------------------------------------------------------------*/
 
