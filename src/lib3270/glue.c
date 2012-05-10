@@ -136,7 +136,7 @@ static void initialize(void)
 
 	/* Set the defaults. */
 	appres.mono = False;
-	appres.extended = True;
+//	appres.extended = True;
 
 #if defined(C3270) /*[*/
 	h3270.m3279 = True;
@@ -200,7 +200,7 @@ static void initialize(void)
 
 #endif /*]*/
 
-	appres.oversize = CN;
+//	appres.oversize = CN;
 
 #if defined(C3270) /*[*/
 	appres.meta_escape = "auto";
@@ -324,7 +324,7 @@ static const struct lib3270_option options[] =
     { OptMono,     OPT_BOOLEAN, True,  ResMono,      offset(mono), N_( "Forces monochrome display" ) },
 #endif /*]*/
 //    { OptOnce,     OPT_BOOLEAN, True,  ResOnce,      offset(once), NULL },
-    { OptOversize, OPT_STRING,  False, ResOversize,  offset(oversize), N_( "Sets the screen dimensions to be larger than the default for the chosen model (COLSxROWS)." ) },
+//    { OptOversize, OPT_STRING,  False, ResOversize,  offset(oversize), N_( "Sets the screen dimensions to be larger than the default for the chosen model (COLSxROWS)." ) },
     { OptPort,     OPT_STRING,  False, ResPort,      offset(port), N_( "The name of the default TCP port to connect" ) },
 #if defined(C3270) && !defined(LIB3270) /*[*/
     { OptPrinterLu,OPT_STRING,  False, ResPrinterLu, offset(printer_lu), NULL },
@@ -391,7 +391,7 @@ static struct {
 	{ ResEof,	offset(eof),		XRM_STRING },
 	{ ResErase,	offset(erase),		XRM_STRING },
 #endif /*]*/
-	{ ResExtended,	offset(extended),	XRM_BOOLEAN },
+//	{ ResExtended,	offset(extended),	XRM_BOOLEAN },
 #if defined(X3270_FT) /*[*/
 	{ ResFtCommand,	offset(ft_command),	XRM_STRING },
 	{ ResDftBufferSize,offset(dft_buffer_size),XRM_INT },
@@ -436,7 +436,7 @@ static struct {
 #endif /*]*/
 	{ ResNumericLock, offset(numeric_lock),	XRM_BOOLEAN },
 	{ ResOerrLock,	offset(oerr_lock),	XRM_BOOLEAN },
-	{ ResOversize,	offset(oversize),	XRM_STRING },
+//	{ ResOversize,	offset(oversize),	XRM_STRING },
 	{ ResPort,	offset(port),		XRM_STRING },
 #if defined(C3270) /*[*/
 	{ ResPrinterLu,	offset(printer_lu),	XRM_STRING },

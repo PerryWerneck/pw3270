@@ -133,6 +133,9 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 	memset(hSession,0,sizeof(H3270));
 	hSession->sz = sizeof(H3270);
 
+	// Set the defaults.
+	hSession->extended = 1;
+
 	// Initialize toggles
 	initialize_toggles(hSession);
 
@@ -188,8 +191,8 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 	else
 		hSession->m3279 = 1;
 
-	if(!appres.extended)
-		appres.oversize = CN;
+	if(!hSession->extended)
+		hSession->oversize = CN;
 
 #if defined(RESTRICT_3279)
 	if (hSession->m3279 && model_number == 4)
@@ -198,7 +201,7 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 
 	Trace("Model_number: %d",model_number);
 
-	if (!appres.extended || appres.oversize == CN || sscanf(appres.oversize, "%dx%d%c", &ovc, &ovr, &junk) != 2)
+	if (!hSession->extended || hSession->oversize == CN || sscanf(hSession->oversize, "%dx%d%c", &ovc, &ovr, &junk) != 2)
 	{
 		ovc = 0;
 		ovr = 0;

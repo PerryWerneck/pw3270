@@ -83,7 +83,9 @@
 		int						  vcontrol		: 1;	/**< Visible control ? */
 		int						  modified_sel	: 1;
 		int						  m3279			: 1;
+		int 					  extended		: 1;
 
+		char					* oversize;
 
 		LIB3270_SSL_STATE		  secure;
 

@@ -51,7 +51,7 @@ typedef struct {
 
 	/* Options (not toggles) */
 	char mono;
-	char extended;
+//	char extended;
 //	char m3279;
 //	char modified_sel;
 //	char once;
@@ -167,7 +167,7 @@ typedef struct {
 */
 
 #endif /*]*/
-	char	*oversize;
+//	char	*oversize;
 #if defined(X3270_FT) /*[*/
 	char	*ft_command;
 	int	dft_buffer_size;

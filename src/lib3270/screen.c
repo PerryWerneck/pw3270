@@ -260,7 +260,7 @@ void update_model_info(H3270 *session, int model, int cols, int rows)
 	session->model_num	= model;
 
 	/* Update the model name. */
-	(void) sprintf(session->model_name, "327%c-%d%s",session->m3279 ? '9' : '8',session->model_num,appres.extended ? "-E" : "");
+	(void) sprintf(session->model_name, "327%c-%d%s",session->m3279 ? '9' : '8',session->model_num,session->extended ? "-E" : "");
 
 	session->update_model(session, session->model_name,session->model_num,rows,cols);
 }
