@@ -727,8 +727,13 @@ static void v3270_accessible_get_size(AtkComponent *component,gint *width, gint 
   if (widget == NULL)
     return;
 
+#if GTK_CHECK_VERSION(3,0,0)
   *width = gtk_widget_get_allocated_width (widget);
   *height = gtk_widget_get_allocated_height (widget);
+#else
+  *width  = widget->allocation.width;
+  *height = widget->allocation.height;
+#endif // GTK(3,0,0)
 }
 
 static gboolean v3270_accessible_grab_focus(AtkComponent *component)

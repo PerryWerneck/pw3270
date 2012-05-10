@@ -656,9 +656,9 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 	case SE_EINPROGRESS:
 		*pending = True;
 		trace_dsn("Connection pending.\n");
-// #if !defined(_WIN32)
+#if !defined(_WIN32)
 		output_id = AddOutput(session->sock, session, output_possible);
-// #endif
+#endif
 		break;
 
 	default:

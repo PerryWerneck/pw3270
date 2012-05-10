@@ -76,7 +76,7 @@ int get_version_info(void)
 	info.dwOSVersionInfoSize = sizeof(info);
 	if(GetVersionEx(&info) == 0)
 	{
-		lib3270_write_log("lib3270","%s","Can't get Windows version");
+		lib3270_write_log(NULL,"lib3270","%s","Can't get Windows version");
 		return -1;
 	}
 

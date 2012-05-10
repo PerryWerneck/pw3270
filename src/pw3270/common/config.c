@@ -489,7 +489,7 @@ void set_integer_to_config(const gchar *group, const gchar *key, gint val)
 
 		if(rc != ERROR_SUCCESS)
 		{
-			gchar *msg = get_last_error_msg();
+			gchar *msg = g_win32_error_message(GetLastError());
 			g_warning("Error \"%s\" when setting key HKCU\\%s\\%s",msg,path,key);
 			g_free(msg);
 		}
@@ -497,7 +497,7 @@ void set_integer_to_config(const gchar *group, const gchar *key, gint val)
 	}
 	else
 	{
-		gchar *msg = get_last_error_msg();
+		gchar *msg = g_win32_error_message(GetLastError());
 		g_warning("Error \"%s\" when creating key HKCU\\%s",msg,path);
 		g_free(msg);
 	}
