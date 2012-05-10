@@ -133,7 +133,7 @@ static void initialize(void)
 	Trace("%s (init_calls: %d)",__FUNCTION__,init_calls);
 
 	/* Set the defaults. */
-	appres.mono = False;
+//	appres.mono = False;
 //	appres.extended = True;
 
 #if defined(C3270) /*[*/
@@ -318,9 +318,9 @@ static const struct lib3270_option options[] =
 //    { OptLocalEncoding,OPT_STRING,False,ResLocalEncoding,offset(local_encoding), NULL },
 //#endif /*]*/
     { OptModel,    OPT_STRING,  False, ResKeymap,    offset(model), N_( "Set terminal model (screen size)" ) },
-#if !defined(_WIN32) /*[*/
-    { OptMono,     OPT_BOOLEAN, True,  ResMono,      offset(mono), N_( "Forces monochrome display" ) },
-#endif /*]*/
+// #if !defined(_WIN32) /*[*/
+//    { OptMono,     OPT_BOOLEAN, True,  ResMono,      offset(mono), N_( "Forces monochrome display" ) },
+// #endif /*]*/
 //    { OptOnce,     OPT_BOOLEAN, True,  ResOnce,      offset(once), NULL },
 //    { OptOversize, OPT_STRING,  False, ResOversize,  offset(oversize), N_( "Sets the screen dimensions to be larger than the default for the chosen model (COLSxROWS)." ) },
     { OptPort,     OPT_STRING,  False, ResPort,      offset(port), N_( "The name of the default TCP port to connect" ) },
@@ -429,9 +429,9 @@ static struct {
 //	{ ResM3279,	offset(m3279),		XRM_BOOLEAN },
 //	{ ResModel,	offset(model),		XRM_STRING },
 //	{ ResModifiedSel, offset(modified_sel),	XRM_BOOLEAN },
-#if defined(C3270) && !defined(_WIN32) /*[*/
-	{ ResMono,	offset(mono),		XRM_BOOLEAN },
-#endif /*]*/
+//#if defined(C3270) && !defined(_WIN32) /*[*/
+//	{ ResMono,	offset(mono),		XRM_BOOLEAN },
+//#endif /*]*/
 	{ ResNumericLock, offset(numeric_lock),	XRM_BOOLEAN },
 	{ ResOerrLock,	offset(oerr_lock),	XRM_BOOLEAN },
 //	{ ResOversize,	offset(oversize),	XRM_STRING },

@@ -186,7 +186,7 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 #endif
 	}
 
-	if(appres.mono)
+	if(hSession->mono)
 		hSession->m3279 = 0;
 	else
 		hSession->m3279 = 1;

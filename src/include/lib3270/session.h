@@ -82,6 +82,7 @@
 		int						  rectsel		: 1;	/**< Selected region is a rectangle ? */
 		int						  vcontrol		: 1;	/**< Visible control ? */
 		int						  modified_sel	: 1;
+		int						  mono			: 1;	/**< Forces monochrome display */
 		int						  m3279			: 1;
 		int 					  extended		: 1;
 

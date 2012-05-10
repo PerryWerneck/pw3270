@@ -258,7 +258,7 @@ void ctlr_set_rows_cols(H3270 *session, int mn, int ovc, int ovr)
 	// Make sure that the current rows/cols are still 24x80.
 	session->cols = 80;
 	session->rows = 24;
-	session->screen_alt = False;
+	session->screen_alt = 0;
 	*/
 
 }

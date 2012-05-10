@@ -50,7 +50,7 @@ typedef struct {
 // #endif /*]*/
 
 	/* Options (not toggles) */
-	char mono;
+//	char mono;
 //	char extended;
 //	char m3279;
 //	char modified_sel;
