@@ -203,7 +203,7 @@ static void net_rawout(unsigned const char *buf, int len);
 static void check_in3270(void);
 static void store3270in(unsigned char c);
 static void check_linemode(Boolean init);
-static int non_blocking(Boolean on);
+static int non_blocking(H3270 *session, Boolean on);
 static void net_connected(H3270 *session);
 #if defined(X3270_TN3270E) /*[*/
 static int tn3270e_negotiate(void);
@@ -624,7 +624,7 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 #endif
 
 	/* set the socket to be non-delaying */
-	if (non_blocking(True) < 0)
+	if (non_blocking(session,True) < 0)
 		close_fail;
 
 #if !defined(_WIN32)
@@ -647,7 +647,7 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 	case 0:					// Connected
 		trace_dsn("Connected.\n");
 
-		if(non_blocking(False) < 0)
+		if(non_blocking(session,False) < 0)
 			close_fail;
 		net_connected(session);
 		break;
@@ -801,7 +801,7 @@ static void net_connected(H3270 *session)
 		}
 		else
 		{
-			non_blocking(False);
+			non_blocking(session,False);
 			rc = SSL_connect(session->ssl_con);
 
 			if(rc != 1)
@@ -825,7 +825,7 @@ static void net_connected(H3270 *session)
 				return;
 
 			}
-			non_blocking(True);
+			non_blocking(session,True);
 		}
 
 //		session->secure_connection = True;
@@ -889,7 +889,7 @@ static void net_connected(H3270 *session)
  */
 static void connection_complete(void)
 {
-	if (non_blocking(False) < 0)
+	if (non_blocking(&h3270,False) < 0)
 	{
 		host_disconnect(&h3270,True);
 		return;
@@ -1100,7 +1100,7 @@ void net_input(H3270 *session)
 
 		if (HALF_CONNECTED)
 		{
-			if (non_blocking(False) < 0)
+			if (non_blocking(session,False) < 0)
 			{
 				host_disconnect(session,True);
 				return;
@@ -3223,40 +3223,26 @@ net_snap_options(void)
  * Set blocking/non-blocking mode on the socket.  On error, pops up an error
  * message, but does not close the socket.
  */
-static int non_blocking(Boolean on)
+static int non_blocking(H3270 *session, Boolean on)
 {
-#if !defined(BLOCKING_CONNECT_ONLY)
-
-# if defined(FIONBIO)
-	int i = on ? 1 : 0;
-
-	if (SOCK_IOCTL(h3270.sock, FIONBIO, (int *) &i) < 0)
-	{
-		popup_a_sockerr(NULL, N_( "ioctl(%s)" ), "FIONBIO");
-		return -1;
-	}
-
-# else
-
 	int f;
 
-	if ((f = fcntl(sock, F_GETFL, 0)) == -1)
+	if ((f = fcntl(session->sock, F_GETFL, 0)) == -1)
 	{
 		popup_an_errno(NULL,errno, N_( "fcntl(%s)" ), "F_GETFL" );
 		return -1;
 	}
+
 	if (on)
 		f |= O_NDELAY;
 	else
 		f &= ~O_NDELAY;
-	if (fcntl(sock, F_SETFL, f) < 0)
+
+	if (fcntl(session->sock, F_SETFL, f) < 0)
 	{
 		popup_an_errno(NULL,errno, N_( "fcntl(%s)" ), "F_GETFL");
 		return -1;
 	}
-#endif // FIONBIO
-
-#endif // !BLOCKING_CONNECT_ONLY
 
 	return 0;
 }
