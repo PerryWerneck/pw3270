@@ -149,8 +149,12 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 	hSession->cursor 			= set_cursor;
 	hSession->message			= message;
 	hSession->update_ssl		= update_ssl;
+	hSession->sock				= -1;
 
-	hSession->sock = -1;
+#ifdef _WIN32
+	hSession->sockEvent	= NULL;
+#endif // _WIN32
+
 	hSession->model_num = -1;
 	hSession->cstate = NOT_CONNECTED;
 	hSession->oia_status = -1;

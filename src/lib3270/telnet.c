@@ -38,8 +38,8 @@
  */
 
 #if defined(_WIN32)
-	#include <winsock2.h>
-	#include <windows.h>
+       #include <winsock2.h>
+       #include <windows.h>
 #endif
 
 #include <lib3270/config.h>
@@ -485,7 +485,7 @@ static int connect_sock(H3270 *hSession, int sockfd, const struct sockaddr *addr
  *
  * @param session	Handle to the session descriptor.
  *
- * @return The file descriptor of the connected socket.
+ * @return 0 if ok, non zero if failed
  */
 int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Boolean *resolving, Boolean *pending)
 {
@@ -676,27 +676,27 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 	}
 
 	/* all done */
-/*
 #if defined(_WIN32)
-	if (session->sock_handle == NULL) {
+
+	if(session->sockEvent == NULL)
+	{
 		char ename[256];
 
-		sprintf(ename, "wc3270-%d", getpid());
+		snprintf(ename, 255, "%s-%d", PACKAGE_NAME, getpid());
 
-		session->sock_handle = CreateEvent(NULL, TRUE, FALSE, ename);
-		if (session->sock_handle == NULL)
+		session->sockEvent = CreateEvent(NULL, TRUE, FALSE, ename);
+		if(session->sockEvent == NULL)
 		{
 			lib3270_popup_dialog(	session,
 									LIB3270_NOTIFY_CRITICAL,
 									N_( "Network startup error" ),
 									N_( "Cannot create socket handle" ),
 									"%s", win32_strerror(GetLastError()) );
-
 			_exit(1);
 		}
 	}
 
-	if (WSAEventSelect(session->sock, session->sock_handle, FD_READ | FD_CONNECT | FD_CLOSE) != 0)
+	if (WSAEventSelect(session->sock, session->sockEvent, FD_READ | FD_CONNECT | FD_CLOSE) != 0)
 	{
 		lib3270_popup_dialog(	session,
 								LIB3270_NOTIFY_CRITICAL,
@@ -706,13 +706,9 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 		_exit(1);
 	}
 
-	return (int) session->sock_handle;
-#else
-	return session->sock;
-#endif
-*/
+#endif // WIN32
 
-	return session->sock;
+	return 0;
 }
 #undef close_fail
 
@@ -1272,9 +1268,10 @@ telnet_fsm(unsigned char c)
 			break;
 		    case DM:
 			trace_dsn("\n");
-			if (syncing) {
+			if (syncing)
+			{
 				syncing = 0;
-				x_except_on(&h3270,h3270.sock);
+				x_except_on(&h3270);
 			}
 			telnet_state = TNS_DATA;
 			break;
@@ -1944,7 +1941,13 @@ void net_exception(H3270 *session)
 	if (!syncing)
 	{
 		syncing = 1;
-		x_except_off(session);
+
+		if(session->excepting)
+		{
+			RemoveInput(session->ns_exception_id);
+			session->excepting = False;
+		}
+//		x_except_off(session);
 	}
 }
 
@@ -3173,7 +3176,7 @@ static int non_blocking(H3270 *session, Boolean on)
 
 	if (SOCK_IOCTL(session->sock, FIONBIO, (int *) &i) < 0)
 	{
-		popup_a_sockerr(session,  N_( "ioctl(%s)" ), "FIONBIO");
+		popup_a_sockerr(session,N_( "ioctl(%s)" ), "FIONBIO");
 		return -1;
 	}
 
@@ -3183,7 +3186,7 @@ static int non_blocking(H3270 *session, Boolean on)
 
 	if ((f = fcntl(session->sock, F_GETFL, 0)) == -1)
 	{
-		popup_an_errno(NULL,errno, N_( "fcntl(%s)" ), "F_GETFL" );
+		popup_an_errno(session,errno, N_( "fcntl(%s)" ), "F_GETFL" );
 		return -1;
 	}
 
@@ -3194,7 +3197,7 @@ static int non_blocking(H3270 *session, Boolean on)
 
 	if (fcntl(session->sock, F_SETFL, f) < 0)
 	{
-		popup_an_errno(NULL,errno, N_( "fcntl(%s)" ), "F_GETFL");
+		popup_an_errno(session,errno, N_( "fcntl(%s)" ), "F_GETFL");
 		return -1;
 	}
 

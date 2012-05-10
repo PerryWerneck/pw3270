@@ -53,17 +53,25 @@
 /*
  * Called to set up input on a new network connection.
  */
-void x_add_input(H3270 *h,int net_sock)
+/*
+void x_add_input(H3270 *h)
 {
-	h->ns_exception_id = AddExcept(net_sock, h, net_exception);
+#ifdef _WIN32
+	h->ns_exception_id = AddExcept(h->sockEvent, h, net_exception);
 	h->excepting = True;
-	h->ns_read_id = AddInput(net_sock, h, net_input);
+	h->ns_read_id = AddInput(h->sockEvent, h, net_input);
 	h->reading = True;
+#else
+	h->ns_exception_id = AddExcept(h->sock, h, net_exception);
+	h->excepting = True;
+	h->ns_read_id = AddInput(h->sock, h, net_input);
+	h->reading = True;
+#endif // WIN32
 }
-
+*/
 /*
  * Called when an exception is received to disable further exceptions.
- */
+ */ /*
 void x_except_off(H3270 *h)
 {
 	CHECK_SESSION_HANDLE(h);
@@ -74,13 +82,14 @@ void x_except_off(H3270 *h)
 		h->excepting = False;
 	}
 }
+*/
 
 /*
  * Called when exception processing is complete to re-enable exceptions.
  * This includes removing and restoring reading, so the exceptions are always
  * processed first.
  */
-void x_except_on(H3270 *h,int net_sock)
+void x_except_on(H3270 *h)
 {
 	if(h->excepting)
 		return;
@@ -88,16 +97,24 @@ void x_except_on(H3270 *h,int net_sock)
 	if(h->reading)
 		RemoveInput(h->ns_read_id);
 
-	h->ns_exception_id = AddExcept(net_sock, h, net_exception);
+#ifdef WIN32
+	h->ns_exception_id = AddExcept(h->sockEvent, h, net_exception);
 	h->excepting = True;
 
 	if(h->reading)
-		h->ns_read_id = AddInput(net_sock, h, net_input);
+		h->ns_read_id = AddInput(h->sockEvent, h, net_input);
+#else
+	h->ns_exception_id = AddExcept(h->sock, h, net_exception);
+	h->excepting = True;
+
+	if(h->reading)
+		h->ns_read_id = AddInput(h->sock, h, net_input);
+#endif // WIN32
 }
 
 /*
  * Called to disable input on a closing network connection.
- */
+ */ /*
 void x_remove_input(H3270 *h)
 {
 	if(h->reading)
@@ -111,3 +128,4 @@ void x_remove_input(H3270 *h)
 		h->excepting = False;
 	}
 }
+*/

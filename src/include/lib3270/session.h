@@ -70,9 +70,10 @@
 		unsigned short 		  	  sz;					/**< Struct size */
 
 		// Connection info
-//		int						  secure_connection;
-		int   	 	  			  sock;					/**< Network socket */
-//		int						  net_sock;
+		int						  sock;					/**< Network socket */
+		#ifdef _WIN32
+			HANDLE				  sockEvent;			/**< Event semaphore */
+		#endif // WIN32
 		LIB3270_CSTATE			  cstate;				/**< Connection state */
 
 		// flags

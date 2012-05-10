@@ -547,7 +547,7 @@ static int do_connect(H3270 *hSession, const char *n)
 	/* Attempt contact. */
 	hSession->ever_3270 = False;
 
-	if(net_connect(hSession, chost, port, 0, &resolving,&pending) < 0 && !resolving)
+	if(net_connect(hSession, chost, port, 0, &resolving,&pending) != 0 && !resolving)
 	{
 		/* Redundantly signal a disconnect. */
 		host_disconnected(hSession);
@@ -572,7 +572,17 @@ static int do_connect(H3270 *hSession, const char *n)
 //		login_macro(ps);
 
 	/* Prepare Xt for I/O. */
-	x_add_input(hSession,hSession->sock);
+//	x_add_input(hSession);
+#ifdef _WIN32
+	hSession->ns_exception_id	= AddExcept(hSession->sockEvent, hSession, net_exception);
+	hSession->ns_read_id		= AddInput(hSession->sockEvent, hSession, net_input);
+#else
+	hSession->ns_exception_id	= AddExcept(hSession->sock, hSession, net_exception);
+	hSession->ns_read_id		= AddInput(hSession->sock, hSession, net_input);
+#endif // WIN32
+
+	hSession->excepting = True;
+	hSession->reading 	= True;
 
 	/* Set state and tell the world. */
 	if (pending)
@@ -660,7 +670,19 @@ void host_disconnect(H3270 *h, int failed)
 
 	if (CONNECTED || HALF_CONNECTED)
 	{
-		x_remove_input(h);
+		// Disconecting, disable input
+		if(h->reading)
+		{
+			RemoveInput(h->ns_read_id);
+			h->reading = False;
+		}
+		if(h->excepting)
+		{
+			RemoveInput(h->ns_exception_id);
+			h->excepting = False;
+		}
+//		x_remove_input(h);
+
 		net_disconnect(h);
 
 		Trace("Disconnected (Failed: %d Reconnect: %d in_progress: %d)",failed,toggled(RECONNECT),h->auto_reconnect_inprogress);
