@@ -26,9 +26,9 @@
 LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
-include ../../lib3270/sources.mak
+include ../lib3270/sources.mak
 
-LOCAL_CFLAGS=-I ../../include
+LOCAL_CFLAGS=-I../include
 LOCAL_MODULE    := lib3270
 LOCAL_SRC_FILES := $(foreach SRC, $(SOURCES), ../../lib3270/$(SRC))
 

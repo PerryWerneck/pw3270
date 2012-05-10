@@ -55,9 +55,15 @@ LIB3270_INTERNAL void net_send_werase(void);
 LIB3270_INTERNAL Boolean net_snap_options(void);
 LIB3270_INTERNAL void space3270out(int n);
 LIB3270_INTERNAL const char *tn3270e_current_opts(void);
-LIB3270_INTERNAL void trace_netdata(char direction, unsigned const char *buf, int len);
 LIB3270_INTERNAL char *net_proxy_type(void);
 LIB3270_INTERNAL char *net_proxy_host(void);
 LIB3270_INTERNAL char *net_proxy_port(void);
+
+#if defined(X3270_TRACE)
+	LIB3270_INTERNAL void trace_netdata(char direction, unsigned const char *buf, int len);
+#else
+	#define trace_netdata(direction, buf, len) /* */
+#endif // X3270_TRACE
+
 
 LIB3270_INTERNAL int net_getsockname(const H3270 *h3270, void *buf, int *len);

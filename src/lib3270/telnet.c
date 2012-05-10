@@ -623,8 +623,8 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 	}
 #endif
 
-	/* set the socket to be non-delaying */
-	if (non_blocking(session,False) < 0)
+	/* set the socket to be non-delaying during connect */
+	if(non_blocking(session,False) < 0)
 		close_fail;
 
 #if !defined(_WIN32)
@@ -646,23 +646,7 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 	if(!rc)
 	{
 		trace_dsn("Connected.\n");
-
-//		if(non_blocking(session,False) < 0)
-//			close_fail;
-
 		net_connected(session);
-
-/*
-		break;
-	case SE_EWOULDBLOCK:	// Connection in progress
-	case SE_EINPROGRESS:
-		*pending = True;
-		trace_dsn("Connection pending.\n");
-#if !defined(_WIN32)
-		output_id = AddOutput(session->sock, session, output_possible);
-#endif
-		break;
-*/
 	}
 	else
 	{
@@ -813,7 +797,6 @@ static void net_connected(H3270 *session)
 		}
 		else
 		{
-			// non_blocking(session,False);
 			rc = SSL_connect(session->ssl_con);
 
 			if(rc != 1)
@@ -837,7 +820,6 @@ static void net_connected(H3270 *session)
 				return;
 
 			}
-			non_blocking(session,True);
 		}
 
 //		session->secure_connection = True;
@@ -911,30 +893,6 @@ static void connection_complete(void)
 }
 
 /*
-#if !defined(_WIN32)
-//
-// output_possible
-//	Output is possible on the socket.  Used only when a connection is
-//	pending, to determine that the connection is complete.
-//
-static void output_possible(H3270 *session)
-{
-	trace("%s: %s",__FUNCTION__,HALF_CONNECTED ? "Half connected" : "Connected");
-	if (HALF_CONNECTED)
-	{
-		connection_complete();
-	}
-
-	if (output_id)
-	{
-		RemoveInput(output_id);
-		output_id = 0L;
-	}
-}
-#endif
-*/
-
-/*
  * net_disconnect
  *	Shut down the socket.
  */
@@ -990,17 +948,17 @@ void net_input(H3270 *session)
 	register unsigned char	*cp;
 	int	nr;
 
-	if(!session)
-		session = &h3270;
+	CHECK_SESSION_HANDLE(session);
 
-#if defined(_WIN32) /*[*/
-	for (;;)
-#endif /*]*/
+// #if defined(_WIN32)
+// 	for (;;)
+// #endif
 	{
 		if (session->sock < 0)
 			return;
 
-#if defined(_WIN32) /*[*/
+/*
+#if defined(_WIN32)
 		if (HALF_CONNECTED) {
 
 			if (connect(session->sock, &haddr.sa, sizeof(haddr)) < 0) {
@@ -1009,7 +967,7 @@ void net_input(H3270 *session)
 				switch (err) {
 				case WSAEISCONN:
 					connection_complete();
-					/* and go get data...? */
+					// and go get data...?
 					break;
 				case WSAEALREADY:
 				case WSAEWOULDBLOCK:
@@ -1025,31 +983,26 @@ void net_input(H3270 *session)
 				}
 			}
 		}
-#endif /*]*/
+#endif
+*/
 
 #if defined(X3270_ANSI) /*[*/
 		ansi_data = 0;
 #endif /*]*/
 
-// #if defined(_WIN32)
-//		(void) ResetEvent(session->sock_handle);
-//#endif /*]*/
-
 #if defined(HAVE_LIBSSL)
 		if (session->ssl_con != NULL)
 			nr = SSL_read(session->ssl_con, (char *) netrbuf, BUFSZ);
 		else
-#endif // HAVE_LIBSSL
-/*
-#if defined(LOCAL_PROCESS)
-		if (local_process)
-		    	nr = read(sock, (char *) netrbuf, BUFSZ);
-		else
-#endif
-*/
 			nr = recv(session->sock, (char *) netrbuf, BUFSZ, 0);
-		if (nr < 0) {
-			if (socket_errno() == SE_EWOULDBLOCK) {
+#else
+			nr = recv(session->sock, (char *) netrbuf, BUFSZ, 0);
+#endif // HAVE_LIBSSL
+
+		if (nr < 0)
+		{
+			if (socket_errno() == SE_EWOULDBLOCK)
+			{
 				return;
 			}
 #if defined(HAVE_LIBSSL) /*[*/
@@ -1082,28 +1035,22 @@ void net_input(H3270 *session)
 				connection_complete();
 				return;
 			}
-/*
-#if defined(LOCAL_PROCESS) /
-			if (errno == EIO && local_process) {
-				trace_dsn("RCVD local process disconnect\n");
-				host_disconnect(session,False);
-				return;
-			}
-#endif
-*/
+
 			trace_dsn("RCVD socket error %d\n", errno);
+
 			if (HALF_CONNECTED)
 			{
-				popup_a_sockerr(NULL, N_( "%s:%d" ),h3270.hostname, h3270.current_port);
+				popup_a_sockerr(session, N_( "%s:%d" ),h3270.hostname, h3270.current_port);
 			}
 			else if (socket_errno() != SE_ECONNRESET)
 			{
-				popup_a_sockerr(NULL, N_( "Socket read error" ) );
+				popup_a_sockerr(session, N_( "Socket read error" ) );
 			}
 
 			host_disconnect(session,True);
 			return;
-		} else if (nr == 0) {
+		} else if (nr == 0)
+		{
 			/* Host disconnected. */
 			trace_dsn("RCVD disconnect\n");
 			host_disconnect(session,False);
@@ -1123,50 +1070,31 @@ void net_input(H3270 *session)
 			net_connected(session);
 		}
 
-#if defined(X3270_TRACE) /*[*/
 		trace_netdata('<', netrbuf, nr);
-#endif /*]*/
 
 		ns_brcvd += nr;
-		for (cp = netrbuf; cp < (netrbuf + nr); cp++) {
-/*
-#if defined(LOCAL_PROCESS)
-			if (local_process) {
-				// More to do here, probably.
-				if (IN_NEITHER) {	// now can assume ANSI mode
-					host_in3270(CONNECTED_ANSI);
-					hisopts[TELOPT_ECHO] = 1;
-					check_linemode(False);
-					kybdlock_clr(KL_AWAITING_FIRST, "telnet_fsm");
-					status_reset();
-					ps_process();
-				}
-				ansi_process((unsigned int) *cp);
-			} else {
-#endif
-*/
-				if (telnet_fsm(*cp))
-				{
-					(void) ctlr_dbcs_postprocess();
-					host_disconnect(&h3270,True);
-					return;
-				}
-/*
-#if defined(LOCAL_PROCESS)
+		for (cp = netrbuf; cp < (netrbuf + nr); cp++)
+		{
+			if (telnet_fsm(*cp))
+			{
+				(void) ctlr_dbcs_postprocess();
+				host_disconnect(session,True);
+				return;
 			}
-#endif
-*/
 		}
 
-#if defined(X3270_ANSI) /*[*/
-		if (IN_ANSI) {
+#if defined(X3270_ANSI)
+		if (IN_ANSI)
+		{
 			(void) ctlr_dbcs_postprocess();
 		}
-		if (ansi_data) {
+
+		if (ansi_data)
+		{
 			trace_dsn("\n");
 			ansi_data = 0;
 		}
-#endif /*]*/
+#endif // X3270_ANSI
 
 	}
 
@@ -2043,9 +1971,7 @@ net_rawout(unsigned const char *buf, int len)
 {
 	int	nw;
 
-#if defined(X3270_TRACE) /*[*/
 	trace_netdata('>', buf, len);
-#endif /*]*/
 
 	while (len) {
 #if defined(OMTU) /*[*/
@@ -2633,7 +2559,7 @@ check_linemode(Boolean init)
 }
 
 
-#if defined(X3270_TRACE) /*[*/
+#if defined(X3270_TRACE)
 
 /*
  * nnn
@@ -2681,11 +2607,9 @@ opt(unsigned char c)
 		return nnn((int)c);
 }
 
-
 #define LINEDUMP_MAX	32
 
-void
-trace_netdata(char direction, unsigned const char *buf, int len)
+void trace_netdata(char direction, unsigned const char *buf, int len)
 {
 	int offset;
 	struct timeval ts;
@@ -2708,7 +2632,7 @@ trace_netdata(char direction, unsigned const char *buf, int len)
 	}
 	trace_dsn("\n");
 }
-#endif /*]*/
+#endif // X3270_TRACE
 
 
 /*

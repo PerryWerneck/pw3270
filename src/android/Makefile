@@ -27,11 +27,8 @@ JAVAH=javah
 NDKBUILD=/opt/android-ndk-r8/ndk-build
 CLASSPATH=br/com/bb/pw3270
 
-all:
-	@$(NDKBUILD) -C jni
-
-Debug:
-	@$(NDKBUILD) -C jni
+Debug: jni/lib3270jni.h
+	@$(NDKBUILD)
 
 jni/lib3270jni.h: bin/classes/$(CLASSPATH)/lib3270.class
 	@$(JAVAH) -o $@ -classpath bin/classes $(subst /,.,$(CLASSPATH)).lib3270
