@@ -30,6 +30,10 @@ CLASSPATH=br/com/bb/pw3270
 Debug: jni/lib3270jni.h
 	@$(NDKBUILD)
 
+clean:
+	@rm -fr obj
+	@rm -f jni/lib3270jni.h
+
 jni/lib3270jni.h: bin/classes/$(CLASSPATH)/lib3270.class
 	@$(JAVAH) -o $@ -classpath bin/classes $(subst /,.,$(CLASSPATH)).lib3270
 

@@ -548,9 +548,13 @@ proxy_socks4(int fd, char *host, unsigned short port, int force_a)
 	}
 
 	/* Resolve the username. */
+#ifdef ANDROID
+	user = "android";
+#else
 	user = getenv("USER");
 	if (user == CN)
 	    	user = "nobody";
+#endif
 
 	/* Send the request to the server. */
 	if (use_4a) {

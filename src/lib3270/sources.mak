@@ -22,14 +22,13 @@
 #
 # perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
 # erico.mendonca@gmail.com	(Erico Mascarenhas de Mendonça)
-# licinio@bb.com.br			(Licínio Luis Branco)
-# kraucer@bb.com.br			(Kraucer Fernandes Mazuco)
 #
 
-SOURCES = XtGlue.c init.c actions.c ansi.c charset.c ctlr.c \
-		ft.c ft_cut.c ft_dft.c glue.c host.c kybd.c \
-		proxy.c resources.c rpq.c screen.c see.c \
-		sf.c tables.c telnet.c toggles.c trace_ds.c utf8.c util.c \
-		xio.c resolver.c log.c paste.c macros.c fallbacks.c version.c \
-		selection.c bounds.c
+# Terminal only sources
+TERMINAL_SOURCES =	bounds.c XtGlue.c ctlr.c util.c toggles.c screen.c selection.c kybd.c telnet.c \
+					host.c sf.c ansi.c log.c resolver.c xio.c tables.c proxy.c utf8.c charset.c
+
+# Full library sources
+SOURCES =			$(TERMINAL_SOURCES) init.c actions.c ft.c ft_cut.c ft_dft.c glue.c resources.c \
+					rpq.c see.c trace_ds.c paste.c macros.c fallbacks.c version.c
 
