@@ -3461,7 +3461,7 @@ add_xk(KeySym key, KeySym assoc)
 			xk[i].assoc = assoc;
 			return;
 		}
-	xk = (struct xks *)Realloc(xk, (nxk + 1) * sizeof(struct xks));
+	xk = (struct xks *) Realloc(xk, (nxk + 1) * sizeof(struct xks));
 	xk[nxk].key = key;
 	xk[nxk].assoc = assoc;
 	nxk++;

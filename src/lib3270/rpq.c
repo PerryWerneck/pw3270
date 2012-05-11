@@ -64,6 +64,7 @@
 #include "telnetc.h"
 #include "trace_dsc.h"
 #include "utilc.h"
+#include "sf.h"
 
 /* Statics */
 static Boolean select_rpq_terms(void);
@@ -121,8 +122,7 @@ static char *x3270rpq;
 /*
  * RPQNAMES query reply.
  */
-void
-do_qr_rpqnames(void)
+void do_qr_rpqnames(void)
 {
 	#define TERM_PREFIX_SIZE 2	/* Each term has 1 byte length and 1
 					   byte id */

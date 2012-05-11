@@ -56,7 +56,7 @@
 #include "kybdc.h"
 #include "screenc.h"
 #include "seec.h"
-#include "sfc.h"
+#include "sf.h"
 #include "tablesc.h"
 #include "telnetc.h"
 #include "trace_dsc.h"
@@ -92,13 +92,13 @@ static void query_reply_start(void);
 static void do_query_reply(unsigned char code);
 static void query_reply_end(void);
 
-typedef void qr_single_fn_t(void);
 typedef Boolean qr_multi_fn_t(unsigned *subindex, Boolean *more);
 
 static qr_single_fn_t do_qr_summary, do_qr_usable_area, do_qr_alpha_part,
 	do_qr_charsets, do_qr_color, do_qr_highlighting, do_qr_reply_modes,
 	do_qr_imp_part, do_qr_null;
-extern qr_single_fn_t do_qr_rpqnames;
+
+
 #if defined(X3270_DBCS) /*[*/
 static qr_single_fn_t do_qr_dbcs_asia;
 #endif /*]*/
@@ -121,10 +121,15 @@ static struct reply {
 #if defined(X3270_DBCS) /*[*/
     { QR_DBCS_ASIA,    do_qr_dbcs_asia,    NULL },		/* 0x91 */
 #endif /*]*/
+
 #if defined(X3270_FT) /*[*/
     { QR_DDM,          do_qr_ddm,          NULL },		/* 0x95 */
 #endif /*]*/
+
+#ifndef ANDROID
     { QR_RPQNAMES,     do_qr_rpqnames,     NULL },		/* 0xa1 */
+#endif // !ANDROID
+
     { QR_IMP_PART,     do_qr_imp_part,     NULL },		/* 0xa6 */
 
     /* QR_NULL must be last in the table */

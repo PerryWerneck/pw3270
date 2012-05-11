@@ -12,9 +12,8 @@
  * file LICENSE for more details.
  */
 
-/*
- *	sfc.h
- *		Global declarations for sf.c.
- */
+typedef void qr_single_fn_t(void);
+
+LIB3270_INTERNAL qr_single_fn_t do_qr_rpqnames;
 
 LIB3270_INTERNAL enum pds write_structured_field(unsigned char buf[], int buflen);

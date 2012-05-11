@@ -159,25 +159,28 @@ restore_charset(void)
 }
 
 /* Get a character set definition. */
-static const char * get_charset_def(const char *csname)
-{
-	return get_fresource("%s.%s", ResCharset, csname);
-}
-
-#if defined(X3270_DBCS) /*[*/
 /*
- * Initialize the DBCS conversion functions, based on resource values.
- */
+static char * get_charset_def(const char *csname)
+{
+	return get_fresource("%s.%s", "charset", csname);
+}
+*/
+
+/*
+#if defined(X3270_DBCS)
+//
+// Initialize the DBCS conversion functions, based on resource values.
+//
 static int
 wide_resource_init(char *csname)
 {
 	char *cn, *en;
 
-	cn = get_fresource("%s.%s", ResDbcsConverters, csname);
+	cn = get_fresource("%s.%s", "dbcsConverters", csname);
 	if (cn == CN)
 		return 0;
 
-	en = get_fresource("%s.%s", ResLocalEncoding, csname);
+	en = get_fresource("%s.%s", "localEncoding", csname);
 	if (en == CN)
 		en = appres.local_encoding;
 	Replace(converter_names, cn);
@@ -186,38 +189,19 @@ wide_resource_init(char *csname)
 	return wide_init(cn, en);
 
 }
-#endif /*]*/
+#endif
+*/
 
 /*
  * Change character sets.
  */
 enum cs_result charset_init(H3270 *session, char *csname)
 {
-	const char *cs;
+	char *cs;
 	const char *ftcs;
 	enum cs_result rc;
 	char *ccs, *cftcs;
-/*
-#if defined(X3270_DISPLAY)
-	char *xks;
-#endif
-*/
 	const char *ak;
-
-/*
-#if !defined(_WIN32)
-	char *codeset_name;
-#endif
-
-#if !defined(_WIN32)
-	// Get all of the locale stuff right.
-
-	// Figure out the locale code set (character set encoding).
-	codeset_name = nl_langinfo(CODESET);
-	Trace("codeset_name: %s",codeset_name);
-	set_codeset(codeset_name);
-#endif
-*/
 
 
 	/* Do nothing, successfully. */
@@ -225,39 +209,40 @@ enum cs_result charset_init(H3270 *session, char *csname)
 	{
 		charset_defaults();
 		set_cgcsgids(CN);
-//		set_charset_name(CN);
 		set_display_charset(session, "ISO-8859-1");
 		return CS_OKAY;
 	}
 
 	/* Figure out if it's already in a resource or in a file. */
-	cs = get_charset_def(csname);
-	if (cs == CN &&
-	    strlen(csname) > ES_SIZE &&
-	    !strcasecmp(csname + strlen(csname) - ES_SIZE, EURO_SUFFIX)) {
-		char *basename;
+#ifdef ANDROID
+	ccs = strdup("0xad: [ \n 0xba: Yacute \n0xbd: ] \n 0xbb: diaeresis \n");
+#else
+	ccs = lib3270_get_resource_string("charset", csname, NULL);
+#endif
+/*
+	if (cs == CN && strlen(csname) > ES_SIZE && !strcasecmp(csname + strlen(csname) - ES_SIZE, EURO_SUFFIX))
+	{
+		char *basename =
+		lib3270_free(cs);
 
-		/* Grab the non-Euro definition. */
+		// Grab the non-Euro definition.
 		basename = xs_buffer("%.*s", (int) (strlen(csname) - ES_SIZE), csname);
 		cs = get_charset_def(basename);
 		Free(basename);
 	}
-	if (cs == CN)
+*/
+	if (!ccs)
 		return CS_NOTFOUND;
 
 	/* Grab the File Transfer character set. */
-	ftcs = get_fresource("%s.%s", ResFtCharset, csname);
-
-	/* Copy strings. */
-	ccs = NewString(cs);
-	cftcs = (ftcs == NULL)? NULL: NewString(ftcs);
+	cftcs = lib3270_get_resource_string("ftCharset",csname,NULL);
 
 	/* Save the current definitions, and start over with the defaults. */
 	save_charset();
 	charset_defaults();
 
 	/* Check for auto-keymap. */
-	ak = get_fresource("%s.%s", ResAutoKeymap, csname);
+	ak = lib3270_get_resource_string("autoKeymap", csname, NULL);
 	if (ak != NULL)
 		auto_keymap = !strcasecmp(ak, "true");
 	else
@@ -277,12 +262,15 @@ enum cs_result charset_init(H3270 *session, char *csname)
 
 	if (rc != CS_OKAY)
 		restore_charset();
-#if defined(X3270_DBCS) /*[*/
+
+/*
+#if defined(X3270_DBCS)
 	else if (wide_resource_init(csname) < 0) {
 		restore_charset();
 		return CS_NOTFOUND;
 	}
-#endif /*]*/
+#endif
+*/
 
 /*
 #if defined(X3270_DISPLAY)
@@ -384,11 +372,11 @@ set_charset_name(char *csname)
 /* Define a charset from resources. */
 static enum cs_result resource_charset(char *csname, char *cs, char *ftcs)
 {
-	enum cs_result rc;
-	int ne = 0;
-	const char *rcs = CN;
-	int n_rcs = 0;
-	const char *dcs;
+	enum cs_result	  rc;
+	int				  ne	= 0;
+	char			* rcs	= CN;
+	int				  n_rcs	= 0;
+	char			* dcs;
 
 	/* Interpret the spec. */
 	rc = remap_chars(csname, cs, (ftcs == NULL)? BOTH: CS_ONLY, &ne);
@@ -400,37 +388,44 @@ static enum cs_result resource_charset(char *csname, char *cs, char *ftcs)
 			return rc;
 	}
 
-	rcs = get_fresource("%s.%s", ResDisplayCharset, csname);
+//	rcs = get_fresource("%s.%s", "displayCharset", csname);
+	rcs = lib3270_get_resource_string("displayCharset", csname, NULL);
 
 	/* Isolate the pieces. */
-	if (rcs != CN) {
-		char *rcs_copy, *buf, *token;
+	if (rcs != CN)
+	{
+		char *buf, *token;
 
-		buf = rcs_copy = NewString(rcs);
-		while ((token = strtok(buf, "+")) != CN) {
+		buf = rcs;
+		while ((token = strtok(buf, "+")) != CN)
+		{
 			buf = CN;
-			switch (n_rcs) {
+			switch (n_rcs)
+			{
 			case 0:
-#if defined(X3270_DBCS) /*[*/
+#if defined(X3270_DBCS)
 			case 1:
-#endif /*]*/
+#endif
 			    break;
 			default:
-			    popup_an_error(NULL,"Extra %s value(s), ignoring",
-				ResDisplayCharset);
+			    popup_an_error(NULL,"Extra value(s) in displayCharset.%s, ignoring", csname);
 			    break;
 			}
 			n_rcs++;
 		}
 	}
 
-#if defined(X3270_DBCS) /*[*/
-	/* Can't swap DBCS modes while connected. */
+	lib3270_free(rcs);
+
+/*
+#if defined(X3270_DBCS)
+	// Can't swap DBCS modes while connected.
 	if (IN_3270 && (n_rcs == 2) != dbcs) {
 		popup_an_error(NULL,"Can't change DBCS modes while connected");
 		return CS_ILLEGAL;
 	}
-#endif /*]*/
+#endif
+*/
 
 /*
 #if !defined(_WIN32)
@@ -445,14 +440,22 @@ static enum cs_result resource_charset(char *csname, char *cs, char *ftcs)
 */
 
 	/* Set up the cgcsgid. */
-	set_cgcsgids(get_fresource("%s.%s", ResCodepage, csname));
+//	set_cgcsgids(get_fresource("%s.%s", "codepage", csname));
+	{
+		char *ptr = lib3270_get_resource_string("codepage", csname, NULL);
+		set_cgcsgids(ptr);
+		lib3270_free(ptr);
+	}
 
-	dcs = get_fresource("%s.%s", ResDisplayCharset, csname);
+//	dcs = get_fresource("%s.%s", "displayCharset", csname);
+	dcs = lib3270_get_resource_string("displayCharset", csname, NULL);
 
 	if (dcs != NULL)
 		set_display_charset(&h3270,dcs);
 	else
 		set_display_charset(&h3270,"ISO-8859-1");
+
+	lib3270_free(dcs);
 
 	/* Set up the character set name. */
 //	set_charset_name(csname);

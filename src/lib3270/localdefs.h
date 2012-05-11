@@ -63,24 +63,15 @@ typedef struct _XtActionsRec{
 
 /* These are local functions with similar semantics to X functions. */
 
-void * Malloc(size_t);
-void   Free(void *);
-void * Calloc(size_t, size_t);
-void * Realloc(void *, size_t);
+// void * Malloc(size_t);
+// void   Free(void *);
+// void * Calloc(size_t, size_t);
+// void * Realloc(void *, size_t);
 
-/**
- * Alloc/Realloc memory buffer.
- *
- * Allocate/reallocate an array.
- *
- * @param elsize	Element size.
- * @param nelem		Number of elements in the array.
- * @param ptr		Pointer to the actual array.
- *
- * @return ptr allocated with the new array size.
- *
- */
-void * lib3270_calloc(size_t elsize, size_t nelem, void *ptr);
+#define Malloc(x) lib3270_malloc(x)
+#define Free(x)	lib3270_free(x)
+#define Calloc(e,n)	lib3270_calloc(e,n,NULL)
+#define Realloc(x,n) lib3270_realloc(x,n)
 
 #define NewString(x) strdup(x)
 //extern char *NewString(const char *);

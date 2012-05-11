@@ -56,7 +56,7 @@
 #include "screenc.h"
 #include "scrollc.h"
 #include "seec.h"
-#include "sfc.h"
+#include "sf.h"
 #include "statusc.h"
 #include "tablesc.h"
 #include "telnetc.h"
@@ -167,8 +167,7 @@ void ctlr_reinit(H3270 *session, unsigned cmask)
 		struct ea *tmp;
 		size_t sz = (session->maxROWS * session->maxCOLS);
 
-
-		session->buffer[0] = tmp = lib3270_calloc(sizeof(struct ea),sz+1, session->buffer[0]);
+		session->buffer[0] = tmp = lib3270_calloc(sizeof(struct ea), sz+1, session->buffer[0]);
 		session->ea_buf = tmp + 1;
 
 		session->buffer[1] = tmp = lib3270_calloc(sizeof(struct ea),sz+1,session->buffer[1]);

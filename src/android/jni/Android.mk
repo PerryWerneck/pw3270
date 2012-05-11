@@ -29,7 +29,7 @@ include $(CLEAR_VARS)
 
 # include ../lib3270/sources.mak
 TERMINAL_SOURCES=	bounds.c XtGlue.c ctlr.c util.c toggles.c screen.c selection.c kybd.c telnet.c \
-					host.c sf.c ansi.c log.c resolver.c xio.c tables.c proxy.c
+					host.c sf.c ansi.c log.c resolver.c xio.c tables.c proxy.c utf8.c charset.c
 
 LOCAL_CFLAGS=-I../include
 LOCAL_MODULE    := lib3270

@@ -1087,3 +1087,100 @@ StringToKeysym(char *s)
 }
 #endif
 */
+
+LIB3270_EXPORT void lib3270_free(void *p)
+{
+	if(p)
+		free(p);
+}
+
+LIB3270_EXPORT void * lib3270_realloc(void *p, int len)
+{
+	p = realloc(p, len);
+	if(!p)
+		Error(NULL,"Out of memory");
+	return p;
+}
+
+LIB3270_EXPORT void * lib3270_calloc(int elsize, int nelem, void *ptr)
+{
+	size_t sz = nelem * elsize;
+
+	if(ptr)
+		ptr = realloc(ptr,sz);
+	else
+		ptr = malloc(sz);
+
+	if(ptr)
+		memset(ptr,0,sz);
+	else
+		Error(NULL,"Out of memory");
+
+	return ptr;
+}
+
+
+LIB3270_EXPORT void * lib3270_malloc(int len)
+{
+	char *r;
+
+	r = malloc(len);
+	if (r == (char *)NULL)
+	{
+		Error(NULL,"Out of memory");
+		return 0;
+	}
+
+	memset(r,0,len);
+	return r;
+}
+
+/*
+void * Calloc(size_t nelem, size_t elsize)
+{
+	int		  sz = nelem * elsize;
+	char	* r = malloc(sz);
+
+	if(!r)
+		Error(NULL,"Out of memory");
+
+	memset(r, 0, sz);
+	return r;
+}
+*/
+
+LIB3270_EXPORT char * lib3270_get_resource_string(const char *first_element, ...)
+{
+#ifndef ANDROID
+
+	#warning Work in progress
+
+	char 		  buffer[4096];
+	char 		* ptr = buffer;
+	const char	* element;
+	va_list		  args;
+	const char	* res;
+
+	va_start(args, first_element);
+
+	for(element = first_element;element;element = va_arg(args, const char *))
+    {
+    	if(ptr != buffer)
+			*(ptr++) = '.';
+
+		strncpy(ptr,element,4096-strlen(buffer));
+		ptr += strlen(ptr);
+    }
+
+	va_end(args);
+
+	*ptr = 0;
+
+	trace("%s: %s",__FUNCTION__,buffer);
+
+	res = get_resource(buffer);
+	if(res)
+		return strdup(res);
+#endif
+	return NULL;
+}

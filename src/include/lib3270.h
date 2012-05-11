@@ -749,6 +749,43 @@
 
 	LIB3270_EXPORT int lib3270_is_protected(H3270 *h, unsigned int baddr);
 
+	/**
+	 * Alloc/Realloc memory buffer.
+	 *
+	 * Allocate/reallocate an array.
+	 *
+	 * @param elsize	Element size.
+	 * @param nelem		Number of elements in the array.
+	 * @param ptr		Pointer to the actual array.
+	 *
+	 * @return Clean buffer with size for the number of elements.
+	 *
+	 */
+	LIB3270_EXPORT void * lib3270_calloc(int elsize, int nelem, void *ptr);
+
+	LIB3270_EXPORT void * lib3270_malloc(int len);
+	LIB3270_EXPORT void * lib3270_realloc(void *p, int len);
+
+	/**
+	 * Release allocated memory.
+	 *
+	 * @param p	Memory block to release (can be NULL)
+	 *
+	 */
+	LIB3270_EXPORT void   lib3270_free(void *p);
+
+
+	/**
+	 * Get resource string.
+	 *
+	 * @param first_element	First element of resource path
+	 * @param ...			Resource path (ends with NULL)
+	 *
+	 * @return Resource string (Release with lib3270_free())
+	 *
+	 */
+	LIB3270_EXPORT char * lib3270_get_resource_string(const char *first_element, ...);
+
 
 #ifdef __cplusplus
 	}
