@@ -30,8 +30,9 @@ include $(CLEAR_VARS)
 include ../lib3270/sources.mak
 
 LOCAL_CFLAGS=-I../include
+LOCAL_DEFAULT_CPP_EXTENSION := cpp
 LOCAL_MODULE    := lib3270
-LOCAL_SRC_FILES := $(foreach SRC, $(TERMINAL_SOURCES), ../../lib3270/$(SRC))
+LOCAL_SRC_FILES := $(foreach SRC, $(TERMINAL_SOURCES), ../../lib3270/$(SRC)) misc.cpp
 
 include $(BUILD_SHARED_LIBRARY)
 

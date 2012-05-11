@@ -34,6 +34,7 @@
 		</Compiler>
 		<Unit filename="Makefile" />
 		<Unit filename="jni/Android.mk" />
+		<Unit filename="jni/misc.cpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />
