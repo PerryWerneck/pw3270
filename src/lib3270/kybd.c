@@ -48,7 +48,7 @@
 
 #include <fcntl.h>
 #include "3270ds.h"
-#include "appres.h"
+// #include "appres.h"
 // #include "ctlr.h"
 #include "resources.h"
 
@@ -195,7 +195,7 @@ static int enq_chk(void)
 	}
 
 	/* If typeahead disabled, complain and drop it. */
-	if (!appres.typeahead)
+	if (!h3270.typeahead)
 	{
 		trace_event("  dropped (no typeahead)\n");
 		return -1;
@@ -439,8 +439,8 @@ kybd_in3270(H3270 *session, int in3270 unused, void *dunno)
 void kybd_init(void)
 {
 	/* Register interest in connect and disconnect events. */
-	register_schange(ST_CONNECT, kybd_connect);
-	register_schange(ST_3270_MODE, kybd_in3270);
+	lib3270_register_schange(NULL,LIB3270_STATE_CONNECT,kybd_connect,NULL);
+	lib3270_register_schange(NULL,LIB3270_STATE_3270_MODE,kybd_in3270,NULL);
 }
 
 /*
@@ -464,12 +464,15 @@ operator_error(int error_type)
 //	if (sms_redirect())
 //		popup_an_error("Keyboard locked");
 
-	if(appres.oerr_lock) { // || sms_redirect()) {
+	if(h3270.oerr_lock)
+	{
 		status_oerr(NULL,error_type);
 		mcursor_locked(&h3270);
 		kybdlock_set((unsigned int)error_type, "operator_error");
-		(void) flush_ta();
-	} else {
+		flush_ta();
+	}
+	else
+	{
 		lib3270_ring_bell(NULL);
 	}
 }
@@ -652,7 +655,7 @@ static Boolean ins_prep(int faddr, int baddr, int count)
 	while (need && (xaddr != next_faddr)) {
 		if (h3270.ea_buf[xaddr].cc == EBC_null)
 			need--;
-		else if (toggled(LIB3270_TOGGLE_BLANK_FILL) &&
+		else if (lib3270_get_toggle(&h3270,LIB3270_TOGGLE_BLANK_FILL) &&
 			((h3270.ea_buf[xaddr].cc == EBC_space) ||
 			 (h3270.ea_buf[xaddr].cc == EBC_underscore))) {
 			if (tb_start == -1)
@@ -770,7 +773,7 @@ static Boolean key_Character(int code, Boolean with_ge, Boolean pasting, Boolean
 		operator_error(KL_OERR_PROTECTED);
 		return False;
 	}
-	if (appres.numeric_lock && FA_IS_NUMERIC(fa) &&
+	if (h3270.numeric_lock && FA_IS_NUMERIC(fa) &&
 	    !((code >= EBC_0 && code <= EBC_9) ||
 	      code == EBC_minus || code == EBC_period)) {
 		operator_error(KL_OERR_NUMERIC);
@@ -795,7 +798,7 @@ static Boolean key_Character(int code, Boolean with_ge, Boolean pasting, Boolean
 	/* Add the character. */
 	if (h3270.ea_buf[baddr].cc == EBC_so) {
 
-		if (toggled(LIB3270_TOGGLE_INSERT)) {
+		if (lib3270_get_toggle(&h3270,LIB3270_TOGGLE_INSERT)) {
 			if (!ins_prep(faddr, baddr, 1))
 				return False;
 		} else {
@@ -832,7 +835,7 @@ static Boolean key_Character(int code, Boolean with_ge, Boolean pasting, Boolean
 		/* fall through... */
 	case DBCS_LEFT:
 		if (why == DBCS_ATTRIBUTE) {
-			if (toggled(LIB3270_TOGGLE_INSERT)) {
+			if (lib3270_get_toggle(&h3270,LIB3270_TOGGLE_INSERT)) {
 				if (!ins_prep(faddr, baddr, 1))
 					return False;
 			} else {
@@ -849,7 +852,7 @@ static Boolean key_Character(int code, Boolean with_ge, Boolean pasting, Boolean
 		} else {
 			Boolean was_si;
 
-			if (toggled(LIB3270_TOGGLE_INSERT)) {
+			if (lib3270_get_toggle(&h3270,LIB3270_TOGGLE_INSERT)) {
 				/*
 				 * Inserting SBCS into a DBCS subfield.
 				 * If this is the first position, we
@@ -906,7 +909,7 @@ static Boolean key_Character(int code, Boolean with_ge, Boolean pasting, Boolean
 		break;
 	default:
 	case DBCS_NONE:
-		if (toggled(LIB3270_TOGGLE_INSERT) && !ins_prep(faddr, baddr, 1))
+		if (lib3270_get_toggle(&h3270,LIB3270_TOGGLE_INSERT) && !ins_prep(faddr, baddr, 1))
 			return False;
 		break;
 	}
@@ -916,7 +919,7 @@ static Boolean key_Character(int code, Boolean with_ge, Boolean pasting, Boolean
 	INC_BA(baddr);
 
 	/* Replace leading nulls with blanks, if desired. */
-	if (h3270.formatted && toggled(BLANK_FILL)) {
+	if (h3270.formatted && lib3270_get_toggle(&h3270,LIB3270_TOGGLE_BLANK_FILL)) {
 		register int	baddr_fill = baddr;
 
 		DEC_BA(baddr_fill);
@@ -1047,7 +1050,7 @@ key_WCharacter(unsigned char code[], Boolean *skipped)
 	}
 
 	/* Numeric? */
-	if (appres.numeric_lock && FA_IS_NUMERIC(fa)) {
+	if (h3270.numeric_lock && FA_IS_NUMERIC(fa)) {
 		operator_error(KL_OERR_NUMERIC);
 		return False;
 	}
@@ -1250,7 +1253,7 @@ retry:
 
 	if (done) {
 		/* Implement blank fill mode. */
-		if (toggled(BLANK_FILL)) {
+		if (lib3270_get_toggle(&h3270,LIB3270_TOGGLE_BLANK_FILL)) {
 			xaddr = faddr;
 			INC_BA(xaddr);
 			while (xaddr != baddr) {
@@ -1505,7 +1508,7 @@ do_reset(Boolean explicit)
 #if defined(X3270_FT) /*[*/
 	    || lib3270_get_ft_state(&h3270) != LIB3270_FT_STATE_NONE
 #endif /*]*/
-	    || (!appres.unlock_delay) // && !sms_in_macro())
+	    || (!h3270.unlock_delay) // && !sms_in_macro())
 	    || (unlock_delay_time != 0 && (time(NULL) - unlock_delay_time) > 1)) {
 		kybdlock_clr(-1, "do_reset");
 	} else if (kybdlock &
@@ -3010,7 +3013,7 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *session, char *s, int len, int p
 				return len-1;		/* wrapped */
 
 			/* Jump cursor over left margin. */
-			if (toggled(MARGINED_PASTE) &&
+			if (lib3270_get_toggle(&h3270,LIB3270_TOGGLE_MARGINED_PASTE) &&
 			    BA_TO_COL(session->cursor_addr) < orig_col) {
 				if (!remargin(orig_col))
 					return len-1;
@@ -3291,7 +3294,7 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *session, char *s, int len, int p
 
 	switch (state) {
 	    case BASE:
-		if (toggled(MARGINED_PASTE) &&
+		if (lib3270_get_toggle(&h3270,LIB3270_TOGGLE_MARGINED_PASTE) &&
 		    BA_TO_COL(session->cursor_addr) < orig_col) {
 			(void) remargin(orig_col);
 		}
@@ -3300,7 +3303,7 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *session, char *s, int len, int p
 	    case HEX:
 		key_ACharacter((unsigned char) literal, KT_STD, ia, &skipped);
 		state = BASE;
-		if (toggled(MARGINED_PASTE) &&
+		if (lib3270_get_toggle(&h3270,LIB3270_TOGGLE_MARGINED_PASTE) &&
 		    BA_TO_COL(session->cursor_addr) < orig_col) {
 			(void) remargin(orig_col);
 		}

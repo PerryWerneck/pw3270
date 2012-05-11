@@ -77,14 +77,25 @@
 		LIB3270_CSTATE			  cstate;				/**< Connection state */
 
 		// flags
-		int						  bgthread		: 1;	/**< Running on a background thread ? */
-		int					  	  selected		: 1;	/**< Has selected region? */
-		int						  rectsel		: 1;	/**< Selected region is a rectangle ? */
-		int						  vcontrol		: 1;	/**< Visible control ? */
-		int						  modified_sel	: 1;
-		int						  mono			: 1;	/**< Forces monochrome display */
-		int						  m3279			: 1;
-		int 					  extended		: 1;
+		int						  bgthread					: 1;	/**< Running on a background thread ? */
+		int					  	  selected					: 1;	/**< Has selected region? */
+		int						  rectsel					: 1;	/**< Selected region is a rectangle ? */
+		int						  vcontrol					: 1;	/**< Visible control ? */
+		int						  modified_sel				: 1;
+		int						  mono						: 1;	/**< Forces monochrome display */
+		int						  m3279						: 1;
+		int 					  extended					: 1;
+		int						  typeahead					: 1;
+		int						  numeric_lock				: 1;
+		int						  oerr_lock					: 1;
+		int						  unlock_delay				: 1;
+		int			 			  auto_reconnect_inprogress	: 1;
+		int						  color8					: 1;
+		int						  apl_mode					: 1;
+		int						  icrnl						: 1;
+		int						  inlcr						: 1;
+		int						  onlcr						: 1;
+		int						  bsd_tm					: 1;
 
 		char					* oversize;
 
@@ -106,7 +117,9 @@
 		char					* current_host;			/**< the hostname part, stripped of qualifiers, luname and port number */
 		char 	          		* full_current_host;	/**< the entire string, for use in reconnecting */
 		char		       		* qualified_host;
-		char		 			  auto_reconnect_inprogress;
+		char					* proxy;				/**< Proxy server (type:host[:port]) */
+		char					* termname;
+
 
 		LIB3270_MESSAGE			  oia_status;
 

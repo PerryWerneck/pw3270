@@ -114,8 +114,8 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
  void ft_init(H3270 *session)
  {
 	/* Register for state changes. */
-	lib3270_register_schange(session, ST_CONNECT, ( void (*)(H3270 *, int, void *)) ft_connected, NULL);
-	lib3270_register_schange(session, ST_3270_MODE, ( void (*)(H3270 *, int, void *)) ft_in3270, NULL);
+	lib3270_register_schange(session, LIB3270_STATE_CONNECT, ( void (*)(H3270 *, int, void *)) ft_connected, NULL);
+	lib3270_register_schange(session, LIB3270_STATE_3270_MODE, ( void (*)(H3270 *, int, void *)) ft_in3270, NULL);
  }
 
 // enum ft_state QueryFTstate(void)

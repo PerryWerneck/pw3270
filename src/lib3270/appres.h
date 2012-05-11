@@ -80,24 +80,24 @@ typedef struct {
 //	char curses_keypad;
 //	char cbreak_mode;
 //#endif /*]*/
-	char apl_mode;
+//	char apl_mode;
 //	char scripted;
-	char numeric_lock;
-	char secure;
-	char oerr_lock;
-	char typeahead;
+//	char numeric_lock;
+//	char secure;
+//	char oerr_lock;
+//	char typeahead;
 	char debug_tracing;
 	char disconnect_clear;
 	char highlight_bold;
-	char color8;
-	char bsd_tm;
-	char unlock_delay;
-#if defined(X3270_SCRIPT) /*[*/
-	char socket;
-#endif /*]*/
-#if defined(C3270) && defined(_WIN32) /*[*/
-	char highlight_underline;
-#endif /*]*/
+//	char color8;
+//	char bsd_tm;
+//	char unlock_delay;
+// #if defined(X3270_SCRIPT) /*[*/
+// 	char socket;
+// #endif /*]*/
+// #if defined(C3270) && defined(_WIN32) /*[*/
+//	char highlight_underline;
+//#endif /*]*/
 
 	/* Named resources */
 /*
@@ -108,7 +108,7 @@ typedef struct {
 #if defined(X3270_DISPLAY) || defined(C3270)
 //	char	*key_map;
 	char	*compose_map;
-	char	*printer_lu;
+//	char	*printer_lu;
 #endif
 /*
 #if defined(X3270_DISPLAY)
@@ -148,10 +148,10 @@ typedef struct {
 	char	*conf_dir;
 	char	*model;
 //	char	*hostsfile;
-	char	*port;
+//	char	*port;
 	char	*charset;
-	char	*termname;
-	char	*login_macro;
+//	char	*termname;
+//	char	*login_macro;
 	char	*macros;
 #if defined(X3270_TRACE) /*[*/
 #if !defined(_WIN32) /*[*/
@@ -186,7 +186,7 @@ typedef struct {
 #if defined(HAVE_LIBSSL) /*[*/
 	char	*cert_file;
 #endif /*]*/
-	char	*proxy;
+//	char	*proxy;
 
 	/* Toggles */
 //	struct toggle toggle[N_TOGGLES];
@@ -198,8 +198,10 @@ typedef struct {
 	Cursor	locked_mcursor;
 #endif
 */
-#if defined(X3270_ANSI) /*[*/
-	/* Line-mode TTY parameters */
+
+/*
+#if defined(X3270_ANSI)
+	// Line-mode TTY parameters
 	char	icrnl;
 	char	inlcr;
 	char	onlcr;
@@ -211,11 +213,12 @@ typedef struct {
 	char	*intr;
 	char	*quit;
 	char	*eof;
-#endif /*]*/
-
-#if defined(WC3270) /*[*/
-	char	*hostname;
 #endif
+*/
+
+// #if defined(WC3270) /*[*/
+//	char	*hostname;
+// #endif
 
 /*
 #if defined(WC3270)

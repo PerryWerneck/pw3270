@@ -134,7 +134,12 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 	hSession->sz = sizeof(H3270);
 
 	// Set the defaults.
-	hSession->extended = 1;
+	hSession->extended  		= 1;
+	hSession->typeahead			= 1;
+	hSession->oerr_lock 		= 1;
+	hSession->unlock_delay		= 1;
+	hSession->icrnl 			= 1;
+	hSession->onlcr				= 1;
 
 	// Initialize toggles
 	initialize_toggles(hSession);
@@ -208,14 +213,14 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 	}
 	ctlr_set_rows_cols(hSession, model_number, ovc, ovr);
 
-	if (appres.termname != CN)
-		hSession->termtype = appres.termname;
+	if (hSession->termname != CN)
+		hSession->termtype = hSession->termname;
 	else
 		hSession->termtype = hSession->full_model_name;
 
 	Trace("Termtype: %s",hSession->termtype);
 
-	if (appres.apl_mode)
+	if (hSession->apl_mode)
 		appres.charset = "apl";
 
 }

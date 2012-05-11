@@ -83,7 +83,7 @@
 #include "tn3270e.h"
 #include "3270ds.h"
 
-#include "appres.h"
+// #include "appres.h"
 
 #include "ansic.h"
 #include "ctlrc.h"
@@ -521,7 +521,18 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 		netrbuf = (unsigned char *)Malloc(BUFSZ);
 
 #if defined(X3270_ANSI) /*[*/
-	if (!t_valid) {
+	if (!t_valid)
+	{
+		vintr   = parse_ctlchar("^C");
+		vquit   = parse_ctlchar("^\\");
+		verase  = parse_ctlchar("^H");
+		vkill   = parse_ctlchar("^U");
+		veof    = parse_ctlchar("^D");
+		vwerase = parse_ctlchar("^W");
+		vrprnt  = parse_ctlchar("^R");
+		vlnext  = parse_ctlchar("^V");
+
+/*
 		vintr   = parse_ctlchar(appres.intr);
 		vquit   = parse_ctlchar(appres.quit);
 		verase  = parse_ctlchar(appres.erase);
@@ -530,6 +541,7 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 		vwerase = parse_ctlchar(appres.werase);
 		vrprnt  = parse_ctlchar(appres.rprnt);
 		vlnext  = parse_ctlchar(appres.lnext);
+*/
 		t_valid = 1;
 	}
 #endif /*]*/
@@ -540,7 +552,8 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 	Replace(session->hostname, NewString(host));
 
 	/* get the passthru host and port number */
-	if (session->passthru_host) {
+	if (session->passthru_host)
+	{
 		const char *hn = CN;
 
 #ifndef ANDROID
@@ -563,27 +576,35 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 			passthru_port = sp->s_port;
 		else
 			passthru_port = htons(3514);
-	} else if (appres.proxy != CN && !proxy_type) {
-	    	proxy_type = proxy_setup(&proxy_host, &proxy_portname);
-		if (proxy_type > 0) {
-		    	unsigned long lport;
+	}
+	else if(session->proxy != CN && !proxy_type)
+	{
+	   	proxy_type = proxy_setup(session, &proxy_host, &proxy_portname);
+
+		if (proxy_type > 0)
+		{
+		   	unsigned long lport;
 			char *ptr;
 			struct servent *sp;
 
 			lport = strtoul(portname, &ptr, 0);
-			if (ptr == portname || *ptr != '\0' || lport == 0L ||
-				    lport & ~0xffff) {
-				if (!(sp = getservbyname(portname, "tcp"))) {
-					popup_an_error(NULL,"Unknown port number "
-						"or service: %s", portname);
+			if (ptr == portname || *ptr != '\0' || lport == 0L || lport & ~0xffff)
+			{
+				if (!(sp = getservbyname(portname, "tcp")))
+				{
+					popup_an_error(session, _( "Unknown port number or service: %s" ), portname);
 					return -1;
 				}
 				session->current_port = ntohs(sp->s_port);
-			} else
+			}
+			else
+			{
 				session->current_port = (unsigned short)lport;
+			}
 		}
+
 		if (proxy_type < 0)
-		    	return -1;
+			return -1;
 	}
 
 	/* fill in the socket address of the given host */
@@ -679,9 +700,9 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 	}
 
 	/* set up temporary termtype */
-	if (appres.termname == CN && session->std_ds_host)
+	if (session->termname == CN && session->std_ds_host)
 	{
-		(void) sprintf(ttype_tmpval, "IBM-327%c-%d",session->m3279 ? '9' : '8', session->model_num);
+		sprintf(ttype_tmpval, "IBM-327%c-%d",session->m3279 ? '9' : '8', session->model_num);
 		session->termtype = ttype_tmpval;
 	}
 
@@ -932,7 +953,7 @@ void net_disconnect(H3270 *session)
 	trace_dsn("SENT disconnect\n");
 
 	/* Restore terminal type to its default. */
-	if (appres.termname == CN)
+	if (session->termname == CN)
 		session->termtype = session->full_model_name;
 
 	/* We're not connected to an LU any more. */
@@ -1216,7 +1237,7 @@ telnet_fsm(unsigned char c)
 			}
 			trace_dsn("%s",see_chr);
 			if (!syncing) {
-				if (linemode && appres.onlcr && c == '\n')
+				if (linemode && h3270.onlcr && c == '\n')
 					ansi_process((unsigned int) '\r');
 				ansi_process((unsigned int) c);
 //				sms_store(c);
@@ -1375,7 +1396,7 @@ telnet_fsm(unsigned char c)
 #endif /*]*/
 			if (c == TELOPT_TN3270E && h3270.non_tn3270e_host)
 				goto wont;
-			if (c == TELOPT_TM && !appres.bsd_tm)
+			if (c == TELOPT_TM && !h3270.bsd_tm)
 				goto wont;
 
 			if (!myopts[c]) {
@@ -1383,8 +1404,7 @@ telnet_fsm(unsigned char c)
 					myopts[c] = 1;
 				will_opt[2] = c;
 				net_rawout(will_opt, sizeof(will_opt));
-				trace_dsn("SENT %s %s\n", cmd(WILL),
-					opt(c));
+				trace_dsn("SENT %s %s\n", cmd(WILL), opt(c));
 				check_in3270();
 				check_linemode(False);
 			}
@@ -2078,7 +2098,7 @@ net_hexansi_out(unsigned char *buf, int len)
 
 #if defined(X3270_TRACE) /*[*/
 	/* Trace the data. */
-	if (toggled(DS_TRACE)) {
+	if (lib3270_get_toggle(&h3270,LIB3270_TOGGLE_DS_TRACE)) {
 		int i;
 
 		trace_dsn(">");
@@ -2114,7 +2134,7 @@ static void
 net_cookedout(const char *buf, int len)
 {
 #if defined(X3270_TRACE) /*[*/
-	if (toggled(DS_TRACE)) {
+	if (lib3270_get_toggle(&h3270,LIB3270_TOGGLE_DS_TRACE)) {
 		int i;
 
 		trace_dsn(">");
@@ -2147,9 +2167,9 @@ net_cookout(const char *buf, int len)
 			c = buf[i];
 
 			/* Input conversions. */
-			if (!lnext && c == '\r' && appres.icrnl)
+			if (!lnext && c == '\r' && h3270.icrnl)
 				c = '\n';
-			else if (!lnext && c == '\n' && appres.inlcr)
+			else if (!lnext && c == '\n' && h3270.inlcr)
 				c = '\r';
 
 			/* Backslashes. */
@@ -2637,7 +2657,7 @@ void trace_netdata(char direction, unsigned const char *buf, int len)
 	struct timeval ts;
 	double tdiff;
 
-	if (!toggled(DS_TRACE))
+	if (!lib3270_get_toggle(&h3270,LIB3270_TOGGLE_DS_TRACE))
 		return;
 	(void) gettimeofday(&ts, (struct timezone *)NULL);
 	if (IN_3270) {

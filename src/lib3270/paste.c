@@ -107,7 +107,7 @@
 	int faddr;
 	unsigned char fa;
 
-	if(toggled(MARGINED_PASTE))
+	if(lib3270_get_toggle(&h3270,LIB3270_TOGGLE_MARGINED_PASTE))
 	{
 		baddr = session->cursor_addr;
 		while(BA_TO_COL(baddr) < lmargin)
@@ -138,7 +138,7 @@
  static int paste_char(H3270 *session, PASTE_DATA *data, unsigned char c)
  {
 
-	if(toggled(SMART_PASTE))
+	if(lib3270_get_toggle(session,SMART_PASTE))
 	{
 		int faddr = find_field_attribute(session,session->cursor_addr);
 		if(FA_IS_PROTECTED(session->ea_buf[faddr].fa))
@@ -226,7 +226,7 @@ LIB3270_EXPORT int lib3270_set_string(H3270 *h, const unsigned char *str)
 		}
 		str++;
 
-		if(IN_3270 && toggled(MARGINED_PASTE) && BA_TO_COL(h->cursor_addr) < data.orig_col)
+		if(IN_3270 && lib3270_get_toggle(h,LIB3270_TOGGLE_MARGINED_PASTE) && BA_TO_COL(h->cursor_addr) < data.orig_col)
 		{
 			if(!remargin(h,data.orig_col))
 				last = 0;

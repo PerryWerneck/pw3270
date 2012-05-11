@@ -141,7 +141,7 @@ static void initialize(void)
 #endif /*]*/
 
 //	appres.modified_sel = False;
-	appres.apl_mode = False;
+//	appres.apl_mode = False;
 
 /*
 #if defined(C3270) || defined(TCL3270)
@@ -151,16 +151,16 @@ static void initialize(void)
 #endif
 */
 
-	appres.numeric_lock = False;
+//	appres.numeric_lock = False;
 //	appres.secure = False;
 
 #if defined(C3270) /*[*/
-	appres.oerr_lock = True;
+//	appres.oerr_lock = True;
 #else /*][*/
-	appres.oerr_lock = False;
+//	appres.oerr_lock = False;
 #endif /*]*/
 
-	appres.typeahead = True;
+//	appres.typeahead = True;
 	appres.debug_tracing = True;
 
 #if defined(C3270) /*[*/
@@ -169,7 +169,7 @@ static void initialize(void)
 
 	appres.model = "";
 //	appres.hostsfile = CN;
-	appres.port = "telnet";
+//	appres.port = "telnet";
 
 #if !defined(_WIN32) /*[*/
 	appres.charset = "bracket";
@@ -181,7 +181,7 @@ static void initialize(void)
 		appres.charset = "bracket437";
 #endif /*]*/
 
-	appres.termname = CN;
+//	appres.termname = CN;
 	appres.macros = CN;
 
 #if defined(X3270_TRACE) /*[*/
@@ -206,21 +206,21 @@ static void initialize(void)
 //	appres.cbreak_mode = False;
 #endif /*]*/
 
-#if defined(X3270_ANSI) /*[*/
-	appres.icrnl = True;
-	appres.inlcr = False;
-	appres.onlcr = True;
-	appres.erase = "^H";
-	appres.kill = "^U";
-	appres.werase = "^W";
-	appres.rprnt = "^R";
-	appres.lnext = "^V";
-	appres.intr = "^C";
-	appres.quit = "^\\";
-	appres.eof = "^D";
+#if defined(X3270_ANSI)
+//	appres.icrnl = True;
+//	appres.inlcr = False;
+//	appres.onlcr = True;
+//	appres.erase = "^H";
+//	appres.kill = "^U";
+//	appres.werase = "^W";
+//	appres.rprnt = "^R";
+//	appres.lnext = "^V";
+//	appres.intr = "^C";
+//	appres.quit = "^\\";
+//	appres.eof = "^D";
 #endif /*]*/
 
-	appres.unlock_delay = True;
+//	appres.unlock_delay = True;
 
 #if defined(X3270_FT) /*[*/
 	appres.dft_buffer_size = DFT_BUF;
@@ -296,7 +296,7 @@ static const struct lib3270_option options[] =
 //    { OptAllBold,  OPT_BOOLEAN, True,  ResAllBold,   offset(all_bold_on), NULL },
 //    { OptAltScreen,OPT_STRING,  False, ResAltScreen, offset(altscreen), NULL },
 //#endif /*]*/
-    { OptAplMode,  OPT_BOOLEAN, True,  ResAplMode,   offset(apl_mode), NULL },
+//    { OptAplMode,  OPT_BOOLEAN, True,  ResAplMode,   offset(apl_mode), NULL },
 #if defined(C3270) /*[*/
 //    { OptCbreak,   OPT_BOOLEAN, True,  ResCbreak,    offset(cbreak_mode), NULL },
 #endif /*]*/
@@ -323,11 +323,11 @@ static const struct lib3270_option options[] =
 // #endif /*]*/
 //    { OptOnce,     OPT_BOOLEAN, True,  ResOnce,      offset(once), NULL },
 //    { OptOversize, OPT_STRING,  False, ResOversize,  offset(oversize), N_( "Sets the screen dimensions to be larger than the default for the chosen model (COLSxROWS)." ) },
-    { OptPort,     OPT_STRING,  False, ResPort,      offset(port), N_( "The name of the default TCP port to connect" ) },
+//    { OptPort,     OPT_STRING,  False, ResPort,      offset(port), N_( "The name of the default TCP port to connect" ) },
 #if defined(C3270) && !defined(LIB3270) /*[*/
-    { OptPrinterLu,OPT_STRING,  False, ResPrinterLu, offset(printer_lu), NULL },
+//    { OptPrinterLu,OPT_STRING,  False, ResPrinterLu, offset(printer_lu), NULL },
 #endif /*]*/
-    { OptProxy,	   OPT_STRING,  False, ResProxy,     offset(proxy), N_( "Proxy server (type:host[:port])" ) },
+//    { OptProxy,	   OPT_STRING,  False, ResProxy,     offset(proxy), N_( "Proxy server (type:host[:port])" ) },
 #if defined(S3270) /*[*/
     { OptScripted, OPT_NOP,     False, ResScripted,  NULL, NULL },
 #endif /*]*/
@@ -339,7 +339,7 @@ static const struct lib3270_option options[] =
     { OptSocket,   OPT_BOOLEAN, True,  ResSocket,    offset(socket), NULL },
 #endif /*]*/
 
-    { OptTermName, OPT_STRING,  False, ResTermName,  offset(termname), N_( "Specifies the terminal name to be transmitted over the telnet connection." ) },
+//    { OptTermName, OPT_STRING,  False, ResTermName,  offset(termname), N_( "Specifies the terminal name to be transmitted over the telnet connection." ) },
 
 #if defined(WC3270) /*[*/
     { OptTitle,    OPT_STRING,  False, ResTitle,     offset(title), NULL },
@@ -377,17 +377,17 @@ static struct {
 } resources[] = {
 	{ ResAllBold,	offset(all_bold),	XRM_STRING },
 //	{ ResAltScreen,	offset(altscreen),	XRM_STRING },
-	{ ResBsdTm,	offset(bsd_tm),		XRM_BOOLEAN },
+//	{ ResBsdTm,	offset(bsd_tm),		XRM_BOOLEAN },
 #if defined(HAVE_LIBSSL) /*[*/
 	{ ResCertFile,	offset(cert_file),	XRM_STRING },
 #endif /*]*/
 	{ ResCharset,	offset(charset),	XRM_STRING },
-	{ ResColor8,	offset(color8),		XRM_BOOLEAN },
+//	{ ResColor8,	offset(color8),		XRM_BOOLEAN },
 	{ ResConfDir,	offset(conf_dir),	XRM_STRING },
 //	{ ResDefScreen,	offset(defscreen),	XRM_STRING },
 #if defined(X3270_ANSI) /*[*/
-	{ ResEof,	offset(eof),		XRM_STRING },
-	{ ResErase,	offset(erase),		XRM_STRING },
+//	{ ResEof,	offset(eof),		XRM_STRING },
+//	{ ResErase,	offset(erase),		XRM_STRING },
 #endif /*]*/
 //	{ ResExtended,	offset(extended),	XRM_BOOLEAN },
 #if defined(X3270_FT) /*[*/
@@ -399,10 +399,10 @@ static struct {
 #endif /*]*/
 //	{ ResHostsFile,	offset(hostsfile),	XRM_STRING },
 #if defined(X3270_ANSI) /*[*/
-	{ ResIcrnl,	offset(icrnl),		XRM_BOOLEAN },
-	{ ResInlcr,	offset(inlcr),		XRM_BOOLEAN },
-	{ ResOnlcr,	offset(onlcr),		XRM_BOOLEAN },
-	{ ResIntr,	offset(intr),		XRM_STRING },
+//	{ ResIcrnl,	offset(icrnl),		XRM_BOOLEAN },
+//	{ ResInlcr,	offset(inlcr),		XRM_BOOLEAN },
+//	{ ResOnlcr,	offset(onlcr),		XRM_BOOLEAN },
+//	{ ResIntr,	offset(intr),		XRM_STRING },
 #endif /*]*/
 #if defined(X3270_SCRIPT) /*[*/
 	{ ResPluginCommand, offset(plugin_command), XRM_STRING },
@@ -422,31 +422,31 @@ static struct {
 //	{ ResCbreak,	offset(cbreak_mode),	XRM_BOOLEAN },
 #endif /*]*/
 #if defined(X3270_ANSI) /*[*/
-	{ ResKill,	offset(kill),		XRM_STRING },
-	{ ResLnext,	offset(lnext),		XRM_STRING },
+//	{ ResKill,	offset(kill),		XRM_STRING },
+//	{ ResLnext,	offset(lnext),		XRM_STRING },
 #endif /*]*/
-	{ ResLoginMacro,offset(login_macro),	XRM_STRING },
+//	{ ResLoginMacro,offset(login_macro),	XRM_STRING },
 //	{ ResM3279,	offset(m3279),		XRM_BOOLEAN },
 //	{ ResModel,	offset(model),		XRM_STRING },
 //	{ ResModifiedSel, offset(modified_sel),	XRM_BOOLEAN },
 //#if defined(C3270) && !defined(_WIN32) /*[*/
 //	{ ResMono,	offset(mono),		XRM_BOOLEAN },
 //#endif /*]*/
-	{ ResNumericLock, offset(numeric_lock),	XRM_BOOLEAN },
-	{ ResOerrLock,	offset(oerr_lock),	XRM_BOOLEAN },
+//	{ ResNumericLock, offset(numeric_lock),	XRM_BOOLEAN },
+//	{ ResOerrLock,	offset(oerr_lock),	XRM_BOOLEAN },
 //	{ ResOversize,	offset(oversize),	XRM_STRING },
-	{ ResPort,	offset(port),		XRM_STRING },
+//	{ ResPort,	offset(port),		XRM_STRING },
 #if defined(C3270) /*[*/
-	{ ResPrinterLu,	offset(printer_lu),	XRM_STRING },
+//	{ ResPrinterLu,	offset(printer_lu),	XRM_STRING },
 	{ ResPrintTextCommand,	NULL,		XRM_STRING },
 #endif /*]*/
-	{ ResProxy,	offset(proxy),		XRM_STRING },
+//	{ ResProxy,	offset(proxy),		XRM_STRING },
 #if defined(X3270_ANSI) /*[*/
-	{ ResQuit,	offset(quit),		XRM_STRING },
-	{ ResRprnt,	offset(rprnt),		XRM_STRING },
+//	{ ResQuit,	offset(quit),		XRM_STRING },
+//	{ ResRprnt,	offset(rprnt),		XRM_STRING },
 #endif /*]*/
 //	{ ResSecure,	offset(secure),		XRM_BOOLEAN },
-	{ ResTermName,	offset(termname),	XRM_STRING },
+//	{ ResTermName,	offset(termname),	XRM_STRING },
 #if defined(WC3270) /*[*/
 	{ ResTitle,	offset(title),		XRM_STRING },
 #endif /*]*/
@@ -460,10 +460,10 @@ static struct {
 	{ ResTraceMonitor,offset(trace_monitor),XRM_BOOLEAN },
 #endif /*]*/
 #endif /*]*/
-	{ ResTypeahead,	offset(typeahead),	XRM_BOOLEAN },
-	{ ResUnlockDelay,offset(unlock_delay),	XRM_BOOLEAN },
+//	{ ResTypeahead,	offset(typeahead),	XRM_BOOLEAN },
+//	{ ResUnlockDelay,offset(unlock_delay),	XRM_BOOLEAN },
 #if defined(X3270_ANSI) /*[*/
-	{ ResWerase,	offset(werase),		XRM_STRING },
+//	{ ResWerase,	offset(werase),		XRM_STRING },
 #endif /*]*/
 
 	{ CN,		0,			XRM_STRING }

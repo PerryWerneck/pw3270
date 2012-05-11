@@ -39,7 +39,7 @@
  */
 
 #include "globals.h"
-#include "appres.h"
+// #include "appres.h"
 #include "resources.h"
 
 #include "actionsc.h"
@@ -477,7 +477,7 @@ static int do_connect(H3270 *hSession, const char *n)
 	char nb[2048];		/* name buffer */
 	char *s;			/* temporary */
 	const char *chost;	/* to whom we will connect */
-	char *ps = CN;
+//	char *ps = CN;
 	char *port = CN;
 	Boolean resolving;
 	Boolean pending;
@@ -522,7 +522,7 @@ static int do_connect(H3270 *hSession, const char *n)
 
 		/* Default the port. */
 		if (port == CN)
-			port = appres.port;
+			port = "telnet";
 	}
 
 	/*
@@ -566,8 +566,8 @@ static int do_connect(H3270 *hSession, const char *n)
 	/* Success. */
 
 	/* Set pending string. */
-	if (ps == CN)
-		ps = appres.login_macro;
+//	if (ps == CN)
+//		ps = appres.login_macro;
 
 //	if (ps != CN)
 //		login_macro(ps);
@@ -656,7 +656,7 @@ int lib3270_connect(H3270 *h, const char *n, int wait)
 static void try_reconnect(H3270 *session)
 {
 	lib3270_write_log(session,"3270","Starting auto-reconnect (Host: %s)",session->full_current_host ? session->full_current_host : "-");
-	session->auto_reconnect_inprogress = False;
+	session->auto_reconnect_inprogress = 0;
 	lib3270_reconnect(session,0);
 }
 
@@ -686,11 +686,11 @@ void host_disconnect(H3270 *h, int failed)
 
 		net_disconnect(h);
 
-		Trace("Disconnected (Failed: %d Reconnect: %d in_progress: %d)",failed,toggled(RECONNECT),h->auto_reconnect_inprogress);
-		if (toggled(RECONNECT) && !h->auto_reconnect_inprogress)
+		trace("Disconnected (Failed: %d Reconnect: %d in_progress: %d)",failed,lib3270_get_toggle(h,LIB3270_TOGGLE_RECONNECT),h->auto_reconnect_inprogress);
+		if (lib3270_get_toggle(h,LIB3270_TOGGLE_RECONNECT) && !h->auto_reconnect_inprogress)
 		{
 			/* Schedule an automatic reconnection. */
-			h->auto_reconnect_inprogress = True;
+			h->auto_reconnect_inprogress = 1;
 			(void) AddTimeOut(failed ? RECONNECT_ERR_MS: RECONNECT_MS, h, try_reconnect);
 		}
 
@@ -699,7 +699,7 @@ void host_disconnect(H3270 *h, int failed)
 		 * in sync.
 		 */
 #if defined(X3270_TRACE) /*[*/
-		if (IN_ANSI && toggled(SCREEN_TRACE))
+		if (IN_ANSI && lib3270_get_toggle(h,LIB3270_TOGGLE_SCREEN_TRACE))
 			trace_ansi_disc();
 #endif /*]*/
 
@@ -716,13 +716,13 @@ void host_in3270(H3270 *session, LIB3270_CSTATE new_cstate)
 
 	session->cstate = new_cstate;
 	session->ever_3270 = now3270;
-	lib3270_st_changed(session, ST_3270_MODE, now3270);
+	lib3270_st_changed(session, LIB3270_STATE_3270_MODE, now3270);
 }
 
 void host_connected(H3270 *session)
 {
 	session->cstate = CONNECTED_INITIAL;
-	lib3270_st_changed(session, ST_CONNECT, True);
+	lib3270_st_changed(session, LIB3270_STATE_CONNECT, True);
 	if(session->update_connect)
 		session->update_connect(session,1);
 }
@@ -731,7 +731,7 @@ void host_disconnected(H3270 *session)
 {
 	session->cstate = NOT_CONNECTED;
 	set_status(session,OIA_FLAG_UNDERA,False);
-	lib3270_st_changed(session,ST_CONNECT, False);
+	lib3270_st_changed(session,LIB3270_STATE_CONNECT, False);
 	status_changed(session,LIB3270_MESSAGE_DISCONNECTED);
 	if(session->update_connect)
 		session->update_connect(session,0);
@@ -758,15 +758,35 @@ LIB3270_EXPORT void lib3270_register_schange(H3270 *h,LIB3270_STATE_CHANGE tx, v
 }
 
 /* Signal a state change. */
-void lib3270_st_changed(H3270 *h, int tx, int mode)
+void lib3270_st_changed(H3270 *h, LIB3270_STATE tx, int mode)
 {
+#if defined(DEBUG)
+
+	static const char * state_name[LIB3270_STATE_USER] =
+	{
+		"LIB3270_STATE_RESOLVING",
+		"LIB3270_STATE_HALF_CONNECT",
+		"LIB3270_STATE_CONNECT",
+		"LIB3270_STATE_3270_MODE",
+		"LIB3270_STATE_LINE_MODE",
+		"LIB3270_STATE_REMODEL",
+		"LIB3270_STATE_PRINTER",
+		"LIB3270_STATE_EXITING",
+		"LIB3270_STATE_CHARSET",
+
+	};
+
+#endif // DEBUG
+
 	struct lib3270_state_callback *st;
 
     CHECK_SESSION_HANDLE(h);
 
+	trace("%s is %d",state_name[tx],mode);
+
 	for (st = h->st_callbacks[tx];st != (struct lib3270_state_callback *)NULL;st = st->next)
 	{
-		(*st->func)(h,mode,st->data);
+		st->func(h,mode,st->data);
 	}
 }
 
@@ -817,7 +837,7 @@ LIB3270_EXPORT int lib3270_reconnect(H3270 *h,int wait)
 
 	if(rc)
 	{
-		h->auto_reconnect_inprogress = False;
+		h->auto_reconnect_inprogress = 0;
 		return rc;
 	}
 

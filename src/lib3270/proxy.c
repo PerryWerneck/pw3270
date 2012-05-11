@@ -35,35 +35,39 @@
  *	proxy.c
  *		This module implements various kinds of proxies.
  */
+
 #ifdef _WIN32
 	#include <winsock2.h>
 	#include <windows.h>
 #endif // _WIN32
 
 #include "globals.h"
-#if !defined(PR3287) /*[*/
+
 #include "appres.h"
 #include "resources.h"
-#endif /*]*/
 
 #ifndef ANDROID
 	#include <stdlib.h>
 #endif
 
 #if defined(_WIN32)
+
 	#include <ws2tcpip.h>
+
 #else
 
-#include <malloc.h>
-#include <sys/socket.h>
-#include <sys/ioctl.h>
-#include <netinet/in.h>
-#include <netdb.h>
-#include <arpa/inet.h>
-#if defined(HAVE_SYS_SELECT_H) /*[*/
-#include <sys/select.h>		/* fd_set declaration */
-#endif /*]*/
-#endif /*]*/
+	#include <malloc.h>
+	#include <sys/socket.h>
+	#include <sys/ioctl.h>
+	#include <netinet/in.h>
+	#include <netdb.h>
+	#include <arpa/inet.h>
+
+//	#if defined(HAVE_SYS_SELECT_H)
+//	#include <sys/select.h>
+//	#endif
+
+#endif
 
 #include "api.h"
 
@@ -76,30 +80,32 @@
 #include "w3miscc.h"
 #include "screen.h"
 
-#if defined(PR3287) /*[*/
-extern char *proxy_spec;
-#endif /*]*/
+// #if defined(PR3287)
+// extern char *proxy_spec;
+// #endif
 
 /*
  * Supported proxy types.
  *
  * At some point we will add SOCKS.
  */
-enum {
-    	PT_NONE,
-    	PT_PASSTHRU,	/* Sun telnet-passthru */
-	PT_HTTP,	/* RFC 2817 CONNECT tunnel */
-	PT_TELNET,	/* 'connect host port' proxy */
-	PT_SOCKS4,	/* SOCKS version 4 (or 4A if necessary) */
-	PT_SOCKS4A,	/* SOCKS version 4A (force remote name resolution) */
- 	PT_SOCKS5,	/* SOCKS version 5 (RFC 1928) */
- 	PT_SOCKS5D,	/* SOCKS version 5 (force remote name resolution) */
+enum
+{
+	PT_NONE,
+	PT_PASSTHRU,	/**< Sun telnet-passthru */
+	PT_HTTP,		/**< RFC 2817 CONNECT tunnel */
+	PT_TELNET,		/**< 'connect host port' proxy */
+	PT_SOCKS4,		/**< SOCKS version 4 (or 4A if necessary) */
+	PT_SOCKS4A,		/**< SOCKS version 4A (force remote name resolution) */
+	PT_SOCKS5,		/**< SOCKS version 5 (RFC 1928) */
+	PT_SOCKS5D,		/**< SOCKS version 5 (force remote name resolution) */
 	PT_MAX
 } proxytype_t;
 
 /* proxy type names -- keep these in sync with proxytype_t! */
-char *type_name[] = {
-    	"unknown",
+char *type_name[] =
+{
+	"unknown",
 	"passthru",
 	"HTTP",
 	"TELNET",
@@ -138,8 +144,7 @@ static int proxy_socks4(int fd, char *host, unsigned short port, int force_a);
 static int proxy_socks5(int fd, char *host, unsigned short port, int force_d);
 
 
-char *
-proxy_type_name(int type)
+char * proxy_type_name(int type)
 {
     	if (type < 1 || type >= PT_MAX)
 	    	return "unknown";
@@ -151,38 +156,35 @@ proxy_type_name(int type)
  * Resolve the type, hostname and port for a proxy.
  * Returns -1 for failure, 0 for no proxy, >0 (the proxy type) for success.
  */
-int
-proxy_setup(char **phost, char **pport)
+int proxy_setup(H3270 *session, char **phost, char **pport)
 {
-    	char *proxy;
-	char *colon;
-	int sl;
+	char	* proxy = session->proxy;
+	char	* colon;
+	int		  sl;
 
-#if defined(PR3287) /*[*/
-	proxy = proxy_spec;
-#else /*][*/
-	proxy = appres.proxy;
-#endif /*]*/
-	if (proxy == CN)
-	    	return PT_NONE;
+	if(!proxy)
+		return PT_NONE;
 
-	if ((colon = strchr(proxy, ':')) == CN || (colon == proxy)) {
-	    	popup_an_error(NULL,"Invalid proxy syntax");
+	if ((colon = strchr(proxy, ':')) == CN || (colon == proxy))
+	{
+    	popup_an_error(session,_( "Invalid proxy syntax" ) );
 		return -1;
 	}
 
 	sl = colon - proxy;
-	if (sl == strlen(PROXY_PASSTHRU) &&
-		!strncasecmp(proxy, PROXY_PASSTHRU, sl)) {
-
+	if (sl == strlen(PROXY_PASSTHRU) && !strncasecmp(proxy, PROXY_PASSTHRU, sl))
+	{
 		if (parse_host_port(colon + 1, phost, pport) < 0)
-		    	return -1;
+	    	return -1;
+
 		if (*pport == CN)
-		    	*pport = NewString(PORT_PASSTHRU);
+	    	*pport = NewString(PORT_PASSTHRU);
+
 		return PT_PASSTHRU;
 	}
-	if (sl == strlen(PROXY_HTTP) &&
-		!strncasecmp(proxy, PROXY_HTTP, sl)) {
+
+	if (sl == strlen(PROXY_HTTP) && !strncasecmp(proxy, PROXY_HTTP, sl))
+	{
 
 		if (parse_host_port(colon + 1, phost, pport) < 0)
 		    	return -1;
@@ -190,54 +192,66 @@ proxy_setup(char **phost, char **pport)
 		    	*pport = NewString(PORT_HTTP);
 		return PT_HTTP;
 	}
-	if (sl == strlen(PROXY_TELNET) &&
-		!strncasecmp(proxy, PROXY_TELNET, sl)) {
+
+	if (sl == strlen(PROXY_TELNET) && !strncasecmp(proxy, PROXY_TELNET, sl))
+	{
 
 		if (parse_host_port(colon + 1, phost, pport) < 0)
 		    	return -1;
-		if (*pport == CN) {
-		    	popup_an_error(NULL,"Must specify port for telnet proxy");
+		if (*pport == CN)
+		{
+		   	popup_an_error(session,_( "Must specify port for telnet proxy" ) );
 			return -1;
 		}
 		return PT_TELNET;
 	}
-	if (sl == strlen(PROXY_SOCKS4) &&
-		!strncasecmp(proxy, PROXY_SOCKS4, sl)) {
 
+	if (sl == strlen(PROXY_SOCKS4) && !strncasecmp(proxy, PROXY_SOCKS4, sl))
+	{
 		if (parse_host_port(colon + 1, phost, pport) < 0)
-		    	return -1;
+	    	return -1;
+
 		if (*pport == CN)
-		    	*pport = NewString(PORT_SOCKS4);
+	    	*pport = NewString(PORT_SOCKS4);
+
 		return PT_SOCKS4;
 	}
-	if (sl == strlen(PROXY_SOCKS4A) &&
-		!strncasecmp(proxy, PROXY_SOCKS4A, sl)) {
 
+	if (sl == strlen(PROXY_SOCKS4A) && !strncasecmp(proxy, PROXY_SOCKS4A, sl))
+	{
 		if (parse_host_port(colon + 1, phost, pport) < 0)
-		    	return -1;
+	    	return -1;
+
 		if (*pport == CN)
-		    	*pport = NewString(PORT_SOCKS4A);
+	    	*pport = NewString(PORT_SOCKS4A);
+
 		return PT_SOCKS4A;
 	}
-	if (sl == strlen(PROXY_SOCKS5) &&
-		!strncasecmp(proxy, PROXY_SOCKS5, sl)) {
 
+	if (sl == strlen(PROXY_SOCKS5) && !strncasecmp(proxy, PROXY_SOCKS5, sl))
+	{
 		if (parse_host_port(colon + 1, phost, pport) < 0)
-		    	return -1;
+	    	return -1;
+
 		if (*pport == CN)
-		    	*pport = NewString(PORT_SOCKS5);
+		    *pport = NewString(PORT_SOCKS5);
+
 		return PT_SOCKS5;
 	}
-	if (sl == strlen(PROXY_SOCKS5D) &&
-		!strncasecmp(proxy, PROXY_SOCKS5D, sl)) {
 
+	if (sl == strlen(PROXY_SOCKS5D) && !strncasecmp(proxy, PROXY_SOCKS5D, sl))
+	{
 		if (parse_host_port(colon + 1, phost, pport) < 0)
-		    	return -1;
+	    	return -1;
+
 		if (*pport == CN)
-		    	*pport = NewString(PORT_SOCKS5D);
+	    	*pport = NewString(PORT_SOCKS5D);
+
 		return PT_SOCKS5D;
 	}
-	popup_an_error(NULL,"Invalid proxy type '%.*s'", sl, proxy);
+
+	popup_an_error(session,"Invalid proxy type '%.*s'", sl, proxy);
+
 	return -1;
 }
 

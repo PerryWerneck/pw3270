@@ -43,7 +43,7 @@
 #include <netinet/in.h>
 #endif /*]*/
 #include "3270ds.h"
-#include "appres.h"
+// #include "appres.h"
 #include "screen.h"
 // #include "ctlr.h"
 #include "resources.h"
@@ -772,7 +772,7 @@ do_qr_color(void)
 
 	trace_ds("> QueryReply(Color)\n");
 
-	color_max = appres.color8? 8: 16; /* report on 8 or 16 colors */
+	color_max = h3270.color8 ? 8: 16; /* report on 8 or 16 colors */
 
 	space3270out(4 + 2*15);
 	*obptr++ = 0x00;	/* no options */
@@ -904,7 +904,7 @@ do_qr_charsets(void)
 	if (!*standard_font) {
 		/* special 3270 font, includes APL */
 		*obptr++ = 0x01;/* SET 1: */
-		if (appres.apl_mode)
+		if (h3270.apl_mode)
 		    *obptr++ = 0x00;/*  FLAGS: non-loadable, single-plane,
 					 single-byte, no compare */
 		else

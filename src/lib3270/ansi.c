@@ -1706,10 +1706,9 @@ trace_pending_mb(void)
  * External entry points
  */
 
-void
-ansi_init(void)
+void ansi_init(void)
 {
-	register_schange(ST_3270_MODE, ansi_in3270);
+	lib3270_register_schange(NULL,LIB3270_STATE_3270_MODE,ansi_in3270,NULL);
 }
 
 void
@@ -1723,7 +1722,7 @@ ansi_process(unsigned int c)
 //	scroll_to_bottom();
 
 #if defined(X3270_TRACE) /*[*/
-	if (toggled(SCREEN_TRACE))
+	if (lib3270_get_toggle(&h3270,SCREEN_TRACE))
 		trace_char((char)c);
 #endif /*]*/
 
@@ -1827,7 +1826,7 @@ ansi_send_pa(int nn)
 
 void toggle_lineWrap(H3270 *session, struct lib3270_toggle *t unused, LIB3270_TOGGLE_TYPE type unused)
 {
-	if (toggled(LIB3270_TOGGLE_LINE_WRAP))
+	if (lib3270_get_toggle(&h3270,LIB3270_TOGGLE_LINE_WRAP))
 		wraparound_mode = 1;
 	else
 		wraparound_mode = 0;

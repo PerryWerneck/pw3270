@@ -142,7 +142,7 @@ trace_ds_s(char *s, Boolean can_break)
 	int len = strlen(s);
 	Boolean nl = False;
 
-	if (!toggled(DS_TRACE) || !len)
+	if (!lib3270_get_toggle(&h3270,DS_TRACE) || !len)
 		return;
 
 	if (s && s[len-1] == '\n') {
@@ -177,7 +177,7 @@ trace_ds(const char *fmt, ...)
 	char tdsbuf[4096];
 	va_list args;
 
-	if (!toggled(DS_TRACE))
+	if (!lib3270_get_toggle(&h3270,DS_TRACE))
 		return;
 
 	va_start(args, fmt);
@@ -194,7 +194,7 @@ trace_ds_nb(const char *fmt, ...)
 	char tdsbuf[4096];
 	va_list args;
 
-	if (!toggled(DS_TRACE))
+	if (!lib3270_get_toggle(&h3270,DS_TRACE))
 		return;
 
 	va_start(args, fmt);
@@ -211,7 +211,7 @@ trace_event(const char *fmt, ...)
 {
 	va_list args;
 
-	if (!toggled(EVENT_TRACE))
+	if (!lib3270_get_toggle(&h3270,EVENT_TRACE))
 		return;
 
 	/* print out message */
@@ -226,7 +226,7 @@ trace_dsn(const char *fmt, ...)
 {
 	va_list args;
 
-	if (!toggled(DS_TRACE))
+	if (!lib3270_get_toggle(&h3270,DS_TRACE))
 		return;
 
 	/* print out message */
@@ -760,14 +760,14 @@ static void tracefile_off(void)
 
 void toggle_dsTrace(H3270 *session, struct toggle *t unused, LIB3270_TOGGLE_TYPE tt)
 {
-	if (toggled(DS_TRACE) && tracef == NULL)
+	if (lib3270_get_toggle(&h3270,DS_TRACE) && tracef == NULL)
 		tracefile_on(DS_TRACE, tt);
 
 	// If turning off trace and not still tracing events, close the trace file.
-	else if (!toggled(DS_TRACE) && !toggled(EVENT_TRACE))
+	else if (!lib3270_get_toggle(&h3270,DS_TRACE) && !lib3270_get_toggle(&h3270,EVENT_TRACE))
 		tracefile_off();
 
-	if (toggled(DS_TRACE))
+	if (lib3270_get_toggle(&h3270,DS_TRACE))
 		(void) gettimeofday(&ds_ts, (struct timezone *)NULL);
 }
 */
@@ -777,11 +777,11 @@ void toggle_eventTrace(H3270 *session, struct toggle *t unused, LIB3270_TOGGLE_T
 {
 	// If turning on event debug, and no trace file, open one.
 
-	if (toggled(EVENT_TRACE) && tracef == NULL)
+	if (lib3270_get_toggle(&h3270,EVENT_TRACE) && tracef == NULL)
 		tracefile_on(EVENT_TRACE, tt);
 
 	// If turning off event debug, and not tracing the data stream, close the trace file.
-	else if (!toggled(EVENT_TRACE) && !toggled(DS_TRACE))
+	else if (!lib3270_get_toggle(&h3270,EVENT_TRACE) && !lib3270_get_toggle(&h3270,DS_TRACE))
 		tracefile_off();
 }
 */
@@ -815,14 +815,14 @@ void trace_screen(void)
 {
 	trace_skipping = False;
 
-	if (!toggled(SCREEN_TRACE))
+	if (!lib3270_get_toggle(&h3270,SCREEN_TRACE))
 		do_screentrace();
 }
 
 /* Called from ANSI emulation code to log a single character. */
 void trace_char(char c)
 {
-	if (toggled(SCREEN_TRACE))
+	if (lib3270_get_toggle(&h3270,SCREEN_TRACE))
 		wtrace("%c",c);
 	return;
 }
@@ -924,7 +924,7 @@ void toggle_screenTrace(H3270 *session, struct toggle *t unused, LIB3270_TOGGLE_
 	char *tracefile_buf = NULL;
 	char *tracefile;
 
-	if (toggled(SCREEN_TRACE)) {
+	if (lib3270_get_toggle(&h3270,SCREEN_TRACE)) {
 		if (appres.screentrace_file)
 			tracefile = appres.screentrace_file;
 		else {

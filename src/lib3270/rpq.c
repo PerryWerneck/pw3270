@@ -48,7 +48,9 @@
 #include <netdb.h>
 #endif /*]*/
 
-#include <stdlib.h>
+#ifndef ANDROID
+	#include <stdlib.h>
+#endif // !ANDROID
 
 #include "api.h"
 
@@ -202,8 +204,7 @@ do_qr_rpqnames(void)
 			}
 			break;
 
-		case RPQ_TIMESTAMP:	/* program build time
-					   (yyyymmddhhmmss bcd) */
+		case RPQ_TIMESTAMP:	/* program build time (yyyymmddhhmmss bcd) */
 			x = strlen(build_rpq_timestamp);
 			omit_due_space_limit = ((x+1)/2 > remaining);
 			if (!omit_due_space_limit) {
@@ -220,8 +221,7 @@ do_qr_rpqnames(void)
 		}
 
 		if (omit_due_space_limit)
-			rpq_warning("RPQ %s term omitted due to insufficient "
-					"space", rpq_keywords[j].text);
+			rpq_warning("RPQ %s term omitted due to insufficient space", rpq_keywords[j].text);
 		/*
 		 * The item is built, insert item length as needed and
 		 * adjust space remaining.
@@ -367,8 +367,7 @@ select_rpq_terms(void)
 }
 
 /* Utility function used by the RPQNAMES query reply. */
-static int
-get_rpq_timezone(void)
+static int get_rpq_timezone(void)
 {
 	/*
 	 * Return the signed number of minutes we're offset from UTC.
@@ -402,8 +401,7 @@ get_rpq_timezone(void)
 
 		x = strtol(p1, &p2, 10);
 		if (errno != 0) {
-			rpq_warning("RPQ TIMEZONE term is invalid - "
-					"use +/-hhmm");
+			rpq_warning("RPQ TIMEZONE term is invalid - use +/-hhmm");
 			return 4;
 		}
 		if ((*p2 != '\0') && (*p2 != ':') && (!isspace(*p2)))
@@ -412,8 +410,7 @@ get_rpq_timezone(void)
 		hhmm = ldiv(x, 100L);
 
 		if (hhmm.rem > 59L) {
-			rpq_warning("RPQ TIMEZONE term is invalid - "
-					"use +/-hhmm");
+			rpq_warning("RPQ TIMEZONE term is invalid - use +/-hhmm");
 			return 4;
 		}
 
@@ -424,15 +421,16 @@ get_rpq_timezone(void)
 		 * No override specified, try to get information from the
 		 * system.
 		 */
-		if ((here = time(NULL)) == (time_t)(-1)) {
-			rpq_warning("RPQ: Unable to determine workstation "
-					"local time");
+		if ((here = time(NULL)) == (time_t)(-1))
+		{
+			rpq_warning("RPQ: Unable to determine workstation local time");
 			return 1;
 		}
 		memcpy(&here_tm, localtime(&here), sizeof(struct tm));
-		if ((utc_tm = gmtime(&here)) == NULL) {
-			rpq_warning("RPQ: Unable to determine workstation UTC "
-					"time");
+
+		if ((utc_tm = gmtime(&here)) == NULL)
+		{
+			rpq_warning("RPQ: Unable to determine workstation UTC time");
 			return 2;
 		}
 
@@ -502,15 +500,13 @@ get_rpq_user(unsigned char buf[], const int buflen)
 			if (isspace(c))
 				continue;	 /* skip white space */
 			if (!isxdigit(c)) {
-				rpq_warning("RPQ USER term has non-hex "
-						"character");
+				rpq_warning("RPQ USER term has non-hex character");
 				break;
 			}
 			x = (p_h - hexstr)/2;
 			if (x >= buflen) {
 				x = buflen;
-				rpq_warning("RPQ USER term truncated after %d "
-						"bytes", x);
+				rpq_warning("RPQ USER term truncated after %d bytes", x);
 				break; /* too long, truncate */
 			}
 
@@ -529,8 +525,7 @@ get_rpq_user(unsigned char buf[], const int buflen)
 		 */
 		is_first_hex_digit = ((strlen(hexstr) % 2) == 0);
 		if (!is_first_hex_digit)
-			rpq_warning("RPQ USER term has odd number of hex "
-					"digits");
+			rpq_warning("RPQ USER term has odd number of hex digits");
 		*buf = 0;	/* initialize first byte for possible implied
 				   leading zero */
 		for (p_h = &hexstr[0]; *p_h; p_h++) {
@@ -555,8 +550,7 @@ get_rpq_user(unsigned char buf[], const int buflen)
 
 		if ( x >= buflen) {
 			x = buflen;
-			rpq_warning("RPQ USER term truncated after %d "
-					"characters", x);
+			rpq_warning("RPQ USER term truncated after %d characters", x);
 			break;
 		}
 
@@ -630,8 +624,7 @@ get_rpq_address(unsigned char *buf, const int maxlen)
 				len = sizeof(struct in6_addr);
 				break;
 			default:
-				rpq_warning("RPQ ADDRESS term has "
-						"unrecognized family %u",
+				rpq_warning("RPQ ADDRESS term has unrecognized family %u",
 						res->ai_family);
 				break;
 			}
@@ -640,8 +633,7 @@ get_rpq_address(unsigned char *buf, const int maxlen)
 				x += len;
 				(void) memcpy(buf, src, len);
 			} else {
-				rpq_warning("RPQ ADDRESS term incomplete due "
-						"to space limit");
+				rpq_warning("RPQ ADDRESS term incomplete due to space limit");
 			}
 			/* Give back storage obtained by getaddrinfo */
 			freeaddrinfo(res);
@@ -670,8 +662,7 @@ get_rpq_address(unsigned char *buf, const int maxlen)
 			(void) memcpy(buf, &ia, sizeof(in_addr_t));
 			x += sizeof(in_addr_t);
 		} else {
-			rpq_warning("RPQ ADDRESS term incomplete due to "
-					"space limit");
+			rpq_warning("RPQ ADDRESS term incomplete due to space limit");
 		}
 #endif /*]*/
 		free(rpqtext);
@@ -704,16 +695,14 @@ get_rpq_address(unsigned char *buf, const int maxlen)
 			break;
 #endif /*]*/
 		default:
-			rpq_warning("RPQ ADDRESS term has unrecognized "
-					"family %u", u.sa.sa_family);
+			rpq_warning("RPQ ADDRESS term has unrecognized family %u", u.sa.sa_family);
 			break;
 		}
 		if (x + len <= maxlen) {
 			(void) memcpy(buf, src, len);
 			x += len;
 		} else {
-			rpq_warning("RPQ ADDRESS term incomplete due to space "
-					"limit");
+			rpq_warning("RPQ ADDRESS term incomplete due to space limit");
 		}
 	}
 	return x;
@@ -721,38 +710,46 @@ get_rpq_address(unsigned char *buf, const int maxlen)
 #endif /*]*/
 
 #define RPQ_WARNBUF_SIZE	1024
-static char *rpq_warnbuf = CN;
-static int rpq_wbcnt = 0;
+static char * rpq_warnbuf	= CN;
+static int    rpq_wbcnt 	= 0;
 
-static void
-rpq_warning(const char *fmt, ...)
+static void rpq_warning(const char *fmt, ...)
 {
 	va_list a;
 
-	/* Only accumulate RPQ warnings if they
+	va_start(a, fmt);
+	lib3270_write_va_log(&h3270,"RPQ",fmt,a);
+	va_end(a);
+
+	/*
+	 * Only accumulate RPQ warnings if they
 	 * have not been displayed already.
 	 */
-	if (!rpq_complained) {
+	if (!rpq_complained)
+	{
 		va_start(a, fmt);
 		if (rpq_warnbuf == CN)
 			rpq_warnbuf = Malloc(RPQ_WARNBUF_SIZE);
-		if (rpq_wbcnt < RPQ_WARNBUF_SIZE) {
+
+		if (rpq_wbcnt < RPQ_WARNBUF_SIZE)
+		{
 			*(rpq_warnbuf + rpq_wbcnt++) = '\n';
 			*(rpq_warnbuf + rpq_wbcnt) = '\0';
 		}
-		if (rpq_wbcnt < RPQ_WARNBUF_SIZE) {
-			rpq_wbcnt += vsnprintf(rpq_warnbuf + rpq_wbcnt,
-				RPQ_WARNBUF_SIZE - rpq_wbcnt, fmt, a);
+
+		if (rpq_wbcnt < RPQ_WARNBUF_SIZE)
+		{
+			rpq_wbcnt += vsnprintf(rpq_warnbuf + rpq_wbcnt,RPQ_WARNBUF_SIZE - rpq_wbcnt, fmt, a);
 		}
 		va_end(a);
 	}
 }
 
-static void
-rpq_dump_warnings(void)
+static void rpq_dump_warnings(void)
 {
 	/* If there's something to complain about, only complain once. */
-	if (!rpq_complained && rpq_wbcnt) {
+	if (!rpq_complained && rpq_wbcnt)
+	{
 		popup_an_error(NULL,rpq_warnbuf);
 		rpq_wbcnt = 0;
 		rpq_complained = True;

@@ -83,7 +83,7 @@ enum ts { TS_AUTO, TS_ON, TS_OFF };
 static void screen_update(H3270 *session, int bstart, int bend);
 static void status_connect(H3270 *session, int ignored, void *dunno);
 static void status_3270_mode(H3270 *session, int ignored, void *dunno);
-static void status_printer(H3270 *session, int on, void *dunno);
+// static void status_printer(H3270 *session, int on, void *dunno);
 static unsigned short color_from_fa(unsigned char fa);
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
@@ -131,9 +131,9 @@ int screen_init(H3270 *session)
 	CHECK_SESSION_HANDLE(session);
 
 	/* Set up callbacks for state changes. */
-	lib3270_register_schange(session,ST_CONNECT, status_connect,0);
-	lib3270_register_schange(session,ST_3270_MODE, status_3270_mode,0);
-	lib3270_register_schange(session,ST_PRINTER, status_printer,0);
+	lib3270_register_schange(session,LIB3270_STATE_CONNECT, status_connect,0);
+	lib3270_register_schange(session,LIB3270_STATE_3270_MODE, status_3270_mode,0);
+//	lib3270_register_schange(session,ST_PRINTER, status_printer,0);
 
 	/* Set up the controller. */
 	ctlr_init(session,-1);
@@ -338,7 +338,7 @@ static void screen_update(H3270 *session, int bstart, int bend)
 			}
 			else
 			{
-				if (toggled(MONOCASE))
+				if (lib3270_get_toggle(session,MONOCASE))
 					addch(session,baddr,asc2uc[ebc2asc[session->ea_buf[baddr].cc]],attr,&first,&last);
 				else
 					addch(session,baddr,ebc2asc[session->ea_buf[baddr].cc],attr,&first,&last);
@@ -579,10 +579,12 @@ static void status_3270_mode(H3270 *session, int ignored unused, void *dunno)
 
 }
 
+/*
 static void status_printer(H3270 *session, int on, void *dunno)
 {
 	set_status(session,OIA_FLAG_PRINTER,on);
 }
+*/
 
 void status_timing(H3270 *session, struct timeval *t0, struct timeval *t1)
 {

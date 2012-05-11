@@ -150,8 +150,8 @@ void ctlr_init(H3270 *session, unsigned cmask unused)
 {
 	/* Register callback routines. */
 	lib3270_register_schange(session,ST_HALF_CONNECT, ctlr_half_connect, 0);
-	lib3270_register_schange(session,ST_CONNECT, ctlr_connect, 0);
-	lib3270_register_schange(session,ST_3270_MODE, ctlr_connect, 0);
+	lib3270_register_schange(session,LIB3270_STATE_CONNECT, ctlr_connect, 0);
+	lib3270_register_schange(session,LIB3270_STATE_3270_MODE, ctlr_connect, 0);
 }
 /*
  * Reinitialize the emulated 3270 hardware.
@@ -2320,7 +2320,7 @@ ctlr_clear(H3270 *session, Boolean can_snap)
 	/* Snap any data that is about to be lost into the trace file. */
 	if (ctlr_any_data()) {
 #if defined(X3270_TRACE) /*[*/
-		if (can_snap && !trace_skipping && toggled(SCREEN_TRACE))
+		if (can_snap && !trace_skipping && lib3270_get_toggle(session,SCREEN_TRACE))
 			trace_screen();
 #endif /*]*/
 //		scroll_save(session->maxROWS, ever_3270 ? False : True);
@@ -2379,7 +2379,7 @@ void ctlr_add(int baddr, unsigned char c, unsigned char cs)
 		if (trace_primed && !IsBlank(oc))
 		{
 #if defined(X3270_TRACE) /*[*/
-			if (toggled(SCREEN_TRACE))
+			if (lib3270_get_toggle(&h3270,SCREEN_TRACE))
 				trace_screen();
 #endif /*]*/
 			trace_primed = False;
@@ -2739,7 +2739,7 @@ void ticking_start(H3270 *session, Boolean anyway)
 
 	if(session->set_timer)
 	{
-		if(toggled(SHOW_TIMING) || anyway)
+		if(lib3270_get_toggle(&h3270,SHOW_TIMING) || anyway)
 			session->set_timer(session,1);
 	}
 	else
@@ -2748,7 +2748,7 @@ void ticking_start(H3270 *session, Boolean anyway)
 
 		mticking = True;
 
-		if (!toggled(SHOW_TIMING) && !anyway)
+		if (!lib3270_get_toggle(&h3270,SHOW_TIMING) && !anyway)
 			return;
 
 		status_untiming(session);

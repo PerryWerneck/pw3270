@@ -307,22 +307,6 @@ LIB3270_INTERNAL struct trans_list *trans_list;
 /*   input key type */
 // enum keytype { KT_STD, KT_GE };
 
-/*   state changes */ /*
-enum state_change
-{
-	ST_RESOLVING,
-	ST_HALF_CONNECT,
-	ST_CONNECT,
-	ST_3270_MODE,
-	ST_LINE_MODE,
-	ST_REMODEL,
-	ST_PRINTER,
-	ST_EXITING,
-	ST_CHARSET,
-
-	N_ST				// Always the last one
-}; */
-
 /* Naming convention for private actions. */
 #define PA_PFX	"PA-"
 

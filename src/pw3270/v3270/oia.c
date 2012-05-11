@@ -1059,11 +1059,13 @@ void v3270_update_oia(H3270 *session, LIB3270_FLAG id, unsigned char on)
 		update_text_field(terminal,on,V3270_OIA_TYPEAHEAD,"T");
 		break;
 
+/*
 #if defined(LIB3270_FLAG_PRINTER) && defined(X3270_PRINTER)
 	case LIB3270_FLAG_PRINTER:
 		update_text_field(terminal,on,V3270_OIA_PRINTER,"P");
 		break;
 #endif //  LIB3270_FLAG_PRINTER
+*/
 
 	default:
 		return;

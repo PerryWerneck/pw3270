@@ -114,8 +114,8 @@
 
 		#define ST_RESOLVING			LIB3270_STATE_RESOLVING
 		#define ST_HALF_CONNECT			LIB3270_STATE_HALF_CONNECT
-		#define ST_CONNECT				LIB3270_STATE_CONNECT
-		#define ST_3270_MODE			LIB3270_STATE_3270_MODE
+//		#define ST_CONNECT				LIB3270_STATE_CONNECT
+//		#define ST_3270_MODE			LIB3270_STATE_3270_MODE
 		#define ST_LINE_MODE			LIB3270_STATE_LINE_MODE
 		#define ST_REMODEL				LIB3270_STATE_REMODEL
 		#define ST_PRINTER				LIB3270_STATE_PRINTER
@@ -159,7 +159,7 @@
 		#define OIA_FLAG_UNDERA		LIB3270_FLAG_UNDERA
 //		#define OIA_FLAG_SECURE		LIB3270_FLAG_SECURE
 		#define OIA_FLAG_TYPEAHEAD	LIB3270_FLAG_TYPEAHEAD
-		#define OIA_FLAG_PRINTER	LIB3270_FLAG_PRINTER
+//		#define OIA_FLAG_PRINTER	LIB3270_FLAG_PRINTER
 		#define OIA_FLAG_REVERSE	LIB3270_FLAG_REVERSE
 		#define OIA_FLAG_USER		LIB3270_FLAG_COUNT
 		#define OIA_FLAG			LIB3270_FLAG
@@ -382,7 +382,7 @@
 
 		LOCAL_EXTERN SCRIPT_STATE status_script(SCRIPT_STATE state);
 
-		#define Toggled(ix) lib3270_get_toggle(NULL,ix)
+//		#define Toggled(ix) lib3270_get_toggle(NULL,ix)
 //		#define CallAndWait(c,h,p) lib3270_call_thread(c,h,p)
 
 //		#define RunPendingEvents(x) lib3270_main_iterate(x)
@@ -401,7 +401,7 @@
 		#define host_connect(n,wait) lib3270_connect(NULL,n,wait)
 		#define host_reconnect(w) lib3270_reconnect(NULL,w)
 
-		#define register_schange(tx,func) lib3270_register_schange(NULL,tx,func,NULL)
+//		#define register_schange(tx,func) lib3270_register_schange(NULL,tx,func,NULL)
 
 		/* Console/Trace window */
 //		LOCAL_EXTERN HCONSOLE	  console_window_new(const char *title, const char *label);
