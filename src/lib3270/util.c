@@ -1151,9 +1151,11 @@ void * Calloc(size_t nelem, size_t elsize)
 
 LIB3270_EXPORT char * lib3270_get_resource_string(const char *first_element, ...)
 {
-#ifndef ANDROID
+#ifdef ANDROID
 
 	#warning Work in progress
+
+#else
 
 	char 		  buffer[4096];
 	char 		* ptr = buffer;
@@ -1183,4 +1185,14 @@ LIB3270_EXPORT char * lib3270_get_resource_string(const char *first_element, ...
 		return strdup(res);
 #endif
 	return NULL;
+}
+
+LIB3270_EXPORT const char * lib3270_get_version(void)
+{
+	return build_rpq_version;
+}
+
+LIB3270_EXPORT const char * lib3270_get_revision(void)
+{
+	return build_rpq_revision;
 }

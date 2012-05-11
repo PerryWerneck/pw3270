@@ -157,7 +157,6 @@
 		<Unit filename="src/lib3270/rpq.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/lib3270/rpq.h" />
 		<Unit filename="src/lib3270/savec.h" />
 		<Unit filename="src/lib3270/screen.c">
 			<Option compilerVar="CC" />

@@ -786,6 +786,10 @@
 	 */
 	LIB3270_EXPORT char * lib3270_get_resource_string(const char *first_element, ...);
 
+	LIB3270_EXPORT const char * lib3270_get_version(void);
+	LIB3270_EXPORT const char * lib3270_get_revision(void);
+
+
 
 #ifdef __cplusplus
 	}

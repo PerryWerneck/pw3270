@@ -4,7 +4,7 @@ public class lib3270 {
 
    static 
    {
-	   System.loadLibrary("3270jni");
+	   System.loadLibrary("3270");
    }
 
 	/**

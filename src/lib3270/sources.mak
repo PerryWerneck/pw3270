@@ -26,9 +26,10 @@
 
 # Terminal only sources
 TERMINAL_SOURCES =	bounds.c XtGlue.c ctlr.c util.c toggles.c screen.c selection.c kybd.c telnet.c \
-					host.c sf.c ansi.c log.c resolver.c xio.c tables.c proxy.c utf8.c charset.c
+					host.c sf.c ansi.c log.c resolver.c xio.c tables.c proxy.c utf8.c charset.c \
+					version.c
 
 # Full library sources
 SOURCES =			$(TERMINAL_SOURCES) init.c actions.c ft.c ft_cut.c ft_dft.c glue.c resources.c \
-					rpq.c see.c trace_ds.c paste.c macros.c fallbacks.c version.c
+					rpq.c see.c trace_ds.c paste.c macros.c fallbacks.c
 

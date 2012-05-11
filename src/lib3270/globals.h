@@ -171,12 +171,16 @@ extern H3270		h3270;
 	LIB3270_INTERNAL XtAppContext	appcontext;
 #endif /*]*/
 
-LIB3270_INTERNAL const char		*build;
-LIB3270_INTERNAL const char		*build_rpq_timestamp;
-LIB3270_INTERNAL const char 		*build_rpq_version;
-LIB3270_INTERNAL int				children;
-// LIB3270_INTERNAL char				*current_host;
-// LIB3270_INTERNAL unsigned short	current_port;
+
+// Version strings
+LIB3270_INTERNAL const char * build;
+LIB3270_INTERNAL const char * app_defaults_version;
+LIB3270_INTERNAL const char * sccsid;
+LIB3270_INTERNAL const char * build_rpq_timestamp;
+LIB3270_INTERNAL const char * build_rpq_version;
+LIB3270_INTERNAL const char * build_rpq_revision;
+
+LIB3270_INTERNAL int			  children;
 
 #if defined(X3270_DBCS) /*[*/
 	LIB3270_INTERNAL Boolean		dbcs;
