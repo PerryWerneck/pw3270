@@ -133,7 +133,7 @@ int screen_init(H3270 *session)
 	/* Set up callbacks for state changes. */
 	lib3270_register_schange(session,LIB3270_STATE_CONNECT, status_connect,0);
 	lib3270_register_schange(session,LIB3270_STATE_3270_MODE, status_3270_mode,0);
-//	lib3270_register_schange(session,ST_PRINTER, status_printer,0);
+//	lib3270_register_schange(session,LIB3270_STATE_PRINTER, status_printer,0);
 
 	/* Set up the controller. */
 	ctlr_init(session,-1);

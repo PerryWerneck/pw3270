@@ -149,7 +149,7 @@ static unsigned char	code_table[64] = {
 void ctlr_init(H3270 *session, unsigned cmask unused)
 {
 	/* Register callback routines. */
-	lib3270_register_schange(session,ST_HALF_CONNECT, ctlr_half_connect, 0);
+	lib3270_register_schange(session,LIB3270_STATE_HALF_CONNECT, ctlr_half_connect, 0);
 	lib3270_register_schange(session,LIB3270_STATE_CONNECT, ctlr_connect, 0);
 	lib3270_register_schange(session,LIB3270_STATE_3270_MODE, ctlr_connect, 0);
 }

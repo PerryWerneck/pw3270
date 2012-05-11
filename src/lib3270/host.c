@@ -559,7 +559,7 @@ static int do_connect(H3270 *hSession, const char *n)
 	if (resolving)
 	{
 		hSession->cstate = RESOLVING;
-		lib3270_st_changed(hSession, ST_RESOLVING, True);
+		lib3270_st_changed(hSession, LIB3270_STATE_RESOLVING, True);
 		return 0;
 	}
 
@@ -589,7 +589,7 @@ static int do_connect(H3270 *hSession, const char *n)
 	if (pending)
 	{
 		hSession->cstate = PENDING;
-		lib3270_st_changed(hSession, ST_HALF_CONNECT, True);
+		lib3270_st_changed(hSession, LIB3270_STATE_HALF_CONNECT, True);
 	}
 	else
 	{

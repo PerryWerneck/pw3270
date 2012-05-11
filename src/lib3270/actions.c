@@ -95,13 +95,15 @@ static char *aliased_actions[] = {
 	"Close", "HardPrint", "Open", NULL
 };
 */
+
+/*
 enum iaction ia_cause;
 const char *ia_name[] = {
 	"String", "Paste", "Screen redraw", "Keypad", "Default", "Key",
 	"Macro", "Script", "Peek", "Typeahead", "File transfer", "Command",
 	"Keymap", "Idle"
 };
-
+*/
 
 /*
  * Return a name for an action.
@@ -135,6 +137,7 @@ check_usage(XtActionProc action, Cardinal nargs, Cardinal nargs_min,
 /*
  * Wrapper for calling an action internally.
  */
+ /*
 void
 action_internal(XtActionProc action, enum iaction cause, const char *parm1,
     const char *parm2)
@@ -142,7 +145,7 @@ action_internal(XtActionProc action, enum iaction cause, const char *parm1,
 	Cardinal count = 0;
 	String parms[2];
 
-	/* Duplicate the parms, because XtActionProc doesn't grok 'const'. */
+	// Duplicate the parms, because XtActionProc doesn't grok 'const'.
 	if (parm1 != CN) {
 		parms[0] = NewString(parm1);
 		count++;
@@ -157,11 +160,11 @@ action_internal(XtActionProc action, enum iaction cause, const char *parm1,
 	    count ? parms : (String *) NULL,
 	    &count);
 
-	/* Free the parm copies. */
+	// Free the parm copies.
 	switch (count) {
 	    case 2:
 		Free(parms[1]);
-		/* fall through... */
+		// fall through...
 	    case 1:
 		Free(parms[0]);
 		break;
@@ -169,5 +172,6 @@ action_internal(XtActionProc action, enum iaction cause, const char *parm1,
 		break;
 	}
 }
+*/
 
 

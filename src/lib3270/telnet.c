@@ -2588,7 +2588,7 @@ check_linemode(Boolean init)
 
 	if (init || linemode != wasline)
 	{
-		st_changed(ST_LINE_MODE, linemode);
+		st_changed(LIB3270_STATE_LINE_MODE, linemode);
 		if (!init)
 		{
 			trace_dsn("Operating in %s mode.\n",linemode ? "line" : "character-at-a-time");

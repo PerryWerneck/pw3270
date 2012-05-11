@@ -84,6 +84,15 @@
 /* Statics */
 // static enum	{ NONE, COMPOSE, FIRST } composing = NONE;
 
+#ifdef X3270_TRACE
+static const char *ia_name[] =
+{
+	"String", "Paste", "Screen redraw", "Keypad", "Default", "Key",
+	"Macro", "Script", "Peek", "Typeahead", "File transfer", "Command",
+	"Keymap", "Idle"
+};
+#endif // X3270_TRACE
+
 static unsigned char pf_xlate[] = {
 	AID_PF1,  AID_PF2,  AID_PF3,  AID_PF4,  AID_PF5,  AID_PF6,
 	AID_PF7,  AID_PF8,  AID_PF9,  AID_PF10, AID_PF11, AID_PF12,
@@ -100,13 +109,15 @@ static time_t unlock_delay_time;
 #define UNLOCK_MS		350	/* 0.35s after last unlock */
 static Boolean key_Character(int code, Boolean with_ge, Boolean pasting,Boolean *skipped);
 static Boolean flush_ta(void);
-static void key_AID(unsigned char aid_code);
+static void key_AID(H3270 *session, unsigned char aid_code);
 static void kybdlock_set(unsigned int bits, const char *cause);
 // static KeySym MyStringToKeysym(char *s, enum keytype *keytypep);
 
-#if defined(X3270_DBCS) /*[*/
+/*
+#if defined(X3270_DBCS)
 Boolean key_WCharacter(unsigned char code[], Boolean *skipped);
-#endif /*]*/
+#endif
+*/
 
 static int nxk = 0;
 static struct xks {
@@ -146,23 +157,20 @@ static struct ta
 	{
 		TA_TYPE_DEFAULT,
 		TA_TYPE_KEY_AID,
-
 		TA_TYPE_USER
 	} type;
 
-	XtActionProc fn;
-	char *parm1;
-	char *parm2;
+	H3270 * session;
+	void (*fn)(H3270 *, const char *, const char *);
+	char *parm[2];
+	unsigned char aid_code;
 } *ta_head = (struct ta *) NULL,
   *ta_tail = (struct ta *) NULL;
 
-#define ENQUEUE_ACTION(x) enq_ta((XtActionProc) x, CN, CN)
+#define ENQUEUE_ACTION(x) enq_ta(hSession, (void (*)(H3270 *, const char *, const char *)) x, NULL, NULL)
 
-static char dxl[] = "0123456789abcdef";
+static const char dxl[] = "0123456789abcdef";
 #define FROM_HEX(c)	(strchr(dxl, tolower(c)) - dxl)
-
-// extern Widget *screen;
-
 #define KYBDLOCK_IS_OERR	(kybdlock && !(kybdlock & ~KL_OERR_MASK))
 
 
@@ -207,11 +215,8 @@ static int enq_chk(void)
 /*
  * Put a "Key-aid" on the typeahead queue
  */
- static void enq_key(unsigned char *xlate, int k)
+ static void enq_key(unsigned char aid_code)
  {
- 	if(enq_chk())
-		return;
-
 	struct ta *ta;
 
  	if(enq_chk())
@@ -220,10 +225,11 @@ static int enq_chk(void)
 	ta = (struct ta *) Malloc(sizeof(*ta));
 	memset(ta,0,sizeof(struct ta));
 
-	ta->next = (struct ta *) NULL;
-	ta->type = TA_TYPE_KEY_AID;
-	ta->parm1 = (char *) xlate;
-	ta->parm2 = (char *) k;
+	ta->next 		= (struct ta *) NULL;
+	ta->type 		= TA_TYPE_KEY_AID;
+	ta->aid_code	= aid_code;
+
+	trace("Adding key %02x on queue",(int) aid_code);
 
 	if (ta_head)
 	{
@@ -242,26 +248,34 @@ static int enq_chk(void)
 /*
  * Put an action on the typeahead queue.
  */
-static void enq_ta(XtActionProc fn, char *parm1, char *parm2)
+static void enq_ta(H3270 *hSession, void (*fn)(H3270 *, const char *, const char *), const char *parm1, const char *parm2)
 {
 	struct ta *ta;
 
  	if(enq_chk())
 		return;
 
+	CHECK_SESSION_HANDLE(hSession);
+
 	ta = (struct ta *) Malloc(sizeof(*ta));
-	ta->next = (struct ta *) NULL;
-	ta->type = TA_TYPE_DEFAULT;
-	ta->fn = fn;
-	ta->parm1 = ta->parm2 = CN;
-	if (parm1) {
-		ta->parm1 = NewString(parm1);
-		if (parm2)
-			ta->parm2 = NewString(parm2);
-	}
+	memset(ta,0,sizeof(struct ta));
+	ta->session	= hSession;
+	ta->next	= (struct ta *) NULL;
+	ta->type	= TA_TYPE_DEFAULT;
+	ta->fn		= fn;
+
+	if (parm1)
+		ta->parm[0] = NewString(parm1);
+
+	if (parm2)
+		ta->parm[1] = NewString(parm2);
+
 	if (ta_head)
+	{
 		ta_tail->next = ta;
-	else {
+	}
+	else
+	{
 		ta_head = ta;
 		status_typeahead(&h3270,True);
 	}
@@ -280,7 +294,8 @@ Boolean run_ta(void)
 	if (kybdlock || (ta = ta_head) == (struct ta *)NULL)
 		return False;
 
-	if ((ta_head = ta->next) == (struct ta *)NULL) {
+	if ((ta_head = ta->next) == (struct ta *)NULL)
+	{
 		ta_tail = (struct ta *)NULL;
 		status_typeahead(&h3270,False);
 	}
@@ -288,31 +303,19 @@ Boolean run_ta(void)
 	switch(ta->type)
 	{
 	case TA_TYPE_DEFAULT:
-		action_internal(ta->fn, IA_TYPEAHEAD, ta->parm1, ta->parm2);
-		Free(ta->parm1);
-		Free(ta->parm2);
+		ta->fn(ta->session,ta->parm[0],ta->parm[1]);
+		Free(ta->parm[0]);
+		Free(ta->parm[1]);
 		Free(ta);
 		break;
 
 	case TA_TYPE_KEY_AID:
-		key_AID( ((char *) ta->parm1)[(int) ta->parm2]);
+		trace("Sending enqueued key %02x",ta->aid_code);
+		key_AID(ta->session,ta->aid_code);
 		break;
-/*
-	enum _ta_type
-	{
-		TA_TYPE_DEFAULT,
-		,
-
-		TA_TYPE_USER
-	} type;
-
-	XtActionProc fn;
-	char *parm1;
-	char *parm2;
-*/
 
 	default:
-		popup_an_error(NULL, _( "Unexpected type %d in typeahead queue" ), ta->type);
+		popup_an_error(ta->session, _( "Unexpected type %d in typeahead queue" ), ta->type);
 
 	}
 
@@ -329,9 +332,10 @@ flush_ta(void)
 	struct ta *ta, *next;
 	Boolean any = False;
 
-	for (ta = ta_head; ta != (struct ta *) NULL; ta = next) {
-		Free(ta->parm1);
-		Free(ta->parm2);
+	for (ta = ta_head; ta != (struct ta *) NULL; ta = next)
+	{
+		Free(ta->parm[0]);
+		Free(ta->parm[1]);
 		next = ta->next;
 		Free(ta);
 		any = True;
@@ -482,8 +486,7 @@ operator_error(int error_type)
  * Handle an AID (Attention IDentifier) key.  This is the common stuff that
  * gets executed for all AID keys (PFs, PAs, Clear and etc).
  */
-static void
-key_AID(unsigned char aid_code)
+static void key_AID(H3270 *session, unsigned char aid_code)
 {
 #if defined(X3270_ANSI) /*[*/
 	if (IN_ANSI) {
@@ -551,9 +554,9 @@ LIB3270_FKEY_ACTION( pfkey )
 	if (kybdlock & KL_OIA_MINUS)
 		return -1;
 	else if (kybdlock)
-		enq_key(pf_xlate,key-1);
+		enq_key(pf_xlate[key-1]);
 	else
-		key_AID(pf_xlate[key-1]);
+		key_AID(hSession,pf_xlate[key-1]);
 
 	return 0;
 }
@@ -568,9 +571,9 @@ LIB3270_FKEY_ACTION( pakey )
 	if (kybdlock & KL_OIA_MINUS)
 		return -1;
 	else if (kybdlock)
-		enq_key(pa_xlate,key-1);
+		enq_key(pa_xlate[key-1]);
 	else
-		key_AID(pa_xlate[key-1]);
+		key_AID(hSession,pa_xlate[key-1]);
 
 	return 0;
 }
@@ -720,27 +723,28 @@ static Boolean ins_prep(int faddr, int baddr, int count)
 #define GE_WFLAG	0x100
 #define PASTE_WFLAG	0x200
 
-static void
-key_Character_wrapper(Widget w unused, XEvent *event unused, String *params,
-    Cardinal *num_params unused)
+static void key_Character_wrapper(H3270 *param, const char *param1, const char *param2)
 {
 	int code;
 	Boolean with_ge = False;
 	Boolean pasting = False;
 
-	code = atoi(params[0]);
-	if (code & GE_WFLAG) {
+	code = atoi(param1);
+
+	if (code & GE_WFLAG)
+	{
 		with_ge = True;
 		code &= ~GE_WFLAG;
 	}
-	if (code & PASTE_WFLAG) {
+
+	if (code & PASTE_WFLAG)
+	{
 		pasting = True;
 		code &= ~PASTE_WFLAG;
 	}
-	trace_event(" %s -> Key(%s\"%s\")\n",
-	    ia_name[(int) ia_cause],
-	    with_ge ? "GE " : "",
-	    ctl_see((int) ebc2asc[code]));
+
+//	trace_event(" %s -> Key(%s\"%s\")\n",ia_name[(int) ia_cause],with_ge ? "GE " : "",ctl_see((int) ebc2asc[code]));
+
 	(void) key_Character(code, with_ge, pasting, NULL);
 }
 
@@ -757,13 +761,12 @@ static Boolean key_Character(int code, Boolean with_ge, Boolean pasting, Boolean
 	if (skipped != NULL)
 		*skipped = False;
 
-	if (kybdlock) {
+	if (kybdlock)
+	{
 		char codename[64];
 
-		(void) sprintf(codename, "%d", code |
-			(with_ge ? GE_WFLAG : 0) |
-			(pasting ? PASTE_WFLAG : 0));
-		enq_ta(key_Character_wrapper, codename, CN);
+		(void) sprintf(codename, "%d", code |(with_ge ? GE_WFLAG : 0) | (pasting ? PASTE_WFLAG : 0));
+		enq_ta(&h3270,key_Character_wrapper, codename, CN);
 		return False;
 	}
 	baddr = h3270.cursor_addr;
@@ -976,10 +979,10 @@ static Boolean key_Character(int code, Boolean with_ge, Boolean pasting, Boolean
 	return True;
 }
 
-#if defined(X3270_DBCS) /*[*/
+/*
+#if defined(X3270_DBCS)
 static void
-key_WCharacter_wrapper(Widget w unused, XEvent *event unused, String *params,
-    Cardinal *num_params unused)
+key_WCharacter_wrapper(Widget w unused, XEvent *event unused, String *params, Cardinal *num_params unused)
 {
 	int code;
 	unsigned char codebuf[2];
@@ -992,12 +995,11 @@ key_WCharacter_wrapper(Widget w unused, XEvent *event unused, String *params,
 	(void) key_WCharacter(codebuf, NULL);
 }
 
-/*
- * Input a DBCS character.
- * Returns True if a character was stored in the buffer, False otherwise.
- */
-Boolean
-key_WCharacter(unsigned char code[], Boolean *skipped)
+//
+// Input a DBCS character.
+// Returns True if a character was stored in the buffer, False otherwise.
+//
+Boolean key_WCharacter(unsigned char code[], Boolean *skipped)
 {
 	int baddr;
 	register unsigned char fa;
@@ -1006,7 +1008,7 @@ key_WCharacter(unsigned char code[], Boolean *skipped)
 	int xaddr;
 	Boolean done = False;
 	Boolean no_si = False;
-	extern unsigned char reply_mode; /* XXX */
+	extern unsigned char reply_mode; // XXX
 
 	reset_idle_timer();
 
@@ -1021,15 +1023,15 @@ key_WCharacter(unsigned char code[], Boolean *skipped)
 	if (skipped != NULL)
 		*skipped = False;
 
-	/* In DBCS mode? */
+	// In DBCS mode?
 	if (!dbcs) {
 		trace_event("DBCS character received when not in DBCS mode, "
 		    "ignoring.\n");
 		return True;
 	}
 
-#if defined(X3270_ANSI) /*[*/
-	/* In ANSI mode? */
+#if defined(X3270_ANSI)
+	// In ANSI mode?
 	if (IN_ANSI) {
 	    char mb[16];
 
@@ -1037,38 +1039,38 @@ key_WCharacter(unsigned char code[], Boolean *skipped)
 	    net_sends(mb);
 	    return True;
 	}
-#endif /*]*/
+#endif
 
 	baddr = cursor_addr;
 	fa = get_field_attribute(baddr);
 	faddr = find_field_attribute(baddr);
 
-	/* Protected? */
+	// Protected?
 	if (ea_buf[baddr].fa || FA_IS_PROTECTED(fa)) {
 		operator_error(KL_OERR_PROTECTED);
 		return False;
 	}
 
-	/* Numeric? */
+	// Numeric?
 	if (h3270.numeric_lock && FA_IS_NUMERIC(fa)) {
 		operator_error(KL_OERR_NUMERIC);
 		return False;
 	}
 
-	/*
-	 * Figure our what to do based on the DBCS state of the buffer.
-	 * Leaves baddr pointing to the next unmodified position.
-	 */
+	//
+	// Figure our what to do based on the DBCS state of the buffer.
+	// Leaves baddr pointing to the next unmodified position.
+	//
 retry:
 	switch (d = ctlr_dbcs_state(baddr)) {
 	case DBCS_RIGHT:
 	case DBCS_RIGHT_WRAP:
-		/* Back up one position and process it as a LEFT. */
+		// Back up one position and process it as a LEFT.
 		DEC_BA(baddr);
-		/* fall through... */
+		// fall through...
 	case DBCS_LEFT:
 	case DBCS_LEFT_WRAP:
-		/* Overwrite the existing character. */
+		// Overwrite the existing character.
 		if (insert) {
 			if (!ins_prep(faddr, baddr, 2)) {
 				return False;
@@ -1081,24 +1083,24 @@ retry:
 		done = True;
 		break;
 	case DBCS_SB:
-		/* Back up one position and process it as an SI. */
+		// Back up one position and process it as an SI.
 		DEC_BA(baddr);
-		/* fall through... */
+		// fall through...
 	case DBCS_SI:
-		/* Extend the subfield to the right. */
+		// Extend the subfield to the right.
 		if (insert) {
 			if (!ins_prep(faddr, baddr, 2)) {
 				return False;
 			}
 		} else {
-			/* Don't overwrite a field attribute or an SO. */
+			// Don't overwrite a field attribute or an SO.
 			xaddr = baddr;
-			INC_BA(xaddr);	/* C1 */
+			INC_BA(xaddr);	// C1
 			if (ea_buf[xaddr].fa)
 				break;
 			if (ea_buf[xaddr].cc == EBC_so)
 				no_si = True;
-			INC_BA(xaddr);	/* SI */
+			INC_BA(xaddr);	// SI
 			if (ea_buf[xaddr].fa || ea_buf[xaddr].cc == EBC_so)
 				break;
 		}
@@ -1117,107 +1119,107 @@ retry:
 		if (ea_buf[faddr].ic) {
 			Boolean extend_left = FALSE;
 
-			/* Is there room? */
+			// Is there room?
 			if (insert) {
 				if (!ins_prep(faddr, baddr, 4)) {
 					return False;
 				}
 			} else {
-				xaddr = baddr;	/* baddr, SO */
+				xaddr = baddr;	// baddr, SO
 				if (ea_buf[xaddr].cc == EBC_so) {
-					/*
-					 * (baddr), where we would have put the
-					 * SO, is already an SO.  Move to
-					 * (baddr+1) and try again.
-					 */
-#if defined(DBCS_RIGHT_DEBUG) /*[*/
+					//
+					// (baddr), where we would have put the
+					// SO, is already an SO.  Move to
+					// (baddr+1) and try again.
+					//
+#if defined(DBCS_RIGHT_DEBUG)
 					printf("SO in position 0\n");
-#endif /*]*/
+#endif
 					INC_BA(baddr);
 					goto retry;
 				}
 
-				INC_BA(xaddr);	/* baddr+1, C0 */
+				INC_BA(xaddr);	// baddr+1, C0
 				if (ea_buf[xaddr].fa)
 					break;
 				if (ea_buf[xaddr].cc == EBC_so) {
 					enum dbcs_state e;
 
-					/*
-					 * (baddr+1), where we would have put
-					 * the left side of the DBCS, is a SO.
-					 * If there's room, we can extend the
-					 * subfield to the left.  If not, we're
-					 * stuck.
-					 */
+					//
+					// (baddr+1), where we would have put
+					// the left side of the DBCS, is a SO.
+					// If there's room, we can extend the
+					// subfield to the left.  If not, we're
+					// stuck.
+					//
 					DEC_BA(xaddr);
 					DEC_BA(xaddr);
 					e = ctlr_dbcs_state(xaddr);
 					if (e == DBCS_NONE || e == DBCS_SB) {
 						extend_left = True;
 						no_si = True;
-#if defined(DBCS_RIGHT_DEBUG) /*[*/
+#if defined(DBCS_RIGHT_DEBUG)
 						printf("SO in position 1, "
 							"extend left\n");
-#endif /*]*/
+#endif
 					} else {
-						/*
-						 * Won't actually happen,
-						 * because this implies that
-						 * the buffer addr at baddr
-						 * is an SB.
-						 */
-#if defined(DBCS_RIGHT_DEBUG) /*[*/
+						//
+						// Won't actually happen,
+						// because this implies that
+						// the buffer addr at baddr
+						// is an SB.
+						//
+#if defined(DBCS_RIGHT_DEBUG)
 						printf("SO in position 1, "
 							"no room on left, "
 							"fail\n");
-#endif /*]*/
+#endif
 						break;
 					}
 				}
 
-				INC_BA(xaddr); /* baddr+2, C1 */
+				INC_BA(xaddr); // baddr+2, C1
 				if (ea_buf[xaddr].fa)
 					break;
 				if (ea_buf[xaddr].cc == EBC_so) {
-					/*
-					 * (baddr+2), where we want to put the
-					 * right half of the DBCS character, is
-					 * a SO.  This is a natural extension
-					 * to the left -- just make sure we
-					 * don't write an SI.
-					 */
+					//
+					// (baddr+2), where we want to put the
+					// right half of the DBCS character, is
+					// a SO.  This is a natural extension
+					// to the left -- just make sure we
+					// don't write an SI.
+					//
 					no_si = True;
-#if defined(DBCS_RIGHT_DEBUG) /*[*/
+#if defined(DBCS_RIGHT_DEBUG)
 					printf("SO in position 2, no SI\n");
-#endif /*]*/
+#endif
 				}
 
-				/*
-				 * Check the fourth position only if we're
-				 * not doing an extend-left.
-				 */
+				//
+				// Check the fourth position only if we're
+				// not doing an extend-left.
+				///
 				if (!no_si) {
-					INC_BA(xaddr); /* baddr+3, SI */
+					INC_BA(xaddr); // baddr+3, SI
 					if (ea_buf[xaddr].fa)
 						break;
 					if (ea_buf[xaddr].cc == EBC_so) {
-						/*
-						 * (baddr+3), where we want to
-						 * put an
-						 * SI, is an SO.  Forget it.
-						 */
-#if defined(DBCS_RIGHT_DEBUG) /*[*/
+						//
+						// (baddr+3), where we want to
+						// put an
+						// SI, is an SO.  Forget it.
+						//
+#if defined(DBCS_RIGHT_DEBUG)
 						printf("SO in position 3, "
 							"retry right\n");
 						INC_BA(baddr);
 						goto retry;
-#endif /*]*/
+#endif
 						break;
 					}
 				}
 			}
-			/* Yes, add it. */
+			// Yes, add it.
 			if (extend_left)
 				DEC_BA(baddr);
 			ctlr_add(baddr, EBC_so, ea_buf[baddr].cs);
@@ -1231,7 +1233,7 @@ retry:
 			}
 			done = True;
 		} else if (reply_mode == SF_SRM_CHAR) {
-			/* Use the character attribute. */
+			// Use the character attribute.
 			if (insert) {
 				if (!ins_prep(faddr, baddr, 2)) {
 					return False;
@@ -1252,7 +1254,7 @@ retry:
 	}
 
 	if (done) {
-		/* Implement blank fill mode. */
+		// Implement blank fill mode.
 		if (lib3270_get_toggle(&h3270,LIB3270_TOGGLE_BLANK_FILL)) {
 			xaddr = faddr;
 			INC_BA(xaddr);
@@ -1267,7 +1269,7 @@ retry:
 
 		mdt_set(cursor_addr);
 
-		/* Implement auto-skip. */
+		// Implement auto-skip.
 		while (ea_buf[baddr].fa) {
 			if (skipped != NULL)
 				*skipped = True;
@@ -1284,7 +1286,8 @@ retry:
 		return False;
 	}
 }
-#endif /*]*/
+#endif
+*/
 
 /*
  * Handle an ordinary character key, given an ASCII code.
@@ -2306,7 +2309,7 @@ LIB3270_KEY_ACTION( enter )
 	else if (kybdlock)
 		ENQUEUE_ACTION(lib3270_enter);
 	else
-		key_AID(AID_ENTER);
+		key_AID(hSession,AID_ENTER);
 
 	return 0;
 }
@@ -2328,7 +2331,7 @@ LIB3270_ACTION( sysreq )
 		else if (kybdlock)
 			ENQUEUE_ACTION(lib3270_sysreq);
 		else
-			key_AID(AID_SYSREQ);
+			key_AID(hSession,AID_SYSREQ);
 	}
 	return 0;
 }
@@ -2356,7 +2359,7 @@ LIB3270_ACTION( clear )
 	ctlr_clear(hSession,True);
 	cursor_move(hSession,0);
 	if (CONNECTED)
-		key_AID(AID_CLEAR);
+		key_AID(hSession,AID_CLEAR);
 	return 0;
 }
 
@@ -2836,7 +2839,6 @@ LIB3270_ACTION( fieldend )
 //	reset_idle_timer();
 	if (kybdlock) {
 		ENQUEUE_ACTION( lib3270_fieldend );
-//		enq_ta(FieldEnd_action, CN, CN);
 		return 0;
 	}
 #if defined(X3270_ANSI) /*[*/
@@ -3079,11 +3081,12 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *session, char *s, int len, int p
 					key_ACharacter((unsigned char) c, KT_STD, ia, &skipped);
 				break;
 			default:
-#if defined(X3270_DBCS) /*[*/
-				/*
-				 * Try mapping it to the 8-bit character set,
-				 * otherwise to the 16-bit character set.
-				 */
+/*
+#if defined(X3270_DBCS)
+				//
+				// Try mapping it to the 8-bit character set,
+				// otherwise to the 16-bit character set.
+				//
 				if (dbcs_map8(c, &cx)) {
 					key_ACharacter((unsigned char)cx,
 					    KT_STD, ia_cause, &skipped);
@@ -3096,9 +3099,8 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *session, char *s, int len, int p
 					    "EBCDIC\n", c & 0xffff);
 					break;
 				}
-#endif /*]*/
-				key_ACharacter((unsigned char) c, KT_STD,
-				    ia, &skipped);
+#endif */
+				key_ACharacter((unsigned char) c, KT_STD, ia, &skipped);
 				break;
 			}
 			break;
