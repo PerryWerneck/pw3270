@@ -963,9 +963,9 @@ void net_input(H3270 *session)
 
 	CHECK_SESSION_HANDLE(session);
 
-//#if defined(_WIN32)
-// 	for (;;)
-//#endif
+#if defined(_WIN32)
+ 	for (;;)
+#endif
 	{
 		if (session->sock < 0)
 			return;
@@ -1002,6 +1002,10 @@ void net_input(H3270 *session)
 #if defined(X3270_ANSI) /*[*/
 		ansi_data = 0;
 #endif /*]*/
+
+#if defined(_WIN32)
+	ResetEvent(session->sockEvent);
+#endif
 
 #if defined(HAVE_LIBSSL)
 		if (session->ssl_con != NULL)
