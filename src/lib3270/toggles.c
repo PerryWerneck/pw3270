@@ -84,7 +84,8 @@ LIB3270_EXPORT unsigned char lib3270_get_toggle(H3270 *session, LIB3270_TOGGLE i
 
 	if(ix < 0 || ix >= N_TOGGLES)
 		return 0;
-	return (unsigned char) session->toggle[ix].value != 0;
+
+	return session->toggle[ix].value != 0;
 }
 
 /*

@@ -244,9 +244,11 @@ static void initialize(void)
 #endif
 */
 
-#if defined(C3270) && defined(_WIN32) /*[*/
+/*
+#if defined(C3270) && defined(_WIN32)
 	appres.highlight_underline = True;
-#endif /*]*/
+#endif
+*/
 
 /*
 #if defined(C3270) && !defined(_WIN32) && !defined(LIB3270)
@@ -407,9 +409,9 @@ static struct {
 #if defined(X3270_SCRIPT) /*[*/
 	{ ResPluginCommand, offset(plugin_command), XRM_STRING },
 #endif /*]*/
-#if defined(C3270) && defined(_WIN32) /*[*/
-	{ ResHighlightUnderline, offset(highlight_underline), XRM_BOOLEAN },
-#endif /*]*/
+//#if defined(C3270) && defined(_WIN32)
+//	{ ResHighlightUnderline, offset(highlight_underline), XRM_BOOLEAN },
+//#endif
 #if defined(C3270) && defined(X3270_SCRIPT) /*[*/
 	{ ResIdleCommand,offset(idle_command),	XRM_STRING },
 	{ ResIdleCommandEnabled,offset(idle_command_enabled),	XRM_BOOLEAN },

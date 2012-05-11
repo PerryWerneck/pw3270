@@ -502,9 +502,7 @@ static int DefaultProcessEvents(int block)
 		    FD_ISSET(ip->source, &rfds))
 		{
 #endif
-			Trace("%s",__FUNCTION__);
 			(*ip->proc)(ip->session);
-			Trace("%s",__FUNCTION__);
 			processed_any = True;
 			if (inputs_changed)
 				goto retry;
@@ -513,9 +511,7 @@ static int DefaultProcessEvents(int block)
 #if !defined(_WIN32)
 		if (((unsigned long)ip->condition & InputWriteMask) && FD_ISSET(ip->source, &wfds))
 		{
-			Trace("%s",__FUNCTION__);
 			(*ip->proc)(ip->session);
-			Trace("%s",__FUNCTION__);
 			processed_any = True;
 			if (inputs_changed)
 				goto retry;
@@ -547,9 +543,7 @@ static int DefaultProcessEvents(int block)
 #endif
 				timeouts = t->next;
 				t->in_play = True;
-				Trace("%s",__FUNCTION__);
 				(*t->proc)(t->session);
-				Trace("%s",__FUNCTION__);
 				processed_any = True;
 				Free(t);
 			} else

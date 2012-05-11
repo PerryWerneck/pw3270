@@ -157,8 +157,6 @@ static GtkSizeRequestMode get_request_mode(GtkWidget *widget)
 {
 	int rows, cols;
 
-	trace("%s",__FUNCTION__);
-
 	lib3270_get_screen_size(GTK_V3270(widget)->host,&rows,&cols);
 
 	return rows > cols ? GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT : GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
@@ -706,6 +704,10 @@ static void changed(H3270 *session, int offset, int len)
 		}
 	}
 
+#ifdef WIN32
+	gtk_widget_queue_draw(widget);
+#endif // WIN32
+
 	g_signal_emit(GTK_WIDGET(widget),v3270_widget_signal[SIGNAL_CHANGED], 0, (guint) offset, (guint) len);
 
 }
@@ -739,7 +741,6 @@ static void message(H3270 *session, LIB3270_NOTIFY id , const char *title, const
 
 static void v3270_init(v3270 *widget)
 {
-	trace("%s",__FUNCTION__);
 	widget->host = lib3270_session_new("");
 
 	if(widget->host->sz != sizeof(H3270))

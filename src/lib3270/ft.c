@@ -377,8 +377,6 @@ void ft_complete(H3270FT *session, const char *errmsg)
 		((double)(t1.tv_sec - starting_time.tv_sec) +
 		 (double)(t1.tv_usec - starting_time.tv_usec) / 1.0e6);
 
-	trace("%s",__FUNCTION__);
-
 	// Close the local file.
 	if(session->ft_local_file)
 	{
@@ -420,8 +418,6 @@ void ft_update_length(H3270FT *session)
 			 (double)(t1.tv_usec - starting_time.tv_usec) / 1.0e6);
 	}
 
-	Trace("%s",__FUNCTION__);
-
 	session->update(session,ft_length,kbytes_sec);
 
 }
@@ -429,8 +425,6 @@ void ft_update_length(H3270FT *session)
 // Process a transfer acknowledgement.
 void ft_running(H3270FT *h, Boolean is_cut)
 {
-	trace("%s",__FUNCTION__);
-
 	CHECK_FT_HANDLE(h);
 
 	ft_is_cut = is_cut;
@@ -450,8 +444,6 @@ void ft_running(H3270FT *h, Boolean is_cut)
 // Process a protocol-generated abort.
 void ft_aborting(H3270FT *h)
 {
-//	Trace("%s",__FUNCTION__);
-
 	CHECK_FT_HANDLE(h);
 
 	if (h->state == FT_RUNNING || h->state == FT_ABORT_WAIT)

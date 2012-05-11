@@ -738,22 +738,27 @@ void host_disconnected(H3270 *session)
 }
 
 /* Register a function interested in a state change. */
-LIB3270_EXPORT void lib3270_register_schange(H3270 *h,LIB3270_STATE_CHANGE tx, void (*func)(H3270 *, int, void *),void *data)
+LIB3270_EXPORT void lib3270_register_schange(H3270 *h, LIB3270_STATE_CHANGE tx, void (*func)(H3270 *, int, void *),void *data)
 {
 	struct lib3270_state_callback *st;
 
     CHECK_SESSION_HANDLE(h);
 
-	st = (struct lib3270_state_callback *)Malloc(sizeof(*st));
-
+	st 			= (struct lib3270_state_callback *) lib3270_malloc(sizeof(struct lib3270_state_callback));
 	st->func	= func;
-	st->next	= (struct lib3270_state_callback *)NULL;
 
-	if (h->st_last[tx] != (struct lib3270_state_callback *)NULL)
+	if (h->st_last[tx])
 		h->st_last[tx]->next = st;
 	else
 		h->st_callbacks[tx] = st;
+
 	h->st_last[tx] = st;
+
+	#warning AQUI
+	if(tx == LIB3270_STATE_CONNECT)
+	{
+		trace("%s st=%p func=%p",__FUNCTION__,st,func);
+	}
 
 }
 
@@ -782,18 +787,22 @@ void lib3270_st_changed(H3270 *h, LIB3270_STATE tx, int mode)
 
     CHECK_SESSION_HANDLE(h);
 
-	trace("%s is %d",state_name[tx],mode);
+	trace("%s is %d on session %p",state_name[tx],mode,h);
 
-	for (st = h->st_callbacks[tx];st != (struct lib3270_state_callback *)NULL;st = st->next)
+	for (st = h->st_callbacks[tx];st;st = st->next)
 	{
+		trace("st=%p func=%p",st,st->func);
 		st->func(h,mode,st->data);
 	}
+
+	trace("%s ends",__FUNCTION__);
 }
 
 LIB3270_EXPORT const char * lib3270_set_host(H3270 *h, const char *n)
 {
     CHECK_SESSION_HANDLE(h);
 
+	#warning AQUI
 	Trace("%s: %p",__FUNCTION__,n);
 
 	if(n && n != h->full_current_host)

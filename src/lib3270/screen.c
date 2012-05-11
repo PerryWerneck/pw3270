@@ -104,7 +104,9 @@ static void addch(H3270 *session, int baddr, unsigned char c, unsigned short att
 	/* Converted char has changed, update it */
 	session->text[baddr].chr  = c;
 	session->text[baddr].attr = attr;
+
 	session->update(session,baddr,c,attr,baddr == session->cursor_addr);
+
 }
 
 LIB3270_EXPORT int lib3270_get_element(H3270 *h, int baddr, unsigned char *c, unsigned short *attr)
@@ -338,14 +340,12 @@ static void screen_update(H3270 *session, int bstart, int bend)
 			}
 			else
 			{
-				if (lib3270_get_toggle(session,MONOCASE))
+				if(lib3270_get_toggle(session,MONOCASE))
 					addch(session,baddr,asc2uc[ebc2asc[session->ea_buf[baddr].cc]],attr,&first,&last);
 				else
 					addch(session,baddr,ebc2asc[session->ea_buf[baddr].cc],attr,&first,&last);
 			}
 		}
-
-
 	}
 
 	if(first >= 0)
@@ -365,6 +365,7 @@ static void screen_update(H3270 *session, int bstart, int bend)
 
 void screen_disp(H3270 *session)
 {
+	CHECK_SESSION_HANDLE(session);
 	screen_update(session,0,session->rows*session->cols);
 }
 

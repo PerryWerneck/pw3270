@@ -411,6 +411,7 @@ static void kybd_connect(H3270 *session, int connected, void *dunno)
 {
 	if (kybdlock & KL_DEFERRED_UNLOCK)
 		RemoveTimeOut(unlock_id);
+
 	kybdlock_clr(-1, "kybd_connect");
 
 	if (connected) {
@@ -580,11 +581,8 @@ LIB3270_FKEY_ACTION( pakey )
 
 LIB3270_ACTION(break)
 {
-
 	if (!IN_3270)
 		return 0;
-
-	Trace("%s",__FUNCTION__);
 
 	net_break();
 
@@ -598,8 +596,6 @@ LIB3270_ACTION(attn)
 {
 	if (!IN_3270)
 		return 0;
-
-	Trace("%s",__FUNCTION__);
 
 	net_interrupt();
 
@@ -1466,8 +1462,6 @@ do_reset(Boolean explicit)
 	 * a half-composed key, simply flush it.
 	 */
 
-	Trace("%s",__FUNCTION__);
-
 	if (explicit
 #if defined(X3270_FT) /*[*/
 	    || lib3270_get_ft_state(&h3270) != LIB3270_FT_STATE_NONE
@@ -2316,7 +2310,6 @@ LIB3270_KEY_ACTION( enter )
 
 LIB3270_ACTION( sysreq )
 {
-	Trace("%s",__FUNCTION__);
 //	reset_idle_timer();
 	if (IN_ANSI)
 		return 0;

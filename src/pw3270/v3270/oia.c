@@ -641,8 +641,6 @@ void v3270_update_luname(GtkWidget *widget,const gchar *name)
 	if(!terminal->surface)
 		return;
 
-//	trace("%s",__FUNCTION__);
-
 	cr = set_update_region(terminal,&rect,V3270_OIA_LUNAME);
 
 	if(name)

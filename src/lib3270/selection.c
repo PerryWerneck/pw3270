@@ -598,8 +598,6 @@ LIB3270_EXPORT int lib3270_drag_selection(H3270 *h, unsigned char flag, int orig
 	else if((flag&0x8F) == SELECTION_ACTIVE)
 		return lib3270_move_selected_area(h,origin,baddr);
 
-//	trace("%s",__FUNCTION__);
-
 	row = baddr/h->cols;
 	col = baddr%h->cols;
 

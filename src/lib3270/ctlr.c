@@ -458,7 +458,6 @@ void ctlr_erase(H3270 *session, int alt)
 	CHECK_SESSION_HANDLE(session);
 
 	kybd_inhibit(False);
-
 	ctlr_clear(session,True);
 	screen_erase(session);
 
@@ -486,6 +485,7 @@ void ctlr_erase(H3270 *session, int alt)
 	}
 
 	session->screen_alt = alt;
+
 }
 
 
@@ -2329,6 +2329,8 @@ ctlr_clear(H3270 *session, Boolean can_snap)
 #endif /*]*/
 
 	/* Clear the screen. */
+	trace("%p",session->ea_buf);
+
 	(void) memset((char *)session->ea_buf, 0, session->rows*session->cols*sizeof(struct ea));
 	cursor_move(&h3270,0);
 	session->buffer_addr = 0;
@@ -2341,8 +2343,7 @@ ctlr_clear(H3270 *session, Boolean can_snap)
 	sscp_start = 0;
 
 //	ALL_CHANGED;
-	screen_erase(session);
-
+	session->erase(session);
 }
 
 /*

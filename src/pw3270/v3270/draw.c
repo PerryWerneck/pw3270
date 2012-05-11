@@ -355,11 +355,12 @@ void v3270_update_char(H3270 *session, int addr, unsigned char chr, unsigned sho
 	cairo_set_scaled_font(cr,terminal->font_scaled);
 	v3270_draw_element(cr, chr, attr, terminal->host, terminal->metrics.height, &rect,terminal->color);
     cairo_destroy(cr);
-
 	if(cursor)
 		v3270_update_cursor_rect(terminal,&rect,chr,attr);
 
+#ifndef _WIN32
 	gtk_widget_queue_draw_area(GTK_WIDGET(terminal),rect.x,rect.y,rect.width,rect.height);
+#endif // WIN32
 
 }
 
