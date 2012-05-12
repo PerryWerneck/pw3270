@@ -401,8 +401,6 @@
 		#define host_connect(n,wait) lib3270_connect(NULL,n,wait)
 		#define host_reconnect(w) lib3270_reconnect(NULL,w)
 
-//		#define register_schange(tx,func) lib3270_register_schange(NULL,tx,func,NULL)
-
 		/* Console/Trace window */
 //		LOCAL_EXTERN HCONSOLE	  console_window_new(const char *title, const char *label);
 //		LOCAL_EXTERN void	  console_window_delete(HCONSOLE hwnd);

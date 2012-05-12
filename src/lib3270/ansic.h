@@ -19,7 +19,6 @@
 
 #if defined(X3270_ANSI) /*[*/
 
-LIB3270_INTERNAL void ansi_init(void);
 LIB3270_INTERNAL void ansi_process(unsigned int c);
 LIB3270_INTERNAL void ansi_send_clear(void);
 LIB3270_INTERNAL void ansi_send_down(void);
@@ -29,11 +28,12 @@ LIB3270_INTERNAL void ansi_send_pa(int nn);
 LIB3270_INTERNAL void ansi_send_pf(int nn);
 LIB3270_INTERNAL void ansi_send_right(void);
 LIB3270_INTERNAL void ansi_send_up(void);
+LIB3270_INTERNAL void ansi_in3270(H3270 *session, int in3270, void *dunno);
+
 LIB3270_INTERNAL void toggle_lineWrap(H3270 *session, struct lib3270_toggle *t, LIB3270_TOGGLE_TYPE type);
 
 #else /*][*/
 
-#define ansi_init()
 #define ansi_process(n)
 #define ansi_send_clear()
 #define ansi_send_down()

@@ -1682,8 +1682,7 @@ ansi_scroll(void)
 }
 
 /* Callback for when we enter ANSI mode. */
-static void
-ansi_in3270(H3270 *session, int in3270, void *dunno)
+void ansi_in3270(H3270 *session, int in3270, void *dunno)
 {
 	if (!in3270)
 		(void) ansi_reset(0, 0);
@@ -1705,12 +1704,6 @@ trace_pending_mb(void)
 /*
  * External entry points
  */
-
-void ansi_init(void)
-{
-	lib3270_register_schange(NULL,LIB3270_STATE_3270_MODE,ansi_in3270,NULL);
-}
-
 void
 ansi_process(unsigned int c)
 {

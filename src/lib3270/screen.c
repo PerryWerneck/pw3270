@@ -303,6 +303,8 @@ static void screen_update(H3270 *session, int bstart, int bend)
 	a  		= color_from_fa(fa);
 	fa_addr = find_field_attribute(session,bstart); // may be -1, that's okay
 
+	trace("%s start=%d end=%d",__FUNCTION__,bstart,bend);
+
 	for(baddr = bstart; baddr < bend; baddr++)
 	{
 		if(session->ea_buf[baddr].fa)
@@ -361,6 +363,8 @@ static void screen_update(H3270 *session, int bstart, int bend)
 
 		session->changed(session,first,len);
 	}
+
+	trace("%s ends",__FUNCTION__);
 }
 
 void screen_disp(H3270 *session)

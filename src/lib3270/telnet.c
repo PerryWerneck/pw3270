@@ -473,13 +473,9 @@ static int connect_sock(H3270 *hSession, int sockfd, const struct sockaddr *addr
 {
 	struct connect_parm p = { sizeof(struct connect_parm), sockfd, addr, addrlen, -1 };
 
-#ifdef _WIN32
-	do_connect_sock(hSession,&p);
-#else
 	trace("%s: Connect begin sock=%d",__FUNCTION__,p.sockfd);
 	lib3270_call_thread((int (*)(H3270 *, void *)) do_connect_sock,hSession,&p);
 	trace("%s: Connect ends, rc=%d",__FUNCTION__,p.err);
-#endif	// _WIN32
 
 	return p.err;
 }

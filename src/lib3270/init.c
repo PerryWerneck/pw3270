@@ -34,6 +34,8 @@
 #include "globals.h"
 #include "appres.h"
 #include "charsetc.h"
+#include "kybdc.h"
+#include "ansic.h"
 
 #include <malloc.h>
 
@@ -254,8 +256,15 @@ H3270 * lib3270_session_new(const char *model)
 		(void) charset_init(hSession,CN);
 	}
 
-	kybd_init();
-	ansi_init();
+	trace("%s: Initializing KYBD",__FUNCTION__);
+	lib3270_register_schange(hSession,LIB3270_STATE_CONNECT,kybd_connect,NULL);
+	lib3270_register_schange(hSession,LIB3270_STATE_3270_MODE,kybd_in3270,NULL);
+
+#if defined(X3270_ANSI)
+	trace("%s: Initializing ANSI",__FUNCTION__);
+	lib3270_register_schange(hSession,LIB3270_STATE_3270_MODE,ansi_in3270,NULL);
+#endif // X3270_ANSI
+
 
 #if defined(X3270_FT)
 	ft_init(hSession);

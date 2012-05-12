@@ -142,16 +142,19 @@ extern void Up_action(Widget w, XEvent *event, String *params,    Cardinal *num_
 */
 
 /* other functions */
-extern void add_xk(KeySym key, KeySym assoc);
-extern void clear_xks(void);
-extern void do_reset(Boolean explicit);
-extern void hex_input(char *s);
-extern void kybdlock_clr(unsigned int bits, const char *cause);
-extern void kybd_inhibit(Boolean inhibit);
-extern void kybd_init(void);
-extern int kybd_prime(void);
-extern void kybd_scroll_lock(Boolean lock);
-extern Boolean run_ta(void);
-extern int state_from_keymap(char keymap[32]);
+LIB3270_INTERNAL void add_xk(KeySym key, KeySym assoc);
+LIB3270_INTERNAL void clear_xks(void);
+LIB3270_INTERNAL void do_reset(Boolean explicit);
+LIB3270_INTERNAL void hex_input(char *s);
+LIB3270_INTERNAL void kybdlock_clr(unsigned int bits, const char *cause);
+LIB3270_INTERNAL void kybd_inhibit(Boolean inhibit);
+LIB3270_INTERNAL void kybd_init(void);
+LIB3270_INTERNAL int kybd_prime(void);
+LIB3270_INTERNAL void kybd_scroll_lock(Boolean lock);
+LIB3270_INTERNAL Boolean run_ta(void);
+LIB3270_INTERNAL int state_from_keymap(char keymap[32]);
+LIB3270_INTERNAL void kybd_connect(H3270 *session, int connected, void *dunno);
+LIB3270_INTERNAL void kybd_in3270(H3270 *session, int in3270 unused, void *dunno);
+
 
 #endif /* KYBDC_H_INCLUDED */
