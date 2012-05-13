@@ -180,7 +180,7 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 	model_number = parse_model_number(hSession,model);
 	if (model_number < 0)
 	{
-		popup_an_error(NULL,"Invalid model number: %s", model);
+		popup_an_error(hSession,"Invalid model number: %s", model);
 		model_number = 0;
 	}
 

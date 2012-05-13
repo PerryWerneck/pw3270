@@ -220,10 +220,13 @@ void v3270_popup_message(GtkWidget *widget, LIB3270_NOTIFY type , const gchar *t
 	GtkMessageType	  msgtype	= GTK_MESSAGE_WARNING;
 	GtkButtonsType	  buttons	= GTK_BUTTONS_OK;
 
-	trace("%s: widget=%p",__FUNCTION__,widget);
-
 	if(widget && GTK_IS_WIDGET(widget))
 		toplevel = gtk_widget_get_toplevel(GTK_WIDGET(widget));
+
+	if(!GTK_IS_WINDOW(toplevel))
+		toplevel = NULL;
+
+	trace("%s: widget=%p toplevel=%p",__FUNCTION__,widget,toplevel);
 
 	if(type == LIB3270_NOTIFY_CRITICAL)
 	{
@@ -253,6 +256,8 @@ void v3270_popup_message(GtkWidget *widget, LIB3270_NOTIFY type , const gchar *t
 	gtk_widget_show_all(dialog);
 	gtk_dialog_run(GTK_DIALOG (dialog));
 	gtk_widget_destroy(dialog);
+
+	trace("%s ends",__FUNCTION__);
 }
 
 static void v3270_class_init(v3270Class *klass)

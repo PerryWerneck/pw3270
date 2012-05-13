@@ -228,7 +228,7 @@ void ctlr_set_rows_cols(H3270 *session, int mn, int ovc, int ovr)
 	if(idx < 0 || idx >= (sizeof(sz)/sizeof(struct _sz)))
 	{
 		idx = 2;
-		popup_an_error(NULL,"Unknown model: %d - Defaulting to 4 (%dx%d)", mn, sz[idx].cols,sz[idx].rows);
+		popup_an_error(session,"Unknown model: %d - Defaulting to 4 (%dx%d)", mn, sz[idx].cols,sz[idx].rows);
 		mn  = 4;
 	}
 
@@ -240,13 +240,13 @@ void ctlr_set_rows_cols(H3270 *session, int mn, int ovc, int ovr)
 	if (ovc != 0 || ovr != 0)
 	{
 		if (ovc <= 0 || ovr <= 0)
-			popup_an_error(NULL,"Invalid %s %dx%d:\nNegative or zero",ResOversize, ovc, ovr);
+			popup_an_error(session,"Invalid %s %dx%d:\nNegative or zero",ResOversize, ovc, ovr);
 		else if (ovc * ovr >= 0x4000)
-			popup_an_error(NULL,"Invalid %s %dx%d:\nToo big",ResOversize, ovc, ovr);
+			popup_an_error(session,"Invalid %s %dx%d:\nToo big",ResOversize, ovc, ovr);
 		else if (ovc > 0 && ovc < session->maxCOLS)
-			popup_an_error(NULL,"Invalid %s cols (%d):\nLess than model %d cols (%d)",ResOversize, ovc, session->model_num, session->maxCOLS);
+			popup_an_error(session,"Invalid %s cols (%d):\nLess than model %d cols (%d)",ResOversize, ovc, session->model_num, session->maxCOLS);
 		else if (ovr > 0 && ovr < session->maxROWS)
-			popup_an_error(NULL,"Invalid %s rows (%d):\nLess than model %d rows (%d)",ResOversize, ovr, session->model_num, session->maxROWS);
+			popup_an_error(session,"Invalid %s rows (%d):\nLess than model %d rows (%d)",ResOversize, ovr, session->model_num, session->maxROWS);
 		else
 			update_model_info(session,mn,session->ov_cols = ovc,session->ov_rows = ovr);
 	}

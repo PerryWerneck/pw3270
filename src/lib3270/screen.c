@@ -660,7 +660,7 @@ void Warning(H3270 *session, const char *fmt, ...)
 }
 
 /* Pop up an error dialog. */
-extern void popup_an_error(H3270 *session, const char *fmt, ...)
+void popup_an_error(H3270 *session, const char *fmt, ...)
 {
 	va_list	args;
 
