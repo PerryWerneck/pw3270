@@ -126,8 +126,13 @@
 	return 0;
  }
 
- static int popup_handler(H3270 *session, void *widget, LIB3270_NOTIFY type, const char *title, const char *msg, const char *fmt, va_list args)
+ static int popup_handler(H3270 *session, void *terminal, LIB3270_NOTIFY type, const char *title, const char *msg, const char *fmt, va_list args)
  {
+ 	GtkWidget *widget = NULL;
+
+ 	if(session && terminal && GTK_IS_V3270(terminal))
+		widget = GTK_WIDGET(terminal);
+
  	if(fmt)
 	{
 		gchar *text = g_strdup_vprintf(fmt,args);
@@ -138,52 +143,6 @@
 	{
 		v3270_popup_message(GTK_WIDGET(widget),type,title,msg,NULL);
 	}
-/*
-	GtkWidget		* dialog;
-	GtkWidget		* toplevel	= NULL;
-	GtkMessageType	  msgtype	= GTK_MESSAGE_WARNING;
-	GtkButtonsType	  buttons	= GTK_BUTTONS_OK;
-	gchar 			* text		= NULL;
-
-	if(fmt)
-		text = g_strdup_vprintf(fmt,args);
-
-	if(widget && GTK_IS_WIDGET(widget))
-		toplevel = gtk_widget_get_toplevel(GTK_WIDGET(widget));
-
-	if(type == LIB3270_NOTIFY_CRITICAL)
-	{
-		msgtype	= GTK_MESSAGE_ERROR;
-		buttons = GTK_BUTTONS_CLOSE;
-	}
-
-	if(!title)
-		title = _( "Error" );
-
-	if(msg)
-	{
-		dialog = gtk_message_dialog_new_with_markup(GTK_WINDOW(toplevel),GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,msgtype,buttons,"%s",msg);
-
-		if(text)
-			gtk_message_dialog_format_secondary_markup(GTK_MESSAGE_DIALOG(dialog),"%s",text);
-	}
-	else if(text)
-	{
-		dialog = gtk_message_dialog_new_with_markup(GTK_WINDOW(toplevel),GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,msgtype,buttons,"%s",text);
-	}
-	else
-	{
-		dialog = gtk_message_dialog_new_with_markup(GTK_WINDOW(toplevel),GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,msgtype,buttons,"%s",title);
-	}
-
-	if(text)
-		g_free(text);
-
-	gtk_window_set_title(GTK_WINDOW(dialog),title);
-	gtk_widget_show_all(dialog);
-	gtk_dialog_run(GTK_DIALOG (dialog));
-	gtk_widget_destroy(dialog);
-*/
 	return 0;
  }
 
@@ -418,6 +377,7 @@
 	for(f=0;f<G_N_ELEMENTS(widget_config);f++)
 	{
 		gchar *str = get_string_from_config("terminal",widget_config[f].key,NULL);
+		trace("str=%p strlen=%d",str,strlen(str));
 		widget_config[f].set(widget->terminal,str);
 		if(str)
 			g_free(str);

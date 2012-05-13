@@ -330,21 +330,19 @@ gchar * get_last_error_msg(void)
 #ifdef WIN_REGISTRY_ENABLED
 
 	HKEY key_handle;
-	BYTE data[4096];
-	unsigned long datatype;
-	unsigned long datalen 	= sizeof(data);
-	gchar *ret				= NULL;
+	BYTE data[4097];
+	unsigned long	  datalen 	= 4096;
+	unsigned long	  datatype;
+	gchar 			* ret		= NULL;
 
 	if(!registry_open_key(group,KEY_READ,&key_handle))
 		return g_strdup(def);
 
 	if(RegQueryValueExA(key_handle,key,NULL,&datatype,data,&datalen) == ERROR_SUCCESS)
 	{
-		ret = (char *) malloc(datalen+1);
-
-		memcpy(ret,data,datalen);
-		ret[datalen+1] = 0;
-//		trace("%s\\%s=\"%s\"",group,key,ret);
+		data[datalen+1] = 0;
+		ret = g_strdup(data);
+		trace("datalen=%d",datalen);
 	}
 	else if(def)
 	{

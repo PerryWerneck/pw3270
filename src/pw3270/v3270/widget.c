@@ -220,6 +220,8 @@ void v3270_popup_message(GtkWidget *widget, LIB3270_NOTIFY type , const gchar *t
 	GtkMessageType	  msgtype	= GTK_MESSAGE_WARNING;
 	GtkButtonsType	  buttons	= GTK_BUTTONS_OK;
 
+	trace("%s: widget=%p",__FUNCTION__,widget);
+
 	if(widget && GTK_IS_WIDGET(widget))
 		toplevel = gtk_widget_get_toplevel(GTK_WIDGET(widget));
 
@@ -743,6 +745,8 @@ static void v3270_init(v3270 *widget)
 {
 	widget->host = lib3270_session_new("");
 
+	trace("%s",__FUNCTION__);
+
 	if(widget->host->sz != sizeof(H3270))
 	{
 		g_error( _( "Unexpected signature in H3270 object, possible version mismatch in lib3270") );
@@ -782,6 +786,7 @@ static void v3270_init(v3270 *widget)
 	// Setup events
     gtk_widget_add_events(GTK_WIDGET(widget),GDK_KEY_PRESS_MASK|GDK_KEY_RELEASE_MASK|GDK_BUTTON_PRESS_MASK|GDK_BUTTON_MOTION_MASK|GDK_BUTTON_RELEASE_MASK|GDK_POINTER_MOTION_MASK|GDK_ENTER_NOTIFY_MASK);
 
+	trace("%s",__FUNCTION__);
 }
 
 GtkWidget * v3270_new(void)
@@ -1133,18 +1138,18 @@ void v3270_set_font_family(GtkWidget *widget, const gchar *name)
 
 	terminal = GTK_V3270(widget);
 
+	if(!name)
+	{
+		// TODO (perry#3#): Get default font family from currrent style
+		name = "courier new";
+	}
+
 	if(terminal->font_family)
 	{
 		if(!g_strcasecmp(terminal->font_family,name))
 			return;
 		g_free(terminal->font_family);
 		terminal->font_family = NULL;
-	}
-
-	if(!name)
-	{
-		// TODO (perry#3#): Get default font family from currrent style
-		name = "courier new";
 	}
 
 	terminal->font_family = g_strdup(name);

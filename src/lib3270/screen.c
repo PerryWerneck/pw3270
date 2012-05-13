@@ -264,6 +264,7 @@ void update_model_info(H3270 *session, int model, int cols, int rows)
 	/* Update the model name. */
 	(void) sprintf(session->model_name, "327%c-%d%s",session->m3279 ? '9' : '8',session->model_num,session->extended ? "-E" : "");
 
+	trace("%s: %p",__FUNCTION__,session->update_model);
 	session->update_model(session, session->model_name,session->model_num,rows,cols);
 }
 
@@ -634,7 +635,12 @@ void Error(H3270 *session, const char *fmt, ...)
 	trace("%s: title=%s fmt=%s",__FUNCTION__,"3270 Error",fmt);
 
 	va_start(arg_ptr, fmt);
-	popup_handler(session,session->widget,LIB3270_NOTIFY_ERROR, _( "3270 Error" ),NULL,fmt,arg_ptr);
+
+	if(session && session->sz == sizeof(H3270))
+		popup_handler(session,session->widget,LIB3270_NOTIFY_ERROR, _( "3270 Error" ),NULL,fmt,arg_ptr);
+	else
+		popup_handler(NULL,NULL,LIB3270_NOTIFY_ERROR, _( "3270 Error" ),NULL,fmt,arg_ptr);
+
 	va_end(arg_ptr);
 
 }

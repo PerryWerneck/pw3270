@@ -167,8 +167,8 @@ char * xs_vsprintf(const char *fmt, va_list args)
 	char *r;
 #if defined(HAVE_VASPRINTF) /*[*/
 	(void) vasprintf(&r, fmt, args);
-	if (r == CN)
-		Error("Out of memory");
+	if(!r)
+		Error(NULL,"Out of memory in %s",__FUNCTION__);
 	return r;
 #else /*][*/
 	char buf[16384];
@@ -1098,7 +1098,7 @@ LIB3270_EXPORT void * lib3270_realloc(void *p, int len)
 {
 	p = realloc(p, len);
 	if(!p)
-		Error(NULL,"Out of memory");
+		Error(NULL,"Out of memory in %s",__FUNCTION__);
 	return p;
 }
 
@@ -1114,7 +1114,7 @@ LIB3270_EXPORT void * lib3270_calloc(int elsize, int nelem, void *ptr)
 	if(ptr)
 		memset(ptr,0,sz);
 	else
-		Error(NULL,"Out of memory");
+		Error(NULL,"Out of memory in %s",__FUNCTION__);
 
 	return ptr;
 }
@@ -1127,7 +1127,7 @@ LIB3270_EXPORT void * lib3270_malloc(int len)
 	r = malloc(len);
 	if (r == (char *)NULL)
 	{
-		Error(NULL,"Out of memory");
+		Error(NULL,"Out of memory in %s",__FUNCTION__);
 		return 0;
 	}
 
@@ -1142,7 +1142,7 @@ void * Calloc(size_t nelem, size_t elsize)
 	char	* r = malloc(sz);
 
 	if(!r)
-		Error(NULL,"Out of memory");
+		Error(NULL,"Out of memory in %s",__FUNCTION__);
 
 	memset(r, 0, sz);
 	return r;
