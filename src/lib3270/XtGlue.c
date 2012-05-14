@@ -850,7 +850,12 @@ void RemoveInput(unsigned long id)
 		callbacks->RemoveInput(id);
 }
 
-int LIB3270_EXPORT lib3270_register_handlers(const struct lib3270_callbacks *cbk)
+LIB3270_EXPORT H3270 * lib3270_get_default_session_handle(void)
+{
+	return &h3270;
+}
+
+LIB3270_EXPORT int lib3270_register_handlers(const struct lib3270_callbacks *cbk)
 {
 	if(!cbk)
 		return EINVAL;
@@ -937,7 +942,7 @@ LIB3270_EXPORT int lib3270_call_thread(int(*callback)(H3270 *h, void *), H3270 *
 	if(h->set_timer)
 		h->set_timer(h,1);
 
-	lib3270_main_iterate(0);
+	lib3270_main_iterate(h,0);
 	if(callbacks->callthread)
 	{
 		h->bgthread = 1;
@@ -950,7 +955,7 @@ LIB3270_EXPORT int lib3270_call_thread(int(*callback)(H3270 *h, void *), H3270 *
 	{
 		rc = callback(h,parm);
 	}
-	lib3270_main_iterate(0);
+	lib3270_main_iterate(h,0);
 
 	if(h->set_timer)
 		h->set_timer(h,0);
@@ -958,7 +963,7 @@ LIB3270_EXPORT int lib3270_call_thread(int(*callback)(H3270 *h, void *), H3270 *
 	return rc;
 }
 
-LIB3270_EXPORT void lib3270_main_iterate(int wait)
+LIB3270_EXPORT void lib3270_main_iterate(H3270 *session, int wait)
 {
 	if(callbacks->RunPendingEvents)
 		callbacks->RunPendingEvents(wait);
@@ -976,7 +981,7 @@ LIB3270_EXPORT int lib3270_wait(seconds)
 
 	while(time(0) < end)
 	{
-		lib3270_main_iterate(1);
+		lib3270_main_iterate(&h3270,1);
 	}
 
 	return 0;

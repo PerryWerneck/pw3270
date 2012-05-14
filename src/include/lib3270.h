@@ -647,10 +647,11 @@
 	 *
 	 * Run lib3270 internal iterations, check for network inputs, process signals.
 	 *
+	 * @param h		Related session.
 	 * @param wait	Wait for signal if not available.
 	 *
 	 */
-	LIB3270_EXPORT void lib3270_main_iterate(int wait);
+	LIB3270_EXPORT void lib3270_main_iterate(H3270 *h, int wait);
 
 	/**
 	 * Wait for "N" seconds keeping main loop active.
@@ -774,6 +775,14 @@
 	 */
 	LIB3270_EXPORT void   lib3270_free(void *p);
 
+
+	/**
+	 * Get default session handle.
+	 *
+	 * @return Internal's lib3270 session handle.
+	 *
+	 */
+	LIB3270_EXPORT H3270 * lib3270_get_default_session_handle(void);
 
 	/**
 	 * Get resource string.

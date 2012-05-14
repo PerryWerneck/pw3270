@@ -18,7 +18,7 @@
  * programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple
  * Place, Suite 330, Boston, MA, 02111-1307, USA
  *
- * Este programa está nomeado como misc.cpp e possui - linhas de código.
+ * Este programa está nomeado como main.cpp e possui - linhas de código.
  *
  * Contatos:
  *
@@ -27,20 +27,47 @@
  */
 
  #include "globals.h"
+ #include <lib3270/session.h>
+
+/*--[ Defines ]--------------------------------------------------------------------------------------*/
+
+ typedef struct _info
+ {
+ 	JNIEnv	 * env;
+ 	jobject	   obj;
+
+ } INFO;
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
-JNIEXPORT jstring JNICALL Java_br_com_bb_pw3270_lib3270_getVersion(JNIEnv *env, jobject obj)
+JNIEXPORT jint JNICALL Java_br_com_bb_pw3270_lib3270_init(JNIEnv *env, jclass obj)
 {
-	return env->NewStringUTF(lib3270_get_version());
+	H3270	* session	= lib3270_session_new("");
+
+	return 0;
 }
 
-JNIEXPORT jstring JNICALL Java_br_com_bb_pw3270_lib3270_getRevision(JNIEnv *env, jobject obj)
+JNIEXPORT jint JNICALL Java_br_com_bb_pw3270_lib3270_processEvents(JNIEnv *env, jobject obj)
 {
-	return env->NewStringUTF(lib3270_get_revision());
+	/*
+	INFO	  data		= { env, obj };
+	H3270	* session 	= lib3270_get_default_session_handle();
+
+	session->widget = &data;
+	lib3270_main_iterate(session,1);
+	session->widget = 0;
+	*/
+	return 0;
 }
 
-JNIEXPORT jstring JNICALL Java_br_com_bb_pw3270_lib3270_getEncoding(JNIEnv *env, jobject obj)
+JNIEXPORT jboolean JNICALL Java_br_com_bb_pw3270_lib3270_isConnected(JNIEnv *, jobject)
 {
-	return env->NewStringUTF(lib3270_get_charset(lib3270_get_default_session_handle()));
+//	return (lib3270_connected(lib3270_get_default_session_handle())) ? JNI_TRUE : JNI_FALSE;;
+	return JNI_FALSE;
 }
+
+JNIEXPORT jboolean JNICALL Java_br_com_bb_pw3270_lib3270_isTerminalReady(JNIEnv *, jobject)
+{
+	return JNI_FALSE;
+}
+

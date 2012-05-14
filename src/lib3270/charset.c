@@ -90,10 +90,9 @@ unsigned char xk_selector = 0;
 unsigned char auto_keymap = 0;
 
 /* Statics. */
-static enum cs_result resource_charset(char *csname, char *cs, char *ftcs);
+static enum cs_result resource_charset(const char *csname, char *cs, char *ftcs);
 typedef enum { CS_ONLY, FT_ONLY, BOTH } remap_scope;
-static enum cs_result remap_chars(char *csname, char *spec, remap_scope scope,
-    int *ne);
+static enum cs_result remap_chars(const char *csname, char *spec, remap_scope scope, int *ne);
 static void remap_one(unsigned char ebc, KeySym iso, remap_scope scope,Boolean one_way);
 
 #if defined(DEBUG_CHARSET) /*[*/
@@ -195,7 +194,7 @@ wide_resource_init(char *csname)
 /*
  * Change character sets.
  */
-enum cs_result charset_init(H3270 *session, char *csname)
+enum cs_result charset_init(H3270 *session, const char *csname)
 {
 	char *cs;
 	const char *ftcs;
@@ -370,7 +369,7 @@ set_charset_name(char *csname)
 */
 
 /* Define a charset from resources. */
-static enum cs_result resource_charset(char *csname, char *cs, char *ftcs)
+static enum cs_result resource_charset(const char *csname, char *cs, char *ftcs)
 {
 	enum cs_result	  rc;
 	int				  ne	= 0;
@@ -586,8 +585,7 @@ remap_one(unsigned char ebc, KeySym iso, remap_scope scope, Boolean one_way)
  * characters that replace certain standard Latin-1 graphics.  The keysym
  * will be entered into the extended keysym translation table.
  */
-static enum cs_result
-remap_chars(char *csname, char *spec, remap_scope scope, int *ne)
+static enum cs_result remap_chars(const char *csname, char *spec, remap_scope scope, int *ne)
 {
 	char *s;
 	char *ebcs, *isos;

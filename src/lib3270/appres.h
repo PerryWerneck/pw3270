@@ -149,7 +149,7 @@ typedef struct {
 	char	*model;
 //	char	*hostsfile;
 //	char	*port;
-	char	*charset;
+//	char	*charset;
 //	char	*termname;
 //	char	*login_macro;
 	char	*macros;

@@ -119,7 +119,7 @@
 		char		       		* qualified_host;
 		char					* proxy;				/**< Proxy server (type:host[:port]) */
 		char					* termname;
-
+		char					* charset;
 
 		LIB3270_MESSAGE			  oia_status;
 
@@ -131,7 +131,7 @@
 		void					* ft;					/**< Active file transfer data */
 
 		// screen info
-		char					* charset;
+		const char				* host_charset;
 		int						  ov_rows;
 		int						  ov_cols;
 		int						  maxROWS;

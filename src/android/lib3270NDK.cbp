@@ -34,7 +34,8 @@
 		</Compiler>
 		<Unit filename="Makefile" />
 		<Unit filename="jni/Android.mk" />
-		<Unit filename="jni/init.cpp" />
+		<Unit filename="jni/globals.h" />
+		<Unit filename="jni/main.cpp" />
 		<Unit filename="jni/misc.cpp" />
 		<Unit filename="src/br/com/bb/pw3270/lib3270.java" />
 		<Extensions>

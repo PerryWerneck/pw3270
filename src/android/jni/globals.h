@@ -18,7 +18,7 @@
  * programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple
  * Place, Suite 330, Boston, MA, 02111-1307, USA
  *
- * Este programa está nomeado como init.cpp e possui - linhas de código.
+ * Este programa está nomeado como globals.h e possui - linhas de código.
  *
  * Contatos:
  *
@@ -28,13 +28,3 @@
 
  #include "lib3270jni.h"
  #include <lib3270.h>
-
-/*--[ Implement ]------------------------------------------------------------------------------------*/
-
-JNIEXPORT jint JNICALL Java_br_com_bb_pw3270_lib3270_init(JNIEnv *env, jobject obj)
-{
-	H3270 *session = lib3270_session_new("");
-
-
-}
-

@@ -1,6 +1,9 @@
 package br.com.bb.pw3270;
 
-public class lib3270 {
+import java.lang.Thread;
+
+public class lib3270 extends Thread
+{
 
 	static
 	{
@@ -16,11 +19,28 @@ public class lib3270 {
 		// TODO Auto-generated method stub
 
 	}
+	
+	/**
+	 * Connect to host, keep event loop running until disconnected.
+	 */
+	public void run()
+	{
+		while(isConnected())
+			processEvents();
+	}
+
+	static private native int	init();
+	private native int			processEvents();
 
 	// Misc calls
-	static private native int		init();
-	public native String 			getVersion();
-	public native String 			getRevision();
+	public native String		getEncoding();
+
+	public native String 		getVersion();
+	public native String 		getRevision();
+	
+	// Connection status
+	public native boolean		isConnected();
+	public native boolean		isTerminalReady();
 
 
 

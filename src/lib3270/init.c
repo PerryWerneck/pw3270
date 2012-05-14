@@ -32,7 +32,7 @@
 
 
 #include "globals.h"
-#include "appres.h"
+// #include "appres.h"
 #include "charsetc.h"
 #include "kybdc.h"
 #include "ansic.h"
@@ -142,6 +142,20 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 	hSession->unlock_delay		= 1;
 	hSession->icrnl 			= 1;
 	hSession->onlcr				= 1;
+	hSession->host_charset		= "bracket";
+
+/*
+#if !defined(_WIN32)
+	hSession->host_charset		= "bracket";
+#else
+
+	if (is_nt)
+		hSession->host_charset	= "bracket";
+	else
+		hSession->host_charset	= "bracket437";
+#endif
+*/
+
 
 	// Initialize toggles
 	initialize_toggles(hSession);
@@ -223,7 +237,7 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 	Trace("Termtype: %s",hSession->termtype);
 
 	if (hSession->apl_mode)
-		appres.charset = "apl";
+		hSession->host_charset = "apl";
 
 }
 
@@ -244,15 +258,16 @@ H3270 * lib3270_session_new(const char *model)
 
 	configured = 1;
 
+
 	lib3270_session_init(hSession, model);
 
 	if(screen_init(hSession))
 		return NULL;
 
-	Trace("Charset: %s",appres.charset);
-	if (charset_init(hSession,appres.charset) != CS_OKAY)
+	Trace("Charset: %s",hSession->host_charset);
+	if (charset_init(hSession,hSession->host_charset) != CS_OKAY)
 	{
-		Warning(hSession, _( "Cannot find charset \"%s\", using defaults" ), appres.charset);
+		Warning(hSession, _( "Cannot find charset \"%s\", using defaults" ), hSession->host_charset);
 		(void) charset_init(hSession,CN);
 	}
 

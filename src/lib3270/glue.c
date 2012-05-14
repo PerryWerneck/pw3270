@@ -171,15 +171,15 @@ static void initialize(void)
 //	appres.hostsfile = CN;
 //	appres.port = "telnet";
 
-#if !defined(_WIN32) /*[*/
-	appres.charset = "bracket";
-#else /*][*/
-
-	if (is_nt)
-		appres.charset = "bracket";
-	else
-		appres.charset = "bracket437";
-#endif /*]*/
+// #if !defined(_WIN32) /*[*/
+// 	appres.charset = "bracket";
+// #else /*][*/
+//
+//	if (is_nt)
+//		appres.charset = "bracket";
+//	else
+//		appres.charset = "bracket437";
+//#endif /*]*/
 
 //	appres.termname = CN;
 	appres.macros = CN;
@@ -305,7 +305,7 @@ static const struct lib3270_option options[] =
 #if defined(HAVE_LIBSSL) /*[*/
     { OptCertFile, OPT_STRING,  False, ResCertFile,  offset(cert_file), NULL },
 #endif /*]*/
-    { OptCharset,  OPT_STRING,  False, ResCharset,   offset(charset), NULL },
+//    { OptCharset,  OPT_STRING,  False, ResCharset,   offset(charset), NULL },
     { OptClear,    OPT_SKIP2,   False, NULL,         NULL, NULL },
 //    { OptDefScreen,OPT_STRING,  False, ResDefScreen, offset(defscreen), NULL },
 //#if defined(X3270_TRACE)
@@ -383,7 +383,7 @@ static struct {
 #if defined(HAVE_LIBSSL) /*[*/
 	{ ResCertFile,	offset(cert_file),	XRM_STRING },
 #endif /*]*/
-	{ ResCharset,	offset(charset),	XRM_STRING },
+//	{ ResCharset,	offset(charset),	XRM_STRING },
 //	{ ResColor8,	offset(color8),		XRM_BOOLEAN },
 	{ ResConfDir,	offset(conf_dir),	XRM_STRING },
 //	{ ResDefScreen,	offset(defscreen),	XRM_STRING },
