@@ -18,7 +18,7 @@
  * programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple
  * Place, Suite 330, Boston, MA, 02111-1307, USA
  *
- * Este programa está nomeado como misc.cpp e possui - linhas de código.
+ * Este programa está nomeado como init.cpp e possui - linhas de código.
  *
  * Contatos:
  *
@@ -31,12 +31,10 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
-JNIEXPORT jstring JNICALL Java_br_com_bb_pw3270_lib3270_getVersion(JNIEnv *env, jobject obj)
+JNIEXPORT jint JNICALL Java_br_com_bb_pw3270_lib3270_init(JNIEnv *env, jobject obj)
 {
-	return env->NewStringUTF(lib3270_get_version());
+	H3270 *session = lib3270_session_new("");
+
+
 }
 
-JNIEXPORT jstring JNICALL Java_br_com_bb_pw3270_lib3270_getRevision(JNIEnv *env, jobject obj)
-{
-	return env->NewStringUTF(lib3270_get_revision());
-}
