@@ -3,6 +3,7 @@ package br.com.bb.pw3270;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Button;
 
 public class PW3270Activity extends Activity {
 	
@@ -15,6 +16,9 @@ public class PW3270Activity extends Activity {
         setContentView(R.layout.main);
         
         TextView text = (TextView) findViewById(R.id.text);
+        Button btn = (Button) findViewById(R.id.connect);
+        
+      
         
         host = new lib3270();
         

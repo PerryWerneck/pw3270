@@ -35,5 +35,6 @@ clean:
 	@rm -f jni/lib3270jni.h
 
 jni/lib3270jni.h: bin/classes/$(CLASSPATH)/lib3270.class
+	@echo $@ ...
 	@$(JAVAH) -o $@ -classpath bin/classes $(subst /,.,$(CLASSPATH)).lib3270
 

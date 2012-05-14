@@ -19,7 +19,7 @@ public class lib3270 extends Thread
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	/**
 	 * Connect to host, keep event loop running until disconnected.
 	 */
@@ -37,10 +37,13 @@ public class lib3270 extends Thread
 
 	public native String 		getVersion();
 	public native String 		getRevision();
-	
-	// Connection status
+
+	// Connect/Disconnect status
+	public native void 			setHost(String host);
+	public native String		getHost();
 	public native boolean		isConnected();
 	public native boolean		isTerminalReady();
+
 
 
 

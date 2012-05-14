@@ -4,10 +4,30 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <EditText
+            android:id="@+id/editText1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:ems="10" />
+
+        <Button
+            android:id="@+id/connect"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:text="Connect" />
+
+    </LinearLayout>
+
     <TextView
         android:id="@+id/text"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:text="@string/hello" />
 
 </LinearLayout>
