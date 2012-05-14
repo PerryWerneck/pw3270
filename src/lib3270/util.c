@@ -1157,8 +1157,8 @@ LIB3270_EXPORT char * lib3270_get_resource_string(const char *first_element, ...
 
 #else
 
-	char 		  buffer[4096];
-	char 		* ptr = buffer;
+	char 		* str		= lib3270_malloc(4097);
+	char 		* ptr 		= str;
 	const char	* element;
 	va_list		  args;
 	const char	* res;
@@ -1167,10 +1167,10 @@ LIB3270_EXPORT char * lib3270_get_resource_string(const char *first_element, ...
 
 	for(element = first_element;element;element = va_arg(args, const char *))
     {
-    	if(ptr != buffer)
+    	if(ptr != str)
 			*(ptr++) = '.';
 
-		strncpy(ptr,element,4096-strlen(buffer));
+		strncpy(ptr,element,4096-strlen(str));
 		ptr += strlen(ptr);
     }
 
@@ -1178,9 +1178,12 @@ LIB3270_EXPORT char * lib3270_get_resource_string(const char *first_element, ...
 
 	*ptr = 0;
 
-	trace("%s: %s",__FUNCTION__,buffer);
+	res = get_resource(str);
 
-	res = get_resource(buffer);
+	trace("%s(%s)=%s",__FUNCTION__,str,res ? res : "NULL");
+
+	lib3270_free(str);
+
 	if(res)
 		return strdup(res);
 #endif
