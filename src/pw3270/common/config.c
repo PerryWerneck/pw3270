@@ -330,13 +330,15 @@ gchar * get_last_error_msg(void)
 #ifdef WIN_REGISTRY_ENABLED
 
 	HKEY key_handle;
-	BYTE data[4097];
 	unsigned long	  datalen 	= 4096;
 	unsigned long	  datatype;
 	gchar 			* ret		= NULL;
+	BYTE			* data;
 
 	if(!registry_open_key(group,KEY_READ,&key_handle))
 		return g_strdup(def);
+
+	data = (BYTE *) g_malloc0(datalen+2);
 
 	if(RegQueryValueExA(key_handle,key,NULL,&datatype,data,&datalen) == ERROR_SUCCESS)
 	{
@@ -348,6 +350,8 @@ gchar * get_last_error_msg(void)
 	{
 		ret = g_strdup(def);
 	}
+
+	g_free(data);
 
 	RegCloseKey(key_handle);
 

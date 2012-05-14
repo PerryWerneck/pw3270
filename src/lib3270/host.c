@@ -754,12 +754,6 @@ LIB3270_EXPORT void lib3270_register_schange(H3270 *h, LIB3270_STATE_CHANGE tx, 
 
 	h->st_last[tx] = st;
 
-	#warning AQUI
-	if(tx == LIB3270_STATE_CONNECT)
-	{
-		trace("%s st=%p func=%p",__FUNCTION__,st,func);
-	}
-
 }
 
 /* Signal a state change. */
@@ -801,9 +795,6 @@ void lib3270_st_changed(H3270 *h, LIB3270_STATE tx, int mode)
 LIB3270_EXPORT const char * lib3270_set_host(H3270 *h, const char *n)
 {
     CHECK_SESSION_HANDLE(h);
-
-	#warning AQUI
-	Trace("%s: %p",__FUNCTION__,n);
 
 	if(n && n != h->full_current_host)
 	{
