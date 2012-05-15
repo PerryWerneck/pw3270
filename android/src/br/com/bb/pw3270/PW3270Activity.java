@@ -6,6 +6,7 @@ import android.widget.TextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.view.View;
+import android.content.res.*;
 
 public class PW3270Activity extends Activity implements View.OnClickListener
 {
@@ -20,24 +21,34 @@ public class PW3270Activity extends Activity implements View.OnClickListener
 			
 		}
 
-		protected void update_message(int id)
+		protected void updateProgramMessage(int id)
 		{
-			 this.view.setText("ID=" + id);
+			 this.view.setText(message[id]);
+		}
+
+		public void popupMessage(int type, String title, String text, String info)
+		{
+			this.view.setText(title + "\n" + text + "\n" + info);
 		}
 
 		
 	};
 	
-	terminal host;
-	EditText uri;
+	private terminal 	host;
+	private EditText 	uri;
+	private Resources	res;
+	private String[] 	message;
 	
     /** Called when the activity is first created. */
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) 
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
-        uri = (EditText) findViewById(R.id.hostname);
+        res 	= getResources();
+        message = res.getStringArray(R.array.program_msg);
+        uri 	= (EditText) findViewById(R.id.hostname);
         
         // Set button
         Button btn = (Button) findViewById(R.id.connect);
@@ -50,7 +61,7 @@ public class PW3270Activity extends Activity implements View.OnClickListener
     public void onClick(View v) 
     {
         // Perform action on click
-    	host.setHost(uri.getText().toString());
+    	// host.setHost(uri.getText().toString());
     	host.connect();
     }
 

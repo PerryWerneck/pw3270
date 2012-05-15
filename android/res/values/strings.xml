@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">Hello World, PW3270Activity!</string>
+    <string name="app_name">PW3270</string>
+    <string-array name="program_msg">
+        <item>LIB3270_MESSAGE_NONE</item>
+		<item>LIB3270_MESSAGE_SYSWAIT</item>
+		<item>LIB3270_MESSAGE_TWAIT</item>
+		<item>LIB3270_MESSAGE_CONNECTED</item>
+		<item>LIB3270_MESSAGE_DISCONNECTED</item>
+		<item>LIB3270_MESSAGE_AWAITING_FIRST</item>
+		<item>LIB3270_MESSAGE_MINUS</item>
+		<item>LIB3270_MESSAGE_PROTECTED</item>
+		<item>LIB3270_MESSAGE_NUMERIC</item>
+		<item>LIB3270_MESSAGE_OVERFLOW</item>
+		<item>LIB3270_MESSAGE_INHIBIT</item>
+		<item>LIB3270_MESSAGE_KYBDLOCK</item>
+		<item>LIB3270_MESSAGE_X</item>
+		<item>LIB3270_MESSAGE_RESOLVING</item>
+		<item>LIB3270_MESSAGE_CONNECTING</item>
+    </string-array>
+ 
+
+</resources>

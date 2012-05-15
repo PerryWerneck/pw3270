@@ -28,6 +28,7 @@
 
  #include "globals.h"
  #include <lib3270/session.h>
+ #include <lib3270/popup.h>
 
 /*--[ Defines ]--------------------------------------------------------------------------------------*/
 
@@ -57,24 +58,46 @@ static void post_message(H3270 *session, int msgid, int arg1 = 0, int arg2 = 0)
 		JNIEnv		* env			= ((INFO *) session->widget)->env;
 		jobject		  obj 			= ((INFO *) session->widget)->obj;
 		jclass 		  cls 			= env->GetObjectClass(obj);
-		jmethodID	  mid			= env->GetMethodID(cls, "post_message", "(III)V");;
+		jmethodID	  mid			= env->GetMethodID(cls, "postMessage", "(III)V");;
 		env->CallVoidMethod(obj,mid,(jint) msgid, (jint) arg1, (jint) arg2);
 	}
 }
 
 static void update_status(H3270 *session, LIB3270_MESSAGE id)
 {
-	post_message(session,0,id);
+	post_message(session,1,id);
 }
 
 static void changed(H3270 *session, int offset, int len)
 {
-	post_message(session,1,offset,len);
+	post_message(session,2,offset,len);
+}
+
+static int popuphandler(H3270 *session, void *terminal, LIB3270_NOTIFY type, const char *title, const char *msg, const char *fmt, va_list args)
+{
+	if(session->widget)
+	{
+		JNIEnv		* env			= ((INFO *) session->widget)->env;
+		jobject		  obj 			= ((INFO *) session->widget)->obj;
+		jclass 		  cls 			= env->GetObjectClass(obj);
+		jmethodID	  mid			= env->GetMethodID(cls, "postPopup", "(ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
+		char		* descr;
+
+        descr = lib3270_vsprintf(fmt, args);
+
+		env->CallVoidMethod(obj,mid,	(jint) type,
+										env->NewStringUTF(title),
+										env->NewStringUTF(msg),
+										env->NewStringUTF(descr) );
+        lib3270_free(descr);
+	}
 }
 
 JNIEXPORT jint JNICALL Java_br_com_bb_pw3270_lib3270_init(JNIEnv *env, jclass obj)
 {
 	H3270	* session	= lib3270_session_new("");
+
+	lib3270_set_popup_handler(popuphandler);
 
 	session->changed 		= changed;
 	session->update_status 	= update_status;
