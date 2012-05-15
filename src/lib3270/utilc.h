@@ -38,12 +38,12 @@ LIB3270_INTERNAL void xs_warning(const char *fmt, ...) printflike(1, 2);
 LIB3270_INTERNAL char * xs_vsprintf(const char *fmt, va_list args);
 
 
-LIB3270_INTERNAL unsigned long AddInput(int, H3270 *session, void (*fn)(H3270 *session));
-LIB3270_INTERNAL unsigned long AddExcept(int, H3270 *session, void (*fn)(H3270 *session));
-LIB3270_INTERNAL unsigned long AddOutput(int, H3270 *session, void (*fn)(H3270 *session));
-LIB3270_INTERNAL void RemoveInput(unsigned long);
-LIB3270_INTERNAL unsigned long AddTimeOut(unsigned long msec, H3270 *session, void (*fn)(H3270 *session));
-LIB3270_INTERNAL void RemoveTimeOut(unsigned long cookie);
+LIB3270_INTERNAL void * AddInput(int, H3270 *session, void (*fn)(H3270 *session));
+LIB3270_INTERNAL void * AddExcept(int, H3270 *session, void (*fn)(H3270 *session));
+LIB3270_INTERNAL void * AddOutput(int, H3270 *session, void (*fn)(H3270 *session));
+LIB3270_INTERNAL void RemoveInput(void *);
+LIB3270_INTERNAL void * AddTimeOut(unsigned long msec, H3270 *session, void (*fn)(H3270 *session));
+LIB3270_INTERNAL void RemoveTimeOut(void *cookie);
 
 LIB3270_INTERNAL const char * KeysymToString(KeySym k);
 LIB3270_INTERNAL KeySym StringToKeysym(char *s);

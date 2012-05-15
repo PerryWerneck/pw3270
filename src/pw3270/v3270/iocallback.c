@@ -47,19 +47,19 @@
 	#include <malloc.h>
 #endif
 
-static int 				static_CallAndWait(int(*callback)(H3270 *session, void *), H3270 *session, void *parm);
-static unsigned long	static_AddInput(int source, H3270 *session, void (*fn)(H3270 *session));
-static void				static_RemoveSource(unsigned long id);
+static int 				  static_CallAndWait(int(*callback)(H3270 *session, void *), H3270 *session, void *parm);
+static void 			* static_AddInput(int source, H3270 *session, void (*fn)(H3270 *session));
+static void				  static_RemoveSource(void *id);
 
 #if !defined(_WIN32) /*[*/
-static unsigned long	static_AddOutput(int source, H3270 *session, void (*fn)(H3270 *session));
+static void 			* static_AddOutput(int source, H3270 *session, void (*fn)(H3270 *session));
 #endif
 
-static unsigned long	static_AddExcept(int source, H3270 *session, void (*fn)(H3270 *session));
-static unsigned long	static_AddTimeOut(unsigned long interval_ms, H3270 *session, void (*proc)(H3270 *session));
-static void 			static_RemoveTimeOut(unsigned long timer);
-static int				static_Sleep(int seconds);
-static int 				static_RunPendingEvents(int wait);
+static void 			* static_AddExcept(int source, H3270 *session, void (*fn)(H3270 *session));
+static void 			* static_AddTimeOut(unsigned long interval_ms, H3270 *session, void (*proc)(H3270 *session));
+static void 			  static_RemoveTimeOut(void * timer);
+static int				  static_Sleep(int seconds);
+static int 				  static_RunPendingEvents(int wait);
 
 static gboolean 		IO_prepare(GSource *source, gint *timeout);
 static gboolean 		IO_check(GSource *source);
@@ -97,7 +97,7 @@ static gboolean			IO_closure(gpointer data);
 
 /*---[ Implement ]-----------------------------------------------------------------------------------------*/
 
-static unsigned long AddSource(int source, H3270 *session, gushort events, void (*fn)(H3270 *session))
+static void * AddSource(int source, H3270 *session, gushort events, void (*fn)(H3270 *session))
 {
 	IO_Source *src = (IO_Source *) g_source_new(&IOSources,sizeof(IO_Source));
 
@@ -109,28 +109,28 @@ static unsigned long AddSource(int source, H3270 *session, gushort events, void 
 	g_source_attach((GSource *) src,NULL);
 	g_source_add_poll((GSource *) src,&src->poll);
 
-	return (unsigned long) src;
+	return src;
 }
 
-static unsigned long static_AddInput(int source, H3270 *session, void (*fn)(H3270 *session))
+static void * static_AddInput(int source, H3270 *session, void (*fn)(H3270 *session))
 {
 	return AddSource(source,session,G_IO_IN|G_IO_HUP|G_IO_ERR,fn);
 }
 
-static void static_RemoveSource(unsigned long id)
+static void static_RemoveSource(void *id)
 {
 	if(id)
 		g_source_destroy((GSource *) id);
 }
 
 #if !defined(_WIN32) /*[*/
-static unsigned long static_AddOutput(int source, H3270 *session, void (*fn)(H3270 *session))
+static void * static_AddOutput(int source, H3270 *session, void (*fn)(H3270 *session))
 {
 	return AddSource(source,session,G_IO_OUT|G_IO_HUP|G_IO_ERR,fn);
 }
 #endif /*]*/
 
-static unsigned long static_AddExcept(int source, H3270 *session, void (*fn)(H3270 *session))
+static void * static_AddExcept(int source, H3270 *session, void (*fn)(H3270 *session))
 {
 #if defined(_WIN32) /*[*/
 	return 0;
@@ -146,22 +146,20 @@ static gboolean do_timer(TIMER *t)
 	return FALSE;
 }
 
-static unsigned long static_AddTimeOut(unsigned long interval, H3270 *session, void (*proc)(H3270 *session))
+static void * static_AddTimeOut(unsigned long interval, H3270 *session, void (*proc)(H3270 *session))
 {
-	TIMER *t = g_malloc(sizeof(TIMER));
+	TIMER *t = g_malloc0(sizeof(TIMER));
 
-	t->remove	= 0;
 	t->fn		= proc;
 	t->session	= session;
 
 	g_timeout_add_full(G_PRIORITY_DEFAULT, (guint) interval, (GSourceFunc) do_timer, t, g_free);
 
-	return (unsigned long) t;
+	return t;
 }
 
-static void static_RemoveTimeOut(unsigned long timer)
+static void static_RemoveTimeOut(void * timer)
 {
-	// FIXME (perry#2#): It this really necessary? The timeout is removed as soon as it ticks.
 	((TIMER *) timer)->remove++;
 }
 

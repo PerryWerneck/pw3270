@@ -554,16 +554,16 @@
 	{
 		unsigned short sz;
 
-		unsigned long	(*AddTimeOut)(unsigned long interval_ms, H3270 *session, void (*proc)(H3270 *session));
-		void			(*RemoveTimeOut)(unsigned long timer);
+		void	* (*AddTimeOut)(unsigned long interval_ms, H3270 *session, void (*proc)(H3270 *session));
+		void	  (*RemoveTimeOut)(void *timer);
 
-		unsigned long	(*AddInput)(int source, H3270 *session, void (*fn)(H3270 *session));
-		void			(*RemoveInput)(unsigned long id);
+		void	* (*AddInput)(int source, H3270 *session, void (*fn)(H3270 *session));
+		void	  (*RemoveInput)(void *id);
 
-		unsigned long	(*AddExcept)(int source, H3270 *session, void (*fn)(H3270 *session));
+		void 	* (*AddExcept)(int source, H3270 *session, void (*fn)(H3270 *session));
 
 		#if !defined(_WIN32) /*[*/
-			unsigned long (*AddOutput)(int source, H3270 *session, void (*fn)(H3270 *session));
+			void * (*AddOutput)(int source, H3270 *session, void (*fn)(H3270 *session));
 		#endif /*]*/
 
 		int 			(*callthread)(int(*callback)(H3270 *, void *), H3270 *session, void *parm);

@@ -172,8 +172,8 @@
 		} select;
 
 		// xio
-		unsigned long			  ns_read_id;
-		unsigned long			  ns_exception_id;
+		void 					* ns_read_id;
+		void 					* ns_exception_id;
 		char					  reading;
 		char					  excepting;
 

@@ -2706,7 +2706,7 @@ ctlr_dbcs_state(int baddr)
 static struct timeval t_start;
 static Boolean ticking = False;
 static Boolean mticking = False;
-static unsigned long tick_id;
+static void * tick_id;
 static struct timeval t_want;
 
 /* Return the difference in milliseconds between two timevals. */

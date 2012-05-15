@@ -91,17 +91,17 @@
 
 /*---[ Callbacks ]------------------------------------------------------------------------------------------*/
 
-static void DefaultRemoveTimeOut(unsigned long timer);
-static unsigned long DefaultAddTimeOut(unsigned long interval_ms, H3270 *session, void (*proc)(H3270 *session));
+static void   DefaultRemoveTimeOut(void *timer);
+static void * DefaultAddTimeOut(unsigned long interval_ms, H3270 *session, void (*proc)(H3270 *session));
 
-static unsigned long DefaultAddInput(int source, H3270 *session, void (*fn)(H3270 *session));
-static unsigned long DefaultAddExcept(int source, H3270 *session, void (*fn)(H3270 *session));
+static void * DefaultAddInput(int source, H3270 *session, void (*fn)(H3270 *session));
+static void * DefaultAddExcept(int source, H3270 *session, void (*fn)(H3270 *session));
 
 #if !defined(_WIN32) /*[*/
-static unsigned long DefaultAddOutput(int source, H3270 *session, void (*fn)(H3270 *session));
+static void * DefaultAddOutput(int source, H3270 *session, void (*fn)(H3270 *session));
 #endif
 
-static void DefaultRemoveInput(unsigned long id);
+static void DefaultRemoveInput(void *id);
 
 static int DefaultProcessEvents(int block);
 
@@ -171,7 +171,7 @@ typedef struct timeout
 #define TN	(timeout_t *)NULL
 static timeout_t *timeouts = TN;
 
-static unsigned long DefaultAddTimeOut(unsigned long interval_ms, H3270 *session, void (*proc)(H3270 *session))
+static void * DefaultAddTimeOut(unsigned long interval_ms, H3270 *session, void (*proc)(H3270 *session))
 {
 	timeout_t *t_new;
 	timeout_t *t;
@@ -225,10 +225,10 @@ static unsigned long DefaultAddTimeOut(unsigned long interval_ms, H3270 *session
 
 	trace("Timeout added: %p",t_new);
 
-	return (unsigned long) t_new;
+	return t_new;
 }
 
-static void DefaultRemoveTimeOut(unsigned long timer)
+static void DefaultRemoveTimeOut(void * timer)
 {
 	timeout_t *st = (timeout_t *)timer;
 	timeout_t *t;
@@ -262,7 +262,7 @@ typedef struct input {
 static input_t *inputs = (input_t *)NULL;
 static Boolean inputs_changed = False;
 
-static unsigned long DefaultAddInput(int source, H3270 *session, void (*fn)(H3270 *session))
+static void * DefaultAddInput(int source, H3270 *session, void (*fn)(H3270 *session))
 {
 	input_t *ip;
 
@@ -281,10 +281,10 @@ static unsigned long DefaultAddInput(int source, H3270 *session, void (*fn)(H327
 
 	Trace("%s: fd=%d callback=%p handle=%p",__FUNCTION__,source,fn,ip);
 
-	return (unsigned long) ip;
+	return ip;
 }
 
-static unsigned long DefaultAddExcept(int source, H3270 *session, void (*fn)(H3270 *session))
+static void * DefaultAddExcept(int source, H3270 *session, void (*fn)(H3270 *session))
 {
 #if defined(_WIN32) /*[*/
 	return 0;
@@ -306,12 +306,12 @@ static unsigned long DefaultAddExcept(int source, H3270 *session, void (*fn)(H32
 
 	Trace("%s: fd=%d callback=%p handle=%p",__FUNCTION__,source,fn,ip);
 
-	return (unsigned long)ip;
+	return ip;
 #endif /*]*/
 }
 
 #if !defined(_WIN32) /*[*/
-static unsigned long DefaultAddOutput(int source, H3270 *session, void (*fn)(H3270 *session))
+static void * DefaultAddOutput(int source, H3270 *session, void (*fn)(H3270 *session))
 {
 	input_t *ip;
 
@@ -330,11 +330,11 @@ static unsigned long DefaultAddOutput(int source, H3270 *session, void (*fn)(H32
 
 	Trace("%s: fd=%d callback=%p handle=%p",__FUNCTION__,source,fn,ip);
 
-	return (unsigned long)ip;
+	return ip;
 }
 #endif /*]*/
 
-static void DefaultRemoveInput(unsigned long id)
+static void DefaultRemoveInput(void *id)
 {
 	input_t *ip;
 	input_t *prev = (input_t *)NULL;
@@ -404,7 +404,7 @@ static int DefaultProcessEvents(int block)
 		if ((unsigned long)ip->condition & InputReadMask)
 		{
 #if defined(_WIN32)
-			ha[nha++] = (HANDLE)ip->source;
+			ha[nha++] = (HANDLE) ip->source;
 #else
 			FD_SET(ip->source, &rfds);
 #endif
@@ -801,7 +801,7 @@ const char * KeysymToString(KeySym k)
 
 /* Timeouts. */
 
-unsigned long AddTimeOut(unsigned long interval_ms, H3270 *session, void (*proc)(H3270 *session))
+void * AddTimeOut(unsigned long interval_ms, H3270 *session, void (*proc)(H3270 *session))
 {
 	CHECK_SESSION_HANDLE(session);
 	if(callbacks->AddTimeOut)
@@ -809,13 +809,13 @@ unsigned long AddTimeOut(unsigned long interval_ms, H3270 *session, void (*proc)
 	return 0;
 }
 
-void RemoveTimeOut(unsigned long timer)
+void RemoveTimeOut(void * timer)
 {
 	if(callbacks->RemoveTimeOut)
 		return callbacks->RemoveTimeOut(timer);
 }
 
-unsigned long AddInput(int source, H3270 *session, void (*fn)(H3270 *session))
+void * AddInput(int source, H3270 *session, void (*fn)(H3270 *session))
 {
 	CHECK_SESSION_HANDLE(session);
 
@@ -826,7 +826,7 @@ unsigned long AddInput(int source, H3270 *session, void (*fn)(H3270 *session))
 	return 0;
 }
 
-unsigned long AddExcept(int source, H3270 *session, void (*fn)(H3270 *session))
+void * AddExcept(int source, H3270 *session, void (*fn)(H3270 *session))
 {
 	CHECK_SESSION_HANDLE(session);
 	if(callbacks->AddExcept)
@@ -835,7 +835,7 @@ unsigned long AddExcept(int source, H3270 *session, void (*fn)(H3270 *session))
 }
 
 #if !defined(_WIN32) /*[*/
-unsigned long AddOutput(int source, H3270 *session, void (*fn)(H3270 *session))
+void * AddOutput(int source, H3270 *session, void (*fn)(H3270 *session))
 {
 	CHECK_SESSION_HANDLE(session);
 	if(callbacks->AddOutput)
@@ -844,7 +844,7 @@ unsigned long AddOutput(int source, H3270 *session, void (*fn)(H3270 *session))
 }
 #endif /*]*/
 
-void RemoveInput(unsigned long id)
+void RemoveInput(void * id)
 {
 	if(callbacks->RemoveInput)
 		callbacks->RemoveInput(id);
