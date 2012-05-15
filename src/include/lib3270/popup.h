@@ -33,8 +33,17 @@
 
 	#define LIB3270_POPUP_INCLUDED 1
 
+#ifdef __cplusplus
+	extern "C" {
+#endif
+
 	LIB3270_EXPORT void lib3270_set_popup_handler(int (*popup_handler)(H3270 *, void *, LIB3270_NOTIFY, const char *, const char *, const char *, va_list));
 	LIB3270_EXPORT void lib3270_popup_dialog(H3270 *session, LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, ...);
+
+
+#ifdef __cplusplus
+	}
+#endif
 
 #endif // LIB3270_POPUP_INCLUDED
 

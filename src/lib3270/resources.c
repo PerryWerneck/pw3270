@@ -172,7 +172,7 @@ const char * get_fresource(const char *fmt, ...)
 	const char *r;
 
 	va_start(args, fmt);
-	name = xs_vsprintf(fmt, args);
+	name = lib3270_vsprintf(fmt, args);
 	va_end(args);
 	r = get_resource(name);
 	lib3270_free(name);

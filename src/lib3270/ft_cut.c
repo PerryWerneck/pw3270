@@ -532,7 +532,7 @@ static void cut_abort(unsigned short reason, const char *fmt, ...)
 
 	/* Save the error message. */
 	va_start(args, fmt);
-	saved_errmsg = xs_vsprintf(fmt, args);
+	saved_errmsg = lib3270_vsprintf(fmt, args);
 	va_end(args);
 
 	/* Send the abort sequence. */

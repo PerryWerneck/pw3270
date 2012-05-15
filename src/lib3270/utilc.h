@@ -35,8 +35,6 @@ LIB3270_INTERNAL char *strip_whitespace(const char *s);
 LIB3270_INTERNAL char *xs_buffer(const char *fmt, ...) printflike(1, 2);
 LIB3270_INTERNAL void xs_error(const char *fmt, ...) printflike(1, 2);
 LIB3270_INTERNAL void xs_warning(const char *fmt, ...) printflike(1, 2);
-LIB3270_INTERNAL char * xs_vsprintf(const char *fmt, va_list args);
-
 
 LIB3270_INTERNAL void * AddInput(int, H3270 *session, void (*fn)(H3270 *session));
 LIB3270_INTERNAL void * AddExcept(int, H3270 *session, void (*fn)(H3270 *session));

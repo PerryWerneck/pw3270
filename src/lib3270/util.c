@@ -166,7 +166,7 @@ const char * win32_strerror(int e)
 /*
  * Cheesy internal version of sprintf that allocates its own memory.
  */
-char * xs_vsprintf(const char *fmt, va_list args)
+char * lib3270_vsprintf(const char *fmt, va_list args)
 {
 	char *r;
 #if defined(HAVE_VASPRINTF) /*[*/
@@ -198,7 +198,7 @@ xs_buffer(const char *fmt, ...)
 	char *r;
 
 	va_start(args, fmt);
-	r = xs_vsprintf(fmt, args);
+	r = lib3270_vsprintf(fmt, args);
 	va_end(args);
 	return r;
 }
@@ -211,7 +211,7 @@ xs_warning(const char *fmt, ...)
 	char *r;
 
 	va_start(args, fmt);
-	r = xs_vsprintf(fmt, args);
+	r = lib3270_vsprintf(fmt, args);
 	va_end(args);
 	Warning(NULL,r);
 	lib3270_free(r);
@@ -224,7 +224,7 @@ xs_error(const char *fmt, ...)
 	char *r;
 
 	va_start(args, fmt);
-	r = xs_vsprintf(fmt, args);
+	r = lib3270_vsprintf(fmt, args);
 	va_end(args);
 	Error(NULL,r);
 	lib3270_free(r);

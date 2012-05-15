@@ -32,6 +32,7 @@
 #ifndef LIB3270_H_INCLUDED
 
 	#define LIB3270_H_INCLUDED 1
+	#include <stdarg.h>
 
 	/**
 	 * Character attributes
@@ -798,6 +799,7 @@
 	LIB3270_EXPORT const char * lib3270_get_version(void);
 	LIB3270_EXPORT const char * lib3270_get_revision(void);
 
+	LIB3270_EXPORT char * lib3270_vsprintf(const char *fmt, va_list args);
 
 
 #ifdef __cplusplus

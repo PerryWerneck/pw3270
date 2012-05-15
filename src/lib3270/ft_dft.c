@@ -497,7 +497,7 @@ static void dft_abort(unsigned short code, const char *fmt, ...)
 		lib3270_free(abort_string);
 
 	va_start(args, fmt);
-	abort_string = xs_vsprintf(fmt, args);
+	abort_string = lib3270_vsprintf(fmt, args);
 	va_end(args);
 
 	trace_ds("> WriteStructuredField FileTransferData Error\n");
