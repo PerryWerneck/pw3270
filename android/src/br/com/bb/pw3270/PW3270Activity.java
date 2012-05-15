@@ -7,17 +7,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.view.View;
 import android.content.res.*;
+import android.app.AlertDialog;
+import android.app.Dialog;
 
 public class PW3270Activity extends Activity implements View.OnClickListener
 {
-	
 	private class terminal extends lib3270
 	{
 		TextView view;
+		Activity Main;
+	
 		
-		terminal(TextView view)
+		terminal(TextView view, Activity Main)
 		{
 			this.view = view;
+			this.Main = Main;
 			
 		}
 
@@ -28,7 +32,25 @@ public class PW3270Activity extends Activity implements View.OnClickListener
 
 		public void popupMessage(int type, String title, String text, String info)
 		{
-			this.view.setText(title + "\n" + text + "\n" + info);
+			AlertDialog d = new AlertDialog.Builder(Main).create();
+			d.setTitle(title);
+			d.setMessage(text);
+
+	
+			/*
+			d.setButton("OK", new DialogInterface.OnClickListener() 
+			{
+			      public void onClick(DialogInterface dialog, int which) 
+			      {
+			 
+			       //here you can add functions
+			 
+			      }
+			});
+			*/			
+			
+			d.show();
+//			this.view.setText(title + "\n" + text + "\n" + info);
 		}
 
 		
@@ -54,7 +76,8 @@ public class PW3270Activity extends Activity implements View.OnClickListener
         Button btn = (Button) findViewById(R.id.connect);
         btn.setOnClickListener((View.OnClickListener) this);        
         
-        host = new terminal((TextView) findViewById(R.id.text));
+        host = new terminal((TextView) findViewById(R.id.text),this);
+        
         
     }
 
