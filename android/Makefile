@@ -27,14 +27,40 @@ JAVAH=javah
 NDKBUILD=/opt/android-ndk-r8/ndk-build
 CLASSPATH=br/com/bb/pw3270
 
-Debug: jni/lib3270jni.h
+MKDIR=/bin/mkdir -p
+CONVERT=rsvg-convert
+
+RESOLUTION=xhdpi mdpi ldpi hdpi
+
+Debug: jni/lib3270jni.h $(foreach DIR, $(RESOLUTION), res/drawable-$(DIR)/ic_launcher.png)
 	@$(NDKBUILD)
 
 clean:
 	@rm -fr obj
 	@rm -f jni/lib3270jni.h
+	@rm -f $(foreach DIR, $(RESOLUTION), res/drawable-$(DIR)/ic_launcher.png)
+
+res/drawable-xhdpi/ic_launcher.png: ../src/pw3270/pixmaps/pw3270.svg
+	@echo "  GEN  `basename $@`"
+	@$(MKDIR) `dirname $@`
+	@$(CONVERT) --format=png --width=96 --height=96 --output=$@ $<
+
+res/drawable-mdpi/ic_launcher.png: ../src/pw3270/pixmaps/pw3270.svg
+	@echo "  GEN  `basename $@`"
+	@$(MKDIR) `dirname $@`
+	@$(CONVERT) --format=png --width=48 --height=48 --output=$@ $<
+
+res/drawable-ldpi/ic_launcher.png: ../src/pw3270/pixmaps/pw3270.svg
+	@echo "  GEN  `basename $@`"
+	@$(MKDIR) `dirname $@`
+	@$(CONVERT) --format=png --width=36 --height=36 --output=$@ $<
+
+res/drawable-hdpi/ic_launcher.png: ../src/pw3270/pixmaps/pw3270.svg
+	@echo "  GEN  `basename $@`"
+	@$(MKDIR) `dirname $@`
+	@$(CONVERT) --format=png --width=72 --height=72 --output=$@ $<
 
 jni/lib3270jni.h: bin/classes/$(CLASSPATH)/lib3270.class
-	@echo $@ ...
+	@echo "  GEN  `basename $@`"
 	@$(JAVAH) -o $@ -classpath bin/classes $(subst /,.,$(CLASSPATH)).lib3270
 
