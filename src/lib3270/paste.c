@@ -45,7 +45,7 @@
 #endif
 
 #include <fcntl.h>
-#include <malloc.h>
+// #include <malloc.h>
 
 #include "3270ds.h"
 #include "appres.h"
@@ -254,7 +254,7 @@ LIB3270_EXPORT int lib3270_paste(H3270 *h, const unsigned char *str)
 
 	if(h->paste_buffer)
 	{
-		free(h->paste_buffer);
+		lib3270_free(h->paste_buffer);
 		h->paste_buffer = NULL;
 	}
 
@@ -296,6 +296,6 @@ LIB3270_ACTION(pastenext)
 
 	rc = lib3270_paste(hSession,(unsigned char *) ptr);
 
-	free(ptr);
+	lib3270_free(ptr);
 	return rc;
 }

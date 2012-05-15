@@ -47,6 +47,7 @@
 		<Unit filename="pw3270.spec.in" />
 		<Unit filename="src/android/jni/main.cpp" />
 		<Unit filename="src/android/jni/misc.cpp" />
+		<Unit filename="src/android/src/br/com/bb/pw3270/lib3270.java" />
 		<Unit filename="src/include/lib3270.h" />
 		<Unit filename="src/include/lib3270/action_table.h" />
 		<Unit filename="src/include/lib3270/actions.h" />

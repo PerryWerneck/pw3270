@@ -29,7 +29,7 @@
 
  #include <gtk/gtk.h>
  #include <pw3270.h>
- #include <malloc.h>
+// #include <malloc.h>
  #include "v3270.h"
  #include "private.h"
  #include <lib3270/selection.h>
@@ -92,7 +92,7 @@ gchar * v3270_get_text(GtkWidget *widget, int offset, int len)
 
 	text = g_convert(str, -1, "UTF-8", lib3270_get_charset(terminal->host), NULL, NULL, NULL);
 
-	free(str);
+	lib3270_free(str);
 	return text;
 }
 
@@ -110,7 +110,7 @@ static gchar * v3270_get_selected(v3270 *widget)
 	if(text)
 	{
 		gchar *str = g_strdup(text);
-		free(text);
+		lib3270_free(text);
 		return str;
 	}
 	return NULL;
@@ -255,7 +255,7 @@ const gchar * v3270_copy_append(GtkWidget *widget)
 
 	text = g_convert(str, -1, "UTF-8", lib3270_get_charset(terminal->host), NULL, NULL, NULL);
 
-	free(str);
+	lib3270_free(str);
 
 	clip = g_strconcat(terminal->clipboard,"\n",text,NULL);
 
@@ -462,7 +462,7 @@ gchar * v3270_get_region(GtkWidget *widget, gint start_pos, gint end_pos, gboole
 
 	utftext = g_convert(str, -1, "UTF-8", lib3270_get_charset(GTK_V3270(widget)->host), NULL, NULL, NULL);
 
-	free(str);
+	lib3270_free(str);
 
 	return utftext;
 }

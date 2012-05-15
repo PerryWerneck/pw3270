@@ -563,7 +563,7 @@ parse_xrm(const char *arg, const char *where)
 			type = resources[i].type;
 #if defined(C3270) /*[*/
 			if (address == NULL) {
-				add_buf = Malloc(strlen(s) + 1);
+				add_buf = lib3270_malloc(strlen(s) + 1);
 				address = add_buf;
 			}
 #endif /*]*/
@@ -619,7 +619,7 @@ parse_xrm(const char *arg, const char *where)
 		}
 		break;
 	case XRM_STRING:
-		t = Malloc(strlen(s) + 1);
+		t = lib3270_malloc(strlen(s) + 1);
 		*(char **)address = t;
 		if (*s == '"') {
 			Boolean quoted = False;
@@ -675,7 +675,7 @@ parse_xrm(const char *arg, const char *where)
 	if (arbitrary) {
 		char *rsname;
 
-		rsname = Malloc(rnlen + 1);
+		rsname = lib3270_malloc(rnlen + 1);
 		(void) strncpy(rsname, arg + match_len, rnlen);
 		rsname[rnlen] = '\0';
 		add_resource(rsname, hide);
@@ -702,7 +702,7 @@ read_resource_file(const char *filename, Boolean fatal)
 	}
 
 	/* Merge in what's in the file into the resource database. */
-	where = Malloc(strlen(filename) + 64);
+	where = lib3270_malloc(strlen(filename) + 64);
 
 	ilen = 0;
 	while (fgets(buf + ilen, sizeof(buf) - ilen, f) != CN || ilen) {
@@ -783,7 +783,7 @@ read_resource_file(const char *filename, Boolean fatal)
 		/* Get ready for the next iteration. */
 		ilen = 0;
 	}
-	Free(where);
+	lib3270_free(where);
 	return 0;
 }
 

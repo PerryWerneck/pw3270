@@ -61,7 +61,7 @@ void lib3270_session_free(H3270 *h)
 		while(h->st_callbacks[f])
 		{
 			struct lib3270_state_callback *next = h->st_callbacks[f]->next;
-			Free(h->st_callbacks[f]);
+			lib3270_free(h->st_callbacks[f]);
 			h->st_callbacks[f] = next;
 		}
 	}

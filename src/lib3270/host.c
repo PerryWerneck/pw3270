@@ -52,7 +52,7 @@
 #include "xioc.h"
 
 #include <errno.h>
-#include <malloc.h>
+// #include <malloc.h>
 
 #define RECONNECT_MS		2000	/* 2 sec before reconnecting to host */
 #define RECONNECT_ERR_MS	5000	/* 5 sec before reconnecting to host */
@@ -124,10 +124,10 @@ hostfile_init(void)
 				    ResHostsFile);
 				continue;
 			}
-			h = (struct host *)Malloc(sizeof(*h));
+			h = (struct host *)lib3270_malloc(sizeof(*h));
 			if (!split_hier(NewString(name), &h->name,
 						&h->parents)) {
-				Free(h);
+				lib3270_free(h);
 				continue;
 			}
 			h->hostname = NewString(hostname);
@@ -160,7 +160,7 @@ hostfile_init(void)
 		popup_an_errno(errno, "Cannot open " ResHostsFile " '%s'",
 				appres.hostsfile);
 	}
-	Free(hostfile_name);
+	lib3270_free(hostfile_name);
 
 // #if defined(X3270_DISPLAY)
 // 	save_recent(CN);
@@ -465,7 +465,7 @@ split_host(H3270 *hSession, char *s, char *ansi, char *std_ds, char *passthru,
 	goto split_success;
 
 split_fail:
-	Free(r);
+	lib3270_free(r);
 	r = CN;
 
 split_success:
@@ -803,7 +803,7 @@ LIB3270_EXPORT const char * lib3270_set_host(H3270 *h, const char *n)
 		trace("new hostname is \"%s\"",new_hostname);
 
 		if(h->full_current_host)
-			free(h->full_current_host);
+			lib3270_free(h->full_current_host);
 
 		h->full_current_host = new_hostname;
 

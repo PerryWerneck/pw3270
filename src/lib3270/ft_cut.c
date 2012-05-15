@@ -36,7 +36,7 @@
  */
 
 #include <errno.h>
-#include <malloc.h>
+// #include <malloc.h>
 
 #include "globals.h"
 
@@ -340,7 +340,7 @@ cut_control_code(void)
 		}
 		else
 		{
-			bp = buf = Malloc(81);
+			bp = buf = lib3270_malloc(81);
 
 			for (i = 0; i < 80; i++)
 				*bp++ = ebc2asc[h3270.ea_buf[O_CC_MESSAGE + i].cc];
@@ -360,7 +360,7 @@ cut_control_code(void)
 				strcpy(buf, N_( "Transfer cancelled by host" ) );
 		}
 		ft_complete(NULL,buf);
-		Free(buf);
+		lib3270_free(buf);
 		break;
 
 	default:
@@ -528,7 +528,7 @@ static void cut_abort(unsigned short reason, const char *fmt, ...)
 	va_list args;
 
 	if(saved_errmsg)
-		free(saved_errmsg);
+		lib3270_free(saved_errmsg);
 
 	/* Save the error message. */
 	va_start(args, fmt);

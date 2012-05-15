@@ -318,7 +318,7 @@ LIB3270_INTERNAL struct trans_list *trans_list;
 
 #define CN	((char *) NULL)
 #define PN	((XtPointer) NULL)
-#define Replace(var, value) { Free(var); var = (value); }
+#define Replace(var, value) { lib3270_free(var); var = (value); }
 
 /* Configuration change masks. */
 #define NO_CHANGE	0x0000	/* no change */

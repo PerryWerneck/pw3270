@@ -96,6 +96,7 @@
 		int						  inlcr						: 1;
 		int						  onlcr						: 1;
 		int						  bsd_tm					: 1;
+		int 					  syncing					: 1;
 
 		char					* oversize;
 
@@ -174,6 +175,7 @@
 		// xio
 		void 					* ns_read_id;
 		void 					* ns_exception_id;
+
 		char					  reading;
 		char					  excepting;
 

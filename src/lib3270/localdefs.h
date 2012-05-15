@@ -68,8 +68,8 @@ typedef struct _XtActionsRec{
 // void * Calloc(size_t, size_t);
 // void * Realloc(void *, size_t);
 
-#define Malloc(x) lib3270_malloc(x)
-#define Free(x)	lib3270_free(x)
+// #define Malloc(x) lib3270_malloc(x)
+// #define Free(x)	lib3270_free(x)
 #define Calloc(e,n)	lib3270_calloc(e,n,NULL)
 #define Realloc(x,n) lib3270_realloc(x,n)
 

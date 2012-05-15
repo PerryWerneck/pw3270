@@ -227,7 +227,7 @@ enum cs_result charset_init(H3270 *session, const char *csname)
 		// Grab the non-Euro definition.
 		basename = xs_buffer("%.*s", (int) (strlen(csname) - ES_SIZE), csname);
 		cs = get_charset_def(basename);
-		Free(basename);
+		lib3270_free(basename);
 	}
 */
 	if (!ccs)
@@ -251,8 +251,8 @@ enum cs_result charset_init(H3270 *session, const char *csname)
 	rc = resource_charset(csname, ccs, cftcs);
 
 	/* Free them. */
-	Free(ccs);
-	Free(cftcs);
+	lib3270_free(ccs);
+	lib3270_free(cftcs);
 
 #if defined(DEBUG_CHARSET) /*[*/
 	if (rc == CS_OKAY)
@@ -340,7 +340,7 @@ static void set_cgcsgids(const char *spec)
 			}
 			n_ids++;
 		}
-		Free(spec_copy);
+		lib3270_free(spec_copy);
 		if (n_ids > 0)
 			return;
 	}
@@ -681,7 +681,7 @@ static enum cs_result remap_chars(const char *csname, char *spec, remap_scope sc
 			remap_one(ebc, iso, scope, one_way);
 		}
 	}
-	Free(spec);
+	lib3270_free(spec);
 	return rc;
 }
 

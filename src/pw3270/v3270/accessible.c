@@ -37,7 +37,7 @@
  #include <glib/gi18n.h>
 
  #include <pw3270.h>
- #include <malloc.h>
+//  #include <malloc.h>
  #include "v3270.h"
  #include "private.h"
  #include "accessible.h"
@@ -393,7 +393,7 @@ static gchar * v3270_accessible_get_text_at_offset(AtkText *atk_text, gint offse
 			g_error_free(error);
 		}
 
-		free(text);
+		lib3270_free(text);
 		return utfchar;
 	}
 
@@ -432,7 +432,7 @@ static gchar * v3270_accessible_get_text(AtkText *atk_text, gint start_pos, gint
 			g_error_free(error);
 		}
 
-		free(text);
+		lib3270_free(text);
 
 //		trace("%s:\n%s\n",__FUNCTION__,utftext);
 

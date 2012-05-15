@@ -163,10 +163,10 @@ action_internal(XtActionProc action, enum iaction cause, const char *parm1,
 	// Free the parm copies.
 	switch (count) {
 	    case 2:
-		Free(parms[1]);
+		lib3270_free(parms[1]);
 		// fall through...
 	    case 1:
-		Free(parms[0]);
+		lib3270_free(parms[0]);
 		break;
 	    default:
 		break;

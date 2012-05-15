@@ -55,7 +55,7 @@
 #include "utilc.h"
 
 #include <errno.h>
-#include <malloc.h>
+// #include <malloc.h>
 
 extern unsigned char aid;
 
@@ -243,7 +243,7 @@ dft_data_insert(struct data_buffer *data_bufr)
 		unsigned char *dollarp;
 
 		/* Get storage to copy the message. */
-		msgp = (unsigned char *)Malloc(my_length + 1);
+		msgp = (unsigned char *)lib3270_malloc(my_length + 1);
 
 		/* Copy the message. */
 		memcpy(msgp, data_bufr->data, my_length);
@@ -257,15 +257,15 @@ dft_data_insert(struct data_buffer *data_bufr)
 
 		/* If transfer completed ok, use our msg. */
 		if (memcmp(msgp, END_TRANSFER, strlen(END_TRANSFER)) == 0) {
-			Free(msgp);
+			lib3270_free(msgp);
 			ft_complete(NULL,NULL);
 		} else if (lib3270_get_ft_state(&h3270) == FT_ABORT_SENT && abort_string != CN) {
-			Free(msgp);
+			lib3270_free(msgp);
 			ft_complete(NULL,abort_string);
 			Replace(abort_string, CN);
 		} else {
 			ft_complete(NULL,(char *)msgp);
-			Free(msgp);
+			lib3270_free(msgp);
 		}
 	} else if (my_length > 0) {
 		/* Write the data out to the file. */
@@ -459,7 +459,7 @@ dft_get_request(void)
 	dft_savebuf_len = obptr - obuf;
 	if (dft_savebuf_len > dft_savebuf_max) {
 		dft_savebuf_max = dft_savebuf_len;
-		Replace(dft_savebuf, (unsigned char *)Malloc(dft_savebuf_max));
+		Replace(dft_savebuf, (unsigned char *)lib3270_malloc(dft_savebuf_max));
 	}
 	(void) memcpy(dft_savebuf, obuf, dft_savebuf_len);
 	aid = AID_SF;
@@ -494,7 +494,7 @@ static void dft_abort(unsigned short code, const char *fmt, ...)
 	va_list args;
 
 	if(abort_string)
-		free(abort_string);
+		lib3270_free(abort_string);
 
 	va_start(args, fmt);
 	abort_string = xs_vsprintf(fmt, args);

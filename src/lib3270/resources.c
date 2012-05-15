@@ -118,7 +118,7 @@ void add_resource(const char *name, const char *value)
 			return;
 		}
 	}
-	d = Malloc(sizeof(struct dresource));
+	d = lib3270_malloc(sizeof(struct dresource));
 	d->next = NULL;
 	d->name = name;
 	d->value = value;
@@ -175,7 +175,7 @@ const char * get_fresource(const char *fmt, ...)
 	name = xs_vsprintf(fmt, args);
 	va_end(args);
 	r = get_resource(name);
-	Free(name);
+	lib3270_free(name);
 	return r;
 }
 

@@ -600,7 +600,7 @@ ansi_reset(int ig1 unused, int ig2 unused)
 	saved_altbuffer = False;
 	scroll_top = 1;
 	scroll_bottom = h3270.rows;
-	Replace(tabs, (unsigned char *)Malloc((h3270.cols+7)/8));
+	Replace(tabs, (unsigned char *)lib3270_malloc((h3270.cols+7)/8));
 	for (i = 0; i < (h3270.cols+7)/8; i++)
 		tabs[i] = 0x01;
 	held_wrap = False;

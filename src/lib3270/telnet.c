@@ -162,10 +162,7 @@ static unsigned char *sbbuf = (unsigned char *)NULL;
 			/* telnet sub-option buffer */
 static unsigned char *sbptr;
 static unsigned char telnet_state;
-static int      syncing;
-#if !defined(_WIN32) /*[*/
-static unsigned long output_id = 0L;
-#endif /*]*/
+// static int      syncing;
 static char     ttype_tmpval[13];
 
 #if defined(X3270_TN3270E) /*[*/
@@ -514,7 +511,7 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 #endif
 
 	if (netrbuf == (unsigned char *)NULL)
-		netrbuf = (unsigned char *)Malloc(BUFSZ);
+		netrbuf = (unsigned char *)lib3270_malloc(BUFSZ);
 
 #if defined(X3270_ANSI) /*[*/
 	if (!t_valid)
@@ -690,7 +687,7 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 								msg,
 								"%s",strerror(rc) );
 
-		Free(msg);
+		lib3270_free(msg);
 		close_fail;
 
 	}
@@ -775,8 +772,7 @@ setup_lus(void)
 	 * Allocate enough memory to construct an argv[] array for
 	 * the LUs.
 	 */
-	Replace(lus,
-	    (char **)Malloc((n_lus+1) * sizeof(char *) + strlen(h3270.luname) + 1));
+	Replace(lus,(char **)lib3270_malloc((n_lus+1) * sizeof(char *) + strlen(h3270.luname) + 1));
 
 	/* Copy each LU into the array. */
 	lu = (char *)(lus + n_lus + 1);
@@ -884,7 +880,7 @@ static void net_connected(H3270 *session)
 	ns_rrcvd = 0;
 	ns_bsent = 0;
 	ns_rsent = 0;
-	syncing = 0;
+	session->syncing = 0;
 	tn3270e_negotiated = 0;
 	tn3270e_submode = E_NONE;
 	tn3270e_bound = 0;
@@ -898,10 +894,10 @@ static void net_connected(H3270 *session)
 	{
 		char *buf;
 
-		buf = Malloc(strlen(session->hostname) + 32);
+		buf = lib3270_malloc(strlen(session->hostname) + 32);
 		(void) sprintf(buf, "%s %d\r\n", session->hostname, session->current_port);
 		(void) send(session->sock, buf, strlen(buf), 0);
-		Free(buf);
+		lib3270_free(buf);
 	}
 }
 
@@ -956,14 +952,17 @@ void net_disconnect(H3270 *session)
 	session->connected_lu = CN;
 	status_lu(&h3270,CN);
 
-#if !defined(_WIN32) /*[*/
-	/* We have no more interest in output buffer space. */
-	if (output_id != 0L)
+/*
+#if !defined(_WIN32)
+	// We have no more interest in output buffer space.
+	if(session->output_id != NULL)
 	{
-		RemoveInput(output_id);
-		output_id = 0L;
+		RemoveInput(session->output_id);
+		session->output_id = NULL;
 	}
-#endif /*]*/
+#endif
+*/
+
 }
 
 
@@ -1232,7 +1231,8 @@ telnet_fsm(unsigned char c)
 				ansi_data = 4 + sl;
 			}
 			trace_dsn("%s",see_chr);
-			if (!syncing) {
+			if (!h3270.syncing)
+			{
 				if (linemode && h3270.onlcr && c == '\n')
 					ansi_process((unsigned int) '\r');
 				ansi_process((unsigned int) c);
@@ -1295,14 +1295,14 @@ telnet_fsm(unsigned char c)
 		    case SB:
 			telnet_state = TNS_SB;
 			if (sbbuf == (unsigned char *)NULL)
-				sbbuf = (unsigned char *)Malloc(1024);
+				sbbuf = (unsigned char *)lib3270_malloc(1024);
 			sbptr = sbbuf;
 			break;
 		    case DM:
 			trace_dsn("\n");
-			if (syncing)
+			if (h3270.syncing)
 			{
-				syncing = 0;
+				h3270.syncing = 0;
 				x_except_on(&h3270);
 			}
 			telnet_state = TNS_DATA;
@@ -1480,7 +1480,7 @@ telnet_fsm(unsigned char c)
 				status_lu(&h3270,h3270.connected_lu);
 
 				tb_len = 4 + tt_len + 2;
-				tt_out = Malloc(tb_len + 1);
+				tt_out = lib3270_malloc(tb_len + 1);
 				(void) sprintf(tt_out, "%c%c%c%c%s%s%s%c%c",
 				    IAC, SB, TELOPT_TTYPE, TELQUAL_IS,
 				    h3270.termtype,
@@ -1494,7 +1494,7 @@ telnet_fsm(unsigned char c)
 				    telquals[TELQUAL_IS],
 				    tt_len, tt_out + 4,
 				    cmd(SE));
-				Free(tt_out);
+				lib3270_free(tt_out);
 
 				/* Advance to the next LU name. */
 				next_lu();
@@ -1536,7 +1536,7 @@ tn3270e_request(void)
 		tt_len += strlen(try_lu) + 1;
 
 	tb_len = 5 + tt_len + 2;
-	tt_out = Malloc(tb_len + 1);
+	tt_out = lib3270_malloc(tb_len + 1);
 	t = tt_out;
 	t += sprintf(tt_out, "%c%c%c%c%c%s",
 	    IAC, SB, TELOPT_TN3270E, TN3270E_OP_DEVICE_TYPE,
@@ -1559,7 +1559,7 @@ tn3270e_request(void)
 	    (try_lu != CN && *try_lu) ? try_lu : "",
 	    cmd(SE));
 
-	Free(tt_out);
+	lib3270_free(tt_out);
 }
 
 /*
@@ -1884,7 +1884,7 @@ process_bind(unsigned char *buf, int buflen)
 static int
 process_eor(void)
 {
-	if (syncing || !(ibptr - ibuf))
+	if (h3270.syncing || !(ibptr - ibuf))
 		return(0);
 
 #if defined(X3270_TN3270E) /*[*/
@@ -1968,15 +1968,17 @@ process_eor(void)
  */
 void net_exception(H3270 *session)
 {
+	CHECK_SESSION_HANDLE(session);
+
 	trace_dsn("RCVD urgent data indication\n");
-	if (!syncing)
+	if (!session->syncing)
 	{
-		syncing = 1;
+		session->syncing = 1;
 
 		if(session->excepting)
 		{
 			RemoveInput(session->ns_exception_id);
-			session->excepting = False;
+			session->excepting = 0;
 		}
 //		x_except_off(session);
 	}
@@ -2105,7 +2107,7 @@ net_hexansi_out(unsigned char *buf, int len)
 #endif /*]*/
 
 	/* Expand it. */
-	tbuf = xbuf = (unsigned char *)Malloc(2*len);
+	tbuf = xbuf = (unsigned char *)lib3270_malloc(2*len);
 	while (len) {
 		unsigned char c = *buf++;
 
@@ -2119,7 +2121,7 @@ net_hexansi_out(unsigned char *buf, int len)
 
 	/* Send it to the host. */
 	net_rawout(xbuf, tbuf - xbuf);
-	Free(xbuf);
+	lib3270_free(xbuf);
 }
 
 /*
@@ -2212,7 +2214,7 @@ static void
 cooked_init(void)
 {
 	if (lbuf == (unsigned char *)NULL)
-		lbuf = (unsigned char *)Malloc(BUFSZ);
+		lbuf = (unsigned char *)lib3270_malloc(BUFSZ);
 	lbptr = lbuf;
 	lnext = 0;
 	backslashed = 0;
@@ -2486,7 +2488,7 @@ check_in3270(void)
 
 		/* Allocate the initial 3270 input buffer. */
 		if (new_cstate >= CONNECTED_INITIAL && !ibuf_size) {
-			ibuf = (unsigned char *)Malloc(BUFSIZ);
+			ibuf = (unsigned char *)lib3270_malloc(BUFSIZ);
 			ibuf_size = BUFSIZ;
 			ibptr = ibuf;
 		}
@@ -2726,7 +2728,7 @@ net_output(void)
 		need_resize++;
 	}
 	if (need_resize) {
-		Replace(xobuf, (unsigned char *)Malloc(xobuf_len));
+		Replace(xobuf, (unsigned char *)lib3270_malloc(xobuf_len));
 	}
 
 	/* Copy and expand IACs. */

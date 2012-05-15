@@ -282,7 +282,7 @@ select_rpq_terms(void)
 	 * If there are override values, I'll get those from the ORIGINAL
 	 * string so upper/lower case is preserved as necessary.
 	 */
-	uplist = (char *) malloc(strlen(x3270rpq)+1);
+	uplist = (char *) lib3270_malloc(strlen(x3270rpq)+1);
 	assert(uplist != NULL);
 	p1 = uplist;
 	p2 = x3270rpq;
@@ -594,7 +594,7 @@ get_rpq_address(unsigned char *buf, const int maxlen)
 #endif /*]*/
 
 		p1 = x3270rpq + kw->oride;
-		rpqtext = (char *) malloc(strlen(p1) + 1);
+		rpqtext = (char *) lib3270_malloc(strlen(p1) + 1);
 		for (p2=rpqtext;*p1; p2++) {
 			if (*p1 == ':')
 				break;
@@ -729,7 +729,7 @@ static void rpq_warning(const char *fmt, ...)
 	{
 		va_start(a, fmt);
 		if (rpq_warnbuf == CN)
-			rpq_warnbuf = Malloc(RPQ_WARNBUF_SIZE);
+			rpq_warnbuf = lib3270_malloc(RPQ_WARNBUF_SIZE);
 
 		if (rpq_wbcnt < RPQ_WARNBUF_SIZE)
 		{

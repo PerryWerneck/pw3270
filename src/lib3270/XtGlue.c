@@ -38,7 +38,7 @@
 
 #include "globals.h"
 #include "api.h"
-#include <malloc.h>
+// #include <malloc.h>
 
 #if defined(_WIN32)
 	#include "appres.h"
@@ -179,8 +179,7 @@ static void * DefaultAddTimeOut(unsigned long interval_ms, H3270 *session, void 
 
 	Trace("%s session=%p proc=%p",__FUNCTION__,session,proc);
 
-	t_new = (timeout_t *)Malloc(sizeof(timeout_t));
-	memset(t_new,0,sizeof(timeout_t));
+	t_new = (timeout_t *) lib3270_malloc(sizeof(timeout_t));
 
 	t_new->proc = proc;
 	t_new->session = session;
@@ -244,7 +243,7 @@ static void DefaultRemoveTimeOut(void * timer)
 				prev->next = t->next;
 			else
 				timeouts = t->next;
-			Free(t);
+			lib3270_free(t);
 			return;
 		}
 		prev = t;
@@ -268,8 +267,7 @@ static void * DefaultAddInput(int source, H3270 *session, void (*fn)(H3270 *sess
 
 	Trace("%s session=%p proc=%p",__FUNCTION__,session,fn);
 
-	ip = (input_t *) Malloc(sizeof(input_t));
-	memset(ip,0,sizeof(input_t));
+	ip = (input_t *) lib3270_malloc(sizeof(input_t));
 
 	ip->source = source;
 	ip->condition = InputReadMask;
@@ -293,8 +291,7 @@ static void * DefaultAddExcept(int source, H3270 *session, void (*fn)(H3270 *ses
 
 	Trace("%s session=%p proc=%p",__FUNCTION__,session,fn);
 
-	ip = (input_t *)Malloc(sizeof(input_t));
-	memset(ip,0,sizeof(input_t));
+	ip = (input_t *) lib3270_malloc(sizeof(input_t));
 
 	ip->source = source;
 	ip->condition = InputExceptMask;
@@ -317,7 +314,7 @@ static void * DefaultAddOutput(int source, H3270 *session, void (*fn)(H3270 *ses
 
 	Trace("%s session=%p proc=%p",__FUNCTION__,session,fn);
 
-	ip = (input_t *)Malloc(sizeof(input_t));
+	ip = (input_t *)lib3270_malloc(sizeof(input_t));
 	memset(ip,0,sizeof(input_t));
 
 	ip->source = source;
@@ -356,7 +353,7 @@ static void DefaultRemoveInput(void *id)
 	else
 		inputs = ip->next;
 
-	Free(ip);
+	lib3270_free(ip);
 	inputs_changed = True;
 }
 
@@ -545,7 +542,7 @@ static int DefaultProcessEvents(int block)
 				t->in_play = True;
 				(*t->proc)(t->session);
 				processed_any = True;
-				Free(t);
+				lib3270_free(t);
 			} else
 				break;
 		}

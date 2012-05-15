@@ -54,6 +54,10 @@
 	#include <pwd.h>
 #endif // _WIN32
 
+#ifdef HAVE_MALLOC_H
+	#include <malloc.h>
+#endif
+
 #ifndef ANDROID
 	#include <stdlib.h>
 #endif // !ANDROID
@@ -177,7 +181,7 @@ char * xs_vsprintf(const char *fmt, va_list args)
 	nc = vsprintf(buf, fmt, args);
 	if (nc > sizeof(buf))
 		Error(NULL,"Internal buffer overflow");
-	r = Malloc(nc + 1);
+	r = lib3270_malloc(nc + 1);
 	return strcpy(r, buf);
 #endif /*]*/
 }
@@ -210,7 +214,7 @@ xs_warning(const char *fmt, ...)
 	r = xs_vsprintf(fmt, args);
 	va_end(args);
 	Warning(NULL,r);
-	Free(r);
+	lib3270_free(r);
 }
 
 void
@@ -223,7 +227,7 @@ xs_error(const char *fmt, ...)
 	r = xs_vsprintf(fmt, args);
 	va_end(args);
 	Error(NULL,r);
-	Free(r);
+	lib3270_free(r);
 }
 
 /* Prettyprinter for strings with unprintable data. */
@@ -406,11 +410,11 @@ split_dbcs_resource(const char *value, char sep, char **part1, char **part2)
 			if (f_end == f_start) {
 				if (c == sep) {
 					if (*part1) {
-						Free(*part1);
+						lib3270_free(*part1);
 						*part1 = NULL;
 					}
 					if (*part2) {
-						Free(*part2);
+						lib3270_free(*part2);
 						*part2 = NULL;
 					}
 					return -1;
@@ -427,7 +431,7 @@ split_dbcs_resource(const char *value, char sep, char **part1, char **part2)
 			default:
 				return 3;
 			}
-			*rp = Malloc(f_end - f_start + 1);
+			*rp = lib3270_malloc(f_end - f_start + 1);
 			strncpy(*rp, f_start, f_end - f_start);
 			(*rp)[f_end - f_start] = '\0';
 			f_end = CN;
@@ -539,7 +543,7 @@ var_subst(const char *s)
 		return NewString(s);
 
 	o_len = strlen(s) + 1;
-	ob = Malloc(o_len);
+	ob = lib3270_malloc(o_len);
 	o = ob;
 #	define LBR	'{'
 #	define RBR	'}'
@@ -604,7 +608,7 @@ var_subst(const char *s)
 					state = VS_BASE;
 					continue;	/* rescan */
 				}
-				vn = Malloc(vn_len + 1);
+				vn = lib3270_malloc(vn_len + 1);
 				(void) strncpy(vn, vn_start, vn_len);
 				vn[vn_len] = '\0';
 
@@ -625,7 +629,7 @@ var_subst(const char *s)
 				}
 #endif // !ANDROID
 
-				Free(vn);
+				lib3270_free(vn);
 				if (state == VS_VNB) {
 					state = VS_BASE;
 					break;
@@ -670,7 +674,7 @@ tilde_subst(const char *s)
 	if (slash) {
 		int len = slash - s;
 
-		mname = Malloc(len + 1);
+		mname = lib3270_malloc(len + 1);
 		(void) strncpy(mname, s, len);
 		mname[len] = '\0';
 		name = mname;
@@ -687,13 +691,13 @@ tilde_subst(const char *s)
 		p = getpwnam(name + 1);
 
 	/* Free any temporary copy. */
-	Free(mname);
+	lib3270_free(mname);
 
 	/* Substitute and return. */
 	if (p == (struct passwd *)NULL)
 		r = NewString(s);
 	else {
-		r = Malloc(strlen(p->pw_dir) + strlen(rest) + 1);
+		r = lib3270_malloc(strlen(p->pw_dir) + strlen(rest) + 1);
 		(void) strcpy(r, p->pw_dir);
 		(void) strcat(r, rest);
 	}
@@ -716,7 +720,7 @@ do_subst(const char *s, Boolean do_vars, Boolean do_tilde)
 			char *u;
 
 			u = tilde_subst(t);
-			Free(t);
+			lib3270_free(t);
 			return u;
 		}
 #endif /*]*/
@@ -871,7 +875,7 @@ rpf(rpf_t *r, char *fmt, ...)
 void
 rpf_free(rpf_t *r)
 {
-	Free(r->buf);
+	lib3270_free(r->buf);
 	r->buf = NULL;
 	r->alloc_len = 0;
 	r->cur_len = 0;

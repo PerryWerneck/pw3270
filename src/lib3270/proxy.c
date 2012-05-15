@@ -56,7 +56,7 @@
 
 #else
 
-	#include <malloc.h>
+//	#include <malloc.h>
 	#include <sys/socket.h>
 	#include <sys/ioctl.h>
 	#include <netinet/in.h>
@@ -306,7 +306,7 @@ parse_host_port(char *s, char **phost, char **pport)
 	    	*pport = NewString(colon + 1);
 
 	/* Copy out the hostname. */
-	*phost = Malloc(hlen + 1);
+	*phost = lib3270_malloc(hlen + 1);
 	strncpy(*phost, hstart, hlen);
 	(*phost)[hlen] = '\0';
 	return 0;
@@ -347,7 +347,7 @@ proxy_passthru(int fd, char *host, unsigned short port)
 {
 	char *buf;
 
-	buf = Malloc(strlen(host) + 32);
+	buf = lib3270_malloc(strlen(host) + 32);
 	(void) sprintf(buf, "%s %u\r\n", host, port);
 
 #if defined(X3270_TRACE) /*[*/
@@ -357,10 +357,10 @@ proxy_passthru(int fd, char *host, unsigned short port)
 
 	if (send(fd, buf, strlen(buf), 0) < 0) {
 	    	popup_a_sockerr(NULL,"Passthru Proxy: send error");
-		Free(buf);
+		lib3270_free(buf);
 		return -1;
 	}
-	Free(buf);
+	lib3270_free(buf);
 
     	return 0;
 }
@@ -377,7 +377,7 @@ proxy_http(int fd, char *host, unsigned short port)
 	char *space;
 
 	/* Send the CONNECT request. */
-	buf = Malloc(64 + strlen(host));
+	buf = lib3270_malloc(64 + strlen(host));
 	colon = strchr(host, ':');
 	sprintf(buf, "CONNECT %s%s%s:%u HTTP/1.1\r\n",
 		(colon? "[": ""),
@@ -392,7 +392,7 @@ proxy_http(int fd, char *host, unsigned short port)
 
 	if (send(fd, buf, strlen(buf), 0) < 0) {
 	    	popup_a_sockerr(NULL,"HTTP Proxy: send error");
-		Free(buf);
+		lib3270_free(buf);
 		return -1;
 	}
 
@@ -409,7 +409,7 @@ proxy_http(int fd, char *host, unsigned short port)
 
 	if (send(fd, buf, strlen(buf), 0) < 0) {
 	    	popup_a_sockerr(NULL,"HTTP Proxy: send error");
-		Free(buf);
+		lib3270_free(buf);
 		return -1;
 	}
 
@@ -421,10 +421,10 @@ proxy_http(int fd, char *host, unsigned short port)
 
 	if (send(fd, buf, strlen(buf), 0) < 0) {
 	    	popup_a_sockerr(NULL,"HTTP Proxy: send error");
-		Free(buf);
+		lib3270_free(buf);
 		return -1;
 	}
-	Free(buf);
+	lib3270_free(buf);
 
 	/*
 	 * Process the reply.
@@ -498,7 +498,7 @@ proxy_telnet(int fd, char *host, unsigned short port)
 {
 	char *buf;
 
-	buf = Malloc(strlen(host) + 32);
+	buf = lib3270_malloc(strlen(host) + 32);
 	(void) sprintf(buf, "connect %s %u\r\n", host, port);
 
 #if defined(X3270_TRACE) /*[*/
@@ -508,10 +508,10 @@ proxy_telnet(int fd, char *host, unsigned short port)
 
 	if (send(fd, buf, strlen(buf), 0) < 0) {
 	    	popup_a_sockerr(NULL,"TELNET Proxy: send error");
-		Free(buf);
+		lib3270_free(buf);
 		return -1;
 	}
-	Free(buf);
+	lib3270_free(buf);
 
     	return 0;
 }
@@ -558,7 +558,7 @@ proxy_socks4(int fd, char *host, unsigned short port, int force_a)
 
 	/* Send the request to the server. */
 	if (use_4a) {
-	    	buf = Malloc(32 + strlen(user) + strlen(host));
+	    	buf = lib3270_malloc(32 + strlen(user) + strlen(host));
 		s = buf;
 		*s++ = 0x04;
 		*s++ = 0x01;
@@ -578,14 +578,14 @@ proxy_socks4(int fd, char *host, unsigned short port, int force_a)
 
 		if (send(fd, buf, s - buf, 0) < 0) {
 		    	popup_a_sockerr(NULL,"SOCKS4 Proxy: send error");
-			Free(buf);
+			lib3270_free(buf);
 			return -1;
 		}
-		Free(buf);
+		lib3270_free(buf);
 	} else {
 	    	unsigned long u;
 
-	    	buf = Malloc(32 + strlen(user));
+	    	buf = lib3270_malloc(32 + strlen(user));
 		s = buf;
 		*s++ = 0x04;
 		*s++ = 0x01;
@@ -603,11 +603,11 @@ proxy_socks4(int fd, char *host, unsigned short port, int force_a)
 #endif /*]*/
 
 		if (send(fd, buf, s - buf, 0) < 0) {
-			Free(buf);
+			lib3270_free(buf);
 		    	popup_a_sockerr(NULL,"SOCKS4 Proxy: send error");
 			return -1;
 		}
-		Free(buf);
+		lib3270_free(buf);
 	}
 
 	/*
@@ -799,7 +799,7 @@ proxy_socks5(int fd, char *host, unsigned short port, int force_d)
 	}
 
 	/* Send the request to the server. */
-	buf = Malloc(32 + strlen(host));
+	buf = lib3270_malloc(32 + strlen(host));
 	s = buf;
 	*s++ = 0x05;		/* protocol version 5 */
 	*s++ = 0x01;		/* CONNECT */
@@ -836,10 +836,10 @@ proxy_socks5(int fd, char *host, unsigned short port, int force_d)
 
 	if (send(fd, buf, s - buf, 0) < 0) {
 		popup_a_sockerr(NULL,"SOCKS5 Proxy: send error");
-		Free(buf);
+		lib3270_free(buf);
 		return -1;
 	}
-	Free(buf);
+	lib3270_free(buf);
 
 	/*
 	 * Process the reply.
@@ -1009,7 +1009,7 @@ proxy_socks5(int fd, char *host, unsigned short port, int force_d)
 		nbuf,
 		rport);
 #endif /*]*/
-	Free(buf);
+	lib3270_free(buf);
 
     	return 0;
 }

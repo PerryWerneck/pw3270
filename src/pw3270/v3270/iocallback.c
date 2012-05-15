@@ -43,9 +43,9 @@
 #include <glib.h>
 #include "../globals.h"
 
-#ifdef HAVE_MALLOC_H
-	#include <malloc.h>
-#endif
+//#ifdef HAVE_MALLOC_H
+//	#include <malloc.h>
+//#endif
 
 static int 				  static_CallAndWait(int(*callback)(H3270 *session, void *), H3270 *session, void *parm);
 static void 			* static_AddInput(int source, H3270 *session, void (*fn)(H3270 *session));

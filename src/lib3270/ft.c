@@ -340,8 +340,7 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 	ft_last_cr = False;
 	ft_is_cut  = False;
 
-	ftHandle = malloc(sizeof(H3270FT));
-	memset(ftHandle,0,sizeof(H3270FT));
+	ftHandle = lib3270_malloc(sizeof(H3270FT));
 
 	ftHandle->sz 			= sizeof(H3270FT);
 	ftHandle->host			= session;

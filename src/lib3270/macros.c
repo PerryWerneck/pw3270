@@ -33,7 +33,7 @@
  #include <errno.h>
  #include <string.h>
  #include <stdio.h>
- #include <malloc.h>
+// #include <malloc.h>
  #include <lib3270.h>
  #include <lib3270/macros.h>
  #include <stdlib.h>
@@ -113,7 +113,7 @@
 	case 1:	// Get entire screen
 		lib3270_get_screen_size(hSession,&rows,&cols);
 		qtd = (rows*(cols+1)+1);
-		buffer = malloc(qtd+2);
+		buffer = lib3270_malloc(qtd+2);
 
 		memset(buffer,0,qtd+1);
 		start = qtd = 0;
@@ -165,7 +165,7 @@
 		return NULL;
 	}
 
-	buffer = malloc(qtd+1);
+	buffer = lib3270_malloc(qtd+1);
 	screen_read(buffer, start, qtd);
 
 */
@@ -231,7 +231,7 @@
 		host = "-";
 
 	sz = strlen(luname)+strlen(state)+strlen(host)+4;
-	rsp = malloc(sz+1);
+	rsp = lib3270_malloc(sz+1);
  	snprintf(rsp,sz,"%s %s %s",state,luname,host);
  	return rsp;
  }

@@ -29,7 +29,7 @@
 
  #include "globals.h"
  #include "appres.h"
- #include <malloc.h>
+//  #include <malloc.h>
  #include <lib3270.h>
  #include <lib3270/session.h>
  #include <lib3270/selection.h>
@@ -382,7 +382,7 @@ static char * get_text(H3270 *hSession,unsigned char all)
 	if(!lib3270_connected(hSession))
 		return NULL;
 
-	ret = malloc(buflen);
+	ret = lib3270_malloc(buflen);
 
 	baddr = 0;
 	for(row=0;row < hSession->rows;row++)
@@ -405,14 +405,14 @@ static char * get_text(H3270 *hSession,unsigned char all)
 
 	if(!sz)
 	{
-		free(ret);
+		lib3270_free(ret);
 		return NULL;
 	}
 
 	ret[sz++] = 0;
 
 	if(sz != buflen)
-		ret = realloc(ret,sz);
+		ret = lib3270_realloc(ret,sz);
 
 	return ret;
 }
@@ -434,7 +434,7 @@ LIB3270_EXPORT char * lib3270_get_region(H3270 *h, int start_pos, int end_pos, u
 	if(start_pos < 0 || start_pos > maxlen || end_pos < 0 || end_pos > maxlen || end_pos < start_pos)
 		return NULL;
 
-	text = malloc(maxlen);
+	text = lib3270_malloc(maxlen);
 
 	for(baddr=start_pos;baddr<end_pos;baddr++)
 	{
@@ -446,7 +446,7 @@ LIB3270_EXPORT char * lib3270_get_region(H3270 *h, int start_pos, int end_pos, u
 	}
 	text[sz++] = 0;
 
-	return realloc(text,sz);
+	return lib3270_realloc(text,sz);
 }
 
 LIB3270_EXPORT char * lib3270_get_text(H3270 *h, int offset, int len)
@@ -467,7 +467,7 @@ LIB3270_EXPORT char * lib3270_get_text(H3270 *h, int offset, int len)
 	else if(len > maxlen)
 		len = maxlen;
 
-	buffer	= malloc(len+1);
+	buffer	= lib3270_malloc(len+1);
 	ptr		= buffer;
 
 //	trace("len=%d buffer=%p",len,buffer);

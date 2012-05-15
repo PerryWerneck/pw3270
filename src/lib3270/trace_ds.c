@@ -421,7 +421,7 @@ static char * create_tracefile_header(const char *mode)
 	time_t clk;
 
 	// Create a buffer and redirect output.
-	buf = Malloc(MAX_HEADER_SIZE);
+	buf = lib3270_malloc(MAX_HEADER_SIZE);
 	tracef_bufptr = buf;
 
 	// Display current status
@@ -583,7 +583,7 @@ static void tracefile_callback(Widget w, XtPointer client_data, XtPointer call_d
 	if (strchr(tfn, '\'') || ((int)strlen(tfn) > 0 && tfn[strlen(tfn)-1] == '\\'))
 	{
 		popup_an_error("Illegal file name: %s", tfn);
-		Free(tfn);
+		lib3270_free(tfn);
 		return;
 	}
 
@@ -604,7 +604,7 @@ static void tracefile_callback(Widget w, XtPointer client_data, XtPointer call_d
 		if (tracef_max && !access(tfn, R_OK))
 		{
 			popup_an_error("Trace file '%s' already exists",tfn);
-			Free(tfn);
+			lib3270_free(tfn);
 			return;
 		}
 
@@ -616,7 +616,7 @@ static void tracefile_callback(Widget w, XtPointer client_data, XtPointer call_d
 		if (tracef == (FILE *)NULL)
 		{
 			popup_an_errno(errno, tfn);
-			Free(tfn);
+			lib3270_free(tfn);
 			return;
 		}
 		(void) SETLINEBUF(tracef);
@@ -629,7 +629,7 @@ static void tracefile_callback(Widget w, XtPointer client_data, XtPointer call_d
 	if(!tracewindow_handle)
 		tracewindow_handle = console_window_new( tfn, NULL );
 
-	Free(tfn);
+	lib3270_free(tfn);
 
 	// We're really tracing, turn the flag on.
 	appres.toggle[trace_reason].value = True;
@@ -639,7 +639,7 @@ static void tracefile_callback(Widget w, XtPointer client_data, XtPointer call_d
 	// Display current status
 	buf = create_tracefile_header("started");
 	wtrace("%s", buf);
-	Free(buf);
+	lib3270_free(buf);
 
 }
 
@@ -696,7 +696,7 @@ tracefile_on(int reason, LIB3270_TOGGLE_TYPE tt)
 	{
 		tracefile_callback((Widget)NULL, tracefile, PN);
 		if (tracefile_buf != NULL)
-		    	Free(tracefile_buf);
+		    	lib3270_free(tracefile_buf);
 		return;
 	}
 #if defined(X3270_DISPLAY)
@@ -718,7 +718,7 @@ tracefile_on(int reason, LIB3270_TOGGLE_TYPE tt)
 #endif
 
 	if (tracefile_buf != NULL)
-		Free(tracefile_buf);
+		lib3270_free(tracefile_buf);
 }
 
 // Close the trace file.
@@ -856,10 +856,10 @@ screentrace_cb(char *tfn)
 	screentracef = fopen(tfn, "a");
 	if (screentracef == (FILE *)NULL) {
 		popup_an_errno(errno, tfn);
-		Free(tfn);
+		lib3270_free(tfn);
 		return False;
 	}
-	Free(tfn);
+	lib3270_free(tfn);
 	(void) SETLINEBUF(screentracef);
 #if !defined(_WIN32)
 	(void) fcntl(fileno(screentracef), F_SETFD, 1);
@@ -941,7 +941,7 @@ void toggle_screenTrace(H3270 *session, struct toggle *t unused, LIB3270_TOGGLE_
 		if (tt == TT_INITIAL || tt == TT_ACTION) {
 			(void) screentrace_cb(NewString(tracefile));
 			if (tracefile_buf != NULL)
-				Free(tracefile_buf);
+				lib3270_free(tracefile_buf);
 			return;
 		}
 #if defined(X3270_DISPLAY)
@@ -965,7 +965,7 @@ void toggle_screenTrace(H3270 *session, struct toggle *t unused, LIB3270_TOGGLE_
 	}
 
 	if (tracefile_buf != NULL)
-		Free(tracefile_buf);
+		lib3270_free(tracefile_buf);
 }
 */
 

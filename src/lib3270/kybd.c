@@ -222,9 +222,7 @@ static int enq_chk(void)
  	if(enq_chk())
 		return;
 
-	ta = (struct ta *) Malloc(sizeof(*ta));
-	memset(ta,0,sizeof(struct ta));
-
+	ta = (struct ta *) lib3270_malloc(sizeof(*ta));
 	ta->next 		= (struct ta *) NULL;
 	ta->type 		= TA_TYPE_KEY_AID;
 	ta->aid_code	= aid_code;
@@ -257,8 +255,7 @@ static void enq_ta(H3270 *hSession, void (*fn)(H3270 *, const char *, const char
 
 	CHECK_SESSION_HANDLE(hSession);
 
-	ta = (struct ta *) Malloc(sizeof(*ta));
-	memset(ta,0,sizeof(struct ta));
+	ta = (struct ta *) lib3270_malloc(sizeof(*ta));
 	ta->session	= hSession;
 	ta->next	= (struct ta *) NULL;
 	ta->type	= TA_TYPE_DEFAULT;
@@ -277,7 +274,7 @@ static void enq_ta(H3270 *hSession, void (*fn)(H3270 *, const char *, const char
 	else
 	{
 		ta_head = ta;
-		status_typeahead(&h3270,True);
+		status_typeahead(hSession,True);
 	}
 	ta_tail = ta;
 
@@ -304,9 +301,8 @@ Boolean run_ta(void)
 	{
 	case TA_TYPE_DEFAULT:
 		ta->fn(ta->session,ta->parm[0],ta->parm[1]);
-		Free(ta->parm[0]);
-		Free(ta->parm[1]);
-		Free(ta);
+		lib3270_free(ta->parm[0]);
+		lib3270_free(ta->parm[1]);
 		break;
 
 	case TA_TYPE_KEY_AID:
@@ -318,6 +314,8 @@ Boolean run_ta(void)
 		popup_an_error(ta->session, _( "Unexpected type %d in typeahead queue" ), ta->type);
 
 	}
+
+	lib3270_free(ta);
 
 	return True;
 }
@@ -334,10 +332,10 @@ flush_ta(void)
 
 	for (ta = ta_head; ta != (struct ta *) NULL; ta = next)
 	{
-		Free(ta->parm[0]);
-		Free(ta->parm[1]);
+		lib3270_free(ta->parm[0]);
+		lib3270_free(ta->parm[1]);
 		next = ta->next;
-		Free(ta);
+		lib3270_free(ta);
 		any = True;
 	}
 	ta_head = ta_tail = (struct ta *) NULL;
@@ -3466,7 +3464,7 @@ void
 clear_xks(void)
 {
 	if (nxk) {
-		Free(xk);
+		lib3270_free(xk);
 		xk = (struct xks *)NULL;
 		nxk = 0;
 	}
