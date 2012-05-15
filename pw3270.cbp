@@ -41,13 +41,15 @@
 			<Add option="`pkg-config gtk+-3.0 lib3270 --libs`" />
 		</Linker>
 		<Unit filename="Makefile.in" />
+		<Unit filename="android/jni/globals.h" />
+		<Unit filename="android/jni/main.cpp" />
+		<Unit filename="android/jni/misc.cpp" />
+		<Unit filename="android/src/br/com/bb/pw3270/PW3270Activity.java" />
+		<Unit filename="android/src/br/com/bb/pw3270/lib3270.java" />
 		<Unit filename="autogen.sh" />
 		<Unit filename="colors.conf" />
 		<Unit filename="configure.ac" />
 		<Unit filename="pw3270.spec.in" />
-		<Unit filename="src/android/jni/main.cpp" />
-		<Unit filename="src/android/jni/misc.cpp" />
-		<Unit filename="src/android/src/br/com/bb/pw3270/lib3270.java" />
 		<Unit filename="src/include/lib3270.h" />
 		<Unit filename="src/include/lib3270/action_table.h" />
 		<Unit filename="src/include/lib3270/actions.h" />

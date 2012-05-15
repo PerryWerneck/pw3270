@@ -38,23 +38,58 @@
 
  } INFO;
 
+ #define session_request(env, obj)	INFO	  jni_data	= { env, obj }; \
+									H3270	* session 	= lib3270_get_default_session_handle(); \
+									session->widget		= &jni_data;
+
+ #define session_release()			session->widget		= 0;
+
+/*--[ Globals ]--------------------------------------------------------------------------------------*/
+
+ const char *java_class_name = "br/com/bb/pw3270/lib3270";
+
 /*--[ Implement ]------------------------------------------------------------------------------------*/
+
+static void post_message(H3270 *session, int msgid, int arg1 = 0, int arg2 = 0)
+{
+	if(session->widget)
+	{
+		JNIEnv		* env			= ((INFO *) session->widget)->env;
+		jobject		  obj 			= ((INFO *) session->widget)->obj;
+		jclass 		  cls 			= env->GetObjectClass(obj);
+		jmethodID	  mid			= env->GetMethodID(cls, "post_message", "(III)V");;
+		env->CallVoidMethod(obj,mid,(jint) msgid, (jint) arg1, (jint) arg2);
+	}
+}
+
+static void update_status(H3270 *session, LIB3270_MESSAGE id)
+{
+	post_message(session,0,id);
+}
+
+static void changed(H3270 *session, int offset, int len)
+{
+	post_message(session,1,offset,len);
+}
 
 JNIEXPORT jint JNICALL Java_br_com_bb_pw3270_lib3270_init(JNIEnv *env, jclass obj)
 {
 	H3270	* session	= lib3270_session_new("");
+
+	session->changed 		= changed;
+	session->update_status 	= update_status;
 
 	return 0;
 }
 
 JNIEXPORT jint JNICALL Java_br_com_bb_pw3270_lib3270_processEvents(JNIEnv *env, jobject obj)
 {
-	INFO	  data		= { env, obj };
-	H3270	* session 	= lib3270_get_default_session_handle();
+	session_request(env,obj);
 
-	session->widget = &data;
 	lib3270_main_iterate(session,1);
-	session->widget = 0;
+
+	session_release();
+
 	return 0;
 }
 
@@ -70,7 +105,9 @@ JNIEXPORT jboolean JNICALL Java_br_com_bb_pw3270_lib3270_isTerminalReady(JNIEnv 
 
 JNIEXPORT void JNICALL Java_br_com_bb_pw3270_lib3270_setHost(JNIEnv *env, jobject obj, jstring hostname)
 {
-	lib3270_set_host(lib3270_get_default_session_handle(),env->GetStringUTFChars(hostname, 0));
+	session_request(env,obj);
+	lib3270_set_host(session,env->GetStringUTFChars(hostname, 0));
+	session_release();
 }
 
 JNIEXPORT jstring JNICALL Java_br_com_bb_pw3270_lib3270_getHost(JNIEnv *env, jobject obj)
@@ -78,3 +115,10 @@ JNIEXPORT jstring JNICALL Java_br_com_bb_pw3270_lib3270_getHost(JNIEnv *env, job
 	return env->NewStringUTF(lib3270_get_host(lib3270_get_default_session_handle()));
 }
 
+JNIEXPORT jint JNICALL Java_br_com_bb_pw3270_lib3270_do_1connect(JNIEnv *env, jobject obj)
+{
+	session_request(env,obj);
+	update_status(session,(LIB3270_MESSAGE) 10);
+	session_release();
+	return -1;
+}
