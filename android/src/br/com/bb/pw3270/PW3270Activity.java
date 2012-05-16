@@ -9,29 +9,29 @@ import android.util.Log;
 import android.view.View;
 import android.content.res.*;
 import android.app.AlertDialog;
-import android.app.Dialog;
+import android.webkit.WebView;
+// import android.app.Dialog;
 
 public class PW3270Activity extends Activity implements View.OnClickListener
 {
 	private class terminal extends lib3270
 	{
-		TextView view;
+		TextView msgbox;
 		Activity Main;
 	
 		
-		terminal(TextView view, Activity Main)
+		terminal(TextView msgbox, Activity Main)
 		{
-			this.view = view;
+			this.msgbox = msgbox;
 			this.Main = Main;
-			
 		}
 
 		protected void updateProgramMessage(int id)
 		{
 			try
 			{
-				this.view.setText(message[id]);
-			} catch(Exception e) { this.view.setText("Estado inesperado"); }
+				this.msgbox.setText(message[id]);
+			} catch(Exception e) { this.msgbox.setText("Estado inesperado"); }
 		}
 
 		public void popupMessage(int type, String title, String text, String info)
@@ -44,6 +44,12 @@ public class PW3270Activity extends Activity implements View.OnClickListener
 			d.setCancelable(true);
 			d.show();
 		}
+		
+		protected void redraw()
+		{
+			String text = getHTML();
+		}
+
 
 		
 	};
@@ -52,6 +58,7 @@ public class PW3270Activity extends Activity implements View.OnClickListener
 	private EditText 	uri;
 	private Resources	res;
 	private String[] 	message;
+	private WebView		view;
 	
     /** Called when the activity is first created. */
     @Override
@@ -70,7 +77,7 @@ public class PW3270Activity extends Activity implements View.OnClickListener
         Button btn = (Button) findViewById(R.id.connect);
         btn.setOnClickListener((View.OnClickListener) this);        
         
-        host = new terminal((TextView) findViewById(R.id.text),this);
+        host = new terminal((TextView) findViewById(R.id.msgbox),this);
         
         
     }

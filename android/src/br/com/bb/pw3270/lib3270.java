@@ -9,7 +9,8 @@ public class lib3270
 {
 	private NetworkThread	mainloop;
 	private static final String TAG = "lib3270";
-	
+	private boolean changed;
+
 	static
 	{
 		System.loadLibrary("3270");
@@ -18,7 +19,8 @@ public class lib3270
 
 	lib3270()
 	{
-		mainloop = null;		
+		changed = false;
+		mainloop = null;
 	}
 
 	private class popupMessageInfo
@@ -26,7 +28,7 @@ public class lib3270
 		public String title;
 		public String text;
 		public String info;
-		
+
 		popupMessageInfo(String title, String text, String info)
 		{
 			this.title 	= title;
@@ -34,7 +36,7 @@ public class lib3270
 			this.info	= info;
 		}
 	}
-	
+
 	// Main Thread
 	private class NetworkThread extends Thread
 	{
@@ -70,7 +72,7 @@ public class lib3270
     	public void postPopup(int type, String title, String text, String info)
     	{
             Message msg = mHandler.obtainMessage();
-            
+
             msg.what = 3;
             msg.arg1 = type;
             msg.obj  = new popupMessageInfo(title,text,info);
@@ -108,12 +110,27 @@ public class lib3270
         		break;
 
         	case 2: // Screen changed
+        		Log.d(TAG,"Screen changed");
+				changed = true;
+				redraw();
         		break;
 
         	case 3:	// Popup
         		popupMessageInfo popup = (popupMessageInfo) msg.obj;
         		popupMessage(msg.arg1, popup.title, popup.text, popup.info);
         		break;
+
+			case 4: // erase
+				changed = false;
+				erase();
+
+			case 5: // ctlr_done
+        		Log.d(TAG,"ctlr_done");
+				if(changed)
+				{
+					changed = false;
+					redraw();
+				}
         	}
         }
     };
@@ -127,15 +144,24 @@ public class lib3270
 	public void popupMessage(int type, String title, String text, String info)
 	{
 	}
-	
+
 	protected void info(String tag, String msg)
 	{
 		Log.i(tag,msg);
 	}
-	
+
 	protected void error(String tag, String msg)
 	{
 		Log.e(tag,msg);
+	}
+
+	protected void erase()
+	{
+		Log.i(TAG,"Erase screen");
+	}
+
+	protected void redraw()
+	{
 	}
 
     /*---[ External methods ]------------------------------------------------*/
@@ -169,6 +195,9 @@ public class lib3270
 	public native String		getHost();
 	public native boolean		isConnected();
 	public native boolean		isTerminalReady();
+
+	// Get/Set screen contents
+	public native String		getHTML();
 
 
 }

@@ -18,7 +18,7 @@
  * programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple
  * Place, Suite 330, Boston, MA, 02111-1307, USA
  *
- * Este programa está nomeado como globals.h e possui - linhas de código.
+ * Este programa está nomeado como main.cpp e possui - linhas de código.
  *
  * Contatos:
  *
@@ -26,30 +26,30 @@
  *
  */
 
- #include "lib3270jni.h"
+ #include "globals.h"
+ #include <string.h>
 
- #include <lib3270.h>
- #include <lib3270/session.h>
- #include <lib3270/log.h>
-
-/*--[ Defines ]--------------------------------------------------------------------------------------*/
-
- typedef struct _info
- {
- 	JNIEnv	 * env;
- 	jobject	   obj;
-
- } INFO;
-
- #define session_request(env, obj)	INFO	  jni_data	= { env, obj }; \
-									H3270	* session 	= lib3270_get_default_session_handle(); \
-									session->widget		= &jni_data;
-
- #define session_release()			session->widget		= 0;
-
-/*--[ Globals ]--------------------------------------------------------------------------------------*/
-
- extern const char *java_class_name;
+/*--[ Implement ]------------------------------------------------------------------------------------*/
 
 
+JNIEXPORT jstring JNICALL Java_br_com_bb_pw3270_lib3270_getHTML(JNIEnv *env, jobject obj)
+{
+	jstring ret;
 
+	session_request(env,obj);
+
+	if(session)
+	{
+		char *text = getHTML(session);
+		ret = env->NewStringUTF(text);
+		lib3270_free(text);
+	}
+	else
+	{
+		ret = env->NewStringUTF("<b>Invalid Session ID</b>");
+	}
+
+	session_release();
+
+	return ret;
+}

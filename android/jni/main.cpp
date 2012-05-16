@@ -27,24 +27,7 @@
  */
 
  #include "globals.h"
- #include <lib3270/session.h>
  #include <lib3270/popup.h>
- #include <lib3270/log.h>
-
-/*--[ Defines ]--------------------------------------------------------------------------------------*/
-
- typedef struct _info
- {
- 	JNIEnv	 * env;
- 	jobject	   obj;
-
- } INFO;
-
- #define session_request(env, obj)	INFO	  jni_data	= { env, obj }; \
-									H3270	* session 	= lib3270_get_default_session_handle(); \
-									session->widget		= &jni_data;
-
- #define session_release()			session->widget		= 0;
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
@@ -74,6 +57,11 @@ static void changed(H3270 *session, int offset, int len)
 	post_message(session,2,offset,len);
 }
 
+static void erase(H3270 *session)
+{
+	post_message(session,4);
+}
+
 static int popuphandler(H3270 *session, void *terminal, LIB3270_NOTIFY type, const char *title, const char *msg, const char *fmt, va_list args)
 {
 	if(session->widget)
@@ -98,6 +86,11 @@ static int popuphandler(H3270 *session, void *terminal, LIB3270_NOTIFY type, con
 	}
 }
 
+static void ctlr_done(H3270 *session)
+{
+	post_message(session,4);
+}
+
 JNIEXPORT jint JNICALL Java_br_com_bb_pw3270_lib3270_init(JNIEnv *env, jclass obj)
 {
 	H3270	* session	= lib3270_session_new("");
@@ -108,6 +101,8 @@ JNIEXPORT jint JNICALL Java_br_com_bb_pw3270_lib3270_init(JNIEnv *env, jclass ob
 
 	session->changed 		= changed;
 	session->update_status 	= update_status;
+	session->erase			= erase;
+	session->ctlr_done		= ctlr_done;
 
 	return 0;
 }
@@ -153,3 +148,4 @@ JNIEXPORT jint JNICALL Java_br_com_bb_pw3270_lib3270_do_1connect(JNIEnv *env, jo
 	session_release();
 	return (jint) rc;
 }
+

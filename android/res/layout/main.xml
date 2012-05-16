@@ -10,7 +10,7 @@
 
         <EditText
             android:id="@+id/hostname"
-            android:layout_width="match_parent"
+            android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:ems="10" />
@@ -20,14 +20,19 @@
             style="?android:attr/buttonStyleSmall"
             android:layout_width="80dp"
             android:layout_height="match_parent"
-            android:text="Connect" />
+            android:text="@string/connect" />
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/text"
+        <TextView
+        android:id="@+id/msgbox"
         android:layout_width="fill_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:text="@string/hello" />
+    
+    <WebView
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </LinearLayout>

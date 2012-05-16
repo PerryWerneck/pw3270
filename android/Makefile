@@ -41,22 +41,22 @@ clean:
 	@rm -f $(foreach DIR, $(RESOLUTION), res/drawable-$(DIR)/ic_launcher.png)
 
 res/drawable-xhdpi/ic_launcher.png: ../src/pw3270/pixmaps/pw3270.svg
-	@echo "  GEN  `basename $@`"
+	@echo "  ICON xhdpi"
 	@$(MKDIR) `dirname $@`
 	@$(CONVERT) --format=png --width=96 --height=96 --output=$@ $<
 
 res/drawable-mdpi/ic_launcher.png: ../src/pw3270/pixmaps/pw3270.svg
-	@echo "  GEN  `basename $@`"
+	@echo "  ICON mdpi"
 	@$(MKDIR) `dirname $@`
 	@$(CONVERT) --format=png --width=48 --height=48 --output=$@ $<
 
 res/drawable-ldpi/ic_launcher.png: ../src/pw3270/pixmaps/pw3270.svg
-	@echo "  GEN  `basename $@`"
+	@echo "  ICON ldpi"
 	@$(MKDIR) `dirname $@`
 	@$(CONVERT) --format=png --width=36 --height=36 --output=$@ $<
 
 res/drawable-hdpi/ic_launcher.png: ../src/pw3270/pixmaps/pw3270.svg
-	@echo "  GEN  `basename $@`"
+	@echo "  ICON hdpi"
 	@$(MKDIR) `dirname $@`
 	@$(CONVERT) --format=png --width=72 --height=72 --output=$@ $<
 
