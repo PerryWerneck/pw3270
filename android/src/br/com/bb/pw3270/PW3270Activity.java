@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.util.Log;
 import android.view.View;
 import android.content.res.*;
 import android.app.AlertDialog;
@@ -27,30 +28,21 @@ public class PW3270Activity extends Activity implements View.OnClickListener
 
 		protected void updateProgramMessage(int id)
 		{
-			 this.view.setText(message[id]);
+			try
+			{
+				this.view.setText(message[id]);
+			} catch(Exception e) { this.view.setText("Estado inesperado"); }
 		}
 
 		public void popupMessage(int type, String title, String text, String info)
 		{
 			AlertDialog d = new AlertDialog.Builder(Main).create();
+			
 			d.setTitle(title);
 			d.setMessage(text);
 
-	
-			/*
-			d.setButton("OK", new DialogInterface.OnClickListener() 
-			{
-			      public void onClick(DialogInterface dialog, int which) 
-			      {
-			 
-			       //here you can add functions
-			 
-			      }
-			});
-			*/			
-			
+			d.setCancelable(true);
 			d.show();
-//			this.view.setText(title + "\n" + text + "\n" + info);
 		}
 
 		
@@ -67,7 +59,9 @@ public class PW3270Activity extends Activity implements View.OnClickListener
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        
+ 
+		Log.i("pw3270","Activity started");
+
         res 	= getResources();
         message = res.getStringArray(R.array.program_msg);
         uri 	= (EditText) findViewById(R.id.hostname);
@@ -84,7 +78,7 @@ public class PW3270Activity extends Activity implements View.OnClickListener
     public void onClick(View v) 
     {
         // Perform action on click
-    	// host.setHost(uri.getText().toString());
+    	host.setHost(uri.getText().toString());
     	host.connect();
     }
 

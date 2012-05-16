@@ -32,7 +32,8 @@ include ../src/lib3270/sources.mak
 LOCAL_CFLAGS=-I../src/include
 LOCAL_DEFAULT_CPP_EXTENSION := cpp
 LOCAL_MODULE    := lib3270
-LOCAL_SRC_FILES := $(foreach SRC, $(TERMINAL_SOURCES), ../../src/lib3270/$(SRC)) \
+LOCAL_LDLIBS 	:= -llog
+LOCAL_SRC_FILES := $(foreach SRC, $(TERMINAL_SOURCES) $(NETWORK_SOURCES), ../../src/lib3270/$(SRC)) \
 					main.cpp misc.cpp
 
 include $(BUILD_SHARED_LIBRARY)

@@ -38,7 +38,7 @@ LIB3270_INTERNAL void xs_warning(const char *fmt, ...) printflike(1, 2);
 
 LIB3270_INTERNAL void * AddInput(int, H3270 *session, void (*fn)(H3270 *session));
 LIB3270_INTERNAL void * AddExcept(int, H3270 *session, void (*fn)(H3270 *session));
-LIB3270_INTERNAL void * AddOutput(int, H3270 *session, void (*fn)(H3270 *session));
+// LIB3270_INTERNAL void * AddOutput(int, H3270 *session, void (*fn)(H3270 *session));
 LIB3270_INTERNAL void RemoveInput(void *);
 LIB3270_INTERNAL void * AddTimeOut(unsigned long msec, H3270 *session, void (*fn)(H3270 *session));
 LIB3270_INTERNAL void RemoveTimeOut(void *cookie);

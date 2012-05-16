@@ -952,17 +952,6 @@ void net_disconnect(H3270 *session)
 	session->connected_lu = CN;
 	status_lu(&h3270,CN);
 
-/*
-#if !defined(_WIN32)
-	// We have no more interest in output buffer space.
-	if(session->output_id != NULL)
-	{
-		RemoveInput(session->output_id);
-		session->output_id = NULL;
-	}
-#endif
-*/
-
 }
 
 
@@ -1978,9 +1967,9 @@ void net_exception(H3270 *session)
 		if(session->excepting)
 		{
 			RemoveInput(session->ns_exception_id);
+			session->ns_exception_id = NULL;
 			session->excepting = 0;
 		}
-//		x_except_off(session);
 	}
 }
 

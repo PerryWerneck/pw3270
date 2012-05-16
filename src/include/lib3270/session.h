@@ -176,8 +176,8 @@
 		void 					* ns_read_id;
 		void 					* ns_exception_id;
 
-		char					  reading;
-		char					  excepting;
+		int 					  reading				: 1;
+		int						  excepting				: 1;
 
 		// SSL Data (Always defined to mantain the same structure size
 		unsigned long 			  last_ssl_error;

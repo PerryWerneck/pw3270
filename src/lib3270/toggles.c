@@ -93,7 +93,7 @@ LIB3270_EXPORT unsigned char lib3270_get_toggle(H3270 *session, LIB3270_TOGGLE i
  */
 static void toggle_notify(H3270 *session, struct lib3270_toggle *t, LIB3270_TOGGLE ix)
 {
-	Trace("%s: ix=%d upcall=%p",__FUNCTION__,ix,t->upcall);
+	trace("%s: ix=%d upcall=%p",__FUNCTION__,ix,t->upcall);
 	t->upcall(session, t, TT_INTERACTIVE);
 
 	if(session->update_toggle)

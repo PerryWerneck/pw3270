@@ -51,9 +51,9 @@ static int 				  static_CallAndWait(int(*callback)(H3270 *session, void *), H327
 static void 			* static_AddInput(int source, H3270 *session, void (*fn)(H3270 *session));
 static void				  static_RemoveSource(void *id);
 
-#if !defined(_WIN32) /*[*/
-static void 			* static_AddOutput(int source, H3270 *session, void (*fn)(H3270 *session));
-#endif
+//#if !defined(_WIN32)
+// static void 			* static_AddOutput(int source, H3270 *session, void (*fn)(H3270 *session));
+//#endif
 
 static void 			* static_AddExcept(int source, H3270 *session, void (*fn)(H3270 *session));
 static void 			* static_AddTimeOut(unsigned long interval_ms, H3270 *session, void (*proc)(H3270 *session));
@@ -123,12 +123,12 @@ static void static_RemoveSource(void *id)
 		g_source_destroy((GSource *) id);
 }
 
-#if !defined(_WIN32) /*[*/
-static void * static_AddOutput(int source, H3270 *session, void (*fn)(H3270 *session))
-{
-	return AddSource(source,session,G_IO_OUT|G_IO_HUP|G_IO_ERR,fn);
-}
-#endif /*]*/
+// #if !defined(_WIN32)
+// static void * static_AddOutput(int source, H3270 *session, void (*fn)(H3270 *session))
+// {
+//	return AddSource(source,session,G_IO_OUT|G_IO_HUP|G_IO_ERR,fn);
+// }
+// #endif
 
 static void * static_AddExcept(int source, H3270 *session, void (*fn)(H3270 *session))
 {
@@ -322,9 +322,9 @@ void v3270_register_io_handlers(v3270Class *cls)
 
 		static_AddExcept,
 
-#if !defined(_WIN32)
-		static_AddOutput,
-#endif
+// #if !defined(_WIN32)
+//		static_AddOutput,
+// #endif
 
 #ifdef G_THREADS_ENABLED
 		static_CallAndWait,

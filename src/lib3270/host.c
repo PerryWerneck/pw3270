@@ -565,25 +565,8 @@ static int do_connect(H3270 *hSession, const char *n)
 
 	/* Success. */
 
-	/* Set pending string. */
-//	if (ps == CN)
-//		ps = appres.login_macro;
-
-//	if (ps != CN)
-//		login_macro(ps);
-
-	/* Prepare Xt for I/O. */
-//	x_add_input(hSession);
-#ifdef _WIN32
-	hSession->ns_exception_id	= AddExcept((int) hSession->sockEvent, hSession, net_exception);
-	hSession->ns_read_id		= AddInput((int) hSession->sockEvent, hSession, net_input);
-#else
-	hSession->ns_exception_id	= AddExcept(hSession->sock, hSession, net_exception);
-	hSession->ns_read_id		= AddInput(hSession->sock, hSession, net_input);
-#endif // WIN32
-
-	hSession->excepting = True;
-	hSession->reading 	= True;
+	/* Setup socket I/O. */
+	add_input_calls(hSession,net_input,net_exception);
 
 	/* Set state and tell the world. */
 	if (pending)
@@ -672,18 +655,7 @@ void host_disconnect(H3270 *h, int failed)
 	if (CONNECTED || HALF_CONNECTED)
 	{
 		// Disconecting, disable input
-		if(h->reading)
-		{
-			RemoveInput(h->ns_read_id);
-			h->reading = False;
-		}
-		if(h->excepting)
-		{
-			RemoveInput(h->ns_exception_id);
-			h->excepting = False;
-		}
-//		x_remove_input(h);
-
+		remove_input_calls(h);
 		net_disconnect(h);
 
 		trace("Disconnected (Failed: %d Reconnect: %d in_progress: %d)",failed,lib3270_get_toggle(h,LIB3270_TOGGLE_RECONNECT),h->auto_reconnect_inprogress);
@@ -759,7 +731,7 @@ LIB3270_EXPORT void lib3270_register_schange(H3270 *h, LIB3270_STATE_CHANGE tx, 
 /* Signal a state change. */
 void lib3270_st_changed(H3270 *h, LIB3270_STATE tx, int mode)
 {
-#if defined(DEBUG)
+#if defined(DEBUG) || defined(ANDROID)
 
 	static const char * state_name[LIB3270_STATE_USER] =
 	{

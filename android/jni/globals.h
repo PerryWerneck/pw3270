@@ -27,4 +27,6 @@
  */
 
  #include "lib3270jni.h"
+
  #include <lib3270.h>
+

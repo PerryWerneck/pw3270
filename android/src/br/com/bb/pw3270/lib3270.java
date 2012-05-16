@@ -1,15 +1,15 @@
 package br.com.bb.pw3270;
 
 import java.lang.Thread;
-// import java.util.Observer;
-// import java.util.Observable;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 public class lib3270
 {
 	private NetworkThread	mainloop;
-
+	private static final String TAG = "lib3270";
+	
 	static
 	{
 		System.loadLibrary("3270");
@@ -47,15 +47,15 @@ public class lib3270
 
         public void run()
         {
+        	int rc;
+        	info(TAG,"Network thread started");
             postMessage(0,1,0);
-        	postPopup(0,"titulo","texto","info");
-
-            /*
-    		do_connect();
+    		rc = do_connect();
+    		info(TAG,"do_connect exits with rc="+rc);
     		while(isConnected())
     			processEvents();
-            */
             postMessage(0,0,0);
+        	info(TAG,"Network thread stopped");
         }
 
         public void postMessage(int what, int arg1, int arg2)
@@ -84,6 +84,11 @@ public class lib3270
     	mainloop.postMessage(what, arg1, arg2);
     }
 
+   	public void postPopup(int type, String title, String text, String info)
+	{
+   		mainloop.postPopup(type, title, text, info);
+	}
+
     // Define the Handler that receives messages from the thread and update the progress
     final Handler handler = new Handler()
     {
@@ -108,7 +113,6 @@ public class lib3270
         	case 3:	// Popup
         		popupMessageInfo popup = (popupMessageInfo) msg.obj;
         		popupMessage(msg.arg1, popup.title, popup.text, popup.info);
-
         		break;
         	}
         }
@@ -123,6 +127,16 @@ public class lib3270
 	public void popupMessage(int type, String title, String text, String info)
 	{
 	}
+	
+	protected void info(String tag, String msg)
+	{
+		Log.i(tag,msg);
+	}
+	
+	protected void error(String tag, String msg)
+	{
+		Log.e(tag,msg);
+	}
 
     /*---[ External methods ]------------------------------------------------*/
 
@@ -130,10 +144,12 @@ public class lib3270
     {
     	if(mainloop == null)
     	{
+        	info("jni","Starting comm thread");
     		mainloop = new NetworkThread(handler);
     		mainloop.start();
     		return 0;
     	}
+    	error("jni","Comm thread already active during connect");
     	return -1;
     }
 

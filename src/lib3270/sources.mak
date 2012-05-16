@@ -26,10 +26,13 @@
 
 # Terminal only sources
 TERMINAL_SOURCES =	bounds.c XtGlue.c ctlr.c util.c toggles.c screen.c selection.c kybd.c telnet.c \
-					host.c sf.c ansi.c log.c resolver.c xio.c tables.c proxy.c utf8.c charset.c \
-					version.c init.c
+					host.c sf.c ansi.c resolver.c tables.c utf8.c charset.c \
+					version.c session.c state.c
+
+# Network I/O Sources
+NETWORK_SOURCES = iocalls.c proxy.c
 
 # Full library sources
-SOURCES =			$(TERMINAL_SOURCES) actions.c ft.c ft_cut.c ft_dft.c glue.c resources.c \
-					rpq.c see.c trace_ds.c paste.c macros.c fallbacks.c
+SOURCES =			$(TERMINAL_SOURCES) $(NETWORK_SOURCES) actions.c ft.c ft_cut.c ft_dft.c glue.c resources.c \
+					rpq.c see.c trace_ds.c paste.c macros.c fallbacks.c log.c
 

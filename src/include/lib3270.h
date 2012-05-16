@@ -563,14 +563,10 @@
 
 		void 	* (*AddExcept)(int source, H3270 *session, void (*fn)(H3270 *session));
 
-		#if !defined(_WIN32) /*[*/
-			void * (*AddOutput)(int source, H3270 *session, void (*fn)(H3270 *session));
-		#endif /*]*/
-
 		int 			(*callthread)(int(*callback)(H3270 *, void *), H3270 *session, void *parm);
 
 		int				(*Wait)(int seconds);
-		int 			(*RunPendingEvents)(int wait);
+		int 			(*event_dispatcher)(int wait);
 		void			(*ring_bell)(H3270 *);
 
 	};

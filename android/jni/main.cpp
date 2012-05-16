@@ -29,6 +29,7 @@
  #include "globals.h"
  #include <lib3270/session.h>
  #include <lib3270/popup.h>
+ #include <lib3270/log.h>
 
 /*--[ Defines ]--------------------------------------------------------------------------------------*/
 
@@ -91,11 +92,17 @@ static int popuphandler(H3270 *session, void *terminal, LIB3270_NOTIFY type, con
 										env->NewStringUTF(descr) );
         lib3270_free(descr);
 	}
+	else
+	{
+		__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "Can't open popup \"%s\", no jni env for active session",title);
+	}
 }
 
 JNIEXPORT jint JNICALL Java_br_com_bb_pw3270_lib3270_init(JNIEnv *env, jclass obj)
 {
 	H3270	* session	= lib3270_session_new("");
+
+	__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "Initializing session %p",session);
 
 	lib3270_set_popup_handler(popuphandler);
 
@@ -140,8 +147,9 @@ JNIEXPORT jstring JNICALL Java_br_com_bb_pw3270_lib3270_getHost(JNIEnv *env, job
 
 JNIEXPORT jint JNICALL Java_br_com_bb_pw3270_lib3270_do_1connect(JNIEnv *env, jobject obj)
 {
+	int rc;
 	session_request(env,obj);
-	update_status(session,(LIB3270_MESSAGE) 10);
+	rc = lib3270_connect(session,0,1);
 	session_release();
-	return -1;
+	return (jint) rc;
 }

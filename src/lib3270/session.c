@@ -18,7 +18,7 @@
  * programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple
  * Place, Suite 330, Boston, MA, 02111-1307, USA
  *
- * Este programa está nomeado como init.c e possui - linhas de código.
+ * Este programa está nomeado como session.c e possui - linhas de código.
  *
  * Contatos:
  *
@@ -32,12 +32,13 @@
 
 
 #include "globals.h"
-// #include "appres.h"
 #include "charsetc.h"
 #include "kybdc.h"
 #include "ansic.h"
 
-#include <malloc.h>
+/*---[ Globals ]--------------------------------------------------------------------------------------------------------------*/
+
+ H3270 h3270;
 
 /*---[ Statics ]--------------------------------------------------------------------------------------------------------------*/
 
@@ -67,14 +68,15 @@ void lib3270_session_free(H3270 *h)
 	}
 
 	// Release memory
-	#define RELEASE_BUFFER(x) if(x) { free(x); x = NULL; }
-
-	RELEASE_BUFFER(h->charset);
-	RELEASE_BUFFER(h->paste_buffer);
+	lib3270_free(h->charset);
+	lib3270_free(h->paste_buffer);
+	h->charset 		= NULL;
+	h->paste_buffer = NULL;
 
 	for(f=0;f<(sizeof(h->buffer)/sizeof(h->buffer[0]));f++)
 	{
-		RELEASE_BUFFER(h->buffer[f]);
+		lib3270_free(h->buffer[f]);
+		h->buffer[f] = NULL;
 	}
 
 }
@@ -117,9 +119,20 @@ static void set_cursor(H3270 *session, LIB3270_CURSOR id)
 
 static void message(H3270 *session, LIB3270_NOTIFY id , const char *title, const char *message, const char *text)
 {
+#ifdef ANDROID
+
+	__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "%s\n",title);
+	__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "%s\n",message);
+	__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "%s\n",text);
+
+#else
+
 	lib3270_write_log(session,"%s",title);
 	lib3270_write_log(session,"%s",message);
 	lib3270_write_log(session,"%s",text);
+
+#endif // ANDROID
+
 }
 
 static void update_ssl(H3270 *session, LIB3270_SSL_STATE state)
@@ -220,7 +233,7 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 		model_number = 3;
 #endif
 
-	Trace("Model_number: %d",model_number);
+	trace("Model_number: %d",model_number);
 
 	if (!hSession->extended || hSession->oversize == CN || sscanf(hSession->oversize, "%dx%d%c", &ovc, &ovr, &junk) != 2)
 	{
@@ -234,7 +247,7 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 	else
 		hSession->termtype = hSession->full_model_name;
 
-	Trace("Termtype: %s",hSession->termtype);
+	trace("Termtype: %s",hSession->termtype);
 
 	if (hSession->apl_mode)
 		hSession->host_charset = "apl";
@@ -247,7 +260,7 @@ H3270 * lib3270_session_new(const char *model)
 
 	H3270		*hSession = &h3270;
 
-	Trace("%s - configured=%d",__FUNCTION__,configured);
+	trace("%s - configured=%d",__FUNCTION__,configured);
 
 	if(configured)
 	{
@@ -264,7 +277,7 @@ H3270 * lib3270_session_new(const char *model)
 	if(screen_init(hSession))
 		return NULL;
 
-	Trace("Charset: %s",hSession->host_charset);
+	trace("Charset: %s",hSession->host_charset);
 	if (charset_init(hSession,hSession->host_charset) != CS_OKAY)
 	{
 		Warning(hSession, _( "Cannot find charset \"%s\", using defaults" ), hSession->host_charset);
@@ -290,7 +303,7 @@ H3270 * lib3270_session_new(const char *model)
 	printer_init();
 #endif
 */
-	Trace("%s finished",__FUNCTION__);
+	trace("%s finished",__FUNCTION__);
 
 	errno = 0;
 	return hSession;
@@ -368,4 +381,15 @@ static int parse_model_number(H3270 *session, const char *m)
 		return -1;
 	}
 
+}
+
+LIB3270_EXPORT H3270 * lib3270_get_default_session_handle(void)
+{
+	return &h3270;
+}
+
+LIB3270_EXPORT void * lib3270_get_widget(H3270 *h)
+{
+	CHECK_SESSION_HANDLE(h);
+	return h->widget;
 }

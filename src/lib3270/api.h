@@ -88,25 +88,28 @@
 			#define CN ((char *) NULL)
 		#endif
 
-		/* Debug & log */
+		/* Debug & log */ /*
 		#if defined( DEBUG )
 			#define Trace( fmt, ... )		fprintf(stderr, "%s(%d) " fmt "\n", __FILE__, __LINE__, __VA_ARGS__ ); fflush(stderr);
 			#define trace( fmt, ... )		fprintf(stderr, "%s(%d) " fmt "\n", __FILE__, __LINE__, __VA_ARGS__ ); fflush(stderr);
-		#else
-			#define Trace( fmt, ... )	/* __VA_ARGS__ */
-			#define trace( fmt, ... )	/* __VA_ARGS__ */
+		#elif !defined(Trace)
+			#define Trace( fmt, ... )	// __VA_ARGS__
+			#define trace( fmt, ... )	// __VA_ARGS__
 		#endif
-
+*/
 
 		#include <lib3270/log.h>
+
 //		#define WriteLog(module,fmt, ...) 		lib3270_write_log(NULL,module,fmt,__VA_ARGS__)
 //		#define WriteRCLog(module,rc,fmt, ...)	lib3270_write_rc(NULL,module,fmt,__VA_ARGS__)
 
+/*
 		#ifdef LIB3270_MODULE_NAME
 			#define Log(fmt, ...)		lib3270_write_log(NULL,LIB3270_MODULE_NAME,fmt,__VA_ARGS__)
 		#else
 			#define Log(fmt, ...)		lib3270_write_log(NULL,"MSG",fmt,__VA_ARGS__)
 		#endif
+*/
 
 		/** 3270 connection handle */
 //		#define LUNAME_SIZE				16

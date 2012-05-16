@@ -492,7 +492,7 @@ static void key_AID(H3270 *session, unsigned char aid_code)
 	if (IN_ANSI) {
 		register unsigned i;
 
-		Trace("aid_code: %02x IN_ANSI: %d",aid_code,IN_ANSI);
+		trace("aid_code: %02x IN_ANSI: %d",aid_code,IN_ANSI);
 
 		if (aid_code == AID_ENTER) {
 			net_sendc('\r');
@@ -516,7 +516,7 @@ static void key_AID(H3270 *session, unsigned char aid_code)
 	plugin_aid(aid_code);
 #endif /*]*/
 
-	Trace("IN_SSCP: %d cursor_addr: %d",IN_SSCP,h3270.cursor_addr);
+	trace("IN_SSCP: %d cursor_addr: %d",IN_SSCP,h3270.cursor_addr);
 
 	if (IN_SSCP) {
 		if (kybdlock & KL_OIA_MINUS)
@@ -2295,7 +2295,7 @@ LIB3270_KEY_ACTION( enter )
 {
 //	reset_idle_timer();
 
-	Trace("%s (kybdlock & KL_OIA_MINUS): %d kybdlock: %d",__FUNCTION__,(kybdlock & KL_OIA_MINUS),kybdlock);
+	trace("%s (kybdlock & KL_OIA_MINUS): %d kybdlock: %d",__FUNCTION__,(kybdlock & KL_OIA_MINUS),kybdlock);
 
 	if (kybdlock & KL_OIA_MINUS)
 		return -1;
