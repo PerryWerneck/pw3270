@@ -191,8 +191,7 @@ char * lib3270_vsprintf(const char *fmt, va_list args)
  * buffer.
  * 'format' is assumed to be a printf format string with '%s's in it.
  */
-char *
-xs_buffer(const char *fmt, ...)
+char * xs_buffer(const char *fmt, ...)
 {
 	va_list args;
 	char *r;
