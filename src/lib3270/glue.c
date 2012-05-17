@@ -119,7 +119,7 @@ static void initialize(void)
 
 #ifdef DEBUG
 	init_calls++;
-	Trace("Initializing library (calls: %d)",init_calls);
+	trace("Initializing library (calls: %d)",init_calls);
 #endif
 
 	h3270.selected = 0;
@@ -130,7 +130,7 @@ static void initialize(void)
 	(void) get_version_info();
 #endif
 
-	Trace("%s (init_calls: %d)",__FUNCTION__,init_calls);
+	trace("%s (init_calls: %d)",__FUNCTION__,init_calls);
 
 	/* Set the defaults. */
 //	appres.mono = False;

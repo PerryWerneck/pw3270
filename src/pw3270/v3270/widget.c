@@ -39,6 +39,12 @@
  #include "accessible.h"
  #include "marshal.h"
 
+#if GTK_CHECK_VERSION(3,0,0)
+	#include <gdk/gdkkeysyms-compat.h>
+#else
+	#include <gdk/gdkkeysyms.h>
+#endif
+
  #define WIDTH_IN_PIXELS(terminal,x) (x * cols)
  #define HEIGHT_IN_PIXELS(terminal,x) (x * (rows+1))
 
@@ -264,6 +270,10 @@ static void v3270_class_init(v3270Class *klass)
 {
 	GObjectClass	* gobject_class	= G_OBJECT_CLASS(klass);
 	GtkWidgetClass	* widget_class	= GTK_WIDGET_CLASS(klass);
+	GtkBindingSet	* binding		= gtk_binding_set_by_class(klass);
+
+	// Setup widget key bindings
+	gtk_binding_entry_skip(binding,GDK_F10,0);
 
 	lib3270_set_log_handler(loghandler);
 

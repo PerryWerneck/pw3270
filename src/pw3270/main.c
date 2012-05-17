@@ -137,7 +137,6 @@ int main(int argc, char *argv[])
 	bind_textdomain_codeset(PACKAGE_NAME, "UTF-8");
 	textdomain(PACKAGE_NAME);
 
-
 	// Process command-line options
 	{
 		static const GOptionEntry app_options[] =
@@ -188,7 +187,13 @@ int main(int argc, char *argv[])
 	rc = initialize();
 	if(!rc)
 	{
+		GtkSettings *settings = gtk_settings_get_default();
 		configuration_init();
+
+		if(settings)
+		{
+			gtk_settings_set_string_property(settings,"gtk-menu-bar-accel","Menu","");
+		}
 
 		toplevel = pw3270_new(host);
 

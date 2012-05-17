@@ -30,6 +30,7 @@
  #include <pw3270.h>
  #include <lib3270.h>
  #include <lib3270/session.h>
+ #include <lib3270/log.h>
  #include <lib3270/config.h>
  #include <gtk/gtk.h>
  #include <string.h>

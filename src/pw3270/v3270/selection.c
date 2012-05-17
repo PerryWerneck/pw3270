@@ -29,10 +29,10 @@
 
  #include <gtk/gtk.h>
  #include <pw3270.h>
-// #include <malloc.h>
  #include "v3270.h"
  #include "private.h"
  #include <lib3270/selection.h>
+ #include <lib3270/log.h>
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
@@ -52,7 +52,6 @@
 static void clipboard_clear(GtkClipboard *clipboard, GObject *obj)
 {
 	trace("%s widget=%p",__FUNCTION__,obj);
-
 }
 
 static void clipboard_get(GtkClipboard *clipboard, GtkSelectionData *selection, guint target, GObject *obj)

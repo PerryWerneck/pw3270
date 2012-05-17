@@ -207,7 +207,7 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 
 	unsigned int		  flen;
 
-//	Trace("%s(%s)",__FUNCTION__,local);
+//	trace("%s(%s)",__FUNCTION__,local);
 	if(!lib3270_connected(session))
 	{
 		*msg  = N_( "Disconnected from host" );
@@ -331,7 +331,7 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 		return NULL;
 	}
 
-	Trace("Command: \"%s\"",buffer);
+	trace("Command: \"%s\"",buffer);
 
 	(void) lib3270_emulate_input(NULL, buffer, strlen(buffer), False);
 

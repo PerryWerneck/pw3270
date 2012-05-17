@@ -151,6 +151,7 @@
 	GObjectClass	* gobject_class	= G_OBJECT_CLASS(klass);
 	GtkWidgetClass	* widget_class	= GTK_WIDGET_CLASS(klass);
 
+
 #if GTK_CHECK_VERSION(3,0,0)
 	widget_class->destroy = pw3270_destroy;
 #else

@@ -42,15 +42,6 @@
 	#include <gtk/gtk.h>
 	#include <lib3270.h>
 
-	// Trace
-	#include <stdio.h>
-
-	#if defined( DEBUG )
-		#define trace(x, ...)          fprintf(stderr,"%s(%d):\t" x "\n",__FILE__,__LINE__, __VA_ARGS__); fflush(stderr);
-	#else
-		#define trace(x, ...) /* */
-	#endif
-
 	// Error management
 	#include <errno.h>
 

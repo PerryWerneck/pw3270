@@ -155,7 +155,7 @@
 
  	if(BA_TO_ROW(session->cursor_addr) != data->row)
  	{
- 		Trace("Row changed from %d to %d",data->row,BA_TO_ROW(session->cursor_addr));
+ 		trace("Row changed from %d to %d",data->row,BA_TO_ROW(session->cursor_addr));
 		if(!remargin(session,data->orig_col))
 			return 0;
 		data->row = BA_TO_ROW(session->cursor_addr);

@@ -33,6 +33,7 @@
  #include <pw3270.h>
  #include <lib3270.h>
  #include <lib3270/actions.h>
+ #include <lib3270/log.h>
  #include <gtk/gtk.h>
  #include <string.h>
  #include <gdk/gdk.h>
@@ -138,6 +139,9 @@
 	if(event->keyval >= GDK_F1 && event->keyval <= GDK_F12 && !(state & (GDK_CONTROL_MASK|GDK_ALT_MASK)))
 	{
 		int pfcode = (event->keyval - GDK_F1) + ((state & GDK_SHIFT_MASK) ? 13 : 1);
+
+		trace("PF%02d",pfcode);
+
 		if(pfcode > 0 && pfcode < 25)
 		{
 			lib3270_pfkey(widget->host,pfcode);

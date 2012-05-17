@@ -88,16 +88,6 @@
 			#define CN ((char *) NULL)
 		#endif
 
-		/* Debug & log */ /*
-		#if defined( DEBUG )
-			#define Trace( fmt, ... )		fprintf(stderr, "%s(%d) " fmt "\n", __FILE__, __LINE__, __VA_ARGS__ ); fflush(stderr);
-			#define trace( fmt, ... )		fprintf(stderr, "%s(%d) " fmt "\n", __FILE__, __LINE__, __VA_ARGS__ ); fflush(stderr);
-		#elif !defined(Trace)
-			#define Trace( fmt, ... )	// __VA_ARGS__
-			#define trace( fmt, ... )	// __VA_ARGS__
-		#endif
-*/
-
 		#include <lib3270/log.h>
 
 //		#define WriteLog(module,fmt, ...) 		lib3270_write_log(NULL,module,fmt,__VA_ARGS__)
