@@ -31,6 +31,10 @@
 <ui>
 	<menubar name='topmenu'>
 
+		<menu name='EditMenu' label='_Edit' >
+			<menuitem action='copyashtml' label='Copy as HTML' />
+		</menu>
+
 		<menu name='View' >
 			<menu name='TraceOptions' label='Trace' >
 				<menuitem action='toggle' id='dstrace' label='DS Trace' />

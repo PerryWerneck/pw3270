@@ -461,16 +461,6 @@
 	// Finish setup
 #ifdef DEBUG
 	lib3270_testpattern(host);
-
-	{
-		#warning Temporario
-		char * text = lib3270_get_as_html(host,1);
-
-		printf("\n%s\n",text);
-
-		lib3270_free(text);
-	}
-
 #endif
 
 	trace("%s ends",__FUNCTION__);

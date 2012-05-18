@@ -38,6 +38,10 @@
  #include <lib3270/trace.h>
  #include <stdlib.h>
 
+ #ifdef DEBUG
+	#include <lib3270/html.h>
+ #endif
+
  #define ERROR_DOMAIN g_quark_from_static_string(PACKAGE_NAME)
  #define TOGGLE_GDKDEBUG LIB3270_TOGGLE_COUNT+1
 
@@ -179,6 +183,26 @@ static void kp_add_action(GtkAction *action, GtkWidget *widget)
 
 }
 
+#ifdef DEBUG
+static void copy_as_html_action(GtkAction *action, GtkWidget *widget)
+{
+	char 			* text;
+	gchar			* utf;
+	H3270			* session	= v3270_get_session(widget);
+	GtkClipboard	* clipboard	= gtk_widget_get_clipboard(widget,GDK_SELECTION_CLIPBOARD);
+
+	trace_action(action,widget);
+
+	text = lib3270_get_as_html(session,LIB3270_HTML_OPTION_ALL|LIB3270_HTML_OPTION_FORM);
+	utf = g_convert(text, -1, "UTF-8", lib3270_get_charset(session), NULL, NULL, NULL);
+	lib3270_free(text);
+
+	gtk_clipboard_set_text(clipboard,utf,-1);
+	g_free(utf);
+
+}
+#endif // DEBUG
+
 static void connect_standard_action(GtkAction *action, GtkWidget *widget, const gchar *name)
 {
 	#undef DECLARE_LIB3270_ACTION
@@ -219,6 +243,7 @@ static void connect_standard_action(GtkAction *action, GtkWidget *widget, const 
 		{ "kpsubtract", kp_subtract_action	},
 		{ "kpadd",		kp_add_action		},
 #ifdef DEBUG
+		{ "copyashtml",	copy_as_html_action	},
 		{ "download",	download_action		},
 		{ "upload",		upload_action		},
 #endif // DEBUG

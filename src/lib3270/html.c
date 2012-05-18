@@ -34,6 +34,12 @@
  #include "globals.h"
  #include "utilc.h"
 
+ struct chr_xlat
+ {
+	unsigned char 	  chr;
+	const char		* xlat;
+ };
+
 /*--[ Defines ]--------------------------------------------------------------------------------------*/
 
  enum html_element
@@ -41,6 +47,8 @@
 	HTML_ELEMENT_LINE_BREAK,
 	HTML_ELEMENT_BEGIN_COLOR,
 	HTML_ELEMENT_END_COLOR,
+	HTML_ELEMENT_HEADER,
+	HTML_ELEMENT_FOOTER,
 
 	HTML_ELEMENT_COUNT
  };
@@ -54,6 +62,8 @@
 #endif // Debug
 	"<span style=\"color:%s;background-color:%s\">",
 	"</span>",
+	"<!DOCTYPE html><html><head><meta http-equiv=\"content-type\" content=\"text/html;charset=%s\"/></head><body style=\"font-family:courier;background-color:%s\">",
+	"</body></html>"
  };
 
  static const char * html_color[] =
@@ -131,7 +141,25 @@
 	info->bg = bg;
  }
 
- LIB3270_EXPORT char * lib3270_get_as_html(H3270 *session, unsigned char all)
+ static const append_char(struct html_info *info, const struct chr_xlat *xlat, unsigned char chr)
+ {
+	char txt[] = { chr, 0 };
+	int f;
+
+	for(f=0;xlat[f].chr;f++)
+	{
+		if(xlat[f].chr == chr)
+		{
+			append_string(info,xlat[f].xlat);
+			return;
+		}
+	}
+
+	append_string(info,txt);
+
+ }
+
+ LIB3270_EXPORT char * lib3270_get_as_html(H3270 *session, LIB3270_HTML_OPTION option)
  {
 	int	row, col, baddr;
 	struct html_info info;
@@ -142,6 +170,13 @@
  	info.fg		= 0xFF;
  	info.bg		= 0xFF;
 
+	if(option & LIB3270_HTML_OPTION_HEADERS)
+	{
+		char *txt = xs_buffer(element_text[HTML_ELEMENT_HEADER],lib3270_get_charset(session),html_color[0]);
+		append_string(&info,txt);
+		lib3270_free(txt);
+	}
+
 	baddr = 0;
 	for(row=0;row < session->rows;row++)
 	{
@@ -149,12 +184,54 @@
 
 		for(col = 0; col < session->cols;col++)
 		{
-			if(all || session->text[baddr].attr & LIB3270_ATTR_SELECTED)
+			if((option && LIB3270_HTML_OPTION_ALL) || (session->text[baddr].attr & LIB3270_ATTR_SELECTED))
 			{
-				char txt[] = { session->text[baddr].chr, 0 };
 				cr++;
 				update_colors(&info,session->text[baddr].attr);
-				append_string(&info,txt);
+
+				if(session->text[baddr].attr & LIB3270_ATTR_CG)
+				{
+					static const struct chr_xlat xlat[] =
+					{
+						{ 0xd3, "+"		}, // CG 0xab, plus
+						{ 0xa2, "-"		}, // CG 0x92, horizontal line
+						{ 0x85, "|"		}, // CG 0x184, vertical line
+						{ 0xd4, "+"		}, // CG 0xac, LR corner
+						{ 0xd5, "+"		}, // CG 0xad, UR corner
+						{ 0xc5, "+"		}, // CG 0xa4, UL corner
+						{ 0xc4, "+"		}, // CG 0xa3, LL corner
+						{ 0xc6, "|"		}, // CG 0xa5, left tee
+						{ 0xd6, "|"		}, // CG 0xae, right tee
+						{ 0xc7, "-"		}, // CG 0xa6, bottom tee
+						{ 0xd7, "-"		}, // CG 0xaf, top tee
+						{ 0x8c, "&le;"	}, // CG 0xf7, less or equal "≤"
+						{ 0xae, "&ge;"	}, // CG 0xd9, greater or equal "≥"
+						{ 0xbe, "&ne;"	}, // CG 0x3e, not equal "≠"
+						{ 0xad, "["		}, // "["
+						{ 0xbd, "]"		}, // "]"
+
+						{ 0x00, NULL	}
+					};
+
+					append_char(&info, xlat, session->text[baddr].chr);
+
+				}
+				else
+				{
+					static const struct chr_xlat xlat[] =
+					{
+						{ '"',	"&quot;"	},
+						{ '&',	"&amp;"		},
+						{ '<',	"&lt;"		},
+						{ '>',	"&gt;"		},
+
+						{ 0x00, NULL		}
+					};
+
+					append_char(&info, xlat, session->text[baddr].chr);
+
+				}
+
 			}
 			baddr++;
 		}
@@ -165,6 +242,9 @@
 
 	if(info.fg != 0xFF)
 		append_string(&info,element_text[HTML_ELEMENT_END_COLOR]);
+
+	if(option & LIB3270_HTML_OPTION_HEADERS)
+		append_element(&info,HTML_ELEMENT_FOOTER);
 
 	return lib3270_realloc(info.text,strlen(info.text)+2);
  }

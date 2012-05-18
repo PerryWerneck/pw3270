@@ -30,6 +30,16 @@
 
 	#define LIB3270_HTML_H_INCLUDED 1
 
+	typedef enum _lib3270_html_option
+	{
+		LIB3270_HTML_OPTION_ALL			= 0x0001,
+		LIB3270_HTML_OPTION_HEADERS		= 0x0002,
+		LIB3270_HTML_OPTION_FORM		= 0x0004,
+
+	} LIB3270_HTML_OPTION;
+
+	LIB3270_EXPORT char * lib3270_get_as_html(H3270 *session, LIB3270_HTML_OPTION option);
+
 
 #endif // LIB3270_HTML_H_INCLUDED
 
