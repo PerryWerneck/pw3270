@@ -294,6 +294,63 @@ static void ft_complete(H3270FT *ft, const char *errmsg,unsigned long length,dou
 	ft->widget = NULL;
 }
 
+static void ft_update(H3270FT *ft, unsigned long current, unsigned long length, double kbytes_sec)
+{
+	GtkLabel		**info	= (GtkLabel **) g_object_get_data(G_OBJECT(ft->widget),"info");
+	GtkProgressBar	* pbar	= g_object_get_data(G_OBJECT(ft->widget),"progress");
+
+	if(info)
+	{
+		gchar *str;
+
+		if(length && info[0])
+		{
+			str = g_strdup_printf("%ld",length);
+			gtk_label_set_text(info[0],str);
+			g_free(str);
+		}
+
+		if(current && info[1])
+		{
+			str = g_strdup_printf("%ld",current);
+			gtk_label_set_text(info[1],str);
+			g_free(str);
+		}
+
+		if(kbytes_sec && info[2])
+		{
+			str = g_strdup_printf("%ld KB/s",(unsigned long) kbytes_sec);
+			gtk_label_set_text(info[2],str);
+			g_free(str);
+		}
+
+	}
+
+	if(pbar)
+	{
+		if(length)
+			gtk_progress_bar_set_fraction(pbar,((gdouble) current) / ((gdouble) length));
+		else
+			gtk_progress_bar_pulse(pbar);
+	}
+
+
+}
+
+static void ft_running(H3270FT *ft, int is_cut)
+{
+
+}
+
+static void ft_aborting(H3270FT *ft)
+{
+
+}
+
+static void ft_state_changed(H3270FT *ft, LIB3270_FT_STATE state)
+{
+
+}
 
 static void run_ft_dialog(GObject *action, GtkWidget *widget, struct ftdialog *dlg)
 {
@@ -401,58 +458,137 @@ static void run_ft_dialog(GObject *action, GtkWidget *widget, struct ftdialog *d
 														[Cancel]
 		*/
 		GtkWidget *container;
+		GtkWidget *ftdialog;
 
-		ft->widget = gtk_dialog_new_with_buttons(	_( "File transfer" ),
-													GTK_WINDOW(gtk_widget_get_toplevel(widget)),
-													GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
-													GTK_STOCK_CLOSE,GTK_RESPONSE_CLOSE );
+		ftdialog = gtk_dialog_new_with_buttons(	_( "File transfer" ),
+												GTK_WINDOW(gtk_widget_get_toplevel(widget)),
+												GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
+												GTK_STOCK_CLOSE,GTK_RESPONSE_CLOSE );
 
 
 		container = gtk_vbox_new(FALSE,2);
-		gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(ft->widget))),container,TRUE,TRUE,2);
+		gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(ftdialog))),container,TRUE,TRUE,2);
 
 		// Information frame
 		{
-			static const gchar *text[] = { N_( "_From:" ), N_( "_To:" ), N_( "_Status:" ) };
+			static const gchar *text[] = { N_( "_From" ), N_( "_To" ), N_( "_Status" ) };
 
 			GtkWidget	* frame = gtk_frame_new( _( "Informations" ) );
 			GtkWidget	* table = gtk_table_new(G_N_ELEMENTS(text),2,FALSE);
 			int			  f;
 			GtkWidget	**entry = g_new0(GtkWidget *, G_N_ELEMENTS(text));
 
-			g_object_set_data_full(G_OBJECT(ft->widget),"info",entry,g_free);
+			g_object_set_data_full(G_OBJECT(ftdialog),"msg",entry,g_free);
 			gtk_container_set_border_width(GTK_CONTAINER(frame),3);
 
 			for(f=0;f<G_N_ELEMENTS(text);f++)
 			{
-				GtkWidget *label = gtk_label_new_with_mnemonic(gettext(text[f]));
-				gtk_misc_set_alignment(GTK_MISC(label),0,.5);
+				GtkWidget	* label = gtk_label_new_with_mnemonic("");
+				gchar 		* str	= g_strdup_printf("<b>%s:</b>",gettext(text[f]));
+
+				gtk_label_set_markup_with_mnemonic(GTK_LABEL(label),str);
+				g_free(str);
+
+				gtk_misc_set_alignment(GTK_MISC(label),0,0);
 				gtk_table_attach(GTK_TABLE(table),label,0,1,f,f+1,GTK_FILL,GTK_FILL,2,2);
 
-				entry[f] = gtk_entry_new();
-				gtk_entry_set_width_chars(GTK_ENTRY(entry[f]),70);
-				gtk_editable_set_editable(GTK_EDITABLE(entry[f]),FALSE);
+				entry[f] = gtk_label_new("");
+				gtk_label_set_width_chars(GTK_LABEL(entry[f]),70);
+				gtk_misc_set_alignment(GTK_MISC(entry[f]),0,0);
+
+//				gtk_entry_set_width_chars(GTK_ENTRY(entry[f]),70);
+//				gtk_editable_set_editable(GTK_EDITABLE(entry[f]),FALSE);
+
 				gtk_table_attach(GTK_TABLE(table),entry[f],1,2,f,f+1,GTK_FILL|GTK_EXPAND,GTK_FILL|GTK_EXPAND,2,2);
 
 				gtk_label_set_mnemonic_widget(GTK_LABEL(label),entry[f]);
 			}
 
 			for(f=0;f<2;f++)
-				gtk_entry_set_text(GTK_ENTRY(entry[f]),gtk_entry_get_text(dlg->file[f]));
+				gtk_label_set_text(GTK_LABEL(entry[f]),gtk_entry_get_text(dlg->file[f]));
 
 			gtk_container_add(GTK_CONTAINER(frame),table);
 			gtk_box_pack_start(GTK_BOX(container),frame,TRUE,TRUE,2);
 
 		}
 
+		// Progress frame
+		{
+			static const gchar *text[] = { N_( "T_otal" ), N_( "C_urrent" ), N_( "Spee_d" ), N_( "ET_A" ) };
+
+			GtkWidget	* frame 	= gtk_frame_new( _( "Progress" ) );
+			GtkWidget	* table 	= gtk_table_new(3,4,TRUE);
+			GtkWidget	**entry 	= g_new0(GtkWidget *, G_N_ELEMENTS(text));
+			GtkWidget	* progress	= gtk_progress_bar_new();
+			int			  pos 		= 0;
+
+			g_object_set_data_full(G_OBJECT(ftdialog),"info",entry,g_free);
+			g_object_set_data(G_OBJECT(ftdialog),"progress",progress);
+
+			gtk_container_set_border_width(GTK_CONTAINER(frame),3);
+			gtk_container_set_border_width(GTK_CONTAINER(table),6);
+
+			for(f=0;f<2;f++)
+			{
+				// Left box
+				GtkWidget	* label;
+				gchar 		* str;
+
+				str = g_strdup_printf("<b>%s:</b>",gettext(text[pos]));
+				label = gtk_label_new("");
+				gtk_label_set_markup_with_mnemonic(GTK_LABEL(label),str);
+				g_free(str);
+
+				gtk_misc_set_alignment(GTK_MISC(label),0,0);
+				gtk_table_attach(GTK_TABLE(table),label,0,1,f,f+1,GTK_FILL,GTK_FILL,2,2);
+
+				entry[pos] = gtk_label_new("");
+				gtk_misc_set_alignment(GTK_MISC(entry[f]),0,0);
+
+				gtk_table_attach(GTK_TABLE(table),entry[pos],1,2,f,f+1,GTK_EXPAND,GTK_FILL,2,2);
+
+				gtk_label_set_mnemonic_widget(GTK_LABEL(label),entry[pos++]);
+
+				// Right box
+				str = g_strdup_printf("<b>%s:</b>",gettext(text[pos]));
+				label = gtk_label_new("");
+				gtk_label_set_markup_with_mnemonic(GTK_LABEL(label),str);
+				g_free(str);
+
+				gtk_misc_set_alignment(GTK_MISC(label),0,0);
+				gtk_table_attach(GTK_TABLE(table),label,2,3,f,f+1,GTK_FILL,GTK_FILL,2,2);
+
+				entry[pos] = gtk_label_new("");
+				gtk_misc_set_alignment(GTK_MISC(entry[f]),0,0);
+
+				gtk_label_set_mnemonic_widget(GTK_LABEL(label),entry[pos++]);
+
+			}
+
+			gtk_table_attach(GTK_TABLE(table),progress,0,4,f,f+1,GTK_EXPAND|GTK_FILL,GTK_EXPAND|GTK_FILL,2,2);
+
+			gtk_container_add(GTK_CONTAINER(frame),table);
+			gtk_box_pack_start(GTK_BOX(container),frame,TRUE,TRUE,2);
 
 
-		gtk_widget_show_all(ft->widget);
-		gtk_dialog_run(GTK_DIALOG(ft->widget));
-		gtk_widget_destroy(ft->widget);
+		}
+
+		ft->widget 			= ftdialog;
+		ft->complete 		= ft_complete;
+		ft->update			= ft_update;
+		ft->running			= ft_running;
+		ft->aborting		= ft_aborting;
+		ft->state_changed	= ft_state_changed;
+
+		gtk_widget_show_all(ftdialog);
+
+		trace("%s: Running dialog %p",ftdialog);
+		gtk_dialog_run(GTK_DIALOG(ftdialog));
+		trace("%s: Dialog %p ends",ftdialog);
 
 		lib3270_ft_destroy(ft);
 
+		gtk_widget_destroy(ftdialog);
 	}
 
 	gtk_widget_destroy(dlg->dialog);
