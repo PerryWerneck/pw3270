@@ -131,18 +131,25 @@ static gboolean is_dialog_ok(GtkEditable *editable, struct ftdialog *dlg)
 	if(!(*local && *remote))
 		return FALSE;
 
-	if( (dlg->option&LIB3270_FT_OPTION_RECEIVE) == 0 && !g_file_test(local,G_FILE_TEST_EXISTS))
-		return FALSE;
+
+	if( (dlg->option&LIB3270_FT_OPTION_RECEIVE) == 0)
+	{
+		if(!g_file_test(local,G_FILE_TEST_EXISTS))
+			return FALSE;
+	}
 
 	for(f=0;f<5;f++)
 	{
-		const gchar *val = gtk_entry_get_text(GTK_ENTRY(dlg->parm[f]));
-
-		while(*val)
+		if(dlg->parm[f])
 		{
-			if(*val < '0' || *val > '9')
-				return FALSE;
-			val++;
+			const gchar *val = gtk_entry_get_text(GTK_ENTRY(dlg->parm[f]));
+
+			while(*val)
+			{
+				if(*val < '0' || *val > '9')
+					return FALSE;
+				val++;
+			}
 		}
 	}
 
@@ -195,8 +202,6 @@ static void add_file_fields(GObject *action, struct ftdialog *dlg)
 
 	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dlg->dialog))),GTK_WIDGET(table),FALSE,FALSE,2);
 
-	for(f=0;f<2;f++)
-		g_signal_connect(G_OBJECT(dlg->file[f]),"changed",G_CALLBACK(check_entry),dlg);
 }
 
 static void toggle_option(GtkToggleButton *button, const struct ftoption *option)
@@ -278,6 +283,8 @@ static void setup_dft(GObject *action, struct ftdialog *dlg, GtkWidget **label)
 	gtk_widget_set_name(GTK_WIDGET(dlg->parm[4]),"dftsize");
 	gtk_entry_set_max_length(dlg->parm[4],10);
 	gtk_entry_set_width_chars(dlg->parm[4],10);
+
+	gtk_entry_set_text(GTK_ENTRY(dlg->parm[4]),"4096");
 
 	gtk_label_set_mnemonic_widget(GTK_LABEL(*label),GTK_WIDGET(dlg->parm[4]));
 
@@ -369,7 +376,10 @@ static void run_ft_dialog(GObject *action, GtkWidget *widget, struct ftdialog *d
 		if(dlg->parm[f])
 		{
 			gchar *val = get_attribute(action,dlg,gtk_widget_get_name(GTK_WIDGET(dlg->parm[f])));
-			gtk_entry_set_text(dlg->parm[f],val);
+
+			if(val && *val)
+				gtk_entry_set_text(dlg->parm[f],val);
+
 			g_free(val);
 			g_signal_connect(G_OBJECT(dlg->parm[f]),"changed",G_CALLBACK(check_entry),dlg);
 		}
@@ -584,9 +594,9 @@ static void run_ft_dialog(GObject *action, GtkWidget *widget, struct ftdialog *d
 		gtk_widget_show_all(ftdialog);
 		lib3270_ft_start(ft);
 
-		trace("%s: Running dialog %p",ftdialog);
+		trace("%s: Running dialog %p",__FUNCTION__,ftdialog);
 		gtk_dialog_run(GTK_DIALOG(ftdialog));
-		trace("%s: Dialog %p ends",ftdialog);
+		trace("%s: Dialog %p ends",__FUNCTION__,ftdialog);
 
 		lib3270_ft_destroy(ft);
 
