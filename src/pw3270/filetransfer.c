@@ -377,6 +377,8 @@ static void run_ft_dialog(GObject *action, GtkWidget *widget, struct ftdialog *d
 		{
 			gchar *val = get_attribute(action,dlg,gtk_widget_get_name(GTK_WIDGET(dlg->parm[f])));
 
+			gtk_entry_set_alignment(GTK_ENTRY(dlg->parm[f]),1);
+
 			if(val && *val)
 				gtk_entry_set_text(dlg->parm[f],val);
 
