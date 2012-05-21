@@ -165,12 +165,7 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 
  }
 
- static void def_setlength(H3270FT *ft, unsigned long length)
- {
-
- }
-
- static void def_update(H3270FT *ft, unsigned long length,double kbytes_sec)
+ static void def_update(H3270FT *ft, unsigned long current, unsigned long length, double kbytes_sec)
  {
 
  }
@@ -191,7 +186,7 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
  }
 
 
- LIB3270_EXPORT H3270FT * lib3270_ft_start(H3270 *session, LIB3270_FT_OPTION flags, const char *local, const char *remote, int lrecl, int blksize, int primspace, int secspace, int dft, const char **msg)
+ LIB3270_EXPORT H3270FT * lib3270_ft_new(H3270 *session, LIB3270_FT_OPTION flags, const char *local, const char *remote, int lrecl, int blksize, int primspace, int secspace, int dft, const char **msg)
  {
  	H3270FT				* ftHandle		= NULL;
  	static const char	* rec			= "fvu";
@@ -201,6 +196,7 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
  	unsigned short		  units			= (flags & FT_ALLOCATION_UNITS_MASK) >> 12;
 
  	FILE				* ft_local_file	= NULL;
+ 	unsigned long		  ft_length		= 0L;
 
  	char 				  op[4096];
  	char				  buffer[4096];
@@ -215,16 +211,16 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 		return NULL;
 	}
 
-	if(ftsession)
+	if(session->ft)
 	{
-		*msg  = N_( "File transfer is already active" );
+		*msg  = N_( "File transfer is already active in this session" );
 		errno = EBUSY;
 		return NULL;
 	}
 
-	if(session->ft)
+	if(ftsession)
 	{
-		*msg  = N_( "File transfer is already active in this session" );
+		*msg  = N_( "File transfer is already active" );
 		errno = EBUSY;
 		return NULL;
 	}
@@ -254,7 +250,25 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 	cr_flag    = ((flags & LIB3270_FT_OPTION_CRLF) != 0);
 	remap_flag = ((flags & LIB3270_FT_OPTION_ASCII) != 0);
 
-	lib3270_write_log(session, "%s file \"%s\"",(flags & LIB3270_FT_OPTION_RECEIVE) ? "Receiving" : "Sending", local);
+	if(flags & LIB3270_FT_OPTION_RECEIVE)
+	{
+		// Receiving file
+		lib3270_write_log(session,"ft","Receiving file %s",local);
+	}
+	else
+	{
+		// Sending file
+		if(fseek(ft_local_file,0L,SEEK_END) < 0)
+		{
+			*msg = N_( "Can't get file size" );
+			return NULL;
+		}
+
+		ft_length = ftell(ft_local_file);
+
+		lib3270_write_log(session,"ft","Sending file %s (%ld bytes)",local,ft_length);
+		rewind(ft_local_file);
+	}
 
  	/* Build the ind$file command */
  	snprintf(op,4095,"%s%s%s",
@@ -331,7 +345,7 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 		return NULL;
 	}
 
-	trace("Command: \"%s\"",buffer);
+	trace_event("Sending FT request:\n%s\n",buffer);
 
 	(void) lib3270_emulate_input(NULL, buffer, strlen(buffer), False);
 
@@ -345,9 +359,9 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 	ftHandle->sz 			= sizeof(H3270FT);
 	ftHandle->host			= session;
 	ftHandle->ft_local_file	= ft_local_file;
+	ftHandle->length		= ft_length;
 	ftHandle->state			= LIB3270_FT_STATE_AWAIT_ACK;
 	ftHandle->complete 		= def_complete;
-	ftHandle->setlength 	= def_setlength;
 	ftHandle->update 		= def_update;
 	ftHandle->running 		= def_running;
 	ftHandle->aborting 		= def_aborting;
@@ -390,6 +404,21 @@ void ft_complete(H3270FT *session, const char *errmsg)
 
 	session->complete(session,errmsg,ft_length,kbytes_sec,ft_is_cut ? "CUT" : "DFT");
 
+}
+
+LIB3270_EXPORT void lib3270_ft_destroy(H3270FT *session)
+{
+	CHECK_FT_HANDLE(session);
+
+	if (session->state != LIB3270_FT_STATE_NONE)
+		lib3270_ft_cancel(session,1);
+
+	if(session->ft_local_file)
+	{
+		fclose(session->ft_local_file);
+		session->ft_local_file = NULL;
+	}
+
 	if(session == ftsession)
 		ftsession = NULL;
 
@@ -417,7 +446,7 @@ void ft_update_length(H3270FT *session)
 			 (double)(t1.tv_usec - starting_time.tv_usec) / 1.0e6);
 	}
 
-	session->update(session,ft_length,kbytes_sec);
+	session->update(session,ft_length,session->length,kbytes_sec);
 
 }
 

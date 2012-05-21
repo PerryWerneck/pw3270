@@ -226,20 +226,21 @@
 		LOCAL_EXTERN int 				CancelFileTransfer(int force);
 //		LOCAL_EXTERN enum ft_state	GetFileTransferState(void);
 
+/*
 		struct filetransfer_callbacks
 		{
 			unsigned short sz;
 
 			void (*begin)(unsigned short flags, const char *local, const char *remote);
 			void (*complete)(const char *errmsg,unsigned long length,double kbytes_sec,const char *mode);
-			void (*setlength)(unsigned long length);
-			void (*update)(unsigned long length,double kbytes_sec);
+			void (*update)(unsigned long length,unsigned long total,double kbytes_sec);
 			void (*running)(int is_cut);
 			void (*aborting)(void);
 
 		};
 
 		LOCAL_EXTERN int RegisterFTCallbacks(const struct filetransfer_callbacks *cbk);
+*/
 
 		#define PCONNECTED		lib3270_pconnected(NULL)
 		#define HALF_CONNECTED	lib3270_half_connected(NULL)

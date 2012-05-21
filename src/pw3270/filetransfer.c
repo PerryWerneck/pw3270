@@ -174,7 +174,6 @@ static void add_file_fields(GObject *action, struct ftdialog *dlg)
 		gtk_table_attach(GTK_TABLE(table),widget,0,1,f,f+1,GTK_FILL,GTK_FILL,2,2);
 
 		dlg->file[f] = GTK_ENTRY(gtk_entry_new());
-		g_signal_connect(G_OBJECT(dlg->file[f]),"changed",G_CALLBACK(check_entry),dlg);
 
 		gtk_widget_set_name(GTK_WIDGET(dlg->file[f]),attr[f]);
 
@@ -196,6 +195,8 @@ static void add_file_fields(GObject *action, struct ftdialog *dlg)
 
 	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dlg->dialog))),GTK_WIDGET(table),FALSE,FALSE,2);
 
+	for(f=0;f<2;f++)
+		g_signal_connect(G_OBJECT(dlg->file[f]),"changed",G_CALLBACK(check_entry),dlg);
 }
 
 static void toggle_option(GtkToggleButton *button, const struct ftoption *option)
@@ -282,12 +283,27 @@ static void setup_dft(GObject *action, struct ftdialog *dlg, GtkWidget **label)
 
 }
 
-static gboolean run_ft_dialog(GObject *action, GtkWidget *widget, struct ftdialog *dlg)
+
+static void ft_complete(H3270FT *ft, const char *errmsg,unsigned long length,double kbytes_sec,const char *mode)
+{
+	if(!ft->widget)
+		return;
+
+
+
+	ft->widget = NULL;
+}
+
+
+static void run_ft_dialog(GObject *action, GtkWidget *widget, struct ftdialog *dlg)
 {
 	H3270FT		* ft			= NULL;
 	const char	* msg			= NULL;
 	int 		  f;
 	int			  parm[G_N_ELEMENTS(dlg->parm)];
+
+	for(f=0;f<2;f++)
+		gtk_widget_set_sensitive(dlg->ready,is_dialog_ok(GTK_EDITABLE(dlg->file[f]),dlg));
 
 	gtk_widget_show_all(dlg->dialog);
 
@@ -303,7 +319,11 @@ static gboolean run_ft_dialog(GObject *action, GtkWidget *widget, struct ftdialo
 	}
 
 	if(gtk_dialog_run(GTK_DIALOG(dlg->dialog)) != GTK_RESPONSE_ACCEPT)
-		return FALSE;
+	{
+		gtk_widget_destroy(dlg->dialog);
+		dlg->dialog = NULL;
+		return;
+	}
 
 	for(f=0;f<G_N_ELEMENTS(dlg->parm);f++)
 	{
@@ -321,7 +341,7 @@ static gboolean run_ft_dialog(GObject *action, GtkWidget *widget, struct ftdialo
 	set_string_to_config(dlg->name,"local","%s",gtk_entry_get_text(dlg->file[0]));
 	set_string_to_config(dlg->name,"remote","%s",gtk_entry_get_text(dlg->file[1]));
 
-	ft = lib3270_ft_start(	v3270_get_session(widget),
+	ft = lib3270_ft_new(	v3270_get_session(widget),
 							dlg->option,
 							gtk_entry_get_text(dlg->file[0]),
 							gtk_entry_get_text(dlg->file[1]),
@@ -331,6 +351,9 @@ static gboolean run_ft_dialog(GObject *action, GtkWidget *widget, struct ftdialo
 							parm[3],	// secspace
 							parm[4],	// dft
 							&msg );
+
+
+	gtk_widget_set_visible(dlg->dialog,FALSE);
 
 	if(msg)
 	{
@@ -351,10 +374,90 @@ static gboolean run_ft_dialog(GObject *action, GtkWidget *widget, struct ftdialo
 
 	}
 
-	if(!ft)
-		return FALSE;
+	if(ft)
+	{
+		// Setup FT callbacks, create popup window
+		/*
+		http://www.suggestsoft.com/images/medieval-software/medieval-bluetooth-obex-file-transfer.gif
 
-	return TRUE;
+		--Informations----------------------------------------
+		|
+		| From:		xxx.xxx.xxx.xxx.xxx.xxx.xxx.xxx.xxx.xxx.xxx.xxx.xxx
+		|
+		| To:		xxx.xxx.xxx.xxx.xxx.xxx.xxx.xxx.xxx.xxx.xxx.xxx.xxx
+		|
+		| Status:	xxx.xxx.xxx.xxx.xxx.xxx.xxx.xxx.xxx.xxx.xxx.xxx.xxx
+		------------------------------------------------------
+
+		--Progress----------------------------------------------
+		|
+		| Total: 	xxx.xxx.xxx 		Current:	xxx.xxx.xxx
+		|
+		| Started:	xx:xx:xx			ETA: 		xx:xx:xx
+		|
+		| xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+		--------------------------------------------------------
+
+														[Cancel]
+		*/
+		GtkWidget *container;
+
+		ft->widget = gtk_dialog_new_with_buttons(	_( "File transfer" ),
+													GTK_WINDOW(gtk_widget_get_toplevel(widget)),
+													GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
+													GTK_STOCK_CLOSE,GTK_RESPONSE_CLOSE );
+
+
+		container = gtk_vbox_new(FALSE,2);
+		gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(ft->widget))),container,TRUE,TRUE,2);
+
+		// Information frame
+		{
+			static const gchar *text[] = { N_( "_From:" ), N_( "_To:" ), N_( "_Status:" ) };
+
+			GtkWidget	* frame = gtk_frame_new( _( "Informations" ) );
+			GtkWidget	* table = gtk_table_new(G_N_ELEMENTS(text),2,FALSE);
+			int			  f;
+			GtkWidget	**entry = g_new0(GtkWidget *, G_N_ELEMENTS(text));
+
+			g_object_set_data_full(G_OBJECT(ft->widget),"info",entry,g_free);
+			gtk_container_set_border_width(GTK_CONTAINER(frame),3);
+
+			for(f=0;f<G_N_ELEMENTS(text);f++)
+			{
+				GtkWidget *label = gtk_label_new_with_mnemonic(gettext(text[f]));
+				gtk_misc_set_alignment(GTK_MISC(label),0,.5);
+				gtk_table_attach(GTK_TABLE(table),label,0,1,f,f+1,GTK_FILL,GTK_FILL,2,2);
+
+				entry[f] = gtk_entry_new();
+				gtk_entry_set_width_chars(GTK_ENTRY(entry[f]),70);
+				gtk_editable_set_editable(GTK_EDITABLE(entry[f]),FALSE);
+				gtk_table_attach(GTK_TABLE(table),entry[f],1,2,f,f+1,GTK_FILL|GTK_EXPAND,GTK_FILL|GTK_EXPAND,2,2);
+
+				gtk_label_set_mnemonic_widget(GTK_LABEL(label),entry[f]);
+			}
+
+			for(f=0;f<2;f++)
+				gtk_entry_set_text(GTK_ENTRY(entry[f]),gtk_entry_get_text(dlg->file[f]));
+
+			gtk_container_add(GTK_CONTAINER(frame),table);
+			gtk_box_pack_start(GTK_BOX(container),frame,TRUE,TRUE,2);
+
+		}
+
+
+
+		gtk_widget_show_all(ft->widget);
+		gtk_dialog_run(GTK_DIALOG(ft->widget));
+		gtk_widget_destroy(ft->widget);
+
+		lib3270_ft_destroy(ft);
+
+	}
+
+	gtk_widget_destroy(dlg->dialog);
+	dlg->dialog = NULL;
+
 }
 
 static void add_buttons(struct ftdialog *dlg)
@@ -408,8 +511,6 @@ void download_action(GtkAction *action, GtkWidget *widget)
 	}
 
 	run_ft_dialog(G_OBJECT(action),widget,&dlg);
-
-	gtk_widget_destroy(dlg.dialog);
 
 }
 
@@ -565,9 +666,9 @@ void upload_action(GtkAction *action, GtkWidget *widget)
 
 	}
 
-	run_ft_dialog(G_OBJECT(action),widget,&dlg);
+	trace("Running ft fialog %p",&dlg);
 
-	gtk_widget_destroy(dlg.dialog);
+	run_ft_dialog(G_OBJECT(action),widget,&dlg);
 
 
 }
