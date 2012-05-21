@@ -283,57 +283,56 @@ static void setup_dft(GObject *action, struct ftdialog *dlg, GtkWidget **label)
 
 }
 
-
-static void ft_complete(H3270FT *ft, const char *errmsg,unsigned long length,double kbytes_sec,const char *mode)
+static void update(H3270FT *ft, unsigned long length, double kbytes_sec)
 {
-	if(!ft->widget)
-		return;
+	GtkLabel **info	= (GtkLabel **) g_object_get_data(G_OBJECT(ft->widget),"info");
 
+	if(length && info[0])
+	{
+		gchar *str = g_strdup_printf("%ld",length);
+		gtk_label_set_text(info[0],str);
+		g_free(str);
+	}
 
+	if(kbytes_sec && info[2])
+	{
+		gchar *str = g_strdup_printf("%ld KB/s",(unsigned long) kbytes_sec);
+		gtk_label_set_text(info[2],str);
+		g_free(str);
+	}
 
-	ft->widget = NULL;
+}
+
+static void ft_complete(H3270FT *ft, unsigned long length,double kbytes_sec,const char *mode)
+{
+	update(ft,length,kbytes_sec);
+}
+
+static void ft_message(struct _h3270ft *ft, const char *text)
+{
+	GtkLabel **msg	= (GtkLabel **) g_object_get_data(G_OBJECT(ft->widget),"msg");
+	gtk_label_set_text(msg[2],gettext(text));
 }
 
 static void ft_update(H3270FT *ft, unsigned long current, unsigned long length, double kbytes_sec)
 {
 	GtkLabel		**info	= (GtkLabel **) g_object_get_data(G_OBJECT(ft->widget),"info");
 	GtkProgressBar	* pbar	= g_object_get_data(G_OBJECT(ft->widget),"progress");
+	gchar 			* str;
 
-	if(info)
+	update(ft, length, kbytes_sec);
+
+	if(current && info[1])
 	{
-		gchar *str;
-
-		if(length && info[0])
-		{
-			str = g_strdup_printf("%ld",length);
-			gtk_label_set_text(info[0],str);
-			g_free(str);
-		}
-
-		if(current && info[1])
-		{
-			str = g_strdup_printf("%ld",current);
-			gtk_label_set_text(info[1],str);
-			g_free(str);
-		}
-
-		if(kbytes_sec && info[2])
-		{
-			str = g_strdup_printf("%ld KB/s",(unsigned long) kbytes_sec);
-			gtk_label_set_text(info[2],str);
-			g_free(str);
-		}
-
+		str = g_strdup_printf("%ld",current);
+		gtk_label_set_text(info[1],str);
+		g_free(str);
 	}
 
-	if(pbar)
-	{
-		if(length)
-			gtk_progress_bar_set_fraction(pbar,((gdouble) current) / ((gdouble) length));
-		else
-			gtk_progress_bar_pulse(pbar);
-	}
-
+	if(length)
+		gtk_progress_bar_set_fraction(pbar,((gdouble) current) / ((gdouble) length));
+	else
+		gtk_progress_bar_pulse(pbar);
 
 }
 
@@ -344,7 +343,8 @@ static void ft_running(H3270FT *ft, int is_cut)
 
 static void ft_aborting(H3270FT *ft)
 {
-
+	GtkLabel **msg	= (GtkLabel **) g_object_get_data(G_OBJECT(ft->widget),"msg");
+	gtk_label_set_text(msg[2],_("Aborting"));
 }
 
 static void ft_state_changed(H3270FT *ft, LIB3270_FT_STATE state)
@@ -542,7 +542,7 @@ static void run_ft_dialog(GObject *action, GtkWidget *widget, struct ftdialog *d
 				gtk_misc_set_alignment(GTK_MISC(label),0,0);
 				gtk_table_attach(GTK_TABLE(table),label,0,1,f,f+1,GTK_FILL,GTK_FILL,2,2);
 
-				entry[pos] = gtk_label_new("");
+				entry[pos] = gtk_label_new(_( "N/A" ) );
 				gtk_misc_set_alignment(GTK_MISC(entry[f]),0,0);
 
 				gtk_table_attach(GTK_TABLE(table),entry[pos],1,2,f,f+1,GTK_EXPAND,GTK_FILL,2,2);
@@ -558,7 +558,7 @@ static void run_ft_dialog(GObject *action, GtkWidget *widget, struct ftdialog *d
 				gtk_misc_set_alignment(GTK_MISC(label),0,0);
 				gtk_table_attach(GTK_TABLE(table),label,2,3,f,f+1,GTK_FILL,GTK_FILL,2,2);
 
-				entry[pos] = gtk_label_new("");
+				entry[pos] = gtk_label_new(_("N/A" ));
 				gtk_misc_set_alignment(GTK_MISC(entry[f]),0,0);
 
 				gtk_label_set_mnemonic_widget(GTK_LABEL(label),entry[pos++]);
@@ -579,8 +579,10 @@ static void run_ft_dialog(GObject *action, GtkWidget *widget, struct ftdialog *d
 		ft->running			= ft_running;
 		ft->aborting		= ft_aborting;
 		ft->state_changed	= ft_state_changed;
+		ft->message			= ft_message;
 
 		gtk_widget_show_all(ftdialog);
+		lib3270_ft_start(ft);
 
 		trace("%s: Running dialog %p",ftdialog);
 		gtk_dialog_run(GTK_DIALOG(ftdialog));

@@ -160,9 +160,14 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 	return 0;
  }
 
- static void def_complete(H3270FT *ft, const char *errmsg,unsigned long length,double kbytes_sec,const char *mode)
+ static void def_complete(H3270FT *ft,unsigned long length,double kbytes_sec,const char *mode)
  {
 
+ }
+
+ static void def_message(H3270FT *ft, const char *errmsg)
+ {
+	lib3270_write_log(ft->host,"ft","%s",errmsg);
  }
 
  static void def_update(H3270FT *ft, unsigned long current, unsigned long length, double kbytes_sec)
@@ -189,19 +194,8 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
  LIB3270_EXPORT H3270FT * lib3270_ft_new(H3270 *session, LIB3270_FT_OPTION flags, const char *local, const char *remote, int lrecl, int blksize, int primspace, int secspace, int dft, const char **msg)
  {
  	H3270FT				* ftHandle		= NULL;
- 	static const char	* rec			= "fvu";
- 	static const char	* un[]			= { "tracks", "cylinders", "avblock" };
-
- 	unsigned short		  recfm			= (flags & FT_RECORD_FORMAT_MASK) >> 8;
- 	unsigned short		  units			= (flags & FT_ALLOCATION_UNITS_MASK) >> 12;
-
  	FILE				* ft_local_file	= NULL;
  	unsigned long		  ft_length		= 0L;
-
- 	char 				  op[4096];
- 	char				  buffer[4096];
-
-	unsigned int		  flen;
 
 //	trace("%s(%s)",__FUNCTION__,local);
 	if(!lib3270_connected(session))
@@ -246,62 +240,112 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 	dft_buffersize = dft;
 	set_dft_buffersize();
 
-	ascii_flag = ((flags & LIB3270_FT_OPTION_ASCII) != 0);
-	cr_flag    = ((flags & LIB3270_FT_OPTION_CRLF) != 0);
-	remap_flag = ((flags & LIB3270_FT_OPTION_ASCII) != 0);
+	// Initialize ft control structure.
+	ft_last_cr = False;
+	ft_is_cut  = False;
 
-	if(flags & LIB3270_FT_OPTION_RECEIVE)
+	ftHandle = lib3270_malloc(sizeof(H3270FT)+strlen(local)+strlen(remote)+3);
+
+	ftHandle->sz 			= sizeof(H3270FT);
+	ftHandle->host			= session;
+	ftHandle->flags			= flags;
+	ftHandle->local_file	= ft_local_file;
+	ftHandle->length		= ft_length;
+	ftHandle->state			= LIB3270_FT_STATE_AWAIT_ACK;
+	ftHandle->complete 		= def_complete;
+	ftHandle->message 		= def_message;
+	ftHandle->update 		= def_update;
+	ftHandle->running 		= def_running;
+	ftHandle->aborting 		= def_aborting;
+	ftHandle->state_changed	= def_state_changed;
+	ftHandle->lrecl			= lrecl;
+	ftHandle->blksize		= blksize;
+	ftHandle->primspace		= primspace;
+	ftHandle->secspace		= secspace;
+	ftHandle->dft			= dft;
+
+	ftHandle->local			= (char *) (ftHandle+1);
+	strcpy((char *) ftHandle->local,local);
+
+	ftHandle->remote		= ftHandle->local + strlen(ftHandle->local)+1;
+	strcpy((char *) ftHandle->remote,remote);
+
+	session->ft				= ftHandle;
+
+ 	return ftsession = ftHandle;
+ }
+
+ LIB3270_EXPORT int lib3270_ft_start(H3270FT *ft)
+ {
+ 	static const char	* rec			= "fvu";
+ 	static const char	* un[]			= { "tracks", "cylinders", "avblock" };
+
+ 	char 				  op[4096];
+ 	char				  buffer[4096];
+	unsigned int		  flen;
+ 	unsigned short		  recfm;
+ 	unsigned short		  units;
+
+	CHECK_FT_HANDLE(ft);
+
+ 	recfm		= (ft->flags & FT_RECORD_FORMAT_MASK) >> 8;
+ 	units		= (ft->flags & FT_ALLOCATION_UNITS_MASK) >> 12;
+	ascii_flag	= ((ft->flags & LIB3270_FT_OPTION_ASCII) != 0);
+	cr_flag   	= ((ft->flags & LIB3270_FT_OPTION_CRLF) != 0);
+	remap_flag	= ((ft->flags & LIB3270_FT_OPTION_ASCII) != 0);
+
+	if(ft->flags & LIB3270_FT_OPTION_RECEIVE)
 	{
 		// Receiving file
-		lib3270_write_log(session,"ft","Receiving file %s",local);
+		lib3270_write_log(ft->host,"ft","Receiving file %s",ft->local);
 	}
 	else
 	{
 		// Sending file
-		if(fseek(ft_local_file,0L,SEEK_END) < 0)
+		if(fseek(ft->local_file,0L,SEEK_END) < 0)
 		{
-			*msg = N_( "Can't get file size" );
-			return NULL;
+			ft_complete(ft,N_( "Can't get file size" ));
+			return errno ? errno : -1;
 		}
 
-		ft_length = ftell(ft_local_file);
+		ft_length = ftell(ft->local_file);
 
-		lib3270_write_log(session,"ft","Sending file %s (%ld bytes)",local,ft_length);
-		rewind(ft_local_file);
+		lib3270_write_log(ft->host,"ft","Sending file %s (%ld bytes)",ft->local,ft_length);
+		rewind(ft->local_file);
 	}
 
  	/* Build the ind$file command */
  	snprintf(op,4095,"%s%s%s",
-						(flags & LIB3270_FT_OPTION_ASCII) 	? " ASCII"	: "",
-						(flags & LIB3270_FT_OPTION_CRLF) 	? " CRLF"	: "",
-						(flags & LIB3270_FT_OPTION_APPEND)	? " APPEND"	: ""
+						(ft->flags & LIB3270_FT_OPTION_ASCII) 	? " ASCII"	: "",
+						(ft->flags & LIB3270_FT_OPTION_CRLF) 	? " CRLF"	: "",
+						(ft->flags & LIB3270_FT_OPTION_APPEND)	? " APPEND"	: ""
 			);
 
-	if(!(flags & LIB3270_FT_OPTION_RECEIVE))
+	if(!(ft->flags & LIB3270_FT_OPTION_RECEIVE))
 	{
-		if(flags & LIB3270_FT_OPTION_TSO)
+		if(ft->flags & LIB3270_FT_OPTION_TSO)
 		{
 			// TSO Host
 			if(recfm > 0)
 			{
 				snconcat(op,4096," recfm(%c)",rec[recfm-1]);
 
-				if(lrecl > 0)
-					snconcat(op,4096," lrecl(%d)",lrecl);
+				if(ft->lrecl > 0)
+					snconcat(op,4096," lrecl(%d)",ft->lrecl);
 
-				if(blksize > 0)
-					snconcat(op,4096," blksize(%d)", blksize);
+				if(ft->blksize > 0)
+					snconcat(op,4096," blksize(%d)", ft->blksize);
 			}
 
 			if(units > 0)
 			{
 				snconcat(op,4096," %s",un[units-1]);
 
-				if(primspace > 0)
+				if(ft->primspace > 0)
 				{
-					snconcat(op,4096," space(%d",primspace);
-					if(secspace)
-						snconcat(op,4096,",%d",secspace);
+					snconcat(op,4096," space(%d",ft->primspace);
+					if(ft->secspace)
+						snconcat(op,4096,",%d",ft->secspace);
 					snconcat(op,4096,"%s",")");
 				}
 			}
@@ -313,20 +357,20 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 			{
 				snconcat(op,4096," recfm %c",rec[recfm-1]);
 
-				if(lrecl > 0)
-					snconcat(op,4096," lrecl %d",lrecl);
+				if(ft->lrecl > 0)
+					snconcat(op,4096," lrecl %d",ft->lrecl);
 
 			}
 		}
 	}
 
 	snprintf(buffer,4095,"%s %s %s",	"IND$FILE",
-										(flags & LIB3270_FT_OPTION_RECEIVE) ? "GET" : "PUT",
-										remote );
+										(ft->flags & LIB3270_FT_OPTION_RECEIVE) ? "GET" : "PUT",
+										ft->remote );
 
 	if(*op)
 	{
-		if(flags & LIB3270_FT_OPTION_TSO)
+		if(ft->flags & LIB3270_FT_OPTION_TSO)
 			snconcat(buffer,4095," %s",op+1);
 		else
 			snconcat(buffer,4095," (%s)",op+1);
@@ -338,39 +382,24 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 	flen = kybd_prime();
 	if (!flen || flen < strlen(buffer) - 1)
 	{
-		lib3270_write_log(session, "Unable to send command \"%s\" (flen=%d szBuffer=%d)",buffer,flen,strlen(buffer));
-		fclose(ft_local_file);
-		*msg  = _( "Unable to send file-transfer request" );
-		errno = EINVAL;
-		return NULL;
+		lib3270_write_log(ft->host, "Unable to send command \"%s\" (flen=%d szBuffer=%d)",buffer,flen,strlen(buffer));
+		ft_complete(ft,N_( "Unable to send file-transfer request" ));
+		return errno = EINVAL;
 	}
 
 	trace_event("Sending FT request:\n%s\n",buffer);
 
-	(void) lib3270_emulate_input(NULL, buffer, strlen(buffer), False);
+	lib3270_emulate_input(ft->host, buffer, strlen(buffer), False);
 
-	// Get this thing started.
+	if(ft->flags & LIB3270_FT_OPTION_RECEIVE)
+		ft->message(ft,N_( "Waiting for GET response" ));
+	else
+		ft->message(ft,N_( "Waiting for PUT response" ));
 
-	ft_last_cr = False;
-	ft_is_cut  = False;
+	return 0;
 
-	ftHandle = lib3270_malloc(sizeof(H3270FT));
-
-	ftHandle->sz 			= sizeof(H3270FT);
-	ftHandle->host			= session;
-	ftHandle->ft_local_file	= ft_local_file;
-	ftHandle->length		= ft_length;
-	ftHandle->state			= LIB3270_FT_STATE_AWAIT_ACK;
-	ftHandle->complete 		= def_complete;
-	ftHandle->update 		= def_update;
-	ftHandle->running 		= def_running;
-	ftHandle->aborting 		= def_aborting;
-	ftHandle->state_changed	= def_state_changed;
-
-	session->ft				= ftHandle;
-
- 	return ftsession = ftHandle;
  }
+
 
 /* External entry points called by ft_dft and ft_cut. */
 
@@ -391,10 +420,10 @@ void ft_complete(H3270FT *session, const char *errmsg)
 		 (double)(t1.tv_usec - starting_time.tv_usec) / 1.0e6);
 
 	// Close the local file.
-	if(session->ft_local_file)
+	if(session->local_file)
 	{
-		fclose(session->ft_local_file);
-		session->ft_local_file = NULL;
+		fclose(session->local_file);
+		session->local_file = NULL;
 	}
 
 	// Clean up the state.
@@ -402,7 +431,8 @@ void ft_complete(H3270FT *session, const char *errmsg)
 
 	ft_update_length(session);
 
-	session->complete(session,errmsg,ft_length,kbytes_sec,ft_is_cut ? "CUT" : "DFT");
+	session->message(session,errmsg);
+	session->complete(session,ft_length,kbytes_sec,ft_is_cut ? "CUT" : "DFT");
 
 }
 
@@ -413,10 +443,10 @@ LIB3270_EXPORT void lib3270_ft_destroy(H3270FT *session)
 	if (session->state != LIB3270_FT_STATE_NONE)
 		lib3270_ft_cancel(session,1);
 
-	if(session->ft_local_file)
+	if(session->local_file)
 	{
-		fclose(session->ft_local_file);
-		session->ft_local_file = NULL;
+		fclose(session->local_file);
+		session->local_file = NULL;
 	}
 
 	if(session == ftsession)
