@@ -50,9 +50,11 @@
 
 #include "charsetc.h"
 #include "ctlrc.h"
-#if defined(X3270_FT) /*[*/
-#include "ft_dftc.h"
-#endif /*]*/
+
+#if defined(X3270_FT)
+	#include "ft_dftc.h"
+#endif
+
 #include "kybdc.h"
 #include "screenc.h"
 #include "seec.h"

@@ -394,11 +394,11 @@ kybd_inhibit(Boolean inhibit)
 	if (inhibit) {
 		kybdlock_set(KL_ENTER_INHIBIT, "kybd_inhibit");
 		if (kybdlock == KL_ENTER_INHIBIT)
-			status_reset(NULL);
+			status_reset(&h3270);
 	} else {
 		kybdlock_clr(KL_ENTER_INHIBIT, "kybd_inhibit");
 		if (!kybdlock)
-			status_reset(NULL);
+			status_reset(&h3270);
 	}
 }
 
@@ -1406,7 +1406,7 @@ LIB3270_KEY_ACTION( backtab )
 	if (kybdlock) {
 		if (KYBDLOCK_IS_OERR) {
 			kybdlock_clr(KL_OERR_MASK, "BackTab");
-			status_reset(NULL);
+			status_reset(&h3270);
 		} else {
 			ENQUEUE_ACTION(lib3270_backtab);
 			return 0;
@@ -1515,7 +1515,7 @@ do_reset(Boolean explicit)
 	}
 
 	/* Clean up other modes. */
-	status_reset(NULL);
+	status_reset(&h3270);
 	mcursor_normal(&h3270);
 
 }
@@ -1586,7 +1586,7 @@ LIB3270_CURSOR_ACTION( left )
 		if (KYBDLOCK_IS_OERR)
 		{
 			kybdlock_clr(KL_OERR_MASK, "Left");
-			status_reset(NULL);
+			status_reset(&h3270);
 		}
 		else
 		{
@@ -1848,7 +1848,7 @@ LIB3270_CURSOR_ACTION( right )
 		if (KYBDLOCK_IS_OERR)
 		{
 			kybdlock_clr(KL_OERR_MASK, "Right");
-			status_reset(NULL);
+			status_reset(&h3270);
 		}
 		else
 		{
@@ -1893,7 +1893,7 @@ Left2_action(Widget w unused, XEvent *event, String *params,
 	if (kybdlock) {
 		if (KYBDLOCK_IS_OERR) {
 			kybdlock_clr(KL_OERR_MASK, "Left2");
-			status_reset();
+			status_reset(&h3270);
 		} else {
 			enq_ta(Left2_action, CN, CN);
 			return;
@@ -1998,7 +1998,7 @@ Right2_action(Widget w unused, XEvent *event, String *params,
 	if (kybdlock) {
 		if (KYBDLOCK_IS_OERR) {
 			kybdlock_clr(KL_OERR_MASK, "Right2");
-			status_reset();
+			status_reset(&h3270);
 		} else {
 			enq_ta(Right2_action, CN, CN);
 			return;
@@ -2151,7 +2151,7 @@ LIB3270_CURSOR_ACTION( up )
 		if (KYBDLOCK_IS_OERR)
 		{
 			kybdlock_clr(KL_OERR_MASK, "Up");
-			status_reset(NULL);
+			status_reset(&h3270);
 		}
 		else
 		{
@@ -2189,7 +2189,7 @@ LIB3270_CURSOR_ACTION( down )
 		if (KYBDLOCK_IS_OERR)
 		{
 			kybdlock_clr(KL_OERR_MASK, "Down");
-			status_reset(NULL);
+			status_reset(&h3270);
 		} else
 		{
 			ENQUEUE_ACTION(lib3270_cursor_down);

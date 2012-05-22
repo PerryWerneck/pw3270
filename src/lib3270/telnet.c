@@ -203,9 +203,9 @@ static char	*proxy_host = CN;
 static char	*proxy_portname = CN;
 static unsigned short proxy_port = 0;
 
-static int telnet_fsm(unsigned char c);
+static int telnet_fsm(H3270 *session, unsigned char c);
 static void net_rawout(unsigned const char *buf, int len);
-static void check_in3270(void);
+static void check_in3270(H3270 *session);
 static void store3270in(unsigned char c);
 static void check_linemode(Boolean init);
 static int non_blocking(H3270 *session, Boolean on);
@@ -609,14 +609,14 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 		haddr.sin.sin_port = passthru_port;
 		ha_len = sizeof(struct sockaddr_in);
 	} else if (proxy_type > 0) {
-	    	if (resolve_host_and_port(&h3270,proxy_host, proxy_portname,
+	    	if (resolve_host_and_port(session,proxy_host, proxy_portname,
 			    &proxy_port, &haddr.sa, &ha_len, errmsg,
 			    sizeof(errmsg)) < 0) {
 		    	popup_an_error(session,errmsg);
 		    	return -1;
 		}
 	} else {
-			if (resolve_host_and_port(&h3270,host, portname,
+			if (resolve_host_and_port(session,host, portname,
 				    &session->current_port, &haddr.sa, &ha_len,
 				    errmsg, sizeof(errmsg)) < 0) {
 			    	popup_an_error(session,errmsg);
@@ -818,7 +818,7 @@ static void net_connected(H3270 *session)
 		if (SSL_set_fd(session->ssl_con, session->sock) != 1)
 		{
 			trace_dsn("Can't set fd!\n");
-			popup_system_error(&h3270,_( "Connection failed" ), _( "Can't set SSL socket file descriptor" ), "%s", SSL_state_string_long(session->ssl_con));
+			popup_system_error(session,_( "Connection failed" ), _( "Can't set SSL socket file descriptor" ), "%s", SSL_state_string_long(session->ssl_con));
 			set_ssl_state(session,LIB3270_SSL_UNSECURE);
 		}
 		else
@@ -836,11 +836,7 @@ static void net_connected(H3270 *session)
 
 				if(e != session->last_ssl_error)
 				{
-					session->message(	&h3270,
-										LIB3270_NOTIFY_ERROR,
-										_( "Connection failed" ),
-										_( "SSL negotiation failed" ),
-										state);
+					session->message(session,LIB3270_NOTIFY_ERROR,_( "Connection failed" ),_( "SSL negotiation failed" ),state);
 					session->last_ssl_error = e;
 				}
 				return;
@@ -907,15 +903,15 @@ static void net_connected(H3270 *session)
  *	appeared ready but recv() returned EWOULDBLOCK).  Complete the
  *	connection-completion processing.
  */
-static void connection_complete(void)
+static void connection_complete(H3270 *session)
 {
-	if (non_blocking(&h3270,False) < 0)
+	if (non_blocking(session,False) < 0)
 	{
-		host_disconnect(&h3270,True);
+		host_disconnect(session,True);
 		return;
 	}
-	host_connected(&h3270);
-	net_connected(&h3270);
+	host_connected(session);
+	net_connected(session);
 }
 
 /*
@@ -950,7 +946,7 @@ void net_disconnect(H3270 *session)
 
 	/* We're not connected to an LU any more. */
 	session->connected_lu = CN;
-	status_lu(&h3270,CN);
+	status_lu(session,CN);
 
 }
 
@@ -984,7 +980,7 @@ void net_input(H3270 *session)
 
 				switch (err) {
 				case WSAEISCONN:
-					connection_complete();
+					connection_complete(session);
 					// and go get data...?
 					break;
 				case WSAEALREADY:
@@ -992,11 +988,7 @@ void net_input(H3270 *session)
 				case WSAEINVAL:
 					return;
 				default:
-					lib3270_popup_dialog(	&h3270,
-											LIB3270_NOTIFY_CRITICAL,
-											N_( "Network startup error" ),
-											N_( "Second connect() failed" ),
-											"%s", win32_strerror(GetLastError()) );
+					lib3270_popup_dialog(session,LIB3270_NOTIFY_CRITICAL,N_( "Network startup error" ),N_( "Second connect() failed" ),"%s", win32_strerror(GetLastError()) );
 					_exit(1);
 				}
 			}
@@ -1040,11 +1032,7 @@ void net_input(H3270 *session)
 
 				trace_dsn("RCVD SSL_read error %ld (%s)\n", e,err_buf);
 
-				h3270.message(	&h3270,
-								LIB3270_NOTIFY_ERROR,
-								_( "SSL Error" ),
-								_( "SSL Read error" ),
-								err_buf );
+				session->message( session,LIB3270_NOTIFY_ERROR,_( "SSL Error" ),_( "SSL Read error" ),err_buf );
 
 				host_disconnect(session,True);
 				return;
@@ -1053,7 +1041,7 @@ void net_input(H3270 *session)
 
 			if (HALF_CONNECTED && socket_errno() == SE_EAGAIN)
 			{
-				connection_complete();
+				connection_complete(session);
 				return;
 			}
 
@@ -1095,7 +1083,7 @@ void net_input(H3270 *session)
 		ns_brcvd += nr;
 		for (cp = netrbuf; cp < (netrbuf + nr); cp++)
 		{
-			if (telnet_fsm(*cp))
+			if (telnet_fsm(session,*cp))
 			{
 				(void) ctlr_dbcs_postprocess();
 				host_disconnect(session,True);
@@ -1177,8 +1165,7 @@ next_lu(void)
  *	Telnet finite-state machine.
  *	Returns 0 for okay, -1 for errors.
  */
-static int
-telnet_fsm(unsigned char c)
+static int telnet_fsm(H3270 *session, unsigned char c)
 {
 #if defined(X3270_ANSI) /*[*/
 	char	*see_chr;
@@ -1202,9 +1189,9 @@ telnet_fsm(unsigned char c)
 			if (linemode)
 				cooked_init();
 #endif /*]*/
-			host_in3270(&h3270,CONNECTED_ANSI);
+			host_in3270(session,CONNECTED_ANSI);
 			kybdlock_clr(KL_AWAITING_FIRST, "telnet_fsm");
-			status_reset(NULL);
+			status_reset(session);
 			ps_process();
 		}
 		if (IN_ANSI && !IN_E) {
@@ -1220,9 +1207,9 @@ telnet_fsm(unsigned char c)
 				ansi_data = 4 + sl;
 			}
 			trace_dsn("%s",see_chr);
-			if (!h3270.syncing)
+			if (!session->syncing)
 			{
-				if (linemode && h3270.onlcr && c == '\n')
+				if (linemode && session->onlcr && c == '\n')
 					ansi_process((unsigned int) '\r');
 				ansi_process((unsigned int) c);
 //				sms_store(c);
@@ -1289,10 +1276,10 @@ telnet_fsm(unsigned char c)
 			break;
 		    case DM:
 			trace_dsn("\n");
-			if (h3270.syncing)
+			if (session->syncing)
 			{
-				h3270.syncing = 0;
-				x_except_on(&h3270);
+				session->syncing = 0;
+				x_except_on(session);
 			}
 			telnet_state = TNS_DATA;
 			break;
@@ -1339,7 +1326,7 @@ telnet_fsm(unsigned char c)
 							cmd(WILL), opt(c));
 					}
 
-					check_in3270();
+					check_in3270(&h3270);
 					check_linemode(False);
 				}
 				break;
@@ -1359,7 +1346,7 @@ telnet_fsm(unsigned char c)
 			dont_opt[2] = c;
 			net_rawout(dont_opt, sizeof(dont_opt));
 			trace_dsn("SENT %s %s\n", cmd(DONT), opt(c));
-			check_in3270();
+			check_in3270(&h3270);
 			check_linemode(False);
 		}
 		telnet_state = TNS_DATA;
@@ -1379,9 +1366,9 @@ telnet_fsm(unsigned char c)
 #if defined(HAVE_LIBSSL) /*[*/
 		    case TELOPT_STARTTLS:
 #endif /*]*/
-			if (c == TELOPT_TN3270E && h3270.non_tn3270e_host)
+			if (c == TELOPT_TN3270E && session->non_tn3270e_host)
 				goto wont;
-			if (c == TELOPT_TM && !h3270.bsd_tm)
+			if (c == TELOPT_TM && !session->bsd_tm)
 				goto wont;
 
 			if (!myopts[c]) {
@@ -1390,7 +1377,7 @@ telnet_fsm(unsigned char c)
 				will_opt[2] = c;
 				net_rawout(will_opt, sizeof(will_opt));
 				trace_dsn("SENT %s %s\n", cmd(WILL), opt(c));
-				check_in3270();
+				check_in3270(&h3270);
 				check_linemode(False);
 			}
 			if (c == TELOPT_NAWS)
@@ -1432,7 +1419,7 @@ telnet_fsm(unsigned char c)
 			wont_opt[2] = c;
 			net_rawout(wont_opt, sizeof(wont_opt));
 			trace_dsn("SENT %s %s\n", cmd(WONT), opt(c));
-			check_in3270();
+			check_in3270(&h3270);
 			check_linemode(False);
 		}
 		telnet_state = TNS_DATA;
@@ -1460,19 +1447,19 @@ telnet_fsm(unsigned char c)
 					return -1;
 				}
 
-				tt_len = strlen(h3270.termtype);
+				tt_len = strlen(session->termtype);
 				if (try_lu != CN && *try_lu) {
 					tt_len += strlen(try_lu) + 1;
-					h3270.connected_lu = try_lu;
+					session->connected_lu = try_lu;
 				} else
-					h3270.connected_lu = CN;
-				status_lu(&h3270,h3270.connected_lu);
+					session->connected_lu = CN;
+				status_lu(session,session->connected_lu);
 
 				tb_len = 4 + tt_len + 2;
 				tt_out = lib3270_malloc(tb_len + 1);
 				(void) sprintf(tt_out, "%c%c%c%c%s%s%s%c%c",
 				    IAC, SB, TELOPT_TTYPE, TELQUAL_IS,
-				    h3270.termtype,
+				    session->termtype,
 				    (try_lu != CN && *try_lu) ? "@" : "",
 				    (try_lu != CN && *try_lu) ? try_lu : "",
 				    IAC, SE);
@@ -1569,7 +1556,7 @@ backoff_tn3270e(const char *why)
 
 	/* Reset our internal state. */
 	myopts[TELOPT_TN3270E] = 0;
-	check_in3270();
+	check_in3270(&h3270);
 }
 
 /*
@@ -1706,7 +1693,7 @@ tn3270e_negotiate(void)
 				tn3270e_subneg_send(TN3270E_OP_IS, e_funcs);
 				tn3270e_negotiated = 1;
 				trace_dsn("TN3270E option negotiation complete.\n");
-				check_in3270();
+				check_in3270(&h3270);
 			} else {
 				/*
 				 * They want us to do something we can't.
@@ -1743,7 +1730,7 @@ tn3270e_negotiate(void)
 			}
 			tn3270e_negotiated = 1;
 			trace_dsn("TN3270E option negotiation complete.\n");
-			check_in3270();
+			check_in3270(&h3270);
 			break;
 
 		default:
@@ -1894,7 +1881,7 @@ process_eor(void)
 			    !tn3270e_bound)
 				return 0;
 			tn3270e_submode = E_3270;
-			check_in3270();
+			check_in3270(&h3270);
 			response_required = h->response_flag;
 			rv = process_ds(ibuf + EH_SIZE,
 			    (ibptr - ibuf) - EH_SIZE);
@@ -1912,7 +1899,7 @@ process_eor(void)
 			process_bind(ibuf + EH_SIZE, (ibptr - ibuf) - EH_SIZE);
 			trace_dsn("< BIND PLU-name '%s'\n", plu_name);
 			tn3270e_bound = 1;
-			check_in3270();
+			check_in3270(&h3270);
 			return 0;
 		case TN3270E_DT_UNBIND:
 			if (!(e_funcs & E_OPT(TN3270E_FUNC_BIND_IMAGE)))
@@ -1920,12 +1907,12 @@ process_eor(void)
 			tn3270e_bound = 0;
 			if (tn3270e_submode == E_3270)
 				tn3270e_submode = E_NONE;
-			check_in3270();
+			check_in3270(&h3270);
 			return 0;
 		case TN3270E_DT_NVT_DATA:
 			/* In tn3270e NVT mode */
 			tn3270e_submode = E_NVT;
-			check_in3270();
+			check_in3270(&h3270);
 			for (s = ibuf; s < ibptr; s++) {
 				ansi_process(*s++);
 			}
@@ -1934,7 +1921,7 @@ process_eor(void)
 			if (!(e_funcs & E_OPT(TN3270E_FUNC_BIND_IMAGE)))
 				return 0;
 			tn3270e_submode = E_SSCP;
-			check_in3270();
+			check_in3270(&h3270);
 			ctlr_write_sscp_lu(ibuf + EH_SIZE,
 			                   (ibptr - ibuf) - EH_SIZE);
 			return 0;
@@ -2407,9 +2394,10 @@ do_lnext(char c)
  *	Check for switches between NVT, SSCP-LU and 3270 modes.
  */
 static void
-check_in3270(void)
+check_in3270(H3270 *session)
 {
 	LIB3270_CSTATE new_cstate = NOT_CONNECTED;
+
 #if defined(X3270_TRACE) /*[*/
 	static const char *state_name[] = {
 		"unconnected",
@@ -2451,14 +2439,14 @@ check_in3270(void)
 	           hisopts[TELOPT_BINARY] &&
 	           hisopts[TELOPT_EOR]) {
 		new_cstate = CONNECTED_3270;
-	} else if (h3270.cstate == CONNECTED_INITIAL) {
+	} else if (session->cstate == CONNECTED_INITIAL) {
 		/* Nothing has happened, yet. */
 		return;
 	} else {
 		new_cstate = CONNECTED_ANSI;
 	}
 
-	if (new_cstate != h3270.cstate) {
+	if (new_cstate != session->cstate) {
 #if defined(X3270_TN3270E) /*[*/
 		int was_in_e = IN_E;
 #endif /*]*/
@@ -2498,7 +2486,7 @@ check_in3270(void)
 		}
 #endif /*]*/
 		trace_dsn("Now operating in %s mode.\n",state_name[new_cstate]);
-		host_in3270(&h3270,new_cstate);
+		host_in3270(session,new_cstate);
 	}
 }
 
@@ -3017,14 +3005,14 @@ net_abort(void)
 			if (tn3270e_bound ||
 			    !(e_funcs & E_OPT(TN3270E_FUNC_BIND_IMAGE))) {
 				tn3270e_submode = E_3270;
-				check_in3270();
+				check_in3270(&h3270);
 			}
 			break;
 		case E_3270:
 			net_rawout(buf, sizeof(buf));
 			trace_dsn("SENT AO\n");
 			tn3270e_submode = E_SSCP;
-			check_in3270();
+			check_in3270(&h3270);
 			break;
 		}
 	}

@@ -75,9 +75,7 @@ static void ft_in3270(H3270 *session, int ignored unused, void *unused);
 #define BN	(Boolean *)NULL
 
 // Globals.
-static H3270FT *ftsession = NULL;
-
-#define CHECK_FT_HANDLE(x) if(!x) x = ftsession;
+H3270FT *ftsession = NULL;
 
 // enum ft_state ft_state = FT_NONE;		// File transfer state
 // char *ft_local_filename;				// Local file to transfer to/from
