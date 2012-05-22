@@ -68,15 +68,17 @@ void lib3270_session_free(H3270 *h)
 	}
 
 	// Release memory
-	lib3270_free(h->charset);
-	lib3270_free(h->paste_buffer);
-	h->charset 		= NULL;
-	h->paste_buffer = NULL;
+	#define release_pointer(x) lib3270_free(x); x = NULL;
+
+	release_pointer(h->charset);
+	release_pointer(h->paste_buffer);
+
+	release_pointer(h->ibuf);
+	h->ibuf_size = 0;
 
 	for(f=0;f<(sizeof(h->buffer)/sizeof(h->buffer[0]));f++)
 	{
-		lib3270_free(h->buffer[f]);
-		h->buffer[f] = NULL;
+		release_pointer(h->buffer[f]);
 	}
 
 }

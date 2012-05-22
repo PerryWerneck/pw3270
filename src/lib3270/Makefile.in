@@ -37,7 +37,7 @@ LDFLAGS=@LDFLAGS@
 LIBS=@LIBS@ @LIBSSL_LIBS@ @INTL_LIBS@ @SOCKET_LIBS@
 
 DEBUG_CFLAGS=-DDEBUG=1 -g
-DEPENDS ?= *.h ../include/*.h Makefile
+DEPENDS ?= *.h ../include/*.h ../include/lib3270/*.h Makefile
 
 #---[ Paths ]------------------------------------------------------------------
 

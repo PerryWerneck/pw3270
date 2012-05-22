@@ -161,6 +161,11 @@
 		char 					  ssl_host;
 		char 					  ever_3270;
 
+		// Telnet.c
+		unsigned char 			* ibuf;
+		int      				  ibuf_size;			/**< size of ibuf */
+
+
 		// Widget info
 		void					* widget;
 

@@ -149,20 +149,23 @@ extern struct timeval ds_ts;
 //#endif /*]*/
 
 static unsigned char myopts[N_OPTS], hisopts[N_OPTS];
-			/* telnet option flags */
-static unsigned char *ibuf = (unsigned char *) NULL;
-			/* 3270 input buffer */
+
+/* telnet option flags */
+// static unsigned char *ibuf = (unsigned char *) NULL;
+// static int      ibuf_size = 0;	/* size of ibuf */
+
+/* 3270 input buffer */
 static unsigned char *ibptr;
-static int      ibuf_size = 0;	/* size of ibuf */
 static unsigned char *obuf_base = (unsigned char *)NULL;
 static int	obuf_size = 0;
 static unsigned char *netrbuf = (unsigned char *)NULL;
-			/* network input buffer */
+
+/* network input buffer */
 static unsigned char *sbbuf = (unsigned char *)NULL;
-			/* telnet sub-option buffer */
+
+/* telnet sub-option buffer */
 static unsigned char *sbptr;
 static unsigned char telnet_state;
-// static int      syncing;
 static char     ttype_tmpval[13];
 
 #if defined(X3270_TN3270E) /*[*/
@@ -868,7 +871,7 @@ static void net_connected(H3270 *session)
 	need_tls_follows = False;
 #endif /*]*/
 	telnet_state = TNS_DATA;
-	ibptr = ibuf;
+	ibptr = h3270.ibuf;
 
 	/* clear statistics and flags */
 	(void) time(&ns_time);
@@ -1253,7 +1256,7 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 			} else
 				Warning(NULL, _( "EOR received when not in 3270 mode, ignored." ));
 			trace_dsn("RCVD EOR\n");
-			ibptr = ibuf;
+			ibptr = h3270.ibuf;
 			telnet_state = TNS_DATA;
 			break;
 		    case WILL:
@@ -1860,12 +1863,12 @@ process_bind(unsigned char *buf, int buflen)
 static int
 process_eor(void)
 {
-	if (h3270.syncing || !(ibptr - ibuf))
+	if (h3270.syncing || !(ibptr - h3270.ibuf))
 		return(0);
 
 #if defined(X3270_TN3270E) /*[*/
 	if (IN_E) {
-		tn3270e_header *h = (tn3270e_header *)ibuf;
+		tn3270e_header *h = (tn3270e_header *) h3270.ibuf;
 		unsigned char *s;
 		enum pds rv;
 
@@ -1883,8 +1886,8 @@ process_eor(void)
 			tn3270e_submode = E_3270;
 			check_in3270(&h3270);
 			response_required = h->response_flag;
-			rv = process_ds(ibuf + EH_SIZE,
-			    (ibptr - ibuf) - EH_SIZE);
+			rv = process_ds(h3270.ibuf + EH_SIZE,
+			    (ibptr - h3270.ibuf) - EH_SIZE);
 			if (rv < 0 &&
 			    response_required != TN3270E_RSF_NO_RESPONSE)
 				tn3270e_nak(rv);
@@ -1896,7 +1899,7 @@ process_eor(void)
 		case TN3270E_DT_BIND_IMAGE:
 			if (!(e_funcs & E_OPT(TN3270E_FUNC_BIND_IMAGE)))
 				return 0;
-			process_bind(ibuf + EH_SIZE, (ibptr - ibuf) - EH_SIZE);
+			process_bind(h3270.ibuf + EH_SIZE, (ibptr - h3270.ibuf) - EH_SIZE);
 			trace_dsn("< BIND PLU-name '%s'\n", plu_name);
 			tn3270e_bound = 1;
 			check_in3270(&h3270);
@@ -1913,7 +1916,7 @@ process_eor(void)
 			/* In tn3270e NVT mode */
 			tn3270e_submode = E_NVT;
 			check_in3270(&h3270);
-			for (s = ibuf; s < ibptr; s++) {
+			for (s = h3270.ibuf; s < ibptr; s++) {
 				ansi_process(*s++);
 			}
 			return 0;
@@ -1922,8 +1925,8 @@ process_eor(void)
 				return 0;
 			tn3270e_submode = E_SSCP;
 			check_in3270(&h3270);
-			ctlr_write_sscp_lu(ibuf + EH_SIZE,
-			                   (ibptr - ibuf) - EH_SIZE);
+			ctlr_write_sscp_lu(h3270.ibuf + EH_SIZE,
+			                   (ibptr - h3270.ibuf) - EH_SIZE);
 			return 0;
 		default:
 			/* Should do something more extraordinary here. */
@@ -1932,7 +1935,7 @@ process_eor(void)
 	} else
 #endif /*]*/
 	{
-		(void) process_ds(ibuf, ibptr - ibuf);
+		(void) process_ds(h3270.ibuf, ibptr - h3270.ibuf);
 	}
 	return 0;
 }
@@ -2464,10 +2467,11 @@ check_in3270(H3270 *session)
 #endif /*]*/
 
 		/* Allocate the initial 3270 input buffer. */
-		if (new_cstate >= CONNECTED_INITIAL && !ibuf_size) {
-			ibuf = (unsigned char *)lib3270_malloc(BUFSIZ);
-			ibuf_size = BUFSIZ;
-			ibptr = ibuf;
+		if(new_cstate >= CONNECTED_INITIAL && !(h3270.ibuf_size && h3270.ibuf))
+		{
+			h3270.ibuf 		= (unsigned char *) lib3270_malloc(BUFSIZ);
+			h3270.ibuf_size = BUFSIZ;
+			ibptr			= h3270.ibuf;
 		}
 
 #if defined(X3270_ANSI) /*[*/
@@ -2498,10 +2502,11 @@ check_in3270(H3270 *session)
 static void
 store3270in(unsigned char c)
 {
-	if (ibptr - ibuf >= ibuf_size) {
-		ibuf_size += BUFSIZ;
-		ibuf = (unsigned char *)Realloc((char *)ibuf, ibuf_size);
-		ibptr = ibuf + ibuf_size - BUFSIZ;
+	if (ibptr - h3270.ibuf >= h3270.ibuf_size)
+	{
+		h3270.ibuf_size += BUFSIZ;
+		h3270.ibuf = (unsigned char *) lib3270_realloc((char *) h3270.ibuf, h3270.ibuf_size);
+		ibptr = h3270.ibuf + h3270.ibuf_size - BUFSIZ;
 	}
 	*ibptr++ = c;
 }
@@ -2733,7 +2738,7 @@ static void
 tn3270e_ack(void)
 {
 	unsigned char rsp_buf[10];
-	tn3270e_header *h_in = (tn3270e_header *)ibuf;
+	tn3270e_header *h_in = (tn3270e_header *) h3270.ibuf;
 	int rsp_len = 0;
 
 	rsp_len = 0;
@@ -2760,7 +2765,7 @@ static void
 tn3270e_nak(enum pds rv)
 {
 	unsigned char rsp_buf[10];
-	tn3270e_header *h_in = (tn3270e_header *)ibuf;
+	tn3270e_header *h_in = (tn3270e_header *) h3270.ibuf;
 	int rsp_len = 0;
 	char *neg = NULL;
 
