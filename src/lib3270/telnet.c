@@ -114,8 +114,6 @@
 #define BUFSZ		16384
 #define TRACELINE	72
 
-#define N_OPTS		256
-
 /* Globals */
 // char    	*hostname = CN;
 time_t          ns_time;
@@ -148,7 +146,7 @@ extern struct timeval ds_ts;
 //static HANDLE	sock_handle = NULL;
 //#endif /*]*/
 
-static unsigned char myopts[N_OPTS], hisopts[N_OPTS];
+// static unsigned char myopts[LIB3270_TELNET_N_OPTS], hisopts[LIB3270_TELNET_N_OPTS];
 
 /* telnet option flags */
 // static unsigned char *ibuf = (unsigned char *) NULL;
@@ -856,8 +854,8 @@ static void net_connected(H3270 *session)
 #endif /*]*/
 
 	/* set up telnet options */
-	(void) memset((char *) myopts, 0, sizeof(myopts));
-	(void) memset((char *) hisopts, 0, sizeof(hisopts));
+	(void) memset((char *) h3270.myopts, 0, sizeof(h3270.myopts));
+	(void) memset((char *) h3270.hisopts, 0, sizeof(h3270.hisopts));
 
 #if defined(X3270_TN3270E) /*[*/
 	e_funcs = E_OPT(TN3270E_FUNC_BIND_IMAGE) |
@@ -1309,8 +1307,8 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 		    case TELOPT_TN3270E:
 #endif /*]*/
 			if (c != TELOPT_TN3270E || !h3270.non_tn3270e_host) {
-				if (!hisopts[c]) {
-					hisopts[c] = 1;
+				if (!h3270.hisopts[c]) {
+					h3270.hisopts[c] = 1;
 					do_opt[2] = c;
 					net_rawout(do_opt, sizeof(do_opt));
 					trace_dsn("SENT %s %s\n",
@@ -1320,8 +1318,8 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 					 * For UTS, volunteer to do EOR when
 					 * they do.
 					 */
-					if (c == TELOPT_EOR && !myopts[c]) {
-						myopts[c] = 1;
+					if (c == TELOPT_EOR && !h3270.myopts[c]) {
+						h3270.myopts[c] = 1;
 						will_opt[2] = c;
 						net_rawout(will_opt,
 							sizeof(will_opt));
@@ -1344,8 +1342,8 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 		break;
 	    case TNS_WONT:	/* telnet WONT DO OPTION command */
 		trace_dsn("%s\n", opt(c));
-		if (hisopts[c]) {
-			hisopts[c] = 0;
+		if (h3270.hisopts[c]) {
+			h3270.hisopts[c] = 0;
 			dont_opt[2] = c;
 			net_rawout(dont_opt, sizeof(dont_opt));
 			trace_dsn("SENT %s %s\n", cmd(DONT), opt(c));
@@ -1374,9 +1372,9 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 			if (c == TELOPT_TM && !session->bsd_tm)
 				goto wont;
 
-			if (!myopts[c]) {
+			if (!h3270.myopts[c]) {
 				if (c != TELOPT_TM)
-					myopts[c] = 1;
+					h3270.myopts[c] = 1;
 				will_opt[2] = c;
 				net_rawout(will_opt, sizeof(will_opt));
 				trace_dsn("SENT %s %s\n", cmd(WILL), opt(c));
@@ -1417,8 +1415,8 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 		break;
 	    case TNS_DONT:	/* telnet PLEASE DON'T DO OPTION command */
 		trace_dsn("%s\n", opt(c));
-		if (myopts[c]) {
-			myopts[c] = 0;
+		if (h3270.myopts[c]) {
+			h3270.myopts[c] = 0;
 			wont_opt[2] = c;
 			net_rawout(wont_opt, sizeof(wont_opt));
 			trace_dsn("SENT %s %s\n", cmd(WONT), opt(c));
@@ -1479,7 +1477,7 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 				next_lu();
 			}
 #if defined(X3270_TN3270E) /*[*/
-			else if (myopts[TELOPT_TN3270E] &&
+			else if (h3270.myopts[TELOPT_TN3270E] &&
 				   sbbuf[0] == TELOPT_TN3270E) {
 				if (tn3270e_negotiate())
 					return -1;
@@ -1487,7 +1485,7 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 #endif /*]*/
 #if defined(HAVE_LIBSSL) /*[*/
 			else if (need_tls_follows &&
-				   myopts[TELOPT_STARTTLS] &&
+				   h3270.myopts[TELOPT_STARTTLS] &&
 				   sbbuf[0] == TELOPT_STARTTLS) {
 				continue_tls(sbbuf, sbptr - sbbuf);
 			}
@@ -1558,7 +1556,7 @@ backoff_tn3270e(const char *why)
 	setup_lus();
 
 	/* Reset our internal state. */
-	myopts[TELOPT_TN3270E] = 0;
+	h3270.myopts[TELOPT_TN3270E] = 0;
 	check_in3270(&h3270);
 }
 
@@ -2417,7 +2415,7 @@ check_in3270(H3270 *session)
 #endif /*]*/
 
 #if defined(X3270_TN3270E) /*[*/
-	if (myopts[TELOPT_TN3270E]) {
+	if (h3270.myopts[TELOPT_TN3270E]) {
 		if (!tn3270e_negotiated)
 			new_cstate = CONNECTED_INITIAL_E;
 		else switch (tn3270e_submode) {
@@ -2436,11 +2434,11 @@ check_in3270(H3270 *session)
 		}
 	} else
 #endif /*]*/
-	if (myopts[TELOPT_BINARY] &&
-	           myopts[TELOPT_EOR] &&
-	           myopts[TELOPT_TTYPE] &&
-	           hisopts[TELOPT_BINARY] &&
-	           hisopts[TELOPT_EOR]) {
+	if (h3270.myopts[TELOPT_BINARY] &&
+	           h3270.myopts[TELOPT_EOR] &&
+	           h3270.myopts[TELOPT_TTYPE] &&
+	           h3270.hisopts[TELOPT_BINARY] &&
+	           h3270.hisopts[TELOPT_EOR]) {
 		new_cstate = CONNECTED_3270;
 	} else if (session->cstate == CONNECTED_INITIAL) {
 		/* Nothing has happened, yet. */
@@ -2483,7 +2481,7 @@ check_in3270(H3270 *session)
 
 #if defined(X3270_TN3270E) /*[*/
 		/* If we fell out of TN3270E, remove the state. */
-		if (!myopts[TELOPT_TN3270E]) {
+		if (!h3270.myopts[TELOPT_TN3270E]) {
 			tn3270e_negotiated = 0;
 			tn3270e_submode = E_NONE;
 			tn3270e_bound = 0;
@@ -2564,7 +2562,7 @@ check_linemode(Boolean init)
 	 * mode" properly by asking for both SGA and ECHO to be off or on, but
 	 * we basically ignore the reply for SGA.
 	 */
-	linemode = !hisopts[TELOPT_ECHO] /* && !hisopts[TELOPT_SGA] */;
+	linemode = !h3270.hisopts[TELOPT_ECHO] /* && !hisopts[TELOPT_SGA] */;
 
 	if (init || linemode != wasline)
 	{
@@ -3092,7 +3090,7 @@ net_snap_options(void)
 	obptr = obuf;
 
 	/* Do TTYPE first. */
-	if (myopts[TELOPT_TTYPE]) {
+	if (h3270.myopts[TELOPT_TTYPE]) {
 		unsigned j;
 
 		space3270out(sizeof(ttype_str));
@@ -3101,17 +3099,17 @@ net_snap_options(void)
 	}
 
 	/* Do the other options. */
-	for (i = 0; i < N_OPTS; i++) {
+	for (i = 0; i < LIB3270_TELNET_N_OPTS; i++) {
 		space3270out(6);
 		if (i == TELOPT_TTYPE)
 			continue;
-		if (hisopts[i]) {
+		if (h3270.hisopts[i]) {
 			*obptr++ = IAC;
 			*obptr++ = WILL;
 			*obptr++ = (unsigned char)i;
 			any = True;
 		}
-		if (myopts[i]) {
+		if (h3270.myopts[i]) {
 			*obptr++ = IAC;
 			*obptr++ = DO;
 			*obptr++ = (unsigned char)i;
@@ -3121,7 +3119,7 @@ net_snap_options(void)
 
 #if defined(X3270_TN3270E) /*[*/
 	/* If we're in TN3270E mode, snap the subnegotations as well. */
-	if (myopts[TELOPT_TN3270E]) {
+	if (h3270.myopts[TELOPT_TN3270E]) {
 		any = True;
 
 		space3270out(5 +

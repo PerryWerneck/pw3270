@@ -36,6 +36,8 @@
 	#define LIB3270_LUNAME_LENGTH			16
 	#define LIB3270_FULL_MODEL_NAME_LENGTH	13
 
+	#define LIB3270_TELNET_N_OPTS			256
+
 	/**  extended attributes */
 	struct ea
 	{
@@ -164,7 +166,8 @@
 		// Telnet.c
 		unsigned char 			* ibuf;
 		int      				  ibuf_size;			/**< size of ibuf */
-
+		unsigned char 			  myopts[LIB3270_TELNET_N_OPTS];
+		unsigned char			  hisopts[LIB3270_TELNET_N_OPTS];
 
 		// Widget info
 		void					* widget;
