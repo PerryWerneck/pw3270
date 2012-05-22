@@ -139,6 +139,12 @@ static void update_ssl(H3270 *session, LIB3270_SSL_STATE state)
 {
 }
 
+static void screen_disp(H3270 *session)
+{
+	CHECK_SESSION_HANDLE(session);
+	screen_update(session,0,session->rows*session->cols);
+}
+
 static void lib3270_session_init(H3270 *hSession, const char *model)
 {
 	int 	ovc, ovr;
@@ -148,6 +154,23 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 	memset(hSession,0,sizeof(H3270));
 	hSession->sz = sizeof(H3270);
 
+	// Default calls
+	hSession->update 			= update_char;
+	hSession->update_model		= update_model;
+	hSession->update_cursor		= update_cursor;
+	hSession->set_selection 	= nop_char;
+	hSession->ctlr_done			= nop;
+	hSession->changed			= changed;
+	hSession->erase				= screen_disp;
+	hSession->suspend			= nop;
+	hSession->resume			= screen_disp;
+	hSession->update_oia		= update_oia;
+	hSession->update_selection	= update_selection;
+	hSession->cursor 			= set_cursor;
+	hSession->message			= message;
+	hSession->update_ssl		= update_ssl;
+	hSession->display			= screen_disp;
+
 	// Set the defaults.
 	hSession->extended  		= 1;
 	hSession->typeahead			= 1;
@@ -156,6 +179,16 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 	hSession->icrnl 			= 1;
 	hSession->onlcr				= 1;
 	hSession->host_charset		= "bracket";
+	hSession->sock				= -1;
+	hSession->model_num			= -1;
+	hSession->cstate			= LIB3270_NOT_CONNECTED;
+	hSession->oia_status		= -1;
+
+
+#ifdef _WIN32
+	hSession->sockEvent			= NULL;
+#endif // _WIN32
+
 
 /*
 #if !defined(_WIN32)
@@ -172,31 +205,6 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 
 	// Initialize toggles
 	initialize_toggles(hSession);
-
-	// Dummy calls to avoid "ifs"
-	hSession->update 			= update_char;
-	hSession->update_model		= update_model;
-	hSession->update_cursor		= update_cursor;
-	hSession->set_selection 	= nop_char;
-	hSession->ctlr_done			= nop;
-	hSession->changed			= changed;
-	hSession->erase				= screen_disp;
-	hSession->suspend			= nop;
-	hSession->resume			= screen_disp;
-	hSession->update_oia		= update_oia;
-	hSession->update_selection	= update_selection;
-	hSession->cursor 			= set_cursor;
-	hSession->message			= message;
-	hSession->update_ssl		= update_ssl;
-	hSession->sock				= -1;
-
-#ifdef _WIN32
-	hSession->sockEvent	= NULL;
-#endif // _WIN32
-
-	hSession->model_num = -1;
-	hSession->cstate = NOT_CONNECTED;
-	hSession->oia_status = -1;
 
 	strncpy(hSession->full_model_name,"IBM-",LIB3270_FULL_MODEL_NAME_LENGTH);
 	hSession->model_name = &hSession->full_model_name[4];

@@ -388,7 +388,7 @@
         /* Screen calls */
 //		LOCAL_EXTERN void screen_resume(H3270 *session);
 //		LOCAL_EXTERN void screen_suspend(H3270 *session);
-		LOCAL_EXTERN void screen_disp(H3270 *session);
+//		LOCAL_EXTERN void screen_disp(H3270 *session);
 
 		#include <lib3270/actions.h>
 

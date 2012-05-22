@@ -459,7 +459,7 @@ void ctlr_erase(H3270 *session, int alt)
 
 	kybd_inhibit(False);
 	ctlr_clear(session,True);
-	screen_erase(session);
+	session->erase(session);
 
 	if(alt == session->screen_alt)
 		return;
@@ -467,7 +467,7 @@ void ctlr_erase(H3270 *session, int alt)
 	if (alt)
 	{
 		/* Going from 24x80 to maximum. */
-		screen_disp(session);
+		session->display(session);
 		set_viewsize(session,session->maxROWS,session->maxCOLS);
 	}
 	else
@@ -478,7 +478,7 @@ void ctlr_erase(H3270 *session, int alt)
 			if(session->vcontrol)
 			{
 				ctlr_blanks();
-				screen_disp(session);
+				session->display(session);
 			}
 			set_viewsize(session,24,80);
 		}
@@ -2574,7 +2574,7 @@ void ctlr_scroll(void)
 	/* Clear the last line. */
 	(void) memset((char *) &h3270.ea_buf[qty], 0, h3270.cols * sizeof(struct ea));
 
-	screen_disp(&h3270);
+	h3270.display(&h3270);
 
 }
 #endif /*]*/
@@ -2672,7 +2672,7 @@ ctlr_shrink(void)
 			h3270.ea_buf[baddr].cc = h3270.vcontrol ? EBC_space : EBC_null;
 	}
 	ALL_CHANGED;
-	screen_disp(&h3270);
+	h3270.display(&h3270);
 }
 
 #if defined(X3270_DBCS) /*[*/

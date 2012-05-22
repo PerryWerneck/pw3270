@@ -80,7 +80,6 @@ static int (*popup_handler)(H3270 *, void *, LIB3270_NOTIFY, const char *, const
 
 enum ts { TS_AUTO, TS_ON, TS_OFF };
 
-static void screen_update(H3270 *session, int bstart, int bend);
 static void status_connect(H3270 *session, int ignored, void *dunno);
 static void status_3270_mode(H3270 *session, int ignored, void *dunno);
 // static void status_printer(H3270 *session, int on, void *dunno);
@@ -290,7 +289,7 @@ LIB3270_EXPORT int lib3270_get_contents(H3270 *h, int first, int last, unsigned 
 }
 
 /* Display what's in the buffer. */
-static void screen_update(H3270 *session, int bstart, int bend)
+void screen_update(H3270 *session, int bstart, int bend)
 {
 	int				baddr;
 	unsigned short	a;
@@ -366,12 +365,6 @@ static void screen_update(H3270 *session, int bstart, int bend)
 	}
 
 	trace("%s ends",__FUNCTION__);
-}
-
-void screen_disp(H3270 *session)
-{
-	CHECK_SESSION_HANDLE(session);
-	screen_update(session,0,session->rows*session->cols);
 }
 
 LIB3270_EXPORT int lib3270_get_cursor_address(H3270 *h)
@@ -476,7 +469,7 @@ void status_reset(H3270 *session)
 		status_changed(session,LIB3270_STATUS_BLANK);
 	}
 
-	screen_disp(session);
+	session->display(session);
 
 }
 
@@ -789,7 +782,7 @@ LIB3270_ACTION( testpattern )
 		hSession->ea_buf[f].cc = pat[row].cc[pos++];
 	}
 
-	screen_disp(hSession);
+	hSession->display(hSession);
 
 	return 0;
 }

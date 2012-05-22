@@ -538,7 +538,7 @@ static void run_ft_dialog(GObject *action, GtkWidget *widget, struct ftdialog *d
 			g_object_set_data(G_OBJECT(ftdialog),"progress",progress);
 
 			gtk_container_set_border_width(GTK_CONTAINER(frame),3);
-			gtk_container_set_border_width(GTK_CONTAINER(table),6);
+//			gtk_container_set_border_width(GTK_CONTAINER(table),6);
 
 			for(f=0;f<2;f++)
 			{
@@ -572,6 +572,7 @@ static void run_ft_dialog(GObject *action, GtkWidget *widget, struct ftdialog *d
 
 				entry[pos] = gtk_label_new(_("N/A" ));
 				gtk_misc_set_alignment(GTK_MISC(entry[f]),0,0);
+				gtk_table_attach(GTK_TABLE(table),entry[pos],3,4,f,f+1,GTK_EXPAND,GTK_FILL,2,2);
 
 				gtk_label_set_mnemonic_widget(GTK_LABEL(label),entry[pos++]);
 

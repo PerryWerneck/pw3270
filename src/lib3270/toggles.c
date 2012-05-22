@@ -140,7 +140,7 @@ LIB3270_EXPORT int lib3270_toggle(H3270 *session, LIB3270_TOGGLE ix)
 
 static void toggle_monocase(H3270 *session, struct lib3270_toggle *t, LIB3270_TOGGLE_TYPE tt)
 {
-	screen_disp(session);
+	session->display(session);
 }
 
 /*
