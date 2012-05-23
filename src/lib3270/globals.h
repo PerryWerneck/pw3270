@@ -106,7 +106,6 @@
  * Prerequisite #includes.
  */
 #include <stdio.h>				/* Unix standard I/O library */
-// #include <stdlib.h>				/* Other Unix library functions */
 #include <unistd.h>				/* Unix system calls */
 #include <ctype.h>				/* Character classes */
 #include <string.h>				/* String manipulations */
@@ -123,32 +122,10 @@
 	#undef X3270_MENUS
 #endif /*]*/
 
-/* Local process (-e) header files. */ /*
-#if defined(X3270_LOCAL_PROCESS) && defined(HAVE_LIBUTIL)
-	#define LOCAL_PROCESS	1
-	#include <termios.h>
-
-	#if defined(HAVE_PTY_H)
-		#include <pty.h>
-	#endif
-
-	#if defined(HAVE_LIBUTIL_H)
-		#include <libutil.h>
-	#endif
-
-	#if defined(HAVE_UTIL_H)
-		#include <util.h>
-	#endif
-#endif
-*/
-
 /* Functions we may need to supply. */
 #if defined(NEED_STRTOK_R) /*[*/
 	extern char *strtok_r(char *str, const char *sep, char **last);
 #endif /*]*/
-
-/* Stop conflicting with curses' COLS, even if we don't link with it. */
-// #define COLS cCOLS
 
 #define CHECK_SESSION_HANDLE(x) if(!x) x = &h3270;
 
@@ -162,9 +139,10 @@ enum iaction {
 	IA_IDLE
 };
 
-LIB3270_INTERNAL int		COLS;
-LIB3270_INTERNAL int		ROWS;
-extern H3270		h3270;
+// LIB3270_INTERNAL int		COLS;
+// LIB3270_INTERNAL int		ROWS;
+
+LIB3270_INTERNAL H3270		h3270;
 
 #if defined(X3270_DISPLAY) /*[*/
 	LIB3270_INTERNAL Atom		a_3270, a_registry, a_encoding;
@@ -232,14 +210,14 @@ LIB3270_INTERNAL Boolean		exiting;
 // LIB3270_INTERNAL int			maxROWS;
 // LIB3270_INTERNAL char			*model_name;
 // LIB3270_INTERNAL int			model_num;
-LIB3270_INTERNAL Boolean		no_login_host;
-LIB3270_INTERNAL Boolean		non_tn3270e_host;
+// LIB3270_INTERNAL Boolean		no_login_host;
+// LIB3270_INTERNAL Boolean		non_tn3270e_host;
 // LIB3270_INTERNAL int			ov_cols, ov_rows;
- LIB3270_INTERNAL Boolean		passthru_host;
-extern const char	*programname;
-LIB3270_INTERNAL char			*qualified_host;
-LIB3270_INTERNAL char			*reconnect_host;
-LIB3270_INTERNAL int			screen_depth;
+// LIB3270_INTERNAL Boolean		passthru_host;
+// extern const char	*programname;
+// LIB3270_INTERNAL char			*qualified_host;
+// LIB3270_INTERNAL char			*reconnect_host;
+// LIB3270_INTERNAL int			screen_depth;
 LIB3270_INTERNAL Boolean		scroll_initted;
 
 //#if defined(HAVE_LIBSSL) /*[*/
@@ -247,13 +225,13 @@ LIB3270_INTERNAL Boolean		scroll_initted;
 //#endif /*]*/
 
 LIB3270_INTERNAL Boolean		shifted;
-LIB3270_INTERNAL Boolean		ssl_host;
+// LIB3270_INTERNAL Boolean		ssl_host;
 LIB3270_INTERNAL Boolean		*standard_font;
-LIB3270_INTERNAL Boolean		std_ds_host;
-LIB3270_INTERNAL char			*termtype;
-LIB3270_INTERNAL Widget			toplevel;
+// LIB3270_INTERNAL Boolean		std_ds_host;
+// LIB3270_INTERNAL char			*termtype;
+// LIB3270_INTERNAL Widget			toplevel;
 // LIB3270_INTERNAL Boolean		visible_control;
-LIB3270_INTERNAL int			*xtra_width;
+// LIB3270_INTERNAL int			*xtra_width;
 
 /*
 #if defined(X3270_DISPLAY)
@@ -318,7 +296,7 @@ LIB3270_INTERNAL struct trans_list *trans_list;
 
 #define CN	((char *) NULL)
 #define PN	((XtPointer) NULL)
-#define Replace(var, value) { lib3270_free(var); var = (value); }
+#define Replace(var, value) { lib3270_free(var); var = (value); };
 
 /* Configuration change masks. */
 #define NO_CHANGE	0x0000	/* no change */

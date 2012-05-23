@@ -763,14 +763,16 @@
 
 	LIB3270_EXPORT void * lib3270_malloc(int len);
 	LIB3270_EXPORT void * lib3270_realloc(void *p, int len);
+	LIB3270_EXPORT void * lib3270_replace(void **p, void *ptr);
 
 	/**
 	 * Release allocated memory.
 	 *
 	 * @param p	Memory block to release (can be NULL)
 	 *
+	 * @return NULL
 	 */
-	LIB3270_EXPORT void   lib3270_free(void *p);
+	LIB3270_EXPORT void  * lib3270_free(void *p);
 
 
 	/**

@@ -49,11 +49,14 @@
 	int						  rows;
 	int						  cols;
 	int						  pages;
+	int						  lpp;			/**< Lines per page */
 	cairo_font_extents_t	  extents;
 	double					  left;
-	double					  width;
-	double					  height;
+	double					  width;		/**< Report width */
+	double					  height;		/**< Report height (all pages) */
 	cairo_scaled_font_t		* font_scaled;
+
+	gchar					**text;
 
  } PRINT_INFO;
 
@@ -83,10 +86,16 @@
  static void begin_print(GtkPrintOperation *prt, GtkPrintContext *context, PRINT_INFO *info)
  {
  	setup_font(context,info);
-	gtk_print_operation_set_n_pages(prt,1);
+
+	info->lpp	= (gtk_print_context_get_height(context) / (info->extents.height + info->extents.descent));
+	info->pages = (info->rows / info->lpp)+1;
+
+	trace("%d lines per page, %d pages to print",info->lpp,info->pages);
+
+	gtk_print_operation_set_n_pages(prt,info->pages);
  }
 
- static void draw_page(GtkPrintOperation *prt, GtkPrintContext *context, gint pg, PRINT_INFO *info)
+ static void draw_screen(GtkPrintOperation *prt, GtkPrintContext *context, gint pg, PRINT_INFO *info)
  {
  	int				  row;
  	int				  col;
@@ -101,6 +110,7 @@
 	rect.height	= (info->extents.height + info->extents.descent);
 	rect.width	= info->extents.max_x_advance;
 
+	// Clear page
 	gdk_cairo_set_source_color(cr,info->color+V3270_COLOR_BACKGROUND);
 	cairo_rectangle(cr, info->left-2, 0, (rect.width*info->cols)+4, (rect.height*info->rows)+4);
 	cairo_fill(cr);
@@ -243,6 +253,9 @@ static gchar * enum_to_string(GType type, guint enum_value)
 
 	if(info->font)
 		g_free(info->font);
+
+	if(info->text)
+		g_strfreev(info->text);
 
 	g_free(info);
  }
@@ -478,13 +491,15 @@ static gchar * enum_to_string(GType type, guint enum_value)
  	PRINT_INFO			* info = NULL;
  	GtkPrintOperation 	* print = begin_print_operation(action,widget,&info);
 
-	trace("Action %s activated on widget %p print=%p",gtk_action_get_name(action),widget,print);
+ #ifdef X3270_TRACE
+	lib3270_trace_event(NULL,"Action %s activated on widget %p\n",gtk_action_get_name(action),widget);
+ #endif
 
  	lib3270_get_screen_size(info->session,&info->rows,&info->cols);
 
 	info->all = 1;
     g_signal_connect(print,"begin_print",G_CALLBACK(begin_print),info);
-    g_signal_connect(print,"draw_page",G_CALLBACK(draw_page),info);
+    g_signal_connect(print,"draw_page",G_CALLBACK(draw_screen),info);
 
 	// Run Print dialog
 	gtk_print_operation_run(print,GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,GTK_WINDOW(gtk_widget_get_toplevel(widget)),NULL);
@@ -499,7 +514,9 @@ static gchar * enum_to_string(GType type, guint enum_value)
  	int					  start, end, rows;
  	GtkPrintOperation 	* print = begin_print_operation(action,widget,&info);;
 
-	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
+ #ifdef X3270_TRACE
+	lib3270_trace_event(NULL,"Action %s activated on widget %p\n",gtk_action_get_name(action),widget);
+ #endif
 
  	if(!lib3270_get_selection_bounds(info->session,&start,&end))
 	{
@@ -517,18 +534,55 @@ static gchar * enum_to_string(GType type, guint enum_value)
 
 	info->all = 0;
     g_signal_connect(print,"begin_print",G_CALLBACK(begin_print),info);
-    g_signal_connect(print,"draw_page",G_CALLBACK(draw_page),info);
+    g_signal_connect(print,"draw_page",G_CALLBACK(draw_screen),info);
 
 	// Run Print dialog
 	gtk_print_operation_run(print,GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,GTK_WINDOW(gtk_widget_get_toplevel(widget)),NULL);
 
-
 	g_object_unref(print);
+ }
+
+ static void draw_text(GtkPrintOperation *prt, GtkPrintContext *context, gint pg, PRINT_INFO *info)
+ {
+	cairo_t	* cr = gtk_print_context_get_cairo_context(context);
+
+	cairo_set_scaled_font(cr,info->font_scaled);
+
+
+
  }
 
  void print_copy_action(GtkAction *action, GtkWidget *widget)
  {
-	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
+ 	PRINT_INFO			* info = NULL;
+ 	GtkPrintOperation 	* print;
+ 	const gchar			* text	= v3270_get_copy(widget);
+ 	int					  r;
 
+ #ifdef X3270_TRACE
+	lib3270_trace_event(NULL,"Action %s activated on widget %p\n",gtk_action_get_name(action),widget);
+ #endif
+
+	if(!text)
+		return;
+
+ 	print 		= begin_print_operation(action,widget,&info);
+	info->text	= g_strsplit(text,"\n",-1);
+	info->rows	= g_strv_length(info->text);
+
+	for(r=0;r < info->rows;r++)
+	{
+		size_t sz = strlen(info->text[r]);
+		if(sz > info->cols)
+			info->cols = sz;
+	}
+
+    g_signal_connect(print,"begin_print",G_CALLBACK(begin_print),info);
+    g_signal_connect(print,"draw_page",G_CALLBACK(draw_text),info);
+
+	// Run Print dialog
+	gtk_print_operation_run(print,GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,GTK_WINDOW(gtk_widget_get_toplevel(widget)),NULL);
+
+	g_object_unref(print);
  }
 

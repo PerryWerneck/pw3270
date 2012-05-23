@@ -880,10 +880,11 @@ rpf_free(rpf_t *r)
 	r->cur_len = 0;
 }
 
-LIB3270_EXPORT void lib3270_free(void *p)
+LIB3270_EXPORT void * lib3270_free(void *p)
 {
 	if(p)
 		free(p);
+	return NULL;
 }
 
 LIB3270_EXPORT void * lib3270_realloc(void *p, int len)

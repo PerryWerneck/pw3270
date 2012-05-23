@@ -134,44 +134,4 @@ check_usage(XtActionProc action, Cardinal nargs, Cardinal nargs_min,
 	return -1;
 } */
 
-/*
- * Wrapper for calling an action internally.
- */
- /*
-void
-action_internal(XtActionProc action, enum iaction cause, const char *parm1,
-    const char *parm2)
-{
-	Cardinal count = 0;
-	String parms[2];
-
-	// Duplicate the parms, because XtActionProc doesn't grok 'const'.
-	if (parm1 != CN) {
-		parms[0] = NewString(parm1);
-		count++;
-		if (parm2 != CN) {
-			parms[1] = NewString(parm2);
-			count++;
-		}
-	}
-
-	ia_cause = cause;
-	(*action)((Widget) NULL, (XEvent *) NULL,
-	    count ? parms : (String *) NULL,
-	    &count);
-
-	// Free the parm copies.
-	switch (count) {
-	    case 2:
-		lib3270_free(parms[1]);
-		// fall through...
-	    case 1:
-		lib3270_free(parms[0]);
-		break;
-	    default:
-		break;
-	}
-}
-*/
-
 
