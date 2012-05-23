@@ -992,3 +992,42 @@ LIB3270_EXPORT const char * lib3270_get_revision(void)
 {
 	return build_rpq_revision;
 }
+
+/* Pop up an error dialog, based on an error number. */
+void popup_an_errno(H3270 *session, int errn, const char *fmt, ...)
+{
+	va_list	  args;
+	char	* text;
+
+	va_start(args, fmt);
+	text = lib3270_vsprintf(fmt, args);
+	va_end(args);
+
+	lib3270_write_log(session, "3270", "Error Popup:\n%s\nrc=%d (%s)",text,errn,strerror(errn));
+
+	Error(session,text);
+
+	lib3270_free(text);
+}
+
+#if defined(_WIN32)
+
+#define SECS_BETWEEN_EPOCHS	11644473600ULL
+#define SECS_TO_100NS		10000000ULL /* 10^7 */
+
+int gettimeofday(struct timeval *tv, void *ignored)
+{
+	FILETIME t;
+	ULARGE_INTEGER u;
+
+	GetSystemTimeAsFileTime(&t);
+	memcpy(&u, &t, sizeof(ULARGE_INTEGER));
+
+	/* Isolate seconds and move epochs. */
+	tv->tv_sec = (DWORD)((u.QuadPart / SECS_TO_100NS) - SECS_BETWEEN_EPOCHS);
+	tv->tv_usec = (u.QuadPart % SECS_TO_100NS) / 10ULL;
+	return 0;
+}
+
+#endif
+

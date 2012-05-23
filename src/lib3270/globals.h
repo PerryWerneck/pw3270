@@ -158,7 +158,7 @@ LIB3270_INTERNAL const char * build_rpq_timestamp;
 LIB3270_INTERNAL const char * build_rpq_version;
 LIB3270_INTERNAL const char * build_rpq_revision;
 
-LIB3270_INTERNAL int			  children;
+// LIB3270_INTERNAL int			  children;
 
 #if defined(X3270_DBCS) /*[*/
 	LIB3270_INTERNAL Boolean		dbcs;
@@ -170,7 +170,7 @@ LIB3270_INTERNAL int			  children;
 
 // LIB3270_INTERNAL char			*efontname;
 LIB3270_INTERNAL Boolean		ever_3270;
-LIB3270_INTERNAL Boolean		exiting;
+// LIB3270_INTERNAL Boolean		exiting;
 
 /*
 #if defined(X3270_DISPLAY)
@@ -192,7 +192,7 @@ LIB3270_INTERNAL Boolean		exiting;
 //LIB3270_INTERNAL char		*hostname;
 
 #if defined(X3270_DBCS) /*[*/
-	LIB3270_INTERNAL char	*local_encoding;
+//	LIB3270_INTERNAL char	*local_encoding;
 
 	#if defined(X3270_DISPLAY) /*[*/
 		LIB3270_INTERNAL char	*locale_name;

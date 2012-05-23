@@ -34,6 +34,7 @@
 
 	#define LIB3270_FILETRANSFER_INCLUDED 1
 	#include <stdio.h>
+	#include <sys/time.h>
 
 	#define LIB3270_FT_OPTION_SEND 0x0000
 
@@ -84,6 +85,8 @@
 		int					  primspace;
 		int					  secspace;
 		int					  dft;
+
+		struct timeval		  starting_time;		/**< Starting time */
 
 		const char 			* local;				/**< Local filename */
 		const char			* remote;				/**< Remote filename */

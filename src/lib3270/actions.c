@@ -59,6 +59,8 @@
 #include "screenc.h"
 #endif /*]*/
 
+#error Deprecated
+
 /*
 
 #if defined(X3270_DISPLAY)

@@ -86,7 +86,7 @@ Boolean remap_flag = True;				// Remap ASCII<->EBCDIC
 unsigned long ft_length = 0;			// Length of transfer
 static Boolean ft_is_cut;				// File transfer is CUT-style
 
-static struct timeval starting_time;	// Starting time
+// static struct timeval starting_time;	// Starting time
 
 // static const struct filetransfer_callbacks	*callbacks = NULL;		// Callbacks to main application
 
@@ -193,7 +193,7 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
  {
  	H3270FT				* ftHandle		= NULL;
  	FILE				* ft_local_file	= NULL;
- 	unsigned long		  ft_length		= 0L;
+// 	unsigned long		  length		= 0L;
 
 //	trace("%s(%s)",__FUNCTION__,local);
 	if(!lib3270_connected(session))
@@ -248,7 +248,6 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 	ftHandle->host			= session;
 	ftHandle->flags			= flags;
 	ftHandle->local_file	= ft_local_file;
-	ftHandle->length		= ft_length;
 	ftHandle->state			= LIB3270_FT_STATE_AWAIT_ACK;
 	ftHandle->complete 		= def_complete;
 	ftHandle->message 		= def_message;
@@ -306,9 +305,10 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 			return errno ? errno : -1;
 		}
 
-		ft_length = ftell(ft->local_file);
+		ft->length = ftell(ft->local_file);
 
-		lib3270_write_log(ft->host,"ft","Sending file %s (%ld bytes)",ft->local,ft_length);
+
+		lib3270_write_log(ft->host,"ft","Sending file %s (%ld bytes)",ft->local,ft->length);
 		rewind(ft->local_file);
 	}
 
@@ -414,8 +414,8 @@ void ft_complete(H3270FT *session, const char *errmsg)
 
 	(void) gettimeofday(&t1, (struct timezone *)NULL);
 	kbytes_sec = (double)ft_length / 1024.0 /
-		((double)(t1.tv_sec - starting_time.tv_sec) +
-		 (double)(t1.tv_usec - starting_time.tv_usec) / 1.0e6);
+		((double)(t1.tv_sec - session->starting_time.tv_sec) +
+		 (double)(t1.tv_usec - session->starting_time.tv_usec) / 1.0e6);
 
 	// Close the local file.
 	if(session->local_file)
@@ -470,8 +470,8 @@ void ft_update_length(H3270FT *session)
 
 		(void) gettimeofday(&t1, (struct timezone *)NULL);
 		kbytes_sec = (double)ft_length / 1024.0 /
-			((double)(t1.tv_sec - starting_time.tv_sec) +
-			 (double)(t1.tv_usec - starting_time.tv_usec) / 1.0e6);
+			((double)(t1.tv_sec - session->starting_time.tv_sec) +
+			 (double)(t1.tv_usec - session->starting_time.tv_usec) / 1.0e6);
 	}
 
 	session->update(session,ft_length,session->length,kbytes_sec);
@@ -486,7 +486,7 @@ void ft_running(H3270FT *h, Boolean is_cut)
 	ft_is_cut = is_cut;
 	ft_length = 0;
 
-	(void) gettimeofday(&starting_time, (struct timezone *)NULL);
+	gettimeofday(&h->starting_time, (struct timezone *)NULL);
 
 	if (h->state == FT_AWAIT_ACK)
 		set_ft_state(h,FT_RUNNING);

@@ -20,7 +20,7 @@
 /* glue.c */
 // extern int parse_command_line(int argc, const char **argv, const char **cl_hostname);
 // extern int parse_program_parameters(int argc, const char **argv);
-LIB3270_INTERNAL void parse_xrm(const char *arg, const char *where);
+// LIB3270_INTERNAL void parse_xrm(const char *arg, const char *where);
 LIB3270_INTERNAL void notify_ssl_error(H3270 *session, const char *title,  const char *msg, const char *state, const char *alert);
 
 /* XtGlue.c */

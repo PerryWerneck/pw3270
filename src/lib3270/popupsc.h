@@ -15,4 +15,4 @@
 /* Non-display version of popupsc.h */
 
 LIB3270_INTERNAL void popup_an_errno(H3270 *session, int errn, const char *fmt, ...);
-LIB3270_INTERNAL void action_output(const char *fmt, ...);
+// LIB3270_INTERNAL void action_output(const char *fmt, ...);

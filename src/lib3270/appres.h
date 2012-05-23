@@ -107,7 +107,7 @@ typedef struct {
 */
 #if defined(X3270_DISPLAY) || defined(C3270)
 //	char	*key_map;
-	char	*compose_map;
+//	char	*compose_map;
 //	char	*printer_lu;
 #endif
 /*
@@ -136,30 +136,31 @@ typedef struct {
 #endif
 #endif
 */
-#if defined(X3270_DBCS) /*[*/
-	char	*local_encoding;
-#endif /*]*/
+//#if defined(X3270_DBCS)
+//	char	*local_encoding;
+//#endif
+
 #if defined(C3270) /*[*/
-	char	*meta_escape;
-	char	*all_bold;
+//	char	*meta_escape;
+//	char	*all_bold;
 //	char	*altscreen;
 //	char	*defscreen;
 #endif /*]*/
-	char	*conf_dir;
+//	char	*conf_dir;
 	char	*model;
 //	char	*hostsfile;
 //	char	*port;
 //	char	*charset;
 //	char	*termname;
 //	char	*login_macro;
-	char	*macros;
+//	char	*macros;
 #if defined(X3270_TRACE) /*[*/
-#if !defined(_WIN32) /*[*/
-	char	*trace_dir;
-#endif /*]*/
-	char	*trace_file;
-	char	*screentrace_file;
-	char	*trace_file_size;
+//#if !defined(_WIN32)
+//	char	*trace_dir;
+//#endif
+//	char	*trace_file;
+//	char	*screentrace_file;
+//	char	*trace_file_size;
 /*
 #if defined(X3270_DISPLAY) || defined(WC3270)
 	char	trace_monitor;
@@ -169,13 +170,13 @@ typedef struct {
 #endif /*]*/
 //	char	*oversize;
 #if defined(X3270_FT) /*[*/
-	char	*ft_command;
+//	char	*ft_command;
 	int	dft_buffer_size;
 #endif /*]*/
-	char	*connectfile_name;
-	char	*idle_command;
-	char	idle_command_enabled;
-	char	*idle_timeout;
+//	char	*connectfile_name;
+//	char	*idle_command;
+//	char	idle_command_enabled;
+//	char	*idle_timeout;
 
 /*
 #if defined(X3270_SCRIPT)
