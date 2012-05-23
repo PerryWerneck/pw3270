@@ -43,7 +43,7 @@
 #include <X11/Shell.h>
 #endif /*]*/
 
-#include "appres.h"
+//#include "appres.h"
 // #include "ctlr.h"
 #if defined(X3270_DBCS) /*[*/
 #include "3270ds.h"
@@ -1715,7 +1715,7 @@ ansi_process(unsigned int c)
 //	scroll_to_bottom();
 
 #if defined(X3270_TRACE) /*[*/
-	if (lib3270_get_toggle(&h3270,SCREEN_TRACE))
+	if (lib3270_get_toggle(&h3270,LIB3270_TOGGLE_SCREEN_TRACE))
 		trace_char((char)c);
 #endif /*]*/
 

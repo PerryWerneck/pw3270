@@ -38,7 +38,7 @@
 #include <errno.h>
 #include <malloc.h>
 
-#include "appres.h"
+//#include "appres.h"
 #include "actionsc.h"
 #include "ft_cutc.h"
 #include "ft_dftc.h"

@@ -48,7 +48,7 @@
 // #include <malloc.h>
 
 #include "3270ds.h"
-#include "appres.h"
+//#include "appres.h"
 #include "resources.h"
 
 #include "actionsc.h"
@@ -138,7 +138,7 @@
  static int paste_char(H3270 *session, PASTE_DATA *data, unsigned char c)
  {
 
-	if(lib3270_get_toggle(session,SMART_PASTE))
+	if(lib3270_get_toggle(session,LIB3270_TOGGLE_SMART_PASTE))
 	{
 		int faddr = find_field_attribute(session,session->cursor_addr);
 		if(FA_IS_PROTECTED(session->ea_buf[faddr].fa))

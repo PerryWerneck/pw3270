@@ -37,7 +37,7 @@
 
 #include "globals.h"
 #include <signal.h>
-#include "appres.h"
+//#include "appres.h"
 #include "3270ds.h"
 #include "resources.h"
 // #include "ctlr.h"
@@ -342,7 +342,7 @@ void screen_update(H3270 *session, int bstart, int bend)
 			}
 			else
 			{
-				if(lib3270_get_toggle(session,MONOCASE))
+				if(lib3270_get_toggle(session,LIB3270_TOGGLE_MONOCASE))
 					addch(session,baddr,asc2uc[ebc2asc[session->ea_buf[baddr].cc]],attr,&first,&last);
 				else
 					addch(session,baddr,ebc2asc[session->ea_buf[baddr].cc],attr,&first,&last);

@@ -51,7 +51,7 @@
 #include <errno.h>
 #include <stdarg.h>
 
-#include "appres.h"
+//#include "appres.h"
 #include "3270ds.h"
 #include "resources.h"
 
@@ -102,7 +102,7 @@
 
 /*---[ Globals ]--------------------------------------------------------------------------------------------------------------*/
 // const char		* programname;
- AppRes				  appres;
+// AppRes				  appres;
 // int				  children = 0;
 // Boolean			  exiting = False;
 // char				* command_string = CN;
@@ -116,15 +116,15 @@
  */
 static void initialize(void)
 {
-	memset(&appres,0,sizeof(appres));
+//	memset(&appres,0,sizeof(appres));
 
 #ifdef DEBUG
 	init_calls++;
 	trace("Initializing library (calls: %d)",init_calls);
 #endif
 
-	h3270.selected = 0;
-	h3270.select.start = h3270.select.end = 0;
+//	h3270.selected = 0;
+//	h3270.select.start = h3270.select.end = 0;
 //	initialize_toggles(&h3270);
 
 #if defined(_WIN32)
@@ -137,9 +137,9 @@ static void initialize(void)
 //	appres.mono = False;
 //	appres.extended = True;
 
-#if defined(C3270) /*[*/
-	h3270.m3279 = True;
-#endif /*]*/
+//#if defined(C3270) /*[*/
+//	h3270.m3279 = True;
+//#endif /*]*/
 
 //	appres.modified_sel = False;
 //	appres.apl_mode = False;
@@ -162,13 +162,13 @@ static void initialize(void)
 #endif /*]*/
 
 //	appres.typeahead = True;
-	appres.debug_tracing = True;
+//	appres.debug_tracing = True;
 
 //#if defined(C3270)
 //	appres.compose_map = "latin1";
 //#endif
 
-	appres.model = "";
+//	appres.model = "";
 //	appres.hostsfile = CN;
 //	appres.port = "telnet";
 
@@ -225,9 +225,9 @@ static void initialize(void)
 
 //	appres.unlock_delay = True;
 
-#if defined(X3270_FT) /*[*/
-	appres.dft_buffer_size = DFT_BUF;
-#endif /*]*/
+//#if defined(X3270_FT) /*[*/
+//	appres.dft_buffer_size = DFT_BUF;
+//#endif /*]*/
 
 /*
 #if defined(C3270) && !defined(LIB3270)

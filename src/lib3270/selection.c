@@ -28,7 +28,7 @@
  */
 
  #include "globals.h"
- #include "appres.h"
+// #include "appres.h"
 //  #include <malloc.h>
  #include <lib3270.h>
  #include <lib3270/session.h>

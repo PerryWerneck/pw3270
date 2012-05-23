@@ -41,7 +41,7 @@
 
 #if defined(X3270_FT) /*[*/
 
-#include "appres.h"
+//#include "appres.h"
 #include "3270ds.h"
 #include "ft_dft_ds.h"
 
@@ -548,9 +548,10 @@ dft_read_modified(void)
 void
 set_dft_buffersize(void)
 {
-	if (dft_buffersize == 0) {
-		dft_buffersize = appres.dft_buffer_size;
-		if (dft_buffersize == 0)
+	if (dft_buffersize == 0)
+	{
+//		dft_buffersize = appres.dft_buffer_size;
+//		if (dft_buffersize == 0)
 			dft_buffersize = DFT_BUF;
 	}
 	if (dft_buffersize > DFT_MAX_BUF)

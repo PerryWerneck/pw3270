@@ -38,7 +38,7 @@
 #include "globals.h"
 
 #include "resources.h"
-#include "appres.h"
+// #include "appres.h"
 #include "cg.h"
 
 #include "charsetc.h"

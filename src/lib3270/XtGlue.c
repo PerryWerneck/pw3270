@@ -41,7 +41,7 @@
 // #include <malloc.h>
 
 #if defined(_WIN32)
-	#include "appres.h"
+//	#include "appres.h"
 	#include "trace_dsc.h"
 	#include "xioc.h"
 #endif

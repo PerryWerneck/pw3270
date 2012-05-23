@@ -38,6 +38,8 @@ struct toggle {
 // #define toggle_toggle(t) { (t)->value = !(t)->value; }
 */
 
+#error Deprecated
+
 #define toggled(ix)		lib3270_get_toggle(NULL,ix)
 
 /* Application resources */
@@ -86,9 +88,9 @@ typedef struct {
 //	char secure;
 //	char oerr_lock;
 //	char typeahead;
-	char debug_tracing;
-	char disconnect_clear;
-	char highlight_bold;
+//	char debug_tracing;
+//	char disconnect_clear;
+//	char highlight_bold;
 //	char color8;
 //	char bsd_tm;
 //	char unlock_delay;
@@ -171,7 +173,7 @@ typedef struct {
 //	char	*oversize;
 #if defined(X3270_FT) /*[*/
 //	char	*ft_command;
-	int	dft_buffer_size;
+//	int	dft_buffer_size;
 #endif /*]*/
 //	char	*connectfile_name;
 //	char	*idle_command;
@@ -184,9 +186,9 @@ typedef struct {
 #endif
 */
 
-#if defined(HAVE_LIBSSL) /*[*/
-	char	*cert_file;
-#endif /*]*/
+//#if defined(HAVE_LIBSSL)
+//	char	*cert_file;
+//#endif
 //	char	*proxy;
 
 	/* Toggles */

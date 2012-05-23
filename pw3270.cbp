@@ -81,7 +81,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/lib3270/aplc.h" />
-		<Unit filename="src/lib3270/appres.h" />
 		<Unit filename="src/lib3270/arpa_telnet.h" />
 		<Unit filename="src/lib3270/bounds.c">
 			<Option compilerVar="CC" />

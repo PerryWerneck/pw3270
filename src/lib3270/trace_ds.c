@@ -53,7 +53,7 @@
 #include <stdarg.h>
 #include <fcntl.h>
 #include "3270ds.h"
-#include "appres.h"
+//#include "appres.h"
 #include "objects.h"
 #include "resources.h"
 // #include "ctlr.h"
@@ -69,6 +69,7 @@
 #include "trace_dsc.h"
 #include "utilc.h"
 #include "w3miscc.h"
+#include "toggle.h"
 
 /* Maximum size of a tracefile header. */
 #define MAX_HEADER_SIZE		(10*1024)
@@ -815,14 +816,14 @@ void trace_screen(void)
 {
 	trace_skipping = False;
 
-	if (!lib3270_get_toggle(&h3270,SCREEN_TRACE))
+	if (!lib3270_get_toggle(&h3270,LIB3270_TOGGLE_SCREEN_TRACE))
 		do_screentrace();
 }
 
 /* Called from ANSI emulation code to log a single character. */
 void trace_char(char c)
 {
-	if (lib3270_get_toggle(&h3270,SCREEN_TRACE))
+	if (lib3270_get_toggle(&h3270,LIB3270_TOGGLE_SCREEN_TRACE))
 		wtrace("%c",c);
 	return;
 }

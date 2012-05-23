@@ -174,18 +174,17 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 	hSession->display			= screen_disp;
 
 	// Set the defaults.
-	hSession->extended  		= 1;
-	hSession->typeahead			= 1;
-	hSession->oerr_lock 		= 1;
-	hSession->unlock_delay		= 1;
-	hSession->icrnl 			= 1;
-	hSession->onlcr				= 1;
+	hSession->extended  		=  1;
+	hSession->typeahead			=  1;
+	hSession->oerr_lock 		=  1;
+	hSession->unlock_delay		=  1;
+	hSession->icrnl 			=  1;
+	hSession->onlcr				=  1;
 	hSession->host_charset		= "bracket";
 	hSession->sock				= -1;
 	hSession->model_num			= -1;
 	hSession->cstate			= LIB3270_NOT_CONNECTED;
 	hSession->oia_status		= -1;
-
 
 #ifdef _WIN32
 	hSession->sockEvent			= NULL;

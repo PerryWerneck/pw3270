@@ -38,8 +38,9 @@
 
 #include <errno.h>
 #include <lib3270/config.h>
+#include "toggle.h"
 #include "globals.h"
-#include "appres.h"
+//#include "appres.h"
 
 #include "ansic.h"
 #include "actionsc.h"
