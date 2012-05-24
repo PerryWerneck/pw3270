@@ -53,7 +53,7 @@
 
 #include "actionsc.h"
 #include "ansic.h"
-#include "aplc.h"
+//#include "aplc.h"
 #include "ctlrc.h"
 #include "ftc.h"
 #include "hostc.h"

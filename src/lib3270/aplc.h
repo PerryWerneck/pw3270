@@ -17,4 +17,6 @@
  *		Global declarations for apl.c.
  */
 
+#error Deprecated
+
 LIB3270_INTERNAL KeySym APLStringToKeysym(char *s, int *is_gep);

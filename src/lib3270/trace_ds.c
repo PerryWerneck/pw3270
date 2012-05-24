@@ -110,7 +110,7 @@
 static void __vwtrace(H3270 *session, const char *fmt, va_list args);
 static void	wtrace(const char *fmt, ...);
 // static char    *create_tracefile_header(const char *mode);
-static void	stop_tracing(void);
+// static void	stop_tracing(void);
 
 /* Globals */
 struct timeval  ds_ts;

@@ -25,7 +25,7 @@
 #
 
 # Terminal only sources
-TERMINAL_SOURCES =	bounds.c XtGlue.c ctlr.c util.c toggles.c screen.c selection.c kybd.c telnet.c \
+TERMINAL_SOURCES =	bounds.c ctlr.c util.c toggles.c screen.c selection.c kybd.c telnet.c \
 					host.c sf.c ansi.c resolver.c tables.c utf8.c charset.c \
 					version.c session.c state.c html.c
 

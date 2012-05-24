@@ -544,11 +544,26 @@ static gchar * enum_to_string(GType type, guint enum_value)
 
  static void draw_text(GtkPrintOperation *prt, GtkPrintContext *context, gint pg, PRINT_INFO *info)
  {
-	cairo_t	* cr = gtk_print_context_get_cairo_context(context);
+	cairo_t			* cr 	= gtk_print_context_get_cairo_context(context);
+	GdkRectangle	  rect;
+	int			  	  row	= pg*info->lpp;
+	int			  	  l;
 
 	cairo_set_scaled_font(cr,info->font_scaled);
 
+	memset(&rect,0,sizeof(rect));
+	rect.y          = 2;
+	rect.height     = (info->extents.height + info->extents.descent)+1;
+	rect.width      = info->extents.max_x_advance+1;
 
+	for(l=0;l<info->lpp && row < info->rows;l++)
+	{
+		cairo_move_to(cr,2,rect.y+rect.height);
+		cairo_show_text(cr, info->text[row]);
+		cairo_stroke(cr);
+		row++;
+		rect.y += (rect.height-1);
+	}
 
  }
 

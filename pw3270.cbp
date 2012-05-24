@@ -68,19 +68,12 @@
 		<Unit filename="src/lib3270/3270ds.h" />
 		<Unit filename="src/lib3270/Makefile.in" />
 		<Unit filename="src/lib3270/X11keysym.h" />
-		<Unit filename="src/lib3270/XtGlue.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/lib3270/actionsc.h" />
 		<Unit filename="src/lib3270/ansi.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/lib3270/ansic.h" />
 		<Unit filename="src/lib3270/api.h" />
-		<Unit filename="src/lib3270/apl.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/lib3270/aplc.h" />
 		<Unit filename="src/lib3270/arpa_telnet.h" />
 		<Unit filename="src/lib3270/bounds.c">
 			<Option compilerVar="CC" />
@@ -218,14 +211,8 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/lib3270/utilc.h" />
-		<Unit filename="src/lib3270/w3misc.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/lib3270/w3miscc.h" />
 		<Unit filename="src/lib3270/widec.h" />
-		<Unit filename="src/lib3270/winvers.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/lib3270/winversc.h" />
 		<Unit filename="src/lib3270/xioc.h" />
 		<Unit filename="src/lib3270/xl.h" />

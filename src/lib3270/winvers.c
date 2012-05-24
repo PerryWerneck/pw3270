@@ -30,6 +30,7 @@
  *
  */
 
+#error Deprecated
 
 /*
  *	winvers.c

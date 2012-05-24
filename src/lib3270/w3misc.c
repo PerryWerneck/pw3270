@@ -30,6 +30,7 @@
  *
  */
 
+#error Deprecated
 
 /*
  *	w3misc.c
