@@ -66,6 +66,7 @@
 #include "resources.h"
 
 #include "utilc.h"
+#include "popupsc.h"
 #include "api.h"
 
 #define my_isspace(c)	isspace((unsigned char)c)

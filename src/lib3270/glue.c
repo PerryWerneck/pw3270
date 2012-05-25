@@ -96,7 +96,7 @@
 	static int init_calls = 0;
 #endif
 
- static void lib3270_session_init(H3270 *hSession, const char *model);
+// static void lib3270_session_init(H3270 *hSession, const char *model);
 
  #define LAST_ARG	"--"
 

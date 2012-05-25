@@ -45,6 +45,10 @@
 #include "kybdc.h"
 #include "popupsc.h"
 
+#ifndef ANDROID
+	#include <stdlib.h>
+#endif // !ANDROID
+
 /*
 #if defined(X3270_DISPLAY) || (defined(C3270) && !defined(_WIN32))
 #include "screenc.h"
@@ -199,8 +203,8 @@ wide_resource_init(char *csname)
  */
 enum cs_result charset_init(H3270 *session, const char *csname)
 {
-	char *cs;
-	const char *ftcs;
+//	char *cs;
+//	const char *ftcs;
 	enum cs_result rc;
 	char *ccs, *cftcs;
 	const char *ak;

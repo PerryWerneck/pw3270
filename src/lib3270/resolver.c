@@ -62,6 +62,7 @@
 #include "api.h"
 
 #include "resolverc.h"
+#include "statusc.h"
 #include "w3miscc.h"
 
 #pragma pack(1)

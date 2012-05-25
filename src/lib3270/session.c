@@ -30,11 +30,19 @@
  *
  */
 
+#ifndef ANDROID
+	#include <stdlib.h>
+#endif // !ANDROID
 
 #include "globals.h"
 #include "charsetc.h"
 #include "kybdc.h"
 #include "ansic.h"
+#include "togglesc.h"
+#include "screen.h"
+#include "screenc.h"
+#include "ctlrc.h"
+#include "ftc.h"
 
 /*---[ Globals ]--------------------------------------------------------------------------------------------------------------*/
 
@@ -119,18 +127,18 @@ static void set_cursor(H3270 *session, LIB3270_CURSOR id)
 {
 }
 
-static void message(H3270 *session, LIB3270_NOTIFY id , const char *title, const char *message, const char *text)
+static void message(H3270 *session, LIB3270_NOTIFY id , const char *title, const char *msg, const char *text)
 {
 #ifdef ANDROID
 
 	__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "%s\n",title);
-	__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "%s\n",message);
+	__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "%s\n",msg);
 	__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "%s\n",text);
 
 #else
 
 	lib3270_write_log(session,"%s",title);
-	lib3270_write_log(session,"%s",message);
+	lib3270_write_log(session,"%s",msg);
 	lib3270_write_log(session,"%s",text);
 
 #endif // ANDROID

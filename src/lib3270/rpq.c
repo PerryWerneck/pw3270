@@ -76,6 +76,7 @@ static int get_rpq_address(unsigned char buf[], const int buflen);
 static void rpq_warning(const char *fmt, ...);
 static void rpq_dump_warnings(void);
 static Boolean rpq_complained = False;
+
 #if !defined(_WIN32) /*[*/
 static Boolean omit_due_space_limit = False;
 #endif /*]*/

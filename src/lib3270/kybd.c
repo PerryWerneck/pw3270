@@ -37,6 +37,10 @@
 
 #include "globals.h"
 
+#ifndef ANDROID
+	#include <stdlib.h>
+#endif // !ANDROID
+
 #if defined(X3270_DISPLAY) /*[*/
 #include <X11/Xatom.h>
 #endif
@@ -2264,6 +2268,8 @@ LIB3270_ACTION( dup )
 		hSession->display(hSession);
 		cursor_move(hSession,next_unprotected(hSession,hSession->cursor_addr));
 	}
+
+	return 0;
 }
 
 /*
@@ -2274,13 +2280,15 @@ LIB3270_ACTION( fieldmark )
 	if (kybdlock)
 	{
 		ENQUEUE_ACTION(lib3270_fieldmark);
-		return;
+		return 0;
 	}
 #if defined(X3270_ANSI)
 	if (IN_ANSI)
-		return;
+		return 0 ;
 #endif
 	(void) key_Character(EBC_fm, False, False, NULL);
+
+	return 0;
 }
 
 /**

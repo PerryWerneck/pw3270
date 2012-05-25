@@ -1,20 +1,38 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <pthread.h>
+
 #include "globals.h"
 #include <lib3270/macros.h>
 
 #define MAX_ARGS 10
 
+#include <pthread.h>
+
+static H3270 *session = NULL;
+
+static void * mainloop(void *dunno)
+{
+	while(session)
+	{
+		lib3270_main_iterate(session,1);
+	}
+	return NULL;
+}
+
 int main(int numpar, char *param[])
 {
-	H3270	* h;
-	char 	  line[4096];
+	H3270		* h;
+	char	 	  line[4096];
+	pthread_t	  thread;
 
 	lib3270_initialize();
 
-	h = lib3270_session_new("");
+	session = h = lib3270_session_new("");
 	printf("3270 session %p created\n]",h);
+
+	pthread_create(&thread, NULL, mainloop, NULL);
 
 	while(fgets(line,4095,stdin))
 	{
@@ -52,7 +70,7 @@ int main(int numpar, char *param[])
 				if(str)
 				{
 					printf("\n%s\n",str);
-					free(str);
+					lib3270_free(str);
 				}
 				else
 				{
@@ -65,6 +83,9 @@ int main(int numpar, char *param[])
 		printf("\n]");
 
 	}
+
+	session = 0;
+	pthread_cancel(thread);
 
 	printf("Ending 3270 session %p\n",h);
 	lib3270_session_free(h);

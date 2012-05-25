@@ -9,9 +9,8 @@
 			<Target title="Debug">
 				<Option output=".bin/Debug/lib3270" prefix_auto="1" extension_auto="1" />
 				<Option object_output=".obj/Debug/" />
-				<Option type="1" />
+				<Option type="3" />
 				<Option compiler="gcc" />
-				<Option use_console_runner="0" />
 				<Compiler>
 					<Add option="-g" />
 					<Add option="-DDEBUG=1" />
@@ -52,10 +51,14 @@
 			<Add option="-Wunreachable-code" />
 			<Add option="-Wmissing-declarations" />
 			<Add option="-Wall" />
+			<Add option="-pthread" />
 			<Add option="-DLIB3270=1" />
 			<Add directory="../include" />
 			<Add directory="../include/lib3270" />
 		</Compiler>
+		<Linker>
+			<Add option="-pthread" />
+		</Linker>
 		<Unit filename="../include/lib3270.h" />
 		<Unit filename="../include/lib3270/action_table.h" />
 		<Unit filename="../include/lib3270/actions.h" />
@@ -68,24 +71,18 @@
 		<Unit filename="3270ds.h" />
 		<Unit filename="Makefile.in" />
 		<Unit filename="X11keysym.h" />
-		<Unit filename="XtGlue.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="actions.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="actionsc.h" />
 		<Unit filename="ansi.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="ansic.h" />
 		<Unit filename="api.h" />
-		<Unit filename="apl.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="aplc.h" />
 		<Unit filename="appres.h" />
 		<Unit filename="arpa_telnet.h" />
+		<Unit filename="bounds.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="cg.h" />
 		<Unit filename="charset.c">
 			<Option compilerVar="CC" />
@@ -125,7 +122,7 @@
 		</Unit>
 		<Unit filename="hostc.h" />
 		<Unit filename="icmdc.h" />
-		<Unit filename="init.c">
+		<Unit filename="iocalls.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="keypadc.h" />
@@ -183,11 +180,17 @@
 		<Unit filename="selection.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="session.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="sf.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="sfc.h" />
 		<Unit filename="shlobj_missing.h" />
+		<Unit filename="state.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="statusc.h" />
 		<Unit filename="tables.c">
 			<Option compilerVar="CC" />
@@ -221,18 +224,9 @@
 		<Unit filename="version.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="w3misc.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="w3miscc.h" />
 		<Unit filename="widec.h" />
-		<Unit filename="winvers.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="winversc.h" />
-		<Unit filename="xio.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="xioc.h" />
 		<Unit filename="xl.h" />
 		<Extensions>

@@ -349,7 +349,7 @@ LIB3270_ACTION( selectfield )
 
 LIB3270_ACTION( selectall )
 {
-	int len, baddr;
+//	int len, baddr;
 
 	CHECK_SESSION_HANDLE(hSession);
 
@@ -360,7 +360,7 @@ LIB3270_ACTION( selectall )
 
 LIB3270_ACTION( reselect )
 {
-	int start, end;
+//	int start, end;
 
 	CHECK_SESSION_HANDLE(hSession);
 
@@ -542,7 +542,8 @@ LIB3270_EXPORT int lib3270_get_selection_bounds(H3270 *hSession, int *start, int
 LIB3270_EXPORT int lib3270_move_selected_area(H3270 *hSession, int from, int to)
 {
 	int pos[2];
-	int rows, cols, f, step, start, end;
+	int rows, cols, f, step;
+	// , start, end;
 
 	if(!lib3270_get_selection_bounds(hSession,&pos[0],&pos[1]))
 		return from;
@@ -715,5 +716,7 @@ LIB3270_EXPORT int lib3270_move_cursor(H3270 *hSession, LIB3270_DIRECTION dir, u
 		lib3270_select_to(hSession,cursor_addr);
 	else
 		cursor_move(hSession,cursor_addr);
+
+	return 0;
 }
 

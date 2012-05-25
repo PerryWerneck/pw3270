@@ -161,7 +161,7 @@
 
  LIB3270_EXPORT char * lib3270_get_as_html(H3270 *session, LIB3270_HTML_OPTION option)
  {
-	int	row, col, baddr;
+	int	row, baddr;
 	struct html_info info;
 
  	memset(&info,0,sizeof(info));
@@ -180,16 +180,24 @@
 	baddr = 0;
 	for(row=0;row < session->rows;row++)
 	{
-		int cr = 0;
+		int cr  = 0;
+		int len = 0;
+		int col;
 
 		for(col = 0; col < session->cols;col++)
 		{
-			if((option && LIB3270_HTML_OPTION_ALL) || (session->text[baddr].attr & LIB3270_ATTR_SELECTED))
+			if( session->text[baddr+col].chr != ' ' || (session->text[baddr+col].attr & LIB3270_ATTR_CG))
+				len = col;
+		}
+
+		for(col = 0; col <= len;col++)
+		{
+			if((option && LIB3270_HTML_OPTION_ALL) || (session->text[baddr+col].attr & LIB3270_ATTR_SELECTED))
 			{
 				cr++;
-				update_colors(&info,session->text[baddr].attr);
+				update_colors(&info,session->text[baddr+col].attr);
 
-				if(session->text[baddr].attr & LIB3270_ATTR_CG)
+				if(session->text[baddr+col].attr & LIB3270_ATTR_CG)
 				{
 					static const struct chr_xlat xlat[] =
 					{
@@ -213,7 +221,7 @@
 						{ 0x00, NULL	}
 					};
 
-					append_char(&info, xlat, session->text[baddr].chr);
+					append_char(&info, xlat, session->text[baddr+col].chr);
 
 				}
 				else
@@ -224,19 +232,21 @@
 						{ '&',	"&amp;"		},
 						{ '<',	"&lt;"		},
 						{ '>',	"&gt;"		},
+						{ ' ',	"&nbsp;"	},
 
 						{ 0x00, NULL		}
 					};
 
-					append_char(&info, xlat, session->text[baddr].chr);
+					append_char(&info, xlat, session->text[baddr+col].chr);
 
 				}
 
 			}
-			baddr++;
 		}
 
-		if(cr)
+		baddr += session->cols;
+
+		if(cr || (option && LIB3270_HTML_OPTION_ALL))
 			append_element(&info,HTML_ELEMENT_LINE_BREAK);
 	}
 

@@ -34,6 +34,7 @@
 #include <sys/types.h>
 #include "xioc.h"
 #include "telnetc.h"
+#include "utilc.h"
 
 #define MILLION			1000000L
 #define InputReadMask	0x1
@@ -54,7 +55,7 @@ static void * internal_add_except(int source, H3270 *session, void (*fn)(H3270 *
 
 static void   internal_remove_input(void *id);
 
-static int	  internal_process_events(int block);
+// static int	  internal_process_events(int block);
 
 static int 	  internal_callthread(int(*callback)(H3270 *, void *), H3270 *session, void *parm);
 static int	  internal_wait(int seconds);
@@ -505,6 +506,7 @@ static int internal_event_dispatcher(int block)
 static int internal_callthread(int(*callback)(H3270 *, void *), H3270 *session, void *parm)
 {
 	callback(session,parm);
+	return 0;
 }
 
 static int internal_wait(int seconds)
@@ -651,7 +653,7 @@ LIB3270_EXPORT int lib3270_register_handlers(const struct lib3270_callbacks *cbk
 
 LIB3270_EXPORT int lib3270_call_thread(int(*callback)(H3270 *h, void *), H3270 *h, void *parm)
 {
-	int rc;
+//	int rc;
 	CHECK_SESSION_HANDLE(h);
 
 	if(h->set_timer)
@@ -664,7 +666,7 @@ LIB3270_EXPORT int lib3270_call_thread(int(*callback)(H3270 *h, void *), H3270 *
 	if(h->set_timer)
 		h->set_timer(h,0);
 
-	return rc;
+	return 0;
 }
 
 LIB3270_EXPORT void lib3270_main_iterate(H3270 *session, int block)
@@ -676,6 +678,7 @@ LIB3270_EXPORT void lib3270_main_iterate(H3270 *session, int block)
 LIB3270_EXPORT int lib3270_wait(seconds)
 {
 	wait(seconds);
+	return 0;
 }
 
 LIB3270_EXPORT void lib3270_ring_bell(H3270 *session)

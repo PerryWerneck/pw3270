@@ -370,7 +370,7 @@ static void continue_tls(unsigned char *sbbuf, int len);
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
-void set_ssl_state(H3270 *session, LIB3270_SSL_STATE state)
+static void set_ssl_state(H3270 *session, LIB3270_SSL_STATE state)
 {
 	if(state == session->secure)
 		return;

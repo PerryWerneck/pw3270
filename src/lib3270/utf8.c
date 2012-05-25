@@ -95,10 +95,12 @@ static char *dcs[] = {		// same order as enum UTF_IX and utf8_tab[]
  * Note that this could be done much more generally with the iconv library
  * or the ICU library, but there is no guarantee that either is available or
  * properly configured.
- */
+ */ /*
 #define HI_SIZE 96
 static char *utf8_tab[U_MAX][96] = {
-/* iso8859-1 */ {
+
+	// iso8859-1
+	{
      "\xc2\xa0",     "\xc2\xa1",     "\xc2\xa2",     "\xc2\xa3",
      "\xc2\xa4",     "\xc2\xa5",     "\xc2\xa6",     "\xc2\xa7",
      "\xc2\xa8",     "\xc2\xa9",     "\xc2\xaa",     "\xc2\xab",
@@ -124,7 +126,8 @@ static char *utf8_tab[U_MAX][96] = {
      "\xc3\xb8",     "\xc3\xb9",     "\xc3\xba",     "\xc3\xbb",
      "\xc3\xbc",     "\xc3\xbd",     "\xc3\xbe",     "\xc3\xbf"
 },
-/* iso8859-2 */ {
+// iso8859-2
+{
      "\xc2\xa0",     "\xc4\x84",     "\xcb\x98",     "\xc5\x81",
      "\xc2\xa4",     "\xc4\xbd",     "\xc5\x9a",     "\xc2\xa7",
      "\xc2\xa8",     "\xc5\xa0",     "\xc5\x9e",     "\xc5\xa4",
@@ -150,7 +153,8 @@ static char *utf8_tab[U_MAX][96] = {
      "\xc5\x99",     "\xc5\xaf",     "\xc3\xba",     "\xc5\xb1",
      "\xc3\xbc",     "\xc3\xbd",     "\xc5\xa3",     "\xcb\x99"
 },
-/* iso8859-7 */ {
+// iso8859-7
+{
      "\xc2\xa0", "\xe2\x80\x98", "\xe2\x80\x99",     "\xc2\xa3",
  "\xe2\x82\xac", "\xe2\x82\xaf",     "\xc2\xa6",     "\xc2\xa7",
      "\xc2\xa8",     "\xc2\xa9",     "\xcd\xba",     "\xc2\xab",
@@ -176,7 +180,8 @@ static char *utf8_tab[U_MAX][96] = {
      "\xcf\x88",     "\xcf\x89",     "\xcf\x8a",     "\xcf\x8b",
      "\xcf\x8c",     "\xcf\x8d",     "\xcf\x8e",            " "
 },
-/* iso8859-8 */ {
+// iso8859-8
+{
      "\xc2\xa0",            " ",     "\xc2\xa2",     "\xc2\xa3",
      "\xc2\xa4",     "\xc2\xa5",     "\xc2\xa6",     "\xc2\xa7",
      "\xc2\xa8",     "\xc2\xa9",     "\xc3\x97",     "\xc2\xab",
@@ -202,7 +207,8 @@ static char *utf8_tab[U_MAX][96] = {
      "\xd7\xa8",     "\xd7\xa9",     "\xd7\xaa",            " ",
             " ", "\xe2\x80\x8e", "\xe2\x80\x8f",            " "
 },
-/* iso8859-9 */ {
+// iso8859-9
+{
      "\xc2\xa0",     "\xc2\xa1",     "\xc2\xa2",     "\xc2\xa3",
      "\xc2\xa4",     "\xc2\xa5",     "\xc2\xa6",     "\xc2\xa7",
      "\xc2\xa8",     "\xc2\xa9",     "\xc2\xaa",     "\xc2\xab",
@@ -228,7 +234,8 @@ static char *utf8_tab[U_MAX][96] = {
      "\xc3\xb8",     "\xc3\xb9",     "\xc3\xba",     "\xc3\xbb",
      "\xc3\xbc",     "\xc4\xb1",     "\xc5\x9f",     "\xc3\xbf"
 },
-/* iso8859-11 */ {
+// iso8859-11
+{
      "\xc2\xa0", "\xe0\xb8\x81", "\xe0\xb8\x82", "\xe0\xb8\x83",
  "\xe0\xb8\x84", "\xe0\xb8\x85", "\xe0\xb8\x86", "\xe0\xb8\x87",
  "\xe0\xb8\x88", "\xe0\xb8\x89", "\xe0\xb8\x8a", "\xe0\xb8\x8b",
@@ -254,7 +261,8 @@ static char *utf8_tab[U_MAX][96] = {
  "\xe0\xb9\x98", "\xe0\xb9\x99", "\xe0\xb9\x9a", "\xe0\xb9\x9b",
             " ",            " ",            " ",            " "
 },
-/* iso8859-15 */ {
+// iso8859-15
+{
      "\xc2\xa0",     "\xc2\xa1",     "\xc2\xa2",     "\xc2\xa3",
  "\xe2\x82\xac",     "\xc2\xa5",     "\xc5\xa0",     "\xc2\xa7",
      "\xc5\xa1",     "\xc2\xa9",     "\xc2\xaa",     "\xc2\xab",
@@ -280,7 +288,8 @@ static char *utf8_tab[U_MAX][96] = {
      "\xc3\xb8",     "\xc3\xb9",     "\xc3\xba",     "\xc3\xbb",
      "\xc3\xbc",     "\xc3\xbd",     "\xc3\xbe",     "\xc3\xbf"
 },
-/* koi8-r */ {
+// koi8-r
+{
  "\xe2\x95\x90", "\xe2\x95\x91", "\xe2\x95\x92",     "\xd1\x91",
  "\xe2\x95\x93", "\xe2\x95\x94", "\xe2\x95\x95", "\xe2\x95\x96",
  "\xe2\x95\x97", "\xe2\x95\x98", "\xe2\x95\x99", "\xe2\x95\x9a",
@@ -306,8 +315,9 @@ static char *utf8_tab[U_MAX][96] = {
      "\xd0\xac",     "\xd0\xab",     "\xd0\x97",     "\xd0\xa8",
      "\xd0\xad",     "\xd0\xa9",     "\xd0\xa7",     "\xd0\xaa"
 },
-#if defined(X3270_DBCS) /*[*/
-/* pseudo-gb18030 - not actually a UTF-8 expansion */ {
+#if defined(X3270_DBCS)
+// pseudo-gb18030 - not actually a UTF-8 expansion
+{
  "\x81\x30\x84\x32", "\x81\x30\x84\x33", "\x81\x30\x84\x34", "\x81\x30\x84\x35",
          "\xa1\xe8", "\x81\x30\x84\x36", "\x81\x30\x84\x37",         "\xa1\xec",
          "\xa1\xa7", "\x81\x30\x84\x38", "\x81\x30\x84\x39", "\x81\x30\x85\x30",
@@ -333,9 +343,9 @@ static char *utf8_tab[U_MAX][96] = {
  "\x81\x30\x8b\x33",         "\xa8\xb4",         "\xa8\xb2", "\x81\x30\x8b\x34",
          "\xa8\xb9", "\x81\x30\x8b\x35", "\x81\x30\x8b\x36", "\x81\x30\x8b\x37"
 }
-#endif /*]*/
+#endif
 };
-
+*/
 /*
  * Look up a multi-byte UTF-8 string and return its value in the 'implied'
  * character set.

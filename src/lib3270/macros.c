@@ -104,30 +104,15 @@
 
  LIB3270_MACRO( get )
  {
-	char *buffer = NULL;
-/*
-	int start, qtd, rows, cols, row, col;
+ 	char *buffer = NULL;
 
 	switch(argc)
 	{
 	case 1:	// Get entire screen
-		lib3270_get_screen_size(hSession,&rows,&cols);
-		qtd = (rows*(cols+1)+1);
-		buffer = lib3270_malloc(qtd+2);
+		buffer = lib3270_get_text(hSession,0,-1);
+		break;
 
-		memset(buffer,0,qtd+1);
-		start = qtd = 0;
-		for(row = 0; row < rows;row++)
-		{
-			screen_read(buffer+qtd,start,cols);
-			qtd += cols;
-			start += cols;
-			buffer[qtd++] = '\n';
-		}
-		buffer[qtd] = 0;
-
-		return buffer;
-
+/*
 	case 2:	// Just size, get current cursor position
 		start	= 0;
 		qtd 	= atoi(argv[1]);
@@ -153,22 +138,11 @@
 		start 	= (row * cols) + col;
 		qtd 	= atoi(argv[3]);
 		break;
-
+*/
 	default:
 		errno = EINVAL;
-		return NULL;
 	}
 
-	if(qtd < 1)
-	{
-		errno = EINVAL;
-		return NULL;
-	}
-
-	buffer = lib3270_malloc(qtd+1);
-	screen_read(buffer, start, qtd);
-
-*/
 	return buffer;
  }
 
