@@ -37,11 +37,11 @@ int main(int numpar, char *param[])
 
 	while(fgets(line,4095,stdin))
 	{
-		const LIB3270_MACRO_LIST *cmd = get_3270_calls();
+//		const LIB3270_MACRO_LIST *cmd = get_3270_calls();
 
 		int		 	  f;
 		int			  argc = 0;
-		const char	* argv[MAX_ARGS];
+		const char	* argv[MAX_ARGS+1];
 		char		* ptr;
 
 		line[4095] = 0;	// Just in case.
@@ -58,27 +58,20 @@ int main(int numpar, char *param[])
 			if( (argv[argc++] = strtok(NULL," ")) == NULL)
 				break;
 		}
-		argc--;
+		argv[argc] = NULL;
 
 		if(!strcmp(argv[0],"quit"))
 			break;
 
-		for(f=0;cmd[f].name;f++)
+		ptr = lib3270_run_macro(h,argv);
+		if(ptr)
 		{
-			if(!strcmp(cmd[f].name,argv[0]))
-			{
-				char *str = cmd[f].exec(h,argc,argv);
-				if(str)
-				{
-					printf("\n%s\n",str);
-					lib3270_free(str);
-				}
-				else
-				{
-					printf("\nNo response\n");
-				}
-				break;
-			}
+			printf("\n%s\n",ptr);
+			lib3270_free(ptr);
+		}
+		else
+		{
+			printf("\nNo response\n");
 		}
 
 		printf("\n]");

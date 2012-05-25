@@ -37,11 +37,22 @@
  #include <lib3270.h>
  #include <lib3270/macros.h>
  #include <stdlib.h>
+ #include <strings.h>
+ #include "globals.h"
  #include "api.h"
 
+/*--[ Structs & Defines ]----------------------------------------------------------------------------*/
+
+ struct macro_list
+ {
+ 	const char *name;
+ 	char *(*exec)(H3270 *session, int argc, const char **argv);
+ };
+
+/*
  #define LIB3270_MACRO_ENTRY( name )  { #name, lib3270_macro_ ## name }
 
- static const LIB3270_MACRO_LIST macro_list[] =
+ static const struct cmd[] =
  {
  	LIB3270_MACRO_ENTRY( connect	),
  	LIB3270_MACRO_ENTRY( cstate		),
@@ -62,6 +73,9 @@
  {
  	return macro_list;
  }
+*/
+
+/*--[ Implement ]------------------------------------------------------------------------------------*/
 
  static const char * get_state(H3270 *h)
  {
@@ -289,3 +303,47 @@
 	lib3270_disconnect(hSession);
 	return strdup("0");
  }
+
+
+/*--[ Macro entry point ]----------------------------------------------------------------------------*/
+
+ LIB3270_EXPORT char * lib3270_run_macro(H3270 *session, const char **argv)
+ {
+	#define LIB3270_MACRO_ENTRY( name )  { #name, lib3270_macro_ ## name }
+
+	static const struct macro_list cmd[] =
+	{
+		LIB3270_MACRO_ENTRY( connect	),
+		LIB3270_MACRO_ENTRY( cstate		),
+		LIB3270_MACRO_ENTRY( disconnect	),
+		LIB3270_MACRO_ENTRY( encoding	),
+		LIB3270_MACRO_ENTRY( enter		),
+		LIB3270_MACRO_ENTRY( get		),
+		LIB3270_MACRO_ENTRY( luname		),
+		LIB3270_MACRO_ENTRY( pa			),
+		LIB3270_MACRO_ENTRY( pf			),
+		LIB3270_MACRO_ENTRY( set		),
+		LIB3270_MACRO_ENTRY( status		),
+
+		{NULL, NULL}
+	};
+
+ 	int argc;
+ 	int f;
+
+	CHECK_SESSION_HANDLE(session);
+
+	// Get the number of arguments
+	for(argc = 0; argv[argc]; argc++);
+
+	// Search for macro function
+	for(f=0;cmd[f].name;f++)
+	{
+		if(!strcasecmp(cmd[f].name,argv[0]))
+			return cmd[f].exec(session,argc,argv);
+	}
+
+	// Not found, return NULL
+	return NULL;
+ }
+
