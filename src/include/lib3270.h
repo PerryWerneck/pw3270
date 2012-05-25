@@ -799,6 +799,9 @@
 
 	LIB3270_EXPORT char * lib3270_vsprintf(const char *fmt, va_list args);
 
+	LIB3270_EXPORT void lib3270_trace_event(H3270 *session, const char *fmt, ...);
+	LIB3270_EXPORT void lib3270_set_trace_handler( void (*handler)(H3270 *session, const char *fmt, va_list args) );
+	LIB3270_EXPORT void lib3270_write_dstrace(H3270 *session, const char *fmt, ...);
 
 #ifdef __cplusplus
 	}
