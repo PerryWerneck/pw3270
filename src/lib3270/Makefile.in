@@ -127,7 +127,7 @@ $(BINRLS)/@DLLPREFIX@3270@DLLEXT@: $(foreach SRC, $(basename $(SOURCES)), $(OBJR
 $(BINDBG)/testprogram$(EXEEXT): $(OBJDBG)/testprogram.o $(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC)@OBJEXT@)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	$(LD) -o $@ $^ $(LIBS)
+	$(LD) -pthread -o $@ $^ $(LIBS)
 
 $(DEBDIR)/lib3270.install: Makefile
 	@echo "  GEN  `basename $@`"

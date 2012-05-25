@@ -474,9 +474,9 @@ split_success:
 
 static int do_connect(H3270 *hSession, const char *n)
 {
-	char nb[2048];		/* name buffer */
-	char *s;			/* temporary */
-	const char *chost;	/* to whom we will connect */
+	char nb[2048];				/* name buffer */
+	char *s;					/* temporary */
+	char *chost = NULL;			/* to whom we will connect */
 //	char *ps = CN;
 	char *port = CN;
 	Boolean resolving;
@@ -554,6 +554,8 @@ static int do_connect(H3270 *hSession, const char *n)
 		host_disconnected(hSession);
 		return -1;
 	}
+
+	chost = lib3270_free(chost);
 
 	/* Still thinking about it? */
 	if (resolving)

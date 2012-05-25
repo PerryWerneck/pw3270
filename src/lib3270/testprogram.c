@@ -33,6 +33,7 @@ int main(int numpar, char *param[])
 	printf("3270 session %p created\n]",h);
 
 	pthread_create(&thread, NULL, mainloop, NULL);
+	pthread_detach(thread);
 
 	while(fgets(line,4095,stdin))
 	{
