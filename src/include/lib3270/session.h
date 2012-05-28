@@ -32,6 +32,7 @@
  #ifndef LIB3270_SESSION_H_INCLUDED
 
 	#define LIB3270_SESSION_H_INCLUDED 1
+	#include <sys/time.h>
 
 	#define LIB3270_LUNAME_LENGTH			16
 	#define LIB3270_FULL_MODEL_NAME_LENGTH	13
@@ -99,6 +100,7 @@
 		int						  onlcr						: 1;
 		int						  bsd_tm					: 1;
 		int 					  syncing					: 1;
+		int						  reverse 					: 1;	/**< reverse-input mode */
 
 		char					* oversize;
 
@@ -171,6 +173,9 @@
 
 		// kybd.c
 		unsigned int			  kybdlock;
+		unsigned char			  aid;					/**< current attention ID */
+		void					* unlock_id;
+		time_t					  unlock_delay_time;
 
 		// Widget info
 		void					* widget;

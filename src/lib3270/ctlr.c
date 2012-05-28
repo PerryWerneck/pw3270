@@ -66,7 +66,7 @@
 #include "screenc.h"
 
 /* Externals: kybd.c */
-extern unsigned char aid;
+// extern unsigned char aid;
 
 /* Globals */
 // int				ROWS, COLS;
@@ -537,19 +537,19 @@ process_ds(unsigned char *buf, int buflen)
 	case CMD_RB:	/* read buffer */
 	case SNA_CMD_RB:
 		trace_ds("ReadBuffer\n");
-		ctlr_read_buffer(aid);
+		ctlr_read_buffer(h3270.aid);
 		return PDS_OKAY_OUTPUT;
 		break;
 	case CMD_RM:	/* read modifed */
 	case SNA_CMD_RM:
 		trace_ds("ReadModified\n");
-		ctlr_read_modified(aid, False);
+		ctlr_read_modified(h3270.aid, False);
 		return PDS_OKAY_OUTPUT;
 		break;
 	case CMD_RMA:	/* read modifed all */
 	case SNA_CMD_RMA:
 		trace_ds("ReadModifiedAll\n");
-		ctlr_read_modified(aid, True);
+		ctlr_read_modified(h3270.aid, True);
 		return PDS_OKAY_OUTPUT;
 		break;
 	case CMD_WSF:	/* write structured field */
@@ -1105,7 +1105,7 @@ ctlr_erase_all_unprotected(void)
 	} else {
 		ctlr_clear(&h3270,True);
 	}
-	aid = AID_NO;
+	h3270.aid = AID_NO;
 	do_reset(&h3270,False);
 	ALL_CHANGED;
 }
@@ -1862,7 +1862,7 @@ ctlr_write(unsigned char buf[], int buflen, Boolean erase)
 	END_TEXT0;
 	trace_ds("\n");
 	if (wcc_keyboard_restore) {
-		aid = AID_NO;
+		h3270.aid = AID_NO;
 		do_reset(&h3270,False);
 	} else if (h3270.kybdlock & KL_OIA_TWAIT) {
 		kybdlock_clr(KL_OIA_TWAIT, "ctlr_write");
@@ -1986,7 +1986,7 @@ ctlr_write_sscp_lu(unsigned char buf[], int buflen)
 	sscp_start = h3270.buffer_addr;
 
 	/* Unlock the keyboard. */
-	aid = AID_NO;
+	h3270.aid = AID_NO;
 	do_reset(&h3270,False);
 
 }

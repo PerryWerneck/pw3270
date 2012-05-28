@@ -44,6 +44,7 @@
 #include "ctlrc.h"
 #include "ftc.h"
 #include "kybdc.h"
+#include "3270ds.h"
 
 /*---[ Globals ]--------------------------------------------------------------------------------------------------------------*/
 
@@ -195,6 +196,7 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 	hSession->cstate			= LIB3270_NOT_CONNECTED;
 	hSession->oia_status		= -1;
 	hSession->kybdlock 			= KL_NOT_CONNECTED;
+	hSession->aid 				= AID_NO;
 
 #ifdef _WIN32
 	hSession->sockEvent			= NULL;

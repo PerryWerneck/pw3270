@@ -57,7 +57,7 @@
 #include <errno.h>
 // #include <malloc.h>
 
-extern unsigned char aid;
+// extern unsigned char aid;
 
 /* Macros. */
 #define OPEN_MSG	"FT:MSG"	/* Open request for message */
@@ -462,7 +462,7 @@ dft_get_request(void)
 		Replace(dft_savebuf, (unsigned char *)lib3270_malloc(dft_savebuf_max));
 	}
 	(void) memcpy(dft_savebuf, obuf, dft_savebuf_len);
-	aid = AID_SF;
+	h3270.aid = AID_SF;
 
 	/* Write the data. */
 	net_output();

@@ -108,8 +108,8 @@ static unsigned char pa_xlate[] = {
 };
 #define PF_SZ	(sizeof(pf_xlate)/sizeof(pf_xlate[0]))
 #define PA_SZ	(sizeof(pa_xlate)/sizeof(pa_xlate[0]))
-static void * unlock_id;
-static time_t unlock_delay_time;
+// static void * unlock_id;
+// static time_t unlock_delay_time;
 #define UNLOCK_MS		350	/* 0.35s after last unlock */
 static Boolean key_Character(int code, Boolean with_ge, Boolean pasting,Boolean *skipped);
 static Boolean flush_ta(void);
@@ -129,11 +129,11 @@ static struct xks {
 	KeySym assoc;
 } *xk;
 
-static Boolean		reverse = False;	/* reverse-input mode */
+// static Boolean		reverse = False;	/* reverse-input mode */
 
 /* Globals */
 // unsigned int	kybdlock = KL_NOT_CONNECTED;
-unsigned char	aid = AID_NO;		/* current attention ID */
+//unsigned char	aid = AID_NO;		/* current attention ID */
 
 /* Composite key mappings. */
 
@@ -361,7 +361,7 @@ kybdlock_set(unsigned int bits, const char *cause unused)
 #endif /*]*/
 		if ((h3270.kybdlock ^ bits) & KL_DEFERRED_UNLOCK) {
 			/* Turned on deferred unlock. */
-			unlock_delay_time = time(NULL);
+			h3270.unlock_delay_time = time(NULL);
 		}
 		h3270.kybdlock = n;
 		status_changed(&h3270,LIB3270_STATUS_KYBDLOCK);
@@ -381,7 +381,7 @@ kybdlock_clr(unsigned int bits, const char *cause unused)
 #endif
 		if ((h3270.kybdlock ^ n) & KL_DEFERRED_UNLOCK) {
 			/* Turned off deferred unlock. */
-			unlock_delay_time = 0;
+			h3270.unlock_delay_time = 0;
 		}
 		h3270.kybdlock = n;
 		status_changed(&h3270,LIB3270_STATUS_KYBDLOCK);
@@ -411,7 +411,7 @@ kybd_inhibit(Boolean inhibit)
 void kybd_connect(H3270 *session, int connected, void *dunno)
 {
 	if (session->kybdlock & KL_DEFERRED_UNLOCK)
-		RemoveTimeOut(unlock_id);
+		RemoveTimeOut(session->unlock_id);
 
 	kybdlock_clr(-1, "kybd_connect");
 
@@ -430,7 +430,7 @@ void kybd_connect(H3270 *session, int connected, void *dunno)
 void kybd_in3270(H3270 *session, int in3270 unused, void *dunno)
 {
 	if (session->kybdlock & KL_DEFERRED_UNLOCK)
-		RemoveTimeOut(unlock_id);
+		RemoveTimeOut(session->unlock_id);
 	kybdlock_clr(~KL_AWAITING_FIRST, "kybd_in3270");
 
 	/* There might be a macro pending. */
@@ -542,8 +542,8 @@ static void key_AID(H3270 *session, unsigned char aid_code)
 		lib3270_set_toggle(&h3270,LIB3270_TOGGLE_INSERT,0);
 		kybdlock_set(KL_OIA_TWAIT | KL_OIA_LOCKED, "key_AID");
 	}
-	aid = aid_code;
-	ctlr_read_modified(aid, False);
+	h3270.aid = aid_code;
+	ctlr_read_modified(h3270.aid, False);
 	ticking_start(&h3270,False);
 	status_ctlr_done(&h3270);
 }
@@ -1489,7 +1489,7 @@ void do_reset(H3270 *session, Boolean explicit)
 	 * keyboard now, or want to defer further into the future.
 	 */
 	if (session->kybdlock & KL_DEFERRED_UNLOCK)
-		RemoveTimeOut(unlock_id);
+		RemoveTimeOut(session->unlock_id);
 
 	/*
 	 * If explicit (from the keyboard), unlock the keyboard now.
@@ -1500,13 +1500,13 @@ void do_reset(H3270 *session, Boolean explicit)
 	    || lib3270_get_ft_state(session) != LIB3270_FT_STATE_NONE
 #endif /*]*/
 	    || (!session->unlock_delay) // && !sms_in_macro())
-	    || (unlock_delay_time != 0 && (time(NULL) - unlock_delay_time) > 1)) {
+	    || (session->unlock_delay_time != 0 && (time(NULL) - session->unlock_delay_time) > 1)) {
 		kybdlock_clr(-1, "do_reset");
 	} else if (session->kybdlock &
   (KL_DEFERRED_UNLOCK | KL_OIA_TWAIT | KL_OIA_LOCKED | KL_AWAITING_FIRST)) {
 		kybdlock_clr(~KL_DEFERRED_UNLOCK, "do_reset");
 		kybdlock_set(KL_DEFERRED_UNLOCK, "do_reset");
-		unlock_id = AddTimeOut(UNLOCK_MS, session, defer_unlock);
+		session->unlock_id = AddTimeOut(UNLOCK_MS, session, defer_unlock);
 	}
 
 	/* Clean up other modes. */
@@ -1709,7 +1709,8 @@ LIB3270_ACTION( delete )
 #endif /*]*/
 	if (!do_delete())
 		return 0;
-	if (reverse) {
+	if (hSession->reverse)
+	{
 		int baddr = hSession->cursor_addr;
 
 		DEC_BA(baddr);
@@ -1737,7 +1738,7 @@ LIB3270_ACTION( backspace )
 		return 0;
 	}
 #endif /*]*/
-	if (reverse)
+	if (hSession->reverse)
 		(void) do_delete();
 	else if (!hSession->flipped)
 		do_left();
