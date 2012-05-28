@@ -240,6 +240,7 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
 			GdkColor	* table	= g_new0(GdkColor,(len*V3270_COLOR_COUNT));
 			int			  pos	= 0;
 			int			  g;
+			gboolean 	  found	= FALSE;
 
 			g_signal_connect(G_OBJECT(widget),"changed",G_CALLBACK(color_scheme_changed),0);
 
@@ -265,14 +266,39 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
 					// It's the same color, select iter
 					trace("Current color scheme is \"%s\"",group[g]);
 					gtk_combo_box_set_active_iter(GTK_COMBO_BOX(widget),&iter);
+					found = TRUE;
 				}
 
 				// move to next color list
 				pos += V3270_COLOR_COUNT;
 			}
 
-
 			g_strfreev(group);
+
+			if(!found)
+			{
+				// Custom color table, save it as a new dropdown entry.
+
+				GdkColor 	* clr = g_new0(GdkColor,V3270_COLOR_COUNT);
+				int			  f;
+
+				for(f=0;f<V3270_COLOR_COUNT;f++)
+					clr[f] = current[f];
+
+				trace("Current color scheme is \"%s\"","custom");
+
+				g_object_set_data_full(G_OBJECT(widget),"customcolortable",clr,g_free);
+
+				gtk_list_store_append((GtkListStore *) model,&iter);
+				gtk_list_store_set((GtkListStore *) model, &iter,
+													0, _( "Custom colors" ),
+													1, clr,
+													-1);
+
+				gtk_combo_box_set_active_iter(GTK_COMBO_BOX(widget),&iter);
+
+			}
+
 
 			gtk_widget_set_sensitive(widget,TRUE);
 		}
@@ -395,8 +421,8 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
 	GtkWidget	* color;
 	GdkColor	  saved[V3270_COLOR_COUNT];
 
+	// Color dialog setup
 	{
-		// Color dialog setup
 		color = gtk_color_selection_new();
 		gtk_widget_set_sensitive(color,0);
 		gtk_color_selection_set_has_opacity_control(GTK_COLOR_SELECTION(color),FALSE);
