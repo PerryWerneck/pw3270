@@ -340,10 +340,9 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
  		const char	*text;
  	} node[] =
  	{
- 		{ V3270_COLOR_BACKGROUND,		N_( "Terminal" )			},
- 		{ V3270_COLOR_FIELD,			N_( "Fields" )				},
- 		{ V3270_COLOR_SELECTED_BG,		N_( "Other" )				},
-
+ 		{ V3270_COLOR_BACKGROUND,		N_( "Terminal colors" )		},
+ 		{ V3270_COLOR_FIELD,			N_( "Field colors" )		},
+ 		{ V3270_COLOR_SELECTED_BG,		N_( "Misc colors" )			},
  	};
 
 	static const gchar *color_name[V3270_COLOR_COUNT] =

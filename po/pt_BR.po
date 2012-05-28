@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-24 10:53-0300\n"
-"PO-Revision-Date: 2012-05-24 11:03-0300\n"
+"POT-Creation-Date: 2012-05-28 15:50-0300\n"
+"PO-Revision-Date: 2012-05-28 15:51-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português do Brasil <>\n"
 "Language: pt_BR\n"
@@ -38,7 +38,7 @@ msgstr "Ação %s precisa do atributo src"
 msgid "%s requires GTK version %d.%d.%d"
 msgstr "%s requer GTK versão %d.%d.%d"
 
-#: resolver.c:121
+#: resolver.c:122
 #, c-format
 msgid "%s: unknown family %d"
 msgstr "%s: Familia %d é inválida"
@@ -157,7 +157,7 @@ msgstr "Avblock"
 msgid "BLKSIZE:"
 msgstr "BLKSIZE:"
 
-#: colors.c:351
+#: colors.c:350
 msgid "Background"
 msgstr "Fundo"
 
@@ -165,7 +165,7 @@ msgstr "Fundo"
 msgid "Bad winsock version"
 msgstr "Versão winsock inválida"
 
-#: colors.c:359
+#: colors.c:358
 msgid "Black"
 msgstr "Preto"
 
@@ -177,7 +177,7 @@ msgstr "Completar com espaços"
 msgid "Blinking Cursor"
 msgstr "Cursor piscante"
 
-#: colors.c:352
+#: colors.c:351
 msgid "Blue"
 msgstr "Azul"
 
@@ -220,7 +220,7 @@ msgstr "Não foi possível conectar ao servidor"
 msgid "Can't convert line %d from %s to %s"
 msgstr "Não foi possível converter a linha %d de %s para %s"
 
-#: ft.c:304
+#: ft.c:305
 msgid "Can't get file size"
 msgstr "Não foi possível obter o tamanho do arquivo"
 
@@ -233,7 +233,7 @@ msgstr "Não foi possível carregar %s"
 msgid "Can't load file"
 msgstr "Não foi possível carregar arquivo"
 
-#: ft.c:233
+#: ft.c:234
 msgid "Can't open local file"
 msgstr "Não foi possível abrir arquivo local"
 
@@ -306,7 +306,7 @@ msgstr "Não foi possível iniciar upload"
 msgid "Can't use winsock version %d.%d"
 msgstr "Não é possível usar a Winsock versão %d.%d"
 
-#: ft.c:156
+#: ft.c:157
 msgid "Cancelled by user"
 msgstr "Cancelado pelo usuário"
 
@@ -314,7 +314,7 @@ msgstr "Cancelado pelo usuário"
 msgid "Cannot create socket handle"
 msgstr "Não foi possível criar um manipulador de socket"
 
-#: session.c:292
+#: session.c:304
 #, c-format
 msgid "Cannot find charset \"%s\", using defaults"
 msgstr "Não encontrei codificação \"%s\", usando defaults"
@@ -327,11 +327,11 @@ msgstr "Erro de codificação de caracteres"
 msgid "Clear"
 msgstr "Limpar"
 
-#: colors.c:473
+#: colors.c:472
 msgid "Color scheme:"
 msgstr "Tema de cores:"
 
-#: colors.c:388
+#: colors.c:387
 msgid "Color setup"
 msgstr "Configuração de cores"
 
@@ -367,7 +367,7 @@ msgstr "Copiar como tabela"
 msgid "Cross Hair Cursor"
 msgstr "Cursor mira"
 
-#: colors.c:376
+#: colors.c:375
 msgid "Cross hair cursor"
 msgstr "Cursor mira"
 
@@ -392,11 +392,11 @@ msgstr "Tamanho do b_uffer DFT:"
 msgid "DS Trace"
 msgstr ""
 
-#: colors.c:360
+#: colors.c:359
 msgid "Dark Blue"
 msgstr "Azul Escuro"
 
-#: colors.c:363
+#: colors.c:362
 msgid "Dark Green"
 msgstr "Verde Escuro"
 
@@ -417,7 +417,7 @@ msgstr "Mostrar atualizações de janela"
 msgid "Default"
 msgstr "Default"
 
-#: ft.c:201
+#: ft.c:202
 msgid "Disconnected from host"
 msgstr "Desconectado do servidor"
 
@@ -467,7 +467,7 @@ msgstr "Erro \"%s\" lendo arquivo local (rc=%d)"
 msgid "Error \"%s\" writing to local file (rc=%d)"
 msgstr "Erro \"%s\" gravando arquivo local (rc=%d)"
 
-#: resolver.c:105
+#: resolver.c:106
 #, c-format
 msgid "Error %d resolving %s"
 msgstr "Erro %d resolvendo %s"
@@ -477,7 +477,7 @@ msgstr "Erro %d resolvendo %s"
 msgid "Error loading %s"
 msgstr "Erro lendo %s"
 
-#: resolver.c:107
+#: resolver.c:108
 #, c-format
 msgid "Error resolving %s: %s"
 msgstr "Erro ao resolver %s: %s"
@@ -487,8 +487,8 @@ msgid "Event Trace"
 msgstr ""
 
 #: colors.c:344
-msgid "Fields"
-msgstr ""
+msgid "Field colors"
+msgstr "Cor dos campos"
 
 #: filetransfer.c:475
 msgid "File transfer"
@@ -498,11 +498,11 @@ msgstr "Transferência de arquivos"
 msgid "File transfer error"
 msgstr "Erro na transferência de arquivos"
 
-#: filetransfer.c:632 filetransfer.c:690 ft.c:215
+#: filetransfer.c:632 filetransfer.c:690 ft.c:216
 msgid "File transfer is already active"
 msgstr "Transferência de arquivos já está ativa"
 
-#: ft.c:208
+#: ft.c:209
 msgid "File transfer is already active in this session"
 msgstr "Transferência de arquivos já está ativa nesta sessão"
 
@@ -518,11 +518,11 @@ msgstr "Tela cheia"
 msgid "GTK Version mismatch"
 msgstr "Divergência de versão GTK"
 
-#: colors.c:366
+#: colors.c:365
 msgid "Gray"
 msgstr "Cinza"
 
-#: colors.c:355
+#: colors.c:354
 msgid "Green"
 msgstr "Verde"
 
@@ -530,7 +530,7 @@ msgstr "Verde"
 msgid "Help"
 msgstr "Ajuda"
 
-#: ft.c:516
+#: ft.c:517
 msgid "Host disconnected, transfer cancelled"
 msgstr "Servidor desconectou, transferência cancelada"
 
@@ -559,11 +559,11 @@ msgstr "Informações"
 msgid "Input method"
 msgstr "Método de entrada"
 
-#: colors.c:371
+#: colors.c:370
 msgid "Intensified/Protected"
 msgstr "Intensificado/Protegido"
 
-#: colors.c:369
+#: colors.c:368
 msgid "Intensified/Unprotected"
 msgstr "Intensificado/Desprotegido"
 
@@ -586,6 +586,10 @@ msgstr "Teclado está bloqueado"
 #: filetransfer.c:777
 msgid "LRECL:"
 msgstr "LRECL:"
+
+#: colors.c:345
+msgid "Misc colors"
+msgstr "Cores diversas"
 
 #: host.c:390
 msgid "Missing ']'"
@@ -612,7 +616,7 @@ msgstr "Múltiplos nomes de porta"
 msgid "Must specify port for telnet proxy"
 msgstr "Proxy telnet precisa de porta"
 
-#: colors.c:365
+#: colors.c:364
 msgid "Mustard"
 msgstr "Mostarda"
 
@@ -632,35 +636,35 @@ msgstr "Erro ao iniciar a rede"
 msgid "Next field"
 msgstr "Próximo campo"
 
-#: colors.c:370
+#: colors.c:369
 msgid "Normal/Protected"
 msgstr "Normal/Protegido"
 
-#: colors.c:368
+#: colors.c:367
 msgid "Normal/Unprotected"
 msgstr "Normal/Desprotegido"
 
-#: ft.c:523
+#: ft.c:524
 msgid "Not in 3270 mode, transfer cancelled"
 msgstr "Não está no modo 3270, transferência cancelada"
 
-#: colors.c:379
+#: colors.c:378
 msgid "OIA background"
 msgstr "Fundo da OIA"
 
-#: colors.c:380
+#: colors.c:379
 msgid "OIA foreground"
 msgstr "Frente da OIA"
 
-#: colors.c:381
+#: colors.c:380
 msgid "OIA separator"
 msgstr "Separador da OIA"
 
-#: colors.c:383
+#: colors.c:382
 msgid "OIA status invalid"
 msgstr "Estado inválido na OIA"
 
-#: colors.c:382
+#: colors.c:381
 msgid "OIA status ok"
 msgstr "Estado normal na OIA"
 
@@ -673,13 +677,9 @@ msgstr "Opção não suportada: '%c:'"
 msgid "Options"
 msgstr "Opções"
 
-#: colors.c:361
+#: colors.c:360
 msgid "Orange"
 msgstr "Laranja"
-
-#: colors.c:345
-msgid "Other"
-msgstr ""
 
 #: main.c:166
 msgid "Parse error"
@@ -710,7 +710,7 @@ msgstr "Colar conteúdo de arquivo texto"
 msgid "Paste with left margin"
 msgstr "Colar com margem esquerda"
 
-#: colors.c:354
+#: colors.c:353
 msgid "Pink"
 msgstr "Rosa"
 
@@ -736,13 +736,13 @@ msgstr "Imprimir seleção"
 
 #: print.c:346
 msgid "Print selection box"
-msgstr ""
+msgstr "Imprimir caixa de seleção"
 
 #: filetransfer.c:531
 msgid "Progress"
 msgstr "Progresso"
 
-#: colors.c:362
+#: colors.c:361
 msgid "Purple"
 msgstr "Púrpura"
 
@@ -758,13 +758,13 @@ msgstr "Receber arquivo do servidor"
 msgid "Record format"
 msgstr "Formato de registro"
 
-#: colors.c:353
+#: colors.c:352
 msgid "Red"
 msgstr "Vermelho"
 
 #: ui/99debug.xml:48
 msgid "Reload buffer contents"
-msgstr ""
+msgstr "Recarregar conteúdo do buffer"
 
 #: ui/00default.xml:127
 msgid "Remove selection"
@@ -858,11 +858,11 @@ msgstr "Selecione fonte"
 msgid "Select hostname"
 msgstr "Selecione host"
 
-#: colors.c:373
+#: colors.c:372
 msgid "Selection background"
 msgstr "Fundo da seleção"
 
-#: colors.c:374
+#: colors.c:373
 msgid "Selection foreground"
 msgstr "Frente da seleção"
 
@@ -916,16 +916,15 @@ msgstr "Espaço no nome da LU"
 
 #: filetransfer.c:529
 msgid "Spee_d"
-msgstr "Spee_d"
+msgstr "Veloci_dade"
 
 #: filetransfer.c:529
 msgid "T_otal"
 msgstr "T_otal"
 
 #: colors.c:343
-#, fuzzy
-msgid "Terminal"
-msgstr "Terminal"
+msgid "Terminal colors"
+msgstr "Cores do terminal"
 
 #: host.c:378
 msgid "Text before '['"
@@ -935,7 +934,7 @@ msgstr ""
 msgid "The file already exists. Replace it?"
 msgstr "O arquivo já existe, substituir?"
 
-#: ft.c:223
+#: ft.c:224
 msgid "The remote file name is invalid"
 msgstr "O nome do arquivo remoto não é válido"
 
@@ -1006,7 +1005,7 @@ msgstr "Opções de transferência"
 msgid "Transmission error"
 msgstr "Erro de transmissão"
 
-#: colors.c:356 colors.c:364
+#: colors.c:355 colors.c:363
 msgid "Turquoise"
 msgstr "Turquesa"
 
@@ -1026,7 +1025,7 @@ msgstr "Não é possível conectar em servidores seguros"
 msgid "Unable to paste text"
 msgstr "Incapaz de colar texto"
 
-#: ft.c:384
+#: ft.c:385
 msgid "Unable to send file-transfer request"
 msgstr "Não foi possível enviar a requisição de transferência de arquivo"
 
@@ -1070,7 +1069,7 @@ msgstr ""
 msgid "Unexpected target \"%s\""
 msgstr ""
 
-#: kybd.c:314
+#: kybd.c:318
 #, c-format
 msgid "Unexpected type %d in typeahead queue"
 msgstr "Tipo inesperado %d na fila de teclado"
@@ -1079,12 +1078,12 @@ msgstr "Tipo inesperado %d na fila de teclado"
 msgid "Unknown FT control code from host"
 msgstr "Servidor enviou código de controle FT desconhecido"
 
-#: kybd.c:2876
+#: kybd.c:2872
 #, c-format
 msgid "Unknown PA key %d"
 msgstr "PA %d desconhecida"
 
-#: kybd.c:2888
+#: kybd.c:2884
 #, c-format
 msgid "Unknown PF key %d"
 msgstr "PF %d desconhecida"
@@ -1093,7 +1092,7 @@ msgstr "PF %d desconhecida"
 msgid "Unknown frame type from host"
 msgstr "Servidor enviou tipo de frame desconhecido"
 
-#: resolver.c:165
+#: resolver.c:166
 #, c-format
 msgid ""
 "Unknown host:\n"
@@ -1107,7 +1106,7 @@ msgstr ""
 msgid "Unknown popup type \"%s\""
 msgstr "Tipo de popup \"%s\" não é conhecido"
 
-#: telnet.c:589 resolver.c:146
+#: telnet.c:589 resolver.c:147
 #, c-format
 msgid "Unknown port number or service: %s"
 msgstr "Número de porta ou serviço desconhecido: %s"
@@ -1133,11 +1132,11 @@ msgstr "WSAEventSelect falhou"
 msgid "WSAStartup failed"
 msgstr "WSAStartup falhou"
 
-#: ft.c:393
+#: ft.c:394
 msgid "Waiting for GET response"
 msgstr "Aguardando resposta do pedido de download"
 
-#: ft.c:395
+#: ft.c:396
 msgid "Waiting for PUT response"
 msgstr "Aguardando resposta do pedido de upload"
 
@@ -1145,7 +1144,7 @@ msgstr "Aguardando resposta do pedido de upload"
 msgid "Western Europe (ISO 8859-1)"
 msgstr "Europa ocidental (ISO 8859-1)"
 
-#: colors.c:358
+#: colors.c:357
 msgid "White"
 msgstr "Branco"
 
@@ -1201,7 +1200,7 @@ msgstr "X Sistema"
 msgid "X Wait"
 msgstr "X Aguarde"
 
-#: colors.c:357
+#: colors.c:356
 msgid "Yellow"
 msgstr "Amarelo"
 
