@@ -33,12 +33,12 @@
  #include <errno.h>
  #include <string.h>
  #include <stdio.h>
-// #include <malloc.h>
  #include <lib3270.h>
  #include <lib3270/macros.h>
  #include <stdlib.h>
  #include <strings.h>
  #include "globals.h"
+ #include "utilc.h"
  #include "api.h"
 
 /*--[ Structs & Defines ]----------------------------------------------------------------------------*/
@@ -328,6 +328,31 @@
 		{NULL, NULL}
 	};
 
+	#undef DECLARE_LIB3270_ACTION
+	#undef DECLARE_LIB3270_CLEAR_SELECTION_ACTION
+	#undef DECLARE_LIB3270_KEY_ACTION
+	#undef DECLARE_LIB3270_CURSOR_ACTION
+	#undef DECLARE_LIB3270_FKEY_ACTION
+
+	static const struct _action
+	{
+		const char *name;
+		int (*exec)(H3270 *session);
+	}
+	action[] =
+	{
+		#define DECLARE_LIB3270_ACTION( name )  				{ #name, lib3270_ ## name			},
+		#define DECLARE_LIB3270_CLEAR_SELECTION_ACTION( name )  { #name, lib3270_ ## name			},
+		#define DECLARE_LIB3270_KEY_ACTION( name )				{ #name, lib3270_ ## name			},
+		#define DECLARE_LIB3270_CURSOR_ACTION( name )			{ #name, lib3270_cursor_ ## name	},
+		#define DECLARE_LIB3270_FKEY_ACTION( name )				/* */
+
+		#include <lib3270/action_table.h>
+
+		{NULL, NULL}
+	};
+
+
  	int argc;
  	int f;
 
@@ -341,6 +366,20 @@
 	{
 		if(!strcasecmp(cmd[f].name,argv[0]))
 			return cmd[f].exec(session,argc,argv);
+	}
+
+	if(argc == 1)
+	{
+		// Search for action
+		for(f=0;action[f].name;f++)
+		{
+			if(!strcasecmp(action[f].name,argv[0]))
+			{
+				int rc = action[f].exec(session);
+				return xs_buffer("%d",rc);
+			}
+		}
+
 	}
 
 	// Not found, return NULL
