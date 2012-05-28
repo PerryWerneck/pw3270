@@ -307,7 +307,7 @@ static void ctlr_connect(H3270 *session, int ignored unused, void *dunno)
 		session->ea_buf[-1].fa = FA_PRINTABLE | FA_MODIFY;
 	else
 		session->ea_buf[-1].fa = FA_PRINTABLE | FA_PROTECT;
-	if (!IN_3270 || (IN_SSCP && (kybdlock & KL_OIA_TWAIT)))
+	if (!IN_3270 || (IN_SSCP && (session->kybdlock & KL_OIA_TWAIT)))
 	{
 		kybdlock_clr(KL_OIA_TWAIT, "ctlr_connect");
 		status_reset(session);
@@ -1106,7 +1106,7 @@ ctlr_erase_all_unprotected(void)
 		ctlr_clear(&h3270,True);
 	}
 	aid = AID_NO;
-	do_reset(False);
+	do_reset(&h3270,False);
 	ALL_CHANGED;
 }
 
@@ -1863,10 +1863,10 @@ ctlr_write(unsigned char buf[], int buflen, Boolean erase)
 	trace_ds("\n");
 	if (wcc_keyboard_restore) {
 		aid = AID_NO;
-		do_reset(False);
-	} else if (kybdlock & KL_OIA_TWAIT) {
+		do_reset(&h3270,False);
+	} else if (h3270.kybdlock & KL_OIA_TWAIT) {
 		kybdlock_clr(KL_OIA_TWAIT, "ctlr_write");
-		status_syswait();
+		status_changed(&h3270,LIB3270_STATUS_SYSWAIT);
 	}
 	if (wcc_sound_alarm)
 		lib3270_ring_bell(NULL);
@@ -1987,7 +1987,7 @@ ctlr_write_sscp_lu(unsigned char buf[], int buflen)
 
 	/* Unlock the keyboard. */
 	aid = AID_NO;
-	do_reset(False);
+	do_reset(&h3270,False);
 
 }
 
@@ -2286,7 +2286,7 @@ ps_process(void)
 	if (lib3270_get_ft_state(&h3270) != LIB3270_FT_STATE_NONE &&	/* transfer in progress */
 	    h3270.formatted &&          								/* screen is formatted */
 	    !h3270.screen_alt &&        								/* 24x80 screen */
-	    !kybdlock &&                								/* keyboard not locked */
+	    !h3270.kybdlock &&                								/* keyboard not locked */
 	    /* magic field */
 	    h3270.ea_buf[1919].fa && FA_IS_SKIP(h3270.ea_buf[1919].fa)) {
 		ft_cut_data();

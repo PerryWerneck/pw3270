@@ -2131,7 +2131,7 @@ static void
 net_cookout(const char *buf, int len)
 {
 
-	if (!IN_ANSI || (kybdlock & KL_AWAITING_FIRST))
+	if (!IN_ANSI || (h3270.kybdlock & KL_AWAITING_FIRST))
 		return;
 
 	if (linemode) {

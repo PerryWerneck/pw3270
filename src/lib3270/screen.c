@@ -454,11 +454,11 @@ void status_reset(H3270 *session)
 {
 	CHECK_SESSION_HANDLE(session);
 
-	if (kybdlock & KL_ENTER_INHIBIT)
+	if (session->kybdlock & KL_ENTER_INHIBIT)
 	{
 		status_changed(session,LIB3270_STATUS_INHIBIT);
 	}
-	else if (kybdlock & KL_DEFERRED_UNLOCK)
+	else if (session->kybdlock & KL_DEFERRED_UNLOCK)
 	{
 		status_changed(session,LIB3270_STATUS_X);
 	}
@@ -540,7 +540,7 @@ static void status_connect(H3270 *session, int connected, void *dunno)
 	{
 		set_status(session,OIA_FLAG_BOXSOLID,IN_3270 && !IN_SSCP);
 
-		if (kybdlock & KL_AWAITING_FIRST)
+		if (session->kybdlock & KL_AWAITING_FIRST)
 			id = LIB3270_STATUS_AWAITING_FIRST;
 		else
 			id = LIB3270_STATUS_CONNECTED;

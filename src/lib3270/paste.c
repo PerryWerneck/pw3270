@@ -186,12 +186,12 @@ LIB3270_EXPORT int lib3270_set_string(H3270 *h, const unsigned char *str)
 	data.orig_addr	= h->cursor_addr;
 	data.orig_col	= BA_TO_COL(h->cursor_addr);
 
-	if(kybdlock)
+	if(h->kybdlock)
 		return -EINVAL;
 
 	h->suspend(h);
 
-	while(*str && last && !kybdlock && h->cursor_addr >= data.orig_addr)
+	while(*str && last && !h->kybdlock && h->cursor_addr >= data.orig_addr)
 	{
 		switch(*str)
 		{

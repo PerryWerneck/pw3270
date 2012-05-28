@@ -169,6 +169,9 @@
 		unsigned char 			  myopts[LIB3270_TELNET_N_OPTS];
 		unsigned char			  hisopts[LIB3270_TELNET_N_OPTS];
 
+		// kybd.c
+		unsigned int			  kybdlock;
+
 		// Widget info
 		void					* widget;
 

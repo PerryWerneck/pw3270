@@ -132,7 +132,7 @@ static struct xks {
 static Boolean		reverse = False;	/* reverse-input mode */
 
 /* Globals */
-unsigned int	kybdlock = KL_NOT_CONNECTED;
+// unsigned int	kybdlock = KL_NOT_CONNECTED;
 unsigned char	aid = AID_NO;		/* current attention ID */
 
 /* Composite key mappings. */
@@ -175,7 +175,7 @@ static struct ta
 
 static const char dxl[] = "0123456789abcdef";
 #define FROM_HEX(c)	(strchr(dxl, tolower(c)) - dxl)
-#define KYBDLOCK_IS_OERR	(kybdlock && !(kybdlock & ~KL_OERR_MASK))
+#define KYBDLOCK_IS_OERR	(h3270.kybdlock && !(h3270.kybdlock & ~KL_OERR_MASK))
 
 
 /*
@@ -191,7 +191,7 @@ static int enq_chk(void)
 	}
 
 	/* If operator error, complain and drop it. */
-	if (kybdlock & KL_OERR_MASK)
+	if (h3270.kybdlock & KL_OERR_MASK)
 	{
 		lib3270_ring_bell(NULL);
 		trace_event("  dropped (operator error)\n");
@@ -199,9 +199,9 @@ static int enq_chk(void)
 	}
 
 	/* If scroll lock, complain and drop it. */
-	if (kybdlock & KL_SCROLLED)
+	if (h3270.kybdlock & KL_SCROLLED)
 	{
-		lib3270_ring_bell(NULL);
+		lib3270_ring_bell(&h3270);
 		trace_event("  dropped (scrolled)\n");
 		return -1;
 	}
@@ -244,7 +244,7 @@ static int enq_chk(void)
 	}
 	ta_tail = ta;
 
-	trace_event("  Key-aid queued (kybdlock 0x%x)\n", kybdlock);
+	trace_event("  Key-aid queued (kybdlock 0x%x)\n", h3270.kybdlock);
  }
 
 /*
@@ -282,7 +282,7 @@ static void enq_ta(H3270 *hSession, void (*fn)(H3270 *, const char *, const char
 	}
 	ta_tail = ta;
 
-	trace_event("  action queued (kybdlock 0x%x)\n", kybdlock);
+	trace_event("  action queued (kybdlock 0x%x)\n", h3270.kybdlock);
 }
 
 /*
@@ -292,7 +292,7 @@ Boolean run_ta(void)
 {
 	struct ta *ta;
 
-	if (kybdlock || (ta = ta_head) == (struct ta *)NULL)
+	if (h3270.kybdlock || (ta = ta_head) == (struct ta *)NULL)
 		return False;
 
 	if ((ta_head = ta->next) == (struct ta *)NULL)
@@ -353,18 +353,18 @@ kybdlock_set(unsigned int bits, const char *cause unused)
 {
 	unsigned int n;
 
-	n = kybdlock | bits;
-	if (n != kybdlock) {
+	n = h3270.kybdlock | bits;
+	if (n != h3270.kybdlock) {
 #if defined(KYBDLOCK_TRACE) /*[*/
 	       trace_event("  %s: kybdlock |= 0x%04x, 0x%04x -> 0x%04x\n",
 		    cause, bits, kybdlock, n);
 #endif /*]*/
-		if ((kybdlock ^ bits) & KL_DEFERRED_UNLOCK) {
+		if ((h3270.kybdlock ^ bits) & KL_DEFERRED_UNLOCK) {
 			/* Turned on deferred unlock. */
 			unlock_delay_time = time(NULL);
 		}
-		kybdlock = n;
-		status_kybdlock();
+		h3270.kybdlock = n;
+		status_changed(&h3270,LIB3270_STATUS_KYBDLOCK);
 	}
 }
 
@@ -374,18 +374,17 @@ kybdlock_clr(unsigned int bits, const char *cause unused)
 {
 	unsigned int n;
 
-	n = kybdlock & ~bits;
-	if (n != kybdlock) {
-#if defined(KYBDLOCK_TRACE) /*[*/
-		trace_event("  %s: kybdlock &= ~0x%04x, 0x%04x -> 0x%04x\n",
-		    cause, bits, kybdlock, n);
-#endif /*]*/
-		if ((kybdlock ^ n) & KL_DEFERRED_UNLOCK) {
+	n = h3270.kybdlock & ~bits;
+	if (n != h3270.kybdlock) {
+#if defined(KYBDLOCK_TRACE)
+		trace_event("  %s: kybdlock &= ~0x%04x, 0x%04x -> 0x%04x\n",cause, bits, kybdlock, n);
+#endif
+		if ((h3270.kybdlock ^ n) & KL_DEFERRED_UNLOCK) {
 			/* Turned off deferred unlock. */
 			unlock_delay_time = 0;
 		}
-		kybdlock = n;
-		status_kybdlock();
+		h3270.kybdlock = n;
+		status_changed(&h3270,LIB3270_STATUS_KYBDLOCK);
 	}
 }
 
@@ -397,11 +396,11 @@ kybd_inhibit(Boolean inhibit)
 {
 	if (inhibit) {
 		kybdlock_set(KL_ENTER_INHIBIT, "kybd_inhibit");
-		if (kybdlock == KL_ENTER_INHIBIT)
+		if (h3270.kybdlock == KL_ENTER_INHIBIT)
 			status_reset(&h3270);
 	} else {
 		kybdlock_clr(KL_ENTER_INHIBIT, "kybd_inhibit");
-		if (!kybdlock)
+		if (!h3270.kybdlock)
 			status_reset(&h3270);
 	}
 }
@@ -411,7 +410,7 @@ kybd_inhibit(Boolean inhibit)
  */
 void kybd_connect(H3270 *session, int connected, void *dunno)
 {
-	if (kybdlock & KL_DEFERRED_UNLOCK)
+	if (session->kybdlock & KL_DEFERRED_UNLOCK)
 		RemoveTimeOut(unlock_id);
 
 	kybdlock_clr(-1, "kybd_connect");
@@ -430,7 +429,7 @@ void kybd_connect(H3270 *session, int connected, void *dunno)
  */
 void kybd_in3270(H3270 *session, int in3270 unused, void *dunno)
 {
-	if (kybdlock & KL_DEFERRED_UNLOCK)
+	if (session->kybdlock & KL_DEFERRED_UNLOCK)
 		RemoveTimeOut(unlock_id);
 	kybdlock_clr(~KL_AWAITING_FIRST, "kybd_in3270");
 
@@ -523,10 +522,10 @@ static void key_AID(H3270 *session, unsigned char aid_code)
 	trace("IN_SSCP: %d cursor_addr: %d",IN_SSCP,h3270.cursor_addr);
 
 	if (IN_SSCP) {
-		if (kybdlock & KL_OIA_MINUS)
+		if (h3270.kybdlock & KL_OIA_MINUS)
 			return;
 		if (aid_code != AID_ENTER && aid_code != AID_CLEAR) {
-			status_minus();
+			status_changed(&h3270,LIB3270_STATUS_MINUS);
 			kybdlock_set(KL_OIA_MINUS, "key_AID");
 			return;
 		}
@@ -555,9 +554,9 @@ LIB3270_FKEY_ACTION( pfkey )
 	if (key < 1 || key > PF_SZ)
 		return EINVAL;
 
-	if (kybdlock & KL_OIA_MINUS)
+	if (hSession->kybdlock & KL_OIA_MINUS)
 		return -1;
-	else if (kybdlock)
+	else if (hSession->kybdlock)
 		enq_key(pf_xlate[key-1]);
 	else
 		key_AID(hSession,pf_xlate[key-1]);
@@ -572,9 +571,9 @@ LIB3270_FKEY_ACTION( pakey )
 		return EINVAL;
 	}
 
-	if (kybdlock & KL_OIA_MINUS)
+	if (hSession->kybdlock & KL_OIA_MINUS)
 		return -1;
-	else if (kybdlock)
+	else if (hSession->kybdlock)
 		enq_key(pa_xlate[key-1]);
 	else
 		key_AID(hSession,pa_xlate[key-1]);
@@ -760,7 +759,7 @@ static Boolean key_Character(int code, Boolean with_ge, Boolean pasting, Boolean
 	if (skipped != NULL)
 		*skipped = False;
 
-	if (kybdlock)
+	if (h3270.kybdlock)
 	{
 		char codename[64];
 
@@ -1377,10 +1376,10 @@ LIB3270_KEY_ACTION( tab )
 
 //	reset_idle_timer();
 
-	if (kybdlock) {
+	if (hSession->kybdlock) {
 		if (KYBDLOCK_IS_OERR) {
 			kybdlock_clr(KL_OERR_MASK, "Tab");
-			status_reset(&h3270);
+			status_reset(hSession);
 		} else {
 			ENQUEUE_ACTION(lib3270_tab);
 			return 0;
@@ -1407,10 +1406,10 @@ LIB3270_KEY_ACTION( backtab )
 
 //	reset_idle_timer();
 
-	if (kybdlock) {
+	if (hSession->kybdlock) {
 		if (KYBDLOCK_IS_OERR) {
 			kybdlock_clr(KL_OERR_MASK, "BackTab");
-			status_reset(&h3270);
+			status_reset(hSession);
 		} else {
 			ENQUEUE_ACTION(lib3270_backtab);
 			return 0;
@@ -1418,26 +1417,26 @@ LIB3270_KEY_ACTION( backtab )
 	}
 	if (!IN_3270)
 		return 0;
-	baddr = h3270.cursor_addr;
+	baddr = hSession->cursor_addr;
 	DEC_BA(baddr);
-	if (h3270.ea_buf[baddr].fa)	/* at bof */
+	if (hSession->ea_buf[baddr].fa)	/* at bof */
 		DEC_BA(baddr);
 	sbaddr = baddr;
 	while (True) {
 		nbaddr = baddr;
 		INC_BA(nbaddr);
-		if (h3270.ea_buf[baddr].fa &&
-		    !FA_IS_PROTECTED(h3270.ea_buf[baddr].fa) &&
-		    !h3270.ea_buf[nbaddr].fa)
+		if (hSession->ea_buf[baddr].fa &&
+		    !FA_IS_PROTECTED(hSession->ea_buf[baddr].fa) &&
+		    !hSession->ea_buf[nbaddr].fa)
 			break;
 		DEC_BA(baddr);
 		if (baddr == sbaddr) {
-			cursor_move(&h3270,0);
+			cursor_move(hSession,0);
 			return 0;
 		}
 	}
 	INC_BA(baddr);
-	cursor_move(&h3270,baddr);
+	cursor_move(hSession,baddr);
 	return 0;
 }
 
@@ -1457,8 +1456,7 @@ static void defer_unlock(H3270 *session)
 /*
  * Reset keyboard lock.
  */
-void
-do_reset(Boolean explicit)
+void do_reset(H3270 *session, Boolean explicit)
 {
 	/*
 	 * If explicit (from the keyboard) and there is typeahead or
@@ -1467,7 +1465,7 @@ do_reset(Boolean explicit)
 
 	if (explicit
 #if defined(X3270_FT) /*[*/
-	    || lib3270_get_ft_state(&h3270) != LIB3270_FT_STATE_NONE
+	    || lib3270_get_ft_state(session) != LIB3270_FT_STATE_NONE
 #endif /*]*/
 	    ) {
 		Boolean half_reset = False;
@@ -1475,19 +1473,12 @@ do_reset(Boolean explicit)
 		if (flush_ta())
 			half_reset = True;
 
-/*
-		if (composing != NONE) {
-			composing = NONE;
-			status_compose(False, 0, KT_STD);
-			half_reset = True;
-		}
-*/
 		if (half_reset)
 			return;
 	}
 
 	/* Always clear insert mode. */
-	lib3270_set_toggle(&h3270,LIB3270_TOGGLE_INSERT,0);
+	lib3270_set_toggle(session,LIB3270_TOGGLE_INSERT,0);
 
 	/* Otherwise, if not connect, reset is a no-op. */
 	if (!CONNECTED)
@@ -1497,7 +1488,7 @@ do_reset(Boolean explicit)
 	 * Remove any deferred keyboard unlock.  We will either unlock the
 	 * keyboard now, or want to defer further into the future.
 	 */
-	if (kybdlock & KL_DEFERRED_UNLOCK)
+	if (session->kybdlock & KL_DEFERRED_UNLOCK)
 		RemoveTimeOut(unlock_id);
 
 	/*
@@ -1506,29 +1497,28 @@ do_reset(Boolean explicit)
 	 */
 	if (explicit
 #if defined(X3270_FT) /*[*/
-	    || lib3270_get_ft_state(&h3270) != LIB3270_FT_STATE_NONE
+	    || lib3270_get_ft_state(session) != LIB3270_FT_STATE_NONE
 #endif /*]*/
-	    || (!h3270.unlock_delay) // && !sms_in_macro())
+	    || (!session->unlock_delay) // && !sms_in_macro())
 	    || (unlock_delay_time != 0 && (time(NULL) - unlock_delay_time) > 1)) {
 		kybdlock_clr(-1, "do_reset");
-	} else if (kybdlock &
+	} else if (session->kybdlock &
   (KL_DEFERRED_UNLOCK | KL_OIA_TWAIT | KL_OIA_LOCKED | KL_AWAITING_FIRST)) {
 		kybdlock_clr(~KL_DEFERRED_UNLOCK, "do_reset");
 		kybdlock_set(KL_DEFERRED_UNLOCK, "do_reset");
-		unlock_id = AddTimeOut(UNLOCK_MS, &h3270, defer_unlock);
+		unlock_id = AddTimeOut(UNLOCK_MS, session, defer_unlock);
 	}
 
 	/* Clean up other modes. */
-	status_reset(&h3270);
-	mcursor_normal(&h3270);
+	status_reset(session);
+	mcursor_normal(session);
 
 }
 
-LIB3270_CLEAR_SELECTION_ACTION( reset )
+LIB3270_ACTION( reset )
 {
-//	reset_idle_timer();
-
-	do_reset(True);
+	lib3270_unselect(hSession);
+	do_reset(hSession,True);
 	return 0;
 }
 
@@ -1539,7 +1529,8 @@ LIB3270_CLEAR_SELECTION_ACTION( reset )
 LIB3270_ACTION( firstfield )
 {
 //	reset_idle_timer();
-	if (kybdlock) {
+	if (hSession->kybdlock)
+	{
 		ENQUEUE_ACTION(lib3270_firstfield);
 		return 0;
 	}
@@ -1585,7 +1576,7 @@ void Left_action(Widget w unused, XEvent *event, String *params, Cardinal *num_p
 
 LIB3270_CURSOR_ACTION( left )
 {
-	if (kybdlock)
+	if (hSession->kybdlock)
 	{
 		if (KYBDLOCK_IS_OERR)
 		{
@@ -1705,7 +1696,7 @@ do_delete(void)
 
 LIB3270_ACTION( delete )
 {
-	if (kybdlock)
+	if (hSession->kybdlock)
 	{
 		ENQUEUE_ACTION(lib3270_delete);
 		return 0;
@@ -1735,7 +1726,7 @@ LIB3270_ACTION( delete )
  */
 LIB3270_ACTION( backspace )
 {
-	if (kybdlock)
+	if (hSession->kybdlock)
 	{
 		ENQUEUE_ACTION( lib3270_backspace );
 		return 0;
@@ -1825,7 +1816,7 @@ do_erase(void)
 LIB3270_ACTION( erase )
 {
 //	reset_idle_timer();
-	if (kybdlock) {
+	if (hSession->kybdlock) {
 		ENQUEUE_ACTION(lib3270_erase);
 		return 0;
 	}
@@ -1847,7 +1838,7 @@ LIB3270_CURSOR_ACTION( right )
 	register int	baddr;
 	enum dbcs_state d;
 
-	if (kybdlock)
+	if (hSession->kybdlock)
 	{
 		if (KYBDLOCK_IS_OERR)
 		{
@@ -1931,7 +1922,7 @@ LIB3270_ACTION( previousword )
 	Boolean prot;
 
 //	reset_idle_timer();
-	if (kybdlock) {
+	if (hSession->kybdlock) {
 		ENQUEUE_ACTION(lib3270_previousword);
 //		enq_ta(PreviousWord_action, CN, CN);
 		return 0;
@@ -2082,7 +2073,7 @@ LIB3270_ACTION( nextword )
 	unsigned char c;
 
 //	reset_idle_timer();
-	if (kybdlock) {
+	if (hSession->kybdlock) {
 		ENQUEUE_ACTION( lib3270_nextword );
 //		enq_ta(NextWord_action, CN, CN);
 		return 0;
@@ -2151,7 +2142,7 @@ LIB3270_CURSOR_ACTION( up )
 	register int	baddr;
 
 //	reset_idle_timer();
-	if (kybdlock) {
+	if (hSession->kybdlock) {
 		if (KYBDLOCK_IS_OERR)
 		{
 			kybdlock_clr(KL_OERR_MASK, "Up");
@@ -2188,7 +2179,7 @@ LIB3270_CURSOR_ACTION( down )
 	register int	baddr;
 
 //	reset_idle_timer();
-	if (kybdlock)
+	if (hSession->kybdlock)
 	{
 		if (KYBDLOCK_IS_OERR)
 		{
@@ -2222,11 +2213,9 @@ LIB3270_CURSOR_ACTION( newline )
 	register int	baddr, faddr;
 	register unsigned char	fa;
 
-//	reset_idle_timer();
-	if (kybdlock)
+	if (hSession->kybdlock)
 	{
 		ENQUEUE_ACTION(lib3270_cursor_newline);
-//		enq_ta(Newline_action, CN, CN);
 		return 0;
 	}
 #if defined(X3270_ANSI) /*[*/
@@ -2254,7 +2243,7 @@ LIB3270_CURSOR_ACTION( newline )
  */
 LIB3270_ACTION( dup )
 {
-	if (kybdlock)
+	if (hSession->kybdlock)
 	{
 		ENQUEUE_ACTION(lib3270_dup);
 		return 0;
@@ -2277,7 +2266,7 @@ LIB3270_ACTION( dup )
  */
 LIB3270_ACTION( fieldmark )
 {
-	if (kybdlock)
+	if (hSession->kybdlock)
 	{
 		ENQUEUE_ACTION(lib3270_fieldmark);
 		return 0;
@@ -2301,13 +2290,11 @@ LIB3270_ACTION( fieldmark )
  */
 LIB3270_KEY_ACTION( enter )
 {
-//	reset_idle_timer();
+	trace("%s (kybdlock & KL_OIA_MINUS): %d kybdlock: %d",__FUNCTION__,(hSession->kybdlock & KL_OIA_MINUS),hSession->kybdlock);
 
-	trace("%s (kybdlock & KL_OIA_MINUS): %d kybdlock: %d",__FUNCTION__,(kybdlock & KL_OIA_MINUS),kybdlock);
-
-	if (kybdlock & KL_OIA_MINUS)
+	if (hSession->kybdlock & KL_OIA_MINUS)
 		return -1;
-	else if (kybdlock)
+	else if (hSession->kybdlock)
 		ENQUEUE_ACTION(lib3270_enter);
 	else
 		key_AID(hSession,AID_ENTER);
@@ -2326,9 +2313,9 @@ LIB3270_ACTION( sysreq )
 	} else
 #endif /*]*/
 	{
-		if (kybdlock & KL_OIA_MINUS)
+		if (hSession->kybdlock & KL_OIA_MINUS)
 			return 0;
-		else if (kybdlock)
+		else if (hSession->kybdlock)
 			ENQUEUE_ACTION(lib3270_sysreq);
 		else
 			key_AID(hSession,AID_SYSREQ);
@@ -2343,9 +2330,9 @@ LIB3270_ACTION( sysreq )
 LIB3270_ACTION( clear )
 {
 //	reset_idle_timer();
-	if (kybdlock & KL_OIA_MINUS)
+	if (hSession->kybdlock & KL_OIA_MINUS)
 		return 0;
-	if (kybdlock && CONNECTED) {
+	if (hSession->kybdlock && CONNECTED) {
 		ENQUEUE_ACTION(lib3270_clear);
 		return 0;
 	}
@@ -2485,7 +2472,7 @@ LIB3270_ACTION( eraseeol )
 	enum dbcs_why why = DBCS_FIELD;
 
 //	reset_idle_timer();
-	if (kybdlock)
+	if (hSession->kybdlock)
 	{
 		ENQUEUE_ACTION(lib3270_eraseeol);
 		return 0;
@@ -2551,7 +2538,7 @@ LIB3270_ACTION( eraseeof )
 	enum dbcs_why why = DBCS_FIELD;
 
 //	reset_idle_timer();
-	if (kybdlock)
+	if (hSession->kybdlock)
 	{
 		ENQUEUE_ACTION(lib3270_eraseeof);
 		return 0;
@@ -2601,7 +2588,7 @@ LIB3270_ACTION( eraseinput )
 	Boolean		f;
 
 //	reset_idle_timer();
-	if (kybdlock) {
+	if (hSession->kybdlock) {
 		ENQUEUE_ACTION( lib3270_eraseinput );
 		return 0;
 	}
@@ -2664,7 +2651,7 @@ LIB3270_ACTION( deleteword )
 	register unsigned char	fa;
 
 //	reset_idle_timer();
-	if (kybdlock) {
+	if (hSession->kybdlock) {
 		ENQUEUE_ACTION(lib3270_deleteword);
 //		enq_ta(DeleteWord_action, CN, CN);
 		return 0;
@@ -2731,7 +2718,7 @@ LIB3270_ACTION( deletefield )
 	register unsigned char	fa;
 
 //	reset_idle_timer();
-	if (kybdlock) {
+	if (hSession->kybdlock) {
 		ENQUEUE_ACTION(lib3270_deletefield);
 //		enq_ta(DeleteField_action, CN, CN);
 		return 0;
@@ -2836,8 +2823,8 @@ LIB3270_ACTION( fieldend )
 	unsigned char	fa, c;
 	int	last_nonblank = -1;
 
-//	reset_idle_timer();
-	if (kybdlock) {
+	if (hSession->kybdlock)
+	{
 		ENQUEUE_ACTION( lib3270_fieldend );
 		return 0;
 	}
@@ -3003,7 +2990,8 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *session, char *s, int len, int p
 		 * It isn't possible to unlock the keyboard from a string,
 		 * so if the keyboard is locked, it's fatal
 		 */
-		if (kybdlock) {
+		if (session->kybdlock)
+		{
 			trace_event("  keyboard locked, string dropped\n");
 			return 0;
 		}
@@ -3350,7 +3338,7 @@ kybd_prime(void)
 	 * No point in trying if the screen isn't formatted, the keyboard
 	 * is locked, or we aren't in 3270 mode.
 	 */
-	if (!h3270.formatted || kybdlock || !IN_3270)
+	if (!h3270.formatted || h3270.kybdlock || !IN_3270)
 		return 0;
 
 	fa = get_field_attribute(&h3270,h3270.cursor_addr);
