@@ -69,6 +69,7 @@ MSGMERGE=@MSGMERGE@
 MSGFMT=@MSGFMT@
 XML2POT=src/tools/xml2pot@EXEEXT@
 SHELL=@SHELL@
+AMTAR=@AMTAR@
 
 #---[ Rules ]------------------------------------------------------------------
 
@@ -204,7 +205,7 @@ $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz: clean pixmaps
 	@$(MKDIR) $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/po
 	@cp po/*.po $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/po
 
-	@tar --create --gzip --directory $(TMPDIR) --exclude-vcs --file=$@ $(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
+	@$(AMTAR) --create --gzip --directory $(TMPDIR) --exclude-vcs --owner=root --group=root --file=$@ $(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 
 	@rm -fr $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@echo $@
