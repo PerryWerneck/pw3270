@@ -370,38 +370,47 @@ kybdlock_set(unsigned int bits, const char *cause unused)
 
 /* Clear bits in the keyboard lock. */
 void
-kybdlock_clr(unsigned int bits, const char *cause unused)
+kybdlock_clr(H3270 *session, unsigned int bits, const char *cause unused)
 {
 	unsigned int n;
 
-	n = h3270.kybdlock & ~bits;
-	if (n != h3270.kybdlock) {
+	n = session->kybdlock & ~bits;
+
+	if (n != session->kybdlock)
+	{
 #if defined(KYBDLOCK_TRACE)
 		trace_event("  %s: kybdlock &= ~0x%04x, 0x%04x -> 0x%04x\n",cause, bits, kybdlock, n);
 #endif
-		if ((h3270.kybdlock ^ n) & KL_DEFERRED_UNLOCK) {
+		if ((session->kybdlock ^ n) & KL_DEFERRED_UNLOCK)
+		{
 			/* Turned off deferred unlock. */
-			h3270.unlock_delay_time = 0;
+			session->unlock_delay_time = 0;
 		}
-		h3270.kybdlock = n;
-		status_changed(&h3270,LIB3270_STATUS_KYBDLOCK);
+		session->kybdlock = n;
+		status_changed(session,LIB3270_STATUS_KYBDLOCK);
 	}
 }
 
-/*
+/**
  * Set or clear enter-inhibit mode.
+ *
+ * @param session	Session handle
+ * @param inhibit	New state
+ *
  */
-void
-kybd_inhibit(Boolean inhibit)
+void kybd_inhibit(H3270 *session, Boolean inhibit)
 {
-	if (inhibit) {
+	if (inhibit)
+	{
 		kybdlock_set(KL_ENTER_INHIBIT, "kybd_inhibit");
-		if (h3270.kybdlock == KL_ENTER_INHIBIT)
-			status_reset(&h3270);
-	} else {
-		kybdlock_clr(KL_ENTER_INHIBIT, "kybd_inhibit");
-		if (!h3270.kybdlock)
-			status_reset(&h3270);
+		if (session->kybdlock == KL_ENTER_INHIBIT)
+			status_reset(session);
+	}
+	else
+	{
+		kybdlock_clr(session,KL_ENTER_INHIBIT, "kybd_inhibit");
+		if (!session->kybdlock)
+			status_reset(session);
 	}
 }
 
@@ -413,7 +422,7 @@ void kybd_connect(H3270 *session, int connected, void *dunno)
 	if (session->kybdlock & KL_DEFERRED_UNLOCK)
 		RemoveTimeOut(session->unlock_id);
 
-	kybdlock_clr(-1, "kybd_connect");
+	kybdlock_clr(session, -1, "kybd_connect");
 
 	if (connected) {
 		/* Wait for any output or a WCC(restore) from the host */
@@ -431,7 +440,7 @@ void kybd_in3270(H3270 *session, int in3270 unused, void *dunno)
 {
 	if (session->kybdlock & KL_DEFERRED_UNLOCK)
 		RemoveTimeOut(session->unlock_id);
-	kybdlock_clr(~KL_AWAITING_FIRST, "kybd_in3270");
+	kybdlock_clr(session,~KL_AWAITING_FIRST, "kybd_in3270");
 
 	/* There might be a macro pending. */
 	if (CONNECTED)
@@ -1378,7 +1387,7 @@ LIB3270_KEY_ACTION( tab )
 
 	if (hSession->kybdlock) {
 		if (KYBDLOCK_IS_OERR) {
-			kybdlock_clr(KL_OERR_MASK, "Tab");
+			kybdlock_clr(hSession,KL_OERR_MASK, "Tab");
 			status_reset(hSession);
 		} else {
 			ENQUEUE_ACTION(lib3270_tab);
@@ -1408,7 +1417,7 @@ LIB3270_KEY_ACTION( backtab )
 
 	if (hSession->kybdlock) {
 		if (KYBDLOCK_IS_OERR) {
-			kybdlock_clr(KL_OERR_MASK, "BackTab");
+			kybdlock_clr(hSession,KL_OERR_MASK, "BackTab");
 			status_reset(hSession);
 		} else {
 			ENQUEUE_ACTION(lib3270_backtab);
@@ -1447,7 +1456,7 @@ LIB3270_KEY_ACTION( backtab )
 
 static void defer_unlock(H3270 *session)
 {
-	kybdlock_clr(KL_DEFERRED_UNLOCK, "defer_unlock");
+	kybdlock_clr(session,KL_DEFERRED_UNLOCK, "defer_unlock");
 	status_reset(session);
 	if (CONNECTED)
 		ps_process();
@@ -1501,10 +1510,10 @@ void do_reset(H3270 *session, Boolean explicit)
 #endif /*]*/
 	    || (!session->unlock_delay) // && !sms_in_macro())
 	    || (session->unlock_delay_time != 0 && (time(NULL) - session->unlock_delay_time) > 1)) {
-		kybdlock_clr(-1, "do_reset");
+		kybdlock_clr(session,-1, "do_reset");
 	} else if (session->kybdlock &
   (KL_DEFERRED_UNLOCK | KL_OIA_TWAIT | KL_OIA_LOCKED | KL_AWAITING_FIRST)) {
-		kybdlock_clr(~KL_DEFERRED_UNLOCK, "do_reset");
+		kybdlock_clr(session,~KL_DEFERRED_UNLOCK, "do_reset");
 		kybdlock_set(KL_DEFERRED_UNLOCK, "do_reset");
 		session->unlock_id = AddTimeOut(UNLOCK_MS, session, defer_unlock);
 	}
@@ -1580,7 +1589,7 @@ LIB3270_CURSOR_ACTION( left )
 	{
 		if (KYBDLOCK_IS_OERR)
 		{
-			kybdlock_clr(KL_OERR_MASK, "Left");
+			kybdlock_clr(hSession,KL_OERR_MASK, "Left");
 			status_reset(&h3270);
 		}
 		else
@@ -1843,8 +1852,8 @@ LIB3270_CURSOR_ACTION( right )
 	{
 		if (KYBDLOCK_IS_OERR)
 		{
-			kybdlock_clr(KL_OERR_MASK, "Right");
-			status_reset(&h3270);
+			kybdlock_clr(hSession,KL_OERR_MASK, "Right");
+			status_reset(hSession);
 		}
 		else
 		{
@@ -1873,43 +1882,6 @@ LIB3270_CURSOR_ACTION( right )
 	}
 	return 0;
 }
-
-
-/*
- * Cursor left 2 positions.
- */ /*
-void
-Left2_action(Widget w unused, XEvent *event, String *params,
-    Cardinal *num_params)
-{
-	register int	baddr;
-	enum dbcs_state d;
-
-//	reset_idle_timer();
-	if (kybdlock) {
-		if (KYBDLOCK_IS_OERR) {
-			kybdlock_clr(KL_OERR_MASK, "Left2");
-			status_reset(&h3270);
-		} else {
-			enq_ta(Left2_action, CN, CN);
-			return;
-		}
-	}
-#if defined(X3270_ANSI)
-	if (IN_ANSI)
-		return;
-#endif
-	baddr = cursor_addr;
-	DEC_BA(baddr);
-	d = ctlr_dbcs_state(baddr);
-	if (IS_LEFT(d))
-		DEC_BA(baddr);
-	DEC_BA(baddr);
-	d = ctlr_dbcs_state(baddr);
-	if (IS_LEFT(d))
-		DEC_BA(baddr);
-	cursor_move(baddr);
-} */
 
 
 /*
@@ -1979,44 +1951,7 @@ LIB3270_ACTION( previousword )
 	return 0;
 }
 
-
-/*
- * Cursor right 2 positions.
- */ /*
-void
-Right2_action(Widget w unused, XEvent *event, String *params,
-    Cardinal *num_params)
-{
-	register int	baddr;
-	enum dbcs_state d;
 
-//	reset_idle_timer();
-	if (kybdlock) {
-		if (KYBDLOCK_IS_OERR) {
-			kybdlock_clr(KL_OERR_MASK, "Right2");
-			status_reset(&h3270);
-		} else {
-			enq_ta(Right2_action, CN, CN);
-			return;
-		}
-	}
-#if defined(X3270_ANSI)
-	if (IN_ANSI)
-		return;
-#endif
-	baddr = cursor_addr;
-	INC_BA(baddr);
-	d = ctlr_dbcs_state(baddr);
-	if (IS_RIGHT(d))
-		INC_BA(baddr);
-	INC_BA(baddr);
-	d = ctlr_dbcs_state(baddr);
-	if (IS_RIGHT(d))
-		INC_BA(baddr);
-	cursor_move(baddr);
-}
-*/
-
 /* Find the next unprotected word, or -1 */
 static int
 nu_word(int baddr)
@@ -2146,8 +2081,8 @@ LIB3270_CURSOR_ACTION( up )
 	if (hSession->kybdlock) {
 		if (KYBDLOCK_IS_OERR)
 		{
-			kybdlock_clr(KL_OERR_MASK, "Up");
-			status_reset(&h3270);
+			kybdlock_clr(hSession,KL_OERR_MASK, "Up");
+			status_reset(hSession);
 		}
 		else
 		{
@@ -2184,8 +2119,8 @@ LIB3270_CURSOR_ACTION( down )
 	{
 		if (KYBDLOCK_IS_OERR)
 		{
-			kybdlock_clr(KL_OERR_MASK, "Down");
-			status_reset(&h3270);
+			kybdlock_clr(hSession,KL_OERR_MASK, "Down");
+			status_reset(hSession);
 		} else
 		{
 			ENQUEUE_ACTION(lib3270_cursor_down);
@@ -2899,7 +2834,7 @@ kybd_scroll_lock(Boolean lock)
 	if (lock)
 		kybdlock_set(KL_SCROLLED, "kybd_scroll_lock");
 	else
-		kybdlock_clr(KL_SCROLLED, "kybd_scroll_lock");
+		kybdlock_clr(&h3270, KL_SCROLLED, "kybd_scroll_lock");
 }
 
 /*

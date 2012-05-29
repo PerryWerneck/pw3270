@@ -1191,7 +1191,7 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 				cooked_init();
 #endif /*]*/
 			host_in3270(session,CONNECTED_ANSI);
-			kybdlock_clr(KL_AWAITING_FIRST, "telnet_fsm");
+			kybdlock_clr(session,KL_AWAITING_FIRST, "telnet_fsm");
 			status_reset(session);
 			ps_process();
 		}

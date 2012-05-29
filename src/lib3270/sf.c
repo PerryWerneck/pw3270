@@ -980,5 +980,5 @@ static void
 query_reply_end(void)
 {
 	net_output();
-	kybd_inhibit(True);
+	kybd_inhibit(&h3270,True);
 }
