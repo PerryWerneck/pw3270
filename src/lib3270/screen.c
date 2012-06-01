@@ -78,7 +78,7 @@ static int logpopup(H3270 *session, void *widget, LIB3270_NOTIFY type, const cha
 
 static int (*popup_handler)(H3270 *, void *, LIB3270_NOTIFY, const char *, const char *, const char *, va_list) = logpopup;
 
-enum ts { TS_AUTO, TS_ON, TS_OFF };
+// enum ts { TS_AUTO, TS_ON, TS_OFF };
 
 static void status_connect(H3270 *session, int ignored, void *dunno);
 static void status_3270_mode(H3270 *session, int ignored, void *dunno);

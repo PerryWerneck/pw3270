@@ -38,7 +38,7 @@
 		<menu name='View' >
 			<menu name='TraceOptions' label='Trace' >
 				<menuitem action='toggle' id='dstrace' label='DS Trace' />
-				<!-- menuitem action='toggle' id='screentrace' label='Screen Trace' / -->
+				<menuitem action='toggle' id='screentrace' label='Screen Trace' />
 				<menuitem action='toggle' id='eventtrace' label='Event Trace' />
 			</menu>
 		</menu>

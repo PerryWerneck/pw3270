@@ -48,7 +48,7 @@
 	void trace_ds_nb(const char *fmt, ...) printflike(1, 2);
 	void trace_dsn(const char *fmt, ...) printflike(1, 2);
 	void trace_event(const char *fmt, ...) printflike(1, 2);
-	void trace_screen(void);
+	void trace_screen(H3270 *session);
 //	void trace_rollover_check(void);
 
 #elif defined(__GNUC__)

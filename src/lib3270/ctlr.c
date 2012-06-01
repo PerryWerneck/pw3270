@@ -2320,7 +2320,7 @@ ctlr_clear(H3270 *session, Boolean can_snap)
 	if (ctlr_any_data()) {
 #if defined(X3270_TRACE) /*[*/
 		if (can_snap && !trace_skipping && lib3270_get_toggle(session,LIB3270_TOGGLE_SCREEN_TRACE))
-			trace_screen();
+			trace_screen(session);
 #endif /*]*/
 //		scroll_save(session->maxROWS, ever_3270 ? False : True);
 	}
@@ -2380,7 +2380,7 @@ void ctlr_add(int baddr, unsigned char c, unsigned char cs)
 		{
 #if defined(X3270_TRACE) /*[*/
 			if (lib3270_get_toggle(&h3270,LIB3270_TOGGLE_SCREEN_TRACE))
-				trace_screen();
+				trace_screen(&h3270);
 #endif /*]*/
 			trace_primed = False;
 		}

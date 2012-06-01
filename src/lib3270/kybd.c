@@ -181,7 +181,7 @@ static const char dxl[] = "0123456789abcdef";
 /*
  * Check if the typeahead queue is available
  */
-static int enq_chk(void)
+static int enq_chk(H3270 *session)
 {
 	/* If no connection, forget it. */
 	if (!CONNECTED)
@@ -191,23 +191,23 @@ static int enq_chk(void)
 	}
 
 	/* If operator error, complain and drop it. */
-	if (h3270.kybdlock & KL_OERR_MASK)
+	if (session->kybdlock & KL_OERR_MASK)
 	{
-		lib3270_ring_bell(NULL);
+		lib3270_ring_bell(session);
 		trace_event("  dropped (operator error)\n");
 		return -1;
 	}
 
 	/* If scroll lock, complain and drop it. */
-	if (h3270.kybdlock & KL_SCROLLED)
+	if (session->kybdlock & KL_SCROLLED)
 	{
-		lib3270_ring_bell(&h3270);
+		lib3270_ring_bell(session);
 		trace_event("  dropped (scrolled)\n");
 		return -1;
 	}
 
 	/* If typeahead disabled, complain and drop it. */
-	if (!h3270.typeahead)
+	if (!session->typeahead)
 	{
 		trace_event("  dropped (no typeahead)\n");
 		return -1;
@@ -219,11 +219,11 @@ static int enq_chk(void)
 /*
  * Put a "Key-aid" on the typeahead queue
  */
- static void enq_key(unsigned char aid_code)
+ static void enq_key(H3270 *session, unsigned char aid_code)
  {
 	struct ta *ta;
 
- 	if(enq_chk())
+ 	if(enq_chk(session))
 		return;
 
 	ta = (struct ta *) lib3270_malloc(sizeof(*ta));
@@ -240,11 +240,11 @@ static int enq_chk(void)
 	else
 	{
 		ta_head = ta;
-		status_typeahead(&h3270,True);
+		status_typeahead(session,True);
 	}
 	ta_tail = ta;
 
-	trace_event("  Key-aid queued (kybdlock 0x%x)\n", h3270.kybdlock);
+	trace_event("  Key-aid queued (kybdlock 0x%x)\n", session->kybdlock);
  }
 
 /*
@@ -254,7 +254,7 @@ static void enq_ta(H3270 *hSession, void (*fn)(H3270 *, const char *, const char
 {
 	struct ta *ta;
 
- 	if(enq_chk())
+ 	if(enq_chk(hSession))
 		return;
 
 	CHECK_SESSION_HANDLE(hSession);
@@ -566,7 +566,7 @@ LIB3270_FKEY_ACTION( pfkey )
 	if (hSession->kybdlock & KL_OIA_MINUS)
 		return -1;
 	else if (hSession->kybdlock)
-		enq_key(pf_xlate[key-1]);
+		enq_key(hSession,pf_xlate[key-1]);
 	else
 		key_AID(hSession,pf_xlate[key-1]);
 
@@ -583,7 +583,7 @@ LIB3270_FKEY_ACTION( pakey )
 	if (hSession->kybdlock & KL_OIA_MINUS)
 		return -1;
 	else if (hSession->kybdlock)
-		enq_key(pa_xlate[key-1]);
+		enq_key(hSession,pa_xlate[key-1]);
 	else
 		key_AID(hSession,pa_xlate[key-1]);
 
