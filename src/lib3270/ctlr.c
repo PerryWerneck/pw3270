@@ -82,25 +82,27 @@
 //										/* ea_buf[-1] is the dummy default field attribute */
 
 // Boolean         formatted = False;	/* set in screen_disp */
-unsigned char	reply_mode = SF_SRM_FIELD;
-int				crm_nattr = 0;
-unsigned char	crm_attr[16];
+// unsigned char	reply_mode = SF_SRM_FIELD;
+// int				crm_nattr = 0;
+// unsigned char	crm_attr[16];
 Boolean			dbcs = False;
 
 /* Statics */
 // static struct ea *aea_buf;	/* alternate 3270 extended attribute buffer */
 static unsigned char *zero_buf;	// empty buffer, for area clears
 static void set_formatted(H3270 *session);
-static void ctlr_blanks(void);
-static Boolean  trace_primed = False;
-static unsigned char default_fg;
-static unsigned char default_bg;
-static unsigned char default_gr;
-static unsigned char default_cs;
-static unsigned char default_ic;
+static void ctlr_blanks(H3270 *session);
+// static Boolean  trace_primed = False;
+
+//static unsigned char default_fg;
+//static unsigned char default_bg;
+//static unsigned char default_gr;
+//static unsigned char default_cs;
+//static unsigned char default_ic;
+
 static void	ctlr_half_connect(H3270 *session, int ignored, void *dunno);
 static void	ctlr_connect(H3270 *session, int ignored, void *dunno);
-static int	sscp_start;
+// static int	sscp_start;
 static void ticking_stop(H3270 *session);
 static void ctlr_add_ic(int baddr, unsigned char ic);
 static void changed(H3270 *session, int bstart, int bend);
@@ -313,13 +315,13 @@ static void ctlr_connect(H3270 *session, int ignored unused, void *dunno)
 		status_reset(session);
 	}
 
-	default_fg = 0x00;
-	default_bg = 0x00;
-	default_gr = 0x00;
-	default_cs = 0x00;
-	default_ic = 0x00;
-	reply_mode = SF_SRM_FIELD;
-	crm_nattr = 0;
+	session->default_fg = 0x00;
+	session->default_bg = 0x00;
+	session->default_gr = 0x00;
+	session->default_cs = 0x00;
+	session->default_ic = 0x00;
+	session->reply_mode = SF_SRM_FIELD;
+	session->crm_nattr = 0;
 }
 
 
@@ -477,7 +479,7 @@ void ctlr_erase(H3270 *session, int alt)
 		{
 			if(session->vcontrol)
 			{
-				ctlr_blanks();
+				ctlr_blanks(session);
 				session->display(session);
 			}
 			set_viewsize(session,24,80);
@@ -608,14 +610,14 @@ static void
 insert_sa(int baddr, unsigned char *current_fgp, unsigned char *current_bgp,
 	unsigned char *current_grp, unsigned char *current_csp, Boolean *anyp)
 {
-	if (reply_mode != SF_SRM_CHAR)
+	if (h3270.reply_mode != SF_SRM_CHAR)
 		return;
 
-	if (memchr((char *)crm_attr, XA_FOREGROUND, crm_nattr))
+	if (memchr((char *) h3270.crm_attr, XA_FOREGROUND, h3270.crm_nattr))
 		insert_sa1(XA_FOREGROUND, h3270.ea_buf[baddr].fg, current_fgp, anyp);
-	if (memchr((char *)crm_attr, XA_BACKGROUND, crm_nattr))
+	if (memchr((char *) h3270.crm_attr, XA_BACKGROUND, h3270.crm_nattr))
 		insert_sa1(XA_BACKGROUND, h3270.ea_buf[baddr].bg, current_bgp, anyp);
-	if (memchr((char *)crm_attr, XA_HIGHLIGHTING, crm_nattr)) {
+	if (memchr((char *) h3270.crm_attr, XA_HIGHLIGHTING, h3270.crm_nattr)) {
 		unsigned char gr;
 
 		gr = h3270.ea_buf[baddr].gr;
@@ -623,7 +625,7 @@ insert_sa(int baddr, unsigned char *current_fgp, unsigned char *current_bgp,
 			gr |= 0xf0;
 		insert_sa1(XA_HIGHLIGHTING, gr, current_grp, anyp);
 	}
-	if (memchr((char *)crm_attr, XA_CHARSET, crm_nattr)) {
+	if (memchr((char *) h3270.crm_attr, XA_CHARSET, h3270.crm_nattr)) {
 		insert_sa1(XA_CHARSET, host_cs(h3270.ea_buf[baddr].cs), current_csp,anyp);
 	}
 }
@@ -759,7 +761,7 @@ ctlr_read_modified(unsigned char aid_byte, Boolean all)
 		 * host left the cursor.
 		 */
 		if (IN_SSCP)
-			baddr = sscp_start;
+			baddr = h3270.sscp_start;
 
 		do {
 			if (h3270.ea_buf[baddr].cc) {
@@ -837,7 +839,7 @@ ctlr_read_buffer(unsigned char aid_byte)
 	baddr = 0;
 	do {
 		if (h3270.ea_buf[baddr].fa) {
-			if (reply_mode == SF_SRM_FIELD) {
+			if (h3270.reply_mode == SF_SRM_FIELD) {
 				space3270out(2);
 				*obptr++ = ORDER_SF;
 			} else {
@@ -852,9 +854,9 @@ ctlr_read_buffer(unsigned char aid_byte)
 			if (any)
 				trace_ds("'");
 			trace_ds(" StartField%s%s%s",
-			    (reply_mode == SF_SRM_FIELD) ? "" : "Extended",
+			    (h3270.reply_mode == SF_SRM_FIELD) ? "" : "Extended",
 			    rcba(&h3270,baddr), see_attr(fa));
-			if (reply_mode != SF_SRM_FIELD) {
+			if (h3270.reply_mode != SF_SRM_FIELD) {
 				if (h3270.ea_buf[baddr].fg) {
 					space3270out(2);
 					*obptr++ = XA_FOREGROUND;
@@ -1039,19 +1041,19 @@ ctlr_snap_modes(void)
 {
 	int i;
 
-	if (!IN_3270 || reply_mode == SF_SRM_FIELD)
+	if (!IN_3270 || h3270.reply_mode == SF_SRM_FIELD)
 		return False;
 
-	space3270out(6 + crm_nattr);
+	space3270out(6 + h3270.crm_nattr);
 	*obptr++ = CMD_WSF;
 	*obptr++ = 0x00;	/* implicit length */
 	*obptr++ = 0x00;
 	*obptr++ = SF_SET_REPLY_MODE;
 	*obptr++ = 0x00;	/* partition 0 */
-	*obptr++ = reply_mode;
-	if (reply_mode == SF_SRM_CHAR)
-		for (i = 0; i < crm_nattr; i++)
-			*obptr++ = crm_attr[i];
+	*obptr++ = h3270.reply_mode;
+	if (h3270.reply_mode == SF_SRM_CHAR)
+		for (i = 0; i < h3270.crm_nattr; i++)
+			*obptr++ = h3270.crm_attr[i];
 	return True;
 }
 #endif /*]*/
@@ -1167,16 +1169,17 @@ ctlr_write(unsigned char buf[], int buflen, Boolean erase)
 	if (buflen < 2)
 		return PDS_BAD_CMD;
 
-	default_fg = 0;
-	default_bg = 0;
-	default_gr = 0;
-	default_cs = 0;
-	default_ic = 0;
-	trace_primed = True;
+	h3270.default_fg = 0;
+	h3270.default_bg = 0;
+	h3270.default_gr = 0;
+	h3270.default_cs = 0;
+	h3270.default_ic = 0;
+
+	h3270.trace_primed = 1;
 	h3270.buffer_addr = h3270.cursor_addr;
 	if (WCC_RESET(buf[1])) {
 		if (erase)
-			reply_mode = SF_SRM_FIELD;
+			h3270.reply_mode = SF_SRM_FIELD;
 		trace_ds("%sreset", paren);
 		paren = ",";
 	}
@@ -1381,30 +1384,25 @@ ctlr_write(unsigned char buf[], int buflen, Boolean erase)
 			}
 			do {
 				if (add_dbcs) {
-					ctlr_add(h3270.buffer_addr, add_c1,
-					    default_cs);
+					ctlr_add(h3270.buffer_addr, add_c1,h3270.default_cs);
 				} else {
 					if (ra_ge)
-						ctlr_add(h3270.buffer_addr, add_c1,
-						    CS_GE);
-					else if (default_cs)
-						ctlr_add(h3270.buffer_addr, add_c1,
-						    default_cs);
+						ctlr_add(h3270.buffer_addr, add_c1,CS_GE);
+					else if (h3270.default_cs)
+						ctlr_add(h3270.buffer_addr, add_c1,h3270.default_cs);
 					else
-						ctlr_add(h3270.buffer_addr, add_c1,
-						    0);
+						ctlr_add(h3270.buffer_addr, add_c1,0);
 				}
-				ctlr_add_fg(h3270.buffer_addr, default_fg);
-				ctlr_add_gr(h3270.buffer_addr, default_gr);
-				ctlr_add_ic(h3270.buffer_addr, default_ic);
+				ctlr_add_fg(h3270.buffer_addr, h3270.default_fg);
+				ctlr_add_gr(h3270.buffer_addr, h3270.default_gr);
+				ctlr_add_ic(h3270.buffer_addr, h3270.default_ic);
 				INC_BA(h3270.buffer_addr);
 				if (add_dbcs) {
-					ctlr_add(h3270.buffer_addr, add_c2,
-					    default_cs);
-					ctlr_add_fg(h3270.buffer_addr, default_fg);
-					ctlr_add_bg(h3270.buffer_addr, default_bg);
-					ctlr_add_gr(h3270.buffer_addr, default_gr);
-					ctlr_add_ic(h3270.buffer_addr, default_ic);
+					ctlr_add(h3270.buffer_addr, add_c2,h3270.default_cs);
+					ctlr_add_fg(h3270.buffer_addr, h3270.default_fg);
+					ctlr_add_bg(h3270.buffer_addr, h3270.default_bg);
+					ctlr_add_gr(h3270.buffer_addr, h3270.default_gr);
+					ctlr_add_ic(h3270.buffer_addr, h3270.default_ic);
 					INC_BA(h3270.buffer_addr);
 				}
 			} while (h3270.buffer_addr != baddr);
@@ -1454,10 +1452,10 @@ ctlr_write(unsigned char buf[], int buflen, Boolean erase)
 			if (*cp)
 				trace_ds("'");
 			ctlr_add(h3270.buffer_addr, *cp, CS_GE);
-			ctlr_add_fg(h3270.buffer_addr, default_fg);
-			ctlr_add_bg(h3270.buffer_addr, default_bg);
-			ctlr_add_gr(h3270.buffer_addr, default_gr);
-			ctlr_add_ic(h3270.buffer_addr, default_ic);
+			ctlr_add_fg(h3270.buffer_addr, h3270.default_fg);
+			ctlr_add_bg(h3270.buffer_addr, h3270.default_bg);
+			ctlr_add_gr(h3270.buffer_addr, h3270.default_gr);
+			ctlr_add_ic(h3270.buffer_addr, h3270.default_ic);
 			INC_BA(h3270.buffer_addr);
 			current_fa = get_field_attribute(&h3270,h3270.buffer_addr);
 			last_cmd = False;
@@ -1608,40 +1606,40 @@ ctlr_write(unsigned char buf[], int buflen, Boolean erase)
 			if (*cp == XA_FOREGROUND)  {
 				trace_ds("%s", see_efa(*cp, *(cp + 1)));
 				if (h3270.m3279)
-					default_fg = *(cp + 1);
+					h3270.default_fg = *(cp + 1);
 			} else if (*cp == XA_BACKGROUND)  {
 				trace_ds("%s", see_efa(*cp, *(cp + 1)));
 				if (h3270.m3279)
-					default_bg = *(cp + 1);
+					h3270.default_bg = *(cp + 1);
 			} else if (*cp == XA_HIGHLIGHTING)  {
 				trace_ds("%s", see_efa(*cp, *(cp + 1)));
-				default_gr = *(cp + 1) & 0x0f;
+				h3270.default_gr = *(cp + 1) & 0x0f;
 			} else if (*cp == XA_ALL)  {
 				trace_ds("%s", see_efa(*cp, *(cp + 1)));
-				default_fg = 0;
-				default_bg = 0;
-				default_gr = 0;
-				default_cs = 0;
-				default_ic = 0;
+				h3270.default_fg = 0;
+				h3270.default_bg = 0;
+				h3270.default_gr = 0;
+				h3270.default_cs = 0;
+				h3270.default_ic = 0;
 			} else if (*cp == XA_CHARSET) {
 				trace_ds("%s", see_efa(*cp, *(cp + 1)));
 				switch (*(cp + 1)) {
 				case 0xf1:
-				    default_cs = CS_APL;
+				    h3270.default_cs = CS_APL;
 				    break;
 				case 0xf8:
-				    default_cs = CS_DBCS;
+				    h3270.default_cs = CS_DBCS;
 				    break;
 				default:
-				    default_cs = CS_BASE;
+				    h3270.default_cs = CS_BASE;
 				    break;
 				}
 			} else if (*cp == XA_INPUT_CONTROL) {
 				trace_ds("%s", see_efa(*cp, *(cp + 1)));
 				if (*(cp + 1) == 1)
-					default_ic = 1;
+					h3270.default_ic = 1;
 				else
-					default_ic = 0;
+					h3270.default_ic = 0;
 			} else
 				trace_ds("%s[unsupported]",
 				    see_efa(*cp, *(cp + 1)));
@@ -1660,14 +1658,14 @@ ctlr_write(unsigned char buf[], int buflen, Boolean erase)
 			END_TEXT(see_ebc(*cp));
 			previous = ORDER;
 			d = ctlr_lookleft_state(buffer_addr, &why);
-			if (default_cs == CS_DBCS || d != DBCS_NONE) {
+			if (h3270.default_cs == CS_DBCS || d != DBCS_NONE) {
 				ABORT_WRITE("invalid format control order in DBCS field");
 			}
-			ctlr_add(h3270.buffer_addr, *cp, default_cs);
-			ctlr_add_fg(h3270.buffer_addr, default_fg);
-			ctlr_add_bg(h3270.buffer_addr, default_bg);
-			ctlr_add_gr(h3270.buffer_addr, default_gr);
-			ctlr_add_ic(h3270.buffer_addr, default_ic);
+			ctlr_add(h3270.buffer_addr, *cp, h3270.default_cs);
+			ctlr_add_fg(h3270.buffer_addr, h3270.default_fg);
+			ctlr_add_bg(h3270.buffer_addr, h3270.default_bg);
+			ctlr_add_gr(h3270.buffer_addr, h3270.default_gr);
+			ctlr_add_ic(h3270.buffer_addr, h3270.default_ic);
 			INC_BA(h3270.buffer_addr);
 			last_cmd = True;
 			last_zpt = False;
@@ -1687,11 +1685,11 @@ ctlr_write(unsigned char buf[], int buflen, Boolean erase)
 			}
 			/* All is well. */
 			previous = ORDER;
-			ctlr_add(h3270.buffer_addr, *cp, default_cs);
-			ctlr_add_fg(h3270.buffer_addr, default_fg);
-			ctlr_add_bg(h3270.buffer_addr, default_bg);
-			ctlr_add_gr(h3270.buffer_addr, default_gr);
-			ctlr_add_ic(h3270.buffer_addr, default_ic);
+			ctlr_add(h3270.buffer_addr, *cp, h3270.default_cs);
+			ctlr_add_fg(h3270.buffer_addr, h3270.default_fg);
+			ctlr_add_bg(h3270.buffer_addr, h3270.default_bg);
+			ctlr_add_gr(h3270.buffer_addr, h3270.default_gr);
+			ctlr_add_ic(h3270.buffer_addr, h3270.default_ic);
 			INC_BA(h3270.buffer_addr);
 			last_cmd = True;
 			last_zpt = False;
@@ -1726,11 +1724,11 @@ ctlr_write(unsigned char buf[], int buflen, Boolean erase)
 			}
 			/* All is well. */
 			previous = ORDER;
-			ctlr_add(h3270.buffer_addr, *cp, default_cs);
-			ctlr_add_fg(h3270.buffer_addr, default_fg);
-			ctlr_add_bg(h3270.buffer_addr, default_bg);
-			ctlr_add_gr(h3270.buffer_addr, default_gr);
-			ctlr_add_ic(h3270.buffer_addr, default_ic);
+			ctlr_add(h3270.buffer_addr, *cp, h3270.default_cs);
+			ctlr_add_fg(h3270.buffer_addr, h3270.default_fg);
+			ctlr_add_bg(h3270.buffer_addr, h3270.default_bg);
+			ctlr_add_gr(h3270.buffer_addr, h3270.default_gr);
+			ctlr_add_ic(h3270.buffer_addr, h3270.default_ic);
 			INC_BA(h3270.buffer_addr);
 			last_cmd = True;
 			last_zpt = False;
@@ -1742,7 +1740,7 @@ ctlr_write(unsigned char buf[], int buflen, Boolean erase)
 			if (d == DBCS_RIGHT) {
 				ABORT_WRITE("NULL overwriting right half of DBCS character");
 			}
-			if (d != DBCS_NONE || default_cs == CS_DBCS) {
+			if (d != DBCS_NONE || h3270.default_cs == CS_DBCS) {
 				add_c1 = EBC_null;
 				cp++;
 				if (cp >= buf + buflen) {
@@ -1779,18 +1777,18 @@ ctlr_write(unsigned char buf[], int buflen, Boolean erase)
 				END_TEXT("NULL");
 				add_c1 = *cp;
 			}
-			ctlr_add(h3270.buffer_addr, add_c1, default_cs);
-			ctlr_add_fg(h3270.buffer_addr, default_fg);
-			ctlr_add_bg(h3270.buffer_addr, default_bg);
-			ctlr_add_gr(h3270.buffer_addr, default_gr);
-			ctlr_add_ic(h3270.buffer_addr, default_ic);
+			ctlr_add(h3270.buffer_addr, add_c1, h3270.default_cs);
+			ctlr_add_fg(h3270.buffer_addr, h3270.default_fg);
+			ctlr_add_bg(h3270.buffer_addr, h3270.default_bg);
+			ctlr_add_gr(h3270.buffer_addr, h3270.default_gr);
+			ctlr_add_ic(h3270.buffer_addr, h3270.default_ic);
 			INC_BA(h3270.buffer_addr);
 			if (add_dbcs) {
-				ctlr_add(h3270.buffer_addr, add_c2, default_cs);
-				ctlr_add_fg(h3270.buffer_addr, default_fg);
-				ctlr_add_bg(h3270.buffer_addr, default_bg);
-				ctlr_add_gr(h3270.buffer_addr, default_gr);
-				ctlr_add_ic(h3270.buffer_addr, default_ic);
+				ctlr_add(h3270.buffer_addr, add_c2, h3270.default_cs);
+				ctlr_add_fg(h3270.buffer_addr, h3270.default_fg);
+				ctlr_add_bg(h3270.buffer_addr, h3270.default_bg);
+				ctlr_add_gr(h3270.buffer_addr, h3270.default_gr);
+				ctlr_add_ic(h3270.buffer_addr, h3270.default_ic);
 				INC_BA(h3270.buffer_addr);
 			}
 			last_cmd = False;
@@ -1837,19 +1835,19 @@ ctlr_write(unsigned char buf[], int buflen, Boolean erase)
 #if defined(X3270_DBCS) /*[*/
 			}
 #endif /*]*/
-			ctlr_add(h3270.buffer_addr, add_c1, default_cs);
-			ctlr_add_fg(h3270.buffer_addr, default_fg);
-			ctlr_add_bg(h3270.buffer_addr, default_bg);
-			ctlr_add_gr(h3270.buffer_addr, default_gr);
-			ctlr_add_ic(h3270.buffer_addr, default_ic);
+			ctlr_add(h3270.buffer_addr, add_c1, h3270.default_cs);
+			ctlr_add_fg(h3270.buffer_addr, h3270.default_fg);
+			ctlr_add_bg(h3270.buffer_addr, h3270.default_bg);
+			ctlr_add_gr(h3270.buffer_addr, h3270.default_gr);
+			ctlr_add_ic(h3270.buffer_addr, h3270.default_ic);
 			INC_BA(h3270.buffer_addr);
 #if defined(X3270_DBCS) /*[*/
 			if (add_dbcs) {
-				ctlr_add(h3270.buffer_addr, add_c2, default_cs);
-				ctlr_add_fg(h3270.buffer_addr, default_fg);
-				ctlr_add_bg(h3270.buffer_addr, default_bg);
-				ctlr_add_gr(h3270.buffer_addr, default_gr);
-				ctlr_add_ic(h3270.buffer_addr, default_ic);
+				ctlr_add(h3270.buffer_addr, add_c2, h3270.default_cs);
+				ctlr_add_fg(h3270.buffer_addr, h3270.default_fg);
+				ctlr_add_bg(h3270.buffer_addr, h3270.default_bg);
+				ctlr_add_gr(h3270.buffer_addr, h3270.default_gr);
+				ctlr_add_ic(h3270.buffer_addr, h3270.default_ic);
 				INC_BA(h3270.buffer_addr);
 			}
 #endif /*]*/
@@ -1875,7 +1873,7 @@ ctlr_write(unsigned char buf[], int buflen, Boolean erase)
 	if (ctlr_dbcs_postprocess() < 0 && rv == PDS_OKAY_NO_OUTPUT)
 		rv = PDS_BAD_ADDR;
 
-	trace_primed = False;
+	h3270.trace_primed = 0;
 
 	ps_process();
 
@@ -1924,11 +1922,11 @@ ctlr_write_sscp_lu(unsigned char buf[], int buflen)
 			 */
 			s_row = h3270.buffer_addr / h3270.cols;
 			while ((h3270.buffer_addr / h3270.cols) == s_row) {
-				ctlr_add(h3270.buffer_addr, EBC_null, default_cs);
-				ctlr_add_fg(h3270.buffer_addr, default_fg);
-				ctlr_add_bg(h3270.buffer_addr, default_bg);
-				ctlr_add_gr(h3270.buffer_addr, default_gr);
-				ctlr_add_ic(h3270.buffer_addr, default_ic);
+				ctlr_add(h3270.buffer_addr, EBC_null, h3270.default_cs);
+				ctlr_add_fg(h3270.buffer_addr, h3270.default_fg);
+				ctlr_add_bg(h3270.buffer_addr, h3270.default_bg);
+				ctlr_add_gr(h3270.buffer_addr, h3270.default_gr);
+				ctlr_add_ic(h3270.buffer_addr, h3270.default_ic);
 				INC_BA(h3270.buffer_addr);
 			}
 			break;
@@ -1938,11 +1936,11 @@ ctlr_write_sscp_lu(unsigned char buf[], int buflen)
 			cp++;
 			i++;
 			trace_ds(" StartField%s %s [translated to space]\n",rcba(&h3270,h3270.buffer_addr), see_attr(*cp));
-			ctlr_add(h3270.buffer_addr, EBC_space, default_cs);
-			ctlr_add_fg(h3270.buffer_addr, default_fg);
-			ctlr_add_bg(h3270.buffer_addr, default_bg);
-			ctlr_add_gr(h3270.buffer_addr, default_gr);
-			ctlr_add_ic(h3270.buffer_addr, default_ic);
+			ctlr_add(h3270.buffer_addr, EBC_space, h3270.default_cs);
+			ctlr_add_fg(h3270.buffer_addr, h3270.default_fg);
+			ctlr_add_bg(h3270.buffer_addr, h3270.default_bg);
+			ctlr_add_gr(h3270.buffer_addr, h3270.default_gr);
+			ctlr_add_ic(h3270.buffer_addr, h3270.default_ic);
 			INC_BA(h3270.buffer_addr);
 			break;
 		case ORDER_IC:
@@ -1965,25 +1963,25 @@ ctlr_write_sscp_lu(unsigned char buf[], int buflen)
 			else
 				c = *cp;
 			ctlr_add(h3270.buffer_addr, c, CS_GE);
-			ctlr_add_fg(h3270.buffer_addr, default_fg);
-			ctlr_add_bg(h3270.buffer_addr, default_bg);
-			ctlr_add_gr(h3270.buffer_addr, default_gr);
-			ctlr_add_ic(h3270.buffer_addr, default_ic);
+			ctlr_add_fg(h3270.buffer_addr, h3270.default_fg);
+			ctlr_add_bg(h3270.buffer_addr, h3270.default_bg);
+			ctlr_add_gr(h3270.buffer_addr, h3270.default_gr);
+			ctlr_add_ic(h3270.buffer_addr, h3270.default_ic);
 			INC_BA(h3270.buffer_addr);
 			break;
 
 		default:
-			ctlr_add(h3270.buffer_addr, *cp, default_cs);
-			ctlr_add_fg(h3270.buffer_addr, default_fg);
-			ctlr_add_bg(h3270.buffer_addr, default_bg);
-			ctlr_add_gr(h3270.buffer_addr, default_gr);
-			ctlr_add_ic(h3270.buffer_addr, default_ic);
+			ctlr_add(h3270.buffer_addr, *cp, h3270.default_cs);
+			ctlr_add_fg(h3270.buffer_addr, h3270.default_fg);
+			ctlr_add_bg(h3270.buffer_addr, h3270.default_bg);
+			ctlr_add_gr(h3270.buffer_addr, h3270.default_gr);
+			ctlr_add_ic(h3270.buffer_addr, h3270.default_ic);
 			INC_BA(h3270.buffer_addr);
 			break;
 		}
 	}
 	cursor_move(&h3270,h3270.buffer_addr);
-	sscp_start = h3270.buffer_addr;
+	h3270.sscp_start = h3270.buffer_addr;
 
 	/* Unlock the keyboard. */
 	h3270.aid = AID_NO;
@@ -2329,39 +2327,40 @@ ctlr_clear(H3270 *session, Boolean can_snap)
 #endif /*]*/
 
 	/* Clear the screen. */
-	trace("%p",session->ea_buf);
-
 	(void) memset((char *)session->ea_buf, 0, session->rows*session->cols*sizeof(struct ea));
-	cursor_move(&h3270,0);
+	cursor_move(session,0);
 	session->buffer_addr = 0;
 	lib3270_unselect(session);
 	session->formatted = False;
-	default_fg = 0;
-	default_bg = 0;
-	default_gr = 0;
-	default_ic = 0;
-	sscp_start = 0;
+	session->default_fg = 0;
+	session->default_bg = 0;
+	session->default_gr = 0;
+	session->default_ic = 0;
+
+	session->sscp_start = 0;
 
 //	ALL_CHANGED;
 	session->erase(session);
 }
 
-/*
+/**
  * Fill the screen buffer with blanks.
+ *
+ * @param session	Session handle
  */
-static void
-ctlr_blanks(void)
+static void ctlr_blanks(H3270 *session)
 {
 	int baddr;
 
-	for (baddr = 0; baddr < h3270.rows*h3270.cols; baddr++) {
-		if (!h3270.ea_buf[baddr].fa)
-			h3270.ea_buf[baddr].cc = EBC_space;
+	for (baddr = 0; baddr < session->rows*session->cols; baddr++)
+	{
+		if (!session->ea_buf[baddr].fa)
+			session->ea_buf[baddr].cc = EBC_space;
 	}
-	cursor_move(&h3270,0);
-	h3270.buffer_addr = 0;
-	lib3270_unselect(&h3270);
-	h3270.formatted = False;
+	cursor_move(session,0);
+	session->buffer_addr = 0;
+	lib3270_unselect(session);
+	session->formatted = False;
 	ALL_CHANGED;
 }
 
@@ -2376,13 +2375,13 @@ void ctlr_add(int baddr, unsigned char c, unsigned char cs)
 
 	if(h3270.ea_buf[baddr].fa || ((oc = h3270.ea_buf[baddr].cc) != c || h3270.ea_buf[baddr].cs != cs))
 	{
-		if (trace_primed && !IsBlank(oc))
+		if (h3270.trace_primed && !IsBlank(oc))
 		{
 #if defined(X3270_TRACE) /*[*/
 			if (lib3270_get_toggle(&h3270,LIB3270_TOGGLE_SCREEN_TRACE))
 				trace_screen(&h3270);
 #endif /*]*/
-			trace_primed = False;
+			h3270.trace_primed = 0;
 		}
 
 		h3270.ea_buf[baddr].cc = c;

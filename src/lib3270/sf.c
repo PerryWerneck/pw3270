@@ -67,9 +67,9 @@
 #include "api.h"
 
 // Externals
-extern unsigned char reply_mode;
-extern int      crm_nattr;
-extern unsigned char crm_attr[];
+// extern unsigned char reply_mode;
+// extern int      crm_nattr;
+// extern unsigned char crm_attr[];
 
 /* Screen globals. */
 static int		  cw = 7;
@@ -444,15 +444,15 @@ sf_set_reply_mode(unsigned char buf[], int buflen)
 		trace_ds(" unknown mode 0x%02x\n", buf[4]);
 		return PDS_BAD_CMD;
 	}
-	reply_mode = buf[4];
+	h3270.reply_mode = buf[4];
 	if (buf[4] == SF_SRM_CHAR) {
-		crm_nattr = buflen - 5;
+		h3270.crm_nattr = buflen - 5;
 		for (i = 5; i < buflen; i++) {
-			crm_attr[i - 5] = buf[i];
+			h3270.crm_attr[i - 5] = buf[i];
 			trace_ds("%s%s", comma, see_efa_only(buf[i]));
 			comma = ",";
 		}
-		trace_ds("%s\n", crm_nattr ? ")" : "");
+		trace_ds("%s\n", h3270.crm_nattr ? ")" : "");
 	}
 	return PDS_OKAY_NO_OUTPUT;
 }

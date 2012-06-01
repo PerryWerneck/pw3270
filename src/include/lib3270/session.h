@@ -165,6 +165,18 @@
 		char 					  ssl_host;
 		char 					  ever_3270;
 
+		// ctlr.c
+		int						  sscp_start;
+		unsigned char			  default_fg;
+		unsigned char			  default_bg;
+		unsigned char			  default_gr;
+		unsigned char			  default_cs;
+		unsigned char			  default_ic;
+		char					  reply_mode;
+		int 					  trace_primed 		: 1;
+		int						  crm_nattr;
+		unsigned char			  crm_attr[16];
+
 		// Telnet.c
 		unsigned char 			* ibuf;
 		int      				  ibuf_size;			/**< size of ibuf */
