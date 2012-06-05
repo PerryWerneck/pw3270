@@ -101,6 +101,7 @@
 		int						  bsd_tm					: 1;
 		int 					  syncing					: 1;
 		int						  reverse 					: 1;	/**< reverse-input mode */
+		int						  dbcs						: 1;
 
 		char					* oversize;
 

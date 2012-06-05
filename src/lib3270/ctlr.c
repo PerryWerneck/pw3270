@@ -65,47 +65,15 @@
 #include "widec.h"
 #include "screenc.h"
 
-/* Externals: kybd.c */
-// extern unsigned char aid;
-
-/* Globals */
-// int				ROWS, COLS;
-//int				maxROWS		= 0;
-//int				maxCOLS		= 0;
-// int				cursor_addr;
-
-// int				buffer_addr;
-// Boolean         screen_alt = False;	/* alternate screen? */
-// Boolean         is_altbuffer = False;
-
-// struct ea      *ea_buf	= NULL;		/* 3270 device buffer */
-//										/* ea_buf[-1] is the dummy default field attribute */
-
-// Boolean         formatted = False;	/* set in screen_disp */
-// unsigned char	reply_mode = SF_SRM_FIELD;
-// int				crm_nattr = 0;
-// unsigned char	crm_attr[16];
-Boolean			dbcs = False;
+// Boolean			dbcs = False;
 
 /* Statics */
-// static struct ea *aea_buf;	/* alternate 3270 extended attribute buffer */
-// static unsigned char *zero_buf;	// empty buffer, for area clears
 static void set_formatted(H3270 *session);
 static void ctlr_blanks(H3270 *session);
-// static Boolean  trace_primed = False;
-
-//static unsigned char default_fg;
-//static unsigned char default_bg;
-//static unsigned char default_gr;
-//static unsigned char default_cs;
-//static unsigned char default_ic;
-
 static void	ctlr_half_connect(H3270 *session, int ignored, void *dunno);
 static void	ctlr_connect(H3270 *session, int ignored, void *dunno);
-// static int	sscp_start;
 static void ticking_stop(H3270 *session);
 static void ctlr_add_ic(int baddr, unsigned char ic);
-// static void changed(H3270 *session, int bstart, int bend);
 
 /*
  * code_table is used to translate buffer addresses and attributes to the 3270
@@ -125,9 +93,9 @@ static unsigned char	code_table[64] = {
 #define IsBlank(c)	((c == EBC_null) || (c == EBC_space))
 
 
-#define ALL_CHANGED	if(IN_ANSI) changed(&h3270,0,h3270.rows*h3270.cols);
-#define REGION_CHANGED(f, l) if(IN_ANSI) changed(&h3270,f,l)
-#define ONE_CHANGED(n)	if(IN_ANSI) changed(&h3270,n,n+1);
+#define ALL_CHANGED(h)	if(lib3270_in_ansi(h)) (h)->changed(h,0,(h)->rows*(h)->cols);
+#define REGION_CHANGED(h, f, l) if(lib3270_in_ansi(h)) (h)->changed(h,f,l)
+#define ONE_CHANGED(h,n)	if(lib3270_in_ansi(h)) (h)->changed(h,n,n+1);
 
 #define DECODE_BADDR(c1, c2) \
 	((((c1) & 0xC0) == 0x00) ? \
@@ -1109,7 +1077,7 @@ ctlr_erase_all_unprotected(void)
 	}
 	h3270.aid = AID_NO;
 	do_reset(&h3270,False);
-	ALL_CHANGED;
+	ALL_CHANGED(&h3270);
 }
 
 
@@ -1201,7 +1169,7 @@ ctlr_write(unsigned char buf[], int buflen, Boolean erase)
 		paren = ",";
 		baddr = 0;
 		if (h3270.modified_sel)
-			ALL_CHANGED;
+			ALL_CHANGED(&h3270);
 		do {
 			if (h3270.ea_buf[baddr].fa) {
 				mdt_clear(baddr);
@@ -1571,7 +1539,7 @@ ctlr_write(unsigned char buf[], int buflen, Boolean erase)
 					cp++;
 					if (*cp == 0xf1)
 						efa_cs = CS_APL;
-					else if (dbcs && (*cp == 0xf8))
+					else if (h3270.dbcs && (*cp == 0xf8))
 						efa_cs = CS_DBCS;
 					else
 						efa_cs = CS_BASE;
@@ -1580,7 +1548,7 @@ ctlr_write(unsigned char buf[], int buflen, Boolean erase)
 					cp++;
 				} else if (*cp == XA_INPUT_CONTROL) {
 					trace_ds("%s", see_efa(*cp, *(cp + 1)));
-					if (dbcs)
+					if (h3270.dbcs)
 					    efa_ic = (*(cp + 1) == 1);
 					cp++;
 				} else {
@@ -2361,7 +2329,7 @@ static void ctlr_blanks(H3270 *session)
 	session->buffer_addr = 0;
 	lib3270_unselect(session);
 	session->formatted = False;
-	ALL_CHANGED;
+	ALL_CHANGED(session);
 }
 
 
@@ -2387,7 +2355,7 @@ void ctlr_add(int baddr, unsigned char c, unsigned char cs)
 		h3270.ea_buf[baddr].cc = c;
 		h3270.ea_buf[baddr].cs = cs;
 		h3270.ea_buf[baddr].fa = 0;
-		ONE_CHANGED(baddr);
+		ONE_CHANGED(&h3270,baddr);
 	}
 }
 
@@ -2420,7 +2388,7 @@ ctlr_add_cs(int baddr, unsigned char cs)
 			unselect(baddr, 1);
 		*/
 		h3270.ea_buf[baddr].cs = cs;
-		ONE_CHANGED(baddr);
+		ONE_CHANGED(&h3270,baddr);
 	}
 }
 
@@ -2435,7 +2403,7 @@ ctlr_add_gr(int baddr, unsigned char gr)
 		h3270.ea_buf[baddr].gr = gr;
 		if (gr & GR_BLINK)
 			blink_start();
-		ONE_CHANGED(baddr);
+		ONE_CHANGED(&h3270,baddr);
 	}
 }
 
@@ -2452,7 +2420,7 @@ ctlr_add_fg(int baddr, unsigned char color)
 	if (h3270.ea_buf[baddr].fg != color)
 	{
 		h3270.ea_buf[baddr].fg = color;
-		ONE_CHANGED(baddr);
+		ONE_CHANGED(&h3270,baddr);
 	}
 }
 
@@ -2469,7 +2437,7 @@ ctlr_add_bg(int baddr, unsigned char color)
 	if (h3270.ea_buf[baddr].bg != color)
 	{
 		h3270.ea_buf[baddr].bg = color;
-		ONE_CHANGED(baddr);
+		ONE_CHANGED(&h3270,baddr);
 	}
 }
 
@@ -2531,7 +2499,7 @@ ctlr_bcopy(int baddr_from, int baddr_to, int count, int move_ea)
 		   count * sizeof(struct ea))) {
 		(void) memmove(&h3270.ea_buf[baddr_to], &h3270.ea_buf[baddr_from],
 			           count * sizeof(struct ea));
-		REGION_CHANGED(baddr_to, baddr_to + count);
+		REGION_CHANGED(&h3270,baddr_to, baddr_to + count);
 	}
 	/* XXX: What about move_ea? */
 }
@@ -2547,7 +2515,7 @@ void ctlr_aclear(int baddr, int count, int clear_ea)
 		    count * sizeof(struct ea))) {
 		(void) memset((char *) &h3270.ea_buf[baddr], 0,
 				count * sizeof(struct ea));
-		REGION_CHANGED(baddr, baddr + count);
+		REGION_CHANGED(&h3270,baddr, baddr + count);
 	}
 	/* XXX: What about clear_ea? */
 }
@@ -2617,7 +2585,7 @@ void ctlr_altbuffer(H3270 *session, int alt)
 		session->is_altbuffer = alt;
 		lib3270_unselect(session);
 
-		ALL_CHANGED;
+		ALL_CHANGED(session);
 
 		/*
 		 * There may be blinkers on the alternate screen; schedule one
@@ -2640,7 +2608,7 @@ mdt_set(int baddr)
 	if (faddr >= 0 && !(h3270.ea_buf[faddr].fa & FA_MODIFY)) {
 		h3270.ea_buf[faddr].fa |= FA_MODIFY;
 		if (h3270.modified_sel)
-			ALL_CHANGED;
+			ALL_CHANGED(&h3270);
 	}
 }
 
@@ -2653,7 +2621,7 @@ mdt_clear(int baddr)
 	if (faddr >= 0 && (h3270.ea_buf[faddr].fa & FA_MODIFY)) {
 		h3270.ea_buf[faddr].fa &= ~FA_MODIFY;
 		if (h3270.modified_sel)
-			ALL_CHANGED;
+			ALL_CHANGED(&h3270);
 	}
 }
 
@@ -2671,7 +2639,7 @@ ctlr_shrink(void)
 		if (!h3270.ea_buf[baddr].fa)
 			h3270.ea_buf[baddr].cc = h3270.vcontrol ? EBC_space : EBC_null;
 	}
-	ALL_CHANGED;
+	ALL_CHANGED(&h3270);
 	h3270.display(&h3270);
 }
 
