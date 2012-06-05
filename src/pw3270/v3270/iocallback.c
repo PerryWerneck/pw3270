@@ -43,10 +43,6 @@
 #include <glib.h>
 #include "../globals.h"
 
-//#ifdef HAVE_MALLOC_H
-//	#include <malloc.h>
-//#endif
-
 static int 				  static_CallAndWait(int(*callback)(H3270 *session, void *), H3270 *session, void *parm);
 static void 			* static_AddInput(int source, H3270 *session, void (*fn)(H3270 *session));
 static void				  static_RemoveSource(void *id);
@@ -122,13 +118,6 @@ static void static_RemoveSource(void *id)
 	if(id)
 		g_source_destroy((GSource *) id);
 }
-
-// #if !defined(_WIN32)
-// static void * static_AddOutput(int source, H3270 *session, void (*fn)(H3270 *session))
-// {
-//	return AddSource(source,session,G_IO_OUT|G_IO_HUP|G_IO_ERR,fn);
-// }
-// #endif
 
 static void * static_AddExcept(int source, H3270 *session, void (*fn)(H3270 *session))
 {

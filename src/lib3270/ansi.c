@@ -1666,7 +1666,7 @@ ansi_scroll(void)
 	{
 //		if (!h3270.is_altbuffer)
 //			scroll_save(1, False);
-		ctlr_scroll();
+		ctlr_scroll(&h3270);
 		return;
 	}
 

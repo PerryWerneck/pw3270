@@ -56,7 +56,6 @@
 
 #else
 
-//	#include <malloc.h>
 	#include <sys/socket.h>
 	#include <sys/ioctl.h>
 	#include <netinet/in.h>

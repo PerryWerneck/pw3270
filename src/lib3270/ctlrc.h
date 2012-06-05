@@ -41,7 +41,7 @@ LIB3270_INTERNAL void ctlr_init(H3270 *session, unsigned cmask);
 LIB3270_INTERNAL void ctlr_read_buffer(unsigned char aid_byte);
 LIB3270_INTERNAL void ctlr_read_modified(unsigned char aid_byte, Boolean all);
 LIB3270_INTERNAL void ctlr_reinit(H3270 *session, unsigned cmask);
-LIB3270_INTERNAL void ctlr_scroll(void);
+LIB3270_INTERNAL void ctlr_scroll(H3270 *hSession);
 LIB3270_INTERNAL void ctlr_shrink(void);
 LIB3270_INTERNAL void ctlr_snap_buffer(void);
 LIB3270_INTERNAL Boolean ctlr_snap_modes(void);

@@ -45,7 +45,6 @@
 #endif
 
 #include <fcntl.h>
-// #include <malloc.h>
 
 #include "3270ds.h"
 //#include "appres.h"
@@ -107,7 +106,7 @@
 	int faddr;
 	unsigned char fa;
 
-	if(lib3270_get_toggle(&h3270,LIB3270_TOGGLE_MARGINED_PASTE))
+	if(lib3270_get_toggle(session,LIB3270_TOGGLE_MARGINED_PASTE))
 	{
 		baddr = session->cursor_addr;
 		while(BA_TO_COL(baddr) < lmargin)

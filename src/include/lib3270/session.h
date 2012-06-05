@@ -176,6 +176,7 @@
 		int 					  trace_primed 		: 1;
 		int						  crm_nattr;
 		unsigned char			  crm_attr[16];
+		unsigned char 			* zero_buf;				/**< empty buffer, for area clears */
 
 		// Telnet.c
 		unsigned char 			* ibuf;

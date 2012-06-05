@@ -52,7 +52,6 @@
 #include "xioc.h"
 
 #include <errno.h>
-// #include <malloc.h>
 
 #define RECONNECT_MS		2000	/* 2 sec before reconnecting to host */
 #define RECONNECT_ERR_MS	5000	/* 5 sec before reconnecting to host */

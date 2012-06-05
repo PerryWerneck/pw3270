@@ -55,7 +55,6 @@
 #include "utilc.h"
 
 #include <errno.h>
-// #include <malloc.h>
 
 // extern unsigned char aid;
 

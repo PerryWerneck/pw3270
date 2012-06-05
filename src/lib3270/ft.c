@@ -36,7 +36,10 @@
 #include "globals.h"
 
 #include <errno.h>
-#include <malloc.h>
+
+#ifdef HAVE_MALLOC_H
+	#include <malloc.h>
+#endif // HAVE_MALLOC_H
 
 //#include "appres.h"
 #include "actionsc.h"

@@ -89,7 +89,7 @@ Boolean			dbcs = False;
 
 /* Statics */
 // static struct ea *aea_buf;	/* alternate 3270 extended attribute buffer */
-static unsigned char *zero_buf;	// empty buffer, for area clears
+// static unsigned char *zero_buf;	// empty buffer, for area clears
 static void set_formatted(H3270 *session);
 static void ctlr_blanks(H3270 *session);
 // static Boolean  trace_primed = False;
@@ -105,7 +105,7 @@ static void	ctlr_connect(H3270 *session, int ignored, void *dunno);
 // static int	sscp_start;
 static void ticking_stop(H3270 *session);
 static void ctlr_add_ic(int baddr, unsigned char ic);
-static void changed(H3270 *session, int bstart, int bend);
+// static void changed(H3270 *session, int bstart, int bend);
 
 /*
  * code_table is used to translate buffer addresses and attributes to the 3270
@@ -177,7 +177,7 @@ void ctlr_reinit(H3270 *session, unsigned cmask)
 
 		session->text = lib3270_calloc(sizeof(struct lib3270_text),sz,session->text);
 
-		Replace(zero_buf, (unsigned char *)Calloc(sizeof(struct ea),sz));
+		Replace(session->zero_buf, (unsigned char *)Calloc(sizeof(struct ea),sz));
 
 		session->cursor_addr = 0;
 		session->buffer_addr = 0;
@@ -2543,7 +2543,7 @@ ctlr_bcopy(int baddr_from, int baddr_to, int count, int move_ea)
  */
 void ctlr_aclear(int baddr, int count, int clear_ea)
 {
-	if (memcmp((char *) &h3270.ea_buf[baddr], (char *) zero_buf,
+	if (memcmp((char *) &h3270.ea_buf[baddr], (char *) h3270.zero_buf,
 		    count * sizeof(struct ea))) {
 		(void) memset((char *) &h3270.ea_buf[baddr], 0,
 				count * sizeof(struct ea));
@@ -2558,9 +2558,9 @@ void ctlr_aclear(int baddr, int count, int clear_ea)
  * This could be accomplished with ctlr_bcopy() and ctlr_aclear(), but this
  * operation is common enough to warrant a separate path.
  */
-void ctlr_scroll(void)
+void ctlr_scroll(H3270 *hSession)
 {
-	int qty = (h3270.rows - 1) * h3270.cols;
+	int qty = (hSession->rows - 1) * hSession->cols;
 
 	/* Make sure nothing is selected. (later this can be fixed) */
 	// unselect(0, ROWS*COLS);
@@ -2568,12 +2568,12 @@ void ctlr_scroll(void)
 	/* Synchronize pending changes prior to this. */
 
 	/* Move ea_buf. */
-	(void) memmove(&h3270.ea_buf[0], &h3270.ea_buf[h3270.cols],qty * sizeof(struct ea));
+	(void) memmove(&hSession->ea_buf[0], &hSession->ea_buf[h3270.cols],qty * sizeof(struct ea));
 
 	/* Clear the last line. */
-	(void) memset((char *) &h3270.ea_buf[qty], 0, h3270.cols * sizeof(struct ea));
+	(void) memset((char *) &hSession->ea_buf[qty], 0, hSession->cols * sizeof(struct ea));
 
-	h3270.display(&h3270);
+	hSession->display(hSession);
 
 }
 #endif /*]*/
@@ -2581,8 +2581,9 @@ void ctlr_scroll(void)
 /*
  * Note that a particular region of the screen has changed.
  */
-void changed(H3270 *session, int bstart, int bend)
-{
+
+// void changed(H3270 *session, int bstart, int bend)
+// {
 	/*
 	if(session->first_changed < 0)
 	{
@@ -2596,7 +2597,7 @@ void changed(H3270 *session, int bstart, int bend)
 	if(bend > session->last_changed)
 		session->last_changed = bend;
 	*/
-}
+// }
 
 /*
  * Swap the regular and alternate screen buffers

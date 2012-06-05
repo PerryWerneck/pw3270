@@ -36,7 +36,6 @@
  */
 
 #include <errno.h>
-// #include <malloc.h>
 
 #include "globals.h"
 
