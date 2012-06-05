@@ -718,7 +718,7 @@ static Boolean ins_prep(int faddr, int baddr, int count)
 			    first_null);
 #endif /*]*/
 			if (copy_len)
-				ctlr_wrapping_memmove(to, baddr, copy_len);
+				ctlr_wrapping_memmove(&h3270,to, baddr, copy_len);
 		}
 		INC_BA(xaddr);
 	}
@@ -824,17 +824,17 @@ static Boolean key_Character(int code, Boolean with_ge, Boolean pasting, Boolean
 			xaddr = baddr;
 			INC_BA(xaddr);
 			was_si = (h3270.ea_buf[xaddr].cc == EBC_si);
-			ctlr_add(xaddr, EBC_space, CS_BASE);
-			ctlr_add_fg(xaddr, 0);
+			ctlr_add(&h3270,xaddr, EBC_space, CS_BASE);
+			ctlr_add_fg(&h3270,xaddr, 0);
 #if defined(X3270_ANSI) /*[*/
-			ctlr_add_bg(xaddr, 0);
+			ctlr_add_bg(&h3270,xaddr, 0);
 #endif /*]*/
 			if (!was_si) {
 				INC_BA(xaddr);
-				ctlr_add(xaddr, EBC_so, CS_BASE);
-				ctlr_add_fg(xaddr, 0);
+				ctlr_add(&h3270,xaddr, EBC_so, CS_BASE);
+				ctlr_add_fg(&h3270,xaddr, 0);
 #if defined(X3270_ANSI) /*[*/
-				ctlr_add_bg(xaddr, 0);
+				ctlr_add_bg(&h3270,xaddr, 0);
 #endif /*]*/
 			}
 		}
@@ -855,9 +855,9 @@ static Boolean key_Character(int code, Boolean with_ge, Boolean pasting, Boolean
 				 */
 				xaddr = baddr;
 				INC_BA(xaddr);
-				ctlr_add(xaddr, EBC_space, CS_BASE);
-				ctlr_add_fg(xaddr, 0);
-				ctlr_add_gr(xaddr, 0);
+				ctlr_add(&h3270,xaddr, EBC_space, CS_BASE);
+				ctlr_add_fg(&h3270,xaddr, 0);
+				ctlr_add_gr(&h3270,xaddr, 0);
 			}
 		} else {
 			Boolean was_si;
@@ -882,37 +882,34 @@ static Boolean key_Character(int code, Boolean with_ge, Boolean pasting, Boolean
 					if (!ins_prep(faddr, baddr, 3))
 						return False;
 					xaddr = baddr;
-					ctlr_add(xaddr, EBC_si,
-					    CS_BASE);
-					ctlr_add_fg(xaddr, 0);
-					ctlr_add_gr(xaddr, 0);
+					ctlr_add(&h3270,xaddr, EBC_si,CS_BASE);
+					ctlr_add_fg(&h3270,xaddr, 0);
+					ctlr_add_gr(&h3270,xaddr, 0);
 					INC_BA(xaddr);
 					INC_BA(baddr);
 					INC_BA(xaddr);
-					ctlr_add(xaddr, EBC_so,
-					    CS_BASE);
-					ctlr_add_fg(xaddr, 0);
-					ctlr_add_gr(xaddr, 0);
+					ctlr_add(&h3270,xaddr, EBC_so,CS_BASE);
+					ctlr_add_fg(&h3270,xaddr, 0);
+					ctlr_add_gr(&h3270,xaddr, 0);
 				}
 			} else {
 				/* Overwriting part of a subfield. */
 				xaddr = baddr;
-				ctlr_add(xaddr, EBC_si, CS_BASE);
-				ctlr_add_fg(xaddr, 0);
-				ctlr_add_gr(xaddr, 0);
+				ctlr_add(&h3270,xaddr, EBC_si, CS_BASE);
+				ctlr_add_fg(&h3270,xaddr, 0);
+				ctlr_add_gr(&h3270,xaddr, 0);
 				INC_BA(xaddr);
 				INC_BA(baddr);
 				INC_BA(xaddr);
 				was_si = (h3270.ea_buf[xaddr].cc == EBC_si);
-				ctlr_add(xaddr, EBC_space, CS_BASE);
-				ctlr_add_fg(xaddr, 0);
-				ctlr_add_gr(xaddr, 0);
+				ctlr_add(&h3270,xaddr, EBC_space, CS_BASE);
+				ctlr_add_fg(&h3270,xaddr, 0);
+				ctlr_add_gr(&h3270,xaddr, 0);
 				if (!was_si) {
 					INC_BA(xaddr);
-					ctlr_add(xaddr, EBC_so,
-					    CS_BASE);
-					ctlr_add_fg(xaddr, 0);
-					ctlr_add_gr(xaddr, 0);
+					ctlr_add(&h3270,xaddr, EBC_so,CS_BASE);
+					ctlr_add_fg(&h3270,xaddr, 0);
+					ctlr_add_gr(&h3270,xaddr, 0);
 				}
 			}
 		}
@@ -923,9 +920,9 @@ static Boolean key_Character(int code, Boolean with_ge, Boolean pasting, Boolean
 			return False;
 		break;
 	}
-	ctlr_add(baddr, (unsigned char)code,(unsigned char)(with_ge ? CS_GE : 0));
-	ctlr_add_fg(baddr, 0);
-	ctlr_add_gr(baddr, 0);
+	ctlr_add(&h3270,baddr, (unsigned char)code,(unsigned char)(with_ge ? CS_GE : 0));
+	ctlr_add_fg(&h3270,baddr, 0);
+	ctlr_add_gr(&h3270,baddr, 0);
 	INC_BA(baddr);
 
 	/* Replace leading nulls with blanks, if desired. */
@@ -958,7 +955,7 @@ static Boolean key_Character(int code, Boolean with_ge, Boolean pasting, Boolean
 			}
 
 			if (h3270.ea_buf[baddr_fill].cc == EBC_null)
-				ctlr_add(baddr_fill, EBC_space, 0);
+				ctlr_add(&h3270,baddr_fill, EBC_space, 0);
 			DEC_BA(baddr_fill);
 		}
 	}
@@ -1693,7 +1690,7 @@ do_delete(void)
 
 	/* NULL fill at the end. */
 	for (i = 0; i < ndel; i++)
-		ctlr_add(end_baddr - i, EBC_null, 0);
+		ctlr_add(&h3270,end_baddr - i, EBC_null, 0);
 
 	/* Set the MDT for this field. */
 	mdt_set(h3270.cursor_addr);
@@ -2431,7 +2428,7 @@ LIB3270_ACTION( eraseeol )
 		/* erase to next field attribute or current line */
 		do
 		{
-			ctlr_add(baddr, EBC_null, 0);
+			ctlr_add(&h3270,baddr, EBC_null, 0);
 			INC_BA(baddr);
 		} while (!h3270.ea_buf[baddr].fa && BA_TO_COL(baddr) > 0);
 
@@ -2442,7 +2439,7 @@ LIB3270_ACTION( eraseeol )
 		/* erase to end of current line */
 		do
 		{
-			ctlr_add(baddr, EBC_null, 0);
+			ctlr_add(&h3270,baddr, EBC_null, 0);
 			INC_BA(baddr);
 		} while(baddr != 0 && BA_TO_COL(baddr) > 0);
 	}
@@ -2491,13 +2488,13 @@ LIB3270_ACTION( eraseeof )
 	}
 	if (hSession->formatted) {	/* erase to next field attribute */
 		do {
-			ctlr_add(baddr, EBC_null, 0);
+			ctlr_add(&h3270,baddr, EBC_null, 0);
 			INC_BA(baddr);
 		} while (!h3270.ea_buf[baddr].fa);
 		mdt_set(hSession->cursor_addr);
 	} else {	/* erase to end of screen */
 		do {
-			ctlr_add(baddr, EBC_null, 0);
+			ctlr_add(&h3270,baddr, EBC_null, 0);
 			INC_BA(baddr);
 		} while (baddr != 0);
 	}
@@ -2553,7 +2550,7 @@ LIB3270_ACTION( eraseinput )
 						f = True;
 					}
 					if (!hSession->ea_buf[baddr].fa) {
-						ctlr_add(baddr, EBC_null, 0);
+						ctlr_add(&h3270,baddr, EBC_null, 0);
 					}
 				} while (!hSession->ea_buf[baddr].fa);
 			} else {	/* skip protected */
@@ -2680,7 +2677,7 @@ LIB3270_ACTION( deletefield )
 	mdt_set(hSession->cursor_addr);
 	cursor_move(hSession,baddr);
 	while (!hSession->ea_buf[baddr].fa) {
-		ctlr_add(baddr, EBC_null, 0);
+		ctlr_add(hSession,baddr, EBC_null, 0);
 		INC_BA(baddr);
 	}
 	hSession->display(hSession);
@@ -3304,7 +3301,7 @@ kybd_prime(void)
 
 	/* Erase it. */
 	while (!h3270.ea_buf[baddr].fa) {
-		ctlr_add(baddr, 0, 0);
+		ctlr_add(&h3270,baddr, 0, 0);
 		len++;
 		INC_BA(baddr);
 	}

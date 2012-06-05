@@ -1923,8 +1923,7 @@ process_eor(void)
 				return 0;
 			tn3270e_submode = E_SSCP;
 			check_in3270(&h3270);
-			ctlr_write_sscp_lu(h3270.ibuf + EH_SIZE,
-			                   (ibptr - h3270.ibuf) - EH_SIZE);
+			ctlr_write_sscp_lu(&h3270, h3270.ibuf + EH_SIZE,(ibptr - h3270.ibuf) - EH_SIZE);
 			return 0;
 		default:
 			/* Should do something more extraordinary here. */

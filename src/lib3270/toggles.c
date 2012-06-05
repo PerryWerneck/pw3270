@@ -145,6 +145,13 @@ static void toggle_monocase(H3270 *session, struct lib3270_toggle *t, LIB3270_TO
 }
 
 /*
+ * No-op toggle.
+ */
+static void toggle_nop(H3270 *session, struct lib3270_toggle *t unused, LIB3270_TOGGLE_TYPE tt unused)
+{
+}
+
+/*
  * Called from system initialization code to handle initial toggle settings.
  */
 void initialize_toggles(H3270 *session)

@@ -606,7 +606,7 @@ ansi_reset(int ig1 unused, int ig2 unused)
 	held_wrap = False;
 	if (!first) {
 		ctlr_altbuffer(&h3270,True);
-		ctlr_aclear(0, h3270.rows * h3270.cols, 1);
+		ctlr_aclear(&h3270, 0, h3270.rows * h3270.cols, 1);
 		ctlr_altbuffer(&h3270,False);
 		ctlr_clear(&h3270,False);
 		screen_80();
@@ -634,7 +634,7 @@ ansi_insert_chars(int nn, int ig2 unused)
 		ctlr_bcopy(h3270.cursor_addr, h3270.cursor_addr + nn, ns, 1);
 
 	/* Clear the middle of the line */
-	ctlr_aclear(h3270.cursor_addr, nn, 1);
+	ctlr_aclear(&h3270, h3270.cursor_addr, nn, 1);
 	return DATA;
 }
 
@@ -708,14 +708,14 @@ ansi_erase_in_display(int nn, int ig2 unused)
 {
 	switch (nn) {
 	    case 0:	/* below */
-		ctlr_aclear(h3270.cursor_addr, (h3270.rows * h3270.cols) - h3270.cursor_addr, 1);
+		ctlr_aclear(&h3270, h3270.cursor_addr, (h3270.rows * h3270.cols) - h3270.cursor_addr, 1);
 		break;
 	    case 1:	/* above */
-		ctlr_aclear(0, h3270.cursor_addr + 1, 1);
+		ctlr_aclear(&h3270, 0, h3270.cursor_addr + 1, 1);
 		break;
 	    case 2:	/* all (without moving cursor) */
 //		if (h3270.cursor_addr == 0 && !h3270.is_altbuffer) scroll_save(h3270.rows, True);
-		ctlr_aclear(0, h3270.rows * h3270.cols, 1);
+		ctlr_aclear(&h3270, 0, h3270.rows * h3270.cols, 1);
 		break;
 	}
 	return DATA;
@@ -728,13 +728,13 @@ ansi_erase_in_line(int nn, int ig2 unused)
 
 	switch (nn) {
 	    case 0:	/* to right */
-		ctlr_aclear(h3270.cursor_addr, h3270.cols - nc, 1);
+		ctlr_aclear(&h3270, h3270.cursor_addr, h3270.cols - nc, 1);
 		break;
 	    case 1:	/* to left */
-		ctlr_aclear(h3270.cursor_addr - nc, nc+1, 1);
+		ctlr_aclear(&h3270, h3270.cursor_addr - nc, nc+1, 1);
 		break;
 	    case 2:	/* all */
-		ctlr_aclear(h3270.cursor_addr - nc, h3270.cols, 1);
+		ctlr_aclear(&h3270, h3270.cursor_addr - nc, h3270.cols, 1);
 		break;
 	}
 	return DATA;
@@ -762,7 +762,7 @@ ansi_insert_lines(int nn, int ig2 unused)
 		ctlr_bcopy(rr * h3270.cols, (rr + nn) * h3270.cols, ns * h3270.cols, 1);
 
 	/* Clear the middle of the screen */
-	ctlr_aclear(rr * h3270.cols, nn * h3270.cols, 1);
+	ctlr_aclear(&h3270, rr * h3270.cols, nn * h3270.cols, 1);
 	return DATA;
 }
 
@@ -788,7 +788,7 @@ ansi_delete_lines(int nn, int ig2 unused)
 		ctlr_bcopy((rr + nn) * h3270.cols, rr * h3270.cols, ns * h3270.cols, 1);
 
 	/* Clear the rest of the screen */
-	ctlr_aclear((rr + ns) * h3270.cols, nn * h3270.cols, 1);
+	ctlr_aclear(&h3270, (rr + ns) * h3270.cols, nn * h3270.cols, 1);
 	return DATA;
 }
 
@@ -810,7 +810,7 @@ ansi_delete_chars(int nn, int ig2 unused)
 		ctlr_bcopy(h3270.cursor_addr + nn, h3270.cursor_addr, ns, 1);
 
 	/* Clear the end of the line */
-	ctlr_aclear(h3270.cursor_addr + ns, nn, 1);
+	ctlr_aclear(&h3270, h3270.cursor_addr + ns, nn, 1);
 	return DATA;
 }
 
@@ -1069,16 +1069,15 @@ ansi_printing(int ig1 unused, int ig2 unused)
 	switch (csd[(once_cset != -1) ? once_cset : cset]) {
 	    case CSD_LD:	/* line drawing "0" */
 		if (ansi_ch >= 0x5f && ansi_ch <= 0x7e)
-			ctlr_add(h3270.cursor_addr, (unsigned char)(ansi_ch - 0x5f),
-			    CS_LINEDRAW);
+			ctlr_add(&h3270,h3270.cursor_addr, (unsigned char)(ansi_ch - 0x5f),CS_LINEDRAW);
 		else
-			ctlr_add(h3270.cursor_addr, asc2ebc[ansi_ch], CS_BASE);
+			ctlr_add(&h3270,h3270.cursor_addr, asc2ebc[ansi_ch], CS_BASE);
 		break;
 	    case CSD_UK:	/* UK "A" */
 		if (ansi_ch == '#')
-			ctlr_add(h3270.cursor_addr, 0x1e, CS_LINEDRAW);
+			ctlr_add(&h3270,h3270.cursor_addr, 0x1e, CS_LINEDRAW);
 		else
-			ctlr_add(h3270.cursor_addr, asc2ebc[ansi_ch], CS_BASE);
+			ctlr_add(&h3270,h3270.cursor_addr, asc2ebc[ansi_ch], CS_BASE);
 		break;
 	    case CSD_US:	/* US "B" */
 		ebc_ch = asc2ebc[ansi_ch];
@@ -1156,7 +1155,7 @@ ansi_printing(int ig1 unused, int ig2 unused)
 			ea_buf[cursor_addr].db = DBCS_NONE;
 		}
 #endif /*]*/
-		ctlr_add(h3270.cursor_addr, ebc_ch, default_cs);
+		ctlr_add(&h3270,h3270.cursor_addr, ebc_ch, default_cs);
 #if defined(X3270_DBCS) /*[*/
 		if (default_cs == CS_DBCS)
 			(void) ctlr_dbcs_postprocess();
@@ -1164,9 +1163,9 @@ ansi_printing(int ig1 unused, int ig2 unused)
 		break;
 	}
 	once_cset = -1;
-	ctlr_add_gr(h3270.cursor_addr, gr);
-	ctlr_add_fg(h3270.cursor_addr, fg);
-	ctlr_add_bg(h3270.cursor_addr, bg);
+	ctlr_add_gr(&h3270,h3270.cursor_addr, gr);
+	ctlr_add_fg(&h3270,h3270.cursor_addr, fg);
+	ctlr_add_bg(&h3270,h3270.cursor_addr, bg);
 	if (wraparound_mode) {
 		/*
 		 * There is a fascinating behavior of xterm which we will
@@ -1588,40 +1587,43 @@ xterm_text(int ig1 unused, int ig2 unused)
 static enum state
 xterm_text_do(int ig1 unused, int ig2 unused)
 {
-#if defined(X3270_DISPLAY) || defined(WC3270) /*[*/
+/*
+#if defined(X3270_DISPLAY) || defined(WC3270)
 	text[tx] = '\0';
-#endif /*]*/
+#endif
 
-#if defined(X3270_DISPLAY) /*[*/
+#if defined(X3270_DISPLAY)
 	switch (n[0]) {
-	    case 0:	/* icon name and window title */
+	    case 0:	// icon name and window title
 		XtVaSetValues(toplevel, XtNiconName, text, NULL);
 		XtVaSetValues(toplevel, XtNtitle, text, NULL);
 		break;
-	    case 1:	/* icon name */
+	    case 1:	// icon name
 		XtVaSetValues(toplevel, XtNiconName, text, NULL);
 		break;
-	    case 2:	/* window_title */
+	    case 2:	// window_title
 		XtVaSetValues(toplevel, XtNtitle, text, NULL);
 		break;
-	    case 50:	/* font */
+	    case 50:	// font
 		screen_newfont(text, False, False);
 		break;
 	    default:
 		break;
 	}
-#endif /*]*/
+#endif
 
-#if defined(WC3270) /*[*/
+
+#if defined(WC3270)
 	switch (n[0]) {
-	    case 0:	/* icon name and window title */
-	    case 2:	/* window_title */
+	    case 0:	// icon name and window title
+	    case 2:	// window_title
 		screen_title(text);
 		break;
 	    default:
 		break;
 	}
-#endif /*]*/
+#endif
+*/
 
 	return DATA;
 }
@@ -1678,7 +1680,7 @@ ansi_scroll(void)
 		    1);
 
 	/* Clear the last line */
-	ctlr_aclear((scroll_bottom - 1) * h3270.cols, h3270.cols, 1);
+	ctlr_aclear(&h3270, (scroll_bottom - 1) * h3270.cols, h3270.cols, 1);
 }
 
 /* Callback for when we enter ANSI mode. */

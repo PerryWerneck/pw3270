@@ -392,7 +392,7 @@ cut_data_request(void)
 	/* Copy data into the screen buffer. */
 	count = 0;
 	while (count < O_UP_MAX && (c = xlate_getc()) != EOF) {
-		ctlr_add(O_UP_DATA + count, c, 0);
+		ctlr_add(&h3270,O_UP_DATA + count, c, 0);
 		count++;
 	}
 
@@ -402,7 +402,7 @@ cut_data_request(void)
 
 		/* Clean out any data we may have written. */
 		for (j = 0; j < count; j++)
-			ctlr_add(O_UP_DATA + j, 0, 0);
+			ctlr_add(&h3270,O_UP_DATA + j, 0, 0);
 
 		/* Abort the transfer. */
 		cut_abort(SC_ABORT_FILE,_( "Error \"%s\" reading from local file (rc=%d)" ), strerror(errno), errno);
@@ -411,24 +411,24 @@ cut_data_request(void)
 
 	/* Send special data for EOF. */
 	if (!count && feof(((H3270FT *) h3270.ft)->local_file)) {
-		ctlr_add(O_UP_DATA, EOF_DATA1, 0);
-		ctlr_add(O_UP_DATA+1, EOF_DATA2, 0);
+		ctlr_add(&h3270,O_UP_DATA, EOF_DATA1, 0);
+		ctlr_add(&h3270,O_UP_DATA+1, EOF_DATA2, 0);
 		count = 2;
 	}
 
 	/* Compute the other fields. */
-	ctlr_add(O_UP_FRAME_SEQ, seq, 0);
+	ctlr_add(&h3270,O_UP_FRAME_SEQ, seq, 0);
 	cs = 0;
 	for (i = 0; i < count; i++)
 		cs ^= h3270.ea_buf[O_UP_DATA + i].cc;
-	ctlr_add(O_UP_CSUM, asc2ebc[(int)table6[cs & 0x3f]], 0);
-	ctlr_add(O_UP_LEN, asc2ebc[(int)table6[(count >> 6) & 0x3f]], 0);
-	ctlr_add(O_UP_LEN+1, asc2ebc[(int)table6[count & 0x3f]], 0);
+	ctlr_add(&h3270,O_UP_CSUM, asc2ebc[(int)table6[cs & 0x3f]], 0);
+	ctlr_add(&h3270,O_UP_LEN, asc2ebc[(int)table6[(count >> 6) & 0x3f]], 0);
+	ctlr_add(&h3270,O_UP_LEN+1, asc2ebc[(int)table6[count & 0x3f]], 0);
 
 	/* XXX: Change the data field attribute so it doesn't display. */
 	attr = h3270.ea_buf[O_DR_SF].fa;
 	attr = (attr & ~FA_INTENSITY) | FA_INT_ZERO_NSEL;
-	ctlr_add_fa(O_DR_SF, attr, 0);
+	ctlr_add_fa(&h3270,O_DR_SF, attr, 0);
 
 	/* Send it up to the host. */
 	trace_ds("> FT DATA %u\n", from6(seq));
@@ -535,10 +535,10 @@ static void cut_abort(unsigned short reason, const char *fmt, ...)
 	va_end(args);
 
 	/* Send the abort sequence. */
-	ctlr_add(RO_FRAME_TYPE, RFT_CONTROL_CODE, 0);
-	ctlr_add(RO_FRAME_SEQ, h3270.ea_buf[O_DT_FRAME_SEQ].cc, 0);
-	ctlr_add(RO_REASON_CODE, HIGH8(reason), 0);
-	ctlr_add(RO_REASON_CODE+1, LOW8(reason), 0);
+	ctlr_add(&h3270,RO_FRAME_TYPE, RFT_CONTROL_CODE, 0);
+	ctlr_add(&h3270,RO_FRAME_SEQ, h3270.ea_buf[O_DT_FRAME_SEQ].cc, 0);
+	ctlr_add(&h3270,RO_REASON_CODE, HIGH8(reason), 0);
+	ctlr_add(&h3270,RO_REASON_CODE+1, LOW8(reason), 0);
 	trace_ds("> FT CONTROL_CODE ABORT\n");
 
 	lib3270_pfkey(&h3270,2);

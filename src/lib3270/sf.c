@@ -641,7 +641,7 @@ sf_outbound_ds(unsigned char buf[], int buflen)
 		break;
 	    case SNA_CMD_EAU:
 		trace_ds(" EraseAllUnprotected\n");
-		ctlr_erase_all_unprotected();
+		ctlr_erase_all_unprotected(&h3270);
 		break;
 	    default:
 		trace_ds(" unknown type 0x%02x\n", buf[4]);
