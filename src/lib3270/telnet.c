@@ -121,8 +121,8 @@ int             ns_brcvd;
 int             ns_rrcvd;
 int             ns_bsent;
 int             ns_rsent;
-unsigned char  *obuf;		/* 3270 output buffer */
-unsigned char  *obptr = (unsigned char *) NULL;
+// unsigned char  *obuf;		/* 3270 output buffer */
+// unsigned char  *obptr = (unsigned char *) NULL;
 int             linemode = 1;
 
 /*
@@ -2520,7 +2520,7 @@ void space3270out(int n)
 	unsigned more = 0;
 
 	if (obuf_size)
-		nc = obptr - obuf;
+		nc = h3270.obptr - h3270.obuf;
 
 	while ((nc + n + EH_SIZE) > (obuf_size + more)) {
 		more += BUFSIZ;
@@ -2530,8 +2530,8 @@ void space3270out(int n)
 		obuf_size += more;
 		obuf_base = (unsigned char *)Realloc((char *)obuf_base,
 			obuf_size);
-		obuf = obuf_base + EH_SIZE;
-		obptr = obuf + nc;
+		h3270.obuf = obuf_base + EH_SIZE;
+		h3270.obptr = h3270.obuf + nc;
 	}
 }
 
@@ -2669,7 +2669,7 @@ net_output(void)
 	unsigned char *nxoptr, *xoptr;
 
 #if defined(X3270_TN3270E) /*[*/
-#define BSTART	((IN_TN3270E || IN_SSCP) ? obuf_base : obuf)
+#define BSTART	((IN_TN3270E || IN_SSCP) ? obuf_base : h3270.obuf)
 #else /*][*/
 #define BSTART	obuf
 #endif /*]*/
@@ -2701,7 +2701,7 @@ net_output(void)
 #endif /*]*/
 
 	/* Reallocate the expanded output buffer. */
-	while (xobuf_len <  (obptr - BSTART + 1) * 2) {
+	while (xobuf_len <  (h3270.obptr - BSTART + 1) * 2) {
 		xobuf_len += BUFSZ;
 		need_resize++;
 	}
@@ -2712,7 +2712,7 @@ net_output(void)
 	/* Copy and expand IACs. */
 	xoptr = xobuf;
 	nxoptr = BSTART;
-	while (nxoptr < obptr) {
+	while (nxoptr < h3270.obptr) {
 		if ((*xoptr++ = *nxoptr++) == IAC) {
 			*xoptr++ = IAC;
 		}
@@ -2802,7 +2802,7 @@ net_add_dummy_tn3270e(void)
 		return False;
 
 	space3270out(EH_SIZE);
-	h = (tn3270e_header *)obptr;
+	h = (tn3270e_header *)h3270.obptr;
 
 	switch (tn3270e_submode) {
 	case E_NONE:
@@ -2821,7 +2821,7 @@ net_add_dummy_tn3270e(void)
 	h->response_flag = TN3270E_RSF_NO_RESPONSE;
 	h->seq_number[0] = 0;
 	h->seq_number[1] = 0;
-	obptr += EH_SIZE;
+	h3270.obptr += EH_SIZE;
 	return True;
 }
 #endif /*]*/
@@ -3085,7 +3085,7 @@ net_snap_options(void)
 	if (!CONNECTED)
 		return False;
 
-	obptr = obuf;
+	h3270.obptr = h3270.obuf;
 
 	/* Do TTYPE first. */
 	if (h3270.myopts[TELOPT_TTYPE]) {
@@ -3093,7 +3093,7 @@ net_snap_options(void)
 
 		space3270out(sizeof(ttype_str));
 		for (j = 0; j < sizeof(ttype_str); j++)
-			*obptr++ = ttype_str[j];
+			*h3270.obptr++ = ttype_str[j];
 	}
 
 	/* Do the other options. */
@@ -3102,15 +3102,15 @@ net_snap_options(void)
 		if (i == TELOPT_TTYPE)
 			continue;
 		if (h3270.hisopts[i]) {
-			*obptr++ = IAC;
-			*obptr++ = WILL;
-			*obptr++ = (unsigned char)i;
+			*h3270.obptr++ = IAC;
+			*h3270.obptr++ = WILL;
+			*h3270.obptr++ = (unsigned char)i;
 			any = True;
 		}
 		if (h3270.myopts[i]) {
-			*obptr++ = IAC;
-			*obptr++ = DO;
-			*obptr++ = (unsigned char)i;
+			*h3270.obptr++ = IAC;
+			*h3270.obptr++ = DO;
+			*h3270.obptr++ = (unsigned char)i;
 			any = True;
 		}
 	}
@@ -3124,50 +3124,48 @@ net_snap_options(void)
 			((h3270.connected_type != CN) ? strlen(h3270.connected_type) : 0) +
 			((h3270.connected_lu != CN) ? + strlen(h3270.connected_lu) : 0) +
 			2);
-		*obptr++ = IAC;
-		*obptr++ = SB;
-		*obptr++ = TELOPT_TN3270E;
-		*obptr++ = TN3270E_OP_DEVICE_TYPE;
-		*obptr++ = TN3270E_OP_IS;
+		*h3270.obptr++ = IAC;
+		*h3270.obptr++ = SB;
+		*h3270.obptr++ = TELOPT_TN3270E;
+		*h3270.obptr++ = TN3270E_OP_DEVICE_TYPE;
+		*h3270.obptr++ = TN3270E_OP_IS;
 		if (h3270.connected_type != CN) {
-			(void) memcpy(obptr, h3270.connected_type,
-					strlen(h3270.connected_type));
-			obptr += strlen(h3270.connected_type);
+			(void) memcpy(h3270.obptr, h3270.connected_type,strlen(h3270.connected_type));
+			h3270.obptr += strlen(h3270.connected_type);
 		}
 		if (h3270.connected_lu != CN) {
-			*obptr++ = TN3270E_OP_CONNECT;
-			(void) memcpy(obptr, h3270.connected_lu,
-					strlen(h3270.connected_lu));
-			obptr += strlen(h3270.connected_lu);
+			*h3270.obptr++ = TN3270E_OP_CONNECT;
+			(void) memcpy(h3270.obptr, h3270.connected_lu,strlen(h3270.connected_lu));
+			h3270.obptr += strlen(h3270.connected_lu);
 		}
-		*obptr++ = IAC;
-		*obptr++ = SE;
+		*h3270.obptr++ = IAC;
+		*h3270.obptr++ = SE;
 
 		space3270out(38);
-		(void) memcpy(obptr, functions_req, 4);
-		obptr += 4;
-		*obptr++ = TN3270E_OP_IS;
+		(void) memcpy(h3270.obptr, functions_req, 4);
+		h3270.obptr += 4;
+		*h3270.obptr++ = TN3270E_OP_IS;
 		for (i = 0; i < 32; i++) {
 			if (e_funcs & E_OPT(i))
-				*obptr++ = i;
+				*h3270.obptr++ = i;
 		}
-		*obptr++ = IAC;
-		*obptr++ = SE;
+		*h3270.obptr++ = IAC;
+		*h3270.obptr++ = SE;
 
 		if (tn3270e_bound) {
 			tn3270e_header *h;
 
 			space3270out(EH_SIZE + 3);
-			h = (tn3270e_header *)obptr;
+			h = (tn3270e_header *)h3270.obptr;
 			h->data_type = TN3270E_DT_BIND_IMAGE;
 			h->request_flag = 0;
 			h->response_flag = 0;
 			h->seq_number[0] = 0;
 			h->seq_number[1] = 0;
-			obptr += EH_SIZE;
-			*obptr++ = 1; /* dummy */
-			*obptr++ = IAC;
-			*obptr++ = EOR;
+			h3270.obptr += EH_SIZE;
+			*h3270.obptr++ = 1; /* dummy */
+			*h3270.obptr++ = IAC;
+			*h3270.obptr++ = EOR;
 		}
 	}
 #endif /*]*/

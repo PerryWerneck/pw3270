@@ -549,9 +549,9 @@ insert_sa1(unsigned char attr, unsigned char value, unsigned char *currentp, Boo
 		return;
 	*currentp = value;
 	space3270out(3);
-	*obptr++ = ORDER_SA;
-	*obptr++ = attr;
-	*obptr++ = value;
+	*h3270.obptr++ = ORDER_SA;
+	*h3270.obptr++ = attr;
+	*h3270.obptr++ = value;
 	if (*anyp)
 		trace_ds("'");
 	trace_ds(" SetAttribute(%s)", see_efa(attr, value));
@@ -626,16 +626,16 @@ ctlr_read_modified(unsigned char aid_byte, Boolean all)
 #endif /*]*/
 
 	trace_ds("> ");
-	obptr = obuf;
+	h3270.obptr = h3270.obuf;
 
 	switch (aid_byte) {
 
 	    case AID_SYSREQ:			/* test request */
 			space3270out(4);
-			*obptr++ = 0x01;	/* soh */
-			*obptr++ = 0x5b;	/*  %  */
-			*obptr++ = 0x61;	/*  /  */
-			*obptr++ = 0x02;	/* stx */
+			*h3270.obptr++ = 0x01;	/* soh */
+			*h3270.obptr++ = 0x5b;	/*  %  */
+			*h3270.obptr++ = 0x61;	/*  /  */
+			*h3270.obptr++ = 0x02;	/* stx */
 			trace_ds("SYSREQ");
 		break;
 
@@ -655,11 +655,11 @@ ctlr_read_modified(unsigned char aid_byte, Boolean all)
 	    default:				/* ordinary AID */
 		if (!IN_SSCP) {
 			space3270out(3);
-			*obptr++ = aid_byte;
+			*h3270.obptr++ = aid_byte;
 			trace_ds("%s",see_aid(aid_byte));
 			if (short_read)
 			    goto rm_done;
-			ENCODE_BADDR(obptr, h3270.cursor_addr);
+			ENCODE_BADDR(h3270.obptr, h3270.cursor_addr);
 			trace_ds("%s",rcba(&h3270,h3270.cursor_addr));
 		} else {
 			space3270out(1);	/* just in case */
@@ -682,8 +682,8 @@ ctlr_read_modified(unsigned char aid_byte, Boolean all)
 
 				INC_BA(baddr);
 				space3270out(3);
-				*obptr++ = ORDER_SBA;
-				ENCODE_BADDR(obptr, baddr);
+				*h3270.obptr++ = ORDER_SBA;
+				ENCODE_BADDR(h3270.obptr, baddr);
 				trace_ds(" SetBufferAddress%s (Cols: %d Rows: %d)", rcba(&h3270,baddr), h3270.cols, h3270.rows);
 				while (!h3270.ea_buf[baddr].fa) {
 
@@ -697,14 +697,14 @@ ctlr_read_modified(unsigned char aid_byte, Boolean all)
 						    &any);
 						if (h3270.ea_buf[baddr].cs & CS_GE) {
 							space3270out(1);
-							*obptr++ = ORDER_GE;
+							*h3270.obptr++ = ORDER_GE;
 							if (any)
 								trace_ds("'");
 							trace_ds(" GraphicEscape");
 							any = False;
 						}
 						space3270out(1);
-						*obptr++ = h3270.ea_buf[baddr].cc;
+						*h3270.obptr++ = h3270.ea_buf[baddr].cc;
 						if (!any)
 							trace_ds(" '");
 						trace_ds("%s",see_ebc(h3270.ea_buf[baddr].cc));
@@ -742,14 +742,14 @@ ctlr_read_modified(unsigned char aid_byte, Boolean all)
 				    &any);
 				if (h3270.ea_buf[baddr].cs & CS_GE) {
 					space3270out(1);
-					*obptr++ = ORDER_GE;
+					*h3270.obptr++ = ORDER_GE;
 					if (any)
 						trace_ds("' ");
 					trace_ds(" GraphicEscape ");
 					any = False;
 				}
 				space3270out(1);
-				*obptr++ = h3270.ea_buf[baddr].cc;
+				*h3270.obptr++ = h3270.ea_buf[baddr].cc;
 				if (!any)
 					trace_ds("%s","'");
 				trace_ds("%s",see_ebc(h3270.ea_buf[baddr].cc));
@@ -797,11 +797,11 @@ void ctlr_read_buffer(H3270 *hSession, unsigned char aid_byte)
 #endif /*]*/
 
 	trace_ds("> ");
-	obptr = obuf;
+	h3270.obptr = h3270.obuf;
 
 	space3270out(3);
-	*obptr++ = aid_byte;
-	ENCODE_BADDR(obptr, hSession->cursor_addr);
+	*h3270.obptr++ = aid_byte;
+	ENCODE_BADDR(h3270.obptr, hSession->cursor_addr);
 	trace_ds("%s%s", see_aid(aid_byte), rcba(hSession,hSession->cursor_addr));
 
 	baddr = 0;
@@ -809,16 +809,16 @@ void ctlr_read_buffer(H3270 *hSession, unsigned char aid_byte)
 		if (hSession->ea_buf[baddr].fa) {
 			if (hSession->reply_mode == SF_SRM_FIELD) {
 				space3270out(2);
-				*obptr++ = ORDER_SF;
+				*h3270.obptr++ = ORDER_SF;
 			} else {
 				space3270out(4);
-				*obptr++ = ORDER_SFE;
-				attr_count = obptr - obuf;
-				*obptr++ = 1; /* for now */
-				*obptr++ = XA_3270;
+				*h3270.obptr++ = ORDER_SFE;
+				attr_count = h3270.obptr - h3270.obuf;
+				*h3270.obptr++ = 1; /* for now */
+				*h3270.obptr++ = XA_3270;
 			}
 			fa = hSession->ea_buf[baddr].fa & ~FA_PRINTABLE;
-			*obptr++ = code_table[fa];
+			*h3270.obptr++ = code_table[fa];
 			if (any)
 				trace_ds("'");
 			trace_ds(" StartField%s%s%s",
@@ -827,32 +827,32 @@ void ctlr_read_buffer(H3270 *hSession, unsigned char aid_byte)
 			if (hSession->reply_mode != SF_SRM_FIELD) {
 				if (hSession->ea_buf[baddr].fg) {
 					space3270out(2);
-					*obptr++ = XA_FOREGROUND;
-					*obptr++ = hSession->ea_buf[baddr].fg;
+					*h3270.obptr++ = XA_FOREGROUND;
+					*h3270.obptr++ = hSession->ea_buf[baddr].fg;
 					trace_ds("%s", see_efa(XA_FOREGROUND, hSession->ea_buf[baddr].fg));
-					(*(obuf + attr_count))++;
+					(*(h3270.obuf + attr_count))++;
 				}
 				if (hSession->ea_buf[baddr].bg) {
 					space3270out(2);
-					*obptr++ = XA_BACKGROUND;
-					*obptr++ = hSession->ea_buf[baddr].bg;
+					*h3270.obptr++ = XA_BACKGROUND;
+					*h3270.obptr++ = hSession->ea_buf[baddr].bg;
 					trace_ds("%s", see_efa(XA_BACKGROUND, hSession->ea_buf[baddr].bg));
-					(*(obuf + attr_count))++;
+					(*(h3270.obuf + attr_count))++;
 				}
 				if (hSession->ea_buf[baddr].gr) {
 					space3270out(2);
-					*obptr++ = XA_HIGHLIGHTING;
-					*obptr++ = hSession->ea_buf[baddr].gr | 0xf0;
+					*h3270.obptr++ = XA_HIGHLIGHTING;
+					*h3270.obptr++ = hSession->ea_buf[baddr].gr | 0xf0;
 					trace_ds("%s", see_efa(XA_HIGHLIGHTING,
 					    hSession->ea_buf[baddr].gr | 0xf0));
-					(*(obuf + attr_count))++;
+					(*(h3270.obuf + attr_count))++;
 				}
 				if (hSession->ea_buf[baddr].cs & CS_MASK) {
 					space3270out(2);
-					*obptr++ = XA_CHARSET;
-					*obptr++ = host_cs(hSession->ea_buf[baddr].cs);
+					*h3270.obptr++ = XA_CHARSET;
+					*h3270.obptr++ = host_cs(hSession->ea_buf[baddr].cs);
 					trace_ds("%s", see_efa(XA_CHARSET,host_cs(hSession->ea_buf[baddr].cs)));
-					(*(obuf + attr_count))++;
+					(*(h3270.obuf + attr_count))++;
 				}
 			}
 			any = False;
@@ -865,14 +865,14 @@ void ctlr_read_buffer(H3270 *hSession, unsigned char aid_byte)
 			    &any);
 			if (hSession->ea_buf[baddr].cs & CS_GE) {
 				space3270out(1);
-				*obptr++ = ORDER_GE;
+				*h3270.obptr++ = ORDER_GE;
 				if (any)
 					trace_ds("'");
 				trace_ds(" GraphicEscape");
 				any = False;
 			}
 			space3270out(1);
-			*obptr++ = hSession->ea_buf[baddr].cc;
+			*h3270.obptr++ = hSession->ea_buf[baddr].cc;
 			if (hSession->ea_buf[baddr].cc <= 0x3f ||
 			    hSession->ea_buf[baddr].cc == 0xff) {
 				if (any)

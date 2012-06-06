@@ -191,12 +191,12 @@ dft_open_request(unsigned short len, unsigned char *cp)
 
 	/* Acknowledge the Open. */
 	trace_ds("> WriteStructuredField FileTransferData OpenAck\n");
-	obptr = obuf;
+	h3270.obptr = h3270.obuf;
 	space3270out(6);
-	*obptr++ = AID_SF;
-	SET16(obptr, 5);
-	*obptr++ = SF_TRANSFER_DATA;
-	SET16(obptr, 9);
+	*h3270.obptr++ = AID_SF;
+	SET16(h3270.obptr, 5);
+	*h3270.obptr++ = SF_TRANSFER_DATA;
+	SET16(h3270.obptr, 9);
 	net_output();
 }
 
@@ -316,14 +316,14 @@ dft_data_insert(struct data_buffer *data_bufr)
 
 	/* Send an acknowledgement frame back. */
 	trace_ds("> WriteStructuredField FileTransferData DataAck(rec=%lu)\n", recnum);
-	obptr = obuf;
+	h3270.obptr = h3270.obuf;
 	space3270out(12);
-	*obptr++ = AID_SF;
-	SET16(obptr, 11);
-	*obptr++ = SF_TRANSFER_DATA;
-	SET16(obptr, TR_NORMAL_REPLY);
-	SET16(obptr, TR_RECNUM_HDR);
-	SET32(obptr, recnum);
+	*h3270.obptr++ = AID_SF;
+	SET16(h3270.obptr, 11);
+	*h3270.obptr++ = SF_TRANSFER_DATA;
+	SET16(h3270.obptr, TR_NORMAL_REPLY);
+	SET16(h3270.obptr, TR_RECNUM_HDR);
+	SET32(h3270.obptr, recnum);
 	recnum++;
 	net_output();
 }
@@ -356,7 +356,7 @@ dft_get_request(void)
 	set_dft_buffersize();
 	space3270out(dft_buffersize);
 	numbytes = dft_buffersize - 27; /* always read 5 bytes less than we're allowed */
-	bufptr = obuf + 17;
+	bufptr = h3270.obuf + 17;
 	while (!dft_eof && numbytes) {
 		if (ascii_flag && cr_flag) {
 			int c;
@@ -416,22 +416,22 @@ dft_get_request(void)
 	}
 
 	/* Set up SF header for Data or EOF. */
-	obptr = obuf;
-	*obptr++ = AID_SF;
-	obptr += 2;	/* skip SF length for now */
-	*obptr++ = SF_TRANSFER_DATA;
+	h3270.obptr = h3270.obuf;
+	*h3270.obptr++ = AID_SF;
+	h3270.obptr += 2;	/* skip SF length for now */
+	*h3270.obptr++ = SF_TRANSFER_DATA;
 
 	if (total_read) {
 		trace_ds("> WriteStructuredField FileTransferData Data(rec=%lu) %d bytes\n",
 		    (unsigned long) recnum, (int) total_read);
-		SET16(obptr, TR_GET_REPLY);
-		SET16(obptr, TR_RECNUM_HDR);
-		SET32(obptr, recnum);
+		SET16(h3270.obptr, TR_GET_REPLY);
+		SET16(h3270.obptr, TR_RECNUM_HDR);
+		SET32(h3270.obptr, recnum);
 		recnum++;
-		SET16(obptr, TR_NOT_COMPRESSED);
-		*obptr++ = TR_BEGIN_DATA;
-		SET16(obptr, total_read + 5);
-		obptr += total_read;
+		SET16(h3270.obptr, TR_NOT_COMPRESSED);
+		*h3270.obptr++ = TR_BEGIN_DATA;
+		SET16(h3270.obptr, total_read + 5);
+		h3270.obptr += total_read;
 
 		ft_length += total_read;
 
@@ -442,25 +442,25 @@ dft_get_request(void)
 
 	} else {
 		trace_ds("> WriteStructuredField FileTransferData EOF\n");
-		*obptr++ = HIGH8(TR_GET_REQ);
-		*obptr++ = TR_ERROR_REPLY;
-		SET16(obptr, TR_ERROR_HDR);
-		SET16(obptr, TR_ERR_EOF);
+		*h3270.obptr++ = HIGH8(TR_GET_REQ);
+		*h3270.obptr++ = TR_ERROR_REPLY;
+		SET16(h3270.obptr, TR_ERROR_HDR);
+		SET16(h3270.obptr, TR_ERR_EOF);
 
 		dft_eof = True;
 	}
 
 	/* Set the SF length. */
-	bufptr = obuf + 1;
-	SET16(bufptr, obptr - (obuf + 1));
+	bufptr = h3270.obuf + 1;
+	SET16(bufptr, h3270.obptr - (h3270.obuf + 1));
 
 	/* Save the data. */
-	dft_savebuf_len = obptr - obuf;
+	dft_savebuf_len = h3270.obptr - h3270.obuf;
 	if (dft_savebuf_len > dft_savebuf_max) {
 		dft_savebuf_max = dft_savebuf_len;
 		Replace(dft_savebuf, (unsigned char *)lib3270_malloc(dft_savebuf_max));
 	}
-	(void) memcpy(dft_savebuf, obuf, dft_savebuf_len);
+	(void) memcpy(dft_savebuf, h3270.obuf, dft_savebuf_len);
 	h3270.aid = AID_SF;
 
 	/* Write the data. */
@@ -478,12 +478,12 @@ dft_close_request(void)
 	 */
 	trace_ds(" Close\n");
 	trace_ds("> WriteStructuredField FileTransferData CloseAck\n");
-	obptr = obuf;
+	h3270.obptr = h3270.obuf;
 	space3270out(6);
-	*obptr++ = AID_SF;
-	SET16(obptr, 5);	/* length */
-	*obptr++ = SF_TRANSFER_DATA;
-	SET16(obptr, TR_CLOSE_REPLY);
+	*h3270.obptr++ = AID_SF;
+	SET16(h3270.obptr, 5);	/* length */
+	*h3270.obptr++ = SF_TRANSFER_DATA;
+	SET16(h3270.obptr, TR_CLOSE_REPLY);
 	net_output();
 }
 
@@ -501,15 +501,15 @@ static void dft_abort(unsigned short code, const char *fmt, ...)
 
 	trace_ds("> WriteStructuredField FileTransferData Error\n");
 
-	obptr = obuf;
+	h3270.obptr = h3270.obuf;
 	space3270out(10);
-	*obptr++ = AID_SF;
-	SET16(obptr, 9);	/* length */
-	*obptr++ = SF_TRANSFER_DATA;
-	*obptr++ = HIGH8(code);
-	*obptr++ = TR_ERROR_REPLY;
-	SET16(obptr, TR_ERROR_HDR);
-	SET16(obptr, TR_ERR_CMDFAIL);
+	*h3270.obptr++ = AID_SF;
+	SET16(h3270.obptr, 9);	/* length */
+	*h3270.obptr++ = SF_TRANSFER_DATA;
+	*h3270.obptr++ = HIGH8(code);
+	*h3270.obptr++ = TR_ERROR_REPLY;
+	SET16(h3270.obptr, TR_ERROR_HDR);
+	SET16(h3270.obptr, TR_ERR_CMDFAIL);
 	net_output();
 
 	/* Update the pop-up and state. */
@@ -535,10 +535,10 @@ dft_read_modified(void)
 {
 	if (dft_savebuf_len) {
 		trace_ds("> WriteStructuredField FileTransferData\n");
-		obptr = obuf;
+		h3270.obptr = h3270.obuf;
 		space3270out(dft_savebuf_len);
-		memcpy(obptr, dft_savebuf, dft_savebuf_len);
-		obptr += dft_savebuf_len;
+		memcpy(h3270.obptr, dft_savebuf, dft_savebuf_len);
+		h3270.obptr += dft_savebuf_len;
 		net_output();
 	}
 }

@@ -20,8 +20,8 @@
  */
 
 /* Output buffer. */
-extern unsigned char *obuf;
-extern unsigned char *obptr;
+// extern unsigned char *obuf;
+// extern unsigned char *obptr;
 
 /* Spelled-out tty control character. */
 struct ctl_char {

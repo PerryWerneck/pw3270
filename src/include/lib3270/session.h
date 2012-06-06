@@ -182,6 +182,9 @@
 		// Telnet.c
 		unsigned char 			* ibuf;
 		int      				  ibuf_size;			/**< size of ibuf */
+		unsigned char			* obuf;					/**< 3270 output buffer */
+		unsigned char			* obptr;
+
 		unsigned char 			  myopts[LIB3270_TELNET_N_OPTS];
 		unsigned char			  hisopts[LIB3270_TELNET_N_OPTS];
 

@@ -653,9 +653,9 @@ sf_outbound_ds(unsigned char buf[], int buflen)
 static void
 query_reply_start(void)
 {
-	obptr = obuf;
+	h3270.obptr = h3270.obuf;
 	space3270out(1);
-	*obptr++ = AID_SF;
+	*h3270.obptr++ = AID_SF;
 	qr_in_progress = True;
 }
 
@@ -681,13 +681,13 @@ do_query_reply(unsigned char code)
 	}
 
 	do {
-		int obptr0 = obptr - obuf;
+		int obptr0 = h3270.obptr - h3270.obuf;
 		Boolean full = True;
 
 		space3270out(4);
-		obptr += 2;	/* skip length for now */
-		*obptr++ = SFID_QREPLY;
-		*obptr++ = code;
+		h3270.obptr += 2;	/* skip length for now */
+		*h3270.obptr++ = SFID_QREPLY;
+		*h3270.obptr++ = code;
 
 		more = False;
 		if (replies[i].single_fn)
@@ -700,12 +700,12 @@ do_query_reply(unsigned char code)
 			unsigned char *obptr_len;
 
 			/* Fill in the length. */
-			obptr_len = obuf + obptr0;
-			len = (obptr - obuf) - obptr0;
+			obptr_len = h3270.obuf + obptr0;
+			len = (h3270.obptr - h3270.obuf) - obptr0;
 			SET16(obptr_len, len);
 		} else {
 			/* Back over the header. */
-			obptr -= 4;
+			h3270.obptr -= 4;
 		}
 	} while (more);
 }
@@ -730,7 +730,7 @@ do_qr_summary(void)
 #endif /*]*/
 			trace_ds("%s%s", comma, see_qcode(replies[i].code));
 			comma = ",";
-			*obptr++ = replies[i].code;
+			*h3270.obptr++ = replies[i].code;
 #if defined(X3270_DBCS) /*[*/
 		}
 #endif /*]*/
@@ -745,30 +745,30 @@ do_qr_usable_area(void)
 
 	trace_ds("> QueryReply(UsableArea)\n");
 	space3270out(19);
-	*obptr++ = 0x01;	/* 12/14-bit addressing */
-	*obptr++ = 0x00;	/* no special character features */
-	SET16(obptr, h3270.maxCOLS);	/* usable width */
-	SET16(obptr, h3270.maxROWS);	/* usable height */
-	*obptr++ = 0x01;	/* units (mm) */
+	*h3270.obptr++ = 0x01;				/* 12/14-bit addressing */
+	*h3270.obptr++ = 0x00;				/* no special character features */
+	SET16(h3270.obptr, h3270.maxCOLS);	/* usable width */
+	SET16(h3270.obptr, h3270.maxROWS);	/* usable height */
+	*h3270.obptr++ = 0x01;				/* units (mm) */
 	num = display_widthMM();
 	denom = display_width();
 	while (!(num %2) && !(denom % 2)) {
 		num /= 2;
 		denom /= 2;
 	}
-	SET16(obptr, (int)num);	/* Xr numerator */
-	SET16(obptr, (int)denom); /* Xr denominator */
+	SET16(h3270.obptr, (int)num);	/* Xr numerator */
+	SET16(h3270.obptr, (int)denom); /* Xr denominator */
 	num = display_heightMM();
 	denom = display_height();
 	while (!(num %2) && !(denom % 2)) {
 		num /= 2;
 		denom /= 2;
 	}
-	SET16(obptr, (int)num);	/* Yr numerator */
-	SET16(obptr, (int)denom); /* Yr denominator */
-	*obptr++ = *char_width;	/* AW */
-	*obptr++ = *char_height;/* AH */
-	SET16(obptr, h3270.maxCOLS * h3270.maxROWS);	/* buffer, questionable */
+	SET16(h3270.obptr, (int)num);	/* Yr numerator */
+	SET16(h3270.obptr, (int)denom); /* Yr denominator */
+	*h3270.obptr++ = *char_width;	/* AW */
+	*h3270.obptr++ = *char_height;/* AH */
+	SET16(h3270.obptr, h3270.maxCOLS * h3270.maxROWS);	/* buffer, questionable */
 }
 
 static void
@@ -782,16 +782,16 @@ do_qr_color(void)
 	color_max = h3270.color8 ? 8: 16; /* report on 8 or 16 colors */
 
 	space3270out(4 + 2*15);
-	*obptr++ = 0x00;	/* no options */
-	*obptr++ = color_max; /* report on 8 or 16 colors */
-	*obptr++ = 0x00;	/* default color: */
-	*obptr++ = 0xf0 + COLOR_GREEN;	/*  green */
+	*h3270.obptr++ = 0x00;					/* no options */
+	*h3270.obptr++ = color_max; 			/* report on 8 or 16 colors */
+	*h3270.obptr++ = 0x00;					/* default color: */
+	*h3270.obptr++ = 0xf0 + COLOR_GREEN;	/*  green */
 	for (i = 0xf1; i < 0xf1 + color_max - 1; i++) {
-		*obptr++ = i;
+		*h3270.obptr++ = i;
 		if (h3270.m3279)
-			*obptr++ = i;
+			*h3270.obptr++ = i;
 		else
-			*obptr++ = 0x00;
+			*h3270.obptr++ = 0x00;
 	}
 
 /*
@@ -813,17 +813,17 @@ do_qr_highlighting(void)
 {
 	trace_ds("> QueryReply(Highlighting)\n");
 	space3270out(11);
-	*obptr++ = 5;		/* report on 5 pairs */
-	*obptr++ = XAH_DEFAULT;	/* default: */
-	*obptr++ = XAH_NORMAL;	/*  normal */
-	*obptr++ = XAH_BLINK;	/* blink: */
-	*obptr++ = XAH_BLINK;	/*  blink */
-	*obptr++ = XAH_REVERSE;	/* reverse: */
-	*obptr++ = XAH_REVERSE;	/*  reverse */
-	*obptr++ = XAH_UNDERSCORE; /* underscore: */
-	*obptr++ = XAH_UNDERSCORE; /*  underscore */
-	*obptr++ = XAH_INTENSIFY; /* intensify: */
-	*obptr++ = XAH_INTENSIFY; /*  intensify */
+	*h3270.obptr++ = 5;					/* report on 5 pairs */
+	*h3270.obptr++ = XAH_DEFAULT;		/* default: */
+	*h3270.obptr++ = XAH_NORMAL;		/*  normal */
+	*h3270.obptr++ = XAH_BLINK;			/* blink: */
+	*h3270.obptr++ = XAH_BLINK;			/*  blink */
+	*h3270.obptr++ = XAH_REVERSE;		/* reverse: */
+	*h3270.obptr++ = XAH_REVERSE;		/*  reverse */
+	*h3270.obptr++ = XAH_UNDERSCORE;	/* underscore: */
+	*h3270.obptr++ = XAH_UNDERSCORE;	/*  underscore */
+	*h3270.obptr++ = XAH_INTENSIFY;		/* intensify: */
+	*h3270.obptr++ = XAH_INTENSIFY;		/*  intensify */
 }
 
 static void
@@ -831,9 +831,9 @@ do_qr_reply_modes(void)
 {
 	trace_ds("> QueryReply(ReplyModes)\n");
 	space3270out(3);
-	*obptr++ = SF_SRM_FIELD;
-	*obptr++ = SF_SRM_XFIELD;
-	*obptr++ = SF_SRM_CHAR;
+	*h3270.obptr++ = SF_SRM_FIELD;
+	*h3270.obptr++ = SF_SRM_XFIELD;
+	*h3270.obptr++ = SF_SRM_CHAR;
 }
 
 #if defined(X3270_DBCS) /*[*/
@@ -858,9 +858,9 @@ do_qr_alpha_part(void)
 {
 	trace_ds("> QueryReply(AlphanumericPartitions)\n");
 	space3270out(4);
-	*obptr++ = 0;		/* 1 partition */
-	SET16(obptr, h3270.maxROWS * h3270.maxCOLS);	/* buffer space */
-	*obptr++ = 0;		/* no special features */
+	*h3270.obptr++ = 0;		/* 1 partition */
+	SET16(h3270.obptr, h3270.maxROWS * h3270.maxCOLS);	/* buffer space */
+	*h3270.obptr++ = 0;		/* no special features */
 }
 
 static void
@@ -870,35 +870,36 @@ do_qr_charsets(void)
 	space3270out(64);
 #if defined(X3270_DBCS) /*[*/
 	if (dbcs)
-		*obptr++ = 0x8e;	/* flags: GE, CGCSGID, DBCS */
+		*h3270.obptr++ = 0x8e;			/* flags: GE, CGCSGID, DBCS */
 	else
 #endif /*]*/
-		*obptr++ = 0x82;	/* flags: GE, CGCSGID present */
-	*obptr++ = 0x00;		/* more flags */
-	*obptr++ = *char_width;		/* SDW */
-	*obptr++ = *char_height;	/* SDW */
-	*obptr++ = 0x00;		/* no load PS */
-	*obptr++ = 0x00;
-	*obptr++ = 0x00;
-	*obptr++ = 0x00;
-#if defined(X3270_DBCS) /*[*/
-	if (dbcs)
-		*obptr++ = 0x0b;	/* DL (11 bytes) */
-	else
-#endif /*]*/
-		*obptr++ = 0x07;	/* DL (7 bytes) */
+		*h3270.obptr++ = 0x82;			/* flags: GE, CGCSGID present */
 
-	*obptr++ = 0x00;		/* SET 0: */
+	*h3270.obptr++ = 0x00;				/* more flags */
+	*h3270.obptr++ = *char_width;		/* SDW */
+	*h3270.obptr++ = *char_height;		/* SDW */
+	*h3270.obptr++ = 0x00;				/* no load PS */
+	*h3270.obptr++ = 0x00;
+	*h3270.obptr++ = 0x00;
+	*h3270.obptr++ = 0x00;
 #if defined(X3270_DBCS) /*[*/
 	if (dbcs)
-		*obptr++ = 0x00;	/*  FLAGS: non-load, single-
+		*h3270.obptr++ = 0x0b;	/* DL (11 bytes) */
+	else
+#endif /*]*/
+		*h3270.obptr++ = 0x07;	/* DL (7 bytes) */
+
+	*h3270.obptr++ = 0x00;		/* SET 0: */
+#if defined(X3270_DBCS) /*[*/
+	if (dbcs)
+		*h3270.obptr++ = 0x00;	/*  FLAGS: non-load, single-
 					    plane, single-bute */
 	else
 #endif /*]*/
-		*obptr++ = 0x10;	/*  FLAGS: non-loadable,
+		*h3270.obptr++ = 0x10;	/*  FLAGS: non-loadable,
 					    single-plane, single-byte,
 					    no compare */
-	*obptr++ = 0x00;		/*  LCID 0 */
+	*h3270.obptr++ = 0x00;		/*  LCID 0 */
 #if defined(X3270_DBCS) /*[*/
 	if (dbcs) {
 		*obptr++ = 0x00;	/*  SW 0 */
@@ -907,17 +908,17 @@ do_qr_charsets(void)
 		*obptr++ = 0x00;	/*  SUBSN */
 	}
 #endif /*]*/
-	SET32(obptr, cgcsgid);		/*  CGCSGID */
+	SET32(h3270.obptr, cgcsgid);		/*  CGCSGID */
 	if (!*standard_font) {
 		/* special 3270 font, includes APL */
-		*obptr++ = 0x01;/* SET 1: */
+		*h3270.obptr++ = 0x01;/* SET 1: */
 		if (h3270.apl_mode)
-		    *obptr++ = 0x00;/*  FLAGS: non-loadable, single-plane,
+		    *h3270.obptr++ = 0x00;/*  FLAGS: non-loadable, single-plane,
 					 single-byte, no compare */
 		else
-		    *obptr++ = 0x10;/*  FLAGS: non-loadable, single-plane,
+		    *h3270.obptr++ = 0x10;/*  FLAGS: non-loadable, single-plane,
 					 single-byte, no compare */
-		*obptr++ = 0xf1;/*  LCID */
+		*h3270.obptr++ = 0xf1;/*  LCID */
 #if defined(X3270_DBCS) /*[*/
 		if (dbcs) {
 			*obptr++ = 0x00;/*  SW 0 */
@@ -926,10 +927,10 @@ do_qr_charsets(void)
 			*obptr++ = 0x00;/*  SUBSN */
 		}
 #endif /*]*/
-		*obptr++ = 0x03;/*  CGCSGID: 3179-style APL2 */
-		*obptr++ = 0xc3;
-		*obptr++ = 0x01;
-		*obptr++ = 0x36;
+		*h3270.obptr++ = 0x03;/*  CGCSGID: 3179-style APL2 */
+		*h3270.obptr++ = 0xc3;
+		*h3270.obptr++ = 0x01;
+		*h3270.obptr++ = 0x36;
 	}
 #if defined(X3270_DBCS) /*[*/
 	if (dbcs) {
@@ -953,10 +954,10 @@ do_qr_ddm(void)
 
 	trace_ds("> QueryReply(DistributedDataManagement)\n");
 	space3270out(8);
-	SET16(obptr,0);			/* set reserved field to 0 */
-	SET16(obptr, dft_buffersize);	/* set inbound length limit INLIM */
-	SET16(obptr, dft_buffersize);	/* set outbound length limit OUTLIM */
-	SET16(obptr, 0x0101);		/* NSS=01, DDMSS=01 */
+	SET16(h3270.obptr,0);			/* set reserved field to 0 */
+	SET16(h3270.obptr, dft_buffersize);	/* set inbound length limit INLIM */
+	SET16(h3270.obptr, dft_buffersize);	/* set outbound length limit OUTLIM */
+	SET16(h3270.obptr, 0x0101);		/* NSS=01, DDMSS=01 */
 }
 #endif /*]*/
 
@@ -965,15 +966,15 @@ do_qr_imp_part(void)
 {
 	trace_ds("> QueryReply(ImplicitPartition)\n");
 	space3270out(13);
-	*obptr++ = 0x0;		/* reserved */
-	*obptr++ = 0x0;
-	*obptr++ = 0x0b;	/* length of display size */
-	*obptr++ = 0x01;	/* "implicit partition size" */
-	*obptr++ = 0x00;	/* reserved */
-	SET16(obptr, 80);	/* implicit partition width */
-	SET16(obptr, 24);	/* implicit partition height */
-	SET16(obptr, h3270.maxCOLS);	/* alternate height */
-	SET16(obptr, h3270.maxROWS);	/* alternate width */
+	*h3270.obptr++ = 0x0;				/* reserved */
+	*h3270.obptr++ = 0x0;
+	*h3270.obptr++ = 0x0b;				/* length of display size */
+	*h3270.obptr++ = 0x01;				/* "implicit partition size" */
+	*h3270.obptr++ = 0x00;				/* reserved */
+	SET16(h3270.obptr, 80);				/* implicit partition width */
+	SET16(h3270.obptr, 24);				/* implicit partition height */
+	SET16(h3270.obptr, h3270.maxCOLS);	/* alternate height */
+	SET16(h3270.obptr, h3270.maxROWS);	/* alternate width */
 }
 
 static void
