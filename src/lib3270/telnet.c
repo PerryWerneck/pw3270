@@ -2514,8 +2514,7 @@ store3270in(unsigned char c)
  *	Allocates the buffer in BUFSIZ chunks.
  *	Allocates hidden space at the front of the buffer for TN3270E.
  */
-void
-space3270out(int n)
+void space3270out(int n)
 {
 	unsigned nc = 0;	/* amount of data currently in obuf */
 	unsigned more = 0;

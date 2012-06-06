@@ -357,7 +357,7 @@ unsigned char get_field_attribute(H3270 *h, int baddr)
  * buffer address.  Return the attribute in a parameter.
  *
  * Returns True if an attribute is found, False if boundary hit.
- */
+ */ /*
 Boolean
 get_bounded_field_attribute(register int baddr, register int bound,
     unsigned char *fa_out)
@@ -378,25 +378,26 @@ get_bounded_field_attribute(register int baddr, register int bound,
 		DEC_BA(baddr);
 	} while (baddr != sbaddr && baddr != bound);
 
-	/* Screen is unformatted (and 'formatted' is inaccurate). */
+	// Screen is unformatted (and 'formatted' is inaccurate).
 	if (baddr == sbaddr) {
 		*fa_out = h3270.ea_buf[-1].fa;
 		return True;
 	}
 
-	/* Wrapped to boundary. */
+	// Wrapped to boundary.
 	return False;
-}
+} */
 
 /*
  * Given the address of a field attribute, return the address of the
  * extended attribute structure.
- */
+ */ /*
 struct ea *
 fa2ea(int baddr)
 {
 	return &h3270.ea_buf[baddr];
 }
+*/
 
 /*
  * Find the next unprotected field.  Returns the address following the
@@ -507,7 +508,7 @@ process_ds(unsigned char *buf, int buflen)
 	case CMD_RB:	/* read buffer */
 	case SNA_CMD_RB:
 		trace_ds("ReadBuffer\n");
-		ctlr_read_buffer(h3270.aid);
+		ctlr_read_buffer(&h3270,h3270.aid);
 		return PDS_OKAY_OUTPUT;
 		break;
 	case CMD_RM:	/* read modifed */
@@ -777,8 +778,7 @@ ctlr_read_modified(unsigned char aid_byte, Boolean all)
  * Process a 3270 Read-Buffer command and transmit the data back to the
  * host.
  */
-void
-ctlr_read_buffer(unsigned char aid_byte)
+void ctlr_read_buffer(H3270 *hSession, unsigned char aid_byte)
 {
 	register int	baddr;
 	unsigned char	fa;
@@ -801,13 +801,13 @@ ctlr_read_buffer(unsigned char aid_byte)
 
 	space3270out(3);
 	*obptr++ = aid_byte;
-	ENCODE_BADDR(obptr, h3270.cursor_addr);
-	trace_ds("%s%s", see_aid(aid_byte), rcba(&h3270,h3270.cursor_addr));
+	ENCODE_BADDR(obptr, hSession->cursor_addr);
+	trace_ds("%s%s", see_aid(aid_byte), rcba(hSession,hSession->cursor_addr));
 
 	baddr = 0;
 	do {
-		if (h3270.ea_buf[baddr].fa) {
-			if (h3270.reply_mode == SF_SRM_FIELD) {
+		if (hSession->ea_buf[baddr].fa) {
+			if (hSession->reply_mode == SF_SRM_FIELD) {
 				space3270out(2);
 				*obptr++ = ORDER_SF;
 			} else {
@@ -817,41 +817,41 @@ ctlr_read_buffer(unsigned char aid_byte)
 				*obptr++ = 1; /* for now */
 				*obptr++ = XA_3270;
 			}
-			fa = h3270.ea_buf[baddr].fa & ~FA_PRINTABLE;
+			fa = hSession->ea_buf[baddr].fa & ~FA_PRINTABLE;
 			*obptr++ = code_table[fa];
 			if (any)
 				trace_ds("'");
 			trace_ds(" StartField%s%s%s",
-			    (h3270.reply_mode == SF_SRM_FIELD) ? "" : "Extended",
-			    rcba(&h3270,baddr), see_attr(fa));
-			if (h3270.reply_mode != SF_SRM_FIELD) {
-				if (h3270.ea_buf[baddr].fg) {
+			    (hSession->reply_mode == SF_SRM_FIELD) ? "" : "Extended",
+			    rcba(hSession,baddr), see_attr(fa));
+			if (hSession->reply_mode != SF_SRM_FIELD) {
+				if (hSession->ea_buf[baddr].fg) {
 					space3270out(2);
 					*obptr++ = XA_FOREGROUND;
-					*obptr++ = h3270.ea_buf[baddr].fg;
-					trace_ds("%s", see_efa(XA_FOREGROUND, h3270.ea_buf[baddr].fg));
+					*obptr++ = hSession->ea_buf[baddr].fg;
+					trace_ds("%s", see_efa(XA_FOREGROUND, hSession->ea_buf[baddr].fg));
 					(*(obuf + attr_count))++;
 				}
-				if (h3270.ea_buf[baddr].bg) {
+				if (hSession->ea_buf[baddr].bg) {
 					space3270out(2);
 					*obptr++ = XA_BACKGROUND;
-					*obptr++ = h3270.ea_buf[baddr].bg;
-					trace_ds("%s", see_efa(XA_BACKGROUND, h3270.ea_buf[baddr].bg));
+					*obptr++ = hSession->ea_buf[baddr].bg;
+					trace_ds("%s", see_efa(XA_BACKGROUND, hSession->ea_buf[baddr].bg));
 					(*(obuf + attr_count))++;
 				}
-				if (h3270.ea_buf[baddr].gr) {
+				if (hSession->ea_buf[baddr].gr) {
 					space3270out(2);
 					*obptr++ = XA_HIGHLIGHTING;
-					*obptr++ = h3270.ea_buf[baddr].gr | 0xf0;
+					*obptr++ = hSession->ea_buf[baddr].gr | 0xf0;
 					trace_ds("%s", see_efa(XA_HIGHLIGHTING,
-					    h3270.ea_buf[baddr].gr | 0xf0));
+					    hSession->ea_buf[baddr].gr | 0xf0));
 					(*(obuf + attr_count))++;
 				}
-				if (h3270.ea_buf[baddr].cs & CS_MASK) {
+				if (hSession->ea_buf[baddr].cs & CS_MASK) {
 					space3270out(2);
 					*obptr++ = XA_CHARSET;
-					*obptr++ = host_cs(h3270.ea_buf[baddr].cs);
-					trace_ds("%s", see_efa(XA_CHARSET,host_cs(h3270.ea_buf[baddr].cs)));
+					*obptr++ = host_cs(hSession->ea_buf[baddr].cs);
+					trace_ds("%s", see_efa(XA_CHARSET,host_cs(hSession->ea_buf[baddr].cs)));
 					(*(obuf + attr_count))++;
 				}
 			}
@@ -863,7 +863,7 @@ ctlr_read_buffer(unsigned char aid_byte)
 			    &current_gr,
 			    &current_cs,
 			    &any);
-			if (h3270.ea_buf[baddr].cs & CS_GE) {
+			if (hSession->ea_buf[baddr].cs & CS_GE) {
 				space3270out(1);
 				*obptr++ = ORDER_GE;
 				if (any)
@@ -872,18 +872,18 @@ ctlr_read_buffer(unsigned char aid_byte)
 				any = False;
 			}
 			space3270out(1);
-			*obptr++ = h3270.ea_buf[baddr].cc;
-			if (h3270.ea_buf[baddr].cc <= 0x3f ||
-			    h3270.ea_buf[baddr].cc == 0xff) {
+			*obptr++ = hSession->ea_buf[baddr].cc;
+			if (hSession->ea_buf[baddr].cc <= 0x3f ||
+			    hSession->ea_buf[baddr].cc == 0xff) {
 				if (any)
 					trace_ds("'");
 
-				trace_ds(" %s", see_ebc(h3270.ea_buf[baddr].cc));
+				trace_ds(" %s", see_ebc(hSession->ea_buf[baddr].cc));
 				any = False;
 			} else {
 				if (!any)
 					trace_ds(" '");
-				trace_ds("%s", see_ebc(h3270.ea_buf[baddr].cc));
+				trace_ds("%s", see_ebc(hSession->ea_buf[baddr].cc));
 				any = True;
 			}
 		}

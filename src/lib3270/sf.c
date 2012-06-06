@@ -369,7 +369,7 @@ sf_read_part(unsigned char buf[], unsigned buflen)
 			return PDS_BAD_CMD;
 		}
 		trace_ds("\n");
-		ctlr_read_buffer(AID_QREPLY);
+		ctlr_read_buffer(&h3270,AID_QREPLY);
 		break;
 	    case SNA_CMD_RM:
 		trace_ds(" ReadModified");
