@@ -54,6 +54,12 @@
 	%define _distro %{_redhat_prefix} %{_redhat_vernum}
 %endif
 
+%if 0%{?centos}
+	%define _release %{_rel}.centos%{centos}
+	%define _distro centos %{centos}
+%endif
+
+
 #---[ Packaging ]-----------------------------------------------------------------------------------------------------
 
 Name:           @PACKAGE@
