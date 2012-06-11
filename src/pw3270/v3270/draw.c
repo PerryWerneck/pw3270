@@ -247,6 +247,17 @@ void v3270_draw_char(cairo_t *cr, unsigned char chr, unsigned short attr, H3270 
 	cairo_stroke(cr);
 }
 
+#if !GTK_CHECK_VERSION(2, 22, 0)
+cairo_surface_t *gdk_window_create_similar_surface(GdkWindow *window, cairo_content_t content, int width, int height)
+{
+	cairo_t *cairoContext = gdk_cairo_create(window);
+	cairo_surface_t *cairoSurface = cairo_get_target(cairoContext);
+	cairo_surface_t *newSurface = cairo_surface_create_similar(cairoSurface, content, width, height);
+	cairo_destroy(cairoContext);
+	return newSurface;
+}
+#endif // GTK_CHECK_VERSION(2, 22, 0)
+
 void v3270_reload(GtkWidget *widget)
 {
 	v3270 * terminal = GTK_V3270(widget);

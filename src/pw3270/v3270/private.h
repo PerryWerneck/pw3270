@@ -202,7 +202,11 @@ void		  v3270_update_mouse_pointer(GtkWidget *widget);
 #if ! GTK_CHECK_VERSION(2,22,0)
 	#define gtk_accessible_set_widget(a,w)	g_object_set_data(G_OBJECT(a),"widget",w)
 	#define gtk_accessible_get_widget(a)	GTK_WIDGET(g_object_get_data(G_OBJECT(a),"widget"))
+
+	G_GNUC_INTERNAL cairo_surface_t * gdk_window_create_similar_surface(GdkWindow *window, cairo_content_t content, int width, int height);
+
 #endif // !GTK(2,22)
+
 
 #if ! GTK_CHECK_VERSION(3,0,0)
  gboolean	  v3270_expose(GtkWidget * widget, GdkEventExpose *event);
