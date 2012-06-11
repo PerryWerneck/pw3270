@@ -37,7 +37,15 @@
  {
  	gboolean active = gtk_toggle_action_get_active(action);
 	set_boolean_to_config("view",gtk_action_get_name(GTK_ACTION(action)),active);
+#if GTK_CHECK_VERSION(2,18,0)
  	gtk_widget_set_visible(widget,active);
+#else
+	if(active)
+		gtk_widget_show(widget);
+	else
+		gtk_widget_hide(widget);
+#endif // GTK(2,18,0)
+
  }
 
  GObject * ui_create_toolbar(GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error)

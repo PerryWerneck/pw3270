@@ -225,6 +225,16 @@
 		g_object_set_data(G_OBJECT(widget),"parent",info->element);
 		info->element = G_OBJECT(widget);
 		gtk_widget_set_visible(widget,ui_get_bool_attribute("visible",names,values,TRUE));
+
+#if GTK_CHECK_VERSION(2,18,0)
+		gtk_widget_set_visible(widget,ui_get_bool_attribute("visible",names,values,TRUE));
+#else
+		if(ui_get_bool_attribute("visible",names,values,TRUE))
+			gtk_widget_show(widget);
+		else
+			gtk_widget_hide(widget);
+#endif // GTK(2,18,0)
+
 	}
 	else
 	{

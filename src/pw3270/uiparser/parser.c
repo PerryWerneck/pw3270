@@ -73,7 +73,15 @@ static void pack_view(gpointer key, GtkWidget *widget, GtkWidget *parent)
 		GtkWidget * menu	= parent;
 		gboolean	visible	= get_boolean_from_config("view",gtk_action_get_name(GTK_ACTION(obj)),TRUE);
 
+#if GTK_CHECK_VERSION(2,18,0)
 		gtk_widget_set_visible(widget,visible);
+#else
+		if(visible)
+			gtk_widget_show(widget);
+		else
+			gtk_widget_hide(widget);
+#endif // GTK(2,18,0)
+
 		gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(obj),visible);
 
 		if(GTK_IS_MENU_ITEM(menu))
