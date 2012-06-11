@@ -31,10 +31,14 @@
 
 %define _rel	0
 %define _distro	Linux
+%define _vrsgtk gtk3
 
 %if 0%{?suse_version}
 	%define _release %{_rel}.suse%{suse_version}
 	%define _distro SuSE Linux %{suse_version}
+	%if %{?suse_version} < 1200
+		%define _vrsgtk gtk2
+	%endif
 %endif
 
 %if 0%{?fedora_version}
@@ -62,7 +66,7 @@ Source:         %{name}-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 Requires:       openssl shared-mime-info
 Distribution:    %_distro
-BuildRequires:  autoconf automake gcc-c++ sed pkgconfig gtk@GTK_VERSION@-devel gettext-devel libopenssl-devel findutils coreutils rsvg-view desktop-file-utils
+BuildRequires:  autoconf automake gcc-c++ sed pkgconfig %{_vrsgtk}-devel gettext-devel libopenssl-devel findutils coreutils rsvg-view desktop-file-utils
 
 %description
 IBM 3270 terminal emulator gtk. It can be used to communicate with
