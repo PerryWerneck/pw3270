@@ -158,6 +158,10 @@ $(BINDIR)/pot/pw3270.pot: $(foreach SRC, $(basename $(SOURCES)), $(TMPDIR)/pot/$
 	@mkdir -p `dirname $@`
 	@$(MSGCAT) --sort-output $^ > $@
 
+distclean: clean
+	@rm -f $(PACKAGE_NAME).png
+	@rm -f $(PACKAGE_NAME)-logo.png
+
 clean: clean-common
 	@rm -f v3270/marshal.c
 	@rm -f v3270/marshal.h
@@ -165,7 +169,5 @@ clean: clean-common
 	@rm -fr uiparser/.obj
 	@rm -fr v3270/.bin
 	@rm -fr v3270/.obj
-	@rm -f $(PACKAGE_NAME).png
-	@rm -f $(PACKAGE_NAME)-logo.png
 	@rm -f $(PACKAGE_NAME).desktop
 

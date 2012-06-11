@@ -248,6 +248,7 @@ clean:
 	@rm -f *.log
 
 distclean: clean
+	@make -C src/pw3270 distclean
 	@rm -f src/pw3270/Makefile
 	@rm -f config.status
 	@rm -f src/lib3270/mkversion.sh
