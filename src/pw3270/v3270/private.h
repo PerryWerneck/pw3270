@@ -194,6 +194,16 @@ gboolean	  v3270_draw(GtkWidget * widget, cairo_t * cr);
 void 		  v3270_draw_oia(cairo_t *cr, H3270 *host, int row, int cols, struct v3270_metrics *metrics, GdkColor *color, GdkRectangle *rect);
 void		  v3270_update_mouse_pointer(GtkWidget *widget);
 
+#if ! GTK_CHECK_VERSION(2,20,0)
+	#define gtk_widget_get_realized(w)		GTK_WIDGET_REALIZED(w)
+	#define gtk_widget_set_realized(w,r)	if(r) { GTK_WIDGET_SET_FLAGS(w,GTK_REALIZED); } else { GTK_WIDGET_UNSET_FLAGS(w,GTK_REALIZED); }
+#endif // !GTK(2,20)
+
+#if ! GTK_CHECK_VERSION(2,22,0)
+	#define gtk_accessible_set_widget(a,w)	g_object_set_data(G_OBJECT(a),"widget",w)
+	#define gtk_accessible_get_widget(a)	GTK_WIDGET(g_object_get_data(G_OBJECT(a),"widget"))
+#endif // !GTK(2,22)
+
 #if ! GTK_CHECK_VERSION(3,0,0)
  gboolean	  v3270_expose(GtkWidget * widget, GdkEventExpose *event);
 #endif // GTK 3
