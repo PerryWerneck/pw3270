@@ -48,10 +48,10 @@
 %endif
 
 %if 0%{?_redhat}
-	%define _redhat_prefix      %(grep -q "Red Hat Linux" /etc/redhat-release && echo rhl || echo el)
-	%define _redhat_vernum      %(rpm -qf --queryformat %{VERSION} /etc/redhat-release|tr -d '.')
-	%define _release          	%{_rel}.%{_redhat_prefix}%{_redhat_vernum}
-	%define _distro %{_redhat_prefix} %{_redhat_vernum}
+	%define _redhat_prefix	%(grep -q "Red Hat Linux" /etc/redhat-release && echo rhl || echo el)
+	%define _redhat_vernum	%(rpm -qf --queryformat %{VERSION} /etc/redhat-release|tr -d '.')
+	%define _release	%{_rel}.%{_redhat_prefix}%{_redhat_vernum}
+	%define _distro		%{_redhat_prefix} %{_redhat_vernum}
 %endif
 
 %if 0%{?centos_ver}
@@ -72,8 +72,8 @@ Summary:        IBM 3270 Terminal emulator for gtk
 Source:         %{name}-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 Requires:       openssl shared-mime-info
-Distribution:    %_distro
-BuildRequires:  autoconf automake gcc-c++ sed pkgconfig %{_vrsgtk}-devel gettext-devel libopenssl-devel findutils coreutils desktop-file-utils
+Distribution:	%_distro
+BuildRequires:	autoconf >= 2.61 automake gcc-c++ sed pkgconfig %{_vrsgtk}-devel gettext-devel libopenssl-devel findutils coreutils desktop-file-utils
 
 %description
 IBM 3270 terminal emulator gtk. It can be used to communicate with
