@@ -29,6 +29,7 @@
  *
  */
 
+#include <glib.h>
 #include "globals.h"
 #include "v3270/v3270.h"
 #include "v3270/accessible.h"
@@ -150,6 +151,10 @@ int main(int argc, char *argv[])
 		GError			* error		= NULL;
 
 		g_option_context_add_main_entries(options, app_options, NULL);
+
+#if ! GLIB_CHECK_VERSION(2,32,0)
+		g_thread_init(NULL);
+#endif // !GLIB(2,32)
 
 		gtk_init(&argc, &argv);
 

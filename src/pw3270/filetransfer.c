@@ -422,7 +422,11 @@ static void run_ft_dialog(GObject *action, GtkWidget *widget, struct ftdialog *d
 							&msg );
 
 
+#if GTK_CHECK_VERSION(2,18,0)
 	gtk_widget_set_visible(dlg->dialog,FALSE);
+#else
+	gtk_widget_hide(dlg->dialog);
+#endif // GTK(2,18,0)
 
 	if(msg)
 	{

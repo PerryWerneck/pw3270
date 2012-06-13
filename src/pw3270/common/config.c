@@ -336,7 +336,11 @@ gchar * get_last_error_msg(void)
 	BYTE			* data;
 
 	if(!registry_open_key(group,KEY_READ,&key_handle))
-		return g_strdup(def);
+	{
+		if(def)
+			return g_strdup(def);
+		return NULL;
+	}
 
 	data = (BYTE *) g_malloc0(datalen+2);
 

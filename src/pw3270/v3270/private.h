@@ -194,6 +194,10 @@ gboolean	  v3270_draw(GtkWidget * widget, cairo_t * cr);
 void 		  v3270_draw_oia(cairo_t *cr, H3270 *host, int row, int cols, struct v3270_metrics *metrics, GdkColor *color, GdkRectangle *rect);
 void		  v3270_update_mouse_pointer(GtkWidget *widget);
 
+#if ! GTK_CHECK_VERSION(2,18,0)
+	G_GNUC_INTERNAL void gtk_widget_get_allocation(GtkWidget *widget,GtkAllocation *allocation);
+#endif // !GTK(2,18)
+
 #if ! GTK_CHECK_VERSION(2,20,0)
 	#define gtk_widget_get_realized(w)		GTK_WIDGET_REALIZED(w)
 	#define gtk_widget_set_realized(w,r)	if(r) { GTK_WIDGET_SET_FLAGS(w,GTK_REALIZED); } else { GTK_WIDGET_UNSET_FLAGS(w,GTK_REALIZED); }

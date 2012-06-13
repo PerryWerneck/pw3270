@@ -63,7 +63,11 @@
 		}
 	}
 
+#if GTK_CHECK_VERSION(2,18,0)
 	gtk_widget_set_can_focus(widget,FALSE);
+#else
+	GTK_WIDGET_UNSET_FLAGS(widget,GTK_CAN_FOCUS);
+#endif // GTK(2,18)
 
 	gtk_toolbar_insert(GTK_TOOLBAR(info->element),GTK_TOOL_ITEM(widget),-1);
 

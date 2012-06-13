@@ -378,7 +378,7 @@
 	for(f=0;f<G_N_ELEMENTS(widget_config);f++)
 	{
 		gchar *str = get_string_from_config("terminal",widget_config[f].key,NULL);
-		trace("str=%p strlen=%d",str,strlen(str));
+//		trace("str=%p strlen=%d",str,strlen(str));
 		widget_config[f].set(widget->terminal,str);
 		if(str)
 			g_free(str);

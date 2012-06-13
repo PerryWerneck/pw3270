@@ -110,6 +110,7 @@ case "$host" in
 		DLLEXT=".dll"
 		EXEEXT=".exe"
 		SOCKET_LIBS="-lws2_32"
+		CFLAGS="$CFLAGS -mms-bitfields"
 		AC_PATH_TOOL([STRIP], [strip])
 		;;
 
@@ -201,7 +202,11 @@ AC_ARG_ENABLE([pic],
 [
 	app_cv_pic="$enableval"
 ],[
-	app_cv_pic="yes"
+	if test "$host_cpu" = "x86_64"; then
+		app_cv_pic="yes"
+	else
+		app_cv_pic="no"
+	fi
 ])
 
 if test "$app_cv_pic" == "yes"; then
@@ -227,7 +232,7 @@ AC_CHECK_FUNCS(getaddrinfo, AC_DEFINE(HAVE_GETADDRINFO) )
 
 PKG_CHECK_EXISTS
 
-PKG_CHECK_MODULES( [GTK], [gtk+-3.0], [ GTK_VERSION="3" ], [ PKG_CHECK_MODULES( [GTK], [gtk+-2.0 >= 2.8], [ GTK_VERSION="2" ] ) ], [  ] )
+PKG_CHECK_MODULES( [GTK], [gtk+-3.0], [ GTK_VERSION="3" ], [ PKG_CHECK_MODULES( [GTK], [gtk+-2.0 >= 2.8 gthread-2.0 gmodule-2.0], [ GTK_VERSION="2" ] ) ], [  ] )
 
 AC_SUBST(GTK_LIBS)
 AC_SUBST(GTK_CFLAGS)

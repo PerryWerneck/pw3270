@@ -147,8 +147,13 @@ static gboolean v3270_accessible_do_action(AtkAction *action, gint i)
 	if(widget == NULL)
 		return FALSE;
 
-	if(!gtk_widget_get_sensitive (widget) || !gtk_widget_get_visible (widget))
+#if GTK_CHECK_VERSION(2,18,0)
+	if(!gtk_widget_get_sensitive(widget) || !gtk_widget_get_visible(widget))
 		return FALSE;
+#else
+	if(!GTK_WIDGET_SENSITIVE(widget) || !GTK_WIDGET_VISIBLE(widget))
+		return FALSE;
+#endif // GTK(2,18,0)
 
 	if (i != 0)
 		return FALSE;
@@ -747,7 +752,12 @@ static gboolean v3270_accessible_grab_focus(AtkComponent *component)
 	gtk_widget_grab_focus (widget);
 
 	toplevel = gtk_widget_get_toplevel (widget);
-	if (gtk_widget_is_toplevel (toplevel))
+
+#if GTK_CHECK_VERSION(2,20,0)
+	if(gtk_widget_is_toplevel(toplevel))
+#else
+	if(GTK_WIDGET_TOPLEVEL(toplevel))
+#endif // GTK(2,20,0)
 	{
 		#ifdef GDK_WINDOWING_X11
 			gtk_window_present_with_time (GTK_WINDOW (toplevel),gdk_x11_get_server_time(gtk_widget_get_window(widget)));

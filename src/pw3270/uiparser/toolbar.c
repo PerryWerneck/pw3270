@@ -65,7 +65,12 @@
 	}
 
 	widget = gtk_toolbar_new();
+
+#if GTK_CHECK_VERSION(2,18,0)
 	gtk_widget_set_can_focus(widget,FALSE);
+#else
+	GTK_WIDGET_UNSET_FLAGS(widget,GTK_CAN_FOCUS);
+#endif // GTK(2,18)
 
 	if(ui_get_attribute("label",names,values))
 	{

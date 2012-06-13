@@ -635,7 +635,11 @@ static void select_cursor(H3270 *session, LIB3270_CURSOR id)
 {
 	GtkWidget *widget = GTK_WIDGET(session->widget);
 
+#if GTK_CHECK_VERSION(2,20,0)
 	if(gtk_widget_get_realized(widget) && gtk_widget_get_has_window(widget))
+#else
+	if(GTK_WIDGET_REALIZED(widget) && widget->window)
+#endif // GTK(2,20)
 	{
 		GTK_V3270(widget)->pointer_id = id;
 		v3270_update_mouse_pointer(widget);
@@ -646,7 +650,11 @@ static void ctlr_done(H3270 *session)
 {
 	GtkWidget *widget = GTK_WIDGET(session->widget);
 
+#if GTK_CHECK_VERSION(2,20,0)
 	if(gtk_widget_get_realized(widget) && gtk_widget_get_has_window(widget))
+#else
+	if(GTK_WIDGET_REALIZED(widget) && widget->window)
+#endif // GTK(2,20)
 	{
 		v3270_update_mouse_pointer(widget);
 	}
@@ -764,7 +772,7 @@ static void v3270_init(v3270 *widget)
 {
 	widget->host = lib3270_session_new("");
 
-	trace("%s",__FUNCTION__);
+	trace("%s host->sz=%d expected=%d revision=%s expected=%s",__FUNCTION__,widget->host->sz,sizeof(H3270),lib3270_get_revision(),PACKAGE_REVISION);
 
 	if(widget->host->sz != sizeof(H3270))
 	{
@@ -799,8 +807,12 @@ static void v3270_init(v3270 *widget)
 	widget->input_method 			= gtk_im_multicontext_new();
     g_signal_connect(G_OBJECT(widget->input_method),"commit",G_CALLBACK(v3270_key_commit),widget);
 
+#if GTK_CHECK_VERSION(2,18,0)
 	gtk_widget_set_can_default(GTK_WIDGET(widget),TRUE);
 	gtk_widget_set_can_focus(GTK_WIDGET(widget),TRUE);
+#else
+	GTK_WIDGET_SET_FLAGS(GTK_WIDGET(widget),(GTK_CAN_DEFAULT|GTK_CAN_FOCUS));
+#endif // GTK(2,18)
 
 	// Setup events
     gtk_widget_add_events(GTK_WIDGET(widget),GDK_KEY_PRESS_MASK|GDK_KEY_RELEASE_MASK|GDK_BUTTON_PRESS_MASK|GDK_BUTTON_MOTION_MASK|GDK_BUTTON_RELEASE_MASK|GDK_POINTER_MOTION_MASK|GDK_ENTER_NOTIFY_MASK);
@@ -915,6 +927,7 @@ static void release_timer(v3270 *widget)
 
 static void v3270_realize(GtkWidget	* widget)
 {
+#if GTK_CHECK_VERSION(2,18,0)
 	if(!gtk_widget_get_has_window(widget))
 	{
 		GTK_WIDGET_CLASS(v3270_parent_class)->realize(widget);
@@ -925,7 +938,6 @@ static void v3270_realize(GtkWidget	* widget)
 		GdkWindow *window;
 		GdkWindowAttr attributes;
 		gint attributes_mask;
-
 
 		gtk_widget_set_realized (widget, TRUE);
 
@@ -949,6 +961,44 @@ static void v3270_realize(GtkWidget	* widget)
 		gtk_im_context_set_client_window(GTK_V3270(widget)->input_method,window);
 
 	}
+#else
+	{
+		if(GTK_WIDGET_NO_WINDOW (widget))
+		{
+			GTK_WIDGET_CLASS(v3270_parent_class)->realize (widget);
+		}
+		else
+		{
+			GdkWindowAttr attributes;
+			gint attributes_mask;
+
+			GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+
+			memset(&attributes,0,sizeof(attributes));
+
+			attributes.window_type = GDK_WINDOW_CHILD;
+			attributes.x = widget->allocation.x;
+			attributes.y = widget->allocation.y;
+			attributes.width = widget->allocation.width;
+			attributes.height = widget->allocation.height;
+			attributes.wclass = GDK_INPUT_OUTPUT;
+			attributes.visual = gtk_widget_get_visual (widget);
+			attributes.colormap = gtk_widget_get_colormap (widget);
+			attributes.event_mask = gtk_widget_get_events (widget) | GDK_EXPOSURE_MASK;
+
+			attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
+
+			widget->window = gdk_window_new (gtk_widget_get_parent_window (widget),&attributes, attributes_mask);
+			gdk_window_set_user_data(widget->window, widget);
+
+			widget->style = gtk_style_attach (widget->style, widget->window);
+			gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
+		}
+
+		gtk_im_context_set_client_window(GTK_V3270(widget)->input_method,widget->window);
+	}
+
+#endif // GTK(2,18,0)
 
 #if !GTK_CHECK_VERSION(3,0,0)
 	widget->style = gtk_style_attach (widget->style, widget->window);
@@ -979,8 +1029,11 @@ static void v3270_size_allocate(GtkWidget * widget, GtkAllocation * allocation)
 	g_return_if_fail(allocation != NULL);
 
 //	trace("Widget size changes to %dx%d",allocation->width,allocation->height);
-
+#if GTK_CHECK_VERSION(2,18,0)
 	gtk_widget_set_allocation(widget, allocation);
+#else
+	widget->allocation = *allocation;
+#endif // GTK(2,18)
 
 #if !GTK_CHECK_VERSION(3,0,0)
 	{
@@ -993,13 +1046,26 @@ static void v3270_size_allocate(GtkWidget * widget, GtkAllocation * allocation)
 
 	if(gtk_widget_get_realized(widget))
 	{
+#if GTK_CHECK_VERSION(2,18,0)
 		if(gtk_widget_get_has_window(widget))
 			gdk_window_move_resize(gtk_widget_get_window (widget),allocation->x, allocation->y,allocation->width, allocation->height);
+#else
+		if(widget->window)
+			gdk_window_move_resize(widget->window,allocation->x, allocation->y,allocation->width, allocation->height);
+#endif // GTK(2,18,0)
 
 		v3270_reload(widget);
 		v3270_send_configure(GTK_V3270(widget));
 	}
 }
+
+#if ! GTK_CHECK_VERSION(2,18,0)
+G_GNUC_INTERNAL void gtk_widget_get_allocation(GtkWidget *widget, GtkAllocation *allocation)
+{
+	*allocation = widget->allocation;
+}
+#endif // !GTK(2,18)
+
 
 static void v3270_send_configure(v3270 * terminal)
 {
@@ -1067,6 +1133,8 @@ void v3270_set_colors(GtkWidget *widget, const gchar *colors)
 					"#FF0000";			// V3270_COLOR_OIA_STATUS_INVALID
 
 	}
+
+	trace("Widget %p colors:\n%s\n",widget,colors);
 
 	v3270_set_color_table(GTK_V3270(widget)->color,colors);
 	g_signal_emit(widget,v3270_widget_signal[SIGNAL_UPDATE_CONFIG], 0, "colors", colors);
