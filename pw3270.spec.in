@@ -54,9 +54,10 @@
 	%define _distro %{_redhat_prefix} %{_redhat_vernum}
 %endif
 
-%if 0%{?centos}
-	%define _release %{_rel}.centos%{centos}
-	%define _distro centos %{centos}
+%if 0%{?centos_ver}
+	%define _release %{_rel}.el%{centos_ver}
+	%define _distro CentOS %{centos_ver}
+	%define _vrsgtk gtk2
 %endif
 
 
