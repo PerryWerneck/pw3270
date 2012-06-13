@@ -205,7 +205,7 @@ static char	*proxy_portname = CN;
 static unsigned short proxy_port = 0;
 
 static int telnet_fsm(H3270 *session, unsigned char c);
-static void net_rawout(unsigned const char *buf, int len);
+static void net_rawout(H3270 *session, unsigned const char *buf, int len);
 static void check_in3270(H3270 *session);
 static void store3270in(unsigned char c);
 static void check_linemode(Boolean init);
@@ -1147,7 +1147,7 @@ send_naws(void)
 	naws_len += set16(naws_msg + naws_len, XMIT_ROWS);
 	(void) sprintf(naws_msg + naws_len, "%c%c", IAC, SE);
 	naws_len += 2;
-	net_rawout((unsigned char *)naws_msg, naws_len);
+	net_rawout(&h3270,(unsigned char *)naws_msg, naws_len);
 	trace_dsn("SENT %s NAWS %d %d %s\n", cmd(SB), XMIT_COLS, XMIT_ROWS, cmd(SE));
 }
 
@@ -1310,7 +1310,7 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 				if (!h3270.hisopts[c]) {
 					h3270.hisopts[c] = 1;
 					do_opt[2] = c;
-					net_rawout(do_opt, sizeof(do_opt));
+					net_rawout(&h3270,do_opt, sizeof(do_opt));
 					trace_dsn("SENT %s %s\n",
 						cmd(DO), opt(c));
 
@@ -1321,7 +1321,7 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 					if (c == TELOPT_EOR && !h3270.myopts[c]) {
 						h3270.myopts[c] = 1;
 						will_opt[2] = c;
-						net_rawout(will_opt,
+						net_rawout(&h3270,will_opt,
 							sizeof(will_opt));
 						trace_dsn("SENT %s %s\n",
 							cmd(WILL), opt(c));
@@ -1334,7 +1334,7 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 			}
 		    default:
 			dont_opt[2] = c;
-			net_rawout(dont_opt, sizeof(dont_opt));
+			net_rawout(&h3270,dont_opt, sizeof(dont_opt));
 			trace_dsn("SENT %s %s\n", cmd(DONT), opt(c));
 			break;
 		}
@@ -1345,7 +1345,7 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 		if (h3270.hisopts[c]) {
 			h3270.hisopts[c] = 0;
 			dont_opt[2] = c;
-			net_rawout(dont_opt, sizeof(dont_opt));
+			net_rawout(&h3270, dont_opt, sizeof(dont_opt));
 			trace_dsn("SENT %s %s\n", cmd(DONT), opt(c));
 			check_in3270(&h3270);
 			check_linemode(False);
@@ -1376,7 +1376,7 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 				if (c != TELOPT_TM)
 					h3270.myopts[c] = 1;
 				will_opt[2] = c;
-				net_rawout(will_opt, sizeof(will_opt));
+				net_rawout(&h3270, will_opt, sizeof(will_opt));
 				trace_dsn("SENT %s %s\n", cmd(WILL), opt(c));
 				check_in3270(&h3270);
 				check_linemode(False);
@@ -1394,7 +1394,7 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 				 * Send IAC SB STARTTLS FOLLOWS IAC SE
 				 * to announce that what follows is TLS.
 				 */
-				net_rawout(follows_msg,
+				net_rawout(&h3270, follows_msg,
 						sizeof(follows_msg));
 				trace_dsn("SENT %s %s FOLLOWS %s\n",
 						cmd(SB),
@@ -1407,7 +1407,7 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 		    default:
 		    wont:
 			wont_opt[2] = c;
-			net_rawout(wont_opt, sizeof(wont_opt));
+			net_rawout(&h3270, wont_opt, sizeof(wont_opt));
 			trace_dsn("SENT %s %s\n", cmd(WONT), opt(c));
 			break;
 		}
@@ -1418,7 +1418,7 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 		if (h3270.myopts[c]) {
 			h3270.myopts[c] = 0;
 			wont_opt[2] = c;
-			net_rawout(wont_opt, sizeof(wont_opt));
+			net_rawout(&h3270, wont_opt, sizeof(wont_opt));
 			trace_dsn("SENT %s %s\n", cmd(WONT), opt(c));
 			check_in3270(&h3270);
 			check_linemode(False);
@@ -1464,7 +1464,7 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 				    (try_lu != CN && *try_lu) ? "@" : "",
 				    (try_lu != CN && *try_lu) ? try_lu : "",
 				    IAC, SE);
-				net_rawout((unsigned char *)tt_out, tb_len);
+				net_rawout(&h3270, (unsigned char *)tt_out, tb_len);
 
 				trace_dsn("SENT %s %s %s %.*s %s\n",
 				    cmd(SB), opt(TELOPT_TTYPE),
@@ -1528,7 +1528,7 @@ tn3270e_request(void)
 
 	(void) sprintf(t, "%c%c", IAC, SE);
 
-	net_rawout((unsigned char *)tt_out, tb_len);
+	net_rawout(&h3270, (unsigned char *)tt_out, tb_len);
 
 	trace_dsn("SENT %s %s DEVICE-TYPE REQUEST %.*s%s%s %s\n",
 	    cmd(SB), opt(TELOPT_TN3270E), (int) strlen(h3270.termtype), tt_out + 5,
@@ -1549,7 +1549,7 @@ backoff_tn3270e(const char *why)
 
 	/* Tell the host 'no'. */
 	wont_opt[2] = TELOPT_TN3270E;
-	net_rawout(wont_opt, sizeof(wont_opt));
+	net_rawout(&h3270, wont_opt, sizeof(wont_opt));
 	trace_dsn("SENT %s %s\n", cmd(WONT), opt(TELOPT_TN3270E));
 
 	/* Restore the LU list; we may need to run it again in TN3270 mode. */
@@ -1805,7 +1805,7 @@ tn3270e_subneg_send(unsigned char op, unsigned long funcs)
 	/* Complete and send out the protocol message. */
 	proto_buf[proto_len++] = IAC;
 	proto_buf[proto_len++] = SE;
-	net_rawout(proto_buf, proto_len);
+	net_rawout(&h3270, proto_buf, proto_len);
 
 	/* Complete and send out the trace text. */
 	trace_dsn("SENT %s %s FUNCTIONS %s %s %s\n",
@@ -1983,7 +1983,7 @@ void net_exception(H3270 *session)
  *	EWOULDBLOCK.
  */
 static void
-net_rawout(unsigned const char *buf, int len)
+net_rawout(H3270 *session, unsigned const char *buf, int len)
 {
 	int	nw;
 
@@ -2002,8 +2002,8 @@ net_rawout(unsigned const char *buf, int len)
 #		define n2w len
 #endif
 #if defined(HAVE_LIBSSL) /*[*/
-		if(h3270.ssl_con != NULL)
-			nw = SSL_write(h3270.ssl_con, (const char *) buf, n2w);
+		if(session->ssl_con != NULL)
+			nw = SSL_write(session->ssl_con, (const char *) buf, n2w);
 		else
 #endif /*]*/
 
@@ -2014,10 +2014,10 @@ net_rawout(unsigned const char *buf, int len)
 		else
 #endif
 */
-			nw = send(h3270.sock, (const char *) buf, n2w, 0);
+			nw = send(session->sock, (const char *) buf, n2w, 0);
 		if (nw < 0) {
 #if defined(HAVE_LIBSSL) /*[*/
-			if (h3270.ssl_con != NULL)
+			if (session->ssl_con != NULL)
 			{
 				unsigned long e;
 				char err_buf[120];
@@ -2026,19 +2026,19 @@ net_rawout(unsigned const char *buf, int len)
 				(void) ERR_error_string(e, err_buf);
 				trace_dsn("RCVD SSL_write error %ld (%s)\n", e,err_buf);
 				popup_an_error(NULL,"SSL_write:\n%s", err_buf);
-				host_disconnect(&h3270,False);
+				host_disconnect(session,False);
 				return;
 			}
 #endif /*]*/
 			trace_dsn("RCVD socket error %d\n", errno);
 			if (socket_errno() == SE_EPIPE || socket_errno() == SE_ECONNRESET) {
-				host_disconnect(&h3270,False);
+				host_disconnect(session,False);
 				return;
 			} else if (socket_errno() == SE_EINTR) {
 				goto bot;
 			} else {
 				popup_a_sockerr(NULL, N_( "Socket write error" ) );
-				host_disconnect(&h3270,True);
+				host_disconnect(session,True);
 				return;
 			}
 		}
@@ -2096,7 +2096,7 @@ net_hexansi_out(unsigned char *buf, int len)
 	}
 
 	/* Send it to the host. */
-	net_rawout(xbuf, tbuf - xbuf);
+	net_rawout(&h3270,xbuf, tbuf - xbuf);
 	lib3270_free(xbuf);
 }
 
@@ -2105,10 +2105,11 @@ net_hexansi_out(unsigned char *buf, int len)
  *	Send user data out in ANSI mode, without cooked-mode processing.
  */
 static void
-net_cookedout(const char *buf, int len)
+net_cookedout(H3270 *hSession, const char *buf, int len)
 {
-#if defined(X3270_TRACE) /*[*/
-	if (lib3270_get_toggle(&h3270,LIB3270_TOGGLE_DS_TRACE)) {
+#if defined(X3270_TRACE)
+	if (lib3270_get_toggle(hSession,LIB3270_TOGGLE_DS_TRACE))
+	{
 		int i;
 
 		trace_dsn(">");
@@ -2116,8 +2117,8 @@ net_cookedout(const char *buf, int len)
 			trace_dsn(" %s", ctl_see((int) *(buf+i)));
 		trace_dsn("\n");
 	}
-#endif /*]*/
-	net_rawout((unsigned const char *) buf, len);
+#endif
+	net_rawout(hSession,(unsigned const char *) buf, len);
 }
 
 
@@ -2126,11 +2127,10 @@ net_cookedout(const char *buf, int len)
  *	Send output in ANSI mode, including cooked-mode processing if
  *	appropriate.
  */
-static void
-net_cookout(const char *buf, int len)
+static void net_cookout(H3270 *hSession, const char *buf, int len)
 {
 
-	if (!IN_ANSI || (h3270.kybdlock & KL_AWAITING_FIRST))
+	if (!IN_ANSI || (hSession->kybdlock & KL_AWAITING_FIRST))
 		return;
 
 	if (linemode) {
@@ -2141,9 +2141,9 @@ net_cookout(const char *buf, int len)
 			c = buf[i];
 
 			/* Input conversions. */
-			if (!lnext && c == '\r' && h3270.icrnl)
+			if (!lnext && c == '\r' && hSession->icrnl)
 				c = '\n';
-			else if (!lnext && c == '\n' && h3270.inlcr)
+			else if (!lnext && c == '\n' && hSession->inlcr)
 				c = '\r';
 
 			/* Backslashes. */
@@ -2178,7 +2178,7 @@ net_cookout(const char *buf, int len)
 		}
 		return;
 	} else
-		net_cookedout(buf, len);
+		net_cookedout(&h3270, buf, len);
 }
 
 
@@ -2206,7 +2206,7 @@ ansi_process_s(const char *data)
 static void
 forward_data(void)
 {
-	net_cookedout((char *) lbuf, lbptr - lbuf);
+	net_cookedout(&h3270, (char *) lbuf, lbptr - lbuf);
 	cooked_init();
 }
 
@@ -2721,7 +2721,7 @@ net_output(void)
 	/* Append the IAC EOR and transmit. */
 	*xoptr++ = IAC;
 	*xoptr++ = EOR;
-	net_rawout(xobuf, xoptr - xobuf);
+	net_rawout(&h3270,xobuf, xoptr - xobuf);
 
 	trace_dsn("SENT EOR\n");
 	ns_rsent++;
@@ -2753,7 +2753,7 @@ tn3270e_ack(void)
 	trace_dsn("SENT TN3270E(RESPONSE POSITIVE-RESPONSE "
 		"%u) DEVICE-END\n",
 		h_in->seq_number[0] << 8 | h_in->seq_number[1]);
-	net_rawout(rsp_buf, rsp_len);
+	net_rawout(&h3270, rsp_buf, rsp_len);
 }
 
 /* Send a TN3270E negative response to the server. */
@@ -2788,7 +2788,7 @@ tn3270e_nak(enum pds rv)
 	rsp_buf[rsp_len++] = IAC;
 	rsp_buf[rsp_len++] = EOR;
 	trace_dsn("SENT TN3270E(RESPONSE NEGATIVE-RESPONSE %u) %s\n",h_in->seq_number[0] << 8 | h_in->seq_number[1], neg);
-	net_rawout(rsp_buf, rsp_len);
+	net_rawout(&h3270, rsp_buf, rsp_len);
 }
 
 #if defined(X3270_TRACE) /*[*/
@@ -2856,9 +2856,9 @@ net_sendc(char c)
 */
 						    ) {
 		/* CR must be quoted */
-		net_cookout("\r\0", 2);
+		net_cookout(&h3270,"\r\0", 2);
 	} else {
-		net_cookout(&c, 1);
+		net_cookout(&h3270,&c, 1);
 	}
 }
 
@@ -2870,7 +2870,7 @@ net_sendc(char c)
 void
 net_sends(const char *s)
 {
-	net_cookout(s, strlen(s));
+	net_cookout(&h3270, s, strlen(s));
 }
 
 
@@ -2881,7 +2881,7 @@ net_sends(const char *s)
 void
 net_send_erase(void)
 {
-	net_cookout(&verase, 1);
+	net_cookout(&h3270, &verase, 1);
 }
 
 
@@ -2892,7 +2892,7 @@ net_send_erase(void)
 void
 net_send_kill(void)
 {
-	net_cookout(&vkill, 1);
+	net_cookout(&h3270, &vkill, 1);
 }
 
 
@@ -2903,7 +2903,7 @@ net_send_kill(void)
 void
 net_send_werase(void)
 {
-	net_cookout(&vwerase, 1);
+	net_cookout(&h3270, &vwerase, 1);
 }
 #endif /*]*/
 
@@ -2959,7 +2959,7 @@ net_break(void)
 	static unsigned char buf[] = { IAC, BREAK };
 
 	/* I don't know if we should first send TELNET synch ? */
-	net_rawout(buf, sizeof(buf));
+	net_rawout(&h3270, buf, sizeof(buf));
 	trace_dsn("SENT BREAK\n");
 }
 
@@ -2974,7 +2974,7 @@ net_interrupt(void)
 	static unsigned char buf[] = { IAC, IP };
 
 	/* I don't know if we should first send TELNET synch ? */
-	net_rawout(buf, sizeof(buf));
+	net_rawout(&h3270, buf, sizeof(buf));
 	trace_dsn("SENT IP\n");
 }
 
@@ -3001,7 +3001,7 @@ net_abort(void)
 		case E_NVT:
 			break;
 		case E_SSCP:
-			net_rawout(buf, sizeof(buf));
+			net_rawout(&h3270, buf, sizeof(buf));
 			trace_dsn("SENT AO\n");
 			if (tn3270e_bound ||
 			    !(e_funcs & E_OPT(TN3270E_FUNC_BIND_IMAGE))) {
@@ -3010,7 +3010,7 @@ net_abort(void)
 			}
 			break;
 		case E_3270:
-			net_rawout(buf, sizeof(buf));
+			net_rawout(&h3270, buf, sizeof(buf));
 			trace_dsn("SENT AO\n");
 			tn3270e_submode = E_SSCP;
 			check_in3270(&h3270);
