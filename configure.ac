@@ -30,7 +30,7 @@ dnl
 dnl Process this file with autoconf to produce a configure script.
 
 dnl The minimum version of autoconf required.
-AC_PREREQ(2.59)
+AC_PREREQ(2.61)
 
 dnl Load svn revision file info
 m4_include([revision.m4])
