@@ -44,10 +44,10 @@
 	%endif
 %endif
 
-%if 0%{?fedora_version}
-	%define _release %{_rel}.fc%{fedora_version}
+%if 0%{?fedora}
+	%define _release %{_rel}.fc%{fedora}
 	%define _redhat 0
-	%define _distro Fedora %{fedora_version}
+	%define _distro Fedora %{fedora}
 	%define _bldreq gtk2-devel openssl-devel
 %endif
 
