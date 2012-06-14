@@ -67,7 +67,7 @@ Group:          System/X11/Terminals
 Version:        @PACKAGE_VERSION@
 Release:        %_release
 Summary:        IBM 3270 Terminal emulator for gtk
-Source:         %{name}-%{version}.tar.gz
+Source:         %{name}-%{version}.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 Requires:       openssl shared-mime-info
 Distribution:	%_distro
@@ -117,7 +117,7 @@ Revision @PACKAGE_REVISION@ from @PACKAGE_SOURCE@
 find . -exec touch {} \;
 aclocal
 autoconf
-./configure --prefix=%{_prefix} --bindir=%{_bindir} --datadir=%{_datadir} --includedir=%{_includedir} --libdir=%{_libdir}
+./configure --enable-pic --prefix=%{_prefix} --bindir=%{_bindir} --datadir=%{_datadir} --includedir=%{_includedir} --libdir=%{_libdir}
 
 %build
 make clean
