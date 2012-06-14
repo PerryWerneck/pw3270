@@ -29,15 +29,18 @@
 
 #---[ Check for distro ]----------------------------------------------------------------------------------------------
 
-%define _rel	0
-%define _distro	Linux
-%define _vrsgtk gtk3
+%define _rel		0
+
+%define _release	%{_rel}
+%define _distro		Linux
+%define _redhat		%(test -e /etc/redhat-release && echo 1 || echo 0)
+%define _bldreq		gtk3-devel libopenssl-devel
 
 %if 0%{?suse_version}
 	%define _release %{_rel}.suse%{suse_version}
 	%define _distro SuSE Linux %{suse_version}
 	%if %{?suse_version} < 1200
-		%define _vrsgtk gtk2
+		%define _bldreq gtk2-devel libopenssl-devel
 	%endif
 %endif
 
@@ -45,6 +48,7 @@
 	%define _release %{_rel}.fc%{fedora_version}
 	%define _redhat 0
 	%define _distro Fedora %{fedora_version}
+	%define _bldreq gtk2-devel openssl-devel
 %endif
 
 %if 0%{?_redhat}
@@ -52,14 +56,8 @@
 	%define _redhat_vernum	%(rpm -qf --queryformat %{VERSION} /etc/redhat-release|tr -d '.')
 	%define _release	%{_rel}.%{_redhat_prefix}%{_redhat_vernum}
 	%define _distro		%{_redhat_prefix} %{_redhat_vernum}
+	%define _bldreq gtk2-devel openssl-devel
 %endif
-
-%if 0%{?centos_ver}
-	%define _release %{_rel}.el%{centos_ver}
-	%define _distro CentOS %{centos_ver}
-	%define _vrsgtk gtk2
-%endif
-
 
 #---[ Packaging ]-----------------------------------------------------------------------------------------------------
 
@@ -73,7 +71,7 @@ Source:         %{name}-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 Requires:       openssl shared-mime-info
 Distribution:	%_distro
-BuildRequires:	autoconf >= 2.61 automake gcc-c++ sed pkgconfig %{_vrsgtk}-devel gettext-devel libopenssl-devel findutils coreutils desktop-file-utils
+BuildRequires:	autoconf >= 2.61 automake gcc-c++ sed pkgconfig %{_bldreq} gettext-devel findutils coreutils desktop-file-utils
 
 %description
 IBM 3270 terminal emulator gtk. It can be used to communicate with
