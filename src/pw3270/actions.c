@@ -31,7 +31,7 @@
 
  #include "globals.h"
  #include "uiparser/parser.h"
- #include "v3270/v3270.h"
+ #include <lib3270/v3270.h>
  #include "filetransfer.h"
  #include <lib3270/actions.h>
  #include <lib3270/selection.h>

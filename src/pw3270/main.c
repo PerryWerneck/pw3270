@@ -31,7 +31,7 @@
 
 #include <glib.h>
 #include "globals.h"
-#include "v3270/v3270.h"
+ #include <lib3270/v3270.h>
 #include "v3270/accessible.h"
 #include <stdlib.h>
 

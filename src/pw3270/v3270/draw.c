@@ -31,7 +31,7 @@
  #include <pw3270.h>
  #include <lib3270.h>
  #include <lib3270/session.h>
- #include "v3270.h"
+ #include <lib3270/v3270.h>
  #include "private.h"
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/

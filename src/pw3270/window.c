@@ -257,21 +257,38 @@
 	gtk_action_set_sensitive(action[ACTION_PASTENEXT],on);
  }
 
- static void disconnected(GtkWidget *widget, GtkActionGroup **group)
+ static void disconnected(GtkWidget *terminal, GtkWidget * window)
  {
-	gtk_action_group_set_sensitive(group[ACTION_GROUP_PASTE],FALSE);
-	gtk_action_group_set_sensitive(group[ACTION_GROUP_ONLINE],FALSE);
-	gtk_action_group_set_sensitive(group[ACTION_GROUP_OFFLINE],TRUE);
-	gtk_window_set_title(GTK_WINDOW(gtk_widget_get_toplevel(widget)),g_get_application_name());
+	GtkActionGroup	**group	= g_object_get_data(G_OBJECT(window),"action_groups");
+
+	if(group)
+	{
+		gtk_action_group_set_sensitive(group[ACTION_GROUP_PASTE],FALSE);
+		gtk_action_group_set_sensitive(group[ACTION_GROUP_ONLINE],FALSE);
+		gtk_action_group_set_sensitive(group[ACTION_GROUP_OFFLINE],TRUE);
+	}
+
+	gtk_window_set_title(GTK_WINDOW(window),v3270_get_session_name(terminal));
  }
 
-  static void connected(GtkWidget *widget, const gchar *host, GtkActionGroup **group)
+ static void connected(GtkWidget *terminal, const gchar *host, GtkWidget * window)
  {
+ 	gchar			* title;
+	GtkActionGroup	**group	= g_object_get_data(G_OBJECT(window),"action_groups");
+
+	if(group)
+	{
+		gtk_action_group_set_sensitive(group[ACTION_GROUP_ONLINE],TRUE);
+		gtk_action_group_set_sensitive(group[ACTION_GROUP_OFFLINE],FALSE);
+		gtk_action_group_set_sensitive(group[ACTION_GROUP_PASTE],TRUE);
+	}
+
 	set_string_to_config("host","uri","%s",host);
-	gtk_window_set_title(GTK_WINDOW(gtk_widget_get_toplevel(widget)),host);
-	gtk_action_group_set_sensitive(group[ACTION_GROUP_ONLINE],TRUE);
-	gtk_action_group_set_sensitive(group[ACTION_GROUP_OFFLINE],FALSE);
-	gtk_action_group_set_sensitive(group[ACTION_GROUP_PASTE],TRUE);
+
+ 	title = g_strdup_printf("%s - %s",v3270_get_session_name(terminal),host);
+	gtk_window_set_title(GTK_WINDOW(window),title);
+	g_free(title);
+
  }
 
  static void update_config(GtkWidget *widget, const gchar *name, const gchar *value)
@@ -421,7 +438,7 @@
 		gtk_action_group_set_sensitive(group[ACTION_GROUP_FILETRANSFER],FALSE);
 		gtk_action_group_set_sensitive(group[ACTION_GROUP_PASTE],FALSE);
 
-		disconnected(widget->terminal, (gpointer) group);
+		disconnected(widget->terminal, GTK_WIDGET(widget));
 
 		// Setup actions
 		if(action[ACTION_FULLSCREEN])
@@ -441,8 +458,8 @@
 
 
 		// Connect action signals
-		g_signal_connect(widget->terminal,"disconnected",G_CALLBACK(disconnected),group);
-		g_signal_connect(widget->terminal,"connected",G_CALLBACK(connected),group);
+		g_signal_connect(widget->terminal,"disconnected",G_CALLBACK(disconnected),widget);
+		g_signal_connect(widget->terminal,"connected",G_CALLBACK(connected),widget);
 		g_signal_connect(widget->terminal,"update_config",G_CALLBACK(update_config),0);
 		g_signal_connect(widget->terminal,"model_changed",G_CALLBACK(update_model),0);
 		g_signal_connect(widget->terminal,"selecting",G_CALLBACK(selecting),group);

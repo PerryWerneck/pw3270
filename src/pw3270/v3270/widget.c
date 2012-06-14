@@ -38,7 +38,7 @@
 	#include <malloc.h>
 #endif // HAVE_MALLOC_H
 
- #include "v3270.h"
+ #include <lib3270/v3270.h>
  #include "private.h"
  #include "accessible.h"
  #include "marshal.h"
@@ -898,6 +898,12 @@ static void v3270_destroy(GtkObject *widget)
 		terminal->clipboard = NULL;
 	}
 
+	if(terminal->session_name)
+	{
+		g_free(terminal->session_name);
+		terminal->session_name = NULL;
+	}
+
 #if GTK_CHECK_VERSION(3,0,0)
 	GTK_WIDGET_CLASS(v3270_parent_class)->destroy(widget);
 #else
@@ -1372,4 +1378,22 @@ void v3270_set_host(GtkWidget *widget, const gchar *uri)
 	g_return_if_fail(GTK_IS_V3270(widget));
 	g_return_if_fail(uri != NULL);
 	lib3270_set_host(GTK_V3270(widget)->host,uri);
+}
+
+const gchar	* v3270_get_session_name(GtkWidget *widget)
+{
+	if(!GTK_IS_V3270(widget) || GTK_V3270(widget)->session_name == NULL)
+		return g_get_application_name();
+	return GTK_V3270(widget)->session_name;
+}
+
+void v3270_set_session_name(GtkWidget *widget, const gchar *name)
+{
+	g_return_if_fail(GTK_IS_V3270(widget));
+	g_return_if_fail(name != NULL);
+
+	if(GTK_V3270(widget)->session_name)
+		g_free(GTK_V3270(widget)->session_name);
+
+	GTK_V3270(widget)->session_name = g_strdup(name);
 }

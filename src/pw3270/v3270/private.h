@@ -38,7 +38,7 @@
 #include <glib/gi18n.h>
 
 #ifndef V3270_H_INCLUDED
-	#include "v3270.h"
+	#include <lib3270/v3270.h>
 #endif
 
 G_BEGIN_DECLS
@@ -176,8 +176,9 @@ G_BEGIN_DECLS
 	// Acessibility
 	GtkAccessible			* accessible;
 
-	// lib3270 stuff
+	// Session
 	H3270   				* host;							/**< Related 3270 session */
+	gchar					* session_name;					/**< Session name (for window title) */
 
  };
 

@@ -39,7 +39,7 @@
 	#include <math.h>
  #endif // HAVE_LIBM
 
- #include "v3270.h"
+ #include <lib3270/v3270.h>
  #include "private.h"
 
 /*--[ Prototipes ]-----------------------------------------------------------------------------------*/
