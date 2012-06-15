@@ -40,7 +40,7 @@
 	%define _release %{_rel}.suse%{suse_version}
 	%define _distro SuSE Linux %{suse_version}
 	%if %{?suse_version} < 1200
-		%define _bldreq gtk2-devel libopenssl-devel
+		%define _bldreq gtk2-devel >= 2.16 libopenssl-devel
 	%endif
 %endif
 
