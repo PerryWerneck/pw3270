@@ -150,7 +150,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n lib3270
 %defattr(-,root,root)
-%{_libdir}/lib3270.so
+%{_libdir}/lib3270.so.@MAJOR_VERSION@
+%{_libdir}/lib3270.so.@VERSION@
 
 %files -n lib3270-devel
 %defattr(-,root,root)
@@ -158,13 +159,15 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/lib3270
 %{_datadir}/@PACKAGE_NAME@/ui/99debug.xml
 %{_libdir}/pkgconfig/*.pc
+%{_libdir}/lib3270.so
 
 #---[ Scripts ]-------------------------------------------------------------------------------------------------------
 
-%post
+%post -n lib3270
+/sbin/ldconfig
 exit 0
 
-%postun
+%postun -n lib3270
+/sbin/ldconfig
 exit 0
-
 

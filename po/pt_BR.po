@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-15 08:28-0300\n"
+"POT-Creation-Date: 2012-06-15 15:05-0300\n"
 "PO-Revision-Date: 2012-05-28 15:51-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português do Brasil <>\n"
@@ -314,7 +314,7 @@ msgstr "Cancelado pelo usuário"
 msgid "Cannot create socket handle"
 msgstr "Não foi possível criar um manipulador de socket"
 
-#: session.c:306
+#: session.c:307
 #, c-format
 msgid "Cannot find charset \"%s\", using defaults"
 msgstr "Não encontrei codificação \"%s\", usando defaults"

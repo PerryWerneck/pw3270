@@ -215,6 +215,7 @@ fi
 
 #--[ Misc options ]-------------------------------------------------------------------------------------------------------------------------------------------
 
+AC_SUBST(MAJOR_VERSION,"$(echo $VERSION | cut -d. -f1)")
 AC_SUBST(HOST_CC)
 AC_SUBST(EXEEXT)
 AC_SUBST(DLLPREFIX)
