@@ -127,13 +127,14 @@ make all
 rm -rf $RPM_BUILD_ROOT
 cd %{_builddir}/%{name}-%{version}
 %makeinstall
+%find_lang %{name} langfiles
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 #---[ Files ]---------------------------------------------------------------------------------------------------------
 
-%files
+%files -f langfiles
 %defattr(-,root,root)
 %doc AUTHORS LICENSE
 
@@ -146,8 +147,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/@PACKAGE_NAME@/ui/00default.xml
 %{_datadir}/@PACKAGE_NAME@/@PACKAGE_NAME@.png
 %{_datadir}/@PACKAGE_NAME@/@PACKAGE_NAME@-logo.png
-
-%{_datadir}/locale
 
 %files -n lib3270
 %defattr(-,root,root)
