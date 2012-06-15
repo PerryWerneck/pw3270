@@ -198,6 +198,7 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 	hSession->kybdlock 			= KL_NOT_CONNECTED;
 	hSession->aid 				= AID_NO;
 	hSession->reply_mode 		= SF_SRM_FIELD;
+	hSession->linemode			= 1;
 
 
 #ifdef _WIN32

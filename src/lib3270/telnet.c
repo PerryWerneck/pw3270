@@ -123,7 +123,7 @@ int             ns_bsent;
 int             ns_rsent;
 // unsigned char  *obuf;		/* 3270 output buffer */
 // unsigned char  *obptr = (unsigned char *) NULL;
-int             linemode = 1;
+//int             linemode = 1;
 
 /*
 #if defined(LOCAL_PROCESS)
@@ -1187,7 +1187,7 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 		}
 		if (IN_NEITHER) {	/* now can assume ANSI mode */
 #if defined(X3270_ANSI)/*[*/
-			if (linemode)
+			if (session->linemode)
 				cooked_init();
 #endif /*]*/
 			host_in3270(session,CONNECTED_ANSI);
@@ -1210,7 +1210,7 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 			trace_dsn("%s",see_chr);
 			if (!session->syncing)
 			{
-				if (linemode && session->onlcr && c == '\n')
+				if (session->linemode && session->onlcr && c == '\n')
 					ansi_process((unsigned int) '\r');
 				ansi_process((unsigned int) c);
 //				sms_store(c);
@@ -2133,7 +2133,7 @@ static void net_cookout(H3270 *hSession, const char *buf, int len)
 	if (!IN_ANSI || (hSession->kybdlock & KL_AWAITING_FIRST))
 		return;
 
-	if (linemode) {
+	if (hSession->linemode) {
 		register int	i;
 		char	c;
 
@@ -2473,7 +2473,7 @@ check_in3270(H3270 *session)
 
 #if defined(X3270_ANSI) /*[*/
 		/* Reinitialize line mode. */
-		if ((new_cstate == CONNECTED_ANSI && linemode) ||
+		if ((new_cstate == CONNECTED_ANSI && h3270.linemode) ||
 		    new_cstate == CONNECTED_NVT)
 			cooked_init();
 #endif /*]*/
@@ -2544,7 +2544,7 @@ void space3270out(int n)
 static void
 check_linemode(Boolean init)
 {
-	int wasline = linemode;
+	int wasline = h3270.linemode;
 
 	/*
 	 * The next line is a deliberate kluge to effectively ignore the SGA
@@ -2560,17 +2560,17 @@ check_linemode(Boolean init)
 	 * mode" properly by asking for both SGA and ECHO to be off or on, but
 	 * we basically ignore the reply for SGA.
 	 */
-	linemode = !h3270.hisopts[TELOPT_ECHO] /* && !hisopts[TELOPT_SGA] */;
+	h3270.linemode = h3270.hisopts[TELOPT_ECHO] ? 0 : 1 /* && !hisopts[TELOPT_SGA] */;
 
-	if (init || linemode != wasline)
+	if (init || h3270.linemode != wasline)
 	{
-		st_changed(LIB3270_STATE_LINE_MODE, linemode);
+		st_changed(LIB3270_STATE_LINE_MODE, h3270.linemode);
 		if (!init)
 		{
-			trace_dsn("Operating in %s mode.\n",linemode ? "line" : "character-at-a-time");
+			trace_dsn("Operating in %s mode.\n",h3270.linemode ? "line" : "character-at-a-time");
 		}
 #if defined(X3270_ANSI) /*[*/
-		if (IN_ANSI && linemode)
+		if (IN_ANSI && h3270.linemode)
 			cooked_init();
 #endif /*]*/
 	}
@@ -2848,7 +2848,7 @@ net_add_eor(unsigned char *buf, int len)
 void
 net_sendc(char c)
 {
-	if (c == '\r' && !linemode
+	if (c == '\r' && !h3270.linemode
 /*
 #if defined(LOCAL_PROCESS)
 				   && !local_process
