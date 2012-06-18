@@ -90,7 +90,7 @@ AC_SUBST(PACKAGE_SOURCE,"SVN_URL")
 #--[ Set host based options ]---------------------------------------------------------------------------------------------------------------------------------
 
 DLL_CFLAGS=""
-DLL_FLAGS="-shared -Wl,-soname,\$(@F)"
+DLL_FLAGS="-shared"
 SOCKET_LIBS=""
 LIB3270_REQUIRES=""
 
@@ -111,6 +111,7 @@ case "$host" in
 		EXEEXT=".exe"
 		SOCKET_LIBS="-lws2_32"
 		CFLAGS="$CFLAGS -mms-bitfields"
+		DLL_FLAGS="-shared -Wl,-soname,\$(@F)"
 		AC_PATH_TOOL([STRIP], [strip])
 		;;
 
@@ -280,6 +281,7 @@ AC_CONFIG_FILES([
 	src/pw3270/uiparser/Makefile
 	src/pw3270/common/common.h
 	src/tools/Makefile
+	man/Makefile
 
 ])
 

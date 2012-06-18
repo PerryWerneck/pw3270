@@ -1,0 +1,62 @@
+.\" Process this file with
+.\" groff -man -Tascii foo.1
+.\"
+.TH PW3270 1 "JUNE 2012" pw3270 "User Manual"
+.SH NAME
+pw3270 \- a modern tn3270 emulator
+.SH SYNOPSIS
+.B pw3270 [-a
+.I application-name
+.B ] [-h 
+.I hostname:port
+.B ]
+.SH DESCRIPTION
+.B pw3270 
+is a modern, GTK-based, completely free tn3270 emulator. 
+
+Based on the original x3270 code by Paul Mattes, it was created originally for Banco do Brasil. It's now an official Brazilian Government Public Software project, and is used worldwide. 
+
+pw3270 is fully themable, and each element on the screen can be individually customized through the configuration files. It also supports all kinds of TrueType and bitmap fonts that your system already supports, although it's recommended that you select a proportional (monospaced) font.
+
+pw3270 supports many advanced clipboard features, allowing you to copy and paste data on forms, respecting the individual fields and positions on screen.
+
+File transfers are supported, for uploads and downloads.
+
+Printing is implemented using the native GTK print dialogs.
+
+
+In addition to the modern GUI, a development library 
+.BR lib3270 (3)
+has been created to allow you to create your own programs using the 3270 protocol.
+
+.SH OPTIONS
+.IP "--help"
+Shows the available options.
+.IP "-h hostname:port"
+Connects to the host and port specified. Use the form 
+.I "s:hostname:port" 
+for a secure (SSL) connection.
+.IP "-a application-name"
+Specifies an alternate window title. This is useful if you want to name each host window differently (with the service name or host address, for example). The default is to always name the window "pw3270". 
+.SH FILES
+.I /etc/pw3270.conf
+.RS
+The system wide configuration file. See
+.BR pw3270 (5)
+for further details.
+.RE
+.I ~/.config/pw3270.conf
+.RS
+Per user configuration file. See
+.BR pw3270 (5)
+for further details.
+.SH AUTHORS
+Perry Werneck <perry.werneck at gmail dot com>
+
+Erico Mendonca <erico.mendonca at gmail dot com>
+
+The official project page is located at http://www.softwarepublico.gov.br/dotlrn/clubs/pw3270 . 
+
+.SH "SEE ALSO"
+.BR pw3270 (5)
+

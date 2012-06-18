@@ -45,6 +45,7 @@ datarootdir=@datarootdir@
 localedir=@localedir@
 docdir=@docdir@
 sysconfdir=@sysconfdir@
+mandir=@mandir@
 
 BINDIR=.bin
 EXEEXT=@EXEEXT@
@@ -205,12 +206,12 @@ $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar: clean pixmaps
 	@cp *.m4 $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@NOCONFIGURE=1 ./autogen.sh $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@cp configure.ac $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
-	@cp configure $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
+#	@cp configure $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@cp *.in $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@cp AUTHORS LICENSE $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@cp -r src $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@cp -r scripts $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
-	@cp $(PACKAGE_TARNAME).spec $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
+#	@cp $(PACKAGE_TARNAME).spec $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 
 	@$(MKDIR) $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/ui
 	@cp ui/* $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/ui
@@ -218,12 +219,15 @@ $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar: clean pixmaps
 	@$(MKDIR) $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/po
 	@cp po/*.po $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/po
 
+	@$(MKDIR) $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/man
+	@cp -r man/* $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/man
+
 	@$(AMTAR) --create --directory $(TMPDIR) --exclude-vcs --owner=root --group=root --file=$@ $(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 
 	@rm -fr $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@echo $@
 
-install: install-sdk install-lib install-app
+install: install-sdk install-lib install-app install-man
 
 install-app: install-locale
 	@$(MAKE) BINDIR="../../$(BINDIR)" LIB3270_LIBS="$(RLSLIB)" LIB3270_CFLAGS="-I../../src/include" -C src/pw3270 install
@@ -237,6 +241,14 @@ locale: $(foreach SRC, $(basename $(LANG_FILES)), $(SRC).po)
 
 install-locale: $(foreach MO, $(basename $(LANG_FILES)), $(BINDIR)/Release/$(localedir)/$(notdir $(MO))/LC_MESSAGES/$(PACKAGE_NAME).mo)
 	@echo -e $(foreach MO, $(notdir $(basename $(LANG_FILES))), mkdir -p $(DESTDIR)/$(localedir)/$(MO)/LC_MESSAGES\\n$(INSTALL_DATA) $(BINDIR)/Release/$(localedir)/$(MO)/LC_MESSAGES/$(PACKAGE_NAME).mo $(DESTDIR)/$(localedir)/$(MO)/LC_MESSAGES/$(PACKAGE_NAME).mo \\n ) | $(SHELL)
+
+
+install-man: 
+	@$(MKDIR) $(DESTDIR)$(mandir)/man1
+	@$(INSTALL_DATA) man/man1/pw3270.1 $(DESTDIR)/$(mandir)/man1/pw3270.1
+	@$(MKDIR) $(DESTDIR)$(mandir)/man5
+	@$(INSTALL_DATA) man/man5/pw3270.5 $(DESTDIR)/$(mandir)/man5/pw3270.5
+
 
 install-sdk:
 	@$(MKDIR) $(DESTDIR)$(includedir)/lib3270
