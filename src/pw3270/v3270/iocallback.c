@@ -15,8 +15,8 @@
  * obter mais detalhes.
  *
  * Você deve ter recebido uma cópia da Licença Pública Geral GNU junto com este
- * programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple
- * Place, Suite 330, Boston, MA, 02111-1307, USA
+ * programa; se não, escreva para a Free Software Foundation, Inc., 51 Franklin
+ * St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * Este programa está nomeado como iocallback.c e possui - linhas de código.
  *

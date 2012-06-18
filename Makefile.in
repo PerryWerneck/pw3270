@@ -77,12 +77,12 @@ AMTAR=@AMTAR@
 %.tar.bz2: %.tar
 	@echo "  GEN  `basename $@`"
 	@bzip2 --compress -9 --stdout $< > $@
-	@chmod 666 $@
+	@chmod 0644 $@
 
 %.tar.gz: %.tar
 	@echo "  GEN  `basename $@`"
 	@gzip -9 --stdout $< > $@
-	@chmod 666 $@
+	@chmod 0644 $@
 
 
 src/pw3270/%.png: src/pw3270/pixmaps/%.svg
@@ -126,7 +126,7 @@ src/tools/%@EXEEXT@: src/tools/%.c
 
 all: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) locale filelist
 
-Release: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) 
+Release: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
 
 $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT): src/pw3270/* $(BINDIR)/Release/lib/@DLLPREFIX@3270@DLLEXT@ $(DEPENDS)
 	@$(MAKE) BINDIR="../../$(BINDIR)" LIB3270_LIBS="$(RLSLIB)" LIB3270_CFLAGS="-I../../src/include" -C src/pw3270 ../../$(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
@@ -148,7 +148,7 @@ debian/lib3270-dev.install: Makefile
 
 #---[ Debug targets ]----------------------------------------------------------
 
-Debug: $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT) 
+Debug: $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
 
 $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT): src/pw3270/* $(BINDIR)/Debug/lib/@DLLPREFIX@3270@DLLEXT@ $(DEPENDS)
 	@$(MAKE) BINDIR="../../$(BINDIR)" LIB3270_LIBS="$(DBGLIB)" LIB3270_CFLAGS="-I../../src/include" -C src/pw3270 ../../$(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
@@ -202,6 +202,7 @@ pixmaps: src/pw3270/$(PACKAGE_NAME).png src/pw3270/$(PACKAGE_NAME)-logo.png
 
 $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar: clean pixmaps
 	@rm -fr $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
+	@find src -name Makefile -exec rm -f {} \;
 	@$(MKDIR) $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@cp *.m4 $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@NOCONFIGURE=1 ./autogen.sh $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
@@ -243,7 +244,7 @@ install-locale: $(foreach MO, $(basename $(LANG_FILES)), $(BINDIR)/Release/$(loc
 	@echo -e $(foreach MO, $(notdir $(basename $(LANG_FILES))), mkdir -p $(DESTDIR)/$(localedir)/$(MO)/LC_MESSAGES\\n$(INSTALL_DATA) $(BINDIR)/Release/$(localedir)/$(MO)/LC_MESSAGES/$(PACKAGE_NAME).mo $(DESTDIR)/$(localedir)/$(MO)/LC_MESSAGES/$(PACKAGE_NAME).mo \\n ) | $(SHELL)
 
 
-install-man: 
+install-man:
 	@$(MKDIR) $(DESTDIR)$(mandir)/man1
 	@$(INSTALL_DATA) man/man1/pw3270.1 $(DESTDIR)/$(mandir)/man1/pw3270.1
 	@$(MKDIR) $(DESTDIR)$(mandir)/man5
