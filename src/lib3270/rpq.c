@@ -604,7 +604,7 @@ get_rpq_address(unsigned char *buf, const int maxlen)
 		}
 		*p2 = '\0';
 
-#if defined(AF_INET6) /*[*/
+#if defined(HAVE_GETADDRINFO)
 		ga_err = getaddrinfo(rpqtext, NULL, NULL, &res);
 		if (ga_err == 0) {
 			void *src = NULL;
@@ -623,8 +623,7 @@ get_rpq_address(unsigned char *buf, const int maxlen)
 				len = sizeof(struct in6_addr);
 				break;
 			default:
-				rpq_warning("RPQ ADDRESS term has unrecognized family %u",
-						res->ai_family);
+				rpq_warning("RPQ ADDRESS term has unrecognized family %u",res->ai_family);
 				break;
 			}
 
@@ -663,16 +662,16 @@ get_rpq_address(unsigned char *buf, const int maxlen)
 		} else {
 			rpq_warning("RPQ ADDRESS term incomplete due to space limit");
 		}
-#endif /*]*/
+#endif // HAVE_GETADDRINFO
 		free(rpqtext);
 	} else {
 		/* No override... get our address from the actual socket */
 		union {
 			struct sockaddr sa;
 			struct sockaddr_in sa4;
-#if defined(AF_INET6) /*[*/
+#if defined(HAVE_GETADDRINFO)
 			struct sockaddr_in6 sa6;
-#endif /*]*/
+#endif // HAVE_GETADDRINFO
 		} u;
 		int addrlen = sizeof(u);
 		void *src = NULL;
@@ -687,12 +686,12 @@ get_rpq_address(unsigned char *buf, const int maxlen)
 			src = &u.sa4.sin_addr;
 			len = sizeof(struct in_addr);
 			break;
-#if defined(AF_INET6) /*[*/
+#if defined(HAVE_GETADDRINFO)
 		case AF_INET6:
 			src = &u.sa6.sin6_addr;
 			len = sizeof(struct in6_addr);
 			break;
-#endif /*]*/
+#endif // HAVE_GETADDRINFO
 		default:
 			rpq_warning("RPQ ADDRESS term has unrecognized family %u", u.sa.sa_family);
 			break;

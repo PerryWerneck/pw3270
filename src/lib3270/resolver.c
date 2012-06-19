@@ -129,7 +129,7 @@ static int cresolve_host_and_port(H3270 *h, struct parms *p)
 
 	freeaddrinfo(res);
 
-#else /*][*/
+#else
 
 	struct hostent	*hp;
 	struct servent	*sp;
@@ -175,7 +175,7 @@ static int cresolve_host_and_port(H3270 *h, struct parms *p)
 	sin->sin_port = port;
 	*p->sa_len = sizeof(struct sockaddr_in);
 
-#endif
+#endif // HAVE_GETADDRINFO
 
 	return 0;
 }

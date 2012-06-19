@@ -516,8 +516,13 @@ proxy_telnet(int fd, char *host, unsigned short port)
 }
 
 /* SOCKS version 4 proxy. */
-static int
-proxy_socks4(int fd, char *host, unsigned short port, int force_a)
+#if defined(HAVE_GETADDRINFO)
+static int proxy_socks4(int fd, char *host, unsigned short port, int force_a)
+{
+	popup_an_error(NULL,"%s", _( "Unsupported socks 4 proxy" ) );
+}
+#else
+static int proxy_socks4(int fd, char *host, unsigned short port, int force_a)
 {
     	struct hostent *hp;
 	struct in_addr ipaddr;
@@ -673,6 +678,7 @@ proxy_socks4(int fd, char *host, unsigned short port, int force_a)
 
     	return 0;
 }
+#endif // HAVE_GETADDRINFO
 
 /* SOCKS version 5 (RFC 1928) proxy. */
 static int

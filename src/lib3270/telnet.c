@@ -491,8 +491,8 @@ static int connect_sock(H3270 *hSession, int sockfd, const struct sockaddr *addr
  */
 int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Boolean *resolving, Boolean *pending)
 {
-	struct servent	* sp;
-	struct hostent	* hp;
+//	struct servent	* sp;
+//	struct hostent	* hp;
 	char	          passthru_haddr[8];
 	int				  passthru_len = 0;
 	unsigned short	  passthru_port = 0;
@@ -548,21 +548,27 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 	/* get the passthru host and port number */
 	if (session->passthru_host)
 	{
-		const char *hn = CN;
+#if defined(HAVE_GETADDRINFO)
 
-#ifndef ANDROID
+		popup_an_error(session,"%s",_( "Unsupported passthru host session" ) );
+
+#else
+		struct hostent	* hp = NULL;
+		struct servent	* sp = NULL;
+		const char 		* hn = CN;
+
 		hn = getenv("INTERNET_HOST");
-#endif // ANDROID
 
 		if (hn == CN)
 			hn = "internet-gateway";
 
 		hp = gethostbyname(hn);
-		if (hp == (struct hostent *) 0) {
-			popup_an_error(NULL,"Unknown passthru host: %s", hn);
+		if (hp == (struct hostent *) 0)
+		{
+			popup_an_error(session,_( "Unknown passthru host: %s" ), hn);
 			return -1;
 		}
-		(void) memmove(passthru_haddr, hp->h_addr, hp->h_length);
+		memmove(passthru_haddr, hp->h_addr, hp->h_length);
 		passthru_len = hp->h_length;
 
 		sp = getservbyname("telnet-passthru","tcp");
@@ -570,6 +576,8 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 			passthru_port = sp->s_port;
 		else
 			passthru_port = htons(3514);
+
+#endif // HAVE_GETADDRINFO
 	}
 	else if(session->proxy != CN && !proxy_type)
 	{
