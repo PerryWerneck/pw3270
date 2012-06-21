@@ -191,6 +191,10 @@
 		int             		  ns_bsent;
 		int             		  ns_rsent;
 		struct timeval 			  ds_ts;
+		unsigned long			  e_funcs;				/**< negotiated TN3270E functions */
+		unsigned short			  e_xmit_seq;			/**< transmit sequence number */
+		int						  response_required;
+
 
 		// 3270 input buffer
 		unsigned char 			* ibptr;

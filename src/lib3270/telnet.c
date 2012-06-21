@@ -166,12 +166,15 @@ Boolean		local_process = False;
 // static unsigned char telnet_state;
 // static char     ttype_tmpval[13];
 
-#if defined(X3270_TN3270E) /*[*/
-static unsigned long e_funcs;	/* negotiated TN3270E functions */
-#define E_OPT(n)	(1 << (n))
-static unsigned short e_xmit_seq; /* transmit sequence number */
-static int response_required;
-#endif /*]*/
+#if defined(X3270_TN3270E)
+	#define E_OPT(n)	(1 << (n))
+#endif // X3270_TN3270E
+
+//#if defined(X3270_TN3270E)
+//static unsigned long e_funcs;	/* negotiated TN3270E functions */
+//static unsigned short e_xmit_seq; /* transmit sequence number */
+//static int response_required;
+//#endif
 
 #if defined(X3270_ANSI) /*[*/
 static int      ansi_data = 0;
@@ -866,11 +869,9 @@ static void net_connected(H3270 *session)
 	(void) memset((char *) h3270.hisopts, 0, sizeof(h3270.hisopts));
 
 #if defined(X3270_TN3270E) /*[*/
-	e_funcs = E_OPT(TN3270E_FUNC_BIND_IMAGE) |
-		  E_OPT(TN3270E_FUNC_RESPONSES) |
-		  E_OPT(TN3270E_FUNC_SYSREQ);
-	e_xmit_seq = 0;
-	response_required = TN3270E_RSF_NO_RESPONSE;
+	h3270.e_funcs = E_OPT(TN3270E_FUNC_BIND_IMAGE) | E_OPT(TN3270E_FUNC_RESPONSES) | E_OPT(TN3270E_FUNC_SYSREQ);
+	h3270.e_xmit_seq = 0;
+	h3270.response_required = TN3270E_RSF_NO_RESPONSE;
 #endif /*]*/
 
 #if defined(HAVE_LIBSSL) /*[*/
@@ -1649,7 +1650,7 @@ tn3270e_negotiate(void)
 			}
 
 			/* Tell them what we can do. */
-			tn3270e_subneg_send(TN3270E_OP_REQUEST, e_funcs);
+			tn3270e_subneg_send(TN3270E_OP_REQUEST, h3270.e_funcs);
 			break;
 		}
 		case TN3270E_OP_REJECT:
@@ -1695,10 +1696,10 @@ tn3270e_negotiate(void)
 			    tn3270e_function_names(h3270.sbbuf+3, sblen-3));
 
 			e_rcvd = tn3270e_fdecode(h3270.sbbuf+3, sblen-3);
-			if ((e_rcvd == e_funcs) || (e_funcs & ~e_rcvd)) {
+			if ((e_rcvd == h3270.e_funcs) || (h3270.e_funcs & ~e_rcvd)) {
 				/* They want what we want, or less.  Done. */
-				e_funcs = e_rcvd;
-				tn3270e_subneg_send(TN3270E_OP_IS, e_funcs);
+				h3270.e_funcs = e_rcvd;
+				tn3270e_subneg_send(TN3270E_OP_IS, h3270.e_funcs);
 				tn3270e_negotiated = 1;
 				trace_dsn("TN3270E option negotiation complete.\n");
 				check_in3270(&h3270);
@@ -1707,8 +1708,8 @@ tn3270e_negotiate(void)
 				 * They want us to do something we can't.
 				 * Request the common subset.
 				 */
-				e_funcs &= e_rcvd;
-				tn3270e_subneg_send(TN3270E_OP_REQUEST,e_funcs);
+				h3270.e_funcs &= e_rcvd;
+				tn3270e_subneg_send(TN3270E_OP_REQUEST,h3270.e_funcs);
 			}
 			break;
 
@@ -1718,14 +1719,14 @@ tn3270e_negotiate(void)
 			trace_dsn("IS %s SE\n",
 			    tn3270e_function_names(h3270.sbbuf+3, sblen-3));
 			e_rcvd = tn3270e_fdecode(h3270.sbbuf+3, sblen-3);
-			if (e_rcvd != e_funcs) {
-				if (e_funcs & ~e_rcvd) {
+			if (e_rcvd != h3270.e_funcs) {
+				if (h3270.e_funcs & ~e_rcvd) {
 					/*
 					 * They've removed something.  This is
 					 * technically illegal, but we can
 					 * live with it.
 					 */
-					e_funcs = e_rcvd;
+					h3270.e_funcs = e_rcvd;
 				} else {
 					/*
 					 * They've added something.  Abandon
@@ -1781,10 +1782,10 @@ tn3270e_current_opts(void)
 	static char text_buf[1024];
 	char *s = text_buf;
 
-	if (!e_funcs || !IN_E)
+	if (!h3270.e_funcs || !IN_E)
 		return CN;
 	for (i = 0; i < 32; i++) {
-		if (e_funcs & E_OPT(i))
+		if (h3270.e_funcs & E_OPT(i))
 		s += sprintf(s, "%s%s", (s == text_buf) ? "" : " ",
 		    fnn(i));
 	}
@@ -1884,24 +1885,24 @@ process_eor(void)
 
 		switch (h->data_type) {
 		case TN3270E_DT_3270_DATA:
-			if ((e_funcs & E_OPT(TN3270E_FUNC_BIND_IMAGE)) &&
+			if ((h3270.e_funcs & E_OPT(TN3270E_FUNC_BIND_IMAGE)) &&
 			    !tn3270e_bound)
 				return 0;
 			tn3270e_submode = E_3270;
 			check_in3270(&h3270);
-			response_required = h->response_flag;
+			h3270.response_required = h->response_flag;
 			rv = process_ds(h3270.ibuf + EH_SIZE,
 			    (h3270.ibptr - h3270.ibuf) - EH_SIZE);
 			if (rv < 0 &&
-			    response_required != TN3270E_RSF_NO_RESPONSE)
+			    h3270.response_required != TN3270E_RSF_NO_RESPONSE)
 				tn3270e_nak(rv);
 			else if (rv == PDS_OKAY_NO_OUTPUT &&
-			    response_required == TN3270E_RSF_ALWAYS_RESPONSE)
+			    h3270.response_required == TN3270E_RSF_ALWAYS_RESPONSE)
 				tn3270e_ack();
-			response_required = TN3270E_RSF_NO_RESPONSE;
+			h3270.response_required = TN3270E_RSF_NO_RESPONSE;
 			return 0;
 		case TN3270E_DT_BIND_IMAGE:
-			if (!(e_funcs & E_OPT(TN3270E_FUNC_BIND_IMAGE)))
+			if (!(h3270.e_funcs & E_OPT(TN3270E_FUNC_BIND_IMAGE)))
 				return 0;
 			process_bind(h3270.ibuf + EH_SIZE, (h3270.ibptr - h3270.ibuf) - EH_SIZE);
 			trace_dsn("< BIND PLU-name '%s'\n", plu_name);
@@ -1909,7 +1910,7 @@ process_eor(void)
 			check_in3270(&h3270);
 			return 0;
 		case TN3270E_DT_UNBIND:
-			if (!(e_funcs & E_OPT(TN3270E_FUNC_BIND_IMAGE)))
+			if (!(h3270.e_funcs & E_OPT(TN3270E_FUNC_BIND_IMAGE)))
 				return 0;
 			tn3270e_bound = 0;
 			if (tn3270e_submode == E_3270)
@@ -1925,7 +1926,7 @@ process_eor(void)
 			}
 			return 0;
 		case TN3270E_DT_SSCP_LU_DATA:
-			if (!(e_funcs & E_OPT(TN3270E_FUNC_BIND_IMAGE)))
+			if (!(h3270.e_funcs & E_OPT(TN3270E_FUNC_BIND_IMAGE)))
 				return 0;
 			tn3270e_submode = E_SSCP;
 			check_in3270(&h3270);
@@ -2685,9 +2686,9 @@ net_output(void)
 		tn3270e_header *h = (tn3270e_header *) h3270.obuf_base;
 
 		/* Check for sending a TN3270E response. */
-		if (response_required == TN3270E_RSF_ALWAYS_RESPONSE) {
+		if (h3270.response_required == TN3270E_RSF_ALWAYS_RESPONSE) {
 			tn3270e_ack();
-			response_required = TN3270E_RSF_NO_RESPONSE;
+			h3270.response_required = TN3270E_RSF_NO_RESPONSE;
 		}
 
 		/* Set the outbound TN3270E header. */
@@ -2695,13 +2696,12 @@ net_output(void)
 			TN3270E_DT_3270_DATA : TN3270E_DT_SSCP_LU_DATA;
 		h->request_flag = 0;
 		h->response_flag = 0;
-		h->seq_number[0] = (e_xmit_seq >> 8) & 0xff;
-		h->seq_number[1] = e_xmit_seq & 0xff;
+		h->seq_number[0] = (h3270.e_xmit_seq >> 8) & 0xff;
+		h->seq_number[1] = h3270.e_xmit_seq & 0xff;
 
-		trace_dsn("SENT TN3270E(%s NO-RESPONSE %u)\n",
-			IN_TN3270E ? "3270-DATA" : "SSCP-LU-DATA", e_xmit_seq);
-		if (e_funcs & E_OPT(TN3270E_FUNC_RESPONSES))
-			e_xmit_seq = (e_xmit_seq + 1) & 0x7fff;
+		trace_dsn("SENT TN3270E(%s NO-RESPONSE %u)\n",IN_TN3270E ? "3270-DATA" : "SSCP-LU-DATA", h3270.e_xmit_seq);
+		if (h3270.e_funcs & E_OPT(TN3270E_FUNC_RESPONSES))
+			h3270.e_xmit_seq = (h3270.e_xmit_seq + 1) & 0x7fff;
 	}
 #endif /*]*/
 
@@ -2994,7 +2994,7 @@ net_abort(void)
 {
 	static unsigned char buf[] = { IAC, AO };
 
-	if (e_funcs & E_OPT(TN3270E_FUNC_SYSREQ)) {
+	if (h3270.e_funcs & E_OPT(TN3270E_FUNC_SYSREQ)) {
 		/*
 		 * I'm not sure yet what to do here.  Should the host respond
 		 * to the AO by sending us SSCP-LU data (and putting us into
@@ -3009,7 +3009,7 @@ net_abort(void)
 			net_rawout(&h3270, buf, sizeof(buf));
 			trace_dsn("SENT AO\n");
 			if (tn3270e_bound ||
-			    !(e_funcs & E_OPT(TN3270E_FUNC_BIND_IMAGE))) {
+			    !(h3270.e_funcs & E_OPT(TN3270E_FUNC_BIND_IMAGE))) {
 				tn3270e_submode = E_3270;
 				check_in3270(&h3270);
 			}
@@ -3151,7 +3151,7 @@ net_snap_options(void)
 		h3270.obptr += 4;
 		*h3270.obptr++ = TN3270E_OP_IS;
 		for (i = 0; i < 32; i++) {
-			if (e_funcs & E_OPT(i))
+			if (h3270.e_funcs & E_OPT(i))
 				*h3270.obptr++ = i;
 		}
 		*h3270.obptr++ = IAC;
