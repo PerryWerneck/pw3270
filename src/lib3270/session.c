@@ -199,7 +199,7 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 	hSession->aid 				= AID_NO;
 	hSession->reply_mode 		= SF_SRM_FIELD;
 	hSession->linemode			= 1;
-
+	hSession->tn3270e_submode	= E_NONE;
 
 #ifdef _WIN32
 	hSession->sockEvent			= NULL;

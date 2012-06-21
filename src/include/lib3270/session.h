@@ -194,6 +194,19 @@
 		unsigned long			  e_funcs;				/**< negotiated TN3270E functions */
 		unsigned short			  e_xmit_seq;			/**< transmit sequence number */
 		int						  response_required;
+		int						  tn3270e_bound;
+		int						  tn3270e_negotiated;
+
+		enum
+		{
+			E_NONE,
+			E_3270,
+			E_NVT,
+			E_SSCP
+		}						  tn3270e_submode;
+
+		unsigned char 			* lbuf;					/**< line-mode input buffer */
+		unsigned char 			* lbptr;
 
 
 		// 3270 input buffer

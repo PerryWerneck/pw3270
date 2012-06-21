@@ -178,9 +178,9 @@ Boolean		local_process = False;
 
 #if defined(X3270_ANSI) /*[*/
 static int      ansi_data = 0;
-static unsigned char *lbuf = (unsigned char *)NULL;
-			/* line-mode input buffer */
-static unsigned char *lbptr;
+// static unsigned char *lbuf = (unsigned char *)NULL;
+/* line-mode input buffer */
+// static unsigned char *lbptr;
 static int      lnext = 0;
 static int      backslashed = 0;
 static int      t_valid = 0;
@@ -194,9 +194,9 @@ static char     vrprnt;
 static char     vlnext;
 #endif /*]*/
 
-static int	tn3270e_negotiated = 0;
-static enum { E_NONE, E_3270, E_NVT, E_SSCP } tn3270e_submode = E_NONE;
-static int	tn3270e_bound = 0;
+// static int	tn3270e_negotiated = 0;
+//static enum { E_NONE, E_3270, E_NVT, E_SSCP } tn3270e_submode = E_NONE;
+// static int	tn3270e_bound = 0;
 static char	plu_name[BIND_PLU_NAME_MAX+1];
 static char	**lus = (char **)NULL;
 static char	**curr_lu = (char **)NULL;
@@ -887,9 +887,9 @@ static void net_connected(H3270 *session)
 	session->ns_bsent  = 0;
 	session->ns_rsent  = 0;
 	session->syncing   = 0;
-	tn3270e_negotiated = 0;
-	tn3270e_submode = E_NONE;
-	tn3270e_bound = 0;
+	session->tn3270e_negotiated = 0;
+	session->tn3270e_submode = E_NONE;
+	session->tn3270e_bound = 0;
 
 	setup_lus();
 
@@ -1256,7 +1256,7 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 			h3270.telnet_state = TNS_DATA;
 			break;
 		    case EOR:	/* eor, process accumulated input */
-			if (IN_3270 || (IN_E && tn3270e_negotiated)) {
+			if (IN_3270 || (IN_E && h3270.tn3270e_negotiated)) {
 				h3270.ns_rrcvd++;
 				if (process_eor())
 					return -1;
@@ -1700,7 +1700,7 @@ tn3270e_negotiate(void)
 				/* They want what we want, or less.  Done. */
 				h3270.e_funcs = e_rcvd;
 				tn3270e_subneg_send(TN3270E_OP_IS, h3270.e_funcs);
-				tn3270e_negotiated = 1;
+				h3270.tn3270e_negotiated = 1;
 				trace_dsn("TN3270E option negotiation complete.\n");
 				check_in3270(&h3270);
 			} else {
@@ -1736,7 +1736,7 @@ tn3270e_negotiate(void)
 					break;
 				}
 			}
-			tn3270e_negotiated = 1;
+			h3270.tn3270e_negotiated = 1;
 			trace_dsn("TN3270E option negotiation complete.\n");
 			check_in3270(&h3270);
 			break;
@@ -1886,9 +1886,9 @@ process_eor(void)
 		switch (h->data_type) {
 		case TN3270E_DT_3270_DATA:
 			if ((h3270.e_funcs & E_OPT(TN3270E_FUNC_BIND_IMAGE)) &&
-			    !tn3270e_bound)
+			    !h3270.tn3270e_bound)
 				return 0;
-			tn3270e_submode = E_3270;
+			h3270.tn3270e_submode = E_3270;
 			check_in3270(&h3270);
 			h3270.response_required = h->response_flag;
 			rv = process_ds(h3270.ibuf + EH_SIZE,
@@ -1906,20 +1906,20 @@ process_eor(void)
 				return 0;
 			process_bind(h3270.ibuf + EH_SIZE, (h3270.ibptr - h3270.ibuf) - EH_SIZE);
 			trace_dsn("< BIND PLU-name '%s'\n", plu_name);
-			tn3270e_bound = 1;
+			h3270.tn3270e_bound = 1;
 			check_in3270(&h3270);
 			return 0;
 		case TN3270E_DT_UNBIND:
 			if (!(h3270.e_funcs & E_OPT(TN3270E_FUNC_BIND_IMAGE)))
 				return 0;
-			tn3270e_bound = 0;
-			if (tn3270e_submode == E_3270)
-				tn3270e_submode = E_NONE;
+			h3270.tn3270e_bound = 0;
+			if (h3270.tn3270e_submode == E_3270)
+				h3270.tn3270e_submode = E_NONE;
 			check_in3270(&h3270);
 			return 0;
 		case TN3270E_DT_NVT_DATA:
 			/* In tn3270e NVT mode */
-			tn3270e_submode = E_NVT;
+			h3270.tn3270e_submode = E_NVT;
 			check_in3270(&h3270);
 			for (s = h3270.ibuf; s < h3270.ibptr; s++) {
 				ansi_process(*s++);
@@ -1928,7 +1928,7 @@ process_eor(void)
 		case TN3270E_DT_SSCP_LU_DATA:
 			if (!(h3270.e_funcs & E_OPT(TN3270E_FUNC_BIND_IMAGE)))
 				return 0;
-			tn3270e_submode = E_SSCP;
+			h3270.tn3270e_submode = E_SSCP;
 			check_in3270(&h3270);
 			ctlr_write_sscp_lu(&h3270, h3270.ibuf + EH_SIZE,(h3270.ibptr - h3270.ibuf) - EH_SIZE);
 			return 0;
@@ -2196,9 +2196,9 @@ static void net_cookout(H3270 *hSession, const char *buf, int len)
 static void
 cooked_init(void)
 {
-	if (lbuf == (unsigned char *)NULL)
-		lbuf = (unsigned char *)lib3270_malloc(BUFSZ);
-	lbptr = lbuf;
+	if (h3270.lbuf == (unsigned char *)NULL)
+		h3270.lbuf = (unsigned char *)lib3270_malloc(BUFSZ);
+	h3270.lbptr = h3270.lbuf;
 	lnext = 0;
 	backslashed = 0;
 }
@@ -2213,17 +2213,17 @@ ansi_process_s(const char *data)
 static void
 forward_data(void)
 {
-	net_cookedout(&h3270, (char *) lbuf, lbptr - lbuf);
+	net_cookedout(&h3270, (char *) h3270.lbuf, h3270.lbptr - h3270.lbuf);
 	cooked_init();
 }
 
 static void
 do_data(char c)
 {
-	if (lbptr+1 < lbuf + BUFSZ) {
-		*lbptr++ = c;
+	if (h3270.lbptr+1 < h3270.lbuf + BUFSZ) {
+		*h3270.lbptr++ = c;
 		if (c == '\r')
-			*lbptr++ = '\0';
+			*h3270.lbptr++ = '\0';
 		if (c == '\t')
 			ansi_process((unsigned int) c);
 		else
@@ -2264,7 +2264,7 @@ do_cerase(char c)
 	int len;
 
 	if (backslashed) {
-		lbptr--;
+		h3270.lbptr--;
 		ansi_process_s("\b");
 		do_data(c);
 		return;
@@ -2273,8 +2273,8 @@ do_cerase(char c)
 		do_data(c);
 		return;
 	}
-	if (lbptr > lbuf) {
-		len = strlen(ctl_see((int) *--lbptr));
+	if (h3270.lbptr > h3270.lbuf) {
+		len = strlen(ctl_see((int) *--h3270.lbptr));
 
 		while (len--)
 			ansi_process_s("\b \b");
@@ -2291,14 +2291,14 @@ do_werase(char c)
 		do_data(c);
 		return;
 	}
-	while (lbptr > lbuf) {
+	while (h3270.lbptr > h3270.lbuf) {
 		char ch;
 
-		ch = *--lbptr;
+		ch = *--h3270.lbptr;
 
 		if (ch == ' ' || ch == '\t') {
 			if (any) {
-				++lbptr;
+				++h3270.lbptr;
 				break;
 			}
 		} else
@@ -2316,7 +2316,7 @@ do_kill(char c)
 	int i, len;
 
 	if (backslashed) {
-		lbptr--;
+		h3270.lbptr--;
 		ansi_process_s("\b");
 		do_data(c);
 		return;
@@ -2325,8 +2325,8 @@ do_kill(char c)
 		do_data(c);
 		return;
 	}
-	while (lbptr > lbuf) {
-		len = strlen(ctl_see((int) *--lbptr));
+	while (h3270.lbptr > h3270.lbuf) {
+		len = strlen(ctl_see((int) *--h3270.lbptr));
 
 		for (i = 0; i < len; i++)
 			ansi_process_s("\b \b");
@@ -2344,7 +2344,7 @@ do_rprnt(char c)
 	}
 	ansi_process_s(ctl_see((int) c));
 	ansi_process_s("\r\n");
-	for (p = lbuf; p < lbptr; p++)
+	for (p = h3270.lbuf; p < h3270.lbptr; p++)
 		ansi_process_s(ctl_see((int) *p));
 }
 
@@ -2352,7 +2352,7 @@ static void
 do_eof(char c)
 {
 	if (backslashed) {
-		lbptr--;
+		h3270.lbptr--;
 		ansi_process_s("\b");
 		do_data(c);
 		return;
@@ -2372,12 +2372,12 @@ do_eol(char c)
 		do_data(c);
 		return;
 	}
-	if (lbptr+2 >= lbuf + BUFSZ) {
+	if (h3270.lbptr+2 >= h3270.lbuf + BUFSZ) {
 		ansi_process_s("\007");
 		return;
 	}
-	*lbptr++ = '\r';
-	*lbptr++ = '\n';
+	*h3270.lbptr++ = '\r';
+	*h3270.lbptr++ = '\n';
 	ansi_process_s("\r\n");
 	forward_data();
 }
@@ -2422,9 +2422,9 @@ check_in3270(H3270 *session)
 
 #if defined(X3270_TN3270E) /*[*/
 	if (h3270.myopts[TELOPT_TN3270E]) {
-		if (!tn3270e_negotiated)
+		if (!h3270.tn3270e_negotiated)
 			new_cstate = CONNECTED_INITIAL_E;
-		else switch (tn3270e_submode) {
+		else switch (h3270.tn3270e_submode) {
 		case E_NONE:
 			new_cstate = CONNECTED_INITIAL_E;
 			break;
@@ -2488,9 +2488,9 @@ check_in3270(H3270 *session)
 #if defined(X3270_TN3270E) /*[*/
 		/* If we fell out of TN3270E, remove the state. */
 		if (!h3270.myopts[TELOPT_TN3270E]) {
-			tn3270e_negotiated = 0;
-			tn3270e_submode = E_NONE;
-			tn3270e_bound = 0;
+			h3270.tn3270e_negotiated = 0;
+			h3270.tn3270e_submode = E_NONE;
+			h3270.tn3270e_bound = 0;
 		}
 #endif /*]*/
 		trace_dsn("Now operating in %s mode.\n",state_name[new_cstate]);
@@ -2803,13 +2803,13 @@ net_add_dummy_tn3270e(void)
 {
 	tn3270e_header *h;
 
-	if (!IN_E || tn3270e_submode == E_NONE)
+	if (!IN_E || h3270.tn3270e_submode == E_NONE)
 		return False;
 
 	space3270out(EH_SIZE);
 	h = (tn3270e_header *)h3270.obptr;
 
-	switch (tn3270e_submode) {
+	switch (h3270.tn3270e_submode) {
 	case E_NONE:
 		break;
 	case E_NVT:
@@ -3001,23 +3001,23 @@ net_abort(void)
 		 * SSCP-LU mode), or should we put ourselves in it?
 		 * Time, and testers, will tell.
 		 */
-		switch (tn3270e_submode) {
+		switch (h3270.tn3270e_submode) {
 		case E_NONE:
 		case E_NVT:
 			break;
 		case E_SSCP:
 			net_rawout(&h3270, buf, sizeof(buf));
 			trace_dsn("SENT AO\n");
-			if (tn3270e_bound ||
+			if (h3270.tn3270e_bound ||
 			    !(h3270.e_funcs & E_OPT(TN3270E_FUNC_BIND_IMAGE))) {
-				tn3270e_submode = E_3270;
+				h3270.tn3270e_submode = E_3270;
 				check_in3270(&h3270);
 			}
 			break;
 		case E_3270:
 			net_rawout(&h3270, buf, sizeof(buf));
 			trace_dsn("SENT AO\n");
-			tn3270e_submode = E_SSCP;
+			h3270.tn3270e_submode = E_SSCP;
 			check_in3270(&h3270);
 			break;
 		}
@@ -3157,7 +3157,7 @@ net_snap_options(void)
 		*h3270.obptr++ = IAC;
 		*h3270.obptr++ = SE;
 
-		if (tn3270e_bound) {
+		if (h3270.tn3270e_bound) {
 			tn3270e_header *h;
 
 			space3270out(EH_SIZE + 3);
