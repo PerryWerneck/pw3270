@@ -185,6 +185,26 @@
 		int      				  ibuf_size;			/**< size of ibuf */
 		unsigned char			* obuf;					/**< 3270 output buffer */
 		unsigned char			* obptr;
+		time_t          		  ns_time;
+		int             		  ns_brcvd;
+		int             		  ns_rrcvd;
+		int             		  ns_bsent;
+		int             		  ns_rsent;
+		struct timeval 			  ds_ts;
+
+		// 3270 input buffer
+		unsigned char 			* ibptr;
+		unsigned char 			* obuf_base;
+		int						  obuf_size;
+		unsigned char 			* netrbuf;
+
+		// network input buffer
+		unsigned char 			* sbbuf;
+
+		// telnet sub-option buffer
+		unsigned char 			* sbptr;
+		unsigned char			  telnet_state;
+		char					  ttype_tmpval[13];
 
 		unsigned char 			  myopts[LIB3270_TELNET_N_OPTS];
 		unsigned char			  hisopts[LIB3270_TELNET_N_OPTS];

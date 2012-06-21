@@ -18,7 +18,7 @@
  * programa; se não, escreva para a Free Software Foundation, Inc., 51 Franklin
  * St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * Este programa está nomeado como telnet.c e possui 3477 linhas de código.
+ * Este programa está nomeado como telnet.c e possui - linhas de código.
  *
  * Contatos:
  *
@@ -116,11 +116,11 @@
 
 /* Globals */
 // char    	*hostname = CN;
-time_t          ns_time;
-int             ns_brcvd;
-int             ns_rrcvd;
-int             ns_bsent;
-int             ns_rsent;
+// time_t          ns_time;
+//int             ns_brcvd;
+//int             ns_rrcvd;
+//int             ns_bsent;
+//int             ns_rsent;
 // unsigned char  *obuf;		/* 3270 output buffer */
 // unsigned char  *obptr = (unsigned char *) NULL;
 //int             linemode = 1;
@@ -133,7 +133,7 @@ Boolean		local_process = False;
 */
 
 /* Externals */
-extern struct timeval ds_ts;
+// extern struct timeval ds_ts;
 
 /* Statics */
 // static int      		sock 			= -1;	/* active socket */
@@ -153,18 +153,18 @@ extern struct timeval ds_ts;
 // static int      ibuf_size = 0;	/* size of ibuf */
 
 /* 3270 input buffer */
-static unsigned char *ibptr;
-static unsigned char *obuf_base = (unsigned char *)NULL;
-static int	obuf_size = 0;
-static unsigned char *netrbuf = (unsigned char *)NULL;
+// static unsigned char *ibptr;
+// static unsigned char *obuf_base = (unsigned char *)NULL;
+// static int	obuf_size = 0;
+// static unsigned char *netrbuf = (unsigned char *)NULL;
 
 /* network input buffer */
-static unsigned char *sbbuf = (unsigned char *)NULL;
+// static unsigned char *sbbuf = (unsigned char *)NULL;
 
 /* telnet sub-option buffer */
-static unsigned char *sbptr;
-static unsigned char telnet_state;
-static char     ttype_tmpval[13];
+// static unsigned char *sbptr;
+// static unsigned char telnet_state;
+// static char     ttype_tmpval[13];
 
 #if defined(X3270_TN3270E) /*[*/
 static unsigned long e_funcs;	/* negotiated TN3270E functions */
@@ -511,8 +511,8 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 	sockstart(session);
 #endif
 
-	if (netrbuf == (unsigned char *)NULL)
-		netrbuf = (unsigned char *)lib3270_malloc(BUFSZ);
+	if (session->netrbuf == (unsigned char *)NULL)
+		session->netrbuf = (unsigned char *)lib3270_malloc(BUFSZ);
 
 #if defined(X3270_ANSI) /*[*/
 	if (!t_valid)
@@ -704,8 +704,8 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 	/* set up temporary termtype */
 	if (session->termname == CN && session->std_ds_host)
 	{
-		sprintf(ttype_tmpval, "IBM-327%c-%d",session->m3279 ? '9' : '8', session->model_num);
-		session->termtype = ttype_tmpval;
+		sprintf(session->ttype_tmpval, "IBM-327%c-%d",session->m3279 ? '9' : '8', session->model_num);
+		session->termtype = session->ttype_tmpval;
 	}
 
 	/* all done */
@@ -876,16 +876,16 @@ static void net_connected(H3270 *session)
 #if defined(HAVE_LIBSSL) /*[*/
 	need_tls_follows = False;
 #endif /*]*/
-	telnet_state = TNS_DATA;
-	ibptr = h3270.ibuf;
+	h3270.telnet_state = TNS_DATA;
+	h3270.ibptr = h3270.ibuf;
 
 	/* clear statistics and flags */
-	(void) time(&ns_time);
-	ns_brcvd = 0;
-	ns_rrcvd = 0;
-	ns_bsent = 0;
-	ns_rsent = 0;
-	session->syncing = 0;
+	time(&session->ns_time);
+	session->ns_brcvd  = 0;
+	session->ns_rrcvd  = 0;
+	session->ns_bsent  = 0;
+	session->ns_rsent  = 0;
+	session->syncing   = 0;
 	tn3270e_negotiated = 0;
 	tn3270e_submode = E_NONE;
 	tn3270e_bound = 0;
@@ -1015,11 +1015,11 @@ void net_input(H3270 *session)
 
 #if defined(HAVE_LIBSSL)
 		if (session->ssl_con != NULL)
-			nr = SSL_read(session->ssl_con, (char *) netrbuf, BUFSZ);
+			nr = SSL_read(session->ssl_con, (char *) session->netrbuf, BUFSZ);
 		else
-			nr = recv(session->sock, (char *) netrbuf, BUFSZ, 0);
+			nr = recv(session->sock, (char *) session->netrbuf, BUFSZ, 0);
 #else
-			nr = recv(session->sock, (char *) netrbuf, BUFSZ, 0);
+			nr = recv(session->sock, (char *) session->netrbuf, BUFSZ, 0);
 #endif // HAVE_LIBSSL
 
 		if (nr < 0)
@@ -1087,10 +1087,10 @@ void net_input(H3270 *session)
 			net_connected(session);
 		}
 
-		trace_netdata('<', netrbuf, nr);
+		trace_netdata('<', session->netrbuf, nr);
 
-		ns_brcvd += nr;
-		for (cp = netrbuf; cp < (netrbuf + nr); cp++)
+		session->ns_brcvd += nr;
+		for (cp = session->netrbuf; cp < (session->netrbuf + nr); cp++)
 		{
 			if (telnet_fsm(session,*cp))
 			{
@@ -1181,10 +1181,10 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 	int	sl;
 #endif /*]*/
 
-	switch (telnet_state) {
+	switch (session->telnet_state) {
 	    case TNS_DATA:	/* normal data processing */
 		if (c == IAC) {	/* got a telnet command */
-			telnet_state = TNS_IAC;
+			session->telnet_state = TNS_IAC;
 #if defined(X3270_ANSI) /*[*/
 			if (ansi_data) {
 				trace_dsn("\n");
@@ -1252,36 +1252,36 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 #endif /*]*/
 			} else
 				store3270in(c);
-			telnet_state = TNS_DATA;
+			h3270.telnet_state = TNS_DATA;
 			break;
 		    case EOR:	/* eor, process accumulated input */
 			if (IN_3270 || (IN_E && tn3270e_negotiated)) {
-				ns_rrcvd++;
+				h3270.ns_rrcvd++;
 				if (process_eor())
 					return -1;
 			} else
 				Warning(NULL, _( "EOR received when not in 3270 mode, ignored." ));
 			trace_dsn("RCVD EOR\n");
-			ibptr = h3270.ibuf;
-			telnet_state = TNS_DATA;
+			h3270.ibptr = h3270.ibuf;
+			h3270.telnet_state = TNS_DATA;
 			break;
 		    case WILL:
-			telnet_state = TNS_WILL;
+			h3270.telnet_state = TNS_WILL;
 			break;
 		    case WONT:
-			telnet_state = TNS_WONT;
+			h3270.telnet_state = TNS_WONT;
 			break;
 		    case DO:
-			telnet_state = TNS_DO;
+			h3270.telnet_state = TNS_DO;
 			break;
 		    case DONT:
-			telnet_state = TNS_DONT;
+			h3270.telnet_state = TNS_DONT;
 			break;
 		    case SB:
-			telnet_state = TNS_SB;
-			if (sbbuf == (unsigned char *)NULL)
-				sbbuf = (unsigned char *)lib3270_malloc(1024);
-			sbptr = sbbuf;
+			h3270.telnet_state = TNS_SB;
+			if (session->sbbuf == (unsigned char *)NULL)
+				session->sbbuf = (unsigned char *)lib3270_malloc(1024);
+			session->sbptr = session->sbbuf;
 			break;
 		    case DM:
 			trace_dsn("\n");
@@ -1290,16 +1290,16 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 				session->syncing = 0;
 				x_except_on(session);
 			}
-			telnet_state = TNS_DATA;
+			h3270.telnet_state = TNS_DATA;
 			break;
 		    case GA:
 		    case NOP:
 			trace_dsn("\n");
-			telnet_state = TNS_DATA;
+			h3270.telnet_state = TNS_DATA;
 			break;
 		    default:
 			trace_dsn("???\n");
-			telnet_state = TNS_DATA;
+			h3270.telnet_state = TNS_DATA;
 			break;
 		}
 		break;
@@ -1346,7 +1346,7 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 			trace_dsn("SENT %s %s\n", cmd(DONT), opt(c));
 			break;
 		}
-		telnet_state = TNS_DATA;
+		h3270.telnet_state = TNS_DATA;
 		break;
 	    case TNS_WONT:	/* telnet WONT DO OPTION command */
 		trace_dsn("%s\n", opt(c));
@@ -1358,7 +1358,7 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 			check_in3270(&h3270);
 			check_linemode(False);
 		}
-		telnet_state = TNS_DATA;
+		h3270.telnet_state = TNS_DATA;
 		break;
 	    case TNS_DO:	/* telnet PLEASE DO OPTION command */
 		trace_dsn("%s\n", opt(c));
@@ -1419,7 +1419,7 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 			trace_dsn("SENT %s %s\n", cmd(WONT), opt(c));
 			break;
 		}
-		telnet_state = TNS_DATA;
+		h3270.telnet_state = TNS_DATA;
 		break;
 	    case TNS_DONT:	/* telnet PLEASE DON'T DO OPTION command */
 		trace_dsn("%s\n", opt(c));
@@ -1431,25 +1431,25 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 			check_in3270(&h3270);
 			check_linemode(False);
 		}
-		telnet_state = TNS_DATA;
+		h3270.telnet_state = TNS_DATA;
 		break;
 	    case TNS_SB:	/* telnet sub-option string command */
 		if (c == IAC)
-			telnet_state = TNS_SB_IAC;
+			h3270.telnet_state = TNS_SB_IAC;
 		else
-			*sbptr++ = c;
+			*h3270.sbptr++ = c;
 		break;
 	    case TNS_SB_IAC:	/* telnet sub-option string command */
-		*sbptr++ = c;
+		*h3270.sbptr++ = c;
 		if (c == SE) {
-			telnet_state = TNS_DATA;
-			if (sbbuf[0] == TELOPT_TTYPE &&
-			    sbbuf[1] == TELQUAL_SEND) {
+			h3270.telnet_state = TNS_DATA;
+			if (session->sbbuf[0] == TELOPT_TTYPE &&
+			    session->sbbuf[1] == TELQUAL_SEND) {
 				int tt_len, tb_len;
 				char *tt_out;
 
-				trace_dsn("%s %s\n", opt(sbbuf[0]),
-				    telquals[sbbuf[1]]);
+				trace_dsn("%s %s\n", opt(session->sbbuf[0]),
+				    telquals[session->sbbuf[1]]);
 				if (lus != (char **)NULL && try_lu == CN) {
 					/* None of the LUs worked. */
 					popup_an_error(NULL,"Cannot connect to specified LU");
@@ -1486,7 +1486,7 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 			}
 #if defined(X3270_TN3270E) /*[*/
 			else if (h3270.myopts[TELOPT_TN3270E] &&
-				   sbbuf[0] == TELOPT_TN3270E) {
+				   h3270.sbbuf[0] == TELOPT_TN3270E) {
 				if (tn3270e_negotiate())
 					return -1;
 			}
@@ -1494,13 +1494,13 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 #if defined(HAVE_LIBSSL) /*[*/
 			else if (need_tls_follows &&
 				   h3270.myopts[TELOPT_STARTTLS] &&
-				   sbbuf[0] == TELOPT_STARTTLS) {
-				continue_tls(sbbuf, sbptr - sbbuf);
+				   h3270.sbbuf[0] == TELOPT_STARTTLS) {
+				continue_tls(h3270.sbbuf, h3270.sbptr - h3270.sbbuf);
 			}
 #endif /*]*/
 
 		} else {
-			telnet_state = TNS_SB;
+			h3270.telnet_state = TNS_SB;
 		}
 		break;
 	}
@@ -1583,24 +1583,24 @@ tn3270e_negotiate(void)
 
 	/* Find out how long the subnegotiation buffer is. */
 	for (sblen = 0; ; sblen++) {
-		if (sbbuf[sblen] == SE)
+		if (h3270.sbbuf[sblen] == SE)
 			break;
 	}
 
 	trace_dsn("TN3270E ");
 
-	switch (sbbuf[1]) {
+	switch (h3270.sbbuf[1]) {
 
 	case TN3270E_OP_SEND:
 
-		if (sbbuf[2] == TN3270E_OP_DEVICE_TYPE) {
+		if (h3270.sbbuf[2] == TN3270E_OP_DEVICE_TYPE) {
 
 			/* Host wants us to send our device type. */
 			trace_dsn("SEND DEVICE-TYPE SE\n");
 
 			tn3270e_request();
 		} else {
-			trace_dsn("SEND ??%u SE\n", sbbuf[2]);
+			trace_dsn("SEND ??%u SE\n", h3270.sbbuf[2]);
 		}
 		break;
 
@@ -1609,7 +1609,7 @@ tn3270e_negotiate(void)
 		/* Device type negotiation. */
 		trace_dsn("DEVICE-TYPE ");
 
-		switch (sbbuf[2]) {
+		switch (h3270.sbbuf[2]) {
 		case TN3270E_OP_IS: {
 			int tnlen, snlen;
 
@@ -1617,24 +1617,24 @@ tn3270e_negotiate(void)
 
 			/* Isolate the terminal type and session. */
 			tnlen = 0;
-			while (sbbuf[3+tnlen] != SE &&
-			       sbbuf[3+tnlen] != TN3270E_OP_CONNECT)
+			while (h3270.sbbuf[3+tnlen] != SE &&
+			       h3270.sbbuf[3+tnlen] != TN3270E_OP_CONNECT)
 				tnlen++;
 			snlen = 0;
-			if (sbbuf[3+tnlen] == TN3270E_OP_CONNECT) {
-				while(sbbuf[3+tnlen+1+snlen] != SE)
+			if (h3270.sbbuf[3+tnlen] == TN3270E_OP_CONNECT) {
+				while(h3270.sbbuf[3+tnlen+1+snlen] != SE)
 					snlen++;
 			}
 			trace_dsn("IS %.*s CONNECT %.*s SE\n",
-				tnlen, &sbbuf[3],
-				snlen, &sbbuf[3+tnlen+1]);
+				tnlen, &h3270.sbbuf[3],
+				snlen, &h3270.sbbuf[3+tnlen+1]);
 
 			/* Remember the LU. */
 			if (tnlen) {
 				if (tnlen > LU_MAX)
 					tnlen = LU_MAX;
 				(void)strncpy(reported_type,
-				    (char *)&sbbuf[3], tnlen);
+				    (char *)&h3270.sbbuf[3], tnlen);
 				reported_type[tnlen] = '\0';
 				h3270.connected_type = reported_type;
 			}
@@ -1642,7 +1642,7 @@ tn3270e_negotiate(void)
 				if (snlen > LU_MAX)
 					snlen = LU_MAX;
 				(void)strncpy(reported_lu,
-				    (char *)&sbbuf[3+tnlen+1], snlen);
+				    (char *)&h3270.sbbuf[3+tnlen+1], snlen);
 				reported_lu[snlen] = '\0';
 				h3270.connected_lu = reported_lu;
 				status_lu(&h3270,h3270.connected_lu);
@@ -1656,11 +1656,10 @@ tn3270e_negotiate(void)
 
 			/* Device type failure. */
 
-			trace_dsn("REJECT REASON %s SE\n", rsn(sbbuf[4]));
-			if (sbbuf[4] == TN3270E_REASON_INV_DEVICE_TYPE ||
-			    sbbuf[4] == TN3270E_REASON_UNSUPPORTED_REQ) {
-				backoff_tn3270e("Host rejected device type or "
-				    "request type");
+			trace_dsn("REJECT REASON %s SE\n", rsn(h3270.sbbuf[4]));
+			if (h3270.sbbuf[4] == TN3270E_REASON_INV_DEVICE_TYPE ||
+			    h3270.sbbuf[4] == TN3270E_REASON_UNSUPPORTED_REQ) {
+				backoff_tn3270e(_( "Host rejected device type or request type" ));
 				break;
 			}
 
@@ -1670,14 +1669,14 @@ tn3270e_negotiate(void)
 				tn3270e_request();
 			} else if (lus != (char **)NULL) {
 				/* No more LUs to try.  Give up. */
-				backoff_tn3270e("Host rejected resource(s)");
+				backoff_tn3270e(_("Host rejected resource(s)"));
 			} else {
-				backoff_tn3270e("Device type rejected");
+				backoff_tn3270e(_("Device type rejected"));
 			}
 
 			break;
 		default:
-			trace_dsn("??%u SE\n", sbbuf[2]);
+			trace_dsn("??%u SE\n", h3270.sbbuf[2]);
 			break;
 		}
 		break;
@@ -1687,15 +1686,15 @@ tn3270e_negotiate(void)
 		/* Functions negotiation. */
 		trace_dsn("FUNCTIONS ");
 
-		switch (sbbuf[2]) {
+		switch (h3270.sbbuf[2]) {
 
 		case TN3270E_OP_REQUEST:
 
 			/* Host is telling us what functions they want. */
 			trace_dsn("REQUEST %s SE\n",
-			    tn3270e_function_names(sbbuf+3, sblen-3));
+			    tn3270e_function_names(h3270.sbbuf+3, sblen-3));
 
-			e_rcvd = tn3270e_fdecode(sbbuf+3, sblen-3);
+			e_rcvd = tn3270e_fdecode(h3270.sbbuf+3, sblen-3);
 			if ((e_rcvd == e_funcs) || (e_funcs & ~e_rcvd)) {
 				/* They want what we want, or less.  Done. */
 				e_funcs = e_rcvd;
@@ -1717,8 +1716,8 @@ tn3270e_negotiate(void)
 
 			/* They accept our last request, or a subset thereof. */
 			trace_dsn("IS %s SE\n",
-			    tn3270e_function_names(sbbuf+3, sblen-3));
-			e_rcvd = tn3270e_fdecode(sbbuf+3, sblen-3);
+			    tn3270e_function_names(h3270.sbbuf+3, sblen-3));
+			e_rcvd = tn3270e_fdecode(h3270.sbbuf+3, sblen-3);
 			if (e_rcvd != e_funcs) {
 				if (e_funcs & ~e_rcvd) {
 					/*
@@ -1732,8 +1731,7 @@ tn3270e_negotiate(void)
 					 * They've added something.  Abandon
 					 * TN3270E, they're brain dead.
 					 */
-					backoff_tn3270e("Host illegally added "
-					    "function(s)");
+					backoff_tn3270e("Host illegally added function(s)");
 					break;
 				}
 			}
@@ -1743,13 +1741,13 @@ tn3270e_negotiate(void)
 			break;
 
 		default:
-			trace_dsn("??%u SE\n", sbbuf[2]);
+			trace_dsn("??%u SE\n", h3270.sbbuf[2]);
 			break;
 		}
 		break;
 
 	default:
-		trace_dsn("??%u SE\n", sbbuf[1]);
+		trace_dsn("??%u SE\n", h3270.sbbuf[1]);
 	}
 
 	/* Good enough for now. */
@@ -1869,7 +1867,7 @@ process_bind(unsigned char *buf, int buflen)
 static int
 process_eor(void)
 {
-	if (h3270.syncing || !(ibptr - h3270.ibuf))
+	if (h3270.syncing || !(h3270.ibptr - h3270.ibuf))
 		return(0);
 
 #if defined(X3270_TN3270E) /*[*/
@@ -1893,7 +1891,7 @@ process_eor(void)
 			check_in3270(&h3270);
 			response_required = h->response_flag;
 			rv = process_ds(h3270.ibuf + EH_SIZE,
-			    (ibptr - h3270.ibuf) - EH_SIZE);
+			    (h3270.ibptr - h3270.ibuf) - EH_SIZE);
 			if (rv < 0 &&
 			    response_required != TN3270E_RSF_NO_RESPONSE)
 				tn3270e_nak(rv);
@@ -1905,7 +1903,7 @@ process_eor(void)
 		case TN3270E_DT_BIND_IMAGE:
 			if (!(e_funcs & E_OPT(TN3270E_FUNC_BIND_IMAGE)))
 				return 0;
-			process_bind(h3270.ibuf + EH_SIZE, (ibptr - h3270.ibuf) - EH_SIZE);
+			process_bind(h3270.ibuf + EH_SIZE, (h3270.ibptr - h3270.ibuf) - EH_SIZE);
 			trace_dsn("< BIND PLU-name '%s'\n", plu_name);
 			tn3270e_bound = 1;
 			check_in3270(&h3270);
@@ -1922,7 +1920,7 @@ process_eor(void)
 			/* In tn3270e NVT mode */
 			tn3270e_submode = E_NVT;
 			check_in3270(&h3270);
-			for (s = h3270.ibuf; s < ibptr; s++) {
+			for (s = h3270.ibuf; s < h3270.ibptr; s++) {
 				ansi_process(*s++);
 			}
 			return 0;
@@ -1931,7 +1929,7 @@ process_eor(void)
 				return 0;
 			tn3270e_submode = E_SSCP;
 			check_in3270(&h3270);
-			ctlr_write_sscp_lu(&h3270, h3270.ibuf + EH_SIZE,(ibptr - h3270.ibuf) - EH_SIZE);
+			ctlr_write_sscp_lu(&h3270, h3270.ibuf + EH_SIZE,(h3270.ibptr - h3270.ibuf) - EH_SIZE);
 			return 0;
 		default:
 			/* Should do something more extraordinary here. */
@@ -1940,7 +1938,7 @@ process_eor(void)
 	} else
 #endif /*]*/
 	{
-		(void) process_ds(h3270.ibuf, ibptr - h3270.ibuf);
+		(void) process_ds(h3270.ibuf, h3270.ibptr - h3270.ibuf);
 	}
 	return 0;
 }
@@ -2050,7 +2048,7 @@ net_rawout(H3270 *session, unsigned const char *buf, int len)
 				return;
 			}
 		}
-		ns_bsent += nw;
+		h3270.ns_bsent += nw;
 		len -= nw;
 		buf += nw;
 	    bot:
@@ -2476,7 +2474,7 @@ check_in3270(H3270 *session)
 		{
 			h3270.ibuf 		= (unsigned char *) lib3270_malloc(BUFSIZ);
 			h3270.ibuf_size = BUFSIZ;
-			ibptr			= h3270.ibuf;
+			h3270.ibptr		= h3270.ibuf;
 		}
 
 #if defined(X3270_ANSI) /*[*/
@@ -2507,13 +2505,13 @@ check_in3270(H3270 *session)
 static void
 store3270in(unsigned char c)
 {
-	if (ibptr - h3270.ibuf >= h3270.ibuf_size)
+	if (h3270.ibptr - h3270.ibuf >= h3270.ibuf_size)
 	{
 		h3270.ibuf_size += BUFSIZ;
 		h3270.ibuf = (unsigned char *) lib3270_realloc((char *) h3270.ibuf, h3270.ibuf_size);
-		ibptr = h3270.ibuf + h3270.ibuf_size - BUFSIZ;
+		h3270.ibptr = h3270.ibuf + h3270.ibuf_size - BUFSIZ;
 	}
-	*ibptr++ = c;
+	*h3270.ibptr++ = c;
 }
 
 /*
@@ -2527,18 +2525,17 @@ void space3270out(int n)
 	unsigned nc = 0;	/* amount of data currently in obuf */
 	unsigned more = 0;
 
-	if (obuf_size)
+	if (h3270.obuf_size)
 		nc = h3270.obptr - h3270.obuf;
 
-	while ((nc + n + EH_SIZE) > (obuf_size + more)) {
+	while ((nc + n + EH_SIZE) > (h3270.obuf_size + more)) {
 		more += BUFSIZ;
 	}
 
 	if (more) {
-		obuf_size += more;
-		obuf_base = (unsigned char *)Realloc((char *)obuf_base,
-			obuf_size);
-		h3270.obuf = obuf_base + EH_SIZE;
+		h3270.obuf_size += more;
+		h3270.obuf_base = (unsigned char *)Realloc((char *) h3270.obuf_base,h3270.obuf_size);
+		h3270.obuf = h3270.obuf_base + EH_SIZE;
 		h3270.obptr = h3270.obuf + nc;
 	}
 }
@@ -2645,11 +2642,11 @@ void trace_netdata(char direction, unsigned const char *buf, int len)
 		return;
 	(void) gettimeofday(&ts, (struct timezone *)NULL);
 	if (IN_3270) {
-		tdiff = ((1.0e6 * (double)(ts.tv_sec - ds_ts.tv_sec)) +
-			(double)(ts.tv_usec - ds_ts.tv_usec)) / 1.0e6;
+		tdiff = ((1.0e6 * (double)(ts.tv_sec - h3270.ds_ts.tv_sec)) +
+			(double)(ts.tv_usec - h3270.ds_ts.tv_usec)) / 1.0e6;
 		trace_dsn("%c +%gs\n", direction, tdiff);
 	}
-	ds_ts = ts;
+	h3270.ds_ts = ts;
 	for (offset = 0; offset < len; offset++) {
 		if (!(offset % LINEDUMP_MAX))
 			trace_dsn("%s%c 0x%-3x ",
@@ -2677,7 +2674,7 @@ net_output(void)
 	unsigned char *nxoptr, *xoptr;
 
 #if defined(X3270_TN3270E) /*[*/
-#define BSTART	((IN_TN3270E || IN_SSCP) ? obuf_base : h3270.obuf)
+#define BSTART	((IN_TN3270E || IN_SSCP) ? h3270.obuf_base : h3270.obuf)
 #else /*][*/
 #define BSTART	obuf
 #endif /*]*/
@@ -2685,7 +2682,7 @@ net_output(void)
 #if defined(X3270_TN3270E) /*[*/
 	/* Set the TN3720E header. */
 	if (IN_TN3270E || IN_SSCP) {
-		tn3270e_header *h = (tn3270e_header *)obuf_base;
+		tn3270e_header *h = (tn3270e_header *) h3270.obuf_base;
 
 		/* Check for sending a TN3270E response. */
 		if (response_required == TN3270E_RSF_ALWAYS_RESPONSE) {
@@ -2732,7 +2729,7 @@ net_output(void)
 	net_rawout(&h3270,xobuf, xoptr - xobuf);
 
 	trace_dsn("SENT EOR\n");
-	ns_rsent++;
+	h3270.ns_rsent++;
 #undef BSTART
 }
 

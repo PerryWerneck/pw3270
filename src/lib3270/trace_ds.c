@@ -113,7 +113,8 @@ static void	wtrace(const char *fmt, ...);
 // static void	stop_tracing(void);
 
 /* Globals */
-struct timeval  ds_ts;
+// struct timeval  ds_ts;
+
 static void (*vwtrace)(H3270 *session, const char *fmt, va_list args) = __vwtrace;
 Boolean         trace_skipping = False;
 
