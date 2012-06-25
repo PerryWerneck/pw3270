@@ -183,7 +183,7 @@ Boolean		local_process = False;
 // static unsigned char *lbptr;
 // static int      lnext = 0;
 // static int      backslashed = 0;
-static int      t_valid = 0;
+//static int      t_valid = 0;
 static char     vintr;
 static char     vquit;
 static char     verase;
@@ -230,12 +230,12 @@ static void tn3270e_nak(enum pds);
 
 #if defined(X3270_ANSI) /*[*/
 static void do_data(char c);
-static void do_intr(char c);
-static void do_quit(char c);
-static void do_cerase(char c);
-static void do_werase(char c);
-static void do_kill(char c);
-static void do_rprnt(char c);
+static void do_intr(H3270 *hSession, char c);
+static void do_quit(H3270 *hSession, char c);
+static void do_cerase(H3270 *hSession, char c);
+static void do_werase(H3270 *hSession, char c);
+static void do_kill(H3270 *hSession, char c);
+static void do_rprnt(H3270 *hSession, char c);
 static void do_eof(char c);
 static void do_eol(char c);
 static void do_lnext(char c);
@@ -496,6 +496,11 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 {
 //	struct servent	* sp;
 //	struct hostent	* hp;
+
+#if defined(X3270_ANSI)
+	static int		  t_valid = 0;
+#endif // X3270_ANSI
+
 	char	          passthru_haddr[8];
 	int				  passthru_len = 0;
 	unsigned short	  passthru_port = 0;
@@ -2163,23 +2168,23 @@ static void net_cookout(H3270 *hSession, const char *buf, int len)
 			if (c == '\n')
 				do_eol(c);
 			else if (c == vintr)
-				do_intr(c);
+				do_intr(hSession, c);
 			else if (c == vquit)
-				do_quit(c);
+				do_quit(hSession,c);
 			else if (c == verase)
-				do_cerase(c);
+				do_cerase(hSession,c);
 			else if (c == vkill)
-				do_kill(c);
+				do_kill(hSession,c);
 			else if (c == vwerase)
-				do_werase(c);
+				do_werase(hSession,c);
 			else if (c == vrprnt)
-				do_rprnt(c);
+				do_rprnt(hSession,c);
 			else if (c == veof)
 				do_eof(c);
 			else if (c == vlnext)
 				do_lnext(c);
 			else if (c == 0x08 || c == 0x7f) /* Yes, a hack. */
-				do_cerase(c);
+				do_cerase(hSession,c);
 			else
 				do_data(c);
 		}
@@ -2234,10 +2239,10 @@ do_data(char c)
 	h3270.backslashed = 0;
 }
 
-static void
-do_intr(char c)
+static void do_intr(H3270 *hSession, char c)
 {
-	if (h3270.lnext) {
+	if (hSession->lnext)
+	{
 		do_data(c);
 		return;
 	}
@@ -2246,10 +2251,10 @@ do_intr(char c)
 	net_interrupt();
 }
 
-static void
-do_quit(char c)
+static void do_quit(H3270 *hSession, char c)
 {
-	if (h3270.lnext) {
+	if (hSession->lnext)
+	{
 		do_data(c);
 		return;
 	}
@@ -2258,47 +2263,48 @@ do_quit(char c)
 	net_break();
 }
 
-static void
-do_cerase(char c)
+static void do_cerase(H3270 *hSession, char c)
 {
 	int len;
 
-	if (h3270.backslashed) {
-		h3270.lbptr--;
+	if (hSession->backslashed)
+	{
+		hSession->lbptr--;
 		ansi_process_s("\b");
 		do_data(c);
 		return;
 	}
-	if (h3270.lnext) {
+	if (hSession->lnext)
+	{
 		do_data(c);
 		return;
 	}
-	if (h3270.lbptr > h3270.lbuf) {
-		len = strlen(ctl_see((int) *--h3270.lbptr));
+	if (hSession->lbptr > hSession->lbuf)
+	{
+		len = strlen(ctl_see((int) *--hSession->lbptr));
 
 		while (len--)
 			ansi_process_s("\b \b");
 	}
 }
 
-static void
-do_werase(char c)
+static void do_werase(H3270 *hSession, char c)
 {
 	int any = 0;
 	int len;
 
-	if (h3270.lnext) {
+	if (hSession->lnext) {
 		do_data(c);
 		return;
 	}
-	while (h3270.lbptr > h3270.lbuf) {
+	while (hSession->lbptr > hSession->lbuf) {
 		char ch;
 
-		ch = *--h3270.lbptr;
+		ch = *--hSession->lbptr;
 
 		if (ch == ' ' || ch == '\t') {
 			if (any) {
-				++h3270.lbptr;
+				++hSession->lbptr;
 				break;
 			}
 		} else
@@ -2310,41 +2316,39 @@ do_werase(char c)
 	}
 }
 
-static void
-do_kill(char c)
+static void do_kill(H3270 *hSession, char c)
 {
 	int i, len;
 
-	if (h3270.backslashed) {
-		h3270.lbptr--;
+	if (hSession->backslashed) {
+		hSession->lbptr--;
 		ansi_process_s("\b");
 		do_data(c);
 		return;
 	}
-	if (h3270.lnext) {
+	if (hSession->lnext) {
 		do_data(c);
 		return;
 	}
-	while (h3270.lbptr > h3270.lbuf) {
-		len = strlen(ctl_see((int) *--h3270.lbptr));
+	while (hSession->lbptr > hSession->lbuf) {
+		len = strlen(ctl_see((int) *--hSession->lbptr));
 
 		for (i = 0; i < len; i++)
 			ansi_process_s("\b \b");
 	}
 }
 
-static void
-do_rprnt(char c)
+static void do_rprnt(H3270 *hSession, char c)
 {
 	unsigned char *p;
 
-	if (h3270.lnext) {
+	if (hSession->lnext) {
 		do_data(c);
 		return;
 	}
 	ansi_process_s(ctl_see((int) c));
 	ansi_process_s("\r\n");
-	for (p = h3270.lbuf; p < h3270.lbptr; p++)
+	for (p = hSession->lbuf; p < hSession->lbptr; p++)
 		ansi_process_s(ctl_see((int) *p));
 }
 
