@@ -196,6 +196,9 @@
 		int						  response_required;
 		int						  tn3270e_bound;
 		int						  tn3270e_negotiated;
+		int						  ansi_data;
+		int						  lnext;
+		int						  backslashed;
 
 		enum
 		{

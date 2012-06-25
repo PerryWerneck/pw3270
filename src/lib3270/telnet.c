@@ -177,12 +177,12 @@ Boolean		local_process = False;
 //#endif
 
 #if defined(X3270_ANSI) /*[*/
-static int      ansi_data = 0;
+//static int      ansi_data = 0;
 // static unsigned char *lbuf = (unsigned char *)NULL;
 /* line-mode input buffer */
 // static unsigned char *lbptr;
-static int      lnext = 0;
-static int      backslashed = 0;
+// static int      lnext = 0;
+// static int      backslashed = 0;
 static int      t_valid = 0;
 static char     vintr;
 static char     vquit;
@@ -1007,7 +1007,7 @@ void net_input(H3270 *session)
 */
 
 #if defined(X3270_ANSI) /*[*/
-		ansi_data = 0;
+	session->ansi_data = 0;
 #endif /*]*/
 
 #if defined(_WIN32)
@@ -1107,10 +1107,10 @@ void net_input(H3270 *session)
 			(void) ctlr_dbcs_postprocess();
 		}
 
-		if (ansi_data)
+		if (session->ansi_data)
 		{
 			trace_dsn("\n");
-			ansi_data = 0;
+			session->ansi_data = 0;
 		}
 #endif // X3270_ANSI
 
@@ -1187,9 +1187,9 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 		if (c == IAC) {	/* got a telnet command */
 			session->telnet_state = TNS_IAC;
 #if defined(X3270_ANSI) /*[*/
-			if (ansi_data) {
+			if (session->ansi_data) {
 				trace_dsn("\n");
-				ansi_data = 0;
+				session->ansi_data = 0;
 			}
 #endif /*]*/
 			break;
@@ -1206,15 +1206,15 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 		}
 		if (IN_ANSI && !IN_E) {
 #if defined(X3270_ANSI) /*[*/
-			if (!ansi_data) {
+			if (!session->ansi_data) {
 				trace_dsn("<.. ");
-				ansi_data = 4;
+				session->ansi_data = 4;
 			}
 			see_chr = ctl_see((int) c);
-			ansi_data += (sl = strlen(see_chr));
-			if (ansi_data >= TRACELINE) {
+			session->ansi_data += (sl = strlen(see_chr));
+			if (session->ansi_data >= TRACELINE) {
 				trace_dsn(" ...\n... ");
-				ansi_data = 4 + sl;
+				session->ansi_data = 4 + sl;
 			}
 			trace_dsn("%s",see_chr);
 			if (!session->syncing)
@@ -1237,15 +1237,15 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 		    case IAC:	/* escaped IAC, insert it */
 			if (IN_ANSI && !IN_E) {
 #if defined(X3270_ANSI) /*[*/
-				if (!ansi_data) {
+				if (!session->ansi_data) {
 					trace_dsn("<.. ");
-					ansi_data = 4;
+					session->ansi_data = 4;
 				}
 				see_chr = ctl_see((int) c);
-				ansi_data += (sl = strlen(see_chr));
-				if (ansi_data >= TRACELINE) {
+				session->ansi_data += (sl = strlen(see_chr));
+				if (session->ansi_data >= TRACELINE) {
 					trace_dsn(" ...\n ...");
-					ansi_data = 4 + sl;
+					session->ansi_data = 4 + sl;
 				}
 				trace_dsn("%s",see_chr);
 				ansi_process((unsigned int) c);
@@ -2148,16 +2148,16 @@ static void net_cookout(H3270 *hSession, const char *buf, int len)
 			c = buf[i];
 
 			/* Input conversions. */
-			if (!lnext && c == '\r' && hSession->icrnl)
+			if (!hSession->lnext && c == '\r' && hSession->icrnl)
 				c = '\n';
-			else if (!lnext && c == '\n' && hSession->inlcr)
+			else if (!hSession->lnext && c == '\n' && hSession->inlcr)
 				c = '\r';
 
 			/* Backslashes. */
-			if (c == '\\' && !backslashed)
-				backslashed = 1;
+			if (c == '\\' && !hSession->backslashed)
+				hSession->backslashed = 1;
 			else
-				backslashed = 0;
+				hSession->backslashed = 0;
 
 			/* Control chars. */
 			if (c == '\n')
@@ -2199,8 +2199,8 @@ cooked_init(void)
 	if (h3270.lbuf == (unsigned char *)NULL)
 		h3270.lbuf = (unsigned char *)lib3270_malloc(BUFSZ);
 	h3270.lbptr = h3270.lbuf;
-	lnext = 0;
-	backslashed = 0;
+	h3270.lnext = 0;
+	h3270.backslashed = 0;
 }
 
 static void
@@ -2230,14 +2230,14 @@ do_data(char c)
 			ansi_process_s(ctl_see((int) c));
 	} else
 		ansi_process_s("\007");
-	lnext = 0;
-	backslashed = 0;
+	h3270.lnext = 0;
+	h3270.backslashed = 0;
 }
 
 static void
 do_intr(char c)
 {
-	if (lnext) {
+	if (h3270.lnext) {
 		do_data(c);
 		return;
 	}
@@ -2249,7 +2249,7 @@ do_intr(char c)
 static void
 do_quit(char c)
 {
-	if (lnext) {
+	if (h3270.lnext) {
 		do_data(c);
 		return;
 	}
@@ -2263,13 +2263,13 @@ do_cerase(char c)
 {
 	int len;
 
-	if (backslashed) {
+	if (h3270.backslashed) {
 		h3270.lbptr--;
 		ansi_process_s("\b");
 		do_data(c);
 		return;
 	}
-	if (lnext) {
+	if (h3270.lnext) {
 		do_data(c);
 		return;
 	}
@@ -2287,7 +2287,7 @@ do_werase(char c)
 	int any = 0;
 	int len;
 
-	if (lnext) {
+	if (h3270.lnext) {
 		do_data(c);
 		return;
 	}
@@ -2315,13 +2315,13 @@ do_kill(char c)
 {
 	int i, len;
 
-	if (backslashed) {
+	if (h3270.backslashed) {
 		h3270.lbptr--;
 		ansi_process_s("\b");
 		do_data(c);
 		return;
 	}
-	if (lnext) {
+	if (h3270.lnext) {
 		do_data(c);
 		return;
 	}
@@ -2338,7 +2338,7 @@ do_rprnt(char c)
 {
 	unsigned char *p;
 
-	if (lnext) {
+	if (h3270.lnext) {
 		do_data(c);
 		return;
 	}
@@ -2351,13 +2351,13 @@ do_rprnt(char c)
 static void
 do_eof(char c)
 {
-	if (backslashed) {
+	if (h3270.backslashed) {
 		h3270.lbptr--;
 		ansi_process_s("\b");
 		do_data(c);
 		return;
 	}
-	if (lnext) {
+	if (h3270.lnext) {
 		do_data(c);
 		return;
 	}
@@ -2368,7 +2368,7 @@ do_eof(char c)
 static void
 do_eol(char c)
 {
-	if (lnext) {
+	if (h3270.lnext) {
 		do_data(c);
 		return;
 	}
@@ -2385,11 +2385,11 @@ do_eol(char c)
 static void
 do_lnext(char c)
 {
-	if (lnext) {
+	if (h3270.lnext) {
 		do_data(c);
 		return;
 	}
-	lnext = 1;
+	h3270.lnext = 1;
 	ansi_process_s("^\b");
 }
 #endif /*]*/
