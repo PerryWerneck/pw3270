@@ -200,7 +200,7 @@ $(TMPDIR)/$(PACKAGE_NAME).pot: $(BINDIR)/pot/pw3270.pot $(BINDIR)/pot/lib3270.po
 
 pixmaps: src/pw3270/$(PACKAGE_NAME).png src/pw3270/$(PACKAGE_NAME)-logo.png
 
-$(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar: clean pixmaps
+$(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar: clean pixmaps filelist
 	@rm -fr $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@find src -name Makefile -exec rm -f {} \;
 	@$(MKDIR) $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
@@ -216,6 +216,9 @@ $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar: clean pixmaps
 
 	@$(MKDIR) $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/ui
 	@cp ui/* $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/ui
+
+	@$(MKDIR) $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/debian
+	@cp debian/* $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/debian
 
 	@$(MKDIR) $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/po
 	@cp po/*.po $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/po
@@ -265,7 +268,6 @@ clean:
 	@rm -fr .bin
 	@rm -fr .tmp
 	@rm -f $(PACKAGE_NAME).po
-	@rm -f debian/*.install
 	@make -C src/lib3270 clean
 	@make -C src/pw3270 clean
 	@make -C src/tools clean
@@ -275,6 +277,7 @@ clean:
 
 distclean: clean
 	@make -C src/pw3270 distclean
+	@rm -f debian/*.install
 	@rm -f src/pw3270/Makefile
 	@rm -f config.status
 	@rm -f src/lib3270/mkversion.sh
