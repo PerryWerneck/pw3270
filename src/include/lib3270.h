@@ -35,6 +35,14 @@
 	#include <stdarg.h>
 
 	/**
+	 * BIND definitions.
+	 */
+	#define LIB3270_BIND_RU					0x31
+	#define LIB3270_BIND_OFF_PLU_NAME_LEN	26
+	#define LIB3270_BIND_OFF_PLU_NAME		27
+	#define LIB3270_BIND_PLU_NAME_MAX		8
+
+	/**
 	 * Character attributes
 	 */
 	typedef enum _lib3270_attr

@@ -197,15 +197,15 @@ static char     vlnext;
 // static int	tn3270e_negotiated = 0;
 //static enum { E_NONE, E_3270, E_NVT, E_SSCP } tn3270e_submode = E_NONE;
 // static int	tn3270e_bound = 0;
-static char	plu_name[BIND_PLU_NAME_MAX+1];
-static char	**lus = (char **)NULL;
-static char	**curr_lu = (char **)NULL;
-static char	*try_lu = CN;
+// static char	plu_name[BIND_PLU_NAME_MAX+1];
+// static char	**lus = (char **)NULL;
+// static char	**curr_lu = (char **)NULL;
+//static char	*try_lu = CN;
 
-static int	proxy_type = 0;
-static char	*proxy_host = CN;
-static char	*proxy_portname = CN;
-static unsigned short proxy_port = 0;
+// static int	proxy_type = 0;
+// static char	*proxy_host = CN;
+//static char	*proxy_portname = CN;
+// static unsigned short proxy_port = 0;
 
 static int telnet_fsm(H3270 *session, unsigned char c);
 static void net_rawout(H3270 *session, unsigned const char *buf, int len);
@@ -587,11 +587,11 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 
 #endif // HAVE_GETADDRINFO
 	}
-	else if(session->proxy != CN && !proxy_type)
+	else if(session->proxy != CN && !session->proxy_type)
 	{
-	   	proxy_type = proxy_setup(session, &proxy_host, &proxy_portname);
+	   	session->proxy_type = proxy_setup(session, &session->proxy_host, &session->proxy_portname);
 
-		if (proxy_type > 0)
+		if (session->proxy_type > 0)
 		{
 		   	unsigned long lport;
 			char *ptr;
@@ -613,7 +613,7 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 			}
 		}
 
-		if (proxy_type < 0)
+		if (session->proxy_type < 0)
 			return -1;
 	}
 
@@ -625,9 +625,9 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 			       passthru_len);
 		haddr.sin.sin_port = passthru_port;
 		ha_len = sizeof(struct sockaddr_in);
-	} else if (proxy_type > 0) {
-	    	if (resolve_host_and_port(session,proxy_host, proxy_portname,
-			    &proxy_port, &haddr.sa, &ha_len, errmsg,
+	} else if (session->proxy_type > 0) {
+	    	if (resolve_host_and_port(session,session->proxy_host, session->proxy_portname,
+			    &session->proxy_port, &haddr.sa, &ha_len, errmsg,
 			    sizeof(errmsg)) < 0) {
 		    	popup_an_error(session,errmsg);
 		    	return -1;
@@ -769,9 +769,9 @@ setup_lus(void)
 	h3270.connected_type = CN;
 
 	if (!h3270.luname[0]) {
-		Replace(lus, NULL);
-		curr_lu = (char **)NULL;
-		try_lu = CN;
+		Replace(h3270.lus, NULL);
+		h3270.curr_lu = (char **)NULL;
+		h3270.try_lu = CN;
 		return;
 	}
 
@@ -789,33 +789,33 @@ setup_lus(void)
 	 * Allocate enough memory to construct an argv[] array for
 	 * the LUs.
 	 */
-	Replace(lus,(char **)lib3270_malloc((n_lus+1) * sizeof(char *) + strlen(h3270.luname) + 1));
+	Replace(h3270.lus,(char **)lib3270_malloc((n_lus+1) * sizeof(char *) + strlen(h3270.luname) + 1));
 
 	/* Copy each LU into the array. */
-	lu = (char *)(lus + n_lus + 1);
+	lu = (char *)(h3270.lus + n_lus + 1);
 	(void) strcpy(lu, h3270.luname);
 	i = 0;
 	do {
-		lus[i++] = lu;
+		h3270.lus[i++] = lu;
 		comma = strchr(lu, ',');
 		if (comma != CN) {
 			*comma = '\0';
 			lu = comma + 1;
 		}
 	} while (comma != CN);
-	lus[i] = CN;
-	curr_lu = lus;
-	try_lu = *curr_lu;
+	h3270.lus[i] = CN;
+	h3270.curr_lu = h3270.lus;
+	h3270.try_lu = *h3270.curr_lu;
 }
 
 static void net_connected(H3270 *session)
 {
-	if (proxy_type > 0)
+	if(session->proxy_type > 0)
 	{
 		/* Negotiate with the proxy. */
-		trace_dsn("Connected to proxy server %s, port %u.\n",proxy_host, proxy_port);
+		trace_dsn("Connected to proxy server %s, port %u.\n",session->proxy_host, session->proxy_port);
 
-		if (proxy_negotiate(proxy_type, session->sock, session->hostname,session->current_port) < 0)
+		if (proxy_negotiate(session->proxy_type, session->sock, session->hostname,session->current_port) < 0)
 		{
 			host_disconnect(session,True);
 			return;
@@ -1171,8 +1171,8 @@ send_naws(void)
 static void
 next_lu(void)
 {
-	if (curr_lu != (char **)NULL && (try_lu = *++curr_lu) == CN)
-		curr_lu = (char **)NULL;
+	if (h3270.curr_lu != (char **)NULL && (h3270.try_lu = *++h3270.curr_lu) == CN)
+		h3270.curr_lu = (char **)NULL;
 }
 
 /*
@@ -1456,16 +1456,16 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 
 				trace_dsn("%s %s\n", opt(session->sbbuf[0]),
 				    telquals[session->sbbuf[1]]);
-				if (lus != (char **)NULL && try_lu == CN) {
+				if (session->lus != (char **)NULL && h3270.try_lu == CN) {
 					/* None of the LUs worked. */
 					popup_an_error(NULL,"Cannot connect to specified LU");
 					return -1;
 				}
 
 				tt_len = strlen(session->termtype);
-				if (try_lu != CN && *try_lu) {
-					tt_len += strlen(try_lu) + 1;
-					session->connected_lu = try_lu;
+				if (h3270.try_lu != CN && *h3270.try_lu) {
+					tt_len += strlen(h3270.try_lu) + 1;
+					session->connected_lu = h3270.try_lu;
 				} else
 					session->connected_lu = CN;
 				status_lu(session,session->connected_lu);
@@ -1475,8 +1475,8 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 				(void) sprintf(tt_out, "%c%c%c%c%s%s%s%c%c",
 				    IAC, SB, TELOPT_TTYPE, TELQUAL_IS,
 				    session->termtype,
-				    (try_lu != CN && *try_lu) ? "@" : "",
-				    (try_lu != CN && *try_lu) ? try_lu : "",
+				    (h3270.try_lu != CN && *h3270.try_lu) ? "@" : "",
+				    (h3270.try_lu != CN && *h3270.try_lu) ? h3270.try_lu : "",
 				    IAC, SE);
 				net_rawout(&h3270, (unsigned char *)tt_out, tb_len);
 
@@ -1523,8 +1523,8 @@ tn3270e_request(void)
 	char *t;
 
 	tt_len = strlen(h3270.termtype);
-	if (try_lu != CN && *try_lu)
-		tt_len += strlen(try_lu) + 1;
+	if (h3270.try_lu != CN && *h3270.try_lu)
+		tt_len += strlen(h3270.try_lu) + 1;
 
 	tb_len = 5 + tt_len + 2;
 	tt_out = lib3270_malloc(tb_len + 1);
@@ -1537,8 +1537,8 @@ tn3270e_request(void)
 	if (tt_out[12] == '9')
 		tt_out[12] = '8';
 
-	if (try_lu != CN && *try_lu)
-		t += sprintf(t, "%c%s", TN3270E_OP_CONNECT, try_lu);
+	if (h3270.try_lu != CN && *h3270.try_lu)
+		t += sprintf(t, "%c%s", TN3270E_OP_CONNECT, h3270.try_lu);
 
 	(void) sprintf(t, "%c%c", IAC, SE);
 
@@ -1546,8 +1546,8 @@ tn3270e_request(void)
 
 	trace_dsn("SENT %s %s DEVICE-TYPE REQUEST %.*s%s%s %s\n",
 	    cmd(SB), opt(TELOPT_TN3270E), (int) strlen(h3270.termtype), tt_out + 5,
-	    (try_lu != CN && *try_lu) ? " CONNECT " : "",
-	    (try_lu != CN && *try_lu) ? try_lu : "",
+	    (h3270.try_lu != CN && *h3270.try_lu) ? " CONNECT " : "",
+	    (h3270.try_lu != CN && *h3270.try_lu) ? h3270.try_lu : "",
 	    cmd(SE));
 
 	lib3270_free(tt_out);
@@ -1670,10 +1670,10 @@ tn3270e_negotiate(void)
 			}
 
 			next_lu();
-			if (try_lu != CN) {
+			if (h3270.try_lu != CN) {
 				/* Try the next LU. */
 				tn3270e_request();
-			} else if (lus != (char **)NULL) {
+			} else if (h3270.lus != (char **)NULL) {
 				/* No more LUs to try.  Give up. */
 				backoff_tn3270e(_("Host rejected resource(s)"));
 			} else {
@@ -1849,7 +1849,7 @@ process_bind(unsigned char *buf, int buflen)
 {
 	int namelen, i;
 
-	(void) memset(plu_name, '\0', sizeof(plu_name));
+	(void) memset(h3270.plu_name, '\0', sizeof(h3270.plu_name));
 
 	/* Make sure it's a BIND. */
 	if (buflen < 1 || buf[0] != BIND_RU) {
@@ -1865,7 +1865,7 @@ process_bind(unsigned char *buf, int buflen)
 	if (namelen > BIND_PLU_NAME_MAX)
 		namelen = BIND_PLU_NAME_MAX;
 	for (i = 0; i < namelen; i++) {
-		plu_name[i] = ebc2asc0[buf[BIND_OFF_PLU_NAME + i]];
+		h3270.plu_name[i] = ebc2asc0[buf[BIND_OFF_PLU_NAME + i]];
 	}
 }
 #endif /*]*/
@@ -1910,7 +1910,7 @@ process_eor(void)
 			if (!(h3270.e_funcs & E_OPT(TN3270E_FUNC_BIND_IMAGE)))
 				return 0;
 			process_bind(h3270.ibuf + EH_SIZE, (h3270.ibptr - h3270.ibuf) - EH_SIZE);
-			trace_dsn("< BIND PLU-name '%s'\n", plu_name);
+			trace_dsn("< BIND PLU-name '%s'\n", h3270.plu_name);
 			h3270.tn3270e_bound = 1;
 			check_in3270(&h3270);
 			return 0;
@@ -2468,9 +2468,9 @@ check_in3270(H3270 *session)
 		 * TN3270E mode, reset the LU list so we can try again
 		 * in the new mode.
 		 */
-		if (lus != (char **)NULL && was_in_e != IN_E) {
-			curr_lu = lus;
-			try_lu = *curr_lu;
+		if (h3270.lus != (char **)NULL && was_in_e != IN_E) {
+			h3270.curr_lu = h3270.lus;
+			h3270.try_lu = *h3270.curr_lu;
 		}
 #endif /*]*/
 
@@ -3452,30 +3452,30 @@ int net_getsockname(const H3270 *session, void *buf, int *len)
 char *
 net_proxy_type(void)
 {
-   	if (proxy_type > 0)
-	    	return proxy_type_name(proxy_type);
+   	if(h3270.proxy_type > 0)
+		return proxy_type_name(h3270.proxy_type);
 	else
-	    	return NULL;
+		return NULL;
 }
 
 /* Return the current proxy host, or NULL. */
 char *
 net_proxy_host(void)
 {
-    	if (proxy_type > 0)
-	    	return proxy_host;
+	if(h3270.proxy_type > 0)
+		return h3270.proxy_host;
 	else
-	    	return NULL;
+		return NULL;
 }
 
 /* Return the current proxy port, or NULL. */
 char *
 net_proxy_port(void)
 {
-    	if (proxy_type > 0)
-	    	return proxy_portname;
+	if (h3270.proxy_type > 0)
+		return h3270.proxy_portname;
 	else
-	    	return NULL;
+		return NULL;
 }
 
 LIB3270_EXPORT LIB3270_SSL_STATE lib3270_get_secure(H3270 *session)

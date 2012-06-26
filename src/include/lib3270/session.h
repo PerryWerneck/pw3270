@@ -199,6 +199,14 @@
 		int						  ansi_data;
 		int						  lnext;
 		int						  backslashed;
+		char					  plu_name[LIB3270_BIND_PLU_NAME_MAX+1];
+		char					**lus;
+		char					**curr_lu;
+		char					* try_lu;
+		int						  proxy_type;
+		char					* proxy_host;
+		char					* proxy_portname;
+		unsigned short			  proxy_port;
 
 		enum
 		{
