@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-21 11:03-0300\n"
+"POT-Creation-Date: 2012-06-29 07:31-0300\n"
 "PO-Revision-Date: 2012-06-21 11:08-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português do Brasil <>\n"
@@ -43,7 +43,7 @@ msgstr "%s requer GTK versão %d.%d.%d"
 msgid "%s: unknown family %d"
 msgstr "%s: Familia %d é inválida"
 
-#: telnet.c:1061
+#: telnet.c:1067
 #, c-format
 msgid "%s:%d"
 msgstr "%s:%d"
@@ -90,7 +90,7 @@ msgstr "<%s> precisa do atributo %s"
 msgid "<%s> should be on toplevel"
 msgstr "<%s> deve estar no primeiro nível"
 
-#: telnet.c:3339
+#: telnet.c:3343
 #, c-format
 msgid ""
 "<b>Connection state:</b> %s\n"
@@ -161,7 +161,7 @@ msgstr "BLKSIZE:"
 msgid "Background"
 msgstr "Fundo"
 
-#: telnet.c:414
+#: telnet.c:417
 msgid "Bad winsock version"
 msgstr "Versão winsock inválida"
 
@@ -206,7 +206,7 @@ msgstr "At_ual"
 msgid "Can't accept unnamed %s"
 msgstr "Não posso aceitar elemento %s sem nome"
 
-#: telnet.c:691
+#: telnet.c:699
 #, c-format
 msgid "Can't connect to %s:%d"
 msgstr "Não foi possível conectar a %s:%d"
@@ -281,7 +281,7 @@ msgstr ""
 "Não foi possível salvar a seleção para o arquivo\n"
 "%s"
 
-#: telnet.c:830
+#: telnet.c:838
 msgid "Can't set SSL socket file descriptor"
 msgstr "Não foi possível definir o descritor de socket SSL"
 
@@ -301,7 +301,7 @@ msgstr "Não foi possível iniciar transferência de arquivo"
 msgid "Can't start upload"
 msgstr "Não foi possível iniciar upload"
 
-#: telnet.c:415
+#: telnet.c:418
 #, c-format
 msgid "Can't use winsock version %d.%d"
 msgstr "Não é possível usar a Winsock versão %d.%d"
@@ -310,7 +310,7 @@ msgstr "Não é possível usar a Winsock versão %d.%d"
 msgid "Cancelled by user"
 msgstr "Cancelado pelo usuário"
 
-#: telnet.c:725
+#: telnet.c:733
 msgid "Cannot create socket handle"
 msgstr "Não foi possível criar um manipulador de socket"
 
@@ -347,7 +347,7 @@ msgstr "Completo"
 msgid "Connect on startup"
 msgstr "Conectar ao iniciar"
 
-#: telnet.c:830 telnet.c:848
+#: telnet.c:838 telnet.c:856
 msgid "Connection failed"
 msgstr "Conexão falhou"
 
@@ -416,7 +416,7 @@ msgstr "Mostrar atualizações de janela"
 msgid "Default"
 msgstr "Padrão"
 
-#: telnet.c:1674
+#: telnet.c:1680
 msgid "Device type rejected"
 msgstr "Tipo de dispositivo rejeitado"
 
@@ -424,7 +424,7 @@ msgstr "Tipo de dispositivo rejeitado"
 msgid "Disconnected from host"
 msgstr "Desconectado do servidor"
 
-#: telnet.c:1263
+#: telnet.c:1269
 msgid "EOR received when not in 3270 mode, ignored."
 msgstr "EOR recebido fora do modo 3270, ignorado."
 
@@ -541,11 +541,11 @@ msgstr "Servidor desconectou, transferência cancelada"
 msgid "Host is T_SO"
 msgstr "Servidor é T_SO"
 
-#: telnet.c:1662
+#: telnet.c:1668
 msgid "Host rejected device type or request type"
 msgstr "Host rejected device type or request type"
 
-#: telnet.c:1672
+#: telnet.c:1678
 msgid "Host rejected resource(s)"
 msgstr "Host rejected resource(s)"
 
@@ -635,11 +635,11 @@ msgstr "Mostarda"
 msgid "N/A"
 msgstr "N/A"
 
-#: telnet.c:444 telnet.c:695
+#: telnet.c:447 telnet.c:703
 msgid "Network error"
 msgstr "Erro de rede"
 
-#: telnet.c:402 telnet.c:413 telnet.c:724 telnet.c:735
+#: telnet.c:405 telnet.c:416 telnet.c:732 telnet.c:743
 msgid "Network startup error"
 msgstr "Erro ao iniciar a rede"
 
@@ -789,15 +789,15 @@ msgstr "Reselecionar"
 msgid "Return"
 msgstr "Return"
 
-#: telnet.c:3337
+#: telnet.c:3341
 msgid "SSL Connect error"
 msgstr "Erro na conexão SSL"
 
-#: telnet.c:1044
+#: telnet.c:1050
 msgid "SSL Error"
 msgstr "Erro SSL"
 
-#: telnet.c:1044
+#: telnet.c:1050
 msgid "SSL Read error"
 msgstr "Erro de leitura SSL"
 
@@ -805,7 +805,7 @@ msgstr "Erro de leitura SSL"
 msgid "SSL error"
 msgstr "Erro SSL"
 
-#: telnet.c:848
+#: telnet.c:856
 msgid "SSL negotiation failed"
 msgstr "Negociação SSL falhou"
 
@@ -913,11 +913,11 @@ msgstr "Mostrar padrão de teste"
 msgid "Smart paste"
 msgstr "Colar inteligente"
 
-#: telnet.c:1065
+#: telnet.c:1071
 msgid "Socket read error"
 msgstr "Erro ao ler dados da rede"
 
-#: telnet.c:2046
+#: telnet.c:2052
 msgid "Socket write error"
 msgstr "Erro ao enviar dados para a rede"
 
@@ -1116,7 +1116,7 @@ msgstr ""
 "Servidor desconhecido:\n"
 "%s"
 
-#: telnet.c:568
+#: telnet.c:576
 #, c-format
 msgid "Unknown passthru host: %s"
 msgstr ""
@@ -1128,12 +1128,12 @@ msgstr ""
 msgid "Unknown popup type \"%s\""
 msgstr "Tipo de popup \"%s\" não é conhecido"
 
-#: telnet.c:597 resolver.c:147
+#: telnet.c:605 resolver.c:147
 #, c-format
 msgid "Unknown port number or service: %s"
 msgstr "Número de porta ou serviço desconhecido: %s"
 
-#: telnet.c:553
+#: telnet.c:561
 msgid "Unsupported passthru host session"
 msgstr "Unsupported passthru host session"
 
@@ -1154,11 +1154,11 @@ msgstr "Variável"
 msgid "Version %s - Revision %s"
 msgstr "Versão %s - Revisão %s"
 
-#: telnet.c:736
+#: telnet.c:744
 msgid "WSAEventSelect failed"
 msgstr "WSAEventSelect falhou"
 
-#: telnet.c:403
+#: telnet.c:406
 msgid "WSAStartup failed"
 msgstr "WSAStartup falhou"
 
@@ -1326,22 +1326,22 @@ msgstr "um atributo \"type\" ou \"group\""
 msgid "an action attribute"
 msgstr "um atributo \"action\""
 
-#: telnet.c:3203 telnet.c:3214
+#: telnet.c:3207 telnet.c:3218
 #, c-format
 msgid "fcntl(%s)"
 msgstr "fcntl(%s)"
 
-#: telnet.c:3193
+#: telnet.c:3197
 #, c-format
 msgid "ioctl(%s)"
 msgstr "ioctl(%s)"
 
-#: telnet.c:646 telnet.c:652 telnet.c:659
+#: telnet.c:654 telnet.c:660 telnet.c:667
 #, c-format
 msgid "setsockopt(%s)"
 msgstr "setsockopt(%s)"
 
-#: telnet.c:639
+#: telnet.c:647
 msgid "socket"
 msgstr "socket"
 
@@ -1349,7 +1349,7 @@ msgstr "socket"
 msgid "translator-credits"
 msgstr ""
 
-#: telnet.c:1040
+#: telnet.c:1046
 msgid "unknown error"
 msgstr "Erro desconhecido"
 
