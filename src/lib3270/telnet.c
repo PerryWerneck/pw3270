@@ -210,8 +210,8 @@ static char     vlnext;
 static int telnet_fsm(H3270 *session, unsigned char c);
 static void net_rawout(H3270 *session, unsigned const char *buf, int len);
 static void check_in3270(H3270 *session);
-static void store3270in(unsigned char c);
-static void check_linemode(Boolean init);
+static void store3270in(H3270 *hSession, unsigned char c);
+static void check_linemode(H3270 *hSession, Boolean init);
 static int non_blocking(H3270 *session, Boolean on);
 static void net_connected(H3270 *session);
 #if defined(X3270_TN3270E) /*[*/
@@ -898,7 +898,7 @@ static void net_connected(H3270 *session)
 
 	setup_lus();
 
-	check_linemode(True);
+	check_linemode(session,True);
 
 	/* write out the passthru hostname and port nubmer */
 	if (session->passthru_host)
@@ -1231,7 +1231,7 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 			}
 #endif /*]*/
 		} else {
-			store3270in(c);
+			store3270in(session,c);
 		}
 		break;
 	    case TNS_IAC:	/* process a telnet command */
@@ -1254,37 +1254,36 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 				}
 				trace_dsn("%s",see_chr);
 				ansi_process((unsigned int) c);
-//				sms_store(c);
 #endif /*]*/
 			} else
-				store3270in(c);
-			h3270.telnet_state = TNS_DATA;
+				store3270in(session,c);
+			session->telnet_state = TNS_DATA;
 			break;
 		    case EOR:	/* eor, process accumulated input */
-			if (IN_3270 || (IN_E && h3270.tn3270e_negotiated)) {
-				h3270.ns_rrcvd++;
+			if (IN_3270 || (IN_E && session->tn3270e_negotiated)) {
+				session->ns_rrcvd++;
 				if (process_eor())
 					return -1;
 			} else
-				Warning(NULL, _( "EOR received when not in 3270 mode, ignored." ));
+				Warning(session, _( "EOR received when not in 3270 mode, ignored." ));
 			trace_dsn("RCVD EOR\n");
-			h3270.ibptr = h3270.ibuf;
-			h3270.telnet_state = TNS_DATA;
+			session->ibptr = session->ibuf;
+			session->telnet_state = TNS_DATA;
 			break;
 		    case WILL:
-			h3270.telnet_state = TNS_WILL;
+			session->telnet_state = TNS_WILL;
 			break;
 		    case WONT:
-			h3270.telnet_state = TNS_WONT;
+			session->telnet_state = TNS_WONT;
 			break;
 		    case DO:
-			h3270.telnet_state = TNS_DO;
+			session->telnet_state = TNS_DO;
 			break;
 		    case DONT:
-			h3270.telnet_state = TNS_DONT;
+			session->telnet_state = TNS_DONT;
 			break;
 		    case SB:
-			h3270.telnet_state = TNS_SB;
+			session->telnet_state = TNS_SB;
 			if (session->sbbuf == (unsigned char *)NULL)
 				session->sbbuf = (unsigned char *)lib3270_malloc(1024);
 			session->sbptr = session->sbbuf;
@@ -1296,16 +1295,16 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 				session->syncing = 0;
 				x_except_on(session);
 			}
-			h3270.telnet_state = TNS_DATA;
+			session->telnet_state = TNS_DATA;
 			break;
 		    case GA:
 		    case NOP:
 			trace_dsn("\n");
-			h3270.telnet_state = TNS_DATA;
+			session->telnet_state = TNS_DATA;
 			break;
 		    default:
 			trace_dsn("???\n");
-			h3270.telnet_state = TNS_DATA;
+			session->telnet_state = TNS_DATA;
 			break;
 		}
 		break;
@@ -1320,11 +1319,11 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 #if defined(X3270_TN3270E) /*[*/
 		    case TELOPT_TN3270E:
 #endif /*]*/
-			if (c != TELOPT_TN3270E || !h3270.non_tn3270e_host) {
-				if (!h3270.hisopts[c]) {
-					h3270.hisopts[c] = 1;
+			if (c != TELOPT_TN3270E || !session->non_tn3270e_host) {
+				if (!session->hisopts[c]) {
+					session->hisopts[c] = 1;
 					do_opt[2] = c;
-					net_rawout(&h3270,do_opt, sizeof(do_opt));
+					net_rawout(session,do_opt, sizeof(do_opt));
 					trace_dsn("SENT %s %s\n",
 						cmd(DO), opt(c));
 
@@ -1332,27 +1331,25 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 					 * For UTS, volunteer to do EOR when
 					 * they do.
 					 */
-					if (c == TELOPT_EOR && !h3270.myopts[c]) {
-						h3270.myopts[c] = 1;
+					if (c == TELOPT_EOR && !session->myopts[c]) {
+						session->myopts[c] = 1;
 						will_opt[2] = c;
-						net_rawout(&h3270,will_opt,
-							sizeof(will_opt));
-						trace_dsn("SENT %s %s\n",
-							cmd(WILL), opt(c));
+						net_rawout(session,will_opt,sizeof(will_opt));
+						trace_dsn("SENT %s %s\n",cmd(WILL), opt(c));
 					}
 
-					check_in3270(&h3270);
-					check_linemode(False);
+					check_in3270(session);
+					check_linemode(session,False);
 				}
 				break;
 			}
 		    default:
 			dont_opt[2] = c;
-			net_rawout(&h3270,dont_opt, sizeof(dont_opt));
+			net_rawout(session,dont_opt, sizeof(dont_opt));
 			trace_dsn("SENT %s %s\n", cmd(DONT), opt(c));
 			break;
 		}
-		h3270.telnet_state = TNS_DATA;
+		session->telnet_state = TNS_DATA;
 		break;
 	    case TNS_WONT:	/* telnet WONT DO OPTION command */
 		trace_dsn("%s\n", opt(c));
@@ -1362,7 +1359,7 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 			net_rawout(&h3270, dont_opt, sizeof(dont_opt));
 			trace_dsn("SENT %s %s\n", cmd(DONT), opt(c));
 			check_in3270(&h3270);
-			check_linemode(False);
+			check_linemode(&h3270,False);
 		}
 		h3270.telnet_state = TNS_DATA;
 		break;
@@ -1393,7 +1390,7 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 				net_rawout(&h3270, will_opt, sizeof(will_opt));
 				trace_dsn("SENT %s %s\n", cmd(WILL), opt(c));
 				check_in3270(&h3270);
-				check_linemode(False);
+				check_linemode(&h3270,False);
 			}
 			if (c == TELOPT_NAWS)
 				send_naws();
@@ -1435,7 +1432,7 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 			net_rawout(&h3270, wont_opt, sizeof(wont_opt));
 			trace_dsn("SENT %s %s\n", cmd(WONT), opt(c));
 			check_in3270(&h3270);
-			check_linemode(False);
+			check_linemode(&h3270,False);
 		}
 		h3270.telnet_state = TNS_DATA;
 		break;
@@ -2507,16 +2504,15 @@ check_in3270(H3270 *session)
  *	Store a character in the 3270 input buffer, checking for buffer
  *	overflow and reallocating ibuf if necessary.
  */
-static void
-store3270in(unsigned char c)
+static void store3270in(H3270 *hSession, unsigned char c)
 {
-	if (h3270.ibptr - h3270.ibuf >= h3270.ibuf_size)
+	if(hSession->ibptr - hSession->ibuf >= hSession->ibuf_size)
 	{
-		h3270.ibuf_size += BUFSIZ;
-		h3270.ibuf = (unsigned char *) lib3270_realloc((char *) h3270.ibuf, h3270.ibuf_size);
-		h3270.ibptr = h3270.ibuf + h3270.ibuf_size - BUFSIZ;
+		hSession->ibuf_size += BUFSIZ;
+		hSession->ibuf = (unsigned char *) lib3270_realloc((char *) hSession->ibuf, hSession->ibuf_size);
+		hSession->ibptr = hSession->ibuf + hSession->ibuf_size - BUFSIZ;
 	}
-	*h3270.ibptr++ = c;
+	*hSession->ibptr++ = c;
 }
 
 /*
@@ -2546,15 +2542,13 @@ void space3270out(int n)
 }
 
 
-/*
- * check_linemode
- *	Set the global variable 'linemode', which says whether we are in
+/**
+ *	Set the session variable 'linemode', which says whether we are in
  *	character-by-character mode or line mode.
  */
-static void
-check_linemode(Boolean init)
+static void check_linemode(H3270 *hSession, Boolean init)
 {
-	int wasline = h3270.linemode;
+	int wasline = hSession->linemode;
 
 	/*
 	 * The next line is a deliberate kluge to effectively ignore the SGA
@@ -2570,17 +2564,17 @@ check_linemode(Boolean init)
 	 * mode" properly by asking for both SGA and ECHO to be off or on, but
 	 * we basically ignore the reply for SGA.
 	 */
-	h3270.linemode = h3270.hisopts[TELOPT_ECHO] ? 0 : 1 /* && !hisopts[TELOPT_SGA] */;
+	hSession->linemode = hSession->hisopts[TELOPT_ECHO] ? 0 : 1 /* && !hisopts[TELOPT_SGA] */;
 
-	if (init || h3270.linemode != wasline)
+	if (init || hSession->linemode != wasline)
 	{
-		st_changed(LIB3270_STATE_LINE_MODE, h3270.linemode);
+		lib3270_st_changed(hSession,LIB3270_STATE_LINE_MODE, hSession->linemode);
 		if (!init)
 		{
-			trace_dsn("Operating in %s mode.\n",h3270.linemode ? "line" : "character-at-a-time");
+			trace_dsn("Operating in %s mode.\n",hSession->linemode ? "line" : "character-at-a-time");
 		}
 #if defined(X3270_ANSI) /*[*/
-		if (IN_ANSI && h3270.linemode)
+		if (IN_ANSI && hSession->linemode)
 			cooked_init();
 #endif /*]*/
 	}
