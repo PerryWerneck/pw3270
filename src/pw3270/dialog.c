@@ -67,7 +67,12 @@
 
  static void add_option_menus(GtkWidget *widget, GtkAction *action, gchar **encoding)
  {
- 	GtkWidget	*box = gtk_hbox_new(FALSE,6);
+#if GTK_CHECK_VERSION(3,0,0)
+	GtkWidget	*box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL,6);
+#else
+	GtkWidget	*box = gtk_hbox_new(FALSE,6);
+#endif // GTK(3,0,0)
+
  	gchar		*ptr = g_object_get_data(G_OBJECT(action),"charset");
 
 	if(ptr)

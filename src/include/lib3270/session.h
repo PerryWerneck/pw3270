@@ -36,6 +36,7 @@
 
 	#define LIB3270_LUNAME_LENGTH			16
 	#define LIB3270_FULL_MODEL_NAME_LENGTH	13
+	#define LIB3270_LU_MAX					32
 
 	#define LIB3270_TELNET_N_OPTS			256
 
@@ -207,6 +208,8 @@
 		char					* proxy_host;
 		char					* proxy_portname;
 		unsigned short			  proxy_port;
+		char					  reported_lu[LIB3270_LU_MAX+1];
+		char					  reported_type[LIB3270_LU_MAX+1];
 
 		enum
 		{

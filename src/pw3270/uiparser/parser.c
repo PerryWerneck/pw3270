@@ -161,8 +161,13 @@ static void release_action_group(GtkActionGroup	** group)
 void parser_build(struct parser *p, GtkWidget *widget)
 {
 	struct action_info	  a_info;
+
+#if GTK_CHECK_VERSION(3,0,0)
+	GtkWidget			* vbox		= gtk_box_new(GTK_ORIENTATION_VERTICAL,0);
+#else
 	GtkWidget			* vbox		= gtk_vbox_new(FALSE,0);
-//	GtkWidget			* hbox		= gtk_hbox_new(FALSE,0);
+#endif // GTK(3,0,0)
+
 	GtkWidget			* parent;
 	int				 	  f;
 

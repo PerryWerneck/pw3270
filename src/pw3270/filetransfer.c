@@ -482,7 +482,12 @@ static void run_ft_dialog(GObject *action, GtkWidget *widget, struct ftdialog *d
 												GTK_STOCK_CLOSE,GTK_RESPONSE_CLOSE );
 
 
+#if GTK_CHECK_VERSION(3,0,0)
+		container = gtk_box_new(GTK_ORIENTATION_VERTICAL,2);
+#else
 		container = gtk_vbox_new(FALSE,2);
+#endif // GTK(3,0,0)
+
 		gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(ftdialog))),container,TRUE,TRUE,2);
 
 		// Information frame
@@ -653,7 +658,11 @@ void download_action(GtkAction *action, GtkWidget *widget)
 
 	{
 		/* Add dft option */
-		GtkWidget *hbox 	= gtk_hbox_new(FALSE,2);
+#if GTK_CHECK_VERSION(3,0,0)
+		GtkWidget *hbox		= gtk_box_new(GTK_ORIENTATION_HORIZONTAL,2);
+#else
+		GtkWidget *hbox		= gtk_hbox_new(FALSE,2);
+#endif // GTK(3,0,0)
 		GtkWidget *label	= NULL;
 
 		gtk_container_set_border_width(GTK_CONTAINER(hbox),4);
@@ -738,16 +747,27 @@ void upload_action(GtkAction *action, GtkWidget *widget)
 			{ N_( "Space allocation units" ), 	"allocationunits",	units	}
 		};
 
-		GtkWidget *box = gtk_hbox_new(TRUE,2);
+
 		int f;
+
+#if GTK_CHECK_VERSION(3,0,0)
+		GtkWidget *box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL,2);
+#else
+		GtkWidget *box = gtk_hbox_new(TRUE,2);
+#endif // GTK(3,0,0)
 
 		for(f=0;f<2;f++)
 		{
 			GtkWidget	* frame 	= gtk_frame_new(gettext(fdesk[f].title));
-			GtkWidget	* vbox 		= gtk_vbox_new(TRUE,2);
 			GSList		* group		= NULL;
 			gchar 		* setup		= get_attribute(G_OBJECT(action),&dlg,fdesk[f].name);
 			int 		  p;
+#if GTK_CHECK_VERSION(3,0,0)
+			GtkWidget	* vbox 		= gtk_box_new(GTK_ORIENTATION_HORIZONTAL,2);
+			gtk_box_set_homogeneous(GTK_BOX(vbox),TRUE);
+#else
+			GtkWidget	* vbox 		= gtk_vbox_new(TRUE,2);
+#endif // GTK(3,0,0)
 
 			for(p=0;p<4;p++)
 			{

@@ -416,7 +416,12 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
 															GTK_STOCK_OK,		GTK_RESPONSE_ACCEPT,
 															GTK_STOCK_CANCEL,	GTK_RESPONSE_REJECT,
 															NULL );
+#if GTK_CHECK_VERSION(3,0,0)
+	GtkWidget	* panned = gtk_box_new(GTK_ORIENTATION_HORIZONTAL,2);
+#else
 	GtkWidget	* panned = gtk_hbox_new(FALSE,2);
+#endif // GTK(3,0,0)
+
 	GtkWidget	* tree;
 	GtkWidget	* color;
 	GdkColor	  saved[V3270_COLOR_COUNT];
@@ -489,7 +494,11 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
 
 	// Color scheme combo
 	{
+#if GTK_CHECK_VERSION(3,0,0)
+		GtkWidget * box		= gtk_box_new(GTK_ORIENTATION_HORIZONTAL,2);
+#else
 		GtkWidget * box		= gtk_hbox_new(FALSE,2);
+#endif // GTK(3,0,0)
 		GtkWidget * button	= color_scheme_new(v3270_get_color_table(widget));
 
 		g_object_set_data(G_OBJECT(button),"terminal_widget",widget);
