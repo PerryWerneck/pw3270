@@ -41,6 +41,7 @@
 
  #include <lib3270/v3270.h>
  #include "private.h"
+ #include "accessible.h"
 
 /*--[ Prototipes ]-----------------------------------------------------------------------------------*/
 
@@ -307,7 +308,7 @@ void v3270_draw_ssl_status(cairo_t *cr, H3270 *host, struct v3270_metrics *metri
 {
 	cairo_surface_t		* icon;
 	double				  sz	= rect->width < rect->height ? rect->width : rect->height;
-	int					  idx	= 0; // lib3270_get_ssl_state(host) ? 1 : 0;
+//	int					  idx	= 0; // lib3270_get_ssl_state(host) ? 1 : 0;
 	unsigned short		  width;
 	unsigned short		  height;
 	unsigned char	 	* bits;

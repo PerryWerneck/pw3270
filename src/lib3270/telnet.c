@@ -224,8 +224,8 @@ static const char *tn3270e_function_names(const unsigned char *, int);
 #endif /*]*/
 static void tn3270e_subneg_send(H3270 *hSession, unsigned char, unsigned long);
 static unsigned long tn3270e_fdecode(const unsigned char *, int);
-static void tn3270e_ack(void);
-static void tn3270e_nak(enum pds);
+static void tn3270e_ack(H3270 *hSession);
+static void tn3270e_nak(H3270 *hSession, enum pds);
 #endif /*]*/
 
 #if defined(X3270_ANSI) /*[*/
@@ -236,9 +236,9 @@ static void do_cerase(H3270 *hSession, char c);
 static void do_werase(H3270 *hSession, char c);
 static void do_kill(H3270 *hSession, char c);
 static void do_rprnt(H3270 *hSession, char c);
-static void do_eof(char c);
-static void do_eol(char c);
-static void do_lnext(char c);
+static void do_eof(H3270 *hSession, char c);
+static void do_eol(H3270 *hSession, char c);
+static void do_lnext(H3270 *hSession, char c);
 static char parse_ctlchar(char *s);
 static void cooked_init(H3270 *hSession);
 #endif /*]*/
@@ -1891,10 +1891,10 @@ process_eor(void)
 			    (h3270.ibptr - h3270.ibuf) - EH_SIZE);
 			if (rv < 0 &&
 			    h3270.response_required != TN3270E_RSF_NO_RESPONSE)
-				tn3270e_nak(rv);
+				tn3270e_nak(&h3270,rv);
 			else if (rv == PDS_OKAY_NO_OUTPUT &&
 			    h3270.response_required == TN3270E_RSF_ALWAYS_RESPONSE)
-				tn3270e_ack();
+				tn3270e_ack(&h3270);
 			h3270.response_required = TN3270E_RSF_NO_RESPONSE;
 			return 0;
 		case TN3270E_DT_BIND_IMAGE:
@@ -2158,7 +2158,7 @@ static void net_cookout(H3270 *hSession, const char *buf, int len)
 
 			/* Control chars. */
 			if (c == '\n')
-				do_eol(c);
+				do_eol(hSession,c);
 			else if (c == vintr)
 				do_intr(hSession, c);
 			else if (c == vquit)
@@ -2172,9 +2172,9 @@ static void net_cookout(H3270 *hSession, const char *buf, int len)
 			else if (c == vrprnt)
 				do_rprnt(hSession,c);
 			else if (c == veof)
-				do_eof(c);
+				do_eof(hSession,c);
 			else if (c == vlnext)
-				do_lnext(c);
+				do_lnext(hSession,c);
 			else if (c == 0x08 || c == 0x7f) /* Yes, a hack. */
 				do_cerase(hSession,c);
 			else
@@ -2343,16 +2343,15 @@ static void do_rprnt(H3270 *hSession, char c)
 		ansi_process_s(ctl_see((int) *p));
 }
 
-static void
-do_eof(char c)
+static void do_eof(H3270 *hSession, char c)
 {
-	if (h3270.backslashed) {
-		h3270.lbptr--;
+	if (hSession->backslashed) {
+		hSession->lbptr--;
 		ansi_process_s("\b");
 		do_data(c);
 		return;
 	}
-	if (h3270.lnext) {
+	if (hSession->lnext) {
 		do_data(c);
 		return;
 	}
@@ -2360,31 +2359,29 @@ do_eof(char c)
 	forward_data();
 }
 
-static void
-do_eol(char c)
+static void do_eol(H3270 *hSession, char c)
 {
-	if (h3270.lnext) {
+	if (hSession->lnext) {
 		do_data(c);
 		return;
 	}
-	if (h3270.lbptr+2 >= h3270.lbuf + BUFSZ) {
+	if (hSession->lbptr+2 >= hSession->lbuf + BUFSZ) {
 		ansi_process_s("\007");
 		return;
 	}
-	*h3270.lbptr++ = '\r';
-	*h3270.lbptr++ = '\n';
+	*hSession->lbptr++ = '\r';
+	*hSession->lbptr++ = '\n';
 	ansi_process_s("\r\n");
 	forward_data();
 }
 
-static void
-do_lnext(char c)
+static void do_lnext(H3270 *hSession, char c)
 {
-	if (h3270.lnext) {
+	if (hSession->lnext) {
 		do_data(c);
 		return;
 	}
-	h3270.lnext = 1;
+	hSession->lnext = 1;
 	ansi_process_s("^\b");
 }
 #endif /*]*/
@@ -2679,7 +2676,7 @@ net_output(void)
 
 		/* Check for sending a TN3270E response. */
 		if (h3270.response_required == TN3270E_RSF_ALWAYS_RESPONSE) {
-			tn3270e_ack();
+			tn3270e_ack(&h3270);
 			h3270.response_required = TN3270E_RSF_NO_RESPONSE;
 		}
 
@@ -2727,11 +2724,10 @@ net_output(void)
 
 #if defined(X3270_TN3270E) /*[*/
 /* Send a TN3270E positive response to the server. */
-static void
-tn3270e_ack(void)
+static void tn3270e_ack(H3270 *hSession)
 {
 	unsigned char rsp_buf[10];
-	tn3270e_header *h_in = (tn3270e_header *) h3270.ibuf;
+	tn3270e_header *h_in = (tn3270e_header *) hSession->ibuf;
 	int rsp_len = 0;
 
 	rsp_len = 0;
@@ -2739,26 +2735,28 @@ tn3270e_ack(void)
 	rsp_buf[rsp_len++] = 0;				    /* request_flag */
 	rsp_buf[rsp_len++] = TN3270E_RSF_POSITIVE_RESPONSE; /* response_flag */
 	rsp_buf[rsp_len++] = h_in->seq_number[0];	    /* seq_number[0] */
+
 	if (h_in->seq_number[0] == IAC)
 		rsp_buf[rsp_len++] = IAC;
+
 	rsp_buf[rsp_len++] = h_in->seq_number[1];	    /* seq_number[1] */
+
 	if (h_in->seq_number[1] == IAC)
 		rsp_buf[rsp_len++] = IAC;
+
 	rsp_buf[rsp_len++] = TN3270E_POS_DEVICE_END;
 	rsp_buf[rsp_len++] = IAC;
 	rsp_buf[rsp_len++] = EOR;
-	trace_dsn("SENT TN3270E(RESPONSE POSITIVE-RESPONSE "
-		"%u) DEVICE-END\n",
+	trace_dsn("SENT TN3270E(RESPONSE POSITIVE-RESPONSE %u) DEVICE-END\n",
 		h_in->seq_number[0] << 8 | h_in->seq_number[1]);
-	net_rawout(&h3270, rsp_buf, rsp_len);
+	net_rawout(hSession, rsp_buf, rsp_len);
 }
 
 /* Send a TN3270E negative response to the server. */
-static void
-tn3270e_nak(enum pds rv)
+static void tn3270e_nak(H3270 *hSession, enum pds rv)
 {
 	unsigned char rsp_buf[10];
-	tn3270e_header *h_in = (tn3270e_header *) h3270.ibuf;
+	tn3270e_header *h_in = (tn3270e_header *) hSession->ibuf;
 	int rsp_len = 0;
 	char *neg = NULL;
 
@@ -2785,7 +2783,7 @@ tn3270e_nak(enum pds rv)
 	rsp_buf[rsp_len++] = IAC;
 	rsp_buf[rsp_len++] = EOR;
 	trace_dsn("SENT TN3270E(RESPONSE NEGATIVE-RESPONSE %u) %s\n",h_in->seq_number[0] << 8 | h_in->seq_number[1], neg);
-	net_rawout(&h3270, rsp_buf, rsp_len);
+	net_rawout(hSession, rsp_buf, rsp_len);
 }
 
 #if defined(X3270_TRACE) /*[*/
@@ -2908,7 +2906,7 @@ net_send_werase(void)
 #if defined(X3270_MENUS) /*[*/
 /*
  * External entry points to negotiate line or character mode.
- */
+ */ /*
 void
 net_linemode(void)
 {
@@ -2925,6 +2923,7 @@ net_linemode(void)
 		trace_dsn("SENT %s %s\n", cmd(DONT), opt(TELOPT_SGA));
 	}
 }
+*/
 
 void
 net_charmode(void)
@@ -3044,7 +3043,7 @@ parse_ctlchar(char *s)
 /*
  * net_linemode_chars
  *	Report line-mode characters.
- */
+ */ /*
 struct ctl_char *
 net_linemode_chars(void)
 {
@@ -3061,14 +3060,14 @@ net_linemode_chars(void)
 	c[8].name = 0;
 
 	return c;
-}
+} */
 #endif /*]*/
 
 #if defined(X3270_TRACE) /*[*/
 /*
  * Construct a string to reproduce the current TELNET options.
  * Returns a Boolean indicating whether it is necessary.
- */
+ */ /*
 Boolean
 net_snap_options(void)
 {
@@ -3084,7 +3083,7 @@ net_snap_options(void)
 
 	h3270.obptr = h3270.obuf;
 
-	/* Do TTYPE first. */
+	// Do TTYPE first.
 	if (h3270.myopts[TELOPT_TTYPE]) {
 		unsigned j;
 
@@ -3093,7 +3092,7 @@ net_snap_options(void)
 			*h3270.obptr++ = ttype_str[j];
 	}
 
-	/* Do the other options. */
+	// Do the other options.
 	for (i = 0; i < LIB3270_TELNET_N_OPTS; i++) {
 		space3270out(6);
 		if (i == TELOPT_TTYPE)
@@ -3112,8 +3111,8 @@ net_snap_options(void)
 		}
 	}
 
-#if defined(X3270_TN3270E) /*[*/
-	/* If we're in TN3270E mode, snap the subnegotations as well. */
+#if defined(X3270_TN3270E)
+	// If we're in TN3270E mode, snap the subnegotations as well.
 	if (h3270.myopts[TELOPT_TN3270E]) {
 		any = True;
 
@@ -3160,15 +3159,17 @@ net_snap_options(void)
 			h->seq_number[0] = 0;
 			h->seq_number[1] = 0;
 			h3270.obptr += EH_SIZE;
-			*h3270.obptr++ = 1; /* dummy */
+			*h3270.obptr++ = 1; // dummy
 			*h3270.obptr++ = IAC;
 			*h3270.obptr++ = EOR;
 		}
 	}
-#endif /*]*/
+#endif
 	return any;
 }
-#endif /*]*/
+*/
+#endif
+
 
 /*
  * Set blocking/non-blocking mode on the socket.  On error, pops up an error
@@ -3436,7 +3437,7 @@ int net_getsockname(const H3270 *session, void *buf, int *len)
 	return getsockname(session->sock, buf, (socklen_t *)(void *)len);
 }
 
-/* Return a text version of the current proxy type, or NULL. */
+/* Return a text version of the current proxy type, or NULL. */ /*
 char *
 net_proxy_type(void)
 {
@@ -3445,8 +3446,9 @@ net_proxy_type(void)
 	else
 		return NULL;
 }
+*/
 
-/* Return the current proxy host, or NULL. */
+/* Return the current proxy host, or NULL. */ /*
 char *
 net_proxy_host(void)
 {
@@ -3455,8 +3457,9 @@ net_proxy_host(void)
 	else
 		return NULL;
 }
+*/
 
-/* Return the current proxy port, or NULL. */
+/* Return the current proxy port, or NULL. */ /*
 char *
 net_proxy_port(void)
 {
@@ -3465,6 +3468,7 @@ net_proxy_port(void)
 	else
 		return NULL;
 }
+*/
 
 LIB3270_EXPORT LIB3270_SSL_STATE lib3270_get_secure(H3270 *session)
 {

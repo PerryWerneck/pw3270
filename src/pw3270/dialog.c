@@ -167,7 +167,7 @@
  {
 	GError * error = NULL;
 
-	if(g_strcasecmp(encoding,"UTF-8"))
+	if(g_ascii_strcasecmp(encoding,"UTF-8"))
 	{
 		// Convert to target charset and save
 		gsize	  bytes_written;
@@ -210,7 +210,7 @@
 	GtkFileChooserConfirmation	  ret 		= GTK_FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME;
 	GtkWidget					* dialog;
 
-	if(attr && !g_strcasecmp(attr,"yes"))
+	if(attr && !g_ascii_strcasecmp(attr,"yes"))
 		return ret;
 
 	dialog = gtk_message_dialog_new_with_markup(	GTK_WINDOW(chooser),

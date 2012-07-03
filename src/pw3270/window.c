@@ -32,6 +32,7 @@
 #include "globals.h"
 #include "uiparser/parser.h"
 #include <lib3270/popup.h>
+#include <lib3270/actions.h>
 
 /*--[ Widget definition ]----------------------------------------------------------------------------*/
 
@@ -148,7 +149,7 @@
 
  static void pw3270_class_init(pw3270Class *klass)
  {
-	GObjectClass	* gobject_class	= G_OBJECT_CLASS(klass);
+//	GObjectClass	* gobject_class	= G_OBJECT_CLASS(klass);
 	GtkWidgetClass	* widget_class	= GTK_WIDGET_CLASS(klass);
 
 
@@ -195,7 +196,7 @@
 
  gboolean pw3270_get_toggle(GtkWidget *widget, LIB3270_TOGGLE ix)
  {
- 	g_return_if_fail(GTK_IS_PW3270(widget));
+ 	g_return_val_if_fail(GTK_IS_PW3270(widget),FALSE);
  	return v3270_get_toggle(GTK_PW3270(widget)->terminal,ix);
  }
 

@@ -37,7 +37,7 @@ EXEEXT=@EXEEXT@
 LIB3270_CFLAGS ?= `pkg-config --cflags lib3270`
 LIB3270_LIBS ?= `pkg-config --libs lib3270`
 
-DEBUG_CFLAGS=-DDEBUG=1 -g
+DEBUG_CFLAGS=-DDEBUG=1 -g -Wall
 DEPENDS ?= *.h ../include/*.h ../include/lib3270/*.h
 
 #---[ Tools ]------------------------------------------------------------------

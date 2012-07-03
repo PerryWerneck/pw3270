@@ -33,6 +33,7 @@
  #include "private.h"
  #include <lib3270/selection.h>
  #include <lib3270/log.h>
+ #include <lib3270/actions.h>
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
@@ -155,7 +156,7 @@ const gchar * v3270_get_selected_text(GtkWidget *widget)
 		{
 			int		  c;
 			gchar 	* ptr = ln[l];
-			GString	* buffer;
+//			GString	* buffer;
 
 			for(c=0;c<width && *ptr;c++)
 			{
@@ -310,7 +311,7 @@ void v3270_paste_string(GtkWidget *widget, const gchar *text, const gchar *encod
 
  	if(!text)
 		return;
-	else if(g_strcasecmp(encoding,charset))
+	else if(g_ascii_strcasecmp(encoding,charset))
 		buffer = g_convert(text, -1, charset, encoding, NULL, NULL, NULL);
 	else
 		buffer = g_strdup(text);

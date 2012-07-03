@@ -79,7 +79,7 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
 	}
 	else
 	{
-		g_warning("Color scheme [%d] has no \"base\" entry, using green on black",group);
+		g_warning("Color scheme [%s] has no \"base\" entry, using green on black",group);
 
 		gdk_color_parse("black",clr);
 		gdk_color_parse("green",clr+1);
@@ -358,7 +358,7 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
 
  void editcolors_action(GtkAction *action, GtkWidget *widget)
  {
- 	static const gchar *custom = N_( "Custom colors" );
+// 	static const gchar *custom = N_( "Custom colors" );
 
  	static const struct _node
  	{

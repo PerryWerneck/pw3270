@@ -36,7 +36,7 @@ LDFLAGS=@LDFLAGS@ -Wl,-soname,@DLLPREFIX@3270@DLLEXT@.@VERSION@
 
 LIBS=@LIBS@ @LIBSSL_LIBS@ @INTL_LIBS@ @SOCKET_LIBS@
 
-DEBUG_CFLAGS=-DDEBUG=1 -g
+DEBUG_CFLAGS=-DDEBUG=1 -g -Wall
 DEPENDS ?= *.h ../include/*.h ../include/lib3270/*.h Makefile
 
 #---[ Paths ]------------------------------------------------------------------

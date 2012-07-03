@@ -99,7 +99,7 @@
 			int f;
 			for(f=0;info->setup[f].name;f++)
 			{
-				if(!g_strcasecmp(name,info->setup[f].name))
+				if(!g_ascii_strcasecmp(name,info->setup[f].name))
 				{
 					info->setup[f].setup(widget,info->center_widget);
 					break;

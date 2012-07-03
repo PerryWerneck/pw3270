@@ -67,7 +67,7 @@
 			gtk_widget_show(item);
 			gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
 
-			if(!g_strcasecmp(name,selected))
+			if(!g_ascii_strcasecmp(name,selected))
 				gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item),TRUE);
 
     	}

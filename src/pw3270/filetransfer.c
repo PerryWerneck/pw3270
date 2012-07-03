@@ -31,6 +31,7 @@
  *
  */
 
+#include <stdlib.h>
 #include "globals.h"
 #include "uiparser/parser.h"
 #include "filetransfer.h"
@@ -231,7 +232,7 @@ static void add_transfer_options(GObject *action, struct ftdialog *dlg)
 
 	GtkTable	* table = GTK_TABLE(gtk_table_new(3,2,TRUE));
 	GtkWidget	* frame = gtk_frame_new( _( "Transfer options" ) );
-	GtkWidget	* label = gtk_frame_get_label_widget(GTK_FRAME(frame));
+//	GtkWidget	* label = gtk_frame_get_label_widget(GTK_FRAME(frame));
 	int 		  row, col, f;
 
 	row=0;
@@ -246,7 +247,7 @@ static void add_transfer_options(GObject *action, struct ftdialog *dlg)
 		gtk_widget_set_name(widget,option[f].name);
 
 		if(val)
-			active = g_strcasecmp(val,"yes") == 0 ? TRUE : FALSE;
+			active = g_ascii_strcasecmp(val,"yes") == 0 ? TRUE : FALSE;
 		else
 			active = get_boolean_from_config(dlg->name,option[f].name,FALSE);
 
@@ -284,7 +285,7 @@ static void setup_dft(GObject *action, struct ftdialog *dlg, GtkWidget **label)
 	gtk_entry_set_max_length(dlg->parm[4],10);
 	gtk_entry_set_width_chars(dlg->parm[4],10);
 
-	gtk_entry_set_text(GTK_ENTRY(dlg->parm[4]),"4096");
+	gtk_entry_set_text(GTK_ENTRY(dlg->parm[4]),val ? val : "4096");
 
 	gtk_label_set_mnemonic_widget(GTK_LABEL(*label),GTK_WIDGET(dlg->parm[4]));
 
@@ -479,7 +480,7 @@ static void run_ft_dialog(GObject *action, GtkWidget *widget, struct ftdialog *d
 		ftdialog = gtk_dialog_new_with_buttons(	_( "File transfer" ),
 												GTK_WINDOW(gtk_widget_get_toplevel(widget)),
 												GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
-												GTK_STOCK_CLOSE,GTK_RESPONSE_CLOSE );
+												GTK_STOCK_CLOSE,GTK_RESPONSE_CLOSE,NULL );
 
 
 #if GTK_CHECK_VERSION(3,0,0)
@@ -623,7 +624,7 @@ static void run_ft_dialog(GObject *action, GtkWidget *widget, struct ftdialog *d
 static void add_buttons(struct ftdialog *dlg)
 {
 	dlg->ready = gtk_dialog_add_button(GTK_DIALOG(dlg->dialog),
-												dlg->option & LIB3270_FT_OPTION_RECEIVE != 0 ? GTK_STOCK_SAVE : GTK_STOCK_OPEN,
+												(dlg->option & LIB3270_FT_OPTION_RECEIVE) != 0 ? GTK_STOCK_SAVE : GTK_STOCK_OPEN,
 												GTK_RESPONSE_ACCEPT);
 
 	gtk_widget_set_sensitive(dlg->ready,FALSE);
@@ -644,10 +645,9 @@ void download_action(GtkAction *action, GtkWidget *widget)
 
 	memset(&dlg,0,sizeof(dlg));
 
-	dlg.dialog = gtk_dialog_new_with_buttons(	_( "Receive file from host" ), \
-												GTK_WINDOW(gtk_widget_get_toplevel(widget)),
-												GTK_DIALOG_DESTROY_WITH_PARENT, \
-												NULL );
+	dlg.dialog = gtk_dialog_new();
+	gtk_window_set_title(GTK_WINDOW(dlg.dialog),_( "Receive file from host" ));
+	gtk_window_set_transient_for(GTK_WINDOW(dlg.dialog),GTK_WINDOW(gtk_widget_get_toplevel(widget)));
 
 	dlg.name	= gtk_action_get_name(action);
 	dlg.option	= LIB3270_FT_OPTION_RECEIVE;
@@ -706,10 +706,9 @@ void upload_action(GtkAction *action, GtkWidget *widget)
 
 	memset(&dlg,0,sizeof(dlg));
 
-	dlg.dialog = gtk_dialog_new_with_buttons(	_( "Send file to host" ), \
-												GTK_WINDOW(gtk_widget_get_toplevel(widget)),
-												GTK_DIALOG_DESTROY_WITH_PARENT, \
-												NULL );
+	dlg.dialog = gtk_dialog_new();
+	gtk_window_set_title(GTK_WINDOW(dlg.dialog),_( "Send file to host" ));
+	gtk_window_set_transient_for(GTK_WINDOW(dlg.dialog),GTK_WINDOW(gtk_widget_get_toplevel(widget)));
 
 	dlg.name	= gtk_action_get_name(action);
 	dlg.option	= LIB3270_FT_OPTION_SEND;
@@ -777,7 +776,7 @@ void upload_action(GtkAction *action, GtkWidget *widget)
 
 				g_signal_connect(G_OBJECT(widget),"toggled", G_CALLBACK(toggle_format),(gpointer) &fdesk[f].option[p]);
 
-				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),!g_strcasecmp(fdesk[f].option[p].name,setup));
+				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),!g_ascii_strcasecmp(fdesk[f].option[p].name,setup));
 				group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(widget));
 				gtk_box_pack_start(GTK_BOX(vbox),widget,TRUE,TRUE,0);
 			}

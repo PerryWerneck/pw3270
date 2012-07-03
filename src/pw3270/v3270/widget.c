@@ -163,6 +163,7 @@ static gboolean v3270_popup_menu(GtkWidget * widget)
 
 #if GTK_CHECK_VERSION(3,0,0)
 
+/*
 static GtkSizeRequestMode get_request_mode(GtkWidget *widget)
 {
 	int rows, cols;
@@ -172,6 +173,7 @@ static GtkSizeRequestMode get_request_mode(GtkWidget *widget)
 	return rows > cols ? GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT : GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
 
 }
+*/
 
 void get_preferred_height(GtkWidget *widget, gint *minimum_height, gint *natural_height)
 {
@@ -1239,7 +1241,7 @@ void v3270_set_font_family(GtkWidget *widget, const gchar *name)
 
 	if(terminal->font_family)
 	{
-		if(!g_strcasecmp(terminal->font_family,name))
+		if(!g_ascii_strcasecmp(terminal->font_family,name))
 			return;
 		g_free(terminal->font_family);
 		terminal->font_family = NULL;

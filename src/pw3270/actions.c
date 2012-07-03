@@ -87,10 +87,12 @@ static void connect_action(GtkAction *action, GtkWidget *widget)
 	hostname_action(action,widget);
 }
 
+/*
 static void nop_action(GtkAction *action, GtkWidget *widget)
 {
 	trace_action(action,widget);
 }
+*/
 
 static void disconnect_action(GtkAction *action, GtkWidget *widget)
 {
@@ -131,7 +133,7 @@ static void copy_action(GtkAction *action, GtkWidget *widget)
 
 		for(f=0;f<G_N_ELEMENTS(format);f++)
 		{
-			if(!g_strcasecmp(format[f].name,str))
+			if(!g_ascii_strcasecmp(format[f].name,str))
 			{
 				mode = format[f].mode;
 				break;
@@ -254,7 +256,7 @@ static void connect_standard_action(GtkAction *action, GtkWidget *widget, const 
 	// Search for lib3270 predefined actions
 	for(f=0;f<G_N_ELEMENTS(lib3270_entry);f++)
 	{
-		if(!g_strcasecmp(name,lib3270_entry[f].name))
+		if(!g_ascii_strcasecmp(name,lib3270_entry[f].name))
 		{
 			g_object_set_data(G_OBJECT(action),"lib3270_call",lib3270_entry[f].call);
 			g_signal_connect(action,"activate",G_CALLBACK(lib3270_action),widget);
@@ -265,14 +267,14 @@ static void connect_standard_action(GtkAction *action, GtkWidget *widget, const 
 	// Search for application actions
 	for(f=0;f<G_N_ELEMENTS(gtk_action);f++)
 	{
-		if(!g_strcasecmp(name,gtk_action[f].name))
+		if(!g_ascii_strcasecmp(name,gtk_action[f].name))
 		{
 			g_signal_connect(action,"activate",G_CALLBACK(gtk_action[f].call),widget);
 			return;
 		}
 	}
 
-	if(!g_strcasecmp(name,"screensizes"))
+	if(!g_ascii_strcasecmp(name,"screensizes"))
 		return;
 
 	// Not-found, disable action
@@ -318,12 +320,12 @@ static void connect_move_action(GtkAction *action, GtkWidget *widget, const gcha
 		return;
 	}
 
-	if(!g_strcasecmp(target,"selection"))
+	if(!g_ascii_strcasecmp(target,"selection"))
 	{
 		g_object_set_data(G_OBJECT(action),"direction",(gpointer) (flags & 3));
 		g_signal_connect(action,"activate",G_CALLBACK(selection_move_action),widget);
 	}
-	else if(!g_strcasecmp(target,"cursor"))
+	else if(!g_ascii_strcasecmp(target,"cursor"))
 	{
 		g_object_set_data(G_OBJECT(action),"move_flags",(gpointer) ((int) flags));
 		g_signal_connect(action,"activate",G_CALLBACK(cursor_move_action),widget);
@@ -393,7 +395,7 @@ static int id_from_array(const gchar *key, const gchar **array, GError **error)
 
 	for(f = 0;array[f];f++)
 	{
-		if(!g_strcasecmp(key,array[f]))
+		if(!g_ascii_strcasecmp(key,array[f]))
 			return f;
 	}
 
@@ -461,7 +463,7 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 	const gchar		* direction		= ui_get_attribute("direction",names,values);
 	unsigned short	  flags			= 0;
 	const GCallback * callback		= NULL;
-	const gchar		* attr;
+	const gchar		* attr			= NULL;
 	int				  id			= 0;
 	gchar			* nm			= NULL;
 	int				  f;
@@ -486,7 +488,7 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 
 		for(f=0;f<G_N_ELEMENTS(dirname);f++)
 		{
-			if(!g_strcasecmp(direction,dirname[f]))
+			if(!g_ascii_strcasecmp(direction,dirname[f]))
 			{
 				flags |= f;
 				break;
@@ -498,14 +500,14 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 		flags |= 0x80;
 
 	// Build action name & type
-	if(!g_strcasecmp(name,"toggle"))
+	if(!g_ascii_strcasecmp(name,"toggle"))
 	{
 		action_type	= ACTION_TYPE_TOGGLE;
 		attr		= ui_get_attribute("id",names,values);
 		if(!attr)
 			attr = ui_get_attribute("toggle",names,values);
 
-		if(g_strcasecmp(attr,"gdkdebug"))
+		if(g_ascii_strcasecmp(attr,"gdkdebug"))
 		{
 			id = lib3270_get_toggle_id(attr);
 			if(id < 0)
@@ -520,7 +522,7 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 		}
 		nm 	= g_strconcat(name,attr,NULL);
 	}
-	else if(!g_strcasecmp(name,"move"))
+	else if(!g_ascii_strcasecmp(name,"move"))
 	{
 		action_type	= ACTION_TYPE_MOVE;
 		attr		= ui_get_attribute("target",names,values);
@@ -534,7 +536,7 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 		nm = g_strconcat((flags & 0x80) ? "select" : "move",attr,direction, NULL);
 
 	}
-	else if(!g_strcasecmp(name,"paste"))
+	else if(!g_ascii_strcasecmp(name,"paste"))
 	{
 		static const GCallback cbk[] = {	G_CALLBACK(paste_clipboard_action),
 											G_CALLBACK(paste_next_action),
@@ -550,7 +552,7 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 			return NULL;
 
 	}
-	else if(!g_strcasecmp(name,"copy"))
+	else if(!g_ascii_strcasecmp(name,"copy"))
 	{
 		static const GCallback cbk[] =	{	G_CALLBACK(copy_action),
 											G_CALLBACK(append_action)
@@ -560,7 +562,7 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 		id 			= ui_get_bool_attribute("append",names,values,FALSE) ? 1 : 0;
 		nm 			= g_strconcat(id == 0 ? "copy" : "append",ui_get_attribute("format",names,values),NULL);
 	}
-	else if(!g_strcasecmp(name,"select"))
+	else if(!g_ascii_strcasecmp(name,"select"))
 	{
 		static const gchar * src[] = 	{	"all", "field", "none", "last", NULL };
 
@@ -575,7 +577,7 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 		if(id < 0)
 			return NULL;
 	}
-	else if(!g_strcasecmp(name,"save"))
+	else if(!g_ascii_strcasecmp(name,"save"))
 	{
 		static const GCallback cbk[] = {	G_CALLBACK(save_all_action),
 											G_CALLBACK(save_selected_action),
@@ -590,7 +592,7 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 			return NULL;
 		nm = g_strconcat(name,attr,NULL);
 	}
-	else if(!g_strcasecmp(name,"print"))
+	else if(!g_ascii_strcasecmp(name,"print"))
 	{
 		static const GCallback cbk[] = {	G_CALLBACK(print_all_action),
 											G_CALLBACK(print_selected_action),
@@ -605,7 +607,7 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 			return NULL;
 		nm = g_strconcat(name,attr,NULL);
 	}
-	else if(!g_strcasecmp(name,"set"))
+	else if(!g_ascii_strcasecmp(name,"set"))
 	{
 		action_type	= ACTION_TYPE_SET;
 		attr		= ui_get_attribute("toggle",names,values);
@@ -617,7 +619,7 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 		}
 		nm 	 = g_strconcat("set",attr,NULL);
 	}
-	else if(!g_strcasecmp(name,"reset"))
+	else if(!g_ascii_strcasecmp(name,"reset"))
 	{
 		action_type	= ACTION_TYPE_RESET;
 		attr		= ui_get_attribute("toggle",names,values);
@@ -629,7 +631,7 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 		}
 		nm = g_strconcat("reset",attr,NULL);
 	}
-	else if(!g_strcasecmp(name,"pfkey"))
+	else if(!g_ascii_strcasecmp(name,"pfkey"))
 	{
 		action_type = ACTION_TYPE_PFKEY;
 		attr 		= ui_get_attribute("id",names,values);
@@ -641,7 +643,7 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 		id   = atoi(attr);
 		nm   = g_strdup_printf("pf%02d",id);
 	}
-	else if(!g_strcasecmp(name,"pakey"))
+	else if(!g_ascii_strcasecmp(name,"pakey"))
 	{
 		action_type = ACTION_TYPE_PAKEY;
 		attr 		= ui_get_attribute("id",names,values);
@@ -721,7 +723,7 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 
 	for(f=0;f<ACTION_COUNT;f++)
 	{
-		if(!g_strcasecmp(actionname[f],nm))
+		if(!g_ascii_strcasecmp(actionname[f],nm))
 		{
 			GtkAction **named_action = (GtkAction **) g_object_get_data(G_OBJECT(widget),"named_actions");
 			named_action[f] = action;

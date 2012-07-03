@@ -61,7 +61,7 @@
 
  	for(f=0;name[f];f++)
  	{
- 		if(!g_strcasecmp(key,name[f]))
+ 		if(!g_ascii_strcasecmp(key,name[f]))
 			return value[f];
  	}
 
@@ -75,7 +75,7 @@
 	if(!val)
 		return def;
 
- 	if(!g_strcasecmp(val,"yes") || atoi(val))
+ 	if(!g_ascii_strcasecmp(val,"yes") || atoi(val))
 		return TRUE;
 
 	return FALSE;
@@ -140,7 +140,7 @@
  {
  	GtkAction *action;
 
- 	if(!g_strcasecmp(name,"quit"))
+ 	if(!g_ascii_strcasecmp(name,"quit"))
 	{
 		action = g_hash_table_lookup(info->actions,name);
 		if(!action)
@@ -177,7 +177,7 @@
 
 	for(f=0;f<G_N_ELEMENTS(element_builder);f++)
 	{
-		if(!g_strcasecmp(element_name,element_builder[f].name))
+		if(!g_ascii_strcasecmp(element_name,element_builder[f].name))
 		{
 			id = f;
 			break;
@@ -255,7 +255,7 @@
 
 	for(f=0;f<G_N_ELEMENTS(element_builder);f++)
 	{
-		if(!g_strcasecmp(element_name,element_builder[f].name))
+		if(!g_ascii_strcasecmp(element_name,element_builder[f].name))
 		{
 			element_builder[f].end(info->element,info,error);
 			break;

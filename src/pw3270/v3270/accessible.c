@@ -42,6 +42,10 @@
  #include "private.h"
  #include "accessible.h"
 
+ #ifdef GDK_WINDOWING_X11
+	#include <gdk/gdkx.h>
+ #endif // GDK_WINDOWING_X11
+
 // References:
 //
 //	http://git.gnome.org/browse/gtk+/tree/gtk/a11y/gtkwidgetaccessible.c
@@ -226,7 +230,7 @@ static gint v3270_accessible_get_caret_offset(AtkText *text)
 
 static gint v3270_accessible_get_character_count(AtkText *text)
 {
-	int rows,cols;
+//	int rows,cols;
 	GtkWidget *widget = gtk_accessible_get_widget(GTK_ACCESSIBLE(text));
 
 	if(!widget)
@@ -328,7 +332,7 @@ static gchar * v3270_accessible_get_text_at_offset(AtkText *atk_text, gint offse
 {
 	GtkWidget	* widget = gtk_accessible_get_widget(GTK_ACCESSIBLE (atk_text));
 	H3270		* host;
-	char		* text;
+	char		* text	 = NULL;
 	int			  rows,cols,pos;
 
 	if(!widget)
@@ -520,7 +524,7 @@ static gboolean v3270_accessible_add_selection(AtkText *text, gint start_pos, gi
 static gboolean v3270_accessible_set_selection(AtkText *text, gint selection_num, gint start_pos, gint end_pos)
 {
 	GtkWidget *widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
-	gint start, end;
+//	gint start, end;
 
 	if(widget == NULL || selection_num != 0)
 		return FALSE;
@@ -846,6 +850,7 @@ void v3270_acessible_set_state(GtkAccessible *obj, LIB3270_MESSAGE id)
 	case LIB3270_MESSAGE_MINUS:
 	case LIB3270_MESSAGE_INHIBIT:
 	case LIB3270_MESSAGE_X:
+	case LIB3270_MESSAGE_USER:
 		break;
 
 	case LIB3270_MESSAGE_PROTECTED:

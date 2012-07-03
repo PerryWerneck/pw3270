@@ -64,7 +64,7 @@
 
 	for(f=0;info->popupname[f] && pos < 0;f++)
 	{
-		if(!g_strcasecmp(info->popupname[f],id))
+		if(!g_ascii_strcasecmp(info->popupname[f],id))
 		{
 			pos = f;
 			break;

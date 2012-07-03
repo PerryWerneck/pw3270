@@ -40,8 +40,8 @@ LIB3270_INTERNAL void net_exception(H3270 *session);
 // LIB3270_INTERNAL void net_hexansi_out(unsigned char *buf, int len);
 LIB3270_INTERNAL void net_input(H3270 *session);
 LIB3270_INTERNAL void net_interrupt(void);
-LIB3270_INTERNAL void net_linemode(void);
-LIB3270_INTERNAL struct ctl_char *net_linemode_chars(void);
+// LIB3270_INTERNAL void net_linemode(void);
+// LIB3270_INTERNAL struct ctl_char *net_linemode_chars(void);
 LIB3270_INTERNAL void net_output(void);
 LIB3270_INTERNAL const char *net_query_bind_plu_name(void);
 LIB3270_INTERNAL const char *net_query_connection_state(void);
@@ -52,12 +52,12 @@ LIB3270_INTERNAL void net_sends(const char *s);
 LIB3270_INTERNAL void net_send_erase(void);
 LIB3270_INTERNAL void net_send_kill(void);
 LIB3270_INTERNAL void net_send_werase(void);
-LIB3270_INTERNAL Boolean net_snap_options(void);
+// LIB3270_INTERNAL Boolean net_snap_options(void);
 LIB3270_INTERNAL void space3270out(int n);
 // LIB3270_INTERNAL const char *tn3270e_current_opts(void);
-LIB3270_INTERNAL char *net_proxy_type(void);
-LIB3270_INTERNAL char *net_proxy_host(void);
-LIB3270_INTERNAL char *net_proxy_port(void);
+// LIB3270_INTERNAL char *net_proxy_type(void);
+//LIB3270_INTERNAL char *net_proxy_host(void);
+// LIB3270_INTERNAL char *net_proxy_port(void);
 
 #if defined(X3270_TRACE)
 	LIB3270_INTERNAL void trace_netdata(char direction, unsigned const char *buf, int len);

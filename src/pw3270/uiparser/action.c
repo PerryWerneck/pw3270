@@ -36,7 +36,7 @@
 
  static gboolean get_boolean(const gchar *value)
  {
- 	if(!g_strcasecmp(value,"yes") || atoi(value))
+ 	if(!g_ascii_strcasecmp(value,"yes") || atoi(value))
 		return TRUE;
 	return FALSE;
  }
@@ -47,14 +47,14 @@
 
 	for(f=0;name[f];f++)
 	{
-		if(!g_strcasecmp(name[f],"group"))
+		if(!g_ascii_strcasecmp(name[f],"group"))
 		{
 			int id = -1;
 			int p;
 
 			for(p=0;info->group[p] && id == -1;p++)
 			{
-				if(!g_strcasecmp(value[f],info->group[p]))
+				if(!g_ascii_strcasecmp(value[f],info->group[p]))
 					id = p;
 			}
 
@@ -67,43 +67,43 @@
 			g_object_set_data(G_OBJECT(action),"id_group",(gpointer) id);
 
 		}
-		else if(!g_strcasecmp(name[f],"icon"))
+		else if(!g_ascii_strcasecmp(name[f],"icon"))
 		{
 			gchar * stock = g_strconcat("gtk-",value[f],NULL);
 			gtk_action_set_stock_id(action,stock);
 			g_free(stock);
 		}
-		else if(!g_strcasecmp(name[f],"sensitive"))
+		else if(!g_ascii_strcasecmp(name[f],"sensitive"))
 		{
 			gtk_action_set_sensitive(action,get_boolean(value[f]));
 		}
-		else if(!g_strcasecmp(name[f],"label"))
+		else if(!g_ascii_strcasecmp(name[f],"label"))
 		{
 			gtk_action_set_label(action,gettext(value[f]));
 		}
-		else if(!g_strcasecmp(name[f],"short-label"))
+		else if(!g_ascii_strcasecmp(name[f],"short-label"))
 		{
 			gtk_action_set_short_label(action,gettext(value[f]));
 		}
-		else if(!g_strcasecmp(name[f],"tooltip"))
+		else if(!g_ascii_strcasecmp(name[f],"tooltip"))
 		{
 			gtk_action_set_tooltip(action,gettext(value[f]));
 		}
-		else if(!g_strcasecmp(name[f],"important"))
+		else if(!g_ascii_strcasecmp(name[f],"important"))
 		{
 			gtk_action_set_is_important(action,get_boolean(value[f]));
 		}
-		else if(!g_strcasecmp(name[f],"key"))
+		else if(!g_ascii_strcasecmp(name[f],"key"))
 		{
 			g_object_set_data_full(G_OBJECT(action),"accel_attr",g_strdup(value[f]),g_free);
 		}
-		else if(!g_strcasecmp(name[f],"target"))
+		else if(!g_ascii_strcasecmp(name[f],"target"))
 		{
 		}
-		else if(!g_strcasecmp(name[f],"direction"))
+		else if(!g_ascii_strcasecmp(name[f],"direction"))
 		{
 		}
-		else if(!g_strcasecmp(name[f],"id"))
+		else if(!g_ascii_strcasecmp(name[f],"id"))
 		{
 			g_object_set_data(G_OBJECT(action),"action_id",(gpointer) atoi(value[f]));
 		}
