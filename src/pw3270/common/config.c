@@ -53,7 +53,7 @@
 
 #ifdef WIN_REGISTRY_ENABLED
 
- 	static const gchar *registry_path = "SOFTWARE\\";
+ 	static const gchar *registry_path = "SOFTWARE";
 
 #else
 

@@ -143,8 +143,8 @@ int main(int argc, char *argv[])
 	{
 		static const GOptionEntry app_options[] =
 		{
-			{ "appname",	'a', 0, G_OPTION_ARG_STRING,	&appname,	N_( "Application name" ),	PACKAGE_NAME	},
-			{ "host",		'h', 0, G_OPTION_ARG_STRING,	&host,		N_( "Host to connect"),		NULL			},
+			{ "appname",	'a', 0, G_OPTION_ARG_STRING,	&appname,		N_( "Application name" ),		PACKAGE_NAME	},
+			{ "host",		'h', 0, G_OPTION_ARG_STRING,	&host,			N_( "Host to connect"),			NULL			},
 			{ NULL }
 		};
 
