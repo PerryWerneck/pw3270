@@ -38,6 +38,14 @@
 
 #include "../include/lib3270/config.h"
 
+
+#ifdef _WIN32
+	#include <windows.h>
+	#include <sys/stat.h>
+	#include <fcntl.h>
+	#define tmpfile w32_tmpfile
+#endif // _WIN32
+
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
@@ -575,3 +583,53 @@ emit(FILE *t, int ix, char c)
 	fprintf(t, "%3d,", (unsigned char)c);
 	n_out[ix]++;
 }
+
+#if defined(_WIN32)
+FILE * w32_tmpfile( void )
+{
+	char *dir;
+	char *xtemplate;
+	DWORD retval;
+	size_t len;
+	int fd;
+	FILE *file = NULL;
+
+	dir = (char *) malloc(PATH_MAX);
+	xtemplate = (char *) malloc(PATH_MAX);
+
+	/* Find Windows temporary file directory.
+	We provide this as the directory argument to path_search
+	because Windows defines P_tmpdir to "\\" and will therefore
+	try to put all temporary files in the root (unless $TMPDIR
+	is set). */
+	retval = GetTempPath (PATH_MAX, dir);
+	if (retval == 0 || retval >= PATH_MAX - 1)
+		goto done;
+
+	do
+	{
+		char *tempname = tempnam(dir,"XXXXXX");
+		if(!tempname)
+			goto done;
+
+		fd = _open (tempname,_O_BINARY | _O_CREAT | _O_TEMPORARY | _O_EXCL | _O_RDWR,_S_IREAD | _S_IWRITE);
+	}
+	while (fd < 0 && errno == EEXIST);
+
+	if (fd < 0)
+		goto done;
+
+	file = _fdopen (fd, "w+b");
+	if (file == NULL)
+	{
+		int save_errno = errno;
+		_close (fd);
+		errno = save_errno;
+	}
+
+	done:
+	free(xtemplate);
+	free(dir);
+	return file;
+}
+#endif // _WIN32
