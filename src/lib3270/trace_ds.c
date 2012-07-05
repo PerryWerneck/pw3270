@@ -68,7 +68,7 @@
 #include "telnetc.h"
 #include "trace_dsc.h"
 #include "utilc.h"
-#include "w3miscc.h"
+// #include "w3miscc.h"
 #include "toggle.h"
 
 /* Maximum size of a tracefile header. */

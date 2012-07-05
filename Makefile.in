@@ -274,6 +274,10 @@ clean:
 	@rm -f $(PACKAGE_NAME).png
 	@rm -f $(PACKAGE_NAME)-logo.png
 	@rm -f *.log
+	@echo "$@"
+
+cleanDebug: clean
+	@echo "$@"
 
 distclean: clean
 	@make -C src/pw3270 distclean
@@ -289,4 +293,5 @@ distclean: clean
 	@rm -f $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar*
 
 	@rm -f Makefile
+	@echo "$@"
 

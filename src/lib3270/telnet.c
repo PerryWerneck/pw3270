@@ -217,7 +217,7 @@ static void net_connected(H3270 *session);
 #if defined(X3270_TN3270E) /*[*/
 static int tn3270e_negotiate(H3270 *hSession);
 #endif /*]*/
-static int process_eor(void);
+static int process_eor(H3270 *hSession);
 #if defined(X3270_TN3270E) /*[*/
 #if defined(X3270_TRACE) /*[*/
 static const char *tn3270e_function_names(const unsigned char *, int);
@@ -746,7 +746,7 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 		_exit(1);
 	}
 
-	trace("Socket: %d Event: %ld",session->sock,session->sockEvent);
+//	trace("Socket: %d Event: %ld",session->sock,(unsigned long) session->sockEvent);
 
 #endif // WIN32
 
@@ -1260,7 +1260,7 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 		    case EOR:	/* eor, process accumulated input */
 			if (IN_3270 || (IN_E && session->tn3270e_negotiated)) {
 				session->ns_rrcvd++;
-				if (process_eor())
+				if (process_eor(session))
 					return -1;
 			} else
 				Warning(session, _( "EOR received when not in 3270 mode, ignored." ));
@@ -1862,14 +1862,14 @@ static void process_bind(H3270 *hSession, unsigned char *buf, int buflen)
 #endif /*]*/
 
 static int
-process_eor(void)
+process_eor(H3270 *hSession)
 {
-	if (h3270.syncing || !(h3270.ibptr - h3270.ibuf))
+	if (hSession->syncing || !(hSession->ibptr - hSession->ibuf))
 		return(0);
 
 #if defined(X3270_TN3270E) /*[*/
 	if (IN_E) {
-		tn3270e_header *h = (tn3270e_header *) h3270.ibuf;
+		tn3270e_header *h = (tn3270e_header *) hSession->ibuf;
 		unsigned char *s;
 		enum pds rv;
 
@@ -1881,52 +1881,52 @@ process_eor(void)
 
 		switch (h->data_type) {
 		case TN3270E_DT_3270_DATA:
-			if ((h3270.e_funcs & E_OPT(TN3270E_FUNC_BIND_IMAGE)) &&
-			    !h3270.tn3270e_bound)
+			if ((hSession->e_funcs & E_OPT(TN3270E_FUNC_BIND_IMAGE)) &&
+			    !hSession->tn3270e_bound)
 				return 0;
-			h3270.tn3270e_submode = E_3270;
-			check_in3270(&h3270);
-			h3270.response_required = h->response_flag;
-			rv = process_ds(h3270.ibuf + EH_SIZE,
-			    (h3270.ibptr - h3270.ibuf) - EH_SIZE);
+			hSession->tn3270e_submode = E_3270;
+			check_in3270(hSession);
+			hSession->response_required = h->response_flag;
+			rv = process_ds(hSession->ibuf + EH_SIZE,
+			    (hSession->ibptr - hSession->ibuf) - EH_SIZE);
 			if (rv < 0 &&
-			    h3270.response_required != TN3270E_RSF_NO_RESPONSE)
-				tn3270e_nak(&h3270,rv);
+			    hSession->response_required != TN3270E_RSF_NO_RESPONSE)
+				tn3270e_nak(hSession,rv);
 			else if (rv == PDS_OKAY_NO_OUTPUT &&
-			    h3270.response_required == TN3270E_RSF_ALWAYS_RESPONSE)
-				tn3270e_ack(&h3270);
-			h3270.response_required = TN3270E_RSF_NO_RESPONSE;
+			    hSession->response_required == TN3270E_RSF_ALWAYS_RESPONSE)
+				tn3270e_ack(hSession);
+			hSession->response_required = TN3270E_RSF_NO_RESPONSE;
 			return 0;
 		case TN3270E_DT_BIND_IMAGE:
-			if (!(h3270.e_funcs & E_OPT(TN3270E_FUNC_BIND_IMAGE)))
+			if (!(hSession->e_funcs & E_OPT(TN3270E_FUNC_BIND_IMAGE)))
 				return 0;
-			process_bind(&h3270, h3270.ibuf + EH_SIZE, (h3270.ibptr - h3270.ibuf) - EH_SIZE);
-			trace_dsn("< BIND PLU-name '%s'\n", h3270.plu_name);
-			h3270.tn3270e_bound = 1;
-			check_in3270(&h3270);
+			process_bind(hSession, hSession->ibuf + EH_SIZE, (hSession->ibptr - hSession->ibuf) - EH_SIZE);
+			trace_dsn("< BIND PLU-name '%s'\n", hSession->plu_name);
+			hSession->tn3270e_bound = 1;
+			check_in3270(hSession);
 			return 0;
 		case TN3270E_DT_UNBIND:
-			if (!(h3270.e_funcs & E_OPT(TN3270E_FUNC_BIND_IMAGE)))
+			if (!(hSession->e_funcs & E_OPT(TN3270E_FUNC_BIND_IMAGE)))
 				return 0;
-			h3270.tn3270e_bound = 0;
-			if (h3270.tn3270e_submode == E_3270)
-				h3270.tn3270e_submode = E_NONE;
-			check_in3270(&h3270);
+			hSession->tn3270e_bound = 0;
+			if (hSession->tn3270e_submode == E_3270)
+				hSession->tn3270e_submode = E_NONE;
+			check_in3270(hSession);
 			return 0;
 		case TN3270E_DT_NVT_DATA:
 			/* In tn3270e NVT mode */
-			h3270.tn3270e_submode = E_NVT;
-			check_in3270(&h3270);
-			for (s = h3270.ibuf; s < h3270.ibptr; s++) {
+			hSession->tn3270e_submode = E_NVT;
+			check_in3270(hSession);
+			for (s = hSession->ibuf; s < hSession->ibptr; s++) {
 				ansi_process(*s++);
 			}
 			return 0;
 		case TN3270E_DT_SSCP_LU_DATA:
-			if (!(h3270.e_funcs & E_OPT(TN3270E_FUNC_BIND_IMAGE)))
+			if (!(hSession->e_funcs & E_OPT(TN3270E_FUNC_BIND_IMAGE)))
 				return 0;
-			h3270.tn3270e_submode = E_SSCP;
-			check_in3270(&h3270);
-			ctlr_write_sscp_lu(&h3270, h3270.ibuf + EH_SIZE,(h3270.ibptr - h3270.ibuf) - EH_SIZE);
+			hSession->tn3270e_submode = E_SSCP;
+			check_in3270(hSession);
+			ctlr_write_sscp_lu(hSession, hSession->ibuf + EH_SIZE,(hSession->ibptr - hSession->ibuf) - EH_SIZE);
 			return 0;
 		default:
 			/* Should do something more extraordinary here. */
@@ -1935,7 +1935,7 @@ process_eor(void)
 	} else
 #endif /*]*/
 	{
-		(void) process_ds(h3270.ibuf, h3270.ibptr - h3270.ibuf);
+		(void) process_ds(hSession->ibuf, hSession->ibptr - hSession->ibuf);
 	}
 	return 0;
 }

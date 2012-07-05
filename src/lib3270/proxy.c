@@ -18,7 +18,7 @@
  * programa; se não, escreva para a Free Software Foundation, Inc., 51 Franklin
  * St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * Este programa está nomeado como proxy.c e possui 991 linhas de código.
+ * Este programa está nomeado como proxy.c e possui - linhas de código.
  *
  * Contatos:
  *
@@ -42,6 +42,7 @@
 #endif // _WIN32
 
 #include "globals.h"
+#include "utilc.h"
 
 //#include "appres.h"
 #include "resources.h"
@@ -51,9 +52,8 @@
 #endif
 
 #if defined(_WIN32)
-
 	#include <ws2tcpip.h>
-
+	#include "w3miscc.h"
 #else
 
 	#include <sys/socket.h>
@@ -824,8 +824,7 @@ proxy_socks5(int fd, char *host, unsigned short port, int force_d)
 	    	*s++ = 0x04;	/* IPv6 */
 		memcpy(s, &ha.sin6.sin6_addr, sizeof(struct in6_addr));
 		s += sizeof(struct in6_addr);
-		(void) inet_ntop(AF_INET6, &ha.sin6.sin6_addr, nbuf,
-				 sizeof(nbuf));
+		(void) inet_ntop(AF_INET6, &ha.sin6.sin6_addr, nbuf, sizeof(nbuf));
 #endif /*]*/
 	}
 	SET16(s, port);

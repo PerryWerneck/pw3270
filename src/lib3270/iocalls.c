@@ -582,6 +582,7 @@ void x_except_on(H3270 *h)
 #endif // WIN32
 }
 
+/*
 void add_input_calls(H3270 *session, void (*in)(H3270 *session), void (*exc)(H3270 *session))
 {
 #ifdef _WIN32
@@ -592,9 +593,10 @@ void add_input_calls(H3270 *session, void (*in)(H3270 *session), void (*exc)(H32
 	session->ns_read_id			= AddInput(session->sock, session, in);
 #endif // WIN32
 
-	session->excepting = 1;
+	session->excepting	= 1;
 	session->reading 	= 1;
 }
+*/
 
 void remove_input_calls(H3270 *session)
 {

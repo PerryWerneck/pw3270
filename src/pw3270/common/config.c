@@ -139,7 +139,7 @@ gchar * get_last_error_msg(void)
 			if(RegQueryValueExA(hKey,pName,NULL,&datatype,data,&datalen) == ERROR_SUCCESS)
 			{
 				data[datalen+1] = 0;
-				cbk(pName,data,user_data);
+				cbk(pName,(const gchar *) data, user_data);
 			}
 			cName = MAX_KEY_LENGTH;
 		}
@@ -169,7 +169,7 @@ gchar * get_last_error_msg(void)
 
 	data[datalen] = 0;
 
-	* value = g_ascii_strtod(data, &end_of_valid_d);
+	* value = g_ascii_strtod((const gchar *) data, &end_of_valid_d);
 
 	if(*end_of_valid_d != '\0' || end_of_valid_d == ((gchar *) data))
 	{
@@ -347,7 +347,7 @@ gchar * get_last_error_msg(void)
 	if(RegQueryValueExA(key_handle,key,NULL,&datatype,data,&datalen) == ERROR_SUCCESS)
 	{
 		data[datalen+1] = 0;
-		ret = g_strdup(data);
+		ret = g_strdup((const gchar *) data);
 		trace("datalen=%d",datalen);
 	}
 	else if(def)

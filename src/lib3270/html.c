@@ -115,7 +115,7 @@
 	append_string(info,element_text[id]);
  }
 
- static update_colors(struct html_info *info, unsigned short attr)
+ static void update_colors(struct html_info *info, unsigned short attr)
  {
 	unsigned short	  fg;
 	unsigned short	  bg	= ((attr & 0x00F0) >> 4);
@@ -141,7 +141,7 @@
 	info->bg = bg;
  }
 
- static const append_char(struct html_info *info, const struct chr_xlat *xlat, unsigned char chr)
+ static void append_char(struct html_info *info, const struct chr_xlat *xlat, unsigned char chr)
  {
 	char txt[] = { chr, 0 };
 	int f;

@@ -150,7 +150,7 @@ upload_convert(unsigned char *buf, int len)
 		unsigned char c = *buf++;
 		char *ixp;
 		int ix;
-		int oq = -1;
+		// int oq = -1;
 
 	    retry:
 		if (quadrant < 0) {
@@ -176,7 +176,7 @@ upload_convert(unsigned char *buf, int len)
 		ixp = strchr(alphas, ebc2asc[c]);
 		if (ixp == (char *)NULL) {
 			/* Try a different quadrant. */
-			oq = quadrant;
+			// oq = quadrant;
 			quadrant = -1;
 			goto retry;
 		}
@@ -189,7 +189,7 @@ upload_convert(unsigned char *buf, int len)
 		if (quadrant != OTHER_2 && c != XLATE_NULL &&
 		    !conv[quadrant].xlate[ix]) {
 			/* Try a different quadrant. */
-			oq = quadrant;
+//			oq = quadrant;
 			quadrant = -1;
 			goto retry;
 		}

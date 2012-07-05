@@ -567,7 +567,18 @@ static int do_connect(H3270 *hSession, const char *n)
 	/* Success. */
 
 	/* Setup socket I/O. */
-	add_input_calls(hSession,net_input,net_exception);
+//	add_input_calls(hSession,net_input,net_exception);
+#ifdef _WIN32
+	hSession->ns_exception_id	= AddExcept((int) hSession->sockEvent, hSession, net_exception);
+	hSession->ns_read_id		= AddInput((int) hSession->sockEvent, hSession, net_input);
+#else
+	hSession->ns_exception_id	= AddExcept(hSession->sock, hSession, net_exception);
+	hSession->ns_read_id		= AddInput(hSession->sock, hSession, net_input);
+#endif // WIN32
+
+	hSession->excepting	= 1;
+	hSession->reading 	= 1;
+
 
 	/* Set state and tell the world. */
 	if (pending)
