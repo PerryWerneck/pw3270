@@ -41,10 +41,11 @@
 
 #ifdef _WIN32
 	#include <windows.h>
-	#include <sys/stat.h>
-	#include <fcntl.h>
 	#define tmpfile w32_tmpfile
 #endif // _WIN32
+
+#include <sys/stat.h>
+#include <fcntl.h>
 
 #include <stdio.h>
 #include <string.h>

@@ -89,7 +89,10 @@
  struct html_info
  {
 	int				  szText;
+
+	unsigned char	  fa;		/**< field attribute, it nonzero */
 	char			* text;
+	int 			  maxlength;
 	unsigned short	  fg;
 	unsigned short	  bg;
  };
@@ -195,7 +198,6 @@
 			if((option && LIB3270_HTML_OPTION_ALL) || (session->text[baddr+col].attr & LIB3270_ATTR_SELECTED))
 			{
 				cr++;
-				update_colors(&info,session->text[baddr+col].attr);
 
 				if(session->text[baddr+col].attr & LIB3270_ATTR_CG)
 				{
@@ -221,6 +223,7 @@
 						{ 0x00, NULL	}
 					};
 
+					update_colors(&info,session->text[baddr+col].attr);
 					append_char(&info, xlat, session->text[baddr+col].chr);
 
 				}
@@ -237,10 +240,17 @@
 						{ 0x00, NULL		}
 					};
 
-					append_char(&info, xlat, session->text[baddr+col].chr);
-
+					if((session->text[baddr+col].attr & LIB3270_ATTR_MARKER))
+					{
+						update_colors(&info,session->text[baddr+col].attr);
+						append_string(&info,"|");
+					}
+					else
+					{
+						update_colors(&info,session->text[baddr+col].attr);
+						append_char(&info, xlat, session->text[baddr+col].chr);
+					}
 				}
-
 			}
 		}
 

@@ -174,7 +174,7 @@ fallbacks.c: $(BINDIR)/mkfb@EXEEXT@ X3270.xad
 $(BINDIR)/mkfb@EXEEXT@: mkfb.c Makefile
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(HOST_CC) -g -o $@ -D_WIN32 mkfb.c
+	@$(HOST_CC) -g -o $@ mkfb.c
 
 clean:
 	@rm -fr .obj

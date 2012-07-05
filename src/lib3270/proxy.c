@@ -520,6 +520,7 @@ proxy_telnet(int fd, char *host, unsigned short port)
 static int proxy_socks4(int fd, char *host, unsigned short port, int force_a)
 {
 	popup_an_error(NULL,"%s", _( "Unsupported socks 4 proxy" ) );
+	return 0;
 }
 #else
 static int proxy_socks4(int fd, char *host, unsigned short port, int force_a)

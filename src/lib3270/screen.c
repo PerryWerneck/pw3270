@@ -220,10 +220,10 @@ static unsigned short calc_attrs(H3270 *session, int baddr, int fa_addr, int fa)
 			a |= LIB3270_ATTR_UNDERLINE;
 	}
 
-	if(h3270.m3279 && (gr & (GR_BLINK | GR_UNDERLINE)) && !(gr & GR_REVERSE) && !bg)
+	if(session->m3279 && (gr & (GR_BLINK | GR_UNDERLINE)) && !(gr & GR_REVERSE) && !bg)
     	a |= LIB3270_ATTR_BACKGROUND_INTENSITY;
 
-	if(!h3270.m3279 &&	((gr & GR_INTENSIFY) || FA_IS_HIGH(fa)))
+	if(!session->m3279 &&	((gr & GR_INTENSIFY) || FA_IS_HIGH(fa)))
 		a |= LIB3270_ATTR_INTENSIFY;
 
 	if (gr & GR_REVERSE)
@@ -313,7 +313,7 @@ void screen_update(H3270 *session, int bstart, int bend)
 			fa_addr = baddr;
 			fa = session->ea_buf[baddr].fa;
 			a = calc_attrs(session, baddr, baddr, fa);
-			addch(session,baddr,' ',(attr = COLOR_GREEN)|CHAR_ATTR_MARKER,&first,&last);
+			addch(session,baddr,' ',(attr = COLOR_GREEN)|LIB3270_ATTR_MARKER,&first,&last);
 		}
 		else if (FA_IS_ZERO(fa))
 		{
