@@ -27,8 +27,10 @@
  */
 
  #include <string.h>
+ #include <stdlib.h>
  #include <lib3270.h>
  #include <lib3270/session.h>
+ #include <lib3270/3270ds.h>
  #include <lib3270/html.h>
 
  #include "globals.h"
@@ -68,29 +70,44 @@
 
  static const char * html_color[] =
  {
-		"black",
-		"deepSkyBlue",
-		"red",
-		"pink",
-		"green",
-		"turquoise",
-		"yellow",
-		"white",
-		"black",
-		"blue",
-		"orange",
-		"purple",
-		"paleGreen",
-		"paleTurquoise",
-		"grey",
-		"white"
+	// Terminal colors
+	"black",
+	"deepSkyBlue",
+	"red",
+	"pink",
+	"green",
+	"turquoise",
+	"yellow",
+	"white",
+	"black",
+	"blue",
+	"orange",
+	"purple",
+	"paleGreen",
+	"paleTurquoise",
+	"grey",
+	"white",
+
+	// Field colors
+	"green",		// Normal/Unprotected
+	"red",			// Intensified/Unprotected
+	"cyan",			// Normal/Protected
+	"white",		// Intensified/Protected
+
  };
 
  struct html_info
  {
 	int				  szText;
 
-	unsigned char	  fa;		/**< field attribute, it nonzero */
+	enum mode
+	{
+		HTML_MODE_TEXT,			/**< Non editable */
+		HTML_MODE_INPUT_TEXT,	/**< Text input */
+		HTML_MODE_INPUT_VALUE,	/**< Value input */
+		HTML_MODE_INPUT_BUTTON,	/**< Button input (PFkey) */
+	}				  mode;
+
 	char			* text;
 	int 			  maxlength;
 	unsigned short	  fg;
@@ -124,9 +141,8 @@
 	unsigned short	  bg	= ((attr & 0x00F0) >> 4);
 	char 			* txt;
 
-	#warning Fix field colors
 	if(attr & LIB3270_ATTR_FIELD)
-		fg = (attr & 0x0003);
+		fg = 16+(attr & 0x0003);
 	else
 		fg = (attr & 0x000F);
 
@@ -162,6 +178,34 @@
 
  }
 
+ static void open_input(struct html_info *info, int addr)
+ {
+	char name[30];
+
+	snprintf(name,29,"F%04d",addr);
+
+	append_string(info,"<input type=\"text\" name=\"");
+	append_string(info,name);
+	append_string(info,"\"");
+	info->mode = HTML_MODE_INPUT_TEXT;
+ }
+
+ static void close_input(struct html_info *info)
+ {
+	char buffer[80];
+
+	if(info->mode == HTML_MODE_TEXT)
+		return;
+
+	snprintf(buffer,80," maxlength=\"%d\" class=\"IW%03d\"",info->maxlength,info->maxlength);
+	append_string(info,buffer);
+
+	append_string(info,"></input>");
+
+	info->mode = HTML_MODE_TEXT;
+	info->maxlength = 0;
+ }
+
  LIB3270_EXPORT char * lib3270_get_as_html(H3270 *session, LIB3270_HTML_OPTION option)
  {
 	int	row, baddr;
@@ -172,6 +216,7 @@
  	info.text	= lib3270_malloc(info.szText+1);
  	info.fg		= 0xFF;
  	info.bg		= 0xFF;
+ 	info.mode	= HTML_MODE_TEXT;
 
 	if(option & LIB3270_HTML_OPTION_HEADERS)
 	{
@@ -193,68 +238,126 @@
 				len = col;
 		}
 
-		for(col = 0; col <= len;col++)
+		for(col = 0; col <= len || (col < session->cols && info.mode != HTML_MODE_TEXT);col++)
 		{
-			if((option && LIB3270_HTML_OPTION_ALL) || (session->text[baddr+col].attr & LIB3270_ATTR_SELECTED))
+			if((option & LIB3270_HTML_OPTION_ALL) || (session->text[baddr+col].attr & LIB3270_ATTR_SELECTED))
 			{
 				cr++;
 
-				if(session->text[baddr+col].attr & LIB3270_ATTR_CG)
+				if((session->text[baddr+col].attr & LIB3270_ATTR_MARKER) && (option & LIB3270_HTML_OPTION_FORM) )
 				{
-					static const struct chr_xlat xlat[] =
-					{
-						{ 0xd3, "+"		}, // CG 0xab, plus
-						{ 0xa2, "-"		}, // CG 0x92, horizontal line
-						{ 0x85, "|"		}, // CG 0x184, vertical line
-						{ 0xd4, "+"		}, // CG 0xac, LR corner
-						{ 0xd5, "+"		}, // CG 0xad, UR corner
-						{ 0xc5, "+"		}, // CG 0xa4, UL corner
-						{ 0xc4, "+"		}, // CG 0xa3, LL corner
-						{ 0xc6, "|"		}, // CG 0xa5, left tee
-						{ 0xd6, "|"		}, // CG 0xae, right tee
-						{ 0xc7, "-"		}, // CG 0xa6, bottom tee
-						{ 0xd7, "-"		}, // CG 0xaf, top tee
-						{ 0x8c, "&le;"	}, // CG 0xf7, less or equal "≤"
-						{ 0xae, "&ge;"	}, // CG 0xd9, greater or equal "≥"
-						{ 0xbe, "&ne;"	}, // CG 0x3e, not equal "≠"
-						{ 0xad, "["		}, // "["
-						{ 0xbd, "]"		}, // "]"
+					int fa = (session->ea_buf[baddr+col].fa & FA_MASK);
+					int tx = (info.mode == HTML_MODE_TEXT);
 
-						{ 0x00, NULL	}
-					};
+					close_input(&info);
 
 					update_colors(&info,session->text[baddr+col].attr);
-					append_char(&info, xlat, session->text[baddr+col].chr);
 
+					if(!FA_IS_PROTECTED(fa))
+					{
+						// Input field
+						open_input(&info,baddr+col+1);
+					}
+					else if(col < len && session->text[baddr+col+1].chr == 'F')
+					{
+						char *text = lib3270_get_field_at(session,baddr+col+1);
+
+						if(text)
+						{
+							char *ptr = text;
+
+							while(*ptr && *ptr == ' ')
+								ptr++;
+
+							if(strlen(ptr)>1)
+							{
+								int value = atoi(ptr+1);
+								if(value > 1 && value < 24)
+								{
+									// E uma PF, cria um botao
+									char name[30];
+
+									snprintf(name,29,"PF%02d",value);
+
+									append_string(&info,"<input type=\"button\" name=\"");
+									append_string(&info,name);
+									append_string(&info,"\" value=\"");
+									append_string(&info,ptr);
+									append_string(&info,"\"");
+									info.mode = HTML_MODE_INPUT_BUTTON;
+								}
+							}
+							lib3270_free(text);
+						}
+
+					}
+					else if(tx)
+					{
+						append_string(&info,"&nbsp;");
+					}
 				}
-				else
+				else if(info.mode == HTML_MODE_TEXT)
 				{
-					static const struct chr_xlat xlat[] =
-					{
-						{ '"',	"&quot;"	},
-						{ '&',	"&amp;"		},
-						{ '<',	"&lt;"		},
-						{ '>',	"&gt;"		},
-						{ ' ',	"&nbsp;"	},
+					// Normal text
+					update_colors(&info,session->text[baddr+col].attr);
 
-						{ 0x00, NULL		}
-					};
-
-					if((session->text[baddr+col].attr & LIB3270_ATTR_MARKER))
+					if(session->text[baddr+col].attr & LIB3270_ATTR_CG)
 					{
-						update_colors(&info,session->text[baddr+col].attr);
-						append_string(&info,"|");
+						static const struct chr_xlat xlat[] =
+						{
+							{ 0xd3, "+"		}, // CG 0xab, plus
+							{ 0xa2, "-"		}, // CG 0x92, horizontal line
+							{ 0x85, "|"		}, // CG 0x184, vertical line
+							{ 0xd4, "+"		}, // CG 0xac, LR corner
+							{ 0xd5, "+"		}, // CG 0xad, UR corner
+							{ 0xc5, "+"		}, // CG 0xa4, UL corner
+							{ 0xc4, "+"		}, // CG 0xa3, LL corner
+							{ 0xc6, "|"		}, // CG 0xa5, left tee
+							{ 0xd6, "|"		}, // CG 0xae, right tee
+							{ 0xc7, "-"		}, // CG 0xa6, bottom tee
+							{ 0xd7, "-"		}, // CG 0xaf, top tee
+							{ 0x8c, "&le;"	}, // CG 0xf7, less or equal "≤"
+							{ 0xae, "&ge;"	}, // CG 0xd9, greater or equal "≥"
+							{ 0xbe, "&ne;"	}, // CG 0x3e, not equal "≠"
+							{ 0xad, "["		}, // "["
+							{ 0xbd, "]"		}, // "]"
+
+							{ 0x00, NULL	}
+						};
+
+						append_char(&info, xlat, session->text[baddr+col].chr);
+
 					}
 					else
 					{
-						update_colors(&info,session->text[baddr+col].attr);
+						static const struct chr_xlat xlat[] =
+						{
+							{ '"',	"&quot;"	},
+							{ '&',	"&amp;"		},
+							{ '<',	"&lt;"		},
+							{ '>',	"&gt;"		},
+							{ ' ',	"&nbsp;"	},
+
+							{ 0x00, NULL		}
+						};
 						append_char(&info, xlat, session->text[baddr+col].chr);
 					}
+				}
+				else
+				{
+					// Input contents
+					info.maxlength++;
 				}
 			}
 		}
 
 		baddr += session->cols;
+
+		if(info.mode != HTML_MODE_TEXT)
+		{
+			#warning Incluir o tratamento correto
+			close_input(&info);
+		}
 
 		if(cr || (option && LIB3270_HTML_OPTION_ALL))
 			append_element(&info,HTML_ELEMENT_LINE_BREAK);

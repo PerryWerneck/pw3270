@@ -46,7 +46,7 @@
 //#include "appres.h"
 // #include "ctlr.h"
 #if defined(X3270_DBCS) /*[*/
-#include "3270ds.h"
+#include <lib3270/3270ds.h>
 #endif /*]*/
 
 #include "ansic.h"

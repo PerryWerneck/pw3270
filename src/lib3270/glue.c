@@ -52,7 +52,7 @@
 #include <stdarg.h>
 
 //#include "appres.h"
-#include "3270ds.h"
+#include <lib3270/3270ds.h>
 #include "resources.h"
 
 #include "actionsc.h"

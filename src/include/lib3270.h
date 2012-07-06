@@ -103,11 +103,11 @@
 		LIB3270_TOGGLE_CONNECT_ON_STARTUP,
 		LIB3270_TOGGLE_KP_ALTERNATIVE,              /**< Keypad +/- move to next/previous field */
 		LIB3270_TOGGLE_BEEP,						/**< Beep on errors */
+		LIB3270_TOGGLE_VIEW_FIELD,					/**< View Field attribute */
 
 //		LIB3270_TOGGLE_ALT_CURSOR,
 //		LIB3270_TOGGLE_AID_WAIT,
 //		LIB3270_TOGGLE_SCROLL_BAR,
-//		LIB3270_TOGGLE_VISIBLE_CONTROL,
 //		LIB3270_TOGGLE_KEYPAD,
 
 		LIB3270_TOGGLE_COUNT
@@ -716,10 +716,12 @@
 	 * @param offset	Start position.
 	 * @param len		Text length or -1 to all text.
 	 *
-	 * @return Contents at position if available, or NULL. Release it with free()
+	 * @return Contents at position if available, or NULL. Release it with lib3270_free()
 	 *
 	 */
 	LIB3270_EXPORT char * lib3270_get_text(H3270 *h, int offset, int len);
+
+	LIB3270_EXPORT char * lib3270_get_field_at(H3270 *session, int baddr);
 
 	/**
 	 * Get a terminal character and attribute.

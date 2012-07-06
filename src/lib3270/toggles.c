@@ -77,6 +77,8 @@ static const char *toggle_names[LIB3270_TOGGLE_COUNT] =
 		"autoconnect",
 		"kpalternative",			/**< Keypad +/- move to next/previous field */
 		"beep",						/**< Beep on errors */
+		"fieldattr",				/**< View Field attribute */
+
 };
 
 LIB3270_EXPORT unsigned char lib3270_get_toggle(H3270 *session, LIB3270_TOGGLE ix)

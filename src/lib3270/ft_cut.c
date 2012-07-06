@@ -45,7 +45,7 @@
 
 //#include "appres.h"
 // #include "ctlr.h"
-#include "3270ds.h"
+#include <lib3270/3270ds.h>
 
 #include "actionsc.h"
 #include "ctlrc.h"

@@ -141,17 +141,17 @@
 #define INC_BA(ba)		{ (ba) = ((ba) + 1) % (h3270.cols * h3270.rows); }
 #define DEC_BA(ba)		{ (ba) = (ba) ? (ba - 1) : ((h3270.cols*h3270.rows) - 1); }
 
-/* Field attributes. */
-#define FA_PRINTABLE	0xc0	/* these make the character "printable" */
-#define FA_PROTECT	0x20	/* unprotected (0) / protected (1) */
-#define FA_NUMERIC	0x10	/* alphanumeric (0) /numeric (1) */
-#define FA_INTENSITY	0x0c	/* display/selector pen detectable: */
-#define FA_INT_NORM_NSEL 0x00	/*  00 normal, non-detect */
-#define FA_INT_NORM_SEL	 0x04	/*  01 normal, detectable */
-#define FA_INT_HIGH_SEL	 0x08	/*  10 intensified, detectable */
-#define FA_INT_ZERO_NSEL 0x0c	/*  11 nondisplay, non-detect */
-#define FA_RESERVED	0x02	/* must be 0 */
-#define FA_MODIFY	0x01	/* modified (1) */
+/** Field attributes. */
+#define FA_PRINTABLE		0xc0	/**< these make the character "printable" */
+#define FA_PROTECT			0x20	/**< unprotected (0) / protected (1) */
+#define FA_NUMERIC			0x10	/**< alphanumeric (0) /numeric (1) */
+#define FA_INTENSITY		0x0c	/**< display/selector pen detectable: */
+#define FA_INT_NORM_NSEL	0x00	/**< 00 normal, non-detect */
+#define FA_INT_NORM_SEL		0x04	/**< 01 normal, detectable */
+#define FA_INT_HIGH_SEL		0x08	/**< 10 intensified, detectable */
+#define FA_INT_ZERO_NSEL	0x0c	/**< 11 nondisplay, non-detect */
+#define FA_RESERVED			0x02	/**< must be 0 */
+#define FA_MODIFY			0x01	/**< modified (1) */
 
 /* Bits in the field attribute that are stored. */
 #define FA_MASK		(FA_PROTECT | FA_NUMERIC | FA_INTENSITY | FA_MODIFY)

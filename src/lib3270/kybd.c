@@ -51,7 +51,7 @@
 // #include <X11/keysym.h>
 
 #include <fcntl.h>
-#include "3270ds.h"
+#include <lib3270/3270ds.h>
 // #include "appres.h"
 // #include "ctlr.h"
 #include "resources.h"

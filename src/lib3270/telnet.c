@@ -81,7 +81,7 @@
 // #include <stdarg.h>
 
 #include "tn3270e.h"
-#include "3270ds.h"
+#include <lib3270/3270ds.h>
 
 // #include "appres.h"
 

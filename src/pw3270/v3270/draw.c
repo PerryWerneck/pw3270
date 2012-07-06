@@ -28,6 +28,7 @@
  */
 
  #include <gtk/gtk.h>
+ #include <math.h>
  #include <pw3270.h>
  #include <lib3270.h>
  #include <lib3270/session.h>
@@ -131,7 +132,24 @@ void v3270_draw_char(cairo_t *cr, unsigned char chr, unsigned short attr, H3270 
 	gdk_cairo_set_source_color(cr,fg);
 
 	// Draw char
-	if(attr & LIB3270_ATTR_CG)
+	if( (attr & LIB3270_ATTR_MARKER) && lib3270_get_toggle(session,LIB3270_TOGGLE_VIEW_FIELD) )
+	{
+		double sz = (double) rect->width;
+		if(rect->height < rect->width)
+			sz = (double) rect->height;
+
+		cairo_save(cr);
+
+		sz /= 10;
+
+		cairo_translate(cr, rect->x + (rect->width / 2), rect->y + (rect->height / 2));
+		cairo_scale(cr, sz, sz);
+		cairo_arc(cr, 0., 0., 1., 0., 2 * M_PI);
+
+
+		cairo_restore(cr);
+	}
+	else if(attr & LIB3270_ATTR_CG)
 	{
 		switch(chr)
 		{

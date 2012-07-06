@@ -497,6 +497,24 @@ LIB3270_EXPORT char * lib3270_get_text(H3270 *h, int offset, int len)
 	return buffer;
 }
 
+/**
+ * Get field contents
+ *
+ * @param session	Session handle
+ * @param baddr		Field addr
+ *
+ * @return String with the field contents (release it with lib3270_free()
+ */
+LIB3270_EXPORT char * lib3270_get_field_at(H3270 *session, int baddr)
+{
+	int first = lib3270_field_addr(session,baddr);
+
+	if(first < 0)
+		return NULL;
+
+	return lib3270_get_text(session,first,lib3270_field_length(session,first)+1);
+}
+
 LIB3270_EXPORT char * lib3270_get_selected(H3270 *hSession)
 {
 	if(!hSession->selected || hSession->select.start == hSession->select.end)

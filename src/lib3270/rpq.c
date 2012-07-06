@@ -56,7 +56,7 @@
 
 #include <assert.h>
 #include <stdarg.h>
-#include "3270ds.h"
+#include <lib3270/3270ds.h>
 //#include "appres.h"
 
 #include "popupsc.h"

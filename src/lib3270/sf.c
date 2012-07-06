@@ -42,7 +42,7 @@
 #if !defined(_WIN32) /*[*/
 #include <netinet/in.h>
 #endif /*]*/
-#include "3270ds.h"
+#include <lib3270/3270ds.h>
 // #include "appres.h"
 #include "screen.h"
 // #include "ctlr.h"
