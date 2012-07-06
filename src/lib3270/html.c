@@ -256,7 +256,26 @@
 					if(!FA_IS_PROTECTED(fa))
 					{
 						// Input field
+						char *text = lib3270_get_field_at(session,baddr+col+1);
+
 						open_input(&info,baddr+col+1);
+
+						if(text)
+						{
+							char *ptr = text;
+
+							for(ptr = text; *ptr && (*ptr == ' ' || *ptr == '_'); ptr++);
+
+							if(*ptr)
+							{
+								append_string(&info," value=\"");
+								append_string(&info,ptr);
+								append_string(&info,"\"");
+							}
+
+							lib3270_free(text);
+						}
+
 					}
 					else if(col < len && session->text[baddr+col+1].chr == 'F')
 					{
