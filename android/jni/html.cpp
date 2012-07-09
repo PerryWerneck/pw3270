@@ -27,6 +27,7 @@
  */
 
  #include "globals.h"
+ #include <lib3270/html.h>
  #include <string.h>
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
@@ -38,9 +39,12 @@ JNIEXPORT jstring JNICALL Java_br_com_bb_pw3270_lib3270_getHTML(JNIEnv *env, job
 
 	session_request(env,obj);
 
+	trace("%s starts, session=%p",__FUNCTION__,session);
+
 	if(session)
 	{
-		char *text = getHTML(session);
+		char *text = lib3270_get_as_html(session,(LIB3270_HTML_OPTION) (LIB3270_HTML_OPTION_ALL|LIB3270_HTML_OPTION_FORM));
+		trace("text=%p",text);
 		ret = env->NewStringUTF(text);
 		lib3270_free(text);
 	}
@@ -48,6 +52,8 @@ JNIEXPORT jstring JNICALL Java_br_com_bb_pw3270_lib3270_getHTML(JNIEnv *env, job
 	{
 		ret = env->NewStringUTF("<b>Invalid Session ID</b>");
 	}
+
+	trace("%s ends",__FUNCTION__);
 
 	session_release();
 

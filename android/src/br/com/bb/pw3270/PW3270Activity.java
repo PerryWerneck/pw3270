@@ -16,6 +16,8 @@ public class PW3270Activity extends Activity implements View.OnClickListener
 {
 	private class terminal extends lib3270
 	{
+		private static final String TAG = "pw3270";
+		
 		TextView msgbox;
 		Activity Main;
 	
@@ -48,6 +50,7 @@ public class PW3270Activity extends Activity implements View.OnClickListener
 		protected void redraw()
 		{
 			String text = getHTML();
+			Log.i(TAG,text);
 		}
 
 

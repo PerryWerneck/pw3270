@@ -965,6 +965,38 @@ void net_disconnect(H3270 *session)
 
 }
 
+
+LIB3270_EXPORT void lib3270_data_recv(H3270 *hSession, size_t nr, const unsigned char *netrbuf)
+{
+	register const unsigned char * cp;
+
+	trace_netdata('<', netrbuf, nr);
+
+	hSession->ns_brcvd += nr;
+	for (cp = netrbuf; cp < (netrbuf + nr); cp++)
+	{
+		if(telnet_fsm(hSession,*cp))
+		{
+			(void) ctlr_dbcs_postprocess();
+			host_disconnect(hSession,True);
+			return;
+		}
+	}
+
+#if defined(X3270_ANSI)
+	if (IN_ANSI)
+	{
+		(void) ctlr_dbcs_postprocess();
+	}
+
+	if (hSession->ansi_data)
+	{
+		trace_dsn("\n");
+		hSession->ansi_data = 0;
+	}
+#endif // X3270_ANSI
+}
+
 
 /*
  * net_input
@@ -974,8 +1006,9 @@ void net_disconnect(H3270 *session)
  */
 void net_input(H3270 *session)
 {
-	register unsigned char	*cp;
-	int	nr;
+//	register unsigned char	* cp;
+	int						  nr;
+	unsigned char			  buffer[BUFSZ];
 
 	CHECK_SESSION_HANDLE(session);
 
@@ -986,46 +1019,21 @@ void net_input(H3270 *session)
 		if (session->sock < 0)
 			return;
 
-/*
-#if defined(_WIN32)
-		if (HALF_CONNECTED) {
-
-			if (connect(session->sock, &haddr.sa, sizeof(haddr)) < 0) {
-				int err = GetLastError();
-
-				switch (err) {
-				case WSAEISCONN:
-					connection_complete(session);
-					// and go get data...?
-					break;
-				case WSAEALREADY:
-				case WSAEWOULDBLOCK:
-				case WSAEINVAL:
-					return;
-				default:
-					lib3270_popup_dialog(session,LIB3270_NOTIFY_CRITICAL,N_( "Network startup error" ),N_( "Second connect() failed" ),"%s", win32_strerror(GetLastError()) );
-					_exit(1);
-				}
-			}
-		}
+#if defined(X3270_ANSI)
+		session->ansi_data = 0;
 #endif
-*/
-
-#if defined(X3270_ANSI) /*[*/
-	session->ansi_data = 0;
-#endif /*]*/
 
 #if defined(_WIN32)
-	ResetEvent(session->sockEvent);
+		ResetEvent(session->sockEvent);
 #endif
 
 #if defined(HAVE_LIBSSL)
 		if (session->ssl_con != NULL)
-			nr = SSL_read(session->ssl_con, (char *) session->netrbuf, BUFSZ);
+			nr = SSL_read(session->ssl_con, (char *) buffer, BUFSZ);
 		else
-			nr = recv(session->sock, (char *) session->netrbuf, BUFSZ, 0);
+			nr = recv(session->sock, (char *) buffer, BUFSZ, 0);
 #else
-			nr = recv(session->sock, (char *) session->netrbuf, BUFSZ, 0);
+			nr = recv(session->sock, (char *) buffer, BUFSZ, 0);
 #endif // HAVE_LIBSSL
 
 		if (nr < 0)
@@ -1064,7 +1072,7 @@ void net_input(H3270 *session)
 
 			if (HALF_CONNECTED)
 			{
-				popup_a_sockerr(session, N_( "%s:%d" ),h3270.hostname, h3270.current_port);
+				popup_a_sockerr(session, N_( "%s:%d" ),session->hostname, session->current_port);
 			}
 			else if (socket_errno() != SE_ECONNRESET)
 			{
@@ -1093,6 +1101,9 @@ void net_input(H3270 *session)
 			net_connected(session);
 		}
 
+		lib3270_data_recv(session, nr, buffer);
+
+/*
 		trace_netdata('<', session->netrbuf, nr);
 
 		session->ns_brcvd += nr;
@@ -1118,7 +1129,7 @@ void net_input(H3270 *session)
 			session->ansi_data = 0;
 		}
 #endif // X3270_ANSI
-
+*/
 	}
 
 }

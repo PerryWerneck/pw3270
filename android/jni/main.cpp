@@ -145,6 +145,7 @@ JNIEXPORT jint JNICALL Java_br_com_bb_pw3270_lib3270_do_1connect(JNIEnv *env, jo
 	int rc;
 	session_request(env,obj);
 	rc = lib3270_connect(session,0,1);
+	trace("lib3270_connect exits with rc=%d",rc);
 	session_release();
 	return (jint) rc;
 }

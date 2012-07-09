@@ -118,7 +118,7 @@ LIB3270_INTERNAL enum dbcs_state ctlr_dbcs_state(int baddr);
 LIB3270_INTERNAL enum dbcs_state ctlr_lookleft_state(int baddr, enum dbcs_why *why);
 LIB3270_INTERNAL int ctlr_dbcs_postprocess(void);
 #else /*][*/
-#define ctlr_dbcs_state(b)		DBCS_NONE
-#define ctlr_lookleft_state(b, w)	DBCS_NONE
-#define ctlr_dbcs_postprocess()		0
+	#define ctlr_dbcs_state(b)		DBCS_NONE
+	#define ctlr_lookleft_state(b, w)	DBCS_NONE
+	#define ctlr_dbcs_postprocess()		0
 #endif /*]*/

@@ -30,6 +30,10 @@
 
 	#define LIB3270_HTML_H_INCLUDED 1
 
+#ifdef __cplusplus
+	extern "C" {
+#endif
+
 	typedef enum _lib3270_html_option
 	{
 		LIB3270_HTML_OPTION_ALL			= 0x0001,
@@ -38,8 +42,12 @@
 
 	} LIB3270_HTML_OPTION;
 
+
 	LIB3270_EXPORT char * lib3270_get_as_html(H3270 *session, LIB3270_HTML_OPTION option);
 
+#ifdef __cplusplus
+	}
+#endif
 
 #endif // LIB3270_HTML_H_INCLUDED
 

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-29 07:31-0300\n"
+"POT-Creation-Date: 2012-07-09 08:24-0300\n"
 "PO-Revision-Date: 2012-06-21 11:08-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português do Brasil <>\n"
@@ -18,22 +18,22 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 
-#: actions.c:638 actions.c:650
+#: actions.c:640 actions.c:652
 #, c-format
 msgid "%s action needs a valid id attribute"
 msgstr "Ação %s exige um atributo ID válido"
 
-#: actions.c:513 actions.c:615 actions.c:627
+#: actions.c:515 actions.c:617 actions.c:629
 #, c-format
 msgid "%s action needs a valid toggle name"
 msgstr "Ação %s exige um nome de toggle válido"
 
-#: actions.c:437
+#: actions.c:439
 #, c-format
 msgid "%s action needs src attribute"
 msgstr "Ação %s precisa do atributo src"
 
-#: main.c:57
+#: main.c:58
 #, c-format
 msgid "%s requires GTK version %d.%d.%d"
 msgstr "%s requer GTK versão %d.%d.%d"
@@ -48,7 +48,7 @@ msgstr "%s: Familia %d é inválida"
 msgid "%s:%d"
 msgstr "%s:%d"
 
-#: main.c:150
+#: main.c:151
 msgid "- 3270 Emulator for Gtk"
 msgstr "- Emulador 3270 para GTK"
 
@@ -60,11 +60,11 @@ msgstr "Erro 3270"
 msgid "3270 Warning"
 msgstr "Alerta 3270"
 
-#: v3270/accessible.c:80
+#: v3270/accessible.c:84
 msgid "3270 screen"
 msgstr "Tela 3270"
 
-#: dialog.c:570
+#: dialog.c:575
 msgid "3270 terminal emulator for GTK+"
 msgstr "Emulador 3270 para GTK+"
 
@@ -90,7 +90,7 @@ msgstr "<%s> precisa do atributo %s"
 msgid "<%s> should be on toplevel"
 msgstr "<%s> deve estar no primeiro nível"
 
-#: telnet.c:3343
+#: telnet.c:3332
 #, c-format
 msgid ""
 "<b>Connection state:</b> %s\n"
@@ -99,7 +99,7 @@ msgstr ""
 "<b>Estado da conexão:</b> %s\n"
 "<b>Mensagem de alerta:</b> %s"
 
-#: main.c:173
+#: main.c:174
 msgid ""
 "<b>Valid options:</b>\n"
 "\n"
@@ -115,7 +115,7 @@ msgstr "<menuitem> deve estar dentro de <menu>"
 msgid "<separator> should be inside a <menu> or <toolbar>"
 msgstr "<separator> só é válido dentro de <menu> ou <toolbar>"
 
-#: filetransfer.c:354
+#: filetransfer.c:355
 msgid "Aborting"
 msgstr "Abortando"
 
@@ -123,37 +123,37 @@ msgstr "Abortando"
 msgid "Action failed"
 msgstr "Ação falhou"
 
-#: ui/00default.xml:118
+#: ui/00default.xml:119
 msgid "Add to copy"
 msgstr "Adicionar à cópia"
 
-#: filetransfer.c:227
+#: filetransfer.c:228
 msgid "Add/Remove _CR at end of line"
 msgstr "Adicionar/Remover _CR no final da linha"
 
-#: ui/00default.xml:185
+#: ui/00default.xml:186
 msgid "Alert sound"
 msgstr "Aviso sonoro"
 
-#: main.c:145
+#: main.c:146
 msgid "Application name"
 msgstr "Nome da aplicação"
 
-#: actions.c:412
+#: actions.c:414
 #, c-format
 msgid "Attribute \"%s\" is invalid or undefined"
 msgstr "Atributo \"%s\" é invalido ou indefinido"
 
-#: ui/00default.xml:180
+#: ui/00default.xml:181
 msgid "Auto-Reconnect"
 msgstr "Reconectar automaticamente"
 
-#: filetransfer.c:727
+#: filetransfer.c:735
 #, fuzzy
 msgid "Avblock"
 msgstr "Avblock"
 
-#: filetransfer.c:783
+#: filetransfer.c:802
 msgid "BLKSIZE:"
 msgstr "BLKSIZE:"
 
@@ -169,11 +169,11 @@ msgstr "Versão winsock inválida"
 msgid "Black"
 msgstr "Preto"
 
-#: ui/00default.xml:178
+#: ui/00default.xml:179
 msgid "Blank Fill"
 msgstr "Completar com espaços"
 
-#: ui/00default.xml:172
+#: ui/00default.xml:173
 msgid "Blinking Cursor"
 msgstr "Cursor piscante"
 
@@ -181,15 +181,15 @@ msgstr "Cursor piscante"
 msgid "Blue"
 msgstr "Azul"
 
-#: ui/00default.xml:181
+#: ui/00default.xml:182
 msgid "Bold"
 msgstr "Negrito"
 
-#: dialog.c:576
+#: dialog.c:581
 msgid "Brazilian Public Software Portal"
 msgstr "Portal do Software Público Brasileiro"
 
-#: dialog.c:94
+#: dialog.c:99
 msgid "C_haracter Coding:"
 msgstr "C_odificação de caracteres:"
 
@@ -197,7 +197,7 @@ msgstr "C_odificação de caracteres:"
 msgid "C_olor scheme:"
 msgstr "Tema de c_ores:"
 
-#: filetransfer.c:533
+#: filetransfer.c:539
 msgid "C_urrent"
 msgstr "At_ual"
 
@@ -215,7 +215,7 @@ msgstr "Não foi possível conectar a %s:%d"
 msgid "Can't connect to host"
 msgstr "Não foi possível conectar ao servidor"
 
-#: v3270/selection.c:380
+#: v3270/selection.c:381
 #, c-format
 msgid "Can't convert line %d from %s to %s"
 msgstr "Não foi possível converter a linha %d de %s para %s"
@@ -229,7 +229,7 @@ msgstr "Não foi possível obter o tamanho do arquivo"
 msgid "Can't load %s"
 msgstr "Não foi possível carregar %s"
 
-#: dialog.c:451
+#: dialog.c:456
 msgid "Can't load file"
 msgstr "Não foi possível carregar arquivo"
 
@@ -237,11 +237,11 @@ msgstr "Não foi possível carregar arquivo"
 msgid "Can't open local file"
 msgstr "Não foi possível abrir arquivo local"
 
-#: uiparser/parser.c:249 uiparser/parsefile.c:310 uiparser/parsefile.c:338
+#: uiparser/parser.c:254 uiparser/parsefile.c:310 uiparser/parsefile.c:338
 msgid "Can't parse UI"
 msgstr "Não foi possível processar a UI"
 
-#: uiparser/parser.c:247
+#: uiparser/parser.c:252
 #, c-format
 msgid "Can't parse UI description files in %s"
 msgstr "Incapaz de processar arquivos de descrição de UI em %s"
@@ -250,7 +250,7 @@ msgstr "Incapaz de processar arquivos de descrição de UI em %s"
 msgid "Can't parse unnamed element"
 msgstr "Incapaz de processar elemento sem nome"
 
-#: dialog.c:429
+#: dialog.c:434
 #, c-format
 msgid ""
 "Can't save copy to file\n"
@@ -259,11 +259,11 @@ msgstr ""
 "Não foi possível salvar cópia para o arquivo\n"
 "%s"
 
-#: dialog.c:190
+#: dialog.c:195
 msgid "Can't save file"
 msgstr "Não foi possível salvar arquivo"
 
-#: dialog.c:404
+#: dialog.c:409
 #, c-format
 msgid ""
 "Can't save screen to file\n"
@@ -272,7 +272,7 @@ msgstr ""
 "Não foi possível salvar a tela no arquivo\n"
 "%s"
 
-#: dialog.c:418
+#: dialog.c:423
 #, c-format
 msgid ""
 "Can't save selection to file\n"
@@ -289,15 +289,15 @@ msgstr "Não foi possível definir o descritor de socket SSL"
 msgid "Can't set lib3270 I/O handlers"
 msgstr "Não foi possível registrar manipuladores de I/O 3270"
 
-#: filetransfer.c:636
+#: filetransfer.c:642
 msgid "Can't start download"
 msgstr "Não foi possível iniciar o download"
 
-#: filetransfer.c:437
+#: filetransfer.c:438
 msgid "Can't start file transfer"
 msgstr "Não foi possível iniciar transferência de arquivo"
 
-#: filetransfer.c:694
+#: filetransfer.c:703
 msgid "Can't start upload"
 msgstr "Não foi possível iniciar upload"
 
@@ -319,15 +319,15 @@ msgstr "Não foi possível criar um manipulador de socket"
 msgid "Cannot find charset \"%s\", using defaults"
 msgstr "Não encontrei codificação \"%s\", usando defaults"
 
-#: v3270/selection.c:382
+#: v3270/selection.c:383
 msgid "Charset error"
 msgstr "Erro de codificação de caracteres"
 
-#: ui/00default.xml:132
+#: ui/00default.xml:133
 msgid "Clear"
 msgstr "Limpar"
 
-#: colors.c:498
+#: colors.c:507
 msgid "Color scheme:"
 msgstr "Tema de cores:"
 
@@ -335,7 +335,7 @@ msgstr "Tema de cores:"
 msgid "Color setup"
 msgstr "Configuração de cores"
 
-#: ui/00default.xml:162
+#: ui/00default.xml:163
 msgid "Colors"
 msgstr "Cores"
 
@@ -343,7 +343,7 @@ msgstr "Cores"
 msgid "Complete"
 msgstr "Completo"
 
-#: ui/00default.xml:171
+#: ui/00default.xml:172
 msgid "Connect on startup"
 msgstr "Conectar ao iniciar"
 
@@ -351,7 +351,7 @@ msgstr "Conectar ao iniciar"
 msgid "Connection failed"
 msgstr "Conexão falhou"
 
-#: ui/00default.xml:115
+#: ui/00default.xml:116
 msgid "Copy"
 msgstr "Copiar"
 
@@ -359,11 +359,11 @@ msgstr "Copiar"
 msgid "Copy as HTML"
 msgstr "Copiar como HTML"
 
-#: ui/00default.xml:116
+#: ui/00default.xml:117
 msgid "Copy as table"
 msgstr "Copiar como tabela"
 
-#: ui/00default.xml:177
+#: ui/00default.xml:178
 msgid "Cross Hair Cursor"
 msgstr "Cursor mira"
 
@@ -371,20 +371,20 @@ msgstr "Cursor mira"
 msgid "Cross hair cursor"
 msgstr "Cursor mira"
 
-#: dialog.c:111
+#: dialog.c:116
 #, c-format
 msgid "Current (%s)"
 msgstr "Atual (%s)"
 
-#: colors.c:294 colors.c:361
+#: colors.c:294
 msgid "Custom colors"
 msgstr "Cores personalizadas"
 
-#: filetransfer.c:726
+#: filetransfer.c:734
 msgid "Cylinders"
 msgstr "Cilindros"
 
-#: filetransfer.c:278 filetransfer.c:785
+#: filetransfer.c:279 filetransfer.c:804
 msgid "DFT B_uffer size:"
 msgstr "Tamanho do b_uffer DFT:"
 
@@ -404,19 +404,19 @@ msgstr "Verde Escuro"
 msgid "Data conversion error"
 msgstr "Erro na conversão de dados"
 
-#: ui/99debug.xml:47
+#: ui/99debug.xml:48
 msgid "Debug"
 msgstr "Debug"
 
-#: ui/99debug.xml:49
+#: ui/99debug.xml:50
 msgid "Debug window updates"
 msgstr "Mostrar atualizações de janela"
 
-#: filetransfer.c:716 filetransfer.c:724
+#: filetransfer.c:724 filetransfer.c:732
 msgid "Default"
 msgstr "Padrão"
 
-#: telnet.c:1680
+#: telnet.c:1673
 msgid "Device type rejected"
 msgstr "Tipo de dispositivo rejeitado"
 
@@ -424,11 +424,11 @@ msgstr "Tipo de dispositivo rejeitado"
 msgid "Disconnected from host"
 msgstr "Desconectado do servidor"
 
-#: telnet.c:1269
+#: telnet.c:1266
 msgid "EOR received when not in 3270 mode, ignored."
 msgstr "EOR recebido fora do modo 3270, ignorado."
 
-#: filetransfer.c:533
+#: filetransfer.c:539
 msgid "ET_A"
 msgstr "ET_A"
 
@@ -444,19 +444,19 @@ msgstr "Nome do host em branco"
 msgid "Empty port name"
 msgstr "Porta em branco"
 
-#: ui/00default.xml:133
+#: ui/00default.xml:134
 msgid "Erase input"
 msgstr "Apagar campos"
 
-#: ui/00default.xml:135
+#: ui/00default.xml:136
 msgid "Erase to end of field"
 msgstr "Apagar até o final do campo"
 
-#: ui/00default.xml:136
+#: ui/00default.xml:137
 msgid "Erase to end of line"
 msgstr "Apagar até o final da linha"
 
-#: v3270/widget.c:248
+#: v3270/widget.c:250
 msgid "Error"
 msgstr "Erro"
 
@@ -475,7 +475,7 @@ msgstr "Erro \"%s\" gravando arquivo local (rc=%d)"
 msgid "Error %d resolving %s"
 msgstr "Erro %d resolvendo %s"
 
-#: dialog.c:449
+#: dialog.c:454
 #, c-format
 msgid "Error loading %s"
 msgstr "Erro lendo %s"
@@ -493,15 +493,15 @@ msgstr "Trace de eventos"
 msgid "Field colors"
 msgstr "Cor dos campos"
 
-#: filetransfer.c:479
+#: filetransfer.c:480
 msgid "File transfer"
 msgstr "Transferência de arquivos"
 
-#: filetransfer.c:440
+#: filetransfer.c:441
 msgid "File transfer error"
 msgstr "Erro na transferência de arquivos"
 
-#: filetransfer.c:636 filetransfer.c:694 ft.c:219
+#: filetransfer.c:642 filetransfer.c:703 ft.c:219
 msgid "File transfer is already active"
 msgstr "Transferência de arquivos já está ativa"
 
@@ -509,15 +509,15 @@ msgstr "Transferência de arquivos já está ativa"
 msgid "File transfer is already active in this session"
 msgstr "Transferência de arquivos já está ativa nesta sessão"
 
-#: filetransfer.c:717
+#: filetransfer.c:725
 msgid "Fixed"
 msgstr "Fixo"
 
-#: ui/00default.xml:175
+#: ui/00default.xml:176
 msgid "Full Screen"
 msgstr "Tela cheia"
 
-#: main.c:61
+#: main.c:62
 msgid "GTK Version mismatch"
 msgstr "Divergência de versão GTK"
 
@@ -529,7 +529,7 @@ msgstr "Cinza"
 msgid "Green"
 msgstr "Verde"
 
-#: ui/00default.xml:195
+#: ui/00default.xml:196
 msgid "Help"
 msgstr "Ajuda"
 
@@ -537,19 +537,19 @@ msgstr "Ajuda"
 msgid "Host disconnected, transfer cancelled"
 msgstr "Servidor desconectou, transferência cancelada"
 
-#: filetransfer.c:226
+#: filetransfer.c:227
 msgid "Host is T_SO"
 msgstr "Servidor é T_SO"
 
-#: telnet.c:1668
+#: telnet.c:1661
 msgid "Host rejected device type or request type"
 msgstr "Host rejected device type or request type"
 
-#: telnet.c:1678
+#: telnet.c:1671
 msgid "Host rejected resource(s)"
 msgstr "Host rejected resource(s)"
 
-#: main.c:146
+#: main.c:147
 msgid "Host to connect"
 msgstr "Servidor a conectar"
 
@@ -562,11 +562,11 @@ msgstr "Formato inválido no nome do servidor"
 msgid "Illegal frame length"
 msgstr "Comprimento de frame inválido"
 
-#: filetransfer.c:492
+#: filetransfer.c:498
 msgid "Informations"
 msgstr "Informações"
 
-#: ui/00default.xml:190
+#: ui/00default.xml:191
 msgid "Input method"
 msgstr "Método de entrada"
 
@@ -586,7 +586,7 @@ msgstr "Nome do host é invalido (vazio)"
 msgid "Invalid proxy syntax"
 msgstr "Formato inválido no nome do proxy"
 
-#: ui/00default.xml:183
+#: ui/00default.xml:184
 msgid "Keep selected"
 msgstr "Manter selecionado"
 
@@ -594,7 +594,7 @@ msgstr "Manter selecionado"
 msgid "Keyboard is locked"
 msgstr "Teclado está bloqueado"
 
-#: filetransfer.c:781
+#: filetransfer.c:800
 msgid "LRECL:"
 msgstr "LRECL:"
 
@@ -611,11 +611,11 @@ msgstr "Faltando ']'"
 msgid "Model %d (%s)"
 msgstr "Modelo %d (%s)"
 
-#: ui/00default.xml:173
+#: ui/00default.xml:174
 msgid "Monocase"
 msgstr "Só Maiúsculas"
 
-#: actions.c:530
+#: actions.c:532
 msgid "Move action needs target & direction attributes"
 msgstr "Ação \"move\" precisa dos atributos \"target\" e \"direction\""
 
@@ -631,7 +631,7 @@ msgstr "Proxy telnet precisa de porta"
 msgid "Mustard"
 msgstr "Mostarda"
 
-#: filetransfer.c:561 filetransfer.c:577
+#: filetransfer.c:567 filetransfer.c:583
 msgid "N/A"
 msgstr "N/A"
 
@@ -643,7 +643,7 @@ msgstr "Erro de rede"
 msgid "Network startup error"
 msgstr "Erro ao iniciar a rede"
 
-#: ui/00default.xml:242
+#: ui/00default.xml:243
 msgid "Next field"
 msgstr "Próximo campo"
 
@@ -692,7 +692,7 @@ msgstr "Opções"
 msgid "Orange"
 msgstr "Laranja"
 
-#: main.c:171
+#: main.c:172
 msgid "Parse error"
 msgstr "Erro de interpretação"
 
@@ -701,23 +701,23 @@ msgstr "Erro de interpretação"
 msgid "Parse error in %s"
 msgstr "Erro de interpretação em %s"
 
-#: ui/00default.xml:119
+#: ui/00default.xml:120
 msgid "Paste"
 msgstr "Colar"
 
-#: ui/00default.xml:120
+#: ui/00default.xml:121
 msgid "Paste next"
 msgstr "Colar próximo"
 
-#: ui/00default.xml:123
+#: ui/00default.xml:124
 msgid "Paste text file"
 msgstr "Colar arquivo texto"
 
-#: dialog.c:486
+#: dialog.c:491
 msgid "Paste text file contents"
 msgstr "Colar conteúdo de arquivo texto"
 
-#: ui/00default.xml:176
+#: ui/00default.xml:177
 msgid "Paste with left margin"
 msgstr "Colar com margem esquerda"
 
@@ -725,23 +725,23 @@ msgstr "Colar com margem esquerda"
 msgid "Pink"
 msgstr "Rosa"
 
-#: ui/00default.xml:241
+#: ui/00default.xml:242
 msgid "Previous field"
 msgstr "Campo anterior"
 
-#: filetransfer.c:782
+#: filetransfer.c:801
 msgid "Primary space:"
 msgstr "Primary space:"
 
-#: ui/00default.xml:103
+#: ui/00default.xml:104
 msgid "Print"
 msgstr "Imprimir"
 
-#: ui/00default.xml:105
+#: ui/00default.xml:106
 msgid "Print copy"
 msgstr "Imprimir cópia"
 
-#: ui/00default.xml:104
+#: ui/00default.xml:105
 msgid "Print selected"
 msgstr "Imprimir seleção"
 
@@ -749,7 +749,7 @@ msgstr "Imprimir seleção"
 msgid "Print selection box"
 msgstr "Imprimir caixa de seleção"
 
-#: filetransfer.c:535
+#: filetransfer.c:541
 msgid "Progress"
 msgstr "Progresso"
 
@@ -757,15 +757,15 @@ msgstr "Progresso"
 msgid "Purple"
 msgstr "Púrpura"
 
-#: ui/00default.xml:108
+#: ui/00default.xml:109
 msgid "Receive file"
 msgstr "Receber arquivo"
 
-#: filetransfer.c:642
+#: filetransfer.c:649
 msgid "Receive file from host"
 msgstr "Receber arquivo do servidor"
 
-#: filetransfer.c:737
+#: filetransfer.c:745
 msgid "Record format"
 msgstr "Formato de registro"
 
@@ -773,23 +773,23 @@ msgstr "Formato de registro"
 msgid "Red"
 msgstr "Vermelho"
 
-#: ui/99debug.xml:48
+#: ui/99debug.xml:49
 msgid "Reload buffer contents"
 msgstr "Recarregar conteúdo do buffer"
 
-#: ui/00default.xml:128
+#: ui/00default.xml:129
 msgid "Remove selection"
 msgstr "Remover seleção"
 
-#: ui/00default.xml:129
+#: ui/00default.xml:130
 msgid "Reselect"
 msgstr "Reselecionar"
 
-#: ui/00default.xml:243
+#: ui/00default.xml:244
 msgid "Return"
 msgstr "Return"
 
-#: telnet.c:3341
+#: telnet.c:3330
 msgid "SSL Connect error"
 msgstr "Erro na conexão SSL"
 
@@ -809,27 +809,27 @@ msgstr "Erro SSL"
 msgid "SSL negotiation failed"
 msgstr "Negociação SSL falhou"
 
-#: ui/00default.xml:100
+#: ui/00default.xml:101
 msgid "Save copy"
 msgstr "Salvar cópia"
 
-#: dialog.c:428
+#: dialog.c:433
 msgid "Save copy to file"
 msgstr "Salvar cópia para arquivo"
 
-#: ui/00default.xml:98
+#: ui/00default.xml:99
 msgid "Save screen"
 msgstr "Salvar tela"
 
-#: dialog.c:403
+#: dialog.c:408
 msgid "Save screen to file"
 msgstr "Salvar tela para arquivo"
 
-#: ui/00default.xml:99
+#: ui/00default.xml:100
 msgid "Save selected"
 msgstr "Salvar seleção"
 
-#: dialog.c:417
+#: dialog.c:422
 msgid "Save selection to file"
 msgstr "Salvar seleção para arquivo"
 
@@ -837,39 +837,39 @@ msgstr "Salvar seleção para arquivo"
 msgid "Screen Trace"
 msgstr "Trace de tela"
 
-#: ui/00default.xml:168
+#: ui/00default.xml:169
 msgid "Screen size"
 msgstr "Tamanho da tela"
 
-#: filetransfer.c:784
+#: filetransfer.c:803
 msgid "Secondary space:"
 msgstr "Secondary space:"
 
-#: ui/00default.xml:127
+#: ui/00default.xml:128
 msgid "Select Field"
 msgstr "Selecionar campo"
 
-#: ui/00default.xml:126
+#: ui/00default.xml:127
 msgid "Select all"
 msgstr "Selecionar tudo"
 
-#: ui/00default.xml:179
+#: ui/00default.xml:180
 msgid "Select by rectangles"
 msgstr "Seleção retangular"
 
-#: filetransfer.c:99
+#: filetransfer.c:100
 msgid "Select file to receive"
 msgstr "Selecione arquivo a receber"
 
-#: filetransfer.c:99
+#: filetransfer.c:100
 msgid "Select file to send"
 msgstr "Selecione arquivo a enviar"
 
-#: ui/00default.xml:165
+#: ui/00default.xml:166
 msgid "Select font"
 msgstr "Selecione fonte"
 
-#: dialog.c:296
+#: dialog.c:301
 msgid "Select hostname"
 msgstr "Selecione host"
 
@@ -881,35 +881,35 @@ msgstr "Fundo da seleção"
 msgid "Selection foreground"
 msgstr "Frente da seleção"
 
-#: ui/00default.xml:109
+#: ui/00default.xml:110
 msgid "Send file"
 msgstr "Enviar arquivo"
 
-#: filetransfer.c:700
+#: filetransfer.c:710
 msgid "Send file to host"
 msgstr "Enviar arquivo para o servidor"
 
-#: ui/00default.xml:108
+#: ui/00default.xml:109
 msgid "Send/Receive"
 msgstr "Enviar/Receber"
 
-#: ui/00default.xml:147
+#: ui/00default.xml:148
 msgid "Set hostname"
 msgstr "Selecione servidor"
 
-#: ui/00default.xml:162
+#: ui/00default.xml:163
 msgid "Settings"
 msgstr "Configurações"
 
-#: ui/00default.xml:182
+#: ui/00default.xml:183
 msgid "Show Underline"
 msgstr "Mostrar sublinhado"
 
-#: ui/99debug.xml:47
+#: ui/99debug.xml:48
 msgid "Show test pattern"
 msgstr "Mostrar padrão de teste"
 
-#: ui/00default.xml:184
+#: ui/00default.xml:185
 msgid "Smart paste"
 msgstr "Colar inteligente"
 
@@ -917,11 +917,11 @@ msgstr "Colar inteligente"
 msgid "Socket read error"
 msgstr "Erro ao ler dados da rede"
 
-#: telnet.c:2052
+#: telnet.c:2043
 msgid "Socket write error"
 msgstr "Erro ao enviar dados para a rede"
 
-#: filetransfer.c:738
+#: filetransfer.c:746
 msgid "Space allocation units"
 msgstr "Space allocation units"
 
@@ -929,11 +929,11 @@ msgstr "Space allocation units"
 msgid "Space in LU name"
 msgstr "Espaço no nome da LU"
 
-#: filetransfer.c:533
+#: filetransfer.c:539
 msgid "Spee_d"
 msgstr "Veloci_dade"
 
-#: filetransfer.c:533
+#: filetransfer.c:539
 msgid "T_otal"
 msgstr "T_otal"
 
@@ -945,7 +945,7 @@ msgstr "Cores do terminal"
 msgid "Text before '['"
 msgstr "Texto antes de '['"
 
-#: dialog.c:214
+#: dialog.c:219
 msgid "The file already exists. Replace it?"
 msgstr "O arquivo já existe, substituir?"
 
@@ -953,7 +953,7 @@ msgstr "O arquivo já existe, substituir?"
 msgid "The remote file name is invalid"
 msgstr "O nome do arquivo remoto não é válido"
 
-#: dialog.c:526
+#: dialog.c:531
 msgid ""
 "This program is free software; you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -988,7 +988,7 @@ msgid ""
 "This version of %s was built without support for secure sockets layer (SSL)."
 msgstr "Esta versão do %s foi gerada sem suporte para conexões seguras (SSL)."
 
-#: ui/00default.xml:201
+#: ui/00default.xml:202
 msgid "Toolbar"
 msgstr "Barra de ferramentas"
 
@@ -996,11 +996,11 @@ msgstr "Barra de ferramentas"
 msgid "Trace"
 msgstr "Trace"
 
-#: ui/00default.xml:174
+#: ui/00default.xml:175
 msgid "Track Cursor"
 msgstr "Mostrar posição do cursor"
 
-#: filetransfer.c:725
+#: filetransfer.c:733
 msgid "Tracks"
 msgstr "Trilhas"
 
@@ -1012,7 +1012,7 @@ msgstr "Transferência cancelada pelo servidor"
 msgid "Transfer cancelled by user"
 msgstr "Transferência cancelada pelo usuário"
 
-#: filetransfer.c:233
+#: filetransfer.c:234
 msgid "Transfer options"
 msgstr "Opções de transferência"
 
@@ -1024,7 +1024,7 @@ msgstr "Erro de transmissão"
 msgid "Turquoise"
 msgstr "Turquesa"
 
-#: dialog.c:87
+#: dialog.c:92
 msgid "UTF-8"
 msgstr "UTF-8"
 
@@ -1044,7 +1044,7 @@ msgstr "Incapaz de colar texto"
 msgid "Unable to send file-transfer request"
 msgstr "Não foi possível enviar a requisição de transferência de arquivo"
 
-#: filetransfer.c:719
+#: filetransfer.c:727
 msgid "Undefined"
 msgstr "Indefinido"
 
@@ -1062,24 +1062,24 @@ msgstr "Erro inesperado"
 msgid "Unexpected group \"%s\""
 msgstr "Grupo inesperado \"%s\""
 
-#: actions.c:426 actions.c:446
+#: actions.c:428 actions.c:448
 #, c-format
 msgid "Unexpected or invalid %s attribute: \"%s\""
 msgstr "Atributo %s inesperado ou inválido: \"%s\""
 
-#: actions.c:400
+#: actions.c:402
 #, c-format
 msgid "Unexpected or invalid attribute value \"%s\""
 msgstr "Valor de attributo inesperado ou inválido: \"%s\""
 
-#: v3270/widget.c:779
+#: v3270/widget.c:781
 msgid ""
 "Unexpected signature in H3270 object, possible version mismatch in lib3270"
 msgstr ""
 "Assinatura inválida no objeto H3270, possível divergência de versão na "
 "lib3270"
 
-#: actions.c:335
+#: actions.c:337
 #, c-format
 msgid "Unexpected target \"%s\""
 msgstr "Alvo inesperado \"%s\""
@@ -1141,18 +1141,22 @@ msgstr "Unsupported passthru host session"
 msgid "Unsupported socks 4 proxy"
 msgstr "Unsupported socks 4 proxy"
 
-#: ui/00default.xml:186
+#: ui/00default.xml:187
 msgid "Use +/- for field navigation"
 msgstr "Usar teclas +/- para navegar por campos"
 
-#: filetransfer.c:718
+#: filetransfer.c:726
 msgid "Variable"
 msgstr "Variável"
 
-#: dialog.c:565
+#: dialog.c:570
 #, c-format
 msgid "Version %s - Revision %s"
 msgstr "Versão %s - Revisão %s"
+
+#: ui/99debug.xml:43
+msgid "View Field Delimiters"
+msgstr "View Field Delimiters"
 
 #: telnet.c:744
 msgid "WSAEventSelect failed"
@@ -1170,7 +1174,7 @@ msgstr "Aguardando resposta do pedido de download"
 msgid "Waiting for PUT response"
 msgstr "Aguardando resposta do pedido de upload"
 
-#: dialog.c:88
+#: dialog.c:93
 msgid "Western Europe (ISO 8859-1)"
 msgstr "Europa ocidental (ISO 8859-1)"
 
@@ -1178,55 +1182,55 @@ msgstr "Europa ocidental (ISO 8859-1)"
 msgid "White"
 msgstr "Branco"
 
-#: ui/00default.xml:212
+#: ui/00default.xml:213
 msgid "Window"
 msgstr "Janela"
 
-#: dialog.c:89
+#: dialog.c:94
 msgid "Windows Western languages (CP1252)"
 msgstr "Windows ocidental (CP1252)"
 
-#: v3270/oia.c:409 v3270/oia.c:433 v3270/oia.c:437
+#: v3270/oia.c:410 v3270/oia.c:434 v3270/oia.c:438
 msgid "X"
 msgstr "X"
 
-#: v3270/oia.c:413
+#: v3270/oia.c:414
 msgid "X -f"
 msgstr "X -f"
 
-#: v3270/oia.c:445
+#: v3270/oia.c:446
 msgid "X Connecting"
 msgstr "X Conectando"
 
-#: v3270/oia.c:429
+#: v3270/oia.c:430
 msgid "X Inhibit"
 msgstr "X Inibido"
 
-#: v3270/oia.c:405
+#: v3270/oia.c:406
 msgid "X Not Connected"
 msgstr "X Desconectado"
 
-#: v3270/oia.c:421
+#: v3270/oia.c:422
 msgid "X Numeric"
 msgstr "X Numérico"
 
-#: v3270/oia.c:425
+#: v3270/oia.c:426
 msgid "X Overflow"
 msgstr "X Estouro"
 
-#: v3270/oia.c:417
+#: v3270/oia.c:418
 msgid "X Protected"
 msgstr "X Protegido"
 
-#: v3270/oia.c:441
+#: v3270/oia.c:442
 msgid "X Resolving"
 msgstr "X Resolvendo"
 
-#: v3270/oia.c:393
+#: v3270/oia.c:394
 msgid "X System"
 msgstr "X Sistema"
 
-#: v3270/oia.c:397
+#: v3270/oia.c:398
 msgid "X Wait"
 msgstr "X Aguarde"
 
@@ -1234,19 +1238,19 @@ msgstr "X Aguarde"
 msgid "Yellow"
 msgstr "Amarelo"
 
-#: filetransfer.c:228
+#: filetransfer.c:229
 msgid "_Append"
 msgstr "_Acrescentar"
 
-#: filetransfer.c:199
+#: filetransfer.c:200
 msgid "_Browse"
 msgstr "_Procurar"
 
-#: ui/00default.xml:157
+#: ui/00default.xml:158
 msgid "_Connect"
 msgstr "_Conectar"
 
-#: ui/00default.xml:158
+#: ui/00default.xml:159
 msgid "_Disconnect"
 msgstr "_Desconectar"
 
@@ -1254,7 +1258,7 @@ msgstr "_Desconectar"
 msgid "_Edit"
 msgstr "_Editar"
 
-#: ui/00default.xml:90
+#: ui/00default.xml:91
 msgid "_File"
 msgstr "_Arquivo"
 
@@ -1262,55 +1266,55 @@ msgstr "_Arquivo"
 msgid "_Font:"
 msgstr "_Fonte:"
 
-#: filetransfer.c:490
+#: filetransfer.c:496
 msgid "_From"
 msgstr "_De"
 
-#: filetransfer.c:166
+#: filetransfer.c:167
 msgid "_Host file name:"
 msgstr "Arquivo no _Servidor:"
 
-#: dialog.c:311
+#: dialog.c:316
 msgid "_Hostname:"
 msgstr "Nome do _Host:"
 
-#: filetransfer.c:166
+#: filetransfer.c:167
 msgid "_Local file name:"
 msgstr "Arquivo _local:"
 
-#: ui/00default.xml:147
+#: ui/00default.xml:148
 msgid "_Network"
 msgstr "_Rede"
 
-#: ui/00default.xml:171
+#: ui/00default.xml:172
 msgid "_Options"
 msgstr "Opções"
 
-#: dialog.c:316
+#: dialog.c:321
 msgid "_Port:"
 msgstr "_Porta:"
 
-#: filetransfer.c:229
+#: filetransfer.c:230
 msgid "_Remap ASCII Characters"
 msgstr "_Remapear caracteres ASCII"
 
-#: dialog.c:295
+#: dialog.c:300
 msgid "_Secure connection"
 msgstr "Conexão _Segura"
 
-#: filetransfer.c:490
+#: filetransfer.c:496
 msgid "_Status"
 msgstr "_Situação"
 
-#: filetransfer.c:225
+#: filetransfer.c:226
 msgid "_Text file"
 msgstr "Arquivo _texto"
 
-#: filetransfer.c:490
+#: filetransfer.c:496
 msgid "_To"
 msgstr "_Para"
 
-#: ui/00default.xml:140
+#: ui/00default.xml:141
 msgid "_View"
 msgstr "_Exibir"
 
@@ -1326,12 +1330,12 @@ msgstr "um atributo \"type\" ou \"group\""
 msgid "an action attribute"
 msgstr "um atributo \"action\""
 
-#: telnet.c:3207 telnet.c:3218
+#: telnet.c:3196 telnet.c:3207
 #, c-format
 msgid "fcntl(%s)"
 msgstr "fcntl(%s)"
 
-#: telnet.c:3197
+#: telnet.c:3186
 #, c-format
 msgid "ioctl(%s)"
 msgstr "ioctl(%s)"
@@ -1345,7 +1349,7 @@ msgstr "setsockopt(%s)"
 msgid "socket"
 msgstr "socket"
 
-#: dialog.c:579
+#: dialog.c:584
 msgid "translator-credits"
 msgstr ""
 

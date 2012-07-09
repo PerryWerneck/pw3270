@@ -32,6 +32,11 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="../src/include/lib3270.h" />
+		<Unit filename="../src/include/lib3270/html.h" />
+		<Unit filename="../src/lib3270/html.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="Makefile" />
 		<Unit filename="jni/Android.mk" />
 		<Unit filename="jni/globals.h" />
