@@ -167,6 +167,7 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 	hSession->sz = sizeof(H3270);
 
 	// Default calls
+	hSession->write				= lib3270_send;
 	hSession->update 			= update_char;
 	hSession->update_model		= update_model;
 	hSession->update_cursor		= update_cursor;

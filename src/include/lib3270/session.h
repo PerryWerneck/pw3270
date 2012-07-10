@@ -227,7 +227,7 @@
 		unsigned char 			* ibptr;
 		unsigned char 			* obuf_base;
 		int						  obuf_size;
-		unsigned char 			* netrbuf;
+//		unsigned char 			* netrbuf;
 
 		// network input buffer
 		unsigned char 			* sbbuf;
@@ -264,7 +264,7 @@
 		int 					  reading				: 1;
 		int						  excepting				: 1;
 
-		// SSL Data (Always defined to mantain the same structure size
+		// SSL Data (Always defined to mantain the same structure size)
 		unsigned long 			  last_ssl_error;
 		SSL 					* ssl_con;
 
@@ -273,6 +273,8 @@
 		struct lib3270_state_callback *st_last[LIB3270_STATE_USER];
 
 		// Session based callbacks
+		int	 (*write)(H3270 *hSession, unsigned const char *buf, int len);
+
 		void (*configure)(H3270 *session, unsigned short rows, unsigned short cols);
 		void (*update)(H3270 *session, int baddr, unsigned char c, unsigned short attr, unsigned char cursor);
 		void (*changed)(H3270 *session, int offset, int len);

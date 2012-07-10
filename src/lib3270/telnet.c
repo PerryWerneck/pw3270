@@ -102,6 +102,8 @@
 #include "xioc.h"
 #include "screen.h"
 
+#include <lib3270/internals.h>
+
 #if !defined(TELOPT_NAWS) /*[*/
 #define TELOPT_NAWS	31
 #endif /*]*/
@@ -519,8 +521,8 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 	sockstart(session);
 #endif
 
-	if (session->netrbuf == (unsigned char *)NULL)
-		session->netrbuf = (unsigned char *)lib3270_malloc(BUFSZ);
+//	if (session->netrbuf == (unsigned char *)NULL)
+//		session->netrbuf = (unsigned char *)lib3270_malloc(BUFSZ);
 
 #if defined(X3270_ANSI) /*[*/
 	if (!t_valid)
@@ -964,7 +966,6 @@ void net_disconnect(H3270 *session)
 	status_lu(session,CN);
 
 }
-
 
 LIB3270_EXPORT void lib3270_data_recv(H3270 *hSession, size_t nr, const unsigned char *netrbuf)
 {
@@ -1989,131 +1990,91 @@ void net_exception(H3270 *session)
  *
  */
 
-
+LIB3270_INTERNAL int lib3270_send(H3270 *hSession, unsigned const char *buf, int len)
+{
+	int rc;
+
+#if defined(HAVE_LIBSSL)
+	if(hSession->ssl_con != NULL)
+		rc = SSL_write(hSession->ssl_con, (const char *) buf, len);
+	else
+		rc = send(hSession->sock, (const char *) buf, len, 0);
+#else
+		rc = send(hSession->sock, (const char *) buf, len, 0);
+#endif // HAVE_LIBSSL
+
+	if(rc > 0)
+		return rc;
+
+	// Recv error, notify
+
+#if defined(HAVE_LIBSSL)
+	if(hSession->ssl_con != NULL)
+	{
+		unsigned long e;
+		char err_buf[120];
+
+		e = ERR_get_error();
+		(void) ERR_error_string(e, err_buf);
+		trace_dsn("RCVD SSL_write error %ld (%s)\n", e,err_buf);
+		popup_an_error(hSession,_( "SSL_write:\n%s" ), err_buf);
+		return -1;
+	}
+#endif // HAVE_LIBSSL
+
+	trace_dsn("RCVD socket error %d\n", socket_errno());
+
+	switch(socket_errno())
+	{
+	case SE_EPIPE:
+		popup_an_error(hSession, "%s", N_( "Broken pipe" ));
+		break;
+
+	case SE_ECONNRESET:
+		popup_an_error(hSession, "%s", N_( "Connection reset by peer" ));
+		break;
+
+	case SE_EINTR:
+		return 0;
+
+	default:
+		popup_a_sockerr(NULL, "%s", N_( "Socket write error" ) );
+
+	}
+
+	return -1;
+}
+
 /*
  * net_rawout
  *	Send out raw telnet data.  We assume that there will always be enough
  *	space to buffer what we want to transmit, so we don't handle EAGAIN or
  *	EWOULDBLOCK.
  */
-static void
-net_rawout(H3270 *session, unsigned const char *buf, int len)
+static void net_rawout(H3270 *hSession, unsigned const char *buf, int len)
 {
-	int	nw;
-
 	trace_netdata('>', buf, len);
 
-	while (len) {
-#if defined(OMTU) /*[*/
-		int n2w = len;
-		int pause = 0;
+	while (len)
+	{
+		int nw = hSession->write(hSession,buf,len);
 
-		if (n2w > OMTU) {
-			n2w = OMTU;
-			pause = 1;
+		if (nw > 0)
+		{
+			// Data received
+			hSession->ns_bsent += nw;
+			len -= nw;
+			buf += nw;
 		}
-#else
-#		define n2w len
-#endif
-#if defined(HAVE_LIBSSL) /*[*/
-		if(session->ssl_con != NULL)
-			nw = SSL_write(session->ssl_con, (const char *) buf, n2w);
-		else
-#endif /*]*/
-
-/*
-#if defined(LOCAL_PROCESS)
-		if (local_process)
-			nw = write(sock, (const char *) buf, n2w);
-		else
-#endif
-*/
-			nw = send(session->sock, (const char *) buf, n2w, 0);
-		if (nw < 0) {
-#if defined(HAVE_LIBSSL) /*[*/
-			if (session->ssl_con != NULL)
-			{
-				unsigned long e;
-				char err_buf[120];
-
-				e = ERR_get_error();
-				(void) ERR_error_string(e, err_buf);
-				trace_dsn("RCVD SSL_write error %ld (%s)\n", e,err_buf);
-				popup_an_error(NULL,"SSL_write:\n%s", err_buf);
-				host_disconnect(session,False);
-				return;
-			}
-#endif /*]*/
-			trace_dsn("RCVD socket error %d\n", errno);
-			if (socket_errno() == SE_EPIPE || socket_errno() == SE_ECONNRESET) {
-				host_disconnect(session,False);
-				return;
-			} else if (socket_errno() == SE_EINTR) {
-				goto bot;
-			} else {
-				popup_a_sockerr(NULL, N_( "Socket write error" ) );
-				host_disconnect(session,True);
-				return;
-			}
+		else if(nw < 0)
+		{
+			host_disconnect(hSession,True);
+			return;
 		}
-		session->ns_bsent += nw;
-		len -= nw;
-		buf += nw;
-	    bot:
-#if defined(OMTU)
-		if (pause)
-			sleep(1);
-#endif
-		;
 	}
 }
 
-
-#if defined(X3270_ANSI) /*[*/
-/*
- * net_hexansi_out
- *	Send uncontrolled user data to the host in ANSI mode, performing IAC
- *	and CR quoting as necessary.
- */ /*
-void
-net_hexansi_out(unsigned char *buf, int len)
-{
-	unsigned char *tbuf;
-	unsigned char *xbuf;
-
-	if (!len)
-		return;
-
-#if defined(X3270_TRACE)
-	// Trace the data.
-	if (lib3270_get_toggle(&h3270,LIB3270_TOGGLE_DS_TRACE)) {
-		int i;
-
-		trace_dsn(">");
-		for (i = 0; i < len; i++)
-			trace_dsn(" %s", ctl_see((int) *(buf+i)));
-		trace_dsn("\n");
-	}
-#endif
-
-	// Expand it
-	tbuf = xbuf = (unsigned char *)lib3270_malloc(2*len);
-	while (len) {
-		unsigned char c = *buf++;
-
-		*tbuf++ = c;
-		len--;
-		if (c == IAC)
-			*tbuf++ = IAC;
-		else if (c == '\r' && (!len || *buf != '\n'))
-			*tbuf++ = '\0';
-	}
-
-	// Send it to the host
-	net_rawout(&h3270,xbuf, tbuf - xbuf);
-	lib3270_free(xbuf);
-}
-*/
+#if defined(X3270_ANSI)
 
 /*
  * net_cookedout
