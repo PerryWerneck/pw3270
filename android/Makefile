@@ -44,6 +44,8 @@ clean:
 	@rm -f bin/classes/$(CLASSPATH)/lib3270.class
 	@rm -f $(foreach DIR, $(RESOLUTION), res/drawable-$(DIR)/ic_launcher.png)
 
+cleanDebug: clean
+
 res/drawable-xhdpi/ic_launcher.png: ../src/pw3270/pixmaps/pw3270.svg
 	@echo "  ICON xhdpi"
 	@$(MKDIR) `dirname $@`

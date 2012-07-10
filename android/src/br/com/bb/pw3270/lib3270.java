@@ -159,36 +159,36 @@ public class lib3270
         {
 
         	info(TAG,"Network thread started");
-            postMessage(0,1,0);
             connected = connect();
 
-            while(connected)
-            {
-            	byte[]	in	= new byte[4096];
-            	int		sz	= -1;
+            if(connected)
+			{
+				postMessage(0,0,0);
 
-            	try
-            	{
-            		sz = inData.read(in,0,4096);
-            	} catch( Exception e ) { sz = -1; }
+				while(connected)
+				{
+					byte[]	in	= new byte[4096];
+					int		sz	= -1;
 
-            	if(sz < 0)
-            	{
-            		connected = false;
-            	}
-            	else if(sz > 0)
-            	{
-                    Message msg = mHandler.obtainMessage();
-                    msg.what = 6;
-                    msg.obj  = new byteMessage(in,sz);
+					try
+					{
+						sz = inData.read(in,0,4096);
+					} catch( Exception e ) { sz = -1; }
 
-                    mHandler.sendMessage(msg);
+					if(sz < 0)
+					{
+						connected = false;
+					}
+					else if(sz > 0)
+					{
+						Message msg = mHandler.obtainMessage();
+						msg.what = 6;
+						msg.obj  = new byteMessage(in,sz);
 
-//            		Log.d(TAG,sz + " bytes recebidos");
-//					procRecvdata(in,sz);
-
-            	}
-            }
+						mHandler.sendMessage(msg);
+					}
+				}
+			}
 
 			try
 			{
@@ -198,8 +198,10 @@ public class lib3270
 			sock = null;
 			outData = null;
 			inData = null;
+
 			postMessage(0,0,0);
 
+			mainloop = null;
 			info(TAG,"Network thread stopped");
         }
 
@@ -241,11 +243,9 @@ public class lib3270
         {
         	switch(msg.what)
         	{
-        	case 0:	// Start/Stop service thread
-        		if(msg.arg1 == 0)
-        		{
-        			mainloop = null;
-        		}
+        	case 0:	// Connected/Disconnected
+        		set_connection_status(connected);
+				Log.d(TAG,connected ? "Connected" : "Disconnected");
         		break;
 
         	case 1:	// OIA message has changed
@@ -278,7 +278,6 @@ public class lib3270
 				break;
 
 			case 6: // recv_data
-        		Log.d(TAG,((byteMessage) msg.obj).getLength() + " bytes recebidos");
 				procRecvdata(((byteMessage) msg.obj).getMessage(),((byteMessage) msg.obj).getLength());
 				break;
         	}
@@ -339,7 +338,8 @@ public class lib3270
 	static private native int	init();
 
 	private native int			processEvents();
-	private native int		    do_connect();
+//	private native int		    do_connect();
+	private native void			set_connection_status(boolean state);
 
 	// Misc calls
 	public native String		getEncoding();

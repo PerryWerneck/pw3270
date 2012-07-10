@@ -51,8 +51,6 @@ public class PW3270Activity extends Activity implements View.OnClickListener
 			try
 			{
 				String text = new String(getText(),getEncoding());
-				
-				msgbox
 				Log.i(TAG,text);
 			} catch(Exception e) { }
 		}
