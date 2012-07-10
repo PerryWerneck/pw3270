@@ -32,10 +32,17 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
-
-JNIEXPORT jstring JNICALL Java_br_com_bb_pw3270_lib3270_getHTML(JNIEnv *env, jobject obj)
+static jbyteArray retString(JNIEnv *env, const char *txt)
 {
-	jstring ret;
+	size_t len = strlen(txt);
+	jbyteArray ret = env->NewByteArray(len);
+	env->SetByteArrayRegion(ret, 0, len, (jbyte*) txt);
+	return ret;
+}
+
+JNIEXPORT jbyteArray JNICALL Java_br_com_bb_pw3270_lib3270_getHTML(JNIEnv *env, jobject obj)
+{
+	jbyteArray ret;
 
 	session_request(env,obj);
 
@@ -44,13 +51,57 @@ JNIEXPORT jstring JNICALL Java_br_com_bb_pw3270_lib3270_getHTML(JNIEnv *env, job
 	if(session)
 	{
 		char *text = lib3270_get_as_html(session,(LIB3270_HTML_OPTION) (LIB3270_HTML_OPTION_ALL|LIB3270_HTML_OPTION_FORM));
-		trace("text=%p",text);
-		ret = env->NewStringUTF(text);
-		lib3270_free(text);
+
+		if(text)
+		{
+			ret = retString(env,text);
+			lib3270_free(text);
+		}
+		else
+		{
+			ret = retString(env, "<b>Empty session</b>");
+		}
 	}
 	else
 	{
-		ret = env->NewStringUTF("<b>Invalid Session ID</b>");
+		ret = retString(env, "<b>Invalid Session ID</b>");
+	}
+
+	trace("%s ends",__FUNCTION__);
+
+	session_release();
+
+	return ret;
+}
+
+
+JNIEXPORT jbyteArray JNICALL Java_br_com_bb_pw3270_lib3270_getText(JNIEnv *env, jobject obj)
+{
+	jbyteArray ret;
+
+	session_request(env,obj);
+
+	trace("%s starts, session=%p",__FUNCTION__,session);
+
+	if(session)
+	{
+		char *text = lib3270_get_text(session,0,-1);
+
+		trace("%s will return \"%s\"",__FUNCTION__,text ? text : "");
+
+		if(text)
+		{
+			ret = retString(env,text);
+			lib3270_free(text);
+		}
+		else
+		{
+			ret = retString(env, "");
+		}
+	}
+	else
+	{
+		ret = retString(env, "<b>Invalid Session ID</b>");
 	}
 
 	trace("%s ends",__FUNCTION__);

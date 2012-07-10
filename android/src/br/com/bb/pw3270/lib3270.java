@@ -51,6 +51,28 @@ public class lib3270
 		}
 	}
 
+	private class byteMessage
+	{
+    	byte[]	msg;
+    	int		sz;
+
+    	byteMessage(byte[] contents, int len)
+    	{
+    		msg = contents;
+    		sz  = len;
+    	}
+
+    	byte[] getMessage()
+    	{
+    		return msg;
+    	}
+
+    	int getLength()
+    	{
+    		return sz;
+    	}
+	}
+
 	protected int send_data(byte[] data, int len)
 	{
 		Log.i(TAG,"Bytes a enviar: " + len);
@@ -72,7 +94,7 @@ public class lib3270
     		Log.i(TAG,"Erro ao enviar dados: " + msg);
 
     		postPopup(0,"Erro na comunicação","Não foi possível enviar dados",msg);
-			
+
 		}
 		return -1;
 	}
@@ -156,8 +178,15 @@ public class lib3270
             	}
             	else if(sz > 0)
             	{
-            		Log.d(TAG,sz + " bytes recebidos");
-					procRecvdata(in,sz);
+                    Message msg = mHandler.obtainMessage();
+                    msg.what = 6;
+                    msg.obj  = new byteMessage(in,sz);
+
+                    mHandler.sendMessage(msg);
+
+//            		Log.d(TAG,sz + " bytes recebidos");
+//					procRecvdata(in,sz);
+
             	}
             }
 
@@ -237,6 +266,7 @@ public class lib3270
 			case 4: // erase
 				changed = false;
 				erase();
+				break;
 
 			case 5: // ctlr_done
         		Log.d(TAG,"ctlr_done");
@@ -245,6 +275,12 @@ public class lib3270
 					changed = false;
 					redraw();
 				}
+				break;
+
+			case 6: // recv_data
+        		Log.d(TAG,((byteMessage) msg.obj).getLength() + " bytes recebidos");
+				procRecvdata(((byteMessage) msg.obj).getMessage(),((byteMessage) msg.obj).getLength());
+				break;
         	}
         }
     };
@@ -293,6 +329,12 @@ public class lib3270
     	return -1;
     }
 
+    public int disconnect()
+    {
+    	connected = false;
+    	return 0;
+    }
+
     /*---[ Native calls ]----------------------------------------------------*/
 	static private native int	init();
 
@@ -314,7 +356,8 @@ public class lib3270
 	public native boolean		isTerminalReady();
 
 	// Get/Set screen contents
-	public native String		getHTML();
+	public native byte[]		getHTML();
+	public native byte[]		getText();
 
 
 }
