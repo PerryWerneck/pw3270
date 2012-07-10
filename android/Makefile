@@ -32,12 +32,16 @@ CONVERT=rsvg-convert
 
 RESOLUTION=xhdpi mdpi ldpi hdpi
 
-Debug: jni/lib3270jni.h $(foreach DIR, $(RESOLUTION), res/drawable-$(DIR)/ic_launcher.png)
+Debug: jni/lib3270jni.h icons
 	@$(NDKBUILD)
+
+icons: $(foreach DIR, $(RESOLUTION), res/drawable-$(DIR)/ic_launcher.png)
 
 clean:
 	@rm -fr obj
 	@rm -f jni/lib3270jni.h
+	@rm -f sigs.txt
+	@rm -f bin/classes/$(CLASSPATH)/lib3270.class
 	@rm -f $(foreach DIR, $(RESOLUTION), res/drawable-$(DIR)/ic_launcher.png)
 
 res/drawable-xhdpi/ic_launcher.png: ../src/pw3270/pixmaps/pw3270.svg
@@ -59,6 +63,9 @@ res/drawable-hdpi/ic_launcher.png: ../src/pw3270/pixmaps/pw3270.svg
 	@echo "  ICON hdpi"
 	@$(MKDIR) `dirname $@`
 	@$(CONVERT) --format=png --width=72 --height=72 --output=$@ $<
+
+sigs.txt: ./bin/classes/br/com/bb/pw3270/lib3270.class
+	@javap -classpath ./bin/classes -s -p br.com.bb.pw3270.lib3270 > $@
 
 jni/lib3270jni.h: bin/classes/$(CLASSPATH)/lib3270.class
 	@echo "  GEN  `basename $@`"

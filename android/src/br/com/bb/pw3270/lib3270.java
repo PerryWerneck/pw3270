@@ -4,12 +4,26 @@ import java.lang.Thread;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import javax.net.SocketFactory;
+import java.net.Socket;
+import javax.net.ssl.SSLSocketFactory;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 
 public class lib3270
 {
 	private NetworkThread	mainloop;
 	private static final String TAG = "lib3270";
-	private boolean changed;
+
+	private boolean 	changed;
+	private boolean 	connected	= false;
+
+	DataOutputStream	outData 	= null;
+	DataInputStream		inData		= null;
+
+	private String		hostname	= "3270.df.bb";
+	private int			port		= 8023;
+	private boolean		ssl			= false;
 
 	static
 	{
@@ -37,27 +51,127 @@ public class lib3270
 		}
 	}
 
+	protected int send_data(byte[] data, int len)
+	{
+		Log.i(TAG,"Bytes a enviar: " + len);
+
+		try
+		{
+			outData.write(data,0,len);
+			outData.flush();
+		} catch( Exception e )
+		{
+    		String msg = e.getLocalizedMessage();
+
+    		if(msg == null)
+    			msg = e.toString();
+
+    		if(msg == null)
+    			msg = "Erro indefinido";
+
+    		Log.i(TAG,"Erro ao enviar dados: " + msg);
+
+    		postPopup(0,"Erro na comunicação","Não foi possível enviar dados",msg);
+			
+		}
+		return -1;
+	}
+
+
 	// Main Thread
 	private class NetworkThread extends Thread
 	{
-		Handler mHandler;
+		Handler 			mHandler;
+		Socket				sock	= null;
 
 		NetworkThread(Handler h)
 		{
             mHandler = h;
         }
 
+		private boolean connect()
+		{
+            // Connecta no host
+			SocketFactory socketFactory;
+			if(ssl)
+			{
+				// Host é SSL
+	        	socketFactory = SSLSocketFactory.getDefault();
+			}
+			else
+			{
+	        	socketFactory = SocketFactory.getDefault();
+			}
+
+			try
+        	{
+        		sock	= socketFactory.createSocket(hostname,port);
+        		outData = new DataOutputStream(sock.getOutputStream());
+        		inData	= new DataInputStream(sock.getInputStream());
+
+        	} catch( Exception e )
+        	{
+        		String msg = e.getLocalizedMessage();
+
+        		if(msg == null)
+        			msg = e.toString();
+
+        		if(msg == null)
+        			msg = "Erro indefinido";
+
+        		Log.i(TAG,"Erro ao conectar: " + msg);
+
+        		postPopup(0,"Erro na conexão","Não foi possível conectar",msg);
+
+                postMessage(0,0,0);
+
+        		return false;
+        	}
+
+        	Log.i(TAG,"Conectado ao host");
+        	return true;
+
+		}
+
         public void run()
         {
-        	int rc;
+
         	info(TAG,"Network thread started");
             postMessage(0,1,0);
-    		rc = do_connect();
-    		info(TAG,"do_connect exits with rc="+rc);
-    		while(isConnected())
-    			processEvents();
-            postMessage(0,0,0);
-        	info(TAG,"Network thread stopped");
+            connected = connect();
+
+            while(connected)
+            {
+            	byte[]	in	= new byte[4096];
+            	int		sz	= -1;
+
+            	try
+            	{
+            		sz = inData.read(in,0,4096);
+            	} catch( Exception e ) { sz = -1; }
+
+            	if(sz < 0)
+            	{
+            		connected = false;
+            	}
+            	else if(sz > 0)
+            	{
+            		Log.d(TAG,sz + " bytes recebidos");
+					procRecvdata(in,sz);
+            	}
+            }
+
+			try
+			{
+				sock.close();
+			} catch( Exception e ) { }
+
+			sock = null;
+			outData = null;
+			inData = null;
+			postMessage(0,0,0);
+
+			info(TAG,"Network thread stopped");
         }
 
         public void postMessage(int what, int arg1, int arg2)
@@ -141,7 +255,7 @@ public class lib3270
 	{
 	}
 
-	public void popupMessage(int type, String title, String text, String info)
+	protected void popupMessage(int type, String title, String text, String info)
 	{
 	}
 
@@ -170,12 +284,12 @@ public class lib3270
     {
     	if(mainloop == null)
     	{
-        	info("jni","Starting comm thread");
+        	info(TAG,"Starting comm thread");
     		mainloop = new NetworkThread(handler);
     		mainloop.start();
     		return 0;
     	}
-    	error("jni","Comm thread already active during connect");
+    	error(TAG,"Comm thread already active during connect");
     	return -1;
     }
 
@@ -189,6 +303,9 @@ public class lib3270
 	public native String		getEncoding();
 	public native String 		getVersion();
 	public native String 		getRevision();
+
+	// Network I/O
+	public native void			procRecvdata( byte[] data, int len);
 
 	// Connect/Disconnect status
 	public native void 			setHost(String host);

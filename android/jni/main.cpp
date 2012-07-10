@@ -28,6 +28,7 @@
 
  #include "globals.h"
  #include <lib3270/popup.h>
+ #include <lib3270/internals.h>
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
@@ -69,7 +70,7 @@ static int popuphandler(H3270 *session, void *terminal, LIB3270_NOTIFY type, con
 		JNIEnv		* env			= ((INFO *) session->widget)->env;
 		jobject		  obj 			= ((INFO *) session->widget)->obj;
 		jclass 		  cls 			= env->GetObjectClass(obj);
-		jmethodID	  mid			= env->GetMethodID(cls, "postPopup", "(ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
+		jmethodID	  mid			= env->GetMethodID(cls, "popupMessage", "(ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
 		char		* descr;
 
         descr = lib3270_vsprintf(fmt, args);
@@ -91,6 +92,30 @@ static void ctlr_done(H3270 *session)
 	post_message(session,4);
 }
 
+static int write_buffer(H3270 *session, unsigned const char *buf, int len)
+{
+	int rc = -1;
+
+	if(session->widget)
+	{
+		JNIEnv		* env			= ((INFO *) session->widget)->env;
+		jobject		  obj 			= ((INFO *) session->widget)->obj;
+		jclass 		  cls 			= env->GetObjectClass(obj);
+		jmethodID	  mid			= env->GetMethodID(cls, "send_data", "([BI)I");
+		jbyteArray	  buffer		= env->NewByteArray(len);
+
+		env->SetByteArrayRegion(buffer, 0, len, (jbyte*) buf);
+
+		rc = env->CallIntMethod(obj, mid, buffer, (jint) len );
+	}
+	else
+	{
+		__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "Can't send %d bytes, no jni env for active session",len);
+	}
+
+	return rc;
+}
+
 JNIEXPORT jint JNICALL Java_br_com_bb_pw3270_lib3270_init(JNIEnv *env, jclass obj)
 {
 	H3270	* session	= lib3270_session_new("");
@@ -99,6 +124,7 @@ JNIEXPORT jint JNICALL Java_br_com_bb_pw3270_lib3270_init(JNIEnv *env, jclass ob
 
 	lib3270_set_popup_handler(popuphandler);
 
+	session->write			= write_buffer;
 	session->changed 		= changed;
 	session->update_status 	= update_status;
 	session->erase			= erase;
@@ -150,3 +176,18 @@ JNIEXPORT jint JNICALL Java_br_com_bb_pw3270_lib3270_do_1connect(JNIEnv *env, jo
 	return (jint) rc;
 }
 
+JNIEXPORT void JNICALL Java_br_com_bb_pw3270_lib3270_procRecvdata(JNIEnv *env, jobject obj, jbyteArray buffer, jint sz)
+{
+	unsigned char *netrbuf = (unsigned char *) env->GetByteArrayElements(buffer,NULL);
+
+	session_request(env,obj);
+
+	trace("Processando %d bytes",(size_t) sz);
+
+	lib3270_data_recv(session, (size_t) sz, netrbuf);
+
+	env->ReleaseByteArrayElements(buffer, (signed char *) netrbuf, 0);
+
+	session_release();
+
+}

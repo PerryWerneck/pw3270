@@ -16,12 +16,11 @@ public class PW3270Activity extends Activity implements View.OnClickListener
 {
 	private class terminal extends lib3270
 	{
-		private static final String TAG = "pw3270";
+//		private static final String TAG = "pw3270";
 		
 		TextView msgbox;
 		Activity Main;
-	
-		
+			
 		terminal(TextView msgbox, Activity Main)
 		{
 			this.msgbox = msgbox;
@@ -36,7 +35,7 @@ public class PW3270Activity extends Activity implements View.OnClickListener
 			} catch(Exception e) { this.msgbox.setText("Estado inesperado"); }
 		}
 
-		public void popupMessage(int type, String title, String text, String info)
+		protected void popupMessage(int type, String title, String text, String info)
 		{
 			AlertDialog d = new AlertDialog.Builder(Main).create();
 			
@@ -46,13 +45,15 @@ public class PW3270Activity extends Activity implements View.OnClickListener
 			d.setCancelable(true);
 			d.show();
 		}
+
+		/*
 		
 		protected void redraw()
 		{
 			String text = getHTML();
 			Log.i(TAG,text);
 		}
-
+		*/
 
 		
 	};
@@ -88,7 +89,7 @@ public class PW3270Activity extends Activity implements View.OnClickListener
     public void onClick(View v) 
     {
         // Perform action on click
-    	host.setHost(uri.getText().toString());
+    	// host.setHost(uri.getText().toString());
     	host.connect();
     }
 
