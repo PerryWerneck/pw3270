@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string name="hello">Welcome to pw3270</string>
     <string name="app_name">PW3270</string>
     <string-array name="program_msg">
         <item>LIB3270_MESSAGE_NONE</item>
@@ -20,7 +18,7 @@
 		<item>X Resolvendo</item>
 		<item>X Conectando</item>
     </string-array>
-		<string name="connect">Connect</string>
+	<string name="connect">Connect</string>
  
 
 </resources>

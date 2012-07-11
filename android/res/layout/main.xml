@@ -23,12 +23,6 @@
             android:text="@string/connect" />
 
     </LinearLayout>
-
-        <TextView
-        android:id="@+id/msgbox"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/hello" />
     
     <WebView
         android:id="@+id/view"

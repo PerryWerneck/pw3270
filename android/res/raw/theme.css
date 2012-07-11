@@ -1,0 +1,57 @@
+
+body
+{
+	background-color: black;
+}
+
+body, input
+{
+	font-family: courier;
+	font-size: 20px;
+}
+
+#terminal
+{
+	width: 49em;
+}
+
+input
+{
+	border: none;
+	padding: 0px;
+	background-color: black;
+	color: #00ff00;
+	margin-left: 0.5em;
+	margin-right: 0.5em;
+}
+
+input[type="text"]
+{
+	border: 1px solid #004000
+}
+
+.IW002
+{
+	width: 1.5em;
+}
+
+.IW008
+{
+	width: 5em;
+}
+
+.IW004
+{
+	width: 2.5em;
+}
+
+.IW020
+{
+	width: 12em;
+}
+
+.IW040
+{
+	width: 24em;
+}
+
