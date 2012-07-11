@@ -4,38 +4,42 @@
 	<meta http-equiv="content-type" content="text/html;charset=utf-8"/>
 	<meta name="author" content="Perry Werneck, perry@werneck.eti.br">
 	<link rel="stylesheet" type="text/css" href="file:theme.css" />
+	<script type="text/javascript" src="file:jsmain.js"></script>
 	<title>pw3270</title>
 </head>
 
-<body>
+<body onload="initialize()">
 <div id="terminal">
+</div>
 
-	<span style="color:green;background-color:black">&nbsp;</span><span style="color:deepSkyBlue;background-color:black">&nbsp;COEM7010&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SISBB&nbsp;-&nbsp;Sistema&nbsp;de&nbsp;Informacoes&nbsp;Banco&nbsp;do&nbsp;Brasil&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;06/07/2012<br />
-	&nbsp;&nbsp;C1103788</span><span style="color:green;background-color:black">&nbsp;</span><span style="color:white;background-color:black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Correio&nbsp;Eletronico&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color:green;background-color:black">&nbsp;</span><span style="color:deepSkyBlue;background-color:black">15:29:03<br />
-	&nbsp;&nbsp;-----------------------&nbsp;Indicadores&nbsp;-&nbsp;Ler&nbsp;Matéria&nbsp;------------------&nbsp;Pag.:&nbsp;&nbsp;&nbsp;1<br />
-	&nbsp;&nbsp;Período:</span><span style="color:green;background-color:black"><input type="text" name="F0251" value="05072012" maxlength="8" class="IW008"></input></span><span style="color:deepSkyBlue;background-color:black">a</span><span style="color:green;background-color:black"><input type="text" name="F0262" value="06072012" maxlength="8" class="IW008"></input>&nbsp;</span><span style="color:white;background-color:black">(Alteravel)</span><span style="color:green;background-color:black">&nbsp;</span><span style="color:deepSkyBlue;background-color:black">&nbsp;&nbsp;Parte&nbsp;título:</span><span style="color:green;background-color:black"><input type="text" name="F0300" maxlength="20" class="IW020"></input><br />
-	&nbsp;<br />
-	</span><span style="color:deepSkyBlue;background-color:black">&nbsp;&nbsp;Assunto:</span><span style="color:green;background-color:black"><input type="text" name="F0411" maxlength="40" class="IW040"></input></span><span style="color:deepSkyBlue;background-color:black">(+)<br />
-	&nbsp;&nbsp;Nr.&nbsp;&nbsp;Título&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Data&nbsp;&nbsp;&nbsp;Hora<br />
-	&nbsp;&nbsp;----&nbsp;-------------------------------------------------------------&nbsp;-----------<br />
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1</span><span style="color:green;background-color:black">&nbsp;</span><span style="color:white;background-color:black">Rentabilidade&nbsp;fundos&nbsp;BB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;06/07&nbsp;00:00<br />
-	</span><span style="color:green;background-color:black">&nbsp;</span><span style="color:deepSkyBlue;background-color:black">&nbsp;&nbsp;&nbsp;&nbsp;2</span><span style="color:green;background-color:black">&nbsp;</span><span style="color:white;background-color:black">Rentabilidade&nbsp;comparada&nbsp;fundos&nbsp;BB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;06/07&nbsp;00:00<br />
-	</span><span style="color:green;background-color:black">&nbsp;</span><span style="color:deepSkyBlue;background-color:black">&nbsp;&nbsp;&nbsp;&nbsp;3</span><span style="color:green;background-color:black">&nbsp;</span><span style="color:white;background-color:black">Indices&nbsp;Economicos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;06/07&nbsp;00:00<br />
-	</span><span style="color:green;background-color:black">&nbsp;</span><span style="color:deepSkyBlue;background-color:black">&nbsp;&nbsp;&nbsp;&nbsp;4&nbsp;ACF&nbsp;-&nbsp;ADIANTAMENTO&nbsp;DE&nbsp;CONTRATO&nbsp;DE&nbsp;FORNECIMENTO&nbsp;-&nbsp;06-07-2012&nbsp;&nbsp;&nbsp;06/07&nbsp;00:00<br />
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5&nbsp;CDF&nbsp;-&nbsp;CRÉDITO&nbsp;DIRETO&nbsp;AO&nbsp;FORNECEDOR&nbsp;-&nbsp;06-07-2012&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;06/07&nbsp;00:00<br />
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6&nbsp;Depositos&nbsp;a&nbsp;Prazo&nbsp;-&nbsp;Taxas&nbsp;Pos&nbsp;Fixadas&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;06/07&nbsp;00:00<br />
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7&nbsp;Depositos&nbsp;a&nbsp;Prazo&nbsp;-&nbsp;Entes&nbsp;Publicos&nbsp;-&nbsp;Taxas&nbsp;Negociadas&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;06/07&nbsp;00:00<br />
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8&nbsp;Depositos&nbsp;a&nbsp;Prazo&nbsp;-&nbsp;Taxas&nbsp;não&nbsp;Negociadas&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;06/07&nbsp;00:00<br />
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;9&nbsp;Depositos&nbsp;a&nbsp;Prazo&nbsp;-&nbsp;Nivel&nbsp;2&nbsp;-&nbsp;Taxas&nbsp;Negociadas&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;06/07&nbsp;00:00<br />
-	&nbsp;&nbsp;&nbsp;&nbsp;10&nbsp;Depositos&nbsp;a&nbsp;Prazo&nbsp;-&nbsp;Nivel&nbsp;1&nbsp;-&nbsp;Taxas&nbsp;Negociadas&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;06/07&nbsp;00:00<br />
-	&nbsp;&nbsp;&nbsp;&nbsp;11&nbsp;Depositos&nbsp;a&nbsp;Prazo&nbsp;-&nbsp;Taxas&nbsp;não&nbsp;Negociadas&nbsp;-&nbsp;BB&nbsp;CDB&nbsp;DI&nbsp;PARCERIA&nbsp;06/07&nbsp;00:00<br />
-	&nbsp;&nbsp;&nbsp;&nbsp;12&nbsp;Inadimplemento&nbsp;-&nbsp;Comissão&nbsp;de&nbsp;Permanência&nbsp;-&nbsp;06/07/2012&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;06/07&nbsp;00:00<br />
-	&nbsp;&nbsp;Informe&nbsp;número&nbsp;(Nr.):</span><span style="color:green;background-color:black"><input type="text" name="F1624" maxlength="4" class="IW004"></input><br />
-	</span><span style="color:deepSkyBlue;background-color:black">&nbsp;&nbsp;------------------------------------------------------------------------------<br />
-	</span><span style="color:green;background-color:black">&nbsp;</span><span style="color:white;background-color:black">&nbsp;F1&nbsp;Ajuda&nbsp;F9&nbsp;Origem<br />
-	</span><span style="color:green;background-color:black">&nbsp;<input type="button" name="PF03" value="F3" maxlength="2" class="IW002"></input></span><span style="color:deepSkyBlue;background-color:black">Sai</span><span style="color:green;background-color:black"><input type="button" name="PF04" value="F4" maxlength="2" class="IW002"></input></span><span style="color:deepSkyBlue;background-color:black">Seleciona(+)</span><span style="color:green;background-color:black"><input type="button" name="PF05" value="F5" maxlength="2" class="IW002"></input></span><span style="color:deepSkyBlue;background-color:black">Encerra</span><span style="color:green;background-color:black"><input type="button" name="PF06" value="F6" maxlength="2" class="IW002"></input></span><span style="color:deepSkyBlue;background-color:black">Imprime</span><span style="color:green;background-color:black"><input type="button" name="PF07" value="F7" maxlength="2" class="IW002"></input></span><span style="color:deepSkyBlue;background-color:black">Pag.Ant</span><span style="color:green;background-color:black"><input type="button" name="PF08" value="F8" maxlength="2" class="IW002"></input></span><span style="color:deepSkyBlue;background-color:black">Prox.Pag<br />
-	</span>
-
+<div id="pfbar">
+<div class="pfkey"><a href="#" onclick="return pfkey(1)">PF1</a></div>
+<div class="pfkey"><a href="#" onclick="return pfkey(2)">PF2</a></div>
+<div class="pfkey"><a href="#" onclick="return pfkey(3)">PF3</a></div>
+<div class="pfkey"><a href="#" onclick="return pfkey(4)">PF4</a></div>
+<div class="pfkey"><a href="#" onclick="return pfkey(5)">PF5</a></div>
+<div class="pfkey"><a href="#" onclick="return pfkey(6)">PF6</a></div>
+<div class="pfkey"><a href="#" onclick="return pfkey(7)">PF7</a></div>
+<div class="pfkey"><a href="#" onclick="return pfkey(8)">PF8</a></div>
+<div class="pfkey"><a href="#" onclick="return pfkey(9)">PF9</a></div>
+<div class="pfkey"><a href="#" onclick="return pfkey(10)">PF10</a></div>
+<div class="pfkey"><a href="#" onclick="return pfkey(11)">PF11</a></div>
+<div class="pfkey"><a href="#" onclick="return pfkey(12)">PF12</a></div>
+<div class="pfkey"><a href="#" onclick="return xmit()">ENTER</a></div>
+<br />
+<div class="pfkey"><a href="#" onclick="return pfkey(13)">PF13</a></div>
+<div class="pfkey"><a href="#" onclick="return pfkey(14)">PF14</a></div>
+<div class="pfkey"><a href="#" onclick="return pfkey(15)">PF15</a></div>
+<div class="pfkey"><a href="#" onclick="return pfkey(16)">PF16</a></div>
+<div class="pfkey"><a href="#" onclick="return pfkey(17)">PF17</a></div>
+<div class="pfkey"><a href="#" onclick="return pfkey(18)">PF18</a></div>
+<div class="pfkey"><a href="#" onclick="return pfkey(19)">PF19</a></div>
+<div class="pfkey"><a href="#" onclick="return pfkey(20)">PF20</a></div>
+<div class="pfkey"><a href="#" onclick="return pfkey(21)">PF21</a></div>
+<div class="pfkey"><a href="#" onclick="return pfkey(22)">PF22</a></div>
+<div class="pfkey"><a href="#" onclick="return pfkey(23)">PF23</a></div>
+<div class="pfkey"><a href="#" onclick="return pfkey(24)">PF24</a></div>
+<div class="pfkey"><a href="#" onclick="return eraseinput()">Clear</a></div>
 </div>
 </body>
 </html>

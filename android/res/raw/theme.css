@@ -2,6 +2,7 @@
 body
 {
 	background-color: black;
+	color: green;
 }
 
 body, input
@@ -55,3 +56,30 @@ input[type="text"]
 	width: 24em;
 }
 
+#pfbar
+{
+	width: 49em;
+	background: black;
+	color: white;
+	text-align: center;
+	border-top: 1px solid #fff;
+}
+
+a
+{
+	text-decoration: none;
+	color: black;
+}
+
+.pfkey
+{
+	margin: 1px;
+	background: gray;
+	color: black;
+	width: 4em;
+	border: 1px solid darkgray;
+	text-decoration: none;
+	font-size: 15px;
+	font-family: arial;
+	display: inline-block;
+}

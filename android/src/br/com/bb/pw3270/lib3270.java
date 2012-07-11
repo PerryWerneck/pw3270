@@ -313,6 +313,16 @@ public class lib3270
 	{
 	}
 
+	public void pfkey(int id)
+	{
+		Log.i(TAG,"PF "+id);
+	}
+	
+	public void xmit()
+	{
+		Log.i(TAG,"XMIT");
+	}
+	
     /*---[ External methods ]------------------------------------------------*/
 
     public int connect()

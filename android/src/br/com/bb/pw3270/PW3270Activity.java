@@ -19,19 +19,18 @@ import java.io.InputStream;
 
 public class PW3270Activity extends Activity 
 {
+	private static final String TAG = "pw3270";
+
 	private Resources	res;
 	private WebView		view;
 	private terminal 	host;
-	private static final String TAG = "pw3270";
+	private Activity 	mainact;
 	
 	private class terminal extends lib3270
 	{
 		
-		Activity Main;
-			
-		terminal(Activity Main)
+		terminal()
 		{
-			this.Main = Main;
 		}
 
 		protected void updateProgramMessage(int id)
@@ -46,7 +45,7 @@ public class PW3270Activity extends Activity
 
 		protected void popupMessage(int type, String title, String text, String info)
 		{
-			AlertDialog d = new AlertDialog.Builder(Main).create();
+			AlertDialog d = new AlertDialog.Builder(mainact).create();
 			
 			d.setTitle(title);
 			d.setMessage(text);
@@ -55,26 +54,25 @@ public class PW3270Activity extends Activity
 			d.show();
 		}
 
-		protected void redraw()
+		public String getscreencontents()
 		{
+			String text;
+			
 			try
 			{
-				String text = new String(getText(),getEncoding());
-//				Log.i(TAG,text);
-			} catch(Exception e) { }
+				text = new String(getHTML(),getEncoding());
+			} catch(Exception e) { text = ""; }
+			
+			return text;
 		}
-
+		
+		protected void redraw()
+		{
+			view.reload();
+		}
 		
 	};
 
-	/*
-	private terminal 	host;
-	private EditText 	uri;
-	private Resources	res;
-	private String[] 	message;
-	private WebView		view;
-	
-*/
 	
 	
     /** Called when the activity is first created. */
@@ -90,6 +88,11 @@ public class PW3270Activity extends Activity
 		view = new WebView(this);
 		
 		view.setWebChromeClient(new WebChromeClient());
+
+		view.getSettings().setBuiltInZoomControls(true);
+		view.getSettings().setSupportZoom(true); 
+		view.getSettings().setUseWideViewPort(true);
+		view.getSettings().setLoadWithOverviewMode(true);		
 		
 		view.setWebViewClient(new WebViewClient() 
 		{
@@ -99,14 +102,18 @@ public class PW3270Activity extends Activity
 			{
 				int		id		= R.raw.index;
 				String	mime	= "text/html";
+				int		pos		= url.lastIndexOf("/");
+				
+				if(pos >=0 )
+					url = url.substring(pos+1);
 				
 				Log.i(TAG,"Loading [" + url + "]");
 				
-				if(url.equalsIgnoreCase("file://jsmain.js"))
+				if(url.equalsIgnoreCase("jsmain.js"))
 				{
 					id = R.raw.jsmain;
 				}
-				else if(url.equalsIgnoreCase("file://theme.css"))
+				else if(url.equalsIgnoreCase("theme.css"))
 				{
 					mime = "text/css";
 					id = R.raw.theme;
@@ -120,44 +127,15 @@ public class PW3270Activity extends Activity
 		});
 		
 		view.getSettings().setJavaScriptEnabled(true);
-		
+
 		setContentView(view);
-		view.loadUrl("file://index.html");
-        
-        //        setContentView(R.layout.main);
+		view.loadUrl("file:index.html");
+		
+		host = new terminal();
+		view.addJavascriptInterface(host, "pw3270");
+		host.connect();
+		
 
-//		Log.i("pw3270","Activity started");
-
-		
-//		view = (WebView) findViewById(R.id.view);
-		
-//		String summary = "<html><body>Welcome to <b>pw3270</b>.</body></html>" ;
-				
-				// res.getString(R.string.hello);
-		
-		// ;
-		// view.loadData("<html><body>Welcome to <b>pw3270</b>.</body></html>", "text/html", null);
-		 
-		/*
-        message = res.getStringArray(R.array.program_msg);
-        uri 	= (EditText) findViewById(R.id.hostname);
-        
-        // Set button
-        Button btn = (Button) findViewById(R.id.connect);
-        btn.setOnClickListener((View.OnClickListener) this);        
-        
-        host = new terminal((TextView) findViewById(R.id.msgbox),this);
-        
-        */
     }
-
-    /*
-    public void onClick(View v) 
-    {
-        // Perform action on click
-    	// host.setHost(uri.getText().toString());
-    	host.connect();
-    }
-    */
 
 }
