@@ -58,6 +58,7 @@
 		<Unit filename="src/include/lib3270/config.h.in" />
 		<Unit filename="src/include/lib3270/filetransfer.h" />
 		<Unit filename="src/include/lib3270/html.h" />
+		<Unit filename="src/include/lib3270/internals.h" />
 		<Unit filename="src/include/lib3270/log.h" />
 		<Unit filename="src/include/lib3270/macros.h" />
 		<Unit filename="src/include/lib3270/popup.h" />

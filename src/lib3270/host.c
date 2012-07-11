@@ -52,6 +52,7 @@
 #include "xioc.h"
 
 #include <errno.h>
+#include <lib3270/internals.h>
 
 #define RECONNECT_MS		2000	/* 2 sec before reconnecting to host */
 #define RECONNECT_ERR_MS	5000	/* 5 sec before reconnecting to host */
@@ -550,7 +551,7 @@ static int do_connect(H3270 *hSession, const char *n)
 	if(net_connect(hSession, chost, port, 0, &resolving,&pending) != 0 && !resolving)
 	{
 		/* Redundantly signal a disconnect. */
-		host_disconnected(hSession);
+		lib3270_set_disconnected(hSession);
 		return -1;
 	}
 
@@ -588,7 +589,7 @@ static int do_connect(H3270 *hSession, const char *n)
 	}
 	else
 	{
-		host_connected(hSession);
+		lib3270_set_connected(hSession);
 	}
 
 	return 0;
@@ -687,7 +688,7 @@ void host_disconnect(H3270 *h, int failed)
 			trace_ansi_disc();
 #endif /*]*/
 
-		host_disconnected(h);
+		lib3270_set_disconnected(h);
 	}
 }
 
@@ -703,22 +704,24 @@ void host_in3270(H3270 *session, LIB3270_CSTATE new_cstate)
 	lib3270_st_changed(session, LIB3270_STATE_3270_MODE, now3270);
 }
 
-void host_connected(H3270 *session)
+void lib3270_set_connected(H3270 *hSession)
 {
-	session->cstate = CONNECTED_INITIAL;
-	lib3270_st_changed(session, LIB3270_STATE_CONNECT, True);
-	if(session->update_connect)
-		session->update_connect(session,1);
+	hSession->cstate = CONNECTED_INITIAL;
+	lib3270_st_changed(hSession, LIB3270_STATE_CONNECT, True);
+	if(hSession->update_connect)
+		hSession->update_connect(hSession,1);
 }
 
-void host_disconnected(H3270 *session)
+void lib3270_set_disconnected(H3270 *hSession)
 {
-	session->cstate = NOT_CONNECTED;
-	set_status(session,OIA_FLAG_UNDERA,False);
-	lib3270_st_changed(session,LIB3270_STATE_CONNECT, False);
-	status_changed(session,LIB3270_MESSAGE_DISCONNECTED);
-	if(session->update_connect)
-		session->update_connect(session,0);
+	CHECK_SESSION_HANDLE(hSession);
+
+	hSession->cstate = NOT_CONNECTED;
+	set_status(hSession,OIA_FLAG_UNDERA,False);
+	lib3270_st_changed(hSession,LIB3270_STATE_CONNECT, False);
+	status_changed(hSession,LIB3270_MESSAGE_DISCONNECTED);
+	if(hSession->update_connect)
+		hSession->update_connect(hSession,0);
 }
 
 /* Register a function interested in a state change. */

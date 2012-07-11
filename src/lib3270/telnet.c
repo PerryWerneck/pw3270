@@ -867,7 +867,7 @@ static void net_connected(H3270 *session)
 //		trace_dsn("TLS/SSL tunneled connection complete. Connection is now secure.\n");
 
 		/* Tell everyone else again. */
-		host_connected(session);
+		lib3270_set_connected(session);
 	}
 #endif /*]*/
 
@@ -927,7 +927,7 @@ static void connection_complete(H3270 *session)
 		host_disconnect(session,True);
 		return;
 	}
-	host_connected(session);
+	lib3270_set_connected(session);
 	net_connected(session);
 }
 
@@ -1098,7 +1098,7 @@ void net_input(H3270 *session)
 				host_disconnect(session,True);
 				return;
 			}
-			host_connected(session);
+			lib3270_set_connected(session);
 			net_connected(session);
 		}
 
@@ -3396,7 +3396,7 @@ static void continue_tls(unsigned char *sbbuf, int len)
 //	trace_dsn("TLS/SSL negotiated connection complete. Connection is now secure.\n");
 
 	/* Tell the world that we are (still) connected, now in secure mode. */
-	host_connected(&h3270);
+	lib3270_set_connected(&h3270);
 }
 
 #endif /*]*/
