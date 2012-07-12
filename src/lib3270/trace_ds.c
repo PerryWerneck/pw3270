@@ -173,11 +173,10 @@ trace_ds_s(char *s, Boolean can_break)
 	}
 }
 
-void
-trace_ds(const char *fmt, ...)
+void trace_ds(const char *fmt, ...)
 {
-	char tdsbuf[4096];
-	va_list args;
+	char	* text;
+	va_list   args;
 
 	if (!lib3270_get_toggle(&h3270,DS_TRACE))
 		return;
@@ -185,9 +184,10 @@ trace_ds(const char *fmt, ...)
 	va_start(args, fmt);
 
 	/* print out remainder of message */
-	(void) vsprintf(tdsbuf, fmt, args);
-	trace_ds_s(tdsbuf, True);
+	text = lib3270_vsprintf(fmt,args);
+	trace_ds_s(text, True);
 	va_end(args);
+	lib3270_free(text);
 }
 
 void
@@ -223,8 +223,7 @@ trace_event(const char *fmt, ...)
 }
 
 /* Conditional data stream trace, without line splitting. */
-void
-trace_dsn(const char *fmt, ...)
+void trace_dsn(const char *fmt, ...)
 {
 	va_list args;
 

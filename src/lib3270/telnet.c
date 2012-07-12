@@ -380,8 +380,7 @@ static void set_ssl_state(H3270 *session, LIB3270_SSL_STATE state)
 	if(state == session->secure)
 		return;
 
-	trace_dsn("SSL state changes to %d",(int) state);
-	trace("SSL state changes to %d",(int) state);
+	trace_dsn("SSL state changes to %d\n",(int) state);
 
 	session->update_ssl(session,session->secure = state);
 }
@@ -931,12 +930,11 @@ static void connection_complete(H3270 *session)
 	net_connected(session);
 }
 
-/*
- * net_disconnect
- *	Shut down the socket.
- */
-void net_disconnect(H3270 *session)
+
+LIB3270_INTERNAL void lib3270_sock_disconnect(H3270 *session)
 {
+	trace("%s",__FUNCTION__);
+
 #if defined(HAVE_LIBSSL)
 	if(session->ssl_con != NULL)
 	{
@@ -946,14 +944,23 @@ void net_disconnect(H3270 *session)
 	}
 #endif
 
-	set_ssl_state(session,LIB3270_SSL_UNSECURE);
-
 	if(session->sock >= 0)
 	{
 		shutdown(session->sock, 2);
 		SOCK_CLOSE(session->sock);
 		session->sock = -1;
 	}
+}
+
+/*
+ * net_disconnect
+ *	Shut down the socket.
+ */
+void net_disconnect(H3270 *session)
+{
+	set_ssl_state(session,LIB3270_SSL_UNSECURE);
+
+	session->disconnect(session);
 
 	trace_dsn("SENT disconnect\n");
 
@@ -1990,7 +1997,7 @@ void net_exception(H3270 *session)
  *
  */
 
-LIB3270_INTERNAL int lib3270_send(H3270 *hSession, unsigned const char *buf, int len)
+LIB3270_INTERNAL int lib3270_sock_send(H3270 *hSession, unsigned const char *buf, int len)
 {
 	int rc;
 
@@ -3249,6 +3256,8 @@ static void ssl_init(H3270 *session)
 /* Callback for tracing protocol negotiation. */
 static void ssl_info_callback(INFO_CONST SSL *s, int where, int ret)
 {
+	H3270 *hSession = &h3270; // TODO: Find a better way!
+
 	switch(where)
 	{
 	case SSL_CB_CONNECT_LOOP:
@@ -3257,12 +3266,11 @@ static void ssl_info_callback(INFO_CONST SSL *s, int where, int ret)
 
 	case SSL_CB_CONNECT_EXIT:
 
-		trace("%s: SSL_CB_CONNECT_EXIT",__FUNCTION__);
+		trace_dsn("%s: SSL_CB_CONNECT_EXIT\n",__FUNCTION__);
 
 		if (ret == 0)
 		{
 			trace_dsn("SSL_connect: failed in %s\n",SSL_state_string_long(s));
-			lib3270_write_log(&h3270,"SSL","connect failed in %s (Alert: %s)",SSL_state_string_long(s),SSL_alert_type_string_long(ret));
 		}
 		else if (ret < 0)
 		{
@@ -3297,7 +3305,7 @@ static void ssl_info_callback(INFO_CONST SSL *s, int where, int ret)
 
 			trace_dsn("SSL Connect error in %s\nState: %s\nAlert: %s\n",err_buf,SSL_state_string_long(s),SSL_alert_type_string_long(ret));
 
-			show_3270_popup_dialog(	&h3270,										// H3270 *session,
+			show_3270_popup_dialog(	hSession,									// H3270 *session,
 									PW3270_DIALOG_CRITICAL,						//	PW3270_DIALOG type,
 									_( "SSL Connect error" ),					// Title
 									err_buf,									// Message
@@ -3310,28 +3318,28 @@ static void ssl_info_callback(INFO_CONST SSL *s, int where, int ret)
 
 
 	default:
-		lib3270_write_log(NULL,"SSL","Current state is \"%s\"",SSL_state_string_long(s));
+		trace_dsn("SSL Current state is \"%s\"\n",SSL_state_string_long(s));
 	}
 
-	trace("%s: state=%04x where=%04x ret=%d",__FUNCTION__,SSL_state(s),where,ret);
+//	trace("%s: state=%04x where=%04x ret=%d",__FUNCTION__,SSL_state(s),where,ret);
 
 #ifdef DEBUG
 	if(where & SSL_CB_EXIT)
 	{
-		trace("%s: SSL_CB_EXIT ret=%d",__FUNCTION__,ret);
+		trace("%s: SSL_CB_EXIT ret=%d\n",__FUNCTION__,ret);
 	}
 #endif
 
 	if(where & SSL_CB_ALERT)
-		lib3270_write_log(NULL,"SSL","ALERT: %s",SSL_alert_type_string_long(ret));
+		trace_dsn("SSL ALERT: %s\n",SSL_alert_type_string_long(ret));
 
 	if(where & SSL_CB_HANDSHAKE_DONE)
 	{
-		trace("%s: SSL_CB_HANDSHAKE_DONE state=%04x",__FUNCTION__,SSL_state(s));
+		trace_dsn("%s: SSL_CB_HANDSHAKE_DONE state=%04x\n",__FUNCTION__,SSL_state(s));
 		if(SSL_state(s) == 0x03)
-			set_ssl_state(&h3270,LIB3270_SSL_SECURE);
+			set_ssl_state(hSession,LIB3270_SSL_SECURE);
 		else
-			set_ssl_state(&h3270,LIB3270_SSL_UNSECURE);
+			set_ssl_state(hSession,LIB3270_SSL_UNSECURE);
 	}
 }
 
@@ -3367,7 +3375,7 @@ static void continue_tls(unsigned char *sbbuf, int len)
 	/* Set up the TLS/SSL connection. */
 	if(SSL_set_fd(h3270.ssl_con, h3270.sock) != 1)
 	{
-		trace_dsn("Can't set fd!\n");
+		trace_dsn("SSL_set_fd failed!\n");
 	}
 
 //#if defined(_WIN32)

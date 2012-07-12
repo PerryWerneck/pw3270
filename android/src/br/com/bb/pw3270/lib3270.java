@@ -81,6 +81,7 @@ public class lib3270
 		{
 			outData.write(data,0,len);
 			outData.flush();
+			return len;
 		} catch( Exception e )
 		{
     		String msg = e.getLocalizedMessage();
@@ -315,12 +316,14 @@ public class lib3270
 
 	public void pfkey(int id)
 	{
-		Log.i(TAG,"PF "+id);
+		Log.d(TAG,"PF"+id);
+		sendPFkey(id);
 	}
 
 	public void xmit()
 	{
-		Log.i(TAG,"XMIT");
+		Log.d(TAG,"XMIT");
+		sendEnter();
 	}
 
     /*---[ External methods ]------------------------------------------------*/
