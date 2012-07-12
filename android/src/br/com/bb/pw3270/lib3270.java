@@ -33,6 +33,9 @@ public class lib3270
 
 	lib3270()
 	{
+    	setToggle("dstrace",true);
+    	setToggle("screentrace",true);
+    	setToggle("eventtrace",true);
 		changed = false;
 		mainloop = null;
 	}
@@ -358,6 +361,7 @@ public class lib3270
 	public native String		getEncoding();
 	public native String 		getVersion();
 	public native String 		getRevision();
+	public native void		    setToggle(String name, boolean state);
 
 	// Network I/O
 	public native void			procRecvdata( byte[] data, int len);

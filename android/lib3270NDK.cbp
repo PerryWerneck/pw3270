@@ -39,6 +39,9 @@
 		<Unit filename="../src/lib3270/html.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="../src/lib3270/kybd.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="../src/lib3270/selection.c">
 			<Option compilerVar="CC" />
 		</Unit>

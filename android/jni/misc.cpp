@@ -44,3 +44,16 @@ JNIEXPORT jstring JNICALL Java_br_com_bb_pw3270_lib3270_getEncoding(JNIEnv *env,
 {
 	return env->NewStringUTF(lib3270_get_charset(lib3270_get_default_session_handle()));
 }
+
+JNIEXPORT void JNICALL Java_br_com_bb_pw3270_lib3270_setToggle(JNIEnv *env, jobject obj, jstring name, jboolean state)
+{
+	LIB3270_TOGGLE id = lib3270_get_toggle_id(env->GetStringUTFChars(name, 0));
+
+	session_request(env,obj);
+
+	if(id >= 0)
+		lib3270_set_toggle(session,id,state ? 1 : 0);
+
+	session_release();
+
+}

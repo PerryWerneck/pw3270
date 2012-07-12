@@ -171,7 +171,12 @@ static struct ta
 } *ta_head = (struct ta *) NULL,
   *ta_tail = (struct ta *) NULL;
 
-#define ENQUEUE_ACTION(x) enq_ta(hSession, (void (*)(H3270 *, const char *, const char *)) x, NULL, NULL)
+
+#if defined(DEBUG) || defined(ANDROID)
+	#define ENQUEUE_ACTION(x) enq_ta(hSession, (void (*)(H3270 *, const char *, const char *)) x, NULL, NULL, #x)
+#else
+	#define ENQUEUE_ACTION(x) enq_ta(hSession, (void (*)(H3270 *, const char *, const char *)) x, NULL, NULL)
+#endif // DEBUG
 
 static const char dxl[] = "0123456789abcdef";
 #define FROM_HEX(c)	(strchr(dxl, tolower(c)) - dxl)
@@ -250,14 +255,20 @@ static int enq_chk(H3270 *session)
 /*
  * Put an action on the typeahead queue.
  */
+#if defined(DEBUG) || defined(ANDROID)
+static void enq_ta(H3270 *hSession, void (*fn)(H3270 *, const char *, const char *), const char *parm1, const char *parm2, const char *name)
+#else
 static void enq_ta(H3270 *hSession, void (*fn)(H3270 *, const char *, const char *), const char *parm1, const char *parm2)
+#endif // DEBUG
 {
 	struct ta *ta;
 
+	CHECK_SESSION_HANDLE(hSession);
+
+	trace("%s: %s",__FUNCTION__,name);
+
  	if(enq_chk(hSession))
 		return;
-
-	CHECK_SESSION_HANDLE(hSession);
 
 	ta = (struct ta *) lib3270_malloc(sizeof(*ta));
 	ta->session	= hSession;
@@ -773,7 +784,13 @@ static Boolean key_Character(int code, Boolean with_ge, Boolean pasting, Boolean
 		char codename[64];
 
 		(void) sprintf(codename, "%d", code |(with_ge ? GE_WFLAG : 0) | (pasting ? PASTE_WFLAG : 0));
+
+#if defined(DEBUG) || defined(ANDROID)
+		enq_ta(&h3270,key_Character_wrapper, codename, CN, "key_Character_wrapper");
+#else
 		enq_ta(&h3270,key_Character_wrapper, codename, CN);
+#endif // DEBUG
+
 		return False;
 	}
 	baddr = h3270.cursor_addr;
@@ -1453,9 +1470,10 @@ LIB3270_KEY_ACTION( backtab )
 
 static void defer_unlock(H3270 *session)
 {
+	trace("%s",__FUNCTION__);
 	kybdlock_clr(session,KL_DEFERRED_UNLOCK, "defer_unlock");
 	status_reset(session);
-	if (CONNECTED)
+	if(CONNECTED)
 		ps_process();
 }
 

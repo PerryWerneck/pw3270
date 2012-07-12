@@ -772,7 +772,7 @@ void lib3270_st_changed(H3270 *h, LIB3270_STATE tx, int mode)
 
 	for (st = h->st_callbacks[tx];st;st = st->next)
 	{
-		trace("st=%p func=%p",st,st->func);
+//		trace("st=%p func=%p",st,st->func);
 		st->func(h,mode,st->data);
 	}
 

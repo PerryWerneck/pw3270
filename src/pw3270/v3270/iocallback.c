@@ -142,6 +142,7 @@ static void * static_AddTimeOut(unsigned long interval, H3270 *session, void (*p
 	t->fn		= proc;
 	t->session	= session;
 
+	trace("Adding timeout with %ld ms",interval);
 	g_timeout_add_full(G_PRIORITY_DEFAULT, (guint) interval, (GSourceFunc) do_timer, t, g_free);
 
 	return t;
