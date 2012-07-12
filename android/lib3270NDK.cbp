@@ -33,6 +33,7 @@
 			<Add option="-Wall" />
 		</Compiler>
 		<Unit filename="../src/include/lib3270.h" />
+		<Unit filename="../src/include/lib3270/actions.h" />
 		<Unit filename="../src/include/lib3270/html.h" />
 		<Unit filename="../src/include/lib3270/internals.h" />
 		<Unit filename="../src/lib3270/html.c">
@@ -41,11 +42,13 @@
 		<Unit filename="../src/lib3270/selection.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="../src/lib3270/sources.mak" />
 		<Unit filename="../src/lib3270/telnet.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="Makefile" />
 		<Unit filename="jni/Android.mk" />
+		<Unit filename="jni/actions.cpp" />
 		<Unit filename="jni/globals.h" />
 		<Unit filename="jni/html.cpp" />
 		<Unit filename="jni/lib3270jni.h" />

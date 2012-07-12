@@ -317,12 +317,12 @@ public class lib3270
 	{
 		Log.i(TAG,"PF "+id);
 	}
-	
+
 	public void xmit()
 	{
 		Log.i(TAG,"XMIT");
 	}
-	
+
     /*---[ External methods ]------------------------------------------------*/
 
     public int connect()
@@ -364,6 +364,10 @@ public class lib3270
 	public native String		getHost();
 	public native boolean		isConnected();
 	public native boolean		isTerminalReady();
+
+	// Keyboard actions
+	public native void			sendEnter();
+	public native void			sendPFkey(int id);
 
 	// Get/Set screen contents
 	public native byte[]		getHTML();

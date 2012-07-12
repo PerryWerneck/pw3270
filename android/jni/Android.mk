@@ -34,7 +34,7 @@ LOCAL_DEFAULT_CPP_EXTENSION := cpp
 LOCAL_MODULE    := lib3270
 LOCAL_LDLIBS 	:= -llog
 LOCAL_SRC_FILES := $(foreach SRC, $(TERMINAL_SOURCES) $(NETWORK_SOURCES), ../../src/lib3270/$(SRC)) \
-					main.cpp misc.cpp html.cpp
+					main.cpp misc.cpp html.cpp actions.cpp
 
 include $(BUILD_SHARED_LIBRARY)
 

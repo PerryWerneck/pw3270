@@ -30,6 +30,10 @@
  *
  */
 
+#ifdef __cplusplus
+	extern "C" {
+#endif
+
 	// Standard actions
 	#define DECLARE_LIB3270_ACTION( name )  				LIB3270_EXPORT int lib3270_ ## name (H3270 *hSession);
 	#define LIB3270_ACTION( name )  						LIB3270_EXPORT int lib3270_ ## name (H3270 *hSession)
@@ -49,3 +53,6 @@
 	// Load action table entries
 	#include <lib3270/action_table.h>
 
+#ifdef __cplusplus
+	}
+#endif

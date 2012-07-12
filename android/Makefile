@@ -24,8 +24,15 @@
 #
 
 JAVAH=javah
+JAVAC=javac
 NDKBUILD=/opt/android-ndk-r8/ndk-build
 CLASSPATH=br/com/bb/pw3270
+ANDROIDSDK=/opt/android-sdk
+
+# package android.os does not exist
+# javac -d bin/classes
+
+# /opt/android-sdk/tools/lib/
 
 MKDIR=/bin/mkdir -p
 CONVERT=rsvg-convert
@@ -66,7 +73,11 @@ res/drawable-hdpi/ic_launcher.png: ../src/pw3270/pixmaps/pw3270.svg
 	@$(MKDIR) `dirname $@`
 	@$(CONVERT) --format=png --width=72 --height=72 --output=$@ $<
 
-sigs.txt: ./bin/classes/br/com/bb/pw3270/lib3270.class
+bin/classes/$(CLASSPATH)/lib3270.class: src/$(CLASSPATH)/lib3270.java
+	@$(MKDIR) `dirname $@`
+	@$(JAVAC) -classpath $(ANDROIDSDK)/platforms/android-15/android.jar -d bin/classes src/$(CLASSPATH)/lib3270.java
+
+sigs.txt: bin/classes/$(CLASSPATH)/lib3270.class
 	@javap -classpath ./bin/classes -s -p br.com.bb.pw3270.lib3270 > $@
 
 jni/lib3270jni.h: bin/classes/$(CLASSPATH)/lib3270.class
