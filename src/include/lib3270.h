@@ -590,6 +590,15 @@
 	int LIB3270_EXPORT lib3270_register_handlers(const struct lib3270_callbacks *cbk);
 
 	/**
+	 * Register time handlers.
+	 *
+	 * @param add	Callback for adding a timeout
+	 * @param rm	Callback for removing a timeout
+	 *
+	 */
+	void LIB3270_EXPORT lib3270_register_time_handlers(void * (*add)(unsigned long interval_ms, H3270 *session, void (*proc)(H3270 *session)), void (*rm)(void *timer));
+
+	/**
 	 * Get program message.
 	 *
 	 * @see LIB3270_MESSAGE

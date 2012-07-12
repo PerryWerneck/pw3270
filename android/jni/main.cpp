@@ -30,6 +30,16 @@
  #include <lib3270/popup.h>
  #include <lib3270/internals.h>
 
+/*--[ Structs ]--------------------------------------------------------------------------------------*/
+
+ typedef struct _timer
+ {
+ 	size_t	  sz;
+ 	bool	  enabled;
+ 	H3270	* session;
+ 	void	  (*proc)(H3270 *session);
+ } TIMER;
+
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
  const char *java_class_name = "br/com/bb/pw3270/lib3270";
@@ -116,6 +126,73 @@ static int write_buffer(H3270 *session, unsigned const char *buf, int len)
 	return rc;
 }
 
+static void * add_timeout(unsigned long interval_ms, H3270 *session, void (*proc)(H3270 *session))
+{
+	if(session->widget)
+	{
+		JNIEnv		* env			= ((INFO *) session->widget)->env;
+		jobject		  obj 			= ((INFO *) session->widget)->obj;
+		jclass 		  cls 			= env->GetObjectClass(obj);
+		jmethodID	  mid			= env->GetMethodID(cls, "newTimer", "(JI)V");
+		TIMER		* timer 		= (TIMER *) lib3270_malloc(sizeof(TIMER));
+
+		timer->sz		= sizeof(timer);
+		timer->enabled	= true;
+		timer->session  = session;
+		timer->proc		= proc;
+
+		__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "Timer ID %08lx created",(unsigned long) timer);
+
+		env->CallVoidMethod(obj,mid, (jlong) timer, (jint) interval_ms);
+
+	}
+	else
+	{
+		__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "Can set timer, no jni env for active session");
+	}
+
+
+}
+
+static void remove_timeout(void *timer)
+{
+	if(timer == NULL || ((TIMER *) timer)->sz != sizeof(TIMER))
+	{
+		__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "Invalid timer ID %08lx",(unsigned long) timer);
+		return;
+	}
+
+	__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "Removing timeout %d",(int) timer);
+	((TIMER *) timer)->enabled = false;
+
+}
+
+JNIEXPORT void JNICALL Java_br_com_bb_pw3270_lib3270_timerFinish(JNIEnv *env, jobject obj, jlong id)
+{
+	TIMER *timer = (TIMER *) id;
+
+	if(timer == NULL)
+	{
+		__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "Unexpected call to %s: No timer ID",__FUNCTION__);
+		return;
+	}
+
+	if(timer->sz != sizeof(TIMER))
+	{
+		__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME,
+							"Invalid timer ID %08lx in %s (sz=%d, expected=%d)",(unsigned long) timer,
+							__FUNCTION__,timer->sz,sizeof(timer));
+		return;
+	}
+
+	if(timer->enabled)
+		timer->proc(timer->session);
+
+	lib3270_free(timer);
+}
+
+
+
 JNIEXPORT jint JNICALL Java_br_com_bb_pw3270_lib3270_init(JNIEnv *env, jclass obj)
 {
 	H3270	* session	= lib3270_session_new("");
@@ -123,6 +200,7 @@ JNIEXPORT jint JNICALL Java_br_com_bb_pw3270_lib3270_init(JNIEnv *env, jclass ob
 	__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "Initializing session %p",session);
 
 	lib3270_set_popup_handler(popuphandler);
+	lib3270_register_time_handlers(add_timeout,remove_timeout);
 
 	session->write			= write_buffer;
 	session->changed 		= changed;

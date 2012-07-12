@@ -3,27 +3,29 @@ package br.com.bb.pw3270;
 import java.lang.Thread;
 import android.os.Handler;
 import android.os.Message;
+import android.os.CountDownTimer;
 import android.util.Log;
 import javax.net.SocketFactory;
 import java.net.Socket;
 import javax.net.ssl.SSLSocketFactory;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.util.Vector;
 
 public class lib3270
 {
 	private NetworkThread	mainloop;
 	private static final String TAG = "lib3270";
 
-	private boolean 	changed;
-	private boolean 	connected	= false;
+	private boolean 		changed;
+	private boolean 		connected	= false;
 
-	DataOutputStream	outData 	= null;
-	DataInputStream		inData		= null;
+	DataOutputStream		outData 	= null;
+	DataInputStream			inData		= null;
 
-	private String		hostname	= "3270.df.bb";
-	private int			port		= 8023;
-	private boolean		ssl			= false;
+	private String			hostname	= "3270.df.bb";
+	private int				port		= 8023;
+	private boolean			ssl			= false;
 
 	static
 	{
@@ -40,6 +42,34 @@ public class lib3270
 		mainloop = null;
 	}
 
+	private class timer extends CountDownTimer
+	{
+		private long	id;
+		private lib3270	terminal;
+
+		timer(lib3270 session, long timer_id, int msec)
+		{
+			super(msec,msec);
+
+			terminal	= session;
+			id			= timer_id;
+
+			Log.d(TAG,"Timer " + id + " set to " + msec + " ms");
+			
+			this.start();
+		}
+
+		public void onTick(long millisUntilFinished)
+		{
+		}
+
+		public void onFinish()
+		{
+			Log.d(TAG,"Timer " + id + " finished");
+			terminal.timerFinish(id);
+		}
+
+	}
 	private class popupMessageInfo
 	{
 		public String title;
@@ -371,6 +401,14 @@ public class lib3270
 	public native String		getHost();
 	public native boolean		isConnected();
 	public native boolean		isTerminalReady();
+
+	// Timers
+	protected void newTimer(long id, int msec)
+	{
+		new timer(this,id,msec);
+	}
+
+	private native void			timerFinish(long id);
 
 	// Keyboard actions
 	public native void			sendEnter();

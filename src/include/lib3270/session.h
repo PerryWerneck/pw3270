@@ -241,7 +241,7 @@
 		unsigned char			  hisopts[LIB3270_TELNET_N_OPTS];
 
 		// kybd.c
-		unsigned int			  kybdlock;
+		unsigned int			  kybdlock;				/**< keyboard lock state */
 		unsigned char			  aid;					/**< current attention ID */
 		void					* unlock_id;
 		time_t					  unlock_delay_time;

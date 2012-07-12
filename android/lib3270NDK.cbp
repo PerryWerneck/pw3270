@@ -36,6 +36,7 @@
 		<Unit filename="../src/include/lib3270/actions.h" />
 		<Unit filename="../src/include/lib3270/html.h" />
 		<Unit filename="../src/include/lib3270/internals.h" />
+		<Unit filename="../src/include/lib3270/session.h" />
 		<Unit filename="../src/lib3270/html.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -57,6 +58,7 @@
 		<Unit filename="jni/lib3270jni.h" />
 		<Unit filename="jni/main.cpp" />
 		<Unit filename="jni/misc.cpp" />
+		<Unit filename="src/br/com/bb/pw3270/PW3270Activity.java" />
 		<Unit filename="src/br/com/bb/pw3270/lib3270.java" />
 		<Extensions>
 			<code_completion />

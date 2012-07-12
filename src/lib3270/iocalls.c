@@ -614,6 +614,16 @@ void remove_input_calls(H3270 *session)
 	}
 }
 
+LIB3270_EXPORT void lib3270_register_time_handlers(void * (*add)(unsigned long interval_ms, H3270 *session, void (*proc)(H3270 *session)), void (*rm)(void *timer))
+{
+	if(add)
+		add_timeout = add;
+
+	if(rm)
+		remove_timeout = rm;
+
+}
+
 LIB3270_EXPORT int lib3270_register_handlers(const struct lib3270_callbacks *cbk)
 {
 	if(!cbk)
@@ -622,11 +632,7 @@ LIB3270_EXPORT int lib3270_register_handlers(const struct lib3270_callbacks *cbk
 	if(cbk->sz != sizeof(struct lib3270_callbacks))
 		return EINVAL;
 
-	if(cbk->AddTimeOut)
-		add_timeout = cbk->AddTimeOut;
-
-	if(cbk->RemoveTimeOut)
-		remove_timeout = cbk->RemoveTimeOut;
+	lib3270_register_time_handlers(cbk->AddTimeOut,cbk->RemoveTimeOut);
 
 	if(cbk->AddInput)
 		add_input = cbk->AddInput;

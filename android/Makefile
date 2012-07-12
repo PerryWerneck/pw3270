@@ -82,5 +82,5 @@ sigs.txt: bin/classes/$(CLASSPATH)/lib3270.class
 
 jni/lib3270jni.h: bin/classes/$(CLASSPATH)/lib3270.class
 	@echo "  GEN  `basename $@`"
-	@$(JAVAH) -o $@ -classpath bin/classes $(subst /,.,$(CLASSPATH)).lib3270
+	@$(JAVAH) -o $@ -classpath $(ANDROIDSDK)/platforms/android-15/android.jar:bin/classes $(subst /,.,$(CLASSPATH)).lib3270
 
