@@ -54,9 +54,10 @@
 
 #ifndef ANDROID
 	#undef HAVE_LIBSSL
-	#define X3270_TRACE
 	#define X3270_FT
 #endif // ANDROID
+
+	#define X3270_TRACE
 
 	/* #define X3270_PRINTER */
 

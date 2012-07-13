@@ -533,12 +533,16 @@ static void internal_ring_bell(H3270 *session)
 
 void * AddTimeOut(unsigned long interval_ms, H3270 *session, void (*proc)(H3270 *session))
 {
+	void *timer;
 	CHECK_SESSION_HANDLE(session);
-	return add_timeout(interval_ms,session,proc);
+	timer = add_timeout(interval_ms,session,proc);
+	trace("Timeout %p created with %ld ms",timer,interval_ms);
+	return timer;
 }
 
 void RemoveTimeOut(void * timer)
 {
+	trace("Removing timeout %p",timer);
 	return remove_timeout(timer);
 }
 

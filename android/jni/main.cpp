@@ -27,6 +27,9 @@
  */
 
  #include "globals.h"
+ #include <stdio.h>
+ #include <string.h>
+ #include <lib3270/config.h>
  #include <lib3270/popup.h>
  #include <lib3270/internals.h>
 
@@ -126,22 +129,24 @@ static int write_buffer(H3270 *session, unsigned const char *buf, int len)
 	return rc;
 }
 
-static void * add_timeout(unsigned long interval_ms, H3270 *session, void (*proc)(H3270 *session))
+static void * add_timer(unsigned long interval_ms, H3270 *session, void (*proc)(H3270 *session))
 {
+	TIMER * timer = NULL;
+
 	if(session->widget)
 	{
 		JNIEnv		* env			= ((INFO *) session->widget)->env;
 		jobject		  obj 			= ((INFO *) session->widget)->obj;
 		jclass 		  cls 			= env->GetObjectClass(obj);
 		jmethodID	  mid			= env->GetMethodID(cls, "newTimer", "(JI)V");
-		TIMER		* timer 		= (TIMER *) lib3270_malloc(sizeof(TIMER));
 
+		timer			= (TIMER *) lib3270_malloc(sizeof(TIMER));
 		timer->sz		= sizeof(timer);
 		timer->enabled	= true;
 		timer->session  = session;
 		timer->proc		= proc;
 
-		__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "Timer ID %08lx created",(unsigned long) timer);
+		trace("Timer %08lx created",(unsigned long) timer);
 
 		env->CallVoidMethod(obj,mid, (jlong) timer, (jint) interval_ms);
 
@@ -151,19 +156,22 @@ static void * add_timeout(unsigned long interval_ms, H3270 *session, void (*proc
 		__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "Can set timer, no jni env for active session");
 	}
 
-
+	return timer;
 }
 
-static void remove_timeout(void *timer)
+static void remove_timer(void *id)
 {
-	if(timer == NULL || ((TIMER *) timer)->sz != sizeof(TIMER))
+	TIMER *timer = (TIMER *) id;
+
+	if(timer == NULL)
 	{
 		__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "Invalid timer ID %08lx",(unsigned long) timer);
 		return;
 	}
 
-	__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "Removing timeout %d",(int) timer);
-	((TIMER *) timer)->enabled = false;
+	__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "Disabling timer %08lx",(unsigned long) timer);
+
+	timer->enabled = false;
 
 }
 
@@ -177,30 +185,71 @@ JNIEXPORT void JNICALL Java_br_com_bb_pw3270_lib3270_timerFinish(JNIEnv *env, jo
 		return;
 	}
 
-	if(timer->sz != sizeof(TIMER))
-	{
-		__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME,
-							"Invalid timer ID %08lx in %s (sz=%d, expected=%d)",(unsigned long) timer,
-							__FUNCTION__,timer->sz,sizeof(timer));
-		return;
-	}
-
 	if(timer->enabled)
+	{
+		__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "Running timer %08lx",(unsigned long) timer);
 		timer->proc(timer->session);
+	}
 
 	lib3270_free(timer);
 }
 
+#ifdef X3270_TRACE
+static void tracehandler(H3270 *session, const char *fmt, va_list args)
+{
+	static char		* buffer 	= NULL;
+	static int		  szBuffer	= 0;
 
+	char		  	  temp[4096];
+	size_t			  sz;
+	char			* src;
+	char			* dst;
+
+	if(!szBuffer)
+	{
+		buffer = (char *) lib3270_malloc(szBuffer = 4096);
+		*buffer = 0;
+	}
+
+	sz = vsnprintf(temp,4095,fmt,args);
+
+	if( (sz+strlen(buffer)) > szBuffer)
+	{
+		szBuffer += (sz+strlen(buffer)+1);
+		buffer = (char *) lib3270_realloc(buffer,szBuffer);
+	}
+
+	dst = buffer+strlen(buffer);
+	for(src = temp;*src;src++)
+	{
+		if(*src == '\n')
+		{
+			*dst = 0;
+			__android_log_print(ANDROID_LOG_DEBUG, PACKAGE_NAME, "%s", buffer);
+			dst = buffer;
+		}
+		else
+		{
+			*(dst++) = *src;
+		}
+	}
+
+	*dst = 0;
+}
+#endif // X3270_TRACE
 
 JNIEXPORT jint JNICALL Java_br_com_bb_pw3270_lib3270_init(JNIEnv *env, jclass obj)
 {
 	H3270	* session	= lib3270_session_new("");
 
-	__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "Initializing session %p",session);
+	__android_log_print(ANDROID_LOG_DEBUG, PACKAGE_NAME, "Initializing session %p",session);
+
+#ifdef X3270_TRACE
+	lib3270_set_trace_handler(tracehandler);
+#endif // X3270_TRACE
 
 	lib3270_set_popup_handler(popuphandler);
-	lib3270_register_time_handlers(add_timeout,remove_timeout);
+	lib3270_register_time_handlers(add_timer,remove_timer);
 
 	session->write			= write_buffer;
 	session->changed 		= changed;
@@ -263,6 +312,8 @@ JNIEXPORT void JNICALL Java_br_com_bb_pw3270_lib3270_procRecvdata(JNIEnv *env, j
 	trace("Processando %d bytes",(size_t) sz);
 
 	lib3270_data_recv(session, (size_t) sz, netrbuf);
+
+	trace("Liberando %d bytes",(size_t) sz);
 
 	env->ReleaseByteArrayElements(buffer, (signed char *) netrbuf, 0);
 

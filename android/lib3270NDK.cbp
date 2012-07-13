@@ -36,6 +36,7 @@
 		<Unit filename="../src/include/lib3270/actions.h" />
 		<Unit filename="../src/include/lib3270/html.h" />
 		<Unit filename="../src/include/lib3270/internals.h" />
+		<Unit filename="../src/include/lib3270/log.h" />
 		<Unit filename="../src/include/lib3270/session.h" />
 		<Unit filename="../src/lib3270/html.c">
 			<Option compilerVar="CC" />
@@ -48,6 +49,9 @@
 		</Unit>
 		<Unit filename="../src/lib3270/sources.mak" />
 		<Unit filename="../src/lib3270/telnet.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../src/lib3270/trace_ds.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="Makefile" />

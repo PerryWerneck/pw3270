@@ -13,7 +13,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebChromeClient;
-import java.io.InputStream;
+// import java.io.InputStream;
 
 // import android.app.Dialog;
 

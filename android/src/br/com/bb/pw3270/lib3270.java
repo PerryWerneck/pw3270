@@ -10,7 +10,7 @@ import java.net.Socket;
 import javax.net.ssl.SSLSocketFactory;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.util.Vector;
+// import java.util.Vector;
 
 public class lib3270
 {
