@@ -58,7 +58,7 @@
  	GtkWidget				*  toplevel;
  	GObject					*  element;
  	GtkAction				*  action;
- 	GCallback				   callback;
+// 	GCallback				   callback;
  	GtkWidget				*  center_widget;
  	GtkWidget				** popup;			/**< Popup widgets */
  	GStringChunk			*  strings;

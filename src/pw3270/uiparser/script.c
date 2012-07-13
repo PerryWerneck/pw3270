@@ -31,26 +31,42 @@
 
  #include "private.h"
 
+ #ifdef X3270_TRACE
+	#define trace_action(a,w) lib3270_trace_event(NULL,"Action %s activated on widget %p\n",gtk_action_get_name(a),w);
+ #else
+	#define trace_action(a,w) /* */
+ #endif // X3270_TRACE
+
 /*--[ Parser struct ]--------------------------------------------------------------------------------*/
 
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
- static void element_start(GMarkupParseContext *context, const gchar *element_name, const gchar **names,const gchar **values, struct parser *info, GError **error)
+ static void element_start(GMarkupParseContext *context, const gchar *element_name, const gchar **names,const gchar **values, GtkAction *action, GError **error)
  {
  	trace("%s: %s",__FUNCTION__,element_name);
  }
 
- static void element_end(GMarkupParseContext *context, const gchar *element_name, struct parser *info, GError **error)
+ static void element_end(GMarkupParseContext *context, const gchar *element_name, GtkAction *action, GError **error)
  {
  	trace("%s: %s",__FUNCTION__,element_name);
  }
 
- static void script_text(GMarkupParseContext *context, const gchar *element_text, gsize text_len,  GtkAction *action, GError **error)
+ static void text_action(GtkAction *action, const gchar *text)
  {
-	gchar *text = g_strstrip(g_strdup(element_text));
-	g_object_set_data_full(G_OBJECT(action),"script_text",g_strdup(text),g_free);
-	g_free(text);
+	trace("Script:\n%s\n",text);
+ }
+
+ static void script_text(GMarkupParseContext *context, const gchar *element_text, gsize text_len, GtkAction *action, GError **error)
+ {
+ 	gchar *base = g_strstrip(g_strdup(element_text));
+	gchar *text = g_strdup(base);
+	g_free(base);
+
+	gtk_action_set_sensitive(action,TRUE);
+	g_object_set_data_full(G_OBJECT(action),"script_text",text,g_free);
+	g_signal_connect(action,"activate",G_CALLBACK(text_action),text);
+
  }
 
  GObject * ui_create_script(GMarkupParseContext *context,GtkAction *action, struct parser *info, const gchar **names, const gchar **values, GError **error)
@@ -77,15 +93,15 @@
 
  	trace("%s: info->element: %p action: %p",__FUNCTION__,info->element, action);
 
-	if(!info->element)
+	if(!(info->element && info->actions))
 	{
 		*error = g_error_new(ERROR_DOMAIN,EINVAL,_( "<%s> is invalid at this context"),"script");
 		return NULL;
 	}
 
-	trace("%s: Parsing script",__FUNCTION__);
+	trace("%s: Parsing script for action %s",__FUNCTION__,gtk_action_get_name(info->action));
 
-	g_markup_parse_context_push(context,&parser,NULL);
+	g_markup_parse_context_push(context,&parser,info->action);
 
 	return NULL;
  }

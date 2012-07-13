@@ -226,6 +226,7 @@
 	{
 		g_object_set_data(G_OBJECT(widget),"parent",info->element);
 		info->element = G_OBJECT(widget);
+		info->action  = action;
 
 #if GTK_CHECK_VERSION(2,18,0)
 		gtk_widget_set_visible(widget,ui_get_bool_attribute("visible",names,values,TRUE));
@@ -237,12 +238,11 @@
 #endif // GTK(2,18,0)
 
 	}
-/*
 	else
 	{
-		info->disabled++;
+//		info->disabled++;
+		info->action = NULL;
 	}
-*/
  }
 
  static void element_end(GMarkupParseContext *context, const gchar *element_name, struct parser *info, GError **error)
