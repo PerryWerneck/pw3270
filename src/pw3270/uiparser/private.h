@@ -54,9 +54,11 @@
 
  struct parser
  {
- 	int						   disabled;
+// 	int						   disabled;
  	GtkWidget				*  toplevel;
  	GObject					*  element;
+ 	GtkAction				*  action;
+ 	GCallback				   callback;
  	GtkWidget				*  center_widget;
  	GtkWidget				** popup;			/**< Popup widgets */
  	GStringChunk			*  strings;
@@ -73,24 +75,24 @@
  GObject 		* ui_get_element(struct parser *info, GtkAction *action, enum ui_element id, const gchar **names, const gchar **values, GError **error);
  GObject		* ui_insert_element(struct parser *info, GtkAction *action, enum ui_element id, const gchar **names, const gchar **values, GObject *widget, GError **error);
 
- GObject		* ui_create_menubar(GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error);
- GObject		* ui_create_menu(GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error);
- GObject		* ui_create_menuitem(GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error);
- GObject		* ui_create_toolbar(GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error);
- GObject		* ui_create_toolitem(GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error);
- GObject		* ui_create_separator(GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error);
- GObject		* ui_create_accelerator(GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error);
- GObject		* ui_create_popup(GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error);
- GObject		* ui_create_script(GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error);
+ GObject		* ui_create_menubar(GMarkupParseContext *context,GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error);
+ GObject		* ui_create_menu(GMarkupParseContext *context,GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error);
+ GObject		* ui_create_menuitem(GMarkupParseContext *context,GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error);
+ GObject		* ui_create_toolbar(GMarkupParseContext *context,GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error);
+ GObject		* ui_create_toolitem(GMarkupParseContext *context,GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error);
+ GObject		* ui_create_separator(GMarkupParseContext *context,GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error);
+ GObject		* ui_create_accelerator(GMarkupParseContext *context,GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error);
+ GObject		* ui_create_popup(GMarkupParseContext *context,GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error);
+ GObject		* ui_create_script(GMarkupParseContext *context,GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error);
 
- void			  ui_end_menubar(GObject *widget,struct parser *info,GError **error);
- void			  ui_end_menu(GObject *widget,struct parser *info,GError **error);
- void			  ui_end_menuitem(GObject *widget,struct parser *info,GError **error);
- void			  ui_end_toolbar(GObject *widget,struct parser *info,GError **error);
- void			  ui_end_toolitem(GObject *widget,struct parser *info,GError **error);
- void			  ui_end_separator(GObject *widget,struct parser *info,GError **error);
- void			  ui_end_accelerator(GObject *widget,struct parser *info,GError **error);
- void			  ui_end_popup(GObject *widget,struct parser *info,GError **error);
- void			  ui_end_script(GObject *widget,struct parser *info,GError **error);
+ void			  ui_end_menubar(GMarkupParseContext *context,GObject *widget,struct parser *info,GError **error);
+ void			  ui_end_menu(GMarkupParseContext *context,GObject *widget,struct parser *info,GError **error);
+ void			  ui_end_menuitem(GMarkupParseContext *context,GObject *widget,struct parser *info,GError **error);
+ void			  ui_end_toolbar(GMarkupParseContext *context,GObject *widget,struct parser *info,GError **error);
+ void			  ui_end_toolitem(GMarkupParseContext *context,GObject *widget,struct parser *info,GError **error);
+ void			  ui_end_separator(GMarkupParseContext *context,GObject *widget,struct parser *info,GError **error);
+ void			  ui_end_accelerator(GMarkupParseContext *context,GObject *widget,struct parser *info,GError **error);
+ void			  ui_end_popup(GMarkupParseContext *context,GObject *widget,struct parser *info,GError **error);
+ void			  ui_end_script(GMarkupParseContext *context,GObject *widget,struct parser *info,GError **error);
 
  #include "parser.h"

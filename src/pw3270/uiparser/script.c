@@ -36,19 +36,62 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
- GObject * ui_create_script(GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error)
+ static void element_start(GMarkupParseContext *context, const gchar *element_name, const gchar **names,const gchar **values, struct parser *info, GError **error)
  {
-	if(!(info->element && action))
+ 	trace("%s: %s",__FUNCTION__,element_name);
+ }
+
+ static void element_end(GMarkupParseContext *context, const gchar *element_name, struct parser *info, GError **error)
+ {
+ 	trace("%s: %s",__FUNCTION__,element_name);
+ }
+
+ static void script_text(GMarkupParseContext *context, const gchar *element_text, gsize text_len,  GtkAction *action, GError **error)
+ {
+	gchar *text = g_strstrip(g_strdup(element_text));
+	g_object_set_data_full(G_OBJECT(action),"script_text",g_strdup(text),g_free);
+	g_free(text);
+ }
+
+ GObject * ui_create_script(GMarkupParseContext *context,GtkAction *action, struct parser *info, const gchar **names, const gchar **values, GError **error)
+ {
+	static const GMarkupParser parser =
+	{
+		(void (*)(GMarkupParseContext *, const gchar *, const gchar **, const gchar **, gpointer, GError **))
+				element_start,
+		(void (*)(GMarkupParseContext *, const gchar *, gpointer, GError **))
+				element_end,
+		(void (*)(GMarkupParseContext *, const gchar *, gsize, gpointer, GError **))
+				script_text,
+
+//		(void (*)(GMarkupParseContext *, GError *, gpointer))
+		NULL
+
+	};
+
+	if(action)
+	{
+		*error = g_error_new(ERROR_DOMAIN,EINVAL,_( "action attribute is invalid for <%s>"),"script");
+		return NULL;
+	}
+
+ 	trace("%s: info->element: %p action: %p",__FUNCTION__,info->element, action);
+
+	if(!info->element)
 	{
 		*error = g_error_new(ERROR_DOMAIN,EINVAL,_( "<%s> is invalid at this context"),"script");
 		return NULL;
 	}
 
+	trace("%s: Parsing script",__FUNCTION__);
+
+	g_markup_parse_context_push(context,&parser,NULL);
+
 	return NULL;
  }
 
- void ui_end_script(GObject *widget,struct parser *info,GError **error)
+ void ui_end_script(GMarkupParseContext *context,GObject *widget,struct parser *info,GError **error)
  {
-
+ 	g_markup_parse_context_pop(context);
  }
 

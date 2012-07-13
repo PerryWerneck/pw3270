@@ -34,7 +34,7 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
- GObject * ui_create_accelerator(GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error)
+ GObject * ui_create_accelerator(GMarkupParseContext *context,GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error)
  {
  	if(info->element)
 	{
@@ -51,6 +51,6 @@
 	return NULL;
  }
 
- void ui_end_accelerator(GObject *widget,struct parser *info,GError **error)
+ void ui_end_accelerator(GMarkupParseContext *context,GObject *widget,struct parser *info,GError **error)
  {
  }

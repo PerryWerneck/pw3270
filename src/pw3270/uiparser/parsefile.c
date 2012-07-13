@@ -38,8 +38,8 @@
  {
  	const gchar		* name;
  	enum ui_element	  id;
-	GObject 		* (*create)(GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error);
-	void			  (*end)(GObject *widget,struct parser *info,GError **error);
+	GObject 		* (*create)(GMarkupParseContext *context,GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error);
+	void			  (*end)(GMarkupParseContext *context,GObject *widget,struct parser *info,GError **error);
  } element_builder[] =
  {
  	{ "menubar",		UI_ELEMENT_MENUBAR,		ui_create_menubar,		ui_end_menubar		},
@@ -168,12 +168,14 @@
  	GtkWidget		* widget	= NULL;
  	int				  f;
 
+/*
 	if(info->disabled)
 	{
 		info->disabled++;
 		trace("%s: <%s> disabled=%d",__FUNCTION__,element_name,info->disabled);
 		return;
 	}
+*/
 
 	for(f=0;f<G_N_ELEMENTS(element_builder);f++)
 	{
@@ -218,7 +220,7 @@
 	}
 
 	if(!widget)
-		widget = GTK_WIDGET(element_builder[id].create(action,info,names,values,error));
+		widget = GTK_WIDGET(element_builder[id].create(context,action,info,names,values,error));
 
 	if(widget)
 	{
@@ -235,10 +237,12 @@
 #endif // GTK(2,18,0)
 
 	}
+/*
 	else
 	{
 		info->disabled++;
 	}
+*/
  }
 
  static void element_end(GMarkupParseContext *context, const gchar *element_name, struct parser *info, GError **error)
@@ -246,18 +250,20 @@
  	GtkWidget *widget = GTK_WIDGET(info->element);
  	int f;
 
+/*
 	if(info->disabled)
 	{
 		info->disabled--;
 //		trace("%s: <%s> disabled=%d",__FUNCTION__,element_name,info->disabled);
 		return;
 	}
+*/
 
 	for(f=0;f<G_N_ELEMENTS(element_builder);f++)
 	{
 		if(!g_ascii_strcasecmp(element_name,element_builder[f].name))
 		{
-			element_builder[f].end(info->element,info,error);
+			element_builder[f].end(context,info->element,info,error);
 			break;
 		}
 	}
@@ -353,7 +359,7 @@
 	g_free(text);
 
 //	trace("%s exits with rc=%d",__FUNCTION__,rc);
-	info->disabled	= 0;
+//	info->disabled	= 0;
 	if(info->element)
 	{
 		g_object_set_data(G_OBJECT(info->element),"parent",NULL);

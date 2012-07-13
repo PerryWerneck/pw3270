@@ -33,7 +33,7 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
- GObject * ui_create_menubar(GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error)
+ GObject * ui_create_menubar(GMarkupParseContext *context,GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error)
  {
  	if(info->element)
 	{
@@ -50,6 +50,6 @@
 	return ui_insert_element(info, action, UI_ELEMENT_MENUBAR, names, values, G_OBJECT(gtk_menu_bar_new()),error);
  }
 
- void ui_end_menubar(GObject *widget,struct parser *info,GError **error)
+ void ui_end_menubar(GMarkupParseContext *context,GObject *widget,struct parser *info,GError **error)
  {
  }

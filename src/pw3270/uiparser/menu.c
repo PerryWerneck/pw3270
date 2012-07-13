@@ -33,7 +33,7 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
- GObject * ui_create_menu(GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error)
+ GObject * ui_create_menu(GMarkupParseContext *context,GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error)
  {
  	GtkWidget		* widget;
 	GtkWidget 		* menu = GTK_WIDGET(info->element);
@@ -77,6 +77,6 @@
 	return ui_insert_element(info, action, UI_ELEMENT_MENU, names, values, G_OBJECT(widget), error);
  }
 
- void ui_end_menu(GObject *widget,struct parser *info,GError **error)
+ void ui_end_menu(GMarkupParseContext *context,GObject *widget,struct parser *info,GError **error)
  {
  }

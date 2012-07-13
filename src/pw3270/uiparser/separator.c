@@ -33,7 +33,7 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
- GObject * ui_create_separator(GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error)
+ GObject * ui_create_separator(GMarkupParseContext *context,GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error)
  {
  	GtkWidget *widget = NULL;
 
@@ -99,7 +99,7 @@
 	return G_OBJECT(widget);
  }
 
- void ui_end_separator(GObject *widget,struct parser *info,GError **error)
+ void ui_end_separator(GMarkupParseContext *context,GObject *widget,struct parser *info,GError **error)
  {
  }
 

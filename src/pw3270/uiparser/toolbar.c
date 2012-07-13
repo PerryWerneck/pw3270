@@ -48,7 +48,7 @@
 
  }
 
- GObject * ui_create_toolbar(GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error)
+ GObject * ui_create_toolbar(GMarkupParseContext *context,GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error)
  {
  	GtkWidget	* widget	= NULL;
 
@@ -90,6 +90,6 @@
 
  }
 
- void ui_end_toolbar(GObject *widget,struct parser *info,GError **error)
+ void ui_end_toolbar(GMarkupParseContext *context,GObject *widget,struct parser *info,GError **error)
  {
  }

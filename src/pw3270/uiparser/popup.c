@@ -33,7 +33,7 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
- GObject * ui_create_popup(GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error)
+ GObject * ui_create_popup(GMarkupParseContext *context,GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error)
  {
  	GtkWidget	* widget 	= NULL;
  	const gchar * id;
@@ -93,7 +93,7 @@
 	return G_OBJECT(ui_insert_element(info, action, UI_ELEMENT_POPUP, names, values, G_OBJECT(widget), error));
  }
 
- void ui_end_popup(GObject *widget,struct parser *info,GError **error)
+ void ui_end_popup(GMarkupParseContext *context,GObject *widget,struct parser *info,GError **error)
  {
 
  }
