@@ -101,11 +101,11 @@
 	int				  szText;
 	int				  form;
 
-	enum mode
+	enum HTML_MODE
 	{
-		HTML_MODE_TEXT,			/**< Non editable */
-		HTML_MODE_INPUT_TEXT,	/**< Text input */
-		HTML_MODE_INPUT_VALUE,	/**< Value input */
+		HTML_MODE_TEXT,				/**< Non editable */
+		HTML_MODE_INPUT_TEXT,		/**< Text input */
+		HTML_MODE_INPUT_PASSWORD,	/**< Password input */
 		HTML_MODE_INPUT_BUTTON,	/**< Button input (PFkey) */
 	}				  mode;
 
@@ -179,7 +179,7 @@
 
  }
 
- static void open_input(struct html_info *info, int addr, const char *type)
+ static void open_input(struct html_info *info, int addr, enum HTML_MODE mode)
  {
 	char name[30];
 
@@ -188,21 +188,27 @@
 	snprintf(name,29,"F%04d",addr);
 
 	append_string(info,"<input type=\"");
-	append_string(info,type);
+	append_string(info,mode == HTML_MODE_INPUT_TEXT ? "text" : "password" );
 	append_string(info,"\" name=\"");
 	append_string(info,name);
-	append_string(info,"\"");
-	info->mode = HTML_MODE_INPUT_TEXT;
+	append_string(info,"\" value=\"");
+	info->mode = mode;
+	info->maxlength = 0;
+
  }
 
  static void close_input(struct html_info *info)
  {
 	char buffer[80];
+	char *ptr;
 
 	if(info->mode == HTML_MODE_TEXT)
 		return;
 
-	snprintf(buffer,80," maxlength=\"%d\" class=\"IW%03d\"",info->maxlength,info->maxlength);
+	for(ptr = info->text+(strlen(info->text)-1);ptr > info->text && *ptr == ' ';ptr--);
+	*(++ptr) = 0;
+
+	snprintf(buffer,80,"\" maxlength=\"%d\" class=\"IW%03d\"",info->maxlength,info->maxlength);
 	append_string(info,buffer);
 
 	append_string(info,"></input>");
@@ -262,35 +268,9 @@
 					{
 						// Input field
 						unsigned char	  attr = get_field_attribute(session,baddr+col+1);
-						char 			* text = lib3270_get_field_at(session,baddr+col+1);
+						//char 			* text = lib3270_get_field_at(session,baddr+col+1);
 
-						open_input(&info,baddr+col+1,FA_IS_ZERO(attr) ? "password" : "text");
-
-						if(text)
-						{
-							char *ptr = text;
-
-							for(ptr = text; *ptr && (*ptr == ' ' || *ptr == '_'); ptr++);
-
-							if(*ptr)
-							{
-								int f;
-								char * last = ptr;
-
-								for(f=0;ptr[f];f++)
-								{
-									if(ptr[f] > ' ')
-										last = ptr+f+1;
-								}
-								*last = 0;
-
-								append_string(&info," value=\"");
-								append_string(&info,ptr);
-								append_string(&info,"\"");
-							}
-
-							lib3270_free(text);
-						}
+						open_input(&info,baddr+col+1,FA_IS_ZERO(attr) ? HTML_MODE_INPUT_PASSWORD : HTML_MODE_INPUT_TEXT);
 
 					}
 					else if(col < len && session->text[baddr+col+1].chr == 'F')
@@ -331,10 +311,11 @@
 						append_string(&info,"&nbsp;");
 					}
 				}
-				else if(info.mode == HTML_MODE_TEXT)
+				else
 				{
 					// Normal text
-					update_colors(&info,session->text[baddr+col].attr);
+					if(info.mode == HTML_MODE_TEXT)
+						update_colors(&info,session->text[baddr+col].attr);
 
 					if(session->text[baddr+col].attr & LIB3270_ATTR_CG)
 					{
@@ -363,6 +344,10 @@
 						append_char(&info, xlat, session->text[baddr+col].chr);
 
 					}
+					else if(session->text[baddr+col].chr == ' ')
+					{
+						append_string(&info,info.mode == HTML_MODE_TEXT ? "&nbsp;" : " ");
+					}
 					else
 					{
 						static const struct chr_xlat xlat[] =
@@ -371,17 +356,15 @@
 							{ '&',	"&amp;"		},
 							{ '<',	"&lt;"		},
 							{ '>',	"&gt;"		},
-							{ ' ',	"&nbsp;"	},
 
 							{ 0x00, NULL		}
 						};
+
 						append_char(&info, xlat, session->text[baddr+col].chr);
 					}
-				}
-				else
-				{
-					// Input contents
+
 					info.maxlength++;
+
 				}
 			}
 		}
