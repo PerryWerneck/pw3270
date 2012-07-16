@@ -99,6 +99,7 @@
  struct html_info
  {
 	int				  szText;
+	int				  form;
 
 	enum mode
 	{
@@ -181,6 +182,8 @@
  static void open_input(struct html_info *info, int addr, const char *type)
  {
 	char name[30];
+
+	info->form = 1;
 
 	snprintf(name,29,"F%04d",addr);
 
@@ -388,8 +391,24 @@
 	if(info.fg != 0xFF)
 		append_string(&info,element_text[HTML_ELEMENT_END_COLOR]);
 
+
 	if(option & LIB3270_HTML_OPTION_HEADERS)
 		append_element(&info,HTML_ELEMENT_FOOTER);
+
+	if(info.form)
+	{
+		static const char * prefix  = "<form name=\"" PACKAGE_NAME "\">";
+		static const char * suffix	= "</form>";
+		char *text = info.text;
+
+		info.text = lib3270_malloc(strlen(prefix)+strlen(suffix)+strlen(text)+4);
+
+		strcpy(info.text,prefix);
+		strcat(info.text,text);
+		strcat(info.text,suffix);
+
+		lib3270_free(text);
+	}
 
 	return lib3270_realloc(info.text,strlen(info.text)+2);
  }

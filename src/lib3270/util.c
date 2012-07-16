@@ -179,7 +179,7 @@ char * lib3270_vsprintf(const char *fmt, va_list args)
 	char buf[16384];
 	int nc;
 
-	nc = vsprintf(buf, fmt, args);
+	nc = vsnprintf(buf, sizeof(buf), fmt, args);
 	if (nc > sizeof(buf))
 		Error(NULL,"Internal buffer overflow");
 	r = lib3270_malloc(nc + 1);
