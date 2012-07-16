@@ -110,6 +110,8 @@
 	}				  mode;
 
 	char			* text;
+	char			* input;
+	char			* block;
 	int 			  maxlength;
 	unsigned short	  fg;
 	unsigned short	  bg;
@@ -187,6 +189,8 @@
 
 	snprintf(name,29,"F%04d",addr);
 
+	info->block = info->text+strlen(info->text);
+
 	append_string(info,"<input type=\"");
 	append_string(info,mode == HTML_MODE_INPUT_TEXT ? "text" : "password" );
 	append_string(info,"\" name=\"");
@@ -194,6 +198,7 @@
 	append_string(info,"\" value=\"");
 	info->mode = mode;
 	info->maxlength = 0;
+	info->input = info->text+strlen(info->text);
 
  }
 
@@ -201,12 +206,25 @@
  {
 	char buffer[80];
 	char *ptr;
+	char *mark;
 
 	if(info->mode == HTML_MODE_TEXT)
 		return;
 
-	for(ptr = info->text+(strlen(info->text)-1);ptr > info->text && *ptr == ' ';ptr--);
-	*(++ptr) = 0;
+	if(info->maxlength < 1)
+	{
+		*info->block = 0;
+		info->mode = HTML_MODE_TEXT;
+		info->maxlength = 0;
+		return;
+	}
+
+	for(ptr=mark=info->input;*ptr;ptr++)
+	{
+		if(*ptr != ' ')
+			mark=ptr+1;
+	}
+	*mark = 0;
 
 	snprintf(buffer,80,"\" maxlength=\"%d\" class=\"IW%03d\"",info->maxlength,info->maxlength);
 	append_string(info,buffer);
@@ -373,13 +391,24 @@
 
 		if(info.mode != HTML_MODE_TEXT)
 		{
-			#warning Incluir o tratamento correto
-			close_input(&info);
-		}
+			enum HTML_MODE mode = info.mode;
 
-		if(cr || (option && LIB3270_HTML_OPTION_ALL))
+			close_input(&info);
+
+			if(cr)
+				append_element(&info,HTML_ELEMENT_LINE_BREAK);
+
+			open_input(&info,baddr,mode);
+
+		}
+		else if(cr)
+		{
 			append_element(&info,HTML_ELEMENT_LINE_BREAK);
+		}
 	}
+
+	if(info.mode != HTML_MODE_TEXT)
+		close_input(&info);
 
 	if(info.fg != 0xFF)
 		append_string(&info,element_text[HTML_ELEMENT_END_COLOR]);
