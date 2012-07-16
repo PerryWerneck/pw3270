@@ -178,13 +178,15 @@
 
  }
 
- static void open_input(struct html_info *info, int addr)
+ static void open_input(struct html_info *info, int addr, const char *type)
  {
 	char name[30];
 
 	snprintf(name,29,"F%04d",addr);
 
-	append_string(info,"<input type=\"text\" name=\"");
+	append_string(info,"<input type=\"");
+	append_string(info,type);
+	append_string(info,"\" name=\"");
 	append_string(info,name);
 	append_string(info,"\"");
 	info->mode = HTML_MODE_INPUT_TEXT;
@@ -256,9 +258,10 @@
 					if(!FA_IS_PROTECTED(fa))
 					{
 						// Input field
-						char *text = lib3270_get_field_at(session,baddr+col+1);
+						unsigned char	  attr = get_field_attribute(session,baddr+col+1);
+						char 			* text = lib3270_get_field_at(session,baddr+col+1);
 
-						open_input(&info,baddr+col+1);
+						open_input(&info,baddr+col+1,FA_IS_ZERO(attr) ? "password" : "text");
 
 						if(text)
 						{

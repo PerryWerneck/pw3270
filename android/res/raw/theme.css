@@ -26,13 +26,42 @@ input
 	margin-right: 0.5em;
 }
 
+input:focus
+{
+	outline:none;
+}
+
 input[type="text"]
 {
 	border: 1px solid #004000
 }
 
+input[type="text"]:focus
+{
+	border: 1px solid #008000
+}
+
+input[type="password"]
+{
+	border: 1px solid #400000
+}
+
+input[type="password"]:focus
+{
+	border: 1px solid #800000
+}
+
+#terminal
+{
+	z-index: 10;
+	background-color: black;
+}
+
 #pfbar
 {
+	z-index: -1;
+	position: fixed;
+	bottom: 1px;
 	width: 49em;
 	background: black;
 	color: white;
@@ -57,6 +86,7 @@ a
 	font-size: 15px;
 	font-family: arial;
 	display: inline-block;
+	border-radius: 3px;
 }
 
 .IW001
@@ -458,6 +488,3 @@ a
 {
 	width: 41em;
 }
-
-
-
