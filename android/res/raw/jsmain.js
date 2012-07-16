@@ -17,7 +17,17 @@ function pfkey(id)
 
 function xmit()
 {
-	pw3270.xmit();
+	var form = document.getElementById("form3270");
+
+	for(var i=0;i < form.elements.length;i++)
+	{
+		if(form.elements[i].name.substr(0,1) == "F")
+		{
+			var offset = parseInt(form.elements[i].name.substr(1,4));
+			alert("offset="+offset+" \""+form.elements[i].value+"\"");
+			pw3270.setStringAt(offset,form.elements[i].value);
+		}
+	}
 	return false;
 }
 
@@ -25,4 +35,3 @@ function eraseinput()
 {
 	return false;
 }
-

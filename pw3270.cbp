@@ -53,6 +53,7 @@
 		<Unit filename="configure.ac" />
 		<Unit filename="pw3270.spec.in" />
 		<Unit filename="src/include/lib3270.h" />
+		<Unit filename="src/include/lib3270/3270ds.h" />
 		<Unit filename="src/include/lib3270/action_table.h" />
 		<Unit filename="src/include/lib3270/actions.h" />
 		<Unit filename="src/include/lib3270/config.h.in" />

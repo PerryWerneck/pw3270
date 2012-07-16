@@ -60,8 +60,6 @@ input[type="password"]:focus
 #pfbar
 {
 	z-index: -1;
-	position: fixed;
-	bottom: 1px;
 	width: 49em;
 	background: black;
 	color: white;

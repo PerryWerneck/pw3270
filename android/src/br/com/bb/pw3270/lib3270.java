@@ -55,7 +55,7 @@ public class lib3270
 			id			= timer_id;
 
 			Log.d(TAG,"Timer " + id + " set to " + msec + " ms");
-			
+
 			this.start();
 		}
 
@@ -380,6 +380,15 @@ public class lib3270
     	return 0;
     }
 
+   	public void	setStringAt(int offset, String str)
+   	{
+   		try
+   		{
+			setTextAt(offset,str.getBytes(getEncoding()),str.length());
+   		} catch( Exception e ) { }
+   	}
+
+
     /*---[ Native calls ]----------------------------------------------------*/
 	static private native int	init();
 
@@ -417,6 +426,7 @@ public class lib3270
 	// Get/Set screen contents
 	public native byte[]		getHTML();
 	public native byte[]		getText();
+	public native void			setTextAt(int offset, byte[] str, int len);
 
 
 }

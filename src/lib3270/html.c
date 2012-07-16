@@ -274,6 +274,16 @@
 
 							if(*ptr)
 							{
+								int f;
+								char * last = ptr;
+
+								for(f=0;ptr[f];f++)
+								{
+									if(ptr[f] > ' ')
+										last = ptr+f+1;
+								}
+								*last = 0;
+
 								append_string(&info," value=\"");
 								append_string(&info,ptr);
 								append_string(&info,"\"");
@@ -397,7 +407,7 @@
 
 	if(info.form)
 	{
-		static const char * prefix  = "<form name=\"" PACKAGE_NAME "\">";
+		static const char * prefix  = "<form name=\"" PACKAGE_NAME "\" id=\"form3270\" >";
 		static const char * suffix	= "</form>";
 		char *text = info.text;
 

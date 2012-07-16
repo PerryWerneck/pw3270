@@ -18,7 +18,7 @@
  * programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple
  * Place, Suite 330, Boston, MA, 02111-1307, USA
  *
- * Este programa está nomeado como main.cpp e possui - linhas de código.
+ * Este programa está nomeado como text.cpp e possui - linhas de código.
  *
  * Contatos:
  *
@@ -109,4 +109,28 @@ JNIEXPORT jbyteArray JNICALL Java_br_com_bb_pw3270_lib3270_getText(JNIEnv *env, 
 	session_release();
 
 	return ret;
+}
+
+JNIEXPORT void JNICALL Java_br_com_bb_pw3270_lib3270_setTextAt(JNIEnv *env, jobject obj, jint pos, jbyteArray inText, jint szText)
+{
+	char 	  str[szText+1];
+	int  	  f;
+	jbyte	* bt;
+
+
+	session_request(env,obj);
+
+	if(!session)
+		return;
+
+	bt = env->GetByteArrayElements(inText,0);
+
+	for(int f=0;f<szText;f++)
+		str[f] = (char) bt[f];
+	str[szText] = 0;
+
+	trace("Buffer(%d)=\"%s\"",(int) pos, str);
+
+	env->ReleaseByteArrayElements(inText,bt,JNI_ABORT);
+	session_release();
 }
