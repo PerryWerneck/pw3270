@@ -331,20 +331,6 @@
 		#define find_field_attribute(s,a) lib3270_field_addr(s,a)
 		#define find_field_length(s,a) find_field_length(s,a)
 
-		/**
-		 * Find the buffer address of the field attribute for a given buffer address.
-		 *
-		 * @param h		Session handle.
-		 * @param addr	Buffer address of the field.
-		 *
-		 * @return field address or -1 if the screen isn't formatted.
-		 *
-		 */
-		LIB3270_EXPORT int lib3270_field_addr(H3270 *h, int baddr);
-
-		LIB3270_EXPORT int lib3270_field_length(H3270 *session, int baddr);
-
-
 		LOCAL_EXTERN unsigned char get_field_attribute(H3270 *session, int baddr);
 //		LOCAL_EXTERN int screen_read(char *dest, int baddr, int count);
 		LOCAL_EXTERN void Input_String(const unsigned char *str);

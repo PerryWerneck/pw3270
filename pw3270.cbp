@@ -46,6 +46,7 @@
 		<Unit filename="android/jni/globals.h" />
 		<Unit filename="android/jni/main.cpp" />
 		<Unit filename="android/jni/misc.cpp" />
+		<Unit filename="android/jni/text.cpp" />
 		<Unit filename="android/src/br/com/bb/pw3270/PW3270Activity.java" />
 		<Unit filename="android/src/br/com/bb/pw3270/lib3270.java" />
 		<Unit filename="autogen.sh" />

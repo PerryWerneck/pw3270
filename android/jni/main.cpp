@@ -165,7 +165,7 @@ static void remove_timer(void *id)
 
 	if(timer == NULL)
 	{
-		__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "Invalid timer ID %08lx",(unsigned long) timer);
+//		__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "Invalid timer ID %08lx",(unsigned long) timer);
 		return;
 	}
 
@@ -181,7 +181,7 @@ JNIEXPORT void JNICALL Java_br_com_bb_pw3270_lib3270_timerFinish(JNIEnv *env, jo
 
 	if(timer == NULL)
 	{
-		__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "Unexpected call to %s: No timer ID",__FUNCTION__);
+//		__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "Unexpected call to %s: No timer ID",__FUNCTION__);
 		return;
 	}
 

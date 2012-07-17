@@ -33,22 +33,22 @@ input:focus
 
 input[type="text"]
 {
-	border: 1px solid #004000
+	background-color: #101010;
 }
 
 input[type="text"]:focus
 {
-	border: 1px solid #008000
+	background-color: #101010;
 }
 
 input[type="password"]
 {
-	border: 1px solid #400000
+	background-color: #101010;
 }
 
 input[type="password"]:focus
 {
-	border: 1px solid #800000
+	background-color: #101010;
 }
 
 #terminal
@@ -294,7 +294,7 @@ a
 
 .IW042
 {
-	width: 22em;
+	width: 25.5em;
 }
 
 .IW043
@@ -484,5 +484,7 @@ a
 
 .IW080
 {
-	width: 41em;
+	margin-left: 0px;
+	margin-right: 0px;
+	width: 48em;
 }

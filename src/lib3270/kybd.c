@@ -180,7 +180,7 @@ static struct ta
 
 static const char dxl[] = "0123456789abcdef";
 #define FROM_HEX(c)	(strchr(dxl, tolower(c)) - dxl)
-#define KYBDLOCK_IS_OERR	(h3270.kybdlock && !(h3270.kybdlock & ~KL_OERR_MASK))
+#define KYBDLOCK_IS_OERR(hSession)	(hSession->kybdlock && !(hSession->kybdlock & ~KL_OERR_MASK))
 
 
 /*
@@ -379,26 +379,26 @@ kybdlock_set(unsigned int bits, const char *cause unused)
 	}
 }
 
-/* Clear bits in the keyboard lock. */
-void
-kybdlock_clr(H3270 *session, unsigned int bits, const char *cause unused)
+/**
+ * Clear bits in the keyboard lock.
+ *
+ */
+void lib3270_kybdlock_clear(H3270 *hSession, LIB3270_KL_STATE bits)
 {
-	unsigned int n;
+	unsigned int n = hSession->kybdlock & ~( (unsigned int) bits);
 
-	n = session->kybdlock & ~bits;
-
-	if (n != session->kybdlock)
+	if (n != hSession->kybdlock)
 	{
 #if defined(KYBDLOCK_TRACE)
-		trace_event("  %s: kybdlock &= ~0x%04x, 0x%04x -> 0x%04x\n",cause, bits, kybdlock, n);
+		trace_event("  %s: kybdlock &= ~0x%04x, 0x%04x -> 0x%04x\n", __FUNCTION__, bits, kybdlock, n);
 #endif
-		if ((session->kybdlock ^ n) & KL_DEFERRED_UNLOCK)
+		if ((hSession->kybdlock ^ n) & KL_DEFERRED_UNLOCK)
 		{
 			/* Turned off deferred unlock. */
-			session->unlock_delay_time = 0;
+			hSession->unlock_delay_time = 0;
 		}
-		session->kybdlock = n;
-		status_changed(session,LIB3270_STATUS_KYBDLOCK);
+		hSession->kybdlock = n;
+		status_changed(hSession,LIB3270_STATUS_KYBDLOCK);
 	}
 }
 
@@ -1399,11 +1399,14 @@ LIB3270_KEY_ACTION( tab )
 
 //	reset_idle_timer();
 
-	if (hSession->kybdlock) {
-		if (KYBDLOCK_IS_OERR) {
+	if (hSession->kybdlock)
+	{
+		if(KYBDLOCK_IS_OERR(hSession))
+		{
 			kybdlock_clr(hSession,KL_OERR_MASK, "Tab");
 			status_reset(hSession);
-		} else {
+		} else
+		{
 			ENQUEUE_ACTION(lib3270_tab);
 			return 0;
 		}
@@ -1418,6 +1421,20 @@ LIB3270_KEY_ACTION( tab )
 	return 0;
 }
 
+LIB3270_EXPORT int lib3270_clear_operator_error(H3270 *hSession)
+{
+	if(!hSession->kybdlock)
+		return ENOENT;
+
+	if(KYBDLOCK_IS_OERR(hSession))
+	{
+		lib3270_kybdlock_clear(hSession,KL_OERR_MASK);
+		status_reset(hSession);
+		return 0;
+	}
+	return EINVAL;
+}
+
 
 /*
  * Tab backward to previous field.
@@ -1429,11 +1446,15 @@ LIB3270_KEY_ACTION( backtab )
 
 //	reset_idle_timer();
 
-	if (hSession->kybdlock) {
-		if (KYBDLOCK_IS_OERR) {
+	if (hSession->kybdlock)
+	{
+		if (KYBDLOCK_IS_OERR(hSession))
+		{
 			kybdlock_clr(hSession,KL_OERR_MASK, "BackTab");
 			status_reset(hSession);
-		} else {
+		}
+		else
+		{
 			ENQUEUE_ACTION(lib3270_backtab);
 			return 0;
 		}
@@ -1602,7 +1623,7 @@ LIB3270_CURSOR_ACTION( left )
 {
 	if (hSession->kybdlock)
 	{
-		if (KYBDLOCK_IS_OERR)
+		if(KYBDLOCK_IS_OERR(hSession))
 		{
 			kybdlock_clr(hSession,KL_OERR_MASK, "Left");
 			status_reset(&h3270);
@@ -1865,7 +1886,7 @@ LIB3270_CURSOR_ACTION( right )
 
 	if (hSession->kybdlock)
 	{
-		if (KYBDLOCK_IS_OERR)
+		if (KYBDLOCK_IS_OERR(hSession))
 		{
 			kybdlock_clr(hSession,KL_OERR_MASK, "Right");
 			status_reset(hSession);
@@ -2093,8 +2114,9 @@ LIB3270_CURSOR_ACTION( up )
 	register int	baddr;
 
 //	reset_idle_timer();
-	if (hSession->kybdlock) {
-		if (KYBDLOCK_IS_OERR)
+	if (hSession->kybdlock)
+	{
+		if (KYBDLOCK_IS_OERR(hSession))
 		{
 			kybdlock_clr(hSession,KL_OERR_MASK, "Up");
 			status_reset(hSession);
@@ -2132,7 +2154,7 @@ LIB3270_CURSOR_ACTION( down )
 //	reset_idle_timer();
 	if (hSession->kybdlock)
 	{
-		if (KYBDLOCK_IS_OERR)
+		if (KYBDLOCK_IS_OERR(hSession))
 		{
 			kybdlock_clr(hSession,KL_OERR_MASK, "Down");
 			status_reset(hSession);

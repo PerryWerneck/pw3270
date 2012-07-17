@@ -730,7 +730,39 @@
 	 */
 	LIB3270_EXPORT char * lib3270_get_text(H3270 *h, int offset, int len);
 
-	LIB3270_EXPORT char * lib3270_get_field_at(H3270 *session, int baddr);
+	/**
+	 * Get contents of the field at position.
+	 *
+	 * @param h			Session Handle.
+	 * @param baddr		Reference position.
+	 *
+	 * @return Contents of the entire field, release it with lib3270_free()
+	 *
+	 */
+	LIB3270_EXPORT char * lib3270_get_field_at(H3270 *h, int baddr);
+
+	/**
+	 * Find the buffer address of the field attribute for a given buffer address.
+	 *
+	 * @param h		Session handle.
+	 * @param addr	Buffer address of the field.
+	 *
+	 * @return field address or -1 if the screen isn't formatted.
+	 *
+	 */
+	LIB3270_EXPORT int lib3270_field_addr(H3270 *h, int baddr);
+
+	/**
+	 * Get the length of the field at given buffer address.
+	 *
+	 * @param h		Session handle.
+	 * @param addr	Buffer address of the field.
+	 *
+	 * @return field length.
+	 *
+	 */
+	LIB3270_EXPORT int lib3270_field_length(H3270 *h, int baddr);
+
 
 	/**
 	 * Get a terminal character and attribute.
@@ -817,6 +849,8 @@
 	LIB3270_EXPORT const char * lib3270_get_revision(void);
 
 	LIB3270_EXPORT char * lib3270_vsprintf(const char *fmt, va_list args);
+
+	LIB3270_EXPORT int lib3270_clear_operator_error(H3270 *hSession);
 
 	LIB3270_EXPORT void lib3270_trace_event(H3270 *session, const char *fmt, ...);
 	LIB3270_EXPORT void lib3270_set_trace_handler( void (*handler)(H3270 *session, const char *fmt, va_list args) );

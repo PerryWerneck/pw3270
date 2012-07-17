@@ -38,6 +38,9 @@
 		<Unit filename="../src/include/lib3270/internals.h" />
 		<Unit filename="../src/include/lib3270/log.h" />
 		<Unit filename="../src/include/lib3270/session.h" />
+		<Unit filename="../src/lib3270/ctlr.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="../src/lib3270/html.c">
 			<Option compilerVar="CC" />
 		</Unit>

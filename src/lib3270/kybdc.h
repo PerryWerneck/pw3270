@@ -61,7 +61,11 @@
 	LIB3270_INTERNAL void clear_xks(void);
 	LIB3270_INTERNAL void do_reset(H3270 *session, Boolean explicit);
 	LIB3270_INTERNAL void hex_input(char *s);
-	LIB3270_INTERNAL void kybdlock_clr(H3270 *session, unsigned int bits, const char *cause);
+
+	#define kybdlock_clr(session, bits, cause) lib3270_kybdlock_clear(session, bits)
+	LIB3270_INTERNAL void lib3270_kybdlock_clear(H3270 *hSession, LIB3270_KL_STATE bits);
+
+
 	LIB3270_INTERNAL void kybd_inhibit(H3270 *session, Boolean inhibit);
 	LIB3270_INTERNAL void kybd_init(void);
 	LIB3270_INTERNAL int kybd_prime(void);

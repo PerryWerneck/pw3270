@@ -19,6 +19,7 @@ public class lib3270
 
 	private boolean 		changed;
 	private boolean 		connected	= false;
+	private boolean			refresh		= true;
 
 	DataOutputStream		outData 	= null;
 	DataInputStream			inData		= null;
@@ -289,7 +290,8 @@ public class lib3270
         	case 2: // Screen changed
         		Log.d(TAG,"Screen changed");
 				changed = true;
-				redraw();
+        		if(refresh)
+					redraw();
         		break;
 
         	case 3:	// Popup
@@ -382,10 +384,12 @@ public class lib3270
 
    	public void	setStringAt(int offset, String str)
    	{
+   		refresh = false;
    		try
    		{
 			setTextAt(offset,str.getBytes(getEncoding()),str.length());
    		} catch( Exception e ) { }
+   		refresh = true;
    	}
 
 
