@@ -19,12 +19,15 @@ function xmit()
 {
 	var form = document.getElementById("form3270");
 
-	for(var i=0;i < form.elements.length;i++)
+	if(form != undefined)
 	{
-		if(form.elements[i].name.substr(0,1) == "F")
+		for(var i=0;i < form.elements.length;i++)
 		{
-			var offset = parseInt(form.elements[i].name.substr(1,4));
-			pw3270.setStringAt(offset,form.elements[i].value);
+			if(form.elements[i].name.substr(0,1) == "F")
+			{
+				var offset = parseInt(form.elements[i].name.substr(1),10);
+				pw3270.setStringAt(offset,form.elements[i].value);
+			}
 		}
 	}
 	

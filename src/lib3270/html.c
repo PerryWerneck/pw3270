@@ -317,7 +317,9 @@
 									append_string(&info,"\" value=\"");
 									append_string(&info,ptr);
 									append_string(&info,"\"");
-									info.mode = HTML_MODE_INPUT_BUTTON;
+									info.mode  = HTML_MODE_INPUT_BUTTON;
+									info.input = info.text+strlen(info.text);
+
 								}
 							}
 							lib3270_free(text);
