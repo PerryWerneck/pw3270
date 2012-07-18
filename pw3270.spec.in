@@ -137,6 +137,7 @@ rm -rf $RPM_BUILD_ROOT
 %files -f langfiles
 %defattr(-,root,root)
 %doc AUTHORS LICENSE
+%{_mandir}/*/*
 
 # Main application
 %dir %{_datadir}/@PACKAGE_NAME@
