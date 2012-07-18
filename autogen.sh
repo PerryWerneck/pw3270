@@ -10,6 +10,8 @@ if test -e revision ; then
 	. revision
 fi
 
+touch ChangeLog
+
 SVN=`which svn 2> /dev/null`
 
 if test -x "$SVN" ; then
@@ -23,6 +25,11 @@ if test -x "$SVN" ; then
 	fi
 
 	rm -f $TEMPFILE
+
+	if [ -x updateChangeLog.sh ]; then
+		./updateChangeLog.sh
+	fi
+
 fi
 
 if test -z $PACKAGE_REVISION ; then
