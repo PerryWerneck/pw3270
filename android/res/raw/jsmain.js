@@ -1,4 +1,26 @@
 
+function setupButtons()
+{
+	var form = document.getElementById("form3270");
+
+	if(form == undefined)
+		return;
+
+	for(var i=0;i < form.elements.length;i++)
+	{
+		if(form.elements[i].name.substr(0,2) == "PF")
+		{
+			form.elements[i].pfkey = parseInt(form.elements[i].name.substr(3));
+			
+			form.elements[i].onclick = function()
+			{
+				pw3270.pfkey(this.pfkey);
+			}
+		}
+	}
+
+}
+
 function initialize()
 {
 	updateScreen();
@@ -7,6 +29,7 @@ function initialize()
 function updateScreen()
 {
 	document.getElementById("terminal").innerHTML = pw3270.getscreencontents();
+	setupButtons();
 }
 
 function pfkey(id)
@@ -30,9 +53,9 @@ function xmit()
 			}
 		}
 	}
-	
+
 	pw3270.sendEnter();
-	
+
 	return false;
 }
 

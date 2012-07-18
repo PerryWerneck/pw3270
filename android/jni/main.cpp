@@ -61,11 +61,6 @@ static void post_message(H3270 *session, int msgid, int arg1 = 0, int arg2 = 0)
 	}
 }
 
-static void update_status(H3270 *session, LIB3270_MESSAGE id)
-{
-	post_message(session,1,id);
-}
-
 static void changed(H3270 *session, int offset, int len)
 {
 	post_message(session,2,offset,len);
@@ -253,7 +248,6 @@ JNIEXPORT jint JNICALL Java_br_com_bb_pw3270_lib3270_init(JNIEnv *env, jclass ob
 
 	session->write			= write_buffer;
 	session->changed 		= changed;
-	session->update_status 	= update_status;
 	session->erase			= erase;
 	session->ctlr_done		= ctlr_done;
 

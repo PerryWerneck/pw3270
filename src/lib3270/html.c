@@ -316,8 +316,9 @@
 									append_string(&info,name);
 									append_string(&info,"\" value=\"");
 									append_string(&info,ptr);
-									append_string(&info,"\"");
+									append_string(&info,"\" />");
 									info.mode  = HTML_MODE_INPUT_BUTTON;
+									info.maxlength = 0;
 									info.input = info.text+strlen(info.text);
 
 								}
@@ -331,7 +332,7 @@
 						append_string(&info,"&nbsp;");
 					}
 				}
-				else
+				else if(info.mode != HTML_MODE_INPUT_BUTTON)
 				{
 					// Normal text
 					if(info.mode == HTML_MODE_TEXT)
