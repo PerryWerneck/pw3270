@@ -56,4 +56,6 @@
 	gboolean	  ui_get_bool_attribute(const gchar *key, const gchar **name, const gchar **value, gboolean def);
 	GtkAction	* ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash, const gchar **names, const gchar **values, GError **error);
 
+	void		  ui_connect_text_script(GtkWidget *widget, GtkAction *action, const gchar *script_text, GError **error);
+
 #endif // UI_PARSER_H_INCLUDED

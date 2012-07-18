@@ -16,8 +16,8 @@
  obter mais detalhes.
 
  Você deve ter recebido uma cópia da Licença Pública Geral GNU junto com este
- programa; se não, escreva para a Free Software Foundation, Inc., 51 Franklin 
- St, Fifth Floor, Boston, MA  02110-1301  USA 
+ programa; se não, escreva para a Free Software Foundation, Inc., 51 Franklin
+ St, Fifth Floor, Boston, MA  02110-1301  USA
 
 
  Contatos:
@@ -184,8 +184,8 @@
 		<menuitem action='print' src='copy'/>
 
 		<separator />
-		<menuitem action='backtab' label='Previous field' />
-		<menuitem action='tab' label='Next field'/>
+		<menuitem action='previousfield' label='Previous field' />
+		<menuitem action='nextfield' label='Next field'/>
 		<menuitem name="return" action='activate' label='Return' key='Return' />
 
 		<separator />
@@ -232,8 +232,8 @@
 	<accelerator action='move' target='cursor' direction='up' key='Up' group='online' />
 	<accelerator action='move' target='cursor' direction='down' key='Down' group='online' />
 
-	<accelerator action='PreviousField' key='ISO_Left_Tab' group='online' label='Previous field' />
-	<accelerator action='NextField' key='Tab' group='online' label='Next field'/>
+	<accelerator action='previousfield' key='ISO_Left_Tab' group='online' label='Previous field' />
+	<accelerator action='nextfield' key='Tab' group='online' label='Next field'/>
 
 	<accelerator action='dup' key='<Shift>KP_Multiply' group='online' />
 

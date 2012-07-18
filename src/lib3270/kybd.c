@@ -1394,7 +1394,7 @@ Tab_action(Widget w unused, XEvent *event, String *params, Cardinal *num_params)
 }
 */
 
-LIB3270_KEY_ACTION( tab )
+LIB3270_ACTION( nextfield )
 {
 
 //	reset_idle_timer();
@@ -1407,7 +1407,7 @@ LIB3270_KEY_ACTION( tab )
 			status_reset(hSession);
 		} else
 		{
-			ENQUEUE_ACTION(lib3270_tab);
+			ENQUEUE_ACTION(lib3270_nextfield);
 			return 0;
 		}
 	}
@@ -1439,7 +1439,7 @@ LIB3270_EXPORT int lib3270_clear_operator_error(H3270 *hSession)
 /*
  * Tab backward to previous field.
  */
-LIB3270_KEY_ACTION( backtab )
+LIB3270_ACTION( previousfield )
 {
 	register int	baddr, nbaddr;
 	int		sbaddr;
@@ -1455,7 +1455,7 @@ LIB3270_KEY_ACTION( backtab )
 		}
 		else
 		{
-			ENQUEUE_ACTION(lib3270_backtab);
+			ENQUEUE_ACTION(lib3270_previousfield);
 			return 0;
 		}
 	}
@@ -3020,7 +3020,7 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *session, char *s, int len, int p
 			    case '\r':	/* ignored */
 				break;
 			    case '\t':
-			    lib3270_tab(session);
+			    lib3270_nextfield(session);
 				skipped = False;
 				break;
 			    case '\\':	/* backslashes are NOT special when
@@ -3106,12 +3106,12 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *session, char *s, int len, int p
 					break;
 
 			    case 't':
-			    lib3270_tab(session);
+			    lib3270_nextfield(session);
 				skipped = False;
 				state = BASE;
 				break;
 			    case 'T':
-			    lib3270_tab(session);
+			    lib3270_nextfield(session);
 				skipped = False;
 				state = BASE;
 				break;

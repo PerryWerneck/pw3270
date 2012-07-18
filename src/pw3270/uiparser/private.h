@@ -54,11 +54,10 @@
 
  struct parser
  {
-// 	int						   disabled;
  	GtkWidget				*  toplevel;
  	GObject					*  element;
  	GtkAction				*  action;
-// 	GCallback				   callback;
+ 	GtkAction				*  script_action;
  	GtkWidget				*  center_widget;
  	GtkWidget				** popup;			/**< Popup widgets */
  	GStringChunk			*  strings;

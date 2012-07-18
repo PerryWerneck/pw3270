@@ -95,8 +95,8 @@
 		{ GDK_Up,				0,					lib3270_cursor_up		},
 		{ GDK_Right,			0,					lib3270_cursor_right	},
 		{ GDK_Down,				0,					lib3270_cursor_down		},
-		{ GDK_Tab,				0,					lib3270_tab				},
-		{ GDK_ISO_Left_Tab,		GDK_SHIFT_MASK,		lib3270_backtab			},
+		{ GDK_Tab,				0,					lib3270_nextfield		},
+		{ GDK_ISO_Left_Tab,		GDK_SHIFT_MASK,		lib3270_previousfield	},
 		{ GDK_KP_Left,			0,					lib3270_cursor_left		},
 		{ GDK_KP_Up,			0,					lib3270_cursor_up		},
 		{ GDK_KP_Right,			0,					lib3270_cursor_right	},
@@ -199,13 +199,13 @@
  void v3270_tab(GtkWidget *widget)
  {
 	g_return_if_fail(GTK_IS_V3270(widget));
-	lib3270_tab(GTK_V3270(widget)->host);
+	lib3270_nextfield(GTK_V3270(widget)->host);
  }
 
  void v3270_backtab(GtkWidget *widget)
  {
 	g_return_if_fail(GTK_IS_V3270(widget));
-	lib3270_backtab(GTK_V3270(widget)->host);
+	lib3270_previousfield(GTK_V3270(widget)->host);
  }
 
  void v3270_set_string(GtkWidget *widget, const gchar *str)

@@ -37,36 +37,21 @@
 	#define trace_action(a,w) /* */
  #endif // X3270_TRACE
 
-/*--[ Parser struct ]--------------------------------------------------------------------------------*/
-
-
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
- static void element_start(GMarkupParseContext *context, const gchar *element_name, const gchar **names,const gchar **values, GtkAction *action, GError **error)
+ static void element_start(GMarkupParseContext *context, const gchar *element_name, const gchar **names,const gchar **values, struct parser *info, GError **error)
  {
  	trace("%s: %s",__FUNCTION__,element_name);
  }
 
- static void element_end(GMarkupParseContext *context, const gchar *element_name, GtkAction *action, GError **error)
+ static void element_end(GMarkupParseContext *context, const gchar *element_name, struct parser *info, GError **error)
  {
  	trace("%s: %s",__FUNCTION__,element_name);
  }
 
- static void text_action(GtkAction *action, const gchar *text)
+ static void script_text(GMarkupParseContext *context, const gchar *element_text, gsize text_len, struct parser *info, GError **error)
  {
-	trace("Script:\n%s\n",text);
- }
-
- static void script_text(GMarkupParseContext *context, const gchar *element_text, gsize text_len, GtkAction *action, GError **error)
- {
- 	gchar *base = g_strstrip(g_strdup(element_text));
-	gchar *text = g_strdup(base);
-	g_free(base);
-
-	gtk_action_set_sensitive(action,TRUE);
-	g_object_set_data_full(G_OBJECT(action),"script_text",text,g_free);
-	g_signal_connect(action,"activate",G_CALLBACK(text_action),text);
-
+	ui_connect_text_script(info->center_widget, info->script_action,element_text,error);
  }
 
  GObject * ui_create_script(GMarkupParseContext *context,GtkAction *action, struct parser *info, const gchar **names, const gchar **values, GError **error)
@@ -91,7 +76,7 @@
 		return NULL;
 	}
 
- 	trace("%s: info->element: %p action: %p",__FUNCTION__,info->element, action);
+// 	trace("%s: info->element: %p action: %p",__FUNCTION__,info->element, action);
 
 	if(!(info->element && info->actions))
 	{
@@ -99,9 +84,8 @@
 		return NULL;
 	}
 
-	trace("%s: Parsing script for action %s",__FUNCTION__,gtk_action_get_name(info->action));
-
-	g_markup_parse_context_push(context,&parser,info->action);
+	info->script_action = info->action;
+	g_markup_parse_context_push(context,&parser,info);
 
 	return NULL;
  }

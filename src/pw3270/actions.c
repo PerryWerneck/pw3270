@@ -36,6 +36,7 @@
  #include <lib3270/actions.h>
  #include <lib3270/selection.h>
  #include <lib3270/trace.h>
+ #include <lib3270/macros.h>
  #include <stdlib.h>
 
  #ifdef DEBUG
@@ -734,5 +735,49 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 	g_hash_table_insert(hash,nm,action);
 
 	return action;
+}
+
+static void action_text_script(GtkAction *action, GtkWidget *widget)
+{
+ 	gchar **ln = g_strsplit(g_object_get_data(G_OBJECT(action),"script_text"),"\n",-1);
+ 	int 	f;
+ 	H3270 * hSession = v3270_get_session(widget);
+
+ 	for(f=0;ln[f];f++)
+	{
+		GError	* error	= NULL;
+		gint	  argc	= 0;
+		gchar	**argv	= NULL;
+
+		if(g_shell_parse_argv(g_strstrip(ln[f]),&argc,&argv,&error))
+		{
+			gchar *rsp = lib3270_run_macro(hSession,(const gchar **) argv);
+			if(rsp)
+				g_free(rsp);
+		}
+		else
+		{
+			g_warning("Error parsing \"%s\": %s",g_strstrip(ln[f]),error->message);
+			g_error_free(error);
+		}
+
+		if(argv)
+			g_strfreev(argv);
+
+	}
+
+
+	g_strfreev(ln);
+}
+
+void ui_connect_text_script(GtkWidget *widget, GtkAction *action, const gchar *script_text, GError **error)
+{
+ 	gchar *base = g_strstrip(g_strdup(script_text));
+	gchar *text = g_strdup(base);
+	g_free(base);
+
+	gtk_action_set_sensitive(action,TRUE);
+	g_object_set_data_full(G_OBJECT(action),"script_text",text,g_free);
+	g_signal_connect(action,"activate",G_CALLBACK(action_text_script),widget);
 }
 
