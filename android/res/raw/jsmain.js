@@ -1,35 +1,38 @@
 
-function setupButtons()
+function setupWindow()
 {
-	var form = document.getElementById("form3270");
+	var input = document.getElementsByTagName("input");
 
-	if(form == undefined)
-		return;
-
-	for(var i=0;i < form.elements.length;i++)
+	window.onkeypress = function()
 	{
-		if(form.elements[i].name.substr(0,2) == "PF")
+		if(event.keyCode == 13)
 		{
-			form.elements[i].pfkey = parseInt(form.elements[i].name.substr(3));
-			
-			form.elements[i].onclick = function()
+			xmit();
+			return false;
+		}
+		return true;
+	}
+
+	for(var i=0;i<input.length;i++)
+	{
+		if(input[i].name.substr(0,2) == "PF")
+		{
+			input[i].pfkey = parseInt(input[i].name.substr(3));
+
+			input[i].onclick = function()
 			{
 				pw3270.pfkey(this.pfkey);
 			}
 		}
+
 	}
 
 }
 
-function initialize()
-{
-	updateScreen();
-}
-
-function updateScreen()
+function terminalUpdate()
 {
 	document.getElementById("terminal").innerHTML = pw3270.getscreencontents();
-	setupButtons();
+	setupWindow();
 }
 
 function pfkey(id)

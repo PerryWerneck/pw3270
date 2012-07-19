@@ -49,11 +49,11 @@ JNIEXPORT void JNICALL Java_br_com_bb_pw3270_lib3270_setToggle(JNIEnv *env, jobj
 {
 	LIB3270_TOGGLE id = lib3270_get_toggle_id(env->GetStringUTFChars(name, 0));
 
-	session_request(env,obj);
+	PW3270_JNI_BEGIN
 
 	if(id >= 0)
-		lib3270_set_toggle(session,id,state ? 1 : 0);
+		lib3270_set_toggle(PW3270_SESSION,id,state ? 1 : 0);
 
-	session_release();
+	PW3270_JNI_END
 
 }

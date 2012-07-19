@@ -268,6 +268,10 @@ public class lib3270
 
    	public void postPopup(int type, String title, String text, String info)
 	{
+		Log.d(TAG,"Type:"+type);
+		Log.d(TAG,"Title:"+title);
+		Log.d(TAG,"Text:"+text);
+		Log.d(TAG,"Info:"+info);
    		mainloop.postPopup(type, title, text, info);
 	}
 

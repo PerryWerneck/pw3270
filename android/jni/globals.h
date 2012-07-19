@@ -34,22 +34,40 @@
 
 /*--[ Defines ]--------------------------------------------------------------------------------------*/
 
- typedef struct _info
- {
- 	JNIEnv	 * env;
- 	jobject	   obj;
-
- } INFO;
-
- #define session_request(env, obj)	INFO	  jni_data	= { env, obj }; \
-									H3270	* session 	= lib3270_get_default_session_handle(); \
+/*
+ #define session_request(env, obj)	H3270	* session 	= lib3270_get_default_session_handle(); \
 									session->widget		= &jni_data;
 
  #define session_release()			session->widget		= 0;
+*/
+
+/*
+ #define 	PW3270_JNI_BEGIN	pw3270_env = env; pw3270_obj = obj;
+ #define 	PW3270_JNI_END		pw3270_env = NULL; pw3270_obj = NULL;
+*/
+
+ #define 	PW3270_JNI_BEGIN	pw3270_env = env; pw3270_obj = obj; \
+								__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "%s.begin env=%p obj=%p",__FUNCTION__,env,obj);
+
+ #define 	PW3270_JNI_END		__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "%s.end env=%p obj=%p",__FUNCTION__,pw3270_env,pw3270_obj); \
+								pw3270_env = NULL; pw3270_obj = NULL;
+
+ #define	PW3270_JNI_ENV		pw3270_env
+ #define	PW3270_JNI_OBJ		pw3270_obj
+
+ #define	PW3270_SESSION		lib3270_get_default_session_handle()
+
+ #define pw3270_jni_call_void(name, sig, ...) 	pw3270_env->CallVoidMethod(pw3270_obj,lib3270_getmethodID(name,sig), __VA_ARGS__)
+ #define pw3270_jni_call_int(name, sig, ...) 	pw3270_env->CallIntMethod(pw3270_obj,lib3270_getmethodID(name,sig), __VA_ARGS__)
+ #define pw3270_jni_new_string(str)				pw3270_env->NewStringUTF(str)
+ #define pw3270_jni_new_byte_array(len)			pw3270_env->NewByteArray(len)
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
- extern const char *java_class_name;
+ extern JNIEnv	 * pw3270_env;
+ extern jobject	   pw3270_obj;
 
+
+ jmethodID lib3270_getmethodID(const char *name, const char *sig);
 
 

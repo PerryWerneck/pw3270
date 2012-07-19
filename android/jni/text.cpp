@@ -32,11 +32,11 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
-static jbyteArray retString(JNIEnv *env, const char *txt)
+static jbyteArray retString(const char *txt)
 {
 	size_t len = strlen(txt);
-	jbyteArray ret = env->NewByteArray(len);
-	env->SetByteArrayRegion(ret, 0, len, (jbyte*) txt);
+	jbyteArray ret = pw3270_env->NewByteArray(len);
+	pw3270_env->SetByteArrayRegion(ret, 0, len, (jbyte*) txt);
 	return ret;
 }
 
@@ -44,44 +44,38 @@ JNIEXPORT jbyteArray JNICALL Java_br_com_bb_pw3270_lib3270_getHTML(JNIEnv *env, 
 {
 	jbyteArray ret;
 
-	session_request(env,obj);
+	PW3270_JNI_BEGIN
 
-	trace("%s starts, session=%p",__FUNCTION__,session);
+	trace("%s starts, session=%p",__FUNCTION__,PW3270_SESSION);
 
-	if(session)
+	char *text = lib3270_get_as_html(PW3270_SESSION,(LIB3270_HTML_OPTION) (LIB3270_HTML_OPTION_ALL|LIB3270_HTML_OPTION_FORM));
+
+	if(text)
 	{
-		char *text = lib3270_get_as_html(session,(LIB3270_HTML_OPTION) (LIB3270_HTML_OPTION_ALL|LIB3270_HTML_OPTION_FORM));
-
-		if(text)
-		{
-			ret = retString(env,text);
-			lib3270_free(text);
-		}
-		else
-		{
-			ret = retString(env, "<b>Empty session</b>");
-		}
+		ret = retString(text);
+		lib3270_free(text);
 	}
 	else
 	{
-		ret = retString(env, "<b>Invalid Session ID</b>");
+		ret = retString("<b>Empty session</b>");
 	}
 
 	trace("%s ends",__FUNCTION__);
 
-	session_release();
+	PW3270_JNI_END
 
 	return ret;
 }
 
 
+/*
 JNIEXPORT jbyteArray JNICALL Java_br_com_bb_pw3270_lib3270_getText(JNIEnv *env, jobject obj)
 {
 	jbyteArray ret;
 
-	session_request(env,obj);
+	PW3270_JNI_BEGIN
 
-	trace("%s starts, session=%p",__FUNCTION__,session);
+	trace("%s starts",__FUNCTION__);
 
 	if(session)
 	{
@@ -106,10 +100,11 @@ JNIEXPORT jbyteArray JNICALL Java_br_com_bb_pw3270_lib3270_getText(JNIEnv *env, 
 
 	trace("%s ends",__FUNCTION__);
 
-	session_release();
+	PW3270_JNI_END
 
 	return ret;
 }
+*/
 
 JNIEXPORT void JNICALL Java_br_com_bb_pw3270_lib3270_setTextAt(JNIEnv *env, jobject obj, jint pos, jbyteArray inText, jint szText)
 {
@@ -117,10 +112,7 @@ JNIEXPORT void JNICALL Java_br_com_bb_pw3270_lib3270_setTextAt(JNIEnv *env, jobj
 	int 		 	  f;
 	jbyte			* bt;
 
-	session_request(env,obj);
-
-	if(!session)
-		return;
+	PW3270_JNI_BEGIN
 
 	bt = env->GetByteArrayElements(inText,0);
 
@@ -128,30 +120,31 @@ JNIEXPORT void JNICALL Java_br_com_bb_pw3270_lib3270_setTextAt(JNIEnv *env, jobj
 		str[f] = (char) bt[f];
 	str[szText] = 0;
 
-	trace("Buffer(%d/%d)=\"%s\"",(int) pos, lib3270_field_addr(session, (int) pos), str);
+	trace("Buffer(%d/%d)=\"%s\"",(int) pos, lib3270_field_addr(PW3270_SESSION, (int) pos), str);
 
 
-	if( ((int) pos) == lib3270_field_addr(session, (int) pos))
+	if( ((int) pos) == lib3270_field_addr(PW3270_SESSION, (int) pos))
 	{
 		// Begin of field, clear it first
-		int 			  sz = lib3270_field_length(session,pos);
+		int 			  sz = lib3270_field_length(PW3270_SESSION,pos);
 		unsigned char	* buffer = (unsigned char *) lib3270_malloc(sz+1);
 
 		memset(buffer,' ',sz);
 
-		lib3270_clear_operator_error(session);
-		lib3270_set_cursor_address(session,(int) pos);
-		lib3270_set_string(session,buffer);
+		lib3270_clear_operator_error(PW3270_SESSION);
+		lib3270_set_cursor_address(PW3270_SESSION,(int) pos);
+		lib3270_set_string(PW3270_SESSION,buffer);
 
 		lib3270_free(buffer);
 	}
 
-	lib3270_clear_operator_error(session);
-	lib3270_set_cursor_address(session,(int) pos);
-	lib3270_set_string(session,str);
+	lib3270_clear_operator_error(PW3270_SESSION);
+	lib3270_set_cursor_address(PW3270_SESSION,(int) pos);
+	lib3270_set_string(PW3270_SESSION,str);
 
-	lib3270_clear_operator_error(session);
+	lib3270_clear_operator_error(PW3270_SESSION);
 
 	env->ReleaseByteArrayElements(inText,bt,JNI_ABORT);
-	session_release();
+
+	PW3270_JNI_END
 }

@@ -45,49 +45,76 @@
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
- const char *java_class_name = "br/com/bb/pw3270/lib3270";
+ const char * java_class_name	= "br/com/bb/pw3270/lib3270";
+ JNIEnv	 	* pw3270_env		= NULL;
+ jobject	  pw3270_obj		= NULL;
+
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
-static void post_message(H3270 *session, int msgid, int arg1 = 0, int arg2 = 0)
+jmethodID lib3270_getmethodID(const char *name, const char *sig)
 {
-	if(session->widget)
+	if(!pw3270_env)
 	{
-		JNIEnv		* env			= ((INFO *) session->widget)->env;
-		jobject		  obj 			= ((INFO *) session->widget)->obj;
-		jclass 		  cls 			= env->GetObjectClass(obj);
-		jmethodID	  mid			= env->GetMethodID(cls, "postMessage", "(III)V");;
-		env->CallVoidMethod(obj,mid,(jint) msgid, (jint) arg1, (jint) arg2);
+		__android_log_print(ANDROID_LOG_ERROR, PACKAGE_NAME, "%s(%s,%s) called outside jni environment",__FUNCTION__,name,sig);
+		return NULL;
 	}
+
+	return pw3270_env->GetMethodID(pw3270_env->GetObjectClass(pw3270_obj), name, sig );
+}
+
+static void post_message(int msgid, int arg1 = 0, int arg2 = 0)
+{
+	trace("%s: pw3270_env=%p pw3270_obj=%p",__FUNCTION__,pw3270_env,pw3270_obj);
+
+	if(pw3270_env)
+		pw3270_jni_call_void("postMessage", "(III)V",(jint) msgid, (jint) arg1, (jint) arg2);
 }
 
 static void changed(H3270 *session, int offset, int len)
 {
-	post_message(session,2,offset,len);
+	post_message(2,offset,len);
 }
 
 static void erase(H3270 *session)
 {
-	post_message(session,4);
+	post_message(4);
 }
 
 static int popuphandler(H3270 *session, void *terminal, LIB3270_NOTIFY type, const char *title, const char *msg, const char *fmt, va_list args)
 {
-	if(session->widget)
+	if(PW3270_JNI_ENV)
 	{
-		JNIEnv		* env			= ((INFO *) session->widget)->env;
-		jobject		  obj 			= ((INFO *) session->widget)->obj;
-		jclass 		  cls 			= env->GetObjectClass(obj);
-		jmethodID	  mid			= env->GetMethodID(cls, "popupMessage", "(ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
-		char		* descr;
+		static const char *sig = "(ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V";
+		char * descr = lib3270_vsprintf(fmt, args);
 
-        descr = lib3270_vsprintf(fmt, args);
+		trace("%s: title=\"%s\"",__FUNCTION__,title);
+		trace("%s: msg=\"%s\"",__FUNCTION__,msg);
+		trace("%s: descr=\"%s\"",__FUNCTION__,descr);
 
-		env->CallVoidMethod(obj,mid,	(jint) type,
-										env->NewStringUTF(title),
-										env->NewStringUTF(msg),
-										env->NewStringUTF(descr) );
-        lib3270_free(descr);
+
+
+		if(msg)
+		{
+			pw3270_jni_call_void(	"postPopup",
+									sig,
+									(jint) type,
+									pw3270_jni_new_string(title),
+									pw3270_jni_new_string(msg),
+									pw3270_jni_new_string(descr) );
+
+		}
+		else
+		{
+			pw3270_jni_call_void(	"postPopup",
+									sig,
+									(jint) type,
+									pw3270_jni_new_string(title),
+									pw3270_jni_new_string(descr),
+									pw3270_jni_new_string("") );
+		}
+
+		lib3270_free(descr);
 	}
 	else
 	{
@@ -97,30 +124,27 @@ static int popuphandler(H3270 *session, void *terminal, LIB3270_NOTIFY type, con
 
 static void ctlr_done(H3270 *session)
 {
-	post_message(session,4);
+	post_message(4);
 }
 
 static int write_buffer(H3270 *session, unsigned const char *buf, int len)
 {
 	int rc = -1;
 
-	if(session->widget)
+	if(PW3270_JNI_ENV)
 	{
-		JNIEnv		* env			= ((INFO *) session->widget)->env;
-		jobject		  obj 			= ((INFO *) session->widget)->obj;
-		jclass 		  cls 			= env->GetObjectClass(obj);
-		jmethodID	  mid			= env->GetMethodID(cls, "send_data", "([BI)I");
-		jbyteArray	  buffer		= env->NewByteArray(len);
+		jbyteArray buffer = pw3270_jni_new_byte_array(len);
 
-		env->SetByteArrayRegion(buffer, 0, len, (jbyte*) buf);
+		pw3270_env->SetByteArrayRegion(buffer, 0, len, (jbyte*) buf);
 
-		rc = env->CallIntMethod(obj, mid, buffer, (jint) len );
+		rc = pw3270_jni_call_int("send_data", "([BI)I", buffer, (jint) len );
 	}
 	else
 	{
 		__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "Can't send %d bytes, no jni env for active session",len);
 	}
 
+	trace("%s exits with rc=%d",__FUNCTION__,rc);
 	return rc;
 }
 
@@ -128,12 +152,8 @@ static void * add_timer(unsigned long interval_ms, H3270 *session, void (*proc)(
 {
 	TIMER * timer = NULL;
 
-	if(session->widget)
+	if(PW3270_JNI_ENV)
 	{
-		JNIEnv		* env			= ((INFO *) session->widget)->env;
-		jobject		  obj 			= ((INFO *) session->widget)->obj;
-		jclass 		  cls 			= env->GetObjectClass(obj);
-		jmethodID	  mid			= env->GetMethodID(cls, "newTimer", "(JI)V");
 
 		timer			= (TIMER *) lib3270_malloc(sizeof(TIMER));
 		timer->sz		= sizeof(timer);
@@ -143,12 +163,12 @@ static void * add_timer(unsigned long interval_ms, H3270 *session, void (*proc)(
 
 		trace("Timer %08lx created",(unsigned long) timer);
 
-		env->CallVoidMethod(obj,mid, (jlong) timer, (jint) interval_ms);
+		pw3270_jni_call_void("newTimer", "(JI)V", (jlong) timer, (jint) interval_ms);
 
 	}
 	else
 	{
-		__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "Can set timer, no jni env for active session");
+		__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "Can't set timer, no jni env for active session");
 	}
 
 	return timer;
@@ -175,10 +195,9 @@ JNIEXPORT void JNICALL Java_br_com_bb_pw3270_lib3270_timerFinish(JNIEnv *env, jo
 	TIMER *timer = (TIMER *) id;
 
 	if(timer == NULL)
-	{
-//		__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "Unexpected call to %s: No timer ID",__FUNCTION__);
 		return;
-	}
+
+	PW3270_JNI_BEGIN
 
 	if(timer->enabled)
 	{
@@ -187,6 +206,9 @@ JNIEXPORT void JNICALL Java_br_com_bb_pw3270_lib3270_timerFinish(JNIEnv *env, jo
 	}
 
 	lib3270_free(timer);
+
+	PW3270_JNI_END
+
 }
 
 #ifdef X3270_TRACE
@@ -237,6 +259,8 @@ JNIEXPORT jint JNICALL Java_br_com_bb_pw3270_lib3270_init(JNIEnv *env, jclass ob
 {
 	H3270	* session	= lib3270_session_new("");
 
+	PW3270_JNI_BEGIN
+
 	__android_log_print(ANDROID_LOG_DEBUG, PACKAGE_NAME, "Initializing session %p",session);
 
 #ifdef X3270_TRACE
@@ -251,35 +275,54 @@ JNIEXPORT jint JNICALL Java_br_com_bb_pw3270_lib3270_init(JNIEnv *env, jclass ob
 	session->erase			= erase;
 	session->ctlr_done		= ctlr_done;
 
+	PW3270_JNI_END
+
 	return 0;
 }
 
+/*
 JNIEXPORT jint JNICALL Java_br_com_bb_pw3270_lib3270_processEvents(JNIEnv *env, jobject obj)
 {
-	session_request(env,obj);
+	PW3270_JNI_BEGIN
 
 	lib3270_main_iterate(session,1);
 
-	session_release();
+	PW3270_JNI_END
 
 	return 0;
 }
+*/
 
 JNIEXPORT jboolean JNICALL Java_br_com_bb_pw3270_lib3270_isConnected(JNIEnv *env, jobject obj)
 {
-	return (lib3270_connected(lib3270_get_default_session_handle())) ? JNI_TRUE : JNI_FALSE;;
+	jboolean rc;
+
+	PW3270_JNI_BEGIN
+
+	rc = lib3270_connected(lib3270_get_default_session_handle()) ? JNI_TRUE : JNI_FALSE;
+
+	PW3270_JNI_END
+
+	return rc;
 }
 
 JNIEXPORT jboolean JNICALL Java_br_com_bb_pw3270_lib3270_isTerminalReady(JNIEnv *env, jobject obj)
 {
+	PW3270_JNI_BEGIN
+
+
+	PW3270_JNI_END
+
 	return JNI_FALSE;
 }
 
 JNIEXPORT void JNICALL Java_br_com_bb_pw3270_lib3270_setHost(JNIEnv *env, jobject obj, jstring hostname)
 {
-	session_request(env,obj);
-	lib3270_set_host(session,env->GetStringUTFChars(hostname, 0));
-	session_release();
+	PW3270_JNI_BEGIN
+
+	lib3270_set_host(PW3270_SESSION,env->GetStringUTFChars(hostname, 0));
+
+	PW3270_JNI_END
 }
 
 JNIEXPORT jstring JNICALL Java_br_com_bb_pw3270_lib3270_getHost(JNIEnv *env, jobject obj)
@@ -289,28 +332,30 @@ JNIEXPORT jstring JNICALL Java_br_com_bb_pw3270_lib3270_getHost(JNIEnv *env, job
 
 JNIEXPORT void JNICALL Java_br_com_bb_pw3270_lib3270_set_1connection_1status(JNIEnv *env, jobject obj, jboolean connected)
 {
-	session_request(env,obj);
+	PW3270_JNI_BEGIN
+
 	if(connected)
-		lib3270_set_connected(session);
+		lib3270_set_connected(PW3270_SESSION);
 	else
-		lib3270_set_disconnected(session);
-	session_release();
+		lib3270_set_disconnected(PW3270_SESSION);
+
+	PW3270_JNI_END
 }
 
 JNIEXPORT void JNICALL Java_br_com_bb_pw3270_lib3270_procRecvdata(JNIEnv *env, jobject obj, jbyteArray buffer, jint sz)
 {
 	unsigned char *netrbuf = (unsigned char *) env->GetByteArrayElements(buffer,NULL);
 
-	session_request(env,obj);
+	PW3270_JNI_BEGIN
 
 	trace("Processando %d bytes",(size_t) sz);
 
-	lib3270_data_recv(session, (size_t) sz, netrbuf);
+	lib3270_data_recv(PW3270_SESSION, (size_t) sz, netrbuf);
 
 	trace("Liberando %d bytes",(size_t) sz);
 
-	env->ReleaseByteArrayElements(buffer, (signed char *) netrbuf, 0);
+	pw3270_env->ReleaseByteArrayElements(buffer, (signed char *) netrbuf, 0);
 
-	session_release();
+	PW3270_JNI_END
 
 }
