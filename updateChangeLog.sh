@@ -39,6 +39,7 @@ REV_MAX=`svn --xml info | tr -d '\r\n' | sed -e 's/.*<commit.*revision="\([0-9]*
 REV_FROM=${2:-$(($REV_LAST + 1))}
 
 if [ $REV_FROM -gt $REV_MAX ]; then
+	echo "No update required from revision $REV_FROM to revision $REV_MAX" 
 	exit 0;
 fi
 
