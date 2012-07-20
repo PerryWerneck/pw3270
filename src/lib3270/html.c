@@ -191,6 +191,10 @@
 
 	info->block = info->text+strlen(info->text);
 
+#ifdef DEBUG
+	append_string(info,"\n");
+#endif // DEBUG
+
 	append_string(info,"<input type=\"");
 	append_string(info,mode == HTML_MODE_INPUT_TEXT ? "text" : "password" );
 	append_string(info,"\" name=\"");
@@ -231,6 +235,11 @@
 
 	append_string(info,"></input>");
 
+#ifdef DEBUG
+	append_string(info,"\n");
+#endif // DEBUG
+
+
 	info->mode = HTML_MODE_TEXT;
 	info->maxlength = 0;
  }
@@ -260,6 +269,14 @@
 		int cr  = 0;
 		int len = 0;
 		int col;
+
+#ifdef DEBUG
+		{
+			char buffer[4096];
+			snprintf(buffer,4095,"\n<!-- R%02d/%02d --->\t",row,session->rows);
+			append_string(&info,buffer);
+		}
+#endif // DEBUG
 
 		for(col = 0; col < session->cols;col++)
 		{
@@ -407,7 +424,9 @@
 		else if(cr)
 		{
 			append_element(&info,HTML_ELEMENT_LINE_BREAK);
+
 		}
+
 	}
 
 	if(info.mode != HTML_MODE_TEXT)

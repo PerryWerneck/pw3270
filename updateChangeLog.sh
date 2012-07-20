@@ -27,6 +27,8 @@
 # kraucer@bb.com.br		(Kraucer Fernandes Mazuco)
 #
 
+touch ChangeLog
+
 REV_TO=${1:-"HEAD"}
 REV_LAST=`cat ChangeLog | head -3 - | tr -d '\r\n' | sed -e 's/.*svn\([0-9]*\).*/\1/'`
 

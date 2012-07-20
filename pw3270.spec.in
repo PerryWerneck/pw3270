@@ -145,6 +145,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/applications/@PACKAGE_NAME@.desktop
 
 %{_bindir}/@PACKAGE_NAME@
+%{_libdir}/libpw3270.so
+%{_libdir}/libpw3270.so.@VERSION@
+
 %{_datadir}/@PACKAGE_NAME@/ui/00default.xml
 %{_datadir}/@PACKAGE_NAME@/@PACKAGE_NAME@.png
 %{_datadir}/@PACKAGE_NAME@/@PACKAGE_NAME@-logo.png

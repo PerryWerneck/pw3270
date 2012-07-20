@@ -33,6 +33,7 @@ PACKAGE_NAME=@PACKAGE_NAME@
 prefix=@prefix@
 exec_prefix=@exec_prefix@
 bindir=@bindir@
+libdir=@libdir@
 datarootdir=@datarootdir@
 localedir=@localedir@
 desktopdir=$(datarootdir)/applications
@@ -44,6 +45,8 @@ INSTALL=@INSTALL@
 INSTALL_PROGRAM=@INSTALL_PROGRAM@
 INSTALL_DATA=@INSTALL_DATA@
 CONVERT=@CONVERT@
+LN_S=@LN_S@
+
 
 #---[ Sources ]----------------------------------------------------------------
 
@@ -53,10 +56,12 @@ include uiparser/sources.mak
 
 #---[ Targets ]----------------------------------------------------------------
 
-SOURCES=main.c window.c actions.c fonts.c dialog.c print.c colors.c filetransfer.c \
-		$(foreach SRC, $(V3270_SRC), v3270/$(SRC)) \
-		$(foreach SRC, $(COMMON_SRC), common/$(SRC)) \
-		$(foreach SRC, $(UI_PARSER_SRC), uiparser/$(SRC))
+APP_SOURCES=	main.c window.c actions.c fonts.c dialog.c print.c colors.c \
+				filetransfer.c \
+				$(foreach SRC, $(UI_PARSER_SRC), uiparser/$(SRC))
+
+LIB_SOURCES=	$(foreach SRC, $(V3270_SRC), v3270/$(SRC)) \
+				$(foreach SRC, $(COMMON_SRC), common/$(SRC))
 
 DEPENDS=*.h common/*.h uiparser/*.h v3270/*.h $(GLOBAL_DEPS)
 
@@ -85,6 +90,10 @@ Release: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
 install: Release $(PACKAGE_NAME).desktop $(PACKAGE_NAME)-logo.png
 	@$(MKDIR) $(DESTDIR)$(bindir)
 	@$(INSTALL_PROGRAM) $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) $(DESTDIR)$(bindir)
+
+	@$(MKDIR) $(DESTDIR)$(libdir)
+	@$(INSTALL_PROGRAM) $(BINDIR)/Release/lib/lib$(PACKAGE_TARNAME).* $(DESTDIR)$(libdir)
+
 	@$(MKDIR) $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)
 	@$(INSTALL_DATA) $(PACKAGE_NAME).png $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)
 	@$(INSTALL_DATA) $(PACKAGE_NAME)-logo.png $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)
@@ -95,20 +104,39 @@ install: Release $(PACKAGE_NAME).desktop $(PACKAGE_NAME)-logo.png
 				--add-category TerminalEmulator \
 				$(PACKAGE_NAME).desktop
 
-$(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT):	$(foreach SRC, $(basename $(SOURCES)), $(OBJDIR)/Release/$(SRC)$(OBJEXT))
-
+$(BINRLS)/$(PACKAGE_TARNAME)$(EXEEXT):	$(LIBRLS)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@ \
+										$(foreach SRC, $(basename $(APP_SOURCES)), $(OBJRLS)/$(SRC)$(OBJEXT))
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(LD) -o $@ $^ $(LIBS) $(LIB3270_LIBS)
+	@$(LD) -o $@ $(foreach SRC, $(basename $(APP_SOURCES)), $(OBJRLS)/$(SRC)$(OBJEXT)) $(LIBS) $(LIB3270_LIBS) -l$(PACKAGE_TARNAME)
+
+$(LIBRLS)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@: $(LIBRLS)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@.@VERSION@
+	@rm -f $@
+	@cd $(LIBRLS) && $(LN_S) @DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@.@VERSION@ @DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@
+
+$(LIBRLS)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@.@VERSION@:	$(foreach SRC, $(basename $(LIB_SOURCES)), $(OBJRLS)/$(SRC)$(OBJEXT))
+	@echo "  CCLD `basename $@`"
+	@$(MKDIR) `dirname $@`
+	@$(LD) $(DLL_FLAGS) $(LDFLAGS) -o $@ $^ $(LIBS) $(LIB3270_LIBS)
 
 #---[ Debug targets ]----------------------------------------------------------
 
-Debug: $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
+Debug: $(BINDBG)/$(PACKAGE_TARNAME)$(EXEEXT)
 
-$(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT):	$(foreach SRC, $(basename $(SOURCES)), $(OBJDIR)/Debug/$(SRC)$(OBJEXT))
+$(BINDBG)/$(PACKAGE_TARNAME)$(EXEEXT):	$(LIBDBG)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@ \
+										$(foreach SRC, $(basename $(APP_SOURCES)), $(OBJDBG)/$(SRC)$(OBJEXT))
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(LD) -Wl,--rpath,.bin/Debug/lib -o $@ $^ $(LIBS) $(LIB3270_LIBS)
+	@$(LD) -Wl,--rpath,.bin/Debug/lib -o $@ $(foreach SRC, $(basename $(APP_SOURCES)), $(OBJDBG)/$(SRC)$(OBJEXT)) $(LIBS) $(LIB3270_LIBS) -l$(PACKAGE_TARNAME)
+
+$(LIBDBG)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@: $(LIBDBG)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@.@VERSION@
+	@rm -f $@
+	@cd $(LIBDBG) && $(LN_S) @DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@.@VERSION@ @DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@
+
+$(LIBDBG)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@.@VERSION@:	$(foreach SRC, $(basename $(LIB_SOURCES)), $(OBJDBG)/$(SRC)$(OBJEXT))
+	@echo "  CCLD `basename $@`"
+	@$(MKDIR) `dirname $@`
+	@$(LD) $(DLL_FLAGS) $(LDFLAGS) -Wl,--rpath,.bin/Debug/lib -o $@ $^ $(LIBS) $(LIB3270_LIBS)
 
 run: $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
 	@cd "$(ROOTDIR)" ; .bin/Debug/$(PACKAGE_TARNAME)$(EXEEXT)

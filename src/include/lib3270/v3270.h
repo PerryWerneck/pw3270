@@ -128,18 +128,18 @@
     #define v3270char void
  #endif // v3270_char
 
- GtkWidget		* v3270_new(void);
- GType 			  v3270_get_type(void);
+ LIB3270_EXPORT	GtkWidget		* v3270_new(void);
+ LIB3270_EXPORT	GType 			  v3270_get_type(void);
 
- void		  	  v3270_reload(GtkWidget * widget);
+ LIB3270_EXPORT	void		  	  v3270_reload(GtkWidget * widget);
 
- void			  v3270_set_font_family(GtkWidget *widget, const gchar *name);
- const gchar	* v3270_get_font_family(GtkWidget *widget);
+ LIB3270_EXPORT	void			  v3270_set_font_family(GtkWidget *widget, const gchar *name);
+ LIB3270_EXPORT	const gchar		* v3270_get_font_family(GtkWidget *widget);
 
- H3270			* v3270_get_session(GtkWidget *widget);
+ LIB3270_EXPORT	H3270			* v3270_get_session(GtkWidget *widget);
 
- int			  v3270_connect(GtkWidget *widget, const gchar *host);
- void			  v3270_disconnect(GtkWidget *widget);
+ LIB3270_EXPORT	int				  v3270_connect(GtkWidget *widget, const gchar *host);
+ LIB3270_EXPORT	void			  v3270_disconnect(GtkWidget *widget);
 
  // Clipboard
  typedef enum _v3270_select_format
@@ -150,42 +150,42 @@
 	V3270_SELECT_MAX
  } V3270_SELECT_FORMAT;
 
- const gchar	* v3270_copy(GtkWidget *widget, V3270_SELECT_FORMAT mode);
- const gchar	* v3270_copy_append(GtkWidget *widget);
+ LIB3270_EXPORT	const gchar		* v3270_copy(GtkWidget *widget, V3270_SELECT_FORMAT mode);
+ LIB3270_EXPORT	const gchar		* v3270_copy_append(GtkWidget *widget);
 
- const gchar	* v3270_get_selected_text(GtkWidget *widget);
- const gchar	* v3270_get_copy(GtkWidget *widget);
- gchar			* v3270_get_text(GtkWidget *widget,int offset, int len);
- gchar			* v3270_get_region(GtkWidget *widget, gint start_pos, gint end_pos, gboolean all);
+ LIB3270_EXPORT	const gchar		* v3270_get_selected_text(GtkWidget *widget);
+ LIB3270_EXPORT	const gchar		* v3270_get_copy(GtkWidget *widget);
+ LIB3270_EXPORT	gchar			* v3270_get_text(GtkWidget *widget,int offset, int len);
+ LIB3270_EXPORT	gchar			* v3270_get_region(GtkWidget *widget, gint start_pos, gint end_pos, gboolean all);
 
- void			  v3270_set_string(GtkWidget *widget, const gchar *str);
- void			  v3270_tab(GtkWidget *widget);
- void			  v3270_backtab(GtkWidget *widget);
+ LIB3270_EXPORT	void			  v3270_set_string(GtkWidget *widget, const gchar *str);
+ LIB3270_EXPORT	void			  v3270_tab(GtkWidget *widget);
+ LIB3270_EXPORT	void			  v3270_backtab(GtkWidget *widget);
 
  // Cut & Paste
- gboolean  		  v3270_get_selection_bounds(GtkWidget *widget, gint *start, gint *end);
- void 			  v3270_unselect(GtkWidget *widget);
- void 			  v3270_paste(GtkWidget *widget);
- void 			  v3270_paste_string(GtkWidget *widget, const gchar *text, const gchar *encoding);
- void	  		  v3270_select_region(GtkWidget *widget, gint start, gint end);
+ LIB3270_EXPORT	gboolean  		  v3270_get_selection_bounds(GtkWidget *widget, gint *start, gint *end);
+ LIB3270_EXPORT	void 			  v3270_unselect(GtkWidget *widget);
+ LIB3270_EXPORT	void 			  v3270_paste(GtkWidget *widget);
+ LIB3270_EXPORT	void 			  v3270_paste_string(GtkWidget *widget, const gchar *text, const gchar *encoding);
+ LIB3270_EXPORT	void	  		  v3270_select_region(GtkWidget *widget, gint start, gint end);
 
  // Colors
- void			  v3270_set_colors(GtkWidget *widget, const gchar *);
- void 			  v3270_set_color_table(GdkColor *table, const gchar *colors);
- const GdkColor	* v3270_get_color_table(GtkWidget *widget);
- void 			  v3270_set_mono_color_table(GdkColor *table, const gchar *fg, const gchar *bg);
- void		  	  v3270_draw_element(cairo_t *cr, unsigned char chr, unsigned short attr, H3270 *session, guint height, GdkRectangle *rect, GdkColor *color);
- void			  v3270_set_color(GtkWidget *widget, enum V3270_COLOR id, GdkColor *color);
- GdkColor		* v3270_get_color(GtkWidget *widget, enum V3270_COLOR id);
+ LIB3270_EXPORT	void			  v3270_set_colors(GtkWidget *widget, const gchar *);
+ LIB3270_EXPORT	void 			  v3270_set_color_table(GdkColor *table, const gchar *colors);
+ LIB3270_EXPORT	const GdkColor	* v3270_get_color_table(GtkWidget *widget);
+ LIB3270_EXPORT	void 			  v3270_set_mono_color_table(GdkColor *table, const gchar *fg, const gchar *bg);
+ LIB3270_EXPORT	void		  	  v3270_draw_element(cairo_t *cr, unsigned char chr, unsigned short attr, H3270 *session, guint height, GdkRectangle *rect, GdkColor *color);
+ LIB3270_EXPORT	void			  v3270_set_color(GtkWidget *widget, enum V3270_COLOR id, GdkColor *color);
+ LIB3270_EXPORT	GdkColor		* v3270_get_color(GtkWidget *widget, enum V3270_COLOR id);
 
  // Misc
- GtkIMContext	* v3270_get_im_context(GtkWidget *widget);
- gboolean		  v3270_get_toggle(GtkWidget *widget, LIB3270_TOGGLE ix);
- void			  v3270_popup_message(GtkWidget *widget, LIB3270_NOTIFY type, const gchar *title, const gchar *message, const gchar *text);
- const gchar	* v3270_get_session_name(GtkWidget *widget);
- void			  v3270_set_session_name(GtkWidget *widget, const gchar *name);
+ LIB3270_EXPORT	GtkIMContext	* v3270_get_im_context(GtkWidget *widget);
+ LIB3270_EXPORT	gboolean		  v3270_get_toggle(GtkWidget *widget, LIB3270_TOGGLE ix);
+ LIB3270_EXPORT	void			  v3270_popup_message(GtkWidget *widget, LIB3270_NOTIFY type, const gchar *title, const gchar *message, const gchar *text);
+ LIB3270_EXPORT	const gchar		* v3270_get_session_name(GtkWidget *widget);
+ LIB3270_EXPORT	void			  v3270_set_session_name(GtkWidget *widget, const gchar *name);
 
- void 			  v3270_set_host(GtkWidget *widget, const gchar *uri);
+ LIB3270_EXPORT	void 			  v3270_set_host(GtkWidget *widget, const gchar *uri);
 
 
 G_END_DECLS

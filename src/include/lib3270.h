@@ -673,7 +673,17 @@
 	 * @param seconds	Number of seconds to wait.
 	 *
 	 */
-	LIB3270_EXPORT int lib3270_wait(int seconds);
+	LIB3270_EXPORT int lib3270_wait(H3270 *hSession, int seconds);
+
+	/**
+	 * Wait "N" seconds for "ready" state.
+	 *
+	 * @param seconds	Number of seconds to wait.
+	 *
+	 * @return 0 if ok, errno code if not.
+	 *
+	 */
+	LIB3270_EXPORT int lib3270_wait_for_ready(H3270 *hSession, int seconds);
 
 	/**
 	 * Get the session's widget.

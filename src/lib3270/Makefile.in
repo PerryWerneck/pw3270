@@ -76,9 +76,11 @@ DEPENDS ?= *.h Makefile
 
 BINDBG  ?= $(BINDIR)/Debug
 BINRLS  ?= $(BINDIR)/Release
+LIBDBG  ?= $(BINDIR)/Debug/lib
 
 OBJDBG = $(OBJDIR)/Debug
 OBJRLS = $(OBJDIR)/Release
+LIBRLS = $(OBJDIR)/Release/lib
 
 #---[ Rules ]------------------------------------------------------------------
 

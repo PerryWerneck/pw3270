@@ -36,6 +36,7 @@ EXEEXT=@EXEEXT@
 
 LIB3270_CFLAGS ?= `pkg-config --cflags lib3270`
 LIB3270_LIBS ?= `pkg-config --libs lib3270`
+DLL_FLAGS=@DLL_FLAGS@
 
 DEBUG_CFLAGS=-DDEBUG=1 -g -Wall
 DEPENDS ?= *.h ../include/*.h ../include/lib3270/*.h
@@ -61,9 +62,11 @@ TMPDIR  ?= $(ROOTDIR)/.tmp
 
 BINDBG  ?= $(BINDIR)/Debug
 BINRLS  ?= $(BINDIR)/Release
+LIBDBG	?= $(BINDBG)/lib
 
 OBJDBG = $(OBJDIR)/Debug
 OBJRLS = $(OBJDIR)/Release
+LIBRLS	?= $(BINRLS)/lib
 
 #---[ Rules ]------------------------------------------------------------------
 
