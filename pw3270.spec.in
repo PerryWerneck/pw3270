@@ -168,6 +168,14 @@ rm -rf $RPM_BUILD_ROOT
 
 #---[ Scripts ]-------------------------------------------------------------------------------------------------------
 
+%post
+/sbin/ldconfig
+exit 0
+
+%postun
+/sbin/ldconfig
+exit 0
+
 %post -n lib3270
 /sbin/ldconfig
 exit 0
