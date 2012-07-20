@@ -263,6 +263,7 @@ install-sdk:
 	@$(INSTALL_DATA) src/include/lib3270/popup.h $(DESTDIR)/$(includedir)/lib3270
 	@$(MKDIR) $(DESTDIR)/$(libdir)/pkgconfig
 	@$(INSTALL_DATA) lib3270.pc $(DESTDIR)/$(libdir)/pkgconfig
+	@$(INSTALL_DATA) pw3270.pc $(DESTDIR)/$(libdir)/pkgconfig
 
 clean:
 	@rm -fr .obj

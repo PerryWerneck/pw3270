@@ -1,0 +1,12 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: pw3270
+Description: @PACKAGE@ GTK widgets and support calls for plugin development
+Version: @PACKAGE_VERSION@
+Libs: -L\@libdir@ -lpw3270
+Libs.private: lib3270
+Cflags: -I@includedir@
+
