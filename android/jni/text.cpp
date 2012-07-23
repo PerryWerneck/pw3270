@@ -35,8 +35,8 @@
 static jbyteArray retString(const char *txt)
 {
 	size_t len = strlen(txt);
-	jbyteArray ret = pw3270_env->NewByteArray(len);
-	pw3270_env->SetByteArrayRegion(ret, 0, len, (jbyte*) txt);
+	jbyteArray ret = PW3270_JNI_ENV->NewByteArray(len);
+	PW3270_JNI_ENV->SetByteArrayRegion(ret, 0, len, (jbyte*) txt);
 	return ret;
 }
 

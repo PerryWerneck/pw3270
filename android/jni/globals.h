@@ -46,28 +46,36 @@
  #define 	PW3270_JNI_END		pw3270_env = NULL; pw3270_obj = NULL;
 */
 
- #define 	PW3270_JNI_BEGIN	pw3270_env = env; pw3270_obj = obj; \
-								__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "%s.begin env=%p obj=%p",__FUNCTION__,env,obj);
+ #define 	PW3270_JNI_BEGIN	__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "%s.lock env=%p obj=%p",__FUNCTION__,env,obj); \
+								pw3270_jni_lock(env,obj);
 
- #define 	PW3270_JNI_END		__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "%s.end env=%p obj=%p",__FUNCTION__,pw3270_env,pw3270_obj); \
-								pw3270_env = NULL; pw3270_obj = NULL;
+ #define 	PW3270_JNI_END		__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "%s.unlock env=%p obj=%p",__FUNCTION__,pw3270_jni_active->env,pw3270_jni_active->obj); \
+								pw3270_jni_unlock();
 
- #define	PW3270_JNI_ENV		pw3270_env
- #define	PW3270_JNI_OBJ		pw3270_obj
+ #define	PW3270_JNI_ENV		pw3270_jni_active->env
+ #define	PW3270_JNI_OBJ		pw3270_jni_active->obj
 
  #define	PW3270_SESSION		lib3270_get_default_session_handle()
 
- #define pw3270_jni_call_void(name, sig, ...) 	pw3270_env->CallVoidMethod(pw3270_obj,lib3270_getmethodID(name,sig), __VA_ARGS__)
- #define pw3270_jni_call_int(name, sig, ...) 	pw3270_env->CallIntMethod(pw3270_obj,lib3270_getmethodID(name,sig), __VA_ARGS__)
- #define pw3270_jni_new_string(str)				pw3270_env->NewStringUTF(str)
- #define pw3270_jni_new_byte_array(len)			pw3270_env->NewByteArray(len)
+ #define pw3270_jni_call_void(name, sig, ...) 	pw3270_jni_active->env->CallVoidMethod(pw3270_jni_active->obj,lib3270_getmethodID(name,sig), __VA_ARGS__)
+ #define pw3270_jni_call_int(name, sig, ...) 	pw3270_jni_active->env->CallIntMethod(pw3270_jni_active->obj,lib3270_getmethodID(name,sig), __VA_ARGS__)
+ #define pw3270_jni_new_string(str)				pw3270_jni_active->env->NewStringUTF(str)
+ #define pw3270_jni_new_byte_array(len)			pw3270_jni_active->env->NewByteArray(len)
+
+ typedef struct _pw3270_jni
+ {
+ 	struct _pw3270_jni	* parent;
+ 	JNIEnv				* env;
+ 	jobject	  			  obj;
+ } PW3270_JNI;
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
- extern JNIEnv	 * pw3270_env;
- extern jobject	   pw3270_obj;
 
+ extern PW3270_JNI	*pw3270_jni_active;
+
+ void pw3270_jni_lock(JNIEnv *env, jobject obj);
+ void pw3270_jni_unlock();
 
  jmethodID lib3270_getmethodID(const char *name, const char *sig);
-
 

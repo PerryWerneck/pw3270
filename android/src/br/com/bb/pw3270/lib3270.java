@@ -399,6 +399,7 @@ public class lib3270
 
     /*---[ Native calls ]----------------------------------------------------*/
 	static private native int	init();
+	static private native int	deinit();
 
 	private native int			processEvents();
 //	private native int		    do_connect();

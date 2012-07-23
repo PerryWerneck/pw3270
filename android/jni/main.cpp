@@ -28,6 +28,7 @@
 
  #include "globals.h"
  #include <stdio.h>
+ #include <pthread.h>
  #include <string.h>
  #include <lib3270/config.h>
  #include <lib3270/popup.h>
@@ -45,29 +46,28 @@
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
- const char * java_class_name	= "br/com/bb/pw3270/lib3270";
- JNIEnv	 	* pw3270_env		= NULL;
- jobject	  pw3270_obj		= NULL;
-
+ const char 			* java_class_name	= "br/com/bb/pw3270/lib3270";
+ PW3270_JNI				* pw3270_jni_active	= NULL;
+ static pthread_mutex_t	  mutex;
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
 jmethodID lib3270_getmethodID(const char *name, const char *sig)
 {
-	if(!pw3270_env)
+	if(!pw3270_jni_active)
 	{
 		__android_log_print(ANDROID_LOG_ERROR, PACKAGE_NAME, "%s(%s,%s) called outside jni environment",__FUNCTION__,name,sig);
 		return NULL;
 	}
 
-	return pw3270_env->GetMethodID(pw3270_env->GetObjectClass(pw3270_obj), name, sig );
+	return PW3270_JNI_ENV->GetMethodID(PW3270_JNI_ENV->GetObjectClass(PW3270_JNI_OBJ), name, sig );
 }
 
 static void post_message(int msgid, int arg1 = 0, int arg2 = 0)
 {
-	trace("%s: pw3270_env=%p pw3270_obj=%p",__FUNCTION__,pw3270_env,pw3270_obj);
+	trace("%s: pw3270_env=%p pw3270_obj=%p",__FUNCTION__,PW3270_JNI_ENV,PW3270_JNI_OBJ);
 
-	if(pw3270_env)
+	if(pw3270_jni_active)
 		pw3270_jni_call_void("postMessage", "(III)V",(jint) msgid, (jint) arg1, (jint) arg2);
 }
 
@@ -135,7 +135,7 @@ static int write_buffer(H3270 *session, unsigned const char *buf, int len)
 	{
 		jbyteArray buffer = pw3270_jni_new_byte_array(len);
 
-		pw3270_env->SetByteArrayRegion(buffer, 0, len, (jbyte*) buf);
+		PW3270_JNI_ENV->SetByteArrayRegion(buffer, 0, len, (jbyte*) buf);
 
 		rc = pw3270_jni_call_int("send_data", "([BI)I", buffer, (jint) len );
 	}
@@ -259,6 +259,8 @@ JNIEXPORT jint JNICALL Java_br_com_bb_pw3270_lib3270_init(JNIEnv *env, jclass ob
 {
 	H3270	* session	= lib3270_session_new("");
 
+	pthread_mutex_init(&mutex,NULL);
+
 	PW3270_JNI_BEGIN
 
 	__android_log_print(ANDROID_LOG_DEBUG, PACKAGE_NAME, "Initializing session %p",session);
@@ -280,18 +282,10 @@ JNIEXPORT jint JNICALL Java_br_com_bb_pw3270_lib3270_init(JNIEnv *env, jclass ob
 	return 0;
 }
 
-/*
-JNIEXPORT jint JNICALL Java_br_com_bb_pw3270_lib3270_processEvents(JNIEnv *env, jobject obj)
+JNIEXPORT jint JNICALL Java_br_com_bb_pw3270_lib3270_deinit(JNIEnv *env, jclass obj)
 {
-	PW3270_JNI_BEGIN
-
-	lib3270_main_iterate(session,1);
-
-	PW3270_JNI_END
-
-	return 0;
+	pthread_mutex_destroy(&mutex);
 }
-*/
 
 JNIEXPORT jboolean JNICALL Java_br_com_bb_pw3270_lib3270_isConnected(JNIEnv *env, jobject obj)
 {
@@ -354,8 +348,42 @@ JNIEXPORT void JNICALL Java_br_com_bb_pw3270_lib3270_procRecvdata(JNIEnv *env, j
 
 	trace("Liberando %d bytes",(size_t) sz);
 
-	pw3270_env->ReleaseByteArrayElements(buffer, (signed char *) netrbuf, 0);
+	PW3270_JNI_ENV->ReleaseByteArrayElements(buffer, (signed char *) netrbuf, 0);
 
 	PW3270_JNI_END
 
 }
+
+void pw3270_jni_lock(JNIEnv *env, jobject obj)
+{
+ 	PW3270_JNI *datablock = (PW3270_JNI *) lib3270_malloc(sizeof(PW3270_JNI));
+
+	datablock->parent		= pw3270_jni_active;
+	datablock->env			= env;
+	datablock->obj			= obj;
+
+	if(!pw3270_jni_active || pw3270_jni_active->env != env)
+	{
+		// Environment change, lock
+		trace("%s: Environment has changed",__FUNCTION__);
+		pthread_mutex_lock(&mutex);
+	}
+
+	pw3270_jni_active = datablock;
+}
+
+void pw3270_jni_unlock(void)
+{
+	PW3270_JNI *datablock 	= pw3270_jni_active;
+	pw3270_jni_active		= datablock->parent;
+
+	if(!pw3270_jni_active || pw3270_jni_active->env != datablock->env)
+	{
+		// Environment change, unlock
+		trace("%s: Environment has changed",__FUNCTION__);
+		pthread_mutex_unlock(&mutex);
+	}
+
+	lib3270_free(datablock);
+}
+

@@ -57,3 +57,4 @@ JNIEXPORT void JNICALL Java_br_com_bb_pw3270_lib3270_setToggle(JNIEnv *env, jobj
 	PW3270_JNI_END
 
 }
+
