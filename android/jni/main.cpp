@@ -127,6 +127,12 @@ static void ctlr_done(H3270 *session)
 	post_message(4);
 }
 
+void update_status(H3270 *session, LIB3270_MESSAGE id)
+{
+	__android_log_print(ANDROID_LOG_DEBUG, PACKAGE_NAME, "Status changed to %d",(int) id);
+	post_message(1,(int) id);
+}
+
 static int write_buffer(H3270 *session, unsigned const char *buf, int len)
 {
 	int rc = -1;
@@ -276,6 +282,7 @@ JNIEXPORT jint JNICALL Java_br_com_bb_pw3270_lib3270_init(JNIEnv *env, jclass ob
 	session->changed 		= changed;
 	session->erase			= erase;
 	session->ctlr_done		= ctlr_done;
+	session->update_status	= update_status;
 
 	PW3270_JNI_END
 

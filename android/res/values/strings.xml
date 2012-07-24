@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">PW3270</string>
     <string-array name="program_msg">
-        <item>LIB3270_MESSAGE_NONE</item>
+        <item></item>
 		<item>X System</item>
 		<item>X Aguarde</item>
 		<item>Conectado</item>

@@ -17,7 +17,7 @@ public class lib3270
 	private NetworkThread	mainloop;
 	private static final String TAG = "lib3270";
 
-	private boolean 		changed;
+	protected boolean 		changed;
 	private boolean 		connected	= false;
 	private boolean			refresh		= true;
 
@@ -147,10 +147,10 @@ public class lib3270
 		{
             // Connecta no host
 			SocketFactory socketFactory;
-			
+
 			if(hostname == "")
 				return false;
-			
+
 			if(ssl)
 			{
 				// Host é SSL
@@ -295,8 +295,6 @@ public class lib3270
         	case 2: // Screen changed
         		Log.d(TAG,"Screen changed");
 				changed = true;
-        		if(refresh)
-					redraw();
         		break;
 
         	case 3:	// Popup
@@ -311,11 +309,6 @@ public class lib3270
 
 			case 5: // ctlr_done
         		Log.d(TAG,"ctlr_done");
-				if(changed)
-				{
-					changed = false;
-					redraw();
-				}
 				break;
 
 			case 6: // recv_data
@@ -348,10 +341,6 @@ public class lib3270
 	protected void erase()
 	{
 		Log.i(TAG,"Erase screen");
-	}
-
-	protected void redraw()
-	{
 	}
 
 	public void pfkey(int id)
