@@ -24,9 +24,9 @@ public class lib3270
 	DataOutputStream		outData 	= null;
 	DataInputStream			inData		= null;
 
-	private String			hostname	= "3270.df.bb";
-	private int				port		= 8023;
-	private boolean			ssl			= false;
+	protected String		hostname	= "3270.df.bb";
+	protected int			port		= 8023;
+	protected boolean		ssl			= false;
 
 	static
 	{
@@ -36,9 +36,6 @@ public class lib3270
 
 	lib3270()
 	{
-    	setToggle("dstrace",true);
-    	setToggle("screentrace",true);
-    	setToggle("eventtrace",true);
 		changed = false;
 		mainloop = null;
 	}
@@ -150,6 +147,10 @@ public class lib3270
 		{
             // Connecta no host
 			SocketFactory socketFactory;
+			
+			if(hostname == "")
+				return false;
+			
 			if(ssl)
 			{
 				// Host é SSL

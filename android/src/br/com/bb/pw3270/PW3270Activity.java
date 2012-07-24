@@ -7,6 +7,7 @@ import android.os.Bundle;
 // import android.widget.EditText;
 import android.util.Log;
 // import android.view.View;
+import android.content.SharedPreferences;
 import android.content.res.*;
 import android.app.AlertDialog;
 import android.webkit.WebView;
@@ -31,6 +32,15 @@ public class PW3270Activity extends Activity
 		
 		terminal()
 		{
+			SharedPreferences settings = getSharedPreferences(TAG, 0);
+			hostname	= settings.getString("hostname",hostname);
+			port		= settings.getInt("port",port);
+			ssl			= settings.getBoolean("ssl",ssl);
+
+	    	setToggle("dstrace",settings.getBoolean("dstrace",true));
+	    	setToggle("screentrace",settings.getBoolean("screentrace",true));
+	    	setToggle("eventtrace",settings.getBoolean("eventtrace",true));
+
 		}
 
 		protected void updateProgramMessage(int id)

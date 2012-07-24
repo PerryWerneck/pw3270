@@ -110,8 +110,7 @@
 	}				  mode;
 
 	char			* text;
-	char			* input;
-	char			* block;
+	int				  block;
 	int 			  maxlength;
 	unsigned short	  fg;
 	unsigned short	  bg;
@@ -189,11 +188,7 @@
 
 	snprintf(name,29,"F%04d",addr);
 
-	info->block = info->text+strlen(info->text);
-
-#ifdef DEBUG
-	append_string(info,"\n");
-#endif // DEBUG
+	info->block = strlen(info->text);
 
 	append_string(info,"<input type=\"");
 	append_string(info,mode == HTML_MODE_INPUT_TEXT ? "text" : "password" );
@@ -202,43 +197,34 @@
 	append_string(info,"\" value=\"");
 	info->mode = mode;
 	info->maxlength = 0;
-	info->input = info->text+strlen(info->text);
 
  }
 
  static void close_input(struct html_info *info)
  {
-	char buffer[80];
-	char *ptr;
-	char *mark;
+	char	buffer[80];
+	int		pos;
 
 	if(info->mode == HTML_MODE_TEXT)
 		return;
 
+	trace("maxlength=%d",info->maxlength);
+
 	if(info->maxlength < 1)
 	{
-		*info->block = 0;
+		info->text[info->block] = 0;
 		info->mode = HTML_MODE_TEXT;
 		info->maxlength = 0;
 		return;
 	}
 
-	for(ptr=mark=info->input;*ptr;ptr++)
-	{
-		if(*ptr != ' ')
-			mark=ptr+1;
-	}
-	*mark = 0;
+	for(pos = strlen(info->text)-1;pos > 0 && info->text[pos] == ' '; pos--)
+		info->text[pos] = 0;
 
 	snprintf(buffer,80,"\" maxlength=\"%d\" class=\"IW%03d\"",info->maxlength,info->maxlength);
 	append_string(info,buffer);
 
 	append_string(info,"></input>");
-
-#ifdef DEBUG
-	append_string(info,"\n");
-#endif // DEBUG
-
 
 	info->mode = HTML_MODE_TEXT;
 	info->maxlength = 0;
@@ -266,30 +252,12 @@
 	baddr = 0;
 	for(row=0;row < session->rows;row++)
 	{
-		int cr  = 0;
-		int len = 0;
 		int col;
-
-#ifdef DEBUG
-		{
-			char buffer[4096];
-			snprintf(buffer,4095,"\n<!-- R%02d/%02d --->\t",row,session->rows);
-			append_string(&info,buffer);
-		}
-#endif // DEBUG
 
 		for(col = 0; col < session->cols;col++)
 		{
-			if( session->text[baddr+col].chr != ' ' || (session->text[baddr+col].attr & LIB3270_ATTR_CG))
-				len = col;
-		}
-
-		for(col = 0; col <= len || (col < session->cols && info.mode != HTML_MODE_TEXT);col++)
-		{
 			if((option & LIB3270_HTML_OPTION_ALL) || (session->text[baddr+col].attr & LIB3270_ATTR_SELECTED))
 			{
-				cr++;
-
 				if((session->text[baddr+col].attr & LIB3270_ATTR_MARKER) && (option & LIB3270_HTML_OPTION_FORM) )
 				{
 					int fa = (session->ea_buf[baddr+col].fa & FA_MASK);
@@ -303,12 +271,10 @@
 					{
 						// Input field
 						unsigned char	  attr = get_field_attribute(session,baddr+col+1);
-						//char 			* text = lib3270_get_field_at(session,baddr+col+1);
-
 						open_input(&info,baddr+col+1,FA_IS_ZERO(attr) ? HTML_MODE_INPUT_PASSWORD : HTML_MODE_INPUT_TEXT);
 
 					}
-					else if(col < len && session->text[baddr+col+1].chr == 'F')
+					else if(session->text[baddr+col+1].chr == 'F')
 					{
 						char *text = lib3270_get_field_at(session,baddr+col+1);
 
@@ -336,8 +302,7 @@
 									append_string(&info,"\" />");
 									info.mode  = HTML_MODE_INPUT_BUTTON;
 									info.maxlength = 0;
-									info.input = info.text+strlen(info.text);
-
+									info.block = strlen(info.text);
 								}
 							}
 							lib3270_free(text);
@@ -414,17 +379,16 @@
 			enum HTML_MODE mode = info.mode;
 
 			close_input(&info);
-
-			if(cr)
-				append_element(&info,HTML_ELEMENT_LINE_BREAK);
-
+			append_element(&info,HTML_ELEMENT_LINE_BREAK);
 			open_input(&info,baddr,mode);
 
 		}
-		else if(cr)
+		else
 		{
 			append_element(&info,HTML_ELEMENT_LINE_BREAK);
-
+#if defined(DEBUG) || defined(ANDROID)
+			append_string(&info,"\n");
+#endif // DEBUG
 		}
 
 	}
@@ -441,8 +405,8 @@
 
 	if(info.form)
 	{
-		static const char * prefix  = "<form name=\"" PACKAGE_NAME "\" id=\"form3270\" >";
-		static const char * suffix	= "</form>";
+		static const char * prefix  = "<form name=\"" PACKAGE_NAME "\" id=\"form3270\" >\n";
+		static const char * suffix	= "</form>\n";
 		char *text = info.text;
 
 		info.text = lib3270_malloc(strlen(prefix)+strlen(suffix)+strlen(text)+4);
@@ -454,7 +418,24 @@
 		lib3270_free(text);
 	}
 
-	return lib3270_realloc(info.text,strlen(info.text)+2);
+	info.text = lib3270_realloc(info.text,strlen(info.text)+2);
+
+#if defined(DEBUG) || defined(ANDROID)
+	{
+		char *text = strdup(info.text);
+		char *save;
+		char *ptr;
+
+		for(ptr=strtok_r(text,"\n",&save);ptr;ptr = strtok_r(NULL,"\n",&save))
+		{
+			trace("%s",ptr);
+		}
+
+		free(text);
+	}
+#endif // DEBUG
+
+	return info.text;
  }
 
 
