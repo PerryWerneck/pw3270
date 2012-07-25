@@ -65,6 +65,7 @@
 		<Unit filename="jni/main.cpp" />
 		<Unit filename="jni/misc.cpp" />
 		<Unit filename="jni/text.cpp" />
+		<Unit filename="res/raw/jsmain.js" />
 		<Unit filename="src/br/com/bb/pw3270/PW3270Activity.java" />
 		<Unit filename="src/br/com/bb/pw3270/lib3270.java" />
 		<Extensions>

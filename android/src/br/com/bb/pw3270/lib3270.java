@@ -10,422 +10,437 @@ import java.net.Socket;
 import javax.net.ssl.SSLSocketFactory;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+
 // import java.util.Vector;
 
-public class lib3270
-{
-	private NetworkThread	mainloop;
+public class lib3270 {
+	private NetworkThread mainloop = null;
 	private static final String TAG = "lib3270";
 
-	protected boolean 		changed;
-	private boolean 		connected	= false;
-	private boolean			refresh		= true;
+	protected int screenState = 0;
+	private boolean connected = false;
+	private boolean refresh = true;
 
-	DataOutputStream		outData 	= null;
-	DataInputStream			inData		= null;
+	DataOutputStream outData = null;
+	DataInputStream inData = null;
 
-	protected String		hostname	= "3270.df.bb";
-	protected int			port		= 8023;
-	protected boolean		ssl			= false;
+	protected String hostname = "3270.df.bb";
+	protected int port = 8023;
+	protected boolean ssl = false;
 
-	static
-	{
+	static {
 		System.loadLibrary("3270");
 		init();
 	}
 
-	lib3270()
-	{
-		changed = false;
+	lib3270() {
+		screenState = 0;
 		mainloop = null;
 	}
 
-	private class timer extends CountDownTimer
-	{
-		private long	id;
-		private lib3270	terminal;
+	private class timer extends CountDownTimer {
+		private long id;
+		private lib3270 terminal;
 
-		timer(lib3270 session, long timer_id, int msec)
-		{
-			super(msec,msec);
+		timer(lib3270 session, long timer_id, int msec) {
+			super(msec, msec);
 
-			terminal	= session;
-			id			= timer_id;
+			terminal = session;
+			id = timer_id;
 
-			Log.d(TAG,"Timer " + id + " set to " + msec + " ms");
+			Log.d(TAG, "Timer " + id + " set to " + msec + " ms");
 
 			this.start();
 		}
 
-		public void onTick(long millisUntilFinished)
-		{
+		public void onTick(long millisUntilFinished) {
 		}
 
-		public void onFinish()
-		{
-			Log.d(TAG,"Timer " + id + " finished");
+		public void onFinish() {
+			Log.d(TAG, "Timer " + id + " finished");
 			terminal.timerFinish(id);
 		}
 
 	}
-	private class popupMessageInfo
-	{
+
+	private class popupMessageInfo {
 		public String title;
 		public String text;
 		public String info;
 
-		popupMessageInfo(String title, String text, String info)
-		{
-			this.title 	= title;
-			this.text 	= text;
-			this.info	= info;
+		popupMessageInfo(String title, String text, String info) {
+			this.title = title;
+			this.text = text;
+			this.info = info;
 		}
 	}
 
-	private class byteMessage
-	{
-    	byte[]	msg;
-    	int		sz;
+	private class byteMessage {
+		byte[] msg;
+		int sz;
 
-    	byteMessage(byte[] contents, int len)
-    	{
-    		msg = contents;
-    		sz  = len;
-    	}
+		byteMessage(byte[] contents, int len) {
+			msg = contents;
+			sz = len;
+		}
 
-    	byte[] getMessage()
-    	{
-    		return msg;
-    	}
+		byte[] getMessage() {
+			return msg;
+		}
 
-    	int getLength()
-    	{
-    		return sz;
-    	}
+		int getLength() {
+			return sz;
+		}
 	}
 
-	protected int send_data(byte[] data, int len)
-	{
-		Log.i(TAG,"Bytes a enviar: " + len);
+	protected int send_data(byte[] data, int len) {
+		Log.i(TAG, "Bytes a enviar: " + len);
 
-		try
-		{
-			outData.write(data,0,len);
+		try {
+			outData.write(data, 0, len);
 			outData.flush();
 			return len;
-		} catch( Exception e )
-		{
-    		String msg = e.getLocalizedMessage();
+		} catch (Exception e) {
+			String msg = e.getLocalizedMessage();
 
-    		if(msg == null)
-    			msg = e.toString();
+			if (msg == null)
+				msg = e.toString();
 
-    		if(msg == null)
-    			msg = "Erro indefinido";
+			if (msg == null)
+				msg = "Erro indefinido";
 
-    		Log.i(TAG,"Erro ao enviar dados: " + msg);
+			Log.i(TAG, "Erro ao enviar dados: " + msg);
 
-    		postPopup(0,"Erro na comunicação","Não foi possível enviar dados",msg);
+			postPopup(0, "Erro na comunicação",
+					"Não foi possível enviar dados", msg);
 
 		}
 		return -1;
 	}
 
-
 	// Main Thread
-	private class NetworkThread extends Thread
-	{
-		Handler 			mHandler;
-		Socket				sock	= null;
+	private class NetworkThread extends Thread {
+		Handler mHandler;
+		Socket sock = null;
 
-		NetworkThread(Handler h)
-		{
-            mHandler = h;
-        }
+		NetworkThread(Handler h) {
+			mHandler = h;
+		}
 
-		private boolean connect()
-		{
-            // Connecta no host
+		private boolean connect() {
+			// Connecta no host
 			SocketFactory socketFactory;
 
-			if(hostname == "")
+			if (hostname == "")
 				return false;
 
-			if(ssl)
-			{
+			postMessage(1, 14, 0);
+
+			if (ssl) {
 				// Host é SSL
-	        	socketFactory = SSLSocketFactory.getDefault();
-			}
-			else
-			{
-	        	socketFactory = SocketFactory.getDefault();
+				socketFactory = SSLSocketFactory.getDefault();
+			} else {
+				socketFactory = SocketFactory.getDefault();
 			}
 
-			try
-        	{
-        		sock	= socketFactory.createSocket(hostname,port);
-        		outData = new DataOutputStream(sock.getOutputStream());
-        		inData	= new DataInputStream(sock.getInputStream());
+			try {
+				sock = socketFactory.createSocket(hostname, port);
+				outData = new DataOutputStream(sock.getOutputStream());
+				inData = new DataInputStream(sock.getInputStream());
 
-        	} catch( Exception e )
-        	{
-        		String msg = e.getLocalizedMessage();
+			} catch (Exception e) {
+				String msg = e.getLocalizedMessage();
 
-        		if(msg == null)
-        			msg = e.toString();
+				if (msg == null)
+					msg = e.toString();
 
-        		if(msg == null)
-        			msg = "Erro indefinido";
+				if (msg == null)
+					msg = "Erro indefinido";
 
-        		Log.i(TAG,"Erro ao conectar: " + msg);
+				Log.i(TAG, "Erro ao conectar: " + msg);
 
-        		postPopup(0,"Erro na conexão","Não foi possível conectar",msg);
+				postPopup(0, "Erro na conexão", "Não foi possível conectar",
+						msg);
 
-                postMessage(0,0,0);
+				postMessage(0, 0, 0);
 
-        		return false;
-        	}
+				return false;
+			}
 
-        	Log.i(TAG,"Conectado ao host");
-        	return true;
+			Log.i(TAG, "Conectado ao host");
+			return true;
 
 		}
 
-        public void run()
-        {
+		public void run() {
 
-        	info(TAG,"Network thread started");
-            connected = connect();
+			info(TAG, "Network thread started");
+			connected = connect();
 
-            if(connected)
-			{
-				postMessage(0,0,0);
+			if (connected) {
+				postMessage(0, 0, 0);
 
-				while(connected)
-				{
-					byte[]	in	= new byte[4096];
-					int		sz	= -1;
+				while (connected) {
+					byte[] in = new byte[4096];
+					int sz = -1;
 
-					try
-					{
-						sz = inData.read(in,0,4096);
-					} catch( Exception e ) { sz = -1; }
-
-					if(sz < 0)
-					{
-						connected = false;
+					try {
+						sz = inData.read(in, 0, 4096);
+					} catch (Exception e) {
+						sz = -1;
 					}
-					else if(sz > 0)
-					{
+
+					if (sz < 0) {
+						connected = false;
+					} else if (sz > 0) {
 						Message msg = mHandler.obtainMessage();
 						msg.what = 6;
-						msg.obj  = new byteMessage(in,sz);
+						msg.obj = new byteMessage(in, sz);
 
 						mHandler.sendMessage(msg);
 					}
 				}
 			}
 
-			try
-			{
+			try {
 				sock.close();
-			} catch( Exception e ) { }
+			} catch (Exception e) {
+			}
 
 			sock = null;
 			outData = null;
 			inData = null;
 
-			postMessage(0,0,0);
+			postMessage(0, 0, 0);
 
 			mainloop = null;
-			info(TAG,"Network thread stopped");
-        }
+			info(TAG, "Network thread stopped");
+		}
 
-        public void postMessage(int what, int arg1, int arg2)
-        {
-            Message msg = mHandler.obtainMessage();
-            msg.what = what;
-            msg.arg1 = arg1;
-            msg.arg2 = arg2;
-            mHandler.sendMessage(msg);
-        }
+		public void postMessage(int what, int arg1, int arg2) {
+			Message msg = mHandler.obtainMessage();
+			msg.what = what;
+			msg.arg1 = arg1;
+			msg.arg2 = arg2;
+			mHandler.sendMessage(msg);
+		}
 
-    	public void postPopup(int type, String title, String text, String info)
-    	{
-            Message msg = mHandler.obtainMessage();
+		public void postPopup(int type, String title, String text, String info) {
+			Message msg = mHandler.obtainMessage();
 
-            msg.what = 3;
-            msg.arg1 = type;
-            msg.obj  = new popupMessageInfo(title,text,info);
-            mHandler.sendMessage(msg);
-    	}
+			msg.what = 3;
+			msg.arg1 = type;
+			msg.obj = new popupMessageInfo(title, text, info);
+			mHandler.sendMessage(msg);
+		}
 
 	}
 
-    public void postMessage(int what, int arg1, int arg2)
-    {
-    	mainloop.postMessage(what, arg1, arg2);
-    }
-
-   	public void postPopup(int type, String title, String text, String info)
-	{
-		Log.d(TAG,"Type:"+type);
-		Log.d(TAG,"Title:"+title);
-		Log.d(TAG,"Text:"+text);
-		Log.d(TAG,"Info:"+info);
-   		mainloop.postPopup(type, title, text, info);
+	public void postMessage(int what, int arg1, int arg2) {
+		mainloop.postMessage(what, arg1, arg2);
 	}
 
-    // Define the Handler that receives messages from the thread and update the progress
-    final Handler handler = new Handler()
-    {
-        public void handleMessage(Message msg)
-        {
-        	switch(msg.what)
-        	{
-        	case 0:	// Connected/Disconnected
-        		set_connection_status(connected);
-				Log.d(TAG,connected ? "Connected" : "Disconnected");
-        		break;
+	public void postPopup(int type, String title, String text, String info) {
+		Log.d(TAG, "Type:" + type);
+		Log.d(TAG, "Title:" + title);
+		Log.d(TAG, "Text:" + text);
+		Log.d(TAG, "Info:" + info);
+		mainloop.postPopup(type, title, text, info);
+	}
 
-        	case 1:	// OIA message has changed
-        		updateProgramMessage(msg.arg1);
-        		break;
+	// Define the Handler that receives messages from the thread and update the
+	// progress
+	final Handler handler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 0: // Connected/Disconnected
+				set_connection_status(connected);
+				Log.d(TAG, connected ? "Connected" : "Disconnected");
+				break;
 
-        	case 2: // Screen changed
-        		Log.d(TAG,"Screen changed");
-				changed = true;
-        		break;
+			case 1: // OIA message has changed
+				updateProgramMessage(msg.arg1);
+				break;
 
-        	case 3:	// Popup
-        		popupMessageInfo popup = (popupMessageInfo) msg.obj;
-        		popupMessage(msg.arg1, popup.title, popup.text, popup.info);
-        		break;
+			case 2: // Screen changed
+				Log.d(TAG, "Screen changed");
+				screenState = 1;
+				break;
+
+			case 3: // Popup
+				popupMessageInfo popup = (popupMessageInfo) msg.obj;
+				popupMessage(msg.arg1, popup.title, popup.text, popup.info);
+				break;
 
 			case 4: // erase
-				changed = false;
-				erase();
+				if(screenState != 2)
+				{
+					screenState = 2;
+					erase();
+				}
 				break;
 
 			case 5: // ctlr_done
-        		Log.d(TAG,"ctlr_done");
+				Log.d(TAG, "ctlr_done");
 				break;
 
 			case 6: // recv_data
-				procRecvdata(((byteMessage) msg.obj).getMessage(),((byteMessage) msg.obj).getLength());
+				procRecvdata(((byteMessage) msg.obj).getMessage(),
+						((byteMessage) msg.obj).getLength());
 				break;
-        	}
-        }
-    };
 
-    /*---[ Signal methods ]--------------------------------------------------*/
+			case 7: // ready
+				hideProgressDialog();
+				break;
 
-	protected void updateProgramMessage(int id)
+			case 8: // busy
+				showProgressDialog("Aguarde...");
+				break;
+			}
+		}
+	};
+
+	/*---[ Signal methods ]--------------------------------------------------*/
+
+	protected void showProgramMessage(int id)
+	{
+		
+	}
+	
+	private void updateProgramMessage(int id) 
+	{
+		if(id == 0 && screenState != 0)
+		{
+			screenState = 0;
+			updateScreen();
+		}
+		else
+		{
+			showProgramMessage(id);
+		}
+	}
+
+	protected void popupMessage(int type, String title, String text, String info) {
+	}
+
+	protected void info(String tag, String msg) {
+		Log.i(tag, msg);
+	}
+
+	protected void error(String tag, String msg) {
+		Log.e(tag, msg);
+	}
+
+	protected void erase() 
 	{
 	}
 
-	protected void popupMessage(int type, String title, String text, String info)
+	protected void updateScreen()
 	{
 	}
-
-	protected void info(String tag, String msg)
+	
+	public void pfkey(int id) 
 	{
-		Log.i(tag,msg);
-	}
-
-	protected void error(String tag, String msg)
-	{
-		Log.e(tag,msg);
-	}
-
-	protected void erase()
-	{
-		Log.i(TAG,"Erase screen");
-	}
-
-	public void pfkey(int id)
-	{
-		Log.d(TAG,"PF"+id);
 		sendPFkey(id);
 	}
 
-	public void xmit()
+	public void xmit() 
 	{
-		Log.d(TAG,"XMIT");
 		sendEnter();
 	}
 
-    /*---[ External methods ]------------------------------------------------*/
-
-    public int connect()
-    {
-    	if(mainloop == null)
-    	{
-        	info(TAG,"Starting comm thread");
-    		mainloop = new NetworkThread(handler);
-    		mainloop.start();
-    		return 0;
-    	}
-    	error(TAG,"Comm thread already active during connect");
-    	return -1;
-    }
-
-    public int disconnect()
-    {
-    	connected = false;
-    	return 0;
-    }
-
-   	public void	setStringAt(int offset, String str)
-   	{
-   		refresh = false;
-   		try
-   		{
-			setTextAt(offset,str.getBytes(getEncoding()),str.length());
-   		} catch( Exception e ) { }
-   		refresh = true;
-   	}
-
-
-    /*---[ Native calls ]----------------------------------------------------*/
-	static private native int	init();
-	static private native int	deinit();
-
-	private native int			processEvents();
-//	private native int		    do_connect();
-	private native void			set_connection_status(boolean state);
-
-	// Misc calls
-	public native String		getEncoding();
-	public native String 		getVersion();
-	public native String 		getRevision();
-	public native void		    setToggle(String name, boolean state);
-
-	// Network I/O
-	public native void			procRecvdata( byte[] data, int len);
-
-	// Connect/Disconnect status
-	public native void 			setHost(String host);
-	public native String		getHost();
-	public native boolean		isConnected();
-	public native boolean		isTerminalReady();
-
-	// Timers
-	protected void newTimer(long id, int msec)
+	public void ready() 
 	{
-		new timer(this,id,msec);
+		postMessage(7, 0, 0);
 	}
 
-	private native void			timerFinish(long id);
+	public void busy() 
+	{
+		postMessage(8, 0, 0);
+	}
+
+	public void hideProgressDialog() 
+	{
+	}
+
+	public void showProgressDialog(String msg) {
+	}
+
+	/*---[ External methods ]------------------------------------------------*/
+
+	public int connect() {
+		if (mainloop == null) {
+			info(TAG, "Starting comm thread");
+			mainloop = new NetworkThread(handler);
+			mainloop.start();
+			return 0;
+		}
+		error(TAG, "Comm thread already active during connect");
+		return -1;
+	}
+
+	public int disconnect() {
+		connected = false;
+		return 0;
+	}
+
+	public void setStringAt(int offset, String str) {
+		refresh = false;
+		try {
+			setTextAt(offset, str.getBytes(getEncoding()), str.length());
+		} catch (Exception e) {
+		}
+		refresh = true;
+	}
+
+	/*---[ Native calls ]----------------------------------------------------*/
+	static private native int init();
+
+	static private native int deinit();
+
+	private native int processEvents();
+
+	// private native int do_connect();
+	private native void set_connection_status(boolean state);
+
+	// Misc calls
+	public native String getEncoding();
+
+	public native String getVersion();
+
+	public native String getRevision();
+
+	public native void setToggle(String name, boolean state);
+
+	// Network I/O
+	public native void procRecvdata(byte[] data, int len);
+
+	// Connect/Disconnect status
+	public native void setHost(String host);
+
+	public native String getHost();
+
+	public native boolean isConnected();
+
+	public native boolean isTerminalReady();
+
+	// Timers
+	protected void newTimer(long id, int msec) {
+		new timer(this, id, msec);
+	}
+
+	private native void timerFinish(long id);
 
 	// Keyboard actions
-	public native void			sendEnter();
-	public native void			sendPFkey(int id);
+	public native void sendEnter();
+
+	public native void sendPFkey(int id);
 
 	// Get/Set screen contents
-	public native byte[]		getHTML();
-	public native byte[]		getText();
-	public native void			setTextAt(int offset, byte[] str, int len);
+	public native byte[] getHTML();
 
+	public native byte[] getText();
+
+	public native void setTextAt(int offset, byte[] str, int len);
 
 }

@@ -57,28 +57,22 @@ public class PW3270Activity extends Activity
 			dlgProgress.show();
 		}
 
-		protected void updateProgramMessage(int id)
+		protected void updateScreen()
 		{
-			if(id == 0)
+			showProgressDialog("Aguarde...");
+			view.reload();
+		}
+		
+		protected void showProgramMessage(int id)
+		{
+			String message[] = res.getStringArray(R.array.program_msg);
+			try
 			{
-				if(changed)
-				{
-					dlgProgress.setMessage("Aguarde...");
-					changed = false;
-					view.reload();
-					hideProgressDialog();
-				}
-			}
-			else
+				showProgressDialog(message[id]);
+			} catch(Exception e)
 			{
-				String message[] = res.getStringArray(R.array.program_msg);
-				try
-				{
-					showProgressDialog(message[id]);
-				} catch(Exception e)
-				{
-					showProgressDialog("Aguarde...");
-				}
+				Log.e(TAG,e.getLocalizedMessage());
+				showProgressDialog("?");
 			}
 		}
 
@@ -90,6 +84,7 @@ public class PW3270Activity extends Activity
 			d.setMessage(text);
 
 			d.setCancelable(true);
+			hideProgressDialog();
 			d.show();
 		}
 

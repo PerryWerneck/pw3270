@@ -33,10 +33,12 @@ function terminalUpdate()
 {
 	document.getElementById("terminal").innerHTML = pw3270.getscreencontents();
 	setupWindow();
+	pw3270.ready();
 }
 
 function pfkey(id)
 {
+	pw3270.busy();
 	pw3270.pfkey(id);
 	return false;
 }
@@ -44,6 +46,8 @@ function pfkey(id)
 function xmit()
 {
 	var form = document.getElementById("form3270");
+
+	pw3270.busy();
 
 	if(form != undefined)
 	{
