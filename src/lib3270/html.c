@@ -218,7 +218,7 @@
 		return;
 	}
 
-	for(pos = strlen(info->text)-1;pos > 0 && info->text[pos] == ' '; pos--)
+	for(pos = strlen(info->text)-1;pos > 0 && (info->text[pos] == ' ' || info->text[pos] == '_'); pos--)
 		info->text[pos] = 0;
 
 	snprintf(buffer,80,"\" maxlength=\"%d\" class=\"IW%03d\"",info->maxlength,info->maxlength);
