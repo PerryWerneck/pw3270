@@ -32,7 +32,7 @@ touch ChangeLog
 REV_TO=${1:-"HEAD"}
 REV_LAST=`cat ChangeLog | head -3 - | tr -d '\r\n' | sed -e 's/.*svn\([0-9]*\).*/\1/'`
 
-echo $PACKAGE_SOURCE
+svn update
 
 REV_MAX=`svn --xml info | tr -d '\r\n' | sed -e 's/.*<commit.*revision="\([0-9]*\)".*<\/commit>.*/\1/'`
 
