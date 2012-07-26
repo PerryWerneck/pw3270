@@ -40,39 +40,65 @@ bin/classes/$(CLASSPATH)/%.class: src/$(CLASSPATH)/%.java
 	@echo "Compile thumb  : `basename $@` <= `basename $<`"
 	@$(JAVAC) -classpath $(ANDROIDSDK)/platforms/android-15/android.jar -d bin/classes $<
 
+res/drawable-xhdpi/%.png: %.svg
+	@echo "Gen XHDPI      : `basename $@` <= `basename $<`"
+	@$(MKDIR) `dirname $@`
+	@$(CONVERT) --format=png --width=96 --height=96 --output=$@ $<
+
+res/drawable-mdpi/%.png: %.svg
+	@echo "Gen MDPI       : `basename $@` <= `basename $<`"
+	@$(MKDIR) `dirname $@`
+	@$(CONVERT) --format=png --width=48 --height=48 --output=$@ $<
+
+res/drawable-ldpi/%.png: %.svg
+	@echo "Gen LDPI       : `basename $@` <= `basename $<`"
+	@$(MKDIR) `dirname $@`
+	@$(CONVERT) --format=png --width=36 --height=36 --output=$@ $<
+
+res/drawable-hdpi/%.png: %.svg
+	@echo "Gen HDPI       : `basename $@` <= `basename $<`"
+	@$(MKDIR) `dirname $@`
+	@$(CONVERT) --format=png --width=72 --height=72 --output=$@ $<
+
 #---[ Targets ]----------------------------------------------------------------
+
+all: jni/lib3270jni.h icons
+	@$(NDKBUILD)
 
 Debug: jni/lib3270jni.h icons
 	@$(NDKBUILD)
 
-icons: $(foreach DIR, $(RESOLUTION), res/drawable-$(DIR)/ic_launcher.png)
+icons: $(foreach DIR, $(RESOLUTION), res/drawable-$(DIR)/ic_launcher.png) \
+	$(foreach DIR, $(RESOLUTION), res/drawable-$(DIR)/ic_connect.png) \
+	$(foreach DIR, $(RESOLUTION), res/drawable-$(DIR)/ic_disconnect.png) \
+	$(foreach DIR, $(RESOLUTION), res/drawable-$(DIR)/ic_settings.png) 
 
 clean:
 	@rm -fr obj
 	@rm -f jni/lib3270jni.h
 	@rm -f sigs.txt
 	@rm -f bin/classes/$(CLASSPATH)/lib3270.class
-	@rm -f $(foreach DIR, $(RESOLUTION), res/drawable-$(DIR)/ic_launcher.png)
+	@rm -f $(foreach DIR, $(RESOLUTION), res/drawable-$(DIR)/*.png)
 
 cleanDebug: clean
 
 res/drawable-xhdpi/ic_launcher.png: ../src/pw3270/pixmaps/pw3270.svg
-	@echo "  ICON xhdpi"
+	@echo "Laucher xhdpi  : `basename $@` <= `basename $<`"
 	@$(MKDIR) `dirname $@`
 	@$(CONVERT) --format=png --width=96 --height=96 --output=$@ $<
 
 res/drawable-mdpi/ic_launcher.png: ../src/pw3270/pixmaps/pw3270.svg
-	@echo "  ICON mdpi"
+	@echo "Laucher mdpi   : `basename $@` <= `basename $<`"
 	@$(MKDIR) `dirname $@`
 	@$(CONVERT) --format=png --width=48 --height=48 --output=$@ $<
 
 res/drawable-ldpi/ic_launcher.png: ../src/pw3270/pixmaps/pw3270.svg
-	@echo "  ICON ldpi"
+	@echo "Laucher ldpi   : `basename $@` <= `basename $<`"
 	@$(MKDIR) `dirname $@`
 	@$(CONVERT) --format=png --width=36 --height=36 --output=$@ $<
 
 res/drawable-hdpi/ic_launcher.png: ../src/pw3270/pixmaps/pw3270.svg
-	@echo "  ICON hdpi"
+	@echo "Laucher hdpi   : `basename $@` <= `basename $<`"
 	@$(MKDIR) `dirname $@`
 	@$(CONVERT) --format=png --width=72 --height=72 --output=$@ $<
 

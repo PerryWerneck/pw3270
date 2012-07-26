@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <item android:id="@+id/connect"
+          android:icon="@drawable/ic_connect"
+          android:title="Conectar" />
+    <item android:id="@+id/disconnect"
+          android:icon="@drawable/ic_disconnect"
+          android:title="Desconectar" />
+    <item android:id="@+id/settings"
+          android:icon="@drawable/ic_settings"
+          android:title="Configurar" />
+</menu>

@@ -259,7 +259,7 @@ public class lib3270 {
 				break;
 
 			case 1: // OIA message has changed
-				updateProgramMessage(msg.arg1);
+				showProgramMessage(msg.arg1);
 				break;
 
 			case 2: // Screen changed
@@ -302,22 +302,16 @@ public class lib3270 {
 
 	/*---[ Signal methods ]--------------------------------------------------*/
 
-	protected void showProgramMessage(int id)
-	{
-		
-	}
-	
-	private void updateProgramMessage(int id) 
+	protected boolean showProgramMessage(int id) 
 	{
 		if(id == 0 && screenState != 0)
 		{
 			screenState = 0;
 			updateScreen();
+			return true;
 		}
-		else
-		{
-			showProgramMessage(id);
-		}
+		
+		return false;
 	}
 
 	protected void popupMessage(int type, String title, String text, String info) {

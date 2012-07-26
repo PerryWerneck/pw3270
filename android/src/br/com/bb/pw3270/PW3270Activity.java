@@ -15,6 +15,10 @@ import android.webkit.WebViewClient;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebChromeClient;
 import android.app.ProgressDialog;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+
 // import java.io.InputStream;
 
 // import android.app.Dialog;
@@ -63,17 +67,21 @@ public class PW3270Activity extends Activity
 			view.reload();
 		}
 		
-		protected void showProgramMessage(int id)
+		protected boolean showProgramMessage(int id) 
 		{
-			String message[] = res.getStringArray(R.array.program_msg);
-			try
+			if(!super.showProgramMessage(id))
 			{
-				showProgressDialog(message[id]);
-			} catch(Exception e)
-			{
-				Log.e(TAG,e.getLocalizedMessage());
-				showProgressDialog("?");
+				String message[] = res.getStringArray(R.array.program_msg);
+				try
+				{
+					showProgressDialog(message[id]);
+				} catch(Exception e)
+				{
+					Log.e(TAG,e.getLocalizedMessage());
+					showProgressDialog("?");
+				}
 			}
+			return true;
 		}
 
 		protected void popupMessage(int type, String title, String text, String info)
@@ -88,6 +96,7 @@ public class PW3270Activity extends Activity
 			d.show();
 		}
 
+		@SuppressWarnings("unused")
 		public String getscreencontents()
 		{
 			String text;
@@ -170,4 +179,33 @@ public class PW3270Activity extends Activity
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) 
+    {
+        MenuInflater inflater = getMenuInflater();
+		Log.d(TAG,"Popup menu");
+        inflater.inflate(R.layout.menu, menu);
+        return true;
+    }    
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) 
+    {
+        // Handle item selection
+		Log.d(TAG,"Menu item selected");
+    	/*
+        switch (item.getItemId()) {
+            case R.id.new_game:
+                newGame();
+                return true;
+            case R.id.help:
+                showHelp();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        */
+		return super.onOptionsItemSelected(item);
+    }
+    
 }
