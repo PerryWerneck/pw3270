@@ -303,7 +303,7 @@ static void enq_ta(H3270 *hSession, void (*fn)(H3270 *, const char *, const char
 	}
 	hSession->ta_tail = ta;
 
-	trace_event("  action queued (kybdlock 0x%x)\n", h3270.kybdlock);
+	trace_event("  action queued (kybdlock 0x%x)\n", hSession->kybdlock);
 }
 
 /*
@@ -473,18 +473,18 @@ void kybd_in3270(H3270 *session, int in3270 unused, void *dunno)
 /*
  * Lock the keyboard because of an operator error.
  */
-static void operator_error(int error_type)
+static void operator_error(H3270 *hSession, int error_type)
 {
-	if(h3270.oerr_lock)
+	if(hSession->oerr_lock)
 	{
-		status_oerr(NULL,error_type);
-		mcursor_locked(&h3270);
-		kybdlock_set(&h3270,(unsigned int)error_type);
-		flush_ta(&h3270);
+		status_oerr(hSession,error_type);
+		mcursor_locked(hSession);
+		kybdlock_set(hSession,(unsigned int)error_type);
+		flush_ta(hSession);
 	}
 	else
 	{
-		lib3270_ring_bell(NULL);
+		lib3270_ring_bell(hSession);
 	}
 }
 
@@ -493,7 +493,7 @@ static void operator_error(int error_type)
  * Handle an AID (Attention IDentifier) key.  This is the common stuff that
  * gets executed for all AID keys (PFs, PAs, Clear and etc).
  */
-static void key_AID(H3270 *session, unsigned char aid_code)
+static void key_AID(H3270 *hSession, unsigned char aid_code)
 {
 #if defined(X3270_ANSI) /*[*/
 	if (IN_ANSI) {
@@ -523,33 +523,37 @@ static void key_AID(H3270 *session, unsigned char aid_code)
 	plugin_aid(aid_code);
 #endif /*]*/
 
-	trace("IN_SSCP: %d cursor_addr: %d",IN_SSCP,h3270.cursor_addr);
+	trace("IN_SSCP: %d cursor_addr: %d",IN_SSCP,hSession->cursor_addr);
 
-	if (IN_SSCP) {
-		if (h3270.kybdlock & KL_OIA_MINUS)
+	if (IN_SSCP)
+	{
+		if (hSession->kybdlock & KL_OIA_MINUS)
 			return;
-		if (aid_code != AID_ENTER && aid_code != AID_CLEAR) {
-			status_changed(&h3270,LIB3270_STATUS_MINUS);
-			kybdlock_set(&h3270,KL_OIA_MINUS);
+		if (aid_code != AID_ENTER && aid_code != AID_CLEAR)
+		{
+			status_changed(hSession,LIB3270_STATUS_MINUS);
+			kybdlock_set(hSession,KL_OIA_MINUS);
 			return;
 		}
 	}
+
 	if (IN_SSCP && aid_code == AID_ENTER)
 	{
 		/* Act as if the host had written our input. */
-		h3270.buffer_addr = h3270.cursor_addr;
+		hSession->buffer_addr = hSession->cursor_addr;
 	}
+
 	if (!IN_SSCP || aid_code != AID_CLEAR)
 	{
-		status_twait(&h3270);
-		mcursor_waiting(&h3270);
-		lib3270_set_toggle(&h3270,LIB3270_TOGGLE_INSERT,0);
-		kybdlock_set(&h3270,KL_OIA_TWAIT | KL_OIA_LOCKED);
+		status_twait(hSession);
+		mcursor_waiting(hSession);
+		lib3270_set_toggle(hSession,LIB3270_TOGGLE_INSERT,0);
+		kybdlock_set(hSession,KL_OIA_TWAIT | KL_OIA_LOCKED);
 	}
-	h3270.aid = aid_code;
-	ctlr_read_modified(h3270.aid, False);
-	ticking_start(&h3270,False);
-	status_ctlr_done(&h3270);
+	hSession->aid = aid_code;
+	ctlr_read_modified(hSession->aid, False);
+	ticking_start(hSession,False);
+	status_ctlr_done(hSession);
 }
 
 LIB3270_FKEY_ACTION( pfkey )
@@ -656,7 +660,7 @@ static Boolean ins_prep(int faddr, int baddr, int count)
 	printf("need %d at %d, tb_start at %d\n", count, baddr, tb_start);
 #endif /*]*/
 	if (need - ntb > 0) {
-		operator_error(KL_OERR_OVERFLOW);
+		operator_error(&h3270,KL_OERR_OVERFLOW);
 		return False;
 	}
 
@@ -761,19 +765,19 @@ static Boolean key_Character(int code, Boolean with_ge, Boolean pasting, Boolean
 	faddr = find_field_attribute(&h3270,baddr);
 	fa = get_field_attribute(&h3270,baddr);
 	if (h3270.ea_buf[baddr].fa || FA_IS_PROTECTED(fa)) {
-		operator_error(KL_OERR_PROTECTED);
+		operator_error(&h3270,KL_OERR_PROTECTED);
 		return False;
 	}
 	if (h3270.numeric_lock && FA_IS_NUMERIC(fa) &&
 	    !((code >= EBC_0 && code <= EBC_9) ||
 	      code == EBC_minus || code == EBC_period)) {
-		operator_error(KL_OERR_NUMERIC);
+		operator_error(&h3270,KL_OERR_NUMERIC);
 		return False;
 	}
 
 	/* Can't put an SBCS in a DBCS field. */
 	if (h3270.ea_buf[faddr].cs == CS_DBCS) {
-		operator_error(KL_OERR_DBCS);
+		operator_error(&h3270,KL_OERR_DBCS);
 		return False;
 	}
 
@@ -781,7 +785,7 @@ static Boolean key_Character(int code, Boolean with_ge, Boolean pasting, Boolean
 	if (h3270.ea_buf[baddr].cc == EBC_si) {
 		INC_BA(baddr);
 		if (baddr == faddr) {
-			operator_error(KL_OERR_OVERFLOW);
+			operator_error(&h3270,KL_OERR_OVERFLOW);
 			return False;
 		}
 	}
@@ -1199,18 +1203,17 @@ LIB3270_ACTION( firstfield )
 /*
  * Cursor left 1 position.
  */
-static void
-do_left(void)
+static void do_left(H3270 *hSession)
 {
 	register int	baddr;
 	enum dbcs_state d;
 
-	baddr = h3270.cursor_addr;
+	baddr = hSession->cursor_addr;
 	DEC_BA(baddr);
 	d = ctlr_dbcs_state(baddr);
 	if (IS_LEFT(d))
 		DEC_BA(baddr);
-	cursor_move(&h3270,baddr);
+	cursor_move(hSession,baddr);
 }
 
 LIB3270_CURSOR_ACTION( left )
@@ -1220,7 +1223,7 @@ LIB3270_CURSOR_ACTION( left )
 		if(KYBDLOCK_IS_OERR(hSession))
 		{
 			lib3270_kybdlock_clear(hSession,KL_OERR_MASK);
-			status_reset(&h3270);
+			status_reset(hSession);
 		}
 		else
 		{
@@ -1238,7 +1241,7 @@ LIB3270_CURSOR_ACTION( left )
 
 	if (!hSession->flipped)
 	{
-		do_left();
+		do_left(hSession);
 	}
 	else
 	{
@@ -1271,7 +1274,7 @@ do_delete(void)
 	/* Can't delete a field attribute. */
 	fa = get_field_attribute(&h3270,baddr);
 	if (FA_IS_PROTECTED(fa) || h3270.ea_buf[baddr].fa) {
-		operator_error(KL_OERR_PROTECTED);
+		operator_error(&h3270,KL_OERR_PROTECTED);
 		return False;
 	}
 	if (h3270.ea_buf[baddr].cc == EBC_so || h3270.ea_buf[baddr].cc == EBC_si) {
@@ -1284,7 +1287,7 @@ do_delete(void)
 		if (h3270.ea_buf[xaddr].cc == SOSI(h3270.ea_buf[baddr].cc)) {
 			ndel = 2;
 		} else {
-			operator_error(KL_OERR_PROTECTED);
+			operator_error(&h3270,KL_OERR_PROTECTED);
 			return False;
 		}
 	} else if (IS_DBCS(h3270.ea_buf[baddr].db)) {
@@ -1380,7 +1383,7 @@ LIB3270_ACTION( backspace )
 	if (hSession->reverse)
 		(void) do_delete();
 	else if (!hSession->flipped)
-		do_left();
+		do_left(hSession);
 	else {
 		register int	baddr;
 
@@ -1396,29 +1399,32 @@ LIB3270_ACTION( backspace )
 /*
  * Destructive backspace, like Unix "erase".
  */
-static void
-do_erase(void)
+static void do_erase(H3270 *hSession)
 {
 	int	baddr, faddr;
 	enum dbcs_state d;
 
-	baddr = h3270.cursor_addr;
-	faddr = find_field_attribute(&h3270,baddr);
-	if (faddr == baddr || FA_IS_PROTECTED(h3270.ea_buf[baddr].fa)) {
-		operator_error(KL_OERR_PROTECTED);
+	baddr = hSession->cursor_addr;
+	faddr = find_field_attribute(hSession,baddr);
+	if (faddr == baddr || FA_IS_PROTECTED(hSession->ea_buf[baddr].fa))
+	{
+		operator_error(hSession,KL_OERR_PROTECTED);
 		return;
 	}
+
 	if (baddr && faddr == baddr - 1)
 		return;
-	do_left();
+
+	do_left(hSession);
 
 	/*
 	 * If we are now on an SI, move left again.
 	 */
-	if (h3270.ea_buf[h3270.cursor_addr].cc == EBC_si) {
-		baddr = h3270.cursor_addr;
+	if (hSession->ea_buf[hSession->cursor_addr].cc == EBC_si)
+	{
+		baddr = hSession->cursor_addr;
 		DEC_BA(baddr);
-		cursor_move(&h3270,baddr);
+		cursor_move(hSession,baddr);
 	}
 
 	/*
@@ -1427,11 +1433,12 @@ do_erase(void)
 	 * This ensures that if this is the end of a DBCS subfield, we will
 	 * land on the SI, instead of on the character following.
 	 */
-	d = ctlr_dbcs_state(h3270.cursor_addr);
-	if (IS_RIGHT(d)) {
-		baddr = h3270.cursor_addr;
+	d = ctlr_dbcs_state(hSession->cursor_addr);
+	if (IS_RIGHT(d))
+	{
+		baddr = hSession->cursor_addr;
 		DEC_BA(baddr);
-		cursor_move(&h3270,baddr);
+		cursor_move(hSession,baddr);
 	}
 
 	/*
@@ -1444,29 +1451,32 @@ do_erase(void)
 	 * If we've just erased the last character of a DBCS subfield, erase
 	 * the SO/SI pair as well.
 	 */
-	baddr = h3270.cursor_addr;
+	baddr = hSession->cursor_addr;
 	DEC_BA(baddr);
-	if (h3270.ea_buf[baddr].cc == EBC_so && h3270.ea_buf[h3270.cursor_addr].cc == EBC_si) {
-		cursor_move(&h3270,baddr);
+	if (hSession->ea_buf[baddr].cc == EBC_so && hSession->ea_buf[hSession->cursor_addr].cc == EBC_si)
+	{
+		cursor_move(hSession,baddr);
 		(void) do_delete();
 	}
-	h3270.display(&h3270);
+	hSession->display(hSession);
 }
 
 LIB3270_ACTION( erase )
 {
 //	reset_idle_timer();
-	if (hSession->kybdlock) {
+	if (hSession->kybdlock)
+	{
 		ENQUEUE_ACTION(lib3270_erase);
 		return 0;
 	}
 #if defined(X3270_ANSI) /*[*/
-	if (IN_ANSI) {
+	if (IN_ANSI)
+	{
 		net_send_erase();
 		return 0;
 	}
 #endif /*]*/
-	do_erase();
+	do_erase(hSession);
 	return 0;
 }
 
@@ -1508,7 +1518,7 @@ LIB3270_CURSOR_ACTION( right )
 	}
 	else
 	{
-		do_left();
+		do_left(hSession);
 	}
 	return 0;
 }
@@ -1943,7 +1953,7 @@ LIB3270_ACTION( eraseeol )
 	fa = get_field_attribute(&h3270,baddr);
 	if (FA_IS_PROTECTED(fa) || h3270.ea_buf[baddr].fa)
 	{
-		operator_error(KL_OERR_PROTECTED);
+		operator_error(&h3270,KL_OERR_PROTECTED);
 		return -1;
 	}
 
@@ -2007,7 +2017,7 @@ LIB3270_ACTION( eraseeof )
 	baddr = hSession->cursor_addr;
 	fa = get_field_attribute(hSession,baddr);
 	if (FA_IS_PROTECTED(fa) || h3270.ea_buf[baddr].fa) {
-		operator_error(KL_OERR_PROTECTED);
+		operator_error(&h3270,KL_OERR_PROTECTED);
 		return -1;
 	}
 	if (hSession->formatted) {	/* erase to next field attribute */
@@ -2127,7 +2137,7 @@ LIB3270_ACTION( deleteword )
 
 	/* Make sure we're on a modifiable field. */
 	if (FA_IS_PROTECTED(fa) || hSession->ea_buf[baddr].fa) {
-		operator_error(KL_OERR_PROTECTED);
+		operator_error(&h3270,KL_OERR_PROTECTED);
 		return -1;
 	}
 
@@ -2139,13 +2149,14 @@ LIB3270_ACTION( deleteword )
 			return 0;
 		if (hSession->ea_buf[baddr].cc == EBC_null ||
 		    hSession->ea_buf[baddr].cc == EBC_space)
-			do_erase();
+			do_erase(hSession);
 		else
 			break;
 	}
 
 	/* Backspace until the character to the left of the cursor is blank. */
-	for (;;) {
+	for (;;)
+	{
 		baddr = hSession->cursor_addr;
 		DEC_BA(baddr);
 		if (hSession->ea_buf[baddr].fa)
@@ -2154,7 +2165,7 @@ LIB3270_ACTION( deleteword )
 		    hSession->ea_buf[baddr].cc == EBC_space)
 			break;
 		else
-			do_erase();
+			do_erase(hSession);
 	}
 	hSession->display(hSession);
 	return 0;
@@ -2192,7 +2203,7 @@ LIB3270_ACTION( deletefield )
 	baddr = hSession->cursor_addr;
 	fa = get_field_attribute(hSession,baddr);
 	if (FA_IS_PROTECTED(fa) || hSession->ea_buf[baddr].fa) {
-		operator_error(KL_OERR_PROTECTED);
+		operator_error(hSession,KL_OERR_PROTECTED);
 		return -1;
 	}
 	while (!hSession->ea_buf[baddr].fa)
@@ -2362,31 +2373,34 @@ kybd_scroll_lock(Boolean lock)
  * Move the cursor back within the legal paste area.
  * Returns a Boolean indicating success.
  */
-static Boolean
-remargin(int lmargin)
+static Boolean remargin(H3270 *hSession, int lmargin)
 {
 	Boolean ever = False;
 	int baddr, b0 = 0;
 	int faddr;
 	unsigned char fa;
 
-	baddr = h3270.cursor_addr;
-	while (BA_TO_COL(baddr) < lmargin) {
+	baddr = hSession->cursor_addr;
+	while (BA_TO_COL(baddr) < lmargin)
+	{
 		baddr = ROWCOL_TO_BA(BA_TO_ROW(baddr), lmargin);
-		if (!ever) {
+		if (!ever)
+		{
 			b0 = baddr;
 			ever = True;
 		}
-		faddr = find_field_attribute(&h3270,baddr);
-		fa = h3270.ea_buf[faddr].fa;
-		if (faddr == baddr || FA_IS_PROTECTED(fa)) {
-			baddr = next_unprotected(&h3270,baddr);
+		faddr = find_field_attribute(hSession,baddr);
+		fa = hSession->ea_buf[faddr].fa;
+
+		if (faddr == baddr || FA_IS_PROTECTED(fa))
+		{
+			baddr = next_unprotected(hSession,baddr);
 			if (baddr <= b0)
 				return False;
 		}
 	}
 
-	cursor_move(&h3270,baddr);
+	cursor_move(hSession,baddr);
 	return True;
 }
 
@@ -2462,7 +2476,7 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *session, char *s, int len, int p
 			/* Jump cursor over left margin. */
 			if (lib3270_get_toggle(&h3270,LIB3270_TOGGLE_MARGINED_PASTE) &&
 			    BA_TO_COL(session->cursor_addr) < orig_col) {
-				if (!remargin(orig_col))
+				if (!remargin(&h3270,orig_col))
 					return len-1;
 				skipped = True;
 			}
@@ -2743,7 +2757,7 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *session, char *s, int len, int p
 	    case BASE:
 		if (lib3270_get_toggle(&h3270,LIB3270_TOGGLE_MARGINED_PASTE) &&
 		    BA_TO_COL(session->cursor_addr) < orig_col) {
-			(void) remargin(orig_col);
+			(void) remargin(&h3270,orig_col);
 		}
 		break;
 	    case OCTAL:
@@ -2752,7 +2766,7 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *session, char *s, int len, int p
 		state = BASE;
 		if (lib3270_get_toggle(&h3270,LIB3270_TOGGLE_MARGINED_PASTE) &&
 		    BA_TO_COL(session->cursor_addr) < orig_col) {
-			(void) remargin(orig_col);
+			(void) remargin(&h3270,orig_col);
 		}
 		break;
 	    case BACKPF:
