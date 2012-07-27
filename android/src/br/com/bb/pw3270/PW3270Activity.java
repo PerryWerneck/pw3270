@@ -192,20 +192,24 @@ public class PW3270Activity extends Activity
     public boolean onOptionsItemSelected(MenuItem item) 
     {
         // Handle item selection
-		Log.d(TAG,"Menu item selected");
-    	/*
-        switch (item.getItemId()) {
-            case R.id.new_game:
-                newGame();
-                return true;
-            case R.id.help:
-                showHelp();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        switch (item.getItemId()) 
+        {
+        case R.id.connect:
+        	host.connect();
+        	break;
+        	
+        case R.id.disconnect:
+        	host.disconnect();
+        	break;
+        	
+        case R.id.settings:
+        	break;
+
+        default:
+            return super.onOptionsItemSelected(item);
         }
-        */
-		return super.onOptionsItemSelected(item);
+        return true;
+        
     }
     
 }

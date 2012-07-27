@@ -69,6 +69,10 @@
 	#define SSL void
 #endif // !HEADER_SSL_H
 
+#ifndef LIB3270_TA
+	#define LIB3270_TA void
+#endif // !LIB3270_TA
+
 	struct _h3270
 	{
 		unsigned short 		  	  sz;					/**< Struct size */
@@ -245,6 +249,8 @@
 		unsigned char			  aid;					/**< current attention ID */
 		void					* unlock_id;
 		time_t					  unlock_delay_time;
+		LIB3270_TA				* ta_head;
+		LIB3270_TA				* ta_tail;
 
 		// Widget info
 		void					* widget;

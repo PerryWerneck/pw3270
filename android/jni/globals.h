@@ -76,6 +76,7 @@
 
  void pw3270_jni_lock(JNIEnv *env, jobject obj);
  void pw3270_jni_unlock();
+ void pw3270_jni_post_message(int msgid, int arg1 = 0, int arg2 = 0);
 
  jmethodID lib3270_getmethodID(const char *name, const char *sig);
 

@@ -63,7 +63,7 @@ jmethodID lib3270_getmethodID(const char *name, const char *sig)
 	return PW3270_JNI_ENV->GetMethodID(PW3270_JNI_ENV->GetObjectClass(PW3270_JNI_OBJ), name, sig );
 }
 
-static void post_message(int msgid, int arg1 = 0, int arg2 = 0)
+void pw3270_jni_post_message(int msgid, int arg1, int arg2)
 {
 	trace("%s: pw3270_env=%p pw3270_obj=%p",__FUNCTION__,PW3270_JNI_ENV,PW3270_JNI_OBJ);
 
@@ -73,12 +73,12 @@ static void post_message(int msgid, int arg1 = 0, int arg2 = 0)
 
 static void changed(H3270 *session, int offset, int len)
 {
-	post_message(2,offset,len);
+	pw3270_jni_post_message(2,offset,len);
 }
 
 static void erase(H3270 *session)
 {
-	post_message(4);
+	pw3270_jni_post_message(4);
 }
 
 static int popuphandler(H3270 *session, void *terminal, LIB3270_NOTIFY type, const char *title, const char *msg, const char *fmt, va_list args)
@@ -124,13 +124,13 @@ static int popuphandler(H3270 *session, void *terminal, LIB3270_NOTIFY type, con
 
 static void ctlr_done(H3270 *session)
 {
-	post_message(4);
+	pw3270_jni_post_message(4);
 }
 
 void update_status(H3270 *session, LIB3270_MESSAGE id)
 {
-	__android_log_print(ANDROID_LOG_DEBUG, PACKAGE_NAME, "Status changed to %d",(int) id);
-	post_message(1,(int) id);
+//	__android_log_print(ANDROID_LOG_DEBUG, PACKAGE_NAME, "Status changed to %d",(int) id);
+	pw3270_jni_post_message(1,(int) id);
 }
 
 static int write_buffer(H3270 *session, unsigned const char *buf, int len)
@@ -334,6 +334,8 @@ JNIEXPORT jstring JNICALL Java_br_com_bb_pw3270_lib3270_getHost(JNIEnv *env, job
 JNIEXPORT void JNICALL Java_br_com_bb_pw3270_lib3270_set_1connection_1status(JNIEnv *env, jobject obj, jboolean connected)
 {
 	PW3270_JNI_BEGIN
+
+	trace("Host is %s",connected ? "connected" : "disconnected");
 
 	if(connected)
 		lib3270_set_connected(PW3270_SESSION);

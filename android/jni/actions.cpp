@@ -36,7 +36,10 @@ JNIEXPORT void JNICALL Java_br_com_bb_pw3270_lib3270_sendEnter(JNIEnv *env, jobj
 {
 	PW3270_JNI_BEGIN
 
-	lib3270_enter(PW3270_SESSION);
+	if(lib3270_connected(PW3270_SESSION))
+		lib3270_enter(PW3270_SESSION);
+	else
+		pw3270_jni_post_message(1,LIB3270_MESSAGE_DISCONNECTED);
 
 	PW3270_JNI_END
 }
@@ -45,7 +48,10 @@ JNIEXPORT void JNICALL Java_br_com_bb_pw3270_lib3270_sendPFkey(JNIEnv *env, jobj
 {
 	PW3270_JNI_BEGIN
 
-	lib3270_pfkey(PW3270_SESSION,key);
+	if(lib3270_connected(PW3270_SESSION))
+		lib3270_pfkey(PW3270_SESSION,key);
+	else
+		pw3270_jni_post_message(1,LIB3270_MESSAGE_DISCONNECTED);
 
 	PW3270_JNI_END
 }

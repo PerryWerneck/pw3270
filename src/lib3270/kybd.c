@@ -35,6 +35,10 @@
  *		This module handles the keyboard for the 3270 emulator.
  */
 
+struct ta;
+
+#define LIB3270_TA struct ta
+
 #include "globals.h"
 
 #ifndef ANDROID
@@ -153,7 +157,7 @@ static int n_composites = 0;
 #define ak_eq(k1, k2)	(((k1).keysym  == (k2).keysym) && \
 			 ((k1).keytype == (k2).keytype))
 
-static struct ta
+struct ta
 {
 	struct ta 		*next;
 
@@ -164,12 +168,15 @@ static struct ta
 		TA_TYPE_USER
 	} type;
 
-	H3270 * session;
 	void (*fn)(H3270 *, const char *, const char *);
 	char *parm[2];
 	unsigned char aid_code;
-} *ta_head = (struct ta *) NULL,
+};
+
+/*
+*ta_head = (struct ta *) NULL,
   *ta_tail = (struct ta *) NULL;
+*/
 
 
 #if defined(DEBUG) || defined(ANDROID)
@@ -238,16 +245,16 @@ static int enq_chk(H3270 *session)
 
 	trace("Adding key %02x on queue",(int) aid_code);
 
-	if (ta_head)
+	if (session->ta_head)
 	{
-		ta_tail->next = ta;
+		session->ta_tail->next = ta;
 	}
 	else
 	{
-		ta_head = ta;
+		session->ta_head = ta;
 		status_typeahead(session,True);
 	}
-	ta_tail = ta;
+	session->ta_tail = ta;
 
 	trace_event("  Key-aid queued (kybdlock 0x%x)\n", session->kybdlock);
  }
@@ -271,7 +278,6 @@ static void enq_ta(H3270 *hSession, void (*fn)(H3270 *, const char *, const char
 		return;
 
 	ta = (struct ta *) lib3270_malloc(sizeof(*ta));
-	ta->session	= hSession;
 	ta->next	= (struct ta *) NULL;
 	ta->type	= TA_TYPE_DEFAULT;
 	ta->fn		= fn;
@@ -282,16 +288,16 @@ static void enq_ta(H3270 *hSession, void (*fn)(H3270 *, const char *, const char
 	if (parm2)
 		ta->parm[1] = NewString(parm2);
 
-	if (ta_head)
+	if(hSession->ta_head)
 	{
-		ta_tail->next = ta;
+		hSession->ta_tail->next = ta;
 	}
 	else
 	{
-		ta_head = ta;
+		hSession->ta_head = ta;
 		status_typeahead(hSession,True);
 	}
-	ta_tail = ta;
+	hSession->ta_tail = ta;
 
 	trace_event("  action queued (kybdlock 0x%x)\n", h3270.kybdlock);
 }
@@ -303,30 +309,30 @@ Boolean run_ta(void)
 {
 	struct ta *ta;
 
-	if (h3270.kybdlock || (ta = ta_head) == (struct ta *)NULL)
+	if (h3270.kybdlock || (ta = h3270.ta_head) == (struct ta *)NULL)
 		return False;
 
-	if ((ta_head = ta->next) == (struct ta *)NULL)
+	if ((h3270.ta_head = ta->next) == (struct ta *)NULL)
 	{
-		ta_tail = (struct ta *)NULL;
+		h3270.ta_tail = (struct ta *)NULL;
 		status_typeahead(&h3270,False);
 	}
 
 	switch(ta->type)
 	{
 	case TA_TYPE_DEFAULT:
-		ta->fn(ta->session,ta->parm[0],ta->parm[1]);
+		ta->fn(&h3270,ta->parm[0],ta->parm[1]);
 		lib3270_free(ta->parm[0]);
 		lib3270_free(ta->parm[1]);
 		break;
 
 	case TA_TYPE_KEY_AID:
 		trace("Sending enqueued key %02x",ta->aid_code);
-		key_AID(ta->session,ta->aid_code);
+		key_AID(&h3270,ta->aid_code);
 		break;
 
 	default:
-		popup_an_error(ta->session, _( "Unexpected type %d in typeahead queue" ), ta->type);
+		popup_an_error(&h3270, _( "Unexpected type %d in typeahead queue" ), ta->type);
 
 	}
 
@@ -339,13 +345,12 @@ Boolean run_ta(void)
  * Flush the typeahead queue.
  * Returns whether or not anything was flushed.
  */
-static Boolean
-flush_ta(void)
+static Boolean flush_ta(void)
 {
 	struct ta *ta, *next;
 	Boolean any = False;
 
-	for (ta = ta_head; ta != (struct ta *) NULL; ta = next)
+	for (ta = h3270.ta_head; ta != (struct ta *) NULL; ta = next)
 	{
 		lib3270_free(ta->parm[0]);
 		lib3270_free(ta->parm[1]);
@@ -353,7 +358,7 @@ flush_ta(void)
 		lib3270_free(ta);
 		any = True;
 	}
-	ta_head = ta_tail = (struct ta *) NULL;
+	h3270.ta_head = h3270.ta_tail = (struct ta *) NULL;
 	status_typeahead(&h3270,False);
 	return any;
 }
@@ -1001,316 +1006,6 @@ static Boolean key_Character(int code, Boolean with_ge, Boolean pasting, Boolean
 }
 
 /*
-#if defined(X3270_DBCS)
-static void
-key_WCharacter_wrapper(Widget w unused, XEvent *event unused, String *params, Cardinal *num_params unused)
-{
-	int code;
-	unsigned char codebuf[2];
-
-	code = atoi(params[0]);
-	trace_event(" %s -> Key(0x%04x)\n",
-	    ia_name[(int) ia_cause], code);
-	codebuf[0] = (code >> 8) & 0xff;
-	codebuf[1] = code & 0xff;
-	(void) key_WCharacter(codebuf, NULL);
-}
-
-//
-// Input a DBCS character.
-// Returns True if a character was stored in the buffer, False otherwise.
-//
-Boolean key_WCharacter(unsigned char code[], Boolean *skipped)
-{
-	int baddr;
-	register unsigned char fa;
-	int faddr;
-	enum dbcs_state d;
-	int xaddr;
-	Boolean done = False;
-	Boolean no_si = False;
-	extern unsigned char reply_mode; // XXX
-
-	reset_idle_timer();
-
-	if (kybdlock) {
-		char codename[64];
-
-		(void) sprintf(codename, "%d", (code[0] << 8) | code[1]);
-		enq_ta(key_WCharacter_wrapper, codename, CN);
-		return False;
-	}
-
-	if (skipped != NULL)
-		*skipped = False;
-
-	// In DBCS mode?
-	if (!dbcs) {
-		trace_event("DBCS character received when not in DBCS mode, "
-		    "ignoring.\n");
-		return True;
-	}
-
-#if defined(X3270_ANSI)
-	// In ANSI mode?
-	if (IN_ANSI) {
-	    char mb[16];
-
-	    dbcs_to_mb(code[0], code[1], mb);
-	    net_sends(mb);
-	    return True;
-	}
-#endif
-
-	baddr = cursor_addr;
-	fa = get_field_attribute(baddr);
-	faddr = find_field_attribute(baddr);
-
-	// Protected?
-	if (ea_buf[baddr].fa || FA_IS_PROTECTED(fa)) {
-		operator_error(KL_OERR_PROTECTED);
-		return False;
-	}
-
-	// Numeric?
-	if (h3270.numeric_lock && FA_IS_NUMERIC(fa)) {
-		operator_error(KL_OERR_NUMERIC);
-		return False;
-	}
-
-	//
-	// Figure our what to do based on the DBCS state of the buffer.
-	// Leaves baddr pointing to the next unmodified position.
-	//
-retry:
-	switch (d = ctlr_dbcs_state(baddr)) {
-	case DBCS_RIGHT:
-	case DBCS_RIGHT_WRAP:
-		// Back up one position and process it as a LEFT.
-		DEC_BA(baddr);
-		// fall through...
-	case DBCS_LEFT:
-	case DBCS_LEFT_WRAP:
-		// Overwrite the existing character.
-		if (insert) {
-			if (!ins_prep(faddr, baddr, 2)) {
-				return False;
-			}
-		}
-		ctlr_add(baddr, code[0], ea_buf[baddr].cs);
-		INC_BA(baddr);
-		ctlr_add(baddr, code[1], ea_buf[baddr].cs);
-		INC_BA(baddr);
-		done = True;
-		break;
-	case DBCS_SB:
-		// Back up one position and process it as an SI.
-		DEC_BA(baddr);
-		// fall through...
-	case DBCS_SI:
-		// Extend the subfield to the right.
-		if (insert) {
-			if (!ins_prep(faddr, baddr, 2)) {
-				return False;
-			}
-		} else {
-			// Don't overwrite a field attribute or an SO.
-			xaddr = baddr;
-			INC_BA(xaddr);	// C1
-			if (ea_buf[xaddr].fa)
-				break;
-			if (ea_buf[xaddr].cc == EBC_so)
-				no_si = True;
-			INC_BA(xaddr);	// SI
-			if (ea_buf[xaddr].fa || ea_buf[xaddr].cc == EBC_so)
-				break;
-		}
-		ctlr_add(baddr, code[0], ea_buf[baddr].cs);
-		INC_BA(baddr);
-		ctlr_add(baddr, code[1], ea_buf[baddr].cs);
-		if (!no_si) {
-			INC_BA(baddr);
-			ctlr_add(baddr, EBC_si, ea_buf[baddr].cs);
-		}
-		done = True;
-		break;
-	case DBCS_DEAD:
-		break;
-	case DBCS_NONE:
-		if (ea_buf[faddr].ic) {
-			Boolean extend_left = FALSE;
-
-			// Is there room?
-			if (insert) {
-				if (!ins_prep(faddr, baddr, 4)) {
-					return False;
-				}
-			} else {
-				xaddr = baddr;	// baddr, SO
-				if (ea_buf[xaddr].cc == EBC_so) {
-					//
-					// (baddr), where we would have put the
-					// SO, is already an SO.  Move to
-					// (baddr+1) and try again.
-					//
-#if defined(DBCS_RIGHT_DEBUG)
-					printf("SO in position 0\n");
-#endif
-					INC_BA(baddr);
-					goto retry;
-				}
-
-				INC_BA(xaddr);	// baddr+1, C0
-				if (ea_buf[xaddr].fa)
-					break;
-				if (ea_buf[xaddr].cc == EBC_so) {
-					enum dbcs_state e;
-
-					//
-					// (baddr+1), where we would have put
-					// the left side of the DBCS, is a SO.
-					// If there's room, we can extend the
-					// subfield to the left.  If not, we're
-					// stuck.
-					//
-					DEC_BA(xaddr);
-					DEC_BA(xaddr);
-					e = ctlr_dbcs_state(xaddr);
-					if (e == DBCS_NONE || e == DBCS_SB) {
-						extend_left = True;
-						no_si = True;
-#if defined(DBCS_RIGHT_DEBUG)
-						printf("SO in position 1, "
-							"extend left\n");
-#endif
-					} else {
-						//
-						// Won't actually happen,
-						// because this implies that
-						// the buffer addr at baddr
-						// is an SB.
-						//
-#if defined(DBCS_RIGHT_DEBUG)
-						printf("SO in position 1, "
-							"no room on left, "
-							"fail\n");
-#endif
-						break;
-					}
-				}
-
-				INC_BA(xaddr); // baddr+2, C1
-				if (ea_buf[xaddr].fa)
-					break;
-				if (ea_buf[xaddr].cc == EBC_so) {
-					//
-					// (baddr+2), where we want to put the
-					// right half of the DBCS character, is
-					// a SO.  This is a natural extension
-					// to the left -- just make sure we
-					// don't write an SI.
-					//
-					no_si = True;
-#if defined(DBCS_RIGHT_DEBUG)
-					printf("SO in position 2, no SI\n");
-#endif
-				}
-
-				//
-				// Check the fourth position only if we're
-				// not doing an extend-left.
-				///
-				if (!no_si) {
-					INC_BA(xaddr); // baddr+3, SI
-					if (ea_buf[xaddr].fa)
-						break;
-					if (ea_buf[xaddr].cc == EBC_so) {
-						//
-						// (baddr+3), where we want to
-						// put an
-						// SI, is an SO.  Forget it.
-						//
-#if defined(DBCS_RIGHT_DEBUG)
-						printf("SO in position 3, "
-							"retry right\n");
-						INC_BA(baddr);
-						goto retry;
-#endif
-						break;
-					}
-				}
-			}
-			// Yes, add it.
-			if (extend_left)
-				DEC_BA(baddr);
-			ctlr_add(baddr, EBC_so, ea_buf[baddr].cs);
-			INC_BA(baddr);
-			ctlr_add(baddr, code[0], ea_buf[baddr].cs);
-			INC_BA(baddr);
-			ctlr_add(baddr, code[1], ea_buf[baddr].cs);
-			if (!no_si) {
-				INC_BA(baddr);
-				ctlr_add(baddr, EBC_si, ea_buf[baddr].cs);
-			}
-			done = True;
-		} else if (reply_mode == SF_SRM_CHAR) {
-			// Use the character attribute.
-			if (insert) {
-				if (!ins_prep(faddr, baddr, 2)) {
-					return False;
-				}
-			} else {
-				xaddr = baddr;
-				INC_BA(xaddr);
-				if (ea_buf[xaddr].fa)
-					break;
-			}
-			ctlr_add(baddr, code[0], CS_DBCS);
-			INC_BA(baddr);
-			ctlr_add(baddr, code[1], CS_DBCS);
-			INC_BA(baddr);
-			done = True;
-		}
-		break;
-	}
-
-	if (done) {
-		// Implement blank fill mode.
-		if (lib3270_get_toggle(&h3270,LIB3270_TOGGLE_BLANK_FILL)) {
-			xaddr = faddr;
-			INC_BA(xaddr);
-			while (xaddr != baddr) {
-				if (ea_buf[xaddr].cc == EBC_null)
-					ctlr_add(xaddr, EBC_space, CS_BASE);
-				else
-					break;
-				INC_BA(xaddr);
-			}
-		}
-
-		mdt_set(cursor_addr);
-
-		// Implement auto-skip.
-		while (ea_buf[baddr].fa) {
-			if (skipped != NULL)
-				*skipped = True;
-			if (FA_IS_SKIP(ea_buf[baddr].fa))
-				baddr = next_unprotected(&h3270,baddr);
-			else
-				INC_BA(baddr);
-		}
-		cursor_move(baddr);
-		(void) ctlr_dbcs_postprocess();
-		return True;
-	} else {
-		operator_error(KL_OERR_DBCS);
-		return False;
-	}
-}
-#endif
-*/
-
-/*
  * Handle an ordinary character key, given an ASCII code.
  */
 void key_ACharacter(unsigned char c, enum keytype keytype, enum iaction cause,Boolean *skipped)
@@ -1340,59 +1035,6 @@ void key_ACharacter(unsigned char c, enum keytype keytype, enum iaction cause,Bo
 		trace_event("  dropped (not connected)\n");
 	}
 }
-
-
-/*
- * Simple toggles.
- */
-/*
-#if defined(X3270_DISPLAY)
-void
-AltCursor_action(Widget w unused, XEvent *event, String *params,
-    Cardinal *num_params)
-{
-	reset_idle_timer();
-	do_toggle(ALT_CURSOR);
-}
-#endif
-*/
-
-/*
-void
-MonoCase_action(Widget w unused, XEvent *event, String *params,
-    Cardinal *num_params)
-{
-	reset_idle_timer();
-	do_toggle(MONOCASE);
-}
-*/
-
-/*
- * Flip the display left-to-right
- */
- /*
-void
-Flip_action(Widget w unused, XEvent *event, String *params,
-    Cardinal *num_params)
-{
-
-//	reset_idle_timer();
-
-	screen_flip();
-}
-*/
-
-
-/*
- * Tab forward to next field.
- */
-/*
-void
-Tab_action(Widget w unused, XEvent *event, String *params, Cardinal *num_params)
-{
-	action_NextField();
-}
-*/
 
 LIB3270_ACTION( nextfield )
 {
@@ -1611,13 +1253,6 @@ do_left(void)
 		DEC_BA(baddr);
 	cursor_move(&h3270,baddr);
 }
-
-/*
-void Left_action(Widget w unused, XEvent *event, String *params, Cardinal *num_params)
-{
-	action_CursorLeft();
-}
-*/
 
 LIB3270_CURSOR_ACTION( left )
 {
@@ -2322,116 +1957,6 @@ LIB3270_ACTION( clear )
 		key_AID(hSession,AID_CLEAR);
 	return 0;
 }
-
-
-/*
- * Cursor Select key (light pen simulator).
- */
- /*
-static void
-lightpen_select(int baddr)
-{
-	int faddr;
-	register unsigned char	fa;
-	int designator;
-#if defined(X3270_DBCS)
-	int designator2;
-#endif
-
-	faddr = find_field_attribute(baddr);
-	fa = ea_buf[faddr].fa;
-	if (!FA_IS_SELECTABLE(fa)) {
-		lib3270_ring_bell();
-		return;
-	}
-	designator = faddr;
-	INC_BA(designator);
-
-#if defined(X3270_DBCS)
-	if (dbcs) {
-		if (ea_buf[baddr].cs == CS_DBCS) {
-			designator2 = designator;
-			INC_BA(designator2);
-			if ((ea_buf[designator].db != DBCS_LEFT &&
-			     ea_buf[designator].db != DBCS_LEFT_WRAP) &&
-			    (ea_buf[designator2].db != DBCS_RIGHT &&
-			     ea_buf[designator2].db != DBCS_RIGHT_WRAP)) {
-				lib3270_ring_bell();
-				return;
-			}
-			if (ea_buf[designator].cc == 0x42 &&
-			    ea_buf[designator2].cc == EBC_greater) {
-				ctlr_add(designator2, EBC_question, CS_DBCS);
-				mdt_clear(faddr);
-			} else if (ea_buf[designator].cc == 0x42 &&
-				   ea_buf[designator2].cc == EBC_question) {
-				ctlr_add(designator2, EBC_greater, CS_DBCS);
-				mdt_clear(faddr);
-			} else if ((ea_buf[designator].cc == EBC_space &&
-				    ea_buf[designator2].cc == EBC_space) ||
-			           (ea_buf[designator].cc == EBC_null &&
-				    ea_buf[designator2].cc == EBC_null)) {
-				ctlr_add(designator2, EBC_greater, CS_DBCS);
-				mdt_set(faddr);
-				key_AID(AID_SELECT);
-			} else if (ea_buf[designator].cc == 0x42 &&
-				   ea_buf[designator2].cc == EBC_ampersand) {
-				mdt_set(faddr);
-				key_AID(AID_ENTER);
-			} else {
-				lib3270_ring_bell();
-			}
-			return;
-		}
-	}
-#endif
-
-	switch (ea_buf[designator].cc) {
-	    case EBC_greater:
-		ctlr_add(designator, EBC_question, 0);
-		mdt_clear(faddr);
-		break;
-	    case EBC_question:
-		ctlr_add(designator, EBC_greater, 0);
-		mdt_set(faddr);
-		break;
-	    case EBC_space:
-	    case EBC_null:
-		mdt_set(faddr);
-		key_AID(AID_SELECT);
-		break;
-	    case EBC_ampersand:
-		mdt_set(faddr);
-		key_AID(AID_ENTER);
-		break;
-	    default:
-		lib3270_ring_bell();
-		break;
-	}
-}
-*/
-
-/*
- * Cursor Select key (light pen simulator) -- at the current cursor location.
- */
-/*
-void
-CursorSelect_action(Widget w unused, XEvent *event, String *params,
-    Cardinal *num_params)
-{
-//	reset_idle_timer();
-	if (kybdlock) {
-		enq_ta(CursorSelect_action, CN, CN);
-		return;
-	}
-
-#if defined(X3270_ANSI)
-	if (IN_ANSI)
-		return;
-#endif
-	lightpen_select(cursor_addr);
-}
-*/
 
 /**
  * Erase End Of Line Key.

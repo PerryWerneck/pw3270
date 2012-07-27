@@ -108,43 +108,43 @@ JNIEXPORT jbyteArray JNICALL Java_br_com_bb_pw3270_lib3270_getText(JNIEnv *env, 
 
 JNIEXPORT void JNICALL Java_br_com_bb_pw3270_lib3270_setTextAt(JNIEnv *env, jobject obj, jint pos, jbyteArray inText, jint szText)
 {
-	unsigned char 	  str[szText+1];
-	int 		 	  f;
-	jbyte			* bt;
-
 	PW3270_JNI_BEGIN
 
-	bt = env->GetByteArrayElements(inText,0);
-
-	for(int f=0;f<szText;f++)
-		str[f] = (char) bt[f];
-	str[szText] = 0;
-
-	trace("Buffer(%d/%d)=\"%s\"",(int) pos, lib3270_field_addr(PW3270_SESSION, (int) pos), str);
-
-
-	if( ((int) pos) == lib3270_field_addr(PW3270_SESSION, (int) pos))
+	if(lib3270_connected(PW3270_SESSION))
 	{
-		// Begin of field, clear it first
-		int 			  sz = lib3270_field_length(PW3270_SESSION,pos);
-		unsigned char	* buffer = (unsigned char *) lib3270_malloc(sz+1);
+		unsigned char 	  str[szText+1];
+		int 		 	  f;
+		jbyte			* bt	= env->GetByteArrayElements(inText,0);
 
-		memset(buffer,' ',sz);
+		for(int f=0;f<szText;f++)
+			str[f] = (char) bt[f];
+		str[szText] = 0;
+
+//		trace("Buffer(%d/%d)=\"%s\"",(int) pos, lib3270_field_addr(PW3270_SESSION, (int) pos), str);
+
+		if( ((int) pos) == lib3270_field_addr(PW3270_SESSION, (int) pos))
+		{
+			// Begin of field, clear it first
+			int 			  sz = lib3270_field_length(PW3270_SESSION,pos);
+			unsigned char	* buffer = (unsigned char *) lib3270_malloc(sz+1);
+
+			memset(buffer,' ',sz);
+
+			lib3270_clear_operator_error(PW3270_SESSION);
+			lib3270_set_cursor_address(PW3270_SESSION,(int) pos);
+			lib3270_set_string(PW3270_SESSION,buffer);
+
+			lib3270_free(buffer);
+		}
 
 		lib3270_clear_operator_error(PW3270_SESSION);
 		lib3270_set_cursor_address(PW3270_SESSION,(int) pos);
-		lib3270_set_string(PW3270_SESSION,buffer);
+		lib3270_set_string(PW3270_SESSION,str);
 
-		lib3270_free(buffer);
+		lib3270_clear_operator_error(PW3270_SESSION);
+
+		env->ReleaseByteArrayElements(inText,bt,JNI_ABORT);
 	}
-
-	lib3270_clear_operator_error(PW3270_SESSION);
-	lib3270_set_cursor_address(PW3270_SESSION,(int) pos);
-	lib3270_set_string(PW3270_SESSION,str);
-
-	lib3270_clear_operator_error(PW3270_SESSION);
-
-	env->ReleaseByteArrayElements(inText,bt,JNI_ABORT);
 
 	PW3270_JNI_END
 }
