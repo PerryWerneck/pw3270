@@ -26,12 +26,23 @@ function setupWindow()
 		}
 
 	}
-
+	
 }
 
 function terminalUpdate()
 {
-	document.getElementById("terminal").innerHTML = pw3270.getscreencontents();
+	if(pw3270.isConnected())
+	{
+		document.getElementById("terminal").innerHTML = pw3270.getscreencontents();
+		document.getElementById("pfbar").style.visible = "visible";
+		document.getElementById("terminal").style.visible = "visible";
+	}
+	else
+	{
+		document.getElementById("pfbar").style.visible = "hidden";
+		document.getElementById("terminal").style.visible = "hidden";
+	}
+		
 	setupWindow();
 	pw3270.ready();
 }

@@ -63,7 +63,7 @@ public class PW3270Activity extends Activity
 
 		protected void updateScreen()
 		{
-			showProgressDialog("Aguarde...");
+			// showProgressDialog("Aguarde...");
 			view.reload();
 		}
 		

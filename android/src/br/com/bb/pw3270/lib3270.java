@@ -96,8 +96,7 @@ public class lib3270
 				break;
 
 			case 6: // recv_data
-				procRecvdata(((byteMessage) msg.obj).getMessage(),
-						((byteMessage) msg.obj).getLength());
+				procRecvdata(((byteMessage) msg.obj).getMessage(),((byteMessage) msg.obj).getLength());
 				break;
 
 			case 7: // ready
@@ -188,7 +187,8 @@ public class lib3270
 	{
 		Log.i(TAG, "Bytes a enviar: " + len);
 
-		try {
+		try 
+		{
 			outData.write(data, 0, len);
 			outData.flush();
 			return len;
@@ -224,18 +224,21 @@ public class lib3270
 
 			postMessage(1, 14, 0);
 
-			if (ssl) {
+			if (ssl) 
+			{
 				// Host é SSL
 				socketFactory = SSLSocketFactory.getDefault();
-			} else {
+			} 
+			else 
+			{
 				socketFactory = SocketFactory.getDefault();
 			}
 
-			try {
+			try 
+			{
 				sock = socketFactory.createSocket(hostname, port);
 				outData = new DataOutputStream(sock.getOutputStream());
 				inData = new DataInputStream(sock.getInputStream());
-
 			}
 			catch (Exception e)
 			{
@@ -276,20 +279,24 @@ public class lib3270
 					byte[] in = new byte[4096];
 					int sz = -1;
 
-					try {
+					try 
+					{
 						sz = inData.read(in, 0, 4096);
-					} catch (Exception e) {
-						sz = -1;
-					}
 
-					if (sz < 0) {
+						Log.i(TAG, Integer.toString(sz) + " bytes recebidos");
+
+						if (sz > 0) 
+						{
+							Message msg = mHandler.obtainMessage();
+							msg.what = 6;
+							msg.obj = new byteMessage(in, sz);
+							mHandler.sendMessage(msg);
+						}
+					
+					} catch (Exception e) 
+					{
+						Log.i(TAG, "Erro ao receber dados do host: " + e.getLocalizedMessage());
 						connected = false;
-					} else if (sz > 0) {
-						Message msg = mHandler.obtainMessage();
-						msg.what = 6;
-						msg.obj = new byteMessage(in, sz);
-
-						mHandler.sendMessage(msg);
 					}
 				}
 			}
@@ -363,18 +370,19 @@ public class lib3270
 			if(screenState != 0)
 			{
 				screenState = 0;
+				Log.v(TAG, "Status changed to NONE");
 				updateScreen();
 			}
 			break;
 
 		case 4: // LIB3270_MESSAGE_DISCONNECTED
-			Log.v(TAG, "Disconnected");
+			Log.v(TAG, "Status changed to disconnected");
 			connected = false;
 			erase();
 			break;
 
 		case 3: // LIB3270_MESSAGE_CONNECTED
-			Log.v(TAG, "Connected");
+			Log.v(TAG, "Status changed to connected");
 			break;
 
 	        // 01 LIB3270_MESSAGE_SYSWAIT
@@ -522,7 +530,8 @@ public class lib3270
 	public native boolean isTerminalReady();
 
 	// Timers
-	protected void newTimer(long id, int msec) {
+	protected void newTimer(long id, int msec) 
+	{
 		new timer(this, id, msec);
 	}
 
