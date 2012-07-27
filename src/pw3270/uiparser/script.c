@@ -85,7 +85,7 @@
 	}
 
 	info->script_action = info->action;
-	g_markup_parse_context_push(context,&parser,info);
+	g_markup_parse_context_push(context,(GMarkupParser *) &parser,info);
 
 	return NULL;
  }
