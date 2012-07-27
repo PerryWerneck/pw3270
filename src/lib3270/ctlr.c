@@ -542,16 +542,15 @@ process_ds(unsigned char *buf, int buflen)
 /*
  * Functions to insert SA attributes into the inbound data stream.
  */
-static void
-insert_sa1(unsigned char attr, unsigned char value, unsigned char *currentp, Boolean *anyp)
+static void insert_sa1(H3270 *hSession, unsigned char attr, unsigned char value, unsigned char *currentp, Boolean *anyp)
 {
 	if (value == *currentp)
 		return;
 	*currentp = value;
 	space3270out(3);
-	*h3270.obptr++ = ORDER_SA;
-	*h3270.obptr++ = attr;
-	*h3270.obptr++ = value;
+	*hSession->obptr++ = ORDER_SA;
+	*hSession->obptr++ = attr;
+	*hSession->obptr++ = value;
 	if (*anyp)
 		trace_ds("'");
 	trace_ds(" SetAttribute(%s)", see_efa(attr, value));
@@ -575,27 +574,30 @@ host_cs(unsigned char cs)
 	}
 }
 
-static void
-insert_sa(int baddr, unsigned char *current_fgp, unsigned char *current_bgp,
-	unsigned char *current_grp, unsigned char *current_csp, Boolean *anyp)
+static void insert_sa(H3270 *hSession, int baddr, unsigned char *current_fgp, unsigned char *current_bgp,unsigned char *current_grp, unsigned char *current_csp, Boolean *anyp)
 {
-	if (h3270.reply_mode != SF_SRM_CHAR)
+	if (hSession->reply_mode != SF_SRM_CHAR)
 		return;
 
-	if (memchr((char *) h3270.crm_attr, XA_FOREGROUND, h3270.crm_nattr))
-		insert_sa1(XA_FOREGROUND, h3270.ea_buf[baddr].fg, current_fgp, anyp);
-	if (memchr((char *) h3270.crm_attr, XA_BACKGROUND, h3270.crm_nattr))
-		insert_sa1(XA_BACKGROUND, h3270.ea_buf[baddr].bg, current_bgp, anyp);
-	if (memchr((char *) h3270.crm_attr, XA_HIGHLIGHTING, h3270.crm_nattr)) {
+	if (memchr((char *) hSession->crm_attr, XA_FOREGROUND, hSession->crm_nattr))
+		insert_sa1(hSession, XA_FOREGROUND, hSession->ea_buf[baddr].fg, current_fgp, anyp);
+
+	if (memchr((char *) hSession->crm_attr, XA_BACKGROUND, hSession->crm_nattr))
+		insert_sa1(hSession, XA_BACKGROUND, hSession->ea_buf[baddr].bg, current_bgp, anyp);
+
+	if (memchr((char *) hSession->crm_attr, XA_HIGHLIGHTING, hSession->crm_nattr))
+	{
 		unsigned char gr;
 
-		gr = h3270.ea_buf[baddr].gr;
+		gr = hSession->ea_buf[baddr].gr;
 		if (gr)
 			gr |= 0xf0;
-		insert_sa1(XA_HIGHLIGHTING, gr, current_grp, anyp);
+		insert_sa1(hSession, XA_HIGHLIGHTING, gr, current_grp, anyp);
 	}
-	if (memchr((char *) h3270.crm_attr, XA_CHARSET, h3270.crm_nattr)) {
-		insert_sa1(XA_CHARSET, host_cs(h3270.ea_buf[baddr].cs), current_csp,anyp);
+
+	if (memchr((char *) hSession->crm_attr, XA_CHARSET, hSession->crm_nattr))
+	{
+		insert_sa1(hSession, XA_CHARSET, host_cs(hSession->ea_buf[baddr].cs), current_csp,anyp);
 	}
 }
 
@@ -689,12 +691,7 @@ ctlr_read_modified(unsigned char aid_byte, Boolean all)
 
 					if (send_data &&
 					    h3270.ea_buf[baddr].cc) {
-						insert_sa(baddr,
-						    &current_fg,
-						    &current_bg,
-						    &current_gr,
-						    &current_cs,
-						    &any);
+						insert_sa(&h3270,baddr,&current_fg,&current_bg,&current_gr,&current_cs,&any);
 						if (h3270.ea_buf[baddr].cs & CS_GE) {
 							space3270out(1);
 							*h3270.obptr++ = ORDER_GE;
@@ -734,12 +731,7 @@ ctlr_read_modified(unsigned char aid_byte, Boolean all)
 
 		do {
 			if (h3270.ea_buf[baddr].cc) {
-				insert_sa(baddr,
-				    &current_fg,
-				    &current_bg,
-				    &current_gr,
-				    &current_cs,
-				    &any);
+				insert_sa(&h3270,baddr,&current_fg,&current_bg,&current_gr,&current_cs,&any);
 				if (h3270.ea_buf[baddr].cs & CS_GE) {
 					space3270out(1);
 					*h3270.obptr++ = ORDER_GE;
@@ -797,82 +789,84 @@ void ctlr_read_buffer(H3270 *hSession, unsigned char aid_byte)
 #endif /*]*/
 
 	trace_ds("> ");
-	h3270.obptr = h3270.obuf;
+	hSession->obptr = hSession->obuf;
 
 	space3270out(3);
-	*h3270.obptr++ = aid_byte;
-	ENCODE_BADDR(h3270.obptr, hSession->cursor_addr);
+	*hSession->obptr++ = aid_byte;
+	ENCODE_BADDR(hSession->obptr, hSession->cursor_addr);
 	trace_ds("%s%s", see_aid(aid_byte), rcba(hSession,hSession->cursor_addr));
 
 	baddr = 0;
 	do {
-		if (hSession->ea_buf[baddr].fa) {
-			if (hSession->reply_mode == SF_SRM_FIELD) {
+		if (hSession->ea_buf[baddr].fa)
+		{
+			if (hSession->reply_mode == SF_SRM_FIELD)
+			{
 				space3270out(2);
-				*h3270.obptr++ = ORDER_SF;
-			} else {
+				*hSession->obptr++ = ORDER_SF;
+			}
+			else
+			{
 				space3270out(4);
-				*h3270.obptr++ = ORDER_SFE;
-				attr_count = h3270.obptr - h3270.obuf;
-				*h3270.obptr++ = 1; /* for now */
-				*h3270.obptr++ = XA_3270;
+				*hSession->obptr++ = ORDER_SFE;
+				attr_count = hSession->obptr - hSession->obuf;
+				*hSession->obptr++ = 1; /* for now */
+				*hSession->obptr++ = XA_3270;
 			}
 			fa = hSession->ea_buf[baddr].fa & ~FA_PRINTABLE;
-			*h3270.obptr++ = code_table[fa];
+			*hSession->obptr++ = code_table[fa];
+
 			if (any)
 				trace_ds("'");
 			trace_ds(" StartField%s%s%s",
 			    (hSession->reply_mode == SF_SRM_FIELD) ? "" : "Extended",
 			    rcba(hSession,baddr), see_attr(fa));
-			if (hSession->reply_mode != SF_SRM_FIELD) {
+
+			if (hSession->reply_mode != SF_SRM_FIELD)
+			{
 				if (hSession->ea_buf[baddr].fg) {
 					space3270out(2);
-					*h3270.obptr++ = XA_FOREGROUND;
-					*h3270.obptr++ = hSession->ea_buf[baddr].fg;
+					*hSession->obptr++ = XA_FOREGROUND;
+					*hSession->obptr++ = hSession->ea_buf[baddr].fg;
 					trace_ds("%s", see_efa(XA_FOREGROUND, hSession->ea_buf[baddr].fg));
-					(*(h3270.obuf + attr_count))++;
+					(*(hSession->obuf + attr_count))++;
 				}
 				if (hSession->ea_buf[baddr].bg) {
 					space3270out(2);
-					*h3270.obptr++ = XA_BACKGROUND;
-					*h3270.obptr++ = hSession->ea_buf[baddr].bg;
+					*hSession->obptr++ = XA_BACKGROUND;
+					*hSession->obptr++ = hSession->ea_buf[baddr].bg;
 					trace_ds("%s", see_efa(XA_BACKGROUND, hSession->ea_buf[baddr].bg));
-					(*(h3270.obuf + attr_count))++;
+					(*(hSession->obuf + attr_count))++;
 				}
 				if (hSession->ea_buf[baddr].gr) {
 					space3270out(2);
-					*h3270.obptr++ = XA_HIGHLIGHTING;
-					*h3270.obptr++ = hSession->ea_buf[baddr].gr | 0xf0;
+					*hSession->obptr++ = XA_HIGHLIGHTING;
+					*hSession->obptr++ = hSession->ea_buf[baddr].gr | 0xf0;
 					trace_ds("%s", see_efa(XA_HIGHLIGHTING,
 					    hSession->ea_buf[baddr].gr | 0xf0));
-					(*(h3270.obuf + attr_count))++;
+					(*(hSession->obuf + attr_count))++;
 				}
 				if (hSession->ea_buf[baddr].cs & CS_MASK) {
 					space3270out(2);
-					*h3270.obptr++ = XA_CHARSET;
-					*h3270.obptr++ = host_cs(hSession->ea_buf[baddr].cs);
+					*hSession->obptr++ = XA_CHARSET;
+					*hSession->obptr++ = host_cs(hSession->ea_buf[baddr].cs);
 					trace_ds("%s", see_efa(XA_CHARSET,host_cs(hSession->ea_buf[baddr].cs)));
-					(*(h3270.obuf + attr_count))++;
+					(*(hSession->obuf + attr_count))++;
 				}
 			}
 			any = False;
 		} else {
-			insert_sa(baddr,
-			    &current_fg,
-			    &current_bg,
-			    &current_gr,
-			    &current_cs,
-			    &any);
+			insert_sa(hSession,baddr,&current_fg,&current_bg,&current_gr,&current_cs,&any);
 			if (hSession->ea_buf[baddr].cs & CS_GE) {
 				space3270out(1);
-				*h3270.obptr++ = ORDER_GE;
+				*hSession->obptr++ = ORDER_GE;
 				if (any)
 					trace_ds("'");
 				trace_ds(" GraphicEscape");
 				any = False;
 			}
 			space3270out(1);
-			*h3270.obptr++ = hSession->ea_buf[baddr].cc;
+			*hSession->obptr++ = hSession->ea_buf[baddr].cc;
 			if (hSession->ea_buf[baddr].cc <= 0x3f ||
 			    hSession->ea_buf[baddr].cc == 0xff) {
 				if (any)
