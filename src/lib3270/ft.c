@@ -381,7 +381,7 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 	snconcat(buffer,4095,"%s","\n");
 
 	// Erase the line and enter the command.
-	flen = kybd_prime();
+	flen = kybd_prime(ft->host);
 	if (!flen || flen < strlen(buffer) - 1)
 	{
 		lib3270_write_log(ft->host, "Unable to send command \"%s\" (flen=%d szBuffer=%d)",buffer,flen,strlen(buffer));

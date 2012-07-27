@@ -101,13 +101,15 @@ static const char *ia_name[] =
 };
 #endif // X3270_TRACE
 
-static unsigned char pf_xlate[] = {
+static unsigned char pf_xlate[] =
+{
 	AID_PF1,  AID_PF2,  AID_PF3,  AID_PF4,  AID_PF5,  AID_PF6,
 	AID_PF7,  AID_PF8,  AID_PF9,  AID_PF10, AID_PF11, AID_PF12,
 	AID_PF13, AID_PF14, AID_PF15, AID_PF16, AID_PF17, AID_PF18,
 	AID_PF19, AID_PF20, AID_PF21, AID_PF22, AID_PF23, AID_PF24
 };
-static unsigned char pa_xlate[] = {
+static unsigned char pa_xlate[] =
+{
 	AID_PA1, AID_PA2, AID_PA3
 };
 #define PF_SZ	(sizeof(pf_xlate)/sizeof(pf_xlate[0]))
@@ -116,9 +118,9 @@ static unsigned char pa_xlate[] = {
 // static time_t unlock_delay_time;
 #define UNLOCK_MS		350	/* 0.35s after last unlock */
 static Boolean key_Character(int code, Boolean with_ge, Boolean pasting,Boolean *skipped);
-static Boolean flush_ta(void);
+static int flush_ta(H3270 *hSession);
 static void key_AID(H3270 *session, unsigned char aid_code);
-static void kybdlock_set(unsigned int bits, const char *cause);
+static void kybdlock_set(H3270 *session, unsigned int bits);
 // static KeySym MyStringToKeysym(char *s, enum keytype *keytypep);
 
 /*
@@ -128,7 +130,8 @@ Boolean key_WCharacter(unsigned char code[], Boolean *skipped);
 */
 
 static int nxk = 0;
-static struct xks {
+static struct xks
+{
 	KeySym key;
 	KeySym assoc;
 } *xk;
@@ -141,7 +144,8 @@ static struct xks {
 
 /* Composite key mappings. */
 
-struct akeysym {
+struct akeysym
+{
 	KeySym keysym;
 	enum keytype keytype;
 };
@@ -196,7 +200,7 @@ static const char dxl[] = "0123456789abcdef";
 static int enq_chk(H3270 *session)
 {
 	/* If no connection, forget it. */
-	if (!CONNECTED)
+	if (!lib3270_connected(session))
 	{
 		trace_event("  dropped (not connected)\n");
 		return -1;
@@ -305,82 +309,85 @@ static void enq_ta(H3270 *hSession, void (*fn)(H3270 *, const char *, const char
 /*
  * Execute an action from the typeahead queue.
  */
-Boolean run_ta(void)
+int run_ta(H3270 *hSession)
 {
 	struct ta *ta;
 
-	if (h3270.kybdlock || (ta = h3270.ta_head) == (struct ta *)NULL)
-		return False;
+	if (hSession->kybdlock || (ta = hSession->ta_head) == (struct ta *)NULL)
+		return 0;
 
-	if ((h3270.ta_head = ta->next) == (struct ta *)NULL)
+	if ((hSession->ta_head = ta->next) == (struct ta *)NULL)
 	{
-		h3270.ta_tail = (struct ta *)NULL;
-		status_typeahead(&h3270,False);
+		hSession->ta_tail = (struct ta *)NULL;
+		status_typeahead(hSession,False);
 	}
 
 	switch(ta->type)
 	{
 	case TA_TYPE_DEFAULT:
-		ta->fn(&h3270,ta->parm[0],ta->parm[1]);
+		ta->fn(hSession,ta->parm[0],ta->parm[1]);
 		lib3270_free(ta->parm[0]);
 		lib3270_free(ta->parm[1]);
 		break;
 
 	case TA_TYPE_KEY_AID:
-		trace("Sending enqueued key %02x",ta->aid_code);
-		key_AID(&h3270,ta->aid_code);
+//		trace("Sending enqueued key %02x",ta->aid_code);
+		key_AID(hSession,ta->aid_code);
 		break;
 
 	default:
-		popup_an_error(&h3270, _( "Unexpected type %d in typeahead queue" ), ta->type);
+		popup_an_error(hSession, _( "Unexpected type %d in typeahead queue" ), ta->type);
 
 	}
 
 	lib3270_free(ta);
 
-	return True;
+	return 1;
 }
 
 /*
  * Flush the typeahead queue.
  * Returns whether or not anything was flushed.
  */
-static Boolean flush_ta(void)
+static int flush_ta(H3270 *hSession)
 {
 	struct ta *ta, *next;
-	Boolean any = False;
+	int any = 0;
 
-	for (ta = h3270.ta_head; ta != (struct ta *) NULL; ta = next)
+	for (ta = hSession->ta_head; ta != (struct ta *) NULL; ta = next)
 	{
 		lib3270_free(ta->parm[0]);
 		lib3270_free(ta->parm[1]);
 		next = ta->next;
 		lib3270_free(ta);
-		any = True;
+		any++;
 	}
-	h3270.ta_head = h3270.ta_tail = (struct ta *) NULL;
-	status_typeahead(&h3270,False);
+	hSession->ta_head = hSession->ta_tail = (struct ta *) NULL;
+	status_typeahead(hSession,False);
 	return any;
 }
 
 /* Set bits in the keyboard lock. */
-static void
-kybdlock_set(unsigned int bits, const char *cause unused)
+static void kybdlock_set(H3270 *hSession, unsigned int bits)
 {
 	unsigned int n;
 
-	n = h3270.kybdlock | bits;
-	if (n != h3270.kybdlock) {
-#if defined(KYBDLOCK_TRACE) /*[*/
+	n = hSession->kybdlock | bits;
+	if (n != hSession->kybdlock)
+	{
+/*
+#if defined(KYBDLOCK_TRACE)
 	       trace_event("  %s: kybdlock |= 0x%04x, 0x%04x -> 0x%04x\n",
 		    cause, bits, kybdlock, n);
-#endif /*]*/
-		if ((h3270.kybdlock ^ bits) & KL_DEFERRED_UNLOCK) {
+#endif
+*/
+		if ((hSession->kybdlock ^ bits) & KL_DEFERRED_UNLOCK)
+		{
 			/* Turned on deferred unlock. */
-			h3270.unlock_delay_time = time(NULL);
+			hSession->unlock_delay_time = time(NULL);
 		}
-		h3270.kybdlock = n;
-		status_changed(&h3270,LIB3270_STATUS_KYBDLOCK);
+		hSession->kybdlock = n;
+		status_changed(hSession,LIB3270_STATUS_KYBDLOCK);
 	}
 }
 
@@ -418,13 +425,13 @@ void kybd_inhibit(H3270 *session, Boolean inhibit)
 {
 	if (inhibit)
 	{
-		kybdlock_set(KL_ENTER_INHIBIT, "kybd_inhibit");
+		kybdlock_set(session,KL_ENTER_INHIBIT);
 		if (session->kybdlock == KL_ENTER_INHIBIT)
 			status_reset(session);
 	}
 	else
 	{
-		kybdlock_clr(session,KL_ENTER_INHIBIT, "kybd_inhibit");
+		lib3270_kybdlock_clear(session,KL_ENTER_INHIBIT);
 		if (!session->kybdlock)
 			status_reset(session);
 	}
@@ -438,14 +445,14 @@ void kybd_connect(H3270 *session, int connected, void *dunno)
 	if (session->kybdlock & KL_DEFERRED_UNLOCK)
 		RemoveTimeOut(session->unlock_id);
 
-	kybdlock_clr(session, -1, "kybd_connect");
+	lib3270_kybdlock_clear(session, -1);
 
 	if (connected) {
 		/* Wait for any output or a WCC(restore) from the host */
-		kybdlock_set(KL_AWAITING_FIRST, "kybd_connect");
+		kybdlock_set(session,KL_AWAITING_FIRST);
 	} else {
-		kybdlock_set(KL_NOT_CONNECTED, "kybd_connect");
-		(void) flush_ta();
+		kybdlock_set(session,KL_NOT_CONNECTED);
+		(void) flush_ta(session);
 	}
 }
 
@@ -456,7 +463,7 @@ void kybd_in3270(H3270 *session, int in3270 unused, void *dunno)
 {
 	if (session->kybdlock & KL_DEFERRED_UNLOCK)
 		RemoveTimeOut(session->unlock_id);
-	kybdlock_clr(session,~KL_AWAITING_FIRST, "kybd_in3270");
+	lib3270_kybdlock_clear(session,~KL_AWAITING_FIRST);
 
 	/* There might be a macro pending. */
 	if (CONNECTED)
@@ -464,44 +471,16 @@ void kybd_in3270(H3270 *session, int in3270 unused, void *dunno)
 }
 
 /*
- * Called to initialize the keyboard logic.
- */ /*
-void kybd_init(void)
-{
-	// Register kybd interest in connect and disconnect events.
-	trace("%s",__FUNCTION__);
-	lib3270_register_schange(NULL,LIB3270_STATE_CONNECT,kybd_connect,NULL);
-	lib3270_register_schange(NULL,LIB3270_STATE_3270_MODE,kybd_in3270,NULL);
-}
-*/
-
-/*
- * Toggle reverse mode.
- */
- /*
-static void
-reverse_mode(Boolean on)
-{
-	reverse = on;
-	status_reverse_mode(on);
-}
-*/
-
-/*
  * Lock the keyboard because of an operator error.
  */
-static void
-operator_error(int error_type)
+static void operator_error(int error_type)
 {
-//	if (sms_redirect())
-//		popup_an_error("Keyboard locked");
-
 	if(h3270.oerr_lock)
 	{
 		status_oerr(NULL,error_type);
 		mcursor_locked(&h3270);
-		kybdlock_set((unsigned int)error_type, "operator_error");
-		flush_ta();
+		kybdlock_set(&h3270,(unsigned int)error_type);
+		flush_ta(&h3270);
 	}
 	else
 	{
@@ -551,7 +530,7 @@ static void key_AID(H3270 *session, unsigned char aid_code)
 			return;
 		if (aid_code != AID_ENTER && aid_code != AID_CLEAR) {
 			status_changed(&h3270,LIB3270_STATUS_MINUS);
-			kybdlock_set(KL_OIA_MINUS, "key_AID");
+			kybdlock_set(&h3270,KL_OIA_MINUS);
 			return;
 		}
 	}
@@ -565,7 +544,7 @@ static void key_AID(H3270 *session, unsigned char aid_code)
 		status_twait(&h3270);
 		mcursor_waiting(&h3270);
 		lib3270_set_toggle(&h3270,LIB3270_TOGGLE_INSERT,0);
-		kybdlock_set(KL_OIA_TWAIT | KL_OIA_LOCKED, "key_AID");
+		kybdlock_set(&h3270,KL_OIA_TWAIT | KL_OIA_LOCKED);
 	}
 	h3270.aid = aid_code;
 	ctlr_read_modified(h3270.aid, False);
@@ -615,7 +594,7 @@ LIB3270_ACTION(break)
 
 	return 0;
 }
-
+
 /*
  * ATTN key, per RFC 2355.  Sends IP, regardless.
  */
@@ -628,26 +607,6 @@ LIB3270_ACTION(attn)
 
 	return 0;
 }
-
-/*
- * IAC IP, which works for 5250 System Request and interrupts the program
- * on an AS/400, even when the keyboard is locked.
- *
- * This is now the same as the Attn action.
- */ /*
-void
-Interrupt_action(Widget w unused, XEvent *event, String *params,
-    Cardinal *num_params)
-{
-	if (!IN_3270)
-		return;
-
-//	reset_idle_timer();
-
-	net_interrupt();
-}
-
-*/
 
 /*
  * Prepare for an insert of 'count' bytes.
@@ -1045,7 +1004,7 @@ LIB3270_ACTION( nextfield )
 	{
 		if(KYBDLOCK_IS_OERR(hSession))
 		{
-			kybdlock_clr(hSession,KL_OERR_MASK, "Tab");
+			lib3270_kybdlock_clear(hSession,KL_OERR_MASK);
 			status_reset(hSession);
 		} else
 		{
@@ -1092,7 +1051,7 @@ LIB3270_ACTION( previousfield )
 	{
 		if (KYBDLOCK_IS_OERR(hSession))
 		{
-			kybdlock_clr(hSession,KL_OERR_MASK, "BackTab");
+			lib3270_kybdlock_clear(hSession,KL_OERR_MASK);
 			status_reset(hSession);
 		}
 		else
@@ -1133,8 +1092,8 @@ LIB3270_ACTION( previousfield )
 
 static void defer_unlock(H3270 *session)
 {
-	trace("%s",__FUNCTION__);
-	kybdlock_clr(session,KL_DEFERRED_UNLOCK, "defer_unlock");
+//	trace("%s",__FUNCTION__);
+	lib3270_kybdlock_clear(session,KL_DEFERRED_UNLOCK);
 	status_reset(session);
 	if(CONNECTED)
 		ps_process();
@@ -1157,7 +1116,7 @@ void do_reset(H3270 *session, Boolean explicit)
 	    ) {
 		Boolean half_reset = False;
 
-		if (flush_ta())
+		if (flush_ta(session))
 			half_reset = True;
 
 		if (half_reset)
@@ -1188,11 +1147,11 @@ void do_reset(H3270 *session, Boolean explicit)
 #endif /*]*/
 	    || (!session->unlock_delay) // && !sms_in_macro())
 	    || (session->unlock_delay_time != 0 && (time(NULL) - session->unlock_delay_time) > 1)) {
-		kybdlock_clr(session,-1, "do_reset");
+		lib3270_kybdlock_clear(session,-1);
 	} else if (session->kybdlock &
   (KL_DEFERRED_UNLOCK | KL_OIA_TWAIT | KL_OIA_LOCKED | KL_AWAITING_FIRST)) {
-		kybdlock_clr(session,~KL_DEFERRED_UNLOCK, "do_reset");
-		kybdlock_set(KL_DEFERRED_UNLOCK, "do_reset");
+		lib3270_kybdlock_clear(session,~KL_DEFERRED_UNLOCK);
+		kybdlock_set(session,KL_DEFERRED_UNLOCK);
 		session->unlock_id = AddTimeOut(UNLOCK_MS, session, defer_unlock);
 	}
 
@@ -1260,7 +1219,7 @@ LIB3270_CURSOR_ACTION( left )
 	{
 		if(KYBDLOCK_IS_OERR(hSession))
 		{
-			kybdlock_clr(hSession,KL_OERR_MASK, "Left");
+			lib3270_kybdlock_clear(hSession,KL_OERR_MASK);
 			status_reset(&h3270);
 		}
 		else
@@ -1523,7 +1482,7 @@ LIB3270_CURSOR_ACTION( right )
 	{
 		if (KYBDLOCK_IS_OERR(hSession))
 		{
-			kybdlock_clr(hSession,KL_OERR_MASK, "Right");
+			lib3270_kybdlock_clear(hSession,KL_OERR_MASK);
 			status_reset(hSession);
 		}
 		else
@@ -1753,7 +1712,7 @@ LIB3270_CURSOR_ACTION( up )
 	{
 		if (KYBDLOCK_IS_OERR(hSession))
 		{
-			kybdlock_clr(hSession,KL_OERR_MASK, "Up");
+			lib3270_kybdlock_clear(hSession,KL_OERR_MASK);
 			status_reset(hSession);
 		}
 		else
@@ -1791,7 +1750,7 @@ LIB3270_CURSOR_ACTION( down )
 	{
 		if (KYBDLOCK_IS_OERR(hSession))
 		{
-			kybdlock_clr(hSession,KL_OERR_MASK, "Down");
+			lib3270_kybdlock_clear(hSession,KL_OERR_MASK);
 			status_reset(hSession);
 		} else
 		{
@@ -2387,7 +2346,7 @@ static void do_pf(unsigned n)
 
 /*
  * Set or clear the keyboard scroll lock.
- */
+ */ /*
 void
 kybd_scroll_lock(Boolean lock)
 {
@@ -2397,7 +2356,7 @@ kybd_scroll_lock(Boolean lock)
 		kybdlock_set(KL_SCROLLED, "kybd_scroll_lock");
 	else
 		kybdlock_clr(&h3270, KL_SCROLLED, "kybd_scroll_lock");
-}
+} */
 
 /*
  * Move the cursor back within the legal paste area.
@@ -2825,8 +2784,7 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *session, char *s, int len, int p
  * Returns the length of the input field, or 0 if there is no field
  * to set up.
  */
-int
-kybd_prime(void)
+int kybd_prime(H3270 *hSession)
 {
 	int baddr;
 	register unsigned char fa;
@@ -2836,37 +2794,42 @@ kybd_prime(void)
 	 * No point in trying if the screen isn't formatted, the keyboard
 	 * is locked, or we aren't in 3270 mode.
 	 */
-	if (!h3270.formatted || h3270.kybdlock || !IN_3270)
+	if (!hSession->formatted || hSession->kybdlock || !IN_3270)
 		return 0;
 
-	fa = get_field_attribute(&h3270,h3270.cursor_addr);
-	if (h3270.ea_buf[h3270.cursor_addr].fa || FA_IS_PROTECTED(fa)) {
+	fa = get_field_attribute(hSession,hSession->cursor_addr);
+	if (hSession->ea_buf[hSession->cursor_addr].fa || FA_IS_PROTECTED(fa))
+	{
 		/*
 		 * The cursor is not in an unprotected field.  Find the
 		 * next one.
 		 */
-		baddr = next_unprotected(&h3270,h3270.cursor_addr);
+		baddr = next_unprotected(hSession,hSession->cursor_addr);
 
 		/* If there isn't any, give up. */
 		if (!baddr)
 			return 0;
 
 		/* Move the cursor there. */
-	} else {
+	}
+	else
+	{
 		/* Already in an unprotected field.  Find its start. */
-		baddr = h3270.cursor_addr;
-		while (!h3270.ea_buf[baddr].fa) {
+		baddr = hSession->cursor_addr;
+		while (!hSession->ea_buf[baddr].fa)
+		{
 			DEC_BA(baddr);
 		}
 		INC_BA(baddr);
 	}
 
 	/* Move the cursor to the beginning of the field. */
-	cursor_move(&h3270,baddr);
+	cursor_move(hSession,baddr);
 
 	/* Erase it. */
-	while (!h3270.ea_buf[baddr].fa) {
-		ctlr_add(&h3270,baddr, 0, 0);
+	while (!hSession->ea_buf[baddr].fa)
+	{
+		ctlr_add(hSession,baddr, 0, 0);
 		len++;
 		INC_BA(baddr);
 	}

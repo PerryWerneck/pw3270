@@ -279,7 +279,7 @@ static void ctlr_connect(H3270 *session, int ignored unused, void *dunno)
 		session->ea_buf[-1].fa = FA_PRINTABLE | FA_PROTECT;
 	if (!IN_3270 || (IN_SSCP && (session->kybdlock & KL_OIA_TWAIT)))
 	{
-		kybdlock_clr(session,KL_OIA_TWAIT, "ctlr_connect");
+		lib3270_kybdlock_clear(session,KL_OIA_TWAIT);
 		status_reset(session);
 	}
 
@@ -1830,7 +1830,7 @@ ctlr_write(unsigned char buf[], int buflen, Boolean erase)
 		h3270.aid = AID_NO;
 		do_reset(&h3270,False);
 	} else if (h3270.kybdlock & KL_OIA_TWAIT) {
-		kybdlock_clr(&h3270,KL_OIA_TWAIT, "ctlr_write");
+		lib3270_kybdlock_clear(&h3270,KL_OIA_TWAIT);
 		status_changed(&h3270,LIB3270_STATUS_SYSWAIT);
 	}
 	if (wcc_sound_alarm)
@@ -2245,7 +2245,7 @@ ctlr_dbcs_postprocess(void)
 void
 ps_process(void)
 {
-	while (run_ta())
+	while (run_ta(&h3270))
 		;
 //	sms_continue();
 

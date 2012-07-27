@@ -60,18 +60,18 @@
 	LIB3270_INTERNAL void add_xk(KeySym key, KeySym assoc);
 	LIB3270_INTERNAL void clear_xks(void);
 	LIB3270_INTERNAL void do_reset(H3270 *session, Boolean explicit);
-	LIB3270_INTERNAL void hex_input(char *s);
+//	LIB3270_INTERNAL void hex_input(char *s);
 
-	#define kybdlock_clr(session, bits, cause) lib3270_kybdlock_clear(session, bits)
+//	#define kybdlock_clr(session, bits, cause) lib3270_kybdlock_clear(session, bits)
 	LIB3270_INTERNAL void lib3270_kybdlock_clear(H3270 *hSession, LIB3270_KL_STATE bits);
 
 
 	LIB3270_INTERNAL void kybd_inhibit(H3270 *session, Boolean inhibit);
-	LIB3270_INTERNAL void kybd_init(void);
-	LIB3270_INTERNAL int kybd_prime(void);
+//	LIB3270_INTERNAL void kybd_init(void);
+	LIB3270_INTERNAL int kybd_prime(H3270 *hSession);
 	LIB3270_INTERNAL void kybd_scroll_lock(Boolean lock);
-	LIB3270_INTERNAL Boolean run_ta(void);
-	LIB3270_INTERNAL int state_from_keymap(char keymap[32]);
+	LIB3270_INTERNAL int	run_ta(H3270 *hSession);
+//	LIB3270_INTERNAL int state_from_keymap(char keymap[32]);
 	LIB3270_INTERNAL void kybd_connect(H3270 *session, int connected, void *dunno);
 	LIB3270_INTERNAL void kybd_in3270(H3270 *session, int in3270 unused, void *dunno);
 
