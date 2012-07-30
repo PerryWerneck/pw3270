@@ -338,9 +338,14 @@ JNIEXPORT void JNICALL Java_br_com_bb_pw3270_lib3270_set_1connection_1status(JNI
 	trace("Host is %s",connected ? "connected" : "disconnected");
 
 	if(connected)
+	{
 		lib3270_set_connected(PW3270_SESSION);
+		lib3270_setup_session(PW3270_SESSION);
+	}
 	else
+	{
 		lib3270_set_disconnected(PW3270_SESSION);
+	}
 
 	PW3270_JNI_END
 }

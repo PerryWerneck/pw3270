@@ -269,17 +269,13 @@ static const char *nnn(int c);
 #define TNS_SB_IAC	7	/* got an IAC after an IAC SB */
 
 /* telnet predefined messages */
-static unsigned char	do_opt[]	= {
-	IAC, DO, '_' };
-static unsigned char	dont_opt[]	= {
-	IAC, DONT, '_' };
-static unsigned char	will_opt[]	= {
-	IAC, WILL, '_' };
-static unsigned char	wont_opt[]	= {
-	IAC, WONT, '_' };
+static unsigned char	do_opt[]	= 	{ 	IAC, DO, '_' };
+static unsigned char	dont_opt[]	= 	{	IAC, DONT, '_' };
+static unsigned char	will_opt[]	= 	{	IAC, WILL, '_' };
+static unsigned char	wont_opt[]	= 	{	IAC, WONT, '_' };
+
 #if defined(X3270_TN3270E) /*[*/
-static unsigned char	functions_req[] = {
-	IAC, SB, TELOPT_TN3270E, TN3270E_OP_FUNCTIONS };
+static unsigned char	functions_req[] = {	IAC, SB, TELOPT_TN3270E, TN3270E_OP_FUNCTIONS };
 #endif /*]*/
 
 #if defined(X3270_TRACE) /*[*/
@@ -620,30 +616,32 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 
 	/* fill in the socket address of the given host */
 	(void) memset((char *) &haddr, 0, sizeof(haddr));
-	if (session->passthru_host) {
+	if (session->passthru_host)
+	{
 		haddr.sin.sin_family = AF_INET;
-		(void) memmove(&haddr.sin.sin_addr, passthru_haddr,
-			       passthru_len);
+		(void) memmove(&haddr.sin.sin_addr, passthru_haddr,passthru_len);
 		haddr.sin.sin_port = passthru_port;
 		ha_len = sizeof(struct sockaddr_in);
-	} else if (session->proxy_type > 0) {
-	    	if (resolve_host_and_port(session,session->proxy_host, session->proxy_portname,
-			    &session->proxy_port, &haddr.sa, &ha_len, errmsg,
-			    sizeof(errmsg)) < 0) {
-		    	popup_an_error(session,errmsg);
-		    	return -1;
+	}
+	else if (session->proxy_type > 0)
+	{
+		if (resolve_host_and_port(session,session->proxy_host, session->proxy_portname,&session->proxy_port, &haddr.sa, &ha_len, errmsg,sizeof(errmsg)) < 0)
+		{
+			popup_an_error(session,errmsg);
+			return -1;
 		}
-	} else {
-			if (resolve_host_and_port(session,host, portname,
-				    &session->current_port, &haddr.sa, &ha_len,
-				    errmsg, sizeof(errmsg)) < 0) {
-			    	popup_an_error(session,errmsg);
-			    	return -1;
-			}
+	}
+	else
+	{
+		if (resolve_host_and_port(session,host, portname,&session->current_port, &haddr.sa, &ha_len,errmsg, sizeof(errmsg)) < 0)
+		{
+			popup_an_error(session,errmsg);
+			return -1;
+		}
 	}
 
 	/* create the socket */
-	if ((session->sock = socket(haddr.sa.sa_family, SOCK_STREAM, 0)) == -1)
+	if((session->sock = socket(haddr.sa.sa_family, SOCK_STREAM, 0)) == -1)
 	{
 		popup_a_sockerr(session, N_( "socket" ) );
 		return -1;
@@ -863,28 +861,41 @@ static void net_connected(H3270 *session)
 		}
 
 //		session->secure_connection = True;
-//		trace_dsn("TLS/SSL tunneled connection complete. Connection is now secure.\n");
+		trace_dsn("TLS/SSL tunneled connection complete. Connection is now secure.\n");
 
 		/* Tell everyone else again. */
 		lib3270_set_connected(session);
 	}
 #endif /*]*/
 
-	/* set up telnet options */
-	(void) memset((char *) h3270.myopts, 0, sizeof(h3270.myopts));
-	(void) memset((char *) h3270.hisopts, 0, sizeof(h3270.hisopts));
+	lib3270_setup_session(session);
+
+}
+
+/**
+ * Set up telnet options.
+ *
+ * Called just after a sucessfull connect to setup tn3270 state.
+ *
+ * @param session	3270 session to setup.
+ *
+ */
+LIB3270_EXPORT void lib3270_setup_session(H3270 *session)
+{
+	(void) memset((char *) session->myopts, 0, sizeof(session->myopts));
+	(void) memset((char *) session->hisopts, 0, sizeof(session->hisopts));
 
 #if defined(X3270_TN3270E) /*[*/
-	h3270.e_funcs = E_OPT(TN3270E_FUNC_BIND_IMAGE) | E_OPT(TN3270E_FUNC_RESPONSES) | E_OPT(TN3270E_FUNC_SYSREQ);
-	h3270.e_xmit_seq = 0;
-	h3270.response_required = TN3270E_RSF_NO_RESPONSE;
+	session->e_funcs = E_OPT(TN3270E_FUNC_BIND_IMAGE) | E_OPT(TN3270E_FUNC_RESPONSES) | E_OPT(TN3270E_FUNC_SYSREQ);
+	session->e_xmit_seq = 0;
+	session->response_required = TN3270E_RSF_NO_RESPONSE;
 #endif /*]*/
 
 #if defined(HAVE_LIBSSL) /*[*/
 	need_tls_follows = False;
 #endif /*]*/
-	h3270.telnet_state = TNS_DATA;
-	h3270.ibptr = h3270.ibuf;
+	session->telnet_state = TNS_DATA;
+	session->ibptr = h3270.ibuf;
 
 	/* clear statistics and flags */
 	time(&session->ns_time);
@@ -904,12 +915,10 @@ static void net_connected(H3270 *session)
 	/* write out the passthru hostname and port nubmer */
 	if (session->passthru_host)
 	{
-		char *buf;
-
-		buf = lib3270_malloc(strlen(session->hostname) + 32);
-		(void) sprintf(buf, "%s %d\r\n", session->hostname, session->current_port);
-		(void) send(session->sock, buf, strlen(buf), 0);
-		lib3270_free(buf);
+		unsigned char *buffer = (unsigned char *) xs_buffer("%s %d\r\n", session->hostname, session->current_port);
+		session->write(session, buffer, strlen((char *) buffer));
+		lib3270_free(buffer);
+		trace_ds("SENT HOSTNAME %s:%d\n", session->hostname, session->current_port);
 	}
 }
 
@@ -1204,7 +1213,8 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 	int	sl;
 #endif /*]*/
 
-	switch (session->telnet_state) {
+	switch (session->telnet_state)
+	{
 	    case TNS_DATA:	/* normal data processing */
 		if (c == IAC) {	/* got a telnet command */
 			session->telnet_state = TNS_IAC;
@@ -1252,14 +1262,19 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 		}
 		break;
 	    case TNS_IAC:	/* process a telnet command */
-		if (c != EOR && c != IAC) {
+		if (c != EOR && c != IAC)
+		{
 			trace_dsn("RCVD %s ", cmd(c));
 		}
-		switch (c) {
-		    case IAC:	/* escaped IAC, insert it */
-			if (IN_ANSI && !IN_E) {
+
+		switch (c)
+		{
+	    case IAC:	/* escaped IAC, insert it */
+			if (IN_ANSI && !IN_E)
+			{
 #if defined(X3270_ANSI) /*[*/
-				if (!session->ansi_data) {
+				if (!session->ansi_data)
+				{
 					trace_dsn("<.. ");
 					session->ansi_data = 4;
 				}
@@ -1272,40 +1287,53 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 				trace_dsn("%s",see_chr);
 				ansi_process((unsigned int) c);
 #endif /*]*/
-			} else
+			}
+			else
+			{
 				store3270in(session,c);
+			}
 			session->telnet_state = TNS_DATA;
 			break;
-		    case EOR:	/* eor, process accumulated input */
-			if (IN_3270 || (IN_E && session->tn3270e_negotiated)) {
+
+	    case EOR:	/* eor, process accumulated input */
+
+			if (IN_3270 || (IN_E && session->tn3270e_negotiated))
+			{
 				session->ns_rrcvd++;
 				if (process_eor(session))
 					return -1;
 			} else
 				Warning(session, _( "EOR received when not in 3270 mode, ignored." ));
+
 			trace_dsn("RCVD EOR\n");
 			session->ibptr = session->ibuf;
 			session->telnet_state = TNS_DATA;
 			break;
-		    case WILL:
+
+	    case WILL:
 			session->telnet_state = TNS_WILL;
 			break;
-		    case WONT:
+
+	    case WONT:
 			session->telnet_state = TNS_WONT;
 			break;
-		    case DO:
+
+	    case DO:
 			session->telnet_state = TNS_DO;
 			break;
-		    case DONT:
+
+	    case DONT:
 			session->telnet_state = TNS_DONT;
 			break;
-		    case SB:
+
+	    case SB:
 			session->telnet_state = TNS_SB;
 			if (session->sbbuf == (unsigned char *)NULL)
 				session->sbbuf = (unsigned char *)lib3270_malloc(1024);
 			session->sbptr = session->sbbuf;
 			break;
-		    case DM:
+
+	    case DM:
 			trace_dsn("\n");
 			if (session->syncing)
 			{
@@ -1314,12 +1342,14 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 			}
 			session->telnet_state = TNS_DATA;
 			break;
-		    case GA:
-		    case NOP:
+
+	    case GA:
+	    case NOP:
 			trace_dsn("\n");
 			session->telnet_state = TNS_DATA;
 			break;
-		    default:
+
+	    default:
 			trace_dsn("???\n");
 			session->telnet_state = TNS_DATA;
 			break;
@@ -1370,15 +1400,17 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 		break;
 	    case TNS_WONT:	/* telnet WONT DO OPTION command */
 		trace_dsn("%s\n", opt(c));
-		if (h3270.hisopts[c]) {
-			h3270.hisopts[c] = 0;
+		if (session->hisopts[c])
+		{
+			session->hisopts[c] = 0;
 			dont_opt[2] = c;
-			net_rawout(&h3270, dont_opt, sizeof(dont_opt));
+			net_rawout(session, dont_opt, sizeof(dont_opt));
 			trace_dsn("SENT %s %s\n", cmd(DONT), opt(c));
-			check_in3270(&h3270);
-			check_linemode(&h3270,False);
+			check_in3270(session);
+			check_linemode(session,False);
 		}
-		h3270.telnet_state = TNS_DATA;
+
+		session->telnet_state = TNS_DATA;
 		break;
 	    case TNS_DO:	/* telnet PLEASE DO OPTION command */
 		trace_dsn("%s\n", opt(c));
@@ -1400,14 +1432,16 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 			if (c == TELOPT_TM && !session->bsd_tm)
 				goto wont;
 
-			if (!h3270.myopts[c]) {
+			trace("session->myopts[c]=%d",session->myopts[c]);
+			if (!session->myopts[c])
+			{
 				if (c != TELOPT_TM)
-					h3270.myopts[c] = 1;
+					session->myopts[c] = 1;
 				will_opt[2] = c;
-				net_rawout(&h3270, will_opt, sizeof(will_opt));
+				net_rawout(session, will_opt, sizeof(will_opt));
 				trace_dsn("SENT %s %s\n", cmd(WILL), opt(c));
-				check_in3270(&h3270);
-				check_linemode(&h3270,False);
+				check_in3270(session);
+				check_linemode(session,False);
 			}
 			if (c == TELOPT_NAWS)
 				send_naws(&h3270);
@@ -2571,8 +2605,7 @@ nnn(int c)
  * cmd
  *	Expands a TELNET command into a character string.
  */
-static const char *
-cmd(int c)
+static const char * cmd(int c)
 {
 	if (TELCMD_OK(c))
 		return TELCMD(c);
