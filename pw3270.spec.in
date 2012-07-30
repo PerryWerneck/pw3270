@@ -29,7 +29,7 @@
 
 #---[ Check for distro ]----------------------------------------------------------------------------------------------
 
-%define _rel		0
+%define _rel		@PACKAGE_LEVEL@
 
 %define _release	%{_rel}
 %define _distro		Linux

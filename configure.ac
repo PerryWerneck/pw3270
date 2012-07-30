@@ -68,6 +68,9 @@ AC_SUBST(REXXC)
 AC_PATH_TOOL([VALGRIND], [valgrind], [no])
 AC_PATH_TOOL([REXXCONFIG], [oorexx-config], [no])
 
+AC_PATH_TOOL([MAKENSIS], [makensis], [no])
+AC_PATH_TOOL([WINDRES], [windres], [no])
+
 AC_CHECK_PROGS(GZIP,[gzip],no)
 export GZIP;
 if test $GZIP = "no" ; then
@@ -86,6 +89,9 @@ AC_SUBST(PACKAGE_REVISION,"SVN_REVISION")
 
 AC_DEFINE(PACKAGE_SOURCE,"SVN_URL")
 AC_SUBST(PACKAGE_SOURCE,"SVN_URL")
+
+AC_DEFINE(PACKAGE_LEVEL,"APP_LEVEL")
+AC_SUBST(PACKAGE_LEVEL,"APP_LEVEL")
 
 #--[ Set host based options ]---------------------------------------------------------------------------------------------------------------------------------
 
@@ -275,6 +281,7 @@ AC_CONFIG_FILES([
 	lib3270.pc
 	pw3270.pc
 	pw3270.spec
+	pw3270.nsi
 	src/include/rules.mak
 	src/lib3270/Makefile
 	src/lib3270/mkversion.sh

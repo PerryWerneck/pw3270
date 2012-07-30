@@ -126,7 +126,7 @@ src/tools/%@EXEEXT@: src/tools/%.c
 
 all: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) locale filelist
 
-Release: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
+Release: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) locale
 
 $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT): src/pw3270/* $(BINDIR)/Release/lib/@DLLPREFIX@3270@DLLEXT@ $(DEPENDS)
 	@$(MAKE) BINDIR="../../$(BINDIR)" LIB3270_LIBS="$(RLSLIB)" LIB3270_CFLAGS="-I../../src/include" -C src/pw3270 ../../$(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
@@ -242,7 +242,7 @@ install-app: install-locale
 install-lib:
 	@$(MAKE) BINRLS="../../.bin/Release/lib" -C src/lib3270 install
 
-locale: $(foreach SRC, $(basename $(LANG_FILES)), $(SRC).po)
+locale: $(foreach MO, $(basename $(LANG_FILES)), $(BINDIR)/Release/$(localedir)/$(notdir $(MO))/LC_MESSAGES/$(PACKAGE_NAME).mo)
 
 install-locale: $(foreach MO, $(basename $(LANG_FILES)), $(BINDIR)/Release/$(localedir)/$(notdir $(MO))/LC_MESSAGES/$(PACKAGE_NAME).mo)
 	@echo -e $(foreach MO, $(notdir $(basename $(LANG_FILES))), mkdir -p $(DESTDIR)/$(localedir)/$(MO)/LC_MESSAGES\\n$(INSTALL_DATA) $(BINDIR)/Release/$(localedir)/$(MO)/LC_MESSAGES/$(PACKAGE_NAME).mo $(DESTDIR)/$(localedir)/$(MO)/LC_MESSAGES/$(PACKAGE_NAME).mo \\n ) | $(SHELL)

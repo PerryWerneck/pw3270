@@ -1,5 +1,7 @@
 #!/bin/bash
 
+APPLEVEL="0"
+
 test -n "$srcdir" || srcdir=`dirname "$0"`
 test -n "$srcdir" || srcdir=.
 
@@ -44,9 +46,11 @@ fi
 
 echo "PACKAGE_REVISION=$PACKAGE_REVISION" > $srcdir/revision
 echo "PACKAGE_SOURCE=$PACKAGE_SOURCE" >> $srcdir/revision
+echo "PACKAGE_LEVEL=$APPLEVEL" >> $srcdir/revision
 
 echo "m4_define([SVN_REVISION], $PACKAGE_REVISION)" > $srcdir/revision.m4
 echo "m4_define([SVN_URL], $PACKAGE_SOURCE)" >> $srcdir/revision.m4
+echo "m4_define([APP_LEVEL], $APPLEVEL)" >> $srcdir/revision.m4
 
 aclocal
 if test $? != 0 ; then
