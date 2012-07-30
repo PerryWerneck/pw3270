@@ -231,7 +231,7 @@ static void tn3270e_nak(H3270 *hSession, enum pds);
 #endif /*]*/
 
 #if defined(X3270_ANSI) /*[*/
-static void do_data(char c);
+static void do_data(H3270 *hSession, char c);
 static void do_intr(H3270 *hSession, char c);
 static void do_quit(H3270 *hSession, char c);
 static void do_cerase(H3270 *hSession, char c);
@@ -756,21 +756,21 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 #undef close_fail
 
 /* Set up the LU list. */
-static void
-setup_lus(void)
+static void setup_lus(H3270 *hSession)
 {
 	char *lu;
 	char *comma;
 	int n_lus = 1;
 	int i;
 
-	h3270.connected_lu = CN;
-	h3270.connected_type = CN;
+	hSession->connected_lu = CN;
+	hSession->connected_type = CN;
 
-	if (!h3270.luname[0]) {
-		Replace(h3270.lus, NULL);
-		h3270.curr_lu = (char **)NULL;
-		h3270.try_lu = CN;
+	if (!hSession->luname[0])
+	{
+		Replace(hSession->lus, NULL);
+		hSession->curr_lu = (char **)NULL;
+		hSession->try_lu = CN;
 		return;
 	}
 
@@ -778,8 +778,9 @@ setup_lus(void)
 	 * Count the commas in the LU name.  That plus one is the
 	 * number of LUs to try.
 	 */
-	lu = h3270.luname;
-	while ((comma = strchr(lu, ',')) != CN) {
+	lu = hSession->luname;
+	while ((comma = strchr(lu, ',')) != CN)
+	{
 		n_lus++;
 		lu++;
 	}
@@ -788,23 +789,27 @@ setup_lus(void)
 	 * Allocate enough memory to construct an argv[] array for
 	 * the LUs.
 	 */
-	Replace(h3270.lus,(char **)lib3270_malloc((n_lus+1) * sizeof(char *) + strlen(h3270.luname) + 1));
+	Replace(hSession->lus,(char **)lib3270_malloc((n_lus+1) * sizeof(char *) + strlen(hSession->luname) + 1));
 
 	/* Copy each LU into the array. */
-	lu = (char *)(h3270.lus + n_lus + 1);
-	(void) strcpy(lu, h3270.luname);
+	lu = (char *)(hSession->lus + n_lus + 1);
+	(void) strcpy(lu, hSession->luname);
+
 	i = 0;
-	do {
-		h3270.lus[i++] = lu;
+	do
+	{
+		hSession->lus[i++] = lu;
 		comma = strchr(lu, ',');
-		if (comma != CN) {
+		if (comma != CN)
+		{
 			*comma = '\0';
 			lu = comma + 1;
 		}
 	} while (comma != CN);
-	h3270.lus[i] = CN;
-	h3270.curr_lu = h3270.lus;
-	h3270.try_lu = *h3270.curr_lu;
+
+	hSession->lus[i]	= CN;
+	hSession->curr_lu	= hSession->lus;
+	hSession->try_lu	= *hSession->curr_lu;
 }
 
 static void net_connected(H3270 *session)
@@ -895,7 +900,7 @@ LIB3270_EXPORT void lib3270_setup_session(H3270 *session)
 	need_tls_follows = False;
 #endif /*]*/
 	session->telnet_state = TNS_DATA;
-	session->ibptr = h3270.ibuf;
+	session->ibptr = session->ibuf;
 
 	/* clear statistics and flags */
 	time(&session->ns_time);
@@ -908,7 +913,7 @@ LIB3270_EXPORT void lib3270_setup_session(H3270 *session)
 	session->tn3270e_submode = E_NONE;
 	session->tn3270e_bound = 0;
 
-	setup_lus();
+	setup_lus(session);
 
 	check_linemode(session,True);
 
@@ -1444,7 +1449,7 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 				check_linemode(session,False);
 			}
 			if (c == TELOPT_NAWS)
-				send_naws(&h3270);
+				send_naws(session);
 #if defined(HAVE_LIBSSL) /*[*/
 			if (c == TELOPT_STARTTLS) {
 				static unsigned char follows_msg[] = {
@@ -1456,8 +1461,7 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 				 * Send IAC SB STARTTLS FOLLOWS IAC SE
 				 * to announce that what follows is TLS.
 				 */
-				net_rawout(&h3270, follows_msg,
-						sizeof(follows_msg));
+				net_rawout(session, follows_msg, sizeof(follows_msg));
 				trace_dsn("SENT %s %s FOLLOWS %s\n",
 						cmd(SB),
 						opt(TELOPT_STARTTLS),
@@ -1469,53 +1473,57 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 		    default:
 		    wont:
 			wont_opt[2] = c;
-			net_rawout(&h3270, wont_opt, sizeof(wont_opt));
+			net_rawout(session, wont_opt, sizeof(wont_opt));
 			trace_dsn("SENT %s %s\n", cmd(WONT), opt(c));
 			break;
 		}
-		h3270.telnet_state = TNS_DATA;
+		session->telnet_state = TNS_DATA;
 		break;
 	    case TNS_DONT:	/* telnet PLEASE DON'T DO OPTION command */
 		trace_dsn("%s\n", opt(c));
-		if (h3270.myopts[c]) {
-			h3270.myopts[c] = 0;
+		if (session->myopts[c]) {
+			session->myopts[c] = 0;
 			wont_opt[2] = c;
-			net_rawout(&h3270, wont_opt, sizeof(wont_opt));
+			net_rawout(session, wont_opt, sizeof(wont_opt));
 			trace_dsn("SENT %s %s\n", cmd(WONT), opt(c));
-			check_in3270(&h3270);
-			check_linemode(&h3270,False);
+			check_in3270(session);
+			check_linemode(session,False);
 		}
-		h3270.telnet_state = TNS_DATA;
+		session->telnet_state = TNS_DATA;
 		break;
 	    case TNS_SB:	/* telnet sub-option string command */
 		if (c == IAC)
-			h3270.telnet_state = TNS_SB_IAC;
+			session->telnet_state = TNS_SB_IAC;
 		else
-			*h3270.sbptr++ = c;
+			*session->sbptr++ = c;
 		break;
 	    case TNS_SB_IAC:	/* telnet sub-option string command */
-		*h3270.sbptr++ = c;
+		*session->sbptr++ = c;
 		if (c == SE) {
-			h3270.telnet_state = TNS_DATA;
-			if (session->sbbuf[0] == TELOPT_TTYPE &&
-			    session->sbbuf[1] == TELQUAL_SEND) {
+			session->telnet_state = TNS_DATA;
+			if (session->sbbuf[0] == TELOPT_TTYPE && session->sbbuf[1] == TELQUAL_SEND)
+			{
 				int tt_len, tb_len;
 				char *tt_out;
 
-				trace_dsn("%s %s\n", opt(session->sbbuf[0]),
-				    telquals[session->sbbuf[1]]);
-				if (session->lus != (char **)NULL && h3270.try_lu == CN) {
+				trace_dsn("%s %s\n", opt(session->sbbuf[0]),telquals[session->sbbuf[1]]);
+
+				if (session->lus != (char **)NULL && session->try_lu == CN)
+				{
 					/* None of the LUs worked. */
 					popup_an_error(NULL,"Cannot connect to specified LU");
 					return -1;
 				}
 
 				tt_len = strlen(session->termtype);
-				if (h3270.try_lu != CN && *h3270.try_lu) {
-					tt_len += strlen(h3270.try_lu) + 1;
-					session->connected_lu = h3270.try_lu;
-				} else
+				if (session->try_lu != CN && *session->try_lu)
+				{
+					tt_len += strlen(session->try_lu) + 1;
+					session->connected_lu = session->try_lu;
+				}
+				else
 					session->connected_lu = CN;
+
 				status_lu(session,session->connected_lu);
 
 				tb_len = 4 + tt_len + 2;
@@ -1523,10 +1531,10 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 				(void) sprintf(tt_out, "%c%c%c%c%s%s%s%c%c",
 				    IAC, SB, TELOPT_TTYPE, TELQUAL_IS,
 				    session->termtype,
-				    (h3270.try_lu != CN && *h3270.try_lu) ? "@" : "",
-				    (h3270.try_lu != CN && *h3270.try_lu) ? h3270.try_lu : "",
+				    (session->try_lu != CN && *session->try_lu) ? "@" : "",
+				    (session->try_lu != CN && *session->try_lu) ? session->try_lu : "",
 				    IAC, SE);
-				net_rawout(&h3270, (unsigned char *)tt_out, tb_len);
+				net_rawout(session, (unsigned char *)tt_out, tb_len);
 
 				trace_dsn("SENT %s %s %s %.*s %s\n",
 				    cmd(SB), opt(TELOPT_TTYPE),
@@ -1536,25 +1544,24 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 				lib3270_free(tt_out);
 
 				/* Advance to the next LU name. */
-				next_lu(&h3270);
+				next_lu(session);
 			}
 #if defined(X3270_TN3270E) /*[*/
-			else if (h3270.myopts[TELOPT_TN3270E] &&
-				   h3270.sbbuf[0] == TELOPT_TN3270E) {
-				if (tn3270e_negotiate(&h3270))
+			else if (session->myopts[TELOPT_TN3270E] && session->sbbuf[0] == TELOPT_TN3270E)
+			{
+				if (tn3270e_negotiate(session))
 					return -1;
 			}
 #endif /*]*/
 #if defined(HAVE_LIBSSL) /*[*/
-			else if (need_tls_follows &&
-				   h3270.myopts[TELOPT_STARTTLS] &&
-				   h3270.sbbuf[0] == TELOPT_STARTTLS) {
-				continue_tls(h3270.sbbuf, h3270.sbptr - h3270.sbbuf);
+			else if (need_tls_follows && session->myopts[TELOPT_STARTTLS] && session->sbbuf[0] == TELOPT_STARTTLS)
+			{
+				continue_tls(session->sbbuf, session->sbptr - session->sbbuf);
 			}
 #endif /*]*/
 
 		} else {
-			h3270.telnet_state = TNS_SB;
+			session->telnet_state = TNS_SB;
 		}
 		break;
 	}
@@ -1563,39 +1570,38 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 
 #if defined(X3270_TN3270E) /*[*/
 /* Send a TN3270E terminal type request. */
-static void
-tn3270e_request(void)
+static void tn3270e_request(H3270 *hSession)
 {
 	int tt_len, tb_len;
 	char *tt_out;
 	char *t;
 
-	tt_len = strlen(h3270.termtype);
-	if (h3270.try_lu != CN && *h3270.try_lu)
-		tt_len += strlen(h3270.try_lu) + 1;
+	tt_len = strlen(hSession->termtype);
+	if (hSession->try_lu != CN && *hSession->try_lu)
+		tt_len += strlen(hSession->try_lu) + 1;
 
 	tb_len = 5 + tt_len + 2;
 	tt_out = lib3270_malloc(tb_len + 1);
 	t = tt_out;
 	t += sprintf(tt_out, "%c%c%c%c%c%s",
 	    IAC, SB, TELOPT_TN3270E, TN3270E_OP_DEVICE_TYPE,
-	    TN3270E_OP_REQUEST, h3270.termtype);
+	    TN3270E_OP_REQUEST, hSession->termtype);
 
 	/* Convert 3279 to 3278, per the RFC. */
 	if (tt_out[12] == '9')
 		tt_out[12] = '8';
 
-	if (h3270.try_lu != CN && *h3270.try_lu)
-		t += sprintf(t, "%c%s", TN3270E_OP_CONNECT, h3270.try_lu);
+	if (hSession->try_lu != CN && *hSession->try_lu)
+		t += sprintf(t, "%c%s", TN3270E_OP_CONNECT, hSession->try_lu);
 
 	(void) sprintf(t, "%c%c", IAC, SE);
 
-	net_rawout(&h3270, (unsigned char *)tt_out, tb_len);
+	net_rawout(hSession, (unsigned char *)tt_out, tb_len);
 
 	trace_dsn("SENT %s %s DEVICE-TYPE REQUEST %.*s%s%s %s\n",
-	    cmd(SB), opt(TELOPT_TN3270E), (int) strlen(h3270.termtype), tt_out + 5,
-	    (h3270.try_lu != CN && *h3270.try_lu) ? " CONNECT " : "",
-	    (h3270.try_lu != CN && *h3270.try_lu) ? h3270.try_lu : "",
+	    cmd(SB), opt(TELOPT_TN3270E), (int) strlen(hSession->termtype), tt_out + 5,
+	    (hSession->try_lu != CN && *hSession->try_lu) ? " CONNECT " : "",
+	    (hSession->try_lu != CN && *hSession->try_lu) ? hSession->try_lu : "",
 	    cmd(SE));
 
 	lib3270_free(tt_out);
@@ -1604,22 +1610,21 @@ tn3270e_request(void)
 /*
  * Back off of TN3270E.
  */
-static void
-backoff_tn3270e(const char *why)
+static void backoff_tn3270e(H3270 *hSession, const char *why)
 {
 	trace_dsn("Aborting TN3270E: %s\n", why);
 
 	/* Tell the host 'no'. */
 	wont_opt[2] = TELOPT_TN3270E;
-	net_rawout(&h3270, wont_opt, sizeof(wont_opt));
+	net_rawout(hSession, wont_opt, sizeof(wont_opt));
 	trace_dsn("SENT %s %s\n", cmd(WONT), opt(TELOPT_TN3270E));
 
 	/* Restore the LU list; we may need to run it again in TN3270 mode. */
-	setup_lus();
+	setup_lus(hSession);
 
 	/* Reset our internal state. */
-	h3270.myopts[TELOPT_TN3270E] = 0;
-	check_in3270(&h3270);
+	hSession->myopts[TELOPT_TN3270E] = 0;
+	check_in3270(hSession);
 }
 
 /*
@@ -1652,7 +1657,7 @@ static int tn3270e_negotiate(H3270 *hSession)
 			/* Host wants us to send our device type. */
 			trace_dsn("SEND DEVICE-TYPE SE\n");
 
-			tn3270e_request();
+			tn3270e_request(hSession);
 		} else {
 			trace_dsn("SEND ??%u SE\n", hSession->sbbuf[2]);
 		}
@@ -1711,19 +1716,24 @@ static int tn3270e_negotiate(H3270 *hSession)
 			trace_dsn("REJECT REASON %s SE\n", rsn(hSession->sbbuf[4]));
 			if (hSession->sbbuf[4] == TN3270E_REASON_INV_DEVICE_TYPE ||
 			    hSession->sbbuf[4] == TN3270E_REASON_UNSUPPORTED_REQ) {
-				backoff_tn3270e(_( "Host rejected device type or request type" ));
+				backoff_tn3270e(hSession,_( "Host rejected device type or request type" ));
 				break;
 			}
 
 			next_lu(hSession);
-			if (hSession->try_lu != CN) {
+			if (hSession->try_lu != CN)
+			{
 				/* Try the next LU. */
-				tn3270e_request();
-			} else if (hSession->lus != (char **)NULL) {
+				tn3270e_request(hSession);
+			}
+			else if (hSession->lus != (char **)NULL)
+			{
 				/* No more LUs to try.  Give up. */
-				backoff_tn3270e(_("Host rejected resource(s)"));
-			} else {
-				backoff_tn3270e(_("Device type rejected"));
+				backoff_tn3270e(hSession,_("Host rejected resource(s)"));
+			}
+			else
+			{
+				backoff_tn3270e(hSession,_("Device type rejected"));
 			}
 
 			break;
@@ -1782,7 +1792,7 @@ static int tn3270e_negotiate(H3270 *hSession)
 					 * They've added something.  Abandon
 					 * TN3270E, they're brain dead.
 					 */
-					backoff_tn3270e("Host illegally added function(s)");
+					backoff_tn3270e(hSession,_( "Host illegally added function(s)" ));
 					break;
 				}
 			}
@@ -2191,11 +2201,11 @@ static void net_cookout(H3270 *hSession, const char *buf, int len)
 			else if (c == 0x08 || c == 0x7f) /* Yes, a hack. */
 				do_cerase(hSession,c);
 			else
-				do_data(c);
+				do_data(hSession,c);
 		}
 		return;
 	} else
-		net_cookedout(&h3270, buf, len);
+		net_cookedout(hSession, buf, len);
 }
 
 
@@ -2219,35 +2229,36 @@ ansi_process_s(const char *data)
 		ansi_process((unsigned int) *data++);
 }
 
-static void
-forward_data(void)
+static void forward_data(H3270 *hSession)
 {
-	net_cookedout(&h3270, (char *) h3270.lbuf, h3270.lbptr - h3270.lbuf);
-	cooked_init(&h3270);
+	net_cookedout(hSession, (char *) hSession->lbuf, hSession->lbptr - hSession->lbuf);
+	cooked_init(hSession);
 }
 
-static void
-do_data(char c)
+static void do_data(H3270 *hSession, char c)
 {
-	if (h3270.lbptr+1 < h3270.lbuf + BUFSZ) {
-		*h3270.lbptr++ = c;
+	if (hSession->lbptr+1 < hSession->lbuf + BUFSZ)
+	{
+		*hSession->lbptr++ = c;
 		if (c == '\r')
-			*h3270.lbptr++ = '\0';
+			*hSession->lbptr++ = '\0';
 		if (c == '\t')
 			ansi_process((unsigned int) c);
 		else
 			ansi_process_s(ctl_see((int) c));
-	} else
+	}
+	else
 		ansi_process_s("\007");
-	h3270.lnext = 0;
-	h3270.backslashed = 0;
+
+	hSession->lnext = 0;
+	hSession->backslashed = 0;
 }
 
 static void do_intr(H3270 *hSession, char c)
 {
 	if (hSession->lnext)
 	{
-		do_data(c);
+		do_data(hSession,c);
 		return;
 	}
 	ansi_process_s(ctl_see((int) c));
@@ -2259,7 +2270,7 @@ static void do_quit(H3270 *hSession, char c)
 {
 	if (hSession->lnext)
 	{
-		do_data(c);
+		do_data(hSession,c);
 		return;
 	}
 	ansi_process_s(ctl_see((int) c));
@@ -2275,14 +2286,16 @@ static void do_cerase(H3270 *hSession, char c)
 	{
 		hSession->lbptr--;
 		ansi_process_s("\b");
-		do_data(c);
+		do_data(hSession,c);
 		return;
 	}
+
 	if (hSession->lnext)
 	{
-		do_data(c);
+		do_data(hSession,c);
 		return;
 	}
+
 	if (hSession->lbptr > hSession->lbuf)
 	{
 		len = strlen(ctl_see((int) *--hSession->lbptr));
@@ -2297,10 +2310,12 @@ static void do_werase(H3270 *hSession, char c)
 	int any = 0;
 	int len;
 
-	if (hSession->lnext) {
-		do_data(c);
+	if (hSession->lnext)
+	{
+		do_data(hSession,c);
 		return;
 	}
+
 	while (hSession->lbptr > hSession->lbuf) {
 		char ch;
 
@@ -2327,14 +2342,18 @@ static void do_kill(H3270 *hSession, char c)
 	if (hSession->backslashed) {
 		hSession->lbptr--;
 		ansi_process_s("\b");
-		do_data(c);
+		do_data(hSession,c);
 		return;
 	}
-	if (hSession->lnext) {
-		do_data(c);
+
+	if (hSession->lnext)
+	{
+		do_data(hSession,c);
 		return;
 	}
-	while (hSession->lbptr > hSession->lbuf) {
+
+	while (hSession->lbptr > hSession->lbuf)
+	{
 		len = strlen(ctl_see((int) *--hSession->lbptr));
 
 		for (i = 0; i < len; i++)
@@ -2346,10 +2365,12 @@ static void do_rprnt(H3270 *hSession, char c)
 {
 	unsigned char *p;
 
-	if (hSession->lnext) {
-		do_data(c);
+	if (hSession->lnext)
+	{
+		do_data(hSession,c);
 		return;
 	}
+
 	ansi_process_s(ctl_see((int) c));
 	ansi_process_s("\r\n");
 	for (p = hSession->lbuf; p < hSession->lbptr; p++)
@@ -2358,40 +2379,49 @@ static void do_rprnt(H3270 *hSession, char c)
 
 static void do_eof(H3270 *hSession, char c)
 {
-	if (hSession->backslashed) {
+	if (hSession->backslashed)
+	{
 		hSession->lbptr--;
 		ansi_process_s("\b");
-		do_data(c);
+		do_data(hSession,c);
 		return;
 	}
-	if (hSession->lnext) {
-		do_data(c);
+
+	if (hSession->lnext)
+	{
+		do_data(hSession,c);
 		return;
 	}
-	do_data(c);
-	forward_data();
+
+	do_data(hSession,c);
+	forward_data(hSession);
 }
 
 static void do_eol(H3270 *hSession, char c)
 {
-	if (hSession->lnext) {
-		do_data(c);
+	if (hSession->lnext)
+	{
+		do_data(hSession,c);
 		return;
 	}
-	if (hSession->lbptr+2 >= hSession->lbuf + BUFSZ) {
+
+	if (hSession->lbptr+2 >= hSession->lbuf + BUFSZ)
+	{
 		ansi_process_s("\007");
 		return;
 	}
+
 	*hSession->lbptr++ = '\r';
 	*hSession->lbptr++ = '\n';
 	ansi_process_s("\r\n");
-	forward_data();
+	forward_data(hSession);
 }
 
 static void do_lnext(H3270 *hSession, char c)
 {
-	if (hSession->lnext) {
-		do_data(c);
+	if (hSession->lnext)
+	{
+		do_data(hSession,c);
 		return;
 	}
 	hSession->lnext = 1;
@@ -2519,29 +2549,34 @@ static void store3270in(H3270 *hSession, unsigned char c)
 	*hSession->ibptr++ = c;
 }
 
-/*
- * space3270out
- *	Ensure that <n> more characters will fit in the 3270 output buffer.
- *	Allocates the buffer in BUFSIZ chunks.
- *	Allocates hidden space at the front of the buffer for TN3270E.
+/**
+ * Ensure that <n> more characters will fit in the 3270 output buffer.
+ *
+ * Allocates the buffer in BUFSIZ chunks.
+ * Allocates hidden space at the front of the buffer for TN3270E.
+ *
+ * @param hSession	3270 session handle.
+ * @param n			Number of characters to set.
  */
-void space3270out(int n)
+void space3270out(H3270 *hSession, int n)
 {
 	unsigned nc = 0;	/* amount of data currently in obuf */
 	unsigned more = 0;
 
-	if (h3270.obuf_size)
-		nc = h3270.obptr - h3270.obuf;
+	if (hSession->obuf_size)
+		nc = hSession->obptr - hSession->obuf;
 
-	while ((nc + n + EH_SIZE) > (h3270.obuf_size + more)) {
+	while ((nc + n + EH_SIZE) > (hSession->obuf_size + more))
+	{
 		more += BUFSIZ;
 	}
 
-	if (more) {
-		h3270.obuf_size += more;
-		h3270.obuf_base = (unsigned char *)Realloc((char *) h3270.obuf_base,h3270.obuf_size);
-		h3270.obuf = h3270.obuf_base + EH_SIZE;
-		h3270.obptr = h3270.obuf + nc;
+	if (more)
+	{
+		hSession->obuf_size += more;
+		hSession->obuf_base = (unsigned char *)Realloc((char *) hSession->obuf_base,hSession->obuf_size);
+		hSession->obuf = hSession->obuf_base + EH_SIZE;
+		hSession->obptr = hSession->obuf + nc;
 	}
 }
 
@@ -2660,66 +2695,75 @@ void trace_netdata(char direction, unsigned const char *buf, int len)
 #endif // X3270_TRACE
 
 
-/*
- * net_output
- *	Send 3270 output over the network:
+/**
+ * Send 3270 output over the network.
+ *
+ * Send 3270 output over the network:
  *	- Prepend TN3270E header
  *	- Expand IAC to IAC IAC
  *	- Append IAC EOR
+ *
+ * @param hSession Session handle
+ *
  */
-void
-net_output(void)
+void net_output(H3270 *hSession)
 {
 	static unsigned char *xobuf = NULL;
 	static int xobuf_len = 0;
 	int need_resize = 0;
 	unsigned char *nxoptr, *xoptr;
 
-#if defined(X3270_TN3270E) /*[*/
-#define BSTART	((IN_TN3270E || IN_SSCP) ? h3270.obuf_base : h3270.obuf)
-#else /*][*/
-#define BSTART	obuf
-#endif /*]*/
+#if defined(X3270_TN3270E)
+	#define BSTART	((IN_TN3270E || IN_SSCP) ? hSession->obuf_base : hSession->obuf)
+#else
+	#define BSTART	obuf
+#endif
 
 #if defined(X3270_TN3270E) /*[*/
 	/* Set the TN3720E header. */
-	if (IN_TN3270E || IN_SSCP) {
-		tn3270e_header *h = (tn3270e_header *) h3270.obuf_base;
+	if (IN_TN3270E || IN_SSCP)
+	{
+		tn3270e_header *h = (tn3270e_header *) hSession->obuf_base;
 
 		/* Check for sending a TN3270E response. */
-		if (h3270.response_required == TN3270E_RSF_ALWAYS_RESPONSE) {
-			tn3270e_ack(&h3270);
-			h3270.response_required = TN3270E_RSF_NO_RESPONSE;
+		if (hSession->response_required == TN3270E_RSF_ALWAYS_RESPONSE)
+		{
+			tn3270e_ack(hSession);
+			hSession->response_required = TN3270E_RSF_NO_RESPONSE;
 		}
 
 		/* Set the outbound TN3270E header. */
-		h->data_type = IN_TN3270E ?
-			TN3270E_DT_3270_DATA : TN3270E_DT_SSCP_LU_DATA;
+		h->data_type = IN_TN3270E ? TN3270E_DT_3270_DATA : TN3270E_DT_SSCP_LU_DATA;
 		h->request_flag = 0;
 		h->response_flag = 0;
-		h->seq_number[0] = (h3270.e_xmit_seq >> 8) & 0xff;
-		h->seq_number[1] = h3270.e_xmit_seq & 0xff;
+		h->seq_number[0] = (hSession->e_xmit_seq >> 8) & 0xff;
+		h->seq_number[1] = hSession->e_xmit_seq & 0xff;
 
-		trace_dsn("SENT TN3270E(%s NO-RESPONSE %u)\n",IN_TN3270E ? "3270-DATA" : "SSCP-LU-DATA", h3270.e_xmit_seq);
-		if (h3270.e_funcs & E_OPT(TN3270E_FUNC_RESPONSES))
-			h3270.e_xmit_seq = (h3270.e_xmit_seq + 1) & 0x7fff;
+		trace_dsn("SENT TN3270E(%s NO-RESPONSE %u)\n",IN_TN3270E ? "3270-DATA" : "SSCP-LU-DATA", hSession->e_xmit_seq);
+		if (hSession->e_funcs & E_OPT(TN3270E_FUNC_RESPONSES))
+			hSession->e_xmit_seq = (hSession->e_xmit_seq + 1) & 0x7fff;
 	}
 #endif /*]*/
 
 	/* Reallocate the expanded output buffer. */
-	while (xobuf_len <  (h3270.obptr - BSTART + 1) * 2) {
+	while (xobuf_len <  (hSession->obptr - BSTART + 1) * 2)
+	{
 		xobuf_len += BUFSZ;
 		need_resize++;
 	}
-	if (need_resize) {
+
+	if (need_resize)
+	{
 		Replace(xobuf, (unsigned char *)lib3270_malloc(xobuf_len));
 	}
 
 	/* Copy and expand IACs. */
 	xoptr = xobuf;
 	nxoptr = BSTART;
-	while (nxoptr < h3270.obptr) {
-		if ((*xoptr++ = *nxoptr++) == IAC) {
+	while (nxoptr < hSession->obptr)
+	{
+		if ((*xoptr++ = *nxoptr++) == IAC)
+		{
 			*xoptr++ = IAC;
 		}
 	}
@@ -2727,10 +2771,10 @@ net_output(void)
 	/* Append the IAC EOR and transmit. */
 	*xoptr++ = IAC;
 	*xoptr++ = EOR;
-	net_rawout(&h3270,xobuf, xoptr - xobuf);
+	net_rawout(hSession,xobuf, xoptr - xobuf);
 
 	trace_dsn("SENT EOR\n");
-	h3270.ns_rsent++;
+	hSession->ns_rsent++;
 #undef BSTART
 }
 
@@ -2808,7 +2852,7 @@ net_add_dummy_tn3270e(void)
 	if (!IN_E || h3270.tn3270e_submode == E_NONE)
 		return False;
 
-	space3270out(EH_SIZE);
+	space3270out(&h3270,EH_SIZE);
 	h = (tn3270e_header *)h3270.obptr;
 
 	switch (h3270.tn3270e_submode) {

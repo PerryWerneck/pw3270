@@ -140,7 +140,7 @@ void do_qr_rpqnames(void)
 	 * By pre-allocating the space I don't have to worry about the
 	 * possibility of addresses changing.
 	 */
-	space3270out(4+4+1+remaining);	/* Maximum space for an RPQNAME item */
+	space3270out(&h3270,4+4+1+remaining);	/* Maximum space for an RPQNAME item */
 
 	SET32(h3270.obptr, 0);		/* Device number, 0 = All */
 	SET32(h3270.obptr, 0);		/* Model number, 0 = All */

@@ -654,7 +654,7 @@ static void
 query_reply_start(void)
 {
 	h3270.obptr = h3270.obuf;
-	space3270out(1);
+	space3270out(&h3270,1);
 	*h3270.obptr++ = AID_SF;
 	qr_in_progress = True;
 }
@@ -684,7 +684,7 @@ do_query_reply(unsigned char code)
 		int obptr0 = h3270.obptr - h3270.obuf;
 		Boolean full = True;
 
-		space3270out(4);
+		space3270out(&h3270,4);
 		h3270.obptr += 2;	/* skip length for now */
 		*h3270.obptr++ = SFID_QREPLY;
 		*h3270.obptr++ = code;
@@ -723,7 +723,7 @@ do_qr_summary(void)
 	const char *comma = "";
 
 	trace_ds("> QueryReply(Summary(");
-	space3270out(NSR);
+	space3270out(&h3270,NSR);
 	for (i = 0; i < NSR; i++) {
 #if defined(X3270_DBCS) /*[*/
 		if (dbcs || replies[i].code != QR_DBCS_ASIA) {
@@ -744,7 +744,7 @@ do_qr_usable_area(void)
 	unsigned short num, denom;
 
 	trace_ds("> QueryReply(UsableArea)\n");
-	space3270out(19);
+	space3270out(&h3270,19);
 	*h3270.obptr++ = 0x01;				/* 12/14-bit addressing */
 	*h3270.obptr++ = 0x00;				/* no special character features */
 	SET16(h3270.obptr, h3270.maxCOLS);	/* usable width */
@@ -781,7 +781,7 @@ do_qr_color(void)
 
 	color_max = h3270.color8 ? 8: 16; /* report on 8 or 16 colors */
 
-	space3270out(4 + 2*15);
+	space3270out(&h3270,4 + 2*15);
 	*h3270.obptr++ = 0x00;					/* no options */
 	*h3270.obptr++ = color_max; 			/* report on 8 or 16 colors */
 	*h3270.obptr++ = 0x00;					/* default color: */
@@ -812,7 +812,7 @@ static void
 do_qr_highlighting(void)
 {
 	trace_ds("> QueryReply(Highlighting)\n");
-	space3270out(11);
+	space3270out(&h3270,11);
 	*h3270.obptr++ = 5;					/* report on 5 pairs */
 	*h3270.obptr++ = XAH_DEFAULT;		/* default: */
 	*h3270.obptr++ = XAH_NORMAL;		/*  normal */
@@ -830,7 +830,7 @@ static void
 do_qr_reply_modes(void)
 {
 	trace_ds("> QueryReply(ReplyModes)\n");
-	space3270out(3);
+	space3270out(&h3270,3);
 	*h3270.obptr++ = SF_SRM_FIELD;
 	*h3270.obptr++ = SF_SRM_XFIELD;
 	*h3270.obptr++ = SF_SRM_CHAR;
@@ -857,7 +857,7 @@ static void
 do_qr_alpha_part(void)
 {
 	trace_ds("> QueryReply(AlphanumericPartitions)\n");
-	space3270out(4);
+	space3270out(&h3270,4);
 	*h3270.obptr++ = 0;		/* 1 partition */
 	SET16(h3270.obptr, h3270.maxROWS * h3270.maxCOLS);	/* buffer space */
 	*h3270.obptr++ = 0;		/* no special features */
@@ -867,7 +867,7 @@ static void
 do_qr_charsets(void)
 {
 	trace_ds("> QueryReply(CharacterSets)\n");
-	space3270out(64);
+	space3270out(&h3270,64);
 #if defined(X3270_DBCS) /*[*/
 	if (dbcs)
 		*h3270.obptr++ = 0x8e;			/* flags: GE, CGCSGID, DBCS */
@@ -953,7 +953,7 @@ do_qr_ddm(void)
 	set_dft_buffersize();
 
 	trace_ds("> QueryReply(DistributedDataManagement)\n");
-	space3270out(8);
+	space3270out(&h3270,8);
 	SET16(h3270.obptr,0);			/* set reserved field to 0 */
 	SET16(h3270.obptr, dft_buffersize);	/* set inbound length limit INLIM */
 	SET16(h3270.obptr, dft_buffersize);	/* set outbound length limit OUTLIM */
@@ -965,7 +965,7 @@ static void
 do_qr_imp_part(void)
 {
 	trace_ds("> QueryReply(ImplicitPartition)\n");
-	space3270out(13);
+	space3270out(&h3270,13);
 	*h3270.obptr++ = 0x0;				/* reserved */
 	*h3270.obptr++ = 0x0;
 	*h3270.obptr++ = 0x0b;				/* length of display size */
@@ -980,6 +980,6 @@ do_qr_imp_part(void)
 static void
 query_reply_end(void)
 {
-	net_output();
+	net_output(&h3270);
 	kybd_inhibit(&h3270,True);
 }

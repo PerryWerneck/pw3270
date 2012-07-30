@@ -18,7 +18,7 @@
  * programa; se não, escreva para a Free Software Foundation, Inc., 51 Franklin
  * St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * Este programa está nomeado como config.c e possui 389 linhas de código.
+ * Este programa está nomeado como config.c e possui - linhas de código.
  *
  * Contatos:
  *

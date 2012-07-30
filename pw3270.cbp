@@ -52,6 +52,7 @@
 		<Unit filename="autogen.sh" />
 		<Unit filename="colors.conf" />
 		<Unit filename="configure.ac" />
+		<Unit filename="pw3270.nsi.in" />
 		<Unit filename="pw3270.spec.in" />
 		<Unit filename="src/include/lib3270.h" />
 		<Unit filename="src/include/lib3270/3270ds.h" />
