@@ -41,6 +41,8 @@ function terminalUpdate()
 	{
 		document.getElementById("pfbar").style.visible = "hidden";
 		document.getElementById("terminal").style.visible = "hidden";
+		document.getElementById("pfbar").innerHTML = "";
+		document.getElementById("terminal").innerHTML = "";
 	}
 		
 	setupWindow();
