@@ -69,7 +69,8 @@ Release:        %_release
 Summary:        IBM 3270 Terminal emulator for gtk
 Source:         %{name}-%{version}.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-Requires:       openssl shared-mime-info
+Requires:       openssl shared-mime-info lib3270 = @PACKAGE_VERSION@
+Provides:	lib@PACKAGE@ = @PACKAGE_VERSION@ lib@PACKAGE@.so = @PACKAGE_VERSION@
 Distribution:	%_distro
 BuildRequires:	autoconf >= 2.61 automake gcc-c++ sed pkgconfig %{_bldreq} gettext-devel findutils coreutils desktop-file-utils
 
@@ -147,6 +148,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/@PACKAGE_NAME@
 %{_libdir}/libpw3270.so.@MAJOR_VERSION@
 %{_libdir}/libpw3270.so.@VERSION@
+%{_libdir}/libpw3270.so
 
 %{_datadir}/@PACKAGE_NAME@/ui/00default.xml
 %{_datadir}/@PACKAGE_NAME@/@PACKAGE_NAME@.png
@@ -163,7 +165,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/lib3270
 %{_datadir}/@PACKAGE_NAME@/ui/99debug.xml
 %{_libdir}/pkgconfig/*.pc
-%{_libdir}/libpw3270.so
 %{_libdir}/lib3270.so
 
 #---[ Scripts ]-------------------------------------------------------------------------------------------------------

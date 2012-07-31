@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-30 09:30-0300\n"
+"POT-Creation-Date: 2012-07-31 14:55-0300\n"
 "PO-Revision-Date: 2012-06-21 11:08-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português do Brasil <>\n"
@@ -23,7 +23,7 @@ msgstr ""
 msgid "%s: unknown family %d"
 msgstr "%s: Familia %d é inválida"
 
-#: telnet.c:1092
+#: telnet.c:1099
 #, c-format
 msgid "%s:%d"
 msgstr "%s:%d"
@@ -36,7 +36,7 @@ msgstr "Erro 3270"
 msgid "3270 Warning"
 msgstr "Alerta 3270"
 
-#: telnet.c:3345
+#: telnet.c:3400
 #, c-format
 msgid ""
 "<b>Connection state:</b> %s\n"
@@ -77,7 +77,7 @@ msgstr "Cursor piscante"
 msgid "Bold"
 msgstr "Negrito"
 
-#: telnet.c:2071
+#: telnet.c:2083
 msgid "Broken pipe"
 msgstr "Broken pipe"
 
@@ -98,7 +98,7 @@ msgstr "Não foi possível obter o tamanho do arquivo"
 msgid "Can't open local file"
 msgstr "Não foi possível abrir arquivo local"
 
-#: telnet.c:837
+#: telnet.c:842
 msgid "Can't set SSL socket file descriptor"
 msgstr "Não foi possível definir o descritor de socket SSL"
 
@@ -136,11 +136,11 @@ msgstr "Completo"
 msgid "Connect on startup"
 msgstr "Conectar ao iniciar"
 
-#: telnet.c:837 telnet.c:855
+#: telnet.c:842 telnet.c:860
 msgid "Connection failed"
 msgstr "Conexão falhou"
 
-#: telnet.c:2075
+#: telnet.c:2087
 #, fuzzy
 msgid "Connection reset by peer"
 msgstr "Ação falhou"
@@ -177,7 +177,7 @@ msgstr "Debug"
 msgid "Debug window updates"
 msgstr "Mostrar atualizações de janela"
 
-#: telnet.c:1726
+#: telnet.c:1738
 msgid "Device type rejected"
 msgstr "Tipo de dispositivo rejeitado"
 
@@ -185,7 +185,7 @@ msgstr "Tipo de dispositivo rejeitado"
 msgid "Disconnected from host"
 msgstr "Desconectado do servidor"
 
-#: telnet.c:1306
+#: telnet.c:1313
 msgid "EOR received when not in 3270 mode, ignored."
 msgstr "EOR recebido fora do modo 3270, ignorado."
 
@@ -257,11 +257,15 @@ msgstr "Ajuda"
 msgid "Host disconnected, transfer cancelled"
 msgstr "Servidor desconectou, transferência cancelada"
 
-#: telnet.c:1714
+#: telnet.c:1797
+msgid "Host illegally added function(s)"
+msgstr "Host illegally added function(s)"
+
+#: telnet.c:1721
 msgid "Host rejected device type or request type"
 msgstr "Host rejected device type or request type"
 
-#: telnet.c:1724
+#: telnet.c:1734
 msgid "Host rejected resource(s)"
 msgstr "Host rejected resource(s)"
 
@@ -383,15 +387,15 @@ msgstr "Reselecionar"
 msgid "Return"
 msgstr "Return"
 
-#: telnet.c:3343
+#: telnet.c:3398
 msgid "SSL Connect error"
 msgstr "Erro na conexão SSL"
 
-#: telnet.c:1075
+#: telnet.c:1082
 msgid "SSL Error"
 msgstr "Erro SSL"
 
-#: telnet.c:1075
+#: telnet.c:1082
 msgid "SSL Read error"
 msgstr "Erro de leitura SSL"
 
@@ -399,11 +403,11 @@ msgstr "Erro de leitura SSL"
 msgid "SSL error"
 msgstr "Erro SSL"
 
-#: telnet.c:855
+#: telnet.c:860
 msgid "SSL negotiation failed"
 msgstr "Negociação SSL falhou"
 
-#: telnet.c:2061
+#: telnet.c:2073
 #, fuzzy, c-format
 msgid ""
 "SSL_write:\n"
@@ -474,11 +478,11 @@ msgstr "Mostrar padrão de teste"
 msgid "Smart paste"
 msgstr "Colar inteligente"
 
-#: telnet.c:1096
+#: telnet.c:1103
 msgid "Socket read error"
 msgstr "Erro ao ler dados da rede"
 
-#: telnet.c:2082
+#: telnet.c:2094
 msgid "Socket write error"
 msgstr "Erro ao enviar dados para a rede"
 
@@ -652,12 +656,12 @@ msgstr "Opções"
 msgid "_View"
 msgstr "_Exibir"
 
-#: telnet.c:3208 telnet.c:3219
+#: telnet.c:3263 telnet.c:3274
 #, c-format
 msgid "fcntl(%s)"
 msgstr "fcntl(%s)"
 
-#: telnet.c:3198
+#: telnet.c:3253
 #, c-format
 msgid "ioctl(%s)"
 msgstr "ioctl(%s)"
@@ -671,7 +675,7 @@ msgstr "setsockopt(%s)"
 msgid "socket"
 msgstr "socket"
 
-#: telnet.c:1071
+#: telnet.c:1078
 msgid "unknown error"
 msgstr "Erro desconhecido"
 
