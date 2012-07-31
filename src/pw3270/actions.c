@@ -285,7 +285,7 @@ static void connect_standard_action(GtkAction *action, GtkWidget *widget, const 
 
 static void lib3270_toggle_action(GtkToggleAction *action,GtkWidget *widget)
 {
-	LIB3270_TOGGLE toggle = (LIB3270_TOGGLE) g_object_get_data(G_OBJECT(action),"toggle_id");
+	LIB3270_TOGGLE toggle = (LIB3270_TOGGLE) GPOINTER_TO_INT(g_object_get_data(G_OBJECT(action),"toggle_id"));
 
 	lib3270_trace_event(NULL,"Action %s toggled on widget %p (id=%d)\n",gtk_action_get_name(GTK_ACTION(action)),widget,(int) toggle);
 
@@ -298,17 +298,17 @@ static void lib3270_toggle_action(GtkToggleAction *action,GtkWidget *widget)
 static void selection_move_action(GtkAction *action, GtkWidget *widget)
 {
 	trace_action(action,widget);
-	lib3270_move_selection(v3270_get_session(widget),(LIB3270_DIRECTION) g_object_get_data(G_OBJECT(action),"direction"));
+	lib3270_move_selection(v3270_get_session(widget),(LIB3270_DIRECTION) GPOINTER_TO_INT(g_object_get_data(G_OBJECT(action),"direction")));
 }
 
 static void cursor_move_action(GtkAction *action, GtkWidget *widget)
 {
-	int flags = (int) g_object_get_data(G_OBJECT(action),"move_flags");
+	int flags = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(action),"move_flags"));
 
 	lib3270_trace_event(NULL,"Action %s activated on widget %p flags=%04x\n",
 									gtk_action_get_name(action),
 									widget,
-									(unsigned int) g_object_get_data(G_OBJECT(action),"move_flags"));
+									(unsigned int) flags);
 
 	lib3270_move_cursor(v3270_get_session(widget),(LIB3270_DIRECTION) (flags & 0x03), (flags & 0x80) );
 }
@@ -323,12 +323,12 @@ static void connect_move_action(GtkAction *action, GtkWidget *widget, const gcha
 
 	if(!g_ascii_strcasecmp(target,"selection"))
 	{
-		g_object_set_data(G_OBJECT(action),"direction",(gpointer) (flags & 3));
+		g_object_set_data(G_OBJECT(action),"direction",GINT_TO_POINTER((flags & 3)));
 		g_signal_connect(action,"activate",G_CALLBACK(selection_move_action),widget);
 	}
 	else if(!g_ascii_strcasecmp(target,"cursor"))
 	{
-		g_object_set_data(G_OBJECT(action),"move_flags",(gpointer) ((int) flags));
+		g_object_set_data(G_OBJECT(action),"move_flags",GINT_TO_POINTER( ((int) flags)));
 		g_signal_connect(action,"activate",G_CALLBACK(cursor_move_action),widget);
 	}
 	else
@@ -343,26 +343,28 @@ static void connect_move_action(GtkAction *action, GtkWidget *widget, const gcha
 
 static void action_pfkey(GtkAction *action, GtkWidget *widget)
 {
-	lib3270_trace_event(NULL,"Action %s activated on widget %p key=%p\n",gtk_action_get_name(action),widget,g_object_get_data(G_OBJECT(action),"pfkey"));
-	lib3270_pfkey(v3270_get_session(widget),(int) g_object_get_data(G_OBJECT(action),"pfkey"));
+	int key = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(action),"pfkey"));
+	lib3270_trace_event(NULL,"Action %s activated on widget %p key=%d\n",gtk_action_get_name(action),widget,key);
+	lib3270_pfkey(v3270_get_session(widget),key);
 }
 
 static void action_pakey(GtkAction *action, GtkWidget *widget)
 {
-	lib3270_trace_event(NULL,"Action %s activated on widget %p key=%p\n",gtk_action_get_name(action),widget,g_object_get_data(G_OBJECT(action),"pakey"));
-	lib3270_pakey(v3270_get_session(widget),(int) g_object_get_data(G_OBJECT(action),"pakey"));
+	int key = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(action),"pakey"));
+	lib3270_trace_event(NULL,"Action %s activated on widget %p key=%d\n",gtk_action_get_name(action),widget,key);
+	lib3270_pakey(v3270_get_session(widget),key);
 }
 
 static void action_set_toggle(GtkAction *action, GtkWidget *widget)
 {
-	LIB3270_TOGGLE id = (LIB3270_TOGGLE) g_object_get_data(G_OBJECT(action),"toggle_id");
+	LIB3270_TOGGLE id = (LIB3270_TOGGLE) GPOINTER_TO_INT(g_object_get_data(G_OBJECT(action),"toggle_id"));
 	lib3270_trace_event(NULL,"Action %s activated on widget %p toggle=%d\n",gtk_action_get_name(action),widget,id);
 	lib3270_set_toggle(v3270_get_session(widget),id,1);
 }
 
 static void action_reset_toggle(GtkAction *action, GtkWidget *widget)
 {
-	LIB3270_TOGGLE id = (LIB3270_TOGGLE) g_object_get_data(G_OBJECT(action),"toggle_id");
+	LIB3270_TOGGLE id = (LIB3270_TOGGLE) GPOINTER_TO_INT(g_object_get_data(G_OBJECT(action),"toggle_id"));
 	lib3270_trace_event(NULL,"Action %s activated on widget %p toggle=%d\n",gtk_action_get_name(action),widget,id);
 	lib3270_set_toggle(v3270_get_session(widget),id,0);
 }
@@ -682,7 +684,7 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 		action = GTK_ACTION(gtk_toggle_action_new(nm,NULL,NULL,NULL));
 		if(id < LIB3270_TOGGLE_COUNT)
 			toggle_action[id] = action;
-		g_object_set_data(G_OBJECT(action),"toggle_id",(gpointer) id);
+		g_object_set_data(G_OBJECT(action),"toggle_id",GINT_TO_POINTER(id));
 		gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action),(lib3270_get_toggle(v3270_get_session(widget),id) != 0));
 		g_signal_connect(action,"toggled",G_CALLBACK(lib3270_toggle_action),widget);
 		break;
@@ -694,25 +696,25 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 
 	case ACTION_TYPE_PFKEY:
 		action = gtk_action_new(nm,NULL,NULL,NULL);
-		g_object_set_data(G_OBJECT(action),"pfkey",(gpointer) id);
+		g_object_set_data(G_OBJECT(action),"pfkey",GINT_TO_POINTER(id));
 		g_signal_connect(action,"activate",G_CALLBACK(action_pfkey),widget);
 		break;
 
 	case ACTION_TYPE_PAKEY:
 		action = gtk_action_new(nm,NULL,NULL,NULL);
-		g_object_set_data(G_OBJECT(action),"pakey",(gpointer) id);
+		g_object_set_data(G_OBJECT(action),"pakey",GINT_TO_POINTER(id));
 		g_signal_connect(action,"activate",G_CALLBACK(action_pakey),widget);
 		break;
 
 	case ACTION_TYPE_SET:
 		action = gtk_action_new(nm,NULL,NULL,NULL);
-		g_object_set_data(G_OBJECT(action),"toggle_id",(gpointer) id);
+		g_object_set_data(G_OBJECT(action),"toggle_id",GINT_TO_POINTER(id));
 		g_signal_connect(action,"activate",G_CALLBACK(action_set_toggle),widget);
 		break;
 
 	case ACTION_TYPE_RESET:
 		action = gtk_action_new(nm,NULL,NULL,NULL);
-		g_object_set_data(G_OBJECT(action),"toggle_id",(gpointer) id);
+		g_object_set_data(G_OBJECT(action),"toggle_id",GINT_TO_POINTER(id));
 		g_signal_connect(action,"activate",G_CALLBACK(action_reset_toggle),widget);
 		break;
 

@@ -158,7 +158,7 @@ gchar * get_last_error_msg(void)
 
  gboolean registry_get_double(HKEY hKey, const gchar *key, gdouble *value)
  {
-	GError			* error = NULL;
+//	GError			* error = NULL;
 	BYTE			  data[4096];
 	unsigned long	  datatype;
 	unsigned long	  datalen 	= sizeof(data);

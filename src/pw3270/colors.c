@@ -177,7 +177,7 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
 	if(colorsel)
 	{
 		// Update color selection widget
-		int	id = (int) g_object_get_data(G_OBJECT(colorsel),"colorid");
+		int	id = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(colorsel),"colorid"));
 		if(id >= 0 && id < V3270_COLOR_COUNT)
 			gtk_color_selection_set_current_color(GTK_COLOR_SELECTION(colorsel),clr+id);
 	}
@@ -314,7 +314,7 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
  static void color_changed(GtkColorSelection *colorselection, GtkWidget *widget)
  {
  	GdkColor	clr;
-	int			id		= (int) g_object_get_data(G_OBJECT(colorselection),"colorid");
+	int			id		= GPOINTER_TO_INT(g_object_get_data(G_OBJECT(colorselection),"colorid"));
 
 	if(id < 0 || id >= V3270_COLOR_COUNT)
 		return;
@@ -347,7 +347,7 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
 	if(id < 0 || id >= V3270_COLOR_COUNT)
 		return;
 
-	g_object_set_data(G_OBJECT(color),"colorid",(gpointer) id);
+	g_object_set_data(G_OBJECT(color),"colorid",GINT_TO_POINTER(id));
 	clr = v3270_get_color(widget,id);
 
 	gtk_color_selection_set_previous_color(GTK_COLOR_SELECTION(color),saved+id);

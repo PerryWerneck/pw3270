@@ -108,7 +108,7 @@ struct action_info
 
 static void action_group_setup(gpointer key, GtkAction *action, struct action_info *info)
 {
-	int group_id = (int) g_object_get_data(G_OBJECT(action),"id_group");
+	int group_id = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(action),"id_group"));
 
 	gtk_action_set_accel_group(action,info->accel_group);
 

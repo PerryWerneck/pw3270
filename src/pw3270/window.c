@@ -211,8 +211,8 @@
  {
 	if(gtk_check_menu_item_get_active(item))
 	{
-		trace("screen model on widget %p changes to %d",widget,(int) g_object_get_data(G_OBJECT(item),"mode_3270"));
-		lib3270_set_model(v3270_get_session(widget),(int) g_object_get_data(G_OBJECT(item),"mode_3270"));
+		trace("screen model on widget %p changes to %d",widget,GPOINTER_TO_INT(g_object_get_data(G_OBJECT(item),"mode_3270")));
+		lib3270_set_model(v3270_get_session(widget),GPOINTER_TO_INT(g_object_get_data(G_OBJECT(item),"mode_3270")));
 	}
  }
 
@@ -234,7 +234,7 @@
 		item = gtk_radio_menu_item_new_with_label(group,name);
 		g_free(name);
 
-		g_object_set_data(G_OBJECT(item),"mode_3270",(gpointer) (f+2));
+		g_object_set_data(G_OBJECT(item),"mode_3270",GINT_TO_POINTER((f+2)));
 
 		group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(item));
 

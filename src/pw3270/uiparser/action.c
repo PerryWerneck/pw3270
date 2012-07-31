@@ -64,7 +64,7 @@
 				return;
 			}
 
-			g_object_set_data(G_OBJECT(action),"id_group",(gpointer) id);
+			g_object_set_data(G_OBJECT(action),"id_group",GINT_TO_POINTER(id));
 
 		}
 		else if(!g_ascii_strcasecmp(name[f],"icon"))
@@ -105,7 +105,7 @@
 		}
 		else if(!g_ascii_strcasecmp(name[f],"id"))
 		{
-			g_object_set_data(G_OBJECT(action),"action_id",(gpointer) atoi(value[f]));
+			g_object_set_data(G_OBJECT(action),"action_id",GINT_TO_POINTER(atoi(value[f])));
 		}
 		else
 		{
