@@ -174,6 +174,7 @@ public class lib3270
 		}
 	}
 
+	/*
 	private class byteMessage
 	{
 		byte[] msg;
@@ -195,6 +196,7 @@ public class lib3270
 			return sz;
 		}
 	}
+	*/
 
 	protected int send_data(byte[] data, int len)
 	{

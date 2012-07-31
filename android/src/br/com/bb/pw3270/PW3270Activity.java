@@ -30,7 +30,7 @@ public class PW3270Activity extends Activity
 	private Resources		res;
 	private WebView			view;
 	private terminal 		host;
-	private Activity 		mainact;
+//	private Activity 		mainact;
 	private ProgressDialog	dlgProgress;
 
 	private class terminal extends lib3270
