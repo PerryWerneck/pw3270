@@ -47,7 +47,6 @@
 
  #define pw3270_jni_call_void(name, sig, ...) 	pw3270_jni_active->env->CallVoidMethod(pw3270_jni_active->obj,lib3270_getmethodID(name,sig), __VA_ARGS__)
  #define pw3270_jni_call_int(name, sig, ...) 	pw3270_jni_active->env->CallIntMethod(pw3270_jni_active->obj,lib3270_getmethodID(name,sig), __VA_ARGS__)
- #define pw3270_jni_new_string(str)				pw3270_jni_active->env->NewStringUTF(str)
  #define pw3270_jni_new_byte_array(len)			pw3270_jni_active->env->NewByteArray(len)
 
  typedef struct _pw3270_jni
@@ -62,9 +61,9 @@
 
  extern PW3270_JNI	*pw3270_jni_active;
 
- int	  pw3270_jni_lock(JNIEnv *env, jobject obj);
- void	  pw3270_jni_unlock();
- void	  pw3270_jni_post_message(int msgid, int arg1 = 0, int arg2 = 0);
-
- jmethodID lib3270_getmethodID(const char *name, const char *sig);
+ int	  	pw3270_jni_lock(JNIEnv *env, jobject obj);
+ void	  	pw3270_jni_unlock();
+ void	  	pw3270_jni_post_message(int msgid, int arg1 = 0, int arg2 = 0);
+ jstring	pw3270_jni_new_string(const char *str);
+ jmethodID	lib3270_getmethodID(const char *name, const char *sig);
 

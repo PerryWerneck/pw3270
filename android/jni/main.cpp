@@ -105,12 +105,6 @@ static int popuphandler(H3270 *session, void *terminal, LIB3270_NOTIFY type, con
 		static const char *sig = "(ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V";
 		char * descr = lib3270_vsprintf(fmt, args);
 
-		trace("%s: title=\"%s\"",__FUNCTION__,title);
-		trace("%s: msg=\"%s\"",__FUNCTION__,msg);
-		trace("%s: descr=\"%s\"",__FUNCTION__,descr);
-
-
-
 		if(msg)
 		{
 			pw3270_jni_call_void(	"postPopup",
@@ -431,3 +425,7 @@ void pw3270_jni_unlock(void)
 	lib3270_free(datablock);
 }
 
+jstring	pw3270_jni_new_string(const char *str)
+{
+	return pw3270_jni_active->env->NewStringUTF(str ? str : "");
+}

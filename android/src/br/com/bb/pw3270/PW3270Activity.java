@@ -30,7 +30,7 @@ public class PW3270Activity extends Activity
 	private Resources		res;
 	private WebView			view;
 	private terminal 		host;
-//	private Activity 		mainact;
+	private Activity 		mainact = this;
 	private ProgressDialog	dlgProgress;
 
 	private class terminal extends lib3270
@@ -84,21 +84,24 @@ public class PW3270Activity extends Activity
 			return true;
 		}
 
-		protected void popupMessage(int type, String title, String text, String info)
+		protected void showPopupMessage(int type, String title, String text, String info)
 		{
+			Log.v(TAG,"Popup Message:");
 			Log.v(TAG,title);
 			Log.v(TAG,text);
 			Log.v(TAG,info);
-			/*
+
 			AlertDialog d = new AlertDialog.Builder(mainact).create();
 
-			d.setTitle(title);
-			d.setMessage(text);
+			if(title != "")
+				d.setTitle(title);
+			
+			if(text != "")
+				d.setMessage(text);
 
 			d.setCancelable(true);
 			hideProgressDialog();
 			d.show();
-			*/
 		}
 
 		@SuppressWarnings("unused")
@@ -174,7 +177,6 @@ public class PW3270Activity extends Activity
 					id = R.raw.theme;
 				}
 
-
 				// http://developer.android.com/reference/android/webkit/WebResourceResponse.html
 				return new WebResourceResponse(mime,"utf-8",getResources().openRawResource(id));
 			}
@@ -184,7 +186,7 @@ public class PW3270Activity extends Activity
 		setContentView(view);
 		view.loadUrl("file:index.html");
 
-		// host.connect();
+		host.connect();
 
     }
 

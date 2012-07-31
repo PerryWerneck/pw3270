@@ -82,7 +82,7 @@ public class lib3270
 
 			case 3: // Popup
 				popupMessageInfo popup = (popupMessageInfo) msg.obj;
-				popupMessage(msg.arg1, popup.title, popup.text, popup.info);
+				showPopupMessage(msg.arg1, popup.title, popup.text, popup.info);
 				break;
 
 			case 4: // erase
@@ -347,16 +347,9 @@ public class lib3270
 
 			mainloop = null;
 			info(TAG, "Network thread stopped");
-		}
-
-		public void postPopup(int type, String title, String text, String info)
-		{
-			Message msg = mHandler.obtainMessage();
-
-			msg.what = 3;
-			msg.arg1 = type;
-			msg.obj = new popupMessageInfo(title, text, info);
-			mHandler.sendMessage(msg);
+			
+			postPopup(0,"","Desconectado","");
+			
 		}
 
 	}
@@ -372,11 +365,11 @@ public class lib3270
 
 	public void postPopup(int type, String title, String text, String info)
 	{
-		Log.d(TAG, "Type:" + type);
-		Log.d(TAG, "Title:" + title);
-		Log.d(TAG, "Text:" + text);
-		Log.d(TAG, "Info:" + info);
-		mainloop.postPopup(type, title, text, info);
+		Message msg = mHandler.obtainMessage();
+		msg.what = 3;
+		msg.arg1 = type;
+		msg.obj  = new popupMessageInfo(title, text, info);
+		mHandler.sendMessage(msg);
 	}
 
 	/*---[ Signal methods ]--------------------------------------------------*/
@@ -425,7 +418,7 @@ public class lib3270
 		return true;
 	}
 
-	protected void popupMessage(int type, String title, String text, String info)
+	protected void showPopupMessage(int type, String title, String text, String info)
 	{
 	}
 
