@@ -36,10 +36,14 @@ LIB3270_INTERNAL char *xs_buffer(const char *fmt, ...) printflike(1, 2);
 LIB3270_INTERNAL void xs_error(const char *fmt, ...) printflike(1, 2);
 LIB3270_INTERNAL void xs_warning(const char *fmt, ...) printflike(1, 2);
 
-LIB3270_INTERNAL void * AddInput(int, H3270 *session, void (*fn)(H3270 *session));
-LIB3270_INTERNAL void * AddExcept(int, H3270 *session, void (*fn)(H3270 *session));
-// LIB3270_INTERNAL void * AddOutput(int, H3270 *session, void (*fn)(H3270 *session));
-LIB3270_INTERNAL void RemoveInput(void *);
+#ifdef WIN32
+	LIB3270_INTERNAL void * AddInput(HANDLE, H3270 *session, void (*fn)(H3270 *session));
+	LIB3270_INTERNAL void * AddExcept(HANDLE, H3270 *session, void (*fn)(H3270 *session));
+#else
+	LIB3270_INTERNAL void * AddInput(int, H3270 *session, void (*fn)(H3270 *session));
+	LIB3270_INTERNAL void * AddExcept(int, H3270 *session, void (*fn)(H3270 *session));
+#endif // WIN32
+LIB3270_INTERNAL void   RemoveInput(void *);
 LIB3270_INTERNAL void * AddTimeOut(unsigned long msec, H3270 *session, void (*fn)(H3270 *session));
 LIB3270_INTERNAL void RemoveTimeOut(void *cookie);
 

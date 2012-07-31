@@ -50,8 +50,13 @@
 static void   internal_remove_timeout(void *timer);
 static void * internal_add_timeout(unsigned long interval_ms, H3270 *session, void (*proc)(H3270 *session));
 
-static void * internal_add_input(int source, H3270 *session, void (*fn)(H3270 *session));
-static void * internal_add_except(int source, H3270 *session, void (*fn)(H3270 *session));
+#ifdef WIN32
+	static void * internal_add_input(HANDLE source, H3270 *session, void (*fn)(H3270 *session));
+	static void * internal_add_except(HANDLE source, H3270 *session, void (*fn)(H3270 *session));
+#else
+	static void * internal_add_input(int source, H3270 *session, void (*fn)(H3270 *session));
+	static void * internal_add_except(int source, H3270 *session, void (*fn)(H3270 *session));
+#endif // WIN32
 
 static void   internal_remove_input(void *id);
 
@@ -71,14 +76,22 @@ static void	  internal_ring_bell(H3270 *);
  static void	  (*remove_timeout)(void *timer)
 					= internal_remove_timeout;
 
- static void	* (*add_input)(int source, H3270 *session, void (*fn)(H3270 *session))
-					= internal_add_input;
-
  static void	  (*remove_input)(void *id)
 					= internal_remove_input;
 
+#ifdef WIN32
+ static void	* (*add_input)(HANDLE source, H3270 *session, void (*fn)(H3270 *session))
+					= internal_add_input;
+
+ static void 	* (*add_except)(HANDLE source, H3270 *session, void (*fn)(H3270 *session))
+					= internal_add_except;
+#else
+ static void	* (*add_input)(int source, H3270 *session, void (*fn)(H3270 *session))
+					= internal_add_input;
+
  static void 	* (*add_except)(int source, H3270 *session, void (*fn)(H3270 *session))
 					= internal_add_except;
+#endif // WIN32
 
  static int 	  (*callthread)(int(*callback)(H3270 *, void *), H3270 *session, void *parm)
 					= internal_callthread;
@@ -113,7 +126,11 @@ static void	  internal_ring_bell(H3270 *);
 typedef struct input
 {
         struct input *next;
+#if defined(_WIN32)
+        HANDLE source;
+#else
         int source;
+#endif // WIN32
         int condition;
         void (*proc)(H3270 *session);
         H3270 *session;
@@ -239,7 +256,11 @@ static void internal_remove_timeout(void * timer)
 
 /* Input events. */
 
+#ifdef WIN32
+static void * internal_add_input(HANDLE source, H3270 *session, void (*fn)(H3270 *session))
+#else
 static void * internal_add_input(int source, H3270 *session, void (*fn)(H3270 *session))
+#endif // WIN32
 {
 	input_t *ip = (input_t *) lib3270_malloc(sizeof(input_t));
 
@@ -253,16 +274,19 @@ static void * internal_add_input(int source, H3270 *session, void (*fn)(H3270 *s
 	inputs = ip;
 	inputs_changed = True;
 
-	trace("%s: fd=%d callback=%p handle=%p",__FUNCTION__,source,fn,ip);
+//	trace("%s: fd=%d callback=%p handle=%p",__FUNCTION__,source,fn,ip);
 
 	return ip;
 }
 
+#if defined(_WIN32)
+static void * internal_add_except(HANDLE source, H3270 *session, void (*fn)(H3270 *session))
+{
+	return 0;
+}
+#else
 static void * internal_add_except(int source, H3270 *session, void (*fn)(H3270 *session))
 {
-#if defined(_WIN32)
-	return 0;
-#else
 	input_t *ip = (input_t *) lib3270_malloc(sizeof(input_t));
 
 	trace("%s session=%p proc=%p",__FUNCTION__,session,fn);
@@ -278,8 +302,8 @@ static void * internal_add_except(int source, H3270 *session, void (*fn)(H3270 *
 	trace("%s: fd=%d callback=%p handle=%p",__FUNCTION__,source,fn,ip);
 
 	return ip;
-#endif
 }
+#endif // WIN32
 
 static void internal_remove_input(void *id)
 {
@@ -348,7 +372,7 @@ static int internal_event_dispatcher(int block)
 		if ((unsigned long)ip->condition & InputReadMask)
 		{
 #if defined(_WIN32)
-			ha[nha++] = (HANDLE) ip->source;
+			ha[nha++] = ip->source;
 #else
 			FD_SET(ip->source, &rfds);
 #endif
@@ -546,13 +570,13 @@ void RemoveTimeOut(void * timer)
 	return remove_timeout(timer);
 }
 
-void * AddInput(int source, H3270 *session, void (*fn)(H3270 *session))
+void * AddInput(HANDLE source, H3270 *session, void (*fn)(H3270 *session))
 {
 	CHECK_SESSION_HANDLE(session);
 	return add_input(source,session,fn);
 }
 
-void * AddExcept(int source, H3270 *session, void (*fn)(H3270 *session))
+void * AddExcept(HANDLE source, H3270 *session, void (*fn)(H3270 *session))
 {
 	CHECK_SESSION_HANDLE(session);
 	return add_except(source,session,fn);
@@ -572,11 +596,11 @@ void x_except_on(H3270 *h)
 		RemoveInput(h->ns_read_id);
 
 #ifdef WIN32
-	h->ns_exception_id = AddExcept((int) h->sockEvent, h, net_exception);
+	h->ns_exception_id = AddExcept(h->sockEvent, h, net_exception);
 	h->excepting = 1;
 
 	if(h->reading)
-		h->ns_read_id = AddInput( (int) h->sockEvent, h, net_input);
+		h->ns_read_id = AddInput(h->sockEvent, h, net_input);
 #else
 	h->ns_exception_id = AddExcept(h->sock, h, net_exception);
 	h->excepting = 1;
