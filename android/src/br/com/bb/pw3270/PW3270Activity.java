@@ -86,6 +86,10 @@ public class PW3270Activity extends Activity
 
 		protected void popupMessage(int type, String title, String text, String info)
 		{
+			Log.v(TAG,title);
+			Log.v(TAG,text);
+			Log.v(TAG,info);
+			/*
 			AlertDialog d = new AlertDialog.Builder(mainact).create();
 
 			d.setTitle(title);
@@ -94,6 +98,7 @@ public class PW3270Activity extends Activity
 			d.setCancelable(true);
 			hideProgressDialog();
 			d.show();
+			*/
 		}
 
 		@SuppressWarnings("unused")
@@ -104,7 +109,12 @@ public class PW3270Activity extends Activity
 			try
 			{
 				text = new String(getHTML(),getEncoding());
-			} catch(Exception e) { text = ""; }
+			} 
+			catch(Exception e) 
+			{ 
+				Log.e(TAG,e.getLocalizedMessage());
+				return ""; 
+			}
 
 			return text;
 		}
@@ -128,12 +138,16 @@ public class PW3270Activity extends Activity
 		// http://developer.android.com/reference/android/webkit/WebView.html
 		view = new WebView(this);
 
+		host = new terminal();
+		view.addJavascriptInterface(host, "pw3270");
+		
 		view.setWebChromeClient(new WebChromeClient());
 
 		view.getSettings().setBuiltInZoomControls(true);
 		view.getSettings().setSupportZoom(true);
 		view.getSettings().setUseWideViewPort(true);
 		view.getSettings().setLoadWithOverviewMode(true);
+		view.getSettings().setJavaScriptEnabled(true);
 
 		view.setWebViewClient(new WebViewClient()
 		{
@@ -167,15 +181,10 @@ public class PW3270Activity extends Activity
 
 		});
 
-		view.getSettings().setJavaScriptEnabled(true);
-
 		setContentView(view);
 		view.loadUrl("file:index.html");
 
-		host = new terminal();
-		view.addJavascriptInterface(host, "pw3270");
-		host.connect();
-
+		// host.connect();
 
     }
 

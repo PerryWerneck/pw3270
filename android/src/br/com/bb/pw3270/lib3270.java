@@ -50,6 +50,7 @@ public class lib3270
 	private boolean connected = false;
 	private boolean refresh = true;
 	private Socket sock = null;
+	private lib3270 hSession = this;
 
 	DataOutputStream outData = null;
 	DataInputStream inData = null;
@@ -65,9 +66,10 @@ public class lib3270
 		{
 			switch (msg.what)
 			{
+/*
 			case 0: // Connected/Disconnected
-				set_connection_status(connected);
 				break;
+*/
 
 			case 1: // OIA message has changed
 				showProgramMessage(msg.arg1);
@@ -95,9 +97,11 @@ public class lib3270
 				Log.d(TAG, "ctlr_done");
 				break;
 
+/*
 			case 6: // recv_data
 				procRecvdata(((byteMessage) msg.obj).getMessage(),((byteMessage) msg.obj).getLength());
 				break;
+*/
 
 			case 7: // ready
 				hideProgressDialog();
@@ -106,6 +110,11 @@ public class lib3270
 			case 8: // busy
 				showProgressDialog("Aguarde...");
 				break;
+
+			case 9: // Create timer
+				new timer(((Long) msg.obj).longValue(), msg.arg1);
+				break;
+
 			}
 		}
 	};
@@ -114,7 +123,6 @@ public class lib3270
 	static
 	{
 		System.loadLibrary("3270");
-		init();
 	}
 
 	lib3270()
@@ -128,11 +136,12 @@ public class lib3270
 		private long id;
 		private lib3270 terminal;
 
-		timer(lib3270 session, long timer_id, int msec) {
+		timer(long timer_id, int msec)
+		{
 			super(msec, msec);
 
-			terminal = session;
-			id = timer_id;
+			terminal	= hSession;
+			id			= timer_id;
 
 			Log.d(TAG, "Timer " + id + " set to " + msec + " ms");
 
@@ -157,7 +166,8 @@ public class lib3270
 		public String text;
 		public String info;
 
-		popupMessageInfo(String title, String text, String info) {
+		popupMessageInfo(String title, String text, String info)
+		{
 			this.title = title;
 			this.text = text;
 			this.info = info;
@@ -169,16 +179,19 @@ public class lib3270
 		byte[] msg;
 		int sz;
 
-		byteMessage(byte[] contents, int len) {
+		byteMessage(byte[] contents, int len)
+		{
 			msg = contents;
 			sz = len;
 		}
 
-		byte[] getMessage() {
+		byte[] getMessage()
+		{
 			return msg;
 		}
 
-		int getLength() {
+		int getLength()
+		{
 			return sz;
 		}
 	}
@@ -187,7 +200,7 @@ public class lib3270
 	{
 		Log.i(TAG, "Bytes a enviar: " + len);
 
-		try 
+		try
 		{
 			outData.write(data, 0, len);
 			outData.flush();
@@ -207,6 +220,8 @@ public class lib3270
 
 			postPopup(0, "Erro na comunicação", "Não foi possível enviar dados", msg);
 
+			connected = false;
+
 		}
 		return -1;
 	}
@@ -224,18 +239,21 @@ public class lib3270
 
 			postMessage(1, 14, 0);
 
-			if (ssl) 
+			if (ssl)
 			{
 				// Host é SSL
 				socketFactory = SSLSocketFactory.getDefault();
-			} 
-			else 
+				Log.v(TAG,"Conecting with SSLSocketFactory");
+			}
+			else
 			{
+				Log.v(TAG,"Conecting with SocketFactory");
 				socketFactory = SocketFactory.getDefault();
 			}
 
-			try 
+			try
 			{
+				Log.v(TAG,"Getting socket for " + hostname + ":" + Integer.toString(port));
 				sock = socketFactory.createSocket(hostname, port);
 				outData = new DataOutputStream(sock.getOutputStream());
 				inData = new DataInputStream(sock.getInputStream());
@@ -272,32 +290,42 @@ public class lib3270
 
 			if (connected)
 			{
-				postMessage(0, 0, 0);
+				set_connection_status(true);
 
 				while (connected)
 				{
 					byte[] in = new byte[4096];
 					int sz = -1;
 
-					try 
+					try
 					{
+						Log.v(TAG,"Aguardando dados...");
 						sz = inData.read(in, 0, 4096);
 
-						Log.i(TAG, Integer.toString(sz) + " bytes recebidos");
-
-						if (sz > 0) 
-						{
-							Message msg = mHandler.obtainMessage();
-							msg.what = 6;
-							msg.obj = new byteMessage(in, sz);
-							mHandler.sendMessage(msg);
-						}
-					
-					} catch (Exception e) 
+					} catch (Exception e)
 					{
 						Log.i(TAG, "Erro ao receber dados do host: " + e.getLocalizedMessage());
 						connected = false;
+						sz = -1;
 					}
+
+					if (sz > 0)
+					{
+						try
+						{
+							Log.i(TAG, Integer.toString(sz) + " bytes recebidos");
+							procRecvdata(in,sz);
+							// Message msg = mHandler.obtainMessage();
+							// msg.what = 6;
+							// msg.obj = new byteMessage(in, sz);
+							// mHandler.sendMessage(msg);
+						} catch (Exception e)
+						{
+							Log.i(TAG, "Erro ao processar dados recebidos: " + e.getLocalizedMessage());
+							connected = false;
+						}
+					}
+
 				}
 			}
 
@@ -313,22 +341,11 @@ public class lib3270
 			outData = null;
 			inData = null;
 
-			postMessage(0, 0, 0);
+			set_connection_status(false);
 
 			mainloop = null;
 			info(TAG, "Network thread stopped");
 		}
-
-		/*
-		public void postMessage(int what, int arg1, int arg2)
-		{
-			Message msg = mHandler.obtainMessage();
-			msg.what = what;
-			msg.arg1 = arg1;
-			msg.arg2 = arg2;
-			mHandler.sendMessage(msg);
-		}
-		*/
 
 		public void postPopup(int type, String title, String text, String info)
 		{
@@ -499,10 +516,6 @@ public class lib3270
 	}
 
 	/*---[ Native calls ]----------------------------------------------------*/
-	static private native int init();
-
-	static private native int deinit();
-
 	private native int processEvents();
 
 	// private native int do_connect();
@@ -530,9 +543,16 @@ public class lib3270
 	public native boolean isTerminalReady();
 
 	// Timers
-	protected void newTimer(long id, int msec) 
+	protected void newTimer(long id, int msec)
 	{
-		new timer(this, id, msec);
+		Message msg = mHandler.obtainMessage();
+		
+		msg.what	= 9; // MSG_CREATETIMER
+		msg.arg1	= msec;
+		msg.obj		= new Long(id);
+		
+		mHandler.sendMessage(msg);
+		
 	}
 
 	private native void timerFinish(long id);

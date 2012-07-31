@@ -34,18 +34,6 @@
 
 /*--[ Defines ]--------------------------------------------------------------------------------------*/
 
-/*
- #define session_request(env, obj)	H3270	* session 	= lib3270_get_default_session_handle(); \
-									session->widget		= &jni_data;
-
- #define session_release()			session->widget		= 0;
-*/
-
-/*
- #define 	PW3270_JNI_BEGIN	pw3270_env = env; pw3270_obj = obj;
- #define 	PW3270_JNI_END		pw3270_env = NULL; pw3270_obj = NULL;
-*/
-
  #define 	PW3270_JNI_BEGIN	__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "%s.lock env=%p obj=%p",__FUNCTION__,env,obj); \
 								pw3270_jni_lock(env,obj);
 
@@ -74,9 +62,9 @@
 
  extern PW3270_JNI	*pw3270_jni_active;
 
- void pw3270_jni_lock(JNIEnv *env, jobject obj);
- void pw3270_jni_unlock();
- void pw3270_jni_post_message(int msgid, int arg1 = 0, int arg2 = 0);
+ int	  pw3270_jni_lock(JNIEnv *env, jobject obj);
+ void	  pw3270_jni_unlock();
+ void	  pw3270_jni_post_message(int msgid, int arg1 = 0, int arg2 = 0);
 
  jmethodID lib3270_getmethodID(const char *name, const char *sig);
 

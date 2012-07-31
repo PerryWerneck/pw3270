@@ -46,12 +46,13 @@ JNIEXPORT jbyteArray JNICALL Java_br_com_bb_pw3270_lib3270_getHTML(JNIEnv *env, 
 
 	PW3270_JNI_BEGIN
 
-	trace("%s starts, session=%p",__FUNCTION__,PW3270_SESSION);
+//	trace("%s starts, session=%p",__FUNCTION__,PW3270_SESSION);
 
 	char *text = lib3270_get_as_html(PW3270_SESSION,(LIB3270_HTML_OPTION) (LIB3270_HTML_OPTION_ALL|LIB3270_HTML_OPTION_FORM));
 
 	if(text)
 	{
+//		trace("Retornar:\n%s\n",text);
 		ret = retString(text);
 		lib3270_free(text);
 	}
@@ -60,7 +61,7 @@ JNIEXPORT jbyteArray JNICALL Java_br_com_bb_pw3270_lib3270_getHTML(JNIEnv *env, 
 		ret = retString("<b>Empty session</b>");
 	}
 
-	trace("%s ends",__FUNCTION__);
+//	trace("%s ends",__FUNCTION__);
 
 	PW3270_JNI_END
 

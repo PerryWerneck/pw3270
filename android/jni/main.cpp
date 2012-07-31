@@ -33,6 +33,7 @@
  #include <lib3270/config.h>
  #include <lib3270/popup.h>
  #include <lib3270/internals.h>
+ #include <lib3270/html.h>
 
 /*--[ Structs ]--------------------------------------------------------------------------------------*/
 
@@ -65,7 +66,7 @@ jmethodID lib3270_getmethodID(const char *name, const char *sig)
 
 void pw3270_jni_post_message(int msgid, int arg1, int arg2)
 {
-	trace("%s: pw3270_env=%p pw3270_obj=%p",__FUNCTION__,PW3270_JNI_ENV,PW3270_JNI_OBJ);
+	trace("%s: pw3270_env=%p pw3270_obj=%p msgid=%d",__FUNCTION__,PW3270_JNI_ENV,PW3270_JNI_OBJ,msgid);
 
 	if(pw3270_jni_active)
 		pw3270_jni_call_void("postMessage", "(III)V",(jint) msgid, (jint) arg1, (jint) arg2);
@@ -73,6 +74,22 @@ void pw3270_jni_post_message(int msgid, int arg1, int arg2)
 
 static void changed(H3270 *session, int offset, int len)
 {
+	trace("%s: offset=%d len=%d",__FUNCTION__,offset,len);
+
+	{
+		char *text = lib3270_get_as_html(session,(LIB3270_HTML_OPTION) (LIB3270_HTML_OPTION_ALL|LIB3270_HTML_OPTION_FORM));
+
+		if(text)
+		{
+			trace("Screen:\n%s\n",text);
+			lib3270_free(text);
+		}
+		else
+		{
+			trace("%s returns NULL","lib3270_get_as_html");
+		}
+	}
+
 	pw3270_jni_post_message(2,offset,len);
 }
 
@@ -129,13 +146,14 @@ static void ctlr_done(H3270 *session)
 
 void update_status(H3270 *session, LIB3270_MESSAGE id)
 {
-//	__android_log_print(ANDROID_LOG_DEBUG, PACKAGE_NAME, "Status changed to %d",(int) id);
 	pw3270_jni_post_message(1,(int) id);
 }
 
 static int write_buffer(H3270 *session, unsigned const char *buf, int len)
 {
 	int rc = -1;
+
+	__android_log_print(ANDROID_LOG_DEBUG, PACKAGE_NAME, "%s: Writing %d bytes",__FUNCTION__,len);
 
 	if(PW3270_JNI_ENV)
 	{
@@ -147,35 +165,26 @@ static int write_buffer(H3270 *session, unsigned const char *buf, int len)
 	}
 	else
 	{
-		__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "Can't send %d bytes, no jni env for active session",len);
+		__android_log_print(ANDROID_LOG_ERROR, PACKAGE_NAME, "Can't send %d bytes, no jni env for active session",len);
 	}
 
 	trace("%s exits with rc=%d",__FUNCTION__,rc);
+
 	return rc;
 }
 
 static void * add_timer(unsigned long interval_ms, H3270 *session, void (*proc)(H3270 *session))
 {
-	TIMER * timer = NULL;
+	TIMER * timer = (TIMER *) lib3270_malloc(sizeof(TIMER));
 
-	if(PW3270_JNI_ENV)
-	{
+	timer->sz		= sizeof(timer);
+	timer->enabled	= true;
+	timer->session  = session;
+	timer->proc		= proc;
 
-		timer			= (TIMER *) lib3270_malloc(sizeof(TIMER));
-		timer->sz		= sizeof(timer);
-		timer->enabled	= true;
-		timer->session  = session;
-		timer->proc		= proc;
+	trace("Timer %08lx created",(unsigned long) timer);
 
-		trace("Timer %08lx created",(unsigned long) timer);
-
-		pw3270_jni_call_void("newTimer", "(JI)V", (jlong) timer, (jint) interval_ms);
-
-	}
-	else
-	{
-		__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "Can't set timer, no jni env for active session");
-	}
+	pw3270_jni_call_void("newTimer", "(JI)V", (jlong) timer, (jint) interval_ms);
 
 	return timer;
 }
@@ -185,10 +194,7 @@ static void remove_timer(void *id)
 	TIMER *timer = (TIMER *) id;
 
 	if(timer == NULL)
-	{
-//		__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "Invalid timer ID %08lx",(unsigned long) timer);
 		return;
-	}
 
 	__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "Disabling timer %08lx",(unsigned long) timer);
 
@@ -258,18 +264,17 @@ static void tracehandler(H3270 *session, const char *fmt, va_list args)
 	}
 
 	*dst = 0;
+
 }
 #endif // X3270_TRACE
 
-JNIEXPORT jint JNICALL Java_br_com_bb_pw3270_lib3270_init(JNIEnv *env, jclass obj)
+jint JNI_OnLoad(JavaVM *vm, void *reserved)
 {
 	H3270	* session	= lib3270_session_new("");
 
+	__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "Initializing %s",PACKAGE_NAME);
+
 	pthread_mutex_init(&mutex,NULL);
-
-	PW3270_JNI_BEGIN
-
-	__android_log_print(ANDROID_LOG_DEBUG, PACKAGE_NAME, "Initializing session %p",session);
 
 #ifdef X3270_TRACE
 	lib3270_set_trace_handler(tracehandler);
@@ -284,13 +289,12 @@ JNIEXPORT jint JNICALL Java_br_com_bb_pw3270_lib3270_init(JNIEnv *env, jclass ob
 	session->ctlr_done		= ctlr_done;
 	session->update_status	= update_status;
 
-	PW3270_JNI_END
-
-	return 0;
+	return JNI_VERSION_1_4;
 }
 
-JNIEXPORT jint JNICALL Java_br_com_bb_pw3270_lib3270_deinit(JNIEnv *env, jclass obj)
+void JNI_OnUnload(JavaVM *vm, void *reserved)
 {
+	__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "Deinitializing %s",PACKAGE_NAME);
 	pthread_mutex_destroy(&mutex);
 }
 
@@ -352,38 +356,60 @@ JNIEXPORT void JNICALL Java_br_com_bb_pw3270_lib3270_set_1connection_1status(JNI
 
 JNIEXPORT void JNICALL Java_br_com_bb_pw3270_lib3270_procRecvdata(JNIEnv *env, jobject obj, jbyteArray buffer, jint sz)
 {
-	unsigned char *netrbuf = (unsigned char *) env->GetByteArrayElements(buffer,NULL);
+	unsigned char *netrbuf;
 
 	PW3270_JNI_BEGIN
 
-	trace("Processando %d bytes",(size_t) sz);
-
+	netrbuf = (unsigned char *) env->GetByteArrayElements(buffer,NULL);
 	lib3270_data_recv(PW3270_SESSION, (size_t) sz, netrbuf);
-
-	trace("Liberando %d bytes",(size_t) sz);
-
 	PW3270_JNI_ENV->ReleaseByteArrayElements(buffer, (signed char *) netrbuf, 0);
 
 	PW3270_JNI_END
 
 }
 
-void pw3270_jni_lock(JNIEnv *env, jobject obj)
+int pw3270_jni_lock(JNIEnv *env, jobject obj)
 {
+	int status;
+
  	PW3270_JNI *datablock = (PW3270_JNI *) lib3270_malloc(sizeof(PW3270_JNI));
 
 	datablock->parent		= pw3270_jni_active;
 	datablock->env			= env;
 	datablock->obj			= obj;
 
+//	__android_log_print(ANDROID_LOG_DEBUG, PACKAGE_NAME, "%s",__FUNCTION__);
+
+	status = pthread_mutex_trylock(&mutex);
+	if(status)
+	{
+		__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "Error %s when trying mutex semaphore (rc=%d)",strerror(status),status);
+		status = pthread_mutex_lock(&mutex);
+		if(status)
+		{
+			__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "Error %s acquiring mutex semaphore (rc=%d)",strerror(status),status);
+		}
+	}
+
+/*
 	if(!pw3270_jni_active || pw3270_jni_active->env != env)
 	{
 		// Environment change, lock
+		if(!pthread_mutex_trylock(&mutex))
+		{
+			__android_log_print(ANDROID_LOG_DEBUG, PACKAGE_NAME, "Recursive access");
+		}
+
 		trace("%s: Environment has changed",__FUNCTION__);
 		pthread_mutex_lock(&mutex);
 	}
 
+	*/
+
 	pw3270_jni_active = datablock;
+
+	return status;
+
 }
 
 void pw3270_jni_unlock(void)
@@ -391,12 +417,16 @@ void pw3270_jni_unlock(void)
 	PW3270_JNI *datablock 	= pw3270_jni_active;
 	pw3270_jni_active		= datablock->parent;
 
+	pthread_mutex_unlock(&mutex);
+
+/*
 	if(!pw3270_jni_active || pw3270_jni_active->env != datablock->env)
 	{
 		// Environment change, unlock
 		trace("%s: Environment has changed",__FUNCTION__);
 		pthread_mutex_unlock(&mutex);
 	}
+*/
 
 	lib3270_free(datablock);
 }
