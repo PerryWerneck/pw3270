@@ -288,7 +288,7 @@ ft_cut_data(void)
 		cut_data();
 		break;
 	    default:
-		trace_ds("< FT unknown 0x%02x\n", h3270.ea_buf[O_FRAME_TYPE].cc);
+		trace_ds(&h3270,"< FT unknown 0x%02x\n", h3270.ea_buf[O_FRAME_TYPE].cc);
 		cut_abort(SC_ABORT_XMIT, "%s", _("Unknown frame type from host"));
 		break;
 	}
@@ -305,12 +305,12 @@ cut_control_code(void)
 	char *bp;
 	int i;
 
-	trace_ds("< FT CONTROL_CODE ");
+	trace_ds(&h3270,"< FT CONTROL_CODE ");
 	code = (h3270.ea_buf[O_CC_STATUS_CODE].cc << 8) | h3270.ea_buf[O_CC_STATUS_CODE + 1].cc;
 	switch (code)
 	{
 	case SC_HOST_ACK:
-		trace_ds("HOST_ACK\n");
+		trace_ds(&h3270,"HOST_ACK\n");
 		cut_xfer_in_progress = True;
 		expanded_length = 0;
 		quadrant = -1;
@@ -320,7 +320,7 @@ cut_control_code(void)
 		break;
 
 	case SC_XFER_COMPLETE:
-		trace_ds("XFER_COMPLETE\n");
+		trace_ds(&h3270,"XFER_COMPLETE\n");
 		cut_ack();
 		cut_xfer_in_progress = False;
 		ft_complete(NULL,N_( "Complete" ) );
@@ -328,7 +328,7 @@ cut_control_code(void)
 
 	case SC_ABORT_FILE:
 	case SC_ABORT_XMIT:
-		trace_ds("ABORT\n");
+		trace_ds(&h3270,"ABORT\n");
 		cut_xfer_in_progress = False;
 		cut_ack();
 
@@ -363,7 +363,7 @@ cut_control_code(void)
 		break;
 
 	default:
-		trace_ds("unknown 0x%04x\n", code);
+		trace_ds(&h3270,"unknown 0x%04x\n", code);
 		cut_abort(SC_ABORT_XMIT, "%s", _("Unknown FT control code from host"));
 		break;
 	}
@@ -382,7 +382,7 @@ cut_data_request(void)
 	int i;
 	unsigned char attr;
 
-	trace_ds("< FT DATA_REQUEST %u\n", from6(seq));
+	trace_ds(&h3270,"< FT DATA_REQUEST %u\n", from6(seq));
 	if (lib3270_get_ft_state(&h3270) == FT_ABORT_WAIT)
 	{
 		cut_abort(SC_ABORT_FILE,"%s",N_("Transfer cancelled by user"));
@@ -431,7 +431,7 @@ cut_data_request(void)
 	ctlr_add_fa(&h3270,O_DR_SF, attr, 0);
 
 	/* Send it up to the host. */
-	trace_ds("> FT DATA %u\n", from6(seq));
+	trace_ds(&h3270,"> FT DATA %u\n", from6(seq));
 	ft_update_length(NULL);
 	expanded_length += count;
 
@@ -444,7 +444,7 @@ cut_data_request(void)
 static void
 cut_retransmit(void)
 {
-	trace_ds("< FT RETRANSMIT\n");
+	trace_ds(&h3270,"< FT RETRANSMIT\n");
 	cut_abort(SC_ABORT_XMIT,"%s",_("Transmission error"));
 }
 
@@ -474,7 +474,7 @@ cut_data(void)
 	int conv_length;
 	register int i;
 
-	trace_ds("< FT DATA\n");
+	trace_ds(&h3270,"< FT DATA\n");
 	if (((H3270FT *) h3270.ft)->state == LIB3270_FT_STATE_ABORT_WAIT)
 	{
 		cut_abort(SC_ABORT_FILE,"%s",_("Transfer cancelled by user"));
@@ -492,7 +492,7 @@ cut_data(void)
 		cvbuf[i] = h3270.ea_buf[O_DT_DATA + i].cc;
 
 	if (raw_length == 2 && cvbuf[0] == EOF_DATA1 && cvbuf[1] == EOF_DATA2) {
-		trace_ds("< FT EOF\n");
+		trace_ds(&h3270,"< FT EOF\n");
 		cut_ack();
 		return;
 	}
@@ -515,7 +515,7 @@ cut_data(void)
  */
 static void cut_ack(void)
 {
-	trace_ds("> FT ACK\n");
+	trace_ds(&h3270,"> FT ACK\n");
 	lib3270_enter(&h3270);
 }
 
@@ -539,7 +539,7 @@ static void cut_abort(unsigned short reason, const char *fmt, ...)
 	ctlr_add(&h3270,RO_FRAME_SEQ, h3270.ea_buf[O_DT_FRAME_SEQ].cc, 0);
 	ctlr_add(&h3270,RO_REASON_CODE, HIGH8(reason), 0);
 	ctlr_add(&h3270,RO_REASON_CODE+1, LOW8(reason), 0);
-	trace_ds("> FT CONTROL_CODE ABORT\n");
+	trace_ds(&h3270,"> FT CONTROL_CODE ABORT\n");
 
 	lib3270_pfkey(&h3270,2);
 

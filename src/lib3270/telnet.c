@@ -923,7 +923,7 @@ LIB3270_EXPORT void lib3270_setup_session(H3270 *session)
 		unsigned char *buffer = (unsigned char *) xs_buffer("%s %d\r\n", session->hostname, session->current_port);
 		session->write(session, buffer, strlen((char *) buffer));
 		lib3270_free(buffer);
-		trace_ds("SENT HOSTNAME %s:%d\n", session->hostname, session->current_port);
+		trace_ds(&h3270,"SENT HOSTNAME %s:%d\n", session->hostname, session->current_port);
 	}
 }
 

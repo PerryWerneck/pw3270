@@ -133,7 +133,7 @@ void do_qr_rpqnames(void)
 	int remaining = 254;	/* maximum data area for rpqname reply */
 	Boolean omit_due_space_limit;
 
-	trace_ds("> QueryReply(RPQNames)\n");
+	trace_ds(&h3270,"> QueryReply(RPQNames)\n");
 
 	/*
 	 * Allocate enough space for the maximum allowed item.

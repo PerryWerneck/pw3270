@@ -44,12 +44,14 @@
 
 	void trace_ansi_disc(void);
 	void trace_char(char c);
-	void trace_ds(const char *fmt, ...) printflike(1, 2);
+	void trace_ds(H3270 *hSession, const char *fmt, ...) printflike(2, 3);
 	void trace_ds_nb(const char *fmt, ...) printflike(1, 2);
 	void trace_dsn(const char *fmt, ...) printflike(1, 2);
-	void trace_event(const char *fmt, ...) printflike(1, 2);
+//	void trace_event(const char *fmt, ...) printflike(1, 2);
 	void trace_screen(H3270 *session);
 //	void trace_rollover_check(void);
+
+	#define trace_event(...)	lib3270_trace_event(&h3270,__VA_ARGS__)
 
 #elif defined(__GNUC__)
 

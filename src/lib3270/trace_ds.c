@@ -173,12 +173,12 @@ trace_ds_s(char *s, Boolean can_break)
 	}
 }
 
-void trace_ds(const char *fmt, ...)
+void trace_ds(H3270 *hSession, const char *fmt, ...)
 {
 	char	* text;
 	va_list   args;
 
-	if (!lib3270_get_toggle(&h3270,DS_TRACE))
+	if (!lib3270_get_toggle(hSession,DS_TRACE))
 		return;
 
 	va_start(args, fmt);
@@ -190,8 +190,7 @@ void trace_ds(const char *fmt, ...)
 	lib3270_free(text);
 }
 
-void
-trace_ds_nb(const char *fmt, ...)
+void trace_ds_nb(const char *fmt, ...)
 {
 	char tdsbuf[4096];
 	va_list args;
@@ -207,20 +206,20 @@ trace_ds_nb(const char *fmt, ...)
 	va_end(args);
 }
 
-/* Conditional event trace. */
-void
-trace_event(const char *fmt, ...)
+/* Conditional event trace. */ /*
+void trace_event(const char *fmt, ...)
 {
 	va_list args;
 
 	if (!lib3270_get_toggle(&h3270,EVENT_TRACE))
 		return;
 
-	/* print out message */
+	// print out message
 	va_start(args, fmt);
 	vwtrace(&h3270,fmt, args);
 	va_end(args);
 }
+*/
 
 /* Conditional data stream trace, without line splitting. */
 void trace_dsn(const char *fmt, ...)

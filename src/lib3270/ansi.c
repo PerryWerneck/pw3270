@@ -1691,13 +1691,13 @@ void ansi_in3270(H3270 *session, int in3270, void *dunno)
 }
 
 #if defined(X3270_DBCS) /*[*/
-static void
-trace_pending_mb(void)
+static void trace_pending_mb(void)
 {
 	int i;
 
-	for (i = 0; i < mb_pending; i++) {
-		trace_ds(" %02x", mb_buffer[i] & 0xff);
+	for (i = 0; i < mb_pending; i++)
+	{
+		trace_ds(&h3270," %02x", mb_buffer[i] & 0xff);
 	}
 }
 #endif /*]*/
@@ -1723,10 +1723,11 @@ ansi_process(unsigned int c)
 
 	fn = ansi_fn[st[(int)state][c]];
 #if defined(X3270_DBCS) /*[*/
-	if (mb_pending && fn != &ansi_printing) {
-		trace_ds("Dropped incomplete multi-byte character");
+	if (mb_pending && fn != &ansi_printing)
+	{
+		trace_ds(&h3270,"Dropped incomplete multi-byte character");
 		trace_pending_mb();
-		trace_ds("\n");
+		trace_ds(&h3270,"\n");
 		mb_pending = 0;
 	}
 #endif /*]*/
@@ -1837,9 +1838,9 @@ dbcs_process(int ch, unsigned char ebc[])
 
 	/* See if we have too many. */
 	if (mb_pending >= MB_MAX) {
-		trace_ds("Multi-byte character ");
+		trace_ds(&h3270,"Multi-byte character ");
 		trace_pending_mb();
-		trace_ds(" too long, dropping\n");
+		trace_ds(&h3270," too long, dropping\n");
 		mb_pending = 0;
 		return 0;
 	}
@@ -1860,9 +1861,9 @@ dbcs_process(int ch, unsigned char ebc[])
 			mb_pending = 0;
 			return 2;
 		} else {
-			trace_ds("Can't map multi-byte character");
+			trace_ds(&h3270,"Can't map multi-byte character");
 			trace_pending_mb();
-			trace_ds(" -> U+%04x to SBCS or DBCS, dropping\n",
+			trace_ds(&h3270," -> U+%04x to SBCS or DBCS, dropping\n",
 			    Ubuf[0] & 0xffff);
 			mb_pending = 0;
 			return 0;
@@ -1876,15 +1877,14 @@ dbcs_process(int ch, unsigned char ebc[])
 		return 0;
 	case U_INVALID_CHAR_FOUND:
 	case U_ILLEGAL_CHAR_FOUND:
-		trace_ds("Invalid multi-byte character");
+		trace_ds(&h3270,"Invalid multi-byte character");
 		trace_pending_mb();
-		trace_ds(", dropping\n");
+		trace_ds(&h3270,", dropping\n");
 		break;
 	default:
-		trace_ds("Unexpected ICU error %d translating multi-type "
-		    "character", (int)err);
+		trace_ds(&h3270,"Unexpected ICU error %d translating multi-type character", (int)err);
 		trace_pending_mb();
-		trace_ds(", dropping\n");
+		trace_ds(&h3270,", dropping\n");
 		break;
 	}
 	mb_pending = 0;

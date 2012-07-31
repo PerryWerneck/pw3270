@@ -108,7 +108,7 @@ ft_dft_data(unsigned char *data, int length unused)
 
 	if (lib3270_get_ft_state(&h3270) == FT_NONE)
 	{
-		trace_ds(" (no transfer in progress)\n");
+		trace_ds(&h3270," (no transfer in progress)\n");
 		return;
 	}
 
@@ -141,7 +141,7 @@ ft_dft_data(unsigned char *data, int length unused)
 		dft_close_request();
 		break;
 	    default:
-		trace_ds(" Unsupported(0x%04x)\n", data_type);
+		trace_ds(&h3270," Unsupported(0x%04x)\n", data_type);
 		break;
 	}
 }
@@ -175,9 +175,9 @@ dft_open_request(unsigned short len, unsigned char *cp)
 		*s-- = '\0';
 	}
 	if (recsz) {
-		trace_ds(" Open('%s',recsz=%u)\n", namebuf, recsz);
+		trace_ds(&h3270," Open('%s',recsz=%u)\n", namebuf, recsz);
 	} else {
-		trace_ds(" Open('%s')\n", namebuf);
+		trace_ds(&h3270," Open('%s')\n", namebuf);
 	}
 
 	if (!strcmp(namebuf, OPEN_MSG))
@@ -190,7 +190,7 @@ dft_open_request(unsigned short len, unsigned char *cp)
 	recnum = 1;
 
 	/* Acknowledge the Open. */
-	trace_ds("> WriteStructuredField FileTransferData OpenAck\n");
+	trace_ds(&h3270,"> WriteStructuredField FileTransferData OpenAck\n");
 	h3270.obptr = h3270.obuf;
 	space3270out(&h3270,6);
 	*h3270.obptr++ = AID_SF;
@@ -204,7 +204,7 @@ dft_open_request(unsigned short len, unsigned char *cp)
 static void
 dft_insert_request(void)
 {
-	trace_ds(" Insert\n");
+	trace_ds(&h3270," Insert\n");
 	/* Doesn't currently do anything. */
 }
 
@@ -230,7 +230,7 @@ dft_data_insert(struct data_buffer *data_bufr)
 	/* Adjust for 5 extra count */
 	my_length -= 5;
 
-	trace_ds(" Data(rec=%lu) %d bytes\n", recnum, my_length);
+	trace_ds(&h3270," Data(rec=%lu) %d bytes\n", recnum, my_length);
 
 	/*
 	 * First, check to see if we have message data or file data.
@@ -315,7 +315,7 @@ dft_data_insert(struct data_buffer *data_bufr)
 	}
 
 	/* Send an acknowledgement frame back. */
-	trace_ds("> WriteStructuredField FileTransferData DataAck(rec=%lu)\n", recnum);
+	trace_ds(&h3270,"> WriteStructuredField FileTransferData DataAck(rec=%lu)\n", recnum);
 	h3270.obptr = h3270.obuf;
 	space3270out(&h3270,12);
 	*h3270.obptr++ = AID_SF;
@@ -332,7 +332,7 @@ dft_data_insert(struct data_buffer *data_bufr)
 static void
 dft_set_cur_req(void)
 {
-	trace_ds(" SetCursor\n");
+	trace_ds(&h3270," SetCursor\n");
 	/* Currently doesn't do anything. */
 }
 
@@ -345,7 +345,7 @@ dft_get_request(void)
 	size_t total_read = 0;
 	unsigned char *bufptr;
 
-	trace_ds(" Get\n");
+	trace_ds(&h3270," Get\n");
 
 	if (!message_flag && lib3270_get_ft_state(&h3270) == FT_ABORT_WAIT) {
 		dft_abort(TR_GET_REQ, _( "Transfer cancelled by user" ) );
@@ -422,8 +422,7 @@ dft_get_request(void)
 	*h3270.obptr++ = SF_TRANSFER_DATA;
 
 	if (total_read) {
-		trace_ds("> WriteStructuredField FileTransferData Data(rec=%lu) %d bytes\n",
-		    (unsigned long) recnum, (int) total_read);
+		trace_ds(&h3270,"> WriteStructuredField FileTransferData Data(rec=%lu) %d bytes\n",(unsigned long) recnum, (int) total_read);
 		SET16(h3270.obptr, TR_GET_REPLY);
 		SET16(h3270.obptr, TR_RECNUM_HDR);
 		SET32(h3270.obptr, recnum);
@@ -441,7 +440,7 @@ dft_get_request(void)
 		}
 
 	} else {
-		trace_ds("> WriteStructuredField FileTransferData EOF\n");
+		trace_ds(&h3270,"> WriteStructuredField FileTransferData EOF\n");
 		*h3270.obptr++ = HIGH8(TR_GET_REQ);
 		*h3270.obptr++ = TR_ERROR_REPLY;
 		SET16(h3270.obptr, TR_ERROR_HDR);
@@ -476,8 +475,8 @@ dft_close_request(void)
 	 * Recieved a close request from the system.
 	 * Return a close acknowledgement.
 	 */
-	trace_ds(" Close\n");
-	trace_ds("> WriteStructuredField FileTransferData CloseAck\n");
+	trace_ds(&h3270," Close\n");
+	trace_ds(&h3270,"> WriteStructuredField FileTransferData CloseAck\n");
 	h3270.obptr = h3270.obuf;
 	space3270out(&h3270,6);
 	*h3270.obptr++ = AID_SF;
@@ -499,7 +498,7 @@ static void dft_abort(unsigned short code, const char *fmt, ...)
 	abort_string = lib3270_vsprintf(fmt, args);
 	va_end(args);
 
-	trace_ds("> WriteStructuredField FileTransferData Error\n");
+	trace_ds(&h3270,"> WriteStructuredField FileTransferData Error\n");
 
 	h3270.obptr = h3270.obuf;
 	space3270out(&h3270,10);
@@ -535,7 +534,7 @@ dft_read_modified(void)
 {
 	if (dft_savebuf_len)
 	{
-		trace_ds("> WriteStructuredField FileTransferData\n");
+		trace_ds(&h3270,"> WriteStructuredField FileTransferData\n");
 		h3270.obptr = h3270.obuf;
 		space3270out(&h3270,dft_savebuf_len);
 		memcpy(h3270.obptr, dft_savebuf, dft_savebuf_len);
