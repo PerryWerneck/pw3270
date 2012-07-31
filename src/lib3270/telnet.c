@@ -210,7 +210,7 @@ static char     vlnext;
 // static unsigned short proxy_port = 0;
 
 static int telnet_fsm(H3270 *session, unsigned char c);
-static void net_rawout(H3270 *session, unsigned const char *buf, int len);
+static void net_rawout(H3270 *session, unsigned const char *buf, size_t len);
 static void check_in3270(H3270 *session);
 static void store3270in(H3270 *hSession, unsigned char c);
 static void check_linemode(H3270 *hSession, Boolean init);
@@ -992,7 +992,9 @@ LIB3270_EXPORT void lib3270_data_recv(H3270 *hSession, size_t nr, const unsigned
 {
 	register const unsigned char * cp;
 
-	trace_netdata('<', netrbuf, nr);
+	trace("%s: nr=%d",__FUNCTION__,nr);
+
+	trace_netdata(hSession, '<', netrbuf, nr);
 
 	hSession->ns_brcvd += nr;
 	for (cp = netrbuf; cp < (netrbuf + nr); cp++)
@@ -2096,15 +2098,20 @@ LIB3270_INTERNAL int lib3270_sock_send(H3270 *hSession, unsigned const char *buf
 	return -1;
 }
 
-/*
- * net_rawout
- *	Send out raw telnet data.  We assume that there will always be enough
- *	space to buffer what we want to transmit, so we don't handle EAGAIN or
- *	EWOULDBLOCK.
+/**
+ * Send out raw telnet data.
+ *
+ * We assume that there will always be enough space to buffer what we want to transmit,
+ * so we don't handle EAGAIN or EWOULDBLOCK.
+ *
+ * @param hSession	Session handle.
+ * @param buf		Buffer to send.
+ * @param len		Buffer length
+ *
  */
-static void net_rawout(H3270 *hSession, unsigned const char *buf, int len)
+static void net_rawout(H3270 *hSession, unsigned const char *buf, size_t len)
 {
-	trace_netdata('>', buf, len);
+	trace_netdata(hSession, '>', buf, len);
 
 	while (len)
 	{
@@ -2669,22 +2676,26 @@ opt(unsigned char c)
 
 #define LINEDUMP_MAX	32
 
-void trace_netdata(char direction, unsigned const char *buf, int len)
+void trace_netdata(H3270 *hSession, char direction, unsigned const char *buf, int len)
 {
 	int offset;
 	struct timeval ts;
 	double tdiff;
 
-	if (!lib3270_get_toggle(&h3270,LIB3270_TOGGLE_DS_TRACE))
+	if (!lib3270_get_toggle(hSession,LIB3270_TOGGLE_DS_TRACE))
 		return;
+
 	(void) gettimeofday(&ts, (struct timezone *)NULL);
-	if (IN_3270) {
+	if (IN_3270)
+	{
 		tdiff = ((1.0e6 * (double)(ts.tv_sec - h3270.ds_ts.tv_sec)) +
 			(double)(ts.tv_usec - h3270.ds_ts.tv_usec)) / 1.0e6;
 		trace_dsn("%c +%gs\n", direction, tdiff);
 	}
-	h3270.ds_ts = ts;
-	for (offset = 0; offset < len; offset++) {
+
+	hSession->ds_ts = ts;
+	for (offset = 0; offset < len; offset++)
+	{
 		if (!(offset % LINEDUMP_MAX))
 			trace_dsn("%s%c 0x%-3x ",
 			    (offset ? "\n" : ""), direction, offset);

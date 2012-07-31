@@ -208,7 +208,7 @@
 	if(info->mode == HTML_MODE_TEXT)
 		return;
 
-	trace("maxlength=%d",info->maxlength);
+//	trace("maxlength=%d",info->maxlength);
 
 	if(info->maxlength < 1)
 	{

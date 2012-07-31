@@ -570,13 +570,21 @@ void RemoveTimeOut(void * timer)
 	return remove_timeout(timer);
 }
 
+#ifdef WIN32
 void * AddInput(HANDLE source, H3270 *session, void (*fn)(H3270 *session))
+#else
+void * AddInput(int source, H3270 *session, void (*fn)(H3270 *session))
+#endif // WIN32
 {
 	CHECK_SESSION_HANDLE(session);
 	return add_input(source,session,fn);
 }
 
+#ifdef WIN32
 void * AddExcept(HANDLE source, H3270 *session, void (*fn)(H3270 *session))
+#else
+void * AddExcept(int source, H3270 *session, void (*fn)(H3270 *session))
+#endif // WIN32
 {
 	CHECK_SESSION_HANDLE(session);
 	return add_except(source,session,fn);
