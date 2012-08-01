@@ -108,7 +108,7 @@
 // static off_t	tracef_midpoint = 0;
 
 static void __vwtrace(H3270 *session, const char *fmt, va_list args);
-static void	wtrace(const char *fmt, ...);
+static void	wtrace(H3270 *session, const char *fmt, ...);
 // static char    *create_tracefile_header(const char *mode);
 // static void	stop_tracing(void);
 
@@ -116,7 +116,7 @@ static void	wtrace(const char *fmt, ...);
 // struct timeval  ds_ts;
 
 static void (*vwtrace)(H3270 *session, const char *fmt, va_list args) = __vwtrace;
-Boolean         trace_skipping = False;
+// Boolean         trace_skipping = False;
 
 
 LIB3270_EXPORT void lib3270_set_trace_handler( void (*handler)(H3270 *session, const char *fmt, va_list args) )
@@ -137,38 +137,46 @@ const char * rcba(H3270 *hSession, int baddr)
 // static char *tdsbuf = CN;
 // #define TDS_LEN	75
 
-static void
-trace_ds_s(char *s, Boolean can_break)
+static void trace_ds_s(H3270 *hSession, char *s, Boolean can_break)
 {
 	static int      dscnt = 0;
 	int len = strlen(s);
 	Boolean nl = False;
 
-	if (!lib3270_get_toggle(&h3270,DS_TRACE) || !len)
+	if (!lib3270_get_toggle(hSession,DS_TRACE) || !len)
 		return;
 
-	if (s && s[len-1] == '\n') {
+	if (s && s[len-1] == '\n')
+	{
 		len--;
 		nl = True;
 	}
-	if (!can_break && dscnt + len >= 75) {
-		wtrace("...\n... ");
+
+	if (!can_break && dscnt + len >= 75)
+	{
+		wtrace(hSession,"...\n... ");
 		dscnt = 0;
 	}
-	while (dscnt + len >= 75) {
+
+	while (dscnt + len >= 75)
+	{
 		int plen = 75-dscnt;
 
-		wtrace("%.*s ...\n... ", plen, s);
+		wtrace(hSession,"%.*s ...\n... ", plen, s);
 		dscnt = 4;
 		s += plen;
 		len -= plen;
 	}
-	if (len) {
-		wtrace("%.*s", len, s);
+
+	if (len)
+	{
+		wtrace(hSession,"%.*s", len, s);
 		dscnt += len;
 	}
-	if (nl) {
-		wtrace("\n");
+
+	if (nl)
+	{
+		wtrace(hSession,"\n");
 		dscnt = 0;
 	}
 }
@@ -185,25 +193,25 @@ void trace_ds(H3270 *hSession, const char *fmt, ...)
 
 	/* print out remainder of message */
 	text = lib3270_vsprintf(fmt,args);
-	trace_ds_s(text, True);
+	trace_ds_s(hSession,text, True);
 	va_end(args);
 	lib3270_free(text);
 }
 
-void trace_ds_nb(const char *fmt, ...)
+void trace_ds_nb(H3270 *hSession, const char *fmt, ...)
 {
-	char tdsbuf[4096];
+	char *text;
 	va_list args;
 
-	if (!lib3270_get_toggle(&h3270,DS_TRACE))
+	if (!lib3270_get_toggle(hSession,DS_TRACE))
 		return;
 
 	va_start(args, fmt);
 
 	/* print out remainder of message */
-	(void) vsprintf(tdsbuf, fmt, args);
-	trace_ds_s(tdsbuf, False);
-	va_end(args);
+	text = lib3270_vsprintf(fmt,args);
+	trace_ds_s(hSession, text, False);
+	lib3270_free(text);
 }
 
 /* Conditional event trace. */ /*
@@ -222,16 +230,16 @@ void trace_event(const char *fmt, ...)
 */
 
 /* Conditional data stream trace, without line splitting. */
-void trace_dsn(const char *fmt, ...)
+void trace_dsn(H3270 *hSession, const char *fmt, ...)
 {
 	va_list args;
 
-	if (!lib3270_get_toggle(&h3270,DS_TRACE))
+	if (!lib3270_get_toggle(hSession,DS_TRACE))
 		return;
 
 	/* print out message */
 	va_start(args, fmt);
-	vwtrace(&h3270,fmt, args);
+	vwtrace(hSession,fmt, args);
 	va_end(args);
 }
 
@@ -247,11 +255,11 @@ static void __vwtrace(H3270 *session, const char *fmt, va_list args)
 }
 
 /* Write to the trace file. */
-static void wtrace(const char *fmt, ...)
+static void wtrace(H3270 *hSession, const char *fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
-	vwtrace(&h3270,fmt, args);
+	vwtrace(hSession,fmt, args);
 	va_end(args);
 }
 
@@ -286,7 +294,7 @@ LIB3270_EXPORT void lib3270_trace_event(H3270 *session, const char *fmt, ...)
  */
 void trace_screen(H3270 *session)
 {
-	trace_skipping = False;
+	session->trace_skipping = 0;
 
 	if (lib3270_get_toggle(session,LIB3270_TOGGLE_SCREEN_TRACE))
 	{
@@ -295,47 +303,51 @@ void trace_screen(H3270 *session)
 		for(row=baddr=0;row < session->rows;row++)
 		{
 			int col;
-			wtrace("%02d ",row+1);
+			wtrace(session,"%02d ",row+1);
 
 			for(col = 0; col < session->cols;col++)
 			{
 				if(session->text[baddr].attr & LIB3270_ATTR_CG)
-					wtrace("%c",'.');
+					wtrace(session,"%c",'.');
 				else if(session->text[baddr].chr)
-					wtrace("%c",session->text[baddr].chr);
+					wtrace(session,"%c",session->text[baddr].chr);
 				else
-					wtrace("%c",'.');
+					wtrace(session,"%c",'.');
 				baddr++;
 			}
-			wtrace("%s\n","");
+			wtrace(session,"%s\n","");
 		}
 	}
 }
 
 /* Called from ANSI emulation code to log a single character. */
-void trace_char(char c)
+void trace_char(H3270 *hSession, char c)
 {
-	if (lib3270_get_toggle(&h3270,LIB3270_TOGGLE_SCREEN_TRACE))
-		wtrace("%c",c);
+	if (lib3270_get_toggle(hSession,LIB3270_TOGGLE_SCREEN_TRACE))
+		wtrace(hSession,"%c",c);
 	return;
 }
 
-/*
- * Called when disconnecting in ANSI mode, to finish off the trace file
+/**
+ * Called when disconnecting in ANSI modeto finish off the trace file.
+ *
+ * Called when disconnecting in ANSI mode to finish off the trace file
  * and keep the next screen clear from re-recording the screen image.
  * (In a gross violation of data hiding and modularity, trace_skipping is
  * manipulated directly in ctlr_clear()).
+ *
+ *
  */
-void trace_ansi_disc(void)
+void trace_ansi_disc(H3270 *hSession)
 {
 	int i;
 
-	wtrace("%c",'\n');
-	for (i = 0; i < h3270.cols; i++)
-		wtrace("%c",'=');
-	wtrace("%c",'\n');
+	wtrace(hSession,"%c",'\n');
+	for (i = 0; i < hSession->cols; i++)
+		wtrace(hSession,"%c",'=');
+	wtrace(hSession,"%c",'\n');
 
-	trace_skipping = True;
+	hSession->trace_skipping = 1;
 }
 
 

@@ -349,13 +349,13 @@ static int proxy_passthru(int fd, char *host, unsigned short port)
 	(void) sprintf(buf, "%s %u\r\n", host, port);
 
 #if defined(X3270_TRACE) /*[*/
-    trace_dsn("Passthru Proxy: xmit '%.*s'", (int) (strlen(buf) - 2), buf);
+    trace_dsn(&h3270,"Passthru Proxy: xmit '%.*s'", (int) (strlen(buf) - 2), buf);
 	trace_netdata(&h3270,'>', (unsigned char *)buf, (int) strlen(buf));
 #endif /*]*/
 
 	if (send(fd, buf, strlen(buf), 0) < 0)
 	{
-	   	popup_a_sockerr(NULL,"Passthru Proxy: send error");
+	   	popup_a_sockerr(&h3270,"Passthru Proxy: send error");
 		lib3270_free(buf);
 		return -1;
 	}
@@ -385,7 +385,7 @@ proxy_http(int fd, char *host, unsigned short port)
 		port);
 
 #if defined(X3270_TRACE) /*[*/
-	trace_dsn("HTTP Proxy: xmit '%.*s'\n", (int) (strlen(buf) - 2), buf);
+	trace_dsn(&h3270,"HTTP Proxy: xmit '%.*s'\n", (int) (strlen(buf) - 2), buf);
 	trace_netdata(&h3270, '>', (unsigned char *)buf, (int) strlen(buf));
 #endif /*]*/
 
@@ -402,7 +402,7 @@ proxy_http(int fd, char *host, unsigned short port)
 		port);
 
 #if defined(X3270_TRACE) /*[*/
-	trace_dsn("HTTP Proxy: xmit '%.*s'\n", (int) (strlen(buf) - 2), buf);
+	trace_dsn(&h3270,"HTTP Proxy: xmit '%.*s'\n", (int) (strlen(buf) - 2), buf);
 	trace_netdata(&h3270, '>', (unsigned char *)buf, (int) strlen(buf));
 #endif /*]*/
 
@@ -414,7 +414,7 @@ proxy_http(int fd, char *host, unsigned short port)
 
 	strcpy(buf, "\r\n");
 #if defined(X3270_TRACE) /*[*/
-	trace_dsn("HTTP Proxy: xmit ''\n");
+	trace_dsn(&h3270,"HTTP Proxy: xmit ''\n");
 	trace_netdata(&h3270, '>', (unsigned char *)buf, strlen(buf));
 #endif /*]*/
 
@@ -476,19 +476,21 @@ proxy_http(int fd, char *host, unsigned short port)
 
 #if defined(X3270_TRACE) /*[*/
 	trace_netdata(&h3270, '<', (unsigned char *)rbuf, nread);
-	trace_dsn("HTTP Proxy: recv '%s'\n", rbuf);
+	trace_dsn(&h3270,"HTTP Proxy: recv '%s'\n", rbuf);
 #endif /*]*/
 
-	if (strncmp(rbuf, "HTTP/", 5) || (space = strchr(rbuf, ' ')) == CN) {
-	    	popup_an_error(NULL,"HTTP Proxy: unrecognized reply");
+	if (strncmp(rbuf, "HTTP/", 5) || (space = strchr(rbuf, ' ')) == CN)
+	{
+		popup_an_error(&h3270,"HTTP Proxy: unrecognized reply");
 		return -1;
 	}
-	if (*(space + 1) != '2') {
-	    	popup_an_error(NULL,"HTTP Proxy: CONNECT failed:\n%s", rbuf);
+	if (*(space + 1) != '2')
+	{
+		popup_an_error(&h3270,"HTTP Proxy: CONNECT failed:\n%s", rbuf);
 		return -1;
 	}
 
-    	return 0;
+	return 0;
 }
 
 /* TELNET proxy. */
@@ -501,12 +503,13 @@ proxy_telnet(int fd, char *host, unsigned short port)
 	(void) sprintf(buf, "connect %s %u\r\n", host, port);
 
 #if defined(X3270_TRACE) /*[*/
-	trace_dsn("TELNET Proxy: xmit '%.*s'", (int) (strlen(buf) - 2), buf);
+	trace_dsn(&h3270,"TELNET Proxy: xmit '%.*s'", (int) (strlen(buf) - 2), buf);
 	trace_netdata(&h3270, '>', (unsigned char *)buf, (int) strlen(buf));
 #endif /*]*/
 
-	if (send(fd, buf, strlen(buf), 0) < 0) {
-	    	popup_a_sockerr(NULL,"TELNET Proxy: send error");
+	if (send(fd, buf, strlen(buf), 0) < 0)
+	{
+		popup_a_sockerr(&h3270,"TELNET Proxy: send error");
 		lib3270_free(buf);
 		return -1;
 	}
@@ -575,12 +578,13 @@ static int proxy_socks4(int fd, char *host, unsigned short port, int force_a)
 		s += strlen(host) + 1;
 
 #if defined(X3270_TRACE) /*[*/
-		trace_dsn("SOCKS4 Proxy: version 4 connect port %u address 0.0.0.1 user '%s' host '%s'\n",port, user, host);
+		trace_dsn(&h3270,"SOCKS4 Proxy: version 4 connect port %u address 0.0.0.1 user '%s' host '%s'\n",port, user, host);
 		trace_netdata(&h3270,'>', (unsigned char *)buf, s - buf);
 #endif /*]*/
 
-		if (send(fd, buf, s - buf, 0) < 0) {
-		    	popup_a_sockerr(NULL,"SOCKS4 Proxy: send error");
+		if (send(fd, buf, s - buf, 0) < 0)
+		{
+			popup_a_sockerr(&h3270,"SOCKS4 Proxy: send error");
 			lib3270_free(buf);
 			return -1;
 		}
@@ -599,15 +603,14 @@ static int proxy_socks4(int fd, char *host, unsigned short port, int force_a)
 		s += strlen(user) + 1;
 
 #if defined(X3270_TRACE) /*[*/
-		trace_dsn("SOCKS4 Proxy: xmit version 4 connect port %u "
-			"address %s user '%s'\n",
-			port, inet_ntoa(ipaddr), user);
+		trace_dsn(&h3270,"SOCKS4 Proxy: xmit version 4 connect port %u address %s user '%s'\n",port, inet_ntoa(ipaddr), user);
 		trace_netdata(&h3270,'>', (unsigned char *)buf, s - buf);
 #endif /*]*/
 
-		if (send(fd, buf, s - buf, 0) < 0) {
+		if (send(fd, buf, s - buf, 0) < 0)
+		{
 			lib3270_free(buf);
-		    	popup_a_sockerr(NULL,"SOCKS4 Proxy: send error");
+		   	popup_a_sockerr(&h3270,"SOCKS4 Proxy: send error");
 			return -1;
 		}
 		lib3270_free(buf);
@@ -643,35 +646,32 @@ static int proxy_socks4(int fd, char *host, unsigned short port, int force_a)
 
 #if defined(X3270_TRACE) /*[*/
 	trace_netdata(&h3270,'<', (unsigned char *)rbuf, nread);
-	if (use_4a) {
-	    	struct in_addr a;
+	if (use_4a)
+	{
+		struct in_addr a;
 
-	    	rport = (rbuf[2] << 8) | rbuf[3];
-	    	memcpy(&a, &rbuf[4], 4);
-		trace_dsn("SOCKS4 Proxy: recv status 0x%02x port %u "
-			"address %s\n",
-			rbuf[1],
-			rport,
-			inet_ntoa(a));
+		rport = (rbuf[2] << 8) | rbuf[3];
+		memcpy(&a, &rbuf[4], 4);
+		trace_dsn(&h3270,"SOCKS4 Proxy: recv status 0x%02x port %u address %s\n",rbuf[1],rport,inet_ntoa(a));
+
 	} else
-		trace_dsn("SOCKS4 Proxy: recv status 0x%02x\n", rbuf[1]);
+		trace_dsn(&h3270,"SOCKS4 Proxy: recv status 0x%02x\n", rbuf[1]);
 #endif /*]*/
 
 	switch (rbuf[1]) {
 	case 0x5a:
 	    	break;
 	case 0x5b:
-		popup_an_error(NULL,"SOCKS4 Proxy: request rejected or failed");
+		popup_an_error(&h3270,"SOCKS4 Proxy: request rejected or failed");
 		return -1;
 	case 0x5c:
-		popup_an_error(NULL,"SOCKS4 Proxy: client is not reachable");
+		popup_an_error(&h3270,"SOCKS4 Proxy: client is not reachable");
 		return -1;
 	case 0x5d:
-		popup_an_error(NULL,"SOCKS4 Proxy: userid error");
+		popup_an_error(&h3270,"SOCKS4 Proxy: userid error");
 		return -1;
 	default:
-		popup_an_error(NULL,"SOCKS4 Proxy: unknown status 0x%02x",
-			rbuf[1]);
+		popup_an_error(&h3270,"SOCKS4 Proxy: unknown status 0x%02x",rbuf[1]);
 		return -1;
 	}
 
@@ -732,7 +732,7 @@ proxy_socks5(int fd, char *host, unsigned short port, int force_d)
 	/* Send the authentication request to the server. */
 	strcpy((char *)rbuf, "\005\001\000");
 #if defined(X3270_TRACE) /*[*/
-	trace_dsn("SOCKS5 Proxy: xmit version 5 nmethods 1 (no auth)\n");
+	trace_dsn(&h3270,"SOCKS5 Proxy: xmit version 5 nmethods 1 (no auth)\n");
 	trace_netdata(&h3270, '>', rbuf, 3);
 #endif /*]*/
 	if (send(fd, (const char *) rbuf, 3, 0) < 0) {
@@ -792,16 +792,16 @@ proxy_socks5(int fd, char *host, unsigned short port, int force_d)
 
 	if (rbuf[0] != 0x05 || (rbuf[1] != 0 && rbuf[1] != 0xff))
 	{
-		popup_an_error(NULL,"SOCKS5 Proxy: bad authentication response");
+		popup_an_error(&h3270,"SOCKS5 Proxy: bad authentication response");
 		return -1;
 	}
 
 #if defined(X3270_TRACE) /*[*/
-	trace_dsn("SOCKS5 Proxy: recv version %d method %d\n", rbuf[0],rbuf[1]);
+	trace_dsn(&h3270,"SOCKS5 Proxy: recv version %d method %d\n", rbuf[0],rbuf[1]);
 #endif /*]*/
 
 	if (rbuf[1] == 0xff) {
-	    	popup_an_error(NULL,"SOCKS5 Proxy: authentication failure");
+	    	popup_an_error(&h3270,"SOCKS5 Proxy: authentication failure");
 		return -1;
 	}
 
@@ -832,7 +832,7 @@ proxy_socks5(int fd, char *host, unsigned short port, int force_d)
 	SET16(s, port);
 
 #if defined(X3270_TRACE) /*[*/
-	trace_dsn("SOCKS5 Proxy: xmit version 5 connect %s %s port %u\n",
+	trace_dsn(&h3270,"SOCKS5 Proxy: xmit version 5 connect %s %s port %u\n",
 		use_name? "domainname":
 			  ((ha.sa.sa_family == AF_INET)? "IPv4": "IPv6"),
 		use_name? host: nbuf,
@@ -1008,7 +1008,7 @@ proxy_socks5(int fd, char *host, unsigned short port, int force_d)
 		break;
 	}
 	rport = (*portp << 8) + *(portp + 1);
-	trace_dsn("SOCKS5 Proxy: recv version %d status 0x%02x address %s %s "
+	trace_dsn(&h3270,"SOCKS5 Proxy: recv version %d status 0x%02x address %s %s "
 		"port %u\n",
 		buf[0], buf[1],
 		atype_name[(unsigned char)buf[3]],

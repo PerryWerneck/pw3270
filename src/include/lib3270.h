@@ -34,6 +34,12 @@
 	#define LIB3270_H_INCLUDED 1
 	#include <stdarg.h>
 
+	#if defined(__GNUC__)
+		#define LIB3270_GNUC_FORMAT(s,f) __attribute__ ((__format__ (__printf__, s, f)))
+	#else
+		#define LIB3270_GNUC_FORMAT(s, f)
+	#endif
+
 	/**
 	 * BIND definitions.
 	 */
@@ -870,9 +876,9 @@
 
 	LIB3270_EXPORT int lib3270_clear_operator_error(H3270 *hSession);
 
-	LIB3270_EXPORT void lib3270_trace_event(H3270 *session, const char *fmt, ...);
+	LIB3270_EXPORT void lib3270_trace_event(H3270 *session, const char *fmt, ...) LIB3270_GNUC_FORMAT(2,3);
 	LIB3270_EXPORT void lib3270_set_trace_handler( void (*handler)(H3270 *session, const char *fmt, va_list args) );
-	LIB3270_EXPORT void lib3270_write_dstrace(H3270 *session, const char *fmt, ...);
+	LIB3270_EXPORT void lib3270_write_dstrace(H3270 *session, const char *fmt, ...) LIB3270_GNUC_FORMAT(2,3);
 
 #ifdef __cplusplus
 	}

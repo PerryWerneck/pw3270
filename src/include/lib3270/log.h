@@ -47,8 +47,8 @@
 	#else
 
 		LIB3270_EXPORT void	  lib3270_set_log_handler(void (*loghandler)(H3270 *, const char *, int, const char *, va_list));
-		LIB3270_EXPORT int	  lib3270_write_log(H3270 *session, const char *module, const char *fmt, ...);
-		LIB3270_EXPORT int	  lib3270_write_rc(H3270 *session, const char *module, int rc, const char *fmt, ...);
+		LIB3270_EXPORT int	  lib3270_write_log(H3270 *session, const char *module, const char *fmt, ...) LIB3270_GNUC_FORMAT(3,4);
+		LIB3270_EXPORT int	  lib3270_write_rc(H3270 *session, const char *module, int rc, const char *fmt, ...) LIB3270_GNUC_FORMAT(4,5);
 		LIB3270_EXPORT void	  lib3270_write_va_log(H3270 *session, const char *module, const char *fmt, va_list arg);
 
 		#ifdef DEBUG

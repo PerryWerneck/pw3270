@@ -685,7 +685,7 @@ void host_disconnect(H3270 *h, int failed)
 		 */
 #if defined(X3270_TRACE) /*[*/
 		if (IN_ANSI && lib3270_get_toggle(h,LIB3270_TOGGLE_SCREEN_TRACE))
-			trace_ansi_disc();
+			trace_ansi_disc(h);
 #endif /*]*/
 
 		lib3270_set_disconnected(h);

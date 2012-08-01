@@ -1718,7 +1718,7 @@ ansi_process(unsigned int c)
 
 #if defined(X3270_TRACE) /*[*/
 	if (lib3270_get_toggle(&h3270,LIB3270_TOGGLE_SCREEN_TRACE))
-		trace_char((char)c);
+		trace_char(&h3270,(char)c);
 #endif /*]*/
 
 	fn = ansi_fn[st[(int)state][c]];
