@@ -698,7 +698,9 @@ static void changed(H3270 *session, int offset, int len)
 	GtkWidget 		* widget	= session->widget;
 	GtkAccessible	* obj		= GTK_V3270(widget)->accessible;
 
-//	trace("%s: offset=%d len=%d",__FUNCTION__,offset,len)
+#ifdef WIN32
+	trace("%s: offset=%d len=%d accessible=%p",__FUNCTION__,offset,len,obj);
+#endif
 
 	if(obj)
 	{
@@ -739,8 +741,15 @@ static void changed(H3270 *session, int offset, int len)
 	gtk_widget_queue_draw(widget);
 #endif // WIN32
 
+#ifdef WIN32
+	trace("%s: emit signal",__FUNCTION__);
+#endif
+
 	g_signal_emit(GTK_WIDGET(widget),v3270_widget_signal[SIGNAL_CHANGED], 0, (guint) offset, (guint) len);
 
+#ifdef WIN32
+	trace("%s: ends",__FUNCTION__);
+#endif
 }
 
 static void set_selection(H3270 *session, unsigned char status)
