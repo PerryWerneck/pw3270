@@ -157,11 +157,17 @@ static void screen_disp(H3270 *session)
 	screen_update(session,0,session->rows*session->cols);
 }
 
+static void set_width(H3270 *session, int width)
+{
+	return;
+}
+
 static void lib3270_session_init(H3270 *hSession, const char *model)
 {
 	int 	ovc, ovr;
 	char	junk;
 	int		model_number;
+	int		f;
 
 	memset(hSession,0,sizeof(H3270));
 	hSession->sz = sizeof(H3270);
@@ -184,6 +190,7 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 	hSession->message			= message;
 	hSession->update_ssl		= update_ssl;
 	hSession->display			= screen_disp;
+	hSession->set_width			= set_width;
 
 	// Set the defaults.
 	hSession->extended  		=  1;
@@ -207,7 +214,10 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 	hSession->wraparound_mode 	= 1;
 	hSession->saved_wraparound_mode	= 1;
 	hSession->once_cset 			= -1;
+	hSession->state					= LIB3270_ANSI_STATE_DATA;
 
+	for(f=0;f<4;f++)
+		hSession->csd[f] = hSession->saved_csd[f] = LIB3270_ANSI_CSD_US;
 
 #ifdef _WIN32
 	hSession->sockEvent			= NULL;
