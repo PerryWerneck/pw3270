@@ -463,78 +463,85 @@ void ctlr_erase(H3270 *session, int alt)
 /*
  * Interpret an incoming 3270 command.
  */
-enum pds
-process_ds(unsigned char *buf, int buflen)
+enum pds process_ds(H3270 *hSession, unsigned char *buf, int buflen)
 {
 	enum pds rv;
 
 	if (!buflen)
 		return PDS_OKAY_NO_OUTPUT;
 
-//	scroll_to_bottom();
+	trace_ds(hSession,"< ");
 
-	trace_ds(&h3270,"< ");
-
-	switch (buf[0]) {	/* 3270 command */
+	switch (buf[0]) /* 3270 command */
+	{
 	case CMD_EAU:	/* erase all unprotected */
 	case SNA_CMD_EAU:
-		trace_ds(&h3270,"EraseAllUnprotected\n");
-		ctlr_erase_all_unprotected(&h3270);
+		trace_ds(hSession, "EraseAllUnprotected\n");
+		ctlr_erase_all_unprotected(hSession);
 		return PDS_OKAY_NO_OUTPUT;
 		break;
+
 	case CMD_EWA:	/* erase/write alternate */
 	case SNA_CMD_EWA:
-		trace_ds(&h3270,"EraseWriteAlternate");
+		trace_ds(hSession,"EraseWriteAlternate");
 		ctlr_erase(NULL,True);
 		if ((rv = ctlr_write(buf, buflen, True)) < 0)
 			return rv;
 		return PDS_OKAY_NO_OUTPUT;
 		break;
+
 	case CMD_EW:	/* erase/write */
 	case SNA_CMD_EW:
-		trace_ds(&h3270,"EraseWrite");
+		trace_ds(hSession,"EraseWrite");
 		ctlr_erase(NULL,False);
 		if ((rv = ctlr_write(buf, buflen, True)) < 0)
 			return rv;
 		return PDS_OKAY_NO_OUTPUT;
 		break;
+
 	case CMD_W:	/* write */
 	case SNA_CMD_W:
-		trace_ds(&h3270,"Write");
+		trace_ds(hSession,"Write");
 		if ((rv = ctlr_write(buf, buflen, False)) < 0)
 			return rv;
 		return PDS_OKAY_NO_OUTPUT;
 		break;
+
 	case CMD_RB:	/* read buffer */
 	case SNA_CMD_RB:
-		trace_ds(&h3270,"ReadBuffer\n");
-		ctlr_read_buffer(&h3270,h3270.aid);
+		trace_ds(hSession,"ReadBuffer\n");
+		ctlr_read_buffer(hSession,hSession->aid);
 		return PDS_OKAY_OUTPUT;
 		break;
+
 	case CMD_RM:	/* read modifed */
 	case SNA_CMD_RM:
-		trace_ds(&h3270,"ReadModified\n");
-		ctlr_read_modified(h3270.aid, False);
+		trace_ds(hSession,"ReadModified\n");
+		ctlr_read_modified(hSession->aid, False);
 		return PDS_OKAY_OUTPUT;
 		break;
+
 	case CMD_RMA:	/* read modifed all */
 	case SNA_CMD_RMA:
-		trace_ds(&h3270,"ReadModifiedAll\n");
-		ctlr_read_modified(h3270.aid, True);
+		trace_ds(hSession,"ReadModifiedAll\n");
+		ctlr_read_modified(hSession->aid, True);
 		return PDS_OKAY_OUTPUT;
 		break;
+
 	case CMD_WSF:	/* write structured field */
 	case SNA_CMD_WSF:
-		trace_ds(&h3270,"WriteStructuredField");
+		trace_ds(hSession,"WriteStructuredField");
 		return write_structured_field(buf, buflen);
 		break;
+
 	case CMD_NOP:	/* no-op */
-		trace_ds(&h3270,"NoOp\n");
+		trace_ds(hSession,"NoOp\n");
 		return PDS_OKAY_NO_OUTPUT;
 		break;
+
 	default:
 		/* unknown 3270 command */
-		popup_an_error(&h3270,_( "Unknown 3270 Data Stream command: 0x%X" ),buf[0]);
+		popup_an_error(hSession,_( "Unknown 3270 Data Stream command: 0x%X" ),buf[0]);
 		return PDS_BAD_CMD;
 	}
 }

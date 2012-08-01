@@ -594,7 +594,7 @@ LIB3270_ACTION(break)
 	if (!IN_3270)
 		return 0;
 
-	net_break();
+	net_break(hSession);
 
 	return 0;
 }
@@ -607,7 +607,7 @@ LIB3270_ACTION(attn)
 	if (!IN_3270)
 		return 0;
 
-	net_interrupt();
+	net_interrupt(hSession);
 
 	return 0;
 }
@@ -1886,7 +1886,7 @@ LIB3270_ACTION( sysreq )
 		return 0;
 #if defined(X3270_TN3270E) /*[*/
 	if (IN_E) {
-		net_abort();
+		net_abort(hSession);
 	} else
 #endif /*]*/
 	{

@@ -69,7 +69,7 @@ LIB3270_INTERNAL void ctlr_write_sscp_lu(H3270 *session, unsigned char buf[], in
 LIB3270_INTERNAL void mdt_clear(int baddr);
 LIB3270_INTERNAL void mdt_set(int baddr);
 LIB3270_INTERNAL int next_unprotected(H3270 *session, int baddr0);
-LIB3270_INTERNAL enum pds process_ds(unsigned char *buf, int buflen);
+LIB3270_INTERNAL enum pds process_ds(H3270 *hSession, unsigned char *buf, int buflen);
 LIB3270_INTERNAL void ps_process(void);
 
 LIB3270_INTERNAL void update_model_info(H3270 *session, int model, int cols, int rows);

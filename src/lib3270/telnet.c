@@ -1952,8 +1952,7 @@ process_eor(H3270 *hSession)
 			hSession->tn3270e_submode = E_3270;
 			check_in3270(hSession);
 			hSession->response_required = h->response_flag;
-			rv = process_ds(hSession->ibuf + EH_SIZE,
-			    (hSession->ibptr - hSession->ibuf) - EH_SIZE);
+			rv = process_ds(hSession, hSession->ibuf + EH_SIZE,(hSession->ibptr - hSession->ibuf) - EH_SIZE);
 			if (rv < 0 &&
 			    hSession->response_required != TN3270E_RSF_NO_RESPONSE)
 				tn3270e_nak(hSession,rv);
@@ -2000,7 +1999,7 @@ process_eor(H3270 *hSession)
 	} else
 #endif /*]*/
 	{
-		(void) process_ds(hSession->ibuf, hSession->ibptr - hSession->ibuf);
+		(void) process_ds(hSession, hSession->ibuf, hSession->ibptr - hSession->ibuf);
 	}
 	return 0;
 }
@@ -2270,7 +2269,7 @@ static void do_intr(H3270 *hSession, char c)
 	}
 	ansi_process_s(ctl_see((int) c));
 	cooked_init(hSession);
-	net_interrupt();
+	net_interrupt(hSession);
 }
 
 static void do_quit(H3270 *hSession, char c)
@@ -2282,7 +2281,7 @@ static void do_quit(H3270 *hSession, char c)
 	}
 	ansi_process_s(ctl_see((int) c));
 	cooked_init(hSession);
-	net_break();
+	net_break(hSession);
 }
 
 static void do_cerase(H3270 *hSession, char c)
@@ -2688,8 +2687,8 @@ void trace_netdata(H3270 *hSession, char direction, unsigned const char *buf, in
 	(void) gettimeofday(&ts, (struct timezone *)NULL);
 	if (IN_3270)
 	{
-		tdiff = ((1.0e6 * (double)(ts.tv_sec - h3270.ds_ts.tv_sec)) +
-			(double)(ts.tv_usec - h3270.ds_ts.tv_usec)) / 1.0e6;
+		tdiff = ((1.0e6 * (double)(ts.tv_sec - hSession->ds_ts.tv_sec)) +
+			(double)(ts.tv_usec - hSession->ds_ts.tv_usec)) / 1.0e6;
 		trace_dsn(hSession,"%c +%gs\n", direction, tdiff);
 	}
 
@@ -2990,20 +2989,23 @@ net_linemode(void)
 }
 */
 
-void
-net_charmode(void)
+void net_charmode(H3270 *hSession)
 {
 	if (!CONNECTED)
 		return;
-	if (!hisopts[TELOPT_ECHO]) {
+
+	if (!hisopts[TELOPT_ECHO])
+	{
 		do_opt[2] = TELOPT_ECHO;
 		net_rawout(do_opt, sizeof(do_opt));
-		trace_dsn(&h3270,"SENT %s %s\n", cmd(DO), opt(TELOPT_ECHO));
+		trace_dsn(hSession,"SENT %s %s\n", cmd(DO), opt(TELOPT_ECHO));
 	}
-	if (!hisopts[TELOPT_SGA]) {
+
+	if (!hisopts[TELOPT_SGA])
+	{
 		do_opt[2] = TELOPT_SGA;
 		net_rawout(do_opt, sizeof(do_opt));
-		trace_dsn(&h3270,"SENT %s %s\n", cmd(DO), opt(TELOPT_SGA));
+		trace_dsn(hSession,"SENT %s %s\n", cmd(DO), opt(TELOPT_SGA));
 	}
 }
 #endif /*]*/
@@ -3014,14 +3016,13 @@ net_charmode(void)
  *	Send telnet break, which is used to implement 3270 ATTN.
  *
  */
-void
-net_break(void)
+void net_break(H3270 *hSession)
 {
-	static unsigned char buf[] = { IAC, BREAK };
+	static const unsigned char buf[] = { IAC, BREAK };
 
 	/* I don't know if we should first send TELNET synch ? */
-	net_rawout(&h3270, buf, sizeof(buf));
-	trace_dsn(&h3270,"SENT BREAK\n");
+	net_rawout(hSession, buf, sizeof(buf));
+	trace_dsn(hSession,"SENT BREAK\n");
 }
 
 /*
@@ -3029,14 +3030,13 @@ net_break(void)
  *	Send telnet IP.
  *
  */
-void
-net_interrupt(void)
+void net_interrupt(H3270 *hSession)
 {
-	static unsigned char buf[] = { IAC, IP };
+	static const unsigned char buf[] = { IAC, IP };
 
 	/* I don't know if we should first send TELNET synch ? */
-	net_rawout(&h3270, buf, sizeof(buf));
-	trace_dsn(&h3270,"SENT IP\n");
+	net_rawout(hSession, buf, sizeof(buf));
+	trace_dsn(hSession,"SENT IP\n");
 }
 
 /*
@@ -3045,36 +3045,39 @@ net_interrupt(void)
  *
  */
 #if defined(X3270_TN3270E) /*[*/
-void
-net_abort(void)
+void net_abort(H3270 *hSession)
 {
-	static unsigned char buf[] = { IAC, AO };
+	static const unsigned char buf[] = { IAC, AO };
 
-	if (h3270.e_funcs & E_OPT(TN3270E_FUNC_SYSREQ)) {
+	if (hSession->e_funcs & E_OPT(TN3270E_FUNC_SYSREQ))
+	{
 		/*
 		 * I'm not sure yet what to do here.  Should the host respond
 		 * to the AO by sending us SSCP-LU data (and putting us into
 		 * SSCP-LU mode), or should we put ourselves in it?
 		 * Time, and testers, will tell.
 		 */
-		switch (h3270.tn3270e_submode) {
+		switch (hSession->tn3270e_submode)
+		{
 		case E_NONE:
 		case E_NVT:
 			break;
+
 		case E_SSCP:
-			net_rawout(&h3270, buf, sizeof(buf));
-			trace_dsn(&h3270,"SENT AO\n");
-			if (h3270.tn3270e_bound ||
-			    !(h3270.e_funcs & E_OPT(TN3270E_FUNC_BIND_IMAGE))) {
-				h3270.tn3270e_submode = E_3270;
-				check_in3270(&h3270);
+			net_rawout(hSession, buf, sizeof(buf));
+			trace_dsn(hSession,"SENT AO\n");
+			if (hSession->tn3270e_bound || !(hSession->e_funcs & E_OPT(TN3270E_FUNC_BIND_IMAGE)))
+			{
+				hSession->tn3270e_submode = E_3270;
+				check_in3270(hSession);
 			}
 			break;
+
 		case E_3270:
-			net_rawout(&h3270, buf, sizeof(buf));
-			trace_dsn(&h3270,"SENT AO\n");
-			h3270.tn3270e_submode = E_SSCP;
-			check_in3270(&h3270);
+			net_rawout(hSession, buf, sizeof(buf));
+			trace_dsn(hSession,"SENT AO\n");
+			hSession->tn3270e_submode = E_SSCP;
+			check_in3270(hSession);
 			break;
 		}
 	}

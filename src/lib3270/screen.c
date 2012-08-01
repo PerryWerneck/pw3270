@@ -166,7 +166,7 @@ static unsigned short calc_attrs(H3270 *session, int baddr, int fa_addr, int fa)
 	/* Compute the color. */
 
 	/* Monochrome is easy, and so is color if nothing is specified. */
-	if (!h3270.m3279 ||
+	if (!session->m3279 ||
 		(!session->ea_buf[baddr].fg &&
 		 !session->ea_buf[fa_addr].fg &&
 		 !session->ea_buf[baddr].bg &&

@@ -29,17 +29,17 @@ struct ctl_char {
 	char value[3];
 };
 
-LIB3270_INTERNAL void net_abort(void);
+LIB3270_INTERNAL void net_abort(H3270 *hSession);
 LIB3270_INTERNAL Boolean net_add_dummy_tn3270e(void);
 LIB3270_INTERNAL void net_add_eor(unsigned char *buf, int len);
-LIB3270_INTERNAL void net_break(void);
-LIB3270_INTERNAL void net_charmode(void);
+LIB3270_INTERNAL void net_break(H3270 *hSession);
+LIB3270_INTERNAL void net_charmode(H3270 *hSession);
 LIB3270_INTERNAL int net_connect(H3270 *session, const char *, char *, Boolean, Boolean *, Boolean *);
 LIB3270_INTERNAL void net_disconnect(H3270 *session);
 LIB3270_INTERNAL void net_exception(H3270 *session);
 // LIB3270_INTERNAL void net_hexansi_out(unsigned char *buf, int len);
 LIB3270_INTERNAL void net_input(H3270 *session);
-LIB3270_INTERNAL void net_interrupt(void);
+LIB3270_INTERNAL void net_interrupt(H3270 *hSession);
 // LIB3270_INTERNAL void net_linemode(void);
 // LIB3270_INTERNAL struct ctl_char *net_linemode_chars(void);
 LIB3270_INTERNAL void net_output(H3270 *hSession);

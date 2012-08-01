@@ -1021,15 +1021,15 @@ ansi_nop(H3270 *hSession, int ig1 unused, int ig2 unused)
 }
 
 #define PWRAP { \
-    nc = h3270.cursor_addr + 1; \
-    if (nc < h3270.scroll_bottom * h3270.cols) \
-	    cursor_move(&h3270,nc); \
+    nc = hSession->cursor_addr + 1; \
+    if (nc < hSession->scroll_bottom * hSession->cols) \
+	    cursor_move(hSession,nc); \
     else { \
-	    if (h3270.cursor_addr / h3270.cols >= h3270.scroll_bottom) \
-		    cursor_move(&h3270,h3270.cursor_addr / h3270.cols * h3270.cols); \
+	    if (hSession->cursor_addr / hSession->cols >= hSession->scroll_bottom) \
+		    cursor_move(hSession,hSession->cursor_addr / hSession->cols * hSession->cols); \
 	    else { \
-		    ansi_scroll(&h3270); \
-		    cursor_move(&h3270,nc - h3270.cols); \
+		    ansi_scroll(hSession); \
+		    cursor_move(hSession,nc - hSession->cols); \
 	    } \
     } \
 }
