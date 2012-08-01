@@ -575,10 +575,8 @@ static int proxy_socks4(int fd, char *host, unsigned short port, int force_a)
 		s += strlen(host) + 1;
 
 #if defined(X3270_TRACE) /*[*/
-		trace_dsn("SOCKS4 Proxy: version 4 connect port %u "
-			"address 0.0.0.1 user '%s' host '%s'\n",
-			port, user, host);
-		trace_netdata('>', (unsigned char *)buf, s - buf);
+		trace_dsn("SOCKS4 Proxy: version 4 connect port %u address 0.0.0.1 user '%s' host '%s'\n",port, user, host);
+		trace_netdata(&h3270,'>', (unsigned char *)buf, s - buf);
 #endif /*]*/
 
 		if (send(fd, buf, s - buf, 0) < 0) {
@@ -604,7 +602,7 @@ static int proxy_socks4(int fd, char *host, unsigned short port, int force_a)
 		trace_dsn("SOCKS4 Proxy: xmit version 4 connect port %u "
 			"address %s user '%s'\n",
 			port, inet_ntoa(ipaddr), user);
-		trace_netdata('>', (unsigned char *)buf, s - buf);
+		trace_netdata(&h3270,'>', (unsigned char *)buf, s - buf);
 #endif /*]*/
 
 		if (send(fd, buf, s - buf, 0) < 0) {
@@ -644,7 +642,7 @@ static int proxy_socks4(int fd, char *host, unsigned short port, int force_a)
 	}
 
 #if defined(X3270_TRACE) /*[*/
-	trace_netdata('<', (unsigned char *)rbuf, nread);
+	trace_netdata(&h3270,'<', (unsigned char *)rbuf, nread);
 	if (use_4a) {
 	    	struct in_addr a;
 
