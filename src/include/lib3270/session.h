@@ -41,7 +41,7 @@
 	#define LIB3270_TELNET_N_OPTS			256
 
 	/**  extended attributes */
-	struct ea
+	struct lib3270_ea
 	{
 		unsigned char cc;		/**< EBCDIC or ASCII character code */
 		unsigned char fa;		/**< field attribute, it nonzero */
@@ -57,12 +57,6 @@
 	{
 		unsigned char  chr;		/**< ASCII character code */
 		unsigned short attr;	/**< Converted character attribute (color & etc) */
-	};
-
-	struct lib3270_toggle
-	{
-		char value;				/**< toggle value */
-		void (*upcall)(H3270 *, struct lib3270_toggle *, LIB3270_TOGGLE_TYPE); /**< change value */
 	};
 
 #ifndef HEADER_SSL_H
@@ -116,7 +110,11 @@
 
 		LIB3270_SSL_STATE		  secure;
 
-		struct lib3270_toggle	  toggle[LIB3270_TOGGLE_COUNT];
+		struct lib3270_toggle
+		{
+			char value;																/**< toggle value */
+			void (*upcall)(H3270 *, struct lib3270_toggle *, LIB3270_TOGGLE_TYPE);	/**< change value */
+		}						  toggle[LIB3270_TOGGLE_COUNT];
 
 		// Network & Termtype
 		char   		 			* hostname;
@@ -163,8 +161,8 @@
 
 		// Screen contents
 		void 					* buffer[2];			/**< Internal buffers */
-		struct ea  	    		* ea_buf;				/**< 3270 device buffer. ea_buf[-1] is the dummy default field attribute */
-		struct ea 				* aea_buf;				/** alternate 3270 extended attribute buffer */
+		struct lib3270_ea  		* ea_buf;				/**< 3270 device buffer. ea_buf[-1] is the dummy default field attribute */
+		struct lib3270_ea		* aea_buf;				/** alternate 3270 extended attribute buffer */
 		struct lib3270_text		* text;					/**< Converted 3270 chars */
 
 		// host.c

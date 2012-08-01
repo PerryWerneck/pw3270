@@ -134,18 +134,18 @@ void ctlr_reinit(H3270 *session, unsigned cmask)
 	if (cmask & MODEL_CHANGE)
 	{
 		/* Allocate buffers */
-		struct ea *tmp;
+		struct lib3270_ea *tmp;
 		size_t sz = (session->maxROWS * session->maxCOLS);
 
-		session->buffer[0] = tmp = lib3270_calloc(sizeof(struct ea), sz+1, session->buffer[0]);
+		session->buffer[0] = tmp = lib3270_calloc(sizeof(struct lib3270_ea), sz+1, session->buffer[0]);
 		session->ea_buf = tmp + 1;
 
-		session->buffer[1] = tmp = lib3270_calloc(sizeof(struct ea),sz+1,session->buffer[1]);
+		session->buffer[1] = tmp = lib3270_calloc(sizeof(struct lib3270_ea),sz+1,session->buffer[1]);
 		session->aea_buf = tmp + 1;
 
 		session->text = lib3270_calloc(sizeof(struct lib3270_text),sz,session->text);
 
-		Replace(session->zero_buf, (unsigned char *)Calloc(sizeof(struct ea),sz));
+		Replace(session->zero_buf, (unsigned char *)Calloc(sizeof(struct lib3270_ea),sz));
 
 		session->cursor_addr = 0;
 		session->buffer_addr = 0;
@@ -2270,7 +2270,7 @@ ctlr_clear(H3270 *session, Boolean can_snap)
 #endif /*]*/
 
 	/* Clear the screen. */
-	(void) memset((char *)session->ea_buf, 0, session->rows*session->cols*sizeof(struct ea));
+	(void) memset((char *)session->ea_buf, 0, session->rows*session->cols*sizeof(struct lib3270_ea));
 	cursor_move(session,0);
 	session->buffer_addr = 0;
 	lib3270_unselect(session);
@@ -2469,9 +2469,9 @@ ctlr_bcopy(int baddr_from, int baddr_to, int count, int move_ea)
 	/* Move the characters. */
 	if (memcmp((char *) &h3270.ea_buf[baddr_from],
 	           (char *) &h3270.ea_buf[baddr_to],
-		   count * sizeof(struct ea))) {
+		   count * sizeof(struct lib3270_ea))) {
 		(void) memmove(&h3270.ea_buf[baddr_to], &h3270.ea_buf[baddr_from],
-			           count * sizeof(struct ea));
+			           count * sizeof(struct lib3270_ea));
 		REGION_CHANGED(&h3270,baddr_to, baddr_to + count);
 	}
 	/* XXX: What about move_ea? */
@@ -2485,9 +2485,9 @@ ctlr_bcopy(int baddr_from, int baddr_to, int count, int move_ea)
 void ctlr_aclear(H3270 *session, int baddr, int count, int clear_ea)
 {
 	if (memcmp((char *) &session->ea_buf[baddr], (char *) session->zero_buf,
-		    count * sizeof(struct ea))) {
+		    count * sizeof(struct lib3270_ea))) {
 		(void) memset((char *) &session->ea_buf[baddr], 0,
-				count * sizeof(struct ea));
+				count * sizeof(struct lib3270_ea));
 		REGION_CHANGED(session,baddr, baddr + count);
 	}
 	/* XXX: What about clear_ea? */
@@ -2509,10 +2509,10 @@ void ctlr_scroll(H3270 *hSession)
 	/* Synchronize pending changes prior to this. */
 
 	/* Move ea_buf. */
-	(void) memmove(&hSession->ea_buf[0], &hSession->ea_buf[h3270.cols],qty * sizeof(struct ea));
+	(void) memmove(&hSession->ea_buf[0], &hSession->ea_buf[h3270.cols],qty * sizeof(struct lib3270_ea));
 
 	/* Clear the last line. */
-	(void) memset((char *) &hSession->ea_buf[qty], 0, hSession->cols * sizeof(struct ea));
+	(void) memset((char *) &hSession->ea_buf[qty], 0, hSession->cols * sizeof(struct lib3270_ea));
 
 	hSession->display(hSession);
 
@@ -2549,7 +2549,7 @@ void ctlr_altbuffer(H3270 *session, int alt)
 
 	if (alt != session->is_altbuffer)
 	{
-		struct ea *etmp;
+		struct lib3270_ea *etmp;
 
 		etmp = session->ea_buf;
 		session->ea_buf  = session->aea_buf;
