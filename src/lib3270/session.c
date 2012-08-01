@@ -202,6 +202,12 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 	hSession->reply_mode 		= SF_SRM_FIELD;
 	hSession->linemode			= 1;
 	hSession->tn3270e_submode	= E_NONE;
+	hSession->scroll_top 		= -1;
+	hSession->scroll_bottom		= -1;
+	hSession->wraparound_mode 	= 1;
+	hSession->saved_wraparound_mode	= 1;
+	hSession->once_cset 			= -1;
+
 
 #ifdef _WIN32
 	hSession->sockEvent			= NULL;

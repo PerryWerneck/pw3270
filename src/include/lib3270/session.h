@@ -264,6 +264,34 @@
 			int end;
 		} select;
 
+		// ansi.c
+		int      				  scroll_top;
+		int						  scroll_bottom;
+		int						  once_cset;
+		int						  saved_cursor;
+
+		int						  held_wrap					: 1;
+
+		int						  insert_mode				: 1;
+		int						  auto_newline_mode			: 1;
+
+		int						  appl_cursor				: 1;
+		int						  saved_appl_cursor			: 1;
+
+		int  					  wraparound_mode			: 1;
+		int						  saved_wraparound_mode		: 1;
+
+		int						  rev_wraparound_mode 		: 1;
+		int						  saved_rev_wraparound_mode	: 1;
+
+		int						  allow_wide_mode			: 1;
+		int						  saved_allow_wide_mode		: 1;
+
+		int						  wide_mode 				: 1;
+		int						  saved_wide_mode			: 1;
+
+		int						  saved_altbuffer			: 1;
+
 		// xio
 		void 					* ns_read_id;
 		void 					* ns_exception_id;

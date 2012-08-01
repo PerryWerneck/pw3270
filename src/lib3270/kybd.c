@@ -507,12 +507,12 @@ static void key_AID(H3270 *hSession, unsigned char aid_code)
 		}
 		for (i = 0; i < PF_SZ; i++)
 			if (aid_code == pf_xlate[i]) {
-				ansi_send_pf(i+1);
+				ansi_send_pf(hSession,i+1);
 				return;
 			}
 		for (i = 0; i < PA_SZ; i++)
 			if (aid_code == pa_xlate[i]) {
-				ansi_send_pa(i+1);
+				ansi_send_pa(hSession,i+1);
 				return;
 			}
 		return;
@@ -1186,7 +1186,7 @@ LIB3270_ACTION( firstfield )
 	}
 #if defined(X3270_ANSI) /*[*/
 	if (IN_ANSI) {
-		ansi_send_home();
+		ansi_send_home(hSession);
 		return 0;
 	}
 #endif /*]*/
@@ -1234,7 +1234,7 @@ LIB3270_CURSOR_ACTION( left )
 #if defined(X3270_ANSI) /*[*/
 	if (IN_ANSI)
 	{
-		ansi_send_left();
+		ansi_send_left(hSession);
 		return 0;
 	}
 #endif /*]*/
@@ -1503,7 +1503,7 @@ LIB3270_CURSOR_ACTION( right )
 	}
 #if defined(X3270_ANSI) /*[*/
 	if (IN_ANSI) {
-		ansi_send_right();
+		ansi_send_right(hSession);
 		return 0;
 	}
 #endif /*]*/
@@ -1734,7 +1734,7 @@ LIB3270_CURSOR_ACTION( up )
 	}
 #if defined(X3270_ANSI) /*[*/
 	if (IN_ANSI) {
-		ansi_send_up();
+		ansi_send_up(hSession);
 		return 0;
 	}
 #endif /*]*/
@@ -1772,7 +1772,7 @@ LIB3270_CURSOR_ACTION( down )
 #if defined(X3270_ANSI) /*[*/
 	if (IN_ANSI)
 	{
-		ansi_send_down();
+		ansi_send_down(hSession);
 		return 0;
 	}
 #endif /*]*/
@@ -1915,7 +1915,7 @@ LIB3270_ACTION( clear )
 	}
 #if defined(X3270_ANSI) /*[*/
 	if (IN_ANSI) {
-		ansi_send_clear();
+		ansi_send_clear(hSession);
 		return 0;
 	}
 #endif /*]*/

@@ -1259,8 +1259,8 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 			if (!session->syncing)
 			{
 				if (session->linemode && session->onlcr && c == '\n')
-					ansi_process((unsigned int) '\r');
-				ansi_process((unsigned int) c);
+					ansi_process(session,(unsigned int) '\r');
+				ansi_process(session,(unsigned int) c);
 //				sms_store(c);
 			}
 #endif /*]*/
@@ -1293,7 +1293,7 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 					session->ansi_data = 4 + sl;
 				}
 				trace_dsn(session,"%s",see_chr);
-				ansi_process((unsigned int) c);
+				ansi_process(session,(unsigned int) c);
 #endif /*]*/
 			}
 			else
@@ -1983,7 +1983,7 @@ process_eor(H3270 *hSession)
 			hSession->tn3270e_submode = E_NVT;
 			check_in3270(hSession);
 			for (s = hSession->ibuf; s < hSession->ibptr; s++) {
-				ansi_process(*s++);
+				ansi_process(hSession,*s++);
 			}
 			return 0;
 		case TN3270E_DT_SSCP_LU_DATA:
@@ -2233,7 +2233,7 @@ static void
 ansi_process_s(const char *data)
 {
 	while (*data)
-		ansi_process((unsigned int) *data++);
+		ansi_process(&h3270,(unsigned int) *data++);
 }
 
 static void forward_data(H3270 *hSession)
@@ -2250,7 +2250,7 @@ static void do_data(H3270 *hSession, char c)
 		if (c == '\r')
 			*hSession->lbptr++ = '\0';
 		if (c == '\t')
-			ansi_process((unsigned int) c);
+			ansi_process(hSession,(unsigned int) c);
 		else
 			ansi_process_s(ctl_see((int) c));
 	}

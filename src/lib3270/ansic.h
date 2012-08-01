@@ -19,15 +19,15 @@
 
 #if defined(X3270_ANSI) /*[*/
 
-LIB3270_INTERNAL void ansi_process(unsigned int c);
-LIB3270_INTERNAL void ansi_send_clear(void);
-LIB3270_INTERNAL void ansi_send_down(void);
-LIB3270_INTERNAL void ansi_send_home(void);
-LIB3270_INTERNAL void ansi_send_left(void);
-LIB3270_INTERNAL void ansi_send_pa(int nn);
-LIB3270_INTERNAL void ansi_send_pf(int nn);
-LIB3270_INTERNAL void ansi_send_right(void);
-LIB3270_INTERNAL void ansi_send_up(void);
+LIB3270_INTERNAL void ansi_process(H3270 *hSession, unsigned int c);
+LIB3270_INTERNAL void ansi_send_clear(H3270 *hSession);
+LIB3270_INTERNAL void ansi_send_down(H3270 *hSession);
+LIB3270_INTERNAL void ansi_send_home(H3270 *hSession);
+LIB3270_INTERNAL void ansi_send_left(H3270 *hSession);
+LIB3270_INTERNAL void ansi_send_pa(H3270 *hSession, int nn);
+LIB3270_INTERNAL void ansi_send_pf(H3270 *hSession, int nn);
+LIB3270_INTERNAL void ansi_send_right(H3270 *hSession);
+LIB3270_INTERNAL void ansi_send_up(H3270 *hSession);
 LIB3270_INTERNAL void ansi_in3270(H3270 *session, int in3270, void *dunno);
 
 LIB3270_INTERNAL void toggle_lineWrap(H3270 *session, struct lib3270_toggle *t, LIB3270_TOGGLE_TYPE type);
