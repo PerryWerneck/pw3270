@@ -77,13 +77,13 @@
 #define ES_SIZE		(sizeof(EURO_SUFFIX) - 1)
 
 /* Globals. */
-Boolean charset_changed = False;
+// static Boolean charset_changed = False;
 #define DEFAULT_CGEN	0x02b90000
 #define DEFAULT_CSET	0x00000025
 unsigned long cgcsgid = DEFAULT_CGEN | DEFAULT_CSET;
 unsigned long cgcsgid_dbcs = 0L;
-char *default_display_charset = "3270cg-1a,3270cg-1,iso8859-1";
-char *converter_names;
+const char *default_display_charset = "3270cg-1a,3270cg-1,iso8859-1";
+// char *converter_names;
 char *encoding;
 
 /*

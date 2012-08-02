@@ -24,14 +24,18 @@
  *		Global declarations for charset.c
  */
 
-LIB3270_INTERNAL Boolean charset_changed;
+// LIB3270_INTERNAL Boolean charset_changed;
 LIB3270_INTERNAL unsigned long cgcsgid;
-#if defined(X3270_DBCS) /*[*/
+
+/*
+#if defined(X3270_DBCS)
 LIB3270_INTERNAL unsigned long cgcsgid_dbcs;
 LIB3270_INTERNAL char *converter_names;
 LIB3270_INTERNAL char *encoding;
-#endif /*]*/
-LIB3270_INTERNAL char *default_display_charset;
+#endif
+*/
+
+// LIB3270_INTERNAL char *default_display_charset;
 
 enum cs_result { CS_OKAY, CS_NOTFOUND, CS_BAD, CS_PREREQ, CS_ILLEGAL };
 
