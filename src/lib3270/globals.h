@@ -345,7 +345,7 @@ enum keytype
 
 
 /* Library internal calls */
-LIB3270_INTERNAL void key_ACharacter(unsigned char c, enum keytype keytype, enum iaction cause,Boolean *skipped);
+LIB3270_INTERNAL void key_ACharacter(H3270 *hSession, unsigned char c, enum keytype keytype, enum iaction cause,Boolean *skipped);
 LIB3270_INTERNAL void lib3270_initialize(void);
 LIB3270_INTERNAL int  cursor_move(H3270 *session, int baddr);
 

@@ -143,11 +143,11 @@
 		if(FA_IS_PROTECTED(session->ea_buf[faddr].fa))
 			session->cursor_addr++;
 		else
-			key_ACharacter(c, KT_STD, IA_PASTE, NULL);
+			key_ACharacter(session, c, KT_STD, IA_PASTE, NULL);
 	}
 	else
 	{
-		key_ACharacter(c, KT_STD, IA_PASTE, NULL);
+		key_ACharacter(session, c, KT_STD, IA_PASTE, NULL);
 	}
 
 	data->qtd++;

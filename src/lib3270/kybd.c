@@ -117,7 +117,7 @@ static unsigned char pa_xlate[] =
 // static void * unlock_id;
 // static time_t unlock_delay_time;
 #define UNLOCK_MS		350	/* 0.35s after last unlock */
-static Boolean key_Character(int code, Boolean with_ge, Boolean pasting,Boolean *skipped);
+static Boolean key_Character(H3270 *hSession, int code, Boolean with_ge, Boolean pasting,Boolean *skipped);
 static int flush_ta(H3270 *hSession);
 static void key_AID(H3270 *session, unsigned char aid_code);
 static void kybdlock_set(H3270 *session, unsigned int bits);
@@ -197,35 +197,35 @@ static const char dxl[] = "0123456789abcdef";
 /*
  * Check if the typeahead queue is available
  */
-static int enq_chk(H3270 *session)
+static int enq_chk(H3270 *hSession)
 {
 	/* If no connection, forget it. */
-	if (!lib3270_connected(session))
+	if (!lib3270_connected(hSession))
 	{
-		trace_event("  dropped (not connected)\n");
+		lib3270_trace_event(hSession,"  dropped (not connected)\n");
 		return -1;
 	}
 
 	/* If operator error, complain and drop it. */
-	if (session->kybdlock & KL_OERR_MASK)
+	if (hSession->kybdlock & KL_OERR_MASK)
 	{
-		lib3270_ring_bell(session);
-		trace_event("  dropped (operator error)\n");
+		lib3270_ring_bell(hSession);
+		lib3270_trace_event(hSession,"  dropped (operator error)\n");
 		return -1;
 	}
 
 	/* If scroll lock, complain and drop it. */
-	if (session->kybdlock & KL_SCROLLED)
+	if (hSession->kybdlock & KL_SCROLLED)
 	{
-		lib3270_ring_bell(session);
-		trace_event("  dropped (scrolled)\n");
+		lib3270_ring_bell(hSession);
+		lib3270_trace_event(hSession,"  dropped (scrolled)\n");
 		return -1;
 	}
 
 	/* If typeahead disabled, complain and drop it. */
-	if (!session->typeahead)
+	if (!hSession->typeahead)
 	{
-		trace_event("  dropped (no typeahead)\n");
+		lib3270_trace_event(hSession,"  dropped (no typeahead)\n");
 		return -1;
 	}
 
@@ -612,11 +612,13 @@ LIB3270_ACTION(attn)
 	return 0;
 }
 
-/*
+/**
  * Prepare for an insert of 'count' bytes.
- * Returns True if the insert is legal, False otherwise.
+ *
+ *
+ * @return True if the insert is legal, False otherwise.
  */
-static Boolean ins_prep(int faddr, int baddr, int count)
+static Boolean ins_prep(H3270 *hSession, int faddr, int baddr, int count)
 {
 	int next_faddr;
 	int xaddr;
@@ -626,13 +628,17 @@ static Boolean ins_prep(int faddr, int baddr, int count)
 	int copy_len;
 
 	/* Find the end of the field. */
-	if (faddr == -1) {
+	if (faddr == -1)
+	{
 		/* Unformatted.  Use the end of the line. */
-		next_faddr = (((baddr / h3270.cols) + 1) * h3270.cols) % (h3270.rows*h3270.cols);
-	} else {
+		next_faddr = (((baddr / hSession->cols) + 1) * hSession->cols) % (hSession->rows*hSession->cols);
+	}
+	else
+	{
 		next_faddr = faddr;
 		INC_BA(next_faddr);
-		while (next_faddr != faddr && !h3270.ea_buf[next_faddr].fa) {
+		while (next_faddr != faddr && !hSession->ea_buf[next_faddr].fa)
+		{
 			INC_BA(next_faddr);
 		}
 	}
@@ -642,11 +648,11 @@ static Boolean ins_prep(int faddr, int baddr, int count)
 	need = count;
 	ntb = 0;
 	while (need && (xaddr != next_faddr)) {
-		if (h3270.ea_buf[xaddr].cc == EBC_null)
+		if (hSession->ea_buf[xaddr].cc == EBC_null)
 			need--;
-		else if (lib3270_get_toggle(&h3270,LIB3270_TOGGLE_BLANK_FILL) &&
-			((h3270.ea_buf[xaddr].cc == EBC_space) ||
-			 (h3270.ea_buf[xaddr].cc == EBC_underscore))) {
+		else if (lib3270_get_toggle(hSession,LIB3270_TOGGLE_BLANK_FILL) &&
+			((hSession->ea_buf[xaddr].cc == EBC_space) ||
+			 (hSession->ea_buf[xaddr].cc == EBC_underscore))) {
 			if (tb_start == -1)
 				tb_start = xaddr;
 			ntb++;
@@ -659,8 +665,9 @@ static Boolean ins_prep(int faddr, int baddr, int count)
 #if defined(_ST) /*[*/
 	printf("need %d at %d, tb_start at %d\n", count, baddr, tb_start);
 #endif /*]*/
-	if (need - ntb > 0) {
-		operator_error(&h3270,KL_OERR_OVERFLOW);
+	if (need - ntb > 0)
+	{
+		operator_error(hSession,KL_OERR_OVERFLOW);
 		return False;
 	}
 
@@ -675,7 +682,7 @@ static Boolean ins_prep(int faddr, int baddr, int count)
 		int first_null = -1;
 
 		while (need &&
-		       ((h3270.ea_buf[xaddr].cc == EBC_null) ||
+		       ((hSession->ea_buf[xaddr].cc == EBC_null) ||
 		        (tb_start >= 0 && xaddr >= tb_start))) {
 			need--;
 			n_nulls++;
@@ -689,15 +696,16 @@ static Boolean ins_prep(int faddr, int baddr, int count)
 			/* Shift right n_nulls worth. */
 			copy_len = first_null - baddr;
 			if (copy_len < 0)
-				copy_len += h3270.rows*h3270.cols;
-			to = (baddr + n_nulls) % (h3270.rows*h3270.cols);
-#if defined(_ST) /*[*/
+				copy_len += hSession->rows*hSession->cols;
+			to = (baddr + n_nulls) % (hSession->rows*hSession->cols);
+/*
+#if defined(_ST)
 			printf("found %d NULLs at %d\n", n_nulls, first_null);
-			printf("copying %d from %d to %d\n", copy_len, to,
-			    first_null);
-#endif /*]*/
+			printf("copying %d from %d to %d\n", copy_len, to,first_null);
+#endif
+*/
 			if (copy_len)
-				ctlr_wrapping_memmove(&h3270,to, baddr, copy_len);
+				ctlr_wrapping_memmove(hSession,to, baddr, copy_len);
 		}
 		INC_BA(xaddr);
 	}
@@ -709,7 +717,7 @@ static Boolean ins_prep(int faddr, int baddr, int count)
 #define GE_WFLAG	0x100
 #define PASTE_WFLAG	0x200
 
-static void key_Character_wrapper(H3270 *param, const char *param1, const char *param2)
+static void key_Character_wrapper(H3270 *hSession, const char *param1, const char *param2)
 {
 	int code;
 	Boolean with_ge = False;
@@ -731,14 +739,14 @@ static void key_Character_wrapper(H3270 *param, const char *param1, const char *
 
 //	trace_event(" %s -> Key(%s\"%s\")\n",ia_name[(int) ia_cause],with_ge ? "GE " : "",ctl_see((int) ebc2asc[code]));
 
-	(void) key_Character(code, with_ge, pasting, NULL);
+	(void) key_Character(hSession, code, with_ge, pasting, NULL);
 }
 
 /*
  * Handle an ordinary displayable character key.  Lots of stuff to handle
  * insert-mode, protected fields and etc.
  */
-static Boolean key_Character(int code, Boolean with_ge, Boolean pasting, Boolean *skipped)
+static Boolean key_Character(H3270 *hSession, int code, Boolean with_ge, Boolean pasting, Boolean *skipped)
 {
 	register int	baddr, faddr, xaddr;
 	register unsigned char	fa;
@@ -747,56 +755,61 @@ static Boolean key_Character(int code, Boolean with_ge, Boolean pasting, Boolean
 	if (skipped != NULL)
 		*skipped = False;
 
-	if (h3270.kybdlock)
+	if (hSession->kybdlock)
 	{
 		char codename[64];
 
 		(void) sprintf(codename, "%d", code |(with_ge ? GE_WFLAG : 0) | (pasting ? PASTE_WFLAG : 0));
 
 #if defined(DEBUG) || defined(ANDROID)
-		enq_ta(&h3270,key_Character_wrapper, codename, CN, "key_Character_wrapper");
+		enq_ta(hSession,key_Character_wrapper, codename, CN, "key_Character_wrapper");
 #else
-		enq_ta(&h3270,key_Character_wrapper, codename, CN);
+		enq_ta(hSession,key_Character_wrapper, codename, CN);
 #endif // DEBUG
 
 		return False;
 	}
-	baddr = h3270.cursor_addr;
-	faddr = find_field_attribute(&h3270,baddr);
-	fa = get_field_attribute(&h3270,baddr);
-	if (h3270.ea_buf[baddr].fa || FA_IS_PROTECTED(fa)) {
-		operator_error(&h3270,KL_OERR_PROTECTED);
+	baddr = hSession->cursor_addr;
+	faddr = find_field_attribute(hSession,baddr);
+	fa = get_field_attribute(hSession,baddr);
+	if (hSession->ea_buf[baddr].fa || FA_IS_PROTECTED(fa))
+	{
+		operator_error(hSession,KL_OERR_PROTECTED);
 		return False;
 	}
-	if (h3270.numeric_lock && FA_IS_NUMERIC(fa) &&
+	if (hSession->numeric_lock && FA_IS_NUMERIC(fa) &&
 	    !((code >= EBC_0 && code <= EBC_9) ||
 	      code == EBC_minus || code == EBC_period)) {
-		operator_error(&h3270,KL_OERR_NUMERIC);
+		operator_error(hSession,KL_OERR_NUMERIC);
 		return False;
 	}
 
 	/* Can't put an SBCS in a DBCS field. */
-	if (h3270.ea_buf[faddr].cs == CS_DBCS) {
-		operator_error(&h3270,KL_OERR_DBCS);
+	if (hSession->ea_buf[faddr].cs == CS_DBCS) {
+		operator_error(hSession,KL_OERR_DBCS);
 		return False;
 	}
 
 	/* If it's an SI (end of DBCS subfield), move over one position. */
-	if (h3270.ea_buf[baddr].cc == EBC_si) {
+	if (hSession->ea_buf[baddr].cc == EBC_si) {
 		INC_BA(baddr);
-		if (baddr == faddr) {
-			operator_error(&h3270,KL_OERR_OVERFLOW);
+		if (baddr == faddr)
+		{
+			operator_error(hSession,KL_OERR_OVERFLOW);
 			return False;
 		}
 	}
 
 	/* Add the character. */
-	if (h3270.ea_buf[baddr].cc == EBC_so) {
+	if (hSession->ea_buf[baddr].cc == EBC_so) {
 
-		if (lib3270_get_toggle(&h3270,LIB3270_TOGGLE_INSERT)) {
-			if (!ins_prep(faddr, baddr, 1))
+		if (lib3270_get_toggle(hSession,LIB3270_TOGGLE_INSERT))
+		{
+			if (!ins_prep(hSession,faddr, baddr, 1))
 				return False;
-		} else {
+		}
+		else
+		{
 			Boolean was_si = False;
 
 			/*
@@ -808,18 +821,19 @@ static Boolean key_Character(int code, Boolean with_ge, Boolean pasting, Boolean
 			 */
 			xaddr = baddr;
 			INC_BA(xaddr);
-			was_si = (h3270.ea_buf[xaddr].cc == EBC_si);
-			ctlr_add(&h3270,xaddr, EBC_space, CS_BASE);
-			ctlr_add_fg(&h3270,xaddr, 0);
+			was_si = (hSession->ea_buf[xaddr].cc == EBC_si);
+			ctlr_add(hSession,xaddr, EBC_space, CS_BASE);
+			ctlr_add_fg(hSession,xaddr, 0);
 #if defined(X3270_ANSI) /*[*/
-			ctlr_add_bg(&h3270,xaddr, 0);
+			ctlr_add_bg(hSession,xaddr, 0);
 #endif /*]*/
-			if (!was_si) {
+			if (!was_si)
+			{
 				INC_BA(xaddr);
-				ctlr_add(&h3270,xaddr, EBC_so, CS_BASE);
-				ctlr_add_fg(&h3270,xaddr, 0);
+				ctlr_add(hSession,xaddr, EBC_so, CS_BASE);
+				ctlr_add_fg(hSession,xaddr, 0);
 #if defined(X3270_ANSI) /*[*/
-				ctlr_add_bg(&h3270,xaddr, 0);
+				ctlr_add_bg(hSession,xaddr, 0);
 #endif /*]*/
 			}
 		}
@@ -830,8 +844,8 @@ static Boolean key_Character(int code, Boolean with_ge, Boolean pasting, Boolean
 		/* fall through... */
 	case DBCS_LEFT:
 		if (why == DBCS_ATTRIBUTE) {
-			if (lib3270_get_toggle(&h3270,LIB3270_TOGGLE_INSERT)) {
-				if (!ins_prep(faddr, baddr, 1))
+			if (lib3270_get_toggle(hSession,LIB3270_TOGGLE_INSERT)) {
+				if (!ins_prep(hSession,faddr, baddr, 1))
 					return False;
 			} else {
 				/*
@@ -840,14 +854,15 @@ static Boolean key_Character(int code, Boolean with_ge, Boolean pasting, Boolean
 				 */
 				xaddr = baddr;
 				INC_BA(xaddr);
-				ctlr_add(&h3270,xaddr, EBC_space, CS_BASE);
-				ctlr_add_fg(&h3270,xaddr, 0);
-				ctlr_add_gr(&h3270,xaddr, 0);
+				ctlr_add(hSession,xaddr, EBC_space, CS_BASE);
+				ctlr_add_fg(hSession,xaddr, 0);
+				ctlr_add_gr(hSession,xaddr, 0);
 			}
 		} else {
 			Boolean was_si;
 
-			if (lib3270_get_toggle(&h3270,LIB3270_TOGGLE_INSERT)) {
+			if (lib3270_get_toggle(hSession,LIB3270_TOGGLE_INSERT))
+			{
 				/*
 				 * Inserting SBCS into a DBCS subfield.
 				 * If this is the first position, we
@@ -859,66 +874,69 @@ static Boolean key_Character(int code, Boolean with_ge, Boolean pasting, Boolean
 				 */
 				xaddr = baddr;
 				DEC_BA(xaddr);
-				if (h3270.ea_buf[xaddr].cc == EBC_so) {
+				if (hSession->ea_buf[xaddr].cc == EBC_so) {
 					DEC_BA(baddr);
-					if (!ins_prep(faddr, baddr, 1))
+					if (!ins_prep(hSession, faddr, baddr, 1))
 						return False;
 				} else {
-					if (!ins_prep(faddr, baddr, 3))
+					if (!ins_prep(hSession, faddr, baddr, 3))
 						return False;
 					xaddr = baddr;
-					ctlr_add(&h3270,xaddr, EBC_si,CS_BASE);
-					ctlr_add_fg(&h3270,xaddr, 0);
-					ctlr_add_gr(&h3270,xaddr, 0);
+					ctlr_add(hSession,xaddr, EBC_si,CS_BASE);
+					ctlr_add_fg(hSession,xaddr, 0);
+					ctlr_add_gr(hSession,xaddr, 0);
 					INC_BA(xaddr);
 					INC_BA(baddr);
 					INC_BA(xaddr);
-					ctlr_add(&h3270,xaddr, EBC_so,CS_BASE);
-					ctlr_add_fg(&h3270,xaddr, 0);
-					ctlr_add_gr(&h3270,xaddr, 0);
+					ctlr_add(hSession,xaddr, EBC_so,CS_BASE);
+					ctlr_add_fg(hSession,xaddr, 0);
+					ctlr_add_gr(hSession,xaddr, 0);
 				}
 			} else {
 				/* Overwriting part of a subfield. */
 				xaddr = baddr;
-				ctlr_add(&h3270,xaddr, EBC_si, CS_BASE);
-				ctlr_add_fg(&h3270,xaddr, 0);
-				ctlr_add_gr(&h3270,xaddr, 0);
+				ctlr_add(hSession,xaddr, EBC_si, CS_BASE);
+				ctlr_add_fg(hSession,xaddr, 0);
+				ctlr_add_gr(hSession,xaddr, 0);
 				INC_BA(xaddr);
 				INC_BA(baddr);
 				INC_BA(xaddr);
-				was_si = (h3270.ea_buf[xaddr].cc == EBC_si);
-				ctlr_add(&h3270,xaddr, EBC_space, CS_BASE);
-				ctlr_add_fg(&h3270,xaddr, 0);
-				ctlr_add_gr(&h3270,xaddr, 0);
-				if (!was_si) {
+				was_si = (hSession->ea_buf[xaddr].cc == EBC_si);
+				ctlr_add(hSession,xaddr, EBC_space, CS_BASE);
+				ctlr_add_fg(hSession,xaddr, 0);
+				ctlr_add_gr(hSession,xaddr, 0);
+				if (!was_si)
+				{
 					INC_BA(xaddr);
-					ctlr_add(&h3270,xaddr, EBC_so,CS_BASE);
-					ctlr_add_fg(&h3270,xaddr, 0);
-					ctlr_add_gr(&h3270,xaddr, 0);
+					ctlr_add(hSession,xaddr, EBC_so,CS_BASE);
+					ctlr_add_fg(hSession,xaddr, 0);
+					ctlr_add_gr(hSession,xaddr, 0);
 				}
 			}
 		}
 		break;
 	default:
 	case DBCS_NONE:
-		if (lib3270_get_toggle(&h3270,LIB3270_TOGGLE_INSERT) && !ins_prep(faddr, baddr, 1))
+		if (lib3270_get_toggle(hSession,LIB3270_TOGGLE_INSERT) && !ins_prep(hSession, faddr, baddr, 1))
 			return False;
 		break;
 	}
-	ctlr_add(&h3270,baddr, (unsigned char)code,(unsigned char)(with_ge ? CS_GE : 0));
-	ctlr_add_fg(&h3270,baddr, 0);
-	ctlr_add_gr(&h3270,baddr, 0);
+	ctlr_add(hSession,baddr, (unsigned char)code,(unsigned char)(with_ge ? CS_GE : 0));
+	ctlr_add_fg(hSession,baddr, 0);
+	ctlr_add_gr(hSession,baddr, 0);
 	INC_BA(baddr);
 
 	/* Replace leading nulls with blanks, if desired. */
-	if (h3270.formatted && lib3270_get_toggle(&h3270,LIB3270_TOGGLE_BLANK_FILL)) {
+	if (hSession->formatted && lib3270_get_toggle(hSession,LIB3270_TOGGLE_BLANK_FILL))
+	{
 		register int	baddr_fill = baddr;
 
 		DEC_BA(baddr_fill);
 		while (baddr_fill != faddr) {
 
 			/* Check for backward line wrap. */
-			if ((baddr_fill % h3270.cols) == h3270.cols - 1) {
+			if ((baddr_fill % hSession->cols) == hSession->cols - 1)
+			{
 				Boolean aborted = True;
 				register int baddr_scan = baddr_fill;
 
@@ -927,11 +945,12 @@ static Boolean key_Character(int code, Boolean with_ge, Boolean pasting, Boolean
 				 * for NULLs.
 				 */
 				while (baddr_scan != faddr) {
-					if (h3270.ea_buf[baddr_scan].cc != EBC_null) {
+					if (hSession->ea_buf[baddr_scan].cc != EBC_null)
+					{
 						aborted = False;
 						break;
 					}
-					if (!(baddr_scan % h3270.cols))
+					if (!(baddr_scan % hSession->cols))
 						break;
 					DEC_BA(baddr_scan);
 				}
@@ -939,63 +958,66 @@ static Boolean key_Character(int code, Boolean with_ge, Boolean pasting, Boolean
 					break;
 			}
 
-			if (h3270.ea_buf[baddr_fill].cc == EBC_null)
-				ctlr_add(&h3270,baddr_fill, EBC_space, 0);
+			if (hSession->ea_buf[baddr_fill].cc == EBC_null)
+				ctlr_add(hSession,baddr_fill, EBC_space, 0);
 			DEC_BA(baddr_fill);
 		}
 	}
 
-	mdt_set(&h3270,h3270.cursor_addr);
+	mdt_set(hSession,hSession->cursor_addr);
 
 	/*
 	 * Implement auto-skip, and don't land on attribute bytes.
 	 * This happens for all pasted data (even DUP), and for all
 	 * keyboard-generated data except DUP.
 	 */
-	if (pasting || (code != EBC_dup)) {
-		while (h3270.ea_buf[baddr].fa) {
+	if (pasting || (code != EBC_dup))
+	{
+		while (hSession->ea_buf[baddr].fa)
+		{
 			if (skipped != NULL)
 				*skipped = True;
-			if (FA_IS_SKIP(h3270.ea_buf[baddr].fa))
-				baddr = next_unprotected(&h3270,baddr);
+			if (FA_IS_SKIP(hSession->ea_buf[baddr].fa))
+				baddr = next_unprotected(hSession,baddr);
 			else
 				INC_BA(baddr);
 		}
-		cursor_move(&h3270,baddr);
+		cursor_move(hSession,baddr);
 	}
 
 	(void) ctlr_dbcs_postprocess();
 	return True;
 }
 
-/*
+/**
  * Handle an ordinary character key, given an ASCII code.
+ *
  */
-void key_ACharacter(unsigned char c, enum keytype keytype, enum iaction cause,Boolean *skipped)
+void key_ACharacter(H3270 *hSession, unsigned char c, enum keytype keytype, enum iaction cause,Boolean *skipped)
 {
 	if (skipped != NULL)
 		*skipped = False;
 
-	trace_event(" %s -> Key(\"%s\")\n",ia_name[(int) cause], ctl_see((int) c));
+	lib3270_trace_event(hSession," %s -> Key(\"%s\")\n",ia_name[(int) cause], ctl_see((int) c));
 
 	if (IN_3270)
 	{
 		if (c < ' ')
 		{
-			trace_event("  dropped (control char)\n");
+			lib3270_trace_event(hSession,"  dropped (control char)\n");
 			return;
 		}
-		(void) key_Character((int) asc2ebc[c], keytype == KT_GE, False, skipped);
+		(void) key_Character(hSession, (int) asc2ebc[c], keytype == KT_GE, False, skipped);
 	}
 #if defined(X3270_ANSI) /*[*/
 	else if (IN_ANSI)
 	{
-		net_sendc(&h3270,(char) c);
+		net_sendc(hSession,(char) c);
 	}
 #endif /*]*/
 	else
 	{
-		trace_event("  dropped (not connected)\n");
+		lib3270_trace_event(hSession,"  dropped (not connected)\n");
 	}
 }
 
@@ -1847,7 +1869,7 @@ LIB3270_ACTION( dup )
 	if (IN_ANSI)
 		return 0;
 #endif
-	if (key_Character(EBC_dup, False, False, NULL))
+	if (key_Character(hSession, EBC_dup, False, False, NULL))
 	{
 		hSession->display(hSession);
 		cursor_move(hSession,next_unprotected(hSession,hSession->cursor_addr));
@@ -1870,7 +1892,7 @@ LIB3270_ACTION( fieldmark )
 	if (IN_ANSI)
 		return 0 ;
 #endif
-	(void) key_Character(EBC_fm, False, False, NULL);
+	(void) key_Character(hSession, EBC_fm, False, False, NULL);
 
 	return 0;
 }
@@ -2511,8 +2533,7 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *session, char *s, int len, int p
 				break;
 			    case '\f':
 				if (pasting) {
-					key_ACharacter((unsigned char) ' ',
-					    KT_STD, ia, &skipped);
+					key_ACharacter(session,(unsigned char) ' ',KT_STD, ia, &skipped);
 				} else {
 					lib3270_clear(session);
 					skipped = False;
@@ -2544,18 +2565,17 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *session, char *s, int len, int p
 				if (!pasting)
 					state = BACKSLASH;
 				else
-					key_ACharacter((unsigned char) c,
-					    KT_STD, ia, &skipped);
+					key_ACharacter(session,(unsigned char) c,KT_STD, ia, &skipped);
 				break;
 			    case '\033': /* ESC is special only when pasting */
 				if (pasting)
 					state = XGE;
 				break;
 			    case '[':	/* APL left bracket */
-					key_ACharacter((unsigned char) c, KT_STD, ia, &skipped);
+					key_ACharacter(session,(unsigned char) c, KT_STD, ia, &skipped);
 				break;
 			    case ']':	/* APL right bracket */
-					key_ACharacter((unsigned char) c, KT_STD, ia, &skipped);
+					key_ACharacter(session,(unsigned char) c, KT_STD, ia, &skipped);
 				break;
 			default:
 /*
@@ -2577,14 +2597,14 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *session, char *s, int len, int p
 					break;
 				}
 #endif */
-				key_ACharacter((unsigned char) c, KT_STD, ia, &skipped);
+				key_ACharacter(session,(unsigned char) c, KT_STD, ia, &skipped);
 				break;
 			}
 			break;
 		    case BACKSLASH:	/* last character was a backslash */
 			switch (c) {
 			    case 'a':
-				popup_an_error(NULL,"%s: Bell not supported",action_name(String_action));
+				popup_an_error(session,"%s: Bell not supported",action_name(String_action));
 //				cancel_if_idle_command();
 				state = BASE;
 				break;
@@ -2640,7 +2660,7 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *session, char *s, int len, int p
 				state = BACKX;
 				break;
 			    case '\\':
-				key_ACharacter((unsigned char) c, KT_STD, ia,&skipped);
+				key_ACharacter(session,(unsigned char) c, KT_STD, ia,&skipped);
 				state = BASE;
 				break;
 			    case '0':
@@ -2723,8 +2743,7 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *session, char *s, int len, int p
 				nc = 0;
 				continue;
 			} else {
-				popup_an_error(NULL,"%s: Missing hex digits after \\x",
-				    action_name(String_action));
+				popup_an_error(session,_( "%s: Missing hex digits after \\x" ),action_name(String_action));
 //				cancel_if_idle_command();
 				state = BASE;
 				continue;
@@ -2735,8 +2754,7 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *session, char *s, int len, int p
 				nc++;
 				break;
 			} else {
-				key_ACharacter((unsigned char) literal, KT_STD,
-				    ia, &skipped);
+				key_ACharacter(session,(unsigned char) literal, KT_STD,ia, &skipped);
 				state = BASE;
 				continue;
 			}
@@ -2746,22 +2764,20 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *session, char *s, int len, int p
 				nc++;
 				break;
 			} else {
-				key_ACharacter((unsigned char) literal, KT_STD,
-				    ia, &skipped);
+				key_ACharacter(session,(unsigned char) literal, KT_STD, ia, &skipped);
 				state = BASE;
 				continue;
 			}
 		    case XGE:	/* have seen ESC */
 			switch (c) {
 			    case ';':	/* FM */
-				key_Character(EBC_fm, False, True, &skipped);
+				key_Character(session, EBC_fm, False, True, &skipped);
 				break;
 			    case '*':	/* DUP */
-				key_Character(EBC_dup, False, True, &skipped);
+				key_Character(session, EBC_dup, False, True, &skipped);
 				break;
 			    default:
-				key_ACharacter((unsigned char) c, KT_GE, ia,
-						&skipped);
+				key_ACharacter(session,(unsigned char) c, KT_GE, ia,&skipped);
 				break;
 			}
 			state = BASE;
@@ -2773,18 +2789,18 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *session, char *s, int len, int p
 
 	switch (state) {
 	    case BASE:
-		if (lib3270_get_toggle(&h3270,LIB3270_TOGGLE_MARGINED_PASTE) &&
+		if (lib3270_get_toggle(session,LIB3270_TOGGLE_MARGINED_PASTE) &&
 		    BA_TO_COL(session->cursor_addr) < orig_col) {
-			(void) remargin(&h3270,orig_col);
+			(void) remargin(session,orig_col);
 		}
 		break;
 	    case OCTAL:
 	    case HEX:
-		key_ACharacter((unsigned char) literal, KT_STD, ia, &skipped);
+		key_ACharacter(session,(unsigned char) literal, KT_STD, ia, &skipped);
 		state = BASE;
-		if (lib3270_get_toggle(&h3270,LIB3270_TOGGLE_MARGINED_PASTE) &&
+		if (lib3270_get_toggle(session,LIB3270_TOGGLE_MARGINED_PASTE) &&
 		    BA_TO_COL(session->cursor_addr) < orig_col) {
-			(void) remargin(&h3270,orig_col);
+			(void) remargin(session,orig_col);
 		}
 		break;
 	    case BACKPF:
