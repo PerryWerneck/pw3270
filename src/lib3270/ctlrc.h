@@ -54,7 +54,7 @@ LIB3270_INTERNAL void ctlr_clear(H3270 *hSession, Boolean can_snap);
 LIB3270_INTERNAL void ctlr_erase_all_unprotected(H3270 *hSession);
 LIB3270_INTERNAL void ctlr_init(H3270 *session, unsigned cmask);
 LIB3270_INTERNAL void ctlr_read_buffer(H3270 *session, unsigned char aid_byte);
-LIB3270_INTERNAL void ctlr_read_modified(unsigned char aid_byte, Boolean all);
+LIB3270_INTERNAL void ctlr_read_modified(H3270 *hSession, unsigned char aid_byte, Boolean all);
 LIB3270_INTERNAL void ctlr_reinit(H3270 *session, unsigned cmask);
 LIB3270_INTERNAL void ctlr_scroll(H3270 *hSession);
 // LIB3270_INTERNAL void ctlr_shrink(void);

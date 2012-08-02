@@ -1312,11 +1312,10 @@ ansi_reverse_index(H3270 *hSession, int ig1 unused, int ig2 unused)
 	return DATA;
 }
 
-static enum lib3270_ansi_state
-ansi_send_attributes(H3270 *hSession, int nn, int ig2 unused)
+static enum lib3270_ansi_state ansi_send_attributes(H3270 *hSession, int nn, int ig2 unused)
 {
 	if (!nn)
-		net_sends("\033[?1;2c");
+		net_sends(hSession,"\033[?1;2c");
 	return DATA;
 }
 
@@ -1361,14 +1360,15 @@ ansi_status_report(H3270 *hSession, int nn, int ig2 unused)
 {
 	static char cpr[11];
 
-	switch (nn) {
-	    case 5:
-		net_sends("\033[0n");
+	switch (nn)
+	{
+	case 5:
+		net_sends(hSession,"\033[0n");
 		break;
-	    case 6:
-		(void) sprintf(cpr, "\033[%d;%dR",
-		    (hSession->cursor_addr/hSession->cols) + 1, (hSession->cursor_addr%hSession->cols) + 1);
-		net_sends(cpr);
+
+	case 6:
+		(void) sprintf(cpr, "\033[%d;%dR",(hSession->cursor_addr/hSession->cols) + 1, (hSession->cursor_addr%hSession->cols) + 1);
+		net_sends(hSession,cpr);
 		break;
 	}
 	return DATA;
@@ -1771,48 +1771,48 @@ void
 ansi_send_up(H3270 *hSession)
 {
 	if (hSession->appl_cursor)
-		net_sends("\033OA");
+		net_sends(hSession,"\033OA");
 	else
-		net_sends("\033[A");
+		net_sends(hSession,"\033[A");
 }
 
 void
 ansi_send_down(H3270 *hSession)
 {
 	if (hSession->appl_cursor)
-		net_sends("\033OB");
+		net_sends(hSession,"\033OB");
 	else
-		net_sends("\033[B");
+		net_sends(hSession,"\033[B");
 }
 
 void
 ansi_send_right(H3270 *hSession)
 {
 	if (hSession->appl_cursor)
-		net_sends("\033OC");
+		net_sends(hSession,"\033OC");
 	else
-		net_sends("\033[C");
+		net_sends(hSession,"\033[C");
 }
 
 void
 ansi_send_left(H3270 *hSession)
 {
 	if (hSession->appl_cursor)
-		net_sends("\033OD");
+		net_sends(hSession,"\033OD");
 	else
-		net_sends("\033[D");
+		net_sends(hSession,"\033[D");
 }
 
 void
 ansi_send_home(H3270 *hSession)
 {
-	net_sends("\033[H");
+	net_sends(hSession,"\033[H");
 }
 
 void
 ansi_send_clear(H3270 *hSession)
 {
-	net_sends("\033[2K");
+	net_sends(hSession,"\033[2K");
 }
 
 void
@@ -1838,7 +1838,7 @@ ansi_send_pf(H3270 *hSession, int nn)
 	if (nn < 1 || nn > sizeof(code)/sizeof(code[0]))
 		return;
 	(void) sprintf(fn_buf, "\033[%d~", code[nn-1]);
-	net_sends(fn_buf);
+	net_sends(hSession,fn_buf);
 }
 
 void
@@ -1850,7 +1850,7 @@ ansi_send_pa(H3270 *hSession, int nn)
 	if (nn < 1 || nn > 4)
 		return;
 	(void) sprintf(fn_buf, "\033O%c", code[nn-1]);
-	net_sends(fn_buf);
+	net_sends(hSession,fn_buf);
 }
 
 void toggle_lineWrap(H3270 *hSession, struct lib3270_toggle *t unused, LIB3270_TOGGLE_TYPE type unused)

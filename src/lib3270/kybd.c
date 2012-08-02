@@ -502,7 +502,7 @@ static void key_AID(H3270 *hSession, unsigned char aid_code)
 		trace("aid_code: %02x IN_ANSI: %d",aid_code,IN_ANSI);
 
 		if (aid_code == AID_ENTER) {
-			net_sendc('\r');
+			net_sendc(hSession, '\r');
 			return;
 		}
 		for (i = 0; i < PF_SZ; i++)
@@ -551,7 +551,7 @@ static void key_AID(H3270 *hSession, unsigned char aid_code)
 		kybdlock_set(hSession,KL_OIA_TWAIT | KL_OIA_LOCKED);
 	}
 	hSession->aid = aid_code;
-	ctlr_read_modified(hSession->aid, False);
+	ctlr_read_modified(hSession, hSession->aid, False);
 	ticking_start(hSession,False);
 	status_ctlr_done(hSession);
 }
@@ -990,7 +990,7 @@ void key_ACharacter(unsigned char c, enum keytype keytype, enum iaction cause,Bo
 #if defined(X3270_ANSI) /*[*/
 	else if (IN_ANSI)
 	{
-		net_sendc((char) c);
+		net_sendc(&h3270,(char) c);
 	}
 #endif /*]*/
 	else
@@ -1017,8 +1017,9 @@ LIB3270_ACTION( nextfield )
 		}
 	}
 #if defined(X3270_ANSI) /*[*/
-	if (IN_ANSI) {
-		net_sendc('\t');
+	if (IN_ANSI)
+	{
+		net_sendc(hSession,'\t');
 		return 0;
 	}
 #endif /*]*/
@@ -1344,8 +1345,9 @@ LIB3270_ACTION( delete )
 		return 0;
 	}
 #if defined(X3270_ANSI) /*[*/
-	if (IN_ANSI) {
-		net_sendc('\177');
+	if (IN_ANSI)
+	{
+		net_sendc(hSession,'\177');
 		return 0;
 	}
 #endif /*]*/
@@ -1376,7 +1378,7 @@ LIB3270_ACTION( backspace )
 	}
 #if defined(X3270_ANSI) /*[*/
 	if (IN_ANSI) {
-		net_send_erase();
+		net_send_erase(hSession);
 		return 0;
 	}
 #endif /*]*/
@@ -1472,7 +1474,7 @@ LIB3270_ACTION( erase )
 #if defined(X3270_ANSI) /*[*/
 	if (IN_ANSI)
 	{
-		net_send_erase();
+		net_send_erase(hSession);
 		return 0;
 	}
 #endif /*]*/
@@ -1798,7 +1800,7 @@ LIB3270_CURSOR_ACTION( newline )
 #if defined(X3270_ANSI) /*[*/
 	if (IN_ANSI)
 	{
-		net_sendc('\n');
+		net_sendc(hSession,'\n');
 		return 0;
 	}
 #endif /*]*/
@@ -2125,7 +2127,7 @@ LIB3270_ACTION( deleteword )
 	}
 #if defined(X3270_ANSI) /*[*/
 	if (IN_ANSI) {
-		net_send_werase();
+		net_send_werase(hSession);
 		return 0;
 	}
 #endif /*]*/
@@ -2193,7 +2195,7 @@ LIB3270_ACTION( deletefield )
 	}
 #if defined(X3270_ANSI) /*[*/
 	if (IN_ANSI) {
-		net_send_kill();
+		net_send_kill(hSession);
 		return 0;
 	}
 #endif /*]*/

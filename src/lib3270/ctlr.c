@@ -353,53 +353,6 @@ unsigned char get_field_attribute(H3270 *h, int baddr)
 }
 
 /*
- * Find the field attribute for the given buffer address, bounded by another
- * buffer address.  Return the attribute in a parameter.
- *
- * Returns True if an attribute is found, False if boundary hit.
- */ /*
-Boolean
-get_bounded_field_attribute(register int baddr, register int bound,
-    unsigned char *fa_out)
-{
-	int	sbaddr;
-
-	if (!h3270.formatted) {
-		*fa_out = h3270.ea_buf[-1].fa;
-		return True;
-	}
-
-	sbaddr = baddr;
-	do {
-		if (h3270.ea_buf[baddr].fa) {
-			*fa_out = h3270.ea_buf[baddr].fa;
-			return True;
-		}
-		DEC_BA(baddr);
-	} while (baddr != sbaddr && baddr != bound);
-
-	// Screen is unformatted (and 'formatted' is inaccurate).
-	if (baddr == sbaddr) {
-		*fa_out = h3270.ea_buf[-1].fa;
-		return True;
-	}
-
-	// Wrapped to boundary.
-	return False;
-} */
-
-/*
- * Given the address of a field attribute, return the address of the
- * extended attribute structure.
- */ /*
-struct ea *
-fa2ea(int baddr)
-{
-	return &h3270.ea_buf[baddr];
-}
-*/
-
-/*
  * Find the next unprotected field.  Returns the address following the
  * unprotected attribute byte, or 0 if no nonzero-width unprotected field
  * can be found.
@@ -517,14 +470,14 @@ enum pds process_ds(H3270 *hSession, unsigned char *buf, int buflen)
 	case CMD_RM:	/* read modifed */
 	case SNA_CMD_RM:
 		trace_ds(hSession,"ReadModified\n");
-		ctlr_read_modified(hSession->aid, False);
+		ctlr_read_modified(hSession, hSession->aid, False);
 		return PDS_OKAY_OUTPUT;
 		break;
 
 	case CMD_RMA:	/* read modifed all */
 	case SNA_CMD_RMA:
 		trace_ds(hSession,"ReadModifiedAll\n");
-		ctlr_read_modified(hSession->aid, True);
+		ctlr_read_modified(hSession, hSession->aid, True);
 		return PDS_OKAY_OUTPUT;
 		break;
 
@@ -609,12 +562,10 @@ static void insert_sa(H3270 *hSession, int baddr, unsigned char *current_fgp, un
 }
 
 
-/*
- * Process a 3270 Read-Modified command and transmit the data back to the
- * host.
+/**
+ * Process a 3270 Read-Modified command and transmit the data back to the host.
  */
-void
-ctlr_read_modified(unsigned char aid_byte, Boolean all)
+void ctlr_read_modified(H3270 *hSession, unsigned char aid_byte, Boolean all)
 {
 	register int	baddr, sbaddr;
 	Boolean		send_data = True;

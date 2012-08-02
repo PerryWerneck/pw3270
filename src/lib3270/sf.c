@@ -357,7 +357,7 @@ sf_read_part(unsigned char buf[], unsigned buflen)
 			return PDS_BAD_CMD;
 		}
 		trace_ds(&h3270,"\n");
-		ctlr_read_modified(AID_QREPLY, True);
+		ctlr_read_modified(&h3270, AID_QREPLY, True);
 		break;
 	    case SNA_CMD_RB:
 		trace_ds(&h3270," ReadBuffer");
@@ -375,7 +375,7 @@ sf_read_part(unsigned char buf[], unsigned buflen)
 			return PDS_BAD_CMD;
 		}
 		trace_ds(&h3270,"\n");
-		ctlr_read_modified(AID_QREPLY, False);
+		ctlr_read_modified(&h3270, AID_QREPLY, False);
 		break;
 	    default:
 		trace_ds(&h3270," unknown type 0x%02x\n", buf[4]);

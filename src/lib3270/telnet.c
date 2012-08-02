@@ -2850,8 +2850,9 @@ static void tn3270e_nak(H3270 *hSession, enum pds rv)
 	net_rawout(hSession, rsp_buf, rsp_len);
 }
 
-#if defined(X3270_TRACE) /*[*/
-/* Add a dummy TN3270E header to the output buffer. */
+/*
+#if defined(X3270_TRACE)
+// Add a dummy TN3270E header to the output buffer.
 Boolean
 net_add_dummy_tn3270e(void)
 {
@@ -2883,7 +2884,8 @@ net_add_dummy_tn3270e(void)
 	h3270.obptr += EH_SIZE;
 	return True;
 }
-#endif /*]*/
+#endif
+*/
 #endif /*]*/
 
 #if defined(X3270_TRACE) /*[*/
@@ -2900,94 +2902,66 @@ net_add_eor(unsigned char *buf, int len)
 
 
 #if defined(X3270_ANSI) /*[*/
-/*
- * net_sendc
- *	Send a character of user data over the network in ANSI mode.
+/**
+ * Send a character of user data over the network in ANSI mode.
+ *
+ * @param hSession	Session handle.
+ * @param c			Character to send.
+ *
  */
 void
-net_sendc(char c)
+net_sendc(H3270 *hSession, char c)
 {
-	if (c == '\r' && !h3270.linemode
-/*
-#if defined(LOCAL_PROCESS)
-				   && !local_process
-#endif
-*/
-						    ) {
+	if (c == '\r' && !hSession->linemode)
+	{
 		/* CR must be quoted */
-		net_cookout(&h3270,"\r\0", 2);
-	} else {
-		net_cookout(&h3270,&c, 1);
+		net_cookout(hSession,"\r\0", 2);
+	}
+	else
+	{
+		net_cookout(hSession,&c, 1);
 	}
 }
 
-
-/*
- * net_sends
- *	Send a null-terminated string of user data in ANSI mode.
+/**
+ * Send a null-terminated string of user data in ANSI mode.
+ *
+ * @param hSession	Session handle.
+ * @param s			String to send.
  */
-void
-net_sends(const char *s)
+void net_sends(H3270 *hSession,const char *s)
 {
-	net_cookout(&h3270, s, strlen(s));
+	net_cookout(hSession, s, strlen(s));
 }
 
-
-/*
- * net_send_erase
+/**
+ * Sends the ERASE character in ANSI mode.
+ *
+ */
+void net_send_erase(H3270 *hSession)
+{
+	net_cookout(hSession, &verase, 1);
+}
+
+/**
  *	Sends the KILL character in ANSI mode.
  */
-void
-net_send_erase(void)
+void net_send_kill(H3270 *hSession)
 {
-	net_cookout(&h3270, &verase, 1);
+	net_cookout(hSession, &vkill, 1);
 }
 
-
-/*
- * net_send_kill
- *	Sends the KILL character in ANSI mode.
+/**
+ * Sends the WERASE character in ANSI mode.
  */
-void
-net_send_kill(void)
+void net_send_werase(H3270 *hSession)
 {
-	net_cookout(&h3270, &vkill, 1);
-}
-
-
-/*
- * net_send_werase
- *	Sends the WERASE character in ANSI mode.
- */
-void
-net_send_werase(void)
-{
-	net_cookout(&h3270, &vwerase, 1);
+	net_cookout(hSession, &vwerase, 1);
 }
 #endif /*]*/
 
-
-#if defined(X3270_MENUS) /*[*/
 /*
- * External entry points to negotiate line or character mode.
- */ /*
-void
-net_linemode(void)
-{
-	if (!CONNECTED)
-		return;
-	if (hisopts[TELOPT_ECHO]) {
-		dont_opt[2] = TELOPT_ECHO;
-		net_rawout(dont_opt, sizeof(dont_opt));
-		trace_dsn(&h3270,"SENT %s %s\n", cmd(DONT), opt(TELOPT_ECHO));
-	}
-	if (hisopts[TELOPT_SGA]) {
-		dont_opt[2] = TELOPT_SGA;
-		net_rawout(dont_opt, sizeof(dont_opt));
-		trace_dsn(&h3270,"SENT %s %s\n", cmd(DONT), opt(TELOPT_SGA));
-	}
-}
-*/
+#if defined(X3270_MENUS)
 
 void net_charmode(H3270 *hSession)
 {
@@ -3008,9 +2982,9 @@ void net_charmode(H3270 *hSession)
 		trace_dsn(hSession,"SENT %s %s\n", cmd(DO), opt(TELOPT_SGA));
 	}
 }
-#endif /*]*/
+#endif
+*/
 
-
 /*
  * net_break
  *	Send telnet break, which is used to implement 3270 ATTN.
@@ -3106,138 +3080,6 @@ parse_ctlchar(char *s)
 		return *s;
 }
 #endif /*]*/
-
-#if (defined(X3270_MENUS) || defined(C3270)) && defined(X3270_ANSI) /*[*/
-/*
- * net_linemode_chars
- *	Report line-mode characters.
- */ /*
-struct ctl_char *
-net_linemode_chars(void)
-{
-	static struct ctl_char c[9];
-
-	c[0].name = "intr";	(void) strcpy(c[0].value, ctl_see(vintr));
-	c[1].name = "quit";	(void) strcpy(c[1].value, ctl_see(vquit));
-	c[2].name = "erase";	(void) strcpy(c[2].value, ctl_see(verase));
-	c[3].name = "kill";	(void) strcpy(c[3].value, ctl_see(vkill));
-	c[4].name = "eof";	(void) strcpy(c[4].value, ctl_see(veof));
-	c[5].name = "werase";	(void) strcpy(c[5].value, ctl_see(vwerase));
-	c[6].name = "rprnt";	(void) strcpy(c[6].value, ctl_see(vrprnt));
-	c[7].name = "lnext";	(void) strcpy(c[7].value, ctl_see(vlnext));
-	c[8].name = 0;
-
-	return c;
-} */
-#endif /*]*/
-
-#if defined(X3270_TRACE) /*[*/
-/*
- * Construct a string to reproduce the current TELNET options.
- * Returns a Boolean indicating whether it is necessary.
- */ /*
-Boolean
-net_snap_options(void)
-{
-	Boolean any = False;
-	int i;
-	static unsigned char ttype_str[] = {
-		IAC, DO, TELOPT_TTYPE,
-		IAC, SB, TELOPT_TTYPE, TELQUAL_SEND, IAC, SE
-	};
-
-	if (!CONNECTED)
-		return False;
-
-	h3270.obptr = h3270.obuf;
-
-	// Do TTYPE first.
-	if (h3270.myopts[TELOPT_TTYPE]) {
-		unsigned j;
-
-		space3270out(sizeof(ttype_str));
-		for (j = 0; j < sizeof(ttype_str); j++)
-			*h3270.obptr++ = ttype_str[j];
-	}
-
-	// Do the other options.
-	for (i = 0; i < LIB3270_TELNET_N_OPTS; i++) {
-		space3270out(6);
-		if (i == TELOPT_TTYPE)
-			continue;
-		if (h3270.hisopts[i]) {
-			*h3270.obptr++ = IAC;
-			*h3270.obptr++ = WILL;
-			*h3270.obptr++ = (unsigned char)i;
-			any = True;
-		}
-		if (h3270.myopts[i]) {
-			*h3270.obptr++ = IAC;
-			*h3270.obptr++ = DO;
-			*h3270.obptr++ = (unsigned char)i;
-			any = True;
-		}
-	}
-
-#if defined(X3270_TN3270E)
-	// If we're in TN3270E mode, snap the subnegotations as well.
-	if (h3270.myopts[TELOPT_TN3270E]) {
-		any = True;
-
-		space3270out(5 +
-			((h3270.connected_type != CN) ? strlen(h3270.connected_type) : 0) +
-			((h3270.connected_lu != CN) ? + strlen(h3270.connected_lu) : 0) +
-			2);
-		*h3270.obptr++ = IAC;
-		*h3270.obptr++ = SB;
-		*h3270.obptr++ = TELOPT_TN3270E;
-		*h3270.obptr++ = TN3270E_OP_DEVICE_TYPE;
-		*h3270.obptr++ = TN3270E_OP_IS;
-		if (h3270.connected_type != CN) {
-			(void) memcpy(h3270.obptr, h3270.connected_type,strlen(h3270.connected_type));
-			h3270.obptr += strlen(h3270.connected_type);
-		}
-		if (h3270.connected_lu != CN) {
-			*h3270.obptr++ = TN3270E_OP_CONNECT;
-			(void) memcpy(h3270.obptr, h3270.connected_lu,strlen(h3270.connected_lu));
-			h3270.obptr += strlen(h3270.connected_lu);
-		}
-		*h3270.obptr++ = IAC;
-		*h3270.obptr++ = SE;
-
-		space3270out(38);
-		(void) memcpy(h3270.obptr, functions_req, 4);
-		h3270.obptr += 4;
-		*h3270.obptr++ = TN3270E_OP_IS;
-		for (i = 0; i < 32; i++) {
-			if (h3270.e_funcs & E_OPT(i))
-				*h3270.obptr++ = i;
-		}
-		*h3270.obptr++ = IAC;
-		*h3270.obptr++ = SE;
-
-		if (h3270.tn3270e_bound) {
-			tn3270e_header *h;
-
-			space3270out(EH_SIZE + 3);
-			h = (tn3270e_header *)h3270.obptr;
-			h->data_type = TN3270E_DT_BIND_IMAGE;
-			h->request_flag = 0;
-			h->response_flag = 0;
-			h->seq_number[0] = 0;
-			h->seq_number[1] = 0;
-			h3270.obptr += EH_SIZE;
-			*h3270.obptr++ = 1; // dummy
-			*h3270.obptr++ = IAC;
-			*h3270.obptr++ = EOR;
-		}
-	}
-#endif
-	return any;
-}
-*/
-#endif
-
 
 /*
  * Set blocking/non-blocking mode on the socket.  On error, pops up an error
