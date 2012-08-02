@@ -387,21 +387,25 @@ sf_read_part(unsigned char buf[], unsigned buflen)
 static enum pds
 sf_erase_reset(unsigned char buf[], int buflen)
 {
-	if (buflen != 4) {
+	if (buflen != 4)
+	{
 		trace_ds(&h3270," error: wrong field length %d\n", buflen);
 		return PDS_BAD_CMD;
 	}
 
-	switch (buf[3]) {
-	    case SF_ER_DEFAULT:
+	switch (buf[3])
+	{
+	case SF_ER_DEFAULT:
 		trace_ds(&h3270," Default\n");
-		ctlr_erase(NULL,False);
+		ctlr_erase(&h3270,False);
 		break;
-	    case SF_ER_ALT:
+
+	case SF_ER_ALT:
 		trace_ds(&h3270," Alternate\n");
-		ctlr_erase(NULL,True);
+		ctlr_erase(&h3270,True);
 		break;
-	    default:
+
+	default:
 		trace_ds(&h3270," unknown type 0x%02x\n", buf[3]);
 		return PDS_BAD_CMD;
 	}
@@ -613,7 +617,7 @@ sf_outbound_ds(unsigned char buf[], int buflen)
 	    case SNA_CMD_W:
 		trace_ds(&h3270," Write");
 		if (buflen > 5) {
-			if ((rv = ctlr_write(&buf[4], buflen-4, False)) < 0)
+			if ((rv = ctlr_write(&h3270,&buf[4], buflen-4, False)) < 0)
 				return rv;
 		} else
 			trace_ds(&h3270,"\n");
@@ -622,7 +626,7 @@ sf_outbound_ds(unsigned char buf[], int buflen)
 		trace_ds(&h3270," EraseWrite");
 		ctlr_erase(&h3270,h3270.screen_alt);
 		if (buflen > 5) {
-			if ((rv = ctlr_write(&buf[4], buflen-4, True)) < 0)
+			if ((rv = ctlr_write(&h3270,&buf[4], buflen-4, True)) < 0)
 				return rv;
 		} else
 			trace_ds(&h3270,"\n");
@@ -631,7 +635,7 @@ sf_outbound_ds(unsigned char buf[], int buflen)
 		trace_ds(&h3270," EraseWriteAlternate");
 		ctlr_erase(&h3270,h3270.screen_alt);
 		if (buflen > 5) {
-			if ((rv = ctlr_write(&buf[4], buflen-4, True)) < 0)
+			if ((rv = ctlr_write(&h3270,&buf[4], buflen-4, True)) < 0)
 				return rv;
 		} else
 			trace_ds(&h3270,"\n");

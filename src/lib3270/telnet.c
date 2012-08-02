@@ -1241,7 +1241,7 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 			host_in3270(session,CONNECTED_ANSI);
 			lib3270_kybdlock_clear(session,KL_AWAITING_FIRST);
 			status_reset(session);
-			ps_process();
+			ps_process(session);
 		}
 		if (IN_ANSI && !IN_E) {
 #if defined(X3270_ANSI) /*[*/
@@ -3213,9 +3213,9 @@ static void ssl_info_callback(INFO_CONST SSL *s, int where, int ret)
 
 			if(e != 0)
 			{
-				if(e == h3270.last_ssl_error)
+				if(e == hSession->last_ssl_error)
 					return;
-				h3270.last_ssl_error = e;
+				hSession->last_ssl_error = e;
 				(void) ERR_error_string_n(e, err_buf, 1023);
 			}
 #if defined(_WIN32)

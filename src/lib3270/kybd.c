@@ -467,7 +467,7 @@ void kybd_in3270(H3270 *session, int in3270 unused, void *dunno)
 
 	/* There might be a macro pending. */
 	if (CONNECTED)
-		ps_process();
+		ps_process(session);
 }
 
 /*
@@ -945,7 +945,7 @@ static Boolean key_Character(int code, Boolean with_ge, Boolean pasting, Boolean
 		}
 	}
 
-	mdt_set(h3270.cursor_addr);
+	mdt_set(&h3270,h3270.cursor_addr);
 
 	/*
 	 * Implement auto-skip, and don't land on attribute bytes.
@@ -1101,7 +1101,7 @@ static void defer_unlock(H3270 *session)
 	lib3270_kybdlock_clear(session,KL_DEFERRED_UNLOCK);
 	status_reset(session);
 	if(CONNECTED)
-		ps_process();
+		ps_process(session);
 }
 
 /*
@@ -1257,12 +1257,14 @@ LIB3270_CURSOR_ACTION( left )
 }
 
 
-/*
+/**
  * Delete char key.
- * Returns "True" if succeeds, "False" otherwise.
+ *
+ * @param hSession	Session handle
+ *
+ * @Return "True" if succeeds, "False" otherwise.
  */
-static Boolean
-do_delete(void)
+static Boolean do_delete(H3270 *hSession)
 {
 	register int	baddr, end_baddr;
 	int xaddr;
@@ -1270,67 +1272,81 @@ do_delete(void)
 	int ndel;
 	register int i;
 
-	baddr = h3270.cursor_addr;
+	baddr = hSession->cursor_addr;
 
 	/* Can't delete a field attribute. */
-	fa = get_field_attribute(&h3270,baddr);
-	if (FA_IS_PROTECTED(fa) || h3270.ea_buf[baddr].fa) {
-		operator_error(&h3270,KL_OERR_PROTECTED);
+	fa = get_field_attribute(hSession,baddr);
+	if (FA_IS_PROTECTED(fa) || hSession->ea_buf[baddr].fa)
+	{
+		operator_error(hSession,KL_OERR_PROTECTED);
 		return False;
 	}
-	if (h3270.ea_buf[baddr].cc == EBC_so || h3270.ea_buf[baddr].cc == EBC_si) {
+
+	if (hSession->ea_buf[baddr].cc == EBC_so || hSession->ea_buf[baddr].cc == EBC_si)
+	{
 		/*
 		 * Can't delete SO or SI, unless it's adjacent to its
 		 * opposite.
 		 */
 		xaddr = baddr;
 		INC_BA(xaddr);
-		if (h3270.ea_buf[xaddr].cc == SOSI(h3270.ea_buf[baddr].cc)) {
+		if (hSession->ea_buf[xaddr].cc == SOSI(hSession->ea_buf[baddr].cc))
+		{
 			ndel = 2;
-		} else {
-			operator_error(&h3270,KL_OERR_PROTECTED);
+		}
+		else
+		{
+			operator_error(hSession,KL_OERR_PROTECTED);
 			return False;
 		}
-	} else if (IS_DBCS(h3270.ea_buf[baddr].db)) {
-		if (IS_RIGHT(h3270.ea_buf[baddr].db))
+	}
+	else if (IS_DBCS(hSession->ea_buf[baddr].db))
+	{
+		if (IS_RIGHT(hSession->ea_buf[baddr].db))
 			DEC_BA(baddr);
 		ndel = 2;
-	} else
+	}
+	else
 		ndel = 1;
 
 	/* find next fa */
-	if (h3270.formatted) {
+	if (hSession->formatted)
+	{
 		end_baddr = baddr;
-		do {
+		do
+		{
 			INC_BA(end_baddr);
-			if (h3270.ea_buf[end_baddr].fa)
+			if (hSession->ea_buf[end_baddr].fa)
 				break;
 		} while (end_baddr != baddr);
 		DEC_BA(end_baddr);
-	} else {
-		if ((baddr % h3270.cols) == h3270.cols - ndel)
+	}
+	else
+	{
+		if ((baddr % hSession->cols) == hSession->cols - ndel)
 			return True;
-		end_baddr = baddr + (h3270.cols - (baddr % h3270.cols)) - 1;
+		end_baddr = baddr + (hSession->cols - (baddr % hSession->cols)) - 1;
 	}
 
 	/* Shift the remainder of the field left. */
-	if (end_baddr > baddr) {
-		ctlr_bcopy(baddr + ndel, baddr, end_baddr - (baddr + ndel) + 1,
-		    0);
-	} else if (end_baddr != baddr) {
+	if (end_baddr > baddr)
+	{
+		ctlr_bcopy(hSession,baddr + ndel, baddr, end_baddr - (baddr + ndel) + 1, 0);
+	}
+	else if (end_baddr != baddr)
+	{
 		/* XXX: Need to verify this. */
-		ctlr_bcopy(baddr + ndel, baddr,
-		    ((h3270.rows * h3270.cols) - 1) - (baddr + ndel) + 1, 0);
-		ctlr_bcopy(0, (h3270.rows * h3270.cols) - ndel, ndel, 0);
-		ctlr_bcopy(ndel, 0, end_baddr - ndel + 1, 0);
+		ctlr_bcopy(hSession,baddr + ndel, baddr,((hSession->rows * hSession->cols) - 1) - (baddr + ndel) + 1, 0);
+		ctlr_bcopy(hSession,0, (hSession->rows * hSession->cols) - ndel, ndel, 0);
+		ctlr_bcopy(hSession,ndel, 0, end_baddr - ndel + 1, 0);
 	}
 
 	/* NULL fill at the end. */
 	for (i = 0; i < ndel; i++)
-		ctlr_add(&h3270,end_baddr - i, EBC_null, 0);
+		ctlr_add(hSession,end_baddr - i, EBC_null, 0);
 
 	/* Set the MDT for this field. */
-	mdt_set(h3270.cursor_addr);
+	mdt_set(hSession,hSession->cursor_addr);
 
 	/* Patch up the DBCS state for display. */
 	(void) ctlr_dbcs_postprocess();
@@ -1351,7 +1367,7 @@ LIB3270_ACTION( delete )
 		return 0;
 	}
 #endif /*]*/
-	if (!do_delete())
+	if (!do_delete(hSession))
 		return 0;
 	if (hSession->reverse)
 	{
@@ -1383,7 +1399,7 @@ LIB3270_ACTION( backspace )
 	}
 #endif /*]*/
 	if (hSession->reverse)
-		(void) do_delete();
+		(void) do_delete(hSession);
 	else if (!hSession->flipped)
 		do_left(hSession);
 	else {
@@ -1446,7 +1462,7 @@ static void do_erase(H3270 *hSession)
 	/*
 	 * Try to delete this character.
 	 */
-	if (!do_delete())
+	if (!do_delete(hSession))
 		return;
 
 	/*
@@ -1458,7 +1474,7 @@ static void do_erase(H3270 *hSession)
 	if (hSession->ea_buf[baddr].cc == EBC_so && hSession->ea_buf[hSession->cursor_addr].cc == EBC_si)
 	{
 		cursor_move(hSession,baddr);
-		(void) do_delete();
+		(void) do_delete(hSession);
 	}
 	hSession->display(hSession);
 }
@@ -1595,19 +1611,19 @@ LIB3270_ACTION( previousword )
 
 
 /* Find the next unprotected word, or -1 */
-static int
-nu_word(int baddr)
+static int nu_word(H3270 *hSession, int baddr)
 {
 	int baddr0 = baddr;
 	unsigned char c;
 	Boolean prot;
 
-	prot = FA_IS_PROTECTED(get_field_attribute(&h3270,baddr));
+	prot = FA_IS_PROTECTED(get_field_attribute(hSession,baddr));
 
-	do {
-		c = h3270.ea_buf[baddr].cc;
-		if (h3270.ea_buf[baddr].fa)
-			prot = FA_IS_PROTECTED(h3270.ea_buf[baddr].fa);
+	do
+	{
+		c = hSession->ea_buf[baddr].cc;
+		if (hSession->ea_buf[baddr].fa)
+			prot = FA_IS_PROTECTED(hSession->ea_buf[baddr].fa);
 		else if (!prot && c != EBC_space && c != EBC_null)
 			return baddr;
 		INC_BA(baddr);
@@ -1666,7 +1682,7 @@ LIB3270_ACTION( nextword )
 	/* If not in an unprotected field, go to the next unprotected word. */
 	if (hSession->ea_buf[hSession->cursor_addr].fa ||
 	    FA_IS_PROTECTED(get_field_attribute(hSession,hSession->cursor_addr))) {
-		baddr = nu_word(hSession->cursor_addr);
+		baddr = nu_word(hSession,hSession->cursor_addr);
 		if (baddr != -1)
 			cursor_move(hSession,baddr);
 		return 0;
@@ -1689,7 +1705,7 @@ LIB3270_ACTION( nextword )
 				cursor_move(hSession,baddr);
 				return 0;
 			} else if (hSession->ea_buf[baddr].fa) {
-				baddr = nu_word(baddr);
+				baddr = nu_word(hSession,baddr);
 				if (baddr != -1)
 					cursor_move(hSession,baddr);
 				return 0;
@@ -1699,7 +1715,7 @@ LIB3270_ACTION( nextword )
 	}
 	/* Otherwise, go to the next unprotected word. */
 	else {
-		baddr = nu_word(hSession->cursor_addr);
+		baddr = nu_word(hSession,hSession->cursor_addr);
 		if (baddr != -1)
 			cursor_move(hSession,baddr);
 	}
@@ -1968,7 +1984,7 @@ LIB3270_ACTION( eraseeol )
 			INC_BA(baddr);
 		} while (!h3270.ea_buf[baddr].fa && BA_TO_COL(baddr) > 0);
 
-		mdt_set(h3270.cursor_addr);
+		mdt_set(hSession,hSession->cursor_addr);
 	}
 	else
 	{
@@ -2027,7 +2043,7 @@ LIB3270_ACTION( eraseeof )
 			ctlr_add(&h3270,baddr, EBC_null, 0);
 			INC_BA(baddr);
 		} while (!h3270.ea_buf[baddr].fa);
-		mdt_set(hSession->cursor_addr);
+		mdt_set(hSession,hSession->cursor_addr);
 	} else {	/* erase to end of screen */
 		do {
 			ctlr_add(&h3270,baddr, EBC_null, 0);
@@ -2078,7 +2094,7 @@ LIB3270_ACTION( eraseinput )
 		do {
 			fa = hSession->ea_buf[baddr].fa;
 			if (!FA_IS_PROTECTED(fa)) {
-				mdt_clear(baddr);
+				mdt_clear(hSession,baddr);
 				do {
 					INC_BA(baddr);
 					if (!f) {
@@ -2211,7 +2227,7 @@ LIB3270_ACTION( deletefield )
 	while (!hSession->ea_buf[baddr].fa)
 		DEC_BA(baddr);
 	INC_BA(baddr);
-	mdt_set(hSession->cursor_addr);
+	mdt_set(hSession,hSession->cursor_addr);
 	cursor_move(hSession,baddr);
 	while (!hSession->ea_buf[baddr].fa) {
 		ctlr_add(hSession,baddr, EBC_null, 0);

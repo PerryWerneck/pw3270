@@ -640,7 +640,7 @@ ansi_insert_chars(H3270 *hSession, int nn, int ig2 unused)
 	/* Move the surviving chars right */
 	ns = mc - nn;
 	if (ns)
-		ctlr_bcopy(hSession->cursor_addr, hSession->cursor_addr + nn, ns, 1);
+		ctlr_bcopy(hSession,hSession->cursor_addr, hSession->cursor_addr + nn, ns, 1);
 
 	/* Clear the middle of the line */
 	ctlr_aclear(hSession, hSession->cursor_addr, nn, 1);
@@ -769,7 +769,7 @@ ansi_insert_lines(H3270 *hSession, int nn, int ig2 unused)
 	/* Move the victims down */
 	ns = mr - nn;
 	if (ns)
-		ctlr_bcopy(rr * hSession->cols, (rr + nn) * hSession->cols, ns * hSession->cols, 1);
+		ctlr_bcopy(hSession,rr * hSession->cols, (rr + nn) * hSession->cols, ns * hSession->cols, 1);
 
 	/* Clear the middle of the screen */
 	ctlr_aclear(hSession, rr * hSession->cols, nn * hSession->cols, 1);
@@ -795,7 +795,7 @@ ansi_delete_lines(H3270 *hSession, int nn, int ig2 unused)
 	/* Move the surviving rows up */
 	ns = mr - nn;
 	if (ns)
-		ctlr_bcopy((rr + nn) * hSession->cols, rr * hSession->cols, ns * hSession->cols, 1);
+		ctlr_bcopy(hSession,(rr + nn) * hSession->cols, rr * hSession->cols, ns * hSession->cols, 1);
 
 	/* Clear the rest of the screen */
 	ctlr_aclear(hSession, (rr + ns) * hSession->cols, nn * hSession->cols, 1);
@@ -817,7 +817,7 @@ ansi_delete_chars(H3270 *hSession, int nn, int ig2 unused)
 	/* Move the surviving chars left */
 	ns = mc - nn;
 	if (ns)
-		ctlr_bcopy(hSession->cursor_addr + nn, hSession->cursor_addr, ns, 1);
+		ctlr_bcopy(hSession,hSession->cursor_addr + nn, hSession->cursor_addr, ns, 1);
 
 	/* Clear the end of the line */
 	ctlr_aclear(hSession, hSession->cursor_addr + ns, nn, 1);
@@ -1705,7 +1705,7 @@ static void ansi_scroll(H3270 *hSession)
 
 	/* Scroll all but the last line up */
 	if (hSession->scroll_bottom > hSession->scroll_top)
-		ctlr_bcopy(hSession->scroll_top * hSession->cols,
+		ctlr_bcopy(hSession,hSession->scroll_top * hSession->cols,
 		    (hSession->scroll_top - 1) * hSession->cols,
 		    (hSession->scroll_bottom - hSession->scroll_top) * hSession->cols,
 		    1);
