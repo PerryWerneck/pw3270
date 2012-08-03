@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-03 08:02-0300\n"
-"PO-Revision-Date: 2012-06-21 11:08-0300\n"
+"POT-Creation-Date: 2012-08-03 08:46-0300\n"
+"PO-Revision-Date: 2012-08-03 08:52-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português do Brasil <>\n"
 "Language: pt_BR\n"
@@ -21,7 +21,7 @@ msgstr ""
 #: kybd.c:2742
 #, c-format
 msgid "%s: Missing hex digits after \\x"
-msgstr "%s: Missing hex digits after \\x"
+msgstr "%s: Faltando dígitos hexadecimais após \\x"
 
 #: resolver.c:122
 #, c-format
@@ -146,9 +146,8 @@ msgid "Connection failed"
 msgstr "Conexão falhou"
 
 #: telnet.c:2086
-#, fuzzy
 msgid "Connection reset by peer"
-msgstr "Ação falhou"
+msgstr "Conexão foi cancelada pelo servidor"
 
 #: ui/00default.xml:116
 msgid "Copy"
@@ -200,7 +199,7 @@ msgstr "Nome da LU está em branco"
 
 #: host.c:267 host.c:394
 msgid "Empty hostname"
-msgstr "Nome do host em branco"
+msgstr "Nome do servidor em branco"
 
 #: host.c:447
 msgid "Empty port name"
@@ -268,11 +267,11 @@ msgstr "Host illegally added function(s)"
 
 #: telnet.c:1722
 msgid "Host rejected device type or request type"
-msgstr "Host rejected device type or request type"
+msgstr "Servidor rejeitou o tipo de dispositivo ou requisição"
 
 #: telnet.c:1735
 msgid "Host rejected resource(s)"
-msgstr "Host rejected resource(s)"
+msgstr "Servidor rejeitou recurso(s)"
 
 #: host.c:315 host.c:340 host.c:352 host.c:378 host.c:390 host.c:394
 #: host.c:447 host.c:462
@@ -413,13 +412,15 @@ msgid "SSL negotiation failed"
 msgstr "Negociação SSL falhou"
 
 #: telnet.c:2072
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "SSL_write:\n"
 "%s"
-msgstr "write(%s): %s"
+msgstr ""
+"SSL_write:\n"
+"%s"
 
-#: ui/00default.xml:101
+#: 00default.xml:101
 msgid "Save copy"
 msgstr "Salvar cópia"
 
@@ -593,9 +594,7 @@ msgstr ""
 #: telnet.c:573
 #, c-format
 msgid "Unknown passthru host: %s"
-msgstr ""
-"Servidor \"passthru\" desconhecido:\n"
-"%s"
+msgstr "Servidor \"passthru\" desconhecido: %s"
 
 #: telnet.c:602 resolver.c:147
 #, c-format
