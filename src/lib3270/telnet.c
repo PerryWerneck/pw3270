@@ -81,7 +81,7 @@
 // #include <stdarg.h>
 
 #include "tn3270e.h"
-#include <lib3270/3270ds.h>
+#include "3270ds.h"
 
 // #include "appres.h"
 
@@ -1001,7 +1001,7 @@ LIB3270_EXPORT void lib3270_data_recv(H3270 *hSession, size_t nr, const unsigned
 	{
 		if(telnet_fsm(hSession,*cp))
 		{
-			(void) ctlr_dbcs_postprocess();
+			(void) ctlr_dbcs_postprocess(hSession);
 			host_disconnect(hSession,True);
 			return;
 		}
@@ -1010,7 +1010,7 @@ LIB3270_EXPORT void lib3270_data_recv(H3270 *hSession, size_t nr, const unsigned
 #if defined(X3270_ANSI)
 	if (IN_ANSI)
 	{
-		(void) ctlr_dbcs_postprocess();
+		(void) ctlr_dbcs_postprocess(hSession);
 	}
 
 	if (hSession->ansi_data)
@@ -1135,7 +1135,7 @@ void net_input(H3270 *session)
 		{
 			if (telnet_fsm(session,*cp))
 			{
-				(void) ctlr_dbcs_postprocess();
+				(void) ctlr_dbcs_postprocess(hSession);
 				host_disconnect(session,True);
 				return;
 			}
@@ -1144,7 +1144,7 @@ void net_input(H3270 *session)
 #if defined(X3270_ANSI)
 		if (IN_ANSI)
 		{
-			(void) ctlr_dbcs_postprocess();
+			(void) ctlr_dbcs_postprocess(hSession);
 		}
 
 		if (session->ansi_data)

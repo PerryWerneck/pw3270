@@ -42,7 +42,7 @@
 #if defined(X3270_FT) /*[*/
 
 //#include "appres.h"
-#include <lib3270/3270ds.h>
+#include "3270ds.h"
 #include "ft_dft_ds.h"
 
 #include "actionsc.h"

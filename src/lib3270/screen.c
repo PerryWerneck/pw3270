@@ -38,7 +38,7 @@
 #include "globals.h"
 #include <signal.h>
 //#include "appres.h"
-#include <lib3270/3270ds.h>
+#include "3270ds.h"
 #include "resources.h"
 // #include "ctlr.h"
 

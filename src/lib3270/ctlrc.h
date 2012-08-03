@@ -91,9 +91,9 @@ enum dbcs_why { DBCS_FIELD, DBCS_SUBFIELD, DBCS_ATTRIBUTE };
 #if defined(X3270_DBCS) /*[*/
 	LIB3270_INTERNAL enum dbcs_state ctlr_dbcs_state(int baddr);
 	LIB3270_INTERNAL enum dbcs_state ctlr_lookleft_state(int baddr, enum dbcs_why *why);
-	LIB3270_INTERNAL int ctlr_dbcs_postprocess(void);
+	LIB3270_INTERNAL int ctlr_dbcs_postprocess(H3270 *hSession);
 #else /*][*/
 	#define ctlr_dbcs_state(b)		DBCS_NONE
 	#define ctlr_lookleft_state(b, w)	DBCS_NONE
-	#define ctlr_dbcs_postprocess()		0
+	#define ctlr_dbcs_postprocess(hSession)		0
 #endif /*]*/

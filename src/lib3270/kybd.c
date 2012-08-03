@@ -54,7 +54,7 @@ struct ta;
 // #include <X11/keysym.h>
 
 #include <fcntl.h>
-#include <lib3270/3270ds.h>
+#include "3270ds.h"
 // #include "appres.h"
 // #include "ctlr.h"
 #include "resources.h"
@@ -982,7 +982,7 @@ static Boolean key_Character(H3270 *hSession, int code, Boolean with_ge, Boolean
 		cursor_move(hSession,baddr);
 	}
 
-	(void) ctlr_dbcs_postprocess();
+	(void) ctlr_dbcs_postprocess(hSession);
 	return True;
 }
 
@@ -1367,7 +1367,7 @@ static Boolean do_delete(H3270 *hSession)
 	mdt_set(hSession,hSession->cursor_addr);
 
 	/* Patch up the DBCS state for display. */
-	(void) ctlr_dbcs_postprocess();
+	(void) ctlr_dbcs_postprocess(hSession);
 	return True;
 }
 
@@ -1650,22 +1650,30 @@ static int nu_word(H3270 *hSession, int baddr)
 	return -1;
 }
 
-/* Find the next word in this field, or -1 */
-static int
-nt_word(int baddr)
+/**
+ * Find the next word in this field
+ *
+ * @return Next word or -1
+ */
+static int nt_word(H3270 *hSession, int baddr)
 {
 	int baddr0 = baddr;
 	unsigned char c;
 	Boolean in_word = True;
 
-	do {
-		c = h3270.ea_buf[baddr].cc;
-		if (h3270.ea_buf[baddr].fa)
+	do
+	{
+		c = hSession->ea_buf[baddr].cc;
+
+		if (hSession->ea_buf[baddr].fa)
 			return -1;
-		if (in_word) {
+
+		if (in_word)
+		{
 			if (c == EBC_space || c == EBC_null)
 				in_word = False;
-		} else {
+		} else
+		{
 			if (c != EBC_space && c != EBC_null)
 				return baddr;
 		}
@@ -1707,7 +1715,7 @@ LIB3270_ACTION( nextword )
 	}
 
 	/* If there's another word in this field, go to it. */
-	baddr = nt_word(hSession->cursor_addr);
+	baddr = nt_word(hSession,hSession->cursor_addr);
 	if (baddr != -1) {
 		cursor_move(hSession,baddr);
 		return 0;
@@ -1985,22 +1993,22 @@ LIB3270_ACTION( eraseeol )
 		return 0;
 #endif /*]*/
 
-	baddr = h3270.cursor_addr;
-	fa = get_field_attribute(&h3270,baddr);
-	if (FA_IS_PROTECTED(fa) || h3270.ea_buf[baddr].fa)
+	baddr = hSession->cursor_addr;
+	fa = get_field_attribute(hSession,baddr);
+	if (FA_IS_PROTECTED(fa) || hSession->ea_buf[baddr].fa)
 	{
-		operator_error(&h3270,KL_OERR_PROTECTED);
+		operator_error(hSession,KL_OERR_PROTECTED);
 		return -1;
 	}
 
-	if (h3270.formatted)
+	if (hSession->formatted)
 	{
 		/* erase to next field attribute or current line */
 		do
 		{
-			ctlr_add(&h3270,baddr, EBC_null, 0);
+			ctlr_add(hSession,baddr, EBC_null, 0);
 			INC_BA(baddr);
-		} while (!h3270.ea_buf[baddr].fa && BA_TO_COL(baddr) > 0);
+		} while (!hSession->ea_buf[baddr].fa && BA_TO_COL(baddr) > 0);
 
 		mdt_set(hSession,hSession->cursor_addr);
 	}
@@ -2009,23 +2017,25 @@ LIB3270_ACTION( eraseeol )
 		/* erase to end of current line */
 		do
 		{
-			ctlr_add(&h3270,baddr, EBC_null, 0);
+			ctlr_add(hSession,baddr, EBC_null, 0);
 			INC_BA(baddr);
 		} while(baddr != 0 && BA_TO_COL(baddr) > 0);
 	}
 
 	/* If the cursor was in a DBCS subfield, re-create the SI. */
 	d = ctlr_lookleft_state(cursor_addr, &why);
-	if (IS_DBCS(d) && why == DBCS_SUBFIELD) {
-		if (d == DBCS_RIGHT) {
-			baddr = h3270.cursor_addr;
+	if (IS_DBCS(d) && why == DBCS_SUBFIELD)
+	{
+		if (d == DBCS_RIGHT)
+		{
+			baddr = hSession->cursor_addr;
 			DEC_BA(baddr);
-			h3270.ea_buf[baddr].cc = EBC_si;
+			hSession->ea_buf[baddr].cc = EBC_si;
 		} else
-			h3270.ea_buf[h3270.cursor_addr].cc = EBC_si;
+			hSession->ea_buf[hSession->cursor_addr].cc = EBC_si;
 	}
-	(void) ctlr_dbcs_postprocess();
-	h3270.display(&h3270);
+	(void) ctlr_dbcs_postprocess(hSession);
+	hSession->display(hSession);
 	return 0;
 }
 
@@ -2079,7 +2089,7 @@ LIB3270_ACTION( eraseeof )
 		} else
 			h3270.ea_buf[hSession->cursor_addr].cc = EBC_si;
 	}
-	(void) ctlr_dbcs_postprocess();
+	(void) ctlr_dbcs_postprocess(hSession);
 	hSession->display(hSession);
 	return 0;
 }
@@ -2440,7 +2450,7 @@ static Boolean remargin(H3270 *hSession, int lmargin)
 	return True;
 }
 
-LIB3270_EXPORT int lib3270_emulate_input(H3270 *session, char *s, int len, int pasting)
+LIB3270_EXPORT int lib3270_emulate_input(H3270 *hSession, char *s, int len, int pasting)
 {
 	enum { BASE, BACKSLASH, BACKX, BACKP, BACKPA, BACKPF, OCTAL, HEX, XGE } state = BASE;
 	int literal = 0;
@@ -2462,10 +2472,10 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *session, char *s, int len, int p
 	char *ws;
 #endif /*]*/
 
-	CHECK_SESSION_HANDLE(session);
+	CHECK_SESSION_HANDLE(hSession);
 
-	orig_addr = session->cursor_addr;
-	orig_col  = BA_TO_COL(session->cursor_addr);
+	orig_addr = hSession->cursor_addr;
+	orig_col  = BA_TO_COL(hSession->cursor_addr);
 
 	if(len < 0)
 		len = strlen(s);
@@ -2474,12 +2484,14 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *session, char *s, int len, int p
 	 * Convert from a multi-byte string to a Unicode string.
 	 */
 #if defined(X3270_DBCS) /*[*/
-	if (len > w_ibuf_len) {
+	if (len > w_ibuf_len)
+	{
 		w_ibuf_len = len;
 		w_ibuf = (UChar *)Realloc(w_ibuf, w_ibuf_len * sizeof(UChar));
 	}
 	len = mb_to_unicode(s, len, w_ibuf, w_ibuf_len, NULL);
-	if (len < 0) {
+	if (len < 0)
+	{
 		return 0; /* failed */
 	}
 	ws = w_ibuf;
@@ -2491,13 +2503,14 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *session, char *s, int len, int p
 	 * In the switch statements below, "break" generally means "consume
 	 * this character," while "continue" means "rescan this character."
 	 */
-	while (len) {
+	while (len)
+	{
 
 		/*
 		 * It isn't possible to unlock the keyboard from a string,
 		 * so if the keyboard is locked, it's fatal
 		 */
-		if (session->kybdlock)
+		if (hSession->kybdlock)
 		{
 			trace_event("  keyboard locked, string dropped\n");
 			return 0;
@@ -2506,13 +2519,13 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *session, char *s, int len, int p
 		if (pasting && IN_3270) {
 
 			/* Check for cursor wrap to top of screen. */
-			if (session->cursor_addr < orig_addr)
+			if (hSession->cursor_addr < orig_addr)
 				return len-1;		/* wrapped */
 
 			/* Jump cursor over left margin. */
-			if (lib3270_get_toggle(&h3270,LIB3270_TOGGLE_MARGINED_PASTE) &&
-			    BA_TO_COL(session->cursor_addr) < orig_col) {
-				if (!remargin(&h3270,orig_col))
+			if (lib3270_get_toggle(hSession,LIB3270_TOGGLE_MARGINED_PASTE) && BA_TO_COL(hSession->cursor_addr) < orig_col)
+			{
+				if (!remargin(hSession,orig_col))
 					return len-1;
 				skipped = True;
 			}
@@ -2520,59 +2533,73 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *session, char *s, int len, int p
 
 		c = *ws;
 
-		switch (state) {
+		switch (state)
+		{
 		    case BASE:
-			switch (c) {
-			    case '\b':
-			    lib3270_cursor_left(session);
+			switch (c)
+			{
+			case '\b':
+			    lib3270_cursor_left(hSession);
 				skipped = False;
 				break;
-			    case '\f':
-				if (pasting) {
-					key_ACharacter(session,(unsigned char) ' ',KT_STD, ia, &skipped);
-				} else {
-					lib3270_clear(session);
+
+			case '\f':
+				if (pasting)
+				{
+					key_ACharacter(hSession,(unsigned char) ' ',KT_STD, ia, &skipped);
+				} else
+				{
+					lib3270_clear(hSession);
 					skipped = False;
 					if (IN_3270)
 						return len-1;
 				}
 				break;
-			    case '\n':
-				if (pasting) {
+
+			case '\n':
+				if (pasting)
+				{
 					if (!skipped)
-						lib3270_cursor_newline(session);
-//						action_internal(Newline_action,ia, CN, CN);
+						lib3270_cursor_newline(hSession);
 					skipped = False;
-				} else {
-					lib3270_enter(session);
+				}
+				else
+				{
+					lib3270_enter(hSession);
 					skipped = False;
 					if (IN_3270)
 						return len-1;
 				}
 				break;
-			    case '\r':	/* ignored */
+
+			case '\r':	/* ignored */
 				break;
-			    case '\t':
-			    lib3270_nextfield(session);
+
+			case '\t':
+			    lib3270_nextfield(hSession);
 				skipped = False;
 				break;
-			    case '\\':	/* backslashes are NOT special when
-					   pasting */
+
+			case '\\':	/* backslashes are NOT special when pasting */
 				if (!pasting)
 					state = BACKSLASH;
 				else
-					key_ACharacter(session,(unsigned char) c,KT_STD, ia, &skipped);
+					key_ACharacter(hSession,(unsigned char) c,KT_STD, ia, &skipped);
 				break;
-			    case '\033': /* ESC is special only when pasting */
+
+			case '\033': /* ESC is special only when pasting */
 				if (pasting)
 					state = XGE;
 				break;
-			    case '[':	/* APL left bracket */
-					key_ACharacter(session,(unsigned char) c, KT_STD, ia, &skipped);
+
+			case '[':	/* APL left bracket */
+					key_ACharacter(hSession,(unsigned char) c, KT_STD, ia, &skipped);
 				break;
-			    case ']':	/* APL right bracket */
-					key_ACharacter(session,(unsigned char) c, KT_STD, ia, &skipped);
+
+			case ']':	/* APL right bracket */
+					key_ACharacter(hSession,(unsigned char) c, KT_STD, ia, &skipped);
 				break;
+
 			default:
 /*
 #if defined(X3270_DBCS)
@@ -2593,232 +2620,271 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *session, char *s, int len, int p
 					break;
 				}
 #endif */
-				key_ACharacter(session,(unsigned char) c, KT_STD, ia, &skipped);
+				key_ACharacter(hSession,(unsigned char) c, KT_STD, ia, &skipped);
 				break;
 			}
 			break;
-		    case BACKSLASH:	/* last character was a backslash */
-			switch (c) {
-			    case 'a':
-				popup_an_error(session,"%s: Bell not supported",action_name(String_action));
-//				cancel_if_idle_command();
-				state = BASE;
-				break;
-			    case 'b':
-				lib3270_cursor_left(session);
-//				action_internal(Left_action, ia, CN, CN);
-				skipped = False;
-				state = BASE;
-				break;
-			    case 'f':
-			    lib3270_clear(session);
-				skipped = False;
-				state = BASE;
-				if (IN_3270)
-					return len-1;
-				else
-					break;
-			    case 'n':
-				lib3270_enter(session);
- 				skipped = False;
-				state = BASE;
-				if (IN_3270)
-					return len-1;
-				else
-					break;
-			    case 'p':
-				state = BACKP;
-				break;
 
-			    case 'r':
-					lib3270_cursor_newline(session);
-//					action_internal(Newline_action, ia, CN, CN);
+		    case BACKSLASH:	/* last character was a backslash */
+				switch (c)
+				{
+				case 'a':
+					popup_an_error(hSession,_( "%s: Bell not supported" ),action_name(String_action));
+					state = BASE;
+					break;
+
+				case 'b':
+					lib3270_cursor_left(hSession);
 					skipped = False;
 					state = BASE;
 					break;
 
-			    case 't':
-			    lib3270_nextfield(session);
-				skipped = False;
-				state = BASE;
+				case 'f':
+					lib3270_clear(hSession);
+					skipped = False;
+					state = BASE;
+					if (IN_3270)
+						return len-1;
+					else
+						break;
+
+				case 'n':
+					lib3270_enter(hSession);
+					skipped = False;
+					state = BASE;
+					if (IN_3270)
+						return len-1;
+					else
+						break;
+
+				case 'p':
+					state = BACKP;
+					break;
+
+				case 'r':
+					lib3270_cursor_newline(hSession);
+					skipped = False;
+					state = BASE;
+					break;
+
+				case 't':
+					lib3270_nextfield(hSession);
+					skipped = False;
+					state = BASE;
+					break;
+
+				case 'T':
+					lib3270_nextfield(hSession);
+					skipped = False;
+					state = BASE;
+					break;
+
+				case 'v':
+					popup_an_error(hSession,_( "%s: Vertical tab not supported" ),action_name(String_action));
+					state = BASE;
+					break;
+
+				case 'x':
+					state = BACKX;
+					break;
+
+				case '\\':
+					key_ACharacter(hSession,(unsigned char) c, KT_STD, ia,&skipped);
+					state = BASE;
+					break;
+
+				case '0':
+				case '1':
+				case '2':
+				case '3':
+				case '4':
+				case '5':
+				case '6':
+				case '7':
+					state = OCTAL;
+					literal = 0;
+					nc = 0;
+					continue;
+
+				default:
+					state = BASE;
+					continue;
+				}
 				break;
-			    case 'T':
-			    lib3270_nextfield(session);
-				skipped = False;
-				state = BASE;
-				break;
-			    case 'v':
-				popup_an_error(NULL,"%s: Vertical tab not supported",action_name(String_action));
-//				cancel_if_idle_command();
-				state = BASE;
-				break;
-			    case 'x':
-				state = BACKX;
-				break;
-			    case '\\':
-				key_ACharacter(session,(unsigned char) c, KT_STD, ia,&skipped);
-				state = BASE;
-				break;
-			    case '0':
-			    case '1':
-			    case '2':
-			    case '3':
-			    case '4':
-			    case '5':
-			    case '6':
-			    case '7':
-				state = OCTAL;
-				literal = 0;
-				nc = 0;
-				continue;
-			default:
-				state = BASE;
-				continue;
-			}
-			break;
+
 		    case BACKP:	/* last two characters were "\p" */
-			switch (c) {
-			    case 'a':
-				literal = 0;
-				nc = 0;
-				state = BACKPA;
+				switch (c)
+				{
+				case 'a':
+					literal = 0;
+					nc = 0;
+					state = BACKPA;
+					break;
+
+				case 'f':
+					literal = 0;
+					nc = 0;
+					state = BACKPF;
+					break;
+
+				default:
+					popup_an_error(hSession,_( "%s: Unknown character after \\p" ),action_name(String_action));
+					state = BASE;
+					break;
+				}
 				break;
-			    case 'f':
-				literal = 0;
-				nc = 0;
-				state = BACKPF;
-				break;
-			    default:
-				popup_an_error(NULL,"%s: Unknown character after \\p",
-				    action_name(String_action));
-//				cancel_if_idle_command();
-				state = BASE;
-				break;
-			}
-			break;
+
 		    case BACKPF: /* last three characters were "\pf" */
-			if (nc < 2 && isdigit(c)) {
-				literal = (literal * 10) + (c - '0');
-				nc++;
-			} else if (!nc) {
-				popup_an_error(NULL,"%s: Unknown character after \\pf",
-				    action_name(String_action));
-//				cancel_if_idle_command();
-				state = BASE;
-			} else {
-				do_pf(literal);
-				skipped = False;
-				if (IN_3270)
-					return len-1;
-				state = BASE;
-				continue;
-			}
-			break;
+				if (nc < 2 && isdigit(c))
+				{
+					literal = (literal * 10) + (c - '0');
+					nc++;
+				}
+				else if (!nc)
+				{
+					popup_an_error(hSession,_( "%s: Unknown character after \\pf" ),action_name(String_action));
+					state = BASE;
+				}
+				else
+				{
+					do_pf(literal);
+					skipped = False;
+					if (IN_3270)
+						return len-1;
+					state = BASE;
+					continue;
+				}
+				break;
+
 		    case BACKPA: /* last three characters were "\pa" */
-			if (nc < 1 && isdigit(c)) {
-				literal = (literal * 10) + (c - '0');
-				nc++;
-			} else if (!nc) {
-				popup_an_error(NULL,"%s: Unknown character after \\pa",
-				    action_name(String_action));
-//				cancel_if_idle_command();
-				state = BASE;
-			} else {
-				do_pa(literal);
-				skipped = False;
-				if (IN_3270)
-					return len-1;
-				state = BASE;
-				continue;
-			}
-			break;
+				if (nc < 1 && isdigit(c))
+				{
+					literal = (literal * 10) + (c - '0');
+					nc++;
+				}
+				else if (!nc)
+				{
+					popup_an_error(hSession,_( "%s: Unknown character after \\pa" ),action_name(String_action));
+					state = BASE;
+				}
+				else
+				{
+					do_pa(literal);
+					skipped = False;
+					if (IN_3270)
+						return len-1;
+					state = BASE;
+					continue;
+				}
+				break;
+
 		    case BACKX:	/* last two characters were "\x" */
-			if (isxdigit(c)) {
-				state = HEX;
-				literal = 0;
-				nc = 0;
+				if (isxdigit(c))
+				{
+					state = HEX;
+					literal = 0;
+					nc = 0;
+					continue;
+				}
+				else
+				{
+					popup_an_error(hSession,_( "%s: Missing hex digits after \\x" ),action_name(String_action));
+					state = BASE;
+					continue;
+				}
 				continue;
-			} else {
-				popup_an_error(session,_( "%s: Missing hex digits after \\x" ),action_name(String_action));
-//				cancel_if_idle_command();
-				state = BASE;
-				continue;
-			}
+
 		    case OCTAL:	/* have seen \ and one or more octal digits */
-			if (nc < 3 && isdigit(c) && c < '8') {
-				literal = (literal * 8) + FROM_HEX(c);
-				nc++;
-				break;
-			} else {
-				key_ACharacter(session,(unsigned char) literal, KT_STD,ia, &skipped);
-				state = BASE;
-				continue;
-			}
+				if (nc < 3 && isdigit(c) && c < '8')
+				{
+					literal = (literal * 8) + FROM_HEX(c);
+					nc++;
+					break;
+				}
+				else
+				{
+					key_ACharacter(hSession,(unsigned char) literal, KT_STD,ia, &skipped);
+					state = BASE;
+					continue;
+				}
+
 		    case HEX:	/* have seen \ and one or more hex digits */
-			if (nc < 2 && isxdigit(c)) {
-				literal = (literal * 16) + FROM_HEX(c);
-				nc++;
-				break;
-			} else {
-				key_ACharacter(session,(unsigned char) literal, KT_STD, ia, &skipped);
-				state = BASE;
-				continue;
-			}
+				if (nc < 2 && isxdigit(c))
+				{
+					literal = (literal * 16) + FROM_HEX(c);
+					nc++;
+					break;
+				}
+				else
+				{
+					key_ACharacter(hSession,(unsigned char) literal, KT_STD, ia, &skipped);
+					state = BASE;
+					continue;
+				}
+
 		    case XGE:	/* have seen ESC */
-			switch (c) {
-			    case ';':	/* FM */
-				key_Character(session, EBC_fm, False, True, &skipped);
+				switch (c)
+				{
+					case ';':	/* FM */
+						key_Character(hSession, EBC_fm, False, True, &skipped);
+						break;
+
+					case '*':	/* DUP */
+						key_Character(hSession, EBC_dup, False, True, &skipped);
+						break;
+
+					default:
+						key_ACharacter(hSession,(unsigned char) c, KT_GE, ia,&skipped);
+						break;
+				}
+				state = BASE;
 				break;
-			    case '*':	/* DUP */
-				key_Character(session, EBC_dup, False, True, &skipped);
-				break;
-			    default:
-				key_ACharacter(session,(unsigned char) c, KT_GE, ia,&skipped);
-				break;
-			}
-			state = BASE;
-			break;
 		}
 		ws++;
 		len--;
 	}
 
-	switch (state) {
+	switch (state)
+	{
 	    case BASE:
-		if (lib3270_get_toggle(session,LIB3270_TOGGLE_MARGINED_PASTE) &&
-		    BA_TO_COL(session->cursor_addr) < orig_col) {
-			(void) remargin(session,orig_col);
-		}
-		break;
+			if (lib3270_get_toggle(hSession,LIB3270_TOGGLE_MARGINED_PASTE) && BA_TO_COL(hSession->cursor_addr) < orig_col)
+			{
+				(void) remargin(hSession,orig_col);
+			}
+			break;
+
 	    case OCTAL:
 	    case HEX:
-		key_ACharacter(session,(unsigned char) literal, KT_STD, ia, &skipped);
-		state = BASE;
-		if (lib3270_get_toggle(session,LIB3270_TOGGLE_MARGINED_PASTE) &&
-		    BA_TO_COL(session->cursor_addr) < orig_col) {
-			(void) remargin(session,orig_col);
-		}
-		break;
+			key_ACharacter(hSession,(unsigned char) literal, KT_STD, ia, &skipped);
+			state = BASE;
+			if (lib3270_get_toggle(hSession,LIB3270_TOGGLE_MARGINED_PASTE) && BA_TO_COL(hSession->cursor_addr) < orig_col)
+			{
+				(void) remargin(hSession,orig_col);
+			}
+			break;
+
 	    case BACKPF:
-		if (nc > 0) {
-			do_pf(literal);
-			state = BASE;
-		}
-		break;
+			if (nc > 0)
+			{
+				do_pf(literal);
+				state = BASE;
+			}
+			break;
+
 	    case BACKPA:
-		if (nc > 0) {
-			do_pa(literal);
-			state = BASE;
-		}
-		break;
+			if (nc > 0)
+			{
+				do_pa(literal);
+				state = BASE;
+			}
+			break;
+
 	    default:
-		popup_an_error(NULL,"%s: Missing data after \\",
-		    action_name(String_action));
-//		cancel_if_idle_command();
-		break;
+			popup_an_error(hSession,"%s: Missing data after \\",action_name(String_action));
+			break;
 	}
 
-	session->display(session);
+	hSession->display(hSession);
 	return len;
 }
 

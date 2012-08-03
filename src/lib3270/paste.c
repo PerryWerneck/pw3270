@@ -46,8 +46,7 @@
 
 #include <fcntl.h>
 
-#include <lib3270/3270ds.h>
-//#include "appres.h"
+#include "3270ds.h"
 #include "resources.h"
 
 #include "actionsc.h"
@@ -99,16 +98,16 @@
  * Move the cursor back within the legal paste area.
  * Returns a Boolean indicating success.
  */
- static int remargin(H3270 *session, int lmargin)
+ static int remargin(H3270 *hSession, int lmargin)
  {
 	int ever = False;
 	int baddr, b0 = 0;
 	int faddr;
 	unsigned char fa;
 
-	if(lib3270_get_toggle(session,LIB3270_TOGGLE_MARGINED_PASTE))
+	if(lib3270_get_toggle(hSession,LIB3270_TOGGLE_MARGINED_PASTE))
 	{
-		baddr = session->cursor_addr;
+		baddr = hSession->cursor_addr;
 		while(BA_TO_COL(baddr) < lmargin)
 		{
 			baddr = ROWCOL_TO_BA(BA_TO_ROW(baddr), lmargin);
@@ -118,46 +117,46 @@
 				ever = True;
 			}
 
-			faddr = find_field_attribute(session,baddr);
-			fa = session->ea_buf[faddr].fa;
+			faddr = find_field_attribute(hSession,baddr);
+			fa = hSession->ea_buf[faddr].fa;
 			if (faddr == baddr || FA_IS_PROTECTED(fa))
 			{
-				baddr = next_unprotected(session,baddr);
+				baddr = next_unprotected(hSession,baddr);
 				if (baddr <= b0)
 					return 0;
 			}
 
 		}
-		cursor_move(session,baddr);
+		cursor_move(hSession,baddr);
 	}
 
 	return -1;
  }
 
- static int paste_char(H3270 *session, PASTE_DATA *data, unsigned char c)
+ static int paste_char(H3270 *hSession, PASTE_DATA *data, unsigned char c)
  {
 
-	if(lib3270_get_toggle(session,LIB3270_TOGGLE_SMART_PASTE))
+	if(lib3270_get_toggle(hSession,LIB3270_TOGGLE_SMART_PASTE))
 	{
-		int faddr = find_field_attribute(session,session->cursor_addr);
-		if(FA_IS_PROTECTED(session->ea_buf[faddr].fa))
-			session->cursor_addr++;
+		int faddr = find_field_attribute(hSession,hSession->cursor_addr);
+		if(FA_IS_PROTECTED(hSession->ea_buf[faddr].fa))
+			hSession->cursor_addr++;
 		else
-			key_ACharacter(session, c, KT_STD, IA_PASTE, NULL);
+			key_ACharacter(hSession, c, KT_STD, IA_PASTE, NULL);
 	}
 	else
 	{
-		key_ACharacter(session, c, KT_STD, IA_PASTE, NULL);
+		key_ACharacter(hSession, c, KT_STD, IA_PASTE, NULL);
 	}
 
 	data->qtd++;
 
- 	if(BA_TO_ROW(session->cursor_addr) != data->row)
+ 	if(BA_TO_ROW(hSession->cursor_addr) != data->row)
  	{
- 		trace("Row changed from %d to %d",data->row,BA_TO_ROW(session->cursor_addr));
-		if(!remargin(session,data->orig_col))
+ 		trace("Row changed from %d to %d",data->row,BA_TO_ROW(hSession->cursor_addr));
+		if(!remargin(hSession,data->orig_col))
 			return 0;
-		data->row = BA_TO_ROW(session->cursor_addr);
+		data->row = BA_TO_ROW(hSession->cursor_addr);
  		return '\n';
  	}
 
@@ -167,35 +166,35 @@
 /**
  * Set string at cursor position.
  *
- * @param h		Session handle.
- * @param str	String to set
+ * @param hSession		Session handle.
+ * @param str			String to set
  *
  * @return Number of characters inserted; <0 in case of error.
  *
  */
-LIB3270_EXPORT int lib3270_set_string(H3270 *h, const unsigned char *str)
+LIB3270_EXPORT int lib3270_set_string(H3270 *hSession, const unsigned char *str)
 {
 	PASTE_DATA data;
 	unsigned char last = 1;
 
-	CHECK_SESSION_HANDLE(h);
+	CHECK_SESSION_HANDLE(hSession);
 
 	memset(&data,0,sizeof(data));
- 	data.row		= BA_TO_ROW(h->cursor_addr);
-	data.orig_addr	= h->cursor_addr;
-	data.orig_col	= BA_TO_COL(h->cursor_addr);
+ 	data.row		= BA_TO_ROW(hSession->cursor_addr);
+	data.orig_addr	= hSession->cursor_addr;
+	data.orig_col	= BA_TO_COL(hSession->cursor_addr);
 
-	if(h->kybdlock)
+	if(hSession->kybdlock)
 		return -EINVAL;
 
-	h->suspend(h);
+	hSession->suspend(hSession);
 
-	while(*str && last && !h->kybdlock && h->cursor_addr >= data.orig_addr)
+	while(*str && last && !hSession->kybdlock && hSession->cursor_addr >= data.orig_addr)
 	{
 		switch(*str)
 		{
 		case '\t':
-			last = paste_char(h,&data, ' ');
+			last = paste_char(hSession,&data, ' ');
 			break;
 
 		case '\n':
@@ -205,37 +204,37 @@ LIB3270_EXPORT int lib3270_set_string(H3270 *h, const unsigned char *str)
 				int faddr;
 				unsigned char fa;
 
-				baddr = (h->cursor_addr + h->cols) % (h->cols * h->rows);   /* down */
-				baddr = (baddr / h->cols) * h->cols;               /* 1st col */
-				faddr = find_field_attribute(h,baddr);
-				fa = h->ea_buf[faddr].fa;
+				baddr = (hSession->cursor_addr + hSession->cols) % (hSession->cols * hSession->rows);   /* down */
+				baddr = (baddr / hSession->cols) * hSession->cols;               /* 1st col */
+				faddr = find_field_attribute(hSession,baddr);
+				fa = hSession->ea_buf[faddr].fa;
 				if (faddr != baddr && !FA_IS_PROTECTED(fa))
-					cursor_move(h,baddr);
+					cursor_move(hSession,baddr);
 				else
-					cursor_move(h,next_unprotected(h,baddr));
-				data.row = BA_TO_ROW(h->cursor_addr);
+					cursor_move(hSession,next_unprotected(hSession,baddr));
+				data.row = BA_TO_ROW(hSession->cursor_addr);
 			}
 			last = ' ';
 			data.qtd++;
 			break;
 
 		default:
-			last = paste_char(h,&data, *str);
+			last = paste_char(hSession,&data, *str);
 
 		}
 		str++;
 
-		if(IN_3270 && lib3270_get_toggle(h,LIB3270_TOGGLE_MARGINED_PASTE) && BA_TO_COL(h->cursor_addr) < data.orig_col)
+		if(IN_3270 && lib3270_get_toggle(hSession,LIB3270_TOGGLE_MARGINED_PASTE) && BA_TO_COL(hSession->cursor_addr) < data.orig_col)
 		{
-			if(!remargin(h,data.orig_col))
+			if(!remargin(hSession,data.orig_col))
 				last = 0;
 		}
 
-		if(h->cursor_addr == data.orig_addr)
+		if(hSession->cursor_addr == data.orig_addr)
 			break;
 	}
 
-	h->resume(h);
+	hSession->resume(hSession);
 
 	return data.qtd;
 }

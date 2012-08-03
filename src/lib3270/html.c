@@ -30,7 +30,7 @@
  #include <stdlib.h>
  #include <lib3270.h>
  #include <lib3270/session.h>
- #include <lib3270/3270ds.h>
+#include "3270ds.h"
  #include <lib3270/html.h>
 
  #include "globals.h"

@@ -1177,7 +1177,7 @@ ansi_printing(H3270 *hSession, int ig1 unused, int ig2 unused)
 		ctlr_add(hSession,hSession->cursor_addr, ebc_ch, default_cs);
 #if defined(X3270_DBCS) /*[*/
 		if (default_cs == CS_DBCS)
-			(void) ctlr_dbcs_postprocess();
+			(void) ctlr_dbcs_postprocess(hSession);
 #endif /*]*/
 		break;
 	}

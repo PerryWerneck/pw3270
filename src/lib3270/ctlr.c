@@ -40,7 +40,7 @@
 
 #include "globals.h"
 #include <errno.h>
-#include <lib3270/3270ds.h>
+#include "3270ds.h"
 //#include "appres.h"
 // #include "ctlr.h"
 #include "screen.h"
@@ -237,19 +237,19 @@ void ctlr_set_rows_cols(H3270 *session, int mn, int ovc, int ovr)
  * Set the formatted screen flag.  A formatted screen is a screen that
  * has at least one field somewhere on it.
  */
-static void set_formatted(H3270 *session)
+static void set_formatted(H3270 *hSession)
 {
 	register int baddr;
 
-	CHECK_SESSION_HANDLE(session);
+	CHECK_SESSION_HANDLE(hSession);
 
-	session->formatted = False;
+	hSession->formatted = False;
 	baddr = 0;
 	do
 	{
-		if(session->ea_buf[baddr].fa)
+		if(hSession->ea_buf[baddr].fa)
 		{
-			session->formatted = True;
+			hSession->formatted = True;
 			break;
 		}
 		INC_BA(baddr);
@@ -259,53 +259,53 @@ static void set_formatted(H3270 *session)
 /*
  * Called when a host is half connected.
  */
-static void ctlr_half_connect(H3270 *session, int ignored unused, void *dunno)
+static void ctlr_half_connect(H3270 *hSession, int ignored unused, void *dunno)
 {
-	ticking_start(session,True);
+	ticking_start(hSession,True);
 }
 
 /*
  * Called when a host connects, disconnects, or changes ANSI/3270 modes.
  */
-static void ctlr_connect(H3270 *session, int ignored unused, void *dunno)
+static void ctlr_connect(H3270 *hSession, int ignored unused, void *dunno)
 {
-	ticking_stop(session);
-	status_untiming(session);
+	ticking_stop(hSession);
+	status_untiming(hSession);
 
-	if (session->ever_3270)
-		session->ea_buf[-1].fa = FA_PRINTABLE | FA_MODIFY;
+	if (hSession->ever_3270)
+		hSession->ea_buf[-1].fa = FA_PRINTABLE | FA_MODIFY;
 	else
-		session->ea_buf[-1].fa = FA_PRINTABLE | FA_PROTECT;
-	if (!IN_3270 || (IN_SSCP && (session->kybdlock & KL_OIA_TWAIT)))
+		hSession->ea_buf[-1].fa = FA_PRINTABLE | FA_PROTECT;
+	if (!IN_3270 || (IN_SSCP && (hSession->kybdlock & KL_OIA_TWAIT)))
 	{
-		lib3270_kybdlock_clear(session,KL_OIA_TWAIT);
-		status_reset(session);
+		lib3270_kybdlock_clear(hSession,KL_OIA_TWAIT);
+		status_reset(hSession);
 	}
 
-	session->default_fg = 0x00;
-	session->default_bg = 0x00;
-	session->default_gr = 0x00;
-	session->default_cs = 0x00;
-	session->default_ic = 0x00;
-	session->reply_mode = SF_SRM_FIELD;
-	session->crm_nattr = 0;
+	hSession->default_fg = 0x00;
+	hSession->default_bg = 0x00;
+	hSession->default_gr = 0x00;
+	hSession->default_cs = 0x00;
+	hSession->default_ic = 0x00;
+	hSession->reply_mode = SF_SRM_FIELD;
+	hSession->crm_nattr = 0;
 }
 
 
 
-LIB3270_EXPORT int lib3270_field_addr(H3270 *h, int baddr)
+LIB3270_EXPORT int lib3270_field_addr(H3270 *hSession, int baddr)
 {
 	int sbaddr;
 
-	CHECK_SESSION_HANDLE(h);
+	CHECK_SESSION_HANDLE(hSession);
 
-	if (!h->formatted)
+	if (!hSession->formatted)
 		return -1;
 
 	sbaddr = baddr;
 	do
 	{
-		if(h->ea_buf[baddr].fa)
+		if(hSession->ea_buf[baddr].fa)
 			return baddr;
 		DEC_BA(baddr);
 	} while (baddr != sbaddr);
@@ -316,23 +316,24 @@ LIB3270_EXPORT int lib3270_field_addr(H3270 *h, int baddr)
 /*
  * Get Field width
  */
-int lib3270_field_length(H3270 *h, int baddr)
+int lib3270_field_length(H3270 *hSession, int baddr)
 {
 	int saddr;
 	int addr;
 	int width = 0;
 
-	CHECK_SESSION_HANDLE(h);
+	CHECK_SESSION_HANDLE(hSession);
 
-	addr = find_field_attribute(h,baddr);
+	addr = find_field_attribute(hSession,baddr);
 
 	if(addr < 0)
 		return -1;
 
 	saddr = addr;
 	INC_BA(addr);
-	do {
-		if(h->ea_buf[addr].fa)
+	do
+	{
+		if(hSession->ea_buf[addr].fa)
 			return width;
 		INC_BA(addr);
 		width++;
@@ -346,9 +347,9 @@ int lib3270_field_length(H3270 *h, int baddr)
  * Find the field attribute for the given buffer address.  Return its address
  * rather than its value.
  */
-unsigned char get_field_attribute(H3270 *h, int baddr)
+unsigned char get_field_attribute(H3270 *hSession, int baddr)
 {
-	return h->ea_buf[find_field_attribute(h,baddr)].fa;
+	return hSession->ea_buf[find_field_attribute(hSession,baddr)].fa;
 }
 
 /*
@@ -356,7 +357,7 @@ unsigned char get_field_attribute(H3270 *h, int baddr)
  * unprotected attribute byte, or 0 if no nonzero-width unprotected field
  * can be found.
  */
-int next_unprotected(H3270 *session, int baddr0)
+int next_unprotected(H3270 *hSession, int baddr0)
 {
 	register int baddr, nbaddr;
 
@@ -365,7 +366,7 @@ int next_unprotected(H3270 *session, int baddr0)
 	{
 		baddr = nbaddr;
 		INC_BA(nbaddr);
-		if(session->ea_buf[baddr].fa &&!FA_IS_PROTECTED(session->ea_buf[baddr].fa) &&!session->ea_buf[nbaddr].fa)
+		if(hSession->ea_buf[baddr].fa &&!FA_IS_PROTECTED(hSession->ea_buf[baddr].fa) &&!hSession->ea_buf[nbaddr].fa)
 			return nbaddr;
 	} while (nbaddr != baddr0);
 
@@ -1267,7 +1268,7 @@ enum pds ctlr_write(H3270 *hSession, unsigned char buf[], int buflen, Boolean er
 				trace_ds(hSession,"%s",rcba(hSession,baddr));
 
 			previous = ORDER;
-			if (baddr >= h3270.cols * h3270.rows)
+			if (baddr >= hSession->cols * hSession->rows)
 			{
 				ABORT_WRITE("invalid EUA address");
 			}
@@ -1283,16 +1284,15 @@ enum pds ctlr_write(H3270 *hSession, unsigned char buf[], int buflen, Boolean er
 			}
 			do
 			{
-				if (h3270.ea_buf[h3270.buffer_addr].fa)
-					current_fa = h3270.ea_buf[h3270.buffer_addr].fa;
+				if (hSession->ea_buf[hSession->buffer_addr].fa)
+					current_fa = hSession->ea_buf[hSession->buffer_addr].fa;
 				else if (!FA_IS_PROTECTED(current_fa))
 				{
-					ctlr_add(&h3270,h3270.buffer_addr, EBC_null,
-					    CS_BASE);
+					ctlr_add(hSession,hSession->buffer_addr, EBC_null,CS_BASE);
 				}
-				INC_BA(h3270.buffer_addr);
-			} while (h3270.buffer_addr != baddr);
-			current_fa = get_field_attribute(hSession,h3270.buffer_addr);
+				INC_BA(hSession->buffer_addr);
+			} while (hSession->buffer_addr != baddr);
+			current_fa = get_field_attribute(hSession,hSession->buffer_addr);
 			last_cmd = True;
 			last_zpt = False;
 			break;
@@ -1308,14 +1308,14 @@ enum pds ctlr_write(H3270 *hSession, unsigned char buf[], int buflen, Boolean er
 			if (*cp)
 				trace_ds(hSession,"'");
 
-			ctlr_add(hSession,h3270.buffer_addr, *cp, CS_GE);
-			ctlr_add_fg(hSession,h3270.buffer_addr, h3270.default_fg);
-			ctlr_add_bg(hSession,h3270.buffer_addr, h3270.default_bg);
-			ctlr_add_gr(hSession,h3270.buffer_addr, h3270.default_gr);
-			ctlr_add_ic(hSession,h3270.buffer_addr, h3270.default_ic);
-			INC_BA(h3270.buffer_addr);
+			ctlr_add(hSession,hSession->buffer_addr, *cp, CS_GE);
+			ctlr_add_fg(hSession,hSession->buffer_addr, hSession->default_fg);
+			ctlr_add_bg(hSession,hSession->buffer_addr, hSession->default_bg);
+			ctlr_add_gr(hSession,hSession->buffer_addr, hSession->default_gr);
+			ctlr_add_ic(hSession,hSession->buffer_addr, hSession->default_ic);
+			INC_BA(hSession->buffer_addr);
 
-			current_fa = get_field_attribute(hSession,h3270.buffer_addr);
+			current_fa = get_field_attribute(hSession,hSession->buffer_addr);
 			last_cmd = False;
 			last_zpt = False;
 			break;
@@ -1323,11 +1323,11 @@ enum pds ctlr_write(H3270 *hSession, unsigned char buf[], int buflen, Boolean er
 		case ORDER_MF:	/* modify field */
 			END_TEXT("ModifyField");
 			if (previous != SBA)
-				trace_ds(hSession,"%s",rcba(hSession,h3270.buffer_addr));
+				trace_ds(hSession,"%s",rcba(hSession,hSession->buffer_addr));
 			previous = ORDER;
 			cp++;
 			na = *cp;
-			if (h3270.ea_buf[h3270.buffer_addr].fa)
+			if (hSession->ea_buf[hSession->buffer_addr].fa)
 			{
 				for (i = 0; i < (int)na; i++)
 				{
@@ -1336,8 +1336,7 @@ enum pds ctlr_write(H3270 *hSession, unsigned char buf[], int buflen, Boolean er
 					{
 						trace_ds(hSession," 3270");
 						cp++;
-						ctlr_add_fa(hSession,h3270.buffer_addr, *cp,
-							h3270.ea_buf[h3270.buffer_addr].cs);
+						ctlr_add_fa(hSession,hSession->buffer_addr, *cp,hSession->ea_buf[hSession->buffer_addr].cs);
 						trace_ds(hSession,"%s",see_attr(*cp));
 					}
 					else if (*cp == XA_FOREGROUND)
@@ -1456,12 +1455,12 @@ enum pds ctlr_write(H3270 *hSession, unsigned char buf[], int buflen, Boolean er
 			}
 			if (!any_fa)
 				START_FIELD(0);
-			ctlr_add_cs(&h3270,h3270.buffer_addr, efa_cs);
-			ctlr_add_fg(&h3270,h3270.buffer_addr, efa_fg);
-			ctlr_add_bg(&h3270,h3270.buffer_addr, efa_bg);
-			ctlr_add_gr(&h3270,h3270.buffer_addr, efa_gr);
-			ctlr_add_ic(&h3270,h3270.buffer_addr, efa_ic);
-			INC_BA(h3270.buffer_addr);
+			ctlr_add_cs(hSession,h3270.buffer_addr, efa_cs);
+			ctlr_add_fg(hSession,h3270.buffer_addr, efa_fg);
+			ctlr_add_bg(hSession,h3270.buffer_addr, efa_bg);
+			ctlr_add_gr(hSession,h3270.buffer_addr, efa_gr);
+			ctlr_add_ic(hSession,h3270.buffer_addr, efa_ic);
+			INC_BA(hSession->buffer_addr);
 			last_cmd = True;
 			last_zpt = False;
 			break;
@@ -1526,12 +1525,12 @@ enum pds ctlr_write(H3270 *hSession, unsigned char buf[], int buflen, Boolean er
 			if (h3270.default_cs == CS_DBCS || d != DBCS_NONE) {
 				ABORT_WRITE("invalid format control order in DBCS field");
 			}
-			ctlr_add(&h3270,h3270.buffer_addr, *cp, h3270.default_cs);
-			ctlr_add_fg(&h3270,h3270.buffer_addr, h3270.default_fg);
-			ctlr_add_bg(&h3270,h3270.buffer_addr, h3270.default_bg);
-			ctlr_add_gr(&h3270,h3270.buffer_addr, h3270.default_gr);
-			ctlr_add_ic(&h3270,h3270.buffer_addr, h3270.default_ic);
-			INC_BA(h3270.buffer_addr);
+			ctlr_add(&h3270,hSession->buffer_addr, *cp, hSession->default_cs);
+			ctlr_add_fg(&h3270,hSession->buffer_addr, hSession->default_fg);
+			ctlr_add_bg(&h3270,hSession->buffer_addr, hSession->default_bg);
+			ctlr_add_gr(&h3270,hSession->buffer_addr, hSession->default_gr);
+			ctlr_add_ic(&h3270,hSession->buffer_addr, hSession->default_ic);
+			INC_BA(hSession->buffer_addr);
 			last_cmd = True;
 			last_zpt = False;
 			break;
@@ -1555,7 +1554,7 @@ enum pds ctlr_write(H3270 *hSession, unsigned char buf[], int buflen, Boolean er
 			ctlr_add_bg(&h3270,h3270.buffer_addr, h3270.default_bg);
 			ctlr_add_gr(&h3270,h3270.buffer_addr, h3270.default_gr);
 			ctlr_add_ic(&h3270,h3270.buffer_addr, h3270.default_ic);
-			INC_BA(h3270.buffer_addr);
+			INC_BA(hSession->buffer_addr);
 			last_cmd = True;
 			last_zpt = False;
 			break;
@@ -1594,7 +1593,7 @@ enum pds ctlr_write(H3270 *hSession, unsigned char buf[], int buflen, Boolean er
 			ctlr_add_bg(&h3270,h3270.buffer_addr, h3270.default_bg);
 			ctlr_add_gr(&h3270,h3270.buffer_addr, h3270.default_gr);
 			ctlr_add_ic(&h3270,h3270.buffer_addr, h3270.default_ic);
-			INC_BA(h3270.buffer_addr);
+			INC_BA(hSession->buffer_addr);
 			last_cmd = True;
 			last_zpt = False;
 			break;
@@ -1646,14 +1645,14 @@ enum pds ctlr_write(H3270 *hSession, unsigned char buf[], int buflen, Boolean er
 			ctlr_add_bg(&h3270,h3270.buffer_addr, h3270.default_bg);
 			ctlr_add_gr(&h3270,h3270.buffer_addr, h3270.default_gr);
 			ctlr_add_ic(&h3270,h3270.buffer_addr, h3270.default_ic);
-			INC_BA(h3270.buffer_addr);
+			INC_BA(hSession->buffer_addr);
 			if (add_dbcs) {
 				ctlr_add(&h3270,h3270.buffer_addr, add_c2, h3270.default_cs);
 				ctlr_add_fg(&h3270,h3270.buffer_addr, h3270.default_fg);
 				ctlr_add_bg(&h3270,h3270.buffer_addr, h3270.default_bg);
 				ctlr_add_gr(&h3270,h3270.buffer_addr, h3270.default_gr);
 				ctlr_add_ic(&h3270,h3270.buffer_addr, h3270.default_ic);
-				INC_BA(h3270.buffer_addr);
+				INC_BA(hSession->buffer_addr);
 			}
 			last_cmd = False;
 			last_zpt = False;
@@ -1703,7 +1702,7 @@ enum pds ctlr_write(H3270 *hSession, unsigned char buf[], int buflen, Boolean er
 			ctlr_add_bg(&h3270,h3270.buffer_addr, h3270.default_bg);
 			ctlr_add_gr(&h3270,h3270.buffer_addr, h3270.default_gr);
 			ctlr_add_ic(&h3270,h3270.buffer_addr, h3270.default_ic);
-			INC_BA(h3270.buffer_addr);
+			INC_BA(hSession->buffer_addr);
 #if defined(X3270_DBCS) /*[*/
 			if (add_dbcs) {
 				ctlr_add(h3270.buffer_addr, add_c2, h3270.default_cs);
@@ -1711,7 +1710,7 @@ enum pds ctlr_write(H3270 *hSession, unsigned char buf[], int buflen, Boolean er
 				ctlr_add_bg(h3270.buffer_addr, h3270.default_bg);
 				ctlr_add_gr(h3270.buffer_addr, h3270.default_gr);
 				ctlr_add_ic(&h3270,h3270.buffer_addr, h3270.default_ic);
-				INC_BA(h3270.buffer_addr);
+				INC_BA(hSession->buffer_addr);
 			}
 #endif /*]*/
 			last_cmd = False;
@@ -1733,10 +1732,10 @@ enum pds ctlr_write(H3270 *hSession, unsigned char buf[], int buflen, Boolean er
 		lib3270_ring_bell(hSession);
 
 	/* Set up the DBCS state. */
-	if (ctlr_dbcs_postprocess() < 0 && rv == PDS_OKAY_NO_OUTPUT)
+	if (ctlr_dbcs_postprocess(hSession) < 0 && rv == PDS_OKAY_NO_OUTPUT)
 		rv = PDS_BAD_ADDR;
 
-	h3270.trace_primed = 0;
+	hSession->trace_primed = 0;
 
 	ps_process(hSession);
 
@@ -1977,16 +1976,14 @@ valid_dbcs_char(unsigned char c1, unsigned char c2)
  *
  * Returns 0 for success, -1 for failure.
  */
-int
-ctlr_dbcs_postprocess(void)
+int ctlr_dbcs_postprocess(H3270 *hSession)
 {
 	int baddr;		/* current buffer address */
 	int faddr0;		/* address of first field attribute */
 	int faddr;		/* address of current field attribute */
 	int last_baddr;		/* last buffer address to search */
 	int pbaddr = -1;	/* previous buffer address */
-	int dbaddr = -1;	/* first data position of current DBCS (sub-)
-				   field */
+	int dbaddr = -1;	/* first data position of current DBCS (sub-) field */
 	Boolean so = False, si = False;
 	Boolean dbcs_field = False;
 	int rc = 0;
@@ -2032,7 +2029,7 @@ ctlr_dbcs_postprocess(void)
 			case EBC_so:
 			    /* Two SO's or SO in DBCS field are invalid. */
 			    if (so || dbcs_field) {
-				    trace_ds(&h3270,"DBCS postprocess: invalid SO found at %s\n", rcba(baddr));
+				    trace_ds(hSession,"DBCS postprocess: invalid SO found at %s\n", rcba(baddr));
 				    rc = -1;
 			    } else {
 				    dbaddr = baddr;
@@ -2045,7 +2042,7 @@ ctlr_dbcs_postprocess(void)
 			case EBC_si:
 			    /* Two SI's or SI in DBCS field are invalid. */
 			    if (si || dbcs_field) {
-				    trace_ds(&h3270,"Postprocess: Invalid SO found at %s\n", rcba(baddr));
+				    trace_ds(hSession,"Postprocess: Invalid SO found at %s\n", rcba(baddr));
 				    rc = -1;
 				    ea_buf[baddr].db = DBCS_NONE;
 			    } else {
@@ -2058,7 +2055,7 @@ ctlr_dbcs_postprocess(void)
 			default:
 			    /* Non-base CS in DBCS subfield is invalid. */
 			    if (so && ea_buf[baddr].cs != CS_BASE) {
-				    trace_ds(&h3270,"DBCS postprocess: invalid character set found at %s\n",rcba(baddr));
+				    trace_ds(hSession,"DBCS postprocess: invalid character set found at %s\n",rcba(baddr));
 				    rc = -1;
 				    ea_buf[baddr].cs = CS_BASE;
 			    }
@@ -2109,7 +2106,7 @@ ctlr_dbcs_postprocess(void)
 		    !IS_RIGHT(ea_buf[baddr].db) &&
 		    ea_buf[pbaddr].db != DBCS_DEAD) {
 			if (!ea_buf[baddr].fa) {
-				trace_ds(&h3270,"DBCS postprocess: dead position at %s\n", rcba(pbaddr));
+				trace_ds(hSession,"DBCS postprocess: dead position at %s\n", rcba(pbaddr));
 				rc = -1;
 			}
 			ea_buf[pbaddr].cc = EBC_null;
