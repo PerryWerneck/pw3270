@@ -95,7 +95,7 @@ unsigned char xk_selector = 0;
 unsigned char auto_keymap = 0;
 
 /* Statics. */
-static enum cs_result resource_charset(const char *csname, char *cs, char *ftcs);
+static enum cs_result resource_charset(H3270 *hSession, const char *csname, char *cs, char *ftcs);
 typedef enum { CS_ONLY, FT_ONLY, BOTH } remap_scope;
 static enum cs_result remap_chars(const char *csname, char *spec, remap_scope scope, int *ne);
 static void remap_one(unsigned char ebc, KeySym iso, remap_scope scope,Boolean one_way);
@@ -201,7 +201,7 @@ wide_resource_init(char *csname)
 /*
  * Change character sets.
  */
-enum cs_result charset_init(H3270 *session, const char *csname)
+enum cs_result charset_init(H3270 *hSession, const char *csname)
 {
 //	char *cs;
 //	const char *ftcs;
@@ -215,7 +215,7 @@ enum cs_result charset_init(H3270 *session, const char *csname)
 	{
 		charset_defaults();
 		set_cgcsgids(CN);
-		set_display_charset(session, "ISO-8859-1");
+		set_display_charset(hSession, "ISO-8859-1");
 		return CS_OKAY;
 	}
 
@@ -223,7 +223,7 @@ enum cs_result charset_init(H3270 *session, const char *csname)
 #ifdef ANDROID
 	ccs = strdup("0xad: [ \n 0xba: Yacute \n0xbd: ] \n 0xbb: diaeresis \n");
 #else
-	ccs = lib3270_get_resource_string("charset", csname, NULL);
+	ccs = lib3270_get_resource_string(hSession,"charset", csname, NULL);
 #endif
 /*
 	if (cs == CN && strlen(csname) > ES_SIZE && !strcasecmp(csname + strlen(csname) - ES_SIZE, EURO_SUFFIX))
@@ -241,21 +241,21 @@ enum cs_result charset_init(H3270 *session, const char *csname)
 		return CS_NOTFOUND;
 
 	/* Grab the File Transfer character set. */
-	cftcs = lib3270_get_resource_string("ftCharset",csname,NULL);
+	cftcs = lib3270_get_resource_string(hSession,"ftCharset",csname,NULL);
 
 	/* Save the current definitions, and start over with the defaults. */
 	save_charset();
 	charset_defaults();
 
 	/* Check for auto-keymap. */
-	ak = lib3270_get_resource_string("autoKeymap", csname, NULL);
+	ak = lib3270_get_resource_string(hSession,"autoKeymap", csname, NULL);
 	if (ak != NULL)
 		auto_keymap = !strcasecmp(ak, "true");
 	else
 		auto_keymap = 0;
 
 	/* Interpret them. */
-	rc = resource_charset(csname, ccs, cftcs);
+	rc = resource_charset(hSession,csname, ccs, cftcs);
 
 	/* Free them. */
 	lib3270_free(ccs);
@@ -376,7 +376,7 @@ set_charset_name(char *csname)
 */
 
 /* Define a charset from resources. */
-static enum cs_result resource_charset(const char *csname, char *cs, char *ftcs)
+static enum cs_result resource_charset(H3270 *hSession, const char *csname, char *cs, char *ftcs)
 {
 	enum cs_result	  rc;
 	int				  ne	= 0;
@@ -395,7 +395,7 @@ static enum cs_result resource_charset(const char *csname, char *cs, char *ftcs)
 	}
 
 //	rcs = get_fresource("%s.%s", "displayCharset", csname);
-	rcs = lib3270_get_resource_string("displayCharset", csname, NULL);
+	rcs = lib3270_get_resource_string(hSession,"displayCharset", csname, NULL);
 
 	/* Isolate the pieces. */
 	if (rcs != CN)
@@ -448,18 +448,18 @@ static enum cs_result resource_charset(const char *csname, char *cs, char *ftcs)
 	/* Set up the cgcsgid. */
 //	set_cgcsgids(get_fresource("%s.%s", "codepage", csname));
 	{
-		char *ptr = lib3270_get_resource_string("codepage", csname, NULL);
+		char *ptr = lib3270_get_resource_string(hSession,"codepage", csname, NULL);
 		set_cgcsgids(ptr);
 		lib3270_free(ptr);
 	}
 
 //	dcs = get_fresource("%s.%s", "displayCharset", csname);
-	dcs = lib3270_get_resource_string("displayCharset", csname, NULL);
+	dcs = lib3270_get_resource_string(hSession,"displayCharset", csname, NULL);
 
 	if (dcs != NULL)
-		set_display_charset(&h3270,dcs);
+		set_display_charset(hSession,dcs);
 	else
-		set_display_charset(&h3270,"ISO-8859-1");
+		set_display_charset(hSession,"ISO-8859-1");
 
 	lib3270_free(dcs);
 

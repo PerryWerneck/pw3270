@@ -943,7 +943,7 @@ void * Calloc(size_t nelem, size_t elsize)
 }
 */
 
-LIB3270_EXPORT char * lib3270_get_resource_string(const char *first_element, ...)
+LIB3270_EXPORT char * lib3270_get_resource_string(H3270 *hSession, const char *first_element, ...)
 {
 #ifdef ANDROID
 
@@ -972,7 +972,7 @@ LIB3270_EXPORT char * lib3270_get_resource_string(const char *first_element, ...
 
 	*ptr = 0;
 
-	res = get_resource(str);
+	res = get_resource(hSession,str);
 
 	trace("%s(%s)=%s",__FUNCTION__,str,res ? res : "NULL");
 

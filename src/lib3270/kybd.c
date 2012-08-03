@@ -2062,19 +2062,19 @@ LIB3270_ACTION( eraseeof )
 #endif /*]*/
 	baddr = hSession->cursor_addr;
 	fa = get_field_attribute(hSession,baddr);
-	if (FA_IS_PROTECTED(fa) || h3270.ea_buf[baddr].fa) {
-		operator_error(&h3270,KL_OERR_PROTECTED);
+	if (FA_IS_PROTECTED(fa) || hSession->ea_buf[baddr].fa) {
+		operator_error(hSession,KL_OERR_PROTECTED);
 		return -1;
 	}
 	if (hSession->formatted) {	/* erase to next field attribute */
 		do {
-			ctlr_add(&h3270,baddr, EBC_null, 0);
+			ctlr_add(hSession,baddr, EBC_null, 0);
 			INC_BA(baddr);
-		} while (!h3270.ea_buf[baddr].fa);
+		} while (!hSession->ea_buf[baddr].fa);
 		mdt_set(hSession,hSession->cursor_addr);
 	} else {	/* erase to end of screen */
 		do {
-			ctlr_add(&h3270,baddr, EBC_null, 0);
+			ctlr_add(hSession,baddr, EBC_null, 0);
 			INC_BA(baddr);
 		} while (baddr != 0);
 	}
@@ -2085,9 +2085,9 @@ LIB3270_ACTION( eraseeof )
 		if (d == DBCS_RIGHT) {
 			baddr = hSession->cursor_addr;
 			DEC_BA(baddr);
-			h3270.ea_buf[baddr].cc = EBC_si;
+			hSession->ea_buf[baddr].cc = EBC_si;
 		} else
-			h3270.ea_buf[hSession->cursor_addr].cc = EBC_si;
+			hSession->ea_buf[hSession->cursor_addr].cc = EBC_si;
 	}
 	(void) ctlr_dbcs_postprocess(hSession);
 	hSession->display(hSession);
@@ -2183,7 +2183,7 @@ LIB3270_ACTION( deleteword )
 
 	/* Make sure we're on a modifiable field. */
 	if (FA_IS_PROTECTED(fa) || hSession->ea_buf[baddr].fa) {
-		operator_error(&h3270,KL_OERR_PROTECTED);
+		operator_error(hSession,KL_OERR_PROTECTED);
 		return -1;
 	}
 
@@ -2377,28 +2377,33 @@ LIB3270_ACTION( fieldend )
 	return 0;
 }
 
-/* PA key action for String actions */
-static void
-do_pa(unsigned n)
+/**
+ * PA key action for String actions
+ */
+static void do_pa(H3270 *hSession, unsigned n)
 {
-	if (n < 1 || n > PA_SZ) {
-		popup_an_error(NULL, _( "Unknown PA key %d" ), n);
+	if (n < 1 || n > PA_SZ)
+	{
+		popup_an_error(hSession, _( "Unknown PA key %d" ), n);
 		return;
 	}
 
-	lib3270_pakey(&h3270,n);
+	lib3270_pakey(hSession,n);
 
 }
 
-/* PF key action for String actions */
-static void do_pf(unsigned n)
+/**
+ * PF key action for String actions
+ */
+static void do_pf(H3270 *hSession, unsigned n)
 {
-	if (n < 1 || n > PF_SZ) {
-		popup_an_error(NULL, _( "Unknown PF key %d" ), n);
+	if (n < 1 || n > PF_SZ)
+	{
+		popup_an_error(hSession, _( "Unknown PF key %d" ), n);
 		return;
 	}
 
-	lib3270_pfkey(&h3270,n);
+	lib3270_pfkey(hSession,n);
 }
 
 /*
@@ -2747,7 +2752,7 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *hSession, char *s, int len, int 
 				}
 				else
 				{
-					do_pf(literal);
+					do_pf(hSession,literal);
 					skipped = False;
 					if (IN_3270)
 						return len-1;
@@ -2769,7 +2774,7 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *hSession, char *s, int len, int 
 				}
 				else
 				{
-					do_pa(literal);
+					do_pa(hSession, literal);
 					skipped = False;
 					if (IN_3270)
 						return len-1;
@@ -2866,7 +2871,7 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *hSession, char *s, int len, int 
 	    case BACKPF:
 			if (nc > 0)
 			{
-				do_pf(literal);
+				do_pf(hSession,literal);
 				state = BASE;
 			}
 			break;
@@ -2874,7 +2879,7 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *hSession, char *s, int len, int 
 	    case BACKPA:
 			if (nc > 0)
 			{
-				do_pa(literal);
+				do_pa(hSession,literal);
 				state = BASE;
 			}
 			break;

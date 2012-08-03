@@ -23,8 +23,8 @@ LIB3270_INTERNAL char *ctl_see(int c);
 LIB3270_INTERNAL char *do_subst(const char *s, Boolean do_vars, Boolean do_tilde);
 LIB3270_INTERNAL void fcatv(FILE *f, char *s);
 LIB3270_INTERNAL const char *get_message(const char *key);
-LIB3270_INTERNAL const char *get_fresource(const char *fmt, ...) printflike(1, 2);
-LIB3270_INTERNAL const char *get_resource(const char *name);
+LIB3270_INTERNAL const char *get_fresource(H3270 *hSession, const char *fmt, ...) printflike(2, 3);
+LIB3270_INTERNAL const char *get_resource(H3270 *hSession, const char *name);
 LIB3270_INTERNAL char *scatv(const char *s, char *buf, size_t len);
 LIB3270_INTERNAL int split_dbcs_resource(const char *value, char sep, char **part1,
     char **part2);

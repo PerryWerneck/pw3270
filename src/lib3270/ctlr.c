@@ -1233,29 +1233,29 @@ enum pds ctlr_write(H3270 *hSession, unsigned char buf[], int buflen, Boolean er
 				else
 				{
 					if (ra_ge)
-						ctlr_add(hSession,h3270.buffer_addr, add_c1,CS_GE);
-					else if (h3270.default_cs)
-						ctlr_add(hSession,h3270.buffer_addr, add_c1,h3270.default_cs);
+						ctlr_add(hSession,hSession->buffer_addr, add_c1,CS_GE);
+					else if (hSession->default_cs)
+						ctlr_add(hSession,hSession->buffer_addr, add_c1,hSession->default_cs);
 					else
-						ctlr_add(hSession,h3270.buffer_addr, add_c1,0);
+						ctlr_add(hSession,hSession->buffer_addr, add_c1,0);
 				}
-				ctlr_add_fg(hSession,h3270.buffer_addr, h3270.default_fg);
-				ctlr_add_gr(hSession,h3270.buffer_addr, h3270.default_gr);
-				ctlr_add_ic(hSession,h3270.buffer_addr, h3270.default_ic);
+				ctlr_add_fg(hSession,hSession->buffer_addr, hSession->default_fg);
+				ctlr_add_gr(hSession,hSession->buffer_addr, hSession->default_gr);
+				ctlr_add_ic(hSession,hSession->buffer_addr, hSession->default_ic);
 
 				INC_BA(hSession->buffer_addr);
 				if (add_dbcs)
 				{
-					ctlr_add(hSession,h3270.buffer_addr, add_c2,h3270.default_cs);
-					ctlr_add_fg(hSession,h3270.buffer_addr, h3270.default_fg);
-					ctlr_add_bg(hSession,h3270.buffer_addr, h3270.default_bg);
-					ctlr_add_gr(hSession,h3270.buffer_addr, h3270.default_gr);
-					ctlr_add_ic(hSession,h3270.buffer_addr, h3270.default_ic);
+					ctlr_add(hSession,hSession->buffer_addr, add_c2,hSession->default_cs);
+					ctlr_add_fg(hSession,hSession->buffer_addr, h3270.default_fg);
+					ctlr_add_bg(hSession,hSession->buffer_addr, hSession->default_bg);
+					ctlr_add_gr(hSession,hSession->buffer_addr, hSession->default_gr);
+					ctlr_add_ic(hSession,hSession->buffer_addr, hSession->default_ic);
 					INC_BA(hSession->buffer_addr);
 				}
-			} while (h3270.buffer_addr != baddr);
+			} while (hSession->buffer_addr != baddr);
 
-			current_fa = get_field_attribute(&h3270,h3270.buffer_addr);
+			current_fa = get_field_attribute(hSession,hSession->buffer_addr);
 			last_cmd = True;
 			last_zpt = False;
 			break;
