@@ -182,9 +182,15 @@
 		unsigned char			  default_ic;
 		char					  reply_mode;
 		int 					  trace_primed 		: 1;
+		int						  ticking			: 1;
+		int						  mticking			: 1;
 		int						  crm_nattr;
 		unsigned char			  crm_attr[16];
 		unsigned char 			* zero_buf;				/**< empty buffer, for area clears */
+
+		struct timeval			  t_start;
+		void					* tick_id;
+		struct timeval			  t_want;
 
 		// Telnet.c
 		unsigned char 			* ibuf;

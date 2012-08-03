@@ -1401,7 +1401,7 @@ enum pds ctlr_write(H3270 *hSession, unsigned char buf[], int buflen, Boolean er
 		case ORDER_SFE:	/* start field extended */
 			END_TEXT("StartFieldExtended");
 			if (previous != SBA)
-				trace_ds(hSession,"%s",rcba(&h3270,h3270.buffer_addr));
+				trace_ds(hSession,"%s",rcba(hSession,h3270.buffer_addr));
 			previous = ORDER;
 			cp++;	/* skip order */
 			na = *cp;
@@ -1526,11 +1526,11 @@ enum pds ctlr_write(H3270 *hSession, unsigned char buf[], int buflen, Boolean er
 			if (h3270.default_cs == CS_DBCS || d != DBCS_NONE) {
 				ABORT_WRITE("invalid format control order in DBCS field");
 			}
-			ctlr_add(&h3270,hSession->buffer_addr, *cp, hSession->default_cs);
-			ctlr_add_fg(&h3270,hSession->buffer_addr, hSession->default_fg);
-			ctlr_add_bg(&h3270,hSession->buffer_addr, hSession->default_bg);
-			ctlr_add_gr(&h3270,hSession->buffer_addr, hSession->default_gr);
-			ctlr_add_ic(&h3270,hSession->buffer_addr, hSession->default_ic);
+			ctlr_add(hSession,hSession->buffer_addr, *cp, hSession->default_cs);
+			ctlr_add_fg(hSession,hSession->buffer_addr, hSession->default_fg);
+			ctlr_add_bg(hSession,hSession->buffer_addr, hSession->default_bg);
+			ctlr_add_gr(hSession,hSession->buffer_addr, hSession->default_gr);
+			ctlr_add_ic(hSession,hSession->buffer_addr, hSession->default_ic);
 			INC_BA(hSession->buffer_addr);
 			last_cmd = True;
 			last_zpt = False;
@@ -1550,11 +1550,11 @@ enum pds ctlr_write(H3270 *hSession, unsigned char buf[], int buflen, Boolean er
 			}
 			/* All is well. */
 			previous = ORDER;
-			ctlr_add(&h3270,h3270.buffer_addr, *cp, h3270.default_cs);
-			ctlr_add_fg(&h3270,h3270.buffer_addr, h3270.default_fg);
-			ctlr_add_bg(&h3270,h3270.buffer_addr, h3270.default_bg);
-			ctlr_add_gr(&h3270,h3270.buffer_addr, h3270.default_gr);
-			ctlr_add_ic(&h3270,h3270.buffer_addr, h3270.default_ic);
+			ctlr_add(hSession,h3270.buffer_addr, *cp, h3270.default_cs);
+			ctlr_add_fg(hSession,h3270.buffer_addr, h3270.default_fg);
+			ctlr_add_bg(hSession,h3270.buffer_addr, h3270.default_bg);
+			ctlr_add_gr(hSession,h3270.buffer_addr, h3270.default_gr);
+			ctlr_add_ic(hSession,h3270.buffer_addr, h3270.default_ic);
 			INC_BA(hSession->buffer_addr);
 			last_cmd = True;
 			last_zpt = False;
@@ -1569,7 +1569,7 @@ enum pds ctlr_write(H3270 *hSession, unsigned char buf[], int buflen, Boolean er
 			if (d != DBCS_NONE && why == DBCS_FIELD) {
 				ABORT_WRITE("SI in DBCS field");
 			}
-			fa_addr = find_field_attribute(&h3270,h3270.buffer_addr);
+			fa_addr = find_field_attribute(hSession,h3270.buffer_addr);
 			baddr = h3270.buffer_addr;
 			DEC_BA(baddr);
 			while (!aborted &&
@@ -1589,11 +1589,11 @@ enum pds ctlr_write(H3270 *hSession, unsigned char buf[], int buflen, Boolean er
 			}
 			/* All is well. */
 			previous = ORDER;
-			ctlr_add(&h3270,h3270.buffer_addr, *cp, h3270.default_cs);
-			ctlr_add_fg(&h3270,h3270.buffer_addr, h3270.default_fg);
-			ctlr_add_bg(&h3270,h3270.buffer_addr, h3270.default_bg);
-			ctlr_add_gr(&h3270,h3270.buffer_addr, h3270.default_gr);
-			ctlr_add_ic(&h3270,h3270.buffer_addr, h3270.default_ic);
+			ctlr_add(hSession,h3270.buffer_addr, *cp, h3270.default_cs);
+			ctlr_add_fg(hSession,h3270.buffer_addr, h3270.default_fg);
+			ctlr_add_bg(hSession,h3270.buffer_addr, h3270.default_bg);
+			ctlr_add_gr(hSession,h3270.buffer_addr, h3270.default_gr);
+			ctlr_add_ic(hSession,h3270.buffer_addr, h3270.default_ic);
 			INC_BA(hSession->buffer_addr);
 			last_cmd = True;
 			last_zpt = False;
@@ -1641,18 +1641,19 @@ enum pds ctlr_write(H3270 *hSession, unsigned char buf[], int buflen, Boolean er
 				END_TEXT("NULL");
 				add_c1 = *cp;
 			}
-			ctlr_add(&h3270,h3270.buffer_addr, add_c1, h3270.default_cs);
-			ctlr_add_fg(&h3270,h3270.buffer_addr, h3270.default_fg);
-			ctlr_add_bg(&h3270,h3270.buffer_addr, h3270.default_bg);
-			ctlr_add_gr(&h3270,h3270.buffer_addr, h3270.default_gr);
-			ctlr_add_ic(&h3270,h3270.buffer_addr, h3270.default_ic);
+			ctlr_add(hSession,h3270.buffer_addr, add_c1, h3270.default_cs);
+			ctlr_add_fg(hSession,h3270.buffer_addr, h3270.default_fg);
+			ctlr_add_bg(hSession,h3270.buffer_addr, h3270.default_bg);
+			ctlr_add_gr(hSession,h3270.buffer_addr, h3270.default_gr);
+			ctlr_add_ic(hSession,h3270.buffer_addr, h3270.default_ic);
 			INC_BA(hSession->buffer_addr);
-			if (add_dbcs) {
-				ctlr_add(&h3270,h3270.buffer_addr, add_c2, h3270.default_cs);
-				ctlr_add_fg(&h3270,h3270.buffer_addr, h3270.default_fg);
-				ctlr_add_bg(&h3270,h3270.buffer_addr, h3270.default_bg);
-				ctlr_add_gr(&h3270,h3270.buffer_addr, h3270.default_gr);
-				ctlr_add_ic(&h3270,h3270.buffer_addr, h3270.default_ic);
+			if (add_dbcs)
+			{
+				ctlr_add(hSession,h3270.buffer_addr, add_c2, h3270.default_cs);
+				ctlr_add_fg(hSession,h3270.buffer_addr, h3270.default_fg);
+				ctlr_add_bg(hSession,h3270.buffer_addr, h3270.default_bg);
+				ctlr_add_gr(hSession,h3270.buffer_addr, h3270.default_gr);
+				ctlr_add_ic(hSession,h3270.buffer_addr, h3270.default_ic);
 				INC_BA(hSession->buffer_addr);
 			}
 			last_cmd = False;
@@ -1690,7 +1691,7 @@ enum pds ctlr_write(H3270 *hSession, unsigned char buf[], int buflen, Boolean er
 			       }
 			       add_dbcs = True;
 			       dbcs_to_mb(add_c1, add_c2, mb);
-			       trace_ds_nb(&h3270,"%s", mb);
+			       trace_ds_nb(hSession,"%s", mb);
 			} else {
 #endif /*]*/
 				add_c1 = *cp;
@@ -1698,19 +1699,19 @@ enum pds ctlr_write(H3270 *hSession, unsigned char buf[], int buflen, Boolean er
 #if defined(X3270_DBCS) /*[*/
 			}
 #endif /*]*/
-			ctlr_add(&h3270,h3270.buffer_addr, add_c1, h3270.default_cs);
-			ctlr_add_fg(&h3270,h3270.buffer_addr, h3270.default_fg);
-			ctlr_add_bg(&h3270,h3270.buffer_addr, h3270.default_bg);
-			ctlr_add_gr(&h3270,h3270.buffer_addr, h3270.default_gr);
-			ctlr_add_ic(&h3270,h3270.buffer_addr, h3270.default_ic);
+			ctlr_add(hSession,h3270.buffer_addr, add_c1, h3270.default_cs);
+			ctlr_add_fg(hSession,h3270.buffer_addr, h3270.default_fg);
+			ctlr_add_bg(hSession,h3270.buffer_addr, h3270.default_bg);
+			ctlr_add_gr(hSession,h3270.buffer_addr, h3270.default_gr);
+			ctlr_add_ic(hSession,h3270.buffer_addr, h3270.default_ic);
 			INC_BA(hSession->buffer_addr);
 #if defined(X3270_DBCS) /*[*/
 			if (add_dbcs) {
 				ctlr_add(h3270.buffer_addr, add_c2, h3270.default_cs);
-				ctlr_add_fg(&h3270,h3270.buffer_addr, h3270.default_fg);
+				ctlr_add_fg(hSession,h3270.buffer_addr, h3270.default_fg);
 				ctlr_add_bg(h3270.buffer_addr, h3270.default_bg);
 				ctlr_add_gr(h3270.buffer_addr, h3270.default_gr);
-				ctlr_add_ic(&h3270,h3270.buffer_addr, h3270.default_ic);
+				ctlr_add_ic(hSession,h3270.buffer_addr, h3270.default_ic);
 				INC_BA(hSession->buffer_addr);
 			}
 #endif /*]*/
@@ -1724,10 +1725,10 @@ enum pds ctlr_write(H3270 *hSession, unsigned char buf[], int buflen, Boolean er
 	trace_ds(hSession,"\n");
 	if (wcc_keyboard_restore) {
 		h3270.aid = AID_NO;
-		do_reset(&h3270,False);
+		do_reset(hSession,False);
 	} else if (h3270.kybdlock & KL_OIA_TWAIT) {
-		lib3270_kybdlock_clear(&h3270,KL_OIA_TWAIT);
-		status_changed(&h3270,LIB3270_STATUS_SYSWAIT);
+		lib3270_kybdlock_clear(hSession,KL_OIA_TWAIT);
+		status_changed(hSession,LIB3270_STATUS_SYSWAIT);
 	}
 	if (wcc_sound_alarm)
 		lib3270_ring_bell(hSession);
@@ -2518,24 +2519,6 @@ void mdt_clear(H3270 *hSession, int baddr)
 	}
 }
 
-
-/*
- * Support for screen-size swapping for scrolling
- */ /*
-void ctlr_shrink(void)
-{
-	int baddr;
-
-	for (baddr = 0; baddr < h3270.rows*h3270.cols; baddr++)
-	{
-		if (!h3270.ea_buf[baddr].fa)
-			h3270.ea_buf[baddr].cc = h3270.vcontrol ? EBC_space : EBC_null;
-	}
-	ALL_CHANGED(&h3270);
-	h3270.display(&h3270);
-}
-*/
-
 #if defined(X3270_DBCS) /*[*/
 /*
  * DBCS state query.
@@ -2564,11 +2547,11 @@ ctlr_dbcs_state(int baddr)
  * to an accuracy of 0.1 seconds.  If we don't repaint the screen before we see
  * the unlock, the time should be fairly accurate.
  */
-static struct timeval t_start;
-static Boolean ticking = False;
-static Boolean mticking = False;
-static void * tick_id;
-static struct timeval t_want;
+//static struct timeval t_start;
+// static Boolean ticking = False;
+//static Boolean mticking = False;
+//static void * tick_id;
+//static struct timeval t_want;
 
 /* Return the difference in milliseconds between two timevals. */
 static long
@@ -2578,7 +2561,7 @@ delta_msec(struct timeval *t1, struct timeval *t0)
 	       (t1->tv_usec - t0->tv_usec + 500) / 1000;
 }
 
-static void keep_ticking(H3270 *session)
+static void keep_ticking(H3270 *hSession)
 {
 	struct timeval t1;
 	long msec;
@@ -2586,64 +2569,64 @@ static void keep_ticking(H3270 *session)
 	do
 	{
 		(void) gettimeofday(&t1, (struct timezone *) 0);
-		t_want.tv_sec++;
-		msec = delta_msec(&t_want, &t1);
+		hSession->t_want.tv_sec++;
+		msec = delta_msec(&hSession->t_want, &t1);
 	} while (msec <= 0);
 
-	tick_id = AddTimeOut(msec, session, keep_ticking);
-	status_timing(session,&t_start, &t1);
+	hSession->tick_id = AddTimeOut(msec, hSession, keep_ticking);
+	status_timing(hSession,&hSession->t_start, &t1);
 }
 
-void ticking_start(H3270 *session, Boolean anyway)
+void ticking_start(H3270 *hSession, Boolean anyway)
 {
-	CHECK_SESSION_HANDLE(session);
+	CHECK_SESSION_HANDLE(hSession);
 
-	if(session->set_timer)
+	if(hSession->set_timer)
 	{
-		if(lib3270_get_toggle(&h3270,LIB3270_TOGGLE_SHOW_TIMING) || anyway)
-			session->set_timer(session,1);
+		if(lib3270_get_toggle(hSession,LIB3270_TOGGLE_SHOW_TIMING) || anyway)
+			hSession->set_timer(hSession,1);
 	}
 	else
 	{
-		(void) gettimeofday(&t_start, (struct timezone *) 0);
+		(void) gettimeofday(&hSession->t_start, (struct timezone *) 0);
 
-		mticking = True;
+		hSession->mticking = 1;
 
-		if (!lib3270_get_toggle(&h3270,LIB3270_TOGGLE_SHOW_TIMING) && !anyway)
+		if (!lib3270_get_toggle(hSession,LIB3270_TOGGLE_SHOW_TIMING) && !anyway)
 			return;
 
-		status_untiming(session);
-		if (ticking)
-			RemoveTimeOut(tick_id);
-		ticking = True;
-		tick_id = AddTimeOut(1000, session, keep_ticking);
-		t_want = t_start;
+		status_untiming(hSession);
+		if (hSession->ticking)
+			RemoveTimeOut(hSession->tick_id);
+		hSession->ticking = 1;
+		hSession->tick_id = AddTimeOut(1000, hSession, keep_ticking);
+		hSession->t_want = hSession->t_start;
 	}
 
 }
 
-static void ticking_stop(H3270 *session)
+static void ticking_stop(H3270 *hSession)
 {
-	CHECK_SESSION_HANDLE(session);
+	CHECK_SESSION_HANDLE(hSession);
 
-	if(session->set_timer)
+	if(hSession->set_timer)
 	{
-		session->set_timer(session,0);
+		hSession->set_timer(hSession,0);
 	}
 	else
 	{
 		struct timeval t1;
 
 		(void) gettimeofday(&t1, (struct timezone *) 0);
-		if (mticking)
-			mticking = False;
+		if (hSession->mticking)
+			hSession->mticking = 0;
 		else
 			return;
 
-		if (!ticking)
+		if (!hSession->ticking)
 			return;
-		RemoveTimeOut(tick_id);
-		ticking = False;
-		status_timing(session,&t_start, &t1);
+		RemoveTimeOut(hSession->tick_id);
+		hSession->ticking = 0;
+		status_timing(hSession,&hSession->t_start, &t1);
 	}
 }

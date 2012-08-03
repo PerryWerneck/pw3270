@@ -88,9 +88,9 @@ static enum pds sf_read_part(H3270 *hSession, unsigned char buf[], unsigned bufl
 static enum pds sf_erase_reset(H3270 *hSession, unsigned char buf[], int buflen);
 static enum pds sf_set_reply_mode(H3270 *hSession, unsigned char buf[], int buflen);
 static enum pds sf_create_partition(H3270 *hSession, unsigned char buf[], int buflen);
-static enum pds sf_outbound_ds(unsigned char buf[], int buflen);
+static enum pds sf_outbound_ds(H3270 *hSession, unsigned char buf[], int buflen);
 static void query_reply_start(H3270 *hSession);
-static void do_query_reply(unsigned char code);
+static void do_query_reply(H3270 *hSession, unsigned char code);
 static void query_reply_end(H3270 *hSession);
 
 typedef Boolean qr_multi_fn_t(H3270 *hSession, unsigned *subindex, Boolean *more);
@@ -215,7 +215,7 @@ enum pds write_structured_field(H3270 *hSession, unsigned char buf[], int buflen
 
 	    case SF_OUTBOUND_DS:
 			trace_ds(hSession,"OutboundDS");
-			rv_this = sf_outbound_ds(cp, (int)fieldlen);
+			rv_this = sf_outbound_ds(hSession, cp, (int)fieldlen);
 			break;
 
 #if defined(X3270_FT)
@@ -285,7 +285,7 @@ static enum pds sf_read_part(H3270 *hSession, unsigned char buf[], unsigned bufl
 #if defined(X3270_DBCS) /*[*/
 			if (dbcs || replies[i].code != QR_DBCS_ASIA)
 #endif /*]*/
-				do_query_reply(replies[i].code);
+				do_query_reply(hSession, replies[i].code);
 		}
  		query_reply_end(hSession);
 		break;
@@ -305,7 +305,7 @@ static enum pds sf_read_part(H3270 *hSession, unsigned char buf[], unsigned bufl
 			trace_ds(hSession,"List(");
 			if (buflen < 7) {
 				trace_ds(hSession,")\n");
-				do_query_reply(QR_NULL);
+				do_query_reply(hSession, QR_NULL);
 			} else {
 				for (i = 6; i < buflen; i++) {
 					trace_ds(hSession,"%s%s", comma,see_qcode(buf[i]));
@@ -321,12 +321,12 @@ static enum pds sf_read_part(H3270 *hSession, unsigned char buf[], unsigned bufl
 						       replies[i].code != QR_DBCS_ASIA)
 #endif /*]*/
 						   ) {
-						do_query_reply(replies[i].code);
+						do_query_reply(hSession, replies[i].code);
 						any++;
 					}
 				}
 				if (!any) {
-					do_query_reply(QR_NULL);
+					do_query_reply(hSession, QR_NULL);
 				}
 			}
 			break;
@@ -341,7 +341,7 @@ static enum pds sf_read_part(H3270 *hSession, unsigned char buf[], unsigned bufl
 #if defined(X3270_DBCS) /*[*/
 				if (dbcs || replies[i].code != QR_DBCS_ASIA)
 #endif /*]*/
-					do_query_reply(replies[i].code);
+					do_query_reply(hSession, replies[i].code);
 			break;
 		    case SF_RPQ_ALL:
 			trace_ds(hSession,"All\n");
@@ -349,7 +349,7 @@ static enum pds sf_read_part(H3270 *hSession, unsigned char buf[], unsigned bufl
 #if defined(X3270_DBCS) /*[*/
 				if (dbcs || replies[i].code != QR_DBCS_ASIA)
 #endif /*]*/
-					do_query_reply(replies[i].code);
+					do_query_reply(hSession, replies[i].code);
 			break;
 		    default:
 			trace_ds(hSession,"unknown request type 0x%02x\n", buf[5]);
@@ -627,55 +627,64 @@ static enum pds sf_create_partition(H3270 *hSession, unsigned char buf[], int bu
 	return PDS_OKAY_NO_OUTPUT;
 }
 
-static enum pds
-sf_outbound_ds(unsigned char buf[], int buflen)
+static enum pds sf_outbound_ds(H3270 *hSession, unsigned char buf[], int buflen)
 {
 	enum pds rv;
 
-	if (buflen < 5) {
-		trace_ds(&h3270," error: field length %d too short\n", buflen);
+	if (buflen < 5)
+	{
+		trace_ds(hSession," error: field length %d too short\n", buflen);
 		return PDS_BAD_CMD;
 	}
 
-	trace_ds(&h3270,"(0x%02x)", buf[3]);
-	if (buf[3] != 0x00) {
-		trace_ds(&h3270," error: illegal partition 0x%0x\n", buf[3]);
+	trace_ds(hSession,"(0x%02x)", buf[3]);
+	if (buf[3] != 0x00)
+	{
+		trace_ds(hSession," error: illegal partition 0x%0x\n", buf[3]);
 		return PDS_BAD_CMD;
 	}
 
-	switch (buf[4]) {
-	    case SNA_CMD_W:
-		trace_ds(&h3270," Write");
-		if (buflen > 5) {
-			if ((rv = ctlr_write(&h3270,&buf[4], buflen-4, False)) < 0)
+	switch (buf[4])
+	{
+	case SNA_CMD_W:
+		trace_ds(hSession," Write");
+		if (buflen > 5)
+		{
+			if ((rv = ctlr_write(hSession,&buf[4], buflen-4, False)) < 0)
 				return rv;
 		} else
-			trace_ds(&h3270,"\n");
+			trace_ds(hSession,"\n");
 		break;
-	    case SNA_CMD_EW:
-		trace_ds(&h3270," EraseWrite");
-		ctlr_erase(&h3270,h3270.screen_alt);
-		if (buflen > 5) {
-			if ((rv = ctlr_write(&h3270,&buf[4], buflen-4, True)) < 0)
+
+	case SNA_CMD_EW:
+		trace_ds(hSession," EraseWrite");
+		ctlr_erase(hSession,hSession->screen_alt);
+		if (buflen > 5)
+		{
+			if ((rv = ctlr_write(hSession,&buf[4], buflen-4, True)) < 0)
 				return rv;
 		} else
-			trace_ds(&h3270,"\n");
+		trace_ds(hSession,"\n");
 		break;
-	    case SNA_CMD_EWA:
-		trace_ds(&h3270," EraseWriteAlternate");
-		ctlr_erase(&h3270,h3270.screen_alt);
-		if (buflen > 5) {
-			if ((rv = ctlr_write(&h3270,&buf[4], buflen-4, True)) < 0)
+
+	case SNA_CMD_EWA:
+		trace_ds(hSession," EraseWriteAlternate");
+		ctlr_erase(hSession,hSession->screen_alt);
+		if (buflen > 5)
+		{
+			if ((rv = ctlr_write(hSession,&buf[4], buflen-4, True)) < 0)
 				return rv;
 		} else
-			trace_ds(&h3270,"\n");
+			trace_ds(hSession,"\n");
 		break;
-	    case SNA_CMD_EAU:
-		trace_ds(&h3270," EraseAllUnprotected\n");
-		ctlr_erase_all_unprotected(&h3270);
+
+	case SNA_CMD_EAU:
+		trace_ds(hSession," EraseAllUnprotected\n");
+		ctlr_erase_all_unprotected(hSession);
 		break;
-	    default:
-		trace_ds(&h3270," unknown type 0x%02x\n", buf[4]);
+
+	default:
+		trace_ds(hSession," unknown type 0x%02x\n", buf[4]);
 		return PDS_BAD_CMD;
 	}
 	return PDS_OKAY_NO_OUTPUT;
@@ -689,8 +698,7 @@ static void query_reply_start(H3270 *hSession)
 	qr_in_progress = True;
 }
 
-static void
-do_query_reply(unsigned char code)
+static void do_query_reply(H3270 *hSession, unsigned char code)
 {
 	int i;
 	unsigned subindex = 0;
@@ -705,37 +713,40 @@ do_query_reply(unsigned char code)
 	    (replies[i].single_fn == NULL && replies[i].multi_fn == NULL))
 		return;
 
-	if (qr_in_progress) {
-		trace_ds(&h3270,"> StructuredField\n");
+	if (qr_in_progress)
+	{
+		trace_ds(hSession,"> StructuredField\n");
 		qr_in_progress = False;
 	}
 
-	do {
-		int obptr0 = h3270.obptr - h3270.obuf;
+	do
+	{
+		int obptr0 = hSession->obptr - hSession->obuf;
 		Boolean full = True;
 
-		space3270out(&h3270,4);
-		h3270.obptr += 2;	/* skip length for now */
-		*h3270.obptr++ = SFID_QREPLY;
-		*h3270.obptr++ = code;
+		space3270out(hSession,4);
+		hSession->obptr += 2;	/* skip length for now */
+		*hSession->obptr++ = SFID_QREPLY;
+		*hSession->obptr++ = code;
 
 		more = False;
 		if (replies[i].single_fn)
-			replies[i].single_fn(&h3270);
+			replies[i].single_fn(hSession);
 		else
-			full = replies[i].multi_fn(&h3270,&subindex, &more);
+			full = replies[i].multi_fn(hSession,&subindex, &more);
 
-		if (full) {
+		if (full)
+		{
 			int len;
 			unsigned char *obptr_len;
 
 			/* Fill in the length. */
-			obptr_len = h3270.obuf + obptr0;
-			len = (h3270.obptr - h3270.obuf) - obptr0;
+			obptr_len = hSession->obuf + obptr0;
+			len = (hSession->obptr - hSession->obuf) - obptr0;
 			SET16(obptr_len, len);
 		} else {
 			/* Back over the header. */
-			h3270.obptr -= 4;
+			hSession->obptr -= 4;
 		}
 	} while (more);
 }
@@ -828,12 +839,12 @@ static void do_qr_color(H3270 *hSession)
 /*
 #if !defined(X3270_DISPLAY)
 	// Add background color.
-	if (h3270.m3279) {
+	if (hSession->m3279) {
 		space3270out(4);
-		*obptr++ = 4;		// length
-		*obptr++ = 0x02;	// background color
-		*obptr++ = 0x00;	// attribute
-		*obptr++ = 0xf0;	// default color
+		*hSession->obptr++ = 4;		// length
+		*hSession->obptr++ = 0x02;	// background color
+		*hSession->obptr++ = 0x00;	// attribute
+		*hSession->obptr++ = 0xf0;	// default color
 	}
 #endif
 */
@@ -892,82 +903,85 @@ static void do_qr_alpha_part(H3270 *hSession)
 
 static void do_qr_charsets(H3270 *hSession)
 {
-	trace_ds(&h3270,"> QueryReply(CharacterSets)\n");
-	space3270out(&h3270,64);
+	trace_ds(hSession,"> QueryReply(CharacterSets)\n");
+	space3270out(hSession,64);
 #if defined(X3270_DBCS) /*[*/
 	if (dbcs)
-		*h3270.obptr++ = 0x8e;			/* flags: GE, CGCSGID, DBCS */
+		*hSession->obptr++ = 0x8e;			/* flags: GE, CGCSGID, DBCS */
 	else
 #endif /*]*/
-		*h3270.obptr++ = 0x82;			/* flags: GE, CGCSGID present */
+		*hSession->obptr++ = 0x82;			/* flags: GE, CGCSGID present */
 
-	*h3270.obptr++ = 0x00;				/* more flags */
-	*h3270.obptr++ = *char_width;		/* SDW */
-	*h3270.obptr++ = *char_height;		/* SDW */
-	*h3270.obptr++ = 0x00;				/* no load PS */
-	*h3270.obptr++ = 0x00;
-	*h3270.obptr++ = 0x00;
-	*h3270.obptr++ = 0x00;
+	*hSession->obptr++ = 0x00;				/* more flags */
+	*hSession->obptr++ = *char_width;		/* SDW */
+	*hSession->obptr++ = *char_height;		/* SDW */
+	*hSession->obptr++ = 0x00;				/* no load PS */
+	*hSession->obptr++ = 0x00;
+	*hSession->obptr++ = 0x00;
+	*hSession->obptr++ = 0x00;
 #if defined(X3270_DBCS) /*[*/
 	if (dbcs)
-		*h3270.obptr++ = 0x0b;	/* DL (11 bytes) */
+		*hSession->obptr++ = 0x0b;	/* DL (11 bytes) */
 	else
 #endif /*]*/
-		*h3270.obptr++ = 0x07;	/* DL (7 bytes) */
+		*hSession->obptr++ = 0x07;	/* DL (7 bytes) */
 
-	*h3270.obptr++ = 0x00;		/* SET 0: */
+	*hSession->obptr++ = 0x00;		/* SET 0: */
 #if defined(X3270_DBCS) /*[*/
 	if (dbcs)
-		*h3270.obptr++ = 0x00;	/*  FLAGS: non-load, single-
+		*hSession->obptr++ = 0x00;	/*  FLAGS: non-load, single-
 					    plane, single-bute */
 	else
 #endif /*]*/
-		*h3270.obptr++ = 0x10;	/*  FLAGS: non-loadable,
+		*hSession->obptr++ = 0x10;	/*  FLAGS: non-loadable,
 					    single-plane, single-byte,
 					    no compare */
-	*h3270.obptr++ = 0x00;		/*  LCID 0 */
+	*hSession->obptr++ = 0x00;		/*  LCID 0 */
 #if defined(X3270_DBCS) /*[*/
 	if (dbcs) {
-		*obptr++ = 0x00;	/*  SW 0 */
-		*obptr++ = 0x00;	/*  SH 0 */
-		*obptr++ = 0x00;	/*  SUBSN */
-		*obptr++ = 0x00;	/*  SUBSN */
+		*hSession->obptr++ = 0x00;	/*  SW 0 */
+		*hSession->obptr++ = 0x00;	/*  SH 0 */
+		*hSession->obptr++ = 0x00;	/*  SUBSN */
+		*hSession->obptr++ = 0x00;	/*  SUBSN */
 	}
 #endif /*]*/
-	SET32(h3270.obptr, cgcsgid);		/*  CGCSGID */
-	if (!*standard_font) {
+	SET32(hSession->obptr, cgcsgid);		/*  CGCSGID */
+	if (!*standard_font)
+	{
 		/* special 3270 font, includes APL */
-		*h3270.obptr++ = 0x01;/* SET 1: */
-		if (h3270.apl_mode)
-		    *h3270.obptr++ = 0x00;/*  FLAGS: non-loadable, single-plane,
+		*hSession->obptr++ = 0x01;/* SET 1: */
+		if (hSession->apl_mode)
+		    *hSession->obptr++ = 0x00;/*  FLAGS: non-loadable, single-plane,
 					 single-byte, no compare */
 		else
-		    *h3270.obptr++ = 0x10;/*  FLAGS: non-loadable, single-plane,
+		    *hSession->obptr++ = 0x10;/*  FLAGS: non-loadable, single-plane,
 					 single-byte, no compare */
-		*h3270.obptr++ = 0xf1;/*  LCID */
+		*hSession->obptr++ = 0xf1;/*  LCID */
 #if defined(X3270_DBCS) /*[*/
-		if (dbcs) {
-			*obptr++ = 0x00;/*  SW 0 */
-			*obptr++ = 0x00;/*  SH 0 */
-			*obptr++ = 0x00;/*  SUBSN */
-			*obptr++ = 0x00;/*  SUBSN */
+		if (dbcs)
+		{
+			*hSession->obptr++ = 0x00;/*  SW 0 */
+			*hSession->obptr++ = 0x00;/*  SH 0 */
+			*hSession->obptr++ = 0x00;/*  SUBSN */
+			*hSession->obptr++ = 0x00;/*  SUBSN */
 		}
 #endif /*]*/
-		*h3270.obptr++ = 0x03;/*  CGCSGID: 3179-style APL2 */
-		*h3270.obptr++ = 0xc3;
-		*h3270.obptr++ = 0x01;
-		*h3270.obptr++ = 0x36;
+		*hSession->obptr++ = 0x03;/*  CGCSGID: 3179-style APL2 */
+		*hSession->obptr++ = 0xc3;
+		*hSession->obptr++ = 0x01;
+		*hSession->obptr++ = 0x36;
 	}
 #if defined(X3270_DBCS) /*[*/
-	if (dbcs) {
-		*obptr++ = 0x80;	/* SET 0x80: */
-		*obptr++ = 0x20;	/*  FLAGS: DBCS */
-		*obptr++ = 0xf8;	/*  LCID: 0xf8 */
-		*obptr++ = *char_width * 2; /* SW */
-		*obptr++ = *char_height; /* SH */
-		*obptr++ = 0x41;	/*  SUBSN */
-		*obptr++ = 0x7f;	/*  SUBSN */
-		SET32(obptr, cgcsgid_dbcs); /* CGCSGID */
+	if (dbcs)
+	{
+		*hSession->obptr++ = 0x80;	/* SET 0x80: */
+		*hSession->obptr++ = 0x20;	/*  FLAGS: DBCS */
+		*hSession->obptr++ = 0xf8;	/*  LCID: 0xf8 */
+		*hSession->obptr++ = *char_width * 2; /* SW */
+		*hSession->obptr++ = *char_height; /* SH */
+		*hSession->obptr++ = 0x41;	/*  SUBSN */
+		*hSession->obptr++ = 0x7f;	/*  SUBSN */
+		SET32(hSession->obptr, cgcsgid_dbcs); /* CGCSGID */
 	}
 #endif /*]*/
 }
