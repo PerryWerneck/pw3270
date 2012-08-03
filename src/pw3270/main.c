@@ -99,9 +99,15 @@ static void toplevel_setup(GtkWindow *window)
 	g_free(name);
 }
 
+static gboolean appname(const gchar *option_name, const gchar *value, gpointer data,GError **error)
+{
+	g_set_application_name(value);
+	return TRUE;
+}
+
 int main(int argc, char *argv[])
 {
-	static const gchar	* appname	= PACKAGE_NAME;
+//	static const gchar	* appname	= PACKAGE_NAME;
 	static const gchar	* host		= NULL;
 	int 				  rc 		= 0;
 
@@ -143,7 +149,7 @@ int main(int argc, char *argv[])
 	{
 		static const GOptionEntry app_options[] =
 		{
-			{ "appname",	'a', 0, G_OPTION_ARG_STRING,	&appname,		N_( "Application name" ),		PACKAGE_NAME	},
+			{ "appname",	'a', 0, G_OPTION_ARG_CALLBACK,	appname,		N_( "Application name" ),		PACKAGE_NAME	},
 			{ "host",		'h', 0, G_OPTION_ARG_STRING,	&host,			N_( "Host to connect"),			NULL			},
 			{ NULL }
 		};
@@ -188,7 +194,7 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	g_set_application_name(appname);
+//	g_set_application_name(appname);
 
 	rc = initialize();
 	if(!rc)
