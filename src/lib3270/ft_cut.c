@@ -119,57 +119,64 @@ static int xlate_buffered = 0;			/* buffer count */
 static int xlate_buf_ix = 0;			/* buffer index */
 static unsigned char xlate_buf[XLATE_NBUF];	/* buffer */
 
-static void cut_control_code(void);
-static void cut_data_request(void);
-static void cut_retransmit(void);
-static void cut_data(void);
+static void cut_control_code(H3270 *hSession);
+static void cut_data_request(H3270 *hSession);
+static void cut_retransmit(H3270 *hSession);
+static void cut_data(H3270 *hSession);
 
-static void cut_ack(void);
-static void cut_abort(unsigned short code, const char *fmt, ...);
+static void cut_ack(H3270 *hSession);
+static void cut_abort(H3270 *hSession, unsigned short code, const char *fmt, ...) printflike(3,4);
 
 static unsigned from6(unsigned char c);
 static int xlate_getc(void);
 
-/*
- * Convert a buffer for uploading (host->local).  Overwrites the buffer.
- * Returns the length of the converted data.
+/**
+ * Convert a buffer for uploading (host->local). Overwrites the buffer.
+ *
  * If there is a conversion error, calls cut_abort() and returns -1.
+ *
+ * @return the length of the converted data.
  */
-static int
-upload_convert(unsigned char *buf, int len)
+static int upload_convert(H3270 *hSession, unsigned char *buf, int len)
 {
 	unsigned char *ob0 = buf;
 	unsigned char *ob = ob0;
 
-	while (len--) {
+	while (len--)
+	{
 		unsigned char c = *buf++;
 		char *ixp;
 		int ix;
 		// int oq = -1;
 
 	    retry:
-		if (quadrant < 0) {
+		if (quadrant < 0)
+		{
 			/* Find the quadrant. */
-			for (quadrant = 0; quadrant < NQ; quadrant++) {
+			for (quadrant = 0; quadrant < NQ; quadrant++)
+			{
 				if (c == conv[quadrant].selector)
 					break;
 			}
-			if (quadrant >= NQ) {
-				cut_abort(SC_ABORT_XMIT, "%s", _("Data conversion error"));
+			if (quadrant >= NQ)
+			{
+				cut_abort(hSession,SC_ABORT_XMIT, "%s", _("Data conversion error"));
 				return -1;
 			}
 			continue;
 		}
 
 		/* Make sure it's in a valid range. */
-		if (c < 0x40 || c > 0xf9) {
-			cut_abort(SC_ABORT_XMIT, "%s", _("Data conversion error"));
+		if (c < 0x40 || c > 0xf9)
+		{
+			cut_abort(hSession,SC_ABORT_XMIT, "%s", _("Data conversion error"));
 			return -1;
 		}
 
 		/* Translate to a quadrant index. */
 		ixp = strchr(alphas, ebc2asc[c]);
-		if (ixp == (char *)NULL) {
+		if (ixp == (char *)NULL)
+		{
 			/* Try a different quadrant. */
 			// oq = quadrant;
 			quadrant = -1;
@@ -181,8 +188,8 @@ upload_convert(unsigned char *buf, int len)
 		 * See if it's mapped by that quadrant, handling NULLs
 		 * specially.
 		 */
-		if (quadrant != OTHER_2 && c != XLATE_NULL &&
-		    !conv[quadrant].xlate[ix]) {
+		if (quadrant != OTHER_2 && c != XLATE_NULL && !conv[quadrant].xlate[ix])
+		{
 			/* Try a different quadrant. */
 //			oq = quadrant;
 			quadrant = -1;
@@ -266,25 +273,29 @@ download_convert(unsigned const char *buf, unsigned len, unsigned char *xobuf)
  * Main entry point from ctlr.c.
  * We have received what looks like an appropriate message from the host.
  */
-void
-ft_cut_data(void)
+void ft_cut_data(H3270 *hSession)
 {
-	switch (h3270.ea_buf[O_FRAME_TYPE].cc) {
-	    case FT_CONTROL_CODE:
-		cut_control_code();
+	switch (hSession->ea_buf[O_FRAME_TYPE].cc)
+	{
+    case FT_CONTROL_CODE:
+		cut_control_code(hSession);
 		break;
-	    case FT_DATA_REQUEST:
-		cut_data_request();
+
+    case FT_DATA_REQUEST:
+		cut_data_request(hSession);
 		break;
-	    case FT_RETRANSMIT:
-		cut_retransmit();
+
+    case FT_RETRANSMIT:
+		cut_retransmit(hSession);
 		break;
-	    case FT_DATA:
-		cut_data();
+
+    case FT_DATA:
+		cut_data(hSession);
 		break;
-	    default:
-		trace_ds(&h3270,"< FT unknown 0x%02x\n", h3270.ea_buf[O_FRAME_TYPE].cc);
-		cut_abort(SC_ABORT_XMIT, "%s", _("Unknown frame type from host"));
+
+    default:
+		trace_ds(hSession,"< FT unknown 0x%02x\n", hSession->ea_buf[O_FRAME_TYPE].cc);
+		cut_abort(hSession,SC_ABORT_XMIT, "%s", _("Unknown frame type from host"));
 		break;
 	}
 }
@@ -292,42 +303,42 @@ ft_cut_data(void)
 /*
  * Process a control code from the host.
  */
-static void
-cut_control_code(void)
+static void cut_control_code(H3270 *hSession)
 {
 	unsigned short code;
 	char *buf;
 	char *bp;
 	int i;
 
-	trace_ds(&h3270,"< FT CONTROL_CODE ");
-	code = (h3270.ea_buf[O_CC_STATUS_CODE].cc << 8) | h3270.ea_buf[O_CC_STATUS_CODE + 1].cc;
+	trace_ds(hSession,"< FT CONTROL_CODE ");
+	code = (hSession->ea_buf[O_CC_STATUS_CODE].cc << 8) | hSession->ea_buf[O_CC_STATUS_CODE + 1].cc;
+
 	switch (code)
 	{
 	case SC_HOST_ACK:
-		trace_ds(&h3270,"HOST_ACK\n");
+		trace_ds(hSession,"HOST_ACK\n");
 		cut_xfer_in_progress = True;
 		expanded_length = 0;
 		quadrant = -1;
 		xlate_buffered = 0;
-		cut_ack();
+		cut_ack(hSession);
 		ft_running(NULL,True);
 		break;
 
 	case SC_XFER_COMPLETE:
-		trace_ds(&h3270,"XFER_COMPLETE\n");
-		cut_ack();
+		trace_ds(hSession,"XFER_COMPLETE\n");
+		cut_ack(hSession);
 		cut_xfer_in_progress = False;
 		ft_complete(NULL,N_( "Complete" ) );
 		break;
 
 	case SC_ABORT_FILE:
 	case SC_ABORT_XMIT:
-		trace_ds(&h3270,"ABORT\n");
+		trace_ds(hSession,"ABORT\n");
 		cut_xfer_in_progress = False;
-		cut_ack();
+		cut_ack(hSession);
 
-		if (lib3270_get_ft_state(&h3270) == FT_ABORT_SENT && saved_errmsg != CN)
+		if (lib3270_get_ft_state(hSession) == FT_ABORT_SENT && saved_errmsg != CN)
 		{
 			buf = saved_errmsg;
 			saved_errmsg = CN;
@@ -337,7 +348,7 @@ cut_control_code(void)
 			bp = buf = lib3270_malloc(81);
 
 			for (i = 0; i < 80; i++)
-				*bp++ = ebc2asc[h3270.ea_buf[O_CC_MESSAGE + i].cc];
+				*bp++ = ebc2asc[hSession->ea_buf[O_CC_MESSAGE + i].cc];
 
 			*bp-- = '\0';
 
@@ -358,8 +369,8 @@ cut_control_code(void)
 		break;
 
 	default:
-		trace_ds(&h3270,"unknown 0x%04x\n", code);
-		cut_abort(SC_ABORT_XMIT, "%s", _("Unknown FT control code from host"));
+		trace_ds(hSession,"unknown 0x%04x\n", code);
+		cut_abort(hSession,SC_ABORT_XMIT, "%s", _("Unknown FT control code from host"));
 		break;
 	}
 }
@@ -367,80 +378,80 @@ cut_control_code(void)
 /*
  * Process a data request from the host.
  */
-static void
-cut_data_request(void)
+static void cut_data_request(H3270 *hSession)
 {
-	unsigned char seq = h3270.ea_buf[O_DR_FRAME_SEQ].cc;
+	unsigned char seq = hSession->ea_buf[O_DR_FRAME_SEQ].cc;
 	int count;
 	unsigned char cs;
 	int c;
 	int i;
 	unsigned char attr;
 
-	trace_ds(&h3270,"< FT DATA_REQUEST %u\n", from6(seq));
-	if (lib3270_get_ft_state(&h3270) == FT_ABORT_WAIT)
+	trace_ds(hSession,"< FT DATA_REQUEST %u\n", from6(seq));
+	if (lib3270_get_ft_state(hSession) == FT_ABORT_WAIT)
 	{
-		cut_abort(SC_ABORT_FILE,"%s",N_("Transfer cancelled by user"));
+		cut_abort(hSession,SC_ABORT_FILE,"%s", N_("Transfer cancelled by user") );
 		return;
 	}
 
 	/* Copy data into the screen buffer. */
 	count = 0;
 	while (count < O_UP_MAX && (c = xlate_getc()) != EOF) {
-		ctlr_add(&h3270,O_UP_DATA + count, c, 0);
+		ctlr_add(hSession,O_UP_DATA + count, c, 0);
 		count++;
 	}
 
 	/* Check for errors. */
-	if (ferror(((H3270FT *) h3270.ft)->local_file)) {
+	if (ferror(((H3270FT *) hSession->ft)->local_file)) {
 		int j;
 
 		/* Clean out any data we may have written. */
 		for (j = 0; j < count; j++)
-			ctlr_add(&h3270,O_UP_DATA + j, 0, 0);
+			ctlr_add(hSession,O_UP_DATA + j, 0, 0);
 
 		/* Abort the transfer. */
-		cut_abort(SC_ABORT_FILE,_( "Error \"%s\" reading from local file (rc=%d)" ), strerror(errno), errno);
+		cut_abort(hSession,SC_ABORT_FILE,_( "Error \"%s\" reading from local file (rc=%d)" ), strerror(errno), errno);
 		return;
 	}
 
 	/* Send special data for EOF. */
-	if (!count && feof(((H3270FT *) h3270.ft)->local_file)) {
-		ctlr_add(&h3270,O_UP_DATA, EOF_DATA1, 0);
-		ctlr_add(&h3270,O_UP_DATA+1, EOF_DATA2, 0);
+	if (!count && feof(((H3270FT *) hSession->ft)->local_file))
+	{
+		ctlr_add(hSession,O_UP_DATA, EOF_DATA1, 0);
+		ctlr_add(hSession,O_UP_DATA+1, EOF_DATA2, 0);
 		count = 2;
 	}
 
 	/* Compute the other fields. */
-	ctlr_add(&h3270,O_UP_FRAME_SEQ, seq, 0);
+	ctlr_add(hSession,O_UP_FRAME_SEQ, seq, 0);
 	cs = 0;
 	for (i = 0; i < count; i++)
-		cs ^= h3270.ea_buf[O_UP_DATA + i].cc;
-	ctlr_add(&h3270,O_UP_CSUM, asc2ebc[(int)table6[cs & 0x3f]], 0);
-	ctlr_add(&h3270,O_UP_LEN, asc2ebc[(int)table6[(count >> 6) & 0x3f]], 0);
-	ctlr_add(&h3270,O_UP_LEN+1, asc2ebc[(int)table6[count & 0x3f]], 0);
+		cs ^= hSession->ea_buf[O_UP_DATA + i].cc;
+
+	ctlr_add(hSession,O_UP_CSUM, asc2ebc[(int)table6[cs & 0x3f]], 0);
+	ctlr_add(hSession,O_UP_LEN, asc2ebc[(int)table6[(count >> 6) & 0x3f]], 0);
+	ctlr_add(hSession,O_UP_LEN+1, asc2ebc[(int)table6[count & 0x3f]], 0);
 
 	/* XXX: Change the data field attribute so it doesn't display. */
-	attr = h3270.ea_buf[O_DR_SF].fa;
+	attr = hSession->ea_buf[O_DR_SF].fa;
 	attr = (attr & ~FA_INTENSITY) | FA_INT_ZERO_NSEL;
-	ctlr_add_fa(&h3270,O_DR_SF, attr, 0);
+	ctlr_add_fa(hSession,O_DR_SF, attr, 0);
 
 	/* Send it up to the host. */
-	trace_ds(&h3270,"> FT DATA %u\n", from6(seq));
+	trace_ds(hSession,"> FT DATA %u\n", from6(seq));
 	ft_update_length(NULL);
 	expanded_length += count;
 
-	lib3270_enter(&h3270);
+	lib3270_enter(hSession);
 }
 
 /*
  * (Improperly) process a retransmit from the host.
  */
-static void
-cut_retransmit(void)
+static void  cut_retransmit(H3270 *hSession)
 {
-	trace_ds(&h3270,"< FT RETRANSMIT\n");
-	cut_abort(SC_ABORT_XMIT,"%s",_("Transmission error"));
+	trace_ds(hSession,"< FT RETRANSMIT\n");
+	cut_abort(hSession,SC_ABORT_XMIT,"%s",_("Transmission error"));
 }
 
 /*
@@ -461,63 +472,70 @@ from6(unsigned char c)
 /*
  * Process data from the host.
  */
-static void
-cut_data(void)
+static void cut_data(H3270 *hSession)
 {
 	static unsigned char cvbuf[O_RESPONSE - O_DT_DATA];
 	unsigned short raw_length;
 	int conv_length;
 	register int i;
 
-	trace_ds(&h3270,"< FT DATA\n");
-	if (((H3270FT *) h3270.ft)->state == LIB3270_FT_STATE_ABORT_WAIT)
+	trace_ds(hSession,"< FT DATA\n");
+	if (((H3270FT *) hSession->ft)->state == LIB3270_FT_STATE_ABORT_WAIT)
 	{
-		cut_abort(SC_ABORT_FILE,"%s",_("Transfer cancelled by user"));
+		cut_abort(hSession,SC_ABORT_FILE,"%s",_("Transfer cancelled by user"));
 		return;
 	}
 
 	/* Copy and convert the data. */
-	raw_length = from6(h3270.ea_buf[O_DT_LEN].cc) << 6 |
-		     from6(h3270.ea_buf[O_DT_LEN + 1].cc);
-	if ((int)raw_length > O_RESPONSE - O_DT_DATA) {
-		cut_abort(SC_ABORT_XMIT,"%s",_("Illegal frame length"));
-		return;
-	}
-	for (i = 0; i < (int)raw_length; i++)
-		cvbuf[i] = h3270.ea_buf[O_DT_DATA + i].cc;
+	raw_length = from6(hSession->ea_buf[O_DT_LEN].cc) << 6 |
+		     from6(hSession->ea_buf[O_DT_LEN + 1].cc);
 
-	if (raw_length == 2 && cvbuf[0] == EOF_DATA1 && cvbuf[1] == EOF_DATA2) {
-		trace_ds(&h3270,"< FT EOF\n");
-		cut_ack();
+	if ((int)raw_length > O_RESPONSE - O_DT_DATA)
+	{
+		cut_abort(hSession,SC_ABORT_XMIT,"%s",_("Illegal frame length"));
 		return;
 	}
-	conv_length = upload_convert(cvbuf, raw_length);
+
+	for (i = 0; i < (int)raw_length; i++)
+		cvbuf[i] = hSession->ea_buf[O_DT_DATA + i].cc;
+
+	if (raw_length == 2 && cvbuf[0] == EOF_DATA1 && cvbuf[1] == EOF_DATA2)
+	{
+		trace_ds(hSession,"< FT EOF\n");
+		cut_ack(hSession);
+		return;
+	}
+
+	conv_length = upload_convert(hSession, cvbuf, raw_length);
 	if (conv_length < 0)
 		return;
 
 	/* Write it to the file. */
-	if (fwrite((char *)cvbuf, conv_length, 1, ((H3270FT *) h3270.ft)->local_file) == 0) {
-		cut_abort(SC_ABORT_FILE,_( "Error \"%s\" writing to local file (rc=%d)" ),strerror(errno),errno);
-	} else {
+	if (fwrite((char *)cvbuf, conv_length, 1, ((H3270FT *) hSession->ft)->local_file) == 0)
+	{
+		cut_abort(hSession,SC_ABORT_FILE,_( "Error \"%s\" writing to local file (rc=%d)" ),strerror(errno),errno);
+	}
+	else
+	{
 		ft_length += conv_length;
 		ft_update_length(NULL);
-		cut_ack();
+		cut_ack(hSession);
 	}
 }
 
 /*
  * Acknowledge a host command.
  */
-static void cut_ack(void)
+static void cut_ack(H3270 *hSession)
 {
-	trace_ds(&h3270,"> FT ACK\n");
-	lib3270_enter(&h3270);
+	trace_ds(hSession,"> FT ACK\n");
+	lib3270_enter(hSession);
 }
 
 /*
  * Abort a transfer in progress.
  */
-static void cut_abort(unsigned short reason, const char *fmt, ...)
+static void cut_abort(H3270 *hSession, unsigned short reason, const char *fmt, ...)
 {
 	va_list args;
 
@@ -530,13 +548,13 @@ static void cut_abort(unsigned short reason, const char *fmt, ...)
 	va_end(args);
 
 	/* Send the abort sequence. */
-	ctlr_add(&h3270,RO_FRAME_TYPE, RFT_CONTROL_CODE, 0);
-	ctlr_add(&h3270,RO_FRAME_SEQ, h3270.ea_buf[O_DT_FRAME_SEQ].cc, 0);
-	ctlr_add(&h3270,RO_REASON_CODE, HIGH8(reason), 0);
-	ctlr_add(&h3270,RO_REASON_CODE+1, LOW8(reason), 0);
-	trace_ds(&h3270,"> FT CONTROL_CODE ABORT\n");
+	ctlr_add(hSession,RO_FRAME_TYPE, RFT_CONTROL_CODE, 0);
+	ctlr_add(hSession,RO_FRAME_SEQ, hSession->ea_buf[O_DT_FRAME_SEQ].cc, 0);
+	ctlr_add(hSession,RO_REASON_CODE, HIGH8(reason), 0);
+	ctlr_add(hSession,RO_REASON_CODE+1, LOW8(reason), 0);
+	trace_ds(hSession,"> FT CONTROL_CODE ABORT\n");
 
-	lib3270_pfkey(&h3270,2);
+	lib3270_pfkey(hSession,2);
 
 	/* Update the in-progress pop-up. */
 	ft_aborting(NULL);

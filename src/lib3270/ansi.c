@@ -1870,9 +1870,9 @@ static int dbcs_process(H3270 *hSession, int ch, unsigned char ebc[])
 
 	// See if we have too many.
 	if (mb_pending >= MB_MAX) {
-		trace_ds(&h3270,"Multi-byte character ");
+		trace_ds(hSession,"Multi-byte character ");
 		trace_pending_mb(hSession);
-		trace_ds(&h3270," too long, dropping\n");
+		trace_ds(hSession," too long, dropping\n");
 		mb_pending = 0;
 		return 0;
 	}
@@ -1893,9 +1893,9 @@ static int dbcs_process(H3270 *hSession, int ch, unsigned char ebc[])
 			mb_pending = 0;
 			return 2;
 		} else {
-			trace_ds(&h3270,"Can't map multi-byte character");
-			trace_pending_mb(&h3270);
-			trace_ds(&h3270," -> U+%04x to SBCS or DBCS, dropping\n",
+			trace_ds(hSession,"Can't map multi-byte character");
+			trace_pending_mb(hSession);
+			trace_ds(hSession," -> U+%04x to SBCS or DBCS, dropping\n",
 			    Ubuf[0] & 0xffff);
 			mb_pending = 0;
 			return 0;
@@ -1909,14 +1909,14 @@ static int dbcs_process(H3270 *hSession, int ch, unsigned char ebc[])
 		return 0;
 	case U_INVALID_CHAR_FOUND:
 	case U_ILLEGAL_CHAR_FOUND:
-		trace_ds(&h3270,"Invalid multi-byte character");
-		trace_pending_mb(&h3270);
-		trace_ds(&h3270,", dropping\n");
+		trace_ds(hSession,"Invalid multi-byte character");
+		trace_pending_mb(hSession);
+		trace_ds(hSession,", dropping\n");
 		break;
 	default:
-		trace_ds(&h3270,"Unexpected ICU error %d translating multi-type character", (int)err);
-		trace_pending_mb(&h3270);
-		trace_ds(&h3270,", dropping\n");
+		trace_ds(hSession,"Unexpected ICU error %d translating multi-type character", (int)err);
+		trace_pending_mb(hSession);
+		trace_ds(hSession,", dropping\n");
 		break;
 	}
 	mb_pending = 0;

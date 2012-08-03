@@ -882,56 +882,58 @@ static void net_connected(H3270 *session)
  *
  * Called just after a sucessfull connect to setup tn3270 state.
  *
- * @param session	3270 session to setup.
+ * @param hSession	3270 session to setup.
  *
  */
-LIB3270_EXPORT void lib3270_setup_session(H3270 *session)
+LIB3270_EXPORT void lib3270_setup_session(H3270 *hSession)
 {
-	(void) memset((char *) session->myopts, 0, sizeof(session->myopts));
-	(void) memset((char *) session->hisopts, 0, sizeof(session->hisopts));
+	(void) memset((char *) hSession->myopts, 0, sizeof(hSession->myopts));
+	(void) memset((char *) hSession->hisopts, 0, sizeof(hSession->hisopts));
 
 #if defined(X3270_TN3270E) /*[*/
-	session->e_funcs = E_OPT(TN3270E_FUNC_BIND_IMAGE) | E_OPT(TN3270E_FUNC_RESPONSES) | E_OPT(TN3270E_FUNC_SYSREQ);
-	session->e_xmit_seq = 0;
-	session->response_required = TN3270E_RSF_NO_RESPONSE;
+	hSession->e_funcs = E_OPT(TN3270E_FUNC_BIND_IMAGE) | E_OPT(TN3270E_FUNC_RESPONSES) | E_OPT(TN3270E_FUNC_SYSREQ);
+	hSession->e_xmit_seq = 0;
+	hSession->response_required = TN3270E_RSF_NO_RESPONSE;
 #endif /*]*/
 
 #if defined(HAVE_LIBSSL) /*[*/
 	need_tls_follows = False;
 #endif /*]*/
-	session->telnet_state = TNS_DATA;
-	session->ibptr = session->ibuf;
+	hSession->telnet_state = TNS_DATA;
+	hSession->ibptr = hSession->ibuf;
 
 	/* clear statistics and flags */
-	time(&session->ns_time);
-	session->ns_brcvd  = 0;
-	session->ns_rrcvd  = 0;
-	session->ns_bsent  = 0;
-	session->ns_rsent  = 0;
-	session->syncing   = 0;
-	session->tn3270e_negotiated = 0;
-	session->tn3270e_submode = E_NONE;
-	session->tn3270e_bound = 0;
+	time(&hSession->ns_time);
+	hSession->ns_brcvd  = 0;
+	hSession->ns_rrcvd  = 0;
+	hSession->ns_bsent  = 0;
+	hSession->ns_rsent  = 0;
+	hSession->syncing   = 0;
+	hSession->tn3270e_negotiated = 0;
+	hSession->tn3270e_submode = E_NONE;
+	hSession->tn3270e_bound = 0;
 
-	setup_lus(session);
+	setup_lus(hSession);
 
-	check_linemode(session,True);
+	check_linemode(hSession,True);
 
 	/* write out the passthru hostname and port nubmer */
-	if (session->passthru_host)
+	if (hSession->passthru_host)
 	{
-		unsigned char *buffer = (unsigned char *) xs_buffer("%s %d\r\n", session->hostname, session->current_port);
-		session->write(session, buffer, strlen((char *) buffer));
+		unsigned char *buffer = (unsigned char *) xs_buffer("%s %d\r\n", hSession->hostname, hSession->current_port);
+		hSession->write(hSession, buffer, strlen((char *) buffer));
 		lib3270_free(buffer);
-		trace_ds(&h3270,"SENT HOSTNAME %s:%d\n", session->hostname, session->current_port);
+		trace_ds(hSession,"SENT HOSTNAME %s:%d\n", hSession->hostname, hSession->current_port);
 	}
 }
 
-/*
- * connection_complete
- *	The connection appears to be complete (output is possible or input
- *	appeared ready but recv() returned EWOULDBLOCK).  Complete the
- *	connection-completion processing.
+/**
+ * Connection_complete.
+ *
+ * The connection appears to be complete (output is possible or input
+ * appeared ready but recv() returned EWOULDBLOCK).  Complete the
+ * connection-completion processing.
+ *
  */
 static void connection_complete(H3270 *session)
 {
