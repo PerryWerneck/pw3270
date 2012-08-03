@@ -2521,7 +2521,8 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *hSession, char *s, int len, int 
 			return 0;
 		}
 
-		if (pasting && IN_3270) {
+		if (pasting && IN_3270)
+		{
 
 			/* Check for cursor wrap to top of screen. */
 			if (hSession->cursor_addr < orig_addr)

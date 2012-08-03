@@ -389,6 +389,13 @@ static void action_select_last(GtkAction *action, GtkWidget *widget)
 	lib3270_reselect(v3270_get_session(widget));
 }
 
+static void action_string(GtkAction *action, GtkWidget *widget)
+{
+	gchar *text = g_object_get_data(G_OBJECT(action),"value");
+	if(text)
+		lib3270_emulate_input(v3270_get_session(widget),text,strlen(text),0);
+}
+
 static int id_from_array(const gchar *key, const gchar **array, GError **error)
 {
 	int f;
@@ -481,6 +488,7 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 		ACTION_TYPE_SET,
 		ACTION_TYPE_RESET,
 		ACTION_TYPE_TABLE,
+		ACTION_TYPE_STRING,
 
 	} action_type = ACTION_TYPE_DEFAULT;
 
@@ -658,6 +666,18 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 		id   = atoi(attr);
 		nm   = g_strdup_printf("pa%02d",id);
 	}
+	else if(!g_ascii_strcasecmp(name,"string"))
+	{
+		action_type = ACTION_TYPE_STRING;
+		attr 		= ui_get_attribute("value",names,values);
+		if(!attr)
+		{
+			*error = g_error_new(ERROR_DOMAIN,EINVAL,_("%s action needs a valid value" ),name);
+			return NULL;
+		}
+		attr = ui_get_attribute("name",names,values);
+		nm = g_strdup(attr ? attr : name);
+	}
 	else
 	{
 		attr = ui_get_attribute("name",names,values);
@@ -721,6 +741,11 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 	case ACTION_TYPE_TABLE:
 		action = gtk_action_new(nm,NULL,NULL,NULL);
 		g_signal_connect(action,"activate",callback[id],widget);
+		break;
+
+	case ACTION_TYPE_STRING:
+		action = gtk_action_new(nm,NULL,NULL,NULL);
+		g_signal_connect(action,"activate",G_CALLBACK(action_string),widget);
 		break;
 	}
 
