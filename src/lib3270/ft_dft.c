@@ -77,7 +77,7 @@ struct data_buffer {
 };
 
 /* Globals. */
-int dft_buffersize = 0;			/* Buffer size (LIMIN, LIMOUT) */
+// int dft_buffersize = 0;			/* Buffer size (LIMIN, LIMOUT) */
 
 /* Statics. */
 static Boolean message_flag = False;	/* Open Request for msg received */
@@ -98,9 +98,11 @@ static void dft_open_request(unsigned short len, unsigned char *cp);
 static void dft_set_cur_req(void);
 static int filter_len(char *s, register int len);
 
-/* Process a Transfer Data structured field from the host. */
-void
-ft_dft_data(unsigned char *data, int length unused)
+/**
+ * Process a Transfer Data structured field from the host.
+ *
+ */
+void ft_dft_data(H3270 *hSession, unsigned char *data, int length unused)
 {
 	struct data_buffer *data_bufr = (struct data_buffer *)data;
 	unsigned short data_length, data_type;
@@ -353,9 +355,9 @@ dft_get_request(void)
 	}
 
 	/* Read a buffer's worth. */
-	set_dft_buffersize();
-	space3270out(&h3270,dft_buffersize);
-	numbytes = dft_buffersize - 27; /* always read 5 bytes less than we're allowed */
+	set_dft_buffersize(&h3270);
+	space3270out(&h3270,h3270.dft_buffersize);
+	numbytes = h3270.dft_buffersize - 27; /* always read 5 bytes less than we're allowed */
 	bufptr = h3270.obuf + 17;
 	while (!dft_eof && numbytes) {
 		if (ascii_flag && cr_flag) {
@@ -528,35 +530,35 @@ filter_len(char *s, register int len)
 	return t - s;
 }
 
-/* Processes a Read Modified command when there is upload data pending. */
-void
-dft_read_modified(void)
+/**
+ * Processes a Read Modified command when there is upload data pending.
+ */
+void dft_read_modified(H3270 *hSession)
 {
 	if (dft_savebuf_len)
 	{
-		trace_ds(&h3270,"> WriteStructuredField FileTransferData\n");
-		h3270.obptr = h3270.obuf;
-		space3270out(&h3270,dft_savebuf_len);
-		memcpy(h3270.obptr, dft_savebuf, dft_savebuf_len);
-		h3270.obptr += dft_savebuf_len;
-		net_output(&h3270);
+		trace_ds(hSession,"> WriteStructuredField FileTransferData\n");
+		hSession->obptr = hSession->obuf;
+		space3270out(hSession,dft_savebuf_len);
+		memcpy(hSession->obptr, dft_savebuf, dft_savebuf_len);
+		hSession->obptr += dft_savebuf_len;
+		net_output(hSession);
 	}
 }
 
-/* Update the buffersize for generating a Query Reply. */
-void
-set_dft_buffersize(void)
+/**
+ * Update the buffersize for generating a Query Reply.
+ */
+void set_dft_buffersize(H3270 *hSession)
 {
-	if (dft_buffersize == 0)
-	{
-//		dft_buffersize = appres.dft_buffer_size;
-//		if (dft_buffersize == 0)
-			dft_buffersize = DFT_BUF;
-	}
-	if (dft_buffersize > DFT_MAX_BUF)
-		dft_buffersize = DFT_MAX_BUF;
-	if (dft_buffersize < DFT_MIN_BUF)
-		dft_buffersize = DFT_MIN_BUF;
+	if (hSession->dft_buffersize == 0)
+		hSession->dft_buffersize = DFT_BUF;
+
+	if (hSession->dft_buffersize > DFT_MAX_BUF)
+		hSession->dft_buffersize = DFT_MAX_BUF;
+
+	if (hSession->dft_buffersize < DFT_MIN_BUF)
+		hSession->dft_buffersize = DFT_MIN_BUF;
 }
 
 

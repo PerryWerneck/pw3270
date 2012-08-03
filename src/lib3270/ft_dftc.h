@@ -14,6 +14,6 @@
  * for more details.
  */
 
-LIB3270_INTERNAL void ft_dft_data(unsigned char *data, int length);
-LIB3270_INTERNAL void dft_read_modified(void);
-LIB3270_INTERNAL void set_dft_buffersize(void);
+LIB3270_INTERNAL void ft_dft_data(H3270 *hSession, unsigned char *data, int length);
+LIB3270_INTERNAL void dft_read_modified(H3270 *hSession);
+LIB3270_INTERNAL void set_dft_buffersize(H3270 *hSession);

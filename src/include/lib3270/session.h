@@ -253,6 +253,9 @@
 		LIB3270_TA				* ta_head;
 		LIB3270_TA				* ta_tail;
 
+		// ft_dft.c
+		int						  dft_buffersize;		/**< Buffer size (LIMIN, LIMOUT) */
+
 		// Widget info
 		void					* widget;
 

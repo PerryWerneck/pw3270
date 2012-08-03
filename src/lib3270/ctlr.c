@@ -581,7 +581,7 @@ void ctlr_read_modified(H3270 *hSession, unsigned char aid_byte, Boolean all)
 #if defined(X3270_FT) /*[*/
 	if (aid_byte == AID_SF)
 	{
-		dft_read_modified();
+		dft_read_modified(hSession);
 		return;
 	}
 #endif /*]*/
@@ -765,8 +765,9 @@ void ctlr_read_buffer(H3270 *hSession, unsigned char aid_byte)
 	unsigned char	current_cs = 0x00;
 
 #if defined(X3270_FT) /*[*/
-	if (aid_byte == AID_SF) {
-		dft_read_modified();
+	if (aid_byte == AID_SF)
+	{
+		dft_read_modified(hSession);
 		return;
 	}
 #endif /*]*/

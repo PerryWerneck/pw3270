@@ -239,8 +239,8 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 	}
 
 	// Set options
-	dft_buffersize = dft;
-	set_dft_buffersize();
+	session->dft_buffersize = dft;
+	set_dft_buffersize(session);
 
 	// Initialize ft control structure.
 	ft_last_cr = False;

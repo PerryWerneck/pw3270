@@ -144,11 +144,12 @@ enum iaction {
 
 LIB3270_INTERNAL H3270		h3270;
 
-#if defined(X3270_DISPLAY) /*[*/
+/*
+#if defined(X3270_DISPLAY)
 	LIB3270_INTERNAL Atom		a_3270, a_registry, a_encoding;
 	LIB3270_INTERNAL XtAppContext	appcontext;
-#endif /*]*/
-
+#endif
+*/
 
 // Version strings
 LIB3270_INTERNAL const char * build;
@@ -164,12 +165,12 @@ LIB3270_INTERNAL const char * build_rpq_revision;
 	LIB3270_INTERNAL Boolean		dbcs;
 #endif /*]*/
 
-#if defined(X3270_FT) /*[*/
-	LIB3270_INTERNAL int		dft_buffersize;
-#endif /*]*/
+// #if defined(X3270_FT) /*[*/
+//	LIB3270_INTERNAL int		dft_buffersize;
+// #endif /*]*/
 
 // LIB3270_INTERNAL char			*efontname;
-LIB3270_INTERNAL Boolean		ever_3270;
+// LIB3270_INTERNAL Boolean		ever_3270;
 // LIB3270_INTERNAL Boolean		exiting;
 
 /*
@@ -218,13 +219,13 @@ LIB3270_INTERNAL Boolean		ever_3270;
 // LIB3270_INTERNAL char			*qualified_host;
 // LIB3270_INTERNAL char			*reconnect_host;
 // LIB3270_INTERNAL int			screen_depth;
-LIB3270_INTERNAL Boolean		scroll_initted;
+// LIB3270_INTERNAL Boolean		scroll_initted;
 
 //#if defined(HAVE_LIBSSL) /*[*/
 //	LIB3270_INTERNAL Boolean	secure_connection;
 //#endif /*]*/
 
-LIB3270_INTERNAL Boolean		shifted;
+// LIB3270_INTERNAL Boolean		shifted;
 // LIB3270_INTERNAL Boolean		ssl_host;
 LIB3270_INTERNAL Boolean		*standard_font;
 // LIB3270_INTERNAL Boolean		std_ds_host;

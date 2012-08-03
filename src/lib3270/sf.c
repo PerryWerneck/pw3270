@@ -214,7 +214,7 @@ write_structured_field(unsigned char buf[], int buflen)
 #if defined(X3270_FT) /*[*/
 		    case SF_TRANSFER_DATA:   /* File transfer data         */
 			trace_ds(&h3270,"FileTransferData");
-			ft_dft_data(cp, (int)fieldlen);
+			ft_dft_data(&h3270,cp, (int)fieldlen);
 			break;
 #endif /*]*/
 		    default:
@@ -951,14 +951,14 @@ do_qr_charsets(void)
 static void
 do_qr_ddm(void)
 {
-	set_dft_buffersize();
+	set_dft_buffersize(&h3270);
 
 	trace_ds(&h3270,"> QueryReply(DistributedDataManagement)\n");
 	space3270out(&h3270,8);
-	SET16(h3270.obptr,0);			/* set reserved field to 0 */
-	SET16(h3270.obptr, dft_buffersize);	/* set inbound length limit INLIM */
-	SET16(h3270.obptr, dft_buffersize);	/* set outbound length limit OUTLIM */
-	SET16(h3270.obptr, 0x0101);		/* NSS=01, DDMSS=01 */
+	SET16(h3270.obptr,0);						/* set reserved field to 0 */
+	SET16(h3270.obptr, h3270.dft_buffersize);	/* set inbound length limit INLIM */
+	SET16(h3270.obptr, h3270.dft_buffersize);	/* set outbound length limit OUTLIM */
+	SET16(h3270.obptr, 0x0101);					/* NSS=01, DDMSS=01 */
 }
 #endif /*]*/
 
