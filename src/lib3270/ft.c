@@ -113,39 +113,24 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 
  }
 
- void ft_init(H3270 *session)
+ void ft_init(H3270 *hSession)
  {
 	/* Register for state changes. */
-	lib3270_register_schange(session, LIB3270_STATE_CONNECT, ( void (*)(H3270 *, int, void *)) ft_connected, NULL);
-	lib3270_register_schange(session, LIB3270_STATE_3270_MODE, ( void (*)(H3270 *, int, void *)) ft_in3270, NULL);
+	lib3270_register_schange(hSession, LIB3270_STATE_CONNECT, ( void (*)(H3270 *, int, void *)) ft_connected, NULL);
+	lib3270_register_schange(hSession, LIB3270_STATE_3270_MODE, ( void (*)(H3270 *, int, void *)) ft_in3270, NULL);
  }
 
-// enum ft_state QueryFTstate(void)
-// {
-// 	return ft_state;
-// }
-
-/*
- int RegisterFTCallbacks(const struct filetransfer_callbacks *cbk)
+ LIB3270_EXPORT int lib3270_ft_cancel(H3270 *hSession, int force)
  {
- 	if(!(cbk && cbk->sz == sizeof(struct filetransfer_callbacks)) )
+ 	H3270FT *ft;
+
+	CHECK_SESSION_HANDLE(hSession);
+
+	ft = (H3270FT *) hSession->ft;
+	if(!ft)
 		return EINVAL;
 
-	callbacks = cbk;
 
-	return 0;
- }
-*/
-
-/*
- enum ft_state GetFileTransferState(void)
- {
-	return ft_state;
- }
-*/
-
- LIB3270_EXPORT int lib3270_ft_cancel(H3270FT *ft, int force)
- {
 	if (ft->state == LIB3270_FT_STATE_RUNNING)
 	{
 		set_ft_state(ft,LIB3270_FT_STATE_ABORT_WAIT);
@@ -276,7 +261,7 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
  	return ftsession = ftHandle;
  }
 
- LIB3270_EXPORT int lib3270_ft_start(H3270FT *ft)
+ LIB3270_EXPORT int lib3270_ft_start(H3270 *hSession)
  {
  	static const char	* rec			= "fvu";
  	static const char	* un[]			= { "tracks", "cylinders", "avblock" };
@@ -286,8 +271,13 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 	unsigned int		  flen;
  	unsigned short		  recfm;
  	unsigned short		  units;
+ 	H3270FT 			* ft;
 
-	CHECK_FT_HANDLE(ft);
+	CHECK_SESSION_HANDLE(hSession);
+
+	ft = (H3270FT *) hSession->ft;
+	if(!ft)
+		return EINVAL;
 
  	recfm		= (ft->flags & FT_RECORD_FORMAT_MASK) >> 8;
  	units		= (ft->flags & FT_ALLOCATION_UNITS_MASK) >> 12;
@@ -438,12 +428,18 @@ void ft_complete(H3270FT *session, const char *errmsg)
 
 }
 
-LIB3270_EXPORT void lib3270_ft_destroy(H3270FT *session)
+LIB3270_EXPORT int lib3270_ft_destroy(H3270 *hSession)
 {
-	CHECK_FT_HANDLE(session);
+	H3270FT *session;
+
+	CHECK_SESSION_HANDLE(hSession);
+
+	session = (H3270FT *) hSession->ft;
+	if(!session)
+		return EINVAL;
 
 	if (session->state != LIB3270_FT_STATE_NONE)
-		lib3270_ft_cancel(session,1);
+		lib3270_ft_cancel(hSession,1);
 
 	if(session->local_file)
 	{
@@ -454,11 +450,11 @@ LIB3270_EXPORT void lib3270_ft_destroy(H3270FT *session)
 	if(session == ftsession)
 		ftsession = NULL;
 
-	if(session->host)
-		session->host->ft = NULL;
+	hSession->ft = NULL;
 
 	free(session);
 
+	return 0;
 }
 
 // Update the bytes-transferred count on the progress pop-up.

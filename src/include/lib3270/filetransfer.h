@@ -91,6 +91,10 @@
 		const char 			* local;				/**< Local filename */
 		const char			* remote;				/**< Remote filename */
 
+		// ft_dft.c
+		char 				* abort_string;
+
+		// Callbacks
 		void (*complete)(struct _h3270ft *ft,unsigned long length,double kbytes_sec,const char *mode);
 		void (*message)(struct _h3270ft *ft, const char *msg);
 		void (*update)(struct _h3270ft *ft, unsigned long current, unsigned long length, double kbytes_sec);
@@ -117,12 +121,12 @@
 	 * @return Filetransfer handle if ok, NULL if failed
 	 *
 	 */
-	LIB3270_EXPORT H3270FT	* lib3270_ft_new(H3270 *session, LIB3270_FT_OPTION flags, const char *local, const char *remote, int lrecl, int blksize, int primspace, int secspace, int dft, const char **msg);
+	LIB3270_EXPORT H3270FT	* lib3270_ft_new(H3270 *hSession, LIB3270_FT_OPTION flags, const char *local, const char *remote, int lrecl, int blksize, int primspace, int secspace, int dft, const char **msg);
 
-	LIB3270_EXPORT int		  lib3270_ft_start(H3270FT *ft);
-	LIB3270_EXPORT void 	  lib3270_ft_destroy(H3270FT *ft);
+	LIB3270_EXPORT int		  lib3270_ft_start(H3270 *hSession);
+	LIB3270_EXPORT int	 	  lib3270_ft_destroy(H3270 *hSession);
 
-	LIB3270_EXPORT int lib3270_ft_cancel(H3270FT *ft, int force);
+	LIB3270_EXPORT int		  lib3270_ft_cancel(H3270 *hSession, int force);
 
 
 	LIB3270_EXPORT LIB3270_FT_STATE lib3270_get_ft_state(H3270 *session);

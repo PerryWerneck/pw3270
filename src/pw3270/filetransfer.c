@@ -605,13 +605,13 @@ static void run_ft_dialog(GObject *action, GtkWidget *widget, struct ftdialog *d
 		ft->message			= ft_message;
 
 		gtk_widget_show_all(ftdialog);
-		lib3270_ft_start(ft);
+		lib3270_ft_start(v3270_get_session(widget));
 
 		trace("%s: Running dialog %p",__FUNCTION__,ftdialog);
 		gtk_dialog_run(GTK_DIALOG(ftdialog));
 		trace("%s: Dialog %p ends",__FUNCTION__,ftdialog);
 
-		lib3270_ft_destroy(ft);
+		lib3270_ft_destroy(v3270_get_session(widget));
 
 		gtk_widget_destroy(ftdialog);
 	}

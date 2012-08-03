@@ -484,7 +484,7 @@ enum pds process_ds(H3270 *hSession, unsigned char *buf, int buflen)
 	case CMD_WSF:	/* write structured field */
 	case SNA_CMD_WSF:
 		trace_ds(hSession,"WriteStructuredField");
-		return write_structured_field(buf, buflen);
+		return write_structured_field(hSession,buf, buflen);
 		break;
 
 	case CMD_NOP:	/* no-op */

@@ -119,10 +119,10 @@ static struct rpq_keyword {
 
 static char *x3270rpq;
 
-/*
+/**
  * RPQNAMES query reply.
  */
-void do_qr_rpqnames(void)
+void do_qr_rpqnames(H3270 *hSession)
 {
 	#define TERM_PREFIX_SIZE 2	/* Each term has 1 byte length and 1
 					   byte id */
@@ -132,14 +132,14 @@ void do_qr_rpqnames(void)
 	int remaining = 254;	/* maximum data area for rpqname reply */
 	Boolean omit_due_space_limit;
 
-	trace_ds(&h3270,"> QueryReply(RPQNames)\n");
+	trace_ds(hSession,"> QueryReply(RPQNames)\n");
 
 	/*
 	 * Allocate enough space for the maximum allowed item.
 	 * By pre-allocating the space I don't have to worry about the
 	 * possibility of addresses changing.
 	 */
-	space3270out(&h3270,4+4+1+remaining);	/* Maximum space for an RPQNAME item */
+	space3270out(hSession,4+4+1+remaining);	/* Maximum space for an RPQNAME item */
 
 	SET32(h3270.obptr, 0);		/* Device number, 0 = All */
 	SET32(h3270.obptr, 0);		/* Model number, 0 = All */
@@ -188,7 +188,7 @@ void do_qr_rpqnames(void)
 
 		case RPQ_ADDRESS:	/* Workstation address */
 #if !defined(_WIN32) /*[*/
-			h3270.obptr += get_rpq_address(h3270.obptr, remaining);
+			hSession->obptr += get_rpq_address(hSession->obptr, remaining);
 #endif /*]*/
 			break;
 
@@ -197,7 +197,7 @@ void do_qr_rpqnames(void)
 			omit_due_space_limit = (x > remaining);
 			if (!omit_due_space_limit) {
 				for (i = 0; i < x; i++) {
-					*h3270.obptr++ = asc2ebc[(int)(*(build_rpq_version+i) & 0xff)];
+					*hSession->obptr++ = asc2ebc[(int)(*(build_rpq_version+i) & 0xff)];
 				}
 			}
 			break;
@@ -207,7 +207,7 @@ void do_qr_rpqnames(void)
 			omit_due_space_limit = ((x+1)/2 > remaining);
 			if (!omit_due_space_limit) {
 				for (i=0; i < x; i+=2) {
-					*h3270.obptr++ = ((*(build_rpq_timestamp+i) - '0') << 4)
+					*hSession->obptr++ = ((*(build_rpq_timestamp+i) - '0') << 4)
 						+ (*(build_rpq_timestamp+i+1) - '0');
 				}
 			}
@@ -254,7 +254,7 @@ void do_qr_rpqnames(void)
 	}
 
 	/* Fill in overall length of RPQNAME info */
-	*rpql = (h3270.obptr - rpql);
+	*rpql = (hSession->obptr - rpql);
 
 	rpq_dump_warnings();
 }
