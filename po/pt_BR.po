@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-31 14:55-0300\n"
+"POT-Creation-Date: 2012-08-03 08:02-0300\n"
 "PO-Revision-Date: 2012-06-21 11:08-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português do Brasil <>\n"
@@ -18,6 +18,11 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 
+#: kybd.c:2742
+#, c-format
+msgid "%s: Missing hex digits after \\x"
+msgstr "%s: Missing hex digits after \\x"
+
 #: resolver.c:122
 #, c-format
 msgid "%s: unknown family %d"
@@ -28,15 +33,15 @@ msgstr "%s: Familia %d é inválida"
 msgid "%s:%d"
 msgstr "%s:%d"
 
-#: screen.c:647 screen.c:649 screen.c:679 screen.c:693 screen.c:804
+#: screen.c:655 screen.c:657 screen.c:687 screen.c:701 screen.c:812
 msgid "3270 Error"
 msgstr "Erro 3270"
 
-#: screen.c:664
+#: screen.c:672
 msgid "3270 Warning"
 msgstr "Alerta 3270"
 
-#: telnet.c:3400
+#: telnet.c:3243
 #, c-format
 msgid ""
 "<b>Connection state:</b> %s\n"
@@ -77,7 +82,7 @@ msgstr "Cursor piscante"
 msgid "Bold"
 msgstr "Negrito"
 
-#: telnet.c:2083
+#: telnet.c:2082
 msgid "Broken pipe"
 msgstr "Broken pipe"
 
@@ -115,7 +120,7 @@ msgstr "Cancelado pelo usuário"
 msgid "Cannot create socket handle"
 msgstr "Não foi possível criar um manipulador de socket"
 
-#: session.c:309
+#: session.c:324
 #, c-format
 msgid "Cannot find charset \"%s\", using defaults"
 msgstr "Não encontrei codificação \"%s\", usando defaults"
@@ -140,7 +145,7 @@ msgstr "Conectar ao iniciar"
 msgid "Connection failed"
 msgstr "Conexão falhou"
 
-#: telnet.c:2087
+#: telnet.c:2086
 #, fuzzy
 msgid "Connection reset by peer"
 msgstr "Ação falhou"
@@ -177,7 +182,7 @@ msgstr "Debug"
 msgid "Debug window updates"
 msgstr "Mostrar atualizações de janela"
 
-#: telnet.c:1738
+#: telnet.c:1739
 msgid "Device type rejected"
 msgstr "Tipo de dispositivo rejeitado"
 
@@ -185,7 +190,7 @@ msgstr "Tipo de dispositivo rejeitado"
 msgid "Disconnected from host"
 msgstr "Desconectado do servidor"
 
-#: telnet.c:1313
+#: telnet.c:1314
 msgid "EOR received when not in 3270 mode, ignored."
 msgstr "EOR recebido fora do modo 3270, ignorado."
 
@@ -261,11 +266,11 @@ msgstr "Servidor desconectou, transferência cancelada"
 msgid "Host illegally added function(s)"
 msgstr "Host illegally added function(s)"
 
-#: telnet.c:1721
+#: telnet.c:1722
 msgid "Host rejected device type or request type"
 msgstr "Host rejected device type or request type"
 
-#: telnet.c:1734
+#: telnet.c:1735
 msgid "Host rejected resource(s)"
 msgstr "Host rejected resource(s)"
 
@@ -387,7 +392,7 @@ msgstr "Reselecionar"
 msgid "Return"
 msgstr "Return"
 
-#: telnet.c:3398
+#: telnet.c:3241
 msgid "SSL Connect error"
 msgstr "Erro na conexão SSL"
 
@@ -407,7 +412,7 @@ msgstr "Erro SSL"
 msgid "SSL negotiation failed"
 msgstr "Negociação SSL falhou"
 
-#: telnet.c:2073
+#: telnet.c:2072
 #, fuzzy, c-format
 msgid ""
 "SSL_write:\n"
@@ -482,7 +487,7 @@ msgstr "Colar inteligente"
 msgid "Socket read error"
 msgstr "Erro ao ler dados da rede"
 
-#: telnet.c:2094
+#: telnet.c:2093
 msgid "Socket write error"
 msgstr "Erro ao enviar dados para a rede"
 
@@ -548,21 +553,26 @@ msgstr "Não foi possível enviar a requisição de transferência de arquivo"
 msgid "Unexpected error"
 msgstr "Erro inesperado"
 
-#: kybd.c:339
+#: kybd.c:336
 #, c-format
 msgid "Unexpected type %d in typeahead queue"
 msgstr "Tipo inesperado %d na fila de teclado"
+
+#: ctlr.c:496
+#, c-format
+msgid "Unknown 3270 Data Stream command: 0x%X"
+msgstr "Unknown 3270 Data Stream command: 0x%X"
 
 #: ft_cut.c:367
 msgid "Unknown FT control code from host"
 msgstr "Servidor enviou código de controle FT desconhecido"
 
-#: kybd.c:2339
+#: kybd.c:2375
 #, c-format
 msgid "Unknown PA key %d"
 msgstr "PA %d desconhecida"
 
-#: kybd.c:2351
+#: kybd.c:2387
 #, c-format
 msgid "Unknown PF key %d"
 msgstr "PF %d desconhecida"
@@ -596,7 +606,7 @@ msgstr "Número de porta ou serviço desconhecido: %s"
 msgid "Unsupported passthru host session"
 msgstr "Unsupported passthru host session"
 
-#: proxy.c:522
+#: proxy.c:525
 msgid "Unsupported socks 4 proxy"
 msgstr "Unsupported socks 4 proxy"
 
@@ -656,12 +666,12 @@ msgstr "Opções"
 msgid "_View"
 msgstr "_Exibir"
 
-#: telnet.c:3263 telnet.c:3274
+#: telnet.c:3106 telnet.c:3117
 #, c-format
 msgid "fcntl(%s)"
 msgstr "fcntl(%s)"
 
-#: telnet.c:3253
+#: telnet.c:3096
 #, c-format
 msgid "ioctl(%s)"
 msgstr "ioctl(%s)"

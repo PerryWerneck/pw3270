@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
 		bindtextdomain( PACKAGE_NAME, locdir );
 
 		g_free(locdir);
-		g_free( appdir );
+		g_free(appdir);
 
 	}
 #elif defined( DATAROOTDIR )
