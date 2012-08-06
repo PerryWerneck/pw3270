@@ -275,7 +275,7 @@ static unsigned char	will_opt[]	= 	{	IAC, WILL, '_' };
 static unsigned char	wont_opt[]	= 	{	IAC, WONT, '_' };
 
 #if defined(X3270_TN3270E) /*[*/
-static unsigned char	functions_req[] = {	IAC, SB, TELOPT_TN3270E, TN3270E_OP_FUNCTIONS };
+static const unsigned char	functions_req[] = {	IAC, SB, TELOPT_TN3270E, TN3270E_OP_FUNCTIONS };
 #endif /*]*/
 
 #if defined(X3270_TRACE) /*[*/
@@ -327,7 +327,7 @@ static const char *trsp_flag[2] = { "POSITIVE-RESPONSE", "NEGATIVE-RESPONSE" };
 // #endif
 
 #if defined(HAVE_LIBSSL) /*[*/
-static Boolean need_tls_follows = False;
+// static Boolean need_tls_follows = False;
 static void ssl_init(H3270 *session);
 #if OPENSSL_VERSION_NUMBER >= 0x00907000L /*[*/
 #define INFO_CONST const
@@ -335,7 +335,7 @@ static void ssl_init(H3270 *session);
 #define INFO_CONST
 #endif /*]*/
 static void ssl_info_callback(INFO_CONST SSL *s, int where, int ret);
-static void continue_tls(unsigned char *sbbuf, int len);
+static void continue_tls(H3270 *hSession, unsigned char *sbbuf, int len);
 #endif /*]*/
 
 // #if !defined(_WIN32) /*[*/
@@ -897,7 +897,7 @@ LIB3270_EXPORT void lib3270_setup_session(H3270 *hSession)
 #endif /*]*/
 
 #if defined(HAVE_LIBSSL) /*[*/
-	need_tls_follows = False;
+	hSession->need_tls_follows = 0;
 #endif /*]*/
 	hSession->telnet_state = TNS_DATA;
 	hSession->ibptr = hSession->ibuf;
@@ -1471,7 +1471,7 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 						cmd(SB),
 						opt(TELOPT_STARTTLS),
 						cmd(SE));
-				need_tls_follows = True;
+				session->need_tls_follows = 1;
 			}
 #endif /*]*/
 			break;
@@ -1559,9 +1559,9 @@ static int telnet_fsm(H3270 *session, unsigned char c)
 			}
 #endif /*]*/
 #if defined(HAVE_LIBSSL) /*[*/
-			else if (need_tls_follows && session->myopts[TELOPT_STARTTLS] && session->sbbuf[0] == TELOPT_STARTTLS)
+			else if (session->need_tls_follows && session->myopts[TELOPT_STARTTLS] && session->sbbuf[0] == TELOPT_STARTTLS)
 			{
-				continue_tls(session->sbbuf, session->sbptr - session->sbbuf);
+				continue_tls(session,session->sbbuf, session->sbptr - session->sbbuf);
 			}
 #endif /*]*/
 
@@ -2851,43 +2851,6 @@ static void tn3270e_nak(H3270 *hSession, enum pds rv)
 	trace_dsn(hSession,"SENT TN3270E(RESPONSE NEGATIVE-RESPONSE %u) %s\n",h_in->seq_number[0] << 8 | h_in->seq_number[1], neg);
 	net_rawout(hSession, rsp_buf, rsp_len);
 }
-
-/*
-#if defined(X3270_TRACE)
-// Add a dummy TN3270E header to the output buffer.
-Boolean
-net_add_dummy_tn3270e(void)
-{
-	tn3270e_header *h;
-
-	if (!IN_E || h3270.tn3270e_submode == E_NONE)
-		return False;
-
-	space3270out(&h3270,EH_SIZE);
-	h = (tn3270e_header *)h3270.obptr;
-
-	switch (h3270.tn3270e_submode) {
-	case E_NONE:
-		break;
-	case E_NVT:
-		h->data_type = TN3270E_DT_NVT_DATA;
-		break;
-	case E_SSCP:
-		h->data_type = TN3270E_DT_SSCP_LU_DATA;
-		break;
-	case E_3270:
-		h->data_type = TN3270E_DT_3270_DATA;
-		break;
-	}
-	h->request_flag = 0;
-	h->response_flag = TN3270E_RSF_NO_RESPONSE;
-	h->seq_number[0] = 0;
-	h->seq_number[1] = 0;
-	h3270.obptr += EH_SIZE;
-	return True;
-}
-#endif
-*/
 #endif /*]*/
 
 #if defined(X3270_TRACE) /*[*/
@@ -3276,68 +3239,71 @@ static void ssl_info_callback(INFO_CONST SSL *s, int where, int ret)
 	}
 }
 
-/* Process a STARTTLS subnegotiation. */
-static void continue_tls(unsigned char *sbbuf, int len)
+/**
+ * Process a STARTTLS subnegotiation.
+ */
+static void continue_tls(H3270 *hSession, unsigned char *sbbuf, int len)
 {
 	int rv;
 
 	/* Whatever happens, we're not expecting another SB STARTTLS. */
-	need_tls_follows = False;
+	hSession->need_tls_follows = 0;
 
 	/* Make sure the option is FOLLOWS. */
-	if (len < 2 || sbbuf[1] != TLS_FOLLOWS) {
+	if (len < 2 || sbbuf[1] != TLS_FOLLOWS)
+	{
 		/* Trace the junk. */
-		trace_dsn(&h3270,"%s ? %s\n", opt(TELOPT_STARTTLS), cmd(SE));
-		popup_an_error(NULL,"TLS negotiation failure");
-		net_disconnect(&h3270);
+		trace_dsn(hSession,"%s ? %s\n", opt(TELOPT_STARTTLS), cmd(SE));
+		popup_an_error(hSession,_( "TLS negotiation failure"));
+		net_disconnect(hSession);
 		return;
 	}
 
 	/* Trace what we got. */
-	trace_dsn(&h3270,"%s FOLLOWS %s\n", opt(TELOPT_STARTTLS), cmd(SE));
+	trace_dsn(hSession,"%s FOLLOWS %s\n", opt(TELOPT_STARTTLS), cmd(SE));
 
 	/* Initialize the SSL library. */
-	ssl_init(&h3270);
-	if(h3270.ssl_con == NULL)
+	ssl_init(hSession);
+	if(hSession->ssl_con == NULL)
 	{
 		/* Failed. */
-		net_disconnect(&h3270);
+		net_disconnect(hSession);
 		return;
 	}
 
 	/* Set up the TLS/SSL connection. */
-	if(SSL_set_fd(h3270.ssl_con, h3270.sock) != 1)
+	if(SSL_set_fd(hSession->ssl_con, hSession->sock) != 1)
 	{
-		trace_dsn(&h3270,"SSL_set_fd failed!\n");
+		trace_dsn(hSession,"SSL_set_fd failed!\n");
 	}
 
 //#if defined(_WIN32)
 //	/* Make the socket blocking for SSL. */
-//	(void) WSAEventSelect(h3270.sock, h3270.sock_handle, 0);
+//	(void) WSAEventSelect(hSession->sock, hSession->sock_handle, 0);
 //	(void) non_blocking(False);
 //#endif
 
-	rv = SSL_connect(h3270.ssl_con);
+	rv = SSL_connect(hSession->ssl_con);
 
 //#if defined(_WIN32)
 //	// Make the socket non-blocking again for event processing
-//	(void) WSAEventSelect(h3270.sock, h3270.sock_handle, FD_READ | FD_CONNECT | FD_CLOSE);
+//	(void) WSAEventSelect(hSession->sock, hSession->sock_handle, FD_READ | FD_CONNECT | FD_CLOSE);
 //#endif
 
 	if (rv != 1)
 	{
-		trace_dsn(&h3270,"continue_tls: SSL_connect failed\n");
-		net_disconnect(&h3270);
+		trace_dsn(hSession,"continue_tls: SSL_connect failed\n");
+		net_disconnect(hSession);
 		return;
 	}
 
-//	h3270.secure_connection = True;
+//	hSession->secure_connection = True;
 
 	/* Success. */
-//	trace_dsn(&h3270,"TLS/SSL negotiated connection complete. Connection is now secure.\n");
+//	trace_dsn(hSession,"TLS/SSL negotiated connection complete. Connection is now secure.\n");
 
 	/* Tell the world that we are (still) connected, now in secure mode. */
-	lib3270_set_connected(&h3270);
+	lib3270_set_connected(hSession);
 }
 
 #endif /*]*/
