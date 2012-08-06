@@ -22,22 +22,24 @@
 
 	#include <lib3270/filetransfer.h>
 
-	#define CHECK_FT_HANDLE(x) if(!x) x = ftsession;
+//	#define CHECK_FT_HANDLE(x) if(!x) x = ftsession;
 
 	LIB3270_INTERNAL Boolean ascii_flag;
 	LIB3270_INTERNAL Boolean cr_flag;
 	LIB3270_INTERNAL unsigned long ft_length;
 
-	LIB3270_INTERNAL H3270FT * ftsession;
+//	LIB3270_INTERNAL H3270FT * ftsession;
 
-	LIB3270_INTERNAL Boolean ft_last_cr;
-	LIB3270_INTERNAL Boolean remap_flag;
+//	LIB3270_INTERNAL Boolean	  ft_last_cr;
+//	LIB3270_INTERNAL Boolean	  remap_flag;
 
-	LIB3270_INTERNAL void ft_init(H3270 *session);
+	LIB3270_INTERNAL H3270FT	* get_ft_handle(H3270 *hSession);
 
-	LIB3270_INTERNAL void ft_aborting(H3270FT *h);
-	LIB3270_INTERNAL void ft_complete(H3270FT *h, const char *errmsg);
-	LIB3270_INTERNAL void ft_running(H3270FT *h, Boolean is_cut);
-	LIB3270_INTERNAL void ft_update_length(H3270FT *h);
+	LIB3270_INTERNAL void		  ft_init(H3270 *hSession);
+
+	LIB3270_INTERNAL void		  ft_aborting(H3270FT *h);
+	LIB3270_INTERNAL void		  ft_complete(H3270FT *h, const char *errmsg);
+	LIB3270_INTERNAL void		  ft_running(H3270FT *h, Boolean is_cut);
+	LIB3270_INTERNAL void		  ft_update_length(H3270FT *h);
 
 #endif /*]*/

@@ -59,34 +59,35 @@
 // extern unsigned char aid;
 
 /* Macros. */
-#define OPEN_MSG	"FT:MSG"	/* Open request for message */
+#define OPEN_MSG	"FT:MSG"		/* Open request for message */
 #define END_TRANSFER	"TRANS03"	/* Message for xfer complete */
 
 #define DFT_MIN_BUF	256
 #define DFT_MAX_BUF	32768
 
 /* Typedefs. */
-struct data_buffer {
-	char sf_length[2];		/* SF length = 0x0023 */
-	char sf_d0;			/* 0xD0 */
-	char sf_request_type[2];	/* request type */
-	char compress_indic[2];		/* 0xc080 */
-	char begin_data;		/* 0x61 */
-	char data_length[2];		/* Data Length in 3270 byte order+5 */
-	char data[256];			/* The actual data */
+struct data_buffer
+{
+	char sf_length[2];			/**< SF length = 0x0023 */
+	char sf_d0;					/**< 0xD0 */
+	char sf_request_type[2];	/**< request type */
+	char compress_indic[2];		/**< 0xc080 */
+	char begin_data;			/**< 0x61 */
+	char data_length[2];		/**< Data Length in 3270 byte order+5 */
+	char data[256];				/**< The actual data */
 };
 
 /* Globals. */
 // int dft_buffersize = 0;			/* Buffer size (LIMIN, LIMOUT) */
 
 /* Statics. */
-static Boolean message_flag = False;	/* Open Request for msg received */
-static int dft_eof;
-static unsigned long recnum;
+// static Boolean message_flag = False;	/* Open Request for msg received */
+// static int dft_eof;
+// static unsigned long recnum;
 // static char *abort_string = CN;
-static unsigned char *dft_savebuf = NULL;
-static int dft_savebuf_len = 0;
-static int dft_savebuf_max = 0;
+// static unsigned char *dft_savebuf = NULL;
+// static int dft_savebuf_len = 0;
+// static int dft_savebuf_max = 0;
 
 static void dft_abort(H3270 *hSession, unsigned short code, const char *fmt, ...);
 
@@ -158,10 +159,11 @@ void ft_dft_data(H3270 *hSession, unsigned char *data, int length unused)
 /* Process an Open request. */
 static void dft_open_request(H3270 *hSession, unsigned short len, unsigned char *cp)
 {
-	char *name = "?";
-	char namebuf[8];
-	char *s;
-	unsigned short recsz = 0;
+	H3270FT			* ft = get_ft_handle(hSession);
+	char			* name = "?";
+	char			  namebuf[8];
+	char			* s;
+	unsigned short	  recsz = 0;
 
 	if (len == 0x23)
 	{
@@ -199,15 +201,15 @@ static void dft_open_request(H3270 *hSession, unsigned short len, unsigned char 
 	}
 
 	if (!strcmp(namebuf, OPEN_MSG))
-		message_flag = True;
+		ft->message_flag = 1;
 	else
 	{
-		message_flag = False;
-		ft_running(hSession->ft,False);
+		ft->message_flag = 0;
+		ft_running(ft,False);
 	}
 
-	dft_eof = False;
-	recnum = 1;
+	ft->dft_eof = 0;
+	ft->recnum = 1;
 
 	/* Acknowledge the Open. */
 	trace_ds(hSession,"> WriteStructuredField FileTransferData OpenAck\n");
@@ -231,10 +233,11 @@ static void dft_insert_request(H3270 *hSession)
 static void dft_data_insert(H3270 *hSession, struct data_buffer *data_bufr)
 {
 	/* Received a data buffer, get the length and process it */
-	int my_length;
-	unsigned char *cp;
+	H3270FT			* ft = get_ft_handle(hSession);
+	int				  my_length;
+	unsigned char	* cp;
 
-	if(!message_flag && lib3270_get_ft_state(hSession) == FT_ABORT_WAIT)
+	if(!ft->message_flag && lib3270_get_ft_state(hSession) == FT_ABORT_WAIT)
 	{
 		dft_abort(hSession,TR_DATA_INSERT, "%s", _("Transfer cancelled by user") );
 		return;
@@ -248,13 +251,13 @@ static void dft_data_insert(H3270 *hSession, struct data_buffer *data_bufr)
 	/* Adjust for 5 extra count */
 	my_length -= 5;
 
-	trace_ds(hSession," Data(rec=%lu) %d bytes\n", recnum, my_length);
+	trace_ds(hSession," Data(rec=%lu) %d bytes\n", ft->recnum, my_length);
 
 	/*
 	 * First, check to see if we have message data or file data.
 	 * Message data will result in a popup.
 	 */
-	if (message_flag)
+	if (ft->message_flag)
 	{
 		/* Data is from a message */
 		unsigned char *msgp;
@@ -281,8 +284,8 @@ static void dft_data_insert(H3270 *hSession, struct data_buffer *data_bufr)
 		else if (lib3270_get_ft_state(hSession) == FT_ABORT_SENT && ((H3270FT *) hSession->ft)->abort_string != CN)
 		{
 			lib3270_free(msgp);
-			ft_complete(hSession->ft,((H3270FT *) hSession->ft)->abort_string);
-			lib3270_free(((H3270FT *) hSession->ft)->abort_string);
+			ft_complete(ft,ft->abort_string);
+			lib3270_free(ft->abort_string);
 		}
 		else
 		{
@@ -293,17 +296,20 @@ static void dft_data_insert(H3270 *hSession, struct data_buffer *data_bufr)
 		/* Write the data out to the file. */
 		int rv = 1;
 
-		if (ascii_flag && remap_flag) {
+		if (ft->ascii_flag && ft->remap_flag)
+		{
 			/* Filter. */
 			unsigned char *s = (unsigned char *)data_bufr->data;
 			unsigned len = my_length;
 
-			while (len--) {
+			while (len--)
+			{
 				*s = ft2asc[*s];
 				s++;
 			}
 		}
-		if (ascii_flag && cr_flag) {
+		if (ft->ascii_flag && ft->cr_flag)
+		{
 			char *s = (char *)data_bufr->data;
 			unsigned len = my_length;
 
@@ -316,7 +322,7 @@ static void dft_data_insert(H3270 *hSession, struct data_buffer *data_bufr)
 					rv = fwrite(s, l, (size_t)1,((H3270FT *) h3270.ft)->local_file);
 					if (rv == 0)
 						break;
-					ft_length += l;
+					ft->ft_length += l;
 				}
 				if (l < len)
 					l++;
@@ -325,7 +331,7 @@ static void dft_data_insert(H3270 *hSession, struct data_buffer *data_bufr)
 			}
 		} else {
 			rv = fwrite((char *)data_bufr->data, my_length,(size_t)1, ((H3270FT *) h3270.ft)->local_file);
-			ft_length += my_length;
+			ft->ft_length += my_length;
 		}
 
 		if (!rv) {
@@ -334,11 +340,11 @@ static void dft_data_insert(H3270 *hSession, struct data_buffer *data_bufr)
 		}
 
 		/* Add up amount transferred. */
-		ft_update_length((H3270FT *) hSession->ft);
+		ft_update_length(ft);
 	}
 
 	/* Send an acknowledgement frame back. */
-	trace_ds(hSession,"> WriteStructuredField FileTransferData DataAck(rec=%lu)\n", recnum);
+	trace_ds(hSession,"> WriteStructuredField FileTransferData DataAck(rec=%lu)\n", ft->recnum);
 	hSession->obptr = hSession->obuf;
 	space3270out(hSession,12);
 	*hSession->obptr++ = AID_SF;
@@ -346,8 +352,8 @@ static void dft_data_insert(H3270 *hSession, struct data_buffer *data_bufr)
 	*hSession->obptr++ = SF_TRANSFER_DATA;
 	SET16(hSession->obptr, TR_NORMAL_REPLY);
 	SET16(hSession->obptr, TR_RECNUM_HDR);
-	SET32(hSession->obptr, recnum);
-	recnum++;
+	SET32(hSession->obptr, ft->recnum);
+	ft->recnum++;
 	net_output(hSession);
 }
 
@@ -361,14 +367,15 @@ static void dft_set_cur_req(H3270 *hSession)
 /* Process a Get request. */
 static void dft_get_request(H3270 *hSession)
 {
-	int numbytes;
-	size_t numread;
-	size_t total_read = 0;
-	unsigned char *bufptr;
+	int				  numbytes;
+	size_t			  numread;
+	size_t 			  total_read = 0;
+	unsigned char	* bufptr;
+	H3270FT 		* ft = get_ft_handle(hSession);
 
 	trace_ds(hSession," Get\n");
 
-	if (!message_flag && lib3270_get_ft_state(hSession) == FT_ABORT_WAIT)
+	if (!ft->message_flag && lib3270_get_ft_state(hSession) == FT_ABORT_WAIT)
 	{
 		dft_abort(hSession,TR_GET_REQ, _( "Transfer cancelled by user" ) );
 		return;
@@ -376,43 +383,46 @@ static void dft_get_request(H3270 *hSession)
 
 	/* Read a buffer's worth. */
 	set_dft_buffersize(hSession);
-	space3270out(hSession,h3270.dft_buffersize);
+	space3270out(hSession,hSession->dft_buffersize);
 	numbytes = h3270.dft_buffersize - 27; /* always read 5 bytes less than we're allowed */
 	bufptr = h3270.obuf + 17;
 
-	while (!dft_eof && numbytes) {
-		if (ascii_flag && cr_flag) {
+	while (!ft->dft_eof && numbytes)
+	{
+		if (ft->ascii_flag && ft->cr_flag)
+		{
 			int c;
 
 			/* Read one byte and do CR/LF translation. */
-			c = fgetc(((H3270FT *) h3270.ft)->local_file);
+			c = fgetc(ft->local_file);
 			if (c == EOF) {
 				break;
 			}
-			if (!ft_last_cr && c == '\n') {
+			if (!ft->ft_last_cr && c == '\n')
+			{
 				if (numbytes < 2) {
 					/*
 					 * Not enough room to expand NL to
 					 * CR/LF.
 					 */
-					ungetc(c, ((H3270FT *) h3270.ft)->local_file);
+					ungetc(c, ft->local_file);
 					break;
 				}
 				*bufptr++ = '\r';
 				numbytes--;
 				total_read++;
 			}
-			ft_last_cr = (c == '\r');
-			*bufptr++ = remap_flag? asc2ft[c]: c;
+			ft->ft_last_cr = (c == '\r') ? 1 : 0;
+			*bufptr++ = ft->remap_flag? asc2ft[c]: c;
 			numbytes--;
 			total_read++;
 		} else {
 			/* Binary read. */
-			numread = fread(bufptr, 1, numbytes, ((H3270FT *) h3270.ft)->local_file);
+			numread = fread(bufptr, 1, numbytes, ft->local_file);
 			if (numread <= 0) {
 				break;
 			}
-			if (ascii_flag && remap_flag) {
+			if (ft->ascii_flag && ft->remap_flag) {
 				unsigned char *s = bufptr;
 				int i = numread;
 
@@ -426,7 +436,8 @@ static void dft_get_request(H3270 *hSession)
 			numbytes -= numread;
 			total_read += numread;
 		}
-		if (feof(((H3270FT *) h3270.ft)->local_file) || ferror(((H3270FT *) h3270.ft)->local_file)) {
+		if (feof(ft->local_file) || ferror(ft->local_file))
+		{
 			break;
 		}
 	}
@@ -439,55 +450,57 @@ static void dft_get_request(H3270 *hSession)
 	}
 
 	/* Set up SF header for Data or EOF. */
-	h3270.obptr = h3270.obuf;
-	*h3270.obptr++ = AID_SF;
-	h3270.obptr += 2;	/* skip SF length for now */
-	*h3270.obptr++ = SF_TRANSFER_DATA;
+	hSession->obptr = hSession->obuf;
+	*hSession->obptr++ = AID_SF;
+	hSession->obptr += 2;	/* skip SF length for now */
+	*hSession->obptr++ = SF_TRANSFER_DATA;
 
-	if (total_read) {
-		trace_ds(hSession,"> WriteStructuredField FileTransferData Data(rec=%lu) %d bytes\n",(unsigned long) recnum, (int) total_read);
-		SET16(h3270.obptr, TR_GET_REPLY);
-		SET16(h3270.obptr, TR_RECNUM_HDR);
-		SET32(h3270.obptr, recnum);
-		recnum++;
-		SET16(h3270.obptr, TR_NOT_COMPRESSED);
-		*h3270.obptr++ = TR_BEGIN_DATA;
-		SET16(h3270.obptr, total_read + 5);
-		h3270.obptr += total_read;
+	if (total_read)
+	{
+		trace_ds(hSession,"> WriteStructuredField FileTransferData Data(rec=%lu) %d bytes\n",(unsigned long) ft->recnum, (int) total_read);
+		SET16(hSession->obptr, TR_GET_REPLY);
+		SET16(hSession->obptr, TR_RECNUM_HDR);
+		SET32(hSession->obptr, ft->recnum);
+		ft->recnum++;
+		SET16(hSession->obptr, TR_NOT_COMPRESSED);
+		*hSession->obptr++ = TR_BEGIN_DATA;
+		SET16(hSession->obptr, total_read + 5);
+		hSession->obptr += total_read;
 
-		ft_length += total_read;
+		ft->ft_length += total_read;
 
-		if (feof(((H3270FT *) h3270.ft)->local_file))
+		if (feof(ft->local_file))
 		{
-			dft_eof = True;
+			ft->dft_eof = 1;
 		}
 
 	} else {
 		trace_ds(hSession,"> WriteStructuredField FileTransferData EOF\n");
-		*h3270.obptr++ = HIGH8(TR_GET_REQ);
-		*h3270.obptr++ = TR_ERROR_REPLY;
-		SET16(h3270.obptr, TR_ERROR_HDR);
-		SET16(h3270.obptr, TR_ERR_EOF);
+		*hSession->obptr++ = HIGH8(TR_GET_REQ);
+		*hSession->obptr++ = TR_ERROR_REPLY;
+		SET16(hSession->obptr, TR_ERROR_HDR);
+		SET16(hSession->obptr, TR_ERR_EOF);
 
-		dft_eof = True;
+		ft->dft_eof = 1;
 	}
 
 	/* Set the SF length. */
-	bufptr = h3270.obuf + 1;
-	SET16(bufptr, h3270.obptr - (h3270.obuf + 1));
+	bufptr = hSession->obuf + 1;
+	SET16(bufptr, hSession->obptr - (hSession->obuf + 1));
 
 	/* Save the data. */
-	dft_savebuf_len = h3270.obptr - h3270.obuf;
-	if (dft_savebuf_len > dft_savebuf_max) {
-		dft_savebuf_max = dft_savebuf_len;
-		Replace(dft_savebuf, (unsigned char *)lib3270_malloc(dft_savebuf_max));
+	ft->dft_savebuf_len = hSession->obptr - hSession->obuf;
+	if (ft->dft_savebuf_len > ft->dft_savebuf_max)
+	{
+		ft->dft_savebuf_max = ft->dft_savebuf_len;
+		Replace(ft->dft_savebuf, (unsigned char *)lib3270_malloc(ft->dft_savebuf_max));
 	}
-	(void) memcpy(dft_savebuf, h3270.obuf, dft_savebuf_len);
-	h3270.aid = AID_SF;
+	(void) memcpy(ft->dft_savebuf, hSession->obuf, ft->dft_savebuf_len);
+	hSession->aid = AID_SF;
 
 	/* Write the data. */
 	net_output(hSession);
-	ft_update_length((H3270FT *) h3270.ft);
+	ft_update_length(get_ft_handle(hSession));
 }
 
 /* Process a Close request. */
@@ -555,13 +568,15 @@ filter_len(char *s, register int len)
  */
 void dft_read_modified(H3270 *hSession)
 {
-	if (dft_savebuf_len)
+	H3270FT	*ft = get_ft_handle(hSession);
+
+	if(ft->dft_savebuf_len)
 	{
 		trace_ds(hSession,"> WriteStructuredField FileTransferData\n");
 		hSession->obptr = hSession->obuf;
-		space3270out(hSession,dft_savebuf_len);
-		memcpy(hSession->obptr, dft_savebuf, dft_savebuf_len);
-		hSession->obptr += dft_savebuf_len;
+		space3270out(hSession,ft->dft_savebuf_len);
+		memcpy(hSession->obptr, ft->dft_savebuf, ft->dft_savebuf_len);
+		hSession->obptr += ft->dft_savebuf_len;
 		net_output(hSession);
 	}
 }

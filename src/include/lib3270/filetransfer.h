@@ -69,9 +69,21 @@
 		LIB3270_FT_STATE_ABORT_SENT		/**< Abort sent; awaiting response */
 	} LIB3270_FT_STATE;
 
+	#define LIB3270_XLATE_NBUF	4
+
 	typedef struct _h3270ft
 	{
 		unsigned short		  sz;					/**< Size of FT data structure */
+
+		int					  ft_last_cr	: 1;	/**< CR was last char in local file */
+		int 				  remap_flag	: 1;	/**< Remap ASCII<->EBCDIC */
+		int					  cr_flag		: 1;	/**< Add crlf to each line */
+		int					  message_flag	: 1;	/**< Open Request for msg received */
+		int					  ascii_flag	: 1;	/**< Convert to ascii */
+		int					  ft_is_cut		: 1;	/**< File transfer is CUT-style */
+		int					  dft_eof		: 1;
+
+
 		H3270				* host;
 		void				* widget;				/**< File transfer dialog handle */
 		FILE 				* local_file;			/**< File descriptor for local file */
@@ -86,6 +98,8 @@
 		int					  secspace;
 		int					  dft;
 
+		unsigned long		  ft_length;			/**< Length of transfer */
+
 		struct timeval		  starting_time;		/**< Starting time */
 
 		const char 			* local;				/**< Local filename */
@@ -93,6 +107,19 @@
 
 		// ft_dft.c
 		char 				* abort_string;
+		unsigned long		  recnum;
+		unsigned char		* dft_savebuf;
+		int					  dft_savebuf_len;
+		int					  dft_savebuf_max;
+
+		// ft_cut.c
+		int					  quadrant;
+		unsigned long		  expanded_length;
+		char				* saved_errmsg;
+		int					  xlate_buffered;					/**< buffer count */
+		int					  xlate_buf_ix;						/**< buffer index */
+		unsigned char		  xlate_buf[LIB3270_XLATE_NBUF];	/**< buffer */
+
 
 		// Callbacks
 		void (*complete)(struct _h3270ft *ft,unsigned long length,double kbytes_sec,const char *mode);

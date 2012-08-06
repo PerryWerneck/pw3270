@@ -58,9 +58,9 @@
 
 /* Data stream conversion tables. */
 
-#define NQ		4	/* number of quadrants */
-#define NE		77	/* number of elements per quadrant */
-#define OTHER_2		2	/* "OTHER 2" quadrant (includes NULL) */
+#define NQ			4		/* number of quadrants */
+#define NE			77		/* number of elements per quadrant */
+#define OTHER_2		2		/* "OTHER 2" quadrant (includes NULL) */
 #define XLATE_NULL	0xc1	/* translation of NULL */
 
 static const char alphas[NE + 1] = " ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%&_()<+,-./:>?";
@@ -109,14 +109,14 @@ static const struct
 };
 static const char table6[] = "abcdefghijklmnopqrstuvwxyz&-.,:+ABCDEFGHIJKLMNOPQRSTUVWXYZ012345";
 
-static int quadrant = -1;
-static unsigned long expanded_length;
-static char *saved_errmsg = CN;
+// static int quadrant = -1;
+// static unsigned long expanded_length;
+// static char *saved_errmsg = CN;
 
-#define XLATE_NBUF	4
-static int xlate_buffered = 0;			/* buffer count */
-static int xlate_buf_ix = 0;			/* buffer index */
-static unsigned char xlate_buf[XLATE_NBUF];	/* buffer */
+#define XLATE_NBUF	LIB3270_XLATE_NBUF
+// static int xlate_buffered = 0;			/* buffer count */
+// static int xlate_buf_ix = 0;			/* buffer index */
+// static unsigned char xlate_buf[XLATE_NBUF];	/* buffer */
 
 static void cut_control_code(H3270 *hSession);
 static void cut_data_request(H3270 *hSession);
@@ -127,7 +127,7 @@ static void cut_ack(H3270 *hSession);
 static void cut_abort(H3270 *hSession, unsigned short code, const char *fmt, ...) printflike(3,4);
 
 static unsigned from6(unsigned char c);
-static int xlate_getc(void);
+static int xlate_getc(H3270FT *ft);
 
 /**
  * Convert a buffer for uploading (host->local). Overwrites the buffer.
@@ -138,8 +138,9 @@ static int xlate_getc(void);
  */
 static int upload_convert(H3270 *hSession, unsigned char *buf, int len)
 {
-	unsigned char *ob0 = buf;
-	unsigned char *ob = ob0;
+	unsigned char	* ob0 = buf;
+	unsigned char	* ob = ob0;
+	H3270FT			* ft = get_ft_handle(hSession);
 
 	while (len--)
 	{
@@ -149,15 +150,15 @@ static int upload_convert(H3270 *hSession, unsigned char *buf, int len)
 		// int oq = -1;
 
 	    retry:
-		if (quadrant < 0)
+		if (ft->quadrant < 0)
 		{
 			/* Find the quadrant. */
-			for (quadrant = 0; quadrant < NQ; quadrant++)
+			for (ft->quadrant = 0; ft->quadrant < NQ; ft->quadrant++)
 			{
-				if (c == conv[quadrant].selector)
+				if (c == conv[ft->quadrant].selector)
 					break;
 			}
-			if (quadrant >= NQ)
+			if (ft->quadrant >= NQ)
 			{
 				cut_abort(hSession,SC_ABORT_XMIT, "%s", _("Data conversion error"));
 				return -1;
@@ -178,7 +179,7 @@ static int upload_convert(H3270 *hSession, unsigned char *buf, int len)
 		{
 			/* Try a different quadrant. */
 			// oq = quadrant;
-			quadrant = -1;
+			ft->quadrant = -1;
 			goto retry;
 		}
 		ix = ixp - alphas;
@@ -187,19 +188,19 @@ static int upload_convert(H3270 *hSession, unsigned char *buf, int len)
 		 * See if it's mapped by that quadrant, handling NULLs
 		 * specially.
 		 */
-		if (quadrant != OTHER_2 && c != XLATE_NULL && !conv[quadrant].xlate[ix])
+		if (ft->quadrant != OTHER_2 && c != XLATE_NULL && !conv[ft->quadrant].xlate[ix])
 		{
 			/* Try a different quadrant. */
 //			oq = quadrant;
-			quadrant = -1;
+			ft->quadrant = -1;
 			goto retry;
 		}
 
 		/* Map it. */
-		c = conv[quadrant].xlate[ix];
-		if (ascii_flag && cr_flag && (c == '\r' || c == 0x1a))
+		c = conv[ft->quadrant].xlate[ix];
+		if (ft->ascii_flag && ft->cr_flag && (c == '\r' || c == 0x1a))
 			continue;
-		if (ascii_flag && remap_flag)
+		if (ft->ascii_flag && ft->remap_flag)
 			c = ft2asc[c];
 		*ob++ = c;
 	}
@@ -207,60 +208,68 @@ static int upload_convert(H3270 *hSession, unsigned char *buf, int len)
 	return ob - ob0;
 }
 
-/* Convert a buffer for downloading (local->host). */
-static int
-download_convert(unsigned const char *buf, unsigned len, unsigned char *xobuf)
+/**
+ * Convert a buffer for downloading (local->host).
+ */
+static int download_convert(unsigned const char *buf, unsigned len, unsigned char *xobuf)
 {
-	unsigned char *ob0 = xobuf;
-	unsigned char *ob = ob0;
+	H3270FT			* ft = get_ft_handle(&h3270);
+	unsigned char	* ob0 = xobuf;
+	unsigned char	* ob = ob0;
 
-	while (len--) {
+	while (len--)
+	{
 		unsigned char c = *buf++;
 		unsigned char *ixp;
 		unsigned ix;
 		int oq;
 
 		/* Handle nulls separately. */
-		if (!c) {
-			if (quadrant != OTHER_2) {
-				quadrant = OTHER_2;
-				*ob++ = conv[quadrant].selector;
+		if (!c)
+		{
+			if (ft->quadrant != OTHER_2)
+			{
+				ft->quadrant = OTHER_2;
+				*ob++ = conv[ft->quadrant].selector;
 			}
 			*ob++ = XLATE_NULL;
 			continue;
 		}
 
 		/* Translate. */
-		if (ascii_flag && remap_flag)
+		if (ft->ascii_flag && ft->remap_flag)
 			c = asc2ft[c];
 
 		/* Quadrant already defined. */
-		if (quadrant >= 0) {
-			ixp = (unsigned char *)memchr(conv[quadrant].xlate, c,
-							NE);
-			if (ixp != (unsigned char *)NULL) {
-				ix = ixp - conv[quadrant].xlate;
+		if (ft->quadrant >= 0) {
+			ixp = (unsigned char *)memchr(conv[ft->quadrant].xlate, c, NE);
+			if (ixp != (unsigned char *)NULL)
+			{
+				ix = ixp - conv[ft->quadrant].xlate;
 				*ob++ = asc2ebc[(int)alphas[ix]];
 				continue;
 			}
 		}
 
 		/* Locate a quadrant. */
-		oq = quadrant;
-		for (quadrant = 0; quadrant < NQ; quadrant++) {
-			if (quadrant == oq)
+		oq = ft->quadrant;
+		for (ft->quadrant = 0; ft->quadrant < NQ; ft->quadrant++)
+		{
+			if (ft->quadrant == oq)
 				continue;
-			ixp = (unsigned char *)memchr(conv[quadrant].xlate, c,
-				    NE);
+
+			ixp = (unsigned char *)memchr(conv[ft->quadrant].xlate, c, NE);
+
 			if (ixp == (unsigned char *)NULL)
 				continue;
-			ix = ixp - conv[quadrant].xlate;
-			*ob++ = conv[quadrant].selector;
+			ix = ixp - conv[ft->quadrant].xlate;
+			*ob++ = conv[ft->quadrant].selector;
 			*ob++ = asc2ebc[(int)alphas[ix]];
 			break;
 		}
-		if (quadrant >= NQ) {
-			quadrant = -1;
+		if (ft->quadrant >= NQ)
+		{
+			ft->quadrant = -1;
 			fprintf(stderr, "Oops\n");
 			continue;
 		}
@@ -304,10 +313,11 @@ void ft_cut_data(H3270 *hSession)
  */
 static void cut_control_code(H3270 *hSession)
 {
-	unsigned short code;
-	char *buf;
-	char *bp;
-	int i;
+	H3270FT			* ft	= get_ft_handle(hSession);
+	unsigned short	  code;
+	char 			* buf;
+	char			* bp;
+	int				  i;
 
 	trace_ds(hSession,"< FT CONTROL_CODE ");
 	code = (hSession->ea_buf[O_CC_STATUS_CODE].cc << 8) | hSession->ea_buf[O_CC_STATUS_CODE + 1].cc;
@@ -317,18 +327,18 @@ static void cut_control_code(H3270 *hSession)
 	case SC_HOST_ACK:
 		trace_ds(hSession,"HOST_ACK\n");
 		hSession->cut_xfer_in_progress = 1;
-		expanded_length = 0;
-		quadrant = -1;
-		xlate_buffered = 0;
+		ft->expanded_length = 0;
+		ft->quadrant = -1;
+		ft->xlate_buffered = 0;
 		cut_ack(hSession);
-		ft_running(NULL,True);
+		ft_running(hSession->ft,True);
 		break;
 
 	case SC_XFER_COMPLETE:
 		trace_ds(hSession,"XFER_COMPLETE\n");
 		cut_ack(hSession);
 		hSession->cut_xfer_in_progress = 0;
-		ft_complete(NULL,N_( "Complete" ) );
+		ft_complete(ft,N_( "Complete" ) );
 		break;
 
 	case SC_ABORT_FILE:
@@ -337,10 +347,10 @@ static void cut_control_code(H3270 *hSession)
 		hSession->cut_xfer_in_progress = 0;
 		cut_ack(hSession);
 
-		if (lib3270_get_ft_state(hSession) == FT_ABORT_SENT && saved_errmsg != CN)
+		if (lib3270_get_ft_state(hSession) == FT_ABORT_SENT && ft->saved_errmsg != CN)
 		{
-			buf = saved_errmsg;
-			saved_errmsg = CN;
+			buf = ft->saved_errmsg;
+			ft->saved_errmsg = CN;
 		}
 		else
 		{
@@ -363,7 +373,7 @@ static void cut_control_code(H3270 *hSession)
 			if (!*buf)
 				strcpy(buf, N_( "Transfer cancelled by host" ) );
 		}
-		ft_complete(NULL,buf);
+		ft_complete(hSession->ft,buf);
 		lib3270_free(buf);
 		break;
 
@@ -379,12 +389,13 @@ static void cut_control_code(H3270 *hSession)
  */
 static void cut_data_request(H3270 *hSession)
 {
-	unsigned char seq = hSession->ea_buf[O_DR_FRAME_SEQ].cc;
-	int count;
-	unsigned char cs;
-	int c;
-	int i;
-	unsigned char attr;
+	H3270FT			* ft	= get_ft_handle(hSession);
+	unsigned char	  seq	= hSession->ea_buf[O_DR_FRAME_SEQ].cc;
+	int				  count;
+	unsigned char	  cs;
+	int				  c;
+	int				  i;
+	unsigned char	  attr;
 
 	trace_ds(hSession,"< FT DATA_REQUEST %u\n", from6(seq));
 	if (lib3270_get_ft_state(hSession) == FT_ABORT_WAIT)
@@ -393,15 +404,18 @@ static void cut_data_request(H3270 *hSession)
 		return;
 	}
 
+
 	/* Copy data into the screen buffer. */
 	count = 0;
-	while (count < O_UP_MAX && (c = xlate_getc()) != EOF) {
+	while (count < O_UP_MAX && (c = xlate_getc(hSession->ft)) != EOF)
+	{
 		ctlr_add(hSession,O_UP_DATA + count, c, 0);
 		count++;
 	}
 
 	/* Check for errors. */
-	if (ferror(((H3270FT *) hSession->ft)->local_file)) {
+	if (ferror(((H3270FT *) hSession->ft)->local_file))
+	{
 		int j;
 
 		/* Clean out any data we may have written. */
@@ -438,8 +452,8 @@ static void cut_data_request(H3270 *hSession)
 
 	/* Send it up to the host. */
 	trace_ds(hSession,"> FT DATA %u\n", from6(seq));
-	ft_update_length(NULL);
-	expanded_length += count;
+	ft_update_length(ft);
+	ft->expanded_length += count;
 
 	lib3270_enter(hSession);
 }
@@ -473,13 +487,14 @@ from6(unsigned char c)
  */
 static void cut_data(H3270 *hSession)
 {
+	H3270FT *ft = get_ft_handle(hSession);
 	static unsigned char cvbuf[O_RESPONSE - O_DT_DATA];
 	unsigned short raw_length;
 	int conv_length;
 	register int i;
 
 	trace_ds(hSession,"< FT DATA\n");
-	if (((H3270FT *) hSession->ft)->state == LIB3270_FT_STATE_ABORT_WAIT)
+	if (ft->state == LIB3270_FT_STATE_ABORT_WAIT)
 	{
 		cut_abort(hSession,SC_ABORT_FILE,"%s",_("Transfer cancelled by user"));
 		return;
@@ -510,14 +525,14 @@ static void cut_data(H3270 *hSession)
 		return;
 
 	/* Write it to the file. */
-	if (fwrite((char *)cvbuf, conv_length, 1, ((H3270FT *) hSession->ft)->local_file) == 0)
+	if (fwrite((char *)cvbuf, conv_length, 1, ft->local_file) == 0)
 	{
 		cut_abort(hSession,SC_ABORT_FILE,_( "Error \"%s\" writing to local file (rc=%d)" ),strerror(errno),errno);
 	}
 	else
 	{
-		ft_length += conv_length;
-		ft_update_length(NULL);
+		ft->ft_length += conv_length;
+		ft_update_length(ft);
 		cut_ack(hSession);
 	}
 }
@@ -536,14 +551,15 @@ static void cut_ack(H3270 *hSession)
  */
 static void cut_abort(H3270 *hSession, unsigned short reason, const char *fmt, ...)
 {
-	va_list args;
+	H3270FT	* ft = get_ft_handle(hSession);
+	va_list	  args;
 
-	if(saved_errmsg)
-		lib3270_free(saved_errmsg);
+	if(ft->saved_errmsg)
+		lib3270_free(ft->saved_errmsg);
 
 	/* Save the error message. */
 	va_start(args, fmt);
-	saved_errmsg = lib3270_vsprintf(fmt, args);
+	ft->saved_errmsg = lib3270_vsprintf(fmt, args);
 	va_end(args);
 
 	/* Send the abort sequence. */
@@ -556,15 +572,15 @@ static void cut_abort(H3270 *hSession, unsigned short reason, const char *fmt, .
 	lib3270_pfkey(hSession,2);
 
 	/* Update the in-progress pop-up. */
-	ft_aborting(NULL);
+	ft_aborting(ft);
 }
 
-/*
+/**
  * Get the next translated character from the local file.
- * Returns the character (in EBCDIC), or EOF.
+ *
+ * @return the character (in EBCDIC), or EOF.
  */
-static int
-xlate_getc(void)
+static int xlate_getc(H3270FT *ft)
 {
 	int r;
 	int c;
@@ -573,25 +589,29 @@ xlate_getc(void)
 	int nc;
 
 	/* If there is a data buffered, return it. */
-	if (xlate_buffered) {
-		r = xlate_buf[xlate_buf_ix];
-		xlate_buf_ix++;
-		xlate_buffered--;
+	if (ft->xlate_buffered)
+	{
+		r = ft->xlate_buf[ft->xlate_buf_ix];
+		ft->xlate_buf_ix++;
+		ft->xlate_buffered--;
 		return r;
 	}
 
 	/* Get the next byte from the file. */
-	c = fgetc(((H3270FT *) h3270.ft)->local_file);
+	c = fgetc(ft->local_file);
 	if (c == EOF)
 		return c;
-	ft_length++;
+	ft->ft_length++;
 
 	/* Expand it. */
-	if (ascii_flag && cr_flag && !ft_last_cr && c == '\n') {
+	if (ft->ascii_flag && ft->cr_flag && !ft->ft_last_cr && c == '\n')
+	{
 		nc = download_convert((unsigned const char *)"\r", 1, cbuf);
-	} else {
+	}
+	else
+	{
 		nc = 0;
-		ft_last_cr = (c == '\r');
+		ft->ft_last_cr = (c == '\r') ? 1 : 0;
 	}
 
 	/* Convert it. */
@@ -600,12 +620,13 @@ xlate_getc(void)
 
 	/* Return it and buffer what's left. */
 	r = cbuf[0];
-	if (nc > 1) {
+	if (nc > 1)
+	{
 		int i;
 
 		for (i = 1; i < nc; i++)
-			xlate_buf[xlate_buffered++] = cbuf[i];
-		xlate_buf_ix = 0;
+			ft->xlate_buf[ft->xlate_buffered++] = cbuf[i];
+		ft->xlate_buf_ix = 0;
 	}
 	return r;
 }
