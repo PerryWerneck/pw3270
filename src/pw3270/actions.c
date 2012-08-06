@@ -47,7 +47,7 @@
  #define TOGGLE_GDKDEBUG LIB3270_TOGGLE_COUNT+1
 
  #ifdef X3270_TRACE
-	#define trace_action(a,w) lib3270_trace_event(NULL,"Action %s activated on widget %p\n",gtk_action_get_name(a),w);
+	#define trace_action(a,w) lib3270_trace_event(v3270_get_session(widget),"Action %s activated on widget %p\n",gtk_action_get_name(a),w);
  #else
 	#define trace_action(a,w) /* */
  #endif // X3270_TRACE
@@ -287,7 +287,7 @@ static void lib3270_toggle_action(GtkToggleAction *action,GtkWidget *widget)
 {
 	LIB3270_TOGGLE toggle = (LIB3270_TOGGLE) GPOINTER_TO_INT(g_object_get_data(G_OBJECT(action),"toggle_id"));
 
-	lib3270_trace_event(NULL,"Action %s toggled on widget %p (id=%d)\n",gtk_action_get_name(GTK_ACTION(action)),widget,(int) toggle);
+	lib3270_trace_event(v3270_get_session(widget),"Action %s toggled on widget %p (id=%d)\n",gtk_action_get_name(GTK_ACTION(action)),widget,(int) toggle);
 
 	if(toggle == TOGGLE_GDKDEBUG)
 		gdk_window_set_debug_updates(gtk_toggle_action_get_active(action));
@@ -305,7 +305,7 @@ static void cursor_move_action(GtkAction *action, GtkWidget *widget)
 {
 	int flags = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(action),"move_flags"));
 
-	lib3270_trace_event(NULL,"Action %s activated on widget %p flags=%04x\n",
+	lib3270_trace_event(v3270_get_session(widget),"Action %s activated on widget %p flags=%04x\n",
 									gtk_action_get_name(action),
 									widget,
 									(unsigned int) flags);
@@ -344,28 +344,28 @@ static void connect_move_action(GtkAction *action, GtkWidget *widget, const gcha
 static void action_pfkey(GtkAction *action, GtkWidget *widget)
 {
 	int key = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(action),"pfkey"));
-	lib3270_trace_event(NULL,"Action %s activated on widget %p key=%d\n",gtk_action_get_name(action),widget,key);
+	lib3270_trace_event(v3270_get_session(widget),"Action %s activated on widget %p key=%d\n",gtk_action_get_name(action),widget,key);
 	lib3270_pfkey(v3270_get_session(widget),key);
 }
 
 static void action_pakey(GtkAction *action, GtkWidget *widget)
 {
 	int key = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(action),"pakey"));
-	lib3270_trace_event(NULL,"Action %s activated on widget %p key=%d\n",gtk_action_get_name(action),widget,key);
+	lib3270_trace_event(v3270_get_session(widget),"Action %s activated on widget %p key=%d\n",gtk_action_get_name(action),widget,key);
 	lib3270_pakey(v3270_get_session(widget),key);
 }
 
 static void action_set_toggle(GtkAction *action, GtkWidget *widget)
 {
 	LIB3270_TOGGLE id = (LIB3270_TOGGLE) GPOINTER_TO_INT(g_object_get_data(G_OBJECT(action),"toggle_id"));
-	lib3270_trace_event(NULL,"Action %s activated on widget %p toggle=%d\n",gtk_action_get_name(action),widget,id);
+	lib3270_trace_event(v3270_get_session(widget),"Action %s activated on widget %p toggle=%d\n",gtk_action_get_name(action),widget,id);
 	lib3270_set_toggle(v3270_get_session(widget),id,1);
 }
 
 static void action_reset_toggle(GtkAction *action, GtkWidget *widget)
 {
 	LIB3270_TOGGLE id = (LIB3270_TOGGLE) GPOINTER_TO_INT(g_object_get_data(G_OBJECT(action),"toggle_id"));
-	lib3270_trace_event(NULL,"Action %s activated on widget %p toggle=%d\n",gtk_action_get_name(action),widget,id);
+	lib3270_trace_event(v3270_get_session(widget),"Action %s activated on widget %p toggle=%d\n",gtk_action_get_name(action),widget,id);
 	lib3270_set_toggle(v3270_get_session(widget),id,0);
 }
 

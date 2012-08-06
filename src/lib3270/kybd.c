@@ -257,7 +257,7 @@ static int enq_chk(H3270 *hSession)
 	}
 	session->ta_tail = ta;
 
-	trace_event("  Key-aid queued (kybdlock 0x%x)\n", session->kybdlock);
+	lib3270_trace_event(session,"  Key-aid queued (kybdlock 0x%x)\n", session->kybdlock);
  }
 
 /*
@@ -300,7 +300,7 @@ static void enq_ta(H3270 *hSession, void (*fn)(H3270 *, const char *, const char
 	}
 	hSession->ta_tail = ta;
 
-	trace_event("  action queued (kybdlock 0x%x)\n", hSession->kybdlock);
+	lib3270_trace_event(hSession,"  action queued (kybdlock 0x%x)\n", hSession->kybdlock);
 }
 
 /*
@@ -374,7 +374,7 @@ static void kybdlock_set(H3270 *hSession, unsigned int bits)
 	{
 /*
 #if defined(KYBDLOCK_TRACE)
-	       trace_event("  %s: kybdlock |= 0x%04x, 0x%04x -> 0x%04x\n",
+	       lib3270_trace_event(hSession,"  %s: kybdlock |= 0x%04x, 0x%04x -> 0x%04x\n",
 		    cause, bits, kybdlock, n);
 #endif
 */
@@ -399,7 +399,7 @@ void lib3270_kybdlock_clear(H3270 *hSession, LIB3270_KL_STATE bits)
 	if (n != hSession->kybdlock)
 	{
 #if defined(KYBDLOCK_TRACE)
-		trace_event("  %s: kybdlock &= ~0x%04x, 0x%04x -> 0x%04x\n", __FUNCTION__, bits, kybdlock, n);
+		lib3270_trace_event(hSession,"  %s: kybdlock &= ~0x%04x, 0x%04x -> 0x%04x\n", __FUNCTION__, bits, kybdlock, n);
 #endif
 		if ((hSession->kybdlock ^ n) & KL_DEFERRED_UNLOCK)
 		{
@@ -734,7 +734,7 @@ static void key_Character_wrapper(H3270 *hSession, const char *param1, const cha
 		code &= ~PASTE_WFLAG;
 	}
 
-//	trace_event(" %s -> Key(%s\"%s\")\n",ia_name[(int) ia_cause],with_ge ? "GE " : "",ctl_see((int) ebc2asc[code]));
+//	lib3270_trace_event(hSession," %s -> Key(%s\"%s\")\n",ia_name[(int) ia_cause],with_ge ? "GE " : "",ctl_see((int) ebc2asc[code]));
 
 	(void) key_Character(hSession, code, with_ge, pasting, NULL);
 }
@@ -1963,7 +1963,7 @@ LIB3270_ACTION( clear )
 		return 0;
 	}
 #endif /*]*/
-	h3270.buffer_addr = 0;
+	hSession->buffer_addr = 0;
 	ctlr_clear(hSession,True);
 	cursor_move(hSession,0);
 	if (CONNECTED)
@@ -2517,7 +2517,7 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *hSession, char *s, int len, int 
 		 */
 		if (hSession->kybdlock)
 		{
-			trace_event("  keyboard locked, string dropped\n");
+			lib3270_trace_event(hSession,"  keyboard locked, string dropped\n");
 			return 0;
 		}
 
@@ -2621,7 +2621,7 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *hSession, char *s, int len, int 
 					(void) key_WCharacter(ebc, &skipped);
 					break;
 				} else {
-					trace_event("Cannot convert U+%04x to "
+					lib3270_trace_event(hSession,"Cannot convert U+%04x to "
 					    "EBCDIC\n", c & 0xffff);
 					break;
 				}

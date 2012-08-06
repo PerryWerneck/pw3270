@@ -83,7 +83,7 @@ static int (*popup_handler)(H3270 *, void *, LIB3270_NOTIFY, const char *, const
 static void status_connect(H3270 *session, int ignored, void *dunno);
 static void status_3270_mode(H3270 *session, int ignored, void *dunno);
 // static void status_printer(H3270 *session, int on, void *dunno);
-static unsigned short color_from_fa(unsigned char fa);
+static unsigned short color_from_fa(H3270 *hSession, unsigned char fa);
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
@@ -146,9 +146,9 @@ int screen_init(H3270 *session)
 }
 
 /* Map a field attribute to its default colors. */
-static unsigned short color_from_fa(unsigned char fa)
+static unsigned short color_from_fa(H3270 *hSession, unsigned char fa)
 {
-	if (h3270.m3279)
+	if (hSession->m3279)
 		return get_color_pair(DEFCOLOR_MAP(fa),0) | COLOR_ATTR_FIELD;
 
 	// Green on black
@@ -172,7 +172,7 @@ static unsigned short calc_attrs(H3270 *session, int baddr, int fa_addr, int fa)
 		 !session->ea_buf[baddr].bg &&
 		 !session->ea_buf[fa_addr].bg))
 	{
-		a = color_from_fa(fa);
+		a = color_from_fa(session,fa);
 	}
 	else
 	{
@@ -299,7 +299,7 @@ void screen_update(H3270 *session, int bstart, int bend)
 	int				last	= -1;
 
 	fa		= get_field_attribute(session,bstart);
-	a  		= color_from_fa(fa);
+	a  		= color_from_fa(session,fa);
 	fa_addr = find_field_attribute(session,bstart); // may be -1, that's okay
 
 #ifdef WIN32

@@ -26,7 +26,6 @@
  * erico.mendonca@gmail.com	(Erico Mascarenhas Mendonça)
  * licinio@bb.com.br		(Licínio Luis Branco)
  * kraucer@bb.com.br		(Kraucer Fernandes Mazuco)
- * macmiranda@bb.com.br		(Marco Aurélio Caldas Miranda)
  *
  */
 
@@ -314,17 +313,8 @@ static const char *trsp_flag[2] = { "POSITIVE-RESPONSE", "NEGATIVE-RESPONSE" };
 #endif /*]*/
 #endif /*]*/
 
-// #if defined(C3270) && defined(C3270_80_132) /*[*/
-// #define XMIT_ROWS	((appres.altscreen != CN)? 24: maxROWS)
-// #define XMIT_COLS	((appres.altscreen != CN)? 80: maxCOLS)
-// #else /*][*/
-#define XMIT_ROWS	h3270.maxROWS
-#define XMIT_COLS	h3270.maxCOLS
-// #endif /*]*/
-
-// #if defined(HAVE_LIBSSL)
-// static SSL *ssl_con;
-// #endif
+#define XMIT_ROWS	hSession->maxROWS
+#define XMIT_COLS	hSession->maxCOLS
 
 #if defined(HAVE_LIBSSL) /*[*/
 // static Boolean need_tls_follows = False;
@@ -337,10 +327,6 @@ static void ssl_init(H3270 *session);
 static void ssl_info_callback(INFO_CONST SSL *s, int where, int ret);
 static void continue_tls(H3270 *hSession, unsigned char *sbbuf, int len);
 #endif /*]*/
-
-// #if !defined(_WIN32) /*[*/
-// static void output_possible(H3270 *session);
-// #endif /*]*/
 
 #if defined(_WIN32) /*[*/
 	#define socket_errno()	WSAGetLastError()
@@ -1838,25 +1824,6 @@ tn3270e_function_names(const unsigned char *buf, int len)
 }
 #endif /*]*/
 
-/* Expand the current TN3270E function codes into text. */ /*
-const char *
-tn3270e_current_opts(void)
-{
-	int i;
-	static char text_buf[1024];
-	char *s = text_buf;
-
-	if (!h3270.e_funcs || !IN_E)
-		return CN;
-	for (i = 0; i < 32; i++) {
-		if (h3270.e_funcs & E_OPT(i))
-		s += sprintf(s, "%s%s", (s == text_buf) ? "" : " ",
-		    fnn(i));
-	}
-	return text_buf;
-}
-*/
-
 /* Transmit a TN3270E FUNCTIONS REQUEST or FUNCTIONS IS message. */
 static void tn3270e_subneg_send(H3270 *hSession, unsigned char op, unsigned long funcs)
 {
@@ -3316,61 +3283,10 @@ int net_getsockname(const H3270 *session, void *buf, int *len)
 	return getsockname(session->sock, buf, (socklen_t *)(void *)len);
 }
 
-/* Return a text version of the current proxy type, or NULL. */ /*
-char *
-net_proxy_type(void)
-{
-   	if(h3270.proxy_type > 0)
-		return proxy_type_name(h3270.proxy_type);
-	else
-		return NULL;
-}
-*/
-
-/* Return the current proxy host, or NULL. */ /*
-char *
-net_proxy_host(void)
-{
-	if(h3270.proxy_type > 0)
-		return h3270.proxy_host;
-	else
-		return NULL;
-}
-*/
-
-/* Return the current proxy port, or NULL. */ /*
-char *
-net_proxy_port(void)
-{
-	if (h3270.proxy_type > 0)
-		return h3270.proxy_portname;
-	else
-		return NULL;
-}
-*/
-
 LIB3270_EXPORT LIB3270_SSL_STATE lib3270_get_secure(H3270 *session)
 {
 	CHECK_SESSION_HANDLE(session);
 	return session->secure;
 }
 
-/*
-LIB3270_EXPORT int lib3270_get_ssl_state(H3270 *h)
-{
-	CHECK_SESSION_HANDLE(h);
 
-#if defined(HAVE_LIBSSL)
-		return (h->secure_connection != 0);
-#else
-		return 0;
-#endif
-}
-*/
-
-/*
-int Get3270Socket(void)
-{
-        return h3270.sock;
-}
-*/

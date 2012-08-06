@@ -18,7 +18,7 @@
  * programa; se não, escreva para a Free Software Foundation, Inc., 51 Franklin
  * St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * Este programa está nomeado como ft_cut.c e possui 591 linhas de código.
+ * Este programa está nomeado como ft_cut.c e possui - linhas de código.
  *
  * Contatos:
  *
@@ -26,12 +26,12 @@
  * erico.mendonca@gmail.com	(Erico Mascarenhas Mendonça)
  * licinio@bb.com.br		(Licínio Luis Branco)
  * kraucer@bb.com.br		(Kraucer Fernandes Mazuco)
- * macmiranda@bb.com.br		(Marco Aurélio Caldas Miranda)
  *
  */
 
-/*
- *	ft_cut.c
+/**
+ *	@file ft_cut.c
+ *
  *		File transfer, data movement logic, CUT version
  */
 
@@ -54,7 +54,7 @@
 #include "trace_dsc.h"
 #include "utilc.h"
 
-static Boolean cut_xfer_in_progress = False;
+// static Boolean cut_xfer_in_progress = 0;
 
 /* Data stream conversion tables. */
 
@@ -63,10 +63,10 @@ static Boolean cut_xfer_in_progress = False;
 #define OTHER_2		2	/* "OTHER 2" quadrant (includes NULL) */
 #define XLATE_NULL	0xc1	/* translation of NULL */
 
-static char alphas[NE + 1] =
-" ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%&_()<+,-./:>?";
+static const char alphas[NE + 1] = " ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%&_()<+,-./:>?";
 
-static struct {
+static const struct
+{
 	unsigned char selector;
 	unsigned char xlate[NE];
 } conv[NQ] = {
@@ -107,8 +107,7 @@ static struct {
 	  0xbe,0xbf,0x9a,0x9b, 0x00 }
     }
 };
-static char table6[] =
-    "abcdefghijklmnopqrstuvwxyz&-.,:+ABCDEFGHIJKLMNOPQRSTUVWXYZ012345";
+static const char table6[] = "abcdefghijklmnopqrstuvwxyz&-.,:+ABCDEFGHIJKLMNOPQRSTUVWXYZ012345";
 
 static int quadrant = -1;
 static unsigned long expanded_length;
@@ -317,7 +316,7 @@ static void cut_control_code(H3270 *hSession)
 	{
 	case SC_HOST_ACK:
 		trace_ds(hSession,"HOST_ACK\n");
-		cut_xfer_in_progress = True;
+		hSession->cut_xfer_in_progress = 1;
 		expanded_length = 0;
 		quadrant = -1;
 		xlate_buffered = 0;
@@ -328,14 +327,14 @@ static void cut_control_code(H3270 *hSession)
 	case SC_XFER_COMPLETE:
 		trace_ds(hSession,"XFER_COMPLETE\n");
 		cut_ack(hSession);
-		cut_xfer_in_progress = False;
+		hSession->cut_xfer_in_progress = 0;
 		ft_complete(NULL,N_( "Complete" ) );
 		break;
 
 	case SC_ABORT_FILE:
 	case SC_ABORT_XMIT:
 		trace_ds(hSession,"ABORT\n");
-		cut_xfer_in_progress = False;
+		hSession->cut_xfer_in_progress = 0;
 		cut_ack(hSession);
 
 		if (lib3270_get_ft_state(hSession) == FT_ABORT_SENT && saved_errmsg != CN)

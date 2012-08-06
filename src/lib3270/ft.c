@@ -379,7 +379,7 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 		return errno = EINVAL;
 	}
 
-	trace_event("Sending FT request:\n%s\n",buffer);
+	lib3270_trace_event(hSession,"Sending FT request:\n%s\n",buffer);
 
 	lib3270_emulate_input(ft->host, buffer, strlen(buffer), False);
 

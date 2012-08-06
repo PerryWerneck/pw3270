@@ -228,14 +228,14 @@ void do_qr_rpqnames(H3270 *hSession)
 		 * adjust space remaining.
 		 * obptr now points at "next available byte".
 		 */
-		x = h3270.obptr-p_term;
+		x = hSession->obptr-p_term;
 		if (x > TERM_PREFIX_SIZE) {
 			*p_term = x;
 			remaining -= x;	/* This includes length and id fields,
 					   correction below */
 		} else {
 			/* We didn't add an item after all, reset pointer. */
-			h3270.obptr = p_term;
+			hSession->obptr = p_term;
 		}
 		/*
 		 * When we calculated the length of the term, a few lines

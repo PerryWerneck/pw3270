@@ -214,21 +214,6 @@ void trace_ds_nb(H3270 *hSession, const char *fmt, ...)
 	lib3270_free(text);
 }
 
-/* Conditional event trace. */ /*
-void trace_event(const char *fmt, ...)
-{
-	va_list args;
-
-	if (!lib3270_get_toggle(&h3270,EVENT_TRACE))
-		return;
-
-	// print out message
-	va_start(args, fmt);
-	vwtrace(&h3270,fmt, args);
-	va_end(args);
-}
-*/
-
 /* Conditional data stream trace, without line splitting. */
 void trace_dsn(H3270 *hSession, const char *fmt, ...)
 {

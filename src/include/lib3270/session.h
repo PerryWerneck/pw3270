@@ -106,6 +106,7 @@
 		int             		  linemode					: 1;
 		int						  trace_skipping			: 1;
 		int						  need_tls_follows			: 1;
+		int						  cut_xfer_in_progress		: 1;
 
 		char					* oversize;
 
