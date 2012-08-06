@@ -2230,11 +2230,10 @@ static void cooked_init(H3270 *hSession)
 	hSession->backslashed = 0;
 }
 
-static void
-ansi_process_s(const char *data)
+static void ansi_process_s(H3270 *hSession, const char *data)
 {
 	while (*data)
-		ansi_process(&h3270,(unsigned int) *data++);
+		ansi_process(hSession,(unsigned int) *data++);
 }
 
 static void forward_data(H3270 *hSession)
@@ -2253,10 +2252,10 @@ static void do_data(H3270 *hSession, char c)
 		if (c == '\t')
 			ansi_process(hSession,(unsigned int) c);
 		else
-			ansi_process_s(ctl_see((int) c));
+			ansi_process_s(hSession,ctl_see((int) c));
 	}
 	else
-		ansi_process_s("\007");
+		ansi_process_s(hSession,"\007");
 
 	hSession->lnext = 0;
 	hSession->backslashed = 0;
@@ -2269,7 +2268,7 @@ static void do_intr(H3270 *hSession, char c)
 		do_data(hSession,c);
 		return;
 	}
-	ansi_process_s(ctl_see((int) c));
+	ansi_process_s(hSession,ctl_see((int) c));
 	cooked_init(hSession);
 	net_interrupt(hSession);
 }
@@ -2281,7 +2280,7 @@ static void do_quit(H3270 *hSession, char c)
 		do_data(hSession,c);
 		return;
 	}
-	ansi_process_s(ctl_see((int) c));
+	ansi_process_s(hSession,ctl_see((int) c));
 	cooked_init(hSession);
 	net_break(hSession);
 }
@@ -2293,7 +2292,7 @@ static void do_cerase(H3270 *hSession, char c)
 	if (hSession->backslashed)
 	{
 		hSession->lbptr--;
-		ansi_process_s("\b");
+		ansi_process_s(hSession,"\b");
 		do_data(hSession,c);
 		return;
 	}
@@ -2309,7 +2308,7 @@ static void do_cerase(H3270 *hSession, char c)
 		len = strlen(ctl_see((int) *--hSession->lbptr));
 
 		while (len--)
-			ansi_process_s("\b \b");
+			ansi_process_s(hSession,"\b \b");
 	}
 }
 
@@ -2339,7 +2338,7 @@ static void do_werase(H3270 *hSession, char c)
 		len = strlen(ctl_see((int) ch));
 
 		while (len--)
-			ansi_process_s("\b \b");
+			ansi_process_s(hSession,"\b \b");
 	}
 }
 
@@ -2347,9 +2346,10 @@ static void do_kill(H3270 *hSession, char c)
 {
 	int i, len;
 
-	if (hSession->backslashed) {
+	if (hSession->backslashed)
+	{
 		hSession->lbptr--;
-		ansi_process_s("\b");
+		ansi_process_s(hSession,"\b");
 		do_data(hSession,c);
 		return;
 	}
@@ -2365,7 +2365,7 @@ static void do_kill(H3270 *hSession, char c)
 		len = strlen(ctl_see((int) *--hSession->lbptr));
 
 		for (i = 0; i < len; i++)
-			ansi_process_s("\b \b");
+			ansi_process_s(hSession,"\b \b");
 	}
 }
 
@@ -2379,10 +2379,10 @@ static void do_rprnt(H3270 *hSession, char c)
 		return;
 	}
 
-	ansi_process_s(ctl_see((int) c));
-	ansi_process_s("\r\n");
+	ansi_process_s(hSession,ctl_see((int) c));
+	ansi_process_s(hSession,"\r\n");
 	for (p = hSession->lbuf; p < hSession->lbptr; p++)
-		ansi_process_s(ctl_see((int) *p));
+		ansi_process_s(hSession,ctl_see((int) *p));
 }
 
 static void do_eof(H3270 *hSession, char c)
@@ -2390,7 +2390,7 @@ static void do_eof(H3270 *hSession, char c)
 	if (hSession->backslashed)
 	{
 		hSession->lbptr--;
-		ansi_process_s("\b");
+		ansi_process_s(hSession,"\b");
 		do_data(hSession,c);
 		return;
 	}
@@ -2415,13 +2415,13 @@ static void do_eol(H3270 *hSession, char c)
 
 	if (hSession->lbptr+2 >= hSession->lbuf + BUFSZ)
 	{
-		ansi_process_s("\007");
+		ansi_process_s(hSession,"\007");
 		return;
 	}
 
 	*hSession->lbptr++ = '\r';
 	*hSession->lbptr++ = '\n';
-	ansi_process_s("\r\n");
+	ansi_process_s(hSession,"\r\n");
 	forward_data(hSession);
 }
 
@@ -2433,7 +2433,7 @@ static void do_lnext(H3270 *hSession, char c)
 		return;
 	}
 	hSession->lnext = 1;
-	ansi_process_s("^\b");
+	ansi_process_s(hSession,"^\b");
 }
 #endif /*]*/
 

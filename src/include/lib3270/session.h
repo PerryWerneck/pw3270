@@ -262,6 +262,15 @@
 		// ft_dft.c
 		int						  dft_buffersize;		/**< Buffer size (LIMIN, LIMOUT) */
 
+		// rpq.c
+		int						  rpq_complained : 1;
+#if !defined(_WIN32)
+		int						  omit_due_space_limit : 1;
+#endif
+
+		char					* rpq_warnbuf;
+		int						  rpq_wbcnt;
+
 		// Widget info
 		void					* widget;
 

@@ -66,19 +66,21 @@
 #include "sf.h"
 
 /* Statics */
-static Boolean select_rpq_terms(void);
-static int get_rpq_timezone(void);
-static int get_rpq_user(unsigned char buf[], const int buflen);
+static Boolean select_rpq_terms(H3270 *hSession);
+static int get_rpq_timezone(H3270 *hSession);
+static int get_rpq_user(H3270 *hSession, unsigned char buf[], const int buflen);
 #if !defined(_WIN32) /*[*/
-static int get_rpq_address(unsigned char buf[], const int buflen);
+static int get_rpq_address(H3270 *hSession, unsigned char buf[], const int buflen);
 #endif /*]*/
-static void rpq_warning(const char *fmt, ...);
-static void rpq_dump_warnings(void);
-static Boolean rpq_complained = False;
+static void rpq_warning(H3270 *hSession, const char *fmt, ...) printflike(2,3);
+static void rpq_dump_warnings(H3270 *hSession);
 
-#if !defined(_WIN32) /*[*/
-static Boolean omit_due_space_limit = False;
-#endif /*]*/
+
+// static Boolean rpq_complained = 0;
+//
+// #if !defined(_WIN32)
+//static Boolean omit_due_space_limit = 0;
+//#endif
 
 /*
  * Define symbolic names for RPQ self-defining terms.
@@ -101,9 +103,10 @@ static Boolean omit_due_space_limit = False;
  * specifies abbreviations, they work in a predictable manner.  E.g., "TIME"
  * should match TIMESTAMP instead of TIMEZONE.
  */
-static struct rpq_keyword {
-	Boolean omit;	/* set from X3270RPQ="kw1:kw2..." environment var */
-	int oride;	/* displacement */
+static struct rpq_keyword
+{
+	Boolean omit;	/**< set from X3270RPQ="kw1:kw2..." environment var */
+	int oride;		/**< displacement */
 	const Boolean allow_oride;
 	const unsigned char id;
 	const char *text;
@@ -112,7 +115,7 @@ static struct rpq_keyword {
 	{True, 0, 	True,	RPQ_ADDRESS,	"ADDRESS"},
 	{True, 0, 	False,	RPQ_TIMESTAMP,	"TIMESTAMP"},
 	{True, 0, 	True,	RPQ_TIMEZONE,	"TIMEZONE"},
-	{True, 0, 	True,	RPQ_USER,	"USER"},
+	{True, 0, 	True,	RPQ_USER,		"USER"},
 	{True, 0, 	False,	RPQ_VERSION,	"VERSION"},
 };
 #define NS_RPQ (sizeof(rpq_keywords)/sizeof(rpq_keywords[0]))
@@ -141,31 +144,31 @@ void do_qr_rpqnames(H3270 *hSession)
 	 */
 	space3270out(hSession,4+4+1+remaining);	/* Maximum space for an RPQNAME item */
 
-	SET32(h3270.obptr, 0);		/* Device number, 0 = All */
-	SET32(h3270.obptr, 0);		/* Model number, 0 = All */
+	SET32(hSession->obptr, 0);		/* Device number, 0 = All */
+	SET32(hSession->obptr, 0);		/* Model number, 0 = All */
 
-	rpql = h3270.obptr++;			/* Save address to place data length. */
+	rpql = hSession->obptr++;			/* Save address to place data length. */
 
 	/* Create fixed length portion - program id: x3270 */
 	for (j = 0; j < 5; j++) {
-		*h3270.obptr++ = asc2ebc[(int)"x3270"[j]];
+		*hSession->obptr++ = asc2ebc[(int)"x3270"[j]];
 		remaining--;
 	}
 
 	/* Create user selected variable-length self-defining terms. */
-	select_rpq_terms();
+	select_rpq_terms(hSession);
 
 	for (j=0; j<NS_RPQ; j++) {
 		if (rpq_keywords[j].omit)
 			continue;
 
-		omit_due_space_limit = False;
+		omit_due_space_limit = 0;
 
 		term_id = rpq_keywords[j].id;
 
-		p_term = h3270.obptr;		/* save starting address (to insert length later) */
-		h3270.obptr++;				/* skip length of term, fill in later */
-		*h3270.obptr++ = term_id;	/* identify this term */
+		p_term = hSession->obptr;		/* save starting address (to insert length later) */
+		hSession->obptr++;				/* skip length of term, fill in later */
+		*hSession->obptr++ = term_id;	/* identify this term */
 
 		/*
 		 * Adjust remaining space by the term prefix size so each case
@@ -177,18 +180,18 @@ void do_qr_rpqnames(H3270 *hSession)
 
 		switch (term_id) {	/* build the term based on id */
 		case RPQ_USER:		/* User text from env. vars */
-			h3270.obptr += get_rpq_user(h3270.obptr, remaining);
+			hSession->obptr += get_rpq_user(hSession,hSession->obptr, remaining);
 			break;
 
 		case RPQ_TIMEZONE:	/* UTC time offset */
 			omit_due_space_limit = (remaining < 2);
 			if (!omit_due_space_limit)
-				SET16(h3270.obptr, get_rpq_timezone());
+				SET16(hSession->obptr, get_rpq_timezone(hSession));
 			break;
 
 		case RPQ_ADDRESS:	/* Workstation address */
 #if !defined(_WIN32) /*[*/
-			hSession->obptr += get_rpq_address(hSession->obptr, remaining);
+			hSession->obptr += get_rpq_address(hSession, hSession->obptr, remaining);
 #endif /*]*/
 			break;
 
@@ -204,7 +207,7 @@ void do_qr_rpqnames(H3270 *hSession)
 
 		case RPQ_TIMESTAMP:	/* program build time (yyyymmddhhmmss bcd) */
 			x = strlen(build_rpq_timestamp);
-			omit_due_space_limit = ((x+1)/2 > remaining);
+			omit_due_space_limit = ((x+1)/2 > remaining) ? 1 : 0;
 			if (!omit_due_space_limit) {
 				for (i=0; i < x; i+=2) {
 					*hSession->obptr++ = ((*(build_rpq_timestamp+i) - '0') << 4)
@@ -214,12 +217,12 @@ void do_qr_rpqnames(H3270 *hSession)
 			break;
 
 		default:		/* unsupported ID, (can't happen) */
-			Error(NULL,"Unsupported RPQ term");
+			Error(hSession,_( "Unsupported RPQ term" ));
 			break;
 		}
 
 		if (omit_due_space_limit)
-			rpq_warning("RPQ %s term omitted due to insufficient space", rpq_keywords[j].text);
+			rpq_warning(hSession, _( "RPQ %s term omitted due to insufficient space" ), rpq_keywords[j].text);
 		/*
 		 * The item is built, insert item length as needed and
 		 * adjust space remaining.
@@ -256,12 +259,11 @@ void do_qr_rpqnames(H3270 *hSession)
 	/* Fill in overall length of RPQNAME info */
 	*rpql = (hSession->obptr - rpql);
 
-	rpq_dump_warnings();
+	rpq_dump_warnings(hSession);
 }
 
 /* Utility function used by the RPQNAMES query reply. */
-static Boolean
-select_rpq_terms(void)
+static Boolean select_rpq_terms(H3270 *hSession)
 {
 	int i,j,k,len;
 	char *uplist;
@@ -330,9 +332,7 @@ select_rpq_terms(void)
 					if (rpq_keywords[j].allow_oride) {
 						rpq_keywords[j].oride = p1-uplist+1;
 					} else {
-						rpq_warning("RPQ %s term "
-								"override "
-								"ignored", p1);
+						rpq_warning(hSession, _("RPQ %s term override ignored"), p1);
 					}
 				}
 				break;
@@ -344,8 +344,7 @@ select_rpq_terms(void)
 				for (k=0; k < NS_RPQ; k++)
 					rpq_keywords[k].omit = is_no_form;
 			} else {
-				rpq_warning("RPQ term \"%s\" is unrecognized",
-						kw);
+				rpq_warning(hSession,_( "RPQ term \"%s\" is unrecognized" ),kw);
 			}
 		}
 	}
@@ -364,8 +363,10 @@ select_rpq_terms(void)
 	return False;
 }
 
-/* Utility function used by the RPQNAMES query reply. */
-static int get_rpq_timezone(void)
+/**
+ * Utility function used by the RPQNAMES query reply.
+ */
+static int get_rpq_timezone(H3270 *hSession)
 {
 	/*
 	 * Return the signed number of minutes we're offset from UTC.
@@ -399,7 +400,7 @@ static int get_rpq_timezone(void)
 
 		x = strtol(p1, &p2, 10);
 		if (errno != 0) {
-			rpq_warning("RPQ TIMEZONE term is invalid - use +/-hhmm");
+			rpq_warning(hSession, _( "RPQ TIMEZONE term is invalid - use +/-hhmm" ));
 			return 4;
 		}
 		if ((*p2 != '\0') && (*p2 != ':') && (!isspace(*p2)))
@@ -408,7 +409,7 @@ static int get_rpq_timezone(void)
 		hhmm = ldiv(x, 100L);
 
 		if (hhmm.rem > 59L) {
-			rpq_warning("RPQ TIMEZONE term is invalid - use +/-hhmm");
+			rpq_warning(hSession, _("RPQ TIMEZONE term is invalid - use +/-hhmm"));
 			return 4;
 		}
 
@@ -421,14 +422,14 @@ static int get_rpq_timezone(void)
 		 */
 		if ((here = time(NULL)) == (time_t)(-1))
 		{
-			rpq_warning("RPQ: Unable to determine workstation local time");
+			rpq_warning(hSession, _("RPQ: Unable to determine workstation local time"));
 			return 1;
 		}
 		memcpy(&here_tm, localtime(&here), sizeof(struct tm));
 
 		if ((utc_tm = gmtime(&here)) == NULL)
 		{
-			rpq_warning("RPQ: Unable to determine workstation UTC time");
+			rpq_warning(hSession, _("RPQ: Unable to determine workstation UTC time"));
 			return 2;
 		}
 
@@ -443,14 +444,13 @@ static int get_rpq_timezone(void)
 
 	/* sanity check: difference cannot exceed +/- 12 hours */
 	if (labs(delta) > 720L)
-		rpq_warning("RPQ timezone exceeds 12 hour UTC offset");
+		rpq_warning(hSession, _("RPQ timezone exceeds 12 hour UTC offset"));
 	return (labs(delta) > 720L)? 3 : (int) delta;
 }
 
 
 /* Utility function used by the RPQNAMES query reply. */
-static int
-get_rpq_user(unsigned char buf[], const int buflen)
+static int get_rpq_user(H3270 *hSession, unsigned char buf[], const int buflen)
 {
 	/*
 	 * Text may be specified in one of two ways, but not both.
@@ -498,13 +498,13 @@ get_rpq_user(unsigned char buf[], const int buflen)
 			if (isspace(c))
 				continue;	 /* skip white space */
 			if (!isxdigit(c)) {
-				rpq_warning("RPQ USER term has non-hex character");
+				rpq_warning(hSession, _("RPQ USER term has non-hex character"));
 				break;
 			}
 			x = (p_h - hexstr)/2;
 			if (x >= buflen) {
 				x = buflen;
-				rpq_warning("RPQ USER term truncated after %d bytes", x);
+				rpq_warning(hSession, _("RPQ USER term truncated after %d bytes"), x);
 				break; /* too long, truncate */
 			}
 
@@ -523,7 +523,7 @@ get_rpq_user(unsigned char buf[], const int buflen)
 		 */
 		is_first_hex_digit = ((strlen(hexstr) % 2) == 0);
 		if (!is_first_hex_digit)
-			rpq_warning("RPQ USER term has odd number of hex digits");
+			rpq_warning(hSession, _("RPQ USER term has odd number of hex digits"));
 		*buf = 0;	/* initialize first byte for possible implied
 				   leading zero */
 		for (p_h = &hexstr[0]; *p_h; p_h++) {
@@ -548,7 +548,7 @@ get_rpq_user(unsigned char buf[], const int buflen)
 
 		if ( x >= buflen) {
 			x = buflen;
-			rpq_warning("RPQ USER term truncated after %d characters", x);
+			rpq_warning(hSession, _("RPQ USER term truncated after %d characters"), x);
 			break;
 		}
 
@@ -566,14 +566,13 @@ get_rpq_user(unsigned char buf[], const int buflen)
 }
 
 #if !defined(_WIN32) /*[*/
-static int
-get_rpq_address(unsigned char *buf, const int maxlen)
+static int get_rpq_address(H3270 *hSession, unsigned char *buf, const int maxlen)
 {
 	struct rpq_keyword *kw;
 	int x = 0;
 
 	if (maxlen < 2) {
-		omit_due_space_limit = True;
+		hSession->omit_due_space_limit = 1;
 		return 0;
 	}
 
@@ -622,7 +621,7 @@ get_rpq_address(unsigned char *buf, const int maxlen)
 				len = sizeof(struct in6_addr);
 				break;
 			default:
-				rpq_warning("RPQ ADDRESS term has unrecognized family %u",res->ai_family);
+				rpq_warning(hSession, _("RPQ ADDRESS term has unrecognized family %u"),res->ai_family);
 				break;
 			}
 
@@ -630,12 +629,12 @@ get_rpq_address(unsigned char *buf, const int maxlen)
 				x += len;
 				(void) memcpy(buf, src, len);
 			} else {
-				rpq_warning("RPQ ADDRESS term incomplete due to space limit");
+				rpq_warning(hSession, _("RPQ ADDRESS term incomplete due to space limit"));
 			}
 			/* Give back storage obtained by getaddrinfo */
 			freeaddrinfo(res);
 		} else {
-			rpq_warning("RPQ: can't resolve '%s': %s",rpqtext, gai_strerror(ga_err));
+			rpq_warning(hSession, _("RPQ: can't resolve '%s': %s"),rpqtext, gai_strerror(ga_err));
 		}
 #else /*][*/
 		/*
@@ -648,7 +647,7 @@ get_rpq_address(unsigned char *buf, const int maxlen)
 
 			h = gethostbyname(rpqtext);
 			if (h == NULL || h->h_addrtype != AF_INET) {
-				rpq_warning("RPQ: gethostbyname error");
+				rpq_warning(hSession, _("RPQ: gethostbyname error"));
 				return 0;
 			}
 			(void) memcpy(&ia, h->h_addr_list[0], h->h_length);
@@ -659,7 +658,7 @@ get_rpq_address(unsigned char *buf, const int maxlen)
 			(void) memcpy(buf, &ia, sizeof(in_addr_t));
 			x += sizeof(in_addr_t);
 		} else {
-			rpq_warning("RPQ ADDRESS term incomplete due to space limit");
+			rpq_warning(hSession, _("RPQ ADDRESS term incomplete due to space limit"));
 		}
 #endif // HAVE_GETADDRINFO
 		free(rpqtext);
@@ -676,7 +675,7 @@ get_rpq_address(unsigned char *buf, const int maxlen)
 		void *src = NULL;
 		int len = 0;
 
-		if(net_getsockname(&h3270, &u, &addrlen) < 0)
+		if(net_getsockname(hSession, &u, &addrlen) < 0)
 			return 0;
 		SET16(buf, u.sa.sa_family);
 		x += 2;
@@ -692,14 +691,14 @@ get_rpq_address(unsigned char *buf, const int maxlen)
 			break;
 #endif // HAVE_GETADDRINFO
 		default:
-			rpq_warning("RPQ ADDRESS term has unrecognized family %u", u.sa.sa_family);
+			rpq_warning(hSession, _("RPQ ADDRESS term has unrecognized family %u"), u.sa.sa_family);
 			break;
 		}
 		if (x + len <= maxlen) {
 			(void) memcpy(buf, src, len);
 			x += len;
 		} else {
-			rpq_warning("RPQ ADDRESS term incomplete due to space limit");
+			rpq_warning(hSession, _("RPQ ADDRESS term incomplete due to space limit"));
 		}
 	}
 	return x;
@@ -707,51 +706,51 @@ get_rpq_address(unsigned char *buf, const int maxlen)
 #endif /*]*/
 
 #define RPQ_WARNBUF_SIZE	1024
-static char * rpq_warnbuf	= CN;
-static int    rpq_wbcnt 	= 0;
+//static char * rpq_warnbuf	= CN;
+//static int    rpq_wbcnt 	= 0;
 
-static void rpq_warning(const char *fmt, ...)
+static void rpq_warning(H3270 *hSession, const char *fmt, ...)
 {
 	va_list a;
 
 	va_start(a, fmt);
-	lib3270_write_va_log(&h3270,"RPQ",fmt,a);
+	lib3270_write_va_log(hSession,"RPQ",fmt,a);
 	va_end(a);
 
 	/*
 	 * Only accumulate RPQ warnings if they
 	 * have not been displayed already.
 	 */
-	if (!rpq_complained)
+	if (!hSession->rpq_complained)
 	{
 		va_start(a, fmt);
-		if (rpq_warnbuf == CN)
-			rpq_warnbuf = lib3270_malloc(RPQ_WARNBUF_SIZE);
+		if (hSession->rpq_warnbuf == CN)
+			hSession->rpq_warnbuf = lib3270_malloc(RPQ_WARNBUF_SIZE);
 
-		if (rpq_wbcnt < RPQ_WARNBUF_SIZE)
+		if (hSession->rpq_wbcnt < RPQ_WARNBUF_SIZE)
 		{
-			*(rpq_warnbuf + rpq_wbcnt++) = '\n';
-			*(rpq_warnbuf + rpq_wbcnt) = '\0';
+			*(hSession->rpq_warnbuf + hSession->rpq_wbcnt++) = '\n';
+			*(hSession->rpq_warnbuf + hSession->rpq_wbcnt) = '\0';
 		}
 
-		if (rpq_wbcnt < RPQ_WARNBUF_SIZE)
+		if (hSession->rpq_wbcnt < RPQ_WARNBUF_SIZE)
 		{
-			rpq_wbcnt += vsnprintf(rpq_warnbuf + rpq_wbcnt,RPQ_WARNBUF_SIZE - rpq_wbcnt, fmt, a);
+			hSession->rpq_wbcnt += vsnprintf(hSession->rpq_warnbuf + hSession->rpq_wbcnt,RPQ_WARNBUF_SIZE - hSession->rpq_wbcnt, fmt, a);
 		}
 		va_end(a);
 	}
 }
 
-static void rpq_dump_warnings(void)
+static void rpq_dump_warnings(H3270 *hSession)
 {
 	/* If there's something to complain about, only complain once. */
-	if (!rpq_complained && rpq_wbcnt)
+	if (!hSession->rpq_complained && hSession->rpq_wbcnt)
 	{
-		popup_an_error(NULL,rpq_warnbuf);
-		rpq_wbcnt = 0;
-		rpq_complained = True;
+		popup_an_error(hSession,hSession->rpq_warnbuf);
+		hSession->rpq_wbcnt = 0;
+		hSession->rpq_complained = 1;
 
-		free(rpq_warnbuf);
-		rpq_warnbuf = CN;
+		lib3270_free(hSession->rpq_warnbuf);
+		hSession->rpq_warnbuf = CN;
 	}
 }
