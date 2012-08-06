@@ -196,7 +196,7 @@ LIB3270_INTERNAL const char * build_rpq_revision;
 //	LIB3270_INTERNAL char	*local_encoding;
 
 	#if defined(X3270_DISPLAY) /*[*/
-		LIB3270_INTERNAL char	*locale_name;
+//		LIB3270_INTERNAL char	*locale_name;
 	#endif /*]*/
 
 #endif /*]*/
@@ -227,7 +227,7 @@ LIB3270_INTERNAL const char * build_rpq_revision;
 
 // LIB3270_INTERNAL Boolean		shifted;
 // LIB3270_INTERNAL Boolean		ssl_host;
-LIB3270_INTERNAL Boolean		*standard_font;
+// LIB3270_INTERNAL Boolean		*standard_font;
 // LIB3270_INTERNAL Boolean		std_ds_host;
 // LIB3270_INTERNAL char			*termtype;
 // LIB3270_INTERNAL Widget			toplevel;
@@ -277,7 +277,7 @@ struct toggle_name {
 };
 
 
-/*   translation lists */
+/*   translation lists */ /*
 struct trans_list {
 	char			*name;
 	char			*pathname;
@@ -286,6 +286,7 @@ struct trans_list {
 	struct trans_list	*next;
 };
 LIB3270_INTERNAL struct trans_list *trans_list;
+*/
 
 /*   input key type */
 // enum keytype { KT_STD, KT_GE };

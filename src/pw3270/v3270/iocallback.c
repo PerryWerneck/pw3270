@@ -56,8 +56,8 @@ static void 			* static_AddExcept(int source, H3270 *session, void (*fn)(H3270 *
 
 static void 			* static_AddTimeOut(unsigned long interval_ms, H3270 *session, void (*proc)(H3270 *session));
 static void 			  static_RemoveTimeOut(void * timer);
-static int				  static_Sleep(int seconds);
-static int 				  static_RunPendingEvents(int wait);
+static int				  static_Sleep(H3270 *hSession, int seconds);
+static int 				  static_RunPendingEvents(H3270 *hSession, int wait);
 
 static gboolean 		IO_prepare(GSource *source, gint *timeout);
 static gboolean 		IO_check(GSource *source);
@@ -285,7 +285,7 @@ static int static_CallAndWait(int(*callback)(H3270 *session, void *), H3270 *ses
     return p.rc;
 }
 
-static int static_Sleep(int seconds)
+static int static_Sleep(H3270 *hSession, int seconds)
 {
 	time_t end = time(0) + seconds;
 
@@ -295,7 +295,7 @@ static int static_Sleep(int seconds)
 	return 0;
 }
 
-static int static_RunPendingEvents(int wait)
+static int static_RunPendingEvents(H3270 *hSession, int wait)
 {
 	int rc = 0;
 	while(gtk_events_pending())

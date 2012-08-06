@@ -812,68 +812,68 @@ static void setup_lus(H3270 *hSession)
 	hSession->try_lu	= *hSession->curr_lu;
 }
 
-static void net_connected(H3270 *session)
+static void net_connected(H3270 *hSession)
 {
-	if(session->proxy_type > 0)
+	if(hSession->proxy_type > 0)
 	{
 		/* Negotiate with the proxy. */
-		trace_dsn(session,"Connected to proxy server %s, port %u.\n",session->proxy_host, session->proxy_port);
+		trace_dsn(hSession,"Connected to proxy server %s, port %u.\n",hSession->proxy_host, hSession->proxy_port);
 
-		if (proxy_negotiate(session->proxy_type, session->sock, session->hostname,session->current_port) < 0)
+		if (proxy_negotiate(hSession, hSession->proxy_type, hSession->sock, hSession->hostname,hSession->current_port) < 0)
 		{
-			host_disconnect(session,True);
+			host_disconnect(hSession,True);
 			return;
 		}
 	}
 
-	trace_dsn(session,"Connected to %s, port %u%s.\n", session->hostname, session->current_port,session->ssl_host? " via SSL": "");
+	trace_dsn(hSession,"Connected to %s, port %u%s.\n", hSession->hostname, hSession->current_port,hSession->ssl_host? " via SSL": "");
 
 #if defined(HAVE_LIBSSL) /*[*/
 	/* Set up SSL. */
-	if(session->ssl_con && session->secure == LIB3270_SSL_UNDEFINED)
+	if(hSession->ssl_con && hSession->secure == LIB3270_SSL_UNDEFINED)
 	{
 		int rc;
 
-		set_ssl_state(session,LIB3270_SSL_NEGOTIATING);
+		set_ssl_state(hSession,LIB3270_SSL_NEGOTIATING);
 
-		if (SSL_set_fd(session->ssl_con, session->sock) != 1)
+		if (SSL_set_fd(hSession->ssl_con, hSession->sock) != 1)
 		{
-			trace_dsn(session,"Can't set fd!\n");
-			popup_system_error(session,_( "Connection failed" ), _( "Can't set SSL socket file descriptor" ), "%s", SSL_state_string_long(session->ssl_con));
-			set_ssl_state(session,LIB3270_SSL_UNSECURE);
+			trace_dsn(hSession,"Can't set fd!\n");
+			popup_system_error(hSession,_( "Connection failed" ), _( "Can't set SSL socket file descriptor" ), "%s", SSL_state_string_long(hSession->ssl_con));
+			set_ssl_state(hSession,LIB3270_SSL_UNSECURE);
 		}
 		else
 		{
-			rc = SSL_connect(session->ssl_con);
+			rc = SSL_connect(hSession->ssl_con);
 
 			if(rc != 1)
 			{
 				unsigned long 	  e		= ERR_get_error();
-				const char  	* state	= SSL_state_string_long(session->ssl_con);
+				const char  	* state	= SSL_state_string_long(hSession->ssl_con);
 
-				trace_dsn(session,"TLS/SSL tunneled connection failed with error %ld, rc=%d and state=%s",e,rc,state);
+				trace_dsn(hSession,"TLS/SSL tunneled connection failed with error %ld, rc=%d and state=%s",e,rc,state);
 
-				host_disconnect(session,True);
+				host_disconnect(hSession,True);
 
-				if(e != session->last_ssl_error)
+				if(e != hSession->last_ssl_error)
 				{
-					session->message(session,LIB3270_NOTIFY_ERROR,_( "Connection failed" ),_( "SSL negotiation failed" ),state);
-					session->last_ssl_error = e;
+					hSession->message(hSession,LIB3270_NOTIFY_ERROR,_( "Connection failed" ),_( "SSL negotiation failed" ),state);
+					hSession->last_ssl_error = e;
 				}
 				return;
 
 			}
 		}
 
-//		session->secure_connection = True;
-		trace_dsn(session,"TLS/SSL tunneled connection complete. Connection is now secure.\n");
+//		hSession->secure_connection = True;
+		trace_dsn(hSession,"TLS/SSL tunneled connection complete. Connection is now secure.\n");
 
 		/* Tell everyone else again. */
-		lib3270_set_connected(session);
+		lib3270_set_connected(hSession);
 	}
 #endif /*]*/
 
-	lib3270_setup_session(session);
+	lib3270_setup_session(hSession);
 
 }
 

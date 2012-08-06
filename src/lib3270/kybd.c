@@ -2130,7 +2130,7 @@ LIB3270_ACTION( eraseinput )
 						f = True;
 					}
 					if (!hSession->ea_buf[baddr].fa) {
-						ctlr_add(&h3270,baddr, EBC_null, 0);
+						ctlr_add(hSession,baddr, EBC_null, 0);
 					}
 				} while (!hSession->ea_buf[baddr].fa);
 			} else {	/* skip protected */
@@ -2417,7 +2417,7 @@ kybd_scroll_lock(Boolean lock)
 	if (lock)
 		kybdlock_set(KL_SCROLLED, "kybd_scroll_lock");
 	else
-		kybdlock_clr(&h3270, KL_SCROLLED, "kybd_scroll_lock");
+		kybdlock_clr(hSession, KL_SCROLLED, "kybd_scroll_lock");
 } */
 
 /*

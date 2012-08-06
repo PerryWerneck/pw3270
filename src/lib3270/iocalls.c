@@ -63,9 +63,9 @@ static void   internal_remove_input(void *id);
 // static int	  internal_process_events(int block);
 
 static int 	  internal_callthread(int(*callback)(H3270 *, void *), H3270 *session, void *parm);
-static int	  internal_wait(int seconds);
+static int	  internal_wait(H3270 *hSession, int seconds);
 
-static int	  internal_event_dispatcher(int block);
+static int	  internal_event_dispatcher(H3270 *hSession, int block);
 static void	  internal_ring_bell(H3270 *);
 
 /*---[ Active callbacks ]-----------------------------------------------------------------------------------*/
@@ -96,10 +96,10 @@ static void	  internal_ring_bell(H3270 *);
  static int 	  (*callthread)(int(*callback)(H3270 *, void *), H3270 *session, void *parm)
 					= internal_callthread;
 
- static int		  (*wait)(int seconds)
+ static int		  (*wait)(H3270 *hSession, int seconds)
 					= internal_wait;
 
- static int 	  (*event_dispatcher)(int wait)
+ static int 	  (*event_dispatcher)(H3270 *hSession,int wait)
 					= internal_event_dispatcher;
 
  static void	  (*ring_bell)(H3270 *)
@@ -333,7 +333,7 @@ static void internal_remove_input(void *id)
 }
 
 /* Event dispatcher. */
-static int internal_event_dispatcher(int block)
+static int internal_event_dispatcher(H3270 *hSession, int block)
 {
 #if defined(_WIN32)
 	HANDLE ha[MAX_HA];
@@ -533,7 +533,7 @@ static int internal_callthread(int(*callback)(H3270 *, void *), H3270 *session, 
 	return 0;
 }
 
-static int internal_wait(int seconds)
+static int internal_wait(H3270 *hSession, int seconds)
 {
 	time_t end;
 
@@ -542,7 +542,7 @@ static int internal_wait(int seconds)
 
 	while(time(0) < end)
 	{
-		lib3270_main_iterate(&h3270,1);
+		lib3270_main_iterate(hSession,1);
 	}
 
 	return 0;
@@ -713,15 +713,15 @@ LIB3270_EXPORT int lib3270_call_thread(int(*callback)(H3270 *h, void *), H3270 *
 	return 0;
 }
 
-LIB3270_EXPORT void lib3270_main_iterate(H3270 *session, int block)
+LIB3270_EXPORT void lib3270_main_iterate(H3270 *hSession, int block)
 {
-	CHECK_SESSION_HANDLE(session);
-	event_dispatcher(block);
+	CHECK_SESSION_HANDLE(hSession);
+	event_dispatcher(hSession,block);
 }
 
 LIB3270_EXPORT int lib3270_wait(H3270 *hSession, int seconds)
 {
-	wait(seconds);
+	wait(hSession,seconds);
 	return 0;
 }
 
@@ -731,7 +731,7 @@ LIB3270_EXPORT int lib3270_wait_for_ready(H3270 *hSession, int seconds)
 
 	while(time(0) < end)
 	{
-		event_dispatcher(1);
+		event_dispatcher(hSession,1);
 
 		if(hSession->oia_status == LIB3270_STATUS_BLANK)
 			return 0;

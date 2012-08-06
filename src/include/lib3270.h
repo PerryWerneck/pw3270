@@ -587,8 +587,8 @@
 
 		int 			(*callthread)(int(*callback)(H3270 *, void *), H3270 *session, void *parm);
 
-		int				(*Wait)(int seconds);
-		int 			(*event_dispatcher)(int wait);
+		int				(*Wait)(H3270 *hSession, int seconds);
+		int 			(*event_dispatcher)(H3270 *hSession, int wait);
 		void			(*ring_bell)(H3270 *);
 
 	};

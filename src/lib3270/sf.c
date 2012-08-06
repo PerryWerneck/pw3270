@@ -79,7 +79,7 @@ int 			* char_height = &ch;
 
 /* Globals */
 static Boolean	  sfont = False;
-Boolean			* standard_font = &sfont;
+static Boolean	* standard_font = &sfont;
 
 
 /* Statics */
