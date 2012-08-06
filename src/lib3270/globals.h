@@ -127,9 +127,6 @@
 	extern char *strtok_r(char *str, const char *sep, char **last);
 #endif /*]*/
 
-#define CHECK_SESSION_HANDLE(x) if(!x) x = &h3270;
-
-
 /* types of internal actions */
 enum iaction {
 	IA_STRING, IA_PASTE, IA_REDRAW,
@@ -142,7 +139,7 @@ enum iaction {
 // LIB3270_INTERNAL int		COLS;
 // LIB3270_INTERNAL int		ROWS;
 
-LIB3270_INTERNAL H3270		h3270;
+// LIB3270_INTERNAL H3270		h3270;
 
 /*
 #if defined(X3270_DISPLAY)
@@ -346,3 +343,12 @@ LIB3270_INTERNAL void remove_input_calls(H3270 *session);
 
 LIB3270_INTERNAL int	lib3270_sock_send(H3270 *hSession, unsigned const char *buf, int len);
 LIB3270_INTERNAL void	lib3270_sock_disconnect(H3270 *hSession);
+
+#if defined(DEBUG)
+	#define CHECK_SESSION_HANDLE(x) check_session_handle(&x,__FUNCTION__);
+	LIB3270_INTERNAL void check_session_handle(H3270 **hSession, const char *fname);
+#else
+	#define CHECK_SESSION_HANDLE(x) check_session_handle(&x);
+	LIB3270_INTERNAL void check_session_handle(H3270 **hSession);
+#endif // DEBUG
+

@@ -3119,7 +3119,7 @@ static void ssl_init(H3270 *session)
 /* Callback for tracing protocol negotiation. */
 static void ssl_info_callback(INFO_CONST SSL *s, int where, int ret)
 {
-	H3270 *hSession = &h3270; // TODO: Find a better way!
+	H3270 *hSession = lib3270_get_default_session_handle(); // TODO: Find a better way!
 
 	switch(where)
 	{

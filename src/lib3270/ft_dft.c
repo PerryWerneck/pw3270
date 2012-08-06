@@ -319,7 +319,7 @@ static void dft_data_insert(H3270 *hSession, struct data_buffer *data_bufr)
 
 				if (l)
 				{
-					rv = fwrite(s, l, (size_t)1,((H3270FT *) h3270.ft)->local_file);
+					rv = fwrite(s, l, (size_t)1,ft->local_file);
 					if (rv == 0)
 						break;
 					ft->ft_length += l;
@@ -330,7 +330,7 @@ static void dft_data_insert(H3270 *hSession, struct data_buffer *data_bufr)
 				len -= l;
 			}
 		} else {
-			rv = fwrite((char *)data_bufr->data, my_length,(size_t)1, ((H3270FT *) h3270.ft)->local_file);
+			rv = fwrite((char *)data_bufr->data, my_length,(size_t)1, ft->local_file);
 			ft->ft_length += my_length;
 		}
 
@@ -384,8 +384,8 @@ static void dft_get_request(H3270 *hSession)
 	/* Read a buffer's worth. */
 	set_dft_buffersize(hSession);
 	space3270out(hSession,hSession->dft_buffersize);
-	numbytes = h3270.dft_buffersize - 27; /* always read 5 bytes less than we're allowed */
-	bufptr = h3270.obuf + 17;
+	numbytes = hSession->dft_buffersize - 27; /* always read 5 bytes less than we're allowed */
+	bufptr = hSession->obuf + 17;
 
 	while (!ft->dft_eof && numbytes)
 	{

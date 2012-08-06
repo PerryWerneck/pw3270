@@ -211,9 +211,8 @@ static int upload_convert(H3270 *hSession, unsigned char *buf, int len)
 /**
  * Convert a buffer for downloading (local->host).
  */
-static int download_convert(unsigned const char *buf, unsigned len, unsigned char *xobuf)
+static int download_convert(H3270FT *ft, unsigned const char *buf, unsigned len, unsigned char *xobuf)
 {
-	H3270FT			* ft = get_ft_handle(&h3270);
 	unsigned char	* ob0 = xobuf;
 	unsigned char	* ob = ob0;
 
@@ -606,7 +605,7 @@ static int xlate_getc(H3270FT *ft)
 	/* Expand it. */
 	if (ft->ascii_flag && ft->cr_flag && !ft->ft_last_cr && c == '\n')
 	{
-		nc = download_convert((unsigned const char *)"\r", 1, cbuf);
+		nc = download_convert(ft,(unsigned const char *)"\r", 1, cbuf);
 	}
 	else
 	{
@@ -616,7 +615,7 @@ static int xlate_getc(H3270FT *ft)
 
 	/* Convert it. */
 	cc = (unsigned char)c;
-	nc += download_convert(&cc, 1, &cbuf[nc]);
+	nc += download_convert(ft,&cc, 1, &cbuf[nc]);
 
 	/* Return it and buffer what's left. */
 	r = cbuf[0];

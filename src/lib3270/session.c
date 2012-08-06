@@ -47,7 +47,7 @@
 
 /*---[ Globals ]--------------------------------------------------------------------------------------------------------------*/
 
- H3270 h3270;
+ static H3270 h3270;
 
 /*---[ Statics ]--------------------------------------------------------------------------------------------------------------*/
 
@@ -423,6 +423,23 @@ static int parse_model_number(H3270 *session, const char *m)
 	}
 
 }
+
+#if defined(DEBUG)
+void check_session_handle(H3270 **hSession, const char *fname)
+#else
+void check_session_handle(H3270 **hSession)
+#endif // DEBUG
+{
+	if(*hSession)
+		return;
+
+#ifdef DEBUG
+	trace("** %s called with hSession == NULL",fname);
+#endif
+
+	*hSession = &h3270;
+}
+
 
 LIB3270_EXPORT H3270 * lib3270_get_default_session_handle(void)
 {
