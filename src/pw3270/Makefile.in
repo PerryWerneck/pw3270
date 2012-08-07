@@ -119,7 +119,7 @@ $(LIBRLS)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@: $(LIBRLS)/@DLLPREFIX@$(PACKAGE_
 $(LIBRLS)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@.@VERSION@:	$(foreach SRC, $(basename $(LIB_SOURCES)), $(OBJRLS)/$(SRC)$(OBJEXT))
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(LD) $(DLL_FLAGS) $(LDFLAGS) -o $@ $^ $(LIBS) $(LIB3270_LIBS)
+	@$(LD) $(DLL_FLAGS) -Wl,-soname,@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@.@VERSION@ $(LDFLAGS) -o $@ $^ $(LIBS) $(LIB3270_LIBS)
 
 #---[ Debug targets ]----------------------------------------------------------
 
@@ -138,7 +138,7 @@ $(LIBDBG)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@: $(LIBDBG)/@DLLPREFIX@$(PACKAGE_
 $(LIBDBG)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@.@VERSION@:	$(foreach SRC, $(basename $(LIB_SOURCES)), $(OBJDBG)/$(SRC)$(OBJEXT))
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(LD) $(DLL_FLAGS) $(LDFLAGS) -Wl,--rpath,.bin/Debug/lib -o $@ $^ $(LIBS) $(LIB3270_LIBS)
+	@$(LD) $(DLL_FLAGS) -Wl,-soname,@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@.@VERSION@ $(LDFLAGS) -Wl,--rpath,.bin/Debug/lib -o $@ $^ $(LIBS) $(LIB3270_LIBS)
 
 run: $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
 	@cd "$(ROOTDIR)" ; .bin/Debug/$(PACKAGE_TARNAME)$(EXEEXT)

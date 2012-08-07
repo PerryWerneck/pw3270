@@ -148,7 +148,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/@PACKAGE_NAME@
 %{_libdir}/libpw3270.so.@MAJOR_VERSION@
 %{_libdir}/libpw3270.so.@VERSION@
-%{_libdir}/libpw3270.so
 
 %{_datadir}/@PACKAGE_NAME@/ui/00default.xml
 %{_datadir}/@PACKAGE_NAME@/@PACKAGE_NAME@.png
@@ -166,6 +165,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/@PACKAGE_NAME@/ui/99debug.xml
 %{_libdir}/pkgconfig/*.pc
 %{_libdir}/lib3270.so
+%{_libdir}/libpw3270.so
 
 #---[ Scripts ]-------------------------------------------------------------------------------------------------------
 

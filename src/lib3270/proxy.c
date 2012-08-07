@@ -686,7 +686,7 @@ static int proxy_socks4(H3270 *hSession, int fd, char *host, unsigned short port
 		popup_an_error(hSession,_("SOCKS4 Proxy: userid error"));
 		return -1;
 	default:
-		popup_an_error(hSession,_("SOCKS4 Proxy: unknown status 0x%02x",rbuf[1]));
+		popup_an_error(hSession,_("SOCKS4 Proxy: unknown status 0x%02x"),rbuf[1]);
 		return -1;
 	}
 
