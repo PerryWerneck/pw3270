@@ -111,6 +111,7 @@ static void * AddSource(int source, H3270 *session, gushort events, void (*fn)(H
 	src->fn				= fn;
 	src->poll.fd		= (int) source;
 	src->poll.events	= events;
+	src->session		= session;
 
 	g_source_attach((GSource *) src,NULL);
 	g_source_add_poll((GSource *) src,&src->poll);
@@ -328,10 +329,6 @@ void v3270_register_io_handlers(v3270Class *cls)
 		static_RemoveSource,
 
 		static_AddExcept,
-
-// #if !defined(_WIN32)
-//		static_AddOutput,
-// #endif
 
 #ifdef G_THREADS_ENABLED
 		static_CallAndWait,

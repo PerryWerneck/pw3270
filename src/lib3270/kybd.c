@@ -456,15 +456,15 @@ void kybd_connect(H3270 *session, int connected, void *dunno)
 /*
  * Called when we switch between 3270 and ANSI modes.
  */
-void kybd_in3270(H3270 *session, int in3270 unused, void *dunno)
+void kybd_in3270(H3270 *hSession, int in3270 unused, void *dunno)
 {
-	if (session->kybdlock & KL_DEFERRED_UNLOCK)
-		RemoveTimeOut(session->unlock_id);
-	lib3270_kybdlock_clear(session,~KL_AWAITING_FIRST);
+	if (hSession->kybdlock & KL_DEFERRED_UNLOCK)
+		RemoveTimeOut(hSession->unlock_id);
+	lib3270_kybdlock_clear(hSession,~KL_AWAITING_FIRST);
 
 	/* There might be a macro pending. */
 	if (CONNECTED)
-		ps_process(session);
+		ps_process(hSession);
 }
 
 /*
@@ -1113,19 +1113,19 @@ LIB3270_ACTION( previousfield )
  * Deferred keyboard unlock.
  */
 
-static void defer_unlock(H3270 *session)
+static void defer_unlock(H3270 *hSession)
 {
 //	trace("%s",__FUNCTION__);
-	lib3270_kybdlock_clear(session,KL_DEFERRED_UNLOCK);
-	status_reset(session);
+	lib3270_kybdlock_clear(hSession,KL_DEFERRED_UNLOCK);
+	status_reset(hSession);
 	if(CONNECTED)
-		ps_process(session);
+		ps_process(hSession);
 }
 
 /*
  * Reset keyboard lock.
  */
-void do_reset(H3270 *session, Boolean explicit)
+void do_reset(H3270 *hSession, Boolean explicit)
 {
 	/*
 	 * If explicit (from the keyboard) and there is typeahead or
@@ -1134,12 +1134,12 @@ void do_reset(H3270 *session, Boolean explicit)
 
 	if (explicit
 #if defined(X3270_FT) /*[*/
-	    || lib3270_get_ft_state(session) != LIB3270_FT_STATE_NONE
+	    || lib3270_get_ft_state(hSession) != LIB3270_FT_STATE_NONE
 #endif /*]*/
 	    ) {
 		Boolean half_reset = False;
 
-		if (flush_ta(session))
+		if (flush_ta(hSession))
 			half_reset = True;
 
 		if (half_reset)
@@ -1147,7 +1147,7 @@ void do_reset(H3270 *session, Boolean explicit)
 	}
 
 	/* Always clear insert mode. */
-	lib3270_set_toggle(session,LIB3270_TOGGLE_INSERT,0);
+	lib3270_set_toggle(hSession,LIB3270_TOGGLE_INSERT,0);
 
 	/* Otherwise, if not connect, reset is a no-op. */
 	if (!CONNECTED)
@@ -1157,8 +1157,8 @@ void do_reset(H3270 *session, Boolean explicit)
 	 * Remove any deferred keyboard unlock.  We will either unlock the
 	 * keyboard now, or want to defer further into the future.
 	 */
-	if (session->kybdlock & KL_DEFERRED_UNLOCK)
-		RemoveTimeOut(session->unlock_id);
+	if (hSession->kybdlock & KL_DEFERRED_UNLOCK)
+		RemoveTimeOut(hSession->unlock_id);
 
 	/*
 	 * If explicit (from the keyboard), unlock the keyboard now.
@@ -1166,21 +1166,21 @@ void do_reset(H3270 *session, Boolean explicit)
 	 */
 	if (explicit
 #if defined(X3270_FT) /*[*/
-	    || lib3270_get_ft_state(session) != LIB3270_FT_STATE_NONE
+	    || lib3270_get_ft_state(hSession) != LIB3270_FT_STATE_NONE
 #endif /*]*/
-	    || (!session->unlock_delay) // && !sms_in_macro())
-	    || (session->unlock_delay_time != 0 && (time(NULL) - session->unlock_delay_time) > 1)) {
-		lib3270_kybdlock_clear(session,-1);
-	} else if (session->kybdlock &
+	    || (!hSession->unlock_delay) // && !sms_in_macro())
+	    || (hSession->unlock_delay_time != 0 && (time(NULL) - hSession->unlock_delay_time) > 1)) {
+		lib3270_kybdlock_clear(hSession,-1);
+	} else if (hSession->kybdlock &
   (KL_DEFERRED_UNLOCK | KL_OIA_TWAIT | KL_OIA_LOCKED | KL_AWAITING_FIRST)) {
-		lib3270_kybdlock_clear(session,~KL_DEFERRED_UNLOCK);
-		kybdlock_set(session,KL_DEFERRED_UNLOCK);
-		session->unlock_id = AddTimeOut(UNLOCK_MS, session, defer_unlock);
+		lib3270_kybdlock_clear(hSession,~KL_DEFERRED_UNLOCK);
+		kybdlock_set(hSession,KL_DEFERRED_UNLOCK);
+		hSession->unlock_id = AddTimeOut(UNLOCK_MS, hSession, defer_unlock);
 	}
 
 	/* Clean up other modes. */
-	status_reset(session);
-	mcursor_normal(session);
+	status_reset(hSession);
+	mcursor_normal(hSession);
 
 }
 

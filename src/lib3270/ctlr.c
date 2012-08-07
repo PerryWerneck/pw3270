@@ -155,26 +155,27 @@ void ctlr_reinit(H3270 *session, unsigned cmask)
 /**
  * Get current 3270 model.
  *
- * @param session selected 3270 session.
+ * @param hSession selected 3270 session.
  * @return Current model number.
  */
-int lib3270_get_model(H3270 *session)
+int lib3270_get_model(H3270 *hSession)
 {
-	return session->model_num;
+	return hSession->model_num;
 }
 
 /**
  * Deal with the relationships between model numbers and rows/cols.
  *
- * @param model	New model (updates model name)
+ * @param hSession	Session handle.
+ * @param model		New model (updates model name)
  */
-int	lib3270_set_model(H3270 *session, int model)
+int	lib3270_set_model(H3270 *hSession, int model)
 {
 	if(CONNECTED)
 		return EBUSY;
 
-	ctlr_set_rows_cols(session,model,session->ov_cols,session->ov_rows);
-	ctlr_reinit(session,MODEL_CHANGE);
+	ctlr_set_rows_cols(hSession,model,hSession->ov_cols,hSession->ov_rows);
+	ctlr_reinit(hSession,MODEL_CHANGE);
 
 	return 0;
 }

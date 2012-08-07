@@ -514,17 +514,17 @@ void ft_aborting(H3270FT *h)
 }
 
 /* Process a disconnect abort. */
-static void ft_connected(H3270 *session, int ignored, void *dunno)
+static void ft_connected(H3270 *hSession, int ignored, void *dunno)
 {
-	if (!CONNECTED && lib3270_get_ft_state(session) != LIB3270_FT_STATE_NONE)
-		ft_complete(get_ft_handle(session),_("Host disconnected, transfer cancelled"));
+	if (!CONNECTED && lib3270_get_ft_state(hSession) != LIB3270_FT_STATE_NONE)
+		ft_complete(get_ft_handle(hSession),_("Host disconnected, transfer cancelled"));
 }
 
 /* Process an abort from no longer being in 3270 mode. */
-static void ft_in3270(H3270 *session, int ignored, void *dunno)
+static void ft_in3270(H3270 *hSession, int ignored, void *dunno)
 {
-	if (!IN_3270 && lib3270_get_ft_state(session) != LIB3270_FT_STATE_NONE)
-		ft_complete(get_ft_handle(session),_("Not in 3270 mode, transfer cancelled"));
+	if (!IN_3270 && lib3270_get_ft_state(hSession) != LIB3270_FT_STATE_NONE)
+		ft_complete(get_ft_handle(hSession),_("Not in 3270 mode, transfer cancelled"));
 }
 
 LIB3270_EXPORT LIB3270_FT_STATE lib3270_get_ft_state(H3270 *session)

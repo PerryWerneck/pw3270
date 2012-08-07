@@ -242,16 +242,16 @@
 		LOCAL_EXTERN int RegisterFTCallbacks(const struct filetransfer_callbacks *cbk);
 */
 
-		#define PCONNECTED		lib3270_pconnected(NULL)
-		#define HALF_CONNECTED	lib3270_half_connected(NULL)
-		#define CONNECTED		lib3270_connected(NULL)
+		#define PCONNECTED		lib3270_pconnected(hSession)
+		#define HALF_CONNECTED	lib3270_half_connected(hSession)
+		#define CONNECTED		lib3270_connected(hSession)
 
-		#define IN_NEITHER		lib3270_in_neither(NULL)
-		#define IN_ANSI			lib3270_in_ansi(NULL)
-		#define IN_3270			lib3270_in_3270(NULL)
-		#define IN_SSCP			lib3270_in_sscp(NULL)
-		#define IN_TN3270E		lib3270_in_tn3270e(NULL)
-		#define IN_E			lib3270_in_e(NULL)
+		#define IN_NEITHER		lib3270_in_neither(hSession)
+		#define IN_ANSI			lib3270_in_ansi(hSession)
+		#define IN_3270			lib3270_in_3270(hSession)
+		#define IN_SSCP			lib3270_in_sscp(hSession)
+		#define IN_TN3270E		lib3270_in_tn3270e(hSession)
+		#define IN_E			lib3270_in_e(hSession)
 
 		#ifndef LIB3270
 

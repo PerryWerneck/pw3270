@@ -538,51 +538,41 @@ void status_lu(H3270 *session, const char *lu)
 
 }
 
-static void status_connect(H3270 *session, int connected, void *dunno)
+static void status_connect(H3270 *hSession, int connected, void *dunno)
 {
 	LIB3270_STATUS id = LIB3270_STATUS_USER;
 
-	ctlr_erase(session,1);
+	ctlr_erase(hSession,1);
 
 	if (connected)
 	{
-		set_status(session,OIA_FLAG_BOXSOLID,IN_3270 && !IN_SSCP);
+		set_status(hSession,OIA_FLAG_BOXSOLID,IN_3270 && !IN_SSCP);
 
-		if (session->kybdlock & KL_AWAITING_FIRST)
+		if (hSession->kybdlock & KL_AWAITING_FIRST)
 			id = LIB3270_STATUS_AWAITING_FIRST;
 		else
 			id = LIB3270_STATUS_CONNECTED;
 
-/*
-#if defined(HAVE_LIBSSL)
-		set_status(session,OIA_FLAG_SECURE,session->secure_connection);
-#endif
-*/
-
 	}
 	else
 	{
-		set_status(session,OIA_FLAG_BOXSOLID,False);
-/*
-		set_status(session,OIA_FLAG_SECURE,False);
-*/
-
+		set_status(hSession,OIA_FLAG_BOXSOLID,False);
 		id = LIB3270_STATUS_DISCONNECTED;
 	}
 
-	status_changed(session,id);
+	status_changed(hSession,id);
 
 }
 
-static void status_3270_mode(H3270 *session, int ignored unused, void *dunno)
+static void status_3270_mode(H3270 *hSession, int ignored unused, void *dunno)
 {
 	Boolean oia_boxsolid = (IN_3270 && !IN_SSCP);
 
-	CHECK_SESSION_HANDLE(session);
+	CHECK_SESSION_HANDLE(hSession);
 
 	if(oia_boxsolid)
-		set_status(session,OIA_FLAG_UNDERA,True);
-	set_status(session,OIA_FLAG_BOXSOLID,oia_boxsolid);
+		set_status(hSession,OIA_FLAG_UNDERA,True);
+	set_status(hSession,OIA_FLAG_BOXSOLID,oia_boxsolid);
 
 }
 

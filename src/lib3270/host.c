@@ -605,15 +605,15 @@ static int do_connect(H3270 *hSession, const char *n)
  * @return 0 if the connection was ok, non zero on error.
  *
  */
-int lib3270_connect(H3270 *h, const char *n, int wait)
+int lib3270_connect(H3270 *hSession, const char *n, int wait)
 {
 	int rc;
 
-	CHECK_SESSION_HANDLE(h);
+	CHECK_SESSION_HANDLE(hSession);
 
-	lib3270_main_iterate(h,0);
+	lib3270_main_iterate(hSession,0);
 
-	if(h->auto_reconnect_inprogress)
+	if(hSession->auto_reconnect_inprogress)
 		return EAGAIN;
 
 	if(PCONNECTED)
@@ -621,12 +621,12 @@ int lib3270_connect(H3270 *h, const char *n, int wait)
 
 	if(!n)
 	{
-		n = h->full_current_host;
+		n = hSession->full_current_host;
 		if(!n)
 			return EINVAL;
 	}
 
-	rc = do_connect(h,n);
+	rc = do_connect(hSession,n);
 	if(rc)
 		return rc;
 
@@ -634,7 +634,7 @@ int lib3270_connect(H3270 *h, const char *n, int wait)
 	{
 		while(!IN_ANSI && !IN_3270)
 		{
-			lib3270_main_iterate(h,1);
+			lib3270_main_iterate(hSession,1);
 
 			if(!PCONNECTED)
 			{
@@ -661,22 +661,22 @@ LIB3270_EXPORT void lib3270_disconnect(H3270 *h)
 	host_disconnect(h,0);
 }
 
-void host_disconnect(H3270 *h, int failed)
+void host_disconnect(H3270 *hSession, int failed)
 {
-    CHECK_SESSION_HANDLE(h);
+    CHECK_SESSION_HANDLE(hSession);
 
 	if (CONNECTED || HALF_CONNECTED)
 	{
 		// Disconecting, disable input
-		remove_input_calls(h);
-		net_disconnect(h);
+		remove_input_calls(hSession);
+		net_disconnect(hSession);
 
-		trace("Disconnected (Failed: %d Reconnect: %d in_progress: %d)",failed,lib3270_get_toggle(h,LIB3270_TOGGLE_RECONNECT),h->auto_reconnect_inprogress);
-		if (lib3270_get_toggle(h,LIB3270_TOGGLE_RECONNECT) && !h->auto_reconnect_inprogress)
+		trace("Disconnected (Failed: %d Reconnect: %d in_progress: %d)",failed,lib3270_get_toggle(hSession,LIB3270_TOGGLE_RECONNECT),hSession->auto_reconnect_inprogress);
+		if (lib3270_get_toggle(hSession,LIB3270_TOGGLE_RECONNECT) && !hSession->auto_reconnect_inprogress)
 		{
 			/* Schedule an automatic reconnection. */
-			h->auto_reconnect_inprogress = 1;
-			(void) AddTimeOut(failed ? RECONNECT_ERR_MS: RECONNECT_MS, h, try_reconnect);
+			hSession->auto_reconnect_inprogress = 1;
+			(void) AddTimeOut(failed ? RECONNECT_ERR_MS: RECONNECT_MS, hSession, try_reconnect);
 		}
 
 		/*
@@ -684,24 +684,24 @@ void host_disconnect(H3270 *h, int failed)
 		 * in sync.
 		 */
 #if defined(X3270_TRACE) /*[*/
-		if (IN_ANSI && lib3270_get_toggle(h,LIB3270_TOGGLE_SCREEN_TRACE))
-			trace_ansi_disc(h);
+		if (IN_ANSI && lib3270_get_toggle(hSession,LIB3270_TOGGLE_SCREEN_TRACE))
+			trace_ansi_disc(hSession);
 #endif /*]*/
 
-		lib3270_set_disconnected(h);
+		lib3270_set_disconnected(hSession);
 	}
 }
 
 /* The host has entered 3270 or ANSI mode, or switched between them. */
-void host_in3270(H3270 *session, LIB3270_CSTATE new_cstate)
+void host_in3270(H3270 *hSession, LIB3270_CSTATE new_cstate)
 {
 	Boolean now3270 = (new_cstate == CONNECTED_3270 ||
 			   new_cstate == CONNECTED_SSCP ||
 			   new_cstate == CONNECTED_TN3270E);
 
-	session->cstate = new_cstate;
-	session->ever_3270 = now3270;
-	lib3270_st_changed(session, LIB3270_STATE_3270_MODE, now3270);
+	hSession->cstate = new_cstate;
+	hSession->ever_3270 = now3270;
+	lib3270_st_changed(hSession, LIB3270_STATE_3270_MODE, now3270);
 }
 
 void lib3270_set_connected(H3270 *hSession)
@@ -805,26 +805,26 @@ LIB3270_EXPORT const char * lib3270_get_host(H3270 *h)
 	return h->full_current_host;
 }
 
-LIB3270_EXPORT int lib3270_reconnect(H3270 *h,int wait)
+LIB3270_EXPORT int lib3270_reconnect(H3270 *hSession,int wait)
 {
 	int rc;
 
-    CHECK_SESSION_HANDLE(h);
+    CHECK_SESSION_HANDLE(hSession);
 
 	if (CONNECTED || HALF_CONNECTED)
 		return EBUSY;
 
-	if (h->full_current_host == CN)
+	if (hSession->full_current_host == CN)
 		return EINVAL;
 
-	if (h->auto_reconnect_inprogress)
+	if (hSession->auto_reconnect_inprogress)
 		return EBUSY;
 
-	rc = lib3270_connect(h,h->full_current_host,wait);
+	rc = lib3270_connect(hSession,hSession->full_current_host,wait);
 
 	if(rc)
 	{
-		h->auto_reconnect_inprogress = 0;
+		hSession->auto_reconnect_inprogress = 0;
 		return rc;
 	}
 
