@@ -2,11 +2,8 @@ package br.com.bb.pw3270;
 
 import android.app.Activity;
 import android.os.Bundle;
-// import android.widget.TextView;
-// import android.widget.Button;
-// import android.widget.EditText;
 import android.util.Log;
-// import android.view.View;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.*;
 import android.app.AlertDialog;
@@ -214,6 +211,8 @@ public class PW3270Activity extends Activity
         	break;
         	
         case R.id.settings:
+			Intent myIntent = new Intent(view.getContext(), SettingsActivity.class);
+			startActivityForResult(myIntent, 0);
         	break;
 
         default:

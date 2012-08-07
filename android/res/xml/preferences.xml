@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory 
+        android:title="Host"
+        android:key="host_category">
+
+        <EditTextPreference
+            android:key="hostname"
+            android:title="Endereço do host" 
+            android:summary="Define o endereço do host a conectar"
+            android:dialogTitle="Endereço do servidor"
+            android:dialogMessage="Informe nome do servidor"    
+            android:defaultValue="" />
+
+
+        <EditTextPreference
+            android:key="port"
+            android:title="Porta a conectar" 
+            android:summary="Define a porta a conectar"
+            android:dialogTitle="Porta de conexão"
+            android:dialogMessage="Informe a porta para conexão"
+            android:defaultValue="23" />
+        
+        <CheckBoxPreference 
+            android:key="ssl"
+            android:summary="Usar SSL nas conexões ao host"
+            android:title="Conexão segura"
+            android:defaultValue="false"
+        />
+        
+    </PreferenceCategory>
+    
+</PreferenceScreen>
+
