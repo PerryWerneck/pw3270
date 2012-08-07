@@ -104,6 +104,7 @@ DLLEXT=".so"
 OBJEXT=".o"
 EXEEXT=""
 DLLPREFIX="lib"
+DLLDIR="/lib"
 
 if test $host != $build; then
 	AC_CHECK_PROGS(HOST_CC, gcc cc)
@@ -118,6 +119,7 @@ case "$host" in
 		SOCKET_LIBS="-lws2_32"
 		CFLAGS="$CFLAGS -mms-bitfields"
 		DLL_FLAGS="-shared -Wl,-soname,\$(@F)"
+		DLLDIR=""
 		AC_PATH_TOOL([STRIP], [strip])
 		;;
 
@@ -229,6 +231,7 @@ AC_SUBST(DLLPREFIX)
 AC_SUBST(DLLEXT)
 AC_SUBST(DLL_FLAGS)
 AC_SUBST(DLL_CFLAGS)
+AC_SUBST(DLLDIR)
 
 #--[ Headers ]------------------------------------------------------------------------------------------------------------------------------------------------
 

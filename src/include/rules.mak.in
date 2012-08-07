@@ -62,11 +62,11 @@ TMPDIR  ?= $(ROOTDIR)/.tmp
 
 BINDBG  ?= $(BINDIR)/Debug
 BINRLS  ?= $(BINDIR)/Release
-LIBDBG	?= $(BINDBG)/lib
+LIBDBG	?= $(BINDBG)@DLLDIR@
 
 OBJDBG = $(OBJDIR)/Debug
 OBJRLS = $(OBJDIR)/Release
-LIBRLS	?= $(BINRLS)/lib
+LIBRLS	?= $(BINRLS)@DLLDIR@
 
 #---[ Rules ]------------------------------------------------------------------
 

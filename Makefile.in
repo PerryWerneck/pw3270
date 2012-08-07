@@ -49,8 +49,8 @@ mandir=@mandir@
 
 BINDIR=.bin
 EXEEXT=@EXEEXT@
-DBGLIB=-L../../$(BINDIR)/Debug/lib -l3270
-RLSLIB=-L../../$(BINDIR)/Release/lib -l3270
+DBGLIB=-L../../$(BINDIR)/Debug@DLLDIR@ -l3270
+RLSLIB=-L../../$(BINDIR)/Release@DLLDIR@ -l3270
 TMPDIR=.tmp
 GLOBAL_DEPS=$(PWD)/include/*.h $(PWD)/include/lib3270/*.h
 LANG_FILES=$(wildcard po/*.po)
@@ -128,11 +128,11 @@ all: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) locale filelist
 
 Release: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) locale
 
-$(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT): src/pw3270/* $(BINDIR)/Release/lib/@DLLPREFIX@3270@DLLEXT@ $(DEPENDS)
+$(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT): src/pw3270/* $(BINDIR)/Release@DLLDIR@/@DLLPREFIX@3270@DLLEXT@ $(DEPENDS)
 	@$(MAKE) BINDIR="../../$(BINDIR)" LIB3270_LIBS="$(RLSLIB)" LIB3270_CFLAGS="-I../../src/include" -C src/pw3270 ../../$(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
 
-$(BINDIR)/Release/lib/@DLLPREFIX@3270@DLLEXT@: src/lib3270/* src/include/lib3270/* src/include/* Makefile
-	@$(MAKE) BINRLS=../../.bin/Release/lib -C src/lib3270 ../../.bin/Release/lib/@DLLPREFIX@3270@DLLEXT@
+$(BINDIR)/Release@DLLDIR@/@DLLPREFIX@3270@DLLEXT@: src/lib3270/* src/include/lib3270/* src/include/* Makefile
+	@$(MAKE) BINRLS=../../.bin/Release@DLLDIR@ -C src/lib3270 ../../.bin/Release@DLLDIR@/@DLLPREFIX@3270@DLLEXT@
 
 #---[ File lists ]-------------------------------------------------------------
 
@@ -150,20 +150,20 @@ debian/lib3270-dev.install: Makefile
 
 Debug: $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
 
-$(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT): src/pw3270/* $(BINDIR)/Debug/lib/@DLLPREFIX@3270@DLLEXT@ $(DEPENDS)
+$(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT): src/pw3270/* $(BINDIR)/Debug@DLLDIR@/@DLLPREFIX@3270@DLLEXT@ $(DEPENDS)
 	@$(MAKE) BINDIR="../../$(BINDIR)" LIB3270_LIBS="$(DBGLIB)" LIB3270_CFLAGS="-I../../src/include" -C src/pw3270 ../../$(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
 
-$(BINDIR)/Debug/lib/@DLLPREFIX@3270@DLLEXT@: src/lib3270/* src/include/lib3270/* src/include/* Makefile
-	@$(MAKE) BINDBG=../../.bin/Debug/lib -C src/lib3270 ../../.bin/Debug/lib/@DLLPREFIX@3270@DLLEXT@
+$(BINDIR)/Debug@DLLDIR@/@DLLPREFIX@3270@DLLEXT@: src/lib3270/* src/include/lib3270/* src/include/* Makefile
+	@$(MAKE) BINDBG=../../.bin/Debug@DLLDIR@ -C src/lib3270 ../../.bin/Debug@DLLDIR@/@DLLPREFIX@3270@DLLEXT@
 
 run: $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT) $(PACKAGE_NAME).png $(PACKAGE_NAME)-logo.png
-	@PATH="$(BINDIR)/Debug/lib:$(PATH)" "$(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)"
+	@PATH="$(BINDIR)/Debug@DLLDIR@:$(PATH)" "$(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)"
 
 memchk: $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
 ifeq ($(VALGRIND),no)
-	@PATH="$(BINDIR)/Debug/lib:$(PATH)" "$(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)"
+	@PATH="$(BINDIR)/Debug@DLLDIR@:$(PATH)" "$(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)"
 else
-	@PATH="$(BINDIR)/Debug/lib:$(PATH)" G_DEBUG=gc-friendly G_SLICE=always-malloc \$(VALGRIND) --leak-check=full --suppressions=src/pw3270/valgrind.suppression --gen-suppressions=all $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
+	@PATH="$(BINDIR)/Debug@DLLDIR@:$(PATH)" G_DEBUG=gc-friendly G_SLICE=always-malloc \$(VALGRIND) --leak-check=full --suppressions=src/pw3270/valgrind.suppression --gen-suppressions=all $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
 endif
 
 #---[ Targets ]----------------------------------------------------------------
@@ -240,7 +240,7 @@ install-app: install-locale
 	@$(INSTALL_DATA) ui/*.xml $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/ui
 
 install-lib:
-	@$(MAKE) BINRLS="../../.bin/Release/lib" -C src/lib3270 install
+	@$(MAKE) BINRLS="../../.bin/Release@DLLDIR@" -C src/lib3270 install
 
 locale: $(foreach MO, $(basename $(LANG_FILES)), $(BINDIR)/Release/$(localedir)/$(notdir $(MO))/LC_MESSAGES/$(PACKAGE_NAME).mo)
 
