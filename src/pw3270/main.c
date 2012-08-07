@@ -32,7 +32,7 @@
 #include <glib.h>
 #include <glib/gstdio.h>
 #include "globals.h"
-#include <lib3270/v3270.h>
+#include <v3270.h>
 #include "v3270/accessible.h"
 #include <stdlib.h>
 

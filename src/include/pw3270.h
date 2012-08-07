@@ -18,7 +18,7 @@
  * programa; se não, escreva para a Free Software Foundation, Inc., 51 Franklin
  * St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * Este programa está nomeado como widget.h e possui - linhas de código.
+ * Este programa está nomeado como pw3270.h e possui - linhas de código.
  *
  * Contatos:
  *
@@ -26,72 +26,37 @@
  * erico.mendonca@gmail.com	(Erico Mascarenhas Mendonça)
  * licinio@bb.com.br		(Licínio Luis Branco)
  * kraucer@bb.com.br		(Kraucer Fernandes Mazuco)
- * macmiranda@bb.com.br		(Marco Aurélio Caldas Miranda)
  *
  */
 
- #ifndef PW3270_H_INCLUDED
+#ifndef PW3270_H_INCLUDED
+
+ #include <gtk/gtk.h>
+ #include <lib3270/config.h>
+ #include <lib3270.h>
+
+ #define PW3270_H_INCLUDED 1
+
+ // pw3270 window
+ G_BEGIN_DECLS
+
+ #define GTK_TYPE_PW3270				(pw3270_get_type ())
+ #define GTK_PW3270(obj)				(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_PW3270, pw3270))
+ #define GTK_PW3270_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_PW3270, pw3270Class))
+ #define GTK_IS_PW3270(obj)				(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_PW3270))
+ #define GTK_IS_PW3270_CLASS(klass)		(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PW3270))
+ #define GTK_PW3270_GET_CLASS(obj)		(G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_PW3270, pw3270Class))
+
+ typedef struct _pw3270				pw3270;
+ typedef struct _pw3270Class		pw3270Class;
 
 
-	#define PW3270_H_INCLUDED 1
+ LIB3270_EXPORT GtkWidget	* pw3270_new(const gchar *host);
+ LIB3270_EXPORT void	  	  pw3270_set_host(GtkWidget *widget, const gchar *uri);
+ LIB3270_EXPORT gboolean 	  pw3270_get_toggle(GtkWidget *widget, LIB3270_TOGGLE ix);
+ LIB3270_EXPORT	H3270		* pw3270_get_session(GtkWidget *widget);
+ LIB3270_EXPORT	GtkWidget	* pw3270_get_terminal_widget(GtkWidget *widget);
 
-	#ifdef _WIN32
-		#include <windows.h>
-	#endif
-
-	#include <gtk/gtk.h>
-	#include <lib3270.h>
-
-	// Error management
-	#include <errno.h>
-
-	#ifndef ETIMEDOUT
-		#define ETIMEDOUT -1238
-	#endif
-
-	#ifndef ECANCELED
-		#ifdef EINTR
-			#define ECANCELED EINTR
-		#else
-			#define ECANCELED -1125
-		#endif
-	#endif
-
-	#ifndef ENOTCONN
-		#define ENOTCONN -1107
-	#endif
-
-	// Windows
-	#ifdef _WIN32
-
-		#ifndef WINVER
-			#define WINVER 0x0501
-		#endif
-
-		#ifndef _WIN32_WINNT
-			#define _WIN32_WINNT WINVER
-		#endif
-
-	#endif
-
-	// pw3270 window
-	G_BEGIN_DECLS
-
-	#define GTK_TYPE_PW3270				(pw3270_get_type ())
-	#define GTK_PW3270(obj)				(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_PW3270, pw3270))
-	#define GTK_PW3270_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_PW3270, pw3270Class))
-	#define GTK_IS_PW3270(obj)			(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_PW3270))
-	#define GTK_IS_PW3270_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PW3270))
-	#define GTK_PW3270_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_PW3270, pw3270Class))
-
-	typedef struct _pw3270			pw3270;
-	typedef struct _pw3270Class		pw3270Class;
-
-
-	LIB3270_EXPORT GtkWidget	* pw3270_new(const gchar *host);
-	LIB3270_EXPORT void		  	  pw3270_set_host(GtkWidget *widget, const gchar *uri);
-	LIB3270_EXPORT gboolean 	  pw3270_get_toggle(GtkWidget *widget, LIB3270_TOGGLE ix);
-
-	G_END_DECLS
+ G_END_DECLS
 
 #endif // PW3270_H_INCLUDED

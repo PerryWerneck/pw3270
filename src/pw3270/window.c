@@ -199,6 +199,18 @@
  	return v3270_get_toggle(GTK_PW3270(widget)->terminal,ix);
  }
 
+ H3270 * pw3270_get_session(GtkWidget *widget)
+ {
+ 	g_return_val_if_fail(GTK_IS_PW3270(widget),NULL);
+ 	return v3270_get_session(GTK_PW3270(widget)->terminal);
+ }
+
+ GtkWidget * pw3270_get_terminal_widget(GtkWidget *widget)
+ {
+ 	g_return_val_if_fail(GTK_IS_PW3270(widget),NULL);
+ 	return GTK_PW3270(widget)->terminal;
+ }
+
  static void setup_input_method(GtkWidget *widget, GtkWidget *obj)
  {
 	GtkWidget *menu	= gtk_menu_new();

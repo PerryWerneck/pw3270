@@ -34,12 +34,13 @@
  #include <lib3270/config.h>
  #include <gtk/gtk.h>
  #include <string.h>
+ #include <errno.h>
 
  #ifdef HAVE_LIBM
 	#include <math.h>
  #endif // HAVE_LIBM
 
- #include <lib3270/v3270.h>
+ #include <v3270.h>
  #include "private.h"
  #include "accessible.h"
 

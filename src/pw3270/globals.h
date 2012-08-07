@@ -18,7 +18,7 @@
  * programa; se não, escreva para a Free Software Foundation, Inc., 51 Franklin
  * St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * Este programa está nomeado como globals.c e possui - linhas de código.
+ * Este programa está nomeado como globals.h e possui - linhas de código.
  *
  * Contatos:
  *
@@ -37,7 +37,7 @@
  #include <glib/gi18n.h>
  #include <gtk/gtk.h>
 
- #include <lib3270/v3270.h>
+ #include <v3270.h>
 
  // Special actions
  enum

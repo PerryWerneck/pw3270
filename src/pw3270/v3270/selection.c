@@ -18,7 +18,7 @@
  * programa; se não, escreva para a Free Software Foundation, Inc., 51 Franklin
  * St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * Este programa está nomeado como clipboard.c e possui - linhas de código.
+ * Este programa está nomeado como selection.c e possui - linhas de código.
  *
  * Contatos:
  *
@@ -29,7 +29,7 @@
 
  #include <gtk/gtk.h>
  #include <pw3270.h>
- #include <lib3270/v3270.h>
+ #include <v3270.h>
  #include "private.h"
  #include <lib3270/selection.h>
  #include <lib3270/log.h>

@@ -33,12 +33,13 @@
  #include <lib3270/session.h>
  #include <lib3270/actions.h>
  #include <lib3270/log.h>
+ #include <errno.h>
 
 #ifdef HAVE_MALLOC_H
 	#include <malloc.h>
 #endif // HAVE_MALLOC_H
 
- #include <lib3270/v3270.h>
+ #include <v3270.h>
  #include "private.h"
  #include "accessible.h"
  #include "marshal.h"
