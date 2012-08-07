@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-03 08:46-0300\n"
+"POT-Creation-Date: 2012-08-07 10:38-0300\n"
 "PO-Revision-Date: 2012-08-03 08:52-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português do Brasil <>\n"
@@ -18,30 +18,55 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 
-#: kybd.c:2742
+#: kybd.c:2638
+#, fuzzy, c-format
+msgid "%s: Bell not supported"
+msgstr "Opção não suportada: '%c:'"
+
+#: kybd.c:2797
 #, c-format
 msgid "%s: Missing hex digits after \\x"
 msgstr "%s: Faltando dígitos hexadecimais após \\x"
+
+#: kybd.c:2737
+#, c-format
+msgid "%s: Unknown character after \\p"
+msgstr "%s: Unknown character after \\p"
+
+#: kybd.c:2773
+#, c-format
+msgid "%s: Unknown character after \\pa"
+msgstr "%s: Unknown character after \\pa"
+
+#: kybd.c:2751
+#, c-format
+msgid "%s: Unknown character after \\pf"
+msgstr "%s: Unknown character after \\pf"
+
+#: kybd.c:2689
+#, fuzzy, c-format
+msgid "%s: Vertical tab not supported"
+msgstr "Opção não suportada: '%c:'"
 
 #: resolver.c:122
 #, c-format
 msgid "%s: unknown family %d"
 msgstr "%s: Familia %d é inválida"
 
-#: telnet.c:1099
+#: telnet.c:1090
 #, c-format
 msgid "%s:%d"
 msgstr "%s:%d"
 
-#: screen.c:655 screen.c:657 screen.c:687 screen.c:701 screen.c:812
+#: screen.c:645 screen.c:647 screen.c:677 screen.c:691 screen.c:802
 msgid "3270 Error"
 msgstr "Erro 3270"
 
-#: screen.c:672
+#: screen.c:662
 msgid "3270 Warning"
 msgstr "Alerta 3270"
 
-#: telnet.c:3243
+#: telnet.c:3178
 #, c-format
 msgid ""
 "<b>Connection state:</b> %s\n"
@@ -50,7 +75,7 @@ msgstr ""
 "<b>Estado da conexão:</b> %s\n"
 "<b>Mensagem de alerta:</b> %s"
 
-#: paste.c:265
+#: paste.c:264
 msgid "Action failed"
 msgstr "Ação falhou"
 
@@ -66,7 +91,7 @@ msgstr "Aviso sonoro"
 msgid "Auto-Reconnect"
 msgstr "Reconectar automaticamente"
 
-#: telnet.c:414
+#: telnet.c:400
 msgid "Bad winsock version"
 msgstr "Versão winsock inválida"
 
@@ -82,11 +107,11 @@ msgstr "Cursor piscante"
 msgid "Bold"
 msgstr "Negrito"
 
-#: telnet.c:2082
+#: telnet.c:2053
 msgid "Broken pipe"
 msgstr "Broken pipe"
 
-#: telnet.c:698
+#: telnet.c:684
 #, c-format
 msgid "Can't connect to %s:%d"
 msgstr "Não foi possível conectar a %s:%d"
@@ -95,28 +120,28 @@ msgstr "Não foi possível conectar a %s:%d"
 msgid "Can't connect to host"
 msgstr "Não foi possível conectar ao servidor"
 
-#: ft.c:308
+#: ft.c:307
 msgid "Can't get file size"
 msgstr "Não foi possível obter o tamanho do arquivo"
 
-#: ft.c:237
+#: ft.c:226
 msgid "Can't open local file"
 msgstr "Não foi possível abrir arquivo local"
 
-#: telnet.c:842
+#: telnet.c:828
 msgid "Can't set SSL socket file descriptor"
 msgstr "Não foi possível definir o descritor de socket SSL"
 
-#: telnet.c:415
+#: telnet.c:401
 #, c-format
 msgid "Can't use winsock version %d.%d"
 msgstr "Não é possível usar a Winsock versão %d.%d"
 
-#: ft.c:160
+#: ft.c:147
 msgid "Cancelled by user"
 msgstr "Cancelado pelo usuário"
 
-#: telnet.c:732
+#: telnet.c:718
 msgid "Cannot create socket handle"
 msgstr "Não foi possível criar um manipulador de socket"
 
@@ -133,7 +158,7 @@ msgstr "Limpar"
 msgid "Colors"
 msgstr "Cores"
 
-#: ft_cut.c:326
+#: ft_cut.c:340
 msgid "Complete"
 msgstr "Completo"
 
@@ -141,11 +166,11 @@ msgstr "Completo"
 msgid "Connect on startup"
 msgstr "Conectar ao iniciar"
 
-#: telnet.c:842 telnet.c:860
+#: telnet.c:828 telnet.c:846
 msgid "Connection failed"
 msgstr "Conexão falhou"
 
-#: telnet.c:2086
+#: telnet.c:2057
 msgid "Connection reset by peer"
 msgstr "Conexão foi cancelada pelo servidor"
 
@@ -169,7 +194,7 @@ msgstr "Cursor mira"
 msgid "DS Trace"
 msgstr "DS Trace"
 
-#: ft_cut.c:163 ft_cut.c:171
+#: ft_cut.c:163 ft_cut.c:172
 msgid "Data conversion error"
 msgstr "Erro na conversão de dados"
 
@@ -181,15 +206,15 @@ msgstr "Debug"
 msgid "Debug window updates"
 msgstr "Mostrar atualizações de janela"
 
-#: telnet.c:1739
+#: telnet.c:1729
 msgid "Device type rejected"
 msgstr "Tipo de dispositivo rejeitado"
 
-#: ft.c:205
+#: ft.c:192
 msgid "Disconnected from host"
 msgstr "Desconectado do servidor"
 
-#: telnet.c:1314
+#: telnet.c:1304
 msgid "EOR received when not in 3270 mode, ignored."
 msgstr "EOR recebido fora do modo 3270, ignorado."
 
@@ -217,12 +242,12 @@ msgstr "Apagar até o final do campo"
 msgid "Erase to end of line"
 msgstr "Apagar até o final da linha"
 
-#: ft_cut.c:408 ft_dft.c:414
+#: ft_cut.c:425 ft_dft.c:448
 #, c-format
 msgid "Error \"%s\" reading from local file (rc=%d)"
 msgstr "Erro \"%s\" lendo arquivo local (rc=%d)"
 
-#: ft_cut.c:505 ft_dft.c:310
+#: ft_cut.c:529 ft_dft.c:339
 #, c-format
 msgid "Error \"%s\" writing to local file (rc=%d)"
 msgstr "Erro \"%s\" gravando arquivo local (rc=%d)"
@@ -241,17 +266,43 @@ msgstr "Erro ao resolver %s: %s"
 msgid "Event Trace"
 msgstr "Trace de eventos"
 
-#: ft.c:219
-msgid "File transfer is already active"
-msgstr "Transferência de arquivos já está ativa"
-
-#: ft.c:212
+#: ft.c:199
 msgid "File transfer is already active in this session"
 msgstr "Transferência de arquivos já está ativa nesta sessão"
 
 #: ui/00default.xml:176
 msgid "Full Screen"
 msgstr "Tela cheia"
+
+#: proxy.c:499
+#, c-format
+msgid ""
+"HTTP Proxy: CONNECT failed:\n"
+"%s"
+msgstr ""
+"HTTP Proxy: CONNECT failed:\n"
+"%s"
+
+#: proxy.c:460
+msgid "HTTP Proxy: receive error"
+msgstr "HTTP Proxy: receive error"
+
+#: proxy.c:399 proxy.c:417 proxy.c:430
+#, fuzzy
+msgid "HTTP Proxy: send error"
+msgstr "Erro de interpretação"
+
+#: proxy.c:450
+msgid "HTTP Proxy: server timeout"
+msgstr "HTTP Proxy: server timeout"
+
+#: proxy.c:473
+msgid "HTTP Proxy: unexpected EOF"
+msgstr "HTTP Proxy: unexpected EOF"
+
+#: proxy.c:494
+msgid "HTTP Proxy: unrecognized reply"
+msgstr "HTTP Proxy: unrecognized reply"
 
 #: ui/00default.xml:196
 msgid "Help"
@@ -261,15 +312,15 @@ msgstr "Ajuda"
 msgid "Host disconnected, transfer cancelled"
 msgstr "Servidor desconectou, transferência cancelada"
 
-#: telnet.c:1797
+#: telnet.c:1787
 msgid "Host illegally added function(s)"
 msgstr "Host illegally added function(s)"
 
-#: telnet.c:1722
+#: telnet.c:1712
 msgid "Host rejected device type or request type"
 msgstr "Servidor rejeitou o tipo de dispositivo ou requisição"
 
-#: telnet.c:1735
+#: telnet.c:1725
 msgid "Host rejected resource(s)"
 msgstr "Servidor rejeitou recurso(s)"
 
@@ -278,7 +329,7 @@ msgstr "Servidor rejeitou recurso(s)"
 msgid "Hostname syntax error"
 msgstr "Formato inválido no nome do servidor"
 
-#: ft_cut.c:488
+#: ft_cut.c:508
 msgid "Illegal frame length"
 msgstr "Comprimento de frame inválido"
 
@@ -290,15 +341,25 @@ msgstr "Método de entrada"
 msgid "Invalid (empty) hostname"
 msgstr "Nome do host é invalido (vazio)"
 
-#: proxy.c:169
+#: proxy.c:284 proxy.c:296
+#, fuzzy
+msgid "Invalid proxy hostname syntax"
+msgstr "Formato inválido no nome do proxy"
+
+#: proxy.c:172
 msgid "Invalid proxy syntax"
+msgstr "Formato inválido no nome do proxy"
+
+#: proxy.c:255
+#, fuzzy, c-format
+msgid "Invalid proxy type '%.*s'"
 msgstr "Formato inválido no nome do proxy"
 
 #: ui/00default.xml:184
 msgid "Keep selected"
 msgstr "Manter selecionado"
 
-#: paste.c:267
+#: paste.c:266
 msgid "Keyboard is locked"
 msgstr "Teclado está bloqueado"
 
@@ -314,15 +375,15 @@ msgstr "Só Maiúsculas"
 msgid "Multiple port names"
 msgstr "Múltiplos nomes de porta"
 
-#: proxy.c:202
+#: proxy.c:205
 msgid "Must specify port for telnet proxy"
 msgstr "Proxy telnet precisa de porta"
 
-#: telnet.c:444 telnet.c:702
+#: telnet.c:430 telnet.c:688
 msgid "Network error"
 msgstr "Erro de rede"
 
-#: telnet.c:402 telnet.c:413 telnet.c:731 telnet.c:742
+#: telnet.c:388 telnet.c:399 telnet.c:717 telnet.c:728
 msgid "Network startup error"
 msgstr "Erro ao iniciar a rede"
 
@@ -338,6 +399,10 @@ msgstr "Não está no modo 3270, transferência cancelada"
 #, c-format
 msgid "Option '%c:' is not supported"
 msgstr "Opção não suportada: '%c:'"
+
+#: proxy.c:363
+msgid "Passthru Proxy: send error"
+msgstr "Passthru Proxy: send error"
 
 #: ui/00default.xml:120
 msgid "Paste"
@@ -371,6 +436,73 @@ msgstr "Imprimir cópia"
 msgid "Print selected"
 msgstr "Imprimir seleção"
 
+#: rpq.c:225
+#, c-format
+msgid "RPQ %s term omitted due to insufficient space"
+msgstr "RPQ %s term omitted due to insufficient space"
+
+#: rpq.c:335
+#, c-format
+msgid "RPQ %s term override ignored"
+msgstr "RPQ %s term override ignored"
+
+#: rpq.c:624 rpq.c:694
+#, c-format
+msgid "RPQ ADDRESS term has unrecognized family %u"
+msgstr "RPQ ADDRESS term has unrecognized family %u"
+
+#: rpq.c:632 rpq.c:661 rpq.c:701
+msgid "RPQ ADDRESS term incomplete due to space limit"
+msgstr "RPQ ADDRESS term incomplete due to space limit"
+
+#: rpq.c:403 rpq.c:412
+msgid "RPQ TIMEZONE term is invalid - use +/-hhmm"
+msgstr "RPQ TIMEZONE term is invalid - use +/-hhmm"
+
+#: rpq.c:501
+msgid "RPQ USER term has non-hex character"
+msgstr "RPQ USER term has non-hex character"
+
+#: rpq.c:526
+msgid "RPQ USER term has odd number of hex digits"
+msgstr "RPQ USER term has odd number of hex digits"
+
+#: rpq.c:507
+#, c-format
+msgid "RPQ USER term truncated after %d bytes"
+msgstr "RPQ USER term truncated after %d bytes"
+
+#: rpq.c:551
+#, c-format
+msgid "RPQ USER term truncated after %d characters"
+msgstr "RPQ USER term truncated after %d characters"
+
+#: rpq.c:347
+#, c-format
+msgid "RPQ term \"%s\" is unrecognized"
+msgstr "RPQ term \"%s\" is unrecognized"
+
+#: rpq.c:447
+msgid "RPQ timezone exceeds 12 hour UTC offset"
+msgstr "RPQ timezone exceeds 12 hour UTC offset"
+
+#: rpq.c:432
+msgid "RPQ: Unable to determine workstation UTC time"
+msgstr "RPQ: Unable to determine workstation UTC time"
+
+#: rpq.c:425
+msgid "RPQ: Unable to determine workstation local time"
+msgstr "RPQ: Unable to determine workstation local time"
+
+#: rpq.c:637
+#, c-format
+msgid "RPQ: can't resolve '%s': %s"
+msgstr "RPQ: can't resolve '%s': %s"
+
+#: rpq.c:650
+msgid "RPQ: gethostbyname error"
+msgstr "RPQ: gethostbyname error"
+
 #: ui/00default.xml:109
 msgid "Receive file"
 msgstr "Receber arquivo"
@@ -391,15 +523,139 @@ msgstr "Reselecionar"
 msgid "Return"
 msgstr "Return"
 
-#: telnet.c:3241
+#: proxy.c:683
+msgid "SOCKS4 Proxy: client is not reachable"
+msgstr "SOCKS4 Proxy: client is not reachable"
+
+#: proxy.c:651
+msgid "SOCKS4 Proxy: receive error"
+msgstr "SOCKS4 Proxy: receive error"
+
+#: proxy.c:672
+#, c-format
+msgid "SOCKS4 Proxy: recv status 0x%02x\n"
+msgstr "SOCKS4 Proxy: recv status 0x%02x\n"
+
+#: proxy.c:669
+#, c-format
+msgid "SOCKS4 Proxy: recv status 0x%02x port %u address %s\n"
+msgstr "SOCKS4 Proxy: recv status 0x%02x port %u address %s\n"
+
+#: proxy.c:680
+msgid "SOCKS4 Proxy: request rejected or failed"
+msgstr "SOCKS4 Proxy: request rejected or failed"
+
+#: proxy.c:597 proxy.c:623
+msgid "SOCKS4 Proxy: send error"
+msgstr "SOCKS4 Proxy: send error"
+
+#: proxy.c:643
+msgid "SOCKS4 Proxy: server timeout"
+msgstr "SOCKS4 Proxy: server timeout"
+
+#: proxy.c:689
+#, c-format
+msgid "SOCKS4 Proxy: unknown status 0x%02x"
+msgstr "SOCKS4 Proxy: unknown status 0x%02x"
+
+#: proxy.c:686
+msgid "SOCKS4 Proxy: userid error"
+msgstr "SOCKS4 Proxy: userid error"
+
+#: proxy.c:616
+#, c-format
+msgid "SOCKS4 Proxy: xmit version 4 connect port %u address %s user '%s'\n"
+msgstr "SOCKS4 Proxy: xmit version 4 connect port %u address %s user '%s'\n"
+
+#: proxy.c:957
+msgid "SOCKS5 Proxy: address type not supported"
+msgstr "SOCKS5 Proxy: address type not supported"
+
+#: proxy.c:821
+msgid "SOCKS5 Proxy: authentication failure"
+msgstr "SOCKS5 Proxy: authentication failure"
+
+#: proxy.c:811
+msgid "SOCKS5 Proxy: bad authentication response"
+msgstr "SOCKS5 Proxy: bad authentication response"
+
+#: proxy.c:954
+msgid "SOCKS5 Proxy: command not supported"
+msgstr "SOCKS5 Proxy: command not supported"
+
+#: proxy.c:939
+msgid "SOCKS5 Proxy: connection not allowed"
+msgstr "SOCKS5 Proxy: connection not allowed"
+
+#: proxy.c:948
+msgid "SOCKS5 Proxy: connection refused"
+msgstr "SOCKS5 Proxy: connection refused"
+
+#: proxy.c:945
+msgid "SOCKS5 Proxy: host unreachable"
+msgstr "SOCKS5 Proxy: host unreachable"
+
+#: proxy.c:918
+#, c-format
+msgid "SOCKS5 Proxy: incorrect reply version 0x%02x"
+msgstr "SOCKS5 Proxy: incorrect reply version 0x%02x"
+
+#: proxy.c:942
+msgid "SOCKS5 Proxy: network unreachable"
+msgstr "SOCKS5 Proxy: network unreachable"
+
+#: proxy.c:785 proxy.c:894
+msgid "SOCKS5 Proxy: receive error"
+msgstr "SOCKS5 Proxy: receive error"
+
+#: proxy.c:755 proxy.c:861
+msgid "SOCKS5 Proxy: send error"
+msgstr "SOCKS5 Proxy: send error"
+
+#: proxy.c:936
+msgid "SOCKS5 Proxy: server failure"
+msgstr "SOCKS5 Proxy: server failure"
+
+#: proxy.c:774 proxy.c:887
+msgid "SOCKS5 Proxy: server timeout"
+msgstr "SOCKS5 Proxy: server timeout"
+
+#: proxy.c:951
+msgid "SOCKS5 Proxy: ttl expired"
+msgstr "SOCKS5 Proxy: ttl expired"
+
+#: proxy.c:794 proxy.c:903
+msgid "SOCKS5 Proxy: unexpected EOF"
+msgstr "SOCKS5 Proxy: unexpected EOF"
+
+#: proxy.c:982
+#, c-format
+msgid "SOCKS5 Proxy: unknown server address type 0x%02x"
+msgstr "SOCKS5 Proxy: unknown server address type 0x%02x"
+
+#: proxy.c:960
+#, c-format
+msgid "SOCKS5 Proxy: unknown server error 0x%02x"
+msgstr "SOCKS5 Proxy: unknown server error 0x%02x"
+
+#: proxy.c:750
+msgid "SOCKS5 Proxy: xmit version 5 nmethods 1 (no auth)\n"
+msgstr "SOCKS5 Proxy: xmit version 5 nmethods 1 (no auth)\n"
+
+#: proxy.c:742
+#, c-format
+msgid "SOCKS5 proxy: %s/%u: %s"
+msgstr "SOCKS5 proxy: %s/%u: %s"
+
+#: telnet.c:3176
 msgid "SSL Connect error"
 msgstr "Erro na conexão SSL"
 
-#: telnet.c:1082
+#: telnet.c:1073
 msgid "SSL Error"
 msgstr "Erro SSL"
 
-#: telnet.c:1082
+#: telnet.c:1073
 msgid "SSL Read error"
 msgstr "Erro de leitura SSL"
 
@@ -407,11 +663,11 @@ msgstr "Erro de leitura SSL"
 msgid "SSL error"
 msgstr "Erro SSL"
 
-#: telnet.c:860
+#: telnet.c:846
 msgid "SSL negotiation failed"
 msgstr "Negociação SSL falhou"
 
-#: telnet.c:2072
+#: telnet.c:2043
 #, c-format
 msgid ""
 "SSL_write:\n"
@@ -420,7 +676,7 @@ msgstr ""
 "SSL_write:\n"
 "%s"
 
-#: 00default.xml:101
+#: ui/00default.xml:101
 msgid "Save copy"
 msgstr "Salvar cópia"
 
@@ -484,11 +740,11 @@ msgstr "Mostrar padrão de teste"
 msgid "Smart paste"
 msgstr "Colar inteligente"
 
-#: telnet.c:1103
+#: telnet.c:1094
 msgid "Socket read error"
 msgstr "Erro ao ler dados da rede"
 
-#: telnet.c:2093
+#: telnet.c:2064
 msgid "Socket write error"
 msgstr "Erro ao enviar dados para a rede"
 
@@ -496,11 +752,20 @@ msgstr "Erro ao enviar dados para a rede"
 msgid "Space in LU name"
 msgstr "Espaço no nome da LU"
 
+#: proxy.c:522
+msgid "TELNET Proxy: send error"
+msgstr "TELNET Proxy: send error"
+
+#: telnet.c:3227
+#, fuzzy
+msgid "TLS negotiation failure"
+msgstr "Negociação SSL falhou"
+
 #: host.c:378
 msgid "Text before '['"
 msgstr "Texto antes de '['"
 
-#: ft.c:227
+#: ft.c:216
 msgid "The remote file name is invalid"
 msgstr "O nome do arquivo remoto não é válido"
 
@@ -522,19 +787,19 @@ msgstr "Trace"
 msgid "Track Cursor"
 msgstr "Mostrar posição do cursor"
 
-#: ft_cut.c:359
+#: ft_cut.c:373
 msgid "Transfer cancelled by host"
 msgstr "Transferência cancelada pelo servidor"
 
-#: ft_cut.c:388 ft_cut.c:480 ft_dft.c:221 ft_dft.c:351
+#: ft_cut.c:402 ft_cut.c:498 ft_dft.c:242 ft_dft.c:380
 msgid "Transfer cancelled by user"
 msgstr "Transferência cancelada pelo usuário"
 
-#: ft_cut.c:448
+#: ft_cut.c:466
 msgid "Transmission error"
 msgstr "Erro de transmissão"
 
-#: ft_dft.c:167
+#: ft_dft.c:182
 msgid "Uknown DFT Open type from host"
 msgstr "Servidor enviou código de abertura DFT desconhecido"
 
@@ -542,15 +807,15 @@ msgstr "Servidor enviou código de abertura DFT desconhecido"
 msgid "Unable to connect to secure hosts"
 msgstr "Não é possível conectar em servidores seguros"
 
-#: paste.c:266
+#: paste.c:265
 msgid "Unable to paste text"
 msgstr "Incapaz de colar texto"
 
-#: ft.c:388
+#: ft.c:387
 msgid "Unable to send file-transfer request"
 msgstr "Não foi possível enviar a requisição de transferência de arquivo"
 
-#: paste.c:267
+#: paste.c:266
 msgid "Unexpected error"
 msgstr "Erro inesperado"
 
@@ -559,26 +824,26 @@ msgstr "Erro inesperado"
 msgid "Unexpected type %d in typeahead queue"
 msgstr "Tipo inesperado %d na fila de teclado"
 
-#: ctlr.c:496
+#: ctlr.c:498
 #, c-format
 msgid "Unknown 3270 Data Stream command: 0x%X"
 msgstr "Unknown 3270 Data Stream command: 0x%X"
 
-#: ft_cut.c:367
+#: ft_cut.c:381
 msgid "Unknown FT control code from host"
 msgstr "Servidor enviou código de controle FT desconhecido"
 
-#: kybd.c:2375
+#: kybd.c:2387
 #, c-format
 msgid "Unknown PA key %d"
 msgstr "PA %d desconhecida"
 
-#: kybd.c:2387
+#: kybd.c:2402
 #, c-format
 msgid "Unknown PF key %d"
 msgstr "PF %d desconhecida"
 
-#: ft_cut.c:292
+#: ft_cut.c:305
 msgid "Unknown frame type from host"
 msgstr "Servidor enviou tipo de frame desconhecido"
 
@@ -591,21 +856,26 @@ msgstr ""
 "Servidor desconhecido:\n"
 "%s"
 
-#: telnet.c:573
+#: telnet.c:559
 #, c-format
 msgid "Unknown passthru host: %s"
 msgstr "Servidor \"passthru\" desconhecido: %s"
 
-#: telnet.c:602 resolver.c:147
+#: telnet.c:588 resolver.c:147
 #, c-format
 msgid "Unknown port number or service: %s"
 msgstr "Número de porta ou serviço desconhecido: %s"
 
-#: telnet.c:558
+#: rpq.c:220
+#, fuzzy
+msgid "Unsupported RPQ term"
+msgstr "Unsupported socks 4 proxy"
+
+#: telnet.c:544
 msgid "Unsupported passthru host session"
 msgstr "Unsupported passthru host session"
 
-#: proxy.c:525
+#: proxy.c:535
 msgid "Unsupported socks 4 proxy"
 msgstr "Unsupported socks 4 proxy"
 
@@ -617,19 +887,19 @@ msgstr "Usar teclas +/- para navegar por campos"
 msgid "View Field Delimiters"
 msgstr "View Field Delimiters"
 
-#: telnet.c:743
+#: telnet.c:729
 msgid "WSAEventSelect failed"
 msgstr "WSAEventSelect falhou"
 
-#: telnet.c:403
+#: telnet.c:389
 msgid "WSAStartup failed"
 msgstr "WSAStartup falhou"
 
-#: ft.c:397
+#: ft.c:396
 msgid "Waiting for GET response"
 msgstr "Aguardando resposta do pedido de download"
 
-#: ft.c:399
+#: ft.c:398
 msgid "Waiting for PUT response"
 msgstr "Aguardando resposta do pedido de upload"
 
@@ -665,28 +935,31 @@ msgstr "Opções"
 msgid "_View"
 msgstr "_Exibir"
 
-#: telnet.c:3106 telnet.c:3117
+#: telnet.c:3041 telnet.c:3052
 #, c-format
 msgid "fcntl(%s)"
 msgstr "fcntl(%s)"
 
-#: telnet.c:3096
+#: telnet.c:3031
 #, c-format
 msgid "ioctl(%s)"
 msgstr "ioctl(%s)"
 
-#: telnet.c:653 telnet.c:659 telnet.c:666
+#: telnet.c:639 telnet.c:645 telnet.c:652
 #, c-format
 msgid "setsockopt(%s)"
 msgstr "setsockopt(%s)"
 
-#: telnet.c:646
+#: telnet.c:632
 msgid "socket"
 msgstr "socket"
 
-#: telnet.c:1078
+#: telnet.c:1069
 msgid "unknown error"
 msgstr "Erro desconhecido"
+
+#~ msgid "File transfer is already active"
+#~ msgstr "Transferência de arquivos já está ativa"
 
 #~ msgid "%s action needs a valid id attribute"
 #~ msgstr "Ação %s exige um atributo ID válido"
@@ -953,9 +1226,6 @@ msgstr "Erro desconhecido"
 
 #~ msgid "Orange"
 #~ msgstr "Laranja"
-
-#~ msgid "Parse error"
-#~ msgstr "Erro de interpretação"
 
 #~ msgid "Parse error in %s"
 #~ msgstr "Erro de interpretação em %s"
