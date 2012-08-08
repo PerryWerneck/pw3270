@@ -14,7 +14,6 @@
             android:dialogMessage="Informe nome do servidor"    
             android:defaultValue="" />
 
-
         <EditTextPreference
             android:key="port"
             android:title="Porta a conectar" 
@@ -29,7 +28,14 @@
             android:title="Conexão segura"
             android:defaultValue="false"
         />
-        
+
+        <CheckBoxPreference 
+            android:key="reconnect"
+            android:summary="Conectar automaticamente"
+            android:title="Conexão automática"
+            android:defaultValue="true"
+        />
+                
     </PreferenceCategory>
     
 </PreferenceScreen>

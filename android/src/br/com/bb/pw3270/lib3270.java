@@ -199,7 +199,7 @@ public class lib3270
 				msg = e.toString();
 
 			if (msg == null)
-				msg = "Erro indefinido";
+				msg = "";
 
 			Log.i(TAG, "Erro ao enviar dados: " + msg);
 
@@ -253,11 +253,11 @@ public class lib3270
 					msg = e.toString();
 
 				if (msg == null)
-					msg = "Erro indefinido";
+					msg = "";
 
 				Log.i(TAG, "Erro ao conectar: " + msg);
 
-				postPopup(0, "Erro na conexão", "Não foi possível conectar", msg);
+				postPopup(0, "Erro na conexão", msg, "");
 
 				postMessage(0, 0, 0);
 
@@ -291,25 +291,19 @@ public class lib3270
 
 					} catch (Exception e)
 					{
-						Log.i(TAG, "Erro ao receber dados do host: " + e.getLocalizedMessage());
+						String msg = e.getLocalizedMessage();
+						Log.i(TAG, "Erro ao receber dados do host: " + msg);
+						postPopup(0, "Erro na comunicação", "Erro ao receber dados", msg);
 						connected = false;
 						sz = -1;
 					}
 
 					if (sz > 0)
-					{
-						try
-						{
-							Log.i(TAG, Integer.toString(sz) + " bytes recebidos");
-							procRecvdata(in,sz);
-						} catch (Exception e)
-						{
-							Log.i(TAG, "Erro ao processar dados recebidos: " + e.getLocalizedMessage());
-							connected = false;
-						}
-					}
+						procRecvdata(in,sz);
 
 				}
+				// postPopup(0,"","Desconectado","");
+				
 			}
 
 			Log.v(TAG, "Exiting communication thread");
@@ -328,8 +322,6 @@ public class lib3270
 
 			mainloop = null;
 			info(TAG, "Network thread stopped");
-			
-			postPopup(0,"","Desconectado","");
 			
 		}
 

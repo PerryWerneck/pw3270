@@ -177,7 +177,7 @@ public class PW3270Activity extends Activity
 		setContentView(view);
 		view.loadUrl("file:index.html");
 
-		if(settings.getString("hostname","") != "")
+		if(settings.getString("hostname","") != "" && settings.getBoolean("reconnect",false))
 			host.connect();
 
     }
