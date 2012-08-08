@@ -2,6 +2,7 @@ package br.com.bb.pw3270;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -33,17 +34,9 @@ public class PW3270Activity extends Activity
 	private class terminal extends lib3270
 	{
 
-		terminal()
+		terminal(SharedPreferences settings) 
 		{
-			SharedPreferences settings = getSharedPreferences(TAG, 0);
-			hostname	= settings.getString("hostname",hostname);
-			port		= settings.getInt("port",port);
-			ssl			= settings.getBoolean("ssl",ssl);
-
-	    	setToggle("dstrace",settings.getBoolean("dstrace",true));
-	    	setToggle("screentrace",settings.getBoolean("screentrace",true));
-	    	setToggle("eventtrace",settings.getBoolean("eventtrace",true));
-
+			super(settings);
 		}
 
 		public void hideProgressDialog()
@@ -60,7 +53,6 @@ public class PW3270Activity extends Activity
 
 		protected void updateScreen()
 		{
-			// showProgressDialog("Aguarde...");
 			view.reload();
 		}
 		
@@ -125,6 +117,8 @@ public class PW3270Activity extends Activity
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);		
+    	
         super.onCreate(savedInstanceState);
 
 		res = getResources();
@@ -138,7 +132,7 @@ public class PW3270Activity extends Activity
 		// http://developer.android.com/reference/android/webkit/WebView.html
 		view = new WebView(this);
 
-		host = new terminal();
+		host = new terminal(settings);
 		view.addJavascriptInterface(host, "pw3270");
 		
 		view.setWebChromeClient(new WebChromeClient());
@@ -183,7 +177,8 @@ public class PW3270Activity extends Activity
 		setContentView(view);
 		view.loadUrl("file:index.html");
 
-		host.connect();
+		if(settings.getString("hostname","") != "")
+			host.connect();
 
     }
 

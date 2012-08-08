@@ -3,7 +3,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory 
-        android:title="Host"
+        android:title="Configuração pw3270"
         android:key="host_category">
 
         <EditTextPreference

@@ -312,7 +312,6 @@ H3270 * lib3270_session_new(const char *model)
 
 	configured = 1;
 
-
 	lib3270_session_init(hSession, model);
 
 	if(screen_init(hSession))

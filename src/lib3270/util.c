@@ -947,7 +947,7 @@ LIB3270_EXPORT char * lib3270_get_resource_string(H3270 *hSession, const char *f
 {
 #ifdef ANDROID
 
-	#warning Work in progress
+	#warning No resource on Android
 
 #else
 

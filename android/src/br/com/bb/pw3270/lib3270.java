@@ -29,6 +29,8 @@
 package br.com.bb.pw3270;
 
 import java.lang.Thread;
+
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
 import android.os.CountDownTimer;
@@ -55,9 +57,7 @@ public class lib3270
 	DataOutputStream outData = null;
 	DataInputStream inData = null;
 
-	protected String hostname = "3270.df.bb";
-	protected int port = 8023;
-	protected boolean ssl = false;
+	protected SharedPreferences settings;
 
 	// Define the Handler that receives messages from the thread
 	final Handler mHandler = new Handler()
@@ -125,10 +125,17 @@ public class lib3270
 		System.loadLibrary("3270");
 	}
 
-	lib3270()
+	lib3270(SharedPreferences settings)
 	{
-		screenState = 0;
-		mainloop = null;
+		String toggle[] = { "dstrace", "screentrace", "eventtrace", "reconnect" }; 
+		
+		this.settings = settings;
+		this.screenState = 0;
+		this.mainloop = null;
+		
+		for(int f = 0; f < toggle.length; f++)
+			setToggle(toggle[f],settings.getBoolean(toggle[f],false));
+
 	}
 
 	private class timer extends CountDownTimer
@@ -174,30 +181,6 @@ public class lib3270
 		}
 	}
 
-	/*
-	private class byteMessage
-	{
-		byte[] msg;
-		int sz;
-
-		byteMessage(byte[] contents, int len)
-		{
-			msg = contents;
-			sz = len;
-		}
-
-		byte[] getMessage()
-		{
-			return msg;
-		}
-
-		int getLength()
-		{
-			return sz;
-		}
-	}
-	*/
-
 	protected int send_data(byte[] data, int len)
 	{
 		Log.i(TAG, "Bytes a enviar: " + len);
@@ -234,14 +217,16 @@ public class lib3270
 		private boolean connect()
 		{
 			// Connecta no host
-			SocketFactory socketFactory;
-
-			if (hostname == "")
+			SocketFactory	socketFactory;
+			String 			hostname = settings.getString("hostname","");
+			Integer			port = new Integer(settings.getString("port","23"));
+			
+			if (hostname == "" || port == 0)
 				return false;
 
 			postMessage(1, 14, 0);
 
-			if (ssl)
+			if(settings.getBoolean("ssl",false))
 			{
 				// Host é SSL
 				socketFactory = SSLSocketFactory.getDefault();
@@ -255,7 +240,7 @@ public class lib3270
 
 			try
 			{
-				Log.v(TAG,"Getting socket for " + hostname + ":" + Integer.toString(port));
+				Log.v(TAG,"Getting socket for " + hostname + ":" + port.toString());
 				sock = socketFactory.createSocket(hostname, port);
 				outData = new DataOutputStream(sock.getOutputStream());
 				inData = new DataInputStream(sock.getInputStream());
@@ -317,10 +302,6 @@ public class lib3270
 						{
 							Log.i(TAG, Integer.toString(sz) + " bytes recebidos");
 							procRecvdata(in,sz);
-							// Message msg = mHandler.obtainMessage();
-							// msg.what = 6;
-							// msg.obj = new byteMessage(in, sz);
-							// mHandler.sendMessage(msg);
 						} catch (Exception e)
 						{
 							Log.i(TAG, "Erro ao processar dados recebidos: " + e.getLocalizedMessage());

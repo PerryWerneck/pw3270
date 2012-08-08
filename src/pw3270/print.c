@@ -360,6 +360,8 @@ static gchar * enum_to_string(GType type, guint enum_value)
 
 	// Show and return
 	gtk_widget_show_all(container);
+
+	trace("%s ends",__FUNCTION__);
  	return G_OBJECT(container);
  }
 
@@ -483,6 +485,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
 	gtk_print_operation_set_print_settings(print,settings);
 	gtk_print_operation_set_default_page_setup(print,setup);
 
+	trace("%s ends",__FUNCTION__);
  	return print;
  }
 

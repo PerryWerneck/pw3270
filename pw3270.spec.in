@@ -62,7 +62,7 @@
 #---[ Packaging ]-----------------------------------------------------------------------------------------------------
 
 Name:           @PACKAGE@
-License:        LGPL
+License:        GPL-2.0
 Group:          System/X11/Terminals
 Version:        @PACKAGE_VERSION@
 Release:        %_release
