@@ -21,34 +21,22 @@ input
 	border: none;
 	padding: 0px;
 	background-color: black;
-	color: #00ff00;
+	color: #ffff00;
 	margin-left: 0.5em;
 	margin-right: 0.5em;
-}
-
-input:focus
-{
+	border-radius: 3px;
 	outline:none;
 }
 
-input[type="text"]
+
+input:focus
 {
-	background-color: #101010;
+	background-color: #303030;
 }
 
-input[type="text"]:focus
+input[type="text"], input[type="password"], input[type="text"]:focus, input[type="password"]:focus
 {
-	background-color: #101010;
-}
-
-input[type="password"]
-{
-	background-color: #101010;
-}
-
-input[type="password"]:focus
-{
-	background-color: #101010;
+	background-color: #303030;
 }
 
 #terminal
@@ -60,10 +48,10 @@ input[type="password"]:focus
 #pfbar
 {
 	z-index: -1;
-	width: 49em;
+	width: 48em;
 	background: black;
 	color: white;
-	text-align: center;
+	text-align: left;
 	border-top: 1px solid #fff;
 }
 
@@ -78,12 +66,13 @@ a
 	margin: 1px;
 	background: gray;
 	color: black;
-	width: 4em;
+	width: 3.9em;
 	border: 1px solid darkgray;
 	text-decoration: none;
 	font-size: 15px;
 	font-family: arial;
 	display: inline-block;
+	text-align: center;
 	border-radius: 3px;
 }
 
