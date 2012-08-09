@@ -23,13 +23,18 @@
 # perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
 #
 
-JAVAH=javah
-JAVAC=javac
+JAVA_HOME=/usr/java/jdk1.7.0_05
+JAVAH=$(JAVA_HOME)/bin/javah
+JAVAC=$(JAVA_HOME)/bin/javac
+ANT=/usr/bin/ant
+
+ANDROIDSDK=/opt/android-sdk
+
 NDKBUILD=/opt/android-ndk-r8/ndk-build
 CLASSPATH=br/com/bb/pw3270
-ANDROIDSDK=/opt/android-sdk
 MKDIR=/bin/mkdir -p
 CONVERT=rsvg-convert
+JAVASRCDIR=src/br/com/bb/pw3270
 
 RESOLUTION=xhdpi mdpi ldpi hdpi
 
@@ -62,16 +67,19 @@ res/drawable-hdpi/%.png: %.svg
 
 #---[ Targets ]----------------------------------------------------------------
 
-all: jni/lib3270jni.h icons
-	@$(NDKBUILD)
+Debug: bin/pw3270-debug.apk
 
-Debug: jni/lib3270jni.h icons
+bin/pw3270-debug.apk: icons libs/armeabi/lib3270.so $(JAVASRCDIR)/*.java
+	$(ANT) debug
+
+
+libs/armeabi/lib3270.so: jni/lib3270jni.h jni/*.cpp
 	@$(NDKBUILD)
 
 icons: $(foreach DIR, $(RESOLUTION), res/drawable-$(DIR)/ic_launcher.png) \
 	$(foreach DIR, $(RESOLUTION), res/drawable-$(DIR)/ic_connect.png) \
 	$(foreach DIR, $(RESOLUTION), res/drawable-$(DIR)/ic_disconnect.png) \
-	$(foreach DIR, $(RESOLUTION), res/drawable-$(DIR)/ic_settings.png) 
+	$(foreach DIR, $(RESOLUTION), res/drawable-$(DIR)/ic_settings.png)
 
 clean:
 	@rm -fr obj
@@ -108,4 +116,3 @@ sigs.txt: bin/classes/$(CLASSPATH)/lib3270.class
 jni/lib3270jni.h: bin/classes/$(CLASSPATH)/lib3270.class
 	@echo "  GEN  `basename $@`"
 	@$(JAVAH) -o $@ -classpath $(ANDROIDSDK)/platforms/android-15/android.jar:bin/classes $(subst /,.,$(CLASSPATH)).lib3270
-
