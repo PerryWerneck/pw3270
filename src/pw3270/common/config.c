@@ -380,10 +380,7 @@ gchar * get_last_error_msg(void)
 
 void configuration_init(void)
 {
-#ifdef WIN_REGISTRY_ENABLED
-
-#else
-
+#ifndef WIN_REGISTRY_ENABLED
 	gchar *filename = search_for_ini();
 
 	if(program_config)
@@ -554,11 +551,21 @@ void configuration_deinit(void)
 
 gchar * build_data_filename(const gchar *first_element, ...)
 {
+	va_list args;
+	gchar	*path;
+
+	va_start(args, first_element);
+	path = filename_from_va(first_element,args);
+	va_end(args);
+	return path;
+}
+
+gchar * filename_from_va(const gchar *first_element, va_list args)
+{
 	static const gchar	* datadir	= NULL;
 	const gchar *		  appname[]	= { g_get_application_name(), PACKAGE_NAME };
 	GString			 	* result	= NULL;
 	const gchar			* element;
-	va_list				  args;
 
 	if(datadir)
 		result = g_string_new(datadir);
@@ -627,15 +634,11 @@ gchar * build_data_filename(const gchar *first_element, ...)
 		g_warning("Unable to find application datadir, using %s",result->str);
 	}
 
-	va_start(args, first_element);
-
 	for(element = first_element;element;element = va_arg(args, gchar *))
     {
     	g_string_append_c(result,G_DIR_SEPARATOR);
     	g_string_append(result,element);
     }
-
-	va_end(args);
 
 	return g_string_free(result, FALSE);
 }

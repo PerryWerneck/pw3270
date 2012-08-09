@@ -75,7 +75,7 @@ static int initialize(void)
 static void toplevel_setup(GtkWindow *window)
 {
  	gchar * name		= g_strdup_printf("%s.png",g_get_application_name());
-	gchar * filename 	= build_data_filename(name,NULL);
+	gchar * filename 	= pw3270_build_filename(GTK_WIDGET(window),name,NULL);
 
 	gtk_window_set_type_hint(window,GDK_WINDOW_TYPE_HINT_NORMAL);
 	gtk_window_set_position(window,GTK_WIN_POS_CENTER);
@@ -200,7 +200,6 @@ int main(int argc, char *argv[])
 	if(!rc)
 	{
 		GtkSettings *settings = gtk_settings_get_default();
-		configuration_init();
 
 		if(settings)
 		{
@@ -218,7 +217,6 @@ int main(int argc, char *argv[])
 
 		gtk_main();
 
-		configuration_deinit();
 	}
 
 	return rc;

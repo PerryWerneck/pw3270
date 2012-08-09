@@ -54,22 +54,6 @@
 	#define PACKAGE_NAME	"@PACKAGE_NAME@"
  #endif
 
- #if defined(_WIN32)
-
-	#include <windows.h>
-	#define DLL_EXPORT	__declspec (dllexport)
-
- #elif defined(__SUNPRO_C) && (__SUNPRO_C >= 0x550)
-
-	#define DLL_EXPORT
-
- #else
-
-    #define DLL_EXPORT	__attribute__((visibility("default"))) extern
-
- #endif
-
-
  #define ENABLE_NLS
 
  #ifndef GETTEXT_PACKAGE
@@ -86,26 +70,27 @@
  #endif
 
  // Configuration
- DLL_EXPORT void		  configuration_init(void);
- DLL_EXPORT void		  configuration_deinit(void);
+ void		  configuration_init(void);
+ void		  configuration_deinit(void);
 
- DLL_EXPORT gchar		* get_string_from_config(const gchar *group, const gchar *key, const gchar *def);
- DLL_EXPORT gboolean	  get_boolean_from_config(const gchar *group, const gchar *key, gboolean def);
- DLL_EXPORT gint 		  get_integer_from_config(const gchar *group, const gchar *key, gint def);
+ gchar		* get_string_from_config(const gchar *group, const gchar *key, const gchar *def);
+ gboolean	  get_boolean_from_config(const gchar *group, const gchar *key, gboolean def);
+ gint 		  get_integer_from_config(const gchar *group, const gchar *key, gint def);
 
- DLL_EXPORT void		  set_string_to_config(const gchar *group, const gchar *key, const gchar *fmt, ...);
- DLL_EXPORT void		  set_boolean_to_config(const gchar *group, const gchar *key, gboolean val);
- DLL_EXPORT void		  set_integer_to_config(const gchar *group, const gchar *key, gint val);
+ void		  set_string_to_config(const gchar *group, const gchar *key, const gchar *fmt, ...);
+ void		  set_boolean_to_config(const gchar *group, const gchar *key, gboolean val);
+ void		  set_integer_to_config(const gchar *group, const gchar *key, gint val);
 
- DLL_EXPORT gchar 		* build_data_filename(const gchar *first_element, ...);
+ gchar 		* build_data_filename(const gchar *first_element, ...);
+ gchar		* filename_from_va(const gchar *first_element, va_list args);
 
 #ifdef WIN_REGISTRY_ENABLED
- DLL_EXPORT gboolean	  get_registry_handle(const gchar *group, HKEY *hKey, REGSAM samDesired);
- DLL_EXPORT void		  registry_foreach(HKEY parent, const gchar *name,void (*cbk)(const gchar *key, const gchar *val, gpointer *user_data), gpointer *user_data);
- DLL_EXPORT void 		  registry_set_double(HKEY hKey, const gchar *key, gdouble value);
- DLL_EXPORT gboolean	  registry_get_double(HKEY hKey, const gchar *key, gdouble *value);
+ gboolean	  get_registry_handle(const gchar *group, HKEY *hKey, REGSAM samDesired);
+ void		  registry_foreach(HKEY parent, const gchar *name,void (*cbk)(const gchar *key, const gchar *val, gpointer *user_data), gpointer *user_data);
+ void 		  registry_set_double(HKEY hKey, const gchar *key, gdouble value);
+ gboolean	  registry_get_double(HKEY hKey, const gchar *key, gdouble *value);
 #else
- DLL_EXPORT GKeyFile	 * get_application_keyfile(void);
+ GKeyFile	* get_application_keyfile(void);
 #endif // WIN_REGISTRY_ENABLED
 
 #endif

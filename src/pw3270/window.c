@@ -18,7 +18,7 @@
  * programa; se não, escreva para a Free Software Foundation, Inc., 51 Franklin
  * St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * Este programa está nomeado como mainwindow.c e possui - linhas de código.
+ * Este programa está nomeado como window.c e possui - linhas de código.
  *
  * Contatos:
  *
@@ -149,8 +149,6 @@
 
  static void pw3270_class_init(pw3270Class *klass)
  {
-//	GObjectClass	* gobject_class	= G_OBJECT_CLASS(klass);
-
 #if GTK_CHECK_VERSION(3,0,0)
 	GtkWidgetClass	* widget_class	= GTK_WIDGET_CLASS(klass);
 	widget_class->destroy = pw3270_destroy;
@@ -161,6 +159,7 @@
 	}
 #endif // GTK3
 
+	configuration_init();
 	lib3270_set_popup_handler(popup_handler);
 
  }
@@ -426,7 +425,7 @@
 
 	// Load UI
 	{
-		gchar *path = build_data_filename("ui",NULL);
+		gchar *path = pw3270_build_filename(GTK_WIDGET(widget),"ui",NULL);
 
 		if(ui_parse_xml_folder(GTK_WINDOW(widget),path,groupname,popupname,widget->terminal,widget_setup))
 		{
