@@ -36,10 +36,11 @@ ANT=/usr/bin/ant
 ANDROIDSDK=/opt/android-sdk
 
 NDKBUILD=/opt/android-ndk-r8/ndk-build
-CLASSPATH=br/com/bb/pw3270
 MKDIR=/bin/mkdir -p
 CONVERT=rsvg-convert
-JAVASRCDIR=src/br/com/bb/pw3270
+
+CLASSPATH=br/com/bb/pw3270
+JAVASRCDIR=src/$(CLASSPATH)
 
 RESOLUTION=xhdpi mdpi ldpi hdpi
 

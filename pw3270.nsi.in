@@ -103,8 +103,8 @@ SubSection "@PACKAGE@" SecMain
 		WriteRegStr HKCU "Software\@PACKAGE@" "" $INSTDIR
 
 		# Main library
-		file "/oname=$SYSDIR\lib3270.dll"	".bin\Release\lib\lib3270.dll"
-		file "/oname=$SYSDIR\libpw3270.dll"	".bin\Release\lib\libpw3270.dll"
+		file "/oname=$SYSDIR\lib3270.dll"	".bin\Release\lib3270.dll"
+		file "/oname=$SYSDIR\libpw3270.dll"	".bin\Release\libpw3270.dll"
 
 	sectionEnd
 
@@ -141,19 +141,11 @@ Section /o "Software Development Kit" SecSDK
 	CreateDirectory "$INSTDIR\sdk\include\lib3270"
 
 	file "/oname=$INSTDIR\sdk\include\lib3270.h" "src\include\lib3270.h"
+	file "/oname=$INSTDIR\sdk\include\pw3270.h" "src\include\pw3270.h"
+	file "/oname=$INSTDIR\sdk\include\v3270.h" "src\include\v3270.h"
+
 	file "/oname=$INSTDIR\sdk\include\lib3270\config.h" "src\include\lib3270\config.h"
 	file "/oname=$INSTDIR\sdk\include\lib3270\rules.mak" "src\include\rules.mak"
-
-	file "/oname=$INSTDIR\sdk\include\lib3270\config.h"	"src\include\lib3270\config.h"
-	file "/oname=$INSTDIR\sdk\include\lib3270\macros.h"	"src\include\lib3270\macros.h"
-	file "/oname=$INSTDIR\sdk\include\lib3270\selection.h"	"src\include\lib3270\selection.h"
-	file "/oname=$INSTDIR\sdk\include\lib3270\v3270.h"	"src\include\lib3270\v3270.h"
-	file "/oname=$INSTDIR\sdk\include\lib3270\actions.h"  	"src\include\lib3270\actions.h"  
-	file "/oname=$INSTDIR\sdk\include\lib3270\html.h"	"src\include\lib3270\html.h"          
-	file "/oname=$INSTDIR\sdk\include\lib3270\log.h"	"src\include\lib3270\log.h"        
-	file "/oname=$INSTDIR\sdk\include\lib3270\popup.h"	"src\include\lib3270\popup.h"   
-	file "/oname=$INSTDIR\sdk\include\lib3270\session.h"	"src\include\lib3270\session.h"
-	file "/oname=$INSTDIR\sdk\include\lib3270\trace.h"	"src\include\lib3270\trace.h"
 
 SectionEnd
 
