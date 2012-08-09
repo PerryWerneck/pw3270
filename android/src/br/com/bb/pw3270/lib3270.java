@@ -66,10 +66,9 @@ public class lib3270
 		{
 			switch (msg.what)
 			{
-/*
-			case 0: // Connected/Disconnected
+			case 0: // Reconnect
+				connect();
 				break;
-*/
 
 			case 1: // OIA message has changed
 				showProgramMessage(msg.arg1);
@@ -81,8 +80,15 @@ public class lib3270
 				break;
 
 			case 3: // Popup
-				popupMessageInfo popup = (popupMessageInfo) msg.obj;
-				showPopupMessage(msg.arg1, popup.title, popup.text, popup.info);
+				if(msg.arg1 == 1 && settings.getBoolean("reconnect",false))
+				{
+					postMessage(0, 1, 0);
+				}
+				else
+				{
+					popupMessageInfo popup = (popupMessageInfo) msg.obj;
+					showPopupMessage(msg.arg1, popup.title, popup.text, popup.info);
+				}
 				break;
 
 			case 4: // erase
@@ -96,12 +102,6 @@ public class lib3270
 			case 5: // ctlr_done
 				Log.d(TAG, "ctlr_done");
 				break;
-
-/*
-			case 6: // recv_data
-				procRecvdata(((byteMessage) msg.obj).getMessage(),((byteMessage) msg.obj).getLength());
-				break;
-*/
 
 			case 7: // ready
 				hideProgressDialog();
@@ -203,7 +203,7 @@ public class lib3270
 
 			Log.i(TAG, "Erro ao enviar dados: " + msg);
 
-			postPopup(0, "Erro na comunicação", "Não foi possível enviar dados", msg);
+			postPopup(1, "Desconectado", "Erro de comunicação ao enviar dados", msg);
 
 			connected = false;
 
@@ -257,7 +257,7 @@ public class lib3270
 
 				Log.i(TAG, "Erro ao conectar: " + msg);
 
-				postPopup(0, "Erro na conexão", msg, "");
+				postPopup(0, "Erro na conexão", "Não foi possível conectar", msg);
 
 				postMessage(0, 0, 0);
 
@@ -286,14 +286,13 @@ public class lib3270
 
 					try
 					{
-						Log.v(TAG,"Aguardando dados...");
 						sz = inData.read(in, 0, 4096);
 
 					} catch (Exception e)
 					{
 						String msg = e.getLocalizedMessage();
 						Log.i(TAG, "Erro ao receber dados do host: " + msg);
-						postPopup(0, "Erro na comunicação", "Erro ao receber dados", msg);
+						postPopup(1, "Desconectado", "Erro de comunicação ao receber dados", msg);
 						connected = false;
 						sz = -1;
 					}

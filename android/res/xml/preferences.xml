@@ -24,19 +24,30 @@
         
         <CheckBoxPreference 
             android:key="ssl"
-            android:summary="Usar SSL nas conexões ao host"
+            android:summaryOff="Não usar SSL nas conexões ao host"
+            android:summaryOn="Usar SSL nas conexões ao host"
             android:title="Conexão segura"
             android:defaultValue="false"
         />
 
         <CheckBoxPreference 
-            android:key="reconnect"
-            android:summary="Conectar automaticamente"
-            android:title="Conexão automática"
+            android:key="autoconnect"
+            android:summaryOn="Conectar ao iniciar"
+            android:summaryOff="Não conectar ao iniciar"
+            android:title="Conecta ao host ao iniciar"
             android:defaultValue="true"
         />
                 
-    </PreferenceCategory>
+        <CheckBoxPreference 
+            android:key="reconnect"
+            android:summaryOn="Reconectar automaticamente"
+            android:summaryOff="Não reconectar automaticamente"
+            android:title="Reconexão automática"
+            android:defaultValue="false"
+        />
+        
+        
+      </PreferenceCategory>
     
 </PreferenceScreen>
 

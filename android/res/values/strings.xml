@@ -18,7 +18,7 @@
 		<item>X Resolvendo</item>
 		<item>X Conectando</item>
     </string-array>
-	<string name="connect">Connect</string>
+	<string name="wait">Em processamento</string>
  
 
 </resources>

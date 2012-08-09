@@ -29,7 +29,7 @@ public class PW3270Activity extends Activity
 	private WebView			view;
 	private terminal 		host;
 	private Activity 		mainact = this;
-	private ProgressDialog	dlgProgress;
+	private ProgressDialog	dlgSysMessage;
 
 	private class terminal extends lib3270
 	{
@@ -41,14 +41,7 @@ public class PW3270Activity extends Activity
 
 		public void hideProgressDialog()
 		{
-			dlgProgress.hide();
-		}
-
-		public void showProgressDialog(String msg)
-		{
-			dlgProgress.setMessage(msg);
-			Log.v(TAG,msg);
-			dlgProgress.show();
+			dlgSysMessage.hide();
 		}
 
 		protected void updateScreen()
@@ -63,12 +56,12 @@ public class PW3270Activity extends Activity
 				String message[] = res.getStringArray(R.array.program_msg);
 				try
 				{
-					showProgressDialog(message[id]);
+					dlgSysMessage.setMessage(message[id]);
 				} catch(Exception e)
 				{
-					Log.e(TAG,e.getLocalizedMessage());
-					showProgressDialog("?");
+					dlgSysMessage.setMessage(e.getLocalizedMessage());
 				}
+				dlgSysMessage.show();
 			}
 			return true;
 		}
@@ -123,11 +116,23 @@ public class PW3270Activity extends Activity
 
 		res = getResources();
 
-        dlgProgress = new ProgressDialog(this);
-        dlgProgress.setMessage("Aguarde...");
-        dlgProgress.setCancelable(false);
-//        dlgProgress.show();
+		// Cria dialogo para as mensagems de sistema
+		dlgSysMessage = new ProgressDialog(this);
+		dlgSysMessage.setCancelable(false);
+		dlgSysMessage.setTitle(res.getString(R.string.wait));
+		
+		/*
+		dlgSysMessage.setButton(-2, "Desconectar", new DialogInterface.OnClickListener()
+		{
 
+			public void onClick(DialogInterface dialog, int which) 
+			{
+				// TODO Auto-generated method stub
+			}
+				
+		});
+		*/
+		
 		// Reference:
 		// http://developer.android.com/reference/android/webkit/WebView.html
 		view = new WebView(this);
@@ -177,7 +182,7 @@ public class PW3270Activity extends Activity
 		setContentView(view);
 		view.loadUrl("file:index.html");
 
-		if(settings.getString("hostname","") != "" && settings.getBoolean("reconnect",false))
+		if(settings.getString("hostname","") != "" && settings.getBoolean("autoconnect",false))
 			host.connect();
 
     }
