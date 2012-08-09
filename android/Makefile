@@ -23,6 +23,11 @@
 # perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
 #
 
+#
+# Referência:
+# http://developer.android.com/tools/building/building-cmdline.html
+#
+
 JAVA_HOME=/usr/java/jdk1.7.0_05
 JAVAH=$(JAVA_HOME)/bin/javah
 JAVAC=$(JAVA_HOME)/bin/javac
