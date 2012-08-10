@@ -28,9 +28,9 @@
 # http://developer.android.com/tools/building/building-cmdline.html
 #
 
-JAVA_HOME=/usr/java/jdk1.7.0_05
-JAVAH=$(JAVA_HOME)/bin/javah
-JAVAC=$(JAVA_HOME)/bin/javac
+JDK_HOME=/usr/java/jdk1.7.0_05
+JAVAH=$(JDK_HOME)/bin/javah
+JAVAC=$(JDK_HOME)/bin/javac
 ANT=/usr/bin/ant
 
 ANDROIDSDK=/opt/android-sdk
@@ -78,10 +78,10 @@ all: pw3270-release-unsigned.apk
 Debug: bin/pw3270-debug.apk
 
 bin/pw3270-debug.apk: icons libs/armeabi/lib3270.so $(JAVASRCDIR)/*.java
-	$(ANT) debug
+	@JAVA_HOME=$(JDK_HOME) $(ANT) debug
 
 pw3270-release-unsigned.apk: icons libs/armeabi/lib3270.so $(JAVASRCDIR)/*.java
-	$(ANT) release
+	@JAVA_HOME=$(JDK_HOME) $(ANT) release
 
 libs/armeabi/lib3270.so: jni/lib3270jni.h jni/*.cpp
 	@$(NDKBUILD)
@@ -92,10 +92,10 @@ icons: $(foreach DIR, $(RESOLUTION), res/drawable-$(DIR)/ic_launcher.png) \
 	$(foreach DIR, $(RESOLUTION), res/drawable-$(DIR)/ic_settings.png)
 
 clean:
+	@rm -fr bin
 	@rm -fr obj
 	@rm -f jni/lib3270jni.h
 	@rm -f sigs.txt
-	@rm -f bin/classes/$(CLASSPATH)/lib3270.class
 	@rm -f $(foreach DIR, $(RESOLUTION), res/drawable-$(DIR)/*.png)
 
 cleanDebug: clean
