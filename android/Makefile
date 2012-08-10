@@ -73,11 +73,15 @@ res/drawable-hdpi/%.png: %.svg
 
 #---[ Targets ]----------------------------------------------------------------
 
+all: pw3270-release-unsigned.apk
+
 Debug: bin/pw3270-debug.apk
 
 bin/pw3270-debug.apk: icons libs/armeabi/lib3270.so $(JAVASRCDIR)/*.java
 	$(ANT) debug
 
+pw3270-release-unsigned.apk: icons libs/armeabi/lib3270.so $(JAVASRCDIR)/*.java
+	$(ANT) release
 
 libs/armeabi/lib3270.so: jni/lib3270jni.h jni/*.cpp
 	@$(NDKBUILD)
