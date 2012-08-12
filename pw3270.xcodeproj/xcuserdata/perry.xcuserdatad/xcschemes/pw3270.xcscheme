@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "C232306215D7F01F00E76E83"
-               BuildableName = "pw3270"
+               BuildableName = "Debug"
                BlueprintName = "Debug"
                ReferencedContainer = "container:pw3270.xcodeproj">
             </BuildableReference>

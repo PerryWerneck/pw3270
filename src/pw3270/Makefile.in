@@ -130,7 +130,7 @@ $(BINDBG)/$(PACKAGE_TARNAME)$(EXEEXT):	$(LIBDBG)/@DLLPREFIX@$(PACKAGE_TARNAME)@D
 					$(foreach SRC, $(basename $(APP_SOURCES)), $(OBJDBG)/$(SRC)$(OBJEXT))
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	$(LD) @DBGRPATH@ -o $@ $(foreach SRC, $(basename $(APP_SOURCES)), $(OBJDBG)/$(SRC)$(OBJEXT)) $(LIBS) $(LIB3270_LIBS) -l$(PACKAGE_TARNAME)
+	$(LD) @LDARCH@ @DBGRPATH@ -o $@ $(foreach SRC, $(basename $(APP_SOURCES)), $(OBJDBG)/$(SRC)$(OBJEXT)) $(LIBS) $(LIB3270_LIBS) -l$(PACKAGE_TARNAME)
 
 $(LIBDBG)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@: $(LIBDBG)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@.@VERSION@
 	@rm -f $@

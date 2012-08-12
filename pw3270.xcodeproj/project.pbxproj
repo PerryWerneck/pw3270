@@ -255,12 +255,14 @@
 		C272076B15D7FBF700CCCD22 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		C272076C15D7FBF700CCCD22 /* Makefile.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Makefile.in; sourceTree = "<group>"; };
 		C272076D15D7FBF700CCCD22 /* xml2pot.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = xml2pot.c; sourceTree = "<group>"; };
+		C2C4DAD815D8282600E8C6A0 /* autogen.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = autogen.sh; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
 		C232305B15D7F01F00E76E83 = {
 			isa = PBXGroup;
 			children = (
+				C2C4DAD815D8282600E8C6A0 /* autogen.sh */,
 				C272066415D7FBF700CCCD22 /* src */,
 				C272066315D7F88300CCCD22 /* configure.ac */,
 			);

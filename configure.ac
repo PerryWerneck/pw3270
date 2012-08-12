@@ -129,6 +129,7 @@ case "$host" in
 		LDSOFLAGS=""
 		DLLDIR="/lib"
 		DBGRPATH=""
+		LDSOFLAGS="-Wl,-install_name,\`basename \$@\`"
 		;;
 		
 	*)
@@ -244,6 +245,7 @@ AC_SUBST(DLL_CFLAGS)
 AC_SUBST(DLLDIR)
 AC_SUBST(LDSOFLAGS)
 AC_SUBST(DBGRPATH)
+AC_SUBST(LDARCH,"-arch $build_cpu")
 
 #--[ Headers ]------------------------------------------------------------------------------------------------------------------------------------------------
 
