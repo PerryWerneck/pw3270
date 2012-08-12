@@ -38,10 +38,12 @@
 #include "../include/lib3270/config.h"
 
 
-#ifdef _WIN32
+#if defined( WIN32 )
 	#include <windows.h>
 	#define tmpfile w32_tmpfile
-#endif // _WIN32
+#elif defined( __APPLE__ )
+	#define tmpfile osx_tmpfile
+#endif // OS
 
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -633,4 +635,30 @@ FILE * w32_tmpfile( void )
 	free(dir);
 	return file;
 }
+#elif defined( __APPLE__ )
+FILE * osx_tmpfile( void )
+{
+	int fd = -1;
+	FILE *file = NULL;
+	
+	do
+	{
+		char *tempname = tempnam(NULL,"XXXXXX");
+		if(!tempname)
+			return NULL;
+		fd = open (tempname,O_CREAT | O_EXCL | O_RDWR,S_IREAD | S_IWRITE);
+	} while (fd < 0 && errno == EEXIST);
+	
+	
+	file = fdopen (fd, "w+b");
+	if (file == NULL)
+	{
+		int save_errno = errno;
+		close (fd);
+		errno = save_errno;
+	}
+	
+	return file;
+}
+
 #endif // _WIN32

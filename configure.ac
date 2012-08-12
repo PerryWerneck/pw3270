@@ -118,12 +118,22 @@ case "$host" in
 		EXEEXT=".exe"
 		SOCKET_LIBS="-lws2_32"
 		CFLAGS="$CFLAGS -mms-bitfields"
-		DLL_FLAGS="-shared -Wl,-soname,\$(@F)"
+		DLL_FLAGS="-shared"
+		LDSOFLAGS="-Wl,-soname,\`basename \$@\`"
+		DBGRPATH=""
 		DLLDIR=""
 		AC_PATH_TOOL([STRIP], [strip])
 		;;
 
+	*-apple-*)
+		LDSOFLAGS=""
+		DLLDIR="/lib"
+		DBGRPATH=""
+		;;
+		
 	*)
+		LDSOFLAGS="-Wl,-soname,\`basename \$@\`"
+		DBGRPATH="-Wl,--rpath,.bin/Debug/lib"
 		AC_PATH_TOOL([STRIP], [strip])
 
 esac
@@ -232,6 +242,8 @@ AC_SUBST(DLLEXT)
 AC_SUBST(DLL_FLAGS)
 AC_SUBST(DLL_CFLAGS)
 AC_SUBST(DLLDIR)
+AC_SUBST(LDSOFLAGS)
+AC_SUBST(DBGRPATH)
 
 #--[ Headers ]------------------------------------------------------------------------------------------------------------------------------------------------
 
