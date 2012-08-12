@@ -669,16 +669,17 @@
 /* End PBXGroup section */
 
 /* Begin PBXLegacyTarget section */
-		C232306215D7F01F00E76E83 /* pw3270 */ = {
+		C232306215D7F01F00E76E83 /* Debug */ = {
 			isa = PBXLegacyTarget;
-			buildArgumentsString = "$(ACTION)";
-			buildConfigurationList = C232306515D7F01F00E76E83 /* Build configuration list for PBXLegacyTarget "pw3270" */;
+			buildArgumentsString = Debug;
+			buildConfigurationList = C232306515D7F01F00E76E83 /* Build configuration list for PBXLegacyTarget "Debug" */;
 			buildPhases = (
 			);
 			buildToolPath = /usr/bin/make;
+			buildWorkingDirectory = "";
 			dependencies = (
 			);
-			name = pw3270;
+			name = Debug;
 			passBuildSettingsInEnvironment = 1;
 			productName = pw3270;
 		};
@@ -702,7 +703,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				C232306215D7F01F00E76E83 /* pw3270 */,
+				C232306215D7F01F00E76E83 /* Debug */,
 			);
 		};
 /* End PBXProject section */
@@ -788,7 +789,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C232306515D7F01F00E76E83 /* Build configuration list for PBXLegacyTarget "pw3270" */ = {
+		C232306515D7F01F00E76E83 /* Build configuration list for PBXLegacyTarget "Debug" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C232306615D7F01F00E76E83 /* Debug */,

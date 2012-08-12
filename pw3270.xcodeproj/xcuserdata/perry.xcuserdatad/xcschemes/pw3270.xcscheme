@@ -16,7 +16,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "C232306215D7F01F00E76E83"
                BuildableName = "pw3270"
-               BlueprintName = "pw3270"
+               BlueprintName = "Debug"
                ReferencedContainer = "container:pw3270.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
