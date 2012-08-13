@@ -721,7 +721,7 @@ static void changed(H3270 *session, int offset, int len)
 																&bytes_written,
 																&error );
 
-			free(text);
+			lib3270_free(text);
 
 			if(error)
 			{
@@ -784,7 +784,7 @@ static void v3270_init(v3270 *widget)
 {
 	widget->host = lib3270_session_new("");
 
-	trace("%s host->sz=%d expected=%d revision=%s expected=%s",__FUNCTION__,widget->host->sz,sizeof(H3270),lib3270_get_revision(),PACKAGE_REVISION);
+	trace("%s host->sz=%d expected=%d revision=%s expected=%s",__FUNCTION__,widget->host->sz,(int) sizeof(H3270),lib3270_get_revision(),PACKAGE_REVISION);
 
 	if(widget->host->sz != sizeof(H3270))
 	{

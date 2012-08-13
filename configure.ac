@@ -104,7 +104,6 @@ DLLEXT=".so"
 OBJEXT=".o"
 EXEEXT=""
 DLLPREFIX="lib"
-DLLDIR="/lib"
 
 if test $host != $build; then
 	AC_CHECK_PROGS(HOST_CC, gcc cc)
@@ -122,6 +121,7 @@ case "$host" in
 		LDSOFLAGS="-Wl,-soname,\`basename \$@\`"
 		DBGRPATH=""
 		DLLDIR=""
+		DBGCMDPREFIX="PATH=\$(BINDIR)/Debug/lib:\$(PATH)"
 		AC_PATH_TOOL([STRIP], [strip])
 		;;
 
@@ -129,13 +129,17 @@ case "$host" in
 		LDSOFLAGS=""
 		DLLDIR="/lib"
 		DBGRPATH=""
+		DBGCMDPREFIX="DYLD_LIBRARY_PATH=\$(BINDIR)/Debug/lib"
 		LDSOFLAGS="-Wl,-install_name,\`basename \$@\`"
 		;;
 		
 	*)
 		LDSOFLAGS="-Wl,-soname,\`basename \$@\`"
+		DLLDIR="/lib"
 		DBGRPATH="-Wl,--rpath,.bin/Debug/lib"
+		DBGCMDPREFIX="PATH=\$(BINDIR)/Debug/lib:\$(PATH)"
 		AC_PATH_TOOL([STRIP], [strip])
+		
 
 esac
 
@@ -245,6 +249,7 @@ AC_SUBST(DLL_CFLAGS)
 AC_SUBST(DLLDIR)
 AC_SUBST(LDSOFLAGS)
 AC_SUBST(DBGRPATH)
+AC_SUBST(DBGCMDPREFIX)
 AC_SUBST(LDARCH,"-arch $build_cpu")
 
 #--[ Headers ]------------------------------------------------------------------------------------------------------------------------------------------------

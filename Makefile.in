@@ -71,6 +71,7 @@ MSGFMT=@MSGFMT@
 XML2POT=src/tools/xml2pot@EXEEXT@
 SHELL=@SHELL@
 AMTAR=@AMTAR@
+DBGCMDPREFIX=@DBGCMDPREFIX@
 
 #---[ Rules ]------------------------------------------------------------------
 
@@ -157,7 +158,7 @@ $(BINDIR)/Debug@DLLDIR@/@DLLPREFIX@3270@DLLEXT@: src/lib3270/* src/include/lib32
 	@$(MAKE) BINDBG=../../.bin/Debug@DLLDIR@ -C src/lib3270 ../../.bin/Debug@DLLDIR@/@DLLPREFIX@3270@DLLEXT@
 
 run: $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT) $(PACKAGE_NAME).png $(PACKAGE_NAME)-logo.png
-	@PATH="$(BINDIR)/Debug@DLLDIR@:$(PATH)" "$(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)"
+	@$(DBGCMDPREFIX) "$(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)"
 
 memchk: $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
 ifeq ($(VALGRIND),no)
