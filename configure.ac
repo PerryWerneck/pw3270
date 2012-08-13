@@ -59,9 +59,6 @@ AC_PROG_INSTALL
 AC_PROG_MKDIR_P
 AC_PROG_LN_S
 
-AC_PATH_TOOL([STRIP], [strip])
-AC_SUBST(STRIP)
-
 AC_PATH_TOOL([REXXC], [rexxc], [cp])
 AC_SUBST(REXXC)
 
@@ -125,7 +122,6 @@ case "$host" in
 		DLLDIR=""
 		DBGCMDPREFIX=""
 		LDARCH=""
-		AC_PATH_TOOL([STRIP], [strip])
 		;;
 
 	*-apple-*)
@@ -140,15 +136,13 @@ case "$host" in
 		;;
 
 	*)
-		DBG_LDFLAGS="-L.bin/Debug/lib"
-		RLS_LDFLAGS="-L.bin/Release/lib -Wl,--strip-all"
+		DLLDIR="/lib"
+		DBG_LDFLAGS="-L.bin/Debug/$DLLDIR"
+		RLS_LDFLAGS="-L.bin/Release/$DLLDIR"
 		LDARCH=""
 		LDSOFLAGS="-Wl,-soname,\`basename \$@\`"
-		DLLDIR="/lib"
 		DBGRPATH="-Wl,--rpath,.bin/Debug/lib"
 		DBGCMDPREFIX="PATH=\$(BINDIR)/Debug/lib:\$(PATH)"
-		AC_PATH_TOOL([STRIP], [strip])
-
 
 esac
 
@@ -240,6 +234,16 @@ AC_ARG_ENABLE([pic],
 if test "$app_cv_pic" == "yes"; then
 	DLL_CFLAGS="$DLL_CFLAGS -fPIC"
 fi
+
+AC_ARG_ENABLE([strip],[AS_HELP_STRING([--disable-strip], [disable stripping of binaries])], [ app_cv_strip="$enableval" ],[ app_cv_strip="yes" ])
+
+if test "$app_cv_pic" == "yes"; then
+	AC_PATH_TOOL([STRIP], [strip], true)
+	AC_SUBST(STRIP)
+else
+	AC_SUBST(STRIP,"true")
+fi
+
 
 #--[ Check For Java ]-----------------------------------------------------------------------------------------------------------------------------------------
 

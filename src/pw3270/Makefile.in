@@ -86,7 +86,6 @@ endif
 #---[ Release targets ]--------------------------------------------------------
 
 Release: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
-	@$(STRIP) $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
 
 install: Release $(PACKAGE_NAME).desktop $(PACKAGE_NAME)-logo.png
 	@$(MKDIR) $(DESTDIR)$(bindir)
@@ -112,6 +111,7 @@ $(BINRLS)/$(PACKAGE_TARNAME)$(EXEEXT):	$(LIBRLS)/@DLLPREFIX@$(PACKAGE_TARNAME)@D
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(LD) -o $@ $(foreach SRC, $(basename $(APP_SOURCES)), $(OBJRLS)/$(SRC)$(OBJEXT)) $(LIBS) $(LIB3270_LIBS) -l$(PACKAGE_TARNAME)
+	@$(STRIP) $@
 
 $(LIBRLS)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@: $(LIBRLS)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@.@VERSION@
 	@rm -f $@
@@ -121,6 +121,7 @@ $(LIBRLS)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@.@VERSION@:	$(foreach SRC, $(base
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(LD) $(DLL_FLAGS) @LDSOFLAGS@ $(LDFLAGS) -o $@ $^ $(LIBS) $(LIB3270_LIBS)
+	@$(STRIP) $@
 
 #---[ Debug targets ]----------------------------------------------------------
 
