@@ -237,8 +237,8 @@ fi
 
 AC_ARG_ENABLE([strip],[AS_HELP_STRING([--disable-strip], [disable stripping of binaries])], [ app_cv_strip="$enableval" ],[ app_cv_strip="yes" ])
 
-if test "$app_cv_pic" == "yes"; then
-	AC_PATH_TOOL([STRIP], [strip], true)
+if test "$app_cv_strip" == "yes"; then
+	AC_PATH_TOOL([STRIP], [strip], "true")
 	AC_SUBST(STRIP)
 else
 	AC_SUBST(STRIP,"true")
