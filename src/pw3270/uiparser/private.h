@@ -57,6 +57,7 @@
  	GtkWidget				*  toplevel;
  	GObject					*  element;
  	GtkAction				*  action;
+	GtkWidget				*  topmenu;
  	GtkAction				*  script_action;
  	GtkWidget				*  center_widget;
  	GtkWidget				** popup;			/**< Popup widgets */

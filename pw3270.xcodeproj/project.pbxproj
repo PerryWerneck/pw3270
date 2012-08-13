@@ -8,6 +8,7 @@
 
 /* Begin PBXFileReference section */
 		C21BB73815D940960093E2FA /* Makefile.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Makefile.in; sourceTree = "<group>"; };
+		C23EFD5315D99E2D00673C59 /* updateChangeLog.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = updateChangeLog.sh; sourceTree = "<group>"; };
 		C272066315D7F88300CCCD22 /* configure.ac */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = configure.ac; sourceTree = "<group>"; };
 		C272066715D7FBF700CCCD22 /* action_table.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = action_table.h; sourceTree = "<group>"; };
 		C272066815D7FBF700CCCD22 /* actions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = actions.h; sourceTree = "<group>"; };
@@ -263,6 +264,7 @@
 		C232305B15D7F01F00E76E83 = {
 			isa = PBXGroup;
 			children = (
+				C23EFD5315D99E2D00673C59 /* updateChangeLog.sh */,
 				C21BB73815D940960093E2FA /* Makefile.in */,
 				C2C4DAD815D8282600E8C6A0 /* autogen.sh */,
 				C272066315D7F88300CCCD22 /* configure.ac */,

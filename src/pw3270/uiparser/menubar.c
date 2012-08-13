@@ -35,7 +35,9 @@
 
  GObject * ui_create_menubar(GMarkupParseContext *context,GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error)
  {
- 	if(info->element)
+	GtkWidget *menu;
+	 
+	if(info->element)
 	{
 		*error = g_error_new(ERROR_DOMAIN,EINVAL, _( "<%s> should be on toplevel"), "menubar");
 		return NULL;
@@ -47,7 +49,12 @@
 		return NULL;
 	}
 
-	return ui_insert_element(info, action, UI_ELEMENT_MENUBAR, names, values, G_OBJECT(gtk_menu_bar_new()),error);
+	menu = gtk_menu_bar_new();
+	
+	if(ui_get_bool_attribute("topmenu",names,values,info->topmenu == NULL))
+	   info->topmenu = menu;
+	   
+	return ui_insert_element(info, action, UI_ELEMENT_MENUBAR, names, values, G_OBJECT(menu),error);
  }
 
  void ui_end_menubar(GMarkupParseContext *context,GObject *widget,struct parser *info,GError **error)

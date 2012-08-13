@@ -30,7 +30,7 @@
 touch ChangeLog
 
 REV_TO=${1:-"HEAD"}
-REV_LAST=`cat ChangeLog | head -3 - | tr -d '\r\n' | sed -e 's/.*svn\([0-9]*\).*/\1/'`
+REV_LAST=`head -3 ChangeLog | tr -d '\r\n' | sed -e 's/.*svn\([0-9]*\).*/\1/'`
 
 svn update
 

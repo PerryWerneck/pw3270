@@ -44,6 +44,8 @@
 
 	#undef HAVE_GNOME
 
+	#undef HAVE_GTKMAC
+
 	/* Optional parts. */
 	#undef X3270_DBCS
 	#undef X3270_SCRIPT

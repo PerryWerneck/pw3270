@@ -314,6 +314,10 @@ AC_SUBST(LIBSSL_LIBS)
 AC_SUBST(LIBSSL_CFLAGS)
 
 #--[ Libraries ]----------------------------------------------------------------------------------------------------------------------------------------------
+PKG_CHECK_MODULES( [GTKMAC], [gtk-mac-integration], AC_DEFINE(HAVE_GTKMAC), AC_MSG_NOTICE([macosx integration not present.]) )
+AC_SUBST(GTKMAC_LIBS)
+AC_SUBST(GTKMAC_CFLAGS)
+
 AC_SEARCH_LIBS( [sin], [m], AC_DEFINE(HAVE_LIBM), AC_MSG_NOTICE([libm not present.]))
 
 AC_SUBST(SOCKET_LIBS)

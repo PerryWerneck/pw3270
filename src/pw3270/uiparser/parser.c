@@ -31,6 +31,11 @@
 
  #include "private.h"
 
+ #ifdef HAVE_GTKMAC
+	#include <gtkmacintegration/gtk-mac-menu.h>
+ #endif // HAVE_GTKMAC
+
+
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
 void parser_init(struct parser *p)
@@ -216,6 +221,14 @@ void parser_build(struct parser *p, GtkWidget *widget)
 	gtk_window_add_accel_group(GTK_WINDOW(p->toplevel),a_info.accel_group);
 
 	gtk_window_set_default(GTK_WINDOW(p->toplevel),widget);
+	
+#ifdef HAVE_GTKMAC
+	if(p->topmenu)
+	{
+		gtk_widget_set_visible(p->topmenu,FALSE);
+		gtk_mac_menu_set_menu_bar(GTK_MENU_SHELL(p->topmenu));
+	}
+#endif // HAVE_GTKMAC
 
 }
 

@@ -31,6 +31,11 @@
 
  #include "private.h"
 
+ #ifdef HAVE_GTKMAC
+	#include <gtkmacintegration/gtk-mac-menu.h>
+ #endif // HAVE_GTKMAC
+
+
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
  GObject * ui_create_menuitem(GMarkupParseContext *context,GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error)
