@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-09 16:58-0300\n"
-"PO-Revision-Date: 2012-08-03 08:52-0300\n"
+"POT-Creation-Date: 2012-08-10 14:40-0300\n"
+"PO-Revision-Date: 2012-08-13 12:14-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português do Brasil <>\n"
 "Language: pt_BR\n"
@@ -19,9 +19,9 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 
 #: kybd.c:2638
-#, fuzzy, c-format
+#, c-format
 msgid "%s: Bell not supported"
-msgstr "Opção não suportada: '%c:'"
+msgstr "%s: Alerta sonoro não suportado"
 
 #: kybd.c:2797
 #, c-format
@@ -44,9 +44,9 @@ msgid "%s: Unknown character after \\pf"
 msgstr "%s: Unknown character after \\pf"
 
 #: kybd.c:2689
-#, fuzzy, c-format
+#, c-format
 msgid "%s: Vertical tab not supported"
-msgstr "Opção não suportada: '%c:'"
+msgstr "%s: Tabulação verticao não suportada"
 
 #: resolver.c:122
 #, c-format
@@ -288,21 +288,20 @@ msgid "HTTP Proxy: receive error"
 msgstr "HTTP Proxy: receive error"
 
 #: proxy.c:399 proxy.c:417 proxy.c:430
-#, fuzzy
 msgid "HTTP Proxy: send error"
-msgstr "Erro de interpretação"
+msgstr "HTTP Proxy: Erro ao enviar"
 
 #: proxy.c:450
 msgid "HTTP Proxy: server timeout"
-msgstr "HTTP Proxy: server timeout"
+msgstr "HTTP Proxy: Timeout no acesso ao servidor"
 
 #: proxy.c:473
 msgid "HTTP Proxy: unexpected EOF"
-msgstr "HTTP Proxy: unexpected EOF"
+msgstr "HTTP Proxy: EOF inesperado"
 
 #: proxy.c:494
 msgid "HTTP Proxy: unrecognized reply"
-msgstr "HTTP Proxy: unrecognized reply"
+msgstr "HTTP Proxy: Resposta desconhecida"
 
 #: ui/00default.xml:196
 msgid "Help"
@@ -342,18 +341,17 @@ msgid "Invalid (empty) hostname"
 msgstr "Nome do host é invalido (vazio)"
 
 #: proxy.c:284 proxy.c:296
-#, fuzzy
 msgid "Invalid proxy hostname syntax"
-msgstr "Formato inválido no nome do proxy"
+msgstr "Erro de sintaxe no nome do proxy"
 
 #: proxy.c:172
 msgid "Invalid proxy syntax"
-msgstr "Formato inválido no nome do proxy"
+msgstr "Sintaxe de proxy inválida"
 
 #: proxy.c:255
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid proxy type '%.*s'"
-msgstr "Formato inválido no nome do proxy"
+msgstr "Tipo de proxy invalido '%.*s'"
 
 #: ui/00default.xml:184
 msgid "Keep selected"
@@ -402,7 +400,7 @@ msgstr "Opção não suportada: '%c:'"
 
 #: proxy.c:363
 msgid "Passthru Proxy: send error"
-msgstr "Passthru Proxy: send error"
+msgstr "Passthru Proxy: Erro ao enviar"
 
 #: ui/00default.xml:120
 msgid "Paste"
@@ -757,9 +755,8 @@ msgid "TELNET Proxy: send error"
 msgstr "TELNET Proxy: send error"
 
 #: telnet.c:3227
-#, fuzzy
 msgid "TLS negotiation failure"
-msgstr "Negociação SSL falhou"
+msgstr "Negociação TLS falhou"
 
 #: host.c:378
 msgid "Text before '['"
@@ -867,9 +864,8 @@ msgid "Unknown port number or service: %s"
 msgstr "Número de porta ou serviço desconhecido: %s"
 
 #: rpq.c:220
-#, fuzzy
 msgid "Unsupported RPQ term"
-msgstr "Unsupported socks 4 proxy"
+msgstr "Unsupported RPQ term"
 
 #: telnet.c:544
 msgid "Unsupported passthru host session"
