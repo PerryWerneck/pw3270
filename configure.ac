@@ -113,6 +113,8 @@ fi
 
 case "$host" in
 	*-mingw32)
+		DBG_LDFLAGS="-L.bin/Debug/lib"
+		RLS_LDFLAGS="-L.bin/Release/lib -Wl,--strip-all"
 		DLLEXT=".dll"
 		EXEEXT=".exe"
 		SOCKET_LIBS="-lws2_32"
@@ -127,6 +129,8 @@ case "$host" in
 		;;
 
 	*-apple-*)
+		DBG_LDFLAGS="-L.bin/Debug/lib"
+		RLS_LDFLAGS="-L.bin/Release/lib -Wl,--strip-all"
 		LDSOFLAGS=""
 		DLLDIR="/lib"
 		DBGRPATH=""
@@ -136,7 +140,9 @@ case "$host" in
 		;;
 
 	*)
-		LDARCH="-arch $build_cpu"
+		DBG_LDFLAGS="-L.bin/Debug/lib"
+		RLS_LDFLAGS="-L.bin/Release/lib -Wl,--strip-all"
+		LDARCH=""
 		LDSOFLAGS="-Wl,-soname,\`basename \$@\`"
 		DLLDIR="/lib"
 		DBGRPATH="-Wl,--rpath,.bin/Debug/lib"
@@ -145,11 +151,6 @@ case "$host" in
 
 
 esac
-
-#--[ Debug/Release ]------------------------------------------------------------------------------------------------------------------------------------------
-
-DBG_LDFLAGS="-L.bin/Debug/lib"
-RLS_LDFLAGS="-L.bin/Release/lib -Wl,--strip-all"
 
 #--[ Check gettext ]------------------------------------------------------------------------------------------------------------------------------------------
 
