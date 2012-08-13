@@ -121,7 +121,8 @@ case "$host" in
 		LDSOFLAGS="-Wl,-soname,\`basename \$@\`"
 		DBGRPATH=""
 		DLLDIR=""
-		DBGCMDPREFIX="PATH=\$(BINDIR)/Debug/lib:\$(PATH)"
+		DBGCMDPREFIX=""
+		LDARCH=""
 		AC_PATH_TOOL([STRIP], [strip])
 		;;
 
@@ -131,15 +132,17 @@ case "$host" in
 		DBGRPATH=""
 		DBGCMDPREFIX="DYLD_LIBRARY_PATH=\$(BINDIR)/Debug/lib"
 		LDSOFLAGS="-Wl,-install_name,\`basename \$@\`"
+		LDARCH="-arch $build_cpu"
 		;;
-		
+
 	*)
+		LDARCH="-arch $build_cpu"
 		LDSOFLAGS="-Wl,-soname,\`basename \$@\`"
 		DLLDIR="/lib"
 		DBGRPATH="-Wl,--rpath,.bin/Debug/lib"
 		DBGCMDPREFIX="PATH=\$(BINDIR)/Debug/lib:\$(PATH)"
 		AC_PATH_TOOL([STRIP], [strip])
-		
+
 
 esac
 
@@ -280,7 +283,7 @@ AC_SUBST(DLLDIR)
 AC_SUBST(LDSOFLAGS)
 AC_SUBST(DBGRPATH)
 AC_SUBST(DBGCMDPREFIX)
-AC_SUBST(LDARCH,"-arch $build_cpu")
+AC_SUBST(LDARCH)
 
 #--[ Headers ]------------------------------------------------------------------------------------------------------------------------------------------------
 
