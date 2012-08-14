@@ -41,6 +41,19 @@
 	return FALSE;
  }
 
+ static gboolean check_internal_attribute(const gchar *name)
+ {
+	static const gchar *ignored[] = { "target", "direction", "sysmenu" };
+	int p;
+
+	for(p=0;p< G_N_ELEMENTS(ignored);p++)
+	{
+		if(!g_ascii_strcasecmp(name,ignored[p]))
+			return FALSE;
+	}
+	return TRUE;
+ }
+
  void ui_action_set_options(GtkAction *action, struct parser *info, const gchar **name, const gchar **value, GError **error)
  {
 	int f;
@@ -97,17 +110,11 @@
 		{
 			g_object_set_data_full(G_OBJECT(action),"accel_attr",g_strdup(value[f]),g_free);
 		}
-		else if(!g_ascii_strcasecmp(name[f],"target"))
-		{
-		}
-		else if(!g_ascii_strcasecmp(name[f],"direction"))
-		{
-		}
 		else if(!g_ascii_strcasecmp(name[f],"id"))
 		{
 			g_object_set_data(G_OBJECT(action),"action_id",GINT_TO_POINTER(atoi(value[f])));
 		}
-		else
+		else if(check_internal_attribute(name[f]))
 		{
 			g_object_set_data(G_OBJECT(action),name[f],g_string_chunk_insert_const(info->strings,value[f]));
 		}
