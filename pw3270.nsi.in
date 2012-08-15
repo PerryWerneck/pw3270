@@ -14,16 +14,16 @@ installDir $PROGRAMFILES\@PACKAGE@
 icon "src\pw3270\@PACKAGE@.ico"
 
 # Get installation folder from registry if available
-InstallDirRegKey HKCU "Software\@PACKAGE@" "datadir"
+InstallDirRegKey HKLM "Software\@PACKAGE@" "datadir"
 
 RequestExecutionLevel admin
 
 # Properties
-VIProductVersion "@PACKAGE_VERSION@.@PACKAGE_LEVEL@.0"
+VIProductVersion "@PACKAGE_VERSION@.@PACKAGE_LEVEL@.@PACKAGE_REVISION@"
 VIAddVersionKey "ProductName" "@PACKAGE@"
 VIAddVersionKey "FileDescription" "3270 Emulator for windows/gtk"
 VIAddVersionKey "FileVersion" "@PACKAGE_REVISION@"
-VIAddVersionKey "LegalCopyright" "GPL"
+VIAddVersionKey "LegalCopyright" "GPL-2.0"
 
 # Interface
 
@@ -62,8 +62,9 @@ SubSection "@PACKAGE@" SecMain
 		file "/oname=$INSTDIR\@PACKAGE@.ico"	"src\pw3270\@PACKAGE@.ico"
 
 		# Configuration files
-		file "/oname=$INSTDIR\@PACKAGE@.png"	"src/pw3270/@PACKAGE@.png"
-		file "/oname=$INSTDIR\colors.conf"	"colors.conf"
+		file "/oname=$INSTDIR\@PACKAGE@-logo.png"	"@PACKAGE@-logo.png"
+		file "/oname=$INSTDIR\@PACKAGE@.png"		"@PACKAGE@.png"
+		file "/oname=$INSTDIR\colors.conf"			"colors.conf"
 
 		# Documentation files
 		file "/oname=$INSTDIR\ChangeLog"		"ChangeLog"
@@ -103,8 +104,8 @@ SubSection "@PACKAGE@" SecMain
 		WriteRegStr HKCU "Software\@PACKAGE@" "" $INSTDIR
 
 		# Main library
-		file "/oname=$SYSDIR\lib3270.dll"	".bin\Release\lib3270.dll"
-		file "/oname=$SYSDIR\libpw3270.dll"	".bin\Release\libpw3270.dll"
+		file "/oname=$SYSDIR\lib3270.dll.@PACKAGE_VERSION@"	".bin\Release\lib3270.dll.@PACKAGE_VERSION@"
+		file "/oname=$SYSDIR\libpw3270.dll.@PACKAGE_VERSION@"	".bin\Release\libpw3270.dll.@PACKAGE_VERSION@"
 
 	sectionEnd
 
@@ -179,8 +180,8 @@ section "Uninstall"
 	DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PACKAGE@"
 
 	# Delete System libraries
-	delete $SYSDIR\lib3270.dll
-	delete $SYSDIR\libpw3270.dll
+	delete $SYSDIR\lib3270.dll.@PACKAGE_VERSION@
+	delete $SYSDIR\libpw3270.dll.@PACKAGE_VERSION@
 
 	# Delete extension libraries
 #	delete $PROGRAMFILES\ooRexx\rx3270.dll
