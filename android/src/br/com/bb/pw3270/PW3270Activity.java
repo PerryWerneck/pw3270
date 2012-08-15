@@ -18,7 +18,7 @@
  * programa; se não, escreva para a Free Software Foundation, Inc., 51 Franklin
  * St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * Este programa está nomeado como PW3270Activity.hava e possui - linhas de 
+ * Este programa está nomeado como PW3270Activity.hava e possui - linhas de
  * código.
  *
  * Contatos:
@@ -64,7 +64,7 @@ public class PW3270Activity extends Activity
 	private class terminal extends lib3270
 	{
 
-		terminal(SharedPreferences settings) 
+		terminal(SharedPreferences settings)
 		{
 			super(settings);
 		}
@@ -78,8 +78,8 @@ public class PW3270Activity extends Activity
 		{
 			view.reload();
 		}
-		
-		protected boolean showProgramMessage(int id) 
+
+		protected boolean showProgramMessage(int id)
 		{
 			if(!super.showProgramMessage(id))
 			{
@@ -107,7 +107,7 @@ public class PW3270Activity extends Activity
 
 			if(title != "")
 				d.setTitle(title);
-			
+
 			if(text != "")
 				d.setMessage(text);
 
@@ -124,11 +124,11 @@ public class PW3270Activity extends Activity
 			try
 			{
 				text = new String(getHTML(),getEncoding());
-			} 
-			catch(Exception e) 
-			{ 
+			}
+			catch(Exception e)
+			{
 				Log.e(TAG,e.getLocalizedMessage());
-				return ""; 
+				return "";
 			}
 
 			return text;
@@ -140,106 +140,121 @@ public class PW3270Activity extends Activity
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);		
-    	
         super.onCreate(savedInstanceState);
-
-		res = getResources();
-
-		// Cria dialogo para as mensagems de sistema
-		dlgSysMessage = new ProgressDialog(this);
-		dlgSysMessage.setCancelable(false);
-		dlgSysMessage.setTitle(res.getString(R.string.wait));
+    	res = getResources();
+		initUI();
+    }
 		
-		/*
-		dlgSysMessage.setButton(-2, "Desconectar", new DialogInterface.OnClickListener()
+	protected void initUI()
+	{
+		boolean autoconnect = false;
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+
+		Log.d(TAG, "Initializing UI");
+
+		if(dlgSysMessage == null)
 		{
-
-			public void onClick(DialogInterface dialog, int which) 
-			{
-				// TODO Auto-generated method stub
-			}
-				
-		});
-		*/
+			// Cria dialogo para as mensagems de sistema
+			Log.d(TAG, "Creating dlgSysMessage");
+			dlgSysMessage = new ProgressDialog(this);
+			dlgSysMessage.setCancelable(false);
+			dlgSysMessage.setTitle(res.getString(R.string.wait));
+		}
 		
-		// Reference:
-		// http://developer.android.com/reference/android/webkit/WebView.html
-		view = new WebView(this);
-
-		host = new terminal(settings);
-		view.addJavascriptInterface(host, "pw3270");
-		
-		view.setWebChromeClient(new WebChromeClient());
-
-		view.getSettings().setBuiltInZoomControls(true);
-		view.getSettings().setSupportZoom(true);
-		view.getSettings().setUseWideViewPort(true);
-		view.getSettings().setLoadWithOverviewMode(true);
-		view.getSettings().setJavaScriptEnabled(true);
-
-		view.setWebViewClient(new WebViewClient()
+		if(host == null)
 		{
+			Log.d(TAG, "Creating terminal object");
+			host = new terminal(settings);
+			autoconnect = settings.getString("hostname","") != "" && settings.getBoolean("autoconnect",false);			
+		}
 
-			@Override
-			public WebResourceResponse shouldInterceptRequest(WebView view, String url)
+		if(view == null)
+		{
+			// Reference:
+			// http://developer.android.com/reference/android/webkit/WebView.html
+			Log.d(TAG, "Creating Webview");
+			view = new WebView(this);
+			
+			view.addJavascriptInterface(host, "pw3270");
+	
+			view.setWebChromeClient(new WebChromeClient());
+	
+			view.getSettings().setBuiltInZoomControls(true);
+			view.getSettings().setSupportZoom(true);
+			view.getSettings().setUseWideViewPort(true);
+			view.getSettings().setLoadWithOverviewMode(true);
+			view.getSettings().setJavaScriptEnabled(true);
+	
+			view.setWebViewClient(new WebViewClient()
 			{
-				int		id		= R.raw.index;
-				String	mime	= "text/html";
-				int		pos		= url.lastIndexOf("/");
-
-				if(pos >=0 )
-					url = url.substring(pos+1);
-
-				Log.i(TAG,"Loading [" + url + "]");
-
-				if(url.equalsIgnoreCase("jsmain.js"))
+	
+				@Override
+				public WebResourceResponse shouldInterceptRequest(WebView view, String url)
 				{
-					id = R.raw.jsmain;
+					int		id		= R.raw.index;
+					String	mime	= "text/html";
+					int		pos		= url.lastIndexOf("/");
+	
+					if(pos >=0 )
+						url = url.substring(pos+1);
+	
+					Log.i(TAG,"Loading [" + url + "]");
+	
+					if(url.equalsIgnoreCase("jsmain.js"))
+					{
+						id = R.raw.jsmain;
+					}
+					else if(url.equalsIgnoreCase("theme.css"))
+					{
+						mime = "text/css";
+						id = R.raw.theme;
+					}
+	
+					// http://developer.android.com/reference/android/webkit/WebResourceResponse.html
+					return new WebResourceResponse(mime,"utf-8",getResources().openRawResource(id));
 				}
-				else if(url.equalsIgnoreCase("theme.css"))
-				{
-					mime = "text/css";
-					id = R.raw.theme;
-				}
-
-				// http://developer.android.com/reference/android/webkit/WebResourceResponse.html
-				return new WebResourceResponse(mime,"utf-8",getResources().openRawResource(id));
-			}
-
-		});
-
+	
+			});
+		}
+		
 		setContentView(view);
 		view.loadUrl("file:index.html");
-
-		if(settings.getString("hostname","") != "" && settings.getBoolean("autoconnect",false))
+		
+		if(autoconnect)
 			host.connect();
 
     }
 
+	@Override
+	public void onConfigurationChanged(Configuration newConfig)
+	{
+		 super.onConfigurationChanged(newConfig);
+		 initUI();
+	}
+
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) 
+    public boolean onCreateOptionsMenu(Menu menu)
     {
         MenuInflater inflater = getMenuInflater();
 		Log.d(TAG,"Popup menu");
         inflater.inflate(R.layout.menu, menu);
         return true;
-    }    
-    
+    }
+
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) 
+    public boolean onOptionsItemSelected(MenuItem item)
     {
         // Handle item selection
-        switch (item.getItemId()) 
+        switch (item.getItemId())
         {
         case R.id.connect:
         	host.connect();
         	break;
-        	
+
         case R.id.disconnect:
         	host.disconnect();
         	break;
-        	
+
         case R.id.settings:
 			Intent myIntent = new Intent(view.getContext(), SettingsActivity.class);
 			startActivityForResult(myIntent, 0);
@@ -249,7 +264,7 @@ public class PW3270Activity extends Activity
             return super.onOptionsItemSelected(item);
         }
         return true;
-        
+
     }
-    
+
 }

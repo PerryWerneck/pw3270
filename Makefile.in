@@ -72,6 +72,7 @@ XML2POT=src/tools/xml2pot@EXEEXT@
 SHELL=@SHELL@
 AMTAR=@AMTAR@
 DBGCMDPREFIX=@DBGCMDPREFIX@
+MAKENSIS=@MAKENSIS@
 
 #---[ Rules ]------------------------------------------------------------------
 
@@ -127,7 +128,7 @@ src/tools/%@EXEEXT@: src/tools/%.c
 
 all: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) locale filelist
 
-Release: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) locale
+Release: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) locale pixmaps
 
 $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT): src/pw3270/* $(BINDIR)/Release@DLLDIR@/@DLLPREFIX@3270@DLLEXT@ $(DEPENDS)
 	@$(MAKE) BINDIR="../../$(BINDIR)" LIB3270_LIBS="$(RLSLIB)" LIB3270_CFLAGS="-I../../src/include" -C src/pw3270 ../../$(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
@@ -183,6 +184,13 @@ endif
 srpm: $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.bz2
 ifneq ($(RPMBUILD),no)
 	@$(RPMBUILD) --define="_srcrpmdir $(PWD)" -bs $(PACKAGE_TARNAME).spec
+endif
+
+nsi: Release
+ifneq ($(MAKENSIS),no)
+	@chmod +x makegtkruntime.sh
+	@./makegtkruntime.sh
+	@$(MAKENSIS) $(PACKAGE_NAME).nsi
 endif
 
 $(PACKAGE_NAME).po: $(TMPDIR)/$(PACKAGE_NAME).pot

@@ -116,6 +116,7 @@ case "$host" in
 		EXEEXT=".exe"
 		SOCKET_LIBS="-lws2_32"
 		CFLAGS="$CFLAGS -mms-bitfields"
+		localedir="locale"
 		DLL_FLAGS="-shared"
 		LDSOFLAGS="-Wl,-soname,\`basename \$@\`"
 		DBGRPATH=""
@@ -354,7 +355,7 @@ AC_CONFIG_FILES([
 	src/pw3270/common/common.h
 	src/tools/Makefile
 	man/Makefile
-
+	makegtkruntime.sh
 ])
 
 dnl Output the generated config.status script.

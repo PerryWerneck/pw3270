@@ -62,9 +62,9 @@ SubSection "@PACKAGE@" SecMain
 		file "/oname=$INSTDIR\@PACKAGE@.ico"	"src\pw3270\@PACKAGE@.ico"
 
 		# Configuration files
-		file "/oname=$INSTDIR\@PACKAGE@-logo.png"	"@PACKAGE@-logo.png"
-		file "/oname=$INSTDIR\@PACKAGE@.png"		"@PACKAGE@.png"
-		file "/oname=$INSTDIR\colors.conf"			"colors.conf"
+		file "/oname=$INSTDIR\@PACKAGE@-logo.png"	"src/pw3270/@PACKAGE@-logo.png"
+		file "/oname=$INSTDIR\@PACKAGE@.png"		"src/pw3270/@PACKAGE@.png"
+		file "/oname=$INSTDIR\colors.conf"		"colors.conf"
 
 		# Documentation files
 		file "/oname=$INSTDIR\ChangeLog"		"ChangeLog"
@@ -78,7 +78,7 @@ SubSection "@PACKAGE@" SecMain
 
 		# Locale files
 		CreateDirectory "$INSTDIR\@localedir@\pt_BR\LC_MESSAGES"
-		file "/oname=$INSTDIR\@localedir@\pt_BR\LC_MESSAGES\@PACKAGE@.mo" ".bin\Release\usr\local\share\locale\pt_BR\LC_MESSAGES\@PACKAGE@.mo"
+		file "/oname=$INSTDIR\@localedir@\pt_BR\LC_MESSAGES\@PACKAGE@.mo" ".bin\Release\@localedir@\pt_BR\LC_MESSAGES\@PACKAGE@.mo"
 
 		# define uninstaller name
 		writeUninstaller $INSTDIR\uninstall.exe
@@ -126,14 +126,12 @@ SubSection "@PACKAGE@" SecMain
 #
 SubSectionEnd
 
-#
-#Section /o "GTK+ Runtime" SecGTK
-#
-#	setOutPath $INSTDIR
-#	file /r ".bin\gtkruntime\*.*"
-#
-#SectionEnd
-#
+Section /o "GTK+ Runtime" SecGTK
+
+	setOutPath $INSTDIR
+	file /r ".bin\gtkruntime\*.*"
+
+SectionEnd
 
 Section /o "Software Development Kit" SecSDK
 
@@ -200,29 +198,29 @@ Function .onInit
 #
 #notRunning:
 
-IfFileExists $PROGRAMFILES\ooRexx\rexx.exe RexxOK RexxNOK
-
-RexxOK:
-	SectionGetFlags "${RexxPlugin}" $0
-	IntOp $0 $0 | ${SF_SELECTED}
-	SectionSetFlags "${RexxPlugin}" $0
-
-	SectionGetFlags "${SecRexxLib}" $0
-	IntOp $0 $0 | ${SF_SELECTED}
-	SectionSetFlags "${SecRexxLib}" $0
-
-goto PastRexxCheck
-
-RexxNOK:
-	SectionGetFlags "${RexxPlugin}" $0
-	IntOp $0 $0 | ${SF_RO}
-	SectionSetFlags "${RexxPlugin}" $0
-
-	SectionGetFlags "${SecRexxLib}" $0
-	IntOp $0 $0 | ${SF_RO}
-	SectionSetFlags "${SecRexxLib}" $0
-
-PastRexxCheck:
+#IfFileExists $PROGRAMFILES\ooRexx\rexx.exe RexxOK RexxNOK
+#
+#RexxOK:
+#	SectionGetFlags "${RexxPlugin}" $0
+#	IntOp $0 $0 | ${SF_SELECTED}
+#	SectionSetFlags "${RexxPlugin}" $0
+#
+#	SectionGetFlags "${SecRexxLib}" $0
+#	IntOp $0 $0 | ${SF_SELECTED}
+#	SectionSetFlags "${SecRexxLib}" $0
+#
+#goto PastRexxCheck
+#
+#RexxNOK:
+#	SectionGetFlags "${RexxPlugin}" $0
+#	IntOp $0 $0 | ${SF_RO}
+#	SectionSetFlags "${RexxPlugin}" $0
+#
+#	SectionGetFlags "${SecRexxLib}" $0
+#	IntOp $0 $0 | ${SF_RO}
+#	SectionSetFlags "${SecRexxLib}" $0
+#
+#PastRexxCheck:
 
 	ReadRegStr $4 HKLM "Software\GTK2-Runtime" "DllPath"
 
