@@ -80,14 +80,7 @@ static void changed(H3270 *session, int offset, int len)
 		char *text = lib3270_get_as_html(session,(LIB3270_HTML_OPTION) (LIB3270_HTML_OPTION_ALL|LIB3270_HTML_OPTION_FORM));
 
 		if(text)
-		{
-			trace("Screen:\n%s\n",text);
 			lib3270_free(text);
-		}
-		else
-		{
-			trace("%s returns NULL","lib3270_get_as_html");
-		}
 	}
 
 	pw3270_jni_post_message(2,offset,len);

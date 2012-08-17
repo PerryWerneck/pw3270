@@ -262,7 +262,11 @@
 
 	#include <lib3270/config.h>
 
-	#if defined(_WIN32)
+	#if defined( ANDROID )
+
+		#define LIB3270_EXPORT	__attribute__((visibility("hidden"))) extern
+
+	#elif defined(_WIN32)
 
 		#include <windows.h>
 		#define LIB3270_EXPORT	__declspec (dllexport)

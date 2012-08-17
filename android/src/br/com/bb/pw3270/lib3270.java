@@ -45,17 +45,20 @@ import java.io.DataOutputStream;
 
 public class lib3270
 {
-	private NetworkThread mainloop = null;
 	private static final String TAG = "lib3270";
 
-	protected int screenState = 0;
-	private boolean connected = false;
-	private boolean refresh = true;
-	private Socket sock = null;
-	private lib3270 hSession = this;
 
-	DataOutputStream outData = null;
-	DataInputStream inData = null;
+	protected int						screenState = -1;
+
+	private lib3270						hSession	= this;
+	
+	private static NetworkThread 		mainloop 	= null;
+	private static boolean				connected	= false;
+	private static boolean				refresh		= true;
+	private static Socket 				sock		= null;
+
+	private static DataOutputStream		outData		= null;
+	private	static DataInputStream		inData		= null;
 
 	protected SharedPreferences settings;
 
@@ -67,7 +70,7 @@ public class lib3270
 			switch (msg.what)
 			{
 			case 0: // Reconnect
-				connect();
+				Log.d(TAG,"----------------------------Reconnecting");
 				break;
 
 			case 1: // OIA message has changed
@@ -80,15 +83,8 @@ public class lib3270
 				break;
 
 			case 3: // Popup
-				if(msg.arg1 == 1 && settings.getBoolean("reconnect",false))
-				{
-					postMessage(0, 1, 0);
-				}
-				else
-				{
-					popupMessageInfo popup = (popupMessageInfo) msg.obj;
-					showPopupMessage(msg.arg1, popup.title, popup.text, popup.info);
-				}
+				popupMessageInfo popup = (popupMessageInfo) msg.obj;
+				showPopupMessage(msg.arg1, popup.title, popup.text, popup.info);
 				break;
 
 			case 4: // erase
@@ -127,12 +123,11 @@ public class lib3270
 
 	lib3270(SharedPreferences settings)
 	{
-		String toggle[] = { "dstrace", "screentrace", "eventtrace", "reconnect" }; 
-		
-		this.settings = settings;
-		this.screenState = 0;
-		this.mainloop = null;
-		
+		String toggle[] = { "dstrace", "screentrace", "eventtrace", "reconnect" };
+
+		this.settings		= settings;
+		this.screenState	= -1;
+
 		for(int f = 0; f < toggle.length; f++)
 			setToggle(toggle[f],settings.getBoolean(toggle[f],false));
 
@@ -220,7 +215,7 @@ public class lib3270
 			SocketFactory	socketFactory;
 			String 			hostname = settings.getString("hostname","");
 			Integer			port = new Integer(settings.getString("port","23"));
-			
+
 			if (hostname == "" || port == 0)
 				return false;
 
@@ -259,8 +254,6 @@ public class lib3270
 
 				postPopup(0, "Erro na conexão", "Não foi possível conectar", msg);
 
-				postMessage(0, 0, 0);
-
 				return false;
 			}
 
@@ -271,9 +264,10 @@ public class lib3270
 
 		public void run()
 		{
+			boolean reconnect = false;
 
 			info(TAG, "Network thread started");
-			connected = connect();
+			reconnect = connected = connect();
 
 			if (connected)
 			{
@@ -301,8 +295,7 @@ public class lib3270
 						procRecvdata(in,sz);
 
 				}
-				// postPopup(0,"","Desconectado","");
-				
+
 			}
 
 			Log.v(TAG, "Exiting communication thread");
@@ -321,7 +314,10 @@ public class lib3270
 
 			mainloop = null;
 			info(TAG, "Network thread stopped");
-			
+
+			if(reconnect)
+				postMessage(0, 0, 0); // Pede por reconexão
+
 		}
 
 	}
@@ -513,13 +509,13 @@ public class lib3270
 	protected void newTimer(long id, int msec)
 	{
 		Message msg = mHandler.obtainMessage();
-		
+
 		msg.what	= 9; // MSG_CREATETIMER
 		msg.arg1	= msec;
 		msg.obj		= new Long(id);
-		
+
 		mHandler.sendMessage(msg);
-		
+
 	}
 
 	private native void timerFinish(long id);

@@ -53,13 +53,14 @@ import android.view.MenuItem;
 
 public class PW3270Activity extends Activity
 {
-	private static final String TAG = "pw3270";
+	private static final String 	TAG		= "pw3270";
+	
+	private static terminal 		host;
 
-	private Resources		res;
-	private WebView			view;
-	private terminal 		host;
-	private Activity 		mainact = this;
-	private ProgressDialog	dlgSysMessage;
+	private Resources				res	;
+	private WebView					view;
+	private Activity 				mainact 		= this;
+	private ProgressDialog			dlgSysMessage;
 
 	private class terminal extends lib3270
 	{
@@ -225,13 +226,6 @@ public class PW3270Activity extends Activity
 
     }
 
-	@Override
-	public void onConfigurationChanged(Configuration newConfig)
-	{
-		 super.onConfigurationChanged(newConfig);
-		 initUI();
-	}
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
@@ -266,5 +260,31 @@ public class PW3270Activity extends Activity
         return true;
 
     }
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig)
+	{
+		Log.d(TAG, "Configuration Changed");
+		super.onConfigurationChanged(newConfig);
+		initUI();
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState)
+	{
+		super.onSaveInstanceState(outState);
+		// Save the state of the WebView
+		view.saveState(outState);
+	}
+ 
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState)
+	{
+		super.onRestoreInstanceState(savedInstanceState);
+		// Restore the state of the WebView
+		view.restoreState(savedInstanceState);
+	}
+	
+    
 
 }
