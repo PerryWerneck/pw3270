@@ -54,6 +54,7 @@ public class lib3270
 	
 	private static NetworkThread 		mainloop 	= null;
 	private static boolean				connected	= false;
+	private static boolean 				reconnect	= false;
 	private static boolean				refresh		= true;
 	private static Socket 				sock		= null;
 
@@ -264,8 +265,6 @@ public class lib3270
 
 		public void run()
 		{
-			boolean reconnect = false;
-
 			info(TAG, "Network thread started");
 			reconnect = connected = connect();
 
@@ -454,7 +453,7 @@ public class lib3270
 	public int disconnect()
 	{
 		Log.v(TAG, "Disconnecting");
-		connected = false;
+		connected = reconnect = false;
 
 		if(sock != null)
 		{
