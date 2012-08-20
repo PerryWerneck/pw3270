@@ -32,16 +32,16 @@ package br.com.bb.pw3270;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+// import android.preference.PreferenceManager;
 import android.util.Log;
 import android.content.Intent;
-import android.content.SharedPreferences;
+//import android.content.SharedPreferences;
 import android.content.res.*;
-import android.app.AlertDialog;
+// import android.app.AlertDialog;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.webkit.WebResourceResponse;
-import android.webkit.WebChromeClient;
+// import android.webkit.WebViewClient;
+// import android.webkit.WebResourceResponse;
+// import android.webkit.WebChromeClient;
 import android.app.ProgressDialog;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -54,176 +54,45 @@ import android.view.MenuItem;
 public class PW3270Activity extends Activity
 {
 	private static final String 	TAG		= "pw3270";
-	
-	private static terminal 		host;
+	private static lib3270 			host	= null;
 
-	private Resources				res	;
-	private WebView					view;
-	private Activity 				mainact 		= this;
-	private ProgressDialog			dlgSysMessage;
-
-	private class terminal extends lib3270
-	{
-
-		terminal(SharedPreferences settings)
-		{
-			super(settings);
-		}
-
-		public void hideProgressDialog()
-		{
-			dlgSysMessage.hide();
-		}
-
-		protected void updateScreen()
-		{
-			view.reload();
-		}
-
-		protected boolean showProgramMessage(int id)
-		{
-			if(!super.showProgramMessage(id))
-			{
-				String message[] = res.getStringArray(R.array.program_msg);
-				try
-				{
-					dlgSysMessage.setMessage(message[id]);
-				} catch(Exception e)
-				{
-					dlgSysMessage.setMessage(e.getLocalizedMessage());
-				}
-				dlgSysMessage.show();
-			}
-			return true;
-		}
-
-		protected void showPopupMessage(int type, String title, String text, String info)
-		{
-			Log.v(TAG,"Popup Message:");
-			Log.v(TAG,title);
-			Log.v(TAG,text);
-			Log.v(TAG,info);
-
-			AlertDialog d = new AlertDialog.Builder(mainact).create();
-
-			if(title != "")
-				d.setTitle(title);
-
-			if(text != "")
-				d.setMessage(text);
-
-			d.setCancelable(true);
-			hideProgressDialog();
-			d.show();
-		}
-
-		@SuppressWarnings("unused")
-		public String getscreencontents()
-		{
-			String text;
-
-			try
-			{
-				text = new String(getHTML(),getEncoding());
-			}
-			catch(Exception e)
-			{
-				Log.e(TAG,e.getLocalizedMessage());
-				return "";
-			}
-
-			return text;
-		}
-
-	};
 
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-    	res = getResources();
-		initUI();
+   		initUI();
     }
 		
 	protected void initUI()
 	{
-		boolean autoconnect = false;
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-
+        if(host == null)
+        	host = new lib3270(this);
+        else
+        	host.setActivity(this);
+        
 		Log.d(TAG, "Initializing UI");
 
-		if(dlgSysMessage == null)
-		{
+//		if(host.dlgSysMessage == null)
+//		{
 			// Cria dialogo para as mensagems de sistema
-			Log.d(TAG, "Creating dlgSysMessage");
-			dlgSysMessage = new ProgressDialog(this);
-			dlgSysMessage.setCancelable(false);
-			dlgSysMessage.setTitle(res.getString(R.string.wait));
-		}
+//			Log.d(TAG, "Creating dlgSysMessage");
+			host.dlgSysMessage = new ProgressDialog(this);
+			host.dlgSysMessage.setCancelable(false);
+			host.dlgSysMessage.setTitle(host.res.getString(R.string.wait));
+//		}
 		
-		if(host == null)
-		{
-			Log.d(TAG, "Creating terminal object");
-			host = new terminal(settings);
-			autoconnect = settings.getString("hostname","") != "" && settings.getBoolean("autoconnect",false);			
-		}
+//		Log.d(TAG, "Creating terminal object");
+//		autoconnect = settings.getString("hostname","") != "" && settings.getBoolean("autoconnect",false);			
 
-		if(view == null)
-		{
-			// Reference:
-			// http://developer.android.com/reference/android/webkit/WebView.html
-			Log.d(TAG, "Creating Webview");
-			view = new WebView(this);
-			
-			view.addJavascriptInterface(host, "pw3270");
-	
-			view.setWebChromeClient(new WebChromeClient());
-	
-			view.getSettings().setBuiltInZoomControls(true);
-			view.getSettings().setSupportZoom(true);
-			view.getSettings().setUseWideViewPort(true);
-			view.getSettings().setLoadWithOverviewMode(true);
-			view.getSettings().setJavaScriptEnabled(true);
-	
-			view.setWebViewClient(new WebViewClient()
-			{
-	
-				@Override
-				public WebResourceResponse shouldInterceptRequest(WebView view, String url)
-				{
-					int		id		= R.raw.index;
-					String	mime	= "text/html";
-					int		pos		= url.lastIndexOf("/");
-	
-					if(pos >=0 )
-						url = url.substring(pos+1);
-	
-					Log.i(TAG,"Loading [" + url + "]");
-	
-					if(url.equalsIgnoreCase("jsmain.js"))
-					{
-						id = R.raw.jsmain;
-					}
-					else if(url.equalsIgnoreCase("theme.css"))
-					{
-						mime = "text/css";
-						id = R.raw.theme;
-					}
-	
-					// http://developer.android.com/reference/android/webkit/WebResourceResponse.html
-					return new WebResourceResponse(mime,"utf-8",getResources().openRawResource(id));
-				}
-	
-			});
-		}
-		
-		setContentView(view);
-		view.loadUrl("file:index.html");
-		
-		if(autoconnect)
-			host.connect();
+		// Reference:
+		// http://developer.android.com/reference/android/webkit/WebView.html
+		Log.d(TAG, "Creating Webview");
+		setContentView(host.setView(new WebView(this)));
 
+		host.view.loadUrl("file:index.html");
+		host.initialize();
     }
 
     @Override
@@ -250,10 +119,14 @@ public class PW3270Activity extends Activity
         	break;
 
         case R.id.settings:
-			Intent myIntent = new Intent(view.getContext(), SettingsActivity.class);
+			Intent myIntent = new Intent(host.view.getContext(), SettingsActivity.class);
 			startActivityForResult(myIntent, 0);
         	break;
 
+        case R.id.reload:
+        	host.view.reload();
+        	break;
+        	
         default:
             return super.onOptionsItemSelected(item);
         }
@@ -274,7 +147,7 @@ public class PW3270Activity extends Activity
 	{
 		super.onSaveInstanceState(outState);
 		// Save the state of the WebView
-		view.saveState(outState);
+		host.view.saveState(outState);
 	}
  
 	@Override
@@ -282,9 +155,8 @@ public class PW3270Activity extends Activity
 	{
 		super.onRestoreInstanceState(savedInstanceState);
 		// Restore the state of the WebView
-		view.restoreState(savedInstanceState);
+		host.view.restoreState(savedInstanceState);
+		host.view.reload();
 	}
-	
-    
 
 }

@@ -86,11 +86,8 @@ pw3270-release-unsigned.apk: icons libs/armeabi/lib3270.so $(JAVASRCDIR)/*.java
 libs/armeabi/lib3270.so: jni/lib3270jni.h jni/*.cpp
 	@$(NDKBUILD)
 
-icons: $(foreach DIR, $(RESOLUTION), res/drawable-$(DIR)/ic_launcher.png) \
-	$(foreach DIR, $(RESOLUTION), res/drawable-$(DIR)/ic_connect.png) \
-	$(foreach DIR, $(RESOLUTION), res/drawable-$(DIR)/ic_disconnect.png) \
-	$(foreach DIR, $(RESOLUTION), res/drawable-$(DIR)/ic_settings.png)
-
+icons: $(foreach DIR, $(RESOLUTION), res/drawable-$(DIR)/ic_launcher.png)
+	
 clean:
 	@rm -fr bin
 	@rm -fr obj

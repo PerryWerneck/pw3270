@@ -30,11 +30,20 @@ package br.com.bb.pw3270;
 
 import java.lang.Thread;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Handler;
 import android.os.Message;
 import android.os.CountDownTimer;
+import android.preference.PreferenceManager;
 import android.util.Log;
+import android.webkit.WebChromeClient;
+import android.webkit.WebResourceResponse;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import javax.net.SocketFactory;
 import java.net.Socket;
 import javax.net.ssl.SSLSocketFactory;
@@ -45,23 +54,28 @@ import java.io.DataOutputStream;
 
 public class lib3270
 {
-	private static final String TAG = "lib3270";
+	private static final String			TAG				= "lib3270";
 
+	protected int						screenState 	= -1;
 
-	protected int						screenState = -1;
-
-	private lib3270						hSession	= this;
+	private lib3270						hSession		= this;
 	
-	private static NetworkThread 		mainloop 	= null;
-	private static boolean				connected	= false;
-	private static boolean 				reconnect	= false;
-	private static boolean				refresh		= true;
-	private static Socket 				sock		= null;
+	public ProgressDialog				dlgSysMessage	= null;
+	public WebView						view			= null;
+	public Resources					res				= null;
+	public Activity 					mainact 		= null;
+	
+	private static boolean				initialized		= false;
+	private static NetworkThread 		mainloop 		= null;
+	private static boolean				connected		= false;
+	private static boolean 				reconnect		= false;
+	private static boolean				refresh			= true;
+	private static Socket 				sock			= null;
 
-	private static DataOutputStream		outData		= null;
-	private	static DataInputStream		inData		= null;
+	private static DataOutputStream		outData			= null;
+	private	static DataInputStream		inData			= null;
 
-	protected SharedPreferences settings;
+	protected SharedPreferences 		settings;
 
 	// Define the Handler that receives messages from the thread
 	final Handler mHandler = new Handler()
@@ -71,7 +85,10 @@ public class lib3270
 			switch (msg.what)
 			{
 			case 0: // Reconnect
-				Log.d(TAG,"----------------------------Reconnecting");
+				if(!hSession.isConnected())
+				{
+					Log.d(TAG,"------------------------------------Connecting");
+				}
 				break;
 
 			case 1: // OIA message has changed
@@ -101,7 +118,7 @@ public class lib3270
 				break;
 
 			case 7: // ready
-				hideProgressDialog();
+				dlgSysMessage.hide();
 				break;
 
 			case 8: // busy
@@ -122,11 +139,11 @@ public class lib3270
 		System.loadLibrary("3270");
 	}
 
-	lib3270(SharedPreferences settings)
+	lib3270(Activity act)
 	{
 		String toggle[] = { "dstrace", "screentrace", "eventtrace", "reconnect" };
 
-		this.settings		= settings;
+		setActivity(act);
 		this.screenState	= -1;
 
 		for(int f = 0; f < toggle.length; f++)
@@ -215,7 +232,7 @@ public class lib3270
 			// Connecta no host
 			SocketFactory	socketFactory;
 			String 			hostname = settings.getString("hostname","");
-			Integer			port = new Integer(settings.getString("port","23"));
+			Integer			port = Integer.valueOf(settings.getString("port", "23"));
 
 			if (hostname == "" || port == 0)
 				return false;
@@ -339,9 +356,76 @@ public class lib3270
 		mHandler.sendMessage(msg);
 	}
 
+	void initialize()
+	{
+		if(initialized)
+			return;
+		
+		initialized = true;
+		
+		if(settings.getString("hostname","") != "" && settings.getBoolean("autoconnect",false))
+			connect();
+	}
+	
+	void setActivity(Activity act)
+	{
+    	this.mainact	= act;
+        this.settings 	= PreferenceManager.getDefaultSharedPreferences(act);
+    	this.res 		= act.getResources();
+	}
+	
+	WebView setView(WebView v)
+	{
+		this.view = v;
+		
+		view.addJavascriptInterface(this, "pw3270");
+
+		view.setWebChromeClient(new WebChromeClient());
+
+		view.getSettings().setBuiltInZoomControls(true);
+		view.getSettings().setSupportZoom(true);
+		view.getSettings().setUseWideViewPort(true);
+		view.getSettings().setLoadWithOverviewMode(true);
+		view.getSettings().setJavaScriptEnabled(true);
+
+		view.setWebViewClient(new WebViewClient()
+		{
+
+			@Override
+			public WebResourceResponse shouldInterceptRequest(WebView view, String url)
+			{
+				int		id		= R.raw.index;
+				String	mime	= "text/html";
+				int		pos		= url.lastIndexOf("/");
+
+				if(pos >=0 )
+					url = url.substring(pos+1);
+
+				Log.i(TAG,"Loading [" + url + "]");
+
+				if(url.equalsIgnoreCase("jsmain.js"))
+				{
+					id = R.raw.jsmain;
+				}
+				else if(url.equalsIgnoreCase("theme.css"))
+				{
+					mime = "text/css";
+					id = R.raw.theme;
+				}
+
+				// http://developer.android.com/reference/android/webkit/WebResourceResponse.html
+				return new WebResourceResponse(mime,"utf-8",mainact.getResources().openRawResource(id));
+			}
+
+		});
+		
+		return view;
+		
+	}
+	
 	/*---[ Signal methods ]--------------------------------------------------*/
 
-	protected boolean showProgramMessage(int id)
+	protected void showProgramMessage(int id)
 	{
 		switch(id)
 		{
@@ -350,7 +434,7 @@ public class lib3270
 			{
 				screenState = 0;
 				Log.v(TAG, "Status changed to NONE");
-				updateScreen();
+				view.reload();
 			}
 			break;
 
@@ -379,14 +463,36 @@ public class lib3270
 			// 14 LIB3270_MESSAGE_CONNECTING
 
 		default:
-			return false;
+			String message[] = res.getStringArray(R.array.program_msg);
+			try
+			{
+				dlgSysMessage.setMessage(message[id]);
+			} catch(Exception e)
+			{
+				dlgSysMessage.setMessage(e.getLocalizedMessage());
+			}
+			dlgSysMessage.show();
 		}
-
-		return true;
 	}
 
 	protected void showPopupMessage(int type, String title, String text, String info)
 	{
+		Log.v(TAG,"Popup Message:");
+		Log.v(TAG,title);
+		Log.v(TAG,text);
+		Log.v(TAG,info);
+
+		AlertDialog d = new AlertDialog.Builder(mainact).create();
+
+		if(title != "")
+			d.setTitle(title);
+
+		if(text != "")
+			d.setMessage(text);
+
+		d.setCancelable(true);
+		dlgSysMessage.hide();
+		d.show();
 	}
 
 	protected void info(String tag, String msg)
@@ -400,10 +506,6 @@ public class lib3270
 	}
 
 	protected void erase()
-	{
-	}
-
-	protected void updateScreen()
 	{
 	}
 
@@ -425,10 +527,6 @@ public class lib3270
 	public void busy()
 	{
 		postMessage(8, 0, 0);
-	}
-
-	public void hideProgressDialog()
-	{
 	}
 
 	public void showProgressDialog(String msg)
@@ -477,6 +575,25 @@ public class lib3270
 		refresh = true;
 	}
 
+//	@SuppressWarnings("unused")
+	public String getscreencontents()
+	{
+		String text;
+
+		try
+		{
+			text = new String(getHTML(),getEncoding());
+		}
+		catch(Exception e)
+		{
+			Log.e(TAG,e.getLocalizedMessage());
+			return "";
+		}
+
+		return text;
+	}
+	
+	
 	/*---[ Native calls ]----------------------------------------------------*/
 	private native int processEvents();
 
