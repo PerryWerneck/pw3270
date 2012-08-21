@@ -31,21 +31,22 @@
 package br.com.bb.pw3270;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.os.Bundle;
-// import android.preference.PreferenceManager;
 import android.util.Log;
 import android.content.Intent;
-//import android.content.SharedPreferences;
 import android.content.res.*;
-// import android.app.AlertDialog;
 import android.webkit.WebView;
-// import android.webkit.WebViewClient;
-// import android.webkit.WebResourceResponse;
-// import android.webkit.WebChromeClient;
 import android.app.ProgressDialog;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 // import java.io.InputStream;
 
@@ -127,6 +128,10 @@ public class PW3270Activity extends Activity
         	host.view.reload();
         	break;
         	
+        case R.id.about:
+        	showAboutDialog();
+        	break;
+        	
         default:
             return super.onOptionsItemSelected(item);
         }
@@ -134,6 +139,29 @@ public class PW3270Activity extends Activity
 
     }
 
+    private void showAboutDialog()
+    {
+    	AlertDialog.Builder builder;
+    	AlertDialog alertDialog;
+    	Context mContext = getApplicationContext();
+    	
+    	LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE);
+    	
+    	View layout = inflater.inflate(R.layout.about, (ViewGroup) findViewById(R.id.layout_root));
+
+    	TextView text = (TextView) layout.findViewById(R.id.text);
+    	text.setText(host.res.getString(R.string.app_name) + " Vrs " + host.getVersion() + "-" + host.getRevision());
+    	
+    	ImageView image = (ImageView) layout.findViewById(R.id.image);
+    	image.setImageResource(R.drawable.ic_launcher);
+
+    	builder = new AlertDialog.Builder(this);
+    	builder.setView(layout);
+    	alertDialog = builder.create();    
+    	
+    	alertDialog.show();
+    }
+    
 	@Override
 	public void onConfigurationChanged(Configuration newConfig)
 	{
