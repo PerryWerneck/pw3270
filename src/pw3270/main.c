@@ -127,7 +127,7 @@ int main(int argc, char *argv[])
 #if ! GLIB_CHECK_VERSION(2,32,0)
 	g_thread_init(NULL);
 #endif // !GLIB(2,32)
-	
+
 	gtk_init(&argc, &argv);
 
 	// Setup locale
@@ -151,16 +151,16 @@ int main(int argc, char *argv[])
 	{
 		osxapp = GTK_OSX_APPLICATION(g_object_new(GTK_TYPE_OSX_APPLICATION,NULL));
 
-		
+
 		gchar * appdir = g_build_filename(DATAROOTDIR,PACKAGE_NAME,NULL);
 		gchar * locdir = g_build_filename(DATAROOTDIR,"locale",NULL);
-		
+
 		g_chdir(appdir);
 		bindtextdomain( PACKAGE_NAME, locdir);
-		
+
 		g_free(locdir);
 		g_free(appdir);
-		
+
 	}
 #elif defined( DATAROOTDIR )
 	{
@@ -237,6 +237,7 @@ int main(int argc, char *argv[])
 
 		if(settings)
 		{
+			// http://developer.gnome.org/gtk/2.24/GtkSettings.html
 			gtk_settings_set_string_property(settings,"gtk-menu-bar-accel","Menu","");
 		}
 
@@ -252,7 +253,7 @@ int main(int argc, char *argv[])
 #ifdef HAVE_GTKMAC
 		gtk_osxapplication_ready(osxapp);
 #endif // HAVE_GTKMAC
-		
+
 		gtk_main();
 
 	}
