@@ -89,6 +89,7 @@ libs/armeabi/lib3270.so: jni/lib3270jni.h jni/*.cpp
 icons: $(foreach DIR, $(RESOLUTION), res/drawable-$(DIR)/ic_launcher.png)
 	
 clean:
+	@JAVA_HOME=$(JDK_HOME) $(ANT) clean
 	@rm -fr bin
 	@rm -fr obj
 	@rm -f jni/lib3270jni.h

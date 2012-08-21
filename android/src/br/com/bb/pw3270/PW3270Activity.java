@@ -36,7 +36,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.content.Intent;
 import android.content.res.*;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.app.ProgressDialog;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -69,9 +71,27 @@ public class PW3270Activity extends Activity
 	protected void initUI()
 	{
         if(host == null)
-        	host = new lib3270(this);
+        {
+        	host = new lib3270(this)
+        	{
+        		public String getProgramMessageText(int id)
+        		{
+        			String message[] = res.getStringArray(R.array.program_msg);
+        			try
+        			{
+        				return message[id];
+        			} catch(Exception e)
+        			{
+        				return e.getLocalizedMessage();
+        			}
+        			
+        		}
+        	};
+        }
         else
+        {
         	host.setActivity(this);
+        }
         
 		Log.d(TAG, "Initializing UI");
 
@@ -81,9 +101,39 @@ public class PW3270Activity extends Activity
 
 		// Reference:
 		// http://developer.android.com/reference/android/webkit/WebView.html
-		Log.d(TAG, "Creating Webview");
-		setContentView(host.setView(new WebView(this)));
+		host.setView(new WebView(this)).setWebViewClient(new WebViewClient()
+		{
 
+			@Override
+			public WebResourceResponse shouldInterceptRequest(WebView view, String url)
+			{
+				int		id		= R.raw.index;
+				String	mime	= "text/html";
+				int		pos		= url.lastIndexOf("/");
+
+				if(pos >=0 )
+					url = url.substring(pos+1);
+
+				Log.i(TAG,"Loading [" + url + "]");
+
+				if(url.equalsIgnoreCase("jsmain.js"))
+				{
+					id = R.raw.jsmain;
+				}
+				else if(url.equalsIgnoreCase("theme.css"))
+				{
+					mime = "text/css";
+					id = R.raw.theme;
+				}
+
+				// http://developer.android.com/reference/android/webkit/WebResourceResponse.html
+				return new WebResourceResponse(mime,"utf-8",host.mainact.getResources().openRawResource(id));
+			}
+
+		});
+		
+		setContentView(host.view);
+		
 		host.view.loadUrl("file:index.html");
 		host.initialize();
     }

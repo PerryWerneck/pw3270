@@ -41,9 +41,9 @@ import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.webkit.WebChromeClient;
-import android.webkit.WebResourceResponse;
+// import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
+// import android.webkit.WebViewClient;
 import javax.net.SocketFactory;
 import java.net.Socket;
 import javax.net.ssl.SSLSocketFactory;
@@ -52,7 +52,7 @@ import java.io.DataOutputStream;
 
 // import java.util.Vector;
 
-public class lib3270
+public abstract class lib3270
 {
 	private static final String			TAG				= "lib3270";
 
@@ -389,40 +389,16 @@ public class lib3270
 		view.getSettings().setLoadWithOverviewMode(true);
 		view.getSettings().setJavaScriptEnabled(true);
 
-		view.setWebViewClient(new WebViewClient()
-		{
-
-			@Override
-			public WebResourceResponse shouldInterceptRequest(WebView view, String url)
-			{
-				int		id		= R.raw.index;
-				String	mime	= "text/html";
-				int		pos		= url.lastIndexOf("/");
-
-				if(pos >=0 )
-					url = url.substring(pos+1);
-
-				Log.i(TAG,"Loading [" + url + "]");
-
-				if(url.equalsIgnoreCase("jsmain.js"))
-				{
-					id = R.raw.jsmain;
-				}
-				else if(url.equalsIgnoreCase("theme.css"))
-				{
-					mime = "text/css";
-					id = R.raw.theme;
-				}
-
-				// http://developer.android.com/reference/android/webkit/WebResourceResponse.html
-				return new WebResourceResponse(mime,"utf-8",mainact.getResources().openRawResource(id));
-			}
-
-		});
-		
 		return view;
 		
 	}
+	
+	public abstract String getProgramMessageText(int id);
+	/*
+	{
+		return "Message " + Integer.toString(id);
+	}
+	*/
 	
 	/*---[ Signal methods ]--------------------------------------------------*/
 
@@ -464,14 +440,7 @@ public class lib3270
 			// 14 LIB3270_MESSAGE_CONNECTING
 
 		default:
-			String message[] = res.getStringArray(R.array.program_msg);
-			try
-			{
-				dlgSysMessage.setMessage(message[id]);
-			} catch(Exception e)
-			{
-				dlgSysMessage.setMessage(e.getLocalizedMessage());
-			}
+			dlgSysMessage.setMessage(getProgramMessageText(id));
 			dlgSysMessage.show();
 		}
 	}
