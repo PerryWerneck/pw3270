@@ -110,12 +110,11 @@ public abstract class lib3270
 				if(screenState != 2)
 				{
 					screenState = 2;
-					erase();
+					reload();
 				}
 				break;
 
 			case 5: // ctlr_done
-				Log.d(TAG, "ctlr_done");
 				break;
 
 			case 7: // ready
@@ -134,7 +133,6 @@ public abstract class lib3270
 				break;
 
 			case 8: // busy
-				showProgressDialog("Aguarde...");
 				break;
 
 			case 9: // Create timer
@@ -394,11 +392,6 @@ public abstract class lib3270
 	}
 	
 	public abstract String getProgramMessageText(int id);
-	/*
-	{
-		return "Message " + Integer.toString(id);
-	}
-	*/
 	
 	/*---[ Signal methods ]--------------------------------------------------*/
 
@@ -410,15 +403,15 @@ public abstract class lib3270
 			if(screenState != 0)
 			{
 				screenState = 0;
-				Log.v(TAG, "Status changed to NONE");
-				view.reload();
+//				Log.v(TAG, "Status changed to NONE");
+				reload();
 			}
 			break;
 
 		case 4: // LIB3270_MESSAGE_DISCONNECTED
 			Log.v(TAG, "Status changed to disconnected");
 			connected = false;
-			erase();
+			reload();
 			break;
 
 		case 3: // LIB3270_MESSAGE_CONNECTED
@@ -475,8 +468,9 @@ public abstract class lib3270
 		Log.e(tag, msg);
 	}
 
-	protected void erase()
+	protected void reload()
 	{
+		view.reload();
 	}
 
 	public void pfkey(int id)
@@ -499,9 +493,11 @@ public abstract class lib3270
 		postMessage(8, 0, 0);
 	}
 
+	/*
 	public void showProgressDialog(String msg)
 	{
 	}
+	*/
 
 	/*---[ External methods ]------------------------------------------------*/
 
