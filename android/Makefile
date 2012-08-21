@@ -84,6 +84,9 @@ pw3270-release-unsigned.apk: icons libs/armeabi/lib3270.so $(JAVASRCDIR)/*.java
 	@JAVA_HOME=$(JDK_HOME) $(ANT) release
 
 libs/armeabi/lib3270.so: jni/lib3270jni.h jni/*.cpp
+	@echo "  GEN  $@"
+	@chmod +x ../src/lib3270/mkversion.sh
+	@../src/lib3270/mkversion.sh
 	@$(NDKBUILD)
 
 icons: $(foreach DIR, $(RESOLUTION), res/drawable-$(DIR)/ic_launcher.png)
