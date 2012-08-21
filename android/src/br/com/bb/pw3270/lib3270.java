@@ -119,7 +119,18 @@ public abstract class lib3270
 				break;
 
 			case 7: // ready
-				dlgSysMessage.hide();
+				if(initialized)
+				{
+					dlgSysMessage.hide();
+				}
+				else
+				{
+					initialized = true;
+					if(settings.getString("hostname","") != "" && settings.getBoolean("autoconnect",false))
+						connect();
+					else
+						dlgSysMessage.hide();
+				}
 				break;
 
 			case 8: // busy
@@ -355,17 +366,6 @@ public abstract class lib3270
 		msg.arg1 = type;
 		msg.obj  = new popupMessageInfo(title, text, info);
 		mHandler.sendMessage(msg);
-	}
-
-	void initialize()
-	{
-		if(initialized)
-			return;
-		
-		initialized = true;
-		
-		if(settings.getString("hostname","") != "" && settings.getBoolean("autoconnect",false))
-			connect();
 	}
 	
 	void setActivity(Activity act)

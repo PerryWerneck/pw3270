@@ -135,7 +135,6 @@ public class PW3270Activity extends Activity
 		setContentView(host.view);
 		
 		host.view.loadUrl("file:index.html");
-		host.initialize();
     }
 
     @Override
