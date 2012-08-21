@@ -44,14 +44,18 @@ public class SettingsActivity extends Activity
 		
 			public stringSetting(Preference p)
 			{
+				String text = p.getSharedPreferences().getString(p.getKey(),"");
+
+				if(text != "")
+					p.setSummary(text);
+				
 				p.setOnPreferenceChangeListener(this);
-				this.onPreferenceChange(p,null);
 			}
 			
-			public boolean onPreferenceChange(Preference p, Object arg1) 
+			public boolean onPreferenceChange(Preference p, Object value) 
 			{
-				p.setSummary(p.getSharedPreferences().getString(p.getKey(),""));
-				return false;
+				p.setSummary((String) value);
+				return true;
 			}			
 		}
 		

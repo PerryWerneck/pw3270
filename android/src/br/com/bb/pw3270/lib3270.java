@@ -85,9 +85,10 @@ public class lib3270
 			switch (msg.what)
 			{
 			case 0: // Reconnect
-				if(!hSession.isConnected())
+				if(!hSession.isConnected() && settings.getString("hostname","") != "" && settings.getBoolean("reconnect",false))
 				{
-					Log.d(TAG,"------------------------------------Connecting");
+					Log.d(TAG,"Connection lost, reconnecting");
+					connect();
 				}
 				break;
 

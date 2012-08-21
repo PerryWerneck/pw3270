@@ -75,17 +75,9 @@ public class PW3270Activity extends Activity
         
 		Log.d(TAG, "Initializing UI");
 
-//		if(host.dlgSysMessage == null)
-//		{
-			// Cria dialogo para as mensagems de sistema
-//			Log.d(TAG, "Creating dlgSysMessage");
-			host.dlgSysMessage = new ProgressDialog(this);
-			host.dlgSysMessage.setCancelable(false);
-			host.dlgSysMessage.setTitle(host.res.getString(R.string.wait));
-//		}
-		
-//		Log.d(TAG, "Creating terminal object");
-//		autoconnect = settings.getString("hostname","") != "" && settings.getBoolean("autoconnect",false);			
+		host.dlgSysMessage = new ProgressDialog(this);
+		host.dlgSysMessage.setCancelable(false);
+		host.dlgSysMessage.setTitle(host.res.getString(R.string.wait));
 
 		// Reference:
 		// http://developer.android.com/reference/android/webkit/WebView.html
