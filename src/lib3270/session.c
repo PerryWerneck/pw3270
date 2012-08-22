@@ -131,9 +131,15 @@ static void set_cursor(H3270 *session, LIB3270_CURSOR id)
 
 static void message(H3270 *session, LIB3270_NOTIFY id , const char *title, const char *msg, const char *text)
 {
+#ifdef ANDROID
+	__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "%s\n",title);
+	__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "%s\n",msg);
+	__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "%s\n",text);
+#else
 	lib3270_write_log(session,"%s",title);
 	lib3270_write_log(session,"%s",msg);
 	lib3270_write_log(session,"%s",text);
+#endif // ANDROID
 }
 
 static void update_ssl(H3270 *session, LIB3270_SSL_STATE state)
