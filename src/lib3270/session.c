@@ -44,6 +44,7 @@
 #include "ftc.h"
 #include "kybdc.h"
 #include "3270ds.h"
+#include "tablesc.h"
 
 /*---[ Globals ]--------------------------------------------------------------------------------------------------------------*/
 
@@ -130,20 +131,9 @@ static void set_cursor(H3270 *session, LIB3270_CURSOR id)
 
 static void message(H3270 *session, LIB3270_NOTIFY id , const char *title, const char *msg, const char *text)
 {
-#ifdef ANDROID
-
-	__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "%s\n",title);
-	__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "%s\n",msg);
-	__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "%s\n",text);
-
-#else
-
 	lib3270_write_log(session,"%s",title);
 	lib3270_write_log(session,"%s",msg);
 	lib3270_write_log(session,"%s",text);
-
-#endif // ANDROID
-
 }
 
 static void update_ssl(H3270 *session, LIB3270_SSL_STATE state)
@@ -170,6 +160,7 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 
 	memset(hSession,0,sizeof(H3270));
 	hSession->sz = sizeof(H3270);
+	initialize_tables(hSession);
 
 	// Default calls
 	hSession->write				= lib3270_sock_send;
@@ -214,6 +205,8 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 	hSession->saved_wraparound_mode	= 1;
 	hSession->once_cset 			= -1;
 	hSession->state					= LIB3270_ANSI_STATE_DATA;
+	hSession->cgcsgid				= LIB3270_DEFAULT_CGEN | LIB3270_DEFAULT_CSET;
+
 
 	for(f=0;f<4;f++)
 		hSession->csd[f] = hSession->saved_csd[f] = LIB3270_ANSI_CSD_US;

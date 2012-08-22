@@ -929,20 +929,6 @@ LIB3270_EXPORT void * lib3270_malloc(int len)
 	return r;
 }
 
-/*
-void * Calloc(size_t nelem, size_t elsize)
-{
-	int		  sz = nelem * elsize;
-	char	* r = malloc(sz);
-
-	if(!r)
-		Error(NULL,"Out of memory in %s",__FUNCTION__);
-
-	memset(r, 0, sz);
-	return r;
-}
-*/
-
 LIB3270_EXPORT char * lib3270_get_resource_string(H3270 *hSession, const char *first_element, ...)
 {
 #ifdef ANDROID

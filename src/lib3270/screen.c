@@ -613,21 +613,7 @@ void show_3270_popup_dialog(H3270 *session, LIB3270_NOTIFY type, const char *tit
 
 static int logpopup(H3270 *session, void *widget, LIB3270_NOTIFY type, const char *title, const char *msg, const char *fmt, va_list arg)
 {
-#ifdef ANDROID
-
-	char   len	= strlen(fmt);
-	char * mask	= malloc(len+5);
-	strncpy(mask,fmt,len);
-	mask[len]	= '\n';
-	mask[len+1]	= 0;
-	__android_log_vprint(ANDROID_LOG_VERBOSE, PACKAGE_NAME, mask, arg);
-
-#else
-
 	lib3270_write_va_log(session,"lib3270",fmt,arg);
-
-#endif // ANDROID
-
 	return 0;
 }
 

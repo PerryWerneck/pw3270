@@ -67,7 +67,9 @@
 	#define LIB3270_TA void
 #endif // !LIB3270_TA
 
-	#define LIB3270_MB_MAX	16
+	#define LIB3270_MB_MAX			16
+	#define LIB3270_DEFAULT_CGEN	0x02b90000
+	#define LIB3270_DEFAULT_CSET	0x00000025
 
 	struct _h3270
 	{
@@ -107,6 +109,7 @@
 		int						  trace_skipping			: 1;
 		int						  need_tls_follows			: 1;
 		int						  cut_xfer_in_progress		: 1;
+		int						  auto_keymap				: 1;
 
 		char					* oversize;
 
@@ -263,6 +266,9 @@
 
 		// ft_dft.c
 		int						  dft_buffersize;		/**< Buffer size (LIMIN, LIMOUT) */
+
+		// charset.c
+		unsigned long			  cgcsgid;
 
 		// rpq.c
 		int						  rpq_complained : 1;

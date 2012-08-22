@@ -18,7 +18,7 @@
  * programa; se não, escreva para a Free Software Foundation, Inc., 51 Franklin
  * St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * Este programa está nomeado como charset.c e possui 749 linhas de código.
+ * Este programa está nomeado como charset.c e possui - linhas de código.
  *
  * Contatos:
  *
@@ -26,7 +26,6 @@
  * erico.mendonca@gmail.com	(Erico Mascarenhas Mendonça)
  * licinio@bb.com.br		(Licínio Luis Branco)
  * kraucer@bb.com.br		(Kraucer Fernandes Mazuco)
- * macmiranda@bb.com.br		(Marco Aurélio Caldas Miranda)
  *
  */
 
@@ -49,12 +48,6 @@
 	#include <stdlib.h>
 #endif // !ANDROID
 
-/*
-#if defined(X3270_DISPLAY) || (defined(C3270) && !defined(_WIN32))
-#include "screenc.h"
-#endif
-*/
-
 #include "tablesc.h"
 #include "utf8c.h"
 #include "utilc.h"
@@ -63,49 +56,31 @@
 
 #include <errno.h>
 
-//#include <locale.h>
-
-/*
-#if !defined(_WIN32)
-#include <langinfo.h>
-#endif
-*/
-
-// #include <lib3270/api.h>
-
 #define EURO_SUFFIX	"-euro"
 #define ES_SIZE		(sizeof(EURO_SUFFIX) - 1)
 
 /* Globals. */
-// static Boolean charset_changed = False;
-#define DEFAULT_CGEN	0x02b90000
-#define DEFAULT_CSET	0x00000025
-unsigned long cgcsgid = DEFAULT_CGEN | DEFAULT_CSET;
-unsigned long cgcsgid_dbcs = 0L;
+// unsigned long cgcsgid = LIB3270_DEFAULT_CGEN | LIB3270_DEFAULT_CSET;
+// unsigned long cgcsgid_dbcs = 0L;
 const char *default_display_charset = "3270cg-1a,3270cg-1,iso8859-1";
-// char *converter_names;
-char *encoding;
+// char *encoding;
 
-/*
-#if defined(X3270_DISPLAY)
-unsigned char xk_selector = 0;
-#endif
-*/
-
-unsigned char auto_keymap = 0;
+// unsigned char auto_keymap = 0;
 
 /* Statics. */
 static enum cs_result resource_charset(H3270 *hSession, const char *csname, char *cs, char *ftcs);
+
 typedef enum { CS_ONLY, FT_ONLY, BOTH } remap_scope;
-static enum cs_result remap_chars(const char *csname, char *spec, remap_scope scope, int *ne);
-static void remap_one(unsigned char ebc, KeySym iso, remap_scope scope,Boolean one_way);
+
+static enum cs_result remap_chars(H3270 *hSession, const char *csname, char *spec, remap_scope scope, int *ne);
+static void remap_one(H3270 *hSession, unsigned char ebc, KeySym iso, remap_scope scope,Boolean one_way);
 
 #if defined(DEBUG_CHARSET) /*[*/
 static enum cs_result check_charset(void);
 static char *char_if_ascii7(unsigned long l);
 #endif /*]*/
 
-static void set_cgcsgids(const char *spec);
+static void set_cgcsgids(H3270 *hSession, const char *spec);
 static int set_cgcsgid(char *spec, unsigned long *idp);
 
 static KeySym StringToKeysym(char *s);
@@ -113,54 +88,55 @@ static KeySym StringToKeysym(char *s);
 // static void set_charset_name(char *csname);
 // static char *charset_name = CN;
 
-static void
-charset_defaults(void)
+static void charset_defaults(void)
 {
 	/* Go to defaults first. */
-	(void) memcpy((char *)ebc2cg, (char *)ebc2cg0, 256);
-	(void) memcpy((char *)cg2ebc, (char *)cg2ebc0, 256);
-	(void) memcpy((char *)ebc2asc, (char *)ebc2asc0, 256);
-	(void) memcpy((char *)asc2ebc, (char *)asc2ebc0, 256);
+	(void) memcpy((char *)ebc2cg,	(const char *)ebc2cg0, 256);
+	(void) memcpy((char *)cg2ebc,	(const char *)cg2ebc0, 256);
+	(void) memcpy((char *)ebc2asc,	(const char *)ebc2asc0, 256);
+	(void) memcpy((char *)asc2ebc,	(const char *)asc2ebc0, 256);
 #if defined(X3270_FT) /*[*/
-	(void) memcpy((char *)ft2asc, (char *)ft2asc0, 256);
-	(void) memcpy((char *)asc2ft, (char *)asc2ft0, 256);
+	(void) memcpy((char *)ft2asc,	(const char *)ft2asc0, 256);
+	(void) memcpy((char *)asc2ft,	(const char *)asc2ft0, 256);
 #endif /*]*/
 	clear_xks();
 }
 
-static unsigned char save_ebc2cg[256];
-static unsigned char save_cg2ebc[256];
-static unsigned char save_ebc2asc[256];
-static unsigned char save_asc2ebc[256];
-
-#if defined(X3270_FT) /*[*/
-static unsigned char save_ft2asc[256];
-static unsigned char save_asc2ft[256];
-#endif /*]*/
-
-static void
-save_charset(void)
+struct charset_buffer
 {
-	(void) memcpy((char *)save_ebc2cg, (char *)ebc2cg, 256);
-	(void) memcpy((char *)save_cg2ebc, (char *)cg2ebc, 256);
-	(void) memcpy((char *)save_ebc2asc, (char *)ebc2asc, 256);
-	(void) memcpy((char *)save_asc2ebc, (char *)asc2ebc, 256);
+	unsigned char ebc2cg[256];
+	unsigned char cg2ebc[256];
+	unsigned char ebc2asc[256];
+	unsigned char asc2ebc[256];
+
+	#if defined(X3270_FT) /*[*/
+	unsigned char ft2asc[256];
+	unsigned char asc2ft[256];
+	#endif /*]*/
+};
+
+
+static void save_charset(struct charset_buffer *save)
+{
+	(void) memcpy((char *)save->ebc2cg, (char *)ebc2cg, 256);
+	(void) memcpy((char *)save->cg2ebc, (char *)cg2ebc, 256);
+	(void) memcpy((char *)save->ebc2asc, (char *)ebc2asc, 256);
+	(void) memcpy((char *)save->asc2ebc, (char *)asc2ebc, 256);
 #if defined(X3270_FT) /*[*/
-	(void) memcpy((char *)save_ft2asc, (char *)ft2asc, 256);
-	(void) memcpy((char *)save_asc2ft, (char *)asc2ft, 256);
+	(void) memcpy((char *)save->ft2asc, (char *)ft2asc, 256);
+	(void) memcpy((char *)save->asc2ft, (char *)asc2ft, 256);
 #endif /*]*/
 }
 
-static void
-restore_charset(void)
+static void restore_charset(struct charset_buffer *save)
 {
-	(void) memcpy((char *)ebc2cg, (char *)save_ebc2cg, 256);
-	(void) memcpy((char *)cg2ebc, (char *)save_cg2ebc, 256);
-	(void) memcpy((char *)ebc2asc, (char *)save_ebc2asc, 256);
-	(void) memcpy((char *)asc2ebc, (char *)save_asc2ebc, 256);
+	(void) memcpy((char *)ebc2cg, (char *)save->ebc2cg, 256);
+	(void) memcpy((char *)cg2ebc, (char *)save->cg2ebc, 256);
+	(void) memcpy((char *)ebc2asc, (char *)save->ebc2asc, 256);
+	(void) memcpy((char *)asc2ebc, (char *)save->asc2ebc, 256);
 #if defined(X3270_FT) /*[*/
-	(void) memcpy((char *)ft2asc, (char *)save_ft2asc, 256);
-	(void) memcpy((char *)asc2ft, (char *)save_asc2ft, 256);
+	(void) memcpy((char *)ft2asc, (char *)save->ft2asc, 256);
+	(void) memcpy((char *)asc2ft, (char *)save->asc2ft, 256);
 #endif /*]*/
 }
 
@@ -207,14 +183,14 @@ enum cs_result charset_init(H3270 *hSession, const char *csname)
 //	const char *ftcs;
 	enum cs_result rc;
 	char *ccs, *cftcs;
-	const char *ak;
-
+	const char	*ak;
+	struct charset_buffer save;
 
 	/* Do nothing, successfully. */
 	if (csname == CN || !strcasecmp(csname, "us"))
 	{
 		charset_defaults();
-		set_cgcsgids(CN);
+		set_cgcsgids(hSession,CN);
 		set_display_charset(hSession, "ISO-8859-1");
 		return CS_OKAY;
 	}
@@ -244,15 +220,15 @@ enum cs_result charset_init(H3270 *hSession, const char *csname)
 	cftcs = lib3270_get_resource_string(hSession,"ftCharset",csname,NULL);
 
 	/* Save the current definitions, and start over with the defaults. */
-	save_charset();
+	save_charset(&save);
 	charset_defaults();
 
 	/* Check for auto-keymap. */
 	ak = lib3270_get_resource_string(hSession,"autoKeymap", csname, NULL);
 	if (ak != NULL)
-		auto_keymap = !strcasecmp(ak, "true");
+		hSession->auto_keymap = strcasecmp(ak, "true") ? 0 : 1;
 	else
-		auto_keymap = 0;
+		hSession->auto_keymap = 0;
 
 	/* Interpret them. */
 	rc = resource_charset(hSession,csname, ccs, cftcs);
@@ -267,7 +243,7 @@ enum cs_result charset_init(H3270 *hSession, const char *csname)
 #endif /*]*/
 
 	if (rc != CS_OKAY)
-		restore_charset();
+		restore_charset(&save);
 
 /*
 #if defined(X3270_DBCS)
@@ -291,9 +267,10 @@ enum cs_result charset_init(H3270 *hSession, const char *csname)
 	return rc;
 }
 
-/* Set a CGCSGID.  Return 0 for success, -1 for failure. */
-static int
-set_cgcsgid(char *spec, unsigned long *r)
+/**
+ * Set a CGCSGID.  Return 0 for success, -1 for failure.
+ */
+static int set_cgcsgid(char *spec, unsigned long *r)
 {
 	unsigned long cp;
 	char *ptr;
@@ -303,7 +280,7 @@ set_cgcsgid(char *spec, unsigned long *r)
 	    ptr != spec &&
 	    *ptr == '\0') {
 		if (!(cp & ~0xffffL))
-			*r = DEFAULT_CGEN | cp;
+			*r = LIB3270_DEFAULT_CGEN | cp;
 		else
 			*r = cp;
 		return 0;
@@ -312,7 +289,7 @@ set_cgcsgid(char *spec, unsigned long *r)
 }
 
 /* Set the CGCSGIDs. */
-static void set_cgcsgids(const char *spec)
+static void set_cgcsgids(H3270 *hSession, const char *spec)
 {
 	int n_ids = 0;
 	char *spec_copy;
@@ -327,21 +304,21 @@ static void set_cgcsgids(const char *spec)
 			buf = CN;
 			switch (n_ids) {
 			case 0:
-			    idp = &cgcsgid;
+			    idp = &hSession->cgcsgid;
 			    break;
 #if defined(X3270_DBCS) /*[*/
 			case 1:
-			    idp = &cgcsgid_dbcs;
+			    idp = &hSession->cgcsgid_dbcs;
 			    break;
 #endif /*]*/
 			default:
-			    popup_an_error(NULL,"Extra CGCSGID(s), ignoring");
+			    popup_an_error(hSession,_( "Extra CGCSGID(s), ignoring" ));
 			    break;
 			}
 			if (idp == NULL)
 				break;
 			if (set_cgcsgid(token, idp) < 0) {
-				popup_an_error(NULL,"Invalid CGCSGID '%s', ignoring",token);
+				popup_an_error(hSession,_( "Invalid CGCSGID '%s', ignoring" ),token);
 				n_ids = -1;
 				break;
 			}
@@ -352,9 +329,9 @@ static void set_cgcsgids(const char *spec)
 			return;
 	}
 
-	cgcsgid = DEFAULT_CGEN | DEFAULT_CSET;
+	hSession->cgcsgid = LIB3270_DEFAULT_CGEN | LIB3270_DEFAULT_CSET;
 #if defined(X3270_DBCS) /*[*/
-	cgcsgid_dbcs = 0L;
+	hSession->cgcsgid_dbcs = 0L;
 #endif /*]*/
 }
 
@@ -385,11 +362,11 @@ static enum cs_result resource_charset(H3270 *hSession, const char *csname, char
 	char			* dcs;
 
 	/* Interpret the spec. */
-	rc = remap_chars(csname, cs, (ftcs == NULL)? BOTH: CS_ONLY, &ne);
+	rc = remap_chars(hSession, csname, cs, (ftcs == NULL)? BOTH: CS_ONLY, &ne);
 	if (rc != CS_OKAY)
 		return rc;
 	if (ftcs != NULL) {
-		rc = remap_chars(csname, ftcs, FT_ONLY, &ne);
+		rc = remap_chars(hSession, csname, ftcs, FT_ONLY, &ne);
 		if (rc != CS_OKAY)
 			return rc;
 	}
@@ -449,7 +426,7 @@ static enum cs_result resource_charset(H3270 *hSession, const char *csname, char
 //	set_cgcsgids(get_fresource("%s.%s", "codepage", csname));
 	{
 		char *ptr = lib3270_get_resource_string(hSession,"codepage", csname, NULL);
-		set_cgcsgids(ptr);
+		set_cgcsgids(hSession,ptr);
 		lib3270_free(ptr);
 	}
 
@@ -500,8 +477,7 @@ parse_keysym(char *s, Boolean extended)
 }
 
 /* Process a single character definition. */
-static void
-remap_one(unsigned char ebc, KeySym iso, remap_scope scope, Boolean one_way)
+static void remap_one(H3270 *hSession, unsigned char ebc, KeySym iso, remap_scope scope, Boolean one_way)
 {
 	unsigned char cg;
 
@@ -515,7 +491,7 @@ remap_one(unsigned char ebc, KeySym iso, remap_scope scope, Boolean one_way)
 	if (iso == 0x20)
 		one_way = True;
 
-	if (!auto_keymap || iso <= 0xff) {
+	if (!hSession->auto_keymap || iso <= 0xff) {
 #if defined(X3270_FT) /*[*/
 		unsigned char aa;
 #endif /*]*/
@@ -524,17 +500,21 @@ remap_one(unsigned char ebc, KeySym iso, remap_scope scope, Boolean one_way)
 			if (iso <= 0xff) {
 				cg = asc2cg[iso];
 
-				if (cg2asc[cg] == iso || iso == 0) {
+				if (cg2asc[cg] == iso || iso == 0)
+				{
 					/* well-defined */
 					ebc2cg[ebc] = cg;
 					if (!one_way)
 						cg2ebc[cg] = ebc;
-				} else {
+				}
+				else
+				{
 					/* into a hole */
 					ebc2cg[ebc] = CG_boxsolid;
 				}
 			}
-			if (ebc > 0x40) {
+			if (ebc > 0x40)
+			{
 				ebc2asc[ebc] = iso;
 				if (!one_way)
 					asc2ebc[iso] = ebc;
@@ -579,9 +559,8 @@ remap_one(unsigned char ebc, KeySym iso, remap_scope scope, Boolean one_way)
 	}
 }
 
-/*
- * Parse an EBCDIC character set map, a series of pairs of numeric EBCDIC codes
- * and keysyms.
+/**
+ * Parse an EBCDIC character set map, a series of pairs of numeric EBCDIC codes and keysyms.
  *
  * If the keysym is in the range 1..255, it is a remapping of the EBCDIC code
  * for a standard Latin-1 graphic, and the CG-to-EBCDIC map will be modified
@@ -592,7 +571,7 @@ remap_one(unsigned char ebc, KeySym iso, remap_scope scope, Boolean one_way)
  * characters that replace certain standard Latin-1 graphics.  The keysym
  * will be entered into the extended keysym translation table.
  */
-static enum cs_result remap_chars(const char *csname, char *spec, remap_scope scope, int *ne)
+static enum cs_result remap_chars(H3270 *hSession, const char *csname, char *spec, remap_scope scope, int *ne)
 {
 	char *s;
 	char *ebcs, *isos;
@@ -620,7 +599,7 @@ static enum cs_result remap_chars(const char *csname, char *spec, remap_scope sc
 
 		while ((tok = strtok(s, " \t\n")) != CN) {
 			if (ebc >= 256) {
-				popup_an_error(NULL,"Charset has more than 256 entries");
+				popup_an_error(hSession,_( "Charset has more than 256 entries" ));
 				rc = CS_BAD;
 				break;
 			}
@@ -634,20 +613,18 @@ static enum cs_result remap_chars(const char *csname, char *spec, remap_scope sc
 				if (strlen(tok) == 1)
 					iso = tok[0] & 0xff;
 				else {
-					popup_an_error(NULL,"Invalid charset "
-					    "entry '%s' (#%d)",
-					    tok, ebc);
+					popup_an_error(hSession,_( "Invalid charset entry '%s' (#%d)" ),tok, ebc);
 					rc = CS_BAD;
 					break;
 				}
 			}
-			remap_one(ebc, iso, scope, one_way);
+			remap_one(hSession, ebc, iso, scope, one_way);
 
 			ebc++;
 			s = CN;
 		}
 		if (ebc != 256) {
-			popup_an_error(NULL,"Charset has %d entries, need 256", ebc);
+			popup_an_error(NULL,_( "Charset has %d entries, need 256" ), ebc);
 			rc = CS_BAD;
 		} else {
 			/*
@@ -680,12 +657,11 @@ static enum cs_result remap_chars(const char *csname, char *spec, remap_scope sc
 			    ((ebc = strtoul(ebcs, &ptr, 0)),
 			     ptr == ebcs || *ptr != '\0') ||
 			    (iso = parse_keysym(isos, True)) == NoSymbol) {
-				popup_an_error(NULL,"Cannot parse %s \"%s\", entry %d",
-				    ResCharset, csname, *ne);
+				popup_an_error(hSession,_( "Cannot parse %s \"%s\", entry %d" ), "charset", csname, *ne);
 				rc = CS_BAD;
 				break;
 			}
-			remap_one(ebc, iso, scope, one_way);
+			remap_one(hSession, ebc, iso, scope, one_way);
 		}
 	}
 	lib3270_free(spec);

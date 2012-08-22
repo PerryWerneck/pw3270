@@ -386,11 +386,6 @@
 		else
 		{
 			append_element(&info,HTML_ELEMENT_LINE_BREAK);
-/*
-#if defined(DEBUG) || defined(ANDROID)
-			append_string(&info,"\n");
-#endif // DEBUG
-*/
 		}
 
 	}
@@ -421,23 +416,6 @@
 	}
 
 	info.text = lib3270_realloc(info.text,strlen(info.text)+2);
-
-/*
-#if defined(DEBUG) || defined(ANDROID)
-	{
-		char *text = strdup(info.text);
-		char *save;
-		char *ptr;
-
-		for(ptr=strtok_r(text,"\n",&save);ptr;ptr = strtok_r(NULL,"\n",&save))
-		{
-			trace("%s",ptr);
-		}
-
-		free(text);
-	}
-#endif // DEBUG
-*/
 
 	return info.text;
  }

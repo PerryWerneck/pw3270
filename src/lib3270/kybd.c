@@ -180,7 +180,7 @@ struct ta
 */
 
 
-#if defined(DEBUG) || defined(ANDROID)
+#if defined(DEBUG)
 	#define ENQUEUE_ACTION(x) enq_ta(hSession, (void (*)(H3270 *, const char *, const char *)) x, NULL, NULL, #x)
 #else
 	#define ENQUEUE_ACTION(x) enq_ta(hSession, (void (*)(H3270 *, const char *, const char *)) x, NULL, NULL)
@@ -263,7 +263,7 @@ static int enq_chk(H3270 *hSession)
 /*
  * Put an action on the typeahead queue.
  */
-#if defined(DEBUG) || defined(ANDROID)
+#if defined(DEBUG)
 static void enq_ta(H3270 *hSession, void (*fn)(H3270 *, const char *, const char *), const char *parm1, const char *parm2, const char *name)
 #else
 static void enq_ta(H3270 *hSession, void (*fn)(H3270 *, const char *, const char *), const char *parm1, const char *parm2)
@@ -758,7 +758,7 @@ static Boolean key_Character(H3270 *hSession, int code, Boolean with_ge, Boolean
 
 		(void) sprintf(codename, "%d", code |(with_ge ? GE_WFLAG : 0) | (pasting ? PASTE_WFLAG : 0));
 
-#if defined(DEBUG) || defined(ANDROID)
+#if defined(DEBUG)
 		enq_ta(hSession,key_Character_wrapper, codename, CN, "key_Character_wrapper");
 #else
 		enq_ta(hSession,key_Character_wrapper, codename, CN);

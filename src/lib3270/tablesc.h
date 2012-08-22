@@ -16,25 +16,26 @@
  *	tablesc.h
  *		Global declarations for tables.c.
  */
-
-LIB3270_INTERNAL unsigned short asc2cg[256];
-LIB3270_INTERNAL unsigned short cg2asc[256];
+LIB3270_INTERNAL void initialize_tables(H3270 *hSession);
 LIB3270_INTERNAL unsigned short ebc2cg[256];
-LIB3270_INTERNAL unsigned short ebc2cg0[256];
 LIB3270_INTERNAL unsigned short cg2ebc[256];
-LIB3270_INTERNAL unsigned short cg2ebc0[256];
 LIB3270_INTERNAL unsigned short ebc2asc[256];
-LIB3270_INTERNAL unsigned short ebc2asc0[256];
-LIB3270_INTERNAL unsigned short ebc2asc7[256];
-LIB3270_INTERNAL unsigned short ebc2asc70[256];
 LIB3270_INTERNAL unsigned short asc2ebc[256];
-LIB3270_INTERNAL unsigned short asc2ebc0[256];
-LIB3270_INTERNAL unsigned short cg2uc[256];
-LIB3270_INTERNAL unsigned short ge2asc[256];
-LIB3270_INTERNAL unsigned short ge2cg8[256];
-LIB3270_INTERNAL unsigned short asc2uc[256];
-LIB3270_INTERNAL unsigned short ebc2uc[256];
 LIB3270_INTERNAL unsigned short ft2asc[256];
-LIB3270_INTERNAL unsigned short ft2asc0[256];
 LIB3270_INTERNAL unsigned short asc2ft[256];
-LIB3270_INTERNAL unsigned short asc2ft0[256];
+
+LIB3270_INTERNAL const unsigned short asc2cg[256];
+LIB3270_INTERNAL const unsigned short cg2asc[256];
+LIB3270_INTERNAL const unsigned short ebc2cg0[256];
+LIB3270_INTERNAL const unsigned short cg2ebc0[256];
+LIB3270_INTERNAL const unsigned short ebc2asc0[256];
+LIB3270_INTERNAL const unsigned short ebc2asc7[256];
+LIB3270_INTERNAL const unsigned short ebc2asc70[256];
+LIB3270_INTERNAL const unsigned short asc2ebc0[256];
+// LIB3270_INTERNAL const unsigned short cg2uc[256];
+LIB3270_INTERNAL const unsigned short ge2asc[256];
+LIB3270_INTERNAL const unsigned short ge2cg8[256];
+LIB3270_INTERNAL const unsigned short asc2uc[256];
+LIB3270_INTERNAL const unsigned short ebc2uc[256];
+LIB3270_INTERNAL const unsigned short ft2asc0[256];
+LIB3270_INTERNAL const unsigned short asc2ft0[256];

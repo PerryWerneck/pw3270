@@ -945,7 +945,7 @@ static void do_qr_charsets(H3270 *hSession)
 		*hSession->obptr++ = 0x00;	/*  SUBSN */
 	}
 #endif /*]*/
-	SET32(hSession->obptr, cgcsgid);		/*  CGCSGID */
+	SET32(hSession->obptr, hSession->cgcsgid);		/*  CGCSGID */
 	if (!*standard_font)
 	{
 		/* special 3270 font, includes APL */

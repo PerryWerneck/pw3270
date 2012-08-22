@@ -746,7 +746,7 @@ LIB3270_EXPORT void lib3270_register_schange(H3270 *h, LIB3270_STATE_CHANGE tx, 
 /* Signal a state change. */
 void lib3270_st_changed(H3270 *h, LIB3270_STATE tx, int mode)
 {
-#if defined(DEBUG) || defined(ANDROID)
+#if defined(DEBUG)
 
 	static const char * state_name[LIB3270_STATE_USER] =
 	{

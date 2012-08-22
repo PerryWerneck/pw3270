@@ -572,7 +572,7 @@ static int proxy_socks4(H3270 *hSession, int fd, char *host, unsigned short port
 	user = getenv("USER");
 	if (user == CN)
 	    	user = "nobody";
-#endif
+#endif // ANDROID
 
 	/* Send the request to the server. */
 	if (use_4a) {
