@@ -84,10 +84,13 @@ static void toplevel_setup(GtkWindow *window)
 {
  	gchar * name		= g_strdup_printf("%s.png",g_get_application_name());
 	gchar * filename 	= pw3270_build_filename(GTK_WIDGET(window),name,NULL);
+ 	gchar * role		= g_strdup_printf("%s_top",g_get_application_name());
 
 	gtk_window_set_type_hint(window,GDK_WINDOW_TYPE_HINT_NORMAL);
 	gtk_window_set_position(window,GTK_WIN_POS_CENTER);
-	gtk_window_set_role(window,"toplevel");
+	gtk_window_set_role(window,role);
+
+	g_free(role);
 
 	// Set default icon
 	if(g_file_test(filename,G_FILE_TEST_EXISTS))
@@ -245,10 +248,11 @@ int main(int argc, char *argv[])
 
 		toplevel_setup(GTK_WINDOW(toplevel));
 
-		gtk_window_present(GTK_WINDOW(toplevel));
-
 		if(pw3270_get_toggle(toplevel,LIB3270_TOGGLE_FULL_SCREEN))
 			gtk_window_fullscreen(GTK_WINDOW(toplevel));
+
+		gtk_window_present(GTK_WINDOW(toplevel));
+
 
 #ifdef HAVE_GTKMAC
 		gtk_osxapplication_ready(osxapp);
