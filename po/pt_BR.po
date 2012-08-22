@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-15 07:51-0300\n"
+"POT-Creation-Date: 2012-08-22 09:20-0300\n"
 "PO-Revision-Date: 2012-08-13 12:14-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português do Brasil <>\n"
@@ -58,11 +58,11 @@ msgstr "%s: Familia %d é inválida"
 msgid "%s:%d"
 msgstr "%s:%d"
 
-#: screen.c:645 screen.c:647 screen.c:677 screen.c:691 screen.c:802
+#: screen.c:637 screen.c:639 screen.c:669 screen.c:683 screen.c:794
 msgid "3270 Error"
 msgstr "Erro 3270"
 
-#: screen.c:662
+#: screen.c:654
 msgid "3270 Warning"
 msgstr "Alerta 3270"
 
@@ -145,10 +145,24 @@ msgstr "Cancelado pelo usuário"
 msgid "Cannot create socket handle"
 msgstr "Não foi possível criar um manipulador de socket"
 
-#: session.c:323
+#: session.c:322
 #, c-format
 msgid "Cannot find charset \"%s\", using defaults"
 msgstr "Não encontrei codificação \"%s\", usando defaults"
+
+#: charset.c:660
+#, fuzzy, c-format
+msgid "Cannot parse %s \"%s\", entry %d"
+msgstr "Não encontrei codificação \"%s\", usando defaults"
+
+#: charset.c:627
+#, c-format
+msgid "Charset has %d entries, need 256"
+msgstr "Charset has %d entries, need 256"
+
+#: charset.c:602
+msgid "Charset has more than 256 entries"
+msgstr "Charset has more than 256 entries"
 
 #: ui/00default.xml:133
 msgid "Clear"
@@ -266,6 +280,10 @@ msgstr "Erro ao resolver %s: %s"
 msgid "Event Trace"
 msgstr "Trace de eventos"
 
+#: charset.c:315
+msgid "Extra CGCSGID(s), ignoring"
+msgstr "Extra CGCSGID(s), ignoring"
+
 #: ft.c:199
 msgid "File transfer is already active in this session"
 msgstr "Transferência de arquivos já está ativa nesta sessão"
@@ -339,6 +357,16 @@ msgstr "Método de entrada"
 #: host.c:496
 msgid "Invalid (empty) hostname"
 msgstr "Nome do host é invalido (vazio)"
+
+#: charset.c:321
+#, c-format
+msgid "Invalid CGCSGID '%s', ignoring"
+msgstr "Invalid CGCSGID '%s', ignoring"
+
+#: charset.c:616
+#, c-format
+msgid "Invalid charset entry '%s' (#%d)"
+msgstr "Invalid charset entry '%s' (#%d)"
 
 #: proxy.c:284 proxy.c:296
 msgid "Invalid proxy hostname syntax"
