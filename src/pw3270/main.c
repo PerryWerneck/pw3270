@@ -250,6 +250,8 @@ int main(int argc, char *argv[])
 
 		if(pw3270_get_toggle(toplevel,LIB3270_TOGGLE_FULL_SCREEN))
 			gtk_window_fullscreen(GTK_WINDOW(toplevel));
+		else
+			pw3270_restore_window_state(toplevel,"toplevel");
 
 		gtk_window_present(GTK_WINDOW(toplevel));
 
@@ -259,6 +261,8 @@ int main(int argc, char *argv[])
 #endif // HAVE_GTKMAC
 
 		gtk_main();
+
+		pw3270_save_window_state(toplevel,"toplevel");
 
 	}
 

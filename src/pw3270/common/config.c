@@ -667,3 +667,80 @@ GKeyFile * get_application_keyfile(void)
 	return program_config;
 }
 #endif // WIN_REGISTRY_ENABLED
+
+ static const struct _WindowState
+ {
+        const char *name;
+        GdkWindowState flag;
+        void (*activate)(GtkWindow *);
+ } WindowState[] =
+ {
+        { "Maximized",	GDK_WINDOW_STATE_MAXIMIZED,	gtk_window_maximize             },
+        { "Iconified",	GDK_WINDOW_STATE_ICONIFIED,	gtk_window_iconify              },
+        { "Sticky",		GDK_WINDOW_STATE_STICKY,	gtk_window_stick                }
+ };
+
+void save_window_to_config(const gchar *group, const gchar *key, GtkWidget *hwnd)
+{
+	GdkWindowState CurrentState = gdk_window_get_state(gtk_widget_get_window(hwnd));
+
+	if( !(CurrentState & (GDK_WINDOW_STATE_FULLSCREEN|GDK_WINDOW_STATE_MAXIMIZED|GDK_WINDOW_STATE_ICONIFIED)) )
+	{
+#if defined( WIN_REGISTRY_ENABLED )
+
+		#warning save window state to registry
+
+#else
+		int			  f;
+		int 		  pos[2];
+		GKeyFile	* conf 	= get_application_keyfile();
+		gchar		* id	= g_strconcat(group,".",key,NULL);
+
+		for(f=0;f<G_N_ELEMENTS(WindowState);f++)
+			g_key_file_set_boolean(conf,id,WindowState[f].name,CurrentState & WindowState[f].flag);
+
+        gtk_window_get_size(GTK_WINDOW(hwnd),&pos[0],&pos[1]);
+        g_key_file_set_integer_list(conf,id,"size",pos,2);
+
+		g_free(id);
+
+#endif // WIN_REGISTRY_ENABLED
+	}
+}
+
+void restore_window_from_config(const gchar *group, const gchar *key, GtkWidget *hwnd)
+{
+#if defined( WIN_REGISTRY_ENABLED )
+
+	#warning Implement window state saving on window
+
+#else
+	gchar		* id	= g_strconcat(group,".",key,NULL);
+	GKeyFile	* conf 	= get_application_keyfile();
+
+	if(g_key_file_has_key(conf,id,"size",NULL))
+	{
+		gsize	  sz	= 2;
+		gint	* vlr	=  g_key_file_get_integer_list(conf,id,"size",&sz,NULL);
+		int		  f;
+
+		if(vlr)
+		{
+			gtk_window_resize(GTK_WINDOW(hwnd),vlr[0],vlr[1]);
+			g_free(vlr);
+		}
+
+		for(f=0;f<G_N_ELEMENTS(WindowState);f++)
+		{
+			if(g_key_file_get_boolean(conf,id,WindowState[f].name,NULL))
+				WindowState[f].activate(GTK_WINDOW(hwnd));
+		}
+
+	}
+
+	g_free(id);
+
+#endif // WIN_REGISTRY_ENABLED
+
+}
+

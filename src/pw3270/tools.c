@@ -78,7 +78,7 @@ int libpw3270_unloaded(void)
 }
 
 
-gchar * pw3270_build_filename(GtkWidget *widget, const gchar *first_element, ...)
+LIB3270_EXPORT gchar * pw3270_build_filename(GtkWidget *widget, const gchar *first_element, ...)
 {
 	va_list args;
 	gchar	*path;
@@ -87,4 +87,14 @@ gchar * pw3270_build_filename(GtkWidget *widget, const gchar *first_element, ...
 	path = filename_from_va(first_element,args);
 	va_end(args);
 	return path;
+}
+
+LIB3270_EXPORT void pw3270_save_window_state(GtkWidget *widget, const gchar *name)
+{
+	save_window_to_config("window", name, widget);
+}
+
+LIB3270_EXPORT void pw3270_restore_window_state(GtkWidget *widget, const gchar *name)
+{
+	restore_window_from_config("window", name, widget);
 }

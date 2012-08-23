@@ -62,6 +62,7 @@
 
  #include <libintl.h>
  #include <glib/gi18n.h>
+ #include <gtk/gtk.h>
 
  #if defined( DEBUG )
 	#define trace(x, ...)	fprintf(stderr,"%s(%d):\t" x "\n",__FILE__,__LINE__, __VA_ARGS__); fflush(stderr);
@@ -83,6 +84,9 @@
 
  gchar 		* build_data_filename(const gchar *first_element, ...);
  gchar		* filename_from_va(const gchar *first_element, va_list args);
+
+ void		  save_window_to_config(const gchar *group, const gchar *key, GtkWidget *hwnd);
+ void		  restore_window_from_config(const gchar *group, const gchar *key, GtkWidget *hwnd);
 
 #ifdef WIN_REGISTRY_ENABLED
  gboolean	  get_registry_handle(const gchar *group, HKEY *hKey, REGSAM samDesired);
