@@ -178,6 +178,7 @@
  LIB3270_EXPORT	void		  	  v3270_draw_element(cairo_t *cr, unsigned char chr, unsigned short attr, H3270 *session, guint height, GdkRectangle *rect, GdkColor *color);
  LIB3270_EXPORT	void			  v3270_set_color(GtkWidget *widget, enum V3270_COLOR id, GdkColor *color);
  LIB3270_EXPORT	GdkColor		* v3270_get_color(GtkWidget *widget, enum V3270_COLOR id);
+ LIB3270_EXPORT gboolean		  v3270_set_keyboard_action(GtkWidget *widget, const gchar *key_name, GtkAction *action);
 
  // Misc
  LIB3270_EXPORT	GtkIMContext	* v3270_get_im_context(GtkWidget *widget);

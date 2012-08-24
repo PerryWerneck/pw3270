@@ -52,4 +52,6 @@
 
 	</menubar>
 
+	<accelerator name='ctrl' action='Enter' key='Control_R' />
+
 </ui>

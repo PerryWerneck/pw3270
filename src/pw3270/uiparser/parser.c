@@ -30,6 +30,7 @@
  */
 
  #include "private.h"
+ #include <v3270.h>
 
  #ifdef HAVE_GTKMAC
 	#include <gtkmacintegration/gtk-mac-menu.h>
@@ -109,7 +110,9 @@ struct action_info
 {
 	GtkActionGroup	** group;
 	GtkAccelGroup	*  accel_group;
+	GtkWidget		*  widget;
 };
+
 
 static void action_group_setup(gpointer key, GtkAction *action, struct action_info *info)
 {
@@ -130,7 +133,7 @@ static void action_group_setup(gpointer key, GtkAction *action, struct action_in
 */
 
 
-		if(key_name)
+		if(key_name && !v3270_set_keyboard_action(info->widget,key_name,action))
 		{
 			gtk_action_group_add_action_with_accel(info->group[group_id],action,key_name);
 			gtk_action_connect_accelerator(action);
@@ -176,6 +179,7 @@ void parser_build(struct parser *p, GtkWidget *widget)
 	GtkWidget			* parent;
 	int				 	  f;
 
+	a_info.widget		= widget;
 	a_info.group 		= g_new0(GtkActionGroup *,(g_strv_length((gchar **) p->group)+1));
 	a_info.accel_group	= gtk_accel_group_new();
 
@@ -221,7 +225,7 @@ void parser_build(struct parser *p, GtkWidget *widget)
 	gtk_window_add_accel_group(GTK_WINDOW(p->toplevel),a_info.accel_group);
 
 	gtk_window_set_default(GTK_WINDOW(p->toplevel),widget);
-	
+
 #ifdef HAVE_GTKMAC
 	if(p->topmenu)
 	{
