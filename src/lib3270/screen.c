@@ -618,7 +618,9 @@ static int logpopup(H3270 *session, void *widget, LIB3270_NOTIFY type, const cha
 	__android_log_vprint(ANDROID_LOG_VERBOSE, PACKAGE_NAME, mask, arg);
 	lib3270_free(mask);
 #else
-	lib3270_write_va_log(session,"lib3270",fmt,arg);
+	lib3270_write_log(session,"popup","%s",title);
+	lib3270_write_log(session,"popup","%s",msg);
+	lib3270_write_va_log(session,"popup",fmt,arg);
 #endif // ANDROID
 	return 0;
 }
