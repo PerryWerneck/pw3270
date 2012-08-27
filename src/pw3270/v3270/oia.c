@@ -502,9 +502,9 @@ void v3270_draw_oia(cairo_t *cr, H3270 *host, int row, int cols, struct v3270_me
 		{ V3270_OIA_TIMER,				setup_timer_position		},
 		{ V3270_OIA_SPINNER, 			setup_spinner_position		},
 		{ V3270_OIA_LUNAME, 			setup_luname_position		},
-#ifdef X3270_PRINTER
+#ifdef HAVE_PRINTER
 		{ V3270_OIA_PRINTER,			setup_single_char_right		},
-#endif // X3270_PRINTER
+#endif // HAVE_PRINTER
 		{ V3270_OIA_SCRIPT,				setup_single_char_right		},
 		{ V3270_OIA_INSERT,				setup_insert_position		},
 		{ V3270_OIA_TYPEAHEAD,			setup_single_char_right		},
@@ -1047,26 +1047,9 @@ void v3270_update_oia(H3270 *session, LIB3270_FLAG id, unsigned char on)
 		cairo_destroy(cr);
 		break;
 
-/*
-	case LIB3270_FLAG_SECURE:
-		cr = set_update_region(terminal,&r,V3270_OIA_SSL);
-		v3270_draw_ssl_status(cr,terminal->host,&terminal->metrics,terminal->color,r);
-		gtk_widget_queue_draw_area(GTK_WIDGET(terminal),r->x,r->y,r->width,r->height);
-		cairo_destroy(cr);
-		break;
-*/
-
 	case LIB3270_FLAG_TYPEAHEAD:
 		update_text_field(terminal,on,V3270_OIA_TYPEAHEAD,"T");
 		break;
-
-/*
-#if defined(LIB3270_FLAG_PRINTER) && defined(X3270_PRINTER)
-	case LIB3270_FLAG_PRINTER:
-		update_text_field(terminal,on,V3270_OIA_PRINTER,"P");
-		break;
-#endif //  LIB3270_FLAG_PRINTER
-*/
 
 	default:
 		return;

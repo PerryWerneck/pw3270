@@ -124,7 +124,7 @@
 #define CSDES	LIB3270_ANSI_STATE_CSDES
 #define N1		LIB3270_ANSI_STATE_N1
 #define DECP	LIB3270_ANSI_STATE_DECP
-#define TEXT	LIB3270_ANSI_STATE_TEXT
+// #define TEXT	LIB3270_ANSI_STATE_TEXT
 #define TEXT2	LIB3270_ANSI_STATE_TEXT2
 #define MBPEND	LIB3270_ANSI_STATE_MBPEND
 
@@ -1597,14 +1597,14 @@ xterm_text_mode(H3270 *hSession, int ig1 unused, int ig2 unused)
 {
 	nx = 0;
 	n[0] = 0;
-	return TEXT;
+	return LIB3270_ANSI_STATE_TEXT;
 }
 
 static enum lib3270_ansi_state
 xterm_text_semicolon(H3270 *hSession, int ig1 unused, int ig2 unused)
 {
 	tx = 0;
-	return TEXT2;
+	return LIB3270_ANSI_STATE_TEXT2;
 }
 
 static enum lib3270_ansi_state

@@ -112,9 +112,9 @@
 
 //	V3270_OIA_CAPS,				/**< Caps indication ("A" or blank) */
 
-#ifdef X3270_PRINTER
+#ifdef HAVE_PRINTER
 	V3270_OIA_PRINTER,			/**< Printer indication ("P" or blank) */
-#endif // X3270_PRINTER
+#endif // HAVE_PRINTER
 
 	V3270_OIA_FIELD_COUNT
 

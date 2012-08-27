@@ -688,7 +688,29 @@ void save_window_to_config(const gchar *group, const gchar *key, GtkWidget *hwnd
 	{
 #if defined( WIN_REGISTRY_ENABLED )
 
-		#warning save window state to registry
+        gchar * path = g_strdup_printf("%s\\%s\\%s\\%s",registry_path,g_get_application_name(),group,key);
+
+        HKEY    hKey;
+        DWORD   disp;
+
+		if(RegCreateKeyEx(HKEY_CURRENT_USER,path,0,NULL,REG_OPTION_NON_VOLATILE,KEY_SET_VALUE,NULL,&hKey,&disp) == ERROR_SUCCESS)
+		{
+			int f;
+			int pos[2];
+
+			for(f=0;f<G_N_ELEMENTS(WindowState);f++)
+			{
+				DWORD value = (CurrentState & WindowState[f].flag) ? 1 : 0;
+				RegSetValueEx(hKey, WindowState[f].name, 0, REG_DWORD,(const BYTE *) &value,sizeof(value));
+			}
+
+			gtk_window_get_size(GTK_WINDOW(hwnd),&pos[0],&pos[1]);
+			RegSetValueEx(hKey, "Size", 0, REG_BINARY,(const BYTE *) pos,sizeof(pos));
+
+			RegCloseKey(hKey);
+		}
+
+		g_free(path);
 
 #else
 		int			  f;
@@ -712,7 +734,57 @@ void restore_window_from_config(const gchar *group, const gchar *key, GtkWidget 
 {
 #if defined( WIN_REGISTRY_ENABLED )
 
-	#warning Implement window state saving on window
+	gchar * path = g_strdup_printf("%s\\%s\\%s\\%s",registry_path,g_get_application_name(),group,key);
+	HKEY    hKey;
+
+	if(RegOpenKeyEx(HKEY_CURRENT_USER,path,0,KEY_READ,&hKey) == ERROR_SUCCESS)
+	{
+		int 			f;
+		int 			pos[2];
+		unsigned long	datalen;
+		unsigned long	datatype;
+
+
+		datalen = sizeof(pos);
+		if(RegQueryValueExA(hKey,"Size",NULL,&datatype,(BYTE *) pos,&datalen) == ERROR_SUCCESS)
+		{
+			if(datatype == REG_BINARY && datalen == sizeof(pos))
+			{
+				gtk_window_resize(GTK_WINDOW(hwnd),pos[0],pos[1]);
+			}
+			else
+			{
+				g_warning("Unexpected registry data in %s\\Size",path);
+			}
+		}
+
+
+		for(f=0;f<G_N_ELEMENTS(WindowState);f++)
+		{
+			DWORD			data;
+
+			datalen       = sizeof(data);
+
+			if(RegQueryValueExA(hKey,WindowState[f].name,NULL,&datatype,(BYTE *) &data,&datalen) == ERROR_SUCCESS)
+			{
+				if(datatype == REG_DWORD)
+				{
+					if(data)
+						WindowState[f].activate(GTK_WINDOW(hwnd));
+
+				}
+				else
+				{
+					g_warning("Unexpected registry data type in %s\\%s",path,WindowState[f].name);
+				}
+			}
+		}
+
+
+		RegCloseKey(hKey);
+	}
+
+	g_free(path);
 
 #else
 	gchar		* id	= g_strconcat(group,".",key,NULL);
