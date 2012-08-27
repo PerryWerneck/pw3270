@@ -69,6 +69,7 @@
 	#define N_( x ) 		x
 #endif // HAVE_LIBINTL
 
+#define action_name(x)  #x
 
 /*
  * OS-specific #defines.  Except for the blocking-connect workarounds, these

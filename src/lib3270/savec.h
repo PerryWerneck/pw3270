@@ -20,3 +20,6 @@
 
 LIB3270_INTERNAL char *command_string;
 */
+
+
+#error Deprecated

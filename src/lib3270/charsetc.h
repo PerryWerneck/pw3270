@@ -25,7 +25,7 @@
  */
 
 // LIB3270_INTERNAL Boolean charset_changed;
-LIB3270_INTERNAL unsigned long cgcsgid;
+// LIB3270_INTERNAL unsigned long cgcsgid;
 
 /*
 #if defined(X3270_DBCS)

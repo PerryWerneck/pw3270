@@ -104,7 +104,9 @@
 	V3270_OIA_SHIFT,			/**< Shift Status */
 	V3270_OIA_TYPEAHEAD,		/**< Typeahead indication ("T" or blank) */
 	V3270_OIA_INSERT,			/**< Insert mode indication (Special symbol/"I" or blank) */
+#ifdef HAVE_SCRIPT
 	V3270_OIA_SCRIPT,			/**< Script indication  ("S" or blank) */
+#endif // HAVE_SCRIPT
 	V3270_OIA_LUNAME,			/**< LU Name */
 	V3270_OIA_SPINNER,			/**< command timing spinner */
 	V3270_OIA_TIMER,			/**< command timing (mmm:ss, or blank) */

@@ -49,3 +49,5 @@ LIB3270_INTERNAL Dimension min_keypad_width(void);
 
 #endif
 */
+
+#error Deprecated

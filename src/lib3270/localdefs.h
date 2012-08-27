@@ -33,12 +33,12 @@
 /* These first definitions were cribbed from X11 -- but no X code is used. */
 #define False 0
 #define True 1
-typedef void *XtPointer;
-typedef void *Widget;
-typedef void *XEvent;
+//typedef void *XtPointer;
+// typedef void *Widget;
+// typedef void *XEvent;
 typedef char Boolean;
 typedef char *String;
-typedef unsigned int Cardinal;
+// typedef unsigned int Cardinal;
 typedef unsigned long KeySym;
 #define Bool int
 

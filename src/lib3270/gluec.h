@@ -21,11 +21,13 @@
 // extern int parse_command_line(int argc, const char **argv, const char **cl_hostname);
 // extern int parse_program_parameters(int argc, const char **argv);
 // LIB3270_INTERNAL void parse_xrm(const char *arg, const char *where);
-LIB3270_INTERNAL void notify_ssl_error(H3270 *session, const char *title,  const char *msg, const char *state, const char *alert);
+// LIB3270_INTERNAL void notify_ssl_error(H3270 *session, const char *title,  const char *msg, const char *state, const char *alert);
 
 /* XtGlue.c */
-LIB3270_INTERNAL void (*Warning_redirect)(const char *);
+// LIB3270_INTERNAL void (*Warning_redirect)(const char *);
 
-#if !defined(_WIN32) /*[*/
-LIB3270_INTERNAL int select_setup(int *nfds, fd_set *readfds, fd_set *writefds,fd_set *exceptfds, struct timeval **timeout, struct timeval *timebuf);
-#endif /*]*/
+// #if !defined(_WIN32)
+// LIB3270_INTERNAL int select_setup(int *nfds, fd_set *readfds, fd_set *writefds,fd_set *exceptfds, struct timeval **timeout, struct timeval *timebuf);
+// #endif
+
+#error Deprecated

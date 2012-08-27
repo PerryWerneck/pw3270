@@ -17,4 +17,6 @@
  *		Declarations for icmd.c.
  */
 
-LIB3270_INTERNAL int interactive_transfer(String **params, Cardinal *num_params);
+// LIB3270_INTERNAL int interactive_transfer(String **params, Cardinal *num_params);
+
+#error Deprecated

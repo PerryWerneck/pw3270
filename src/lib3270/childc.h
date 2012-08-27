@@ -26,3 +26,5 @@ LIB3270_INTERNAL void child_ignore_output(void);
 #define child_ignore_output()
 #endif
 */
+
+#error Deprecated

@@ -43,7 +43,7 @@
 //#include "appres.h"
 
 #include "ansic.h"
-#include "actionsc.h"
+//#include "actionsc.h"
 #include "ctlrc.h"
 #include "popupsc.h"
 #include "screenc.h"

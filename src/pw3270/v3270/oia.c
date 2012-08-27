@@ -505,7 +505,9 @@ void v3270_draw_oia(cairo_t *cr, H3270 *host, int row, int cols, struct v3270_me
 #ifdef HAVE_PRINTER
 		{ V3270_OIA_PRINTER,			setup_single_char_right		},
 #endif // HAVE_PRINTER
+#ifdef HAVE_SCRIPT
 		{ V3270_OIA_SCRIPT,				setup_single_char_right		},
+#endif // HAVE_SCRIPT
 		{ V3270_OIA_INSERT,				setup_insert_position		},
 		{ V3270_OIA_TYPEAHEAD,			setup_single_char_right		},
 		{ V3270_OIA_SHIFT,				setup_double_char_position	},
@@ -1051,7 +1053,20 @@ void v3270_update_oia(H3270 *session, LIB3270_FLAG id, unsigned char on)
 		update_text_field(terminal,on,V3270_OIA_TYPEAHEAD,"T");
 		break;
 
+#ifdef HAVE_PRINTER
+	case LIB3270_FLAG_PRINTER:
+		update_text_field(terminal,on,V3270_OIA_PRINTER,"P");
+		break;
+#endif // HAVE_PRINTER
+
+#ifdef HAVE_SCRIPT
+	case LIB3270_FLAG_SCRIPT:
+		update_text_field(terminal,on,V3270_OIA_SCRIPT,"S");
+		break;
+#endif // HAVE_SCRIPT
+
 	default:
 		return;
 	}
+
 }

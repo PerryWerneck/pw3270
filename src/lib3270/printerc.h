@@ -25,3 +25,5 @@
 #if defined(_WIN32) /*[*/
 // LIB3270_INTERNAL void printer_check(void);
 #endif /*]*/
+
+#error Deprecated

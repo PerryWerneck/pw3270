@@ -153,11 +153,10 @@
 	{
 		LIB3270_FLAG_BOXSOLID,	/**< System available */
 		LIB3270_FLAG_UNDERA,	/**< Control Unit STATUS */
-//		LIB3270_FLAG_SECURE,	/**< Security status */
 		LIB3270_FLAG_TYPEAHEAD,
-//		LIB3270_FLAG_PRINTER,
+		LIB3270_FLAG_PRINTER,	/**< Printer session status */
 		LIB3270_FLAG_REVERSE,
-		LIB3270_FLAG_SCRIPT,
+		LIB3270_FLAG_SCRIPT,	/**< Script status */
 
 		LIB3270_FLAG_COUNT
 

@@ -48,7 +48,7 @@
 
 /*---[ Globals ]--------------------------------------------------------------------------------------------------------------*/
 
- static H3270 h3270;
+ static H3270 *default_session = NULL;
 
 /*---[ Statics ]--------------------------------------------------------------------------------------------------------------*/
 
@@ -59,6 +59,9 @@
 void lib3270_session_free(H3270 *h)
 {
 	int f;
+
+	if(!h)
+		return;
 
 	// Terminate session
 	if(lib3270_connected(h))
@@ -90,6 +93,11 @@ void lib3270_session_free(H3270 *h)
 	{
 		release_pointer(h->buffer[f]);
 	}
+
+	if(h == default_session)
+		default_session = NULL;
+
+	lib3270_free(h);
 
 }
 
@@ -169,45 +177,45 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 	initialize_tables(hSession);
 
 	// Default calls
-	hSession->write				= lib3270_sock_send;
-	hSession->disconnect		= lib3270_sock_disconnect;
-	hSession->update 			= update_char;
-	hSession->update_model		= update_model;
-	hSession->update_cursor		= update_cursor;
-	hSession->set_selection 	= nop_char;
-	hSession->ctlr_done			= nop;
-	hSession->changed			= changed;
-	hSession->erase				= screen_disp;
-	hSession->suspend			= nop;
-	hSession->resume			= screen_disp;
-	hSession->update_oia		= update_oia;
-	hSession->update_selection	= update_selection;
-	hSession->cursor 			= set_cursor;
-	hSession->message			= message;
-	hSession->update_ssl		= update_ssl;
-	hSession->display			= screen_disp;
-	hSession->set_width			= set_width;
+	hSession->write					= lib3270_sock_send;
+	hSession->disconnect			= lib3270_sock_disconnect;
+	hSession->update 				= update_char;
+	hSession->update_model			= update_model;
+	hSession->update_cursor			= update_cursor;
+	hSession->set_selection 		= nop_char;
+	hSession->ctlr_done				= nop;
+	hSession->changed				= changed;
+	hSession->erase					= screen_disp;
+	hSession->suspend				= nop;
+	hSession->resume				= screen_disp;
+	hSession->update_oia			= update_oia;
+	hSession->update_selection		= update_selection;
+	hSession->cursor 				= set_cursor;
+	hSession->message				= message;
+	hSession->update_ssl			= update_ssl;
+	hSession->display				= screen_disp;
+	hSession->set_width				= set_width;
 
 	// Set the defaults.
-	hSession->extended  		=  1;
-	hSession->typeahead			=  1;
-	hSession->oerr_lock 		=  1;
-	hSession->unlock_delay		=  1;
-	hSession->icrnl 			=  1;
-	hSession->onlcr				=  1;
-	hSession->host_charset		= "bracket";
-	hSession->sock				= -1;
-	hSession->model_num			= -1;
-	hSession->cstate			= LIB3270_NOT_CONNECTED;
-	hSession->oia_status		= -1;
-	hSession->kybdlock 			= KL_NOT_CONNECTED;
-	hSession->aid 				= AID_NO;
-	hSession->reply_mode 		= SF_SRM_FIELD;
-	hSession->linemode			= 1;
-	hSession->tn3270e_submode	= E_NONE;
-	hSession->scroll_top 		= -1;
-	hSession->scroll_bottom		= -1;
-	hSession->wraparound_mode 	= 1;
+	hSession->extended  			=  1;
+	hSession->typeahead				=  1;
+	hSession->oerr_lock 			=  1;
+	hSession->unlock_delay			=  1;
+	hSession->icrnl 				=  1;
+	hSession->onlcr					=  1;
+	hSession->host_charset			= "bracket";
+	hSession->sock					= -1;
+	hSession->model_num				= -1;
+	hSession->cstate				= LIB3270_NOT_CONNECTED;
+	hSession->oia_status			= -1;
+	hSession->kybdlock 				= KL_NOT_CONNECTED;
+	hSession->aid 					= AID_NO;
+	hSession->reply_mode 			= SF_SRM_FIELD;
+	hSession->linemode				= 1;
+	hSession->tn3270e_submode		= E_NONE;
+	hSession->scroll_top 			= -1;
+	hSession->scroll_bottom			= -1;
+	hSession->wraparound_mode 		= 1;
 	hSession->saved_wraparound_mode	= 1;
 	hSession->once_cset 			= -1;
 	hSession->state					= LIB3270_ANSI_STATE_DATA;
@@ -220,19 +228,6 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 #ifdef _WIN32
 	hSession->sockEvent			= NULL;
 #endif // _WIN32
-
-
-/*
-#if !defined(_WIN32)
-	hSession->host_charset		= "bracket";
-#else
-
-	if (is_nt)
-		hSession->host_charset	= "bracket";
-	else
-		hSession->host_charset	= "bracket437";
-#endif
-*/
 
 
 	// Initialize toggles
@@ -296,20 +291,18 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 
 H3270 * lib3270_session_new(const char *model)
 {
-	static int configured = 0;
+	H3270 * hSession;
 
-	H3270		*hSession = &h3270;
+	trace("%s - configured=%s",__FUNCTION__,default_session ? "Yes" : "No");
 
-	trace("%s - configured=%d",__FUNCTION__,configured);
-
-	if(configured)
+	if(default_session)
 	{
 		// TODO (perry#5#): Allocate a new structure.
 		errno = EBUSY;
-		return hSession;
+		return lib3270_get_default_session_handle();
 	}
 
-	configured = 1;
+	hSession = default_session = lib3270_malloc(sizeof(H3270));
 
 	lib3270_session_init(hSession, model);
 
@@ -343,10 +336,14 @@ H3270 * lib3270_session_new(const char *model)
 	return hSession;
 }
 
- /*
-- * Parse the model number.
-- * Returns -1 (error), 0 (default), or the specified number.
-- */
+ /**
+  * Parse the model number.
+  *
+  * @param session	Session Handle.
+  * @param m		Model number.
+  *
+  * @return -1 (error), 0 (default), or the specified number.
+  */
 static int parse_model_number(H3270 *session, const char *m)
 {
 	int sl;
@@ -426,17 +423,17 @@ void check_session_handle(H3270 **hSession)
 	if(*hSession)
 		return;
 
-#ifdef DEBUG
-	trace("** %s called with hSession == NULL",fname);
-#endif
+	*hSession = lib3270_get_default_session_handle();
 
-	*hSession = &h3270;
+	lib3270_write_log(*hSession,"%s called with empty session",__FUNCTION__);
 }
-
 
 LIB3270_EXPORT H3270 * lib3270_get_default_session_handle(void)
 {
-	return &h3270;
+	if(default_session)
+		return default_session;
+
+	return lib3270_session_new("");
 }
 
 LIB3270_EXPORT void * lib3270_get_widget(H3270 *h)

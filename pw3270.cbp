@@ -73,7 +73,6 @@
 		<Unit filename="src/lib3270/3270ds.h" />
 		<Unit filename="src/lib3270/Makefile.in" />
 		<Unit filename="src/lib3270/X11keysym.h" />
-		<Unit filename="src/lib3270/actionsc.h" />
 		<Unit filename="src/lib3270/ansi.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -88,7 +87,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/lib3270/charsetc.h" />
-		<Unit filename="src/lib3270/childc.h" />
 		<Unit filename="src/lib3270/ctlr.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -119,11 +117,9 @@
 		<Unit filename="src/lib3270/html.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/lib3270/icmdc.h" />
 		<Unit filename="src/lib3270/iocalls.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/lib3270/keypadc.h" />
 		<Unit filename="src/lib3270/kybd.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -138,13 +134,10 @@
 		<Unit filename="src/lib3270/mkfb.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/lib3270/objects.h" />
 		<Unit filename="src/lib3270/paste.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/lib3270/popupsc.h" />
-		<Unit filename="src/lib3270/printc.h" />
-		<Unit filename="src/lib3270/printerc.h" />
 		<Unit filename="src/lib3270/proxy.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -160,13 +153,11 @@
 		<Unit filename="src/lib3270/rpq.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/lib3270/savec.h" />
 		<Unit filename="src/lib3270/screen.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/lib3270/screen.h" />
 		<Unit filename="src/lib3270/screenc.h" />
-		<Unit filename="src/lib3270/scrollc.h" />
 		<Unit filename="src/lib3270/see.c">
 			<Option compilerVar="CC" />
 		</Unit>

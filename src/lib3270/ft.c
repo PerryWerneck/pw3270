@@ -41,7 +41,7 @@
 #endif // HAVE_MALLOC_H
 
 //#include "appres.h"
-#include "actionsc.h"
+//#include "actionsc.h"
 #include "ft_cutc.h"
 #include "ft_dftc.h"
 #include "ftc.h"
@@ -52,7 +52,7 @@
 #endif
 */
 #include "kybdc.h"
-#include "objects.h"
+// #include "objects.h"
 #include "popupsc.h"
 #include "screenc.h"
 #include "tablesc.h"

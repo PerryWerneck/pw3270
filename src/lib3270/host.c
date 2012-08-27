@@ -42,7 +42,7 @@
 // #include "appres.h"
 #include "resources.h"
 
-#include "actionsc.h"
+//#include "actionsc.h"
 #include "hostc.h"
 #include "statusc.h"
 #include "popupsc.h"

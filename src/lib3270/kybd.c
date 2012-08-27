@@ -59,7 +59,7 @@ struct ta;
 // #include "ctlr.h"
 #include "resources.h"
 
-#include "actionsc.h"
+//#include "actionsc.h"
 #include "ansic.h"
 //#include "aplc.h"
 #include "ctlrc.h"
@@ -68,7 +68,7 @@ struct ta;
 // #include "keypadc.h"
 #include "kybdc.h"
 #include "popupsc.h"
-#include "printc.h"
+// #include "printc.h"
 #include "screenc.h"
 // #if defined(X3270_DISPLAY) /*[*/
 // #include "selectc.h"

@@ -49,7 +49,7 @@
 #include "3270ds.h"
 #include "resources.h"
 
-#include "actionsc.h"
+//#include "actionsc.h"
 #include "ansic.h"
 //#include "aplc.h"
 #include "ctlrc.h"
@@ -58,7 +58,7 @@
 // #include "keypadc.h"
 #include "kybdc.h"
 #include "popupsc.h"
-#include "printc.h"
+// #include "printc.h"
 #include "screenc.h"
 
 /*

@@ -45,7 +45,7 @@
 #include "3270ds.h"
 #include "ft_dft_ds.h"
 
-#include "actionsc.h"
+//#include "actionsc.h"
 #include "kybdc.h"
 #include "ft_dftc.h"
 #include "ftc.h"

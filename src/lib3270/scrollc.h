@@ -16,3 +16,5 @@
 
 // #define scroll_save(n, trim_blanks)
 // #define scroll_to_bottom()
+
+#error Deprecated

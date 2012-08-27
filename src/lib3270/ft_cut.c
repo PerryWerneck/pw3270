@@ -42,7 +42,7 @@
 #if defined(X3270_FT) /*[*/
 
 #include "3270ds.h"
-#include "actionsc.h"
+//#include "actionsc.h"
 #include "ctlrc.h"
 #include "ft_cutc.h"
 #include "ft_cut_ds.h"

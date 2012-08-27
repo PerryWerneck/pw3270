@@ -53,11 +53,11 @@
 #include "3270ds.h"
 #include "resources.h"
 
-#include "actionsc.h"
+//#include "actionsc.h"
 #include "ansic.h"
 #include "charsetc.h"
 #include "ctlrc.h"
-#include "gluec.h"
+// #include "gluec.h"
 #include "hostc.h"
 // #include "keymapc.h"
 #include "kybdc.h"
@@ -71,7 +71,7 @@
 #include "trace_dsc.h"
 #include "utilc.h"
 // #include "idlec.h"
-#include "printerc.h"
+// #include "printerc.h"
 
 #if defined(X3270_FT)
 	#include "ftc.h"

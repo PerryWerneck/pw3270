@@ -62,9 +62,8 @@
 	#define X3270_TRACE
 
 	#undef HAVE_PRINTER
+	#undef HAVE_SCRIPT
 
-	#undef HAVE_IGEMAC
-	#undef HAVE_MACUI
 	#undef HAVE_MALLOC_H
 
 #endif /* LIB3270_CONFIG_INCLUDED */

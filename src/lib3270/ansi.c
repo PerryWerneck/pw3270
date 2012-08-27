@@ -52,7 +52,7 @@
 #include "ctlrc.h"
 #include "hostc.h"
 #include "screenc.h"
-#include "scrollc.h"
+// #include "scrollc.h"
 #include "tablesc.h"
 #include "telnetc.h"
 #include "trace_dsc.h"

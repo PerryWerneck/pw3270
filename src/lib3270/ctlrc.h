@@ -72,14 +72,14 @@ LIB3270_INTERNAL void ctlr_erase(H3270 *session, int alt);
 LIB3270_INTERNAL void ticking_start(H3270 *session, Boolean anyway);
 
 enum dbcs_state {
-	DBCS_NONE = 0,		/* position is not DBCS */
-	DBCS_LEFT,			/* position is left half of DBCS character */
-	DBCS_RIGHT,			/* position is right half of DBCS character */
-	DBCS_SI,			/* position is SI terminating DBCS subfield */
-	DBCS_SB,			/* position is SBCS character after the SI */
-	DBCS_LEFT_WRAP,		/* position is left half of split DBCS */
-	DBCS_RIGHT_WRAP,	/* position is right half of split DBCS */
-	DBCS_DEAD			/* position is dead left-half DBCS */
+	DBCS_NONE = 0,		/**< position is not DBCS */
+	DBCS_LEFT,			/**< position is left half of DBCS character */
+	DBCS_RIGHT,			/**< position is right half of DBCS character */
+	DBCS_SI,			/**< position is SI terminating DBCS subfield */
+	DBCS_SB,			/**< position is SBCS character after the SI */
+	DBCS_LEFT_WRAP,		/**< position is left half of split DBCS */
+	DBCS_RIGHT_WRAP,	/**< position is right half of split DBCS */
+	DBCS_DEAD			/**< position is dead left-half DBCS */
 };
 #define IS_LEFT(d)	((d) == DBCS_LEFT || (d) == DBCS_LEFT_WRAP)
 #define IS_RIGHT(d)	((d) == DBCS_RIGHT || (d) == DBCS_RIGHT_WRAP)

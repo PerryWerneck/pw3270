@@ -53,7 +53,7 @@
 #include "kybdc.h"
 #include "popupsc.h"
 #include "screenc.h"
-#include "scrollc.h"
+// #include "scrollc.h"
 #include "seec.h"
 #include "sf.h"
 #include "statusc.h"
