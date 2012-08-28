@@ -119,6 +119,7 @@ case "$host" in
 		localedir="locale"
 		DLL_FLAGS="-shared"
 		LDSOFLAGS="-Wl,-soname,\`basename \$@\`"
+		LDAPPFLAGS="-mwindows"
 		DBGRPATH=""
 		DLLDIR=""
 		DBGCMDPREFIX=""
@@ -134,6 +135,7 @@ case "$host" in
 		DBGCMDPREFIX="DYLD_LIBRARY_PATH=\$(BINDIR)/Debug/lib"
 		LDSOFLAGS="-Wl,-install_name,\`basename \$@\`"
 		LDARCH="-arch $build_cpu"
+		LDAPPFLAGS=""
 		;;
 
 	*)
@@ -142,6 +144,7 @@ case "$host" in
 		RLS_LDFLAGS="-L.bin/Release/$DLLDIR"
 		LDARCH=""
 		LDSOFLAGS="-Wl,-soname,\`basename \$@\`"
+		LDAPPFLAGS=""
 		DBGRPATH="-Wl,--rpath,.bin/Debug/lib"
 		DBGCMDPREFIX="PATH=\$(BINDIR)/Debug/lib:\$(PATH)"
 
@@ -287,6 +290,7 @@ AC_SUBST(DLL_FLAGS)
 AC_SUBST(DLL_CFLAGS)
 AC_SUBST(DLLDIR)
 AC_SUBST(LDSOFLAGS)
+AC_SUBST(LDAPPFLAGS)
 AC_SUBST(DBGRPATH)
 AC_SUBST(DBGCMDPREFIX)
 AC_SUBST(LDARCH)
