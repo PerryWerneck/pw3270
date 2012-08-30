@@ -254,5 +254,6 @@ gboolean	  v3270_button_release_event(GtkWidget *widget, GdkEventButton*event);
 gboolean	  v3270_motion_notify_event(GtkWidget *widget, GdkEventMotion *event);
 void		  v3270_emit_popup(v3270 *widget, int baddr, GdkEventButton *event);
 gint 		  v3270_get_offset_at_point(v3270 *widget, gint x, gint y);
+gboolean	  v3270_scroll_event(GtkWidget *widget, GdkEventScroll *event, gpointer user_data);
 
 G_END_DECLS

@@ -468,15 +468,15 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 														"setfullscreen",
 														"resetfullscreen"
  													};
- 	GtkAction		* action 		= NULL;
-	GtkAction 		**toggle_action	= (GtkAction **) g_object_get_data(G_OBJECT(widget),"toggle_actions");
-	const gchar		* direction		= ui_get_attribute("direction",names,values);
-	unsigned short	  flags			= 0;
-	const GCallback * callback		= NULL;
-	const gchar		* attr			= NULL;
-	int				  id			= 0;
-	gchar			* nm			= NULL;
-	int				  f;
+ 	GtkAction			* action 		= NULL;
+	GtkAction	 		**toggle_action	= (GtkAction **) g_object_get_data(G_OBJECT(widget),"toggle_actions");
+	UI_ATTR_DIRECTION	  dir			= ui_get_dir_attribute(names,values);
+	unsigned short		  flags			= 0;
+	const GCallback		* callback		= NULL;
+	const gchar			* attr			= NULL;
+	int					  id			= 0;
+	gchar				* nm			= NULL;
+	int					  f;
 
 	enum _action_type
 	{
@@ -492,20 +492,8 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 
 	} action_type = ACTION_TYPE_DEFAULT;
 
-	if(direction)
-	{
-		static const gchar *dirname[] = { "up", "down", "left", "right" };
-		int f;
-
-		for(f=0;f<G_N_ELEMENTS(dirname);f++)
-		{
-			if(!g_ascii_strcasecmp(direction,dirname[f]))
-			{
-				flags |= f;
-				break;
-			}
-		}
-	}
+	if(dir != UI_ATTR_DIRECTION_NONE)
+		flags |= ((unsigned char) dir) & 0x03;
 
 	if(ui_get_bool_attribute("selecting",names,values,FALSE))
 		flags |= 0x80;
@@ -538,13 +526,13 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 		action_type	= ACTION_TYPE_MOVE;
 		attr		= ui_get_attribute("target",names,values);
 
-		if(!(attr && direction))
+		if(!attr || dir == UI_ATTR_DIRECTION_NONE)
 		{
 			*error = g_error_new(ERROR_DOMAIN,EINVAL,"%s",_("Move action needs target & direction attributes" ));
 			return NULL;
 		}
 
-		nm = g_strconcat((flags & 0x80) ? "select" : "move",attr,direction, NULL);
+		nm = g_strconcat((flags & 0x80) ? "select" : "move",attr,ui_get_dir_name(dir), NULL);
 
 	}
 	else if(!g_ascii_strcasecmp(name,"paste"))
@@ -808,3 +796,14 @@ void ui_connect_text_script(GtkWidget *widget, GtkAction *action, const gchar *s
 	g_signal_connect(action,"activate",G_CALLBACK(action_text_script),widget);
 }
 
+void ui_set_scroll_actions(GtkWidget *widget, GtkAction *action[UI_ATTR_DIRECTION_COUNT])
+{
+	int f;
+
+	for(f=0;f<4;f++)
+	{
+		if(action[f])
+			v3270_set_scroll_action(widget, (GdkScrollDirection) f, action[f]);
+	}
+
+}

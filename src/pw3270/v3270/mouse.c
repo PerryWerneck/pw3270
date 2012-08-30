@@ -36,6 +36,10 @@
  #include <lib3270/actions.h>
  #include <lib3270/log.h>
 
+/*--[ Globals ]--------------------------------------------------------------------------------------*/
+
+ static GtkAction *action_scroll[] = { NULL, NULL, NULL, NULL };
+
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
 gint v3270_get_offset_at_point(v3270 *widget, gint x, gint y)
@@ -262,3 +266,24 @@ gboolean v3270_motion_notify_event(GtkWidget *widget, GdkEventMotion *event)
 
 	return FALSE;
 }
+
+void v3270_set_scroll_action(GtkWidget *widget, GdkScrollDirection direction, GtkAction *action)
+{
+ 	g_return_if_fail(GTK_IS_V3270(widget));
+	action_scroll[((int) direction) & 0x03] = action;
+}
+
+gboolean	  v3270_scroll_event(GtkWidget *widget, GdkEventScroll *event, gpointer user_data)
+{
+	v3270	* terminal	= GTK_V3270(widget);
+
+	if(lib3270_get_program_message(terminal->host) != LIB3270_MESSAGE_NONE || event->direction < 0 || event->direction > G_N_ELEMENTS(action_scroll))
+		return FALSE;
+
+	trace("Scroll: %d Action: %p",event->direction,action_scroll[event->direction]);
+
+	if(action_scroll[event->direction])
+		gtk_action_activate(action_scroll[event->direction]);
+
+	return TRUE;
+ }

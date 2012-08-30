@@ -33,6 +33,19 @@
 
 	#define UI_PARSER_H_INCLUDED 1
 
+	typedef enum ui_attr_direction
+	{
+		UI_ATTR_UP,
+		UI_ATTR_DOWN,
+		UI_ATTR_LEFT,
+		UI_ATTR_RIGHT,
+
+		UI_ATTR_DIRECTION_COUNT
+
+	} UI_ATTR_DIRECTION;
+
+	#define UI_ATTR_DIRECTION_NONE ((UI_ATTR_DIRECTION) -1)
+
 	/**
 	 * Callback list for specil widget.
 	 *
@@ -51,11 +64,14 @@
 		void		  (*setup)(GtkWidget *widget, GtkWidget *obj);
 	} UI_WIDGET_SETUP;
 
-	int			  ui_parse_xml_folder(GtkWindow *toplevel, const gchar *path, const gchar ** groupname, const gchar **popupname, GtkWidget *widget, const UI_WIDGET_SETUP *itn);
-	const gchar	* ui_get_attribute(const gchar *key, const gchar **name, const gchar **value);
-	gboolean	  ui_get_bool_attribute(const gchar *key, const gchar **name, const gchar **value, gboolean def);
-	GtkAction	* ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash, const gchar **names, const gchar **values, GError **error);
+	int					  ui_parse_xml_folder(GtkWindow *toplevel, const gchar *path, const gchar ** groupname, const gchar **popupname, GtkWidget *widget, const UI_WIDGET_SETUP *itn);
+	const gchar			* ui_get_attribute(const gchar *key, const gchar **name, const gchar **value);
+	gboolean			  ui_get_bool_attribute(const gchar *key, const gchar **name, const gchar **value, gboolean def);
+	UI_ATTR_DIRECTION	  ui_get_dir_attribute(const gchar **name, const gchar **value);
+	GtkAction			* ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash, const gchar **names, const gchar **values, GError **error);
+	const gchar			* ui_get_dir_name(UI_ATTR_DIRECTION dir);
 
-	void		  ui_connect_text_script(GtkWidget *widget, GtkAction *action, const gchar *script_text, GError **error);
+	void				  ui_connect_text_script(GtkWidget *widget, GtkAction *action, const gchar *script_text, GError **error);
+	void				  ui_set_scroll_actions(GtkWidget *widget, GtkAction *action[UI_ATTR_DIRECTION_COUNT]);
 
 #endif // UI_PARSER_H_INCLUDED

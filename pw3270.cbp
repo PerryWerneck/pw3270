@@ -274,6 +274,9 @@
 		<Unit filename="src/pw3270/uiparser/script.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/pw3270/uiparser/scroll.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/pw3270/uiparser/separator.c">
 			<Option compilerVar="CC" />
 		</Unit>

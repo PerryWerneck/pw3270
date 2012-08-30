@@ -294,6 +294,7 @@ static void v3270_class_init(v3270Class *klass)
 	widget_class->button_release_event				= v3270_button_release_event;
 	widget_class->motion_notify_event				= v3270_motion_notify_event;
 	widget_class->popup_menu						= v3270_popup_menu;
+	widget_class->scroll_event						= v3270_scroll_event;
 
 	/* Accessibility support */
 	widget_class->get_accessible 					= v3270_get_accessible;

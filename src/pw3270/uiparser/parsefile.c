@@ -51,6 +51,7 @@
  	{ "accelerator",	UI_ELEMENT_ACCELERATOR,	ui_create_accelerator,	ui_end_accelerator	},
  	{ "popup",			UI_ELEMENT_POPUP,		ui_create_popup,		ui_end_popup		},
  	{ "script",			UI_ELEMENT_SCRIPT,		ui_create_script,		ui_end_script		},
+ 	{ "scroll",			UI_ELEMENT_SCROLL,		ui_create_scroll,		ui_end_scroll		},
  };
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
@@ -168,15 +169,6 @@
  	GtkWidget		* widget	= NULL;
  	int				  f;
 
-/*
-	if(info->disabled)
-	{
-		info->disabled++;
-		trace("%s: <%s> disabled=%d",__FUNCTION__,element_name,info->disabled);
-		return;
-	}
-*/
-
 	for(f=0;f<G_N_ELEMENTS(element_builder);f++)
 	{
 		if(!g_ascii_strcasecmp(element_name,element_builder[f].name))
@@ -240,7 +232,6 @@
 	}
 	else
 	{
-//		info->disabled++;
 		info->action = NULL;
 	}
  }

@@ -36,6 +36,9 @@
 	#include <gtkmacintegration/gtk-mac-menu.h>
  #endif // HAVE_GTKMAC
 
+/*--[ Globals ]--------------------------------------------------------------------------------------*/
+
+static const gchar	* dirname[]	= { "up", "down", "left", "right" };
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
@@ -208,12 +211,14 @@ void parser_build(struct parser *p, GtkWidget *widget)
 	// Pack top toolbars
 	g_hash_table_foreach(p->element_list[UI_ELEMENT_TOOLBAR],(GHFunc) pack_start, p);
 
-	// Pack center widget
+	// Pack & configure center widget
 	if(widget)
 	{
+		ui_set_scroll_actions(widget,p->scroll_action);
 		gtk_box_pack_start(GTK_BOX(vbox),widget,TRUE,TRUE,0);
 		gtk_widget_show(widget);
 	}
+
 
 //	gtk_box_pack_start(GTK_BOX(vbox),hbox,TRUE,TRUE,0);
 
@@ -335,3 +340,28 @@ int ui_parse_xml_folder(GtkWindow *toplevel, const gchar *path, const gchar ** g
 
 	return 0;
 }
+
+UI_ATTR_DIRECTION ui_get_dir_attribute(const gchar **names, const gchar **values)
+{
+	const gchar			* dir		= ui_get_attribute("direction",names,values);
+	int					  f;
+
+	if(dir)
+	{
+		for(f=0;f<G_N_ELEMENTS(dirname);f++)
+		{
+			if(!g_ascii_strcasecmp(dir,dirname[f]))
+				return f;
+		}
+	}
+
+	return UI_ATTR_DIRECTION_NONE;
+}
+
+const gchar * ui_get_dir_name(UI_ATTR_DIRECTION dir)
+{
+	if(dir == UI_ATTR_DIRECTION_NONE)
+		return "";
+	return dirname[dir];
+}
+

@@ -180,7 +180,6 @@
  LIB3270_EXPORT	void		  	  v3270_draw_element(cairo_t *cr, unsigned char chr, unsigned short attr, H3270 *session, guint height, GdkRectangle *rect, GdkColor *color);
  LIB3270_EXPORT	void			  v3270_set_color(GtkWidget *widget, enum V3270_COLOR id, GdkColor *color);
  LIB3270_EXPORT	GdkColor		* v3270_get_color(GtkWidget *widget, enum V3270_COLOR id);
- LIB3270_EXPORT gboolean		  v3270_set_keyboard_action(GtkWidget *widget, const gchar *key_name, GtkAction *action);
 
  // Misc
  LIB3270_EXPORT	GtkIMContext	* v3270_get_im_context(GtkWidget *widget);
@@ -191,6 +190,9 @@
 
  LIB3270_EXPORT	void 			  v3270_set_host(GtkWidget *widget, const gchar *uri);
 
+ // Keyboard & Mouse special actions
+ LIB3270_EXPORT gboolean		  v3270_set_keyboard_action(GtkWidget *widget, const gchar *key_name, GtkAction *action);
+ LIB3270_EXPORT void			  v3270_set_scroll_action(GtkWidget *widget, GdkScrollDirection direction, GtkAction *action);
 
 G_END_DECLS
 

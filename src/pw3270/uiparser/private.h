@@ -51,12 +51,14 @@
  #define UI_ELEMENT_ACCELERATOR UI_ELEMENT_COUNT+2
  #define UI_ELEMENT_SCRIPT		UI_ELEMENT_COUNT+3
  #define UI_ELEMENT_MENUITEM	UI_ELEMENT_COUNT+4
+ #define UI_ELEMENT_SCROLL		UI_ELEMENT_COUNT+5
 
  struct parser
  {
  	GtkWidget				*  toplevel;
  	GObject					*  element;
  	GtkAction				*  action;
+ 	GtkAction				*  scroll_action[UI_ATTR_DIRECTION_COUNT];
 	GtkWidget				*  topmenu;
  	GtkAction				*  script_action;
  	GtkWidget				*  center_widget;
@@ -84,6 +86,7 @@
  GObject		* ui_create_accelerator(GMarkupParseContext *context,GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error);
  GObject		* ui_create_popup(GMarkupParseContext *context,GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error);
  GObject		* ui_create_script(GMarkupParseContext *context,GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error);
+ GObject		* ui_create_scroll(GMarkupParseContext *context,GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error);
 
  void			  ui_end_menubar(GMarkupParseContext *context,GObject *widget,struct parser *info,GError **error);
  void			  ui_end_menu(GMarkupParseContext *context,GObject *widget,struct parser *info,GError **error);
@@ -94,5 +97,6 @@
  void			  ui_end_accelerator(GMarkupParseContext *context,GObject *widget,struct parser *info,GError **error);
  void			  ui_end_popup(GMarkupParseContext *context,GObject *widget,struct parser *info,GError **error);
  void			  ui_end_script(GMarkupParseContext *context,GObject *widget,struct parser *info,GError **error);
+ void			  ui_end_scroll(GMarkupParseContext *context,GObject *widget,struct parser *info,GError **error);
 
  #include "parser.h"
