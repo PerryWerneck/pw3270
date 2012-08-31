@@ -372,10 +372,14 @@ void screen_update(H3270 *session, int bstart, int bend)
 		session->changed(session,first,len);
 	}
 
-	if(session->starting && session->formatted && lib3270_in_3270(session))
+	if(session->starting && session->formatted && !session->kybdlock && lib3270_in_3270(session))
 	{
 		session->starting = 0;
+
+//		cursor_move(session,next_unprotected(session,0));
+//		lib3270_emulate_input(session,"\\n",-1,0);
 		session->autostart(session);
+
 #ifdef DEBUG
 		{
 			char *text = lib3270_get_text(session,0,-1);

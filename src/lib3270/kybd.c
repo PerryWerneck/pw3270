@@ -86,7 +86,9 @@ struct ta;
 #include "api.h"
 
 
-/*#define KYBDLOCK_TRACE	1*/
+#ifdef DEBUG
+	#define KYBDLOCK_TRACE
+#endif // DEBUG
 
 /* Statics */
 // static enum	{ NONE, COMPOSE, FIRST } composing = NONE;
@@ -372,12 +374,9 @@ static void kybdlock_set(H3270 *hSession, unsigned int bits)
 	n = hSession->kybdlock | bits;
 	if (n != hSession->kybdlock)
 	{
-/*
 #if defined(KYBDLOCK_TRACE)
-	       lib3270_trace_event(hSession,"  %s: kybdlock |= 0x%04x, 0x%04x -> 0x%04x\n",
-		    cause, bits, kybdlock, n);
+		lib3270_trace_event(hSession,"  %s: kybdlock |= 0x%04x, 0x%04x -> 0x%04x\n", "set", bits, hSession->kybdlock, n);
 #endif
-*/
 		if ((hSession->kybdlock ^ bits) & KL_DEFERRED_UNLOCK)
 		{
 			/* Turned on deferred unlock. */
@@ -396,10 +395,12 @@ void lib3270_kybdlock_clear(H3270 *hSession, LIB3270_KL_STATE bits)
 {
 	unsigned int n = hSession->kybdlock & ~( (unsigned int) bits);
 
+	trace("%s: kybdlock=%d",__FUNCTION__,n);
+
 	if (n != hSession->kybdlock)
 	{
 #if defined(KYBDLOCK_TRACE)
-		lib3270_trace_event(hSession,"  %s: kybdlock &= ~0x%04x, 0x%04x -> 0x%04x\n", __FUNCTION__, bits, kybdlock, n);
+		lib3270_trace_event(hSession,"  %s: kybdlock &= ~0x%04x, 0x%04x -> 0x%04x\n", "clear", bits, hSession->kybdlock, n);
 #endif
 		if ((hSession->kybdlock ^ n) & KL_DEFERRED_UNLOCK)
 		{
@@ -2502,7 +2503,7 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *hSession, const char *s, int len
 	len = mb_to_unicode(s, len, w_ibuf, w_ibuf_len, NULL);
 	if (len < 0)
 	{
-		return 0; /* failed */
+		return -1; /* failed */
 	}
 	ws = w_ibuf;
 #else /*][*/
@@ -2523,7 +2524,7 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *hSession, const char *s, int len
 		if (hSession->kybdlock)
 		{
 			lib3270_trace_event(hSession,"  keyboard locked, string dropped\n");
-			return 0;
+			return -1;
 		}
 
 		if (pasting && IN_3270)

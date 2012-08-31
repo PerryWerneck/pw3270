@@ -61,7 +61,9 @@ LIB3270_INTERNAL enum pds ctlr_write(H3270 *hSession, unsigned char buf[], int b
 LIB3270_INTERNAL void ctlr_write_sscp_lu(H3270 *session, unsigned char buf[], int buflen);
 LIB3270_INTERNAL void mdt_clear(H3270 *hSession, int baddr);
 LIB3270_INTERNAL void mdt_set(H3270 *hSession, int baddr);
-LIB3270_INTERNAL int next_unprotected(H3270 *session, int baddr0);
+
+#define next_unprotected(session, baddr0) lib3270_get_next_unprotected(session, baddr0)
+
 LIB3270_INTERNAL enum pds process_ds(H3270 *hSession, unsigned char *buf, int buflen);
 LIB3270_INTERNAL void ps_process(H3270 *hSession);
 

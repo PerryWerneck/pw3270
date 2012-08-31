@@ -45,7 +45,8 @@
 		#define lib3270_write_rc(s,m,r,f,...)	__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, f "\n", __VA_ARGS__ )
 		#define lib3270_write_va_log(s,m,f,a)	__android_log_vprint(ANDROID_LOG_VERBOSE, PACKAGE_NAME, f "\n", a)
 
-		#define trace( fmt, ... )	__android_log_print(ANDROID_LOG_DEBUG, PACKAGE_NAME, "%s(%d) " fmt "\n", __FILE__, __LINE__, __VA_ARGS__ );
+		// #define trace( fmt, ... )	__android_log_print(ANDROID_LOG_DEBUG, PACKAGE_NAME, "%s(%d) " fmt "\n", __FILE__, __LINE__, __VA_ARGS__ );
+		#define trace(x, ...) 		// __VA_ARGS__
 
 	#else
 

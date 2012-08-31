@@ -77,10 +77,20 @@ static void changed(H3270 *session, int offset, int len)
 	trace("%s: offset=%d len=%d",__FUNCTION__,offset,len);
 
 	{
-		char *text = lib3270_get_as_html(session,(LIB3270_HTML_OPTION) (LIB3270_HTML_OPTION_ALL|LIB3270_HTML_OPTION_FORM));
-
+		char *text = lib3270_get_text(PW3270_SESSION,0,-1);
 		if(text)
+		{
+			char *strtok_r(char *str, const char *delim, char **saveptr);
+			char *save;
+
+/*
+			__android_log_print(ANDROID_LOG_DEBUG, PACKAGE_NAME, "Contents:\n");
+			for(char *ptr = strtok_r(text,"\n",&save);ptr;ptr = strtok_r(NULL,"\n",&save))
+				__android_log_print(ANDROID_LOG_DEBUG, PACKAGE_NAME, "%s\n",ptr);
+*/
+
 			lib3270_free(text);
+		}
 	}
 
 	pw3270_jni_post_message(2,offset,len);
@@ -258,16 +268,25 @@ static void ctlr_done(H3270 *session)
 
 static void autostart(H3270 *session)
 {
-	// pw3270_jni_post_message(10);
-
 	{
 		char *text = lib3270_get_text(PW3270_SESSION,0,-1);
 		if(text)
 		{
-			__android_log_print(ANDROID_LOG_DEBUG, PACKAGE_NAME, "Contents:\n%s\n",text);
+			char *strtok_r(char *str, const char *delim, char **saveptr);
+			char *save;
+
+/*
+			__android_log_print(ANDROID_LOG_DEBUG, PACKAGE_NAME, "Contents:\n");
+			for(char *ptr = strtok_r(text,"\n",&save);ptr;ptr = strtok_r(NULL,"\n",&save))
+				__android_log_print(ANDROID_LOG_DEBUG, PACKAGE_NAME, "%s\n",ptr);
+*/
+
 			lib3270_free(text);
 		}
 	}
+
+	pw3270_jni_post_message(10);
+
 }
 
 jint JNI_OnLoad(JavaVM *vm, void *reserved)

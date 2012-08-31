@@ -441,7 +441,7 @@
 	 * @param len		Size of the string (or -1 to null terminated strings)
 	 * @param pasting	Non zero for pasting (See comments).
 	 *
-	 * @return The number of unprocessed characters.
+	 * @return The number of unprocessed characters or -1 if failed
 	 */
 	LIB3270_EXPORT int lib3270_emulate_input(H3270 *session, const char *s, int len, int pasting);
 
@@ -767,6 +767,17 @@
 	 *
 	 */
 	LIB3270_EXPORT char * lib3270_get_field_at(H3270 *h, int baddr);
+
+	/**
+	 * Find the next unprotected field.
+	 *
+	 * @param hSession	Session handle.
+	 * @param baddr0	Search start addr.
+	 *
+	 * @return address following the unprotected attribute byte, or 0 if no nonzero-width unprotected field can be found.
+	 *
+	 */
+	LIB3270_EXPORT int lib3270_get_next_unprotected(H3270 *hSession, int baddr0);
 
 	/**
 	 * Find the buffer address of the field attribute for a given buffer address.

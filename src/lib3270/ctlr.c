@@ -240,7 +240,6 @@ static void set_formatted(H3270 *hSession, int state)
 		hSession->update_formatted(hSession,hSession->formatted);
 	}
 */
-	trace("Screen is now %s",hSession->formatted ? "formatted" : "unformatted");
 }
 
 /**
@@ -366,12 +365,7 @@ unsigned char get_field_attribute(H3270 *hSession, int baddr)
 	return hSession->ea_buf[find_field_attribute(hSession,baddr)].fa;
 }
 
-/*
- * Find the next unprotected field.  Returns the address following the
- * unprotected attribute byte, or 0 if no nonzero-width unprotected field
- * can be found.
- */
-int next_unprotected(H3270 *hSession, int baddr0)
+LIB3270_EXPORT int lib3270_get_next_unprotected(H3270 *hSession, int baddr0)
 {
 	register int baddr, nbaddr;
 

@@ -139,16 +139,18 @@ JNIEXPORT void JNICALL Java_br_com_bb_pw3270_lib3270_setTextAt(JNIEnv *env, jobj
 	PW3270_JNI_END
 }
 
-JNIEXPORT jint JNICALL Java_br_com_bb_pw3270_lib3270_input(JNIEnv *env, jobject obj, jstring str, jint pasting)
+JNIEXPORT void JNICALL Java_br_com_bb_pw3270_lib3270_runStartupString(JNIEnv *env, jobject obj, jstring str)
 {
 	int rc = -1;
 
 	PW3270_JNI_BEGIN
 
 	if(lib3270_connected(PW3270_SESSION))
-		rc = lib3270_emulate_input(PW3270_SESSION, env->GetStringUTFChars(str, 0), -1, (int) pasting);
+	{
+		lib3270_set_cursor_address(PW3270_SESSION,lib3270_get_next_unprotected(PW3270_SESSION,0));
+		lib3270_emulate_input(PW3270_SESSION, env->GetStringUTFChars(str, 0), -1, 0);
+	}
 
 	PW3270_JNI_END
 
-	return rc;
 }

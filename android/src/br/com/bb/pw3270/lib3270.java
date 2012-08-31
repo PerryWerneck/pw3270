@@ -140,22 +140,11 @@ public abstract class lib3270
 				break;
 
 			case 10: // Run autostart
-				Log.v(TAG, "AAA---------------------------------------------------------------");
-				Log.v(TAG, "In3270="+(in3270() ? "Yes" : "No"));
 
-				/*
 				String str = settings.getString("logonstring","");
 				Log.v(TAG, "Logon string is \"" + str + "\"");
 				if( str != "")
-				{
-					int sz = input(str,0);
-					Log.v(TAG, "Input exits with "+sz);
-				}
-				*/
-
-				Log.v(TAG, "Contents:\n" + getText() + "\n");
-
-				Log.v(TAG, "AAA---------------------------------------------------------------");
+					runStartupString(str);
 				break;
 
 			}
@@ -176,7 +165,7 @@ public abstract class lib3270
 		this.screenState	= -1;
 
 		for(int f = 0; f < toggle.length; f++)
-			setToggle(toggle[f],settings.getBoolean(toggle[f],true));
+			setToggle(toggle[f],settings.getBoolean(toggle[f],false));
 
 	}
 
@@ -632,7 +621,7 @@ public abstract class lib3270
 
 	public native void setTextAt(int offset, byte[] str, int len);
 
-	public native int input(String text, int pasting);
-
 	public native boolean in3270();
+
+	public native void runStartupString(String text);
 }
