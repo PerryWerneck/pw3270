@@ -59,12 +59,12 @@ public abstract class lib3270
 	protected int						screenState 	= -1;
 
 	private lib3270						hSession		= this;
-	
+
 	public ProgressDialog				dlgSysMessage	= null;
 	public WebView						view			= null;
 	public Resources					res				= null;
 	public Activity 					mainact 		= null;
-	
+
 	private static boolean				initialized		= false;
 	private static NetworkThread 		mainloop 		= null;
 	private static boolean				connected		= false;
@@ -139,6 +139,25 @@ public abstract class lib3270
 				new timer(((Long) msg.obj).longValue(), msg.arg1);
 				break;
 
+			case 10: // Run autostart
+				Log.v(TAG, "AAA---------------------------------------------------------------");
+				Log.v(TAG, "In3270="+(in3270() ? "Yes" : "No"));
+
+				/*
+				String str = settings.getString("logonstring","");
+				Log.v(TAG, "Logon string is \"" + str + "\"");
+				if( str != "")
+				{
+					int sz = input(str,0);
+					Log.v(TAG, "Input exits with "+sz);
+				}
+				*/
+
+				Log.v(TAG, "Contents:\n" + getText() + "\n");
+
+				Log.v(TAG, "AAA---------------------------------------------------------------");
+				break;
+
 			}
 		}
 	};
@@ -157,7 +176,7 @@ public abstract class lib3270
 		this.screenState	= -1;
 
 		for(int f = 0; f < toggle.length; f++)
-			setToggle(toggle[f],settings.getBoolean(toggle[f],false));
+			setToggle(toggle[f],settings.getBoolean(toggle[f],true));
 
 	}
 
@@ -301,12 +320,12 @@ public abstract class lib3270
 
 				while (connected)
 				{
-					byte[] in = new byte[4096];
+					byte[] in = new byte[16384];
 					int sz = -1;
 
 					try
 					{
-						sz = inData.read(in, 0, 4096);
+						sz = inData.read(in, 0, 16384);
 
 					} catch (Exception e)
 					{
@@ -365,18 +384,18 @@ public abstract class lib3270
 		msg.obj  = new popupMessageInfo(title, text, info);
 		mHandler.sendMessage(msg);
 	}
-	
+
 	void setActivity(Activity act)
 	{
     	this.mainact	= act;
         this.settings 	= PreferenceManager.getDefaultSharedPreferences(act);
     	this.res 		= act.getResources();
 	}
-	
+
 	WebView setView(WebView v)
 	{
 		this.view = v;
-		
+
 		view.addJavascriptInterface(this, "pw3270");
 
 		view.setWebChromeClient(new WebChromeClient());
@@ -388,11 +407,11 @@ public abstract class lib3270
 		view.getSettings().setJavaScriptEnabled(true);
 
 		return view;
-		
+
 	}
-	
+
 	public abstract String getProgramMessageText(int id);
-	
+
 	/*---[ Signal methods ]--------------------------------------------------*/
 
 	protected void showProgramMessage(int id)
@@ -403,7 +422,6 @@ public abstract class lib3270
 			if(screenState != 0)
 			{
 				screenState = 0;
-//				Log.v(TAG, "Status changed to NONE");
 				reload();
 			}
 			break;
@@ -558,8 +576,8 @@ public abstract class lib3270
 
 		return text;
 	}
-	
-	
+
+
 	/*---[ Native calls ]----------------------------------------------------*/
 	private native int processEvents();
 
@@ -614,4 +632,7 @@ public abstract class lib3270
 
 	public native void setTextAt(int offset, byte[] str, int len);
 
+	public native int input(String text, int pasting);
+
+	public native boolean in3270();
 }

@@ -68,44 +68,33 @@ JNIEXPORT jbyteArray JNICALL Java_br_com_bb_pw3270_lib3270_getHTML(JNIEnv *env, 
 	return ret;
 }
 
-
-/*
 JNIEXPORT jbyteArray JNICALL Java_br_com_bb_pw3270_lib3270_getText(JNIEnv *env, jobject obj)
 {
 	jbyteArray ret;
 
 	PW3270_JNI_BEGIN
 
-	trace("%s starts",__FUNCTION__);
+//	trace("%s starts",__FUNCTION__);
 
-	if(session)
+	char *text = lib3270_get_text(PW3270_SESSION,0,-1);
+
+	if(text)
 	{
-		char *text = lib3270_get_text(session,0,-1);
-
-		trace("%s will return \"%s\"",__FUNCTION__,text ? text : "");
-
-		if(text)
-		{
-			ret = retString(env,text);
-			lib3270_free(text);
-		}
-		else
-		{
-			ret = retString(env, "");
-		}
+		ret = retString(text);
+		lib3270_free(text);
 	}
 	else
 	{
-		ret = retString(env, "<b>Invalid Session ID</b>");
+		ret = retString("");
 	}
 
-	trace("%s ends",__FUNCTION__);
+//	trace("%s ends",__FUNCTION__);
 
 	PW3270_JNI_END
 
 	return ret;
 }
-*/
+
 
 JNIEXPORT void JNICALL Java_br_com_bb_pw3270_lib3270_setTextAt(JNIEnv *env, jobject obj, jint pos, jbyteArray inText, jint szText)
 {
@@ -148,4 +137,18 @@ JNIEXPORT void JNICALL Java_br_com_bb_pw3270_lib3270_setTextAt(JNIEnv *env, jobj
 	}
 
 	PW3270_JNI_END
+}
+
+JNIEXPORT jint JNICALL Java_br_com_bb_pw3270_lib3270_input(JNIEnv *env, jobject obj, jstring str, jint pasting)
+{
+	int rc = -1;
+
+	PW3270_JNI_BEGIN
+
+	if(lib3270_connected(PW3270_SESSION))
+		rc = lib3270_emulate_input(PW3270_SESSION, env->GetStringUTFChars(str, 0), -1, (int) pasting);
+
+	PW3270_JNI_END
+
+	return rc;
 }

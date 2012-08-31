@@ -126,11 +126,6 @@ static int popuphandler(H3270 *session, void *terminal, LIB3270_NOTIFY type, con
 	}
 }
 
-static void ctlr_done(H3270 *session)
-{
-	pw3270_jni_post_message(4);
-}
-
 void update_status(H3270 *session, LIB3270_MESSAGE id)
 {
 	pw3270_jni_post_message(1,(int) id);
@@ -255,6 +250,26 @@ static void tracehandler(H3270 *session, const char *fmt, va_list args)
 }
 #endif // X3270_TRACE
 
+static void ctlr_done(H3270 *session)
+{
+	__android_log_print(ANDROID_LOG_DEBUG, PACKAGE_NAME, "%s",__FUNCTION__);
+	pw3270_jni_post_message(5);
+}
+
+static void autostart(H3270 *session)
+{
+	// pw3270_jni_post_message(10);
+
+	{
+		char *text = lib3270_get_text(PW3270_SESSION,0,-1);
+		if(text)
+		{
+			__android_log_print(ANDROID_LOG_DEBUG, PACKAGE_NAME, "Contents:\n%s\n",text);
+			lib3270_free(text);
+		}
+	}
+}
+
 jint JNI_OnLoad(JavaVM *vm, void *reserved)
 {
 	H3270	* session	= lib3270_session_new("");
@@ -270,11 +285,12 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved)
 	lib3270_set_popup_handler(popuphandler);
 	lib3270_register_time_handlers(add_timer,remove_timer);
 
-	session->write			= write_buffer;
-	session->changed 		= changed;
-	session->erase			= erase;
-	session->ctlr_done		= ctlr_done;
-	session->update_status	= update_status;
+	session->write				= write_buffer;
+	session->changed 			= changed;
+	session->erase				= erase;
+	session->ctlr_done			= ctlr_done;
+	session->update_status		= update_status;
+	session->autostart			= autostart;
 
 	return JNI_VERSION_1_4;
 }

@@ -372,7 +372,21 @@ void screen_update(H3270 *session, int bstart, int bend)
 		session->changed(session,first,len);
 	}
 
-	trace("%s ends",__FUNCTION__);
+	if(session->starting && session->formatted && lib3270_in_3270(session))
+	{
+		session->starting = 0;
+		session->autostart(session);
+#ifdef DEBUG
+		{
+			char *text = lib3270_get_text(session,0,-1);
+			trace("First screen:\n%s\n",text);
+			lib3270_free(text);
+		}
+#endif
+	}
+
+//	trace("%s ends",__FUNCTION__);
+
 }
 
 LIB3270_EXPORT int lib3270_get_cursor_address(H3270 *h)
@@ -426,20 +440,20 @@ void status_ctlr_done(H3270 *session)
 
 void status_oerr(H3270 *session, int error_type)
 {
-	LIB3270_STATUS sts = LIB3270_STATUS_USER;
+	LIB3270_STATUS sts = LIB3270_MESSAGE_USER;
 
 	CHECK_SESSION_HANDLE(session);
 
 	switch (error_type)
 	{
 	case KL_OERR_PROTECTED:
-		sts = LIB3270_STATUS_PROTECTED;
+		sts = LIB3270_MESSAGE_PROTECTED;
 		break;
 	case KL_OERR_NUMERIC:
-		sts = LIB3270_STATUS_NUMERIC;
+		sts = LIB3270_MESSAGE_NUMERIC;
 		break;
 	case KL_OERR_OVERFLOW:
-		sts = LIB3270_STATUS_OVERFLOW;
+		sts = LIB3270_MESSAGE_OVERFLOW;
 		break;
 
 	default:
@@ -453,9 +467,9 @@ void status_oerr(H3270 *session, int error_type)
 void status_connecting(H3270 *session, Boolean on)
 {
 	if(session->cursor)
-			session->cursor(session,on ? CURSOR_MODE_LOCKED : CURSOR_MODE_NORMAL);
+		session->cursor(session,on ? CURSOR_MODE_LOCKED : CURSOR_MODE_NORMAL);
 
-	status_changed(session, on ? LIB3270_STATUS_CONNECTING : LIB3270_STATUS_BLANK);
+	status_changed(session, on ? LIB3270_MESSAGE_CONNECTING : LIB3270_MESSAGE_NONE);
 }
 
 void status_reset(H3270 *session)
@@ -464,17 +478,17 @@ void status_reset(H3270 *session)
 
 	if (session->kybdlock & KL_ENTER_INHIBIT)
 	{
-		status_changed(session,LIB3270_STATUS_INHIBIT);
+		status_changed(session,LIB3270_MESSAGE_INHIBIT);
 	}
 	else if (session->kybdlock & KL_DEFERRED_UNLOCK)
 	{
-		status_changed(session,LIB3270_STATUS_X);
+		status_changed(session,LIB3270_MESSAGE_X);
 	}
 	else
 	{
 		if(session->cursor)
 			session->cursor(session,CURSOR_MODE_NORMAL);
-		status_changed(session,LIB3270_STATUS_BLANK);
+		status_changed(session,LIB3270_MESSAGE_NONE);
 	}
 
 	session->display(session);
@@ -503,8 +517,7 @@ void status_changed(H3270 *session, LIB3270_STATUS id)
 
 	session->oia_status = id;
 
-	if(session->update_status)
-		session->update_status(session,id);
+	session->update_status(session,id);
 }
 
 void status_twait(H3270 *session)

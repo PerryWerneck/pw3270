@@ -706,7 +706,9 @@ void host_in3270(H3270 *hSession, LIB3270_CSTATE new_cstate)
 
 void lib3270_set_connected(H3270 *hSession)
 {
-	hSession->cstate = CONNECTED_INITIAL;
+	hSession->cstate	= CONNECTED_INITIAL;
+	hSession->starting	= 1;	// Enable autostart
+
 	lib3270_st_changed(hSession, LIB3270_STATE_CONNECT, True);
 	if(hSession->update_connect)
 		hSession->update_connect(hSession,1);
@@ -716,7 +718,9 @@ void lib3270_set_disconnected(H3270 *hSession)
 {
 	CHECK_SESSION_HANDLE(hSession);
 
-	hSession->cstate = NOT_CONNECTED;
+	hSession->cstate	= NOT_CONNECTED;
+	hSession->starting	= 0;
+
 	set_status(hSession,OIA_FLAG_UNDERA,False);
 	lib3270_st_changed(hSession,LIB3270_STATE_CONNECT, False);
 	status_changed(hSession,LIB3270_MESSAGE_DISCONNECTED);

@@ -34,6 +34,7 @@
  // "PW" Standards
  #include <gtk/gtk.h>
  #include <errno.h>
+ #include <lib3270/config.h>
 
  #ifdef WIN32
 
@@ -49,10 +50,6 @@
 	#endif // KEY_WOW64_64KEY
 
  #endif // WIN32
-
- #ifndef PACKAGE_NAME
-	#define PACKAGE_NAME	"@PACKAGE_NAME@"
- #endif
 
  #define ENABLE_NLS
 
@@ -96,5 +93,6 @@
 #else
  GKeyFile	* get_application_keyfile(void);
 #endif // WIN_REGISTRY_ENABLED
+
 
 #endif

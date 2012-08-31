@@ -1300,9 +1300,11 @@ static int telnet_fsm(H3270 *hSession, unsigned char c)
 				hSession->ns_rrcvd++;
 				if (process_eor(hSession))
 					return -1;
-			} else
+			}
+			else
+			{
 				Warning(hSession, _( "EOR received when not in 3270 mode, ignored." ));
-
+			}
 			trace_dsn(hSession,"RCVD EOR\n");
 			hSession->ibptr = hSession->ibuf;
 			hSession->telnet_state = TNS_DATA;
@@ -1900,6 +1902,7 @@ static void process_bind(H3270 *hSession, unsigned char *buf, int buflen)
 static int
 process_eor(H3270 *hSession)
 {
+	trace("%s: syncing=%s",__FUNCTION__,hSession->syncing ? "Yes" : "No");
 	if (hSession->syncing || !(hSession->ibptr - hSession->ibuf))
 		return(0);
 

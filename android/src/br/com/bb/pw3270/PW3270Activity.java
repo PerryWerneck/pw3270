@@ -165,10 +165,6 @@ public class PW3270Activity extends Activity
 			startActivityForResult(myIntent, 0);
         	break;
 
-        case R.id.reload:
-        	host.view.reload();
-        	break;
-        	
         case R.id.about:
         	showAboutDialog();
         	break;

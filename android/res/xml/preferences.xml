@@ -46,6 +46,13 @@
             android:defaultValue="false"
         />
         
+        <EditTextPreference
+            android:key="logonstring"
+            android:title="String de conexão" 
+            android:summary="Define texto a enviar ao conectar"
+            android:dialogTitle="String de conexão"
+            android:dialogMessage="Informe texto a enviar logo após a conexão"
+            android:defaultValue="" />
         
       </PreferenceCategory>
     

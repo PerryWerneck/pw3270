@@ -1209,7 +1209,8 @@ LIB3270_ACTION( firstfield )
 		return 0;
 	}
 #endif /*]*/
-	if (!hSession->formatted) {
+	if (!hSession->formatted)
+	{
 		cursor_move(hSession,0);
 		return 0;
 	}
@@ -2066,8 +2067,10 @@ LIB3270_ACTION( eraseeof )
 		operator_error(hSession,KL_OERR_PROTECTED);
 		return -1;
 	}
-	if (hSession->formatted) {	/* erase to next field attribute */
-		do {
+	if (hSession->formatted)
+	{	/* erase to next field attribute */
+		do
+		{
 			ctlr_add(hSession,baddr, EBC_null, 0);
 			INC_BA(baddr);
 		} while (!hSession->ea_buf[baddr].fa);
@@ -2109,7 +2112,8 @@ LIB3270_ACTION( eraseinput )
 	if (IN_ANSI)
 		return 0;
 #endif /*]*/
-	if (hSession->formatted) {
+	if (hSession->formatted)
+	{
 		/* find first field attribute */
 		baddr = 0;
 		do {
@@ -2170,7 +2174,8 @@ LIB3270_ACTION( deleteword )
 		return 0;
 	}
 #if defined(X3270_ANSI) /*[*/
-	if (IN_ANSI) {
+	if (IN_ANSI)
+	{
 		net_send_werase(hSession);
 		return 0;
 	}
@@ -2455,7 +2460,7 @@ static Boolean remargin(H3270 *hSession, int lmargin)
 	return True;
 }
 
-LIB3270_EXPORT int lib3270_emulate_input(H3270 *hSession, char *s, int len, int pasting)
+LIB3270_EXPORT int lib3270_emulate_input(H3270 *hSession, const char *s, int len, int pasting)
 {
 	enum { BASE, BACKSLASH, BACKX, BACKP, BACKPA, BACKPF, OCTAL, HEX, XGE } state = BASE;
 	int literal = 0;
@@ -2474,7 +2479,7 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *hSession, char *s, int len, int 
 	UChar *ws;
 #else /*][*/
 	char c;
-	char *ws;
+	const char *ws;
 #endif /*]*/
 
 	CHECK_SESSION_HANDLE(hSession);

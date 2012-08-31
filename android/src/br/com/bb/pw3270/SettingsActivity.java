@@ -70,6 +70,7 @@ public class SettingsActivity extends Activity
 	        // Update summary from settings
 	        new stringSetting(findPreference("hostname"));
 	        new stringSetting(findPreference("port"));
+	        new stringSetting(findPreference("logonstring"));
 	        
 	    }
 

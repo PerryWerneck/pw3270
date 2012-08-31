@@ -110,6 +110,8 @@
 		int						  need_tls_follows			: 1;
 		int						  cut_xfer_in_progress		: 1;
 		int						  auto_keymap				: 1;
+		int						  formatted					: 1;	/**< Formatted screen flag */
+		int						  starting					: 1;	/**< Is starting (no first screen)? */
 
 		char					* oversize;
 
@@ -161,8 +163,6 @@
 		char					  flipped;
 		int						  screen_alt;			/**< alternate screen? */
 		int						  is_altbuffer;
-
-		int						  formatted;			/**< set in screen_disp */
 
 		// Screen contents
 		void 					* buffer[2];			/**< Internal buffers */
@@ -401,6 +401,7 @@
 		void (*update_model)(H3270 *session, const char *name, int model, int rows, int cols);
 		void (*update_selection)(H3270 *session, int start, int end);
 		void (*update_ssl)(H3270 *session, LIB3270_SSL_STATE state);
+//		void (*update_formatted)(H3270 *session,int state);
 
 		void (*set_timer)(H3270 *session, unsigned char on);
 		void (*erase)(H3270 *session);
@@ -409,6 +410,7 @@
 		void (*cursor)(H3270 *session, LIB3270_CURSOR id);
 		void (*set_selection)(H3270 *session, unsigned char on);
 		void (*ctlr_done)(H3270 *session);
+		void (*autostart)(H3270 *session);
 
 		void (*message)(H3270 *session, LIB3270_NOTIFY id , const char *title, const char *message, const char *text);
 

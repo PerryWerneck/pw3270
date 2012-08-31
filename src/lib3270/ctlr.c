@@ -67,7 +67,8 @@
 // Boolean			dbcs = False;
 
 /* Statics */
-static void set_formatted(H3270 *session);
+static void update_formatted(H3270 *session);
+static void set_formatted(H3270 *hSession, int state);
 static void ctlr_blanks(H3270 *session);
 static void	ctlr_half_connect(H3270 *session, int ignored, void *dunno);
 static void	ctlr_connect(H3270 *session, int ignored, void *dunno);
@@ -224,37 +225,50 @@ void ctlr_set_rows_cols(H3270 *session, int mn, int ovc, int ovr)
 
 	set_viewsize(session,sz[idx].rows,sz[idx].cols);
 
-	/*
-	// Make sure that the current rows/cols are still 24x80.
-	session->cols = 80;
-	session->rows = 24;
-	session->screen_alt = 0;
-	*/
-
 }
 
-
+static void set_formatted(H3270 *hSession, int state)
+{
+	hSession->formatted = state;
 /*
- * Set the formatted screen flag.  A formatted screen is a screen that
- * has at least one field somewhere on it.
+	int last = (int) hSession->formatted;
+	hSession->formatted = state;
+
+	if( ((int) hSession->formatted) != last)
+	{
+		trace("Screen is now %s",hSession->formatted ? "formatted" : "unformatted");
+		hSession->update_formatted(hSession,hSession->formatted);
+	}
+*/
+	trace("Screen is now %s",hSession->formatted ? "formatted" : "unformatted");
+}
+
+/**
+ * Update the formatted screen flag.
+ *
+ * A formatted screen is a screen that has at least one field somewhere on it.
+ *
+ * @param hSession	Session Handle
  */
-static void set_formatted(H3270 *hSession)
+static void update_formatted(H3270 *hSession)
 {
 	register int baddr;
 
 	CHECK_SESSION_HANDLE(hSession);
 
-	hSession->formatted = False;
 	baddr = 0;
 	do
 	{
 		if(hSession->ea_buf[baddr].fa)
 		{
-			hSession->formatted = True;
-			break;
+			set_formatted(hSession,1);
+			return;
 		}
 		INC_BA(baddr);
 	} while (baddr != 0);
+
+	set_formatted(hSession,0);
+
 }
 
 /*
@@ -277,6 +291,7 @@ static void ctlr_connect(H3270 *hSession, int ignored unused, void *dunno)
 		hSession->ea_buf[-1].fa = FA_PRINTABLE | FA_MODIFY;
 	else
 		hSession->ea_buf[-1].fa = FA_PRINTABLE | FA_PROTECT;
+
 	if (!IN_3270 || (IN_SSCP && (hSession->kybdlock & KL_OIA_TWAIT)))
 	{
 		lib3270_kybdlock_clear(hSession,KL_OIA_TWAIT);
@@ -291,8 +306,6 @@ static void ctlr_connect(H3270 *hSession, int ignored unused, void *dunno)
 	hSession->reply_mode = SF_SRM_FIELD;
 	hSession->crm_nattr = 0;
 }
-
-
 
 LIB3270_EXPORT int lib3270_field_addr(H3270 *hSession, int baddr)
 {
@@ -886,7 +899,8 @@ void ctlr_erase_all_unprotected(H3270 *hSession)
 
 	kybd_inhibit(hSession,False);
 
-	if (hSession->formatted) {
+	if (hSession->formatted)
+	{
 		/* find first field attribute */
 		baddr = 0;
 		do {
@@ -975,7 +989,7 @@ enum pds ctlr_write(H3270 *hSession, unsigned char buf[], int buflen, Boolean er
 			ctlr_add_gr(hSession,hSession->buffer_addr, 0); \
 			ctlr_add_ic(hSession,hSession->buffer_addr, 0); \
 			trace_ds(hSession,"%s",see_attr(fa)); \
-			hSession->formatted = True; \
+			set_formatted(hSession,1); \
 		}
 
 	kybd_inhibit(hSession,False);
@@ -1721,7 +1735,7 @@ enum pds ctlr_write(H3270 *hSession, unsigned char buf[], int buflen, Boolean er
 			break;
 		}
 	}
-	set_formatted(hSession);
+	update_formatted(hSession);
 	END_TEXT0;
 	trace_ds(hSession,"\n");
 	if (wcc_keyboard_restore) {
@@ -2196,7 +2210,7 @@ ctlr_clear(H3270 *session, Boolean can_snap)
 	cursor_move(session,0);
 	session->buffer_addr = 0;
 	lib3270_unselect(session);
-	session->formatted = False;
+	set_formatted(session,0);
 	session->default_fg = 0;
 	session->default_bg = 0;
 	session->default_gr = 0;
@@ -2225,7 +2239,7 @@ static void ctlr_blanks(H3270 *session)
 	cursor_move(session,0);
 	session->buffer_addr = 0;
 	lib3270_unselect(session);
-	session->formatted = False;
+	set_formatted(session,0);
 	ALL_CHANGED(session);
 }
 

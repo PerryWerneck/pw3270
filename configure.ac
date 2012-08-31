@@ -356,7 +356,6 @@ AC_CONFIG_FILES([
 	src/lib3270/mkversion.sh
 	src/pw3270/Makefile
 	src/pw3270/uiparser/Makefile
-	src/pw3270/common/common.h
 	src/tools/Makefile
 	man/Makefile
 	makegtkruntime.sh

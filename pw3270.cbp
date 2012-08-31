@@ -219,7 +219,7 @@
 		<Unit filename="src/pw3270/colors.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/pw3270/common/common.h.in" />
+		<Unit filename="src/pw3270/common/common.h" />
 		<Unit filename="src/pw3270/common/config.c">
 			<Option compilerVar="CC" />
 		</Unit>

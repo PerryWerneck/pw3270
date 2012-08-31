@@ -160,7 +160,7 @@ static void screen_disp(H3270 *session)
 	screen_update(session,0,session->rows*session->cols);
 }
 
-static void set_width(H3270 *session, int width)
+static void nop_int(H3270 *session, int width)
 {
 	return;
 }
@@ -194,7 +194,9 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 	hSession->message				= message;
 	hSession->update_ssl			= update_ssl;
 	hSession->display				= screen_disp;
-	hSession->set_width				= set_width;
+	hSession->set_width				= nop_int;
+	hSession->update_status			= (void (*)(H3270 *, LIB3270_STATUS)) nop_int;
+	hSession->autostart				= nop;
 
 	// Set the defaults.
 	hSession->extended  			=  1;
@@ -425,7 +427,11 @@ void check_session_handle(H3270 **hSession)
 
 	*hSession = lib3270_get_default_session_handle();
 
+#ifdef ANDROID
+	__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "%s called with empty session\n", __FUNCTION__);
+#else
 	lib3270_write_log(*hSession,"%s called with empty session",__FUNCTION__);
+#endif // ANDROID
 }
 
 LIB3270_EXPORT H3270 * lib3270_get_default_session_handle(void)

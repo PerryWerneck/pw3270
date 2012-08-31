@@ -61,6 +61,12 @@
  LIB3270_EXPORT void		  pw3270_save_window_state(GtkWidget *widget, const gchar *name);
  LIB3270_EXPORT void		  pw3270_restore_window_state(GtkWidget *widget, const gchar *name);
 
+#ifdef HAVE_GTKMAC
+ LIB3270_EXPORT				  GtkMacBundle * pw3270_get_bundle(void);
+#endif
+
+
+
  G_END_DECLS
 
 #endif // PW3270_H_INCLUDED

@@ -273,7 +273,7 @@ void v3270_set_scroll_action(GtkWidget *widget, GdkScrollDirection direction, Gt
 	action_scroll[((int) direction) & 0x03] = action;
 }
 
-gboolean	  v3270_scroll_event(GtkWidget *widget, GdkEventScroll *event, gpointer user_data)
+gboolean v3270_scroll_event(GtkWidget *widget, GdkEventScroll *event)
 {
 	v3270	* terminal	= GTK_V3270(widget);
 

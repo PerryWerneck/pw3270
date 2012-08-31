@@ -172,7 +172,7 @@
 		LIB3270_MESSAGE_NONE,				/**< No message */
 		LIB3270_MESSAGE_SYSWAIT,
 		LIB3270_MESSAGE_TWAIT,
-		LIB3270_MESSAGE_CONNECTED,
+		LIB3270_MESSAGE_CONNECTED,			/**< Connected */
 		LIB3270_MESSAGE_DISCONNECTED,		/**< Disconnected from host */
 		LIB3270_MESSAGE_AWAITING_FIRST,
 		LIB3270_MESSAGE_MINUS,
@@ -443,7 +443,7 @@
 	 *
 	 * @return The number of unprocessed characters.
 	 */
-	LIB3270_EXPORT int lib3270_emulate_input(H3270 *session, char *s, int len, int pasting);
+	LIB3270_EXPORT int lib3270_emulate_input(H3270 *session, const char *s, int len, int pasting);
 
 	/**
 	 * Set string at current cursor position.

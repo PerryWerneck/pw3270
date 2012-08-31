@@ -378,7 +378,7 @@ static char * get_text(H3270 *hSession,unsigned char all)
 	size_t buflen = (hSession->rows * (hSession->cols+1))+1;
 	size_t sz = 0;
 
-	if(!lib3270_connected(hSession))
+	if(!(lib3270_connected(hSession) && hSession->text))
 		return NULL;
 
 	ret = lib3270_malloc(buflen);

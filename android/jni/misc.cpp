@@ -58,3 +58,13 @@ JNIEXPORT void JNICALL Java_br_com_bb_pw3270_lib3270_setToggle(JNIEnv *env, jobj
 
 }
 
+JNIEXPORT jboolean JNICALL Java_br_com_bb_pw3270_lib3270_in3270 (JNIEnv *env, jobject obj)
+{
+	jboolean rc;
+
+	PW3270_JNI_BEGIN
+	rc = lib3270_in_3270(PW3270_SESSION) ? JNI_TRUE : JNI_FALSE;
+	PW3270_JNI_END
+
+	return rc;
+}
