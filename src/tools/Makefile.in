@@ -50,7 +50,7 @@ all: xml2pot$(EXEEXT)
 
 xml2pot$(EXEEXT): xml2pot.c Makefile
 	@echo "  CCLD `basename $@`"
-	@$(HOST_CC) `pkg-config --cflags gtk+-@GTK_VERSION@`  -g -o $@ xml2pot.c `pkg-config --libs gtk+-@GTK_VERSION@`
+	@$(HOST_CC) @LDARCH@ `pkg-config --cflags gtk+-@GTK_VERSION@`  -g -o $@ xml2pot.c `pkg-config --libs gtk+-@GTK_VERSION@`
 
 clean:
 	@rm -f *.$(OBJEXT)
