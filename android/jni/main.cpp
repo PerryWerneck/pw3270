@@ -50,8 +50,10 @@
  const char 			* java_class_name	= "br/com/bb/pw3270/lib3270";
  PW3270_JNI				* pw3270_jni_active	= NULL;
  static pthread_mutex_t	  mutex;
+ static char			* startup_script	= NULL;
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
+
 
 jmethodID lib3270_getmethodID(const char *name, const char *sig)
 {
@@ -268,25 +270,13 @@ static void ctlr_done(H3270 *session)
 
 static void autostart(H3270 *session)
 {
+	if(startup_script)
 	{
-		char *text = lib3270_get_text(PW3270_SESSION,0,-1);
-		if(text)
-		{
-			char *strtok_r(char *str, const char *delim, char **saveptr);
-			char *save;
-
-/*
-			__android_log_print(ANDROID_LOG_DEBUG, PACKAGE_NAME, "Contents:\n");
-			for(char *ptr = strtok_r(text,"\n",&save);ptr;ptr = strtok_r(NULL,"\n",&save))
-				__android_log_print(ANDROID_LOG_DEBUG, PACKAGE_NAME, "%s\n",ptr);
-*/
-
-			lib3270_free(text);
-		}
+		// Input startup script contents
+		lib3270_emulate_input(PW3270_SESSION,startup_script,-1,0);
+		free(startup_script);
+		startup_script = NULL;
 	}
-
-	pw3270_jni_post_message(10);
-
 }
 
 jint JNI_OnLoad(JavaVM *vm, void *reserved)
@@ -351,6 +341,27 @@ JNIEXPORT void JNICALL Java_br_com_bb_pw3270_lib3270_setHost(JNIEnv *env, jobjec
 
 	PW3270_JNI_END
 }
+
+JNIEXPORT void JNICALL Java_br_com_bb_pw3270_lib3270_setStartupScript(JNIEnv *env, jobject obj, jstring str)
+{
+	const char *text;
+
+	PW3270_JNI_BEGIN
+
+	text = env->GetStringUTFChars(str, 0);
+
+	if(startup_script)
+		free(startup_script);
+
+	if(text || strlen(text) > 0)
+		startup_script = strdup(text);
+	else
+		startup_script = NULL;
+
+	PW3270_JNI_END
+
+}
+
 
 JNIEXPORT jstring JNICALL Java_br_com_bb_pw3270_lib3270_getHost(JNIEnv *env, jobject obj)
 {

@@ -84,7 +84,8 @@ public abstract class lib3270
 		{
 			switch (msg.what)
 			{
-			case 0: // Reconnect
+			case 0: // Connection lost
+				reload();
 				if(!hSession.isConnected() && settings.getString("hostname","") != "" && settings.getBoolean("reconnect",false))
 				{
 					Log.d(TAG,"Connection lost, reconnecting");
@@ -139,14 +140,14 @@ public abstract class lib3270
 				new timer(((Long) msg.obj).longValue(), msg.arg1);
 				break;
 
+/*
 			case 10: // Run autostart
-
 				String str = settings.getString("logonstring","");
 				Log.v(TAG, "Logon string is \"" + str + "\"");
 				if( str != "")
 					runStartupString(str);
 				break;
-
+*/
 			}
 		}
 	};
@@ -273,6 +274,10 @@ public abstract class lib3270
 			{
 				Log.v(TAG,"Getting socket for " + hostname + ":" + port.toString());
 				sock = socketFactory.createSocket(hostname, port);
+
+				sock.setKeepAlive(true);
+				// sock.setSoTimeout(1000);
+
 				outData = new DataOutputStream(sock.getOutputStream());
 				inData = new DataInputStream(sock.getInputStream());
 			}
@@ -418,6 +423,7 @@ public abstract class lib3270
 		case 4: // LIB3270_MESSAGE_DISCONNECTED
 			Log.v(TAG, "Status changed to disconnected");
 			connected = false;
+			net_cleanup();
 			reload();
 			break;
 
@@ -447,10 +453,12 @@ public abstract class lib3270
 
 	protected void showPopupMessage(int type, String title, String text, String info)
 	{
+		/*
 		Log.v(TAG,"Popup Message:");
 		Log.v(TAG,title);
 		Log.v(TAG,text);
 		Log.v(TAG,info);
+		*/
 
 		AlertDialog d = new AlertDialog.Builder(mainact).create();
 
@@ -510,31 +518,76 @@ public abstract class lib3270
 
 	public int connect()
 	{
+		if(connected)
+		{
+			Log.v(TAG, "Already connected");
+			return -1;
+		}
+
+		Log.v(TAG, "Connecting");
 		if (mainloop == null)
 		{
 			info(TAG, "Starting comm thread");
+			setStartupScript(settings.getString("logonstring",""));
 			mainloop = new NetworkThread();
 			mainloop.start();
 			return 0;
 		}
-		error(TAG, "Comm thread already active during connect");
+		Log.v(TAG, "Comm thread already active during connect");
+		disconnect();
+
 		return -1;
 	}
 
+	private int net_cleanup()
+	{
+		Log.v(TAG, "Stopping network activity");
+		
+		if(sock != null)
+		{
+			if(sock.isConnected())
+			{
+				try
+				{
+					sock.shutdownInput();
+					return 0;
+				}
+				catch(Exception e)
+				{
+					String msg = e.getLocalizedMessage();
+					if(msg == null)
+						msg = e.getMessage();
+	
+					Log.v(TAG,": shutdownInput error" + (msg != null ? msg : e.toString()));
+				}
+			}
+			
+			if(!sock.isClosed())
+			{
+				try
+				{
+					sock.close();
+					return 0;
+				}
+				catch(Exception e)
+				{
+					String msg = e.getLocalizedMessage();
+					if(msg == null)
+						msg = e.getMessage();
+	
+					Log.v(TAG,"sockclose error: " + (msg != null ? msg : e.toString()));
+				}
+			}
+		}
+		
+		return 0;
+	}
+	
 	public int disconnect()
 	{
 		Log.v(TAG, "Disconnecting");
 		connected = reconnect = false;
-
-		if(sock != null)
-		{
-			try
-			{
-				sock.shutdownInput();
-				sock.shutdownOutput();
-			} catch(Exception e) { }
-		}
-
+		net_cleanup();
 		return 0;
 	}
 
@@ -623,5 +676,6 @@ public abstract class lib3270
 
 	public native boolean in3270();
 
-	public native void runStartupString(String text);
+	public native void setStartupScript(String str);
+
 }
