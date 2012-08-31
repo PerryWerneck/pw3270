@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>pw3270</string>
+	<key>CFBundleGetInfoString</key>
+	<string>pw3270 - 5.0-0</string>
+	<key>CFBundleIconFile</key>
+	<string>pw3270.icns</string>
+	<key>CFBundleIdentifier</key>
+	<string>pw3270</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleLongVersionString</key>
+	<string>pw3270-pw3270 © Banco do Brasil S.A.</string>
+	<key>CFBundleName</key>
+	<string>pw3270</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>5.0</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>5.0</string>
+	<key>CSResourcesFileMapped</key>
+	<true/>
+	<key>LSRequiresCarbon</key>
+	<true/>
+	<key>NSHumanReadableCopyright</key>
+	<string>Copyright (C) 2008 Banco do Brasil S.A., GNU General Public License.</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>10.6</string>
+</dict>
+</plist>

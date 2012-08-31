@@ -36,16 +36,13 @@
 #include "v3270/accessible.h"
 #include <stdlib.h>
 
-#ifdef HAVE_GTKMAC
-	#include <gtkmacintegration/gtkosxapplication.h>
-#endif // HAVE_GTKMAC
-
 /*--[ Statics ]--------------------------------------------------------------------------------------*/
 
  static GtkWidget *toplevel = NULL;
 
 #ifdef HAVE_GTKMAC
- static GtkOSXApplication	* osxapp = NULL;
+ GtkOSXApplication	* osxapp	= NULL;
+ GtkMacBundle		* macbundle	= NULL;
 #endif // HAVE_GTKMAC
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
@@ -153,17 +150,14 @@ int main(int argc, char *argv[])
 #elif defined(HAVE_GTKMAC)
 	{
 		osxapp = GTK_OSX_APPLICATION(g_object_new(GTK_TYPE_OSX_APPLICATION,NULL));
+		
+		macbundle = gtk_mac_bundle_get_default();
+		if(!macbundle)
+			macbundle = gtk_mac_bundle_new();
 
-
-		gchar * appdir = g_build_filename(DATAROOTDIR,PACKAGE_NAME,NULL);
-		gchar * locdir = g_build_filename(DATAROOTDIR,"locale",NULL);
-
-		g_chdir(appdir);
-		bindtextdomain( PACKAGE_NAME, locdir);
-
-		g_free(locdir);
-		g_free(appdir);
-
+		g_chdir(gtk_mac_bundle_get_datadir(macbundle));
+		bindtextdomain(PACKAGE_NAME,gtk_mac_bundle_get_localedir(macbundle));
+		
 	}
 #elif defined( DATAROOTDIR )
 	{

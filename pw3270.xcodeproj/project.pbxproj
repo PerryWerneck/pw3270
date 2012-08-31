@@ -257,9 +257,9 @@
 		C272076B15D7FBF700CCCD22 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		C272076C15D7FBF700CCCD22 /* Makefile.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Makefile.in; sourceTree = "<group>"; };
 		C272076D15D7FBF700CCCD22 /* xml2pot.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = xml2pot.c; sourceTree = "<group>"; };
-		C2C3E14515F0503B00B02C1C /* pw3270.bundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = pw3270.bundle; sourceTree = "<group>"; };
 		C2C3E14D15F0598900B02C1C /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = mac/Info.plist; sourceTree = "<group>"; };
 		C2C3E14E15F0598900B02C1C /* launcher.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = launcher.sh; path = mac/launcher.sh; sourceTree = "<group>"; };
+		C2C3E15015F09BE200B02C1C /* pw3270.bundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = pw3270.bundle; sourceTree = "<group>"; };
 		C2C4DAD815D8282600E8C6A0 /* autogen.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = autogen.sh; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -679,9 +679,9 @@
 		C2C3E14715F0547300B02C1C /* Bundle */ = {
 			isa = PBXGroup;
 			children = (
+				C2C3E15015F09BE200B02C1C /* pw3270.bundle */,
 				C2C3E14D15F0598900B02C1C /* Info.plist */,
 				C2C3E14E15F0598900B02C1C /* launcher.sh */,
-				C2C3E14515F0503B00B02C1C /* pw3270.bundle */,
 			);
 			name = Bundle;
 			sourceTree = "<group>";
