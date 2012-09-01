@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-31 04:17-0300\n"
+"POT-Creation-Date: 2012-09-01 05:19-0300\n"
 "PO-Revision-Date: 2012-08-27 09:01-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português do Brasil <>\n"
@@ -18,32 +18,32 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 
-#: kybd.c:2638
+#: kybd.c:2644
 #, c-format
 msgid "%s: Bell not supported"
 msgstr "%s: Alerta sonoro não suportado"
 
-#: kybd.c:2797
+#: kybd.c:2803
 #, c-format
 msgid "%s: Missing hex digits after \\x"
 msgstr "%s: Faltando dígitos hexadecimais após \\x"
 
-#: kybd.c:2737
+#: kybd.c:2743
 #, c-format
 msgid "%s: Unknown character after \\p"
 msgstr "%s: Unknown character after \\p"
 
-#: kybd.c:2773
+#: kybd.c:2779
 #, c-format
 msgid "%s: Unknown character after \\pa"
 msgstr "%s: Unknown character after \\pa"
 
-#: kybd.c:2751
+#: kybd.c:2757
 #, c-format
 msgid "%s: Unknown character after \\pf"
 msgstr "%s: Unknown character after \\pf"
 
-#: kybd.c:2689
+#: kybd.c:2695
 #, c-format
 msgid "%s: Vertical tab not supported"
 msgstr "%s: Tabulação verticao não suportada"
@@ -58,15 +58,15 @@ msgstr "%s: Familia %d é inválida"
 msgid "%s:%d"
 msgstr "%s:%d"
 
-#: screen.c:639 screen.c:641 screen.c:671 screen.c:685 screen.c:796
+#: screen.c:656 screen.c:658 screen.c:688 screen.c:702 screen.c:813
 msgid "3270 Error"
 msgstr "Erro 3270"
 
-#: screen.c:656
+#: screen.c:673
 msgid "3270 Warning"
 msgstr "Alerta 3270"
 
-#: telnet.c:3178
+#: telnet.c:3181
 #, c-format
 msgid ""
 "<b>Connection state:</b> %s\n"
@@ -107,7 +107,7 @@ msgstr "Cursor piscante"
 msgid "Bold"
 msgstr "Negrito"
 
-#: telnet.c:2053
+#: telnet.c:2056
 msgid "Broken pipe"
 msgstr "Broken pipe"
 
@@ -145,7 +145,7 @@ msgstr "Cancelado pelo usuário"
 msgid "Cannot create socket handle"
 msgstr "Não foi possível criar um manipulador de socket"
 
-#: session.c:315
+#: session.c:317
 #, c-format
 msgid "Cannot find charset \"%s\", using defaults"
 msgstr "Não encontrei codificação \"%s\", usando defaults"
@@ -184,7 +184,7 @@ msgstr "Conectar ao iniciar"
 msgid "Connection failed"
 msgstr "Conexão falhou"
 
-#: telnet.c:2057
+#: telnet.c:2060
 msgid "Connection reset by peer"
 msgstr "Conexão foi cancelada pelo servidor"
 
@@ -220,7 +220,7 @@ msgstr "Debug"
 msgid "Debug window updates"
 msgstr "Mostrar atualizações de janela"
 
-#: telnet.c:1729
+#: telnet.c:1731
 msgid "Device type rejected"
 msgstr "Tipo de dispositivo rejeitado"
 
@@ -228,7 +228,7 @@ msgstr "Tipo de dispositivo rejeitado"
 msgid "Disconnected from host"
 msgstr "Desconectado do servidor"
 
-#: telnet.c:1304
+#: telnet.c:1306
 msgid "EOR received when not in 3270 mode, ignored."
 msgstr "EOR recebido fora do modo 3270, ignorado."
 
@@ -329,15 +329,15 @@ msgstr "Ajuda"
 msgid "Host disconnected, transfer cancelled"
 msgstr "Servidor desconectou, transferência cancelada"
 
-#: telnet.c:1787
+#: telnet.c:1789
 msgid "Host illegally added function(s)"
 msgstr "Host illegally added function(s)"
 
-#: telnet.c:1712
+#: telnet.c:1714
 msgid "Host rejected device type or request type"
 msgstr "Servidor rejeitou o tipo de dispositivo ou requisição"
 
-#: telnet.c:1725
+#: telnet.c:1727
 msgid "Host rejected resource(s)"
 msgstr "Servidor rejeitou recurso(s)"
 
@@ -673,7 +673,7 @@ msgstr "SOCKS5 Proxy: xmit version 5 nmethods 1 (no auth)\n"
 msgid "SOCKS5 proxy: %s/%u: %s"
 msgstr "SOCKS5 proxy: %s/%u: %s"
 
-#: telnet.c:3176
+#: telnet.c:3179
 msgid "SSL Connect error"
 msgstr "Erro na conexão SSL"
 
@@ -693,7 +693,7 @@ msgstr "Erro SSL"
 msgid "SSL negotiation failed"
 msgstr "Negociação SSL falhou"
 
-#: telnet.c:2043
+#: telnet.c:2046
 #, c-format
 msgid ""
 "SSL_write:\n"
@@ -770,7 +770,7 @@ msgstr "Colar inteligente"
 msgid "Socket read error"
 msgstr "Erro ao ler dados da rede"
 
-#: telnet.c:2064
+#: telnet.c:2067
 msgid "Socket write error"
 msgstr "Erro ao enviar dados para a rede"
 
@@ -782,7 +782,7 @@ msgstr "Espaço no nome da LU"
 msgid "TELNET Proxy: send error"
 msgstr "TELNET Proxy: send error"
 
-#: telnet.c:3227
+#: telnet.c:3230
 msgid "TLS negotiation failure"
 msgstr "Negociação TLS falhou"
 
@@ -844,12 +844,12 @@ msgstr "Não foi possível enviar a requisição de transferência de arquivo"
 msgid "Unexpected error"
 msgstr "Erro inesperado"
 
-#: kybd.c:336
+#: kybd.c:338
 #, c-format
 msgid "Unexpected type %d in typeahead queue"
 msgstr "Tipo inesperado %d na fila de teclado"
 
-#: ctlr.c:498
+#: ctlr.c:505
 #, c-format
 msgid "Unknown 3270 Data Stream command: 0x%X"
 msgstr "Unknown 3270 Data Stream command: 0x%X"
@@ -858,12 +858,12 @@ msgstr "Unknown 3270 Data Stream command: 0x%X"
 msgid "Unknown FT control code from host"
 msgstr "Servidor enviou código de controle FT desconhecido"
 
-#: kybd.c:2387
+#: kybd.c:2393
 #, c-format
 msgid "Unknown PA key %d"
 msgstr "PA %d desconhecida"
 
-#: kybd.c:2402
+#: kybd.c:2408
 #, c-format
 msgid "Unknown PF key %d"
 msgstr "PF %d desconhecida"
@@ -959,12 +959,12 @@ msgstr "Opções"
 msgid "_View"
 msgstr "_Exibir"
 
-#: telnet.c:3041 telnet.c:3052
+#: telnet.c:3044 telnet.c:3055
 #, c-format
 msgid "fcntl(%s)"
 msgstr "fcntl(%s)"
 
-#: telnet.c:3031
+#: telnet.c:3034
 #, c-format
 msgid "ioctl(%s)"
 msgstr "ioctl(%s)"

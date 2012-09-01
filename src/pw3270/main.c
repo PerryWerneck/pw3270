@@ -32,6 +32,11 @@
 #include <glib.h>
 #include <glib/gstdio.h>
 #include "globals.h"
+
+#ifdef HAVE_GTKMAC
+ #include <gtkosxapplication.h>
+#endif // HAVE_GTKMAC
+
 #include <v3270.h>
 #include "v3270/accessible.h"
 #include <stdlib.h>
@@ -259,4 +264,3 @@ int main(int argc, char *argv[])
 
 	return rc;
 }
-
