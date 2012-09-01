@@ -233,12 +233,6 @@ void parser_build(struct parser *p, GtkWidget *widget)
 
 #ifdef HAVE_GTKMAC
 	{
-	    if(p->topmenu)
-	    {
-		    gtk_widget_set_visible(p->topmenu,FALSE);
-		    gtk_mac_menu_set_menu_bar(GTK_MENU_SHELL(p->topmenu));
-	    }
-
 	    if(p->sysmenu[SYSMENU_ITEM_QUIT])
 	    {
 		gtk_mac_menu_set_quit_menu_item (GTK_MENU_ITEM(p->sysmenu[SYSMENU_ITEM_QUIT]));
@@ -252,8 +246,15 @@ void parser_build(struct parser *p, GtkWidget *widget)
 
 	    if(p->sysmenu[SYSMENU_ITEM_PREFERENCES])
 	    {
-		GtkMacMenuGroup *group = gtk_mac_menu_add_app_menu_group();
+		GtkMacMenuGroup *group	= gtk_mac_menu_add_app_menu_group();
+		gtk_widget_show_all(p->sysmenu[SYSMENU_ITEM_PREFERENCES]);
 		gtk_mac_menu_add_app_menu_item(group,GTK_MENU_ITEM(p->sysmenu[SYSMENU_ITEM_PREFERENCES]),NULL);
+	    }
+
+	    if(p->topmenu)
+	    {
+		    gtk_widget_set_visible(p->topmenu,FALSE);
+		    gtk_mac_menu_set_menu_bar(GTK_MENU_SHELL(p->topmenu));
 	    }
 
 	}

@@ -104,7 +104,7 @@
 			<menuitem action='disconnect' icon='disconnect' group='online' label='_Disconnect' />
 		</menu>
 
-		<menu name='SettingsMenu' label='Settings' sysmenu='preferences' >
+		<menu name='SettingsMenu' label='Settings'>
 			<menuitem action='editcolors' icon='select-color' label='Colors' />
 
 			<!--- Special action - The fontselect menu will be populated with all available monospaced fonts --->
