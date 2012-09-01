@@ -53,6 +53,18 @@
  #define UI_ELEMENT_MENUITEM	UI_ELEMENT_COUNT+4
  #define UI_ELEMENT_SCROLL		UI_ELEMENT_COUNT+5
 
+#ifdef HAVE_GTKMAC
+ enum SYSMENU_ITEM
+ {
+    SYSMENU_ITEM_ABOUT,
+    SYSMENU_ITEM_PREFERENCES,
+    SYSMENU_ITEM_QUIT,
+
+    SYSMENU_ITEM_COUNT
+
+ };
+#endif // HAVE_GTKMAC
+
  struct parser
  {
  	GtkWidget				*  toplevel;
@@ -69,6 +81,9 @@
 	GHashTable	 			*  actions;			/**< List of actions */
 	GHashTable				*  element_list[UI_ELEMENT_COUNT];
 	const UI_WIDGET_SETUP	*  setup;
+#ifdef HAVE_GTKMAC
+	GtkWidget			*  sysmenu[SYSMENU_ITEM_COUNT];
+#endif // HAVE_GTKMAC
  };
 
  int 			  ui_parse_file(struct parser *info, const gchar *filename);
@@ -76,6 +91,10 @@
 
  GObject 		* ui_get_element(struct parser *info, GtkAction *action, enum ui_element id, const gchar **names, const gchar **values, GError **error);
  GObject		* ui_insert_element(struct parser *info, GtkAction *action, enum ui_element id, const gchar **names, const gchar **values, GObject *widget, GError **error);
+
+#ifdef HAVE_GTKMAC
+ void			  ui_check_for_sysmenu(GtkWidget *widget, struct parser *info, const gchar *name);
+#endif // HAVE_GTKMAC
 
  GObject		* ui_create_menubar(GMarkupParseContext *context,GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error);
  GObject		* ui_create_menu(GMarkupParseContext *context,GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error);

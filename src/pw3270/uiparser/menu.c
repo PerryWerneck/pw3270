@@ -72,7 +72,9 @@
 
 	gtk_menu_shell_append((GtkMenuShell *) menu, widget);
 
-//	trace("%s: %s=%p",__FUNCTION__,gtk_widget_get_name(widget),widget);
+#ifdef HAVE_GTKMAC
+	ui_check_for_sysmenu(widget,info,ui_get_attribute("sysmenu",names,values));
+#endif // HAVE_GTKMAC
 
 	return ui_insert_element(info, action, UI_ELEMENT_MENU, names, values, G_OBJECT(widget), error);
  }

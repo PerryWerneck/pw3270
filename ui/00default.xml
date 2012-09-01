@@ -54,7 +54,7 @@
 				<menuitem action='download' key='<alt>d' label='Receive file' />
 				<menuitem action='upload' key='<alt>u' label='Send file' />
 			</menu>
-			<menuitem action='Quit' key='<ctrl>q' icon="quit" />
+			<menuitem action='Quit' key='<ctrl>q' icon="quit" sysmenu="quit"/>
 		</menu>
 
 		<menu name='EditMenu' label='_Edit' >
@@ -104,7 +104,7 @@
 			<menuitem action='disconnect' icon='disconnect' group='online' label='_Disconnect' />
 		</menu>
 
-		<menu name='SettingsMenu' label='Settings' sysmenu='yes' >
+		<menu name='SettingsMenu' label='Settings' sysmenu='preferences' >
 			<menuitem action='editcolors' icon='select-color' label='Colors' />
 
 			<!--- Special action - The fontselect menu will be populated with all available monospaced fonts --->
@@ -138,7 +138,7 @@
 		</menu>
 
 		<menu name='HelpMenu' label='Help' >
-			<menuitem action='about' icon='about' sysmenu='yes' />
+			<menuitem action='about' icon='about' sysmenu='about' />
 		</menu>
 
 	</menubar>
@@ -260,4 +260,3 @@
 	<accelerator name='KPadd' action='kpadd' key='KP_Add' group='online' />
 
 </ui>
-

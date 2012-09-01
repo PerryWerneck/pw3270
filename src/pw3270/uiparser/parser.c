@@ -232,10 +232,30 @@ void parser_build(struct parser *p, GtkWidget *widget)
 	gtk_window_set_default(GTK_WINDOW(p->toplevel),widget);
 
 #ifdef HAVE_GTKMAC
-	if(p->topmenu)
 	{
-		gtk_widget_set_visible(p->topmenu,FALSE);
-		gtk_mac_menu_set_menu_bar(GTK_MENU_SHELL(p->topmenu));
+	    if(p->topmenu)
+	    {
+		    gtk_widget_set_visible(p->topmenu,FALSE);
+		    gtk_mac_menu_set_menu_bar(GTK_MENU_SHELL(p->topmenu));
+	    }
+
+	    if(p->sysmenu[SYSMENU_ITEM_QUIT])
+	    {
+		gtk_mac_menu_set_quit_menu_item (GTK_MENU_ITEM(p->sysmenu[SYSMENU_ITEM_QUIT]));
+	    }
+
+	    if(p->sysmenu[SYSMENU_ITEM_ABOUT])
+	    {
+		GtkMacMenuGroup *group = gtk_mac_menu_add_app_menu_group();
+		gtk_mac_menu_add_app_menu_item(group,GTK_MENU_ITEM(p->sysmenu[SYSMENU_ITEM_ABOUT]),NULL);
+	    }
+
+	    if(p->sysmenu[SYSMENU_ITEM_PREFERENCES])
+	    {
+		GtkMacMenuGroup *group = gtk_mac_menu_add_app_menu_group();
+		gtk_mac_menu_add_app_menu_item(group,GTK_MENU_ITEM(p->sysmenu[SYSMENU_ITEM_PREFERENCES]),NULL);
+	    }
+
 	}
 #endif // HAVE_GTKMAC
 
@@ -364,4 +384,3 @@ const gchar * ui_get_dir_name(UI_ATTR_DIRECTION dir)
 		return "";
 	return dirname[dir];
 }
-

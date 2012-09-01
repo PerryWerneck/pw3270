@@ -32,11 +32,33 @@
  #include "private.h"
 
  #ifdef HAVE_GTKMAC
-	#include <gtkmacintegration/gtk-mac-menu.h>
+    #include <gtkmacintegration/gtk-mac-menu.h>
  #endif // HAVE_GTKMAC
 
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
+
+#ifdef HAVE_GTKMAC
+ void ui_check_for_sysmenu(GtkWidget *widget, struct parser *info, const gchar *name)
+ {
+    static const gchar *sysmenu[SYSMENU_ITEM_COUNT] = { "about", "preferences", "quit" };
+    int f;
+
+    if(!name)
+	return;
+
+    for(f=0;f<SYSMENU_ITEM_COUNT;f++)
+    {
+	if(!g_strcasecmp(name,sysmenu[f]))
+	{
+	    info->sysmenu[f] = widget;
+	    return;
+	}
+    }
+
+ }
+#endif // HAVE_GTKMAC
+
 
  GObject * ui_create_menuitem(GMarkupParseContext *context,GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error)
  {
@@ -113,10 +135,13 @@
 		}
 	}
 
+#ifdef HAVE_GTKMAC
+	ui_check_for_sysmenu(widget,info,ui_get_attribute("sysmenu",names,values));
+#endif // HAVE_GTKMAC
+
 	return G_OBJECT(widget);
  }
 
  void ui_end_menuitem(GMarkupParseContext *context,GObject *widget,struct parser *info,GError **error)
  {
  }
-
