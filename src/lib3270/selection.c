@@ -32,6 +32,7 @@
  #include <lib3270.h>
  #include <lib3270/session.h>
  #include <lib3270/selection.h>
+ #include "3270ds.h"
 
  #define SELECTION_LEFT			0x01
  #define SELECTION_TOP			0x02
@@ -529,12 +530,70 @@ LIB3270_EXPORT char * lib3270_get_selected(H3270 *hSession)
 
 LIB3270_EXPORT char * lib3270_cut_selected(H3270 *hSession)
 {
+
+	CHECK_SESSION_HANDLE(hSession);
+
 	if(!hSession->selected || hSession->select.start == hSession->select.end)
 		return NULL;
 
-	if(!lib3270_connected(hSession))
+	if(!(lib3270_connected(hSession) && hSession->text))
 		return NULL;
 
+	trace("Rectangle select is %s",lib3270_get_toggle(hSession,LIB3270_TOGGLE_RECTANGLE_SELECT) ? "Active" : "Inactive");
+
+	if(lib3270_get_toggle(hSession,LIB3270_TOGGLE_RECTANGLE_SELECT))
+	{
+		// Rectangle cut is not implemented
+	}
+	else
+	{
+		int end;
+		size_t szText;
+		int baddr;
+		int saddr;
+		char *text;
+		int f;
+
+		get_selected_addr(hSession,&baddr,&end);
+
+		if(baddr >= end)
+			return NULL;
+
+		szText = (end-baddr)+1;
+
+		text = lib3270_malloc(szText+1);
+
+		saddr = baddr+szText;
+
+		for(f=0;f<szText;f++)
+		{
+			text[f] = hSession->text[baddr].chr;
+
+			if(FA_IS_PROTECTED(hSession->ea_buf[saddr].fa))
+				saddr = lib3270_get_next_unprotected(hSession,saddr);
+
+			if(!FA_IS_PROTECTED(hSession->ea_buf[saddr].fa))
+			{
+				if(hSession->text[baddr].chr != hSession->text[saddr].chr)
+				{
+					hSession->text[baddr].chr = hSession->text[saddr].chr;
+					hSession->update(hSession,baddr,hSession->text[baddr].chr,hSession->text[baddr].attr,baddr == hSession->cursor_addr);
+				}
+
+				if(hSession->text[saddr].chr != ' ')
+				{
+					hSession->text[saddr].chr = ' ';
+					hSession->update(hSession,saddr,hSession->text[saddr].chr,hSession->text[saddr].attr,saddr == hSession->cursor_addr);
+				}
+
+				saddr++;
+			}
+			baddr++;
+		}
+
+		lib3270_unselect(hSession);
+		return text;
+	}
 
 	return NULL;
 }
