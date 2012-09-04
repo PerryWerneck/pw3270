@@ -413,7 +413,7 @@ static union {
 } haddr;
 socklen_t ha_len = sizeof(haddr);
 
-void popup_a_sockerr(H3270 *session, char *fmt, ...)
+void popup_a_sockerr(H3270 *hSession, char *fmt, ...)
 {
 #if defined(_WIN32)
 	const char *msg = win32_strerror(socket_errno());
@@ -421,14 +421,17 @@ void popup_a_sockerr(H3270 *session, char *fmt, ...)
 	const char *msg = strerror(errno);
 #endif // WIN32
 	va_list args;
-	char buffer[4096];
+	char *text;
 
 	va_start(args, fmt);
-	vsnprintf(buffer, 4095, fmt, args);
+	text = lib3270_vsprintf(fmt, args);
 	va_end(args);
 
-	popup_system_error(session, N_( "Network error" ), buffer, "%s", msg);
+	lib3270_write_log(hSession, "3270", "Network error:\n%s\n%s",text,msg);
 
+	lib3270_popup_dialog(hSession, LIB3270_NOTIFY_ERROR, _( "Network error" ), text, "%s", msg);
+
+	lib3270_free(text);
 }
 
 #pragma pack(1)
@@ -3031,7 +3034,7 @@ static int non_blocking(H3270 *session, Boolean on)
 
 	if (SOCK_IOCTL(session->sock, FIONBIO, (int *) &i) < 0)
 	{
-		popup_a_sockerr(session,N_( "ioctl(%s)" ), "FIONBIO");
+		popup_a_sockerr(session,N_( "Error in ioctl(%s) when setting no blocking mode" ), "FIONBIO");
 		return -1;
 	}
 
@@ -3041,7 +3044,7 @@ static int non_blocking(H3270 *session, Boolean on)
 
 	if ((f = fcntl(session->sock, F_GETFL, 0)) == -1)
 	{
-		popup_an_errno(session,errno, N_( "fcntl(%s)" ), "F_GETFL" );
+		popup_an_errno(session,errno, _( "Error in fcntl(%s) when setting non blocking mode" ), "F_GETFL" );
 		return -1;
 	}
 
@@ -3052,7 +3055,7 @@ static int non_blocking(H3270 *session, Boolean on)
 
 	if (fcntl(session->sock, F_SETFL, f) < 0)
 	{
-		popup_an_errno(session,errno, N_( "fcntl(%s)" ), "F_GETFL");
+		popup_an_errno(session,errno, _( "Error in fcntl(%s) when setting non blocking mode" ), "F_SETFL");
 		return -1;
 	}
 
@@ -3174,7 +3177,7 @@ static void ssl_info_callback(INFO_CONST SSL *s, int where, int ret)
 
 			trace_dsn(hSession,"SSL Connect error in %s\nState: %s\nAlert: %s\n",err_buf,SSL_state_string_long(s),SSL_alert_type_string_long(ret));
 
-			show_3270_popup_dialog(	hSession,									// H3270 *session,
+			lib3270_popup_dialog(	hSession,									// H3270 *session,
 									PW3270_DIALOG_CRITICAL,						//	PW3270_DIALOG type,
 									_( "SSL Connect error" ),					// Title
 									err_buf,									// Message

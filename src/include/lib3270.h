@@ -883,8 +883,32 @@
 	 */
 	LIB3270_EXPORT char * lib3270_get_resource_string(H3270 *hSession, const char *first_element, ...);
 
+	/**
+	 * Get library version.
+	 *
+	 * @return Version of active library as string.
+	 *
+	 */
 	LIB3270_EXPORT const char * lib3270_get_version(void);
+
+	/**
+	 * Get source code revision.
+	 *
+	 * @return SVN revision of the current source code.
+	 *
+	 */
 	LIB3270_EXPORT const char * lib3270_get_revision(void);
+
+	/**
+	 * Pop up an error dialog, based on an error number.
+	 *
+	 * @param hSession	Session handle
+	 * @param errn		Error number (errno).
+	 * @param fmt		Message format
+	 * @param ...		Arguments for message
+	 */
+	LIB3270_EXPORT void lib3270_popup_an_errno(H3270 *hSession, int errn, const char *fmt, ...);
+
 
 	LIB3270_EXPORT char * lib3270_vsprintf(const char *fmt, va_list args);
 

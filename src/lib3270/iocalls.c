@@ -447,7 +447,7 @@ static int internal_event_dispatcher(H3270 *hSession, int block)
 	if (ns < 0)
 	{
 		if (errno != EINTR)
-			Warning(NULL, "process_events: select() failed" );
+			lib3270_popup_an_errno(hSession,errno,"%s",_( "select() failed when dispatching events"));
 #endif
 		return processed_any;
 	}

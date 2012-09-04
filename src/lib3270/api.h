@@ -18,7 +18,7 @@
  * programa; se não, escreva para a Free Software Foundation, Inc., 51 Franklin
  * St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * Este programa está nomeado como api.h e possui 444 linhas de código.
+ * Este programa está nomeado como api.h e possui - linhas de código.
  *
  * Contatos:
  *
@@ -322,10 +322,6 @@
 
 		LOCAL_EXTERN const struct lib3270_option * get_3270_option_table(int sz);
 
-		/* Popups */
-		LOCAL_EXTERN void Error(H3270 *session, const char *fmt, ...);
-		LOCAL_EXTERN void Warning(H3270 *session, const char *fmt, ...);
-		LOCAL_EXTERN void show_3270_popup_dialog(H3270 *session, PW3270_DIALOG type, const char *title, const char *msg, const char *fmt, ...);
 
 		/* Set/Get screen contents */
 		#define find_field_attribute(s,a) lib3270_field_addr(s,a)
@@ -347,9 +343,6 @@
 //		LOCAL_EXTERN int 			  Get3270Socket(void);
 
         /* Misc calls */
-		LOCAL_EXTERN void 		  popup_an_error(H3270 *session, const char *fmt, ...);
-		LOCAL_EXTERN void		  popup_system_error(H3270 *session, const char *title, const char *message, const char *fmt, ...);
-		LOCAL_EXTERN void 		  popup_a_sockerr(H3270 *session, char *fmt, ...);
 
 		#define query_3270_terminal_status(void) lib3270_get_program_message(NULL)
 

@@ -612,22 +612,6 @@ void status_untiming(H3270 *session)
 		session->set_timer(session,0);
 }
 
-void show_3270_popup_dialog(H3270 *session, LIB3270_NOTIFY type, const char *title, const char *msg, const char *fmt, ...)
-{
-	CHECK_SESSION_HANDLE(session);
-
-	trace("%s: title=%s msg=%s",__FUNCTION__,title,msg);
-
-	if(!fmt)
-		fmt = "";
-
-	va_list arg_ptr;
-	va_start(arg_ptr, fmt);
-	popup_handler(session,session->widget,type,title,msg,fmt,arg_ptr);
-	va_end(arg_ptr);
-
-}
-
 static int logpopup(H3270 *session, void *widget, LIB3270_NOTIFY type, const char *title, const char *msg, const char *fmt, va_list arg)
 {
 #ifdef ANDROID
