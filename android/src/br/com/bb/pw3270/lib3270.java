@@ -194,7 +194,16 @@ public abstract class lib3270
 		public void onFinish()
 		{
 			Log.d(TAG, "Timer " + id + " finished");
-			terminal.timerFinish(id);
+			
+			Thread t = new Thread()
+			{
+				public void run()
+				{
+					terminal.timerFinish(id);
+				}
+			};
+			
+			t.start();
 		}
 
 	}
@@ -215,7 +224,7 @@ public abstract class lib3270
 
 	protected int send_data(byte[] data, int len)
 	{
-		Log.i(TAG, "Bytes a enviar: " + len);
+		Log.d(TAG, "Bytes a enviar: " + len);
 
 		try
 		{
@@ -233,12 +242,11 @@ public abstract class lib3270
 			if (msg == null)
 				msg = "";
 
-			Log.i(TAG, "Erro ao enviar dados: " + msg);
+			Log.d(TAG, "Erro ao enviar dados: " + msg);
 
 			postPopup(1, "Desconectado", "Erro de comunicação ao enviar dados", msg);
 
-			connected = false;
-
+			net_cleanup();
 		}
 		return -1;
 	}
@@ -312,29 +320,31 @@ public abstract class lib3270
 			{
 				set_connection_status(true);
 
-				while (connected)
+				try
 				{
-					byte[] in = new byte[16384];
-					int sz = -1;
-
+					sock.setSoTimeout(100);
+				} catch (Exception e) { connected = false; }
+				
+				while (connected && sock.isConnected() )
+				{
 					try
 					{
-						sz = inData.read(in, 0, 16384);
+						byte[] in = new byte[16384];
 
-					} catch (Exception e)
-					{
-						String msg = e.getLocalizedMessage();
-						Log.i(TAG, "Erro ao receber dados do host: " + msg);
-						postPopup(1, "Desconectado", "Erro de comunicação ao receber dados", msg);
-						connected = false;
-						sz = -1;
-					}
+						int sz = inData.read(in, 0, 16384);
 
-					if (sz > 0)
-						procRecvdata(in,sz);
+						if (sz > 0)
+							procRecvdata(in,sz);
+
+					} catch (Exception e) { }
 
 				}
-
+				
+				if(connected)
+				{
+					postPopup(1, "Desconectado", "Erro de comunicação ao receber dados", "");
+					connected = false;
+				}
 			}
 
 			Log.v(TAG, "Exiting communication thread");
@@ -541,6 +551,8 @@ public abstract class lib3270
 
 	private int net_cleanup()
 	{
+		connected = false;
+/*		
 		if(sock != null)
 		{
 			Thread t = new Thread()
@@ -554,40 +566,26 @@ public abstract class lib3270
 						try
 						{
 							sock.shutdownInput();
+							return;
 						}
-						catch(Exception e)
-						{
-							String msg = e.getLocalizedMessage();
-							if(msg == null)
-								msg = e.getMessage();
-			
-							Log.v(TAG,": shutdownInput error" + (msg != null ? msg : e.toString()));
-						}
+						catch(Exception e) { }
 					}
 					
-					/*
-					if!(sock == null && sock.isClosed()))
+					if(!(sock == null && sock.isClosed()))
 					{
 						try
 						{
 							sock.close();
+							return;
 						}
-						catch(Exception e)
-						{
-							String msg = e.getLocalizedMessage();
-							if(msg == null)
-								msg = e.getMessage();
-			
-							Log.v(TAG,"sockclose error: " + (msg != null ? msg : e.toString()));
-						}
+						catch(Exception e) { }
 					}
-					*/
 				}
 			};
 			
 			t.start();
 		}
-		
+	*/	
 		return 0;
 	}
 	
