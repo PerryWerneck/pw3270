@@ -792,6 +792,8 @@
 	 */
 	LIB3270_EXPORT int lib3270_field_addr(H3270 *h, int baddr);
 
+	LIB3270_EXPORT int lib3270_field_attribute(H3270 *hSession, int baddr);
+
 	/**
 	 * Get the length of the field at given buffer address.
 	 *

@@ -554,46 +554,63 @@ LIB3270_EXPORT char * lib3270_cut_selected(H3270 *hSession)
 	{
 		int end;
 		size_t szText;
-		int baddr;
-		int saddr;
+		int daddr;	/* Destination addr */
+		int dattr;	/* Destination addr attribute */
+		int saddr;	/* Source addr (First field after the selected area) */
+		int sattr;	/* Source addr attribute */
 		char *text;
 		int f;
 
-		get_selected_addr(hSession,&baddr,&end);
+		get_selected_addr(hSession,&daddr,&end);
 
-		if(baddr >= end)
+		if(daddr >= end)
 			return NULL;
 
-		szText = (end-baddr)+1;
+		dattr = lib3270_field_attribute(hSession,daddr);	/* Get first attribute */
+
+		szText = (end-daddr)+1;
 
 		text = lib3270_malloc(szText+1);
 
-		saddr = baddr+szText;
+		saddr = daddr+szText;
+		sattr = lib3270_field_attribute(hSession,saddr);
 
 		for(f=0;f<szText;f++)
 		{
-			text[f] = hSession->text[baddr].chr;
+			if(hSession->ea_buf[daddr].fa)
+				dattr = hSession->ea_buf[daddr].fa;
 
-			if(FA_IS_PROTECTED(hSession->ea_buf[saddr].fa))
-				saddr = lib3270_get_next_unprotected(hSession,saddr);
+			text[f] = hSession->text[daddr].chr;
 
-			if(!FA_IS_PROTECTED(hSession->ea_buf[saddr].fa))
+			if(!FA_IS_PROTECTED(dattr))
 			{
-				if(hSession->text[baddr].chr != hSession->text[saddr].chr)
+				if(hSession->ea_buf[saddr].fa)
+					sattr = hSession->ea_buf[saddr].fa;
+
+				if(FA_IS_PROTECTED(sattr))
 				{
-					hSession->text[baddr].chr = hSession->text[saddr].chr;
-					hSession->update(hSession,baddr,hSession->text[baddr].chr,hSession->text[baddr].attr,baddr == hSession->cursor_addr);
+					saddr = lib3270_get_next_unprotected(hSession,saddr);
+					sattr = lib3270_field_attribute(hSession,saddr);
 				}
 
-				if(hSession->text[saddr].chr != ' ')
+				if(!FA_IS_PROTECTED(sattr))
 				{
-					hSession->text[saddr].chr = ' ';
-					hSession->update(hSession,saddr,hSession->text[saddr].chr,hSession->text[saddr].attr,saddr == hSession->cursor_addr);
-				}
+					if(hSession->text[daddr].chr != hSession->text[saddr].chr)
+					{
+						hSession->text[daddr].chr = hSession->text[saddr].chr;
+						hSession->update(hSession,daddr,hSession->text[daddr].chr,hSession->text[daddr].attr,daddr == hSession->cursor_addr);
+					}
 
-				saddr++;
+					if(hSession->text[saddr].chr != ' ')
+					{
+						hSession->text[saddr].chr = ' ';
+						hSession->update(hSession,saddr,hSession->text[saddr].chr,hSession->text[saddr].attr,saddr == hSession->cursor_addr);
+					}
+
+					saddr++;
+				}
 			}
-			baddr++;
+			daddr++;
 		}
 
 		lib3270_unselect(hSession);

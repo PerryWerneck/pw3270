@@ -326,6 +326,27 @@ LIB3270_EXPORT int lib3270_field_addr(H3270 *hSession, int baddr)
 	return -1;
 }
 
+LIB3270_EXPORT int lib3270_field_attribute(H3270 *hSession, int baddr)
+{
+	int sbaddr;
+
+	CHECK_SESSION_HANDLE(hSession);
+
+	if (!hSession->formatted)
+		return -1;
+
+	sbaddr = baddr;
+	do
+	{
+		if(hSession->ea_buf[baddr].fa)
+			return hSession->ea_buf[baddr].fa;
+		DEC_BA(baddr);
+	} while (baddr != sbaddr);
+
+	return -1;
+}
+
+
 /*
  * Get Field width
  */
