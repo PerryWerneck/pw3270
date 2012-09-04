@@ -408,6 +408,10 @@ static char * get_text(H3270 *hSession,unsigned char all)
 		lib3270_free(ret);
 		return NULL;
 	}
+	else if(sz > 1 && ret[sz-1] == '\n') // Remove ending \n
+	{
+		ret[sz-1] = 0;
+	}
 
 	ret[sz++] = 0;
 
