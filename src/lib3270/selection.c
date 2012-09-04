@@ -527,6 +527,19 @@ LIB3270_EXPORT char * lib3270_get_selected(H3270 *hSession)
 	return get_text(hSession,0);
 }
 
+LIB3270_EXPORT char * lib3270_cut_selected(H3270 *hSession)
+{
+	if(!hSession->selected || hSession->select.start == hSession->select.end)
+		return NULL;
+
+	if(!lib3270_connected(hSession))
+		return NULL;
+
+
+	return NULL;
+}
+
+
 LIB3270_EXPORT int lib3270_get_selection_bounds(H3270 *hSession, int *start, int *end)
 {
 	int first, last;

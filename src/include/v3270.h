@@ -153,10 +153,10 @@
 	V3270_SELECT_MAX
  } V3270_SELECT_FORMAT;
 
- LIB3270_EXPORT	const gchar		* v3270_copy(GtkWidget *widget, V3270_SELECT_FORMAT mode);
+ LIB3270_EXPORT	const gchar		* v3270_copy(GtkWidget *widget, V3270_SELECT_FORMAT mode, gboolean cut);
  LIB3270_EXPORT	const gchar		* v3270_copy_append(GtkWidget *widget);
 
- LIB3270_EXPORT	const gchar		* v3270_get_selected_text(GtkWidget *widget);
+ LIB3270_EXPORT	const gchar		* v3270_get_selected_text(GtkWidget *widget, gboolean cut);
  LIB3270_EXPORT	const gchar		* v3270_get_copy(GtkWidget *widget);
  LIB3270_EXPORT	gchar			* v3270_get_text(GtkWidget *widget,int offset, int len);
  LIB3270_EXPORT	gchar			* v3270_get_region(GtkWidget *widget, gint start_pos, gint end_pos, gboolean all);

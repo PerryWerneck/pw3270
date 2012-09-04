@@ -32,6 +32,7 @@
 	<menubar name='topmenu'>
 
 		<menu name='EditMenu' label='_Edit' >
+			<menuitem action='cut' append='no' format='text' key='<ctrl>x' icon='cut' group='selection' label='Cut' />
 			<menuitem action='copyashtml' label='Copy as HTML' />
 		</menu>
 

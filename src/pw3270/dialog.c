@@ -421,7 +421,7 @@
 					widget,
 					N_( "Save selection to file" ),
 					N_( "Can't save selection to file\n%s" ),
-					v3270_get_selected_text(widget));
+					v3270_get_selected_text(widget,FALSE));
  }
 
  void save_copy_action(GtkAction *action, GtkWidget *widget)

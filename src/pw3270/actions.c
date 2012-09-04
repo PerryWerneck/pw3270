@@ -113,7 +113,7 @@ static void reload_action(GtkAction *action, GtkWidget *widget)
 	v3270_reload(widget);
 }
 
-static void copy_action(GtkAction *action, GtkWidget *widget)
+static void do_copy(GtkAction *action, GtkWidget *widget, gboolean cut)
 {
 	V3270_SELECT_FORMAT	  mode = V3270_SELECT_TEXT;
 	const gchar 		* str = (const gchar *) g_object_get_data(G_OBJECT(action),"format");
@@ -143,7 +143,17 @@ static void copy_action(GtkAction *action, GtkWidget *widget)
 	}
 
 	trace_action(action,widget);
-	v3270_copy(widget,mode);
+	v3270_copy(widget,mode,cut);
+}
+
+static void copy_action(GtkAction *action, GtkWidget *widget)
+{
+	do_copy(action, widget, FALSE);
+}
+
+static void cut_action(GtkAction *action, GtkWidget *widget)
+{
+	do_copy(action, widget, TRUE);
 }
 
 static void append_action(GtkAction *action, GtkWidget *widget)
@@ -559,7 +569,17 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 		callback	= cbk;
 		action_type	= ACTION_TYPE_TABLE;
 		id 			= ui_get_bool_attribute("append",names,values,FALSE) ? 1 : 0;
-		nm 			= g_strconcat(id == 0 ? "copy" : "append",ui_get_attribute("format",names,values),NULL);
+		nm 			= g_strconcat(id == 0 ? "copy" : "copyappend",ui_get_attribute("format",names,values),NULL);
+	}
+	else if(!g_ascii_strcasecmp(name,"cut"))
+	{
+		static const GCallback cbk[] =	{	G_CALLBACK(cut_action),
+											G_CALLBACK(cut_action)
+											};
+		callback	= cbk;
+		action_type	= ACTION_TYPE_TABLE;
+		id 			= ui_get_bool_attribute("append",names,values,FALSE) ? 1 : 0;
+		nm 			= g_strconcat(id == 0 ? "cut" : "cutappend",ui_get_attribute("format",names,values),NULL);
 	}
 	else if(!g_ascii_strcasecmp(name,"select"))
 	{

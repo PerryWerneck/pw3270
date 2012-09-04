@@ -103,7 +103,7 @@ gchar * v3270_get_text(GtkWidget *widget, int offset, int len)
  *
  * @return NULL if error, otherwise the selected buffer contents (release with g_free).
  *
- */
+ */ /*
 static gchar * v3270_get_selected(v3270 *widget)
 {
 	gchar *text = lib3270_get_selected(widget->host);
@@ -116,10 +116,23 @@ static gchar * v3270_get_selected(v3270 *widget)
 	return NULL;
 }
 
-const gchar * v3270_get_selected_text(GtkWidget *widget)
+static gchar * v3270_cut_selected(v3270 *widget)
 {
-	v3270 *terminal;
-	gchar *text;
+	gchar *text = lib3270_cut_selected(widget->host);
+	if(text)
+	{
+		gchar *str = g_strdup(text);
+		lib3270_free(text);
+		return str;
+	}
+	return NULL;
+}
+*/
+
+const gchar * v3270_get_selected_text(GtkWidget *widget, gboolean cut)
+{
+	v3270	* terminal;
+	char	* text;
 
 	g_return_val_if_fail(GTK_IS_V3270(widget),NULL);
 
@@ -131,7 +144,10 @@ const gchar * v3270_get_selected_text(GtkWidget *widget)
 		terminal->clipboard = NULL;
 	}
 
-	text = v3270_get_selected(terminal);
+	if(cut)
+		text = lib3270_cut_selected(terminal->host);
+	else
+		text = lib3270_get_selected(terminal->host);
 
 	if(!text)
 	{
@@ -217,7 +233,7 @@ const gchar * v3270_get_selected_text(GtkWidget *widget)
 
 	terminal->clipboard = g_convert(text, -1, "UTF-8", lib3270_get_charset(terminal->host), NULL, NULL, NULL);
 
-	g_free(text);
+	lib3270_free(text);
 
 
 	return terminal->clipboard;
@@ -246,7 +262,7 @@ const gchar * v3270_copy_append(GtkWidget *widget)
 	terminal = GTK_V3270(widget);
 
 	if(!terminal->clipboard)
-		return v3270_get_selected_text(widget);
+		return v3270_get_selected_text(widget,FALSE);
 
 	str = lib3270_get_selected(terminal->host);
 
@@ -271,7 +287,7 @@ const gchar * v3270_copy_append(GtkWidget *widget)
 	return terminal->clipboard;
 }
 
-const gchar * v3270_copy(GtkWidget *widget, V3270_SELECT_FORMAT mode)
+const gchar * v3270_copy(GtkWidget *widget, V3270_SELECT_FORMAT mode, gboolean cut)
 {
 	const gchar		* text;
 	GtkClipboard	* clipboard	= gtk_widget_get_clipboard(widget,GDK_SELECTION_CLIPBOARD);
@@ -280,7 +296,7 @@ const gchar * v3270_copy(GtkWidget *widget, V3270_SELECT_FORMAT mode)
 
 	GTK_V3270(widget)->table = (mode == V3270_SELECT_TABLE ? 1 : 0);
 
-	text = v3270_get_selected_text(widget);
+	text = v3270_get_selected_text(widget,cut);
 
 	if(text)
 	{
