@@ -34,11 +34,8 @@
 
 /*--[ Defines ]--------------------------------------------------------------------------------------*/
 
- #define 	PW3270_JNI_BEGIN	__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "%s.lock env=%p obj=%p",__FUNCTION__,env,obj); \
-								pw3270_jni_lock(env,obj);
-
- #define 	PW3270_JNI_END		__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "%s.unlock env=%p obj=%p",__FUNCTION__,pw3270_jni_active->env,pw3270_jni_active->obj); \
-								pw3270_jni_unlock();
+ #define 	PW3270_JNI_BEGIN	pw3270_jni_lock(env,obj);
+ #define 	PW3270_JNI_END		pw3270_jni_unlock();
 
  #define	PW3270_JNI_ENV		pw3270_jni_active->env
  #define	PW3270_JNI_OBJ		pw3270_jni_active->obj

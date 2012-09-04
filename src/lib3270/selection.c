@@ -544,6 +544,7 @@ LIB3270_EXPORT char * lib3270_cut_selected(H3270 *hSession)
 	if(lib3270_get_toggle(hSession,LIB3270_TOGGLE_RECTANGLE_SELECT))
 	{
 		// Rectangle cut is not implemented
+		lib3270_popup_dialog(hSession, LIB3270_NOTIFY_INFO, _( "Not available" ), _( "Invalid cut action" ), "%s", _( "Can't cut rectangular regions") );
 	}
 	else
 	{
