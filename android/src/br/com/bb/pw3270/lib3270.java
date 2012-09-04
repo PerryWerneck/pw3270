@@ -541,43 +541,51 @@ public abstract class lib3270
 
 	private int net_cleanup()
 	{
-		Log.v(TAG, "Stopping network activity");
-		
 		if(sock != null)
 		{
-			if(sock.isConnected())
+			Thread t = new Thread()
 			{
-				try
+				public void run()
 				{
-					sock.shutdownInput();
-					return 0;
-				}
-				catch(Exception e)
-				{
-					String msg = e.getLocalizedMessage();
-					if(msg == null)
-						msg = e.getMessage();
-	
-					Log.v(TAG,": shutdownInput error" + (msg != null ? msg : e.toString()));
-				}
-			}
+					Log.v(TAG, "Stopping network activity");
+					
+					if(sock.isConnected())
+					{
+						try
+						{
+							sock.shutdownInput();
+						}
+						catch(Exception e)
+						{
+							String msg = e.getLocalizedMessage();
+							if(msg == null)
+								msg = e.getMessage();
 			
-			if(!sock.isClosed())
-			{
-				try
-				{
-					sock.close();
-					return 0;
+							Log.v(TAG,": shutdownInput error" + (msg != null ? msg : e.toString()));
+						}
+					}
+					
+					/*
+					if!(sock == null && sock.isClosed()))
+					{
+						try
+						{
+							sock.close();
+						}
+						catch(Exception e)
+						{
+							String msg = e.getLocalizedMessage();
+							if(msg == null)
+								msg = e.getMessage();
+			
+							Log.v(TAG,"sockclose error: " + (msg != null ? msg : e.toString()));
+						}
+					}
+					*/
 				}
-				catch(Exception e)
-				{
-					String msg = e.getLocalizedMessage();
-					if(msg == null)
-						msg = e.getMessage();
-	
-					Log.v(TAG,"sockclose error: " + (msg != null ? msg : e.toString()));
-				}
-			}
+			};
+			
+			t.start();
 		}
 		
 		return 0;
