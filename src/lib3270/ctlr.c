@@ -2259,9 +2259,10 @@ static void ctlr_blanks(H3270 *session)
 }
 
 
-/*
- * Change a character in the 3270 buffer.
- * Removes any field attribute defined at that location.
+/**
+ * Change a character in the 3270 buffer, removes any field attribute defined at that location.
+ *
+ *
  */
 void ctlr_add(H3270 *hSession, int baddr, unsigned char c, unsigned char cs)
 {
@@ -2430,17 +2431,19 @@ void ctlr_bcopy(H3270 *hSession, int baddr_from, int baddr_to, int count, int mo
 }
 
 #if defined(X3270_ANSI) /*[*/
-/*
- * Erase a region of the 3270 buffer, optionally clearing extended attributes
- * as well.
+/**
+ * Erase a region of the 3270 buffer, optionally clearing extended attributes as well.
+ *
+ * @param hSession	Session handle
+ *
  */
-void ctlr_aclear(H3270 *session, int baddr, int count, int clear_ea)
+void ctlr_aclear(H3270 *hSession, int baddr, int count, int clear_ea)
 {
-	if (memcmp((char *) &session->ea_buf[baddr], (char *) session->zero_buf,
+	if (memcmp((char *) &hSession->ea_buf[baddr], (char *) hSession->zero_buf,
 		    count * sizeof(struct lib3270_ea))) {
-		(void) memset((char *) &session->ea_buf[baddr], 0,
+		(void) memset((char *) &hSession->ea_buf[baddr], 0,
 				count * sizeof(struct lib3270_ea));
-		REGION_CHANGED(session,baddr, baddr + count);
+		REGION_CHANGED(hSession,baddr, baddr + count);
 	}
 	/* XXX: What about clear_ea? */
 }

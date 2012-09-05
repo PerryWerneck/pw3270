@@ -60,6 +60,7 @@
 		<menu name='EditMenu' label='_Edit' >
 			<menuitem action='copy' append='no' format='text' key='<ctrl>c' icon='copy' group='selection' label='Copy' />
 			<menuitem action='copy' append='no' format='table' key='<ctrl><alt>c' group='selection' label='Copy as table' />
+			<menuitem action='cut'  append='no' format='text' key='<ctrl>x' icon='cut' group='selection' label='Cut' />
 			<!-- menuitem action='copy' mode='image' group='selection' label='Copy as image' /-->
 			<menuitem action='copy' append='yes' key='<shift><ctrl>c' group='selection' label='Add to copy' />
 			<menuitem action='paste' src='clipboard' key='<ctrl>v' icon='paste' group='paste' label='Paste' />

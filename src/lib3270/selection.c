@@ -532,6 +532,58 @@ LIB3270_EXPORT char * lib3270_get_selected(H3270 *hSession)
 	return get_text(hSession,0);
 }
 
+static void copy_chr(H3270 *hSession, int from, int to)
+{
+	if(hSession->text[from].chr == hSession->text[to].chr)
+		return;
+
+	hSession->text[to].chr = hSession->text[from].chr;
+
+	memcpy(&hSession->ea_buf[to], &hSession->ea_buf[from],sizeof(struct lib3270_ea));
+	hSession->ea_buf[from].fa = 0;
+
+	hSession->update(	hSession,
+						to,
+						hSession->text[to].chr,
+						hSession->text[to].attr,
+						to == hSession->cursor_addr );
+}
+
+static void clear_chr(H3270 *hSession, int baddr)
+{
+	hSession->text[baddr].chr = ' ';
+
+	hSession->ea_buf[baddr].cc = EBC_null;
+	hSession->ea_buf[baddr].cs = 0;
+
+	hSession->update(	hSession,
+						baddr,
+						hSession->text[baddr].chr,
+						hSession->text[baddr].attr,
+						baddr == hSession->cursor_addr );
+}
+
+int cut_addr(H3270 *hSession, int daddr, int saddr, int maxlen, int *sattr)
+{
+	if(hSession->ea_buf[saddr].fa)
+		*sattr = hSession->ea_buf[saddr++].fa;
+
+/*
+	if(FA_IS_PROTECTED(*sattr))
+	{
+		saddr  = lib3270_get_next_unprotected(hSession,saddr);
+		*sattr = lib3270_field_attribute(hSession,saddr);
+	}
+*/
+
+	if(FA_IS_PROTECTED(*sattr) || saddr >= maxlen)
+		clear_chr(hSession,daddr);
+	else
+		copy_chr(hSession,saddr++,daddr);
+
+	return saddr;
+}
+
 LIB3270_EXPORT char * lib3270_cut_selected(H3270 *hSession)
 {
 
@@ -559,9 +611,12 @@ LIB3270_EXPORT char * lib3270_cut_selected(H3270 *hSession)
 		int saddr;	/* Source addr (First field after the selected area) */
 		int sattr;	/* Source addr attribute */
 		char *text;
+		size_t maxlen = hSession->rows * hSession->cols;
 		int f;
 
 		get_selected_addr(hSession,&daddr,&end);
+
+		lib3270_set_cursor_address(hSession,daddr);
 
 		if(daddr >= end)
 			return NULL;
@@ -583,35 +638,22 @@ LIB3270_EXPORT char * lib3270_cut_selected(H3270 *hSession)
 			text[f] = hSession->text[daddr].chr;
 
 			if(!FA_IS_PROTECTED(dattr))
-			{
-				if(hSession->ea_buf[saddr].fa)
-					sattr = hSession->ea_buf[saddr].fa;
+				saddr = cut_addr(hSession,daddr,saddr,maxlen,&sattr);
 
-				if(FA_IS_PROTECTED(sattr))
-				{
-					saddr = lib3270_get_next_unprotected(hSession,saddr);
-					sattr = lib3270_field_attribute(hSession,saddr);
-				}
-
-				if(!FA_IS_PROTECTED(sattr))
-				{
-					if(hSession->text[daddr].chr != hSession->text[saddr].chr)
-					{
-						hSession->text[daddr].chr = hSession->text[saddr].chr;
-						hSession->update(hSession,daddr,hSession->text[daddr].chr,hSession->text[daddr].attr,daddr == hSession->cursor_addr);
-					}
-
-					if(hSession->text[saddr].chr != ' ')
-					{
-						hSession->text[saddr].chr = ' ';
-						hSession->update(hSession,saddr,hSession->text[saddr].chr,hSession->text[saddr].attr,saddr == hSession->cursor_addr);
-					}
-
-					saddr++;
-				}
-			}
 			daddr++;
 		}
+
+		// Move contents of the current field
+		while(daddr < (maxlen-1) && !hSession->ea_buf[daddr].fa)
+		{
+			saddr = cut_addr(hSession,daddr,saddr,maxlen,&sattr);
+			daddr++;
+		}
+
+		if(!hSession->ea_buf[daddr].fa)
+			clear_chr(hSession,daddr);
+
+		hSession->changed(hSession,0,maxlen);
 
 		lib3270_unselect(hSession);
 		return text;
