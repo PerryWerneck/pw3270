@@ -76,11 +76,11 @@
 			<menuitem action='select' target='last' key='<Ctrl>r' group='online' label='Reselect' />
 
 			<separator/>
-			<menuitem action='clear' group='online' key='Pause' label='Clear' />
-			<menuitem action='EraseInput' icon='clear' group='online' label='Erase input' />
-<!---			<menuitem action='EraseField' key='<Ctrl>u' group='online' /> -->
-			<menuitem action='EraseEOF' group='online' label='Erase to end of field' />
-			<menuitem action='EraseEOL' group='online' label='Erase to end of line' />
+			<menuitem action='erase' target='all' group='online' key='Pause' label='Clear' />
+			<menuitem action='erase' target='input' icon='clear' group='online' label='Erase input' />
+<!---			<menuitem action='erase' target='field' key='<Ctrl>u' group='online' /> -->
+			<menuitem action='erase' target='eof' group='online' label='Erase to end of field' />
+			<menuitem action='erase' target='eol' group='online' label='Erase to end of line' />
 		</menu>
 
 		<!--- Special action - View menu will be populated with labeled toolbars, menubars and keypads --->
@@ -212,8 +212,8 @@
 
 	<accelerator action='DeleteWord' key='<Ctrl>w' group='online' />
 	<accelerator action='Delete' key='Delete' group='online' />
-	<accelerator action='Erase' key='BackSpace' group='online' />
-	<accelerator action='EraseEOF' key='End' group='online' />
+	<accelerator action='erase' target='char' key='BackSpace' group='online' />
+	<accelerator action='erase' target='eof' key='End' group='online' />
 	<accelerator action='fieldend' key='<ctrl>End' group='online' />
 
 	<accelerator action='SysREQ' key='Sys_Req' group='online' />

@@ -499,6 +499,7 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 		ACTION_TYPE_RESET,
 		ACTION_TYPE_TABLE,
 		ACTION_TYPE_STRING,
+		ACTION_TYPE_LIB3270,
 
 	} action_type = ACTION_TYPE_DEFAULT;
 
@@ -580,6 +581,22 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 		action_type	= ACTION_TYPE_TABLE;
 		id 			= ui_get_bool_attribute("append",names,values,FALSE) ? 1 : 0;
 		nm 			= g_strconcat(id == 0 ? "cut" : "cutappend",ui_get_attribute("format",names,values),NULL);
+	}
+	else if(!g_ascii_strcasecmp(name,"erase"))
+	{
+		static const gchar * src[] = 	{	"input", "eof", "eol", "all", "char", NULL };
+
+		static const GCallback cbk[] =	{	G_CALLBACK(lib3270_eraseinput),
+											G_CALLBACK(lib3270_eraseeof),
+											G_CALLBACK(lib3270_eraseeol),
+											G_CALLBACK(lib3270_clear),
+											G_CALLBACK(lib3270_erase)
+										};
+		callback	= cbk;
+		action_type	= ACTION_TYPE_LIB3270;
+		id = get_attribute_id(name,"target",&nm,src,names,values,error);
+		if(id < 0)
+			return NULL;
 	}
 	else if(!g_ascii_strcasecmp(name,"select"))
 	{
@@ -749,6 +766,12 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 	case ACTION_TYPE_TABLE:
 		action = gtk_action_new(nm,NULL,NULL,NULL);
 		g_signal_connect(action,"activate",callback[id],widget);
+		break;
+
+	case ACTION_TYPE_LIB3270:
+		action = gtk_action_new(nm,NULL,NULL,NULL);
+		g_object_set_data(G_OBJECT(action),"lib3270_call",callback[id]);
+		g_signal_connect(action,"activate",G_CALLBACK(lib3270_action),widget);
 		break;
 
 	case ACTION_TYPE_STRING:
