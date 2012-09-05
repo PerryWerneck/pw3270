@@ -2223,8 +2223,6 @@ LIB3270_ACTION( deleteword )
 	return 0;
 }
 
-
-
 /*
  * Delete field key.  Similar to EraseEOF, but it wipes out the entire field
  * rather than just to the right of the cursor, and it leaves the cursor at

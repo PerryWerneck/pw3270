@@ -584,13 +584,14 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 	}
 	else if(!g_ascii_strcasecmp(name,"erase"))
 	{
-		static const gchar * src[] = 	{	"input", "eof", "eol", "all", "char", NULL };
+		static const gchar * src[] = 	{	"input", "eof", "eol", "all", "char", "field", NULL };
 
 		static const GCallback cbk[] =	{	G_CALLBACK(lib3270_eraseinput),
 											G_CALLBACK(lib3270_eraseeof),
 											G_CALLBACK(lib3270_eraseeol),
 											G_CALLBACK(lib3270_clear),
-											G_CALLBACK(lib3270_erase)
+											G_CALLBACK(lib3270_erase),
+											G_CALLBACK(lib3270_deletefield)
 										};
 		callback	= cbk;
 		action_type	= ACTION_TYPE_LIB3270;

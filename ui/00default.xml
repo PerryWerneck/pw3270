@@ -60,9 +60,9 @@
 		<menu name='EditMenu' label='_Edit' >
 			<menuitem action='copy' append='no' format='text' key='<ctrl>c' icon='copy' group='selection' label='Copy' />
 			<menuitem action='copy' append='no' format='table' key='<ctrl><alt>c' group='selection' label='Copy as table' />
-			<menuitem action='cut'  append='no' format='text' key='<ctrl>x' icon='cut' group='selection' label='Cut' />
 			<!-- menuitem action='copy' mode='image' group='selection' label='Copy as image' /-->
 			<menuitem action='copy' append='yes' key='<shift><ctrl>c' group='selection' label='Add to copy' />
+			<menuitem action='cut'  append='no' format='text' key='<ctrl>x' icon='cut' group='selection' label='Cut' />
 			<menuitem action='paste' src='clipboard' key='<ctrl>v' icon='paste' group='paste' label='Paste' />
 			<menuitem action='paste' src='next' key='<shift><ctrl>v' label='Paste next' />
 
@@ -78,7 +78,7 @@
 			<separator/>
 			<menuitem action='erase' target='all' group='online' key='Pause' label='Clear' />
 			<menuitem action='erase' target='input' icon='clear' group='online' label='Erase input' />
-<!---			<menuitem action='erase' target='field' key='<Ctrl>u' group='online' /> -->
+			<menuitem action='erase' target='field' key='<Ctrl>u' group='online' label='Delete field' />
 			<menuitem action='erase' target='eof' group='online' label='Erase to end of field' />
 			<menuitem action='erase' target='eol' group='online' label='Erase to end of line' />
 		</menu>
@@ -148,7 +148,7 @@
 		<toolitem action='selectall' />
 		<toolitem action='copy' append='no' format='text' />
 		<toolitem action='paste' src='clipboard' />
-		<toolitem action='EraseInput' />
+		<toolitem action='erase' target='input' />
 
 		<separator/>
 		<toolitem action='connect' />
