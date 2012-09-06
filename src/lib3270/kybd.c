@@ -1123,8 +1123,12 @@ static void defer_unlock(H3270 *hSession)
 		ps_process(hSession);
 }
 
-/*
+/**
  * Reset keyboard lock.
+ *
+ * @param hSession	Session handle.
+ * @param explicit	Explicit request from the keyboard.
+ *
  */
 void do_reset(H3270 *hSession, Boolean explicit)
 {
@@ -1132,12 +1136,16 @@ void do_reset(H3270 *hSession, Boolean explicit)
 	 * If explicit (from the keyboard) and there is typeahead or
 	 * a half-composed key, simply flush it.
 	 */
-
 	if (explicit
 #if defined(X3270_FT) /*[*/
 	    || lib3270_get_ft_state(hSession) != LIB3270_FT_STATE_NONE
 #endif /*]*/
 	    ) {
+
+		if (flush_ta(hSession))
+			return;
+
+/*
 		Boolean half_reset = False;
 
 		if (flush_ta(hSession))
@@ -1145,6 +1153,7 @@ void do_reset(H3270 *hSession, Boolean explicit)
 
 		if (half_reset)
 			return;
+*/
 	}
 
 	/* Always clear insert mode. */
@@ -1185,7 +1194,7 @@ void do_reset(H3270 *hSession, Boolean explicit)
 
 }
 
-LIB3270_ACTION( reset )
+LIB3270_ACTION( kybdreset )
 {
 	lib3270_unselect(hSession);
 	do_reset(hSession,True);

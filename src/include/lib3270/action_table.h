@@ -52,7 +52,7 @@
 	DECLARE_LIB3270_CURSOR_ACTION( newline )
 
 	/* Misc actions */
-	DECLARE_LIB3270_ACTION( reset )
+	DECLARE_LIB3270_ACTION( kybdreset )
 	DECLARE_LIB3270_ACTION( clear )
 	DECLARE_LIB3270_ACTION( eraseinput )
 

@@ -204,8 +204,8 @@
 	<accelerator action='toggle' id='insert' key='Insert' group='online' />
 
 	<accelerator action='firstfield' key='Home' group='online' />
-	<!-- accelerator action='Reset' key='<Shift><Ctrl>r' group='online' /-->
-	<!-- accelerator name="return" action='activate' key='return' /-->
+	<accelerator action='kybdreset' key='<Shift><Ctrl>r' group='online' />
+	<accelerator name="return" action='activate' key='return' />
 	<accelerator name="KP_enter" action='activate' key='KP_Enter' />
 	<accelerator action='Break' key='Escape' group='online' />
 	<accelerator action='Attn' key='<shift>Escape' group='online' />
