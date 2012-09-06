@@ -125,7 +125,10 @@
 		LIB3270_DIR_UP,
 		LIB3270_DIR_DOWN,
 		LIB3270_DIR_LEFT,
-		LIB3270_DIR_RIGHT
+		LIB3270_DIR_RIGHT,
+
+		LIB3270_DIR_END,
+
 	} LIB3270_DIRECTION;
 
 	/**
@@ -780,6 +783,19 @@
 	 *
 	 */
 	LIB3270_EXPORT int lib3270_get_next_unprotected(H3270 *hSession, int baddr0);
+
+	/**
+	 * Get address of the first blank.
+	 *
+	 * Get address of the first blank after the last nonblank in the
+	 * field, or if the field is full, to the last character in the field.
+	 *
+	 * @param hSession	Session handle.
+	 * @param baddr		Field address.
+	 *
+	 * @return address of the first blank or -1 if invalid.
+	 */
+	LIB3270_EXPORT int lib3270_get_field_end(H3270 *hSession, int baddr);
 
 	/**
 	 * Find the buffer address of the field attribute for a given buffer address.

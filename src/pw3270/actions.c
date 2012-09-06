@@ -320,7 +320,7 @@ static void cursor_move_action(GtkAction *action, GtkWidget *widget)
 									widget,
 									(unsigned int) flags);
 
-	lib3270_move_cursor(v3270_get_session(widget),(LIB3270_DIRECTION) (flags & 0x03), (flags & 0x80) );
+	lib3270_move_cursor(v3270_get_session(widget),(LIB3270_DIRECTION) (flags & 0x0F), (flags & 0x80) );
 }
 
 static void connect_move_action(GtkAction *action, GtkWidget *widget, const gchar *target, unsigned short flags, GError **error)
@@ -333,7 +333,7 @@ static void connect_move_action(GtkAction *action, GtkWidget *widget, const gcha
 
 	if(!g_ascii_strcasecmp(target,"selection"))
 	{
-		g_object_set_data(G_OBJECT(action),"direction",GINT_TO_POINTER((flags & 3)));
+		g_object_set_data(G_OBJECT(action),"direction",GINT_TO_POINTER((flags & 0x0F)));
 		g_signal_connect(action,"activate",G_CALLBACK(selection_move_action),widget);
 	}
 	else if(!g_ascii_strcasecmp(target,"cursor"))
@@ -504,7 +504,7 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 	} action_type = ACTION_TYPE_DEFAULT;
 
 	if(dir != UI_ATTR_DIRECTION_NONE)
-		flags |= ((unsigned char) dir) & 0x03;
+		flags |= ((unsigned char) dir) & 0x0F;
 
 	if(ui_get_bool_attribute("selecting",names,values,FALSE))
 		flags |= 0x80;

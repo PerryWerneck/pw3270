@@ -214,7 +214,6 @@
 	<accelerator action='Delete' key='Delete' group='online' />
 	<accelerator action='erase' target='char' key='BackSpace' group='online' />
 	<accelerator action='erase' target='eof' key='End' group='online' />
-	<accelerator action='fieldend' key='<ctrl>End' group='online' />
 
 	<accelerator action='SysREQ' key='Sys_Req' group='online' />
 	<accelerator action='SysREQ' key='<shift>Print' group='online' />
@@ -233,6 +232,7 @@
 	<accelerator action='move' target='cursor' direction='left' key='Left' group='online' />
 	<accelerator action='move' target='cursor' direction='up' key='Up' group='online' />
 	<accelerator action='move' target='cursor' direction='down' key='Down' group='online' />
+	<accelerator action='move' target='cursor' direction='end' key='<ctrl>End' group='online' />
 
 	<accelerator action='previousfield' key='ISO_Left_Tab' group='online' label='Previous field' />
 	<accelerator action='nextfield' key='Tab' group='online' label='Next field'/>

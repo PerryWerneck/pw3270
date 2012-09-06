@@ -862,6 +862,12 @@ LIB3270_EXPORT int lib3270_move_cursor(H3270 *hSession, LIB3270_DIRECTION dir, u
 		cursor_addr++;
 		break;
 
+	case LIB3270_DIR_END:
+		cursor_addr = lib3270_get_field_end(hSession,cursor_addr);
+		if(cursor_addr == -1)
+			return EINVAL;
+		break;
+
 	default:
 		return -1;
 	}

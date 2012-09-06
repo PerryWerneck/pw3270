@@ -2346,29 +2346,43 @@ ToggleReverse_action(Widget w unused, XEvent *event, String *params, Cardinal *n
  */
 LIB3270_ACTION( fieldend )
 {
-	int	baddr, faddr;
-	unsigned char	fa, c;
-	int	last_nonblank = -1;
+	int baddr;
 
 	if (hSession->kybdlock)
 	{
 		ENQUEUE_ACTION( lib3270_fieldend );
 		return 0;
 	}
+
+	baddr = lib3270_get_field_end(hSession,hSession->cursor_addr);
+	if(baddr >= 0)
+		cursor_move(hSession,baddr);
+
+	return 0;
+}
+
+int lib3270_get_field_end(H3270 *hSession, int baddr)
+{
+	int faddr;
+	unsigned char	fa, c;
+	int	last_nonblank = -1;
+
 #if defined(X3270_ANSI) /*[*/
 	if (IN_ANSI)
-		return 0;
+		return -1;
 #endif /*]*/
+
 	if (!hSession->formatted)
-		return 0;
-	baddr = hSession->cursor_addr;
+		return -1;
+
 	faddr = find_field_attribute(hSession,baddr);
 	fa = hSession->ea_buf[faddr].fa;
 	if (faddr == baddr || FA_IS_PROTECTED(fa))
-		return 0;
+		return -1;
 
 	baddr = faddr;
-	while (True) {
+	while (True)
+	{
 		INC_BA(baddr);
 		c = hSession->ea_buf[baddr].cc;
 		if (hSession->ea_buf[baddr].fa)
@@ -2377,17 +2391,19 @@ LIB3270_ACTION( fieldend )
 			last_nonblank = baddr;
 	}
 
-	if (last_nonblank == -1) {
+	if (last_nonblank == -1)
+	{
 		baddr = faddr;
 		INC_BA(baddr);
-	} else {
+	}
+	else
+	{
 		baddr = last_nonblank;
 		INC_BA(baddr);
 		if (hSession->ea_buf[baddr].fa)
 			baddr = last_nonblank;
 	}
-	cursor_move(hSession,baddr);
-	return 0;
+	return baddr;
 }
 
 /**
