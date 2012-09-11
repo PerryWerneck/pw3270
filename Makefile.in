@@ -63,6 +63,7 @@ INSTALL=@INSTALL@
 INSTALL_PROGRAM=@INSTALL_PROGRAM@
 INSTALL_DATA=@INSTALL_DATA@
 RPMBUILD=@RPMBUILD@
+DPKGBUILD=@DPKGBUILD@
 CONVERT=@CONVERT@
 MSGCAT=@MSGCAT@
 MSGINIT=@MSGINIT@
@@ -180,6 +181,12 @@ ifneq ($(RPMBUILD),no)
 	@TMPDIR=$(PWD)/$(TMPDIR)/rpmbuild $(RPMBUILD) --define="_sourcedir $(PWD)" -ba --clean $(PACKAGE_TARNAME).spec
 	@rm -fr $(PWD)/$(TMPDIR)/rpmbuild
 endif
+
+deb: clean
+ifneq ($(DPKGBUILD),no)
+	$(DPKGBUILD) -rfakeroot -uc -us
+endif
+
 
 srpm: $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.bz2
 ifneq ($(RPMBUILD),no)
