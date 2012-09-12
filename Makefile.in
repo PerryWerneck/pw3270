@@ -32,6 +32,8 @@ PACKAGE_NAME=@PACKAGE_NAME@
 PACKAGE_VERSION=@PACKAGE_VERSION@
 PACKAGE_TARNAME=@PACKAGE_TARNAME@
 
+PLUGINS=@PLUGINS@
+
 #---[ Paths ]------------------------------------------------------------------
 
 prefix=@prefix@
@@ -131,9 +133,13 @@ $(BINDIR)/Release/plugins/%@DLLEXT@: src/plugins/%/* $(BINDIR)/Release/$(PACKAGE
 
 #---[ Release targets ]--------------------------------------------------------
 
-all: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) locale filelist
+all: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) \
+		$(foreach PLUGIN, $(PLUGINS), $(BINDIR)/Release/plugins/$(PLUGIN)@DLLEXT@) \
+		locale pixmaps filelist
 
-Release: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) locale pixmaps
+Release: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) \
+			$(foreach PLUGIN, $(PLUGINS), $(BINDIR)/Release/plugins/$(PLUGIN)@DLLEXT@) \
+			locale pixmaps
 
 $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT): src/pw3270/* $(BINDIR)/Release@DLLDIR@/@DLLPREFIX@3270@DLLEXT@ $(DEPENDS)
 	@$(MAKE) BINDIR="../../$(BINDIR)" LIB3270_LIBS="$(RLSLIB)" LIB3270_CFLAGS="-I../../src/include" -C src/pw3270 ../../$(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
@@ -155,7 +161,8 @@ debian/lib3270-dev.install: Makefile
 
 #---[ Debug targets ]----------------------------------------------------------
 
-Debug: $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
+Debug: $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT) \
+		$(foreach PLUGIN, $(PLUGINS), $(BINDIR)/Debug/plugins/$(PLUGIN)@DLLEXT@)
 
 $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT): src/pw3270/* $(BINDIR)/Debug@DLLDIR@/@DLLPREFIX@3270@DLLEXT@ $(DEPENDS)
 	@$(MAKE) BINDIR="../../$(BINDIR)" LIB3270_LIBS="$(DBGLIB)" LIB3270_CFLAGS="-I../../src/include" -C src/pw3270 ../../$(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
