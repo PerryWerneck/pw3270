@@ -306,7 +306,7 @@ AC_CHECK_FUNCS(getaddrinfo, AC_DEFINE(HAVE_GETADDRINFO) )
 
 PKG_CHECK_EXISTS
 
-PKG_CHECK_MODULES( [GTK], [gtk+-3.0], [ GTK_VERSION="3.0" ], [ PKG_CHECK_MODULES( [GTK], [gtk+-2.0 >= 2.16 gthread-2.0 gmodule-2.0], [ GTK_VERSION="2.0" ] ) ], [  ] )
+PKG_CHECK_MODULES( [GTK], [gtk+-3.0 gmodule-2.0], [ GTK_VERSION="3.0" ], [ PKG_CHECK_MODULES( [GTK], [gtk+-2.0 >= 2.16 gthread-2.0 gmodule-2.0], [ GTK_VERSION="2.0" ] ) ], [  ] )
 
 AC_SUBST(GTK_LIBS)
 AC_SUBST(GTK_CFLAGS)

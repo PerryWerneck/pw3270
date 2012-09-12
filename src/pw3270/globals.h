@@ -77,6 +77,9 @@
  G_GNUC_INTERNAL void download_action(GtkAction *action, GtkWidget *widget);
  G_GNUC_INTERNAL void upload_action(GtkAction *action, GtkWidget *widget);
 
+ // plugins
+ G_GNUC_INTERNAL void init_plugins(GtkWidget *widget);
+ G_GNUC_INTERNAL void deinit_plugins(GtkWidget *widget);
 
 
 

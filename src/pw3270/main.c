@@ -249,14 +249,16 @@ int main(int argc, char *argv[])
 		else
 			pw3270_restore_window_state(toplevel,"toplevel");
 
+		init_plugins(toplevel);
 		gtk_window_present(GTK_WINDOW(toplevel));
-
 
 #ifdef HAVE_GTKMAC
 		gtk_osxapplication_ready(osxapp);
 #endif // HAVE_GTKMAC
 
 		gtk_main();
+
+		deinit_plugins(toplevel);
 
 		pw3270_save_window_state(toplevel,"toplevel");
 
