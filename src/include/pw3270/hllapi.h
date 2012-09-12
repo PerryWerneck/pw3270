@@ -18,7 +18,7 @@
  * programa; se não, escreva para a Free Software Foundation, Inc., 51 Franklin
  * St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * Este programa está nomeado como plugin.h e possui - linhas de código.
+ * Este programa está nomeado como hllapi.h e possui - linhas de código.
  *
  * Contatos:
  *
@@ -29,18 +29,33 @@
  *
  */
 
-#ifndef PW3270_PLUGIN_INCLUDED
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-	#define PW3270_PLUGIN_INCLUDED 1
+ #define HLLAPI_REQUEST_ID				0x01
+ #define HLLAPI_MAXLENGTH				32768
 
-	#include <gtk/gtk.h>
-	#include <lib3270.h>
+ #define HLLAPI_CMD_CONNECTPS				   1	/**< connect presentation space				*/
+ #define HLLAPI_CMD_SENDSTRING				   3	/**< send string							*/
+ #define HLLAPI_CMD_COPYPSTOSTR				   8	/**< copy presentation space to string		*/
+ #define HLLAPI_CMD_SETCURSOR				  40	/**< set cursor								*/
+ #define HLLAPI_CMD_GETREVISION				2000	/**< Get lib3270 revision					*/
 
-	LIB3270_EXPORT int pw3270_plugin_init(GtkWidget *window);
-	LIB3270_EXPORT int pw3270_plugin_deinit(GtkWidget *window);
+ #pragma pack(1)
+ typedef struct _hllapi_data
+ {
+		unsigned char	id;			/**< Request id */
+		unsigned long	func;		/**< Function number */
+		unsigned short	rc;			/**< Short argument/return code */
+		unsigned short	len;		/**< Text length */
+		char			string[1];	/**< String argument */
+ } HLLAPI_DATA;
+ #pragma pack()
 
-	LIB3270_EXPORT void pw3270_plugin_start(GtkWidget *window);
-	LIB3270_EXPORT void pw3270_plugin_stop(GtkWidget *window);
+ LIB3270_EXPORT int hllapi(unsigned long function, const char *string, unsigned short length, unsigned short *rc);
 
-#endif // PW3270_PLUGIN_INCLUDED
+#ifdef __cplusplus
+}    /* end of extern "C" */
+#endif
 

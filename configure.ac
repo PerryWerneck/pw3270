@@ -358,6 +358,7 @@ AC_CONFIG_FILES([
 	src/pw3270/Makefile
 	src/pw3270/uiparser/Makefile
 	src/tools/Makefile
+	src/plugins/remotectl/Makefile
 	man/Makefile
 	makegtkruntime.sh
 ])

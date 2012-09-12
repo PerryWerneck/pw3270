@@ -18,29 +18,41 @@
  * programa; se não, escreva para a Free Software Foundation, Inc., 51 Franklin
  * St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * Este programa está nomeado como plugin.h e possui - linhas de código.
+ * Este programa está nomeado como remotectl.h e possui - linhas de código.
  *
  * Contatos:
  *
  * perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
  * erico.mendonca@gmail.com	(Erico Mascarenhas Mendonça)
- * licinio@bb.com.br		(Licínio Luis Branco)
- * kraucer@bb.com.br		(Kraucer Fernandes Mazuco)
+ *
+ * Agradecimento:
+ *
+ * Hélio Passos
  *
  */
 
-#ifndef PW3270_PLUGIN_INCLUDED
+ #define ENABLE_NLS
+ #define GETTEXT_PACKAGE PACKAGE_NAME
 
-	#define PW3270_PLUGIN_INCLUDED 1
+ #include <libintl.h>
+ #include <glib/gi18n.h>
+ #include <gtk/gtk.h>
 
-	#include <gtk/gtk.h>
-	#include <lib3270.h>
+ #include <lib3270.h>
+ #include <lib3270/log.h>
+ #include <pw3270/hllapi.h>
 
-	LIB3270_EXPORT int pw3270_plugin_init(GtkWidget *window);
-	LIB3270_EXPORT int pw3270_plugin_deinit(GtkWidget *window);
+#ifdef WIN32
 
-	LIB3270_EXPORT void pw3270_plugin_start(GtkWidget *window);
-	LIB3270_EXPORT void pw3270_plugin_stop(GtkWidget *window);
+	#define PIPE_BUFFER_LENGTH 4096
 
-#endif // PW3270_PLUGIN_INCLUDED
+	void init_source_pipe(HANDLE hPipe);
+	void popup_lasterror(const gchar *fmt, ...);
+
+#endif // WIN32
+
+
+
+
+
 

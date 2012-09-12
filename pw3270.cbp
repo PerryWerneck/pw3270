@@ -68,6 +68,7 @@
 		<Unit filename="src\include\lib3270\session.h" />
 		<Unit filename="src\include\lib3270\trace.h" />
 		<Unit filename="src\include\pw3270.h" />
+		<Unit filename="src\include\pw3270\hllapi.h" />
 		<Unit filename="src\include\pw3270\plugin.h" />
 		<Unit filename="src\include\rules.mak.in" />
 		<Unit filename="src\include\v3270.h" />
@@ -213,6 +214,17 @@
 		<Unit filename="src\lib3270\winversc.h" />
 		<Unit filename="src\lib3270\xioc.h" />
 		<Unit filename="src\lib3270\xl.h" />
+		<Unit filename="src\plugins\remotectl\Makefile.in" />
+		<Unit filename="src\plugins\remotectl\hllapi.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\plugins\remotectl\pipesource.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\plugins\remotectl\remotectl.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\plugins\remotectl\remotectl.h" />
 		<Unit filename="src\pw3270\Makefile.in" />
 		<Unit filename="src\pw3270\actions.c">
 			<Option compilerVar="CC" />

@@ -1,0 +1,110 @@
+#
+# "Software pw3270, desenvolvido com base nos códigos fontes do WC3270  e X3270
+# (Paul Mattes Paul.Mattes@usa.net), de emulação de terminal 3270 para acesso a
+# aplicativos mainframe. Registro no INPI sob o nome G3270.
+#
+# Copyright (C) <2008> <Banco do Brasil S.A.>
+#
+# Este programa é software livre. Você pode redistribuí-lo e/ou modificá-lo sob
+# os termos da GPL v.2 - Licença Pública Geral  GNU,  conforme  publicado  pela
+# Free Software Foundation.
+#
+# Este programa é distribuído na expectativa de  ser  útil,  mas  SEM  QUALQUER
+# GARANTIA; sem mesmo a garantia implícita de COMERCIALIZAÇÃO ou  de  ADEQUAÇÃO
+# A QUALQUER PROPÓSITO EM PARTICULAR. Consulte a Licença Pública Geral GNU para
+# obter mais detalhes.
+#
+# Você deve ter recebido uma cópia da Licença Pública Geral GNU junto com este
+# programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple
+# Place, Suite 330, Boston, MA, 02111-1307, USA
+#
+# Contatos:
+#
+# perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
+# erico.mendonca@gmail.com	(Erico Mascarenhas de Mendonça)
+# licinio@bb.com.br			(Licínio Luis Branco)
+# kraucer@bb.com.br			(Kraucer Fernandes Mazuco)
+#
+
+#---[ Sources ]----------------------------------------------------------------
+
+MODULE_NAME=remotectl
+DEPENDS=*.h ../../include/*.h ../../include/lib3270/*.h Makefile
+PLUGIN_SRC=remotectl.c pipesource.c
+HLLAPI_SRC=hllapi.c
+
+#---[ Paths ]------------------------------------------------------------------
+
+ROOTDIR ?= .
+OBJDIR  ?= $(ROOTDIR)/.obj
+BINDIR  ?= $(ROOTDIR)/.bin
+BINDBG  ?= $(BINDIR)/Debug
+BINRLS  ?= $(BINDIR)/Release
+
+OBJDBG = $(OBJDIR)/Debug
+OBJRLS = $(OBJDIR)/Release
+OBJEXT = o
+
+#---[ Tools ]------------------------------------------------------------------
+
+MKDIR=@MKDIR_P@
+CC=@CC@
+LD=@CC@
+MSGCAT=@MSGCAT@
+XGETTEXT=@XGETTEXT@
+
+#---[ Rules ]------------------------------------------------------------------
+
+DLL_FLAGS=@DLL_FLAGS@
+DEBUG_CFLAGS=-DDEBUG=1 -g -Wall
+
+PW3270_LIBS ?= `pkg-config --libs pw3270 lib3270`
+PW3270_CFLAGS ?= `pkg-config --cflags pw3270 lib3270`
+GTK_CFLAGS ?= @GTK_CFLAGS@ @GTKMAC_CFLAGS@
+GTK_LIBS ?= @GTK_LIBS@ @GTKMAC_LIBS@
+
+$(OBJDBG)/%.o: %.c $(DEPENDS)
+	@echo "  CC   `basename $@`"
+	@$(MKDIR) `dirname $@`
+	@$(CC) $(CFLAGS) $(DEBUG_CFLAGS) $(PW3270_CFLAGS) $(GTK_CFLAGS) -o $@ -c $<
+
+$(OBJRLS)/%.o: %.c $(DEPENDS)
+	@echo "  CC   `basename $@`"
+	@$(MKDIR) `dirname $@`
+	@$(CC) $(CFLAGS) $(PW3270_CFLAGS) $(GTK_CFLAGS) -o $@ -c $<
+
+
+#---[ Release targets ]--------------------------------------------------------
+
+Release: $(BINRLS)/plugins/$(MODULE_NAME).dll $(BINRLS)/libhllapi.dll
+
+$(BINRLS)/plugins/$(MODULE_NAME).dll: $(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJRLS)/$(SRC).o)
+	@echo "  CCLD `basename $@`"
+	@$(MKDIR) `dirname $@`
+	@$(LD) $(DLL_FLAGS) -Wl,-soname,`basename $@` $(LDFLAGS) -o $@ $^ $(LIBS) $(PW3270_LIBS) $(GTK_LIBS)
+
+$(BINRLS)/libhllapi.dll: $(foreach SRC, $(basename $(HLLAPI_SRC)), $(OBJRLS)/$(SRC).o)
+	@echo "  CCLD `basename $@`"
+	@$(MKDIR) `dirname $@`
+	@$(LD) $(DLL_FLAGS) -Wl,-soname,`basename $@` $(LDFLAGS) -o $@ $^ $(LIBS)
+
+#---[ Debug targets ]----------------------------------------------------------
+
+Debug: $(BINDBG)/plugins/$(MODULE_NAME).dll $(BINDBG)/libhllapi.dll
+
+$(BINDBG)/plugins/$(MODULE_NAME).dll: $(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJDBG)/$(SRC).o)
+	@echo "  CCLD `basename $@`"
+	@$(MKDIR) `dirname $@`
+	@$(LD) $(DLL_FLAGS) -Wl,-soname,`basename $@` $(LDFLAGS) -o $@ $^ $(LIBS) $(PW3270_LIBS) $(GTK_LIBS)
+
+$(BINDBG)/libhllapi.dll: $(foreach SRC, $(basename $(HLLAPI_SRC)), $(OBJDBG)/$(SRC).o)
+	@echo "  CCLD `basename $@`"
+	@$(MKDIR) `dirname $@`
+	@$(LD) $(DLL_FLAGS) -Wl,-soname,`basename $@` $(LDFLAGS) -o $@ $^ $(LIBS)
+
+#---[ Misc targets ]-----------------------------------------------------------
+
+clean:
+	@rm -fr $(OBJDIR)
+	@rm -fr $(BINDIR)
+	@find . -name "*~" -exec rm -f {} \;

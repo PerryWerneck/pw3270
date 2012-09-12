@@ -126,6 +126,9 @@ src/tools/%@EXEEXT@: src/tools/%.c
 $(BINDIR)/Debug/plugins/%@DLLEXT@: src/plugins/%/* $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
 	@make BINDIR="../../../$(BINDIR)" PW3270_LIBS="-L../../../$(BINDIR)/Debug@DLLDIR@ -l3270 -lpw3270" PW3270_CFLAGS="-I../../../src/include" -C $(dir $<) Debug
 
+$(BINDIR)/Release/plugins/%@DLLEXT@: src/plugins/%/* $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
+	@make BINDIR="../../../$(BINDIR)" PW3270_LIBS="-L../../../$(BINDIR)/Release@DLLDIR@ -l3270 -lpw3270" PW3270_CFLAGS="-I../../../src/include" -C $(dir $<) Release
+
 #---[ Release targets ]--------------------------------------------------------
 
 all: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) locale filelist
@@ -292,6 +295,7 @@ clean:
 	@make -C src/lib3270 clean
 	@make -C src/pw3270 clean
 	@make -C src/tools clean
+	@make -C src/plugins/remotectl clean
 	@rm -f $(PACKAGE_NAME).png
 	@rm -f $(PACKAGE_NAME)-logo.png
 	@rm -f *.log
