@@ -1,4 +1,3 @@
-
 #
 # "Software pw3270, desenvolvido com base nos códigos fontes do WC3270  e X3270
 # (Paul Mattes Paul.Mattes@usa.net), de emulação de terminal 3270 para acesso a
@@ -102,7 +101,6 @@ ifneq ($(CONVERT),no)
 	@$(CONVERT) --format=png --output=$@ $<
 endif
 
-
 debian/%.install: src/%/Makefile
 	@$(MAKE) DEBDIR=../../debian -C $(dir $^) ../../$@
 
@@ -124,6 +122,9 @@ $(BINDIR)/Release/$(localedir)/%/LC_MESSAGES/$(PACKAGE_NAME).mo: po/%.po
 
 src/tools/%@EXEEXT@: src/tools/%.c
 	@make -C src/tools $(notdir $@)
+
+$(BINDIR)/Debug/plugins/%@DLLEXT@: src/plugins/%/* $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
+	@make BINDIR="../../../$(BINDIR)" PW3270_LIBS="-L../../../$(BINDIR)/Debug@DLLDIR@ -l3270 -lpw3270" PW3270_CFLAGS="-I../../../src/include" -C $(dir $<) Debug
 
 #---[ Release targets ]--------------------------------------------------------
 
@@ -311,6 +312,7 @@ distclean: clean
 	@rm -fr autom4te.cache
 	@rm -f *.pc
 	@rm -f $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar*
+	@find ./src -name "Makefile" -exec rm -f {} \;
 
 	@rm -f Makefile
 	@echo "$@"
