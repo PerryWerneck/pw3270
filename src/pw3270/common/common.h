@@ -82,7 +82,10 @@
  gchar 		* build_data_filename(const gchar *first_element, ...);
  gchar		* filename_from_va(const gchar *first_element, va_list args);
 
- void		  save_window_to_config(const gchar *group, const gchar *key, GtkWidget *hwnd);
+
+ void 		  save_window_state_to_config(const gchar *group, const gchar *key, GdkWindowState CurrentState);
+ void		  save_window_size_to_config(const gchar *group, const gchar *key, GtkWidget *hwnd);
+
  void		  restore_window_from_config(const gchar *group, const gchar *key, GtkWidget *hwnd);
 
 #ifdef WIN_REGISTRY_ENABLED

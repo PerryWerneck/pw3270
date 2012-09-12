@@ -680,12 +680,8 @@ GKeyFile * get_application_keyfile(void)
         { "Sticky",		GDK_WINDOW_STATE_STICKY,	gtk_window_stick                }
  };
 
-void save_window_to_config(const gchar *group, const gchar *key, GtkWidget *hwnd)
+void save_window_state_to_config(const gchar *group, const gchar *key, GdkWindowState CurrentState)
 {
-	GdkWindowState CurrentState = gdk_window_get_state(gtk_widget_get_window(hwnd));
-
-	if( !(CurrentState & (GDK_WINDOW_STATE_FULLSCREEN|GDK_WINDOW_STATE_MAXIMIZED|GDK_WINDOW_STATE_ICONIFIED)) )
-	{
 #if defined( WIN_REGISTRY_ENABLED )
 
         gchar * path = g_strdup_printf("%s\\%s\\%s\\%s",registry_path,g_get_application_name(),group,key);
@@ -696,16 +692,12 @@ void save_window_to_config(const gchar *group, const gchar *key, GtkWidget *hwnd
 		if(RegCreateKeyEx(HKEY_CURRENT_USER,path,0,NULL,REG_OPTION_NON_VOLATILE,KEY_SET_VALUE,NULL,&hKey,&disp) == ERROR_SUCCESS)
 		{
 			int f;
-			int pos[2];
-
 			for(f=0;f<G_N_ELEMENTS(WindowState);f++)
 			{
 				DWORD value = (CurrentState & WindowState[f].flag) ? 1 : 0;
+//				trace("%s=%s",WindowState[f].name,value ? "Yes" : "No");
 				RegSetValueEx(hKey, WindowState[f].name, 0, REG_DWORD,(const BYTE *) &value,sizeof(value));
 			}
-
-			gtk_window_get_size(GTK_WINDOW(hwnd),&pos[0],&pos[1]);
-			RegSetValueEx(hKey, "Size", 0, REG_BINARY,(const BYTE *) pos,sizeof(pos));
 
 			RegCloseKey(hKey);
 		}
@@ -714,12 +706,43 @@ void save_window_to_config(const gchar *group, const gchar *key, GtkWidget *hwnd
 
 #else
 		int			  f;
-		int 		  pos[2];
 		GKeyFile	* conf 	= get_application_keyfile();
 		gchar		* id	= g_strconcat(group,".",key,NULL);
 
 		for(f=0;f<G_N_ELEMENTS(WindowState);f++)
 			g_key_file_set_boolean(conf,id,WindowState[f].name,CurrentState & WindowState[f].flag);
+
+		g_free(id);
+
+#endif // WIN_REGISTRY_ENABLED
+}
+
+void save_window_size_to_config(const gchar *group, const gchar *key, GtkWidget *hwnd)
+{
+#if defined( WIN_REGISTRY_ENABLED )
+
+        gchar * path = g_strdup_printf("%s\\%s\\%s\\%s",registry_path,g_get_application_name(),group,key);
+
+        HKEY    hKey;
+        DWORD   disp;
+
+		if(RegCreateKeyEx(HKEY_CURRENT_USER,path,0,NULL,REG_OPTION_NON_VOLATILE,KEY_SET_VALUE,NULL,&hKey,&disp) == ERROR_SUCCESS)
+		{
+			int pos[2];
+
+			gtk_window_get_size(GTK_WINDOW(hwnd),&pos[0],&pos[1]);
+
+			RegSetValueEx(hKey, "Size", 0, REG_BINARY,(const BYTE *) pos,sizeof(pos));
+
+			RegCloseKey(hKey);
+		}
+
+		g_free(path);
+
+#else
+		int 		  pos[2];
+		GKeyFile	* conf 	= get_application_keyfile();
+		gchar		* id	= g_strconcat(group,".",key,NULL);
 
         gtk_window_get_size(GTK_WINDOW(hwnd),&pos[0],&pos[1]);
         g_key_file_set_integer_list(conf,id,"size",pos,2);
@@ -727,7 +750,6 @@ void save_window_to_config(const gchar *group, const gchar *key, GtkWidget *hwnd
 		g_free(id);
 
 #endif // WIN_REGISTRY_ENABLED
-	}
 }
 
 void restore_window_from_config(const gchar *group, const gchar *key, GtkWidget *hwnd)

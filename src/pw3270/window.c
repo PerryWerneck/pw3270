@@ -110,7 +110,7 @@
 
  }
 
-  static gboolean window_state_event(GtkWidget *window, GdkEventWindowState *event, GtkWidget *widget)
+ static gboolean window_state_event(GtkWidget *window, GdkEventWindowState *event, GtkWidget *widget)
  {
 	gboolean	  fullscreen	= event->new_window_state & GDK_WINDOW_STATE_FULLSCREEN ? TRUE : FALSE;
 	GtkAction	**action		= (GtkAction **) g_object_get_data(G_OBJECT(widget),"named_actions");
@@ -124,6 +124,14 @@
 
 	lib3270_set_toggle(v3270_get_session(widget),LIB3270_TOGGLE_FULL_SCREEN,fullscreen);
 
+	save_window_state_to_config("window", "toplevel", event->new_window_state);
+
+	return 0;
+ }
+
+ static gboolean configure_event(GtkWidget *widget, GdkEvent  *event, gpointer   user_data)
+ {
+ 	save_window_size_to_config("window","toplevel",widget);
 	return 0;
  }
 
@@ -484,6 +492,7 @@
 
 	// Connect window signals
 	g_signal_connect(widget,"window_state_event",G_CALLBACK(window_state_event),widget->terminal);
+	g_signal_connect(widget,"configure_event",G_CALLBACK(configure_event),widget->terminal);
 
 
 	// Finish setup

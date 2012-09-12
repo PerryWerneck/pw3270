@@ -192,7 +192,7 @@ void parser_build(struct parser *p, GtkWidget *widget)
 	g_object_set_data_full(G_OBJECT(p->toplevel),"action_groups",a_info.group,(GDestroyNotify) release_action_group);
 	g_object_set_data_full(G_OBJECT(p->toplevel),"string_chunk",p->strings,(GDestroyNotify) g_string_chunk_free);
 
-	g_signal_connect(p->toplevel, "destroy", G_CALLBACK (gtk_main_quit), NULL);
+	g_signal_connect(p->toplevel, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
 	// Has "view" menu? Update it.
 	parent = GTK_WIDGET(g_hash_table_lookup(p->element_list[UI_ELEMENT_MENU],"view"));

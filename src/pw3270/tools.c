@@ -89,12 +89,13 @@ LIB3270_EXPORT gchar * pw3270_build_filename(GtkWidget *widget, const gchar *fir
 	return path;
 }
 
-LIB3270_EXPORT void pw3270_save_window_state(GtkWidget *widget, const gchar *name)
+LIB3270_EXPORT void pw3270_save_window_size(GtkWidget *widget, const gchar *name)
 {
-	save_window_to_config("window", name, widget);
+	trace("%s",__FUNCTION__);
+	save_window_size_to_config("window", name, widget);
 }
 
-LIB3270_EXPORT void pw3270_restore_window_state(GtkWidget *widget, const gchar *name)
+LIB3270_EXPORT void pw3270_restore_window(GtkWidget *widget, const gchar *name)
 {
 	restore_window_from_config("window", name, widget);
 }
