@@ -131,7 +131,11 @@
 
  static gboolean configure_event(GtkWidget *widget, GdkEvent  *event, gpointer   user_data)
  {
- 	save_window_size_to_config("window","toplevel",widget);
+ 	GdkWindowState CurrentState = gdk_window_get_state(gtk_widget_get_window(widget));
+
+	if( !(CurrentState & (GDK_WINDOW_STATE_FULLSCREEN|GDK_WINDOW_STATE_MAXIMIZED|GDK_WINDOW_STATE_ICONIFIED)) )
+		save_window_size_to_config("window","toplevel",widget);
+
 	return 0;
  }
 
