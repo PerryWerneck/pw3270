@@ -34,7 +34,6 @@
 
  #include <windows.h>
  #include <stdarg.h>
- #include <lib3270.h>
  #include "remotectl.h"
 
 /*---[ Defines ]----------------------------------------------------------------------------*/
@@ -134,12 +133,17 @@ static void wait_for_client(pipe_source *source)
 
  static void process_input(pipe_source *source, DWORD cbRead)
  {
- 	gint	  argc = 0;
- 	gchar	**argv;
- 	GError	* error = NULL;
- 	gchar	* cmd;
+ 	HLLAPI_DATA *data = (HLLAPI_DATA *) source->buffer;
 
  	source->buffer[cbRead] = 0;
+
+	if(data->id == 0x01)
+	{
+		DWORD wrote;
+		data->rc = run_hllapi(data->func,data->string,data->len,data->rc);
+		wrote = sizeof(HLLAPI_DATA)+data->len;
+		WriteFile(source->hPipe,data,wrote,&wrote,NULL);
+	}
 
  }
 
@@ -195,7 +199,7 @@ static void wait_for_client(pipe_source *source)
 	 */
 	BOOL	fSuccess;
 	DWORD	cbRead	= 0;
-	DWORD	dwErr	= 0;
+//	DWORD	dwErr	= 0;
 
 	fSuccess = GetOverlappedResult(((pipe_source *) source)->hPipe,&((pipe_source *) source)->overlap,&cbRead,FALSE );
 

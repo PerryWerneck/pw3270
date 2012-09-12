@@ -33,6 +33,8 @@
 
  #include "remotectl.h"
  #include <pw3270/plugin.h>
+ #include <errno.h>
+ #include <string.h>
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
@@ -121,4 +123,30 @@
 	return 0;
  }
 
+ static int cmd_getrevision(unsigned short rc, char *string, unsigned short length)
+ {
+	strncpy(string,lib3270_get_revision(),length);
+	return 0;
+ }
+
+ int run_hllapi(unsigned long function, char *string, unsigned short length, unsigned short rc)
+ {
+	static const struct _cmd
+	{
+		unsigned long function;
+		int (*exec)(unsigned short rc, char *string, unsigned short length);
+	} cmd[] =
+	{
+		{ HLLAPI_CMD_GETREVISION, cmd_getrevision }
+	};
+	int f;
+
+	for(f=0;f<G_N_ELEMENTS(cmd);f++)
+	{
+		if(cmd[f].function == function)
+			return cmd[f].exec(rc,string,length);
+	}
+
+ 	return EINVAL;
+ }
 

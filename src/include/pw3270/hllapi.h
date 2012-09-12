@@ -29,6 +29,11 @@
  *
  */
 
+#ifndef HLLAPI_H_INCLUDED
+
+	#define HLLAPI_H_INCLUDED 1
+	#include <lib3270.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -53,9 +58,10 @@ extern "C" {
  } HLLAPI_DATA;
  #pragma pack()
 
- LIB3270_EXPORT int hllapi(unsigned long function, const char *string, unsigned short length, unsigned short *rc);
+ LIB3270_EXPORT int hllapi(unsigned long function, char *string, unsigned short length, unsigned short *rc);
 
 #ifdef __cplusplus
 }    /* end of extern "C" */
 #endif
 
+#endif // HLLAPI_H_INCLUDED

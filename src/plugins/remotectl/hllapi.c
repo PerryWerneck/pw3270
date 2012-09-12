@@ -32,10 +32,12 @@
  #include <string.h>
  #include <errno.h>
  #include <pw3270/hllapi.h>
+ #include <stdio.h>
+ #include <lib3270/log.h>
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
- LIB3270_EXPORT int hllapi(unsigned long func, const char *string, unsigned short length, unsigned short *rc)
+ LIB3270_EXPORT int hllapi(unsigned long func, char *string, unsigned short length, unsigned short *rc)
  {
  	int result = -1;
 
@@ -69,8 +71,8 @@
 	else
 	{
 		HLLAPI_DATA	*buffer	= malloc(HLLAPI_MAXLENGTH+1);
-		DWORD cbSize		= 0;
-		HLLAPI_DATA *data	= malloc(sizeof(HLLAPI_DATA) + length);
+		DWORD cbSize		= sizeof(HLLAPI_DATA) + length;
+		HLLAPI_DATA *data	= malloc(cbSize+1);
 
 		data->id		= HLLAPI_REQUEST_ID;
 		data->func		= func;
@@ -80,7 +82,9 @@
 		if(string && length > 0)
 			memcpy(data->string,string,length);
 
-		if(!TransactNamedPipe(hPipe,(LPVOID) data,sizeof(HLLAPI_DATA) + length,buffer,HLLAPI_MAXLENGTH,&cbSize,NULL))
+		trace("Sending %d bytes",(int) cbSize);
+
+		if(!TransactNamedPipe(hPipe,(LPVOID) data,cbSize,buffer,HLLAPI_MAXLENGTH,&cbSize,NULL))
 		{
 			result = -1;
 		}

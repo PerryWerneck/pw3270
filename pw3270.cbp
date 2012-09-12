@@ -225,6 +225,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src\plugins\remotectl\remotectl.h" />
+		<Unit filename="src\plugins\remotectl\testprogram.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src\pw3270\Makefile.in" />
 		<Unit filename="src\pw3270\actions.c">
 			<Option compilerVar="CC" />
