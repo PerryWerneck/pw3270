@@ -203,5 +203,6 @@ clean: clean-common
 	@rm -fr uiparser/.obj
 	@rm -fr v3270/.bin
 	@rm -fr v3270/.obj
+	@rm -fr debian
 	@rm -f $(PACKAGE_NAME).desktop
 

@@ -186,3 +186,4 @@ clean:
 	@rm -f version.c
 	@rm -f fallbacks.c
 	@rm -f lib3270.pot
+	@rm -fr debian

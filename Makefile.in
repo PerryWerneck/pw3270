@@ -321,6 +321,7 @@ distclean: clean
 	@rm -f src/include/lib3270/config.h
 	@rm -f src/pw3270/uiparser/Makefile
 	@rm -fr autom4te.cache
+	@rm -fr debian
 	@rm -f *.pc
 	@rm -f $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar*
 	@find ./src -name "Makefile" -exec rm -f {} \;
