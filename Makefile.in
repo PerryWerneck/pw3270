@@ -247,7 +247,7 @@ $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar: clean pixmaps filelist
 	@cp ui/* $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/ui
 
 	@$(MKDIR) $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/debian
-	@cp debian/*.install $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/debian
+#	@cp debian/*.install $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/debian
 
 	@$(MKDIR) $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/po
 	@cp po/*.po $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/po

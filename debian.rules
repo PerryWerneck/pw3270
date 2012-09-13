@@ -21,6 +21,8 @@ build-stamp:
 
 	# Add here commands to compile the package.
 	./configure --prefix=/usr
+	rm -f debian/*.install
+	make filelist
 	make all
 	# --- end custom part for compiling
 
