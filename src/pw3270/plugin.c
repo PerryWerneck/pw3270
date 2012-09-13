@@ -124,8 +124,12 @@
 
  G_GNUC_INTERNAL void init_plugins(GtkWidget *widget)
  {
-#ifdef DEBUG
+#if defined(DEBUG)
 	load("." G_DIR_SEPARATOR_S "plugins", widget);
+#else
+	gchar *path = pw3270_build_filename(widget,"plugins",NULL);
+	load(path, widget);
+	g_free(path);
 #endif
 
  }
