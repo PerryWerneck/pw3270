@@ -10,7 +10,7 @@ mkdir debian
 
 echo 7 > debian/compat
 cp debian.control debian/control
-cp debian.rules debian/control
+cp debian.rules debian/rules
 
 EDITOR=true dch --preserve -v $VERSION-$PACKAGE_LEVEL -u low --create --package pw3270
 sed -i "s@UNRELEASED@unstable@;s@Initial release. (Closes: #XXXXXX)@SVN Revision $PACKAGE_REVISION@" debian/changelog
