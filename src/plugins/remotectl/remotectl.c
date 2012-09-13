@@ -150,6 +150,18 @@
 	return 0;
  }
 
+ static int cmd_sendstring(unsigned short rc, char *string, unsigned short length)
+ {
+	H3270 *hSession = lib3270_get_default_session_handle();
+
+	if(!lib3270_connected(hSession))
+		return ENOTCONN;
+
+	#warning Converter formato da string e incluir no buffer
+
+	return 0;
+ }
+
  int run_hllapi(unsigned long function, char *string, unsigned short length, unsigned short rc)
  {
 	static const struct _cmd
@@ -159,9 +171,12 @@
 	} cmd[] =
 	{
 		{ HLLAPI_CMD_SETCURSOR,		cmd_setcursor	},
+		{ HLLAPI_CMD_INPUTSTRING,	cmd_sendstring	},
 		{ HLLAPI_CMD_GETREVISION,	cmd_getrevision }
 	};
 	int f;
+
+	trace("HLLAPI function %d",(int) function);
 
 	for(f=0;f<G_N_ELEMENTS(cmd);f++)
 	{
@@ -169,6 +184,7 @@
 			return cmd[f].exec(rc,string,length);
 	}
 
+	g_warning("Unexpected HLLAPI function %d",(int) function);
  	return EINVAL;
  }
 

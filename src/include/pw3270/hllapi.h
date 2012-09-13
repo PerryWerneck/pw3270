@@ -42,7 +42,7 @@ extern "C" {
  #define HLLAPI_MAXLENGTH				32768
 
  #define HLLAPI_CMD_CONNECTPS				   1	/**< connect presentation space				*/
- #define HLLAPI_CMD_SENDSTRING				   3	/**< send string							*/
+ #define HLLAPI_CMD_INPUTSTRING				   3	/**< send string							*/
  #define HLLAPI_CMD_COPYPSTOSTR				   8	/**< copy presentation space to string		*/
  #define HLLAPI_CMD_SETCURSOR				  40	/**< set cursor								*/
  #define HLLAPI_CMD_GETREVISION				2000	/**< Get lib3270 revision					*/

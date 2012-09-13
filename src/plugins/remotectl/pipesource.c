@@ -74,13 +74,13 @@ static void wait_for_client(pipe_source *source)
 	{
 	// The overlapped connection in progress.
 	case ERROR_IO_PENDING:
-		trace("%s: ERROR_IO_PENDING",__FUNCTION__);
+		// trace("%s: ERROR_IO_PENDING",__FUNCTION__);
 		source->state = PIPE_STATE_WAITING;
 		break;
 
 	// Client is already connected, so signal an event.
 	case ERROR_PIPE_CONNECTED:
-		trace("%s: ERROR_PIPE_CONNECTED",__FUNCTION__);
+		// trace("%s: ERROR_PIPE_CONNECTED",__FUNCTION__);
 		if(SetEvent(source->overlap.hEvent))
 			break;
 
@@ -108,7 +108,7 @@ static void wait_for_client(pipe_source *source)
 	 */
 	if(WaitForSingleObject(((pipe_source *) source)->overlap.hEvent,0) == WAIT_OBJECT_0)
 	{
-		trace("%s: source=%p",__FUNCTION__,source);
+		// trace("%s: source=%p",__FUNCTION__,source);
 		return TRUE;
 	}
 
@@ -142,6 +142,9 @@ static void wait_for_client(pipe_source *source)
 		DWORD wrote;
 		data->rc = run_hllapi(data->func,data->string,data->len,data->rc);
 		wrote = sizeof(HLLAPI_DATA)+data->len;
+
+		trace("%s rc=%d",__FUNCTION__,(int) data->rc);
+
 		WriteFile(source->hPipe,data,wrote,&wrote,NULL);
 	}
 
@@ -157,18 +160,21 @@ static void wait_for_client(pipe_source *source)
 	// The read operation is still pending.
 	switch(GetLastError())
 	{
+	case 0:
+		break;
+
 	case ERROR_IO_PENDING:
-		trace("%s: PIPE_STATE_PENDING_READ",__FUNCTION__);
+		// trace("%s: PIPE_STATE_PENDING_READ",__FUNCTION__);
 		source->state = PIPE_STATE_PENDING_READ;
 		break;
 
 	case ERROR_PIPE_LISTENING:
-		trace("%s: ERROR_PIPE_LISTENING",__FUNCTION__);
+		// trace("%s: ERROR_PIPE_LISTENING",__FUNCTION__);
 		source->state = PIPE_STATE_READ;
 		break;
 
 	case ERROR_BROKEN_PIPE:
-		trace("%s: ERROR_BROKEN_PIPE",__FUNCTION__);
+		// trace("%s: ERROR_BROKEN_PIPE",__FUNCTION__);
 		if(!DisconnectNamedPipe(source->hPipe))
 			popup_lasterror("%s",_( "Error in DisconnectNamedPipe" ));
 		else
@@ -176,7 +182,7 @@ static void wait_for_client(pipe_source *source)
 		break;
 
 	case ERROR_PIPE_NOT_CONNECTED:
-		trace("%s: ERROR_PIPE_NOT_CONNECTED",__FUNCTION__);
+		// trace("%s: ERROR_PIPE_NOT_CONNECTED",__FUNCTION__);
 		break;
 
 	default:
@@ -203,14 +209,14 @@ static void wait_for_client(pipe_source *source)
 
 	fSuccess = GetOverlappedResult(((pipe_source *) source)->hPipe,&((pipe_source *) source)->overlap,&cbRead,FALSE );
 
-	trace("%s: source=%p data=%p Result=%s cbRead=%d",__FUNCTION__,source,data,fSuccess ? "Success" : "Unsuccess",(int) cbRead);
+	// trace("%s: source=%p data=%p Result=%s cbRead=%d",__FUNCTION__,source,data,fSuccess ? "Success" : "Unsuccess",(int) cbRead);
 
 	switch(((pipe_source *) source)->state)
 	{
 	case PIPE_STATE_WAITING:
 		if(fSuccess)
 		{
-			trace("Pipe connected (cbRet=%d)",(int) cbRead);
+			// trace("Pipe connected (cbRet=%d)",(int) cbRead);
 			((pipe_source *) source)->state = PIPE_STATE_READ;
 		}
 		else
@@ -220,7 +226,7 @@ static void wait_for_client(pipe_source *source)
 		break;
 
 	case PIPE_STATE_READ:
-		trace("Reading pipe (cbRead=%d)",(int) cbRead);
+		// trace("Reading pipe (cbRead=%d)",(int) cbRead);
 		read_input_pipe( (pipe_source *) source);
 		break;
 
@@ -230,10 +236,10 @@ static void wait_for_client(pipe_source *source)
 		((pipe_source *) source)->state = PIPE_STATE_READ;
 		break;
 
-#ifdef DEBUG
-	default:
-		trace("%s: source=%p data=%p Unexpected mode %d",__FUNCTION__,source,data,((pipe_source *) source)->state);
-#endif
+//#ifdef DEBUG
+//	default:
+//		trace("%s: source=%p data=%p Unexpected mode %d",__FUNCTION__,source,data,((pipe_source *) source)->state);
+//#endif
 	}
 
 	return TRUE;
@@ -241,7 +247,7 @@ static void wait_for_client(pipe_source *source)
 
  static void IO_finalize(GSource *source)
  {
-	trace("%s: source=%p",__FUNCTION__,source);
+//	trace("%s: source=%p",__FUNCTION__,source);
 
 	if( ((pipe_source *) source)->hPipe != INVALID_HANDLE_VALUE)
 	{
@@ -253,7 +259,7 @@ static void wait_for_client(pipe_source *source)
 
  static gboolean IO_closure(gpointer data)
  {
-	trace("%s: data=%p",__FUNCTION__,data);
+//	trace("%s: data=%p",__FUNCTION__,data);
 	return 0;
  }
 

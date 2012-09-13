@@ -63,6 +63,8 @@
 		DWORD cbSize		= sizeof(HLLAPI_DATA) + length;
 		HLLAPI_DATA *data	= malloc(cbSize+1);
 
+		memset(buffer,0,HLLAPI_MAXLENGTH);
+
 		data->id		= HLLAPI_REQUEST_ID;
 		data->func		= func;
 		data->rc		= *rc;
@@ -71,14 +73,17 @@
 		if(string && length > 0)
 			memcpy(data->string,string,length);
 
-		if(!CallNamedPipe(PipeName,(LPVOID)data,cbSize,buffer,HLLAPI_MAXLENGTH,&cbSize,NMPWAIT_USE_DEFAULT_WAIT))
+		memset(buffer,0,HLLAPI_MAXLENGTH);		if(!CallNamedPipe(PipeName,(LPVOID)data,cbSize,buffer,HLLAPI_MAXLENGTH,&cbSize,NMPWAIT_USE_DEFAULT_WAIT))
 		{
 			result = GetLastError();
 		}
 		else
 		{
 			int sz = length < buffer->len ? length : buffer->len;
+
 			*rc = buffer->rc;
+
+			trace("%s: Query rc=%d",__FUNCTION__,(int) buffer->rc);
 
 			if(string && sz > 0)
 				memcpy(string,buffer->string,sz);
@@ -120,7 +125,7 @@
 	default:
 		if(!session_name)
 		{
-			if(set_session_name("pw3270"))
+			if(set_session_name("pw3270A"))
 				return ENOENT;
 		}
 		result = run_query(func, str, length, rc);

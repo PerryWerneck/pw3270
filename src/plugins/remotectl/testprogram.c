@@ -39,12 +39,18 @@
 	unsigned short rc;
 
 	// Set session name
-	strcpy(buffer,"pw3270");
+	strcpy(buffer,"pw3270A");
 	printf("ConnectPS exits with %d\n[%s]\n",hllapi(HLLAPI_CMD_CONNECTPS,buffer,1024,&rc),buffer);
 
 	// Test for GetRevision call
 	*buffer = 0;
 	printf("GetRevision exits with %d\n[%s]\n",hllapi(HLLAPI_CMD_GETREVISION,buffer,1024,&rc),buffer);
+	printf("query rc=%d\n\n",rc);
+
+	// Test for string input
+	strcpy(buffer,"test");
+	printf("InputString exits with %d\n[%s]\n",hllapi(HLLAPI_CMD_INPUTSTRING,buffer,1024,&rc),buffer);
+	printf("query rc=%d\n\n",rc);
 
  	return 0;
  }
