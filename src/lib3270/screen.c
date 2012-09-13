@@ -418,8 +418,11 @@ int cursor_move(H3270 *h, int baddr)
 	if(ret == baddr)
 		return ret;
 
-	h->cursor_addr = baddr;
-	h->update_cursor(h,(unsigned short) (baddr/h->cols),(unsigned short) (baddr%h->cols),h->text[baddr].chr,h->text[baddr].attr);
+	if(baddr >= 0)
+	{
+		h->cursor_addr = baddr;
+		h->update_cursor(h,(unsigned short) (baddr/h->cols),(unsigned short) (baddr%h->cols),h->text[baddr].chr,h->text[baddr].attr);
+	}
 
     return ret;
 }

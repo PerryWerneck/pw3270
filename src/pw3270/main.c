@@ -122,11 +122,12 @@ static gboolean appname(const gchar *option_name, const gchar *value, gpointer d
 int main(int argc, char *argv[])
 {
 #if defined( WIN32 )
-	static const gchar	* appname	= PACKAGE_NAME;
+	static const gchar	* appname		= PACKAGE_NAME;
 #endif // WIN32
 
-	static const gchar	* host		= NULL;
-	int 				  rc 		= 0;
+	static const gchar	* session_name	= PACKAGE_NAME;
+	static const gchar	* host			= NULL;
+	int 				  rc 			= 0;
 
 #if ! GLIB_CHECK_VERSION(2,32,0)
 	g_thread_init(NULL);
@@ -183,16 +184,18 @@ int main(int argc, char *argv[])
 		static const GOptionEntry app_options[] =
 		{
 #if ! defined( WIN32 )
-			{ "appname",	'a', 0, G_OPTION_ARG_CALLBACK,	appname,		N_( "Application name" ),		PACKAGE_NAME	},
+			{ "appname",		'a', 0, G_OPTION_ARG_CALLBACK,	appname,		N_( "Application name" ),		PACKAGE_NAME	},
 #else
-			{ "appname",	'a', 0, G_OPTION_ARG_STRING,	&appname,		N_( "Application name" ),		PACKAGE_NAME	},
+			{ "appname",		'a', 0, G_OPTION_ARG_STRING,	&appname,		N_( "Application name" ),		PACKAGE_NAME	},
 #endif // WIN32
-			{ "host",		'h', 0, G_OPTION_ARG_STRING,	&host,			N_( "Host to connect"),			NULL			},
+			{ "session",		's', 0, G_OPTION_ARG_STRING,	&session_name,	N_( "Session name" ),			PACKAGE_NAME	},
+			{ "host",			'h', 0, G_OPTION_ARG_STRING,	&host,			N_( "Host to connect"),			NULL			},
 			{ NULL }
 		};
 
 		GOptionContext	* options	= g_option_context_new (_("- 3270 Emulator for Gtk"));
 		GError			* error		= NULL;
+
 
 		g_option_context_add_main_entries(options, app_options, NULL);
 
@@ -241,6 +244,7 @@ int main(int argc, char *argv[])
 		}
 
 		toplevel = pw3270_new(host);
+		pw3270_set_session_name(toplevel,session_name);
 
 		toplevel_setup(GTK_WINDOW(toplevel));
 

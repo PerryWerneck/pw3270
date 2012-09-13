@@ -32,6 +32,7 @@
  */
 
  #include "remotectl.h"
+ #include <pw3270.h>
  #include <pw3270/plugin.h>
  #include <errno.h>
  #include <string.h>
@@ -76,31 +77,40 @@
  LIB3270_EXPORT int pw3270_plugin_init(GtkWidget *window)
  {
 #ifdef WIN32
-	static const LPTSTR	lpszPipename	= TEXT("\\\\.\\pipe\\" PACKAGE_NAME );
-	HANDLE				hPipe;
+	char id;
 
-	trace("\n\n%s\n\n",__FUNCTION__);
-
-	hPipe = CreateNamedPipe(	lpszPipename,				// pipe name
-								PIPE_ACCESS_DUPLEX |		// read/write access
-								FILE_FLAG_OVERLAPPED,		// overlapped mode
-								PIPE_TYPE_MESSAGE |			// pipe type
-								PIPE_READMODE_MESSAGE |		// pipe mode
-								PIPE_WAIT,					// blocking mode
-								1,							// number of instances
-								PIPE_BUFFER_LENGTH,   		// output buffer size
-								PIPE_BUFFER_LENGTH,			// input buffer size
-								0,							// client time-out
-								NULL);						// default security attributes
-
-
-	if (hPipe == INVALID_HANDLE_VALUE)
+	for(id='A';id < 'Z';id++)
 	{
-		popup_lasterror( _( "Can´t create pipe %s" ),lpszPipename);
-		return -1;
+		gchar	* pipename	= g_strdup_printf("\\\\.\\pipe\\%s%c",pw3270_get_session_name(window),id);
+
+		HANDLE	  hPipe		= CreateNamedPipe(	TEXT(pipename),				// pipe name
+												PIPE_ACCESS_DUPLEX |		// read/write access
+												FILE_FLAG_OVERLAPPED,		// overlapped mode
+												PIPE_TYPE_MESSAGE |			// pipe type
+												PIPE_READMODE_MESSAGE |		// pipe mode
+												PIPE_WAIT,					// blocking mode
+												1,							// number of instances
+												PIPE_BUFFER_LENGTH,   		// output buffer size
+												PIPE_BUFFER_LENGTH,			// input buffer size
+												0,							// client time-out
+												NULL);						// default security attributes
+
+		g_free(pipename);
+
+		if(hPipe != INVALID_HANDLE_VALUE)
+		{
+			gchar *session = g_strdup_printf("%s:%c",pw3270_get_session_name(window),id);
+			pw3270_set_session_name(window,session);
+			g_free(session);
+
+			init_source_pipe(hPipe);
+			return 0;
+		}
+
 	}
 
-	init_source_pipe(hPipe);
+	popup_lasterror( "%s", _( "Can´t create remote control pipe" ));
+	return -1;
 
 #else
 
@@ -129,6 +139,17 @@
 	return 0;
  }
 
+ static int cmd_setcursor(unsigned short rc, char *string, unsigned short length)
+ {
+	H3270 *hSession = lib3270_get_default_session_handle();
+
+	if(!lib3270_connected(hSession))
+		return ENOTCONN;
+
+	lib3270_set_cursor_address(hSession,(int) rc);
+	return 0;
+ }
+
  int run_hllapi(unsigned long function, char *string, unsigned short length, unsigned short rc)
  {
 	static const struct _cmd
@@ -137,7 +158,8 @@
 		int (*exec)(unsigned short rc, char *string, unsigned short length);
 	} cmd[] =
 	{
-		{ HLLAPI_CMD_GETREVISION, cmd_getrevision }
+		{ HLLAPI_CMD_SETCURSOR,		cmd_setcursor	},
+		{ HLLAPI_CMD_GETREVISION,	cmd_getrevision }
 	};
 	int f;
 

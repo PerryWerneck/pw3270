@@ -61,6 +61,9 @@
  LIB3270_EXPORT void		  pw3270_save_window_size(GtkWidget *widget, const gchar *name);
  LIB3270_EXPORT void		  pw3270_restore_window(GtkWidget *widget, const gchar *name);
 
+ LIB3270_EXPORT const gchar	* pw3270_get_session_name(GtkWidget *widget);
+ LIB3270_EXPORT void		  pw3270_set_session_name(GtkWidget *widget, const gchar *name);
+
 #ifdef HAVE_GTKMAC
  #include <gtk-mac-bundle.h>
  LIB3270_EXPORT GtkMacBundle	* pw3270_get_bundle(void);

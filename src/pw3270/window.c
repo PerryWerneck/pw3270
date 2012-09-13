@@ -216,6 +216,20 @@
  	return v3270_get_session(GTK_PW3270(widget)->terminal);
  }
 
+ const gchar * pw3270_get_session_name(GtkWidget *widget)
+ {
+ 	if(widget && GTK_IS_PW3270(widget))
+		return v3270_get_session_name(GTK_PW3270(widget)->terminal);
+	return g_get_application_name();
+ }
+
+ LIB3270_EXPORT void pw3270_set_session_name(GtkWidget *widget, const gchar *name)
+ {
+ 	g_return_if_fail(GTK_IS_PW3270(widget));
+	v3270_set_session_name(GTK_PW3270(widget)->terminal,name);
+	gtk_window_set_title(GTK_WINDOW(widget),name);
+ }
+
  GtkWidget * pw3270_get_terminal_widget(GtkWidget *widget)
  {
  	g_return_val_if_fail(GTK_IS_PW3270(widget),NULL);

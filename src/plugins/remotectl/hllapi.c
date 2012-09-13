@@ -35,38 +35,27 @@
  #include <stdio.h>
  #include <lib3270/log.h>
 
+/*--[ Globals ]--------------------------------------------------------------------------------------*/
+
+ static char *session_name = NULL;
+
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
- LIB3270_EXPORT int hllapi(unsigned long func, char *string, unsigned short length, unsigned short *rc)
+ static int run_query(unsigned long func, char *string, unsigned short length, unsigned short *rc)
  {
  	int result = -1;
 
 #ifdef WIN32
-
-	static DWORD		dwMode			= PIPE_READMODE_MESSAGE;
-	static const LPTSTR	lpszPipeName	= TEXT( "\\\\.\\pipe\\pw3270" );
-	HANDLE				hPipe			= INVALID_HANDLE_VALUE;
+	char				PipeName[4096];
 
 	if(length < 0 && string)
 		length = strlen(string);
 
-	if(!WaitNamedPipe(lpszPipeName,10000))
-		return ETIMEDOUT;
+	snprintf(PipeName,4095,"\\\\.\\pipe\\%s",session_name);
 
-	hPipe = CreateFile(	lpszPipeName,   					// pipe name
-						GENERIC_WRITE|GENERIC_READ,			// Read/Write access
-						0,              					// no sharing
-						NULL,           					// default security attributes
-						OPEN_EXISTING,  					// opens existing pipe
-						0,									// Attributes
-						NULL);          					// no template file
-
-	if(hPipe == INVALID_HANDLE_VALUE)
-		return -1;
-
-	if(!SetNamedPipeHandleState(hPipe,&dwMode,NULL,NULL))
+	if(!WaitNamedPipe(PipeName,NMPWAIT_USE_DEFAULT_WAIT))
 	{
-		result = -1;
+		result = ETIMEDOUT;
 	}
 	else
 	{
@@ -82,18 +71,17 @@
 		if(string && length > 0)
 			memcpy(data->string,string,length);
 
-		trace("Sending %d bytes",(int) cbSize);
-
-		if(!TransactNamedPipe(hPipe,(LPVOID) data,cbSize,buffer,HLLAPI_MAXLENGTH,&cbSize,NULL))
+		if(!CallNamedPipe(PipeName,(LPVOID)data,cbSize,buffer,HLLAPI_MAXLENGTH,&cbSize,NMPWAIT_USE_DEFAULT_WAIT))
 		{
-			result = -1;
+			result = GetLastError();
 		}
 		else
 		{
+			int sz = length < buffer->len ? length : buffer->len;
 			*rc = buffer->rc;
 
-			if(string && length > 0)
-				memcpy(string,buffer->string,length);
+			if(string && sz > 0)
+				memcpy(string,buffer->string,sz);
 
 			result = 0;
 		}
@@ -101,8 +89,6 @@
 		free(data);
 		free(buffer);
 	}
-
-	CloseHandle(hPipe);
 
 #else
 
@@ -112,3 +98,35 @@
 
 	return result;
  }
+
+ static int set_session_name(const char *name)
+ {
+	if(!session_name)
+		free(session_name);
+	session_name = strdup(name);
+
+	return 0;
+ }
+
+ LIB3270_EXPORT int hllapi(unsigned long func, char *str, unsigned short length, unsigned short *rc)
+ {
+ 	int result = 1;
+ 	switch(func)
+ 	{
+	case HLLAPI_CMD_CONNECTPS:
+		result = set_session_name(str);
+		break;
+
+	default:
+		if(!session_name)
+		{
+			if(set_session_name("pw3270"))
+				return ENOENT;
+		}
+		result = run_query(func, str, length, rc);
+ 	}
+
+ 	return result;
+ }
+
+

@@ -38,6 +38,10 @@
 	char buffer[1024];
 	unsigned short rc;
 
+	// Set session name
+	strcpy(buffer,"pw3270");
+	printf("ConnectPS exits with %d\n[%s]\n",hllapi(HLLAPI_CMD_CONNECTPS,buffer,1024,&rc),buffer);
+
 	// Test for GetRevision call
 	*buffer = 0;
 	printf("GetRevision exits with %d\n[%s]\n",hllapi(HLLAPI_CMD_GETREVISION,buffer,1024,&rc),buffer);
