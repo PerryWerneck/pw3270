@@ -109,8 +109,17 @@ SubSection "@PACKAGE@" SecMain
 
 	sectionEnd
 
-#
-#	SubSection "Plugins" SecPLugin
+	SubSection "Plugins" SecPLugin
+
+		Section /o "HLLAPI" HLLAPIPlugin
+			setOutPath $INSTDIR
+
+			CreateDirectory "$INSTDIR\plugins"
+			file "/oname=$INSTDIR\plugins\remotectl.dll" ".bin\Release\plugins\remotectl.dll"
+			file "/oname=$SYSDIR\libhllapi.dll"	".bin\Release\libhllapi.dll"
+
+		sectionEnd
+
 #
 #		Section /o "Rexx" RexxPlugin
 #			setOutPath $INSTDIR
@@ -124,7 +133,7 @@ SubSection "@PACKAGE@" SecMain
 #
 #		sectionEnd
 #
-SubSectionEnd
+	SubSectionEnd
 
 Section /o "GTK+ Runtime" SecGTK
 
@@ -180,6 +189,7 @@ section "Uninstall"
 	# Delete System libraries
 	delete $SYSDIR\lib3270.dll.@PACKAGE_VERSION@
 	delete $SYSDIR\libpw3270.dll.@PACKAGE_VERSION@
+	delete $SYSDIR\libhllapi.dll
 
 	# Delete extension libraries
 #	delete $PROGRAMFILES\ooRexx\rx3270.dll
