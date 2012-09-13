@@ -145,9 +145,9 @@ static void message(H3270 *session, LIB3270_NOTIFY id , const char *title, const
 	__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "%s\n",msg);
 	__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "%s\n",text);
 #else
-	lib3270_write_log(session,"%s",title);
-	lib3270_write_log(session,"%s",msg);
-	lib3270_write_log(session,"%s",text);
+	lib3270_write_log(session,"lib3270","%s",title);
+	lib3270_write_log(session,"lib3270","%s",msg);
+	lib3270_write_log(session,"lib3270","%s",text);
 #endif // ANDROID
 }
 

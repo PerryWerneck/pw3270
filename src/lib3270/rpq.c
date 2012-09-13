@@ -746,7 +746,7 @@ static void rpq_dump_warnings(H3270 *hSession)
 	/* If there's something to complain about, only complain once. */
 	if (!hSession->rpq_complained && hSession->rpq_wbcnt)
 	{
-		popup_an_error(hSession,hSession->rpq_warnbuf);
+		popup_an_error(hSession,"%s",hSession->rpq_warnbuf);
 		hSession->rpq_wbcnt = 0;
 		hSession->rpq_complained = 1;
 

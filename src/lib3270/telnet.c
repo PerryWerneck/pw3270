@@ -616,7 +616,7 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 	{
 		if (resolve_host_and_port(session,session->proxy_host, session->proxy_portname,&session->proxy_port, &haddr.sa, &ha_len, errmsg,sizeof(errmsg)) < 0)
 		{
-			popup_an_error(session,errmsg);
+			popup_an_error(session,"%s",errmsg);
 			return -1;
 		}
 	}
@@ -624,7 +624,7 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 	{
 		if (resolve_host_and_port(session,host, portname,&session->current_port, &haddr.sa, &ha_len,errmsg, sizeof(errmsg)) < 0)
 		{
-			popup_an_error(session,errmsg);
+			popup_an_error(session,"%s",errmsg);
 			return -1;
 		}
 	}
