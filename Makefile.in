@@ -208,7 +208,7 @@ nsi: Release
 ifneq ($(MAKENSIS),no)
 	@chmod +x makegtkruntime.sh
 	@./makegtkruntime.sh
-	@$(MAKENSIS) $(PACKAGE_NAME).nsi
+	@"$(MAKENSIS)" $(PACKAGE_NAME).nsi
 endif
 
 $(PACKAGE_NAME).po: $(TMPDIR)/$(PACKAGE_NAME).pot

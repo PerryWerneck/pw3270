@@ -62,8 +62,8 @@ SubSection "@PACKAGE@" SecMain
 		file "/oname=$INSTDIR\@PACKAGE@.ico"	"src\pw3270\@PACKAGE@.ico"
 
 		# Configuration files
-		file "/oname=$INSTDIR\@PACKAGE@-logo.png"	"src/pw3270/@PACKAGE@-logo.png"
-		file "/oname=$INSTDIR\@PACKAGE@.png"		"src/pw3270/@PACKAGE@.png"
+		file "/oname=$INSTDIR\@PACKAGE@-logo.png"	"src\pw3270\@PACKAGE@-logo.png"
+		file "/oname=$INSTDIR\@PACKAGE@.png"		"src\pw3270\@PACKAGE@.png"
 		file "/oname=$INSTDIR\colors.conf"		"colors.conf"
 
 		# Documentation files
@@ -134,6 +134,8 @@ SubSection "@PACKAGE@" SecMain
 #		sectionEnd
 #
 	SubSectionEnd
+
+SubSectionEnd
 
 Section /o "GTK+ Runtime" SecGTK
 
