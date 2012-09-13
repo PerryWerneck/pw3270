@@ -9,6 +9,66 @@ TARGET_PATH=".bin/gtkruntime"
 rm -fr "$TARGET_PATH/*"
 mkdir -p "$TARGET_PATH"
 
+copyFiles() {
+
+	while read FILE
+	do
+		FILEPATH=$(find "$GTK_PREFIX/bin" -name "$FILE")
+
+		if [ ! -z $FILEPATH ]; then
+			echo "$FILEPATH ..."
+			cp $FILEPATH "$TARGET_PATH"
+			if [ "$?" != "0" ]; then
+				echo "Can´t copy $FILEPATH"
+				exit -1
+			fi
+		else
+			echo "Can´t find $FILE"
+		fi
+	done < $1
+	rm -f $1
+
+}
+
+gtk3() {
+
+TEMPFILE="temp1.tmp"
+cat > $TEMPFILE << EOF
+libglib-*.dll
+libintl*.dll
+libgmodule*.dll
+libgobject*.dll
+libffi*.dll
+libgtk-*.dll
+libgdk-*.dll
+libcairo-gobject*.dll
+libcairo-2*.dll
+libfontconfig-1*.dll
+libfreetype-6*.dll
+zlib1.dll
+libxml2-*.dll
+libpixman-1*.dll
+libpng15-*.dll
+libgdk_pixbuf*.dll
+libgio-*.dll
+libjasper-*.dll
+libjpeg-8*.dll
+libtiff-5*.dll
+liblzma-5*.dll
+libpango-1*.dll
+libpangocairo-1*.dll
+libpangoft2-1*.dll
+libpangowin32-1*.dll
+libatk-*.dll
+libcrypto-*.dll
+libssl-*.dll
+EOF
+copyFiles $TEMPFILE
+
+}
+
+gtk2() {
+
 # Build DLL list
 TEMPFILE="temp1.tmp"
 cat > $TEMPFILE << EOF
@@ -45,22 +105,7 @@ EOF
 
 # jpeg62.dll
 # libtiff*.dll
-
-while read FILE
-do
-	FILEPATH=$(find "$GTK_PREFIX/bin" -name "$FILE")
-	if [ ! -z $FILEPATH ]; then
-		echo "$FILEPATH ..."
-		cp $FILEPATH "$TARGET_PATH"
-		if [ "$?" != "0" ]; then
-			echo "Can´t copy $FILEPATH"
-			exit -1
-		fi
-	else
-		echo "Can´t find $FILE"
-	fi
-done < $TEMPFILE
-rm -f $TEMPFILE
+copyFiles $TEMPFILE
 
 # Build locale dirs
 cat > $TEMPFILE << EOF
@@ -132,3 +177,10 @@ if [ "$?" != "0" ]; then
 	exit -1
 fi
 
+}
+
+if [ "$GTK_VERSION" == "gtk+-3.0" ]; then
+	gtk3
+else
+	gtk2
+fi

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-12 17:29-0300\n"
+"POT-Creation-Date: 2012-09-13 08:07-0300\n"
 "PO-Revision-Date: 2012-09-05 09:05-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português do Brasil <>\n"
@@ -58,11 +58,11 @@ msgstr "%s: Familia %d é inválida"
 msgid "%s:%d"
 msgstr "%s:%d"
 
-#: screen.c:640 screen.c:642 screen.c:672 screen.c:686 screen.c:797
+#: screen.c:643 screen.c:645 screen.c:675 screen.c:689 screen.c:800
 msgid "3270 Error"
 msgstr "Erro 3270"
 
-#: screen.c:657
+#: screen.c:660
 msgid "3270 Warning"
 msgstr "Alerta 3270"
 
