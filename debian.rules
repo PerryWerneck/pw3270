@@ -22,8 +22,7 @@ build-stamp:
 	# Add here commands to compile the package.
 	./configure --prefix=/usr
 	rm -f debian/*.install
-	make filelist
-	make all
+	make Release
 	# --- end custom part for compiling
 
 	touch build-stamp
@@ -34,7 +33,7 @@ clean:
 	rm -f build-stamp
 
 	# Add here commands to clean up after the build process.
-	make clean || true
+	if [ -e Makefile ]; then make clean; fi
 	# --- end custom part for cleaning up
 
 	dh_clean
@@ -46,9 +45,11 @@ install: build
 	dh_installdirs
 
 	# Add here commands to install the packages
-	make DESTDIR=/usr/src/packages/BUILD/debian/lib3270 install-lib
-	make DESTDIR=/usr/src/packages/BUILD/debian/lib3270-dev install-sdk
-	make DESTDIR=/usr/src/packages/BUILD/debian/pw3270 install-app
+	make DESTDIR=$(PWD)/debian/lib3270 install-lib
+	make DESTDIR=$(PWD)/debian/lib3270-dev install-sdk
+	make DESTDIR=$(PWD)/debian/pw3270 install-app
+
+	find debian
 	# --- end custom part for installing
 
 # Build architecture-independent files here.
@@ -80,7 +81,7 @@ binary-arch: build install
 #	dh_makeshlibs
 	dh_installdeb
 #	dh_perl
-	dh_shlibdeps
+#	dh_shlibdeps
 	dh_gencontrol
 	dh_md5sums
 	dh_builddeb
