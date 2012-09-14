@@ -150,14 +150,15 @@
 	return 0;
  }
 
- static int cmd_sendstring(unsigned short rc, char *string, unsigned short length)
+ static int cmd_sendstring(unsigned short rc, char *text, unsigned short length)
  {
 	H3270 *hSession = lib3270_get_default_session_handle();
 
 	if(!lib3270_connected(hSession))
 		return ENOTCONN;
 
-	#warning Converter formato da string e incluir no buffer
+	#warning Converter formato da string
+	lib3270_emulate_input(hSession,text,strlen(text),0);
 
 	return 0;
  }

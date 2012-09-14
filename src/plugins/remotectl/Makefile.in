@@ -107,7 +107,7 @@ $(BINDBG)/libhllapi.dll: $(foreach SRC, $(basename $(HLLAPI_SRC)), $(OBJDBG)/$(S
 testprogram@EXEEXT@: testprogram.c
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CC) $(CFLAGS) -I../../../src/include -L../../../$(BINDIR)/Debug $(DEBUG_CFLAGS) -lhllapi -o $@ -c $<
+	@$(CC) $(CFLAGS) -I../../../src/include -L../../../$(BINDIR)/Debug $(DEBUG_CFLAGS) -lhllapi -o $@ $<
 
 test: testprogram@EXEEXT@
 	@PATH="../../../$(BINDIR)/Debug:$(PATH)" ./testprogram@EXEEXT@
