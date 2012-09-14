@@ -5,10 +5,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-13 16:59-0300\n"
-"PO-Revision-Date: 2012-09-05 09:05-0300\n"
+"POT-Creation-Date: 2012-09-14 14:03-0300\n"
+"PO-Revision-Date: 2012-09-14 14:32-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
-"Language-Team: Português do Brasil <>\n"
+"Language-Team: Português <perry.werneck@gmail.com>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -83,11 +83,11 @@ msgstr "Ação falhou"
 msgid "Add to copy"
 msgstr "Adicionar à cópia"
 
-#: ui/00default.xml:132
+#: ui/00default.xml:133
 msgid "Alert sound"
 msgstr "Aviso sonoro"
 
-#: ui/00default.xml:127
+#: ui/00default.xml:128
 msgid "Auto-Reconnect"
 msgstr "Reconectar automaticamente"
 
@@ -95,7 +95,7 @@ msgstr "Reconectar automaticamente"
 msgid "Bad winsock version"
 msgstr "Versão winsock inválida"
 
-#: ui/00default.xml:125
+#: ui/00default.xml:126
 msgid "Blank Fill"
 msgstr "Completar com espaços"
 
@@ -103,13 +103,13 @@ msgstr "Completar com espaços"
 msgid "Blinking Cursor"
 msgstr "Cursor piscante"
 
-#: ui/00default.xml:128
+#: ui/00default.xml:129
 msgid "Bold"
 msgstr "Negrito"
 
 #: telnet.c:2059
 msgid "Broken pipe"
-msgstr "Broken pipe"
+msgstr "Conexão interrompida"
 
 #: telnet.c:687
 #, c-format
@@ -166,7 +166,7 @@ msgstr "Tabela de tradução tem %d entradas, precisa de 256"
 
 #: charset.c:602
 msgid "Charset has more than 256 entries"
-msgstr "Tabela de tradução tem mais de 256 caractere."
+msgstr "Tabela de tradução tem mais de 256 caracteres"
 
 #: ui/00default.xml:79
 msgid "Clear"
@@ -196,7 +196,7 @@ msgstr "Conexão foi cancelada pelo servidor"
 msgid "Copy"
 msgstr "Copiar"
 
-#: ui/99debug.xml:298
+#: ui/99debug.xml:299
 msgid "Copy as HTML"
 msgstr "Copiar como HTML"
 
@@ -204,7 +204,7 @@ msgstr "Copiar como HTML"
 msgid "Copy as table"
 msgstr "Copiar como tabela"
 
-#: ui/00default.xml:124
+#: ui/00default.xml:125
 msgid "Cross Hair Cursor"
 msgstr "Cursor mira"
 
@@ -212,7 +212,7 @@ msgstr "Cursor mira"
 msgid "Cut"
 msgstr "Recortar"
 
-#: ui/99debug.xml:303
+#: ui/99debug.xml:304
 msgid "DS Trace"
 msgstr "DS Trace"
 
@@ -220,11 +220,11 @@ msgstr "DS Trace"
 msgid "Data conversion error"
 msgstr "Erro na conversão de dados"
 
-#: ui/99debug.xml:311
+#: ui/99debug.xml:312
 msgid "Debug"
-msgstr "Debug"
+msgstr "Depuração"
 
-#: ui/99debug.xml:313
+#: ui/99debug.xml:314
 msgid "Debug window updates"
 msgstr "Mostrar atualizações de janela"
 
@@ -290,19 +290,19 @@ msgstr "Erro %d resolvendo %s"
 #: telnet.c:3047 telnet.c:3058
 #, c-format
 msgid "Error in fcntl(%s) when setting non blocking mode"
-msgstr "Error in fcntl(%s) when setting non blocking mode"
+msgstr "Erro em fcntl(%s) ao ativar o modo não blocante"
 
 #: telnet.c:3037
 #, c-format
 msgid "Error in ioctl(%s) when setting no blocking mode"
-msgstr "Error in ioctl(%s) when setting no blocking mode"
+msgstr "Erro em ioctl(%s) ao ativar o modo não blocante"
 
 #: resolver.c:108
 #, c-format
 msgid "Error resolving %s: %s"
 msgstr "Erro ao resolver %s: %s"
 
-#: ui/99debug.xml:305
+#: ui/99debug.xml:306
 msgid "Event Trace"
 msgstr "Trace de eventos"
 
@@ -347,7 +347,7 @@ msgstr "HTTP Proxy: EOF inesperado"
 msgid "HTTP Proxy: unrecognized reply"
 msgstr "HTTP Proxy: Resposta desconhecida"
 
-#: ui/00default.xml:142
+#: ui/00default.xml:143
 msgid "Help"
 msgstr "Ajuda"
 
@@ -376,7 +376,7 @@ msgstr "Formato inválido no nome do servidor"
 msgid "Illegal frame length"
 msgstr "Comprimento de frame inválido"
 
-#: ui/00default.xml:137
+#: ui/00default.xml:138
 msgid "Input method"
 msgstr "Método de entrada"
 
@@ -396,7 +396,7 @@ msgstr "Invalid charset entry '%s' (#%d)"
 
 #: selection.c:603
 msgid "Invalid cut action"
-msgstr "Invalid cut action"
+msgstr "Ação recortar inválida"
 
 #: proxy.c:284 proxy.c:296
 msgid "Invalid proxy hostname syntax"
@@ -411,7 +411,7 @@ msgstr "Sintaxe de proxy inválida"
 msgid "Invalid proxy type '%.*s'"
 msgstr "Tipo de proxy invalido '%.*s'"
 
-#: ui/00default.xml:130
+#: ui/00default.xml:131
 msgid "Keep selected"
 msgstr "Manter selecionado"
 
@@ -443,13 +443,13 @@ msgstr "Erro de rede"
 msgid "Network startup error"
 msgstr "Erro ao iniciar a rede"
 
-#: ui/00default.xml:189
+#: ui/00default.xml:190
 msgid "Next field"
 msgstr "Próximo campo"
 
 #: selection.c:603
 msgid "Not available"
-msgstr "Not available"
+msgstr "Não disponível"
 
 #: ft.c:527
 msgid "Not in 3270 mode, transfer cancelled"
@@ -476,11 +476,11 @@ msgstr "Colar próximo"
 msgid "Paste text file"
 msgstr "Colar arquivo texto"
 
-#: ui/00default.xml:123
+#: ui/00default.xml:124
 msgid "Paste with left margin"
 msgstr "Colar com margem esquerda"
 
-#: ui/00default.xml:188
+#: ui/00default.xml:189
 msgid "Previous field"
 msgstr "Campo anterior"
 
@@ -561,13 +561,13 @@ msgstr "RPQ: can't resolve '%s': %s"
 
 #: rpq.c:650
 msgid "RPQ: gethostbyname error"
-msgstr "RPQ: gethostbyname error"
+msgstr "RPQ: Erro em gethostbyname"
 
 #: ui/00default.xml:54
 msgid "Receive file"
 msgstr "Receber arquivo"
 
-#: ui/99debug.xml:312
+#: ui/99debug.xml:313
 msgid "Reload buffer contents"
 msgstr "Recarregar conteúdo do buffer"
 
@@ -579,7 +579,11 @@ msgstr "Remover seleção"
 msgid "Reselect"
 msgstr "Reselecionar"
 
-#: ui/00default.xml:190
+#: ui/00default.xml:123
+msgid "Resize on alternate screen"
+msgstr "Mudar tamanho do terminal em tela alternativa"
+
+#: ui/00default.xml:191
 msgid "Return"
 msgstr "Return"
 
@@ -748,7 +752,7 @@ msgstr "Salvar tela"
 msgid "Save selected"
 msgstr "Salvar seleção"
 
-#: ui/99debug.xml:304
+#: ui/99debug.xml:305
 msgid "Screen Trace"
 msgstr "Trace de tela"
 
@@ -764,7 +768,7 @@ msgstr "Selecionar campo"
 msgid "Select all"
 msgstr "Selecionar tudo"
 
-#: ui/00default.xml:126
+#: ui/00default.xml:127
 msgid "Select by rectangles"
 msgstr "Seleção retangular"
 
@@ -788,15 +792,15 @@ msgstr "Selecione servidor"
 msgid "Settings"
 msgstr "Configurações"
 
-#: ui/00default.xml:129
+#: ui/00default.xml:130
 msgid "Show Underline"
 msgstr "Mostrar sublinhado"
 
-#: ui/99debug.xml:311
+#: ui/99debug.xml:312
 msgid "Show test pattern"
 msgstr "Mostrar padrão de teste"
 
-#: ui/00default.xml:131
+#: ui/00default.xml:132
 msgid "Smart paste"
 msgstr "Colar inteligente"
 
@@ -834,11 +838,11 @@ msgid ""
 "This version of %s was built without support for secure sockets layer (SSL)."
 msgstr "Esta versão do %s foi gerada sem suporte para conexões seguras (SSL)."
 
-#: ui/00default.xml:148
+#: ui/00default.xml:149
 msgid "Toolbar"
 msgstr "Barra de ferramentas"
 
-#: ui/99debug.xml:303
+#: ui/99debug.xml:304
 msgid "Trace"
 msgstr "Trace"
 
@@ -883,7 +887,7 @@ msgstr "Erro inesperado"
 msgid "Unexpected type %d in typeahead queue"
 msgstr "Tipo inesperado %d na fila de teclado"
 
-#: ctlr.c:526
+#: ctlr.c:527
 #, c-format
 msgid "Unknown 3270 Data Stream command: 0x%X"
 msgstr "Unknown 3270 Data Stream command: 0x%X"
@@ -937,11 +941,11 @@ msgstr "Unsupported passthru host session"
 msgid "Unsupported socks 4 proxy"
 msgstr "Unsupported socks 4 proxy"
 
-#: ui/00default.xml:133
+#: ui/00default.xml:134
 msgid "Use +/- for field navigation"
 msgstr "Usar teclas +/- para navegar por campos"
 
-#: ui/99debug.xml:306
+#: ui/99debug.xml:307
 msgid "View Field Delimiters"
 msgstr "Mostrar delimitadores de campo"
 
@@ -961,7 +965,7 @@ msgstr "Aguardando resposta do pedido de download"
 msgid "Waiting for PUT response"
 msgstr "Aguardando resposta do pedido de upload"
 
-#: ui/00default.xml:159
+#: ui/00default.xml:160
 msgid "Window"
 msgstr "Janela"
 
