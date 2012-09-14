@@ -78,6 +78,8 @@ static const char *toggle_names[LIB3270_TOGGLE_COUNT] =
 		"kpalternative",			/**< Keypad +/- move to next/previous field */
 		"beep",						/**< Beep on errors */
 		"fieldattr",				/**< View Field attribute */
+		"altscreen",				/**< auto resize on altscreen */
+
 
 };
 
@@ -141,6 +143,12 @@ LIB3270_EXPORT int lib3270_toggle(H3270 *session, LIB3270_TOGGLE ix)
 	return (int) t->value;
 }
 
+static void toggle_altscreen(H3270 *session, struct lib3270_toggle *t, LIB3270_TOGGLE_TYPE tt)
+{
+	if(!session->screen_alt)
+		set_viewsize(session,t->value ? 24 : session->maxROWS,80);
+}
+
 static void toggle_monocase(H3270 *session, struct lib3270_toggle *t, LIB3270_TOGGLE_TYPE tt)
 {
 	session->display(session);
@@ -165,6 +173,7 @@ void initialize_toggles(H3270 *session)
 
 	session->toggle[LIB3270_TOGGLE_RECTANGLE_SELECT].upcall	= toggle_rectselect;
 	session->toggle[LIB3270_TOGGLE_MONOCASE].upcall 		= toggle_monocase;
+	session->toggle[LIB3270_TOGGLE_ALTSCREEN].upcall 		= toggle_altscreen;
 
 /*
 #if defined(X3270_TRACE)
@@ -183,13 +192,11 @@ void initialize_toggles(H3270 *session)
 		LIB3270_TOGGLE_CURSOR_BLINK,
 		LIB3270_TOGGLE_CURSOR_POS,
 		LIB3270_TOGGLE_BEEP,
+		LIB3270_TOGGLE_ALTSCREEN,
 	};
 
 	for(f=0;f< (sizeof(active_by_default)/sizeof(active_by_default[0])); f++)
-	{
 		session->toggle[active_by_default[f]].value = True;
-	}
-
 
 	for(f=0;f<LIB3270_TOGGLE_COUNT;f++)
 	{

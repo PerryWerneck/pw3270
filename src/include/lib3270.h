@@ -110,6 +110,7 @@
 		LIB3270_TOGGLE_KP_ALTERNATIVE,              /**< Keypad +/- move to next/previous field */
 		LIB3270_TOGGLE_BEEP,						/**< Beep on errors */
 		LIB3270_TOGGLE_VIEW_FIELD,					/**< View Field attribute */
+		LIB3270_TOGGLE_ALTSCREEN,					/**< auto resize on altscreen */
 
 //		LIB3270_TOGGLE_ALT_CURSOR,
 //		LIB3270_TOGGLE_AID_WAIT,

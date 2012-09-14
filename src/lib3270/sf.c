@@ -403,12 +403,12 @@ static enum pds sf_erase_reset(H3270 *hSession, unsigned char buf[], int buflen)
 	{
 	case SF_ER_DEFAULT:
 		trace_ds(hSession," Default\n");
-		ctlr_erase(hSession,False);
+		ctlr_erase(hSession,0);
 		break;
 
 	case SF_ER_ALT:
 		trace_ds(hSession," Alternate\n");
-		ctlr_erase(hSession,True);
+		ctlr_erase(hSession,1);
 		break;
 
 	default:

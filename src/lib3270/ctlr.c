@@ -129,9 +129,6 @@ void ctlr_init(H3270 *session, unsigned cmask unused)
  */
 void ctlr_reinit(H3270 *session, unsigned cmask)
 {
-//	static struct ea *real_ea_buf = NULL;
-//	static struct ea *real_aea_buf = NULL;
-
 	if (cmask & MODEL_CHANGE)
 	{
 		/* Allocate buffers */
@@ -177,7 +174,7 @@ int	lib3270_set_model(H3270 *hSession, int model)
 
 	ctlr_set_rows_cols(hSession,model,hSession->ov_cols,hSession->ov_rows);
 	ctlr_reinit(hSession,MODEL_CHANGE);
-
+	screen_update(hSession,0,hSession->rows*hSession->cols);
 	return 0;
 }
 
@@ -402,9 +399,9 @@ LIB3270_EXPORT int lib3270_get_next_unprotected(H3270 *hSession, int baddr0)
 	return 0;
 }
 
-/*
- * Perform an erase command, which may include changing the (virtual) screen
- * size.
+/**
+ * Perform an erase command, which may include changing the (virtual) screen size.
+ *
  */
 void ctlr_erase(H3270 *session, int alt)
 {
@@ -421,6 +418,7 @@ void ctlr_erase(H3270 *session, int alt)
 	{
 		/* Going from 24x80 to maximum. */
 		session->display(session);
+
 		set_viewsize(session,session->maxROWS,session->maxCOLS);
 	}
 	else
@@ -433,7 +431,11 @@ void ctlr_erase(H3270 *session, int alt)
 				ctlr_blanks(session);
 				session->display(session);
 			}
-			set_viewsize(session,24,80);
+
+			if(lib3270_get_toggle(session,LIB3270_TOGGLE_ALTSCREEN))
+				set_viewsize(session,24,80);
+			else
+				set_viewsize(session,session->maxROWS,80);
 		}
 	}
 
@@ -441,7 +443,6 @@ void ctlr_erase(H3270 *session, int alt)
 
 }
 
-
 /*
  * Interpret an incoming 3270 command.
  */
@@ -466,7 +467,7 @@ enum pds process_ds(H3270 *hSession, unsigned char *buf, int buflen)
 	case CMD_EWA:	/* erase/write alternate */
 	case SNA_CMD_EWA:
 		trace_ds(hSession,"EraseWriteAlternate");
-		ctlr_erase(hSession,True);
+		ctlr_erase(hSession,1);
 		if ((rv = ctlr_write(hSession,buf, buflen, True)) < 0)
 			return rv;
 		return PDS_OKAY_NO_OUTPUT;
@@ -475,7 +476,7 @@ enum pds process_ds(H3270 *hSession, unsigned char *buf, int buflen)
 	case CMD_EW:	/* erase/write */
 	case SNA_CMD_EW:
 		trace_ds(hSession,"EraseWrite");
-		ctlr_erase(hSession,False);
+		ctlr_erase(hSession,0);
 		if ((rv = ctlr_write(hSession,buf, buflen, True)) < 0)
 			return rv;
 		return PDS_OKAY_NO_OUTPUT;
