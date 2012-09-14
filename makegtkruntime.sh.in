@@ -30,6 +30,27 @@ copyFiles() {
 
 }
 
+copy_locale() {
+
+	rm -fr $TARGET_PATH/share/locale/pt_BR/LC_MESSAGES
+	mkdir -p $TARGET_PATH/share/locale/pt_BR/LC_MESSAGES
+
+	while read FILE
+	do
+		echo "$GTK_PREFIX/share/locale/pt_BR/LC_MESSAGES/$FILE ..."
+
+		if [ -e "$GTK_PREFIX/share/locale/pt_BR/LC_MESSAGES/$FILE" ]; then
+			cp "$GTK_PREFIX/share/locale/pt_BR/LC_MESSAGES/$FILE" "$TARGET_PATH/share/locale/pt_BR/LC_MESSAGES"
+			if [ "$?" != "0" ]; then
+				echo "Can´t copy $FILE"
+				exit -1
+			fi
+		fi
+
+	done < $1
+	rm -f $1
+}
+
 gtk3() {
 
 TEMPFILE="temp1.tmp"
@@ -62,8 +83,22 @@ libpangowin32-1*.dll
 libatk-*.dll
 libcrypto-*.dll
 libssl-*.dll
+gspawn-win32-helper-console.exe
+gspawn-win32-helper.exe
+gdk-pixbuf-query-loaders.exe
 EOF
 copyFiles $TEMPFILE
+
+# Build locale dirs
+cat > $TEMPFILE << EOF
+atk10.mo
+gdk-pixbuf.mo
+glib20.mo
+gtk30-properties.mo
+EOF
+
+copy_locale $TEMPFILE
+
 
 }
 
@@ -119,23 +154,7 @@ gtk20.mo
 libiconv.mo
 EOF
 
-rm -fr $TARGET_PATH/share/locale/pt_BR/LC_MESSAGES
-mkdir -p $TARGET_PATH/share/locale/pt_BR/LC_MESSAGES
-
-while read FILE
-do
-	echo "$GTK_PREFIX/share/locale/pt_BR/LC_MESSAGES/$FILE ..."
-
-	if [ -e "$GTK_PREFIX/share/locale/pt_BR/LC_MESSAGES/$FILE" ]; then
-		cp "$GTK_PREFIX/share/locale/pt_BR/LC_MESSAGES/$FILE" "$TARGET_PATH/share/locale/pt_BR/LC_MESSAGES"
-		if [ "$?" != "0" ]; then
-			echo "Can´t copy $FILE"
-			exit -1
-		fi
-	fi
-
-done < $TEMPFILE
-rm -f $TEMPFILE
+copy_locale $TEMPFILE
 
 # Copy default theme
 THEME_PATH="themes/MS-Windows/gtk-2.0"
