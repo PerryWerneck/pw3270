@@ -196,7 +196,6 @@ int main(int argc, char *argv[])
 		GOptionContext	* options	= g_option_context_new (_("- 3270 Emulator for Gtk"));
 		GError			* error		= NULL;
 
-
 		g_option_context_add_main_entries(options, app_options, NULL);
 
 		if(!g_option_context_parse( options, &argc, &argv, &error ))
@@ -226,6 +225,36 @@ int main(int argc, char *argv[])
 
 			return -1;
 		}
+	}
+
+	{
+		const gchar	*msg = gtk_check_version(GTK_MAJOR_VERSION, GTK_MINOR_VERSION, GTK_MICRO_VERSION);
+
+		if(msg)
+		{
+			// Invalid GTK version, notify user and exit
+			int 		  rc;
+			GtkWidget	* dialog = gtk_message_dialog_new(	NULL,
+															GTK_DIALOG_DESTROY_WITH_PARENT,
+															GTK_MESSAGE_WARNING,
+															GTK_BUTTONS_OK_CANCEL,
+															_( "This program requires GTK version %d.%d.%d" ),GTK_MAJOR_VERSION,GTK_MINOR_VERSION,GTK_MICRO_VERSION );
+
+
+			gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),"%s",msg);
+			gtk_window_set_title(GTK_WINDOW(dialog),_( "GTK Version mismatch" ));
+
+#if GTK_CHECK_VERSION(2,10,0)
+			gtk_window_set_deletable(GTK_WINDOW(dialog),FALSE);
+#endif
+
+			rc = gtk_dialog_run(GTK_DIALOG (dialog));
+			gtk_widget_destroy(dialog);
+
+			if(rc != GTK_RESPONSE_OK)
+				return EINVAL;
+		}
+
 	}
 
 #if defined(WIN32)

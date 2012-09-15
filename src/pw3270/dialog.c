@@ -544,6 +544,7 @@
 	GtkAboutDialog  * dialog 	= GTK_ABOUT_DIALOG(gtk_about_dialog_new());
 	gchar			* text 		= g_strdup_printf("%s-logo.png",g_get_application_name());
 	gchar			* filename	= build_data_filename(text,NULL);
+	gchar			* info;
 
 	trace("[%s]",filename);
 	if(g_file_test(filename,G_FILE_TEST_EXISTS))
@@ -572,7 +573,9 @@
 	g_free(text);
 
 	gtk_about_dialog_set_copyright(dialog, "Copyright © 2008 Banco do Brasil S.A." );
-	gtk_about_dialog_set_comments(dialog, _( "3270 terminal emulator for GTK+" ) );
+
+	info = g_strdup_printf(_( "3270 terminal emulator for GTK %d.%d" ),GTK_MAJOR_VERSION,GTK_MINOR_VERSION);
+	gtk_about_dialog_set_comments(dialog, info );
 
 	gtk_about_dialog_set_license(dialog, gettext( license ) );
 	gtk_about_dialog_set_wrap_license(dialog,TRUE);
@@ -586,4 +589,6 @@
 	gtk_widget_show_all(GTK_WIDGET(dialog));
 	gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(GTK_WIDGET(dialog));
+
+	g_free(info);
  }
