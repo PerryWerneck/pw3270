@@ -262,6 +262,9 @@
 		<Unit filename="src\pw3270\print.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src\pw3270\resources.rc">
+			<Option compilerVar="WINDRES" />
+		</Unit>
 		<Unit filename="src\pw3270\tools.c">
 			<Option compilerVar="CC" />
 		</Unit>

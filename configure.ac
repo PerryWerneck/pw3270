@@ -102,6 +102,7 @@ OBJEXT=".o"
 EXEEXT=""
 DLLPREFIX="lib"
 PLUGINS=""
+APP_GUI_SRC=""
 
 if test $host != $build; then
 	AC_CHECK_PROGS(HOST_CC, gcc cc)
@@ -126,6 +127,7 @@ case "$host" in
 		DBGCMDPREFIX=""
 		LDARCH=""
 		PLUGINS="remotectl"
+		APP_GUI_SRC="resources.rc"
 		;;
 
 	*-apple-*)
@@ -298,6 +300,7 @@ AC_SUBST(DBGRPATH)
 AC_SUBST(DBGCMDPREFIX)
 AC_SUBST(LDARCH)
 AC_SUBST(PLUGINS)
+AC_SUBST(APP_GUI_SRC)
 
 #--[ Headers ]------------------------------------------------------------------------------------------------------------------------------------------------
 
