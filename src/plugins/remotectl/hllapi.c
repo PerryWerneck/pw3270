@@ -41,7 +41,7 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
- static int run_query(unsigned long func, char *string, unsigned short length, unsigned short *rc)
+ static int run_query(unsigned long func, const char *arg, char *string, unsigned short length, unsigned short *rc)
  {
  	int result = -1;
 
@@ -70,10 +70,15 @@
 		data->rc		= *rc;
 		data->len		= length;
 
-		if(string && length > 0)
-			memcpy(data->string,string,length);
+		if(length > 0)
+		{
+			memset(data->string,0,length);
+			if(arg)
+				strncpy(data->string,arg,length);
+		}
 
-		memset(buffer,0,HLLAPI_MAXLENGTH);		if(!CallNamedPipe(PipeName,(LPVOID)data,cbSize,buffer,HLLAPI_MAXLENGTH,&cbSize,NMPWAIT_USE_DEFAULT_WAIT))
+		memset(buffer,0,HLLAPI_MAXLENGTH);
+		if(!CallNamedPipe(PipeName,(LPVOID)data,cbSize,buffer,HLLAPI_MAXLENGTH,&cbSize,NMPWAIT_USE_DEFAULT_WAIT))
 		{
 			result = GetLastError();
 		}
@@ -113,13 +118,38 @@
 	return 0;
  }
 
- LIB3270_EXPORT int hllapi(unsigned long func, char *str, unsigned short length, unsigned short *rc)
+ LIB3270_EXPORT int hllapi(unsigned long *func, char *str, unsigned short *length, unsigned short *rc)
  {
- 	int result = 1;
- 	switch(func)
+ 	int 	  result = 1;
+ 	char	* arg;
+
+	if(!length || *length > HLLAPI_MAXLENGTH)
+		return EINVAL;
+
+	if(length > 0)
+	{
+		arg = malloc(*length+1);
+		strncpy(arg,str,(int) *length);
+		arg[(size_t) *length] = 0;
+	}
+	else
+	{
+		arg = malloc(1);
+		*arg = 0;
+	}
+
+/*
+#ifdef DEBUG
+	freopen("hllapi.log","a",stderr);
+#endif // DEBUG
+*/
+
+ 	switch(*func)
  	{
 	case HLLAPI_CMD_CONNECTPS:
-		result = set_session_name(str);
+		result = set_session_name(arg);
+		if(!result)
+			result = run_query(*func, arg, str, *length, rc);
 		break;
 
 	default:
@@ -128,9 +158,10 @@
 			if(set_session_name("pw3270A"))
 				return ENOENT;
 		}
-		result = run_query(func, str, length, rc);
+		result = run_query(*func, arg, str, *length, rc);
  	}
 
+	free(arg);
  	return result;
  }
 

@@ -76,31 +76,31 @@ $(OBJRLS)/%.o: %.c $(DEPENDS)
 
 #---[ Release targets ]--------------------------------------------------------
 
-Release: $(BINRLS)/plugins/$(MODULE_NAME).dll $(BINRLS)/libhllapi.dll
+Release: $(BINRLS)/plugins/$(MODULE_NAME)@DLLEXT@ $(BINRLS)/libhllapi@DLLEXT@
 
-$(BINRLS)/plugins/$(MODULE_NAME).dll: $(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJRLS)/$(SRC).o)
+$(BINRLS)/plugins/$(MODULE_NAME)@DLLEXT@: $(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJRLS)/$(SRC).o)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(LD) $(DLL_FLAGS) -Wl,-soname,`basename $@` $(LDFLAGS) -o $@ $^ $(LIBS) $(PW3270_LIBS) $(GTK_LIBS)
+	@$(LD) $(DLL_FLAGS) @LDSOFLAGS@ $(LDFLAGS) -o $@ $^ $(LIBS) $(PW3270_LIBS) $(GTK_LIBS)
 
-$(BINRLS)/libhllapi.dll: $(foreach SRC, $(basename $(HLLAPI_SRC)), $(OBJRLS)/$(SRC).o)
+$(BINRLS)/libhllapi@DLLEXT@: $(foreach SRC, $(basename $(HLLAPI_SRC)), $(OBJRLS)/$(SRC).o)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(LD) $(DLL_FLAGS) -Wl,-soname,`basename $@` $(LDFLAGS) -o $@ $^ $(LIBS)
+	@$(LD) $(DLL_FLAGS) @LDSOFLAGS@ $(LDFLAGS) -o $@ $^ $(LIBS)
 
 #---[ Debug targets ]----------------------------------------------------------
 
-Debug: $(BINDBG)/plugins/$(MODULE_NAME).dll $(BINDBG)/libhllapi.dll
+Debug: $(BINDBG)/plugins/$(MODULE_NAME)@DLLEXT@ $(BINDBG)/libhllapi@DLLEXT@
 
-$(BINDBG)/plugins/$(MODULE_NAME).dll: $(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJDBG)/$(SRC).o)
+$(BINDBG)/plugins/$(MODULE_NAME)@DLLEXT@: $(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJDBG)/$(SRC).o)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(LD) $(DLL_FLAGS) -Wl,-soname,`basename $@` $(LDFLAGS) -o $@ $^ $(LIBS) $(PW3270_LIBS) $(GTK_LIBS)
+	@$(LD) $(DLL_FLAGS) @LDSOFLAGS@ $(LDFLAGS) -o $@ $^ $(LIBS) $(PW3270_LIBS) $(GTK_LIBS)
 
-$(BINDBG)/libhllapi.dll: $(foreach SRC, $(basename $(HLLAPI_SRC)), $(OBJDBG)/$(SRC).o)
+$(BINDBG)/libhllapi@DLLEXT@: $(foreach SRC, $(basename $(HLLAPI_SRC)), $(OBJDBG)/$(SRC).o)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(LD) $(DLL_FLAGS) -Wl,-soname,`basename $@` $(LDFLAGS) -o $@ $^ $(LIBS)
+	@$(LD) $(DLL_FLAGS) @LDSOFLAGS@ $(LDFLAGS) -o $@ $^ $(LIBS)
 
 #---[ Misc targets ]-----------------------------------------------------------
 

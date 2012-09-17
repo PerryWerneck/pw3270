@@ -119,7 +119,7 @@ case "$host" in
 		SOCKET_LIBS="-lws2_32"
 		CFLAGS="$CFLAGS -mms-bitfields"
 		localedir="locale"
-		DLL_FLAGS="-shared"
+		DLL_FLAGS="-shared -Wl,--add-stdcall-alias"
 		LDSOFLAGS="-Wl,-soname,\`basename \$@\`"
 		LDAPPFLAGS="-mwindows"
 		DBGRPATH=""

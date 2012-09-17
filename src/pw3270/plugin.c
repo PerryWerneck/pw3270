@@ -46,6 +46,9 @@
  	GError		* err	= NULL;
  	GList		* lst	= NULL;
 
+	if(!g_file_test(path,G_FILE_TEST_IS_DIR))
+		return;
+
 	trace("Loading plugins from %s",path);
 
 	dir = g_dir_open(path,0,&err);

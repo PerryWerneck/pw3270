@@ -58,7 +58,8 @@ extern "C" {
  } HLLAPI_DATA;
  #pragma pack()
 
- LIB3270_EXPORT int hllapi(unsigned long function, char *string, unsigned short length, unsigned short *rc);
+ #warning Remover comentario
+// LIB3270_EXPORT int hllapi(unsigned long func, char *str, unsigned short length, unsigned short *rc);
 
 #ifdef __cplusplus
 }    /* end of extern "C" */

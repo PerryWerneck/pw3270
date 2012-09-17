@@ -133,6 +133,12 @@
 	return 0;
  }
 
+ static int cmd_connectps(unsigned short rc, char *string, unsigned short length)
+ {
+ 	g_message("%s","HLLAPI ConnectPS request received");
+	return 0;
+ }
+
  static int cmd_getrevision(unsigned short rc, char *string, unsigned short length)
  {
 	strncpy(string,lib3270_get_revision(),length);
@@ -171,6 +177,7 @@
 		int (*exec)(unsigned short rc, char *string, unsigned short length);
 	} cmd[] =
 	{
+		{ HLLAPI_CMD_CONNECTPS,		cmd_connectps	},
 		{ HLLAPI_CMD_SETCURSOR,		cmd_setcursor	},
 		{ HLLAPI_CMD_INPUTSTRING,	cmd_sendstring	},
 		{ HLLAPI_CMD_GETREVISION,	cmd_getrevision }
