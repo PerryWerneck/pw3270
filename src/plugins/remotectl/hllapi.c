@@ -51,6 +51,9 @@
 	if(length < 0 && string)
 		length = strlen(string);
 
+	if(!session_name)
+		session_name = strdup("pw3270A");
+
 	snprintf(PipeName,4095,"\\\\.\\pipe\\%s",session_name);
 
 	if(!WaitNamedPipe(PipeName,NMPWAIT_USE_DEFAULT_WAIT))
@@ -114,7 +117,6 @@
 	if(!session_name)
 		free(session_name);
 	session_name = strdup(name);
-
 	return 0;
  }
 
@@ -152,14 +154,21 @@
 			result = run_query(*func, arg, str, *length, rc);
 		break;
 
-	default:
-		if(!session_name)
+	case HLLAPI_CMD_DISCONNECTPS:
+		if(session_name)
 		{
-			if(set_session_name("pw3270A"))
-				return ENOENT;
+			result = run_query(*func, arg, str, *length, rc);
+			free(session_name);
+			session_name = NULL;
 		}
+		break;
+
+	default:
 		result = run_query(*func, arg, str, *length, rc);
  	}
+
+ 	if(result && length && *length && str)
+		strncpy(str,strerror(result),*length);
 
 	free(arg);
  	return result;

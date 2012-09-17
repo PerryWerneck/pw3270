@@ -41,11 +41,14 @@ extern "C" {
  #define HLLAPI_REQUEST_ID				0x01
  #define HLLAPI_MAXLENGTH				32768
 
- #define HLLAPI_CMD_CONNECTPS				   1	/**< connect presentation space				*/
- #define HLLAPI_CMD_INPUTSTRING				   3	/**< send string							*/
- #define HLLAPI_CMD_COPYPSTOSTR				   8	/**< copy presentation space to string		*/
- #define HLLAPI_CMD_SETCURSOR				  40	/**< set cursor								*/
- #define HLLAPI_CMD_GETREVISION				2000	/**< Get lib3270 revision					*/
+ #define HLLAPI_CMD_CONNECTPS				   1	/**< connect presentation space							*/
+ #define HLLAPI_CMD_DISCONNECTPS			   2	/**< disconnect presentation space        				*/
+ #define HLLAPI_CMD_INPUTSTRING				   3	/**< send string										*/
+ #define HLLAPI_CMD_WAIT					   4	/**< Wait if the session is waiting for a host response	*/
+
+ #define HLLAPI_CMD_COPYPSTOSTR				   8	/**< copy presentation space to string					*/
+ #define HLLAPI_CMD_SETCURSOR				  40	/**< set cursor											*/
+ #define HLLAPI_CMD_GETREVISION				2000	/**< Get lib3270 revision								*/
 
  #pragma pack(1)
  typedef struct _hllapi_data

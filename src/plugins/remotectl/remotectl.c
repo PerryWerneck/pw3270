@@ -133,22 +133,26 @@
 	return 0;
  }
 
- static int cmd_connectps(unsigned short rc, char *string, unsigned short length)
+ static int cmd_connectps(H3270 *hSession, unsigned short rc, char *string, unsigned short length)
  {
  	g_message("%s","HLLAPI ConnectPS request received");
 	return 0;
  }
 
- static int cmd_getrevision(unsigned short rc, char *string, unsigned short length)
+ static int cmd_disconnectps(H3270 *hSession, unsigned short rc, char *string, unsigned short length)
+ {
+ 	g_message("%s","HLLAPI DisconnectPS request received");
+	return 0;
+ }
+
+ static int cmd_getrevision(H3270 *hSession, unsigned short rc, char *string, unsigned short length)
  {
 	strncpy(string,lib3270_get_revision(),length);
 	return 0;
  }
 
- static int cmd_setcursor(unsigned short rc, char *string, unsigned short length)
+ static int cmd_setcursor(H3270 *hSession, unsigned short rc, char *string, unsigned short length)
  {
-	H3270 *hSession = lib3270_get_default_session_handle();
-
 	if(!lib3270_connected(hSession))
 		return ENOTCONN;
 
@@ -156,10 +160,8 @@
 	return 0;
  }
 
- static int cmd_sendstring(unsigned short rc, char *text, unsigned short length)
+ static int cmd_sendstring(H3270 *hSession, unsigned short rc, char *text, unsigned short length)
  {
-	H3270 *hSession = lib3270_get_default_session_handle();
-
 	if(!lib3270_connected(hSession))
 		return ENOTCONN;
 
@@ -169,18 +171,25 @@
 	return 0;
  }
 
+ static int cmd_wait(H3270 *hSession, unsigned short rc, char *text, unsigned short length)
+ {
+	return lib3270_wait_for_ready(hSession,60);
+ }
+
  int run_hllapi(unsigned long function, char *string, unsigned short length, unsigned short rc)
  {
 	static const struct _cmd
 	{
 		unsigned long function;
-		int (*exec)(unsigned short rc, char *string, unsigned short length);
+		int (*exec)(H3270 *hSession, unsigned short rc, char *string, unsigned short length);
 	} cmd[] =
 	{
-		{ HLLAPI_CMD_CONNECTPS,		cmd_connectps	},
-		{ HLLAPI_CMD_SETCURSOR,		cmd_setcursor	},
-		{ HLLAPI_CMD_INPUTSTRING,	cmd_sendstring	},
-		{ HLLAPI_CMD_GETREVISION,	cmd_getrevision }
+		{ HLLAPI_CMD_CONNECTPS,		cmd_connectps		},
+		{ HLLAPI_CMD_DISCONNECTPS,	cmd_disconnectps	},
+		{ HLLAPI_CMD_INPUTSTRING,	cmd_sendstring		},
+		{ HLLAPI_CMD_WAIT,			cmd_wait			},
+		{ HLLAPI_CMD_SETCURSOR,		cmd_setcursor		},
+		{ HLLAPI_CMD_GETREVISION,	cmd_getrevision 	}
 	};
 	int f;
 
@@ -189,7 +198,7 @@
 	for(f=0;f<G_N_ELEMENTS(cmd);f++)
 	{
 		if(cmd[f].function == function)
-			return cmd[f].exec(rc,string,length);
+			return cmd[f].exec(lib3270_get_default_session_handle(),rc,string,length);
 	}
 
 	g_warning("Unexpected HLLAPI function %d",(int) function);
