@@ -180,6 +180,14 @@ G_BEGIN_DECLS
 	H3270   				* host;							/**< Related 3270 session */
 	gchar					* session_name;					/**< Session name (for window title) */
 
+	// Scripting
+	struct
+	{
+		int					  blink : 1;
+		gchar				  id;						/**< Script indicator */
+		GSource				* timer;
+	} script;
+
  };
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/

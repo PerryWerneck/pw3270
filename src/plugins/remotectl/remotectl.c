@@ -34,6 +34,7 @@
  #include "remotectl.h"
  #include <pw3270.h>
  #include <pw3270/plugin.h>
+ #include <pw3270/v3270.h>
  #include <errno.h>
  #include <string.h>
 
@@ -95,6 +96,7 @@
 												0,							// client time-out
 												NULL);						// default security attributes
 
+		trace("%s = %p",pipename,hPipe);
 		g_free(pipename);
 
 		if(hPipe != INVALID_HANDLE_VALUE)
@@ -136,7 +138,7 @@
  static int cmd_connectps(H3270 *hSession, unsigned short rc, char *string, unsigned short length)
  {
  	g_message("%s","HLLAPI ConnectPS request received");
-	return 0;
+	return v3270_set_script(pw3270_get_terminal_widget(NULL),'H',1);
  }
 
  static int cmd_disconnectps(H3270 *hSession, unsigned short rc, char *string, unsigned short length)

@@ -26,9 +26,11 @@
  * erico.mendonca@gmail.com	(Erico Mascarenhas Mendonça)
  * licinio@bb.com.br		(Licínio Luis Branco)
  * kraucer@bb.com.br		(Kraucer Fernandes Mazuco)
- * macmiranda@bb.com.br		(Marco Aurélio Caldas Miranda)
  *
  */
+
+ #include <pw3270.h>
+ #include <pw3270/v3270.h>
 
 #ifdef WIN32
 
@@ -64,6 +66,7 @@
 
 static void wait_for_client(pipe_source *source)
 {
+	v3270_set_script(pw3270_get_terminal_widget(NULL),'H',0);
 	if(ConnectNamedPipe(source->hPipe,&source->overlap))
 	{
 		popup_lasterror("%s",_( "Error in ConnectNamedPipe" ));
@@ -80,7 +83,8 @@ static void wait_for_client(pipe_source *source)
 
 	// Client is already connected, so signal an event.
 	case ERROR_PIPE_CONNECTED:
-		// trace("%s: ERROR_PIPE_CONNECTED",__FUNCTION__);
+		trace("%s: ERROR_PIPE_CONNECTED",__FUNCTION__);
+		v3270_set_script(pw3270_get_terminal_widget(NULL),'H',1);
 		if(SetEvent(source->overlap.hEvent))
 			break;
 
@@ -174,15 +178,21 @@ static void wait_for_client(pipe_source *source)
 		break;
 
 	case ERROR_BROKEN_PIPE:
-		// trace("%s: ERROR_BROKEN_PIPE",__FUNCTION__);
+		trace("%s: ERROR_BROKEN_PIPE",__FUNCTION__);
 		if(!DisconnectNamedPipe(source->hPipe))
+		{
+			v3270_set_script(pw3270_get_terminal_widget(NULL),'H',0);
 			popup_lasterror("%s",_( "Error in DisconnectNamedPipe" ));
+		}
 		else
+		{
 			wait_for_client(source);
+		}
 		break;
 
 	case ERROR_PIPE_NOT_CONNECTED:
-		// trace("%s: ERROR_PIPE_NOT_CONNECTED",__FUNCTION__);
+		trace("%s: ERROR_PIPE_NOT_CONNECTED",__FUNCTION__);
+		v3270_set_script(pw3270_get_terminal_widget(NULL),'H',0);
 		break;
 
 	default:
@@ -216,7 +226,8 @@ static void wait_for_client(pipe_source *source)
 	case PIPE_STATE_WAITING:
 		if(fSuccess)
 		{
-			// trace("Pipe connected (cbRet=%d)",(int) cbRead);
+			trace("Pipe connected (cbRet=%d)",(int) cbRead);
+			v3270_set_script(pw3270_get_terminal_widget(NULL),'H',1);
 			((pipe_source *) source)->state = PIPE_STATE_READ;
 		}
 		else

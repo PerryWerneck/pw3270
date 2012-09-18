@@ -39,7 +39,7 @@
 	#include <malloc.h>
 #endif // HAVE_MALLOC_H
 
- #include <v3270.h>
+ #include <pw3270/v3270.h>
  #include "private.h"
  #include "accessible.h"
  #include "marshal.h"
@@ -890,6 +890,13 @@ static void v3270_destroy(GtkObject *widget)
 		g_source_destroy(terminal->timer);
 		while(terminal->timer)
 			g_source_unref(terminal->timer);
+	}
+
+	if(terminal->script.timer)
+	{
+		g_source_destroy(terminal->script.timer);
+		while(terminal->script.timer)
+			g_source_unref(terminal->script.timer);
 	}
 
 	if(terminal->cursor.timer)

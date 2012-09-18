@@ -230,8 +230,30 @@
 	gtk_window_set_title(GTK_WINDOW(widget),name);
  }
 
- GtkWidget * pw3270_get_terminal_widget(GtkWidget *widget)
+ static void chktoplevel(GtkWidget *window, GtkWidget **widget)
  {
+ 	if(*widget)
+		return;
+
+	if(GTK_IS_PW3270(window))
+		*widget = window;
+ }
+
+ LIB3270_EXPORT GtkWidget * pw3270_get_toplevel(void)
+ {
+	GtkWidget	* widget	= NULL;
+	GList		* lst 		= gtk_window_list_toplevels();
+
+	g_list_foreach(lst, (GFunc) chktoplevel, &widget);
+
+	g_list_free(lst);
+	return widget;
+ }
+
+ LIB3270_EXPORT GtkWidget * pw3270_get_terminal_widget(GtkWidget *widget)
+ {
+ 	if(!widget)
+		widget = pw3270_get_toplevel();
  	g_return_val_if_fail(GTK_IS_PW3270(widget),NULL);
  	return GTK_PW3270(widget)->terminal;
  }

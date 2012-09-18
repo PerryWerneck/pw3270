@@ -72,8 +72,8 @@
 		<Unit filename="src\include\pw3270.h" />
 		<Unit filename="src\include\pw3270\hllapi.h" />
 		<Unit filename="src\include\pw3270\plugin.h" />
+		<Unit filename="src\include\pw3270\v3270.h" />
 		<Unit filename="src\include\rules.mak.in" />
-		<Unit filename="src\include\v3270.h" />
 		<Unit filename="src\lib3270\3270ds.h" />
 		<Unit filename="src\lib3270\Makefile.in" />
 		<Unit filename="src\lib3270\X11keysym.h" />

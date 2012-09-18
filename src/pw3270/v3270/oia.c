@@ -40,7 +40,7 @@
 	#include <math.h>
  #endif // HAVE_LIBM
 
- #include <v3270.h>
+ #include <pw3270/v3270.h>
  #include "private.h"
  #include "accessible.h"
 
@@ -505,9 +505,7 @@ void v3270_draw_oia(cairo_t *cr, H3270 *host, int row, int cols, struct v3270_me
 #ifdef HAVE_PRINTER
 		{ V3270_OIA_PRINTER,			setup_single_char_right		},
 #endif // HAVE_PRINTER
-#ifdef HAVE_SCRIPT
 		{ V3270_OIA_SCRIPT,				setup_single_char_right		},
-#endif // HAVE_SCRIPT
 		{ V3270_OIA_INSERT,				setup_insert_position		},
 		{ V3270_OIA_TYPEAHEAD,			setup_single_char_right		},
 		{ V3270_OIA_SHIFT,				setup_double_char_position	},
@@ -858,10 +856,11 @@ void v3270_draw_shift_status(v3270 *terminal)
 
 }
 
-static void update_text_field(v3270 *terminal, gboolean flag, V3270_OIA_FIELD id, const gchar *text)
+static void update_text_field(v3270 *terminal, gboolean flag, V3270_OIA_FIELD id, const gchar chr)
 {
-	GdkRectangle *r;
-	cairo_t *cr;
+	GdkRectangle	* r;
+	cairo_t 		* cr;
+	gchar			  text[] = { chr, 0 };
 
 	if(!terminal->surface)
 		return;
@@ -882,7 +881,7 @@ static void update_text_field(v3270 *terminal, gboolean flag, V3270_OIA_FIELD id
 
 void v3270_draw_alt_status(v3270 *terminal)
 {
-	update_text_field(terminal,terminal->keyflags & KEY_FLAG_ALT,V3270_OIA_ALT,"A");
+	update_text_field(terminal,terminal->keyflags & KEY_FLAG_ALT,V3270_OIA_ALT,'A');
 }
 
 void v3270_draw_ins_status(v3270 *terminal)
@@ -1050,23 +1049,76 @@ void v3270_update_oia(H3270 *session, LIB3270_FLAG id, unsigned char on)
 		break;
 
 	case LIB3270_FLAG_TYPEAHEAD:
-		update_text_field(terminal,on,V3270_OIA_TYPEAHEAD,"T");
+		update_text_field(terminal,on,V3270_OIA_TYPEAHEAD,'T');
 		break;
 
 #ifdef HAVE_PRINTER
 	case LIB3270_FLAG_PRINTER:
-		update_text_field(terminal,on,V3270_OIA_PRINTER,"P");
+		update_text_field(terminal,on,V3270_OIA_PRINTER,'P');
 		break;
 #endif // HAVE_PRINTER
 
-#ifdef HAVE_SCRIPT
+/*
 	case LIB3270_FLAG_SCRIPT:
-		update_text_field(terminal,on,V3270_OIA_SCRIPT,"S");
+		update_text_field(terminal,on,V3270_OIA_SCRIPT,terminal->script_id);
 		break;
-#endif // HAVE_SCRIPT
+*/
 
 	default:
 		return;
 	}
 
+}
+
+static gboolean blink_script(v3270 *widget)
+{
+	if(!widget->script.id)
+		return FALSE;
+
+	update_text_field(widget,1,V3270_OIA_SCRIPT,widget->script.blink ? 'S' : ' ');
+	widget->script.blink = !widget->script.blink;
+
+	return TRUE;
+}
+
+static void release_script(v3270 *widget)
+{
+	widget->script.timer = NULL;
+	widget->script.id = 0;
+}
+
+LIB3270_EXPORT int v3270_set_script(GtkWidget *widget, const gchar id, unsigned char on)
+{
+	v3270 *terminal;
+	g_return_val_if_fail(GTK_IS_V3270(widget),EINVAL);
+
+	terminal = GTK_V3270(widget);
+
+	if(terminal->script.id && id != terminal->script.id)
+		return EBUSY;
+
+	terminal->script.id = on ? id : 0;
+	update_text_field(terminal,on,V3270_OIA_SCRIPT,'S');
+
+	if(on)
+	{
+		if(!terminal->script.timer)
+		{
+			terminal->script.timer = g_timeout_source_new(500);
+			g_source_set_callback(terminal->script.timer,(GSourceFunc) blink_script, terminal, (GDestroyNotify) release_script);
+
+			g_source_attach(terminal->script.timer, NULL);
+			g_source_unref(terminal->script.timer);
+		}
+	}
+	else if(terminal->script.timer)
+	{
+		if(terminal->script.timer->ref_count < 2)
+			g_source_destroy(terminal->script.timer);
+
+		if(terminal->timer)
+			g_source_unref(terminal->script.timer);
+	}
+
+	return 0;
 }

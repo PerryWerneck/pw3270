@@ -37,28 +37,59 @@
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
- static char *session_name = NULL;
+#ifdef WIN32
+
+ static HANDLE	hPipe = INVALID_HANDLE_VALUE;
+
+#endif // WIN32
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
+
+ static int cmd_connect_ps(const char *name)
+ {
+#ifdef WIN32
+
+	static DWORD dwMode = PIPE_READMODE_MESSAGE;
+	char PipeName[4096];
+
+	if(hPipe != INVALID_HANDLE_VALUE)
+		return EBUSY;
+
+	snprintf(PipeName,4095,"\\\\.\\pipe\\%s",name);
+
+	if(!WaitNamedPipe(PipeName,NMPWAIT_USE_DEFAULT_WAIT))
+		return ETIMEDOUT;
+
+	hPipe = CreateFile(PipeName,GENERIC_WRITE|GENERIC_READ,0,NULL,OPEN_EXISTING,0,NULL);
+
+	if(hPipe == INVALID_HANDLE_VALUE)
+		return GetLastError();
+
+	if(!SetNamedPipeHandleState(hPipe,&dwMode,NULL,NULL))
+		return GetLastError();
+
+#else
+
+	#error Not implemented
+
+#endif // WIN32
+
+	return 0;
+ }
+
 
  static int run_query(unsigned long func, const char *arg, char *string, unsigned short length, unsigned short *rc)
  {
  	int result = -1;
 
 #ifdef WIN32
-	char				PipeName[4096];
 
 	if(length < 0 && string)
 		length = strlen(string);
 
-	if(!session_name)
-		session_name = strdup("pw3270A");
-
-	snprintf(PipeName,4095,"\\\\.\\pipe\\%s",session_name);
-
-	if(!WaitNamedPipe(PipeName,NMPWAIT_USE_DEFAULT_WAIT))
+	if(hPipe == INVALID_HANDLE_VALUE)
 	{
-		result = ETIMEDOUT;
+		result = EPERM;
 	}
 	else
 	{
@@ -81,7 +112,7 @@
 		}
 
 		memset(buffer,0,HLLAPI_MAXLENGTH);
-		if(!CallNamedPipe(PipeName,(LPVOID)data,cbSize,buffer,HLLAPI_MAXLENGTH,&cbSize,NMPWAIT_USE_DEFAULT_WAIT))
+		if(!TransactNamedPipe(hPipe,(LPVOID) data,cbSize,buffer,HLLAPI_MAXLENGTH,&cbSize,NULL))
 		{
 			result = GetLastError();
 		}
@@ -112,15 +143,7 @@
 	return result;
  }
 
- static int set_session_name(const char *name)
- {
-	if(!session_name)
-		free(session_name);
-	session_name = strdup(name);
-	return 0;
- }
-
- LIB3270_EXPORT int hllapi(unsigned long *func, char *str, unsigned short *length, unsigned short *rc)
+ LIB3270_EXPORT int hllapi(const unsigned long *func, char *str, unsigned short *length, unsigned short *rc)
  {
  	int 	  result = 1;
  	char	* arg;
@@ -149,18 +172,31 @@
  	switch(*func)
  	{
 	case HLLAPI_CMD_CONNECTPS:
-		result = set_session_name(arg);
+		result = cmd_connect_ps(arg);
 		if(!result)
+		{
 			result = run_query(*func, arg, str, *length, rc);
+			if(result || rc)
+			{
+				CloseHandle(hPipe);
+				hPipe = INVALID_HANDLE_VALUE;
+			}
+		}
 		break;
 
 	case HLLAPI_CMD_DISCONNECTPS:
-		if(session_name)
+#ifdef WIN32
+		if(hPipe == INVALID_HANDLE_VALUE)
+		{
+			result = EINVAL;
+		}
+		else
 		{
 			result = run_query(*func, arg, str, *length, rc);
-			free(session_name);
-			session_name = NULL;
+			CloseHandle(hPipe);
+			hPipe = INVALID_HANDLE_VALUE;
 		}
+#endif // WIN32
 		break;
 
 	default:

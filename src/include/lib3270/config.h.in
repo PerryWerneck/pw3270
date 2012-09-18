@@ -62,7 +62,6 @@
 	#define X3270_TRACE
 
 	#undef HAVE_PRINTER
-	#undef HAVE_SCRIPT
 
 	#undef HAVE_MALLOC_H
 

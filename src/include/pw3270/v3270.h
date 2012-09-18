@@ -104,9 +104,7 @@
 	V3270_OIA_SHIFT,			/**< Shift Status */
 	V3270_OIA_TYPEAHEAD,		/**< Typeahead indication ("T" or blank) */
 	V3270_OIA_INSERT,			/**< Insert mode indication (Special symbol/"I" or blank) */
-#ifdef HAVE_SCRIPT
 	V3270_OIA_SCRIPT,			/**< Script indication  ("S" or blank) */
-#endif // HAVE_SCRIPT
 	V3270_OIA_LUNAME,			/**< LU Name */
 	V3270_OIA_SPINNER,			/**< command timing spinner */
 	V3270_OIA_TIMER,			/**< command timing (mmm:ss, or blank) */
@@ -187,6 +185,7 @@
  LIB3270_EXPORT	void			  v3270_popup_message(GtkWidget *widget, LIB3270_NOTIFY type, const gchar *title, const gchar *message, const gchar *text);
  LIB3270_EXPORT	const gchar		* v3270_get_session_name(GtkWidget *widget);
  LIB3270_EXPORT	void			  v3270_set_session_name(GtkWidget *widget, const gchar *name);
+ LIB3270_EXPORT int				  v3270_set_script(GtkWidget *widget, const gchar id, unsigned char on);
 
  LIB3270_EXPORT	void 			  v3270_set_host(GtkWidget *widget, const gchar *uri);
 

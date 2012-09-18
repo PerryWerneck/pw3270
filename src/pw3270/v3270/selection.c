@@ -29,7 +29,7 @@
 
  #include <gtk/gtk.h>
  #include <pw3270.h>
- #include <v3270.h>
+ #include <pw3270/v3270.h>
  #include "private.h"
  #include <lib3270/selection.h>
  #include <lib3270/log.h>

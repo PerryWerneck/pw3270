@@ -38,19 +38,33 @@
 	char buffer[1024];
 	unsigned short rc;
 
-	// Set session name
-	strcpy(buffer,"pw3270A");
-	printf("ConnectPS exits with %d\n[%s]\n",hllapi(HLLAPI_CMD_CONNECTPS,buffer,1024,&rc),buffer);
+	static const struct _cmd
+	{
+		const char 		* name;
+		unsigned long	  fn;
+		const char		* arg;
+	} cmd[] =
+	{
+		{ "ConnectPS", 		HLLAPI_CMD_CONNECTPS, 	"pw3270A"	},
+		{ "GetRevision",	HLLAPI_CMD_GETREVISION,	""			},
+		{ "InputString",	HLLAPI_CMD_INPUTSTRING,	"test"		},
 
-	// Test for GetRevision call
-	*buffer = 0;
-	printf("GetRevision exits with %d\n[%s]\n",hllapi(HLLAPI_CMD_GETREVISION,buffer,1024,&rc),buffer);
-	printf("query rc=%d\n\n",rc);
+		{ "DisconnectPS", 	HLLAPI_CMD_DISCONNECTPS, ""	},
+	};
 
-	// Test for string input
-	strcpy(buffer,"test");
-	printf("InputString exits with %d\n[%s]\n",hllapi(HLLAPI_CMD_INPUTSTRING,buffer,1024,&rc),buffer);
-	printf("query rc=%d\n\n",rc);
+	int f;
+
+
+	for(f=0;f< (sizeof(cmd)/sizeof(struct _cmd)); f++)
+	{
+		unsigned short len = 1024;
+		int result;
+
+		strcpy(buffer,cmd[f].arg);
+		result = hllapi(&cmd[f].fn,buffer,&len,&rc);
+		printf("%s exits with %d\n[%s]\n",cmd[f].name,result,buffer);
+
+	}
 
  	return 0;
  }
