@@ -61,7 +61,12 @@ extern "C" {
  } HLLAPI_DATA;
  #pragma pack()
 
+#ifdef _WIN32
+ // http://www.mingw.org/wiki/Visual_Basic_DLL
+ __declspec (dllexport) int __stdcall hllapi(const unsigned long *func, char *str, unsigned short *length, unsigned short *rc);
+#else
  LIB3270_EXPORT int hllapi(const unsigned long *func, char *str, unsigned short *length, unsigned short *rc);
+#endif // _WIN32
 
 #ifdef __cplusplus
 }    /* end of extern "C" */

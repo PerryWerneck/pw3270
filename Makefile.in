@@ -154,7 +154,7 @@ debian/lib3270-dev.install: Makefile
 	@echo "$(includedir)/lib3270.h" > $@
 	@echo "$(includedir)/lib3270" >> $@
 	@echo "$(datarootdir)/@PACKAGE_NAME@/ui/99debug.xml" >> $@
-	@echo "$(libdir)/pkgconfig/*.pc" >: $@
+	@echo "$(libdir)/pkgconfig/*.pc" >> $@
 
 #---[ Debug targets ]----------------------------------------------------------
 
@@ -198,7 +198,9 @@ endif
 nsi: Release
 ifneq ($(MAKENSIS),no)
 	@chmod +x makegtkruntime.sh
+	@echo "  GEN  GTK Runtime"
 	@./makegtkruntime.sh
+	@echo "  GEN  Windows installer"
 	@"$(MAKENSIS)" $(PACKAGE_NAME).nsi
 endif
 

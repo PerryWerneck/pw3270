@@ -75,6 +75,7 @@ SubSection "@PACKAGE@" SecMain
 		CreateDirectory "$INSTDIR\ui"
 
 		file "/oname=$INSTDIR\ui\00default.xml" 	"ui\00default.xml"
+		file "/oname=$INSTDIR\ui\10keypad.xml" 		"ui\10keypad.xml"
 
 		# Locale files
 		CreateDirectory "$INSTDIR\@localedir@\pt_BR\LC_MESSAGES"
@@ -149,10 +150,11 @@ Section /o "Software Development Kit" SecSDK
 	CreateDirectory "$INSTDIR\sdk"
 	CreateDirectory "$INSTDIR\sdk\include"
 	CreateDirectory "$INSTDIR\sdk\include\lib3270"
+	CreateDirectory "$INSTDIR\sdk\include\pw3270"
 
 	file "/oname=$INSTDIR\sdk\include\lib3270.h" "src\include\lib3270.h"
 	file "/oname=$INSTDIR\sdk\include\pw3270.h" "src\include\pw3270.h"
-	file "/oname=$INSTDIR\sdk\include\v3270.h" "src\include\v3270.h"
+	file "/oname=$INSTDIR\sdk\include\pw3270\v3270.h" "src\include\pw3270\v3270.h"
 
 	file "/oname=$INSTDIR\sdk\include\lib3270\config.h" "src\include\lib3270\config.h"
 	file "/oname=$INSTDIR\sdk\include\lib3270\rules.mak" "src\include\rules.mak"

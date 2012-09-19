@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-17 14:31-0300\n"
+"POT-Creation-Date: 2012-09-19 09:13-0300\n"
 "PO-Revision-Date: 2012-09-14 14:32-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <perry.werneck@gmail.com>\n"
@@ -87,6 +87,10 @@ msgstr "Adicionar à cópia"
 msgid "Alert sound"
 msgstr "Aviso sonoro"
 
+#: ui/10keypad.xml:352
+msgid "Attn"
+msgstr "Attn"
+
 #: ui/00default.xml:128
 msgid "Auto-Reconnect"
 msgstr "Reconectar automaticamente"
@@ -106,6 +110,10 @@ msgstr "Cursor piscante"
 #: ui/00default.xml:129
 msgid "Bold"
 msgstr "Negrito"
+
+#: ui/10keypad.xml:353
+msgid "Break"
+msgstr "Break"
 
 #: telnet.c:2059
 msgid "Broken pipe"
@@ -196,7 +204,7 @@ msgstr "Conexão foi cancelada pelo servidor"
 msgid "Copy"
 msgstr "Copiar"
 
-#: ui/99debug.xml:299
+#: ui/99debug.xml:397
 msgid "Copy as HTML"
 msgstr "Copiar como HTML"
 
@@ -212,7 +220,7 @@ msgstr "Cursor mira"
 msgid "Cut"
 msgstr "Recortar"
 
-#: ui/99debug.xml:304
+#: ui/99debug.xml:402
 msgid "DS Trace"
 msgstr "DS Trace"
 
@@ -220,11 +228,11 @@ msgstr "DS Trace"
 msgid "Data conversion error"
 msgstr "Erro na conversão de dados"
 
-#: ui/99debug.xml:312
+#: ui/99debug.xml:410
 msgid "Debug"
 msgstr "Depuração"
 
-#: ui/99debug.xml:314
+#: ui/99debug.xml:412
 msgid "Debug window updates"
 msgstr "Mostrar atualizações de janela"
 
@@ -255,6 +263,21 @@ msgstr "Nome do servidor em branco"
 #: host.c:447
 msgid "Empty port name"
 msgstr "Porta em branco"
+
+#: ui/10keypad.xml:348
+msgid ""
+"Erase\n"
+"EOF"
+msgstr ""
+"Erase\n"
+"EOF"
+
+#: ui/10keypad.xml:349
+#, fuzzy
+msgid ""
+"Erase\n"
+"Input"
+msgstr "Apagar campos"
 
 #: ui/00default.xml:80
 msgid "Erase input"
@@ -302,7 +325,7 @@ msgstr "Erro em ioctl(%s) ao ativar o modo não blocante"
 msgid "Error resolving %s: %s"
 msgstr "Erro ao resolver %s: %s"
 
-#: ui/99debug.xml:306
+#: ui/99debug.xml:404
 msgid "Event Trace"
 msgstr "Trace de eventos"
 
@@ -419,6 +442,10 @@ msgstr "Manter selecionado"
 msgid "Keyboard is locked"
 msgstr "Teclado está bloqueado"
 
+#: ui/10keypad.xml:298
+msgid "Lateral keypad"
+msgstr "Lateral keypad"
+
 #: host.c:390
 msgid "Missing ']'"
 msgstr "Faltando ']'"
@@ -459,6 +486,66 @@ msgstr "Não está no modo 3270, transferência cancelada"
 #, c-format
 msgid "Option '%c:' is not supported"
 msgstr "Opção não suportada: '%c:'"
+
+#: ui/10keypad.xml:335
+msgid "PA1"
+msgstr "PA1"
+
+#: ui/10keypad.xml:336
+msgid "PA2"
+msgstr "PA2"
+
+#: ui/10keypad.xml:337
+msgid "PA3"
+msgstr "PA3"
+
+#: ui/10keypad.xml:300
+msgid "PF1"
+msgstr "PF1"
+
+#: ui/10keypad.xml:315
+msgid "PF10"
+msgstr "PF10"
+
+#: ui/10keypad.xml:316
+msgid "PF11"
+msgstr "PF11"
+
+#: ui/10keypad.xml:317
+msgid "PF12"
+msgstr "PF12"
+
+#: ui/10keypad.xml:301
+msgid "PF2"
+msgstr "PF2"
+
+#: ui/10keypad.xml:302
+msgid "PF3"
+msgstr "PF3"
+
+#: ui/10keypad.xml:305
+msgid "PF4"
+msgstr "PF4"
+
+#: ui/10keypad.xml:306
+msgid "PF5"
+msgstr "PF5"
+
+#: ui/10keypad.xml:307
+msgid "PF6"
+msgstr "PF6"
+
+#: ui/10keypad.xml:310
+msgid "PF7"
+msgstr "PF7"
+
+#: ui/10keypad.xml:311
+msgid "PF8"
+msgstr "PF8"
+
+#: ui/10keypad.xml:312
+msgid "PF9"
+msgstr "PF9"
 
 #: proxy.c:363
 msgid "Passthru Proxy: send error"
@@ -567,7 +654,7 @@ msgstr "RPQ: Erro em gethostbyname"
 msgid "Receive file"
 msgstr "Receber arquivo"
 
-#: ui/99debug.xml:313
+#: ui/99debug.xml:411
 msgid "Reload buffer contents"
 msgstr "Recarregar conteúdo do buffer"
 
@@ -577,6 +664,11 @@ msgstr "Remover seleção"
 
 #: ui/00default.xml:76
 msgid "Reselect"
+msgstr "Reselecionar"
+
+#: ui/10keypad.xml:345
+#, fuzzy
+msgid "Reset"
 msgstr "Reselecionar"
 
 #: ui/00default.xml:123
@@ -752,7 +844,7 @@ msgstr "Salvar tela"
 msgid "Save selected"
 msgstr "Salvar seleção"
 
-#: ui/99debug.xml:305
+#: ui/99debug.xml:403
 msgid "Screen Trace"
 msgstr "Trace de tela"
 
@@ -796,7 +888,7 @@ msgstr "Configurações"
 msgid "Show Underline"
 msgstr "Mostrar sublinhado"
 
-#: ui/99debug.xml:312
+#: ui/99debug.xml:410
 msgid "Show test pattern"
 msgstr "Mostrar padrão de teste"
 
@@ -842,7 +934,7 @@ msgstr "Esta versão do %s foi gerada sem suporte para conexões seguras (SSL)."
 msgid "Toolbar"
 msgstr "Barra de ferramentas"
 
-#: ui/99debug.xml:304
+#: ui/99debug.xml:402
 msgid "Trace"
 msgstr "Trace"
 
@@ -945,7 +1037,7 @@ msgstr "Unsupported socks 4 proxy"
 msgid "Use +/- for field navigation"
 msgstr "Usar teclas +/- para navegar por campos"
 
-#: ui/99debug.xml:307
+#: ui/99debug.xml:405
 msgid "View Field Delimiters"
 msgstr "Mostrar delimitadores de campo"
 

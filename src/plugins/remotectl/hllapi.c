@@ -143,7 +143,11 @@
 	return result;
  }
 
+#ifdef _WIN32
+ __declspec (dllexport) int __stdcall hllapi(const unsigned long *func, char *str, unsigned short *length, unsigned short *rc)
+#else
  LIB3270_EXPORT int hllapi(const unsigned long *func, char *str, unsigned short *length, unsigned short *rc)
+#endif // _WIN32
  {
  	int 	  result = 1;
  	char	* arg;
