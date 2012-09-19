@@ -1,0 +1,98 @@
+<!-----------------------------------------------------------------------------
+
+ "Software pw3270, desenvolvido com base nos códigos fontes do WC3270  e X3270
+ (Paul Mattes Paul.Mattes@usa.net), de emulação de terminal 3270 para acesso a
+ aplicativos mainframe. Registro no INPI sob o nome G3270.
+
+  Copyright (C) <2008> <Banco do Brasil S.A.>
+
+ Este programa é software livre. Você pode redistribuí-lo e/ou modificá-lo sob
+ os termos da GPL v.2 - Licença Pública Geral  GNU,  conforme  publicado  pela
+ Free Software Foundation.
+
+ Este programa é distribuído na expectativa de  ser  útil,  mas  SEM  QUALQUER
+ GARANTIA; sem mesmo a garantia implícita de COMERCIALIZAÇÃO ou  de  ADEQUAÇÃO
+ A QUALQUER PROPÓSITO EM PARTICULAR. Consulte a Licença Pública Geral GNU para
+ obter mais detalhes.
+
+ Você deve ter recebido uma cópia da Licença Pública Geral GNU junto com este
+ programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple
+ Place, Suite 330, Boston, MA, 02111-1307, USA
+
+ Contatos:
+
+ perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
+ erico.mendonca@gmail.com	(Erico Mascarenhas Mendonça)
+ licinio@bb.com.br			(Licínio Luis Branco)
+ kraucer@bb.com.br			(Kraucer Fernandes Mazuco)
+
+------------------------------------------------------------------------------>
+
+<ui>
+
+	<keypad name="keypad.right" label="Lateral keypad" position="right" key='<alt>k' >
+
+		<row>
+			<button action='pfkey' id='1' label='PF1' />
+			<button action='pfkey' id='2' label='PF2' />
+			<button action='pfkey' id='3' label='PF3' />
+		</row>
+		<row>
+			<button action='pfkey' id='4' label='PF4' />
+			<button action='pfkey' id='5' label='PF5' />
+			<button action='pfkey' id='6' label='PF6' />
+		</row>
+		<row>
+			<button action='pfkey' id='7' label='PF7' />
+			<button action='pfkey' id='8' label='PF8' />
+			<button action='pfkey' id='9' label='PF9' />
+		</row>
+		<row>
+			<button action='pfkey' id='10' label='PF10' />
+			<button action='pfkey' id='11' label='PF11' />
+			<button action='pfkey' id='12' label='PF12' />
+		</row>
+		<row>
+			<button />
+			<button action="CursorUp" icon="go-up" />
+			<button />
+		</row>
+		<row>
+			<button action="CursorLeft" icon="go-back" />
+			<button action="Home" icon="goto-top" />
+			<button action="CursorRight" icon="go-forward" />
+		</row>
+		<row>
+			<button />
+			<button action="CursorDown" icon="go-down"/>
+			<button />
+		</row>
+		<row>
+			<button action='pakey' id='1' label='PA1' />
+			<button action='pakey' id='2' label='PA2' />
+			<button action='pakey' id='3' label='PA3' />
+		</row>
+		<row>
+			<button action='PreviousField' icon="goto-first" />
+			<button action='NextField' icon="goto-last" />
+		</row>
+		<row>
+			<button action='Erase' label="Clear" />
+			<button action='Reset' label="Reset" />
+		</row>
+		<row>
+			<button action='EraseEOF' label="Erase\nEOF" />
+			<button action='EraseInput' label="Erase\nInput" />
+		</row>
+		<row>
+			<button action='Attn' label="Attn" />
+			<button action='Break' label="Break" />
+		</row>
+
+		<row>
+			<button action='Enter' icon="ok" />
+		</row>
+
+	</keypad>
+
+</ui>

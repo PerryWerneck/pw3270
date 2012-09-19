@@ -52,6 +52,7 @@
  	{ "popup",			UI_ELEMENT_POPUP,		ui_create_popup,		ui_end_popup		},
  	{ "script",			UI_ELEMENT_SCRIPT,		ui_create_script,		ui_end_script		},
  	{ "scroll",			UI_ELEMENT_SCROLL,		ui_create_scroll,		ui_end_scroll		},
+ 	{ "keypad",			UI_ELEMENT_KEYPAD,		ui_create_keypad,		ui_end_keypad		},
  };
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/

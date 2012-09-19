@@ -275,6 +275,9 @@
 		<Unit filename="src\pw3270\uiparser\action.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src\pw3270\uiparser\keypad.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src\pw3270\uiparser\menu.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -344,6 +347,7 @@
 		</Unit>
 		<Unit filename="src\tools\Makefile.in" />
 		<Unit filename="ui\00default.xml" />
+		<Unit filename="ui\10keypad.xml" />
 		<Unit filename="ui\99debug.xml" />
 		<Unit filename="updateChangeLog.sh" />
 		<Extensions>

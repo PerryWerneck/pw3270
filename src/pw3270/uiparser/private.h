@@ -43,6 +43,7 @@
  	UI_ELEMENT_TOOLBAR,
  	UI_ELEMENT_TOOLITEM,
  	UI_ELEMENT_POPUP,
+ 	UI_ELEMENT_KEYPAD,
 
  	UI_ELEMENT_COUNT
  };
@@ -106,6 +107,7 @@
  GObject		* ui_create_popup(GMarkupParseContext *context,GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error);
  GObject		* ui_create_script(GMarkupParseContext *context,GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error);
  GObject		* ui_create_scroll(GMarkupParseContext *context,GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error);
+ GObject		* ui_create_keypad(GMarkupParseContext *context,GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error);
 
  void			  ui_end_menubar(GMarkupParseContext *context,GObject *widget,struct parser *info,GError **error);
  void			  ui_end_menu(GMarkupParseContext *context,GObject *widget,struct parser *info,GError **error);
@@ -117,5 +119,6 @@
  void			  ui_end_popup(GMarkupParseContext *context,GObject *widget,struct parser *info,GError **error);
  void			  ui_end_script(GMarkupParseContext *context,GObject *widget,struct parser *info,GError **error);
  void			  ui_end_scroll(GMarkupParseContext *context,GObject *widget,struct parser *info,GError **error);
+ void			  ui_end_keypad(GMarkupParseContext *context,GObject *widget,struct parser *info,GError **error);
 
  #include "parser.h"
