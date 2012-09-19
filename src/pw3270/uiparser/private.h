@@ -85,6 +85,7 @@
 #ifdef HAVE_GTKMAC
 	GtkWidget			*  sysmenu[SYSMENU_ITEM_COUNT];
 #endif // HAVE_GTKMAC
+	void					*  block_data;
  };
 
  int 			  ui_parse_file(struct parser *info, const gchar *filename);

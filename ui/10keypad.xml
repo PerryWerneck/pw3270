@@ -54,17 +54,17 @@
 		</row>
 		<row>
 			<button />
-			<button action="CursorUp" icon="go-up" />
+			<button action='move' target='cursor' direction='up' icon="go-up" />
 			<button />
 		</row>
 		<row>
-			<button action="CursorLeft" icon="go-back" />
-			<button action="Home" icon="goto-top" />
-			<button action="CursorRight" icon="go-forward" />
+			<button action='move' target='cursor' direction='left' icon="go-back" />
+			<button action="firstfield" icon="goto-top" />
+			<button action='move' target='cursor' direction='right' icon="go-forward" />
 		</row>
 		<row>
 			<button />
-			<button action="CursorDown" icon="go-down"/>
+			<button action='move' target='cursor' direction='down' icon="go-down"/>
 			<button />
 		</row>
 		<row>

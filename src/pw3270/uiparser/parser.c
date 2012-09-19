@@ -73,6 +73,22 @@ static void pack_start(gpointer key, GtkWidget *widget, struct parser *p)
 	gtk_box_pack_start(GTK_BOX(p->element),widget,FALSE,FALSE,0);
 }
 
+struct keypad
+{
+	GtkWidget		* box;
+	GtkPositionType	  filter;
+	void              (*pack)(GtkBox *,GtkWidget *, gboolean,gboolean,guint);
+};
+
+static void pack_keypad(gpointer key, GtkWidget *widget, struct keypad *k)
+{
+	if(gtk_handle_box_get_handle_position(GTK_HANDLE_BOX(widget)) != k->filter)
+		return;
+
+	gtk_widget_show_all(widget);
+	k->pack(GTK_BOX(k->box),widget,FALSE,FALSE,0);
+}
+
 static void pack_view(gpointer key, GtkWidget *widget, GtkWidget *parent)
 {
 	GObject *obj = g_object_get_data(G_OBJECT(widget),"view_action");
@@ -115,7 +131,6 @@ struct action_info
 	GtkAccelGroup	*  accel_group;
 	GtkWidget		*  widget;
 };
-
 
 static void action_group_setup(gpointer key, GtkAction *action, struct action_info *info)
 {
@@ -175,11 +190,14 @@ void parser_build(struct parser *p, GtkWidget *widget)
 
 #if GTK_CHECK_VERSION(3,0,0)
 	GtkWidget			* vbox		= gtk_box_new(GTK_ORIENTATION_VERTICAL,0);
+	GtkWidget			* hbox		= gtk_box_new(GTK_ORIENTATION_HORIZONTAL,0);
 #else
 	GtkWidget			* vbox		= gtk_vbox_new(FALSE,0);
+	GtkWidget			* hbox		= gtk_hbox_new(FALSE,0);
 #endif // GTK(3,0,0)
 
 	GtkWidget			* parent;
+	struct keypad		  keypad;
 	int				 	  f;
 
 	a_info.widget		= widget;
@@ -211,20 +229,42 @@ void parser_build(struct parser *p, GtkWidget *widget)
 	// Pack top toolbars
 	g_hash_table_foreach(p->element_list[UI_ELEMENT_TOOLBAR],(GHFunc) pack_start, p);
 
+	// Pack top keypads
+	memset(&keypad,0,sizeof(keypad));
+	keypad.box 		= vbox;
+	keypad.filter 	= GTK_POS_BOTTOM;
+	keypad.pack 	= gtk_box_pack_start;
+	g_hash_table_foreach(p->element_list[UI_ELEMENT_KEYPAD],(GHFunc) pack_keypad, &keypad);
+
+
+	// Pack left keypads
+	keypad.box 		= hbox;
+	keypad.filter 	= GTK_POS_RIGHT;
+	g_hash_table_foreach(p->element_list[UI_ELEMENT_KEYPAD],(GHFunc) pack_keypad, &keypad);
+
 	// Pack & configure center widget
 	if(widget)
 	{
 		ui_set_scroll_actions(widget,p->scroll_action);
-		gtk_box_pack_start(GTK_BOX(vbox),widget,TRUE,TRUE,0);
+		gtk_box_pack_start(GTK_BOX(hbox),widget,TRUE,TRUE,0);
 		gtk_widget_show(widget);
 	}
 
+	// Pack right keypads
+	keypad.filter 	= GTK_POS_LEFT;
+	keypad.pack 	= gtk_box_pack_end;
+	g_hash_table_foreach(p->element_list[UI_ELEMENT_KEYPAD],(GHFunc) pack_keypad, &keypad);
 
-//	gtk_box_pack_start(GTK_BOX(vbox),hbox,TRUE,TRUE,0);
+	// Pack bottom keypads
+	keypad.box 		= vbox;
+	keypad.filter 	= GTK_POS_TOP;
+	g_hash_table_foreach(p->element_list[UI_ELEMENT_KEYPAD],(GHFunc) pack_keypad, &keypad);
 
+	// Finish building
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,TRUE,TRUE,0);
 	gtk_container_add(GTK_CONTAINER(p->toplevel),vbox);
 
-//	gtk_widget_show(hbox);
+	gtk_widget_show(hbox);
 	gtk_widget_show(vbox);
 
 	gtk_window_add_accel_group(GTK_WINDOW(p->toplevel),a_info.accel_group);

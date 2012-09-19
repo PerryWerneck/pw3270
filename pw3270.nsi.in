@@ -155,6 +155,7 @@ Section /o "Software Development Kit" SecSDK
 	file "/oname=$INSTDIR\sdk\include\lib3270.h" "src\include\lib3270.h"
 	file "/oname=$INSTDIR\sdk\include\pw3270.h" "src\include\pw3270.h"
 	file "/oname=$INSTDIR\sdk\include\pw3270\v3270.h" "src\include\pw3270\v3270.h"
+	file "/oname=$INSTDIR\sdk\include\pw3270\hllapi.h" "src\include\pw3270\hllapi.h"
 
 	file "/oname=$INSTDIR\sdk\include\lib3270\config.h" "src\include\lib3270\config.h"
 	file "/oname=$INSTDIR\sdk\include\lib3270\rules.mak" "src\include\rules.mak"

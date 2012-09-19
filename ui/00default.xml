@@ -188,7 +188,7 @@
 		<separator />
 		<menuitem action='previousfield' label='Previous field' />
 		<menuitem action='nextfield' label='Next field'/>
-		<menuitem name="return" action='activate' label='Return' key='Return' />
+		<menuitem name="return" action='activate' label='Return' />
 
 		<separator />
 		<menuitem action='Quit'/>
@@ -206,7 +206,7 @@
 
 	<accelerator action='firstfield' key='Home' group='online' />
 	<accelerator action='kybdreset' key='<Shift><Ctrl>r' group='online' />
-	<accelerator name="return" action='activate' key='return' />
+	<!-- accelerator name="return" action='activate' key='Enter' --->
 	<accelerator name="KP_enter" action='activate' key='KP_Enter' />
 	<accelerator action='Break' key='Escape' group='online' />
 	<accelerator action='Attn' key='<shift>Escape' group='online' />
