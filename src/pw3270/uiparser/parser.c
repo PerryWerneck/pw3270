@@ -217,6 +217,7 @@ void parser_build(struct parser *p, GtkWidget *widget)
 	if(parent)
 	{
 		g_hash_table_foreach(p->element_list[UI_ELEMENT_TOOLBAR],(GHFunc) pack_view, parent);
+		g_hash_table_foreach(p->element_list[UI_ELEMENT_KEYPAD],(GHFunc) pack_view, parent);
 	}
 
 	// Setup actions

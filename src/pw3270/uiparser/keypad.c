@@ -45,6 +45,7 @@
 	unsigned short		  num_rows;
 	unsigned short	  	  num_cols;
 	unsigned short		  col;
+	unsigned short		  button_width;
 	struct row			* row;
 	GtkWidget			* box;
 	GtkWidget			* handle;
@@ -89,6 +90,20 @@
 	}
 
 	keypad->row->cols = g_list_append(keypad->row->cols,widget);
+
+	if(!widget)
+		return;
+
+#if GTK_CHECK_VERSION(2,18,0)
+	gtk_widget_set_can_focus(widget,FALSE);
+	gtk_widget_set_can_default(widget,FALSE);
+#else
+	GTK_WIDGET_UNSET_FLAGS(widget,GTK_CAN_FOCUS);
+	GTK_WIDGET_UNSET_FLAGS(widget,GTK_CAN_DEFAULT);
+#endif // GTK(2,18)
+
+	gtk_widget_set_sensitive(widget,FALSE);
+
  }
 
  static void element_start(GMarkupParseContext *context, const gchar *element_name, const gchar **names,const gchar **values, struct keypad *keypad, GError **error)
@@ -122,6 +137,21 @@
 // 	trace("%s: %s",__FUNCTION__,element_name);
  }
 
+ static void toggled(GtkToggleAction *action, GtkWidget *widget)
+ {
+ 	gboolean active = gtk_toggle_action_get_active(action);
+	set_boolean_to_config("view",gtk_action_get_name(GTK_ACTION(action)),active);
+#if GTK_CHECK_VERSION(2,18,0)
+ 	gtk_widget_set_visible(widget,active);
+#else
+	if(active)
+		gtk_widget_show(widget);
+	else
+		gtk_widget_hide(widget);
+#endif // GTK(2,18,0)
+
+ }
+
  GObject * ui_create_keypad(GMarkupParseContext *context,GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error)
  {
 	static const GMarkupParser parser =
@@ -137,9 +167,6 @@
 		NULL
 
 	};
-
- 	const gchar *label	= ui_get_attribute("label", names, values);
- 	const gchar *name	= ui_get_attribute("name", names, values);
 
 	struct keypad *keypad;
 
@@ -185,11 +212,19 @@
 
 	}
 
-	if(name)
-		gtk_widget_set_name(keypad->handle,name);
+	if(ui_get_attribute("label",names,values))
+	{
+		// Keypad has label, create and setup an action
+		const gchar *name = ui_get_attribute("name",names,values);
+		if(name)
+		{
+			GtkToggleAction *action = gtk_toggle_action_new(name,NULL,NULL,NULL);
+			ui_action_set_options(GTK_ACTION(action),info,names,values,error);
+			g_object_set_data_full(G_OBJECT(keypad->handle),"view_action",action,g_object_unref);
+			g_signal_connect(action,"toggled",G_CALLBACK(toggled),keypad->handle);
+		}
+	}
 
-	if(label)
-		g_object_set_data_full(G_OBJECT(keypad->handle),"keypad_label",g_strdup(label),g_free);
 
 	gtk_handle_box_set_shadow_type(GTK_HANDLE_BOX(keypad->handle),GTK_SHADOW_ETCHED_IN);
     gtk_container_add(GTK_CONTAINER(keypad->handle),keypad->box);
@@ -206,12 +241,12 @@
 		gtk_widget_show_all(widget);
 		gtk_table_attach(	GTK_TABLE(keypad->table),
 							widget,
-							keypad->num_cols,keypad->num_cols+1,
+							keypad->col,keypad->col+keypad->button_width,
 							keypad->num_rows,keypad->num_rows+1,
 							GTK_EXPAND|GTK_FILL,GTK_EXPAND|GTK_FILL,0,0 );
 
 	}
-	keypad->num_cols++;
+	keypad->col += keypad->button_width;
 
  }
 
@@ -219,7 +254,11 @@
  {
  	if(info->cols)
 	{
-		keypad->num_cols = 0;
+		keypad->col = 0;
+		keypad->button_width = keypad->num_cols / info->num_cols;
+
+		trace("Max cols=%d row cols=%d width=%d",keypad->num_cols,info->num_cols,keypad->button_width);
+
 		g_list_foreach(info->cols,(GFunc) create_col,keypad);
 		g_list_free(info->cols);
 	}
@@ -246,7 +285,7 @@
 		GTK_WIDGET_UNSET_FLAGS(keypad->table,GTK_CAN_DEFAULT);
 #endif // GTK(2,18)
 
-		keypad->num_cols = keypad->num_rows = 0;
+		keypad->num_rows = 0;
 		g_list_foreach(keypad->rows,(GFunc) create_row,keypad);
 		g_list_free_full(keypad->rows,g_free);
 		gtk_box_pack_start(GTK_BOX(keypad->box),keypad->table,FALSE,FALSE,0);
