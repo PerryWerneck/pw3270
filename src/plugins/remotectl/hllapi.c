@@ -68,6 +68,7 @@
 	if(!SetNamedPipeHandleState(hPipe,&dwMode,NULL,NULL))
 		return GetLastError();
 
+	trace("Pipe %ld open",(unsigned long) hPipe);
 #else
 
 	#error Not implemented
@@ -89,6 +90,7 @@
 
 	if(hPipe == INVALID_HANDLE_VALUE)
 	{
+		trace("Invalid pipe handle %ld",(unsigned long) hPipe);
 		result = EPERM;
 	}
 	else
@@ -180,8 +182,9 @@
 		if(!result)
 		{
 			result = run_query(*func, arg, str, *length, rc);
-			if(result || rc)
+			if(result || *rc)
 			{
+				trace("Closing pipe rc=%d result=%d ",*rc,result);
 				CloseHandle(hPipe);
 				hPipe = INVALID_HANDLE_VALUE;
 			}

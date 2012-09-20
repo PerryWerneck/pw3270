@@ -31,12 +31,17 @@
  #include <stdio.h>
  #include <pw3270/hllapi.h>
 
+ #define BUFFER_LENGTH 4096
+
 /*---[ Implement ]--------------------------------------------------------------------------------*/
 
  int main(int numpar, char *param[])
  {
-	char buffer[1024];
+	char buffer[BUFFER_LENGTH];
 	unsigned short rc;
+	unsigned short len;
+	int result;
+	unsigned long fn;
 
 	static const struct _cmd
 	{
@@ -49,7 +54,6 @@
 		{ "GetRevision",	HLLAPI_CMD_GETREVISION,	""			},
 		{ "InputString",	HLLAPI_CMD_INPUTSTRING,	"test"		},
 
-		{ "DisconnectPS", 	HLLAPI_CMD_DISCONNECTPS, ""	},
 	};
 
 	int f;
@@ -57,14 +61,27 @@
 
 	for(f=0;f< (sizeof(cmd)/sizeof(struct _cmd)); f++)
 	{
-		unsigned short len = 1024;
-		int result;
-
+		len = BUFFER_LENGTH;
 		strcpy(buffer,cmd[f].arg);
 		result = hllapi(&cmd[f].fn,buffer,&len,&rc);
 		printf("%s exits with %d\n[%s]\n",cmd[f].name,result,buffer);
 
 	}
+
+	len = BUFFER_LENGTH;
+	rc	= 1;
+	fn = HLLAPI_CMD_COPYPSTOSTR;
+	result = hllapi(&fn,buffer,&len,&rc);
+	printf("%s exits with %d\n%s\n","HLLAPI_CMD_COPYPSTOSTR",result,buffer);
+
+
+	// Disconnect
+	len = BUFFER_LENGTH;
+	rc	= 1;
+	fn = HLLAPI_CMD_DISCONNECTPS;
+	*buffer = 0;
+	result = hllapi(&fn,buffer,&len,&rc);
+	printf("%s exits with %d [%s]\n","HLLAPI_CMD_DISCONNECTPS",result,buffer);
 
  	return 0;
  }

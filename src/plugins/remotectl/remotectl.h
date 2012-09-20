@@ -46,7 +46,7 @@
 
 #ifdef WIN32
 
-	#define PIPE_BUFFER_LENGTH 4096
+	#define PIPE_BUFFER_LENGTH 8192
 
 	void init_source_pipe(HANDLE hPipe);
 	void popup_lasterror(const gchar *fmt, ...);

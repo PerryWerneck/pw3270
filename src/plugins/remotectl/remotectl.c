@@ -162,20 +162,74 @@
 	return 0;
  }
 
- static int cmd_sendstring(H3270 *hSession, unsigned short rc, char *text, unsigned short length)
+ static int cmd_sendstring(H3270 *hSession, unsigned short dunno, char *buffer, unsigned short length)
  {
+	gchar		* text;
+	GError		* error			= NULL;
+	gsize		  bytes_read;
+	gsize		  bytes_written;
+	const gchar	* charset;
+	int 		  rc = -1;
+
 	if(!lib3270_connected(hSession))
 		return ENOTCONN;
 
-	#warning Converter formato da string
-	lib3270_emulate_input(hSession,text,strlen(text),0);
+	g_get_charset(&charset);
 
-	return 0;
+	text = g_convert(buffer,-1,lib3270_get_charset(hSession),charset,&bytes_read,&bytes_written,&error);
+	if(text)
+	{
+		#warning Converter "@" em "\\"
+		lib3270_emulate_input(hSession,text,strlen(text),0);
+		g_free(text);
+		rc = 0;
+	}
+	else
+	{
+		strncpy(buffer,error->message,length);
+		rc = error->code;
+		g_error_free(error);
+	}
+
+	return rc;
  }
 
  static int cmd_wait(H3270 *hSession, unsigned short rc, char *text, unsigned short length)
  {
 	return lib3270_wait_for_ready(hSession,60);
+ }
+
+ static int cmd_copypstostr(H3270 *hSession, unsigned short pos, char *buffer, unsigned short length)
+ {
+	char		* text			= lib3270_get_text(hSession, (int) pos, (int) length);
+	gchar		* local;
+	GError		* error			= NULL;
+	gsize		  bytes_read;
+	gsize		  bytes_written;
+	int			  rc = 0;
+	const gchar	* charset;
+
+	if(!text)
+		return -1;
+
+	g_get_charset(&charset);
+
+	local = g_convert((const gchar *) text,-1,charset,lib3270_get_charset(hSession),&bytes_read,&bytes_written,&error);
+
+	if(local)
+	{
+		strncpy(buffer,local,length);
+		g_free(local);
+	}
+	else
+	{
+		strncpy(buffer,error->message,length);
+		rc = error->code;
+		g_error_free(error);
+	}
+
+ 	lib3270_free(text);
+	return rc;
  }
 
  int run_hllapi(unsigned long function, char *string, unsigned short length, unsigned short rc)
@@ -191,7 +245,8 @@
 		{ HLLAPI_CMD_INPUTSTRING,	cmd_sendstring		},
 		{ HLLAPI_CMD_WAIT,			cmd_wait			},
 		{ HLLAPI_CMD_SETCURSOR,		cmd_setcursor		},
-		{ HLLAPI_CMD_GETREVISION,	cmd_getrevision 	}
+		{ HLLAPI_CMD_GETREVISION,	cmd_getrevision 	},
+		{ HLLAPI_CMD_COPYPSTOSTR,	cmd_copypstostr 	}
 	};
 	int f;
 

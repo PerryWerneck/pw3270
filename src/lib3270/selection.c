@@ -464,11 +464,9 @@ LIB3270_EXPORT char * lib3270_get_text(H3270 *h, int offset, int len)
 	if(!lib3270_connected(h))
 		return NULL;
 
-	maxlen = h->rows * (h->cols+1);
+	maxlen = (h->rows * (h->cols+1)) - offset;
 
-	if(len < 0)
-		len = (maxlen - offset);
-	else if(len > maxlen)
+	if(len < 0 || len > maxlen)
 		len = maxlen;
 
 	buffer	= lib3270_malloc(len+1);
