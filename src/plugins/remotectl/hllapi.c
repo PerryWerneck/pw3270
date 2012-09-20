@@ -58,7 +58,7 @@
 	snprintf(PipeName,4095,"\\\\.\\pipe\\%s",name);
 
 	if(!WaitNamedPipe(PipeName,NMPWAIT_USE_DEFAULT_WAIT))
-		return ETIMEDOUT;
+		return ENOENT;
 
 	hPipe = CreateFile(PipeName,GENERIC_WRITE|GENERIC_READ,0,NULL,OPEN_EXISTING,0,NULL);
 
@@ -90,8 +90,7 @@
 
 	if(hPipe == INVALID_HANDLE_VALUE)
 	{
-		trace("Invalid pipe handle %ld",(unsigned long) hPipe);
-		result = EPERM;
+		*rc = result = EPERM;
 	}
 	else
 	{
@@ -116,15 +115,13 @@
 		memset(buffer,0,HLLAPI_MAXLENGTH);
 		if(!TransactNamedPipe(hPipe,(LPVOID) data,cbSize,buffer,HLLAPI_MAXLENGTH,&cbSize,NULL))
 		{
-			result = GetLastError();
+			*rc = result = GetLastError();
 		}
 		else
 		{
 			int sz = length < buffer->len ? length : buffer->len;
 
 			*rc = buffer->rc;
-
-			trace("%s: Query rc=%d",__FUNCTION__,(int) buffer->rc);
 
 			if(string && sz > 0)
 				memcpy(string,buffer->string,sz);
@@ -155,7 +152,7 @@
  	char	* arg;
 
 	if(!length || *length > HLLAPI_MAXLENGTH)
-		return EINVAL;
+		return *rc = EINVAL;
 
 	if(length > 0)
 	{
@@ -169,16 +166,10 @@
 		*arg = 0;
 	}
 
-/*
-#ifdef DEBUG
-	freopen("hllapi.log","a",stderr);
-#endif // DEBUG
-*/
-
  	switch(*func)
  	{
 	case HLLAPI_CMD_CONNECTPS:
-		result = cmd_connect_ps(arg);
+		*rc = result = cmd_connect_ps(arg);
 		if(!result)
 		{
 			result = run_query(*func, arg, str, *length, rc);
@@ -189,13 +180,17 @@
 				hPipe = INVALID_HANDLE_VALUE;
 			}
 		}
+		else
+		{
+			*rc = result;
+		}
 		break;
 
 	case HLLAPI_CMD_DISCONNECTPS:
 #ifdef WIN32
 		if(hPipe == INVALID_HANDLE_VALUE)
 		{
-			result = EINVAL;
+			*rc = result = EINVAL;
 		}
 		else
 		{

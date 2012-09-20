@@ -64,7 +64,7 @@
 		len = BUFFER_LENGTH;
 		strcpy(buffer,cmd[f].arg);
 		result = hllapi(&cmd[f].fn,buffer,&len,&rc);
-		printf("%s exits with %d\n[%s]\n",cmd[f].name,result,buffer);
+		printf("%s exits with result=%d rc=%d\n[%s]\n",cmd[f].name,result,rc,buffer);
 
 	}
 
@@ -72,8 +72,7 @@
 	rc	= 1;
 	fn = HLLAPI_CMD_COPYPSTOSTR;
 	result = hllapi(&fn,buffer,&len,&rc);
-	printf("%s exits with %d\n%s\n","HLLAPI_CMD_COPYPSTOSTR",result,buffer);
-
+	printf("%s exits with result=%d rc=%d\n%s\n","HLLAPI_CMD_COPYPSTOSTR",result,rc,buffer);
 
 	// Disconnect
 	len = BUFFER_LENGTH;

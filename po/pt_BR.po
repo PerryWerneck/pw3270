@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-19 09:13-0300\n"
+"POT-Creation-Date: 2012-09-20 09:55-0300\n"
 "PO-Revision-Date: 2012-09-14 14:32-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <perry.werneck@gmail.com>\n"
@@ -128,7 +128,7 @@ msgstr "Não foi possível conectar a %s:%d"
 msgid "Can't connect to host"
 msgstr "Não foi possível conectar ao servidor"
 
-#: selection.c:603
+#: selection.c:601
 msgid "Can't cut rectangular regions"
 msgstr "Recortar não permitido em seleção retangular"
 
@@ -417,7 +417,7 @@ msgstr "Invalid CGCSGID '%s', ignoring"
 msgid "Invalid charset entry '%s' (#%d)"
 msgstr "Invalid charset entry '%s' (#%d)"
 
-#: selection.c:603
+#: selection.c:601
 msgid "Invalid cut action"
 msgstr "Ação recortar inválida"
 
@@ -474,7 +474,7 @@ msgstr "Erro ao iniciar a rede"
 msgid "Next field"
 msgstr "Próximo campo"
 
-#: selection.c:603
+#: selection.c:601
 msgid "Not available"
 msgstr "Não disponível"
 
