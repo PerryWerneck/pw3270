@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-20 09:55-0300\n"
-"PO-Revision-Date: 2012-09-14 14:32-0300\n"
+"POT-Creation-Date: 2012-09-20 17:26-0300\n"
+"PO-Revision-Date: 2012-09-20 17:33-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <perry.werneck@gmail.com>\n"
 "Language: pt_BR\n"
@@ -87,7 +87,7 @@ msgstr "Adicionar à cópia"
 msgid "Alert sound"
 msgstr "Aviso sonoro"
 
-#: ui/10keypad.xml:352
+#: ui/10keypad.xml:417
 msgid "Attn"
 msgstr "Attn"
 
@@ -111,7 +111,7 @@ msgstr "Cursor piscante"
 msgid "Bold"
 msgstr "Negrito"
 
-#: ui/10keypad.xml:353
+#: ui/10keypad.xml:418
 msgid "Break"
 msgstr "Break"
 
@@ -204,7 +204,7 @@ msgstr "Conexão foi cancelada pelo servidor"
 msgid "Copy"
 msgstr "Copiar"
 
-#: ui/99debug.xml:397
+#: ui/99debug.xml:462
 msgid "Copy as HTML"
 msgstr "Copiar como HTML"
 
@@ -220,7 +220,7 @@ msgstr "Cursor mira"
 msgid "Cut"
 msgstr "Recortar"
 
-#: ui/99debug.xml:402
+#: ui/99debug.xml:467
 msgid "DS Trace"
 msgstr "DS Trace"
 
@@ -228,11 +228,11 @@ msgstr "DS Trace"
 msgid "Data conversion error"
 msgstr "Erro na conversão de dados"
 
-#: ui/99debug.xml:410
+#: ui/99debug.xml:475
 msgid "Debug"
 msgstr "Depuração"
 
-#: ui/99debug.xml:412
+#: ui/99debug.xml:477
 msgid "Debug window updates"
 msgstr "Mostrar atualizações de janela"
 
@@ -264,20 +264,21 @@ msgstr "Nome do servidor em branco"
 msgid "Empty port name"
 msgstr "Porta em branco"
 
-#: ui/10keypad.xml:348
+#: ui/10keypad.xml:413
 msgid ""
 "Erase\n"
 "EOF"
 msgstr ""
-"Erase\n"
-"EOF"
+"Apagar\n"
+"Campo"
 
-#: ui/10keypad.xml:349
-#, fuzzy
+#: ui/10keypad.xml:414
 msgid ""
 "Erase\n"
 "Input"
-msgstr "Apagar campos"
+msgstr ""
+"Apagar\n"
+"Campos"
 
 #: ui/00default.xml:80
 msgid "Erase input"
@@ -325,7 +326,7 @@ msgstr "Erro em ioctl(%s) ao ativar o modo não blocante"
 msgid "Error resolving %s: %s"
 msgstr "Erro ao resolver %s: %s"
 
-#: ui/99debug.xml:404
+#: ui/99debug.xml:469
 msgid "Event Trace"
 msgstr "Trace de eventos"
 
@@ -340,6 +341,10 @@ msgstr "Transferência de arquivos já está ativa nesta sessão"
 #: ui/00default.xml:122
 msgid "Full Screen"
 msgstr "Tela cheia"
+
+#: ui/10functions.xml:298
+msgid "Function bar"
+msgstr "Barra de funções"
 
 #: proxy.c:499
 #, c-format
@@ -442,9 +447,9 @@ msgstr "Manter selecionado"
 msgid "Keyboard is locked"
 msgstr "Teclado está bloqueado"
 
-#: ui/10keypad.xml:298
+#: ui/10keypad.xml:363
 msgid "Lateral keypad"
-msgstr "Lateral keypad"
+msgstr "Barra lateral"
 
 #: host.c:390
 msgid "Missing ']'"
@@ -487,63 +492,111 @@ msgstr "Não está no modo 3270, transferência cancelada"
 msgid "Option '%c:' is not supported"
 msgstr "Opção não suportada: '%c:'"
 
-#: ui/10keypad.xml:335
+#: ui/10keypad.xml:400
 msgid "PA1"
 msgstr "PA1"
 
-#: ui/10keypad.xml:336
+#: ui/10keypad.xml:401
 msgid "PA2"
 msgstr "PA2"
 
-#: ui/10keypad.xml:337
+#: ui/10keypad.xml:402
 msgid "PA3"
 msgstr "PA3"
 
-#: ui/10keypad.xml:300
+#: ui/10functions.xml:299
 msgid "PF1"
 msgstr "PF1"
 
-#: ui/10keypad.xml:315
+#: ui/10functions.xml:308
 msgid "PF10"
 msgstr "PF10"
 
-#: ui/10keypad.xml:316
+#: ui/10functions.xml:309
 msgid "PF11"
 msgstr "PF11"
 
-#: ui/10keypad.xml:317
+#: ui/10functions.xml:310
 msgid "PF12"
 msgstr "PF12"
 
-#: ui/10keypad.xml:301
+#: ui/10functions.xml:313
+msgid "PF13"
+msgstr "PF13"
+
+#: ui/10functions.xml:314
+msgid "PF14"
+msgstr "PF14"
+
+#: ui/10functions.xml:315
+msgid "PF15"
+msgstr "PF15"
+
+#: ui/10functions.xml:316
+msgid "PF16"
+msgstr "PF16"
+
+#: ui/10functions.xml:317
+msgid "PF17"
+msgstr "PF17"
+
+#: ui/10functions.xml:318
+msgid "PF18"
+msgstr "PF18"
+
+#: ui/10functions.xml:319
+msgid "PF19"
+msgstr "PF19"
+
+#: ui/10functions.xml:300
 msgid "PF2"
 msgstr "PF2"
 
-#: ui/10keypad.xml:302
+#: ui/10functions.xml:320
+msgid "PF20"
+msgstr "PF20"
+
+#: ui/10functions.xml:321
+msgid "PF21"
+msgstr "PF21"
+
+#: ui/10functions.xml:322
+msgid "PF22"
+msgstr "PF22"
+
+#: ui/10functions.xml:323
+msgid "PF23"
+msgstr "PF23"
+
+#: ui/10functions.xml:324
+msgid "PF24"
+msgstr "PF24"
+
+#: ui/10functions.xml:301
 msgid "PF3"
 msgstr "PF3"
 
-#: ui/10keypad.xml:305
+#: ui/10functions.xml:302
 msgid "PF4"
 msgstr "PF4"
 
-#: ui/10keypad.xml:306
+#: ui/10functions.xml:303
 msgid "PF5"
 msgstr "PF5"
 
-#: ui/10keypad.xml:307
+#: ui/10functions.xml:304
 msgid "PF6"
 msgstr "PF6"
 
-#: ui/10keypad.xml:310
+#: ui/10functions.xml:305
 msgid "PF7"
 msgstr "PF7"
 
-#: ui/10keypad.xml:311
+#: ui/10functions.xml:306
 msgid "PF8"
 msgstr "PF8"
 
-#: ui/10keypad.xml:312
+#: ui/10functions.xml:307
 msgid "PF9"
 msgstr "PF9"
 
@@ -654,7 +707,7 @@ msgstr "RPQ: Erro em gethostbyname"
 msgid "Receive file"
 msgstr "Receber arquivo"
 
-#: ui/99debug.xml:411
+#: ui/99debug.xml:476
 msgid "Reload buffer contents"
 msgstr "Recarregar conteúdo do buffer"
 
@@ -666,10 +719,9 @@ msgstr "Remover seleção"
 msgid "Reselect"
 msgstr "Reselecionar"
 
-#: ui/10keypad.xml:345
-#, fuzzy
+#: ui/10keypad.xml:410
 msgid "Reset"
-msgstr "Reselecionar"
+msgstr "Reset"
 
 #: ui/00default.xml:123
 msgid "Resize on alternate screen"
@@ -844,7 +896,7 @@ msgstr "Salvar tela"
 msgid "Save selected"
 msgstr "Salvar seleção"
 
-#: ui/99debug.xml:403
+#: ui/99debug.xml:468
 msgid "Screen Trace"
 msgstr "Trace de tela"
 
@@ -888,7 +940,7 @@ msgstr "Configurações"
 msgid "Show Underline"
 msgstr "Mostrar sublinhado"
 
-#: ui/99debug.xml:410
+#: ui/99debug.xml:475
 msgid "Show test pattern"
 msgstr "Mostrar padrão de teste"
 
@@ -934,7 +986,7 @@ msgstr "Esta versão do %s foi gerada sem suporte para conexões seguras (SSL)."
 msgid "Toolbar"
 msgstr "Barra de ferramentas"
 
-#: ui/99debug.xml:402
+#: ui/99debug.xml:467
 msgid "Trace"
 msgstr "Trace"
 
@@ -1037,7 +1089,7 @@ msgstr "Unsupported socks 4 proxy"
 msgid "Use +/- for field navigation"
 msgstr "Usar teclas +/- para navegar por campos"
 
-#: ui/99debug.xml:405
+#: ui/99debug.xml:470
 msgid "View Field Delimiters"
 msgstr "Mostrar delimitadores de campo"
 
@@ -1083,7 +1135,7 @@ msgstr "_Rede"
 
 #: ui/00default.xml:118
 msgid "_Options"
-msgstr "Opções"
+msgstr "_Opções"
 
 #: ui/00default.xml:87
 msgid "_View"
