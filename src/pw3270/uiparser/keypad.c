@@ -50,11 +50,41 @@
 	GtkWidget			* box;
 	GtkWidget			* handle;
 	GtkWidget			* table;
+	GtkReliefStyle		  relief;
 	UI_ATTR_DIRECTION	  pos;
 	GList				* rows;
  };
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
+
+ static GtkReliefStyle get_relief(const gchar **names, const gchar **values, GtkReliefStyle def)
+ {
+
+ 	const gchar *name = ui_get_attribute("relief",names,values);
+ 	if(name)
+	{
+		static const struct _style
+		{
+			GtkReliefStyle	  val;
+			const gchar		* name;
+		} style[] =
+		{
+			{ GTK_RELIEF_NORMAL,	"normal" 	},
+			{ GTK_RELIEF_HALF,		"half"		},
+			{ GTK_RELIEF_NONE,		"none"		}
+		};
+
+		int f;
+
+		for(f=0;f<G_N_ELEMENTS(style);f++)
+		{
+			if(!g_strcasecmp(style[f].name,name))
+				return style[f].val;
+		}
+	}
+
+ 	return def;
+ }
 
  static void row_start(struct keypad *keypad, const gchar **names,const gchar **values, GError **error)
  {
@@ -66,11 +96,19 @@
 	keypad->rows = g_list_append(keypad->rows,keypad->row);
  }
 
+ static void button_clicked(GtkButton *button, GtkAction *action)
+ {
+	gtk_action_activate(action);
+ }
+
  static void button_start(struct keypad *keypad, const gchar **names,const gchar **values, GError **error)
  {
- 	const gchar *label	= ui_get_attribute("label", names, values);
- 	const gchar *icon	= ui_get_attribute("icon", names, values);
- 	GtkWidget	*widget	= NULL;
+ 	const gchar		* label		= ui_get_attribute("label", names, values);
+ 	const gchar		* icon		= ui_get_attribute("icon", names, values);
+ 	const gchar		* name		= ui_get_attribute("action", names, values);
+	struct parser	* info		= keypad->parser;
+ 	GtkAction		* action;
+ 	GtkWidget		* widget	= NULL;
 
 	if(++keypad->col > keypad->num_cols)
 		keypad->num_cols = keypad->col;
@@ -102,8 +140,28 @@
 	GTK_WIDGET_UNSET_FLAGS(widget,GTK_CAN_DEFAULT);
 #endif // GTK(2,18)
 
-	gtk_widget_set_sensitive(widget,FALSE);
+	if(!name)
+	{
+		// Invalid unnamed element
+		*error = g_error_new(ERROR_DOMAIN,EINVAL,_( "Can't accept unnamed %s"),"button");
+		return;
+	}
 
+	gtk_button_set_relief(GTK_BUTTON(widget),get_relief(names, values, keypad->relief));
+	gtk_button_set_alignment(GTK_BUTTON(widget),0.5,0.5);
+	gtk_button_set_focus_on_click(GTK_BUTTON(widget),FALSE);
+
+ 	action = ui_get_action(info->center_widget,name,info->actions,names,values,error);
+
+	if(action)
+	{
+		ui_action_set_options(action,info,names,values,error);
+		g_signal_connect(G_OBJECT(widget),"clicked",G_CALLBACK(button_clicked),action);
+	}
+	else
+	{
+		gtk_widget_set_sensitive(widget,FALSE);
+	}
  }
 
  static void element_start(GMarkupParseContext *context, const gchar *element_name, const gchar **names,const gchar **values, struct keypad *keypad, GError **error)
@@ -187,6 +245,7 @@
 	keypad->parser 		= info;
 	keypad->handle		= gtk_handle_box_new();
 	keypad->pos			= ui_get_dir_attribute(names,values);
+	keypad->relief		= get_relief(names, values, GTK_RELIEF_NORMAL);
 
 	switch(keypad->pos)
 	{

@@ -30,7 +30,7 @@
 
 <ui>
 
-	<keypad name="keypad.right" label="Lateral keypad" position="right" key='<alt>k' >
+	<keypad name="keypad.right" label="Lateral keypad" position="right" key='<alt>k' relief='half' >
 
 		<row>
 			<button action='pfkey' id='1' label='PF1' />
@@ -77,8 +77,8 @@
 			<button action='NextField' icon="goto-last" />
 		</row>
 		<row>
-			<button action='Erase' label="Clear" />
-			<button action='Reset' label="Reset" />
+			<button action='erase' target='all' label="Clear" />
+			<button action='kybdreset' label="Reset" />
 		</row>
 		<row>
 			<button action='EraseEOF' label="Erase\nEOF" />
