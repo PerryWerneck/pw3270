@@ -362,7 +362,12 @@
 
 		keypad->num_rows = 0;
 		g_list_foreach(keypad->rows,(GFunc) create_row,keypad);
+#if GTK_CHECK_VERSION(2,28,0)
 		g_list_free_full(keypad->rows,g_free);
+#else
+		g_list_foreach(keypad->rows,(GFunc) g_free,NULL);
+		g_list_free(keypad->rows);
+#endif // GTK(2,28)
 		gtk_box_pack_start(GTK_BOX(keypad->box),keypad->table,FALSE,FALSE,0);
 
 		gtk_widget_show_all(keypad->box);
