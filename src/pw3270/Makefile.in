@@ -191,6 +191,7 @@ $(DEBDIR)/pw3270.install: Makefile
 	@echo "$(libdir)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@" >> $@
 	@echo "$(datarootdir)/$(PACKAGE_NAME)/ui/00default.xml" >> $@
 	@echo "$(datarootdir)/$(PACKAGE_NAME)/ui/10keypad.xml" >> $@
+	@echo "$(datarootdir)/$(PACKAGE_NAME)/ui/10functions.xml" >> $@
 	@echo "$(datarootdir)/$(PACKAGE_NAME)/$(PACKAGE_NAME).png" >> $@
 	@echo "$(datarootdir)/$(PACKAGE_NAME)/$(PACKAGE_NAME)-logo.png" >> $@
 

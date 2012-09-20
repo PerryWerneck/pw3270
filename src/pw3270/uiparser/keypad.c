@@ -210,6 +210,24 @@
 
  }
 
+ UI_ATTR_DIRECTION ui_get_position_attribute(const gchar **names, const gchar **values)
+ {
+ 	static const gchar	* posname[]	= { "top", "bottom", "left", "right" };
+	const gchar			* dir		= ui_get_attribute("position",names,values);
+	int					  f;
+
+	if(dir)
+	{
+		for(f=0;f<G_N_ELEMENTS(posname);f++)
+		{
+			if(!g_ascii_strcasecmp(dir,posname[f]))
+				return f;
+		}
+	}
+
+	return UI_ATTR_DIRECTION_NONE;
+ }
+
  GObject * ui_create_keypad(GMarkupParseContext *context,GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error)
  {
 	static const GMarkupParser parser =
@@ -244,7 +262,7 @@
 
 	keypad->parser 		= info;
 	keypad->handle		= gtk_handle_box_new();
-	keypad->pos			= ui_get_dir_attribute(names,values);
+	keypad->pos			= ui_get_position_attribute(names,values);
 	keypad->relief		= get_relief(names, values, GTK_RELIEF_NORMAL);
 
 	switch(keypad->pos)
@@ -284,7 +302,6 @@
 		}
 	}
 
-
 	gtk_handle_box_set_shadow_type(GTK_HANDLE_BOX(keypad->handle),GTK_SHADOW_ETCHED_IN);
     gtk_container_add(GTK_CONTAINER(keypad->handle),keypad->box);
 
@@ -297,7 +314,6 @@
  {
 	if(widget)
 	{
-		gtk_widget_show_all(widget);
 		gtk_table_attach(	GTK_TABLE(keypad->table),
 							widget,
 							keypad->col,keypad->col+keypad->button_width,
@@ -350,8 +366,6 @@
 		gtk_box_pack_start(GTK_BOX(keypad->box),keypad->table,FALSE,FALSE,0);
 
 		gtk_widget_show_all(keypad->box);
-		gtk_widget_show_all(keypad->table);
-		gtk_widget_show_all(keypad->handle);
 	}
 
 	g_free(keypad);

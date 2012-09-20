@@ -85,7 +85,6 @@ static void pack_keypad(gpointer key, GtkWidget *widget, struct keypad *k)
 	if(gtk_handle_box_get_handle_position(GTK_HANDLE_BOX(widget)) != k->filter)
 		return;
 
-	gtk_widget_show_all(widget);
 	k->pack(GTK_BOX(k->box),widget,FALSE,FALSE,0);
 }
 
@@ -189,9 +188,11 @@ void parser_build(struct parser *p, GtkWidget *widget)
 	struct action_info	  a_info;
 
 #if GTK_CHECK_VERSION(3,0,0)
+	GtkWidget			* mainBox	= gtk_box_new(GTK_ORIENTATION_VERTICAL,0);
 	GtkWidget			* vbox		= gtk_box_new(GTK_ORIENTATION_VERTICAL,0);
 	GtkWidget			* hbox		= gtk_box_new(GTK_ORIENTATION_HORIZONTAL,0);
 #else
+	GtkWidget			* mainBox	= gtk_vbox_new(FALSE,0);
 	GtkWidget			* vbox		= gtk_vbox_new(FALSE,0);
 	GtkWidget			* hbox		= gtk_hbox_new(FALSE,0);
 #endif // GTK(3,0,0)
@@ -224,7 +225,7 @@ void parser_build(struct parser *p, GtkWidget *widget)
 	g_hash_table_foreach(p->actions,(GHFunc) action_group_setup, &a_info);
 
 	// Pack menubars
-	p->element = G_OBJECT(vbox);
+	p->element = G_OBJECT(mainBox);
 	g_hash_table_foreach(p->element_list[UI_ELEMENT_MENUBAR],(GHFunc) pack_start, p);
 
 	// Pack top toolbars
@@ -247,9 +248,10 @@ void parser_build(struct parser *p, GtkWidget *widget)
 	if(widget)
 	{
 		ui_set_scroll_actions(widget,p->scroll_action);
-		gtk_box_pack_start(GTK_BOX(hbox),widget,TRUE,TRUE,0);
+		gtk_box_pack_start(GTK_BOX(vbox),widget,TRUE,TRUE,0);
 		gtk_widget_show(widget);
 	}
+	gtk_box_pack_start(GTK_BOX(hbox),vbox,TRUE,TRUE,0);
 
 	// Pack right keypads
 	keypad.filter 	= GTK_POS_LEFT;
@@ -262,11 +264,12 @@ void parser_build(struct parser *p, GtkWidget *widget)
 	g_hash_table_foreach(p->element_list[UI_ELEMENT_KEYPAD],(GHFunc) pack_keypad, &keypad);
 
 	// Finish building
-	gtk_box_pack_start(GTK_BOX(vbox),hbox,TRUE,TRUE,0);
-	gtk_container_add(GTK_CONTAINER(p->toplevel),vbox);
+	gtk_box_pack_start(GTK_BOX(mainBox),hbox,TRUE,TRUE,0);
+	gtk_container_add(GTK_CONTAINER(p->toplevel),mainBox);
 
 	gtk_widget_show(hbox);
 	gtk_widget_show(vbox);
+	gtk_widget_show(mainBox);
 
 	gtk_window_add_accel_group(GTK_WINDOW(p->toplevel),a_info.accel_group);
 
