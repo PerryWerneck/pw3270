@@ -2628,11 +2628,11 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *hSession, const char *s, int len
 				break;
 
 			case '[':	/* APL left bracket */
-					key_ACharacter(hSession,(unsigned char) c, KT_STD, ia, &skipped);
+				key_ACharacter(hSession,(unsigned char) c, KT_STD, ia, &skipped);
 				break;
 
 			case ']':	/* APL right bracket */
-					key_ACharacter(hSession,(unsigned char) c, KT_STD, ia, &skipped);
+				key_ACharacter(hSession,(unsigned char) c, KT_STD, ia, &skipped);
 				break;
 
 			default:

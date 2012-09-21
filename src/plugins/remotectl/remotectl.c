@@ -35,8 +35,13 @@
  #include <pw3270.h>
  #include <pw3270/plugin.h>
  #include <pw3270/v3270.h>
+ #include <lib3270/actions.h>
  #include <errno.h>
  #include <string.h>
+
+/*--[ Implement ]------------------------------------------------------------------------------------*/
+
+ static const gchar control_char = '@';
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
@@ -176,11 +181,85 @@
 
 	g_get_charset(&charset);
 
-	text = g_convert(buffer,-1,lib3270_get_charset(hSession),charset,&bytes_read,&bytes_written,&error);
+	text = g_convert(buffer,length,lib3270_get_charset(hSession),charset,&bytes_read,&bytes_written,&error);
 	if(text)
 	{
-		#warning Converter "@" em "\\"
-		lib3270_emulate_input(hSession,text,strlen(text),0);
+		if(strchr(text,control_char))
+		{
+			// Convert control char
+			gchar	* buffer = text;
+			char	* ptr;
+
+			for(ptr = strchr(text,control_char);ptr;ptr = strchr(buffer,control_char))
+			{
+				*(ptr++) = 0;
+
+				lib3270_emulate_input(hSession,buffer,-1,0);
+
+				switch(*(ptr++))
+				{
+				case 'E':	// Enter
+					lib3270_enter(hSession);
+					break;
+
+				case '1':	// PF1
+					lib3270_pfkey(hSession,1);
+					break;
+
+				case '2':	// PF2
+					lib3270_pfkey(hSession,2);
+					break;
+
+				case '3':	// PF3
+					lib3270_pfkey(hSession,3);
+					break;
+
+				case '4':	// PF4
+					lib3270_pfkey(hSession,4);
+					break;
+
+				case '5':	// PF5
+					lib3270_pfkey(hSession,5);
+					break;
+
+				case '6':	// PF6
+					lib3270_pfkey(hSession,6);
+					break;
+
+				case '7':	// PF7
+					lib3270_pfkey(hSession,7);
+					break;
+
+				case '8':	// PF8
+					lib3270_pfkey(hSession,8);
+					break;
+
+				case '9':	// PF9
+					lib3270_pfkey(hSession,9);
+					break;
+
+				case 'a':	// PF10
+					lib3270_pfkey(hSession,10);
+					break;
+
+				case 'b':	// PF11
+					lib3270_pfkey(hSession,11);
+					break;
+
+				case 'c':	// PF12
+					lib3270_pfkey(hSession,12);
+					break;
+				}
+
+			}
+
+			lib3270_emulate_input(hSession,buffer,-1,0);
+
+		}
+		else
+		{
+			lib3270_emulate_input(hSession,text,strlen(text),0);
+		}
 		g_free(text);
 		rc = 0;
 	}
