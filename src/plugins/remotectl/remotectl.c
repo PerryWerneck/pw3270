@@ -278,36 +278,59 @@
 	return lib3270_wait_for_ready(hSession,60);
  }
 
- static int cmd_copypstostr(H3270 *hSession, unsigned short pos, char *buffer, unsigned short length)
+ static int cmd_copypstostr(H3270 *hSession, unsigned short pos, char *outBuff, unsigned short length)
  {
-	char		* text			= lib3270_get_text(hSession, (int) pos, (int) length);
-	gchar		* local;
-	GError		* error			= NULL;
-	gsize		  bytes_read;
-	gsize		  bytes_written;
-	int			  rc = 0;
-	const gchar	* charset;
+	int 			  rows;
+	int 			  cols;
+	unsigned short	* attr;
+	unsigned char	* text;
+	int				  rc;
 
-	if(!text)
-		return -1;
+	lib3270_get_screen_size(hSession,&rows,&cols);
 
-	g_get_charset(&charset);
+	if(pos < 1 || (pos+length) >= (rows*cols))
+		return EINVAL;
 
-	local = g_convert((const gchar *) text,-1,charset,lib3270_get_charset(hSession),&bytes_read,&bytes_written,&error);
+	pos--;
 
-	if(local)
+	attr = g_new0(unsigned short, length+0);
+	text = g_new0(unsigned char, length+1);
+
+	rc = lib3270_get_contents(hSession,pos,pos+(length-1),text,attr);
+
+	if(rc)
 	{
-		strncpy(buffer,local,length);
-		g_free(local);
+		strncpy(outBuff,strerror(rc),length);
 	}
 	else
 	{
-		strncpy(buffer,error->message,length);
-		rc = error->code;
-		g_error_free(error);
-	}
+		const gchar		* charset;
+		gchar		 	* local;
+		gsize			  bytes_read;
+		gsize			  bytes_written;
+		GError			* error				= NULL;
 
- 	lib3270_free(text);
+		trace("Text: [%s]",text);
+
+		g_get_charset(&charset);
+
+		local = g_convert((const gchar *) text,length,charset,lib3270_get_charset(hSession),&bytes_read,&bytes_written,&error);
+
+		g_free(attr);
+		g_free(text);
+
+		if(!local)
+		{
+			rc = error->code;
+			strncpy(outBuff,error->message,length);
+			g_error_free(error);
+		}
+		else
+		{
+			strncpy(outBuff,(const char *) local,length);
+			g_free(local);
+		}
+	}
 	return rc;
  }
 
