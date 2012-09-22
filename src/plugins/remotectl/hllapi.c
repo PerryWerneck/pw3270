@@ -208,6 +208,24 @@
  	if(result && length && *length && str)
 		strncpy(str,strerror(result),*length);
 
+	str[*length] = 0;
+
+#ifdef DEBUG
+	{
+		FILE *arq = fopen("hllapi.dbg","a");
+		char *ptr;
+
+		for(ptr=str;*ptr;ptr++)
+		{
+			if(*ptr == ' ')
+				*ptr = '.';
+		}
+
+		fprintf(arq,"func: %ld\nresult: %d\nrc: %d\nLength: %d\nstring: [%s]\n",*func,result,*rc, *length, str);
+		fclose(arq);
+	}
+#endif // DEBUG
+
 	free(arg);
  	return result;
  }

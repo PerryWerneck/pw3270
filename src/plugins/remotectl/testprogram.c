@@ -31,7 +31,7 @@
  #include <stdio.h>
  #include <pw3270/hllapi.h>
 
- #define BUFFER_LENGTH 4096
+ #define BUFFER_LENGTH 8000
 
 /*---[ Implement ]--------------------------------------------------------------------------------*/
 
@@ -68,8 +68,8 @@
 
 	}
 
-	len = BUFFER_LENGTH;
-	rc	= 1;
+	len = 80;
+	rc	= 1040;
 	fn = HLLAPI_CMD_COPYPSTOSTR;
 	result = hllapi(&fn,buffer,&len,&rc);
 	printf("%s exits with result=%d rc=%d\n%s\n","HLLAPI_CMD_COPYPSTOSTR",result,rc,buffer);

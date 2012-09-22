@@ -296,6 +296,7 @@
 	attr = g_new0(unsigned short, length+0);
 	text = g_new0(unsigned char, length+1);
 
+	trace("%s: pos=%d length=%d",__FUNCTION__,pos,length);
 	rc = lib3270_get_contents(hSession,pos,pos+(length-1),text,attr);
 
 	if(rc)
