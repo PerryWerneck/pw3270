@@ -79,18 +79,16 @@
  }
 
 
- static int run_query(unsigned long func, const char *arg, char *string, unsigned short length, unsigned short *rc)
+ static char * run_query(unsigned long func, const char *arg, size_t length, unsigned short *rc)
  {
- 	int result = -1;
+	char *outBuffer = NULL;
 
 #ifdef WIN32
 
-	if(length < 0 && string)
-		length = strlen(string);
-
 	if(hPipe == INVALID_HANDLE_VALUE)
 	{
-		*rc = result = EPERM;
+		trace("%s: Invalid pipe handle",__FUNCTION__);
+		*rc = EPERM;
 	}
 	else
 	{
@@ -105,28 +103,28 @@
 		data->rc		= *rc;
 		data->len		= length;
 
-		if(length > 0)
-		{
-			memset(data->string,0,length);
-			if(arg)
-				strncpy(data->string,arg,length);
-		}
-
+		memcpy(data->string,arg,length);
 		memset(buffer,0,HLLAPI_MAXLENGTH);
+
 		if(!TransactNamedPipe(hPipe,(LPVOID) data,cbSize,buffer,HLLAPI_MAXLENGTH,&cbSize,NULL))
 		{
-			*rc = result = GetLastError();
+			trace("Error %d in TransactNamedPipe",(int) GetLastError());
+			*rc = GetLastError();
 		}
 		else
 		{
-			int sz = length < buffer->len ? length : buffer->len;
-
 			*rc = buffer->rc;
 
-			if(string && sz > 0)
-				memcpy(string,buffer->string,sz);
+			trace("buffer->len=%d rc=%d",buffer->len,buffer->rc);
 
-			result = 0;
+			if(buffer->len > 0)
+			{
+				outBuffer = malloc(buffer->len+1);
+				memcpy(outBuffer,buffer->string,buffer->len);
+				outBuffer[buffer->len] = 0;
+
+				trace("outBuffer=[%s]",outBuffer);
+			}
 		}
 
 		free(data);
@@ -139,50 +137,58 @@
 
 #endif // WIN32
 
-	return result;
+	return outBuffer;
+ }
+
+ static void copyString(char *str, unsigned short *length, const char *msg)
+ {
+	size_t len = strlen(msg);
+
+	if(len > *length)
+		len = *length;
+	else
+		*length = len;
+
+	memcpy(str,msg,*length);
  }
 
 #ifdef _WIN32
- __declspec (dllexport) int __stdcall hllapi(LPWORD func, LPSTR str, LPWORD length, LPWORD rc)
+ __declspec (dllexport) int __stdcall hllapi(LPWORD func, LPSTR buffer, LPWORD length, LPWORD rc)
 #else
- LIB3270_EXPORT int hllapi(const unsigned long *func, char *str, unsigned short *length, unsigned short *rc)
+ LIB3270_EXPORT int hllapi(const unsigned long *func, char *buffer, unsigned short *length, unsigned short *rc)
 #endif // _WIN32
  {
- 	int 	  result = 1;
- 	char	* arg;
+ 	char	* inBuffer	= NULL;
+ 	char	* outBuffer	= NULL;
 
-	if(!length || *length > HLLAPI_MAXLENGTH)
-		return *rc = EINVAL;
+	if(*length <= 0 || *length > HLLAPI_MAXLENGTH)
+	{
+		*rc = EINVAL;
+		return 0;
+	}
 
-	if(length > 0)
-	{
-		arg = malloc(*length+1);
-		strncpy(arg,str,(int) *length);
-		arg[(size_t) *length] = 0;
-	}
-	else
-	{
-		arg = malloc(1);
-		*arg = 0;
-	}
+	// Copy input argument
+	inBuffer = malloc(*length+1);
+	memcpy(inBuffer,buffer,*length);
+	inBuffer[*length] = 0;
+
+	// Clear output buffer
+	memset(buffer,' ',*length);
+	buffer[*length] = 0;
 
  	switch(*func)
  	{
 	case HLLAPI_CMD_CONNECTPS:
-		*rc = result = cmd_connect_ps(arg);
-		if(!result)
+		*rc = cmd_connect_ps(inBuffer);
+		if(!*rc)
 		{
-			result = run_query(*func, arg, str, *length, rc);
-			if(result || *rc)
+			outBuffer = run_query(*func, inBuffer, *length, rc);
+			if(*rc)
 			{
-				trace("Closing pipe rc=%d result=%d ",*rc,result);
+				trace("Closing pipe rc=%d",*rc);
 				CloseHandle(hPipe);
 				hPipe = INVALID_HANDLE_VALUE;
 			}
-		}
-		else
-		{
-			*rc = result;
 		}
 		break;
 
@@ -190,11 +196,11 @@
 #ifdef WIN32
 		if(hPipe == INVALID_HANDLE_VALUE)
 		{
-			*rc = result = EINVAL;
+			*rc = EINVAL;
 		}
 		else
 		{
-			result = run_query(*func, arg, str, *length, rc);
+			outBuffer = run_query(*func, inBuffer, *length, rc);
 			CloseHandle(hPipe);
 			hPipe = INVALID_HANDLE_VALUE;
 		}
@@ -202,32 +208,20 @@
 		break;
 
 	default:
-		result = run_query(*func, arg, str, *length, rc);
+		trace("Calling function %d",(int) *func);
+		outBuffer = run_query(*func, inBuffer, *length, rc);
  	}
 
- 	if(result && length && *length && str)
-		strncpy(str,strerror(result),*length);
+	if(*rc)
+		copyString(buffer,length,strerror(*rc));
+	else if(outBuffer)
+		copyString(buffer,length,outBuffer);
 
-	str[*length] = 0;
+	if(outBuffer)
+		free(outBuffer);
 
-#ifdef DEBUG
-	{
-		FILE *arq = fopen("hllapi.dbg","a");
-		char *ptr;
-
-		for(ptr=str;*ptr;ptr++)
-		{
-			if(*ptr == ' ')
-				*ptr = '.';
-		}
-
-		fprintf(arq,"func: %d\nresult: %d\nrc: %d\nLength: %d\nstring: [%s]\n",*func,result,*rc, *length, str);
-		fclose(arq);
-	}
-#endif // DEBUG
-
-	free(arg);
- 	return result;
+	free(inBuffer);
+ 	return 0;
  }
 
 

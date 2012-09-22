@@ -40,18 +40,17 @@
 	char buffer[BUFFER_LENGTH];
 	unsigned short rc;
 	unsigned short len;
-	int result;
 	unsigned long fn;
 
 	static const struct _cmd
 	{
 		const char 		* name;
-		unsigned long	  fn;
+		unsigned short	  fn;
 		const char		* arg;
 	} cmd[] =
 	{
 		{ "ConnectPS", 		HLLAPI_CMD_CONNECTPS, 	"pw3270A"	},
-		{ "GetRevision",	HLLAPI_CMD_GETREVISION,	""			},
+		{ "GetRevision",	HLLAPI_CMD_GETREVISION,	"       "	},
 		{ "InputString",	HLLAPI_CMD_INPUTSTRING,	"test"		},
 
 	};
@@ -61,26 +60,25 @@
 
 	for(f=0;f< (sizeof(cmd)/sizeof(struct _cmd)); f++)
 	{
-		len = BUFFER_LENGTH;
-		strcpy(buffer,cmd[f].arg);
-		result = hllapi(&cmd[f].fn,buffer,&len,&rc);
-		printf("%s exits with result=%d rc=%d\n[%s]\n",cmd[f].name,result,rc,buffer);
-
+		len = strlen(cmd[f].arg);
+		memcpy(buffer,cmd[f].arg,len);
+		hllapi((LPWORD) &cmd[f].fn,buffer,&len,&rc);
+		printf("%s exits with rc=%d\n[%s]\n",cmd[f].name,rc,buffer);
 	}
 
 	len = 80;
 	rc	= 1040;
 	fn = HLLAPI_CMD_COPYPSTOSTR;
-	result = hllapi(&fn,buffer,&len,&rc);
-	printf("%s exits with result=%d rc=%d\n%s\n","HLLAPI_CMD_COPYPSTOSTR",result,rc,buffer);
+	hllapi((LPWORD) &fn,buffer,&len,&rc);
+	printf("%s exits with rc=%d\n%s\n","HLLAPI_CMD_COPYPSTOSTR",rc,buffer);
 
 	// Disconnect
-	len = BUFFER_LENGTH;
+	len = 10;
 	rc	= 1;
 	fn = HLLAPI_CMD_DISCONNECTPS;
 	*buffer = 0;
-	result = hllapi(&fn,buffer,&len,&rc);
-	printf("%s exits with %d [%s]\n","HLLAPI_CMD_DISCONNECTPS",result,buffer);
+	hllapi((LPWORD) &fn,buffer,&len,&rc);
+	printf("%s exits with rc=%d\n[%s]\n","HLLAPI_CMD_DISCONNECTPS",rc,buffer);
 
  	return 0;
  }
