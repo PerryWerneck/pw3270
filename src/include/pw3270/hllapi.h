@@ -63,7 +63,7 @@ extern "C" {
 
 #ifdef _WIN32
  // http://www.mingw.org/wiki/Visual_Basic_DLL
- __declspec (dllexport) int __stdcall hllapi(const unsigned long *func, char *str, unsigned short *length, unsigned short *rc);
+ __declspec (dllexport) int __stdcall hllapi(LPWORD func, LPSTR str, LPWORD length, LPWORD rc);
 #else
  LIB3270_EXPORT int hllapi(const unsigned long *func, char *str, unsigned short *length, unsigned short *rc);
 #endif // _WIN32
