@@ -103,7 +103,9 @@
 		data->rc		= *rc;
 		data->len		= length;
 
-		memcpy(data->string,arg,length);
+		if(arg && length > 0)
+			memcpy(data->string,arg,length);
+
 		memset(buffer,0,HLLAPI_MAXLENGTH);
 
 		if(!TransactNamedPipe(hPipe,(LPVOID) data,cbSize,buffer,HLLAPI_MAXLENGTH,&cbSize,NULL))
@@ -161,16 +163,19 @@
  	char	* inBuffer	= NULL;
  	char	* outBuffer	= NULL;
 
-	if(*length <= 0 || *length > HLLAPI_MAXLENGTH)
+	if(*length < 0 || *length > HLLAPI_MAXLENGTH)
 	{
 		*rc = EINVAL;
 		return 0;
 	}
 
 	// Copy input argument
-	inBuffer = malloc(*length+1);
-	memcpy(inBuffer,buffer,*length);
-	inBuffer[*length] = 0;
+	if(*length)
+	{
+		inBuffer = malloc(*length+1);
+		memcpy(inBuffer,buffer,*length);
+		inBuffer[*length] = 0;
+	}
 
 	// Clear output buffer
 	memset(buffer,' ',*length);

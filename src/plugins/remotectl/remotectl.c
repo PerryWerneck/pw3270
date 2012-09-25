@@ -163,6 +163,7 @@
 	if(!lib3270_connected(hSession))
 		return ENOTCONN;
 
+	trace("%s: pos=%d row=%d col=%d",__FUNCTION__,rc,rc/80,rc%80);
 	lib3270_set_cursor_address(hSession,(int) rc);
 	return 0;
  }
@@ -198,6 +199,9 @@
 
 				switch(*(ptr++))
 				{
+				case 'P':	// Print
+					break;
+
 				case 'E':	// Enter
 					lib3270_enter(hSession);
 					break;
@@ -275,7 +279,7 @@
 
  static int cmd_wait(H3270 *hSession, unsigned short rc, char *text, unsigned short length)
  {
-	return lib3270_wait_for_ready(hSession,60);
+	return lib3270_wait_for_ready(hSession,pw3270_get_integer(pw3270_get_toplevel(),"hllapi","wait",2));
  }
 
  static int cmd_copypstostr(H3270 *hSession, unsigned short pos, char *outBuff, unsigned short length)

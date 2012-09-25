@@ -66,6 +66,8 @@
  LIB3270_EXPORT const gchar	* pw3270_get_session_name(GtkWidget *widget);
  LIB3270_EXPORT void		  pw3270_set_session_name(GtkWidget *widget, const gchar *name);
 
+ LIB3270_EXPORT gint		  pw3270_get_integer(GtkWidget *widget, const gchar *group, const gchar *key, gint def);
+
 #ifdef HAVE_GTKMAC
  #include <gtk-mac-bundle.h>
  LIB3270_EXPORT GtkMacBundle	* pw3270_get_bundle(void);

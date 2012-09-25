@@ -99,3 +99,8 @@ LIB3270_EXPORT void pw3270_restore_window(GtkWidget *widget, const gchar *name)
 {
 	restore_window_from_config("window", name, widget);
 }
+
+LIB3270_EXPORT gint pw3270_get_integer(GtkWidget *widget, const gchar *group, const gchar *key, gint def)
+{
+	return get_integer_from_config(group, key, def);
+}
