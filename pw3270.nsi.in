@@ -138,7 +138,7 @@ SubSection "@PACKAGE@" SecMain
 
 SubSectionEnd
 
-Section /o "GTK+ Runtime" SecGTK
+Section /o "GTK @GTK_MODVERSION@ Runtime" SecGTK
 
 	setOutPath $INSTDIR
 	file /r ".bin\gtkruntime\*.*"
