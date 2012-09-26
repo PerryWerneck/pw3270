@@ -289,6 +289,9 @@ static gchar * enum_to_string(GType type, guint enum_value)
 	pango_font_description_free(descr);
 
 	set_string_to_config("print","font",name);
+	set_integer_to_config("print","fontsize",info->fontsize);
+	set_integer_to_config("print","fontweight",info->fontweight);
+
 	trace("Font set to \"%s\" with size %d",info->font,info->fontsize);
  }
 
@@ -299,16 +302,18 @@ static gchar * enum_to_string(GType type, guint enum_value)
  	set_boolean_to_config("print","selection",active);
  }
 
- static void load_settings(PRINT_INFO *i)
+ static void load_settings(PRINT_INFO *info)
  {
 	gchar *ptr = get_string_from_config("print","colors","");
 
-	i->font = get_string_from_config("print","font","Courier 10");
+	info->font = get_string_from_config("print","font","Courier New 10");
+	info->fontsize = get_integer_from_config("print","fontsize",10240);
+	info->fontweight = get_integer_from_config("print","fontweight",0);
 
 	if(*ptr)
-		v3270_set_color_table(i->color,ptr);
+		v3270_set_color_table(info->color,ptr);
 	else
-		v3270_set_mono_color_table(i->color,"black","white");
+		v3270_set_mono_color_table(info->color,"black","white");
 	g_free(ptr);
  }
 
@@ -639,3 +644,33 @@ static gchar * enum_to_string(GType type, guint enum_value)
 	gtk_print_operation_run(print,oper,GTK_WINDOW(gtk_widget_get_toplevel(widget)),NULL);
 	g_object_unref(print);
  }
+
+void print_settings_action(GtkAction *action, GtkWidget *terminal)
+{
+ 	const gchar * title  = g_object_get_data(G_OBJECT(action),"title");
+ 	PRINT_INFO	  info;
+ 	GtkWidget	* widget;
+	GtkWidget	* dialog = gtk_dialog_new_with_buttons (	gettext(title ? title : N_( "Print settings") ),
+															gtk_widget_get_toplevel(terminal),
+															GTK_DIALOG_DESTROY_WITH_PARENT,
+															GTK_STOCK_OK,		GTK_RESPONSE_ACCEPT,
+															GTK_STOCK_CANCEL,	GTK_RESPONSE_REJECT,
+															NULL );
+
+	memset(&info,0,sizeof(info));
+
+	widget = create_custom_widget(NULL,&info);
+
+	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),GTK_WIDGET(widget),TRUE,TRUE,2);
+
+	if(gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
+	{
+		// Accepted, save settings
+		custom_widget_apply(NULL,widget,&info);
+	}
+
+	gtk_widget_destroy(dialog);
+
+}
+
+

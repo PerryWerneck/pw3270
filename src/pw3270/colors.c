@@ -411,7 +411,7 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
 
  	const gchar * title  = g_object_get_data(G_OBJECT(action),"title");
 	GtkWidget	* dialog = gtk_dialog_new_with_buttons (	gettext(title ? title : N_( "Color setup") ),
-															NULL,
+															gtk_widget_get_toplevel(widget),
 															GTK_DIALOG_DESTROY_WITH_PARENT,
 															GTK_STOCK_OK,		GTK_RESPONSE_ACCEPT,
 															GTK_STOCK_CANCEL,	GTK_RESPONSE_REJECT,

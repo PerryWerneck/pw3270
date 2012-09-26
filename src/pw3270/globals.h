@@ -76,6 +76,7 @@
  G_GNUC_INTERNAL void about_dialog_action(GtkAction *action, GtkWidget *widget);
  G_GNUC_INTERNAL void download_action(GtkAction *action, GtkWidget *widget);
  G_GNUC_INTERNAL void upload_action(GtkAction *action, GtkWidget *widget);
+ G_GNUC_INTERNAL void print_settings_action(GtkAction *action, GtkWidget *widget);
 
  // plugins
  G_GNUC_INTERNAL void init_plugins(GtkWidget *widget);

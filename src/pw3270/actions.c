@@ -246,19 +246,20 @@ static void connect_standard_action(GtkAction *action, GtkWidget *widget, const 
 	}
 	gtk_action[] =
 	{
-		{ "activate", 	activate_action		},
-		{ "reload",		reload_action		},
-		{ "connect", 	connect_action		},
-		{ "disconnect", disconnect_action	},
-		{ "hostname",	hostname_action		},
-		{ "editcolors",	editcolors_action	},
-		{ "about",		about_dialog_action	},
-		{ "kpsubtract", kp_subtract_action	},
-		{ "kpadd",		kp_add_action		},
-		{ "download",	download_action		},
-		{ "upload",		upload_action		},
+		{ "activate", 		activate_action			},
+		{ "reload",			reload_action			},
+		{ "connect", 		connect_action			},
+		{ "disconnect", 	disconnect_action		},
+		{ "hostname",		hostname_action			},
+		{ "editcolors",		editcolors_action		},
+		{ "printsettings",	print_settings_action	},
+		{ "about",			about_dialog_action		},
+		{ "kpsubtract", 	kp_subtract_action		},
+		{ "kpadd",			kp_add_action			},
+		{ "download",		download_action			},
+		{ "upload",			upload_action			},
 #ifdef DEBUG
-		{ "copyashtml",	copy_as_html_action	},
+		{ "copyashtml",		copy_as_html_action		},
 #endif // DEBUG
 	};
 
