@@ -68,6 +68,17 @@
 
  LIB3270_EXPORT gint		  pw3270_get_integer(GtkWidget *widget, const gchar *group, const gchar *key, gint def);
 
+ typedef enum pw3270_src
+ {
+ 	PW3270_SRC_ALL,			/**< Screen contents */
+ 	PW3270_SRC_SELECTED,	/**< Selected region */
+
+ 	PW3270_SRC_USER
+ } PW3270_SRC;
+
+ LIB3270_EXPORT void 		  pw3270_print(GtkWidget *widget, GObject *action, GtkPrintOperationAction oper, PW3270_SRC src);
+
+
 #ifdef HAVE_GTKMAC
  #include <gtk-mac-bundle.h>
  LIB3270_EXPORT GtkMacBundle	* pw3270_get_bundle(void);

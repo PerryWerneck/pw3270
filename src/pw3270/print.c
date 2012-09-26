@@ -39,7 +39,7 @@
  {
 	GdkColor				  color[V3270_COLOR_COUNT];
 	int 					  show_selection : 1;
-	int						  all : 1;
+	PW3270_SRC				  src;
 
 	H3270					* session;
 	gchar					* font;
@@ -66,6 +66,7 @@
  {
  	cairo_t *cr = gtk_print_context_get_cairo_context(context);
 
+	trace("Font: %s",info->font);
 	cairo_select_font_face(cr, info->font, CAIRO_FONT_SLANT_NORMAL, info->fontweight);
 
 	info->font_scaled = cairo_get_scaled_font(cr);
@@ -127,7 +128,7 @@
 			unsigned char	c;
 			unsigned short	attr;
 
-			if(!lib3270_get_element(info->session,baddr++,&c,&attr) && (info->all || (attr & LIB3270_ATTR_SELECTED)))
+			if(!lib3270_get_element(info->session,baddr++,&c,&attr) && (info->src == PW3270_SRC_ALL || (attr & LIB3270_ATTR_SELECTED)))
 			{
 				if(!info->show_selection)
 					attr &= ~LIB3270_ATTR_SELECTED;
@@ -298,14 +299,29 @@ static gchar * enum_to_string(GType type, guint enum_value)
  	set_boolean_to_config("print","selection",active);
  }
 
+ static void load_settings(PRINT_INFO *i)
+ {
+	gchar *ptr = get_string_from_config("print","colors","");
+
+	i->font = get_string_from_config("print","font","Courier 10");
+
+	if(*ptr)
+		v3270_set_color_table(i->color,ptr);
+	else
+		v3270_set_mono_color_table(i->color,"black","white");
+	g_free(ptr);
+ }
+
  static GObject * create_custom_widget(GtkPrintOperation *prt, PRINT_INFO *info)
  {
- 	static const gchar	* text[]	= { N_( "_Font:" ), N_( "C_olor scheme:" ) };
 	GtkWidget			* container = gtk_table_new(3,2,FALSE);
+ 	static const gchar	* text[]	= { N_( "_Font:" ), N_( "C_olor scheme:" ) };
 	GtkWidget			* label[G_N_ELEMENTS(text)];
 	GtkWidget			* widget;
 	int					  f;
 	gchar				* ptr;
+
+	trace("%s starts",__FUNCTION__);
 
 	for(f=0;f<G_N_ELEMENTS(label);f++)
 	{
@@ -323,18 +339,10 @@ static gchar * enum_to_string(GType type, guint enum_value)
 #endif // GTK(3,2,0)
 	gtk_table_attach(GTK_TABLE(container),widget,1,2,0,1,GTK_EXPAND|GTK_FILL,GTK_FILL,5,0);
 
-	info->font = get_string_from_config("print","font","Courier 10");
+	load_settings(info);
 	gtk_font_button_set_font_name((GtkFontButton *) widget,info->font);
 	font_set((GtkFontButton *) widget,info);
     g_signal_connect(G_OBJECT(widget),"font-set",G_CALLBACK(font_set),info);
-
-	// Color scheme dropdown
-	ptr = get_string_from_config("print","colors","");
-	if(*ptr)
-		v3270_set_color_table(info->color,ptr);
-	else
-		v3270_set_mono_color_table(info->color,"black","white");
-	g_free(ptr);
 
 	widget = color_scheme_new(info->color);
 	gtk_label_set_mnemonic_widget(GTK_LABEL(label[1]),widget);
@@ -345,7 +353,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
 	// Selection checkbox
 	widget = gtk_check_button_new_with_label(_("Print selection box"));
 
-	if(info->all)
+	if(info->src == PW3270_SRC_ALL)
 	{
 		info->show_selection = get_boolean_from_config("print","selection",FALSE);
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),info->show_selection);
@@ -361,7 +369,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
 	// Show and return
 	gtk_widget_show_all(container);
 
-	trace("%s ends",__FUNCTION__);
+	trace("%s ends container=%p",__FUNCTION__,container);
  	return G_OBJECT(container);
  }
 
@@ -419,8 +427,13 @@ static gchar * enum_to_string(GType type, guint enum_value)
 
 	// Common signals
     g_signal_connect(print,"done",G_CALLBACK(done),*info);
+
+#if GTK_CHECK_VERSION(3,0,0) && !defined(WIN32)
 	g_signal_connect(print,"create-custom-widget",G_CALLBACK(create_custom_widget),	*info);
 	g_signal_connect(print,"custom-widget-apply",G_CALLBACK(custom_widget_apply), *info);
+#else
+	load_settings(*info);
+#endif // WIN32
 
 	// Load page and print settings
 	{
@@ -485,6 +498,9 @@ static gchar * enum_to_string(GType type, guint enum_value)
 
  void print_all_action(GtkAction *action, GtkWidget *widget)
  {
+	pw3270_print(widget,G_OBJECT(action),GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, PW3270_SRC_ALL);
+
+/*
  	PRINT_INFO			* info = NULL;
  	GtkPrintOperation 	* print = begin_print_operation(G_OBJECT(action),widget,&info);
 
@@ -503,10 +519,14 @@ static gchar * enum_to_string(GType type, guint enum_value)
 
 
 	g_object_unref(print);
+*/
  }
 
  void print_selected_action(GtkAction *action, GtkWidget *widget)
  {
+	pw3270_print(widget,G_OBJECT(action),GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, PW3270_SRC_SELECTED);
+
+/*
  	PRINT_INFO			* info = NULL;
  	int					  start, end, rows;
  	GtkPrintOperation 	* print = begin_print_operation(G_OBJECT(action),widget,&info);;
@@ -537,6 +557,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
 	gtk_print_operation_run(print,GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,GTK_WINDOW(gtk_widget_get_toplevel(widget)),NULL);
 
 	g_object_unref(print);
+*/
  }
 
  static void draw_text(GtkPrintOperation *prt, GtkPrintContext *context, gint pg, PRINT_INFO *info)
@@ -598,3 +619,23 @@ static gchar * enum_to_string(GType type, guint enum_value)
 	g_object_unref(print);
  }
 
+ LIB3270_EXPORT void pw3270_print(GtkWidget *widget, GObject *action, GtkPrintOperationAction oper, PW3270_SRC src)
+ {
+ 	PRINT_INFO			* info = NULL;
+ 	GtkPrintOperation 	* print = begin_print_operation(action,widget,&info);
+
+ #ifdef X3270_TRACE
+	if(action)
+		lib3270_trace_event(NULL,"Action %s activated on widget %p\n",gtk_action_get_name(GTK_ACTION(action)),widget);
+ #endif
+
+ 	lib3270_get_screen_size(info->session,&info->rows,&info->cols);
+
+	info->src = src;
+    g_signal_connect(print,"begin_print",G_CALLBACK(begin_print),info);
+	g_signal_connect(print,"draw_page",G_CALLBACK(draw_screen),info);
+
+	// Run Print dialog
+	gtk_print_operation_run(print,oper,GTK_WINDOW(gtk_widget_get_toplevel(widget)),NULL);
+	g_object_unref(print);
+ }
