@@ -200,6 +200,7 @@
 				switch(*(ptr++))
 				{
 				case 'P':	// Print
+					pw3270_print(pw3270_get_toplevel(), NULL, GTK_PRINT_OPERATION_ACTION_PRINT, PW3270_SRC_ALL);
 					break;
 
 				case 'E':	// Enter
