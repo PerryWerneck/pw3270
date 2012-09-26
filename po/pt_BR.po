@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-24 23:07-0300\n"
+"POT-Creation-Date: 2012-09-26 18:45-0300\n"
 "PO-Revision-Date: 2012-09-20 17:33-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <perry.werneck@gmail.com>\n"
@@ -635,6 +635,11 @@ msgstr "Imprimir cópia"
 #: ui/00default.xml:50
 msgid "Print selected"
 msgstr "Imprimir seleção"
+
+#: ui/99debug.xml:478
+#, fuzzy
+msgid "Print settings"
+msgstr "Imprimir caixa de seleção"
 
 #: rpq.c:225
 #, c-format
@@ -1441,9 +1446,6 @@ msgstr "Erro desconhecido"
 
 #~ msgid "Primary space:"
 #~ msgstr "Primary space:"
-
-#~ msgid "Print selection box"
-#~ msgstr "Imprimir caixa de seleção"
 
 #~ msgid "Progress"
 #~ msgstr "Progresso"
