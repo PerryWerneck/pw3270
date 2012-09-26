@@ -164,7 +164,7 @@
 		return ENOTCONN;
 
 	trace("%s: pos=%d row=%d col=%d",__FUNCTION__,rc,rc/80,rc%80);
-	lib3270_set_cursor_address(hSession,(int) rc);
+	lib3270_set_cursor_address(hSession,((int) rc) -1);
 	return 0;
  }
 
