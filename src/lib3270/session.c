@@ -431,7 +431,7 @@ void check_session_handle(H3270 **hSession)
 #ifdef ANDROID
 	__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "%s called with empty session\n", __FUNCTION__);
 #else
-	lib3270_write_log(*hSession,"%s called with empty session",__FUNCTION__);
+	lib3270_write_log(*hSession, "lib3270", "%s called with empty session",__FUNCTION__);
 #endif // ANDROID
 }
 

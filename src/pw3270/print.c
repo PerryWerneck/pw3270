@@ -324,7 +324,6 @@ static gchar * enum_to_string(GType type, guint enum_value)
 	GtkWidget			* label[G_N_ELEMENTS(text)];
 	GtkWidget			* widget;
 	int					  f;
-	gchar				* ptr;
 
 	trace("%s starts",__FUNCTION__);
 
@@ -631,7 +630,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
 
  #ifdef X3270_TRACE
 	if(action)
-		lib3270_trace_event(NULL,"Action %s activated on widget %p\n",gtk_action_get_name(GTK_ACTION(action)),widget);
+		lib3270_trace_event(v3270_get_session(widget),"Action %s activated on widget %p\n",gtk_action_get_name(GTK_ACTION(action)),widget);
  #endif
 
  	lib3270_get_screen_size(info->session,&info->rows,&info->cols);
@@ -651,7 +650,7 @@ void print_settings_action(GtkAction *action, GtkWidget *terminal)
  	PRINT_INFO	  info;
  	GtkWidget	* widget;
 	GtkWidget	* dialog = gtk_dialog_new_with_buttons (	gettext(title ? title : N_( "Print settings") ),
-															gtk_widget_get_toplevel(terminal),
+															GTK_WINDOW(gtk_widget_get_toplevel(terminal)),
 															GTK_DIALOG_DESTROY_WITH_PARENT,
 															GTK_STOCK_OK,		GTK_RESPONSE_ACCEPT,
 															GTK_STOCK_CANCEL,	GTK_RESPONSE_REJECT,
@@ -659,7 +658,7 @@ void print_settings_action(GtkAction *action, GtkWidget *terminal)
 
 	memset(&info,0,sizeof(info));
 
-	widget = create_custom_widget(NULL,&info);
+	widget = GTK_WIDGET(create_custom_widget(NULL,&info));
 
 	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),GTK_WIDGET(widget),TRUE,TRUE,2);
 
