@@ -394,12 +394,11 @@ static gchar * enum_to_string(GType type, guint enum_value)
  }
 #endif // WIN32
 
- static GtkPrintOperation * begin_print_operation(GtkAction *action, GtkWidget *widget, PRINT_INFO **info)
+ static GtkPrintOperation * begin_print_operation(GObject *obj, GtkWidget *widget, PRINT_INFO **info)
  {
  	GtkPrintOperation	* print 	= gtk_print_operation_new();
 	GtkPrintSettings 	* settings	= gtk_print_settings_new();
 	GtkPageSetup 		* setup 	= gtk_page_setup_new();
- 	const gchar 		* attr;
 
  	*info = g_new0(PRINT_INFO,1);
  	(*info)->session = v3270_get_session(widget);
@@ -408,16 +407,11 @@ static gchar * enum_to_string(GType type, guint enum_value)
 	// Basic setup
 	gtk_print_operation_set_allow_async(print,TRUE);
 
-	attr = (const gchar *) g_object_get_data(G_OBJECT(action),"jobname");
-	if(attr)
+	if(obj)
 	{
-		gtk_print_operation_set_job_name(print,attr);
-	}
-	else
-	{
-		gchar *ptr = g_strconcat(PACKAGE_NAME,".",gtk_action_get_name(action),NULL);
-		gtk_print_operation_set_job_name(print,ptr);
-		g_free(ptr);
+		const gchar * attr = (const gchar *) g_object_get_data(obj,"jobname");
+		if(attr)
+			gtk_print_operation_set_job_name(print,attr);
 	}
 
 	gtk_print_operation_set_custom_tab_label(print,_( "Options" ));
@@ -492,7 +486,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
  void print_all_action(GtkAction *action, GtkWidget *widget)
  {
  	PRINT_INFO			* info = NULL;
- 	GtkPrintOperation 	* print = begin_print_operation(action,widget,&info);
+ 	GtkPrintOperation 	* print = begin_print_operation(G_OBJECT(action),widget,&info);
 
  #ifdef X3270_TRACE
 	lib3270_trace_event(NULL,"Action %s activated on widget %p\n",gtk_action_get_name(action),widget);
@@ -515,7 +509,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
  {
  	PRINT_INFO			* info = NULL;
  	int					  start, end, rows;
- 	GtkPrintOperation 	* print = begin_print_operation(action,widget,&info);;
+ 	GtkPrintOperation 	* print = begin_print_operation(G_OBJECT(action),widget,&info);;
 
  #ifdef X3270_TRACE
 	lib3270_trace_event(NULL,"Action %s activated on widget %p\n",gtk_action_get_name(action),widget);
@@ -584,7 +578,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
 	if(!text)
 		return;
 
- 	print 		= begin_print_operation(action,widget,&info);
+ 	print 		= begin_print_operation(G_OBJECT(action),widget,&info);
 	info->text	= g_strsplit(text,"\n",-1);
 	info->rows	= g_strv_length(info->text);
 
