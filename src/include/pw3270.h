@@ -79,10 +79,9 @@
 
  LIB3270_EXPORT void 		  pw3270_print(GtkWidget *widget, GObject *action, GtkPrintOperationAction oper, PW3270_SRC src);
 
-
 #ifdef HAVE_GTKMAC
- #include <gtk-mac-bundle.h>
- LIB3270_EXPORT GtkMacBundle	* pw3270_get_bundle(void);
+	#include <gtk-mac-bundle.h>
+	LIB3270_EXPORT GtkMacBundle	* pw3270_get_bundle(void);
 #endif
 
  G_END_DECLS

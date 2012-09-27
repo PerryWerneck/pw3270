@@ -71,6 +71,8 @@
 	GtkAction			* ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash, const gchar **names, const gchar **values, GError **error);
 	const gchar			* ui_get_dir_name(UI_ATTR_DIRECTION dir);
 
+	void				  ui_setup_keypads(GHashTable *keypads, GtkWidget *window, GtkWidget *widget);
+
 	void				  ui_connect_text_script(GtkWidget *widget, GtkAction *action, const gchar *script_text, GError **error);
 	void				  ui_set_scroll_actions(GtkWidget *widget, GtkAction *action[UI_ATTR_DIRECTION_COUNT]);
 

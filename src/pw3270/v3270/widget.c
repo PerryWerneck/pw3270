@@ -1417,3 +1417,9 @@ void v3270_set_session_name(GtkWidget *widget, const gchar *name)
 
 	GTK_V3270(widget)->session_name = g_strdup(name);
 }
+
+gboolean v3270_is_connected(GtkWidget *widget)
+{
+	g_return_val_if_fail(GTK_IS_V3270(widget),FALSE);
+	return lib3270_connected(GTK_V3270(widget)->host) ? TRUE : FALSE;
+}

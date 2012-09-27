@@ -231,13 +231,15 @@ void parser_build(struct parser *p, GtkWidget *widget)
 	// Pack top toolbars
 	g_hash_table_foreach(p->element_list[UI_ELEMENT_TOOLBAR],(GHFunc) pack_start, p);
 
+	// Setup keypads
+	ui_setup_keypads(p->element_list[UI_ELEMENT_KEYPAD], p->toplevel, p->center_widget);
+
 	// Pack top keypads
 	memset(&keypad,0,sizeof(keypad));
 	keypad.box 		= vbox;
 	keypad.filter 	= GTK_POS_BOTTOM;
 	keypad.pack 	= gtk_box_pack_start;
 	g_hash_table_foreach(p->element_list[UI_ELEMENT_KEYPAD],(GHFunc) pack_keypad, &keypad);
-
 
 	// Pack left keypads
 	keypad.box 		= hbox;

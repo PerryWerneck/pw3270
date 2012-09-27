@@ -30,6 +30,7 @@
  */
 
  #include <stdlib.h>
+ #include <pw3270/v3270.h>
  #include "private.h"
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
@@ -119,4 +120,54 @@
 			g_object_set_data(G_OBJECT(action),name[f],g_string_chunk_insert_const(info->strings,value[f]));
 		}
 	}
+ }
+
+ struct list_data
+ {
+ 	GtkWidget	* terminal;
+ 	GtkWidget	**keypad;
+ 	guint		  pos;
+ 	guint		  total;
+ };
+
+ static void insert_keypad(gpointer key, GtkWidget *widget, struct list_data *dt)
+ {
+ 	if(!widget || dt->pos >= dt->total)
+		return;
+	gtk_widget_set_sensitive(widget,v3270_is_connected(dt->terminal));
+
+	trace("%s: keypad[%d]=%p",__FUNCTION__,dt->pos,widget);
+	dt->keypad[dt->pos++] = widget;
+ }
+
+ static void disable_keypad(GtkWidget *terminal, GtkWidget **keypad)
+ {
+ 	while(*keypad)
+		gtk_widget_set_sensitive(*(keypad++),FALSE);
+ }
+
+ static void enable_keypad(GtkWidget *terminal, const gchar *dunno, GtkWidget **keypad)
+ {
+ 	while(*keypad)
+		gtk_widget_set_sensitive(*(keypad++),TRUE);
+ }
+
+ void ui_setup_keypads(GHashTable *keypads, GtkWidget *window, GtkWidget *widget)
+ {
+ 	struct list_data dt;
+
+ 	memset(&dt,0,sizeof(dt));
+ 	dt.terminal = widget;
+	dt.total	= g_hash_table_size(keypads);
+
+	if(!dt.total)
+		return;
+
+	dt.keypad = g_new0(GtkWidget *,dt.total+1);
+	g_hash_table_foreach(keypads,(GHFunc) insert_keypad, &dt);
+
+	g_signal_connect(widget,"disconnected",G_CALLBACK(disable_keypad),dt.keypad);
+	g_signal_connect(widget,"connected",G_CALLBACK(enable_keypad),dt.keypad);
+
+	g_object_set_data_full(G_OBJECT(widget),"keypads",dt.keypad,g_free);
  }

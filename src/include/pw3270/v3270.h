@@ -138,6 +138,7 @@
  LIB3270_EXPORT	const gchar		* v3270_get_font_family(GtkWidget *widget);
 
  LIB3270_EXPORT	H3270			* v3270_get_session(GtkWidget *widget);
+ LIB3270_EXPORT gboolean		  v3270_is_connected(GtkWidget *widget);
 
  LIB3270_EXPORT	int				  v3270_connect(GtkWidget *widget, const gchar *host);
  LIB3270_EXPORT	void			  v3270_disconnect(GtkWidget *widget);
