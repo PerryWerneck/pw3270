@@ -625,6 +625,9 @@ static gchar * enum_to_string(GType type, guint enum_value)
 
  void print_copy_action(GtkAction *action, GtkWidget *widget)
  {
+	pw3270_print(widget,G_OBJECT(action),GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, PW3270_SRC_COPY);
+
+/*
  	PRINT_INFO			* info = NULL;
  	GtkPrintOperation 	* print;
  	const gchar			* text	= v3270_get_copy(widget);
@@ -655,12 +658,14 @@ static gchar * enum_to_string(GType type, guint enum_value)
 	gtk_print_operation_run(print,GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,GTK_WINDOW(gtk_widget_get_toplevel(widget)),NULL);
 
 	g_object_unref(print);
+*/
  }
 
  LIB3270_EXPORT void pw3270_print(GtkWidget *widget, GObject *action, GtkPrintOperationAction oper, PW3270_SRC src)
  {
  	PRINT_INFO			* info = NULL;
  	GtkPrintOperation 	* print = begin_print_operation(action,widget,&info);
+ 	const gchar			* text;
 
  #ifdef X3270_TRACE
 	if(action)
@@ -672,7 +677,35 @@ static gchar * enum_to_string(GType type, guint enum_value)
 	info->src = src;
 
     g_signal_connect(print,"begin_print",G_CALLBACK(begin_print),info);
-	g_signal_connect(print,"draw_page",G_CALLBACK(draw_screen),info);
+
+	switch(src)
+	{
+	case PW3270_SRC_ALL:
+	case PW3270_SRC_SELECTED:
+		g_signal_connect(print,"draw_page",G_CALLBACK(draw_screen),info);
+		break;
+
+	case PW3270_SRC_COPY:
+
+		text = v3270_get_copy(widget);
+
+		if(text)
+		{
+			int r;
+
+			info->text	= g_strsplit(text,"\n",-1);
+			info->rows	= g_strv_length(info->text);
+
+			for(r=0;r < info->rows;r++)
+			{
+				size_t sz = strlen(info->text[r]);
+				if(sz > info->cols)
+					info->cols = sz;
+			}
+		}
+		g_signal_connect(print,"draw_page",G_CALLBACK(draw_text),info);
+		break;
+	}
 
 	// Run Print dialog
 	gtk_print_operation_run(print,oper,GTK_WINDOW(gtk_widget_get_toplevel(widget)),NULL);

@@ -72,6 +72,7 @@
  {
  	PW3270_SRC_ALL,			/**< Screen contents */
  	PW3270_SRC_SELECTED,	/**< Selected region */
+	PW3270_SRC_COPY,		/**< Copy buffer */
 
  	PW3270_SRC_USER
  } PW3270_SRC;
