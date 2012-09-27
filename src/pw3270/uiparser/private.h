@@ -82,8 +82,11 @@
 	GHashTable	 			*  actions;			/**< List of actions */
 	GHashTable				*  element_list[UI_ELEMENT_COUNT];
 	const UI_WIDGET_SETUP	*  setup;
+
+	int						   disabled : 1;
+
 #ifdef HAVE_GTKMAC
-	GtkWidget			*  sysmenu[SYSMENU_ITEM_COUNT];
+	GtkWidget				*  sysmenu[SYSMENU_ITEM_COUNT];
 #endif // HAVE_GTKMAC
 	void					*  block_data;
  };

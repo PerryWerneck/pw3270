@@ -352,7 +352,6 @@ static gchar * enum_to_string(GType type, guint enum_value)
 	GtkWidget			* label[G_N_ELEMENTS(text)];
 	GtkWidget			* widget;
 	int					  f;
- 	gchar				* font;
 
 	trace("%s starts",__FUNCTION__);
 
@@ -364,8 +363,14 @@ static gchar * enum_to_string(GType type, guint enum_value)
 	}
 
 	// Font selection button
-	widget = gtk_font_button_new();
-	gtk_label_set_mnemonic_widget(GTK_LABEL(label[0]),widget);
+	{
+		gchar * font = get_string_from_config("print","font","Courier New 10");
+		widget = gtk_font_button_new_with_font(font);
+		gtk_font_button_set_show_size((GtkFontButton *) widget,FALSE);
+		gtk_font_button_set_use_font((GtkFontButton *) widget,TRUE);
+		gtk_label_set_mnemonic_widget(GTK_LABEL(label[0]),widget);
+		g_free(font);
+	}
 
 #if GTK_CHECK_VERSION(3,2,0)
 	gtk_font_chooser_set_filter_func((GtkFontChooser *) widget,filter_monospaced,NULL,NULL);
@@ -374,9 +379,6 @@ static gchar * enum_to_string(GType type, guint enum_value)
 
 	load_settings(info);
 
- 	font = get_string_from_config("print","font","Courier New 10");
-	gtk_font_button_set_font_name((GtkFontButton *) widget, font);
-	g_free(font);
 
     g_signal_connect(G_OBJECT(widget),"font-set",G_CALLBACK(font_set),info);
 

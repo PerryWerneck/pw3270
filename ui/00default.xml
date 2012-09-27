@@ -107,6 +107,7 @@
 
 		<menu name='SettingsMenu' label='Settings'>
 			<menuitem action='editcolors' icon='select-color' label='Colors' />
+			<menuitem action='printsettings' platform='windows' label='Print settings' />
 
 			<!--- Special action - The fontselect menu will be populated with all available monospaced fonts --->
 			<menuitem name='fontselect' icon='select-font' label='Select font' />

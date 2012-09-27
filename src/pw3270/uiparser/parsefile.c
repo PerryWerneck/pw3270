@@ -170,6 +170,33 @@
  	GtkWidget		* widget	= NULL;
  	int				  f;
 
+	name = ui_get_attribute("platform",names,values);
+	if(name)
+	{
+#if defined(WIN32)
+		static const gchar *platname = "windows";
+#elif defined(linux)
+		static const gchar *platname = "linux";
+#elif defined( __APPLE__ )
+		static const gchar *platname = "apple";
+#else
+		static const gchar *platname = "none";
+#endif
+		gchar **plat = g_strsplit(name,",",-1);
+		info->disabled = 1;
+
+		for(f=0;info->disabled && plat[f];f++)
+		{
+			if(!g_strcasecmp(plat[f],platname))
+				info->disabled = 0;
+		}
+
+		g_strfreev(plat);
+
+		if(info->disabled)
+			return;
+	}
+
 	for(f=0;f<G_N_ELEMENTS(element_builder);f++)
 	{
 		if(!g_ascii_strcasecmp(element_name,element_builder[f].name))
@@ -242,14 +269,11 @@
  	GtkWidget *widget = GTK_WIDGET(info->element);
  	int f;
 
-/*
 	if(info->disabled)
 	{
-		info->disabled--;
-//		trace("%s: <%s> disabled=%d",__FUNCTION__,element_name,info->disabled);
+		info->disabled = 0;
 		return;
 	}
-*/
 
 	for(f=0;f<G_N_ELEMENTS(element_builder);f++)
 	{
