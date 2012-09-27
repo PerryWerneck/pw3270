@@ -160,10 +160,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n lib3270-devel
 %defattr(-,root,root)
+%{_includedir}/lib3270
+%{_includedir}/pw3270
 %{_includedir}/lib3270.h
 %{_includedir}/pw3270.h
 %{_includedir}/pw3270/v3270.h
-%{_includedir}/lib3270
 %{_datadir}/@PACKAGE_NAME@/ui/99debug.xml
 %{_libdir}/pkgconfig/*.pc
 %{_libdir}/lib3270.so
