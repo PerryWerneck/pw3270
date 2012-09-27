@@ -42,20 +42,16 @@
 	PW3270_SRC				  src;
 
 	H3270					* session;
-/*
-	gchar					* font;
-	guint					  fontsize;
-	cairo_font_weight_t		  fontweight;
-*/
+
 	int						  baddr;
 	int						  rows;
-	int						  cols;
+	int						  cols;				/**< Max line width */
 	int						  pages;
-	int						  lpp;			/**< Lines per page */
+	int						  lpp;				/**< Lines per page */
 	cairo_font_extents_t	  extents;
 	double					  left;
-	double					  width;		/**< Report width */
-	double					  height;		/**< Report height (all pages) */
+	double					  width;			/**< Report width */
+	double					  height;			/**< Report height (all pages) */
 	cairo_scaled_font_t		* font_scaled;
 
 	gchar					**text;
@@ -94,7 +90,7 @@
 
 	// Setup font
 
-	if(font)
+	if(*font)
 	{
 		PangoFontDescription * descr = pango_font_description_from_string(font);
 		if(descr)
@@ -103,12 +99,12 @@
 										CAIRO_FONT_SLANT_NORMAL,
 										pango_font_description_get_weight(descr) == PANGO_WEIGHT_BOLD ? CAIRO_FONT_WEIGHT_BOLD : CAIRO_FONT_WEIGHT_NORMAL);
 
-			cairo_set_font_size(cr,gtk_print_context_get_width(context)/80);
+			cairo_set_font_size(cr,gtk_print_context_get_width(context)/info->cols);
 
 			pango_font_description_free(descr);
 		}
-		g_free(font);
 	}
+	g_free(font);
 
 	info->font_scaled = cairo_get_scaled_font(cr);
 	cairo_scaled_font_reference(info->font_scaled);
@@ -449,7 +445,8 @@ static gchar * enum_to_string(GType type, guint enum_value)
 	GtkPageSetup 		* setup 	= gtk_page_setup_new();
 
  	*info = g_new0(PRINT_INFO,1);
- 	(*info)->session = v3270_get_session(widget);
+ 	(*info)->session 	= v3270_get_session(widget);
+ 	(*info)->cols		= 80;
 
 	// Basic setup
 	gtk_print_operation_set_allow_async(print,TRUE);
@@ -671,6 +668,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
  	lib3270_get_screen_size(info->session,&info->rows,&info->cols);
 
 	info->src = src;
+
     g_signal_connect(print,"begin_print",G_CALLBACK(begin_print),info);
 	g_signal_connect(print,"draw_page",G_CALLBACK(draw_screen),info);
 
