@@ -42,9 +42,11 @@
 	PW3270_SRC				  src;
 
 	H3270					* session;
+/*
 	gchar					* font;
 	guint					  fontsize;
 	cairo_font_weight_t		  fontweight;
+*/
 	int						  baddr;
 	int						  rows;
 	int						  cols;
@@ -62,6 +64,7 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
+/*
  static void setup_font(GtkPrintContext * context, PRINT_INFO *info)
  {
  	cairo_t *cr = gtk_print_context_get_cairo_context(context);
@@ -83,11 +86,43 @@
 
 
  }
-
+*/
  static void begin_print(GtkPrintOperation *prt, GtkPrintContext *context, PRINT_INFO *info)
  {
- 	setup_font(context,info);
+ 	cairo_t * cr	= gtk_print_context_get_cairo_context(context);
+ 	gchar	* font	= get_string_from_config("print","font","Courier New 10");
 
+	// Setup font
+
+	if(font)
+	{
+		PangoFontDescription * descr = pango_font_description_from_string(font);
+		if(descr)
+		{
+			cairo_select_font_face(cr,	pango_font_description_get_family(descr),
+										CAIRO_FONT_SLANT_NORMAL,
+										pango_font_description_get_weight(descr) == PANGO_WEIGHT_BOLD ? CAIRO_FONT_WEIGHT_BOLD : CAIRO_FONT_WEIGHT_NORMAL);
+
+			cairo_set_font_size(cr,gtk_print_context_get_width(context)/80);
+
+			pango_font_description_free(descr);
+		}
+		g_free(font);
+	}
+
+	info->font_scaled = cairo_get_scaled_font(cr);
+	cairo_scaled_font_reference(info->font_scaled);
+	cairo_scaled_font_extents(info->font_scaled,&info->extents);
+
+	info->width  = ((double) info->cols) * info->extents.max_x_advance;
+	info->height = ((double) info->rows) * (info->extents.height + info->extents.descent);
+
+	// Center image
+	info->left = (gtk_print_context_get_width(context)-info->width)/2;
+	if(info->left < 2)
+		info->left = 2;
+
+	// Setup page size
 	info->lpp	= (gtk_print_context_get_height(context) / (info->extents.height + info->extents.descent));
 	info->pages = (info->rows / info->lpp)+1;
 
@@ -252,8 +287,10 @@ static gchar * enum_to_string(GType type, guint enum_value)
 	if(info->font_scaled)
 		cairo_scaled_font_destroy(info->font_scaled);
 
+/*
 	if(info->font)
 		g_free(info->font);
+*/
 
 	if(info->text)
 		g_strfreev(info->text);
@@ -270,7 +307,8 @@ static gchar * enum_to_string(GType type, guint enum_value)
 
  static void font_set(GtkFontButton *widget, PRINT_INFO *info)
  {
- 	const gchar				* name  = gtk_font_button_get_font_name(widget);
+	set_string_to_config("print","font",gtk_font_button_get_font_name(widget));
+/*
  	PangoFontDescription	* descr = pango_font_description_from_string(name);
 
 	if(!descr)
@@ -288,11 +326,8 @@ static gchar * enum_to_string(GType type, guint enum_value)
 
 	pango_font_description_free(descr);
 
-	set_string_to_config("print","font",name);
-	set_integer_to_config("print","fontsize",info->fontsize);
-	set_integer_to_config("print","fontweight",info->fontweight);
-
 	trace("Font set to \"%s\" with size %d",info->font,info->fontsize);
+*/
  }
 
  static void toggle_show_selection(GtkToggleButton *togglebutton,PRINT_INFO *info)
@@ -306,14 +341,11 @@ static gchar * enum_to_string(GType type, guint enum_value)
  {
 	gchar *ptr = get_string_from_config("print","colors","");
 
-	info->font = get_string_from_config("print","font","Courier New 10");
-	info->fontsize = get_integer_from_config("print","fontsize",10240);
-	info->fontweight = get_integer_from_config("print","fontweight",0);
-
 	if(*ptr)
 		v3270_set_color_table(info->color,ptr);
 	else
 		v3270_set_mono_color_table(info->color,"black","white");
+
 	g_free(ptr);
  }
 
@@ -324,6 +356,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
 	GtkWidget			* label[G_N_ELEMENTS(text)];
 	GtkWidget			* widget;
 	int					  f;
+ 	gchar				* font;
 
 	trace("%s starts",__FUNCTION__);
 
@@ -344,8 +377,11 @@ static gchar * enum_to_string(GType type, guint enum_value)
 	gtk_table_attach(GTK_TABLE(container),widget,1,2,0,1,GTK_EXPAND|GTK_FILL,GTK_FILL,5,0);
 
 	load_settings(info);
-	gtk_font_button_set_font_name((GtkFontButton *) widget,info->font);
-	font_set((GtkFontButton *) widget,info);
+
+ 	font = get_string_from_config("print","font","Courier New 10");
+	gtk_font_button_set_font_name((GtkFontButton *) widget, font);
+	g_free(font);
+
     g_signal_connect(G_OBJECT(widget),"font-set",G_CALLBACK(font_set),info);
 
 	widget = color_scheme_new(info->color);
@@ -414,7 +450,6 @@ static gchar * enum_to_string(GType type, guint enum_value)
 
  	*info = g_new0(PRINT_INFO,1);
  	(*info)->session = v3270_get_session(widget);
- 	(*info)->fontweight = CAIRO_FONT_WEIGHT_NORMAL;
 
 	// Basic setup
 	gtk_print_operation_set_allow_async(print,TRUE);
