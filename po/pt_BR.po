@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-27 00:50-0300\n"
-"PO-Revision-Date: 2012-09-20 17:33-0300\n"
+"POT-Creation-Date: 2012-09-27 10:49-0300\n"
+"PO-Revision-Date: 2012-09-27 10:51-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <perry.werneck@gmail.com>\n"
 "Language: pt_BR\n"
@@ -637,9 +637,8 @@ msgid "Print selected"
 msgstr "Imprimir seleção"
 
 #: ui/00default.xml:110
-#, fuzzy
 msgid "Print settings"
-msgstr "Imprimir caixa de seleção"
+msgstr "Configurações de impressão"
 
 #: rpq.c:225
 #, c-format
