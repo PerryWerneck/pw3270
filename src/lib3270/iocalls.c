@@ -529,8 +529,7 @@ static int internal_event_dispatcher(H3270 *hSession, int block)
 
 static int internal_callthread(int(*callback)(H3270 *, void *), H3270 *session, void *parm)
 {
-	callback(session,parm);
-	return 0;
+	return callback(session,parm);
 }
 
 static int internal_wait(H3270 *hSession, int seconds)
@@ -697,20 +696,18 @@ LIB3270_EXPORT int lib3270_register_handlers(const struct lib3270_callbacks *cbk
 
 LIB3270_EXPORT int lib3270_call_thread(int(*callback)(H3270 *h, void *), H3270 *h, void *parm)
 {
-//	int rc;
+	int rc;
 	CHECK_SESSION_HANDLE(h);
 
-	if(h->set_timer)
-		h->set_timer(h,1);
+	h->set_timer(h,1);
 
 	lib3270_main_iterate(h,0);
-	callthread(callback,h,parm);
+	rc = callthread(callback,h,parm);
 	lib3270_main_iterate(h,0);
 
-	if(h->set_timer)
-		h->set_timer(h,0);
+	h->set_timer(h,0);
 
-	return 0;
+	return rc;
 }
 
 LIB3270_EXPORT void lib3270_main_iterate(H3270 *hSession, int block)

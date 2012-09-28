@@ -182,6 +182,7 @@
 
 	if(host)
 	{
+		set_string_to_config("host","uri","%s",host);
 		pw3270_set_host(widget,host);
 	}
 	else
@@ -318,7 +319,8 @@
 
  static void disconnected(GtkWidget *terminal, GtkWidget * window)
  {
-	GtkActionGroup	**group	= g_object_get_data(G_OBJECT(window),"action_groups");
+	GtkActionGroup	**group		= g_object_get_data(G_OBJECT(window),"action_groups");
+	GtkWidget		**keypad	= g_object_get_data(G_OBJECT(window),"keypads");
 
 	if(group)
 	{
@@ -327,19 +329,32 @@
 		gtk_action_group_set_sensitive(group[ACTION_GROUP_OFFLINE],TRUE);
 	}
 
+	if(keypad)
+	{
+		while(*keypad)
+			gtk_widget_set_sensitive(*(keypad++),FALSE);
+	}
+
 	gtk_window_set_title(GTK_WINDOW(window),v3270_get_session_name(terminal));
  }
 
  static void connected(GtkWidget *terminal, const gchar *host, GtkWidget * window)
  {
  	gchar			* title;
-	GtkActionGroup	**group	= g_object_get_data(G_OBJECT(window),"action_groups");
+	GtkActionGroup	**group		= g_object_get_data(G_OBJECT(window),"action_groups");
+	GtkWidget		**keypad	= g_object_get_data(G_OBJECT(window),"keypads");
 
 	if(group)
 	{
 		gtk_action_group_set_sensitive(group[ACTION_GROUP_ONLINE],TRUE);
 		gtk_action_group_set_sensitive(group[ACTION_GROUP_OFFLINE],FALSE);
 		gtk_action_group_set_sensitive(group[ACTION_GROUP_PASTE],TRUE);
+	}
+
+	if(keypad)
+	{
+		while(*keypad)
+			gtk_widget_set_sensitive(*(keypad++),TRUE);
 	}
 
 	set_string_to_config("host","uri","%s",host);

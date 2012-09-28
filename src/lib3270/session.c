@@ -155,6 +155,10 @@ static void update_ssl(H3270 *session, LIB3270_SSL_STATE state)
 {
 }
 
+static void set_timer(H3270 *session, unsigned char on)
+{
+}
+
 static void screen_disp(H3270 *session)
 {
 	CHECK_SESSION_HANDLE(session);
@@ -198,6 +202,7 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 	hSession->set_width				= nop_int;
 	hSession->update_status			= (void (*)(H3270 *, LIB3270_STATUS)) nop_int;
 	hSession->autostart				= nop;
+	hSession->set_timer				= set_timer;
 
 	// Set the defaults.
 	hSession->extended  			=  1;

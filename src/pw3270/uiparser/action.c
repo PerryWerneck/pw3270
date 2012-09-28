@@ -140,18 +140,6 @@
 	dt->keypad[dt->pos++] = widget;
  }
 
- static void disable_keypad(GtkWidget *terminal, GtkWidget **keypad)
- {
- 	while(*keypad)
-		gtk_widget_set_sensitive(*(keypad++),FALSE);
- }
-
- static void enable_keypad(GtkWidget *terminal, const gchar *dunno, GtkWidget **keypad)
- {
- 	while(*keypad)
-		gtk_widget_set_sensitive(*(keypad++),TRUE);
- }
-
  void ui_setup_keypads(GHashTable *keypads, GtkWidget *window, GtkWidget *widget)
  {
  	struct list_data dt;
@@ -166,8 +154,5 @@
 	dt.keypad = g_new0(GtkWidget *,dt.total+1);
 	g_hash_table_foreach(keypads,(GHFunc) insert_keypad, &dt);
 
-	g_signal_connect(widget,"disconnected",G_CALLBACK(disable_keypad),dt.keypad);
-	g_signal_connect(widget,"connected",G_CALLBACK(enable_keypad),dt.keypad);
-
-	g_object_set_data_full(G_OBJECT(widget),"keypads",dt.keypad,g_free);
+	g_object_set_data_full(G_OBJECT(window),"keypads",dt.keypad,g_free);
  }
