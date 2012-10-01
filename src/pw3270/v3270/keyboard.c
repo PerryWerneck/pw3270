@@ -261,7 +261,8 @@
 
 	if(utf)
 	{
-		lib3270_set_string(GTK_V3270(widget)->host, (const unsigned char *) utf);
+		lib3270_input_string(GTK_V3270(widget)->host, (const unsigned char *) utf);
+//		lib3270_set_string(GTK_V3270(widget)->host, (const unsigned char *) utf);
 		g_free(utf);
 	}
 	else

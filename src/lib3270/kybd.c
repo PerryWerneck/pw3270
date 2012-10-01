@@ -70,6 +70,7 @@ struct ta;
 #include "popupsc.h"
 // #include "printc.h"
 #include "screenc.h"
+#include "screen.h"
 // #if defined(X3270_DISPLAY) /*[*/
 // #include "selectc.h"
 // #endif /*]*/
@@ -735,8 +736,6 @@ static void key_Character_wrapper(H3270 *hSession, const char *param1, const cha
 		code &= ~PASTE_WFLAG;
 	}
 
-//	lib3270_trace_event(hSession," %s -> Key(%s\"%s\")\n",ia_name[(int) ia_cause],with_ge ? "GE " : "",ctl_see((int) ebc2asc[code]));
-
 	(void) key_Character(hSession, code, with_ge, pasting, NULL);
 }
 
@@ -987,6 +986,18 @@ static Boolean key_Character(H3270 *hSession, int code, Boolean with_ge, Boolean
 	return True;
 }
 
+
+LIB3270_EXPORT void lib3270_input_string(H3270 *hSession, const unsigned char *str)
+{
+	while(*str)
+	{
+		key_ACharacter(hSession,(unsigned char)((*str) & 0xff), KT_STD, IA_KEY, NULL);
+		str++;
+	}
+
+	screen_update(hSession,0,hSession->rows*hSession->cols);
+}
+
 /**
  * Handle an ordinary character key, given an ASCII code.
  *
@@ -996,7 +1007,7 @@ void key_ACharacter(H3270 *hSession, unsigned char c, enum keytype keytype, enum
 	if (skipped != NULL)
 		*skipped = False;
 
-	lib3270_trace_event(hSession," %s -> Key(\"%s\")\n",ia_name[(int) cause], ctl_see((int) c));
+	lib3270_trace_event(hSession," %s -> Key(\"%s\") Hex(%02x)\n",ia_name[(int) cause], ctl_see((int) c), (int) c);
 
 	if (IN_3270)
 	{

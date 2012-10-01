@@ -468,6 +468,8 @@
 	 */
 	LIB3270_EXPORT int lib3270_set_string(H3270 *h, const unsigned char *str);
 
+	LIB3270_EXPORT void lib3270_input_string(H3270 *hSession, const unsigned char *str);
+
 	/**
 	 * Set cursor address.
 	 *
