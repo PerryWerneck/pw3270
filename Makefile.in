@@ -232,6 +232,8 @@ $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar: clean pixmaps filelist
 	@cp *.m4 $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@cp revision $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@cp ChangeLog $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
+	@cp colors.conf $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
+	@cp autogen.sh $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@cp configure.ac $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 #	@cp configure $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@cp *.in $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
@@ -262,6 +264,7 @@ install: install-sdk install-lib install-app install-man
 install-app: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) install-locale
 	@$(MAKE) BINDIR="../../$(BINDIR)" LIB3270_LIBS="$(RLSLIB)" LIB3270_CFLAGS="-I../../src/include" -C src/pw3270 install
 	@$(MKDIR) $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/ui
+	@$(INSTALL_DATA) colors.conf $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)
 	@$(INSTALL_DATA) ui/*.xml $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/ui
 
 install-lib: $(BINDIR)/Release@DLLDIR@/@DLLPREFIX@3270@DLLEXT@

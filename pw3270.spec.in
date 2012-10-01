@@ -149,7 +149,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libpw3270.so.@MAJOR_VERSION@
 %{_libdir}/libpw3270.so.@VERSION@
 
+%{_datadir}/@PACKAGE_NAME@/colors.conf
 %{_datadir}/@PACKAGE_NAME@/ui/00default.xml
+%{_datadir}/pw3270/ui/10functions.xml
+%{_datadir}/pw3270/ui/10keypad.xml
 %{_datadir}/@PACKAGE_NAME@/@PACKAGE_NAME@.png
 %{_datadir}/@PACKAGE_NAME@/@PACKAGE_NAME@-logo.png
 
@@ -160,12 +163,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n lib3270-devel
 %defattr(-,root,root)
-%{_includedir}/lib3270
-%{_includedir}/pw3270
+%{_includedir}/pw3270/*.h
+%{_includedir}/lib3270/*.h
 %{_includedir}/lib3270.h
 %{_includedir}/pw3270.h
-%{_includedir}/pw3270/v3270.h
-%{_datadir}/@PACKAGE_NAME@/ui/99debug.xml
+%{_datadir}/pw3270/ui/99debug.xml
 %{_libdir}/pkgconfig/*.pc
 %{_libdir}/lib3270.so
 %{_libdir}/libpw3270.so
