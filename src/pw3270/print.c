@@ -436,6 +436,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
 #ifdef WIN32
  void update_settings(const gchar *key, const gchar *val, gpointer *settings)
  {
+ 	trace("%s: %s=\"%s\"",__FUNCTION__,key,val);
 	gtk_print_settings_set(GTK_PRINT_SETTINGS(settings), key, val);
  }
 #endif // WIN32
@@ -537,65 +538,11 @@ static gchar * enum_to_string(GType type, guint enum_value)
  void print_all_action(GtkAction *action, GtkWidget *widget)
  {
 	pw3270_print(widget,G_OBJECT(action),GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, PW3270_SRC_ALL);
-
-/*
- 	PRINT_INFO			* info = NULL;
- 	GtkPrintOperation 	* print = begin_print_operation(G_OBJECT(action),widget,&info);
-
- #ifdef X3270_TRACE
-	lib3270_trace_event(NULL,"Action %s activated on widget %p\n",gtk_action_get_name(action),widget);
- #endif
-
- 	lib3270_get_screen_size(info->session,&info->rows,&info->cols);
-
-	info->all = 1;
-    g_signal_connect(print,"begin_print",G_CALLBACK(begin_print),info);
-    g_signal_connect(print,"draw_page",G_CALLBACK(draw_screen),info);
-
-	// Run Print dialog
-	gtk_print_operation_run(print,GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,GTK_WINDOW(gtk_widget_get_toplevel(widget)),NULL);
-
-
-	g_object_unref(print);
-*/
  }
 
  void print_selected_action(GtkAction *action, GtkWidget *widget)
  {
 	pw3270_print(widget,G_OBJECT(action),GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, PW3270_SRC_SELECTED);
-
-/*
- 	PRINT_INFO			* info = NULL;
- 	int					  start, end, rows;
- 	GtkPrintOperation 	* print = begin_print_operation(G_OBJECT(action),widget,&info);;
-
- #ifdef X3270_TRACE
-	lib3270_trace_event(NULL,"Action %s activated on widget %p\n",gtk_action_get_name(action),widget);
- #endif
-
- 	if(!lib3270_get_selection_bounds(info->session,&start,&end))
-	{
-		g_warning("Can't get selected addresses for action %s",gtk_action_get_name(action));
-		g_object_unref(print);
-		return;
-	}
-
-	info->baddr = start;
- 	lib3270_get_screen_size(info->session,&rows,&info->cols);
-
-	info->rows = ((end / info->cols) - (start / info->cols))+1;
-
-	trace("First row: %d  End row: %d  Num rows: %d",(start / info->cols),(end / info->cols),info->rows);
-
-	info->all = 0;
-    g_signal_connect(print,"begin_print",G_CALLBACK(begin_print),info);
-    g_signal_connect(print,"draw_page",G_CALLBACK(draw_screen),info);
-
-	// Run Print dialog
-	gtk_print_operation_run(print,GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,GTK_WINDOW(gtk_widget_get_toplevel(widget)),NULL);
-
-	g_object_unref(print);
-*/
  }
 
  static void draw_text(GtkPrintOperation *prt, GtkPrintContext *context, gint pg, PRINT_INFO *info)
@@ -626,51 +573,24 @@ static gchar * enum_to_string(GType type, guint enum_value)
  void print_copy_action(GtkAction *action, GtkWidget *widget)
  {
 	pw3270_print(widget,G_OBJECT(action),GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, PW3270_SRC_COPY);
-
-/*
- 	PRINT_INFO			* info = NULL;
- 	GtkPrintOperation 	* print;
- 	const gchar			* text	= v3270_get_copy(widget);
- 	int					  r;
-
- #ifdef X3270_TRACE
-	lib3270_trace_event(NULL,"Action %s activated on widget %p\n",gtk_action_get_name(action),widget);
- #endif
-
-	if(!text)
-		return;
-
- 	print 		= begin_print_operation(G_OBJECT(action),widget,&info);
-	info->text	= g_strsplit(text,"\n",-1);
-	info->rows	= g_strv_length(info->text);
-
-	for(r=0;r < info->rows;r++)
-	{
-		size_t sz = strlen(info->text[r]);
-		if(sz > info->cols)
-			info->cols = sz;
-	}
-
-    g_signal_connect(print,"begin_print",G_CALLBACK(begin_print),info);
-    g_signal_connect(print,"draw_page",G_CALLBACK(draw_text),info);
-
-	// Run Print dialog
-	gtk_print_operation_run(print,GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,GTK_WINDOW(gtk_widget_get_toplevel(widget)),NULL);
-
-	g_object_unref(print);
-*/
  }
 
- LIB3270_EXPORT void pw3270_print(GtkWidget *widget, GObject *action, GtkPrintOperationAction oper, PW3270_SRC src)
+ LIB3270_EXPORT int pw3270_print(GtkWidget *widget, GObject *action, GtkPrintOperationAction oper, PW3270_SRC src)
  {
  	PRINT_INFO			* info = NULL;
- 	GtkPrintOperation 	* print = begin_print_operation(action,widget,&info);
+ 	GtkPrintOperation 	* print;
  	const gchar			* text;
 
  #ifdef X3270_TRACE
 	if(action)
 		lib3270_trace_event(v3270_get_session(widget),"Action %s activated on widget %p\n",gtk_action_get_name(GTK_ACTION(action)),widget);
  #endif
+
+ 	g_return_val_if_fail(GTK_IS_V3270(widget),EINVAL);
+
+ 	print = begin_print_operation(action,widget,&info);
+ 	if(!print)
+		return -1;
 
  	lib3270_get_screen_size(info->session,&info->rows,&info->cols);
 
@@ -710,6 +630,8 @@ static gchar * enum_to_string(GType type, guint enum_value)
 	// Run Print dialog
 	gtk_print_operation_run(print,oper,GTK_WINDOW(gtk_widget_get_toplevel(widget)),NULL);
 	g_object_unref(print);
+
+	return 0;
  }
 
 void print_settings_action(GtkAction *action, GtkWidget *terminal)

@@ -98,7 +98,7 @@
 												1,							// number of instances
 												PIPE_BUFFER_LENGTH,   		// output buffer size
 												PIPE_BUFFER_LENGTH,			// input buffer size
-												0,							// client time-out
+												NMPWAIT_USE_DEFAULT_WAIT,	// client time-out
 												NULL);						// default security attributes
 
 		trace("%s = %p",pipename,hPipe);
@@ -185,6 +185,7 @@
 	text = g_convert(buffer,length,lib3270_get_charset(hSession),charset,&bytes_read,&bytes_written,&error);
 	if(text)
 	{
+		rc = 0;
 		if(strchr(text,control_char))
 		{
 			// Convert control char
@@ -200,7 +201,7 @@
 				switch(*(ptr++))
 				{
 				case 'P':	// Print
-					pw3270_print(pw3270_get_toplevel(), NULL, GTK_PRINT_OPERATION_ACTION_PRINT, PW3270_SRC_ALL);
+					rc = pw3270_print(pw3270_get_terminal_widget(NULL), NULL, GTK_PRINT_OPERATION_ACTION_PRINT, PW3270_SRC_ALL);
 					break;
 
 				case 'E':	// Enter
@@ -270,7 +271,6 @@
 			lib3270_emulate_input(hSession,text,strlen(text),0);
 		}
 		g_free(text);
-		rc = 0;
 	}
 	else
 	{

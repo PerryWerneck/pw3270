@@ -77,7 +77,7 @@
  	PW3270_SRC_USER
  } PW3270_SRC;
 
- LIB3270_EXPORT void 		  pw3270_print(GtkWidget *widget, GObject *action, GtkPrintOperationAction oper, PW3270_SRC src);
+ LIB3270_EXPORT int 		  pw3270_print(GtkWidget *widget, GObject *action, GtkPrintOperationAction oper, PW3270_SRC src);
 
 #ifdef HAVE_GTKMAC
 	#include <gtk-mac-bundle.h>
