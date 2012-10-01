@@ -67,6 +67,7 @@
  LIB3270_EXPORT void		  pw3270_set_session_name(GtkWidget *widget, const gchar *name);
 
  LIB3270_EXPORT gint		  pw3270_get_integer(GtkWidget *widget, const gchar *group, const gchar *key, gint def);
+ LIB3270_EXPORT void		  pw3270_set_integer(GtkWidget *widget, const gchar *group, const gchar *key, gint val);
 
  typedef enum pw3270_src
  {

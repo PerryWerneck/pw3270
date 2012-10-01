@@ -187,6 +187,7 @@
  LIB3270_EXPORT	const gchar		* v3270_get_session_name(GtkWidget *widget);
  LIB3270_EXPORT	void			  v3270_set_session_name(GtkWidget *widget, const gchar *name);
  LIB3270_EXPORT int				  v3270_set_script(GtkWidget *widget, const gchar id, unsigned char on);
+ LIB3270_EXPORT void			  v3270_set_scaled_fonts(GtkWidget *widget, gboolean on);
 
  LIB3270_EXPORT	void 			  v3270_set_host(GtkWidget *widget, const gchar *uri);
 

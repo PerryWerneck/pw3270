@@ -60,29 +60,6 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
-/*
- static void setup_font(GtkPrintContext * context, PRINT_INFO *info)
- {
- 	cairo_t *cr = gtk_print_context_get_cairo_context(context);
-
-	trace("Font: %s",info->font);
-	cairo_select_font_face(cr, info->font, CAIRO_FONT_SLANT_NORMAL, info->fontweight);
-
-	info->font_scaled = cairo_get_scaled_font(cr);
-	cairo_scaled_font_reference(info->font_scaled);
-	cairo_scaled_font_extents(info->font_scaled,&info->extents);
-
-	info->width  = ((double) info->cols) * info->extents.max_x_advance;
-	info->height = ((double) info->rows) * (info->extents.height + info->extents.descent);
-
-	// Center image
-	info->left = (gtk_print_context_get_width(context)-info->width)/2;
-	if(info->left < 2)
-		info->left = 2;
-
-
- }
-*/
  static void begin_print(GtkPrintOperation *prt, GtkPrintContext *context, PRINT_INFO *info)
  {
  	cairo_t * cr	= gtk_print_context_get_cairo_context(context);
@@ -602,6 +579,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
 	{
 	case PW3270_SRC_ALL:
 	case PW3270_SRC_SELECTED:
+	case PW3270_SRC_USER:
 		g_signal_connect(print,"draw_page",G_CALLBACK(draw_screen),info);
 		break;
 
@@ -625,6 +603,8 @@ static gchar * enum_to_string(GType type, guint enum_value)
 		}
 		g_signal_connect(print,"draw_page",G_CALLBACK(draw_text),info);
 		break;
+
+
 	}
 
 	// Run Print dialog

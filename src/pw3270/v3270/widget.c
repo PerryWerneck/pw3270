@@ -521,9 +521,7 @@ static void v3270_class_init(v3270Class *klass)
 void v3270_update_font_metrics(v3270 *terminal, cairo_t *cr, int width, int height)
 {
 	// update font metrics
- 	static const int font_size[] = { 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 18, 20, 22, 24, 26, 28, 32, 36, 40, 48, 56, 64, 72, 0 };
-	int f, rows, cols, hFont;
-	int size = font_size[0];
+	int rows, cols, hFont, size;
 
 	cairo_font_extents_t extents;
 
@@ -533,47 +531,46 @@ void v3270_update_font_metrics(v3270 *terminal, cairo_t *cr, int width, int heig
 
 	cairo_select_font_face(cr, terminal->font_family, CAIRO_FONT_SLANT_NORMAL,terminal->font_weight);
 
- 	for(f=0;font_size[f];f++)
- 	{
-        cairo_set_font_size(cr,font_size[f]);
-        cairo_font_extents(cr,&extents);
+	if(terminal->scaled_fonts)
+	{
+		double w = ((double)width) / ((double)cols);
+		double h = ((double) height) / ((double) (rows+2));
 
-		if(f == 0)
+		cairo_set_font_size(cr,w < h ? w : h);
+	}
+	else
+	{
+		static const int font_size[] = { 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 18, 20, 22, 24, 26, 28, 32, 36, 40, 48, 56, 64, 72, 0 };
+		int f;
+
+		size = font_size[0];
+
+		for(f=0;font_size[f];f++)
 		{
-			terminal->minimum_width  = (cols * extents.max_x_advance);
-			terminal->minimum_height = ((rows+1) * (extents.height + extents.descent)) + (OIA_TOP_MARGIN+2);
+			cairo_set_font_size(cr,font_size[f]);
+			cairo_font_extents(cr,&extents);
+
+			if(f == 0)
+			{
+				terminal->minimum_width  = (cols * extents.max_x_advance);
+				terminal->minimum_height = ((rows+1) * (extents.height + extents.descent)) + (OIA_TOP_MARGIN+2);
+			}
+
+			if( HEIGHT_IN_PIXELS(terminal,(extents.height+extents.descent)) < height && WIDTH_IN_PIXELS(terminal,extents.max_x_advance) < width )
+				size = font_size[f];
 		}
 
-		if( HEIGHT_IN_PIXELS(terminal,(extents.height+extents.descent)) < height && WIDTH_IN_PIXELS(terminal,extents.max_x_advance) < width )
-			size = font_size[f];
- 	}
+		cairo_set_font_size(cr,size);
 
-	cairo_set_font_size(cr,size);
+		#if !GTK_CHECK_VERSION(3,0,0)
+			gtk_widget_set_size_request(GTK_WIDGET(terminal),terminal->minimum_width,terminal->minimum_height);
+		#endif // !GTK(3,0,0)
 
-#if !GTK_CHECK_VERSION(3,0,0)
-	gtk_widget_set_size_request(GTK_WIDGET(terminal),terminal->minimum_width,terminal->minimum_height);
-#endif // !GTK(3,0,0)
+	}
 
-/*
-	double sx, sy;
-	cairo_matrix_t font_matrix;
-
-	cairo_set_font_size(cr,10);
 	cairo_font_extents(cr,&extents);
 
-	trace("font - extents.height=%f  extents.width=%f",extents.height,extents.max_x_advance);
-
-	sx = ((double) width) / (((double) terminal->cols) * extents.max_x_advance);
-	sy = ((double) height) / (((double) terminal->rows) * extents.height);
-
-	trace("sy=%f sx=%f ",sy,sx);
-
-	cairo_get_font_matrix(cr,&font_matrix);
-	cairo_matrix_scale(&font_matrix, sx, sy);
-	cairo_set_font_matrix(cr,&font_matrix);
-*/
-
-	/* Save scaled font for use on next drawings */
+	// Save scaled font for use on next drawings
 	if(terminal->font_scaled)
 		cairo_scaled_font_destroy(terminal->font_scaled);
 
@@ -1405,6 +1402,15 @@ const gchar	* v3270_get_session_name(GtkWidget *widget)
 	if(!GTK_IS_V3270(widget) || GTK_V3270(widget)->session_name == NULL)
 		return g_get_application_name();
 	return GTK_V3270(widget)->session_name;
+}
+
+void v3270_set_scaled_fonts(GtkWidget *widget, gboolean on)
+{
+	g_return_if_fail(GTK_IS_V3270(widget));
+
+	GTK_V3270(widget)->scaled_fonts = on ? 1 : 0;
+
+	trace("Sfonts is %s",GTK_V3270(widget)->scaled_fonts ? "YES" : "NO");
 }
 
 void v3270_set_session_name(GtkWidget *widget, const gchar *name)

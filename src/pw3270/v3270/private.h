@@ -125,10 +125,11 @@ G_BEGIN_DECLS
 	GtkWidget parent;
 
 	// flags
-	int selecting	: 1;	/**< Selecting region */
-	int moving		: 1;	/**< Moving selected region */
-	int resizing	: 1;	/**< Resizing selected region */
-	int table		: 1;	/**< Copy mode is table */
+	int selecting		: 1;	/**< Selecting region */
+	int moving			: 1;	/**< Moving selected region */
+	int resizing		: 1;	/**< Resizing selected region */
+	int table			: 1;	/**< Copy mode is table */
+	int scaled_fonts	: 1;	/**< Use scaled fonts */
 
 #if GTK_CHECK_VERSION(3,0,0)
 

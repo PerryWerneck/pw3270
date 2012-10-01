@@ -184,12 +184,12 @@ int main(int argc, char *argv[])
 		static const GOptionEntry app_options[] =
 		{
 #if ! defined( WIN32 )
-			{ "appname",		'a', 0, G_OPTION_ARG_CALLBACK,	appname,		N_( "Application name" ),		PACKAGE_NAME	},
+			{ "appname",		'a', 0, G_OPTION_ARG_CALLBACK,	appname,			N_( "Application name" ),					PACKAGE_NAME	},
 #else
-			{ "appname",		'a', 0, G_OPTION_ARG_STRING,	&appname,		N_( "Application name" ),		PACKAGE_NAME	},
+			{ "appname",		'a', 0, G_OPTION_ARG_STRING,	&appname,			N_( "Application name" ),					PACKAGE_NAME	},
 #endif // WIN32
-			{ "session",		's', 0, G_OPTION_ARG_STRING,	&session_name,	N_( "Session name" ),			PACKAGE_NAME	},
-			{ "host",			'h', 0, G_OPTION_ARG_STRING,	&host,			N_( "Host to connect"),			NULL			},
+			{ "session",		's', 0, G_OPTION_ARG_STRING,	&session_name,		N_( "Session name" ),						PACKAGE_NAME	},
+			{ "host",			'h', 0, G_OPTION_ARG_STRING,	&host,				N_( "Host to connect"),						NULL			},
 			{ NULL }
 		};
 

@@ -104,3 +104,8 @@ LIB3270_EXPORT gint pw3270_get_integer(GtkWidget *widget, const gchar *group, co
 {
 	return get_integer_from_config(group, key, def);
 }
+
+LIB3270_EXPORT void pw3270_set_integer(GtkWidget *widget, const gchar *group, const gchar *key, gint val)
+{
+	set_integer_to_config(group, key, val);
+}
