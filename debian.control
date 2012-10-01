@@ -14,7 +14,7 @@ Description: IBM 3270 Terminal emulator for gtk
 Package: lib3270
 Architecture: any
 Section: libs
-Depends: ${misc:Depends}, binutils (>= 2.14.90.0.7)
+Depends: ${misc:Depends}
 Description: pw3270 shared libraries.
  This package contains the pw3270 shared library for the core application.
 

@@ -275,10 +275,17 @@ void v3270_set_scroll_action(GtkWidget *widget, GdkScrollDirection direction, Gt
 
 gboolean v3270_scroll_event(GtkWidget *widget, GdkEventScroll *event)
 {
-	v3270	* terminal	= GTK_V3270(widget);
+	H3270	* hSession	= v3270_get_session(widget);
 
-	if(lib3270_get_program_message(terminal->host) != LIB3270_MESSAGE_NONE || event->direction < 0 || event->direction > G_N_ELEMENTS(action_scroll))
+	lib3270_trace_event(hSession,"scroll event direction=%d",(int) event->direction);
+
+	if(lib3270_get_program_message(hSession) != LIB3270_MESSAGE_NONE || event->direction < 0 || event->direction > G_N_ELEMENTS(action_scroll))
+	{
+		lib3270_trace_event(hSession,"  dropped (not available)\n");
 		return FALSE;
+	}
+
+	lib3270_trace_event(hSession,"\n");
 
 	trace("Scroll: %d Action: %p",event->direction,action_scroll[event->direction]);
 
