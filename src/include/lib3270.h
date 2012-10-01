@@ -33,6 +33,11 @@
 
 	#define LIB3270_H_INCLUDED 1
 	#include <stdarg.h>
+	#include <errno.h>
+
+	#ifndef ENOTCONN
+		#define ENOTCONN 107
+	#endif // !ENOTCONN
 
 	#if defined(__GNUC__)
 		#define LIB3270_GNUC_FORMAT(s,f) __attribute__ ((__format__ (__printf__, s, f)))

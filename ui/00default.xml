@@ -79,7 +79,7 @@
 			<menuitem action='erase' target='all' group='online' key='Pause' label='Clear' />
 			<menuitem action='erase' target='input' icon='clear' group='online' label='Erase input' />
 			<menuitem action='erase' target='field' key='<Ctrl>u' group='online' label='Delete field' />
-			<menuitem action='erase' target='eof' group='online' label='Erase to end of field' />
+			<menuitem action='erase' target='eof' group='online' key='End' label='Erase to end of field' />
 			<menuitem action='erase' target='eol' group='online' label='Erase to end of line' />
 		</menu>
 

@@ -207,6 +207,10 @@
 					lib3270_enter(hSession);
 					break;
 
+				case 'F':	// Erase EOF
+					lib3270_eraseeof(hSession);
+					break;
+
 				case '1':	// PF1
 					lib3270_pfkey(hSession,1);
 					break;
