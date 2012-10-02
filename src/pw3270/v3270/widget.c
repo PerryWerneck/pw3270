@@ -533,10 +533,24 @@ void v3270_update_font_metrics(v3270 *terminal, cairo_t *cr, int width, int heig
 
 	if(terminal->scaled_fonts)
 	{
-		double w = ((double)width) / ((double)cols);
+		double w = ((double) width) / ((double)cols);
 		double h = ((double) height) / ((double) (rows+2));
+		double s = w < h ? w : h;
 
-		cairo_set_font_size(cr,w < h ? w : h);
+		cairo_set_font_size(cr,s);
+		cairo_font_extents(cr,&extents);
+
+		while( HEIGHT_IN_PIXELS(terminal,(extents.height+extents.descent)) < height && WIDTH_IN_PIXELS(terminal,extents.max_x_advance) < width )
+		{
+			s += 1.0;
+			cairo_set_font_size(cr,s);
+			cairo_font_extents(cr,&extents);
+		}
+
+		s -= 1.0;
+
+		cairo_set_font_size(cr,s < 1.0 ? 1.0 : s);
+		cairo_font_extents(cr,&extents);
 	}
 	else
 	{
