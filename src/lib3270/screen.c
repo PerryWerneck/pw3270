@@ -302,10 +302,6 @@ void screen_update(H3270 *session, int bstart, int bend)
 	a  		= color_from_fa(session,fa);
 	fa_addr = find_field_attribute(session,bstart); // may be -1, that's okay
 
-#ifdef WIN32
-	trace("%s start=%d end=%d",__FUNCTION__,bstart,bend);
-#endif // WIN32
-
 	for(baddr = bstart; baddr < bend; baddr++)
 	{
 		if(session->ea_buf[baddr].fa)
@@ -351,10 +347,6 @@ void screen_update(H3270 *session, int bstart, int bend)
 		}
 	}
 
-#ifdef WIN32
-	trace("%s first=%d last=%d",__FUNCTION__,first,last);
-#endif // WIN32
-
 	if(first >= 0)
 	{
 		int len = (last - first)+1;
@@ -366,9 +358,6 @@ void screen_update(H3270 *session, int bstart, int bend)
 				len++;
 		}
 
-#ifdef WIN32
-		trace("%s first=%d last=%d len=%d changed=%p",__FUNCTION__,first,last,len,session->changed);
-#endif // WIN32
 		session->changed(session,first,len);
 	}
 
