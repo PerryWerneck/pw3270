@@ -196,7 +196,7 @@
 	if(pw3270_get_toggle(widget,LIB3270_TOGGLE_CONNECT_ON_STARTUP))
 		v3270_connect(GTK_PW3270(widget)->terminal,NULL);
 
-	v3270_set_scaled_fonts(GTK_PW3270(widget)->terminal,get_integer_from_config("terminal","sfonts",0) ? TRUE : FALSE);
+	v3270_set_scaled_fonts(GTK_PW3270(widget)->terminal,get_boolean_from_config("terminal","sfonts",FALSE));
 
  	return widget;
  }
