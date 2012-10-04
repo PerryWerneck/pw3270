@@ -109,3 +109,8 @@ LIB3270_EXPORT void pw3270_set_integer(GtkWidget *widget, const gchar *group, co
 {
 	set_integer_to_config(group, key, val);
 }
+
+LIB3270_EXPORT gint pw3270_get_boolean(GtkWidget *widget, const gchar *group, const gchar *key, gint def)
+{
+	return get_boolean_from_config(group, key, def);
+}

@@ -69,6 +69,8 @@
  LIB3270_EXPORT gint		  pw3270_get_integer(GtkWidget *widget, const gchar *group, const gchar *key, gint def);
  LIB3270_EXPORT void		  pw3270_set_integer(GtkWidget *widget, const gchar *group, const gchar *key, gint val);
 
+ LIB3270_EXPORT gboolean	  pw3270_get_boolean(GtkWidget *widget, const gchar *group, const gchar *key, gboolean def);
+
  typedef enum pw3270_src
  {
  	PW3270_SRC_ALL,			/**< Screen contents */
