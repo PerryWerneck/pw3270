@@ -268,23 +268,39 @@
 	switch(keypad->pos)
 	{
 	case UI_ATTR_UP:
+#if GTK_CHECK_VERSION(3,0,0)
+        keypad->box = gtk_box_new(GTK_ORIENTATION_VERTICAL,0);
+#else
 		keypad->box = gtk_vbox_new(FALSE,0);
+#endif // GTK(3,0,0)
 		gtk_handle_box_set_handle_position(GTK_HANDLE_BOX(keypad->handle),GTK_POS_BOTTOM);
 		break;
 
 	case UI_ATTR_DOWN:
+#if GTK_CHECK_VERSION(3,0,0)
+        keypad->box = gtk_box_new(GTK_ORIENTATION_VERTICAL,0);
+#else
 		keypad->box = gtk_vbox_new(FALSE,0);
+#endif // GTK(3,0,0)
 		gtk_handle_box_set_handle_position(GTK_HANDLE_BOX(keypad->handle),GTK_POS_TOP);
 		break;
 
 	case UI_ATTR_LEFT:
+#if GTK_CHECK_VERSION(3,0,0)
+        keypad->box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL,0);
+#else
 		keypad->box = gtk_hbox_new(FALSE,0);
+#endif // GTK(3,0,0)
 		gtk_handle_box_set_handle_position(GTK_HANDLE_BOX(keypad->handle),GTK_POS_RIGHT);
 		break;
 
 	default:
-		keypad->pos = UI_ATTR_RIGHT;
+#if GTK_CHECK_VERSION(3,0,0)
+        keypad->box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL,0);
+#else
 		keypad->box = gtk_hbox_new(FALSE,0);
+#endif // GTK(3,0,0)
+		keypad->pos = UI_ATTR_RIGHT;
 		gtk_handle_box_set_handle_position(GTK_HANDLE_BOX(keypad->handle),GTK_POS_LEFT);
 
 	}

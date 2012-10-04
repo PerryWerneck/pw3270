@@ -983,7 +983,7 @@ LIB3270_EXPORT void lib3270_data_recv(H3270 *hSession, size_t nr, const unsigned
 {
 	register const unsigned char * cp;
 
-	trace("%s: nr=%d",__FUNCTION__,nr);
+	trace("%s: nr=%d",__FUNCTION__,(int) nr);
 
 	trace_netdata(hSession, '<', netrbuf, nr);
 
