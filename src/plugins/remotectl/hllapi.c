@@ -53,7 +53,7 @@
 	char PipeName[4096];
 
 	if(hPipe != INVALID_HANDLE_VALUE)
-		return EBUSY;
+		return 0;
 
 	snprintf(PipeName,4095,"\\\\.\\pipe\\%s",name);
 
