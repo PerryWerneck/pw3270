@@ -726,6 +726,9 @@ LIB3270_EXPORT int lib3270_wait_for_ready(H3270 *hSession, int seconds)
 {
 	time_t	end = time(0)+seconds;
 
+	if(hSession->oia_status == LIB3270_STATUS_BLANK)
+		return 0;
+
 	while(time(0) < end)
 	{
 		event_dispatcher(hSession,1);

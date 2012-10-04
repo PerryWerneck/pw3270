@@ -36,7 +36,7 @@
 	#include <errno.h>
 
 	#ifndef ENOTCONN
-		#define ENOTCONN 107
+		#define ENOTCONN 126
 	#endif // !ENOTCONN
 
 	#if defined(__GNUC__)

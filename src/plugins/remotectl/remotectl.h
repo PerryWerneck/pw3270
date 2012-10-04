@@ -42,7 +42,30 @@
  #include <lib3270/log.h>
  #include <pw3270/hllapi.h>
 
- int run_hllapi(unsigned long function, char *string, unsigned short length, unsigned short rc);
+ typedef struct _remotequery
+ {
+#ifdef WIN32
+	HANDLE			  hPipe;	/**< Pipe handle (for response) */
+#endif // WIN32
+
+	H3270 			* hSession;	/**< 3270 Session */
+ 	int				  cmd;		/**< Command */
+	int 			  rc;		/**< Response status */
+
+	int 			  pos;
+	unsigned short	  length;	/**< Query string length */
+ 	const gchar		* text;		/**< Query string */
+
+ } QUERY;
+
+ G_GNUC_INTERNAL void set_active(gboolean on);
+ G_GNUC_INTERNAL void enqueue_request(QUERY *qry);
+ G_GNUC_INTERNAL void request_complete(QUERY *qry, int rc, const gchar *text);
+ G_GNUC_INTERNAL void request_status(QUERY *qry, int rc);
+ G_GNUC_INTERNAL void request_buffer(QUERY *qry, int rc, size_t sz, const gpointer buffer);
+
+// int run_hllapi(unsigned long function, char *string, unsigned short length, unsigned short rc);
+
 
 #ifdef WIN32
 

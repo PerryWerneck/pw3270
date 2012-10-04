@@ -41,7 +41,7 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
- static const gchar control_char = '@';
+ static const gchar	  control_char	= '@';
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
@@ -137,55 +137,64 @@
 	#error Nao implementado
 
 #endif // WIN32
+
+	set_active(FALSE);
+
 	return 0;
  }
 
- static int cmd_connectps(H3270 *hSession, unsigned short rc, char *string, unsigned short length)
+ static void cmd_connectps(QUERY *qry)
  {
  	g_message("%s","HLLAPI ConnectPS request received");
-	return v3270_set_script(pw3270_get_terminal_widget(NULL),'H',1);
+	request_status(qry,v3270_set_script(pw3270_get_terminal_widget(NULL),'H',TRUE));
  }
 
- static int cmd_disconnectps(H3270 *hSession, unsigned short rc, char *string, unsigned short length)
+ static void cmd_disconnectps(QUERY *qry)
  {
  	g_message("%s","HLLAPI DisconnectPS request received");
-	return 0;
+ 	request_status(qry,0);
  }
 
- static int cmd_getrevision(H3270 *hSession, unsigned short rc, char *string, unsigned short length)
+ static void cmd_getrevision(QUERY *qry)
  {
-	strncpy(string,lib3270_get_revision(),length);
-	return 0;
+	request_complete(qry,0,lib3270_get_revision());
  }
 
- static int cmd_setcursor(H3270 *hSession, unsigned short rc, char *string, unsigned short length)
+ static void cmd_setcursor(QUERY *qry)
  {
-	if(!lib3270_connected(hSession))
-		return ENOTCONN;
+ 	int rc = ENOTCONN;
 
-	trace("%s: pos=%d row=%d col=%d",__FUNCTION__,rc,rc/80,rc%80);
-	lib3270_set_cursor_address(hSession,((int) rc) -1);
-	return 0;
+	if(lib3270_connected(qry->hSession))
+	{
+		trace("%s: pos=%d row=%d col=%d",__FUNCTION__,rc,rc/80,rc%80);
+		lib3270_set_cursor_address(qry->hSession,qry->pos -1);
+		rc = 0;
+	}
+
+ 	request_status(qry,rc);
  }
 
- static int cmd_sendstring(H3270 *hSession, unsigned short dunno, char *buffer, unsigned short length)
+ static void cmd_sendstring(QUERY *qry)
  {
 	gchar		* text;
 	GError		* error			= NULL;
 	gsize		  bytes_read;
 	gsize		  bytes_written;
 	const gchar	* charset;
-	int 		  rc = -1;
 
-	if(!lib3270_connected(hSession))
-		return ENOTCONN;
+	if(!lib3270_connected(qry->hSession))
+	{
+		request_status(qry,ENOTCONN);
+		return;
+	}
 
 	g_get_charset(&charset);
 
-	text = g_convert(buffer,length,lib3270_get_charset(hSession),charset,&bytes_read,&bytes_written,&error);
+	text = g_convert(qry->text,qry->length,lib3270_get_charset(qry->hSession),charset,&bytes_read,&bytes_written,&error);
 	if(text)
 	{
-		rc = 0;
+		int rc = 0;
+
 		if(strchr(text,control_char))
 		{
 			// Convert control char
@@ -196,7 +205,7 @@
 			{
 				*(ptr++) = 0;
 
-				lib3270_emulate_input(hSession,buffer,-1,0);
+				lib3270_emulate_input(qry->hSession,buffer,-1,0);
 
 				switch(*(ptr++))
 				{
@@ -205,112 +214,160 @@
 					break;
 
 				case 'E':	// Enter
-					lib3270_enter(hSession);
+					lib3270_enter(qry->hSession);
 					break;
 
 				case 'F':	// Erase EOF
-					lib3270_eraseeof(hSession);
+					lib3270_eraseeof(qry->hSession);
 					break;
 
 				case '1':	// PF1
-					lib3270_pfkey(hSession,1);
+					lib3270_pfkey(qry->hSession,1);
 					break;
 
 				case '2':	// PF2
-					lib3270_pfkey(hSession,2);
+					lib3270_pfkey(qry->hSession,2);
 					break;
 
 				case '3':	// PF3
-					lib3270_pfkey(hSession,3);
+					lib3270_pfkey(qry->hSession,3);
 					break;
 
 				case '4':	// PF4
-					lib3270_pfkey(hSession,4);
+					lib3270_pfkey(qry->hSession,4);
 					break;
 
 				case '5':	// PF5
-					lib3270_pfkey(hSession,5);
+					lib3270_pfkey(qry->hSession,5);
 					break;
 
 				case '6':	// PF6
-					lib3270_pfkey(hSession,6);
+					lib3270_pfkey(qry->hSession,6);
 					break;
 
 				case '7':	// PF7
-					lib3270_pfkey(hSession,7);
+					lib3270_pfkey(qry->hSession,7);
 					break;
 
 				case '8':	// PF8
-					lib3270_pfkey(hSession,8);
+					lib3270_pfkey(qry->hSession,8);
 					break;
 
 				case '9':	// PF9
-					lib3270_pfkey(hSession,9);
+					lib3270_pfkey(qry->hSession,9);
 					break;
 
 				case 'a':	// PF10
-					lib3270_pfkey(hSession,10);
+					lib3270_pfkey(qry->hSession,10);
 					break;
 
 				case 'b':	// PF11
-					lib3270_pfkey(hSession,11);
+					lib3270_pfkey(qry->hSession,11);
 					break;
 
 				case 'c':	// PF12
-					lib3270_pfkey(hSession,12);
+					lib3270_pfkey(qry->hSession,12);
 					break;
 				}
 
 			}
 
-			lib3270_emulate_input(hSession,buffer,-1,0);
+			lib3270_emulate_input(qry->hSession,buffer,-1,0);
 
 		}
 		else
 		{
-			lib3270_emulate_input(hSession,text,strlen(text),0);
+			lib3270_emulate_input(qry->hSession,text,strlen(text),0);
 		}
 		g_free(text);
-	}
-	else
-	{
-		strncpy(buffer,error->message,length);
-		rc = error->code;
-		g_error_free(error);
+
+		request_status(qry,rc);
+
+		return;
 	}
 
-	return rc;
+	request_complete(qry, error->code, error->message);
+	g_error_free(error);
+
  }
 
- static int cmd_wait(H3270 *hSession, unsigned short rc, char *text, unsigned short length)
+ struct wait
  {
-	return lib3270_wait_for_ready(hSession,pw3270_get_integer(pw3270_get_toplevel(),"hllapi","wait",2));
+ 	QUERY	* qry;
+ 	time_t	  end;
+ };
+
+ static gboolean do_wait(struct wait *w)
+ {
+	if(lib3270_get_program_message(w->qry->hSession) == LIB3270_MESSAGE_NONE)
+	{
+		request_status(w->qry,0);
+		return FALSE;
+	}
+
+	if(time(0) > w->end)
+	{
+		trace("%s: TIMEOUT",__FUNCTION__);
+		request_status(w->qry,ETIMEDOUT);
+		return FALSE;
+	}
+
+	return TRUE;
  }
 
- static int cmd_copypstostr(H3270 *hSession, unsigned short pos, char *outBuff, unsigned short length)
+ static void cmd_wait(QUERY *qry)
+ {
+ 	struct wait *w;
+
+	if(lib3270_get_program_message(qry->hSession) == LIB3270_MESSAGE_NONE)
+	{
+		request_status(qry,0);
+		return;
+	}
+
+	w 		= g_malloc0(sizeof(struct wait));
+	w->qry	= qry;
+	w->end	= time(0)+pw3270_get_integer(pw3270_get_toplevel(),"hllapi","wait",2);
+
+	g_timeout_add_full(G_PRIORITY_DEFAULT, (guint) 300, (GSourceFunc) do_wait, w, g_free);
+ }
+
+ static void cmd_copypstostr(QUERY *qry)
  {
 	int 			  rows;
 	int 			  cols;
 	unsigned short	* attr;
 	unsigned char	* text;
 	int				  rc;
+	unsigned char	* buffer;
+	size_t 			  length;
 
-	lib3270_get_screen_size(hSession,&rows,&cols);
+	if(!lib3270_connected(qry->hSession))
+	{
+		request_status(qry,ENOTCONN);
+		return;
+	}
 
-	if(pos < 1 || (pos+length) >= (rows*cols))
-		return EINVAL;
+	lib3270_get_screen_size(qry->hSession,&rows,&cols);
 
-	pos--;
+	if(qry->pos < 1 || (qry->pos+qry->length) >= (rows*cols))
+	{
+		request_status(qry,EINVAL);
+		return;
+	}
 
-	attr = g_new0(unsigned short, length+0);
-	text = g_new0(unsigned char, length+1);
+	qry->pos--;
 
-	trace("%s: pos=%d length=%d",__FUNCTION__,pos,length);
-	rc = lib3270_get_contents(hSession,pos,pos+(length-1),text,attr);
+	length	= (qry->length * sizeof(unsigned short)) + qry->length + 2;
+	text	= buffer = g_malloc0(length+1);
+	attr 	= (unsigned short *) (text+qry->length+1);
+
+	trace("%s: pos=%d length=%d",__FUNCTION__,qry->pos,qry->length);
+	rc = lib3270_get_contents(qry->hSession,qry->pos,qry->pos+(qry->length-1),text,attr);
 
 	if(rc)
 	{
-		strncpy(outBuff,strerror(rc),length);
+		request_status(qry,rc);
 	}
 	else
 	{
@@ -324,43 +381,65 @@
 
 		g_get_charset(&charset);
 
-		local = g_convert((const gchar *) text,length,charset,lib3270_get_charset(hSession),&bytes_read,&bytes_written,&error);
-
-		g_free(attr);
-		g_free(text);
+		local = g_convert((const gchar *) text,-1,charset,lib3270_get_charset(qry->hSession),&bytes_read,&bytes_written,&error);
 
 		if(!local)
 		{
-			rc = error->code;
-			strncpy(outBuff,error->message,length);
+			request_complete(qry,error->code,error->message);
 			g_error_free(error);
 		}
 		else
 		{
-			strncpy(outBuff,(const char *) local,length);
+			strncpy((char *) text,(const char *) local,qry->length);
+
+			trace("response: [%s] len=%d",buffer,length);
+			request_buffer(qry,0,length,buffer);
 			g_free(local);
 		}
 	}
-	return rc;
+
+	g_free(buffer);
  }
 
- int run_hllapi(unsigned long function, char *string, unsigned short length, unsigned short rc)
+ void enqueue_request(QUERY *qry)
  {
 	static const struct _cmd
 	{
-		unsigned long function;
-		int (*exec)(H3270 *hSession, unsigned short rc, char *string, unsigned short length);
+		int cmd;
+		void (*exec)(QUERY *qry);
 	} cmd[] =
 	{
 		{ HLLAPI_CMD_CONNECTPS,		cmd_connectps		},
 		{ HLLAPI_CMD_DISCONNECTPS,	cmd_disconnectps	},
 		{ HLLAPI_CMD_INPUTSTRING,	cmd_sendstring		},
-		{ HLLAPI_CMD_WAIT,			cmd_wait			},
 		{ HLLAPI_CMD_SETCURSOR,		cmd_setcursor		},
 		{ HLLAPI_CMD_GETREVISION,	cmd_getrevision 	},
-		{ HLLAPI_CMD_COPYPSTOSTR,	cmd_copypstostr 	}
+		{ HLLAPI_CMD_COPYPSTOSTR,	cmd_copypstostr 	},
+		{ HLLAPI_CMD_WAIT,			cmd_wait			},
 	};
+
 	int f;
+
+	trace("HLLAPI function %d",(int) qry->cmd);
+
+	qry->hSession = lib3270_get_default_session_handle();
+
+	for(f=0;f<G_N_ELEMENTS(cmd);f++)
+	{
+		if(cmd[f].cmd == qry->cmd)
+		{
+			cmd[f].exec(qry);
+			return;
+		}
+	}
+
+	g_warning("Unexpected HLLAPI function %d",(int) qry->cmd);
+ 	request_status(qry,EINVAL);
+ }
+
+/*
+ int run_hllapi(unsigned long function, char *string, unsigned short length, unsigned short rc)
+ {
 
 	trace("HLLAPI function %d",(int) function);
 
@@ -373,4 +452,11 @@
 	g_warning("Unexpected HLLAPI function %d",(int) function);
  	return EINVAL;
  }
+*/
+
+ G_GNUC_INTERNAL void set_active(gboolean on)
+ {
+	v3270_set_script(pw3270_get_terminal_widget(NULL),'H',on);
+ }
+
 

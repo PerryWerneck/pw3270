@@ -79,7 +79,7 @@
  }
 
 
- static char * run_query(unsigned long func, const char *arg, size_t length, unsigned short *rc)
+ static char * run_query(unsigned long func, const char *arg, size_t *length, unsigned short *rc)
  {
 	char *outBuffer = NULL;
 
@@ -93,7 +93,7 @@
 	else
 	{
 		HLLAPI_DATA	*buffer	= malloc(HLLAPI_MAXLENGTH+1);
-		DWORD cbSize		= sizeof(HLLAPI_DATA) + length;
+		DWORD cbSize		= sizeof(HLLAPI_DATA) + *length;
 		HLLAPI_DATA *data	= malloc(cbSize+1);
 
 		memset(buffer,0,HLLAPI_MAXLENGTH);
@@ -101,10 +101,10 @@
 		data->id		= HLLAPI_REQUEST_ID;
 		data->func		= func;
 		data->rc		= *rc;
-		data->len		= length;
+		data->len		= *length;
 
-		if(arg && length > 0)
-			memcpy(data->string,arg,length);
+		if(arg && *length > 0)
+			memcpy(data->string,arg,*length);
 
 		memset(buffer,0,HLLAPI_MAXLENGTH);
 
@@ -115,7 +115,8 @@
 		}
 		else
 		{
-			*rc = buffer->rc;
+			*rc		= buffer->rc;
+			*length = buffer->len;
 
 			trace("buffer->len=%d rc=%d",buffer->len,buffer->rc);
 
@@ -162,12 +163,15 @@
  {
  	char	* inBuffer	= NULL;
  	char	* outBuffer	= NULL;
+	size_t	  szOutBuffer;
 
 	if(*length < 0 || *length > HLLAPI_MAXLENGTH)
 	{
 		*rc = EINVAL;
 		return 0;
 	}
+
+	szOutBuffer = (size_t) *length;
 
 	// Copy input argument
 	if(*length)
@@ -187,7 +191,7 @@
 		*rc = cmd_connect_ps(inBuffer);
 		if(!*rc)
 		{
-			outBuffer = run_query(*func, inBuffer, *length, rc);
+			outBuffer = run_query(*func, inBuffer, &szOutBuffer, rc);
 			if(*rc)
 			{
 				trace("Closing pipe rc=%d",*rc);
@@ -205,7 +209,7 @@
 		}
 		else
 		{
-			outBuffer = run_query(*func, inBuffer, *length, rc);
+			outBuffer = run_query(*func, inBuffer, &szOutBuffer, rc);
 			CloseHandle(hPipe);
 			hPipe = INVALID_HANDLE_VALUE;
 		}
@@ -214,14 +218,18 @@
 
 	default:
 		trace("Calling function %d",(int) *func);
-		outBuffer = run_query(*func, inBuffer, *length, rc);
+		outBuffer = run_query(*func, inBuffer, &szOutBuffer, rc);
  	}
 
 	if(*rc)
 		copyString(buffer,length,strerror(*rc));
 	else if(outBuffer)
-		copyString(buffer,length,outBuffer);
+	{
+		if(szOutBuffer < *length)
+			*length = szOutBuffer;
 
+		copyString(buffer,length,outBuffer);
+	}
 	if(outBuffer)
 		free(outBuffer);
 

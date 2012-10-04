@@ -1087,7 +1087,7 @@ static void release_script(v3270 *widget)
 	widget->script.id = 0;
 }
 
-LIB3270_EXPORT int v3270_set_script(GtkWidget *widget, const gchar id, unsigned char on)
+LIB3270_EXPORT int v3270_set_script(GtkWidget *widget, const gchar id, gboolean on)
 {
 	v3270 *terminal;
 	g_return_val_if_fail(GTK_IS_V3270(widget),EINVAL);

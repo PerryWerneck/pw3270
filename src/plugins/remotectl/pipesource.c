@@ -66,7 +66,7 @@
 
 static void wait_for_client(pipe_source *source)
 {
-	v3270_set_script(pw3270_get_terminal_widget(NULL),'H',0);
+	set_active(FALSE);
 	if(ConnectNamedPipe(source->hPipe,&source->overlap))
 	{
 		popup_lasterror("%s",_( "Error in ConnectNamedPipe" ));
@@ -84,7 +84,7 @@ static void wait_for_client(pipe_source *source)
 	// Client is already connected, so signal an event.
 	case ERROR_PIPE_CONNECTED:
 		trace("%s: ERROR_PIPE_CONNECTED",__FUNCTION__);
-		v3270_set_script(pw3270_get_terminal_widget(NULL),'H',1);
+		set_active(TRUE);
 		if(SetEvent(source->overlap.hEvent))
 			break;
 
@@ -137,20 +137,100 @@ static void wait_for_client(pipe_source *source)
 
  static void process_input(pipe_source *source, DWORD cbRead)
  {
- 	HLLAPI_DATA *data = (HLLAPI_DATA *) source->buffer;
+	HLLAPI_DATA * data	= (HLLAPI_DATA *) source->buffer;
+ 	QUERY 		* qry	= g_malloc0(sizeof(QUERY)+cbRead+1);
 
- 	source->buffer[cbRead] = 0;
+	qry->hPipe	= source->hPipe;
+ 	qry->text	= (const gchar *) (qry+1);
 
 	if(data->id == 0x01)
 	{
-		DWORD wrote;
-		data->rc = run_hllapi(data->func,data->string,data->len,data->rc);
-		wrote = sizeof(HLLAPI_DATA)+data->len;
-
-		trace("%s rc=%d",__FUNCTION__,(int) data->rc);
-
-		WriteFile(source->hPipe,data,wrote,&wrote,NULL);
+		// HLLAPI query
+		qry->cmd	= (int) data->func;
+		qry->pos	= (int) data->rc;
+		qry->length	= data->len;
+		memcpy((gchar *)(qry->text),data->string,qry->length);
 	}
+	else
+	{
+		qry->cmd = -1;
+	}
+
+	enqueue_request(qry);
+ }
+
+ void request_complete(QUERY *qry, int rc, const gchar *text)
+ {
+ 	request_buffer(qry,rc,strlen(text),(const gpointer) text);
+ }
+
+ void request_status(QUERY *qry, int rc)
+ {
+ 	if(rc)
+	{
+		const gchar *msg = strerror(rc);
+		request_buffer(qry, rc, strlen(msg), (const gpointer) msg);
+	}
+	else
+	{
+		request_buffer(qry, rc, 0, NULL);
+	}
+/*
+	HLLAPI_DATA data;
+
+	memset(&data,0,sizeof(data));
+
+	data.id		= 0x01;
+	data.func	= qry->cmd;
+	data.rc		= rc;
+
+	trace("rc=%d",rc);
+
+#ifdef WIN32
+	{
+		DWORD wrote = sizeof(data);
+		WriteFile(qry->hPipe,&data,wrote,&wrote,NULL);
+	}
+#endif // WIN32
+
+ 	g_free(qry);
+*/
+ }
+
+ void request_buffer(QUERY *qry, int rc, size_t szBuffer, const gpointer buffer)
+ {
+ 	size_t			sz;
+	HLLAPI_DATA 	*data;
+
+	if(buffer)
+	{
+		sz 			= sizeof(HLLAPI_DATA)+szBuffer;
+		data		= g_malloc0(sz);
+		data->len	= szBuffer;
+		memcpy(data->string,buffer,szBuffer);
+	}
+	else
+	{
+		sz		= sizeof(HLLAPI_DATA);
+		data	= g_malloc0(sz);
+	}
+
+	data->id	= 0x01;
+	data->func	= qry->cmd;
+	data->rc	= rc;
+
+	trace("rc=%d data->len=%d",rc,(int) data->len);
+
+#ifdef WIN32
+	{
+		DWORD wrote = sz;
+		WriteFile(qry->hPipe,data,wrote,&wrote,NULL);
+		trace("Wrote=%d len=%d",(int) wrote, (int) sz);
+	}
+#endif // WIN32
+
+	g_free(data);
+ 	g_free(qry);
 
  }
 
@@ -179,9 +259,10 @@ static void wait_for_client(pipe_source *source)
 
 	case ERROR_BROKEN_PIPE:
 		trace("%s: ERROR_BROKEN_PIPE",__FUNCTION__);
+
 		if(!DisconnectNamedPipe(source->hPipe))
 		{
-			v3270_set_script(pw3270_get_terminal_widget(NULL),'H',0);
+			set_active(FALSE);
 			popup_lasterror("%s",_( "Error in DisconnectNamedPipe" ));
 		}
 		else
@@ -192,7 +273,7 @@ static void wait_for_client(pipe_source *source)
 
 	case ERROR_PIPE_NOT_CONNECTED:
 		trace("%s: ERROR_PIPE_NOT_CONNECTED",__FUNCTION__);
-		v3270_set_script(pw3270_get_terminal_widget(NULL),'H',0);
+		set_active(FALSE);
 		break;
 
 	default:
@@ -227,7 +308,7 @@ static void wait_for_client(pipe_source *source)
 		if(fSuccess)
 		{
 			trace("Pipe connected (cbRet=%d)",(int) cbRead);
-			v3270_set_script(pw3270_get_terminal_widget(NULL),'H',1);
+			set_active(TRUE);
 			((pipe_source *) source)->state = PIPE_STATE_READ;
 		}
 		else
