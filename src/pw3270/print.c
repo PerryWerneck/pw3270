@@ -33,6 +33,8 @@
  #include <pw3270/v3270.h>
  #include <lib3270/selection.h>
 
+ #define AUTO_FONT_SIZE 1
+
 /*--[ Structs ]--------------------------------------------------------------------------------------*/
 
  typedef struct _print_info
@@ -54,6 +56,7 @@
 	double					  height;			/**< Report height (all pages) */
 	cairo_scaled_font_t		* font_scaled;
 
+	gchar					* font;				/**< Font name */
 	gchar					**text;
 
  } PRINT_INFO;
@@ -76,7 +79,9 @@
 										CAIRO_FONT_SLANT_NORMAL,
 										pango_font_description_get_weight(descr) == PANGO_WEIGHT_BOLD ? CAIRO_FONT_WEIGHT_BOLD : CAIRO_FONT_WEIGHT_NORMAL);
 
+#ifdef AUTO_FONT_SIZE
 			cairo_set_font_size(cr,gtk_print_context_get_width(context)/info->cols);
+#endif // AUTO_FONT_SIZE
 
 			pango_font_description_free(descr);
 		}
@@ -260,16 +265,16 @@ static gchar * enum_to_string(GType type, guint enum_value)
 	if(info->font_scaled)
 		cairo_scaled_font_destroy(info->font_scaled);
 
-/*
-	if(info->font)
-		g_free(info->font);
-*/
-
 	if(info->text)
 		g_strfreev(info->text);
 
+	if(info->font)
+		g_free(info->font);
+
 	g_free(info);
  }
+
+#ifndef AUTO_FONT_SIZE
 
 #if GTK_CHECK_VERSION(3,2,0)
  static gboolean filter_monospaced(const PangoFontFamily *family,const PangoFontFace *face,gpointer data)
@@ -280,28 +285,31 @@ static gchar * enum_to_string(GType type, guint enum_value)
 
  static void font_set(GtkFontButton *widget, PRINT_INFO *info)
  {
-	set_string_to_config("print","font",gtk_font_button_get_font_name(widget));
-/*
- 	PangoFontDescription	* descr = pango_font_description_from_string(name);
+ 	if(info->font)
+		g_free(info->font)
+	info->font = g_strdup(gtk_font_button_get_font_name(widget));
+ }
 
-	if(!descr)
+#else
+
+ static void font_name_changed(GtkComboBox *combo, PRINT_INFO *info)
+ {
+	GValue		  value	= { 0, };
+	GtkTreeIter	  iter;
+
+	if(!gtk_combo_box_get_active_iter(combo,&iter))
 		return;
 
- 	if(info->font)
+	gtk_tree_model_get_value(gtk_combo_box_get_model(combo),&iter,0,&value);
+
+	if(info->font)
 		g_free(info->font);
 
-	info->font			= g_strdup(pango_font_description_get_family(descr));
-	info->fontsize		= pango_font_description_get_size(descr);
-	info->fontweight	= CAIRO_FONT_WEIGHT_NORMAL;
+	info->font = g_value_dup_string(&value);
 
-	if(pango_font_description_get_weight(descr) == PANGO_WEIGHT_BOLD)
-		info->fontweight = CAIRO_FONT_WEIGHT_BOLD;
-
-	pango_font_description_free(descr);
-
-	trace("Font set to \"%s\" with size %d",info->font,info->fontsize);
-*/
  }
+
+#endif // !AUTO_FONT_SIZE
 
  static void toggle_show_selection(GtkToggleButton *togglebutton,PRINT_INFO *info)
  {
@@ -339,25 +347,64 @@ static gchar * enum_to_string(GType type, guint enum_value)
 		gtk_table_attach(GTK_TABLE(container),label[f],0,1,f,f+1,GTK_FILL,GTK_FILL,0,0);
 	}
 
+	if(info->font)
+		g_free(info->font);
+
+	info->font = get_string_from_config("print","font","Courier New");
+
 	// Font selection button
+#ifdef AUTO_FONT_SIZE
 	{
-		gchar * font = get_string_from_config("print","font","Courier New 10");
-		widget = gtk_font_button_new_with_font(font);
+		GtkTreeModel	* model		= (GtkTreeModel *) gtk_list_store_new(1,G_TYPE_STRING);
+		GtkCellRenderer * renderer	= gtk_cell_renderer_text_new();
+		PangoFontFamily **families;
+		gint 			  n_families, i;
+		GtkTreeIter		  iter;
+
+		widget	= gtk_combo_box_new_with_model(model);
+
+		gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(widget), renderer, TRUE);
+		gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(widget), renderer, "text", 0, NULL);
+
+		g_signal_connect(G_OBJECT(widget),"changed",G_CALLBACK(font_name_changed),info);
+
+		pango_context_list_families(gtk_widget_get_pango_context(container),&families, &n_families);
+
+		for(i=0; i<n_families; i++)
+		{
+			if(pango_font_family_is_monospace(families[i]))
+			{
+				const gchar *name = pango_font_family_get_name (families[i]);
+				gtk_list_store_append((GtkListStore *) model,&iter);
+				gtk_list_store_set((GtkListStore *) model, &iter,0, name, -1);
+
+				if(!g_strcasecmp(name,info->font))
+					gtk_combo_box_set_active_iter(GTK_COMBO_BOX(widget),&iter);
+			}
+		}
+
+		g_free(families);
+	}
+#else
+	{
+		widget = gtk_font_button_new_with_font(info->font);
 		gtk_font_button_set_show_size((GtkFontButton *) widget,FALSE);
 		gtk_font_button_set_use_font((GtkFontButton *) widget,TRUE);
 		gtk_label_set_mnemonic_widget(GTK_LABEL(label[0]),widget);
 		g_free(font);
-	}
 
 #if GTK_CHECK_VERSION(3,2,0)
-	gtk_font_chooser_set_filter_func((GtkFontChooser *) widget,filter_monospaced,NULL,NULL);
+		gtk_font_chooser_set_filter_func((GtkFontChooser *) widget,filter_monospaced,NULL,NULL);
 #endif // GTK(3,2,0)
+
+		g_signal_connect(G_OBJECT(widget),"font-set",G_CALLBACK(font_set),info);
+
+	}
+#endif
+
 	gtk_table_attach(GTK_TABLE(container),widget,1,2,0,1,GTK_EXPAND|GTK_FILL,GTK_FILL,5,0);
 
 	load_settings(info);
-
-
-    g_signal_connect(G_OBJECT(widget),"font-set",G_CALLBACK(font_set),info);
 
 	widget = color_scheme_new(info->color);
 	gtk_label_set_mnemonic_widget(GTK_LABEL(label[1]),widget);
@@ -392,6 +439,9 @@ static gchar * enum_to_string(GType type, guint enum_value)
  {
  	GtkWidget	* combo = g_object_get_data(G_OBJECT(widget),"combo");
  	GdkColor 	* clr	= g_object_get_data(G_OBJECT(combo),"selected");
+
+	if(info->font)
+		set_string_to_config("print","font",info->font);
 
 	if(clr)
 	{
@@ -477,7 +527,6 @@ static gchar * enum_to_string(GType type, guint enum_value)
 
 				RegCloseKey(hKey);
 			}
-
 
 			#warning Work in progress
 			RegCloseKey(registry);
