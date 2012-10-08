@@ -39,6 +39,10 @@
  #include <errno.h>
  #include <string.h>
 
+#ifndef ETIMEDOUT
+	#define ETIMEDOUT 1238
+#endif // ETIMEDOUT
+
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
  static const gchar	  control_char	= '@';

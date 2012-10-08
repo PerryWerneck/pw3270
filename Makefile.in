@@ -331,3 +331,11 @@ distclean: clean
 	@rm -f Makefile
 	@echo "$@"
 
+#---[ Plugins ]----------------------------------------------------------------
+
+$(BINDIR)/Debug/plugins/remotectl@DLLEXT@: src/plugins/remotectl/* $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
+	@make BINDIR="../../../$(BINDIR)" PW3270_LIBS="-L../../../$(BINDIR)/Debug@DLLDIR@ -l3270 -lpw3270" PW3270_CFLAGS="-I../../../src/include" -C $(dir $<) Debug
+
+$(BINDIR)/Release/plugins/remotectl@DLLEXT@: src/plugins/remotectl/* $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
+	@make BINDIR="../../../$(BINDIR)" PW3270_LIBS="-L../../../$(BINDIR)/Release@DLLDIR@ -l3270 -lpw3270" PW3270_CFLAGS="-I../../../src/include" -C $(dir $<) Release
+
