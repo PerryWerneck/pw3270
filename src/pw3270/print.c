@@ -35,6 +35,14 @@
 
  #define AUTO_FONT_SIZE 1
 
+#ifdef AUTO_FONT_SIZE
+	#define FONT_CONFIG 	"font-family"
+	#define DEFAULT_FONT	"Courier New"
+#else
+	#define FONT_CONFIG 	"font"
+	#define DEFAULT_FONT	"Courier New 10"
+#endif // AUTO_FONT_SIZE
+
 /*--[ Structs ]--------------------------------------------------------------------------------------*/
 
  typedef struct _print_info
@@ -61,12 +69,13 @@
 
  } PRINT_INFO;
 
+
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
  static void begin_print(GtkPrintOperation *prt, GtkPrintContext *context, PRINT_INFO *info)
  {
  	cairo_t * cr	= gtk_print_context_get_cairo_context(context);
- 	gchar	* font	= get_string_from_config("print","font","Courier New 10");
+ 	gchar	* font	= get_string_from_config("print",FONT_CONFIG,DEFAULT_FONT);
 
 	trace("%s: operation=%p context=%p font=\"%s\"",__FUNCTION__,prt,context,font);
 
@@ -372,7 +381,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
 	if(info->font)
 		g_free(info->font);
 
-	info->font = get_string_from_config("print","font","Courier New");
+	info->font = get_string_from_config("print",FONT_CONFIG,DEFAULT_FONT);
 
 	// Font selection button
 #ifdef AUTO_FONT_SIZE
@@ -463,7 +472,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
  	GdkColor 	* clr	= g_object_get_data(G_OBJECT(combo),"selected");
 
 	if(info->font)
-		set_string_to_config("print","font",info->font);
+		set_string_to_config("print",FONT_CONFIG,info->font);
 
 	if(clr)
 	{
