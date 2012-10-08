@@ -68,6 +68,8 @@
  	cairo_t * cr	= gtk_print_context_get_cairo_context(context);
  	gchar	* font	= get_string_from_config("print","font","Courier New 10");
 
+	trace("%s: operation=%p context=%p font=\"%s\"",__FUNCTION__,prt,context,font);
+
 	// Setup font
 
 	if(*font)
@@ -80,7 +82,27 @@
 										pango_font_description_get_weight(descr) == PANGO_WEIGHT_BOLD ? CAIRO_FONT_WEIGHT_BOLD : CAIRO_FONT_WEIGHT_NORMAL);
 
 #ifdef AUTO_FONT_SIZE
-			cairo_set_font_size(cr,gtk_print_context_get_width(context)/info->cols);
+            {
+                double                  width    = gtk_print_context_get_width(context);
+                double                  cols     = (double)info->cols;
+                double                  current  = width / cols;
+                double                  valid    = current;
+               	cairo_font_extents_t    extents;
+
+                do
+                {
+                    valid   = current;
+                    current = valid +1.0;
+                    cairo_set_font_size(cr,current);
+                    cairo_font_extents(cr,&extents);
+                    trace("Valid: %d",(int) valid);
+                } while(  (cols * extents.max_x_advance) < width );
+
+				trace("Font size: %d",(int) valid);
+				cairo_set_font_size(cr,valid);
+
+
+			}
 #endif // AUTO_FONT_SIZE
 
 			pango_font_description_free(descr);
@@ -479,7 +501,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
  	(*info)->cols		= 80;
 
 	// Basic setup
-	gtk_print_operation_set_allow_async(print,TRUE);
+	gtk_print_operation_set_allow_async(print,get_boolean_from_config("print","allow_async",TRUE));
 
 	if(obj)
 	{
@@ -603,9 +625,10 @@ static gchar * enum_to_string(GType type, guint enum_value)
 
  LIB3270_EXPORT int pw3270_print(GtkWidget *widget, GObject *action, GtkPrintOperationAction oper, PW3270_SRC src)
  {
- 	PRINT_INFO			* info = NULL;
+ 	PRINT_INFO			* info 		= NULL;
  	GtkPrintOperation 	* print;
  	const gchar			* text;
+ 	GError				* err		= NULL;
 
  #ifdef X3270_TRACE
 	if(action)
@@ -657,7 +680,28 @@ static gchar * enum_to_string(GType type, guint enum_value)
 	}
 
 	// Run Print dialog
-	gtk_print_operation_run(print,oper,GTK_WINDOW(gtk_widget_get_toplevel(widget)),NULL);
+	gtk_print_operation_run(print,oper,GTK_WINDOW(gtk_widget_get_toplevel(widget)),&err);
+
+	if(err)
+	{
+		GtkWidget *dialog;
+
+		g_warning(err->message);
+
+		dialog = gtk_message_dialog_new_with_markup(	GTK_WINDOW(gtk_widget_get_toplevel(widget)),
+														GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
+														GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,
+														"%s",_( "Print operation failed" ));
+
+		gtk_window_set_title(GTK_WINDOW(dialog),_("Error"));
+
+		gtk_message_dialog_format_secondary_markup(GTK_MESSAGE_DIALOG(dialog),"%s",err->message);
+		g_error_free(err);
+
+		gtk_dialog_run(GTK_DIALOG(dialog));
+		gtk_widget_destroy(dialog);
+	}
+
 	g_object_unref(print);
 
 	return 0;
