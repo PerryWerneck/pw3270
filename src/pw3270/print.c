@@ -104,7 +104,6 @@
                     current = valid +1.0;
                     cairo_set_font_size(cr,current);
                     cairo_font_extents(cr,&extents);
-                    trace("Valid: %d",(int) valid);
                 } while(  (cols * extents.max_x_advance) < width );
 
 				trace("Font size: %d",(int) valid);
