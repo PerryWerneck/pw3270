@@ -519,6 +519,8 @@ static gchar * enum_to_string(GType type, guint enum_value)
 		g_string_free(str,TRUE);
 	}
 
+	trace("%s ends",__FUNCTION__);
+
  }
 
 #ifdef WIN32
