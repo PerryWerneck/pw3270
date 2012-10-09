@@ -51,6 +51,7 @@
 	int 					  show_selection : 1;
 	PW3270_SRC				  src;
 
+	GtkWidget				* widget;
 	H3270					* session;
 
 	int						  baddr;
@@ -221,76 +222,104 @@ static gchar * enum_to_string(GType type, guint enum_value)
 
 #endif // WIN32
 
+ static void show_print_error(GtkWidget *widget, GError *err)
+ {
+	GtkWidget *dialog = gtk_message_dialog_new_with_markup(	GTK_WINDOW(gtk_widget_get_toplevel(widget)),
+															GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
+															GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,
+															"%s",_( "Print operation failed" ));
+
+	g_warning(err->message);
+
+	gtk_window_set_title(GTK_WINDOW(dialog),_("Error"));
+
+	gtk_message_dialog_format_secondary_markup(GTK_MESSAGE_DIALOG(dialog),"%s",err->message);
+
+	gtk_dialog_run(GTK_DIALOG(dialog));
+	gtk_widget_destroy(dialog);
+}
+
  static void done(GtkPrintOperation *prt, GtkPrintOperationResult result, PRINT_INFO *info)
  {
-#ifdef WIN32
-
-	HKEY registry;
-
-	if(get_registry_handle("print",&registry,KEY_SET_VALUE))
+	if(result == GTK_PRINT_OPERATION_RESULT_ERROR)
 	{
-		HKEY	hKey;
-		DWORD	disp;
+		GError		* err		= NULL;
 
-		if(RegCreateKeyEx(registry,"settings",0,NULL,REG_OPTION_NON_VOLATILE,KEY_SET_VALUE,NULL,&hKey,&disp) == ERROR_SUCCESS)
-		{
-			gtk_print_settings_foreach(	gtk_print_operation_get_print_settings(prt),
-										(GtkPrintSettingsFunc) save_settings,
-										hKey );
-			RegCloseKey(hKey);
-		}
+		gtk_print_operation_get_error(prt,&err);
+		show_print_error(info->widget,err);
+		g_error_free(err);
 
-		if(RegCreateKeyEx(registry,"pagesetup",0,NULL,REG_OPTION_NON_VOLATILE,KEY_SET_VALUE,NULL,&hKey,&disp) == ERROR_SUCCESS)
-		{
-			HKEY			  hPaperSize;
-			GtkPageSetup	* setup			= gtk_print_operation_get_default_page_setup(prt);
-			gchar			* orientation	= enum_to_string(GTK_TYPE_PAGE_ORIENTATION,gtk_page_setup_get_orientation(setup));
-
-			// From http://git.gnome.org/browse/gtk+/tree/gtk/gtkpagesetup.c
-			save_double(hKey, "MarginTop",		gtk_page_setup_get_top_margin(setup, GTK_UNIT_MM));
-			save_double(hKey, "MarginBottom",	gtk_page_setup_get_bottom_margin(setup, GTK_UNIT_MM));
-			save_double(hKey, "MarginLeft",		gtk_page_setup_get_left_margin(setup, GTK_UNIT_MM));
-			save_double(hKey, "MarginRight",	gtk_page_setup_get_right_margin(setup, GTK_UNIT_MM));
-			save_string(hKey, "Orientation", 	orientation);
-
-			g_free (orientation);
-
-			if(RegCreateKeyEx(hKey,"papersize",0,NULL,REG_OPTION_NON_VOLATILE,KEY_SET_VALUE,NULL,&hPaperSize,&disp) == ERROR_SUCCESS)
-			{
-				GtkPaperSize *size = gtk_page_setup_get_paper_size(setup);
-				if(size)
-				{
-					// From http://git.gnome.org/browse/gtk+/tree/gtk/gtkpapersize.c
-					const gchar *name 			= gtk_paper_size_get_name(size);
-					const gchar *display_name	= gtk_paper_size_get_display_name(size);
-					const gchar *ppd_name		= gtk_paper_size_get_ppd_name(size);
-
-					if (ppd_name != NULL)
-						save_string(hPaperSize,"PPDName", ppd_name);
-					else
-						save_string(hPaperSize,"Name", name);
-
-					if (display_name)
-						save_string(hPaperSize,"DisplayName", display_name);
-
-					save_double(hPaperSize, "Width", gtk_paper_size_get_width (size, GTK_UNIT_MM));
-					save_double(hPaperSize, "Height", gtk_paper_size_get_height (size, GTK_UNIT_MM));
-				}
-				RegCloseKey(hPaperSize);
-			}
-			RegCloseKey(hKey);
-		}
-
-		RegCloseKey(registry);
 	}
+	else
+	{
+		// Save settings
+		GtkPrintSettings	* settings	= gtk_print_operation_get_print_settings(prt);
+		GtkPageSetup		* pgsetup	= gtk_print_operation_get_default_page_setup(prt);
 
+		trace("Saving settings PrintSettings=%p page_setup=%p",settings,pgsetup);
+
+#ifdef WIN32
+		HKEY registry;
+
+		if(get_registry_handle("print",&registry,KEY_SET_VALUE))
+		{
+			HKEY	hKey;
+			DWORD	disp;
+
+			if(RegCreateKeyEx(registry,"settings",0,NULL,REG_OPTION_NON_VOLATILE,KEY_SET_VALUE,NULL,&hKey,&disp) == ERROR_SUCCESS)
+			{
+				gtk_print_settings_foreach(	settings,(GtkPrintSettingsFunc) save_settings, hKey );
+				RegCloseKey(hKey);
+			}
+
+			if(RegCreateKeyEx(registry,"pagesetup",0,NULL,REG_OPTION_NON_VOLATILE,KEY_SET_VALUE,NULL,&hKey,&disp) == ERROR_SUCCESS)
+			{
+				HKEY			  hPaperSize;
+				gchar			* orientation	= enum_to_string(GTK_TYPE_PAGE_ORIENTATION,gtk_page_setup_get_orientation(pgsetup));
+
+				// From http://git.gnome.org/browse/gtk+/tree/gtk/gtkpagesetup.c
+				save_double(hKey, "MarginTop",		gtk_page_setup_get_top_margin(pgsetup, GTK_UNIT_MM));
+				save_double(hKey, "MarginBottom",	gtk_page_setup_get_bottom_margin(pgsetup, GTK_UNIT_MM));
+				save_double(hKey, "MarginLeft",		gtk_page_setup_get_left_margin(pgsetup, GTK_UNIT_MM));
+				save_double(hKey, "MarginRight",	gtk_page_setup_get_right_margin(pgsetup, GTK_UNIT_MM));
+				save_string(hKey, "Orientation", 	orientation);
+
+				g_free (orientation);
+
+				if(RegCreateKeyEx(hKey,"papersize",0,NULL,REG_OPTION_NON_VOLATILE,KEY_SET_VALUE,NULL,&hPaperSize,&disp) == ERROR_SUCCESS)
+				{
+					GtkPaperSize *size = gtk_page_setup_get_paper_size(pgsetup);
+					if(size)
+					{
+						// From http://git.gnome.org/browse/gtk+/tree/gtk/gtkpapersize.c
+						const gchar *name 			= gtk_paper_size_get_name(size);
+						const gchar *display_name	= gtk_paper_size_get_display_name(size);
+						const gchar *ppd_name		= gtk_paper_size_get_ppd_name(size);
+
+						if (ppd_name != NULL)
+							save_string(hPaperSize,"PPDName", ppd_name);
+						else
+							save_string(hPaperSize,"Name", name);
+
+						if (display_name)
+							save_string(hPaperSize,"DisplayName", display_name);
+
+						save_double(hPaperSize, "Width", gtk_paper_size_get_width (size, GTK_UNIT_MM));
+						save_double(hPaperSize, "Height", gtk_paper_size_get_height (size, GTK_UNIT_MM));
+					}
+					RegCloseKey(hPaperSize);
+				}
+				RegCloseKey(hKey);
+			}
+
+			RegCloseKey(registry);
+		}
 #else
-	GKeyFile	* conf	= get_application_keyfile();
-
-	gtk_print_settings_to_key_file(gtk_print_operation_get_print_settings(prt),conf,"print_settings");
-	gtk_page_setup_to_key_file(gtk_print_operation_get_default_page_setup(prt),conf,"page_setup");
-
+		GKeyFile			* conf		= get_application_keyfile();
+		gtk_print_settings_to_key_file(settings,conf,"print_settings");
+		gtk_page_setup_to_key_file(pgsetup,conf,"page_setup");
 #endif
+	}
 
 	if(info->font_scaled)
 		cairo_scaled_font_destroy(info->font_scaled);
@@ -470,6 +499,8 @@ static gchar * enum_to_string(GType type, guint enum_value)
  	GtkWidget	* combo = g_object_get_data(G_OBJECT(widget),"combo");
  	GdkColor 	* clr	= g_object_get_data(G_OBJECT(combo),"selected");
 
+	trace("%s starts combo=%p clr=%p widget=%p",__FUNCTION__,combo,clr,widget);
+
 	if(info->font)
 		set_string_to_config("print",FONT_CONFIG,info->font);
 
@@ -487,7 +518,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
 		set_string_to_config("print","colors","%s",str->str);
 		g_string_free(str,TRUE);
 	}
-	g_object_unref(combo);
+
  }
 
 #ifdef WIN32
@@ -507,6 +538,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
  	*info = g_new0(PRINT_INFO,1);
  	(*info)->session 	= v3270_get_session(widget);
  	(*info)->cols		= 80;
+ 	(*info)->widget		= widget;
 
 	// Basic setup
 	gtk_print_operation_set_allow_async(print,get_boolean_from_config("print","allow_async",TRUE));
@@ -692,22 +724,8 @@ static gchar * enum_to_string(GType type, guint enum_value)
 
 	if(err)
 	{
-		GtkWidget *dialog;
-
-		g_warning(err->message);
-
-		dialog = gtk_message_dialog_new_with_markup(	GTK_WINDOW(gtk_widget_get_toplevel(widget)),
-														GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
-														GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,
-														"%s",_( "Print operation failed" ));
-
-		gtk_window_set_title(GTK_WINDOW(dialog),_("Error"));
-
-		gtk_message_dialog_format_secondary_markup(GTK_MESSAGE_DIALOG(dialog),"%s",err->message);
+		show_print_error(widget,err);
 		g_error_free(err);
-
-		gtk_dialog_run(GTK_DIALOG(dialog));
-		gtk_widget_destroy(dialog);
 	}
 
 	g_object_unref(print);
