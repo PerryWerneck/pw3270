@@ -552,7 +552,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
 			gtk_print_operation_set_job_name(print,attr);
 	}
 
-	gtk_print_operation_set_custom_tab_label(print,_( "Options" ));
+	gtk_print_operation_set_custom_tab_label(print, _( "Options" ) );
 	gtk_print_operation_set_show_progress(print,TRUE);
 
 	// Common signals

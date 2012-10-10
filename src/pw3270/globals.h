@@ -27,9 +27,7 @@
  *
  */
 
- #include <pw3270.h>
  #include <lib3270/config.h>
-
  #define ENABLE_NLS
  #define GETTEXT_PACKAGE PACKAGE_NAME
 
@@ -37,6 +35,7 @@
  #include <glib/gi18n.h>
  #include <gtk/gtk.h>
 
+ #include <pw3270.h>
  #include <pw3270/v3270.h>
 
  // Special actions
