@@ -28,14 +28,16 @@
 # http://developer.android.com/tools/building/building-cmdline.html
 #
 
-JDK_HOME=/usr/java/jdk1.7.0_05
+JDK_HOME=/usr/java/default
 JAVAH=$(JDK_HOME)/bin/javah
 JAVAC=$(JDK_HOME)/bin/javac
 ANT=/usr/bin/ant
 
-ANDROIDSDK=/opt/android-sdk
+ANDROIDSDK=/opt/android-sdk-linux
+ANDROIDNDK=/opt/android-ndk-r8b
+ANDROIDCLASSPATH=$(ANDROIDSDK)/platforms/android-16/android.jar
 
-NDKBUILD=/opt/android-ndk-r8/ndk-build
+NDKBUILD=$(ANDROIDNDK)/ndk-build
 MKDIR=/bin/mkdir -p
 CONVERT=rsvg-convert
 
@@ -49,7 +51,7 @@ RESOLUTION=xhdpi mdpi ldpi hdpi
 bin/classes/$(CLASSPATH)/%.class: src/$(CLASSPATH)/%.java
 	@$(MKDIR) `dirname $@`
 	@echo "Compile thumb  : `basename $@` <= `basename $<`"
-	@$(JAVAC) -classpath $(ANDROIDSDK)/platforms/android-15/android.jar -d bin/classes $<
+	@$(JAVAC) -classpath $(ANDROIDCLASSPATH) -d bin/classes $<
 
 res/drawable-xhdpi/%.png: %.svg
 	@echo "Gen XHDPI      : `basename $@` <= `basename $<`"
@@ -126,4 +128,4 @@ sigs.txt: bin/classes/$(CLASSPATH)/lib3270.class
 
 jni/lib3270jni.h: bin/classes/$(CLASSPATH)/lib3270.class
 	@echo "  GEN  `basename $@`"
-	@$(JAVAH) -o $@ -classpath $(ANDROIDSDK)/platforms/android-15/android.jar:bin/classes $(subst /,.,$(CLASSPATH)).lib3270
+	@$(JAVAH) -o $@ -classpath $(ANDROIDCLASSPATH):bin/classes $(subst /,.,$(CLASSPATH)).lib3270
