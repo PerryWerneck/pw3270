@@ -87,6 +87,9 @@ $(TMPDIR)/pot/%.pot: %.c
 			--keyword=_ --keyword=N_ --keyword=MSG_:2 --output=$@ $<
 	@touch $@
 
+$(TMPDIR)/pot/%.pot: %.rc
+	@touch $@
+
 #---[ Targets ]----------------------------------------------------------------
 
 clean-common:
