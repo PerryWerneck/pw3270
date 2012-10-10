@@ -472,7 +472,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
 	gtk_table_attach(GTK_TABLE(container),widget,1,2,1,2,GTK_EXPAND|GTK_FILL,GTK_FILL,5,0);
 
 	// Selection checkbox
-	widget = gtk_check_button_new_with_label(_("Print selection box"));
+	widget = gtk_check_button_new_with_label( _("Print selection box") );
 
 	if(info->src == PW3270_SRC_ALL)
 	{
