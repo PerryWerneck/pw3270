@@ -68,7 +68,7 @@ BOOL WINAPI DllMain(HANDLE hinst, DWORD dwcallpurpose, LPVOID lpvResvd)
 
 int librx3270_loaded(void)
 {
-	trace("%s",__FUNCTION__);
+	trace("%s %04x",__FUNCTION__,REXX_CURRENT_INTERPRETER_VERSION);
 	return 0;
 }
 
@@ -91,10 +91,10 @@ RexxRoutineEntry rx3270_functions[] =
     REXX_LAST_METHOD()
 };
 
-RexxPackageEntry rxmath_package_entry =
+RexxPackageEntry rx3270_package_entry =
 {
     STANDARD_PACKAGE_HEADER
-    REXX_INTERPRETER_4_0_0,              // anything after 4.0.0 will work
+    REXX_CURRENT_INTERPRETER_VERSION,	// anything after 4.0.0 will work
     "RX3270",                            // name of the package
     "5.0",                               // package information
     NULL,                                // no load/unload functions
