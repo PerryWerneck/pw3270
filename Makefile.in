@@ -307,6 +307,7 @@ clean:
 	@make -C src/pw3270 clean
 	@make -C src/tools clean
 	@make -C src/plugins/remotectl clean
+	@make -C src/plugins/rx3270 clean
 	@rm -f $(PACKAGE_NAME).png
 	@rm -f $(PACKAGE_NAME)-logo.png
 	@rm -f *.log
@@ -338,4 +339,10 @@ $(BINDIR)/Debug/plugins/remotectl@DLLEXT@: src/plugins/remotectl/* $(BINDIR)/Deb
 
 $(BINDIR)/Release/plugins/remotectl@DLLEXT@: src/plugins/remotectl/* $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
 	@make BINDIR="../../../$(BINDIR)" PW3270_LIBS="-L../../../$(BINDIR)/Release@DLLDIR@ -l3270 -lpw3270" PW3270_CFLAGS="-I../../../src/include" -C $(dir $<) Release
+
+$(BINDIR)/Debug/plugins/rx3270@DLLEXT@: src/plugins/rx3270/* $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
+	@make BINDIR="../../../$(BINDIR)" LIB3270_MODE=Debug -C $(dir $<) Debug
+
+$(BINDIR)/Release/plugins/rx3270@DLLEXT@: src/plugins/rx3270/* $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
+	@make BINDIR="../../../$(BINDIR)" LIB3270_MODE=Release -C $(dir $<) Release
 

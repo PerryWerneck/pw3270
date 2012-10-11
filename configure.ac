@@ -59,11 +59,7 @@ AC_PROG_INSTALL
 AC_PROG_MKDIR_P
 AC_PROG_LN_S
 
-AC_PATH_TOOL([REXXC], [rexxc], [cp])
-AC_SUBST(REXXC)
-
 AC_PATH_TOOL([VALGRIND], [valgrind], [no])
-AC_PATH_TOOL([REXXCONFIG], [oorexx-config], [no])
 
 AC_PATH_TOOL([MAKENSIS], [makensis], [no])
 AC_PATH_TOOL([WINDRES], [windres], [no])
@@ -256,7 +252,7 @@ fi
 
 #--[ Check For Java ]-----------------------------------------------------------------------------------------------------------------------------------------
 
-AC_ARG_ENABLE([java],[AS_HELP_STRING([--disable-java], [Disable java extension & plugin])],[ app_cv_java="$enableval" ],[ app_cv_java="yes" ])
+AC_ARG_ENABLE([java],[AS_HELP_STRING([--disable-java], [Disable java integration])],[ app_cv_java="$enableval" ],[ app_cv_java="yes" ])
 
 # Check for JDK_HOME
 if test "_$JDK_HOME" = "_" ; then
@@ -347,6 +343,19 @@ fi
 
 AC_SUBST(PHPCONFIG)
 
+AC_ARG_WITH([rexxconfig], [AS_HELP_STRING([--with-rexx-config], [Path to oorexx-config tool])], [ REXXCONFIG="$withval" ],[ AC_PATH_TOOL(REXXCONFIG, oorexx-config, , $PATH) ])
+
+if test -z "${REXXCONFIG}"; then
+	AC_MSG_NOTICE([Program oorexx-config not found. Use --with-rexx-config=path to specify absolute path to the oorexx-config tool.])
+else
+	AC_DEFINE(HAVE_REXX)
+	AC_PATH_TOOL([REXXC], [rexxc], [cp], `$REXXCONFIG --prefix`/bin )
+	PLUGINS="$PLUGINS rx3270"
+fi
+
+AC_SUBST(REXXC)
+AC_SUBST(REXXCONFIG)
+
 #--[ Pre-reqs ]-----------------------------------------------------------------------------------------------------------------------------------------------
 AC_SUBST(LIB3270_REQUIRES)
 
@@ -360,12 +369,14 @@ AC_CONFIG_FILES([
 	pw3270.spec
 	pw3270.nsi
 	src/include/rules.mak
+	src/include/plugin.mak
 	src/lib3270/Makefile
 	src/lib3270/mkversion.sh
 	src/pw3270/Makefile
 	src/pw3270/uiparser/Makefile
 	src/tools/Makefile
 	src/plugins/remotectl/Makefile
+	src/plugins/rx3270/Makefile
 	man/Makefile
 	makegtkruntime.sh
 ])

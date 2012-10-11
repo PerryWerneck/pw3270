@@ -1,0 +1,105 @@
+#
+# "Software pw3270, desenvolvido com base nos códigos fontes do WC3270  e X3270
+# (Paul Mattes Paul.Mattes@usa.net), de emulação de terminal 3270 para acesso a
+# aplicativos mainframe. Registro no INPI sob o nome G3270.
+#
+# Copyright (C) <2008> <Banco do Brasil S.A.>
+#
+# Este programa é software livre. Você pode redistribuí-lo e/ou modificá-lo sob
+# os termos da GPL v.2 - Licença Pública Geral  GNU,  conforme  publicado  pela
+# Free Software Foundation.
+#
+# Este programa é distribuído na expectativa de  ser  útil,  mas  SEM  QUALQUER
+# GARANTIA; sem mesmo a garantia implícita de COMERCIALIZAÇÃO ou  de  ADEQUAÇÃO
+# A QUALQUER PROPÓSITO EM PARTICULAR. Consulte a Licença Pública Geral GNU para
+# obter mais detalhes.
+#
+# Você deve ter recebido uma cópia da Licença Pública Geral GNU junto com este
+# programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple
+# Place, Suite 330, Boston, MA, 02111-1307, USA
+#
+# Contatos:
+#
+# perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
+# erico.mendonca@gmail.com	(Erico Mascarenhas de Mendonça)
+#
+
+#---[ Sources ]----------------------------------------------------------------
+
+DEPENDS=*.h ../../include/*.h ../../include/lib3270/*.h Makefile
+
+#---[ Paths ]------------------------------------------------------------------
+
+ROOTDIR ?= .
+OBJDIR  ?= $(ROOTDIR)/.obj
+BINDIR  ?= $(ROOTDIR)/.bin
+BINDBG  ?= $(BINDIR)/Debug
+BINRLS  ?= $(BINDIR)/Release
+
+OBJDBG = $(OBJDIR)/Debug
+OBJRLS = $(OBJDIR)/Release
+OBJEXT = o
+
+#---[ Tools ]------------------------------------------------------------------
+
+MKDIR=@MKDIR_P@
+CC=@CC@
+LD=@CC@
+MSGCAT=@MSGCAT@
+XGETTEXT=@XGETTEXT@
+
+#---[ Rules ]------------------------------------------------------------------
+LDSOFLAGS=@LDSOFLAGS@
+DLL_FLAGS=@DLL_FLAGS@
+DLL_CFLAGS=@DLL_CFLAGS@
+DEBUG_CFLAGS=-DDEBUG=1 -g -Wall
+LIB3270_MODE ?= Default
+
+ifeq ($(LIB3270_MODE),Debug)
+	PW3270_LIBS="-L$(BINDBG)@DLLDIR@ -l3270"
+	PW3270_CFLAGS="-I../../../src/include"
+	LIB3270_LIBS="-L$(BINDBG)@DLLDIR@ -l3270"
+	LIB270_CFLAGS="-I../../../src/include"
+endif
+
+ifeq ($(LIB3270_MODE),Release)
+	PW3270_LIBS="-L$(BINRLS)@DLLDIR@ -l3270"
+	PW3270_CFLAGS="-I../../../src/include"
+	LIB3270_LIBS="-L$(BINRLS)@DLLDIR@ -l3270"
+	LIB270_CFLAGS="-I../../../src/include"
+endif
+
+ifeq ($(LIB3270_MODE),Default)
+	LIB3270_LIBS ?= `pkg-config --libs lib3270`
+	LIB3270_CFLAGS ?= `pkg-config --cflags lib3270`
+	PW3270_LIBS ?= `pkg-config --libs pw3270 lib3270`
+	PW3270_CFLAGS ?= `pkg-config --cflags pw3270 lib3270`
+endif
+
+GTK_CFLAGS ?= @GTK_CFLAGS@ @GTKMAC_CFLAGS@
+GTK_LIBS ?= @GTK_LIBS@ @GTKMAC_LIBS@
+
+$(OBJDBG)/%.o: %.c $(DEPENDS)
+	@echo "  CC   `basename $@`"
+	@$(MKDIR) `dirname $@`
+	@$(CC) $(DLL_CFLAGS) $(CFLAGS) $(DEBUG_CFLAGS) $(PW3270_CFLAGS) $(GTK_CFLAGS) -o $@ -c $<
+
+$(OBJRLS)/%.o: %.c $(DEPENDS)
+	@echo "  CC   `basename $@`"
+	@$(MKDIR) `dirname $@`
+	@$(CC) $(DLL_CFLAGS) $(CFLAGS) $(PW3270_CFLAGS) $(GTK_CFLAGS) -o $@ -c $<
+
+
+#---[ Targets ]----------------------------------------------------------------
+
+all: $(BINRLS)/plugins/$(MODULE_NAME)@DLLEXT@
+
+Release: $(BINRLS)/plugins/$(MODULE_NAME)@DLLEXT@
+
+Debug: $(BINDBG)/plugins/$(MODULE_NAME)@DLLEXT@
+
+clean:
+	@rm -fr $(OBJDIR)
+	@rm -fr $(BINDIR)
+	@rm -f testprogram@EXEEXT@
+	@find . -name "*~" -exec rm -f {} \;
