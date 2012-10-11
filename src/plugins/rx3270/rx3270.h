@@ -48,8 +48,4 @@
 
 /*--[ Prototipes ]-------------------------------------------------------------------------------------------*/
 
- LIB3270_EXPORT REXX_TYPED_ROUTINE_PROTOTYPE(rx3270version);
-
-
-
 #endif // RX3270_H_INCLUDED

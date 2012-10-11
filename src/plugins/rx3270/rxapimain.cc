@@ -95,7 +95,7 @@ RexxPackageEntry rx3270_package_entry =
 {
     STANDARD_PACKAGE_HEADER
     REXX_CURRENT_INTERPRETER_VERSION,	// anything after 4.0.0 will work
-    "RX3270",                            // name of the package
+    "pw3270",                            // name of the package
     "5.0",                               // package information
     NULL,                                // no load/unload functions
     NULL,
@@ -104,6 +104,17 @@ RexxPackageEntry rx3270_package_entry =
 };
 
 // package loading stub.
+/*
 OOREXX_GET_PACKAGE(rx3270);
+*/
+
+BEGIN_EXTERN_C()
+LIB3270_EXPORT RexxPackageEntry * RexxEntry RexxGetPackage(void)
+{
+	trace("%s struct size=%d ****************************************************",__FUNCTION__,(int) sizeof(RexxPackageEntry));
+	return &rx3270_package_entry;
+}
+END_EXTERN_C()
+
 
 
