@@ -44,6 +44,7 @@ OBJEXT = o
 
 MKDIR=@MKDIR_P@
 CC=@CC@
+CXX=@CXX@
 LD=@CC@
 MSGCAT=@MSGCAT@
 XGETTEXT=@XGETTEXT@
@@ -86,11 +87,20 @@ $(OBJDBG)/%.o: %.c $(DEPENDS)
 	@$(MKDIR) `dirname $@`
 	@$(CC) $(DLL_CFLAGS) $(CFLAGS) $(DEBUG_CFLAGS) $(PW3270_CFLAGS) $(GTK_CFLAGS) -o $@ -c $<
 
+$(OBJDBG)/%.o: %.cc $(DEPENDS)
+	@echo "  CC   `basename $@`"
+	@$(MKDIR) `dirname $@`
+	@$(CXX) $(DLL_CFLAGS) $(CFLAGS) $(DEBUG_CFLAGS) $(PW3270_CFLAGS) $(GTK_CFLAGS) -o $@ -c $<
+
 $(OBJRLS)/%.o: %.c $(DEPENDS)
 	@echo "  CC   `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(CC) $(DLL_CFLAGS) $(CFLAGS) $(PW3270_CFLAGS) $(GTK_CFLAGS) -o $@ -c $<
 
+$(OBJRLS)/%.o: %.cc $(DEPENDS)
+	@echo "  CC   `basename $@`"
+	@$(MKDIR) `dirname $@`
+	@$(CXX) $(DLL_CFLAGS) $(CFLAGS) $(PW3270_CFLAGS) $(GTK_CFLAGS) -o $@ -c $<
 
 #---[ Targets ]----------------------------------------------------------------
 

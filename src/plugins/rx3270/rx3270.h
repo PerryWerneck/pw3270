@@ -32,6 +32,7 @@
  #define RX3270_H_INCLUDED 1
 
  #include <errno.h>
+ #include <stdio.h>
  #include <lib3270/config.h>
  #include <lib3270.h>
  #include <lib3270/log.h>
@@ -43,6 +44,12 @@
  LIB3270_EXPORT RexxPackageEntry rx3270_package_entry;
 
 /*---[ Globals ]---------------------------------------------------------------------------------------------*/
+
+
+/*--[ Prototipes ]-------------------------------------------------------------------------------------------*/
+
+ LIB3270_EXPORT REXX_TYPED_ROUTINE_PROTOTYPE(rx3270version);
+
 
 
 #endif // RX3270_H_INCLUDED
