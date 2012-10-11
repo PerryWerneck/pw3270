@@ -351,10 +351,14 @@ else
 	AC_DEFINE(HAVE_REXX)
 	AC_PATH_TOOL([REXXC], [rexxc], [cp], `$REXXCONFIG --prefix`/bin )
 	PLUGINS="$PLUGINS rx3270"
+	REXX_CFLAGS="$CFLAGS `$REXXCONFIG --cflags`"
+	REXX_LIBS="$LIBS `$REXXCONFIG --libs`"
 fi
 
 AC_SUBST(REXXC)
 AC_SUBST(REXXCONFIG)
+AC_SUBST(REXX_CFLAGS)
+AC_SUBST(REXX_LIBS)
 
 #--[ Pre-reqs ]-----------------------------------------------------------------------------------------------------------------------------------------------
 AC_SUBST(LIB3270_REQUIRES)

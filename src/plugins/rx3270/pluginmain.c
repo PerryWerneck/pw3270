@@ -29,8 +29,8 @@
 
  #include <pw3270.h>
  #include <pw3270/plugin.h>
- #include <errno.h>
- #include <lib3270/log.h>
+
+ #include "rx3270.h"
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 

@@ -235,6 +235,7 @@
 		<Unit filename="src/plugins/rx3270/pluginmain.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/plugins/rx3270/rx3270.h" />
 		<Unit filename="src/plugins/rx3270/rxapimain.c">
 			<Option compilerVar="CC" />
 		</Unit>

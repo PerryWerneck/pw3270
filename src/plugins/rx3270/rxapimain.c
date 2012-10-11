@@ -26,3 +26,95 @@
  * erico.mendonca@gmail.com	(Erico Mascarenhas Mendonça)
  *
  */
+
+ /*
+  * Reference:
+  *
+  * http://www.oorexx.org/docs/rexxpg/x2950.htm
+  *
+  */
+
+ #include <pw3270.h>
+ #include <pw3270/plugin.h>
+ #include <oorexxapi.h>
+
+ #include "rx3270.h"
+
+// create function declarations for the linker
+REXX_TYPED_ROUTINE_PROTOTYPE(rx3270LoadFuncs);
+REXX_TYPED_ROUTINE_PROTOTYPE(rx3270DropFuncs);
+REXX_TYPED_ROUTINE_PROTOTYPE(rx3270Version);
+
+/*--[ Globals ]--------------------------------------------------------------------------------------*/
+
+#if defined WIN32
+        BOOL WINAPI DllMain(HANDLE hinst, DWORD dwcallpurpose, LPVOID lpvResvd);
+        static int librx3270_loaded(void);
+        static int librx3270_unloaded(void);
+#else
+        int librx3270_loaded(void) __attribute__((constructor));
+        int librx3270_unloaded(void) __attribute__((destructor));
+#endif
+
+/*--[ Rexx Package description ]---------------------------------------------------------------------*/
+
+
+// now build the actual entry list
+RexxRoutineEntry rx3270_functions[] =
+{
+    REXX_TYPED_ROUTINE(rx3270Version,	rx3270Version),
+    REXX_LAST_ROUTINE()
+};
+
+RexxPackageEntry rx3270_package_entry =
+{
+    STANDARD_PACKAGE_HEADER
+    REXX_INTERPRETER_4_0_0,			/**> anything after 4.0.0 will work */
+    "RX3270",						/**> name of the package */
+    PACKAGE_VERSION,				/**> package information */
+    NULL,							/**> no load/unload functions */
+    NULL,							/**> no load/unload functions */
+    rx3270_functions,				/**> the exported functions */
+    NULL							/**> no methods in rx3270. */
+};
+
+// package loading stub.
+OOREXX_GET_PACKAGE(rx3270);
+
+/*--[ Implement ]------------------------------------------------------------------------------------*/
+
+#if defined WIN32
+BOOL WINAPI DllMain(HANDLE hinst, DWORD dwcallpurpose, LPVOID lpvResvd)
+{
+	switch(dwcallpurpose)
+	{
+	case DLL_PROCESS_ATTACH:
+		librx3270_loaded();
+		break;
+
+	case DLL_PROCESS_DETACH:
+		librx3270_unloaded();
+		break;
+	}
+
+	return TRUE;
+}
+#endif // WIN32
+
+int librx3270_loaded(void)
+{
+	trace("%s %s %s",__FUNCTION__,__DATE__,__TIME__);
+    return 0;
+}
+
+int librx3270_unloaded(void)
+{
+	trace("%s",__FUNCTION__);
+    return 0;
+}
+
+RexxRoutine0(CSTRING, rx3270Version)
+{
+	return "teste"; // lib3270_get_version();
+}
+

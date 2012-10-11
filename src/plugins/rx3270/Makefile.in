@@ -22,16 +22,22 @@
 #
 # perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
 # erico.mendonca@gmail.com	(Erico Mascarenhas de Mendonça)
-# licinio@bb.com.br			(Licínio Luis Branco)
-# kraucer@bb.com.br			(Kraucer Fernandes Mazuco)
 #
 
 #---[ Sources ]----------------------------------------------------------------
 
 MODULE_NAME=rx3270
-DEPENDS=*.h *.c ../../include/*.h ../../include/lib3270/*.h Makefile
+DEPENDS=*.h ../../include/*.h ../../include/lib3270/*.h Makefile
 PLUGIN_SRC=pluginmain.c
 EXTAPI_SRC=rxapimain.c
+
+#---[ Tools ]------------------------------------------------------------------
+
+REXXCONFIG=@REXXCONFIG@
+LN_S=@LN_S@
+
+LIBS=@REXX_LIBS@
+CFLAGS=@REXX_CFLAGS@
 
 #---[ Include plugin rules ]---------------------------------------------------
 
@@ -39,24 +45,24 @@ include ../../include/plugin.mak
 
 #---[ Debug Targets ]----------------------------------------------------------
 
-$(BINDBG)/plugins/$(MODULE_NAME)@DLLEXT@: $(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJDBG)/$(SRC).o) $(BINDBG)/lib$(MODULE_NAME)@DLLEXT@
+$(BINDBG)/$(PLUGIN_NAME): $(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJDBG)/$(SRC).o) $(BINDBG)$(DLL_NAME)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(LD) $(DLL_FLAGS) $(LDSOFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS) $(PW3270_LIBS) $(GTK_LIBS)
 
-$(BINDBG)/lib$(MODULE_NAME)@DLLEXT@: $(foreach SRC, $(basename $(EXTAPI_SRC)), $(OBJDBG)/$(SRC).o)
+$(BINDBG)$(DLL_NAME): $(foreach SRC, $(basename $(EXTAPI_SRC)), $(OBJDBG)/$(SRC)@OBJEXT@)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(LD) $(DLL_FLAGS) $(LDSOFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS) $(LIB3270_LIBS)
+	@$(LD) $(DLL_FLAGS) $(LDFLAGS) @DBGRPATH@ @LDSOFLAGS@ -o $@ $^ $(LIBS) $(LIB3270_LIBS)
 
 #---[ Release Targets ]--------------------------------------------------------
 
-$(BINRLS)/plugins/$(MODULE_NAME)@DLLEXT@: $(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJRLS)/$(SRC).o) $(BINRLS)/lib$(MODULE_NAME)@DLLEXT@
+$(BINRLS)/$(PLUGIN_NAME): $(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJRLS)/$(SRC).o) $(BINRLS)$(DLL_NAME)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(LD) $(DLL_FLAGS) $(LDSOFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS) $(PW3270_LIBS) $(GTK_LIBS)
 
-$(BINRLS)/lib$(MODULE_NAME)@DLLEXT@: $(foreach SRC, $(basename $(EXTAPI_SRC)), $(OBJRLS)/$(SRC).o)
+$(BINRLS)$(DLL_NAME): $(foreach SRC, $(basename $(EXTAPI_SRC)), $(OBJRLS)/$(SRC).o)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(LD) $(DLL_FLAGS) $(LDSOFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS) $(LIB3270_LIBS)
