@@ -83,9 +83,11 @@
 		}
 		else if(!g_ascii_strcasecmp(name[f],"icon"))
 		{
+#if GTK_CHECK_VERSION(2,16,0)
 			gchar * stock = g_strconcat("gtk-",value[f],NULL);
 			gtk_action_set_stock_id(action,stock);
 			g_free(stock);
+#endif // GTK(2,16)
 		}
 		else if(!g_ascii_strcasecmp(name[f],"sensitive"))
 		{
@@ -93,19 +95,27 @@
 		}
 		else if(!g_ascii_strcasecmp(name[f],"label"))
 		{
+#if GTK_CHECK_VERSION(2,16,0)
 			gtk_action_set_label(action,gettext(value[f]));
+#endif // GTK(2,16)
 		}
 		else if(!g_ascii_strcasecmp(name[f],"short-label"))
 		{
+#if GTK_CHECK_VERSION(2,16,0)
 			gtk_action_set_short_label(action,gettext(value[f]));
+#endif // GTK(2,16)
 		}
 		else if(!g_ascii_strcasecmp(name[f],"tooltip"))
 		{
+#if GTK_CHECK_VERSION(2,16,0)
 			gtk_action_set_tooltip(action,gettext(value[f]));
+#endif // GTK(2,16)
 		}
 		else if(!g_ascii_strcasecmp(name[f],"important"))
 		{
+#if GTK_CHECK_VERSION(2,16,0)
 			gtk_action_set_is_important(action,get_boolean(value[f]));
+#endif // GTK(2,16)
 		}
 		else if(!g_ascii_strcasecmp(name[f],"key"))
 		{

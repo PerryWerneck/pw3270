@@ -141,14 +141,6 @@ static void action_group_setup(gpointer key, GtkAction *action, struct action_in
 	{
 		const gchar	* key_name = g_object_get_data(G_OBJECT(action),"accel_attr");
 		GSList		* child = gtk_action_get_proxies(action);
-/*
-
-		Trace("Adding action %s in group %s key=%s",
-						gtk_action_get_name(action),
-						gtk_action_group_get_name(info->group[group_id]),
-						key_name);
-*/
-
 
 		if(key_name && !v3270_set_keyboard_action(info->widget,key_name,action))
 		{

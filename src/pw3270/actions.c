@@ -472,6 +472,30 @@ static int setup_block_action(const gchar *name, const gchar *attr, GError **err
 	return id;
 }
 
+static GtkAction * new_action(const gchar *name, const gchar **names, const gchar **values)
+{
+#if GTK_CHECK_VERSION(2,16,0)
+	const gchar *label		= ui_get_attribute("label",names,values);
+	const gchar *tooltip	= ui_get_attribute("tooltip",names,values);
+	const gchar *id			= ui_get_attribute("label",names,values);
+	GtkAction	*action		= NULL;
+
+	if(id)
+	{
+		gchar * stock = g_strconcat("gtk-",id,NULL);
+		action = gtk_action_new(name,label,tooltip,stock);
+		g_free(stock);
+	}
+	else
+	{
+		action = gtk_action_new(name,label,tooltip,NULL);
+	}
+	return action;
+#else
+	return gtk_action_new(nm,NULL,NULL,NULL);
+#endif // GTK(2,16)
+}
+
 GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash, const gchar **names, const gchar **values, GError **error)
 {
 	static const gchar *actionname[ACTION_COUNT] = {	"pastenext",
@@ -723,7 +747,7 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 	switch(action_type)
 	{
 	case ACTION_TYPE_DEFAULT:
-		action = gtk_action_new(nm,NULL,NULL,NULL);
+		action = new_action(nm,names,values);
 		connect_standard_action(action,widget,name);
 		break;
 
@@ -737,47 +761,47 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 		break;
 
 	case ACTION_TYPE_MOVE:
-		action = gtk_action_new(nm,NULL,NULL,NULL);
+		action = new_action(nm,names,values);
 		connect_move_action(action,widget,attr,flags,error);
 		break;
 
 	case ACTION_TYPE_PFKEY:
-		action = gtk_action_new(nm,NULL,NULL,NULL);
+		action = new_action(nm,names,values);
 		g_object_set_data(G_OBJECT(action),"pfkey",GINT_TO_POINTER(id));
 		g_signal_connect(action,"activate",G_CALLBACK(action_pfkey),widget);
 		break;
 
 	case ACTION_TYPE_PAKEY:
-		action = gtk_action_new(nm,NULL,NULL,NULL);
+		action = new_action(nm,names,values);
 		g_object_set_data(G_OBJECT(action),"pakey",GINT_TO_POINTER(id));
 		g_signal_connect(action,"activate",G_CALLBACK(action_pakey),widget);
 		break;
 
 	case ACTION_TYPE_SET:
-		action = gtk_action_new(nm,NULL,NULL,NULL);
+		action = new_action(nm,names,values);
 		g_object_set_data(G_OBJECT(action),"toggle_id",GINT_TO_POINTER(id));
 		g_signal_connect(action,"activate",G_CALLBACK(action_set_toggle),widget);
 		break;
 
 	case ACTION_TYPE_RESET:
-		action = gtk_action_new(nm,NULL,NULL,NULL);
+		action = new_action(nm,names,values);
 		g_object_set_data(G_OBJECT(action),"toggle_id",GINT_TO_POINTER(id));
 		g_signal_connect(action,"activate",G_CALLBACK(action_reset_toggle),widget);
 		break;
 
 	case ACTION_TYPE_TABLE:
-		action = gtk_action_new(nm,NULL,NULL,NULL);
+		action = new_action(nm,names,values);
 		g_signal_connect(action,"activate",callback[id],widget);
 		break;
 
 	case ACTION_TYPE_LIB3270:
-		action = gtk_action_new(nm,NULL,NULL,NULL);
+		action = new_action(nm,names,values);
 		g_object_set_data(G_OBJECT(action),"lib3270_call",callback[id]);
 		g_signal_connect(action,"activate",G_CALLBACK(lib3270_action),widget);
 		break;
 
 	case ACTION_TYPE_STRING:
-		action = gtk_action_new(nm,NULL,NULL,NULL);
+		action = new_action(nm,names,values);
 		g_signal_connect(action,"activate",G_CALLBACK(action_string),widget);
 		break;
 	}
