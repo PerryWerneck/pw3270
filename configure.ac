@@ -172,7 +172,7 @@ m4_define([GLIB_CHECK_COMPILE_WARNINGS],
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])dnl
 rm -f conftest.$ac_objext
 glib_ac_compile_save="$ac_compile"
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext'
+ac_compile='$CC -c conftest.$ac_ext'
 AS_IF([_AC_EVAL_STDERR($ac_compile) &&
          AC_TRY_COMMAND([(if test -s conftest.err; then false ; else true; fi)])],
       [$2],

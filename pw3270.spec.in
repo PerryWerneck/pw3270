@@ -118,7 +118,10 @@ Revision @PACKAGE_REVISION@ from @PACKAGE_SOURCE@
 find . -exec touch {} \;
 aclocal
 autoconf
-./configure --enable-pic --prefix=%{_prefix} --bindir=%{_bindir} --datadir=%{_datadir} --includedir=%{_includedir} --libdir=%{_libdir}
+export CFLAGS="$RPM_OPT_FLAGS"
+export CXXFLAGS="$RPM_OPT_FLAGS"
+export FFLAGS="$RPM_OPT_FLAGS"
+%configure 
 
 %build
 make clean
