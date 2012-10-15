@@ -51,6 +51,7 @@
  GObject * ui_create_toolbar(GMarkupParseContext *context,GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error)
  {
  	GtkWidget	* widget	= NULL;
+ 	const gchar	* label		= NULL;
 
  	if(info->element)
 	{
@@ -72,13 +73,14 @@
 	GTK_WIDGET_UNSET_FLAGS(widget,GTK_CAN_FOCUS);
 #endif // GTK(2,18)
 
-	if(ui_get_attribute("label",names,values))
+	label = ui_get_attribute("label",names,values);
+	if(label)
 	{
 		// Toolbar has label, create and setup an action
 		const gchar *name = ui_get_attribute("name",names,values);
 		if(name)
 		{
-			GtkToggleAction *action = gtk_toggle_action_new(name,NULL,NULL,NULL);
+			GtkToggleAction *action = gtk_toggle_action_new(name,gettext(label),NULL,NULL);
 			ui_action_set_options(GTK_ACTION(action),info,names,values,error);
 			g_object_set_data_full(G_OBJECT(widget),"view_action",action,g_object_unref);
 			g_signal_connect(action,"toggled",G_CALLBACK(toggled),widget);

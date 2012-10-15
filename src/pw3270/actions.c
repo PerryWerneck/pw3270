@@ -475,14 +475,16 @@ static int setup_block_action(const gchar *name, const gchar *attr, GError **err
 static GtkAction * new_action(const gchar *name, const gchar **names, const gchar **values)
 {
 #if GTK_CHECK_VERSION(2,16,0)
+	return gtk_action_new(name,NULL,NULL,NULL);
+#else
 	const gchar *label		= ui_get_attribute("label",names,values);
 	const gchar *tooltip	= ui_get_attribute("tooltip",names,values);
-	const gchar *id			= ui_get_attribute("label",names,values);
+	const gchar *icon		= ui_get_attribute("icon",names,values);
 	GtkAction	*action		= NULL;
 
-	if(id)
+	if(icon)
 	{
-		gchar * stock = g_strconcat("gtk-",id,NULL);
+		gchar * stock = g_strconcat("gtk-",icon,NULL);
 		action = gtk_action_new(name,label,tooltip,stock);
 		g_free(stock);
 	}
@@ -491,22 +493,22 @@ static GtkAction * new_action(const gchar *name, const gchar **names, const gcha
 		action = gtk_action_new(name,label,tooltip,NULL);
 	}
 	return action;
-#else
-	return gtk_action_new(name,NULL,NULL,NULL);
 #endif // GTK(2,16)
 }
 
 static GtkAction * new_toggle(const gchar *name, const gchar **names, const gchar **values)
 {
 #if GTK_CHECK_VERSION(2,16,0)
-	const gchar *label		= ui_get_attribute("label",names,values);
-	const gchar *tooltip	= ui_get_attribute("tooltip",names,values);
-	const gchar *id			= ui_get_attribute("label",names,values);
-	GtkAction	*action		= NULL;
+	return GTK_ACTION(gtk_toggle_action_new(name,NULL,NULL,NULL));
+#else
+	const gchar		*label		= ui_get_attribute("label",names,values);
+	const gchar		*tooltip	= ui_get_attribute("tooltip",names,values);
+	const gchar 	*icon		= ui_get_attribute("icon",names,values);
+	GtkToggleAction	*action		= NULL;
 
-	if(id)
+	if(icon)
 	{
-		gchar * stock = g_strconcat("gtk-",id,NULL);
+		gchar * stock = g_strconcat("gtk-",icon,NULL);
 		action = gtk_toggle_action_new(name,label,tooltip,stock);
 		g_free(stock);
 	}
@@ -515,8 +517,6 @@ static GtkAction * new_toggle(const gchar *name, const gchar **names, const gcha
 		action = gtk_toggle_action_new(name,label,tooltip,NULL);
 	}
 	return GTK_ACTION(action);
-#else
-	return GTK_ACTION(gtk_toggle_action_new(name,NULL,NULL,NULL));
 #endif // GTK(2,16)
 }
 
