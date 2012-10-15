@@ -492,7 +492,31 @@ static GtkAction * new_action(const gchar *name, const gchar **names, const gcha
 	}
 	return action;
 #else
-	return gtk_action_new(nm,NULL,NULL,NULL);
+	return gtk_action_new(name,NULL,NULL,NULL);
+#endif // GTK(2,16)
+}
+
+static GtkAction * new_toggle(const gchar *name, const gchar **names, const gchar **values)
+{
+#if GTK_CHECK_VERSION(2,16,0)
+	const gchar *label		= ui_get_attribute("label",names,values);
+	const gchar *tooltip	= ui_get_attribute("tooltip",names,values);
+	const gchar *id			= ui_get_attribute("label",names,values);
+	GtkAction	*action		= NULL;
+
+	if(id)
+	{
+		gchar * stock = g_strconcat("gtk-",id,NULL);
+		action = gtk_toggle_action_new(name,label,tooltip,stock);
+		g_free(stock);
+	}
+	else
+	{
+		action = gtk_toggle_action_new(name,label,tooltip,NULL);
+	}
+	return GTK_ACTION(action);
+#else
+	return GTK_ACTION(gtk_toggle_action_new(name,NULL,NULL,NULL));
 #endif // GTK(2,16)
 }
 
@@ -752,7 +776,7 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 		break;
 
 	case ACTION_TYPE_TOGGLE:
-		action = GTK_ACTION(gtk_toggle_action_new(nm,NULL,NULL,NULL));
+		action = new_toggle(nm,names,values);
 		if(id < LIB3270_TOGGLE_COUNT)
 			toggle_action[id] = action;
 		g_object_set_data(G_OBJECT(action),"toggle_id",GINT_TO_POINTER(id));

@@ -153,11 +153,15 @@ static void action_group_setup(gpointer key, GtkAction *action, struct action_in
 		}
 
 		// Update proxy widgets
+#if GTK_CHECK_VERSION(2,16,0)
         while(child)
         {
 			gtk_activatable_sync_action_properties(GTK_ACTIVATABLE(child->data),action);
 			child = child->next;
         }
+#else
+
+#endif // GTK(2,16,0)
 
 	}
 

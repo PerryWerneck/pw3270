@@ -40,7 +40,11 @@
  {
  	if(!gtk_check_menu_item_get_active(item))
 		return;
+#if GTK_CHECK_VERSION(2,16,0)
 	v3270_set_font_family(widget,gtk_menu_item_get_label(GTK_MENU_ITEM(item)));
+#else
+	v3270_set_font_family(widget,g_object_get_data(G_OBJECT(item),"fontfamily"));
+#endif // GTK(2,16,0)
  }
 
  static void load_system_monospaced_fonts(GtkWidget *topmenu, GtkWidget *menu, GtkWidget *obj)
@@ -61,6 +65,10 @@
 			GtkWidget		*item = gtk_radio_menu_item_new_with_label(group,name);
 
 			group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(item));
+
+#if ! GTK_CHECK_VERSION(2,16,0)
+			g_object_set_data_full(G_OBJECT(item),"fontfamily",g_strdup(name),g_free);
+#endif // !GTK(2,16,0)
 
 			g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(activate_font),obj);
 
