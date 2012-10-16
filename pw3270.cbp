@@ -232,13 +232,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/plugins/rx3270/Makefile.in" />
-		<Unit filename="src/plugins/rx3270/pluginmain.c">
-			<Option compilerVar="CC" />
-		</Unit>
+		<Unit filename="src/plugins/rx3270/pluginmain.cc" />
 		<Unit filename="src/plugins/rx3270/rx3270.h" />
-		<Unit filename="src/plugins/rx3270/rxapimain.c">
-			<Option compilerVar="CC" />
-		</Unit>
+		<Unit filename="src/plugins/rx3270/rxapimain.cc" />
 		<Unit filename="src/pw3270/Makefile.in" />
 		<Unit filename="src/pw3270/actions.c">
 			<Option compilerVar="CC" />

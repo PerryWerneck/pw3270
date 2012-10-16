@@ -68,7 +68,7 @@ BOOL WINAPI DllMain(HANDLE hinst, DWORD dwcallpurpose, LPVOID lpvResvd)
 
 int librx3270_loaded(void)
 {
-	trace("%s %04x",__FUNCTION__,REXX_CURRENT_INTERPRETER_VERSION);
+	trace("%s %04x %s %s",__FUNCTION__,REXX_CURRENT_INTERPRETER_VERSION,__DATE__,__TIME__);
 	return 0;
 }
 
@@ -80,27 +80,45 @@ int librx3270_unloaded(void)
 
 RexxRoutine0(CSTRING, rx3270version)
 {
-   return "Teste";
+	return lib3270_get_version();
+}
+
+RexxRoutine0(CSTRING, rx3270QueryCState)
+{
+	return "";
+}
+
+RexxRoutine0(int, rx3270Disconnect)
+{
+	return 0;
+}
+
+RexxRoutine2(int, rx3270Connect, CSTRING, hostname, int, timeout)
+{
+	return 0;
 }
 
 
 // now build the actual entry list
 RexxRoutineEntry rx3270_functions[] =
 {
-    REXX_TYPED_ROUTINE(rx3270version, rx3270version),
-    REXX_LAST_METHOD()
+	REXX_TYPED_ROUTINE(rx3270version, 		rx3270version),
+	REXX_TYPED_ROUTINE(rx3270QueryCState,	rx3270QueryCState),
+	REXX_TYPED_ROUTINE(rx3270Disconnect,	rx3270Disconnect),
+	REXX_TYPED_ROUTINE(rx3270Connect,		rx3270Connect),
+	REXX_LAST_METHOD()
 };
 
 RexxPackageEntry rx3270_package_entry =
 {
     STANDARD_PACKAGE_HEADER
-    REXX_CURRENT_INTERPRETER_VERSION,	// anything after 4.0.0 will work
-    "pw3270",                            // name of the package
-    "5.0",                               // package information
-    NULL,                                // no load/unload functions
+    REXX_CURRENT_INTERPRETER_VERSION,		// anything after 4.0.0 will work
+    "pw3270",								// name of the package
+    PACKAGE_VERSION,						// package information
+    NULL,									// no load/unload functions
     NULL,
-    rx3270_functions,                    // the exported functions
-    NULL                                 // no methods in rxmath.
+    rx3270_functions,						// the exported functions
+    NULL									// no methods in rx3270.
 };
 
 // package loading stub.
@@ -111,7 +129,6 @@ OOREXX_GET_PACKAGE(rx3270);
 BEGIN_EXTERN_C()
 LIB3270_EXPORT RexxPackageEntry * RexxEntry RexxGetPackage(void)
 {
-	trace("%s struct size=%d ****************************************************",__FUNCTION__,(int) sizeof(RexxPackageEntry));
 	return &rx3270_package_entry;
 }
 END_EXTERN_C()

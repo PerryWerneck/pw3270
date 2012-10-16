@@ -59,17 +59,17 @@ DLL_NAME=@DLLDIR@/@DLLPREFIX@$(MODULE_NAME)@DLLEXT@.@VERSION@
 PLUGIN_NAME=plugins/$(MODULE_NAME)@DLLEXT@
 
 ifeq ($(LIB3270_MODE),Debug)
-	PW3270_LIBS="-L$(BINDBG)@DLLDIR@ -l3270"
-	PW3270_CFLAGS="-I../../../src/include"
-	LIB3270_LIBS="-L$(BINDBG)@DLLDIR@ -l3270"
-	LIB270_CFLAGS="-I../../../src/include"
+	PW3270_LIBS=-L$(BINDBG)@DLLDIR@ -l3270
+	PW3270_CFLAGS=-I../../../src/include
+	LIB3270_LIBS=-L$(BINDBG)@DLLDIR@ -l3270
+	LIB270_CFLAGS=-I../../../src/include
 endif
 
 ifeq ($(LIB3270_MODE),Release)
-	PW3270_LIBS="-L$(BINRLS)@DLLDIR@ -l3270"
-	PW3270_CFLAGS="-I../../../src/include"
-	LIB3270_LIBS="-L$(BINRLS)@DLLDIR@ -l3270"
-	LIB270_CFLAGS="-I../../../src/include"
+	PW3270_LIBS=-L$(BINRLS)@DLLDIR@ -l3270
+	PW3270_CFLAGS=-I../../../src/include
+	LIB3270_LIBS=-L$(BINRLS)@DLLDIR@ -l3270
+	LIB270_CFLAGS=-I../../../src/include
 endif
 
 ifeq ($(LIB3270_MODE),Default)
