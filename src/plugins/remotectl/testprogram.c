@@ -29,6 +29,7 @@
 
  #include <windows.h>
  #include <stdio.h>
+ #include <time.h>
  #include <pw3270/hllapi.h>
 
  #define BUFFER_LENGTH 8000
@@ -49,8 +50,8 @@
 		const char		* arg;
 	} cmd[] =
 	{
-		{ "ConnectPS", 		HLLAPI_CMD_CONNECTPS, 	"pw3270A"	},
 		{ "GetRevision",	HLLAPI_CMD_GETREVISION,	"       "	},
+		{ "ConnectPS", 		HLLAPI_CMD_CONNECTPS, 	"pw3270A"	},
 		{ "InputString",	HLLAPI_CMD_INPUTSTRING,	"test"		},
 
 	};
@@ -72,6 +73,21 @@
 	hllapi((LPWORD) &fn,buffer,&len,&rc);
 	printf("%s exits with rc=%d\n%s\n","HLLAPI_CMD_COPYPSTOSTR",rc,buffer);
 
+	// Performance
+	len = strlen(cmd[0].arg);
+	memcpy(buffer,cmd[0].arg,len);
+	if(hllapi((LPWORD) &cmd[0].fn,buffer,&len,&rc) == 0 && rc == 0)
+	{
+		time_t	end = time(0) + 5;
+		int 	qtd = 0;
+		do
+		{
+			qtd++;
+		} while(hllapi((LPWORD) &cmd[0].fn,buffer,&len,&rc) == 0 && rc == 0 && time(0)<end);
+		printf("%d interacoes em 5 segundos (rc=%d)\n",qtd,rc);
+
+	}
+
 	// Disconnect
 	len = 10;
 	rc	= 1;
@@ -79,6 +95,7 @@
 	*buffer = 0;
 	hllapi((LPWORD) &fn,buffer,&len,&rc);
 	printf("%s exits with rc=%d\n[%s]\n","HLLAPI_CMD_DISCONNECTPS",rc,buffer);
+
 
  	return 0;
  }
