@@ -161,33 +161,17 @@
  	}
 
  	return c;
- }
+}
 
-/**
- * Set string at cursor position.
- *
- * @param hSession		Session handle.
- * @param str			String to set
- *
- * @return Number of characters inserted; <0 in case of error.
- *
- */
-LIB3270_EXPORT int lib3270_set_string(H3270 *hSession, const unsigned char *str)
+static int set_string(H3270 *hSession, const unsigned char *str)
 {
 	PASTE_DATA data;
 	unsigned char last = 1;
-
-	CHECK_SESSION_HANDLE(hSession);
 
 	memset(&data,0,sizeof(data));
  	data.row		= BA_TO_ROW(hSession->cursor_addr);
 	data.orig_addr	= hSession->cursor_addr;
 	data.orig_col	= BA_TO_COL(hSession->cursor_addr);
-
-	if(hSession->kybdlock)
-		return -EINVAL;
-
-	hSession->suspend(hSession);
 
 	while(*str && last && !hSession->kybdlock && hSession->cursor_addr >= data.orig_addr)
 	{
@@ -234,9 +218,61 @@ LIB3270_EXPORT int lib3270_set_string(H3270 *hSession, const unsigned char *str)
 			break;
 	}
 
+	return data.qtd;
+}
+
+LIB3270_EXPORT int lib3270_set_string_at(H3270 *hSession, int row, int col, const unsigned char *str)
+{
+    int rc = -1;
+
+	CHECK_SESSION_HANDLE(hSession);
+
+	if(hSession->kybdlock)
+		return -EINVAL;
+
+	if(hSession->selected && !lib3270_get_toggle(hSession,LIB3270_TOGGLE_KEEP_SELECTED))
+		lib3270_unselect(hSession);
+
+	row--;
+	col--;
+
+	if(row >= 0 && col >= 0 && row <= hSession->rows && col <= hSession->cols)
+	{
+		hSession->suspend(hSession);
+
+		hSession->cursor_addr = (row * hSession->cols) + col;
+		rc = set_string(hSession, str);
+
+		hSession->resume(hSession);
+	}
+
+	return rc;
+}
+
+
+/**
+ * Set string at cursor position.
+ *
+ * @param hSession		Session handle.
+ * @param str			String to set
+ *
+ * @return Number of characters inserted; <0 in case of error.
+ *
+ */
+LIB3270_EXPORT int lib3270_set_string(H3270 *hSession, const unsigned char *str)
+{
+	int rc;
+
+	CHECK_SESSION_HANDLE(hSession);
+
+	if(hSession->kybdlock)
+		return -EINVAL;
+
+	hSession->suspend(hSession);
+	rc = set_string(hSession, str);
 	hSession->resume(hSession);
 
-	return data.qtd;
+	return rc;
 }
 
 LIB3270_EXPORT int lib3270_paste(H3270 *h, const unsigned char *str)

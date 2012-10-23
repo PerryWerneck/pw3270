@@ -79,3 +79,35 @@ char * get_contents(H3270 *hSession, int start, int sz)
 	return strdup((char *) str);
 }
 
+char * set_contents(H3270 *hSession, const char *str)
+{
+#ifdef HAVE_ICONV
+	// Convert received string to 3270 encoding
+	if(inputConv != (iconv_t)(-1))
+	{
+		size_t	  in		= strlen(str);
+		size_t	  out		= (in << 1);
+		char	* ptr;
+		char	* buffer	= (char *) malloc(out);
+		char	* ret;
+
+		memset(ptr=buffer,0,out);
+
+		iconv(inputConv,NULL,NULL,NULL,NULL);   // Reset state
+
+		if(iconv(inputConv,(char **) &str,&in,&ptr,&out) == ((size_t) -1))
+			ret = strdup(str);
+		else
+			ret = strdup(buffer);
+
+		free(buffer);
+
+		return ret;
+	}
+#endif // HAVE_ICONV
+
+	return strdup((char *) str);
+
+}
+
+

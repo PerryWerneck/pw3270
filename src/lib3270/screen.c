@@ -398,11 +398,36 @@ LIB3270_EXPORT int lib3270_set_cursor_address(H3270 *h, int baddr)
 	return cursor_move(h,baddr);
 }
 
+LIB3270_EXPORT int lib3270_set_cursor_position(H3270 *h, int row, int col)
+{
+    int baddr = -1;
+
+    CHECK_SESSION_HANDLE(h);
+
+	if(h->selected && !lib3270_get_toggle(h,LIB3270_TOGGLE_KEEP_SELECTED))
+		lib3270_unselect(h);
+
+	row--;
+	col--;
+
+	if(row >= 0 && col >= 0 && row <= h->rows && col <= h->cols)
+	{
+		baddr = (row * h->cols) + col;
+
+		if(baddr != h->cursor_addr)
+		{
+			h->cursor_addr = baddr;
+			h->update_cursor(h,(unsigned short) row,(unsigned short) col,h->text[baddr].chr,h->text[baddr].attr);
+		}
+	}
+
+	return baddr;
+}
+
+
 int cursor_move(H3270 *h, int baddr)
 {
-    int ret;
-
-    ret = h->cursor_addr;
+    int ret = h->cursor_addr;
 
 	if(ret == baddr)
 		return ret;

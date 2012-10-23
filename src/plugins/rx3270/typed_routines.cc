@@ -242,3 +242,52 @@ RexxRoutine3(int, rx3270queryStringAt, int, row, int, col, CSTRING, key)
 	return 0;
 }
 
+RexxRoutine2(int, rx3270SetCursorPosition, int, row, int, col)
+{
+	return lib3270_set_cursor_position(RX3270SESSION,row,col);
+}
+
+RexxRoutine3(int, rx3270SetStringAt, int, row, int, col, CSTRING, text)
+{
+	int		  rc;
+	H3270	* hSession	= RX3270SESSION;
+	char	* str		= set_contents(hSession,text);
+
+	if(str)
+		rc = lib3270_set_string_at(hSession,row,col,(const unsigned char *) str);
+	else
+		rc = -1;
+
+	free(str);
+
+	return rc;
+}
+
+/*
+::method RunMode
+return rx3270QueryRunMode()
+
+::method 'encoding='
+	use arg ptr
+return rx3270SetCharset(ptr)
+
+::method sendfile
+	use arg from, tostrncasecmp
+
+	status = rx3270BeginFileSend(from,to)
+	if status <> 0
+		then return status
+
+return rx3270WaitForFTComplete()
+
+::method recvfile
+	use arg from, to
+
+	status = rx3270BeginFileRecv(from,to)
+	if status <> 0
+		then return status
+
+return rx3270WaitForFTComplete()
+*/
+
+

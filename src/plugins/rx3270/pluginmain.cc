@@ -34,10 +34,12 @@
 
  LIB3270_EXPORT int pw3270_plugin_init(GtkWidget *window)
  {
+	rx3270_set_mode(RX3270_MODE_PLUGIN);
 	return 0;
  }
 
  LIB3270_EXPORT int pw3270_plugin_deinit(GtkWidget *window)
  {
+	rx3270_set_mode(RX3270_MODE_UNDEFINED);
 	return 0;
  }

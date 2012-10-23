@@ -59,6 +59,8 @@
 	int librx3270_unloaded(void) __attribute__((destructor));
 #endif
 
+	static enum rx3270mode active_mode = RX3270_MODE_UNDEFINED;
+
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
 #if defined WIN32
@@ -80,8 +82,15 @@ BOOL WINAPI DllMain(HANDLE hinst, DWORD dwcallpurpose, LPVOID lpvResvd)
 }
 #endif
 
+void rx3270_set_mode(enum rx3270mode mode)
+{
+	active_mode = mode;
+}
+
 int librx3270_loaded(void)
 {
+	active_mode = RX3270_MODE_STANDALONE;
+
 #ifdef HAVE_ICONV
 	outputConv = iconv_open(REXX_DEFAULT_CHARSET, lib3270_get_default_charset());
 	inputConv = iconv_open(lib3270_get_default_charset(), REXX_DEFAULT_CHARSET);
@@ -92,6 +101,8 @@ int librx3270_loaded(void)
 
 int librx3270_unloaded(void)
 {
+	active_mode = RX3270_MODE_UNDEFINED;
+
 #ifdef HAVE_ICONV
 
  	if(outputConv != (iconv_t) (-1))
@@ -103,42 +114,6 @@ int librx3270_unloaded(void)
 
 	return 0;
 }
-
-
-/*
-::method setStringAt
-	use arg row, col, str
-return rx3270InputString(row,col,str)
-
-::method setCursorPosition
-	use arg row, col
-return rx3270SetCursorPosition(row,col)
-
-::method RunMode
-return rx3270QueryRunMode()
-
-::method 'encoding='
-	use arg ptr
-return rx3270SetCharset(ptr)
-
-::method sendfile
-	use arg from, tostrncasecmp
-
-	status = rx3270BeginFileSend(from,to)
-	if status <> 0
-		then return status
-
-return rx3270WaitForFTComplete()
-
-::method recvfile
-	use arg from, to
-
-	status = rx3270BeginFileRecv(from,to)
-	if status <> 0
-		then return status
-
-return rx3270WaitForFTComplete()
-*/
 
 // now build the actual entry list
 RexxRoutineEntry rx3270_functions[] =
@@ -159,6 +134,7 @@ RexxRoutineEntry rx3270_functions[] =
 	REXX_TYPED_ROUTINE(rx3270IsTerminalReady,		rx3270IsTerminalReady),
 	REXX_TYPED_ROUTINE(rx3270ReadScreen,			rx3270ReadScreen),
 	REXX_TYPED_ROUTINE(rx3270queryStringAt,			rx3270queryStringAt),
+	REXX_TYPED_ROUTINE(rx3270SetStringAt,			rx3270SetStringAt),
 
 	REXX_LAST_METHOD()
 };

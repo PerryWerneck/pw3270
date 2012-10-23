@@ -66,12 +66,19 @@
  REXX_TYPED_ROUTINE_PROTOTYPE(rx3270IsTerminalReady);
  REXX_TYPED_ROUTINE_PROTOTYPE(rx3270ReadScreen);
  REXX_TYPED_ROUTINE_PROTOTYPE(rx3270queryStringAt);
+ REXX_TYPED_ROUTINE_PROTOTYPE(rx3270SetStringAt);
 
 /*---[ Globals ]---------------------------------------------------------------------------------------------*/
 
- #define RX3270SESSION lib3270_get_default_session_handle()
+ enum rx3270mode
+ {
+	RX3270_MODE_STANDALONE,	/**< Running outside pw3270's main process */
+	RX3270_MODE_PLUGIN,		/**< Running inside pw3270's main process */
 
- char * get_contents(H3270 *hSession, int start, int sz);
+	RX3270_MODE_UNDEFINED
+ };
+
+ #define RX3270SESSION lib3270_get_default_session_handle()
 
 #ifdef HAVE_ICONV
  extern iconv_t outputConv;
@@ -79,5 +86,10 @@
 #endif
 
 /*--[ Prototipes ]-------------------------------------------------------------------------------------------*/
+
+ char	* get_contents(H3270 *hSession, int start, int sz);
+ char	* set_contents(H3270 *hSession, const char *text);
+
+ LIB3270_EXPORT void rx3270_set_mode(enum rx3270mode mode);
 
 #endif // RX3270_H_INCLUDED
