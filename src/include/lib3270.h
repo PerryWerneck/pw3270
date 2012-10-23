@@ -667,6 +667,9 @@
 	LIB3270_EXPORT int lib3270_in_tn3270e(H3270 *h);
 	LIB3270_EXPORT int lib3270_in_e(H3270 *h);
 
+	#define lib3270_is_connected(h) lib3270_in_tn3270e(h)
+	#define lib3270_is_ready(h) lib3270_get_program_message(h) == LIB3270_MESSAGE_NONE
+
 	LIB3270_EXPORT LIB3270_SSL_STATE lib3270_get_secure(H3270 *session);
 
 
@@ -745,6 +748,8 @@
 	 *
 	 */
 	 LIB3270_EXPORT const char * lib3270_get_charset(H3270 *session);
+
+	 LIB3270_EXPORT const char * lib3270_get_default_charset(void);
 
 	/**
 	 * Get selected area.

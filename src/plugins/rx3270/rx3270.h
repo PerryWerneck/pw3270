@@ -38,13 +38,45 @@
  #include <lib3270/log.h>
  #include <oorexxapi.h>
 
+#ifdef HAVE_ICONV
+	#include <iconv.h>
+#endif
+
+
 /*---[ Exports ]---------------------------------------------------------------------------------------------*/
 
  LIB3270_EXPORT RexxRoutineEntry rx3270_functions[];
  LIB3270_EXPORT RexxPackageEntry rx3270_package_entry;
 
+/*---[ Rexx entry points ]-----------------------------------------------------------------------------------*/
+
+ REXX_TYPED_ROUTINE_PROTOTYPE(rx3270version);
+ REXX_TYPED_ROUTINE_PROTOTYPE(rx3270QueryCState);
+ REXX_TYPED_ROUTINE_PROTOTYPE(rx3270Disconnect);
+ REXX_TYPED_ROUTINE_PROTOTYPE(rx3270Connect);
+ REXX_TYPED_ROUTINE_PROTOTYPE(rx3270isConnected);
+ REXX_TYPED_ROUTINE_PROTOTYPE(rx3270WaitForEvents);
+ REXX_TYPED_ROUTINE_PROTOTYPE(rx3270Sleep);
+ REXX_TYPED_ROUTINE_PROTOTYPE(rx3270SendENTERKey);
+ REXX_TYPED_ROUTINE_PROTOTYPE(rx3270SendPFKey);
+ REXX_TYPED_ROUTINE_PROTOTYPE(rx3270SendPAKey);
+ REXX_TYPED_ROUTINE_PROTOTYPE(rx3270WaitForTerminalReady);
+ REXX_TYPED_ROUTINE_PROTOTYPE(rx3270WaitForStringAt);
+ REXX_TYPED_ROUTINE_PROTOTYPE(rx3270GetStringAt);
+ REXX_TYPED_ROUTINE_PROTOTYPE(rx3270IsTerminalReady);
+ REXX_TYPED_ROUTINE_PROTOTYPE(rx3270ReadScreen);
+ REXX_TYPED_ROUTINE_PROTOTYPE(rx3270queryStringAt);
+
 /*---[ Globals ]---------------------------------------------------------------------------------------------*/
 
+ #define RX3270SESSION lib3270_get_default_session_handle()
+
+ char * get_contents(H3270 *hSession, int start, int sz);
+
+#ifdef HAVE_ICONV
+ extern iconv_t outputConv;
+ extern iconv_t inputConv;
+#endif
 
 /*--[ Prototipes ]-------------------------------------------------------------------------------------------*/
 

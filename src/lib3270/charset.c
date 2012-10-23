@@ -726,10 +726,15 @@ void set_display_charset(H3270 *session, const char *dcs)
 	session->charset = strdup(dcs);
 }
 
+LIB3270_EXPORT const char * lib3270_get_default_charset(void)
+{
+	return "ISO-8859-1";
+}
+
 LIB3270_EXPORT const char * lib3270_get_charset(H3270 *session)
 {
 	CHECK_SESSION_HANDLE(session);
-	return session->charset ? session->charset : "ISO-8859-1";
+	return session->charset ? session->charset : lib3270_get_default_charset();
 }
 
 static KeySym StringToKeysym(char *s)

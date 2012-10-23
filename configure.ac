@@ -51,6 +51,9 @@ AC_CONFIG_HEADER([src/include/lib3270/config.h])
 dnl Initialise automake stuff.
 AM_INIT_AUTOMAKE
 
+dnl Check for iconv
+AM_ICONV
+
 #--[ Check for tools & Libraries ]----------------------------------------------------------------------------------------------------------------------------
 
 AC_PROG_CXX

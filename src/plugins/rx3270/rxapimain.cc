@@ -36,15 +36,29 @@
   */
 
  #include "rx3270.h"
+ #include <lib3270/actions.h>
+
+#ifdef HAVE_ICONV
+	#include <iconv.h>
+#endif
+
+ #include <string.h>
 
 #if defined WIN32
+
+	#define REXX_DEFAULT_CHARSET "CP1252"
+
 	BOOL WINAPI DllMain(HANDLE hinst, DWORD dwcallpurpose, LPVOID lpvResvd);
 	static int librx3270_loaded(void);
 	static int librx3270_unloaded(void);
 #else
+
+	#define REXX_DEFAULT_CHARSET "UTF-8"
+
 	int librx3270_loaded(void) __attribute__((constructor));
 	int librx3270_unloaded(void) __attribute__((destructor));
 #endif
+
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
 #if defined WIN32
@@ -68,44 +82,84 @@ BOOL WINAPI DllMain(HANDLE hinst, DWORD dwcallpurpose, LPVOID lpvResvd)
 
 int librx3270_loaded(void)
 {
-	trace("%s %04x %s %s",__FUNCTION__,REXX_CURRENT_INTERPRETER_VERSION,__DATE__,__TIME__);
+#ifdef HAVE_ICONV
+	outputConv = iconv_open(REXX_DEFAULT_CHARSET, lib3270_get_default_charset());
+	inputConv = iconv_open(lib3270_get_default_charset(), REXX_DEFAULT_CHARSET);
+#endif
+
 	return 0;
 }
 
 int librx3270_unloaded(void)
 {
-	trace("%s",__FUNCTION__);
+#ifdef HAVE_ICONV
+
+ 	if(outputConv != (iconv_t) (-1))
+		iconv_close(outputConv);
+
+ 	if(inputConv != (iconv_t) (-1))
+		iconv_close(inputConv);
+#endif
+
 	return 0;
 }
 
-RexxRoutine0(CSTRING, rx3270version)
-{
-	return lib3270_get_version();
-}
 
-RexxRoutine0(CSTRING, rx3270QueryCState)
-{
-	return "";
-}
+/*
+::method setStringAt
+	use arg row, col, str
+return rx3270InputString(row,col,str)
 
-RexxRoutine0(int, rx3270Disconnect)
-{
-	return 0;
-}
+::method setCursorPosition
+	use arg row, col
+return rx3270SetCursorPosition(row,col)
 
-RexxRoutine2(int, rx3270Connect, CSTRING, hostname, int, timeout)
-{
-	return 0;
-}
+::method RunMode
+return rx3270QueryRunMode()
 
+::method 'encoding='
+	use arg ptr
+return rx3270SetCharset(ptr)
+
+::method sendfile
+	use arg from, tostrncasecmp
+
+	status = rx3270BeginFileSend(from,to)
+	if status <> 0
+		then return status
+
+return rx3270WaitForFTComplete()
+
+::method recvfile
+	use arg from, to
+
+	status = rx3270BeginFileRecv(from,to)
+	if status <> 0
+		then return status
+
+return rx3270WaitForFTComplete()
+*/
 
 // now build the actual entry list
 RexxRoutineEntry rx3270_functions[] =
 {
-	REXX_TYPED_ROUTINE(rx3270version, 		rx3270version),
-	REXX_TYPED_ROUTINE(rx3270QueryCState,	rx3270QueryCState),
-	REXX_TYPED_ROUTINE(rx3270Disconnect,	rx3270Disconnect),
-	REXX_TYPED_ROUTINE(rx3270Connect,		rx3270Connect),
+	REXX_TYPED_ROUTINE(rx3270version, 				rx3270version),
+	REXX_TYPED_ROUTINE(rx3270QueryCState,			rx3270QueryCState),
+	REXX_TYPED_ROUTINE(rx3270Disconnect,			rx3270Disconnect),
+	REXX_TYPED_ROUTINE(rx3270Connect,				rx3270Connect),
+	REXX_TYPED_ROUTINE(rx3270isConnected,			rx3270isConnected),
+	REXX_TYPED_ROUTINE(rx3270WaitForEvents,			rx3270WaitForEvents),
+	REXX_TYPED_ROUTINE(rx3270Sleep,					rx3270Sleep),
+	REXX_TYPED_ROUTINE(rx3270SendENTERKey,			rx3270SendENTERKey),
+	REXX_TYPED_ROUTINE(rx3270SendPFKey,				rx3270SendPFKey),
+	REXX_TYPED_ROUTINE(rx3270SendPAKey,				rx3270SendPAKey),
+	REXX_TYPED_ROUTINE(rx3270WaitForTerminalReady,	rx3270WaitForTerminalReady),
+	REXX_TYPED_ROUTINE(rx3270WaitForStringAt,		rx3270WaitForStringAt),
+	REXX_TYPED_ROUTINE(rx3270GetStringAt,			rx3270GetStringAt),
+	REXX_TYPED_ROUTINE(rx3270IsTerminalReady,		rx3270IsTerminalReady),
+	REXX_TYPED_ROUTINE(rx3270ReadScreen,			rx3270ReadScreen),
+	REXX_TYPED_ROUTINE(rx3270queryStringAt,			rx3270queryStringAt),
+
 	REXX_LAST_METHOD()
 };
 
