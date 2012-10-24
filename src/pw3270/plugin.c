@@ -125,7 +125,7 @@
 
  }
 
- G_GNUC_INTERNAL void init_plugins(GtkWidget *widget)
+ LIB3270_EXPORT void pw3270_init_plugins(GtkWidget *widget)
  {
 #if defined(DEBUG)
 	load("." G_DIR_SEPARATOR_S "plugins", widget);
@@ -137,7 +137,7 @@
 
  }
 
- G_GNUC_INTERNAL void deinit_plugins(GtkWidget *widget)
+ LIB3270_EXPORT void pw3270_deinit_plugins(GtkWidget *widget)
  {
  	int f;
 
@@ -167,4 +167,45 @@
 	g_free(hPlugin);
 	hPlugin = NULL;
 	nPlugin	= 0;
+ }
+
+ LIB3270_EXPORT int pw3270_setup_plugin_action(GtkAction *action, GtkWidget *widget, const gchar *name)
+ {
+ 	int		  f;
+ 	gchar	* fname;
+
+	if(!hPlugin)
+		return ENOENT;
+
+	// Search for plugin setup calls
+	fname = g_strdup_printf("pw3270_setup_action_%s",name);
+	for(f=0;f<nPlugin;f++)
+	{
+		int (*setup)(GtkAction *action, GtkWidget *widget);
+
+		if(g_module_symbol(hPlugin[f], fname, (gpointer) &setup))
+		{
+			g_free(fname);
+			return setup(action,widget);
+		}
+	}
+	g_free(fname);
+
+	// Search for activation callbacks
+	fname = g_strdup_printf("pw3270_action_%s_activated",name);
+	for(f=0;f<nPlugin;f++)
+	{
+		void (*call)(GtkAction *action, GtkWidget *widget);
+
+		if(g_module_symbol(hPlugin[f], fname, (gpointer) &call))
+		{
+			g_signal_connect(action,"activate",G_CALLBACK(call),widget);
+			g_free(fname);
+			return 0;
+		}
+	}
+	g_free(fname);
+
+	return ENOENT;
+
  }

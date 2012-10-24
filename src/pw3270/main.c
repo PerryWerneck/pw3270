@@ -282,7 +282,7 @@ int main(int argc, char *argv[])
 		else
 			pw3270_restore_window(toplevel,"toplevel");
 
-		init_plugins(toplevel);
+		pw3270_init_plugins(toplevel);
 		gtk_window_present(GTK_WINDOW(toplevel));
 
 #ifdef HAVE_GTKMAC
@@ -291,7 +291,7 @@ int main(int argc, char *argv[])
 
 		gtk_main();
 
-		deinit_plugins(toplevel);
+		pw3270_deinit_plugins(toplevel);
 
 	}
 

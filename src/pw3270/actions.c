@@ -32,6 +32,7 @@
  #include "globals.h"
  #include "uiparser/parser.h"
  #include <pw3270/v3270.h>
+ #include <pw3270/plugin.h>
  #include "filetransfer.h"
  #include <lib3270/actions.h>
  #include <lib3270/selection.h>
@@ -47,7 +48,7 @@
  #define TOGGLE_GDKDEBUG LIB3270_TOGGLE_COUNT+1
 
  #ifdef X3270_TRACE
-	#define trace_action(a,w) lib3270_trace_event(v3270_get_session(widget),"Action %s activated on widget %p\n",gtk_action_get_name(a),w);
+	#define trace_action(a,w) lib3270_trace_event(v3270_get_session(w),"Action %s activated on widget %p\n",gtk_action_get_name(a),w);
  #else
 	#define trace_action(a,w) /* */
  #endif // X3270_TRACE
@@ -87,13 +88,6 @@ static void connect_action(GtkAction *action, GtkWidget *widget)
 
 	hostname_action(action,widget);
 }
-
-/*
-static void nop_action(GtkAction *action, GtkWidget *widget)
-{
-	trace_action(action,widget);
-}
-*/
 
 static void disconnect_action(GtkAction *action, GtkWidget *widget)
 {
@@ -287,6 +281,10 @@ static void connect_standard_action(GtkAction *action, GtkWidget *widget, const 
 	}
 
 	if(!g_ascii_strcasecmp(name,"screensizes"))
+		return;
+
+	// Check for plugin actions
+	if(!pw3270_setup_plugin_action(action, widget, name))
 		return;
 
 	// Not-found, disable action

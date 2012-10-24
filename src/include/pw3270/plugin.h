@@ -46,6 +46,11 @@
 	LIB3270_EXPORT void pw3270_plugin_start(GtkWidget *window);
 	LIB3270_EXPORT void pw3270_plugin_stop(GtkWidget *window);
 
+	// plugins
+	LIB3270_EXPORT void pw3270_init_plugins(GtkWidget *widget);
+	LIB3270_EXPORT void pw3270_deinit_plugins(GtkWidget *widget);
+	LIB3270_EXPORT int  pw3270_setup_plugin_action(GtkAction *action, GtkWidget *widget, const gchar *name);
+
 #ifdef __cplusplus
 	}
 #endif
