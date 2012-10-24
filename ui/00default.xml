@@ -86,9 +86,7 @@
 		<!--- Special action - View menu will be populated with labeled toolbars, menubars and keypads --->
 		<menu name='View' label='_View' />
 
-		<!---
-		<menu name='ScriptsMenu' label='Scripts' />
-		--->
+		<menu name='ScriptsMenu' label='Scripts' visible='no' />
 
 		<menu name='NetworkMenu' label='_Network' >
 			<menuitem action='hostname' icon='home' group='offline' label='Set hostname' />
