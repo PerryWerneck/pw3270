@@ -47,11 +47,14 @@ static int dump_buffer(H3270 *hSession, unsigned const char *buf, int len)
 
 int main(int numpar, char *param[])
 {
+	unsigned char buffer[] = { 0xf3, 0x00, 0x05, 0x01, 0xff, 0x02 };
+
 	H3270 *hSession = lib3270_session_new("");
 	hSession->write = dump_buffer;
 
 	lib3270_set_toggle(hSession,LIB3270_TOGGLE_DS_TRACE,1);
 
+	write_structured_field(hSession, buffer, 6);
 
 	lib3270_session_free(hSession);
 	return 0;
