@@ -653,10 +653,7 @@ void Error(H3270 *session, const char *fmt, ...)
 
 	va_start(arg_ptr, fmt);
 
-	if(session && session->sz == sizeof(H3270))
-		popup_handler(session,session->widget,LIB3270_NOTIFY_ERROR, _( "3270 Error" ),NULL,fmt,arg_ptr);
-	else
-		popup_handler(NULL,NULL,LIB3270_NOTIFY_ERROR, _( "3270 Error" ),NULL,fmt,arg_ptr);
+	popup_handler(session,session->widget,LIB3270_NOTIFY_ERROR, _( "3270 Error" ),NULL,fmt,arg_ptr);
 
 	va_end(arg_ptr);
 

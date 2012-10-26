@@ -92,8 +92,8 @@ static void rpq_dump_warnings(H3270 *hSession);
 #define	RPQ_ADDRESS	0
 #define	RPQ_TIMESTAMP	1
 #define	RPQ_TIMEZONE	2
-#define	RPQ_USER	3
-#define	RPQ_VERSION	4
+#define	RPQ_USER		3
+#define	RPQ_VERSION		4
 
 /*
  * Define a table of RPQ self-defing terms.
@@ -127,8 +127,7 @@ static char *x3270rpq;
  */
 void do_qr_rpqnames(H3270 *hSession)
 {
-	#define TERM_PREFIX_SIZE 2	/* Each term has 1 byte length and 1
-					   byte id */
+	#define TERM_PREFIX_SIZE 2	/* Each term has 1 byte length and 1 byte id */
 
 	unsigned char *rpql, *p_term;
 	int term_id,i,j,x;
@@ -178,7 +177,8 @@ void do_qr_rpqnames(H3270 *hSession)
 		 */
 		remaining -= TERM_PREFIX_SIZE;
 
-		switch (term_id) {	/* build the term based on id */
+		switch (term_id) /* build the term based on id */
+		{
 		case RPQ_USER:		/* User text from env. vars */
 			hSession->obptr += get_rpq_user(hSession,hSession->obptr, remaining);
 			break;
@@ -198,8 +198,10 @@ void do_qr_rpqnames(H3270 *hSession)
 		case RPQ_VERSION:	/* program version */
 			x = strlen(build_rpq_version);
 			omit_due_space_limit = (x > remaining);
-			if (!omit_due_space_limit) {
-				for (i = 0; i < x; i++) {
+			if (!omit_due_space_limit)
+			{
+				for (i = 0; i < x; i++)
+				{
 					*hSession->obptr++ = asc2ebc[(int)(*(build_rpq_version+i) & 0xff)];
 				}
 			}
@@ -208,8 +210,10 @@ void do_qr_rpqnames(H3270 *hSession)
 		case RPQ_TIMESTAMP:	/* program build time (yyyymmddhhmmss bcd) */
 			x = strlen(build_rpq_timestamp);
 			omit_due_space_limit = ((x+1)/2 > remaining) ? 1 : 0;
-			if (!omit_due_space_limit) {
-				for (i=0; i < x; i+=2) {
+			if (!omit_due_space_limit)
+			{
+				for (i=0; i < x; i+=2)
+				{
 					*hSession->obptr++ = ((*(build_rpq_timestamp+i) - '0') << 4)
 						+ (*(build_rpq_timestamp+i+1) - '0');
 				}
@@ -217,7 +221,11 @@ void do_qr_rpqnames(H3270 *hSession)
 			break;
 
 		default:		/* unsupported ID, (can't happen) */
-			Error(hSession,_( "Unsupported RPQ term" ));
+			lib3270_popup_dialog(	hSession,
+									LIB3270_NOTIFY_ERROR,
+									_( "RPQ Error" ),
+									_( "Unsupported RPQ term" ),
+									_( "RPQ term %d is unknown" ), term_id );
 			break;
 		}
 

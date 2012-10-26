@@ -460,37 +460,37 @@ see_efa_only(unsigned char efa)
 	}
 }
 
-const char *
-see_qcode(unsigned char id)
+const char * see_qcode(unsigned char id)
 {
 	static char buf[64];
 
-	switch (id) {
+	switch (id)
+	{
 	    case QR_CHARSETS:
-		return "CharacterSets";
+			return "CharacterSets";
 	    case QR_IMP_PART:
-		return "ImplicitPartition";
+			return "ImplicitPartition";
 	    case QR_SUMMARY:
-		return "Summary";
+			return "Summary";
 	    case QR_USABLE_AREA:
-		return "UsableArea";
+			return "UsableArea";
 	    case QR_COLOR:
-		return "Color";
+			return "Color";
 	    case QR_HIGHLIGHTING:
-		return "Highlighting";
+			return "Highlighting";
 	    case QR_REPLY_MODES:
-		return "ReplyModes";
+			return "ReplyModes";
 	    case QR_DBCS_ASIA:
-		return "DbcsAsia";
+			return "DbcsAsia";
 	    case QR_ALPHA_PART:
-		return "AlphanumericPartitions";
+			return "AlphanumericPartitions";
 	    case QR_DDM:
-		return "DistributedDataManagement";
+			return "DistributedDataManagement";
 	    case QR_RPQNAMES:
-		return "RPQNames";
+			return "RPQNames";
 	    default:
-		(void) sprintf(buf, "unknown[0x%x]", id);
-		return buf;
+			(void) sprintf(buf, "unknown[0x%x]", id);
+			return buf;
 	}
 }
 
