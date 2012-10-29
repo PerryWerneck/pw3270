@@ -607,7 +607,7 @@ static int do_connect(H3270 *hSession, const char *n)
  */
 int lib3270_connect(H3270 *hSession, const char *n, int wait)
 {
-	int rc;
+	int		  rc;
 
 	CHECK_SESSION_HANDLE(hSession);
 

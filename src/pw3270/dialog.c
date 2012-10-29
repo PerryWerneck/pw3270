@@ -288,6 +288,26 @@
 
  void hostname_action(GtkAction *action, GtkWidget *widget)
  {
+ 	static const struct _option
+	{
+		LIB3270_OPTION	  value;
+		const gchar		* text;
+		const gchar		* tooltip;
+	} option[] =
+	{
+		{
+			LIB3270_OPTION_COLOR8,
+			N_( "_8 colors" ),
+			N_( "If active, pw3270 will respond to a Query(Color) with a list of 8 supported colors." )
+		},
+
+		{
+			LIB3270_OPTION_AS400,
+			N_( "Host is AS_400" ),
+			NULL
+		},
+	};
+
  	const gchar 	* title 	= g_object_get_data(G_OBJECT(action),"title");
  	gchar			* cfghost	= get_string_from_config("host","uri","");
  	gchar			* hostname;
@@ -297,7 +317,8 @@
  	GtkTable		* table		= GTK_TABLE(gtk_table_new(2,4,FALSE));
  	GtkEntry		* host		= GTK_ENTRY(gtk_entry_new());
  	GtkEntry		* port		= GTK_ENTRY(gtk_entry_new());
- 	GtkToggleButton	* checkbox	= GTK_TOGGLE_BUTTON(gtk_check_button_new_with_mnemonic( _( "_Secure connection" ) ));
+ 	GtkToggleButton	* sslcheck	= GTK_TOGGLE_BUTTON(gtk_check_button_new_with_mnemonic( _( "_Secure connection" ) ));
+ 	GtkToggleButton	* optcheck[G_N_ELEMENTS(option)];
  	GtkWidget 		* dialog 	= gtk_dialog_new_with_buttons(	gettext(title ? title : N_( "Select hostname" )),
 																GTK_WINDOW(gtk_widget_get_toplevel(widget)),
 																GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -312,7 +333,6 @@
 	gtk_entry_set_max_length(port,6);
 	gtk_entry_set_width_chars(port,7);
 
-
 	label = gtk_label_new_with_mnemonic( _("_Hostname:") );
 	gtk_label_set_mnemonic_widget(GTK_LABEL(label),GTK_WIDGET(host));
 	gtk_table_attach(table,label,0,1,0,1,0,0,5,0);
@@ -323,7 +343,36 @@
 	gtk_table_attach(table, label, 2,3,0,1,0,0,5,0);
 	gtk_table_attach(table,GTK_WIDGET(port), 3,4,0,1,GTK_FILL,0,0,0);
 
-	gtk_table_attach(table,GTK_WIDGET(checkbox), 1,2,1,2,GTK_EXPAND|GTK_FILL,0,0,0);
+	{
+		int f;
+		int col = 1;
+		int row = 0;
+		LIB3270_OPTION optval = lib3270_get_options(v3270_get_session(widget));
+
+		GtkTable * frame = GTK_TABLE(gtk_table_new(2,2,FALSE));
+		gtk_table_attach(frame,GTK_WIDGET(sslcheck), 0,1,0,1,GTK_EXPAND|GTK_FILL,0,0,0);
+
+		for(f=0;f<G_N_ELEMENTS(option);f++)
+		{
+			optcheck[f] = GTK_TOGGLE_BUTTON(gtk_check_button_new_with_mnemonic( gettext( option[f].text ) ));
+
+			if(option[f].tooltip)
+				gtk_widget_set_tooltip_markup(GTK_WIDGET(optcheck[f]),gettext(option[f].tooltip));
+
+			gtk_table_attach(frame,GTK_WIDGET(optcheck[f]),col,col+1,row,row+1,GTK_EXPAND|GTK_FILL,0,0,0);
+			gtk_toggle_button_set_active(optcheck[f],optval & option[f].value ? TRUE : FALSE);
+
+			if(++col > 1);
+			{
+				col = 0;
+				row++;
+			}
+
+		}
+
+		gtk_table_attach(table,GTK_WIDGET(frame),1,2,1,2,GTK_EXPAND|GTK_FILL,0,0,0);
+	}
+
 
 	gtk_container_set_border_width(GTK_CONTAINER(table),5);
 
@@ -334,12 +383,12 @@
 #ifdef HAVE_LIBSSL
 	if(!strncmp(hostname,"L:",2))
 	{
-		gtk_toggle_button_set_active(checkbox,TRUE);
+		gtk_toggle_button_set_active(sslcheck,TRUE);
 		hostname += 2;
 	}
 #else
-	gtk_toggle_button_set_active(checkbox,FALSE);
-	gtk_widget_set_sensitive(GTK_WIDGET(checkbox),FALSE);
+	gtk_toggle_button_set_active(sslcheck,FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(sslcheck),FALSE);
 	if(!strncmp(hostname,"L:",2))
 		hostname += 2;
 #endif
@@ -367,7 +416,7 @@
 		case GTK_RESPONSE_ACCEPT:
 			gtk_widget_set_sensitive(dialog,FALSE);
 
-			hostname = g_strconcat(	gtk_toggle_button_get_active(checkbox) ? "L:" : "",
+			hostname = g_strconcat(	gtk_toggle_button_get_active(sslcheck) ? "L:" : "",
 									gtk_entry_get_text(host),
 									":",
 									gtk_entry_get_text(port),

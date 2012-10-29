@@ -820,7 +820,7 @@ static void do_qr_color(H3270 *hSession)
 
 	trace_ds(hSession,"> QueryReply(Color)\n");
 
-	color_max = hSession->color8 ? 8: 16; /* report on 8 or 16 colors */
+	color_max = (hSession->options & LIB3270_OPTION_COLOR8) ? 8: 16; /* report on 8 or 16 colors */
 
 	space3270out(hSession,4 + 2*15);
 	*hSession->obptr++ = 0x00;					/* no options */

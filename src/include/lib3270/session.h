@@ -83,6 +83,8 @@
 		LIB3270_CSTATE			  cstate;				/**< Connection state */
 
 		// flags
+		LIB3270_OPTION			  options;							/**< Session options */
+
 		int						  bgthread					: 1;	/**< Running on a background thread ? */
 		int					  	  selected					: 1;	/**< Has selected region? */
 		int						  rectsel					: 1;	/**< Selected region is a rectangle ? */
@@ -96,7 +98,7 @@
 		int						  oerr_lock					: 1;
 		int						  unlock_delay				: 1;
 		int			 			  auto_reconnect_inprogress	: 1;
-		int						  color8					: 1;
+//		int						  color8					: 1;
 		int						  apl_mode					: 1;
 		int						  icrnl						: 1;
 		int						  inlcr						: 1;

@@ -236,6 +236,17 @@
 
 
 	/**
+	 * Connect options
+	 *
+	 */
+	typedef enum lib3270_option
+	{
+		LIB3270_OPTION_COLOR8 	= 0x0001,	/**< If active, pw3270 will respond to a Query(Color) with a list of 8 supported colors. */
+		LIB3270_OPTION_AS400	= 0x0002,	/**< Host is AS400? */
+
+	} LIB3270_OPTION;
+
+	/**
 	 * SSL state
 	 *
 	 */
@@ -953,6 +964,10 @@
 	LIB3270_EXPORT void lib3270_trace_event(H3270 *session, const char *fmt, ...) LIB3270_GNUC_FORMAT(2,3);
 	LIB3270_EXPORT void lib3270_set_trace_handler( void (*handler)(H3270 *session, const char *fmt, va_list args) );
 	LIB3270_EXPORT void lib3270_write_dstrace(H3270 *session, const char *fmt, ...) LIB3270_GNUC_FORMAT(2,3);
+
+	LIB3270_EXPORT LIB3270_OPTION lib3270_get_options(H3270 *hSession);
+	LIB3270_EXPORT void lib3270_set_options(H3270 *hSession, LIB3270_OPTION opt);
+
 
 #ifdef __cplusplus
 	}

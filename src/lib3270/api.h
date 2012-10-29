@@ -299,7 +299,8 @@
 
 		#define CHAR_ATTR_UNCONVERTED	LIB3270_ATTR_CG
 
-		struct lib3270_option
+/*
+		struct _lib3270_option
 		{
 			const char *name;
 			enum
@@ -320,7 +321,8 @@
 
 		#define new_3270_session(m) lib3270_session_new(m)
 
-		LOCAL_EXTERN const struct lib3270_option * get_3270_option_table(int sz);
+		LOCAL_EXTERN const struct _lib3270_option * get_3270_option_table(int sz);
+*/
 
 
 		/* Set/Get screen contents */

@@ -453,3 +453,15 @@ LIB3270_EXPORT void * lib3270_get_widget(H3270 *h)
 	CHECK_SESSION_HANDLE(h);
 	return h->widget;
 }
+
+LIB3270_EXPORT LIB3270_OPTION lib3270_get_options(H3270 *hSession)
+{
+	CHECK_SESSION_HANDLE(hSession);
+	return hSession->options;
+}
+
+LIB3270_EXPORT void lib3270_set_options(H3270 *hSession, LIB3270_OPTION opt)
+{
+	CHECK_SESSION_HANDLE(hSession);
+	hSession->options = opt;
+}
