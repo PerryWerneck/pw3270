@@ -246,6 +246,16 @@
 
 	} LIB3270_OPTION;
 
+	#define LIB3270_OPTION_COUNT 2
+
+	typedef struct _lib3270_option_entry
+	{
+		LIB3270_OPTION	  value;
+		const char		* key;
+		const char		* text;
+		const char		* tooltip;
+	} LIB3270_OPTION_ENTRY;
+
 	/**
 	 * SSL state
 	 *
@@ -967,6 +977,8 @@
 
 	LIB3270_EXPORT LIB3270_OPTION lib3270_get_options(H3270 *hSession);
 	LIB3270_EXPORT void lib3270_set_options(H3270 *hSession, LIB3270_OPTION opt);
+
+	LIB3270_EXPORT const LIB3270_OPTION_ENTRY * lib3270_get_option_list(void);
 
 
 #ifdef __cplusplus

@@ -32,42 +32,18 @@
  #include "globals.h"
  #include <pw3270/v3270.h>
 
- static const struct _lib3270_options
- {
-	LIB3270_OPTION	  value;
-	const gchar		* key;
-	const gchar		* text;
-	const gchar		* tooltip;
- } lib3270_options[] =
- {
-	{
-		LIB3270_OPTION_COLOR8,
-		"color8",
-		N_( "_8 colors" ),
-		N_( "If active, pw3270 will respond to a Query(Color) with a list of 8 supported colors." )
-	},
-
-	{
-		LIB3270_OPTION_AS400,
-		"as400",
-		N_( "Host is AS_400" ),
-		NULL
-	},
-
- };
-
-
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
  void load_3270_options_from_config(GtkWidget *widget)
  {
  	int f;
-	LIB3270_OPTION opt = 0;
+	LIB3270_OPTION 				opt = 0;
+	const LIB3270_OPTION_ENTRY *options = lib3270_get_option_list();
 
-	for(f=0;f<G_N_ELEMENTS(lib3270_options);f++)
+	for(f=0;f<LIB3270_OPTION_COUNT;f++)
 	{
-		if(get_boolean_from_config("host",lib3270_options[f].key,FALSE))
-			opt |= lib3270_options[f].value;
+		if(get_boolean_from_config("host",options[f].key,FALSE))
+			opt |= options[f].value;
 	}
 	lib3270_set_options(v3270_get_session(widget),opt);
  }
@@ -328,6 +304,8 @@
 
  void hostname_action(GtkAction *action, GtkWidget *widget)
  {
+	const LIB3270_OPTION_ENTRY *options = lib3270_get_option_list();
+
  	const gchar 	* title 	= g_object_get_data(G_OBJECT(action),"title");
  	gchar			* cfghost	= get_string_from_config("host","uri","");
  	gchar			* hostname;
@@ -338,8 +316,8 @@
  	GtkEntry		* host		= GTK_ENTRY(gtk_entry_new());
  	GtkEntry		* port		= GTK_ENTRY(gtk_entry_new());
  	GtkToggleButton	* sslcheck	= GTK_TOGGLE_BUTTON(gtk_check_button_new_with_mnemonic( _( "_Secure connection" ) ));
- 	GtkToggleButton	* optcheck[G_N_ELEMENTS(lib3270_options)];
- 	GtkWidget 		* dialog 	= gtk_dialog_new_with_buttons(	gettext(title ? title : N_( "Select hostname" )),
+ 	GtkToggleButton	* optcheck[LIB3270_OPTION_COUNT];
+	GtkWidget 		* dialog 	= gtk_dialog_new_with_buttons(	gettext(title ? title : N_( "Select hostname" )),
 																GTK_WINDOW(gtk_widget_get_toplevel(widget)),
 																GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
 																GTK_STOCK_CONNECT,	GTK_RESPONSE_ACCEPT,
@@ -371,15 +349,15 @@
 		GtkTable * frame = GTK_TABLE(gtk_table_new(2,2,FALSE));
 		gtk_table_attach(frame,GTK_WIDGET(sslcheck), 0,1,0,1,GTK_EXPAND|GTK_FILL,0,0,0);
 
-		for(f=0;f<G_N_ELEMENTS(lib3270_options);f++)
+		for(f=0;f<LIB3270_OPTION_COUNT;f++)
 		{
-			optcheck[f] = GTK_TOGGLE_BUTTON(gtk_check_button_new_with_mnemonic( gettext( lib3270_options[f].text ) ));
+			optcheck[f] = GTK_TOGGLE_BUTTON(gtk_check_button_new_with_mnemonic( gettext( options[f].text ) ));
 
-			if(lib3270_options[f].tooltip)
-				gtk_widget_set_tooltip_markup(GTK_WIDGET(optcheck[f]),gettext(lib3270_options[f].tooltip));
+			if(options[f].tooltip)
+				gtk_widget_set_tooltip_markup(GTK_WIDGET(optcheck[f]),gettext(options[f].tooltip));
 
 			gtk_table_attach(frame,GTK_WIDGET(optcheck[f]),col,col+1,row,row+1,GTK_EXPAND|GTK_FILL,0,0,0);
-			gtk_toggle_button_set_active(optcheck[f],get_boolean_from_config("host", lib3270_options[f].key, FALSE));
+			gtk_toggle_button_set_active(optcheck[f],get_boolean_from_config("host", options[f].key, FALSE));
 
 			if(++col > 1);
 			{
@@ -446,12 +424,12 @@
 				int f;
 				LIB3270_OPTION opt = 0;
 
-				for(f=0;f<G_N_ELEMENTS(lib3270_options);f++)
+				for(f=0;f<LIB3270_OPTION_COUNT;f++)
 				{
 					gboolean val = gtk_toggle_button_get_active(optcheck[f]);
 					if(val)
-						opt |= lib3270_options[f].value;
-					set_boolean_to_config("host", lib3270_options[f].key, val);
+						opt |= options[f].value;
+					set_boolean_to_config("host", options[f].key, val);
 				}
 
 				lib3270_set_options(v3270_get_session(widget),opt);

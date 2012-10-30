@@ -28,12 +28,12 @@
 TERMINAL_SOURCES =	bounds.c ctlr.c util.c toggles.c screen.c selection.c kybd.c telnet.c \
 				host.c sf.c ansi.c resolver.c tables.c utf8.c charset.c \
 				version.c session.c state.c html.c trace_ds.c see.c \
-				paste.c 
+				paste.c
 
 # Network I/O Sources
 NETWORK_SOURCES = iocalls.c proxy.c
 
 # Full library sources
 SOURCES =			$(TERMINAL_SOURCES) $(NETWORK_SOURCES) ft.c ft_cut.c ft_dft.c glue.c resources.c \
-					rpq.c macros.c fallbacks.c log.c
+					rpq.c macros.c fallbacks.c log.c options.c
 
