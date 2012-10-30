@@ -73,6 +73,7 @@ static void connect_action(GtkAction *action, GtkWidget *widget)
 
 	if(host)
 	{
+		lib3270_set_options(v3270_get_session(widget),0);
 		v3270_connect(widget,host);
 		return;
 	}
@@ -80,6 +81,7 @@ static void connect_action(GtkAction *action, GtkWidget *widget)
 	host = get_string_from_config("host","uri","");
 	if(*host)
 	{
+		load_3270_options_from_config(widget);
 		v3270_connect(widget,host);
 		g_free(host);
 		return;
