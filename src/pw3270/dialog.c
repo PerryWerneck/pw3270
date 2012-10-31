@@ -312,7 +312,7 @@
  	gchar			* ptr;
  	gboolean		  again		= TRUE;
  	GtkWidget		* label;
- 	GtkTable		* table		= GTK_TABLE(gtk_table_new(2,4,FALSE));
+ 	GtkTable		* table		= GTK_TABLE(gtk_table_new(3,4,FALSE));
  	GtkEntry		* host		= GTK_ENTRY(gtk_entry_new());
  	GtkEntry		* port		= GTK_ENTRY(gtk_entry_new());
  	GtkToggleButton	* sslcheck	= GTK_TOGGLE_BUTTON(gtk_check_button_new_with_mnemonic( _( "_Secure connection" ) ));
@@ -341,13 +341,16 @@
 	gtk_table_attach(table, label, 2,3,0,1,0,0,5,0);
 	gtk_table_attach(table,GTK_WIDGET(port), 3,4,0,1,GTK_FILL,0,0,0);
 
+	gtk_table_attach(table,GTK_WIDGET(sslcheck), 1,2,1,2,GTK_EXPAND|GTK_FILL,0,0,0);
+
 	{
+
 		int f;
-		int col = 1;
+		int col = 0;
 		int row = 0;
 
-		GtkTable * frame = GTK_TABLE(gtk_table_new(2,2,FALSE));
-		gtk_table_attach(frame,GTK_WIDGET(sslcheck), 0,1,0,1,GTK_EXPAND|GTK_FILL,0,0,0);
+		GtkWidget	* container = gtk_expander_new_with_mnemonic(_( "_Host options"));
+		GtkTable	* frame		= GTK_TABLE(gtk_table_new(2,2,FALSE));
 
 		for(f=0;f<LIB3270_OPTION_COUNT;f++)
 		{
@@ -359,7 +362,7 @@
 			gtk_table_attach(frame,GTK_WIDGET(optcheck[f]),col,col+1,row,row+1,GTK_EXPAND|GTK_FILL,0,0,0);
 			gtk_toggle_button_set_active(optcheck[f],get_boolean_from_config("host", options[f].key, FALSE));
 
-			if(++col > 1);
+			if(col++ > 1)
 			{
 				col = 0;
 				row++;
@@ -367,7 +370,8 @@
 
 		}
 
-		gtk_table_attach(table,GTK_WIDGET(frame),1,2,1,2,GTK_EXPAND|GTK_FILL,0,0,0);
+		gtk_container_add(GTK_CONTAINER(container),GTK_WIDGET(frame));
+		gtk_table_attach(table,container,1,2,2,3,GTK_EXPAND|GTK_FILL,0,0,0);
 	}
 
 
