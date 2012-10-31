@@ -563,10 +563,21 @@ LIB3270_FKEY_ACTION( pfkey )
 
 	if (hSession->kybdlock & KL_OIA_MINUS)
 		return -1;
-	else if (hSession->kybdlock)
-		enq_key(hSession,pf_xlate[key-1]);
+
+	if (hSession->kybdlock)
+	{
+		if(hSession->options & LIB3270_OPTION_AS400)
+			enq_key(hSession,pa_xlate[0]);
+
+ 		enq_key(hSession,pf_xlate[key-1]);
+	}
 	else
+	{
+		if(hSession->options & LIB3270_OPTION_AS400)
+			key_AID(hSession,pa_xlate[0]);
+
 		key_AID(hSession,pf_xlate[key-1]);
+	}
 
 	return 0;
 }
