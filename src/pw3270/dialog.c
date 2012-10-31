@@ -45,7 +45,7 @@
 		if(get_boolean_from_config("host",options[f].key,FALSE))
 			opt |= options[f].value;
 	}
-	lib3270_set_options(v3270_get_session(widget),opt);
+	v3270_set_session_options(widget,opt);
  }
 
 
@@ -432,7 +432,7 @@
 					set_boolean_to_config("host", options[f].key, val);
 				}
 
-				lib3270_set_options(v3270_get_session(widget),opt);
+				v3270_set_session_options(widget,opt);
 
 			}
 

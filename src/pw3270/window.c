@@ -233,6 +233,12 @@
 	gtk_window_set_title(GTK_WINDOW(widget),name);
  }
 
+ LIB3270_EXPORT void pw3270_set_session_options(GtkWidget *widget, LIB3270_OPTION options)
+ {
+ 	g_return_if_fail(GTK_IS_PW3270(widget));
+	v3270_set_session_options(GTK_PW3270(widget)->terminal,options);
+ }
+
  static void chktoplevel(GtkWidget *window, GtkWidget **widget)
  {
  	if(*widget)

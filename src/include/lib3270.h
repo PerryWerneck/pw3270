@@ -246,7 +246,8 @@
 
 	} LIB3270_OPTION;
 
-	#define LIB3270_OPTION_COUNT 2
+	#define LIB3270_OPTION_DEFAULT	0
+	#define LIB3270_OPTION_COUNT	2
 
 	typedef struct _lib3270_option_entry
 	{

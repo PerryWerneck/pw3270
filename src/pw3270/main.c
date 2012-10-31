@@ -38,15 +38,24 @@
 #endif // HAVE_GTKMAC
 
 #include <pw3270/v3270.h>
+#include <pw3270/plugin.h>
 #include "v3270/accessible.h"
 #include <stdlib.h>
 
+ struct option
+ {
+	LIB3270_OPTION	host;
+ };
+
+ #define ERROR_DOMAIN g_quark_from_static_string(PACKAGE_NAME)
+
 /*--[ Statics ]--------------------------------------------------------------------------------------*/
 
- static GtkWidget *toplevel = NULL;
+ static struct option	  cmdline_opt	= { LIB3270_OPTION_DEFAULT };
+ static GtkWidget		* toplevel		= NULL;
 
 #ifdef HAVE_GTKMAC
- GtkOSXApplication	* osxapp	= NULL;
+ GtkOSXApplication		* osxapp		= NULL;
 #endif // HAVE_GTKMAC
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
@@ -112,12 +121,31 @@ static void toplevel_setup(GtkWindow *window)
 }
 
 #if ! defined( WIN32 )
-static gboolean appname(const gchar *option_name, const gchar *value, gpointer data,GError **error)
+static gboolean appname(const gchar *option_name, const gchar *value, gpointer data, GError **error)
 {
 	g_set_application_name(value);
 	return TRUE;
 }
 #endif // !win32
+
+static gboolean optcolors(const gchar *option_name, const gchar *value, gpointer data, GError **error)
+{
+	switch(atoi(value))
+	{
+	case 8:
+		((struct option *) data)->host |= LIB3270_OPTION_COLOR8;
+		break;
+
+	case 16:
+		break;
+
+	default:
+		*error = g_error_new(ERROR_DOMAIN,EINVAL, _("Unexpected or invalid color value \"%s\""), value );
+		return FALSE;
+	}
+
+	return TRUE;
+}
 
 int main(int argc, char *argv[])
 {
@@ -190,15 +218,20 @@ int main(int argc, char *argv[])
 #endif // WIN32
 			{ "session",		's', 0, G_OPTION_ARG_STRING,	&session_name,		N_( "Session name" ),						PACKAGE_NAME	},
 			{ "host",			'h', 0, G_OPTION_ARG_STRING,	&host,				N_( "Host to connect"),						NULL			},
+			{ "colors",			'c', 0, G_OPTION_ARG_CALLBACK,	optcolors,			N_( "Set reported colors (8/16)" ),			"16"			},
+
 			{ NULL }
 		};
 
-		GOptionContext	* options	= g_option_context_new (_("- 3270 Emulator for Gtk"));
-		GError			* error		= NULL;
+		GOptionContext	* context		= g_option_context_new (_("- 3270 Emulator for Gtk"));
+		GError			* error			= NULL;
+		GOptionGroup 	* group			= g_option_group_new( PACKAGE_NAME, NULL, NULL, &cmdline_opt, NULL);
 
-		g_option_context_add_main_entries(options, app_options, NULL);
+		g_option_context_set_main_group(context, group);
 
-		if(!g_option_context_parse( options, &argc, &argv, &error ))
+		g_option_context_add_main_entries(context, app_options, NULL);
+
+		if(!g_option_context_parse( context, &argc, &argv, &error ))
 		{
 			int f;
 			GString 	* str;
@@ -225,6 +258,7 @@ int main(int argc, char *argv[])
 
 			return -1;
 		}
+
 	}
 
 	{
@@ -274,6 +308,7 @@ int main(int argc, char *argv[])
 
 		toplevel = pw3270_new(host);
 		pw3270_set_session_name(toplevel,session_name);
+		pw3270_set_session_options(toplevel,cmdline_opt.host);
 
 		toplevel_setup(GTK_WINDOW(toplevel));
 
