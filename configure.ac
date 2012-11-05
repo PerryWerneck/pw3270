@@ -346,11 +346,19 @@ fi
 
 AC_SUBST(PHPCONFIG)
 
-AC_ARG_WITH([rexxconfig], [AS_HELP_STRING([--with-rexx-config], [Path to oorexx-config tool])], [ REXXCONFIG="$withval" ],[ AC_PATH_TOOL(REXXCONFIG, oorexx-config, , $PATH) ])
+AC_ARG_ENABLE([rexx],[AS_HELP_STRING([--disable-rexx], [Disable rexx scripting support])],[ app_cv_rexx="$enableval" ],[ app_cv_rexx="yes" ])
 
-if test -z "${REXXCONFIG}"; then
-	AC_MSG_NOTICE([Program oorexx-config not found. Use --with-rexx-config=path to specify absolute path to the oorexx-config tool.])
-else
+if test "$app_cv_rexx" == "yes"; then
+	AC_ARG_WITH([rexxconfig], [AS_HELP_STRING([--with-rexx-config], [Path to oorexx-config tool])], [ REXXCONFIG="$withval" ],[ AC_PATH_TOOL(REXXCONFIG, oorexx-config, , $PATH) ])
+
+	if test -z "${REXXCONFIG}"; then
+		AC_MSG_NOTICE([Program oorexx-config not found. Use --with-rexx-config=path to specify absolute path to the oorexx-config tool.])
+		app_cv_rexx="no"
+	fi
+fi
+
+
+if test "$app_cv_rexx" == "yes"; then
 	AC_DEFINE(HAVE_REXX)
 	AC_PATH_TOOL([REXXC], [rexxc], [cp], `$REXXCONFIG --prefix`/bin )
 	PLUGINS="$PLUGINS rx3270"

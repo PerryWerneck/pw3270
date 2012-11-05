@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-31 07:43-0200\n"
+"POT-Creation-Date: 2012-11-05 11:23-0200\n"
 "PO-Revision-Date: 2012-10-31 07:44-0200\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
@@ -43,32 +43,32 @@ msgstr "Ação %s precisa do atributo src"
 msgid "%s requires GTK version %d.%d.%d"
 msgstr "%s requer GTK versão %d.%d.%d"
 
-#: kybd.c:2678
+#: kybd.c:2689
 #, c-format
 msgid "%s: Bell not supported"
 msgstr "%s: Alerta sonoro não suportado"
 
-#: kybd.c:2837
+#: kybd.c:2848
 #, c-format
 msgid "%s: Missing hex digits after \\x"
 msgstr "%s: Faltando dígitos hexadecimais após \\x"
 
-#: kybd.c:2777
+#: kybd.c:2788
 #, c-format
 msgid "%s: Unknown character after \\p"
 msgstr "%s: Unknown character after \\p"
 
-#: kybd.c:2813
+#: kybd.c:2824
 #, c-format
 msgid "%s: Unknown character after \\pa"
 msgstr "%s: Unknown character after \\pa"
 
-#: kybd.c:2791
+#: kybd.c:2802
 #, c-format
 msgid "%s: Unknown character after \\pf"
 msgstr "%s: Unknown character after \\pf"
 
-#: kybd.c:2729
+#: kybd.c:2740
 #, c-format
 msgid "%s: Vertical tab not supported"
 msgstr "%s: Tabulação verticao não suportada"
@@ -1659,12 +1659,12 @@ msgstr "Unknown 3270 Data Stream command: 0x%X"
 msgid "Unknown FT control code from host"
 msgstr "Servidor enviou código de controle FT desconhecido"
 
-#: kybd.c:2427
+#: kybd.c:2438
 #, c-format
 msgid "Unknown PA key %d"
 msgstr "PA %d desconhecida"
 
-#: kybd.c:2442
+#: kybd.c:2453
 #, c-format
 msgid "Unknown PF key %d"
 msgstr "PF %d desconhecida"
