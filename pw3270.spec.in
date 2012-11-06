@@ -48,7 +48,7 @@
 	%define _release %{_rel}.fc%{fedora}
 	%define _redhat 0
 	%define _distro Fedora %{fedora}
-	%define _bldreq gtk2-devel openssl-devel
+	%define _bldreq gtk3-devel openssl-devel
 %endif
 
 %if 0%{?_redhat}
