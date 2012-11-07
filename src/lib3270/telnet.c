@@ -3243,6 +3243,7 @@ static void continue_tls(H3270 *hSession, unsigned char *sbbuf, int len)
 	if(hSession->ssl_con == NULL)
 	{
 		/* Failed. */
+		popup_an_error(hSession,_( "SSL init failed!"));
 		net_disconnect(hSession);
 		return;
 	}
@@ -3251,24 +3252,19 @@ static void continue_tls(H3270 *hSession, unsigned char *sbbuf, int len)
 	if(SSL_set_fd(hSession->ssl_con, hSession->sock) != 1)
 	{
 		trace_dsn(hSession,"SSL_set_fd failed!\n");
+		popup_an_error(hSession,_( "SSL_set_fd failed!"));
+		net_disconnect(hSession);
+		return;
 	}
 
-//#if defined(_WIN32)
-//	/* Make the socket blocking for SSL. */
-//	(void) WSAEventSelect(hSession->sock, hSession->sock_handle, 0);
-//	(void) non_blocking(False);
-//#endif
-
+	trace("%s: Running SSL_connect",__FUNCTION__);
 	rv = SSL_connect(hSession->ssl_con);
-
-//#if defined(_WIN32)
-//	// Make the socket non-blocking again for event processing
-//	(void) WSAEventSelect(hSession->sock, hSession->sock_handle, FD_READ | FD_CONNECT | FD_CLOSE);
-//#endif
+	trace("%s: SSL_connect exits with rc=%d",__FUNCTION__,rv);
 
 	if (rv != 1)
 	{
 		trace_dsn(hSession,"continue_tls: SSL_connect failed\n");
+		popup_an_error(hSession,_( "SSL connect failed!"));
 		net_disconnect(hSession);
 		return;
 	}
@@ -3276,7 +3272,7 @@ static void continue_tls(H3270 *hSession, unsigned char *sbbuf, int len)
 //	hSession->secure_connection = True;
 
 	/* Success. */
-//	trace_dsn(hSession,"TLS/SSL negotiated connection complete. Connection is now secure.\n");
+	trace_dsn(hSession,"TLS/SSL negotiated connection complete. Connection is now secure.\n");
 
 	/* Tell the world that we are (still) connected, now in secure mode. */
 	lib3270_set_connected(hSession);
