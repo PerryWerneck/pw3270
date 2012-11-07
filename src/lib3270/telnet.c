@@ -3077,13 +3077,13 @@ static void ssl_init(H3270 *session)
 
 	if(ssl_ctx == NULL)
 	{
-		lib3270_write_log(session,"%s","Initializing SSL context");
+		lib3270_write_log(session,"SSL","%s","Initializing SSL context");
 		SSL_load_error_strings();
 		SSL_library_init();
 		ssl_ctx = SSL_CTX_new(SSLv23_method());
 		if(ssl_ctx == NULL)
 		{
-			popup_an_error(NULL,"SSL_CTX_new failed");
+			popup_an_error(session,"SSL_CTX_new failed");
 			session->ssl_host = False;
 			return;
 		}
