@@ -99,6 +99,18 @@ EOF
 
 copy_locale $TEMPFILE
 
+mkdir -p $TARGET_PATH/share/glib-2.0/schemas
+if [ "$?" != 0 ]; then
+        echo "Can´t create schemas folder"
+        exit -1
+fi
+
+cp $GTK_PREFIX/share/glib-2.0/schemas/gschemas.compiled $TARGET_PATH/share/glib-2.0/schemas/gschemas.compiled
+if [ "$?" != 0 ]; then
+        echo "Can´t copy gshemars.compiled"
+        exit -1
+fi
+
 
 }
 
