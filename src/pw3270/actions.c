@@ -859,9 +859,12 @@ static void action_text_script(GtkAction *action, GtkWidget *widget)
 
 		if(g_shell_parse_argv(g_strstrip(ln[f]),&argc,&argv,&error))
 		{
-			gchar *rsp = lib3270_run_macro(hSession,(const gchar **) argv);
-			if(rsp)
-				g_free(rsp);
+			if(pw3270_run_macro(widget, argc,(const gchar **) argv) < 0)
+			{
+				gchar *rsp = lib3270_run_macro(hSession,(const gchar **) argv);
+				if(rsp)
+					g_free(rsp);
+			}
 		}
 		else
 		{
@@ -883,6 +886,8 @@ void ui_connect_text_script(GtkWidget *widget, GtkAction *action, const gchar *s
  	gchar *base = g_strstrip(g_strdup(script_text));
 	gchar *text = g_strdup(base);
 	g_free(base);
+
+	lib3270_trace_event(v3270_get_session(widget),"Action %s activated on widget %p\n",gtk_action_get_name(action),widget);
 
 	gtk_action_set_sensitive(action,TRUE);
 	g_object_set_data_full(G_OBJECT(action),"script_text",text,g_free);

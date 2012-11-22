@@ -49,32 +49,6 @@
  	char *(*exec)(H3270 *session, int argc, const char **argv);
  };
 
-/*
- #define LIB3270_MACRO_ENTRY( name )  { #name, lib3270_macro_ ## name }
-
- static const struct cmd[] =
- {
- 	LIB3270_MACRO_ENTRY( connect	),
- 	LIB3270_MACRO_ENTRY( cstate		),
- 	LIB3270_MACRO_ENTRY( disconnect	),
- 	LIB3270_MACRO_ENTRY( encoding	),
- 	LIB3270_MACRO_ENTRY( enter		),
- 	LIB3270_MACRO_ENTRY( get		),
- 	LIB3270_MACRO_ENTRY( luname		),
- 	LIB3270_MACRO_ENTRY( pa			),
- 	LIB3270_MACRO_ENTRY( pf			),
- 	LIB3270_MACRO_ENTRY( set		),
- 	LIB3270_MACRO_ENTRY( status		),
-
- 	{NULL, NULL}
- };
-
- LIB3270_EXPORT const LIB3270_MACRO_LIST * get_3270_calls(void)
- {
- 	return macro_list;
- }
-*/
-
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
  static const char * get_state(H3270 *h)
@@ -356,6 +330,8 @@
  	int f;
 
 	CHECK_SESSION_HANDLE(session);
+
+	trace("macro(%s)",argv[0]);
 
 	// Get the number of arguments
 	for(argc = 0; argv[argc]; argc++);

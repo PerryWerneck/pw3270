@@ -195,6 +195,7 @@
  LIB3270_EXPORT gboolean		  v3270_set_keyboard_action(GtkWidget *widget, const gchar *key_name, GtkAction *action);
  LIB3270_EXPORT void			  v3270_set_scroll_action(GtkWidget *widget, GdkScrollDirection direction, GtkAction *action);
 
+
 G_END_DECLS
 
 #endif // V3270_H_INCLUDED
