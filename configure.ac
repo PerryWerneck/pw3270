@@ -257,18 +257,22 @@ fi
 
 AC_ARG_ENABLE([java],[AS_HELP_STRING([--disable-java], [Disable java integration])],[ app_cv_java="$enableval" ],[ app_cv_java="yes" ])
 
-# Check for JDK_HOME
-if test "_$JDK_HOME" = "_" ; then
-	AC_CHECK_FILE("/usr/java/default/bin/javac",JDK_HOME="/usr/java/default",)
-fi
+if test "$app_cv_java" = "yes" ; then
 
-if test "_$JDK_HOME" = "_" ; then
-	app_cv_java="no"
-fi
+	# Check for JDK_HOME
+	if test "_$JDK_HOME" = "_" ; then
+		AC_CHECK_FILE("/usr/java/default/bin/javac",JDK_HOME="/usr/java/default",)
+	fi
 
-# Check for JRE_HOME
-if test "_$JRE_HOME" = "_" ; then
-	JRE_HOME="\$(JDK_HOME)/jre"
+	if test "_$JDK_HOME" = "_" ; then
+		app_cv_java="no"
+	fi
+
+	# Check for JRE_HOME
+	if test "_$JRE_HOME" = "_" ; then
+		JRE_HOME="\$(JDK_HOME)/jre"
+	fi
+
 fi
 
 if test "$app_cv_java" = "yes" ; then
