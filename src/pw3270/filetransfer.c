@@ -177,18 +177,67 @@ static void check_entry(GtkEditable *editable, struct ftdialog *dlg)
 	gtk_widget_set_sensitive(dlg->ready,is_dialog_ok(editable,dlg));
 }
 
+static GtkWidget * add_filename_entry(GObject *action, int ix, int row, struct ftdialog *dlg, GtkTable *table)
+{
+	static const gchar	* label_text[]	= { N_( "_Local file name:" ), N_( "_Host file name:" ) };
+	static const gchar	* attr[]		= { "local", "remote" };
+
+	GtkWidget	* entry		= gtk_entry_new();
+	GtkWidget	* label		= gtk_label_new_with_mnemonic(gettext(label_text[ix]));
+	gchar		* val;
+
+	gtk_misc_set_alignment(GTK_MISC(label),0,.5);
+	gtk_table_attach(GTK_TABLE(table),label,0,1,row,row+1,GTK_FILL,GTK_FILL,2,2);
+
+	gtk_widget_set_name(entry,attr[ix]);
+
+	val = get_attribute(action,dlg,attr[ix]);
+	gtk_entry_set_text(dlg->file[ix],val);
+	g_free(val);
+
+	gtk_entry_set_width_chars(GTK_ENTRY(entry),40);
+
+	gtk_label_set_mnemonic_widget(GTK_LABEL(label),entry);
+
+	gtk_table_attach(GTK_TABLE(table),entry,1,3,row,row+1,GTK_EXPAND|GTK_SHRINK|GTK_FILL,GTK_EXPAND|GTK_SHRINK|GTK_FILL,2,2);
+
+	return entry;
+}
+
 static void add_file_fields(GObject *action, struct ftdialog *dlg)
 {
-	static const gchar	* label[]	= { N_( "_Local file name:" ), N_( "_Host file name:" ) };
-	static const gchar	* attr[]	= { "local", "remote" };
 	GtkTable			* table		= GTK_TABLE(gtk_table_new(2,3,FALSE));
 	GtkWidget			* widget;
 	int					  f;
 
 	gtk_container_set_border_width(GTK_CONTAINER(table),2);
 
+	if(dlg->option&LIB3270_FT_OPTION_RECEIVE)
+	{
+		// Receiving file, first the remote filename
+		dlg->file[1] = add_filename_entry(action,1,0,dlg,table);
+
+		dlg->file[0] = add_filename_entry(action,0,1,dlg,table);
+		widget = gtk_button_new_with_mnemonic( _( "_Browse" ) );
+		g_signal_connect(G_OBJECT(widget),"clicked",G_CALLBACK(browse_file),dlg);
+		gtk_table_attach(GTK_TABLE(table),widget,3,4,1,2,0,0,2,2);
+	}
+	else
+	{
+		// Sending file, first the local filename
+		dlg->file[0] = add_filename_entry(action,0,0,dlg,table);
+		widget = gtk_button_new_with_mnemonic( _( "_Browse" ) );
+		g_signal_connect(G_OBJECT(widget),"clicked",G_CALLBACK(browse_file),dlg);
+		gtk_table_attach(GTK_TABLE(table),widget,3,4,0,1,0,0,2,2);
+
+		dlg->file[1] = add_filename_entry(action,1,1,dlg,table);
+	}
+
+
+/*
 	for(f=0;f<2;f++)
 	{
+
 		gchar	*val;
 
 		widget = gtk_label_new_with_mnemonic(gettext(label[f]));
@@ -209,12 +258,8 @@ static void add_file_fields(GObject *action, struct ftdialog *dlg)
 		gtk_label_set_mnemonic_widget(GTK_LABEL(widget),GTK_WIDGET(dlg->file[f]));
 
 		gtk_table_attach(GTK_TABLE(table),GTK_WIDGET(dlg->file[f]),1,3,f,f+1,GTK_EXPAND|GTK_SHRINK|GTK_FILL,GTK_EXPAND|GTK_SHRINK|GTK_FILL,2,2);
-
 	}
-
-	widget = gtk_button_new_with_mnemonic( _( "_Browse" ) );
-	g_signal_connect(G_OBJECT(widget),"clicked",G_CALLBACK(browse_file),dlg);
-	gtk_table_attach(GTK_TABLE(table),widget,3,4,0,1,0,0,2,2);
+*/
 
 	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dlg->dialog))),GTK_WIDGET(table),FALSE,FALSE,2);
 
