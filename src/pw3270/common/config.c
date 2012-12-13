@@ -594,9 +594,24 @@ gchar * filename_from_va(const gchar *first_element, va_list args)
 				unsigned long	datalen	= sizeof(data);		// data field length(in), data returned length(out)
 				unsigned long	datatype;					// #defined in winnt.h (predefined types 0-11)
 
-				if(RegQueryValueExA(hKey,NULL,NULL,&datatype,(LPBYTE) data,&datalen) == ERROR_SUCCESS)
+				rc = RegQueryValueExA(hKey,NULL,NULL,&datatype,(LPBYTE) data,&datalen);
+				if(rc == ERROR_SUCCESS)
+				{
 					result = g_string_new(g_strchomp(data));
+				}
+				else
+				{
+					gchar *msg = g_win32_error_message(rc);
+					g_message("Error \"%s\" when getting application datadir from registry",msg);
+					g_free(msg);
+				}
 				RegCloseKey(hKey);
+			}
+			else
+			{
+				gchar *msg = g_win32_error_message(rc);
+				g_message("Error \"%s\" when opening datadir key from registry",msg);
+				g_free(msg);
 			}
 
 			g_free(path);

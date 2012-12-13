@@ -129,13 +129,13 @@ static gboolean is_dialog_ok(GtkEditable *editable, struct ftdialog *dlg)
 	const gchar *remote = gtk_entry_get_text(GTK_ENTRY(dlg->file[1]));
 	int			 f;
 
-	if(!(*local && *remote))
+	if(!*remote)
 		return FALSE;
 
-
-	if( (dlg->option&LIB3270_FT_OPTION_RECEIVE) == 0)
+	if(!(dlg->option&LIB3270_FT_OPTION_RECEIVE))
 	{
-		if(!g_file_test(local,G_FILE_TEST_EXISTS))
+		// Sending file, should have local and remote filenames
+		if(!( *local && g_file_test(local,G_FILE_TEST_EXISTS)))
 			return FALSE;
 	}
 
@@ -155,6 +155,21 @@ static gboolean is_dialog_ok(GtkEditable *editable, struct ftdialog *dlg)
 	}
 
 	return TRUE;
+}
+
+static void check_remote_filename(GtkEditable *editable, struct ftdialog *dlg)
+{
+#if GTK_CHECK_VERSION(3,2,0)
+	if(!gtk_entry_get_text_length(dlg->file[0]))
+	{
+		gchar *basename = g_path_get_basename(gtk_entry_get_text(GTK_ENTRY(editable)));
+		gchar *filename = g_build_filename(g_get_user_special_dir(G_USER_DIRECTORY_DOCUMENTS),basename,NULL);
+		gtk_entry_set_placeholder_text(dlg->file[0],filename);
+		g_free(filename);
+		g_free(basename);
+	}
+#endif // GTK(3,2)
+	gtk_widget_set_sensitive(dlg->ready,is_dialog_ok(editable,dlg));
 }
 
 static void check_entry(GtkEditable *editable, struct ftdialog *dlg)
@@ -366,6 +381,10 @@ static void run_ft_dialog(GObject *action, GtkWidget *widget, struct ftdialog *d
 	const char	* msg			= NULL;
 	int 		  f;
 	int			  parm[G_N_ELEMENTS(dlg->parm)];
+	const gchar	* remote_filename;
+
+	g_signal_connect(G_OBJECT(dlg->file[0]),"changed",G_CALLBACK(check_entry),dlg);
+	g_signal_connect(G_OBJECT(dlg->file[1]),"changed",G_CALLBACK(check_remote_filename),dlg);
 
 	for(f=0;f<2;f++)
 		gtk_widget_set_sensitive(dlg->ready,is_dialog_ok(GTK_EDITABLE(dlg->file[f]),dlg));
@@ -408,13 +427,25 @@ static void run_ft_dialog(GObject *action, GtkWidget *widget, struct ftdialog *d
 		}
 	}
 
+	remote_filename = gtk_entry_get_text(dlg->file[1]);
+
 	set_string_to_config(dlg->name,"local","%s",gtk_entry_get_text(dlg->file[0]));
-	set_string_to_config(dlg->name,"remote","%s",gtk_entry_get_text(dlg->file[1]));
+	set_string_to_config(dlg->name,"remote","%s",remote_filename);
+
+	if(!gtk_entry_get_text_length(dlg->file[0]))
+	{
+		// Local filename wasn´t set, create a new one
+		gchar *basename = g_path_get_basename(remote_filename);
+		gchar *filename = g_build_filename(g_get_user_special_dir(G_USER_DIRECTORY_DOCUMENTS),basename,NULL);
+		gtk_entry_set_text(dlg->file[0],filename);
+		g_free(filename);
+		g_free(basename);
+	}
 
 	ft = lib3270_ft_new(	v3270_get_session(widget),
 							dlg->option,
 							gtk_entry_get_text(dlg->file[0]),
-							gtk_entry_get_text(dlg->file[1]),
+							remote_filename,
 							parm[0],	// lrecl
 							parm[2],	// blksize
 							parm[1],	// primspace

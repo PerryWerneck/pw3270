@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-06 09:03-0200\n"
+"POT-Creation-Date: 2012-11-22 22:50-0200\n"
 "PO-Revision-Date: 2012-10-31 07:44-0200\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
@@ -38,7 +38,7 @@ msgstr "Ação %s precisa de um valor válido"
 msgid "%s action needs src attribute"
 msgstr "Ação %s precisa do atributo src"
 
-#: main.c:76
+#: main.c:80
 #, c-format
 msgid "%s requires GTK version %d.%d.%d"
 msgstr "%s requer GTK versão %d.%d.%d"
@@ -83,7 +83,7 @@ msgstr "%s: Familia %d é inválida"
 msgid "%s:%d"
 msgstr "%s:%d"
 
-#: main.c:226
+#: main.c:261
 msgid "- 3270 Emulator for Gtk"
 msgstr "- Emulador 3270 para GTK"
 
@@ -136,7 +136,7 @@ msgstr ""
 "<b>Estado da conexão:</b> %s\n"
 "<b>Mensagem de alerta:</b> %s"
 
-#: main.c:246
+#: main.c:281
 msgid ""
 "<b>Valid options:</b>\n"
 "\n"
@@ -160,7 +160,7 @@ msgstr "Abortando"
 msgid "Action failed"
 msgstr "Ação falhou"
 
-#: ui/00default.xml:286
+#: ui/00default.xml:64
 msgid "Add to copy"
 msgstr "Adicionar à cópia"
 
@@ -168,15 +168,15 @@ msgstr "Adicionar à cópia"
 msgid "Add/Remove _CR at end of line"
 msgstr "Adicionar/Remover _CR no final da linha"
 
-#: ui/00default.xml:354
+#: ui/00default.xml:132
 msgid "Alert sound"
 msgstr "Aviso sonoro"
 
-#: main.c:215 main.c:217
+#: main.c:249 main.c:251
 msgid "Application name"
 msgstr "Nome da aplicação"
 
-#: ui/10keypad.xml:155
+#: ui/10keypad.xml:417
 msgid "Attn"
 msgstr "Attn"
 
@@ -185,7 +185,7 @@ msgstr "Attn"
 msgid "Attribute \"%s\" is invalid or undefined"
 msgstr "Atributo \"%s\" é invalido ou indefinido"
 
-#: ui/00default.xml:349
+#: ui/00default.xml:127
 msgid "Auto-Reconnect"
 msgstr "Reconectar automaticamente"
 
@@ -210,11 +210,11 @@ msgstr "Versão winsock inválida"
 msgid "Black"
 msgstr "Preto"
 
-#: ui/00default.xml:347
+#: ui/00default.xml:125
 msgid "Blank Fill"
 msgstr "Completar com espaços"
 
-#: ui/00default.xml:340
+#: ui/00default.xml:118
 msgid "Blinking Cursor"
 msgstr "Cursor piscante"
 
@@ -222,7 +222,7 @@ msgstr "Cursor piscante"
 msgid "Blue"
 msgstr "Azul"
 
-#: ui/00default.xml:350
+#: ui/00default.xml:128
 msgid "Bold"
 msgstr "Negrito"
 
@@ -230,7 +230,7 @@ msgstr "Negrito"
 msgid "Brazilian Public Software Portal"
 msgstr "Portal do Software Público Brasileiro"
 
-#: ui/10keypad.xml:156
+#: ui/10keypad.xml:418
 msgid "Break"
 msgstr "Break"
 
@@ -390,7 +390,7 @@ msgstr "Tabela de tradução tem %d entradas, precisa de 256"
 msgid "Charset has more than 256 entries"
 msgstr "Tabela de tradução tem mais de 256 caracteres"
 
-#: ui/10keypad.xml:147
+#: ui/00default.xml:79
 msgid "Clear"
 msgstr "Limpar"
 
@@ -402,7 +402,7 @@ msgstr "Tema de cores:"
 msgid "Color setup"
 msgstr "Configuração de cores"
 
-#: ui/00default.xml:329
+#: ui/00default.xml:107
 msgid "Colors"
 msgstr "Cores"
 
@@ -410,7 +410,7 @@ msgstr "Cores"
 msgid "Complete"
 msgstr "Completo"
 
-#: ui/00default.xml:339
+#: ui/00default.xml:117
 msgid "Connect on startup"
 msgstr "Conectar ao iniciar"
 
@@ -422,19 +422,23 @@ msgstr "Conexão falhou"
 msgid "Connection reset by peer"
 msgstr "Conexão foi cancelada pelo servidor"
 
-#: ui/00default.xml:283
+#: ui/98teste.xml:462
+msgid "Copiar tudo"
+msgstr "Copiar tudo"
+
+#: ui/00default.xml:61
 msgid "Copy"
 msgstr "Copiar"
 
-#: ui/99debug.xml:200
+#: ui/99debug.xml:511
 msgid "Copy as HTML"
 msgstr "Copiar como HTML"
 
-#: ui/00default.xml:284
+#: ui/00default.xml:62
 msgid "Copy as table"
 msgstr "Copiar como tabela"
 
-#: ui/00default.xml:346
+#: ui/00default.xml:124
 msgid "Cross Hair Cursor"
 msgstr "Cursor mira"
 
@@ -451,7 +455,7 @@ msgstr "Atual (%s)"
 msgid "Custom colors"
 msgstr "Cores personalizadas"
 
-#: ui/00default.xml:287
+#: ui/00default.xml:65
 msgid "Cut"
 msgstr "Recortar"
 
@@ -463,7 +467,7 @@ msgstr "Cilindros"
 msgid "DFT B_uffer size:"
 msgstr "Tamanho do b_uffer DFT:"
 
-#: ui/99debug.xml:205
+#: ui/99debug.xml:516
 msgid "DS Trace"
 msgstr "DS Trace"
 
@@ -479,11 +483,11 @@ msgstr "Verde Escuro"
 msgid "Data conversion error"
 msgstr "Erro na conversão de dados"
 
-#: ui/99debug.xml:213
+#: ui/99debug.xml:524
 msgid "Debug"
 msgstr "Depuração"
 
-#: ui/99debug.xml:215
+#: ui/99debug.xml:526
 msgid "Debug window updates"
 msgstr "Mostrar atualizações de janela"
 
@@ -491,7 +495,7 @@ msgstr "Mostrar atualizações de janela"
 msgid "Default"
 msgstr "Padrão"
 
-#: ui/00default.xml:303
+#: ui/00default.xml:81
 msgid "Delete field"
 msgstr "Apagar campo"
 
@@ -523,7 +527,7 @@ msgstr "Nome do servidor em branco"
 msgid "Empty port name"
 msgstr "Porta em branco"
 
-#: ui/10keypad.xml:151
+#: ui/10keypad.xml:413
 msgid ""
 "Erase\n"
 "EOF"
@@ -531,7 +535,7 @@ msgstr ""
 "Apagar\n"
 "Campo"
 
-#: ui/10keypad.xml:152
+#: ui/10keypad.xml:414
 msgid ""
 "Erase\n"
 "Input"
@@ -539,15 +543,15 @@ msgstr ""
 "Apagar\n"
 "Campos"
 
-#: ui/00default.xml:302
+#: ui/00default.xml:80
 msgid "Erase input"
 msgstr "Apagar campos"
 
-#: ui/00default.xml:304
+#: ui/00default.xml:82
 msgid "Erase to end of field"
 msgstr "Apagar até o final do campo"
 
-#: ui/00default.xml:305
+#: ui/00default.xml:83
 msgid "Erase to end of line"
 msgstr "Apagar até o final da linha"
 
@@ -590,7 +594,7 @@ msgstr "Erro lendo %s"
 msgid "Error resolving %s: %s"
 msgstr "Erro ao resolver %s: %s"
 
-#: ui/99debug.xml:207
+#: ui/99debug.xml:518
 msgid "Event Trace"
 msgstr "Trace de eventos"
 
@@ -622,15 +626,15 @@ msgstr "Transferência de arquivos já está ativa nesta sessão"
 msgid "Fixed"
 msgstr "Fixo"
 
-#: ui/00default.xml:343
+#: ui/00default.xml:121
 msgid "Full Screen"
 msgstr "Tela cheia"
 
-#: ui/10functions.xml:35
+#: ui/10functions.xml:297
 msgid "Function bar"
 msgstr "Barra de funções"
 
-#: main.c:80 main.c:279
+#: main.c:84 main.c:314
 msgid "GTK Version mismatch"
 msgstr "Divergência de versão GTK"
 
@@ -671,7 +675,7 @@ msgstr "HTTP Proxy: EOF inesperado"
 msgid "HTTP Proxy: unrecognized reply"
 msgstr "HTTP Proxy: Resposta desconhecida"
 
-#: ui/00default.xml:364
+#: ui/00default.xml:142
 msgid "Help"
 msgstr "Ajuda"
 
@@ -699,7 +703,7 @@ msgstr "Servidor rejeitou o tipo de dispositivo ou requisição"
 msgid "Host rejected resource(s)"
 msgstr "Servidor rejeitou recurso(s)"
 
-#: main.c:220
+#: main.c:255
 msgid "Host to connect"
 msgstr "Servidor a conectar"
 
@@ -724,7 +728,7 @@ msgstr "Comprimento de frame inválido"
 msgid "Informations"
 msgstr "Informações"
 
-#: ui/00default.xml:359
+#: ui/00default.xml:137
 msgid "Input method"
 msgstr "Método de entrada"
 
@@ -767,7 +771,7 @@ msgstr "Sintaxe de proxy inválida"
 msgid "Invalid proxy type '%.*s'"
 msgstr "Tipo de proxy invalido '%.*s'"
 
-#: ui/00default.xml:352
+#: ui/00default.xml:130
 msgid "Keep selected"
 msgstr "Manter selecionado"
 
@@ -779,7 +783,7 @@ msgstr "Teclado está bloqueado"
 msgid "LRECL:"
 msgstr "LRECL:"
 
-#: ui/10keypad.xml:101
+#: ui/10keypad.xml:363
 msgid "Lateral keypad"
 msgstr "Barra lateral"
 
@@ -796,7 +800,7 @@ msgstr "Faltando ']'"
 msgid "Model %d (%s)"
 msgstr "Modelo %d (%s)"
 
-#: ui/00default.xml:341
+#: ui/00default.xml:119
 msgid "Monocase"
 msgstr "Só Maiúsculas"
 
@@ -828,7 +832,7 @@ msgstr "Erro de rede"
 msgid "Network startup error"
 msgstr "Erro ao iniciar a rede"
 
-#: ui/00default.xml:411
+#: ui/00default.xml:189
 msgid "Next field"
 msgstr "Próximo campo"
 
@@ -881,115 +885,115 @@ msgstr "Opções"
 msgid "Orange"
 msgstr "Laranja"
 
-#: ui/10keypad.xml:138
+#: ui/10keypad.xml:400
 msgid "PA1"
 msgstr "PA1"
 
-#: ui/10keypad.xml:139
+#: ui/10keypad.xml:401
 msgid "PA2"
 msgstr "PA2"
 
-#: ui/10keypad.xml:140
+#: ui/10keypad.xml:402
 msgid "PA3"
 msgstr "PA3"
 
-#: ui/10functions.xml:36
+#: ui/10functions.xml:298
 msgid "PF1"
 msgstr "PF1"
 
-#: ui/10functions.xml:45
+#: ui/10functions.xml:307
 msgid "PF10"
 msgstr "PF10"
 
-#: ui/10functions.xml:46
+#: ui/10functions.xml:308
 msgid "PF11"
 msgstr "PF11"
 
-#: ui/10functions.xml:47
+#: ui/10functions.xml:309
 msgid "PF12"
 msgstr "PF12"
 
-#: ui/10functions.xml:50
+#: ui/10functions.xml:312
 msgid "PF13"
 msgstr "PF13"
 
-#: ui/10functions.xml:51
+#: ui/10functions.xml:313
 msgid "PF14"
 msgstr "PF14"
 
-#: ui/10functions.xml:52
+#: ui/10functions.xml:314
 msgid "PF15"
 msgstr "PF15"
 
-#: ui/10functions.xml:53
+#: ui/10functions.xml:315
 msgid "PF16"
 msgstr "PF16"
 
-#: ui/10functions.xml:54
+#: ui/10functions.xml:316
 msgid "PF17"
 msgstr "PF17"
 
-#: ui/10functions.xml:55
+#: ui/10functions.xml:317
 msgid "PF18"
 msgstr "PF18"
 
-#: ui/10functions.xml:56
+#: ui/10functions.xml:318
 msgid "PF19"
 msgstr "PF19"
 
-#: ui/10functions.xml:37
+#: ui/10functions.xml:299
 msgid "PF2"
 msgstr "PF2"
 
-#: ui/10functions.xml:57
+#: ui/10functions.xml:319
 msgid "PF20"
 msgstr "PF20"
 
-#: ui/10functions.xml:58
+#: ui/10functions.xml:320
 msgid "PF21"
 msgstr "PF21"
 
-#: ui/10functions.xml:59
+#: ui/10functions.xml:321
 msgid "PF22"
 msgstr "PF22"
 
-#: ui/10functions.xml:60
+#: ui/10functions.xml:322
 msgid "PF23"
 msgstr "PF23"
 
-#: ui/10functions.xml:61
+#: ui/10functions.xml:323
 msgid "PF24"
 msgstr "PF24"
 
-#: ui/10functions.xml:38
+#: ui/10functions.xml:300
 msgid "PF3"
 msgstr "PF3"
 
-#: ui/10functions.xml:39
+#: ui/10functions.xml:301
 msgid "PF4"
 msgstr "PF4"
 
-#: ui/10functions.xml:40
+#: ui/10functions.xml:302
 msgid "PF5"
 msgstr "PF5"
 
-#: ui/10functions.xml:41
+#: ui/10functions.xml:303
 msgid "PF6"
 msgstr "PF6"
 
-#: ui/10functions.xml:42
+#: ui/10functions.xml:304
 msgid "PF7"
 msgstr "PF7"
 
-#: ui/10functions.xml:43
+#: ui/10functions.xml:305
 msgid "PF8"
 msgstr "PF8"
 
-#: ui/10functions.xml:44
+#: ui/10functions.xml:306
 msgid "PF9"
 msgstr "PF9"
 
-#: main.c:244
+#: main.c:279
 msgid "Parse error"
 msgstr "Erro de interpretação"
 
@@ -1002,15 +1006,15 @@ msgstr "Erro de interpretação em %s"
 msgid "Passthru Proxy: send error"
 msgstr "Passthru Proxy: Erro ao enviar"
 
-#: ui/00default.xml:288
+#: ui/00default.xml:66
 msgid "Paste"
 msgstr "Colar"
 
-#: ui/00default.xml:289
+#: ui/00default.xml:67
 msgid "Paste next"
 msgstr "Colar próximo"
 
-#: ui/00default.xml:292
+#: ui/00default.xml:70
 msgid "Paste text file"
 msgstr "Colar arquivo texto"
 
@@ -1018,15 +1022,19 @@ msgstr "Colar arquivo texto"
 msgid "Paste text file contents"
 msgstr "Colar conteúdo de arquivo texto"
 
-#: ui/00default.xml:345
+#: ui/00default.xml:123
 msgid "Paste with left margin"
 msgstr "Colar com margem esquerda"
+
+#: main.c:252
+msgid "Path to application data files"
+msgstr "Path to application data files"
 
 #: colors.c:379
 msgid "Pink"
 msgstr "Rosa"
 
-#: ui/00default.xml:410
+#: ui/00default.xml:188
 msgid "Previous field"
 msgstr "Campo anterior"
 
@@ -1034,11 +1042,11 @@ msgstr "Campo anterior"
 msgid "Primary space:"
 msgstr "Primary space:"
 
-#: ui/00default.xml:271
+#: ui/00default.xml:49
 msgid "Print"
 msgstr "Imprimir"
 
-#: ui/00default.xml:273
+#: ui/00default.xml:51
 msgid "Print copy"
 msgstr "Imprimir cópia"
 
@@ -1046,7 +1054,7 @@ msgstr "Imprimir cópia"
 msgid "Print operation failed"
 msgstr "Operação de impressão falhou"
 
-#: ui/00default.xml:272
+#: ui/00default.xml:50
 msgid "Print selected"
 msgstr "Imprimir seleção"
 
@@ -1054,7 +1062,7 @@ msgstr "Imprimir seleção"
 msgid "Print selection box"
 msgstr "Imprimir marca de seleção"
 
-#: print.c:743 ui/00default.xml:330
+#: print.c:743 ui/00default.xml:108
 msgid "Print settings"
 msgstr "Configurações de impressão"
 
@@ -1142,7 +1150,7 @@ msgstr "RPQ: can't resolve '%s': %s"
 msgid "RPQ: gethostbyname error"
 msgstr "RPQ: Erro em gethostbyname"
 
-#: ui/00default.xml:276
+#: ui/00default.xml:54
 msgid "Receive file"
 msgstr "Receber arquivo"
 
@@ -1158,27 +1166,27 @@ msgstr "Formato de registro"
 msgid "Red"
 msgstr "Vermelho"
 
-#: ui/99debug.xml:214
+#: ui/99debug.xml:525
 msgid "Reload buffer contents"
 msgstr "Recarregar conteúdo do buffer"
 
-#: ui/00default.xml:297
+#: ui/00default.xml:75
 msgid "Remove selection"
 msgstr "Remover seleção"
 
-#: ui/00default.xml:298
+#: ui/00default.xml:76
 msgid "Reselect"
 msgstr "Reselecionar"
 
-#: ui/10keypad.xml:148
+#: ui/10keypad.xml:410
 msgid "Reset"
 msgstr "Reset"
 
-#: ui/00default.xml:344
+#: ui/00default.xml:122
 msgid "Resize on alternate screen"
 msgstr "Mudar tamanho do terminal em tela alternativa"
 
-#: ui/00default.xml:412
+#: ui/00default.xml:190
 msgid "Return"
 msgstr "Return"
 
@@ -1318,12 +1326,27 @@ msgstr "Erro SSL"
 msgid "SSL Read error"
 msgstr "Erro de leitura SSL"
 
+#: telnet.c:3267
+#, fuzzy
+msgid "SSL connect failed!"
+msgstr "Segundo connect() falhou"
+
 #: host.c:302
 msgid "SSL error"
 msgstr "Erro SSL"
 
+#: telnet.c:3246
+#, fuzzy
+msgid "SSL init failed!"
+msgstr "Negociação SSL falhou"
+
 #: telnet.c:849
 msgid "SSL negotiation failed"
+msgstr "Negociação SSL falhou"
+
+#: telnet.c:3255
+#, fuzzy
+msgid "SSL_set_fd failed!"
 msgstr "Negociação SSL falhou"
 
 #: telnet.c:2049
@@ -1335,7 +1358,7 @@ msgstr ""
 "SSL_write:\n"
 "%s"
 
-#: ui/00default.xml:268
+#: ui/00default.xml:46
 msgid "Save copy"
 msgstr "Salvar cópia"
 
@@ -1343,7 +1366,7 @@ msgstr "Salvar cópia"
 msgid "Save copy to file"
 msgstr "Salvar cópia para arquivo"
 
-#: ui/00default.xml:266
+#: ui/00default.xml:44
 msgid "Save screen"
 msgstr "Salvar tela"
 
@@ -1351,7 +1374,7 @@ msgstr "Salvar tela"
 msgid "Save screen to file"
 msgstr "Salvar tela para arquivo"
 
-#: ui/00default.xml:267
+#: ui/00default.xml:45
 msgid "Save selected"
 msgstr "Salvar seleção"
 
@@ -1359,15 +1382,15 @@ msgstr "Salvar seleção"
 msgid "Save selection to file"
 msgstr "Salvar seleção para arquivo"
 
-#: ui/99debug.xml:206
+#: ui/99debug.xml:517
 msgid "Screen Trace"
 msgstr "Trace de tela"
 
-#: ui/00default.xml:336
+#: ui/00default.xml:114
 msgid "Screen size"
 msgstr "Tamanho da tela"
 
-#: ui/00default.xml:311
+#: ui/00default.xml:89
 msgid "Scripts"
 msgstr "Scripts"
 
@@ -1375,15 +1398,15 @@ msgstr "Scripts"
 msgid "Secondary space:"
 msgstr "Secondary space:"
 
-#: ui/00default.xml:296
+#: ui/00default.xml:74
 msgid "Select Field"
 msgstr "Selecionar campo"
 
-#: ui/00default.xml:295
+#: ui/00default.xml:73
 msgid "Select all"
 msgstr "Selecionar tudo"
 
-#: ui/00default.xml:348
+#: ui/00default.xml:126
 msgid "Select by rectangles"
 msgstr "Seleção retangular"
 
@@ -1395,7 +1418,7 @@ msgstr "Selecione arquivo a receber"
 msgid "Select file to send"
 msgstr "Selecione arquivo a enviar"
 
-#: ui/00default.xml:333
+#: ui/00default.xml:111
 msgid "Select font"
 msgstr "Selecione fonte"
 
@@ -1411,7 +1434,7 @@ msgstr "Fundo da seleção"
 msgid "Selection foreground"
 msgstr "Frente da seleção"
 
-#: ui/00default.xml:277
+#: ui/00default.xml:55
 msgid "Send file"
 msgstr "Enviar arquivo"
 
@@ -1419,35 +1442,35 @@ msgstr "Enviar arquivo"
 msgid "Send file to host"
 msgstr "Enviar arquivo para o servidor"
 
-#: ui/00default.xml:276
+#: ui/00default.xml:54
 msgid "Send/Receive"
 msgstr "Enviar/Receber"
 
-#: main.c:219
+#: main.c:254
 msgid "Session name"
 msgstr "Nome da sessão"
 
-#: ui/00default.xml:314
+#: ui/00default.xml:92
 msgid "Set hostname"
 msgstr "Selecione servidor"
 
-#: main.c:221
+#: main.c:256
 msgid "Set reported colors (8/16)"
 msgstr "Set reported colors (8/16)"
 
-#: ui/00default.xml:329
+#: ui/00default.xml:107
 msgid "Settings"
 msgstr "Configurações"
 
-#: ui/00default.xml:351
+#: ui/00default.xml:129
 msgid "Show Underline"
 msgstr "Mostrar sublinhado"
 
-#: ui/99debug.xml:213
+#: ui/99debug.xml:524
 msgid "Show test pattern"
 msgstr "Mostrar padrão de teste"
 
-#: ui/00default.xml:353
+#: ui/00default.xml:131
 msgid "Smart paste"
 msgstr "Colar inteligente"
 
@@ -1528,7 +1551,7 @@ msgstr ""
 "programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple "
 "Place, Suite 330, Boston, MA, 02111-1307, USA"
 
-#: main.c:275
+#: main.c:310
 #, c-format
 msgid "This program requires GTK version %d.%d.%d"
 msgstr "Este programa precisa do GTK versão %d.%d.%d"
@@ -1539,15 +1562,15 @@ msgid ""
 "This version of %s was built without support for secure sockets layer (SSL)."
 msgstr "Esta versão do %s foi gerada sem suporte para conexões seguras (SSL)."
 
-#: ui/00default.xml:370
+#: ui/00default.xml:148
 msgid "Toolbar"
 msgstr "Barra de ferramentas"
 
-#: ui/99debug.xml:205
+#: ui/99debug.xml:516
 msgid "Trace"
 msgstr "Trace"
 
-#: ui/00default.xml:342
+#: ui/00default.xml:120
 msgid "Track Cursor"
 msgstr "Mostrar posição do cursor"
 
@@ -1628,7 +1651,7 @@ msgstr "Atributo %s inesperado ou inválido: \"%s\""
 msgid "Unexpected or invalid attribute value \"%s\""
 msgstr "Valor de attributo inesperado ou inválido: \"%s\""
 
-#: main.c:143
+#: main.c:181
 #, c-format
 msgid "Unexpected or invalid color value \"%s\""
 msgstr "Valor de cor inválido ou inesperado: \"%s\""
@@ -1709,7 +1732,7 @@ msgstr "Unsupported passthru host session"
 msgid "Unsupported socks 4 proxy"
 msgstr "Unsupported socks 4 proxy"
 
-#: ui/00default.xml:355
+#: ui/00default.xml:133
 msgid "Use +/- for field navigation"
 msgstr "Usar teclas +/- para navegar por campos"
 
@@ -1722,7 +1745,7 @@ msgstr "Variável"
 msgid "Version %s - Revision %s"
 msgstr "Versão %s - Revisão %s"
 
-#: ui/99debug.xml:208
+#: ui/99debug.xml:519
 msgid "View Field Delimiters"
 msgstr "Mostrar delimitadores de campo"
 
@@ -1750,7 +1773,7 @@ msgstr "Europa ocidental (ISO 8859-1)"
 msgid "White"
 msgstr "Branco"
 
-#: ui/00default.xml:381
+#: ui/00default.xml:159
 msgid "Window"
 msgstr "Janela"
 
@@ -1818,19 +1841,19 @@ msgstr "_Acrescentar"
 msgid "_Browse"
 msgstr "_Procurar"
 
-#: ui/00default.xml:324
+#: ui/00default.xml:102
 msgid "_Connect"
 msgstr "_Conectar"
 
-#: ui/00default.xml:325
+#: ui/00default.xml:103
 msgid "_Disconnect"
 msgstr "_Desconectar"
 
-#: ui/99debug.xml:200
+#: ui/00default.xml:61
 msgid "_Edit"
 msgstr "_Editar"
 
-#: ui/00default.xml:258
+#: ui/00default.xml:36
 msgid "_File"
 msgstr "_Arquivo"
 
@@ -1858,11 +1881,11 @@ msgstr "Nome do _Host:"
 msgid "_Local file name:"
 msgstr "Arquivo _local:"
 
-#: ui/00default.xml:314
+#: ui/00default.xml:92
 msgid "_Network"
 msgstr "_Rede"
 
-#: ui/00default.xml:339
+#: ui/00default.xml:117
 msgid "_Options"
 msgstr "_Opções"
 
@@ -1890,7 +1913,7 @@ msgstr "Arquivo _texto"
 msgid "_To"
 msgstr "_Para"
 
-#: ui/00default.xml:309
+#: ui/00default.xml:87
 msgid "_View"
 msgstr "_Exibir"
 
@@ -1950,9 +1973,6 @@ msgstr "Erro desconhecido"
 
 #~ msgid "SSLv2/v3 read server hello A"
 #~ msgstr "SSLv2/v3 read server hello A"
-
-#~ msgid "Second connect() failed"
-#~ msgstr "Segundo connect() falhou"
 
 #~ msgid "Set terminal model (screen size)"
 #~ msgstr "Modelo de terminal (tamanho da tela)"
