@@ -106,9 +106,7 @@ if [ "$?" != 0 ]; then
 fi
 
 if [ ! -e $GTK_PREFIX/share/glib-2.0/schemas/gschemas.compiled ]; then
-	pushd $GTK_PREFIX/share/glib-2.0/schemas
-	glib-compile-schemas .
-	popd
+	glib-compile-schemas $GTK_PREFIX/share/glib-2.0/schemas
 fi
 
 cp $GTK_PREFIX/share/glib-2.0/schemas/gschemas.compiled $TARGET_PATH/share/glib-2.0/schemas/gschemas.compiled
