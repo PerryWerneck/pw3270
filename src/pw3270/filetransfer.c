@@ -177,7 +177,7 @@ static void check_entry(GtkEditable *editable, struct ftdialog *dlg)
 	gtk_widget_set_sensitive(dlg->ready,is_dialog_ok(editable,dlg));
 }
 
-static GtkWidget * add_filename_entry(GObject *action, int ix, int row, struct ftdialog *dlg, GtkTable *table)
+static GtkEntry * add_filename_entry(GObject *action, int ix, int row, struct ftdialog *dlg, GtkTable *table)
 {
 	static const gchar	* label_text[]	= { N_( "_Local file name:" ), N_( "_Host file name:" ) };
 	static const gchar	* attr[]		= { "local", "remote" };
@@ -201,14 +201,13 @@ static GtkWidget * add_filename_entry(GObject *action, int ix, int row, struct f
 
 	gtk_table_attach(GTK_TABLE(table),entry,1,3,row,row+1,GTK_EXPAND|GTK_SHRINK|GTK_FILL,GTK_EXPAND|GTK_SHRINK|GTK_FILL,2,2);
 
-	return entry;
+	return GTK_ENTRY(entry);
 }
 
 static void add_file_fields(GObject *action, struct ftdialog *dlg)
 {
 	GtkTable			* table		= GTK_TABLE(gtk_table_new(2,3,FALSE));
 	GtkWidget			* widget;
-	int					  f;
 
 	gtk_container_set_border_width(GTK_CONTAINER(table),2);
 
@@ -232,34 +231,6 @@ static void add_file_fields(GObject *action, struct ftdialog *dlg)
 
 		dlg->file[1] = add_filename_entry(action,1,1,dlg,table);
 	}
-
-
-/*
-	for(f=0;f<2;f++)
-	{
-
-		gchar	*val;
-
-		widget = gtk_label_new_with_mnemonic(gettext(label[f]));
-
-		gtk_misc_set_alignment(GTK_MISC(widget),0,.5);
-		gtk_table_attach(GTK_TABLE(table),widget,0,1,f,f+1,GTK_FILL,GTK_FILL,2,2);
-
-		dlg->file[f] = GTK_ENTRY(gtk_entry_new());
-
-		gtk_widget_set_name(GTK_WIDGET(dlg->file[f]),attr[f]);
-
-		val = get_attribute(action,dlg,attr[f]);
-		gtk_entry_set_text(dlg->file[f],val);
-		g_free(val);
-
-		gtk_entry_set_width_chars(dlg->file[f],40);
-
-		gtk_label_set_mnemonic_widget(GTK_LABEL(widget),GTK_WIDGET(dlg->file[f]));
-
-		gtk_table_attach(GTK_TABLE(table),GTK_WIDGET(dlg->file[f]),1,3,f,f+1,GTK_EXPAND|GTK_SHRINK|GTK_FILL,GTK_EXPAND|GTK_SHRINK|GTK_FILL,2,2);
-	}
-*/
 
 	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dlg->dialog))),GTK_WIDGET(table),FALSE,FALSE,2);
 

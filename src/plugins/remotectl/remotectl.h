@@ -61,7 +61,9 @@
  G_GNUC_INTERNAL void set_active(gboolean on);
  G_GNUC_INTERNAL void enqueue_request(QUERY *qry);
  G_GNUC_INTERNAL void request_complete(QUERY *qry, int rc, const gchar *text);
+
  G_GNUC_INTERNAL void request_status(QUERY *qry, int rc);
+ G_GNUC_INTERNAL void request_value(QUERY *qry,  int rc, unsigned int value);
  G_GNUC_INTERNAL void request_buffer(QUERY *qry, int rc, size_t sz, const gpointer buffer);
 
 // int run_hllapi(unsigned long function, char *string, unsigned short length, unsigned short rc);

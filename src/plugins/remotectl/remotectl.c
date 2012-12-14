@@ -405,6 +405,11 @@
 	g_free(buffer);
  }
 
+ static void cmd_querycursor(QUERY *qry)
+ {
+	request_value(qry,0,lib3270_get_cursor_address(qry->hSession));
+ }
+
  void enqueue_request(QUERY *qry)
  {
 	static const struct _cmd
@@ -413,14 +418,28 @@
 		void (*exec)(QUERY *qry);
 	} cmd[] =
 	{
-		{ HLLAPI_CMD_CONNECTPS,		cmd_connectps		},
-		{ HLLAPI_CMD_DISCONNECTPS,	cmd_disconnectps	},
-		{ HLLAPI_CMD_INPUTSTRING,	cmd_sendstring		},
-		{ HLLAPI_CMD_SETCURSOR,		cmd_setcursor		},
+		{ HLLAPI_CMD_CONNECTPS,		cmd_connectps		},	// 1
+		{ HLLAPI_CMD_DISCONNECTPS,	cmd_disconnectps	},	// 2
+		{ HLLAPI_CMD_INPUTSTRING,	cmd_sendstring		},	// 3
+		{ HLLAPI_CMD_WAIT,			cmd_wait			},	// 4
+//		{ HLLAPI_CMD_COPYPS,							},	// 5
+//		{ HLLAPI_CMD_SEARCHPS,							},	// 6
+		{ HLLAPI_CMD_QUERYCURSOR,	cmd_querycursor		},	// 7
+
+		{ HLLAPI_CMD_COPYPSTOSTR,	cmd_copypstostr 	},	// 8
+
+//		{ HLLAPI_CMD_COPYSTRTOPS				  		},	// 15
+
+		{ HLLAPI_CMD_SETCURSOR,		cmd_setcursor		},	// 40
+
+//		{ HLLAPI_CMD_SENDFILE				  			},	// 90
+//		{ HLLAPI_CMD_RECEIVEFILE				  		},
+
+
 		{ HLLAPI_CMD_GETREVISION,	cmd_getrevision 	},
-		{ HLLAPI_CMD_COPYPSTOSTR,	cmd_copypstostr 	},
-		{ HLLAPI_CMD_WAIT,			cmd_wait			},
 	};
+
+
 
 	int f;
 
@@ -440,23 +459,6 @@
 	g_warning("Unexpected HLLAPI function %d",(int) qry->cmd);
  	request_status(qry,EINVAL);
  }
-
-/*
- int run_hllapi(unsigned long function, char *string, unsigned short length, unsigned short rc)
- {
-
-	trace("HLLAPI function %d",(int) function);
-
-	for(f=0;f<G_N_ELEMENTS(cmd);f++)
-	{
-		if(cmd[f].function == function)
-			return cmd[f].exec(lib3270_get_default_session_handle(),rc,string,length);
-	}
-
-	g_warning("Unexpected HLLAPI function %d",(int) function);
- 	return EINVAL;
- }
-*/
 
  G_GNUC_INTERNAL void set_active(gboolean on)
  {

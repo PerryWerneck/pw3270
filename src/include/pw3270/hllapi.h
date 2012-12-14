@@ -38,16 +38,25 @@
 extern "C" {
 #endif
 
- #define HLLAPI_REQUEST_ID				0x01
+ #define HLLAPI_REQUEST_QUERY			0x01
+ #define HLLAPI_RESPONSE_VALUE			0x02
+ #define HLLAPI_RESPONSE_TEXT			0x03
+
  #define HLLAPI_MAXLENGTH				32768
 
  #define HLLAPI_CMD_CONNECTPS				   1	/**< connect presentation space							*/
  #define HLLAPI_CMD_DISCONNECTPS			   2	/**< disconnect presentation space        				*/
  #define HLLAPI_CMD_INPUTSTRING				   3	/**< send string										*/
  #define HLLAPI_CMD_WAIT					   4	/**< Wait if the session is waiting for a host response	*/
+ #define HLLAPI_CMD_COPYPS					   5	/**< Copies the contents of the presentation space into a string buffer. */
+ #define HLLAPI_CMD_SEARCHPS				   6	/**< Search the presentation space for a specified string. */
+ #define HLLAPI_CMD_QUERYCURSOR				   7	/**< Determines the location of the cursor in the presentation space. */
+ #define HLLAPI_CMD_COPYPSTOSTR				   8	/**< Copy presentation space to string					*/
+ #define HLLAPI_CMD_COPYSTRTOPS				  15	/**< Copies an ASCII string directly to a specified position in the presentation space. */
+ #define HLLAPI_CMD_SETCURSOR				  40	/**< Places the cursor at a specified position in presentation space.*/
+ #define HLLAPI_CMD_SENDFILE				  90	/**< Send file to the host */
+ #define HLLAPI_CMD_RECEIVEFILE				  91	/**< Receive a file from the host */
 
- #define HLLAPI_CMD_COPYPSTOSTR				   8	/**< copy presentation space to string					*/
- #define HLLAPI_CMD_SETCURSOR				  40	/**< set cursor											*/
  #define HLLAPI_CMD_GETREVISION				2000	/**< Get lib3270 revision								*/
 
  #pragma pack(1)
@@ -56,7 +65,7 @@ extern "C" {
 		unsigned char	id;			/**< Request id */
 		unsigned long	func;		/**< Function number */
 		unsigned short	rc;			/**< Short argument/return code */
-		unsigned short	len;		/**< Text length */
+		unsigned int	value;		/**< Requested value */
 		char			string[1];	/**< String argument */
  } HLLAPI_DATA;
  #pragma pack()

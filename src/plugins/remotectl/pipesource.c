@@ -143,12 +143,12 @@ static void wait_for_client(pipe_source *source)
 	qry->hPipe	= source->hPipe;
  	qry->text	= (const gchar *) (qry+1);
 
-	if(data->id == 0x01)
+	if(data->id == HLLAPI_REQUEST_QUERY)
 	{
 		// HLLAPI query
 		qry->cmd	= (int) data->func;
 		qry->pos	= (int) data->rc;
-		qry->length	= data->len;
+		qry->length	= data->value;
 		memcpy((gchar *)(qry->text),data->string,qry->length);
 	}
 	else
@@ -175,26 +175,29 @@ static void wait_for_client(pipe_source *source)
 	{
 		request_buffer(qry, rc, 0, NULL);
 	}
-/*
-	HLLAPI_DATA data;
+ }
+
+ void request_value(QUERY *qry, int rc, unsigned int value)
+ {
+	HLLAPI_DATA	data;
 
 	memset(&data,0,sizeof(data));
-
-	data.id		= 0x01;
+	data.id		= HLLAPI_RESPONSE_VALUE;
 	data.func	= qry->cmd;
 	data.rc		= rc;
-
-	trace("rc=%d",rc);
+	data.value 	= value;
 
 #ifdef WIN32
 	{
 		DWORD wrote = sizeof(data);
 		WriteFile(qry->hPipe,&data,wrote,&wrote,NULL);
+		trace("Wrote=%d len=%d",(int) wrote, sizeof(data));
 	}
 #endif // WIN32
 
  	g_free(qry);
-*/
+
+
  }
 
  void request_buffer(QUERY *qry, int rc, size_t szBuffer, const gpointer buffer)
@@ -206,20 +209,21 @@ static void wait_for_client(pipe_source *source)
 	{
 		sz 			= sizeof(HLLAPI_DATA)+szBuffer;
 		data		= g_malloc0(sz);
-		data->len	= szBuffer;
+		data->id	= HLLAPI_RESPONSE_TEXT;
 		memcpy(data->string,buffer,szBuffer);
 	}
 	else
 	{
-		sz		= sizeof(HLLAPI_DATA);
-		data	= g_malloc0(sz);
+		sz			= sizeof(HLLAPI_DATA);
+		data		= g_malloc0(sz);
+		data->id	= HLLAPI_RESPONSE_VALUE;
 	}
 
-	data->id	= 0x01;
 	data->func	= qry->cmd;
 	data->rc	= rc;
+	data->value	= szBuffer;
 
-	trace("rc=%d data->len=%d",rc,(int) data->len);
+	trace("rc=%d data->len=%d",rc,(int) szBuffer);
 
 #ifdef WIN32
 	{

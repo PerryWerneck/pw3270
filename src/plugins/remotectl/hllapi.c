@@ -98,10 +98,10 @@
 
 		memset(buffer,0,HLLAPI_MAXLENGTH);
 
-		data->id		= HLLAPI_REQUEST_ID;
+		data->id		= HLLAPI_REQUEST_QUERY;
 		data->func		= func;
 		data->rc		= *rc;
-		data->len		= *length;
+		data->value		= *length;
 
 		if(arg && *length > 0)
 			memcpy(data->string,arg,*length);
@@ -116,15 +116,15 @@
 		else
 		{
 			*rc		= buffer->rc;
-			*length = buffer->len;
+			*length = buffer->value;
 
-			trace("buffer->len=%d rc=%d",buffer->len,buffer->rc);
+			trace("buffer->id=%d buffer->value=%d rc=%d",buffer->id,buffer->value,buffer->rc);
 
-			if(buffer->len > 0)
+			if(buffer->value > 0 && buffer->id == HLLAPI_RESPONSE_TEXT)
 			{
-				outBuffer = malloc(buffer->len+1);
-				memcpy(outBuffer,buffer->string,buffer->len);
-				outBuffer[buffer->len] = 0;
+				outBuffer = malloc(buffer->value+1);
+				memcpy(outBuffer,buffer->string,buffer->value);
+				outBuffer[buffer->value] = 0;
 
 				trace("outBuffer=[%s]",outBuffer);
 			}
