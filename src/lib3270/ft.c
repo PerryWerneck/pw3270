@@ -372,9 +372,9 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 	if(*op)
 	{
 		if(ft->flags & LIB3270_FT_OPTION_TSO)
-			snconcat(buffer,4095," %s",op+1);
-		else
 			snconcat(buffer,4095," (%s)",op+1);
+		else
+			snconcat(buffer,4095," %s",op+1);
 	}
 
 	snconcat(buffer,4095,"%s","\n");
