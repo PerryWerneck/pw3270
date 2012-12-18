@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-14 07:59-0200\n"
-"PO-Revision-Date: 2012-10-31 07:44-0200\n"
+"POT-Creation-Date: 2012-12-18 10:26-0200\n"
+"PO-Revision-Date: 2012-12-18 10:32-0200\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
 "Language: pt_BR\n"
@@ -56,17 +56,17 @@ msgstr "%s: Faltando dígitos hexadecimais após \\x"
 #: kybd.c:2788
 #, c-format
 msgid "%s: Unknown character after \\p"
-msgstr "%s: Unknown character after \\p"
+msgstr "%s: Caractere desconhecido depois de \\p"
 
 #: kybd.c:2824
 #, c-format
 msgid "%s: Unknown character after \\pa"
-msgstr "%s: Unknown character after \\pa"
+msgstr "%s: Caractere desconhecido depois de \\pa"
 
 #: kybd.c:2802
 #, c-format
 msgid "%s: Unknown character after \\pf"
-msgstr "%s: Unknown character after \\pf"
+msgstr "%s: Caractere desconhecido depois de \\pf"
 
 #: kybd.c:2740
 #, c-format
@@ -152,7 +152,7 @@ msgstr "<menuitem> deve estar dentro de <menu>"
 msgid "<separator> should be inside a <menu> or <toolbar>"
 msgstr "<separator> só é válido dentro de <menu> ou <toolbar>"
 
-#: filetransfer.c:415
+#: filetransfer.c:386
 msgid "Aborting"
 msgstr "Abortando"
 
@@ -164,7 +164,7 @@ msgstr "Ação falhou"
 msgid "Add to copy"
 msgstr "Adicionar à cópia"
 
-#: filetransfer.c:288
+#: filetransfer.c:259
 msgid "Add/Remove _CR at end of line"
 msgstr "Adicionar/Remover _CR no final da linha"
 
@@ -189,12 +189,12 @@ msgstr "Atributo \"%s\" é invalido ou indefinido"
 msgid "Auto-Reconnect"
 msgstr "Reconectar automaticamente"
 
-#: filetransfer.c:811
+#: filetransfer.c:782
 #, fuzzy
 msgid "Avblock"
 msgstr "Avblock"
 
-#: filetransfer.c:878
+#: filetransfer.c:849
 msgid "BLKSIZE:"
 msgstr "BLKSIZE:"
 
@@ -246,7 +246,7 @@ msgstr "C_odificação de caracteres:"
 msgid "C_olor scheme:"
 msgstr "Tema de c_ores:"
 
-#: filetransfer.c:615
+#: filetransfer.c:586
 msgid "C_urrent"
 msgstr "At_ual"
 
@@ -342,15 +342,15 @@ msgstr "Não foi possível definir o descritor de socket SSL"
 msgid "Can't set lib3270 I/O handlers"
 msgstr "Não foi possível registrar manipuladores de I/O 3270"
 
-#: filetransfer.c:718
+#: filetransfer.c:689
 msgid "Can't start download"
 msgstr "Não foi possível iniciar o download"
 
-#: filetransfer.c:514
+#: filetransfer.c:485
 msgid "Can't start file transfer"
 msgstr "Não foi possível iniciar transferência de arquivo"
 
-#: filetransfer.c:779
+#: filetransfer.c:750
 msgid "Can't start upload"
 msgstr "Não foi possível iniciar upload"
 
@@ -455,11 +455,11 @@ msgstr "Cores personalizadas"
 msgid "Cut"
 msgstr "Recortar"
 
-#: filetransfer.c:810
+#: filetransfer.c:781
 msgid "Cylinders"
 msgstr "Cilindros"
 
-#: filetransfer.c:339 filetransfer.c:880
+#: filetransfer.c:310 filetransfer.c:851
 msgid "DFT B_uffer size:"
 msgstr "Tamanho do b_uffer DFT:"
 
@@ -487,7 +487,7 @@ msgstr "Depuração"
 msgid "Debug window updates"
 msgstr "Mostrar atualizações de janela"
 
-#: filetransfer.c:800 filetransfer.c:808
+#: filetransfer.c:771 filetransfer.c:779
 msgid "Default"
 msgstr "Padrão"
 
@@ -507,7 +507,7 @@ msgstr "Desconectado do servidor"
 msgid "EOR received when not in 3270 mode, ignored."
 msgstr "EOR recebido fora do modo 3270, ignorado."
 
-#: filetransfer.c:615
+#: filetransfer.c:586
 msgid "ET_A"
 msgstr "ET_A"
 
@@ -602,15 +602,15 @@ msgstr "Extra CGCSGID(s), ignoring"
 msgid "Field colors"
 msgstr "Cor dos campos"
 
-#: filetransfer.c:556
+#: filetransfer.c:527
 msgid "File transfer"
 msgstr "Transferência de arquivos"
 
-#: filetransfer.c:517
+#: filetransfer.c:488
 msgid "File transfer error"
 msgstr "Erro na transferência de arquivos"
 
-#: filetransfer.c:718 filetransfer.c:779
+#: filetransfer.c:689 filetransfer.c:750
 msgid "File transfer is already active"
 msgstr "Transferência de arquivos já está ativa"
 
@@ -618,7 +618,7 @@ msgstr "Transferência de arquivos já está ativa"
 msgid "File transfer is already active in this session"
 msgstr "Transferência de arquivos já está ativa nesta sessão"
 
-#: filetransfer.c:801
+#: filetransfer.c:772
 msgid "Fixed"
 msgstr "Fixo"
 
@@ -687,7 +687,7 @@ msgstr "Host illegally added function(s)"
 msgid "Host is AS_400"
 msgstr "Servidor é AS_400"
 
-#: filetransfer.c:287
+#: filetransfer.c:258
 msgid "Host is T_SO"
 msgstr "Servidor é T_SO"
 
@@ -713,14 +713,14 @@ msgid ""
 "If active, pw3270 will respond to a Query(Color) with a list of 8 supported "
 "colors."
 msgstr ""
-"If active, pw3270 will respond to a Query(Color) with a list of 8 supported "
-"colors."
+"Quanto ativo o pw3270 response à uma consulta \"color\" com uma lista de "
+"apenas 8 cores."
 
 #: ft_cut.c:508
 msgid "Illegal frame length"
 msgstr "Comprimento de frame inválido"
 
-#: filetransfer.c:574
+#: filetransfer.c:545
 msgid "Informations"
 msgstr "Informações"
 
@@ -775,7 +775,7 @@ msgstr "Manter selecionado"
 msgid "Keyboard is locked"
 msgstr "Teclado está bloqueado"
 
-#: filetransfer.c:876
+#: filetransfer.c:847
 msgid "LRECL:"
 msgstr "LRECL:"
 
@@ -816,7 +816,7 @@ msgstr "Proxy telnet precisa de porta"
 msgid "Mustard"
 msgstr "Mostarda"
 
-#: filetransfer.c:643 filetransfer.c:659
+#: filetransfer.c:614 filetransfer.c:630
 msgid "N/A"
 msgstr "N/A"
 
@@ -1034,7 +1034,7 @@ msgstr "Rosa"
 msgid "Previous field"
 msgstr "Campo anterior"
 
-#: filetransfer.c:877
+#: filetransfer.c:848
 msgid "Primary space:"
 msgstr "Primary space:"
 
@@ -1062,7 +1062,7 @@ msgstr "Imprimir marca de seleção"
 msgid "Print settings"
 msgstr "Configurações de impressão"
 
-#: filetransfer.c:617
+#: filetransfer.c:588
 msgid "Progress"
 msgstr "Progresso"
 
@@ -1150,11 +1150,11 @@ msgstr "RPQ: Erro em gethostbyname"
 msgid "Receive file"
 msgstr "Receber arquivo"
 
-#: filetransfer.c:725
+#: filetransfer.c:696
 msgid "Receive file from host"
 msgstr "Receber arquivo do servidor"
 
-#: filetransfer.c:821
+#: filetransfer.c:792
 msgid "Record format"
 msgstr "Formato de registro"
 
@@ -1323,27 +1323,24 @@ msgid "SSL Read error"
 msgstr "Erro de leitura SSL"
 
 #: telnet.c:3267
-#, fuzzy
 msgid "SSL connect failed!"
-msgstr "Segundo connect() falhou"
+msgstr "Conexão SSL falhou"
 
 #: host.c:302
 msgid "SSL error"
 msgstr "Erro SSL"
 
 #: telnet.c:3246
-#, fuzzy
 msgid "SSL init failed!"
-msgstr "Negociação SSL falhou"
+msgstr "Inicialização SSL falhou"
 
 #: telnet.c:849
 msgid "SSL negotiation failed"
 msgstr "Negociação SSL falhou"
 
 #: telnet.c:3255
-#, fuzzy
 msgid "SSL_set_fd failed!"
-msgstr "Negociação SSL falhou"
+msgstr "SSL_set_fd falhou!"
 
 #: telnet.c:2049
 #, c-format
@@ -1390,7 +1387,7 @@ msgstr "Tamanho da tela"
 msgid "Scripts"
 msgstr "Scripts"
 
-#: filetransfer.c:879
+#: filetransfer.c:850
 msgid "Secondary space:"
 msgstr "Secondary space:"
 
@@ -1434,7 +1431,7 @@ msgstr "Frente da seleção"
 msgid "Send file"
 msgstr "Enviar arquivo"
 
-#: filetransfer.c:786
+#: filetransfer.c:757
 msgid "Send file to host"
 msgstr "Enviar arquivo para o servidor"
 
@@ -1452,7 +1449,7 @@ msgstr "Selecione servidor"
 
 #: main.c:257
 msgid "Set reported colors (8/16)"
-msgstr "Set reported colors (8/16)"
+msgstr "Define número de cores informadas (8/16)"
 
 #: ui/00default.xml:329
 msgid "Settings"
@@ -1478,7 +1475,7 @@ msgstr "Erro ao ler dados da rede"
 msgid "Socket write error"
 msgstr "Erro ao enviar dados para a rede"
 
-#: filetransfer.c:822
+#: filetransfer.c:793
 msgid "Space allocation units"
 msgstr "Space allocation units"
 
@@ -1486,7 +1483,7 @@ msgstr "Space allocation units"
 msgid "Space in LU name"
 msgstr "Espaço no nome da LU"
 
-#: filetransfer.c:615
+#: filetransfer.c:586
 msgid "Spee_d"
 msgstr "Veloci_dade"
 
@@ -1498,7 +1495,7 @@ msgstr "TELNET Proxy: send error"
 msgid "TLS negotiation failure"
 msgstr "Negociação TLS falhou"
 
-#: filetransfer.c:615
+#: filetransfer.c:586
 msgid "T_otal"
 msgstr "T_otal"
 
@@ -1570,7 +1567,7 @@ msgstr "Trace"
 msgid "Track Cursor"
 msgstr "Mostrar posição do cursor"
 
-#: filetransfer.c:809
+#: filetransfer.c:780
 msgid "Tracks"
 msgstr "Trilhas"
 
@@ -1582,7 +1579,7 @@ msgstr "Transferência cancelada pelo servidor"
 msgid "Transfer cancelled by user"
 msgstr "Transferência cancelada pelo usuário"
 
-#: filetransfer.c:294
+#: filetransfer.c:265
 msgid "Transfer options"
 msgstr "Opções de transferência"
 
@@ -1614,7 +1611,7 @@ msgstr "Incapaz de colar texto"
 msgid "Unable to send file-transfer request"
 msgstr "Não foi possível enviar a requisição de transferência de arquivo"
 
-#: filetransfer.c:803
+#: filetransfer.c:774
 msgid "Undefined"
 msgstr "Indefinido"
 
@@ -1732,7 +1729,7 @@ msgstr "Unsupported socks 4 proxy"
 msgid "Use +/- for field navigation"
 msgstr "Usar teclas +/- para navegar por campos"
 
-#: filetransfer.c:802
+#: filetransfer.c:773
 msgid "Variable"
 msgstr "Variável"
 
@@ -1829,11 +1826,11 @@ msgstr "Amarelo"
 msgid "_8 colors"
 msgstr "_8 cores"
 
-#: filetransfer.c:289
+#: filetransfer.c:260
 msgid "_Append"
 msgstr "_Acrescentar"
 
-#: filetransfer.c:221 filetransfer.c:229
+#: filetransfer.c:220 filetransfer.c:228
 msgid "_Browse"
 msgstr "_Procurar"
 
@@ -1857,7 +1854,7 @@ msgstr "_Arquivo"
 msgid "_Font:"
 msgstr "_Fonte:"
 
-#: filetransfer.c:572
+#: filetransfer.c:543
 msgid "_From"
 msgstr "_De"
 
@@ -1889,7 +1886,7 @@ msgstr "_Opções"
 msgid "_Port:"
 msgstr "_Porta:"
 
-#: filetransfer.c:290
+#: filetransfer.c:261
 msgid "_Remap ASCII Characters"
 msgstr "_Remapear caracteres ASCII"
 
@@ -1897,15 +1894,15 @@ msgstr "_Remapear caracteres ASCII"
 msgid "_Secure connection"
 msgstr "Conexão _Segura"
 
-#: filetransfer.c:572
+#: filetransfer.c:543
 msgid "_Status"
 msgstr "_Situação"
 
-#: filetransfer.c:286
+#: filetransfer.c:257
 msgid "_Text file"
 msgstr "Arquivo _texto"
 
-#: filetransfer.c:572
+#: filetransfer.c:543
 msgid "_To"
 msgstr "_Para"
 
