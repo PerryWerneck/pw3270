@@ -116,7 +116,7 @@ int librx3270_unloaded(void)
 }
 
 // now build the actual entry list
-RexxRoutineEntry rx3270_functions[] =
+LIB3270_EXPORT RexxRoutineEntry rx3270_functions[] =
 {
 	REXX_TYPED_ROUTINE(rx3270version, 				rx3270version),
 	REXX_TYPED_ROUTINE(rx3270QueryCState,			rx3270QueryCState),
@@ -139,7 +139,7 @@ RexxRoutineEntry rx3270_functions[] =
 	REXX_LAST_METHOD()
 };
 
-RexxPackageEntry rx3270_package_entry =
+LIB3270_EXPORT RexxPackageEntry rx3270_package_entry =
 {
     STANDARD_PACKAGE_HEADER
     REXX_CURRENT_INTERPRETER_VERSION,		// anything after 4.0.0 will work

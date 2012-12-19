@@ -47,12 +47,6 @@
 	#include <iconv.h>
 #endif // HAVE_ICONV
 
-
-/*---[ Exports ]---------------------------------------------------------------------------------------------*/
-
- LIB3270_EXPORT RexxRoutineEntry rx3270_functions[];
- LIB3270_EXPORT RexxPackageEntry rx3270_package_entry;
-
 /*---[ Rexx entry points ]-----------------------------------------------------------------------------------*/
 
  REXX_TYPED_ROUTINE_PROTOTYPE(rx3270version);
