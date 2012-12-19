@@ -358,6 +358,8 @@ if test "$app_cv_rexx" == "yes"; then
 	if test -z "${REXXCONFIG}"; then
 		AC_MSG_NOTICE([Program oorexx-config not found. Use --with-rexx-config=path to specify absolute path to the oorexx-config tool.])
 		app_cv_rexx="no"
+	else
+		AC_CHECK_HEADER(oorexxapi.h, AC_DEFINE(HAVE_OOREXXAPI_H))
 	fi
 fi
 

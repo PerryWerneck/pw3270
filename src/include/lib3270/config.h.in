@@ -65,5 +65,6 @@
 	#undef HAVE_PRINTER
 
 	#undef HAVE_MALLOC_H
+	#undef HAVE_OOREXXAPI_H
 
 #endif /* LIB3270_CONFIG_INCLUDED */
