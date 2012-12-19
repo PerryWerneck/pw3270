@@ -27,10 +27,12 @@
  *
  */
 
+ #include <time.h>
+ #include <string.h>
+
  #include "rx3270.h"
  #include <lib3270/actions.h>
 
- #include <string.h>
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
