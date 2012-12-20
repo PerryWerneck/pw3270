@@ -801,6 +801,56 @@ static void setup_lus(H3270 *hSession)
 	hSession->try_lu	= *hSession->curr_lu;
 }
 
+#if defined(HAVE_LIBSSL)
+static void ssl_negotiate(H3270 *hSession)
+{
+	int rv;
+
+	set_ssl_state(hSession,LIB3270_SSL_NEGOTIATING);
+	non_blocking(hSession,False);
+
+	/* Initialize the SSL library. */
+	ssl_init(hSession);
+	if(hSession->ssl_con == NULL)
+	{
+		/* Failed. */
+		popup_an_error(hSession,_( "SSL init failed!"));
+		net_disconnect(hSession);
+		return;
+	}
+
+	/* Set up the TLS/SSL connection. */
+	if(SSL_set_fd(hSession->ssl_con, hSession->sock) != 1)
+	{
+		trace_dsn(hSession,"SSL_set_fd failed!\n");
+		popup_an_error(hSession,_( "SSL_set_fd failed!"));
+		net_disconnect(hSession);
+		return;
+	}
+
+	trace("%s: Running SSL_connect",__FUNCTION__);
+	rv = SSL_connect(hSession->ssl_con);
+	trace("%s: SSL_connect exits with rc=%d",__FUNCTION__,rv);
+
+	if (rv != 1)
+	{
+		trace_dsn(hSession,"continue_tls: SSL_connect failed\n");
+		popup_an_error(hSession,_( "SSL connect failed!"));
+		net_disconnect(hSession);
+		return;
+	}
+
+//	hSession->secure_connection = True;
+	non_blocking(hSession,True);
+
+	/* Success. */
+	trace_dsn(hSession,"TLS/SSL negotiated connection complete. Connection is now secure.\n");
+
+	/* Tell the world that we are (still) connected, now in secure mode. */
+	lib3270_set_connected(hSession);
+}
+#endif // HAVE_LIBSSL
+
 static void net_connected(H3270 *hSession)
 {
 	if(hSession->proxy_type > 0)
@@ -821,6 +871,8 @@ static void net_connected(H3270 *hSession)
 	/* Set up SSL. */
 	if(hSession->ssl_con && hSession->secure == LIB3270_SSL_UNDEFINED)
 	{
+		ssl_negotiate(hSession);
+/*
 		int rc;
 
 		set_ssl_state(hSession,LIB3270_SSL_NEGOTIATING);
@@ -857,8 +909,9 @@ static void net_connected(H3270 *hSession)
 //		hSession->secure_connection = True;
 		trace_dsn(hSession,"TLS/SSL tunneled connection complete. Connection is now secure.\n");
 
-		/* Tell everyone else again. */
+		// Tell everyone else again.
 		lib3270_set_connected(hSession);
+*/
 	}
 #endif /*]*/
 
@@ -3220,8 +3273,6 @@ static void ssl_info_callback(INFO_CONST SSL *s, int where, int ret)
  */
 static void continue_tls(H3270 *hSession, unsigned char *sbbuf, int len)
 {
-	int rv;
-
 	/* Whatever happens, we're not expecting another SB STARTTLS. */
 	hSession->need_tls_follows = 0;
 
@@ -3237,45 +3288,7 @@ static void continue_tls(H3270 *hSession, unsigned char *sbbuf, int len)
 
 	/* Trace what we got. */
 	trace_dsn(hSession,"%s FOLLOWS %s\n", opt(TELOPT_STARTTLS), cmd(SE));
-
-	/* Initialize the SSL library. */
-	ssl_init(hSession);
-	if(hSession->ssl_con == NULL)
-	{
-		/* Failed. */
-		popup_an_error(hSession,_( "SSL init failed!"));
-		net_disconnect(hSession);
-		return;
-	}
-
-	/* Set up the TLS/SSL connection. */
-	if(SSL_set_fd(hSession->ssl_con, hSession->sock) != 1)
-	{
-		trace_dsn(hSession,"SSL_set_fd failed!\n");
-		popup_an_error(hSession,_( "SSL_set_fd failed!"));
-		net_disconnect(hSession);
-		return;
-	}
-
-	trace("%s: Running SSL_connect",__FUNCTION__);
-	rv = SSL_connect(hSession->ssl_con);
-	trace("%s: SSL_connect exits with rc=%d",__FUNCTION__,rv);
-
-	if (rv != 1)
-	{
-		trace_dsn(hSession,"continue_tls: SSL_connect failed\n");
-		popup_an_error(hSession,_( "SSL connect failed!"));
-		net_disconnect(hSession);
-		return;
-	}
-
-//	hSession->secure_connection = True;
-
-	/* Success. */
-	trace_dsn(hSession,"TLS/SSL negotiated connection complete. Connection is now secure.\n");
-
-	/* Tell the world that we are (still) connected, now in secure mode. */
-	lib3270_set_connected(hSession);
+	ssl_negotiate(hSession);
 }
 
 #endif /*]*/

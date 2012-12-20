@@ -317,13 +317,17 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 
  	/* Build the ind$file command */
  	snprintf(op,4095,"%s%s%s",
-						(ft->flags & LIB3270_FT_OPTION_ASCII) 	? " ASCII"	: "",
-						(ft->flags & LIB3270_FT_OPTION_CRLF) 	? " CRLF"	: "",
-						(ft->flags & LIB3270_FT_OPTION_APPEND)	? " APPEND"	: ""
+						(ft->flags & LIB3270_FT_OPTION_ASCII) 	? " ascii"	: "",
+						(ft->flags & LIB3270_FT_OPTION_CRLF) 	? " crlf"	: "",
+						(ft->flags & LIB3270_FT_OPTION_APPEND)	? " append"	: ""
 			);
 
 	if(!(ft->flags & LIB3270_FT_OPTION_RECEIVE))
 	{
+		// Sending file
+
+		trace("tso=%d",ft->flags & LIB3270_FT_OPTION_TSO);
+
 		if(ft->flags & LIB3270_FT_OPTION_TSO)
 		{
 			// TSO Host
@@ -365,16 +369,16 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 		}
 	}
 
-	snprintf(buffer,4095,"%s %s %s",	"IND$FILE",
-										(ft->flags & LIB3270_FT_OPTION_RECEIVE) ? "GET" : "PUT",
+	snprintf(buffer,4095,"%s %s %s",	"ind$file",
+										(ft->flags & LIB3270_FT_OPTION_RECEIVE) ? "get" : "put",
 										ft->remote );
 
 	if(*op)
 	{
 		if(ft->flags & LIB3270_FT_OPTION_TSO)
-			snconcat(buffer,4095," (%s)",op+1);
-		else
 			snconcat(buffer,4095," %s",op+1);
+		else
+			snconcat(buffer,4095," (%s",op+1);
 	}
 
 	snconcat(buffer,4095,"%s","\n");
