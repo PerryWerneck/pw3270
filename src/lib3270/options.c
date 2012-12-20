@@ -46,9 +46,16 @@
 	},
 
 	{
-		LIB3270_OPTION_AS400,
+		LIB3270_OPTION_KYBD_AS400,
 		"as400",
-		N_( "Host is AS_400" ),
+		N_( "Host is AS/400" ),
+		NULL
+	},
+
+	{
+		LIB3270_OPTION_TSO,
+		"tso",
+		N_( "Host is TSO" ),
 		NULL
 	},
 

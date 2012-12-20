@@ -34,6 +34,36 @@
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
+ static const struct _host_type
+ {
+	const gchar		* name;
+	const gchar		* description;
+	LIB3270_OPTION	  option;
+ } host_type[] =
+ {
+	{ "S390",		N_( "IBM S/390"			),	LIB3270_OPTION_TSO			},
+	{ "AS400",		N_( "IBM AS/400"		),	LIB3270_OPTION_KYBD_AS400	},
+	{ "TSO",		N_( "Other (TSO)"		),	LIB3270_OPTION_TSO			},
+	{ "VM/CMS",		N_( "Other (VM/CMS)"	),	0 							}
+ };
+
+ static const struct _charset
+ {
+	const gchar *name;
+	const gchar *description;
+ } charset[] =
+ {
+	// http://en.wikipedia.org/wiki/Character_encoding
+	{ "UTF-8",		N_( "UTF-8"	)								},
+	{ "ISO-8859-1", N_( "Western Europe (ISO 8859-1)" ) 		},
+	{ "CP1252",		N_( "Windows Western languages (CP1252)" )	},
+
+	{ NULL, NULL }
+ };
+
+
+/*--[ Implement ]------------------------------------------------------------------------------------*/
+
  void load_3270_options_from_config(GtkWidget *widget)
  {
  	int f;
@@ -97,22 +127,8 @@
 	else
 	{
 		// Add charset options
-		static const struct _list
-		{
-			const gchar *charset;
-			const gchar *text;
-		} list[] =
-		{
-			// http://en.wikipedia.org/wiki/Character_encoding
-			{ "UTF-8",		N_( "UTF-8"	)								},
-			{ "ISO-8859-1", N_( "Western Europe (ISO 8859-1)" ) 		},
-			{ "CP1252",		N_( "Windows Western languages (CP1252)" )	},
-
-			{ NULL, NULL }
-		};
-
 		GtkWidget		* label 	= gtk_label_new_with_mnemonic (_("C_haracter Coding:"));
-		const gchar		* charset	= NULL;
+		const gchar		* scharset	= NULL;
 #if GTK_CHECK_VERSION(3,0,0)
 		GtkWidget		* menu		= gtk_combo_box_text_new();
 #else
@@ -125,14 +141,14 @@
 		int			  f;
 		int			  p = 0;
 
-		g_get_charset(&charset);
-		*encoding = g_strdup(charset);
+		g_get_charset(&scharset);
+		*encoding = g_strdup(scharset);
 
-		text = g_strdup_printf(_("Current (%s)"),charset);
+		text = g_strdup_printf(_("Current (%s)"),scharset);
 
 #if GTK_CHECK_VERSION(3,0,0)
 
-		gtk_combo_box_text_insert(GTK_COMBO_BOX_TEXT(menu),p,charset,text);
+		gtk_combo_box_text_insert(GTK_COMBO_BOX_TEXT(menu),p,scharset,text);
 
 #else
 
@@ -140,7 +156,7 @@
 		gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(menu), renderer, "text", 0, NULL);
 
 		gtk_list_store_append((GtkListStore *) model,&iter);
-		gtk_list_store_set((GtkListStore *) model, &iter, 0, text, 1, charset, -1);
+		gtk_list_store_set((GtkListStore *) model, &iter, 0, text, 1, scharset, -1);
 
 #endif // GTK(3,0,0)
 
@@ -148,15 +164,15 @@
 
 		gtk_combo_box_set_active(GTK_COMBO_BOX(menu),p++);
 
-		for(f=0;list[f].charset;f++)
+		for(f=0;charset[f].name;f++)
 		{
-			if(strcasecmp(charset,list[f].charset))
+			if(strcasecmp(scharset,charset[f].name))
 			{
 #if GTK_CHECK_VERSION(3,0,0)
-				gtk_combo_box_text_insert(GTK_COMBO_BOX_TEXT(menu),p++,list[f].charset,gettext(list[f].text));
+				gtk_combo_box_text_insert(GTK_COMBO_BOX_TEXT(menu),p++,charset[f].name,gettext(charset[f].description));
 #else
 				gtk_list_store_append((GtkListStore *) model,&iter);
-				gtk_list_store_set((GtkListStore *) model, &iter, 0, gettext(list[f].text), 1, list[f].charset, -1);
+				gtk_list_store_set((GtkListStore *) model, &iter, 0, gettext(charset[f].description), 1, charset[f].name, -1);
 #endif // GTK(3,0,0)
 			}
 		}
@@ -304,9 +320,10 @@
 
  void hostname_action(GtkAction *action, GtkWidget *widget)
  {
-	const LIB3270_OPTION_ENTRY *options = lib3270_get_option_list();
+//	const LIB3270_OPTION_ENTRY *options = lib3270_get_option_list();
 
  	const gchar 	* title 	= g_object_get_data(G_OBJECT(action),"title");
+ 	const gchar 	* systype 	= g_object_get_data(G_OBJECT(action),"type");
  	gchar			* cfghost	= get_string_from_config("host","uri","");
  	gchar			* hostname;
  	gchar			* ptr;
@@ -316,7 +333,7 @@
  	GtkEntry		* host		= GTK_ENTRY(gtk_entry_new());
  	GtkEntry		* port		= GTK_ENTRY(gtk_entry_new());
  	GtkToggleButton	* sslcheck	= GTK_TOGGLE_BUTTON(gtk_check_button_new_with_mnemonic( _( "_Secure connection" ) ));
- 	GtkToggleButton	* optcheck[LIB3270_OPTION_COUNT];
+// 	GtkToggleButton	* optcheck[LIB3270_OPTION_COUNT];
 	GtkWidget 		* dialog 	= gtk_dialog_new_with_buttons(	gettext(title ? title : N_( "Select hostname" )),
 																GTK_WINDOW(gtk_widget_get_toplevel(widget)),
 																GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -344,12 +361,38 @@
 	gtk_table_attach(table,GTK_WIDGET(sslcheck), 1,2,1,2,GTK_EXPAND|GTK_FILL,0,0,0);
 
 	{
+		GtkWidget	* expander	= gtk_expander_new_with_mnemonic(_( "_Host options"));
+		GtkBox		* container = GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL,0));
 
-		int f;
-		int col = 0;
-		int row = 0;
+		// Host options
+		if(!systype)
+		{
+			// No system type defined, ask user
+			GtkTable	* frame	 = GTK_TABLE(gtk_table_new(2,2,FALSE));
+			GtkWidget	* widget = gtk_combo_box_text_new();
+			gchar 		* str	 = get_string_from_config("host","systype",host_type[0].name);
+			int			  f;
 
-		GtkWidget	* container = gtk_expander_new_with_mnemonic(_( "_Host options"));
+			label = gtk_label_new_with_mnemonic( _("System _Type:") );
+			gtk_table_attach(frame,label,0,1,0,1,0,0,5,0);
+
+			for(f=0;f<G_N_ELEMENTS(host_type);f++)
+			{
+				gtk_combo_box_text_append(GTK_COMBO_BOX_TEXT(widget),host_type[f].name,gettext(host_type[f].description));
+				if(!g_strcasecmp(host_type[f].name,str))
+					gtk_combo_box_set_active(GTK_COMBO_BOX(widget),f);
+			}
+
+			g_free(str);
+
+
+			gtk_table_attach(frame,widget,1,2,0,1,GTK_EXPAND|GTK_FILL,0,0,0);
+			gtk_label_set_mnemonic_widget(GTK_LABEL(label),GTK_WIDGET(widget));
+
+			gtk_box_pack_start(container,GTK_WIDGET(frame),FALSE,TRUE,0);
+		}
+
+/*
 		GtkTable	* frame		= GTK_TABLE(gtk_table_new(2,2,FALSE));
 
 		for(f=0;f<LIB3270_OPTION_COUNT;f++)
@@ -371,7 +414,10 @@
 		}
 
 		gtk_container_add(GTK_CONTAINER(container),GTK_WIDGET(frame));
-		gtk_table_attach(table,container,1,2,2,3,GTK_EXPAND|GTK_FILL,0,0,0);
+
+*/
+		gtk_container_add(GTK_CONTAINER(expander),GTK_WIDGET(container));
+		gtk_table_attach(table,expander,1,2,2,3,GTK_EXPAND|GTK_FILL,0,0,0);
 	}
 
 
@@ -425,9 +471,10 @@
 								);
 
 			{
-				int f;
+//				int f;
 				LIB3270_OPTION opt = 0;
 
+/*
 				for(f=0;f<LIB3270_OPTION_COUNT;f++)
 				{
 					gboolean val = gtk_toggle_button_get_active(optcheck[f]);
@@ -435,7 +482,7 @@
 						opt |= options[f].value;
 					set_boolean_to_config("host", options[f].key, val);
 				}
-
+*/
 				v3270_set_session_options(widget,opt);
 
 			}

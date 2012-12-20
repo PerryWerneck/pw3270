@@ -241,13 +241,14 @@
 	 */
 	typedef enum lib3270_option
 	{
-		LIB3270_OPTION_COLOR8 	= 0x0001,	/**< If active, pw3270 will respond to a Query(Color) with a list of 8 supported colors. */
-		LIB3270_OPTION_AS400	= 0x0002,	/**< Host is AS400? */
+		LIB3270_OPTION_COLOR8	 	= 0x0001,	/**< If active, pw3270 will respond to a Query(Color) with a list of 8 supported colors. */
+		LIB3270_OPTION_KYBD_AS400	= 0x0002,	/**< Prefix every PF with PA1 */
+		LIB3270_OPTION_TSO			= 0x0004,	/**< Host is TSO? */
 
 	} LIB3270_OPTION;
 
 	#define LIB3270_OPTION_DEFAULT	0
-	#define LIB3270_OPTION_COUNT	2
+	#define LIB3270_OPTION_COUNT	3
 
 	typedef struct _lib3270_option_entry
 	{
