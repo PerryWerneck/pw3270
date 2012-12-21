@@ -239,6 +239,12 @@
 	v3270_set_session_options(GTK_PW3270(widget)->terminal,options);
  }
 
+ LIB3270_EXPORT int pw3270_set_session_color_type(GtkWidget *widget, unsigned short colortype)
+ {
+ 	g_return_val_if_fail(GTK_IS_PW3270(widget),EFAULT);
+	return v3270_set_session_color_type(GTK_PW3270(widget)->terminal,colortype);
+ }
+
  static void chktoplevel(GtkWidget *window, GtkWidget **widget)
  {
  	if(*widget)

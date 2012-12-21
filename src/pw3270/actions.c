@@ -74,6 +74,7 @@ static void connect_action(GtkAction *action, GtkWidget *widget)
 	if(host)
 	{
 		v3270_set_session_options(widget,0);
+		v3270_set_session_color_type(widget,0);
 		v3270_connect(widget,host);
 		return;
 	}

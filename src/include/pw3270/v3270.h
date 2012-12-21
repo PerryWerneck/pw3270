@@ -189,6 +189,7 @@
  LIB3270_EXPORT int				  v3270_set_script(GtkWidget *widget, const gchar id, gboolean on);
  LIB3270_EXPORT void			  v3270_set_scaled_fonts(GtkWidget *widget, gboolean on);
  LIB3270_EXPORT void			  v3270_set_session_options(GtkWidget *widget, LIB3270_OPTION options);
+ LIB3270_EXPORT int				  v3270_set_session_color_type(GtkWidget *widget, unsigned short colortype);
  LIB3270_EXPORT	void 			  v3270_set_host(GtkWidget *widget, const gchar *uri);
 
  // Keyboard & Mouse special actions

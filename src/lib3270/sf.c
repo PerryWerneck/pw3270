@@ -820,13 +820,13 @@ static void do_qr_color(H3270 *hSession)
 
 	trace_ds(hSession,"> QueryReply(Color)\n");
 
-	color_max = (hSession->options & LIB3270_OPTION_COLOR8) ? 8: 16; /* report on 8 or 16 colors */
+	color_max = (hSession->colors == 8) ? 8: 16; 	/* report on 8 or 16 colors */
 
 	space3270out(hSession,4 + 2*15);
-	*hSession->obptr++ = 0x00;					/* no options */
-	*hSession->obptr++ = color_max; 			/* report on 8 or 16 colors */
-	*hSession->obptr++ = 0x00;					/* default color: */
-	*hSession->obptr++ = 0xf0 + COLOR_GREEN;	/*  green */
+	*hSession->obptr++ = 0x00;						/* no options */
+	*hSession->obptr++ = color_max; 				/* report on 8 or 16 colors */
+	*hSession->obptr++ = 0x00;						/* default color: */
+	*hSession->obptr++ = 0xf0 + COLOR_GREEN;		/*  green */
 	for (i = 0xf1; i < 0xf1 + color_max - 1; i++)
 	{
 		*hSession->obptr++ = i;

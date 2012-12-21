@@ -44,7 +44,7 @@
 
  struct option
  {
-	LIB3270_OPTION	host;
+	int colors;
  };
 
  #define ERROR_DOMAIN g_quark_from_static_string(PACKAGE_NAME)
@@ -169,21 +169,21 @@ static gboolean datadir(const gchar *option_name, const gchar *value, gpointer d
 
 static gboolean optcolors(const gchar *option_name, const gchar *value, gpointer data, GError **error)
 {
-	switch(atoi(value))
+	static const unsigned char	valid[] = { 2,8,16 };
+	int 		 				f;
+	unsigned char				optval = (unsigned char) atoi(value);
+
+	for(f=0;f<G_N_ELEMENTS(valid);f++)
 	{
-	case 8:
-		((struct option *) data)->host |= LIB3270_OPTION_COLOR8;
-		break;
-
-	case 16:
-		break;
-
-	default:
-		*error = g_error_new(ERROR_DOMAIN,EINVAL, _("Unexpected or invalid color value \"%s\""), value );
-		return FALSE;
+		if(optval == valid[f])
+		{
+			((struct option *) data)->colors = optval;
+			return TRUE;
+		}
 	}
 
-	return TRUE;
+	*error = g_error_new(ERROR_DOMAIN,EINVAL, _("Unexpected or invalid color value \"%s\""), value );
+	return FALSE;
 }
 
 int main(int argc, char *argv[])
@@ -344,7 +344,8 @@ int main(int argc, char *argv[])
 
 		toplevel = pw3270_new(host);
 		pw3270_set_session_name(toplevel,session_name);
-		pw3270_set_session_options(toplevel,cmdline_opt.host);
+		pw3270_set_session_color_type(toplevel,cmdline_opt.colors);
+		// pw3270_set_session_options(toplevel,cmdline_opt.host);
 
 		toplevel_setup(GTK_WINDOW(toplevel));
 

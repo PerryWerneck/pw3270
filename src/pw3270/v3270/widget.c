@@ -1444,6 +1444,12 @@ void v3270_set_session_options(GtkWidget *widget, LIB3270_OPTION options)
 	lib3270_set_options(GTK_V3270(widget)->host,options);
 }
 
+int v3270_set_session_color_type(GtkWidget *widget, unsigned short colortype)
+{
+	g_return_val_if_fail(GTK_IS_V3270(widget),EFAULT);
+	return lib3270_set_color_type(GTK_V3270(widget)->host,colortype);
+}
+
 gboolean v3270_is_connected(GtkWidget *widget)
 {
 	g_return_val_if_fail(GTK_IS_V3270(widget),FALSE);

@@ -241,11 +241,13 @@
 	 */
 	typedef enum lib3270_option
 	{
-		LIB3270_OPTION_COLOR8	 	= 0x0001,	/**< If active, pw3270 will respond to a Query(Color) with a list of 8 supported colors. */
-		LIB3270_OPTION_KYBD_AS400	= 0x0002,	/**< Prefix every PF with PA1 */
-		LIB3270_OPTION_TSO			= 0x0004,	/**< Host is TSO? */
+		LIB3270_OPTION_KYBD_AS400	= 0x0001,	/**< Prefix every PF with PA1 */
+		LIB3270_OPTION_TSO			= 0x0002,	/**< Host is TSO? */
 
 	} LIB3270_OPTION;
+
+
+//		LIB3270_OPTION_COLOR8	 	= 0x0001,	/**< If active, pw3270 will respond to a Query(Color) with a list of 8 supported colors. */
 
 	#define LIB3270_OPTION_DEFAULT	0
 	#define LIB3270_OPTION_COUNT	3
@@ -979,6 +981,7 @@
 
 	LIB3270_EXPORT LIB3270_OPTION lib3270_get_options(H3270 *hSession);
 	LIB3270_EXPORT void lib3270_set_options(H3270 *hSession, LIB3270_OPTION opt);
+	LIB3270_EXPORT int	lib3270_set_color_type(H3270 *hSession, unsigned short colortype);
 
 	LIB3270_EXPORT const LIB3270_OPTION_ENTRY * lib3270_get_option_list(void);
 

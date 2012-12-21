@@ -39,13 +39,6 @@
  static const const LIB3270_OPTION_ENTRY options[LIB3270_OPTION_COUNT+1] =
  {
 	{
-		LIB3270_OPTION_COLOR8,
-		"color8",
-		N_( "_8 colors" ),
-		N_( "If active, pw3270 will respond to a Query(Color) with a list of 8 supported colors." )
-	},
-
-	{
 		LIB3270_OPTION_KYBD_AS400,
 		"as400",
 		N_( "Host is AS/400" ),
@@ -83,6 +76,37 @@ LIB3270_EXPORT void lib3270_set_options(H3270 *hSession, LIB3270_OPTION opt)
 	CHECK_SESSION_HANDLE(hSession);
 	hSession->options = opt;
 }
+
+LIB3270_EXPORT int lib3270_set_color_type(H3270 *hSession, unsigned short colortype)
+{
+	CHECK_SESSION_HANDLE(hSession);
+
+	switch(colortype)
+	{
+	case 0:
+	case 16:
+		hSession->colors 	= 16;
+		hSession->mono		= 0;
+		break;
+
+	case 8:
+		hSession->colors	= 8;
+		hSession->mono		= 0;
+		break;
+
+	case 2:
+		hSession->colors 	= 16;
+		hSession->mono		= 1;
+		break;
+
+	default:
+		return EINVAL;
+	}
+
+
+	return 0;
+}
+
 
 LIB3270_EXPORT const LIB3270_OPTION_ENTRY * lib3270_get_option_list(void)
 {
