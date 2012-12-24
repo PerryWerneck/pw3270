@@ -69,7 +69,39 @@
 	gtk_label_set_mnemonic_widget(GTK_LABEL(label),widget);
  }
 
-  void hostname_action(GtkAction *action, GtkWidget *widget)
+ static void systype_changed(GtkComboBox *widget, int *iHostType)
+ {
+	GValue          value   = { 0, };
+	GtkTreeIter iter;
+
+	if(!gtk_combo_box_get_active_iter(widget,&iter))
+		return;
+
+	gtk_tree_model_get_value(gtk_combo_box_get_model(widget),&iter,1,&value);
+
+	*iHostType = g_value_get_int(&value);
+
+	trace("Selected host type: %s",host_type[*iHostType].name);
+
+ }
+
+ static void color_changed(GtkComboBox *widget, int *iColorTable)
+ {
+	GValue          value   = { 0, };
+	GtkTreeIter iter;
+
+	if(!gtk_combo_box_get_active_iter(widget,&iter))
+		return;
+
+	gtk_tree_model_get_value(gtk_combo_box_get_model(widget),&iter,1,&value);
+
+	*iColorTable = g_value_get_int(&value);
+
+	trace("Selected color type: %d",(int) colortable[*iColorTable].colors);
+
+ }
+
+ void hostname_action(GtkAction *action, GtkWidget *widget)
  {
  	const gchar 	* title 	= g_object_get_data(G_OBJECT(action),"title");
  	gchar			* cfghost	= get_string_from_config("host","uri","");
@@ -144,12 +176,14 @@
 				gtk_list_store_set((GtkListStore *) model, &iter, 0, gettext(host_type[f].description), 1, f, -1);
 
 				if(!g_ascii_strcasecmp(host_type[f].name,str))
-					gtk_combo_box_set_active(GTK_COMBO_BOX(widget),f);
+					gtk_combo_box_set_active(GTK_COMBO_BOX(widget),iHostType=f);
 			}
 
 			g_free(str);
 
 			set_row(row++,widget,container,_("System _type:"));
+
+			g_signal_connect(G_OBJECT(widget),"changed",G_CALLBACK(systype_changed),&iHostType);
 
 		}
 		else
@@ -175,18 +209,20 @@
 				GtkTreeIter		  iter;
 
 				gtk_list_store_append((GtkListStore *) model,&iter);
-				gtk_list_store_set((GtkListStore *) model, &iter, 0, gettext(colortable[f].description), 1, (int) colortable[f].colors, -1);
+				gtk_list_store_set((GtkListStore *) model, &iter, 0, gettext(colortable[f].description), 1, (int) f, -1);
 
 				if(colortable[f].colors == colors)
-					gtk_combo_box_set_active(GTK_COMBO_BOX(widget),f);
+					gtk_combo_box_set_active(GTK_COMBO_BOX(widget),iColorTable=f);
 			}
 
 			set_row(row++,widget,container,_("_Color table:"));
 
+			g_signal_connect(G_OBJECT(widget),"changed",G_CALLBACK(color_changed),&iColorTable);
+
 		}
 		else
 		{
-			#warning TODO: Configurar tabela de cores de acordo com systype
+			#warning TODO: Configurar tabela de cores de acordo com colortype
 		}
 
 		gtk_container_add(GTK_CONTAINER(expander),GTK_WIDGET(container));
@@ -243,6 +279,9 @@
 								);
 
 			gtk_widget_set_visible(dialog,FALSE);
+
+			set_string_to_config("host","systype",host_type[iHostType].name);
+			set_integer_to_config("host","colortype",colortable[iColorTable].colors);
 
 			v3270_set_session_options(widget,host_type[iHostType].option);
 			v3270_set_session_color_type(widget,colortable[iColorTable].colors);
