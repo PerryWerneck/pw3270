@@ -176,9 +176,28 @@
 
  }
 
- GtkWidget * pw3270_new(const gchar *host)
+ GtkWidget * pw3270_new(const gchar *host, const gchar *systype, unsigned short colors)
  {
- 	GtkWidget *widget = g_object_new(GTK_TYPE_PW3270, NULL);
+ 	GtkWidget * widget	= g_object_new(GTK_TYPE_PW3270, NULL);
+
+	if(systype)
+	{
+		set_string_to_config("host","uri","%s",systype);
+		pw3270_set_session_options(widget,pw3270_options_by_hosttype(systype));
+	}
+	else
+	{
+		gchar *ptr = get_string_from_config("host","systype","S390");
+		pw3270_set_session_options(widget,pw3270_options_by_hosttype(ptr));
+		g_free(ptr);
+	}
+
+	if(colors)
+		set_integer_to_config("host","colortype",colors);
+	else
+		colors = get_integer_from_config("host","colortype",16);
+
+	pw3270_set_session_color_type(widget,colors);
 
 	if(host)
 	{

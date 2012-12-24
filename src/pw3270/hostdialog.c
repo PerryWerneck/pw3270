@@ -58,6 +58,20 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
+ LIB3270_OPTION pw3270_options_by_hosttype(const gchar *systype)
+ {
+	int f;
+
+	for(f=0;G_N_ELEMENTS(host_type);f++)
+	{
+		if(!g_ascii_strcasecmp(host_type[f].name,systype))
+			return host_type[f].option;
+	}
+
+	g_message("Unexpected system type: \"%s\"",systype);
+	return 0;
+ }
+
  static void set_row(int row, GtkWidget *widget, GtkTable *container, const gchar *text)
  {
 	GtkWidget *label = gtk_label_new_with_mnemonic(text);

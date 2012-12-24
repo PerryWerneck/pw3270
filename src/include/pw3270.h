@@ -51,7 +51,7 @@
  typedef struct _pw3270Class		pw3270Class;
 
 
- LIB3270_EXPORT GtkWidget	* pw3270_new(const gchar *host);
+ LIB3270_EXPORT GtkWidget	* pw3270_new(const gchar *host, const gchar *systype, unsigned short colors);
  LIB3270_EXPORT void	  	  pw3270_set_host(GtkWidget *widget, const gchar *uri);
  LIB3270_EXPORT gboolean 	  pw3270_get_toggle(GtkWidget *widget, LIB3270_TOGGLE ix);
  LIB3270_EXPORT	H3270		* pw3270_get_session(GtkWidget *widget);

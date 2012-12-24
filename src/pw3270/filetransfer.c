@@ -255,7 +255,7 @@ static void add_transfer_options(GObject *action, struct ftdialog *dlg)
 {
 	static const struct ftoption option[]	=
 	{	{	LIB3270_FT_OPTION_ASCII,		"text", 	N_( "_Text file" )						},
-		{	LIB3270_FT_OPTION_TSO,			"tso",		N_( "Host is T_SO" )					},
+//		{	LIB3270_FT_OPTION_TSO,			"tso",		N_( "Host is T_SO" )					},
 		{	LIB3270_FT_OPTION_CRLF,			"cr",		N_( "Add/Remove _CR at end of line" )	},
 		{	LIB3270_FT_OPTION_APPEND,		"append",	N_( "_Append" )							},
 		{   LIB3270_FT_OPTION_REMAP_ASCII,	"remap",	N_( "_Remap ASCII Characters" )			}

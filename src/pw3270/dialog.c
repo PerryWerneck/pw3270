@@ -51,20 +51,6 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
- void load_3270_options_from_config(GtkWidget *widget)
- {
- 	int f;
-	LIB3270_OPTION 				opt = 0;
-	const LIB3270_OPTION_ENTRY *options = lib3270_get_option_list();
-
-	for(f=0;f<LIB3270_OPTION_COUNT;f++)
-	{
-		if(get_boolean_from_config("host",options[f].key,FALSE))
-			opt |= options[f].value;
-	}
-	v3270_set_session_options(widget,opt);
- }
-
 
  static void charset_changed(GtkComboBox *widget,gchar **encoding)
  {

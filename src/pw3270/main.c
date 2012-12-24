@@ -42,17 +42,13 @@
 #include "v3270/accessible.h"
 #include <stdlib.h>
 
- struct option
- {
-	int colors;
- };
-
- #define ERROR_DOMAIN g_quark_from_static_string(PACKAGE_NAME)
+#define ERROR_DOMAIN g_quark_from_static_string(PACKAGE_NAME)
 
 /*--[ Statics ]--------------------------------------------------------------------------------------*/
 
- static struct option	  cmdline_opt	= { LIB3270_OPTION_DEFAULT };
  static GtkWidget		* toplevel		= NULL;
+ static unsigned int	  syscolors		= 16;
+ static const gchar		* systype		= NULL;
 
 #ifdef HAVE_GTKMAC
  GtkOSXApplication		* osxapp		= NULL;
@@ -169,15 +165,15 @@ static gboolean datadir(const gchar *option_name, const gchar *value, gpointer d
 
 static gboolean optcolors(const gchar *option_name, const gchar *value, gpointer data, GError **error)
 {
-	static const unsigned char	valid[] = { 2,8,16 };
+	static const unsigned short	valid[] = { 2,8,16 };
 	int 		 				f;
-	unsigned char				optval = (unsigned char) atoi(value);
+	unsigned short				optval = (unsigned short) atoi(value);
 
 	for(f=0;f<G_N_ELEMENTS(valid);f++)
 	{
 		if(optval == valid[f])
 		{
-			((struct option *) data)->colors = optval;
+			syscolors = optval;
 			return TRUE;
 		}
 	}
@@ -255,13 +251,14 @@ int main(int argc, char *argv[])
 			{ "session",		's', 0, G_OPTION_ARG_STRING,	&session_name,		N_( "Session name" ),						PACKAGE_NAME	},
 			{ "host",			'h', 0, G_OPTION_ARG_STRING,	&host,				N_( "Host to connect"),						NULL			},
 			{ "colors",			'c', 0, G_OPTION_ARG_CALLBACK,	optcolors,			N_( "Set reported colors (8/16)" ),			"16"			},
+			{ "systype",		't', 0, G_OPTION_ARG_STRING,	&system,			N_( "Host system type" ),					"S390"			},
 
 			{ NULL }
 		};
 
 		GOptionContext	* context		= g_option_context_new (_("- 3270 Emulator for Gtk"));
 		GError			* error			= NULL;
-		GOptionGroup 	* group			= g_option_group_new( PACKAGE_NAME, NULL, NULL, &cmdline_opt, NULL);
+		GOptionGroup 	* group			= g_option_group_new( PACKAGE_NAME, NULL, NULL, NULL, NULL);
 
 		g_option_context_set_main_group(context, group);
 
@@ -342,9 +339,8 @@ int main(int argc, char *argv[])
 			gtk_settings_set_string_property(settings,"gtk-menu-bar-accel","Menu","");
 		}
 
-		toplevel = pw3270_new(host);
+		toplevel = pw3270_new(host,systype,syscolors);
 		pw3270_set_session_name(toplevel,session_name);
-		pw3270_set_session_color_type(toplevel,cmdline_opt.colors);
 		// pw3270_set_session_options(toplevel,cmdline_opt.host);
 
 		toplevel_setup(GTK_WINDOW(toplevel));

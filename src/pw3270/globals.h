@@ -57,12 +57,11 @@
 
  #include "common/common.h"
 
- G_GNUC_INTERNAL GtkWidget	* create_main_window(const gchar *uri);
- G_GNUC_INTERNAL void		  setup_font_list(GtkWidget *widget, GtkWidget *obj);
- G_GNUC_INTERNAL void		  load_color_schemes(GtkWidget *widget, gchar *active);
- G_GNUC_INTERNAL GtkWidget	* color_scheme_new(const GdkColor *current);
-
- G_GNUC_INTERNAL void		  load_3270_options_from_config(GtkWidget *widget);
+ G_GNUC_INTERNAL GtkWidget		* create_main_window(const gchar *uri);
+ G_GNUC_INTERNAL void			  setup_font_list(GtkWidget *widget, GtkWidget *obj);
+ G_GNUC_INTERNAL void			  load_color_schemes(GtkWidget *widget, gchar *active);
+ G_GNUC_INTERNAL GtkWidget		* color_scheme_new(const GdkColor *current);
+ G_GNUC_INTERNAL LIB3270_OPTION	  pw3270_options_by_hosttype(const gchar *systype);
 
 
  // actions

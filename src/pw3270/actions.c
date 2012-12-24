@@ -67,27 +67,41 @@ static void lib3270_action(GtkAction *action, GtkWidget *widget)
 
 static void connect_action(GtkAction *action, GtkWidget *widget)
 {
-	gchar *host = (gchar *) g_object_get_data(G_OBJECT(action),"host");
+	const gchar 	* host		= (const gchar *) g_object_get_data(G_OBJECT(action),"host");
+	const gchar		* systype 	= (const gchar *) g_object_get_data(G_OBJECT(action),"type");
+	const gchar		* colortype	= (const gchar *) g_object_get_data(G_OBJECT(action),"colors");
+	unsigned short	  colors;
 
 	trace_action(action,widget);
 
+	if(!systype)
+		systype = get_string_from_config("host","systype","S390");
+
+	if(colortype)
+		colors = atoi(colortype);
+	else
+		colors = (unsigned short) get_integer_from_config("host","colortype",16);
+
+	trace("System type=%s System colors=%d",systype,(int) colors);
+
+	v3270_set_session_color_type(widget,colors);
+	v3270_set_session_options(widget,pw3270_options_by_hosttype(systype));
+
 	if(host)
 	{
-		v3270_set_session_options(widget,0);
-		v3270_set_session_color_type(widget,0);
 		v3270_connect(widget,host);
-		return;
 	}
-
-	host = get_string_from_config("host","uri","");
-	if(*host)
+	else
 	{
-		load_3270_options_from_config(widget);
-		v3270_connect(widget,host);
-		g_free(host);
-		return;
+		gchar *ptr = get_string_from_config("host","uri","");
+		if(*ptr)
+		{
+			v3270_connect(widget,ptr);
+			g_free(ptr);
+			return;
+		}
+		g_free(ptr);
 	}
-	g_free(host);
 
 	hostname_action(action,widget);
 }
