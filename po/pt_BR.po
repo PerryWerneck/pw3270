@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-19 16:56-0200\n"
+"POT-Creation-Date: 2012-12-26 07:54-0200\n"
 "PO-Revision-Date: 2012-12-18 10:32-0200\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
@@ -18,27 +18,27 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: actions.c:726 actions.c:738
+#: actions.c:741 actions.c:753
 #, c-format
 msgid "%s action needs a valid id attribute"
 msgstr "Ação %s exige um atributo ID válido"
 
-#: actions.c:574 actions.c:703 actions.c:715
+#: actions.c:589 actions.c:718 actions.c:730
 #, c-format
 msgid "%s action needs a valid toggle name"
 msgstr "Ação %s exige um nome de toggle válido"
 
-#: actions.c:750
+#: actions.c:765
 #, c-format
 msgid "%s action needs a valid value"
 msgstr "Ação %s precisa de um valor válido"
 
-#: actions.c:460
+#: actions.c:475
 #, c-format
 msgid "%s action needs src attribute"
 msgstr "Ação %s precisa do atributo src"
 
-#: main.c:80
+#: main.c:76
 #, c-format
 msgid "%s requires GTK version %d.%d.%d"
 msgstr "%s requer GTK versão %d.%d.%d"
@@ -78,14 +78,19 @@ msgstr "%s: Tabulação verticao não suportada"
 msgid "%s: unknown family %d"
 msgstr "%s: Familia %d é inválida"
 
-#: telnet.c:1093
+#: telnet.c:1146
 #, c-format
 msgid "%s:%d"
 msgstr "%s:%d"
 
-#: main.c:262
+#: main.c:259
 msgid "- 3270 Emulator for Gtk"
 msgstr "- Emulador 3270 para GTK"
+
+#: hostdialog.c:54
+#, fuzzy
+msgid "16 colors"
+msgstr "_8 cores"
 
 #: screen.c:656 screen.c:686 screen.c:700 screen.c:811
 msgid "3270 Error"
@@ -99,10 +104,15 @@ msgstr "Alerta 3270"
 msgid "3270 screen"
 msgstr "Tela 3270"
 
-#: dialog.c:643
+#: dialog.c:476
 #, c-format
 msgid "3270 terminal emulator for GTK %d.%d"
 msgstr "Emulador 3270 para GTK+ %d.%d"
+
+#: hostdialog.c:55
+#, fuzzy
+msgid "8 colors"
+msgstr "_8 cores"
 
 #: uiparser/menu.c:43 uiparser/menuitem.c:87 uiparser/separator.c:93
 #: uiparser/toolitem.c:42 uiparser/script.c:83
@@ -127,7 +137,7 @@ msgstr "<%s> precisa do atributo %s"
 msgid "<%s> should be on toplevel"
 msgstr "<%s> deve estar no primeiro nível"
 
-#: telnet.c:3184
+#: telnet.c:3237
 #, c-format
 msgid ""
 "<b>Connection state:</b> %s\n"
@@ -136,7 +146,7 @@ msgstr ""
 "<b>Estado da conexão:</b> %s\n"
 "<b>Mensagem de alerta:</b> %s"
 
-#: main.c:282
+#: main.c:279
 msgid ""
 "<b>Valid options:</b>\n"
 "\n"
@@ -172,7 +182,7 @@ msgstr "Adicionar/Remover _CR no final da linha"
 msgid "Alert sound"
 msgstr "Aviso sonoro"
 
-#: main.c:250 main.c:252
+#: main.c:246 main.c:248
 msgid "Application name"
 msgstr "Nome da aplicação"
 
@@ -180,7 +190,7 @@ msgstr "Nome da aplicação"
 msgid "Attn"
 msgstr "Attn"
 
-#: actions.c:435
+#: actions.c:450
 #, c-format
 msgid "Attribute \"%s\" is invalid or undefined"
 msgstr "Atributo \"%s\" é invalido ou indefinido"
@@ -226,7 +236,7 @@ msgstr "Azul"
 msgid "Bold"
 msgstr "Negrito"
 
-#: dialog.c:650
+#: dialog.c:483
 msgid "Brazilian Public Software Portal"
 msgstr "Portal do Software Público Brasileiro"
 
@@ -234,11 +244,11 @@ msgstr "Portal do Software Público Brasileiro"
 msgid "Break"
 msgstr "Break"
 
-#: telnet.c:2059
+#: telnet.c:2112
 msgid "Broken pipe"
 msgstr "Conexão interrompida"
 
-#: dialog.c:114
+#: dialog.c:103
 msgid "C_haracter Coding:"
 msgstr "C_odificação de caracteres:"
 
@@ -282,7 +292,7 @@ msgstr "Não foi possível obter o tamanho do arquivo"
 msgid "Can't load %s"
 msgstr "Não foi possível carregar %s"
 
-#: dialog.c:522
+#: dialog.c:355
 msgid "Can't load file"
 msgstr "Não foi possível carregar arquivo"
 
@@ -303,7 +313,7 @@ msgstr "Incapaz de processar arquivos de descrição de UI em %s"
 msgid "Can't parse unnamed element"
 msgstr "Incapaz de processar elemento sem nome"
 
-#: dialog.c:500
+#: dialog.c:333
 #, c-format
 msgid ""
 "Can't save copy to file\n"
@@ -312,11 +322,11 @@ msgstr ""
 "Não foi possível salvar cópia para o arquivo\n"
 "%s"
 
-#: dialog.c:210
+#: dialog.c:199
 msgid "Can't save file"
 msgstr "Não foi possível salvar arquivo"
 
-#: dialog.c:475
+#: dialog.c:308
 #, c-format
 msgid ""
 "Can't save screen to file\n"
@@ -325,7 +335,7 @@ msgstr ""
 "Não foi possível salvar a tela no arquivo\n"
 "%s"
 
-#: dialog.c:489
+#: dialog.c:322
 #, c-format
 msgid ""
 "Can't save selection to file\n"
@@ -333,10 +343,6 @@ msgid ""
 msgstr ""
 "Não foi possível salvar a seleção para o arquivo\n"
 "%s"
-
-#: telnet.c:831
-msgid "Can't set SSL socket file descriptor"
-msgstr "Não foi possível definir o descritor de socket SSL"
 
 #: v3270/iocallback.c:347
 msgid "Can't set lib3270 I/O handlers"
@@ -414,11 +420,7 @@ msgstr "Completo"
 msgid "Connect on startup"
 msgstr "Conectar ao iniciar"
 
-#: telnet.c:831 telnet.c:849
-msgid "Connection failed"
-msgstr "Conexão falhou"
-
-#: telnet.c:2063
+#: telnet.c:2116
 msgid "Connection reset by peer"
 msgstr "Conexão foi cancelada pelo servidor"
 
@@ -442,7 +444,7 @@ msgstr "Cursor mira"
 msgid "Cross hair cursor"
 msgstr "Cursor mira"
 
-#: dialog.c:131
+#: dialog.c:120
 #, c-format
 msgid "Current (%s)"
 msgstr "Atual (%s)"
@@ -495,7 +497,7 @@ msgstr "Padrão"
 msgid "Delete field"
 msgstr "Apagar campo"
 
-#: telnet.c:1734
+#: telnet.c:1787
 msgid "Device type rejected"
 msgstr "Tipo de dispositivo rejeitado"
 
@@ -503,7 +505,7 @@ msgstr "Tipo de dispositivo rejeitado"
 msgid "Disconnected from host"
 msgstr "Desconectado do servidor"
 
-#: telnet.c:1309
+#: telnet.c:1362
 msgid "EOR received when not in 3270 mode, ignored."
 msgstr "EOR recebido fora do modo 3270, ignorado."
 
@@ -570,17 +572,17 @@ msgstr "Erro \"%s\" gravando arquivo local (rc=%d)"
 msgid "Error %d resolving %s"
 msgstr "Erro %d resolvendo %s"
 
-#: telnet.c:3047 telnet.c:3058
+#: telnet.c:3100 telnet.c:3111
 #, c-format
 msgid "Error in fcntl(%s) when setting non blocking mode"
 msgstr "Erro em fcntl(%s) ao ativar o modo não blocante"
 
-#: telnet.c:3037
+#: telnet.c:3090
 #, c-format
 msgid "Error in ioctl(%s) when setting no blocking mode"
 msgstr "Erro em ioctl(%s) ao ativar o modo não blocante"
 
-#: dialog.c:520
+#: dialog.c:353
 #, c-format
 msgid "Error loading %s"
 msgstr "Erro lendo %s"
@@ -630,7 +632,7 @@ msgstr "Tela cheia"
 msgid "Function bar"
 msgstr "Barra de funções"
 
-#: main.c:84 main.c:315
+#: main.c:80 main.c:312
 msgid "GTK Version mismatch"
 msgstr "Divergência de versão GTK"
 
@@ -675,31 +677,37 @@ msgstr "HTTP Proxy: Resposta desconhecida"
 msgid "Help"
 msgstr "Ajuda"
 
-#: ft.c:520
+#: ft.c:524
 msgid "Host disconnected, transfer cancelled"
 msgstr "Servidor desconectou, transferência cancelada"
 
-#: telnet.c:1792
+#: telnet.c:1845
 msgid "Host illegally added function(s)"
 msgstr "Host illegally added function(s)"
 
-#: options.c:51
-msgid "Host is AS_400"
+#: options.c:44
+#, fuzzy
+msgid "Host is AS/400"
 msgstr "Servidor é AS_400"
 
-#: filetransfer.c:258
-msgid "Host is T_SO"
+#: options.c:51
+#, fuzzy
+msgid "Host is TSO"
 msgstr "Servidor é T_SO"
 
-#: telnet.c:1717
+#: telnet.c:1770
 msgid "Host rejected device type or request type"
 msgstr "Servidor rejeitou o tipo de dispositivo ou requisição"
 
-#: telnet.c:1730
+#: telnet.c:1783
 msgid "Host rejected resource(s)"
 msgstr "Servidor rejeitou recurso(s)"
 
-#: main.c:256
+#: main.c:254
+msgid "Host system type"
+msgstr "Host system type"
+
+#: main.c:252
 msgid "Host to connect"
 msgstr "Servidor a conectar"
 
@@ -708,13 +716,13 @@ msgstr "Servidor a conectar"
 msgid "Hostname syntax error"
 msgstr "Formato inválido no nome do servidor"
 
-#: options.c:45
-msgid ""
-"If active, pw3270 will respond to a Query(Color) with a list of 8 supported "
-"colors."
-msgstr ""
-"Quanto ativo o pw3270 response à uma consulta \"color\" com uma lista de "
-"apenas 8 cores."
+#: hostdialog.c:43
+msgid "IBM AS/400"
+msgstr "IBM AS/400"
+
+#: hostdialog.c:42
+msgid "IBM S/390"
+msgstr "IBM S/390"
 
 #: ft_cut.c:508
 msgid "Illegal frame length"
@@ -791,7 +799,7 @@ msgstr "Cores diversas"
 msgid "Missing ']'"
 msgstr "Faltando ']'"
 
-#: window.c:300
+#: window.c:325
 #, c-format
 msgid "Model %d (%s)"
 msgstr "Modelo %d (%s)"
@@ -800,7 +808,12 @@ msgstr "Modelo %d (%s)"
 msgid "Monocase"
 msgstr "Só Maiúsculas"
 
-#: actions.c:591
+#: hostdialog.c:56
+#, fuzzy
+msgid "Monochrome"
+msgstr "Só Maiúsculas"
+
+#: actions.c:606
 msgid "Move action needs target & direction attributes"
 msgstr "Ação \"move\" precisa dos atributos \"target\" e \"direction\""
 
@@ -844,7 +857,7 @@ msgstr "Normal/Desprotegido"
 msgid "Not available"
 msgstr "Não disponível"
 
-#: ft.c:527
+#: ft.c:531
 msgid "Not in 3270 mode, transfer cancelled"
 msgstr "Não está no modo 3270, transferência cancelada"
 
@@ -880,6 +893,14 @@ msgstr "Opções"
 #: colors.c:386
 msgid "Orange"
 msgstr "Laranja"
+
+#: hostdialog.c:44
+msgid "Other (TSO)"
+msgstr "Other (TSO)"
+
+#: hostdialog.c:45
+msgid "Other (VM/CMS)"
+msgstr "Other (VM/CMS)"
 
 #: ui/10keypad.xml:138
 msgid "PA1"
@@ -989,7 +1010,7 @@ msgstr "PF8"
 msgid "PF9"
 msgstr "PF9"
 
-#: main.c:280
+#: main.c:277
 msgid "Parse error"
 msgstr "Erro de interpretação"
 
@@ -1014,7 +1035,7 @@ msgstr "Colar próximo"
 msgid "Paste text file"
 msgstr "Colar arquivo texto"
 
-#: dialog.c:557
+#: dialog.c:390
 msgid "Paste text file contents"
 msgstr "Colar conteúdo de arquivo texto"
 
@@ -1022,7 +1043,7 @@ msgstr "Colar conteúdo de arquivo texto"
 msgid "Paste with left margin"
 msgstr "Colar com margem esquerda"
 
-#: main.c:253
+#: main.c:249
 msgid "Path to application data files"
 msgstr "Path to application data files"
 
@@ -1310,19 +1331,19 @@ msgstr "SOCKS5 Proxy: xmit version 5 nmethods 1 (no auth)\n"
 msgid "SOCKS5 proxy: %s/%u: %s"
 msgstr "SOCKS5 proxy: %s/%u: %s"
 
-#: telnet.c:3182
+#: telnet.c:3235
 msgid "SSL Connect error"
 msgstr "Erro na conexão SSL"
 
-#: telnet.c:1076
+#: telnet.c:1129
 msgid "SSL Error"
 msgstr "Erro SSL"
 
-#: telnet.c:1076
+#: telnet.c:1129
 msgid "SSL Read error"
 msgstr "Erro de leitura SSL"
 
-#: telnet.c:3267
+#: telnet.c:838
 msgid "SSL connect failed!"
 msgstr "Conexão SSL falhou"
 
@@ -1330,19 +1351,15 @@ msgstr "Conexão SSL falhou"
 msgid "SSL error"
 msgstr "Erro SSL"
 
-#: telnet.c:3246
+#: telnet.c:817
 msgid "SSL init failed!"
 msgstr "Inicialização SSL falhou"
 
-#: telnet.c:849
-msgid "SSL negotiation failed"
-msgstr "Negociação SSL falhou"
-
-#: telnet.c:3255
+#: telnet.c:826
 msgid "SSL_set_fd failed!"
 msgstr "SSL_set_fd falhou!"
 
-#: telnet.c:2049
+#: telnet.c:2102
 #, c-format
 msgid ""
 "SSL_write:\n"
@@ -1355,7 +1372,7 @@ msgstr ""
 msgid "Save copy"
 msgstr "Salvar cópia"
 
-#: dialog.c:499
+#: dialog.c:332
 msgid "Save copy to file"
 msgstr "Salvar cópia para arquivo"
 
@@ -1363,7 +1380,7 @@ msgstr "Salvar cópia para arquivo"
 msgid "Save screen"
 msgstr "Salvar tela"
 
-#: dialog.c:474
+#: dialog.c:307
 msgid "Save screen to file"
 msgstr "Salvar tela para arquivo"
 
@@ -1371,7 +1388,7 @@ msgstr "Salvar tela para arquivo"
 msgid "Save selected"
 msgstr "Salvar seleção"
 
-#: dialog.c:488
+#: dialog.c:321
 msgid "Save selection to file"
 msgstr "Salvar seleção para arquivo"
 
@@ -1415,7 +1432,7 @@ msgstr "Selecione arquivo a enviar"
 msgid "Select font"
 msgstr "Selecione fonte"
 
-#: dialog.c:320
+#: hostdialog.c:132
 msgid "Select hostname"
 msgstr "Selecione host"
 
@@ -1439,7 +1456,7 @@ msgstr "Enviar arquivo para o servidor"
 msgid "Send/Receive"
 msgstr "Enviar/Receber"
 
-#: main.c:255
+#: main.c:251
 msgid "Session name"
 msgstr "Nome da sessão"
 
@@ -1447,7 +1464,7 @@ msgstr "Nome da sessão"
 msgid "Set hostname"
 msgstr "Selecione servidor"
 
-#: main.c:257
+#: main.c:253
 msgid "Set reported colors (8/16)"
 msgstr "Define número de cores informadas (8/16)"
 
@@ -1467,11 +1484,11 @@ msgstr "Mostrar padrão de teste"
 msgid "Smart paste"
 msgstr "Colar inteligente"
 
-#: telnet.c:1097
+#: telnet.c:1150
 msgid "Socket read error"
 msgstr "Erro ao ler dados da rede"
 
-#: telnet.c:2070
+#: telnet.c:2123
 msgid "Socket write error"
 msgstr "Erro ao enviar dados para a rede"
 
@@ -1487,11 +1504,15 @@ msgstr "Espaço no nome da LU"
 msgid "Spee_d"
 msgstr "Veloci_dade"
 
+#: hostdialog.c:198
+msgid "System _type:"
+msgstr "System _type:"
+
 #: proxy.c:522
 msgid "TELNET Proxy: send error"
 msgstr "TELNET Proxy: send error"
 
-#: telnet.c:3233
+#: telnet.c:3284
 msgid "TLS negotiation failure"
 msgstr "Negociação TLS falhou"
 
@@ -1507,7 +1528,7 @@ msgstr "Cores do terminal"
 msgid "Text before '['"
 msgstr "Texto antes de '['"
 
-#: dialog.c:234
+#: dialog.c:223
 msgid "The file already exists. Replace it?"
 msgstr "O arquivo já existe, substituir?"
 
@@ -1515,7 +1536,7 @@ msgstr "O arquivo já existe, substituir?"
 msgid "The remote file name is invalid"
 msgstr "O nome do arquivo remoto não é válido"
 
-#: dialog.c:597
+#: dialog.c:430
 msgid ""
 "This program is free software; you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -1544,7 +1565,7 @@ msgstr ""
 "programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple "
 "Place, Suite 330, Boston, MA, 02111-1307, USA"
 
-#: main.c:311
+#: main.c:308
 #, c-format
 msgid "This program requires GTK version %d.%d.%d"
 msgstr "Este programa precisa do GTK versão %d.%d.%d"
@@ -1591,7 +1612,7 @@ msgstr "Erro de transmissão"
 msgid "Turquoise"
 msgstr "Turquesa"
 
-#: dialog.c:107
+#: dialog.c:44
 msgid "UTF-8"
 msgstr "UTF-8"
 
@@ -1607,7 +1628,7 @@ msgstr "Não é possível conectar em servidores seguros"
 msgid "Unable to paste text"
 msgstr "Incapaz de colar texto"
 
-#: ft.c:387
+#: ft.c:391
 msgid "Unable to send file-transfer request"
 msgstr "Não foi possível enviar a requisição de transferência de arquivo"
 
@@ -1634,17 +1655,17 @@ msgstr "Erro inesperado"
 msgid "Unexpected group \"%s\""
 msgstr "Grupo inesperado \"%s\""
 
-#: actions.c:449 actions.c:469
+#: actions.c:464 actions.c:484
 #, c-format
 msgid "Unexpected or invalid %s attribute: \"%s\""
 msgstr "Atributo %s inesperado ou inválido: \"%s\""
 
-#: actions.c:423
+#: actions.c:438
 #, c-format
 msgid "Unexpected or invalid attribute value \"%s\""
 msgstr "Valor de attributo inesperado ou inválido: \"%s\""
 
-#: main.c:182
+#: main.c:181
 #, c-format
 msgid "Unexpected or invalid color value \"%s\""
 msgstr "Valor de cor inválido ou inesperado: \"%s\""
@@ -1656,7 +1677,7 @@ msgstr ""
 "Assinatura inválida no objeto H3270, possível divergência de versão na "
 "lib3270"
 
-#: actions.c:349
+#: actions.c:364
 #, c-format
 msgid "Unexpected target \"%s\""
 msgstr "Alvo inesperado \"%s\""
@@ -1733,7 +1754,7 @@ msgstr "Usar teclas +/- para navegar por campos"
 msgid "Variable"
 msgstr "Variável"
 
-#: dialog.c:637
+#: dialog.c:470
 #, c-format
 msgid "Version %s - Revision %s"
 msgstr "Versão %s - Revisão %s"
@@ -1750,15 +1771,15 @@ msgstr "WSAEventSelect falhou"
 msgid "WSAStartup failed"
 msgstr "WSAStartup falhou"
 
-#: ft.c:396
+#: ft.c:400
 msgid "Waiting for GET response"
 msgstr "Aguardando resposta do pedido de download"
 
-#: ft.c:398
+#: ft.c:402
 msgid "Waiting for PUT response"
 msgstr "Aguardando resposta do pedido de upload"
 
-#: dialog.c:108
+#: dialog.c:45
 msgid "Western Europe (ISO 8859-1)"
 msgstr "Europa ocidental (ISO 8859-1)"
 
@@ -1770,7 +1791,7 @@ msgstr "Branco"
 msgid "Window"
 msgstr "Janela"
 
-#: dialog.c:109
+#: dialog.c:46
 msgid "Windows Western languages (CP1252)"
 msgstr "Windows ocidental (CP1252)"
 
@@ -1822,10 +1843,6 @@ msgstr "X Aguarde"
 msgid "Yellow"
 msgstr "Amarelo"
 
-#: options.c:44
-msgid "_8 colors"
-msgstr "_8 cores"
-
 #: filetransfer.c:260
 msgid "_Append"
 msgstr "_Acrescentar"
@@ -1833,6 +1850,11 @@ msgstr "_Acrescentar"
 #: filetransfer.c:220 filetransfer.c:228
 msgid "_Browse"
 msgstr "_Procurar"
+
+#: hostdialog.c:232
+#, fuzzy
+msgid "_Color table:"
+msgstr "Tema de cores:"
 
 #: ui/00default.xml:324
 msgid "_Connect"
@@ -1862,11 +1884,11 @@ msgstr "_De"
 msgid "_Host file name:"
 msgstr "Arquivo no _Servidor:"
 
-#: dialog.c:352
+#: hostdialog.c:169
 msgid "_Host options"
 msgstr "Opções do _Servidor"
 
-#: dialog.c:334
+#: hostdialog.c:150
 msgid "_Hostname:"
 msgstr "Nome do _Host:"
 
@@ -1882,7 +1904,7 @@ msgstr "_Rede"
 msgid "_Options"
 msgstr "_Opções"
 
-#: dialog.c:339
+#: hostdialog.c:155
 msgid "_Port:"
 msgstr "_Porta:"
 
@@ -1890,7 +1912,7 @@ msgstr "_Porta:"
 msgid "_Remap ASCII Characters"
 msgstr "_Remapear caracteres ASCII"
 
-#: dialog.c:318
+#: hostdialog.c:130
 msgid "_Secure connection"
 msgstr "Conexão _Segura"
 
@@ -1944,13 +1966,29 @@ msgstr "setsockopt(%s)"
 msgid "socket"
 msgstr "socket"
 
-#: dialog.c:653
+#: dialog.c:486
 msgid "translator-credits"
 msgstr "translator-credits"
 
-#: telnet.c:1072
+#: telnet.c:1125
 msgid "unknown error"
 msgstr "Erro desconhecido"
+
+#~ msgid "Can't set SSL socket file descriptor"
+#~ msgstr "Não foi possível definir o descritor de socket SSL"
+
+#~ msgid "Connection failed"
+#~ msgstr "Conexão falhou"
+
+#~ msgid ""
+#~ "If active, pw3270 will respond to a Query(Color) with a list of 8 "
+#~ "supported colors."
+#~ msgstr ""
+#~ "Quanto ativo o pw3270 response à uma consulta \"color\" com uma lista de "
+#~ "apenas 8 cores."
+
+#~ msgid "SSL negotiation failed"
+#~ msgstr "Negociação SSL falhou"
 
 #~ msgid "Copiar tudo"
 #~ msgstr "Copiar tudo"

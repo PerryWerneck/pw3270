@@ -295,7 +295,11 @@ void parser_build(struct parser *p, GtkWidget *widget)
 
 	    if(p->topmenu)
 	    {
+#if GTK_CHECK_VERSION(2,18,0)
 		    gtk_widget_set_visible(p->topmenu,FALSE);
+#else
+		    gtk_widget_hide(p->topmenu);
+#endif // GTK(2,18,0)
 		    gtk_mac_menu_set_menu_bar(GTK_MENU_SHELL(p->topmenu));
 	    }
 

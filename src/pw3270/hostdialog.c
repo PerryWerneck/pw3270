@@ -292,8 +292,11 @@
 									NULL
 								);
 
+#if GTK_CHECK_VERSION(2,18,0)
 			gtk_widget_set_visible(dialog,FALSE);
-
+#else
+			gtk_widget_hide(dialog);
+#endif
 			set_string_to_config("host","systype",host_type[iHostType].name);
 			set_integer_to_config("host","colortype",colortable[iColorTable].colors);
 
@@ -301,9 +304,17 @@
 			v3270_set_session_color_type(widget,colortable[iColorTable].colors);
 
 			if(!lib3270_connect(v3270_get_session(widget),hostname,1))
+			{
 				again = FALSE;
+			}
 			else
+			{
+#if GTK_CHECK_VERSION(2,18,0)
 				gtk_widget_set_visible(dialog,TRUE);
+#else
+				gtk_widget_show(dialog);
+#endif
+			}
 
 			g_free(hostname);
 			break;
