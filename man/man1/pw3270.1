@@ -9,6 +9,15 @@ pw3270 \- a modern tn3270 emulator
 .I application-name
 .B ] [-h 
 .I hostname:port
+.B ] [-s 
+.I session name
+.B ]
+.B ] [-c 
+.I session colors
+.B ] [-t 
+.I system type
+.B ] [-a 
+.I application name
 .B ]
 .SH DESCRIPTION
 .B pw3270 
@@ -16,7 +25,7 @@ is a modern, GTK-based, completely free tn3270 emulator.
 
 Based on the original x3270 code by Paul Mattes, it was created originally for Banco do Brasil. It's now an official Brazilian Government Public Software project, and is used worldwide. 
 
-pw3270 is fully themable, and each element on the screen can be individually customized through the configuration files. It also supports all kinds of TrueType and bitmap fonts that your system already supports, although it's recommended that you select a proportional (monospaced) font.
+pw3270 is fully themable, and each element on the screen can be individually customized through the configuration files. It also supports all kinds of monospaced TrueType and bitmap fonts your system already supports.
 
 pw3270 supports many advanced clipboard features, allowing you to copy and paste data on forms, respecting the individual fields and positions on screen.
 
@@ -38,6 +47,12 @@ Connects to the host and port specified. Use the form
 for a secure (SSL) connection.
 .IP "-a application-name"
 Specifies an alternate window title. This is useful if you want to name each host window differently (with the service name or host address, for example). The default is to always name the window "pw3270". 
+.IP "-s session-name"
+Specifies an anternate session-name. This affects some plugins who does IPC communications
+.IP "-c Change the reported colors"
+Change the response to a Query(Color); when 8 pw3270 will respond with a list of 8 supported colors; when 16 the response will be a list of the 16 standard colors.
+.IP "-t Change systemtype"
+Change the host type parameter; this afects the file transfer (TSO or VM) and, for AS-400, the PFkey action.
 .SH FILES
 .I /etc/pw3270.conf
 .RS

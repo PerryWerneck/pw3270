@@ -195,7 +195,7 @@
 
 			g_free(str);
 
-			set_row(row++,widget,container,_("System _type:"));
+			set_row(row++,widget,container,_( "System _type:" ));
 
 			g_signal_connect(G_OBJECT(widget),"changed",G_CALLBACK(systype_changed),&iHostType);
 

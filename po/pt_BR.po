@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-26 07:54-0200\n"
-"PO-Revision-Date: 2012-12-18 10:32-0200\n"
+"POT-Creation-Date: 2012-12-26 10:34-0200\n"
+"PO-Revision-Date: 2012-12-26 10:36-0200\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
 "Language: pt_BR\n"
@@ -88,9 +88,8 @@ msgid "- 3270 Emulator for Gtk"
 msgstr "- Emulador 3270 para GTK"
 
 #: hostdialog.c:54
-#, fuzzy
 msgid "16 colors"
-msgstr "_8 cores"
+msgstr "16 cores"
 
 #: screen.c:656 screen.c:686 screen.c:700 screen.c:811
 msgid "3270 Error"
@@ -110,9 +109,8 @@ msgid "3270 terminal emulator for GTK %d.%d"
 msgstr "Emulador 3270 para GTK+ %d.%d"
 
 #: hostdialog.c:55
-#, fuzzy
 msgid "8 colors"
-msgstr "_8 cores"
+msgstr "8 cores"
 
 #: uiparser/menu.c:43 uiparser/menuitem.c:87 uiparser/separator.c:93
 #: uiparser/toolitem.c:42 uiparser/script.c:83
@@ -300,11 +298,11 @@ msgstr "Não foi possível carregar arquivo"
 msgid "Can't open local file"
 msgstr "Não foi possível abrir arquivo local"
 
-#: uiparser/parser.c:339 uiparser/parsefile.c:332 uiparser/parsefile.c:360
+#: uiparser/parser.c:343 uiparser/parsefile.c:332 uiparser/parsefile.c:360
 msgid "Can't parse UI"
 msgstr "Não foi possível processar a UI"
 
-#: uiparser/parser.c:337
+#: uiparser/parser.c:341
 #, c-format
 msgid "Can't parse UI description files in %s"
 msgstr "Incapaz de processar arquivos de descrição de UI em %s"
@@ -686,14 +684,12 @@ msgid "Host illegally added function(s)"
 msgstr "Host illegally added function(s)"
 
 #: options.c:44
-#, fuzzy
 msgid "Host is AS/400"
 msgstr "Servidor é AS_400"
 
 #: options.c:51
-#, fuzzy
 msgid "Host is TSO"
-msgstr "Servidor é T_SO"
+msgstr "Servidor é TSO"
 
 #: telnet.c:1770
 msgid "Host rejected device type or request type"
@@ -705,7 +701,7 @@ msgstr "Servidor rejeitou recurso(s)"
 
 #: main.c:254
 msgid "Host system type"
-msgstr "Host system type"
+msgstr "Tipo do sistema no servidor"
 
 #: main.c:252
 msgid "Host to connect"
@@ -809,9 +805,8 @@ msgid "Monocase"
 msgstr "Só Maiúsculas"
 
 #: hostdialog.c:56
-#, fuzzy
 msgid "Monochrome"
-msgstr "Só Maiúsculas"
+msgstr "Monocromático"
 
 #: actions.c:606
 msgid "Move action needs target & direction attributes"
@@ -1506,7 +1501,7 @@ msgstr "Veloci_dade"
 
 #: hostdialog.c:198
 msgid "System _type:"
-msgstr "System _type:"
+msgstr "Tipo de servidor:"
 
 #: proxy.c:522
 msgid "TELNET Proxy: send error"
@@ -1852,9 +1847,8 @@ msgid "_Browse"
 msgstr "_Procurar"
 
 #: hostdialog.c:232
-#, fuzzy
 msgid "_Color table:"
-msgstr "Tema de cores:"
+msgstr "Tabela de cores:"
 
 #: ui/00default.xml:324
 msgid "_Connect"
