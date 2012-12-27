@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-26 10:34-0200\n"
+"POT-Creation-Date: 2012-12-26 11:20-0200\n"
 "PO-Revision-Date: 2012-12-26 10:36-0200\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
@@ -268,7 +268,7 @@ msgstr "Não posso aceitar elemento %s sem nome"
 msgid "Can't connect to %s:%d"
 msgstr "Não foi possível conectar a %s:%d"
 
-#: host.c:316
+#: host.c:154
 msgid "Can't connect to host"
 msgstr "Não foi possível conectar ao servidor"
 
@@ -281,7 +281,7 @@ msgstr "Não foi possível converter a linha %d de %s para %s"
 msgid "Can't cut rectangular regions"
 msgstr "Recortar não permitido em seleção retangular"
 
-#: ft.c:307
+#: ft.c:311
 msgid "Can't get file size"
 msgstr "Não foi possível obter o tamanho do arquivo"
 
@@ -294,7 +294,7 @@ msgstr "Não foi possível carregar %s"
 msgid "Can't load file"
 msgstr "Não foi possível carregar arquivo"
 
-#: ft.c:226
+#: ft.c:230
 msgid "Can't open local file"
 msgstr "Não foi possível abrir arquivo local"
 
@@ -511,15 +511,15 @@ msgstr "EOR recebido fora do modo 3270, ignorado."
 msgid "ET_A"
 msgstr "ET_A"
 
-#: host.c:340
+#: host.c:178
 msgid "Empty LU name"
 msgstr "Nome da LU está em branco"
 
-#: host.c:267 host.c:394
+#: host.c:105 host.c:232
 msgid "Empty hostname"
 msgstr "Nome do servidor em branco"
 
-#: host.c:447
+#: host.c:285
 msgid "Empty port name"
 msgstr "Porta em branco"
 
@@ -675,7 +675,7 @@ msgstr "HTTP Proxy: Resposta desconhecida"
 msgid "Help"
 msgstr "Ajuda"
 
-#: ft.c:524
+#: ft.c:528
 msgid "Host disconnected, transfer cancelled"
 msgstr "Servidor desconectou, transferência cancelada"
 
@@ -707,8 +707,8 @@ msgstr "Tipo do sistema no servidor"
 msgid "Host to connect"
 msgstr "Servidor a conectar"
 
-#: host.c:315 host.c:340 host.c:352 host.c:378 host.c:390 host.c:394
-#: host.c:447 host.c:462
+#: host.c:153 host.c:178 host.c:190 host.c:216 host.c:228 host.c:232
+#: host.c:285 host.c:300
 msgid "Hostname syntax error"
 msgstr "Formato inválido no nome do servidor"
 
@@ -740,7 +740,7 @@ msgstr "Intensificado/Protegido"
 msgid "Intensified/Unprotected"
 msgstr "Intensificado/Desprotegido"
 
-#: host.c:496
+#: host.c:334
 msgid "Invalid (empty) hostname"
 msgstr "Nome do host é invalido (vazio)"
 
@@ -791,7 +791,7 @@ msgstr "Barra lateral"
 msgid "Misc colors"
 msgstr "Cores diversas"
 
-#: host.c:390
+#: host.c:228
 msgid "Missing ']'"
 msgstr "Faltando ']'"
 
@@ -812,7 +812,7 @@ msgstr "Monocromático"
 msgid "Move action needs target & direction attributes"
 msgstr "Ação \"move\" precisa dos atributos \"target\" e \"direction\""
 
-#: host.c:462
+#: host.c:300
 msgid "Multiple port names"
 msgstr "Múltiplos nomes de porta"
 
@@ -852,7 +852,7 @@ msgstr "Normal/Desprotegido"
 msgid "Not available"
 msgstr "Não disponível"
 
-#: ft.c:531
+#: ft.c:535
 msgid "Not in 3270 mode, transfer cancelled"
 msgstr "Não está no modo 3270, transferência cancelada"
 
@@ -876,7 +876,7 @@ msgstr "Estado inválido na OIA"
 msgid "OIA status ok"
 msgstr "Estado normal na OIA"
 
-#: host.c:317
+#: host.c:155
 #, c-format
 msgid "Option '%c:' is not supported"
 msgstr "Opção não suportada: '%c:'"
@@ -1342,7 +1342,7 @@ msgstr "Erro de leitura SSL"
 msgid "SSL connect failed!"
 msgstr "Conexão SSL falhou"
 
-#: host.c:302
+#: host.c:140
 msgid "SSL error"
 msgstr "Erro SSL"
 
@@ -1491,7 +1491,7 @@ msgstr "Erro ao enviar dados para a rede"
 msgid "Space allocation units"
 msgstr "Space allocation units"
 
-#: host.c:352
+#: host.c:190
 msgid "Space in LU name"
 msgstr "Espaço no nome da LU"
 
@@ -1519,7 +1519,7 @@ msgstr "T_otal"
 msgid "Terminal colors"
 msgstr "Cores do terminal"
 
-#: host.c:378
+#: host.c:216
 msgid "Text before '['"
 msgstr "Texto antes de '['"
 
@@ -1565,7 +1565,7 @@ msgstr ""
 msgid "This program requires GTK version %d.%d.%d"
 msgstr "Este programa precisa do GTK versão %d.%d.%d"
 
-#: host.c:304
+#: host.c:142
 #, c-format
 msgid ""
 "This version of %s was built without support for secure sockets layer (SSL)."
@@ -1615,7 +1615,7 @@ msgstr "UTF-8"
 msgid "Uknown DFT Open type from host"
 msgstr "Servidor enviou código de abertura DFT desconhecido"
 
-#: host.c:303
+#: host.c:141
 msgid "Unable to connect to secure hosts"
 msgstr "Não é possível conectar em servidores seguros"
 
@@ -1623,7 +1623,7 @@ msgstr "Não é possível conectar em servidores seguros"
 msgid "Unable to paste text"
 msgstr "Incapaz de colar texto"
 
-#: ft.c:391
+#: ft.c:395
 msgid "Unable to send file-transfer request"
 msgstr "Não foi possível enviar a requisição de transferência de arquivo"
 
@@ -1766,11 +1766,11 @@ msgstr "WSAEventSelect falhou"
 msgid "WSAStartup failed"
 msgstr "WSAStartup falhou"
 
-#: ft.c:400
+#: ft.c:404
 msgid "Waiting for GET response"
 msgstr "Aguardando resposta do pedido de download"
 
-#: ft.c:402
+#: ft.c:406
 msgid "Waiting for PUT response"
 msgstr "Aguardando resposta do pedido de upload"
 

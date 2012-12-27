@@ -52,7 +52,7 @@ BINDIR=.bin
 EXEEXT=@EXEEXT@
 DBGLIB=-L../../$(BINDIR)/Debug@DLLDIR@ -l3270
 RLSLIB=-L../../$(BINDIR)/Release@DLLDIR@ -l3270
-TMPDIR=.tmp
+TMPDIR ?= .tmp
 GLOBAL_DEPS=$(PWD)/include/*.h $(PWD)/include/lib3270/*.h
 LANG_FILES=$(wildcard po/*.po)
 
@@ -116,6 +116,7 @@ po/%.po: $(PACKAGE_NAME).po
 	@cp $@ $(TMPDIR)/$@ 2> $(TMPDIR)/cp.err > $(TMPDIR)/cp.out || true
 	@touch $(TMPDIR)/$@
 	@$(MSGMERGE) $(TMPDIR)/$@ $(PACKAGE_NAME).po --output-file=$@
+	@rm -fr $(TMPDIR)/po
 
 $(BINDIR)/Release/$(localedir)/%/LC_MESSAGES/$(PACKAGE_NAME).mo: po/%.po
 	@echo "  FMT  `basename $@`"

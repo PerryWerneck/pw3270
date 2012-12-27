@@ -219,7 +219,11 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 	}
 
 	// Open local file
+#ifdef _WIN32
+	ft_local_file = fopen(local,(flags & LIB3270_FT_OPTION_RECEIVE) ? ((flags & LIB3270_FT_OPTION_APPEND) ? "ab" : "wb") : "rb");
+#else
 	ft_local_file = fopen(local,(flags & LIB3270_FT_OPTION_RECEIVE) ? ((flags & LIB3270_FT_OPTION_APPEND) ? "a" : "w") : "r");
+#endif // _WIN32
 
 	if(!ft_local_file)
 	{
