@@ -854,7 +854,11 @@ static void ssl_negotiate(H3270 *hSession)
 
 		trace_dsn(hSession,"TLS/SSL cipher description: %s",SSL_CIPHER_description(cipher, buffer, 4095));
 		SSL_CIPHER_get_bits(cipher, &alg_bits);
-		trace_dsn(hSession,"%s version %s with %d bits\n",SSL_CIPHER_get_name(cipher),SSL_CIPHER_get_version(cipher),alg_bits);
+		trace_dsn(hSession,"%s version %s with %d bits verify=%ld\n",
+						SSL_CIPHER_get_name(cipher),
+						SSL_CIPHER_get_version(cipher),
+						alg_bits,
+						SSL_get_verify_result(hSession->ssl_con));
 	}
 
 	/* Tell the world that we are (still) connected, now in secure mode. */
