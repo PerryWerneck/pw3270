@@ -844,7 +844,18 @@ static void ssl_negotiate(H3270 *hSession)
 	non_blocking(hSession,True);
 
 	/* Success. */
-	trace_dsn(hSession,"TLS/SSL negotiated connection complete. Connection is now secure.\n");
+	if(lib3270_get_toggle(hSession,LIB3270_TOGGLE_DS_TRACE))
+	{
+		char				  buffer[4096];
+		int 				  alg_bits		= 0;
+		const SSL_CIPHER	* cipher		= SSL_get_current_cipher(hSession->ssl_con);
+
+		trace_dsn(hSession,"TLS/SSL negotiated connection complete. Connection is now secure.\n");
+
+		trace_dsn(hSession,"TLS/SSL cipher description: %s",SSL_CIPHER_description(cipher, buffer, 4095));
+		SSL_CIPHER_get_bits(cipher, &alg_bits);
+		trace_dsn(hSession,"%s version %s with %d bits\n",SSL_CIPHER_get_name(cipher),SSL_CIPHER_get_version(cipher),alg_bits);
+	}
 
 	/* Tell the world that we are (still) connected, now in secure mode. */
 	lib3270_set_connected(hSession);
