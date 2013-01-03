@@ -1167,6 +1167,7 @@ void v3270_set_colors(GtkWidget *widget, const gchar *colors)
 					"#00FF00,"			// V3270_COLOR_OIA
 					"#7890F0,"			// V3270_COLOR_OIA_SEPARATOR
 					"#FFFFFF,"			// V3270_COLOR_OIA_STATUS_OK
+					"#FFFF00,"			// V3270_COLOR_OIA_STATUS_WARNING
 					"#FF0000";			// V3270_COLOR_OIA_STATUS_INVALID
 
 	}
@@ -1228,8 +1229,15 @@ void v3270_set_color_table(GdkColor *table, const gchar *colors)
 
  	clr = g_strsplit(colors,",",V3270_COLOR_COUNT+1);
  	cnt = g_strv_length(clr);
+
  	switch(cnt)
  	{
+ 	case 28:				// Version 4 string
+		for(f=0;f < 28;f++)
+			gdk_color_parse(clr[f],table+f);
+		table[V3270_COLOR_OIA_STATUS_INVALID] = table[V3270_COLOR_OIA_STATUS_WARNING];
+		break;
+
 	case V3270_COLOR_COUNT:	// Complete string
 		for(f=0;f < V3270_COLOR_COUNT;f++)
 			gdk_color_parse(clr[f],table+f);

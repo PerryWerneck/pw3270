@@ -861,6 +861,9 @@ static void ssl_negotiate(H3270 *hSession)
 						SSL_get_verify_result(hSession->ssl_con));
 	}
 
+	if(!SSL_get_verify_result(hSession->ssl_con))
+		set_ssl_state(hSession,LIB3270_SSL_SECURE);
+
 	/* Tell the world that we are (still) connected, now in secure mode. */
 	lib3270_set_connected(hSession);
 }
@@ -3277,7 +3280,7 @@ static void ssl_info_callback(INFO_CONST SSL *s, int where, int ret)
 	{
 		trace_dsn(hSession,"%s: SSL_CB_HANDSHAKE_DONE state=%04x\n",__FUNCTION__,SSL_state(s));
 		if(SSL_state(s) == 0x03)
-			set_ssl_state(hSession,LIB3270_SSL_SECURE);
+			set_ssl_state(hSession,LIB3270_SSL_NEGOTIATED);
 		else
 			set_ssl_state(hSession,LIB3270_SSL_UNSECURE);
 	}

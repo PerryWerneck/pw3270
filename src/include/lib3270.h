@@ -267,7 +267,8 @@
 	typedef enum lib3270_ssl_state
 	{
 		LIB3270_SSL_UNSECURE,			/**< No secure connection */
-		LIB3270_SSL_SECURE,				/**< Connection secure */
+		LIB3270_SSL_SECURE,				/**< Connection secure with CA check */
+		LIB3270_SSL_NEGOTIATED,			/**< Connection secure, no CA or self-signed */
 		LIB3270_SSL_NEGOTIATING,		/**< Negotiating SSL */
 		LIB3270_SSL_UNDEFINED			/**< Undefined */
 	} LIB3270_SSL_STATE;

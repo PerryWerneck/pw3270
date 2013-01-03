@@ -126,14 +126,31 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
 	clr[V3270_COLOR_OIA_SEPARATOR]		= clr[V3270_COLOR_GREEN];
 	clr[V3270_COLOR_OIA_STATUS_OK]		= clr[V3270_COLOR_GREEN];
 	clr[V3270_COLOR_OIA_STATUS_INVALID]	= clr[V3270_COLOR_RED];
+	clr[V3270_COLOR_OIA_STATUS_WARNING]	= clr[V3270_COLOR_YELLOW];
 
 	val = g_key_file_get_string(conf,group,"OIA",NULL);
 	if(val)
 	{
-		gchar **str = g_strsplit(val,",",5);
+		gchar **str = g_strsplit(val,",",6);
 
-		for(f=0;f< MIN(g_strv_length(str),4); f++)
-			gdk_color_parse(str[f],clr+V3270_COLOR_OIA_BACKGROUND+f);
+		// 0 = V3270_COLOR_OIA_BACKGROUND,
+		// 1 = V3270_COLOR_OIA_FOREGROUND,
+		// 2 = V3270_COLOR_OIA_SEPARATOR,
+		// 3 = V3270_COLOR_OIA_STATUS_OK,
+		// 4 = V3270_COLOR_OIA_STATUS_WARNING,
+		// 5 = V3270_COLOR_OIA_STATUS_INVALID,
+
+		if(g_strv_length(str) == 5)
+		{
+			for(f=0;f < 5; f++)
+				gdk_color_parse(str[f],clr+V3270_COLOR_OIA_BACKGROUND+f);
+			clr[V3270_COLOR_OIA_STATUS_INVALID] = clr[V3270_COLOR_OIA_STATUS_WARNING];
+		}
+		else
+		{
+			for(f=0;f< MIN(g_strv_length(str),6); f++)
+				gdk_color_parse(str[f],clr+V3270_COLOR_OIA_BACKGROUND+f);
+		}
 
 		g_strfreev(str);
 	}
@@ -405,6 +422,7 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
 		N_( "OIA foreground" ),				// TERMINAL_COLOR_OIA_FOREGROUND
 		N_( "OIA separator" ),				// TERMINAL_COLOR_OIA_SEPARATOR
 		N_( "OIA status ok" ),				// TERMINAL_COLOR_OIA_STATUS_OK
+		N_( "OIA Warning"	),				// V3270_COLOR_OIA_STATUS_WARNING
 		N_( "OIA status invalid" ),			// TERMINAL_COLOR_OIA_STATUS_INVALID
 
 	};

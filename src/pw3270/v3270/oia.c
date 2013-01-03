@@ -52,6 +52,7 @@ static void draw_cursor_position(cairo_t *cr, GdkRectangle *rect, struct v3270_m
 
  #include "locked.xbm"
  #include "unlocked.xbm"
+ #include "negotiated.xbm"
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
@@ -334,8 +335,16 @@ void v3270_draw_ssl_status(cairo_t *cr, H3270 *host, struct v3270_metrics *metri
 		bits	= (unsigned char *) unlocked_bits;
 		break;
 
-	case LIB3270_SSL_SECURE:	/**< Connection secure */
-		gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_FOREGROUND);
+	case LIB3270_SSL_NEGOTIATED:	/**< Connection secure, no CA or self-signed */
+		gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_STATUS_WARNING);
+		width   = negotiated_width;
+		height  = negotiated_height;
+		bits	= (unsigned char *) negotiated_bits;
+		break;
+
+
+	case LIB3270_SSL_SECURE:	/**< Connection secure with CA check */
+		gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_STATUS_OK);
 		width   = locked_width;
 		height  = locked_height;
 		bits	= (unsigned char *) locked_bits;
@@ -343,9 +352,9 @@ void v3270_draw_ssl_status(cairo_t *cr, H3270 *host, struct v3270_metrics *metri
 
 	case LIB3270_SSL_NEGOTIATING:	/**< Negotiating SSL */
 		gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_STATUS_WARNING);
-		width   = locked_width;
-		height  = locked_height;
-		bits	= (unsigned char *) locked_bits;
+		width   = unlocked_width;
+		height  = unlocked_height;
+		bits	= (unsigned char *) unlocked_bits;
 		break;
 
 	default:
