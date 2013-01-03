@@ -52,7 +52,7 @@ BINDIR=.bin
 EXEEXT=@EXEEXT@
 DBGLIB=-L../../$(BINDIR)/Debug@DLLDIR@ -l3270
 RLSLIB=-L../../$(BINDIR)/Release@DLLDIR@ -l3270
-TMPDIR ?= .tmp
+TMPDIR = .tmp
 GLOBAL_DEPS=$(PWD)/include/*.h $(PWD)/include/lib3270/*.h
 LANG_FILES=$(wildcard po/*.po)
 
