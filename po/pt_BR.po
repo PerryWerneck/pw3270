@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-27 15:43-0200\n"
+"POT-Creation-Date: 2013-01-03 17:05-0200\n"
 "PO-Revision-Date: 2012-12-26 10:36-0200\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
@@ -78,7 +78,7 @@ msgstr "%s: Tabulação verticao não suportada"
 msgid "%s: unknown family %d"
 msgstr "%s: Familia %d é inválida"
 
-#: telnet.c:1146
+#: telnet.c:1164
 #, c-format
 msgid "%s:%d"
 msgstr "%s:%d"
@@ -135,7 +135,7 @@ msgstr "<%s> precisa do atributo %s"
 msgid "<%s> should be on toplevel"
 msgstr "<%s> deve estar no primeiro nível"
 
-#: telnet.c:3237
+#: telnet.c:3255
 #, c-format
 msgid ""
 "<b>Connection state:</b> %s\n"
@@ -206,7 +206,7 @@ msgstr "Avblock"
 msgid "BLKSIZE:"
 msgstr "BLKSIZE:"
 
-#: colors.c:376
+#: colors.c:393
 msgid "Background"
 msgstr "Fundo"
 
@@ -214,7 +214,7 @@ msgstr "Fundo"
 msgid "Bad winsock version"
 msgstr "Versão winsock inválida"
 
-#: colors.c:384
+#: colors.c:401
 msgid "Black"
 msgstr "Preto"
 
@@ -226,7 +226,7 @@ msgstr "Completar com espaços"
 msgid "Blinking Cursor"
 msgstr "Cursor piscante"
 
-#: colors.c:377
+#: colors.c:394
 msgid "Blue"
 msgstr "Azul"
 
@@ -242,7 +242,7 @@ msgstr "Portal do Software Público Brasileiro"
 msgid "Break"
 msgstr "Break"
 
-#: telnet.c:2112
+#: telnet.c:2130
 msgid "Broken pipe"
 msgstr "Conexão interrompida"
 
@@ -398,11 +398,11 @@ msgstr "Tabela de tradução tem mais de 256 caracteres"
 msgid "Clear"
 msgstr "Limpar"
 
-#: colors.c:507
+#: colors.c:525
 msgid "Color scheme:"
 msgstr "Tema de cores:"
 
-#: colors.c:413
+#: colors.c:431
 msgid "Color setup"
 msgstr "Configuração de cores"
 
@@ -418,7 +418,7 @@ msgstr "Completo"
 msgid "Connect on startup"
 msgstr "Conectar ao iniciar"
 
-#: telnet.c:2116
+#: telnet.c:2134
 msgid "Connection reset by peer"
 msgstr "Conexão foi cancelada pelo servidor"
 
@@ -438,7 +438,7 @@ msgstr "Copiar como tabela"
 msgid "Cross Hair Cursor"
 msgstr "Cursor mira"
 
-#: colors.c:401
+#: colors.c:418
 msgid "Cross hair cursor"
 msgstr "Cursor mira"
 
@@ -447,7 +447,7 @@ msgstr "Cursor mira"
 msgid "Current (%s)"
 msgstr "Atual (%s)"
 
-#: colors.c:294
+#: colors.c:311
 msgid "Custom colors"
 msgstr "Cores personalizadas"
 
@@ -467,11 +467,11 @@ msgstr "Tamanho do b_uffer DFT:"
 msgid "DS Trace"
 msgstr "DS Trace"
 
-#: colors.c:385
+#: colors.c:402
 msgid "Dark Blue"
 msgstr "Azul Escuro"
 
-#: colors.c:388
+#: colors.c:405
 msgid "Dark Green"
 msgstr "Verde Escuro"
 
@@ -495,7 +495,7 @@ msgstr "Padrão"
 msgid "Delete field"
 msgstr "Apagar campo"
 
-#: telnet.c:1787
+#: telnet.c:1805
 msgid "Device type rejected"
 msgstr "Tipo de dispositivo rejeitado"
 
@@ -503,7 +503,7 @@ msgstr "Tipo de dispositivo rejeitado"
 msgid "Disconnected from host"
 msgstr "Desconectado do servidor"
 
-#: telnet.c:1362
+#: telnet.c:1380
 msgid "EOR received when not in 3270 mode, ignored."
 msgstr "EOR recebido fora do modo 3270, ignorado."
 
@@ -570,12 +570,12 @@ msgstr "Erro \"%s\" gravando arquivo local (rc=%d)"
 msgid "Error %d resolving %s"
 msgstr "Erro %d resolvendo %s"
 
-#: telnet.c:3100 telnet.c:3111
+#: telnet.c:3118 telnet.c:3129
 #, c-format
 msgid "Error in fcntl(%s) when setting non blocking mode"
 msgstr "Erro em fcntl(%s) ao ativar o modo não blocante"
 
-#: telnet.c:3090
+#: telnet.c:3108
 #, c-format
 msgid "Error in ioctl(%s) when setting no blocking mode"
 msgstr "Erro em ioctl(%s) ao ativar o modo não blocante"
@@ -598,7 +598,7 @@ msgstr "Trace de eventos"
 msgid "Extra CGCSGID(s), ignoring"
 msgstr "Extra CGCSGID(s), ignoring"
 
-#: colors.c:370
+#: colors.c:387
 msgid "Field colors"
 msgstr "Cor dos campos"
 
@@ -634,11 +634,11 @@ msgstr "Barra de funções"
 msgid "GTK Version mismatch"
 msgstr "Divergência de versão GTK"
 
-#: colors.c:391
+#: colors.c:408
 msgid "Gray"
 msgstr "Cinza"
 
-#: colors.c:380
+#: colors.c:397
 msgid "Green"
 msgstr "Verde"
 
@@ -679,7 +679,7 @@ msgstr "Ajuda"
 msgid "Host disconnected, transfer cancelled"
 msgstr "Servidor desconectou, transferência cancelada"
 
-#: telnet.c:1845
+#: telnet.c:1863
 msgid "Host illegally added function(s)"
 msgstr "Host illegally added function(s)"
 
@@ -691,11 +691,11 @@ msgstr "Servidor é AS_400"
 msgid "Host is TSO"
 msgstr "Servidor é TSO"
 
-#: telnet.c:1770
+#: telnet.c:1788
 msgid "Host rejected device type or request type"
 msgstr "Servidor rejeitou o tipo de dispositivo ou requisição"
 
-#: telnet.c:1783
+#: telnet.c:1801
 msgid "Host rejected resource(s)"
 msgstr "Servidor rejeitou recurso(s)"
 
@@ -732,11 +732,11 @@ msgstr "Informações"
 msgid "Input method"
 msgstr "Método de entrada"
 
-#: colors.c:396
+#: colors.c:413
 msgid "Intensified/Protected"
 msgstr "Intensificado/Protegido"
 
-#: colors.c:394
+#: colors.c:411
 msgid "Intensified/Unprotected"
 msgstr "Intensificado/Desprotegido"
 
@@ -787,7 +787,7 @@ msgstr "LRECL:"
 msgid "Lateral keypad"
 msgstr "Barra lateral"
 
-#: colors.c:371
+#: colors.c:388
 msgid "Misc colors"
 msgstr "Cores diversas"
 
@@ -820,7 +820,7 @@ msgstr "Múltiplos nomes de porta"
 msgid "Must specify port for telnet proxy"
 msgstr "Proxy telnet precisa de porta"
 
-#: colors.c:390
+#: colors.c:407
 msgid "Mustard"
 msgstr "Mostarda"
 
@@ -840,11 +840,11 @@ msgstr "Erro ao iniciar a rede"
 msgid "Next field"
 msgstr "Próximo campo"
 
-#: colors.c:395
+#: colors.c:412
 msgid "Normal/Protected"
 msgstr "Normal/Protegido"
 
-#: colors.c:393
+#: colors.c:410
 msgid "Normal/Unprotected"
 msgstr "Normal/Desprotegido"
 
@@ -856,23 +856,28 @@ msgstr "Não disponível"
 msgid "Not in 3270 mode, transfer cancelled"
 msgstr "Não está no modo 3270, transferência cancelada"
 
-#: colors.c:404
+#: colors.c:425
+#, fuzzy
+msgid "OIA Warning"
+msgstr "Alerta 3270"
+
+#: colors.c:421
 msgid "OIA background"
 msgstr "Fundo da OIA"
 
-#: colors.c:405
+#: colors.c:422
 msgid "OIA foreground"
 msgstr "Frente da OIA"
 
-#: colors.c:406
+#: colors.c:423
 msgid "OIA separator"
 msgstr "Separador da OIA"
 
-#: colors.c:408
+#: colors.c:426
 msgid "OIA status invalid"
 msgstr "Estado inválido na OIA"
 
-#: colors.c:407
+#: colors.c:424
 msgid "OIA status ok"
 msgstr "Estado normal na OIA"
 
@@ -885,7 +890,7 @@ msgstr "Opção não suportada: '%c:'"
 msgid "Options"
 msgstr "Opções"
 
-#: colors.c:386
+#: colors.c:403
 msgid "Orange"
 msgstr "Laranja"
 
@@ -1042,7 +1047,7 @@ msgstr "Colar com margem esquerda"
 msgid "Path to application data files"
 msgstr "Path to application data files"
 
-#: colors.c:379
+#: colors.c:396
 msgid "Pink"
 msgstr "Rosa"
 
@@ -1082,7 +1087,7 @@ msgstr "Configurações de impressão"
 msgid "Progress"
 msgstr "Progresso"
 
-#: colors.c:387
+#: colors.c:404
 msgid "Purple"
 msgstr "Púrpura"
 
@@ -1174,7 +1179,7 @@ msgstr "Receber arquivo do servidor"
 msgid "Record format"
 msgstr "Formato de registro"
 
-#: colors.c:378
+#: colors.c:395
 msgid "Red"
 msgstr "Vermelho"
 
@@ -1326,15 +1331,15 @@ msgstr "SOCKS5 Proxy: xmit version 5 nmethods 1 (no auth)\n"
 msgid "SOCKS5 proxy: %s/%u: %s"
 msgstr "SOCKS5 proxy: %s/%u: %s"
 
-#: telnet.c:3235
+#: telnet.c:3253
 msgid "SSL Connect error"
 msgstr "Erro na conexão SSL"
 
-#: telnet.c:1129
+#: telnet.c:1147
 msgid "SSL Error"
 msgstr "Erro SSL"
 
-#: telnet.c:1129
+#: telnet.c:1147
 msgid "SSL Read error"
 msgstr "Erro de leitura SSL"
 
@@ -1354,7 +1359,7 @@ msgstr "Inicialização SSL falhou"
 msgid "SSL_set_fd failed!"
 msgstr "SSL_set_fd falhou!"
 
-#: telnet.c:2102
+#: telnet.c:2120
 #, c-format
 msgid ""
 "SSL_write:\n"
@@ -1431,11 +1436,11 @@ msgstr "Selecione fonte"
 msgid "Select hostname"
 msgstr "Selecione host"
 
-#: colors.c:398
+#: colors.c:415
 msgid "Selection background"
 msgstr "Fundo da seleção"
 
-#: colors.c:399
+#: colors.c:416
 msgid "Selection foreground"
 msgstr "Frente da seleção"
 
@@ -1479,11 +1484,11 @@ msgstr "Mostrar padrão de teste"
 msgid "Smart paste"
 msgstr "Colar inteligente"
 
-#: telnet.c:1150
+#: telnet.c:1168
 msgid "Socket read error"
 msgstr "Erro ao ler dados da rede"
 
-#: telnet.c:2123
+#: telnet.c:2141
 msgid "Socket write error"
 msgstr "Erro ao enviar dados para a rede"
 
@@ -1507,7 +1512,7 @@ msgstr "Tipo de servidor:"
 msgid "TELNET Proxy: send error"
 msgstr "TELNET Proxy: send error"
 
-#: telnet.c:3284
+#: telnet.c:3302
 msgid "TLS negotiation failure"
 msgstr "Negociação TLS falhou"
 
@@ -1515,7 +1520,7 @@ msgstr "Negociação TLS falhou"
 msgid "T_otal"
 msgstr "T_otal"
 
-#: colors.c:369
+#: colors.c:386
 msgid "Terminal colors"
 msgstr "Cores do terminal"
 
@@ -1603,7 +1608,7 @@ msgstr "Opções de transferência"
 msgid "Transmission error"
 msgstr "Erro de transmissão"
 
-#: colors.c:381 colors.c:389
+#: colors.c:398 colors.c:406
 msgid "Turquoise"
 msgstr "Turquesa"
 
@@ -1778,7 +1783,7 @@ msgstr "Aguardando resposta do pedido de upload"
 msgid "Western Europe (ISO 8859-1)"
 msgstr "Europa ocidental (ISO 8859-1)"
 
-#: colors.c:383
+#: colors.c:400
 msgid "White"
 msgstr "Branco"
 
@@ -1790,51 +1795,51 @@ msgstr "Janela"
 msgid "Windows Western languages (CP1252)"
 msgstr "Windows ocidental (CP1252)"
 
-#: v3270/oia.c:411 v3270/oia.c:435 v3270/oia.c:439
+#: v3270/oia.c:420 v3270/oia.c:444 v3270/oia.c:448
 msgid "X"
 msgstr "X"
 
-#: v3270/oia.c:415
+#: v3270/oia.c:424
 msgid "X -f"
 msgstr "X -f"
 
-#: v3270/oia.c:447
+#: v3270/oia.c:456
 msgid "X Connecting"
 msgstr "X Conectando"
 
-#: v3270/oia.c:431
+#: v3270/oia.c:440
 msgid "X Inhibit"
 msgstr "X Inibido"
 
-#: v3270/oia.c:407
+#: v3270/oia.c:416
 msgid "X Not Connected"
 msgstr "X Desconectado"
 
-#: v3270/oia.c:423
+#: v3270/oia.c:432
 msgid "X Numeric"
 msgstr "X Numérico"
 
-#: v3270/oia.c:427
+#: v3270/oia.c:436
 msgid "X Overflow"
 msgstr "X Estouro"
 
-#: v3270/oia.c:419
+#: v3270/oia.c:428
 msgid "X Protected"
 msgstr "X Protegido"
 
-#: v3270/oia.c:443
+#: v3270/oia.c:452
 msgid "X Resolving"
 msgstr "X Resolvendo"
 
-#: v3270/oia.c:395
+#: v3270/oia.c:404
 msgid "X System"
 msgstr "X Sistema"
 
-#: v3270/oia.c:399
+#: v3270/oia.c:408
 msgid "X Wait"
 msgstr "X Aguarde"
 
-#: colors.c:382
+#: colors.c:399
 msgid "Yellow"
 msgstr "Amarelo"
 
@@ -1964,7 +1969,7 @@ msgstr "socket"
 msgid "translator-credits"
 msgstr "translator-credits"
 
-#: telnet.c:1125
+#: telnet.c:1143
 msgid "unknown error"
 msgstr "Erro desconhecido"
 

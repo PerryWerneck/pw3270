@@ -471,6 +471,23 @@
 
  }
 
+ static gboolean field_clicked(GtkWidget *terminal, gboolean connected, V3270_OIA_FIELD field, GdkEventButton *event)
+ {
+	trace("%s: %s field=%d event=%p",__FUNCTION__,connected ? "Connected" : "Disconnected", field, event);
+
+	if(!connected)
+		return FALSE;
+
+	if(field == V3270_OIA_SSL)
+	{
+		trace("%s: Show SSL connection info dialog",__FUNCTION__);
+		return TRUE;
+	}
+
+
+	return FALSE;
+ }
+
  static void pw3270_init(pw3270 *widget)
  {
  	static const UI_WIDGET_SETUP widget_setup[] =
@@ -576,6 +593,7 @@
 	}
 
 	// Connect widget signals
+	g_signal_connect(widget->terminal,"field_clicked",G_CALLBACK(field_clicked),widget);
 	g_signal_connect(widget->terminal,"toggle_changed",G_CALLBACK(toggle_changed),widget);
 
 	// Connect window signals

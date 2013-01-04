@@ -333,6 +333,8 @@ static void v3270_class_init(v3270Class *klass)
 	// Cursors
 	{
 #ifdef WIN32
+		// http://git.gnome.org/browse/gtk+/tree/gdk/win32/gdkcursor-win32.c
+		// http://www.functionx.com/win32/Lesson02b.htm
 		static const gchar	* cr[V3270_CURSOR_COUNT] =
 		{
 			"ibeam",	//	V3270_CURSOR_UNPROTECTED
@@ -348,6 +350,7 @@ static void v3270_class_init(v3270Class *klass)
 			"sizens",	//	V3270_CURSOR_SELECTION_BOTTOM
 			"sizewe",	//	V3270_CURSOR_SELECTION_LEFT
 			"sizewe",	//	V3270_CURSOR_SELECTION_RIGHT
+			"help",		//	V3270_CURSOR_QUESTION
 		};
 #else
 		static const int	  cr[V3270_CURSOR_COUNT] =
@@ -365,6 +368,7 @@ static void v3270_class_init(v3270Class *klass)
 			GDK_BOTTOM_SIDE,			// V3270_CURSOR_SELECTION_BOTTOM
 			GDK_LEFT_SIDE,				// V3270_CURSOR_SELECTION_LEFT
 			GDK_RIGHT_SIDE,				// V3270_CURSOR_SELECTION_RIGHT
+			GDK_QUESTION_ARROW,			// V3270_CURSOR_QUESTION
 		};
 #endif // WIN32
 
@@ -515,6 +519,15 @@ static void v3270_class_init(v3270Class *klass)
 						NULL, NULL,
 						pw3270_VOID__VOID_UINT_POINTER_POINTER_POINTER,
 						G_TYPE_NONE, 4, G_TYPE_UINT, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
+
+	v3270_widget_signal[SIGNAL_FIELD] =
+		g_signal_new(	"field_clicked",
+						G_OBJECT_CLASS_TYPE (gobject_class),
+						G_SIGNAL_RUN_LAST,
+						0,
+						NULL, NULL,
+						pw3270_BOOL__VOID_BOOL_UINT_POINTER,
+						G_TYPE_BOOLEAN, 3, G_TYPE_BOOLEAN, G_TYPE_UINT, G_TYPE_POINTER);
 
 }
 

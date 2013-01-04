@@ -81,9 +81,11 @@ G_BEGIN_DECLS
  	SIGNAL_CLIPBOARD,
  	SIGNAL_CHANGED,
  	SIGNAL_MESSAGE,
+ 	SIGNAL_FIELD,
 
  	LAST_SIGNAL
  };
+
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
@@ -101,8 +103,9 @@ G_BEGIN_DECLS
  #define V3270_CURSOR_SELECTION_BOTTOM			LIB3270_CURSOR_USER+7
  #define V3270_CURSOR_SELECTION_LEFT			LIB3270_CURSOR_USER+8
  #define V3270_CURSOR_SELECTION_RIGHT			LIB3270_CURSOR_USER+9
+ #define V3270_CURSOR_QUESTION					LIB3270_CURSOR_USER+10
 
- #define V3270_CURSOR_COUNT						LIB3270_CURSOR_USER+10
+ #define V3270_CURSOR_COUNT						LIB3270_CURSOR_USER+11
 
 
  struct v3270_metrics
@@ -144,8 +147,10 @@ G_BEGIN_DECLS
 	gchar					* clipboard;			/**< Clipboard contents (text only) */
 
 	LIB3270_CURSOR 			  pointer_id;
-	unsigned char			  pointer;				/** Mouse pointer ID */
-	int						  selection_addr;		/** Selection addr */
+	unsigned char			  pointer;				/**< Mouse pointer ID */
+	int						  selection_addr;		/**< Selection addr */
+
+	V3270_OIA_FIELD			  selected_field;		/**< Clicked OIA field */
 
 	// Font info
 	gchar 					* font_family;

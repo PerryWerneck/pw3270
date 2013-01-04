@@ -335,13 +335,19 @@ void v3270_draw_ssl_status(cairo_t *cr, H3270 *host, struct v3270_metrics *metri
 		bits	= (unsigned char *) unlocked_bits;
 		break;
 
+	case LIB3270_SSL_NEGOTIATING:	/**< Negotiating SSL */
+		gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_STATUS_WARNING);
+		width   = unlocked_width;
+		height  = unlocked_height;
+		bits	= (unsigned char *) unlocked_bits;
+		break;
+
 	case LIB3270_SSL_NEGOTIATED:	/**< Connection secure, no CA or self-signed */
 		gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_STATUS_WARNING);
 		width   = negotiated_width;
 		height  = negotiated_height;
 		bits	= (unsigned char *) negotiated_bits;
 		break;
-
 
 	case LIB3270_SSL_SECURE:	/**< Connection secure with CA check */
 		gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_STATUS_OK);
@@ -350,18 +356,10 @@ void v3270_draw_ssl_status(cairo_t *cr, H3270 *host, struct v3270_metrics *metri
 		bits	= (unsigned char *) locked_bits;
 		break;
 
-	case LIB3270_SSL_NEGOTIATING:	/**< Negotiating SSL */
-		gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_STATUS_WARNING);
-		width   = unlocked_width;
-		height  = unlocked_height;
-		bits	= (unsigned char *) unlocked_bits;
-		break;
-
 	default:
 		return;
 
 	}
-
 
 	icon = cairo_image_surface_create_for_data(	bits,
 												CAIRO_FORMAT_A1,

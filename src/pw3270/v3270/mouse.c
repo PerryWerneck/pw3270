@@ -128,28 +128,49 @@ void v3270_emit_popup(v3270 *widget, int baddr, GdkEventButton *event)
 	gdk_beep();
 }
 
+static V3270_OIA_FIELD get_field_from_event(v3270 *widget, GdkEventButton *event)
+{
+	if(event->y >= widget->oia_rect->y)
+	{
+		V3270_OIA_FIELD f;
+
+		for(f=0;f<V3270_OIA_FIELD_COUNT;f++)
+		{
+			if(event->x >= widget->oia_rect[f].x && event->x <= (widget->oia_rect[f].x+widget->oia_rect[f].width))
+				return f;
+		}
+	}
+
+	return V3270_OIA_FIELD_INVALID;
+}
+
 gboolean v3270_button_press_event(GtkWidget *widget, GdkEventButton *event)
 {
 	int baddr = v3270_get_offset_at_point(GTK_V3270(widget),event->x,event->y);
 
-	if(baddr < 0)
-		return FALSE;
-
-//	trace("%s button=%d type=%d",__FUNCTION__,event->button,event->type);
-
-	switch(event->button)
+	if(baddr >= 0)
 	{
-	case 1:		// Left button
-		button_1_press(widget,event->type,baddr);
-		break;
+		GTK_V3270(widget)->selected_field = V3270_OIA_FIELD_INVALID;
 
-	case 3:		// Right button
-		if(event->type == GDK_BUTTON_PRESS)
-			v3270_emit_popup(GTK_V3270(widget),baddr,event);
-		break;
+		switch(event->button)
+		{
+		case 1:		// Left button
+			button_1_press(widget,event->type,baddr);
+			break;
 
-	default:
-		trace("%s button=%d type=%d",__FUNCTION__,event->button,event->type);
+		case 3:		// Right button
+			if(event->type == GDK_BUTTON_PRESS)
+				v3270_emit_popup(GTK_V3270(widget),baddr,event);
+			break;
+
+		default:
+			trace("%s button=%d type=%d",__FUNCTION__,event->button,event->type);
+		}
+	}
+	else if(event->button == 1 && event->type == GDK_BUTTON_PRESS)
+	{
+		GTK_V3270(widget)->selected_field = get_field_from_event(GTK_V3270(widget),event);
+		trace("%s field=%d",__FUNCTION__,GTK_V3270(widget)->selected_field);
 	}
 
 	return FALSE;
@@ -163,24 +184,44 @@ gboolean v3270_button_release_event(GtkWidget *widget, GdkEventButton*event)
 		GTK_V3270(widget)->selecting = 0;
 		GTK_V3270(widget)->moving	 = 0;
 		GTK_V3270(widget)->resizing	 = 0;
+
+		if(GTK_V3270(widget)->selected_field != V3270_OIA_FIELD_INVALID && GTK_V3270(widget)->selected_field == get_field_from_event(GTK_V3270(widget),event))
+		{
+			gboolean handled = FALSE;
+
+			trace("%s field %d was clicked event=%p",__FUNCTION__,GTK_V3270(widget)->selected_field,event);
+
+			g_signal_emit(widget,	v3270_widget_signal[SIGNAL_FIELD], 0,
+									lib3270_connected(GTK_V3270(widget)->host) ? TRUE : FALSE,
+									GTK_V3270(widget)->selected_field,
+									event,
+									&handled);
+
+			trace("Handled: %s",handled ? "Yes": "No");
+
+			if(!handled)
+				gdk_beep();
+
+		}
+
+		GTK_V3270(widget)->selected_field = V3270_OIA_FIELD_INVALID;
+
 		break;
 
 	default:
 		trace("%s button=%d type=%d",__FUNCTION__,event->button,event->type);
 	}
 
-
 	return FALSE;
 }
 
-
 static void update_mouse_pointer(GtkWidget *widget, int baddr)
 {
-	v3270 *terminal = GTK_V3270(widget);
+	v3270	* terminal	= GTK_V3270(widget);
+	int		  id		= terminal->pointer;
 
 	if(baddr >= 0 && terminal->pointer_id == LIB3270_CURSOR_EDITABLE)
 	{
-		int id = terminal->pointer;
 
 		switch(lib3270_get_selection_flags(terminal->host,baddr) & 0x8f)
 		{
@@ -225,8 +266,9 @@ static void update_mouse_pointer(GtkWidget *widget, int baddr)
 
 		}
 
-		gdk_window_set_cursor(gtk_widget_get_window(widget),v3270_cursor[id]);
 	}
+
+	gdk_window_set_cursor(gtk_widget_get_window(widget),v3270_cursor[id]);
 
 }
 
@@ -244,11 +286,20 @@ void v3270_update_mouse_pointer(GtkWidget *widget)
 
 gboolean v3270_motion_notify_event(GtkWidget *widget, GdkEventMotion *event)
 {
-	v3270	* terminal	= GTK_V3270(widget);
-	int		  baddr		= v3270_get_offset_at_point(terminal,event->x,event->y);
+	v3270		* terminal	= GTK_V3270(widget);
+	int			  baddr;
+
+	if(!lib3270_connected(terminal->host))
+	{
+		gdk_window_set_cursor(gtk_widget_get_window(widget),v3270_cursor[V3270_CURSOR_PROTECTED]);
+		return FALSE;
+	}
+
+	baddr = v3270_get_offset_at_point(terminal,event->x,event->y);
 
 	if(baddr >= 0)
 	{
+
 		if(terminal->selecting)		// Select region
 		{
 			lib3270_select_to(terminal->host,baddr);
@@ -262,6 +313,37 @@ gboolean v3270_motion_notify_event(GtkWidget *widget, GdkEventMotion *event)
 			terminal->pointer = lib3270_get_selection_flags(terminal->host,baddr);
 			update_mouse_pointer(widget,baddr);
 		}
+	}
+	else if(event->y >= terminal->oia_rect->y)
+	{
+		int id = V3270_CURSOR_PROTECTED;
+
+		if(event->x >= terminal->oia_rect[V3270_OIA_SSL].x && event->x <= (terminal->oia_rect[V3270_OIA_SSL].x + terminal->oia_rect[V3270_OIA_SSL].width))
+		{
+			switch(lib3270_get_secure(terminal->host))
+			{
+			case LIB3270_SSL_UNSECURE:	/**< No secure connection */
+				id = V3270_CURSOR_QUESTION;
+				break;
+
+			case LIB3270_SSL_NEGOTIATING:	/**< Negotiating SSL */
+				id = V3270_CURSOR_WAITING;
+				break;
+
+			case LIB3270_SSL_NEGOTIATED:	/**< Connection secure, no CA or self-signed */
+				id = V3270_CURSOR_QUESTION;
+				break;
+
+			case LIB3270_SSL_SECURE:	/**< Connection secure with CA check */
+				id = V3270_CURSOR_QUESTION;
+				break;
+
+			default:
+				id = V3270_CURSOR_LOCKED;
+			}
+		}
+
+		gdk_window_set_cursor(gtk_widget_get_window(widget),v3270_cursor[id]);
 	}
 
 	return FALSE;
