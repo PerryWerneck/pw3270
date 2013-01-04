@@ -226,6 +226,12 @@
  	v3270_set_host(GTK_PW3270(widget)->terminal,uri);
  }
 
+ const gchar * pw3270_get_host(GtkWidget *widget)
+ {
+ 	g_return_val_if_fail(GTK_IS_PW3270(widget),"");
+ 	return v3270_get_host(GTK_PW3270(widget)->terminal);
+ }
+
  gboolean pw3270_get_toggle(GtkWidget *widget, LIB3270_TOGGLE ix)
  {
  	g_return_val_if_fail(GTK_IS_PW3270(widget),FALSE);
@@ -471,15 +477,16 @@
 
  }
 
- static gboolean field_clicked(GtkWidget *terminal, gboolean connected, V3270_OIA_FIELD field, GdkEventButton *event)
+ static gboolean field_clicked(GtkWidget *widget, gboolean connected, V3270_OIA_FIELD field, GdkEventButton *event, GtkWidget *window)
  {
-	trace("%s: %s field=%d event=%p",__FUNCTION__,connected ? "Connected" : "Disconnected", field, event);
+	trace("%s: %s field=%d event=%p window=%p",__FUNCTION__,connected ? "Connected" : "Disconnected", field, event, window);
 
 	if(!connected)
 		return FALSE;
 
 	if(field == V3270_OIA_SSL)
 	{
+		run_security_dialog(window);
 		trace("%s: Show SSL connection info dialog",__FUNCTION__);
 		return TRUE;
 	}
@@ -511,6 +518,8 @@
 	int f;
 	GtkAction	**action = g_new0(GtkAction *,ACTION_COUNT);
 	H3270 		* host;
+
+	trace("%s(%p)",__FUNCTION__,widget);
 
 	// Initialize terminal widget
 	widget->terminal = v3270_new();

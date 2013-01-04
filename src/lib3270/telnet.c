@@ -3325,4 +3325,12 @@ LIB3270_EXPORT LIB3270_SSL_STATE lib3270_get_secure(H3270 *session)
 	return session->secure;
 }
 
-
+LIB3270_EXPORT long lib3270_get_SSL_verify_result(H3270 *hSession)
+{
+	CHECK_SESSION_HANDLE(hSession);
+#if defined(HAVE_LIBSSL)
+	if(hSession->ssl_con)
+		return SSL_get_verify_result(hSession->ssl_con);
+#endif // HAVE_LIBSSL
+	return -1;
+}

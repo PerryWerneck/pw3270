@@ -62,7 +62,7 @@
  G_GNUC_INTERNAL void			  load_color_schemes(GtkWidget *widget, gchar *active);
  G_GNUC_INTERNAL GtkWidget		* color_scheme_new(const GdkColor *current);
  G_GNUC_INTERNAL LIB3270_OPTION	  pw3270_options_by_hosttype(const gchar *systype);
-
+ G_GNUC_INTERNAL void			  run_security_dialog(GtkWidget *widget);
 
  // actions
  G_GNUC_INTERNAL void paste_file_action(GtkAction *action, GtkWidget *widget);

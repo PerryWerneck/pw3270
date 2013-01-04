@@ -699,7 +699,8 @@
 	#define lib3270_is_connected(h) lib3270_in_tn3270e(h)
 	#define lib3270_is_ready(h) lib3270_get_program_message(h) == LIB3270_MESSAGE_NONE
 
-	LIB3270_EXPORT LIB3270_SSL_STATE lib3270_get_secure(H3270 *session);
+	LIB3270_EXPORT LIB3270_SSL_STATE	lib3270_get_secure(H3270 *session);
+	LIB3270_EXPORT long 				lib3270_get_SSL_verify_result(H3270 *session);
 
 
 	/**

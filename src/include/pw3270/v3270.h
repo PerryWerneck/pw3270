@@ -194,6 +194,7 @@
  LIB3270_EXPORT void			  v3270_set_session_options(GtkWidget *widget, LIB3270_OPTION options);
  LIB3270_EXPORT int				  v3270_set_session_color_type(GtkWidget *widget, unsigned short colortype);
  LIB3270_EXPORT	void 			  v3270_set_host(GtkWidget *widget, const gchar *uri);
+ LIB3270_EXPORT	const gchar		* v3270_get_host(GtkWidget *widget);
 
  // Keyboard & Mouse special actions
  LIB3270_EXPORT gboolean		  v3270_set_keyboard_action(GtkWidget *widget, const gchar *key_name, GtkAction *action);
