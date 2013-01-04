@@ -53,6 +53,7 @@ static void draw_cursor_position(cairo_t *cr, GdkRectangle *rect, struct v3270_m
  #include "locked.xbm"
  #include "unlocked.xbm"
  #include "negotiated.xbm"
+ #include "warning.xbm"
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
@@ -306,65 +307,16 @@ void v3270_draw_connection(cairo_t *cr, H3270 *host, struct v3270_metrics *metri
 
 }
 
-void v3270_draw_ssl_status(cairo_t *cr, H3270 *host, struct v3270_metrics *metrics, GdkColor *color, GdkRectangle *rect)
+static void draw_xbm(cairo_t *cr, GdkRectangle *rect, int width, int height, unsigned char *bits)
 {
-	cairo_surface_t		* icon;
-	double				  sz	= rect->width < rect->height ? rect->width : rect->height;
-//	int					  idx	= 0; // lib3270_get_ssl_state(host) ? 1 : 0;
-	unsigned short		  width;
-	unsigned short		  height;
-	unsigned char	 	* bits;
+	double			  sz	= rect->width < rect->height ? rect->width : rect->height;
+	cairo_surface_t	* icon	= cairo_image_surface_create_for_data(
+									bits,
+									CAIRO_FORMAT_A1,
+									width,height,
+									cairo_format_stride_for_width(CAIRO_FORMAT_A1,width));
 
-#ifdef DEBUG
-	cairo_set_source_rgb(cr,0.1,0.1,0.1);
-#else
-	gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_BACKGROUND);
-#endif
-
-	cairo_translate(cr, rect->x, rect->y);
-
-	cairo_rectangle(cr, 0, 0, rect->width, rect->height);
-	cairo_fill(cr);
-
-	switch(lib3270_get_secure(host))
-	{
-	case LIB3270_SSL_UNSECURE:	/**< No secure connection */
-		gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_FOREGROUND);
-		width   = unlocked_width;
-		height  = unlocked_height;
-		bits	= (unsigned char *) unlocked_bits;
-		break;
-
-	case LIB3270_SSL_NEGOTIATING:	/**< Negotiating SSL */
-		gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_STATUS_WARNING);
-		width   = unlocked_width;
-		height  = unlocked_height;
-		bits	= (unsigned char *) unlocked_bits;
-		break;
-
-	case LIB3270_SSL_NEGOTIATED:	/**< Connection secure, no CA or self-signed */
-		gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_STATUS_WARNING);
-		width   = negotiated_width;
-		height  = negotiated_height;
-		bits	= (unsigned char *) negotiated_bits;
-		break;
-
-	case LIB3270_SSL_SECURE:	/**< Connection secure with CA check */
-		gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_STATUS_OK);
-		width   = locked_width;
-		height  = locked_height;
-		bits	= (unsigned char *) locked_bits;
-		break;
-
-	default:
-		return;
-
-	}
-
-	icon = cairo_image_surface_create_for_data(	bits,
-												CAIRO_FORMAT_A1,
-												width,height,
-												cairo_format_stride_for_width(CAIRO_FORMAT_A1,locked_width));
+	cairo_save(cr);
 
 	cairo_scale(cr,	sz / ((double) width),
 					sz / ((double) height));
@@ -372,6 +324,51 @@ void v3270_draw_ssl_status(cairo_t *cr, H3270 *host, struct v3270_metrics *metri
 	cairo_mask_surface(cr,icon,(rect->width-sz)/2,(rect->height-sz)/2);
 
 	cairo_surface_destroy(icon);
+
+	cairo_restore(cr);
+}
+
+void v3270_draw_ssl_status(cairo_t *cr, H3270 *host, struct v3270_metrics *metrics, GdkColor *color, GdkRectangle *rect)
+{
+#ifdef DEBUG
+	cairo_set_source_rgb(cr,0.1,0.1,0.1);
+#else
+	gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_BACKGROUND);
+#endif
+
+	cairo_translate(cr, rect->x, rect->y);
+	cairo_rectangle(cr, 0, 0, rect->width, rect->height);
+	cairo_fill(cr);
+
+	switch(lib3270_get_secure(host))
+	{
+	case LIB3270_SSL_UNSECURE:	/**< No secure connection */
+		gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_FOREGROUND);
+		draw_xbm(cr,rect,unlocked_width,unlocked_height,unlocked_bits);
+		break;
+
+	case LIB3270_SSL_NEGOTIATING:	/**< Negotiating SSL */
+		gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_STATUS_WARNING);
+		draw_xbm(cr,rect,unlocked_width,unlocked_height,unlocked_bits);
+		break;
+
+	case LIB3270_SSL_NEGOTIATED:	/**< Connection secure, no CA or self-signed */
+		gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_STATUS_OK);
+		draw_xbm(cr,rect,negotiated_width,negotiated_height,negotiated_bits);
+		gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_STATUS_WARNING);
+		draw_xbm(cr,rect,warning_width,warning_height,warning_bits);
+		break;
+
+	case LIB3270_SSL_SECURE:	/**< Connection secure with CA check */
+		gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_STATUS_OK);
+		draw_xbm(cr,rect,locked_width,locked_height,locked_bits);
+		break;
+
+	default:
+		return;
+
+	}
+
 
 }
 
