@@ -273,6 +273,57 @@ void v3270_popup_message(GtkWidget *widget, LIB3270_NOTIFY type , const gchar *t
 	trace("%s ends",__FUNCTION__);
 }
 
+gboolean v3270_query_tooltip(GtkWidget  *widget, gint x, gint y, gboolean keyboard_tooltip, GtkTooltip *tooltip)
+{
+/*
+	if(!lib3270_connected(GTK_V3270(widget)->host))
+	{
+		gtk_tooltip_set_text(tooltip,_( "Disconnected" ) );
+		return TRUE;
+	}
+*/
+
+	if(y >= GTK_V3270(widget)->oia_rect->y)
+	{
+		GdkRectangle *rect = GTK_V3270(widget)->oia_rect;
+
+		if(x >= rect[V3270_OIA_SSL].x && x <= (rect[V3270_OIA_SSL].x + rect[V3270_OIA_SSL].width))
+		{
+			if(!lib3270_connected(GTK_V3270(widget)->host))
+			{
+				gtk_tooltip_set_icon_from_stock(tooltip,GTK_STOCK_DISCONNECT,GTK_ICON_SIZE_MENU);
+				gtk_tooltip_set_markup(tooltip,_( "<b>Disconnected from host</b>\nNo security info" ) );
+			}
+			else if(lib3270_get_secure(GTK_V3270(widget)->host) == LIB3270_SSL_UNSECURE)
+			{
+				gtk_tooltip_set_icon_from_stock(tooltip,GTK_STOCK_INFO,GTK_ICON_SIZE_MENU);
+				gtk_tooltip_set_markup(tooltip,_( "Connection is insecure" ) );
+			}
+			else
+			{
+				const struct v3270_ssl_status_msg *msg = v3270_get_ssl_status_msg(widget);
+
+				if(msg)
+				{
+					gtk_tooltip_set_icon_from_stock(tooltip,msg->icon,GTK_ICON_SIZE_MENU);
+					gtk_tooltip_set_markup(tooltip,msg->text);
+				}
+				else
+				{
+					gchar *text = g_strdup_printf(_("<b>Unexpected SSL status %ld</b>\nSecurity status is undefined"),lib3270_get_SSL_verify_result(GTK_V3270(widget)->host));
+					gtk_tooltip_set_icon_from_stock(tooltip,GTK_STOCK_DIALOG_ERROR,GTK_ICON_SIZE_MENU);
+					gtk_tooltip_set_markup(tooltip,text);
+					g_free(text);
+				}
+			}
+
+			return TRUE;
+		}
+
+	}
+	return FALSE;
+}
+
 static void v3270_class_init(v3270Class *klass)
 {
 	GObjectClass	* gobject_class	= G_OBJECT_CLASS(klass);
@@ -295,6 +346,7 @@ static void v3270_class_init(v3270Class *klass)
 	widget_class->motion_notify_event				= v3270_motion_notify_event;
 	widget_class->popup_menu						= v3270_popup_menu;
 	widget_class->scroll_event						= v3270_scroll_event;
+	widget_class->query_tooltip						= v3270_query_tooltip;
 
 	/* Accessibility support */
 	widget_class->get_accessible 					= v3270_get_accessible;
@@ -851,8 +903,9 @@ static void v3270_init(v3270 *widget)
 	GTK_WIDGET_SET_FLAGS(GTK_WIDGET(widget),(GTK_CAN_DEFAULT|GTK_CAN_FOCUS));
 #endif // GTK(2,18)
 
-	// Setup events
+	// Setup widget
     gtk_widget_add_events(GTK_WIDGET(widget),GDK_KEY_PRESS_MASK|GDK_KEY_RELEASE_MASK|GDK_BUTTON_PRESS_MASK|GDK_BUTTON_MOTION_MASK|GDK_BUTTON_RELEASE_MASK|GDK_POINTER_MOTION_MASK|GDK_ENTER_NOTIFY_MASK|GDK_SCROLL_MASK);
+	gtk_widget_set_has_tooltip(GTK_WIDGET(widget),TRUE);
 
 	trace("%s",__FUNCTION__);
 }

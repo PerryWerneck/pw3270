@@ -26,5 +26,6 @@
 # kraucer@bb.com.br			(Kraucer Fernandes Mazuco)
 #
 
-V3270_SRC=marshal.c widget.c oia.c iocallback.c keyboard.c draw.c mouse.c selection.c accessible.c
+V3270_SRC=marshal.c widget.c oia.c iocallback.c keyboard.c draw.c mouse.c selection.c \
+			accessible.c security.c
 

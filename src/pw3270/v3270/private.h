@@ -38,11 +38,10 @@
 #include <glib/gi18n.h>
 
 #ifndef V3270_H_INCLUDED
-	#include <lib3270/v3270.h>
+	#include <pw3270/v3270.h>
 #endif
 
 G_BEGIN_DECLS
-
 
  struct _v3270Class
  {
@@ -119,6 +118,14 @@ G_BEGIN_DECLS
 
 	guint left;
 	guint top;
+ };
+
+ struct v3270_ssl_status_msg
+ {
+	long			  id;
+	const gchar		* icon;
+	const gchar		* text;
+	const gchar		* message;
  };
 
 /*--[ Widget data ]----------------------------------------------------------------------------------*/
@@ -201,6 +208,7 @@ G_BEGIN_DECLS
  G_GNUC_INTERNAL guint		  v3270_widget_signal[LAST_SIGNAL];
  G_GNUC_INTERNAL GdkCursor	* v3270_cursor[V3270_CURSOR_COUNT];
 
+
 /*--[ Prototipes ]-----------------------------------------------------------------------------------*/
 
 const GtkWidgetClass	* v3270_get_parent_class(void);
@@ -269,5 +277,8 @@ gboolean	  v3270_motion_notify_event(GtkWidget *widget, GdkEventMotion *event);
 void		  v3270_emit_popup(v3270 *widget, int baddr, GdkEventButton *event);
 gint 		  v3270_get_offset_at_point(v3270 *widget, gint x, gint y);
 gboolean	  v3270_scroll_event(GtkWidget *widget, GdkEventScroll *event);
+
+G_GNUC_INTERNAL const struct v3270_ssl_status_msg * v3270_get_ssl_status_msg(GtkWidget *widget);
+
 
 G_END_DECLS

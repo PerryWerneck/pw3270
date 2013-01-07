@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-03 17:05-0200\n"
+"POT-Creation-Date: 2013-01-04 16:52-0200\n"
 "PO-Revision-Date: 2012-12-26 10:36-0200\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
@@ -103,7 +103,7 @@ msgstr "Alerta 3270"
 msgid "3270 screen"
 msgstr "Tela 3270"
 
-#: dialog.c:476
+#: dialog.c:711
 #, c-format
 msgid "3270 terminal emulator for GTK %d.%d"
 msgstr "Emulador 3270 para GTK+ %d.%d"
@@ -144,6 +144,14 @@ msgstr ""
 "<b>Estado da conexão:</b> %s\n"
 "<b>Mensagem de alerta:</b> %s"
 
+#: dialog.c:753
+msgid ""
+"<b>Identity not verified</b>\n"
+"The connection is insecure"
+msgstr ""
+"<b>Identity not verified</b>\n"
+"The connection is insecure"
+
 #: main.c:279
 msgid ""
 "<b>Valid options:</b>\n"
@@ -160,9 +168,21 @@ msgstr "<menuitem> deve estar dentro de <menu>"
 msgid "<separator> should be inside a <menu> or <toolbar>"
 msgstr "<separator> só é válido dentro de <menu> ou <toolbar>"
 
+#: dialog.c:226
+msgid ""
+"A CA certificate is invalid. Either it is not a CA or its extensions are not "
+"consistent with the supplied purpose."
+msgstr ""
+"A CA certificate is invalid. Either it is not a CA or its extensions are not "
+"consistent with the supplied purpose."
+
 #: filetransfer.c:386
 msgid "Aborting"
 msgstr "Abortando"
+
+#: dialog.c:800
+msgid "About security"
+msgstr "About security"
 
 #: paste.c:300
 msgid "Action failed"
@@ -180,6 +200,10 @@ msgstr "Adicionar/Remover _CR no final da linha"
 msgid "Alert sound"
 msgstr "Aviso sonoro"
 
+#: dialog.c:184
+msgid "An error occurred trying to allocate memory. This should never happen."
+msgstr "An error occurred trying to allocate memory. This should never happen."
+
 #: main.c:246 main.c:248
 msgid "Application name"
 msgstr "Nome da aplicação"
@@ -192,6 +216,14 @@ msgstr "Attn"
 #, c-format
 msgid "Attribute \"%s\" is invalid or undefined"
 msgstr "Atributo \"%s\" é invalido ou indefinido"
+
+#: dialog.c:274
+msgid "Authority and issuer serial number mismatch"
+msgstr "Authority and issuer serial number mismatch"
+
+#: dialog.c:267
+msgid "Authority and subject key identifier mismatch"
+msgstr "Authority and subject key identifier mismatch"
 
 #: ui/00default.xml:349
 msgid "Auto-Reconnect"
@@ -234,7 +266,7 @@ msgstr "Azul"
 msgid "Bold"
 msgstr "Negrito"
 
-#: dialog.c:483
+#: dialog.c:718
 msgid "Brazilian Public Software Portal"
 msgstr "Portal do Software Público Brasileiro"
 
@@ -246,7 +278,19 @@ msgstr "Break"
 msgid "Broken pipe"
 msgstr "Conexão interrompida"
 
-#: dialog.c:103
+#: dialog.c:148
+msgid "CRL has expired"
+msgstr "CRL has expired"
+
+#: dialog.c:141
+msgid "CRL is not yet valid"
+msgstr "CRL is not yet valid"
+
+#: dialog.c:120
+msgid "CRL signature failure"
+msgstr "CRL signature failure"
+
+#: dialog.c:338
 msgid "C_haracter Coding:"
 msgstr "C_odificação de caracteres:"
 
@@ -290,7 +334,7 @@ msgstr "Não foi possível obter o tamanho do arquivo"
 msgid "Can't load %s"
 msgstr "Não foi possível carregar %s"
 
-#: dialog.c:355
+#: dialog.c:590
 msgid "Can't load file"
 msgstr "Não foi possível carregar arquivo"
 
@@ -311,7 +355,7 @@ msgstr "Incapaz de processar arquivos de descrição de UI em %s"
 msgid "Can't parse unnamed element"
 msgstr "Incapaz de processar elemento sem nome"
 
-#: dialog.c:333
+#: dialog.c:568
 #, c-format
 msgid ""
 "Can't save copy to file\n"
@@ -320,11 +364,11 @@ msgstr ""
 "Não foi possível salvar cópia para o arquivo\n"
 "%s"
 
-#: dialog.c:199
+#: dialog.c:434
 msgid "Can't save file"
 msgstr "Não foi possível salvar arquivo"
 
-#: dialog.c:308
+#: dialog.c:543
 #, c-format
 msgid ""
 "Can't save screen to file\n"
@@ -333,7 +377,7 @@ msgstr ""
 "Não foi possível salvar a tela no arquivo\n"
 "%s"
 
-#: dialog.c:322
+#: dialog.c:557
 #, c-format
 msgid ""
 "Can't save selection to file\n"
@@ -380,6 +424,32 @@ msgstr "Não encontrei codificação \"%s\", usando defaults"
 #, c-format
 msgid "Cannot parse %s \"%s\", entry %d"
 msgstr "Impossível interpretar %s \"%s\", entrada %d"
+
+#: dialog.c:134
+msgid "Certificate has expired"
+msgstr "Certificate has expired"
+
+#: dialog.c:127
+msgid "Certificate is not yet valid"
+msgstr "Certificate is not yet valid"
+
+#: dialog.c:246
+#, fuzzy
+msgid "Certificate not trusted"
+msgstr "%s: Tabulação verticao não suportada"
+
+#: dialog.c:253
+#, fuzzy
+msgid "Certificate rejected"
+msgstr "Tipo de dispositivo rejeitado"
+
+#: dialog.c:218
+msgid "Certificate revoked"
+msgstr "Certificate revoked"
+
+#: dialog.c:113
+msgid "Certificate signature failure"
+msgstr "Certificate signature failure"
 
 #: v3270/selection.c:399
 msgid "Charset error"
@@ -442,7 +512,7 @@ msgstr "Cursor mira"
 msgid "Cross hair cursor"
 msgstr "Cursor mira"
 
-#: dialog.c:120
+#: dialog.c:355
 #, c-format
 msgid "Current (%s)"
 msgstr "Atual (%s)"
@@ -580,7 +650,7 @@ msgstr "Erro em fcntl(%s) ao ativar o modo não blocante"
 msgid "Error in ioctl(%s) when setting no blocking mode"
 msgstr "Erro em ioctl(%s) ao ativar o modo não blocante"
 
-#: dialog.c:353
+#: dialog.c:588
 #, c-format
 msgid "Error loading %s"
 msgstr "Erro lendo %s"
@@ -621,6 +691,22 @@ msgstr "Transferência de arquivos já está ativa nesta sessão"
 #: filetransfer.c:772
 msgid "Fixed"
 msgstr "Fixo"
+
+#: dialog.c:169
+msgid "Format error in CRL's lastUpdate field"
+msgstr "Format error in CRL's lastUpdate field"
+
+#: dialog.c:176
+msgid "Format error in CRL's nextUpdate field"
+msgstr "Format error in CRL's nextUpdate field"
+
+#: dialog.c:162
+msgid "Format error in certificate's notAfter field"
+msgstr "Format error in certificate's notAfter field"
+
+#: dialog.c:155
+msgid "Format error in certificate's notBefore field"
+msgstr "Format error in certificate's notBefore field"
 
 #: ui/00default.xml:343
 msgid "Full Screen"
@@ -744,6 +830,11 @@ msgstr "Intensificado/Desprotegido"
 msgid "Invalid (empty) hostname"
 msgstr "Nome do host é invalido (vazio)"
 
+#: dialog.c:225
+#, fuzzy
+msgid "Invalid CA certificate"
+msgstr "Ação recortar inválida"
+
 #: charset.c:321
 #, c-format
 msgid "Invalid CGCSGID '%s', ignoring"
@@ -775,6 +866,10 @@ msgstr "Tipo de proxy invalido '%.*s'"
 msgid "Keep selected"
 msgstr "Manter selecionado"
 
+#: dialog.c:281
+msgid "Key usage does not include certificate signing"
+msgstr "Key usage does not include certificate signing"
+
 #: paste.c:302
 msgid "Keyboard is locked"
 msgstr "Teclado está bloqueado"
@@ -795,7 +890,7 @@ msgstr "Cores diversas"
 msgid "Missing ']'"
 msgstr "Faltando ']'"
 
-#: window.c:325
+#: window.c:331
 #, c-format
 msgid "Model %d (%s)"
 msgstr "Modelo %d (%s)"
@@ -839,6 +934,14 @@ msgstr "Erro ao iniciar a rede"
 #: ui/00default.xml:411
 msgid "Next field"
 msgstr "Próximo campo"
+
+#: dialog.c:212
+msgid ""
+"No signatures could be verified because the chain contains only one "
+"certificate and it is not self signed."
+msgstr ""
+"No signatures could be verified because the chain contains only one "
+"certificate and it is not self signed."
 
 #: colors.c:412
 msgid "Normal/Protected"
@@ -901,6 +1004,10 @@ msgstr "Other (TSO)"
 #: hostdialog.c:45
 msgid "Other (VM/CMS)"
 msgstr "Other (VM/CMS)"
+
+#: dialog.c:183
+msgid "Out of memory"
+msgstr "Out of memory"
 
 #: ui/10keypad.xml:138
 msgid "PA1"
@@ -1035,13 +1142,17 @@ msgstr "Colar próximo"
 msgid "Paste text file"
 msgstr "Colar arquivo texto"
 
-#: dialog.c:390
+#: dialog.c:625
 msgid "Paste text file contents"
 msgstr "Colar conteúdo de arquivo texto"
 
 #: ui/00default.xml:345
 msgid "Paste with left margin"
 msgstr "Colar com margem esquerda"
+
+#: dialog.c:232
+msgid "Path length constraint exceeded"
+msgstr "Path length constraint exceeded"
 
 #: main.c:249
 msgid "Path to application data files"
@@ -1372,7 +1483,7 @@ msgstr ""
 msgid "Save copy"
 msgstr "Salvar cópia"
 
-#: dialog.c:332
+#: dialog.c:567
 msgid "Save copy to file"
 msgstr "Salvar cópia para arquivo"
 
@@ -1380,7 +1491,7 @@ msgstr "Salvar cópia para arquivo"
 msgid "Save screen"
 msgstr "Salvar tela"
 
-#: dialog.c:307
+#: dialog.c:542
 msgid "Save screen to file"
 msgstr "Salvar tela para arquivo"
 
@@ -1388,7 +1499,7 @@ msgstr "Salvar tela para arquivo"
 msgid "Save selected"
 msgstr "Salvar seleção"
 
-#: dialog.c:321
+#: dialog.c:556
 msgid "Save selection to file"
 msgstr "Salvar seleção para arquivo"
 
@@ -1407,6 +1518,11 @@ msgstr "Scripts"
 #: filetransfer.c:850
 msgid "Secondary space:"
 msgstr "Secondary space:"
+
+#: dialog.c:71
+#, fuzzy
+msgid "Secure connection was successful."
+msgstr "Conexão _Segura"
 
 #: ui/00default.xml:296
 msgid "Select Field"
@@ -1443,6 +1559,14 @@ msgstr "Fundo da seleção"
 #: colors.c:416
 msgid "Selection foreground"
 msgstr "Frente da seleção"
+
+#: dialog.c:190
+msgid "Self signed certificate"
+msgstr "Self signed certificate"
+
+#: dialog.c:197
+msgid "Self signed certificate in certificate chain"
+msgstr "Self signed certificate in certificate chain"
 
 #: ui/00default.xml:277
 msgid "Send file"
@@ -1504,6 +1628,10 @@ msgstr "Espaço no nome da LU"
 msgid "Spee_d"
 msgstr "Veloci_dade"
 
+#: dialog.c:260
+msgid "Subject issuer mismatch"
+msgstr "Subject issuer mismatch"
+
 #: hostdialog.c:198
 msgid "System _type:"
 msgstr "Tipo de servidor:"
@@ -1528,15 +1656,186 @@ msgstr "Cores do terminal"
 msgid "Text before '['"
 msgstr "Texto antes de '['"
 
-#: dialog.c:223
+#: dialog.c:149
+msgid "The CRL has expired."
+msgstr "The CRL has expired."
+
+#: dialog.c:142
+msgid "The CRL is not yet valid."
+msgstr "The CRL is not yet valid."
+
+#: dialog.c:170
+msgid "The CRL lastUpdate field contains an invalid time."
+msgstr "The CRL lastUpdate field contains an invalid time."
+
+#: dialog.c:177
+msgid "The CRL nextUpdate field contains an invalid time."
+msgstr "The CRL nextUpdate field contains an invalid time."
+
+#: dialog.c:86
+msgid "The CRL of a certificate could not be found."
+msgstr "The CRL of a certificate could not be found."
+
+#: dialog.c:100
+msgid ""
+"The CRL signature could not be decrypted: this means that the actual "
+"signature value could not be determined rather than it not matching the "
+"expected value. Unused."
+msgstr ""
+"The CRL signature could not be decrypted: this means that the actual "
+"signature value could not be determined rather than it not matching the "
+"expected value. Unused."
+
+#: dialog.c:233
+msgid "The basicConstraints pathlength parameter has been exceeded."
+msgstr "The basicConstraints pathlength parameter has been exceeded."
+
+#: dialog.c:198
+msgid ""
+"The certificate chain could be built up using the untrusted certificates but "
+"the root could not be found locally."
+msgstr ""
+"The certificate chain could be built up using the untrusted certificates but "
+"the root could not be found locally."
+
+#: dialog.c:219
+msgid "The certificate has been revoked."
+msgstr "The certificate has been revoked."
+
+#: dialog.c:135
+msgid ""
+"The certificate has expired: that is the notAfter date is before the current "
+"time."
+msgstr ""
+"The certificate has expired: that is the notAfter date is before the current "
+"time."
+
+#: dialog.c:128
+msgid ""
+"The certificate is not yet valid: the notBefore date is after the current "
+"time."
+msgstr ""
+"The certificate is not yet valid: the notBefore date is after the current "
+"time."
+
+#: dialog.c:163
+msgid "The certificate notAfter field contains an invalid time."
+msgstr "The certificate notAfter field contains an invalid time."
+
+#: dialog.c:156
+msgid "The certificate notBefore field contains an invalid time."
+msgstr "The certificate notBefore field contains an invalid time."
+
+#: dialog.c:93
+msgid ""
+"The certificate signature could not be decrypted. This means that the actual "
+"signature value could not be determined rather than it not matching the "
+"expected value, this is only meaningful for RSA keys."
+msgstr ""
+"The certificate signature could not be decrypted. This means that the actual "
+"signature value could not be determined rather than it not matching the "
+"expected value, this is only meaningful for RSA keys."
+
+#: dialog.c:275
+msgid ""
+"The current candidate issuer certificate was rejected because its issuer "
+"name and serial number was present and did not match the authority key "
+"identifier of the current certificate. Only displayed when the -"
+"issuer_checks option is set."
+msgstr ""
+"The current candidate issuer certificate was rejected because its issuer "
+"name and serial number was present and did not match the authority key "
+"identifier of the current certificate. Only displayed when the -"
+"issuer_checks option is set."
+
+#: dialog.c:282
+msgid ""
+"The current candidate issuer certificate was rejected because its keyUsage "
+"extension does not permit certificate signing."
+msgstr ""
+"The current candidate issuer certificate was rejected because its keyUsage "
+"extension does not permit certificate signing."
+
+#: dialog.c:268
+msgid ""
+"The current candidate issuer certificate was rejected because its subject "
+"key identifier was present and did not match the authority key identifier "
+"current certificate. Only displayed when the -issuer_checks option is set."
+msgstr ""
+"The current candidate issuer certificate was rejected because its subject "
+"key identifier was present and did not match the authority key identifier "
+"current certificate. Only displayed when the -issuer_checks option is set."
+
+#: dialog.c:261
+msgid ""
+"The current candidate issuer certificate was rejected because its subject "
+"name did not match the issuer name of the current certificate. Only "
+"displayed when the -issuer_checks option is set."
+msgstr ""
+"The current candidate issuer certificate was rejected because its subject "
+"name did not match the issuer name of the current certificate. Only "
+"displayed when the -issuer_checks option is set."
+
+#: dialog.c:458
 msgid "The file already exists. Replace it?"
 msgstr "O arquivo já existe, substituir?"
+
+#: dialog.c:205
+msgid ""
+"The issuer certificate could not be found: this occurs if the issuer "
+"certificate of an untrusted certificate cannot be found."
+msgstr ""
+"The issuer certificate could not be found: this occurs if the issuer "
+"certificate of an untrusted certificate cannot be found."
+
+#: dialog.c:79
+msgid ""
+"The issuer certificate of a looked up certificate could not be found. This "
+"normally means the list of trusted certificates is not complete."
+msgstr ""
+"The issuer certificate of a looked up certificate could not be found. This "
+"normally means the list of trusted certificates is not complete."
+
+#: dialog.c:191
+msgid ""
+"The passed certificate is self signed and the same certificate cannot be "
+"found in the list of trusted certificates."
+msgstr ""
+"The passed certificate is self signed and the same certificate cannot be "
+"found in the list of trusted certificates."
+
+#: dialog.c:107
+msgid ""
+"The public key in the certificate SubjectPublicKeyInfo could not be read."
+msgstr ""
+"The public key in the certificate SubjectPublicKeyInfo could not be read."
 
 #: ft.c:216
 msgid "The remote file name is invalid"
 msgstr "O nome do arquivo remoto não é válido"
 
-#: dialog.c:430
+#: dialog.c:254
+msgid "The root CA is marked to reject the specified purpose."
+msgstr "The root CA is marked to reject the specified purpose."
+
+#: dialog.c:247
+msgid "The root CA is not marked as trusted for the specified purpose."
+msgstr "The root CA is not marked as trusted for the specified purpose."
+
+#: dialog.c:114 dialog.c:121
+#, fuzzy
+msgid "The signature of the certificate is invalid."
+msgstr "O nome do arquivo remoto não é válido"
+
+#: dialog.c:240
+msgid "The supplied certificate cannot be used for the specified purpose."
+msgstr "The supplied certificate cannot be used for the specified purpose."
+
+#: dialog.c:72
+msgid "This connection is secure and signed."
+msgstr "This connection is secure and signed."
+
+#: dialog.c:665
 msgid ""
 "This program is free software; you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -1612,7 +1911,7 @@ msgstr "Erro de transmissão"
 msgid "Turquoise"
 msgstr "Turquesa"
 
-#: dialog.c:44
+#: dialog.c:50
 msgid "UTF-8"
 msgstr "UTF-8"
 
@@ -1624,6 +1923,30 @@ msgstr "Servidor enviou código de abertura DFT desconhecido"
 msgid "Unable to connect to secure hosts"
 msgstr "Não é possível conectar em servidores seguros"
 
+#: dialog.c:106
+msgid "Unable to decode issuer public key"
+msgstr "Unable to decode issuer public key"
+
+#: dialog.c:99
+msgid "Unable to decrypt CRL's signature"
+msgstr "Unable to decrypt CRL's signature"
+
+#: dialog.c:92
+msgid "Unable to decrypt certificate's signature"
+msgstr "Unable to decrypt certificate's signature"
+
+#: dialog.c:85
+msgid "Unable to get certificate CRL"
+msgstr "Unable to get certificate CRL"
+
+#: dialog.c:78
+msgid "Unable to get issuer certificate"
+msgstr "Unable to get issuer certificate"
+
+#: dialog.c:204
+msgid "Unable to get local issuer certificate"
+msgstr "Unable to get local issuer certificate"
+
 #: paste.c:301
 msgid "Unable to paste text"
 msgstr "Incapaz de colar texto"
@@ -1632,9 +1955,18 @@ msgstr "Incapaz de colar texto"
 msgid "Unable to send file-transfer request"
 msgstr "Não foi possível enviar a requisição de transferência de arquivo"
 
+#: dialog.c:211
+msgid "Unable to verify the first certificate"
+msgstr "Unable to verify the first certificate"
+
 #: filetransfer.c:774
 msgid "Undefined"
 msgstr "Indefinido"
+
+#: dialog.c:760
+#, fuzzy
+msgid "Unexpected SSL error"
+msgstr "Erro inesperado"
 
 #: uiparser/menubar.c:48 uiparser/toolbar.c:64 uiparser/popup.c:51
 #, c-format
@@ -1670,7 +2002,7 @@ msgstr "Valor de attributo inesperado ou inválido: \"%s\""
 msgid "Unexpected or invalid color value \"%s\""
 msgstr "Valor de cor inválido ou inesperado: \"%s\""
 
-#: v3270/widget.c:803
+#: v3270/widget.c:816
 msgid ""
 "Unexpected signature in H3270 object, possible version mismatch in lib3270"
 msgstr ""
@@ -1738,6 +2070,11 @@ msgstr "Número de porta ou serviço desconhecido: %s"
 msgid "Unsupported RPQ term"
 msgstr "Unsupported RPQ term"
 
+#: dialog.c:239
+#, fuzzy
+msgid "Unsupported certificate purpose"
+msgstr "Unsupported socks 4 proxy"
+
 #: telnet.c:547
 msgid "Unsupported passthru host session"
 msgstr "Unsupported passthru host session"
@@ -1754,7 +2091,7 @@ msgstr "Usar teclas +/- para navegar por campos"
 msgid "Variable"
 msgstr "Variável"
 
-#: dialog.c:470
+#: dialog.c:705
 #, c-format
 msgid "Version %s - Revision %s"
 msgstr "Versão %s - Revisão %s"
@@ -1779,7 +2116,7 @@ msgstr "Aguardando resposta do pedido de download"
 msgid "Waiting for PUT response"
 msgstr "Aguardando resposta do pedido de upload"
 
-#: dialog.c:45
+#: dialog.c:51
 msgid "Western Europe (ISO 8859-1)"
 msgstr "Europa ocidental (ISO 8859-1)"
 
@@ -1791,51 +2128,51 @@ msgstr "Branco"
 msgid "Window"
 msgstr "Janela"
 
-#: dialog.c:46
+#: dialog.c:52
 msgid "Windows Western languages (CP1252)"
 msgstr "Windows ocidental (CP1252)"
 
-#: v3270/oia.c:420 v3270/oia.c:444 v3270/oia.c:448
+#: v3270/oia.c:415 v3270/oia.c:439 v3270/oia.c:443
 msgid "X"
 msgstr "X"
 
-#: v3270/oia.c:424
+#: v3270/oia.c:419
 msgid "X -f"
 msgstr "X -f"
 
-#: v3270/oia.c:456
+#: v3270/oia.c:451
 msgid "X Connecting"
 msgstr "X Conectando"
 
-#: v3270/oia.c:440
+#: v3270/oia.c:435
 msgid "X Inhibit"
 msgstr "X Inibido"
 
-#: v3270/oia.c:416
+#: v3270/oia.c:411
 msgid "X Not Connected"
 msgstr "X Desconectado"
 
-#: v3270/oia.c:432
+#: v3270/oia.c:427
 msgid "X Numeric"
 msgstr "X Numérico"
 
-#: v3270/oia.c:436
+#: v3270/oia.c:431
 msgid "X Overflow"
 msgstr "X Estouro"
 
-#: v3270/oia.c:428
+#: v3270/oia.c:423
 msgid "X Protected"
 msgstr "X Protegido"
 
-#: v3270/oia.c:452
+#: v3270/oia.c:447
 msgid "X Resolving"
 msgstr "X Resolvendo"
 
-#: v3270/oia.c:404
+#: v3270/oia.c:399
 msgid "X System"
 msgstr "X Sistema"
 
-#: v3270/oia.c:408
+#: v3270/oia.c:403
 msgid "X Wait"
 msgstr "X Aguarde"
 
@@ -1965,7 +2302,7 @@ msgstr "setsockopt(%s)"
 msgid "socket"
 msgstr "socket"
 
-#: dialog.c:486
+#: dialog.c:721
 msgid "translator-credits"
 msgstr "translator-credits"
 

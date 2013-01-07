@@ -200,7 +200,13 @@
  LIB3270_EXPORT gboolean		  v3270_set_keyboard_action(GtkWidget *widget, const gchar *key_name, GtkAction *action);
  LIB3270_EXPORT void			  v3270_set_scroll_action(GtkWidget *widget, GdkScrollDirection direction, GtkAction *action);
 
+ // SSL & Security
+ LIB3270_EXPORT const gchar		* v3270_get_ssl_status_icon(GtkWidget *widget);
+ LIB3270_EXPORT const gchar		* v3270_get_ssl_status_text(GtkWidget *widget);
+ LIB3270_EXPORT const gchar		* v3270_get_ssl_status_message(GtkWidget *widget);
+ LIB3270_EXPORT	void			  v3270_popup_security_dialog(GtkWidget *widget);
 
-G_END_DECLS
+
+ G_END_DECLS
 
 #endif // V3270_H_INCLUDED

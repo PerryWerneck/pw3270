@@ -486,7 +486,7 @@
 
 	if(field == V3270_OIA_SSL)
 	{
-		run_security_dialog(window);
+		v3270_popup_security_dialog(widget);
 		trace("%s: Show SSL connection info dialog",__FUNCTION__);
 		return TRUE;
 	}
