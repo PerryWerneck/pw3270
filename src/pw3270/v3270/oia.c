@@ -349,12 +349,12 @@ void v3270_draw_ssl_status(cairo_t *cr, H3270 *host, struct v3270_metrics *metri
 
 	case LIB3270_SSL_NEGOTIATING:	/**< Negotiating SSL */
 		gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_STATUS_WARNING);
-		draw_xbm(cr,rect,unlocked_width,unlocked_height,unlocked_bits);
+		draw_xbm(cr,rect,negotiated_width,negotiated_height,negotiated_bits);
 		break;
 
 	case LIB3270_SSL_NEGOTIATED:	/**< Connection secure, no CA or self-signed */
 		gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_STATUS_OK);
-		draw_xbm(cr,rect,negotiated_width,negotiated_height,negotiated_bits);
+		draw_xbm(cr,rect,locked_width,locked_height,locked_bits);
 		gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_STATUS_WARNING);
 		draw_xbm(cr,rect,warning_width,warning_height,warning_bits);
 		break;
