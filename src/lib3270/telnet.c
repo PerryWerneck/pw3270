@@ -239,15 +239,20 @@ static const char *trsp_flag[2] = { "POSITIVE-RESPONSE", "NEGATIVE-RESPONSE" };
 #define XMIT_COLS	hSession->maxCOLS
 
 #if defined(HAVE_LIBSSL) /*[*/
-// static Boolean need_tls_follows = False;
-static void ssl_init(H3270 *session);
-#if OPENSSL_VERSION_NUMBER >= 0x00907000L /*[*/
-#define INFO_CONST const
-#else /*][*/
-#define INFO_CONST
-#endif /*]*/
-static void ssl_info_callback(INFO_CONST SSL *s, int where, int ret);
-static void continue_tls(H3270 *hSession, unsigned char *sbbuf, int len);
+
+	static void ssl_init(H3270 *session);
+
+	#if OPENSSL_VERSION_NUMBER >= 0x00907000L /*[*/
+		#define INFO_CONST const
+	#else /*][*/
+		#define INFO_CONST
+	#endif /*]*/
+
+	static void ssl_info_callback(INFO_CONST SSL *s, int where, int ret);
+	static void continue_tls(H3270 *hSession, unsigned char *sbbuf, int len);
+
+	static int ssl_3270_ex_index = -1;	/**< Index of h3270 handle in SSL session */
+
 #endif /*]*/
 
 #if defined(_WIN32) /*[*/
@@ -3083,6 +3088,9 @@ static void ssl_init(H3270 *session)
 		SSL_CTX_set_options(ssl_ctx, SSL_OP_ALL);
 		SSL_CTX_set_info_callback(ssl_ctx, ssl_info_callback);
 		SSL_CTX_set_default_verify_paths(ssl_ctx);
+
+		ssl_3270_ex_index = SSL_get_ex_new_index(0,NULL,NULL,NULL,NULL);
+
 	}
 
 	if(session->ssl_con)
@@ -3096,32 +3104,23 @@ static void ssl_init(H3270 *session)
 		return;
 	}
 
-	SSL_set_verify(session->ssl_con, 0/*xxx*/, NULL);
+	SSL_set_ex_data(session->ssl_con,ssl_3270_ex_index,(char *) session);
 
-	/* XXX: May need to get key file and password. */
-	/*
-	if (appres.cert_file)
-	{
-		if (!(SSL_CTX_use_certificate_chain_file(ssl_ctx,
-						appres.cert_file))) {
-			unsigned long e;
-			char err_buf[120];
+	SSL_set_verify(session->ssl_con, 0, NULL);
 
-			e = ERR_get_error();
-			(void) ERR_error_string(e, err_buf);
-
-			popup_an_error(NULL,"SSL_CTX_use_certificate_chain_file("
-					"\"%s\") failed:\n%s",
-					appres.cert_file, err_buf);
-		}
-	}
-	*/
 }
 
 /* Callback for tracing protocol negotiation. */
 static void ssl_info_callback(INFO_CONST SSL *s, int where, int ret)
 {
-	H3270 *hSession = lib3270_get_default_session_handle(); // TODO: Find a better way!
+//	H3270 *hSession = lib3270_get_default_session_handle(); // TODO: Find a better way!
+	H3270 *hSession = (H3270 *) SSL_get_ex_data(s,ssl_3270_ex_index);
+
+#ifdef DEBUG
+	trace("%s: hsession=%p, session=%p",__FUNCTION__,hSession,lib3270_get_default_session_handle());
+	if(hSession != lib3270_get_default_session_handle())
+		exit(-1);
+#endif // DEBUG
 
 	switch(where)
 	{
