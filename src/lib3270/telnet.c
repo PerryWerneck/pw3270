@@ -115,76 +115,11 @@
 #define BUFSZ		16384
 #define TRACELINE	72
 
-/* Globals */
-// char    	*hostname = CN;
-// time_t          ns_time;
-//int             ns_brcvd;
-//int             ns_rrcvd;
-//int             ns_bsent;
-//int             ns_rsent;
-// unsigned char  *obuf;		/* 3270 output buffer */
-// unsigned char  *obptr = (unsigned char *) NULL;
-//int             linemode = 1;
-
-/*
-#if defined(LOCAL_PROCESS)
-Boolean		local_process = False;
-#endif
-// char           *termtype;
-*/
-
-/* Externals */
-// extern struct timeval ds_ts;
-
-/* Statics */
-// static int      		sock 			= -1;	/* active socket */
-
-//#if defined(HAVE_LIBSSL) /*[*/
-//static unsigned long last_ssl_error	= 0;
-//#endif
-
-//#if defined(_WIN32) /*[*/
-//static HANDLE	sock_handle = NULL;
-//#endif /*]*/
-
-// static unsigned char myopts[LIB3270_TELNET_N_OPTS], hisopts[LIB3270_TELNET_N_OPTS];
-
-/* telnet option flags */
-// static unsigned char *ibuf = (unsigned char *) NULL;
-// static int      ibuf_size = 0;	/* size of ibuf */
-
-/* 3270 input buffer */
-// static unsigned char *ibptr;
-// static unsigned char *obuf_base = (unsigned char *)NULL;
-// static int	obuf_size = 0;
-// static unsigned char *netrbuf = (unsigned char *)NULL;
-
-/* network input buffer */
-// static unsigned char *sbbuf = (unsigned char *)NULL;
-
-/* telnet sub-option buffer */
-// static unsigned char *sbptr;
-// static unsigned char telnet_state;
-// static char     ttype_tmpval[13];
-
 #if defined(X3270_TN3270E)
 	#define E_OPT(n)	(1 << (n))
 #endif // X3270_TN3270E
 
-//#if defined(X3270_TN3270E)
-//static unsigned long e_funcs;	/* negotiated TN3270E functions */
-//static unsigned short e_xmit_seq; /* transmit sequence number */
-//static int response_required;
-//#endif
-
 #if defined(X3270_ANSI) /*[*/
-//static int      ansi_data = 0;
-// static unsigned char *lbuf = (unsigned char *)NULL;
-/* line-mode input buffer */
-// static unsigned char *lbptr;
-// static int      lnext = 0;
-// static int      backslashed = 0;
-//static int      t_valid = 0;
 static char     vintr;
 static char     vquit;
 static char     verase;
@@ -194,19 +129,6 @@ static char     vwerase;
 static char     vrprnt;
 static char     vlnext;
 #endif /*]*/
-
-// static int	tn3270e_negotiated = 0;
-//static enum { E_NONE, E_3270, E_NVT, E_SSCP } tn3270e_submode = E_NONE;
-// static int	tn3270e_bound = 0;
-// static char	plu_name[BIND_PLU_NAME_MAX+1];
-// static char	**lus = (char **)NULL;
-// static char	**curr_lu = (char **)NULL;
-//static char	*try_lu = CN;
-
-// static int	proxy_type = 0;
-// static char	*proxy_host = CN;
-//static char	*proxy_portname = CN;
-// static unsigned short proxy_port = 0;
 
 static int telnet_fsm(H3270 *session, unsigned char c);
 static void net_rawout(H3270 *session, unsigned const char *buf, size_t len);
