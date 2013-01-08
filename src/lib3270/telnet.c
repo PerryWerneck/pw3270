@@ -776,6 +776,7 @@ static void ssl_negotiate(H3270 *hSession)
 		char				  buffer[4096];
 		int 				  alg_bits		= 0;
 		const SSL_CIPHER	* cipher		= SSL_get_current_cipher(hSession->ssl_con);
+		X509				* peer			= SSL_get_peer_certificate(hSession->ssl_con);
 
 		trace_dsn(hSession,"TLS/SSL negotiated connection complete. Connection is now secure.\n");
 
@@ -786,6 +787,28 @@ static void ssl_negotiate(H3270 *hSession)
 						SSL_CIPHER_get_version(cipher),
 						alg_bits,
 						SSL_get_verify_result(hSession->ssl_con));
+
+		if(peer)
+		{
+			BIO				* out	= BIO_new(BIO_s_mem());
+			unsigned char	* data;
+			unsigned char	* text;
+			int				  n;
+
+			X509_print(out,peer);
+
+			n		= BIO_get_mem_data(out, &data);
+			text	= (unsigned char *) malloc (n+1);
+			text[n]	='\0';
+			memcpy(text,data,n);
+
+			trace_dsn(hSession,"TLS/SSL peer certificate:\n%s\n",text);
+
+			free(text);
+			BIO_free(out);
+			X509_free(peer);
+
+		}
 	}
 
 	if(!SSL_get_verify_result(hSession->ssl_con))
