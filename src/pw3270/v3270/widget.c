@@ -297,7 +297,12 @@ gboolean v3270_query_tooltip(GtkWidget  *widget, gint x, gint y, gboolean keyboa
 			else if(lib3270_get_secure(GTK_V3270(widget)->host) == LIB3270_SSL_UNSECURE)
 			{
 				gtk_tooltip_set_icon_from_stock(tooltip,GTK_STOCK_INFO,GTK_ICON_SIZE_MENU);
-				gtk_tooltip_set_markup(tooltip,_( "Connection is insecure" ) );
+				gtk_tooltip_set_markup(tooltip,_( "<b>Identity not verified</b>\nConnection is insecure" ) );
+			}
+			else if(!lib3270_get_SSL_verify_result(GTK_V3270(widget)->host))
+			{
+				gtk_tooltip_set_icon_from_stock(tooltip,GTK_STOCK_DIALOG_AUTHENTICATION,GTK_ICON_SIZE_MENU);
+				gtk_tooltip_set_markup(tooltip,_( "<b>Identity verified</b>\nThe connection is secure" ) );
 			}
 			else
 			{
