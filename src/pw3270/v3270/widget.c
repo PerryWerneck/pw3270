@@ -292,7 +292,7 @@ gboolean v3270_query_tooltip(GtkWidget  *widget, gint x, gint y, gboolean keyboa
 			if(!lib3270_connected(GTK_V3270(widget)->host))
 			{
 				gtk_tooltip_set_icon_from_stock(tooltip,GTK_STOCK_DISCONNECT,GTK_ICON_SIZE_MENU);
-				gtk_tooltip_set_markup(tooltip,_( "<b>Disconnected from host</b>\nNo security info" ) );
+				gtk_tooltip_set_markup(tooltip,_( "<b>Identity not verified</b>\nDisconnected from host" ) );
 			}
 			else if(lib3270_get_secure(GTK_V3270(widget)->host) == LIB3270_SSL_UNSECURE)
 			{
@@ -310,12 +310,14 @@ gboolean v3270_query_tooltip(GtkWidget  *widget, gint x, gint y, gboolean keyboa
 
 				if(msg)
 				{
+					gchar *text = g_strdup_printf("<b>%s</b>\n%s",_("Identity not verified"),msg->text);
 					gtk_tooltip_set_icon_from_stock(tooltip,msg->icon,GTK_ICON_SIZE_MENU);
-					gtk_tooltip_set_markup(tooltip,msg->text);
+					gtk_tooltip_set_markup(tooltip,text);
+					g_free(text);
 				}
 				else
 				{
-					gchar *text = g_strdup_printf(_("<b>Unexpected SSL status %ld</b>\nSecurity status is undefined"),lib3270_get_SSL_verify_result(GTK_V3270(widget)->host));
+					gchar *text = g_strdup_printf(_("<b>SSL state is undefined</b>Unexpected SSL status %ld"),lib3270_get_SSL_verify_result(GTK_V3270(widget)->host));
 					gtk_tooltip_set_icon_from_stock(tooltip,GTK_STOCK_DIALOG_ERROR,GTK_ICON_SIZE_MENU);
 					gtk_tooltip_set_markup(tooltip,text);
 					g_free(text);
