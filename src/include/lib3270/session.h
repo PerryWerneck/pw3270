@@ -377,7 +377,7 @@
 		int						  excepting				: 1;
 
 		// SSL Data (Always defined to mantain the same structure size)
-		unsigned long 			  last_ssl_error;
+		unsigned long 			  ssl_error;
 		SSL 					* ssl_con;
 
 		// State change callbacks.
