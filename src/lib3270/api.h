@@ -291,38 +291,10 @@
 		#define COLOR_ATTR_NONE			0x0000
 		#define COLOR_ATTR_FIELD		LIB3270_ATTR_FIELD
 		#define COLOR_ATTR_BLINK		LIB3270_ATTR_BLINK
-		#define COLOR_ATTR_UNDERLINE	LIB3270_ATTR_UNDERLINE
+//		#define COLOR_ATTR_UNDERLINE	LIB3270_ATTR_UNDERLINE
 		#define COLOR_ATTR_INTENSIFY	LIB3270_ATTR_INTENSIFY
 
-//		#define CHAR_ATTR_CG			LIB3270_ATTR_CG
-//		#define CHAR_ATTR_MARKER		LIB3270_ATTR_MARKER
-
 		#define CHAR_ATTR_UNCONVERTED	LIB3270_ATTR_CG
-
-/*
-		struct _lib3270_option
-		{
-			const char *name;
-			enum
-			{
-				OPT_BOOLEAN,
-				OPT_STRING,
-				OPT_INTEGER,
-				OPT_XRM,
-				OPT_SKIP2,
-				OPT_NOP,
-				OPT_DONE
-			} type;
-			unsigned char	flag;
-			const char		*res_name;
-			void			*aoff;
-			const char		*description;
-		};
-
-		#define new_3270_session(m) lib3270_session_new(m)
-
-		LOCAL_EXTERN const struct _lib3270_option * get_3270_option_table(int sz);
-*/
 
 
 		/* Set/Get screen contents */

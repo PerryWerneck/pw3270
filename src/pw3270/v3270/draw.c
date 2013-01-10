@@ -119,6 +119,28 @@ void v3270_draw_element(cairo_t *cr, unsigned char chr, unsigned short attr, H32
 
 	get_element_colors(attr,&fg,&bg,color);
 	v3270_draw_char(cr,chr,attr,session,height,rect,fg,bg);
+
+	if(attr & LIB3270_ATTR_UNDERLINE)
+	{
+		cairo_scaled_font_t		* font	= cairo_get_scaled_font(cr);
+		cairo_font_extents_t	  extents;
+		double					  sl;
+
+		cairo_scaled_font_extents(font,&extents);
+
+		sl = extents.descent/3;
+		if(sl < 1)
+			sl = 1;
+
+		gdk_cairo_set_source_color(cr,fg);
+
+		cairo_rectangle(cr,rect->x,rect->y+sl+extents.ascent+(extents.descent/2),rect->width,sl);
+		cairo_fill(cr);
+
+		cairo_stroke(cr);
+	}
+
+
 }
 
 void v3270_draw_char(cairo_t *cr, unsigned char chr, unsigned short attr, H3270 *session, guint height, GdkRectangle *rect, GdkColor *fg, GdkColor *bg)
@@ -262,6 +284,7 @@ void v3270_draw_char(cairo_t *cr, unsigned char chr, unsigned short attr, H3270 
 			g_free(utf);
 		}
 	}
+
 	cairo_stroke(cr);
 }
 

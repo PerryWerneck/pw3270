@@ -210,16 +210,13 @@ static unsigned short calc_attrs(H3270 *session, int baddr, int fa_addr, int fa)
 	else
 		gr = 0;
 
-	if(!(gr & GR_REVERSE) && !bg)
-	{
-		if(gr & GR_BLINK)
-			a |= LIB3270_ATTR_BLINK;
+	if(gr & GR_BLINK)
+		a |= LIB3270_ATTR_BLINK;
 
-		if(gr & GR_UNDERLINE)
-			a |= LIB3270_ATTR_UNDERLINE;
-	}
+	if( (gr & GR_UNDERLINE) && lib3270_get_toggle(session,LIB3270_TOGGLE_UNDERLINE))
+		a |= LIB3270_ATTR_UNDERLINE;
 
-	if(session->m3279 && (gr & (GR_BLINK | GR_UNDERLINE)) && !(gr & GR_REVERSE) && !bg)
+	if(session->m3279 && (gr & (GR_BLINK | GR_UNDERLINE)) && !(gr & GR_REVERSE))
     	a |= LIB3270_ATTR_BACKGROUND_INTENSITY;
 
 	if(!session->m3279 &&	((gr & GR_INTENSIFY) || FA_IS_HIGH(fa)))
@@ -762,11 +759,14 @@ LIB3270_ACTION( testpattern )
 		{ 0,		text_pat	},
 	};
 
-	int row = 0;
+	static const unsigned char gr[] = { 0, GR_UNDERLINE, GR_BLINK };
+
+	int row		= 0;
 	int max;
-	int pos = 0;
+	int pos 	= 0;
+	int grpos	= 0;
 	int f;
-	int fg = COLOR_BLUE;
+	int fg		= COLOR_BLUE;
 
 	CHECK_SESSION_HANDLE(hSession);
 
@@ -779,7 +779,11 @@ LIB3270_ACTION( testpattern )
 			{
 				row = 0;
 				if(++fg > COLOR_WHITE)
+				{
 					fg = COLOR_BLUE;
+					if(++grpos > (sizeof(gr)/sizeof(gr[0])))
+						grpos = 0;
+				}
 			}
 			pos = 0;
 		}
@@ -787,6 +791,7 @@ LIB3270_ACTION( testpattern )
 		hSession->ea_buf[f].bg = (fg == COLOR_BLACK) ? COLOR_WHITE : COLOR_BLACK;
 		hSession->ea_buf[f].cs = pat[row].cs;
 		hSession->ea_buf[f].cc = pat[row].cc[pos++];
+		hSession->ea_buf[f].gr = gr[grpos];
 	}
 
 	hSession->display(hSession);

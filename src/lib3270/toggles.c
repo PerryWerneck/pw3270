@@ -149,7 +149,7 @@ static void toggle_altscreen(H3270 *session, struct lib3270_toggle *t, LIB3270_T
 		set_viewsize(session,t->value ? 24 : session->maxROWS,80);
 }
 
-static void toggle_monocase(H3270 *session, struct lib3270_toggle *t, LIB3270_TOGGLE_TYPE tt)
+static void toggle_redraw(H3270 *session, struct lib3270_toggle *t, LIB3270_TOGGLE_TYPE tt)
 {
 	session->display(session);
 }
@@ -172,16 +172,9 @@ void initialize_toggles(H3270 *session)
 		session->toggle[f].upcall	= toggle_nop;
 
 	session->toggle[LIB3270_TOGGLE_RECTANGLE_SELECT].upcall	= toggle_rectselect;
-	session->toggle[LIB3270_TOGGLE_MONOCASE].upcall 		= toggle_monocase;
+	session->toggle[LIB3270_TOGGLE_MONOCASE].upcall 		= toggle_redraw;
+	session->toggle[LIB3270_TOGGLE_UNDERLINE].upcall 		= toggle_redraw;
 	session->toggle[LIB3270_TOGGLE_ALTSCREEN].upcall 		= toggle_altscreen;
-
-/*
-#if defined(X3270_TRACE)
-	session->toggle[LIB3270_TOGGLE_DS_TRACE].upcall			= toggle_dsTrace;
-	session->toggle[LIB3270_TOGGLE_SCREEN_TRACE].upcall		= toggle_screenTrace;
-	session->toggle[LIB3270_TOGGLE_EVENT_TRACE].upcall		= toggle_eventTrace;
-#endif
-*/
 
 #if defined(X3270_ANSI)
 	session->toggle[LIB3270_TOGGLE_LINE_WRAP].upcall			= toggle_lineWrap;
