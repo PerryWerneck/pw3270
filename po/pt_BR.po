@@ -1,12 +1,12 @@
 #
-# Perry Werneck <perry.werneck@gmail.com>, 2012.
+# Perry Werneck <perry.werneck@gmail.com>, 2012, 2013.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-08 11:18-0200\n"
-"PO-Revision-Date: 2012-12-26 10:36-0200\n"
+"POT-Creation-Date: 2013-01-14 09:39-0200\n"
+"PO-Revision-Date: 2013-01-14 09:49-0200\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
 "Language: pt_BR\n"
@@ -78,7 +78,7 @@ msgstr "%s: Tabulação verticao não suportada"
 msgid "%s: unknown family %d"
 msgstr "%s: Familia %d é inválida"
 
-#: telnet.c:1114
+#: telnet.c:1100
 #, c-format
 msgid "%s:%d"
 msgstr "%s:%d"
@@ -91,11 +91,11 @@ msgstr "- Emulador 3270 para GTK"
 msgid "16 colors"
 msgstr "16 cores"
 
-#: screen.c:656 screen.c:686 screen.c:700 screen.c:811
+#: screen.c:653 screen.c:683 screen.c:697 screen.c:816
 msgid "3270 Error"
 msgstr "Erro 3270"
 
-#: screen.c:671
+#: screen.c:668
 msgid "3270 Warning"
 msgstr "Alerta 3270"
 
@@ -135,56 +135,34 @@ msgstr "<%s> precisa do atributo %s"
 msgid "<%s> should be on toplevel"
 msgstr "<%s> deve estar no primeiro nível"
 
-#: telnet.c:3199
-#, c-format
-msgid ""
-"<b>Connection state:</b> %s\n"
-"<b>Alert message:</b> %s"
-msgstr ""
-"<b>Estado da conexão:</b> %s\n"
-"<b>Mensagem de alerta:</b> %s"
-
 #: v3270/widget.c:295
-#, fuzzy
-msgid ""
-"<b>Disconnected from host</b>\n"
-"No security info"
-msgstr "Desconectado do servidor"
-
-#: v3270/widget.c:300
-#, fuzzy
 msgid ""
 "<b>Identity not verified</b>\n"
-"Connection is insecure"
+"Disconnected from host"
 msgstr ""
-"<b>Identity not verified</b>\n"
-"The connection is insecure"
+"<b>Identidade não foi confirmada</b>\n"
+"Desconectado do servidor"
 
-#: v3270/security.c:370
+#: v3270/widget.c:300 v3270/security.c:370
 msgid ""
 "<b>Identity not verified</b>\n"
 "The connection is insecure"
 msgstr ""
-"<b>Identity not verified</b>\n"
-"The connection is insecure"
+"<b>Identidade não foi confirmada</b>\n"
+"A conexão não é segura"
 
 #: v3270/widget.c:305
-#, fuzzy
 msgid ""
 "<b>Identity verified</b>\n"
 "The connection is secure"
 msgstr ""
-"<b>Identity not verified</b>\n"
-"The connection is insecure"
+"<b>Identidade verificada</b>\n"
+"A conexão é segura"
 
-#: v3270/widget.c:318
+#: v3270/widget.c:320
 #, c-format
-msgid ""
-"<b>Unexpected SSL status %ld</b>\n"
-"Security status is undefined"
-msgstr ""
-"<b>Unexpected SSL status %ld</b>\n"
-"Security status is undefined"
+msgid "<b>SSL state is undefined</b>Unexpected SSL status %ld"
+msgstr "<b>Estado do SSL é indefinido</b>Estado SSL inesperado %ld"
 
 #: main.c:279
 msgid ""
@@ -216,7 +194,7 @@ msgstr "Abortando"
 
 #: v3270/security.c:417
 msgid "About security"
-msgstr "About security"
+msgstr "Sobre a segurança"
 
 #: paste.c:300
 msgid "Action failed"
@@ -236,7 +214,8 @@ msgstr "Aviso sonoro"
 
 #: v3270/security.c:160
 msgid "An error occurred trying to allocate memory. This should never happen."
-msgstr "An error occurred trying to allocate memory. This should never happen."
+msgstr ""
+"Ocorreu um erro ao tentar alocar memória. Isso nunca deveria acontecer."
 
 #: main.c:246 main.c:248
 msgid "Application name"
@@ -308,7 +287,7 @@ msgstr "Portal do Software Público Brasileiro"
 msgid "Break"
 msgstr "Break"
 
-#: telnet.c:2080
+#: telnet.c:2068
 msgid "Broken pipe"
 msgstr "Conexão interrompida"
 
@@ -468,18 +447,16 @@ msgid "Certificate is not yet valid"
 msgstr "Certificate is not yet valid"
 
 #: v3270/security.c:222
-#, fuzzy
 msgid "Certificate not trusted"
-msgstr "%s: Tabulação verticao não suportada"
+msgstr "O certificado não é confiável"
 
 #: v3270/security.c:229
-#, fuzzy
 msgid "Certificate rejected"
-msgstr "Tipo de dispositivo rejeitado"
+msgstr "Certificado rejeitado"
 
 #: v3270/security.c:194
 msgid "Certificate revoked"
-msgstr "Certificate revoked"
+msgstr "Certificado revogado"
 
 #: v3270/security.c:89
 msgid "Certificate signature failure"
@@ -522,7 +499,7 @@ msgstr "Completo"
 msgid "Connect on startup"
 msgstr "Conectar ao iniciar"
 
-#: telnet.c:2084
+#: telnet.c:2072
 msgid "Connection reset by peer"
 msgstr "Conexão foi cancelada pelo servidor"
 
@@ -538,11 +515,7 @@ msgstr "Copiar como HTML"
 msgid "Copy as table"
 msgstr "Copiar como tabela"
 
-#: ui/00default.xml:346
-msgid "Cross Hair Cursor"
-msgstr "Cursor mira"
-
-#: colors.c:418
+#: colors.c:418 ui/00default.xml:346
 msgid "Cross hair cursor"
 msgstr "Cursor mira"
 
@@ -599,7 +572,7 @@ msgstr "Padrão"
 msgid "Delete field"
 msgstr "Apagar campo"
 
-#: telnet.c:1755
+#: telnet.c:1743
 msgid "Device type rejected"
 msgstr "Tipo de dispositivo rejeitado"
 
@@ -607,7 +580,7 @@ msgstr "Tipo de dispositivo rejeitado"
 msgid "Disconnected from host"
 msgstr "Desconectado do servidor"
 
-#: telnet.c:1330
+#: telnet.c:1318
 msgid "EOR received when not in 3270 mode, ignored."
 msgstr "EOR recebido fora do modo 3270, ignorado."
 
@@ -674,12 +647,12 @@ msgstr "Erro \"%s\" gravando arquivo local (rc=%d)"
 msgid "Error %d resolving %s"
 msgstr "Erro %d resolvendo %s"
 
-#: telnet.c:3068 telnet.c:3079
+#: telnet.c:3056 telnet.c:3067
 #, c-format
 msgid "Error in fcntl(%s) when setting non blocking mode"
 msgstr "Erro em fcntl(%s) ao ativar o modo não blocante"
 
-#: telnet.c:3058
+#: telnet.c:3046
 #, c-format
 msgid "Error in ioctl(%s) when setting no blocking mode"
 msgstr "Erro em ioctl(%s) ao ativar o modo não blocante"
@@ -799,7 +772,7 @@ msgstr "Ajuda"
 msgid "Host disconnected, transfer cancelled"
 msgstr "Servidor desconectou, transferência cancelada"
 
-#: telnet.c:1813
+#: telnet.c:1801
 msgid "Host illegally added function(s)"
 msgstr "Host illegally added function(s)"
 
@@ -811,11 +784,11 @@ msgstr "Servidor é AS_400"
 msgid "Host is TSO"
 msgstr "Servidor é TSO"
 
-#: telnet.c:1738
+#: telnet.c:1726
 msgid "Host rejected device type or request type"
 msgstr "Servidor rejeitou o tipo de dispositivo ou requisição"
 
-#: telnet.c:1751
+#: telnet.c:1739
 msgid "Host rejected resource(s)"
 msgstr "Servidor rejeitou recurso(s)"
 
@@ -839,6 +812,10 @@ msgstr "IBM AS/400"
 #: hostdialog.c:42
 msgid "IBM S/390"
 msgstr "IBM S/390"
+
+#: v3270/widget.c:313
+msgid "Identity not verified"
+msgstr "Identity not verified"
 
 #: ft_cut.c:508
 msgid "Illegal frame length"
@@ -865,9 +842,8 @@ msgid "Invalid (empty) hostname"
 msgstr "Nome do host é invalido (vazio)"
 
 #: v3270/security.c:201
-#, fuzzy
 msgid "Invalid CA certificate"
-msgstr "Ação recortar inválida"
+msgstr "Certificado CA inválido"
 
 #: charset.c:321
 #, c-format
@@ -994,9 +970,8 @@ msgid "Not in 3270 mode, transfer cancelled"
 msgstr "Não está no modo 3270, transferência cancelada"
 
 #: colors.c:425
-#, fuzzy
 msgid "OIA Warning"
-msgstr "Alerta 3270"
+msgstr "Alerta na OIA"
 
 #: colors.c:421
 msgid "OIA background"
@@ -1476,19 +1451,15 @@ msgstr "SOCKS5 Proxy: xmit version 5 nmethods 1 (no auth)\n"
 msgid "SOCKS5 proxy: %s/%u: %s"
 msgstr "SOCKS5 proxy: %s/%u: %s"
 
-#: telnet.c:3197
-msgid "SSL Connect error"
-msgstr "Erro na conexão SSL"
-
-#: telnet.c:1097
+#: telnet.c:1083
 msgid "SSL Error"
 msgstr "Erro SSL"
 
-#: telnet.c:1097
+#: telnet.c:1083
 msgid "SSL Read error"
 msgstr "Erro de leitura SSL"
 
-#: telnet.c:765
+#: telnet.c:773 telnet.c:787
 msgid "SSL connect failed!"
 msgstr "Conexão SSL falhou"
 
@@ -1496,15 +1467,15 @@ msgstr "Conexão SSL falhou"
 msgid "SSL error"
 msgstr "Erro SSL"
 
-#: telnet.c:744
+#: telnet.c:746
 msgid "SSL init failed!"
 msgstr "Inicialização SSL falhou"
 
-#: telnet.c:753
+#: telnet.c:755
 msgid "SSL_set_fd failed!"
 msgstr "SSL_set_fd falhou!"
 
-#: telnet.c:2070
+#: telnet.c:2058
 #, c-format
 msgid ""
 "SSL_write:\n"
@@ -1554,9 +1525,8 @@ msgid "Secondary space:"
 msgstr "Secondary space:"
 
 #: v3270/security.c:47
-#, fuzzy
 msgid "Secure connection was successful."
-msgstr "Conexão _Segura"
+msgstr "Conexão segura efetuada com sucesso."
 
 #: ui/00default.xml:296
 msgid "Select Field"
@@ -1642,11 +1612,11 @@ msgstr "Mostrar padrão de teste"
 msgid "Smart paste"
 msgstr "Colar inteligente"
 
-#: telnet.c:1118
+#: telnet.c:1104
 msgid "Socket read error"
 msgstr "Erro ao ler dados da rede"
 
-#: telnet.c:2091
+#: telnet.c:2079
 msgid "Socket write error"
 msgstr "Erro ao enviar dados para a rede"
 
@@ -1674,7 +1644,7 @@ msgstr "Tipo de servidor:"
 msgid "TELNET Proxy: send error"
 msgstr "TELNET Proxy: send error"
 
-#: telnet.c:3246
+#: telnet.c:3227
 msgid "TLS negotiation failure"
 msgstr "Negociação TLS falhou"
 
@@ -1771,14 +1741,12 @@ msgstr ""
 "expected value, this is only meaningful for RSA keys."
 
 #: v3270/security.c:331
-#, fuzzy
 msgid "The connection is insecure"
-msgstr "This connection is secure and signed."
+msgstr "A conexão não é segura"
 
 #: v3270/security.c:48
-#, fuzzy
-msgid "The connection is secure and signed."
-msgstr "This connection is secure and signed."
+msgid "The connection is secure and the host identity was confirmed."
+msgstr "A conexão é segura e a identidade do servidor foi confirmada."
 
 #: v3270/security.c:251
 msgid ""
@@ -1867,9 +1835,8 @@ msgid "The root CA is not marked as trusted for the specified purpose."
 msgstr "The root CA is not marked as trusted for the specified purpose."
 
 #: v3270/security.c:90 v3270/security.c:97
-#, fuzzy
 msgid "The signature of the certificate is invalid."
-msgstr "O nome do arquivo remoto não é válido"
+msgstr "A assinatura do certificado não é válida."
 
 #: v3270/security.c:216
 msgid "The supplied certificate cannot be used for the specified purpose."
@@ -2004,14 +1971,13 @@ msgid "Undefined"
 msgstr "Indefinido"
 
 #: v3270/security.c:377
-#, fuzzy
 msgid "Unexpected SSL error"
-msgstr "Erro inesperado"
+msgstr "Erro SSL inesperado"
 
 #: v3270/security.c:409
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected SSL error <b>%ld</b>"
-msgstr "Erro inesperado"
+msgstr "Erro SSL <b>%ld</b> inesperado"
 
 #: uiparser/menubar.c:48 uiparser/toolbar.c:64 uiparser/popup.c:51
 #, c-format
@@ -2051,7 +2017,7 @@ msgstr "Valor de cor inválido ou inesperado: \"%s\""
 msgid "Unexpected or unknown security status"
 msgstr "Unexpected or unknown security status"
 
-#: v3270/widget.c:873
+#: v3270/widget.c:875
 msgid ""
 "Unexpected signature in H3270 object, possible version mismatch in lib3270"
 msgstr ""
@@ -2120,9 +2086,8 @@ msgid "Unsupported RPQ term"
 msgstr "Unsupported RPQ term"
 
 #: v3270/security.c:215
-#, fuzzy
 msgid "Unsupported certificate purpose"
-msgstr "Unsupported socks 4 proxy"
+msgstr "Finalidade do certificado não é suportada"
 
 #: telnet.c:474
 msgid "Unsupported passthru host session"
@@ -2355,9 +2320,43 @@ msgstr "socket"
 msgid "translator-credits"
 msgstr "translator-credits"
 
-#: telnet.c:1093
+#: telnet.c:1079
 msgid "unknown error"
 msgstr "Erro desconhecido"
+
+#, fuzzy
+#~ msgid "Cross hair Cursor"
+#~ msgstr "Cursor mira"
+
+#~ msgid ""
+#~ "<b>Identity not verified</b>\n"
+#~ "Connection is insecure"
+#~ msgstr ""
+#~ "<b>Identidade não foi confirmada</b>\n"
+#~ "A conexão não é segura"
+
+#~ msgid ""
+#~ "<b>Connection state:</b> %s\n"
+#~ "<b>Alert message:</b> %s"
+#~ msgstr ""
+#~ "<b>Estado da conexão:</b> %s\n"
+#~ "<b>Mensagem de alerta:</b> %s"
+
+#, fuzzy
+#~ msgid ""
+#~ "<b>Disconnected from host</b>\n"
+#~ "No security info"
+#~ msgstr "Desconectado do servidor"
+
+#~ msgid ""
+#~ "<b>Unexpected SSL status %ld</b>\n"
+#~ "Security status is undefined"
+#~ msgstr ""
+#~ "<b>Unexpected SSL status %ld</b>\n"
+#~ "Security status is undefined"
+
+#~ msgid "SSL Connect error"
+#~ msgstr "Erro na conexão SSL"
 
 #~ msgid "Can't set SSL socket file descriptor"
 #~ msgstr "Não foi possível definir o descritor de socket SSL"

@@ -45,7 +45,7 @@
 		X509_V_OK,
 		GTK_STOCK_DIALOG_AUTHENTICATION,
 		N_( "Secure connection was successful." ),
-		N_( "The connection is secure and signed." )
+		N_( "The connection is secure and the host identity was confirmed." )
 	},
 
 	{

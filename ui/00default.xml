@@ -121,7 +121,7 @@
 				<menuitem action='toggle' id='FullScreen' key='<alt>Home' label='Full Screen' />
 				<menuitem action='toggle' id='AltScreen' label='Resize on alternate screen' />
 				<menuitem action='toggle' id='MarginedPaste'  label='Paste with left margin' />
-				<menuitem action='toggle' id='CrossHair' key='<alt>x' label='Cross Hair Cursor' />
+				<menuitem action='toggle' id='CrossHair' key='<alt>x' label='Cross hair cursor' />
 				<menuitem action='toggle' id='BlankFill' label='Blank Fill' />
 				<menuitem action='toggle' id='RectSelect'  label='Select by rectangles' />
 				<menuitem action='toggle' id='Reconnect' label='Auto-Reconnect'  />
