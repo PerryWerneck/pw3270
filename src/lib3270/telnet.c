@@ -803,7 +803,7 @@ static int ssl_negotiate(H3270 *hSession)
 
 		trace_dsn(hSession,"TLS/SSL negotiated connection complete. Connection is now secure.\n");
 
-		trace_dsn(hSession,"TLS/SSL cipher description: %s",SSL_CIPHER_description(cipher, buffer, 4095));
+		trace_dsn(hSession,"TLS/SSL cipher description: %s",SSL_CIPHER_description((SSL_CIPHER *) cipher, buffer, 4095));
 		SSL_CIPHER_get_bits(cipher, &alg_bits);
 		trace_dsn(hSession,"%s version %s with %d bits verify=%ld\n",
 						SSL_CIPHER_get_name(cipher),
