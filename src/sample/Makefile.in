@@ -35,6 +35,8 @@ MKDIR=@MKDIR_P@
 CC=@CC@
 LD=@CC@
 
+CFLAGS=-g -Wall
+
 #---[ Targets ]----------------------------------------------------------------
 
 all: connect$(EXEEXT)
