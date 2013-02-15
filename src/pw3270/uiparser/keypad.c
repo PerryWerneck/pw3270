@@ -18,7 +18,7 @@
  * programa; se não, escreva para a Free Software Foundation, Inc., 51 Franklin
  * St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * Este programa está nomeado como accelerator.c e possui - linhas de código.
+ * Este programa está nomeado como keypad.c e possui - linhas de código.
  *
  * Contatos:
  *
@@ -27,66 +27,11 @@
  *
  */
 
- #include <gtk/gtk.h>
- #include "private.h"
-
-/*--[ Globals ]--------------------------------------------------------------------------------------*/
-
- struct row
- {
- 	unsigned short		  pos;
- 	unsigned short		  num_cols;
-	GList				* cols;
- };
-
- struct keypad
- {
-	struct parser		* parser;
-	unsigned short		  num_rows;
-	unsigned short	  	  num_cols;
-	unsigned short		  col;
-	unsigned short		  button_width;
-	struct row			* row;
-	GtkWidget			* box;
-	GtkWidget			* handle;
-	GtkWidget			* table;
-	GtkReliefStyle		  relief;
-	UI_ATTR_DIRECTION	  pos;
-	GList				* rows;
- };
+ #include "keypad.h"
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
- static GtkReliefStyle get_relief(const gchar **names, const gchar **values, GtkReliefStyle def)
- {
-
- 	const gchar *name = ui_get_attribute("relief",names,values);
- 	if(name)
-	{
-		static const struct _style
-		{
-			GtkReliefStyle	  val;
-			const gchar		* name;
-		} style[] =
-		{
-			{ GTK_RELIEF_NORMAL,	"normal" 	},
-			{ GTK_RELIEF_HALF,		"half"		},
-			{ GTK_RELIEF_NONE,		"none"		}
-		};
-
-		int f;
-
-		for(f=0;f<G_N_ELEMENTS(style);f++)
-		{
-			if(!g_strcasecmp(style[f].name,name))
-				return style[f].val;
-		}
-	}
-
- 	return def;
- }
-
- static void row_start(struct keypad *keypad, const gchar **names,const gchar **values, GError **error)
+ void keypad_row_start(GMarkupParseContext *context, const gchar **names,const gchar **values, GError **error, struct keypad *keypad)
  {
 	keypad->row = g_malloc0(sizeof(struct row));
 
@@ -96,84 +41,16 @@
 	keypad->rows = g_list_append(keypad->rows,keypad->row);
  }
 
- static void button_clicked(GtkButton *button, GtkAction *action)
- {
-	gtk_action_activate(action);
- }
-
- static void button_start(struct keypad *keypad, const gchar **names,const gchar **values, GError **error)
- {
- 	const gchar		* label		= ui_get_attribute("label", names, values);
- 	const gchar		* icon		= ui_get_attribute("icon", names, values);
- 	const gchar		* name		= ui_get_attribute("action", names, values);
-	struct parser	* info		= keypad->parser;
- 	GtkAction		* action;
- 	GtkWidget		* widget	= NULL;
-
-	if(++keypad->col > keypad->num_cols)
-		keypad->num_cols = keypad->col;
-
-	keypad->row->num_cols++;
-
-	if(label)
-	{
-		widget = gtk_button_new_with_label(gettext(g_strcompress(label)));
-	}
-	else if(icon)
-	{
-		gchar *text = g_strconcat("gtk-",icon,NULL);
-		widget = gtk_button_new();
-		gtk_container_add(GTK_CONTAINER(widget),gtk_image_new_from_stock(text,GTK_ICON_SIZE_SMALL_TOOLBAR));
-		g_free(text);
-	}
-
-	keypad->row->cols = g_list_append(keypad->row->cols,widget);
-
-	if(!widget)
-		return;
-
-#if GTK_CHECK_VERSION(2,18,0)
-	gtk_widget_set_can_focus(widget,FALSE);
-	gtk_widget_set_can_default(widget,FALSE);
-#else
-	GTK_WIDGET_UNSET_FLAGS(widget,GTK_CAN_FOCUS);
-	GTK_WIDGET_UNSET_FLAGS(widget,GTK_CAN_DEFAULT);
-#endif // GTK(2,18)
-
-	if(!name)
-	{
-		// Invalid unnamed element
-		*error = g_error_new(ERROR_DOMAIN,EINVAL,_( "Can't accept unnamed %s"),"button");
-		return;
-	}
-
-	gtk_button_set_relief(GTK_BUTTON(widget),get_relief(names, values, keypad->relief));
-	gtk_button_set_alignment(GTK_BUTTON(widget),0.5,0.5);
-	gtk_button_set_focus_on_click(GTK_BUTTON(widget),FALSE);
-
- 	action = ui_get_action(info->center_widget,name,info->actions,names,values,error);
-
-	if(action)
-	{
-		ui_action_set_options(action,info,names,values,error);
-		g_signal_connect(G_OBJECT(widget),"clicked",G_CALLBACK(button_clicked),action);
-	}
-	else
-	{
-		gtk_widget_set_sensitive(widget,FALSE);
-	}
- }
-
  static void element_start(GMarkupParseContext *context, const gchar *element_name, const gchar **names,const gchar **values, struct keypad *keypad, GError **error)
  {
  	static const struct _cmd
  	{
 		const gchar *element_name;
-		void (*start)(struct keypad *, const gchar **, const gchar **, GError **);
+		void (*start)(GMarkupParseContext *, const gchar **,const gchar **, GError **, struct keypad *);
  	} cmd[] =
  	{
- 		{ "row",	row_start		},
- 		{ "button",	button_start	},
+ 		{ "row",	keypad_row_start	},
+ 		{ "button",	keypad_button_start	},
  	};
 
  	int f;
@@ -182,7 +59,7 @@
 	{
 		if(!g_strcasecmp(cmd[f].element_name,element_name))
 		{
-			cmd[f].start(keypad,names,values,error);
+			cmd[f].start(context,names,values,error,keypad);
 			return;
 		}
 	}
@@ -192,6 +69,7 @@
 
  static void element_end(GMarkupParseContext *context, const gchar *element_name, struct keypad *keypad, GError **error)
  {
+ 	keypad->widget = NULL;
 // 	trace("%s: %s",__FUNCTION__,element_name);
  }
 
@@ -228,6 +106,28 @@
 	return UI_ATTR_DIRECTION_NONE;
  }
 
+ static void element_text(GMarkupParseContext *context, const gchar *text, gsize sz, struct keypad *keypad, GError **error)
+ {
+		if(keypad->widget)
+		{
+			gchar *base = g_strstrip(g_strdup(text));
+			gchar *text = g_strdup(base);
+			g_free(base);
+
+			if(*text)
+			{
+				gtk_widget_set_sensitive(keypad->widget,TRUE);
+				g_object_set_data_full(G_OBJECT(keypad->widget),"script_text",text,g_free);
+			}
+			else
+			{
+				g_free(text);
+			}
+
+		}
+
+ }
+
  GObject * ui_create_keypad(GMarkupParseContext *context,GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error)
  {
 	static const GMarkupParser parser =
@@ -237,7 +137,7 @@
 		(void (*)(GMarkupParseContext *, const gchar *, gpointer, GError **))
 				element_end,
 		(void (*)(GMarkupParseContext *, const gchar *, gsize, gpointer, GError **))
-				NULL,
+				element_text,
 
 //		(void (*)(GMarkupParseContext *, GError *, gpointer))
 		NULL
@@ -264,7 +164,7 @@
 	keypad->parser 		= info;
 	keypad->handle		= gtk_handle_box_new();
 	keypad->pos			= ui_get_position_attribute(names,values);
-	keypad->relief		= get_relief(names, values, GTK_RELIEF_NORMAL);
+	keypad->relief		= ui_get_relief(names, values, GTK_RELIEF_NORMAL);
 
 	switch(keypad->pos)
 	{
@@ -350,7 +250,7 @@
 		keypad->col = 0;
 		keypad->button_width = keypad->num_cols / info->num_cols;
 
-		trace("Max cols=%d row cols=%d width=%d",keypad->num_cols,info->num_cols,keypad->button_width);
+//		trace("Max cols=%d row cols=%d width=%d",keypad->num_cols,info->num_cols,keypad->button_width);
 
 		g_list_foreach(info->cols,(GFunc) create_col,keypad);
 		g_list_free(info->cols);
