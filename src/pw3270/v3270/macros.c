@@ -30,30 +30,26 @@
  *
  */
 
- #include "globals.h"
- #include <pw3270/v3270.h>
-
-
+ #include "private.h"
+ #include <lib3270/macros.h>
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
- static int pw3270_macro_copy(GtkWidget *widget, int argc, const char **argv)
+ static int v3270_macro_copy(GtkWidget *widget, int argc, const char **argv)
  {
- 	trace("%s",__FUNCTION__);
 	v3270_copy(widget, V3270_SELECT_TEXT, FALSE);
  	return 0;
  }
 
- static int pw3270_macro_append(GtkWidget *widget, int argc, const char **argv)
+ static int v3270_macro_append(GtkWidget *widget, int argc, const char **argv)
  {
- 	trace("%s",__FUNCTION__);
 	v3270_copy_append(widget);
  	return 0;
  }
 
- LIB3270_EXPORT int pw3270_run_macro(GtkWidget *widget, int argc, const char **argv)
+ static int run_macro(GtkWidget *widget, int argc, const char **argv)
  {
-	#define PW3270_MACRO( name )  				{ #name, pw3270_macro_ ## name			}
+	#define V3270_MACRO( name )  				{ #name, v3270_macro_ ## name			}
 
 	static const struct _list
 	{
@@ -61,20 +57,64 @@
 		int (*exec)(GtkWidget *widget, int argc, const char **argv);
 	} list[] =
 	{
-		PW3270_MACRO( copy ),
-		PW3270_MACRO( append ),
+		V3270_MACRO( copy ),
+		V3270_MACRO( append ),
 	};
-	int f;
 
-			trace("<%s>",argv[0]);
+	int f;
+	gchar *rsp;
 
 	for(f=0;f<G_N_ELEMENTS(list);f++)
 	{
-		if(!g_strcasecmp(argv[0],list[f].name))
+		if(!g_ascii_strcasecmp(argv[0],list[f].name))
 			return list[f].exec(widget,argc,argv);
 	}
 
-			trace("<%s>",argv[0]);
+	rsp = lib3270_run_macro(GTK_V3270(widget)->host,argv);
+	if(rsp)
+	{
+		g_free(rsp);
+		return 0;
+	}
 
 	return -1;
  }
+
+ int v3270_run_script(GtkWidget *widget, const gchar *script)
+{
+ 	gchar **ln;
+ 	int 	f;
+
+	if(!script)
+		return 0;
+
+	g_return_val_if_fail(GTK_IS_V3270(widget),EINVAL);
+
+ 	ln = g_strsplit(script,"\n",-1);
+
+ 	for(f=0;ln[f];f++)
+	{
+		GError	* error	= NULL;
+		gint	  argc	= 0;
+		gchar	**argv	= NULL;
+
+		if(g_shell_parse_argv(g_strstrip(ln[f]),&argc,&argv,&error))
+		{
+			run_macro(widget, argc, (const char **) argv);
+		}
+		else
+		{
+			g_warning("Error parsing \"%s\": %s",g_strstrip(ln[f]),error->message);
+			g_error_free(error);
+		}
+
+		if(argv)
+			g_strfreev(argv);
+
+	}
+
+	g_strfreev(ln);
+
+	return 0;
+}
+

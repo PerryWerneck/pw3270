@@ -863,43 +863,6 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 static void action_text_script(GtkAction *action, GtkWidget *widget)
 {
 	v3270_run_script(widget,g_object_get_data(G_OBJECT(action),"script_text"));
-
-/*
- 	gchar **ln = g_strsplit(g_object_get_data(G_OBJECT(action),"script_text"),"\n",-1);
- 	int 	f;
- 	H3270 * hSession = v3270_get_session(widget);
-
-	lib3270_trace_event(v3270_get_session(widget),"Action %s activated on widget %p\n",gtk_action_get_name(action),widget);
-
- 	for(f=0;ln[f];f++)
-	{
-		GError	* error	= NULL;
-		gint	  argc	= 0;
-		gchar	**argv	= NULL;
-
-		if(g_shell_parse_argv(g_strstrip(ln[f]),&argc,&argv,&error))
-		{
-			if(pw3270_run_macro(widget, argc,(const gchar **) argv) < 0)
-			{
-				gchar *rsp = lib3270_run_macro(hSession,(const gchar **) argv);
-				if(rsp)
-					g_free(rsp);
-			}
-		}
-		else
-		{
-			g_warning("Error parsing \"%s\": %s",g_strstrip(ln[f]),error->message);
-			g_error_free(error);
-		}
-
-		if(argv)
-			g_strfreev(argv);
-
-	}
-
-
-	g_strfreev(ln);
-*/
 }
 
 void ui_connect_text_script(GtkWidget *widget, GtkAction *action, const gchar *script_text, GError **error)

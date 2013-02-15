@@ -266,9 +266,6 @@
 		<Unit filename="src/pw3270/hostdialog.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/pw3270/macros.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/pw3270/main.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -346,6 +343,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/pw3270/v3270/keyboard.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/pw3270/v3270/macros.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/pw3270/v3270/mouse.c">
