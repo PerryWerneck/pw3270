@@ -170,10 +170,12 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/lib3270/*.h
 %{_includedir}/lib3270.h
 %{_includedir}/pw3270.h
-%{_datadir}/pw3270/ui/99debug.xml
+%{_datadir}/@PACKAGE_NAME@/ui/99debug.xml
 %{_libdir}/pkgconfig/*.pc
 %{_libdir}/lib3270.so
 %{_libdir}/libpw3270.so
+%dir %{_datadir}/@PACKAGE_NAME@/sample
+%{_datadir}/@PACKAGE_NAME@/sample/*
 
 #---[ Scripts ]-------------------------------------------------------------------------------------------------------
 

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-30 10:26-0200\n"
+"POT-Creation-Date: 2013-02-15 16:38-0200\n"
 "PO-Revision-Date: 2013-01-14 09:49-0200\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
@@ -130,12 +130,12 @@ msgid "<%s> requires a %s attribute"
 msgstr "<%s> precisa do atributo %s"
 
 #: uiparser/accelerator.c:41 uiparser/menubar.c:42 uiparser/toolbar.c:58
-#: uiparser/popup.c:45 uiparser/scroll.c:43 uiparser/keypad.c:252
+#: uiparser/popup.c:45 uiparser/scroll.c:43 uiparser/keypad.c:152
 #, c-format
 msgid "<%s> should be on toplevel"
 msgstr "<%s> deve estar no primeiro nível"
 
-#: v3270/widget.c:295
+#: v3270/widget.c:296
 msgid ""
 "<b>Identity not verified</b>\n"
 "Disconnected from host"
@@ -143,7 +143,7 @@ msgstr ""
 "<b>Identidade não foi confirmada</b>\n"
 "Desconectado do servidor"
 
-#: v3270/widget.c:300 v3270/security.c:370
+#: v3270/widget.c:301 v3270/security.c:370
 msgid ""
 "<b>Identity not verified</b>\n"
 "The connection is insecure"
@@ -151,7 +151,7 @@ msgstr ""
 "<b>Identidade não foi confirmada</b>\n"
 "A conexão não é segura"
 
-#: v3270/widget.c:305
+#: v3270/widget.c:306
 msgid ""
 "<b>Identity verified</b>\n"
 "The connection is secure"
@@ -159,7 +159,7 @@ msgstr ""
 "<b>Identidade verificada</b>\n"
 "A conexão é segura"
 
-#: v3270/widget.c:320
+#: v3270/widget.c:321
 #, c-format
 msgid "<b>SSL state is undefined</b>Unexpected SSL status %ld"
 msgstr "<b>Estado do SSL é indefinido</b>Estado SSL inesperado %ld"
@@ -315,7 +315,7 @@ msgstr "Tema de c_ores:"
 msgid "C_urrent"
 msgstr "At_ual"
 
-#: uiparser/parsefile.c:225 uiparser/keypad.c:146
+#: uiparser/parsefile.c:225
 #, c-format
 msgid "Can't accept unnamed %s"
 msgstr "Não posso aceitar elemento %s sem nome"
@@ -628,7 +628,7 @@ msgstr "Apagar até o final do campo"
 msgid "Erase to end of line"
 msgstr "Apagar até o final da linha"
 
-#: print.c:234 v3270/widget.c:251 util.c:994
+#: print.c:234 v3270/widget.c:252 util.c:994
 msgid "Error"
 msgstr "Erro"
 
@@ -813,7 +813,7 @@ msgstr "IBM AS/400"
 msgid "IBM S/390"
 msgstr "IBM S/390"
 
-#: v3270/widget.c:313
+#: v3270/widget.c:314
 msgid "Identity not verified"
 msgstr "Identity not verified"
 
@@ -1984,7 +1984,7 @@ msgstr "Erro SSL <b>%ld</b> inesperado"
 msgid "Unexpected action attribute in <%s>"
 msgstr "Atributo inesperado \"action\" em <%s>"
 
-#: uiparser/keypad.c:190
+#: uiparser/keypad.c:67
 #, c-format
 msgid "Unexpected element <%s>"
 msgstr "Elemento <%s> inesperado"
@@ -2017,7 +2017,7 @@ msgstr "Valor de cor inválido ou inesperado: \"%s\""
 msgid "Unexpected or unknown security status"
 msgstr "Unexpected or unknown security status"
 
-#: v3270/widget.c:875
+#: v3270/widget.c:876
 msgid ""
 "Unexpected signature in H3270 object, possible version mismatch in lib3270"
 msgstr ""
@@ -2294,7 +2294,7 @@ msgstr "um attributo \"label\""
 msgid "a type or group attribute"
 msgstr "um atributo \"type\" ou \"group\""
 
-#: uiparser/script.c:75 uiparser/keypad.c:258
+#: uiparser/script.c:75 uiparser/keypad.c:158
 #, c-format
 msgid "action attribute is invalid for <%s>"
 msgstr "Atributo inesperado \"action\" em <%s>"

@@ -160,6 +160,9 @@ Section /o "Software Development Kit" SecSDK
 	file "/oname=$INSTDIR\sdk\include\lib3270\config.h" "src\include\lib3270\config.h"
 	file "/oname=$INSTDIR\sdk\include\lib3270\rules.mak" "src\include\rules.mak"
 
+	file "/oname=$INSTDIR\sdk\sample\Makefile" "src\sample\Makefile"
+	file "/oname=$INSTDIR\sdk\sample\connect.c" "src\sample\connect.c"
+
 SectionEnd
 
 # create a section to define what the uninstaller does.

@@ -572,8 +572,6 @@ gchar * filename_from_va(const gchar *first_element, va_list args)
 
 #if defined( HAVE_WIN_REGISTRY )
 
-#error aqui
-
 	if(!result)
 	{
 		// No predefined datadir, search registry

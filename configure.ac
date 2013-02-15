@@ -418,6 +418,7 @@ AC_CONFIG_FILES([
 	src/plugins/rx3270/Makefile
 	man/Makefile
 	makegtkruntime.sh
+	src/sample/Makefile
 ])
 
 dnl Output the generated config.status script.

@@ -299,6 +299,10 @@ install-sdk:
 	@$(INSTALL_DATA) lib3270.pc $(DESTDIR)/$(libdir)/pkgconfig
 	@$(INSTALL_DATA) pw3270.pc $(DESTDIR)/$(libdir)/pkgconfig
 
+	@$(MKDIR) $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/sample
+	@$(INSTALL_DATA) src/sample/Makefile $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/sample
+	@$(INSTALL_DATA) src/sample/*.c $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/sample
+
 clean:
 	@rm -fr .obj
 	@rm -fr .bin
