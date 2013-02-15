@@ -33,6 +33,7 @@
  #include <lib3270/session.h>
  #include <lib3270/actions.h>
  #include <lib3270/log.h>
+ #include <lib3270/macros.h>
  #include <errno.h>
 
 #ifdef HAVE_MALLOC_H
@@ -1541,4 +1542,46 @@ gboolean v3270_is_connected(GtkWidget *widget)
 {
 	g_return_val_if_fail(GTK_IS_V3270(widget),FALSE);
 	return lib3270_connected(GTK_V3270(widget)->host) ? TRUE : FALSE;
+}
+
+int v3270_run_script(GtkWidget *widget, const gchar *script)
+{
+ 	gchar **ln;
+ 	int 	f;
+ 	H3270 * hSession;
+
+	if(!script)
+		return 0;
+
+	g_return_val_if_fail(GTK_IS_V3270(widget),EINVAL);
+
+ 	hSession	= v3270_get_session(widget);
+ 	ln			= g_strsplit(script,"\n",-1);
+
+ 	for(f=0;ln[f];f++)
+	{
+		GError	* error	= NULL;
+		gint	  argc	= 0;
+		gchar	**argv	= NULL;
+
+		if(g_shell_parse_argv(g_strstrip(ln[f]),&argc,&argv,&error))
+		{
+			gchar *rsp = lib3270_run_macro(hSession,(const gchar **) argv);
+			if(rsp)
+				g_free(rsp);
+		}
+		else
+		{
+			g_warning("Error parsing \"%s\": %s",g_strstrip(ln[f]),error->message);
+			g_error_free(error);
+		}
+
+		if(argv)
+			g_strfreev(argv);
+
+	}
+
+	g_strfreev(ln);
+
+	return 0;
 }

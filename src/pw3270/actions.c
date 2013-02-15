@@ -862,9 +862,14 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 
 static void action_text_script(GtkAction *action, GtkWidget *widget)
 {
+	v3270_run_script(widget,g_object_get_data(G_OBJECT(action),"script_text"));
+
+/*
  	gchar **ln = g_strsplit(g_object_get_data(G_OBJECT(action),"script_text"),"\n",-1);
  	int 	f;
  	H3270 * hSession = v3270_get_session(widget);
+
+	lib3270_trace_event(v3270_get_session(widget),"Action %s activated on widget %p\n",gtk_action_get_name(action),widget);
 
  	for(f=0;ln[f];f++)
 	{
@@ -894,6 +899,7 @@ static void action_text_script(GtkAction *action, GtkWidget *widget)
 
 
 	g_strfreev(ln);
+*/
 }
 
 void ui_connect_text_script(GtkWidget *widget, GtkAction *action, const gchar *script_text, GError **error)
@@ -901,8 +907,6 @@ void ui_connect_text_script(GtkWidget *widget, GtkAction *action, const gchar *s
  	gchar *base = g_strstrip(g_strdup(script_text));
 	gchar *text = g_strdup(base);
 	g_free(base);
-
-	lib3270_trace_event(v3270_get_session(widget),"Action %s activated on widget %p\n",gtk_action_get_name(action),widget);
 
 	gtk_action_set_sensitive(action,TRUE);
 	g_object_set_data_full(G_OBJECT(action),"script_text",text,g_free);

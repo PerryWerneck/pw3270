@@ -157,6 +157,7 @@
 
  LIB3270_EXPORT	const gchar		* v3270_copy(GtkWidget *widget, V3270_SELECT_FORMAT mode, gboolean cut);
  LIB3270_EXPORT	const gchar		* v3270_copy_append(GtkWidget *widget);
+ LIB3270_EXPORT int				  v3270_run_script(GtkWidget *widget, const gchar *script);
 
  LIB3270_EXPORT	const gchar		* v3270_get_selected_text(GtkWidget *widget, gboolean cut);
  LIB3270_EXPORT	const gchar		* v3270_get_copy(GtkWidget *widget);

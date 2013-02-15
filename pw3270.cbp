@@ -291,9 +291,13 @@
 		<Unit filename="src/pw3270/uiparser/action.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/pw3270/uiparser/button.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/pw3270/uiparser/keypad.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/pw3270/uiparser/keypad.h" />
 		<Unit filename="src/pw3270/uiparser/menu.c">
 			<Option compilerVar="CC" />
 		</Unit>
