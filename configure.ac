@@ -239,6 +239,23 @@ AC_ARG_ENABLE([pic],
 	fi
 ])
 
+AC_ARG_ENABLE([registry],
+	[AS_HELP_STRING([--disable-registry], [disable configurations in windows registry])],
+[
+	app_cv_registry="$enableval"
+],[
+	case "$host" in
+        *-mingw32)
+			app_cv_registry="yes"
+			;;
+
+		*)
+			app_cv_registry="no"
+	esac
+
+])
+
+
 if test "$app_cv_pic" == "yes"; then
 	DLL_CFLAGS="$DLL_CFLAGS -fPIC"
 fi
@@ -361,6 +378,9 @@ if test "$app_cv_rexx" == "yes"; then
 	fi
 fi
 
+if test "$app_cv_registry" == "yes"; then
+	AC_DEFINE(HAVE_WIN_REGISTRY)
+fi
 
 if test "$app_cv_rexx" == "yes"; then
 	AC_DEFINE(HAVE_REXX)

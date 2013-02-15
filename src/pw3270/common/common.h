@@ -39,7 +39,6 @@
  #ifdef WIN32
 
 	#include <windows.h>
-	#define WIN_REGISTRY_ENABLED 1
 
 	#ifndef KEY_WOW64_64KEY
 		#define KEY_WOW64_64KEY 0x0100
@@ -88,14 +87,14 @@
 
  void		  restore_window_from_config(const gchar *group, const gchar *key, GtkWidget *hwnd);
 
-#ifdef WIN_REGISTRY_ENABLED
+#ifdef HAVE_WIN_REGISTRY
  gboolean	  get_registry_handle(const gchar *group, HKEY *hKey, REGSAM samDesired);
  void		  registry_foreach(HKEY parent, const gchar *name,void (*cbk)(const gchar *key, const gchar *val, gpointer *user_data), gpointer *user_data);
  void 		  registry_set_double(HKEY hKey, const gchar *key, gdouble value);
  gboolean	  registry_get_double(HKEY hKey, const gchar *key, gdouble *value);
 #else
  GKeyFile	* get_application_keyfile(void);
-#endif // WIN_REGISTRY_ENABLED
+#endif // HAVE_WIN_REGISTRY
 
 
 #endif

@@ -43,6 +43,10 @@
 	#undef HAVE_LIBINTL
 	#undef HAVE_GETADDRINFO
 
+#ifdef WIN32
+	#undef HAVE_WIN_REGISTRY
+#endif // HAVE_WIN_REGISTRY
+
 	#undef HAVE_GNOME
 
 	#undef HAVE_GTKMAC
