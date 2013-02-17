@@ -368,6 +368,10 @@
 		<Unit filename="src/pw3270/window.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/sample/Makefile.in" />
+		<Unit filename="src/sample/connect.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/tools/Makefile.in" />
 		<Unit filename="ui/00default.xml" />
 		<Unit filename="ui/10functions.xml" />
