@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node name="/br/com/bb/pw3270">
+  <interface name="br.com.bb.pw3270">
+    <method name="getRevision">
+      <annotation name="org.freedesktop.DBus.GLib.Async" value="true"/>
+      <arg type="s" name="revision" direction="out" />
+    </method>
+  </interface>
+</node>

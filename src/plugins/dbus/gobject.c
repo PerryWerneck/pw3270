@@ -18,7 +18,7 @@
  * programa; se não, escreva para a Free Software Foundation, Inc., 51 Franklin
  * St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * Este programa está nomeado como connect.c e possui - linhas de código.
+ * Este programa está nomeado como gobject.c e possui - linhas de código.
  *
  * Contatos:
  *
@@ -27,61 +27,52 @@
  * licinio@bb.com.br		(Licínio Luis Branco)
  * kraucer@bb.com.br		(Kraucer Fernandes Mazuco)
  *
+ * Referencias:
+ *
+ * https://live.gnome.org/DBusGlibBindings
+ *
  */
 
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
- #include <lib3270.h>
+#include <glib.h>
+#include <dbus/dbus.h>
+#include <dbus/dbus-glib-lowlevel.h>
+#include <dbus/dbus-glib.h>
 
-/*--[ Implement ]------------------------------------------------------------------------------------*/
+#include <lib3270/config.h>
 
- int main(int numpar, char *param[])
- {
-	H3270 *hSession;
-	int rc;
+#include "service.h"
 
-	if(numpar != 2)
-	{
-		fprintf(stderr,"Inform host URI as argument\n");
-		exit(-1);
-	}
-
-	/* Get session handle */
-	hSession = lib3270_session_new("");
-
-	/* Connect to the requested URI, wait for 3270 negotiation */
-	rc = lib3270_connect(hSession,param[1],1);
-	if(rc)
-	{
-		fprintf(stderr,"Can't connect to %s: %s\n",param[1],strerror(rc));
-		return rc;
-	}
-
-	printf("Connected to LU %s\n",lib3270_get_luname(hSession));
-
-	/* Wait until the host is ready for commands */
-	rc = lib3270_wait_for_ready(hSession,60);
-	if(rc)
-	{
-		fprintf(stderr,"Error waiting for session negotiation: %s\n",strerror(rc));
-		return rc;
-	}
-	else
-	{
-		/* Host is ready, get screen contents */
-		char *text = lib3270_get_text(hSession,0,-1);
-
-		printf("\nScreen contents:\n%s\n",text);
-
-		lib3270_free(text);
-	}
+/*---[ Globals ]---------------------------------------------------------------------------------*/
 
 
+/*---[ Implement ]-------------------------------------------------------------------------------*/
+
+G_DEFINE_TYPE(PW3270Dbus, pw3270_dbus, G_TYPE_OBJECT)
+
+static void pw3270_dbus_finalize(GObject *object)
+{
+	G_OBJECT_CLASS(pw3270_dbus_parent_class)->finalize (object);
+}
 
 
-	/* Release session handle */
-	lib3270_session_free(hSession);
-	return 0;
- }
+static void pw3270_dbus_class_init(PW3270DbusClass *klass)
+{
+        GObjectClass *object_class;
+        object_class = G_OBJECT_CLASS (klass);
+        object_class->finalize = pw3270_dbus_finalize;
+}
 
+static void pw3270_dbus_init(PW3270Dbus *object)
+{
+
+}
+
+PW3270Dbus * pw3270_dbus_new(void)
+{
+	return g_object_new(PW3270_TYPE_DBUS, NULL);
+}
+
+void pw3270_dbus_get_revision(PW3270Dbus *object, DBusGMethodInvocation *context)
+{
+	dbus_g_method_return(context,PACKAGE_REVISION);
+}

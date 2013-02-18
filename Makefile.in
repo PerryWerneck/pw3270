@@ -155,6 +155,8 @@ debian/lib3270-dev.install: Makefile
 	@echo "$(includedir)/lib3270.h" > $@
 	@echo "$(includedir)/lib3270" >> $@
 	@echo "$(datarootdir)/@PACKAGE_NAME@/ui/99debug.xml" >> $@
+	@echo "$(datarootdir)/@PACKAGE_NAME@/sample/*.c" >> $@
+	@echo "$(datarootdir)/@PACKAGE_NAME@/sample/Makefile" >> $@
 	@echo "$(libdir)/pkgconfig/*.pc" >> $@
 	@echo "$(includedir)/pw3270.h" >> $@
 	@echo "$(includedir)/pw3270" >> $@

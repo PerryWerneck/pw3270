@@ -66,6 +66,7 @@ AC_PATH_TOOL([VALGRIND], [valgrind], [no])
 
 AC_PATH_TOOL([MAKENSIS], [makensis], [no])
 AC_PATH_TOOL([WINDRES], [windres], [no])
+AC_PATH_TOOL([DBUSBINDINGTOOL],[dbus-binding-tool],[no])
 
 AC_CHECK_PROGS(GZIP,[gzip],no)
 export GZIP;
@@ -328,9 +329,9 @@ AC_CHECK_HEADER(malloc.h, AC_DEFINE(HAVE_MALLOC_H,,[do we have malloc.h?]))
 
 AC_CHECK_FUNCS(getaddrinfo, AC_DEFINE(HAVE_GETADDRINFO) )
 
-#--[ GTK 2/3 check ]------------------------------------------------------------------------------------------------------------------------------------------
-
 PKG_CHECK_EXISTS
+
+#--[ GTK 2/3 check ]------------------------------------------------------------------------------------------------------------------------------------------
 
 PKG_CHECK_MODULES( [GTK], [gtk+-3.0 gmodule-2.0], [ GTK_VERSION="3.0" ], [ PKG_CHECK_MODULES( [GTK], [gtk+-2.0 >= 2.14 gthread-2.0 gmodule-2.0], [ GTK_VERSION="2.0" ] ) ], [  ] )
 
@@ -338,6 +339,18 @@ AC_SUBST(GTK_LIBS)
 AC_SUBST(GTK_CFLAGS)
 AC_SUBST(GTK_VERSION)
 AC_SUBST(GTK_MODVERSION,`pkg-config --modversion gtk+-$GTK_VERSION`)
+
+#--[ GLIB check ]---------------------------------------------------------------------------------------------------------------------------------------------
+
+PKG_CHECK_MODULES( [GLIB], [glib-2.0], AC_DEFINE(HAVE_GLIB) )
+AC_SUBST(GLIB_LIBS)
+AC_SUBST(GLIB_CFLAGS)
+
+#--[ Check DBUS ]---------------------------------------------------------------------------------------------------------------------------------------------
+
+PKG_CHECK_MODULES( [DBUS], [dbus-glib-1], AC_DEFINE(HAVE_DBUS) )
+AC_SUBST(DBUS_LIBS)
+AC_SUBST(DBUS_CFLAGS)
 
 #--[ SSL ]----------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -416,6 +429,7 @@ AC_CONFIG_FILES([
 	src/tools/Makefile
 	src/plugins/remotectl/Makefile
 	src/plugins/rx3270/Makefile
+	src/plugins/dbus/Makefile
 	man/Makefile
 	makegtkruntime.sh
 	src/sample/Makefile
