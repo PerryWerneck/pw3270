@@ -1,3 +1,34 @@
+/*
+ * "Software pw3270, desenvolvido com base nos códigos fontes do WC3270  e X3270
+ * (Paul Mattes Paul.Mattes@usa.net), de emulação de terminal 3270 para acesso a
+ * aplicativos mainframe. Registro no INPI sob o nome G3270.
+ *
+ * Copyright (C) <2008> <Banco do Brasil S.A.>
+ *
+ * Este programa é software livre. Você pode redistribuí-lo e/ou modificá-lo sob
+ * os termos da GPL v.2 - Licença Pública Geral  GNU,  conforme  publicado  pela
+ * Free Software Foundation.
+ *
+ * Este programa é distribuído na expectativa de  ser  útil,  mas  SEM  QUALQUER
+ * GARANTIA; sem mesmo a garantia implícita de COMERCIALIZAÇÃO ou  de  ADEQUAÇÃO
+ * A QUALQUER PROPÓSITO EM PARTICULAR. Consulte a Licença Pública Geral GNU para
+ * obter mais detalhes.
+ *
+ * Você deve ter recebido uma cópia da Licença Pública Geral GNU junto com este
+ * programa; se não, escreva para a Free Software Foundation, Inc., 51 Franklin
+ * St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * Este programa está nomeado como service.h e possui - linhas de código.
+ *
+ * Contatos:
+ *
+ * perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
+ * erico.mendonca@gmail.com	(Erico Mascarenhas Mendonça)
+ * licinio@bb.com.br		(Licínio Luis Branco)
+ * kraucer@bb.com.br		(Kraucer Fernandes Mazuco)
+ *
+ */
+
 #ifndef _PW3270_DBUS_SERVICE_H
 
 	#define _PW3270_DBUS_SERVICE_H 1
@@ -5,14 +36,7 @@
 	#define ENABLE_NLS
 	#define GETTEXT_PACKAGE PACKAGE_NAME
 
-	#include <libintl.h>
-	#include <glib/gi18n.h>
-
-	#include <lib3270.h>
-	#include <glib.h>
-	#include <dbus/dbus-glib.h>
-	#include <dbus/dbus-glib-bindings.h>
-	#include <dbus/dbus-glib-lowlevel.h>
+	#include "globals.h"
 
 	#define PW3270_DBUS_SERVICE_PATH	"/br/com/bb/pw3270"
 	#define PW3270_DBUS_SERVICE			"br.com.bb.pw3270"
@@ -46,7 +70,10 @@
 	void		  pw3270_dbus_quit(PW3270Dbus *object, DBusGMethodInvocation *context);
 	void		  pw3270_dbus_connect(PW3270Dbus *object, const gchar *uri, DBusGMethodInvocation *context);
 	void		  pw3270_dbus_disconnect(PW3270Dbus *object, DBusGMethodInvocation *context);
+	void		  pw3270_dbus_get_program_message(PW3270Dbus *object, DBusGMethodInvocation *context);
+	void		  pw3270_dbus_get_screen_contents(PW3270Dbus *object, DBusGMethodInvocation *context);
 	H3270		* pw3270_dbus_get_session_handle(PW3270Dbus *object);
+	GError		* pw3270_dbus_get_error_from_errno(int code);
 
 	G_END_DECLS
 

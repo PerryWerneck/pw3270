@@ -429,7 +429,7 @@ AC_CONFIG_FILES([
 	src/tools/Makefile
 	src/plugins/remotectl/Makefile
 	src/plugins/rx3270/Makefile
-	src/plugins/dbus/Makefile
+	src/plugins/3270dbus/Makefile
 	man/Makefile
 	makegtkruntime.sh
 	src/sample/Makefile

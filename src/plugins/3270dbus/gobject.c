@@ -86,7 +86,96 @@ void pw3270_dbus_connect(PW3270Dbus *object, const gchar *uri, DBusGMethodInvoca
 void pw3270_dbus_disconnect(PW3270Dbus *object, DBusGMethodInvocation *context)
 {
 	g_message("Disconnecting by remote request");
-	lib3270_disconnect(pw3270_dbus_get_session_handle(PW3270_DBUS(object)));
+	lib3270_disconnect(pw3270_dbus_get_session_handle(object));
 	dbus_g_method_return(context,0);
+}
+
+void pw3270_dbus_get_program_message(PW3270Dbus *object, DBusGMethodInvocation *context)
+{
+	dbus_g_method_return(context,lib3270_get_program_message(pw3270_dbus_get_session_handle(object)));
+}
+
+GError * pw3270_dbus_get_error_from_errno(int code)
+{
+	return g_error_new(ERROR_DOMAIN,code,"%s",g_strerror(code));
+}
+
+int pw3270_dbus_check_valid_state(PW3270Dbus *object, DBusGMethodInvocation *context)
+{
+	H3270	* hSession = pw3270_dbus_get_session_handle(object);
+	GError	* error = NULL;
+
+	if(!lib3270_is_connected(hSession))
+	{
+		error = pw3270_dbus_get_error_from_errno(ENOTCONN);
+	}
+	else
+	{
+		LIB3270_MESSAGE state = lib3270_get_program_message(hSession);
+
+		switch(state)
+		{
+		case LIB3270_MESSAGE_NONE:
+			return 0;
+
+		case LIB3270_MESSAGE_DISCONNECTED:
+			error = pw3270_dbus_get_error_from_errno(ENOTCONN);
+			break;
+
+		case LIB3270_MESSAGE_MINUS:
+		case LIB3270_MESSAGE_PROTECTED:
+		case LIB3270_MESSAGE_NUMERIC:
+		case LIB3270_MESSAGE_OVERFLOW:
+		case LIB3270_MESSAGE_INHIBIT:
+		case LIB3270_MESSAGE_KYBDLOCK:
+		case LIB3270_MESSAGE_X:
+			error = g_error_new(ERROR_DOMAIN,-1,_( "State %04d can't accept requests" ),state);
+			break;
+
+		case LIB3270_MESSAGE_SYSWAIT:
+		case LIB3270_MESSAGE_TWAIT:
+		case LIB3270_MESSAGE_CONNECTED:
+		case LIB3270_MESSAGE_AWAITING_FIRST:
+			error = pw3270_dbus_get_error_from_errno(EBUSY);
+			break;
+
+		case LIB3270_MESSAGE_RESOLVING:
+		case LIB3270_MESSAGE_CONNECTING:
+			error = g_error_new(ERROR_DOMAIN,EINPROGRESS,_( "Connecting to host" ));
+
+		case LIB3270_MESSAGE_USER:
+			error = g_error_new(ERROR_DOMAIN,-1,_( "Unexpected state %04d" ),state);
+		}
+	}
+
+	if(error)
+	{
+		dbus_g_method_return_error(context,error);
+		g_error_free(error);
+		return -1;
+	}
+
+	return 0;
+}
+
+void pw3270_dbus_get_screen_contents(PW3270Dbus *object, DBusGMethodInvocation *context)
+{
+	char	* text;
+	gchar	* utftext;
+	H3270	* hSession = pw3270_dbus_get_session_handle(object);
+
+	if(pw3270_dbus_check_valid_state(object,context))
+		return;
+
+	text = lib3270_get_text(hSession,0,-1);
+
+	utftext = g_convert_with_fallback(text,-1,"UTF-8",lib3270_get_charset(hSession),"?",NULL,NULL,NULL);
+
+	lib3270_free(text);
+
+	dbus_g_method_return(context,utftext);
+
+	g_free(utftext);
+
 }
 

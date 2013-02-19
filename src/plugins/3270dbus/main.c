@@ -49,14 +49,6 @@
 
 /*---[ Implement ]-------------------------------------------------------------------------------*/
 
- static gpointer dbus_register_object (DBusGConnection *connection,DBusGProxy *proxy,GType object_type,const DBusGObjectInfo *info,const gchar *path)
- {
-	GObject *object = g_object_new (object_type, NULL);
-	dbus_g_object_type_install_info (object_type, info);
-	dbus_g_connection_register_g_object (connection, path, object);
-	return object;
- }
-
  LIB3270_EXPORT int pw3270_plugin_init(GtkWidget *window)
  {
 
@@ -89,8 +81,28 @@
 	proxy = dbus_g_proxy_new_for_name(connection,DBUS_SERVICE_DBUS,DBUS_PATH_DBUS,DBUS_INTERFACE_DBUS);
 
 	org_freedesktop_DBus_request_name(proxy, PW3270_DBUS_SERVICE, DBUS_NAME_FLAG_DO_NOT_QUEUE, &result, &error);
+	if(error)
+	{
+		GtkWidget *dialog =  gtk_message_dialog_new(
+									GTK_WINDOW(window),
+									GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
+									GTK_MESSAGE_ERROR,
+									GTK_BUTTONS_OK,
+									_( "Can't get DBUS object name" ));
 
-	dbus_register_object(connection,proxy,PW3270_TYPE_DBUS,&dbus_glib_pw3270_dbus_object_info,PW3270_DBUS_SERVICE_PATH);
+		gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),"%s",error->message);
+
+		g_message("Error \"%s\" requesting DBUS name",error->message);
+
+		g_error_free(error);
+
+		gtk_dialog_run(GTK_DIALOG(dialog));
+		gtk_widget_destroy(dialog);
+
+		return -1;
+	}
+
+	pw3270_dbus_register_object(connection,proxy,PW3270_TYPE_DBUS,&dbus_glib_pw3270_dbus_object_info,PW3270_DBUS_SERVICE_PATH);
 
 	return 0;
  }

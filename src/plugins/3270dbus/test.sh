@@ -6,6 +6,10 @@ case $1 in
 		dbus-send --session  --print-reply --dest=br.com.bb.pw3270 /br/com/bb/pw3270 br.com.bb.pw3270.getRevision
 		;;
 
+	message)
+		dbus-send --session  --print-reply --dest=br.com.bb.pw3270 /br/com/bb/pw3270 br.com.bb.pw3270.getProgramMessage
+		;;
+
 	connect)
 		dbus-send --session  --print-reply --dest=br.com.bb.pw3270 /br/com/bb/pw3270 br.com.bb.pw3270.connect string:$2
 		;;
@@ -16,6 +20,10 @@ case $1 in
 
 	quit)
 		dbus-send --session  --print-reply --dest=br.com.bb.pw3270 /br/com/bb/pw3270 br.com.bb.pw3270.quit
+		;;
+
+	get)
+		dbus-send --session  --print-reply --dest=br.com.bb.pw3270 /br/com/bb/pw3270 br.com.bb.pw3270.getScreenContents
 		;;
 
 	*)

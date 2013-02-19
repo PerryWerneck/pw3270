@@ -47,6 +47,7 @@
 		</Unit>
 		<Unit filename="daemon.h" />
 		<Unit filename="dbus-glue.h" />
+		<Unit filename="globals.h" />
 		<Unit filename="gobject.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -54,6 +55,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="misc.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="pw3270dbus.xml" />

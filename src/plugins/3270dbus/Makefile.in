@@ -28,10 +28,10 @@
 
 #---[ Sources ]----------------------------------------------------------------
 
-MODULE_NAME=pw3270dbus
+MODULE_NAME=3270dbus
 DEPENDS=Makefile dbus-glue.h
-PLUGIN_SRC=main.c gobject.c
-DAEMON_SRC=daemon.c gobject.c iocallback.c
+PLUGIN_SRC=main.c gobject.c misc.c
+DAEMON_SRC=daemon.c gobject.c iocallback.c misc.c
 
 #---[ Paths ]------------------------------------------------------------------
 
@@ -55,6 +55,7 @@ DBUSBINDINGTOOL=@DBUSBINDINGTOOL@
 #---[ Flags ]------------------------------------------------------------------
 
 DLL_FLAGS=-shared
+DLL_CFLAGS=@DLL_CFLAGS@
 DEBUG_CFLAGS=-DDEBUG=1 -g -Wall
 
 LIB3270_CFLAGS ?= `pkg-config --cflags lib3270`
@@ -72,12 +73,12 @@ GTK_LIBS=@GTK_LIBS@
 $(OBJDBG)/%.o: %.c $(DEPENDS)
 	@echo "  CC   `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CC) $(CFLAGS) $(DBUS_CFLAGS) $(GLIB_CFLAGS) $(GTK_CFLAGS) $(DEBUG_CFLAGS) $(LIB3270_CFLAGS)  -o $@ -c $<
+	@$(CC) $(CFLAGS) $(DLL_CFLAGS) $(DBUS_CFLAGS) $(GLIB_CFLAGS) $(GTK_CFLAGS) $(DEBUG_CFLAGS) $(LIB3270_CFLAGS)  -o $@ -c $<
 
 $(OBJRLS)/%.o: %.c $(DEPENDS)
 	@echo "  CC   `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CC) $(CFLAGS) $(DBUS_CFLAGS) $(GLIB_CFLAGS) $(GTK_CFLAGS)  $(LIB3270_CFLAGS) -o $@ -c $<
+	@$(CC) $(CFLAGS) $(DLL_CFLAGS) $(DBUS_CFLAGS) $(GLIB_CFLAGS) $(GTK_CFLAGS)  $(LIB3270_CFLAGS) -o $@ -c $<
 
 
 #---[ Release targets ]--------------------------------------------------------
@@ -91,7 +92,7 @@ $(BINRLS)/plugins/$(MODULE_NAME).so: $(foreach SRC, $(basename $(PLUGIN_SRC)), $
 
 #---[ Debug targets ]----------------------------------------------------------
 
-Debug: $(BINDBG)/plugins/$(MODULE_NAME).so $(BINDBG)/libhllapi.so
+Debug: $(BINDBG)/plugins/$(MODULE_NAME).so
 
 $(BINDBG)/plugins/$(MODULE_NAME).so: $(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJDBG)/$(SRC).o)
 	@echo "  CCLD `basename $@`"

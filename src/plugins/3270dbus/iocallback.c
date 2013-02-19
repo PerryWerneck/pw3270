@@ -247,6 +247,7 @@ static gboolean IO_closure(gpointer data)
 struct bgParameter
 {
 	gboolean	running;
+	gboolean	timer;
 	H3270		*session;
 	int			rc;
 	int(*callback)(H3270 *session, void *);
@@ -263,14 +264,26 @@ gpointer BgCall(struct bgParameter *p)
 	return 0;
 }
 
+static gboolean wait_for_thread(struct bgParameter *p)
+{
+	if(!p->running)
+	{
+		p->timer = 0;
+		return FALSE;
+	}
+	return TRUE;
+}
+
 static int static_CallAndWait(int(*callback)(H3270 *session, void *), H3270 *session, void *parm)
 {
-	struct bgParameter p = { TRUE, session, -1, callback, parm };
-	GThread	*thread;
+	struct bgParameter	  p			= { TRUE, TRUE, session, -1, callback, parm };
+	GThread				* thread;
 
 //	trace("Starting auxiliary thread for callback %p",callback);
 
-	p.running = TRUE;
+	p.running	= TRUE;
+	p.timer 	= TRUE;
+
     thread = g_thread_create( (GThreadFunc) BgCall, &p, 0, NULL);
 
     if(!thread)
@@ -279,7 +292,9 @@ static int static_CallAndWait(int(*callback)(H3270 *session, void *), H3270 *ses
     	return -1;
     }
 
-	while(p.running)
+	g_timeout_add(50,(GSourceFunc) wait_for_thread,(gpointer) &p);
+
+	while(p.timer)
 		g_main_context_iteration(g_main_loop_get_context(main_loop),TRUE);
 
     return p.rc;

@@ -52,14 +52,6 @@
 
 /*---[ Implement ]-------------------------------------------------------------------------------*/
 
-static gpointer dbus_register_object (DBusGConnection *connection,DBusGProxy *proxy,GType object_type,const DBusGObjectInfo *info,const gchar *path)
-{
-	GObject *object = g_object_new (object_type, NULL);
-	dbus_g_object_type_install_info (object_type, info);
-	dbus_g_connection_register_g_object (connection, path, object);
-	return object;
-}
-
 static int initialize(void)
 {
 	GError	* error = NULL;
@@ -77,7 +69,7 @@ static int initialize(void)
 
 	org_freedesktop_DBus_request_name(proxy, PW3270_DBUS_SERVICE, DBUS_NAME_FLAG_DO_NOT_QUEUE, &result, &error);
 
-	dbus_register_object(connection,proxy,PW3270_TYPE_DBUS,&dbus_glib_pw3270_dbus_object_info,PW3270_DBUS_SERVICE_PATH);
+	pw3270_dbus_register_object(connection,proxy,PW3270_TYPE_DBUS,&dbus_glib_pw3270_dbus_object_info,PW3270_DBUS_SERVICE_PATH);
 
 	return 0;
 }
@@ -99,7 +91,6 @@ int main(int numpar, char *param[])
 
 	if(initialize())
 		return -1;
-
 
 	g_main_loop_run(main_loop);
 
