@@ -620,7 +620,6 @@ gchar * filename_from_va(const gchar *first_element, va_list args)
 	}
 #endif // HAVE_WIN_REGISTRY
 
-
 	if(!result)
 	{
 		// Search for application folder on system data dirs
@@ -644,9 +643,36 @@ gchar * filename_from_va(const gchar *first_element, va_list args)
 
 	}
 
+#ifdef DEBUG
 	if(!result)
 	{
-		result = g_string_new(g_get_current_dir());
+		int f;
+		gchar *dir = g_get_current_dir();
+
+		for(f=0;f<2 && dir;f++)
+		{
+			gchar *ptr = dir;
+			dir = g_path_get_dirname(ptr);
+			g_free(ptr);
+		}
+
+		if(dir)
+		{
+			gchar *name = g_build_filename(dir,"ui",NULL);
+			if(g_file_test(name,G_FILE_TEST_IS_DIR))
+				result = g_string_new(dir);
+			g_free(name);
+			g_free(dir);
+		}
+
+	}
+#endif // DEBUG
+
+	if(!result)
+	{
+		gchar *dir = g_get_current_dir();
+		result = g_string_new(dir);
+		g_free(dir);
 		g_warning("Unable to find application datadir, using %s",result->str);
 	}
 
