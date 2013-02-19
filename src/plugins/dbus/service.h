@@ -1,7 +1,8 @@
 #ifndef _PW3270_DBUS_SERVICE_H
 
-	#define _PW3270_DBUS_SERVICE_H
+	#define _PW3270_DBUS_SERVICE_H 1
 
+	#include <lib3270.h>
 	#include <glib.h>
 	#include <dbus/dbus-glib.h>
 	#include <dbus/dbus-glib-bindings.h>
@@ -36,6 +37,10 @@
 	GType 		  pw3270_dbus_get_type (void);
 
 	void		  pw3270_dbus_get_revision(PW3270Dbus *object, DBusGMethodInvocation *context);
+	void		  pw3270_dbus_quit(PW3270Dbus *object, DBusGMethodInvocation *context);
+	void		  pw3270_dbus_connect(PW3270Dbus *object, const gchar *uri, DBusGMethodInvocation *context);
+	void		  pw3270_dbus_disconnect(PW3270Dbus *object, DBusGMethodInvocation *context);
+	H3270		* pw3270_dbus_get_session_handle(PW3270Dbus *object);
 
 	G_END_DECLS
 

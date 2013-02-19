@@ -30,8 +30,8 @@
 
 MODULE_NAME=pw3270dbus
 DEPENDS=Makefile dbus-glue.h
-PLUGIN_SRC=main.c
-DAEMON_SRC=daemon.c gobject.c
+PLUGIN_SRC=main.c gobject.c
+DAEMON_SRC=daemon.c gobject.c iocallback.c
 
 #---[ Paths ]------------------------------------------------------------------
 

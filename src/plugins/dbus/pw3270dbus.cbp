@@ -42,6 +42,9 @@
 			<Add option="-Wall" />
 		</Compiler>
 		<Unit filename="Makefile.in" />
+		<Unit filename="daemon.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="dbus-glue.h" />
 		<Unit filename="gobject.c">
 			<Option compilerVar="CC" />
@@ -51,9 +54,7 @@
 		</Unit>
 		<Unit filename="pw3270dbus.xml" />
 		<Unit filename="service.h" />
-		<Unit filename="testprogram.c">
-			<Option compilerVar="CC" />
-		</Unit>
+		<Unit filename="test.sh" />
 		<Extensions>
 			<code_completion />
 			<debugger />

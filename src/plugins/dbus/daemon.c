@@ -38,13 +38,17 @@
 #include <dbus/dbus-glib-lowlevel.h>
 #include <dbus/dbus-glib.h>
 
-#include "service.h"
+#include "daemon.h"
 #include "dbus-glue.h"
 
 /*---[ Globals ]---------------------------------------------------------------------------------*/
 
  static DBusGConnection	* connection	= NULL;
  static DBusGProxy		* proxy			= NULL;
+ static H3270			* hSession		= NULL;
+
+ GMainLoop				* main_loop		= NULL;
+
 
 /*---[ Implement ]-------------------------------------------------------------------------------*/
 
@@ -80,8 +84,6 @@ static int initialize(void)
 
 int main(int numpar, char *param[])
 {
-	GMainLoop *loop;
-
 	g_type_init ();
 
 	if (!g_thread_supported ())
@@ -89,16 +91,31 @@ int main(int numpar, char *param[])
 
 	dbus_g_thread_init ();
 
-	loop = g_main_loop_new (NULL, FALSE);
+	pw3270_dbus_register_io_handlers();
+
+	hSession = lib3270_session_new("");
+
+	main_loop = g_main_loop_new (NULL, FALSE);
 
 	if(initialize())
 		return -1;
 
 
-	g_main_loop_run(loop);
+	g_main_loop_run(main_loop);
+
+	lib3270_session_free(hSession);
 
 	return 0;
 }
 
+void pw3270_dbus_quit(PW3270Dbus *object, DBusGMethodInvocation *context)
+{
+	g_main_loop_quit(main_loop);
+	dbus_g_method_return(context,0);
+}
 
+H3270 * pw3270_dbus_get_session_handle(PW3270Dbus *object)
+{
+	return hSession;
+}
 

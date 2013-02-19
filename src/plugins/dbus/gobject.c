@@ -57,9 +57,9 @@ static void pw3270_dbus_finalize(GObject *object)
 
 static void pw3270_dbus_class_init(PW3270DbusClass *klass)
 {
-        GObjectClass *object_class;
-        object_class = G_OBJECT_CLASS (klass);
-        object_class->finalize = pw3270_dbus_finalize;
+	GObjectClass *object_class;
+	object_class = G_OBJECT_CLASS (klass);
+	object_class->finalize = pw3270_dbus_finalize;
 }
 
 static void pw3270_dbus_init(PW3270Dbus *object)
@@ -76,3 +76,17 @@ void pw3270_dbus_get_revision(PW3270Dbus *object, DBusGMethodInvocation *context
 {
 	dbus_g_method_return(context,PACKAGE_REVISION);
 }
+
+void pw3270_dbus_connect(PW3270Dbus *object, const gchar *uri, DBusGMethodInvocation *context)
+{
+	g_message("Connecting to \"%s\" by remote request",uri);
+	dbus_g_method_return(context,lib3270_connect(pw3270_dbus_get_session_handle(PW3270_DBUS(object)),uri,0));
+}
+
+void pw3270_dbus_disconnect(PW3270Dbus *object, DBusGMethodInvocation *context)
+{
+	g_message("Disconnecting by remote request");
+	lib3270_disconnect(pw3270_dbus_get_session_handle(PW3270_DBUS(object)));
+	dbus_g_method_return(context,0);
+}
+
