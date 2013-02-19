@@ -74,24 +74,30 @@ PW3270Dbus * pw3270_dbus_new(void)
 
 void pw3270_dbus_get_revision(PW3270Dbus *object, DBusGMethodInvocation *context)
 {
+	trace("%s object=%p context=%p",__FUNCTION__,object,context);
 	dbus_g_method_return(context,PACKAGE_REVISION);
 }
 
 void pw3270_dbus_connect(PW3270Dbus *object, const gchar *uri, DBusGMethodInvocation *context)
 {
+	trace("%s object=%p context=%p",__FUNCTION__,object,context);
+
 	g_message("Connecting to \"%s\" by remote request",uri);
 	dbus_g_method_return(context,lib3270_connect(pw3270_dbus_get_session_handle(PW3270_DBUS(object)),uri,0));
 }
 
 void pw3270_dbus_disconnect(PW3270Dbus *object, DBusGMethodInvocation *context)
 {
+	trace("%s object=%p context=%p",__FUNCTION__,object,context);
+
 	g_message("Disconnecting by remote request");
 	lib3270_disconnect(pw3270_dbus_get_session_handle(object));
 	dbus_g_method_return(context,0);
 }
 
-void pw3270_dbus_get_program_message(PW3270Dbus *object, DBusGMethodInvocation *context)
+void pw3270_dbus_get_message_id(PW3270Dbus *object, DBusGMethodInvocation *context)
 {
+	trace("%s object=%p context=%p",__FUNCTION__,object,context);
 	dbus_g_method_return(context,lib3270_get_program_message(pw3270_dbus_get_session_handle(object)));
 }
 
@@ -104,6 +110,8 @@ int pw3270_dbus_check_valid_state(PW3270Dbus *object, DBusGMethodInvocation *con
 {
 	H3270	* hSession = pw3270_dbus_get_session_handle(object);
 	GError	* error = NULL;
+
+	trace("%s object=%p context=%p",__FUNCTION__,object,context);
 
 	if(!lib3270_is_connected(hSession))
 	{
@@ -163,6 +171,8 @@ void pw3270_dbus_get_screen_contents(PW3270Dbus *object, DBusGMethodInvocation *
 	char	* text;
 	gchar	* utftext;
 	H3270	* hSession = pw3270_dbus_get_session_handle(object);
+
+	trace("%s object=%p context=%p",__FUNCTION__,object,context);
 
 	if(pw3270_dbus_check_valid_state(object,context))
 		return;

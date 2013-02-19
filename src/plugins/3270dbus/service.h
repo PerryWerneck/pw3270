@@ -70,7 +70,7 @@
 	void		  pw3270_dbus_quit(PW3270Dbus *object, DBusGMethodInvocation *context);
 	void		  pw3270_dbus_connect(PW3270Dbus *object, const gchar *uri, DBusGMethodInvocation *context);
 	void		  pw3270_dbus_disconnect(PW3270Dbus *object, DBusGMethodInvocation *context);
-	void		  pw3270_dbus_get_program_message(PW3270Dbus *object, DBusGMethodInvocation *context);
+	void		  pw3270_dbus_get_message_id(PW3270Dbus *object, DBusGMethodInvocation *context);
 	void		  pw3270_dbus_get_screen_contents(PW3270Dbus *object, DBusGMethodInvocation *context);
 	H3270		* pw3270_dbus_get_session_handle(PW3270Dbus *object);
 	GError		* pw3270_dbus_get_error_from_errno(int code);

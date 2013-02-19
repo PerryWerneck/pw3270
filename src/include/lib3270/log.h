@@ -56,6 +56,7 @@
 		LIB3270_EXPORT void	  lib3270_write_va_log(H3270 *session, const char *module, const char *fmt, va_list arg);
 
 		#ifdef DEBUG
+			#include <stdio.h>
 			#define trace( fmt, ... )	fprintf(stderr, "%s(%d) " fmt "\n", __FILE__, __LINE__, __VA_ARGS__ ); fflush(stderr);
 		#else
 			#define trace(x, ...) 		// __VA_ARGS__
