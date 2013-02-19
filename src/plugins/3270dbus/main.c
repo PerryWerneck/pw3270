@@ -40,6 +40,8 @@
 #include "service.h"
 #include "dbus-glue.h"
 
+#include <gtk/gtk.h>
+
 /*---[ Globals ]---------------------------------------------------------------------------------*/
 
  static DBusGConnection	* connection	= NULL;
@@ -64,11 +66,25 @@
 	connection = dbus_g_bus_get_private(DBUS_BUS_SESSION, g_main_context_default(), &error);
 	if(error)
 	{
-		# Popup Error
+		GtkWidget *dialog =  gtk_message_dialog_new(
+									GTK_WINDOW(window),
+									GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
+									GTK_MESSAGE_ERROR,
+									GTK_BUTTONS_OK,
+									_( "Can't connect to DBUS server" ));
+
+		gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),"%s",error->message);
+
 		g_message("Error \"%s\" getting session dbus",error->message);
+
 		g_error_free(error);
+
+		gtk_dialog_run(GTK_DIALOG(dialog));
+		gtk_widget_destroy(dialog);
+
 		return -1;
 	}
+
 
 	proxy = dbus_g_proxy_new_for_name(connection,DBUS_SERVICE_DBUS,DBUS_PATH_DBUS,DBUS_INTERFACE_DBUS);
 

@@ -60,22 +60,24 @@ DEBUG_CFLAGS=-DDEBUG=1 -g -Wall
 LIB3270_CFLAGS ?= `pkg-config --cflags lib3270`
 DBUS_CFLAGS=@DBUS_CFLAGS@
 GLIB_CFLAGS=@GLIB_CFLAGS@
+GTK_CFLAGS=@GTK_CFLAGS@
 
 LIB3270_LIBS ?= `pkg-config --libs lib3270`
 DBUS_LIBS=@DBUS_LIBS@
 GLIB_LIBS=@GLIB_LIBS@
+GTK_LIBS=@GTK_LIBS@
 
 #---[ Rules ]------------------------------------------------------------------
 
 $(OBJDBG)/%.o: %.c $(DEPENDS)
 	@echo "  CC   `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CC) $(CFLAGS) $(DBUS_CFLAGS) $(GLIB_CFLAGS) $(DEBUG_CFLAGS) $(LIB3270_CFLAGS)  -o $@ -c $<
+	@$(CC) $(CFLAGS) $(DBUS_CFLAGS) $(GLIB_CFLAGS) $(GTK_CFLAGS) $(DEBUG_CFLAGS) $(LIB3270_CFLAGS)  -o $@ -c $<
 
 $(OBJRLS)/%.o: %.c $(DEPENDS)
 	@echo "  CC   `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CC) $(CFLAGS) $(DBUS_CFLAGS) $(GLIB_CFLAGS) $(LIB3270_CFLAGS) -o $@ -c $<
+	@$(CC) $(CFLAGS) $(DBUS_CFLAGS) $(GLIB_CFLAGS) $(GTK_CFLAGS)  $(LIB3270_CFLAGS) -o $@ -c $<
 
 
 #---[ Release targets ]--------------------------------------------------------
@@ -94,7 +96,7 @@ Debug: $(BINDBG)/plugins/$(MODULE_NAME).so $(BINDBG)/libhllapi.so
 $(BINDBG)/plugins/$(MODULE_NAME).so: $(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJDBG)/$(SRC).o)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(LD) $(DLL_FLAGS) -Wl,-soname,`basename $@` $(LDFLAGS) -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(GLIB_LIBS)
+	@$(LD) $(DLL_FLAGS) -Wl,-soname,`basename $@` $(LDFLAGS) -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(GLIB_LIBS) $(GTK_LIBS)
 
 #---[ Misc targets ]-----------------------------------------------------------
 

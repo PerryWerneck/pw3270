@@ -2,6 +2,12 @@
 
 	#define _PW3270_DBUS_SERVICE_H 1
 
+	#define ENABLE_NLS
+	#define GETTEXT_PACKAGE PACKAGE_NAME
+
+	#include <libintl.h>
+	#include <glib/gi18n.h>
+
 	#include <lib3270.h>
 	#include <glib.h>
 	#include <dbus/dbus-glib.h>

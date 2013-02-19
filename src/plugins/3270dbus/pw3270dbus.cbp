@@ -45,8 +45,12 @@
 		<Unit filename="daemon.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="daemon.h" />
 		<Unit filename="dbus-glue.h" />
 		<Unit filename="gobject.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="iocallback.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="main.c">
