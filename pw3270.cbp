@@ -220,7 +220,6 @@
 		<Unit filename="src/lib3270/winversc.h" />
 		<Unit filename="src/lib3270/xioc.h" />
 		<Unit filename="src/lib3270/xl.h" />
-		<Unit filename="src/plugins/dbus/Makefile.in" />
 		<Unit filename="src/plugins/dbus/daemon.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -230,9 +229,29 @@
 		<Unit filename="src/plugins/dbus/main.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/plugins/dbus/pw3270dbus.xml" />
 		<Unit filename="src/plugins/dbus/service.h" />
-		<Unit filename="src/plugins/dbus/test.sh" />
+		<Unit filename="src/plugins/dbus3270/Makefile.in" />
+		<Unit filename="src/plugins/dbus3270/daemon.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/plugins/dbus3270/daemon.h" />
+		<Unit filename="src/plugins/dbus3270/dbus-glue.h" />
+		<Unit filename="src/plugins/dbus3270/globals.h" />
+		<Unit filename="src/plugins/dbus3270/gobject.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/plugins/dbus3270/iocallback.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/plugins/dbus3270/main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/plugins/dbus3270/misc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/plugins/dbus3270/pw3270dbus.xml" />
+		<Unit filename="src/plugins/dbus3270/service.h" />
+		<Unit filename="src/plugins/dbus3270/test.sh" />
 		<Unit filename="src/plugins/remotectl/Makefile.in" />
 		<Unit filename="src/plugins/remotectl/hllapi.c">
 			<Option compilerVar="CC" />
