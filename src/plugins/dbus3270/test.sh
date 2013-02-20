@@ -26,6 +26,10 @@ case $1 in
 		dbus-send --session  --print-reply --dest=br.com.bb.pw3270 /br/com/bb/pw3270 br.com.bb.pw3270.getScreenContents
 		;;
 
+	set)
+		dbus-send --session  --print-reply --dest=br.com.bb.pw3270 /br/com/bb/pw3270 br.com.bb.pw3270.setTextAt int32:$2 int32:$3 string:$4
+		;;
+
 	enter)
 		dbus-send --session  --print-reply --dest=br.com.bb.pw3270 /br/com/bb/pw3270 br.com.bb.pw3270.enter
 		;;

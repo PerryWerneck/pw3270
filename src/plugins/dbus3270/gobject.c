@@ -198,3 +198,19 @@ void pw3270_dbus_enter(PW3270Dbus *object, DBusGMethodInvocation *context)
 		return;
 	dbus_g_method_return(context,lib3270_enter(pw3270_dbus_get_session_handle(object)));
 }
+
+void pw3270_dbus_set_text_at(PW3270Dbus *object, int row, int col, const gchar *utftext, DBusGMethodInvocation *context)
+{
+	gchar	* text;
+	H3270	* hSession = pw3270_dbus_get_session_handle(object);
+
+	trace("%s object=%p context=%p",__FUNCTION__,object,context);
+	if(pw3270_dbus_check_valid_state(object,context))
+		return;
+
+	text = g_convert_with_fallback(utftext,-1,lib3270_get_charset(hSession),"UTF-8","?",NULL,NULL,NULL);
+
+	dbus_g_method_return(context,lib3270_set_string_at(hSession,row,col,(const unsigned char *) text));
+
+	g_free(text);
+}
