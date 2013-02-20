@@ -127,14 +127,37 @@
 
  LIB3270_EXPORT void pw3270_init_plugins(GtkWidget *widget)
  {
-#if defined(DEBUG)
-	load("." G_DIR_SEPARATOR_S "plugins", widget);
-#else
+#if ! defined(DEBUG)
+
 	gchar *path = pw3270_build_filename(widget,"plugins",NULL);
 	load(path, widget);
 	g_free(path);
-#endif
 
+#elif defined( win32 )
+
+	gchar * appdir	= g_win32_get_package_installation_directory_of_module(NULL);
+	gchar * path	= pw3270_build_filename(widget,"plugins",NULL);
+	load(path, widget);
+	g_free(path);
+	g_free(appdir);
+
+#else
+
+	gchar * dir  = g_get_current_dir();
+	gchar * path = g_build_filename(dir,".bin","Debug","plugins",NULL);
+
+	if(!g_file_test(path,G_FILE_TEST_IS_DIR))
+	{
+		g_free(path);
+		path = pw3270_build_filename(widget,"plugins",NULL);
+	}
+
+	load(path,widget);
+
+	g_free(path);
+	g_free(dir);
+
+#endif
  }
 
  LIB3270_EXPORT void pw3270_deinit_plugins(GtkWidget *widget)
