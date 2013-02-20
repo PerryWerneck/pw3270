@@ -42,6 +42,7 @@
 	#undef HAVE_LIBM
 	#undef HAVE_LIBINTL
 	#undef HAVE_GETADDRINFO
+	#undef HAVE_SYSLOG
 
 #ifdef WIN32
 	#undef HAVE_WIN_REGISTRY

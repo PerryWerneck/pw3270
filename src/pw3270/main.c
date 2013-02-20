@@ -42,6 +42,10 @@
 #include "v3270/accessible.h"
 #include <stdlib.h>
 
+#if defined( HAVE_SYSLOG )
+ #include <syslog.h>
+#endif // HAVE_SYSLOG
+
 #define ERROR_DOMAIN g_quark_from_static_string(PACKAGE_NAME)
 
 /*--[ Statics ]--------------------------------------------------------------------------------------*/
@@ -55,8 +59,14 @@
 #endif // HAVE_GTKMAC
 
 #if defined( WIN32 )
- static const gchar	* appname		= PACKAGE_NAME;
+ static const gchar		* appname		= PACKAGE_NAME;
 #endif // WIN32
+
+#if defined( HAVE_SYSLOG )
+ static gboolean	  	  log_to_syslog	= FALSE;
+#endif // HAVE_SYSLOG
+
+
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
@@ -182,6 +192,52 @@ static gboolean optcolors(const gchar *option_name, const gchar *value, gpointer
 	return FALSE;
 }
 
+#if defined( HAVE_SYSLOG )
+static void g_syslog(const gchar *log_domain,GLogLevelFlags log_level,const gchar *message,gpointer user_data)
+{
+ 	static const struct _logtype
+ 	{
+ 		GLogLevelFlags	  log_level;
+ 		int 			  priority;
+ 		const gchar		* msg;
+ 	} logtype[] =
+ 	{
+		{ G_LOG_FLAG_RECURSION,	LOG_INFO,		"recursion"			},
+		{ G_LOG_FLAG_FATAL,		LOG_ERR,		"fatal error"		},
+
+		/* GLib log levels */
+		{ G_LOG_LEVEL_ERROR,	LOG_ERR,		"error"				},
+		{ G_LOG_LEVEL_CRITICAL,	LOG_ERR,		"critical error"	},
+		{ G_LOG_LEVEL_WARNING,	LOG_ERR,		"warning"			},
+		{ G_LOG_LEVEL_MESSAGE,	LOG_ERR,		"message"			},
+		{ G_LOG_LEVEL_INFO,		LOG_INFO,		"info"				},
+		{ G_LOG_LEVEL_DEBUG,	LOG_DEBUG,		"debug"				},
+ 	};
+
+	int f;
+
+	for(f=0;f<G_N_ELEMENTS(logtype);f++)
+	{
+		if(logtype[f].log_level == log_level)
+		{
+			gchar *ptr;
+			gchar *text = g_strdup_printf("%s: %s %s",logtype[f].msg,log_domain ? log_domain : "",message);
+			for(ptr = text;*ptr;ptr++)
+			{
+				if(*ptr < ' ')
+					*ptr = ' ';
+			}
+
+			syslog(logtype[f].priority,"%s",text);
+			g_free(text);
+			return;
+		}
+	}
+
+	syslog(LOG_INFO,"%s %s",log_domain ? log_domain : "", message);
+}
+#endif // HAVE_SYSLOG
+
 int main(int argc, char *argv[])
 {
 	static const gchar	* session_name	= PACKAGE_NAME;
@@ -252,6 +308,9 @@ int main(int argc, char *argv[])
 			{ "host",			'h', 0, G_OPTION_ARG_STRING,	&host,				N_( "Host to connect"),						NULL			},
 			{ "colors",			'c', 0, G_OPTION_ARG_CALLBACK,	optcolors,			N_( "Set reported colors (8/16)" ),			"16"			},
 			{ "systype",		't', 0, G_OPTION_ARG_STRING,	&system,			N_( "Host system type" ),					"S390"			},
+#if defined( HAVE_SYSLOG )
+			{ "syslog",			'l', 0, G_OPTION_ARG_NONE,		&log_to_syslog,		N_( "Send messages to syslog" ),			NULL			},
+#endif
 
 			{ NULL }
 		};
@@ -291,6 +350,14 @@ int main(int argc, char *argv[])
 
 			return -1;
 		}
+
+#if defined( HAVE_SYSLOG )
+		if(log_to_syslog)
+		{
+			openlog(g_get_prgname(), LOG_NDELAY|LOG_NDELAY, LOG_USER);
+			g_log_set_default_handler(g_syslog,NULL);
+		}
+#endif // HAVE_SYSLOG
 
 	}
 
