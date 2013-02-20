@@ -74,6 +74,11 @@ static int initialize(void)
 	return 0;
 }
 
+static void loghandler(H3270 *session, const char *module, int rc, const char *fmt, va_list args)
+{
+	g_logv(module,rc ? G_LOG_LEVEL_WARNING : G_LOG_LEVEL_MESSAGE, fmt, args);
+}
+
 int main(int numpar, char *param[])
 {
 	g_type_init ();
@@ -83,6 +88,7 @@ int main(int numpar, char *param[])
 
 	dbus_g_thread_init ();
 
+	lib3270_set_log_handler(loghandler);
 	pw3270_dbus_register_io_handlers();
 
 	hSession = lib3270_session_new("");

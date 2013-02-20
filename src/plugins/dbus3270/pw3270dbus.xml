@@ -26,5 +26,9 @@
       <annotation name="org.freedesktop.DBus.GLib.Async" value="true"/>
       <arg type="s" name="contents" direction="out" />
     </method>
+    <method name="enter">
+      <annotation name="org.freedesktop.DBus.GLib.Async" value="true"/>
+      <arg type="i" name="result" direction="out" />
+    </method>
   </interface>
 </node>

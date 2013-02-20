@@ -28,7 +28,7 @@
 
 #---[ Sources ]----------------------------------------------------------------
 
-MODULE_NAME=3270dbus
+MODULE_NAME=dbus3270
 DEPENDS=Makefile dbus-glue.h
 PLUGIN_SRC=main.c gobject.c misc.c
 DAEMON_SRC=daemon.c gobject.c iocallback.c misc.c

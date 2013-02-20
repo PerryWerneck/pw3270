@@ -39,6 +39,8 @@
 #include <dbus/dbus-glib.h>
 
 #include <lib3270/config.h>
+#include <lib3270.h>
+#include <lib3270/actions.h>
 
 #include "service.h"
 
@@ -189,3 +191,10 @@ void pw3270_dbus_get_screen_contents(PW3270Dbus *object, DBusGMethodInvocation *
 
 }
 
+void pw3270_dbus_enter(PW3270Dbus *object, DBusGMethodInvocation *context)
+{
+	trace("%s object=%p context=%p",__FUNCTION__,object,context);
+	if(pw3270_dbus_check_valid_state(object,context))
+		return;
+	dbus_g_method_return(context,lib3270_enter(pw3270_dbus_get_session_handle(object)));
+}

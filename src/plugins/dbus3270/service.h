@@ -75,6 +75,10 @@
 	H3270		* pw3270_dbus_get_session_handle(PW3270Dbus *object);
 	GError		* pw3270_dbus_get_error_from_errno(int code);
 
+	// Actions
+	void		  pw3270_dbus_enter(PW3270Dbus *object, DBusGMethodInvocation *context);
+
+
 	G_END_DECLS
 
 #endif // _PW3270_DBUS_SERVICE_H
