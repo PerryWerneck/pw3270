@@ -95,12 +95,12 @@ endif
 $(OBJDBG)/%.o: %.c $(DEPENDS)
 	@echo "  CC   `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CC) $(CFLAGS) $(DLL_CFLAGS) $(DBUS_CFLAGS) $(GLIB_CFLAGS) $(GTK_CFLAGS) $(DEBUG_CFLAGS) $(LIB3270_CFLAGS)  -o $@ -c $<
+	@$(CC) $(CFLAGS) $(DLL_CFLAGS) $(DBUS_CFLAGS) $(GLIB_CFLAGS) $(GTK_CFLAGS) $(DEBUG_CFLAGS) $(LIB3270_CFLAGS) $(PW3270_CFLAGS) -o $@ -c $<
 
 $(OBJRLS)/%.o: %.c $(DEPENDS)
 	@echo "  CC   `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CC) $(CFLAGS) $(DLL_CFLAGS) $(DBUS_CFLAGS) $(GLIB_CFLAGS) $(GTK_CFLAGS)  $(LIB3270_CFLAGS) -o $@ -c $<
+	@$(CC) $(CFLAGS) $(DLL_CFLAGS) $(DBUS_CFLAGS) $(GLIB_CFLAGS) $(GTK_CFLAGS)  $(LIB3270_CFLAGS) $(PW3270_CFLAGS) -o $@ -c $<
 
 
 #---[ Release targets ]--------------------------------------------------------
@@ -110,7 +110,7 @@ Release: $(BINRLS)/plugins/$(MODULE_NAME).so
 $(BINRLS)/plugins/$(MODULE_NAME).so: $(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJRLS)/$(SRC).o)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(LD) $(DLL_FLAGS) -Wl,-soname,`basename $@` $(LDFLAGS) -o $@ $^ $(LIBS)
+	@$(LD) $(DLL_FLAGS) -Wl,-soname,`basename $@` $(LDFLAGS) -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(PW3270_LIBS) $(GLIB_LIBS) $(GTK_LIBS)
 
 #---[ Debug targets ]----------------------------------------------------------
 
@@ -119,13 +119,14 @@ Debug: $(BINDBG)/plugins/$(MODULE_NAME).so
 $(BINDBG)/plugins/$(MODULE_NAME).so: $(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJDBG)/$(SRC).o)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(LD) $(DLL_FLAGS) -Wl,-soname,`basename $@` $(LDFLAGS) -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(GLIB_LIBS) $(GTK_LIBS)
+	@$(LD) $(DLL_FLAGS) -Wl,-soname,`basename $@` $(LDFLAGS) -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(PW3270_LIBS) $(GLIB_LIBS) $(GTK_LIBS)
 
 #---[ Misc targets ]-----------------------------------------------------------
 
 debug-service: $(BINDBG)/@PACKAGE_NAME@d
 
 dbus-glue.h: pw3270dbus.xml
+	@$(MKDIR) .tmp
 	@$(DBUSBINDINGTOOL) --mode=glib-server --output=$@ --prefix=pw3270_dbus $^
 
 $(BINDBG)/@PACKAGE_NAME@d: $(foreach SRC, $(basename $(DAEMON_SRC)), $(OBJDBG)/$(SRC).o)
@@ -138,5 +139,6 @@ cleandebug-service: clean
 clean:
 	@rm -fr $(OBJDIR)
 	@rm -fr $(BINDIR)
+	@rm -fr .tmp
 	@rm -f dbus-glue.h
 	@find . -name "*~" -exec rm -f {} \;
