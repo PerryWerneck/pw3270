@@ -15,16 +15,13 @@
 # obter mais detalhes.
 #
 # Você deve ter recebido uma cópia da Licença Pública Geral GNU junto com este
-# programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple
-# Place, Suite 330, Boston, MA, 02111-1307, USA
+# programa; se não, escreva para a Free Software Foundation, Inc., 51 Franklin
+# St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 # Contatos:
 #
 # perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
 # erico.mendonca@gmail.com	(Erico Mascarenhas de Mendonça)
-# licinio@bb.com.br			(Licínio Luis Branco)
-# kraucer@bb.com.br			(Kraucer Fernandes Mazuco)
-#
 #
 
 LIB3270_CFLAGS=`pkg-config --cflags lib3270`
