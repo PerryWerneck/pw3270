@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-19 17:42-0300\n"
+"POT-Creation-Date: 2013-02-21 10:43-0300\n"
 "PO-Revision-Date: 2013-01-14 09:49-0200\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
@@ -38,7 +38,7 @@ msgstr "Ação %s precisa de um valor válido"
 msgid "%s action needs src attribute"
 msgstr "Ação %s precisa do atributo src"
 
-#: main.c:76
+#: main.c:86
 #, c-format
 msgid "%s requires GTK version %d.%d.%d"
 msgstr "%s requer GTK versão %d.%d.%d"
@@ -83,7 +83,7 @@ msgstr "%s: Familia %d é inválida"
 msgid "%s:%d"
 msgstr "%s:%d"
 
-#: main.c:259
+#: main.c:318
 msgid "- 3270 Emulator for Gtk"
 msgstr "- Emulador 3270 para GTK"
 
@@ -164,7 +164,7 @@ msgstr ""
 msgid "<b>SSL state is undefined</b>Unexpected SSL status %ld"
 msgstr "<b>Estado do SSL é indefinido</b>Estado SSL inesperado %ld"
 
-#: main.c:279
+#: main.c:338
 msgid ""
 "<b>Valid options:</b>\n"
 "\n"
@@ -217,7 +217,7 @@ msgid "An error occurred trying to allocate memory. This should never happen."
 msgstr ""
 "Ocorreu um erro ao tentar alocar memória. Isso nunca deveria acontecer."
 
-#: main.c:246 main.c:248
+#: main.c:302 main.c:304
 msgid "Application name"
 msgstr "Nome da aplicação"
 
@@ -334,7 +334,7 @@ msgstr "Não foi possível conectar ao servidor"
 msgid "Can't convert line %d from %s to %s"
 msgstr "Não foi possível converter a linha %d de %s para %s"
 
-#: selection.c:601
+#: selection.c:631
 msgid "Can't cut rectangular regions"
 msgstr "Recortar não permitido em seleção retangular"
 
@@ -723,7 +723,7 @@ msgstr "Tela cheia"
 msgid "Function bar"
 msgstr "Barra de funções"
 
-#: main.c:80 main.c:312
+#: main.c:90 main.c:379
 msgid "GTK Version mismatch"
 msgstr "Divergência de versão GTK"
 
@@ -792,11 +792,11 @@ msgstr "Servidor rejeitou o tipo de dispositivo ou requisição"
 msgid "Host rejected resource(s)"
 msgstr "Servidor rejeitou recurso(s)"
 
-#: main.c:254
+#: main.c:310
 msgid "Host system type"
 msgstr "Tipo do sistema no servidor"
 
-#: main.c:252
+#: main.c:308
 msgid "Host to connect"
 msgstr "Servidor a conectar"
 
@@ -855,7 +855,7 @@ msgstr "Invalid CGCSGID '%s', ignoring"
 msgid "Invalid charset entry '%s' (#%d)"
 msgstr "Invalid charset entry '%s' (#%d)"
 
-#: selection.c:601
+#: selection.c:631
 msgid "Invalid cut action"
 msgstr "Ação recortar inválida"
 
@@ -961,7 +961,7 @@ msgstr "Normal/Protegido"
 msgid "Normal/Unprotected"
 msgstr "Normal/Desprotegido"
 
-#: selection.c:601
+#: selection.c:631
 msgid "Not available"
 msgstr "Não disponível"
 
@@ -1126,7 +1126,7 @@ msgstr "PF8"
 msgid "PF9"
 msgstr "PF9"
 
-#: main.c:277
+#: main.c:336
 msgid "Parse error"
 msgstr "Erro de interpretação"
 
@@ -1163,7 +1163,7 @@ msgstr "Colar com margem esquerda"
 msgid "Path length constraint exceeded"
 msgstr "Path length constraint exceeded"
 
-#: main.c:249
+#: main.c:305
 msgid "Path to application data files"
 msgstr "Path to application data files"
 
@@ -1580,11 +1580,15 @@ msgstr "Enviar arquivo"
 msgid "Send file to host"
 msgstr "Enviar arquivo para o servidor"
 
+#: main.c:312
+msgid "Send messages to syslog"
+msgstr "Send messages to syslog"
+
 #: ui/00default.xml:276
 msgid "Send/Receive"
 msgstr "Enviar/Receber"
 
-#: main.c:251
+#: main.c:307
 msgid "Session name"
 msgstr "Nome da sessão"
 
@@ -1592,7 +1596,7 @@ msgstr "Nome da sessão"
 msgid "Set hostname"
 msgstr "Selecione servidor"
 
-#: main.c:253
+#: main.c:309
 msgid "Set reported colors (8/16)"
 msgstr "Define número de cores informadas (8/16)"
 
@@ -1871,7 +1875,7 @@ msgstr ""
 "programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple "
 "Place, Suite 330, Boston, MA, 02111-1307, USA"
 
-#: main.c:308
+#: main.c:375
 #, c-format
 msgid "This program requires GTK version %d.%d.%d"
 msgstr "Este programa precisa do GTK versão %d.%d.%d"
@@ -2008,7 +2012,7 @@ msgstr "Atributo %s inesperado ou inválido: \"%s\""
 msgid "Unexpected or invalid attribute value \"%s\""
 msgstr "Valor de attributo inesperado ou inválido: \"%s\""
 
-#: main.c:181
+#: main.c:191
 #, c-format
 msgid "Unexpected or invalid color value \"%s\""
 msgstr "Valor de cor inválido ou inesperado: \"%s\""

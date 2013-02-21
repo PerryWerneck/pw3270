@@ -47,12 +47,14 @@
  static DBusGConnection	* connection	= NULL;
  static DBusGProxy		* proxy			= NULL;
 
+
 /*---[ Implement ]-------------------------------------------------------------------------------*/
 
  LIB3270_EXPORT int pw3270_plugin_init(GtkWidget *window)
  {
 
-	GError	* error = NULL;
+	GError	* error 		= NULL;
+	gchar 	* service_path	= NULL;
 	guint     result;
 
 	connection = dbus_g_bus_get_private(DBUS_BUS_SESSION, g_main_context_default(), &error);
@@ -77,10 +79,22 @@
 		return -1;
 	}
 
-
 	proxy = dbus_g_proxy_new_for_name(connection,DBUS_SERVICE_DBUS,DBUS_PATH_DBUS,DBUS_INTERFACE_DBUS);
 
-	org_freedesktop_DBus_request_name(proxy, PW3270_DBUS_SERVICE, DBUS_NAME_FLAG_DO_NOT_QUEUE, &result, &error);
+	{
+		gchar * service_name = g_strdup_printf("br.com.bb.%s",pw3270_get_session_name(window));
+
+		service_path = g_strdup_printf("/br/com/bb/%s",pw3270_get_session_name(window));
+
+		trace("DBUS service path is %s",service_path);
+		trace("DBUS service name is %s",service_name);
+
+		org_freedesktop_DBus_request_name(proxy, service_name, DBUS_NAME_FLAG_DO_NOT_QUEUE, &result, &error);
+
+		g_free(service_name);
+
+	}
+
 	if(error)
 	{
 		GtkWidget *dialog =  gtk_message_dialog_new(
@@ -102,13 +116,25 @@
 		return -1;
 	}
 
-	pw3270_dbus_register_object(connection,proxy,PW3270_TYPE_DBUS,&dbus_glib_pw3270_dbus_object_info,PW3270_DBUS_SERVICE_PATH);
+	pw3270_dbus_register_object(connection,proxy,PW3270_TYPE_DBUS,&dbus_glib_pw3270_dbus_object_info,service_path);
+
+	g_free(service_path);
 
 	return 0;
  }
 
  LIB3270_EXPORT int pw3270_plugin_deinit(GtkWidget *window)
  {
-
 	return 0;
  }
+
+ void pw3270_dbus_quit(PW3270Dbus *object, DBusGMethodInvocation *context)
+ {
+	gtk_main_quit();
+	dbus_g_method_return(context,0);
+ }
+
+H3270 * pw3270_dbus_get_session_handle(PW3270Dbus *object)
+{
+	return lib3270_get_default_session_handle();
+}

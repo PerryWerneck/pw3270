@@ -41,6 +41,10 @@
 #include "daemon.h"
 #include "dbus-glue.h"
 
+#define PW3270_DBUS_SERVICE_PATH	"/br/com/bb/pw3270"
+#define PW3270_DBUS_SERVICE			"br.com.bb.pw3270"
+
+
 /*---[ Globals ]---------------------------------------------------------------------------------*/
 
  static DBusGConnection	* connection	= NULL;

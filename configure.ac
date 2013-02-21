@@ -349,9 +349,13 @@ AC_SUBST(GLIB_CFLAGS)
 
 #--[ Check DBUS ]---------------------------------------------------------------------------------------------------------------------------------------------
 
-PKG_CHECK_MODULES( [DBUS], [dbus-glib-1], AC_DEFINE(HAVE_DBUS), AC_MSG_NOTICE([No DBUS support.])  )
+PKG_CHECK_MODULES( [DBUS], [dbus-glib-1], app_cv_dbus=yes, AC_MSG_NOTICE([No DBUS support.])  )
 AC_SUBST(DBUS_LIBS)
 AC_SUBST(DBUS_CFLAGS)
+
+#if test "$app_cv_dbus" == "yes"; then
+#	PLUGINS="$PLUGINS dbus3270"
+#fi
 
 #--[ SSL ]----------------------------------------------------------------------------------------------------------------------------------------------------
 

@@ -465,6 +465,8 @@ LIB3270_EXPORT char * lib3270_get_text(H3270 *h, int offset, int len)
 		return NULL;
 
 	maxlen = (h->rows * (h->cols+1)) - offset;
+	if(maxlen <= 0)
+		return NULL;
 
 	if(len < 0 || len > maxlen)
 		len = maxlen;
@@ -499,6 +501,34 @@ LIB3270_EXPORT char * lib3270_get_text(H3270 *h, int offset, int len)
 
 	return buffer;
 }
+
+LIB3270_EXPORT char * lib3270_get_text_at(H3270 *h, int row, int col, int len)
+{
+	CHECK_SESSION_HANDLE(h);
+
+	if(!lib3270_connected(h))
+		return NULL;
+
+	return lib3270_get_text(h, ((row) * h->cols) + col, len);
+}
+
+LIB3270_EXPORT int lib3270_cmp_text_at(H3270 *h, int row, int col, const char *text)
+{
+	int		  rc;
+	size_t	  sz		= strlen(text);
+	char	* contents;
+
+	contents = lib3270_get_text_at(h,row,col,sz);
+	if(!contents)
+		return -1;
+
+	rc = strncmp(contents,text,sz);
+
+	lib3270_free(contents);
+
+	return rc;
+}
+
 
 /**
  * Get field contents

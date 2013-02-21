@@ -38,9 +38,6 @@
 
 	#include "globals.h"
 
-	#define PW3270_DBUS_SERVICE_PATH	"/br/com/bb/pw3270"
-	#define PW3270_DBUS_SERVICE			"br.com.bb.pw3270"
-
 	#define PW3270_TYPE_DBUS			(pw3270_dbus_get_type ())
 	#define PW3270_DBUS(object)			(G_TYPE_CHECK_INSTANCE_CAST ((object), PW3270_TYPE_DBUS, PW3270Dbus))
 	#define PW3270_DBUS_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), PW3270_TYPE_DBUS, PW3270DbusClass))

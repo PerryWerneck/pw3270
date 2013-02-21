@@ -437,7 +437,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
 				gtk_list_store_append((GtkListStore *) model,&iter);
 				gtk_list_store_set((GtkListStore *) model, &iter,0, name, -1);
 
-				if(!g_strcasecmp(name,info->font))
+				if(!g_ascii_strcasecmp(name,info->font))
 					gtk_combo_box_set_active_iter(GTK_COMBO_BOX(widget),&iter);
 			}
 		}

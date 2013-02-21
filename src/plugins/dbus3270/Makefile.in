@@ -110,7 +110,7 @@ Release: $(BINRLS)/plugins/$(MODULE_NAME).so
 $(BINRLS)/plugins/$(MODULE_NAME).so: $(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJRLS)/$(SRC).o)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(LD) $(DLL_FLAGS) -Wl,-soname,`basename $@` $(LDFLAGS) -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(PW3270_LIBS) $(GLIB_LIBS) $(GTK_LIBS)
+	@$(LD) $(DLL_FLAGS) -Wl,-soname,`basename $@` $(LDFLAGS) -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(PW3270_LIBS) $(GLIB_LIBS) $(GTK_LIBS) $(DBUS_LIBS)
 
 #---[ Debug targets ]----------------------------------------------------------
 
@@ -119,7 +119,7 @@ Debug: $(BINDBG)/plugins/$(MODULE_NAME).so
 $(BINDBG)/plugins/$(MODULE_NAME).so: $(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJDBG)/$(SRC).o)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(LD) $(DLL_FLAGS) @DBGRPATH@ -Wl,-soname,`basename $@` $(LDFLAGS) -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(PW3270_LIBS) $(GLIB_LIBS) $(GTK_LIBS)
+	@$(LD) $(DLL_FLAGS) @DBGRPATH@ -Wl,-soname,`basename $@` $(LDFLAGS) -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(PW3270_LIBS) $(GLIB_LIBS) $(GTK_LIBS) $(DBUS_LIBS)
 
 #---[ Misc targets ]-----------------------------------------------------------
 

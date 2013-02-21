@@ -220,16 +220,6 @@
 		<Unit filename="src/lib3270/winversc.h" />
 		<Unit filename="src/lib3270/xioc.h" />
 		<Unit filename="src/lib3270/xl.h" />
-		<Unit filename="src/plugins/dbus/daemon.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/plugins/dbus/gobject.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/plugins/dbus/main.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/plugins/dbus/service.h" />
 		<Unit filename="src/plugins/dbus3270/Makefile.in" />
 		<Unit filename="src/plugins/dbus3270/daemon.c">
 			<Option compilerVar="CC" />
