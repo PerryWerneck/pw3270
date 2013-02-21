@@ -150,7 +150,7 @@ case "$host" in
 		LDSOFLAGS="-Wl,-soname,\`basename \$@\`"
 		LDAPPFLAGS=""
 		DBGRPATH="-Wl,--rpath,.bin/Debug/lib"
-		DBGCMDPREFIX="PATH=\$(BINDIR)/Debug/lib:\$(PATH)"
+		DBGCMDPREFIX="LD_LIBRARY_PATH=\$(BINDIR)/Debug/lib"
 
 esac
 

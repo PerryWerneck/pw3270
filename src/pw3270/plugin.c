@@ -64,10 +64,17 @@
 	{
 		gchar *filename = g_build_filename(path,name,NULL);
 
+//		trace("%s is %s",filename,g_str_has_suffix(filename,G_MODULE_SUFFIX) ? "valid" : "invalid");
+
 		if(g_str_has_suffix(filename,G_MODULE_SUFFIX))
 		{
 			GModule *handle = g_module_open(filename,G_MODULE_BIND_LOCAL);
-			if(handle)
+
+			if(!handle)
+			{
+				g_message("Error \"%s\" loading %s",g_module_error(),filename);
+			}
+			else
 			{
 				int (*init)(GtkWidget *);
 
@@ -82,6 +89,7 @@
 					{
 						// Plugin init is ok, save handle
 						lst = g_list_append(lst,handle);
+						trace("%s=%p",filename,handle);
 					}
 				}
 				else
@@ -105,7 +113,7 @@
 		int f;
 
 		nPlugin = g_list_length(lst);
-		g_message("%d plugin(s) loaded",nPlugin);
+		g_message("%d plugin%s loaded",nPlugin,nPlugin > 1 ? "s" : "");
 		hPlugin = g_malloc0(nPlugin * sizeof(GModule *));
 
 		for(f=0;f<nPlugin && l;f++)
@@ -158,6 +166,7 @@
 	g_free(dir);
 
 #endif
+
  }
 
  LIB3270_EXPORT void pw3270_deinit_plugins(GtkWidget *widget)
