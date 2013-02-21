@@ -33,7 +33,6 @@
  #include <stdlib.h>
  #include <string.h>
  #include <lib3270.h>
- #include <lib3270/actions.h>
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
@@ -61,67 +60,24 @@
 
 	printf("Connected to LU %s\n",lib3270_get_luname(hSession));
 
-	// Wait until the host is ready for commands
+	/* Wait until the host is ready for commands */
 	rc = lib3270_wait_for_ready(hSession,60);
 	if(rc)
 	{
 		fprintf(stderr,"Error waiting for session negotiation: %s\n",strerror(rc));
 		return rc;
 	}
-
-	while(lib3270_wait_for_ready(hSession,60))
+	else
 	{
-		char * screen_id = lib3270_get_text(hSession,1,9);
-
-		printf("Screen-id: [%s]",screen_id);
-
-		if(!strcasecmp(screen_id),"         ")
-		{
-/*
-			select
-			when host~queryStringAt(16,34,"Tecle ENTER")
-				then host~sendEnterKey()
-
-			when host~queryStringAt(2,24,"Conexoes Externas ao SISBB")
-				then host~sendEnterKey()
-
-			when host~queryStringAt(15,2,"Aplicativo       :") then
-			do
-				if host~queryStringAt(15,21,app) = 0 then
-				do
-					host~setStringAt(15,21,aplic)
-					host~setCursorPosition(13,21)
-				end
-			end
-
-			otherwise
-			end
-*/
-		}
-		else
-		{
-			fprintf(stderr,"Tela desconhecida [%s], abortando\n",screen_id);
-			break;
-		}
-
-
-		lib3270_free(screen_id);
-
-	}
-
-/*
-
-	rc = lib3270_enter(hSession);
-	rc = lib3270_wait_for_ready(hSession,60);
-
-	{
+		/* Host is ready, get screen contents */
 		char *text = lib3270_get_text(hSession,0,-1);
 
 		printf("\nScreen contents:\n%s\n",text);
 
 		lib3270_free(text);
 	}
-*/
+
+
 
 
 	/* Release session handle */
