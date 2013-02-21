@@ -54,6 +54,7 @@
 		<Unit filename="configure.ac" />
 		<Unit filename="debian.rules" />
 		<Unit filename="makegtkruntime.sh.in" />
+		<Unit filename="man/man1/pw3270.1" />
 		<Unit filename="pw3270.nsi.in" />
 		<Unit filename="pw3270.spec.in" />
 		<Unit filename="src/include/lib3270.h" />

@@ -214,3 +214,34 @@ void pw3270_dbus_set_text_at(PW3270Dbus *object, int row, int col, const gchar *
 
 	g_free(text);
 }
+
+void pw3270_dbus_get_text_at(PW3270Dbus *object, int row, int col, int len, DBusGMethodInvocation *context)
+{
+	gchar	* text;
+	H3270	* hSession = pw3270_dbus_get_session_handle(object);
+
+	trace("%s object=%p context=%p",__FUNCTION__,object,context);
+	if(pw3270_dbus_check_valid_state(object,context))
+		return;
+
+	text = lib3270_get_text_at(hSession, row, col, len);
+	if(!text)
+	{
+		GError *error = pw3270_dbus_get_error_from_errno(errno);
+		dbus_g_method_return_error(context,error);
+		g_error_free(error);
+	}
+	else
+	{
+		gchar * utftext = g_convert_with_fallback(text,-1,"UTF-8",lib3270_get_charset(hSession),"?",NULL,NULL,NULL);
+
+		lib3270_free(text);
+
+		dbus_g_method_return(context,utftext);
+
+		g_free(utftext);
+	}
+
+
+}
+

@@ -76,6 +76,8 @@ AMTAR=@AMTAR@
 DBGCMDPREFIX=@DBGCMDPREFIX@
 MAKENSIS=@MAKENSIS@
 
+PLUGIN_RELEASE_ARGS=LIB3270_MODE=Release
+
 #---[ Rules ]------------------------------------------------------------------
 
 %.tar.bz2: %.tar
@@ -130,7 +132,7 @@ $(BINDIR)/Debug/plugins/%@DLLEXT@: src/plugins/%/* $(BINDIR)/Debug/$(PACKAGE_TAR
 	@make BINDIR="../../../$(BINDIR)" PW3270_LIBS="-L../../../$(BINDIR)/Debug@DLLDIR@ -l3270 -lpw3270" PW3270_CFLAGS="-I../../../src/include" -C $(dir $<) Debug
 
 $(BINDIR)/Release/plugins/%@DLLEXT@: src/plugins/%/* $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
-	@make BINDIR="../../../$(BINDIR)" PW3270_LIBS="-L../../../$(BINDIR)/Release@DLLDIR@ -l3270 -lpw3270" PW3270_CFLAGS="-I../../../src/include" -C $(dir $<) Release
+	@make $(PLUGIN_RELEASE_ARGS) -C $(dir $<) Release
 
 #---[ Release targets ]--------------------------------------------------------
 
@@ -262,13 +264,16 @@ $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar: clean pixmaps filelist
 	@rm -fr $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@echo $@
 
-install: install-sdk install-lib install-app install-man
+install: install-sdk install-lib install-app install-man install-plugins
 
 install-app: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) install-locale
 	@$(MAKE) BINDIR="../../$(BINDIR)" LIB3270_LIBS="$(RLSLIB)" LIB3270_CFLAGS="-I../../src/include" -C src/pw3270 install
 	@$(MKDIR) $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/ui
 	@$(INSTALL_DATA) colors.conf $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)
 	@$(INSTALL_DATA) ui/*.xml $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/ui
+
+install-plugins: $(foreach PLUGIN, $(PLUGINS), $(BINDIR)/Release/plugins/$(PLUGIN)@DLLEXT@)
+	@echo -e $(foreach PLUGIN, $(PLUGINS), $(MAKE) DESTDIR=$(DESTDIR) $(PLUGIN_RELEASE_ARGS) -C src/plugins/$(PLUGIN) install\\n ) | $(SHELL)
 
 install-lib: $(BINDIR)/Release@DLLDIR@/@DLLPREFIX@3270@DLLEXT@
 	@$(MAKE) BINRLS="../../.bin/Release@DLLDIR@" -C src/lib3270 install
@@ -278,13 +283,11 @@ locale: $(foreach MO, $(basename $(LANG_FILES)), $(BINDIR)/Release/$(localedir)/
 install-locale: $(foreach MO, $(basename $(LANG_FILES)), $(BINDIR)/Release/$(localedir)/$(notdir $(MO))/LC_MESSAGES/$(PACKAGE_NAME).mo)
 	@echo -e $(foreach MO, $(notdir $(basename $(LANG_FILES))), mkdir -p $(DESTDIR)/$(localedir)/$(MO)/LC_MESSAGES\\n$(INSTALL_DATA) $(BINDIR)/Release/$(localedir)/$(MO)/LC_MESSAGES/$(PACKAGE_NAME).mo $(DESTDIR)/$(localedir)/$(MO)/LC_MESSAGES/$(PACKAGE_NAME).mo \\n ) | $(SHELL)
 
-
 install-man:
 	@$(MKDIR) $(DESTDIR)$(mandir)/man1
 	@$(INSTALL_DATA) man/man1/pw3270.1 $(DESTDIR)/$(mandir)/man1/pw3270.1
 	@$(MKDIR) $(DESTDIR)$(mandir)/man5
 	@$(INSTALL_DATA) man/man5/pw3270.5 $(DESTDIR)/$(mandir)/man5/pw3270.5
-
 
 install-sdk:
 	@$(MKDIR) $(DESTDIR)$(includedir)/lib3270
@@ -349,16 +352,16 @@ $(BINDIR)/Debug/plugins/remotectl@DLLEXT@: src/plugins/remotectl/* $(BINDIR)/Deb
 	@make BINDIR="../../../$(BINDIR)" PW3270_LIBS="-L../../../$(BINDIR)/Debug@DLLDIR@ -l3270 -lpw3270" PW3270_CFLAGS="-I../../../src/include" -C $(dir $<) Debug
 
 $(BINDIR)/Release/plugins/remotectl@DLLEXT@: src/plugins/remotectl/* $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
-	@make BINDIR="../../../$(BINDIR)" PW3270_LIBS="-L../../../$(BINDIR)/Release@DLLDIR@ -l3270 -lpw3270" PW3270_CFLAGS="-I../../../src/include" -C $(dir $<) Release
+	@make $(PLUGIN_RELEASE_ARGS) -C $(dir $<) Release
 
 $(BINDIR)/Debug/plugins/rx3270@DLLEXT@: src/plugins/rx3270/* $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
 	@make BINDIR="../../../$(BINDIR)" LIB3270_MODE=Debug -C $(dir $<) Debug
 
 $(BINDIR)/Release/plugins/rx3270@DLLEXT@: src/plugins/rx3270/* $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
-	@make BINDIR="../../../$(BINDIR)" LIB3270_MODE=Release -C $(dir $<) Release
+	@make $(PLUGIN_RELEASE_ARGS) -C $(dir $<) Release
 
 $(BINDIR)/Debug/plugins/dbus3270@DLLEXT@: src/plugins/dbus3270/* $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
 	@make BINDIR="../../../$(BINDIR)" LIB3270_MODE=Debug -C $(dir $<) Debug
 
 $(BINDIR)/Release/plugins/dbus3270@DLLEXT@: src/plugins/dbus3270/* $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
-	@make BINDIR="../../../$(BINDIR)" LIB3270_MODE=Release -C $(dir $<) Release
+	@make $(PLUGIN_RELEASE_ARGS) -C $(dir $<) Release

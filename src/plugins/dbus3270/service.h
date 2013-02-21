@@ -75,7 +75,7 @@
 	// Actions
 	void		  pw3270_dbus_enter(PW3270Dbus *object, DBusGMethodInvocation *context);
 	void		  pw3270_dbus_set_text_at(PW3270Dbus *object, int row, int col, const gchar *text, DBusGMethodInvocation *context);
-
+	void		  pw3270_dbus_get_text_at(PW3270Dbus *object, int row, int col, int len, DBusGMethodInvocation *context);
 
 	G_END_DECLS
 

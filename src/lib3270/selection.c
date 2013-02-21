@@ -380,7 +380,10 @@ static char * get_text(H3270 *hSession,unsigned char all)
 	size_t sz = 0;
 
 	if(!(lib3270_connected(hSession) && hSession->text))
+	{
+		errno = ENOTCONN;
 		return NULL;
+	}
 
 	ret = lib3270_malloc(buflen);
 
@@ -406,6 +409,7 @@ static char * get_text(H3270 *hSession,unsigned char all)
 	if(!sz)
 	{
 		lib3270_free(ret);
+		errno = ENOENT;
 		return NULL;
 	}
 	else if(sz > 1 && ret[sz-1] == '\n') // Remove ending \n
@@ -462,7 +466,10 @@ LIB3270_EXPORT char * lib3270_get_text(H3270 *h, int offset, int len)
 	CHECK_SESSION_HANDLE(h);
 
 	if(!lib3270_connected(h))
+	{
+		errno = ENOTCONN;
 		return NULL;
+	}
 
 	maxlen = (h->rows * (h->cols+1)) - offset;
 	if(maxlen <= 0 || offset < 0)
@@ -505,10 +512,6 @@ LIB3270_EXPORT char * lib3270_get_text(H3270 *h, int offset, int len)
 LIB3270_EXPORT char * lib3270_get_text_at(H3270 *h, int row, int col, int len)
 {
 	CHECK_SESSION_HANDLE(h);
-
-	if(!lib3270_connected(h))
-		return NULL;
-
 	return lib3270_get_text(h, ((row-1) * h->cols) + (col-1), len);
 }
 

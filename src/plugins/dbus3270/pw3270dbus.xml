@@ -36,5 +36,11 @@
       <arg type="i" name="col" direction="in" />
       <arg type="s" name="text" direction="in" />
     </method>
+    <method name="getTextAt">
+      <annotation name="org.freedesktop.DBus.GLib.Async" value="true"/>
+      <arg type="i" name="row" direction="in" />
+      <arg type="i" name="col" direction="in" />
+      <arg type="i" name="len" direction="in" />
+    </method>
   </interface>
 </node>

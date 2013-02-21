@@ -187,7 +187,7 @@
 
 		for(f=0;info->disabled && plat[f];f++)
 		{
-			if(!g_strcasecmp(plat[f],platname))
+			if(!g_ascii_strcasecmp(plat[f],platname))
 				info->disabled = 0;
 		}
 

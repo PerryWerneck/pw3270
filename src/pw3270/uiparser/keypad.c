@@ -57,7 +57,7 @@
 
  	for(f = 0; f < G_N_ELEMENTS(cmd); f++)
 	{
-		if(!g_strcasecmp(cmd[f].element_name,element_name))
+		if(!g_ascii_strcasecmp(cmd[f].element_name,element_name))
 		{
 			cmd[f].start(context,names,values,error,keypad);
 			return;

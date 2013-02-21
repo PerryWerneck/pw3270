@@ -26,9 +26,18 @@
 # kraucer@bb.com.br			(Kraucer Fernandes Mazuco)
 #
 
+PACKAGE_NAME=@PACKAGE_NAME@
+MODULE_NAME=dbus3270
+
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+bindir=@bindir@
+libdir=@libdir@
+datarootdir=@datarootdir@
+localedir=@localedir@
+
 #---[ Sources ]----------------------------------------------------------------
 
-MODULE_NAME=dbus3270
 DEPENDS=Makefile dbus-glue.h
 PLUGIN_SRC=main.c gobject.c misc.c
 DAEMON_SRC=daemon.c gobject.c iocallback.c misc.c
@@ -51,6 +60,9 @@ MKDIR=@MKDIR_P@
 CC=@CC@
 LD=@CC@
 DBUSBINDINGTOOL=@DBUSBINDINGTOOL@
+INSTALL=@INSTALL@
+INSTALL_PROGRAM=@INSTALL_PROGRAM@
+INSTALL_DATA=@INSTALL_DATA@
 
 #---[ Flags ]------------------------------------------------------------------
 
@@ -69,26 +81,25 @@ GLIB_LIBS=@GLIB_LIBS@
 GTK_LIBS=@GTK_LIBS@
 
 ifeq ($(LIB3270_MODE),Debug)
-	PW3270_LIBS=-L$(BINDBG)@DLLDIR@ -lpw3270
-	PW3270_CFLAGS=-I../../../src/include
-	LIB3270_LIBS=-L$(BINDBG)@DLLDIR@ -l3270
+	PW3270_LIBS="-L../../../.bin/Debug@DLLDIR@ -lpw3270"
+	PW3270_CFLAGS="-I../../../src/include"
+	LIB3270_LIBS="-L../../../.bin/Debug@DLLDIR@  -l3270"
 	LIB270_CFLAGS=-I../../../src/include
 endif
 
 ifeq ($(LIB3270_MODE),Release)
-	PW3270_LIBS=-L$(BINRLS)@DLLDIR@ -lṕw3270
-	PW3270_CFLAGS=-I../../../src/include
-	LIB3270_LIBS=-L$(BINRLS)@DLLDIR@ -l3270
+	PW3270_LIBS="-L../../../.bin/Release@DLLDIR@ -lpw3270"
+	PW3270_CFLAGS="-I../../../src/include"
+	LIB3270_LIBS="-L../../../.bin/Release@DLLDIR@  -l3270"
 	LIB270_CFLAGS=-I../../../src/include
 endif
 
 ifeq ($(LIB3270_MODE),Default)
 	LIB3270_LIBS ?= `pkg-config --libs lib3270`
 	LIB3270_CFLAGS ?= `pkg-config --cflags lib3270`
-	PW3270_LIBS ?= `pkg-config --libs pw3270`
-	PW3270_CFLAGS ?= `pkg-config --cflags pw3270`
+	PW3270_LIBS ?= `pkg-config --libs pw3270 lib3270`
+	PW3270_CFLAGS ?= `pkg-config --cflags pw3270 lib3270`
 endif
-
 
 #---[ Rules ]------------------------------------------------------------------
 
@@ -110,7 +121,7 @@ Release: $(BINRLS)/plugins/$(MODULE_NAME).so
 $(BINRLS)/plugins/$(MODULE_NAME).so: $(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJRLS)/$(SRC).o)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(LD) $(DLL_FLAGS) -Wl,-soname,`basename $@` $(LDFLAGS) -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(PW3270_LIBS) $(GLIB_LIBS) $(GTK_LIBS) $(DBUS_LIBS)
+	$(LD) $(DLL_FLAGS) -Wl,-soname,`basename $@` $(LDFLAGS) -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(PW3270_LIBS) $(GLIB_LIBS) $(GTK_LIBS) $(DBUS_LIBS)
 
 #---[ Debug targets ]----------------------------------------------------------
 
@@ -122,6 +133,10 @@ $(BINDBG)/plugins/$(MODULE_NAME).so: $(foreach SRC, $(basename $(PLUGIN_SRC)), $
 	@$(LD) $(DLL_FLAGS) @DBGRPATH@ -Wl,-soname,`basename $@` $(LDFLAGS) -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(PW3270_LIBS) $(GLIB_LIBS) $(GTK_LIBS) $(DBUS_LIBS)
 
 #---[ Misc targets ]-----------------------------------------------------------
+
+install: $(BINRLS)/plugins/$(MODULE_NAME).so
+	@$(MKDIR) $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/plugins
+	@$(INSTALL_PROGRAM) $(BINRLS)/plugins/$(MODULE_NAME).so $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/plugins
 
 debug-service: $(BINDBG)/@PACKAGE_NAME@d
 
