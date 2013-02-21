@@ -465,7 +465,7 @@ LIB3270_EXPORT char * lib3270_get_text(H3270 *h, int offset, int len)
 		return NULL;
 
 	maxlen = (h->rows * (h->cols+1)) - offset;
-	if(maxlen <= 0)
+	if(maxlen <= 0 || offset < 0)
 		return NULL;
 
 	if(len < 0 || len > maxlen)
@@ -509,7 +509,7 @@ LIB3270_EXPORT char * lib3270_get_text_at(H3270 *h, int row, int col, int len)
 	if(!lib3270_connected(h))
 		return NULL;
 
-	return lib3270_get_text(h, ((row) * h->cols) + col, len);
+	return lib3270_get_text(h, ((row-1) * h->cols) + (col-1), len);
 }
 
 LIB3270_EXPORT int lib3270_cmp_text_at(H3270 *h, int row, int col, const char *text)
