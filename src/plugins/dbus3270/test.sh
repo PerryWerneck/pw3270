@@ -1,42 +1,96 @@
 #!/bin/bash
 
-case $1 in
+SESSION=a
+DEST=br.com.bb.pw3270
+BPATH=/br/com/bb/pw3270
 
-	revision)
-		dbus-send --session  --print-reply --dest=br.com.bb.pw3270 /br/com/bb/pw3270 br.com.bb.pw3270.getRevision
-		;;
+run_command()
+{
 
-	message)
-		dbus-send --session  --print-reply --dest=br.com.bb.pw3270 /br/com/bb/pw3270 br.com.bb.pw3270.getMessageID
-		;;
+	case $1 in
 
-	connect)
-		dbus-send --session  --print-reply --dest=br.com.bb.pw3270 /br/com/bb/pw3270 br.com.bb.pw3270.connect string:$2
-		;;
+		revision)
+			dbus-send --session  --print-reply --dest=$DEST.$SESSION $BPATH $DEST.getRevision
+			;;
 
-	disconnect)
-		dbus-send --session  --print-reply --dest=br.com.bb.pw3270 /br/com/bb/pw3270 br.com.bb.pw3270.disconnect
-		;;
+		message)
+			dbus-send --session  --print-reply --dest=$DEST.$SESSION $BPATH $DEST.getMessageID
+			;;
 
-	quit)
-		dbus-send --session  --print-reply --dest=br.com.bb.pw3270 /br/com/bb/pw3270 br.com.bb.pw3270.quit
-		;;
+		connect)
+			dbus-send --session  --print-reply --dest=$DEST.$SESSION $BPATH $DEST.connect string:$2
+			;;
 
-	get)
-		dbus-send --session  --print-reply --dest=br.com.bb.pw3270 /br/com/bb/pw3270 br.com.bb.pw3270.getScreenContents
-		;;
+		disconnect)
+			dbus-send --session  --print-reply --dest=$DEST.$SESSION $BPATH $DEST.disconnect
+			;;
 
-	set)
-		dbus-send --session  --print-reply --dest=br.com.bb.pw3270 /br/com/bb/pw3270 br.com.bb.pw3270.setTextAt int32:$2 int32:$3 string:$4
-		;;
+		quit)
+			dbus-send --session  --print-reply --dest=$DEST.$SESSION $BPATH $DEST.quit
+			;;
 
-	enter)
-		dbus-send --session  --print-reply --dest=br.com.bb.pw3270 /br/com/bb/pw3270 br.com.bb.pw3270.enter
-		;;
+		get)
+			dbus-send --session  --print-reply --dest=$DEST.$SESSION $BPATH $DEST.getScreenContents
+			;;
 
-	*)
-		echo "Comando $1 desconhecido"
-		;;
+		set)
+			dbus-send --session  --print-reply --dest=$DEST.$SESSION $BPATH $DEST.setTextAt int32:$2 int32:$3 string:$4
+			;;
 
-esac
+		enter)
+			dbus-send --session  --print-reply --dest=$DEST $BPATH $DEST.enter
+			;;
+
+		*)
+			echo "Comando $1 desconhecido"
+			;;
+
+	esac
+}
+
+
+
+until [ -z "$1" ]
+do
+        if [ ${1:0:2} = '--' ]; then
+                tmp=${1:2}
+                parameter=${tmp%%=*}
+                parameter=$(echo $parameter | tr "[:lower:]" "[:upper:]")
+                value=${tmp##*=}
+
+		case "$parameter" in
+		SESSION)
+			SESSION=$value
+			;;
+		HELP)
+			echo "$0 options"
+			echo ""
+			echo "Options:"
+			echo ""
+			echo "	--session	pw3270's session manager"
+			echo ""
+			exit 0
+			;;
+
+		*)
+			eval $parameter=$value
+			;;
+
+		esac
+
+        elif [ -d $1 ]; then
+
+		IMGNAME=$1
+
+		if [ -e $IMGNAME/matriz.conf ]; then
+			. $IMGNAME/matriz.conf
+		fi
+
+	else
+		run_command $@
+		exit 0
+	fi
+
+        shift
+done
 
