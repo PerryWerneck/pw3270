@@ -68,11 +68,27 @@ extern "C" {
 		unsigned int	value;		/**< Requested value */
 		char			string[1];	/**< String argument */
  } HLLAPI_DATA;
+
  #pragma pack()
 
 #ifdef _WIN32
  // http://www.mingw.org/wiki/Visual_Basic_DLL
  __declspec (dllexport) int __stdcall hllapi(const LPWORD func, LPSTR str, LPWORD length, LPWORD rc);
+
+ __declspec (dllexport) int __stdcall hllapi_init(LPSTR mode);
+ __declspec (dllexport) int __stdcall hllapi_deinit(void);
+
+ __declspec (dllexport) int __stdcall hllapi_get_revision(LPDWORD rc);
+ __declspec (dllexport) int __stdcall hllapi_connect(LPSTR uri);
+ __declspec (dllexport) int __stdcall hllapi_disconnect(LPWORD rc);
+ __declspec (dllexport) int __stdcall hllapi_get_message_id(LPWORD rc);
+ __declspec (dllexport) int __stdcall hllapi_get_screen_at(WORD row, WORD col, LPSTR buffer);
+ __declspec (dllexport) int __stdcall hllapi_enter(LPWORD rc);
+ __declspec (dllexport) int __stdcall hllapi_set_text_at(LPWORD rc, WORD row, WORD col, LPSTR text);
+ __declspec (dllexport) int __stdcall hllapi_cmp_text_at(LPWORD rc, WORD row, WORD col, LPSTR text);
+ __declspec (dllexport) int __stdcall hllapi_wait_for_ready(LPWORD rc, WORD seconds);
+ __declspec (dllexport) int __stdcall hllapi_wait(LPWORD rc, WORD seconds);
+
 #else
  LIB3270_EXPORT int hllapi(const unsigned long *func, char *str, unsigned short *length, unsigned short *rc);
 #endif // _WIN32

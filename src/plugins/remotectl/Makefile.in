@@ -31,7 +31,7 @@
 MODULE_NAME=remotectl
 DEPENDS=*.h ../../include/*.h ../../include/lib3270/*.h Makefile
 PLUGIN_SRC=remotectl.c pipesource.c
-HLLAPI_SRC=hllapi.c
+HLLAPI_SRC=hllapi.c calls.c
 
 #---[ Paths ]------------------------------------------------------------------
 
@@ -58,8 +58,8 @@ XGETTEXT=@XGETTEXT@
 DLL_FLAGS=@DLL_FLAGS@
 DEBUG_CFLAGS=-DDEBUG=1 -g -Wall
 
-PW3270_LIBS ?= `pkg-config --libs pw3270 lib3270`
-PW3270_CFLAGS ?= `pkg-config --cflags pw3270 lib3270`
+PW3270_LIBS ?= `pkg-config --libs lib3270`
+PW3270_CFLAGS ?= `pkg-config --cflags lib3270`
 GTK_CFLAGS ?= @GTK_CFLAGS@ @GTKMAC_CFLAGS@
 GTK_LIBS ?= @GTK_LIBS@ @GTKMAC_LIBS@
 

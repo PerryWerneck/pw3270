@@ -38,6 +38,29 @@
 
  int main(int numpar, char *param[])
  {
+ 	DWORD	revision;
+ 	int 	rc;
+
+ 	rc = hllapi_init("");
+ 	if(rc)
+	{
+		printf("Init exits with rc=%d\n",rc);
+		return rc;
+	}
+
+	if(!hllapi_get_revision(&revision))
+		printf("Library revision is %d\n",(int) revision);
+
+
+	printf("Deinit exits with rc=%d\n",rc);
+	rc = hllapi_deinit();
+
+	return rc;
+ }
+
+/*
+ int main(int numpar, char *param[])
+ {
 	char buffer[BUFFER_LENGTH];
 	unsigned short rc;
 	unsigned short len;
@@ -99,3 +122,4 @@
 
  	return 0;
  }
+*/

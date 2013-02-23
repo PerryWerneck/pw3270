@@ -244,6 +244,9 @@
 		<Unit filename="src/plugins/dbus3270/service.h" />
 		<Unit filename="src/plugins/dbus3270/test.sh" />
 		<Unit filename="src/plugins/remotectl/Makefile.in" />
+		<Unit filename="src/plugins/remotectl/calls.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/plugins/remotectl/hllapi.c">
 			<Option compilerVar="CC" />
 		</Unit>
