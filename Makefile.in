@@ -76,7 +76,7 @@ AMTAR=@AMTAR@
 DBGCMDPREFIX=@DBGCMDPREFIX@
 MAKENSIS=@MAKENSIS@
 
-PLUGIN_RELEASE_ARGS=LIB3270_MODE=Release
+PLUGIN_RELEASE_ARGS=BINDIR="../../../$(BINDIR)" LIB3270_MODE=Release
 
 #---[ Rules ]------------------------------------------------------------------
 

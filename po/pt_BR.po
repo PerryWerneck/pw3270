@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-25 07:46-0300\n"
-"PO-Revision-Date: 2013-01-14 09:49-0200\n"
+"POT-Creation-Date: 2013-02-25 08:29-0300\n"
+"PO-Revision-Date: 2013-02-25 08:31-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
 "Language: pt_BR\n"
@@ -440,7 +440,7 @@ msgstr "Impossível interpretar %s \"%s\", entrada %d"
 
 #: v3270/security.c:110
 msgid "Certificate has expired"
-msgstr "Certificate has expired"
+msgstr "O certificado expirou"
 
 #: v3270/security.c:103
 msgid "Certificate is not yet valid"
@@ -460,7 +460,7 @@ msgstr "Certificado revogado"
 
 #: v3270/security.c:89
 msgid "Certificate signature failure"
-msgstr "Certificate signature failure"
+msgstr "Falha na assinatura do certificado"
 
 #: v3270/selection.c:399
 msgid "Charset error"
