@@ -125,7 +125,7 @@ $(BINDBG)/@DLLPREFIX@3270@DLLEXT@: $(BINDBG)/@DLLPREFIX@3270@DLLEXT@.@VERSION@
 $(BINDBG)/@DLLPREFIX@3270@DLLEXT@.@VERSION@: $(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC)@OBJEXT@)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(LD) $(DLL_FLAGS) $(LDFLAGS) @LDSOFLAGS@ -o $@ $^ $(LIBS)
+	@$(LD) $(DLL_FLAGS) $(LDFLAGS) @LDSOFLAGS@ @LDLIBFLAGS@ -o $@ $^ $(LIBS)
 
 $(BINRLS)/@DLLPREFIX@3270@DLLEXT@: $(BINRLS)/@DLLPREFIX@3270@DLLEXT@.@VERSION@
 	@rm -f $@
@@ -134,7 +134,7 @@ $(BINRLS)/@DLLPREFIX@3270@DLLEXT@: $(BINRLS)/@DLLPREFIX@3270@DLLEXT@.@VERSION@
 $(BINRLS)/@DLLPREFIX@3270@DLLEXT@.@VERSION@: $(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SRC)@OBJEXT@)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(LD) $(DLL_FLAGS) $(LDFLAGS) @LDSOFLAGS@ -o $@ $^ $(LIBS)
+	@$(LD) $(DLL_FLAGS) $(LDFLAGS) @LDSOFLAGS@ @LDLIBFLAGS@ -o $@ $^ $(LIBS)
 	@$(STRIP) $@
 
 $(BINDBG)/testprogram$(EXEEXT): $(OBJDBG)/testprogram.o $(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC)@OBJEXT@)

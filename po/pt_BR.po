@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-25 08:36-0300\n"
-"PO-Revision-Date: 2013-02-25 08:31-0300\n"
+"POT-Creation-Date: 2013-02-25 14:45-0300\n"
+"PO-Revision-Date: 2013-02-25 14:46-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
 "Language: pt_BR\n"
@@ -243,7 +243,6 @@ msgid "Auto-Reconnect"
 msgstr "Reconectar automaticamente"
 
 #: filetransfer.c:782
-#, fuzzy
 msgid "Avblock"
 msgstr "Avblock"
 

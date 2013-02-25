@@ -108,7 +108,7 @@ $(BINRLS)/plugins/$(MODULE_NAME)@DLLEXT@: $(foreach SRC, $(basename $(PLUGIN_SRC
 $(BINRLS)/libhllapi@DLLEXT@: $(foreach SRC, $(basename $(HLLAPI_SRC)), $(OBJRLS)/$(SRC).o)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(LD) $(DLL_FLAGS) @LDSOFLAGS@ $(LDFLAGS) -o $@ $^ $(LIBS)
+	@$(LD) $(DLL_FLAGS) @LDSOFLAGS@ $(LDFLAGS) @LDLIBFLAGS@ -o $@ $^ $(LIBS)
 
 #---[ Debug targets ]----------------------------------------------------------
 
@@ -122,7 +122,7 @@ $(BINDBG)/plugins/$(MODULE_NAME)@DLLEXT@: $(foreach SRC, $(basename $(PLUGIN_SRC
 $(BINDBG)/libhllapi@DLLEXT@: $(foreach SRC, $(basename $(HLLAPI_SRC)), $(OBJDBG)/$(SRC).o)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(LD) $(DLL_FLAGS) @LDSOFLAGS@ $(LDFLAGS) -o $@ $^ $(LIBS)
+	@$(LD) $(DLL_FLAGS) @LDSOFLAGS@ $(LDFLAGS) @LDLIBFLAGS@ -o $@ $^ $(LIBS)
 
 #---[ Misc targets ]-----------------------------------------------------------
 

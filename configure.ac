@@ -103,6 +103,7 @@ EXEEXT=""
 DLLPREFIX="lib"
 PLUGINS=""
 APP_GUI_SRC=""
+LDLIBFLAGS=""
 
 if test $host != $build; then
 	AC_CHECK_PROGS(HOST_CC, gcc cc)
@@ -122,6 +123,7 @@ case "$host" in
 		DLL_FLAGS="-shared -Wl,--add-stdcall-alias"
 		LDSOFLAGS="-Wl,-soname,\`basename \$@\`"
 		LDAPPFLAGS="-mwindows"
+		LDLIBFLAGS="-Wl,--output-def,\$@.def"
 		DBGRPATH=""
 		DLLDIR=""
 		DBGCMDPREFIX=""
@@ -315,6 +317,7 @@ AC_SUBST(DLL_CFLAGS)
 AC_SUBST(DLLDIR)
 AC_SUBST(LDSOFLAGS)
 AC_SUBST(LDAPPFLAGS)
+AC_SUBST(LDLIBFLAGS)
 AC_SUBST(DBGRPATH)
 AC_SUBST(DBGCMDPREFIX)
 AC_SUBST(LDARCH)
