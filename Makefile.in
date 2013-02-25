@@ -77,6 +77,7 @@ DBGCMDPREFIX=@DBGCMDPREFIX@
 MAKENSIS=@MAKENSIS@
 
 PLUGIN_RELEASE_ARGS=BINDIR="../../../$(BINDIR)" LIB3270_MODE=Release
+PLUGIN_DEBUG_ARGS=BINDIR="../../../$(BINDIR)" LIB3270_MODE=Debug
 
 #---[ Rules ]------------------------------------------------------------------
 
@@ -351,19 +352,19 @@ distclean: clean
 #---[ Plugins ]----------------------------------------------------------------
 
 $(BINDIR)/Debug/plugins/remotectl@DLLEXT@: src/plugins/remotectl/* $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
-	@make BINDIR="../../../$(BINDIR)" PW3270_LIBS="-L../../../$(BINDIR)/Debug@DLLDIR@ -l3270 -lpw3270" PW3270_CFLAGS="-I../../../src/include" -C $(dir $<) Debug
+	@make $(PLUGIN_DEBUG_ARGS) -C $(dir $<) Debug
 
 $(BINDIR)/Release/plugins/remotectl@DLLEXT@: src/plugins/remotectl/* $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
 	@make $(PLUGIN_RELEASE_ARGS) -C $(dir $<) Release
 
 $(BINDIR)/Debug/plugins/rx3270@DLLEXT@: src/plugins/rx3270/* $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
-	@make BINDIR="../../../$(BINDIR)" LIB3270_MODE=Debug -C $(dir $<) Debug
+	@make $(PLUGIN_DEBUG_ARGS) -C $(dir $<) Debug
 
 $(BINDIR)/Release/plugins/rx3270@DLLEXT@: src/plugins/rx3270/* $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
 	@make $(PLUGIN_RELEASE_ARGS) -C $(dir $<) Release
 
 $(BINDIR)/Debug/plugins/dbus3270@DLLEXT@: src/plugins/dbus3270/* $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
-	@make BINDIR="../../../$(BINDIR)" LIB3270_MODE=Debug -C $(dir $<) Debug
+	@make $(PLUGIN_DEBUG_ARGS) -C $(dir $<) Debug
 
 $(BINDIR)/Release/plugins/dbus3270@DLLEXT@: src/plugins/dbus3270/* $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
 	@make $(PLUGIN_RELEASE_ARGS) -C $(dir $<) Release
