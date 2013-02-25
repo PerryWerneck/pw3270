@@ -137,9 +137,22 @@
  {
 #if ! defined(DEBUG)
 
-	gchar *path = pw3270_build_filename(widget,"plugins",NULL);
-	load(path, widget);
-	g_free(path);
+	const gchar * appname[]	= { g_get_application_name(), PACKAGE_NAME };
+	int f;
+
+	for(f=0;f<G_N_ELEMENTS(appname);f++)
+	{
+		gchar *path = g_strdup_printf("%s" G_DIR_SEPARATOR_S "%s-plugins",LIBDIR,appname[f]);
+
+		if(g_file_test(path,G_FILE_TEST_IS_DIR))
+		{
+			load(path, widget);
+			g_free(path);
+			return;
+		}
+
+		g_free(path);
+	}
 
 #elif defined( win32 )
 
@@ -166,7 +179,6 @@
 	g_free(dir);
 
 #endif
-
  }
 
  LIB3270_EXPORT void pw3270_deinit_plugins(GtkWidget *widget)

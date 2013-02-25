@@ -131,7 +131,7 @@ autoconf
 export CFLAGS="$RPM_OPT_FLAGS"
 export CXXFLAGS="$RPM_OPT_FLAGS"
 export FFLAGS="$RPM_OPT_FLAGS"
-%configure 
+%configure
 
 %build
 make clean
@@ -188,7 +188,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/@PACKAGE_NAME@/sample/*
 
 %files plugin-dbus
-%{_datadir}/@PACKAGE_NAME@/plugins/dbus3270.so
+%{_libdir}/@PACKAGE_NAME@-plugins/dbus3270.so
 
 #---[ Scripts ]-------------------------------------------------------------------------------------------------------
 

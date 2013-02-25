@@ -135,8 +135,8 @@ $(BINDBG)/plugins/$(MODULE_NAME).so: $(foreach SRC, $(basename $(PLUGIN_SRC)), $
 #---[ Misc targets ]-----------------------------------------------------------
 
 install: $(BINRLS)/plugins/$(MODULE_NAME).so
-	@$(MKDIR) $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/plugins
-	@$(INSTALL_PROGRAM) $(BINRLS)/plugins/$(MODULE_NAME).so $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/plugins
+	@$(MKDIR) $(DESTDIR)$(libdir)/$(PACKAGE_NAME)-plugins
+	@$(INSTALL_PROGRAM) $(BINRLS)/plugins/$(MODULE_NAME).so $(DESTDIR)$(libdir)/$(PACKAGE_NAME)-plugins
 
 debug-service: $(BINDBG)/@PACKAGE_NAME@d
 
