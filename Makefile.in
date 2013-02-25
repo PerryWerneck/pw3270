@@ -176,7 +176,8 @@ $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT): src/pw3270/* $(BINDIR)/Debug@DLLDIR
 $(BINDIR)/Debug@DLLDIR@/@DLLPREFIX@3270@DLLEXT@: src/lib3270/* src/include/lib3270/* src/include/* Makefile
 	@$(MAKE) BINDBG=../../.bin/Debug@DLLDIR@ -C src/lib3270 ../../.bin/Debug@DLLDIR@/@DLLPREFIX@3270@DLLEXT@
 
-run: $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT) $(PACKAGE_NAME).png $(PACKAGE_NAME)-logo.png
+run: $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT) $(PACKAGE_NAME).png $(PACKAGE_NAME)-logo.png \
+		$(foreach PLUGIN, $(PLUGINS), $(BINDIR)/Debug/plugins/$(PLUGIN)@DLLEXT@)
 	@$(DBGCMDPREFIX) "$(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)"
 
 memchk: $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)

@@ -278,32 +278,29 @@ AC_ARG_ENABLE([java],[AS_HELP_STRING([--disable-java], [Disable java integration
 
 if test "$app_cv_java" = "yes" ; then
 
-	# Check for JDK_HOME
-	if test "_$JDK_HOME" = "_" ; then
-		AC_CHECK_FILE("/usr/java/default/bin/javac",JDK_HOME="/usr/java/default",)
-	fi
-
-	if test "_$JDK_HOME" = "_" ; then
+	# Check for JAVA_HOME
+	if test "_$JAVA_HOME" = "_" ; then
 		app_cv_java="no"
 	fi
 
 	# Check for JRE_HOME
 	if test "_$JRE_HOME" = "_" ; then
-		JRE_HOME="\$(JDK_HOME)/jre"
+		JRE_HOME="\$(JAVA_HOME)/jre"
 	fi
 
 fi
 
 if test "$app_cv_java" = "yes" ; then
-	AC_PATH_TOOL([JAVAC], [javac], [\$(JDK_HOME)/bin/javac])
-	AC_PATH_TOOL([JAVAH], [javah], [\$(JDK_HOME)/bin/javah])
-	AC_PATH_TOOL([JAR], [jar], [\$(JDK_HOME)/bin/jar])
+	AC_PATH_TOOL([JAVA], [java], [no], [$PATH:$JAVA_HOME/bin])
+	AC_PATH_TOOL([JAVAC], [javac], [no], [$PATH:$JAVA_HOME/bin])
+	AC_PATH_TOOL([JAVAH], [javah], [no], [$PATH:$JAVA_HOME/bin])
+	AC_PATH_TOOL([JAR], [jar], [no], [$PATH:$JAVA_HOME/bin])
 fi
 
 AC_SUBST(JAVAC)
 AC_SUBST(JAVAH)
 AC_SUBST(JAR)
-AC_SUBST(JDK_HOME)
+AC_SUBST(JAVA_HOME)
 AC_SUBST(JRE_HOME)
 
 #--[ Misc options ]-------------------------------------------------------------------------------------------------------------------------------------------

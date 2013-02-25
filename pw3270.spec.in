@@ -110,6 +110,16 @@ devel for tn3270 protocol library for %{name}
 
 Revision @PACKAGE_REVISION@ from @PACKAGE_SOURCE@
 
+%package plugin-dbus
+Summary:	DBUS object for %{name}
+Group:		System/X11/Terminals
+Requires:	%{name} = @PACKAGE_VERSION@
+
+%description plugin-dbus
+Plugin exporting a DBUS object from every %{name} open session.
+
+Revision @PACKAGE_REVISION@ from @PACKAGE_SOURCE@
+
 #---[ Build & Install ]-----------------------------------------------------------------------------------------------
 
 %prep
@@ -176,6 +186,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libpw3270.so
 %dir %{_datadir}/@PACKAGE_NAME@/sample
 %{_datadir}/@PACKAGE_NAME@/sample/*
+
+%files plugin-dbus
+%{_datadir}/@PACKAGE_NAME@/plugins/dbus3270.so
 
 #---[ Scripts ]-------------------------------------------------------------------------------------------------------
 
