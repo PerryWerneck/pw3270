@@ -52,12 +52,14 @@
  static char 			* (*get_text)(H3270 *h, int row, int col, int len)							= NULL;
  static void  			* (*release_memory)(void *p)												= NULL;
  static int  			  (*action_enter)(H3270 *h)													= NULL;
- static int 			  (*set_text_at)(H3270 *h, int row, int col, const unsigned char *str)	= NULL;
+ static int 			  (*set_text_at)(H3270 *h, int row, int col, const unsigned char *str)		= NULL;
  static int 			  (*cmp_text_at)(H3270 *h, int row, int col, const char *text)				= NULL;
+ static int				  (*pfkey)(H3270 *hSession, int key)										= NULL;
+ static int				  (*pakey)(H3270 *hSession, int key)										= NULL;
 
  static const struct _entry_point
  {
-	void		**ptr;
+	void		**call;
 	const char	* name;
  } entry_point[] =
  {
@@ -74,6 +76,8 @@
 	{ (void **) &action_enter,		"lib3270_enter"					},
 	{ (void **) &set_text_at,		"lib3270_set_string_at"			},
 	{ (void **) &cmp_text_at,		"lib3270_cmp_text_at"			},
+	{ (void **) &pfkey,				"lib3270_pfkey"					},
+	{ (void **) &pakey,				"lib3270_pakey"					},
 
 	{ NULL, NULL }
  };
@@ -108,7 +112,7 @@
 				hllapi_deinit();
 				return ENOENT;
 			}
-			*entry_point[f].ptr = ptr;
+			*entry_point[f].call = ptr;
 		}
 
 		// Get session handle
@@ -117,7 +121,7 @@
 		return 0;
 	}
 
-	// Set entry pointers to pipe based calls
+	// Set entry points to pipe based calls
 
 
  	return -1;
@@ -132,8 +136,7 @@
 		session_free(hSession);
 
 	for(f=0;entry_point[f].name;f++)
-		*entry_point[f].ptr = NULL;
-
+		*entry_point[f].call = NULL;
 
  	if(hModule != NULL)
  	{
@@ -250,3 +253,22 @@
  	return 0;
  }
 
+ __declspec (dllexport) int __stdcall hllapi_pfkey(LPWORD rc, WORD key)
+ {
+	if(!(pfkey && hSession))
+		return EINVAL;
+
+	*rc = (WORD) pfkey(hSession,key);
+
+ 	return 0;
+ }
+
+ __declspec (dllexport) int __stdcall hllapi_pakey(LPWORD rc, WORD key)
+ {
+	if(!(pfkey && hSession))
+		return EINVAL;
+
+	*rc = (WORD) pakey(hSession,key);
+
+ 	return 0;
+ }

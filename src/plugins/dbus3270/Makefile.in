@@ -84,14 +84,14 @@ ifeq ($(LIB3270_MODE),Debug)
 	PW3270_LIBS="-L../../../.bin/Debug@DLLDIR@ -lpw3270"
 	PW3270_CFLAGS="-I../../../src/include"
 	LIB3270_LIBS="-L../../../.bin/Debug@DLLDIR@  -l3270"
-	LIB270_CFLAGS=-I../../../src/include
+	LIB3270_CFLAGS=-I../../../src/include
 endif
 
 ifeq ($(LIB3270_MODE),Release)
 	PW3270_LIBS="-L../../../.bin/Release@DLLDIR@ -lpw3270"
 	PW3270_CFLAGS="-I../../../src/include"
 	LIB3270_LIBS="-L../../../.bin/Release@DLLDIR@  -l3270"
-	LIB270_CFLAGS=-I../../../src/include
+	LIB3270_CFLAGS=-I../../../src/include
 endif
 
 ifeq ($(LIB3270_MODE),Default)

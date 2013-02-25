@@ -88,6 +88,9 @@ extern "C" {
  __declspec (dllexport) int __stdcall hllapi_cmp_text_at(LPWORD rc, WORD row, WORD col, LPSTR text);
  __declspec (dllexport) int __stdcall hllapi_wait_for_ready(LPWORD rc, WORD seconds);
  __declspec (dllexport) int __stdcall hllapi_wait(LPWORD rc, WORD seconds);
+ __declspec (dllexport) int __stdcall hllapi_pfkey(LPWORD rc, WORD key);
+ __declspec (dllexport) int __stdcall hllapi_pakey(LPWORD rc, WORD key);
+
 
 #else
  LIB3270_EXPORT int hllapi(const unsigned long *func, char *str, unsigned short *length, unsigned short *rc);

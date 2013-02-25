@@ -58,20 +58,42 @@ XGETTEXT=@XGETTEXT@
 DLL_FLAGS=@DLL_FLAGS@
 DEBUG_CFLAGS=-DDEBUG=1 -g -Wall
 
-PW3270_LIBS ?= `pkg-config --libs lib3270`
-PW3270_CFLAGS ?= `pkg-config --cflags lib3270`
+LIB3270_MODE ?= Default
+
+ifeq ($(LIB3270_MODE),Debug)
+	PW3270_LIBS=-L../../../.bin/Debug@DLLDIR@ -lpw3270 -l3270
+	PW3270_CFLAGS=-I../../../src/include
+	LIB3270_LIBS=-L../../../.bin/Debug@DLLDIR@  -l3270
+	LIB3270_CFLAGS=-I../../../src/include
+endif
+
+ifeq ($(LIB3270_MODE),Release)
+	PW3270_LIBS=-L../../../.bin/Release@DLLDIR@ -lpw3270 -l3270
+	PW3270_CFLAGS=-I../../../src/include
+	LIB3270_LIBS=-L../../../.bin/Release@DLLDIR@  -l3270
+	LIB3270_CFLAGS=-I../../../src/include
+endif
+
+ifeq ($(LIB3270_MODE),Default)
+	LIB3270_LIBS ?= `pkg-config --libs lib3270`
+	LIB3270_CFLAGS ?= `pkg-config --cflags lib3270`
+	PW3270_LIBS ?= `pkg-config --libs pw3270 lib3270`
+	PW3270_CFLAGS ?= `pkg-config --cflags pw3270 lib3270`
+endif
+
+
 GTK_CFLAGS ?= @GTK_CFLAGS@ @GTKMAC_CFLAGS@
 GTK_LIBS ?= @GTK_LIBS@ @GTKMAC_LIBS@
 
 $(OBJDBG)/%.o: %.c $(DEPENDS)
 	@echo "  CC   `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CC) $(CFLAGS) $(DEBUG_CFLAGS) $(PW3270_CFLAGS) $(GTK_CFLAGS) -o $@ -c $<
+	@$(CC) $(CFLAGS) $(DEBUG_CFLAGS) $(LIB3270_CFLAGS) $(GTK_CFLAGS) -o $@ -c $<
 
 $(OBJRLS)/%.o: %.c $(DEPENDS)
 	@echo "  CC   `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CC) $(CFLAGS) $(PW3270_CFLAGS) $(GTK_CFLAGS) -o $@ -c $<
+	@$(CC) $(CFLAGS) $(LIB3270_CFLAGS) $(GTK_CFLAGS) -o $@ -c $<
 
 
 #---[ Release targets ]--------------------------------------------------------
