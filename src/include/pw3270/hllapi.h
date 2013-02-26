@@ -75,21 +75,22 @@ extern "C" {
  // http://www.mingw.org/wiki/Visual_Basic_DLL
  __declspec (dllexport) int __stdcall hllapi(const LPWORD func, LPSTR str, LPWORD length, LPWORD rc);
 
- __declspec (dllexport) int __stdcall hllapi_init(LPSTR mode);
- __declspec (dllexport) int __stdcall hllapi_deinit(void);
+ __declspec (dllexport) DWORD __stdcall hllapi_init(LPSTR mode);
+ __declspec (dllexport) DWORD __stdcall hllapi_deinit(void);
 
- __declspec (dllexport) int __stdcall hllapi_get_revision(LPDWORD rc);
- __declspec (dllexport) int __stdcall hllapi_connect(LPSTR uri);
- __declspec (dllexport) int __stdcall hllapi_disconnect(LPWORD rc);
- __declspec (dllexport) int __stdcall hllapi_get_message_id(LPWORD rc);
- __declspec (dllexport) int __stdcall hllapi_get_screen_at(WORD row, WORD col, LPSTR buffer);
- __declspec (dllexport) int __stdcall hllapi_enter(LPWORD rc);
- __declspec (dllexport) int __stdcall hllapi_set_text_at(LPWORD rc, WORD row, WORD col, LPSTR text);
- __declspec (dllexport) int __stdcall hllapi_cmp_text_at(LPWORD rc, WORD row, WORD col, LPSTR text);
- __declspec (dllexport) int __stdcall hllapi_wait_for_ready(LPWORD rc, WORD seconds);
- __declspec (dllexport) int __stdcall hllapi_wait(LPWORD rc, WORD seconds);
- __declspec (dllexport) int __stdcall hllapi_pfkey(LPWORD rc, WORD key);
- __declspec (dllexport) int __stdcall hllapi_pakey(LPWORD rc, WORD key);
+ __declspec (dllexport) DWORD __stdcall hllapi_get_revision(void);
+
+ __declspec (dllexport) DWORD __stdcall hllapi_connect(LPSTR uri);
+ __declspec (dllexport) DWORD __stdcall hllapi_disconnect(void);
+ __declspec (dllexport) DWORD __stdcall hllapi_get_message_id(void);
+ __declspec (dllexport) DWORD __stdcall hllapi_get_screen_at(WORD row, WORD col, LPSTR buffer);
+ __declspec (dllexport) DWORD __stdcall hllapi_enter(void);
+ __declspec (dllexport) DWORD __stdcall hllapi_set_text_at(WORD row, WORD col, LPSTR text);
+ __declspec (dllexport) DWORD __stdcall hllapi_cmp_text_at(WORD row, WORD col, LPSTR text);
+ __declspec (dllexport) DWORD __stdcall hllapi_wait_for_ready(WORD seconds);
+ __declspec (dllexport) DWORD __stdcall hllapi_wait(WORD seconds);
+ __declspec (dllexport) DWORD __stdcall hllapi_pfkey(WORD key);
+ __declspec (dllexport) DWORD __stdcall hllapi_pakey(WORD key);
 
 
 #else

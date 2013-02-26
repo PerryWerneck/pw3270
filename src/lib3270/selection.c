@@ -473,7 +473,10 @@ LIB3270_EXPORT char * lib3270_get_text(H3270 *h, int offset, int len)
 
 	maxlen = (h->rows * (h->cols+1)) - offset;
 	if(maxlen <= 0 || offset < 0)
+	{
+		errno = EINVAL;
 		return NULL;
+	}
 
 	if(len < 0 || len > maxlen)
 		len = maxlen;

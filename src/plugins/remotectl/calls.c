@@ -82,10 +82,12 @@
 	{ NULL, NULL }
  };
 
+#undef trace
+#define trace(...) { FILE *__dbg = fopen("c:\\users\\perry\\debug.txt","a"); fprintf(__dbg,__VA_ARGS__); fclose(__dbg); }
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
- __declspec (dllexport) int __stdcall hllapi_init(LPSTR mode)
+ __declspec (dllexport) DWORD __stdcall hllapi_init(LPSTR mode)
  {
  	if(!mode)
 		return EINVAL;
@@ -98,8 +100,15 @@
 		// Direct mode, load lib3270.dll, get pointers to the calls
 		int f;
 
+#ifdef DEBUG
+		// Notify user in case of error loading protocol DLL
+		SetErrorMode(0);
+#endif // DEBUG
+
 		hModule = LoadLibrary("lib3270.dll");
-		if(hModule == NULL)
+		trace("hModule=%p\n",hModule);
+
+		if(!hModule)
 			return GetLastError();
 
 		// Get library entry pointers
@@ -118,6 +127,8 @@
 		// Get session handle
 		hSession = session_new("");
 
+		trace("%s ok hSession=%p\n",__FUNCTION__,hSession);
+
 		return 0;
 	}
 
@@ -127,7 +138,7 @@
  	return -1;
  }
 
- __declspec (dllexport) int __stdcall hllapi_deinit(void)
+ __declspec (dllexport) DWORD __stdcall hllapi_deinit(void)
  {
  	int f;
 
@@ -147,17 +158,14 @@
  	return 0;
  }
 
- __declspec (dllexport) int __stdcall hllapi_get_revision(LPDWORD rc)
+ __declspec (dllexport) DWORD __stdcall hllapi_get_revision(void)
  {
 	if(!get_revision)
-		return EINVAL;
-
-	*rc = (DWORD) atoi(get_revision());
-
- 	return 0;
+		return 0;
+	return (DWORD) atoi(get_revision());
  }
 
- __declspec (dllexport) int __stdcall hllapi_connect(LPSTR uri)
+ __declspec (dllexport) DWORD __stdcall hllapi_connect(LPSTR uri)
  {
  	if(!(host_connect && hSession && uri))
 		return EINVAL;
@@ -165,54 +173,57 @@
  	return host_connect(hSession,uri,0);
  }
 
- __declspec (dllexport) int __stdcall hllapi_disconnect(LPWORD rc)
+ __declspec (dllexport) DWORD __stdcall hllapi_disconnect(void)
  {
  	if(!(host_disconnect && hSession))
 		return EINVAL;
 
 	host_disconnect(hSession);
 
- 	return 0;
+	return 0;
  }
 
- __declspec (dllexport) int __stdcall hllapi_wait_for_ready(LPWORD rc, WORD seconds)
+ __declspec (dllexport) DWORD __stdcall hllapi_wait_for_ready(WORD seconds)
  {
  	if(!(wait_for_ready && hSession))
 		return EINVAL;
 
-	*rc = (WORD) wait_for_ready(hSession,(int) seconds);
+	trace("%s seconds=%d\n", __FUNCTION__, (int) seconds);
 
- 	return 0;
+	return (DWORD) wait_for_ready(hSession,(int) seconds);
  }
 
- __declspec (dllexport) int __stdcall hllapi_wait(LPWORD rc, WORD seconds)
+ __declspec (dllexport) DWORD __stdcall hllapi_wait(WORD seconds)
  {
  	if(!(script_sleep && hSession))
 		return EINVAL;
 
-	*rc = (WORD) script_sleep(hSession,(int) seconds);
-
- 	return 0;
-
+	return (DWORD) script_sleep(hSession,(int) seconds);
  }
 
- __declspec (dllexport) int __stdcall hllapi_get_message_id(LPWORD rc)
+ __declspec (dllexport) DWORD __stdcall hllapi_get_message_id(void)
  {
 	if(!(get_message && hSession))
 		return EINVAL;
-	*rc = get_message(hSession);
- 	return 0;
+	return (DWORD) get_message(hSession);
  }
 
- __declspec (dllexport) int __stdcall hllapi_get_screen_at(WORD row, WORD col, LPSTR buffer)
+ __declspec (dllexport) DWORD __stdcall hllapi_get_screen_at(WORD row, WORD col, LPSTR buffer)
  {
 	char	* text;
-	int		  len = strlen(buffer);
+	int		  len;
 
 	if(!(get_text && release_memory && hSession))
 		return EINVAL;
 
+	trace("%s row=%d col=%d buffer=%p",__FUNCTION__,row,col,buffer);
+	len = strlen(buffer);
+
+	trace(" len=%d",len);
+
 	text = get_text(hSession,row,col,len);
+
+	trace(" text=%p errno=%d %s\n",text,errno,strerror(errno));
 
 	if(!text)
 		return EINVAL;
@@ -220,55 +231,47 @@
 	strncpy(buffer,text,len);
 	release_memory(text);
 
+	trace("text:\n%s\n",buffer);
+
  	return 0;
  }
 
- __declspec (dllexport) int __stdcall hllapi_enter(LPWORD rc)
+ __declspec (dllexport) DWORD __stdcall hllapi_enter(void)
  {
 	if(!(action_enter && hSession))
 		return EINVAL;
 
-	*rc = (WORD) action_enter(hSession);
-
- 	return 0;
+	return (DWORD) action_enter(hSession);
  }
 
- __declspec (dllexport) int __stdcall hllapi_set_text_at(LPWORD rc, WORD row, WORD col, LPSTR text)
+ __declspec (dllexport) DWORD __stdcall hllapi_set_text_at(WORD row, WORD col, LPSTR text)
  {
 	if(!(set_text_at && hSession))
 		return EINVAL;
 
-	*rc = (WORD) set_text_at(hSession,row,col,(const unsigned char *) text);
-
- 	return 0;
+	return (DWORD) set_text_at(hSession,row,col,(const unsigned char *) text);
  }
 
- __declspec (dllexport) int __stdcall hllapi_cmp_text_at(LPWORD rc, WORD row, WORD col, LPSTR text)
+ __declspec (dllexport) DWORD __stdcall hllapi_cmp_text_at(WORD row, WORD col, LPSTR text)
  {
 	if(!(cmp_text_at && hSession))
 		return EINVAL;
 
-	*rc = (WORD) cmp_text_at(hSession,row,col,(const char *) text);
-
- 	return 0;
+	return (DWORD) cmp_text_at(hSession,row,col,(const char *) text);
  }
 
- __declspec (dllexport) int __stdcall hllapi_pfkey(LPWORD rc, WORD key)
+ __declspec (dllexport) DWORD __stdcall hllapi_pfkey(WORD key)
  {
 	if(!(pfkey && hSession))
 		return EINVAL;
 
-	*rc = (WORD) pfkey(hSession,key);
-
- 	return 0;
+	return (DWORD) pfkey(hSession,key);
  }
 
- __declspec (dllexport) int __stdcall hllapi_pakey(LPWORD rc, WORD key)
+ __declspec (dllexport) DWORD __stdcall hllapi_pakey(WORD key)
  {
 	if(!(pfkey && hSession))
 		return EINVAL;
 
-	*rc = (WORD) pakey(hSession,key);
-
- 	return 0;
+	return (DWORD) pakey(hSession,key);
  }
