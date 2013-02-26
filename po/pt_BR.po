@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-25 14:45-0300\n"
+"POT-Creation-Date: 2013-02-26 07:23-0300\n"
 "PO-Revision-Date: 2013-02-25 14:46-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
@@ -333,7 +333,7 @@ msgstr "Não foi possível conectar ao servidor"
 msgid "Can't convert line %d from %s to %s"
 msgstr "Não foi possível converter a linha %d de %s para %s"
 
-#: selection.c:634
+#: selection.c:637
 msgid "Can't cut rectangular regions"
 msgstr "Recortar não permitido em seleção retangular"
 
@@ -854,7 +854,7 @@ msgstr "Invalid CGCSGID '%s', ignoring"
 msgid "Invalid charset entry '%s' (#%d)"
 msgstr "Invalid charset entry '%s' (#%d)"
 
-#: selection.c:634
+#: selection.c:637
 msgid "Invalid cut action"
 msgstr "Ação recortar inválida"
 
@@ -960,7 +960,7 @@ msgstr "Normal/Protegido"
 msgid "Normal/Unprotected"
 msgstr "Normal/Desprotegido"
 
-#: selection.c:634
+#: selection.c:637
 msgid "Not available"
 msgstr "Não disponível"
 

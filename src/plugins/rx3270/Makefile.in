@@ -68,3 +68,8 @@ $(BINRLS)$(DLL_NAME).$(VERSION): $(foreach SRC, $(basename $(EXTAPI_SRC)), $(OBJ
 	$(CXX) $(DLL_FLAGS) @LDSOFLAGS@ $(LDFLAGS) -o $@ $^ $(LIBS) $(LIB3270_LIBS)
 
 install:
+
+$(DEBDIR)/$(MODULE_NAME).install: Makefile
+	@$(MKDIR) `dirname $@`
+	@rm -f $@
+	@echo $(libdir)/$(PACKAGE_NAME)-plugins/$(MODULE_NAME).so > $@

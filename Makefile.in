@@ -109,6 +109,9 @@ endif
 debian/%.install: src/%/Makefile
 	@$(MAKE) DEBDIR=../../debian -C $(dir $^) ../../$@
 
+debian/%.install: src/plugins/%/Makefile
+	@$(MAKE) DEBDIR=../../../debian -C $(dir $^) ../../../$@
+
 $(BINDIR)/pot/%.pot: src/%/Makefile
 	@$(MAKE) BINDIR=../../$(BINDIR) -C $(dir $^) ../../$@
 
@@ -150,7 +153,8 @@ $(BINDIR)/Release@DLLDIR@/@DLLPREFIX@3270@DLLEXT@: src/lib3270/* src/include/lib
 
 #---[ File lists ]-------------------------------------------------------------
 
-filelist: debian/lib3270-dev.install debian/lib3270.install debian/lib3270-dev.install debian/pw3270.install
+filelist: debian/lib3270-dev.install debian/lib3270.install debian/lib3270-dev.install debian/pw3270.install \
+			$(foreach PLUGIN, $(PLUGINS), debian/$(PLUGIN).install)
 
 debian/lib3270-dev.install: Makefile
 	@echo "  GEN  `basename $@`"
