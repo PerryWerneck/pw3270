@@ -1,7 +1,7 @@
 
 PACKAGE=@PACKAGE_NAME@
 
-SOURCES=main.cxx
+SOURCES=main.cxx local.cxx get.cxx
 
 prefix=/usr
 exec_prefix=@exec_prefix@

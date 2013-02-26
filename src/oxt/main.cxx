@@ -213,16 +213,21 @@ Sequence< OUString > pw3270::uno_impl::getSupportedServiceNames() throw (Runtime
 
 pw3270::uno_impl::uno_impl( const Reference< XComponentContext > & xContext )
 {
-
+	this->hSession = new lib3270_session();
 }
 
 pw3270::uno_impl::~uno_impl()
 {
-	trace("%s: Object deleted",__FUNCTION__);
+	delete this->hSession;
 }
 
-sal_Int16 SAL_CALL pw3270::uno_impl::getRevision() throw (RuntimeException)
+pw3270::session::session()
 {
-	return 0;
+	trace("%s",__FUNCTION__);
+}
+
+pw3270::session::~session()
+{
+	trace("%s",__FUNCTION__);
 }
 

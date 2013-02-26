@@ -46,6 +46,32 @@
 	namespace pw3270
 	{
 
+		class session
+		{
+			public:
+				session();
+				virtual ~session();
+				virtual int get_revision(void)	= 0;
+
+		};
+
+		class lib3270_session : public session
+		{
+			public:
+				lib3270_session();
+				virtual ~lib3270_session();
+
+				virtual int get_revision(void);
+
+			private:
+				oslModule	  hModule;
+				void		* hSession;
+
+				/* lib3270 entry points */
+				const char	* (* _get_revision)(void);
+
+		};
+
 		class uno_impl : public ::cppu::WeakImplHelper3< br::com::bb::pw3270intf, com::sun::star::lang::XServiceInfo, com::sun::star::lang::XInitialization >
 		{
 			public:
@@ -66,11 +92,15 @@
 
 			private:
 
-				// H3270 *hSession;
+				session *hSession;
+
+
 
 		};
 
 	};
+
+
 
 
 #endif // GLOBALS_HPP_INCLUDED
