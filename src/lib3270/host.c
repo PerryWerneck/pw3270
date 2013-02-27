@@ -556,7 +556,7 @@ void lib3270_set_disconnected(H3270 *hSession)
 {
 	CHECK_SESSION_HANDLE(hSession);
 
-	hSession->cstate	= NOT_CONNECTED;
+	hSession->cstate	= LIB3270_NOT_CONNECTED;
 	hSession->starting	= 0;
 
 	set_status(hSession,OIA_FLAG_UNDERA,False);

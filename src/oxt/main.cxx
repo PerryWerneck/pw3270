@@ -231,3 +231,7 @@ pw3270::session::~session()
 	trace("%s",__FUNCTION__);
 }
 
+rtl_TextEncoding pw3270::session::getEncoding()
+{
+	return RTL_TEXTENCODING_ISO_8859_1;
+}

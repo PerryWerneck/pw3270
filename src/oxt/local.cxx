@@ -30,9 +30,12 @@
  */
 
  #include "globals.hpp"
+ #include <errno.h>
 
-// osl_createEmptySocketAddr
-// osl_connectSocketTo
+/*
+ * NOTE:	Take a better look at osl_createEmptySocketAddr() & osl_connectSocketTo() to see if there's
+ *			a way to use this calls to connect with the host for better performance.
+ */
 
 /*---[ Statics ]-------------------------------------------------------------------------------------------*/
 
@@ -41,15 +44,34 @@
 
  pw3270::lib3270_session::lib3270_session()
  {
+	struct _call
+	{
+		void 		**entry;
+		const char 	* name;
+	} call[] =
+	{
+		{ (void **) & _get_revision,	"lib3270_get_revision"	},
+		{ (void **) & _get_text_at,		"lib3270_get_text_at"	},
+		{ (void **) & _set_text_at,		"lib3270_set_string_at"	},
+		{ (void **) & _cmp_text_at,		"lib3270_cmp_text_at"	},
+		{ (void **) & _enter,			"lib3270_enter"			},
+		{ (void **) & _pfkey,			"lib3270_pfkey"			},
+		{ (void **) & _pakey,			"lib3270_pakey"			}
+
+	};
+
  	void * (*lib3270_new)(const char *);
+
+	hThread  = NULL;
+	hSession = NULL;
 
 	trace("%s",__FUNCTION__);
 	hModule = osl_loadModuleAscii("lib3270.so",SAL_LOADMODULE_NOW);
 	if(!hModule)
 		return;
 
-	_get_revision = (const char	* (*)(void)) osl_getAsciiFunctionSymbol(hModule,"lib3270_get_revision");
-
+	for(int f = 0; f < (sizeof (call) / sizeof ((call)[0]));f++)
+		*call[f].entry = (void *) osl_getAsciiFunctionSymbol(hModule,call[f].name);
 
 	/* Get lib3270 session handle */
 	lib3270_new = (void * (*)(const char *)) osl_getAsciiFunctionSymbol(hModule,"lib3270_session_new");
@@ -61,6 +83,8 @@
  {
 
 	trace("%s hModule=%p hSession=%p",__FUNCTION__,hModule,hSession);
+
+	disconnect();
 
 	if(hModule)
 	{
@@ -81,3 +105,99 @@
 	return atoi(_get_revision());
  }
 
+ int pw3270::lib3270_session::connect(const char *uri)
+ {
+ 	const char * (*set_host)(void *h, const char *n);
+
+	if(!(hModule && hSession))
+		return EINVAL;
+
+	if(hThread)
+		return EBUSY;
+
+	set_host = (const char * (*)(void *,const char *)) osl_getAsciiFunctionSymbol(hModule,"lib3270_set_host");
+	if(!set_host)
+		return EINVAL;
+
+	set_host(hSession,uri);
+
+	enabled = true;
+	hThread = osl_createThread((oslWorkerFunction) pw3270::lib3270_session::start_connect, this);
+
+	osl_yieldThread();
+
+	if(!hThread)
+		return -1;
+
+	osl_yieldThread();
+
+	return 0;
+ }
+
+ int pw3270::lib3270_session::disconnect(void)
+ {
+ 	enabled = false;
+	return 0;
+ }
+
+ void pw3270::lib3270_session::start_connect(lib3270_session *session)
+ {
+	session->network_loop();
+	session->hThread = NULL;
+	session->enabled = false;
+ }
+
+ void pw3270::lib3270_session::network_loop(void)
+ {
+	/* Lib3270 entry points */
+	void (* _disconnect)(void *h) =
+			(void (*)(void *)) osl_getAsciiFunctionSymbol(hModule,"lib3270_disconnect");
+
+	int  (* _connect)(void *h,const char *n, int wait) =
+			(int  (*)(void *,const char *,int)) osl_getAsciiFunctionSymbol(hModule,"lib3270_connect");
+
+	int  (* _status)(void *h) =
+			(int  (*)(void *)) osl_getAsciiFunctionSymbol(hModule,"lib3270_disconnected");
+
+	void (*_iterate)(void *h, int wait) =
+			(void (*)(void *, int)) osl_getAsciiFunctionSymbol(hModule,"lib3270_main_iterate");
+
+	_connect(hSession,NULL,1);
+
+	while(enabled && !_status(hSession))
+	{
+		osl_yieldThread();
+		_iterate(hSession,1);
+	}
+
+	osl_yieldThread();
+
+	_disconnect(hSession);
+
+ }
+
+ bool pw3270::lib3270_session::connected(void)
+ {
+	return enabled;
+ }
+
+ int pw3270::lib3270_session::enter(void)
+ {
+	if(!hSession)
+		return EINVAL;
+	return _enter(hSession);
+ }
+
+ int pw3270::lib3270_session::pfkey(int key)
+ {
+	if(!hSession)
+		return EINVAL;
+	return _pfkey(hSession,key);
+ }
+
+ int pw3270::lib3270_session::pakey(int key)
+ {
+	if(!hSession)
+		return EINVAL;
+	return _pakey(hSession,key);
+ }

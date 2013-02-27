@@ -2430,7 +2430,7 @@ static void do_lnext(H3270 *hSession, char c)
  */
 static void check_in3270(H3270 *hSession)
 {
-	LIB3270_CSTATE new_cstate = NOT_CONNECTED;
+	LIB3270_CSTATE new_cstate = LIB3270_NOT_CONNECTED;
 
 #if defined(X3270_TRACE) /*[*/
 	static const char *state_name[] =

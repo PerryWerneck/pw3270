@@ -51,7 +51,15 @@
 			public:
 				session();
 				virtual ~session();
-				virtual int get_revision(void)	= 0;
+				virtual int		get_revision(void)			= 0;
+				virtual int		connect(const char *uri)	= 0;
+				virtual int		disconnect(void)			= 0;
+				virtual bool	connected(void)				= 0;
+				virtual int		enter(void)					= 0;
+				virtual int		pfkey(int key)				= 0;
+				virtual int		pakey(int key)				= 0;
+
+				rtl_TextEncoding getEncoding();
 
 		};
 
@@ -61,14 +69,33 @@
 				lib3270_session();
 				virtual ~lib3270_session();
 
-				virtual int get_revision(void);
+				virtual int		get_revision(void);
+				virtual int		connect(const char *uri);
+				virtual int		disconnect(void);
+				virtual bool	connected(void);
+				virtual int		enter(void);
+				virtual int		pfkey(int key);
+				virtual int		pakey(int key);
 
 			private:
+				bool		  enabled;
 				oslModule	  hModule;
+				oslThread	  hThread;
 				void		* hSession;
+
+				/* Internal calls */
+				static void start_connect(lib3270_session *session);
+				void network_loop(void);
 
 				/* lib3270 entry points */
 				const char	* (* _get_revision)(void);
+				char 		* (* _get_text_at)(void *,int,int,int);
+				int			  (* _set_text_at)(void *,int,int,const unsigned char *);
+				int 		  (* _cmp_text_at)(void *,int,int,const char *);
+				int			  (* _enter)(void *);
+				int			  (* _pfkey)(void *, int);
+				int			  (* _pakey)(void *, int);
+
 
 		};
 

@@ -55,6 +55,13 @@ LIB3270_EXPORT int lib3270_connected(H3270 *h)
 	return ((int) h->cstate >= (int)CONNECTED_INITIAL);
 }
 
+LIB3270_EXPORT int lib3270_disconnected(H3270 *h)
+{
+	CHECK_SESSION_HANDLE(h);
+	return ((int) h->cstate == (int)LIB3270_NOT_CONNECTED);
+}
+
+
 LIB3270_EXPORT int lib3270_in_neither(H3270 *h)
 {
 	CHECK_SESSION_HANDLE(h);
