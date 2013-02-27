@@ -104,25 +104,26 @@ int SAL_CALL main(int argc, char **argv)
 		if(srv.is())
 		{
 			// Wait for commands
-//			OString	str;
+			OString	str;
 
 			printf("Revision:\t%d\n",srv->getRevision());
 
 			printf("getConnectionState: %d\n", srv->getConnectionState());
 			printf("Connect(): %d\n" , srv->Connect(OUString::createFromAscii("L:3270.df.bb:9023")));
 
-			srv->sleep(5);
+			srv->sleep(2);
 			printf("getConnectionState: %d\n", srv->getConnectionState());
-			srv->sleep(5);
+			srv->sleep(2);
+
+			str	= OUStringToOString( srv->getTextAt(1,1,2000),RTL_TEXTENCODING_UTF8);
+			printf("ContentsAt(1,1):\n%s\n",str.pData->buffer);
 
 			srv->Disconnect();
-			srv->sleep(5);
+			srv->sleep(2);
 			printf("getConnectionState: %d\n", srv->getConnectionState());
 
-			srv->sleep(5);
+			srv->sleep(2);
 
-			//str	=  OUStringToOString( srv->getScreenContentAt(20,39,5),RTL_TEXTENCODING_UTF8);
-			//Trace("ContentsAt(20,39): \"%s\"",str.pData->buffer);
 
 			/*
 			printf("waitForStringAt(SISBB) returned %d\n",srv->waitForStringAt(20,39,OUString::createFromAscii("SISBB"),20));

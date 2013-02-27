@@ -51,18 +51,20 @@
 			public:
 				session();
 				virtual ~session();
-				virtual int		get_revision(void)			= 0;
-				virtual int 	get_state(void)				= 0;
+				virtual int		get_revision(void)						= 0;
+				virtual int 	get_state(void)							= 0;
+				virtual char *  get_text_at(int row, int col, int len)	= 0;
 
-				virtual int		connect(const char *uri)	= 0;
-				virtual int		disconnect(void)			= 0;
-				virtual bool	connected(void)				= 0;
 
-				virtual int		enter(void)					= 0;
-				virtual int		pfkey(int key)				= 0;
-				virtual int		pakey(int key)				= 0;
+				virtual int		connect(const char *uri)				= 0;
+				virtual int		disconnect(void)						= 0;
+				virtual bool	connected(void)							= 0;
 
-				virtual void	mem_free(void *)			= 0;
+				virtual int		enter(void)								= 0;
+				virtual int		pfkey(int key)							= 0;
+				virtual int		pakey(int key)							= 0;
+
+				virtual void	mem_free(void *)						= 0;
 
 				void			sleep(int seconds = 1);
 
@@ -86,6 +88,8 @@
 				virtual int		enter(void);
 				virtual int		pfkey(int key);
 				virtual int		pakey(int key);
+
+				virtual char *  get_text_at(int row, int col, int len);
 
 				virtual void	mem_free(void *ptr);
 
@@ -134,6 +138,7 @@
 				virtual ::sal_Int16 SAL_CALL Disconnect(  ) throw (::com::sun::star::uno::RuntimeException);
 				virtual ::sal_Int16 SAL_CALL getConnectionState(  ) throw (::com::sun::star::uno::RuntimeException);
 				virtual ::sal_Int16 SAL_CALL sleep( ::sal_Int16 seconds ) throw (::com::sun::star::uno::RuntimeException);
+				virtual ::rtl::OUString SAL_CALL getTextAt( ::sal_Int16 row, ::sal_Int16 col, ::sal_Int16 size ) throw (::com::sun::star::uno::RuntimeException);
 
 			private:
 

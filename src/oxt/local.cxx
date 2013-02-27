@@ -221,3 +221,10 @@
  {
 	_mem_free(ptr);
  }
+
+ char * pw3270::lib3270_session::get_text_at(int row, int col, int len)
+ {
+	if(!hSession)
+		return NULL;
+	return _get_text_at(hSession,row,col,len);
+ }

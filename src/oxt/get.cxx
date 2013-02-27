@@ -30,6 +30,7 @@
  */
 
  #include "globals.hpp"
+ #include <string.h>
 
 /*---[ Implement ]-----------------------------------------------------------------------------------------*/
 
@@ -41,6 +42,21 @@ sal_Int16 SAL_CALL pw3270::uno_impl::getRevision() throw (RuntimeException)
 sal_Int16 SAL_CALL pw3270::uno_impl::getConnectionState(  ) throw (::com::sun::star::uno::RuntimeException)
 {
 	return hSession->get_state();
+}
+
+::rtl::OUString SAL_CALL pw3270::uno_impl::getTextAt( ::sal_Int16 row, ::sal_Int16 col, ::sal_Int16 size ) throw (::com::sun::star::uno::RuntimeException)
+{
+	char		* ptr = hSession->get_text_at(row,col,size);
+	OUString	  ret;
+
+	if(!ptr)
+		return OUString( RTL_CONSTASCII_USTRINGPARAM( "" ) );
+
+	ret = OUString(ptr, strlen(ptr), hSession->get_encoding(), RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE);
+
+	hSession->mem_free(ptr);
+
+	return ret;
 }
 
 
