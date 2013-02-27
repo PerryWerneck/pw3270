@@ -83,7 +83,17 @@
  };
 
 #undef trace
-#define trace(...) { FILE *__dbg = fopen("c:\\users\\perry\\debug.txt","a"); fprintf(__dbg,__VA_ARGS__); fclose(__dbg); }
+
+#ifdef DEBUG
+	#define trace(...) { FILE *__dbg = fopen("c:\\users\\perry\\debug.txt","a"); if(__dbg) { fprintf(__dbg,__VA_ARGS__); fclose(__dbg); }; }
+#else
+	#define trace(...) /* */
+#endif // DEBUG
+
+#ifndef LOAD_LIBRARY_SEARCH_DEFAULT_DIRS
+	// http://msdn.microsoft.com/en-us/library/windows/desktop/ms684179(v=vs.85).aspx
+	#define LOAD_LIBRARY_SEARCH_DEFAULT_DIRS	0x00001000
+#endif // LOAD_LIBRARY_SEARCH_DEFAULT_DIRS
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
@@ -95,26 +105,58 @@
 	if(hModule)
 		return EBUSY;
 
-	if(!*mode)
+	if(!(mode && *mode))
 	{
 		// Direct mode, load lib3270.dll, get pointers to the calls
-		int f;
+		int 		f;
+		HKEY 		hKey		= 0;
+		HMODULE		kernel		= LoadLibrary("kernel32.dll");
+		HANDLE		cookie		= NULL;
+		DWORD		rc;
+		HANDLE 		(*AddDllDirectory)(PCWSTR NewDirectory) = (HANDLE (*)(PCWSTR)) GetProcAddress(kernel,"AddDllDirectory");
+		BOOL 	 	(*RemoveDllDirectory)(HANDLE Cookie)	= (BOOL (*)(HANDLE)) GetProcAddress(kernel,"RemoveDllDirectory");
 
-#ifdef DEBUG
 		// Notify user in case of error loading protocol DLL
-		SetErrorMode(0);
-#endif // DEBUG
+		UINT 		errorMode	= SetErrorMode(0);
 
-		hModule = LoadLibrary("lib3270.dll");
-		trace("hModule=%p\n",hModule);
+		if(RegOpenKeyEx(HKEY_LOCAL_MACHINE,"Software\\pw3270",0,KEY_QUERY_VALUE,&hKey) == ERROR_SUCCESS)
+		{
+			char			data[4096];
+			unsigned long	datalen	= sizeof(data);		// data field length(in), data returned length(out)
+			unsigned long	datatype;					// #defined in winnt.h (predefined types 0-11)
+			if(RegQueryValueExA(hKey,"datadir",NULL,&datatype,(LPBYTE) data,&datalen) == ERROR_SUCCESS)
+			{
+				// Datadir is set, add it to DLL load path
+				wchar_t path[4096];
+				mbstowcs(path, data, 4095);
+				trace("Datadir=[%s] AddDllDirectory=%p RemoveDllDirectory=%p\n",data,AddDllDirectory,RemoveDllDirectory);
+				if(AddDllDirectory)
+					cookie = AddDllDirectory(path);
+			}
+			RegCloseKey(hKey);
+		}
+
+		hModule = LoadLibraryEx("lib3270.dll.5.0",NULL,LOAD_LIBRARY_SEARCH_DEFAULT_DIRS);
+		rc = GetLastError();
+
+		SetErrorMode(errorMode);
+
+		if(cookie && RemoveDllDirectory)
+			RemoveDllDirectory(cookie);
+
+		if(kernel)
+			FreeLibrary(kernel);
 
 		if(!hModule)
-			return GetLastError();
+			return rc;
 
 		// Get library entry pointers
 		for(f=0;entry_point[f].name;f++)
 		{
 			void *ptr = (void *) GetProcAddress(hModule,entry_point[f].name);
+
+			trace("%d %s=%p\n",f,entry_point[f].name,ptr);
+
 			if(!ptr)
 			{
 				fprintf(stderr,"Can´t load \"%s\"\n",entry_point[f].name);

@@ -579,14 +579,14 @@ gchar * filename_from_va(const gchar *first_element, va_list args)
 
 		for(p=0;p<G_N_ELEMENTS(appname) && !result;p++)
 		{
-			gchar	* path	= g_strconcat("SOFTWARE\\",appname[p],"\\datadir",NULL);
+			gchar	* path	= g_strconcat("Software\\",appname[p],NULL);
 			HKEY	  hKey	= 0;
 			LONG	  rc 	= 0;
 
 			// Note: This could be needed: http://support.microsoft.com/kb/556009
 			// http://msdn.microsoft.com/en-us/library/windows/desktop/aa384129(v=vs.85).aspx
 
-			rc = RegOpenKeyEx(HKEY_LOCAL_MACHINE,path,0,KEY_QUERY_VALUE|KEY_WOW64_64KEY,&hKey);
+			rc = RegOpenKeyEx(HKEY_LOCAL_MACHINE,path,0,KEY_QUERY_VALUE,&hKey);
 			SetLastError(rc);
 
 			if(rc == ERROR_SUCCESS)
@@ -595,7 +595,7 @@ gchar * filename_from_va(const gchar *first_element, va_list args)
 				unsigned long	datalen	= sizeof(data);		// data field length(in), data returned length(out)
 				unsigned long	datatype;					// #defined in winnt.h (predefined types 0-11)
 
-				rc = RegQueryValueExA(hKey,NULL,NULL,&datatype,(LPBYTE) data,&datalen);
+				rc = RegQueryValueExA(hKey,"datadir",NULL,&datatype,(LPBYTE) data,&datalen);
 				if(rc == ERROR_SUCCESS)
 				{
 					result = g_string_new(g_strchomp(data));

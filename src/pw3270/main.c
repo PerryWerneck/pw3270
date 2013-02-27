@@ -142,12 +142,12 @@ static gboolean appname(const gchar *option_name, const gchar *value, gpointer d
 
 static gboolean datadir(const gchar *option_name, const gchar *value, gpointer data, GError **error)
 {
-		gchar	* path = g_strconcat("SOFTWARE\\",appname,"\\datadir",NULL);
+		gchar	* path = g_strconcat("SOFTWARE\\",appname,NULL);
 		HKEY	  hKey;
 		DWORD	  disp;
 		int		  rc;
 
-		rc = RegCreateKeyEx(HKEY_LOCAL_MACHINE,path,0,NULL,REG_OPTION_NON_VOLATILE,KEY_SET_VALUE|KEY_WOW64_64KEY,NULL,&hKey,&disp);
+		rc = RegCreateKeyEx(HKEY_LOCAL_MACHINE,path,0,NULL,REG_OPTION_NON_VOLATILE,KEY_SET_VALUE,NULL,&hKey,&disp);
 		SetLastError(rc);
 
 		trace("%s=\"%s\" create=%d",path,value,rc);
@@ -155,7 +155,7 @@ static gboolean datadir(const gchar *option_name, const gchar *value, gpointer d
 		if(rc == ERROR_SUCCESS)
 		{
 			trace("%s: Value set",__FUNCTION__);
-			RegSetValueEx(hKey,NULL,0,REG_SZ,(const BYTE *) value,strlen(value)+1);
+			RegSetValueEx(hKey,"datadir",0,REG_SZ,(const BYTE *) value,strlen(value)+1);
 			RegCloseKey(hKey);
 		}
         else
