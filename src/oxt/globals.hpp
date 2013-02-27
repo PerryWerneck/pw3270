@@ -52,14 +52,21 @@
 				session();
 				virtual ~session();
 				virtual int		get_revision(void)			= 0;
+				virtual int 	get_state(void)				= 0;
+
 				virtual int		connect(const char *uri)	= 0;
 				virtual int		disconnect(void)			= 0;
 				virtual bool	connected(void)				= 0;
+
 				virtual int		enter(void)					= 0;
 				virtual int		pfkey(int key)				= 0;
 				virtual int		pakey(int key)				= 0;
 
-				rtl_TextEncoding getEncoding();
+				virtual void	mem_free(void *)			= 0;
+
+				void			sleep(int seconds = 1);
+
+				rtl_TextEncoding get_encoding();
 
 		};
 
@@ -70,12 +77,17 @@
 				virtual ~lib3270_session();
 
 				virtual int		get_revision(void);
+				virtual int 	get_state(void);
+
 				virtual int		connect(const char *uri);
 				virtual int		disconnect(void);
 				virtual bool	connected(void);
+
 				virtual int		enter(void);
 				virtual int		pfkey(int key);
 				virtual int		pakey(int key);
+
+				virtual void	mem_free(void *ptr);
 
 			private:
 				bool		  enabled;
@@ -89,12 +101,14 @@
 
 				/* lib3270 entry points */
 				const char	* (* _get_revision)(void);
+				int 		  (* _get_program_message)(void *);
 				char 		* (* _get_text_at)(void *,int,int,int);
 				int			  (* _set_text_at)(void *,int,int,const unsigned char *);
 				int 		  (* _cmp_text_at)(void *,int,int,const char *);
 				int			  (* _enter)(void *);
 				int			  (* _pfkey)(void *, int);
 				int			  (* _pakey)(void *, int);
+				void		* (* _mem_free)(void *);
 
 
 		};
@@ -115,7 +129,11 @@
 				virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(RuntimeException);
 
 				// pw3270 implementation - Main
-				virtual sal_Int16 SAL_CALL getRevision() throw (RuntimeException);
+				virtual ::sal_Int16 SAL_CALL getRevision() throw (RuntimeException);
+				virtual ::sal_Int16 SAL_CALL Connect( const ::rtl::OUString& hostinfo ) throw (::com::sun::star::uno::RuntimeException);
+				virtual ::sal_Int16 SAL_CALL Disconnect(  ) throw (::com::sun::star::uno::RuntimeException);
+				virtual ::sal_Int16 SAL_CALL getConnectionState(  ) throw (::com::sun::star::uno::RuntimeException);
+				virtual ::sal_Int16 SAL_CALL sleep( ::sal_Int16 seconds ) throw (::com::sun::star::uno::RuntimeException);
 
 			private:
 

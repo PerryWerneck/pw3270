@@ -33,6 +33,7 @@
 			<Add option="-Wall" />
 		</Compiler>
 		<Unit filename="Makefile.in" />
+		<Unit filename="connection.cxx" />
 		<Unit filename="get.cxx" />
 		<Unit filename="globals.hpp" />
 		<Unit filename="local.cxx" />

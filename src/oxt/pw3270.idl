@@ -56,7 +56,15 @@ module br
 			 */
 			interface pw3270intf : com::sun::star::uno::XInterface
 			{
+				/* Connect/Disconnect */
+				short	Connect( [in] string hostinfo );
+				short 	Disconnect();
+				short	getConnectionState();
+
+				/* Misc */
 				short	getRevision();
+				short	sleep([in] short seconds);
+
 			};
 
 			service pw3270

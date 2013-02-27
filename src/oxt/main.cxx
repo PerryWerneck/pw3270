@@ -31,6 +31,7 @@
 
 #include "globals.hpp"
 
+#include <salhelper/timer.hxx>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 
@@ -221,6 +222,14 @@ pw3270::uno_impl::~uno_impl()
 	delete this->hSession;
 }
 
+::sal_Int16 SAL_CALL pw3270::uno_impl::sleep( ::sal_Int16 seconds ) throw (::com::sun::star::uno::RuntimeException)
+{
+	salhelper::TTimeValue t = salhelper::TTimeValue(seconds,0);
+	osl_waitThread(&t);
+	return 0;
+}
+
+
 pw3270::session::session()
 {
 	trace("%s",__FUNCTION__);
@@ -231,7 +240,13 @@ pw3270::session::~session()
 	trace("%s",__FUNCTION__);
 }
 
-rtl_TextEncoding pw3270::session::getEncoding()
+rtl_TextEncoding pw3270::session::get_encoding()
 {
 	return RTL_TEXTENCODING_ISO_8859_1;
+}
+
+void pw3270::session::sleep(int seconds)
+{
+	salhelper::TTimeValue t = salhelper::TTimeValue(seconds,0);
+	osl_waitThread(&t);
 }

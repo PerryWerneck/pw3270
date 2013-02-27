@@ -50,13 +50,15 @@
 		const char 	* name;
 	} call[] =
 	{
-		{ (void **) & _get_revision,	"lib3270_get_revision"	},
-		{ (void **) & _get_text_at,		"lib3270_get_text_at"	},
-		{ (void **) & _set_text_at,		"lib3270_set_string_at"	},
-		{ (void **) & _cmp_text_at,		"lib3270_cmp_text_at"	},
-		{ (void **) & _enter,			"lib3270_enter"			},
-		{ (void **) & _pfkey,			"lib3270_pfkey"			},
-		{ (void **) & _pakey,			"lib3270_pakey"			}
+		{ (void **) & _get_revision,		"lib3270_get_revision"			},
+		{ (void **) & _get_text_at,			"lib3270_get_text_at"			},
+		{ (void **) & _set_text_at,			"lib3270_set_string_at"			},
+		{ (void **) & _cmp_text_at,			"lib3270_cmp_text_at"			},
+		{ (void **) & _enter,				"lib3270_enter"					},
+		{ (void **) & _pfkey,				"lib3270_pfkey"					},
+		{ (void **) & _pakey,				"lib3270_pakey"					},
+		{ (void **) & _get_program_message,	"lib3270_get_program_message"	},
+		{ (void **) & _mem_free,			"lib3270_free"					}
 
 	};
 
@@ -85,6 +87,10 @@
 	trace("%s hModule=%p hSession=%p",__FUNCTION__,hModule,hSession);
 
 	disconnect();
+	osl_yieldThread();
+
+	if(hThread)
+		osl_joinWithThread(hThread);
 
 	if(hModule)
 	{
@@ -92,8 +98,10 @@
 		{
 			void (*lib3270_free)(void *) = (void (*)(void *)) osl_getAsciiFunctionSymbol(hModule,"lib3270_session_free");
 			lib3270_free(hSession);
+			hSession = NULL;
 		}
 		osl_unloadModule(hModule);
+		hModule = NULL;
 	}
 
  }
@@ -200,4 +208,16 @@
 	if(!hSession)
 		return EINVAL;
 	return _pakey(hSession,key);
+ }
+
+ int pw3270::lib3270_session::get_state(void)
+ {
+	if(!hSession)
+		return -1;
+	return _get_program_message(hSession);
+ }
+
+ void pw3270::lib3270_session::mem_free(void *ptr)
+ {
+	_mem_free(ptr);
  }

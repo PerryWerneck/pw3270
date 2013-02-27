@@ -105,17 +105,21 @@ int SAL_CALL main(int argc, char **argv)
 		{
 			// Wait for commands
 //			OString	str;
-//			char	buffer[80];
-//			printf("getConnectionState: %d\n", srv->getConnectionState());
-
-//			str = OUStringToOString( srv->getVersion(),RTL_TEXTENCODING_UTF8);
-//			printf("Version:\t%s\n",str.pData->buffer);
 
 			printf("Revision:\t%d\n",srv->getRevision());
 
-			// printf("Connect(): %d\n" , srv->Connect(OUString::createFromAscii("L:3270.df.bb:9023"),10));
+			printf("getConnectionState: %d\n", srv->getConnectionState());
+			printf("Connect(): %d\n" , srv->Connect(OUString::createFromAscii("L:3270.df.bb:9023")));
 
-			// sleep(5);
+			srv->sleep(5);
+			printf("getConnectionState: %d\n", srv->getConnectionState());
+			srv->sleep(5);
+
+			srv->Disconnect();
+			srv->sleep(5);
+			printf("getConnectionState: %d\n", srv->getConnectionState());
+
+			srv->sleep(5);
 
 			//str	=  OUStringToOString( srv->getScreenContentAt(20,39,5),RTL_TEXTENCODING_UTF8);
 			//Trace("ContentsAt(20,39): \"%s\"",str.pData->buffer);

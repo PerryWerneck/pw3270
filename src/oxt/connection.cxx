@@ -18,7 +18,7 @@
  * programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple
  * Place, Suite 330, Boston, MA, 02111-1307, USA
  *
- * Este programa está nomeado como get.cxx e possui - linhas de código.
+ * Este programa está nomeado como connection.cxx e possui - linhas de código.
  *
  * Contatos:
  *
@@ -33,14 +33,15 @@
 
 /*---[ Implement ]-----------------------------------------------------------------------------------------*/
 
-sal_Int16 SAL_CALL pw3270::uno_impl::getRevision() throw (RuntimeException)
+sal_Int16 SAL_CALL pw3270::uno_impl::Connect( const ::rtl::OUString& hostinfo ) throw (::com::sun::star::uno::RuntimeException)
 {
-	return hSession->get_revision();
+	OString str = rtl::OUStringToOString( hostinfo , hSession->get_encoding() );
+	return hSession->connect(str.getStr());
 }
 
-sal_Int16 SAL_CALL pw3270::uno_impl::getConnectionState(  ) throw (::com::sun::star::uno::RuntimeException)
+sal_Int16 SAL_CALL pw3270::uno_impl::Disconnect(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-	return hSession->get_state();
+	return hSession->disconnect();
 }
 
 
