@@ -44,15 +44,15 @@
  void  				  hllapi_pipe_release_memory(void *p);
  int				  hllapi_pipe_connect(void *h, const char *n, int wait);
  void 				  hllapi_pipe_disconnect(void *h);
-
-/*
- int 				  hllapi_pipe_wait_for_ready(void *h, int seconds);
- int 				  hllapi_pipe_sleep(void *h, int seconds);
  LIB3270_MESSAGE	  hllapi_pipe_get_message(void *h);
- char 				* hllapi_pipe_get_text(void *h, int row, int col, int len);
+ char 				* hllapi_pipe_get_text_at(void *h, int row, int col, int len);
  int  			  	  hllapi_pipe_enter(void *h);
  int 			  	  hllapi_pipe_set_text_at(void *h, int row, int col, const unsigned char *str);
  int 			      hllapi_pipe_cmp_text_at(void *h, int row, int col, const char *text);
  int				  hllapi_pipe_pfkey(void *h, int key);
  int				  hllapi_pipe_pakey(void *h, int key);
+
+/*
+ int 				  hllapi_pipe_wait_for_ready(void *h, int seconds);
+ int 				  hllapi_pipe_sleep(void *h, int seconds);
 */

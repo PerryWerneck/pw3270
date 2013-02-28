@@ -72,14 +72,14 @@
 	{ (void **) &host_disconnect,	(void *) hllapi_pipe_disconnect, 		"lib3270_disconnect"			},
 	{ (void **) &wait_for_ready,	(void *) NULL, "lib3270_wait_for_ready"			},
 	{ (void **) &script_sleep,		(void *) NULL, "lib3270_wait"					},
-	{ (void **) &get_message,		(void *) NULL, "lib3270_get_program_message"	},
-	{ (void **) &get_text,			(void *) NULL, "lib3270_get_text_at"			},
+	{ (void **) &get_message,		(void *) hllapi_pipe_get_message, 		"lib3270_get_program_message"	},
+	{ (void **) &get_text,			(void *) hllapi_pipe_get_text_at, 		"lib3270_get_text_at"			},
 	{ (void **) &release_memory,	(void *) hllapi_pipe_release_memory,	"lib3270_free"					},
-	{ (void **) &action_enter,		(void *) NULL, "lib3270_enter"					},
-	{ (void **) &set_text_at,		(void *) NULL, "lib3270_set_string_at"			},
-	{ (void **) &cmp_text_at,		(void *) NULL, "lib3270_cmp_text_at"			},
-	{ (void **) &pfkey,				(void *) NULL, "lib3270_pfkey"					},
-	{ (void **) &pakey,				(void *) NULL, "lib3270_pakey"					},
+	{ (void **) &action_enter,		(void *) hllapi_pipe_enter, 			"lib3270_enter"					},
+	{ (void **) &set_text_at,		(void *) hllapi_pipe_set_text_at, 		"lib3270_set_string_at"			},
+	{ (void **) &cmp_text_at,		(void *) hllapi_pipe_cmp_text_at, 		"lib3270_cmp_text_at"			},
+	{ (void **) &pfkey,				(void *) hllapi_pipe_pfkey, 			"lib3270_pfkey"					},
+	{ (void **) &pakey,				(void *) hllapi_pipe_pakey, 			"lib3270_pakey"					},
 
 	{ NULL, NULL }
  };

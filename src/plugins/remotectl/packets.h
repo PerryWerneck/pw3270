@@ -31,48 +31,65 @@
 
 struct hllapi_packet_result
 {
-	int rc;
+	int 			rc;
 };
 
 struct hllapi_packet_query
 {
-	unsigned char	packet_id;
+	int				packet_id;
 };
 
 struct hllapi_packet_connect
 {
-	unsigned char	packet_id;
+	int				packet_id;
 	unsigned char	wait;
 	char			hostname[1];
 };
 
 struct hllapi_packet_keycode
 {
-	unsigned char	packet_id;
+	int				packet_id;
 	unsigned short	keycode;
 };
 
 struct hllapi_packet_cursor
 {
-	unsigned char	packet_id;
+	int				packet_id;
 	unsigned short	row;
 	unsigned short	col;
 };
 
 struct hllapi_packet_text
 {
-	unsigned char	packet_id;
+	int				packet_id;
 	char 			text[1];
 };
 
+struct hllapi_packet_at
+{
+	int				packet_id;
+	unsigned short	row;
+	unsigned short	col;
+	unsigned short	len;
+};
 
 struct hllapi_packet_text_at
 {
-	unsigned char	packet_id;
+	int				packet_id;
 	unsigned short	row;
 	unsigned short	col;
 	char 			text[1];
 };
+
+struct hllapi_packet_query_at
+{
+	int				packet_id;
+	unsigned short	row;
+	unsigned short	col;
+	unsigned short	len;
+};
+
+
 
 #pragma pack()
 

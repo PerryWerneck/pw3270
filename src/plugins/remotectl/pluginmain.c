@@ -134,13 +134,28 @@
 	return FALSE;
  }
 
-/*
- static void send_message(pipe_source *source, const void *pkt, int sz)
+ static void send_text(pipe_source *source, char *text)
  {
-		WriteFile(qry->hPipe,&data,wrote,&wrote,NULL);
+ 	struct hllapi_packet_text *pkt;
+	DWORD szBlock;
 
+	if(text)
+	{
+		szBlock = sizeof(struct hllapi_packet_text)+strlen(text);
+		pkt = g_malloc0(szBlock);
+		pkt->packet_id = 0;
+		strcpy(pkt->text,text);
+		lib3270_free(text);
+	}
+	else
+	{
+		szBlock = sizeof(struct hllapi_packet_text);
+		pkt = g_malloc0(szBlock);
+		pkt->packet_id = errno ? errno : -1;
+	}
+
+	WriteFile(source->hPipe,&pkt,szBlock,&szBlock,NULL);
  }
-*/
 
  static void send_result(pipe_source *source, int rc)
  {
@@ -195,6 +210,13 @@
 											((struct hllapi_packet_text_at *) source->buffer)->row,
 											((struct hllapi_packet_text_at *) source->buffer)->col,
 											(unsigned char *) ((struct hllapi_packet_text_at *) source->buffer)->text));
+		break;
+
+	case HLLAPI_PACKET_GET_TEXT_AT:
+		send_text(source,lib3270_get_text_at(	lib3270_get_default_session_handle(),
+											((struct hllapi_packet_at *) source->buffer)->row,
+											((struct hllapi_packet_at *) source->buffer)->col,
+											((struct hllapi_packet_at *) source->buffer)->len));
 		break;
 
 	case HLLAPI_PACKET_CMP_TEXT_AT:
