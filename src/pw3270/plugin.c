@@ -145,7 +145,16 @@
 	if(!g_file_test(path,G_FILE_TEST_IS_DIR))
 	{
 		g_free(path);
-		path = pw3270_build_filename(widget,"plugins",NULL);
+
+		path = g_build_filename(dir,".bin","Debug","plugins",NULL);
+		trace("%s testing [%s]",__FUNCTION__,path);
+
+		if(!g_file_test(path,G_FILE_TEST_IS_DIR))
+		{
+			g_free(path);
+			path = pw3270_build_filename(widget,"plugins",NULL);
+			trace("%s using [%s]",__FUNCTION__,path);
+		}
 	}
 
 	load(path,widget);

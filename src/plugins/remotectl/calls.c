@@ -219,7 +219,7 @@
  	if(!(host_connect && hSession && uri))
 		return EINVAL;
 
- 	return host_connect(hSession,uri,1);
+ 	return host_connect(hSession,uri,0);
  }
 
  __declspec (dllexport) DWORD __stdcall hllapi_disconnect(void)
