@@ -35,60 +35,54 @@
  #include <pw3270/hllapi.h>
  #include <stdio.h>
  #include <lib3270/log.h>
+ #include "client.h"
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
  HMODULE 	  hModule	= NULL;
- H3270		* hSession	= NULL;
+ void		* hSession	= NULL;
 
- static H3270			* (*session_new)(const char *model)											= NULL;
- static void			  (*session_free)(H3270 *h)													= NULL;
+ static void			* (*session_new)(const char *model)											= NULL;
+ static void			  (*session_free)(void *h)													= NULL;
  static const char		* (*get_revision)(void)														= NULL;
- static int				  (*host_connect)(H3270 *h,const char *n, int wait)							= NULL;
- static int 			  (*wait_for_ready)(H3270 *h, int seconds)									= NULL;
- static void 			  (*host_disconnect)(H3270 *h)												= NULL;
- static int 			  (*script_sleep)(H3270 *h, int seconds)									= NULL;
- static LIB3270_MESSAGE	  (*get_message)(H3270 *h)													= NULL;
- static char 			* (*get_text)(H3270 *h, int row, int col, int len)							= NULL;
+ static int				  (*host_connect)(void *h,const char *n, int wait)							= NULL;
+ static int 			  (*wait_for_ready)(void *h, int seconds)									= NULL;
+ static void 			  (*host_disconnect)(void *h)												= NULL;
+ static int 			  (*script_sleep)(void *h, int seconds)										= NULL;
+ static LIB3270_MESSAGE	  (*get_message)(void *h)													= NULL;
+ static char 			* (*get_text)(void *h, int row, int col, int len)							= NULL;
  static void  			* (*release_memory)(void *p)												= NULL;
- static int  			  (*action_enter)(H3270 *h)													= NULL;
- static int 			  (*set_text_at)(H3270 *h, int row, int col, const unsigned char *str)		= NULL;
- static int 			  (*cmp_text_at)(H3270 *h, int row, int col, const char *text)				= NULL;
- static int				  (*pfkey)(H3270 *hSession, int key)										= NULL;
- static int				  (*pakey)(H3270 *hSession, int key)										= NULL;
+ static int  			  (*action_enter)(void *h)													= NULL;
+ static int 			  (*set_text_at)(void *h, int row, int col, const unsigned char *str)		= NULL;
+ static int 			  (*cmp_text_at)(void *h, int row, int col, const char *text)				= NULL;
+ static int				  (*pfkey)(void *hSession, int key)											= NULL;
+ static int				  (*pakey)(void *hSession, int key)											= NULL;
 
  static const struct _entry_point
  {
 	void		**call;
+	void		* pipe;
 	const char	* name;
  } entry_point[] =
  {
-	{ (void **) &session_new,		"lib3270_session_new" 			},
-	{ (void **) &session_free,		"lib3270_session_free"			},
-	{ (void **) &get_revision,		"lib3270_get_revision"			},
-	{ (void **) &host_connect,		"lib3270_connect"				},
-	{ (void **) &host_disconnect,	"lib3270_disconnect"			},
-	{ (void **) &wait_for_ready,	"lib3270_wait_for_ready"		},
-	{ (void **) &script_sleep,		"lib3270_wait"					},
-	{ (void **) &get_message,		"lib3270_get_program_message"	},
-	{ (void **) &get_text,			"lib3270_get_text_at"			},
-	{ (void **) &release_memory,	"lib3270_free"					},
-	{ (void **) &action_enter,		"lib3270_enter"					},
-	{ (void **) &set_text_at,		"lib3270_set_string_at"			},
-	{ (void **) &cmp_text_at,		"lib3270_cmp_text_at"			},
-	{ (void **) &pfkey,				"lib3270_pfkey"					},
-	{ (void **) &pakey,				"lib3270_pakey"					},
+	{ (void **) &session_new,		(void *) hllapi_pipe_init,				"lib3270_session_new" 			},
+	{ (void **) &session_free,		(void *) hllapi_pipe_deinit,			"lib3270_session_free"			},
+	{ (void **) &get_revision,		(void *) hllapi_pipe_get_revision,		"lib3270_get_revision"			},
+	{ (void **) &host_connect,		(void *) hllapi_pipe_connect, 			"lib3270_connect"				},
+	{ (void **) &host_disconnect,	(void *) hllapi_pipe_disconnect, 		"lib3270_disconnect"			},
+	{ (void **) &wait_for_ready,	(void *) NULL, "lib3270_wait_for_ready"			},
+	{ (void **) &script_sleep,		(void *) NULL, "lib3270_wait"					},
+	{ (void **) &get_message,		(void *) NULL, "lib3270_get_program_message"	},
+	{ (void **) &get_text,			(void *) NULL, "lib3270_get_text_at"			},
+	{ (void **) &release_memory,	(void *) hllapi_pipe_release_memory,	"lib3270_free"					},
+	{ (void **) &action_enter,		(void *) NULL, "lib3270_enter"					},
+	{ (void **) &set_text_at,		(void *) NULL, "lib3270_set_string_at"			},
+	{ (void **) &cmp_text_at,		(void *) NULL, "lib3270_cmp_text_at"			},
+	{ (void **) &pfkey,				(void *) NULL, "lib3270_pfkey"					},
+	{ (void **) &pakey,				(void *) NULL, "lib3270_pakey"					},
 
 	{ NULL, NULL }
  };
-
-#undef trace
-
-#ifdef DEBUG
-	#define trace(...) { FILE *__dbg = fopen("c:\\users\\perry\\debug.txt","a"); if(__dbg) { fprintf(__dbg,__VA_ARGS__); fclose(__dbg); }; }
-#else
-	#define trace(...) /* */
-#endif // DEBUG
 
 #ifndef LOAD_LIBRARY_SEARCH_DEFAULT_DIRS
 	// http://msdn.microsoft.com/en-us/library/windows/desktop/ms684179(v=vs.85).aspx
@@ -102,22 +96,30 @@
  	if(!mode)
 		return EINVAL;
 
-	if(hModule)
-		return EBUSY;
+	trace("%s(%s)",__FUNCTION__,(char *) mode);
 
 	if(!(mode && *mode))
 	{
 		// Direct mode, load lib3270.dll, get pointers to the calls
 		int 		f;
 		HKEY 		hKey		= 0;
-		HMODULE		kernel		= LoadLibrary("kernel32.dll");
+		HMODULE		kernel;
 		HANDLE		cookie		= NULL;
 		DWORD		rc;
-		HANDLE 		(*AddDllDirectory)(PCWSTR NewDirectory) = (HANDLE (*)(PCWSTR)) GetProcAddress(kernel,"AddDllDirectory");
-		BOOL 	 	(*RemoveDllDirectory)(HANDLE Cookie)	= (BOOL (*)(HANDLE)) GetProcAddress(kernel,"RemoveDllDirectory");
+		HANDLE 		(*AddDllDirectory)(PCWSTR NewDirectory);
+		BOOL 	 	(*RemoveDllDirectory)(HANDLE Cookie);
+		UINT 		errorMode;
+
+		trace("hModule=%p",hModule);
+		if(hModule)
+			return EBUSY;
+
+		kernel 				= LoadLibrary("kernel32.dll");
+		AddDllDirectory		= (HANDLE (*)(PCWSTR)) GetProcAddress(kernel,"AddDllDirectory");
+		RemoveDllDirectory	= (BOOL (*)(HANDLE)) GetProcAddress(kernel,"RemoveDllDirectory");
 
 		// Notify user in case of error loading protocol DLL
-		UINT 		errorMode	= SetErrorMode(0);
+		errorMode = SetErrorMode(0);
 
 		if(RegOpenKeyEx(HKEY_LOCAL_MACHINE,"Software\\pw3270",0,KEY_QUERY_VALUE,&hKey) == ERROR_SUCCESS)
 		{
@@ -138,6 +140,7 @@
 
 		hModule = LoadLibraryEx("lib3270.dll.5.0",NULL,LOAD_LIBRARY_SEARCH_DEFAULT_DIRS);
 		rc = GetLastError();
+		trace("hModule=%p rc=%d",hModule,(int) rc);
 
 		SetErrorMode(errorMode);
 
@@ -166,18 +169,22 @@
 			*entry_point[f].call = ptr;
 		}
 
-		// Get session handle
-		hSession = session_new("");
+	}
+	else
+	{
+		// Get pointers to the pipe based calls
+		int f;
 
-		trace("%s ok hSession=%p\n",__FUNCTION__,hSession);
+		for(f=0;entry_point[f].name;f++)
+			*entry_point[f].call = entry_point[f].pipe;
 
-		return 0;
 	}
 
-	// Set entry points to pipe based calls
+	// Get session handle
+	hSession = session_new((const char *) mode);
+	trace("%s ok hSession=%p\n",__FUNCTION__,hSession);
 
-
- 	return -1;
+ 	return hSession ? 0 : -1;
  }
 
  __declspec (dllexport) DWORD __stdcall hllapi_deinit(void)

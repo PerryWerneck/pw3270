@@ -998,7 +998,7 @@ static Boolean key_Character(H3270 *hSession, int code, Boolean with_ge, Boolean
 }
 
 
-LIB3270_EXPORT void lib3270_input_string(H3270 *hSession, const unsigned char *str)
+LIB3270_EXPORT int lib3270_input_string(H3270 *hSession, const unsigned char *str)
 {
 	while(*str)
 	{
@@ -1007,6 +1007,8 @@ LIB3270_EXPORT void lib3270_input_string(H3270 *hSession, const unsigned char *s
 	}
 
 	screen_update(hSession,0,hSession->rows*hSession->cols);
+
+	return 0;
 }
 
 /**

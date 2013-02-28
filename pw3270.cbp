@@ -250,10 +250,14 @@
 		<Unit filename="src/plugins/remotectl/hllapi.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/plugins/remotectl/packets.h" />
 		<Unit filename="src/plugins/remotectl/pipesource.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/plugins/remotectl/remotectl.c">
+		<Unit filename="src/plugins/remotectl/pluginmain.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/plugins/remotectl/remote.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/plugins/remotectl/remotectl.h" />

@@ -32,8 +32,6 @@
  #include <pw3270.h>
  #include <pw3270/v3270.h>
 
-#ifdef WIN32
-
  #include <windows.h>
  #include <stdarg.h>
  #include "remotectl.h"
@@ -385,4 +383,3 @@ static void wait_for_client(pipe_source *source)
 	return;
  }
 
-#endif // WIN32

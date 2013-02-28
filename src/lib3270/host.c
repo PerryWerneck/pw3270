@@ -494,9 +494,10 @@ static void try_reconnect(H3270 *session)
 	lib3270_reconnect(session,0);
 }
 
-LIB3270_EXPORT void lib3270_disconnect(H3270 *h)
+LIB3270_EXPORT int lib3270_disconnect(H3270 *h)
 {
 	host_disconnect(h,0);
+	return 0;
 }
 
 void host_disconnect(H3270 *hSession, int failed)

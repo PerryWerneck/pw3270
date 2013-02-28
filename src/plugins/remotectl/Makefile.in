@@ -30,8 +30,8 @@
 
 MODULE_NAME=remotectl
 DEPENDS=*.h ../../include/*.h ../../include/lib3270/*.h Makefile
-PLUGIN_SRC=remotectl.c pipesource.c
-HLLAPI_SRC=hllapi.c calls.c
+PLUGIN_SRC=pluginmain.c
+HLLAPI_SRC=hllapi.c calls.c remote.c
 
 #---[ Paths ]------------------------------------------------------------------
 
@@ -126,13 +126,15 @@ $(BINDBG)/libhllapi@DLLEXT@: $(foreach SRC, $(basename $(HLLAPI_SRC)), $(OBJDBG)
 
 #---[ Misc targets ]-----------------------------------------------------------
 
-testprogram@EXEEXT@: testprogram.c
+$(BINDBG)/testprogram@EXEEXT@: testprogram.c $(BINDBG)/libhllapi@DLLEXT@
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CC) $(CFLAGS) -I../../../src/include -L../../../$(BINDIR)/Debug $(DEBUG_CFLAGS) -lhllapi -o $@ $<
+	@$(CC) $(CFLAGS) $(PW3270_CFLAGS) -L$(BINDBG) $(DEBUG_CFLAGS) -lhllapi -o $@ testprogram.c
 
-test: testprogram@EXEEXT@
-	@PATH="../../../$(BINDIR)/Debug:$(PATH)" ./testprogram@EXEEXT@
+test: $(BINDBG)/testprogram@EXEEXT@
+
+run: $(BINDBG)/testprogram@EXEEXT@
+	@cd $(BINDBG) ; ./testprogram@EXEEXT@
 
 install: $(BINRLS)/plugins/$(MODULE_NAME)@DLLEXT@
 	@$(MKDIR) $(DESTDIR)$(libdir)/$(PACKAGE_NAME)-plugins

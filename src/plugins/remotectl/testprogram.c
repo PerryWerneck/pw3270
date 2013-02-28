@@ -38,6 +38,15 @@
 
  int main(int numpar, char *param[])
  {
+ 	const char *session = "pw3270:a";
+
+ 	printf("init(%s)=%d\n",session,(int) hllapi_init((LPSTR) session));
+	printf("revision=%d\n",(int) hllapi_get_revision());
+	printf("connect=%d\n",(int) hllapi_connect("fandezhi.efglobe.com:23"));
+
+	printf("deinit=%d\n",(int) hllapi_deinit());
+
+/*
  	DWORD	revision;
  	int 	rc;
 
@@ -54,8 +63,8 @@
 
 	printf("Deinit exits with rc=%d\n",rc);
 	rc = hllapi_deinit();
-
-	return rc;
+*/
+	return 0;
  }
 
 /*

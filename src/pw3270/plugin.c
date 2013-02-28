@@ -46,10 +46,10 @@
  	GError		* err	= NULL;
  	GList		* lst	= NULL;
 
+	trace("Loading plugins from %s",path);
+
 	if(!g_file_test(path,G_FILE_TEST_IS_DIR))
 		return;
-
-	trace("Loading plugins from %s",path);
 
 	dir = g_dir_open(path,0,&err);
 	if(!dir)
@@ -135,7 +135,31 @@
 
  LIB3270_EXPORT void pw3270_init_plugins(GtkWidget *widget)
  {
-#if ! defined(DEBUG)
+#if defined( DEBUG )
+
+	gchar * dir  = g_get_current_dir();
+	gchar * path = g_build_filename(dir,"plugins",NULL);
+
+	trace("%s testing [%s]",__FUNCTION__,path);
+
+	if(!g_file_test(path,G_FILE_TEST_IS_DIR))
+	{
+		g_free(path);
+		path = pw3270_build_filename(widget,"plugins",NULL);
+	}
+
+	load(path,widget);
+
+	g_free(path);
+	g_free(dir);
+
+#elif defined( WIN32 )
+
+	gchar * path = pw3270_build_filename(widget,"plugins",NULL);
+	load(path, widget);
+	g_free(path);
+
+#else
 
 	const gchar * appname[]	= { g_get_application_name(), PACKAGE_NAME };
 	int f;
@@ -153,30 +177,6 @@
 
 		g_free(path);
 	}
-
-#elif defined( win32 )
-
-	gchar * appdir	= g_win32_get_package_installation_directory_of_module(NULL);
-	gchar * path	= pw3270_build_filename(widget,"plugins",NULL);
-	load(path, widget);
-	g_free(path);
-	g_free(appdir);
-
-#else
-
-	gchar * dir  = g_get_current_dir();
-	gchar * path = g_build_filename(dir,".bin","Debug","plugins",NULL);
-
-	if(!g_file_test(path,G_FILE_TEST_IS_DIR))
-	{
-		g_free(path);
-		path = pw3270_build_filename(widget,"plugins",NULL);
-	}
-
-	load(path,widget);
-
-	g_free(path);
-	g_free(dir);
 
 #endif
  }

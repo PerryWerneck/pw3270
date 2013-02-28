@@ -37,14 +37,22 @@
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
-#ifdef WIN32
-
- static HANDLE	hPipe = INVALID_HANDLE_VALUE;
-
-#endif // WIN32
+// static HANDLE	hPipe = INVALID_HANDLE_VALUE;
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
+#ifdef _WIN32
+ __declspec (dllexport) int __stdcall hllapi(LPWORD func, LPSTR buffer, LPWORD length, LPWORD rc)
+#else
+ LIB3270_EXPORT int hllapi(const unsigned long *func, char *buffer, unsigned short *length, unsigned short *rc)
+#endif // _WIN32
+{
+
+
+	return -1;
+}
+
+/*
  static int cmd_connect_ps(const char *name)
  {
 #ifdef WIN32
@@ -237,3 +245,4 @@
  	return 0;
  }
 
+*/

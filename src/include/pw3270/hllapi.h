@@ -38,11 +38,7 @@
 extern "C" {
 #endif
 
- #define HLLAPI_REQUEST_QUERY			0x01
- #define HLLAPI_RESPONSE_VALUE			0x02
- #define HLLAPI_RESPONSE_TEXT			0x03
-
- #define HLLAPI_MAXLENGTH				32768
+ #define HLLAPI_MAXLENGTH				4096
 
  #define HLLAPI_CMD_CONNECTPS				   1	/**< connect presentation space							*/
  #define HLLAPI_CMD_DISCONNECTPS			   2	/**< disconnect presentation space        				*/
@@ -59,42 +55,52 @@ extern "C" {
 
  #define HLLAPI_CMD_GETREVISION				2000	/**< Get lib3270 revision								*/
 
- #pragma pack(1)
- typedef struct _hllapi_data
+ typedef enum _hllapi_packet
  {
-		unsigned char	id;			/**< Request id */
-		unsigned long	func;		/**< Function number */
-		unsigned short	rc;			/**< Short argument/return code */
-		unsigned int	value;		/**< Requested value */
-		char			string[1];	/**< String argument */
- } HLLAPI_DATA;
+		HLLAPI_PACKET_CONNECT,
+		HLLAPI_PACKET_DISCONNECT,
+		HLLAPI_PACKET_GET_PROGRAM_MESSAGE,
+		HLLAPI_PACKET_GET_TEXT_AT,
+		HLLAPI_PACKET_SET_TEXT_AT,
+		HLLAPI_PACKET_CMP_TEXT_AT,
+		HLLAPI_PACKET_ENTER,
+		HLLAPI_PACKET_PFKEY,
+		HLLAPI_PACKET_PAKEY,
+		HLLAPI_PACKET_SET_CURSOR_POSITION,
+		HLLAPI_PACKET_GET_CURSOR_POSITION,
+		HLLAPI_PACKET_INPUT_STRING,
 
- #pragma pack()
+		HLLAPI_PACKET_INVALID
+
+ } HLLAPI_PACKET;
+
+
 
 #ifdef _WIN32
- // http://www.mingw.org/wiki/Visual_Basic_DLL
- __declspec (dllexport) int __stdcall hllapi(const LPWORD func, LPSTR str, LPWORD length, LPWORD rc);
+	// http://www.mingw.org/wiki/Visual_Basic_DLL
+	__declspec (dllexport) int __stdcall hllapi(const LPWORD func, LPSTR str, LPWORD length, LPWORD rc);
 
- __declspec (dllexport) DWORD __stdcall hllapi_init(LPSTR mode);
- __declspec (dllexport) DWORD __stdcall hllapi_deinit(void);
+	__declspec (dllexport) DWORD __stdcall hllapi_init(LPSTR mode);
+	__declspec (dllexport) DWORD __stdcall hllapi_deinit(void);
 
- __declspec (dllexport) DWORD __stdcall hllapi_get_revision(void);
+	__declspec (dllexport) DWORD __stdcall hllapi_get_revision(void);
 
- __declspec (dllexport) DWORD __stdcall hllapi_connect(LPSTR uri);
- __declspec (dllexport) DWORD __stdcall hllapi_disconnect(void);
- __declspec (dllexport) DWORD __stdcall hllapi_get_message_id(void);
- __declspec (dllexport) DWORD __stdcall hllapi_get_screen_at(WORD row, WORD col, LPSTR buffer);
- __declspec (dllexport) DWORD __stdcall hllapi_enter(void);
- __declspec (dllexport) DWORD __stdcall hllapi_set_text_at(WORD row, WORD col, LPSTR text);
- __declspec (dllexport) DWORD __stdcall hllapi_cmp_text_at(WORD row, WORD col, LPSTR text);
- __declspec (dllexport) DWORD __stdcall hllapi_wait_for_ready(WORD seconds);
- __declspec (dllexport) DWORD __stdcall hllapi_wait(WORD seconds);
- __declspec (dllexport) DWORD __stdcall hllapi_pfkey(WORD key);
- __declspec (dllexport) DWORD __stdcall hllapi_pakey(WORD key);
-
+	__declspec (dllexport) DWORD __stdcall hllapi_connect(LPSTR uri);
+	__declspec (dllexport) DWORD __stdcall hllapi_disconnect(void);
+	__declspec (dllexport) DWORD __stdcall hllapi_get_message_id(void);
+	__declspec (dllexport) DWORD __stdcall hllapi_get_screen_at(WORD row, WORD col, LPSTR buffer);
+	__declspec (dllexport) DWORD __stdcall hllapi_enter(void);
+	__declspec (dllexport) DWORD __stdcall hllapi_set_text_at(WORD row, WORD col, LPSTR text);
+	__declspec (dllexport) DWORD __stdcall hllapi_cmp_text_at(WORD row, WORD col, LPSTR text);
+	__declspec (dllexport) DWORD __stdcall hllapi_wait_for_ready(WORD seconds);
+	__declspec (dllexport) DWORD __stdcall hllapi_wait(WORD seconds);
+	__declspec (dllexport) DWORD __stdcall hllapi_pfkey(WORD key);
+	__declspec (dllexport) DWORD __stdcall hllapi_pakey(WORD key);
 
 #else
- LIB3270_EXPORT int hllapi(const unsigned long *func, char *str, unsigned short *length, unsigned short *rc);
+
+	#error NOT IMPLEMENTED
+
 #endif // _WIN32
 
 #ifdef __cplusplus

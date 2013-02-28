@@ -111,7 +111,7 @@ gchar * get_last_error_msg(void)
 		}
 	}
 
-	trace("Cant open \"%s\"",path);
+//	trace("Cant open \"%s\"",path);
 	g_free(path);
 
 	return FALSE;
@@ -603,7 +603,9 @@ gchar * filename_from_va(const gchar *first_element, va_list args)
 				else
 				{
 					gchar *msg = g_win32_error_message(rc);
+#ifndef DEBUG
 					g_message("Error \"%s\" when getting application datadir from registry",msg);
+#endif // !DEBUG
 					g_free(msg);
 				}
 				RegCloseKey(hKey);
@@ -611,7 +613,9 @@ gchar * filename_from_va(const gchar *first_element, va_list args)
 			else
 			{
 				gchar *msg = g_win32_error_message(rc);
+#ifndef DEBUG
 				g_message("Error \"%s\" when opening datadir key from registry",msg);
+#endif // !DEBUG
 				g_free(msg);
 			}
 
@@ -633,7 +637,7 @@ gchar * filename_from_va(const gchar *first_element, va_list args)
 			for(f=0;dir[f] && !datadir;f++)
 			{
 				gchar *name = g_build_filename(dir[f],appname[p],NULL);
-				trace("Searching for %s: %s",name,g_file_test(name,G_FILE_TEST_IS_DIR) ? "Ok" : "Not found");
+//				trace("Searching for %s: %s",name,g_file_test(name,G_FILE_TEST_IS_DIR) ? "Ok" : "Not found");
 				if(g_file_test(name,G_FILE_TEST_IS_DIR))
 					result = g_string_new(datadir = name);
 				else

@@ -439,7 +439,7 @@
 	 * @param h		Session handle.
 	 *
 	 */
-	LIB3270_EXPORT void lib3270_disconnect(H3270 *h);
+	LIB3270_EXPORT int lib3270_disconnect(H3270 *h);
 
 	/**
 	 * Reconnect.
@@ -496,7 +496,7 @@
 
 	#define lib3270_set_text_at(h,r,c,t) lib3270_set_string_at(h,r,c,t)
 	LIB3270_EXPORT int lib3270_set_string_at(H3270 *h, int row, int col, const unsigned char *str);
-	LIB3270_EXPORT void lib3270_input_string(H3270 *hSession, const unsigned char *str);
+	LIB3270_EXPORT int lib3270_input_string(H3270 *hSession, const unsigned char *str);
 
 	/**
 	 * Set cursor address.
