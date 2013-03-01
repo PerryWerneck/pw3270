@@ -48,3 +48,25 @@
 {
 	return hSession->pakey((int) keycode);
 }
+
+::sal_Int16 SAL_CALL pw3270::uno_impl::cmpTextAt( ::sal_Int16 row, ::sal_Int16 col, const ::rtl::OUString& text ) throw (::com::sun::star::uno::RuntimeException)
+{
+	return hSession->cmp_text_at((int) row, (int) col, rtl::OUStringToOString(text,hSession->get_encoding()).getStr());
+}
+
+::sal_Bool SAL_CALL isReady(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+	if(!isConnected())
+		return FALSE;
+
+	if(hSession->get_state() == )
+		return TRUE;
+
+	return FALSE;
+}
+
+::sal_Bool SAL_CALL isConnected(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+
+}
+

@@ -11,6 +11,7 @@
 	#define LANGUAGE_BINDING_NAME "gcc3"
 
 	#include <stdio.h>
+	#include <lib3270.h>
 
 	#include <rtl/uuid.h>
 	#include <osl/thread.hxx>
@@ -51,22 +52,23 @@
 			public:
 				session();
 				virtual ~session();
-				virtual int		get_revision(void)								= 0;
-				virtual int 	get_state(void)									= 0;
-				virtual char *  get_text_at(int row, int col, int len)			= 0;
-				virtual int		set_text_at(int row, int col, const char *text) = 0;
+				virtual int					get_revision(void)								= 0;
+				virtual LIB3270_MESSAGE 	get_state(void)									= 0;
+				virtual char			 *  get_text_at(int row, int col, int len)			= 0;
+				virtual int					set_text_at(int row, int col, const char *text) = 0;
+				virtual int					cmp_text_at(int row, int col, const char *text) = 0;
 
-				virtual int		connect(const char *uri)						= 0;
-				virtual int		disconnect(void)								= 0;
-				virtual bool	connected(void)									= 0;
+				virtual int					connect(const char *uri)						= 0;
+				virtual int					disconnect(void)								= 0;
+				virtual bool				connected(void)									= 0;
 
-				virtual int		enter(void)										= 0;
-				virtual int		pfkey(int key)									= 0;
-				virtual int		pakey(int key)									= 0;
+				virtual int					enter(void)										= 0;
+				virtual int					pfkey(int key)									= 0;
+				virtual int					pakey(int key)									= 0;
 
-				virtual void	mem_free(void *)								= 0;
+				virtual void				mem_free(void *)								= 0;
 
-				void			sleep(int seconds = 1);
+				void						sleep(int seconds = 1);
 
 				rtl_TextEncoding get_encoding();
 
@@ -78,43 +80,43 @@
 				lib3270_session();
 				virtual ~lib3270_session();
 
-				virtual int		get_revision(void);
-				virtual int 	get_state(void);
+				virtual int					get_revision(void);
+				virtual LIB3270_MESSAGE 	get_state(void);
 
-				virtual int		connect(const char *uri);
-				virtual int		disconnect(void);
-				virtual bool	connected(void);
+				virtual int					connect(const char *uri);
+				virtual int					disconnect(void);
+				virtual bool				connected(void);
 
-				virtual int		enter(void);
-				virtual int		pfkey(int key);
-				virtual int		pakey(int key);
+				virtual int					enter(void);
+				virtual int					pfkey(int key);
+				virtual int					pakey(int key);
 
-				virtual char *  get_text_at(int row, int col, int len);
-				virtual int		set_text_at(int row, int col, const char *text);
+				virtual char			 *  get_text_at(int row, int col, int len);
+				virtual int					set_text_at(int row, int col, const char *text);
+				virtual int					cmp_text_at(int row, int col, const char *text);
 
-				virtual void	mem_free(void *ptr);
+				virtual void				mem_free(void *ptr);
 
 			private:
 				bool		  enabled;
 				oslModule	  hModule;
 				oslThread	  hThread;
-				void		* hSession;
+				H3270		* hSession;
 
 				/* Internal calls */
 				static void start_connect(lib3270_session *session);
 				void network_loop(void);
 
 				/* lib3270 entry points */
-				const char	* (* _get_revision)(void);
-				int 		  (* _get_program_message)(void *);
-				char 		* (* _get_text_at)(void *,int,int,int);
-				int			  (* _set_text_at)(void *,int,int,const unsigned char *);
-				int 		  (* _cmp_text_at)(void *,int,int,const char *);
-				int			  (* _enter)(void *);
-				int			  (* _pfkey)(void *, int);
-				int			  (* _pakey)(void *, int);
-				void		* (* _mem_free)(void *);
-
+				const char		* (* _get_revision)(void);
+				LIB3270_MESSAGE	  (* _get_program_message)(H3270 *);
+				char 			* (* _get_text_at)(H3270 *,int,int,int);
+				int				  (* _set_text_at)(H3270 *,int,int,const unsigned char *);
+				int 			  (* _cmp_text_at)(H3270 *,int,int,const char *);
+				int				  (* _enter)(H3270 *);
+				int				  (* _pfkey)(H3270 *, int);
+				int				  (* _pakey)(H3270 *, int);
+				void			* (* _mem_free)(void *);
 
 		};
 
@@ -144,6 +146,7 @@
 				virtual ::sal_Int16 SAL_CALL enter(  ) throw (::com::sun::star::uno::RuntimeException);
 				virtual ::sal_Int16 SAL_CALL pfkey( ::sal_Int16 keycode ) throw (::com::sun::star::uno::RuntimeException);
 				virtual ::sal_Int16 SAL_CALL pakey( ::sal_Int16 keycode ) throw (::com::sun::star::uno::RuntimeException);
+				virtual ::sal_Int16 SAL_CALL cmpTextAt( ::sal_Int16 row, ::sal_Int16 col, const ::rtl::OUString& text ) throw (::com::sun::star::uno::RuntimeException);
 
 			private:
 

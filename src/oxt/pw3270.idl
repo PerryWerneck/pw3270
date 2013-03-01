@@ -68,6 +68,7 @@ module br
 				short	setTextAt([in] short row, [in] short col, [in] string text);
 
 				/* Actions */
+				short	cmpTextAt([in] short row, [in] short col, [in] string text);
 				short	enter();
 				short	pfkey([in] short keycode);
 				short	pakey([in] short keycode);
@@ -75,6 +76,10 @@ module br
 				/* Misc */
 				short	getRevision();
 				short	sleep([in] short seconds);
+				boolean isReady();
+//				short	waitForReady([in] short seconds);
+//				short	waitForTextAt(in] short row, [in] short col, [in] string text, [in] short seconds);
+				boolean	isConnected();
 
 			};
 

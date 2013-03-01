@@ -236,3 +236,9 @@
 	return _set_text_at(hSession,row,col,(const unsigned char *) text);
  }
 
+ int pw3270::lib3270_session::cmp_text_at(int row, int col,const char *text)
+ {
+	if(!hSession)
+		return EINVAL;
+	return _cmp_text_at(hSession,row,col,text);
+ }
