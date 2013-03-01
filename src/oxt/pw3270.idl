@@ -64,6 +64,14 @@ module br
 				/* Get */
 				string	getTextAt([in] short row, [in] short col, [in] short size);
 
+				/* Set */
+				short	setTextAt([in] short row, [in] short col, [in] string text);
+
+				/* Actions */
+				short	enter();
+				short	pfkey([in] short keycode);
+				short	pakey([in] short keycode);
+
 				/* Misc */
 				short	getRevision();
 				short	sleep([in] short seconds);

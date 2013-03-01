@@ -228,3 +228,11 @@
 		return NULL;
 	return _get_text_at(hSession,row,col,len);
  }
+
+ int pw3270::lib3270_session::set_text_at(int row, int col, const char *text)
+ {
+	if(!hSession)
+		return EINVAL;
+	return _set_text_at(hSession,row,col,(const unsigned char *) text);
+ }
+

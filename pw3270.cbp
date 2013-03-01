@@ -262,6 +262,7 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/plugins/remotectl/remotectl.h" />
+		<Unit filename="src/plugins/remotectl/server.h" />
 		<Unit filename="src/plugins/remotectl/testprogram.c">
 			<Option compilerVar="CC" />
 		</Unit>

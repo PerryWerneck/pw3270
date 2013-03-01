@@ -118,12 +118,14 @@ int SAL_CALL main(int argc, char **argv)
 			str	= OUStringToOString( srv->getTextAt(1,1,2000),RTL_TEXTENCODING_UTF8);
 			printf("ContentsAt(1,1):\n%s\n",str.pData->buffer);
 
-			srv->Disconnect();
-			srv->sleep(2);
 			printf("getConnectionState: %d\n", srv->getConnectionState());
 
-			srv->sleep(2);
+			srv->sleep(1);
+			srv->enter();
+			srv->sleep(1);
 
+			str	= OUStringToOString( srv->getTextAt(1,1,2000),RTL_TEXTENCODING_UTF8);
+			printf("ContentsAt(1,1):\n%s\n",str.pData->buffer);
 
 			/*
 			printf("waitForStringAt(SISBB) returned %d\n",srv->waitForStringAt(20,39,OUString::createFromAscii("SISBB"),20));
