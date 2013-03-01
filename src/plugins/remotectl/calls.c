@@ -37,6 +37,9 @@
  #include <lib3270/log.h>
  #include "client.h"
 
+ #undef trace
+ #define trace( fmt, ... )	{ FILE *out = fopen("c:\\Users\\Perry\\hllapi.log","a"); if(out) { fprintf(out, "%s(%d) " fmt "\n", __FILE__, __LINE__, __VA_ARGS__ ); fclose(out); } }
+
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
  HMODULE 	  hModule	= NULL;
@@ -46,6 +49,7 @@
  static void			  (*session_free)(void *h)													= NULL;
  static const char		* (*get_revision)(void)														= NULL;
  static int				  (*host_connect)(void *h,const char *n, int wait)							= NULL;
+ static int				  (*host_is_connected)(void *h)												= NULL;
  static int 			  (*wait_for_ready)(void *h, int seconds)									= NULL;
  static void 			  (*host_disconnect)(void *h)												= NULL;
  static int 			  (*script_sleep)(void *h, int seconds)										= NULL;
@@ -70,8 +74,9 @@
 	{ (void **) &get_revision,		(void *) hllapi_pipe_get_revision,		"lib3270_get_revision"			},
 	{ (void **) &host_connect,		(void *) hllapi_pipe_connect, 			"lib3270_connect"				},
 	{ (void **) &host_disconnect,	(void *) hllapi_pipe_disconnect, 		"lib3270_disconnect"			},
-	{ (void **) &wait_for_ready,	(void *) NULL, "lib3270_wait_for_ready"			},
-	{ (void **) &script_sleep,		(void *) NULL, "lib3270_wait"					},
+	{ (void **) &host_is_connected,	(void *) NULL, 							"lib3270_in_tn3270e"			},
+	{ (void **) &wait_for_ready,	(void *) NULL, 							"lib3270_wait_for_ready"			},
+	{ (void **) &script_sleep,		(void *) NULL, 							"lib3270_wait"					},
 	{ (void **) &get_message,		(void *) hllapi_pipe_get_message, 		"lib3270_get_program_message"	},
 	{ (void **) &get_text,			(void *) hllapi_pipe_get_text_at, 		"lib3270_get_text_at"			},
 	{ (void **) &release_memory,	(void *) hllapi_pipe_release_memory,	"lib3270_free"					},
@@ -98,9 +103,21 @@
 
 	trace("%s(%s)",__FUNCTION__,(char *) mode);
 
-	if(!(mode && *mode))
+	if(mode && *mode)
+	{
+		// Get pointers to the pipe based calls
+		int f;
+
+		trace("%s: Loading pipe based calls",__FUNCTION__);
+		for(f=0;entry_point[f].name;f++)
+			*entry_point[f].call = entry_point[f].pipe;
+
+	}
+	else
 	{
 		// Direct mode, load lib3270.dll, get pointers to the calls
+		static const char *dllname = "lib3270.dll." PACKAGE_VERSION;
+
 		int 		f;
 		HKEY 		hKey		= 0;
 		HMODULE		kernel;
@@ -109,11 +126,13 @@
 		HANDLE 		(*AddDllDirectory)(PCWSTR NewDirectory);
 		BOOL 	 	(*RemoveDllDirectory)(HANDLE Cookie);
 		UINT 		errorMode;
+		char		datadir[4096];
 
 		trace("hModule=%p",hModule);
 		if(hModule)
 			return EBUSY;
 
+		*datadir			= 0;
 		kernel 				= LoadLibrary("kernel32.dll");
 		AddDllDirectory		= (HANDLE (*)(PCWSTR)) GetProcAddress(kernel,"AddDllDirectory");
 		RemoveDllDirectory	= (BOOL (*)(HANDLE)) GetProcAddress(kernel,"RemoveDllDirectory");
@@ -123,26 +142,40 @@
 
 		if(RegOpenKeyEx(HKEY_LOCAL_MACHINE,"Software\\pw3270",0,KEY_QUERY_VALUE,&hKey) == ERROR_SUCCESS)
 		{
-			char			data[4096];
-			unsigned long	datalen	= sizeof(data);		// data field length(in), data returned length(out)
+			unsigned long	datalen	= sizeof(datadir);	// data field length(in), data returned length(out)
 			unsigned long	datatype;					// #defined in winnt.h (predefined types 0-11)
-			if(RegQueryValueExA(hKey,"datadir",NULL,&datatype,(LPBYTE) data,&datalen) == ERROR_SUCCESS)
+			if(RegQueryValueExA(hKey,"datadir",NULL,&datatype,(LPBYTE) datadir,&datalen) == ERROR_SUCCESS)
 			{
 				// Datadir is set, add it to DLL load path
 				wchar_t path[4096];
-				mbstowcs(path, data, 4095);
-				trace("Datadir=[%s] AddDllDirectory=%p RemoveDllDirectory=%p\n",data,AddDllDirectory,RemoveDllDirectory);
+				mbstowcs(path, datadir, 4095);
+				trace("Datadir=[%s] AddDllDirectory=%p RemoveDllDirectory=%p\n",datadir,AddDllDirectory,RemoveDllDirectory);
 				if(AddDllDirectory)
 					cookie = AddDllDirectory(path);
 			}
 			RegCloseKey(hKey);
 		}
 
-		hModule = LoadLibraryEx("lib3270.dll.5.0",NULL,LOAD_LIBRARY_SEARCH_DEFAULT_DIRS);
+//		hModule = LoadLibraryEx("lib3270.dll.5.0",NULL,LOAD_LIBRARY_SEARCH_DEFAULT_DIRS|LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR);
+		hModule = LoadLibrary(dllname);
 		rc = GetLastError();
-		trace("hModule=%p rc=%d",hModule,(int) rc);
 
 		SetErrorMode(errorMode);
+
+		trace("%s hModule=%p rc=%d",dllname,hModule,(int) rc);
+
+		if(rc == ERROR_MOD_NOT_FOUND && *datadir)
+		{
+			char buffer[4096];
+#ifdef DEBUG
+			snprintf(buffer,4096,"%s\\.bin\\Debug\\%s",datadir,dllname);
+#else
+			snprintf(buffer,4096,"%s\\%s",datadir,dllname);
+#endif // DEBUG
+
+			hModule = LoadLibrary(buffer);
+			trace("%s hModule=%p rc=%d",buffer,hModule,(int) rc);
+		}
 
 		if(cookie && RemoveDllDirectory)
 			RemoveDllDirectory(cookie);
@@ -170,16 +203,6 @@
 		}
 
 	}
-	else
-	{
-		// Get pointers to the pipe based calls
-		int f;
-
-		for(f=0;entry_point[f].name;f++)
-			*entry_point[f].call = entry_point[f].pipe;
-
-	}
-
 	// Get session handle
 	hSession = session_new((const char *) mode);
 	trace("%s ok hSession=%p\n",__FUNCTION__,hSession);
@@ -214,12 +237,20 @@
 	return (DWORD) atoi(get_revision());
  }
 
- __declspec (dllexport) DWORD __stdcall hllapi_connect(LPSTR uri)
+ __declspec (dllexport) DWORD __stdcall hllapi_connect(LPSTR uri, WORD wait)
  {
  	if(!(host_connect && hSession && uri))
 		return EINVAL;
 
- 	return host_connect(hSession,uri,0);
+ 	return host_connect(hSession,uri,wait);
+ }
+
+ __declspec (dllexport) DWORD __stdcall hllapi_is_connected(void)
+ {
+ 	if(!(host_is_connected && hSession))
+		return EINVAL;
+
+ 	return host_is_connected(hSession);
  }
 
  __declspec (dllexport) DWORD __stdcall hllapi_disconnect(void)

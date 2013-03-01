@@ -247,6 +247,7 @@
 		<Unit filename="src/plugins/remotectl/calls.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/plugins/remotectl/client.h" />
 		<Unit filename="src/plugins/remotectl/hllapi.c">
 			<Option compilerVar="CC" />
 		</Unit>

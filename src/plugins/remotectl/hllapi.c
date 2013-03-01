@@ -47,9 +47,54 @@
  LIB3270_EXPORT int hllapi(const unsigned long *func, char *buffer, unsigned short *length, unsigned short *rc)
 #endif // _WIN32
 {
+	switch(*func)
+	{
+	case HLLAPI_CMD_CONNECTPS:
+		break;
+
+	case HLLAPI_CMD_DISCONNECTPS:
+		break;
+
+	case HLLAPI_CMD_INPUTSTRING:
+		break;
+
+	case HLLAPI_CMD_WAIT:
+		break;
+
+	case HLLAPI_CMD_COPYPS:
+		break;
+
+	case HLLAPI_CMD_SEARCHPS:
+		break;
+
+	case HLLAPI_CMD_QUERYCURSOR:
+		break;
+
+	case HLLAPI_CMD_COPYPSTOSTR:
+		break;
+
+	case HLLAPI_CMD_COPYSTRTOPS:
+		break;
+
+	case HLLAPI_CMD_SETCURSOR:
+		break;
+
+	case HLLAPI_CMD_SENDFILE:
+		break;
+
+	case HLLAPI_CMD_RECEIVEFILE:
+		break;
+
+	case HLLAPI_CMD_GETREVISION:
+		break;
+
+	default:
+		*rc = EINVAL;
+		return EINVAL;
+	}
 
 
-	return -1;
+	return 0;
 }
 
 /*

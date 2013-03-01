@@ -85,9 +85,10 @@ extern "C" {
 
 	__declspec (dllexport) DWORD __stdcall hllapi_get_revision(void);
 
-	__declspec (dllexport) DWORD __stdcall hllapi_connect(LPSTR uri);
+	__declspec (dllexport) DWORD __stdcall hllapi_connect(LPSTR uri, WORD wait);
 	__declspec (dllexport) DWORD __stdcall hllapi_disconnect(void);
 	__declspec (dllexport) DWORD __stdcall hllapi_get_message_id(void);
+	__declspec (dllexport) DWORD __stdcall hllapi_is_connected(void);
 	__declspec (dllexport) DWORD __stdcall hllapi_get_screen_at(WORD row, WORD col, LPSTR buffer);
 	__declspec (dllexport) DWORD __stdcall hllapi_enter(void);
 	__declspec (dllexport) DWORD __stdcall hllapi_set_text_at(WORD row, WORD col, LPSTR text);
