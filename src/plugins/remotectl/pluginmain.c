@@ -185,6 +185,10 @@
 		send_result(source,lib3270_get_program_message(lib3270_get_default_session_handle()));
 		break;
 
+	case HLLAPI_PACKET_IS_CONNECTED:
+		send_result(source,lib3270_in_tn3270e(lib3270_get_default_session_handle()));
+		break;
+
 	case HLLAPI_PACKET_ENTER:
 		send_result(source,lib3270_enter(lib3270_get_default_session_handle()));
 		break;

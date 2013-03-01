@@ -51,8 +51,7 @@
  int 			      hllapi_pipe_cmp_text_at(void *h, int row, int col, const char *text);
  int				  hllapi_pipe_pfkey(void *h, int key);
  int				  hllapi_pipe_pakey(void *h, int key);
-
-/*
  int 				  hllapi_pipe_wait_for_ready(void *h, int seconds);
  int 				  hllapi_pipe_sleep(void *h, int seconds);
-*/
+ int 				  hllapi_pipe_is_connected(void *h);
+

@@ -32,6 +32,7 @@
  #include <string.h>
  #include <errno.h>
  #include <stdio.h>
+ #include <time.h>
  #include <lib3270/log.h>
 
  #include "client.h"
@@ -239,4 +240,44 @@
  void hllapi_pipe_release_memory(void *p)
  {
  	free(p);
+ }
+
+ int hllapi_pipe_wait_for_ready(void *h, int seconds)
+ {
+ 	time_t end = time(0)+seconds;
+
+	while(time(0) < end)
+	{
+		if(!hllapi_pipe_is_connected(h))
+			return ENOTCONN;
+
+		if(hllapi_pipe_get_message(h) == 0)
+			return 0;
+		Sleep(250);
+	}
+
+	return ETIMEDOUT;
+ }
+
+ int hllapi_pipe_is_connected(void *h)
+ {
+	static const struct hllapi_packet_query query		= { HLLAPI_PACKET_IS_CONNECTED };
+	struct hllapi_packet_result		  		response;
+	DWORD							  		cbSize		= sizeof(query);
+	TransactNamedPipe((HANDLE) h,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
+	return (LIB3270_MESSAGE) response.rc;
+ }
+
+ int hllapi_pipe_sleep(void *h, int seconds)
+ {
+ 	time_t end = time(0)+seconds;
+
+	while(time(0) < end)
+	{
+		if(!hllapi_pipe_is_connected(h))
+			return ENOTCONN;
+		Sleep(500);
+	}
+
+	return 0;
  }

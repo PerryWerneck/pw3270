@@ -89,6 +89,11 @@ struct hllapi_packet_query_at
 	unsigned short	len;
 };
 
+struct hllapi_packet_wait
+{
+	int				packet_id;
+	int				timeout;
+};
 
 
 #pragma pack()
