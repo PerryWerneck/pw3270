@@ -89,10 +89,14 @@
 	{ NULL, NULL }
  };
 
+// http://msdn.microsoft.com/en-us/library/windows/desktop/ms684179(v=vs.85).aspx
 #ifndef LOAD_LIBRARY_SEARCH_DEFAULT_DIRS
-	// http://msdn.microsoft.com/en-us/library/windows/desktop/ms684179(v=vs.85).aspx
 	#define LOAD_LIBRARY_SEARCH_DEFAULT_DIRS	0x00001000
 #endif // LOAD_LIBRARY_SEARCH_DEFAULT_DIRS
+
+#ifndef LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR
+	#define LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR 	0x00000100
+#endif // LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
@@ -119,7 +123,6 @@
 		static const char *dllname = "lib3270.dll." PACKAGE_VERSION;
 
 		int 		f;
-		HKEY 		hKey		= 0;
 		HMODULE		kernel;
 		HANDLE		cookie		= NULL;
 		DWORD		rc;
@@ -132,7 +135,6 @@
 		if(hModule)
 			return EBUSY;
 
-		*datadir			= 0;
 		kernel 				= LoadLibrary("kernel32.dll");
 		AddDllDirectory		= (HANDLE (*)(PCWSTR)) GetProcAddress(kernel,"AddDllDirectory");
 		RemoveDllDirectory	= (BOOL (*)(HANDLE)) GetProcAddress(kernel,"RemoveDllDirectory");
@@ -140,33 +142,19 @@
 		// Notify user in case of error loading protocol DLL
 		errorMode = SetErrorMode(0);
 
-		if(RegOpenKeyEx(HKEY_LOCAL_MACHINE,"Software\\pw3270",0,KEY_QUERY_VALUE,&hKey) == ERROR_SUCCESS)
+		memset(datadir,' ',4095);
+		datadir[4095] = 0;
+
+		if(hllapi_get_datadir(datadir))
 		{
-			unsigned long	datalen	= sizeof(datadir);	// data field length(in), data returned length(out)
-			unsigned long	datatype;					// #defined in winnt.h (predefined types 0-11)
-			if(RegQueryValueExA(hKey,"datadir",NULL,&datatype,(LPBYTE) datadir,&datalen) == ERROR_SUCCESS)
-			{
-				// Datadir is set, add it to DLL load path
-				wchar_t path[4096];
-				mbstowcs(path, datadir, 4095);
-				trace("Datadir=[%s] AddDllDirectory=%p RemoveDllDirectory=%p\n",datadir,AddDllDirectory,RemoveDllDirectory);
-				if(AddDllDirectory)
-					cookie = AddDllDirectory(path);
-			}
-			RegCloseKey(hKey);
-		}
+			char	buffer[4096];
+			wchar_t	path[4096];
 
-//		hModule = LoadLibraryEx("lib3270.dll.5.0",NULL,LOAD_LIBRARY_SEARCH_DEFAULT_DIRS|LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR);
-		hModule = LoadLibrary(dllname);
-		rc = GetLastError();
+			mbstowcs(path, datadir, 4095);
+			trace("Datadir=[%s] AddDllDirectory=%p RemoveDllDirectory=%p\n",datadir,AddDllDirectory,RemoveDllDirectory);
+			if(AddDllDirectory)
+				cookie = AddDllDirectory(path);
 
-		SetErrorMode(errorMode);
-
-		trace("%s hModule=%p rc=%d",dllname,hModule,(int) rc);
-
-		if(rc == ERROR_MOD_NOT_FOUND && *datadir)
-		{
-			char buffer[4096];
 #ifdef DEBUG
 			snprintf(buffer,4096,"%s\\.bin\\Debug\\%s",datadir,dllname);
 #else
@@ -174,8 +162,26 @@
 #endif // DEBUG
 
 			hModule = LoadLibrary(buffer);
+
+			trace("%s hModule=%p rc=%d",buffer,hModule,(int) GetLastError());
+
+			if(hModule == NULL)
+				hModule = LoadLibraryEx(buffer,NULL,LOAD_LIBRARY_SEARCH_DEFAULT_DIRS|LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR);
+
+			rc = GetLastError();
+
 			trace("%s hModule=%p rc=%d",buffer,hModule,(int) rc);
 		}
+		else
+		{
+			hModule = LoadLibrary(dllname);
+			rc = GetLastError();
+		}
+//		hModule = LoadLibraryEx("lib3270.dll.5.0",NULL,LOAD_LIBRARY_SEARCH_DEFAULT_DIRS|LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR);
+
+		SetErrorMode(errorMode);
+
+		trace("%s hModule=%p rc=%d",dllname,hModule,(int) rc);
 
 		if(cookie && RemoveDllDirectory)
 			RemoveDllDirectory(cookie);
@@ -355,3 +361,22 @@
 
 	return (DWORD) pakey(hSession,key);
  }
+
+ __declspec (dllexport) DWORD __stdcall hllapi_get_datadir(LPSTR datadir)
+ {
+	HKEY 			hKey	= 0;
+ 	unsigned long	datalen = strlen(datadir);
+
+	*datadir = 0;
+
+	if(RegOpenKeyEx(HKEY_LOCAL_MACHINE,"Software\\pw3270",0,KEY_QUERY_VALUE,&hKey) == ERROR_SUCCESS)
+	{
+		unsigned long datatype;					// #defined in winnt.h (predefined types 0-11)
+		if(RegQueryValueExA(hKey,"datadir",NULL,&datatype,(LPBYTE) datadir,&datalen) != ERROR_SUCCESS)
+			*datadir = 0;
+		RegCloseKey(hKey);
+	}
+
+	return *datadir;
+ }
+

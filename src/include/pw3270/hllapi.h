@@ -85,6 +85,7 @@ extern "C" {
 	__declspec (dllexport) DWORD __stdcall hllapi_deinit(void);
 
 	__declspec (dllexport) DWORD __stdcall hllapi_get_revision(void);
+	__declspec (dllexport) DWORD __stdcall hllapi_get_datadir(LPSTR datadir);
 
 	__declspec (dllexport) DWORD __stdcall hllapi_connect(LPSTR uri, WORD wait);
 	__declspec (dllexport) DWORD __stdcall hllapi_disconnect(void);
