@@ -250,3 +250,5 @@ void pw3270::session::sleep(int seconds)
 	salhelper::TTimeValue t = salhelper::TTimeValue(seconds,0);
 	osl_waitThread(&t);
 }
+
+

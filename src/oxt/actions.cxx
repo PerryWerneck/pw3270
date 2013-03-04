@@ -54,19 +54,19 @@
 	return hSession->cmp_text_at((int) row, (int) col, rtl::OUStringToOString(text,hSession->get_encoding()).getStr());
 }
 
-::sal_Bool SAL_CALL isReady(  ) throw (::com::sun::star::uno::RuntimeException)
+::sal_Bool SAL_CALL pw3270::uno_impl::isReady(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-	if(!isConnected())
-		return FALSE;
+	if(!hSession->in_tn3270e())
+		return false;
 
-	if(hSession->get_state() == )
-		return TRUE;
+	if(hSession->get_state() == LIB3270_MESSAGE_NONE)
+		return true;
 
-	return FALSE;
+	return false;
 }
 
-::sal_Bool SAL_CALL isConnected(  ) throw (::com::sun::star::uno::RuntimeException)
+::sal_Bool SAL_CALL pw3270::uno_impl::isConnected(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-
+	return hSession->in_tn3270e() != 0;
 }
 

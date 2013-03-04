@@ -57,12 +57,13 @@
 		{ (void **) & _enter,				"lib3270_enter"					},
 		{ (void **) & _pfkey,				"lib3270_pfkey"					},
 		{ (void **) & _pakey,				"lib3270_pakey"					},
+		{ (void **) & _in_tn3270e,			"lib3270_in_tn3270e"			},
 		{ (void **) & _get_program_message,	"lib3270_get_program_message"	},
 		{ (void **) & _mem_free,			"lib3270_free"					}
 
 	};
 
- 	void * (*lib3270_new)(const char *);
+ 	H3270 * (*lib3270_new)(const char *);
 
 	hThread  = NULL;
 	hSession = NULL;
@@ -76,7 +77,7 @@
 		*call[f].entry = (void *) osl_getAsciiFunctionSymbol(hModule,call[f].name);
 
 	/* Get lib3270 session handle */
-	lib3270_new = (void * (*)(const char *)) osl_getAsciiFunctionSymbol(hModule,"lib3270_session_new");
+	lib3270_new = (H3270 * (*)(const char *)) osl_getAsciiFunctionSymbol(hModule,"lib3270_session_new");
 	hSession = lib3270_new("");
 
  }
@@ -210,10 +211,10 @@
 	return _pakey(hSession,key);
  }
 
- int pw3270::lib3270_session::get_state(void)
+ LIB3270_MESSAGE pw3270::lib3270_session::get_state(void)
  {
 	if(!hSession)
-		return -1;
+		return LIB3270_MESSAGE_DISCONNECTED;
 	return _get_program_message(hSession);
  }
 
@@ -241,4 +242,11 @@
 	if(!hSession)
 		return EINVAL;
 	return _cmp_text_at(hSession,row,col,text);
+ }
+
+ bool pw3270::lib3270_session::in_tn3270e(void)
+ {
+	if(!hSession)
+		return false;
+	return _in_tn3270e(hSession) != 0;
  }

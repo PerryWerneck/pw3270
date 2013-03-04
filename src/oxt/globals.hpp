@@ -65,12 +65,12 @@
 				virtual int					enter(void)										= 0;
 				virtual int					pfkey(int key)									= 0;
 				virtual int					pakey(int key)									= 0;
-
+				virtual bool 				in_tn3270e()									= 0;
 				virtual void				mem_free(void *)								= 0;
 
 				void						sleep(int seconds = 1);
 
-				rtl_TextEncoding get_encoding();
+				rtl_TextEncoding			get_encoding();
 
 		};
 
@@ -86,6 +86,7 @@
 				virtual int					connect(const char *uri);
 				virtual int					disconnect(void);
 				virtual bool				connected(void);
+				virtual bool 				in_tn3270e(void);
 
 				virtual int					enter(void);
 				virtual int					pfkey(int key);
@@ -110,6 +111,7 @@
 				/* lib3270 entry points */
 				const char		* (* _get_revision)(void);
 				LIB3270_MESSAGE	  (* _get_program_message)(H3270 *);
+				int				  (* _in_tn3270e)(H3270 *);
 				char 			* (* _get_text_at)(H3270 *,int,int,int);
 				int				  (* _set_text_at)(H3270 *,int,int,const unsigned char *);
 				int 			  (* _cmp_text_at)(H3270 *,int,int,const char *);
@@ -147,6 +149,8 @@
 				virtual ::sal_Int16 SAL_CALL pfkey( ::sal_Int16 keycode ) throw (::com::sun::star::uno::RuntimeException);
 				virtual ::sal_Int16 SAL_CALL pakey( ::sal_Int16 keycode ) throw (::com::sun::star::uno::RuntimeException);
 				virtual ::sal_Int16 SAL_CALL cmpTextAt( ::sal_Int16 row, ::sal_Int16 col, const ::rtl::OUString& text ) throw (::com::sun::star::uno::RuntimeException);
+				virtual ::sal_Bool SAL_CALL isReady(  ) throw (::com::sun::star::uno::RuntimeException);
+				virtual ::sal_Bool SAL_CALL isConnected(  ) throw (::com::sun::star::uno::RuntimeException);
 
 			private:
 
