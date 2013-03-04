@@ -70,3 +70,11 @@
 	return hSession->in_tn3270e() != 0;
 }
 
+::sal_Bool SAL_CALL pw3270::uno_impl::hasTextAt( ::sal_Int16 row, ::sal_Int16 col, const ::rtl::OUString& text ) throw (::com::sun::star::uno::RuntimeException)
+{
+	if(!hSession->in_tn3270e())
+		return false;
+
+	return cmpTextAt(row,col,text) == 0;
+}
+

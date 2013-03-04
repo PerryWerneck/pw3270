@@ -77,8 +77,8 @@ module br
 				short	getRevision();
 				short	sleep([in] short seconds);
 				boolean isReady();
-//				boolean hasTextAt([in] short row, [in] short col, [in] string text);
-//				short	waitForReady([in] short seconds);
+				boolean hasTextAt([in] short row, [in] short col, [in] string text);
+				short	waitForReady([in] short seconds);
 //				short	waitForTextAt(in] short row, [in] short col, [in] string text, [in] short seconds);
 				boolean	isConnected();
 
