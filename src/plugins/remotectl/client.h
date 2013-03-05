@@ -54,4 +54,7 @@
  int 				  hllapi_pipe_wait_for_ready(void *h, int seconds);
  int 				  hllapi_pipe_sleep(void *h, int seconds);
  int 				  hllapi_pipe_is_connected(void *h);
+ int				  hllapi_pipe_getcursor(void *h);
+ int				  hllapi_pipe_setcursor(void *h, int baddr);
+
 

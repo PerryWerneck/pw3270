@@ -281,3 +281,22 @@
 
 	return 0;
  }
+
+ int hllapi_pipe_getcursor(void *h)
+ {
+	static const struct hllapi_packet_query query		= { HLLAPI_PACKET_GET_CURSOR };
+	struct hllapi_packet_result		  		response;
+	DWORD							  		cbSize		= sizeof(query);
+	TransactNamedPipe((HANDLE) h,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
+	return (LIB3270_MESSAGE) response.rc;
+
+ }
+
+ int hllapi_pipe_setcursor(void *h, int baddr)
+ {
+	struct hllapi_packet_addr		query		= { HLLAPI_PACKET_SET_CURSOR, baddr };
+	struct hllapi_packet_result		response;
+	DWORD							cbSize		= sizeof(query);
+	TransactNamedPipe((HANDLE) h,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
+	return response.rc;
+ }

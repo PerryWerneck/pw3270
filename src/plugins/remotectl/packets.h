@@ -27,6 +27,28 @@
  *
  */
 
+ typedef enum _hllapi_packet
+ {
+		HLLAPI_PACKET_CONNECT,
+		HLLAPI_PACKET_DISCONNECT,
+		HLLAPI_PACKET_GET_PROGRAM_MESSAGE,
+		HLLAPI_PACKET_GET_TEXT_AT,
+		HLLAPI_PACKET_SET_TEXT_AT,
+		HLLAPI_PACKET_CMP_TEXT_AT,
+		HLLAPI_PACKET_ENTER,
+		HLLAPI_PACKET_PFKEY,
+		HLLAPI_PACKET_PAKEY,
+		HLLAPI_PACKET_SET_CURSOR_POSITION,
+		HLLAPI_PACKET_GET_CURSOR_POSITION,
+		HLLAPI_PACKET_INPUT_STRING,
+		HLLAPI_PACKET_IS_CONNECTED,
+		HLLAPI_PACKET_SET_CURSOR,
+		HLLAPI_PACKET_GET_CURSOR,
+
+		HLLAPI_PACKET_INVALID
+
+ } HLLAPI_PACKET;
+
 #pragma pack(1)
 
 struct hllapi_packet_result
@@ -93,6 +115,12 @@ struct hllapi_packet_wait
 {
 	int				packet_id;
 	int				timeout;
+};
+
+struct hllapi_packet_addr
+{
+	int				packet_id;
+	int				addr;
 };
 
 

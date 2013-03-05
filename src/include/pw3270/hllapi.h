@@ -63,29 +63,6 @@ extern "C" {
  #define HLLAPI_STATUS_UNAVAILABLE			  11	/**< Resource unavailable at this time */
 
 
-
- typedef enum _hllapi_packet
- {
-		HLLAPI_PACKET_CONNECT,
-		HLLAPI_PACKET_DISCONNECT,
-		HLLAPI_PACKET_GET_PROGRAM_MESSAGE,
-		HLLAPI_PACKET_GET_TEXT_AT,
-		HLLAPI_PACKET_SET_TEXT_AT,
-		HLLAPI_PACKET_CMP_TEXT_AT,
-		HLLAPI_PACKET_ENTER,
-		HLLAPI_PACKET_PFKEY,
-		HLLAPI_PACKET_PAKEY,
-		HLLAPI_PACKET_SET_CURSOR_POSITION,
-		HLLAPI_PACKET_GET_CURSOR_POSITION,
-		HLLAPI_PACKET_INPUT_STRING,
-		HLLAPI_PACKET_IS_CONNECTED,
-
-		HLLAPI_PACKET_INVALID
-
- } HLLAPI_PACKET;
-
-
-
 #ifdef _WIN32
 	// http://www.mingw.org/wiki/Visual_Basic_DLL
 	__declspec (dllexport) int __stdcall hllapi(const LPWORD func, LPSTR str, LPWORD length, LPWORD rc);
@@ -108,6 +85,8 @@ extern "C" {
 	__declspec (dllexport) DWORD __stdcall hllapi_wait(WORD seconds);
 	__declspec (dllexport) DWORD __stdcall hllapi_pfkey(WORD key);
 	__declspec (dllexport) DWORD __stdcall hllapi_pakey(WORD key);
+	__declspec (dllexport) DWORD __stdcall hllapi_setcursor(WORD key);
+	__declspec (dllexport) DWORD __stdcall hllapi_getcursor();
 
 #else
 

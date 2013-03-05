@@ -235,6 +235,16 @@
 												(unsigned char *) ((struct hllapi_packet_text *) source->buffer)->text));
 		break;
 
+	case HLLAPI_PACKET_SET_CURSOR:
+		send_result(source,lib3270_set_cursor_address(lib3270_get_default_session_handle(),
+												((struct hllapi_packet_addr *) source->buffer)->addr));
+		break;
+
+	case HLLAPI_PACKET_GET_CURSOR:
+		send_result(source,lib3270_get_cursor_address(lib3270_get_default_session_handle()));
+		break;
+
+
 	default:
 		send_result(source, EINVAL);
 		g_message("Invalid remote request (id=%d)",source->buffer[0]);

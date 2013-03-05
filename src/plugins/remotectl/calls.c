@@ -61,6 +61,8 @@
  static int 			  (*cmp_text_at)(void *h, int row, int col, const char *text)				= NULL;
  static int				  (*pfkey)(void *hSession, int key)											= NULL;
  static int				  (*pakey)(void *hSession, int key)											= NULL;
+ static int 			  (*getcursor)(void *hSession)												= NULL;
+ static int 			  (*setcursor)(void *hSession, int baddr)									= NULL;
 
  static const struct _entry_point
  {
@@ -85,6 +87,8 @@
 	{ (void **) &cmp_text_at,		(void *) hllapi_pipe_cmp_text_at, 		"lib3270_cmp_text_at"			},
 	{ (void **) &pfkey,				(void *) hllapi_pipe_pfkey, 			"lib3270_pfkey"					},
 	{ (void **) &pakey,				(void *) hllapi_pipe_pakey, 			"lib3270_pakey"					},
+	{ (void **) &setcursor,			(void *) hllapi_pipe_setcursor,			"lib3270_set_cursor_address"	},
+	{ (void **) &getcursor,			(void *) hllapi_pipe_getcursor,			"lib3270_get_cursor_address"	},
 
 	{ NULL, NULL }
  };
@@ -182,7 +186,6 @@
 			hModule = LoadLibrary(dllname);
 			rc = GetLastError();
 		}
-//		hModule = LoadLibraryEx("lib3270.dll.5.0",NULL,LOAD_LIBRARY_SEARCH_DEFAULT_DIRS|LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR);
 
 		SetErrorMode(errorMode);
 
@@ -385,3 +388,16 @@
 	return *datadir;
  }
 
+ __declspec (dllexport) DWORD __stdcall hllapi_setcursor(WORD pos)
+ {
+	if(!(setcursor && hSession))
+		return EINVAL;
+	return setcursor(hSession,pos+1);
+ }
+
+ __declspec (dllexport) DWORD __stdcall hllapi_getcursor()
+ {
+	if(!(getcursor && hSession))
+		return -EINVAL;
+	return getcursor(hSession)-1;
+ }

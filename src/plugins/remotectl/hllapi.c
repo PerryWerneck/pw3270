@@ -41,6 +41,9 @@
  static int disconnect_ps(char *buffer, unsigned short *length, unsigned short *rc);
  static int get_library_revision(char *buffer, unsigned short *length, unsigned short *rc);
 
+ static int get_cursor_position(char *buffer, unsigned short *length, unsigned short *rc);
+ static int set_cursor_position(char *buffer, unsigned short *length, unsigned short *rc);
+
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
  static const struct _hllapi_call
@@ -52,6 +55,8 @@
 	{ HLLAPI_CMD_CONNECTPS,			connect_ps				},
 	{ HLLAPI_CMD_DISCONNECTPS,		disconnect_ps			},
 	{ HLLAPI_CMD_GETREVISION,		get_library_revision	},
+	{ HLLAPI_CMD_QUERYCURSOR,		get_cursor_position		},
+	{ HLLAPI_CMD_SETCURSOR,			set_cursor_position		},
  };
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
@@ -93,6 +98,18 @@ static int disconnect_ps(char *buffer, unsigned short *length, unsigned short *r
 static int get_library_revision(char *buffer, unsigned short *length, unsigned short *rc)
 {
 	*rc = hllapi_get_revision();
+	return 0;
+}
+
+static int get_cursor_position(char *buffer, unsigned short *length, unsigned short *rc)
+{
+	*rc = hllapi_getcursor()-1;
+	return 0;
+}
+
+static int set_cursor_position(char *buffer, unsigned short *length, unsigned short *rc)
+{
+	*rc = hllapi_setcursor(*rc+1);
 	return 0;
 }
 
