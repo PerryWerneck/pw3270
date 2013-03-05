@@ -140,7 +140,8 @@
 		RemoveDllDirectory	= (BOOL (*)(HANDLE)) GetProcAddress(kernel,"RemoveDllDirectory");
 
 		// Notify user in case of error loading protocol DLL
-		errorMode = SetErrorMode(0);
+		// http://msdn.microsoft.com/en-us/library/windows/desktop/ms680621(v=vs.85).aspx
+		errorMode = SetErrorMode(1);
 
 		memset(datadir,' ',4095);
 		datadir[4095] = 0;
@@ -166,7 +167,11 @@
 			trace("%s hModule=%p rc=%d",buffer,hModule,(int) GetLastError());
 
 			if(hModule == NULL)
+			{
+				// Enable DLL error popup and try again with full path
+				SetErrorMode(0)
 				hModule = LoadLibraryEx(buffer,NULL,LOAD_LIBRARY_SEARCH_DEFAULT_DIRS|LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR);
+			}
 
 			rc = GetLastError();
 
