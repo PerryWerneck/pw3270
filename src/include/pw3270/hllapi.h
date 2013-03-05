@@ -38,8 +38,9 @@
 extern "C" {
 #endif
 
- #define HLLAPI_MAXLENGTH				4096
+ #define HLLAPI_MAXLENGTH					4096
 
+ /* Function codes */
  #define HLLAPI_CMD_CONNECTPS				   1	/**< connect presentation space							*/
  #define HLLAPI_CMD_DISCONNECTPS			   2	/**< disconnect presentation space        				*/
  #define HLLAPI_CMD_INPUTSTRING				   3	/**< send string										*/
@@ -54,6 +55,14 @@ extern "C" {
  #define HLLAPI_CMD_RECEIVEFILE				  91	/**< Receive a file from the host */
 
  #define HLLAPI_CMD_GETREVISION				2000	/**< Get lib3270 revision								*/
+
+
+ /* Result codes */
+ #define HLLAPI_STATUS_SUCESS				   0	/**< Good return code */
+ #define HLLAPI_STATUS_BAD_PARAMETER		   2	/**< Bad parameter or verb not supported */
+ #define HLLAPI_STATUS_UNAVAILABLE			  11	/**< Resource unavailable at this time */
+
+
 
  typedef enum _hllapi_packet
  {

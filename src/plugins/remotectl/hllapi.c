@@ -35,9 +35,24 @@
  #include <stdio.h>
  #include <lib3270/log.h>
 
+/*--[ Prototipes ]-----------------------------------------------------------------------------------*/
+
+ static int connect_ps(char *buffer, unsigned short *length, unsigned short *rc);
+ static int disconnect_ps(char *buffer, unsigned short *length, unsigned short *rc);
+ static int get_library_revision(char *buffer, unsigned short *length, unsigned short *rc);
+
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
-// static HANDLE	hPipe = INVALID_HANDLE_VALUE;
+ static const struct _hllapi_call
+ {
+	unsigned long func;
+	int (*exec)(char *buffer, unsigned short *length, unsigned short *rc);
+ } hllapi_call[] =
+ {
+	{ HLLAPI_CMD_CONNECTPS,			connect_ps				},
+	{ HLLAPI_CMD_DISCONNECTPS,		disconnect_ps			},
+	{ HLLAPI_CMD_GETREVISION,		get_library_revision	},
+ };
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
@@ -47,55 +62,40 @@
  LIB3270_EXPORT int hllapi(const unsigned long *func, char *buffer, unsigned short *length, unsigned short *rc)
 #endif // _WIN32
 {
-	switch(*func)
+	int f;
+
+	for(f=0;f< (sizeof (hllapi_call) / sizeof ((hllapi_call)[0])));f++)
 	{
-	case HLLAPI_CMD_CONNECTPS:
-		break;
-
-	case HLLAPI_CMD_DISCONNECTPS:
-		break;
-
-	case HLLAPI_CMD_INPUTSTRING:
-		break;
-
-	case HLLAPI_CMD_WAIT:
-		break;
-
-	case HLLAPI_CMD_COPYPS:
-		break;
-
-	case HLLAPI_CMD_SEARCHPS:
-		break;
-
-	case HLLAPI_CMD_QUERYCURSOR:
-		break;
-
-	case HLLAPI_CMD_COPYPSTOSTR:
-		break;
-
-	case HLLAPI_CMD_COPYSTRTOPS:
-		break;
-
-	case HLLAPI_CMD_SETCURSOR:
-		break;
-
-	case HLLAPI_CMD_SENDFILE:
-		break;
-
-	case HLLAPI_CMD_RECEIVEFILE:
-		break;
-
-	case HLLAPI_CMD_GETREVISION:
-		break;
-
-	default:
-		*rc = EINVAL;
-		return EINVAL;
+		if(hllapi_call[f].func == *func)
+			return hllapi_call[f].exec(buffer,length,rc);
 	}
 
+	*rc = HLLAPI_STATUS_BAD_PARAMETER;
 
+	return *rc;
+}
+
+static int connect_ps(char *buffer, unsigned short *length, unsigned short *rc)
+{
+	if(hllapi_init(buffer) == 0)
+		*rc = HLLAPI_STATUS_SUCESS;
+	else
+		*rc = HLLAPI_STATUS_UNAVAILABLE;
 	return 0;
 }
+
+static int disconnect_ps(char *buffer, unsigned short *length, unsigned short *rc)
+{
+	*rc = hllapi_deinit();
+	return 0;
+}
+
+static int get_library_revision(char *buffer, unsigned short *length, unsigned short *rc)
+{
+	*rc = hllapi_get_revision();
+	return 0;
+}
+
 
 /*
  static int cmd_connect_ps(const char *name)
