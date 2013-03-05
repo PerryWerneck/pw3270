@@ -167,9 +167,9 @@
  static void process_input(pipe_source *source, DWORD cbRead)
  {
 
- 	trace("%s id=%d",__FUNCTION__,source->buffer[0]);
+ 	trace("%s id=%d",__FUNCTION__,((struct hllapi_packet_query *) source->buffer)->packet_id);
 
-	switch(source->buffer[0])
+	switch(((struct hllapi_packet_query *) source->buffer)->packet_id)
 	{
 	case HLLAPI_PACKET_CONNECT:
 		send_result(source,lib3270_connect(	lib3270_get_default_session_handle(),

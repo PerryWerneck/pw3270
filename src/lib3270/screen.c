@@ -389,6 +389,8 @@ LIB3270_EXPORT int lib3270_set_cursor_address(H3270 *h, int baddr)
 {
     CHECK_SESSION_HANDLE(h);
 
+	trace("%s(%d)",__FUNCTION__,baddr);
+
 	if(h->selected && !lib3270_get_toggle(h,LIB3270_TOGGLE_KEEP_SELECTED))
 		lib3270_unselect(h);
 

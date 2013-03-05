@@ -287,6 +287,9 @@
 	static const struct hllapi_packet_query query		= { HLLAPI_PACKET_GET_CURSOR };
 	struct hllapi_packet_result		  		response;
 	DWORD							  		cbSize		= sizeof(query);
+
+	trace("%s",__FUNCTION__);
+
 	TransactNamedPipe((HANDLE) h,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
 	return (LIB3270_MESSAGE) response.rc;
 
@@ -297,6 +300,9 @@
 	struct hllapi_packet_addr		query		= { HLLAPI_PACKET_SET_CURSOR, baddr };
 	struct hllapi_packet_result		response;
 	DWORD							cbSize		= sizeof(query);
+
+	trace("%s(%d)",__FUNCTION__,query.addr);
+
 	TransactNamedPipe((HANDLE) h,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
 	return response.rc;
  }

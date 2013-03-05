@@ -392,12 +392,13 @@
  {
 	if(!(setcursor && hSession))
 		return EINVAL;
-	return setcursor(hSession,pos+1);
+	trace("%s(%d)",__FUNCTION__,pos);
+	return setcursor(hSession,pos-1);
  }
 
  __declspec (dllexport) DWORD __stdcall hllapi_getcursor()
  {
 	if(!(getcursor && hSession))
 		return -EINVAL;
-	return getcursor(hSession)-1;
+	return getcursor(hSession);
  }

@@ -35,6 +35,9 @@
  #include <stdio.h>
  #include <lib3270/log.h>
 
+ #undef trace
+ #define trace( fmt, ... )	{ FILE *out = fopen("c:\\Users\\Perry\\hllapi.log","a"); if(out) { fprintf(out, "%s(%d) " fmt "\n", __FILE__, __LINE__, __VA_ARGS__ ); fclose(out); } }
+
 /*--[ Prototipes ]-----------------------------------------------------------------------------------*/
 
  static int connect_ps(char *buffer, unsigned short *length, unsigned short *rc);
@@ -69,6 +72,8 @@
 {
 	int f;
 
+	trace("%s(%d)",__FUNCTION__,*func);
+
 	for(f=0;f< (sizeof (hllapi_call) / sizeof ((hllapi_call)[0]));f++)
 	{
 		if(hllapi_call[f].func == *func)
@@ -82,10 +87,33 @@
 
 static int connect_ps(char *buffer, unsigned short *length, unsigned short *rc)
 {
+	char *tempbuffer = NULL;
+
+	trace("%s: len=%d buflen=%d",__FUNCTION__,*length,strlen(buffer));
+
+	if(strlen(buffer) > *length)
+		buffer[*length] = 0;
+
+	if(!strrchr(buffer,':'))
+	{
+		int sz = strlen(buffer);
+
+		tempbuffer = malloc(sz+2);
+		strcpy(tempbuffer,buffer);
+		tempbuffer[sz-1] = ':';
+		tempbuffer[sz]   = buffer[sz-1];
+		tempbuffer[sz+1] = 0;
+		buffer = tempbuffer;
+	}
+
 	if(hllapi_init(buffer) == 0)
 		*rc = HLLAPI_STATUS_SUCESS;
 	else
 		*rc = HLLAPI_STATUS_UNAVAILABLE;
+
+	if(tempbuffer)
+		free(tempbuffer);
+
 	return 0;
 }
 
@@ -103,13 +131,21 @@ static int get_library_revision(char *buffer, unsigned short *length, unsigned s
 
 static int get_cursor_position(char *buffer, unsigned short *length, unsigned short *rc)
 {
-	*rc = hllapi_getcursor()-1;
+	int pos = hllapi_getcursor();
+
+	trace("%s(%d)",__FUNCTION__,pos);
+
+	if(pos < 0)
+		return -1;
+
+	*rc = pos;
 	return 0;
 }
 
 static int set_cursor_position(char *buffer, unsigned short *length, unsigned short *rc)
 {
-	*rc = hllapi_setcursor(*rc+1);
+	trace("%s(%d)",__FUNCTION__,*rc);
+	*rc = hllapi_setcursor(*rc);
 	return 0;
 }
 

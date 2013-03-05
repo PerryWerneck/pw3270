@@ -58,38 +58,38 @@ struct hllapi_packet_result
 
 struct hllapi_packet_query
 {
-	int				packet_id;
+	unsigned char	packet_id;
 };
 
 struct hllapi_packet_connect
 {
-	int				packet_id;
+	unsigned char	packet_id;
 	unsigned char	wait;
 	char			hostname[1];
 };
 
 struct hllapi_packet_keycode
 {
-	int				packet_id;
+	unsigned char	packet_id;
 	unsigned short	keycode;
 };
 
 struct hllapi_packet_cursor
 {
-	int				packet_id;
+	unsigned char	packet_id;
 	unsigned short	row;
 	unsigned short	col;
 };
 
 struct hllapi_packet_text
 {
-	int				packet_id;
+	unsigned char	packet_id;
 	char 			text[1];
 };
 
 struct hllapi_packet_at
 {
-	int				packet_id;
+	unsigned char	packet_id;
 	unsigned short	row;
 	unsigned short	col;
 	unsigned short	len;
@@ -97,7 +97,7 @@ struct hllapi_packet_at
 
 struct hllapi_packet_text_at
 {
-	int				packet_id;
+	unsigned char	packet_id;
 	unsigned short	row;
 	unsigned short	col;
 	char 			text[1];
@@ -105,7 +105,7 @@ struct hllapi_packet_text_at
 
 struct hllapi_packet_query_at
 {
-	int				packet_id;
+	unsigned char	packet_id;
 	unsigned short	row;
 	unsigned short	col;
 	unsigned short	len;
@@ -113,14 +113,14 @@ struct hllapi_packet_query_at
 
 struct hllapi_packet_wait
 {
-	int				packet_id;
+	unsigned char	packet_id;
 	int				timeout;
 };
 
 struct hllapi_packet_addr
 {
-	int				packet_id;
-	int				addr;
+	unsigned char	packet_id;
+	unsigned short	addr;
 };
 
 
