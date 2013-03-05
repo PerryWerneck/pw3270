@@ -400,5 +400,5 @@
  {
 	if(!(getcursor && hSession))
 		return -EINVAL;
-	return getcursor(hSession);
+	return getcursor(hSession)+1;
  }
