@@ -169,7 +169,7 @@
 			if(hModule == NULL)
 			{
 				// Enable DLL error popup and try again with full path
-				SetErrorMode(0)
+				SetErrorMode(0);
 				hModule = LoadLibraryEx(buffer,NULL,LOAD_LIBRARY_SEARCH_DEFAULT_DIRS|LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR);
 			}
 

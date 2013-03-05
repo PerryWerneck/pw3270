@@ -64,7 +64,7 @@
 {
 	int f;
 
-	for(f=0;f< (sizeof (hllapi_call) / sizeof ((hllapi_call)[0])));f++)
+	for(f=0;f< (sizeof (hllapi_call) / sizeof ((hllapi_call)[0]));f++)
 	{
 		if(hllapi_call[f].func == *func)
 			return hllapi_call[f].exec(buffer,length,rc);
