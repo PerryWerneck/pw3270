@@ -55,6 +55,8 @@
  static int 			  (*script_sleep)(void *h, int seconds)										= NULL;
  static LIB3270_MESSAGE	  (*get_message)(void *h)													= NULL;
  static char 			* (*get_text)(void *h, int row, int col, int len)							= NULL;
+ static char 			* (*get_text_at_offset)(void *h, int offset, int len)						= NULL;
+
  static void  			* (*release_memory)(void *p)												= NULL;
  static int  			  (*action_enter)(void *h)													= NULL;
  static int 			  (*set_text_at)(void *h, int row, int col, const unsigned char *str)		= NULL;
@@ -71,25 +73,25 @@
 	const char	* name;
  } entry_point[] =
  {
-	{ (void **) &session_new,		(void *) hllapi_pipe_init,				"lib3270_session_new" 			},
-	{ (void **) &session_free,		(void *) hllapi_pipe_deinit,			"lib3270_session_free"			},
-	{ (void **) &get_revision,		(void *) hllapi_pipe_get_revision,		"lib3270_get_revision"			},
-	{ (void **) &host_connect,		(void *) hllapi_pipe_connect, 			"lib3270_connect"				},
-	{ (void **) &host_disconnect,	(void *) hllapi_pipe_disconnect, 		"lib3270_disconnect"			},
-	{ (void **) &host_is_connected,	(void *) hllapi_pipe_is_connected, 		"lib3270_in_tn3270e"			},
-	{ (void **) &wait_for_ready,	(void *) hllapi_pipe_wait_for_ready, 	"lib3270_wait_for_ready"		},
-	{ (void **) &script_sleep,		(void *) hllapi_pipe_sleep, 			"lib3270_wait"					},
-	{ (void **) &get_message,		(void *) hllapi_pipe_get_message, 		"lib3270_get_program_message"	},
-	{ (void **) &get_text,			(void *) hllapi_pipe_get_text_at, 		"lib3270_get_text_at"			},
-	{ (void **) &release_memory,	(void *) hllapi_pipe_release_memory,	"lib3270_free"					},
-	{ (void **) &action_enter,		(void *) hllapi_pipe_enter, 			"lib3270_enter"					},
-	{ (void **) &set_text_at,		(void *) hllapi_pipe_set_text_at, 		"lib3270_set_string_at"			},
-	{ (void **) &cmp_text_at,		(void *) hllapi_pipe_cmp_text_at, 		"lib3270_cmp_text_at"			},
-	{ (void **) &pfkey,				(void *) hllapi_pipe_pfkey, 			"lib3270_pfkey"					},
-	{ (void **) &pakey,				(void *) hllapi_pipe_pakey, 			"lib3270_pakey"					},
-	{ (void **) &setcursor,			(void *) hllapi_pipe_setcursor,			"lib3270_set_cursor_address"	},
-	{ (void **) &getcursor,			(void *) hllapi_pipe_getcursor,			"lib3270_get_cursor_address"	},
-
+	{ (void **) &session_new,			(void *) hllapi_pipe_init,				"lib3270_session_new" 			},
+	{ (void **) &session_free,			(void *) hllapi_pipe_deinit,			"lib3270_session_free"			},
+	{ (void **) &get_revision,			(void *) hllapi_pipe_get_revision,		"lib3270_get_revision"			},
+	{ (void **) &host_connect,			(void *) hllapi_pipe_connect, 			"lib3270_connect"				},
+	{ (void **) &host_disconnect,		(void *) hllapi_pipe_disconnect, 		"lib3270_disconnect"			},
+	{ (void **) &host_is_connected,		(void *) hllapi_pipe_is_connected, 		"lib3270_in_tn3270e"			},
+	{ (void **) &wait_for_ready,		(void *) hllapi_pipe_wait_for_ready, 	"lib3270_wait_for_ready"		},
+	{ (void **) &script_sleep,			(void *) hllapi_pipe_sleep, 			"lib3270_wait"					},
+	{ (void **) &get_message,			(void *) hllapi_pipe_get_message, 		"lib3270_get_program_message"	},
+	{ (void **) &get_text,				(void *) hllapi_pipe_get_text_at, 		"lib3270_get_text_at"			},
+	{ (void **) &release_memory,		(void *) hllapi_pipe_release_memory,	"lib3270_free"					},
+	{ (void **) &action_enter,			(void *) hllapi_pipe_enter, 			"lib3270_enter"					},
+	{ (void **) &set_text_at,			(void *) hllapi_pipe_set_text_at, 		"lib3270_set_string_at"			},
+	{ (void **) &cmp_text_at,			(void *) hllapi_pipe_cmp_text_at, 		"lib3270_cmp_text_at"			},
+	{ (void **) &pfkey,					(void *) hllapi_pipe_pfkey, 			"lib3270_pfkey"					},
+	{ (void **) &pakey,					(void *) hllapi_pipe_pakey, 			"lib3270_pakey"					},
+	{ (void **) &setcursor,				(void *) hllapi_pipe_setcursor,			"lib3270_set_cursor_address"	},
+	{ (void **) &getcursor,				(void *) hllapi_pipe_getcursor,			"lib3270_get_cursor_address"	},
+	{ (void **) &get_text_at_offset, 	(void *) hllapi_pipe_get_text,			"lib3270_get_text"				},
 	{ NULL, NULL }
  };
 
@@ -401,4 +403,34 @@
 	if(!(getcursor && hSession))
 		return -EINVAL;
 	return getcursor(hSession)+1;
+ }
+
+ __declspec (dllexport) DWORD __stdcall hllapi_get_screen(WORD pos, LPSTR buffer, WORD len)
+ {
+ 	char *text;
+
+	trace("%s(%d,%d)",__FUNCTION__,pos,len);
+
+	if(len < 0)
+		len = strlen(buffer);
+
+ 	if(!(get_text_at_offset && hSession))
+		return EINVAL;
+
+ 	if(len > strlen(buffer))
+		len = strlen(buffer);
+
+	trace("len=%d",len);
+	text = get_text_at_offset(hSession,pos-1,len);
+
+	trace("text=\n%s\n",text);
+
+	if(!text)
+		return -1;
+
+	memcpy(buffer,text,len);
+
+	release_memory(text);
+
+	return 0;
  }

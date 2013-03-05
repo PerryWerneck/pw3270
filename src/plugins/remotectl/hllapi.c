@@ -43,6 +43,7 @@
  static int connect_ps(char *buffer, unsigned short *length, unsigned short *rc);
  static int disconnect_ps(char *buffer, unsigned short *length, unsigned short *rc);
  static int get_library_revision(char *buffer, unsigned short *length, unsigned short *rc);
+ static int copy_ps_to_str(char *buffer, unsigned short *length, unsigned short *rc);
 
  static int get_cursor_position(char *buffer, unsigned short *length, unsigned short *rc);
  static int set_cursor_position(char *buffer, unsigned short *length, unsigned short *rc);
@@ -60,6 +61,7 @@
 	{ HLLAPI_CMD_GETREVISION,		get_library_revision	},
 	{ HLLAPI_CMD_QUERYCURSOR,		get_cursor_position		},
 	{ HLLAPI_CMD_SETCURSOR,			set_cursor_position		},
+	{ HLLAPI_CMD_COPYPSTOSTR,		copy_ps_to_str			},
  };
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
@@ -149,6 +151,12 @@ static int set_cursor_position(char *buffer, unsigned short *length, unsigned sh
 	return 0;
 }
 
+static int copy_ps_to_str(char *buffer, unsigned short *length, unsigned short *rc)
+{
+	// Length		Length of the target data string.
+	// PS Position	Position within the host presentation space of the first byte in your target data string.
+	return hllapi_get_screen(*rc,buffer,*length);
+}
 
 /*
  static int cmd_connect_ps(const char *name)

@@ -154,7 +154,9 @@
 		pkt->packet_id = errno ? errno : -1;
 	}
 
-	WriteFile(source->hPipe,&pkt,szBlock,&szBlock,NULL);
+	WriteFile(source->hPipe,pkt,szBlock,&szBlock,NULL);
+
+	g_free(pkt);
  }
 
  static void send_result(pipe_source *source, int rc)
@@ -221,6 +223,12 @@
 											((struct hllapi_packet_at *) source->buffer)->row,
 											((struct hllapi_packet_at *) source->buffer)->col,
 											((struct hllapi_packet_at *) source->buffer)->len));
+		break;
+
+	case HLLAPI_PACKET_GET_TEXT_AT_OFFSET:
+		send_text(source,lib3270_get_text(	lib3270_get_default_session_handle(),
+											((struct hllapi_packet_query_offset *) source->buffer)->addr,
+											((struct hllapi_packet_query_offset *) source->buffer)->len));
 		break;
 
 	case HLLAPI_PACKET_CMP_TEXT_AT:

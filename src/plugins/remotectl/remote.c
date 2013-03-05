@@ -306,3 +306,29 @@
 	TransactNamedPipe((HANDLE) h,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
 	return response.rc;
  }
+
+ char * hllapi_pipe_get_text(void *h, int offset, int len)
+ {
+	struct hllapi_packet_query_offset	  query		= { HLLAPI_PACKET_GET_TEXT_AT_OFFSET, offset, len };
+	struct hllapi_packet_text			* response;
+	DWORD								  cbSize	= sizeof(struct hllapi_packet_text)+len;
+	char 								* text		= NULL;
+
+	trace("cbSize=%d",(int) cbSize);
+
+	response = malloc(cbSize+2);
+	memset(response,0,cbSize+2);
+
+	if(!TransactNamedPipe((HANDLE) h,(LPVOID) &query, sizeof(query), response, cbSize, &cbSize,NULL))
+		return NULL;
+
+	trace("rc=%d",response->packet_id);
+
+	if(response->packet_id)
+		errno = response->packet_id;
+	else
+		text  = strdup(response->text);
+
+	free(response);
+	return text;
+ }

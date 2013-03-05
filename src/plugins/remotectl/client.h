@@ -46,6 +46,7 @@
  void 				  hllapi_pipe_disconnect(void *h);
  LIB3270_MESSAGE	  hllapi_pipe_get_message(void *h);
  char 				* hllapi_pipe_get_text_at(void *h, int row, int col, int len);
+ char 				* hllapi_pipe_get_text(void *h, int offset, int len);
  int  			  	  hllapi_pipe_enter(void *h);
  int 			  	  hllapi_pipe_set_text_at(void *h, int row, int col, const unsigned char *str);
  int 			      hllapi_pipe_cmp_text_at(void *h, int row, int col, const char *text);

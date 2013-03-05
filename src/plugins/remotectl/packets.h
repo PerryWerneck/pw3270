@@ -32,6 +32,7 @@
 		HLLAPI_PACKET_CONNECT,
 		HLLAPI_PACKET_DISCONNECT,
 		HLLAPI_PACKET_GET_PROGRAM_MESSAGE,
+		HLLAPI_PACKET_GET_TEXT_AT_OFFSET,
 		HLLAPI_PACKET_GET_TEXT_AT,
 		HLLAPI_PACKET_SET_TEXT_AT,
 		HLLAPI_PACKET_CMP_TEXT_AT,
@@ -54,6 +55,12 @@
 struct hllapi_packet_result
 {
 	int 			rc;
+};
+
+struct hllapi_packet_text_result
+{
+	int 			rc;
+	char 			text[1];
 };
 
 struct hllapi_packet_query
@@ -122,6 +129,14 @@ struct hllapi_packet_addr
 	unsigned char	packet_id;
 	unsigned short	addr;
 };
+
+struct hllapi_packet_query_offset
+{
+	unsigned char	packet_id;
+	unsigned short	addr;
+	unsigned short	len;
+};
+
 
 
 #pragma pack()
