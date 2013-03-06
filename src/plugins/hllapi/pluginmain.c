@@ -195,6 +195,10 @@
 		send_result(source,lib3270_enter(lib3270_get_default_session_handle()));
 		break;
 
+	case HLLAPI_PACKET_ERASE_EOF:
+		send_result(source,lib3270_eraseeof(lib3270_get_default_session_handle()));
+		break;
+
 	case HLLAPI_PACKET_PFKEY:
 		send_result(source,lib3270_pfkey(	lib3270_get_default_session_handle(),
 											((struct hllapi_packet_keycode *) source->buffer)->keycode));
@@ -241,6 +245,13 @@
 	case HLLAPI_PACKET_INPUT_STRING:
 		send_result(source,lib3270_input_string(lib3270_get_default_session_handle(),
 												(unsigned char *) ((struct hllapi_packet_text *) source->buffer)->text));
+		break;
+
+	case HLLAPI_PACKET_EMULATE_INPUT:
+		send_result(source,lib3270_emulate_input(lib3270_get_default_session_handle(),
+												(const char *) ((struct hllapi_packet_emulate_input *) source->buffer)->text,
+												(int) ((struct hllapi_packet_emulate_input *) source->buffer)->len,
+												(int) ((struct hllapi_packet_emulate_input *) source->buffer)->pasting));
 		break;
 
 	case HLLAPI_PACKET_SET_CURSOR:

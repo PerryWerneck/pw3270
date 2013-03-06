@@ -65,6 +65,8 @@
  static int				  (*pakey)(void *hSession, int key)											= NULL;
  static int 			  (*getcursor)(void *hSession)												= NULL;
  static int 			  (*setcursor)(void *hSession, int baddr)									= NULL;
+ static int 			  (*emulate_input)(void *hSession, const char *s, int len, int pasting)		= NULL;
+ static int				  (*erase_eof)(void *hSession)												= NULL;
 
  static const struct _entry_point
  {
@@ -92,7 +94,9 @@
 	{ (void **) &setcursor,				(void *) hllapi_pipe_setcursor,			"lib3270_set_cursor_address"	},
 	{ (void **) &getcursor,				(void *) hllapi_pipe_getcursor,			"lib3270_get_cursor_address"	},
 	{ (void **) &get_text_at_offset, 	(void *) hllapi_pipe_get_text,			"lib3270_get_text"				},
-	{ NULL, NULL }
+	{ (void **) &emulate_input,		 	(void *) hllapi_pipe_emulate_input,		"lib3270_emulate_input"			},
+	{ (void **) &erase_eof,				(void *) hllapi_pipe_erase_eof,			"lib3270_eraseeof"				},
+	{ NULL, NULL, NULL }
  };
 
 // http://msdn.microsoft.com/en-us/library/windows/desktop/ms684179(v=vs.85).aspx
@@ -433,4 +437,27 @@
 	release_memory(text);
 
 	return 0;
+ }
+
+ __declspec (dllexport) DWORD __stdcall hllapi_emulate_input(LPSTR buffer, WORD len, WORD pasting)
+ {
+
+	if(!(emulate_input && hSession))
+		return EINVAL;
+	trace("%s",__FUNCTION__);
+	return emulate_input(hSession, buffer, len, pasting);
+ }
+
+ __declspec (dllexport) DWORD __stdcall hllapi_erase_eof(void)
+ {
+	if(!erase_eof && hSession)
+		return EINVAL;
+	trace("%s",__FUNCTION__);
+	return erase_eof(hSession);
+ }
+
+ __declspec (dllexport) DWORD __stdcall hllapi_print(void)
+ {
+	#warning Implementar
+	return -1;
  }

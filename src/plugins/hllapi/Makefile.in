@@ -28,7 +28,7 @@
 
 #---[ Sources ]----------------------------------------------------------------
 
-MODULE_NAME=remotectl
+MODULE_NAME=hllapi
 DEPENDS=*.h ../../include/*.h ../../include/lib3270/*.h Makefile
 PLUGIN_SRC=pluginmain.c
 HLLAPI_SRC=hllapi.c calls.c remote.c

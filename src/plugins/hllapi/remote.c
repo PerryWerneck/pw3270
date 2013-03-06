@@ -181,6 +181,16 @@
 	return response.rc;
  }
 
+ int hllapi_pipe_erase_eof(void *h)
+ {
+	static const struct hllapi_packet_query query		= { HLLAPI_PACKET_ERASE_EOF };
+	struct hllapi_packet_result		  		response;
+	DWORD							  		cbSize		= sizeof(query);
+	TransactNamedPipe((HANDLE) h,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
+	return response.rc;
+ }
+
+
  int hllapi_pipe_set_text_at(void *h, int row, int col, const unsigned char *str)
  {
 	struct hllapi_packet_text_at 	* query;
@@ -331,4 +341,23 @@
 
 	free(response);
 	return text;
+ }
+
+ int hllapi_pipe_emulate_input(void *h, const char *text, int len, int pasting)
+ {
+	struct hllapi_packet_emulate_input 	* query;
+	struct hllapi_packet_result	  		  response;
+	DWORD								  cbSize		= sizeof(struct hllapi_packet_emulate_input)+strlen(text);
+
+	query = malloc(cbSize);
+	query->packet_id 	= HLLAPI_PACKET_EMULATE_INPUT;
+	query->len			= len;
+	query->pasting		= pasting;
+	strcpy(query->text,text);
+
+	TransactNamedPipe((HANDLE) h,(LPVOID) query, cbSize, &response, sizeof(response), &cbSize,NULL);
+
+	free(query);
+
+	return response.rc;
  }

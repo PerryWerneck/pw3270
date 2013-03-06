@@ -82,12 +82,15 @@ extern "C" {
 	__declspec (dllexport) DWORD __stdcall hllapi_enter(void);
 	__declspec (dllexport) DWORD __stdcall hllapi_set_text_at(WORD row, WORD col, LPSTR text);
 	__declspec (dllexport) DWORD __stdcall hllapi_cmp_text_at(WORD row, WORD col, LPSTR text);
+    __declspec (dllexport) DWORD __stdcall hllapi_emulate_input(LPSTR buffer, WORD len, WORD pasting);
 	__declspec (dllexport) DWORD __stdcall hllapi_wait_for_ready(WORD seconds);
 	__declspec (dllexport) DWORD __stdcall hllapi_wait(WORD seconds);
 	__declspec (dllexport) DWORD __stdcall hllapi_pfkey(WORD key);
 	__declspec (dllexport) DWORD __stdcall hllapi_pakey(WORD key);
 	__declspec (dllexport) DWORD __stdcall hllapi_setcursor(WORD key);
 	__declspec (dllexport) DWORD __stdcall hllapi_getcursor();
+	__declspec (dllexport) DWORD __stdcall hllapi_erase_eof(void);
+	__declspec (dllexport) DWORD __stdcall hllapi_print(void);
 
 #else
 

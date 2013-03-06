@@ -47,6 +47,9 @@
 
  static int get_cursor_position(char *buffer, unsigned short *length, unsigned short *rc);
  static int set_cursor_position(char *buffer, unsigned short *length, unsigned short *rc);
+ static int input_string(char *buffer, unsigned short *length, unsigned short *rc);
+
+ static int invalid_request(char *buffer, unsigned short *length, unsigned short *rc);
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
@@ -62,7 +65,17 @@
 	{ HLLAPI_CMD_QUERYCURSOR,		get_cursor_position		},
 	{ HLLAPI_CMD_SETCURSOR,			set_cursor_position		},
 	{ HLLAPI_CMD_COPYPSTOSTR,		copy_ps_to_str			},
+	{ HLLAPI_CMD_INPUTSTRING,		input_string			},
+	{ HLLAPI_CMD_WAIT,				invalid_request			},
+	{ HLLAPI_CMD_COPYPS,			invalid_request			},
+	{ HLLAPI_CMD_SEARCHPS,			invalid_request			},
+	{ HLLAPI_CMD_COPYSTRTOPS,		invalid_request			},
+	{ HLLAPI_CMD_SENDFILE,			invalid_request			},
+	{ HLLAPI_CMD_RECEIVEFILE,		invalid_request			},
+
  };
+
+ static const char control_char = '@';
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
@@ -82,8 +95,12 @@
 			return hllapi_call[f].exec(buffer,length,rc);
 	}
 
-	*rc = HLLAPI_STATUS_BAD_PARAMETER;
+	return invalid_request(buffer, length, rc);
+}
 
+static int invalid_request(char *buffer, unsigned short *length, unsigned short *rc)
+{
+	*rc = HLLAPI_STATUS_BAD_PARAMETER;
 	return *rc;
 }
 
@@ -158,197 +175,117 @@ static int copy_ps_to_str(char *buffer, unsigned short *length, unsigned short *
 	return hllapi_get_screen(*rc,buffer,*length);
 }
 
-/*
- static int cmd_connect_ps(const char *name)
- {
-#ifdef WIN32
+static int input_string(char *input, unsigned short *length, unsigned short *rc)
+{
+	size_t	  szText;
+	char 	* text;
 
-	static DWORD dwMode = PIPE_READMODE_MESSAGE;
-	char PipeName[4096];
+	if(!input)
+	{
+		*rc = HLLAPI_STATUS_BAD_PARAMETER;
+		return HLLAPI_STATUS_BAD_PARAMETER;
+	}
 
-	if(hPipe != INVALID_HANDLE_VALUE)
-		return 0;
+	szText = strlen(input);
 
-	snprintf(PipeName,4095,"\\\\.\\pipe\\%s",name);
+	if(*length > 0 && *length < szText)
+		szText = *length;
 
-	if(!WaitNamedPipe(PipeName,NMPWAIT_USE_DEFAULT_WAIT))
-		return ENOENT;
+	text = malloc(szText+2);
+	memcpy(text,input,szText);
+	text[szText] = 0;
 
-	hPipe = CreateFile(PipeName,GENERIC_WRITE|GENERIC_READ,0,NULL,OPEN_EXISTING,0,NULL);
+	*rc = 0;
 
-	if(hPipe == INVALID_HANDLE_VALUE)
-		return GetLastError();
+	if(strchr(text,control_char))
+	{
+		// Convert control char
+		char	* buffer = text;
+		char	* ptr;
 
-	if(!SetNamedPipeHandleState(hPipe,&dwMode,NULL,NULL))
-		return GetLastError();
+		for(ptr = strchr(text,control_char);ptr;ptr = strchr(buffer,control_char))
+		{
+			*(ptr++) = 0;
 
-	trace("Pipe %ld open",(unsigned long) hPipe);
-#else
+			hllapi_emulate_input(buffer,-1,0);
 
-	#error Not implemented
+			switch(*(ptr++))
+			{
+			case 'P':	// Print
+				*rc = hllapi_print();
+				break;
 
-#endif // WIN32
+			case 'E':	// Enter
+				hllapi_enter();
+				break;
+
+			case 'F':	// Erase EOF
+				hllapi_erase_eof();
+				break;
+
+			case '1':	// PF1
+				hllapi_pfkey(1);
+				break;
+
+			case '2':	// PF2
+				hllapi_pfkey(2);
+				break;
+
+			case '3':	// PF3
+				hllapi_pfkey(3);
+				break;
+
+			case '4':	// PF4
+				hllapi_pfkey(4);
+				break;
+
+			case '5':	// PF5
+				hllapi_pfkey(5);
+				break;
+
+			case '6':	// PF6
+				hllapi_pfkey(6);
+				break;
+
+			case '7':	// PF7
+				hllapi_pfkey(7);
+				break;
+
+			case '8':	// PF8
+				hllapi_pfkey(8);
+				break;
+
+			case '9':	// PF9
+				hllapi_pfkey(9);
+				break;
+
+			case 'a':	// PF10
+				hllapi_pfkey(10);
+				break;
+
+			case 'b':	// PF11
+				hllapi_pfkey(11);
+				break;
+
+			case 'c':	// PF12
+				hllapi_pfkey(12);
+				break;
+			}
+
+			buffer = ptr;
+
+		}
+
+		hllapi_emulate_input(buffer,-1,0);
+
+	}
+	else
+	{
+		hllapi_emulate_input(text,szText,0);
+	}
+
+	free(text);
 
 	return 0;
- }
+}
 
-
- static char * run_query(unsigned long func, const char *arg, size_t *length, unsigned short *rc)
- {
-	char *outBuffer = NULL;
-
-#ifdef WIN32
-
-	if(hPipe == INVALID_HANDLE_VALUE)
-	{
-		trace("%s: Invalid pipe handle",__FUNCTION__);
-		*rc = EPERM;
-	}
-	else
-	{
-		HLLAPI_DATA	*buffer	= malloc(HLLAPI_MAXLENGTH+1);
-		DWORD cbSize		= sizeof(HLLAPI_DATA) + *length;
-		HLLAPI_DATA *data	= malloc(cbSize+1);
-
-		memset(buffer,0,HLLAPI_MAXLENGTH);
-
-		data->id		= HLLAPI_REQUEST_QUERY;
-		data->func		= func;
-		data->rc		= *rc;
-		data->value		= *length;
-
-		if(arg && *length > 0)
-			memcpy(data->string,arg,*length);
-
-		memset(buffer,0,HLLAPI_MAXLENGTH);
-
-		if(!TransactNamedPipe(hPipe,(LPVOID) data,cbSize,buffer,HLLAPI_MAXLENGTH,&cbSize,NULL))
-		{
-			trace("Error %d in TransactNamedPipe",(int) GetLastError());
-			*rc = GetLastError();
-		}
-		else
-		{
-			*rc		= buffer->rc;
-			*length = buffer->value;
-
-			trace("buffer->id=%d buffer->value=%d rc=%d",buffer->id,buffer->value,buffer->rc);
-
-			if(buffer->value > 0 && buffer->id == HLLAPI_RESPONSE_TEXT)
-			{
-				outBuffer = malloc(buffer->value+1);
-				memcpy(outBuffer,buffer->string,buffer->value);
-				outBuffer[buffer->value] = 0;
-
-				trace("outBuffer=[%s]",outBuffer);
-			}
-		}
-
-		free(data);
-		free(buffer);
-	}
-
-#else
-
-	#error NOT IMPLEMENTED
-
-#endif // WIN32
-
-	return outBuffer;
- }
-
- static void copyString(char *str, unsigned short *length, const char *msg)
- {
-	size_t len = strlen(msg);
-
-	if(len > *length)
-		len = *length;
-	else
-		*length = len;
-
-	memcpy(str,msg,*length);
- }
-
-#ifdef _WIN32
- __declspec (dllexport) int __stdcall hllapi(LPWORD func, LPSTR buffer, LPWORD length, LPWORD rc)
-#else
- LIB3270_EXPORT int hllapi(const unsigned long *func, char *buffer, unsigned short *length, unsigned short *rc)
-#endif // _WIN32
- {
- 	char	* inBuffer	= NULL;
- 	char	* outBuffer	= NULL;
-	size_t	  szOutBuffer;
-
-	if(*length < 0 || *length > HLLAPI_MAXLENGTH)
-	{
-		*rc = EINVAL;
-		return 0;
-	}
-
-	szOutBuffer = (size_t) *length;
-
-	// Copy input argument
-	if(*length)
-	{
-		inBuffer = malloc(*length+1);
-		memcpy(inBuffer,buffer,*length);
-		inBuffer[*length] = 0;
-	}
-
-	// Clear output buffer
-	memset(buffer,' ',*length);
-	buffer[*length] = 0;
-
- 	switch(*func)
- 	{
-	case HLLAPI_CMD_CONNECTPS:
-		*rc = cmd_connect_ps(inBuffer);
-		if(!*rc)
-		{
-			outBuffer = run_query(*func, inBuffer, &szOutBuffer, rc);
-			if(*rc)
-			{
-				trace("Closing pipe rc=%d",*rc);
-				CloseHandle(hPipe);
-				hPipe = INVALID_HANDLE_VALUE;
-			}
-		}
-		break;
-
-	case HLLAPI_CMD_DISCONNECTPS:
-#ifdef WIN32
-		if(hPipe == INVALID_HANDLE_VALUE)
-		{
-			*rc = EINVAL;
-		}
-		else
-		{
-			outBuffer = run_query(*func, inBuffer, &szOutBuffer, rc);
-			CloseHandle(hPipe);
-			hPipe = INVALID_HANDLE_VALUE;
-		}
-#endif // WIN32
-		break;
-
-	default:
-		trace("Calling function %d",(int) *func);
-		outBuffer = run_query(*func, inBuffer, &szOutBuffer, rc);
- 	}
-
-	if(*rc)
-		copyString(buffer,length,strerror(*rc));
-	else if(outBuffer)
-	{
-		if(szOutBuffer < *length)
-			*length = szOutBuffer;
-
-		copyString(buffer,length,outBuffer);
-	}
-	if(outBuffer)
-		free(outBuffer);
-
-	free(inBuffer);
- 	return 0;
- }
-
-*/

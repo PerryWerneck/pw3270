@@ -45,6 +45,8 @@
 		HLLAPI_PACKET_IS_CONNECTED,
 		HLLAPI_PACKET_SET_CURSOR,
 		HLLAPI_PACKET_GET_CURSOR,
+		HLLAPI_PACKET_EMULATE_INPUT,
+		HLLAPI_PACKET_ERASE_EOF,
 
 		HLLAPI_PACKET_INVALID
 
@@ -137,6 +139,13 @@ struct hllapi_packet_query_offset
 	unsigned short	len;
 };
 
+struct hllapi_packet_emulate_input
+{
+	unsigned char	packet_id;
+	unsigned short	len;
+	unsigned char	pasting;
+	char 			text[1];
+};
 
 
 #pragma pack()

@@ -128,7 +128,7 @@ case "$host" in
 		DLLDIR=""
 		DBGCMDPREFIX=""
 		LDARCH=""
-		PLUGINS="remotectl"
+		PLUGINS="hllapi"
 		APP_GUI_SRC="resources.rc"
 		;;
 
@@ -433,7 +433,7 @@ AC_CONFIG_FILES([
 	src/oxt/Makefile
 	src/pw3270/uiparser/Makefile
 	src/tools/Makefile
-	src/plugins/remotectl/Makefile
+	src/plugins/hllapi/Makefile
 	src/plugins/rx3270/Makefile
 	src/plugins/dbus3270/Makefile
 	man/Makefile

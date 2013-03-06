@@ -326,7 +326,7 @@ clean:
 	@make -C src/lib3270 clean
 	@make -C src/pw3270 clean
 	@make -C src/tools clean
-	@make -C src/plugins/remotectl clean
+	@make -C src/plugins/hllapi clean
 	@make -C src/plugins/rx3270 clean
 	@make -C src/plugins/dbus3270 clean
 	@make -C src/oxt clean
@@ -356,10 +356,10 @@ distclean: clean
 
 #---[ Plugins ]----------------------------------------------------------------
 
-$(BINDIR)/Debug/plugins/remotectl@DLLEXT@: src/plugins/remotectl/* $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
+$(BINDIR)/Debug/plugins/hllapi@DLLEXT@: src/plugins/hllapi/* $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
 	@make $(PLUGIN_DEBUG_ARGS) -C $(dir $<) Debug
 
-$(BINDIR)/Release/plugins/remotectl@DLLEXT@: src/plugins/remotectl/* $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
+$(BINDIR)/Release/plugins/hllapi@DLLEXT@: src/plugins/hllapi/* $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
 	@make $(PLUGIN_RELEASE_ARGS) -C $(dir $<) Release
 
 $(BINDIR)/Debug/plugins/rx3270@DLLEXT@: src/plugins/rx3270/* $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
