@@ -58,9 +58,13 @@ extern "C" {
 
 
  /* Result codes */
- #define HLLAPI_STATUS_SUCESS				   0	/**< Good return code */
- #define HLLAPI_STATUS_BAD_PARAMETER		   2	/**< Bad parameter or verb not supported */
+ #define HLLAPI_STATUS_SUCCESS				   0	/**< Good return code */
+ #define HLLAPI_STATUS_DISCONNECTED			   1	/**< The presentation space was not valid or not connected. */
+ #define HLLAPI_STATUS_BAD_PARAMETER		   2	/**< An incorrect option was specified. */
+ #define HLLAPI_STATUS_TIMEOUT				   4	/**< Timeout */
+ #define HLLAPI_STATUS_KEYBOARD_LOCKED		   5	/**< The keyboard is locked. */
  #define HLLAPI_STATUS_UNAVAILABLE			  11	/**< Resource unavailable at this time */
+ #define HLLAPI_STATUS_SYSTEM_ERROR			   9 	/**< A system error occurred */
 
 
 #ifdef _WIN32

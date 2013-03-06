@@ -33,6 +33,7 @@
  #include <errno.h>
  #include <pw3270/hllapi.h>
  #include <stdio.h>
+ #include <time.h>
  #include <lib3270/log.h>
 
  #undef trace
@@ -44,6 +45,9 @@
  static int disconnect_ps(char *buffer, unsigned short *length, unsigned short *rc);
  static int get_library_revision(char *buffer, unsigned short *length, unsigned short *rc);
  static int copy_ps_to_str(char *buffer, unsigned short *length, unsigned short *rc);
+ static int search_ps(char *buffer, unsigned short *length, unsigned short *rc);
+ static int copy_ps(char *buffer, unsigned short *length, unsigned short *rc);
+ static int wait_system(char *buffer, unsigned short *length, unsigned short *rc);
 
  static int get_cursor_position(char *buffer, unsigned short *length, unsigned short *rc);
  static int set_cursor_position(char *buffer, unsigned short *length, unsigned short *rc);
@@ -66,9 +70,9 @@
 	{ HLLAPI_CMD_SETCURSOR,			set_cursor_position		},
 	{ HLLAPI_CMD_COPYPSTOSTR,		copy_ps_to_str			},
 	{ HLLAPI_CMD_INPUTSTRING,		input_string			},
-	{ HLLAPI_CMD_WAIT,				invalid_request			},
-	{ HLLAPI_CMD_COPYPS,			invalid_request			},
-	{ HLLAPI_CMD_SEARCHPS,			invalid_request			},
+	{ HLLAPI_CMD_WAIT,				wait_system				},
+	{ HLLAPI_CMD_COPYPS,			copy_ps					},
+	{ HLLAPI_CMD_SEARCHPS,			search_ps				},
 	{ HLLAPI_CMD_COPYSTRTOPS,		invalid_request			},
 	{ HLLAPI_CMD_SENDFILE,			invalid_request			},
 	{ HLLAPI_CMD_RECEIVEFILE,		invalid_request			},
@@ -126,7 +130,7 @@ static int connect_ps(char *buffer, unsigned short *length, unsigned short *rc)
 	}
 
 	if(hllapi_init(buffer) == 0)
-		*rc = HLLAPI_STATUS_SUCESS;
+		*rc = HLLAPI_STATUS_SUCCESS;
 	else
 		*rc = HLLAPI_STATUS_UNAVAILABLE;
 
@@ -289,3 +293,102 @@ static int input_string(char *input, unsigned short *length, unsigned short *rc)
 	return 0;
 }
 
+static int search_ps(char *buffer, unsigned short *length, unsigned short *ps)
+{
+	/*
+	 * Data String	Target string for search.
+	 * Length	Length of the target data string. Overridden in EOT mode.
+	 * PS Position	Position within the host presentation space where the search is to begin (SRCHFRWD option) or to end
+	 * (SRCHBKWD option). Overridden in SRCHALL (default) mode.
+	 *
+	 * Return in *ps:
+	 *
+	 * = 0	The string was not found.
+	 * > 0	The string was found at the indicated host presentation space position.
+	 *
+	 * Return code:
+	 *
+	 * 0	The Search Presentation Space function was successful.
+	 * 1	Your program is not connected to a host session.
+	 * 2	An error was made in specifying parameters.
+	 * 7	The host presentation space position is not valid.
+	 * 9	A system error was encountered.
+	 * 24	The search string was not found.
+	 *
+	 */
+	 size_t szBuffer = strlen(buffer);
+
+	 if(*length < szBuffer)
+		szBuffer = *length;
+
+
+	#warning Implementar
+
+	return HLLAPI_STATUS_SYSTEM_ERROR;
+}
+
+static int copy_ps(char *buffer, unsigned short *length, unsigned short *rc)
+{
+	/*
+	 * Data String	Preallocated target string the size of your host presentation space. This can vary depending on how your host presentation space is configured. When the Set Session Parameters (9) function with the EAB option is issued, the length of the data string must be at least twice the length of the presentation space.
+	 *				DBCS Only: When the EAD option is specified, the length of the data string must be at least three times the length of the presentation space. When both the EAB and EAD options are specified, the length of the data string must be at least four times the length of the presentation space.
+	 *
+	 * Length		NA (the length of the host presentation space is implied).
+	 * PS Position	NA.
+	 *
+	 *
+	 */
+
+	#warning Implementar
+
+	return HLLAPI_STATUS_SYSTEM_ERROR;
+}
+
+static int wait_system(char *buffer, unsigned short *length, unsigned short *rc)
+{
+	/*
+	 * Checks the status of the host-connected presentation space. If the session is
+	 * waiting for a host response (indicated by XCLOCK (X []) or XSYSTEM), the Wait
+	 * function causes HLLAPI to wait up to 1 minute to see if the condition clears.
+	 *
+	 */
+
+	/*
+	 * Return Code	Definition
+	 *
+	 * 0	The keyboard is unlocked and ready for input.
+	 * 1	Your application program is not connected to a valid session.
+	 * 4	Timeout while still in XCLOCK (X []) or XSYSTEM.
+	 * 5	The keyboard is locked.
+	 * 9	A system error was encountered.
+	 *
+	 */
+	 time_t end = time(0) + 3600;
+
+	 while(time(0) < end)
+	 {
+	 	switch(hllapi_get_message_id())
+	 	{
+		case LIB3270_MESSAGE_NONE:				/* 0 - No message */
+			return HLLAPI_STATUS_SUCCESS;
+
+		case LIB3270_MESSAGE_DISCONNECTED:		/* 4 - Disconnected from host */
+			return HLLAPI_STATUS_DISCONNECTED;
+
+		case LIB3270_MESSAGE_MINUS:
+		case LIB3270_MESSAGE_PROTECTED:
+		case LIB3270_MESSAGE_NUMERIC:
+		case LIB3270_MESSAGE_OVERFLOW:
+		case LIB3270_MESSAGE_INHIBIT:
+		case LIB3270_MESSAGE_KYBDLOCK:
+			return HLLAPI_STATUS_KEYBOARD_LOCKED;
+
+	 	}
+
+		if(hllapi_wait(1))
+			return HLLAPI_STATUS_SYSTEM_ERROR;
+
+	 }
+
+	 return HLLAPI_STATUS_TIMEOUT;
+}
