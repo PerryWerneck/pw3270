@@ -461,3 +461,17 @@
 	#warning Implementar
 	return -1;
  }
+
+ char * hllapi_get_string(int offset, size_t len)
+ {
+ 	if(!(get_text_at_offset && hSession))
+		return NULL;
+
+	return get_text_at_offset(hSession,offset-1,len);
+ }
+
+ void hllapi_free(void *p)
+ {
+	if(release_memory)
+		release_memory(p);
+ }

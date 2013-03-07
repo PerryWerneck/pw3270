@@ -60,4 +60,8 @@
  int				  hllapi_pipe_setcursor(void *h, int baddr);
  int				  hllapi_pipe_emulate_input(void *hSession, const char *s, int len, int pasting);
 
+ char				* hllapi_get_string(int offset, size_t len);
+ void				  hllapi_free(void *p);
+
+
 

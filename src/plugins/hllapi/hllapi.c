@@ -316,15 +316,34 @@ static int search_ps(char *buffer, unsigned short *length, unsigned short *ps)
 	 * 24	The search string was not found.
 	 *
 	 */
-	 size_t szBuffer = strlen(buffer);
+	size_t   szBuffer = strlen(buffer);
+	char   * text;
+	int		 rc = -1;
 
-	 if(*length < szBuffer)
+	if(*length < szBuffer)
 		szBuffer = *length;
 
 
-	#warning Implementar
+	text = hllapi_get_string(*ps,szBuffer);
+	if(!text)
+		return HLLAPI_STATUS_SYSTEM_ERROR;
 
-	return HLLAPI_STATUS_SYSTEM_ERROR;
+	if(strncmp(text,buffer,szBuffer))
+	{
+		// String not found
+		*ps = 0;
+		rc = 24;
+	}
+	else
+	{
+		// String found
+		*ps = 1;
+		rc = 0;
+	}
+
+	hllapi_free(text);
+
+	return rc;
 }
 
 static int copy_ps(char *buffer, unsigned short *length, unsigned short *rc)
@@ -338,6 +357,11 @@ static int copy_ps(char *buffer, unsigned short *length, unsigned short *rc)
 	 *
 	 *
 	 */
+	 size_t szBuffer = strlen(buffer);
+
+	 if(*length < szBuffer)
+		szBuffer = *length;
+
 
 	#warning Implementar
 
