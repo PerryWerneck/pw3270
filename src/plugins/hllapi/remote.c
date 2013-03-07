@@ -361,3 +361,12 @@
 
 	return response.rc;
  }
+
+ int hllapi_pipe_print(void *h)
+ {
+	static const struct hllapi_packet_query query		= { HLLAPI_PACKET_PRINT };
+	struct hllapi_packet_result		  		response;
+	DWORD							  		cbSize		= sizeof(query);
+	TransactNamedPipe((HANDLE) h,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
+	return response.rc;
+ }

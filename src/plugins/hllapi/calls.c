@@ -45,6 +45,7 @@
  HMODULE 	  hModule	= NULL;
  void		* hSession	= NULL;
 
+
  static void			* (*session_new)(const char *model)											= NULL;
  static void			  (*session_free)(void *h)													= NULL;
  static const char		* (*get_revision)(void)														= NULL;
@@ -67,6 +68,7 @@
  static int 			  (*setcursor)(void *hSession, int baddr)									= NULL;
  static int 			  (*emulate_input)(void *hSession, const char *s, int len, int pasting)		= NULL;
  static int				  (*erase_eof)(void *hSession)												= NULL;
+ static int 			  (*do_print)(void *h)														= NULL;
 
  static const struct _entry_point
  {
@@ -96,6 +98,8 @@
 	{ (void **) &get_text_at_offset, 	(void *) hllapi_pipe_get_text,			"lib3270_get_text"				},
 	{ (void **) &emulate_input,		 	(void *) hllapi_pipe_emulate_input,		"lib3270_emulate_input"			},
 	{ (void **) &erase_eof,				(void *) hllapi_pipe_erase_eof,			"lib3270_eraseeof"				},
+	{ (void **) &do_print,				(void *) hllapi_pipe_print,				"lib3270_print"					},
+
 	{ NULL, NULL, NULL }
  };
 
@@ -409,32 +413,21 @@
 	return getcursor(hSession)+1;
  }
 
- __declspec (dllexport) DWORD __stdcall hllapi_get_screen(WORD pos, LPSTR buffer, WORD len)
+ __declspec (dllexport) DWORD __stdcall hllapi_get_screen(WORD offset, LPSTR buffer, WORD len)
  {
- 	char *text;
+	size_t	  szBuffer = strlen(buffer);
+	char	* text;
 
-	trace("%s(%d,%d)",__FUNCTION__,pos,len);
+	if(len < szBuffer && len > 0)
+		szBuffer = len;
 
-	if(len < 0)
-		len = strlen(buffer);
-
- 	if(!(get_text_at_offset && hSession))
-		return EINVAL;
-
- 	if(len > strlen(buffer))
-		len = strlen(buffer);
-
-	trace("len=%d",len);
-	text = get_text_at_offset(hSession,pos-1,len);
-
-	trace("text=\n%s\n",text);
-
+	text = hllapi_get_string(offset, szBuffer);
 	if(!text)
-		return -1;
+		return HLLAPI_STATUS_SYSTEM_ERROR;
 
 	memcpy(buffer,text,len);
 
-	release_memory(text);
+	hllapi_free(text);
 
 	return 0;
  }
@@ -458,8 +451,10 @@
 
  __declspec (dllexport) DWORD __stdcall hllapi_print(void)
  {
-	#warning Implementar
-	return -1;
+	if(!(do_print && hSession))
+		return EINVAL;
+
+	return do_print(hSession);
  }
 
  char * hllapi_get_string(int offset, size_t len)

@@ -35,6 +35,7 @@
  #include <stdio.h>
  #include <time.h>
  #include <lib3270/log.h>
+ #include "client.h"
 
  #undef trace
  #define trace( fmt, ... )	{ FILE *out = fopen("c:\\Users\\Perry\\hllapi.log","a"); if(out) { fprintf(out, "%s(%d) " fmt "\n", __FILE__, __LINE__, __VA_ARGS__ ); fclose(out); } }

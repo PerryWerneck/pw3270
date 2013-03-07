@@ -533,6 +533,16 @@
 	LIB3270_EXPORT int lib3270_get_cursor_address(H3270 *h);
 
 	/**
+	 * Print page
+	 *
+	 * @param h		Session Handle.
+	 *
+	 * @return 0 if ok, error code if not.
+	 *
+	 */
+	LIB3270_EXPORT int lib3270_print(H3270 *h);
+
+	/**
 	 * Get buffer contents.
 	 *
 	 * @param h		Session handle.

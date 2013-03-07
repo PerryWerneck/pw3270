@@ -195,6 +195,10 @@
 		send_result(source,lib3270_enter(lib3270_get_default_session_handle()));
 		break;
 
+	case HLLAPI_PACKET_PRINT:
+		send_result(source,lib3270_print(lib3270_get_default_session_handle()));
+		break;
+
 	case HLLAPI_PACKET_ERASE_EOF:
 		send_result(source,lib3270_eraseeof(lib3270_get_default_session_handle()));
 		break;
