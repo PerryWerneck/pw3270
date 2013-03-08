@@ -436,9 +436,11 @@
  {
 
 	if(!(emulate_input && hSession))
-		return EINVAL;
+		return HLLAPI_STATUS_DISCONNECTED;
 	trace("%s",__FUNCTION__);
-	return emulate_input(hSession, buffer, len, pasting);
+	emulate_input(hSession, buffer, len, pasting);
+
+	return HLLAPI_STATUS_SUCCESS;
  }
 
  __declspec (dllexport) DWORD __stdcall hllapi_erase_eof(void)

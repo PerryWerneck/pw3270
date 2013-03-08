@@ -46,6 +46,7 @@
  static int disconnect_ps(char *buffer, unsigned short *length, unsigned short *rc);
  static int get_library_revision(char *buffer, unsigned short *length, unsigned short *rc);
  static int copy_ps_to_str(char *buffer, unsigned short *length, unsigned short *rc);
+ static int copy_str_to_ps(char *buffer, unsigned short *length, unsigned short *rc);
  static int search_ps(char *buffer, unsigned short *length, unsigned short *rc);
  static int copy_ps(char *buffer, unsigned short *length, unsigned short *rc);
  static int wait_system(char *buffer, unsigned short *length, unsigned short *rc);
@@ -74,7 +75,7 @@
 	{ HLLAPI_CMD_WAIT,				wait_system				},
 	{ HLLAPI_CMD_COPYPS,			copy_ps					},
 	{ HLLAPI_CMD_SEARCHPS,			search_ps				},
-	{ HLLAPI_CMD_COPYSTRTOPS,		invalid_request			},
+	{ HLLAPI_CMD_COPYSTRTOPS,		copy_str_to_ps			},
 	{ HLLAPI_CMD_SENDFILE,			invalid_request			},
 	{ HLLAPI_CMD_RECEIVEFILE,		invalid_request			},
 
@@ -356,6 +357,13 @@ static int copy_ps(char *buffer, unsigned short *length, unsigned short *rc)
 	 * Length		NA (the length of the host presentation space is implied).
 	 * PS Position	NA.
 	 *
+	 * Return values:
+	 *
+	 * 0	The host presentation space contents were copied to the application program. The target presentation space was active, and the keyboard was unlocked.
+	 * 1	Your program is not connected to a host session.
+	 * 4	The host presentation space contents were copied. The connected host presentation space was waiting for host response.
+	 * 5	The host presentation space was copied. The keyboard was locked.
+	 * 9	A system error was encountered.
 	 *
 	 */
 	 size_t szBuffer = strlen(buffer);
@@ -416,4 +424,55 @@ static int wait_system(char *buffer, unsigned short *length, unsigned short *rc)
 	 }
 
 	 return HLLAPI_STATUS_TIMEOUT;
+}
+
+static int copy_str_to_ps(char *text, unsigned short *length, unsigned short *ps)
+{
+	/*
+	 * Call Parameters
+	 *
+	 * Data String	String of ASCII data to be copied into the host presentation space.
+	 * Length	Length, in number of bytes, of the source data string. Overridden if in EOT mode.
+	 * PS Position	Position in the host presentation space to begin the copy, a value between 1 and the configured size of your host presentation space.
+	 *
+	 * Return Parameters
+	 *
+	 * 0	The Copy String to Presentation Space function was successful.
+	 * 1	Your program is not connected to a host session.
+	 * 2	Parameter error or zero length for copy.
+	 * 5	The target presentation space is protected or inhibited, or incorrect data was sent to the target presentation space (such as a field attribute byte).
+	 * 6	The copy was completed, but the data was truncated.
+	 * 7	The host presentation space position is not valid.
+	 * 9	A system error was encountered.
+	 *
+	 */
+	size_t szText = strlen(text);
+
+	if(*length < szText)
+		szText = *length;
+
+	if(!szText)
+		return 2;
+
+	switch(hllapi_get_message_id())
+	{
+		case LIB3270_MESSAGE_NONE:
+			break;
+
+		case LIB3270_MESSAGE_DISCONNECTED:
+			return HLLAPI_STATUS_DISCONNECTED;
+
+		case LIB3270_MESSAGE_MINUS:
+		case LIB3270_MESSAGE_PROTECTED:
+		case LIB3270_MESSAGE_NUMERIC:
+		case LIB3270_MESSAGE_OVERFLOW:
+		case LIB3270_MESSAGE_INHIBIT:
+		case LIB3270_MESSAGE_KYBDLOCK:
+			return HLLAPI_STATUS_KEYBOARD_LOCKED;
+
+		default:
+			return HLLAPI_STATUS_SYSTEM_ERROR;
+	}
+
+	return hllapi_emulate_input(text,szText,0);
 }
