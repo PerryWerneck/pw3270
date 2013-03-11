@@ -1020,5 +1020,7 @@ int gettimeofday(struct timeval *tv, void *ignored)
 
  LIB3270_EXPORT int lib3270_print(H3270 *h)
  {
-	return -1;
+	CHECK_SESSION_HANDLE(h);
+	trace("%s(%p)",__FUNCTION__,h);
+	return h->print(h);
  }

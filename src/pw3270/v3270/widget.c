@@ -165,18 +165,6 @@ static gboolean v3270_popup_menu(GtkWidget * widget)
 
 #if GTK_CHECK_VERSION(3,0,0)
 
-/*
-static GtkSizeRequestMode get_request_mode(GtkWidget *widget)
-{
-	int rows, cols;
-
-	lib3270_get_screen_size(GTK_V3270(widget)->host,&rows,&cols);
-
-	return rows > cols ? GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT : GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
-
-}
-*/
-
 void get_preferred_height(GtkWidget *widget, gint *minimum_height, gint *natural_height)
 {
 	int height = GTK_V3270(widget)->minimum_height;
@@ -199,31 +187,6 @@ void get_preferred_width(GtkWidget *widget, gint *minimum_width, gint *natural_w
 	if(natural_width)
 		*natural_width = 600;
 }
-
-/*
-void get_preferred_height_for_width(GtkWidget *widget, gint width, gint *minimum_height, gint *natural_height)
-{
-	trace("%s",__FUNCTION__);
-
-	if(minimum_height)
-		*minimum_height = 10;
-
-	if(natural_height)
-		*natural_height = 10;
-}
-
-static void get_preferred_width_for_height(GtkWidget *widget,gint height, gint *minimum_width, gint *natural_width)
-{
-	trace("%s",__FUNCTION__);
-
-	if(minimum_width)
-		*minimum_width = 10;
-
-	if(natural_width)
-		*natural_width = 10;
-
-}
-*/
 
 #endif // GTK(3,0,0)
 
@@ -276,14 +239,6 @@ void v3270_popup_message(GtkWidget *widget, LIB3270_NOTIFY type , const gchar *t
 
 gboolean v3270_query_tooltip(GtkWidget  *widget, gint x, gint y, gboolean keyboard_tooltip, GtkTooltip *tooltip)
 {
-/*
-	if(!lib3270_connected(GTK_V3270(widget)->host))
-	{
-		gtk_tooltip_set_text(tooltip,_( "Disconnected" ) );
-		return TRUE;
-	}
-*/
-
 	if(y >= GTK_V3270(widget)->oia_rect->y)
 	{
 		GdkRectangle *rect = GTK_V3270(widget)->oia_rect;
@@ -369,8 +324,6 @@ static void v3270_class_init(v3270Class *klass)
 
 	widget_class->get_preferred_height				= get_preferred_height;
 	widget_class->get_preferred_width				= get_preferred_width;
-//	widget_class->get_preferred_width_for_height	= get_preferred_width_for_height;
-//	widget_class->get_preferred_height_for_width	= get_preferred_height_for_width;
 
 	widget_class->destroy 							= v3270_destroy;
 	widget_class->draw 								= v3270_draw;
@@ -588,6 +541,16 @@ static void v3270_class_init(v3270Class *klass)
 						NULL, NULL,
 						pw3270_BOOL__VOID_BOOL_UINT_POINTER,
 						G_TYPE_BOOLEAN, 3, G_TYPE_BOOLEAN, G_TYPE_UINT, G_TYPE_POINTER);
+
+
+	v3270_widget_signal[SIGNAL_PRINT] =
+		g_signal_new(	"print",
+						G_OBJECT_CLASS_TYPE (gobject_class),
+						G_SIGNAL_RUN_FIRST,
+						0,
+						NULL, NULL,
+						pw3270_VOID__VOID,
+						G_TYPE_NONE, 0);
 
 }
 
@@ -865,6 +828,12 @@ static void message(H3270 *session, LIB3270_NOTIFY id , const char *title, const
 
 }
 
+static int emit_print_signal(H3270 *session)
+{
+	g_signal_emit(GTK_WIDGET(session->widget), v3270_widget_signal[SIGNAL_PRINT], 0);
+	return 0;
+}
+
 static void v3270_init(v3270 *widget)
 {
 	widget->host = lib3270_session_new("");
@@ -899,6 +868,7 @@ static void v3270_init(v3270 *widget)
 	widget->host->ctlr_done			= ctlr_done;
 	widget->host->message			= message;
 	widget->host->update_ssl		= v3270_update_ssl;
+	widget->host->print				= emit_print_signal;
 
 	// Setup input method
 	widget->input_method 			= gtk_im_multicontext_new();

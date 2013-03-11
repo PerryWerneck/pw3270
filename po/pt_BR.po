@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-06 09:33-0300\n"
-"PO-Revision-Date: 2013-02-25 14:46-0300\n"
+"POT-Creation-Date: 2013-03-11 11:24-0300\n"
+"PO-Revision-Date: 2013-03-11 11:30-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
 "Language: pt_BR\n"
@@ -38,7 +38,7 @@ msgstr "Ação %s precisa de um valor válido"
 msgid "%s action needs src attribute"
 msgstr "Ação %s precisa do atributo src"
 
-#: main.c:86
+#: main.c:88
 #, c-format
 msgid "%s requires GTK version %d.%d.%d"
 msgstr "%s requer GTK versão %d.%d.%d"
@@ -83,7 +83,7 @@ msgstr "%s: Familia %d é inválida"
 msgid "%s:%d"
 msgstr "%s:%d"
 
-#: main.c:318
+#: main.c:323
 msgid "- 3270 Emulator for Gtk"
 msgstr "- Emulador 3270 para GTK"
 
@@ -164,7 +164,7 @@ msgstr ""
 msgid "<b>SSL state is undefined</b>Unexpected SSL status %ld"
 msgstr "<b>Estado do SSL é indefinido</b>Estado SSL inesperado %ld"
 
-#: main.c:338
+#: main.c:343
 msgid ""
 "<b>Valid options:</b>\n"
 "\n"
@@ -217,7 +217,7 @@ msgid "An error occurred trying to allocate memory. This should never happen."
 msgstr ""
 "Ocorreu um erro ao tentar alocar memória. Isso nunca deveria acontecer."
 
-#: main.c:302 main.c:304
+#: main.c:304 main.c:306
 msgid "Application name"
 msgstr "Nome da aplicação"
 
@@ -292,15 +292,15 @@ msgstr "Conexão interrompida"
 
 #: v3270/security.c:124
 msgid "CRL has expired"
-msgstr "CRL has expired"
+msgstr "CRL expirou"
 
 #: v3270/security.c:117
 msgid "CRL is not yet valid"
-msgstr "CRL is not yet valid"
+msgstr "CRL ainda não é válido"
 
 #: v3270/security.c:96
 msgid "CRL signature failure"
-msgstr "CRL signature failure"
+msgstr "Erro na assinatura CRL"
 
 #: dialog.c:109
 msgid "C_haracter Coding:"
@@ -430,7 +430,7 @@ msgstr "Não foi possível criar um manipulador de socket"
 #: session.c:323
 #, c-format
 msgid "Cannot find charset \"%s\", using defaults"
-msgstr "Não encontrei codificação \"%s\", usando defaults"
+msgstr "Não encontrei codificação \"%s\", usando padrão"
 
 #: charset.c:660
 #, c-format
@@ -443,7 +443,7 @@ msgstr "O certificado expirou"
 
 #: v3270/security.c:103
 msgid "Certificate is not yet valid"
-msgstr "Certificate is not yet valid"
+msgstr "O certificado ainda não é válido"
 
 #: v3270/security.c:222
 msgid "Certificate not trusted"
@@ -722,7 +722,7 @@ msgstr "Tela cheia"
 msgid "Function bar"
 msgstr "Barra de funções"
 
-#: main.c:90 main.c:379
+#: main.c:92 main.c:384
 msgid "GTK Version mismatch"
 msgstr "Divergência de versão GTK"
 
@@ -791,11 +791,11 @@ msgstr "Servidor rejeitou o tipo de dispositivo ou requisição"
 msgid "Host rejected resource(s)"
 msgstr "Servidor rejeitou recurso(s)"
 
-#: main.c:310
+#: main.c:312
 msgid "Host system type"
 msgstr "Tipo do sistema no servidor"
 
-#: main.c:308
+#: main.c:310
 msgid "Host to connect"
 msgstr "Servidor a conectar"
 
@@ -814,7 +814,7 @@ msgstr "IBM S/390"
 
 #: v3270/widget.c:314
 msgid "Identity not verified"
-msgstr "Identity not verified"
+msgstr "Identidade não verificada"
 
 #: ft_cut.c:508
 msgid "Illegal frame length"
@@ -1007,15 +1007,15 @@ msgstr "Laranja"
 
 #: hostdialog.c:44
 msgid "Other (TSO)"
-msgstr "Other (TSO)"
+msgstr "Outro (TSO)"
 
 #: hostdialog.c:45
 msgid "Other (VM/CMS)"
-msgstr "Other (VM/CMS)"
+msgstr "Outro (VM/CMS)"
 
 #: v3270/security.c:159
 msgid "Out of memory"
-msgstr "Out of memory"
+msgstr "Memória insuficiente"
 
 #: ui/10keypad.xml:138
 msgid "PA1"
@@ -1125,7 +1125,7 @@ msgstr "PF8"
 msgid "PF9"
 msgstr "PF9"
 
-#: main.c:336
+#: main.c:341
 msgid "Parse error"
 msgstr "Erro de interpretação"
 
@@ -1162,9 +1162,9 @@ msgstr "Colar com margem esquerda"
 msgid "Path length constraint exceeded"
 msgstr "Path length constraint exceeded"
 
-#: main.c:305
+#: main.c:307
 msgid "Path to application data files"
-msgstr "Path to application data files"
+msgstr "Caminho para os arquivos de dados da aplicação"
 
 #: colors.c:396
 msgid "Pink"
@@ -1565,11 +1565,11 @@ msgstr "Frente da seleção"
 
 #: v3270/security.c:166
 msgid "Self signed certificate"
-msgstr "Self signed certificate"
+msgstr "Certificado auto assinada"
 
 #: v3270/security.c:173
 msgid "Self signed certificate in certificate chain"
-msgstr "Self signed certificate in certificate chain"
+msgstr "Certificado auto assinado na cadeia de certificados"
 
 #: ui/00default.xml:277
 msgid "Send file"
@@ -1579,7 +1579,7 @@ msgstr "Enviar arquivo"
 msgid "Send file to host"
 msgstr "Enviar arquivo para o servidor"
 
-#: main.c:312
+#: main.c:317
 msgid "Send messages to syslog"
 msgstr "Send messages to syslog"
 
@@ -1587,7 +1587,7 @@ msgstr "Send messages to syslog"
 msgid "Send/Receive"
 msgstr "Enviar/Receber"
 
-#: main.c:307
+#: main.c:309
 msgid "Session name"
 msgstr "Nome da sessão"
 
@@ -1595,9 +1595,17 @@ msgstr "Nome da sessão"
 msgid "Set hostname"
 msgstr "Selecione servidor"
 
-#: main.c:309
+#: main.c:311
 msgid "Set reported colors (8/16)"
 msgstr "Define número de cores informadas (8/16)"
+
+#: main.c:314
+msgid "Set toggles OFF"
+msgstr "Desativa toggles"
+
+#: main.c:313
+msgid "Set toggles ON"
+msgstr "Ativa toggles"
 
 #: ui/00default.xml:329
 msgid "Settings"
@@ -1874,7 +1882,7 @@ msgstr ""
 "programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple "
 "Place, Suite 330, Boston, MA, 02111-1307, USA"
 
-#: main.c:375
+#: main.c:380
 #, c-format
 msgid "This program requires GTK version %d.%d.%d"
 msgstr "Este programa precisa do GTK versão %d.%d.%d"
@@ -2011,7 +2019,7 @@ msgstr "Atributo %s inesperado ou inválido: \"%s\""
 msgid "Unexpected or invalid attribute value \"%s\""
 msgstr "Valor de attributo inesperado ou inválido: \"%s\""
 
-#: main.c:191
+#: main.c:193
 #, c-format
 msgid "Unexpected or invalid color value \"%s\""
 msgstr "Valor de cor inválido ou inesperado: \"%s\""

@@ -138,6 +138,12 @@ static void set_cursor(H3270 *session, LIB3270_CURSOR id)
 {
 }
 
+static int print(H3270 *session)
+{
+	lib3270_write_log(session, "print", "%s", "Printing is unavailable");
+	return -1;
+}
+
 static void message(H3270 *session, LIB3270_NOTIFY id , const char *title, const char *msg, const char *text)
 {
 #ifdef ANDROID
@@ -203,6 +209,7 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 	hSession->update_status			= (void (*)(H3270 *, LIB3270_STATUS)) nop_int;
 	hSession->autostart				= nop;
 	hSession->set_timer				= set_timer;
+	hSession->print					= print;
 
 	// Set the defaults.
 	hSession->extended  			=  1;

@@ -79,10 +79,10 @@
 		{ GDK_KP_Add,			GDK_NUMLOCK_MASK,	NULL,					NULL	},
 		{ GDK_KP_Subtract,		GDK_NUMLOCK_MASK,	NULL,					NULL	},
 
-		{ GDK_3270_PrintScreen,	0,					NULL,					NULL	},
+		{ GDK_3270_PrintScreen,	0,					lib3270_print,			NULL	},
 		{ GDK_Sys_Req,			0,					lib3270_sysreq,			NULL	},
 
-		{ GDK_Print,			GDK_CONTROL_MASK,	NULL,					NULL	},
+		{ GDK_Print,			GDK_CONTROL_MASK,	lib3270_print,			NULL	},
 		{ GDK_Print,			GDK_SHIFT_MASK,		lib3270_sysreq,			NULL	},
 		{ GDK_Control_R,		0,					NULL,					NULL	},
 		{ GDK_Control_L,		0,					NULL,					NULL	},

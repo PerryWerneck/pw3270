@@ -457,6 +457,11 @@
 	gtk_action_group_set_sensitive(group[ACTION_GROUP_CLIPBOARD],on);
  }
 
+ static void print_all(GtkWidget *widget, GtkWidget *window)
+ {
+	pw3270_print(widget,G_OBJECT(widget), GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, PW3270_SRC_ALL);
+ }
+
  static void toggle_changed(GtkWidget *widget, LIB3270_TOGGLE id, gboolean toggled, const gchar *name, GtkWindow *toplevel)
  {
 	GtkAction **list = (GtkAction **) g_object_get_data(G_OBJECT(widget),"toggle_actions");
@@ -604,6 +609,7 @@
 	// Connect widget signals
 	g_signal_connect(widget->terminal,"field_clicked",G_CALLBACK(field_clicked),widget);
 	g_signal_connect(widget->terminal,"toggle_changed",G_CALLBACK(toggle_changed),widget);
+	g_signal_connect(widget->terminal,"print",G_CALLBACK(print_all),widget);
 
 	// Connect window signals
 	g_signal_connect(widget,"window_state_event",G_CALLBACK(window_state_event),widget->terminal);
