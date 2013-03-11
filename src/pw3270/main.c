@@ -53,6 +53,8 @@
  static GtkWidget		* toplevel		= NULL;
  static unsigned int	  syscolors		= 16;
  static const gchar		* systype		= NULL;
+ static const gchar		* toggleset		= NULL;
+ static const gchar		* togglereset	= NULL;
 
 #ifdef HAVE_GTKMAC
  GtkOSXApplication		* osxapp		= NULL;
@@ -308,6 +310,9 @@ int main(int argc, char *argv[])
 			{ "host",			'h', 0, G_OPTION_ARG_STRING,	&host,				N_( "Host to connect"),						NULL			},
 			{ "colors",			'c', 0, G_OPTION_ARG_CALLBACK,	optcolors,			N_( "Set reported colors (8/16)" ),			"16"			},
 			{ "systype",		't', 0, G_OPTION_ARG_STRING,	&system,			N_( "Host system type" ),					"S390"			},
+			{ "toggleset",		'S', 0, G_OPTION_ARG_STRING,	&toggleset,			N_( "Set toggles ON" ),						NULL			},
+			{ "togglereset",	'R', 0, G_OPTION_ARG_STRING,	&togglereset,		N_( "Set toggles OFF" ),					NULL			},
+
 #if defined( HAVE_SYSLOG )
 			{ "syslog",			'l', 0, G_OPTION_ARG_NONE,		&log_to_syslog,		N_( "Send messages to syslog" ),			NULL			},
 #endif
@@ -408,7 +413,31 @@ int main(int argc, char *argv[])
 
 		toplevel = pw3270_new(host,systype,syscolors);
 		pw3270_set_session_name(toplevel,session_name);
-		// pw3270_set_session_options(toplevel,cmdline_opt.host);
+
+		if(toggleset)
+		{
+			gchar **str = g_strsplit(toggleset,",",-1);
+			int f;
+
+			for(f=0;str[f];f++)
+				pw3270_set_toggle_by_name(toplevel,str[f],TRUE);
+
+
+			g_strfreev(str);
+		}
+
+		if(togglereset)
+		{
+			gchar **str = g_strsplit(togglereset,",",-1);
+			int f;
+
+			for(f=0;str[f];f++)
+				pw3270_set_toggle_by_name(toplevel,str[f],FALSE);
+
+			g_strfreev(str);
+		}
+
+
 
 		toplevel_setup(GTK_WINDOW(toplevel));
 

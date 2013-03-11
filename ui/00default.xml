@@ -46,7 +46,7 @@
 			<menuitem action='save' src='copy' group='clipboard' label='Save copy' />
 
 			<separator/>
-			<menuitem action='print' src='all' key='Print' group='online' icon='print' label='Print' />
+			<menuitem action='print' src='all' key='Print' icon='print' label='Print' />
 			<menuitem action='print' src='selected' group='selection' label='Print selected' />
 			<menuitem action='print' src='copy' group='clipboard' label='Print copy' />
 			<separator/>

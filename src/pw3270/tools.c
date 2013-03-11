@@ -119,3 +119,15 @@ LIB3270_EXPORT void pw3270_set_boolean(GtkWidget *widget, const gchar *group, co
 {
 	set_boolean_to_config(group, key, val);
 }
+
+LIB3270_EXPORT gboolean pw3270_set_toggle_by_name(GtkWidget *widget, const gchar *name, gboolean flag)
+{
+	H3270 			* hSession	= pw3270_get_session(widget);
+	LIB3270_TOGGLE	  id		= lib3270_get_toggle_id(name);
+
+	if(!hSession || id == (LIB3270_TOGGLE) -1)
+		return FALSE;
+
+	lib3270_set_toggle(hSession,id,(int) flag);
+	return TRUE;
+}
