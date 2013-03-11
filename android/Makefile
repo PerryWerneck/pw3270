@@ -33,8 +33,8 @@ JAVAH=$(JDK_HOME)/bin/javah
 JAVAC=$(JDK_HOME)/bin/javac
 ANT=/usr/bin/ant
 
-ANDROIDSDK=/opt/android-sdk-linux
-ANDROIDNDK=/opt/android-ndk-r8b
+ANDROIDSDK?=/opt/android-sdk-linux
+ANDROIDNDK?=/opt/android-ndk-r8d
 ANDROIDCLASSPATH=$(ANDROIDSDK)/platforms/android-16/android.jar
 
 NDKBUILD=$(ANDROIDNDK)/ndk-build
