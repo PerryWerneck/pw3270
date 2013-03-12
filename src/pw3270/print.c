@@ -94,7 +94,11 @@
 #ifdef AUTO_FONT_SIZE
             {
                 double                  width    = gtk_print_context_get_width(context);
-                double                  cols     = (double)info->cols;
+#if GTK_CHECK_VERSION(3,0,0)
+                double                  cols     = (double) info->cols;
+#else
+                double                  cols     = (double) (info->cols+5);
+#endif // GTK(3,0,0)
                 double                  current  = width / cols;
                 double                  valid    = current;
                	cairo_font_extents_t    extents;
@@ -105,11 +109,11 @@
                     current = valid +1.0;
                     cairo_set_font_size(cr,current);
                     cairo_font_extents(cr,&extents);
-                } while(  (cols * extents.max_x_advance) < width );
+                }
+                while(  (cols * extents.max_x_advance) < width );
 
 				trace("Font size: %d",(int) valid);
 				cairo_set_font_size(cr,valid);
-
 
 			}
 #endif // AUTO_FONT_SIZE
@@ -344,8 +348,9 @@ static gchar * enum_to_string(GType type, guint enum_value)
 
  static void font_set(GtkFontButton *widget, PRINT_INFO *info)
  {
+	trace("%s font=%p",__FUNCTION__,info->font);
  	if(info->font)
-		g_free(info->font)
+		g_free(info->font);
 	info->font = g_strdup(gtk_font_button_get_font_name(widget));
  }
 
@@ -410,6 +415,11 @@ static gchar * enum_to_string(GType type, guint enum_value)
 		g_free(info->font);
 
 	info->font = get_string_from_config("print",FONT_CONFIG,DEFAULT_FONT);
+	if(!*info->font)
+	{
+		g_free(info->font);
+		info->font = g_strdup(DEFAULT_FONT);
+	}
 
 	// Font selection button
 #ifdef AUTO_FONT_SIZE
@@ -446,11 +456,12 @@ static gchar * enum_to_string(GType type, guint enum_value)
 	}
 #else
 	{
+		trace("Font=%s",info->font);
 		widget = gtk_font_button_new_with_font(info->font);
-		gtk_font_button_set_show_size((GtkFontButton *) widget,FALSE);
+		gtk_font_button_set_show_size((GtkFontButton *) widget,TRUE);
 		gtk_font_button_set_use_font((GtkFontButton *) widget,TRUE);
 		gtk_label_set_mnemonic_widget(GTK_LABEL(label[0]),widget);
-		g_free(font);
+		g_free(info->font);
 
 #if GTK_CHECK_VERSION(3,2,0)
 		gtk_font_chooser_set_filter_func((GtkFontChooser *) widget,filter_monospaced,NULL,NULL);
