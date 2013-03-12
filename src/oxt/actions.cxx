@@ -30,6 +30,7 @@
  */
 
  #include "globals.hpp"
+ #include <unistd.h>
  #include <string.h>
 
 /*---[ Implement ]-----------------------------------------------------------------------------------------*/
@@ -78,3 +79,35 @@
 	return cmpTextAt(row,col,text) == 0;
 }
 
+::sal_Int16 SAL_CALL pw3270::uno_impl::waitForReady( ::sal_Int16 seconds ) throw (::com::sun::star::uno::RuntimeException)
+{
+	time_t end = time(0) + seconds;
+
+	osl_yieldThread();
+
+	while(time(0) < end)
+	{
+		switch(hSession->get_state())
+		{
+		case LIB3270_MESSAGE_NONE:
+			return 0;
+
+		case LIB3270_MESSAGE_DISCONNECTED:
+			return ENOTCONN;
+
+		case LIB3270_MESSAGE_MINUS:
+		case LIB3270_MESSAGE_PROTECTED:
+		case LIB3270_MESSAGE_NUMERIC:
+		case LIB3270_MESSAGE_OVERFLOW:
+		case LIB3270_MESSAGE_INHIBIT:
+		case LIB3270_MESSAGE_KYBDLOCK:
+			return EPROTO;
+
+
+		}
+
+		sleep(1);
+	}
+
+	return ETIMEDOUT;
+}

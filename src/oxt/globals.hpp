@@ -152,6 +152,7 @@
 				virtual ::sal_Bool SAL_CALL isReady(  ) throw (::com::sun::star::uno::RuntimeException);
 				virtual ::sal_Bool SAL_CALL isConnected(  ) throw (::com::sun::star::uno::RuntimeException);
 				virtual ::sal_Bool SAL_CALL hasTextAt( ::sal_Int16 row, ::sal_Int16 col, const ::rtl::OUString& text ) throw (::com::sun::star::uno::RuntimeException);
+				virtual ::sal_Int16 SAL_CALL waitForReady( ::sal_Int16 seconds ) throw (::com::sun::star::uno::RuntimeException);
 
 			private:
 
