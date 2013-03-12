@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-11 11:24-0300\n"
+"POT-Creation-Date: 2013-03-12 09:21-0300\n"
 "PO-Revision-Date: 2013-03-11 11:30-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
@@ -135,7 +135,7 @@ msgstr "<%s> precisa do atributo %s"
 msgid "<%s> should be on toplevel"
 msgstr "<%s> deve estar no primeiro nível"
 
-#: v3270/widget.c:296
+#: v3270/widget.c:251
 msgid ""
 "<b>Identity not verified</b>\n"
 "Disconnected from host"
@@ -143,7 +143,7 @@ msgstr ""
 "<b>Identidade não foi confirmada</b>\n"
 "Desconectado do servidor"
 
-#: v3270/widget.c:301 v3270/security.c:370
+#: v3270/widget.c:256 v3270/security.c:370
 msgid ""
 "<b>Identity not verified</b>\n"
 "The connection is insecure"
@@ -151,7 +151,7 @@ msgstr ""
 "<b>Identidade não foi confirmada</b>\n"
 "A conexão não é segura"
 
-#: v3270/widget.c:306
+#: v3270/widget.c:261
 msgid ""
 "<b>Identity verified</b>\n"
 "The connection is secure"
@@ -159,7 +159,7 @@ msgstr ""
 "<b>Identidade verificada</b>\n"
 "A conexão é segura"
 
-#: v3270/widget.c:321
+#: v3270/widget.c:276
 #, c-format
 msgid "<b>SSL state is undefined</b>Unexpected SSL status %ld"
 msgstr "<b>Estado do SSL é indefinido</b>Estado SSL inesperado %ld"
@@ -306,7 +306,7 @@ msgstr "Erro na assinatura CRL"
 msgid "C_haracter Coding:"
 msgstr "C_odificação de caracteres:"
 
-#: print.c:395
+#: print.c:400
 msgid "C_olor scheme:"
 msgstr "Tema de c_ores:"
 
@@ -427,7 +427,7 @@ msgstr "Cancelado pelo usuário"
 msgid "Cannot create socket handle"
 msgstr "Não foi possível criar um manipulador de socket"
 
-#: session.c:323
+#: session.c:330
 #, c-format
 msgid "Cannot find charset \"%s\", using defaults"
 msgstr "Não encontrei codificação \"%s\", usando padrão"
@@ -627,7 +627,7 @@ msgstr "Apagar até o final do campo"
 msgid "Erase to end of line"
 msgstr "Apagar até o final da linha"
 
-#: print.c:234 v3270/widget.c:252 util.c:994
+#: print.c:238 v3270/widget.c:215 util.c:994
 msgid "Error"
 msgstr "Erro"
 
@@ -812,7 +812,7 @@ msgstr "IBM AS/400"
 msgid "IBM S/390"
 msgstr "IBM S/390"
 
-#: v3270/widget.c:314
+#: v3270/widget.c:269
 msgid "Identity not verified"
 msgstr "Identidade não verificada"
 
@@ -997,7 +997,7 @@ msgstr "Estado normal na OIA"
 msgid "Option '%c:' is not supported"
 msgstr "Opção não suportada: '%c:'"
 
-#: print.c:555
+#: print.c:566
 msgid "Options"
 msgstr "Opções"
 
@@ -1186,7 +1186,7 @@ msgstr "Imprimir"
 msgid "Print copy"
 msgstr "Imprimir cópia"
 
-#: print.c:230
+#: print.c:234
 msgid "Print operation failed"
 msgstr "Operação de impressão falhou"
 
@@ -1194,11 +1194,11 @@ msgstr "Operação de impressão falhou"
 msgid "Print selected"
 msgstr "Imprimir seleção"
 
-#: print.c:475
+#: print.c:486
 msgid "Print selection box"
 msgstr "Imprimir marca de seleção"
 
-#: print.c:743 ui/00default.xml:330
+#: print.c:754 ui/00default.xml:330
 msgid "Print settings"
 msgstr "Configurações de impressão"
 
@@ -2028,7 +2028,7 @@ msgstr "Valor de cor inválido ou inesperado: \"%s\""
 msgid "Unexpected or unknown security status"
 msgstr "Unexpected or unknown security status"
 
-#: v3270/widget.c:876
+#: v3270/widget.c:845
 msgid ""
 "Unexpected signature in H3270 object, possible version mismatch in lib3270"
 msgstr ""
@@ -2233,7 +2233,7 @@ msgstr "_Editar"
 msgid "_File"
 msgstr "_Arquivo"
 
-#: print.c:395
+#: print.c:400
 msgid "_Font:"
 msgstr "_Fonte:"
 
