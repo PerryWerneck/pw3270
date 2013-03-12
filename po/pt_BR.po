@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-12 09:21-0300\n"
-"PO-Revision-Date: 2013-03-11 11:30-0300\n"
+"POT-Creation-Date: 2013-03-12 11:09-0300\n"
+"PO-Revision-Date: 2013-03-12 11:29-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
 "Language: pt_BR\n"
@@ -232,7 +232,7 @@ msgstr "Atributo \"%s\" é invalido ou indefinido"
 
 #: v3270/security.c:250
 msgid "Authority and issuer serial number mismatch"
-msgstr "Authority and issuer serial number mismatch"
+msgstr "Divergência nos números de série da autoridade e emissor "
 
 #: v3270/security.c:243
 msgid "Authority and subject key identifier mismatch"
@@ -949,8 +949,8 @@ msgid ""
 "No signatures could be verified because the chain contains only one "
 "certificate and it is not self signed."
 msgstr ""
-"No signatures could be verified because the chain contains only one "
-"certificate and it is not self signed."
+"Nenhuma assinatura pode ser verificada, porque a cadeia contém apenas um "
+"certificado e não é auto assinado."
 
 #: colors.c:412
 msgid "Normal/Protected"
@@ -1565,7 +1565,7 @@ msgstr "Frente da seleção"
 
 #: v3270/security.c:166
 msgid "Self signed certificate"
-msgstr "Certificado auto assinada"
+msgstr "Certificado auto assinado"
 
 #: v3270/security.c:173
 msgid "Self signed certificate in certificate chain"
@@ -1645,7 +1645,7 @@ msgstr "Veloci_dade"
 
 #: v3270/security.c:236
 msgid "Subject issuer mismatch"
-msgstr "Subject issuer mismatch"
+msgstr "Divergência na identidade do emissor"
 
 #: hostdialog.c:198
 msgid "System _type:"
@@ -1653,7 +1653,7 @@ msgstr "Tipo de servidor:"
 
 #: proxy.c:522
 msgid "TELNET Proxy: send error"
-msgstr "TELNET Proxy: send error"
+msgstr "TELNET Proxy: Erro ao enviar"
 
 #: telnet.c:3227
 msgid "TLS negotiation failure"
@@ -1715,7 +1715,7 @@ msgstr ""
 
 #: v3270/security.c:195
 msgid "The certificate has been revoked."
-msgstr "The certificate has been revoked."
+msgstr "O certificado foi revogado."
 
 #: v3270/security.c:111
 msgid ""
@@ -1839,11 +1839,14 @@ msgstr "O nome do arquivo remoto não é válido"
 
 #: v3270/security.c:230
 msgid "The root CA is marked to reject the specified purpose."
-msgstr "The root CA is marked to reject the specified purpose."
+msgstr ""
+"O certificado raiz está marcado para rejeitar a finalidade especificada."
 
 #: v3270/security.c:223
 msgid "The root CA is not marked as trusted for the specified purpose."
-msgstr "The root CA is not marked as trusted for the specified purpose."
+msgstr ""
+"O Certificado raiz não está marcado como confiável para os fins "
+"especificados."
 
 #: v3270/security.c:90 v3270/security.c:97
 msgid "The signature of the certificate is invalid."
@@ -1851,7 +1854,9 @@ msgstr "A assinatura do certificado não é válida."
 
 #: v3270/security.c:216
 msgid "The supplied certificate cannot be used for the specified purpose."
-msgstr "The supplied certificate cannot be used for the specified purpose."
+msgstr ""
+"O certificado fornecido não pode ser utilizado para a finalidade "
+"especificada."
 
 #: dialog.c:436
 msgid ""
@@ -1943,7 +1948,7 @@ msgstr "Não é possível conectar em servidores seguros"
 
 #: v3270/security.c:82
 msgid "Unable to decode issuer public key"
-msgstr "Unable to decode issuer public key"
+msgstr "Não é possível decodificar chave pública do emissor"
 
 #: v3270/security.c:75
 msgid "Unable to decrypt CRL's signature"
@@ -1951,7 +1956,7 @@ msgstr "Unable to decrypt CRL's signature"
 
 #: v3270/security.c:68
 msgid "Unable to decrypt certificate's signature"
-msgstr "Unable to decrypt certificate's signature"
+msgstr "Incapaz de decifrar a assinatura do certificado"
 
 #: v3270/security.c:61
 msgid "Unable to get certificate CRL"
@@ -2026,7 +2031,7 @@ msgstr "Valor de cor inválido ou inesperado: \"%s\""
 
 #: v3270/security.c:342
 msgid "Unexpected or unknown security status"
-msgstr "Unexpected or unknown security status"
+msgstr "Estado de segurança inesperado ou desconhecido."
 
 #: v3270/widget.c:845
 msgid ""

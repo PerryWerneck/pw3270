@@ -359,7 +359,7 @@ int main(int argc, char *argv[])
 #if defined( HAVE_SYSLOG )
 		if(log_to_syslog)
 		{
-			openlog(g_get_prgname(), LOG_NDELAY|LOG_NDELAY, LOG_USER);
+			openlog(g_get_prgname(), LOG_NDELAY, LOG_USER);
 			g_log_set_default_handler(g_syslog,NULL);
 		}
 #endif // HAVE_SYSLOG
@@ -399,6 +399,9 @@ int main(int argc, char *argv[])
 #if defined(WIN32)
 	g_set_application_name(appname);
 #endif // WIN32
+
+	// Just in case!
+	g_mkdir_with_parents(g_get_tmp_dir(),0777);
 
 	rc = initialize();
 	if(!rc)
