@@ -83,16 +83,16 @@ GLIB_LIBS=@GLIB_LIBS@
 GTK_LIBS=@GTK_LIBS@
 
 ifeq ($(LIB3270_MODE),Debug)
-	PW3270_LIBS="-L../../../.bin/Debug@DLLDIR@ -lpw3270"
-	PW3270_CFLAGS="-I../../../src/include"
-	LIB3270_LIBS="-L../../../.bin/Debug@DLLDIR@  -l3270"
+	PW3270_LIBS=-L../../../.bin/Debug@DLLDIR@ -lpw3270
+	PW3270_CFLAGS=-I../../../src/include"
+	LIB3270_LIBS=-L../../../.bin/Debug@DLLDIR@  -l3270
 	LIB3270_CFLAGS=-I../../../src/include
 endif
 
 ifeq ($(LIB3270_MODE),Release)
-	PW3270_LIBS="-L../../../.bin/Release@DLLDIR@ -lpw3270"
-	PW3270_CFLAGS="-I../../../src/include"
-	LIB3270_LIBS="-L../../../.bin/Release@DLLDIR@  -l3270"
+	PW3270_LIBS=-L../../../.bin/Release@DLLDIR@ -lpw3270
+	PW3270_CFLAGS=-I../../../src/include
+	LIB3270_LIBS=-L../../../.bin/Release@DLLDIR@  -l3270
 	LIB3270_CFLAGS=-I../../../src/include
 endif
 
@@ -124,6 +124,11 @@ $(BINRLS)/plugins/$(MODULE_NAME).so: $(foreach SRC, $(basename $(PLUGIN_SRC)), $
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
 	$(LD) $(DLL_FLAGS) -Wl,-soname,`basename $@` $(LDFLAGS) -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(PW3270_LIBS) $(GLIB_LIBS) $(GTK_LIBS) $(DBUS_LIBS)
+
+$(BINRLS)/@PACKAGE_NAME@d: $(foreach SRC, $(basename $(DAEMON_SRC)), $(OBJRLS)/$(SRC).o)
+	@echo "  CCLD `basename $@`"
+	@$(MKDIR) `dirname $@`
+	@$(CC) $(CFLAGS) -o $@ $^ $(DBUS_LIBS) $(GLIB_LIBS) $(LIB3270_LIBS)
 
 #---[ Debug targets ]----------------------------------------------------------
 

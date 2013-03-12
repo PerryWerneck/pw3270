@@ -38,7 +38,7 @@ run_command()
 			;;
 
 		enter)
-			dbus-send --session  --print-reply --dest=$DEST $BPATH $DEST.enter
+			dbus-send --session  --print-reply --dest=$DEST.$SESSION $BPATH $DEST.enter
 			;;
 
 		*)
@@ -77,14 +77,6 @@ do
 			;;
 
 		esac
-
-        elif [ -d $1 ]; then
-
-		IMGNAME=$1
-
-		if [ -e $IMGNAME/matriz.conf ]; then
-			. $IMGNAME/matriz.conf
-		fi
 
 	else
 		run_command $@
