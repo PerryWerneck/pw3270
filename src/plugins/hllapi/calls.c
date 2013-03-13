@@ -117,7 +117,7 @@
  __declspec (dllexport) DWORD __stdcall hllapi_init(LPSTR mode)
  {
  	if(!mode)
-		return EINVAL;
+		return HLLAPI_STATUS_SYSTEM_ERROR;
 
 	trace("%s(%s)",__FUNCTION__,(char *) mode);
 
@@ -264,7 +264,7 @@
  __declspec (dllexport) DWORD __stdcall hllapi_connect(LPSTR uri, WORD wait)
  {
  	if(!(host_connect && hSession && uri))
-		return EINVAL;
+		return HLLAPI_STATUS_SYSTEM_ERROR;
 
  	return host_connect(hSession,uri,wait);
  }
@@ -272,15 +272,45 @@
  __declspec (dllexport) DWORD __stdcall hllapi_is_connected(void)
  {
  	if(!(host_is_connected && hSession))
-		return EINVAL;
+		return HLLAPI_STATUS_SYSTEM_ERROR;
 
  	return host_is_connected(hSession);
+ }
+
+ __declspec (dllexport) DWORD __stdcall hllapi_get_state(void)
+ {
+	switch(hllapi_get_message_id())
+	{
+	case LIB3270_MESSAGE_NONE:				/* 0 - No message */
+		return HLLAPI_STATUS_SUCCESS;
+
+	case LIB3270_MESSAGE_DISCONNECTED:		/* 4 - Disconnected from host */
+		return HLLAPI_STATUS_DISCONNECTED;
+
+	case LIB3270_MESSAGE_MINUS:
+	case LIB3270_MESSAGE_PROTECTED:
+	case LIB3270_MESSAGE_NUMERIC:
+	case LIB3270_MESSAGE_OVERFLOW:
+	case LIB3270_MESSAGE_INHIBIT:
+	case LIB3270_MESSAGE_KYBDLOCK:
+		return HLLAPI_STATUS_KEYBOARD_LOCKED;
+
+	case LIB3270_MESSAGE_SYSWAIT:
+	case LIB3270_MESSAGE_TWAIT:
+	case LIB3270_MESSAGE_AWAITING_FIRST:
+	case LIB3270_MESSAGE_X:
+	case LIB3270_MESSAGE_RESOLVING:
+	case LIB3270_MESSAGE_CONNECTING:
+		return HLLAPI_STATUS_WAITING;
+	}
+
+	return HLLAPI_STATUS_SYSTEM_ERROR;
  }
 
  __declspec (dllexport) DWORD __stdcall hllapi_disconnect(void)
  {
  	if(!(host_disconnect && hSession))
-		return EINVAL;
+		return HLLAPI_STATUS_SYSTEM_ERROR;
 
 	host_disconnect(hSession);
 
@@ -290,7 +320,7 @@
  __declspec (dllexport) DWORD __stdcall hllapi_wait_for_ready(WORD seconds)
  {
  	if(!(wait_for_ready && hSession))
-		return EINVAL;
+		return HLLAPI_STATUS_SYSTEM_ERROR;
 
 	trace("%s seconds=%d\n", __FUNCTION__, (int) seconds);
 
@@ -300,7 +330,7 @@
  __declspec (dllexport) DWORD __stdcall hllapi_wait(WORD seconds)
  {
  	if(!(script_sleep && hSession))
-		return EINVAL;
+		return HLLAPI_STATUS_SYSTEM_ERROR;
 
 	return (DWORD) script_sleep(hSession,(int) seconds);
  }
@@ -308,7 +338,7 @@
  __declspec (dllexport) DWORD __stdcall hllapi_get_message_id(void)
  {
 	if(!(get_message && hSession))
-		return EINVAL;
+		return HLLAPI_STATUS_SYSTEM_ERROR;
 	return (DWORD) get_message(hSession);
  }
 
@@ -318,7 +348,7 @@
 	int		  len;
 
 	if(!(get_text && release_memory && hSession))
-		return EINVAL;
+		return HLLAPI_STATUS_SYSTEM_ERROR;
 
 	trace("%s row=%d col=%d buffer=%p",__FUNCTION__,row,col,buffer);
 	len = strlen(buffer);
@@ -330,7 +360,7 @@
 	trace(" text=%p errno=%d %s\n",text,errno,strerror(errno));
 
 	if(!text)
-		return EINVAL;
+		return HLLAPI_STATUS_SYSTEM_ERROR;
 
 	strncpy(buffer,text,len);
 	release_memory(text);
@@ -343,7 +373,7 @@
  __declspec (dllexport) DWORD __stdcall hllapi_enter(void)
  {
 	if(!(action_enter && hSession))
-		return EINVAL;
+		return HLLAPI_STATUS_SYSTEM_ERROR;
 
 	return (DWORD) action_enter(hSession);
  }
@@ -351,7 +381,7 @@
  __declspec (dllexport) DWORD __stdcall hllapi_set_text_at(WORD row, WORD col, LPSTR text)
  {
 	if(!(set_text_at && hSession))
-		return EINVAL;
+		return HLLAPI_STATUS_SYSTEM_ERROR;
 
 	return (DWORD) set_text_at(hSession,row,col,(const unsigned char *) text);
  }
@@ -359,7 +389,7 @@
  __declspec (dllexport) DWORD __stdcall hllapi_cmp_text_at(WORD row, WORD col, LPSTR text)
  {
 	if(!(cmp_text_at && hSession))
-		return EINVAL;
+		return HLLAPI_STATUS_SYSTEM_ERROR;
 
 	return (DWORD) cmp_text_at(hSession,row,col,(const char *) text);
  }
@@ -367,7 +397,7 @@
  __declspec (dllexport) DWORD __stdcall hllapi_pfkey(WORD key)
  {
 	if(!(pfkey && hSession))
-		return EINVAL;
+		return HLLAPI_STATUS_SYSTEM_ERROR;
 
 	return (DWORD) pfkey(hSession,key);
  }
@@ -375,7 +405,7 @@
  __declspec (dllexport) DWORD __stdcall hllapi_pakey(WORD key)
  {
 	if(!(pfkey && hSession))
-		return EINVAL;
+		return HLLAPI_STATUS_SYSTEM_ERROR;
 
 	return (DWORD) pakey(hSession,key);
  }
@@ -401,7 +431,7 @@
  __declspec (dllexport) DWORD __stdcall hllapi_setcursor(WORD pos)
  {
 	if(!(setcursor && hSession))
-		return EINVAL;
+		return HLLAPI_STATUS_SYSTEM_ERROR;
 	trace("%s(%d)",__FUNCTION__,pos);
 	return setcursor(hSession,pos-1);
  }
@@ -446,7 +476,7 @@
  __declspec (dllexport) DWORD __stdcall hllapi_erase_eof(void)
  {
 	if(!erase_eof && hSession)
-		return EINVAL;
+		return HLLAPI_STATUS_SYSTEM_ERROR;
 	trace("%s",__FUNCTION__);
 	return erase_eof(hSession);
  }
@@ -454,7 +484,7 @@
  __declspec (dllexport) DWORD __stdcall hllapi_print(void)
  {
 	if(!(do_print && hSession))
-		return EINVAL;
+		return HLLAPI_STATUS_SYSTEM_ERROR;
 
 	return do_print(hSession);
  }

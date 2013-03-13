@@ -66,6 +66,7 @@ extern "C" {
  #define HLLAPI_STATUS_UNAVAILABLE			  11	/**< Resource unavailable at this time */
  #define HLLAPI_STATUS_SYSTEM_ERROR			   9 	/**< A system error occurred */
 
+ #define HLLAPI_STATUS_WAITING	HLLAPI_STATUS_TIMEOUT
 
 #ifdef _WIN32
 	// http://www.mingw.org/wiki/Visual_Basic_DLL
@@ -81,6 +82,7 @@ extern "C" {
 	__declspec (dllexport) DWORD __stdcall hllapi_disconnect(void);
 	__declspec (dllexport) DWORD __stdcall hllapi_get_message_id(void);
 	__declspec (dllexport) DWORD __stdcall hllapi_is_connected(void);
+	__declspec (dllexport) DWORD __stdcall hllapi_get_state(void);
 	__declspec (dllexport) DWORD __stdcall hllapi_get_screen_at(WORD row, WORD col, LPSTR buffer);
 	__declspec (dllexport) DWORD __stdcall hllapi_get_screen(WORD pos, LPSTR buffer, WORD len);
 	__declspec (dllexport) DWORD __stdcall hllapi_enter(void);

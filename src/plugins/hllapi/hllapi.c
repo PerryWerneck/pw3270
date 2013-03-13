@@ -366,15 +366,22 @@ static int copy_ps(char *buffer, unsigned short *length, unsigned short *rc)
 	 * 9	A system error was encountered.
 	 *
 	 */
-	 size_t szBuffer = strlen(buffer);
+	size_t	  			  szBuffer	= strlen(buffer);
+	char				* text;
 
-	 if(*length < szBuffer)
-		szBuffer = *length;
+	if(!hllapi_is_connected())
+		return HLLAPI_STATUS_DISCONNECTED;
 
+	text = hllapi_get_string(1, szBuffer);
 
-	#warning Implementar
+	if(!text)
+		return HLLAPI_STATUS_SYSTEM_ERROR;
 
-	return HLLAPI_STATUS_SYSTEM_ERROR;
+	memcpy(buffer,text,szBuffer);
+
+	hllapi_free(text);
+
+	return hllapi_get_state();
 }
 
 static int wait_system(char *buffer, unsigned short *length, unsigned short *rc)
@@ -400,23 +407,10 @@ static int wait_system(char *buffer, unsigned short *length, unsigned short *rc)
 
 	 while(time(0) < end)
 	 {
-	 	switch(hllapi_get_message_id())
-	 	{
-		case LIB3270_MESSAGE_NONE:				/* 0 - No message */
-			return HLLAPI_STATUS_SUCCESS;
+		int state = hllapi_get_state();
 
-		case LIB3270_MESSAGE_DISCONNECTED:		/* 4 - Disconnected from host */
-			return HLLAPI_STATUS_DISCONNECTED;
-
-		case LIB3270_MESSAGE_MINUS:
-		case LIB3270_MESSAGE_PROTECTED:
-		case LIB3270_MESSAGE_NUMERIC:
-		case LIB3270_MESSAGE_OVERFLOW:
-		case LIB3270_MESSAGE_INHIBIT:
-		case LIB3270_MESSAGE_KYBDLOCK:
-			return HLLAPI_STATUS_KEYBOARD_LOCKED;
-
-	 	}
+		if(state != HLLAPI_STATUS_WAITING)
+			return state;
 
 		if(hllapi_wait(1))
 			return HLLAPI_STATUS_SYSTEM_ERROR;
