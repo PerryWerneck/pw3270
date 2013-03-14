@@ -36,7 +36,12 @@
  #include <lib3270/config.h>
  #include <lib3270.h>
  #include <lib3270/log.h>
- #include <oorexxapi.h>
+
+#ifdef HAVE_OOREXXAPI_H
+	#include <oorexxapi.h>
+#else
+	#error Only Rexx 4
+#endif
 
 #ifndef ETIMEDOUT
 	#define ETIMEDOUT -1

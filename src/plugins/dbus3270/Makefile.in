@@ -84,7 +84,7 @@ GTK_LIBS=@GTK_LIBS@
 
 ifeq ($(LIB3270_MODE),Debug)
 	PW3270_LIBS=-L../../../.bin/Debug@DLLDIR@ -lpw3270
-	PW3270_CFLAGS=-I../../../src/include"
+	PW3270_CFLAGS=-I../../../src/include
 	LIB3270_LIBS=-L../../../.bin/Debug@DLLDIR@  -l3270
 	LIB3270_CFLAGS=-I../../../src/include
 endif
