@@ -402,6 +402,8 @@ fi
 
 if test "$app_cv_rexx" == "yes"; then
 	AC_DEFINE(HAVE_REXX)
+	AC_CHECK_HEADER(oorexxapi.h, AC_DEFINE(HAVE_OOREXXAPI_H))
+
 	AC_PATH_TOOL([REXXC], [rexxc], [cp], `$REXXCONFIG --prefix`/bin )
 	PLUGINS="$PLUGINS rx3270"
 	REXX_CFLAGS="$CFLAGS `$REXXCONFIG --cflags`"
