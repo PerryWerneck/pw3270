@@ -75,6 +75,13 @@ if test $GZIP = "no" ; then
 fi
 AC_SUBST(GZIP)
 
+AC_CHECK_PROGS(ZIP,[zip],no)
+export ZIP;
+if test $GZIP = "no" ; then
+        AC_MSG_ERROR([Unable to find the gzip application]);
+fi
+AC_SUBST(ZIP)
+
 AC_CHECK_PROGS(CONVERT,[rsvg-convert],no)
 AC_SUBST(CONVERT)
 
@@ -433,6 +440,8 @@ AC_CONFIG_FILES([
 	src/lib3270/mkversion.sh
 	src/pw3270/Makefile
 	src/oxt/Makefile
+	src/oxt/description.xml
+	src/oxt/manifest.xml
 	src/pw3270/uiparser/Makefile
 	src/tools/Makefile
 	src/plugins/hllapi/Makefile

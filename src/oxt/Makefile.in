@@ -22,6 +22,8 @@ OBJRLS = $(OBJDIR)/Release
 #---[ Tools ]------------------------------------------------------------------------------------------
 MKDIR=@MKDIR_P@
 CXX=@CXX@
+CONVERT=@CONVERT@
+ZIP=@ZIP@
 
 DBG_CFLAGS=-g -DDEBUG=1
 RLS_CFLAGS=-DNDEBUG=1
@@ -62,11 +64,15 @@ LDFLAGS=-L${OO_SDK_HOME}/lib -L${OO_SDK_URE_HOME}/lib -Wl,-rpath-link=${OO_SDK_U
 
 # CC_DEFINES=-DUNX -DGCC -DLINUX -DCPPU_ENV=$(CPPU_ENV) -DGXX_INCLUDE_PATH=$(SDK_GXX_INCLUDE_PATH) -DHAVE_GCC_VISIBILITY_FEATURE
 
-
 $(OBJDBG)/%.o: %.cxx $(OBJDIR)/uno/include/br/com/bb/$(PACKAGE).hpp Makefile
 	@echo $< ...
 	@$(MKDIR) `dirname $@`
 	@$(CXX) $(DBG_CFLAGS) $(CXXFLAGS) $(LIB3270_CFLAGS) $(DLL_CFLAGS) -o $@ -c $<
+
+$(OBJRLS)/%.o: %.cxx $(OBJDIR)/uno/include/br/com/bb/$(PACKAGE).hpp Makefile
+	@echo $< ...
+	@$(MKDIR) `dirname $@`
+	@$(CXX) $(CXXFLAGS) $(LIB3270_CFLAGS) $(DLL_CFLAGS) -o $@ -c $<
 
 %.urd: %.idl
 	@echo $< ...
@@ -81,7 +87,35 @@ $(OBJDBG)/%.o: %.cxx $(OBJDIR)/uno/include/br/com/bb/$(PACKAGE).hpp Makefile
 	$(REGMERGE) -v $@ /UCR $<
 	$(REGMERGE) -v $@ / $<
 
-#---[ Targets ]----------------------------------------------------------------------------------------
+
+#---[ Release targets ]--------------------------------------------------------------------------------
+
+Release: $(PACKAGE).oxt
+
+$(PACKAGE).oxt: $(BINRLS)/$(PACKAGE).uno@DLLEXT@ $(PACKAGE).uno.rdb description.xml manifest.xml description.txt
+	@$(MKDIR) $(BINDIR)/$(PACKAGE).oxt
+
+	@$(MKDIR) $(BINDIR)/$(PACKAGE).oxt/META-INF
+	@cp description.xml $(BINDIR)/$(PACKAGE).oxt/META-INF
+	@cp manifest.xml $(BINDIR)/$(PACKAGE).oxt/META-INF
+
+	@cp description.txt $(BINDIR)/$(PACKAGE).oxt
+	@$(CONVERT) ../pw3270/pixmaps/pw3270.svg --format=png > $(BINDIR)/$(PACKAGE).oxt/$(PACKAGE).png
+
+	@$(MKDIR) $(BINDIR)/$(PACKAGE).oxt/linux
+	@cp $(BINRLS)/$(PACKAGE).uno@DLLEXT@ $(BINDIR)/$(PACKAGE).oxt/linux
+	@cp $(PACKAGE).uno.rdb $(BINDIR)/$(PACKAGE).oxt
+	@rm -f $(BINDIR)/$(PACKAGE).zip
+	@cd $(BINDIR)/$(PACKAGE).oxt ; $(ZIP) -r ../$(PACKAGE).zip .
+	@mv $(BINDIR)/$(PACKAGE).zip $@
+	@echo $@ Ok.
+
+$(BINRLS)/$(PACKAGE).uno@DLLEXT@: $(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SRC).o)
+	@echo $@ ...
+	@$(MKDIR) `dirname $@`
+	@$(CXX) $(DLL_FLAGS) $(LDFLAGS) -o $@ $^
+
+#---[ Debug Targets ]----------------------------------------------------------------------------------
 
 Debug: $(BINDBG)/testprogram
 
@@ -90,12 +124,12 @@ run: $(BINDBG)/testprogram
 
 $(BINDBG)/$(PACKAGE).uno@DLLEXT@: $(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC).o)
 	@echo $@ ...
-	@$(MKDIR) -p `dirname $@`
+	@$(MKDIR) `dirname $@`
 	@$(CXX) $(DLL_FLAGS) $(LDFLAGS) -o $@ $^
 
 $(BINDBG)/testprogram: $(BINDBG)/$(PACKAGE).uno@DLLEXT@ $(OBJDBG)/testprogram.o
 	@echo $@ ...
-	@$(MKDIR) -p `dirname $@`
+	@$(MKDIR) `dirname $@`
 	@$(CXX) $(LDFLAGS) -o $@ $(OBJDBG)/testprogram.o
 
 $(OBJDIR)/uno/include/br/com/bb/$(PACKAGE).hpp: $(PACKAGE).uno.rdb

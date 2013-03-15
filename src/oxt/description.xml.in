@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description xmlns="http://openoffice.org/extensions/description/2006"
+xmlns:d="http://openoffice.org/extensions/description/2006"
+xmlns:xlink="http://www.w3.org/1999/xlink">
+
+  <version value="@PACKAGE_VERSION@" />
+
+  <identifier value="@PACKAGE_NAME@" />
+
+  <platform value="linux_x86" />
+
+  <dependencies>
+    <OpenOffice.org-minimal-version value="2.2" d:name="OpenOffice.org 2.2"/>
+  </dependencies>
+
+  <display-name>
+    <name lang="en">3270 access extension</name>
+  </display-name>
+
+  <icon>
+    <default xlink:href="@PACKAGE_NAME@.png" />
+  </icon>
+
+  <extension-description>
+    <src xlink:href="description.txt" lang="en" />
+  </extension-description>
+
+
+
+</description>

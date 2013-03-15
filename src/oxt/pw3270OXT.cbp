@@ -35,10 +35,12 @@
 		<Unit filename="Makefile.in" />
 		<Unit filename="actions.cxx" />
 		<Unit filename="connection.cxx" />
+		<Unit filename="description.xml.in" />
 		<Unit filename="get.cxx" />
 		<Unit filename="globals.hpp" />
 		<Unit filename="local.cxx" />
 		<Unit filename="main.cxx" />
+		<Unit filename="manifest.xml.in" />
 		<Unit filename="pw3270.idl" />
 		<Unit filename="set.cxx" />
 		<Unit filename="testprogram.cxx" />
