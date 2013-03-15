@@ -7,7 +7,7 @@ xmlns:xlink="http://www.w3.org/1999/xlink">
 
   <identifier value="@PACKAGE_NAME@" />
 
-  <platform value="linux_x86" />
+  <platform value="linux_@host_cpu@" />
 
   <dependencies>
     <OpenOffice.org-minimal-version value="2.2" d:name="OpenOffice.org 2.2"/>

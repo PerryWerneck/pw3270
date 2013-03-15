@@ -90,24 +90,25 @@ $(OBJRLS)/%.o: %.cxx $(OBJDIR)/uno/include/br/com/bb/$(PACKAGE).hpp Makefile
 
 #---[ Release targets ]--------------------------------------------------------------------------------
 
-Release: $(PACKAGE).oxt
+Release: $(BINDIR)/$(PACKAGE).oxt
 
-$(PACKAGE).oxt: $(BINRLS)/$(PACKAGE).uno@DLLEXT@ $(PACKAGE).uno.rdb description.xml manifest.xml description.txt
-	@$(MKDIR) $(BINDIR)/$(PACKAGE).oxt
+$(BINDIR)/$(PACKAGE).oxt: $(BINRLS)/$(PACKAGE).uno@DLLEXT@ $(PACKAGE).uno.rdb description.xml manifest.xml description.txt
+	@rm -f $@
 
-	@$(MKDIR) $(BINDIR)/$(PACKAGE).oxt/META-INF
-	@cp description.xml $(BINDIR)/$(PACKAGE).oxt/META-INF
-	@cp manifest.xml $(BINDIR)/$(PACKAGE).oxt/META-INF
+	@$(MKDIR) $(BINDIR)/$(PACKAGE).oxt.tmp
 
-	@cp description.txt $(BINDIR)/$(PACKAGE).oxt
-	@$(CONVERT) ../pw3270/pixmaps/pw3270.svg --format=png > $(BINDIR)/$(PACKAGE).oxt/$(PACKAGE).png
+	@$(MKDIR) $(BINDIR)/$(PACKAGE).oxt.tmp/META-INF
+	@cp manifest.xml $(BINDIR)/$(PACKAGE).oxt.tmp/META-INF
 
-	@$(MKDIR) $(BINDIR)/$(PACKAGE).oxt/linux
-	@cp $(BINRLS)/$(PACKAGE).uno@DLLEXT@ $(BINDIR)/$(PACKAGE).oxt/linux
-	@cp $(PACKAGE).uno.rdb $(BINDIR)/$(PACKAGE).oxt
-	@rm -f $(BINDIR)/$(PACKAGE).zip
-	@cd $(BINDIR)/$(PACKAGE).oxt ; $(ZIP) -r ../$(PACKAGE).zip .
-	@mv $(BINDIR)/$(PACKAGE).zip $@
+	@cp description.xml $(BINDIR)/$(PACKAGE).oxt.tmp
+	@cp description.txt $(BINDIR)/$(PACKAGE).oxt.tmp
+
+	@$(CONVERT) ../pw3270/pixmaps/pw3270.svg --format=png > $(BINDIR)/$(PACKAGE).oxt.tmp/$(PACKAGE).png
+
+	@cp $(BINRLS)/$(PACKAGE).uno@DLLEXT@ $(BINDIR)/$(PACKAGE).oxt.tmp
+	@cp $(PACKAGE).uno.rdb $(BINDIR)/$(PACKAGE).oxt.tmp
+	@rm -f $(BINDIR)/$(PACKAGE).oxt
+	@cd $(BINDIR)/$(PACKAGE).oxt.tmp ; $(ZIP) -r -m ../$(PACKAGE).oxt .
 	@echo $@ Ok.
 
 $(BINRLS)/$(PACKAGE).uno@DLLEXT@: $(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SRC).o)
