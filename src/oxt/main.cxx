@@ -239,6 +239,19 @@ pw3270::uno_impl::~uno_impl()
 	return 0;
 }
 
+::sal_Int16 SAL_CALL pw3270::uno_impl::dsTrace( ::sal_Bool state ) throw (::com::sun::star::uno::RuntimeException)
+{
+	hSession->log("DS trace is %s",state ? "ON" : "OFF");
+	hSession->set_toggle(LIB3270_TOGGLE_DS_TRACE,state);
+	return 0;
+}
+
+::sal_Int16 SAL_CALL pw3270::uno_impl::screenTrace( ::sal_Bool state ) throw (::com::sun::star::uno::RuntimeException)
+{
+	hSession->log("Screen trace is %s",state ? "ON" : "OFF");
+	hSession->set_toggle(LIB3270_TOGGLE_SCREEN_TRACE,state);
+	return 0;
+}
 
 pw3270::session::session()
 {

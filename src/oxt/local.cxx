@@ -31,6 +31,7 @@
 
  #include "globals.hpp"
  #include <errno.h>
+ #include <string.h>
 
  #ifdef HAVE_SYSLOG
 	#include <syslog.h>
@@ -47,14 +48,53 @@
 
 /*---[ Implement ]-----------------------------------------------------------------------------------------*/
 
-static void loghandler(H3270 *session, const char *module, int rc, const char *fmt, va_list args)
-{
+ static void loghandler(H3270 *session, const char *module, int rc, const char *fmt, va_list args)
+ {
 #ifdef HAVE_SYSLOG
 	openlog(PACKAGE_NAME, LOG_NDELAY, LOG_USER);
 	vsyslog(LOG_INFO,fmt,args);
 	closelog();
 #endif // HAVE_SYSLOG
-}
+ }
+
+ static void tracehandler(H3270 *session, const char *fmt, va_list args)
+ {
+#ifdef HAVE_SYSLOG
+
+	#define MAX_LOG_LENGTH 200
+
+	static char	  line[MAX_LOG_LENGTH+1];
+	char 		  temp[MAX_LOG_LENGTH];
+	char		* ptr;
+	size_t		  len = strlen(line);
+
+	vsnprintf(temp,MAX_LOG_LENGTH-len,fmt,args);
+
+	ptr = strchr(temp,'\n');
+	if(!ptr)
+	{
+		strncat(line,temp,MAX_LOG_LENGTH);
+		if(strlen(line) >= MAX_LOG_LENGTH)
+		{
+			openlog(PACKAGE_NAME, LOG_NDELAY, LOG_USER);
+			syslog(LOG_INFO,line);
+			closelog();
+			*line = 0;
+		}
+		return;
+	}
+
+	*ptr = 0;
+	strncat(line,temp,MAX_LOG_LENGTH);
+
+	openlog(PACKAGE_NAME, LOG_NDELAY, LOG_USER);
+	syslog(LOG_INFO,line);
+	closelog();
+
+	strncpy(line,ptr+1,MAX_LOG_LENGTH);
+
+#endif // HAVE_SYSLOG
+ }
 
  pw3270::lib3270_session::lib3270_session()
  {
@@ -73,12 +113,14 @@ static void loghandler(H3270 *session, const char *module, int rc, const char *f
 		{ (void **) & _pakey,				"lib3270_pakey"					},
 		{ (void **) & _in_tn3270e,			"lib3270_in_tn3270e"			},
 		{ (void **) & _get_program_message,	"lib3270_get_program_message"	},
-		{ (void **) & _mem_free,			"lib3270_free"					}
+		{ (void **) & _mem_free,			"lib3270_free"					},
+		{ (void **) & _set_toggle,			"lib3270_set_toggle"			}
 
 	};
 
  	H3270 * (*lib3270_new)(const char *);
  	void	(*set_log_handler)(void (*loghandler)(H3270 *, const char *, int, const char *, va_list));
+	void 	(*set_trace_handler)( void (*handler)(H3270 *session, const char *fmt, va_list args) );
 
 	hThread  = NULL;
 	hSession = NULL;
@@ -89,13 +131,21 @@ static void loghandler(H3270 *session, const char *module, int rc, const char *f
 		return;
 
 	for(int f = 0; f < (sizeof (call) / sizeof ((call)[0]));f++)
+	{
 		*call[f].entry = (void *) osl_getAsciiFunctionSymbol(hModule,call[f].name);
+		if(!*call[f].entry)
+			log("Error loading lib3270::%s",call[f].name);
+	}
 
 	/* Get lib3270 session handle */
-	set_log_handler = (void (*)(void (*loghandler)(H3270 *, const char *, int, const char *, va_list))) osl_getAsciiFunctionSymbol(hModule,"lib3270_set_log_handler");
+	set_log_handler   = (void (*)(void (*loghandler)(H3270 *, const char *, int, const char *, va_list))) osl_getAsciiFunctionSymbol(hModule,"lib3270_set_log_handler");
+	set_trace_handler = (void (*)(void (*handler)(H3270 *session, const char *fmt, va_list args) )) osl_getAsciiFunctionSymbol(hModule,"lib3270_set_trace_handler");
 
 	if(set_log_handler)
 		set_log_handler(loghandler);
+
+	if(set_trace_handler)
+		set_trace_handler(tracehandler);
 
 	lib3270_new = (H3270 * (*)(const char *)) osl_getAsciiFunctionSymbol(hModule,"lib3270_session_new");
 	hSession = lib3270_new("");
@@ -193,13 +243,16 @@ static void loghandler(H3270 *session, const char *module, int rc, const char *f
 	void (*_iterate)(void *h, int wait) =
 			(void (*)(void *, int)) osl_getAsciiFunctionSymbol(hModule,"lib3270_main_iterate");
 
+	trace("%s starts",__FUNCTION__);
 	_connect(hSession,NULL,1);
 
+	trace("%s network loop begin",__FUNCTION__);
 	while(enabled && !_status(hSession))
 	{
 		osl_yieldThread();
 		_iterate(hSession,1);
 	}
+	trace("%s network loop ends",__FUNCTION__);
 
 	osl_yieldThread();
 
@@ -271,4 +324,10 @@ static void loghandler(H3270 *session, const char *module, int rc, const char *f
 	if(!hSession)
 		return false;
 	return _in_tn3270e(hSession) != 0;
+ }
+
+ void pw3270::lib3270_session::set_toggle(LIB3270_TOGGLE toggle, bool state)
+ {
+	if(hSession)
+		_set_toggle(hSession,toggle,(int) state);
  }

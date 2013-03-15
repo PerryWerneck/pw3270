@@ -82,6 +82,8 @@ module br
 				short	waitForReady([in] short seconds);
 //				short	waitForTextAt(in] short row, [in] short col, [in] string text, [in] short seconds);
 				boolean	isConnected();
+				short	dsTrace([in] boolean mode);
+				short	screenTrace([in] boolean mode);
 
 			};
 

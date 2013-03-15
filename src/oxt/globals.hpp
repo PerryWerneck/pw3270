@@ -57,6 +57,7 @@
 				virtual char			 *  get_text_at(int row, int col, int len)			= 0;
 				virtual int					set_text_at(int row, int col, const char *text) = 0;
 				virtual int					cmp_text_at(int row, int col, const char *text) = 0;
+				virtual void			    set_toggle(LIB3270_TOGGLE toggle, bool state)	= 0;
 
 				virtual int					connect(const char *uri)						= 0;
 				virtual int					disconnect(void)								= 0;
@@ -99,6 +100,7 @@
 				virtual int					cmp_text_at(int row, int col, const char *text);
 
 				virtual void				mem_free(void *ptr);
+				virtual void			    set_toggle(LIB3270_TOGGLE toggle, bool state);
 
 			private:
 				bool		  enabled;
@@ -121,6 +123,8 @@
 				int				  (* _pfkey)(H3270 *, int);
 				int				  (* _pakey)(H3270 *, int);
 				void			* (* _mem_free)(void *);
+				void 			  (*_set_toggle)(void *h, LIB3270_TOGGLE ix, int value);
+
 
 		};
 
@@ -156,6 +160,8 @@
 				virtual ::sal_Bool SAL_CALL isConnected(  ) throw (::com::sun::star::uno::RuntimeException);
 				virtual ::sal_Bool SAL_CALL hasTextAt( ::sal_Int16 row, ::sal_Int16 col, const ::rtl::OUString& text ) throw (::com::sun::star::uno::RuntimeException);
 				virtual ::sal_Int16 SAL_CALL waitForReady( ::sal_Int16 seconds ) throw (::com::sun::star::uno::RuntimeException);
+				virtual ::sal_Int16 SAL_CALL dsTrace( ::sal_Bool state ) throw (::com::sun::star::uno::RuntimeException);
+				virtual ::sal_Int16 SAL_CALL screenTrace( ::sal_Bool state ) throw (::com::sun::star::uno::RuntimeException);
 
 			private:
 

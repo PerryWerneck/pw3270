@@ -53,70 +53,25 @@
 #include <stdarg.h>
 #include <fcntl.h>
 #include "3270ds.h"
-//#include "appres.h"
-// #include "objects.h"
 #include "resources.h"
-// #include "ctlr.h"
 
 #include "charsetc.h"
-// #include "childc.h"
 #include "ctlrc.h"
 #include "popupsc.h"
-// #include "printc.h"
-// #include "savec.h"
 #include "tablesc.h"
 #include "telnetc.h"
 #include "trace_dsc.h"
 #include "utilc.h"
-// #include "w3miscc.h"
 #include "toggle.h"
 
 /* Maximum size of a tracefile header. */
 #define MAX_HEADER_SIZE		(10*1024)
 
-/* Minimum size of a trace file. */
-// #define MIN_TRACEFILE_SIZE	(64*1024)
-// #define MIN_TRACEFILE_SIZE_NAME	"64K"
-
-/* System calls which may not be there. */
-// #if !defined(HAVE_FSEEKO)
-// #define fseeko(s, o, w)	fseek(s, (long)o, w)
-// #define ftello(s)	(off_t)ftell(s)
-// #endif
-
-// #include <lib3270/api.h>
 
 /* Statics */
-// static int      dscnt = 0;
-
-/*
-#if defined (LIB3270)
-	HCONSOLE		tracewindow_handle = 0;
-#elif defined(_WIN32)
-	static HANDLE	tracewindow_handle = NULL;
-#else
-	static int		tracewindow_pid = -1;
-#endif
-*/
-
-// static FILE    *tracef = NULL;
-// static FILE    *tracef_pipe = NULL;
-// static char    *tracef_bufptr = CN;
-// static off_t	tracef_size = 0;
-// static off_t	tracef_max = 0;
-// static char    *tracef_midpoint_header = CN;
-// static off_t	tracef_midpoint = 0;
-
 static void __vwtrace(H3270 *session, const char *fmt, va_list args);
 static void	wtrace(H3270 *session, const char *fmt, ...);
-// static char    *create_tracefile_header(const char *mode);
-// static void	stop_tracing(void);
-
-/* Globals */
-// struct timeval  ds_ts;
-
 static void (*vwtrace)(H3270 *session, const char *fmt, va_list args) = __vwtrace;
-// Boolean         trace_skipping = False;
 
 
 LIB3270_EXPORT void lib3270_set_trace_handler( void (*handler)(H3270 *session, const char *fmt, va_list args) )

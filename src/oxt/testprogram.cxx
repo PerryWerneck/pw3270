@@ -104,9 +104,13 @@ int SAL_CALL main(int argc, char **argv)
 		if(srv.is())
 		{
 			// Wait for commands
+			char buffer[4096];
 			OString	str;
 
 			printf("Revision:\t%d\n",srv->getRevision());
+
+			srv->dsTrace(true);
+			srv->screenTrace(true);
 
 			printf("getConnectionState: %d\n", srv->getConnectionState());
 			printf("Connect(): %d\n" , srv->Connect(OUString::createFromAscii("L:3270.df.bb:9023")));
@@ -136,14 +140,15 @@ int SAL_CALL main(int argc, char **argv)
 			str	=  OUStringToOString( srv->getScreenContent(),RTL_TEXTENCODING_UTF8);
 			printf("Entire screen:\n%s\n",str.pData->buffer);
 
+
+			*/
+
 			printf("Enter to exit...\n");
 			fgets(buffer,80,stdin);
 
 			printf("Disconnect(): %d\n" , srv->Disconnect());
 
-			sleep(5);
-
-			*/
+			srv->sleep(5);
 
 		}
 	}
