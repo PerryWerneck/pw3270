@@ -31,6 +31,10 @@
 
 #include "globals.hpp"
 
+#ifdef HAVE_SYSLOG
+	#include <syslog.h>
+#endif // HAVE_SYSLOG
+
 #include <salhelper/timer.hxx>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
@@ -229,6 +233,12 @@ pw3270::uno_impl::~uno_impl()
 	return 0;
 }
 
+::sal_Int16 SAL_CALL pw3270::uno_impl::log( const ::rtl::OUString& msg ) throw (::com::sun::star::uno::RuntimeException)
+{
+	hSession->log("%s",rtl::OUStringToOString(msg,RTL_TEXTENCODING_UTF8).getStr());
+	return 0;
+}
+
 
 pw3270::session::session()
 {
@@ -251,4 +261,14 @@ void pw3270::session::sleep(int seconds)
 	osl_waitThread(&t);
 }
 
+void pw3270::session::log(const char *fmt, const char *msg)
+{
+#ifdef HAVE_SYSLOG
+	openlog(PACKAGE_NAME, LOG_NDELAY, LOG_USER);
+	syslog(LOG_INFO,fmt,msg);
+	closelog();
+#else
+	#error This module needs syslog support
+#endif // HAVE_SYSLOG
+}
 

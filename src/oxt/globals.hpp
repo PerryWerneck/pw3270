@@ -70,6 +70,8 @@
 
 				void						sleep(int seconds = 1);
 
+				void					    log(const char *fmt, const char *msg);
+
 				rtl_TextEncoding			get_encoding();
 
 		};
@@ -145,6 +147,7 @@
 				virtual ::sal_Int16 SAL_CALL sleep( ::sal_Int16 seconds ) throw (::com::sun::star::uno::RuntimeException);
 				virtual ::rtl::OUString SAL_CALL getTextAt( ::sal_Int16 row, ::sal_Int16 col, ::sal_Int16 size ) throw (::com::sun::star::uno::RuntimeException);
 				virtual ::sal_Int16 SAL_CALL setTextAt( ::sal_Int16 row, ::sal_Int16 col, const ::rtl::OUString& text ) throw (::com::sun::star::uno::RuntimeException);
+				virtual ::sal_Int16 SAL_CALL log(const ::rtl::OUString& text ) throw (::com::sun::star::uno::RuntimeException);
 				virtual ::sal_Int16 SAL_CALL enter(  ) throw (::com::sun::star::uno::RuntimeException);
 				virtual ::sal_Int16 SAL_CALL pfkey( ::sal_Int16 keycode ) throw (::com::sun::star::uno::RuntimeException);
 				virtual ::sal_Int16 SAL_CALL pakey( ::sal_Int16 keycode ) throw (::com::sun::star::uno::RuntimeException);

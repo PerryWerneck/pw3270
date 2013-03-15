@@ -32,6 +32,11 @@
  #include "globals.hpp"
  #include <errno.h>
 
+ #ifdef HAVE_SYSLOG
+	#include <syslog.h>
+	 #include <stdarg.h>
+ #endif // HAVE_SYSLOG
+
 /*
  * NOTE:	Take a better look at osl_createEmptySocketAddr() & osl_connectSocketTo() to see if there's
  *			a way to use this calls to connect with the host for better performance.
@@ -41,6 +46,15 @@
 
 
 /*---[ Implement ]-----------------------------------------------------------------------------------------*/
+
+static void loghandler(H3270 *session, const char *module, int rc, const char *fmt, va_list args)
+{
+#ifdef HAVE_SYSLOG
+	openlog(PACKAGE_NAME, LOG_NDELAY, LOG_USER);
+	vsyslog(LOG_INFO,fmt,args);
+	closelog();
+#endif // HAVE_SYSLOG
+}
 
  pw3270::lib3270_session::lib3270_session()
  {
@@ -64,6 +78,7 @@
 	};
 
  	H3270 * (*lib3270_new)(const char *);
+ 	void	(*set_log_handler)(void (*loghandler)(H3270 *, const char *, int, const char *, va_list));
 
 	hThread  = NULL;
 	hSession = NULL;
@@ -77,9 +92,15 @@
 		*call[f].entry = (void *) osl_getAsciiFunctionSymbol(hModule,call[f].name);
 
 	/* Get lib3270 session handle */
+	set_log_handler = (void (*)(void (*loghandler)(H3270 *, const char *, int, const char *, va_list))) osl_getAsciiFunctionSymbol(hModule,"lib3270_set_log_handler");
+
+	if(set_log_handler)
+		set_log_handler(loghandler);
+
 	lib3270_new = (H3270 * (*)(const char *)) osl_getAsciiFunctionSymbol(hModule,"lib3270_session_new");
 	hSession = lib3270_new("");
 
+	log("%s UNO extension loaded",PACKAGE_NAME);
  }
 
  pw3270::lib3270_session::~lib3270_session()
@@ -105,6 +126,7 @@
 		hModule = NULL;
 	}
 
+	log("%s UNO extension unloaded",PACKAGE_NAME);
  }
 
  int pw3270::lib3270_session::get_revision(void)

@@ -75,6 +75,7 @@ module br
 
 				/* Misc */
 				short	getRevision();
+				short	log([in] string msg);
 				short	sleep([in] short seconds);
 				boolean isReady();
 				boolean hasTextAt([in] short row, [in] short col, [in] string text);
