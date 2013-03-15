@@ -147,7 +147,7 @@
 
 		trace("hModule=%p",hModule);
 		if(hModule)
-			return EBUSY;
+			return -EBUSY;
 
 		kernel 				= LoadLibrary("kernel32.dll");
 		AddDllDirectory		= (HANDLE (*)(PCWSTR)) GetProcAddress(kernel,"AddDllDirectory");
@@ -219,9 +219,9 @@
 
 			if(!ptr)
 			{
-				fprintf(stderr,"Can´t load \"%s\"\n",entry_point[f].name);
+				trace(stderr,"Can´t load \"%s\"\n",entry_point[f].name);
 				hllapi_deinit();
-				return ENOENT;
+				return -ENOENT;
 			}
 			*entry_point[f].call = ptr;
 		}
