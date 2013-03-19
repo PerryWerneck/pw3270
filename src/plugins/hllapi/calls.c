@@ -219,7 +219,7 @@
 
 			if(!ptr)
 			{
-				trace(stderr,"Can´t load \"%s\"\n",entry_point[f].name);
+				trace("Can´t load \"%s\"\n",entry_point[f].name);
 				hllapi_deinit();
 				return -ENOENT;
 			}
@@ -360,14 +360,17 @@
 	trace(" text=%p errno=%d %s\n",text,errno,strerror(errno));
 
 	if(!text)
-		return HLLAPI_STATUS_SYSTEM_ERROR;
+	{
+		int rc = hllapi_get_state();
+		return rc == HLLAPI_STATUS_SUCCESS ? -1 : rc;
+	}
 
 	strncpy(buffer,text,len);
 	release_memory(text);
 
 	trace("text:\n%s\n",buffer);
 
- 	return 0;
+ 	return HLLAPI_STATUS_SUCCESS;
  }
 
  __declspec (dllexport) DWORD __stdcall hllapi_enter(void)
@@ -439,7 +442,7 @@
  __declspec (dllexport) DWORD __stdcall hllapi_getcursor()
  {
 	if(!(getcursor && hSession))
-		return -EINVAL;
+		return HLLAPI_STATUS_SYSTEM_ERROR;
 	return getcursor(hSession)+1;
  }
 
@@ -453,13 +456,16 @@
 
 	text = hllapi_get_string(offset, szBuffer);
 	if(!text)
-		return HLLAPI_STATUS_SYSTEM_ERROR;
+	{
+		int rc = hllapi_get_state();
+		return rc == HLLAPI_STATUS_SUCCESS ? -1 : rc;
+	}
 
 	memcpy(buffer,text,len);
 
 	hllapi_free(text);
 
-	return 0;
+	return HLLAPI_STATUS_SUCCESS;
  }
 
  __declspec (dllexport) DWORD __stdcall hllapi_emulate_input(LPSTR buffer, WORD len, WORD pasting)
