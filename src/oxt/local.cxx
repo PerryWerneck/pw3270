@@ -88,7 +88,7 @@
 	strncat(line,temp,MAX_LOG_LENGTH);
 
 	openlog(PACKAGE_NAME, LOG_NDELAY, LOG_USER);
-	syslog(LOG_INFO,line);
+	syslog(LOG_DEBUG,line);
 	closelog();
 
 	strncpy(line,ptr+1,MAX_LOG_LENGTH);
