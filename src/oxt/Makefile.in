@@ -6,6 +6,7 @@ SOURCES=main.cxx local.cxx connection.cxx get.cxx set.cxx actions.cxx
 prefix=/usr
 exec_prefix=@exec_prefix@
 libdir=@libdir@
+instdir=$(DESTDIR)/$(libdir)/libreoffice/share/extensions/$(PACKAGE)
 
 #---[ Paths ]------------------------------------------------------------------------------------------
 ROOTDIR ?= .
@@ -21,6 +22,9 @@ OBJRLS = $(OBJDIR)/Release
 
 #---[ Tools ]------------------------------------------------------------------------------------------
 MKDIR=@MKDIR_P@
+INSTALL=@INSTALL@
+INSTALL_DATA=@INSTALL_DATA@
+INSTALL_PROGRAM=@INSTALL_PROGRAM@
 CXX=@CXX@
 CONVERT=@CONVERT@
 ZIP=@ZIP@
@@ -92,6 +96,19 @@ $(OBJRLS)/%.o: %.cxx $(OBJDIR)/uno/include/br/com/bb/$(PACKAGE).hpp Makefile
 
 Release: $(BINDIR)/$(PACKAGE).oxt
 
+install: $(BINRLS)/$(PACKAGE).uno@DLLEXT@ $(PACKAGE).uno.rdb description.xml manifest.xml description.txt $(PACKAGE).png
+	@$(MKDIR) $(instdir)
+	@$(MKDIR) $(instdir)/META-INF
+	@$(INSTALL_DATA) manifest.xml $(instdir)/META-INF
+
+	@$(INSTALL_DATA) description.xml $(instdir)
+	@$(INSTALL_DATA) description.txt $(instdir)
+
+	@$(INSTALL_DATA) $(PACKAGE).png $(instdir)/$(PACKAGE).png
+
+	@$(INSTALL_PROGRAM) $(BINRLS)/$(PACKAGE).uno@DLLEXT@ $(instdir)
+	@$(INSTALL_DATA) $(PACKAGE).uno.rdb $(instdir)
+
 $(BINDIR)/$(PACKAGE).oxt: $(BINRLS)/$(PACKAGE).uno@DLLEXT@ $(PACKAGE).uno.rdb description.xml manifest.xml description.txt
 	@rm -f $@
 
@@ -115,6 +132,9 @@ $(BINRLS)/$(PACKAGE).uno@DLLEXT@: $(foreach SRC, $(basename $(SOURCES)), $(OBJRL
 	@echo $@ ...
 	@$(MKDIR) `dirname $@`
 	@$(CXX) $(DLL_FLAGS) $(LDFLAGS) -o $@ $^
+
+$(PACKAGE).png: ../pw3270/pixmaps/pw3270.svg
+	@$(CONVERT) $^ --format=png > $@
 
 #---[ Debug Targets ]----------------------------------------------------------------------------------
 
@@ -145,6 +165,7 @@ cleanDebug: clean
 clean:
 	@rm -f *.urd
 	@rm -f *.uno.rdb
+	@rm -f $(PACKAGE).png
 	@rm -fr $(OBJDIR)
 	@rm -fr $(BINDIR)
 
