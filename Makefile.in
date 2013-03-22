@@ -318,6 +318,9 @@ install-sdk:
 	@$(INSTALL_DATA) src/sample/sample.cbp $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/sample
 	@$(INSTALL_DATA) src/sample/*.c $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/sample
 
+install-oxt:
+	@make LIB3270_CFLAGS="-I../../src/include" -C src/oxt install
+
 clean:
 	@rm -fr .obj
 	@rm -fr .bin
