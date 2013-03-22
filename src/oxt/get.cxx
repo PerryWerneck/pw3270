@@ -39,6 +39,12 @@ sal_Int16 SAL_CALL pw3270::uno_impl::getRevision() throw (RuntimeException)
 	return hSession->get_revision();
 }
 
+::rtl::OUString SAL_CALL pw3270::uno_impl::getVersion() throw (RuntimeException)
+{
+	const char *version = PACKAGE_VERSION;
+	return OUString(version, strlen(version), hSession->get_encoding(), RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE);
+}
+
 sal_Int16 SAL_CALL pw3270::uno_impl::getConnectionState(  ) throw (::com::sun::star::uno::RuntimeException)
 {
 	return hSession->get_state();

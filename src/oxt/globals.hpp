@@ -145,6 +145,7 @@
 
 				// pw3270 implementation - Main
 				virtual ::sal_Int16 SAL_CALL getRevision() throw (RuntimeException);
+				virtual ::rtl::OUString SAL_CALL getVersion(  ) throw (::com::sun::star::uno::RuntimeException);
 				virtual ::sal_Int16 SAL_CALL Connect( const ::rtl::OUString& hostinfo ) throw (::com::sun::star::uno::RuntimeException);
 				virtual ::sal_Int16 SAL_CALL Disconnect(  ) throw (::com::sun::star::uno::RuntimeException);
 				virtual ::sal_Int16 SAL_CALL getConnectionState(  ) throw (::com::sun::star::uno::RuntimeException);
