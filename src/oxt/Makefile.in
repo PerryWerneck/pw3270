@@ -35,8 +35,8 @@ RLS_CFLAGS=-DNDEBUG=1
 #---[ LibreOffice SDK ]--------------------------------------------------------------------------------
 COMID=gcc3
 OO_SDK_NAME=openoffice.org3.5_sdk
-OFFICE_HOME=${libdir}/libreoffice
-OO_SDK_HOME=${OFFICE_HOME}/sdk
+OFFICE_HOME=@OFFICE_HOME@
+OO_SDK_HOME=@OO_SDK_HOME@
 OO_SDK_URE_HOME=${OFFICE_HOME}/ure
 OO_SDK_URE_BIN_DIR=${OO_SDK_URE_HOME}/bin
 OO_SDK_URE_LIB_DIR=${OO_SDK_URE_HOME}/lib
@@ -51,9 +51,9 @@ REGLIB=-lreg
 STORELIB=-lstore
 
 # Libre office tools
-IDLC=${OO_SDK_HOME}/bin/idlc
-REGMERGE=${OO_SDK_URE_BIN_DIR}/regmerge
-CPPUMAKER=${OO_SDK_HOME}/bin/cppumaker
+IDLC=@IDLC@
+REGMERGE=@REGMERGE@
+CPPUMAKER=@CPPUMAKER@
 
 #---[ Rules ]------------------------------------------------------------------------------------------
 

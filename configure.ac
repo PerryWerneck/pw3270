@@ -422,6 +422,52 @@ AC_SUBST(REXXCONFIG)
 AC_SUBST(REXX_CFLAGS)
 AC_SUBST(REXX_LIBS)
 
+#--[ Libreoffice ]--------------------------------------------------------------------------------------------------------------------------------------------
+
+AC_ARG_ENABLE([office],[AS_HELP_STRING([--disable-office], [Disable libreoffice extension])],[ app_cv_office="$enableval" ],[ app_cv_office="yes" ])
+
+AC_ARG_VAR([OFFICE_HOME], [Libreoffice home])
+AC_ARG_VAR([OO_SDK_HOME], [Libreoffice SDK home])
+
+OO_SDK_URE_HOME=$OFFICE_HOME/ure
+OO_SDK_URE_BIN_DIR=$OO_SDK_URE_HOME/bin
+OO_SDK_URE_LIB_DIR=$OO_SDK_URE_HOME/lib
+
+AC_PATH_TOOL([IDLC], idlc, "no", path="$PATH:$OO_SDK_HOME/bin")
+if test "$IDLC" == "no" ; then
+	app_cv_office="no"
+fi
+
+AC_PATH_TOOL([REGMERGE], regmerge, "no", path="$PATH:$OO_SDK_URE_BIN_DIR")
+if test "$REGMERGE" == "no" ; then
+	app_cv_office="no"
+fi
+
+AC_PATH_TOOL([CPPUMAKER], cppumaker, "no", path="$PATH:$OO_SDK_HOME/bin")
+if test "$CPPUMAKER" == "no" ; then
+	app_cv_office="no"
+fi
+
+# Check for OO_SDK_HOME
+if test "_$OO_SDK_HOME" == "_" ; then
+	app_cv_office="no"
+fi
+
+# Check for OFFICE_HOME
+if test "_$OFFICE_HOME" == "_" ; then
+	app_cv_office="no"
+fi
+
+# Set targets
+if test "$app_cv_office" == "yes" ; then
+	AC_MSG_NOTICE([libreoffice sdk is present.])
+else
+	AC_MSG_NOTICE([libreoffice sdk is NOT present.])
+fi
+
+AC_SUBST(OFFICE_HOME)
+AC_SUBST(OO_SDK_HOME)
+
 #--[ Pre-reqs ]-----------------------------------------------------------------------------------------------------------------------------------------------
 AC_SUBST(LIB3270_REQUIRES)
 
