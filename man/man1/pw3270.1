@@ -43,17 +43,23 @@ has been created to allow you to create your own programs using the 3270 protoco
 Shows the available options.
 .IP "-h hostname:port"
 Connects to the host and port specified. Use the form
-.I "s:hostname:port"
+.I "L:hostname:port"
 for a secure (SSL) connection.
 .IP "-a application-name"
-Specifies an alternate window title. This is useful if you want to name each host window differently (with the service name or host address, for example). The default is to always name the window "pw3270".
+Specifies an alternate application name. This is useful if you want to name each host window differently (with the service name or host address, for example). The default is to always name the window "pw3270".
 .IP "-s session-name"
 Specifies an anternate session-name. This affects some plugins who does IPC communications, like the dbus one.
-.IP "-c Change the reported colors"
+.IP "-c colors"
 Change the response to a Query(Color); when 8 pw3270 will respond with a list of 8 supported colors; when 16 the response will be a list of the 16 standard colors.
-.IP "-t Change systemtype"
+.IP "-t System type"
 Change the host type parameter; this afects the file transfer (TSO or VM) and, for AS-400, the PFkey action.
 .SH FILES
+.IP "-l Send messages to syslog"
+Send application messages to system log.
+.IP "-S toggle1,toggle2,...,toggleN"
+Turn the informed toggles "ON"
+.IP "-R toggle1,toggle2,...,toggleN"
+Turn the informed toggles "OFF"
 .I /etc/pw3270.conf
 .RS
 The system wide configuration file. See
