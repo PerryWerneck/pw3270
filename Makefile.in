@@ -33,6 +33,7 @@ PACKAGE_VERSION=@PACKAGE_VERSION@
 PACKAGE_TARNAME=@PACKAGE_TARNAME@
 
 PLUGINS=@PLUGINS@
+EXTENSIONS=@EXTENSIONS@
 
 #---[ Paths ]------------------------------------------------------------------
 
@@ -143,6 +144,7 @@ $(BINDIR)/Release/plugins/%@DLLEXT@: src/plugins/%/* $(BINDIR)/Release/$(PACKAGE
 all: Release
 
 Release: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) $(foreach PLUGIN, $(PLUGINS), $(BINDIR)/Release/plugins/$(PLUGIN)@DLLEXT@) \
+			$(foreach EXT, $(EXTENSIONS), $(EXT)) \
 			locale pixmaps filelist
 
 $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT): src/pw3270/* $(BINDIR)/Release@DLLDIR@/@DLLPREFIX@3270@DLLEXT@ $(DEPENDS)
@@ -150,6 +152,11 @@ $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT): src/pw3270/* $(BINDIR)/Release@DL
 
 $(BINDIR)/Release@DLLDIR@/@DLLPREFIX@3270@DLLEXT@: src/lib3270/* src/include/lib3270/* src/include/* Makefile
 	@$(MAKE) BINRLS=../../.bin/Release@DLLDIR@ -C src/lib3270 ../../.bin/Release@DLLDIR@/@DLLPREFIX@3270@DLLEXT@
+
+oxt: $(BINDIR)/$(PACKAGE_TARNAME).oxt
+
+$(BINDIR)/$(PACKAGE_TARNAME).oxt: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
+	@$(MAKE) BINDIR=../../.bin LIB3270_CFLAGS="-I../../src/include" -C src/oxt ../../.bin/$(PACKAGE_TARNAME).oxt
 
 #---[ File lists ]-------------------------------------------------------------
 
@@ -270,7 +277,7 @@ $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar: clean pixmaps filelist
 	@rm -fr $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@echo $@
 
-install: install-sdk install-lib install-app install-man install-plugins
+install: $(foreach EXT, sdk lib app man plugins $(EXTENSIONS), install-$(EXT))
 
 install-app: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) install-locale
 	@$(MAKE) BINDIR="../../$(BINDIR)" LIB3270_LIBS="$(RLSLIB)" LIB3270_CFLAGS="-I../../src/include" -C src/pw3270 install
@@ -319,7 +326,7 @@ install-sdk:
 	@$(INSTALL_DATA) src/sample/*.c $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/sample
 
 install-oxt:
-	@make LIB3270_CFLAGS="-I../../src/include" -C src/oxt install
+	@$(MAKE) BINDIR=../../.bin LIB3270_CFLAGS="-I../../src/include" -C src/oxt install
 
 clean:
 	@rm -fr .obj

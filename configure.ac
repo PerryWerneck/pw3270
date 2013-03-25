@@ -111,6 +111,7 @@ DLLPREFIX="lib"
 PLUGINS=""
 APP_GUI_SRC=""
 LDLIBFLAGS=""
+EXTENSIONS=""
 
 if test $host != $build; then
 	AC_CHECK_PROGS(HOST_CC, gcc cc)
@@ -312,25 +313,6 @@ AC_SUBST(JAR)
 AC_SUBST(JAVA_HOME)
 AC_SUBST(JRE_HOME)
 
-#--[ Misc options ]-------------------------------------------------------------------------------------------------------------------------------------------
-
-AC_SUBST(MAJOR_VERSION,"$(echo $VERSION | cut -d. -f1)")
-AC_SUBST(HOST_CC)
-AC_SUBST(EXEEXT)
-AC_SUBST(DLLPREFIX)
-AC_SUBST(DLLEXT)
-AC_SUBST(DLL_FLAGS)
-AC_SUBST(DLL_CFLAGS)
-AC_SUBST(DLLDIR)
-AC_SUBST(LDSOFLAGS)
-AC_SUBST(LDAPPFLAGS)
-AC_SUBST(LDLIBFLAGS)
-AC_SUBST(DBGRPATH)
-AC_SUBST(DBGCMDPREFIX)
-AC_SUBST(LDARCH)
-AC_SUBST(PLUGINS)
-AC_SUBST(APP_GUI_SRC)
-
 #--[ Headers ]------------------------------------------------------------------------------------------------------------------------------------------------
 
 AC_CHECK_HEADER(malloc.h, AC_DEFINE(HAVE_MALLOC_H,,[do we have malloc.h?]))
@@ -461,6 +443,7 @@ fi
 # Set targets
 if test "$app_cv_office" == "yes" ; then
 	AC_MSG_NOTICE([libreoffice sdk is present.])
+	EXTENSIONS="$EXTENSIONS oxt"
 else
 	AC_MSG_NOTICE([libreoffice sdk is NOT present.])
 fi
@@ -470,6 +453,26 @@ AC_SUBST(OO_SDK_HOME)
 
 #--[ Pre-reqs ]-----------------------------------------------------------------------------------------------------------------------------------------------
 AC_SUBST(LIB3270_REQUIRES)
+
+#--[ Misc options ]-------------------------------------------------------------------------------------------------------------------------------------------
+
+AC_SUBST(MAJOR_VERSION,"$(echo $VERSION | cut -d. -f1)")
+AC_SUBST(HOST_CC)
+AC_SUBST(EXEEXT)
+AC_SUBST(DLLPREFIX)
+AC_SUBST(DLLEXT)
+AC_SUBST(DLL_FLAGS)
+AC_SUBST(DLL_CFLAGS)
+AC_SUBST(DLLDIR)
+AC_SUBST(LDSOFLAGS)
+AC_SUBST(LDAPPFLAGS)
+AC_SUBST(LDLIBFLAGS)
+AC_SUBST(DBGRPATH)
+AC_SUBST(DBGCMDPREFIX)
+AC_SUBST(LDARCH)
+AC_SUBST(PLUGINS)
+AC_SUBST(EXTENSIONS)
+AC_SUBST(APP_GUI_SRC)
 
 #--[ Output files ]-------------------------------------------------------------------------------------------------------------------------------------------
 
