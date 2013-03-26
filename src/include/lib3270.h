@@ -189,7 +189,7 @@
 		LIB3270_MESSAGE_NUMERIC,			/**<  8 - */
 		LIB3270_MESSAGE_OVERFLOW,			/**<  9 - */
 		LIB3270_MESSAGE_INHIBIT,			/**< 10 - */
-		LIB3270_MESSAGE_KYBDLOCK,			/**< 11 - */
+		LIB3270_MESSAGE_KYBDLOCK,			/**< 11 - Keyboard is locked */
 
 		LIB3270_MESSAGE_X,					/**< 12 - */
 		LIB3270_MESSAGE_RESOLVING,			/**< 13 - Resolving hostname (running DNS query) */
@@ -707,9 +707,10 @@
 	LIB3270_EXPORT int lib3270_in_sscp(H3270 *h);
 	LIB3270_EXPORT int lib3270_in_tn3270e(H3270 *h);
 	LIB3270_EXPORT int lib3270_in_e(H3270 *h);
+	LIB3270_EXPORT int lib3270_lock_status(H3270 *h);
+	LIB3270_EXPORT int lib3270_is_ready(H3270 *h);
 
 	#define lib3270_is_connected(h) lib3270_in_tn3270e(h)
-	#define lib3270_is_ready(h) lib3270_get_program_message(h) == LIB3270_MESSAGE_NONE
 
 	LIB3270_EXPORT LIB3270_SSL_STATE	lib3270_get_secure(H3270 *session);
 	LIB3270_EXPORT long 				lib3270_get_SSL_verify_result(H3270 *session);

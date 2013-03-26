@@ -384,7 +384,7 @@ static void kybdlock_set(H3270 *hSession, unsigned int bits)
 			hSession->unlock_delay_time = time(NULL);
 		}
 		hSession->kybdlock = n;
-		status_changed(hSession,LIB3270_STATUS_KYBDLOCK);
+		status_changed(hSession,LIB3270_MESSAGE_KYBDLOCK);
 	}
 }
 
@@ -409,7 +409,7 @@ void lib3270_kybdlock_clear(H3270 *hSession, LIB3270_KL_STATE bits)
 			hSession->unlock_delay_time = 0;
 		}
 		hSession->kybdlock = n;
-		status_changed(hSession,LIB3270_STATUS_KYBDLOCK);
+		status_changed(hSession,LIB3270_MESSAGE_KYBDLOCK);
 	}
 }
 

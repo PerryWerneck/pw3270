@@ -528,6 +528,42 @@ LIB3270_EXPORT LIB3270_STATUS lib3270_get_program_message(H3270 *session)
 	return session->oia_status;
 }
 
+/**
+ * Check if the terminal is ready for commands.
+ *
+ * @param h	Session handle.
+ *
+ * @return 0 if the terminal is ready (no message, keyboard unlocked), LIB3270_MESSAGE if not
+ *
+ */
+LIB3270_EXPORT int lib3270_lock_status(H3270 *hSession)
+{
+	CHECK_SESSION_HANDLE(hSession);
+
+	if(hSession->oia_status)
+		return hSession->oia_status;
+
+	if(hSession->kybdlock)
+		return LIB3270_MESSAGE_KYBDLOCK;
+
+	return LIB3270_MESSAGE_NONE;
+
+}
+
+/**
+ * Check if terminal is ready for actions.
+ *
+ * @param h	Session handle.
+ *
+ * @return Non zero if terminal is ready for commands.
+ *
+ */
+LIB3270_EXPORT int lib3270_is_ready(H3270 *hSession)
+{
+	return lib3270_lock_status(hSession) == LIB3270_MESSAGE_NONE;
+}
+
+
 void status_changed(H3270 *session, LIB3270_STATUS id)
 {
 	CHECK_SESSION_HANDLE(session);

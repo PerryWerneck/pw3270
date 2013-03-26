@@ -2205,21 +2205,20 @@ int ctlr_any_data(H3270 *session)
  * Clear the text (non-status) portion of the display.  Also resets the cursor
  * and buffer addresses and extended attributes.
  */
-void
-ctlr_clear(H3270 *session, Boolean can_snap)
+void ctlr_clear(H3270 *session, Boolean can_snap)
 {
 	/* Snap any data that is about to be lost into the trace file. */
+#if defined(X3270_TRACE)
+
 	if (ctlr_any_data(session))
 	{
-#if defined(X3270_TRACE) /*[*/
 		if (can_snap && !session->trace_skipping && lib3270_get_toggle(session,LIB3270_TOGGLE_SCREEN_TRACE))
 			trace_screen(session);
-#endif /*]*/
-//		scroll_save(session->maxROWS, ever_3270 ? False : True);
 	}
-#if defined(X3270_TRACE) /*[*/
+
 	session->trace_skipping = 0;
-#endif /*]*/
+
+#endif
 
 	/* Clear the screen. */
 	(void) memset((char *)session->ea_buf, 0, session->rows*session->cols*sizeof(struct lib3270_ea));
