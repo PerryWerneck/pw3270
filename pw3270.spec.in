@@ -72,7 +72,17 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 Requires:       openssl shared-mime-info lib3270 = @PACKAGE_VERSION@
 Provides:	lib@PACKAGE@ = @PACKAGE_VERSION@ lib@PACKAGE@.so = @PACKAGE_VERSION@
 Distribution:	%_distro
-BuildRequires:	autoconf >= 2.61 automake gcc-c++ sed pkgconfig %{_bldreq} gettext-devel findutils coreutils desktop-file-utils
+BuildRequires:	autoconf >= 2.61
+BuildRequires:	automake 
+BuildRequires:	gcc-c++ 
+BuildRequires:	sed 
+BuildRequires:	pkgconfig 
+BuildRequires:	%{_bldreq} 
+BuildRequires:	gettext-devel 
+BuildRequires:	findutils 
+BuildRequires:	coreutils 
+BuildRequires:	desktop-file-utils
+BuildRequires:	libreoffice-sdk
 
 %description
 IBM 3270 terminal emulator gtk. It can be used to communicate with
@@ -120,6 +130,18 @@ Plugin exporting a DBUS object from every %{name} open session.
 
 Revision @PACKAGE_REVISION@ from @PACKAGE_SOURCE@
 
+%package -n libreoffice-extension-%{name}
+Summary:	%{name} extension for libreoffice
+Group:		Productivity/Office/Suite
+Requires:	%{name} = @PACKAGE_VERSION@
+Requires:	libreoffice
+
+%description -n libreoffice-extension-%{name}
+This package provides 3270 access object to StarBasic.
+
+Revision @PACKAGE_REVISION@ from @PACKAGE_SOURCE@
+
+
 #---[ Build & Install ]-----------------------------------------------------------------------------------------------
 
 %prep
@@ -131,6 +153,8 @@ autoconf
 export CFLAGS="$RPM_OPT_FLAGS"
 export CXXFLAGS="$RPM_OPT_FLAGS"
 export FFLAGS="$RPM_OPT_FLAGS"
+export OFFICE_HOME=%{_libdir}/libreoffice 
+export OO_SDK_HOME=%{_libdir}/libreoffice/sdk
 %configure
 
 %build
@@ -189,6 +213,16 @@ rm -rf $RPM_BUILD_ROOT
 
 %files plugin-dbus
 %{_libdir}/@PACKAGE_NAME@-plugins/dbus3270.so
+
+%files -n libreoffice-extension-%{name}
+%dir %{_libdir}/libreoffice/share/extensions/%{name}
+%{_libdir}/libreoffice/share/extensions/%{name}/META-INF/manifest.xml
+%{_libdir}/libreoffice/share/extensions/%{name}/description.txt
+%{_libdir}/libreoffice/share/extensions/%{name}/description.xml
+%{_libdir}/libreoffice/share/extensions/%{name}/pw3270.png
+%{_libdir}/libreoffice/share/extensions/%{name}/pw3270.uno.rdb
+%{_libdir}/libreoffice/share/extensions/%{name}/pw3270.uno.so
+
 
 #---[ Scripts ]-------------------------------------------------------------------------------------------------------
 
