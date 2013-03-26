@@ -301,10 +301,10 @@ if test "$app_cv_java" = "yes" ; then
 fi
 
 if test "$app_cv_java" = "yes" ; then
-	AC_PATH_TOOL([JAVA], [java], [no], [$PATH:$JAVA_HOME/bin])
-	AC_PATH_TOOL([JAVAC], [javac], [no], [$PATH:$JAVA_HOME/bin])
-	AC_PATH_TOOL([JAVAH], [javah], [no], [$PATH:$JAVA_HOME/bin])
-	AC_PATH_TOOL([JAR], [jar], [no], [$PATH:$JAVA_HOME/bin])
+	AC_PATH_TOOL([JAVA], [java], [no], [$JAVA_HOME/bin:$PATH])
+	AC_PATH_TOOL([JAVAC], [javac], [no], [$JAVA_HOME/bin:$PATH])
+	AC_PATH_TOOL([JAVAH], [javah], [no], [$JAVA_HOME/bin:$PATH])
+	AC_PATH_TOOL([JAR], [jar], [no], [$JAVA_HOME/bin:$PATH])
 fi
 
 AC_SUBST(JAVAC)
