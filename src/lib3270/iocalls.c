@@ -617,22 +617,6 @@ void x_except_on(H3270 *h)
 #endif // WIN32
 }
 
-/*
-void add_input_calls(H3270 *session, void (*in)(H3270 *session), void (*exc)(H3270 *session))
-{
-#ifdef _WIN32
-	session->ns_exception_id	= AddExcept((int) session->sockEvent, session, exc);
-	session->ns_read_id			= AddInput((int) session->sockEvent, session, in);
-#else
-	session->ns_exception_id	= AddExcept(session->sock, session, exc);
-	session->ns_read_id			= AddInput(session->sock, session, in);
-#endif // WIN32
-
-	session->excepting	= 1;
-	session->reading 	= 1;
-}
-*/
-
 void remove_input_calls(H3270 *session)
 {
 	if(session->ns_read_id)
