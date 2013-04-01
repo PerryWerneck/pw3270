@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-03-25 10:47-0300\n"
-"PO-Revision-Date: 2013-03-12 11:29-0300\n"
+"PO-Revision-Date: 2013-04-01 10:06-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
 "Language: pt_BR\n"
@@ -71,7 +71,7 @@ msgstr "%s: Caractere desconhecido depois de \\pf"
 #: kybd.c:2742
 #, c-format
 msgid "%s: Vertical tab not supported"
-msgstr "%s: Tabulação verticao não suportada"
+msgstr "%s: Tabulação vertical não é suportada"
 
 #: resolver.c:122
 #, c-format
@@ -1581,7 +1581,7 @@ msgstr "Enviar arquivo para o servidor"
 
 #: main.c:317
 msgid "Send messages to syslog"
-msgstr "Send messages to syslog"
+msgstr "Enviar mensagens para o log do sistema"
 
 #: ui/00default.xml:276
 msgid "Send/Receive"
