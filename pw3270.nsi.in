@@ -73,6 +73,10 @@ SubSection "@PACKAGE@" SecMain
 		file "/oname=$INSTDIR\AUTHORS"			"AUTHORS"
 		file "/oname=$INSTDIR\LICENSE"			"LICENSE"
 
+		# Misc folders
+		CreateDirectory "$INSTDIR\certs"
+		CreateDirectory "$INSTDIR\plugins"
+
 		# UI definition files
 		CreateDirectory "$INSTDIR\ui"
 

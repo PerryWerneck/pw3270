@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-25 10:47-0300\n"
+"POT-Creation-Date: 2013-04-01 11:10-0300\n"
 "PO-Revision-Date: 2013-04-01 10:06-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
@@ -91,11 +91,11 @@ msgstr "- Emulador 3270 para GTK"
 msgid "16 colors"
 msgstr "16 cores"
 
-#: screen.c:655 screen.c:685 screen.c:699 screen.c:818
+#: screen.c:691 screen.c:721 screen.c:735 screen.c:854
 msgid "3270 Error"
 msgstr "Erro 3270"
 
-#: screen.c:670
+#: screen.c:706
 msgid "3270 Warning"
 msgstr "Alerta 3270"
 
@@ -1655,7 +1655,7 @@ msgstr "Tipo de servidor:"
 msgid "TELNET Proxy: send error"
 msgstr "TELNET Proxy: Erro ao enviar"
 
-#: telnet.c:3227
+#: telnet.c:3253
 msgid "TLS negotiation failure"
 msgstr "Negociação TLS falhou"
 

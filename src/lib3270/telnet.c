@@ -3101,7 +3101,33 @@ static void ssl_init(H3270 *session)
 		SSL_CTX_set_info_callback(ssl_ctx, ssl_info_callback);
 		SSL_CTX_set_default_verify_paths(ssl_ctx);
 
+#if defined(_WIN32)
+		{
+			HKEY hKey = 0;
+
+			if(RegOpenKeyEx(HKEY_LOCAL_MACHINE,"Software\\" PACKAGE_NAME,0,KEY_QUERY_VALUE,&hKey) == ERROR_SUCCESS)
+			{
+				char			data[4096];
+				unsigned long	datalen	= sizeof(data);		// data field length(in), data returned length(out)
+				unsigned long	datatype;					// #defined in winnt.h (predefined types 0-11)
+
+				if(RegQueryValueExA(hKey,"datadir",NULL,&datatype,(LPBYTE) data,&datalen) == ERROR_SUCCESS)
+				{
+					strncat(data,"\\certs",4095);
+
+					trace("Loading certs from \"%s\"",data);
+					SSL_CTX_load_verify_locations(ssl_ctx,NULL,data);
+				}
+				RegCloseKey(hKey);
+			}
+
+
+		}
+
+#endif // _WIN32
+
 		ssl_3270_ex_index = SSL_get_ex_new_index(0,NULL,NULL,NULL,NULL);
+
 
 	}
 
