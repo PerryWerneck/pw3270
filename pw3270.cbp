@@ -221,6 +221,7 @@
 		<Unit filename="src/lib3270/winversc.h" />
 		<Unit filename="src/lib3270/xioc.h" />
 		<Unit filename="src/lib3270/xl.h" />
+		<Unit filename="src/oxt/Makefile.in" />
 		<Unit filename="src/plugins/dbus3270/Makefile.in" />
 		<Unit filename="src/plugins/dbus3270/daemon.c">
 			<Option compilerVar="CC" />
