@@ -31,14 +31,13 @@
  #include <string.h>
 
  #include "rx3270.h"
- #include <lib3270/actions.h>
 
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
 RexxRoutine0(CSTRING, rx3270version)
 {
-	return lib3270_get_version();
+	return rx3270::get_default()->get_version();
 }
 
 RexxRoutine0(CSTRING, rx3270QueryCState)
@@ -64,9 +63,7 @@ RexxRoutine0(CSTRING, rx3270QueryCState)
  	};
 
  	size_t			f;
- 	LIB3270_CSTATE	state;
-
-	state = lib3270_get_connection_state(RX3270SESSION);
+ 	LIB3270_CSTATE	state = rx3270::get_default()->get_cstate();
 
 	for(f=0;f < (sizeof(xlat_state)/sizeof(struct _xlat_state)); f++)
 	{
@@ -79,94 +76,69 @@ RexxRoutine0(CSTRING, rx3270QueryCState)
 
 RexxRoutine0(int, rx3270Disconnect)
 {
-	lib3270_disconnect(RX3270SESSION);
-	return 0;
+	return rx3270::get_default()->disconnect();
 }
 
 RexxRoutine2(int, rx3270Connect, CSTRING, hostname, int, wait)
 {
-	return lib3270_connect(RX3270SESSION, hostname, wait);
+	return rx3270::get_default()->connect(hostname,wait);
 }
 
 RexxRoutine0(int, rx3270isConnected)
 {
-	return lib3270_is_connected(RX3270SESSION) ? 1 : 0;
+	return rx3270::get_default()->is_connected();
 }
 
 RexxRoutine0(int, rx3270WaitForEvents)
 {
-	H3270 * hSession = RX3270SESSION;
-
-	if(!lib3270_is_connected(hSession))
-		return ENOTCONN;
-
-	lib3270_main_iterate(hSession,1);
-
-	return 0;
+	return rx3270::get_default()->iterate();
 }
 
 RexxRoutine1(int, rx3270Sleep, int, seconds)
 {
-	return lib3270_wait(RX3270SESSION,seconds);
+	return rx3270::get_default()->wait(seconds);
 }
 
 RexxRoutine0(int, rx3270SendENTERKey)
 {
-	return lib3270_enter(RX3270SESSION);
+	return rx3270::get_default()->enter();
 }
 
 RexxRoutine1(int, rx3270SendPFKey, int, key)
 {
-	return lib3270_pfkey(RX3270SESSION,key);
+	return rx3270::get_default()->pfkey(key);
 }
 
 RexxRoutine1(int, rx3270SendPAKey, int, key)
 {
-	return lib3270_pakey(RX3270SESSION,key);
+	return rx3270::get_default()->pakey(key);
 }
 
 RexxRoutine1(int, rx3270WaitForTerminalReady, int, seconds)
 {
-	return lib3270_wait_for_ready(RX3270SESSION,seconds);
+	return rx3270::get_default()->wait_for_ready(seconds);
 }
 
 RexxRoutine4(int, rx3270WaitForStringAt, int, row, int, col, CSTRING, key, int, timeout)
 {
-	H3270	* hSession	= RX3270SESSION;
+	rx3270	* session 	= rx3270::get_default();
 	time_t	  end		= time(0) + timeout;
-	int		  sz		= strlen(key);
-	int		  rows;
-	int		  cols;
-	int		  start;
-
-	lib3270_get_screen_size(hSession,&rows,&cols);
-
-	if(row < 0 || row > rows || col < 0 || col > cols)
-		return EINVAL;
-
-	start = ((row) * cols) + col;
+	char	* text		= session->get_3270_string(key);
 
 	while(time(0) < end)
 	{
-		if(!lib3270_is_connected(hSession))
+		if(!session->is_connected())
 		{
 			return ENOTCONN;
 		}
-		else if(lib3270_is_ready(hSession))
+		else if( !(session->wait_for_ready(1) || session->cmp_text_at(row,col,text)) )
 		{
-			char *buffer = get_contents(hSession, start, start+sz);
-			if(buffer)
-			{
-				int rc = strncasecmp((const char *) buffer,key,sz);
-				free(buffer);
-				if(rc == 0)
-					return 0;
-			}
+			free(text);
+			return 0;
 		}
-
-		lib3270_main_iterate(hSession,1);
-
 	}
+
+	free(text);
 
 	return ETIMEDOUT;
 
@@ -174,17 +146,14 @@ RexxRoutine4(int, rx3270WaitForStringAt, int, row, int, col, CSTRING, key, int, 
 
 RexxRoutine3(RexxStringObject, rx3270GetStringAt, int, row, int, col, int, sz)
 {
-	H3270	* hSession	= RX3270SESSION;
-	int		  rows;
-	int		  cols;
-	char	* text;
+	rx3270	* session 	= rx3270::get_default();
+	char	* str		= session->get_text_at(row,col,sz);
 
-	lib3270_get_screen_size(hSession,&rows,&cols);
-
-	text = get_contents(hSession, ((row) * cols) + col, sz);
-	if(text)
+	if(str)
 	{
-		RexxStringObject ret = context->String((CSTRING) text);
+		char				* text	= session->get_local_string(str);
+		RexxStringObject	  ret	= context->String((CSTRING) text);
+		free(str);
 		free(text);
 		return ret;
 	}
@@ -194,102 +163,42 @@ RexxRoutine3(RexxStringObject, rx3270GetStringAt, int, row, int, col, int, sz)
 
 RexxRoutine0(int, rx3270IsTerminalReady)
 {
-	return lib3270_is_ready(RX3270SESSION);
-}
-
-RexxRoutine3(RexxStringObject, rx3270ReadScreen, OPTIONAL_int, row, OPTIONAL_int, col, OPTIONAL_int, sz)
-{
-	H3270	* hSession	= RX3270SESSION;
-	int		  rows;
-	int		  cols;
-	char	* text;
-	int		  start;
-
-	lib3270_get_screen_size(hSession,&rows,&cols);
-
-	start = (row * cols) + col;
-
-	if(sz == 0)
-		sz = (rows*cols) - start;
-
-	text = get_contents(hSession, start, sz);
-	if(text)
-	{
-		RexxStringObject ret = context->String((CSTRING) text);
-		free(text);
-		return ret;
-	}
-
-	return context->String("");
+	return rx3270::get_default()->is_ready();
 }
 
 RexxRoutine3(int, rx3270queryStringAt, int, row, int, col, CSTRING, key)
 {
-	H3270	* hSession	= RX3270SESSION;
-	int		  rows;
-	int		  cols;
-	char	* text;
-	size_t	  sz		= strlen(key);
-
-	lib3270_get_screen_size(hSession,&rows,&cols);
-
-	text = get_contents(hSession, (row * cols) + col, sz);
-	if(text)
-	{
-		int rc = strncasecmp(text,key,sz);
-		free(text);
-		return rc;
-	}
-
-	return 0;
-}
-
-RexxRoutine2(int, rx3270SetCursorPosition, int, row, int, col)
-{
-	return lib3270_set_cursor_position(RX3270SESSION,row,col);
-}
-
-RexxRoutine3(int, rx3270SetStringAt, int, row, int, col, CSTRING, text)
-{
-	int		  rc;
-	H3270	* hSession	= RX3270SESSION;
-	char	* str		= set_contents(hSession,text);
+	int		  rc		= 0;
+	rx3270	* session 	= rx3270::get_default();
+	char	* str		= session->get_text_at(row,col,strlen(key));
 
 	if(str)
-		rc = lib3270_set_string_at(hSession,row,col,(const unsigned char *) str);
-	else
-		rc = -1;
+	{
+		char * text	= session->get_3270_string(key);
+		rc = strcasecmp(str,text);
+		free(text);
+	}
 
 	free(str);
 
 	return rc;
 }
 
-/*
-::method RunMode
-return rx3270QueryRunMode()
+RexxRoutine2(int, rx3270SetCursorPosition, int, row, int, col)
+{
+	return rx3270::get_default()->set_cursor_position(row,col);
+}
 
-::method 'encoding='
-	use arg ptr
-return rx3270SetCharset(ptr)
+RexxRoutine3(int, rx3270SetStringAt, int, row, int, col, CSTRING, text)
+{
+	rx3270	* session 	= rx3270::get_default();
+	char	* str		= session->get_3270_string(text);
+	int		  rc;
 
-::method sendfile
-	use arg from, tostrncasecmp
+	rc = session->set_text_at(row,col,str);
 
-	status = rx3270BeginFileSend(from,to)
-	if status <> 0
-		then return status
+	free(str);
 
-return rx3270WaitForFTComplete()
-
-::method recvfile
-	use arg from, to
-
-	status = rx3270BeginFileRecv(from,to)
-	if status <> 0
-		then return status
-
-return rx3270WaitForFTComplete()
-*/
-
+	return rc;
+}
 

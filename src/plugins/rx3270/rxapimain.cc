@@ -38,10 +38,6 @@
  #include "rx3270.h"
  #include <lib3270/actions.h>
 
-#ifdef HAVE_ICONV
-	#include <iconv.h>
-#endif
-
  #include <string.h>
 
 #if defined WIN32
@@ -63,7 +59,7 @@
 	LIB3270_EXPORT RexxPackageEntry rx3270_package_entry;
 
 
-	static enum rx3270mode active_mode = RX3270_MODE_UNDEFINED;
+	static rx3270 * hSession = NULL;
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
@@ -86,36 +82,15 @@ BOOL WINAPI DllMain(HANDLE hinst, DWORD dwcallpurpose, LPVOID lpvResvd)
 }
 #endif
 
-void rx3270_set_mode(enum rx3270mode mode)
-{
-	active_mode = mode;
-}
-
 int librx3270_loaded(void)
 {
-	active_mode = RX3270_MODE_STANDALONE;
-
-#ifdef HAVE_ICONV
-	outputConv = iconv_open(REXX_DEFAULT_CHARSET, lib3270_get_default_charset());
-	inputConv = iconv_open(lib3270_get_default_charset(), REXX_DEFAULT_CHARSET);
-#endif
-
 	return 0;
 }
 
 int librx3270_unloaded(void)
 {
-	active_mode = RX3270_MODE_UNDEFINED;
-
-#ifdef HAVE_ICONV
-
- 	if(outputConv != (iconv_t) (-1))
-		iconv_close(outputConv);
-
- 	if(inputConv != (iconv_t) (-1))
-		iconv_close(inputConv);
-#endif
-
+	if(hSession)
+		delete hSession;
 	return 0;
 }
 
@@ -136,7 +111,6 @@ RexxRoutineEntry rx3270_functions[] =
 	REXX_TYPED_ROUTINE(rx3270WaitForStringAt,		rx3270WaitForStringAt),
 	REXX_TYPED_ROUTINE(rx3270GetStringAt,			rx3270GetStringAt),
 	REXX_TYPED_ROUTINE(rx3270IsTerminalReady,		rx3270IsTerminalReady),
-	REXX_TYPED_ROUTINE(rx3270ReadScreen,			rx3270ReadScreen),
 	REXX_TYPED_ROUTINE(rx3270queryStringAt,			rx3270queryStringAt),
 	REXX_TYPED_ROUTINE(rx3270SetStringAt,			rx3270SetStringAt),
 
@@ -168,4 +142,35 @@ LIB3270_EXPORT RexxPackageEntry * RexxEntry RexxGetPackage(void)
 END_EXTERN_C()
 
 
+rx3270	* rx3270::get_default(void)
+{
+	return hSession;
+}
+
+rx3270::rx3270()
+{
+#ifdef HAVE_ICONV
+	this->conv2Local = iconv_open(REXX_DEFAULT_CHARSET, "ISO-8859-1");
+	this->conv2Host = iconv_open("ISO-8859-1",REXX_DEFAULT_CHARSET);
+#endif
+
+	if(!hSession)
+		hSession = this;
+}
+
+rx3270::~rx3270()
+{
+#ifdef HAVE_ICONV
+
+ 	if(conv2Local != (iconv_t) (-1))
+		iconv_close(conv2Local);
+
+ 	if(conv2Host != (iconv_t) (-1))
+		iconv_close(conv2Host);
+#endif
+
+
+	if(hSession == this)
+		hSession = NULL;
+}
 

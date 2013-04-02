@@ -28,18 +28,149 @@
  */
 
  #include <pw3270/plugin.h>
+ #include <lib3270/actions.h>
  #include "rx3270.h"
+
+/*--[ Plugin session object ]--------------------------------------------------------------------------------*/
+
+ class plugin : public rx3270
+ {
+ public:
+	plugin(H3270 *hSession);
+
+	const char		* get_version(void);
+	LIB3270_CSTATE	  get_cstate(void);
+	int				  disconnect(void);
+	int				  connect(const char *uri, bool wait = true);
+	int				  is_connected(void);
+	int				  is_ready(void);
+
+	int				  iterate(void);
+	int				  wait(int seconds);
+	int				  wait_for_ready(int seconds);
+
+	char 			* get_text_at(int row, int col, size_t sz);
+	int				  cmp_text_at(int row, int col, const char *text);
+	int 			  set_text_at(int row, int col, const char *str);
+
+	int				  set_cursor_position(int row, int col);
+
+	int				  enter(void);
+	int				  pfkey(int key);
+	int				  pakey(int key);
+
+ private:
+	H3270 *hSession;
+
+ };
+
+ static plugin * session = NULL;
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
  LIB3270_EXPORT int pw3270_plugin_init(GtkWidget *window)
  {
-	rx3270_set_mode(RX3270_MODE_PLUGIN);
+	session = new plugin(lib3270_get_default_session_handle());
 	return 0;
  }
 
  LIB3270_EXPORT int pw3270_plugin_deinit(GtkWidget *window)
  {
-	rx3270_set_mode(RX3270_MODE_UNDEFINED);
+	if(session)
+	{
+		delete session;
+		session = NULL;
+	}
 	return 0;
+ }
+
+ plugin::plugin(H3270 *hSession) : rx3270()
+ {
+	this->hSession = hSession;
+ }
+
+ const char * plugin::get_version(void)
+ {
+	return lib3270_get_version();
+ }
+
+ LIB3270_CSTATE plugin::get_cstate(void)
+ {
+ 	return lib3270_get_connection_state(hSession);
+ }
+
+ int plugin::disconnect(void)
+ {
+	lib3270_disconnect(hSession);
+	return 0;
+ }
+
+ int plugin::connect(const char *uri, bool wait)
+ {
+ 	return lib3270_connect(hSession,uri,wait);
+ }
+
+ int plugin::is_connected(void)
+ {
+ 	return lib3270_is_connected(hSession) ? 1 : 0;
+ }
+
+ int plugin::iterate(void)
+ {
+	if(!lib3270_is_connected(hSession))
+		return ENOTCONN;
+
+	lib3270_main_iterate(hSession,1);
+
+	return 0;
+ }
+
+ int plugin::wait(int seconds)
+ {
+	return lib3270_wait(hSession,seconds);
+ }
+
+ int plugin::enter(void)
+ {
+	return lib3270_enter(hSession);
+ }
+
+ int plugin::pfkey(int key)
+ {
+	return lib3270_pfkey(hSession,key);
+ }
+
+ int plugin::pakey(int key)
+ {
+	return lib3270_pakey(hSession,key);
+ }
+
+ int plugin::wait_for_ready(int seconds)
+ {
+	return lib3270_wait_for_ready(hSession,seconds);
+ }
+
+ char * plugin::get_text_at(int row, int col, size_t sz)
+ {
+	return lib3270_get_text_at(hSession,row,col,(int) sz);
+ }
+
+ int plugin::cmp_text_at(int row, int col, const char *text)
+ {
+	return lib3270_cmp_text_at(hSession,row,col,text);
+ }
+
+ int plugin::set_text_at(int row, int col, const char *str)
+ {
+	return lib3270_set_text_at(hSession,row,col,(const unsigned char *) str);
+ }
+
+ int plugin::is_ready(void)
+ {
+	return lib3270_is_ready(hSession);
+ }
+
+ int plugin::set_cursor_position(int row, int col)
+ {
+	return lib3270_set_cursor_position(hSession,row,col);
  }

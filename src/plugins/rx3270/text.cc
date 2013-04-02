@@ -32,27 +32,12 @@
 
  #include <string.h>
 
-
-/*--[ Globals ]--------------------------------------------------------------------------------------*/
-
-#ifdef HAVE_ICONV
-	iconv_t outputConv = (iconv_t) (-1);
-	iconv_t inputConv = (iconv_t) (-1);
-#endif
-
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
-char * get_contents(H3270 *hSession, int start, int sz)
+char * rx3270::get_3270_string(const char *str)
 {
-	unsigned char	  str[sz+1];
-	unsigned short	  attr[sz+1];
-
-	if(!lib3270_get_contents(hSession,start,start+sz,str,attr))
-		return NULL;
-
 #ifdef HAVE_ICONV
-	// Convert received string to rexx encoding
-	if(outputConv != (iconv_t)(-1))
+	if(conv2Host != (iconv_t)(-1))
 	{
 		size_t	in = strlen((char *) str);
 		size_t out = (in << 1);
@@ -62,9 +47,9 @@ char * get_contents(H3270 *hSession, int start, int sz)
 
 		memset(ptr=buffer,0,out);
 
-		iconv(outputConv,NULL,NULL,NULL,NULL);	// Reset state
+		iconv(conv2Host,NULL,NULL,NULL,NULL);	// Reset state
 
-		if(iconv(outputConv,(char **) &str,&in,&ptr,&out) == ((size_t) -1))
+		if(iconv(conv2Host,(char **) &str,&in,&ptr,&out) == ((size_t) -1))
 			ret = strdup((char *) str);
 		else
 			ret = strdup(buffer);
@@ -73,30 +58,28 @@ char * get_contents(H3270 *hSession, int start, int sz)
 
 		return ret;
 	}
-
 #endif // HAVE_ICONV
 
-	return strdup((char *) str);
+	return strdup(str);
 }
 
-char * set_contents(H3270 *hSession, const char *str)
+char * rx3270::get_local_string(const char *str)
 {
 #ifdef HAVE_ICONV
-	// Convert received string to 3270 encoding
-	if(inputConv != (iconv_t)(-1))
+	if(conv2Local != (iconv_t)(-1))
 	{
-		size_t	  in		= strlen(str);
-		size_t	  out		= (in << 1);
-		char	* ptr;
-		char	* buffer	= (char *) malloc(out);
-		char	* ret;
+		size_t	in = strlen((char *) str);
+		size_t out = (in << 1);
+		char *ptr;
+		char *buffer = (char *) malloc(out);
+		char *ret;
 
 		memset(ptr=buffer,0,out);
 
-		iconv(inputConv,NULL,NULL,NULL,NULL);   // Reset state
+		iconv(conv2Local,NULL,NULL,NULL,NULL);	// Reset state
 
-		if(iconv(inputConv,(char **) &str,&in,&ptr,&out) == ((size_t) -1))
-			ret = strdup(str);
+		if(iconv(conv2Local,(char **) &str,&in,&ptr,&out) == ((size_t) -1))
+			ret = strdup((char *) str);
 		else
 			ret = strdup(buffer);
 
@@ -106,8 +89,7 @@ char * set_contents(H3270 *hSession, const char *str)
 	}
 #endif // HAVE_ICONV
 
-	return strdup((char *) str);
-
+	return strdup(str);
 }
 
 
