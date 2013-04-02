@@ -410,8 +410,12 @@ AC_ARG_ENABLE([office],[AS_HELP_STRING([--disable-office], [Disable libreoffice 
 
 AC_ARG_VAR([OFFICE_HOME], [Libreoffice home])
 AC_ARG_VAR([OO_SDK_HOME], [Libreoffice SDK home])
+AC_ARG_VAR([OO_SDK_URE_HOME], [Libreoffice URE home])
 
-OO_SDK_URE_HOME=$OFFICE_HOME/ure
+if test "_$OO_SDK_URE_HOME" == "_" ; then
+	OO_SDK_URE_HOME=$OFFICE_HOME/ure
+fi
+
 OO_SDK_URE_BIN_DIR=$OO_SDK_URE_HOME/bin
 OO_SDK_URE_LIB_DIR=$OO_SDK_URE_HOME/lib
 
