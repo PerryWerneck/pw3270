@@ -161,7 +161,7 @@ $(BINDIR)/$(PACKAGE_TARNAME).oxt: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
 #---[ File lists ]-------------------------------------------------------------
 
 filelist: debian/lib3270-dev.install debian/lib3270.install debian/lib3270-dev.install debian/pw3270.install \
-			$(foreach PLUGIN, $(PLUGINS), debian/$(PLUGIN).install)
+			$(foreach PLUGIN, $(PLUGINS) $(EXTENSIONS), debian/$(PLUGIN).install)
 
 debian/lib3270-dev.install: Makefile
 	@echo "  GEN  `basename $@`"
