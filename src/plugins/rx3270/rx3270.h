@@ -101,24 +101,23 @@
 	virtual const char		* get_version(void) = 0;
 	virtual LIB3270_CSTATE	  get_cstate(void)	= 0;
 
-	virtual int				  connect(const char *uri, bool wait = true)	= 0;
-	virtual int				  disconnect(void)						= 0;
-	virtual int				  is_connected(void)					= 0;
-	virtual int				  is_ready(void)						= 0;
-	virtual int				  iterate(void)							= 0;
-	virtual int				  wait(int seconds)						= 0;
-	virtual int				  wait_for_ready(int seconds)			= 0;
-	virtual int				  set_cursor_position(int row, int col)	= 0;
+	virtual int				  connect(const char *uri, bool wait = true)		= 0;
+	virtual int				  disconnect(void)									= 0;
+	virtual int				  is_connected(void)								= 0;
+	virtual int				  is_ready(void)									= 0;
+	virtual int				  iterate(void)										= 0;
+	virtual int				  wait(int seconds)									= 0;
+	virtual int				  wait_for_ready(int seconds)						= 0;
+	virtual int				  set_cursor_position(int row, int col)				= 0;
+	virtual void 			  set_toggle(LIB3270_TOGGLE ix, bool value)			= 0;
 
-	virtual int				  enter(void)							= 0;
-	virtual int				  pfkey(int key)						= 0;
-	virtual int				  pakey(int key)						= 0;
+	virtual int				  enter(void)										= 0;
+	virtual int				  pfkey(int key)									= 0;
+	virtual int				  pakey(int key)									= 0;
 
 	virtual char 			* get_text_at(int row, int col, size_t sz) 			= 0;
 	virtual int				  cmp_text_at(int row, int col, const char *text)	= 0;
 	virtual int 			  set_text_at(int row, int col, const char *str)	= 0;
-
-
 
  };
 

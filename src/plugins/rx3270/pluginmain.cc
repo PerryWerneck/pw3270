@@ -55,6 +55,8 @@
 
 	int				  set_cursor_position(int row, int col);
 
+	void 			  set_toggle(LIB3270_TOGGLE ix, bool value);
+
 	int				  enter(void);
 	int				  pfkey(int key);
 	int				  pakey(int key);
@@ -175,4 +177,9 @@
  int plugin::set_cursor_position(int row, int col)
  {
 	return lib3270_set_cursor_position(hSession,row,col);
+ }
+
+ void plugin::set_toggle(LIB3270_TOGGLE ix, bool value)
+ {
+	lib3270_set_toggle(hSession,ix,(int) value);
  }

@@ -41,15 +41,10 @@
  #include <string.h>
 
 #if defined WIN32
-
-	#define REXX_DEFAULT_CHARSET "CP1252"
-
 	BOOL WINAPI DllMain(HANDLE hinst, DWORD dwcallpurpose, LPVOID lpvResvd);
 	static int librx3270_loaded(void);
 	static int librx3270_unloaded(void);
 #else
-
-	#define REXX_DEFAULT_CHARSET "UTF-8"
 
 	int librx3270_loaded(void) __attribute__((constructor));
 	int librx3270_unloaded(void) __attribute__((destructor));
@@ -59,10 +54,6 @@
 
 	LIB3270_EXPORT RexxRoutineEntry rx3270_functions[];
 	LIB3270_EXPORT RexxPackageEntry rx3270_package_entry;
-
-
-	static rx3270	* hSession	= NULL;
-	static bool		  plugin	= false;
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
@@ -92,8 +83,6 @@ int librx3270_loaded(void)
 
 int librx3270_unloaded(void)
 {
-	if(hSession)
-		delete hSession;
 	return 0;
 }
 
@@ -145,40 +134,3 @@ LIB3270_EXPORT RexxPackageEntry * RexxEntry RexxGetPackage(void)
 END_EXTERN_C()
 
 
-rx3270	* rx3270::get_default(void)
-{
-	return hSession;
-}
-
-rx3270::rx3270()
-{
-#ifdef HAVE_ICONV
-	this->conv2Local = iconv_open(REXX_DEFAULT_CHARSET, "ISO-8859-1");
-	this->conv2Host = iconv_open("ISO-8859-1",REXX_DEFAULT_CHARSET);
-#endif
-
-	if(!hSession)
-		hSession = this;
-}
-
-rx3270::~rx3270()
-{
-#ifdef HAVE_ICONV
-
- 	if(conv2Local != (iconv_t) (-1))
-		iconv_close(conv2Local);
-
- 	if(conv2Host != (iconv_t) (-1))
-		iconv_close(conv2Host);
-#endif
-
-
-	if(hSession == this)
-		hSession = NULL;
-}
-
-void rx3270::set_plugin(void)
-{
-	trace("%s: Rexx API running as plugin",__FUNCTION__);
-	plugin = true;
-}
