@@ -374,14 +374,42 @@ fi
 
 AC_SUBST(PHPCONFIG)
 
+AC_ARG_VAR([REXX_HOME], [ooRexx home])
+
 AC_ARG_ENABLE([rexx],[AS_HELP_STRING([--disable-rexx], [Disable rexx scripting support])],[ app_cv_rexx="$enableval" ],[ app_cv_rexx="yes" ])
 
 if test "$app_cv_rexx" == "yes"; then
-	AC_ARG_WITH([rexx-config], [AS_HELP_STRING([--with-rexx-config], [Path to oorexx-config tool])], [ REXXCONFIG="$withval" ],[ AC_PATH_TOOL(REXXCONFIG, oorexx-config, , $PATH) ])
+	AC_ARG_WITH([rexx-config], [AS_HELP_STRING([--with-rexx-config], [Path to oorexx-config tool])], [ REXXCONFIG="$withval" ],[ AC_PATH_TOOL(REXXCONFIG, oorexx-config, "no", path="$PATH:$REXX_HOME") ])
 
-	if test -z "${REXXCONFIG}"; then
-		AC_MSG_NOTICE([Program oorexx-config not found. Use --with-rexx-config=path to specify absolute path to the oorexx-config tool.])
-		app_cv_rexx="no"
+	if test "$REXXCONFIG" == "no" ; then
+
+		if test -z "${REXX_HOME}"; then
+
+			AC_MSG_NOTICE([Program oorexx-config not found. Use --with-rexx-config=path to specify absolute path to the oorexx-config tool.])
+			app_cv_rexx="no"
+
+		else
+
+			if test -e "${REXX_HOME}/api/oorexxapi.h"; then
+
+				AC_DEFINE(HAVE_REXX)
+				AC_DEFINE(HAVE_OOREXXAPI_H)
+
+				AC_PATH_TOOL([REXXC], [rexxc], [cp], path="$PATH:$REXX_HOME" )
+				REXX_CFLAGS="$CFLAGS -I\"$REXX_HOME/api\""
+				REXX_LIBS="$LIBS -L\"$REXX_HOME\" -lrexxapi -lrexx"
+
+			else
+				AC_MSG_NOTICE([ooRexx SDK is NOT available.])
+				app_cv_rexx="no"
+			fi
+		fi
+	else
+		AC_DEFINE(HAVE_REXX)
+		AC_CHECK_HEADER(oorexxapi.h, AC_DEFINE(HAVE_OOREXXAPI_H))
+		AC_PATH_TOOL([REXXC], [rexxc], [cp], `$REXXCONFIG --prefix`/bin )
+		REXX_CFLAGS="$CFLAGS `$REXXCONFIG --cflags`"
+		REXX_LIBS="$LIBS `$REXXCONFIG --libs`"
 	fi
 fi
 
@@ -390,13 +418,7 @@ if test "$app_cv_registry" == "yes"; then
 fi
 
 if test "$app_cv_rexx" == "yes"; then
-	AC_DEFINE(HAVE_REXX)
-	AC_CHECK_HEADER(oorexxapi.h, AC_DEFINE(HAVE_OOREXXAPI_H))
-
-	AC_PATH_TOOL([REXXC], [rexxc], [cp], `$REXXCONFIG --prefix`/bin )
 	PLUGINS="$PLUGINS rx3270"
-	REXX_CFLAGS="$CFLAGS `$REXXCONFIG --cflags`"
-	REXX_LIBS="$LIBS `$REXXCONFIG --libs`"
 fi
 
 AC_SUBST(REXXC)
