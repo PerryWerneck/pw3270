@@ -49,7 +49,7 @@ char * rx3270::get_3270_string(const char *str)
 
 		iconv(conv2Host,NULL,NULL,NULL,NULL);	// Reset state
 
-		if(iconv(conv2Host,(char **) &str,&in,&ptr,&out) == ((size_t) -1))
+		if(iconv(conv2Host,&str,&in,&ptr,&out) == ((size_t) -1))
 			ret = strdup((char *) str);
 		else
 			ret = strdup(buffer);
@@ -78,7 +78,7 @@ char * rx3270::get_local_string(const char *str)
 
 		iconv(conv2Local,NULL,NULL,NULL,NULL);	// Reset state
 
-		if(iconv(conv2Local,(char **) &str,&in,&ptr,&out) == ((size_t) -1))
+		if(iconv(conv2Local,&str,&in,&ptr,&out) == ((size_t) -1))
 			ret = strdup((char *) str);
 		else
 			ret = strdup(buffer);

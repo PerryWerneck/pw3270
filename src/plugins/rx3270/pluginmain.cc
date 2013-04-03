@@ -27,9 +27,9 @@
  *
  */
 
+ #include "rx3270.h"
  #include <pw3270/plugin.h>
  #include <lib3270/actions.h>
- #include "rx3270.h"
 
 /*--[ Plugin session object ]--------------------------------------------------------------------------------*/
 

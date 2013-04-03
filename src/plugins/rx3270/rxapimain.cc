@@ -52,8 +52,8 @@
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
-	LIB3270_EXPORT RexxRoutineEntry rx3270_functions[];
-	LIB3270_EXPORT RexxPackageEntry rx3270_package_entry;
+//	LIB3270_EXPORT RexxRoutineEntry rx3270_functions[];
+//	LIB3270_EXPORT RexxPackageEntry rx3270_package_entry;
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 

@@ -43,6 +43,14 @@
 	#include <stdarg.h>
 #endif // HAVE_SYSLOG
 
+// http://msdn.microsoft.com/en-us/library/windows/desktop/ms684179(v=vs.85).aspx
+#ifndef LOAD_LIBRARY_SEARCH_DEFAULT_DIRS
+	#define LOAD_LIBRARY_SEARCH_DEFAULT_DIRS	0x00001000
+#endif // LOAD_LIBRARY_SEARCH_DEFAULT_DIRS
+
+#ifndef LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR
+	#define LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR 	0x00000100
+#endif // LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR
 
 /*--[ Class definition ]-----------------------------------------------------------------------------*/
 
@@ -96,7 +104,7 @@
 	void 			(*_set_toggle)(H3270 *h, LIB3270_TOGGLE ix, int value);
 
 #ifdef WIN32
-	HMODULE			  hModule
+	HMODULE			  hModule;
 #else
 	void			* hModule;
 #endif // WIN32
@@ -376,7 +384,7 @@ dynamic::dynamic()
 			fflush(stderr);
 			dlclose(hModule);
 #else
-			#error DLL close
+			FreeLibrary(hModule);
 #endif // !WIN32
 			hModule = NULL;
 			return;

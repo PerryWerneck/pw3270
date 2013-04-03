@@ -31,17 +31,21 @@
 
  #define RX3270_H_INCLUDED 1
 
+ #include <lib3270/config.h>
+
+ #ifdef HAVE_OOREXXAPI_H
+	#ifdef WIN32
+		#define _SSIZE_T_DEFINED
+	#endif
+	#include <oorexxapi.h>
+ #else
+	#error Only Rexx 4
+ #endif
+
  #include <errno.h>
  #include <stdio.h>
- #include <lib3270/config.h>
  #include <lib3270.h>
  #include <lib3270/log.h>
-
-#ifdef HAVE_OOREXXAPI_H
-	#include <oorexxapi.h>
-#else
-	#error Only Rexx 4
-#endif
 
 #ifndef ETIMEDOUT
 	#define ETIMEDOUT -1
@@ -96,6 +100,8 @@
 
 #if defined (HAVE_GNUC_VISIBILITY)
  class __attribute__((visibility("default"))) rx3270
+#elif defined(WIN32)
+ class __declspec (dllexport) rx3270
 #else
 	#error NOT_IMPLEMENTED
 #endif
