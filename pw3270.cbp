@@ -222,6 +222,18 @@
 		<Unit filename="src/lib3270/xioc.h" />
 		<Unit filename="src/lib3270/xl.h" />
 		<Unit filename="src/oxt/Makefile.in" />
+		<Unit filename="src/oxt/actions.cxx" />
+		<Unit filename="src/oxt/connection.cxx" />
+		<Unit filename="src/oxt/description.txt" />
+		<Unit filename="src/oxt/description.xml.in" />
+		<Unit filename="src/oxt/get.cxx" />
+		<Unit filename="src/oxt/globals.hpp" />
+		<Unit filename="src/oxt/local.cxx" />
+		<Unit filename="src/oxt/main.cxx" />
+		<Unit filename="src/oxt/manifest.xml.in" />
+		<Unit filename="src/oxt/pw3270.idl" />
+		<Unit filename="src/oxt/set.cxx" />
+		<Unit filename="src/oxt/testprogram.cxx" />
 		<Unit filename="src/plugins/dbus3270/Makefile.in" />
 		<Unit filename="src/plugins/dbus3270/daemon.c">
 			<Option compilerVar="CC" />
@@ -273,6 +285,7 @@
 		<Unit filename="src/plugins/remotectl/remotectl.h" />
 		<Unit filename="src/plugins/remotectl/server.h" />
 		<Unit filename="src/plugins/rx3270/Makefile.in" />
+		<Unit filename="src/plugins/rx3270/local.cc" />
 		<Unit filename="src/plugins/rx3270/pluginmain.cc" />
 		<Unit filename="src/plugins/rx3270/rx3270.h" />
 		<Unit filename="src/plugins/rx3270/rxapimain.cc" />
