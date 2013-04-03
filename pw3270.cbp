@@ -287,6 +287,8 @@
 		<Unit filename="src/plugins/rx3270/Makefile.in" />
 		<Unit filename="src/plugins/rx3270/local.cc" />
 		<Unit filename="src/plugins/rx3270/pluginmain.cc" />
+		<Unit filename="src/plugins/rx3270/rexx_methods.cc" />
+		<Unit filename="src/plugins/rx3270/rx3270.cls" />
 		<Unit filename="src/plugins/rx3270/rx3270.h" />
 		<Unit filename="src/plugins/rx3270/rxapimain.cc" />
 		<Unit filename="src/plugins/rx3270/text.cc" />

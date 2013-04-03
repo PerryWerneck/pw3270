@@ -75,6 +75,16 @@
  REXX_METHOD_PROTOTYPE(rx3270_method_connect);
  REXX_METHOD_PROTOTYPE(rx3270_method_disconnect);
  REXX_METHOD_PROTOTYPE(rx3270_method_sleep);
+ REXX_METHOD_PROTOTYPE(rx3270_method_is_connected);
+ REXX_METHOD_PROTOTYPE(rx3270_method_is_ready);
+ REXX_METHOD_PROTOTYPE(rx3270_method_wait_for_ready);
+ REXX_METHOD_PROTOTYPE(rx3270_method_set_cursor);
+ REXX_METHOD_PROTOTYPE(rx3270_method_enter);
+ REXX_METHOD_PROTOTYPE(rx3270_method_pfkey);
+ REXX_METHOD_PROTOTYPE(rx3270_method_pakey);
+ REXX_METHOD_PROTOTYPE(rx3270_method_get_text_at);
+ REXX_METHOD_PROTOTYPE(rx3270_method_set_text_at);
+ REXX_METHOD_PROTOTYPE(rx3270_method_cmp_text_at);
 
 /*---[ Globals ]---------------------------------------------------------------------------------------------*/
 

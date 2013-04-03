@@ -74,3 +74,117 @@ RexxMethod2(int, rx3270_method_sleep, CSELF, sessionPtr, int, seconds)
 		return -1;
 	return hSession->wait(seconds);
 }
+
+RexxMethod1(int, rx3270_method_is_connected, CSELF, sessionPtr)
+{
+	rx3270 *hSession = (rx3270 *) sessionPtr;
+	if(!hSession)
+		return -1;
+	return hSession->is_connected();
+}
+
+RexxMethod1(int, rx3270_method_is_ready, CSELF, sessionPtr)
+{
+	rx3270 *hSession = (rx3270 *) sessionPtr;
+	if(!hSession)
+		return -1;
+	return hSession->is_ready();
+}
+
+RexxMethod2(int, rx3270_method_wait_for_ready, CSELF, sessionPtr, int, seconds)
+{
+	rx3270 *hSession = (rx3270 *) sessionPtr;
+	if(!hSession)
+		return -1;
+	return hSession->wait_for_ready(seconds);
+}
+
+RexxMethod3(int, rx3270_method_set_cursor, CSELF, sessionPtr, int, row, int, col)
+{
+	rx3270 *hSession = (rx3270 *) sessionPtr;
+	if(!hSession)
+		return -1;
+	return hSession->set_cursor_position(row,col);
+}
+
+RexxMethod1(int, rx3270_method_enter, CSELF, sessionPtr)
+{
+	rx3270 *hSession = (rx3270 *) sessionPtr;
+	if(!hSession)
+		return -1;
+	return hSession->enter();
+}
+
+RexxMethod2(int, rx3270_method_pfkey, CSELF, sessionPtr, int, key)
+{
+	rx3270 *hSession = (rx3270 *) sessionPtr;
+	if(!hSession)
+		return -1;
+	return hSession->pfkey(key);
+}
+
+RexxMethod2(int, rx3270_method_pakey, CSELF, sessionPtr, int, key)
+{
+	rx3270 *hSession = (rx3270 *) sessionPtr;
+	if(!hSession)
+		return -1;
+	return hSession->pakey(key);
+}
+
+RexxMethod4(RexxStringObject, rx3270_method_get_text_at, CSELF, sessionPtr, int, row, int, col, int, sz)
+{
+	rx3270	* session 	= (rx3270 *) sessionPtr;
+
+	if(session)
+	{
+		char * str = session->get_text_at(row,col,sz);
+
+		if(str)
+		{
+			char				* text	= session->get_local_string(str);
+			RexxStringObject	  ret	= context->String((CSTRING) text);
+			free(str);
+			free(text);
+			return ret;
+		}
+	}
+
+	return context->String("");
+}
+
+
+RexxMethod4(int, rx3270_method_set_text_at, CSELF, sessionPtr, int, row, int, col, CSTRING, text)
+{
+	rx3270 * session = (rx3270 *) sessionPtr;
+
+	if(session)
+	{
+		char	* str		= session->get_3270_string(text);
+		int		  rc;
+		rc = session->set_text_at(row,col,str);
+		free(str);
+		return rc;
+	}
+	return -1;
+}
+
+RexxMethod4(int, rx3270_method_cmp_text_at, CSELF, sessionPtr, int, row, int, col, CSTRING, key)
+{
+	int		  rc		= 0;
+	rx3270	* session	= (rx3270 *) sessionPtr;
+
+	if(session)
+	{
+		char * str = session->get_text_at(row,col,strlen(key));
+		if(str)
+		{
+			char * text	= session->get_3270_string(key);
+			rc = strcasecmp(str,text);
+			free(text);
+		}
+		free(str);
+	}
+
+	return rc;
+}
+

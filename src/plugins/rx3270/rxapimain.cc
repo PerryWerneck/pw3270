@@ -111,11 +111,22 @@ RexxRoutineEntry rx3270_functions[] =
 
 RexxMethodEntry rx3270_methods[] =
 {
-    REXX_METHOD(rx3270_method_init,			rx3270_method_init			),
-    REXX_METHOD(rx3270_method_uninit,		rx3270_method_uninit		),
-    REXX_METHOD(rx3270_method_connect,		rx3270_method_connect		),
-    REXX_METHOD(rx3270_method_disconnect,	rx3270_method_disconnect	),
-    REXX_METHOD(rx3270_method_sleep,		rx3270_method_sleep			),
+    REXX_METHOD(rx3270_method_init,				rx3270_method_init				),
+    REXX_METHOD(rx3270_method_uninit,			rx3270_method_uninit			),
+    REXX_METHOD(rx3270_method_connect,			rx3270_method_connect			),
+    REXX_METHOD(rx3270_method_disconnect,		rx3270_method_disconnect		),
+    REXX_METHOD(rx3270_method_sleep,			rx3270_method_sleep				),
+    REXX_METHOD(rx3270_method_is_connected, 	rx3270_method_is_connected		),
+    REXX_METHOD(rx3270_method_is_ready, 		rx3270_method_is_ready			),
+    REXX_METHOD(rx3270_method_wait_for_ready, 	rx3270_method_wait_for_ready	),
+    REXX_METHOD(rx3270_method_set_cursor, 		rx3270_method_set_cursor		),
+    REXX_METHOD(rx3270_method_enter, 			rx3270_method_enter				),
+    REXX_METHOD(rx3270_method_pfkey, 			rx3270_method_pfkey				),
+    REXX_METHOD(rx3270_method_pakey, 			rx3270_method_pakey				),
+    REXX_METHOD(rx3270_method_get_text_at, 		rx3270_method_get_text_at		),
+    REXX_METHOD(rx3270_method_set_text_at, 		rx3270_method_set_text_at		),
+    REXX_METHOD(rx3270_method_cmp_text_at, 		rx3270_method_cmp_text_at		),
+
     REXX_LAST_METHOD()
 };
 
