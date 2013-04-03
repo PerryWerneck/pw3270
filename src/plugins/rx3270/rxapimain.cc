@@ -55,11 +55,14 @@
 	int librx3270_unloaded(void) __attribute__((destructor));
 #endif
 
+/*--[ Globals ]--------------------------------------------------------------------------------------*/
+
 	LIB3270_EXPORT RexxRoutineEntry rx3270_functions[];
 	LIB3270_EXPORT RexxPackageEntry rx3270_package_entry;
 
 
-	static rx3270 * hSession = NULL;
+	static rx3270	* hSession	= NULL;
+	static bool		  plugin	= false;
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
@@ -174,3 +177,8 @@ rx3270::~rx3270()
 		hSession = NULL;
 }
 
+void rx3270::set_plugin(void)
+{
+	trace("%s: Rexx API running as plugin",__FUNCTION__);
+	plugin = true;
+}

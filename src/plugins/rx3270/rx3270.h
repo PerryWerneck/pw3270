@@ -92,10 +92,11 @@
 	rx3270();
 	virtual ~rx3270();
 
-	static rx3270	* get_default(void);
+	static rx3270			* get_default(void);
+	static void				  set_plugin(void);
 
-	char 			* get_3270_string(const char *str);
-	char 			* get_local_string(const char *str);
+	char 					* get_3270_string(const char *str);
+	char 					* get_local_string(const char *str);
 
 	virtual const char		* get_version(void) = 0;
 	virtual LIB3270_CSTATE	  get_cstate(void)	= 0;

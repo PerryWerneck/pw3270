@@ -71,6 +71,8 @@
  LIB3270_EXPORT int pw3270_plugin_init(GtkWidget *window)
  {
 	session = new plugin(lib3270_get_default_session_handle());
+	session->set_plugin();
+	trace("%s: Rexx object is %p",__FUNCTION__,session);
 	return 0;
  }
 
