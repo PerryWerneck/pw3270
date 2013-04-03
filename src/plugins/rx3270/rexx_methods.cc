@@ -188,3 +188,83 @@ RexxMethod4(int, rx3270_method_cmp_text_at, CSELF, sessionPtr, int, row, int, co
 	return rc;
 }
 
+RexxMethod2(int, rx3270_method_event_trace, CSELF, sessionPtr, int, flag)
+{
+	rx3270 *hSession = (rx3270 *) sessionPtr;
+	if(!hSession)
+		return -1;
+	hSession->set_toggle(LIB3270_TOGGLE_EVENT_TRACE,flag);
+	return 0;
+}
+
+RexxMethod2(int, rx3270_method_screen_trace, CSELF, sessionPtr, int, flag)
+{
+	rx3270 *hSession = (rx3270 *) sessionPtr;
+	if(!hSession)
+		return -1;
+	hSession->set_toggle(LIB3270_TOGGLE_SCREEN_TRACE,flag);
+	return 0;
+
+}
+
+RexxMethod2(int, rx3270_method_data_trace, CSELF, sessionPtr, int, flag)
+{
+	rx3270 *hSession = (rx3270 *) sessionPtr;
+	if(!hSession)
+		return -1;
+	hSession->set_toggle(LIB3270_TOGGLE_DS_TRACE,flag);
+	return 0;
+}
+
+RexxMethod3(int, rx3270_method_set_toggle, CSELF, sessionPtr, CSTRING, name, int, flag)
+{
+	static const struct _toggle_info
+	{
+		const char		* name;
+		LIB3270_TOGGLE	  id;
+	}
+	toggle[LIB3270_TOGGLE_COUNT] =
+	{
+			{ "monocase",		LIB3270_TOGGLE_MONOCASE				},
+			{ "cursorblink",	LIB3270_TOGGLE_CURSOR_BLINK			},
+			{ "showtiming",		LIB3270_TOGGLE_SHOW_TIMING			},
+			{ "cursorpos",		LIB3270_TOGGLE_CURSOR_POS			},
+			{ "dstrace",		LIB3270_TOGGLE_DS_TRACE				},
+			{ "linewrap",		LIB3270_TOGGLE_LINE_WRAP			},
+			{ "blankfill",		LIB3270_TOGGLE_BLANK_FILL			},
+			{ "screentrace",	LIB3270_TOGGLE_SCREEN_TRACE			},
+			{ "eventtrace",		LIB3270_TOGGLE_EVENT_TRACE			},
+			{ "marginedpaste",	LIB3270_TOGGLE_MARGINED_PASTE		},
+			{ "rectselect",		LIB3270_TOGGLE_RECTANGLE_SELECT		},
+			{ "crosshair",		LIB3270_TOGGLE_CROSSHAIR			},
+			{ "fullscreen",		LIB3270_TOGGLE_FULL_SCREEN			},
+			{ "reconnect",		LIB3270_TOGGLE_RECONNECT			},
+			{ "insert",			LIB3270_TOGGLE_INSERT				},
+			{ "smartpaste",		LIB3270_TOGGLE_SMART_PASTE			},
+			{ "bold",			LIB3270_TOGGLE_BOLD					},
+			{ "keepselected",	LIB3270_TOGGLE_KEEP_SELECTED		},
+			{ "underline",		LIB3270_TOGGLE_UNDERLINE			},
+			{ "autoconnect",	LIB3270_TOGGLE_CONNECT_ON_STARTUP	},
+			{ "kpalternative",	LIB3270_TOGGLE_KP_ALTERNATIVE		},
+			{ "beep",			LIB3270_TOGGLE_BEEP					},
+			{ "fieldattr",		LIB3270_TOGGLE_VIEW_FIELD			},
+			{ "altscreen",		LIB3270_TOGGLE_ALTSCREEN			}
+	};
+
+	rx3270 *hSession = (rx3270 *) sessionPtr;
+	if(hSession)
+	{
+		for(int f = 0; f < LIB3270_TOGGLE_COUNT; f++)
+		{
+			if(!strcasecmp(name,toggle[f].name))
+			{
+				hSession->set_toggle(toggle[f].id,flag);
+				return 0;
+			}
+		}
+		return ENOENT;
+	}
+	return -1;
+}
+
+
