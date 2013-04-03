@@ -70,6 +70,12 @@
  REXX_TYPED_ROUTINE_PROTOTYPE(rx3270queryStringAt);
  REXX_TYPED_ROUTINE_PROTOTYPE(rx3270SetStringAt);
 
+ REXX_METHOD_PROTOTYPE(rx3270_method_init);
+ REXX_METHOD_PROTOTYPE(rx3270_method_uninit);
+ REXX_METHOD_PROTOTYPE(rx3270_method_connect);
+ REXX_METHOD_PROTOTYPE(rx3270_method_disconnect);
+ REXX_METHOD_PROTOTYPE(rx3270_method_sleep);
+
 /*---[ Globals ]---------------------------------------------------------------------------------------------*/
 
 /*--[ 3270 Session ]-----------------------------------------------------------------------------------------*/
@@ -92,6 +98,7 @@
 	rx3270();
 	virtual ~rx3270();
 
+	static rx3270			* create(const char *type = NULL);
 	static rx3270			* get_default(void);
 	static void				  set_plugin(void);
 
@@ -120,5 +127,7 @@
 	virtual int 			  set_text_at(int row, int col, const char *str)	= 0;
 
  };
+
+ rx3270 * create_lib3270_instance(void);
 
 #endif // RX3270_H_INCLUDED

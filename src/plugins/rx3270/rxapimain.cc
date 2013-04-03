@@ -109,6 +109,16 @@ RexxRoutineEntry rx3270_functions[] =
 	REXX_LAST_METHOD()
 };
 
+RexxMethodEntry rx3270_methods[] =
+{
+    REXX_METHOD(rx3270_method_init,			rx3270_method_init			),
+    REXX_METHOD(rx3270_method_uninit,		rx3270_method_uninit		),
+    REXX_METHOD(rx3270_method_connect,		rx3270_method_connect		),
+    REXX_METHOD(rx3270_method_disconnect,	rx3270_method_disconnect	),
+    REXX_METHOD(rx3270_method_sleep,		rx3270_method_sleep			),
+    REXX_LAST_METHOD()
+};
+
 RexxPackageEntry rx3270_package_entry =
 {
     STANDARD_PACKAGE_HEADER
@@ -118,7 +128,7 @@ RexxPackageEntry rx3270_package_entry =
     NULL,									// no load/unload functions
     NULL,
     rx3270_functions,						// the exported functions
-    NULL									// no methods in rx3270.
+    rx3270_methods							// no methods in rx3270.
 };
 
 // package loading stub.
