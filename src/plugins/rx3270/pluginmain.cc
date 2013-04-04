@@ -42,10 +42,10 @@
 	LIB3270_CSTATE	  get_cstate(void);
 	int				  disconnect(void);
 	int				  connect(const char *uri, bool wait = true);
-	int				  is_connected(void);
-	int				  is_ready(void);
+	bool			  is_connected(void);
+	bool			  is_ready(void);
 
-	int				  iterate(void);
+	int				  iterate(bool wait);
 	int				  wait(int seconds);
 	int				  wait_for_ready(int seconds);
 
@@ -114,17 +114,17 @@
  	return lib3270_connect(hSession,uri,wait);
  }
 
- int plugin::is_connected(void)
+ bool plugin::is_connected(void)
  {
- 	return lib3270_is_connected(hSession) ? 1 : 0;
+ 	return lib3270_is_connected(hSession) != 0;
  }
 
- int plugin::iterate(void)
+ int plugin::iterate(bool wait)
  {
 	if(!lib3270_is_connected(hSession))
 		return ENOTCONN;
 
-	lib3270_main_iterate(hSession,1);
+	lib3270_main_iterate(hSession,wait);
 
 	return 0;
  }
@@ -169,9 +169,9 @@
 	return lib3270_set_text_at(hSession,row,col,(const unsigned char *) str);
  }
 
- int plugin::is_ready(void)
+ bool plugin::is_ready(void)
  {
-	return lib3270_is_ready(hSession);
+	return lib3270_is_ready(hSession) != 0;
  }
 
  int plugin::set_cursor_position(int row, int col)

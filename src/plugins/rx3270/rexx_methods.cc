@@ -25,6 +25,11 @@
  * perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
  * erico.mendonca@gmail.com	(Erico Mascarenhas Mendonça)
  *
+ *
+ * Referencias:
+ *
+ * * http://www.oorexx.org/docs/rexxpg/x2950.htm
+ *
  */
 
  #include "rx3270.h"
@@ -73,19 +78,19 @@ RexxMethod2(int, rx3270_method_sleep, CSELF, sessionPtr, int, seconds)
 	return hSession->wait(seconds);
 }
 
-RexxMethod1(int, rx3270_method_is_connected, CSELF, sessionPtr)
+RexxMethod1(logical_t, rx3270_method_is_connected, CSELF, sessionPtr)
 {
 	rx3270 *hSession = (rx3270 *) sessionPtr;
 	if(!hSession)
-		return -1;
+		return false;
 	return hSession->is_connected();
 }
 
-RexxMethod1(int, rx3270_method_is_ready, CSELF, sessionPtr)
+RexxMethod1(logical_t, rx3270_method_is_ready, CSELF, sessionPtr)
 {
 	rx3270 *hSession = (rx3270 *) sessionPtr;
 	if(!hSession)
-		return -1;
+		return false;
 	return hSession->is_ready();
 }
 
@@ -266,3 +271,29 @@ RexxMethod3(int, rx3270_method_set_option, CSELF, sessionPtr, CSTRING, name, int
 }
 
 
+RexxMethod4(logical_t, rx3270_method_test, CSELF, sessionPtr, CSTRING, key, int, row, int, col)
+{
+	rx3270	* hSession = (rx3270 *) sessionPtr;
+
+	if(!hSession)
+		return false;
+
+	if(!hSession->is_ready())
+		hSession->iterate(false);
+
+	if(hSession->is_ready())
+	{
+		bool	  rc	= false;
+		char	* str	= hSession->get_text_at(row,col,strlen(key));
+		if(str)
+		{
+			char * text	= hSession->get_3270_string(key);
+			rc = (strcasecmp(str,text) == 0);
+			free(text);
+		}
+		free(str);
+		return rc;
+	}
+
+	return false;
+}

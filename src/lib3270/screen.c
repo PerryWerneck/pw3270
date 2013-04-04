@@ -536,7 +536,7 @@ LIB3270_EXPORT LIB3270_STATUS lib3270_get_program_message(H3270 *session)
  * @return 0 if the terminal is ready (no message, keyboard unlocked), LIB3270_MESSAGE if not
  *
  */
-LIB3270_EXPORT int lib3270_lock_status(H3270 *hSession)
+LIB3270_EXPORT LIB3270_MESSAGE lib3270_lock_status(H3270 *hSession)
 {
 	CHECK_SESSION_HANDLE(hSession);
 

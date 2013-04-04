@@ -64,10 +64,10 @@
 	LIB3270_CSTATE	  get_cstate(void);
 	int				  disconnect(void);
 	int				  connect(const char *uri, bool wait = true);
-	int				  is_connected(void);
-	int				  is_ready(void);
+	bool			  is_connected(void);
+	bool			  is_ready(void);
 
-	int				  iterate(void);
+	int				  iterate(bool wait);
 	int				  wait(int seconds);
 	int				  wait_for_ready(int seconds);
 
@@ -455,26 +455,26 @@ int dynamic::connect(const char *uri, bool wait)
 	return _connect(hSession,uri,(int) wait);
 }
 
-int dynamic::is_connected(void)
+bool dynamic::is_connected(void)
 {
 	if(!hModule)
 		return -1;
-	return _is_connected(hSession);
+	return _is_connected(hSession) != 0;
 }
 
-int dynamic::is_ready(void)
+bool dynamic::is_ready(void)
 {
 	if(!hModule)
 		return -1;
-	return _is_ready(hSession);
+	return _is_ready(hSession) != 0;
 }
 
-int dynamic::iterate(void)
+int dynamic::iterate(bool wait)
 {
 	if(!hModule)
 		return -1;
 
-	_main_iterate(hSession,1);
+	_main_iterate(hSession,wait);
 
 	return 0;
 }

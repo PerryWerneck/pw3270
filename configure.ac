@@ -405,16 +405,13 @@ if test "$app_cv_rexx" == "yes"; then
 			fi
 		fi
 	else
+		REXX_HOME="\${datarootdir}/ooRexx"
 		AC_DEFINE(HAVE_REXX)
 		AC_CHECK_HEADER(oorexxapi.h, AC_DEFINE(HAVE_OOREXXAPI_H))
 		AC_PATH_TOOL([REXXC], [rexxc], [cp], `$REXXCONFIG --prefix`/bin )
 		REXX_CFLAGS="$CFLAGS `$REXXCONFIG --cflags`"
 		REXX_LIBS="$LIBS `$REXXCONFIG --libs`"
 	fi
-fi
-
-if test "$app_cv_registry" == "yes"; then
-	AC_DEFINE(HAVE_WIN_REGISTRY)
 fi
 
 if test "$app_cv_rexx" == "yes"; then
@@ -425,6 +422,7 @@ AC_SUBST(REXXC)
 AC_SUBST(REXXCONFIG)
 AC_SUBST(REXX_CFLAGS)
 AC_SUBST(REXX_LIBS)
+AC_SUBST(REXX_HOME)
 
 #--[ Libreoffice ]--------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -482,6 +480,10 @@ AC_SUBST(OO_SDK_URE_HOME)
 AC_SUBST(LIB3270_REQUIRES)
 
 #--[ Misc options ]-------------------------------------------------------------------------------------------------------------------------------------------
+
+if test "$app_cv_registry" == "yes"; then
+	AC_DEFINE(HAVE_WIN_REGISTRY)
+fi
 
 AC_SUBST(MAJOR_VERSION,"$(echo $VERSION | cut -d. -f1)")
 AC_SUBST(HOST_CC)

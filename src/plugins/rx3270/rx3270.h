@@ -93,6 +93,7 @@
  REXX_METHOD_PROTOTYPE(rx3270_method_screen_trace);
  REXX_METHOD_PROTOTYPE(rx3270_method_ds_trace);
  REXX_METHOD_PROTOTYPE(rx3270_method_set_option);
+ REXX_METHOD_PROTOTYPE(rx3270_method_test);
 
 /*---[ Globals ]---------------------------------------------------------------------------------------------*/
 
@@ -130,9 +131,9 @@
 
 	virtual int				  connect(const char *uri, bool wait = true)		= 0;
 	virtual int				  disconnect(void)									= 0;
-	virtual int				  is_connected(void)								= 0;
-	virtual int				  is_ready(void)									= 0;
-	virtual int				  iterate(void)										= 0;
+	virtual bool			  is_connected(void)								= 0;
+	virtual bool			  is_ready(void)									= 0;
+	virtual int				  iterate(bool wait = true)							= 0;
 	virtual int				  wait(int seconds)									= 0;
 	virtual int				  wait_for_ready(int seconds)						= 0;
 	virtual int				  set_cursor_position(int row, int col)				= 0;

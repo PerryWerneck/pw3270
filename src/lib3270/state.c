@@ -92,6 +92,12 @@ LIB3270_EXPORT int lib3270_in_tn3270e(H3270 *h)
 	return (h->cstate == CONNECTED_TN3270E);
 }
 
+LIB3270_EXPORT int lib3270_is_connected(H3270 *h)
+{
+	CHECK_SESSION_HANDLE(h);
+	return (h->cstate == CONNECTED_TN3270E);
+}
+
 LIB3270_EXPORT int lib3270_in_e(H3270 *h)
 {
 	CHECK_SESSION_HANDLE(h);

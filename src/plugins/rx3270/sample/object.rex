@@ -2,14 +2,28 @@
 use arg uri
 
 host = .rx3270~new("")
+host~ScreenTrace(1)
 
-if host~connect(uri) <> 0 then
+if host~connect(uri,1) <> 0 then
 do
-	say "Erro ao conectar em "||uri
+	say "Error connecting to "||uri
 	return -1
 end
 
-host~sleep(20)
+if host~WaitForReady(60) <> 0 then
+do
+	say "Timeout waiting for terminal ready"
+end
+
+say "Text(2,2,23)=["||host~GetTextAt(2,2,23)||"]"
+say "Text(3,2,27)=["||host~GetTextAt(3,2,27)||"]"
+
+host~enter()
+if host~WaitForReady(60) <> 0 then
+do
+	say "Timeout waiting for terminal ready"
+end
+
 
 host~disconnect()
 

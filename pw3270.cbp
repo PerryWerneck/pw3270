@@ -279,7 +279,6 @@
 		<Unit filename="src/plugins/hllapi/testprogram.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/plugins/remotectl/Makefile.in" />
 		<Unit filename="src/plugins/remotectl/client.h" />
 		<Unit filename="src/plugins/remotectl/packets.h" />
 		<Unit filename="src/plugins/remotectl/remotectl.h" />
@@ -291,6 +290,7 @@
 		<Unit filename="src/plugins/rx3270/rx3270.cls" />
 		<Unit filename="src/plugins/rx3270/rx3270.h" />
 		<Unit filename="src/plugins/rx3270/rxapimain.cc" />
+		<Unit filename="src/plugins/rx3270/sample/object.rex" />
 		<Unit filename="src/plugins/rx3270/text.cc" />
 		<Unit filename="src/plugins/rx3270/typed_routines.cc" />
 		<Unit filename="src/pw3270/Makefile.in" />

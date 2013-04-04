@@ -73,14 +73,14 @@ Requires:       openssl shared-mime-info lib3270 = @PACKAGE_VERSION@
 Provides:	lib@PACKAGE@ = @PACKAGE_VERSION@ lib@PACKAGE@.so = @PACKAGE_VERSION@
 Distribution:	%_distro
 BuildRequires:	autoconf >= 2.61
-BuildRequires:	automake 
-BuildRequires:	gcc-c++ 
-BuildRequires:	sed 
-BuildRequires:	pkgconfig 
-BuildRequires:	%{_bldreq} 
-BuildRequires:	gettext-devel 
-BuildRequires:	findutils 
-BuildRequires:	coreutils 
+BuildRequires:	automake
+BuildRequires:	gcc-c++
+BuildRequires:	sed
+BuildRequires:	pkgconfig
+BuildRequires:	%{_bldreq}
+BuildRequires:	gettext-devel
+BuildRequires:	findutils
+BuildRequires:	coreutils
 BuildRequires:	desktop-file-utils
 BuildRequires:	libreoffice-sdk
 
@@ -141,6 +141,19 @@ This package provides 3270 access object to StarBasic.
 
 Revision @PACKAGE_REVISION@ from @PACKAGE_SOURCE@
 
+%if 0%{?_ooRexx}
+%package -n %{name}-rexx
+Summary:	%{name} extension & plugin for rexx scripting
+Group:		Development/Languages/Other
+Requires:	%{name} >= @PACKAGE_VERSION@
+Requires:	ooRexx
+
+%description -n %{name}-rexx
+This package provides Rexx class and associated libraries
+allowing rexx scripts to access tn3270e hosts.
+
+Revision @PACKAGE_REVISION@ from @PACKAGE_SOURCE@
+%endif
 
 #---[ Build & Install ]-----------------------------------------------------------------------------------------------
 
@@ -153,7 +166,7 @@ autoconf
 export CFLAGS="$RPM_OPT_FLAGS"
 export CXXFLAGS="$RPM_OPT_FLAGS"
 export FFLAGS="$RPM_OPT_FLAGS"
-export OFFICE_HOME=%{_libdir}/libreoffice 
+export OFFICE_HOME=%{_libdir}/libreoffice
 export OO_SDK_HOME=%{_libdir}/libreoffice/sdk
 %configure
 
@@ -223,6 +236,13 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libreoffice/share/extensions/%{name}/pw3270.uno.rdb
 %{_libdir}/libreoffice/share/extensions/%{name}/pw3270.uno.so
 
+%if 0%{?_ooRexx}
+%files -n %{name}-rexx
+%{_rexxlibdir}/librx3270.so.@VERSION@
+%{_rexxlibdir}/librx3270.so
+%{_rexxclassdir}/rx3270.cls
+%{_libdir}/@PACKAGE_NAME@-plugins/rx3270.so
+%endif
 
 #---[ Scripts ]-------------------------------------------------------------------------------------------------------
 
@@ -242,3 +262,8 @@ exit 0
 /sbin/ldconfig
 exit 0
 
+%if 0%{?_ooRexx}
+%postun -n %{name}-rexx
+/sbin/ldconfig
+exit 0
+%endif

@@ -43,6 +43,9 @@ CFLAGS=@REXX_CFLAGS@
 
 include ../../include/plugin.mak
 
+REXX_HOME=@REXX_HOME@
+REXXLIBDIR=$(libdir)/ooRexx
+
 #---[ Debug Targets ]----------------------------------------------------------
 
 $(BINDBG)/$(PLUGIN_NAME): $(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJDBG)/$(SRC).o) $(BINDBG)$(DLL_NAME)
@@ -67,7 +70,16 @@ $(BINRLS)$(DLL_NAME).$(VERSION): $(foreach SRC, $(basename $(EXTAPI_SRC)), $(OBJ
 	@$(MKDIR) `dirname $@`
 	$(CXX) $(DLL_FLAGS) @LDSOFLAGS@ $(LDFLAGS) -o $@ $^ $(LIBS) $(LIB3270_LIBS)
 
-install:
+install: $(BINRLS)$(DLL_NAME).$(VERSION) $(BINRLS)/$(PLUGIN_NAME)
+	@$(MKDIR) $(DESTDIR)$(libdir)/$(PACKAGE_NAME)-plugins
+	@$(INSTALL_PROGRAM) $(BINRLS)/$(PLUGIN_NAME) $(DESTDIR)$(libdir)/$(PACKAGE_NAME)-plugins
+
+	@$(MKDIR) $(DESTDIR)$(REXXLIBDIR)
+	@$(INSTALL_PROGRAM) $(BINRLS)$(DLL_NAME).$(VERSION) $(DESTDIR)$(REXXLIBDIR)
+	@$(LN_S) @DLLPREFIX@$(MODULE_NAME)@DLLEXT@.$(VERSION) $(DESTDIR)$(REXXLIBDIR)/@DLLPREFIX@$(MODULE_NAME)@DLLEXT@
+
+	@$(MKDIR) $(DESTDIR)$(REXX_HOME)
+	@$(INSTALL_PROGRAM) rx3270.cls $(DESTDIR)$(REXX_HOME)
 
 $(DEBDIR)/$(MODULE_NAME).install: Makefile
 	@$(MKDIR) `dirname $@`
