@@ -91,8 +91,8 @@
  REXX_METHOD_PROTOTYPE(rx3270_method_cmp_text_at);
  REXX_METHOD_PROTOTYPE(rx3270_method_event_trace);
  REXX_METHOD_PROTOTYPE(rx3270_method_screen_trace);
- REXX_METHOD_PROTOTYPE(rx3270_method_data_trace);
- REXX_METHOD_PROTOTYPE(rx3270_method_set_toggle);
+ REXX_METHOD_PROTOTYPE(rx3270_method_ds_trace);
+ REXX_METHOD_PROTOTYPE(rx3270_method_set_option);
 
 /*---[ Globals ]---------------------------------------------------------------------------------------------*/
 

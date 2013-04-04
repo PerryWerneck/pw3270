@@ -205,7 +205,7 @@ RexxMethod2(int, rx3270_method_screen_trace, CSELF, sessionPtr, int, flag)
 
 }
 
-RexxMethod2(int, rx3270_method_data_trace, CSELF, sessionPtr, int, flag)
+RexxMethod2(int, rx3270_method_ds_trace, CSELF, sessionPtr, int, flag)
 {
 	rx3270 *hSession = (rx3270 *) sessionPtr;
 	if(!hSession)
@@ -214,7 +214,7 @@ RexxMethod2(int, rx3270_method_data_trace, CSELF, sessionPtr, int, flag)
 	return 0;
 }
 
-RexxMethod3(int, rx3270_method_set_toggle, CSELF, sessionPtr, CSTRING, name, int, flag)
+RexxMethod3(int, rx3270_method_set_option, CSELF, sessionPtr, CSTRING, name, int, flag)
 {
 	static const struct _toggle_info
 	{

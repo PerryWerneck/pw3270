@@ -128,8 +128,8 @@ RexxMethodEntry rx3270_methods[] =
     REXX_METHOD(rx3270_method_cmp_text_at, 		rx3270_method_cmp_text_at		),
     REXX_METHOD(rx3270_method_event_trace, 		rx3270_method_event_trace		),
     REXX_METHOD(rx3270_method_screen_trace, 	rx3270_method_screen_trace		),
-    REXX_METHOD(rx3270_method_data_trace, 		rx3270_method_data_trace		),
-    REXX_METHOD(rx3270_method_set_toggle,		rx3270_method_set_toggle		),
+    REXX_METHOD(rx3270_method_ds_trace, 		rx3270_method_ds_trace			),
+    REXX_METHOD(rx3270_method_set_option,		rx3270_method_set_option		),
 
     REXX_LAST_METHOD()
 };
