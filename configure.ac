@@ -343,6 +343,7 @@ AC_SUBST(DBUS_LIBS)
 AC_SUBST(DBUS_CFLAGS)
 
 if test "$app_cv_dbus" == "yes"; then
+	AC_DEFINE(HAVE_DBUS)
 	PLUGINS="$PLUGINS dbus3270"
 fi
 

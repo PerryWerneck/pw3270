@@ -42,6 +42,7 @@
 	#undef HAVE_LIBINTL
 	#undef HAVE_GETADDRINFO
 	#undef HAVE_SYSLOG
+	#undef HAVE_DBUS
 
 	#undef HAVE_ICONV
 	#undef ICONV_CONST

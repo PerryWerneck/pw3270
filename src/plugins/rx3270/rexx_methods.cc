@@ -94,12 +94,12 @@ RexxMethod1(logical_t, rx3270_method_is_ready, CSELF, sessionPtr)
 	return hSession->is_ready();
 }
 
-RexxMethod2(int, rx3270_method_wait_for_ready, CSELF, sessionPtr, int, seconds)
+RexxMethod2(int, rx3270_method_wait_for_ready, CSELF, sessionPtr, OPTIONAL_int, seconds)
 {
 	rx3270 *hSession = (rx3270 *) sessionPtr;
 	if(!hSession)
 		return -1;
-	return hSession->wait_for_ready(seconds);
+	return hSession->wait_for_ready(seconds > 0 ? seconds : 60);
 }
 
 RexxMethod3(int, rx3270_method_set_cursor, CSELF, sessionPtr, int, row, int, col)

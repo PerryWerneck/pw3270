@@ -119,8 +119,10 @@
 	rx3270();
 	virtual ~rx3270();
 
-	static rx3270			* create(const char *type = NULL);
+	static rx3270			* create(const char *name = NULL);
+	static rx3270			* create_remote(const char *name);
 	static rx3270			* get_default(void);
+
 	static void				  set_plugin(void);
 
 	char 					* get_3270_string(const char *str);

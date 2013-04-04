@@ -147,13 +147,10 @@ rx3270::~rx3270()
 		defSession = NULL;
 }
 
-rx3270 * rx3270::create(const char *type)
+rx3270 * rx3270::create(const char *name)
 {
-	if(type && *type)
-	{
-		// Create remote session
-		return NULL;
-	}
+	if(name && *name)
+		return create_remote(name);
 	return new dynamic();
 }
 
