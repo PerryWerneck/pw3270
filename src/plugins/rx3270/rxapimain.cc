@@ -111,6 +111,8 @@ RexxRoutineEntry rx3270_functions[] =
 
 RexxMethodEntry rx3270_methods[] =
 {
+	REXX_METHOD(rx3270_method_version,			rx3270_method_version			),
+	REXX_METHOD(rx3270_method_revision,			rx3270_method_revision			),
     REXX_METHOD(rx3270_method_init,				rx3270_method_init				),
     REXX_METHOD(rx3270_method_uninit,			rx3270_method_uninit			),
     REXX_METHOD(rx3270_method_connect,			rx3270_method_connect			),

@@ -28,6 +28,7 @@
  */
 
  #include "rx3270.h"
+ #include <string.h>
  #include <pw3270/plugin.h>
  #include <lib3270/actions.h>
 
@@ -38,7 +39,7 @@
  public:
 	plugin(H3270 *hSession);
 
-	const char		* get_version(void);
+	char			* get_version(void);
 	LIB3270_CSTATE	  get_cstate(void);
 	int				  disconnect(void);
 	int				  connect(const char *uri, bool wait = true);
@@ -93,9 +94,9 @@
 	this->hSession = hSession;
  }
 
- const char * plugin::get_version(void)
+ char * plugin::get_version(void)
  {
-	return lib3270_get_version();
+	return strdup(lib3270_get_version());
  }
 
  LIB3270_CSTATE plugin::get_cstate(void)

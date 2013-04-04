@@ -44,7 +44,7 @@
 	remote(const char *session);
 	~remote();
 
-	const char		* get_version(void);
+	char			* get_revision(void);
 	LIB3270_CSTATE	  get_cstate(void);
 	int				  disconnect(void);
 	int				  connect(const char *uri, bool wait = true);
@@ -72,10 +72,12 @@
 
 #elif defined(HAVE_DBUS)
 	DBusConnection	* conn;
-	char			* service_name;
-	char			* interface_name;
+	char			* dest;
+	char			* path;
+	char			* intf;
 	DBusMessage		* create_message(const char *method);
-
+	DBusMessage		* call(DBusMessage *msg);
+	char 			* query_string(const char *method);
 #endif
 
 
@@ -84,8 +86,8 @@
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
 #if defined(HAVE_DBUS)
- static const char * prefix	= "br.com.bb.";
- static const char * object	= "br/com/bb/" PACKAGE_NAME;
+ static const char * prefix_dest	= "br.com.bb.";
+ static const char * prefix_path	= "/br/com/bb/";
 #else
  #error AQUI
 #endif // HAVE_DBUS
@@ -95,10 +97,10 @@
 #if defined(HAVE_DBUS)
 DBusMessage * remote::create_message(const char *method)
 {
-	DBusMessage * msg = dbus_message_new_method_call(	service_name,
-														object,
-														interface_name,
-														method);
+	DBusMessage * msg = dbus_message_new_method_call(	this->dest,		// Destination
+														this->path,		// Path
+														this->intf,		// Interface
+														method);		// method
 
 	if (!msg)
 		fprintf(stderr, "Error creating message for method %s\n",method);
@@ -130,40 +132,35 @@ remote::remote(const char *name)
 
 		*(ptr++) = 0;
 
-		sz = strlen(ptr)+strlen(name)+strlen(prefix)+2;
+		// Build destination
+		sz		= strlen(ptr)+strlen(str)+strlen(prefix_dest)+2;
+		dest	= (char *) malloc(sz+1);
+		strncpy(dest,prefix_dest,sz);
+		strncat(dest,str,sz);
+		strncat(dest,".",sz);
+		strncat(dest,ptr,sz);
 
-		service_name = (char *) malloc(sz+1);
-		strncpy(service_name,prefix,sz);
-		strncat(service_name,".",sz);
-		strncat(service_name,name,sz);
-		strncat(service_name,".",sz);
-		strncat(service_name,ptr,sz);
+		// Build path
+		sz		= strlen(str)+strlen(prefix_path);
+		path	= (char *) malloc(sz+1);
+		strncpy(path,prefix_path,sz);
+		strncat(path,str,sz);
 
-		sz = strlen(prefix)+strlen(name)+1;
-		interface_name = (char *) malloc(sz+1);
-		strncpy(interface_name,prefix,sz);
-		strncat(interface_name,".",sz);
-		strncat(interface_name,name,sz);
+		// Build intf
+		sz		= strlen(str)+strlen(prefix_dest)+1;
+		intf	= (char *) malloc(sz+1);
+		strncpy(intf,prefix_dest,sz);
+		strncat(intf,str,sz);
+
+
 	}
 	else
 	{
-		size_t sz = strlen(name)+strlen(prefix)+1;
-
-		service_name = (char *) malloc(sz+1);
-		strncpy(service_name,prefix,sz);
-		strncat(service_name,".",sz);
-		strncat(service_name,name,sz);
-
-		sz = strlen(prefix)+strlen(name)+1;
-		interface_name = (char *) malloc(sz+1);
-		strncpy(interface_name,prefix,sz);
-		strncat(interface_name,".",sz);
-		strncat(interface_name,name,sz);
+		exit(-1);
 
 	}
 
-	trace("service_name:   [%s]", service_name);
-	trace("interface_name: [%s]", interface_name);
+	trace("DBUS:\nDestination:\t[%s]\nPath:\t\t[%s]\nInterface:\t[%s]",dest,path,intf);
 
 	free(str);
 
@@ -213,27 +210,84 @@ remote::~remote()
 
 #elif defined(HAVE_DBUS)
 
-	if(conn)
-		dbus_connection_close(conn);
-
-	free(service_name);
-	free(interface_name);
+	free(dest);
+	free(path);
+	free(intf);
 
 #else
 
 #endif
 }
 
-const char * remote::get_version(void)
+#if defined(HAVE_DBUS)
+DBusMessage	* remote::call(DBusMessage *msg)
+{
+	DBusMessage		* reply;
+	DBusError		  error;
+
+	dbus_error_init(&error);
+	reply = dbus_connection_send_with_reply_and_block(conn,msg,10000,&error);
+	dbus_message_unref(msg);
+
+	if(reply)
+		return reply;
+
+	fprintf(stderr,"%s\n",error.message);
+	dbus_error_free(&error);
+
+	return NULL;
+
+}
+
+char * remote::query_string(const char *method)
+{
+	char *rc = NULL;
+
+	if(conn)
+	{
+		DBusMessage	* msg = call(create_message(method));
+		if(msg)
+		{
+			DBusMessageIter iter;
+
+			if(dbus_message_iter_init(msg, &iter))
+			{
+				if(dbus_message_iter_get_arg_type(&iter) == DBUS_TYPE_STRING)
+				{
+					const char * str;
+					dbus_message_iter_get_basic(&iter, &str);
+					rc = strdup(str);
+				}
+			}
+
+			dbus_message_unref(msg);
+		}
+	}
+
+	return rc;
+}
+
+#endif // HAVE_DBUS
+
+char * remote::get_revision(void)
 {
 #if defined(WIN32)
 
+	return NULL;
+
+
 #elif defined(HAVE_DBUS)
+
+	return query_string("getRevision");
+
+#else
+
+	return NULL;
 
 #endif
 
-	return NULL;
 }
+
 
 LIB3270_CSTATE remote::get_cstate(void)
 {
@@ -297,6 +351,9 @@ int remote::iterate(bool wait)
 
 #elif defined(HAVE_DBUS)
 
+	if(wait)
+		this->wait(1);
+
 #endif
 
 	return -1;
@@ -307,6 +364,8 @@ int remote::wait(int seconds)
 #if defined(WIN32)
 
 #elif defined(HAVE_DBUS)
+
+	sleep(seconds);
 
 #endif
 

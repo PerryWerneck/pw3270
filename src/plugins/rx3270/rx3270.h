@@ -74,6 +74,8 @@
  REXX_TYPED_ROUTINE_PROTOTYPE(rx3270queryStringAt);
  REXX_TYPED_ROUTINE_PROTOTYPE(rx3270SetStringAt);
 
+ REXX_METHOD_PROTOTYPE(rx3270_method_version);
+ REXX_METHOD_PROTOTYPE(rx3270_method_revision);
  REXX_METHOD_PROTOTYPE(rx3270_method_init);
  REXX_METHOD_PROTOTYPE(rx3270_method_uninit);
  REXX_METHOD_PROTOTYPE(rx3270_method_connect);
@@ -128,7 +130,8 @@
 	char 					* get_3270_string(const char *str);
 	char 					* get_local_string(const char *str);
 
-	virtual const char		* get_version(void) = 0;
+	virtual char			* get_version(void);
+	virtual char			* get_revision(void);
 	virtual LIB3270_CSTATE	  get_cstate(void)	= 0;
 
 	virtual int				  connect(const char *uri, bool wait = true)		= 0;

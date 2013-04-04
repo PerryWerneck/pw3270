@@ -60,7 +60,7 @@
 	dynamic();
 	~dynamic();
 
-	const char		* get_version(void);
+	char			* get_version(void);
 	LIB3270_CSTATE	  get_cstate(void);
 	int				  disconnect(void);
 	int				  connect(const char *uri, bool wait = true);
@@ -154,6 +154,15 @@ rx3270 * rx3270::create(const char *name)
 	return new dynamic();
 }
 
+char * rx3270::get_version(void)
+{
+	return strdup(PACKAGE_VERSION);
+}
+
+char * rx3270::get_revision(void)
+{
+	return strdup(PACKAGE_REVISION);
+}
 
 rx3270	* rx3270::get_default(void)
 {
@@ -424,11 +433,11 @@ dynamic::~dynamic()
 
 }
 
-const char * dynamic::get_version(void)
+char * dynamic::get_version(void)
 {
 	if(!hModule)
 		return NULL;
-	return _get_version();
+	return strdup(_get_version());
 }
 
 LIB3270_CSTATE dynamic::get_cstate(void)

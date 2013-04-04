@@ -38,7 +38,7 @@ LN_S=@LN_S@
 
 #---[ Include plugin rules ]---------------------------------------------------
 
-LIBS=@REXX_LIBS@ @LIBICONV@
+LIBS=@REXX_LIBS@ @LIBICONV@ @DBUS_LIBS@
 CFLAGS=@REXX_CFLAGS@ @DBUS_CFLAGS@
 REXX_HOME=@REXX_HOME@
 REXXLIBDIR=$(libdir)/ooRexx

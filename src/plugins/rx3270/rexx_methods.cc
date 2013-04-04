@@ -54,6 +54,36 @@ RexxMethod1(int, rx3270_method_uninit, CSELF, sessionPtr)
 	return 0;
 }
 
+RexxMethod1(RexxStringObject, rx3270_method_version, CSELF, sessionPtr)
+{
+	rx3270	* session 	= (rx3270 *) sessionPtr;
+
+	if(session)
+	{
+		char				* version	= session->get_version();
+		RexxStringObject	  ret 		= context->String((CSTRING) (version ? version : "ERROR:"));
+		free(version);
+		return ret;
+	}
+
+	return context->String((CSTRING) PACKAGE_VERSION);
+}
+
+RexxMethod1(RexxStringObject, rx3270_method_revision, CSELF, sessionPtr)
+{
+	rx3270	* session 	= (rx3270 *) sessionPtr;
+
+	if(session)
+	{
+		char				* version	= session->get_revision();
+		RexxStringObject	  ret 		= context->String((CSTRING) (version ? version : PACKAGE_REVISION));
+		free(version);
+		return ret;
+	}
+
+	return context->String((CSTRING) PACKAGE_REVISION);
+}
+
 RexxMethod3(int, rx3270_method_connect, CSELF, sessionPtr, CSTRING, uri, OPTIONAL_int, wait)
 {
 	rx3270 *hSession = (rx3270 *) sessionPtr;
