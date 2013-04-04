@@ -38,6 +38,10 @@
  #include "rx3270.h"
  #include <lib3270/actions.h>
 
+#ifdef HAVE_SYSLOG
+ #include <syslog.h>
+#endif // HAVE_SYSLOG
+
  #include <string.h>
 
 #if defined WIN32
@@ -162,3 +166,21 @@ LIB3270_EXPORT RexxPackageEntry * RexxEntry RexxGetPackage(void)
 END_EXTERN_C()
 
 
+void rx3270::log(const char *fmt, ...)
+{
+	va_list arg_ptr;
+	va_start(arg_ptr, fmt);
+	this->logva(fmt,arg_ptr);
+	va_end(arg_ptr);
+}
+
+void rx3270::logva(const char *fmt, va_list args)
+{
+#ifdef HAVE_SYSLOG
+	openlog(PACKAGE_NAME, LOG_NDELAY, LOG_USER);
+	vsyslog(LOG_INFO,fmt,args);
+	closelog();
+#else
+	vfprintf(stderr,fmt,args);
+#endif
+}

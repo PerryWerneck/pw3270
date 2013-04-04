@@ -46,6 +46,7 @@
  #include <stdio.h>
  #include <lib3270.h>
  #include <lib3270/log.h>
+ #include <stdarg.h>
 
 #ifndef ETIMEDOUT
 	#define ETIMEDOUT -1
@@ -130,9 +131,13 @@
 	char 					* get_3270_string(const char *str);
 	char 					* get_local_string(const char *str);
 
+	void			  		  log(const char *fmt, ...);
+	virtual void			  logva(const char *fmt, va_list arg);
+
 	virtual char			* get_version(void);
 	virtual char			* get_revision(void);
 	virtual LIB3270_CSTATE	  get_cstate(void)	= 0;
+
 
 	virtual int				  connect(const char *uri, bool wait = true)		= 0;
 	virtual int				  disconnect(void)									= 0;

@@ -18,7 +18,7 @@
  * programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple
  * Place, Suite 330, Boston, MA, 02111-1307, USA
  *
- * Este programa está nomeado como local.cc e possui - linhas de código.
+ * Este programa está nomeado como remote.cc e possui - linhas de código.
  *
  * Contatos:
  *
@@ -78,6 +78,7 @@
 	DBusMessage		* create_message(const char *method);
 	DBusMessage		* call(DBusMessage *msg);
 	char 			* query_string(const char *method);
+	int 			  query_intval(const char *method);
 #endif
 
 
@@ -103,7 +104,7 @@ DBusMessage * remote::create_message(const char *method)
 														method);		// method
 
 	if (!msg)
-		fprintf(stderr, "Error creating message for method %s\n",method);
+		log("Error creating message for method %s",method);
 
 	return msg;
 }
@@ -170,13 +171,13 @@ remote::remote(const char *name)
 
 	if (dbus_error_is_set(&err))
 	{
-		fprintf(stderr, "DBUS Connection Error (%s)\n", err.message);
+		log("DBUS Connection Error (%s)", err.message);
 		dbus_error_free(&err);
 	}
 
 	if(!conn)
 	{
-		fprintf(stderr, "%s\n", "DBUS Connection failed");
+		log("%s", "DBUS Connection failed");
 		dbus_connection_close(conn);
 		conn = NULL;
 		return;
@@ -186,13 +187,13 @@ remote::remote(const char *name)
 
 	if (dbus_error_is_set(&err))
 	{
-		fprintf(stderr, "Name Error (%s)\n", err.message);
+		log("Name Error (%s)", err.message);
 		dbus_error_free(&err);
 	}
 
 	if(rc != DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER)
 	{
-		fprintf(stderr, "%s\n", "DBUS request name failed");
+		log("%s", "DBUS request name failed");
 		dbus_connection_close(conn);
 		conn = NULL;
 		return;
@@ -232,7 +233,7 @@ DBusMessage	* remote::call(DBusMessage *msg)
 	if(reply)
 		return reply;
 
-	fprintf(stderr,"%s\n",error.message);
+	log("%s",error.message);
 	dbus_error_free(&error);
 
 	return NULL;
@@ -267,6 +268,35 @@ char * remote::query_string(const char *method)
 	return rc;
 }
 
+int remote::query_intval(const char *method)
+{
+	int rc = -1;
+
+	if(conn)
+	{
+		DBusMessage	* msg = call(create_message(method));
+		if(msg)
+		{
+			DBusMessageIter iter;
+
+			if(dbus_message_iter_init(msg, &iter))
+			{
+				if(dbus_message_iter_get_arg_type(&iter) == DBUS_TYPE_INT32)
+				{
+					dbus_int32_t iSigned;
+					dbus_message_iter_get_basic(&iter, &iSigned);
+					rc = (int) iSigned;
+				}
+			}
+
+			dbus_message_unref(msg);
+		}
+	}
+
+	return rc;
+}
+
+
 #endif // HAVE_DBUS
 
 char * remote::get_revision(void)
@@ -293,11 +323,17 @@ LIB3270_CSTATE remote::get_cstate(void)
 {
 #if defined(WIN32)
 
+	return (LIB3270_CSTATE) -1;
+
 #elif defined(HAVE_DBUS)
 
-#endif
+	return (LIB3270_CSTATE) query_intval("getConnectionState");
+
+#else
 
 	return (LIB3270_CSTATE) -1;
+
+#endif
 
 }
 
@@ -307,9 +343,14 @@ int remote::disconnect(void)
 
 #elif defined(HAVE_DBUS)
 
-#endif
+	return query_intval("disconnect");
+
+#else
 
 	return -1;
+
+#endif
+
 }
 
 int remote::connect(const char *uri, bool wait)
@@ -351,8 +392,7 @@ int remote::iterate(bool wait)
 
 #elif defined(HAVE_DBUS)
 
-	if(wait)
-		this->wait(1);
+	return 0;
 
 #endif
 
@@ -366,6 +406,7 @@ int remote::wait(int seconds)
 #elif defined(HAVE_DBUS)
 
 	sleep(seconds);
+	return 0;
 
 #endif
 
@@ -431,11 +472,18 @@ int remote::enter(void)
 {
 #if defined(WIN32)
 
+	return -1;
+
 #elif defined(HAVE_DBUS)
+
+	return query_intval("enter");
+
+#else
+
+	return -1;
 
 #endif
 
-	return -1;
 }
 
 int remote::pfkey(int key)

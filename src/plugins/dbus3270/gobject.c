@@ -103,6 +103,13 @@ void pw3270_dbus_get_message_id(PW3270Dbus *object, DBusGMethodInvocation *conte
 	dbus_g_method_return(context,lib3270_get_program_message(pw3270_dbus_get_session_handle(object)));
 }
 
+void pw3270_dbus_get_connection_state(PW3270Dbus *object, DBusGMethodInvocation *context)
+{
+	trace("%s object=%p context=%p",__FUNCTION__,object,context);
+	dbus_g_method_return(context,lib3270_get_connection_state(pw3270_dbus_get_session_handle(object)));
+}
+
+
 GError * pw3270_dbus_get_error_from_errno(int code)
 {
 	return g_error_new(ERROR_DOMAIN,code,"%s",g_strerror(code));

@@ -31,6 +31,7 @@
  #include <string.h>
  #include <pw3270/plugin.h>
  #include <lib3270/actions.h>
+ #include <lib3270/log.h>
 
 /*--[ Plugin session object ]--------------------------------------------------------------------------------*/
 
@@ -45,6 +46,8 @@
 	int				  connect(const char *uri, bool wait = true);
 	bool			  is_connected(void);
 	bool			  is_ready(void);
+
+	void 			  logva(const char *fmt, va_list args);
 
 	int				  iterate(bool wait);
 	int				  wait(int seconds);
@@ -183,4 +186,9 @@
  void plugin::set_toggle(LIB3270_TOGGLE ix, bool value)
  {
 	lib3270_set_toggle(hSession,ix,(int) value);
+ }
+
+ void plugin::logva(const char *fmt, va_list args)
+ {
+	lib3270_write_va_log(hSession,"REXX",fmt,args);
  }

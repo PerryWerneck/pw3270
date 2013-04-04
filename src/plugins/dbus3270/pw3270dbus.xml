@@ -22,6 +22,10 @@
       <annotation name="org.freedesktop.DBus.GLib.Async" value="true"/>
       <arg type="i" name="status" direction="out" />
     </method>
+    <method name="getConnectionState">
+      <annotation name="org.freedesktop.DBus.GLib.Async" value="true"/>
+      <arg type="i" name="status" direction="out" />
+    </method>
     <method name="getScreenContents">
       <annotation name="org.freedesktop.DBus.GLib.Async" value="true"/>
       <arg type="s" name="contents" direction="out" />
