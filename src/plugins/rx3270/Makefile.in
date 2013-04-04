@@ -36,7 +36,7 @@ EXTAPI_SRC=rxapimain.cc text.cc typed_routines.cc local.cc rexx_methods.cc
 REXXCONFIG=@REXXCONFIG@
 LN_S=@LN_S@
 
-LIBS=@REXX_LIBS@
+LIBS=@REXX_LIBS@ @LIBICONV@
 CFLAGS=@REXX_CFLAGS@
 
 #---[ Include plugin rules ]---------------------------------------------------
