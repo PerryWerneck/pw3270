@@ -34,6 +34,11 @@
 	#include <dbus/dbus.h>
 #endif // HAVE_DBUS
 
+#if defined(WIN32)
+	#include <pw3270/ipcpackets.h>
+#endif // WIN32
+
+ #include <time.h>
  #include <string.h>
 
 /*--[ Class definition ]-----------------------------------------------------------------------------*/
@@ -70,7 +75,10 @@
  private:
 #if defined(WIN32)
 
+	HANDLE			  hPipe;
+
 #elif defined(HAVE_DBUS)
+
 	DBusConnection	* conn;
 	char			* dest;
 	char			* path;
@@ -79,6 +87,7 @@
 	DBusMessage		* call(DBusMessage *msg);
 	char 			* query_string(const char *method);
 	int 			  query_intval(const char *method);
+
 #endif
 
 
@@ -89,8 +98,6 @@
 #if defined(HAVE_DBUS)
  static const char * prefix_dest	= "br.com.bb.";
  static const char * prefix_path	= "/br/com/bb/";
-#else
- #error AQUI
 #endif // HAVE_DBUS
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
@@ -120,6 +127,46 @@ rx3270 * rx3270::create_remote(const char *name)
 remote::remote(const char *name)
 {
 #if defined(WIN32)
+	static DWORD	  dwMode = PIPE_READMODE_MESSAGE;
+ 	char	 		  buffer[4096];
+ 	char			* str = strdup(name);
+ 	char			* ptr;
+
+	hPipe  = INVALID_HANDLE_VALUE;
+
+ 	for(ptr=str;*ptr;ptr++)
+	{
+		if(*ptr == ':')
+			*ptr = '_';
+	}
+
+	snprintf(buffer,4095,"\\\\.\\pipe\\%s",str);
+
+	free(str);
+
+	if(!WaitNamedPipe(buffer,NMPWAIT_USE_DEFAULT_WAIT))
+	{
+		log("%s","Invalid service instance");
+		return;
+	}
+
+	hPipe = CreateFile(buffer,GENERIC_WRITE|GENERIC_READ,0,NULL,OPEN_EXISTING,0,NULL);
+
+	if(hPipe == INVALID_HANDLE_VALUE)
+	{
+		log("%s","Can´t create service pipe");
+		return;
+	}
+
+	if(!SetNamedPipeHandleState(hPipe,&dwMode,NULL,NULL))
+	{
+		log("%s","Can´t set pipe state");
+		CloseHandle(hPipe);
+		hPipe = INVALID_HANDLE_VALUE;
+		return;
+	}
+
+	// Connected
 
 #elif defined(HAVE_DBUS)
 	DBusError	  err;
@@ -208,6 +255,9 @@ remote::remote(const char *name)
 remote::~remote()
 {
 #if defined(WIN32)
+
+	if(hPipe != INVALID_HANDLE_VALUE)
+		CloseHandle(hPipe);
 
 #elif defined(HAVE_DBUS)
 
@@ -303,8 +353,7 @@ char * remote::get_revision(void)
 {
 #if defined(WIN32)
 
-	return NULL;
-
+	return strdup(PACKAGE_REVISION);
 
 #elif defined(HAVE_DBUS)
 
@@ -322,6 +371,11 @@ char * remote::get_revision(void)
 LIB3270_CSTATE remote::get_cstate(void)
 {
 #if defined(WIN32)
+
+	if(hPipe != INVALID_HANDLE_VALUE)
+	{
+
+	}
 
 	return (LIB3270_CSTATE) -1;
 
@@ -341,6 +395,16 @@ int remote::disconnect(void)
 {
 #if defined(WIN32)
 
+	if(hPipe != INVALID_HANDLE_VALUE)
+	{
+		static const struct hllapi_packet_query query		= { HLLAPI_PACKET_DISCONNECT };
+		struct hllapi_packet_result		  		response;
+		DWORD							  		cbSize		= sizeof(query);
+		TransactNamedPipe(hPipe,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
+		return 0;
+	}
+	return -1;
+
 #elif defined(HAVE_DBUS)
 
 	return query_intval("disconnect");
@@ -356,6 +420,32 @@ int remote::disconnect(void)
 int remote::connect(const char *uri, bool wait)
 {
 #if defined(WIN32)
+	if(hPipe != INVALID_HANDLE_VALUE)
+	{
+		struct hllapi_packet_connect	* pkt;
+		struct hllapi_packet_result		  response;
+		DWORD							  cbSize;
+
+		cbSize	= sizeof(struct hllapi_packet_connect)+strlen(uri);
+		pkt 	= (struct hllapi_packet_connect *) malloc(cbSize);
+
+		pkt->packet_id	= HLLAPI_PACKET_CONNECT;
+		pkt->wait		= (unsigned char) wait;
+		strcpy(pkt->hostname,uri);
+
+		trace("Sending %s",pkt->hostname);
+
+		if(!TransactNamedPipe(hPipe,(LPVOID) pkt, cbSize, &response, sizeof(response), &cbSize,NULL))
+		{
+			errno 		= GetLastError();
+			response.rc = -1;
+		}
+
+		free(pkt);
+
+		return response.rc;
+
+	}
 
 #elif defined(HAVE_DBUS)
 
@@ -368,6 +458,15 @@ bool remote::is_connected(void)
 {
 #if defined(WIN32)
 
+	if(hPipe != INVALID_HANDLE_VALUE)
+	{
+		static const struct hllapi_packet_query query		= { HLLAPI_PACKET_IS_CONNECTED };
+		struct hllapi_packet_result		  		response;
+		DWORD							  		cbSize		= sizeof(query);
+		TransactNamedPipe(hPipe,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
+		return response.rc != 0;
+	}
+
 #elif defined(HAVE_DBUS)
 
 #endif
@@ -379,6 +478,11 @@ bool remote::is_ready(void)
 {
 #if defined(WIN32)
 
+	if(hPipe != INVALID_HANDLE_VALUE)
+	{
+
+	}
+
 #elif defined(HAVE_DBUS)
 
 #endif
@@ -389,6 +493,8 @@ bool remote::is_ready(void)
 int remote::iterate(bool wait)
 {
 #if defined(WIN32)
+
+	return 0;
 
 #elif defined(HAVE_DBUS)
 
@@ -403,9 +509,28 @@ int remote::wait(int seconds)
 {
 #if defined(WIN32)
 
+ 	time_t end = time(0)+seconds;
+
+	while(time(0) < end)
+	{
+		if(!is_connected())
+			return ENOTCONN;
+		Sleep(500);
+	}
+
+	return 0;
+
 #elif defined(HAVE_DBUS)
 
-	sleep(seconds);
+ 	time_t end = time(0)+seconds;
+
+	while(time(0) < end)
+	{
+		if(!is_connected())
+			return ENOTCONN;
+		usleep(500);
+	}
+
 	return 0;
 
 #endif
@@ -416,6 +541,26 @@ int remote::wait(int seconds)
 int remote::wait_for_ready(int seconds)
 {
 #if defined(WIN32)
+
+	if(hPipe != INVALID_HANDLE_VALUE)
+	{
+		time_t end = time(0)+seconds;
+
+		while(time(0) < end)
+		{
+			if(!is_connected())
+				return ENOTCONN;
+
+			if(is_ready())
+				return 0;
+
+			Sleep(250);
+		}
+
+		return ETIMEDOUT;
+
+	}
+
 
 #elif defined(HAVE_DBUS)
 
@@ -428,6 +573,29 @@ char * remote::get_text_at(int row, int col, size_t sz)
 {
 #if defined(WIN32)
 
+	if(hPipe != INVALID_HANDLE_VALUE)
+	{
+		struct hllapi_packet_query_at	  query		= { HLLAPI_PACKET_GET_TEXT_AT, (unsigned short) row, (unsigned short) col, (unsigned short) sz };
+		struct hllapi_packet_text		* response;
+		DWORD							  cbSize	= sizeof(struct hllapi_packet_text)+sz;
+		char 							* text		= NULL;
+
+		response = (struct hllapi_packet_text *) malloc(cbSize+2);
+		memset(response,0,cbSize+2);
+
+		if(!TransactNamedPipe(hPipe,(LPVOID) &query, sizeof(struct hllapi_packet_query_at), &response, cbSize, &cbSize,NULL))
+			return NULL;
+
+		if(response->packet_id)
+			errno = response->packet_id;
+		else
+			text  = strdup(response->text);
+
+		free(response);
+		return text;
+
+	}
+
 #elif defined(HAVE_DBUS)
 
 #endif
@@ -438,6 +606,26 @@ char * remote::get_text_at(int row, int col, size_t sz)
 int remote::cmp_text_at(int row, int col, const char *text)
 {
 #if defined(WIN32)
+
+	if(hPipe != INVALID_HANDLE_VALUE)
+	{
+		struct hllapi_packet_text_at 	* query;
+		struct hllapi_packet_result	  	  response;
+		DWORD							  cbSize		= sizeof(struct hllapi_packet_text_at)+strlen(text);
+
+		query = (struct hllapi_packet_text_at *) malloc(cbSize);
+		query->packet_id 	= HLLAPI_PACKET_CMP_TEXT_AT;
+		query->row			= row;
+		query->col			= col;
+		strcpy(query->text,text);
+
+		TransactNamedPipe(hPipe,(LPVOID) query, cbSize, &response, sizeof(response), &cbSize,NULL);
+
+		free(query);
+
+		return response.rc;
+	}
+
 
 #elif defined(HAVE_DBUS)
 
@@ -450,6 +638,25 @@ int remote::set_text_at(int row, int col, const char *str)
 {
 #if defined(WIN32)
 
+	if(hPipe != INVALID_HANDLE_VALUE)
+	{
+		struct hllapi_packet_text_at 	* query;
+		struct hllapi_packet_result	  	  response;
+		DWORD							  cbSize		= sizeof(struct hllapi_packet_text_at)+strlen((const char *) str);
+
+		query = (struct hllapi_packet_text_at *) malloc(cbSize);
+		query->packet_id 	= HLLAPI_PACKET_SET_TEXT_AT;
+		query->row			= row;
+		query->col			= col;
+		strcpy(query->text,(const char *) str);
+
+		TransactNamedPipe(hPipe,(LPVOID) query, cbSize, &response, sizeof(response), &cbSize,NULL);
+
+		free(query);
+
+		return response.rc;
+	}
+
 #elif defined(HAVE_DBUS)
 
 #endif
@@ -461,6 +668,11 @@ int remote::set_cursor_position(int row, int col)
 {
 #if defined(WIN32)
 
+	if(hPipe != INVALID_HANDLE_VALUE)
+	{
+
+	}
+
 #elif defined(HAVE_DBUS)
 
 #endif
@@ -471,6 +683,15 @@ int remote::set_cursor_position(int row, int col)
 int remote::enter(void)
 {
 #if defined(WIN32)
+
+	if(hPipe != INVALID_HANDLE_VALUE)
+	{
+		static const struct hllapi_packet_query query		= { HLLAPI_PACKET_ENTER };
+		struct hllapi_packet_result		  		response;
+		DWORD							  		cbSize		= sizeof(query);
+		TransactNamedPipe(hPipe,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
+		return response.rc;
+	}
 
 	return -1;
 
@@ -490,6 +711,15 @@ int remote::pfkey(int key)
 {
 #if defined(WIN32)
 
+	if(hPipe != INVALID_HANDLE_VALUE)
+	{
+		struct hllapi_packet_keycode	query		= { HLLAPI_PACKET_PFKEY, (unsigned short) key };
+		struct hllapi_packet_result		response;
+		DWORD							cbSize		= sizeof(query);
+		TransactNamedPipe(hPipe,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
+		return response.rc;
+	}
+
 #elif defined(HAVE_DBUS)
 
 #endif
@@ -500,6 +730,15 @@ int remote::pfkey(int key)
 int remote::pakey(int key)
 {
 #if defined(WIN32)
+
+	if(hPipe != INVALID_HANDLE_VALUE)
+	{
+		struct hllapi_packet_keycode	query		= { HLLAPI_PACKET_PAKEY, (unsigned short) key };
+		struct hllapi_packet_result		response;
+		DWORD							cbSize		= sizeof(query);
+		TransactNamedPipe(hPipe,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
+		return response.rc;
+	}
 
 #elif defined(HAVE_DBUS)
 
@@ -512,7 +751,14 @@ void remote::set_toggle(LIB3270_TOGGLE ix, bool value)
 {
 #if defined(WIN32)
 
+	if(hPipe != INVALID_HANDLE_VALUE)
+	{
+
+	}
+
 #elif defined(HAVE_DBUS)
 
 #endif
+
 }
+

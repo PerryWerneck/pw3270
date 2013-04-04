@@ -32,7 +32,7 @@
  */
 
  #include "server.h"
- #include "packets.h"
+ #include <pw3270/ipcpackets.h>
  #include <lib3270/actions.h>
 
 /*--[ Defines ]--------------------------------------------------------------------------------------*/

@@ -34,9 +34,9 @@
  #include <stdio.h>
  #include <time.h>
  #include <lib3270/log.h>
+ #include <pw3270/ipcpackets.h>
 
  #include "client.h"
- #include "packets.h"
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
@@ -152,7 +152,7 @@
 
  char * hllapi_pipe_get_text_at(void *h, int row, int col, int len)
  {
-	struct hllapi_packet_query_at	  query		= { HLLAPI_PACKET_GET_TEXT_AT, };
+	struct hllapi_packet_query_at	  query		= { HLLAPI_PACKET_GET_TEXT_AT, row, col, len };
 	struct hllapi_packet_text		* response;
 	DWORD							  cbSize	= sizeof(struct hllapi_packet_text)+len;
 	char 							* text		= NULL;
