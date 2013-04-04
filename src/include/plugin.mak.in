@@ -61,9 +61,9 @@ DLL_NAME=@DLLDIR@/@DLLPREFIX@$(MODULE_NAME)@DLLEXT@
 PLUGIN_NAME=plugins/$(MODULE_NAME)@DLLEXT@
 
 ifeq ($(LIB3270_MODE),Debug)
-	PW3270_LIBS="-L../../../.bin/Debug@DLLDIR@ -lpw3270"
-	PW3270_CFLAGS="-I../../../src/include"
-	LIB3270_LIBS="-L../../../.bin/Debug@DLLDIR@  -l3270"
+	PW3270_LIBS=-L../../../.bin/Debug@DLLDIR@ -lpw3270
+	PW3270_CFLAGS=-I../../../src/include
+	LIB3270_LIBS=-L../../../.bin/Debug@DLLDIR@  -l3270
 	LIB270_CFLAGS=-I../../../src/include
 endif
 
