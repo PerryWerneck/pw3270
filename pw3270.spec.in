@@ -142,13 +142,13 @@ This package provides 3270 access object to StarBasic.
 Revision @PACKAGE_REVISION@ from @PACKAGE_SOURCE@
 
 %if 0%{?_ooRexx}
-%package -n %{name}-rexx
+%package -n %{name}-plugin-rexx
 Summary:	%{name} extension & plugin for rexx scripting
 Group:		Development/Languages/Other
 Requires:	%{name} >= @PACKAGE_VERSION@
 Requires:	ooRexx
 
-%description -n %{name}-rexx
+%description -n %{name}-plugin-rexx
 This package provides Rexx class and associated libraries
 allowing rexx scripts to access tn3270e hosts.
 
@@ -237,7 +237,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libreoffice/share/extensions/%{name}/pw3270.uno.so
 
 %if 0%{?_ooRexx}
-%files -n %{name}-rexx
+%files -n %{name}-plugin-rexx
 %{_rexxlibdir}/librx3270.so.@VERSION@
 %{_rexxlibdir}/librx3270.so
 %{_rexxclassdir}/rx3270.cls
@@ -263,7 +263,7 @@ exit 0
 exit 0
 
 %if 0%{?_ooRexx}
-%postun -n %{name}-rexx
+%postun -n %{name}-plugin-rexx
 /sbin/ldconfig
 exit 0
 %endif
