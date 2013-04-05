@@ -49,7 +49,7 @@
 		HLLAPI_PACKET_ERASE_EOF,
 		HLLAPI_PACKET_PRINT,
 		HLLAPI_PACKET_GET_CSTATE,
-		HLLAPI_PACKET_IS_READY,
+		HLLAPI_PACKET_IS_READY,		HLLAPI_PACKET_SET_TOGGLE,
 
 		HLLAPI_PACKET_INVALID
 
@@ -148,6 +148,11 @@ struct hllapi_packet_emulate_input
 	unsigned short	len;
 	unsigned char	pasting;
 	char 			text[1];
+};
+struct hllapi_packet_set
+{
+	unsigned char	packet_id;
+	unsigned short	id;	unsigned short	value;
 };
 
 

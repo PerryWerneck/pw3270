@@ -61,6 +61,7 @@
 	int				  wait(int seconds);
 	int				  wait_for_ready(int seconds);
 
+	char			* get_text(int baddr, size_t len);
 	char 			* get_text_at(int row, int col, size_t sz);
 	int				  cmp_text_at(int row, int col, const char *text);
 	int 			  set_text_at(int row, int col, const char *str);
@@ -69,7 +70,7 @@
 
 	int				  set_cursor_position(int row, int col);
 
-	void 			  set_toggle(LIB3270_TOGGLE ix, bool value);
+	int 			  set_toggle(LIB3270_TOGGLE ix, bool value);
 
 	int				  enter(void);
 	int				  pfkey(int key);
@@ -910,13 +911,17 @@ int remote::pakey(int key)
 	return -1;
 }
 
-void remote::set_toggle(LIB3270_TOGGLE ix, bool value)
+int remote::set_toggle(LIB3270_TOGGLE ix, bool value)
 {
 #if defined(WIN32)
 
 	if(hPipe != INVALID_HANDLE_VALUE)
 	{
-		#warning Implementar
+		struct hllapi_packet_set		query		= { HLLAPI_PACKET_SET_TOGGLE, (unsigned short) ix, (unsigned short) value };
+		struct hllapi_packet_result		response;
+		DWORD							cbSize		= sizeof(query);
+		TransactNamedPipe(hPipe,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
+		return response.rc;
 	}
 
 #elif defined(HAVE_DBUS)
@@ -928,12 +933,12 @@ void remote::set_toggle(LIB3270_TOGGLE ix, bool value)
 	if(msg)
 	{
 		dbus_message_append_args(msg, DBUS_TYPE_INT32, &i, DBUS_TYPE_INT32, &v, DBUS_TYPE_INVALID);
-		get_intval(call(msg));
+		return get_intval(call(msg));
 	}
-
 
 #endif
 
+	return -1;
 }
 
 int remote::wait_for_text_at(int row, int col, const char *key, int timeout)
@@ -956,4 +961,10 @@ int remote::wait_for_text_at(int row, int col, const char *key, int timeout)
 	}
 
 	return ETIMEDOUT;
+}
+
+char * remote::get_text(int baddr, size_t len)
+{
+	#warning IMPLEMENTAR
+	return NULL;
 }

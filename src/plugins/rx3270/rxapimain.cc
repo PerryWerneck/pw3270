@@ -36,6 +36,7 @@
   */
 
  #include "rx3270.h"
+ #include <time.h>
  #include <lib3270/actions.h>
 
 #ifdef HAVE_SYSLOG
@@ -131,6 +132,7 @@ RexxMethodEntry rx3270_methods[] =
     REXX_METHOD(rx3270_method_enter, 			rx3270_method_enter				),
     REXX_METHOD(rx3270_method_pfkey, 			rx3270_method_pfkey				),
     REXX_METHOD(rx3270_method_pakey, 			rx3270_method_pakey				),
+    REXX_METHOD(rx3270_method_get_text,			rx3270_method_get_text			),
     REXX_METHOD(rx3270_method_get_text_at, 		rx3270_method_get_text_at		),
     REXX_METHOD(rx3270_method_set_text_at, 		rx3270_method_set_text_at		),
     REXX_METHOD(rx3270_method_cmp_text_at, 		rx3270_method_cmp_text_at		),

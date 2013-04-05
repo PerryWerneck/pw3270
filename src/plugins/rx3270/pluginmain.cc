@@ -53,13 +53,14 @@
 	int				  wait(int seconds);
 	int				  wait_for_ready(int seconds);
 
+	char			* get_text(int baddr, size_t len);
 	char 			* get_text_at(int row, int col, size_t sz);
 	int				  cmp_text_at(int row, int col, const char *text);
 	int 			  set_text_at(int row, int col, const char *str);
 
 	int				  set_cursor_position(int row, int col);
 
-	void 			  set_toggle(LIB3270_TOGGLE ix, bool value);
+	int 			  set_toggle(LIB3270_TOGGLE ix, bool value);
 
 	int				  enter(void);
 	int				  pfkey(int key);
@@ -183,12 +184,17 @@
 	return lib3270_set_cursor_position(hSession,row,col);
  }
 
- void plugin::set_toggle(LIB3270_TOGGLE ix, bool value)
+ int plugin::set_toggle(LIB3270_TOGGLE ix, bool value)
  {
-	lib3270_set_toggle(hSession,ix,(int) value);
+	return lib3270_set_toggle(hSession,ix,(int) value);
  }
 
  void plugin::logva(const char *fmt, va_list args)
  {
 	lib3270_write_va_log(hSession,"REXX",fmt,args);
+ }
+
+ char * plugin::get_text(int baddr, size_t len)
+ {
+	return lib3270_get_text(hSession,baddr,len);
  }

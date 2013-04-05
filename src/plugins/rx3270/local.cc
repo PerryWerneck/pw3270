@@ -68,13 +68,14 @@
 	int				  wait(int seconds);
 	int				  wait_for_ready(int seconds);
 
+	char			* get_text(int baddr, size_t len);
 	char 			* get_text_at(int row, int col, size_t sz);
 	int				  cmp_text_at(int row, int col, const char *text);
 	int 			  set_text_at(int row, int col, const char *str);
 
 	int				  set_cursor_position(int row, int col);
 
-	void 			  set_toggle(LIB3270_TOGGLE ix, bool value);
+	int 			  set_toggle(LIB3270_TOGGLE ix, bool value);
 
 	int				  enter(void);
 	int				  pfkey(int key);
@@ -93,12 +94,13 @@
 	int 			(*_pfkey)(H3270 *hSession, int key);
 	int 			(*_pakey)(H3270 *hSession, int key);
 	int 			(*_wait_for_ready)(H3270 *hSession, int seconds);
+	char * 			(*_get_text)(H3270 *h, int offset, int len);
 	char *  		(*_get_text_at)(H3270 *h, int row, int col, int len);
 	int 			(*_cmp_text_at)(H3270 *h, int row, int col, const char *text);
 	int 			(*_set_text_at)(H3270 *h, int row, int col, const unsigned char *str);
 	int 			(*_is_ready)(H3270 *h);
 	int 			(*_set_cursor_position)(H3270 *h, int row, int col);
-	void 			(*_set_toggle)(H3270 *h, LIB3270_TOGGLE ix, int value);
+	int 			(*_set_toggle)(H3270 *h, LIB3270_TOGGLE ix, int value);
 
 #ifdef WIN32
 	HMODULE			  hModule;
@@ -283,6 +285,7 @@ dynamic::dynamic()
 		{ (void **) & _pfkey,					"lib3270_pfkey"						},
 		{ (void **) & _pakey,					"lib3270_pakey"						},
 		{ (void **) & _wait_for_ready,			"lib3270_wait_for_ready"			},
+		{ (void **) & _get_text,				"lib3270_get_text"					},
 		{ (void **) & _get_text_at,				"lib3270_get_text_at"				},
 		{ (void **) & _cmp_text_at,				"lib3270_cmp_text_at"				},
 		{ (void **) & _set_text_at,				"lib3270_set_string_at"				},
@@ -505,6 +508,13 @@ int dynamic::wait_for_ready(int seconds)
 	return _wait_for_ready(hSession,seconds);
 }
 
+char * dynamic::get_text(int offset, size_t len)
+{
+	if(!hModule)
+		return NULL;
+	return _get_text(hSession,offset,len);
+}
+
 char * dynamic::get_text_at(int row, int col, size_t sz)
 {
 	if(!hModule)
@@ -554,8 +564,9 @@ int dynamic::pakey(int key)
 	return _pakey(hSession,key);
 }
 
-void dynamic::set_toggle(LIB3270_TOGGLE ix, bool value)
+int dynamic::set_toggle(LIB3270_TOGGLE ix, bool value)
 {
 	if(hModule)
-		_set_toggle(hSession,ix,(int) value);
+		return _set_toggle(hSession,ix,(int) value);
+	return -1;
 }

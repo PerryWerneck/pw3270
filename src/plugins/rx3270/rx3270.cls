@@ -64,17 +64,19 @@
 ::METHOD GETTEXTAT EXTERNAL "LIBRARY rx3270 rx3270_method_get_text_at"
 ::METHOD SETTEXTAT EXTERNAL "LIBRARY rx3270 rx3270_method_set_text_at"
 ::METHOD CMPTEXTAT EXTERNAL "LIBRARY rx3270 rx3270_method_cmp_text_at"
+::METHOD GET EXTERNAL "LIBRARY rx3270 rx3270_method_get_text"
 ::METHOD WAITFORTEXTAT EXTERNAL "LIBRARY rx3270 rx3270_method_wait_for_text_at"
 ::METHOD TEST EXTERNAL "LIBRARY rx3270 rx3270_method_test"
 
 /*
 getConnectionState
 waitForEvents
-getScreenContent
 RunMode
 
 ::method isConnected
 return self~getConnectionState() = "CONNECTED_TN3270E"
+
+*/
 
 ::method waitForStringAt
         use arg row, col, key, timeout
@@ -82,7 +84,8 @@ return self~getConnectionState() = "CONNECTED_TN3270E"
                 then timeout = 60
 return self~WaitForTextAt(row,col,key,timeout)
 
-*/
+::method getScreenContent
+return self~get()
 
 ::method queryStringAt
         use arg row, col, key
@@ -104,7 +107,7 @@ return self~SetTextAt(row,col,str)
 return self~GetTextAt(row,col,size)
 
 ::method sendEnterKey
-return self~Enter()
+return self~enter()
 
 ::method sendPFKey
         use arg key

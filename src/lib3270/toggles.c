@@ -105,25 +105,22 @@ static void toggle_notify(H3270 *session, struct lib3270_toggle *t, LIB3270_TOGG
 		session->update_toggle(session,ix,t->value,TT_INTERACTIVE,toggle_names[ix]);
 
 }
-
-LIB3270_EXPORT void lib3270_set_toggle(H3270 *session, LIB3270_TOGGLE ix, int value)
+LIB3270_EXPORT int lib3270_set_toggle(H3270 *session, LIB3270_TOGGLE ix, int value)
 {
-	char v = value ? True : False;
-	struct lib3270_toggle * t;
+	char v = value ? True : False;	struct lib3270_toggle * t;
 
 	CHECK_SESSION_HANDLE(session);
 
 	if(ix < 0 || ix >= LIB3270_TOGGLE_COUNT)
-		return;
+		return -EINVAL;
 
 	t = &session->toggle[ix];
 
 	if(v == t->value)
-		return;
+		return 0;
+	t->value = v;
 
-	t->value = v;
-
-	toggle_notify(session,t,ix);
+	toggle_notify(session,t,ix);	return 1;
 }
 
 LIB3270_EXPORT int lib3270_toggle(H3270 *session, LIB3270_TOGGLE ix)

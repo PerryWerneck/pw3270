@@ -338,3 +338,22 @@ RexxMethod5(int, rx3270_method_wait_for_text_at, CSELF, sessionPtr, int, row, in
 	return -1;
 }
 
+RexxMethod3(RexxStringObject, rx3270_method_get_text, CSELF, sessionPtr, OPTIONAL_int, baddr, OPTIONAL_int, sz)
+{
+	rx3270	* hSession = (rx3270 *) sessionPtr;
+
+	if(hSession)
+	{
+		char *str = hSession->get_text(baddr,sz > 0 ? sz : -1);
+		if(str)
+		{
+			char				* text	= hSession->get_local_string(str);
+			RexxStringObject	  ret	= context->String((CSTRING) text);
+			free(str);
+			free(text);
+			return ret;
+		}
+	}
+
+	return context->String("");
+}

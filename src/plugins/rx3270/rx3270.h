@@ -95,7 +95,7 @@
  REXX_METHOD_PROTOTYPE(rx3270_method_set_cursor);
  REXX_METHOD_PROTOTYPE(rx3270_method_enter);
  REXX_METHOD_PROTOTYPE(rx3270_method_pfkey);
- REXX_METHOD_PROTOTYPE(rx3270_method_pakey);
+ REXX_METHOD_PROTOTYPE(rx3270_method_pakey); REXX_METHOD_PROTOTYPE(rx3270_method_get_text);
  REXX_METHOD_PROTOTYPE(rx3270_method_get_text_at);
  REXX_METHOD_PROTOTYPE(rx3270_method_set_text_at);
  REXX_METHOD_PROTOTYPE(rx3270_method_cmp_text_at);
@@ -157,13 +157,13 @@
 	virtual int				  wait_for_ready(int seconds)						= 0;
 	virtual int				  wait_for_text_at(int row, int col, const char *key, int timeout);
 	virtual int				  set_cursor_position(int row, int col)				= 0;
-	virtual void 			  set_toggle(LIB3270_TOGGLE ix, bool value)			= 0;
+	virtual int 			  set_toggle(LIB3270_TOGGLE ix, bool value)			= 0;
 
 	virtual int				  enter(void)										= 0;
 	virtual int				  pfkey(int key)									= 0;
 	virtual int				  pakey(int key)									= 0;
 
-	virtual char 			* get_text_at(int row, int col, size_t sz) 			= 0;
+	virtual char 			* get_text_at(int row, int col, size_t sz) 			= 0;	virtual char			* get_text(int baddr, size_t len)					= 0;
 	virtual int				  cmp_text_at(int row, int col, const char *text)	= 0;
 	virtual int 			  set_text_at(int row, int col, const char *str)	= 0;
 

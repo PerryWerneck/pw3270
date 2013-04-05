@@ -279,8 +279,7 @@ void pw3270_dbus_get_text_at(PW3270Dbus *object, int row, int col, int len, DBus
  void pw3270_dbus_set_toggle(PW3270Dbus *object, int id, int value, DBusGMethodInvocation *context)
  {
 	trace("%s object=%p context=%p",__FUNCTION__,object,context);
-	lib3270_set_toggle(pw3270_dbus_get_session_handle(object),id,value);
-	dbus_g_method_return(context,0);
+	dbus_g_method_return(context,lib3270_set_toggle(pw3270_dbus_get_session_handle(object),id,value));
  }
 
 void pw3270_dbus_cmp_text_at(PW3270Dbus *object, int row, int col, const gchar *utftext, DBusGMethodInvocation *context)
