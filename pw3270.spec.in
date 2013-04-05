@@ -130,20 +130,20 @@ Plugin exporting a DBUS object from every %{name} open session.
 
 Revision @PACKAGE_REVISION@ from @PACKAGE_SOURCE@
 
-%package -n libreoffice-extension-%{name}
+%package -n %{name}-libreoffice
 Summary:	%{name} extension for libreoffice
 Group:		Productivity/Office/Suite
 Requires:	%{name} = @PACKAGE_VERSION@
 Requires:	libreoffice
 
-%description -n libreoffice-extension-%{name}
+%description -n %{name}-libreoffice
 This package provides 3270 access object to StarBasic.
 
 Revision @PACKAGE_REVISION@ from @PACKAGE_SOURCE@
 
 %if 0%{?_ooRexx}
 %package -n %{name}-plugin-rexx
-Summary:	%{name} extension & plugin for rexx scripting
+Summary:	Rexx class for 3270 access
 Group:		Development/Languages/Other
 Requires:	%{name} >= @PACKAGE_VERSION@
 Requires:	ooRexx
@@ -227,7 +227,7 @@ rm -rf $RPM_BUILD_ROOT
 %files plugin-dbus
 %{_libdir}/@PACKAGE_NAME@-plugins/dbus3270.so
 
-%files -n libreoffice-extension-%{name}
+%files -n %{name}-libreoffice
 %dir %{_libdir}/libreoffice/share/extensions/%{name}
 %{_libdir}/libreoffice/share/extensions/%{name}/META-INF/manifest.xml
 %{_libdir}/libreoffice/share/extensions/%{name}/description.txt
@@ -238,6 +238,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %if 0%{?_ooRexx}
 %files -n %{name}-plugin-rexx
+%defattr(-,root,root)
 %{_rexxlibdir}/librx3270.so.@VERSION@
 %{_rexxlibdir}/librx3270.so
 %{_rexxclassdir}/rx3270.cls
