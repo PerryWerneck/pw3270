@@ -254,8 +254,6 @@ remote::remote(const char *name)
 	if(!conn)
 	{
 		log("%s", "DBUS Connection failed");
-		dbus_connection_close(conn);
-		conn = NULL;
 		return;
 	}
 
@@ -265,12 +263,13 @@ remote::remote(const char *name)
 	{
 		log("Name Error (%s)", err.message);
 		dbus_error_free(&err);
+		conn = NULL;
+		return;
 	}
 
 	if(rc != DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER)
 	{
 		log("%s", "DBUS request name failed");
-		dbus_connection_close(conn);
 		conn = NULL;
 		return;
 	}
@@ -309,13 +308,13 @@ DBusMessage	* remote::call(DBusMessage *msg)
 	reply = dbus_connection_send_with_reply_and_block(conn,msg,10000,&error);
 	dbus_message_unref(msg);
 
-	if(reply)
-		return reply;
+	if(!reply)
+	{
+		log("%s",error.message);
+		dbus_error_free(&error);
+	}
 
-	log("%s",error.message);
-	dbus_error_free(&error);
-
-	return NULL;
+	return reply;
 
 }
 
@@ -338,7 +337,7 @@ char * get_string(DBusMessage * msg)
 #ifdef DEBUG
 			else
 			{
-				trace("Arg type is %c, expecting %c",dbus_message_iter_get_arg_type(&iter),DBUS_TYPE_STRING);
+				trace("Return type is %c, expecting %c",dbus_message_iter_get_arg_type(&iter),DBUS_TYPE_STRING);
 			}
 #endif
 		}
@@ -371,6 +370,12 @@ int get_intval(DBusMessage * msg)
 				dbus_message_iter_get_basic(&iter, &iSigned);
 				rc = (int) iSigned;
 			}
+#ifdef DEBUG
+			else
+			{
+				trace("Return type is %c, expecting %c",dbus_message_iter_get_arg_type(&iter),DBUS_TYPE_INT32);
+			}
+#endif
 		}
 
 		dbus_message_unref(msg);
@@ -619,6 +624,7 @@ int remote::wait_for_ready(int seconds)
 
 	}
 
+	return -1;
 
 #elif defined(HAVE_DBUS)
 
@@ -642,12 +648,14 @@ int remote::wait_for_ready(int seconds)
 			return rc;
 	}
 
-
 	return ETIMEDOUT;
+
+#else
+
+	return -1;
 
 #endif
 
-	return -1;
 }
 
 char * remote::get_text_at(int row, int col, size_t sz)
