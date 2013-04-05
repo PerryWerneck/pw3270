@@ -65,6 +65,8 @@
 	int				  cmp_text_at(int row, int col, const char *text);
 	int 			  set_text_at(int row, int col, const char *str);
 
+	int				  wait_for_text_at(int row, int col, const char *key, int timeout);
+
 	int				  set_cursor_position(int row, int col);
 
 	void 			  set_toggle(LIB3270_TOGGLE ix, bool value);
@@ -934,3 +936,24 @@ void remote::set_toggle(LIB3270_TOGGLE ix, bool value)
 
 }
 
+int remote::wait_for_text_at(int row, int col, const char *key, int timeout)
+{
+	time_t end = time(0)+timeout;
+
+	while(time(0) < end)
+	{
+		if(!is_connected())
+			return ENOTCONN;
+
+		if(!cmp_text_at(row,col,key))
+			return 0;
+
+#ifdef WIN32
+		Sleep(500);
+#else
+		usleep(500);
+#endif
+	}
+
+	return ETIMEDOUT;
+}

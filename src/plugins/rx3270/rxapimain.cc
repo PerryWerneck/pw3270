@@ -110,6 +110,8 @@ RexxRoutineEntry rx3270_functions[] =
 	REXX_TYPED_ROUTINE(rx3270queryStringAt,			rx3270queryStringAt),
 	REXX_TYPED_ROUTINE(rx3270SetStringAt,			rx3270SetStringAt),
 
+	// rx3270Popup
+
 	REXX_LAST_METHOD()
 };
 
@@ -137,6 +139,7 @@ RexxMethodEntry rx3270_methods[] =
     REXX_METHOD(rx3270_method_ds_trace, 		rx3270_method_ds_trace			),
     REXX_METHOD(rx3270_method_set_option,		rx3270_method_set_option		),
     REXX_METHOD(rx3270_method_test,				rx3270_method_test				),
+    REXX_METHOD(rx3270_method_wait_for_text_at,	rx3270_method_wait_for_text_at	),
 
     REXX_LAST_METHOD()
 };
@@ -183,4 +186,22 @@ void rx3270::logva(const char *fmt, va_list args)
 #else
 	vfprintf(stderr,fmt,args);
 #endif
+}
+
+int rx3270::wait_for_text_at(int row, int col, const char *key, int timeout)
+{
+	time_t end = time(0)+timeout;
+
+	while(time(0) < end)
+	{
+		if(!is_connected())
+			return ENOTCONN;
+
+		if(!cmp_text_at(row,col,key))
+			return 0;
+
+		iterate();
+	}
+
+	return ETIMEDOUT;
 }

@@ -104,6 +104,7 @@
  REXX_METHOD_PROTOTYPE(rx3270_method_ds_trace);
  REXX_METHOD_PROTOTYPE(rx3270_method_set_option);
  REXX_METHOD_PROTOTYPE(rx3270_method_test);
+ REXX_METHOD_PROTOTYPE(rx3270_method_wait_for_text_at);
 
 /*---[ Globals ]---------------------------------------------------------------------------------------------*/
 
@@ -154,6 +155,7 @@
 	virtual int				  iterate(bool wait = true)							= 0;
 	virtual int				  wait(int seconds)									= 0;
 	virtual int				  wait_for_ready(int seconds)						= 0;
+	virtual int				  wait_for_text_at(int row, int col, const char *key, int timeout);
 	virtual int				  set_cursor_position(int row, int col)				= 0;
 	virtual void 			  set_toggle(LIB3270_TOGGLE ix, bool value)			= 0;
 

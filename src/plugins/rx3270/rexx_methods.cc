@@ -327,3 +327,14 @@ RexxMethod4(logical_t, rx3270_method_test, CSELF, sessionPtr, CSTRING, key, int,
 
 	return false;
 }
+
+RexxMethod5(int, rx3270_method_wait_for_text_at, CSELF, sessionPtr, int, row, int, col, CSTRING, key, int, timeout)
+{
+	rx3270	* hSession = (rx3270 *) sessionPtr;
+
+	if(hSession)
+		return hSession->wait_for_text_at(row,col,key,timeout);
+
+	return -1;
+}
+

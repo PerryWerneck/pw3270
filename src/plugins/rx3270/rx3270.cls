@@ -64,5 +64,58 @@
 ::METHOD GETTEXTAT EXTERNAL "LIBRARY rx3270 rx3270_method_get_text_at"
 ::METHOD SETTEXTAT EXTERNAL "LIBRARY rx3270 rx3270_method_set_text_at"
 ::METHOD CMPTEXTAT EXTERNAL "LIBRARY rx3270 rx3270_method_cmp_text_at"
+::METHOD WAITFORTEXTAT EXTERNAL "LIBRARY rx3270 rx3270_method_wait_for_text_at"
 ::METHOD TEST EXTERNAL "LIBRARY rx3270 rx3270_method_test"
+
+/*
+getConnectionState
+waitForEvents
+getScreenContent
+RunMode
+
+::method isConnected
+return self~getConnectionState() = "CONNECTED_TN3270E"
+
+::method waitForStringAt
+        use arg row, col, key, timeout
+        if datatype(timeout) <> "NUM"
+                then timeout = 60
+return self~WaitForTextAt(row,col,key,timeout)
+
+*/
+
+::method queryStringAt
+        use arg row, col, key
+return self~GetTextAt(row,col,length(key)) == key
+
+::method waitForTerminalReady
+        use arg timeout
+return self~WaitForReady(timeout)
+
+::method isTerminalReady
+return self~ready()
+
+::method setStringAt
+        use arg row, col, str
+return self~SetTextAt(row,col,str)
+
+::method getStringAt
+        use arg row, col, size
+return self~GetTextAt(row,col,size)
+
+::method sendEnterKey
+return self~Enter()
+
+::method sendPFKey
+        use arg key
+return self~pfKey(key)
+
+::method setCursorPosition
+        use arg row, col
+return self~SetCursor(row,col)
+
+::method getScreenContentAt
+        use arg row, col, size
+return self~GetTextAt(row,col,size)
+
 
