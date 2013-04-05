@@ -191,6 +191,10 @@
 		send_result(source,lib3270_in_tn3270e(lib3270_get_default_session_handle()));
 		break;
 
+	case HLLAPI_PACKET_IS_READY:
+		send_result(source,lib3270_is_ready(lib3270_get_default_session_handle()));
+		break;
+
 	case HLLAPI_PACKET_ENTER:
 		send_result(source,lib3270_enter(lib3270_get_default_session_handle()));
 		break;
@@ -267,6 +271,9 @@
 		send_result(source,lib3270_get_cursor_address(lib3270_get_default_session_handle()));
 		break;
 
+	case HLLAPI_PACKET_GET_CSTATE:
+		send_result(source,lib3270_get_connection_state(lib3270_get_default_session_handle()));
+		break;
 
 	default:
 		send_result(source, EINVAL);

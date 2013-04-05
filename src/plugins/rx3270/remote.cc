@@ -118,7 +118,6 @@ DBusMessage * remote::create_message(const char *method)
 }
 #endif // HAVE_DBUS
 
-
 rx3270 * rx3270::create_remote(const char *name)
 {
 	return new remote(name);
@@ -419,7 +418,11 @@ LIB3270_CSTATE remote::get_cstate(void)
 
 	if(hPipe != INVALID_HANDLE_VALUE)
 	{
-		#warning Implementar
+		static const struct hllapi_packet_query query		= { HLLAPI_PACKET_GET_CSTATE };
+		struct hllapi_packet_result		  		response;
+		DWORD							  		cbSize		= sizeof(query);
+		TransactNamedPipe(hPipe,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
+		return (LIB3270_CSTATE) response.rc;
 	}
 
 	return (LIB3270_CSTATE) -1;
@@ -541,7 +544,11 @@ bool remote::is_ready(void)
 
 	if(hPipe != INVALID_HANDLE_VALUE)
 	{
-		#warning Implementar
+		static const struct hllapi_packet_query query		= { HLLAPI_PACKET_IS_READY };
+		struct hllapi_packet_result		  		response;
+		DWORD							  		cbSize		= sizeof(query);
+		TransactNamedPipe(hPipe,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
+		return response.rc != 0;
 	}
 
 #elif defined(HAVE_DBUS)
@@ -792,7 +799,11 @@ int remote::set_cursor_position(int row, int col)
 
 	if(hPipe != INVALID_HANDLE_VALUE)
 	{
-		#warning Implementar
+		struct hllapi_packet_cursor 	query		= { HLLAPI_PACKET_SET_CURSOR_POSITION, (unsigned short) row, (unsigned short) col };
+		struct hllapi_packet_result		response;
+		DWORD							cbSize		= sizeof(query);
+		TransactNamedPipe(hPipe,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
+		return response.rc != 0;
 	}
 
 #elif defined(HAVE_DBUS)
