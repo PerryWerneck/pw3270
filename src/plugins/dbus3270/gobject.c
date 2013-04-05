@@ -252,3 +252,65 @@ void pw3270_dbus_get_text_at(PW3270Dbus *object, int row, int col, int len, DBus
 
 }
 
+ void pw3270_dbus_is_connected(PW3270Dbus *object, DBusGMethodInvocation *context)
+ {
+	trace("%s object=%p context=%p",__FUNCTION__,object,context);
+	dbus_g_method_return(context,lib3270_is_connected(pw3270_dbus_get_session_handle(object)));
+ }
+
+ void pw3270_dbus_is_ready(PW3270Dbus *object, DBusGMethodInvocation *context)
+ {
+	trace("%s object=%p context=%p",__FUNCTION__,object,context);
+	dbus_g_method_return(context,lib3270_is_ready(pw3270_dbus_get_session_handle(object)));
+ }
+
+ void pw3270_dbus_wait_for_ready(PW3270Dbus *object, int timeout, DBusGMethodInvocation *context)
+ {
+	trace("%s object=%p context=%p",__FUNCTION__,object,context);
+	dbus_g_method_return(context,lib3270_wait_for_ready(pw3270_dbus_get_session_handle(object),timeout));
+ }
+
+ void pw3270_dbus_set_cursor_at(PW3270Dbus *object, int row, int col, DBusGMethodInvocation *context)
+ {
+	trace("%s object=%p context=%p",__FUNCTION__,object,context);
+	dbus_g_method_return(context,lib3270_set_cursor_position(pw3270_dbus_get_session_handle(object),row,col));
+ }
+
+ void pw3270_dbus_set_toggle(PW3270Dbus *object, int id, int value, DBusGMethodInvocation *context)
+ {
+	trace("%s object=%p context=%p",__FUNCTION__,object,context);
+	lib3270_set_toggle(pw3270_dbus_get_session_handle(object),id,value);
+	dbus_g_method_return(context,0);
+ }
+
+void pw3270_dbus_cmp_text_at(PW3270Dbus *object, int row, int col, const gchar *utftext, DBusGMethodInvocation *context)
+{
+	gchar	* text;
+	H3270	* hSession = pw3270_dbus_get_session_handle(object);
+
+	trace("%s object=%p context=%p",__FUNCTION__,object,context);
+	if(pw3270_dbus_check_valid_state(object,context))
+		return;
+
+	text = g_convert_with_fallback(utftext,-1,lib3270_get_charset(hSession),"UTF-8","?",NULL,NULL,NULL);
+
+	dbus_g_method_return(context,lib3270_cmp_text_at(hSession,row,col,text));
+
+	g_free(text);
+}
+
+void pw3270_dbus_pf_key(PW3270Dbus *object, int key, DBusGMethodInvocation *context)
+{
+	trace("%s object=%p context=%p",__FUNCTION__,object,context);
+	if(pw3270_dbus_check_valid_state(object,context))
+		return;
+	dbus_g_method_return(context,lib3270_pfkey(pw3270_dbus_get_session_handle(object),key));
+}
+
+void pw3270_dbus_pa_key(PW3270Dbus *object, int key, DBusGMethodInvocation *context)
+{
+	trace("%s object=%p context=%p",__FUNCTION__,object,context);
+	if(pw3270_dbus_check_valid_state(object,context))
+		return;
+	dbus_g_method_return(context,lib3270_pakey(pw3270_dbus_get_session_handle(object),key));
+}

@@ -30,12 +30,9 @@
  #include "rx3270.h"
  #include <string.h>
 
-#if defined WIN32
-	#define REXX_DEFAULT_CHARSET "CP1252"
-#else
+#if !defined WIN32
 	#include <dlfcn.h>
 	#include <stdio.h>
-	#define REXX_DEFAULT_CHARSET "UTF-8"
 #endif
 
 #ifdef HAVE_SYSLOG
@@ -120,11 +117,20 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
-rx3270::rx3270()
+rx3270::rx3270(const char *local, const char *remote)
 {
 #ifdef HAVE_ICONV
-	this->conv2Local = iconv_open(REXX_DEFAULT_CHARSET, "ISO-8859-1");
-	this->conv2Host = iconv_open("ISO-8859-1",REXX_DEFAULT_CHARSET);
+
+	if(strcmp(local,remote))
+	{
+		// Local and remote charsets aren't the same, setup conversion
+		this->conv2Local = iconv_open(local, remote);
+		this->conv2Host = iconv_open(remote,local);
+	}
+	else
+	{
+		this->conv2Local = this->conv2Host = (iconv_t)(-1);
+	}
 #endif
 
 	if(!defSession)

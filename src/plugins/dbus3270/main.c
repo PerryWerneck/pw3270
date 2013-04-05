@@ -161,7 +161,10 @@
 	dbus_g_method_return(context,0);
  }
 
-H3270 * pw3270_dbus_get_session_handle(PW3270Dbus *object)
-{
+ H3270 * pw3270_dbus_get_session_handle(PW3270Dbus *object)
+ {
 	return lib3270_get_default_session_handle();
-}
+ }
+
+
+

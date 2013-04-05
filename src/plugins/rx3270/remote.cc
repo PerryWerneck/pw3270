@@ -40,6 +40,7 @@
 
  #include <time.h>
  #include <string.h>
+ #include <ctype.h>
 
 /*--[ Class definition ]-----------------------------------------------------------------------------*/
 
@@ -124,7 +125,11 @@ rx3270 * rx3270::create_remote(const char *name)
 }
 
 
+#if defined(HAVE_DBUS)
+remote::remote(const char *name) : rx3270(REXX_DEFAULT_CHARSET,"UTF-8")
+#else
 remote::remote(const char *name)
+#endif // HAVE_DBUS
 {
 #if defined(WIN32)
 	static DWORD	  dwMode = PIPE_READMODE_MESSAGE;
@@ -138,6 +143,8 @@ remote::remote(const char *name)
 	{
 		if(*ptr == ':')
 			*ptr = '_';
+		else
+			*ptr = tolower(*ptr);
 	}
 
 	snprintf(buffer,4095,"\\\\.\\pipe\\%s",str);
@@ -172,7 +179,12 @@ remote::remote(const char *name)
 	DBusError	  err;
 	int			  rc;
 	char		* str = strdup(name);
-	char		* ptr = strchr(str,':');
+	char		* ptr;
+
+	for(ptr=str;*ptr;ptr++)
+		*ptr = tolower(*ptr);
+
+	ptr = strchr(str,':');
 
 	if(ptr)
 	{
@@ -200,11 +212,28 @@ remote::remote(const char *name)
 		strncpy(intf,prefix_dest,sz);
 		strncat(intf,str,sz);
 
-
 	}
 	else
 	{
-		exit(-1);
+		size_t sz;
+
+		// Build destination
+		sz		= strlen(str)+strlen(prefix_dest)+2;
+		dest	= (char *) malloc(sz+1);
+		strncpy(dest,prefix_dest,sz);
+		strncat(dest,str,sz);
+
+		// Build path
+		sz		= strlen(str)+strlen(prefix_path);
+		path	= (char *) malloc(sz+1);
+		strncpy(path,prefix_path,sz);
+		strncat(path,str,sz);
+
+		// Build intf
+		sz		= strlen(str)+strlen(prefix_dest)+1;
+		intf	= (char *) malloc(sz+1);
+		strncpy(intf,prefix_dest,sz);
+		strncat(intf,str,sz);
 
 	}
 
@@ -290,29 +319,61 @@ DBusMessage	* remote::call(DBusMessage *msg)
 
 }
 
-char * remote::query_string(const char *method)
+char * get_string(DBusMessage * msg)
 {
 	char *rc = NULL;
-
-	if(conn)
+	if(msg)
 	{
-		DBusMessage	* msg = call(create_message(method));
-		if(msg)
+		DBusMessageIter iter;
+
+		if(dbus_message_iter_init(msg, &iter))
 		{
-			DBusMessageIter iter;
-
-			if(dbus_message_iter_init(msg, &iter))
+			if(dbus_message_iter_get_arg_type(&iter) == DBUS_TYPE_STRING)
 			{
-				if(dbus_message_iter_get_arg_type(&iter) == DBUS_TYPE_STRING)
-				{
-					const char * str;
-					dbus_message_iter_get_basic(&iter, &str);
-					rc = strdup(str);
-				}
+				const char * str;
+				dbus_message_iter_get_basic(&iter, &str);
+				trace("Response: [%s]",str);
+				rc = strdup(str);
 			}
-
-			dbus_message_unref(msg);
+#ifdef DEBUG
+			else
+			{
+				trace("Arg type is %c, expecting %c",dbus_message_iter_get_arg_type(&iter),DBUS_TYPE_STRING);
+			}
+#endif
 		}
+
+		dbus_message_unref(msg);
+	}
+	return rc;
+}
+
+char * remote::query_string(const char *method)
+{
+	if(conn)
+		return get_string(call(create_message(method)));
+	return NULL;
+}
+
+int get_intval(DBusMessage * msg)
+{
+	int rc = -1;
+
+	if(msg)
+	{
+		DBusMessageIter iter;
+
+		if(dbus_message_iter_init(msg, &iter))
+		{
+			if(dbus_message_iter_get_arg_type(&iter) == DBUS_TYPE_INT32)
+			{
+				dbus_int32_t iSigned;
+				dbus_message_iter_get_basic(&iter, &iSigned);
+				rc = (int) iSigned;
+			}
+		}
+
+		dbus_message_unref(msg);
 	}
 
 	return rc;
@@ -320,30 +381,9 @@ char * remote::query_string(const char *method)
 
 int remote::query_intval(const char *method)
 {
-	int rc = -1;
-
 	if(conn)
-	{
-		DBusMessage	* msg = call(create_message(method));
-		if(msg)
-		{
-			DBusMessageIter iter;
-
-			if(dbus_message_iter_init(msg, &iter))
-			{
-				if(dbus_message_iter_get_arg_type(&iter) == DBUS_TYPE_INT32)
-				{
-					dbus_int32_t iSigned;
-					dbus_message_iter_get_basic(&iter, &iSigned);
-					rc = (int) iSigned;
-				}
-			}
-
-			dbus_message_unref(msg);
-		}
-	}
-
-	return rc;
+		return get_intval(call(create_message(method)));
+	return -1;
 }
 
 
@@ -374,7 +414,7 @@ LIB3270_CSTATE remote::get_cstate(void)
 
 	if(hPipe != INVALID_HANDLE_VALUE)
 	{
-
+		#warning Implementar
 	}
 
 	return (LIB3270_CSTATE) -1;
@@ -449,6 +489,20 @@ int remote::connect(const char *uri, bool wait)
 
 #elif defined(HAVE_DBUS)
 
+	int rc;
+	DBusMessage * msg = create_message("connect");
+	if(!msg)
+		return -1;
+
+	dbus_message_append_args(msg, DBUS_TYPE_STRING, &uri, DBUS_TYPE_INVALID);
+
+	rc = get_intval(call(msg));
+
+	if(!rc && wait)
+		return wait_for_ready(120);
+
+	return rc;
+
 #endif
 
 	return -1;
@@ -469,6 +523,8 @@ bool remote::is_connected(void)
 
 #elif defined(HAVE_DBUS)
 
+	return query_intval("isConnected") != 0;
+
 #endif
 
 	return false;
@@ -480,10 +536,12 @@ bool remote::is_ready(void)
 
 	if(hPipe != INVALID_HANDLE_VALUE)
 	{
-
+		#warning Implementar
 	}
 
 #elif defined(HAVE_DBUS)
+
+	return query_intval("isReady") != 0;
 
 #endif
 
@@ -564,6 +622,29 @@ int remote::wait_for_ready(int seconds)
 
 #elif defined(HAVE_DBUS)
 
+	time_t end = time(0)+seconds;
+
+	while(time(0) < end)
+	{
+		static const dbus_int32_t delay = 2;
+
+		DBusMessage		* msg = create_message("waitForReady");
+		int				  rc;
+
+		if(!msg)
+			return -1;
+
+		dbus_message_append_args(msg, DBUS_TYPE_INT32, &delay, DBUS_TYPE_INVALID);
+
+		rc = get_intval(call(msg));
+		trace("waitForReady exits with rc=%d",rc);
+		if(rc != ETIMEDOUT)
+			return rc;
+	}
+
+
+	return ETIMEDOUT;
+
 #endif
 
 	return -1;
@@ -598,6 +679,19 @@ char * remote::get_text_at(int row, int col, size_t sz)
 
 #elif defined(HAVE_DBUS)
 
+	dbus_int32_t r = (dbus_int32_t) row;
+	dbus_int32_t c = (dbus_int32_t) col;
+	dbus_int32_t l = (dbus_int32_t) sz;
+
+	DBusMessage * msg = create_message("getTextAt");
+	if(!msg)
+		return NULL;
+
+	trace("%s(%d,%d,%d)",__FUNCTION__,r,c,l);
+	dbus_message_append_args(msg, DBUS_TYPE_INT32, &r, DBUS_TYPE_INT32, &c, DBUS_TYPE_INT32, &l, DBUS_TYPE_INVALID);
+
+	return get_string(call(msg));
+
 #endif
 
 	return NULL;
@@ -629,6 +723,16 @@ int remote::cmp_text_at(int row, int col, const char *text)
 
 #elif defined(HAVE_DBUS)
 
+	dbus_int32_t r = (dbus_int32_t) row;
+	dbus_int32_t c = (dbus_int32_t) col;
+
+	DBusMessage * msg = create_message("cmpTextAt");
+	if(msg)
+	{
+		dbus_message_append_args(msg, DBUS_TYPE_INT32, &r, DBUS_TYPE_INT32, &c, DBUS_TYPE_STRING, &text, DBUS_TYPE_INVALID);
+		return get_intval(call(msg));
+	}
+
 #endif
 
 	return 0;
@@ -659,6 +763,16 @@ int remote::set_text_at(int row, int col, const char *str)
 
 #elif defined(HAVE_DBUS)
 
+	dbus_int32_t r = (dbus_int32_t) row;
+	dbus_int32_t c = (dbus_int32_t) col;
+
+	DBusMessage * msg = create_message("setTextAt");
+	if(msg)
+	{
+		dbus_message_append_args(msg, DBUS_TYPE_INT32, &r, DBUS_TYPE_INT32, &c, DBUS_TYPE_STRING, &str, DBUS_TYPE_INVALID);
+		return get_intval(call(msg));
+	}
+
 #endif
 
 	return -1;
@@ -670,10 +784,20 @@ int remote::set_cursor_position(int row, int col)
 
 	if(hPipe != INVALID_HANDLE_VALUE)
 	{
-
+		#warning Implementar
 	}
 
 #elif defined(HAVE_DBUS)
+
+	dbus_int32_t r = (dbus_int32_t) row;
+	dbus_int32_t c = (dbus_int32_t) col;
+
+	DBusMessage * msg = create_message("setCursorAt");
+	if(msg)
+	{
+		dbus_message_append_args(msg, DBUS_TYPE_INT32, &r, DBUS_TYPE_INT32, &c, DBUS_TYPE_INVALID);
+		return get_intval(call(msg));
+	}
 
 #endif
 
@@ -722,6 +846,15 @@ int remote::pfkey(int key)
 
 #elif defined(HAVE_DBUS)
 
+	dbus_int32_t k = (dbus_int32_t) key;
+
+	DBusMessage * msg = create_message("pfKey");
+	if(msg)
+	{
+		dbus_message_append_args(msg, DBUS_TYPE_INT32, &k, DBUS_TYPE_INVALID);
+		return get_intval(call(msg));
+	}
+
 #endif
 
 	return -1;
@@ -742,6 +875,15 @@ int remote::pakey(int key)
 
 #elif defined(HAVE_DBUS)
 
+	dbus_int32_t k = (dbus_int32_t) key;
+
+	DBusMessage * msg = create_message("paKey");
+	if(msg)
+	{
+		dbus_message_append_args(msg, DBUS_TYPE_INT32, &k, DBUS_TYPE_INVALID);
+		return get_intval(call(msg));
+	}
+
 #endif
 
 	return -1;
@@ -757,6 +899,17 @@ void remote::set_toggle(LIB3270_TOGGLE ix, bool value)
 	}
 
 #elif defined(HAVE_DBUS)
+
+	dbus_int32_t i = (dbus_int32_t) ix;
+	dbus_int32_t v = (dbus_int32_t) value;
+
+	DBusMessage * msg = create_message("setToggle");
+	if(msg)
+	{
+		dbus_message_append_args(msg, DBUS_TYPE_INT32, &i, DBUS_TYPE_INT32, &v, DBUS_TYPE_INVALID);
+		get_intval(call(msg));
+	}
+
 
 #endif
 

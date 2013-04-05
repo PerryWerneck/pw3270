@@ -56,6 +56,13 @@
 	#include <iconv.h>
 #endif // HAVE_ICONV
 
+#ifdef WIN32
+	#define REXX_DEFAULT_CHARSET "CP1252"
+#else
+	#define REXX_DEFAULT_CHARSET "UTF-8"
+#endif // WIN32
+
+
 /*---[ Rexx entry points ]-----------------------------------------------------------------------------------*/
 
  REXX_TYPED_ROUTINE_PROTOTYPE(rx3270version);
@@ -119,7 +126,8 @@
 
  public:
 
-	rx3270();
+	rx3270(const char *local = REXX_DEFAULT_CHARSET, const char *remote = "ISO-8859-1");
+
 	virtual ~rx3270();
 
 	static rx3270			* create(const char *name = NULL);

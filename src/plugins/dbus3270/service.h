@@ -73,10 +73,21 @@
 	H3270		* pw3270_dbus_get_session_handle(PW3270Dbus *object);
 	GError		* pw3270_dbus_get_error_from_errno(int code);
 
+	void		  pw3270_dbus_is_connected(PW3270Dbus *object, DBusGMethodInvocation *context);
+	void		  pw3270_dbus_is_ready(PW3270Dbus *object, DBusGMethodInvocation *context);
+
+	void		  pw3270_dbus_set_cursor_at(PW3270Dbus *object, int row, int col, DBusGMethodInvocation *context);
+	void		  pw3270_dbus_set_toggle(PW3270Dbus *object, int id, int value, DBusGMethodInvocation *context);
+
+	void		  pw3270_dbus_wait_for_ready(PW3270Dbus *object, int timeout, DBusGMethodInvocation *context);
+
 	// Actions
 	void		  pw3270_dbus_enter(PW3270Dbus *object, DBusGMethodInvocation *context);
+	void		  pw3270_dbus_pf_key(PW3270Dbus *object, int key, DBusGMethodInvocation *context);
+	void		  pw3270_dbus_pa_key(PW3270Dbus *object, int key, DBusGMethodInvocation *context);
 	void		  pw3270_dbus_set_text_at(PW3270Dbus *object, int row, int col, const gchar *text, DBusGMethodInvocation *context);
 	void		  pw3270_dbus_get_text_at(PW3270Dbus *object, int row, int col, int len, DBusGMethodInvocation *context);
+	void		  pw3270_dbus_cmp_text_at(PW3270Dbus *object, int row, int col, const gchar *text, DBusGMethodInvocation *context);
 
 	G_END_DECLS
 

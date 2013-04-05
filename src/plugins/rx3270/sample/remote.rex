@@ -4,7 +4,15 @@ use arg uri
 host = .rx3270~new("pw3270:a")
 
 say "PW3270 version is "||host~revision()
-say "Connections state is "||rx3270QueryCState()
+say "Connection state is "||host~connected()
+say "Ready state is "||host~ready()
+
+if uri <> "URI"
+	then say "Connect rc="||host~connect(uri)
+
+say "Wait for ready is "||host~WaitForReady(60)
+
+say "Text[3,2,27]="||host~GetTextAt(3,2,27)
 
 return 0
 
