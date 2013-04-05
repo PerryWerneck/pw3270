@@ -914,7 +914,7 @@ void remote::set_toggle(LIB3270_TOGGLE ix, bool value)
 
 	if(hPipe != INVALID_HANDLE_VALUE)
 	{
-
+		#warning Implementar
 	}
 
 #elif defined(HAVE_DBUS)
