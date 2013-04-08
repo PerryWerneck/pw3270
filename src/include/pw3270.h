@@ -71,6 +71,11 @@
  LIB3270_EXPORT void		  pw3270_set_session_options(GtkWidget *widget, LIB3270_OPTION options);
  LIB3270_EXPORT int			  pw3270_set_session_color_type(GtkWidget *widget, unsigned short color_type);
 
+ LIB3270_EXPORT gchar		* pw3270_get_filename(GtkWidget *widget, const gchar *group, const gchar *key, GtkFileFilter **filter, const gchar *title);
+
+ LIB3270_EXPORT gchar 		* pw3270_get_string(GtkWidget *widget, const gchar *group, const gchar *key, const gchar *def);
+ LIB3270_EXPORT void 		  pw3270_set_string(GtkWidget *widget, const gchar *group, const gchar *key, const gchar *val);
+
  LIB3270_EXPORT gint		  pw3270_get_integer(GtkWidget *widget, const gchar *group, const gchar *key, gint def);
  LIB3270_EXPORT void		  pw3270_set_integer(GtkWidget *widget, const gchar *group, const gchar *key, gint val);
 

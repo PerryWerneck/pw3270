@@ -105,9 +105,19 @@ LIB3270_EXPORT gint pw3270_get_integer(GtkWidget *widget, const gchar *group, co
 	return get_integer_from_config(group, key, def);
 }
 
+LIB3270_EXPORT gchar * pw3270_get_string(GtkWidget *widget, const gchar *group, const gchar *key, const gchar *def)
+{
+	return get_string_from_config(group, key, def);
+}
+
 LIB3270_EXPORT void pw3270_set_integer(GtkWidget *widget, const gchar *group, const gchar *key, gint val)
 {
 	set_integer_to_config(group, key, val);
+}
+
+LIB3270_EXPORT void pw3270_set_string(GtkWidget *widget, const gchar *group, const gchar *key, const gchar *val)
+{
+	set_string_to_config(group, key, val);
 }
 
 LIB3270_EXPORT gint pw3270_get_boolean(GtkWidget *widget, const gchar *group, const gchar *key, gint def)
@@ -130,4 +140,48 @@ LIB3270_EXPORT gboolean pw3270_set_toggle_by_name(GtkWidget *widget, const gchar
 
 	lib3270_set_toggle(hSession,id,(int) flag);
 	return TRUE;
+}
+
+LIB3270_EXPORT gchar * pw3270_get_filename(GtkWidget *widget, const gchar *group, const gchar *key, GtkFileFilter **filter, const gchar *title)
+{
+	gchar 		* filename = NULL;
+	gchar		* ptr;
+	GtkWidget 	* dialog = gtk_file_chooser_dialog_new(	title,
+														GTK_WINDOW(gtk_widget_get_toplevel(widget)),
+														GTK_FILE_CHOOSER_ACTION_OPEN,
+														GTK_STOCK_CANCEL,	GTK_RESPONSE_CANCEL,
+														GTK_STOCK_EXECUTE,	GTK_RESPONSE_ACCEPT,
+														NULL );
+
+	if(filter)
+	{
+		int f;
+
+		for(f=0;filter[f];f++)
+			gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog),filter[f]);
+	}
+
+	gtk_file_chooser_set_show_hidden(GTK_FILE_CHOOSER(dialog),FALSE);
+
+	ptr = pw3270_get_string(widget,group,key,NULL);
+	if(ptr)
+	{
+		gtk_file_chooser_set_uri(GTK_FILE_CHOOSER(dialog),ptr);
+		g_free(ptr);
+	}
+
+	if(gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
+	{
+		gchar *uri 		= gtk_file_chooser_get_uri(GTK_FILE_CHOOSER(dialog));
+
+		filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+
+		pw3270_set_string(widget,group,key,uri);
+		g_free(uri);
+
+	}
+
+	gtk_widget_destroy(dialog);
+
+	return filename;
 }

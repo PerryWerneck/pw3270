@@ -27,8 +27,17 @@
  *
  */
 
+ #define ENABLE_NLS
+ #define GETTEXT_PACKAGE PACKAGE_NAME
+
  #include "rx3270.h"
+
+ #include <libintl.h>
+ #include <glib/gi18n.h>
+ #include <gtk/gtk.h>
+
  #include <string.h>
+ #include <pw3270.h>
  #include <pw3270/plugin.h>
  #include <pw3270/v3270.h>
  #include <lib3270/actions.h>
@@ -72,12 +81,16 @@
 
  };
 
- static plugin * session = NULL;
+/*--[ Globals ]--------------------------------------------------------------------------------------*/
+
+ static plugin			* session	= NULL;
+ static GMutex			  mutex;
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
  LIB3270_EXPORT int pw3270_plugin_init(GtkWidget *window)
  {
+	g_mutex_init(&mutex);
 	session = new plugin(lib3270_get_default_session_handle());
 	session->set_plugin();
 	trace("%s: Rexx object is %p",__FUNCTION__,session);
@@ -91,6 +104,7 @@
 		delete session;
 		session = NULL;
 	}
+	g_mutex_clear(&mutex);
 	return 0;
  }
 
@@ -203,12 +217,79 @@
 extern "C"
 {
 
+ static void call_rexx_script(const gchar *filename)
+ {
+
+ }
+
  LIB3270_EXPORT void pw3270_action_rexx_activated(GtkAction *action, GtkWidget *widget)
  {
+	gchar *filename = (gchar *) g_object_get_data(G_OBJECT(action),"src");
+
 	lib3270_trace_event(v3270_get_session(widget),"Action %s activated on widget %p",gtk_action_get_name(action),widget);
 
+	if(!g_mutex_trylock(&mutex))
+	{
+		GtkWidget *dialog = gtk_message_dialog_new(	GTK_WINDOW(gtk_widget_get_toplevel(widget)),
+													GTK_DIALOG_DESTROY_WITH_PARENT,
+													GTK_MESSAGE_ERROR,
+													GTK_BUTTONS_CANCEL,
+													"%s", _(  "Can't start script" ));
 
+		gtk_window_set_title(GTK_WINDOW(dialog),_( "System busy" ));
+		gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),"%s",_( "Please, try again in a few moments" ));
+
+        gtk_dialog_run(GTK_DIALOG (dialog));
+        gtk_widget_destroy(dialog);
+		return;
+	}
+
+	gtk_action_set_sensitive(action,FALSE);
+
+	if(filename)
+	{
+		// Has filename, call it directly
+		call_rexx_script(filename);
+	}
+	else
+	{
+		// No filename, ask user
+		static const struct _list
+		{
+			const gchar *name;
+			const gchar *pattern;
+		} list[] =
+		{
+			{ N_( "Rexx script file" ),	"*.rex" },
+			{ N_( "Rexx class file" ),	"*.cls" }
+		};
+
+		GtkFileFilter * filter[G_N_ELEMENTS(list)+1];
+		unsigned int f;
+
+		memset(filter,0,sizeof(filter));
+
+		for(f=0;f<G_N_ELEMENTS(list);f++)
+		{
+			filter[f] = gtk_file_filter_new();
+			gtk_file_filter_set_name(filter[f],gettext(list[f].name));
+			gtk_file_filter_add_pattern(filter[f],list[f].pattern);
+		}
+
+		filename = pw3270_get_filename(widget,"rexx","script",filter,_( "Select Rexx script to run" ));
+
+		if(filename)
+		{
+			call_rexx_script(filename);
+			g_free(filename);
+		}
+
+	}
+
+	gtk_action_set_sensitive(action,TRUE);
+	g_mutex_unlock(&mutex);
 
  }
 
 }
+
