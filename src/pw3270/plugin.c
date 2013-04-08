@@ -169,8 +169,8 @@
 
 #elif defined( WIN32 )
 
-	gchar * path = pw3270_build_filename(widget,"plugins",NULL);
-	load(path, widget);
+	gchar * path = pw3270_build_filename(NULL,"plugins",NULL);
+	load(path);
 	g_free(path);
 
 #else
@@ -184,7 +184,7 @@
 
 		if(g_file_test(path,G_FILE_TEST_IS_DIR))
 		{
-			load(path, widget);
+			load(path);
 			g_free(path);
 			return;
 		}
