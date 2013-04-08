@@ -31,7 +31,7 @@
  *
  */
 
- #include "server.h"
+ #include "server.h" #include <pw3270/plugin.h>
  #include <pw3270/ipcpackets.h>
  #include <lib3270/actions.h>
 
@@ -439,7 +439,7 @@
 	LocalFree(lpMsgBuf);
  }
 
- LIB3270_EXPORT int pw3270_plugin_init(GtkWidget *window)
+ LIB3270_EXPORT int pw3270_plugin_start(GtkWidget *window)
  {
 	char id;
 
@@ -503,7 +503,7 @@
 	return -1;
  }
 
- LIB3270_EXPORT int pw3270_plugin_deinit(GtkWidget *window)
+ LIB3270_EXPORT int pw3270_plugin_stop(GtkWidget *window)
  {
 
 	return 0;

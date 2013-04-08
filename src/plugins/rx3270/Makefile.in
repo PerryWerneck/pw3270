@@ -50,7 +50,7 @@ include ../../include/plugin.mak
 $(BINDBG)/$(PLUGIN_NAME): $(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJDBG)/$(SRC).o) $(BINDBG)$(DLL_NAME)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CXX) $(DLL_FLAGS) @LDSOFLAGS@ $(LDFLAGS) -o $@ $^ $(LIBS) $(LIB3270_LIBS)
+	@$(CXX) $(DLL_FLAGS) @LDSOFLAGS@ $(LDFLAGS) -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(GTK_LIBS) $(GLIB_LIBS) $(PW3270_LIBS)
 
 $(BINDBG)$(DLL_NAME).$(VERSION): $(foreach SRC, $(basename $(EXTAPI_SRC)), $(OBJDBG)/$(SRC)@OBJEXT@)
 	@echo "  CCLD `basename $@`"
@@ -62,7 +62,7 @@ $(BINDBG)$(DLL_NAME).$(VERSION): $(foreach SRC, $(basename $(EXTAPI_SRC)), $(OBJ
 $(BINRLS)/$(PLUGIN_NAME): $(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJRLS)/$(SRC).o) $(BINRLS)$(DLL_NAME)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	$(CXX) $(DLL_FLAGS) @LDSOFLAGS@ $(LDFLAGS) -o $@ $^ $(LIBS) $(LIB3270_LIBS)
+	$(CXX) $(DLL_FLAGS) @LDSOFLAGS@ $(LDFLAGS) -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(GTK_LIBS) $(GLIB_LIBS) $(PW3270_LIBS)
 
 $(BINRLS)$(DLL_NAME).$(VERSION): $(foreach SRC, $(basename $(EXTAPI_SRC)), $(OBJRLS)/$(SRC).o)
 	@echo "  CCLD `basename $@`"

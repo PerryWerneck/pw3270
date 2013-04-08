@@ -98,14 +98,15 @@
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
- static plugin			* session	= NULL;
- static GMutex			  mutex;
+ static plugin			* session	= NULL;#if GTK_CHECK_VERSION(2,32,0)
+ static GMutex			  mutex;#else static GStaticMutex	  mutex = G_STATIC_MUTEX_INIT;#endif // GTK_CHECK_VERSION
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
  LIB3270_EXPORT int pw3270_plugin_init(GtkWidget *window)
  {
-	g_mutex_init(&mutex);
+#if GTK_CHECK_VERSION(2,32,0)
+	g_mutex_init(&mutex);#endif // GTK_CHECK_VERSION
 	session = new plugin(lib3270_get_default_session_handle());
 	session->set_plugin();
 	trace("%s: Rexx object is %p",__FUNCTION__,session);
@@ -119,7 +120,8 @@
 		delete session;
 		session = NULL;
 	}
-	g_mutex_clear(&mutex);
+#if GTK_CHECK_VERSION(2,32,0)
+	g_mutex_clear(&mutex);#endif // GTK_CHECK_VERSION
 	return 0;
  }
 
@@ -363,7 +365,8 @@ extern "C"
 
 	lib3270_trace_event(v3270_get_session(widget),"Action %s activated on widget %p",gtk_action_get_name(action),widget);
 
-	if(!g_mutex_trylock(&mutex))
+#if GTK_CHECK_VERSION(2,32,0)
+	if(!g_mutex_trylock(&mutex))#else	if(!g_static_mutex_trylock(&mutex))#endif // GTK_CHECK_VERSION
 	{
 		GtkWidget *dialog = gtk_message_dialog_new(	GTK_WINDOW(gtk_widget_get_toplevel(widget)),
 													GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -422,7 +425,8 @@ extern "C"
 	}
 
 	gtk_action_set_sensitive(action,TRUE);
-	g_mutex_unlock(&mutex);
+#if GTK_CHECK_VERSION(2,32,0)
+	g_mutex_unlock(&mutex);#else	g_static_mutex_unlock(&mutex);#endif // GTK_CHECK_VERSION
 
  }
 
