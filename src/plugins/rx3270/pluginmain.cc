@@ -48,6 +48,16 @@
  #include <lib3270/actions.h>
  #include <lib3270/log.h>
 
+/*--[ Rexx application data block ]--------------------------------------------------------------------------*/
+
+ struct rexx_application_data
+ {
+	GtkAction	* action;
+	GtkWidget	* widget;
+	const gchar	* filename;
+ };
+
+
 /*--[ Plugin session object ]--------------------------------------------------------------------------------*/
 
  class plugin : public rx3270
@@ -219,15 +229,53 @@
 	return lib3270_get_text(hSession,baddr,len);
  }
 
+ static int REXXENTRY Rexx_IO_exit(RexxExitContext *context, int exitnumber, int subfunction, PEXIT parmBlock)
+ {
+	trace("%s call with ExitNumber: %d Subfunction: %d",__FUNCTION__,(int) exitnumber, (int) subfunction);
+
+	if(subfunction == RXSIOSAY)
+	{
+		GtkWidget *dialog = gtk_message_dialog_new(		GTK_WINDOW(gtk_widget_get_toplevel(((struct rexx_application_data * )context->GetApplicationData())->widget)),
+														GTK_DIALOG_DESTROY_WITH_PARENT,
+														GTK_MESSAGE_INFO,
+														GTK_BUTTONS_OK_CANCEL,
+														"%s", (((RXSIOSAY_PARM *) parmBlock)->rxsio_string).strptr );
+
+		gtk_window_set_title(GTK_WINDOW(dialog), _( "Script message" ) );
+
+        if(gtk_dialog_run(GTK_DIALOG (dialog)) == GTK_RESPONSE_CANCEL)
+			context->RaiseException0(Rexx_Error_Program_interrupted);
+
+        gtk_widget_destroy(dialog);
+
+		return RXEXIT_HANDLED;
+	}
+
+	return RXEXIT_NOT_HANDLED;
+ }
+
  static void call_rexx_script(GtkAction *action, GtkWidget *widget, const gchar *filename)
  {
-	const gchar			* args = (const gchar *) g_object_get_data(G_OBJECT(action),"args");
+	const gchar						* args = (const gchar *) g_object_get_data(G_OBJECT(action),"args");
+
+	struct rexx_application_data	  appdata = { action, widget, filename };
 
 	RexxInstance 		* instance;
 	RexxThreadContext	* threadContext;
 	RexxOption			  options[25];
+	RexxContextExit		  exits[2];
 
 	memset(options,0,sizeof(options));
+	memset(exits,0,sizeof(exits));
+
+	exits[0].sysexit_code	= RXSIO;
+	exits[0].handler 		= Rexx_IO_exit;
+
+	options[0].optionName	= DIRECT_EXITS;
+	options[0].option		= (void *) exits;
+
+	options[1].optionName	= APPLICATION_DATA;
+	options[1].option		= (void *) &appdata;
 
 	if(!RexxCreateInterpreter(&instance, &threadContext, options))
 	{
@@ -278,9 +326,9 @@
 														GTK_DIALOG_DESTROY_WITH_PARENT,
 														GTK_MESSAGE_ERROR,
 														GTK_BUTTONS_CANCEL,
-														"%s", _(  "Script error" ));
+														"%s", _(  "Rexx script failed" ));
 
-			gtk_window_set_title(GTK_WINDOW(dialog),_( "System busy" ));
+			gtk_window_set_title(GTK_WINDOW(dialog),_( "Rexx error" ));
 
 			gtk_message_dialog_format_secondary_text(
 					GTK_MESSAGE_DIALOG(dialog),
