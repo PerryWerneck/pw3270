@@ -219,76 +219,17 @@
 	return lib3270_get_text(hSession,baddr,len);
  }
 
-extern "C"
-{
-
- static RXSTRING * build_args(const gchar **arg, size_t *argc)
- {
-	size_t		  sz		= g_strv_length((gchar **)arg);
-	size_t		  szText	= 0;
-	gchar	 	* ptr;
-	int			  f;
-	RXSTRING 	* rxArgs;
-
-	for(f=0;f< (int) sz;f++)
-		szText += strlen(arg[f])+1;
-
-	*argc	= sz;
-	rxArgs	= (RXSTRING *) g_malloc0((sizeof(RXSTRING) * (sz+1))+szText);
-	ptr 	= (gchar *) &(rxArgs[sz+1]);
-
-	for(f=0;f< (int) sz;f++)
-	{
-		strcpy(ptr,arg[f]);
-
-		rxArgs[f].strptr 	= ptr;
-		rxArgs[f].strlength = strlen(ptr);
-		ptr += ((size_t) rxArgs[f].strlength+1);
-	}
-
-	return rxArgs;
- }
-
  static void call_rexx_script(GtkAction *action, GtkWidget *widget, const gchar *filename)
  {
-	gchar			* args		= (gchar *) g_object_get_data(G_OBJECT(action),"args");
+	const gchar			* args = (const gchar *) g_object_get_data(G_OBJECT(action),"args");
 
-	RXSTRING	 	* rxArgs;
-	int 			  ret;
-	short			  rc;
-	size_t			  argc		= 0;
-	RXSTRING		  retstr;
-	unsigned char	  userArea[10];
+	RexxInstance 		* instance;
+	RexxThreadContext	* threadContext;
+	RexxOption			  options[25];
 
-	if(args)
-	{
-		gchar	** arg	= g_strsplit(args,",",-1);
-		rxArgs = build_args((const gchar **)arg,&argc);
-		g_strfreev(arg);
-	}
-	else
-	{
-		static const gchar *arg[] = { "", NULL };
-		rxArgs = build_args(arg,&argc);
-	}
+	memset(options,0,sizeof(options));
 
-	// set up default return
-	memset(&retstr,0,sizeof(retstr));
-
-	memset(userArea,' ',10);
-	userArea[9] = 0;
-
-	ret = RexxStart(	argc,						// argument count
-						(PCONSTRXSTRING) rxArgs,	// argument array
-						(char *) filename,			// REXX procedure name
-						(PRXSTRING)  0,				// no instore used
-						PACKAGE_NAME,				// default address name
-						RXCOMMAND,					// calling as a subcommand
-						NULL,						// EXITs for this call
-						&rc,						// converted return code
-						&retstr);					// returned result
-
-	if(ret)
+	if(!RexxCreateInterpreter(&instance, &threadContext, options))
 	{
 		GtkWidget *dialog = gtk_message_dialog_new(	GTK_WINDOW(gtk_widget_get_toplevel(widget)),
 													GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -296,25 +237,78 @@ extern "C"
 													GTK_BUTTONS_CANCEL,
 													"%s", _(  "Can't start script" ));
 
-		gtk_window_set_title(GTK_WINDOW(dialog),_( "Startup error" ));
-		gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),_("Error %d starting rexx script"),ret);
+		gtk_window_set_title(GTK_WINDOW(dialog),_( "Rexx error" ));
+		gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),"%s",_( "Can't create rexx interpreter instance" ));
 
         gtk_dialog_run(GTK_DIALOG (dialog));
         gtk_widget_destroy(dialog);
-
 	}
 	else
 	{
-		RexxWaitForTermination();
+		RexxArrayObject rxArgs;
+
+		if(args)
+		{
+			gchar   **arg	= g_strsplit(args,",",-1);
+			size_t	  sz	= g_strv_length(arg);
+
+			rxArgs = threadContext->NewArray(sz);
+			for(unsigned int i = 0; i<sz; i++)
+				threadContext->ArrayPut(rxArgs, threadContext->String(arg[i]), i + 1);
+
+			g_strfreev(arg);
+		}
+		else
+		{
+			rxArgs = threadContext->NewArray(1);
+			threadContext->ArrayPut(rxArgs, threadContext->String(""),1);
+		}
+
+		RexxObjectPtr result = threadContext->CallProgram(filename, rxArgs);
+
+		if (threadContext->CheckCondition())
+		{
+			RexxCondition condition;
+
+			// retrieve the error information and get it into a decoded form
+			RexxDirectoryObject cond = threadContext->GetConditionInfo();
+			threadContext->DecodeConditionInfo(cond, &condition);
+			// display the errors
+			GtkWidget *dialog = gtk_message_dialog_new(	GTK_WINDOW(gtk_widget_get_toplevel(widget)),
+														GTK_DIALOG_DESTROY_WITH_PARENT,
+														GTK_MESSAGE_ERROR,
+														GTK_BUTTONS_CANCEL,
+														"%s", _(  "Script error" ));
+
+			gtk_window_set_title(GTK_WINDOW(dialog),_( "System busy" ));
+
+			gtk_message_dialog_format_secondary_text(
+					GTK_MESSAGE_DIALOG(dialog),
+							_( "Rexx error %d: %s\n%s" ),
+									(int) condition.code,
+									threadContext->CString(condition.errortext),
+									threadContext->CString(condition.message)
+
+			);
+
+			gtk_dialog_run(GTK_DIALOG (dialog));
+			gtk_widget_destroy(dialog);
+
+		}
+		else if (result != NULLOBJECT)
+        {
+            CSTRING resultString = threadContext->CString(result);
+			lib3270_write_log(NULL,"REXX","%s exits with rc=%s",filename,resultString);
+        }
+
+		instance->Terminate();
 	}
-
-	if(RXSTRPTR(retstr))
-		RexxFreeMemory(RXSTRPTR(retstr));
-
-	g_free(rxArgs);
 
  }
 
+
+extern "C"
+{
  LIB3270_EXPORT void pw3270_action_rexx_activated(GtkAction *action, GtkWidget *widget)
  {
 	gchar *filename = (gchar *) g_object_get_data(G_OBJECT(action),"src");
