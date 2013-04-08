@@ -25,6 +25,11 @@
  * perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
  * erico.mendonca@gmail.com	(Erico Mascarenhas Mendonça)
  *
+ * Referencias:
+ *
+ * * http://www.oorexx.org/docs/rexxpg/x14097.htm
+ * * http://www.oorexx.org/docs/rexxpg/c2539.htm
+ *
  */
 
  #define ENABLE_NLS
@@ -217,8 +222,96 @@
 extern "C"
 {
 
- static void call_rexx_script(const gchar *filename)
+ static RXSTRING * build_args(const gchar **arg, size_t *argc)
  {
+	size_t		  sz		= g_strv_length((gchar **)arg);
+	size_t		  szText	= 0;
+	gchar	 	* ptr;
+	int			  f;
+	RXSTRING 	* rxArgs;
+
+	for(f=0;f< (int) sz;f++)
+		szText += strlen(arg[f])+1;
+
+	*argc	= sz;
+	rxArgs	= (RXSTRING *) g_malloc0((sizeof(RXSTRING) * (sz+1))+szText);
+	ptr 	= (gchar *) &(rxArgs[sz+1]);
+
+	for(f=0;f< (int) sz;f++)
+	{
+		strcpy(ptr,arg[f]);
+
+		rxArgs[f].strptr 	= ptr;
+		rxArgs[f].strlength = strlen(ptr);
+		ptr += ((size_t) rxArgs[f].strlength+1);
+	}
+
+	return rxArgs;
+ }
+
+ static void call_rexx_script(GtkAction *action, GtkWidget *widget, const gchar *filename)
+ {
+	gchar			* args		= (gchar *) g_object_get_data(G_OBJECT(action),"args");
+
+	RXSTRING	 	* rxArgs;
+	int 			  ret;
+	short			  rc;
+	size_t			  argc		= 0;
+	RXSTRING		  retstr;
+	unsigned char	  userArea[10];
+
+	if(args)
+	{
+		gchar	** arg	= g_strsplit(args,",",-1);
+		rxArgs = build_args((const gchar **)arg,&argc);
+		g_strfreev(arg);
+	}
+	else
+	{
+		static const gchar *arg[] = { "", NULL };
+		rxArgs = build_args(arg,&argc);
+	}
+
+	// set up default return
+	memset(&retstr,0,sizeof(retstr));
+
+	memset(userArea,' ',10);
+	userArea[9] = 0;
+
+	ret = RexxStart(	argc,						// argument count
+						(PCONSTRXSTRING) rxArgs,	// argument array
+						(char *) filename,			// REXX procedure name
+						(PRXSTRING)  0,				// no instore used
+						PACKAGE_NAME,				// default address name
+						RXCOMMAND,					// calling as a subcommand
+						NULL,						// EXITs for this call
+						&rc,						// converted return code
+						&retstr);					// returned result
+
+	if(ret)
+	{
+		GtkWidget *dialog = gtk_message_dialog_new(	GTK_WINDOW(gtk_widget_get_toplevel(widget)),
+													GTK_DIALOG_DESTROY_WITH_PARENT,
+													GTK_MESSAGE_ERROR,
+													GTK_BUTTONS_CANCEL,
+													"%s", _(  "Can't start script" ));
+
+		gtk_window_set_title(GTK_WINDOW(dialog),_( "Startup error" ));
+		gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),_("Error %d starting rexx script"),ret);
+
+        gtk_dialog_run(GTK_DIALOG (dialog));
+        gtk_widget_destroy(dialog);
+
+	}
+	else
+	{
+		RexxWaitForTermination();
+	}
+
+	if(RXSTRPTR(retstr))
+		RexxFreeMemory(RXSTRPTR(retstr));
+
+	g_free(rxArgs);
 
  }
 
@@ -249,7 +342,7 @@ extern "C"
 	if(filename)
 	{
 		// Has filename, call it directly
-		call_rexx_script(filename);
+		call_rexx_script(action,widget,filename);
 	}
 	else
 	{
@@ -280,7 +373,7 @@ extern "C"
 
 		if(filename)
 		{
-			call_rexx_script(filename);
+			call_rexx_script(action,widget,filename);
 			g_free(filename);
 		}
 

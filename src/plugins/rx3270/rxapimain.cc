@@ -207,3 +207,5 @@ int rx3270::wait_for_text_at(int row, int col, const char *key, int timeout)
 
 	return ETIMEDOUT;
 }
+
+
