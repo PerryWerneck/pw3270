@@ -39,7 +39,7 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
- static void load(const gchar *path, GtkWidget *widget)
+ static void load(const gchar *path)
  {
 	GDir		* dir;
  	const gchar	* name;
@@ -85,11 +85,11 @@
 			}
 			else
 			{
-				int (*init)(GtkWidget *);
+				int (*init)();
 
 				if(g_module_symbol(handle, "pw3270_plugin_init", (gpointer) &init))
 				{
-					if(init(widget))
+					if(init())
 					{
 						// Plugin init fails
 						g_module_close(handle);
@@ -104,7 +104,6 @@
 				else
 				{
 					// No plugin init warn and save it anyway
-					g_warning("No pw3270_plugin_init() method in %s",filename);
 					lst = g_list_append(lst,handle);
 				}
 			}
@@ -121,7 +120,7 @@
 
 	if(lst)
 	{
-		// At least one plugin was loaded, save handle, start it
+		// At least one plugin was loaded, save handle
 		GList *l	= g_list_first(lst);
 		int f;
 
@@ -131,22 +130,15 @@
 
 		for(f=0;f<nPlugin && l;f++)
 		{
-			void (*start)(GtkWidget *);
-
 			hPlugin[f] = (GModule *) l->data;
-
 			l = g_list_next(l);
-
-			if(g_module_symbol(hPlugin[f], "pw3270_plugin_start", (gpointer) &start))
-				start(widget);
 		}
-
 		g_list_free(lst);
 	}
 
  }
 
- LIB3270_EXPORT void pw3270_init_plugins(GtkWidget *widget)
+ LIB3270_EXPORT void pw3270_init_plugins(void)
  {
 #if defined( DEBUG )
 
@@ -165,12 +157,12 @@
 		if(!g_file_test(path,G_FILE_TEST_IS_DIR))
 		{
 			g_free(path);
-			path = pw3270_build_filename(widget,"plugins",NULL);
+			path = pw3270_build_filename(NULL,"plugins",NULL);
 			trace("%s using [%s]",__FUNCTION__,path);
 		}
 	}
 
-	load(path,widget);
+	load(path);
 
 	g_free(path);
 	g_free(dir);
@@ -203,7 +195,35 @@
 #endif
  }
 
- LIB3270_EXPORT void pw3270_deinit_plugins(GtkWidget *widget)
+ LIB3270_EXPORT void pw3270_start_plugins(GtkWidget *widget)
+ {
+	int f;
+
+	for(f=0;f<nPlugin;f++)
+	{
+		int (*start)(GtkWidget *);
+
+		if(g_module_symbol(hPlugin[f], "pw3270_plugin_start", (gpointer) &start))
+			start(widget);
+	}
+
+ }
+
+ LIB3270_EXPORT void pw3270_stop_plugins(GtkWidget *widget)
+ {
+	int f;
+
+	for(f=0;f<nPlugin;f++)
+	{
+		int (*stop)(GtkWidget *);
+
+		if(g_module_symbol(hPlugin[f], "pw3270_plugin_stop", (gpointer) &stop))
+			stop(widget);
+	}
+
+ }
+
+ LIB3270_EXPORT void pw3270_deinit_plugins(void)
  {
  	int f;
 
@@ -211,21 +231,12 @@
 		return;
 
 	trace("Unloading %d plugin(s)",nPlugin);
-
 	for(f=0;f<nPlugin;f++)
 	{
-		void (*stop)(GtkWidget *);
-
-		if(g_module_symbol(hPlugin[f], "pw3270_plugin_stop", (gpointer) &stop))
-			stop(widget);
-	}
-
-	for(f=0;f<nPlugin;f++)
-	{
-		void (*deinit)(GtkWidget *);
+		void (*deinit)(void);
 
 		if(g_module_symbol(hPlugin[f], "pw3270_plugin_deinit", (gpointer) &deinit))
-			deinit(widget);
+			deinit();
 
 		g_module_close(hPlugin[f]);
 	}
@@ -240,17 +251,21 @@
  	int		  f;
  	gchar	* fname;
 
+	trace("%s hPlugin=%p",__FUNCTION__,hPlugin);
 	if(!hPlugin)
 		return ENOENT;
 
 	// Search for plugin setup calls
 	fname = g_strdup_printf("pw3270_setup_action_%s",name);
+	trace("Searching for \"%s\"",fname);
+
 	for(f=0;f<nPlugin;f++)
 	{
 		int (*setup)(GtkAction *action, GtkWidget *widget);
 
 		if(g_module_symbol(hPlugin[f], fname, (gpointer) &setup))
 		{
+			trace("%s=%p",fname,setup);
 			g_free(fname);
 			return setup(action,widget);
 		}
@@ -259,12 +274,15 @@
 
 	// Search for activation callbacks
 	fname = g_strdup_printf("pw3270_action_%s_activated",name);
+	trace("Searching for \"%s\"",fname);
+
 	for(f=0;f<nPlugin;f++)
 	{
 		void (*call)(GtkAction *action, GtkWidget *widget);
 
 		if(g_module_symbol(hPlugin[f], fname, (gpointer) &call))
 		{
+			trace("%s=%p",fname,call);
 			g_signal_connect(action,"activate",G_CALLBACK(call),widget);
 			g_free(fname);
 			return 0;

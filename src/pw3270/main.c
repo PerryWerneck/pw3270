@@ -414,6 +414,7 @@ int main(int argc, char *argv[])
 			gtk_settings_set_string_property(settings,"gtk-menu-bar-accel","Menu","");
 		}
 
+		pw3270_init_plugins();
 		toplevel = pw3270_new(host,systype,syscolors);
 		pw3270_set_session_name(toplevel,session_name);
 
@@ -441,7 +442,6 @@ int main(int argc, char *argv[])
 		}
 
 
-
 		toplevel_setup(GTK_WINDOW(toplevel));
 
 		if(pw3270_get_toggle(toplevel,LIB3270_TOGGLE_FULL_SCREEN))
@@ -449,7 +449,7 @@ int main(int argc, char *argv[])
 		else
 			pw3270_restore_window(toplevel,"toplevel");
 
-		pw3270_init_plugins(toplevel);
+		pw3270_start_plugins(toplevel);
 		gtk_window_present(GTK_WINDOW(toplevel));
 
 #ifdef HAVE_GTKMAC
@@ -458,7 +458,8 @@ int main(int argc, char *argv[])
 
 		gtk_main();
 
-		pw3270_deinit_plugins(toplevel);
+		pw3270_stop_plugins(toplevel);
+		pw3270_deinit_plugins();
 
 	}
 

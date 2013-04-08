@@ -30,6 +30,7 @@
  #include "rx3270.h"
  #include <string.h>
  #include <pw3270/plugin.h>
+ #include <pw3270/v3270.h>
  #include <lib3270/actions.h>
  #include <lib3270/log.h>
 
@@ -198,3 +199,16 @@
  {
 	return lib3270_get_text(hSession,baddr,len);
  }
+
+extern "C"
+{
+
+ LIB3270_EXPORT void pw3270_action_rexx_activated(GtkAction *action, GtkWidget *widget)
+ {
+	lib3270_trace_event(v3270_get_session(widget),"Action %s activated on widget %p",gtk_action_get_name(action),widget);
+
+
+
+ }
+
+}
