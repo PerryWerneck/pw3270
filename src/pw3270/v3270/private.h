@@ -253,7 +253,7 @@ void 		  v3270_draw_char(cairo_t *cr, unsigned char chr, unsigned short attr, H3
 void		  v3270_start_timer(GtkWidget *terminal);
 void		  v3270_stop_timer(GtkWidget *terminal);
 
-void		  v3270_draw_connection(cairo_t *cr, H3270 *host, struct v3270_metrics *metrics, GdkColor *color, GdkRectangle *rect);
+void		  v3270_draw_connection(cairo_t *cr, H3270 *host, struct v3270_metrics *metrics, GdkColor *color, const GdkRectangle *rect);
 void		  v3270_draw_ssl_status(cairo_t *cr, H3270 *host, struct v3270_metrics *metrics, GdkColor *color, GdkRectangle *rect);
 
 void		  v3270_update_char(H3270 *session, int addr, unsigned char chr, unsigned short attr, unsigned char cursor);

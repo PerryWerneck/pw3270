@@ -278,10 +278,21 @@ static void draw_undera(cairo_t *cr, H3270 *host, struct v3270_metrics *metrics,
 
 }
 
-void v3270_draw_connection(cairo_t *cr, H3270 *host, struct v3270_metrics *metrics, GdkColor *color, GdkRectangle *rect)
+static void draw_centered_text(cairo_t *cr, struct v3270_metrics *metrics, int x, int y, const gchar *str)
 {
 	cairo_text_extents_t extents;
+	cairo_text_extents(cr,str,&extents);
+	cairo_move_to(cr,x+(((metrics->width+2)/2)-(extents.width/2)),y+extents.height+( (metrics->spacing/2) - (extents.height/2)));
+	cairo_show_text(cr,str);
+}
+
+void v3270_draw_connection(cairo_t *cr, H3270 *host, struct v3270_metrics *metrics, GdkColor *color, const GdkRectangle *rect)
+{
  	const gchar *str;
+
+	gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_BACKGROUND);
+	cairo_rectangle(cr, rect->x, rect->y, rect->width, rect->height);
+	cairo_fill(cr);
 
 	gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_FOREGROUND);
 	cairo_rectangle(cr, rect->x, rect->y, rect->width, rect->height);
@@ -301,9 +312,7 @@ void v3270_draw_connection(cairo_t *cr, H3270 *host, struct v3270_metrics *metri
 	else
 		str = "?";
 
-	cairo_text_extents(cr,str,&extents);
-	cairo_move_to(cr,rect->x+((rect->width/2)-(extents.width/2)),rect->y+extents.height+( (rect->height/2) - (extents.height/2)));
-	cairo_show_text(cr,str);
+	draw_centered_text(cr,metrics,rect->x,rect->y,str);
 
 }
 
@@ -533,8 +542,6 @@ void v3270_draw_oia(cairo_t *cr, H3270 *host, int row, int cols, struct v3270_me
 	cairo_rectangle(cr, metrics->left, row, cols*metrics->width, metrics->spacing);
 	cairo_fill(cr);
 
-	gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_FOREGROUND);
-
 	for(f=0;f<G_N_ELEMENTS(right);f++)
 	{
 		GdkRectangle *r = rect+right[f].id;
@@ -551,12 +558,7 @@ void v3270_draw_oia(cairo_t *cr, H3270 *host, int row, int cols, struct v3270_me
 
 	gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_FOREGROUND);
 
-	const gchar *str = "4";
-	cairo_text_extents_t extents;
-
-	cairo_text_extents(cr,str,&extents);
-	cairo_move_to(cr,lCol+(((metrics->width+2)/2)-(extents.width/2)),row+extents.height+( (metrics->spacing/2) - (extents.height/2)));
-	cairo_show_text(cr,str);
+	draw_centered_text(cr,metrics,lCol,row,"4");
 
 	cairo_stroke(cr);
 	cairo_rectangle(cr, lCol, row, metrics->width+2, metrics->spacing);
