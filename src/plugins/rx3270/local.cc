@@ -114,69 +114,10 @@
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
- static bool	  plugin		= false;
- static rx3270	* defSession	= NULL;
-
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
-rx3270::rx3270(const char *local, const char *remote)
+rx3270 * rx3270::create_local(void)
 {
-#ifdef HAVE_ICONV
-
-	if(strcmp(local,remote))
-	{
-		// Local and remote charsets aren't the same, setup conversion
-		this->conv2Local = iconv_open(local, remote);
-		this->conv2Host = iconv_open(remote,local);
-	}
-	else
-	{
-		this->conv2Local = this->conv2Host = (iconv_t)(-1);
-	}
-#endif
-
-	if(!defSession)
-		defSession = this;
-}
-
-rx3270::~rx3270()
-{
-#ifdef HAVE_ICONV
-
- 	if(conv2Local != (iconv_t) (-1))
-		iconv_close(conv2Local);
-
- 	if(conv2Host != (iconv_t) (-1))
-		iconv_close(conv2Host);
-#endif
-
-
-	if(defSession == this)
-		defSession = NULL;
-}
-
-rx3270 * rx3270::create(const char *name)
-{
-	if(name && *name)
-		return create_remote(name);
-	return new dynamic();
-}
-
-char * rx3270::get_version(void)
-{
-	return strdup(PACKAGE_VERSION);
-}
-
-char * rx3270::get_revision(void)
-{
-	return strdup(PACKAGE_REVISION);
-}
-
-rx3270	* rx3270::get_default(void)
-{
-	if(defSession)
-		return defSession;
-
 	return new dynamic();
 }
 
@@ -199,12 +140,6 @@ static int get_datadir(LPSTR datadir)
 	return *datadir;
 }
 #endif // WIN32
-
-void rx3270::set_plugin(void)
-{
-	trace("%s: Rexx API running as plugin",__FUNCTION__);
-	plugin = true;
-}
 
 extern "C"
 {
