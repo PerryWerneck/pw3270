@@ -266,7 +266,7 @@ gboolean v3270_query_tooltip(GtkWidget  *widget, gint x, gint y, gboolean keyboa
 
 				if(msg)
 				{
-					gchar *text = g_strdup_printf("<b>%s</b>\n%s",_("Identity not verified"),msg->text);
+					gchar *text = g_strdup_printf("<b>%s</b>\n%s",_("Identity not verified"),gettext(msg->text));
 					gtk_tooltip_set_icon_from_stock(tooltip,msg->icon,GTK_ICON_SIZE_MENU);
 					gtk_tooltip_set_markup(tooltip,text);
 					g_free(text);

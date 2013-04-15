@@ -317,7 +317,7 @@
 	{
 		const struct v3270_ssl_status_msg *info = v3270_get_ssl_status_msg(widget);
 		if(info)
-			return info->text;
+			return gettext(info->text);
 	}
 #endif // HAVE_LIBSSL
 	return v3270_get_host(widget);
@@ -335,7 +335,7 @@
 	{
 		const struct v3270_ssl_status_msg *info = v3270_get_ssl_status_msg(widget);
 		if(info)
-			return info->message;
+			return gettext(info->message);
 	}
 #endif // HAVE_LIBSSL
 
@@ -402,7 +402,7 @@
 
 		if(text)
 		{
-			gtk_message_dialog_format_secondary_markup(GTK_MESSAGE_DIALOG(dialog),text);
+			gtk_message_dialog_format_secondary_markup(GTK_MESSAGE_DIALOG(dialog), gettext(text));
 		}
 		else
 		{

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-10 09:20-0300\n"
+"POT-Creation-Date: 2013-04-15 16:57-0300\n"
 "PO-Revision-Date: 2013-04-01 10:06-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
@@ -2166,47 +2166,47 @@ msgstr "Janela"
 msgid "Windows Western languages (CP1252)"
 msgstr "Windows ocidental (CP1252)"
 
-#: v3270/oia.c:415 v3270/oia.c:439 v3270/oia.c:443
+#: v3270/oia.c:424 v3270/oia.c:448 v3270/oia.c:452
 msgid "X"
 msgstr "X"
 
-#: v3270/oia.c:419
+#: v3270/oia.c:428
 msgid "X -f"
 msgstr "X -f"
 
-#: v3270/oia.c:451
+#: v3270/oia.c:460
 msgid "X Connecting"
 msgstr "X Conectando"
 
-#: v3270/oia.c:435
+#: v3270/oia.c:444
 msgid "X Inhibit"
 msgstr "X Inibido"
 
-#: v3270/oia.c:411
+#: v3270/oia.c:420
 msgid "X Not Connected"
 msgstr "X Desconectado"
 
-#: v3270/oia.c:427
+#: v3270/oia.c:436
 msgid "X Numeric"
 msgstr "X Numérico"
 
-#: v3270/oia.c:431
+#: v3270/oia.c:440
 msgid "X Overflow"
 msgstr "X Estouro"
 
-#: v3270/oia.c:423
+#: v3270/oia.c:432
 msgid "X Protected"
 msgstr "X Protegido"
 
-#: v3270/oia.c:447
+#: v3270/oia.c:456
 msgid "X Resolving"
 msgstr "X Resolvendo"
 
-#: v3270/oia.c:399
+#: v3270/oia.c:408
 msgid "X System"
 msgstr "X Sistema"
 
-#: v3270/oia.c:403
+#: v3270/oia.c:412
 msgid "X Wait"
 msgstr "X Aguarde"
 
