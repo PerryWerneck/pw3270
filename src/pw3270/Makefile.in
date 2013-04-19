@@ -198,11 +198,11 @@ $(DEBDIR)/pw3270.install: Makefile
 
 v3270/marshal.h: v3270/genmarshal
 	@$(MKDIR) `dirname $@`
-	@glib-genmarshal --prefix=$(PACKAGE_NAME) --header v3270/genmarshal > $@
+	@glib-genmarshal --prefix=v3270 --header v3270/genmarshal > $@
 
 v3270/marshal.c: v3270/genmarshal v3270/marshal.h
 	@$(MKDIR) `dirname $@`
-	@glib-genmarshal --prefix=$(PACKAGE_NAME) --body v3270/genmarshal > $@
+	@glib-genmarshal --prefix=v3270 --body v3270/genmarshal > $@
 
 $(BINDIR)/pot/pw3270.pot: $(foreach SRC, $(basename $(APP_SOURCES) $(LIB_SOURCES)), $(TMPDIR)/pot/$(SRC).pot)
 	@rm -f $@

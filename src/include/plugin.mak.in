@@ -25,6 +25,7 @@
 #
 
 PACKAGE_NAME=@PACKAGE_NAME@
+PACKAGE_TARNAME=@PACKAGE_TARNAME@
 
 #---[ Sources ]----------------------------------------------------------------
 
@@ -75,7 +76,7 @@ DLL_NAME=@DLLDIR@/@DLLPREFIX@$(MODULE_NAME)@DLLEXT@
 PLUGIN_NAME=plugins/$(MODULE_NAME)@DLLEXT@
 
 ifeq ($(LIB3270_MODE),Debug)
-	PW3270_LIBS=-L../../../.bin/Debug@DLLDIR@ -lpw3270
+	PW3270_LIBS=-L../../../.bin/Debug@DLLDIR@ -l$(PACKAGE_TARNAME)
 	PW3270_CFLAGS=-I../../../src/include
 	LIB3270_LIBS=-L../../../.bin/Debug@DLLDIR@  -l3270
 	LIB270_CFLAGS=-I../../../src/include
@@ -83,7 +84,7 @@ endif
 
 ifeq ($(LIB3270_MODE),Release)
 	BINRLS=../../../.bin/Release
-	PW3270_LIBS=-L$(BINRLS)@DLLDIR@ -lpw3270
+	PW3270_LIBS=-L$(BINRLS)@DLLDIR@ -l$(PACKAGE_TARNAME)
 	PW3270_CFLAGS=-I../../../src/include
 	LIB3270_LIBS=-L$(BINRLS)@DLLDIR@  -l3270
 	LIB270_CFLAGS=-I../../../src/include

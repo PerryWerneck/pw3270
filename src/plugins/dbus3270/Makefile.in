@@ -27,6 +27,7 @@
 #
 
 PACKAGE_NAME=@PACKAGE_NAME@
+PACKAGE_TARNAME=@PACKAGE_TARNAME@
 MODULE_NAME=dbus3270
 
 prefix=@prefix@
@@ -83,14 +84,14 @@ GLIB_LIBS=@GLIB_LIBS@
 GTK_LIBS=@GTK_LIBS@
 
 ifeq ($(LIB3270_MODE),Debug)
-	PW3270_LIBS=-L../../../.bin/Debug@DLLDIR@ -lpw3270
+	PW3270_LIBS=-L../../../.bin/Debug@DLLDIR@ -l$(PACKAGE_TARNAME)
 	PW3270_CFLAGS=-I../../../src/include
 	LIB3270_LIBS=-L../../../.bin/Debug@DLLDIR@  -l3270
 	LIB3270_CFLAGS=-I../../../src/include
 endif
 
 ifeq ($(LIB3270_MODE),Release)
-	PW3270_LIBS=-L../../../.bin/Release@DLLDIR@ -lpw3270
+	PW3270_LIBS=-L../../../.bin/Release@DLLDIR@ -l$(PACKAGE_TARNAME)
 	PW3270_CFLAGS=-I../../../src/include
 	LIB3270_LIBS=-L../../../.bin/Release@DLLDIR@  -l3270
 	LIB3270_CFLAGS=-I../../../src/include

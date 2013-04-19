@@ -404,7 +404,7 @@ static void v3270_class_init(v3270Class *klass)
 						G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
 						G_STRUCT_OFFSET (v3270Class, activate),
 						NULL, NULL,
-						pw3270_VOID__VOID,
+						v3270_VOID__VOID,
 						G_TYPE_NONE, 0);
 
 	v3270_widget_signal[SIGNAL_TOGGLE_CHANGED] =
@@ -413,7 +413,7 @@ static void v3270_class_init(v3270Class *klass)
 						G_SIGNAL_RUN_FIRST,
 						G_STRUCT_OFFSET (v3270Class, toggle_changed),
 						NULL, NULL,
-						pw3270_VOID__VOID_ENUM_BOOL_POINTER,
+						v3270_VOID__VOID_ENUM_BOOL_POINTER,
 						G_TYPE_NONE, 3, G_TYPE_UINT, G_TYPE_BOOLEAN, G_TYPE_STRING);
 
 	v3270_widget_signal[SIGNAL_MESSAGE_CHANGED] =
@@ -422,7 +422,7 @@ static void v3270_class_init(v3270Class *klass)
 						G_SIGNAL_RUN_FIRST,
 						G_STRUCT_OFFSET (v3270Class, message_changed),
 						NULL, NULL,
-						pw3270_VOID__VOID_ENUM,
+						v3270_VOID__VOID_ENUM,
 						G_TYPE_NONE, 1, G_TYPE_UINT);
 
 	v3270_widget_signal[SIGNAL_LUNAME_CHANGED] =
@@ -431,7 +431,7 @@ static void v3270_class_init(v3270Class *klass)
 						G_SIGNAL_RUN_FIRST,
 						G_STRUCT_OFFSET (v3270Class, luname_changed),
 						NULL, NULL,
-						pw3270_VOID__VOID_POINTER,
+						v3270_VOID__VOID_POINTER,
 						G_TYPE_NONE, 1, G_TYPE_STRING);
 
 	v3270_widget_signal[SIGNAL_KEYPRESS] =
@@ -440,7 +440,7 @@ static void v3270_class_init(v3270Class *klass)
 						G_SIGNAL_RUN_LAST,
 						G_STRUCT_OFFSET (v3270Class, keypress),
 						NULL, NULL,
-						pw3270_BOOL__VOID_UINT_ENUM,
+						v3270_BOOL__VOID_UINT_ENUM,
 						G_TYPE_BOOLEAN, 2, G_TYPE_UINT, G_TYPE_UINT);
 
 	v3270_widget_signal[SIGNAL_CONNECTED] =
@@ -449,7 +449,7 @@ static void v3270_class_init(v3270Class *klass)
 						G_SIGNAL_RUN_FIRST,
 						0,
 						NULL, NULL,
-						pw3270_VOID__POINTER,
+						v3270_VOID__POINTER,
 						G_TYPE_NONE, 1, G_TYPE_STRING);
 
 	v3270_widget_signal[SIGNAL_DISCONNECTED] =
@@ -458,7 +458,7 @@ static void v3270_class_init(v3270Class *klass)
 						G_SIGNAL_RUN_FIRST,
 						0,
 						NULL, NULL,
-						pw3270_VOID__VOID,
+						v3270_VOID__VOID,
 						G_TYPE_NONE, 0);
 
 	v3270_widget_signal[SIGNAL_UPDATE_CONFIG] =
@@ -467,7 +467,7 @@ static void v3270_class_init(v3270Class *klass)
 						G_SIGNAL_RUN_FIRST,
 						0,
 						NULL, NULL,
-						pw3270_VOID__VOID_POINTER_POINTER,
+						v3270_VOID__VOID_POINTER_POINTER,
 						G_TYPE_NONE, 2, G_TYPE_STRING, G_TYPE_STRING);
 
 	v3270_widget_signal[SIGNAL_MODEL_CHANGED] =
@@ -476,7 +476,7 @@ static void v3270_class_init(v3270Class *klass)
 						G_SIGNAL_RUN_FIRST,
 						0,
 						NULL, NULL,
-						pw3270_VOID__VOID_UINT_POINTER,
+						v3270_VOID__VOID_UINT_POINTER,
 						G_TYPE_NONE, 2, G_TYPE_UINT, G_TYPE_STRING);
 
 	v3270_widget_signal[SIGNAL_SELECTING] =
@@ -485,7 +485,7 @@ static void v3270_class_init(v3270Class *klass)
 						G_SIGNAL_RUN_FIRST,
 						0,
 						NULL, NULL,
-						pw3270_VOID__VOID_BOOL,
+						v3270_VOID__VOID_BOOL,
 						G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 
 	v3270_widget_signal[SIGNAL_POPUP] =
@@ -494,7 +494,7 @@ static void v3270_class_init(v3270Class *klass)
 						G_SIGNAL_RUN_LAST,
 						0,
 						NULL, NULL,
-						pw3270_BOOL__VOID_BOOL_BOOL_POINTER,
+						v3270_BOOL__VOID_BOOL_BOOL_POINTER,
 						G_TYPE_BOOLEAN, 3, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN, G_TYPE_POINTER);
 
 	v3270_widget_signal[SIGNAL_PASTENEXT] =
@@ -503,7 +503,7 @@ static void v3270_class_init(v3270Class *klass)
 						G_SIGNAL_RUN_FIRST,
 						0,
 						NULL, NULL,
-						pw3270_VOID__VOID_BOOL,
+						v3270_VOID__VOID_BOOL,
 						G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 
 	v3270_widget_signal[SIGNAL_CLIPBOARD] =
@@ -512,7 +512,7 @@ static void v3270_class_init(v3270Class *klass)
 						G_SIGNAL_RUN_FIRST,
 						0,
 						NULL, NULL,
-						pw3270_VOID__VOID_BOOL,
+						v3270_VOID__VOID_BOOL,
 						G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 
 	v3270_widget_signal[SIGNAL_CHANGED] =
@@ -521,7 +521,7 @@ static void v3270_class_init(v3270Class *klass)
 						G_SIGNAL_RUN_FIRST,
 						0,
 						NULL, NULL,
-						pw3270_VOID__VOID_UINT_UINT,
+						v3270_VOID__VOID_UINT_UINT,
 						G_TYPE_NONE, 2, G_TYPE_UINT, G_TYPE_UINT);
 
 	v3270_widget_signal[SIGNAL_MESSAGE] =
@@ -530,7 +530,7 @@ static void v3270_class_init(v3270Class *klass)
 						G_SIGNAL_RUN_FIRST,
 						G_STRUCT_OFFSET (v3270Class, popup_message),
 						NULL, NULL,
-						pw3270_VOID__VOID_UINT_POINTER_POINTER_POINTER,
+						v3270_VOID__VOID_UINT_POINTER_POINTER_POINTER,
 						G_TYPE_NONE, 4, G_TYPE_UINT, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
 
 	v3270_widget_signal[SIGNAL_FIELD] =
@@ -539,7 +539,7 @@ static void v3270_class_init(v3270Class *klass)
 						G_SIGNAL_RUN_LAST,
 						0,
 						NULL, NULL,
-						pw3270_BOOL__VOID_BOOL_UINT_POINTER,
+						v3270_BOOL__VOID_BOOL_UINT_POINTER,
 						G_TYPE_BOOLEAN, 3, G_TYPE_BOOLEAN, G_TYPE_UINT, G_TYPE_POINTER);
 
 
@@ -549,7 +549,7 @@ static void v3270_class_init(v3270Class *klass)
 						G_SIGNAL_RUN_FIRST,
 						0,
 						NULL, NULL,
-						pw3270_VOID__VOID,
+						v3270_VOID__VOID,
 						G_TYPE_NONE, 0);
 
 }
