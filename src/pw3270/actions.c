@@ -90,6 +90,7 @@ static void connect_action(GtkAction *action, GtkWidget *widget)
 	if(host)
 	{
 		v3270_connect(widget,host);
+		return;
 	}
 	else
 	{
