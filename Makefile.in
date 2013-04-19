@@ -223,7 +223,7 @@ ifneq ($(MAKENSIS),no)
 	@echo "  GEN  GTK Runtime"
 	@./makegtkruntime.sh
 	@echo "  GEN  Windows installer"
-	@"$(MAKENSIS)" $(PACKAGE_NAME).nsi
+	@"$(MAKENSIS)" pw3270.nsi
 endif
 
 $(PACKAGE_NAME).po: $(TMPDIR)/$(PACKAGE_NAME).pot
