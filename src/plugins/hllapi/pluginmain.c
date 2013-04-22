@@ -31,7 +31,9 @@
  *
  */
 
- #include "server.h" #include <pw3270/plugin.h>
+ #include "server.h"
+ #include <pw3270/plugin.h>
+ #include <pw3270/v3270.h>
  #include <pw3270/ipcpackets.h>
  #include <lib3270/actions.h>
 
@@ -274,9 +276,12 @@
 	case HLLAPI_PACKET_GET_CSTATE:
 		send_result(source,lib3270_get_connection_state(lib3270_get_default_session_handle()));
 		break;
-	case HLLAPI_PACKET_SET_TOGGLE:
+
+	case HLLAPI_PACKET_SET_TOGGLE:
 		send_result(source,lib3270_set_toggle(lib3270_get_default_session_handle(),
-												((struct hllapi_packet_set *) source->buffer)->id,												((struct hllapi_packet_set *) source->buffer)->value));		break;
+												((struct hllapi_packet_set *) source->buffer)->id,
+												((struct hllapi_packet_set *) source->buffer)->value));
+		break;
 	default:
 		send_result(source, EINVAL);
 		g_message("Invalid remote request (id=%d)",source->buffer[0]);
@@ -511,5 +516,6 @@
 
  G_GNUC_INTERNAL void set_active(gboolean on)
  {
+ 	trace("%s(%s)",__FUNCTION__,on ? "Active" : "Inactive");
 	v3270_set_script(v3270_get_default_widget(),'H',on);
  }

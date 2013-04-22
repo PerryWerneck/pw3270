@@ -128,7 +128,7 @@ case "$host" in
 		SOCKET_LIBS="-lws2_32"
 		CFLAGS="$CFLAGS -mms-bitfields"
 		localedir="locale"
-		DLL_FLAGS="-shared -Wl,--add-stdcall-alias"
+		DLL_FLAGS="-shared -Wl,--add-stdcall-alias,--enable-stdcall-fixup"
 		LDSOFLAGS="-Wl,-soname,\`basename \$@\`"
 		LDAPPFLAGS="-mwindows"
 		LDLIBFLAGS="-Wl,--output-def,\$@.def"
@@ -138,6 +138,7 @@ case "$host" in
 		LDARCH=""
 		PLUGINS="hllapi"
 		APP_GUI_SRC="resources.rc"
+		DLLPREFIX=""
 		;;
 
 	*-apple-*)

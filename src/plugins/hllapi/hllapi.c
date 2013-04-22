@@ -203,6 +203,8 @@ static int input_string(char *input, unsigned short *length, unsigned short *rc)
 
 	*rc = 0;
 
+	trace("input[%s]",text);
+
 	if(strchr(text,control_char))
 	{
 		// Convert control char
@@ -213,6 +215,7 @@ static int input_string(char *input, unsigned short *length, unsigned short *rc)
 		{
 			*(ptr++) = 0;
 
+			trace("input[%s]",buffer);
 			hllapi_emulate_input(buffer,-1,0);
 
 			switch(*(ptr++))
@@ -282,7 +285,8 @@ static int input_string(char *input, unsigned short *length, unsigned short *rc)
 
 		}
 
-		hllapi_emulate_input(buffer,-1,0);
+		if(*buffer)
+			hllapi_emulate_input(buffer,-1,0);
 
 	}
 	else

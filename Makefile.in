@@ -147,11 +147,11 @@ Release: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) $(foreach PLUGIN, $(PLUGI
 			$(foreach EXT, $(EXTENSIONS), $(EXT)) \
 			locale pixmaps filelist
 
-$(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT): src/pw3270/* $(BINDIR)/Release@DLLDIR@/@DLLPREFIX@3270@DLLEXT@ $(DEPENDS)
+$(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT): src/pw3270/* $(BINDIR)/Release@DLLDIR@/lib3270@DLLEXT@ $(DEPENDS)
 	@$(MAKE) BINDIR="../../$(BINDIR)" LIB3270_LIBS="$(RLSLIB)" LIB3270_CFLAGS="-I../../src/include" -C src/pw3270 ../../$(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
 
-$(BINDIR)/Release@DLLDIR@/@DLLPREFIX@3270@DLLEXT@: src/lib3270/* src/include/lib3270/* src/include/* Makefile
-	@$(MAKE) BINRLS=../../.bin/Release@DLLDIR@ -C src/lib3270 ../../.bin/Release@DLLDIR@/@DLLPREFIX@3270@DLLEXT@
+$(BINDIR)/Release@DLLDIR@/lib3270@DLLEXT@: src/lib3270/* src/include/lib3270/* src/include/* Makefile
+	@$(MAKE) BINRLS=../../.bin/Release@DLLDIR@ -C src/lib3270 ../../.bin/Release@DLLDIR@/lib3270@DLLEXT@
 
 oxt: $(BINDIR)/$(PACKAGE_TARNAME).oxt
 
@@ -182,11 +182,11 @@ debian/lib3270-dev.install: Makefile
 Debug: $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT) \
 		$(foreach PLUGIN, $(PLUGINS), $(BINDIR)/Debug/plugins/$(PLUGIN)@DLLEXT@)
 
-$(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT): src/pw3270/* $(BINDIR)/Debug@DLLDIR@/@DLLPREFIX@3270@DLLEXT@ $(DEPENDS)
+$(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT): src/pw3270/* $(BINDIR)/Debug@DLLDIR@/lib3270@DLLEXT@ $(DEPENDS)
 	@$(MAKE) BINDIR="../../$(BINDIR)" LIB3270_LIBS="$(DBGLIB)" LIB3270_CFLAGS="-I../../src/include" -C src/pw3270 ../../$(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
 
-$(BINDIR)/Debug@DLLDIR@/@DLLPREFIX@3270@DLLEXT@: src/lib3270/* src/include/lib3270/* src/include/* Makefile
-	@$(MAKE) BINDBG=../../.bin/Debug@DLLDIR@ -C src/lib3270 ../../.bin/Debug@DLLDIR@/@DLLPREFIX@3270@DLLEXT@
+$(BINDIR)/Debug@DLLDIR@/lib3270@DLLEXT@: src/lib3270/* src/include/lib3270/* src/include/* Makefile
+	@$(MAKE) BINDBG=../../.bin/Debug@DLLDIR@ -C src/lib3270 ../../.bin/Debug@DLLDIR@/lib3270@DLLEXT@
 
 run: $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT) $(PACKAGE_NAME).png $(PACKAGE_NAME)-logo.png \
 		$(foreach PLUGIN, $(PLUGINS), $(BINDIR)/Debug/plugins/$(PLUGIN)@DLLEXT@)
@@ -289,7 +289,7 @@ install-plugins: $(foreach PLUGIN, $(PLUGINS), $(BINDIR)/Release/plugins/$(PLUGI
 	@$(MKDIR) $(DESTDIR)$(libdir)/$(PACKAGE_NAME)-plugins
 	@echo -e $(foreach PLUGIN, $(PLUGINS), $(MAKE) DESTDIR=$(DESTDIR) $(PLUGIN_RELEASE_ARGS) -C src/plugins/$(PLUGIN) install\\n ) | $(SHELL)
 
-install-lib: $(BINDIR)/Release@DLLDIR@/@DLLPREFIX@3270@DLLEXT@
+install-lib: $(BINDIR)/Release@DLLDIR@/lib3270@DLLEXT@
 	@$(MAKE) BINRLS="../../.bin/Release@DLLDIR@" -C src/lib3270 install
 
 locale: $(foreach MO, $(basename $(LANG_FILES)), $(BINDIR)/Release/$(localedir)/$(notdir $(MO))/LC_MESSAGES/$(PACKAGE_NAME).mo)

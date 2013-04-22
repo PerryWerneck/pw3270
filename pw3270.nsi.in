@@ -61,7 +61,7 @@ SubSection "@PACKAGE@" SecMain
 		file "/oname=$INSTDIR\@PACKAGE@.exe"	".bin\Release\@PACKAGE@.exe"
 		file "/oname=$INSTDIR\@PACKAGE@.ico"	"src\pw3270\@PACKAGE@.ico"
 		file "/oname=$INSTDIR\lib3270.dll.@PACKAGE_VERSION@"	".bin\Release\lib3270.dll.@PACKAGE_VERSION@"
-		file "/oname=$INSTDIR\libpw3270.dll.@PACKAGE_VERSION@"	".bin\Release\libpw3270.dll.@PACKAGE_VERSION@"
+		file "/oname=$INSTDIR\pw3270.dll.@PACKAGE_VERSION@"		".bin\Release\pw3270.dll.@PACKAGE_VERSION@"
 
 		# Configuration files
 		file "/oname=$INSTDIR\@PACKAGE@-logo.png"	"src\pw3270\@PACKAGE@-logo.png"

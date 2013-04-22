@@ -234,18 +234,18 @@ dynamic::dynamic()
 #ifdef WIN32
 		static const char *dllname = "lib3270.dll." PACKAGE_VERSION;
 
-		int 		f;
 		HMODULE		kernel;
 		HANDLE		cookie		= NULL;
 		DWORD		rc;
-		HANDLE 		(*AddDllDirectory)(PCWSTR NewDirectory);
-		BOOL 	 	(*RemoveDllDirectory)(HANDLE Cookie);
+		HANDLE 		WINAPI (*AddDllDirectory)(PCWSTR NewDirectory);
+		BOOL 	 	WINAPI (*RemoveDllDirectory)(HANDLE Cookie);
 		UINT 		errorMode;
 		char		datadir[4096];
+		char		buffer[4096];
 
 		kernel 				= LoadLibrary("kernel32.dll");
-		AddDllDirectory		= (HANDLE (*)(PCWSTR)) GetProcAddress(kernel,"AddDllDirectory");
-		RemoveDllDirectory	= (BOOL (*)(HANDLE)) GetProcAddress(kernel,"RemoveDllDirectory");
+		AddDllDirectory		= (HANDLE WINAPI (*)(PCWSTR)) GetProcAddress(kernel,"AddDllDirectory");
+		RemoveDllDirectory	= (BOOL WINAPI (*)(HANDLE)) GetProcAddress(kernel,"RemoveDllDirectory");
 
 		// Notify user in case of error loading protocol DLL
 		// http://msdn.microsoft.com/en-us/library/windows/desktop/ms680621(v=vs.85).aspx
@@ -256,13 +256,15 @@ dynamic::dynamic()
 
 		if(get_datadir(datadir))
 		{
-			char	buffer[4096];
-			wchar_t	path[4096];
-
-			mbstowcs(path, datadir, 4095);
 			trace("Datadir=[%s] AddDllDirectory=%p RemoveDllDirectory=%p\n",datadir,AddDllDirectory,RemoveDllDirectory);
+
 			if(AddDllDirectory)
+			{
+				wchar_t	*path = (wchar_t *) malloc(4096*sizeof(wchar_t));
+				mbstowcs(path, datadir, 4095);
 				cookie = AddDllDirectory(path);
+				free(path);
+			}
 
 #ifdef DEBUG
 			snprintf(buffer,4096,"%s\\.bin\\Debug\\%s",datadir,dllname);
@@ -270,9 +272,10 @@ dynamic::dynamic()
 			snprintf(buffer,4096,"%s\\%s",datadir,dllname);
 #endif // DEBUG
 
+			trace("Loading [%s] [%s]",buffer,datadir);
 			hModule = LoadLibrary(buffer);
 
-			trace("%s hModule=%p rc=%d",buffer,hModule,(int) GetLastError());
+			trace("Module=%p rc=%d",hModule,(int) GetLastError());
 
 			if(hModule == NULL)
 			{

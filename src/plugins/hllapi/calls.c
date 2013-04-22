@@ -473,8 +473,10 @@
 
 	if(!(emulate_input && hSession))
 		return HLLAPI_STATUS_DISCONNECTED;
-	trace("%s",__FUNCTION__);
-	emulate_input(hSession, buffer, len, pasting);
+	trace("%s(%s)",__FUNCTION__,(char *) buffer);
+
+	if(buffer && *buffer)
+		emulate_input(hSession, buffer, len, pasting);
 
 	return HLLAPI_STATUS_SUCCESS;
  }
