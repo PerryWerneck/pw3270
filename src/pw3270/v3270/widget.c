@@ -1514,3 +1514,21 @@ gboolean v3270_is_connected(GtkWidget *widget)
 	return lib3270_connected(GTK_V3270(widget)->host) ? TRUE : FALSE;
 }
 
+GtkWidget * v3270_get_default_widget(void)
+{
+	H3270 * hSession = lib3270_get_default_session_handle();
+
+	if(!hSession)
+	{
+		g_warning("No default session available on %s",__FUNCTION__);
+		return NULL;
+	}
+
+	if(!(hSession->widget && GTK_IS_V3270(hSession->widget)))
+	{
+		g_warning("No widget on default session on %s",__FUNCTION__);
+		return NULL;
+	}
+
+	return GTK_WIDGET(hSession->widget);
+}

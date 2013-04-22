@@ -58,7 +58,6 @@
 
  } QUERY;
 
- G_GNUC_INTERNAL void set_active(gboolean on);
  G_GNUC_INTERNAL void enqueue_request(QUERY *qry);
  G_GNUC_INTERNAL void request_complete(QUERY *qry, int rc, const gchar *text);
 

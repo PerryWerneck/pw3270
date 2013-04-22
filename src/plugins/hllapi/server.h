@@ -44,8 +44,6 @@
 
  #define PIPE_BUFFER_LENGTH HLLAPI_MAXLENGTH+30
 
- #define set_active(x) /* x */
-
-
  G_GNUC_INTERNAL void popup_lasterror(const gchar *fmt, ...);
+ G_GNUC_INTERNAL void set_active(gboolean on);
 

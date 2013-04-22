@@ -314,7 +314,9 @@
 			threadContext->ArrayPut(rxArgs, threadContext->String(""),1);
 		}
 
+		v3270_set_script(widget,'R',TRUE);
 		RexxObjectPtr result = threadContext->CallProgram(filename, rxArgs);
+		v3270_set_script(widget,'R',FALSE);
 
 		if (threadContext->CheckCondition())
 		{
@@ -421,6 +423,7 @@ extern "C"
 			call_rexx_script(action,widget,filename);
 			g_free(filename);
 		}
+
 
 	}
 

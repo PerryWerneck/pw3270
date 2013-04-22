@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-19 09:39-0300\n"
-"PO-Revision-Date: 2013-04-01 10:06-0300\n"
+"POT-Creation-Date: 2013-04-22 09:22-0300\n"
+"PO-Revision-Date: 2013-04-22 09:32-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
 "Language: pt_BR\n"
@@ -18,22 +18,22 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: actions.c:741 actions.c:753
+#: actions.c:742 actions.c:754
 #, c-format
 msgid "%s action needs a valid id attribute"
 msgstr "Ação %s exige um atributo ID válido"
 
-#: actions.c:589 actions.c:718 actions.c:730
+#: actions.c:590 actions.c:719 actions.c:731
 #, c-format
 msgid "%s action needs a valid toggle name"
 msgstr "Ação %s exige um nome de toggle válido"
 
-#: actions.c:765
+#: actions.c:766
 #, c-format
 msgid "%s action needs a valid value"
 msgstr "Ação %s precisa de um valor válido"
 
-#: actions.c:475
+#: actions.c:476
 #, c-format
 msgid "%s action needs src attribute"
 msgstr "Ação %s precisa do atributo src"
@@ -225,7 +225,7 @@ msgstr "Nome da aplicação"
 msgid "Attn"
 msgstr "Attn"
 
-#: actions.c:450
+#: actions.c:451
 #, c-format
 msgid "Attribute \"%s\" is invalid or undefined"
 msgstr "Atributo \"%s\" é invalido ou indefinido"
@@ -672,7 +672,7 @@ msgstr "Trace de eventos"
 
 #: ui/rexx.xml:260
 msgid "External Rexx script"
-msgstr "External Rexx script"
+msgstr "Script rexx externo"
 
 #: charset.c:315
 msgid "Extra CGCSGID(s), ignoring"
@@ -881,7 +881,7 @@ msgstr "Manter selecionado"
 
 #: v3270/security.c:257
 msgid "Key usage does not include certificate signing"
-msgstr "Key usage does not include certificate signing"
+msgstr "Uso da chave não permite assinatura de certificados"
 
 #: paste.c:302
 msgid "Keyboard is locked"
@@ -916,7 +916,7 @@ msgstr "Só Maiúsculas"
 msgid "Monochrome"
 msgstr "Monocromático"
 
-#: actions.c:606
+#: actions.c:607
 msgid "Move action needs target & direction attributes"
 msgstr "Ação \"move\" precisa dos atributos \"target\" e \"direction\""
 
@@ -1677,11 +1677,11 @@ msgstr "Texto antes de '['"
 
 #: v3270/security.c:125
 msgid "The CRL has expired."
-msgstr "The CRL has expired."
+msgstr "A lista de certificados revogados expirou."
 
 #: v3270/security.c:118
 msgid "The CRL is not yet valid."
-msgstr "The CRL is not yet valid."
+msgstr "A lista de certificados revogados ainda não é válida."
 
 #: v3270/security.c:146
 msgid "The CRL lastUpdate field contains an invalid time."
@@ -1956,7 +1956,8 @@ msgstr "Não é possível decodificar chave pública do emissor"
 
 #: v3270/security.c:75
 msgid "Unable to decrypt CRL's signature"
-msgstr "Unable to decrypt CRL's signature"
+msgstr ""
+"Na foi possível decriptar assinatura da lista de certificados revogados"
 
 #: v3270/security.c:68
 msgid "Unable to decrypt certificate's signature"
@@ -1968,7 +1969,7 @@ msgstr "Unable to get certificate CRL"
 
 #: v3270/security.c:54
 msgid "Unable to get issuer certificate"
-msgstr "Unable to get issuer certificate"
+msgstr "Não foi possível obter emissor do certificado"
 
 #: v3270/security.c:180
 msgid "Unable to get local issuer certificate"
@@ -1984,7 +1985,7 @@ msgstr "Não foi possível enviar a requisição de transferência de arquivo"
 
 #: v3270/security.c:187
 msgid "Unable to verify the first certificate"
-msgstr "Unable to verify the first certificate"
+msgstr "Não foi possível verificar o primeiro certificado"
 
 #: filetransfer.c:774
 msgid "Undefined"
@@ -2018,12 +2019,12 @@ msgstr "Erro inesperado"
 msgid "Unexpected group \"%s\""
 msgstr "Grupo inesperado \"%s\""
 
-#: actions.c:464 actions.c:484
+#: actions.c:465 actions.c:485
 #, c-format
 msgid "Unexpected or invalid %s attribute: \"%s\""
 msgstr "Atributo %s inesperado ou inválido: \"%s\""
 
-#: actions.c:438
+#: actions.c:439
 #, c-format
 msgid "Unexpected or invalid attribute value \"%s\""
 msgstr "Valor de attributo inesperado ou inválido: \"%s\""
@@ -2044,7 +2045,7 @@ msgstr ""
 "Assinatura inválida no objeto H3270, possível divergência de versão na "
 "lib3270"
 
-#: actions.c:364
+#: actions.c:365
 #, c-format
 msgid "Unexpected target \"%s\""
 msgstr "Alvo inesperado \"%s\""
