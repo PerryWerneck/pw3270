@@ -169,6 +169,7 @@ Section /o "Software Development Kit" SecSDK
 	file "/oname=$INSTDIR\sdk\sample\connect.c" "src\sample\connect.c"
 
 	file "/oname=$INSTDIR\sdk\lib3270.def" 		".bin\Release\lib3270.dll.@PACKAGE_VERSION@.def"
+	file "/oname=$INSTDIR\sdk\pw3270.def" 		".bin\Release\pw3270.dll.@PACKAGE_VERSION@.def"
 	file "/oname=$INSTDIR\sdk\libhllapi.def"	".bin\Release\libhllapi.dll.def"
 
 SectionEnd
