@@ -40,19 +40,11 @@
 	#include <malloc.h>
 #endif // HAVE_MALLOC_H
 
-//#include "appres.h"
-//#include "actionsc.h"
 #include "ft_cutc.h"
 #include "ft_dftc.h"
 #include "ftc.h"
 #include "hostc.h"
-/*
-#if defined(C3270) || defined(WC3270)
-#include "icmdc.h"
-#endif
-*/
 #include "kybdc.h"
-// #include "objects.h"
 #include "popupsc.h"
 #include "screenc.h"
 #include "tablesc.h"
@@ -77,22 +69,6 @@ static void ft_in3270(H3270 *session, int ignored unused, void *unused);
 
 #define BN	(Boolean *)NULL
 
-// Globals.
-// H3270FT *ftsession = NULL;
-
-// enum ft_state ft_state = FT_NONE;		// File transfer state
-// char *ft_local_filename;				// Local file to transfer to/from
-// Boolean ft_last_cr = 0;				// CR was last char in local file
-// Boolean ascii_flag = True;				// Convert to ascii
-// Boolean cr_flag = True;					// Add crlf to each line
-// Boolean remap_flag = True;				// Remap ASCII<->EBCDIC
-// unsigned long ft_length = 0;			// Length of transfer
-// static Boolean ft_is_cut;				// File transfer is CUT-style
-
-// static struct timeval starting_time;	// Starting time
-
-// static const struct filetransfer_callbacks	*callbacks = NULL;		// Callbacks to main application
-
 #define snconcat(x,s,fmt,...) snprintf(x+strlen(x),s-strlen(x),fmt,__VA_ARGS__)
 
 static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
@@ -104,7 +80,7 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
  {
  	if(!hSession->ft)
 	{
-		popup_an_error(hSession,"Unexpected call to %s: No active filetransfer",__FUNCTION__);
+		popup_an_error(hSession,_( "Unexpected call to %s: No active filetransfer" ),__FUNCTION__);
 	}
  	return hSession->ft;
  }
@@ -200,15 +176,6 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 		errno = EBUSY;
 		return NULL;
 	}
-
-/*
-	if(ftsession)
-	{
-		*msg  = N_( "File transfer is already active" );
-		errno = EBUSY;
-		return NULL;
-	}
-*/
 
 	// Check remote file
 	if(!*remote)
@@ -461,9 +428,6 @@ LIB3270_EXPORT int lib3270_ft_destroy(H3270 *hSession)
 		fclose(session->local_file);
 		session->local_file = NULL;
 	}
-
-//	if(session == ftsession)
-//		ftsession = NULL;
 
 	hSession->ft = NULL;
 

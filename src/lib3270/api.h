@@ -199,12 +199,6 @@
 //		LOCAL_EXTERN int  set_device_buffer(struct ea *src, int el);
 
 		/* File transfer */
-		//#define LIB3270_FT_OPTION_RECEIVE					0x0001
-		// #define LIB3270_FT_OPTION_ASCII					0x0002
-		// #define LIB3270_FT_OPTION_CRLF					0x0004
-		// #define LIB3270_FT_OPTION_APPEND					0x0008
-		// #define LIB3270_FT_OPTION_TSO						0x0010
-		// #define LIB3270_FT_OPTION_REMAP_ASCII				0x0020
 
 		#define FT_RECORD_FORMAT_FIXED			LIB3270_FT_RECORD_FORMAT_FIXED
 		#define FT_RECORD_FORMAT_VARIABLE		LIB3270_FT_RECORD_FORMAT_VARIABLE

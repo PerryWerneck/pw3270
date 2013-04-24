@@ -109,14 +109,7 @@ static const struct
 };
 static const char table6[] = "abcdefghijklmnopqrstuvwxyz&-.,:+ABCDEFGHIJKLMNOPQRSTUVWXYZ012345";
 
-// static int quadrant = -1;
-// static unsigned long expanded_length;
-// static char *saved_errmsg = CN;
-
 #define XLATE_NBUF	LIB3270_XLATE_NBUF
-// static int xlate_buffered = 0;			/* buffer count */
-// static int xlate_buf_ix = 0;			/* buffer index */
-// static unsigned char xlate_buf[XLATE_NBUF];	/* buffer */
 
 static void cut_control_code(H3270 *hSession);
 static void cut_data_request(H3270 *hSession);
