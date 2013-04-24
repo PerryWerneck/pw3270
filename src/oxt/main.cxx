@@ -285,3 +285,12 @@ void pw3270::session::log(const char *fmt, const char *msg)
 #endif // HAVE_SYSLOG
 }
 
+::sal_Int16 SAL_CALL pw3270::uno_impl::setSession( const ::rtl::OUString& name ) throw (::com::sun::star::uno::RuntimeException)
+{
+	OString str = rtl::OUStringToOString( name , hSession->get_encoding() );
+
+	delete this->hSession;
+	this->hSession = new ipc3270_session(str.getStr());
+
+	return 0;
+}

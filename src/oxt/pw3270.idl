@@ -74,6 +74,7 @@ module br
 				short	pakey([in] short keycode);
 
 				/* Misc */
+				short	setSession([in] string name);
 				short	getRevision();
 				string	getVersion();
 				short	log([in] string msg);

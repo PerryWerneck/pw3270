@@ -42,6 +42,7 @@
 		<Unit filename="main.cxx" />
 		<Unit filename="manifest.xml.in" />
 		<Unit filename="pw3270.idl" />
+		<Unit filename="remote.cxx" />
 		<Unit filename="set.cxx" />
 		<Unit filename="testprogram.cxx" />
 		<Extensions>

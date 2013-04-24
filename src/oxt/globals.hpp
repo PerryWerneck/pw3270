@@ -128,6 +128,31 @@
 
 		};
 
+		class ipc3270_session : public session
+		{
+			public:
+				ipc3270_session(const char *name);
+				virtual ~ipc3270_session();
+				virtual int					get_revision(void);
+				virtual LIB3270_MESSAGE 	get_state(void);
+				virtual char			 *  get_text_at(int row, int col, int len);
+				virtual int					set_text_at(int row, int col, const char *text);
+				virtual int					cmp_text_at(int row, int col, const char *text);
+				virtual void			    set_toggle(LIB3270_TOGGLE toggle, bool state);
+
+				virtual int					connect(const char *uri);
+				virtual int					disconnect(void);
+				virtual bool				connected(void);
+
+				virtual int					enter(void);
+				virtual int					pfkey(int key);
+				virtual int					pakey(int key);
+				virtual bool 				in_tn3270e();
+				virtual void				mem_free(void *);
+
+		};
+
+
 		class uno_impl : public ::cppu::WeakImplHelper3< br::com::bb::pw3270intf, com::sun::star::lang::XServiceInfo, com::sun::star::lang::XInitialization >
 		{
 			public:
@@ -163,6 +188,7 @@
 				virtual ::sal_Int16 SAL_CALL waitForReady( ::sal_Int16 seconds ) throw (::com::sun::star::uno::RuntimeException);
 				virtual ::sal_Int16 SAL_CALL dsTrace( ::sal_Bool state ) throw (::com::sun::star::uno::RuntimeException);
 				virtual ::sal_Int16 SAL_CALL screenTrace( ::sal_Bool state ) throw (::com::sun::star::uno::RuntimeException);
+				virtual ::sal_Int16 SAL_CALL setSession( const ::rtl::OUString& name ) throw (::com::sun::star::uno::RuntimeException);
 
 			private:
 

@@ -1,7 +1,7 @@
 
 PACKAGE=@PACKAGE_NAME@
 
-SOURCES=main.cxx local.cxx connection.cxx get.cxx set.cxx actions.cxx
+SOURCES=main.cxx local.cxx connection.cxx get.cxx set.cxx actions.cxx remote.cxx
 
 prefix=/usr
 exec_prefix=@exec_prefix@
