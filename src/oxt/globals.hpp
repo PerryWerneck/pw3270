@@ -13,6 +13,11 @@
 	#include <stdio.h>
 	#include <lib3270.h>
 
+#if defined(HAVE_DBUS)
+	#include <stdio.h>
+	#include <dbus/dbus.h>
+#endif // HAVE_DBUS
+
 	#include <rtl/uuid.h>
 	#include <osl/thread.hxx>
 
@@ -149,6 +154,21 @@
 				virtual int					pakey(int key);
 				virtual bool 				in_tn3270e();
 				virtual void				mem_free(void *);
+
+			private:
+
+#if defined(HAVE_DBUS)
+
+				DBusConnection	* conn;
+				char			* dest;
+				char			* path;
+				char			* intf;
+				DBusMessage		* create_message(const char *method);
+				DBusMessage		* call(DBusMessage *msg);
+				char 			* query_string(const char *method);
+				int 			  query_intval(const char *method);
+
+#endif // HAVE_DBUS
 
 		};
 

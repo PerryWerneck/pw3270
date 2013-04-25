@@ -63,9 +63,13 @@ LIB3270_CFLAGS ?= `pkg-config --cflags lib3270`
 DLL_CFLAGS=@DLL_CFLAGS@
 DLL_FLAGS=-shared
 
-CXXFLAGS=-Wno-strict-aliasing -I$(OBJDIR)/uno/include -I$(OO_SDK_HOME)/include -I$(OBJDIR)/uno/include/br/com/bb $(LIB3270_CFLAGS)
-LDFLAGS=-L${OO_SDK_HOME}/lib -L${OO_SDK_URE_HOME}/lib -Wl,-rpath-link=${OO_SDK_URE_HOME}/lib,-rpath=${OO_SDK_URE_HOME}/lib \
-		$(CPPULIB) $(CPPUHELPERLIB) $(SALLIB)
+CXXFLAGS=-Wno-strict-aliasing -I$(OBJDIR)/uno/include -I$(OO_SDK_HOME)/include \
+					-I$(OBJDIR)/uno/include/br/com/bb $(LIB3270_CFLAGS) \
+					@DBUS_CFLAGS@
+
+LDFLAGS=-L${OO_SDK_HOME}/lib -L${OO_SDK_URE_HOME}/lib \
+		-Wl,-rpath-link=${OO_SDK_URE_HOME}/lib,-rpath=${OO_SDK_URE_HOME}/lib \
+		$(CPPULIB) $(CPPUHELPERLIB) $(SALLIB) @DBUS_LIBS@
 
 # CC_DEFINES=-DUNX -DGCC -DLINUX -DCPPU_ENV=$(CPPU_ENV) -DGXX_INCLUDE_PATH=$(SDK_GXX_INCLUDE_PATH) -DHAVE_GCC_VISIBILITY_FEATURE
 
