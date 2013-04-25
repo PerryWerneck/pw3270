@@ -75,7 +75,7 @@
 
 	void		  pw3270_dbus_is_connected(PW3270Dbus *object, DBusGMethodInvocation *context);
 	void		  pw3270_dbus_is_ready(PW3270Dbus *object, DBusGMethodInvocation *context);
-
+	void		  pw3270_dbus_in_tn3270_e(PW3270Dbus *object, DBusGMethodInvocation *context);
 	void		  pw3270_dbus_set_cursor_at(PW3270Dbus *object, int row, int col, DBusGMethodInvocation *context);
 	void		  pw3270_dbus_set_toggle(PW3270Dbus *object, int id, int value, DBusGMethodInvocation *context);
 

@@ -272,7 +272,13 @@ pw3270::ipc3270_session::~ipc3270_session()
 int pw3270::ipc3270_session::get_revision(void)
 {
 #ifdef HAVE_DBUS
-
+	char *ptr = query_string("getRevision");
+	if(ptr)
+	{
+		int rc = atoi(ptr);
+		free(ptr);
+		return rc;
+	}
 	return -1;
 
 #else
@@ -286,7 +292,7 @@ LIB3270_MESSAGE pw3270::ipc3270_session::get_state(void)
 {
 #ifdef HAVE_DBUS
 
-	return (LIB3270_MESSAGE) -1;
+	return (LIB3270_MESSAGE) query_intval("getMessageID");
 
 #else
 
@@ -299,7 +305,18 @@ char * pw3270::ipc3270_session::get_text_at(int row, int col, int len)
 {
 #ifdef HAVE_DBUS
 
-	return NULL;
+	dbus_int32_t r = (dbus_int32_t) row;
+	dbus_int32_t c = (dbus_int32_t) col;
+	dbus_int32_t l = (dbus_int32_t) len;
+
+	DBusMessage * msg = create_message("getTextAt");
+	if(!msg)
+		return NULL;
+
+	trace("%s(%d,%d,%d)",__FUNCTION__,r,c,l);
+	dbus_message_append_args(msg, DBUS_TYPE_INT32, &r, DBUS_TYPE_INT32, &c, DBUS_TYPE_INT32, &l, DBUS_TYPE_INVALID);
+
+	return get_string(call(msg));
 
 #else
 
@@ -312,7 +329,15 @@ int pw3270::ipc3270_session::set_text_at(int row, int col, const char *text)
 {
 #ifdef HAVE_DBUS
 
-	return -1;
+	dbus_int32_t r = (dbus_int32_t) row;
+	dbus_int32_t c = (dbus_int32_t) col;
+
+	DBusMessage * msg = create_message("setTextAt");
+	if(msg)
+	{
+		dbus_message_append_args(msg, DBUS_TYPE_INT32, &r, DBUS_TYPE_INT32, &c, DBUS_TYPE_STRING, &text, DBUS_TYPE_INVALID);
+		return get_intval(call(msg));
+	}
 
 #else
 
@@ -325,7 +350,15 @@ int pw3270::ipc3270_session::cmp_text_at(int row, int col, const char *text)
 {
 #ifdef HAVE_DBUS
 
-	return -1;
+	dbus_int32_t r = (dbus_int32_t) row;
+	dbus_int32_t c = (dbus_int32_t) col;
+
+	DBusMessage * msg = create_message("cmpTextAt");
+	if(msg)
+	{
+		dbus_message_append_args(msg, DBUS_TYPE_INT32, &r, DBUS_TYPE_INT32, &c, DBUS_TYPE_STRING, &text, DBUS_TYPE_INVALID);
+		return get_intval(call(msg));
+	}
 
 #else
 
@@ -336,13 +369,33 @@ int pw3270::ipc3270_session::cmp_text_at(int row, int col, const char *text)
 
 void pw3270::ipc3270_session::set_toggle(LIB3270_TOGGLE toggle, bool state)
 {
+#ifdef HAVE_DBUS
+
+	dbus_int32_t i = (dbus_int32_t) toggle;
+	dbus_int32_t v = (dbus_int32_t) state;
+
+	DBusMessage * msg = create_message("setToggle");
+	if(msg)
+	{
+		dbus_message_append_args(msg, DBUS_TYPE_INT32, &i, DBUS_TYPE_INT32, &v, DBUS_TYPE_INVALID);
+		get_intval(call(msg));
+	}
+
+#endif // HAVE_DBUS
 }
 
 int pw3270::ipc3270_session::connect(const char *uri)
 {
 #ifdef HAVE_DBUS
 
-	return -1;
+	int rc;
+	DBusMessage * msg = create_message("connect");
+	if(!msg)
+		return -1;
+
+	dbus_message_append_args(msg, DBUS_TYPE_STRING, &uri, DBUS_TYPE_INVALID);
+
+	return get_intval(call(msg));
 
 #else
 
@@ -355,7 +408,7 @@ int pw3270::ipc3270_session::disconnect(void)
 {
 #ifdef HAVE_DBUS
 
-	return -1;
+	return query_intval("disconnect");
 
 #else
 
@@ -368,7 +421,7 @@ bool pw3270::ipc3270_session::connected(void)
 {
 #ifdef HAVE_DBUS
 
-	return false;
+	return query_intval("isConnected") > 0;
 
 #else
 
@@ -381,7 +434,7 @@ int pw3270::ipc3270_session::enter(void)
 {
 #ifdef HAVE_DBUS
 
-	return -1;
+	return query_intval("enter");
 
 #else
 
@@ -394,33 +447,45 @@ int pw3270::ipc3270_session::pfkey(int key)
 {
 #ifdef HAVE_DBUS
 
-	return -1;
+	dbus_int32_t k = (dbus_int32_t) key;
 
-#else
-
-	return -1;
+	DBusMessage * msg = create_message("pfKey");
+	if(msg)
+	{
+		dbus_message_append_args(msg, DBUS_TYPE_INT32, &k, DBUS_TYPE_INVALID);
+		return get_intval(call(msg));
+	}
 
 #endif // HAVE_DBUS
+
+	return -1;
+
 }
 
 int	pw3270::ipc3270_session::pakey(int key)
 {
 #ifdef HAVE_DBUS
 
-	return -1;
+	dbus_int32_t k = (dbus_int32_t) key;
 
-#else
-
-	return -1;
+	DBusMessage * msg = create_message("paKey");
+	if(msg)
+	{
+		dbus_message_append_args(msg, DBUS_TYPE_INT32, &k, DBUS_TYPE_INVALID);
+		return get_intval(call(msg));
+	}
 
 #endif // HAVE_DBUS
+
+	return -1;
+
 }
 
 bool pw3270::ipc3270_session::in_tn3270e()
 {
 #ifdef HAVE_DBUS
 
-	return false;
+	return query_intval("inTN3270E") > 0;
 
 #else
 
@@ -433,6 +498,7 @@ void pw3270::ipc3270_session::mem_free(void *ptr)
 {
 #ifdef HAVE_DBUS
 
+	free(ptr);
 
 #else
 

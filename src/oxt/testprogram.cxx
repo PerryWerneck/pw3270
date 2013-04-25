@@ -107,6 +107,8 @@ int SAL_CALL main(int argc, char **argv)
 			char buffer[4096];
 			OString	str;
 
+			srv->setSession(OUString::createFromAscii("pw3270:a"));
+
 			printf("Revision:\t%d\n",srv->getRevision());
 
 			srv->dsTrace(true);

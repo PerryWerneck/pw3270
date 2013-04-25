@@ -125,10 +125,20 @@
 	hThread  = NULL;
 	hSession = NULL;
 
-	trace("%s",__FUNCTION__);
-	hModule = osl_loadModuleAscii("lib3270.so",SAL_LOADMODULE_NOW);
+	hModule = osl_loadModuleAscii("lib3270.so." PACKAGE_VERSION,SAL_LOADMODULE_NOW);
+	trace("%s: hModule(lib3270.so." PACKAGE_VERSION ")=%p",__FUNCTION__,hModule);
+
 	if(!hModule)
+	{
+		hModule = osl_loadModuleAscii("lib3270.so." PACKAGE_VERSION,SAL_LOADMODULE_NOW);
+		trace("%s: hModule(lib3270.so)=%p",__FUNCTION__,hModule);
+	}
+
+	if(!hModule)
+	{
+		log("%s","Error loading lib3270");
 		return;
+	}
 
 	for(int f = 0; f < (sizeof (call) / sizeof ((call)[0]));f++)
 	{
