@@ -301,6 +301,8 @@ void pw3270::uno_impl::failed(const char *fmt, ...) throw( ::com::sun::star::uno
 	closelog();
 #endif // HAVE_SYSLOG
 
+	trace("%s: %s",__FUNCTION__,msg);
+
 	::rtl::OUString str = OUString(msg, strlen(msg), RTL_TEXTENCODING_UTF8, RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE);
 
 	free(msg);

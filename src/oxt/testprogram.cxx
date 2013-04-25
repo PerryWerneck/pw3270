@@ -107,7 +107,18 @@ int SAL_CALL main(int argc, char **argv)
 			char buffer[4096];
 			OString	str;
 
+			try
+			{
+
 			srv->setSession(OUString::createFromAscii("pw3270:a"));
+
+			}
+			catch( RuntimeException & e )
+			{
+				OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
+				fprintf( stderr, "%s\n", o.pData->buffer );
+				exit(-1);
+			}
 
 			printf("Revision:\t%d\n",srv->getRevision());
 

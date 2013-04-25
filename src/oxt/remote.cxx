@@ -224,8 +224,11 @@ pw3270::ipc3270_session::ipc3270_session(uno_impl *obj, const char *name) throw(
 
 	conn = dbus_bus_get(DBUS_BUS_SESSION, &err);
 
+	trace("conn=%p",conn);
+
 	if (dbus_error_is_set(&err))
 	{
+		trace("DBUS Connection Error (%s)", err.message);
 		obj->failed("DBUS Connection Error (%s)", err.message);
 		dbus_error_free(&err);
 		return;
@@ -253,7 +256,27 @@ pw3270::ipc3270_session::ipc3270_session(uno_impl *obj, const char *name) throw(
 		conn = NULL;
 		return;
 	}
+	else
+	{
+		DBusMessage		* reply;
+		DBusMessage		* msg		= create_message("getRevision");
+		DBusError		  error;
 
+		dbus_error_init(&error);
+		reply = dbus_connection_send_with_reply_and_block(conn,msg,10000,&error);
+		dbus_message_unref(msg);
+
+		if(reply)
+		{
+			log("%s","PW3270 DBus object found");
+			dbus_message_unref(reply);
+		}
+		else
+		{
+			obj->failed("DBUS error: %s",error.message);
+			dbus_error_free(&error);
+		}
+	}
 #else
 
 #endif // HAVE_DBUS
