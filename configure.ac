@@ -285,6 +285,9 @@ fi
 
 #--[ Check For Java ]-----------------------------------------------------------------------------------------------------------------------------------------
 
+AC_ARG_VAR([JDK_HOME], [JDK home directory])
+AC_ARG_VAR([JRE_HOME], [JRE home directory])
+
 AC_ARG_ENABLE([java],[AS_HELP_STRING([--disable-java], [Disable java integration])],[ app_cv_java="$enableval" ],[ app_cv_java="yes" ])
 
 if test "$app_cv_java" = "yes" ; then
@@ -294,24 +297,28 @@ if test "$app_cv_java" = "yes" ; then
 		app_cv_java="no"
 	fi
 
-	# Check for JRE_HOME
-	if test "_$JRE_HOME" = "_" ; then
-		JRE_HOME="\$(JAVA_HOME)/jre"
+	# Check for JDK_HOME
+	if test "_$JDK_HOME" = "_" ; then
+		JDK_HOME=$JAVA_HOME
 	fi
 
+	# Check for JRE_HOME
+	if test "_$JRE_HOME" = "_" ; then
+		JRE_HOME=$JAVA_HOME/jre
+	fi
 fi
 
 if test "$app_cv_java" = "yes" ; then
-	AC_PATH_TOOL([JAVA], [java], [no], [$JAVA_HOME/bin:$PATH])
-	AC_PATH_TOOL([JAVAC], [javac], [no], [$JAVA_HOME/bin:$PATH])
-	AC_PATH_TOOL([JAVAH], [javah], [no], [$JAVA_HOME/bin:$PATH])
-	AC_PATH_TOOL([JAR], [jar], [no], [$JAVA_HOME/bin:$PATH])
+	AC_PATH_TOOL([JAVA], [java], [no], [$JDK_HOME/bin:$JRE_HOME/bin:$PATH])
+	AC_PATH_TOOL([JAVAC], [javac], [no], [$JDK_HOME/bin:$JRE_HOME/bin:$PATH])
+	AC_PATH_TOOL([JAVAH], [javah], [no], [$JDK_HOME/bin:$JRE_HOME/bin:$PATH])
+	AC_PATH_TOOL([JAR], [jar], [no], [$JDK_HOME/bin:$JRE_HOME/bin:$PATH])
 fi
 
 AC_SUBST(JAVAC)
 AC_SUBST(JAVAH)
 AC_SUBST(JAR)
-AC_SUBST(JAVA_HOME)
+AC_SUBST(JDK_HOME)
 AC_SUBST(JRE_HOME)
 
 #--[ Headers ]------------------------------------------------------------------------------------------------------------------------------------------------
