@@ -83,10 +83,10 @@
 {
 	time_t end = time(0) + seconds;
 
-	osl_yieldThread();
-
 	while(time(0) < end)
 	{
+		osl_yieldThread();
+
 		switch(hSession->get_state())
 		{
 		case LIB3270_MESSAGE_NONE:

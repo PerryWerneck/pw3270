@@ -110,7 +110,7 @@ int SAL_CALL main(int argc, char **argv)
 			try
 			{
 
-			srv->setSession(OUString::createFromAscii("pw3270:a"));
+				srv->setSession(OUString::createFromAscii("pw3270:a"));
 
 			}
 			catch( RuntimeException & e )

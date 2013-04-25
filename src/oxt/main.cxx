@@ -313,10 +313,18 @@ void pw3270::uno_impl::failed(const char *fmt, ...) throw( ::com::sun::star::uno
 
 ::sal_Int16 SAL_CALL pw3270::uno_impl::setSession( const ::rtl::OUString& name ) throw (::com::sun::star::uno::RuntimeException)
 {
+	const char *ptr;
+
 	OString str = rtl::OUStringToOString( name , hSession->get_encoding() );
 
 	delete this->hSession;
-	this->hSession = new ipc3270_session(this,str.getStr());
+
+	ptr = str.getStr();
+
+	if(ptr && *ptr)
+		this->hSession = new ipc3270_session(this,str.getStr());
+	else
+		this->hSession = new lib3270_session(this);
 
 	return 0;
 }
