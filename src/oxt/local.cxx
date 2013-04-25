@@ -96,7 +96,7 @@
 #endif // HAVE_SYSLOG
  }
 
- pw3270::lib3270_session::lib3270_session()
+ pw3270::lib3270_session::lib3270_session(uno_impl *obj) throw( RuntimeException )
  {
 	struct _call
 	{
@@ -136,7 +136,7 @@
 
 	if(!hModule)
 	{
-		log("%s","Error loading lib3270");
+		obj->failed("%s","Can't load lib3270");
 		return;
 	}
 
@@ -144,7 +144,7 @@
 	{
 		*call[f].entry = (void *) osl_getAsciiFunctionSymbol(hModule,call[f].name);
 		if(!*call[f].entry)
-			log("Error loading lib3270::%s",call[f].name);
+			obj->failed("Error loading lib3270::%s",call[f].name);
 	}
 
 	/* Get lib3270 session handle */

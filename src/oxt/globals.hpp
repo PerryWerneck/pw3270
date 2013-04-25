@@ -52,6 +52,8 @@
 	namespace pw3270
 	{
 
+		class uno_impl;
+
 		class session
 		{
 			public:
@@ -85,7 +87,7 @@
 		class lib3270_session : public session
 		{
 			public:
-				lib3270_session();
+				lib3270_session(uno_impl *obj) throw( RuntimeException );
 				virtual ~lib3270_session();
 
 				virtual int					get_revision(void);
@@ -136,7 +138,7 @@
 		class ipc3270_session : public session
 		{
 			public:
-				ipc3270_session(const char *name);
+				ipc3270_session(uno_impl *obj, const char *name) throw( RuntimeException );
 				virtual ~ipc3270_session();
 				virtual int					get_revision(void);
 				virtual LIB3270_MESSAGE 	get_state(void);
@@ -210,11 +212,11 @@
 				virtual ::sal_Int16 SAL_CALL screenTrace( ::sal_Bool state ) throw (::com::sun::star::uno::RuntimeException);
 				virtual ::sal_Int16 SAL_CALL setSession( const ::rtl::OUString& name ) throw (::com::sun::star::uno::RuntimeException);
 
+				void failed(const char *fmt, ...) throw( ::com::sun::star::uno::RuntimeException );
+
 			private:
 
 				session *hSession;
-
-
 
 		};
 

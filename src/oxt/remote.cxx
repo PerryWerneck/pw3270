@@ -151,7 +151,7 @@ int pw3270::ipc3270_session::query_intval(const char *method)
 #endif // HAVE_DBUS
 
 
-pw3270::ipc3270_session::ipc3270_session(const char *name) : pw3270::session()
+pw3270::ipc3270_session::ipc3270_session(uno_impl *obj, const char *name) throw( RuntimeException ) : pw3270::session()
 {
 #ifdef HAVE_DBUS
 
@@ -226,13 +226,14 @@ pw3270::ipc3270_session::ipc3270_session(const char *name) : pw3270::session()
 
 	if (dbus_error_is_set(&err))
 	{
-		log("DBUS Connection Error (%s)", err.message);
+		obj->failed("DBUS Connection Error (%s)", err.message);
 		dbus_error_free(&err);
+		return;
 	}
 
 	if(!conn)
 	{
-		log("%s", "DBUS Connection failed");
+		obj->failed("%s", "DBUS Connection failed");
 		return;
 	}
 
@@ -240,7 +241,7 @@ pw3270::ipc3270_session::ipc3270_session(const char *name) : pw3270::session()
 
 	if (dbus_error_is_set(&err))
 	{
-		log("Name Error (%s)", err.message);
+		obj->failed("DBUS Name Error (%s)", err.message);
 		dbus_error_free(&err);
 		conn = NULL;
 		return;
@@ -248,7 +249,7 @@ pw3270::ipc3270_session::ipc3270_session(const char *name) : pw3270::session()
 
 	if(rc != DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER)
 	{
-		log("%s", "DBUS request name failed");
+		obj->failed("%s", "DBUS request name failed");
 		conn = NULL;
 		return;
 	}

@@ -30,6 +30,7 @@
  */
 
 #include "globals.hpp"
+#include <string.h>
 
 #ifdef HAVE_SYSLOG
 	#include <syslog.h>
@@ -218,7 +219,7 @@ Sequence< OUString > pw3270::uno_impl::getSupportedServiceNames() throw (Runtime
 
 pw3270::uno_impl::uno_impl( const Reference< XComponentContext > & xContext )
 {
-	this->hSession = new lib3270_session();
+	this->hSession = new lib3270_session(this);
 }
 
 pw3270::uno_impl::~uno_impl()
@@ -285,12 +286,35 @@ void pw3270::session::log(const char *fmt, const char *msg)
 #endif // HAVE_SYSLOG
 }
 
+void pw3270::uno_impl::failed(const char *fmt, ...) throw( ::com::sun::star::uno::RuntimeException )
+{
+	va_list	  arg_ptr;
+	char	* msg		= (char *) malloc(1024);
+
+	va_start(arg_ptr, fmt);
+	vsnprintf(msg, 1023, fmt, arg_ptr);
+	va_end(arg_ptr);
+
+#ifdef HAVE_SYSLOG
+	openlog(PACKAGE_NAME, LOG_NDELAY, LOG_USER);
+	syslog(LOG_ERR,"%s",msg);
+	closelog();
+#endif // HAVE_SYSLOG
+
+	::rtl::OUString str = OUString(msg, strlen(msg), RTL_TEXTENCODING_UTF8, RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE);
+
+	free(msg);
+
+	throw Exception( str , *this );
+
+}
+
 ::sal_Int16 SAL_CALL pw3270::uno_impl::setSession( const ::rtl::OUString& name ) throw (::com::sun::star::uno::RuntimeException)
 {
 	OString str = rtl::OUStringToOString( name , hSession->get_encoding() );
 
 	delete this->hSession;
-	this->hSession = new ipc3270_session(str.getStr());
+	this->hSession = new ipc3270_session(this,str.getStr());
 
 	return 0;
 }
