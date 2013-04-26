@@ -437,23 +437,23 @@ if test "_$OO_SDK_HOME" == "_" ; then
 fi
 
 if test "_$OO_SDK_URE_HOME" == "_" ; then
-	OO_SDK_URE_HOME=$OFFICE_HOME/ure
+	OO_SDK_URE_HOME=$libdir/ure
 fi
 
 OO_SDK_URE_BIN_DIR=$OO_SDK_URE_HOME/bin
 OO_SDK_URE_LIB_DIR=$OO_SDK_URE_HOME/lib
 
-AC_PATH_TOOL([IDLC], idlc, "no", path="$PATH:$OO_SDK_HOME/bin")
+AC_PATH_TOOL([IDLC], idlc, "no", path=$PATH:$OO_SDK_HOME/bin)
 if test "$IDLC" == "no" ; then
 	app_cv_office="no"
 fi
 
-AC_PATH_TOOL([REGMERGE], regmerge, "no", path="$PATH:$OO_SDK_URE_BIN_DIR")
+AC_PATH_TOOL([REGMERGE], regmerge, "no", path=$PATH:$OO_SDK_URE_BIN_DIR)
 if test "$REGMERGE" == "no" ; then
 	app_cv_office="no"
 fi
 
-AC_PATH_TOOL([CPPUMAKER], cppumaker, "no", path="$PATH:$OO_SDK_HOME/bin")
+AC_PATH_TOOL([CPPUMAKER], cppumaker, "no", path=$PATH:$OO_SDK_HOME/bin)
 if test "$CPPUMAKER" == "no" ; then
 	app_cv_office="no"
 fi
