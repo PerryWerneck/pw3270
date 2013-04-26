@@ -336,7 +336,7 @@ PKG_CHECK_MODULES( [GTK], [gtk+-3.0 gmodule-2.0], [ GTK_VERSION="3.0" ], [ PKG_C
 AC_SUBST(GTK_LIBS)
 AC_SUBST(GTK_CFLAGS)
 AC_SUBST(GTK_VERSION)
-AC_SUBST(GTK_MODVERSION,`pkg-config --modversion gtk+-$GTK_VERSION`)
+AC_SUBST(GTK_MODVERSION,`$PKG_CONFIG --modversion gtk+-$GTK_VERSION`)
 
 #--[ GLIB check ]---------------------------------------------------------------------------------------------------------------------------------------------
 
