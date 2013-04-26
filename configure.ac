@@ -428,6 +428,14 @@ AC_ARG_VAR([OFFICE_HOME], [Libreoffice home])
 AC_ARG_VAR([OO_SDK_HOME], [Libreoffice SDK home])
 AC_ARG_VAR([OO_SDK_URE_HOME], [Libreoffice URE home])
 
+if test "_$OFFICE_HOME" == "_" ; then
+	OFFICE_HOME=$libdir/libreoffice
+fi
+
+if test "_$OO_SDK_HOME" == "_" ; then
+	OO_SDK_HOME=$OFFICE_HOME/sdk
+fi
+
 if test "_$OO_SDK_URE_HOME" == "_" ; then
 	OO_SDK_URE_HOME=$OFFICE_HOME/ure
 fi
