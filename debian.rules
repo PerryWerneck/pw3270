@@ -23,6 +23,8 @@ build-stamp:
 	./configure --prefix=/usr
 	rm -f debian/*.install
 	make Release
+	mv debian/dbus3270.install debian/pw3270-plugin-dbus.install
+	mv debian/oxt.install debian/libreoffice-extension-pw3270.install
 	# --- end custom part for compiling
 
 	touch build-stamp
@@ -48,6 +50,13 @@ install: build
 	make DESTDIR=$(PWD)/debian/lib3270 install-lib
 	make DESTDIR=$(PWD)/debian/lib3270-dev install-sdk
 	make DESTDIR=$(PWD)/debian/pw3270 install-app
+
+	# Install libreoffice extension
+	make DESTDIR=$(PWD)/debian/libreoffice-extension-pw3270 install-oxt
+
+	# Install DBUS plugin
+	install -d --mode=755 $(PWD)/debian/pw3270/pw3270-plugin-dbus/usr/lib/pw3270-plugins
+	install --mode=755 .bin/Release/plugins/dbus3270.so $(PWD)/debian/pw3270/pw3270-plugin-dbus/usr/lib/pw3270-plugins/dbus3270.so
 
 	find debian
 	# --- end custom part for installing
