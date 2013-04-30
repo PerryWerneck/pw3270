@@ -83,6 +83,12 @@ libpangowin32-1*.dll
 libatk-*.dll
 libcrypto-*.dll
 libssl-*.dll
+libgcc_s_sjlj-1.dll
+libharfbuzz-0.dll
+icule51.dll
+icuuc51.dll
+icudata51.dll
+libstdc++-6.dll
 gspawn-win32-helper-console.exe
 gspawn-win32-helper.exe
 gdk-pixbuf-query-loaders.exe

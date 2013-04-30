@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-23 10:17-0300\n"
+"POT-Creation-Date: 2013-04-30 08:07-0300\n"
 "PO-Revision-Date: 2013-04-23 10:22-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
@@ -188,7 +188,7 @@ msgstr ""
 "A CA certificate is invalid. Either it is not a CA or its extensions are not "
 "consistent with the supplied purpose."
 
-#: filetransfer.c:386
+#: filetransfer.c:384
 msgid "Aborting"
 msgstr "Abortando"
 
@@ -204,7 +204,7 @@ msgstr "Ação falhou"
 msgid "Add to copy"
 msgstr "Adicionar à cópia"
 
-#: filetransfer.c:259
+#: filetransfer.c:258
 msgid "Add/Remove _CR at end of line"
 msgstr "Adicionar/Remover _CR no final da linha"
 
@@ -242,11 +242,11 @@ msgstr "Authority and subject key identifier mismatch"
 msgid "Auto-Reconnect"
 msgstr "Reconectar automaticamente"
 
-#: filetransfer.c:782
+#: filetransfer.c:780
 msgid "Avblock"
 msgstr "Avblock"
 
-#: filetransfer.c:849
+#: filetransfer.c:847
 msgid "BLKSIZE:"
 msgstr "BLKSIZE:"
 
@@ -310,7 +310,7 @@ msgstr "C_odificação de caracteres:"
 msgid "C_olor scheme:"
 msgstr "Tema de c_ores:"
 
-#: filetransfer.c:586
+#: filetransfer.c:584
 msgid "C_urrent"
 msgstr "At_ual"
 
@@ -337,7 +337,7 @@ msgstr "Não foi possível converter a linha %d de %s para %s"
 msgid "Can't cut rectangular regions"
 msgstr "Recortar não permitido em seleção retangular"
 
-#: ft.c:311
+#: ft.c:278
 msgid "Can't get file size"
 msgstr "Não foi possível obter o tamanho do arquivo"
 
@@ -350,7 +350,7 @@ msgstr "Não foi possível carregar %s"
 msgid "Can't load file"
 msgstr "Não foi possível carregar arquivo"
 
-#: ft.c:230
+#: ft.c:197
 msgid "Can't open local file"
 msgstr "Não foi possível abrir arquivo local"
 
@@ -402,15 +402,15 @@ msgstr ""
 msgid "Can't set lib3270 I/O handlers"
 msgstr "Não foi possível registrar manipuladores de I/O 3270"
 
-#: filetransfer.c:689
+#: filetransfer.c:687
 msgid "Can't start download"
 msgstr "Não foi possível iniciar o download"
 
-#: filetransfer.c:485
+#: filetransfer.c:483
 msgid "Can't start file transfer"
 msgstr "Não foi possível iniciar transferência de arquivo"
 
-#: filetransfer.c:750
+#: filetransfer.c:748
 msgid "Can't start upload"
 msgstr "Não foi possível iniciar upload"
 
@@ -419,7 +419,7 @@ msgstr "Não foi possível iniciar upload"
 msgid "Can't use winsock version %d.%d"
 msgstr "Não é possível usar a Winsock versão %d.%d"
 
-#: ft.c:147
+#: ft.c:123
 msgid "Cancelled by user"
 msgstr "Cancelado pelo usuário"
 
@@ -490,7 +490,7 @@ msgstr "Configuração de cores"
 msgid "Colors"
 msgstr "Cores"
 
-#: ft_cut.c:340
+#: ft_cut.c:333
 msgid "Complete"
 msgstr "Completo"
 
@@ -531,11 +531,11 @@ msgstr "Cores personalizadas"
 msgid "Cut"
 msgstr "Recortar"
 
-#: filetransfer.c:781
+#: filetransfer.c:779
 msgid "Cylinders"
 msgstr "Cilindros"
 
-#: filetransfer.c:310 filetransfer.c:851
+#: filetransfer.c:308 filetransfer.c:849
 msgid "DFT B_uffer size:"
 msgstr "Tamanho do b_uffer DFT:"
 
@@ -551,7 +551,7 @@ msgstr "Azul Escuro"
 msgid "Dark Green"
 msgstr "Verde Escuro"
 
-#: ft_cut.c:163 ft_cut.c:172
+#: ft_cut.c:156 ft_cut.c:165
 msgid "Data conversion error"
 msgstr "Erro na conversão de dados"
 
@@ -563,7 +563,7 @@ msgstr "Depuração"
 msgid "Debug window updates"
 msgstr "Mostrar atualizações de janela"
 
-#: filetransfer.c:771 filetransfer.c:779
+#: filetransfer.c:769 filetransfer.c:777
 msgid "Default"
 msgstr "Padrão"
 
@@ -575,7 +575,7 @@ msgstr "Apagar campo"
 msgid "Device type rejected"
 msgstr "Tipo de dispositivo rejeitado"
 
-#: ft.c:192
+#: ft.c:168
 msgid "Disconnected from host"
 msgstr "Desconectado do servidor"
 
@@ -583,7 +583,7 @@ msgstr "Desconectado do servidor"
 msgid "EOR received when not in 3270 mode, ignored."
 msgstr "EOR recebido fora do modo 3270, ignorado."
 
-#: filetransfer.c:586
+#: filetransfer.c:584
 msgid "ET_A"
 msgstr "ET_A"
 
@@ -631,12 +631,12 @@ msgstr "Apagar até o final da linha"
 msgid "Error"
 msgstr "Erro"
 
-#: ft_cut.c:425 ft_dft.c:448
+#: ft_cut.c:418 ft_dft.c:448
 #, c-format
 msgid "Error \"%s\" reading from local file (rc=%d)"
 msgstr "Erro \"%s\" lendo arquivo local (rc=%d)"
 
-#: ft_cut.c:529 ft_dft.c:339
+#: ft_cut.c:522 ft_dft.c:339
 #, c-format
 msgid "Error \"%s\" writing to local file (rc=%d)"
 msgstr "Erro \"%s\" gravando arquivo local (rc=%d)"
@@ -682,23 +682,23 @@ msgstr "Extra CGCSGID(s), ignoring"
 msgid "Field colors"
 msgstr "Cor dos campos"
 
-#: filetransfer.c:527
+#: filetransfer.c:525
 msgid "File transfer"
 msgstr "Transferência de arquivos"
 
-#: filetransfer.c:488
+#: filetransfer.c:486
 msgid "File transfer error"
 msgstr "Erro na transferência de arquivos"
 
-#: filetransfer.c:689 filetransfer.c:750
+#: filetransfer.c:687 filetransfer.c:748
 msgid "File transfer is already active"
 msgstr "Transferência de arquivos já está ativa"
 
-#: ft.c:199
+#: ft.c:175
 msgid "File transfer is already active in this session"
 msgstr "Transferência de arquivos já está ativa nesta sessão"
 
-#: filetransfer.c:772
+#: filetransfer.c:770
 msgid "Fixed"
 msgstr "Fixo"
 
@@ -771,7 +771,7 @@ msgstr "HTTP Proxy: Resposta desconhecida"
 msgid "Help"
 msgstr "Ajuda"
 
-#: ft.c:528
+#: ft.c:492
 msgid "Host disconnected, transfer cancelled"
 msgstr "Servidor desconectou, transferência cancelada"
 
@@ -820,11 +820,11 @@ msgstr "IBM S/390"
 msgid "Identity not verified"
 msgstr "Identidade não verificada"
 
-#: ft_cut.c:508
+#: ft_cut.c:501
 msgid "Illegal frame length"
 msgstr "Comprimento de frame inválido"
 
-#: filetransfer.c:545
+#: filetransfer.c:543
 msgid "Informations"
 msgstr "Informações"
 
@@ -887,7 +887,7 @@ msgstr "Uso da chave não permite assinatura de certificados"
 msgid "Keyboard is locked"
 msgstr "Teclado está bloqueado"
 
-#: filetransfer.c:847
+#: filetransfer.c:845
 msgid "LRECL:"
 msgstr "LRECL:"
 
@@ -932,7 +932,7 @@ msgstr "Proxy telnet precisa de porta"
 msgid "Mustard"
 msgstr "Mostarda"
 
-#: filetransfer.c:614 filetransfer.c:630
+#: filetransfer.c:612 filetransfer.c:628
 msgid "N/A"
 msgstr "N/A"
 
@@ -968,7 +968,7 @@ msgstr "Normal/Desprotegido"
 msgid "Not available"
 msgstr "Não disponível"
 
-#: ft.c:535
+#: ft.c:499
 msgid "Not in 3270 mode, transfer cancelled"
 msgstr "Não está no modo 3270, transferência cancelada"
 
@@ -1178,7 +1178,7 @@ msgstr "Rosa"
 msgid "Previous field"
 msgstr "Campo anterior"
 
-#: filetransfer.c:848
+#: filetransfer.c:846
 msgid "Primary space:"
 msgstr "Primary space:"
 
@@ -1206,7 +1206,7 @@ msgstr "Imprimir marca de seleção"
 msgid "Print settings"
 msgstr "Configurações de impressão"
 
-#: filetransfer.c:588
+#: filetransfer.c:586
 msgid "Progress"
 msgstr "Progresso"
 
@@ -1294,11 +1294,11 @@ msgstr "RPQ: Erro em gethostbyname"
 msgid "Receive file"
 msgstr "Receber arquivo"
 
-#: filetransfer.c:696
+#: filetransfer.c:694
 msgid "Receive file from host"
 msgstr "Receber arquivo do servidor"
 
-#: filetransfer.c:792
+#: filetransfer.c:790
 msgid "Record format"
 msgstr "Formato de registro"
 
@@ -1523,7 +1523,7 @@ msgstr "Tamanho da tela"
 msgid "Scripts"
 msgstr "Scripts"
 
-#: filetransfer.c:850
+#: filetransfer.c:848
 msgid "Secondary space:"
 msgstr "Secondary space:"
 
@@ -1579,7 +1579,7 @@ msgstr "Certificado auto assinado na cadeia de certificados"
 msgid "Send file"
 msgstr "Enviar arquivo"
 
-#: filetransfer.c:757
+#: filetransfer.c:755
 msgid "Send file to host"
 msgstr "Enviar arquivo para o servidor"
 
@@ -1635,7 +1635,7 @@ msgstr "Erro ao ler dados da rede"
 msgid "Socket write error"
 msgstr "Erro ao enviar dados para a rede"
 
-#: filetransfer.c:793
+#: filetransfer.c:791
 msgid "Space allocation units"
 msgstr "Unidades de alocação de espaço"
 
@@ -1643,7 +1643,7 @@ msgstr "Unidades de alocação de espaço"
 msgid "Space in LU name"
 msgstr "Espaço no nome da LU"
 
-#: filetransfer.c:586
+#: filetransfer.c:584
 msgid "Spee_d"
 msgstr "Veloci_dade"
 
@@ -1663,7 +1663,7 @@ msgstr "TELNET Proxy: Erro ao enviar"
 msgid "TLS negotiation failure"
 msgstr "Negociação TLS falhou"
 
-#: filetransfer.c:586
+#: filetransfer.c:584
 msgid "T_otal"
 msgstr "T_otal"
 
@@ -1837,7 +1837,7 @@ msgid ""
 msgstr ""
 "The public key in the certificate SubjectPublicKeyInfo could not be read."
 
-#: ft.c:216
+#: ft.c:183
 msgid "The remote file name is invalid"
 msgstr "O nome do arquivo remoto não é válido"
 
@@ -1914,23 +1914,23 @@ msgstr "Trace"
 msgid "Track Cursor"
 msgstr "Mostrar posição do cursor"
 
-#: filetransfer.c:780
+#: filetransfer.c:778
 msgid "Tracks"
 msgstr "Trilhas"
 
-#: ft_cut.c:373
+#: ft_cut.c:366
 msgid "Transfer cancelled by host"
 msgstr "Transferência cancelada pelo servidor"
 
-#: ft_cut.c:402 ft_cut.c:498 ft_dft.c:242 ft_dft.c:380
+#: ft_cut.c:395 ft_cut.c:491 ft_dft.c:242 ft_dft.c:380
 msgid "Transfer cancelled by user"
 msgstr "Transferência cancelada pelo usuário"
 
-#: filetransfer.c:265
+#: filetransfer.c:264
 msgid "Transfer options"
 msgstr "Opções de transferência"
 
-#: ft_cut.c:466
+#: ft_cut.c:459
 msgid "Transmission error"
 msgstr "Erro de transmissão"
 
@@ -1979,7 +1979,7 @@ msgstr "Unable to get local issuer certificate"
 msgid "Unable to paste text"
 msgstr "Incapaz de colar texto"
 
-#: ft.c:395
+#: ft.c:362
 msgid "Unable to send file-transfer request"
 msgstr "Não foi possível enviar a requisição de transferência de arquivo"
 
@@ -1987,7 +1987,7 @@ msgstr "Não foi possível enviar a requisição de transferência de arquivo"
 msgid "Unable to verify the first certificate"
 msgstr "Não foi possível verificar o primeiro certificado"
 
-#: filetransfer.c:774
+#: filetransfer.c:772
 msgid "Undefined"
 msgstr "Indefinido"
 
@@ -2004,6 +2004,11 @@ msgstr "Erro SSL <b>%ld</b> inesperado"
 #, c-format
 msgid "Unexpected action attribute in <%s>"
 msgstr "Atributo inesperado \"action\" em <%s>"
+
+#: ft.c:83
+#, c-format
+msgid "Unexpected call to %s: No active filetransfer"
+msgstr "Unexpected call to %s: No active filetransfer"
 
 #: uiparser/keypad.c:67
 #, c-format
@@ -2060,7 +2065,7 @@ msgstr "Tipo inesperado %d na fila de teclado"
 msgid "Unknown 3270 Data Stream command: 0x%X"
 msgstr "Unknown 3270 Data Stream command: 0x%X"
 
-#: ft_cut.c:381
+#: ft_cut.c:374
 msgid "Unknown FT control code from host"
 msgstr "Servidor enviou código de controle FT desconhecido"
 
@@ -2074,7 +2079,7 @@ msgstr "PA %d desconhecida"
 msgid "Unknown PF key %d"
 msgstr "PF %d desconhecida"
 
-#: ft_cut.c:305
+#: ft_cut.c:298
 msgid "Unknown frame type from host"
 msgstr "Servidor enviou tipo de frame desconhecido"
 
@@ -2122,7 +2127,7 @@ msgstr "Unsupported socks 4 proxy"
 msgid "Use +/- for field navigation"
 msgstr "Usar teclas +/- para navegar por campos"
 
-#: filetransfer.c:773
+#: filetransfer.c:771
 msgid "Variable"
 msgstr "Variável"
 
@@ -2143,11 +2148,11 @@ msgstr "WSAEventSelect falhou"
 msgid "WSAStartup failed"
 msgstr "WSAStartup falhou"
 
-#: ft.c:404
+#: ft.c:371
 msgid "Waiting for GET response"
 msgstr "Aguardando resposta do pedido de download"
 
-#: ft.c:406
+#: ft.c:373
 msgid "Waiting for PUT response"
 msgstr "Aguardando resposta do pedido de upload"
 
@@ -2215,7 +2220,7 @@ msgstr "X Aguarde"
 msgid "Yellow"
 msgstr "Amarelo"
 
-#: filetransfer.c:260
+#: filetransfer.c:259
 msgid "_Append"
 msgstr "_Acrescentar"
 
@@ -2247,7 +2252,7 @@ msgstr "_Arquivo"
 msgid "_Font:"
 msgstr "_Fonte:"
 
-#: filetransfer.c:543
+#: filetransfer.c:541
 msgid "_From"
 msgstr "_De"
 
@@ -2279,7 +2284,7 @@ msgstr "_Opções"
 msgid "_Port:"
 msgstr "_Porta:"
 
-#: filetransfer.c:261
+#: filetransfer.c:260
 msgid "_Remap ASCII Characters"
 msgstr "_Remapear caracteres ASCII"
 
@@ -2287,7 +2292,7 @@ msgstr "_Remapear caracteres ASCII"
 msgid "_Secure connection"
 msgstr "Conexão _Segura"
 
-#: filetransfer.c:543
+#: filetransfer.c:541
 msgid "_Status"
 msgstr "_Situação"
 
@@ -2295,7 +2300,7 @@ msgstr "_Situação"
 msgid "_Text file"
 msgstr "Arquivo _texto"
 
-#: filetransfer.c:543
+#: filetransfer.c:541
 msgid "_To"
 msgstr "_Para"
 
