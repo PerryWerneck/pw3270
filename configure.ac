@@ -429,7 +429,11 @@ AC_ARG_VAR([OO_SDK_HOME], [Libreoffice SDK home])
 AC_ARG_VAR([OO_SDK_URE_HOME], [Libreoffice URE home])
 
 if test "_$OFFICE_HOME" == "_" ; then
-	OFFICE_HOME=$libdir/libreoffice
+	if test "$host_cpu" = "x86_64"; then
+		OFFICE_HOME="/usr/lib64/libreoffice"
+	else
+		OFFICE_HOME="/usr/lib/libreoffice"
+	fi
 fi
 
 if test "_$OO_SDK_HOME" == "_" ; then
@@ -437,7 +441,15 @@ if test "_$OO_SDK_HOME" == "_" ; then
 fi
 
 if test "_$OO_SDK_URE_HOME" == "_" ; then
-	OO_SDK_URE_HOME=$libdir/ure
+	if test -d $OFFICE_HOME/ure; then
+		OO_SDK_URE_HOME="$OFFICE_HOME/ure"
+	else
+		if test "$host_cpu" = "x86_64"; then
+			OO_SDK_URE_HOME="/usr/lib64/ure"
+		else
+			OO_SDK_URE_HOME="/usr/lib/ure"
+		fi
+	fi
 fi
 
 OO_SDK_URE_BIN_DIR=$OO_SDK_URE_HOME/bin
