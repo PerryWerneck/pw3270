@@ -202,22 +202,35 @@
 	if(host)
 	{
 		set_string_to_config("host","uri","%s",host);
-		pw3270_set_host(widget,host);
+
+		if(pw3270_get_toggle(widget,LIB3270_TOGGLE_CONNECT_ON_STARTUP))
+			pw3270_connect_host(widget,host);
+		else
+			pw3270_set_host(widget,host);
 	}
 	else
 	{
 		gchar *ptr = get_string_from_config("host","uri","");
+
 		if(*ptr)
-			pw3270_set_host(widget,ptr);
+		{
+			if(pw3270_get_toggle(widget,LIB3270_TOGGLE_CONNECT_ON_STARTUP))
+				pw3270_connect_host(widget,ptr);
+			else
+				pw3270_set_host(widget,ptr);
+		}
 		g_free(ptr);
 	}
-
-	if(pw3270_get_toggle(widget,LIB3270_TOGGLE_CONNECT_ON_STARTUP))
-		v3270_connect(GTK_PW3270(widget)->terminal,NULL);
 
 	v3270_set_scaled_fonts(GTK_PW3270(widget)->terminal,get_boolean_from_config("terminal","sfonts",FALSE));
 
  	return widget;
+ }
+
+ void pw3270_connect_host(GtkWidget *widget, const gchar *uri)
+ {
+ 	g_return_if_fail(GTK_IS_PW3270(widget));
+ 	v3270_connect(GTK_PW3270(widget)->terminal,uri);
  }
 
  void pw3270_set_host(GtkWidget *widget, const gchar *uri)
