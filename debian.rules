@@ -8,6 +8,10 @@ export DH_VERBOSE=1
 # This is the debhelper compatibility version to use.
 export DH_COMPAT=4
 
+# Libreoffice stuff
+export OFFICE_HOME=/usr/lib/libreoffice
+export OO_SDK_URE_HOME=/usr/lib/ure
+
 CFLAGS = -g
 ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
 CFLAGS += -O0
