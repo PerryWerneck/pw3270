@@ -96,9 +96,9 @@ gchar * get_last_error_msg(void)
 
 #ifdef HAVE_WIN_REGISTRY
 
- static BOOL registry_open_key(const gchar *group, REGSAM samDesired, HKEY *hKey)
+ static BOOL registry_open_key(const gchar *group, const gchar *key, REGSAM samDesired, HKEY *hKey)
  {
- 	static HKEY	  predefined[] = { HKEY_CURRENT_USER, HKEY_USERS, HKEY_LOCAL_MACHINE };
+ 	static HKEY	  predefined[] = { HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE };
  	int			  f;
 	gchar		* path = g_strdup_printf("%s\\%s\\%s",registry_path,g_get_application_name(),group);
 
@@ -111,7 +111,6 @@ gchar * get_last_error_msg(void)
 		}
 	}
 
-//	trace("Cant open \"%s\"",path);
 	g_free(path);
 
 	return FALSE;
@@ -244,7 +243,7 @@ gchar * get_last_error_msg(void)
 
 	HKEY key_handle;
 
-	if(registry_open_key(group,KEY_READ,&key_handle))
+	if(registry_open_key(group,key,KEY_READ,&key_handle))
 	{
 		DWORD			  data;
 		gboolean		  ret 		= def;
@@ -287,7 +286,7 @@ gchar * get_last_error_msg(void)
 
 	HKEY key_handle;
 
-	if(registry_open_key(group,KEY_READ,&key_handle))
+	if(registry_open_key(group,key,KEY_READ,&key_handle))
 	{
 		DWORD			data;
 		gint			ret = def;
@@ -335,7 +334,7 @@ gchar * get_last_error_msg(void)
 	gchar 			* ret		= NULL;
 	BYTE			* data;
 
-	if(!registry_open_key(group,KEY_READ,&key_handle))
+	if(!registry_open_key(group,key,KEY_READ,&key_handle))
 	{
 		if(def)
 			return g_strdup(def);
