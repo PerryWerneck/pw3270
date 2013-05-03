@@ -243,6 +243,10 @@
  	GtkWindow	* toplevel		= GTK_WINDOW(gtk_widget_get_toplevel(widget));
  	const gchar * user_title	= g_object_get_data(G_OBJECT(action),"title");
  	const gchar * filename		= g_object_get_data(G_OBJECT(action),"filename");
+ 	const gchar * extension		= g_object_get_data(G_OBJECT(action),"extension");
+
+	if(!extension)
+		extension = "txt";
 
 	if(!text)
 		return 0;
@@ -272,6 +276,8 @@
 		ptr = get_string_from_config("save",gtk_action_get_name(action),"");
 		if(*ptr)
 			gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog),ptr);
+		else
+			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),g_get_user_special_dir(G_USER_DIRECTORY_DOCUMENTS));
 		g_free(ptr);
 
 		if(gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
@@ -403,8 +409,12 @@
 	add_option_menus(dialog, action, &encattr);
 
 	ptr = get_string_from_config("load",gtk_action_get_name(action),"");
+
 	if(*ptr)
 		gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog),ptr);
+	else
+		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),g_get_user_special_dir(G_USER_DIRECTORY_DOCUMENTS));
+
 	g_free(ptr);
 
 	if(gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
