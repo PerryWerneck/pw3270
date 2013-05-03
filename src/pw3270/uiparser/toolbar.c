@@ -52,6 +52,7 @@
  {
  	GtkWidget	* widget	= NULL;
  	const gchar	* label		= NULL;
+ 	const gchar * key;
 
  	if(info->element)
 	{
@@ -66,6 +67,68 @@
 	}
 
 	widget = gtk_toolbar_new();
+
+	key = ui_get_attribute("style",names,values);
+	if(key)
+	{
+		static const struct _xlat
+		{
+			GtkToolbarStyle	  style;
+			const gchar 	* name;
+		} xlat[] =
+		{
+			{ GTK_TOOLBAR_ICONS,		"icons"			},
+			{ GTK_TOOLBAR_TEXT,			"text"			},
+			{ GTK_TOOLBAR_BOTH,			"icons&text"	},
+			{ GTK_TOOLBAR_BOTH,			"both"			},
+			{ GTK_TOOLBAR_BOTH_HORIZ,	"horizontal"	},
+			{ GTK_TOOLBAR_BOTH_HORIZ,	"htext"			},
+		};
+
+		int f;
+
+		for(f=0;f<G_N_ELEMENTS(xlat);f++)
+		{
+			if(!g_ascii_strcasecmp(key,xlat[f].name))
+			{
+				gtk_toolbar_set_style(GTK_TOOLBAR(widget),xlat[f].style);
+				break;
+			}
+		}
+
+	}
+
+
+	key = ui_get_attribute("size",names,values);
+	if(key)
+	{
+		static const struct _xlat
+		{
+			GtkIconSize		  size;
+			const gchar 	* name;
+		} xlat[] =
+		{
+			{ GTK_ICON_SIZE_MENU,			"menu"		},
+			{ GTK_ICON_SIZE_SMALL_TOOLBAR,	"small"		},
+			{ GTK_ICON_SIZE_LARGE_TOOLBAR,	"large"		},
+			{ GTK_ICON_SIZE_BUTTON,			"button"	},
+			{ GTK_ICON_SIZE_DND,			"dnd"		},
+			{ GTK_ICON_SIZE_DIALOG,			"dialog"	},
+		};
+
+		int f;
+
+		for(f=0;f<G_N_ELEMENTS(xlat);f++)
+		{
+			if(!g_ascii_strcasecmp(key,xlat[f].name))
+			{
+				gtk_toolbar_set_icon_size(GTK_TOOLBAR(widget),xlat[f].size);
+				break;
+			}
+		}
+
+	}
+
 
 #if GTK_CHECK_VERSION(2,18,0)
 	gtk_widget_set_can_focus(widget,FALSE);
