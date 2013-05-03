@@ -64,37 +64,40 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
-/*
-#ifdef WIN32
-
-gchar * get_last_error_msg(void)
-{
-	LPVOID	  lpMsgBuf;
-	DWORD	  dw	= GetLastError();
-	gchar	* ptr;
-	gsize 	  bytes_written;
-
-	FormatMessage(	FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_FROM_SYSTEM|FORMAT_MESSAGE_IGNORE_INSERTS,
-					NULL,
-					dw,
-					MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-					(LPTSTR) &lpMsgBuf,
-					0, NULL );
-
-	for(ptr=lpMsgBuf;*ptr != '\n';ptr++);
-	*ptr = 0;
-
-	ptr = g_locale_to_utf8(lpMsgBuf,strlen(lpMsgBuf)-1,NULL,&bytes_written,NULL);
-
-	LocalFree(lpMsgBuf);
-
-	return ptr;
-}
-
-#endif // WIN32
-*/
-
 #ifdef HAVE_WIN_REGISTRY
+
+ enum REG_KEY
+ {
+	REG_KEY_USER,
+	REG_KEY_SYSTEM,
+	REG_KEY_INEXISTENT
+ };
+
+ static enum REG_KEY registry_query(const gchar *group, const gchar *key, HKEY *hKey)
+ {
+ 	static HKEY	  predefined[] = { HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE };
+	gchar		* path = g_strdup_printf("%s\\%s\\%s",registry_path,g_get_application_name(),group);
+	int			  f;
+
+	for(f=0;f<G_N_ELEMENTS(predefined);f++)
+	{
+		if(RegOpenKeyEx(predefined[f],path,0,KEY_READ,hKey) == ERROR_SUCCESS)
+		{
+			if(RegQueryValueExA(*hKey,key,NULL,NULL,NULL,NULL) == ERROR_SUCCESS)
+			{
+				trace("Key[%s\%s] found at id %d",path,key,f);
+				g_free(path);
+				return f;
+			}
+			RegCloseKey(*hKey);
+		}
+	}
+
+	trace("Key[%s\%s] not found",path,key,f);
+	g_free(path);
+
+	return -1;
+ }
 
  static BOOL registry_open_key(const gchar *group, const gchar *key, REGSAM samDesired, HKEY *hKey)
  {
@@ -240,7 +243,29 @@ gchar * get_last_error_msg(void)
  gboolean get_boolean_from_config(const gchar *group, const gchar *key, gboolean def)
  {
 #ifdef HAVE_WIN_REGISTRY
+	gboolean	ret 		= def;
+	HKEY 		hKey;
 
+	if(registry_query(group,key,&hKey) != REG_KEY_INEXISTENT)
+	{
+		DWORD			  data;
+		unsigned long	  datalen	= sizeof(data);
+		unsigned long	  datatype;
+
+		if(RegQueryValueExA(hKey,key,NULL,&datatype,(BYTE *) &data,&datalen) == ERROR_SUCCESS)
+		{
+			if(datatype == REG_DWORD)
+				ret = data ? TRUE : FALSE;
+			else
+				g_warning("Unexpected registry data type in %s\\%s\\%s\\%s",registry_path,g_get_application_name(),group,key);
+		}
+
+		RegCloseKey(hKey);
+	}
+
+	return ret;
+
+/*
 	HKEY key_handle;
 
 	if(registry_open_key(group,key,KEY_READ,&key_handle))
@@ -263,6 +288,7 @@ gchar * get_last_error_msg(void)
 		return ret;
 
 	}
+*/
 
 #else
 

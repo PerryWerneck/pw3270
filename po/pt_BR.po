@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-02 08:31-0300\n"
+"POT-Creation-Date: 2013-05-03 15:59-0300\n"
 "PO-Revision-Date: 2013-04-23 10:22-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
@@ -103,7 +103,7 @@ msgstr "Alerta 3270"
 msgid "3270 screen"
 msgstr "Tela 3270"
 
-#: dialog.c:482
+#: dialog.c:492
 #, c-format
 msgid "3270 terminal emulator for GTK %d.%d"
 msgstr "Emulador 3270 para GTK+ %d.%d"
@@ -129,7 +129,7 @@ msgstr "<%s> exige %s"
 msgid "<%s> requires a %s attribute"
 msgstr "<%s> precisa do atributo %s"
 
-#: uiparser/accelerator.c:41 uiparser/menubar.c:42 uiparser/toolbar.c:58
+#: uiparser/accelerator.c:41 uiparser/menubar.c:42 uiparser/toolbar.c:59
 #: uiparser/popup.c:45 uiparser/scroll.c:43 uiparser/keypad.c:152
 #, c-format
 msgid "<%s> should be on toplevel"
@@ -278,7 +278,7 @@ msgstr "Azul"
 msgid "Bold"
 msgstr "Negrito"
 
-#: dialog.c:489
+#: dialog.c:499
 msgid "Brazilian Public Software Portal"
 msgstr "Portal do Software Público Brasileiro"
 
@@ -346,7 +346,7 @@ msgstr "Não foi possível obter o tamanho do arquivo"
 msgid "Can't load %s"
 msgstr "Não foi possível carregar %s"
 
-#: dialog.c:361
+#: dialog.c:367
 msgid "Can't load file"
 msgstr "Não foi possível carregar arquivo"
 
@@ -367,7 +367,7 @@ msgstr "Incapaz de processar arquivos de descrição de UI em %s"
 msgid "Can't parse unnamed element"
 msgstr "Incapaz de processar elemento sem nome"
 
-#: dialog.c:339
+#: dialog.c:345
 #, c-format
 msgid ""
 "Can't save copy to file\n"
@@ -380,7 +380,7 @@ msgstr ""
 msgid "Can't save file"
 msgstr "Não foi possível salvar arquivo"
 
-#: dialog.c:314
+#: dialog.c:320
 #, c-format
 msgid ""
 "Can't save screen to file\n"
@@ -389,7 +389,7 @@ msgstr ""
 "Não foi possível salvar a tela no arquivo\n"
 "%s"
 
-#: dialog.c:328
+#: dialog.c:334
 #, c-format
 msgid ""
 "Can't save selection to file\n"
@@ -656,7 +656,7 @@ msgstr "Erro em fcntl(%s) ao ativar o modo não blocante"
 msgid "Error in ioctl(%s) when setting no blocking mode"
 msgstr "Erro em ioctl(%s) ao ativar o modo não blocante"
 
-#: dialog.c:359
+#: dialog.c:365
 #, c-format
 msgid "Error loading %s"
 msgstr "Erro lendo %s"
@@ -1154,7 +1154,7 @@ msgstr "Colar próximo"
 msgid "Paste text file"
 msgstr "Colar arquivo texto"
 
-#: dialog.c:396
+#: dialog.c:402
 msgid "Paste text file contents"
 msgstr "Colar conteúdo de arquivo texto"
 
@@ -1491,7 +1491,7 @@ msgstr ""
 msgid "Save copy"
 msgstr "Salvar cópia"
 
-#: dialog.c:338
+#: dialog.c:344
 msgid "Save copy to file"
 msgstr "Salvar cópia para arquivo"
 
@@ -1499,7 +1499,7 @@ msgstr "Salvar cópia para arquivo"
 msgid "Save screen"
 msgstr "Salvar tela"
 
-#: dialog.c:313
+#: dialog.c:319
 msgid "Save screen to file"
 msgstr "Salvar tela para arquivo"
 
@@ -1507,7 +1507,7 @@ msgstr "Salvar tela para arquivo"
 msgid "Save selected"
 msgstr "Salvar seleção"
 
-#: dialog.c:327
+#: dialog.c:333
 msgid "Save selection to file"
 msgstr "Salvar seleção para arquivo"
 
@@ -1862,7 +1862,7 @@ msgstr ""
 "O certificado fornecido não pode ser utilizado para a finalidade "
 "especificada."
 
-#: dialog.c:436
+#: dialog.c:446
 msgid ""
 "This program is free software; you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -2000,7 +2000,7 @@ msgstr "Erro SSL inesperado"
 msgid "Unexpected SSL error <b>%ld</b>"
 msgstr "Erro SSL <b>%ld</b> inesperado"
 
-#: uiparser/menubar.c:48 uiparser/toolbar.c:64 uiparser/popup.c:51
+#: uiparser/menubar.c:48 uiparser/toolbar.c:65 uiparser/popup.c:51
 #, c-format
 msgid "Unexpected action attribute in <%s>"
 msgstr "Atributo inesperado \"action\" em <%s>"
@@ -2131,7 +2131,7 @@ msgstr "Usar teclas +/- para navegar por campos"
 msgid "Variable"
 msgstr "Variável"
 
-#: dialog.c:476
+#: dialog.c:486
 #, c-format
 msgid "Version %s - Revision %s"
 msgstr "Versão %s - Revisão %s"
@@ -2342,7 +2342,7 @@ msgstr "setsockopt(%s)"
 msgid "socket"
 msgstr "socket"
 
-#: dialog.c:492
+#: dialog.c:502
 msgid "translator-credits"
 msgstr "translator-credits"
 
