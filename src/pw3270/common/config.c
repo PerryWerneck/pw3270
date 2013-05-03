@@ -798,6 +798,54 @@ void save_window_size_to_config(const gchar *group, const gchar *key, GtkWidget 
 #endif // HAVE_WIN_REGISTRY
 }
 
+#if defined( HAVE_WIN_REGISTRY )
+static void restore_window_from_regkey(GtkWidget *hwnd, HKEY hKey, const gchar *path)
+{
+	int 			f;
+	int 			pos[2];
+	unsigned long	datalen;
+	unsigned long	datatype;
+
+
+	datalen = sizeof(pos);
+	if(RegQueryValueExA(hKey,"Size",NULL,&datatype,(BYTE *) pos,&datalen) == ERROR_SUCCESS)
+	{
+		if(datatype == REG_BINARY && datalen == sizeof(pos))
+		{
+			gtk_window_resize(GTK_WINDOW(hwnd),pos[0],pos[1]);
+		}
+		else
+		{
+			g_warning("Unexpected registry data in %s\\Size",path);
+		}
+	}
+
+
+	for(f=0;f<G_N_ELEMENTS(WindowState);f++)
+	{
+		DWORD			data;
+
+		datalen       = sizeof(data);
+
+		if(RegQueryValueExA(hKey,WindowState[f].name,NULL,&datatype,(BYTE *) &data,&datalen) == ERROR_SUCCESS)
+		{
+			if(datatype == REG_DWORD)
+			{
+				if(data)
+					WindowState[f].activate(GTK_WINDOW(hwnd));
+
+			}
+			else
+			{
+				g_warning("Unexpected registry data type in %s\\%s",path,WindowState[f].name);
+			}
+		}
+	}
+
+
+}
+#endif // HAVE_WIN_REGISTRY
+
 void restore_window_from_config(const gchar *group, const gchar *key, GtkWidget *hwnd)
 {
 #if defined( HAVE_WIN_REGISTRY )
@@ -807,48 +855,14 @@ void restore_window_from_config(const gchar *group, const gchar *key, GtkWidget 
 
 	if(RegOpenKeyEx(HKEY_CURRENT_USER,path,0,KEY_READ,&hKey) == ERROR_SUCCESS)
 	{
-		int 			f;
-		int 			pos[2];
-		unsigned long	datalen;
-		unsigned long	datatype;
-
-
-		datalen = sizeof(pos);
-		if(RegQueryValueExA(hKey,"Size",NULL,&datatype,(BYTE *) pos,&datalen) == ERROR_SUCCESS)
-		{
-			if(datatype == REG_BINARY && datalen == sizeof(pos))
-			{
-				gtk_window_resize(GTK_WINDOW(hwnd),pos[0],pos[1]);
-			}
-			else
-			{
-				g_warning("Unexpected registry data in %s\\Size",path);
-			}
-		}
-
-
-		for(f=0;f<G_N_ELEMENTS(WindowState);f++)
-		{
-			DWORD			data;
-
-			datalen       = sizeof(data);
-
-			if(RegQueryValueExA(hKey,WindowState[f].name,NULL,&datatype,(BYTE *) &data,&datalen) == ERROR_SUCCESS)
-			{
-				if(datatype == REG_DWORD)
-				{
-					if(data)
-						WindowState[f].activate(GTK_WINDOW(hwnd));
-
-				}
-				else
-				{
-					g_warning("Unexpected registry data type in %s\\%s",path,WindowState[f].name);
-				}
-			}
-		}
-
-
+		// Load user settings
+		restore_window_from_regkey(hwnd,hKey,path);
+		RegCloseKey(hKey);
+	}
+	else if(RegOpenKeyEx(HKEY_LOCAL_MACHINE,path,0,KEY_READ,&hKey) == ERROR_SUCCESS)
+	{
+		// Load system defaults
+		restore_window_from_regkey(hwnd,hKey,path);
 		RegCloseKey(hKey);
 	}
 
