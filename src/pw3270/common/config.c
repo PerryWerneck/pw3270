@@ -265,31 +265,6 @@
 
 	return ret;
 
-/*
-	HKEY key_handle;
-
-	if(registry_open_key(group,key,KEY_READ,&key_handle))
-	{
-		DWORD			  data;
-		gboolean		  ret 		= def;
-		unsigned long	  datalen	= sizeof(data);
-		unsigned long	  datatype;
-
-		if(RegQueryValueExA(key_handle,key,NULL,&datatype,(BYTE *) &data,&datalen) == ERROR_SUCCESS)
-		{
-			if(datatype == REG_DWORD)
-				ret = data ? TRUE : FALSE;
-			else
-				g_warning("Unexpected registry data type in %s\\%s\\%s\\%s",registry_path,g_get_application_name(),group,key);
-		}
-
-		RegCloseKey(key_handle);
-
-		return ret;
-
-	}
-*/
-
 #else
 
 	if(program_config)

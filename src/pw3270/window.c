@@ -264,11 +264,34 @@
 	return g_get_application_name();
  }
 
+ static void update_window_title(GtkWidget *window)
+ {
+	gchar			* title;
+	GtkWidget		* widget = GTK_PW3270(window)->terminal;
+
+	if(v3270_is_connected(widget))
+	{
+		const gchar *host = v3270_get_host(widget);
+
+		if(host && *host)
+			title = g_strdup_printf("%s - %s",v3270_get_session_name(widget),host);
+		else
+			title = g_strdup_printf("%s",v3270_get_session_name(widget));
+	}
+	else
+	{
+		title = g_strdup_printf(_( "%s - Disconnected" ),v3270_get_session_name(widget));
+	}
+
+	gtk_window_set_title(GTK_WINDOW(window),title);
+	g_free(title);
+ }
+
  LIB3270_EXPORT void pw3270_set_session_name(GtkWidget *widget, const gchar *name)
  {
  	g_return_if_fail(GTK_IS_PW3270(widget));
 	v3270_set_session_name(GTK_PW3270(widget)->terminal,name);
-	gtk_window_set_title(GTK_WINDOW(widget),name);
+	update_window_title(widget);
  }
 
  LIB3270_EXPORT void pw3270_set_session_options(GtkWidget *widget, LIB3270_OPTION options)
@@ -387,14 +410,15 @@
 			gtk_widget_set_sensitive(*(keypad++),FALSE);
 	}
 
-	gtk_window_set_title(GTK_WINDOW(window),v3270_get_session_name(terminal));
+	update_window_title(window);
  }
 
  static void connected(GtkWidget *terminal, const gchar *host, GtkWidget * window)
  {
- 	gchar			* title;
 	GtkActionGroup	**group		= g_object_get_data(G_OBJECT(window),"action_groups");
 	GtkWidget		**keypad	= g_object_get_data(G_OBJECT(window),"keypads");
+
+	trace("%s(%s)",__FUNCTION__,host ? host : "NULL");
 
 	if(group)
 	{
@@ -411,9 +435,7 @@
 
 	set_string_to_config("host","uri","%s",host);
 
- 	title = g_strdup_printf("%s - %s",v3270_get_session_name(terminal),host);
-	gtk_window_set_title(GTK_WINDOW(window),title);
-	g_free(title);
+	update_window_title(window);
 
  }
 
@@ -627,7 +649,6 @@
 	// Connect window signals
 	g_signal_connect(widget,"window_state_event",G_CALLBACK(window_state_event),widget->terminal);
 	g_signal_connect(widget,"configure_event",G_CALLBACK(configure_event),widget->terminal);
-
 
 	// Finish setup
 #ifdef DEBUG

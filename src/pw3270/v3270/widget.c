@@ -716,6 +716,8 @@ static void update_connect(H3270 *session, unsigned char connected)
 {
 	v3270 *widget = GTK_V3270(session->widget);
 
+	trace("%s - %s",__FUNCTION__,connected ? "Connected" : "Disconnected");
+
 	if(connected)
 	{
 		widget->cursor.show |= 2;
