@@ -48,6 +48,9 @@ CONVERT=@CONVERT@
 WINDRES=@WINDRES@
 LN_S=@LN_S@
 
+DLL_FLAGS=@DLL_FLAGS@
+LDFLAGS=@LDFLAGS@
+
 #---[ Sources ]----------------------------------------------------------------
 
 include common/sources.mak
@@ -134,7 +137,7 @@ $(LIBRLS)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@: $(LIBRLS)/@DLLPREFIX@$(PACKAGE_
 $(LIBRLS)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@.@VERSION@:	$(foreach SRC, $(basename $(LIB_SOURCES)), $(OBJRLS)/$(SRC)$(OBJEXT))
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(LD) $(DLL_FLAGS) @LDSOFLAGS@ @LDLIBFLAGS@ $(LDFLAGS) -o $@ $^ $(LIBS) $(LIB3270_LIBS)
+	@$(LD) $(DLL_FLAGS) $(LDFLAGS) @LDSOFLAGS@ @LDLIBFLAGS@ -o $@ $^ $(LIBS) $(LIB3270_LIBS)
 	@$(STRIP) $@
 
 #---[ Debug targets ]----------------------------------------------------------
