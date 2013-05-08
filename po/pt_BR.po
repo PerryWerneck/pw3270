@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-08 10:42-0300\n"
-"PO-Revision-Date: 2013-04-23 10:22-0300\n"
+"POT-Creation-Date: 2013-05-08 14:31-0300\n"
+"PO-Revision-Date: 2013-05-08 14:30-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
 "Language: pt_BR\n"
@@ -19,9 +19,9 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
 #: window.c:283
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Disconnected"
-msgstr "_Desconectar"
+msgstr "%s - Desconectado"
 
 #: actions.c:742 actions.c:754
 #, c-format

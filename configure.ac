@@ -156,7 +156,7 @@ case "$host" in
 	*)
 		DLLDIR="/lib"
 		DBG_LDFLAGS="-L.bin/Debug/$DLLDIR"
-		RLS_LDFLAGS="-L.bin/Release/$DLLDIR"
+		RLS_LDFLAGS="-Wl,-rpath,\$(libdir)"
 		LDARCH=""
 		LDSOFLAGS="-Wl,-soname,\`basename \$@\`"
 		LDAPPFLAGS=""
@@ -518,6 +518,8 @@ AC_SUBST(LDARCH)
 AC_SUBST(PLUGINS)
 AC_SUBST(EXTENSIONS)
 AC_SUBST(APP_GUI_SRC)
+
+AC_SUBST(RLS_LDFLAGS)
 
 #--[ Output files ]-------------------------------------------------------------------------------------------------------------------------------------------
 

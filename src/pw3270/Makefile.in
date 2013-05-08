@@ -137,7 +137,7 @@ $(LIBRLS)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@: $(LIBRLS)/@DLLPREFIX@$(PACKAGE_
 $(LIBRLS)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@.@VERSION@:	$(foreach SRC, $(basename $(LIB_SOURCES)), $(OBJRLS)/$(SRC)$(OBJEXT))
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(LD) $(DLL_FLAGS) $(LDFLAGS) @LDSOFLAGS@ @LDLIBFLAGS@ -o $@ $^ $(LIBS) $(LIB3270_LIBS)
+	@$(LD) $(DLL_FLAGS) $(LDFLAGS) @LDSOFLAGS@ @LDLIBFLAGS@ @RLS_LDFLAGS@ -o $@ $^ $(LIBS) $(LIB3270_LIBS)
 	@$(STRIP) $@
 
 #---[ Debug targets ]----------------------------------------------------------

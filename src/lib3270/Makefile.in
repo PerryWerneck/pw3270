@@ -169,14 +169,11 @@ version.c: ./mkversion.sh
 	@chmod +x ./mkversion.sh
 	@./mkversion.sh
 
-fallbacks.c: $(BINDIR)/mkfb@EXEEXT@ X3270.xad
+fallbacks.c: X3270.xad mkfb.c
 	@echo "  GEN  $@"
+	@$(MKDIR) $(BINDIR)
+	@$(HOST_CC) -g -o $(BINDIR)/mkfb@EXEEXT@ mkfb.c
 	@$(BINDIR)/mkfb@EXEEXT@ -c X3270.xad $@
-
-$(BINDIR)/mkfb@EXEEXT@: mkfb.c Makefile
-	@echo "  CCLD `basename $@`"
-	@$(MKDIR) `dirname $@`
-	@$(HOST_CC) -g -o $@ mkfb.c
 
 clean:
 	@rm -fr .obj
