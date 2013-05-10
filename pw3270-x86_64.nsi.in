@@ -1,12 +1,12 @@
 !include "MUI2.nsh"
+!include x64.nsh
 
 Name "@PACKAGE@"
 Caption "@PACKAGE@ - 3270 Emulator for windows/gtk"
-outfile "@PACKAGE@-@PACKAGE_VERSION@.@PACKAGE_LEVEL@-gtk-@GTK_MODVERSION@-@host_cpu@-install.exe"
+outfile "@PACKAGE@-@PACKAGE_VERSION@.@PACKAGE_LEVEL@-gtk-@GTK_MODVERSION@-@host_cpu@.exe"
 XPStyle on
 
-# define the directory to install to
-installDir $PROGRAMFILES\@PACKAGE@
+installDir "$PROGRAMFILES64\pw3270"
 
 #define the installer icon
 !define MUI_ICON "src\pw3270\@PACKAGE@.ico"
@@ -49,6 +49,8 @@ VIAddVersionKey "LegalCopyright" "GPL-2.0"
 SubSection "@PACKAGE@" SecMain
 
 	Section "Core" SecCore
+
+		SetRegView 64
 
 		# define the output path for this file
 		setOutPath $INSTDIR
@@ -195,7 +197,6 @@ section "Uninstall"
 	RMDir /r "$INSTDIR\etc"
 	RMDir /r "$INSTDIR\plugins"
 	RMDir /r "$INSTDIR\sdk"
-	RMDir /r "$INSTDIR\gtk2-runtime"
 
 	# Delete all files
 	delete "$INSTDIR\*.dll"
@@ -216,13 +217,20 @@ sectionEnd
 
 Function .onInit
 
-#FindProcDLL::FindProc "@PACKAGE@.exe"
-#IntCmp $R0 1 0 notRunning
-#
-#    MessageBox MB_OK|MB_ICONEXCLAMATION "@PACKAGE@ is running. Please close it first" /SD IDOK
-#    Abort
-#
-#notRunning:
+; define the directory to install to
+; http://bojan-komazec.blogspot.com.br/2011/10/nsis-installer-for-64-bit-windows.html
+;${If} ! ${RunningX64}
+;	MessageBox MB_ERROR|MB_ICONEXCLAMATION "You can´t install a 64 bits application on a non 64 bits machine." /SD IDOK
+;	Abort
+;${EndIf}
+
+;FindProcDLL::FindProc "@PACKAGE@.exe"
+;IntCmp $R0 1 0 notRunning
+;
+;	MessageBox MB_OK|MB_ICONEXCLAMATION "@PACKAGE@ is running. Please close it first" /SD IDOK
+;	Abort
+;
+;notRunning:
 
 #IfFileExists $PROGRAMFILES\ooRexx\rexx.exe RexxOK RexxNOK
 #

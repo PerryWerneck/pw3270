@@ -530,6 +530,8 @@ AC_CONFIG_FILES([
 	pw3270.pc
 	pw3270.spec
 	pw3270.nsi
+	pw3270-i686.nsi
+	pw3270-x86_64.nsi
 	src/include/rules.mak
 	src/include/plugin.mak
 	src/lib3270/Makefile

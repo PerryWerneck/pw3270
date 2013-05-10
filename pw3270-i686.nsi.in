@@ -2,7 +2,7 @@
 
 Name "@PACKAGE@"
 Caption "@PACKAGE@ - 3270 Emulator for windows/gtk"
-outfile "@PACKAGE@-@PACKAGE_VERSION@.@PACKAGE_LEVEL@-gtk-@GTK_MODVERSION@-@host_cpu@-install.exe"
+outfile "@PACKAGE@-@PACKAGE_VERSION@.@PACKAGE_LEVEL@-gtk-@GTK_MODVERSION@-@host_cpu@.exe"
 XPStyle on
 
 # define the directory to install to
@@ -216,13 +216,13 @@ sectionEnd
 
 Function .onInit
 
-#FindProcDLL::FindProc "@PACKAGE@.exe"
-#IntCmp $R0 1 0 notRunning
-#
-#    MessageBox MB_OK|MB_ICONEXCLAMATION "@PACKAGE@ is running. Please close it first" /SD IDOK
-#    Abort
-#
-#notRunning:
+FindProcDLL::FindProc "@PACKAGE@.exe"
+IntCmp $R0 1 0 notRunning
+
+	MessageBox MB_OK|MB_ICONEXCLAMATION "@PACKAGE@ is running. Please close it first" /SD IDOK
+	Abort
+
+notRunning:
 
 #IfFileExists $PROGRAMFILES\ooRexx\rexx.exe RexxOK RexxNOK
 #
