@@ -83,6 +83,7 @@ BuildRequires:	findutils
 BuildRequires:	coreutils
 BuildRequires:	desktop-file-utils
 BuildRequires:	libreoffice-sdk
+BuildRequires:  rsvg-view
 
 %description
 IBM 3270 terminal emulator gtk. It can be used to communicate with
