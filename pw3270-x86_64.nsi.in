@@ -170,10 +170,6 @@ Section /o "Software Development Kit" SecSDK
 	file "/oname=$INSTDIR\sdk\sample\Makefile" "src\sample\Makefile"
 	file "/oname=$INSTDIR\sdk\sample\connect.c" "src\sample\connect.c"
 
-	file "/oname=$INSTDIR\sdk\lib3270.def" 		".bin\Release\lib3270.dll.@PACKAGE_VERSION@.def"
-	file "/oname=$INSTDIR\sdk\pw3270.def" 		".bin\Release\pw3270.dll.@PACKAGE_VERSION@.def"
-	file "/oname=$INSTDIR\sdk\libhllapi.def"	".bin\Release\libhllapi.dll.def"
-
 SectionEnd
 
 # create a section to define what the uninstaller does.
@@ -216,76 +212,6 @@ section "Uninstall"
 sectionEnd
 
 Function .onInit
-
-; define the directory to install to
-; http://bojan-komazec.blogspot.com.br/2011/10/nsis-installer-for-64-bit-windows.html
-;${If} ! ${RunningX64}
-;	MessageBox MB_ERROR|MB_ICONEXCLAMATION "You can´t install a 64 bits application on a non 64 bits machine." /SD IDOK
-;	Abort
-;${EndIf}
-
-;FindProcDLL::FindProc "@PACKAGE@.exe"
-;IntCmp $R0 1 0 notRunning
-;
-;	MessageBox MB_OK|MB_ICONEXCLAMATION "@PACKAGE@ is running. Please close it first" /SD IDOK
-;	Abort
-;
-;notRunning:
-
-#IfFileExists $PROGRAMFILES\ooRexx\rexx.exe RexxOK RexxNOK
-#
-#RexxOK:
-#	SectionGetFlags "${RexxPlugin}" $0
-#	IntOp $0 $0 | ${SF_SELECTED}
-#	SectionSetFlags "${RexxPlugin}" $0
-#
-#	SectionGetFlags "${SecRexxLib}" $0
-#	IntOp $0 $0 | ${SF_SELECTED}
-#	SectionSetFlags "${SecRexxLib}" $0
-#
-#goto PastRexxCheck
-#
-#RexxNOK:
-#	SectionGetFlags "${RexxPlugin}" $0
-#	IntOp $0 $0 | ${SF_RO}
-#	SectionSetFlags "${RexxPlugin}" $0
-#
-#	SectionGetFlags "${SecRexxLib}" $0
-#	IntOp $0 $0 | ${SF_RO}
-#	SectionSetFlags "${SecRexxLib}" $0
-#
-#PastRexxCheck:
-
-	ReadRegStr $4 HKLM "Software\GTK2-Runtime" "DllPath"
-
-	# remove trailing back slash
-	Push $4
-	Exch $EXEDIR
-	Exch $EXEDIR
-	Pop $4
-
-	# if Gtk runtime DLL path exists gtk runtime is already installed.
-	IfFileExists $4 gtkOK gtkNOK
-
-gtkOK:
-
-	SectionGetFlags "${SecGTK}" $0
-	IntOp $0 $0 & ${SECTION_OFF}
-	SectionSetFlags "${SecGTK}" $0
-
-goto PastGTKCheck
-
-gtkNOK:
-
-	SectionGetFlags "${SecGTK}" $0
-	IntOp $0 $0 | ${SF_SELECTED}
-	SectionSetFlags "${SecGTK}" $0
-
-goto PastGTKCheck
-
-
-
-PastGTKCheck:
 
 
 FunctionEnd

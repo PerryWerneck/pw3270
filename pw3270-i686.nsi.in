@@ -216,68 +216,13 @@ sectionEnd
 
 Function .onInit
 
-FindProcDLL::FindProc "@PACKAGE@.exe"
-IntCmp $R0 1 0 notRunning
-
-	MessageBox MB_OK|MB_ICONEXCLAMATION "@PACKAGE@ is running. Please close it first" /SD IDOK
-	Abort
-
-notRunning:
-
-#IfFileExists $PROGRAMFILES\ooRexx\rexx.exe RexxOK RexxNOK
-#
-#RexxOK:
-#	SectionGetFlags "${RexxPlugin}" $0
-#	IntOp $0 $0 | ${SF_SELECTED}
-#	SectionSetFlags "${RexxPlugin}" $0
-#
-#	SectionGetFlags "${SecRexxLib}" $0
-#	IntOp $0 $0 | ${SF_SELECTED}
-#	SectionSetFlags "${SecRexxLib}" $0
-#
-#goto PastRexxCheck
-#
-#RexxNOK:
-#	SectionGetFlags "${RexxPlugin}" $0
-#	IntOp $0 $0 | ${SF_RO}
-#	SectionSetFlags "${RexxPlugin}" $0
-#
-#	SectionGetFlags "${SecRexxLib}" $0
-#	IntOp $0 $0 | ${SF_RO}
-#	SectionSetFlags "${SecRexxLib}" $0
-#
-#PastRexxCheck:
-
-	ReadRegStr $4 HKLM "Software\GTK2-Runtime" "DllPath"
-
-	# remove trailing back slash
-	Push $4
-	Exch $EXEDIR
-	Exch $EXEDIR
-	Pop $4
-
-	# if Gtk runtime DLL path exists gtk runtime is already installed.
-	IfFileExists $4 gtkOK gtkNOK
-
-gtkOK:
-
-	SectionGetFlags "${SecGTK}" $0
-	IntOp $0 $0 & ${SECTION_OFF}
-	SectionSetFlags "${SecGTK}" $0
-
-goto PastGTKCheck
-
-gtkNOK:
-
-	SectionGetFlags "${SecGTK}" $0
-	IntOp $0 $0 | ${SF_SELECTED}
-	SectionSetFlags "${SecGTK}" $0
-
-goto PastGTKCheck
-
-
-
-PastGTKCheck:
+;FindProcDLL::FindProc "@PACKAGE@.exe"
+;IntCmp $R0 1 0 notRunning
+;
+;	MessageBox MB_OK|MB_ICONEXCLAMATION "@PACKAGE@ is running. Please close it first" /SD IDOK
+;	Abort
+;
+;notRunning:
 
 
 FunctionEnd
