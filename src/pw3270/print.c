@@ -259,6 +259,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
 		// Save settings
 		GtkPrintSettings	* settings	= gtk_print_operation_get_print_settings(prt);
 		GtkPageSetup		* pgsetup	= gtk_print_operation_get_default_page_setup(prt);
+		GtkPaperSize        * papersize = gtk_page_setup_get_paper_size(pgsetup);
 
 		trace("Saving settings PrintSettings=%p page_setup=%p",settings,pgsetup);
 
@@ -290,27 +291,23 @@ static gchar * enum_to_string(GType type, guint enum_value)
 
 				g_free (orientation);
 
-				if(RegCreateKeyEx(hKey,"papersize",0,NULL,REG_OPTION_NON_VOLATILE,KEY_SET_VALUE,NULL,&hPaperSize,&disp) == ERROR_SUCCESS)
+				if(papersize && RegCreateKeyEx(hKey,"papersize",0,NULL,REG_OPTION_NON_VOLATILE,KEY_SET_VALUE,NULL,&hPaperSize,&disp) == ERROR_SUCCESS)
 				{
-					GtkPaperSize *size = gtk_page_setup_get_paper_size(pgsetup);
-					if(size)
-					{
-						// From http://git.gnome.org/browse/gtk+/tree/gtk/gtkpapersize.c
-						const gchar *name 			= gtk_paper_size_get_name(size);
-						const gchar *display_name	= gtk_paper_size_get_display_name(size);
-						const gchar *ppd_name		= gtk_paper_size_get_ppd_name(size);
+                    // From http://git.gnome.org/browse/gtk+/tree/gtk/gtkpapersize.c
+                    const gchar *name 			= gtk_paper_size_get_name(papersize);
+                    const gchar *display_name	= gtk_paper_size_get_display_name(papersize);
+                    const gchar *ppd_name		= gtk_paper_size_get_ppd_name(papersize);
 
-						if (ppd_name != NULL)
-							save_string(hPaperSize,"PPDName", ppd_name);
-						else
-							save_string(hPaperSize,"Name", name);
+                    if (ppd_name != NULL)
+                        save_string(hPaperSize,"PPDName", ppd_name);
+                    else
+                        save_string(hPaperSize,"Name", name);
 
-						if (display_name)
-							save_string(hPaperSize,"DisplayName", display_name);
+                    if (display_name)
+                        save_string(hPaperSize,"DisplayName", display_name);
 
-						save_double(hPaperSize, "Width", gtk_paper_size_get_width (size, GTK_UNIT_MM));
-						save_double(hPaperSize, "Height", gtk_paper_size_get_height (size, GTK_UNIT_MM));
-					}
+                    save_double(hPaperSize, "Width", gtk_paper_size_get_width (size, GTK_UNIT_MM));
+                    save_double(hPaperSize, "Height", gtk_paper_size_get_height (size, GTK_UNIT_MM));
 					RegCloseKey(hPaperSize);
 				}
 				RegCloseKey(hKey);
@@ -322,6 +319,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
 		GKeyFile			* conf		= get_application_keyfile();
 		gtk_print_settings_to_key_file(settings,conf,"print_settings");
 		gtk_page_setup_to_key_file(pgsetup,conf,"page_setup");
+        gtk_paper_size_to_key_file(papersize,conf,"paper_size");
 #endif
 	}
 
@@ -547,6 +545,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
  	GtkPrintOperation	* print 	= gtk_print_operation_new();
 	GtkPrintSettings 	* settings	= gtk_print_settings_new();
 	GtkPageSetup 		* setup 	= gtk_page_setup_new();
+    GtkPaperSize        * papersize = gtk_paper_size_new((const gchar *) g_object_get_data(obj,"papersize"));
 
  	*info = g_new0(PRINT_INFO,1);
  	(*info)->session 	= v3270_get_session(widget);
@@ -630,6 +629,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
 
 	// Finish settings
 	gtk_print_operation_set_print_settings(print,settings);
+	gtk_page_setup_set_paper_size_and_default_margins(setup,papersize);
 	gtk_print_operation_set_default_page_setup(print,setup);
 
 	trace("%s ends",__FUNCTION__);
