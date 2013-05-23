@@ -277,9 +277,8 @@ static gchar * enum_to_string(GType type, guint enum_value)
 				RegCloseKey(hKey);
 			}
 
-			if(RegCreateKeyEx(registry,"pagesetup",0,NULL,REG_OPTION_NON_VOLATILE,KEY_SET_VALUE,NULL,&hKey,&disp) == ERROR_SUCCESS)
+			if(RegCreateKeyEx(registry,"page",0,NULL,REG_OPTION_NON_VOLATILE,KEY_SET_VALUE,NULL,&hKey,&disp) == ERROR_SUCCESS)
 			{
-				HKEY			  hPaperSize;
 				gchar			* orientation	= enum_to_string(GTK_TYPE_PAGE_ORIENTATION,gtk_page_setup_get_orientation(pgsetup));
 
 				// From http://git.gnome.org/browse/gtk+/tree/gtk/gtkpagesetup.c
@@ -291,32 +290,43 @@ static gchar * enum_to_string(GType type, guint enum_value)
 
 				g_free (orientation);
 
-				if(papersize && RegCreateKeyEx(hKey,"papersize",0,NULL,REG_OPTION_NON_VOLATILE,KEY_SET_VALUE,NULL,&hPaperSize,&disp) == ERROR_SUCCESS)
-				{
-                    // From http://git.gnome.org/browse/gtk+/tree/gtk/gtkpapersize.c
-                    const gchar *name 			= gtk_paper_size_get_name(papersize);
-                    const gchar *display_name	= gtk_paper_size_get_display_name(papersize);
-                    const gchar *ppd_name		= gtk_paper_size_get_ppd_name(papersize);
-
-                    if (ppd_name != NULL)
-                        save_string(hPaperSize,"PPDName", ppd_name);
-                    else
-                        save_string(hPaperSize,"Name", name);
-
-                    if (display_name)
-                        save_string(hPaperSize,"DisplayName", display_name);
-
-                    save_double(hPaperSize, "Width", gtk_paper_size_get_width (size, GTK_UNIT_MM));
-                    save_double(hPaperSize, "Height", gtk_paper_size_get_height (size, GTK_UNIT_MM));
-					RegCloseKey(hPaperSize);
-				}
 				RegCloseKey(hKey);
 			}
+
+            if(papersize && RegCreateKeyEx(registry,"paper",0,NULL,REG_OPTION_NON_VOLATILE,KEY_SET_VALUE,NULL,&hKey,&disp) == ERROR_SUCCESS)
+            {
+                // From http://git.gnome.org/browse/gtk+/tree/gtk/gtkpapersize.c
+                static const struct _papersettings
+                {
+                    const gchar * name;
+                    const gchar * (*get)(GtkPaperSize *);
+                } papersettings[] =
+                {
+                    { "PPDName",     gtk_paper_size_get_ppd_name        },
+                    { "Name",        gtk_paper_size_get_name            },
+                    { "DisplayName", gtk_paper_size_get_display_name    }
+                };
+
+                int f;
+
+                for(f=0;f<G_N_ELEMENTS(papersettings);f++)
+                {
+                    const gchar *ptr = papersettings[f].get(papersize);
+                    if(ptr)
+                        save_string(hKey,papersettings[f].name,ptr);
+                }
+
+                save_double(hKey, "Width", gtk_paper_size_get_width (papersize, GTK_UNIT_MM));
+                save_double(hKey, "Height", gtk_paper_size_get_height (papersize, GTK_UNIT_MM));
+
+                RegCloseKey(hKey);
+            }
+
 
 			RegCloseKey(registry);
 		}
 #else
-		GKeyFile			* conf		= get_application_keyfile();
+		GKeyFile * conf = get_application_keyfile();
 		gtk_print_settings_to_key_file(settings,conf,"print_settings");
 		gtk_page_setup_to_key_file(pgsetup,conf,"page_setup");
         gtk_paper_size_to_key_file(papersize,conf,"paper_size");
