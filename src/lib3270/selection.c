@@ -372,12 +372,13 @@ LIB3270_ACTION( reselect )
 	return 0;
 }
 
-static char * get_text(H3270 *hSession,unsigned char all)
+static char * get_text(H3270 *hSession,unsigned char all, unsigned char tok)
 {
-	int	row, col, baddr;
-	char *ret;
-	size_t buflen = (hSession->rows * (hSession->cols+1))+1;
-	size_t sz = 0;
+	int				  row, col, baddr;
+	char 			* ret;
+	size_t			  buflen	= (hSession->rows * (hSession->cols+1))+1;
+	size_t			  sz		= 0;
+    unsigned short	  attr		= 0;
 
 	if(!(lib3270_connected(hSession) && hSession->text))
 	{
@@ -388,6 +389,15 @@ static char * get_text(H3270 *hSession,unsigned char all)
 	ret = lib3270_malloc(buflen);
 
 	baddr = 0;
+
+	if(tok)
+	{
+		attr = hSession->text[baddr].attr;
+		ret[sz++] = tok;
+		ret[sz++] = (attr & 0x0F);
+		ret[sz++] = ((attr & 0xF0) >> 4);
+	}
+
 	for(row=0;row < hSession->rows;row++)
 	{
 		int cr = 0;
@@ -396,6 +406,14 @@ static char * get_text(H3270 *hSession,unsigned char all)
 		{
 			if(all || hSession->text[baddr].attr & LIB3270_ATTR_SELECTED)
 			{
+				if(tok && attr != hSession->text[baddr].attr)
+				{
+					attr = hSession->text[baddr].attr;
+					ret[sz++] = tok;
+					ret[sz++] = (attr & 0x0F);
+					ret[sz++] = ((attr & 0xF0) >> 4);
+				}
+
 				cr++;
 				ret[sz++] = hSession->text[baddr].chr;
 			}
@@ -404,6 +422,12 @@ static char * get_text(H3270 *hSession,unsigned char all)
 
 		if(cr)
 			ret[sz++] = '\n';
+
+        if((sz+10) > buflen)
+        {
+            buflen += 100;
+       		ret = lib3270_realloc(ret,buflen);
+        }
 	}
 
 	if(!sz)
@@ -563,7 +587,7 @@ LIB3270_EXPORT char * lib3270_get_selected(H3270 *hSession)
 		return NULL;
 
 
-	return get_text(hSession,0);
+	return get_text(hSession,0,0);
 }
 
 static void copy_chr(H3270 *hSession, int from, int to)
@@ -601,14 +625,6 @@ int cut_addr(H3270 *hSession, int daddr, int saddr, int maxlen, int *sattr)
 {
 	if(hSession->ea_buf[saddr].fa)
 		*sattr = hSession->ea_buf[saddr++].fa;
-
-/*
-	if(FA_IS_PROTECTED(*sattr))
-	{
-		saddr  = lib3270_get_next_unprotected(hSession,saddr);
-		*sattr = lib3270_field_attribute(hSession,saddr);
-	}
-*/
 
 	if(FA_IS_PROTECTED(*sattr) || saddr >= maxlen)
 		clear_chr(hSession,daddr);

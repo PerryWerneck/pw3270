@@ -138,11 +138,7 @@ const gchar * v3270_get_selected_text(GtkWidget *widget, gboolean cut)
 
 	terminal = GTK_V3270(widget);
 
-	if(terminal->clipboard)
-	{
-		g_free(terminal->clipboard);
-		terminal->clipboard = NULL;
-	}
+    v3270_clear_clipboard(terminal);
 
 	if(cut)
 		text = lib3270_cut_selected(terminal->host);
@@ -276,7 +272,7 @@ const gchar * v3270_copy_append(GtkWidget *widget)
 	clip = g_strconcat(terminal->clipboard,"\n",text,NULL);
 
 	g_free(text);
-	g_free(terminal->clipboard);
+    v3270_clear_clipboard(terminal);
 
 	terminal->clipboard = clip;
 

@@ -244,6 +244,8 @@ void		  v3270_draw_shift_status(v3270 *terminal);
 void		  v3270_draw_alt_status(v3270 *terminal);
 void		  v3270_draw_ins_status(v3270 *terminal);
 
+void		  v3270_clear_clipboard(v3270 *terminal);
+
 void		  v3270_update_cursor_surface(v3270 *widget,unsigned char chr,unsigned short attr);
 
 void		  v3270_register_io_handlers(v3270Class *cls);

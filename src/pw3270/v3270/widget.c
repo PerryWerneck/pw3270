@@ -895,6 +895,15 @@ GtkWidget * v3270_new(void)
 	return g_object_new(GTK_TYPE_V3270, NULL);
 }
 
+void v3270_clear_clipboard(v3270 *terminal)
+{
+	if(terminal->clipboard)
+	{
+		g_free(terminal->clipboard);
+		terminal->clipboard = NULL;
+	}
+}
+
 #if GTK_CHECK_VERSION(3,0,0)
 static void v3270_destroy(GtkWidget *widget)
 #else
@@ -969,11 +978,7 @@ static void v3270_destroy(GtkObject *widget)
 		terminal->input_method = NULL;
 	}
 
-	if(terminal->clipboard)
-	{
-		g_free(terminal->clipboard);
-		terminal->clipboard = NULL;
-	}
+    v3270_clear_clipboard(terminal);
 
 	if(terminal->session_name)
 	{
