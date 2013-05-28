@@ -155,12 +155,12 @@ G_BEGIN_DECLS
 
 	struct
 	{
-	    char                * text;                  /**< Clipboard contents (lib3270 charset) */
+	    char                * text;                 /**< Clipboard contents (lib3270 charset) */
+        int                   baddr;	        	/**< Selection addr */
 	} selection;
 
 	LIB3270_CURSOR 			  pointer_id;
 	unsigned char			  pointer;				/**< Mouse pointer ID */
-	int						  selection_addr;		/**< Selection addr */
 
 	V3270_OIA_FIELD			  selected_field;		/**< Clicked OIA field */
 

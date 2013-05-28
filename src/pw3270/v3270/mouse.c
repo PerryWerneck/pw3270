@@ -76,7 +76,7 @@ static void single_click(v3270 *widget, int baddr)
 	default:
 		// Move selected area
 		trace("%s: default action",__FUNCTION__);
-		widget->selection_addr = baddr;
+		widget->selection.baddr = baddr;
 		widget->moving = 1;
 	}
 
@@ -306,7 +306,7 @@ gboolean v3270_motion_notify_event(GtkWidget *widget, GdkEventMotion *event)
 		}
 		if(terminal->moving) 	// Move selected area
 		{
-			terminal->selection_addr = lib3270_drag_selection(terminal->host,terminal->pointer,terminal->selection_addr,baddr);
+			terminal->selection.baddr = lib3270_drag_selection(terminal->host,terminal->pointer,terminal->selection.baddr,baddr);
 		}
 		else
 		{
