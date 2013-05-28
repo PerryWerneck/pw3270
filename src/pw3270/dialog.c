@@ -326,24 +326,36 @@
 
  void save_selected_action(GtkAction *action, GtkWidget *widget)
  {
+    gchar *text = v3270_get_selected(widget,FALSE);
+
 	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
 
-	save_dialog(	action,
-					widget,
-					N_( "Save selection to file" ),
-					N_( "Can't save selection to file\n%s" ),
-					v3270_get_selected_text(widget,FALSE));
+    if(text)
+    {
+        save_dialog(	action,
+                        widget,
+                        N_( "Save selection to file" ),
+                        N_( "Can't save selection to file\n%s" ),
+                        text);
+        g_free(text);
+    }
  }
 
  void save_copy_action(GtkAction *action, GtkWidget *widget)
  {
+    gchar *text = v3270_get_copy(widget);
+
 	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
 
-	save_dialog(	action,
-					widget,
-					N_( "Save copy to file" ),
-					N_( "Can't save copy to file\n%s" ),
-					v3270_get_copy(widget));
+    if(text)
+    {
+        save_dialog(	action,
+                        widget,
+                        N_( "Save copy to file" ),
+                        N_( "Can't save copy to file\n%s" ),
+                        text);
+        g_free(text);
+    }
  }
 
  static void paste_filename(GtkWidget *widget, const gchar *filename, const gchar *encoding)

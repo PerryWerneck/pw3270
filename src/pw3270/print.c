@@ -690,7 +690,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
  {
  	PRINT_INFO			* info 		= NULL;
  	GtkPrintOperation 	* print;
- 	const gchar			* text;
+ 	gchar			    * text;
  	GError				* err		= NULL;
 
  #ifdef X3270_TRACE
@@ -735,6 +735,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
 				if(sz > info->cols)
 					info->cols = sz;
 			}
+			g_free(text);
 		}
 		g_signal_connect(print,"draw_page",G_CALLBACK(draw_text),info);
 		break;

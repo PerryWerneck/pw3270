@@ -129,7 +129,7 @@ static gchar * v3270_cut_selected(v3270 *widget)
 }
 */
 
-const gchar * v3270_get_selected_text(GtkWidget *widget, gboolean cut)
+gchar * v3270_get_selected(GtkWidget *widget, gboolean cut)
 {
 	v3270	* terminal;
 	char	* text;
@@ -232,38 +232,37 @@ const gchar * v3270_get_selected_text(GtkWidget *widget, gboolean cut)
 	lib3270_free(text);
 
 
-	return terminal->clipboard;
+	return g_strdup(terminal->clipboard);
 }
 
-const gchar	* v3270_get_copy(GtkWidget *widget)
+gchar * v3270_get_copy(GtkWidget *widget)
 {
-	v3270 *terminal;
-
 	g_return_val_if_fail(GTK_IS_V3270(widget),NULL);
-
-	terminal = GTK_V3270(widget);
-
-	return terminal->clipboard;
+	return g_strdup(GTK_V3270(widget)->clipboard);
 }
 
-const gchar * v3270_copy_append(GtkWidget *widget)
+void v3270_copy_append(GtkWidget *widget)
 {
 	v3270			* terminal;
 	char 			* str;
 	gchar			* text;
 	gchar 			* clip;
 
-	g_return_val_if_fail(GTK_IS_V3270(widget),NULL);
+	g_return_if_fail(GTK_IS_V3270(widget));
 
 	terminal = GTK_V3270(widget);
 
 	if(!terminal->clipboard)
-		return v3270_get_selected_text(widget,FALSE);
+    {
+        // Clipboard is empty, do a single copy
+        v3270_copy(widget, V3270_SELECT_TEXT, FALSE);
+        return;
+    }
 
 	str = lib3270_get_selected(terminal->host);
 
 	if(!str)
-		return terminal->clipboard;
+		return;
 
 	text = g_convert(str, -1, "UTF-8", lib3270_get_charset(terminal->host), NULL, NULL, NULL);
 
@@ -280,19 +279,18 @@ const gchar * v3270_copy_append(GtkWidget *widget)
 
 	g_signal_emit(widget,v3270_widget_signal[SIGNAL_CLIPBOARD], 0, TRUE);
 
-	return terminal->clipboard;
 }
 
-const gchar * v3270_copy(GtkWidget *widget, V3270_SELECT_FORMAT mode, gboolean cut)
+void v3270_copy(GtkWidget *widget, V3270_SELECT_FORMAT mode, gboolean cut)
 {
-	const gchar		* text;
+	gchar		    * text;
 	GtkClipboard	* clipboard	= gtk_widget_get_clipboard(widget,GDK_SELECTION_CLIPBOARD);
 
-	g_return_val_if_fail(GTK_IS_V3270(widget),NULL);
+	g_return_if_fail(GTK_IS_V3270(widget));
 
 	GTK_V3270(widget)->table = (mode == V3270_SELECT_TABLE ? 1 : 0);
 
-	text = v3270_get_selected_text(widget,cut);
+	text = v3270_get_selected(widget,cut);
 
 	if(text)
 	{
@@ -308,9 +306,8 @@ const gchar * v3270_copy(GtkWidget *widget, V3270_SELECT_FORMAT mode, gboolean c
 		}
 
 		g_signal_emit(widget,v3270_widget_signal[SIGNAL_CLIPBOARD], 0, TRUE);
+		g_free(text);
 	}
-
-	return text;
 
 }
 
