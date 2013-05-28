@@ -152,7 +152,11 @@ G_BEGIN_DECLS
 	GSource					* timer;
 	GtkIMContext			* input_method;
 	unsigned short			  keyflags;
-	gchar					* clipboard;			/**< Clipboard contents (text only) */
+
+	struct
+	{
+	    char                * text;                  /**< Clipboard contents (lib3270 charset) */
+	} selection;
 
 	LIB3270_CURSOR 			  pointer_id;
 	unsigned char			  pointer;				/**< Mouse pointer ID */

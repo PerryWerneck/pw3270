@@ -63,11 +63,17 @@ static void clipboard_get(GtkClipboard *clipboard, GtkSelectionData *selection, 
 
 	switch(target)
 	{
-	case CLIPBOARD_TYPE_TEXT:
-		if(!widget->clipboard)
+	case CLIPBOARD_TYPE_TEXT:   /* Get clipboard contents as text */
+		if(!widget->selection.text)
+        {
 			lib3270_ring_bell(widget->host);
+        }
 		else
-			gtk_selection_data_set_text(selection,widget->clipboard,-1);
+        {
+            gchar * text = g_convert(widget->selection.text, -1, "UTF-8", lib3270_get_charset(widget->host), NULL, NULL, NULL);
+			gtk_selection_data_set_text(selection,text,-1);
+			g_free(text);
+        }
 		break;
 
 	default:
@@ -96,45 +102,10 @@ gchar * v3270_get_text(GtkWidget *widget, int offset, int len)
 	return text;
 }
 
-/**
- * Get lib3270 selection as a g_malloc buffer.
- *
- * @param widget	Widget containing the desired section.
- *
- * @return NULL if error, otherwise the selected buffer contents (release with g_free).
- *
- */ /*
-static gchar * v3270_get_selected(v3270 *widget)
-{
-	gchar *text = lib3270_get_selected(widget->host);
-	if(text)
-	{
-		gchar *str = g_strdup(text);
-		lib3270_free(text);
-		return str;
-	}
-	return NULL;
-}
-
-static gchar * v3270_cut_selected(v3270 *widget)
-{
-	gchar *text = lib3270_cut_selected(widget->host);
-	if(text)
-	{
-		gchar *str = g_strdup(text);
-		lib3270_free(text);
-		return str;
-	}
-	return NULL;
-}
-*/
-
-gchar * v3270_get_selected(GtkWidget *widget, gboolean cut)
+static const char * update_selected_text(GtkWidget *widget, gboolean cut)
 {
 	v3270	* terminal;
 	char	* text;
-
-	g_return_val_if_fail(GTK_IS_V3270(widget),NULL);
 
 	terminal = GTK_V3270(widget);
 
@@ -227,73 +198,51 @@ gchar * v3270_get_selected(GtkWidget *widget, gboolean cut)
 		text = g_string_free(buffer,FALSE);
 	}
 
-	terminal->clipboard = g_convert(text, -1, "UTF-8", lib3270_get_charset(terminal->host), NULL, NULL, NULL);
+    return terminal->selection.text = text;
 
-	lib3270_free(text);
+}
 
+/**
+ * Get lib3270 selection as a g_malloc buffer.
+ *
+ * @param widget	Widget containing the desired section.
+ *
+ * @return NULL if error, otherwise the selected buffer contents (release with g_free).
+ *
+ */
+gchar * v3270_get_selected(GtkWidget *widget, gboolean cut)
+{
+    const char *text;
 
-	return g_strdup(terminal->clipboard);
+	g_return_val_if_fail(GTK_IS_V3270(widget),NULL);
+
+    text = update_selected_text(widget,cut);
+
+    if(text)
+        return g_convert(text, -1, "UTF-8", lib3270_get_charset(GTK_V3270(widget)->host), NULL, NULL, NULL);
+
+    return NULL;
 }
 
 gchar * v3270_get_copy(GtkWidget *widget)
 {
+    const char *text;
 	g_return_val_if_fail(GTK_IS_V3270(widget),NULL);
-	return g_strdup(GTK_V3270(widget)->clipboard);
+
+    text = update_selected_text(widget,FALSE);
+
+    if(text)
+        return g_convert(text, -1, "UTF-8", lib3270_get_charset(GTK_V3270(widget)->host), NULL, NULL, NULL);
+
+    return NULL;
 }
 
-void v3270_copy_append(GtkWidget *widget)
+static void update_system_clipboard(GtkWidget *widget)
 {
-	v3270			* terminal;
-	char 			* str;
-	gchar			* text;
-	gchar 			* clip;
-
-	g_return_if_fail(GTK_IS_V3270(widget));
-
-	terminal = GTK_V3270(widget);
-
-	if(!terminal->clipboard)
-    {
-        // Clipboard is empty, do a single copy
-        v3270_copy(widget, V3270_SELECT_TEXT, FALSE);
-        return;
-    }
-
-	str = lib3270_get_selected(terminal->host);
-
-	if(!str)
-		return;
-
-	text = g_convert(str, -1, "UTF-8", lib3270_get_charset(terminal->host), NULL, NULL, NULL);
-
-	lib3270_free(str);
-
-	clip = g_strconcat(terminal->clipboard,"\n",text,NULL);
-
-	g_free(text);
-    v3270_clear_clipboard(terminal);
-
-	terminal->clipboard = clip;
-
-	gtk_clipboard_set_text(gtk_widget_get_clipboard(widget,GDK_SELECTION_CLIPBOARD),terminal->clipboard,-1);
-
-	g_signal_emit(widget,v3270_widget_signal[SIGNAL_CLIPBOARD], 0, TRUE);
-
-}
-
-void v3270_copy(GtkWidget *widget, V3270_SELECT_FORMAT mode, gboolean cut)
-{
-	gchar		    * text;
-	GtkClipboard	* clipboard	= gtk_widget_get_clipboard(widget,GDK_SELECTION_CLIPBOARD);
-
-	g_return_if_fail(GTK_IS_V3270(widget));
-
-	GTK_V3270(widget)->table = (mode == V3270_SELECT_TABLE ? 1 : 0);
-
-	text = v3270_get_selected(widget,cut);
-
-	if(text)
+	if(GTK_V3270(widget)->selection.text)
 	{
+        GtkClipboard * clipboard	= gtk_widget_get_clipboard(widget,GDK_SELECTION_CLIPBOARD);
+
 		if(gtk_clipboard_set_with_owner(	clipboard,
 											targets,
 											G_N_ELEMENTS(targets),
@@ -306,9 +255,58 @@ void v3270_copy(GtkWidget *widget, V3270_SELECT_FORMAT mode, gboolean cut)
 		}
 
 		g_signal_emit(widget,v3270_widget_signal[SIGNAL_CLIPBOARD], 0, TRUE);
-		g_free(text);
 	}
+}
 
+
+void v3270_copy_append(GtkWidget *widget)
+{
+	v3270			* terminal;
+	char 			* str;
+
+	g_return_if_fail(GTK_IS_V3270(widget));
+
+	terminal = GTK_V3270(widget);
+
+	if(!terminal->selection.text)
+    {
+        // Clipboard is empty, do a single copy
+        v3270_copy(widget, V3270_SELECT_TEXT, FALSE);
+        return;
+    }
+
+	str = lib3270_get_selected(terminal->host);
+
+	if(str)
+    {
+        size_t len = strlen(terminal->selection.text)+strlen(str)+2;
+
+        terminal->selection.text = lib3270_realloc(terminal->selection.text,len);
+
+        strncat(terminal->selection.text,"\n",len);
+        strncat(terminal->selection.text,str,len);
+
+        lib3270_free(str);
+    }
+
+/*
+	text = g_convert(terminal->selection.text, -1, "UTF-8", lib3270_get_charset(terminal->host), NULL, NULL, NULL);
+	gtk_clipboard_set_text(gtk_widget_get_clipboard(widget,GDK_SELECTION_CLIPBOARD),text,-1);
+    g_free(text);
+
+	g_signal_emit(widget,v3270_widget_signal[SIGNAL_CLIPBOARD], 0, TRUE);
+*/
+
+    update_system_clipboard(widget);
+
+}
+
+void v3270_copy(GtkWidget *widget, V3270_SELECT_FORMAT mode, gboolean cut)
+{
+	g_return_if_fail(GTK_IS_V3270(widget));
+	GTK_V3270(widget)->table = (mode == V3270_SELECT_TABLE ? 1 : 0);
+	update_selected_text(widget,cut);
+    update_system_clipboard(widget);
 }
 
 void v3270_paste_string(GtkWidget *widget, const gchar *text, const gchar *encoding)

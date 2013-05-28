@@ -897,11 +897,7 @@ GtkWidget * v3270_new(void)
 
 void v3270_clear_clipboard(v3270 *terminal)
 {
-	if(terminal->clipboard)
-	{
-		g_free(terminal->clipboard);
-		terminal->clipboard = NULL;
-	}
+    terminal->selection.text = lib3270_free(terminal->selection.text);
 }
 
 #if GTK_CHECK_VERSION(3,0,0)
