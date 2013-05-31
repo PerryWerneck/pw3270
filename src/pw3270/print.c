@@ -331,6 +331,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
 		gtk_page_setup_to_key_file(pgsetup,conf,"page_setup");
         gtk_paper_size_to_key_file(papersize,conf,"paper_size");
 #endif
+
 	}
 
 	if(info->font_scaled)
@@ -548,6 +549,31 @@ static gchar * enum_to_string(GType type, guint enum_value)
  	trace("%s: %s=\"%s\"",__FUNCTION__,key,val);
 	gtk_print_settings_set(GTK_PRINT_SETTINGS(settings), key, val);
  }
+
+ // From https://git.gnome.org/browse/gtk+/tree/gtk/gtkprintutils.h
+ #define MM_PER_INCH 25.4
+ #define POINTS_PER_INCH 72
+
+ // From https://git.gnome.org/browse/gtk+/tree/gtk/gtkprintutils.c
+ static gdouble _gtk_print_convert_from_mm (gdouble len, GtkUnit unit)
+ {
+    switch (unit)
+    {
+    case GTK_UNIT_MM:
+        return len;
+    case GTK_UNIT_INCH:
+        return len / MM_PER_INCH;
+
+    default:
+        g_warning ("Unsupported unit");
+
+    /* Fall through */
+    case GTK_UNIT_POINTS:
+        return len / (MM_PER_INCH / POINTS_PER_INCH);
+        break;
+    }
+ }
+
 #endif // WIN32
 
  static GtkPrintOperation * begin_print_operation(GObject *obj, GtkWidget *widget, PRINT_INFO **info)
@@ -555,7 +581,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
  	GtkPrintOperation	* print 	= gtk_print_operation_new();
 	GtkPrintSettings 	* settings	= gtk_print_settings_new();
 	GtkPageSetup 		* setup 	= gtk_page_setup_new();
-    GtkPaperSize        * papersize = gtk_paper_size_new((const gchar *) g_object_get_data(obj,"papersize"));
+    GtkPaperSize        * papersize = NULL;
 
  	*info = g_new0(PRINT_INFO,1);
  	(*info)->session 	= v3270_get_session(widget);
@@ -593,8 +619,9 @@ static gchar * enum_to_string(GType type, guint enum_value)
 
 		if(get_registry_handle("print",&registry,KEY_READ))
 		{
-			HKEY 	hKey;
-			DWORD	disp;
+			HKEY 	  hKey;
+			DWORD	  disp;
+			gchar   * attr  = g_object_get_data(obj,"papersize");
 
 			registry_foreach(registry,"settings",update_settings,(gpointer) settings);
 
@@ -612,13 +639,99 @@ static gchar * enum_to_string(GType type, guint enum_value)
 				RegCloseKey(hKey);
 			}
 
-			#warning Work in progress
+            if(attr)
+            {
+                // Paper is defined in xml, use it
+                papersize = gtk_paper_size_new(attr);
+            }
+			else if(RegCreateKeyEx(registry,"paper",0,NULL,REG_OPTION_NON_VOLATILE,KEY_READ,NULL,&hKey,&disp) == ERROR_SUCCESS)
+            {
+                // Use saved paper size
+                // Reference: https://git.gnome.org/browse/gtk+/tree/gtk/gtkpapersize.c
+                struct _papersettings
+                {
+                    const gchar * name;
+                    gchar       * value;
+                } papersettings[] =
+                {
+                    { "PPDName",     NULL   },
+                    { "Name",        NULL   },
+                    { "DisplayName", NULL   }
+                };
+
+                int f;
+                gdouble width, height;
+
+                // Read paper settings
+                registry_get_double(hKey, "Width",  &width);
+                registry_get_double(hKey, "Height", &height);
+
+                for(f=0;f<G_N_ELEMENTS(papersettings);f++)
+                {
+                    BYTE data[4097];
+                    unsigned long datatype;
+                    unsigned long datalen 	= 4096;
+
+                    if(RegQueryValueExA(hKey,papersettings[f].name,NULL,&datatype,data,&datalen) == ERROR_SUCCESS)
+                    {
+                        data[datalen+1] = 0;
+                        trace("paper[%s]=\"%s\"",papersettings[f].name,data);
+                        papersettings[f].value = g_strdup((gchar *) data);
+                    }
+                }
+
+                #define ppd_name        papersettings[0].value
+                #define name            papersettings[1].value
+                #define display_name    papersettings[2].value
+
+                if(!display_name)
+                    display_name = g_strdup(name);
+
+                if(ppd_name)
+                {
+                    papersize = gtk_paper_size_new_from_ppd(    ppd_name,
+                                                                display_name,
+                                                                _gtk_print_convert_from_mm(width,GTK_UNIT_POINTS),
+                                                                _gtk_print_convert_from_mm(height,GTK_UNIT_POINTS));
+                }
+                else if(name)
+                {
+                    papersize = gtk_paper_size_new_custom(name, display_name,width, height, GTK_UNIT_MM);
+                }
+                else
+                {
+                    g_warning("Invalid paper size settings, using defaults");
+                    papersize = gtk_paper_size_new(NULL);
+                }
+
+                // Release memory
+                #undef ppd_name
+                #undef display_name
+                #undef name
+
+                for(f=0;f<G_N_ELEMENTS(papersettings);f++)
+                {
+                    if(papersettings[f].value)
+                        g_free(papersettings[f].value);
+                }
+
+				RegCloseKey(hKey);
+
+            }
+            else
+            {
+                // Create default
+                papersize = gtk_paper_size_new(NULL);
+            }
+
+
 			RegCloseKey(registry);
 		}
 
 #else
 		GKeyFile	* conf	= get_application_keyfile();
 		GError		* err	= NULL;
+		gchar       * attr  = g_object_get_data(obj,"papersize");
 
 		if(!gtk_print_settings_load_key_file(settings,conf,"print_settings",&err))
 		{
@@ -633,6 +746,31 @@ static gchar * enum_to_string(GType type, guint enum_value)
 			g_error_free(err);
 			err = NULL;
 		}
+
+		if(attr)
+        {
+            // Paper is defined in xml, use it
+            papersize = gtk_paper_size_new(attr);
+        }
+        else if(g_key_file_has_group(conf,"paper_size"))
+        {
+            // Use saved paper size
+            GError *err = NULL;
+
+            papersize = gtk_paper_size_new_from_key_file(conf,"paper_size",&err);
+            if(err)
+            {
+                g_warning("Error loading paper size: %s",err->message);
+                g_error_free(err);
+            }
+
+            trace("Papersize: %p",papersize);
+        }
+        else
+        {
+            // Create default
+            papersize = gtk_paper_size_new(NULL);
+        }
 
 #endif
 	}

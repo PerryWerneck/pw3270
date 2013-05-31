@@ -81,6 +81,14 @@ static void clipboard_get(GtkClipboard *clipboard, GtkSelectionData *selection, 
 	}
 }
 
+/**
+ * Get text at informed area.
+ *
+ * @param widget    Widget.
+ * @param offset    Offset of the desired text.
+ * @param len       Number of characters to get.
+ *
+ */
 gchar * v3270_get_text(GtkWidget *widget, int offset, int len)
 {
 	v3270	* terminal;
@@ -139,7 +147,6 @@ static const char * update_selected_text(GtkWidget *widget, gboolean cut)
 		{
 			int		  c;
 			gchar 	* ptr = ln[l];
-//			GString	* buffer;
 
 			for(c=0;c<width && *ptr;c++)
 			{
@@ -288,14 +295,6 @@ void v3270_copy_append(GtkWidget *widget)
 
         lib3270_free(str);
     }
-
-/*
-	text = g_convert(terminal->selection.text, -1, "UTF-8", lib3270_get_charset(terminal->host), NULL, NULL, NULL);
-	gtk_clipboard_set_text(gtk_widget_get_clipboard(widget,GDK_SELECTION_CLIPBOARD),text,-1);
-    g_free(text);
-
-	g_signal_emit(widget,v3270_widget_signal[SIGNAL_CLIPBOARD], 0, TRUE);
-*/
 
     update_system_clipboard(widget);
 
