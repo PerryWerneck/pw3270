@@ -46,6 +46,18 @@
  #define GTK_IS_V3270_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_V3270))
  #define GTK_V3270_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_V3270, v3270Class))
 
+#if ! GTK_CHECK_VERSION(3,0,0)
+    #define GdkRGBA                                     GdkColor
+    #define gdk_cairo_set_source_rgba(cr,cl)            gdk_cairo_set_source_color(cr,cl)
+    #define gdk_rgba_to_string(c)                       gdk_color_to_string(c)
+    #define gdk_rgba_equal(a,b)                         gdk_color_equal(a,b)
+    #define gdk_rgba_to_string(c)                       gdk_color_to_string(c)
+    #define gtk_color_selection_set_current_rgba(w,c)   gtk_color_selection_set_current_color(w,c)
+    #define gtk_color_selection_get_current_rgba(w,c)   gtk_color_selection_get_current_color(w,c)
+	#define gtk_color_selection_set_previous_rgba(w,c)  gtk_color_selection_set_previous_color(w,c)
+	#define gtk_color_selection_set_current_rgba(w,c)   gtk_color_selection_set_current_color(w,c)
+#endif // !GTK(3,0,0)
+
 
  typedef struct _v3270			v3270;
  typedef struct _v3270Class		v3270Class;
@@ -178,12 +190,12 @@
 
  // Colors
  LIB3270_EXPORT	void			  v3270_set_colors(GtkWidget *widget, const gchar *);
- LIB3270_EXPORT	void 			  v3270_set_color_table(GdkColor *table, const gchar *colors);
- LIB3270_EXPORT	const GdkColor	* v3270_get_color_table(GtkWidget *widget);
- LIB3270_EXPORT	void 			  v3270_set_mono_color_table(GdkColor *table, const gchar *fg, const gchar *bg);
- LIB3270_EXPORT	void		  	  v3270_draw_element(cairo_t *cr, unsigned char chr, unsigned short attr, H3270 *session, guint height, GdkRectangle *rect, GdkColor *color);
- LIB3270_EXPORT	void			  v3270_set_color(GtkWidget *widget, enum V3270_COLOR id, GdkColor *color);
- LIB3270_EXPORT	GdkColor		* v3270_get_color(GtkWidget *widget, enum V3270_COLOR id);
+ LIB3270_EXPORT	void 			  v3270_set_color_table(GdkRGBA *table, const gchar *colors);
+ LIB3270_EXPORT	const GdkRGBA	* v3270_get_color_table(GtkWidget *widget);
+ LIB3270_EXPORT	void 			  v3270_set_mono_color_table(GdkRGBA *table, const gchar *fg, const gchar *bg);
+ LIB3270_EXPORT	void		  	  v3270_draw_element(cairo_t *cr, unsigned char chr, unsigned short attr, H3270 *session, guint height, GdkRectangle *rect, GdkRGBA *color);
+ LIB3270_EXPORT	void			  v3270_set_color(GtkWidget *widget, enum V3270_COLOR id, GdkRGBA *color);
+ LIB3270_EXPORT	GdkRGBA 		* v3270_get_color(GtkWidget *widget, enum V3270_COLOR id);
 
  // Misc
  LIB3270_EXPORT	GtkIMContext	* v3270_get_im_context(GtkWidget *widget);

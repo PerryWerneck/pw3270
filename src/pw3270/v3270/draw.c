@@ -49,7 +49,7 @@ gboolean v3270_draw(GtkWidget * widget, cairo_t * cr)
 		GtkAllocation allocation;
 		gtk_widget_get_allocation(widget, &allocation);
 
-		gdk_cairo_set_source_color(cr,terminal->color+V3270_COLOR_CROSS_HAIR);
+		gdk_cairo_set_source_rgba(cr,terminal->color+V3270_COLOR_CROSS_HAIR);
 
 		cairo_rectangle(cr,	0,terminal->cursor.rect.y+terminal->metrics.height,allocation.width,1);
 		cairo_fill(cr);
@@ -94,7 +94,7 @@ gboolean v3270_expose(GtkWidget *widget, GdkEventExpose *event)
 #endif // GTk3
 
 
-static void get_element_colors(unsigned short attr, GdkColor **fg, GdkColor **bg, GdkColor *color)
+static void get_element_colors(unsigned short attr, GdkRGBA **fg, GdkRGBA **bg, GdkRGBA *color)
 {
 	if(attr & LIB3270_ATTR_SELECTED)
 	{
@@ -112,10 +112,10 @@ static void get_element_colors(unsigned short attr, GdkColor **fg, GdkColor **bg
 	}
 }
 
-void v3270_draw_element(cairo_t *cr, unsigned char chr, unsigned short attr, H3270 *session, guint height, GdkRectangle *rect, GdkColor *color)
+void v3270_draw_element(cairo_t *cr, unsigned char chr, unsigned short attr, H3270 *session, guint height, GdkRectangle *rect, GdkRGBA *color)
 {
-	GdkColor *fg;
-	GdkColor *bg;
+	GdkRGBA *fg;
+	GdkRGBA *bg;
 
 	get_element_colors(attr,&fg,&bg,color);
 	v3270_draw_char(cr,chr,attr,session,height,rect,fg,bg);
@@ -132,7 +132,7 @@ void v3270_draw_element(cairo_t *cr, unsigned char chr, unsigned short attr, H32
 		if(sl < 1)
 			sl = 1;
 
-		gdk_cairo_set_source_color(cr,fg);
+		gdk_cairo_set_source_rgba(cr,fg);
 
 		cairo_rectangle(cr,rect->x,rect->y+sl+extents.ascent+(extents.descent/2),rect->width,sl);
 		cairo_fill(cr);
@@ -143,15 +143,15 @@ void v3270_draw_element(cairo_t *cr, unsigned char chr, unsigned short attr, H32
 
 }
 
-void v3270_draw_char(cairo_t *cr, unsigned char chr, unsigned short attr, H3270 *session, guint height, GdkRectangle *rect, GdkColor *fg, GdkColor *bg)
+void v3270_draw_char(cairo_t *cr, unsigned char chr, unsigned short attr, H3270 *session, guint height, GdkRectangle *rect, GdkRGBA *fg, GdkRGBA *bg)
 {
 	// Clear element area
-	gdk_cairo_set_source_color(cr,bg);
+	gdk_cairo_set_source_rgba(cr,bg);
 	cairo_rectangle(cr, rect->x, rect->y, rect->width, rect->height);
 	cairo_fill(cr);
 
 	// Set foreground color
-	gdk_cairo_set_source_color(cr,fg);
+	gdk_cairo_set_source_rgba(cr,fg);
 
 	// Draw char
 	if( (attr & LIB3270_ATTR_MARKER) && lib3270_get_toggle(session,LIB3270_TOGGLE_VIEW_FIELD) )
@@ -329,7 +329,7 @@ void v3270_reload(GtkWidget *widget)
 	cr = cairo_create(terminal->surface);
 	v3270_update_font_metrics(terminal, cr, width, height);
 
-	gdk_cairo_set_source_color(cr,terminal->color+V3270_COLOR_BACKGROUND);
+	gdk_cairo_set_source_rgba(cr,terminal->color+V3270_COLOR_BACKGROUND);
 	cairo_rectangle(cr, 0, 0, width, height);
 	cairo_fill(cr);
 	cairo_stroke(cr);
@@ -422,8 +422,8 @@ void v3270_update_cursor_surface(v3270 *widget,unsigned char chr,unsigned short 
 	{
 		GdkRectangle	  rect	= widget->cursor.rect;
 		cairo_t			* cr 	= cairo_create(widget->cursor.surface);
-		GdkColor		* fg;
-		GdkColor 		* bg;
+		GdkRGBA		* fg;
+		GdkRGBA 		* bg;
 
 		get_element_colors(attr,&fg,&bg,widget->color);
 

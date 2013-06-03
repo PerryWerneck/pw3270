@@ -1227,7 +1227,7 @@ void v3270_set_colors(GtkWidget *widget, const gchar *colors)
 
 }
 
-void v3270_set_color(GtkWidget *widget, enum V3270_COLOR id, GdkColor *color)
+void v3270_set_color(GtkWidget *widget, enum V3270_COLOR id, GdkRGBA *color)
 {
 	g_return_if_fail(GTK_IS_V3270(widget));
 
@@ -1238,24 +1238,24 @@ void v3270_set_color(GtkWidget *widget, enum V3270_COLOR id, GdkColor *color)
 #endif // !GTK(3,0,0)
 
 }
-GdkColor * v3270_get_color(GtkWidget *widget, enum V3270_COLOR id)
+GdkRGBA * v3270_get_color(GtkWidget *widget, enum V3270_COLOR id)
 {
 	g_return_val_if_fail(GTK_IS_V3270(widget),NULL);
  	return GTK_V3270(widget)->color+id;
 }
 
-const GdkColor * v3270_get_color_table(GtkWidget *widget)
+const GdkRGBA * v3270_get_color_table(GtkWidget *widget)
 {
 	g_return_val_if_fail(GTK_IS_V3270(widget),NULL);
  	return GTK_V3270(widget)->color;
 }
 
-void v3270_set_mono_color_table(GdkColor *clr, const gchar *fg, const gchar *bg)
+void v3270_set_mono_color_table(GdkRGBA *clr, const gchar *fg, const gchar *bg)
 {
 	int f;
 
-	gdk_color_parse(bg,clr);
-	gdk_color_parse(fg,clr+1);
+	gdk_rgba_parse(clr,bg);
+	gdk_rgba_parse(clr+1,fg);
 
 	for(f=2;f<V3270_COLOR_COUNT;f++)
 		clr[f] = clr[1];
@@ -1268,11 +1268,13 @@ void v3270_set_mono_color_table(GdkColor *clr, const gchar *fg, const gchar *bg)
 
 }
 
-void v3270_set_color_table(GdkColor *table, const gchar *colors)
+void v3270_set_color_table(GdkRGBA *table, const gchar *colors)
 {
  	gchar	**clr;
  	guint	  cnt;
  	int		  f;
+
+	trace("colors=[%s]",colors);
 
  	clr = g_strsplit(colors,",",V3270_COLOR_COUNT+1);
  	cnt = g_strv_length(clr);
@@ -1281,13 +1283,13 @@ void v3270_set_color_table(GdkColor *table, const gchar *colors)
  	{
  	case 28:				// Version 4 string
 		for(f=0;f < 28;f++)
-			gdk_color_parse(clr[f],table+f);
+			gdk_rgba_parse(table+f,clr[f]);
 		table[V3270_COLOR_OIA_STATUS_INVALID] = table[V3270_COLOR_OIA_STATUS_WARNING];
 		break;
 
 	case V3270_COLOR_COUNT:	// Complete string
 		for(f=0;f < V3270_COLOR_COUNT;f++)
-			gdk_color_parse(clr[f],table+f);
+			gdk_rgba_parse(table+f,clr[f]);
 		break;
 
 	default:
@@ -1295,10 +1297,10 @@ void v3270_set_color_table(GdkColor *table, const gchar *colors)
 		g_warning("Color table has %d elements; should be %d.",cnt,V3270_COLOR_COUNT);
 
 		for(f=0;f < cnt;f++)
-			gdk_color_parse(clr[f],table+f);
+			gdk_rgba_parse(table+f,clr[f]);
 
 		for(f=cnt; f < V3270_COLOR_COUNT;f++)
-			gdk_color_parse(clr[cnt-1],table+f);
+			gdk_rgba_parse(table+f,clr[cnt-1]);
 
 		clr[V3270_COLOR_OIA_BACKGROUND] = clr[0];
 		clr[V3270_COLOR_SELECTED_BG] 	= clr[0];

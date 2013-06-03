@@ -70,7 +70,7 @@ static void short2string(char *ptr, unsigned short vlr, size_t sz)
 
 
 #ifdef HAVE_LIBM
-static gint draw_spinner(cairo_t *cr, GdkRectangle *r, GdkColor *color, gint step)
+static gint draw_spinner(cairo_t *cr, GdkRectangle *r, GdkRGBA *color, gint step)
 {
 	static const guint num_steps	= 10;
 
@@ -123,7 +123,7 @@ static gint draw_spinner(cairo_t *cr, GdkRectangle *r, GdkColor *color, gint ste
 }
 #endif // HAVE_LIBM
 
-static void setup_cursor_position(GdkRectangle *rect, struct v3270_metrics *metrics, cairo_t *cr, H3270 *host, int cols, GdkColor *color)
+static void setup_cursor_position(GdkRectangle *rect, struct v3270_metrics *metrics, cairo_t *cr, H3270 *host, int cols, GdkRGBA *color)
 {
 	rect->width = metrics->width * 8;
 	rect->x -= rect->width;
@@ -135,7 +135,7 @@ static void setup_cursor_position(GdkRectangle *rect, struct v3270_metrics *metr
 	}
 }
 
-static void setup_timer_position(GdkRectangle *rect, struct v3270_metrics *metrics, cairo_t *cr, H3270 *host, int cols, GdkColor *color)
+static void setup_timer_position(GdkRectangle *rect, struct v3270_metrics *metrics, cairo_t *cr, H3270 *host, int cols, GdkRGBA *color)
 {
 	char buffer[7];
 	cairo_text_extents_t extents;
@@ -150,14 +150,14 @@ static void setup_timer_position(GdkRectangle *rect, struct v3270_metrics *metri
 	rect->x -= rect->width;
 }
 
-static void setup_spinner_position(GdkRectangle *rect, struct v3270_metrics *metrics, cairo_t *cr, H3270 *host, int cols, GdkColor *color)
+static void setup_spinner_position(GdkRectangle *rect, struct v3270_metrics *metrics, cairo_t *cr, H3270 *host, int cols, GdkRGBA *color)
 {
 	rect->width = rect->height;
 	rect->x -= rect->width;
 //	draw_spinner(cr,rect,color,0);
 }
 
-static void setup_luname_position(GdkRectangle *rect, struct v3270_metrics *metrics, cairo_t *cr, H3270 *host, int cols, GdkColor *color)
+static void setup_luname_position(GdkRectangle *rect, struct v3270_metrics *metrics, cairo_t *cr, H3270 *host, int cols, GdkRGBA *color)
 {
 	const char *luname = lib3270_get_luname(host);
 
@@ -171,7 +171,7 @@ static void setup_luname_position(GdkRectangle *rect, struct v3270_metrics *metr
 #ifdef DEBUG
 	cairo_set_source_rgb(cr,0.1,0.1,0.1);
 #else
-	gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_BACKGROUND);
+	gdk_cairo_set_source_rgba(cr,color+V3270_COLOR_OIA_BACKGROUND);
 #endif
 
 	cairo_rectangle(cr, rect->x, rect->y, rect->width, rect->height);
@@ -180,7 +180,7 @@ static void setup_luname_position(GdkRectangle *rect, struct v3270_metrics *metr
 	if(luname)
 	{
 		cairo_move_to(cr,rect->x,rect->y+metrics->height);
-		gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_LUNAME);
+		gdk_cairo_set_source_rgba(cr,color+V3270_COLOR_OIA_LUNAME);
 		cairo_show_text(cr,luname);
 		cairo_stroke(cr);
 	}
@@ -189,7 +189,7 @@ static void setup_luname_position(GdkRectangle *rect, struct v3270_metrics *metr
 
 }
 
-static void setup_single_char_right(GdkRectangle *rect, struct v3270_metrics *metrics, cairo_t *cr, H3270 *host, int cols, GdkColor *color)
+static void setup_single_char_right(GdkRectangle *rect, struct v3270_metrics *metrics, cairo_t *cr, H3270 *host, int cols, GdkRGBA *color)
 {
 	rect->x -= rect->width;
 
@@ -201,7 +201,7 @@ static void setup_single_char_right(GdkRectangle *rect, struct v3270_metrics *me
 
 }
 
-static void setup_insert_position(GdkRectangle *rect, struct v3270_metrics *metrics, cairo_t *cr, H3270 *host, int cols, GdkColor *color)
+static void setup_insert_position(GdkRectangle *rect, struct v3270_metrics *metrics, cairo_t *cr, H3270 *host, int cols, GdkRGBA *color)
 {
 	if(rect->width > rect->height)
 	{
@@ -225,7 +225,7 @@ static void setup_insert_position(GdkRectangle *rect, struct v3270_metrics *metr
 
 
 
-static void setup_double_char_position(GdkRectangle *rect, struct v3270_metrics *metrics, cairo_t *cr, H3270 *host, int cols, GdkColor *color)
+static void setup_double_char_position(GdkRectangle *rect, struct v3270_metrics *metrics, cairo_t *cr, H3270 *host, int cols, GdkRGBA *color)
 {
 	rect->width <<= 1;
 	rect->x -= rect->width;
@@ -238,12 +238,12 @@ static void setup_double_char_position(GdkRectangle *rect, struct v3270_metrics 
 
 }
 
-static void draw_undera(cairo_t *cr, H3270 *host, struct v3270_metrics *metrics, GdkColor *color, GdkRectangle *rect)
+static void draw_undera(cairo_t *cr, H3270 *host, struct v3270_metrics *metrics, GdkRGBA *color, GdkRectangle *rect)
 {
 #ifdef DEBUG
 	cairo_set_source_rgb(cr,0.1,0.1,0.1);
 #else
-	gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_BACKGROUND);
+	gdk_cairo_set_source_rgba(cr,color+V3270_COLOR_OIA_BACKGROUND);
 #endif
 
 	cairo_rectangle(cr, rect->x, rect->y, rect->width, rect->height);
@@ -255,11 +255,11 @@ static void draw_undera(cairo_t *cr, H3270 *host, struct v3270_metrics *metrics,
 		cairo_text_extents_t extents;
 		int x,y;
 
-		gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_BACKGROUND);
+		gdk_cairo_set_source_rgba(cr,color+V3270_COLOR_OIA_BACKGROUND);
 		cairo_rectangle(cr, rect->x, rect->y, rect->width, rect->height);
 		cairo_fill(cr);
 
-		gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_FOREGROUND);
+		gdk_cairo_set_source_rgba(cr,color+V3270_COLOR_OIA_FOREGROUND);
 
 		cairo_text_extents(cr,chr,&extents);
 
@@ -286,15 +286,15 @@ static void draw_centered_text(cairo_t *cr, struct v3270_metrics *metrics, int x
 	cairo_show_text(cr,str);
 }
 
-void v3270_draw_connection(cairo_t *cr, H3270 *host, struct v3270_metrics *metrics, GdkColor *color, const GdkRectangle *rect)
+void v3270_draw_connection(cairo_t *cr, H3270 *host, struct v3270_metrics *metrics, GdkRGBA *color, const GdkRectangle *rect)
 {
  	const gchar *str;
 
-	gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_BACKGROUND);
+	gdk_cairo_set_source_rgba(cr,color+V3270_COLOR_OIA_BACKGROUND);
 	cairo_rectangle(cr, rect->x, rect->y, rect->width, rect->height);
 	cairo_fill(cr);
 
-	gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_FOREGROUND);
+	gdk_cairo_set_source_rgba(cr,color+V3270_COLOR_OIA_FOREGROUND);
 	cairo_rectangle(cr, rect->x, rect->y, rect->width, rect->height);
 	cairo_stroke(cr);
 
@@ -337,12 +337,12 @@ static void draw_xbm(cairo_t *cr, GdkRectangle *rect, int width, int height, uns
 	cairo_restore(cr);
 }
 
-void v3270_draw_ssl_status(cairo_t *cr, H3270 *host, struct v3270_metrics *metrics, GdkColor *color, GdkRectangle *rect)
+void v3270_draw_ssl_status(cairo_t *cr, H3270 *host, struct v3270_metrics *metrics, GdkRGBA *color, GdkRectangle *rect)
 {
 #ifdef DEBUG
 	cairo_set_source_rgb(cr,0.1,0.1,0.1);
 #else
-	gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_BACKGROUND);
+	gdk_cairo_set_source_rgba(cr,color+V3270_COLOR_OIA_BACKGROUND);
 #endif
 
 	cairo_translate(cr, rect->x, rect->y);
@@ -352,24 +352,24 @@ void v3270_draw_ssl_status(cairo_t *cr, H3270 *host, struct v3270_metrics *metri
 	switch(lib3270_get_secure(host))
 	{
 	case LIB3270_SSL_UNSECURE:	/**< No secure connection */
-		gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_FOREGROUND);
+		gdk_cairo_set_source_rgba(cr,color+V3270_COLOR_OIA_FOREGROUND);
 		draw_xbm(cr,rect,unlocked_width,unlocked_height,unlocked_bits);
 		break;
 
 	case LIB3270_SSL_NEGOTIATING:	/**< Negotiating SSL */
-		gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_STATUS_WARNING);
+		gdk_cairo_set_source_rgba(cr,color+V3270_COLOR_OIA_STATUS_WARNING);
 		draw_xbm(cr,rect,negotiated_width,negotiated_height,negotiated_bits);
 		break;
 
 	case LIB3270_SSL_NEGOTIATED:	/**< Connection secure, no CA or self-signed */
-		gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_STATUS_OK);
+		gdk_cairo_set_source_rgba(cr,color+V3270_COLOR_OIA_STATUS_OK);
 		draw_xbm(cr,rect,locked_width,locked_height,locked_bits);
-		gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_STATUS_WARNING);
+		gdk_cairo_set_source_rgba(cr,color+V3270_COLOR_OIA_STATUS_WARNING);
 		draw_xbm(cr,rect,warning_width,warning_height,warning_bits);
 		break;
 
 	case LIB3270_SSL_SECURE:	/**< Connection secure with CA check */
-		gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_STATUS_OK);
+		gdk_cairo_set_source_rgba(cr,color+V3270_COLOR_OIA_STATUS_OK);
 		draw_xbm(cr,rect,locked_width,locked_height,locked_bits);
 		break;
 
@@ -381,7 +381,7 @@ void v3270_draw_ssl_status(cairo_t *cr, H3270 *host, struct v3270_metrics *metri
 
 }
 
-static void draw_status_message(cairo_t *cr, LIB3270_MESSAGE id, struct v3270_metrics *metrics, GdkColor *color, GdkRectangle *rect)
+static void draw_status_message(cairo_t *cr, LIB3270_MESSAGE id, struct v3270_metrics *metrics, GdkRGBA *color, GdkRectangle *rect)
 {
 	#ifdef DEBUG
 		#define OIA_MESSAGE(x,c,y) { #x, c, y }
@@ -477,14 +477,14 @@ static void draw_status_message(cairo_t *cr, LIB3270_MESSAGE id, struct v3270_me
 
 	if(msg)
 	{
-		gdk_cairo_set_source_color(cr,color+message[id].color);
+		gdk_cairo_set_source_rgba(cr,color+message[id].color);
 		cairo_move_to(cr,rect->x,rect->y+metrics->height);
 		cairo_show_text(cr,gettext(msg));
 	}
 
 }
 
-static void draw_insert(cairo_t *cr, H3270 *host, GdkColor *color, GdkRectangle *rect)
+static void draw_insert(cairo_t *cr, H3270 *host, GdkRGBA *color, GdkRectangle *rect)
 {
 	if(lib3270_get_toggle(host,LIB3270_TOGGLE_INSERT))
 	{
@@ -493,7 +493,7 @@ static void draw_insert(cairo_t *cr, H3270 *host, GdkColor *color, GdkRectangle 
 		cairo_rectangle(cr, rect->x, rect->y, rect->width, rect->height);
 		cairo_clip(cr);
 
-		gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_FOREGROUND);
+		gdk_cairo_set_source_rgba(cr,color+V3270_COLOR_OIA_FOREGROUND);
 
 		cairo_move_to(cr,rect->x,y);
 		cairo_rel_line_to(cr,rect->width/2,-(rect->height/1.7));
@@ -503,12 +503,12 @@ static void draw_insert(cairo_t *cr, H3270 *host, GdkColor *color, GdkRectangle 
 
 }
 
-void v3270_draw_oia(cairo_t *cr, H3270 *host, int row, int cols, struct v3270_metrics *metrics, GdkColor *color, GdkRectangle *rect)
+void v3270_draw_oia(cairo_t *cr, H3270 *host, int row, int cols, struct v3270_metrics *metrics, GdkRGBA *color, GdkRectangle *rect)
 {
 	static const struct _right_fields
 	{
 		V3270_OIA_FIELD id;
-		void (*draw)(GdkRectangle *rect, struct v3270_metrics *metrics, cairo_t *cr, H3270 *host, int cols, GdkColor *color);
+		void (*draw)(GdkRectangle *rect, struct v3270_metrics *metrics, cairo_t *cr, H3270 *host, int cols, GdkRGBA *color);
 	} right[] =
 	{
 		{ V3270_OIA_CURSOR_POSITION,	setup_cursor_position 		},
@@ -532,13 +532,13 @@ void v3270_draw_oia(cairo_t *cr, H3270 *host, int row, int cols, struct v3270_me
 	int lCol = metrics->left+1;
 
 	row += OIA_TOP_MARGIN;
-	gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_SEPARATOR);
+	gdk_cairo_set_source_rgba(cr,color+V3270_COLOR_OIA_SEPARATOR);
 	cairo_rectangle(cr, metrics->left, row, cols*metrics->width, 1);
 	cairo_fill(cr);
 
 	row += 2;
 
-	gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_BACKGROUND);
+	gdk_cairo_set_source_rgba(cr,color+V3270_COLOR_OIA_BACKGROUND);
 	cairo_rectangle(cr, metrics->left, row, cols*metrics->width, metrics->spacing);
 	cairo_fill(cr);
 
@@ -551,12 +551,12 @@ void v3270_draw_oia(cairo_t *cr, H3270 *host, int row, int cols, struct v3270_me
 		r->y = row;
 		r->width  = metrics->width;
 		r->height = metrics->spacing;
-		gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_FOREGROUND);
+		gdk_cairo_set_source_rgba(cr,color+V3270_COLOR_OIA_FOREGROUND);
 		right[f].draw(r,metrics,cr,host,cols,color);
 		rCol = r->x - (metrics->width/3);
 	}
 
-	gdk_cairo_set_source_color(cr,color+V3270_COLOR_OIA_FOREGROUND);
+	gdk_cairo_set_source_rgba(cr,color+V3270_COLOR_OIA_FOREGROUND);
 
 	draw_centered_text(cr,metrics,lCol,row,"4");
 
@@ -630,13 +630,13 @@ static cairo_t * set_update_region(v3270 * terminal, GdkRectangle **r, V3270_OIA
 #ifdef DEBUG
 	cairo_set_source_rgb(cr,0.1,0.1,0.1);
 #else
-	gdk_cairo_set_source_color(cr,terminal->color+V3270_COLOR_OIA_BACKGROUND);
+	gdk_cairo_set_source_rgba(cr,terminal->color+V3270_COLOR_OIA_BACKGROUND);
 #endif
 
 	cairo_rectangle(cr, rect->x, rect->y, rect->width, rect->height);
 	cairo_fill(cr);
 
-	gdk_cairo_set_source_color(cr,terminal->color+V3270_COLOR_OIA_FOREGROUND);
+	gdk_cairo_set_source_rgba(cr,terminal->color+V3270_COLOR_OIA_FOREGROUND);
 
 	return cr;
 }
@@ -655,7 +655,7 @@ void v3270_update_luname(GtkWidget *widget,const gchar *name)
 	if(name)
 	{
 		cairo_move_to(cr,rect->x,rect->y+terminal->metrics.height);
-		gdk_cairo_set_source_color(cr,terminal->color+V3270_COLOR_OIA_LUNAME);
+		gdk_cairo_set_source_rgba(cr,terminal->color+V3270_COLOR_OIA_LUNAME);
 		cairo_show_text(cr,name);
 		cairo_stroke(cr);
 	}
@@ -793,7 +793,7 @@ static void release_timer(struct timer_info *info)
 #ifdef DEBUG
 		cairo_set_source_rgb(cr,0.1,0.1,0.1);
 #else
-		gdk_cairo_set_source_color(cr,info->terminal->color+V3270_COLOR_OIA_BACKGROUND);
+		gdk_cairo_set_source_rgba(cr,info->terminal->color+V3270_COLOR_OIA_BACKGROUND);
 #endif
 
 		for(f=0;f<G_N_ELEMENTS(id);f++)
@@ -928,13 +928,13 @@ static gboolean update_timer(struct timer_info *info)
 #ifdef DEBUG
 		cairo_set_source_rgb(cr,0.1,0.1,0.1);
 #else
-		gdk_cairo_set_source_color(cr,info->terminal->color+V3270_COLOR_OIA_BACKGROUND);
+		gdk_cairo_set_source_rgba(cr,info->terminal->color+V3270_COLOR_OIA_BACKGROUND);
 #endif
 
 		cairo_rectangle(cr, rect->x, rect->y, rect->width, rect->height);
 		cairo_fill(cr);
 
-		gdk_cairo_set_source_color(cr,info->terminal->color+V3270_COLOR_OIA_FOREGROUND);
+		gdk_cairo_set_source_rgba(cr,info->terminal->color+V3270_COLOR_OIA_FOREGROUND);
 
 		short2string(buffer,seconds/60,2);
 		buffer[2] = ':';
@@ -956,12 +956,12 @@ static gboolean update_timer(struct timer_info *info)
 #ifdef DEBUG
 		cairo_set_source_rgb(cr,0.1,0.1,0.1);
 #else
-		gdk_cairo_set_source_color(cr,info->terminal->color+V3270_COLOR_OIA_BACKGROUND);
+		gdk_cairo_set_source_rgba(cr,info->terminal->color+V3270_COLOR_OIA_BACKGROUND);
 #endif
 		cairo_rectangle(cr, rect->x, rect->y, rect->width, rect->height);
 		cairo_fill(cr);
 
-		gdk_cairo_set_source_color(cr,info->terminal->color+V3270_COLOR_OIA_FOREGROUND);
+		gdk_cairo_set_source_rgba(cr,info->terminal->color+V3270_COLOR_OIA_FOREGROUND);
 
 		info->step = draw_spinner(cr, rect, info->terminal->color, info->step);
 		gtk_widget_queue_draw_area(GTK_WIDGET(info->terminal),rect->x,rect->y,rect->width,rect->height);

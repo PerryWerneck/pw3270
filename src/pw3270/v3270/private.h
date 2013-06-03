@@ -176,7 +176,7 @@ G_BEGIN_DECLS
 	gint					  minimum_height;
 
 	// Colors
-	GdkColor				  color[V3270_COLOR_COUNT];	/**< Terminal widget colors */
+	GdkRGBA				  color[V3270_COLOR_COUNT];	/**< Terminal widget colors */
 
 	// Regions
 	GdkRectangle			  oia_rect[V3270_OIA_FIELD_COUNT];
@@ -219,7 +219,7 @@ G_BEGIN_DECLS
 const GtkWidgetClass	* v3270_get_parent_class(void);
 
 gboolean	  v3270_draw(GtkWidget * widget, cairo_t * cr);
-void 		  v3270_draw_oia(cairo_t *cr, H3270 *host, int row, int cols, struct v3270_metrics *metrics, GdkColor *color, GdkRectangle *rect);
+void 		  v3270_draw_oia(cairo_t *cr, H3270 *host, int row, int cols, struct v3270_metrics *metrics, GdkRGBA *color, GdkRectangle *rect);
 void		  v3270_update_mouse_pointer(GtkWidget *widget);
 
 #if ! GTK_CHECK_VERSION(2,18,0)
@@ -241,7 +241,9 @@ void		  v3270_update_mouse_pointer(GtkWidget *widget);
 
 
 #if ! GTK_CHECK_VERSION(3,0,0)
- gboolean	  v3270_expose(GtkWidget * widget, GdkEventExpose *event);
+
+#define GdkRGBA
+gboolean	  v3270_expose(GtkWidget * widget, GdkEventExpose *event);
 #endif // GTK 3
 
 void		  v3270_draw_shift_status(v3270 *terminal);
@@ -254,13 +256,13 @@ void		  v3270_update_cursor_surface(v3270 *widget,unsigned char chr,unsigned sho
 
 void		  v3270_register_io_handlers(v3270Class *cls);
 
-void 		  v3270_draw_char(cairo_t *cr, unsigned char chr, unsigned short attr, H3270 *session, guint height, GdkRectangle *rect, GdkColor *fg, GdkColor *bg);
+void 		  v3270_draw_char(cairo_t *cr, unsigned char chr, unsigned short attr, H3270 *session, guint height, GdkRectangle *rect, GdkRGBA *fg, GdkRGBA *bg);
 
 void		  v3270_start_timer(GtkWidget *terminal);
 void		  v3270_stop_timer(GtkWidget *terminal);
 
-void		  v3270_draw_connection(cairo_t *cr, H3270 *host, struct v3270_metrics *metrics, GdkColor *color, const GdkRectangle *rect);
-void		  v3270_draw_ssl_status(cairo_t *cr, H3270 *host, struct v3270_metrics *metrics, GdkColor *color, GdkRectangle *rect);
+void		  v3270_draw_connection(cairo_t *cr, H3270 *host, struct v3270_metrics *metrics, GdkRGBA *color, const GdkRectangle *rect);
+void		  v3270_draw_ssl_status(cairo_t *cr, H3270 *host, struct v3270_metrics *metrics, GdkRGBA *color, GdkRectangle *rect);
 
 void		  v3270_update_char(H3270 *session, int addr, unsigned char chr, unsigned short attr, unsigned char cursor);
 

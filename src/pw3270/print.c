@@ -47,7 +47,7 @@
 
  typedef struct _print_info
  {
-	GdkColor				  color[V3270_COLOR_COUNT];
+	GdkRGBA				  color[V3270_COLOR_COUNT];
 	int 					  show_selection : 1;
 	PW3270_SRC				  src;
 
@@ -160,7 +160,7 @@
 	rect.width	= info->extents.max_x_advance;
 
 	// Clear page
-	gdk_cairo_set_source_color(cr,info->color+V3270_COLOR_BACKGROUND);
+	gdk_cairo_set_source_rgba(cr,info->color+V3270_COLOR_BACKGROUND);
 	cairo_rectangle(cr, info->left-2, 0, (rect.width*info->cols)+4, (rect.height*info->rows)+4);
 	cairo_fill(cr);
 	cairo_stroke(cr);
@@ -517,7 +517,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
  static void custom_widget_apply(GtkPrintOperation *prt, GtkWidget *widget, PRINT_INFO *info)
  {
  	GtkWidget	* combo = g_object_get_data(G_OBJECT(widget),"combo");
- 	GdkColor 	* clr	= g_object_get_data(G_OBJECT(combo),"selected");
+ 	GdkRGBA 	* clr	= g_object_get_data(G_OBJECT(combo),"selected");
 
 	trace("%s starts combo=%p clr=%p widget=%p",__FUNCTION__,combo,clr,widget);
 
@@ -533,7 +533,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
 			info->color[f] = clr[f];
 			if(f)
 				g_string_append_c(str,',');
-			g_string_append_printf(str,"%s",gdk_color_to_string(clr+f));
+			g_string_append_printf(str,"%s",gdk_rgba_to_string(clr+f));
 		}
 		set_string_to_config("print","colors","%s",str->str);
 		g_string_free(str,TRUE);

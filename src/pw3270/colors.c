@@ -32,7 +32,7 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
-static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
+static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkRGBA *clr)
 {
 	#define V3270_COLOR_BASE V3270_COLOR_GRAY+1
 
@@ -54,7 +54,7 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
 
 		case V3270_COLOR_BASE:	// All colors, update it
 			for(f=0;f<V3270_COLOR_BASE;f++)
-				gdk_color_parse(str[f],clr+f);
+				gdk_rgba_parse(clr+f,str[f]);
 			break;
 
 		default:
@@ -62,8 +62,8 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
 			// Unexpected size, load new colors over the defaults
 			g_warning("base color list in %s has %d elements, should have %d",group,g_strv_length(str),V3270_COLOR_GRAY);
 
-			gdk_color_parse(str[0],clr);
-			gdk_color_parse(str[1],clr+1);
+			gdk_rgba_parse(clr,str[0]);
+			gdk_rgba_parse(clr+1,str[1]);
 
 			for(f=2;f<V3270_COLOR_BASE;f++)
 				clr[f] = clr[1];
@@ -71,7 +71,7 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
 			clr[V3270_COLOR_BLACK] = *clr;
 
 			for(f=2;f<MIN(g_strv_length(str),V3270_COLOR_BASE-1);f++)
-				gdk_color_parse(str[f],clr+f);
+				gdk_rgba_parse(clr+f,str[f]);
 
 		}
 		g_strfreev(str);
@@ -81,8 +81,8 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
 	{
 		g_warning("Color scheme [%s] has no \"base\" entry, using green on black",group);
 
-		gdk_color_parse("black",clr);
-		gdk_color_parse("green",clr+1);
+		gdk_rgba_parse(clr,"black");
+		gdk_rgba_parse(clr+1,"green");
 
 		for(f=2;f<V3270_COLOR_BASE;f++)
 			clr[f] = clr[1];
@@ -101,7 +101,7 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
 		gchar **str = g_strsplit(val,",",5);
 
 		for(f=0;f< MIN(g_strv_length(str),4); f++)
-			gdk_color_parse(str[f],clr+V3270_COLOR_FIELD+f);
+			gdk_rgba_parse(clr+V3270_COLOR_FIELD+f,str[f]);
 
 		g_strfreev(str);
 	}
@@ -115,7 +115,7 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
 		gchar **str = g_strsplit(val,",",3);
 
 		for(f=0;f< MIN(g_strv_length(str),2); f++)
-			gdk_color_parse(str[f],clr+V3270_COLOR_SELECTED_BG+f);
+			gdk_rgba_parse(clr+V3270_COLOR_SELECTED_BG+f,str[f]);
 
 		g_strfreev(str);
 	}
@@ -143,13 +143,13 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
 		if(g_strv_length(str) == 5)
 		{
 			for(f=0;f < 5; f++)
-				gdk_color_parse(str[f],clr+V3270_COLOR_OIA_BACKGROUND+f);
+				gdk_rgba_parse(clr+V3270_COLOR_OIA_BACKGROUND+f,str[f]);
 			clr[V3270_COLOR_OIA_STATUS_INVALID] = clr[V3270_COLOR_OIA_STATUS_WARNING];
 		}
 		else
 		{
 			for(f=0;f< MIN(g_strv_length(str),6); f++)
-				gdk_color_parse(str[f],clr+V3270_COLOR_OIA_BACKGROUND+f);
+				gdk_rgba_parse(clr+V3270_COLOR_OIA_BACKGROUND+f,str[f]);
 		}
 
 		g_strfreev(str);
@@ -160,7 +160,7 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
 
 	val = g_key_file_get_string(conf,group,"cross-hair",NULL);
 	if(val)
-		gdk_color_parse(val,clr+V3270_COLOR_CROSS_HAIR);
+		gdk_rgba_parse(clr+V3270_COLOR_CROSS_HAIR,val);
 
 }
 
@@ -168,7 +168,7 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
  {
 	GtkWidget	* terminal	= (GtkWidget *) g_object_get_data(G_OBJECT(combo),"terminal_widget");
 	GtkWidget	* colorsel	= (GtkWidget *) g_object_get_data(G_OBJECT(combo),"color_selection_widget");
-	GdkColor	* clr		= NULL;
+	GdkRGBA	* clr		= NULL;
 	GValue		  value	= { 0, };
 	GtkTreeIter	  iter;
 
@@ -196,18 +196,18 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
 		// Update color selection widget
 		int	id = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(colorsel),"colorid"));
 		if(id >= 0 && id < V3270_COLOR_COUNT)
-			gtk_color_selection_set_current_color(GTK_COLOR_SELECTION(colorsel),clr+id);
+			gtk_color_selection_set_current_rgba(GTK_COLOR_SELECTION(colorsel),clr+id);
 	}
 
  }
 
- static gboolean compare_colors(const GdkColor *colora, const GdkColor *colorb)
+ static gboolean compare_colors(const GdkRGBA *colora, const GdkRGBA *colorb)
  {
  	int f;
 
  	for(f=0;f<V3270_COLOR_COUNT;f++)
 	{
-		if(!gdk_color_equal(colora+f,colorb+f))
+		if(!gdk_rgba_equal(colora+f,colorb+f))
 			return FALSE;
 	}
 
@@ -222,7 +222,7 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
  * @return Combobox widget with colors.conf loaded and set
  *
  */
- GtkWidget * color_scheme_new(const GdkColor *current)
+ GtkWidget * color_scheme_new(const GdkRGBA *current)
  {
 	gchar			* filename	= build_data_filename("colors.conf",NULL);
 	GtkTreeModel	* model		= (GtkTreeModel *) gtk_list_store_new(2,G_TYPE_STRING,G_TYPE_POINTER);
@@ -254,7 +254,7 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
 		{
 			gsize   	len		= 0;
 			gchar		**group = g_key_file_get_groups(conf,&len);
-			GdkColor	* table	= g_new0(GdkColor,(len*V3270_COLOR_COUNT));
+			GdkRGBA	* table	= g_new0(GdkRGBA,(len*V3270_COLOR_COUNT));
 			int			  pos	= 0;
 			int			  g;
 			gboolean 	  found	= FALSE;
@@ -266,7 +266,7 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
 			for(g=0;g<len;g++)
 			{
 				// Setup colors for current entry
-				GdkColor	* clr	= table+pos;
+				GdkRGBA	* clr	= table+pos;
 				const gchar	* label	= g_key_file_get_locale_string(conf,group[g],"label",NULL,NULL);
 
 				load_color_scheme(conf,group[g],clr);
@@ -296,7 +296,7 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
 			{
 				// Custom color table, save it as a new dropdown entry.
 
-				GdkColor 	* clr = g_new0(GdkColor,V3270_COLOR_COUNT);
+				GdkRGBA 	* clr = g_new0(GdkRGBA,V3270_COLOR_COUNT);
 				int			  f;
 
 				for(f=0;f<V3270_COLOR_COUNT;f++)
@@ -330,13 +330,13 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
 
  static void color_changed(GtkColorSelection *colorselection, GtkWidget *widget)
  {
- 	GdkColor	clr;
+ 	GdkRGBA	clr;
 	int			id		= GPOINTER_TO_INT(g_object_get_data(G_OBJECT(colorselection),"colorid"));
 
 	if(id < 0 || id >= V3270_COLOR_COUNT)
 		return;
 
-	gtk_color_selection_get_current_color(colorselection,&clr);
+	gtk_color_selection_get_current_rgba(colorselection,&clr);
 	v3270_set_color(widget,id,&clr);
 	v3270_reload(widget);
 	gtk_widget_queue_draw(widget);
@@ -345,11 +345,11 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
  static void color_selected(GtkTreeSelection *selection, GtkWidget *color)
  {
 	GtkWidget		* widget	= g_object_get_data(G_OBJECT(selection),"v3270");
-	GdkColor		* saved		= g_object_get_data(G_OBJECT(selection),"lastcolors");
+	GdkRGBA		* saved		= g_object_get_data(G_OBJECT(selection),"lastcolors");
 	GValue			  value		= { 0, };
 	GtkTreeModel	* model;
 	GtkTreeIter		  iter;
-	GdkColor		* clr;
+	GdkRGBA		* clr;
 	int				  id;
 
 	gtk_widget_set_sensitive(color,FALSE);
@@ -367,8 +367,8 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
 	g_object_set_data(G_OBJECT(color),"colorid",GINT_TO_POINTER(id));
 	clr = v3270_get_color(widget,id);
 
-	gtk_color_selection_set_previous_color(GTK_COLOR_SELECTION(color),saved+id);
-	gtk_color_selection_set_current_color(GTK_COLOR_SELECTION(color),clr);
+	gtk_color_selection_set_previous_rgba(GTK_COLOR_SELECTION(color),saved+id);
+	gtk_color_selection_set_current_rgba(GTK_COLOR_SELECTION(color),clr);
 
 	gtk_widget_set_sensitive(color,TRUE);
  }
@@ -442,7 +442,7 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
 
 	GtkWidget	* tree;
 	GtkWidget	* color;
-	GdkColor	  saved[V3270_COLOR_COUNT];
+	GdkRGBA	  saved[V3270_COLOR_COUNT];
 
 	// Color dialog setup
 	{
@@ -539,7 +539,7 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkColor *clr)
 		{
 			if(f)
 				g_string_append_c(str,',');
-			g_string_append_printf(str,"%s",gdk_color_to_string(v3270_get_color(widget,f)));
+			g_string_append_printf(str,"%s",gdk_rgba_to_string(v3270_get_color(widget,f)));
 		}
 		set_string_to_config("terminal","colors","%s",str->str);
 		g_string_free(str,TRUE);
