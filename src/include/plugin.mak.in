@@ -72,8 +72,8 @@ DLL_FLAGS=@DLL_FLAGS@
 DLL_CFLAGS=@DLL_CFLAGS@
 DEBUG_CFLAGS=-DDEBUG=1 -g -Wall
 LIB3270_MODE ?= Default
-DLL_NAME=@DLLDIR@/@DLLPREFIX@$(MODULE_NAME)@DLLEXT@
-PLUGIN_NAME=plugins/$(MODULE_NAME)@DLLEXT@
+DLL_NAME ?= @DLLDIR@/@DLLPREFIX@$(MODULE_NAME)@DLLEXT@
+PLUGIN_NAME ?= plugins/$(MODULE_NAME)@DLLEXT@
 
 ifeq ($(LIB3270_MODE),Debug)
 	PW3270_LIBS=-L../../../.bin/Debug@DLLDIR@ -l$(PACKAGE_TARNAME)
@@ -122,11 +122,11 @@ $(OBJRLS)/%.o: %.cc $(DEPENDS)
 
 #---[ Targets ]----------------------------------------------------------------
 
-all: $(BINRLS)/plugins/$(MODULE_NAME)@DLLEXT@
+all: $(BINRLS)/$(PLUGIN_NAME)
 
-Release: $(BINRLS)/plugins/$(MODULE_NAME)@DLLEXT@
+Release: $(BINRLS)/$(PLUGIN_NAME)
 
-Debug: $(BINDBG)/plugins/$(MODULE_NAME)@DLLEXT@
+Debug: $(BINDBG)/$(PLUGIN_NAME)
 
 $(BINDBG)$(DLL_NAME): $(BINDBG)$(DLL_NAME).$(VERSION)
 	@rm -f $@

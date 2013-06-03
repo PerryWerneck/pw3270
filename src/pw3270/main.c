@@ -55,6 +55,7 @@
  static const gchar		* systype		= NULL;
  static const gchar		* toggleset		= NULL;
  static const gchar		* togglereset	= NULL;
+ static const gchar     * logfile       = NULL;
 
 #ifdef HAVE_GTKMAC
  GtkOSXApplication		* osxapp		= NULL;
@@ -240,6 +241,20 @@ static void g_syslog(const gchar *log_domain,GLogLevelFlags log_level,const gcha
 }
 #endif // HAVE_SYSLOG
 
+static void g_logfile(const gchar *log_domain,GLogLevelFlags log_level,const gchar *message,gpointer user_data)
+{
+    FILE *out = fopen(logfile,"a");
+    if(out)
+    {
+        time_t  ltime;
+        char    wrk[40];
+        time(&ltime);
+        strftime(wrk, 39, "%d/%m/%Y %H:%M:%S", localtime(&ltime));
+        fprintf(out,"%s\t%s\n",wrk,message);
+        fclose(out);
+    }
+}
+
 int main(int argc, char *argv[])
 {
 	static const gchar	* session_name	= PACKAGE_NAME;
@@ -316,6 +331,7 @@ int main(int argc, char *argv[])
 #if defined( HAVE_SYSLOG )
 			{ "syslog",			'l', 0, G_OPTION_ARG_NONE,		&log_to_syslog,		N_( "Send messages to syslog" ),			NULL			},
 #endif
+			{ "log",		    'L', 0, G_OPTION_ARG_STRING,	&logfile,		    N_( "Log to file" ),						NULL        	},
 
 			{ NULL }
 		};
@@ -362,7 +378,13 @@ int main(int argc, char *argv[])
 			openlog(g_get_prgname(), LOG_NDELAY, LOG_USER);
 			g_log_set_default_handler(g_syslog,NULL);
 		}
+		else if(logfile)
+#else
+        if(logfile)
 #endif // HAVE_SYSLOG
+        {
+			g_log_set_default_handler(g_logfile,NULL);
+        }
 
 	}
 

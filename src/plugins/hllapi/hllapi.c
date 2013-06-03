@@ -114,7 +114,7 @@ static int connect_ps(char *buffer, unsigned short *length, unsigned short *rc)
 {
 	char *tempbuffer = NULL;
 
-	trace("%s: len=%d buflen=%d",__FUNCTION__,*length,strlen(buffer));
+	trace("%s: len=%d buflen=%d",__FUNCTION__,*length,(int) strlen(buffer));
 
 	if(strlen(buffer) > *length)
 		buffer[*length] = 0;

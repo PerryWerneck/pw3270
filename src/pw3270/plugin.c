@@ -82,6 +82,27 @@
 			if(!handle)
 			{
 				g_message("Error \"%s\" loading %s",g_module_error(),filename);
+/*
+			    gchar       * text  = g_strdup(g_module_error());
+			    gchar       * name  = g_path_get_basename(filename);
+                GtkWidget   * popup = gtk_message_dialog_new_with_markup(
+                                                    NULL,
+                                                    GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                    GTK_MESSAGE_ERROR,GTK_BUTTONS_OK,
+                                                    _( "Can't load plugin %s" ),name);
+
+                gtk_window_set_title(GTK_WINDOW(popup),_("Can't load plugin"));
+
+				g_message("Error \"%s\" loading %s",text,filename);
+
+                gtk_message_dialog_format_secondary_markup(GTK_MESSAGE_DIALOG(popup),_( "<b>%s</b>\n" ),text);
+
+                gtk_dialog_run(GTK_DIALOG(popup));
+                gtk_widget_destroy(popup);
+
+				g_free(text);
+				g_free(name);
+*/
 			}
 			else
 			{

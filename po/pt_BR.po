@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-03 08:12-0300\n"
+"POT-Creation-Date: 2013-06-03 15:24-0300\n"
 "PO-Revision-Date: 2013-05-08 14:30-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
@@ -43,7 +43,7 @@ msgstr "Ação %s precisa de um valor válido"
 msgid "%s action needs src attribute"
 msgstr "Ação %s precisa do atributo src"
 
-#: main.c:88
+#: main.c:89
 #, c-format
 msgid "%s requires GTK version %d.%d.%d"
 msgstr "%s requer GTK versão %d.%d.%d"
@@ -88,7 +88,7 @@ msgstr "%s: Familia %d é inválida"
 msgid "%s:%d"
 msgstr "%s:%d"
 
-#: main.c:323
+#: main.c:339
 msgid "- 3270 Emulator for Gtk"
 msgstr "- Emulador 3270 para GTK"
 
@@ -169,7 +169,7 @@ msgstr ""
 msgid "<b>SSL state is undefined</b>Unexpected SSL status %ld"
 msgstr "<b>Estado do SSL é indefinido</b>Estado SSL inesperado %ld"
 
-#: main.c:343
+#: main.c:359
 msgid ""
 "<b>Valid options:</b>\n"
 "\n"
@@ -222,7 +222,7 @@ msgid "An error occurred trying to allocate memory. This should never happen."
 msgstr ""
 "Ocorreu um erro ao tentar alocar memória. Isso nunca deveria acontecer."
 
-#: main.c:304 main.c:306
+#: main.c:319 main.c:321
 msgid "Application name"
 msgstr "Nome da aplicação"
 
@@ -675,7 +675,7 @@ msgstr "Erro ao resolver %s: %s"
 msgid "Event Trace"
 msgstr "Trace de eventos"
 
-#: ui/rexx.xml:260
+#: ui/80rexx.xml:260
 msgid "External Rexx script"
 msgstr "Script rexx externo"
 
@@ -731,7 +731,7 @@ msgstr "Tela cheia"
 msgid "Function bar"
 msgstr "Barra de funções"
 
-#: main.c:92 main.c:384
+#: main.c:93 main.c:406
 msgid "GTK Version mismatch"
 msgstr "Divergência de versão GTK"
 
@@ -800,11 +800,11 @@ msgstr "Servidor rejeitou o tipo de dispositivo ou requisição"
 msgid "Host rejected resource(s)"
 msgstr "Servidor rejeitou recurso(s)"
 
-#: main.c:312
+#: main.c:327
 msgid "Host system type"
 msgstr "Tipo do sistema no servidor"
 
-#: main.c:310
+#: main.c:325
 msgid "Host to connect"
 msgstr "Servidor a conectar"
 
@@ -899,6 +899,11 @@ msgstr "LRECL:"
 #: ui/10keypad.xml:101
 msgid "Lateral keypad"
 msgstr "Barra lateral"
+
+#: main.c:334
+#, fuzzy
+msgid "Log to file"
+msgstr "Salvar cópia para arquivo"
 
 #: colors.c:388
 msgid "Misc colors"
@@ -1134,7 +1139,7 @@ msgstr "PF8"
 msgid "PF9"
 msgstr "PF9"
 
-#: main.c:341
+#: main.c:357
 msgid "Parse error"
 msgstr "Erro de interpretação"
 
@@ -1171,7 +1176,7 @@ msgstr "Colar com margem esquerda"
 msgid "Path length constraint exceeded"
 msgstr "Path length constraint exceeded"
 
-#: main.c:307
+#: main.c:322
 msgid "Path to application data files"
 msgstr "Caminho para os arquivos de dados da aplicação"
 
@@ -1524,7 +1529,7 @@ msgstr "Trace de tela"
 msgid "Screen size"
 msgstr "Tamanho da tela"
 
-#: ui/rexx.xml:260
+#: ui/80rexx.xml:260
 msgid "Scripts"
 msgstr "Scripts"
 
@@ -1588,7 +1593,7 @@ msgstr "Enviar arquivo"
 msgid "Send file to host"
 msgstr "Enviar arquivo para o servidor"
 
-#: main.c:317
+#: main.c:332
 msgid "Send messages to syslog"
 msgstr "Enviar mensagens para o log do sistema"
 
@@ -1596,7 +1601,7 @@ msgstr "Enviar mensagens para o log do sistema"
 msgid "Send/Receive"
 msgstr "Enviar/Receber"
 
-#: main.c:309
+#: main.c:324
 msgid "Session name"
 msgstr "Nome da sessão"
 
@@ -1604,15 +1609,15 @@ msgstr "Nome da sessão"
 msgid "Set hostname"
 msgstr "Selecione servidor"
 
-#: main.c:311
+#: main.c:326
 msgid "Set reported colors (8/16)"
 msgstr "Define número de cores informadas (8/16)"
 
-#: main.c:314
+#: main.c:329
 msgid "Set toggles OFF"
 msgstr "Desativa toggles"
 
-#: main.c:313
+#: main.c:328
 msgid "Set toggles ON"
 msgstr "Ativa toggles"
 
@@ -1896,7 +1901,7 @@ msgstr ""
 "programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple "
 "Place, Suite 330, Boston, MA, 02111-1307, USA"
 
-#: main.c:380
+#: main.c:402
 #, c-format
 msgid "This program requires GTK version %d.%d.%d"
 msgstr "Este programa precisa do GTK versão %d.%d.%d"
@@ -2039,7 +2044,7 @@ msgstr "Atributo %s inesperado ou inválido: \"%s\""
 msgid "Unexpected or invalid attribute value \"%s\""
 msgstr "Valor de attributo inesperado ou inválido: \"%s\""
 
-#: main.c:193
+#: main.c:194
 #, c-format
 msgid "Unexpected or invalid color value \"%s\""
 msgstr "Valor de cor inválido ou inesperado: \"%s\""
@@ -2249,7 +2254,7 @@ msgstr "_Desconectar"
 msgid "_Edit"
 msgstr "_Editar"
 
-#: ui/rexx.xml:256
+#: ui/80rexx.xml:256
 msgid "_File"
 msgstr "_Arquivo"
 
@@ -2309,7 +2314,7 @@ msgstr "Arquivo _texto"
 msgid "_To"
 msgstr "_Para"
 
-#: ui/rexx.xml:258
+#: ui/80rexx.xml:258
 msgid "_View"
 msgstr "_Exibir"
 
@@ -2354,6 +2359,17 @@ msgstr "translator-credits"
 #: telnet.c:1079
 msgid "unknown error"
 msgstr "Erro desconhecido"
+
+#~ msgid "<b>%s</b>\n"
+#~ msgstr "<b>%s</b>\n"
+
+#, fuzzy
+#~ msgid "Can't load plugin"
+#~ msgstr "Não foi possível carregar arquivo"
+
+#, fuzzy
+#~ msgid "Can't load plugin %s"
+#~ msgstr "Não foi possível carregar %s"
 
 #, fuzzy
 #~ msgid "Script"
