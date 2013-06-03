@@ -126,19 +126,19 @@ SubSection "@PACKAGE@" SecMain
 
 		sectionEnd
 
-#
-#		Section /o "Rexx" RexxPlugin
-#			setOutPath $INSTDIR
-#
-#			CreateDirectory "$INSTDIR"
-#			file src\plugins\rexx\rx3270.cls
-#
-#			CreateDirectory "$INSTDIR\plugins"
-#			file "/oname=$INSTDIR\plugins\rx3270.dll" ".bin\Release\plugins\rx3270.dll"
-#			file "/oname=$INSTDIR\ui\rexx.xml" ui\rexx.xml
-#
-#		sectionEnd
-#
+		Section /o "Rexx" RexxPlugin
+
+			setOutPath $INSTDIR
+
+			file "/oname=$INSTDIR\plugins\rxplug.dll" ".bin\Release\plugins\rx3270.dll"
+			file "/oname=$INSTDIR\ui\80rexx.xml" "ui\80rexx.xml"
+
+			file "/oname=$PROGRAMFILES\ooRexx\rx3270.cls" "src/plugins/rx3270/rx3270.cls"
+			file "/oname=$INSTDIR\rx3270.dll.@PACKAGE_VERSION@" ".bin\Release\rx3270.dll.@PACKAGE_VERSION@"
+			file "/oname=$PROGRAMFILES\ooRexx\rx3270.dll" ".bin\Release\rx3270.dll"
+
+		sectionEnd
+
 	SubSectionEnd
 
 SubSectionEnd
@@ -208,13 +208,23 @@ section "Uninstall"
 	delete $SYSDIR\libhllapi.dll
 
 	# Delete extension libraries
-#	delete $PROGRAMFILES\ooRexx\rx3270.dll
+	delete "$PROGRAMFILES\ooRexx\rx3270.cls"
+	delete "$PROGRAMFILES\ooRexx\rx3270.dll"
 
 	RMDir /r "$INSTDIR"
 
 sectionEnd
 
 Function .onInit
+
+IfFileExists $PROGRAMFILES\ooRexx\rexx.exe EnableRexx RexxSET
+
+EnableRexx:
+	SectionGetFlags "${RexxPlugin}" $0
+	IntOp $0 $0 | ${SF_SELECTED}
+	SectionSetFlags "${RexxPlugin}" $0
+
+RexxSET:
 
 FunctionEnd
 

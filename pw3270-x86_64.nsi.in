@@ -206,7 +206,7 @@ section "Uninstall"
 
 	# Delete extension libraries
 	delete "$PROGRAMFILES64\ooRexx\rx3270.cls"
-    delete "$PROGRAMFILES64\ooRexx\rx3270.dll"
+	delete "$PROGRAMFILES64\ooRexx\rx3270.dll"
 
 	RMDir /r "$INSTDIR"
 
