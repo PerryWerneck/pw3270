@@ -143,7 +143,7 @@ SubSection "@PACKAGE@" SecMain
 
 SubSectionEnd
 
-Section /o "GTK @GTK_MODVERSION@ Runtime" SecGTK
+Section "GTK @GTK_MODVERSION@ Runtime" SecGTK
 
 	setOutPath $INSTDIR
 	file /r ".bin\gtkruntime\*.*"
@@ -215,15 +215,6 @@ section "Uninstall"
 sectionEnd
 
 Function .onInit
-
-;FindProcDLL::FindProc "@PACKAGE@.exe"
-;IntCmp $R0 1 0 notRunning
-;
-;	MessageBox MB_OK|MB_ICONEXCLAMATION "@PACKAGE@ is running. Please close it first" /SD IDOK
-;	Abort
-;
-;notRunning:
-
 
 FunctionEnd
 
