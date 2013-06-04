@@ -30,6 +30,10 @@
  #include <gtk/gtk.h>
  #include "globals.h"
 
+//#if GTK_CHECK_VERSION(3,4,0)
+//    #define USE_GTK_COLOR_CHOOSER 1
+//#endif // GTK_CHECK_VERSION
+
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
 static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkRGBA *clr)
@@ -196,7 +200,13 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkRGBA *clr)
 		// Update color selection widget
 		int	id = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(colorsel),"colorid"));
 		if(id >= 0 && id < V3270_COLOR_COUNT)
+        {
+#if USE_GTK_COLOR_CHOOSER
+			gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(colorsel),clr+id);
+#else
 			gtk_color_selection_set_current_rgba(GTK_COLOR_SELECTION(colorsel),clr+id);
+#endif // GTK_CHECK_VERSION
+        }
 	}
 
  }
@@ -328,24 +338,45 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkRGBA *clr)
 	return widget;
  }
 
- static void color_changed(GtkColorSelection *colorselection, GtkWidget *widget)
+#if USE_GTK_COLOR_CHOOSER
+ static void color_activated(GtkColorChooser *chooser, GdkRGBA *clr, GtkWidget *widget)
  {
- 	GdkRGBA	clr;
-	int			id		= GPOINTER_TO_INT(g_object_get_data(G_OBJECT(colorselection),"colorid"));
+	int id = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(chooser),"colorid"));
 
 	if(id < 0 || id >= V3270_COLOR_COUNT)
 		return;
 
-	gtk_color_selection_get_current_rgba(colorselection,&clr);
+    trace("Updating color %d",id);
+
+	v3270_set_color(widget,id,clr);
+	v3270_reload(widget);
+	gtk_widget_queue_draw(widget);
+
+ }
+
+#else
+ static void color_changed(GtkWidget *colorselection, GtkWidget *widget)
+ {
+ 	GdkRGBA	clr;
+	int		id		= GPOINTER_TO_INT(g_object_get_data(G_OBJECT(colorselection),"colorid"));
+
+	if(id < 0 || id >= V3270_COLOR_COUNT)
+		return;
+
+	gtk_color_selection_get_current_rgba(GTK_COLOR_SELECTION(colorselection),&clr);
+
 	v3270_set_color(widget,id,&clr);
 	v3270_reload(widget);
 	gtk_widget_queue_draw(widget);
  }
+#endif // GTK_CHECK_VERSION
 
  static void color_selected(GtkTreeSelection *selection, GtkWidget *color)
  {
 	GtkWidget		* widget	= g_object_get_data(G_OBJECT(selection),"v3270");
+#if ! USE_GTK_COLOR_CHOOSER
 	GdkRGBA		* saved		= g_object_get_data(G_OBJECT(selection),"lastcolors");
+#endif // !GTK(3,4,0)
 	GValue			  value		= { 0, };
 	GtkTreeModel	* model;
 	GtkTreeIter		  iter;
@@ -367,8 +398,20 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkRGBA *clr)
 	g_object_set_data(G_OBJECT(color),"colorid",GINT_TO_POINTER(id));
 	clr = v3270_get_color(widget,id);
 
+#if USE_GTK_COLOR_CHOOSER
+    {
+        GValue value;
+
+        gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(color),clr);
+
+        g_value_init(&value, G_TYPE_BOOLEAN);
+        g_value_set_boolean(&value,FALSE);
+        g_object_set_property(G_OBJECT(color),"show-editor",&value);
+    }
+#else
 	gtk_color_selection_set_previous_rgba(GTK_COLOR_SELECTION(color),saved+id);
 	gtk_color_selection_set_current_rgba(GTK_COLOR_SELECTION(color),clr);
+#endif // GTK_CHECK_VERSION
 
 	gtk_widget_set_sensitive(color,TRUE);
  }
@@ -445,15 +488,20 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkRGBA *clr)
 	GdkRGBA	  saved[V3270_COLOR_COUNT];
 
 	// Color dialog setup
-	{
-		color = gtk_color_selection_new();
-		gtk_widget_set_sensitive(color,0);
-		gtk_color_selection_set_has_opacity_control(GTK_COLOR_SELECTION(color),FALSE);
-		gtk_color_selection_set_has_palette(GTK_COLOR_SELECTION(color),TRUE);
-		gtk_box_pack_end(GTK_BOX(panned),color,TRUE,TRUE,0);
-		g_object_set_data(G_OBJECT(color),"colorid",(gpointer) -1);
-		g_signal_connect(G_OBJECT(color),"color-changed",G_CALLBACK(color_changed),widget);
-	}
+#if USE_GTK_COLOR_CHOOSER
+    color = gtk_color_chooser_widget_new();
+    gtk_widget_set_sensitive(color,0);
+    g_signal_connect(G_OBJECT(color),"color-activated",G_CALLBACK(color_activated),widget);
+#else
+    color = gtk_color_selection_new();
+    gtk_widget_set_sensitive(color,0);
+    gtk_color_selection_set_has_opacity_control(GTK_COLOR_SELECTION(color),FALSE);
+    gtk_color_selection_set_has_palette(GTK_COLOR_SELECTION(color),TRUE);
+    g_signal_connect(G_OBJECT(color),"color-changed",G_CALLBACK(color_changed),widget);
+#endif // GTK_CHECK_VERSION
+
+    gtk_box_pack_end(GTK_BOX(panned),color,TRUE,TRUE,0);
+    g_object_set_data(G_OBJECT(color),"colorid",(gpointer) -1);
 
 	// Tree view with all available colors
 	{
