@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-03 15:46-0300\n"
+"POT-Creation-Date: 2013-06-05 12:30-0300\n"
 "PO-Revision-Date: 2013-05-08 14:30-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
@@ -255,7 +255,7 @@ msgstr "Avblock"
 msgid "BLKSIZE:"
 msgstr "BLKSIZE:"
 
-#: colors.c:393
+#: colors.c:437
 msgid "Background"
 msgstr "Fundo"
 
@@ -263,7 +263,7 @@ msgstr "Fundo"
 msgid "Bad winsock version"
 msgstr "Versão winsock inválida"
 
-#: colors.c:401
+#: colors.c:445
 msgid "Black"
 msgstr "Preto"
 
@@ -275,7 +275,7 @@ msgstr "Completar com espaços"
 msgid "Blinking Cursor"
 msgstr "Cursor piscante"
 
-#: colors.c:394
+#: colors.c:438
 msgid "Blue"
 msgstr "Azul"
 
@@ -483,11 +483,11 @@ msgstr "Tabela de tradução tem mais de 256 caracteres"
 msgid "Clear"
 msgstr "Limpar"
 
-#: colors.c:525
+#: colors.c:574
 msgid "Color scheme:"
 msgstr "Tema de cores:"
 
-#: colors.c:431
+#: colors.c:475
 msgid "Color setup"
 msgstr "Configuração de cores"
 
@@ -519,7 +519,7 @@ msgstr "Copiar como HTML"
 msgid "Copy as table"
 msgstr "Copiar como tabela"
 
-#: colors.c:418 ui/00default.xml:388
+#: colors.c:462 ui/00default.xml:388
 msgid "Cross hair cursor"
 msgstr "Cursor mira"
 
@@ -528,7 +528,7 @@ msgstr "Cursor mira"
 msgid "Current (%s)"
 msgstr "Atual (%s)"
 
-#: colors.c:311
+#: colors.c:322
 msgid "Custom colors"
 msgstr "Cores personalizadas"
 
@@ -548,11 +548,11 @@ msgstr "Tamanho do b_uffer DFT:"
 msgid "DS Trace"
 msgstr "DS Trace"
 
-#: colors.c:402
+#: colors.c:446
 msgid "Dark Blue"
 msgstr "Azul Escuro"
 
-#: colors.c:405
+#: colors.c:449
 msgid "Dark Green"
 msgstr "Verde Escuro"
 
@@ -683,7 +683,7 @@ msgstr "Script rexx externo"
 msgid "Extra CGCSGID(s), ignoring"
 msgstr "Extra CGCSGID(s), ignoring"
 
-#: colors.c:387
+#: colors.c:431
 msgid "Field colors"
 msgstr "Cor dos campos"
 
@@ -735,11 +735,11 @@ msgstr "Barra de funções"
 msgid "GTK Version mismatch"
 msgstr "Divergência de versão GTK"
 
-#: colors.c:408
+#: colors.c:452
 msgid "Gray"
 msgstr "Cinza"
 
-#: colors.c:397
+#: colors.c:441
 msgid "Green"
 msgstr "Verde"
 
@@ -837,11 +837,11 @@ msgstr "Informações"
 msgid "Input method"
 msgstr "Método de entrada"
 
-#: colors.c:413
+#: colors.c:457
 msgid "Intensified/Protected"
 msgstr "Intensificado/Protegido"
 
-#: colors.c:411
+#: colors.c:455
 msgid "Intensified/Unprotected"
 msgstr "Intensificado/Desprotegido"
 
@@ -905,7 +905,7 @@ msgstr "Barra lateral"
 msgid "Log to file"
 msgstr "Salvar cópia para arquivo"
 
-#: colors.c:388
+#: colors.c:432
 msgid "Misc colors"
 msgstr "Cores diversas"
 
@@ -938,7 +938,7 @@ msgstr "Múltiplos nomes de porta"
 msgid "Must specify port for telnet proxy"
 msgstr "Proxy telnet precisa de porta"
 
-#: colors.c:407
+#: colors.c:451
 msgid "Mustard"
 msgstr "Mostarda"
 
@@ -966,11 +966,11 @@ msgstr ""
 "Nenhuma assinatura pode ser verificada, porque a cadeia contém apenas um "
 "certificado e não é auto assinado."
 
-#: colors.c:412
+#: colors.c:456
 msgid "Normal/Protected"
 msgstr "Normal/Protegido"
 
-#: colors.c:410
+#: colors.c:454
 msgid "Normal/Unprotected"
 msgstr "Normal/Desprotegido"
 
@@ -982,27 +982,27 @@ msgstr "Não disponível"
 msgid "Not in 3270 mode, transfer cancelled"
 msgstr "Não está no modo 3270, transferência cancelada"
 
-#: colors.c:425
+#: colors.c:469
 msgid "OIA Warning"
 msgstr "Alerta na OIA"
 
-#: colors.c:421
+#: colors.c:465
 msgid "OIA background"
 msgstr "Fundo da OIA"
 
-#: colors.c:422
+#: colors.c:466
 msgid "OIA foreground"
 msgstr "Frente da OIA"
 
-#: colors.c:423
+#: colors.c:467
 msgid "OIA separator"
 msgstr "Separador da OIA"
 
-#: colors.c:426
+#: colors.c:470
 msgid "OIA status invalid"
 msgstr "Estado inválido na OIA"
 
-#: colors.c:424
+#: colors.c:468
 msgid "OIA status ok"
 msgstr "Estado normal na OIA"
 
@@ -1015,7 +1015,7 @@ msgstr "Opção não suportada: '%c:'"
 msgid "Options"
 msgstr "Opções"
 
-#: colors.c:403
+#: colors.c:447
 msgid "Orange"
 msgstr "Laranja"
 
@@ -1180,7 +1180,7 @@ msgstr "Path length constraint exceeded"
 msgid "Path to application data files"
 msgstr "Caminho para os arquivos de dados da aplicação"
 
-#: colors.c:396
+#: colors.c:440
 msgid "Pink"
 msgstr "Rosa"
 
@@ -1220,7 +1220,7 @@ msgstr "Configurações de impressão"
 msgid "Progress"
 msgstr "Progresso"
 
-#: colors.c:404
+#: colors.c:448
 msgid "Purple"
 msgstr "Púrpura"
 
@@ -1312,7 +1312,7 @@ msgstr "Receber arquivo do servidor"
 msgid "Record format"
 msgstr "Formato de registro"
 
-#: colors.c:395
+#: colors.c:439
 msgid "Red"
 msgstr "Vermelho"
 
@@ -1569,11 +1569,11 @@ msgstr "Selecione fonte"
 msgid "Select hostname"
 msgstr "Selecione host"
 
-#: colors.c:415
+#: colors.c:459
 msgid "Selection background"
 msgstr "Fundo da seleção"
 
-#: colors.c:416
+#: colors.c:460
 msgid "Selection foreground"
 msgstr "Frente da seleção"
 
@@ -1677,7 +1677,7 @@ msgstr "Negociação TLS falhou"
 msgid "T_otal"
 msgstr "T_otal"
 
-#: colors.c:386
+#: colors.c:430
 msgid "Terminal colors"
 msgstr "Cores do terminal"
 
@@ -1944,7 +1944,7 @@ msgstr "Opções de transferência"
 msgid "Transmission error"
 msgstr "Erro de transmissão"
 
-#: colors.c:398 colors.c:406
+#: colors.c:442 colors.c:450
 msgid "Turquoise"
 msgstr "Turquesa"
 
@@ -2170,7 +2170,7 @@ msgstr "Aguardando resposta do pedido de upload"
 msgid "Western Europe (ISO 8859-1)"
 msgstr "Europa ocidental (ISO 8859-1)"
 
-#: colors.c:400
+#: colors.c:444
 msgid "White"
 msgstr "Branco"
 
@@ -2226,7 +2226,7 @@ msgstr "X Sistema"
 msgid "X Wait"
 msgstr "X Aguarde"
 
-#: colors.c:399
+#: colors.c:443
 msgid "Yellow"
 msgstr "Amarelo"
 
