@@ -49,6 +49,7 @@
 #if ! GTK_CHECK_VERSION(3,0,0)
     #define GdkRGBA                                     GdkColor
     #define gdk_cairo_set_source_rgba(cr,cl)            gdk_cairo_set_source_color(cr,cl)
+    #define gdk_rgba_parse(a,b)                         gdk_color_parse(b,a)
     #define gdk_rgba_to_string(c)                       gdk_color_to_string(c)
     #define gdk_rgba_equal(a,b)                         gdk_color_equal(a,b)
     #define gdk_rgba_to_string(c)                       gdk_color_to_string(c)

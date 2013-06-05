@@ -241,8 +241,6 @@ void		  v3270_update_mouse_pointer(GtkWidget *widget);
 
 
 #if ! GTK_CHECK_VERSION(3,0,0)
-
-#define GdkRGBA
 gboolean	  v3270_expose(GtkWidget * widget, GdkEventExpose *event);
 #endif // GTK 3
 

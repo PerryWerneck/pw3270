@@ -31,7 +31,7 @@
  #include "globals.h"
 
 //#if GTK_CHECK_VERSION(3,4,0)
- #ifdef DEBUG
+ #if defined(DEBUG) && GTK_CHECK_VERSION(3,4,0)
     #define USE_GTK_COLOR_CHOOSER 1
  #endif // GTK_CHECK_VERSION
 
