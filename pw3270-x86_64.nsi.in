@@ -90,10 +90,12 @@ SubSection "@PACKAGE@" SecMain
 		file "/oname=$INSTDIR\@localedir@\pt_BR\LC_MESSAGES\@PACKAGE@.mo" ".bin\Release\@localedir@\pt_BR\LC_MESSAGES\@PACKAGE@.mo"
 
 		# Save DataDir
-		WriteRegStr HKLM "Software\@PACKAGE@" \
-			         "datadir" $INSTDIR
+		SetRegView 64
+		WriteRegStr HKLM "Software\@PACKAGE@" "datadir" $INSTDIR
 
 		# define uninstaller name
+		SetRegView 32
+
 		writeUninstaller $INSTDIR\uninstall.exe
 
 		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PACKAGE@" \
@@ -198,6 +200,10 @@ section "Uninstall"
 	delete "$INSTDIR\*.dll"
 
 	# Remove registry
+	SetRegView 64
+	DeleteRegKey HKLM "Software\@PACKAGE@" 
+
+	SetRegView 32
 	DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PACKAGE@"
 	DeleteRegKey HKLM "Software\@PACKAGE@"
 
