@@ -374,11 +374,81 @@ struct connect_parm
 
 static int do_connect_sock(H3270 *h, struct connect_parm *p)
 {
+#ifdef WIN32
 
 	if(connect(p->sockfd, p->addr, p->addrlen) == -1)
 		p->err = socket_errno();
 	else
 		p->err = 0;
+
+#else
+
+    // Linux, use 120 seconds timeout
+    fcntl(p->sockfd, F_SETFL,fcntl(p->sockfd,F_GETFL,0)|O_NONBLOCK);
+
+    errno = 0;
+    if(connect(p->sockfd, p->addr, p->addrlen))
+    {
+        if( errno != EINPROGRESS )
+        {
+            p->err = errno;
+            lib3270_write_log(h,"lib3270","Error %s on connect",strerror(errno));
+        }
+        else
+        {
+            // Connection in progress, wait
+            fd_set				wr;
+            struct timeval		tm;
+            int					err;
+            socklen_t			len		= sizeof(err);
+
+            FD_ZERO(&wr);
+            FD_SET(p->sockfd, &wr);
+            memset(&tm,0,sizeof(tm));
+
+            tm.tv_sec = 120;    // 2 minutes timeout
+
+            switch(select(p->sockfd+1, NULL, &wr, NULL, &tm))
+            {
+            case 0:
+                lib3270_write_log(h,"lib3270","Connect timeout");
+                p->err = ETIMEDOUT;
+                break;
+
+            case -1:
+                lib3270_write_log(h,"lib3270","Select error \"%s while connecting",strerror(errno));
+                p->err = errno;
+                break;
+
+            default:
+
+                // Se o socket nao esta disponivel para gravacao o connect falhou
+                if(!FD_ISSET(p->sockfd,&wr))
+                {
+                    lib3270_write_log(h,"lib3270","Unexpected connection failure, the socket wasn't ready to write");
+                    p->err = ENOTCONN;
+                }
+                else if(getsockopt(p->sockfd, SOL_SOCKET, SO_ERROR, &err, &len) < 0)
+                {
+                    lib3270_write_log(h,"lib3270","Connect error. Error \"%s\" when getting socket state",strerror(errno));
+                    p->err = ENOTCONN;
+                }
+                else if(err)
+                {
+                    lib3270_write_log(h,"lib3270","Connection error \"%s\"",strerror(err));
+                    p->err = err;
+                }
+                else
+                {
+                    lib3270_write_log(h,"lib3270","Connected to host");
+                    p->err = 0;
+                }
+            }
+        }
+    }
+
+    fcntl(p->sockfd, F_SETFL,fcntl(p->sockfd,F_GETFL,0)&(~O_NONBLOCK));
+#endif // WIN32
 
 	return 0;
 }
