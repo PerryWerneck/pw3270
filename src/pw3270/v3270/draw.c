@@ -370,6 +370,7 @@ void v3270_reload(GtkWidget *widget)
 
 	}
 
+	cairo_set_scaled_font(cr,terminal->font_scaled);
 	v3270_draw_oia(cr, terminal->host, rect.y, cols, &terminal->metrics, terminal->color,terminal->oia_rect);
 
     cairo_destroy(cr);

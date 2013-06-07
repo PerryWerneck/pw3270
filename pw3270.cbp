@@ -430,8 +430,8 @@
 		<Unit filename="ui/00default.xml" />
 		<Unit filename="ui/10functions.xml" />
 		<Unit filename="ui/10keypad.xml" />
+		<Unit filename="ui/80rexx.xml" />
 		<Unit filename="ui/99debug.xml" />
-		<Unit filename="ui/rexx.xml" />
 		<Unit filename="updateChangeLog.sh" />
 		<Extensions>
 			<code_completion />
