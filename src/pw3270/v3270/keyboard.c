@@ -107,6 +107,7 @@
 		v3270_draw_shift_status(terminal);
 	}
 
+#ifdef KEY_FLAG_ALT
 	if(keyval_is_alt())
 	{
 		if(status)
@@ -115,6 +116,7 @@
 			terminal->keyflags &= ~KEY_FLAG_ALT;
 		v3270_draw_alt_status(terminal);
 	}
+#endif // KEY_FLAG_ALT
 
  }
 

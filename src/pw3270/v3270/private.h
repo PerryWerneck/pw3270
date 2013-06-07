@@ -62,7 +62,10 @@ G_BEGIN_DECLS
  #define OIA_TOP_MARGIN 2
 
  #define KEY_FLAG_SHIFT	0x0001
- #define KEY_FLAG_ALT	0x0002
+
+ #ifndef WIN32
+  #define KEY_FLAG_ALT	0x0002
+ #endif // !WIN32
 
  enum
  {

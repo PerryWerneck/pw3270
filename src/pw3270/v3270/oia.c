@@ -887,7 +887,9 @@ static void update_text_field(v3270 *terminal, gboolean flag, V3270_OIA_FIELD id
 
 void v3270_draw_alt_status(v3270 *terminal)
 {
+#ifdef KEY_FLAG_ALT
 	update_text_field(terminal,terminal->keyflags & KEY_FLAG_ALT,V3270_OIA_ALT,'A');
+#endif // KEY_FLAG_ALT
 }
 
 void v3270_draw_ins_status(v3270 *terminal)
