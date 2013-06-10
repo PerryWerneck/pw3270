@@ -202,7 +202,25 @@
 		}
 		else
 		{
-			#warning TODO: Configurar o tipo de host de acordo com systype
+            int f;
+
+            iHostType = -1;
+			for(f=0;f<G_N_ELEMENTS(host_type);f++)
+			{
+                if(!g_ascii_strcasecmp(systype,host_type[f].name))
+                {
+                    g_message("Host set to %s (%s) by action property",host_type[f].name,host_type[f].description);
+                    iHostType = f;
+                    break;
+                }
+            }
+
+            if(iHostType == -1)
+            {
+                iHostType = 0;
+                g_message("Unexpected host type \"%s\", using defaults",systype);
+            }
+
 		}
 
 		if(!colortype)

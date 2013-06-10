@@ -517,16 +517,6 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 		vrprnt  = parse_ctlchar("^R");
 		vlnext  = parse_ctlchar("^V");
 
-/*
-		vintr   = parse_ctlchar(appres.intr);
-		vquit   = parse_ctlchar(appres.quit);
-		verase  = parse_ctlchar(appres.erase);
-		vkill   = parse_ctlchar(appres.kill);
-		veof    = parse_ctlchar(appres.eof);
-		vwerase = parse_ctlchar(appres.werase);
-		vrprnt  = parse_ctlchar(appres.rprnt);
-		vlnext  = parse_ctlchar(appres.lnext);
-*/
 		t_valid = 1;
 	}
 #endif /*]*/
