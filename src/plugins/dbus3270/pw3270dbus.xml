@@ -93,6 +93,15 @@
       <arg type="s" name="text" direction="in" />
       <arg type="i" name="result" direction="out" />
     </method>
-
+    <method name="getFieldStart">
+      <annotation name="org.freedesktop.DBus.GLib.Async" value="true"/>
+      <arg type="i" name="addr" direction="in" />
+      <arg type="i" name="result" direction="out" />
+    </method>
+    <method name="getFieldLength">
+      <annotation name="org.freedesktop.DBus.GLib.Async" value="true"/>
+      <arg type="i" name="addr" direction="in" />
+      <arg type="i" name="result" direction="out" />
+    </method>
   </interface>
 </node>

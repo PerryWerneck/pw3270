@@ -91,6 +91,9 @@
 	int				  pfkey(int key);
 	int				  pakey(int key);
 
+	int               get_field_start(int baddr = -1);
+	int               get_field_len(int baddr = -1);
+
  private:
 	H3270 *hSession;
 
@@ -229,6 +232,16 @@
  char * plugin::get_text(int baddr, size_t len)
  {
 	return lib3270_get_text(hSession,baddr,len);
+ }
+
+ int plugin::get_field_start(int baddr)
+ {
+    return lib3270_get_field_start(hSession,baddr);
+ }
+
+ int plugin::get_field_len(int baddr)
+ {
+    return lib3270_get_field_len(hSession,baddr);
  }
 
  static int REXXENTRY Rexx_IO_exit(RexxExitContext *context, int exitnumber, int subfunction, PEXIT parmBlock)

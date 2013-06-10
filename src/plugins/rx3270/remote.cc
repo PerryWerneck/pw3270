@@ -76,6 +76,9 @@
 	int				  pfkey(int key);
 	int				  pakey(int key);
 
+	int               get_field_start(int baddr = -1);
+	int               get_field_len(int baddr = -1);
+
  private:
 #if defined(WIN32)
 
@@ -910,6 +913,66 @@ int remote::pakey(int key)
 
 	return -1;
 }
+
+int remote::get_field_start(int baddr)
+{
+#if defined(WIN32)
+
+	if(hPipe != INVALID_HANDLE_VALUE)
+	{
+		struct hllapi_packet_addr       query		= { HLLAPI_PACKET_FIELD_START, (unsigned short) baddr };
+		struct hllapi_packet_result		response;
+		DWORD							cbSize		= sizeof(query);
+		TransactNamedPipe(hPipe,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
+		return response.rc;
+	}
+
+#elif defined(HAVE_DBUS)
+
+	dbus_int32_t k = (dbus_int32_t) baddr;
+
+	DBusMessage * msg = create_message("getFieldStart");
+	if(msg)
+	{
+		dbus_message_append_args(msg, DBUS_TYPE_INT32, &k, DBUS_TYPE_INVALID);
+		return get_intval(call(msg));
+	}
+
+#endif
+
+	return -1;
+}
+
+int remote::get_field_len(int baddr)
+{
+#if defined(WIN32)
+
+	if(hPipe != INVALID_HANDLE_VALUE)
+	{
+		struct hllapi_packet_addr       query		= { HLLAPI_PACKET_FIELD_LEN, (unsigned short) baddr };
+		struct hllapi_packet_result		response;
+		DWORD							cbSize		= sizeof(query);
+		TransactNamedPipe(hPipe,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
+		return response.rc;
+	}
+
+#elif defined(HAVE_DBUS)
+
+	dbus_int32_t k = (dbus_int32_t) baddr;
+
+	DBusMessage * msg = create_message("getFieldLength");
+	if(msg)
+	{
+		dbus_message_append_args(msg, DBUS_TYPE_INT32, &k, DBUS_TYPE_INVALID);
+		return get_intval(call(msg));
+	}
+
+#endif
+
+	return -1;
+}
+
+
 
 int remote::set_toggle(LIB3270_TOGGLE ix, bool value)
 {

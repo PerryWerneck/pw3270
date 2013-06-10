@@ -303,6 +303,62 @@ static void ctlr_connect(H3270 *hSession, int ignored unused, void *dunno)
 	hSession->crm_nattr = 0;
 }
 
+LIB3270_EXPORT int lib3270_get_field_start(H3270 *hSession, int baddr)
+{
+	int sbaddr;
+
+	CHECK_SESSION_HANDLE(hSession);
+
+	if (!hSession->formatted)
+		return -1;
+
+    if(baddr < 0)
+        baddr = hSession->cursor_addr;
+
+	sbaddr = baddr;
+	do
+	{
+		if(hSession->ea_buf[baddr].fa)
+			return baddr;
+		DEC_BA(baddr);
+	} while (baddr != sbaddr);
+
+	return -1;
+
+}
+
+LIB3270_EXPORT int lib3270_get_field_len(H3270 *hSession, int baddr)
+{
+	int saddr;
+	int addr;
+	int width = 0;
+
+	CHECK_SESSION_HANDLE(hSession);
+
+	if (!hSession->formatted)
+		return -1;
+
+    if(baddr < 0)
+        baddr = hSession->cursor_addr;
+
+	addr = find_field_attribute(hSession,baddr);
+
+	if(addr < 0)
+		return -1;
+
+	saddr = addr;
+	INC_BA(addr);
+	do
+	{
+		if(hSession->ea_buf[addr].fa)
+			return width;
+		INC_BA(addr);
+		width++;
+	} while (addr != saddr);
+
+	return -1;
+}
+
 LIB3270_EXPORT int lib3270_field_addr(H3270 *hSession, int baddr)
 {
 	int sbaddr;

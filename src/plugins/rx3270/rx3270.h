@@ -168,6 +168,9 @@
 	virtual int				  cmp_text_at(int row, int col, const char *text)	= 0;
 	virtual int 			  set_text_at(int row, int col, const char *str)	= 0;
 
+	virtual int               get_field_start(int baddr = -1)                   = 0;
+	virtual int               get_field_len(int baddr = -1)                     = 0;
+
  };
 
  rx3270 * create_lib3270_instance(void);

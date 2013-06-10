@@ -68,6 +68,9 @@
 ::METHOD WAITFORTEXTAT EXTERNAL "LIBRARY rx3270 rx3270_method_wait_for_text_at"
 ::METHOD TEST EXTERNAL "LIBRARY rx3270 rx3270_method_test"
 
+::METHOD GETFIELDSTART EXTERNAL "LIBRARY rx3270 rx3270_method_get_field_start"
+::METHOD GETFIELDLEN EXTERNAL "LIBRARY rx3270 rx3270_method_get_field_len"
+
 /*
 getConnectionState
 waitForEvents

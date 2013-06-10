@@ -282,6 +282,18 @@
 												((struct hllapi_packet_set *) source->buffer)->id,
 												((struct hllapi_packet_set *) source->buffer)->value));
 		break;
+
+    case HLLAPI_PACKET_FIELD_START:
+		send_result(source,lib3270_get_field_start(lib3270_get_default_session_handle(),
+												((struct hllapi_packet_addr *) source->buffer)->addr));
+		break;
+
+
+    case HLLAPI_PACKET_FIELD_LEN:
+		send_result(source,lib3270_get_field_len(lib3270_get_default_session_handle(),
+												((struct hllapi_packet_addr *) source->buffer)->addr));
+		break;
+
 	default:
 		send_result(source, EINVAL);
 		g_message("Invalid remote request (id=%d)",source->buffer[0]);

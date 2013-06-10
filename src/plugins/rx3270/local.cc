@@ -81,6 +81,9 @@
 	int				  pfkey(int key);
 	int				  pakey(int key);
 
+	int               get_field_start(int baddr = -1);
+	int               get_field_len(int baddr = -1);
+
  private:
 
 	const char * 	(*_get_version)(void);
@@ -101,6 +104,8 @@
 	int 			(*_is_ready)(H3270 *h);
 	int 			(*_set_cursor_position)(H3270 *h, int row, int col);
 	int 			(*_set_toggle)(H3270 *h, LIB3270_TOGGLE ix, int value);
+	int             (*_get_field_start)(H3270 *h, int baddr);
+	int             (*_get_field_len)(H3270 *h, int baddr);
 
 #ifdef WIN32
 	HMODULE			  hModule;
@@ -227,6 +232,8 @@ dynamic::dynamic()
 		{ (void **) & _is_ready,				"lib3270_is_ready"					},
 		{ (void **) & _set_cursor_position,		"lib3270_set_cursor_position"		},
 		{ (void **) & _set_toggle,				"lib3270_set_toggle"				},
+		{ (void **) & _get_field_start,			"lib3270_get_field_start"			},
+		{ (void **) & _get_field_len,			"lib3270_get_field_len"				},
 
 	};
 
@@ -508,3 +515,18 @@ int dynamic::set_toggle(LIB3270_TOGGLE ix, bool value)
 		return _set_toggle(hSession,ix,(int) value);
 	return -1;
 }
+
+int dynamic::get_field_start(int baddr)
+{
+    if(hModule)
+        return _get_field_start(hSession,baddr);
+    return -1;
+}
+
+int dynamic::get_field_len(int baddr)
+{
+    if(hModule)
+        return _get_field_len(hSession,baddr);
+    return -1;
+}
+

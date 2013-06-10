@@ -932,6 +932,9 @@
 	 */
 	LIB3270_EXPORT int lib3270_get_field_bounds(H3270 *hSession, int baddr, int *start, int *end);
 
+	LIB3270_EXPORT int lib3270_get_field_start(H3270 *hSession, int baddr);
+	LIB3270_EXPORT int lib3270_get_field_len(H3270 *hSession, int baddr);
+
 	LIB3270_EXPORT int lib3270_get_word_bounds(H3270 *hSession, int baddr, int *start, int *end);
 
 

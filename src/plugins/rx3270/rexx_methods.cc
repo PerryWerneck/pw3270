@@ -357,3 +357,19 @@ RexxMethod3(RexxStringObject, rx3270_method_get_text, CSELF, sessionPtr, OPTIONA
 
 	return context->String("");
 }
+
+RexxMethod2(int, rx3270_method_get_field_len, CSELF, sessionPtr, OPTIONAL_int, baddr)
+{
+	rx3270 *hSession = (rx3270 *) sessionPtr;
+	if(!hSession)
+		return -1;
+	return hSession->get_field_len(baddr);
+}
+
+RexxMethod2(int, rx3270_method_get_field_start, CSELF, sessionPtr, OPTIONAL_int, baddr)
+{
+	rx3270 *hSession = (rx3270 *) sessionPtr;
+	if(!hSession)
+		return -1;
+	return hSession->get_field_start(baddr);
+}
