@@ -290,6 +290,7 @@
 		<Unit filename="src/plugins/rx3270/rx3270.cls" />
 		<Unit filename="src/plugins/rx3270/rx3270.h" />
 		<Unit filename="src/plugins/rx3270/rxapimain.cc" />
+		<Unit filename="src/plugins/rx3270/sample/clipboard.rex" />
 		<Unit filename="src/plugins/rx3270/sample/object.rex" />
 		<Unit filename="src/plugins/rx3270/sample/remote.rex" />
 		<Unit filename="src/plugins/rx3270/text.cc" />

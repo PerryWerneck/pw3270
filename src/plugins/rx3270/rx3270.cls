@@ -33,7 +33,6 @@
 
 ::class rx3270 public subclass object
 
-
 ::METHOD INIT EXTERNAL "LIBRARY rx3270 rx3270_method_init"
 ::METHOD UNINIT EXTERNAL "LIBRARY rx3270 rx3270_method_uninit"
 
@@ -71,15 +70,10 @@
 ::METHOD GETFIELDSTART EXTERNAL "LIBRARY rx3270 rx3270_method_get_field_start"
 ::METHOD GETFIELDLEN EXTERNAL "LIBRARY rx3270 rx3270_method_get_field_len"
 
-/*
-getConnectionState
-waitForEvents
-RunMode
+::METHOD GETSELECTION EXTERNAL "LIBRARY rx3270 rx3270_method_get_selection"
+::METHOD SETSELECTION EXTERNAL "LIBRARY rx3270 rx3270_method_set_selection"
 
-::method isConnected
-return self~getConnectionState() = "CONNECTED_TN3270E"
-
-*/
+::METHOD GETCLIPBOARD EXTERNAL "LIBRARY rx3270 rx3270_method_get_clipboard"
 
 ::method waitForStringAt
         use arg row, col, key, timeout

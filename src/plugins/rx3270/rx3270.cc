@@ -45,10 +45,13 @@
 
  #include <string.h>
 
+
+ static rx3270 * factory_default(const char *type);
+
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
- static bool	  plugin		= false;
- static rx3270	* defSession	= NULL;
+ static rx3270	* defSession	                = NULL;
+ static rx3270  * (*factory)(const char *type)  = factory_default;
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
@@ -86,13 +89,21 @@ rx3270::~rx3270()
 
 	if(defSession == this)
 		defSession = NULL;
+
+    trace("%s",__FUNCTION__);
 }
 
-rx3270 * rx3270::create(const char *name)
+static rx3270 * factory_default(const char *type)
 {
-	if(name && *name)
-		return create_remote(name);
-	return create_local();
+    trace("%s",__FUNCTION__);
+	if(type && *type)
+		return rx3270::create_remote(type);
+	return rx3270::create_local();
+}
+
+rx3270 * rx3270::create(const char *type)
+{
+    return factory(type);
 }
 
 char * rx3270::get_version(void)
@@ -149,9 +160,15 @@ int rx3270::wait_for_text_at(int row, int col, const char *key, int timeout)
 	return ETIMEDOUT;
 }
 
-void rx3270::set_plugin(void)
+void rx3270::set_plugin(rx3270 * (*ptr)(const char *name))
 {
-	plugin = true;
+    trace("%s factory=%p",__FUNCTION__,ptr);
+
+	if(ptr)
+        factory = ptr;
+    else
+        factory = factory_default;
+
 }
 
 int rx3270::set_copy(const char *text)
@@ -165,6 +182,15 @@ char * rx3270::get_copy(void)
     return NULL;
 }
 
+char * rx3270::get_clipboard(void)
+{
+    errno = EINVAL;
+    return NULL;
+}
 
+void rx3270::free(char *ptr)
+{
+    free(ptr);
+}
 
 

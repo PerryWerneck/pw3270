@@ -123,6 +123,7 @@
 
 rx3270 * rx3270::create_local(void)
 {
+    trace("%s",__FUNCTION__);
 	return new dynamic();
 }
 
@@ -361,6 +362,8 @@ dynamic::dynamic()
 dynamic::~dynamic()
 {
 	static void	(*session_free)(void *h);
+
+    trace("%s",__FUNCTION__);
 
 	if(!hModule)
 		return;

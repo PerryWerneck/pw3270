@@ -326,7 +326,7 @@ void pw3270_dbus_pa_key(PW3270Dbus *object, int key, DBusGMethodInvocation *cont
 	dbus_g_method_return(context,lib3270_get_field_start(pw3270_dbus_get_session_handle(object),baddr));
  }
 
-void pw3270_dbus_get_field_len(PW3270Dbus *object, int baddr, DBusGMethodInvocation *context)
+void pw3270_dbus_get_field_length(PW3270Dbus *object, int baddr, DBusGMethodInvocation *context)
  {
 	trace("%s object=%p context=%p",__FUNCTION__,object,context);
 	dbus_g_method_return(context,lib3270_get_field_len(pw3270_dbus_get_session_handle(object),baddr));

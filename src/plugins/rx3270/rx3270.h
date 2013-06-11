@@ -105,6 +105,12 @@
  REXX_METHOD_PROTOTYPE(rx3270_method_set_option);
  REXX_METHOD_PROTOTYPE(rx3270_method_test);
  REXX_METHOD_PROTOTYPE(rx3270_method_wait_for_text_at);
+ REXX_METHOD_PROTOTYPE(rx3270_method_get_field_len);
+ REXX_METHOD_PROTOTYPE(rx3270_method_get_field_start);
+ REXX_METHOD_PROTOTYPE(rx3270_method_get_selection);
+ REXX_METHOD_PROTOTYPE(rx3270_method_set_selection);
+ REXX_METHOD_PROTOTYPE(rx3270_method_get_clipboard);
+
 
 /*---[ Globals ]---------------------------------------------------------------------------------------------*/
 
@@ -131,12 +137,15 @@
 
 	virtual ~rx3270();
 
+    virtual void free(char *ptr);
+
+
 	static rx3270			* create(const char *name = NULL);
 	static rx3270			* create_remote(const char *name);
 	static rx3270			* create_local(void);
 	static rx3270			* get_default(void);
 
-	static void				  set_plugin(void);
+	static void				  set_plugin(rx3270 * (*factory)(const char *name));
 
 	char 					* get_3270_string(const char *str);
 	char 					* get_local_string(const char *str);
@@ -173,6 +182,8 @@
 
 	virtual int               set_copy(const char *text);
 	virtual char            * get_copy(void);
+
+    virtual char            * get_clipboard(void);
 
  };
 

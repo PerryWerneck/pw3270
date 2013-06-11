@@ -143,6 +143,12 @@ RexxMethodEntry rx3270_methods[] =
     REXX_METHOD(rx3270_method_test,				rx3270_method_test				),
     REXX_METHOD(rx3270_method_wait_for_text_at,	rx3270_method_wait_for_text_at	),
 
+    REXX_METHOD(rx3270_method_get_field_len,	rx3270_method_get_field_len	    ),
+    REXX_METHOD(rx3270_method_get_field_start,	rx3270_method_get_field_start	),
+    REXX_METHOD(rx3270_method_get_selection,	rx3270_method_get_selection	    ),
+    REXX_METHOD(rx3270_method_set_selection,	rx3270_method_set_selection 	),
+    REXX_METHOD(rx3270_method_get_clipboard,	rx3270_method_get_clipboard	    ),
+
     REXX_LAST_METHOD()
 };
 

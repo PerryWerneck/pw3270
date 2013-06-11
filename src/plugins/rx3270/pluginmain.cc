@@ -64,6 +64,9 @@
  {
  public:
 	plugin(H3270 *hSession);
+	virtual ~plugin();
+
+    void              free(char *ptr);
 
 	char			* get_version(void);
 	LIB3270_CSTATE	  get_cstate(void);
@@ -97,37 +100,41 @@
 	int               set_copy(const char *text);
 	char            * get_copy(void);
 
+    char            * get_clipboard(void);
+
+ protected:
+
  private:
-	H3270 *hSession;
+	H3270           * hSession;
 
  };
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
- static plugin			* session	= NULL;#if GTK_CHECK_VERSION(2,32,0)
+#if GTK_CHECK_VERSION(2,32,0)
  static GMutex			  mutex;#else static GStaticMutex	  mutex = G_STATIC_MUTEX_INIT;#endif // GTK_CHECK_VERSION
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
- LIB3270_EXPORT int pw3270_plugin_init(GtkWidget *window)
+ static rx3270 * factory(const char *name)
  {
+    return new plugin(lib3270_get_default_session_handle());
+ }
+
+ LIB3270_EXPORT int pw3270_plugin_start(GtkWidget *window)
+ {
+	trace("%s",__FUNCTION__);
 #if GTK_CHECK_VERSION(2,32,0)
 	g_mutex_init(&mutex);#endif // GTK_CHECK_VERSION
-	session = new plugin(lib3270_get_default_session_handle());
-	session->set_plugin();
-	trace("%s: Rexx object is %p",__FUNCTION__,session);
+	rx3270::set_plugin(factory);
 	return 0;
  }
 
- LIB3270_EXPORT int pw3270_plugin_deinit(GtkWidget *window)
+ LIB3270_EXPORT int pw3270_plugin_stop(GtkWidget *window)
  {
-	if(session)
-	{
-		delete session;
-		session = NULL;
-	}
 #if GTK_CHECK_VERSION(2,32,0)
 	g_mutex_clear(&mutex);#endif // GTK_CHECK_VERSION
+    trace("%s",__FUNCTION__);
 	return 0;
  }
 
@@ -135,6 +142,12 @@
  {
 	this->hSession = hSession;
  }
+
+ plugin::~plugin()
+ {
+    trace("%s",__FUNCTION__);
+ }
+
 
  char * plugin::get_version(void)
  {
@@ -258,6 +271,17 @@
     return v3270_get_copy(GTK_WIDGET(lib3270_get_widget(hSession)));
  }
 
+ char * plugin::get_clipboard(void)
+ {
+    trace("%s toplevel=%p",__FUNCTION__,pw3270_get_toplevel());
+    return gtk_clipboard_wait_for_text(gtk_widget_get_clipboard(pw3270_get_toplevel(),GDK_SELECTION_CLIPBOARD));
+ }
+
+ void plugin::free(char *ptr)
+ {
+    g_free(ptr);
+ }
+
  static int REXXENTRY Rexx_IO_exit(RexxExitContext *context, int exitnumber, int subfunction, PEXIT parmBlock)
  {
 	trace("%s call with ExitNumber: %d Subfunction: %d",__FUNCTION__,(int) exitnumber, (int) subfunction);
@@ -324,6 +348,8 @@
 	{
 		RexxArrayObject rxArgs;
 
+		trace("%s start",__FUNCTION__);
+
 		if(args)
 		{
 			gchar   **arg	= g_strsplit(args,",",-1);
@@ -381,6 +407,8 @@
         }
 
 		instance->Terminate();
+
+		trace("%s ends",__FUNCTION__);
 	}
 
  }

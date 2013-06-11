@@ -49,8 +49,13 @@ RexxMethod1(int, rx3270_method_init, CSTRING, type)
 RexxMethod1(int, rx3270_method_uninit, CSELF, sessionPtr)
 {
 	rx3270 *hSession = (rx3270 *) sessionPtr;
+
+    trace("rx3270_method_uninit hSession=%p",hSession);
+
 	if(hSession)
 		delete hSession;
+
+    trace("%s","rx3270_method_uninit");
 	return 0;
 }
 
@@ -373,3 +378,61 @@ RexxMethod2(int, rx3270_method_get_field_start, CSELF, sessionPtr, OPTIONAL_int,
 		return -1;
 	return hSession->get_field_start(baddr);
 }
+
+RexxMethod1(RexxStringObject, rx3270_method_get_selection, CSELF, sessionPtr)
+{
+	rx3270	* hSession = (rx3270 *) sessionPtr;
+
+	if(hSession)
+	{
+		char *str = hSession->get_copy();
+		if(str)
+		{
+			char				* text	= hSession->get_local_string(str);
+			RexxStringObject	  ret	= context->String((CSTRING) text);
+			free(str);
+			free(text);
+			return ret;
+		}
+	}
+
+	return context->String("");
+}
+
+RexxMethod2(int, rx3270_method_set_selection, CSELF, sessionPtr, CSTRING, text)
+{
+	rx3270 * session = (rx3270 *) sessionPtr;
+
+	if(session)
+	{
+		char	* str		= session->get_3270_string(text);
+		int		  rc;
+		rc = session->set_copy(str);
+		free(str);
+		return rc;
+	}
+	return -1;
+}
+
+RexxMethod1(RexxStringObject, rx3270_method_get_clipboard, CSELF, sessionPtr)
+{
+	rx3270	* hSession = (rx3270 *) sessionPtr;
+
+	if(hSession)
+	{
+		char *str = hSession->get_clipboard();
+
+		trace("str=%p (%s)",str,str);
+
+		if(str)
+		{
+			RexxStringObject ret = context->String((CSTRING) str);
+			hSession->free(str);
+			return ret;
+		}
+	}
+
+    trace("%s","rx3270_method_get_clipboard: Clipboard is empty");
+	return context->String("");
+}
+

@@ -236,7 +236,10 @@ gchar * v3270_get_copy(GtkWidget *widget)
     const char *text;
 	g_return_val_if_fail(GTK_IS_V3270(widget),NULL);
 
-    text = update_selected_text(widget,FALSE);
+    text = GTK_V3270(widget)->selection.text;
+
+    if(!text)
+        text = update_selected_text(widget,FALSE);
 
     if(text)
         return g_convert(text, -1, "UTF-8", lib3270_get_charset(GTK_V3270(widget)->host), NULL, NULL, NULL);
