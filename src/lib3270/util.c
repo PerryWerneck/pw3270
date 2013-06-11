@@ -929,6 +929,21 @@ LIB3270_EXPORT void * lib3270_malloc(int len)
 	return r;
 }
 
+LIB3270_EXPORT void * lib3270_strdup(const char *str)
+{
+	char *r;
+
+	r = strdup(str);
+	if (r == (char *)NULL)
+	{
+		Error(NULL,"Out of memory in %s",__FUNCTION__);
+		return 0;
+	}
+
+	return r;
+}
+
+
 LIB3270_EXPORT char * lib3270_get_resource_string(H3270 *hSession, const char *first_element, ...)
 {
 #ifdef ANDROID

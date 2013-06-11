@@ -244,6 +244,41 @@ gchar * v3270_get_copy(GtkWidget *widget)
     return NULL;
 }
 
+void v3270_set_copy(GtkWidget *widget, const gchar *text)
+{
+	v3270	* terminal;
+	gchar   * isotext;
+
+	g_return_if_fail(GTK_IS_V3270(widget));
+
+	terminal = GTK_V3270(widget);
+    v3270_clear_clipboard(terminal);
+
+    if(!text)
+    {
+        /* No string, signal clipboard clear and return */
+        g_signal_emit(widget,v3270_widget_signal[SIGNAL_CLIPBOARD], 0, FALSE);
+        return;
+    }
+
+    /* Received text, replace the selection buffer */
+    terminal->table = 0;
+    isotext = g_convert(text, -1, lib3270_get_charset(terminal->host), "UTF-8", NULL, NULL, NULL);
+
+    if(!isotext)
+    {
+        /* No string, signal clipboard clear and return */
+        g_signal_emit(widget,v3270_widget_signal[SIGNAL_CLIPBOARD], 0, FALSE);
+        return;
+    }
+
+    terminal->selection.text = lib3270_strdup(isotext);
+
+    g_free(isotext);
+
+    g_signal_emit(widget,v3270_widget_signal[SIGNAL_CLIPBOARD], 0, TRUE);
+}
+
 static void update_system_clipboard(GtkWidget *widget)
 {
 	if(GTK_V3270(widget)->selection.text)

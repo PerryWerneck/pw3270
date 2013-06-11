@@ -171,6 +171,9 @@
 	virtual int               get_field_start(int baddr = -1)                   = 0;
 	virtual int               get_field_len(int baddr = -1)                     = 0;
 
+	virtual int               set_copy(const char *text);
+	virtual char            * get_copy(void);
+
  };
 
  rx3270 * create_lib3270_instance(void);

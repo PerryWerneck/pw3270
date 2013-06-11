@@ -154,6 +154,17 @@ void rx3270::set_plugin(void)
 	plugin = true;
 }
 
+int rx3270::set_copy(const char *text)
+{
+    return EINVAL;
+}
+
+char * rx3270::get_copy(void)
+{
+    errno = EINVAL;
+    return NULL;
+}
+
 
 
 

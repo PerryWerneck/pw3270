@@ -960,6 +960,7 @@
 	LIB3270_EXPORT void * lib3270_malloc(int len);
 	LIB3270_EXPORT void * lib3270_realloc(void *p, int len);
 	LIB3270_EXPORT void * lib3270_replace(void **p, void *ptr);
+	LIB3270_EXPORT void * lib3270_strdup(const char *str);
 
 	/**
 	 * Release allocated memory.

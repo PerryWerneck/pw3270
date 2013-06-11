@@ -94,6 +94,9 @@
 	int               get_field_start(int baddr = -1);
 	int               get_field_len(int baddr = -1);
 
+	int               set_copy(const char *text);
+	char            * get_copy(void);
+
  private:
 	H3270 *hSession;
 
@@ -242,6 +245,17 @@
  int plugin::get_field_len(int baddr)
  {
     return lib3270_get_field_len(hSession,baddr);
+ }
+
+ int plugin::set_copy(const char *text)
+ {
+    v3270_set_copy(GTK_WIDGET(lib3270_get_widget(hSession)),text);
+    return 0;
+ }
+
+ char * plugin::get_copy(void)
+ {
+    return v3270_get_copy(GTK_WIDGET(lib3270_get_widget(hSession)));
  }
 
  static int REXXENTRY Rexx_IO_exit(RexxExitContext *context, int exitnumber, int subfunction, PEXIT parmBlock)
