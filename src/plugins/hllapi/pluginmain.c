@@ -294,6 +294,11 @@
 												((struct hllapi_packet_addr *) source->buffer)->addr));
 		break;
 
+    case HLLAPI_PACKET_NEXT_UNPROTECTED:
+		send_result(source,lib3270_get_next_unprotected(lib3270_get_default_session_handle(),
+												((struct hllapi_packet_addr *) source->buffer)->addr));
+		break;
+
 	default:
 		send_result(source, EINVAL);
 		g_message("Invalid remote request (id=%d)",source->buffer[0]);

@@ -872,7 +872,7 @@
 	 * Find the next unprotected field.
 	 *
 	 * @param hSession	Session handle.
-	 * @param baddr0	Search start addr.
+	 * @param baddr0	Search start addr (-1 to use current cursor position).
 	 *
 	 * @return address following the unprotected attribute byte, or 0 if no nonzero-width unprotected field can be found.
 	 *

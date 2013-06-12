@@ -86,6 +86,7 @@
 
 	int               get_field_start(int baddr = -1);
 	int               get_field_len(int baddr = -1);
+	int               get_next_unprotected(int baddr = -1);
 
  private:
 
@@ -112,6 +113,7 @@
 	int             (*_set_cursor_addr)(H3270 *h, int addr);
 	int             (*_get_cursor_addr)(H3270 *h);
     int             (*_emulate_input)(H3270 *session, const char *s, int len, int pasting);
+    int             (*_get_next_unprotected)(H3270 *hSession, int baddr0);
 
 #ifdef WIN32
 	HMODULE			  hModule;
@@ -244,6 +246,7 @@ dynamic::dynamic()
 		{ (void **) & _set_cursor_addr,			"lib3270_set_cursor_address"		},
 		{ (void **) & _get_cursor_addr,			"lib3270_get_cursor_address"		},
 		{ (void **) & _emulate_input,			"lib3270_emulate_input"	        	},
+		{ (void **) & _get_next_unprotected,	"lib3270_get_next_unprotected"	   	},
 
 	};
 
@@ -560,5 +563,12 @@ int dynamic::emulate_input(const char *str)
 {
     if(hModule)
         return _emulate_input(hSession,str,-1,1);
+    return -1;
+}
+
+int dynamic::get_next_unprotected(int baddr)
+{
+    if(hModule)
+        return _get_next_unprotected(hSession,baddr);
     return -1;
 }

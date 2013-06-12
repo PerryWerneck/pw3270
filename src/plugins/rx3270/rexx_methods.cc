@@ -411,6 +411,19 @@ RexxMethod2(int, rx3270_method_get_field_start, CSELF, sessionPtr, OPTIONAL_int,
 	return hSession->get_field_start(baddr)+1;
 }
 
+RexxMethod2(int, rx3270_method_get_next_unprotected, CSELF, sessionPtr, OPTIONAL_int, baddr)
+{
+	rx3270 *hSession = (rx3270 *) sessionPtr;
+	if(!hSession)
+		return -1;
+
+	baddr = hSession->get_next_unprotected(baddr);
+	if(baddr < 1)
+        return -1;
+
+	return baddr;
+}
+
 RexxMethod1(RexxStringObject, rx3270_method_get_selection, CSELF, sessionPtr)
 {
 	rx3270	* hSession = (rx3270 *) sessionPtr;

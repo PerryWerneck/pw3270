@@ -81,6 +81,7 @@
 
 	int               get_field_start(int baddr = -1);
 	int               get_field_len(int baddr = -1);
+	int               get_next_unprotected(int baddr = -1);
 
  private:
 #if defined(WIN32)
@@ -1124,4 +1125,33 @@ int remote::get_cursor_addr(void)
     return -1;
 
 #endif
+}
+
+int remote::get_next_unprotected(int baddr)
+{
+#if defined(WIN32)
+
+	if(hPipe != INVALID_HANDLE_VALUE)
+	{
+		struct hllapi_packet_addr       query		= { HLLAPI_PACKET_NEXT_UNPROTECTED, (unsigned short) baddr };
+		struct hllapi_packet_result		response;
+		DWORD							cbSize		= sizeof(query);
+		TransactNamedPipe(hPipe,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
+		return response.rc;
+	}
+
+#elif defined(HAVE_DBUS)
+
+	dbus_int32_t k = (dbus_int32_t) baddr;
+
+	DBusMessage * msg = create_message("getNextUnprotected");
+	if(msg)
+	{
+		dbus_message_append_args(msg, DBUS_TYPE_INT32, &k, DBUS_TYPE_INVALID);
+		return get_intval(call(msg));
+	}
+
+#endif
+
+    return -1;
 }

@@ -87,6 +87,7 @@
 
 	void		  pw3270_dbus_get_field_start(PW3270Dbus *object, int baddr, DBusGMethodInvocation *context);
 	void		  pw3270_dbus_get_field_length(PW3270Dbus *object, int baddr, DBusGMethodInvocation *context);
+    void          pw3270_dbus_get_next_unprotected(PW3270Dbus *object, int baddr, DBusGMethodInvocation *context);
 
 	// Actions
 	void		  pw3270_dbus_enter(PW3270Dbus *object, DBusGMethodInvocation *context);

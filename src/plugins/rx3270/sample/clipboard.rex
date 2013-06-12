@@ -26,10 +26,16 @@
     return 0
  end
 
+ cursor = host~GetCursorAddr()
+ next   = cursor
+
  while text <> ""
  do
+    addr = host~GetFieldStart(next)
+    next = host~GetNextUnprotected(addr)
 
-    host~SetCursorAddr(host~GetFieldStart())
+    host~SetCursorAddr(addr)
+
     field_len = host~GetFieldLen()
 
     if length(text) < field_len then
@@ -63,6 +69,12 @@
     end
 
     say text
+
+    if next <= cursor then
+    do
+        /* Next field is before the original position */
+        leave
+    end
 
     text = ""
  end

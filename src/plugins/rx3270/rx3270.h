@@ -109,6 +109,7 @@
  REXX_METHOD_PROTOTYPE(rx3270_method_wait_for_text_at);
  REXX_METHOD_PROTOTYPE(rx3270_method_get_field_len);
  REXX_METHOD_PROTOTYPE(rx3270_method_get_field_start);
+ REXX_METHOD_PROTOTYPE(rx3270_method_get_next_unprotected);
  REXX_METHOD_PROTOTYPE(rx3270_method_get_selection);
  REXX_METHOD_PROTOTYPE(rx3270_method_set_selection);
  REXX_METHOD_PROTOTYPE(rx3270_method_get_clipboard);
@@ -188,6 +189,7 @@
 
 	virtual int               get_field_start(int baddr = -1)                   = 0;
 	virtual int               get_field_len(int baddr = -1)                     = 0;
+	virtual int               get_next_unprotected(int baddr = -1)              = 0;
 
 	virtual int               set_copy(const char *text);
 	virtual char            * get_copy(void);

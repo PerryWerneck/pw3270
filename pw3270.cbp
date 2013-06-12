@@ -242,7 +242,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/plugins/dbus3270/daemon.h" />
-		<Unit filename="src/plugins/dbus3270/dbus-glue.h" />
 		<Unit filename="src/plugins/dbus3270/globals.h" />
 		<Unit filename="src/plugins/dbus3270/gobject.c">
 			<Option compilerVar="CC" />

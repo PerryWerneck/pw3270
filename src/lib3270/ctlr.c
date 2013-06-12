@@ -443,6 +443,11 @@ LIB3270_EXPORT int lib3270_get_next_unprotected(H3270 *hSession, int baddr0)
 {
 	register int baddr, nbaddr;
 
+    CHECK_SESSION_HANDLE(hSession);
+
+    if(baddr0 < 0)
+        baddr0 = hSession->cursor_addr;
+
 	nbaddr = baddr0;
 	do
 	{

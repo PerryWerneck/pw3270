@@ -99,6 +99,7 @@
 
 	int               get_field_start(int baddr = -1);
 	int               get_field_len(int baddr = -1);
+	int               get_next_unprotected(int baddr = -1);
 
 	int               set_copy(const char *text);
 	char            * get_copy(void);
@@ -298,6 +299,11 @@
  int plugin::emulate_input(const char *str)
  {
 	return lib3270_emulate_input(hSession, str, -1, 1);
+ }
+
+ int plugin::get_next_unprotected(int baddr)
+ {
+     return lib3270_get_next_unprotected(hSession,baddr);
  }
 
  static int REXXENTRY Rexx_IO_exit(RexxExitContext *context, int exitnumber, int subfunction, PEXIT parmBlock)
