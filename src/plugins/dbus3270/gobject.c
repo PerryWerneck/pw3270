@@ -222,6 +222,23 @@ void pw3270_dbus_set_text_at(PW3270Dbus *object, int row, int col, const gchar *
 	g_free(text);
 }
 
+void pw3270_dbus_input(PW3270Dbus *object, const gchar *utftext, DBusGMethodInvocation *context)
+{
+	gchar	* text;
+	H3270	* hSession = pw3270_dbus_get_session_handle(object);
+
+	trace("%s object=%p context=%p",__FUNCTION__,object,context);
+	if(pw3270_dbus_check_valid_state(object,context))
+		return;
+
+	text = g_convert_with_fallback(utftext,-1,lib3270_get_charset(hSession),"UTF-8","?",NULL,NULL,NULL);
+
+	dbus_g_method_return(context,lib3270_emulate_input(hSession,(const char *) text,-1,1));
+
+	g_free(text);
+}
+
+
 void pw3270_dbus_get_text_at(PW3270Dbus *object, int row, int col, int len, DBusGMethodInvocation *context)
 {
 	gchar	* text;
@@ -280,6 +297,18 @@ void pw3270_dbus_get_text_at(PW3270Dbus *object, int row, int col, int len, DBus
  {
 	trace("%s object=%p context=%p",__FUNCTION__,object,context);
 	dbus_g_method_return(context,lib3270_set_cursor_position(pw3270_dbus_get_session_handle(object),row,col));
+ }
+
+ void pw3270_dbus_set_cursor_address(PW3270Dbus *object, int addr, DBusGMethodInvocation *context)
+ {
+	trace("%s object=%p context=%p",__FUNCTION__,object,context);
+	dbus_g_method_return(context,lib3270_set_cursor_address(pw3270_dbus_get_session_handle(object),addr));
+ }
+
+ void pw3270_dbus_get_cursor_address(PW3270Dbus *object, DBusGMethodInvocation *context)
+ {
+	trace("%s object=%p context=%p",__FUNCTION__,object,context);
+	dbus_g_method_return(context,lib3270_get_cursor_address(pw3270_dbus_get_session_handle(object)));
  }
 
  void pw3270_dbus_set_toggle(PW3270Dbus *object, int id, int value, DBusGMethodInvocation *context)

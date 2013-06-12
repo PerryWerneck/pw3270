@@ -72,8 +72,11 @@
 	char 			* get_text_at(int row, int col, size_t sz);
 	int				  cmp_text_at(int row, int col, const char *text);
 	int 			  set_text_at(int row, int col, const char *str);
+    int               emulate_input(const char *str);
 
 	int				  set_cursor_position(int row, int col);
+	int               set_cursor_addr(int addr);
+	int               get_cursor_addr(void);
 
 	int 			  set_toggle(LIB3270_TOGGLE ix, bool value);
 
@@ -106,6 +109,9 @@
 	int 			(*_set_toggle)(H3270 *h, LIB3270_TOGGLE ix, int value);
 	int             (*_get_field_start)(H3270 *h, int baddr);
 	int             (*_get_field_len)(H3270 *h, int baddr);
+	int             (*_set_cursor_addr)(H3270 *h, int addr);
+	int             (*_get_cursor_addr)(H3270 *h);
+    int             (*_emulate_input)(H3270 *session, const char *s, int len, int pasting);
 
 #ifdef WIN32
 	HMODULE			  hModule;
@@ -235,6 +241,9 @@ dynamic::dynamic()
 		{ (void **) & _set_toggle,				"lib3270_set_toggle"				},
 		{ (void **) & _get_field_start,			"lib3270_get_field_start"			},
 		{ (void **) & _get_field_len,			"lib3270_get_field_len"				},
+		{ (void **) & _set_cursor_addr,			"lib3270_set_cursor_address"		},
+		{ (void **) & _get_cursor_addr,			"lib3270_get_cursor_address"		},
+		{ (void **) & _emulate_input,			"lib3270_emulate_input"	        	},
 
 	};
 
@@ -533,3 +542,23 @@ int dynamic::get_field_len(int baddr)
     return -1;
 }
 
+int dynamic::set_cursor_addr(int addr)
+{
+    if(hModule)
+        return _set_cursor_addr(hSession,addr);
+    return -1;
+}
+
+int dynamic::get_cursor_addr(void)
+{
+    if(hModule)
+        return _get_cursor_addr(hSession);
+    return -1;
+}
+
+int dynamic::emulate_input(const char *str)
+{
+    if(hModule)
+        return _emulate_input(hSession,str,-1,1);
+    return -1;
+}

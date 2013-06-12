@@ -76,7 +76,11 @@
 	void		  pw3270_dbus_is_connected(PW3270Dbus *object, DBusGMethodInvocation *context);
 	void		  pw3270_dbus_is_ready(PW3270Dbus *object, DBusGMethodInvocation *context);
 	void		  pw3270_dbus_in_tn3270_e(PW3270Dbus *object, DBusGMethodInvocation *context);
+
 	void		  pw3270_dbus_set_cursor_at(PW3270Dbus *object, int row, int col, DBusGMethodInvocation *context);
+	void		  pw3270_dbus_set_cursor_address(PW3270Dbus *object, int addr, DBusGMethodInvocation *context);
+	void		  pw3270_dbus_get_cursor_address(PW3270Dbus *object, DBusGMethodInvocation *context);
+
 	void		  pw3270_dbus_set_toggle(PW3270Dbus *object, int id, int value, DBusGMethodInvocation *context);
 
 	void		  pw3270_dbus_wait_for_ready(PW3270Dbus *object, int timeout, DBusGMethodInvocation *context);
@@ -91,6 +95,7 @@
 	void		  pw3270_dbus_set_text_at(PW3270Dbus *object, int row, int col, const gchar *text, DBusGMethodInvocation *context);
 	void		  pw3270_dbus_get_text_at(PW3270Dbus *object, int row, int col, int len, DBusGMethodInvocation *context);
 	void		  pw3270_dbus_cmp_text_at(PW3270Dbus *object, int row, int col, const gchar *text, DBusGMethodInvocation *context);
+    void          pw3270_dbus_input(PW3270Dbus *object, const gchar *utftext, DBusGMethodInvocation *context);
 
 	G_END_DECLS
 

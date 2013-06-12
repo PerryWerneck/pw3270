@@ -145,6 +145,22 @@ RexxMethod3(int, rx3270_method_set_cursor, CSELF, sessionPtr, int, row, int, col
 	return hSession->set_cursor_position(row,col);
 }
 
+RexxMethod1(int, rx3270_method_get_cursor_addr, CSELF, sessionPtr)
+{
+	rx3270 *hSession = (rx3270 *) sessionPtr;
+	if(!hSession)
+		return -1;
+	return hSession->get_cursor_addr();
+}
+
+RexxMethod2(int, rx3270_method_set_cursor_addr, CSELF, sessionPtr, int, addr)
+{
+	rx3270 *hSession = (rx3270 *) sessionPtr;
+	if(!hSession)
+		return -1;
+	return hSession->set_cursor_addr(addr);
+}
+
 RexxMethod1(int, rx3270_method_enter, CSELF, sessionPtr)
 {
 	rx3270 *hSession = (rx3270 *) sessionPtr;
@@ -203,6 +219,21 @@ RexxMethod4(int, rx3270_method_set_text_at, CSELF, sessionPtr, int, row, int, co
 		free(str);
 		return rc;
 	}
+	return -1;
+}
+
+RexxMethod2(int, rx3270_method_input_text, CSELF, sessionPtr, CSTRING, text)
+{
+	rx3270	* session = (rx3270 *) sessionPtr;
+
+	if(session)
+	{
+		char	* str	= session->get_3270_string(text);
+		int		  rc    = session->emulate_input(str);
+		free(str);
+		return rc;
+	}
+
 	return -1;
 }
 
@@ -363,6 +394,7 @@ RexxMethod3(RexxStringObject, rx3270_method_get_text, CSELF, sessionPtr, OPTIONA
 	return context->String("");
 }
 
+
 RexxMethod2(int, rx3270_method_get_field_len, CSELF, sessionPtr, OPTIONAL_int, baddr)
 {
 	rx3270 *hSession = (rx3270 *) sessionPtr;
@@ -376,7 +408,7 @@ RexxMethod2(int, rx3270_method_get_field_start, CSELF, sessionPtr, OPTIONAL_int,
 	rx3270 *hSession = (rx3270 *) sessionPtr;
 	if(!hSession)
 		return -1;
-	return hSession->get_field_start(baddr);
+	return hSession->get_field_start(baddr)+1;
 }
 
 RexxMethod1(RexxStringObject, rx3270_method_get_selection, CSELF, sessionPtr)

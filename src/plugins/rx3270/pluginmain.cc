@@ -87,6 +87,9 @@
 	int 			  set_text_at(int row, int col, const char *str);
 
 	int				  set_cursor_position(int row, int col);
+	int				  set_cursor_addr(int addr);
+	int				  get_cursor_addr(void);
+    int               emulate_input(const char *str);
 
 	int 			  set_toggle(LIB3270_TOGGLE ix, bool value);
 
@@ -282,6 +285,21 @@
     g_free(ptr);
  }
 
+ int plugin::set_cursor_addr(int addr)
+ {
+    return lib3270_set_cursor_address(hSession,addr);
+ }
+
+ int plugin::get_cursor_addr(void)
+ {
+    return lib3270_get_cursor_address(hSession);
+ }
+
+ int plugin::emulate_input(const char *str)
+ {
+	return lib3270_emulate_input(hSession, str, -1, 1);
+ }
+
  static int REXXENTRY Rexx_IO_exit(RexxExitContext *context, int exitnumber, int subfunction, PEXIT parmBlock)
  {
 	trace("%s call with ExitNumber: %d Subfunction: %d",__FUNCTION__,(int) exitnumber, (int) subfunction);
@@ -336,10 +354,10 @@
 													GTK_DIALOG_DESTROY_WITH_PARENT,
 													GTK_MESSAGE_ERROR,
 													GTK_BUTTONS_CANCEL,
-													"%s", _(  "Can't start script" ));
+													_(  "Can't start %s script" ), "rexx" );
 
 		gtk_window_set_title(GTK_WINDOW(dialog),_( "Rexx error" ));
-		gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),"%s",_( "Can't create rexx interpreter instance" ));
+		gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),_( "Can't create %s interpreter instance" ), "rexx");
 
         gtk_dialog_run(GTK_DIALOG (dialog));
         gtk_widget_destroy(dialog);
@@ -383,13 +401,14 @@
 														GTK_DIALOG_DESTROY_WITH_PARENT,
 														GTK_MESSAGE_ERROR,
 														GTK_BUTTONS_CANCEL,
-														"%s", _(  "Rexx script failed" ));
+														_(  "%s script failed" ), "Rexx" );
 
 			gtk_window_set_title(GTK_WINDOW(dialog),_( "Rexx error" ));
 
 			gtk_message_dialog_format_secondary_text(
 					GTK_MESSAGE_DIALOG(dialog),
-							_( "Rexx error %d: %s\n%s" ),
+							_( "%s error %d: %s\n%s" ),
+                                    "Rexx",
 									(int) condition.code,
 									threadContext->CString(condition.errortext),
 									threadContext->CString(condition.message)
@@ -471,7 +490,7 @@ extern "C"
 			gtk_file_filter_add_pattern(filter[f],list[f].pattern);
 		}
 
-		filename = pw3270_get_filename(widget,"rexx","script",filter,_( "Select Rexx script to run" ));
+		filename = pw3270_get_filename(widget,"rexx","script",filter,_( "Select script to run" ));
 
 		if(filename)
 		{

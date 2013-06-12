@@ -93,6 +93,8 @@
  REXX_METHOD_PROTOTYPE(rx3270_method_is_ready);
  REXX_METHOD_PROTOTYPE(rx3270_method_wait_for_ready);
  REXX_METHOD_PROTOTYPE(rx3270_method_set_cursor);
+ REXX_METHOD_PROTOTYPE(rx3270_method_get_cursor_addr);
+ REXX_METHOD_PROTOTYPE(rx3270_method_set_cursor_addr);
  REXX_METHOD_PROTOTYPE(rx3270_method_enter);
  REXX_METHOD_PROTOTYPE(rx3270_method_pfkey);
  REXX_METHOD_PROTOTYPE(rx3270_method_pakey); REXX_METHOD_PROTOTYPE(rx3270_method_get_text);
@@ -110,7 +112,9 @@
  REXX_METHOD_PROTOTYPE(rx3270_method_get_selection);
  REXX_METHOD_PROTOTYPE(rx3270_method_set_selection);
  REXX_METHOD_PROTOTYPE(rx3270_method_get_clipboard);
-
+ REXX_METHOD_PROTOTYPE(rx3270_method_get_cursor_addr);
+ REXX_METHOD_PROTOTYPE(rx3270_method_set_cursor_addr);
+ REXX_METHOD_PROTOTYPE(rx3270_method_input_text);
 
 /*---[ Globals ]---------------------------------------------------------------------------------------------*/
 
@@ -166,7 +170,11 @@
 	virtual int				  wait(int seconds)									= 0;
 	virtual int				  wait_for_ready(int seconds)						= 0;
 	virtual int				  wait_for_text_at(int row, int col, const char *key, int timeout);
+
 	virtual int				  set_cursor_position(int row, int col)				= 0;
+	virtual int               set_cursor_addr(int addr)                         = 0;
+	virtual int               get_cursor_addr(void)                             = 0;
+
 	virtual int 			  set_toggle(LIB3270_TOGGLE ix, bool value)			= 0;
 
 	virtual int				  enter(void)										= 0;
@@ -176,6 +184,7 @@
 	virtual char 			* get_text_at(int row, int col, size_t sz) 			= 0;	virtual char			* get_text(int baddr, size_t len)					= 0;
 	virtual int				  cmp_text_at(int row, int col, const char *text)	= 0;
 	virtual int 			  set_text_at(int row, int col, const char *str)	= 0;
+	virtual int               emulate_input(const char *str)                    = 0;
 
 	virtual int               get_field_start(int baddr = -1)                   = 0;
 	virtual int               get_field_len(int baddr = -1)                     = 0;

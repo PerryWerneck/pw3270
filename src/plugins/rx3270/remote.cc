@@ -65,10 +65,13 @@
 	char 			* get_text_at(int row, int col, size_t sz);
 	int				  cmp_text_at(int row, int col, const char *text);
 	int 			  set_text_at(int row, int col, const char *str);
+    int               emulate_input(const char *str);
 
 	int				  wait_for_text_at(int row, int col, const char *key, int timeout);
 
 	int				  set_cursor_position(int row, int col);
+	int				  set_cursor_addr(int addr);
+	int				  get_cursor_addr(void);
 
 	int 			  set_toggle(LIB3270_TOGGLE ix, bool value);
 
@@ -799,6 +802,44 @@ int remote::set_text_at(int row, int col, const char *str)
 	return -1;
 }
 
+int remote::emulate_input(const char *str)
+{
+#if defined(WIN32)
+
+	if(hPipe != INVALID_HANDLE_VALUE)
+	{
+        size_t                                len           = strlen(str);
+		struct hllapi_packet_emulate_input 	* query;
+		struct hllapi_packet_result           response;
+		DWORD							      cbSize		= sizeof(struct hllapi_packet_emulate_input)+len;
+
+		query = (struct hllapi_packet_emulate_input *) malloc(cbSize);
+        query->packet_id 	= HLLAPI_PACKET_EMULATE_INPUT;
+        query->len			= len;
+        query->pasting		= 1;
+        strcpy(query->text,str);
+
+		TransactNamedPipe(hPipe,(LPVOID) query, cbSize, &response, sizeof(response), &cbSize,NULL);
+
+		free(query);
+
+		return response.rc;
+	}
+
+#elif defined(HAVE_DBUS)
+
+	DBusMessage * msg = create_message("input");
+	if(msg)
+	{
+		dbus_message_append_args(msg, DBUS_TYPE_STRING, &str, DBUS_TYPE_INVALID);
+		return get_intval(call(msg));
+	}
+
+#endif
+
+	return -1;
+}
+
 int remote::set_cursor_position(int row, int col)
 {
 #if defined(WIN32)
@@ -1030,4 +1071,57 @@ char * remote::get_text(int baddr, size_t len)
 {
 	#warning IMPLEMENTAR
 	return NULL;
+}
+
+int remote::set_cursor_addr(int addr)
+{
+#if defined(WIN32)
+
+	if(hPipe != INVALID_HANDLE_VALUE)
+	{
+		struct hllapi_packet_addr       query		= { HLLAPI_PACKET_FIELD_LEN, (unsigned short) addr };
+		struct hllapi_packet_result		response;
+		DWORD							cbSize		= sizeof(query);
+		TransactNamedPipe(hPipe,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
+		return response.rc;
+	}
+
+#elif defined(HAVE_DBUS)
+
+	dbus_int32_t k = (dbus_int32_t) addr;
+
+	DBusMessage * msg = create_message("setCursorAddress");
+	if(msg)
+	{
+		dbus_message_append_args(msg, DBUS_TYPE_INT32, &k, DBUS_TYPE_INVALID);
+		return get_intval(call(msg));
+	}
+
+#endif
+
+    return -1;
+}
+
+int remote::get_cursor_addr(void)
+{
+#if defined(WIN32)
+
+	if(hPipe != INVALID_HANDLE_VALUE)
+	{
+		struct hllapi_packet_query      query		= { HLLAPI_PACKET_GET_CURSOR };
+		struct hllapi_packet_result		response;
+		DWORD							cbSize		= sizeof(query);
+		TransactNamedPipe(hPipe,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
+		return response.rc;
+	}
+
+#elif defined(HAVE_DBUS)
+
+	return query_intval("getCursorAddress");
+
+#else
+
+    return -1;
+
+#endif
 }

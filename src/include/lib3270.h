@@ -509,7 +509,28 @@
 	 */
 	LIB3270_EXPORT int lib3270_set_cursor_address(H3270 *h, int baddr);
 
+	/**
+	 * Set cursor position.
+	 *
+	 * @param h		Session handle.
+	 * @param row	New cursor row.
+	 * @param col	New cursor col.
+	 *
+	 * @return last cursor address.
+	 *
+	 */
 	LIB3270_EXPORT int lib3270_set_cursor_position(H3270 *h, int row, int col);
+
+	/**
+	 * get cursor address.
+	 *
+	 * @param h		Session handle.
+	 *
+	 * @return Cursor address.
+	 *
+	 */
+	LIB3270_EXPORT int lib3270_get_cursor_address(H3270 *h);
+
 
 	/**
 	 * Move cursor
@@ -521,16 +542,6 @@
 	 * @return 0 if the movement can be done, non zero if failed.
 	 */
 	 LIB3270_EXPORT int lib3270_move_cursor(H3270 *h, LIB3270_DIRECTION dir, unsigned char sel);
-
-	/**
-	 * get cursor address.
-	 *
-	 * @param h		Session handle.
-	 *
-	 * @return Cursor address.
-	 *
-	 */
-	LIB3270_EXPORT int lib3270_get_cursor_address(H3270 *h);
 
 	/**
 	 * Print page
