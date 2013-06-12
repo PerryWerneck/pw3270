@@ -141,7 +141,7 @@
 
 	virtual ~rx3270();
 
-    virtual void free(char *ptr);
+    virtual void free(void *ptr);
 
 
 	static rx3270			* create(const char *name = NULL);

@@ -188,7 +188,7 @@ char * rx3270::get_clipboard(void)
     return NULL;
 }
 
-void rx3270::free(char *ptr)
+void rx3270::free(void *ptr)
 {
     free(ptr);
 }

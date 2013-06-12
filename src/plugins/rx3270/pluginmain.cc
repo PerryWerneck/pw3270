@@ -66,7 +66,7 @@
 	plugin(H3270 *hSession);
 	virtual ~plugin();
 
-    void              free(char *ptr);
+    void              free(void *ptr);
 
 	char			* get_version(void);
 	LIB3270_CSTATE	  get_cstate(void);
@@ -280,7 +280,7 @@
     return gtk_clipboard_wait_for_text(gtk_widget_get_clipboard(pw3270_get_toplevel(),GDK_SELECTION_CLIPBOARD));
  }
 
- void plugin::free(char *ptr)
+ void plugin::free(void *ptr)
  {
     g_free(ptr);
  }
