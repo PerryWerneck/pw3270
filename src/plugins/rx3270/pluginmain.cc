@@ -105,6 +105,7 @@
 	char            * get_copy(void);
 
     char            * get_clipboard(void);
+    int               set_clipboard(const char *text);
 
  protected:
 
@@ -279,6 +280,12 @@
  {
     trace("%s toplevel=%p",__FUNCTION__,pw3270_get_toplevel());
     return gtk_clipboard_wait_for_text(gtk_widget_get_clipboard(pw3270_get_toplevel(),GDK_SELECTION_CLIPBOARD));
+ }
+
+ int plugin::set_clipboard(const char *text)
+ {
+    gtk_clipboard_set_text(gtk_widget_get_clipboard(pw3270_get_toplevel(),GDK_SELECTION_CLIPBOARD),(gchar *) text, -1);
+    return 0;
  }
 
  void plugin::free(void *ptr)

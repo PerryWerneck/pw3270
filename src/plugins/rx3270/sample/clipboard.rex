@@ -13,7 +13,7 @@
     return 0
  end
 
- text = host~GetClipboard()
+ text = strip(host~GetClipboard())
  if text = "" then
  do
     say "Clipboard is empty"
@@ -38,45 +38,36 @@
 
     field_len = host~GetFieldLen()
 
-    if length(text) < field_len then
+    s = strip(left(text,field_len))
+    p = lastpos(" ",s)
+
+    select
+    when length(text) < field_len then
     do
-        /* Text is smaller than field, just insert it */
-        host~input(text)
+        s = strip(text)
+        text = ""
     end
-    else
+
+    when p = 0 then
     do
-        /* Text is bigger than field, split ... */
         s = strip(left(text,field_len))
-        p = lastpos(" ",s)
-        if p = 0 then
-        do
-            s = strip(left(text,field_len))
-            text = substr(text,field_len+1)
-        end
-        else
-        do
-            s = strip(left(text,p))
-            text = strip(substr(text,p+1))
-        end
-
-        /* ... and justify */
-
-        /* TODO */
-
-        /* Insert new string */
-        host~input(s)
-
+        text = substr(text,field_len+1)
     end
 
-    say text
+    otherwise
+        s = strip(left(text,p))
+        text = strip(substr(text,p+1))
+    end
+
+    /* Insert new string */
+    host~input(s)
 
     if next <= cursor then
     do
         /* Next field is before the original position */
-        leave
+        return 0
     end
 
-    text = ""
  end
 
 return 0

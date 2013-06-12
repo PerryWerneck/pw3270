@@ -113,6 +113,7 @@
  REXX_METHOD_PROTOTYPE(rx3270_method_get_selection);
  REXX_METHOD_PROTOTYPE(rx3270_method_set_selection);
  REXX_METHOD_PROTOTYPE(rx3270_method_get_clipboard);
+ REXX_METHOD_PROTOTYPE(rx3270_method_set_clipboard);
  REXX_METHOD_PROTOTYPE(rx3270_method_get_cursor_addr);
  REXX_METHOD_PROTOTYPE(rx3270_method_set_cursor_addr);
  REXX_METHOD_PROTOTYPE(rx3270_method_input_text);
@@ -195,6 +196,7 @@
 	virtual char            * get_copy(void);
 
     virtual char            * get_clipboard(void);
+    virtual int               set_clipboard(const char *text);
 
  };
 

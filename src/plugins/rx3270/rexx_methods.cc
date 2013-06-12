@@ -481,3 +481,13 @@ RexxMethod1(RexxStringObject, rx3270_method_get_clipboard, CSELF, sessionPtr)
 	return context->String("");
 }
 
+RexxMethod2(int, rx3270_method_set_clipboard, CSELF, sessionPtr, CSTRING, text)
+{
+	rx3270	* hSession = (rx3270 *) sessionPtr;
+
+	if(hSession)
+		return hSession->set_clipboard(text);
+
+	return -1;
+}
+

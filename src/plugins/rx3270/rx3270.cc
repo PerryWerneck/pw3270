@@ -188,6 +188,11 @@ char * rx3270::get_clipboard(void)
     return NULL;
 }
 
+int rx3270::set_clipboard(const char *text)
+{
+    return EINVAL;
+}
+
 void rx3270::free(void *ptr)
 {
     free(ptr);

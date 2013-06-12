@@ -80,6 +80,7 @@
 ::METHOD SETSELECTION EXTERNAL "LIBRARY rx3270 rx3270_method_set_selection"
 
 ::METHOD GETCLIPBOARD EXTERNAL "LIBRARY rx3270 rx3270_method_get_clipboard"
+::METHOD SETCLIPBOARD EXTERNAL "LIBRARY rx3270 rx3270_method_set_clipboard"
 
 ::method waitForStringAt
         use arg row, col, key, timeout
