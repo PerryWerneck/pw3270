@@ -40,8 +40,15 @@
 
     s = strip(left(text,field_len))
     p = lastpos(" ",s)
+    n = pos(d2c(10),s)
 
     select
+    when n <> 0 then
+    do
+        s = strip(left(text,n-1))
+        text = strip(substr(text,n+1))
+    end
+
     when length(text) < field_len then
     do
         s = strip(text)
@@ -65,6 +72,7 @@
     if next <= cursor then
     do
         /* Next field is before the original position */
+        host~SetClipboard(text)
         return 0
     end
 
