@@ -43,6 +43,7 @@
 	#undef HAVE_GETADDRINFO
 	#undef HAVE_SYSLOG
 	#undef HAVE_DBUS
+	#undef HAVE_VASPRINTF
 
 	#undef HAVE_ICONV
 	#undef ICONV_CONST

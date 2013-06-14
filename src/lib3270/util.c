@@ -1,7 +1,8 @@
 /*
  * "Software pw3270, desenvolvido com base nos códigos fontes do WC3270  e X3270
  * (Paul Mattes Paul.Mattes@usa.net), de emulação de terminal 3270 para acesso a
- * aplicativos mainframe. Registro no INPI sob o nome G3270. Registro no INPI sob o nome G3270.
+ * aplicativos mainframe. Registro no INPI sob o nome G3270. Registro no INPI sob
+ * o nome G3270.
  *
  * Copyright (C) <2008> <Banco do Brasil S.A.>
  *
@@ -18,7 +19,7 @@
  * programa; se não, escreva para a Free Software Foundation, Inc., 51 Franklin
  * St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * Este programa está nomeado como util.c e possui 978 linhas de código.
+ * Este programa está nomeado como util.c e possui - linhas de código.
  *
  * Contatos:
  *
@@ -34,6 +35,8 @@
  *	util.c
  *		Utility functions for x3270/c3270/s3270/tcl3270
  */
+
+#define _GNU_SOURCE
 
 #if defined(_WIN32)
 	#include <winsock2.h>
@@ -230,7 +233,7 @@ xs_error(const char *fmt, ...)
 	lib3270_free(r);
 }
 
-/* Prettyprinter for strings with unprintable data. */
+/* Prettyprinter for strings with unprintable data. */ /*
 void
 fcatv(FILE *f, char *s)
 {
@@ -256,8 +259,9 @@ fcatv(FILE *f, char *s)
 		}
 	}
 }
+*/
 
-/* String version of fcatv. */
+/* String version of fcatv. */ /*
 char *
 scatv(const char *s, char *buf, size_t len)
 {
@@ -268,7 +272,7 @@ scatv(const char *s, char *buf, size_t len)
 		char cbuf[5];
 		char *t = cbuf;
 
-		/* Expand this character. */
+		// Expand this character.
 		switch (c) {
 		    case '\n':
 			(void) strcpy(cbuf, "\\n");
@@ -288,7 +292,7 @@ scatv(const char *s, char *buf, size_t len)
 			}
 			break;
 		}
-		/* Copy as much as will fit. */
+		// Copy as much as will fit.
 		while ((c = *t++) && len > 0) {
 			*dst++ = c;
 			len--;
@@ -299,6 +303,7 @@ scatv(const char *s, char *buf, size_t len)
 
 	return buf;
 }
+*/
 
 /*
  * Definition resource splitter, for resources of the repeating form:
@@ -527,7 +532,7 @@ get_message(const char *key)
 
 // #define ex_getenv getenv
 
-/* Variable and tilde substitution functions. */
+/* Variable and tilde substitution functions. */ /*
 static char *
 var_subst(const char *s)
 {
@@ -606,7 +611,7 @@ var_subst(const char *s)
 					(void) strncpy(o, vn_start, vn_len);
 					o += vn_len;
 					state = VS_BASE;
-					continue;	/* rescan */
+					continue;	// rescan
 				}
 				vn = lib3270_malloc(vn_len + 1);
 				(void) strncpy(vn, vn_start, vn_len);
@@ -617,10 +622,10 @@ var_subst(const char *s)
 				{
 					*o = '\0';
 					o_len = o_len
-					    - 1			/* '$' */
-					    - (state == VS_VNB)	/* { */
-					    - vn_len		/* name */
-					    - (state == VS_VNB)	/* } */
+					    - 1			// '$'
+					    - (state == VS_VNB)	//
+					    - vn_len		// name
+					    - (state == VS_VNB)	// }
 					    + strlen(vv);
 					ob = Realloc(ob, o_len);
 					o = strchr(ob, '\0');
@@ -634,7 +639,7 @@ var_subst(const char *s)
 					state = VS_BASE;
 					break;
 				} else {
-					/* Rescan this character */
+					// Rescan this character
 					state = VS_BASE;
 					continue;
 				}
@@ -649,12 +654,14 @@ var_subst(const char *s)
 	}
 	return ob;
 }
+*/
 
-#if !defined(_WIN32) /*[*/
+#if !defined(_WIN32)
 /*
  * Do tilde (home directory) substitution on a string.  Returns a malloc'd
  * result.
  */
+ /*
 static char *
 tilde_subst(const char *s)
 {
@@ -665,11 +672,11 @@ tilde_subst(const char *s)
 	char *r;
 	char *mname = CN;
 
-	/* Does it start with a "~"? */
+	// Does it start with a "~"?
 	if (*s != '~')
 		return NewString(s);
 
-	/* Terminate with "/". */
+	// Terminate with "/".
 	slash = strchr(s, '/');
 	if (slash) {
 		int len = slash - s;
@@ -684,16 +691,16 @@ tilde_subst(const char *s)
 		rest = strchr(name, '\0');
 	}
 
-	/* Look it up. */
-	if (!strcmp(name, "~"))	/* this user */
+	// Look it up.
+	if (!strcmp(name, "~"))	// this user
 		p = getpwuid(getuid());
-	else			/* somebody else */
+	else			// somebody else
 		p = getpwnam(name + 1);
 
-	/* Free any temporary copy. */
+	// Free any temporary copy.
 	lib3270_free(mname);
 
-	/* Substitute and return. */
+	// Substitute and return.
 	if (p == (struct passwd *)NULL)
 		r = NewString(s);
 	else {
@@ -702,9 +709,9 @@ tilde_subst(const char *s)
 		(void) strcat(r, rest);
 	}
 	return r;
-}
-#endif /*]*/
-
+} */
+#endif
+/*
 char *
 do_subst(const char *s, Boolean do_vars, Boolean do_tilde)
 {
@@ -715,7 +722,7 @@ do_subst(const char *s, Boolean do_vars, Boolean do_tilde)
 		char *t;
 
 		t = var_subst(s);
-#if !defined(_WIN32) /*[*/
+#if !defined(_WIN32)
 		if (do_tilde) {
 			char *u;
 
@@ -723,16 +730,18 @@ do_subst(const char *s, Boolean do_vars, Boolean do_tilde)
 			lib3270_free(t);
 			return u;
 		}
-#endif /*]*/
+#endif
 		return t;
 	}
 
-#if !defined(_WIN32) /*[*/
+#if !defined(_WIN32)
 	return tilde_subst(s);
-#else /*][*/
+#else
 	return NewString(s);
-#endif /*]*/
+#endif
 }
+
+*/
 
 /*
  * ctl_see
