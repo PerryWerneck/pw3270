@@ -37,9 +37,35 @@
 	extern "C" {
 #endif
 
+	/**
+	 * Notification message types.
+	 *
+	 */
+	typedef enum _LIB3270_NOTIFY
+	{
+		LIB3270_NOTIFY_INFO,		/**< Simple information dialog */
+		LIB3270_NOTIFY_WARNING,
+		LIB3270_NOTIFY_ERROR,
+		LIB3270_NOTIFY_CRITICAL,	/**< Critical error, user can abort application */
+
+		LIB3270_NOTIFY_USER			/**< Reserved, always the last one */
+	} LIB3270_NOTIFY;
+
 	LIB3270_EXPORT void lib3270_set_popup_handler(int (*popup_handler)(H3270 *, void *, LIB3270_NOTIFY, const char *, const char *, const char *, va_list));
+
+	/**
+	 * Pop up an error dialog, based on an error number.
+	 *
+	 * @param hSession	Session handle
+	 * @param errn		Error number (errno).
+	 * @param fmt		Message format
+	 * @param ...		Arguments for message
+	 */
+	LIB3270_EXPORT void lib3270_popup_an_errno(H3270 *hSession, int errn, const char *fmt, ...);
+
 	LIB3270_EXPORT void lib3270_popup_dialog(H3270 *session, LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, ...);
 
+	LIB3270_EXPORT void lib3270_popup_va(H3270 *session, LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, va_list);
 
 #ifdef __cplusplus
 	}

@@ -107,6 +107,8 @@
     char            * get_clipboard(void);
     int               set_clipboard(const char *text);
 
+	int               popup_dialog(LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, ...);
+
  protected:
 
  private:
@@ -312,6 +314,15 @@
  {
      return lib3270_get_next_unprotected(hSession,baddr);
  }
+
+int plugin::popup_dialog(LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, ...)
+{
+    va_list	args;
+    va_start(args, fmt);
+    lib3270_popup_va(hSession, id, title, message, fmt, args);
+    va_end(args);
+    return 0;
+}
 
  static int REXXENTRY Rexx_IO_exit(RexxExitContext *context, int exitnumber, int subfunction, PEXIT parmBlock)
  {

@@ -9,7 +9,7 @@
 
  if host~connected() = 0 then
  do
-    say "Disconnected from host"
+    host~popup("error","Can't start script","Disconnected from host")
     return 0
  end
 
@@ -22,7 +22,7 @@
 
  if host~WaitForReady(60) <> 0 then
  do
-    say "Timeout waiting for host"
+    host~popup("error","Failed","Timeout waiting for host response")
     return 0
  end
 

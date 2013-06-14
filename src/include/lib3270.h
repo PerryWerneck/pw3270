@@ -275,21 +275,6 @@
 
 	#define LIB3270_SSL_FAILED LIB3270_SSL_UNSECURE
 
-	/**
-	 * Notification message types.
-	 *
-	 */
-	typedef enum _LIB3270_NOTIFY
-	{
-		LIB3270_NOTIFY_INFO,		/**< Simple information dialog */
-		LIB3270_NOTIFY_WARNING,
-		LIB3270_NOTIFY_ERROR,
-		LIB3270_NOTIFY_CRITICAL,	/**< Critical error, user can abort application */
-
-		LIB3270_NOTIFY_USER			/**< Reserved, always the last one */
-	} LIB3270_NOTIFY;
-
-
 #ifdef __cplusplus
 	extern "C" {
 #endif
@@ -1017,17 +1002,6 @@
 	 *
 	 */
 	LIB3270_EXPORT const char * lib3270_get_revision(void);
-
-	/**
-	 * Pop up an error dialog, based on an error number.
-	 *
-	 * @param hSession	Session handle
-	 * @param errn		Error number (errno).
-	 * @param fmt		Message format
-	 * @param ...		Arguments for message
-	 */
-	LIB3270_EXPORT void lib3270_popup_an_errno(H3270 *hSession, int errn, const char *fmt, ...);
-
 
 	LIB3270_EXPORT char * lib3270_vsprintf(const char *fmt, va_list args);
 

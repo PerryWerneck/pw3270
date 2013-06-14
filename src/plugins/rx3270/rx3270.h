@@ -46,6 +46,7 @@
  #include <stdio.h>
  #include <lib3270.h>
  #include <lib3270/log.h>
+ #include <lib3270/popup.h>
  #include <stdarg.h>
 
 #ifndef ETIMEDOUT
@@ -114,6 +115,7 @@
  REXX_METHOD_PROTOTYPE(rx3270_method_set_selection);
  REXX_METHOD_PROTOTYPE(rx3270_method_get_clipboard);
  REXX_METHOD_PROTOTYPE(rx3270_method_set_clipboard);
+ REXX_METHOD_PROTOTYPE(rx3270_method_popup);
  REXX_METHOD_PROTOTYPE(rx3270_method_get_cursor_addr);
  REXX_METHOD_PROTOTYPE(rx3270_method_set_cursor_addr);
  REXX_METHOD_PROTOTYPE(rx3270_method_input_text);
@@ -197,6 +199,8 @@
 
     virtual char            * get_clipboard(void);
     virtual int               set_clipboard(const char *text);
+
+	virtual int               popup_dialog(LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, ...);
 
  };
 

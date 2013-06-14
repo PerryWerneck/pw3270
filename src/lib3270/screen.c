@@ -845,14 +845,19 @@ LIB3270_EXPORT void lib3270_set_popup_handler(int (*handler)(H3270 *, void *, LI
 LIB3270_EXPORT void lib3270_popup_dialog(H3270 *session, LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, ...)
 {
 	va_list	args;
+	va_start(args, fmt);
+    lib3270_popup_va(session, id, title, message, fmt, args);
+	va_end(args);
+}
+
+LIB3270_EXPORT void lib3270_popup_va(H3270 *session, LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, va_list args)
+{
 
 	CHECK_SESSION_HANDLE(session);
 
 	trace("%s: title=%s msg=%s",__FUNCTION__,"3270 Error",message);
 
-	va_start(args, fmt);
 	popup_handler(session,session->widget,id,title ? title : _( "3270 Error" ), message,fmt,args);
-	va_end(args);
 }
 
 LIB3270_EXPORT int lib3270_is_protected(H3270 *h, unsigned int baddr)

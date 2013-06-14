@@ -35,6 +35,7 @@
  #include "rx3270.h"
  #include <time.h>
  #include <string.h>
+ #include <ctype.h>
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
@@ -491,3 +492,38 @@ RexxMethod2(int, rx3270_method_set_clipboard, CSELF, sessionPtr, CSTRING, text)
 	return -1;
 }
 
+
+RexxMethod5(int, rx3270_method_popup, CSELF, sessionPtr, CSTRING, s_id, CSTRING, title, CSTRING, message, OPTIONAL_CSTRING, det)
+{
+    LIB3270_NOTIFY    id        = LIB3270_NOTIFY_INFO;
+	rx3270          * hSession  = (rx3270 *) sessionPtr;
+
+    if(!hSession)
+        return -1;
+
+    if(*s_id)
+    {
+        static const struct _descr
+        {
+            char            str;
+            LIB3270_NOTIFY  id;
+        } descr[] =
+        {
+            { 'I', LIB3270_NOTIFY_INFO       },
+            { 'W', LIB3270_NOTIFY_WARNING    },
+            { 'E', LIB3270_NOTIFY_ERROR      },
+            { 'C', LIB3270_NOTIFY_CRITICAL   },
+        };
+
+        for(int f=0;f<4;f++)
+        {
+            if(toupper(*s_id) == descr[f].str)
+            {
+                id = descr[f].id;
+                trace("Using mode %c (%d)",toupper(*s_id),(int) id);
+            }
+        }
+    }
+
+    return hSession->popup_dialog(id, title, message, "%s", det ? det : "");
+}

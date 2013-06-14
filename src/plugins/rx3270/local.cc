@@ -88,6 +88,8 @@
 	int               get_field_len(int baddr = -1);
 	int               get_next_unprotected(int baddr = -1);
 
+	int               popup_dialog(LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, ...);
+
  private:
 
 	const char * 	(*_get_version)(void);
@@ -114,6 +116,7 @@
 	int             (*_get_cursor_addr)(H3270 *h);
     int             (*_emulate_input)(H3270 *session, const char *s, int len, int pasting);
     int             (*_get_next_unprotected)(H3270 *hSession, int baddr0);
+    void            (*_popup_va)(H3270 *session, LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, va_list);
 
 #ifdef WIN32
 	HMODULE			  hModule;
@@ -247,7 +250,7 @@ dynamic::dynamic()
 		{ (void **) & _get_cursor_addr,			"lib3270_get_cursor_address"		},
 		{ (void **) & _emulate_input,			"lib3270_emulate_input"	        	},
 		{ (void **) & _get_next_unprotected,	"lib3270_get_next_unprotected"	   	},
-
+		{ (void **) & _popup_va,	            "lib3270_popup_va"          	   	},
 	};
 
 // Load lib3270.dll
@@ -570,5 +573,18 @@ int dynamic::get_next_unprotected(int baddr)
 {
     if(hModule)
         return _get_next_unprotected(hSession,baddr);
+    return -1;
+}
+
+int dynamic::popup_dialog(LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, ...)
+{
+    if(hModule)
+    {
+        va_list	args;
+        va_start(args, fmt);
+        _popup_va(hSession, id, title, message, fmt, args);
+        va_end(args);
+        return 0;
+    }
     return -1;
 }

@@ -44,7 +44,7 @@
 #endif // HAVE_SYSLOG
 
  #include <string.h>
-
+ #include <stdarg.h>
 
  static rx3270 * factory_default(const char *type);
 
@@ -198,4 +198,8 @@ void rx3270::free(void *ptr)
     free(ptr);
 }
 
+int rx3270::popup_dialog(LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, ...)
+{
+    return -1;
+}
 
