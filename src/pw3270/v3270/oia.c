@@ -100,9 +100,9 @@ static gint draw_spinner(cairo_t *cr, GdkRectangle *r, GdkRGBA *color, gint step
 		cairo_save(cr);
 
 		cairo_set_source_rgba (cr,
-							 color[V3270_COLOR_OIA_SPINNER].red / 65535.,
-							 color[V3270_COLOR_OIA_SPINNER].green / 65535.,
-							 color[V3270_COLOR_OIA_SPINNER].blue / 65535.,
+							 color[V3270_COLOR_OIA_SPINNER].red,
+							 color[V3270_COLOR_OIA_SPINNER].green,
+							 color[V3270_COLOR_OIA_SPINNER].blue,
 							 t);
 
 		cairo_set_line_width (cr, 2.0);
@@ -953,20 +953,24 @@ static gboolean update_timer(struct timer_info *info)
 	}
 
 #ifdef HAVE_LIBM
-		rect = info->terminal->oia_rect + V3270_OIA_SPINNER;
+
+    rect = info->terminal->oia_rect + V3270_OIA_SPINNER;
 
 #ifdef DEBUG
-		cairo_set_source_rgb(cr,0.1,0.1,0.1);
+	cairo_set_source_rgb(cr,0.1,0.1,0.1);
 #else
-		gdk_cairo_set_source_rgba(cr,info->terminal->color+V3270_COLOR_OIA_BACKGROUND);
+	gdk_cairo_set_source_rgba(cr,info->terminal->color+V3270_COLOR_OIA_BACKGROUND);
 #endif
-		cairo_rectangle(cr, rect->x, rect->y, rect->width, rect->height);
-		cairo_fill(cr);
 
-		gdk_cairo_set_source_rgba(cr,info->terminal->color+V3270_COLOR_OIA_FOREGROUND);
+    cairo_rectangle(cr, rect->x, rect->y, rect->width, rect->height);
+    cairo_fill(cr);
 
-		info->step = draw_spinner(cr, rect, info->terminal->color, info->step);
-		gtk_widget_queue_draw_area(GTK_WIDGET(info->terminal),rect->x,rect->y,rect->width,rect->height);
+	gdk_cairo_set_source_rgba(cr,info->terminal->color+V3270_COLOR_OIA_FOREGROUND);
+
+    info->step = draw_spinner(cr, rect, info->terminal->color, info->step);
+
+    gtk_widget_queue_draw_area(GTK_WIDGET(info->terminal),rect->x,rect->y,rect->width,rect->height);
+
 #endif // HAVE_LIBM
 
     cairo_destroy(cr);

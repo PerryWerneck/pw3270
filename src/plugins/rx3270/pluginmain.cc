@@ -48,6 +48,14 @@
  #include <lib3270/actions.h>
  #include <lib3270/log.h>
 
+/*--[ Globals ]--------------------------------------------------------------------------------------*/
+
+#if GTK_CHECK_VERSION(2,32,0)
+ static GMutex		  mutex;
+#else
+ static GStaticMutex	  mutex = G_STATIC_MUTEX_INIT;
+#endif // GTK_CHECK_VERSION
+
 /*--[ Rexx application data block ]--------------------------------------------------------------------------*/
 
  struct rexx_application_data
@@ -57,6 +65,223 @@
 	const gchar	* filename;
  };
 
+
+/*--[ Running rexx scripts ]---------------------------------------------------------------------------------*/
+
+ static int REXXENTRY Rexx_IO_exit(RexxExitContext *context, int exitnumber, int subfunction, PEXIT parmBlock)
+ {
+	trace("%s call with ExitNumber: %d Subfunction: %d",__FUNCTION__,(int) exitnumber, (int) subfunction);
+
+	if(subfunction == RXSIOSAY)
+	{
+		GtkWidget *dialog = gtk_message_dialog_new(		GTK_WINDOW(gtk_widget_get_toplevel(((struct rexx_application_data * )context->GetApplicationData())->widget)),
+														GTK_DIALOG_DESTROY_WITH_PARENT,
+														GTK_MESSAGE_INFO,
+														GTK_BUTTONS_OK_CANCEL,
+														"%s", (((RXSIOSAY_PARM *) parmBlock)->rxsio_string).strptr );
+
+		gtk_window_set_title(GTK_WINDOW(dialog), _( "Script message" ) );
+
+        if(gtk_dialog_run(GTK_DIALOG (dialog)) == GTK_RESPONSE_CANCEL)
+			context->RaiseException0(Rexx_Error_Program_interrupted);
+
+        gtk_widget_destroy(dialog);
+
+		return RXEXIT_HANDLED;
+	}
+
+	return RXEXIT_NOT_HANDLED;
+ }
+
+ static void call_rexx_script(GtkAction *action, GtkWidget *widget, const gchar *filename)
+ {
+	const gchar						* args = (const gchar *) g_object_get_data(G_OBJECT(action),"args");
+
+	struct rexx_application_data	  appdata = { action, widget, filename };
+
+	RexxInstance 		* instance;
+	RexxThreadContext	* threadContext;
+	RexxOption			  options[25];
+	RexxContextExit		  exits[2];
+
+	memset(options,0,sizeof(options));
+	memset(exits,0,sizeof(exits));
+
+	exits[0].sysexit_code	= RXSIO;
+	exits[0].handler 		= Rexx_IO_exit;
+
+	options[0].optionName	= DIRECT_EXITS;
+	options[0].option		= (void *) exits;
+
+	options[1].optionName	= APPLICATION_DATA;
+	options[1].option		= (void *) &appdata;
+
+	if(!RexxCreateInterpreter(&instance, &threadContext, options))
+	{
+		GtkWidget *dialog = gtk_message_dialog_new(	GTK_WINDOW(gtk_widget_get_toplevel(widget)),
+													GTK_DIALOG_DESTROY_WITH_PARENT,
+													GTK_MESSAGE_ERROR,
+													GTK_BUTTONS_CANCEL,
+													_(  "Can't start %s script" ), "rexx" );
+
+		gtk_window_set_title(GTK_WINDOW(dialog),_( "Rexx error" ));
+		gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),_( "Can't create %s interpreter instance" ), "rexx");
+
+        gtk_dialog_run(GTK_DIALOG (dialog));
+        gtk_widget_destroy(dialog);
+	}
+	else
+	{
+		RexxArrayObject rxArgs;
+
+		trace("%s start",__FUNCTION__);
+
+		if(args)
+		{
+			gchar   **arg	= g_strsplit(args,",",-1);
+			size_t	  sz	= g_strv_length(arg);
+
+			rxArgs = threadContext->NewArray(sz);
+			for(unsigned int i = 0; i<sz; i++)
+				threadContext->ArrayPut(rxArgs, threadContext->String(arg[i]), i + 1);
+
+			g_strfreev(arg);
+		}
+		else
+		{
+			rxArgs = threadContext->NewArray(1);
+			threadContext->ArrayPut(rxArgs, threadContext->String(""),1);
+		}
+
+		v3270_set_script(widget,'R',TRUE);
+		RexxObjectPtr result = threadContext->CallProgram(filename, rxArgs);
+		v3270_set_script(widget,'R',FALSE);
+
+		if (threadContext->CheckCondition())
+		{
+			RexxCondition condition;
+
+			// retrieve the error information and get it into a decoded form
+			RexxDirectoryObject cond = threadContext->GetConditionInfo();
+			threadContext->DecodeConditionInfo(cond, &condition);
+			// display the errors
+			GtkWidget *dialog = gtk_message_dialog_new(	GTK_WINDOW(gtk_widget_get_toplevel(widget)),
+														GTK_DIALOG_DESTROY_WITH_PARENT,
+														GTK_MESSAGE_ERROR,
+														GTK_BUTTONS_CANCEL,
+														_(  "%s script failed" ), "Rexx" );
+
+			gtk_window_set_title(GTK_WINDOW(dialog),_( "Rexx error" ));
+
+			gtk_message_dialog_format_secondary_text(
+					GTK_MESSAGE_DIALOG(dialog),
+							_( "%s error %d: %s\n%s" ),
+                                    "Rexx",
+									(int) condition.code,
+									threadContext->CString(condition.errortext),
+									threadContext->CString(condition.message)
+
+			);
+
+			gtk_dialog_run(GTK_DIALOG (dialog));
+			gtk_widget_destroy(dialog);
+
+		}
+		else if (result != NULLOBJECT)
+        {
+            CSTRING resultString = threadContext->CString(result);
+			lib3270_write_log(NULL,"REXX","%s exits with rc=%s",filename,resultString);
+        }
+
+		instance->Terminate();
+
+		trace("%s ends",__FUNCTION__);
+	}
+
+ }
+
+
+extern "C"
+{
+ LIB3270_EXPORT void pw3270_action_rexx_activated(GtkAction *action, GtkWidget *widget)
+ {
+	gchar *filename = (gchar *) g_object_get_data(G_OBJECT(action),"src");
+
+	lib3270_trace_event(v3270_get_session(widget),"Action %s activated on widget %p",gtk_action_get_name(action),widget);
+
+#if GTK_CHECK_VERSION(2,32,0)
+	if(!g_mutex_trylock(&mutex))
+#else
+	if(!g_static_mutex_trylock(&mutex))
+#endif // GTK_CHECK_VERSION
+	{
+		GtkWidget *dialog = gtk_message_dialog_new(	GTK_WINDOW(gtk_widget_get_toplevel(widget)),
+													GTK_DIALOG_DESTROY_WITH_PARENT,
+													GTK_MESSAGE_ERROR,
+													GTK_BUTTONS_CANCEL,
+													"%s", _(  "Can't start script" ));
+
+		gtk_window_set_title(GTK_WINDOW(dialog),_( "System busy" ));
+		gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),"%s",_( "Please, try again in a few moments" ));
+
+        gtk_dialog_run(GTK_DIALOG (dialog));
+        gtk_widget_destroy(dialog);
+		return;
+	}
+
+	gtk_action_set_sensitive(action,FALSE);
+
+	if(filename)
+	{
+		// Has filename, call it directly
+		call_rexx_script(action,widget,filename);
+	}
+	else
+	{
+		// No filename, ask user
+		static const struct _list
+		{
+			const gchar *name;
+			const gchar *pattern;
+		} list[] =
+		{
+			{ N_( "Rexx script file" ),	"*.rex" },
+			{ N_( "Rexx class file" ),	"*.cls" }
+		};
+
+		GtkFileFilter * filter[G_N_ELEMENTS(list)+1];
+		unsigned int f;
+
+		memset(filter,0,sizeof(filter));
+
+		for(f=0;f<G_N_ELEMENTS(list);f++)
+		{
+			filter[f] = gtk_file_filter_new();
+			gtk_file_filter_set_name(filter[f],gettext(list[f].name));
+			gtk_file_filter_add_pattern(filter[f],list[f].pattern);
+		}
+
+		filename = pw3270_get_filename(widget,"rexx","script",filter,_( "Select script to run" ));
+
+		if(filename)
+		{
+			call_rexx_script(action,widget,filename);
+			g_free(filename);
+		}
+
+
+	}
+
+	gtk_action_set_sensitive(action,TRUE);
+#if GTK_CHECK_VERSION(2,32,0)
+	g_mutex_unlock(&mutex);
+#else
+	g_static_mutex_unlock(&mutex);
+#endif // GTK_CHECK_VERSION
+
+ }
+
+}
 
 /*--[ Plugin session object ]--------------------------------------------------------------------------------*/
 
@@ -116,11 +341,6 @@
 
  };
 
-/*--[ Globals ]--------------------------------------------------------------------------------------*/
-
-#if GTK_CHECK_VERSION(2,32,0)
- static GMutex			  mutex;#else static GStaticMutex	  mutex = G_STATIC_MUTEX_INIT;#endif // GTK_CHECK_VERSION
-
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
  static rx3270 * factory(const char *name)
@@ -132,7 +352,8 @@
  {
 	trace("%s",__FUNCTION__);
 #if GTK_CHECK_VERSION(2,32,0)
-	g_mutex_init(&mutex);#endif // GTK_CHECK_VERSION
+	g_mutex_init(&mutex);
+#endif // GTK_CHECK_VERSION
 	rx3270::set_plugin(factory);
 	return 0;
  }
@@ -140,7 +361,8 @@
  LIB3270_EXPORT int pw3270_plugin_stop(GtkWidget *window)
  {
 #if GTK_CHECK_VERSION(2,32,0)
-	g_mutex_clear(&mutex);#endif // GTK_CHECK_VERSION
+	g_mutex_clear(&mutex);
+#endif // GTK_CHECK_VERSION
     trace("%s",__FUNCTION__);
 	return 0;
  }
@@ -322,214 +544,5 @@ int plugin::popup_dialog(LIB3270_NOTIFY id , const char *title, const char *mess
     lib3270_popup_va(hSession, id, title, message, fmt, args);
     va_end(args);
     return 0;
-}
-
- static int REXXENTRY Rexx_IO_exit(RexxExitContext *context, int exitnumber, int subfunction, PEXIT parmBlock)
- {
-	trace("%s call with ExitNumber: %d Subfunction: %d",__FUNCTION__,(int) exitnumber, (int) subfunction);
-
-	if(subfunction == RXSIOSAY)
-	{
-		GtkWidget *dialog = gtk_message_dialog_new(		GTK_WINDOW(gtk_widget_get_toplevel(((struct rexx_application_data * )context->GetApplicationData())->widget)),
-														GTK_DIALOG_DESTROY_WITH_PARENT,
-														GTK_MESSAGE_INFO,
-														GTK_BUTTONS_OK_CANCEL,
-														"%s", (((RXSIOSAY_PARM *) parmBlock)->rxsio_string).strptr );
-
-		gtk_window_set_title(GTK_WINDOW(dialog), _( "Script message" ) );
-
-        if(gtk_dialog_run(GTK_DIALOG (dialog)) == GTK_RESPONSE_CANCEL)
-			context->RaiseException0(Rexx_Error_Program_interrupted);
-
-        gtk_widget_destroy(dialog);
-
-		return RXEXIT_HANDLED;
-	}
-
-	return RXEXIT_NOT_HANDLED;
- }
-
- static void call_rexx_script(GtkAction *action, GtkWidget *widget, const gchar *filename)
- {
-	const gchar						* args = (const gchar *) g_object_get_data(G_OBJECT(action),"args");
-
-	struct rexx_application_data	  appdata = { action, widget, filename };
-
-	RexxInstance 		* instance;
-	RexxThreadContext	* threadContext;
-	RexxOption			  options[25];
-	RexxContextExit		  exits[2];
-
-	memset(options,0,sizeof(options));
-	memset(exits,0,sizeof(exits));
-
-	exits[0].sysexit_code	= RXSIO;
-	exits[0].handler 		= Rexx_IO_exit;
-
-	options[0].optionName	= DIRECT_EXITS;
-	options[0].option		= (void *) exits;
-
-	options[1].optionName	= APPLICATION_DATA;
-	options[1].option		= (void *) &appdata;
-
-	if(!RexxCreateInterpreter(&instance, &threadContext, options))
-	{
-		GtkWidget *dialog = gtk_message_dialog_new(	GTK_WINDOW(gtk_widget_get_toplevel(widget)),
-													GTK_DIALOG_DESTROY_WITH_PARENT,
-													GTK_MESSAGE_ERROR,
-													GTK_BUTTONS_CANCEL,
-													_(  "Can't start %s script" ), "rexx" );
-
-		gtk_window_set_title(GTK_WINDOW(dialog),_( "Rexx error" ));
-		gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),_( "Can't create %s interpreter instance" ), "rexx");
-
-        gtk_dialog_run(GTK_DIALOG (dialog));
-        gtk_widget_destroy(dialog);
-	}
-	else
-	{
-		RexxArrayObject rxArgs;
-
-		trace("%s start",__FUNCTION__);
-
-		if(args)
-		{
-			gchar   **arg	= g_strsplit(args,",",-1);
-			size_t	  sz	= g_strv_length(arg);
-
-			rxArgs = threadContext->NewArray(sz);
-			for(unsigned int i = 0; i<sz; i++)
-				threadContext->ArrayPut(rxArgs, threadContext->String(arg[i]), i + 1);
-
-			g_strfreev(arg);
-		}
-		else
-		{
-			rxArgs = threadContext->NewArray(1);
-			threadContext->ArrayPut(rxArgs, threadContext->String(""),1);
-		}
-
-		v3270_set_script(widget,'R',TRUE);
-		RexxObjectPtr result = threadContext->CallProgram(filename, rxArgs);
-		v3270_set_script(widget,'R',FALSE);
-
-		if (threadContext->CheckCondition())
-		{
-			RexxCondition condition;
-
-			// retrieve the error information and get it into a decoded form
-			RexxDirectoryObject cond = threadContext->GetConditionInfo();
-			threadContext->DecodeConditionInfo(cond, &condition);
-			// display the errors
-			GtkWidget *dialog = gtk_message_dialog_new(	GTK_WINDOW(gtk_widget_get_toplevel(widget)),
-														GTK_DIALOG_DESTROY_WITH_PARENT,
-														GTK_MESSAGE_ERROR,
-														GTK_BUTTONS_CANCEL,
-														_(  "%s script failed" ), "Rexx" );
-
-			gtk_window_set_title(GTK_WINDOW(dialog),_( "Rexx error" ));
-
-			gtk_message_dialog_format_secondary_text(
-					GTK_MESSAGE_DIALOG(dialog),
-							_( "%s error %d: %s\n%s" ),
-                                    "Rexx",
-									(int) condition.code,
-									threadContext->CString(condition.errortext),
-									threadContext->CString(condition.message)
-
-			);
-
-			gtk_dialog_run(GTK_DIALOG (dialog));
-			gtk_widget_destroy(dialog);
-
-		}
-		else if (result != NULLOBJECT)
-        {
-            CSTRING resultString = threadContext->CString(result);
-			lib3270_write_log(NULL,"REXX","%s exits with rc=%s",filename,resultString);
-        }
-
-		instance->Terminate();
-
-		trace("%s ends",__FUNCTION__);
-	}
-
- }
-
-
-extern "C"
-{
- LIB3270_EXPORT void pw3270_action_rexx_activated(GtkAction *action, GtkWidget *widget)
- {
-	gchar *filename = (gchar *) g_object_get_data(G_OBJECT(action),"src");
-
-	lib3270_trace_event(v3270_get_session(widget),"Action %s activated on widget %p",gtk_action_get_name(action),widget);
-
-#if GTK_CHECK_VERSION(2,32,0)
-	if(!g_mutex_trylock(&mutex))#else	if(!g_static_mutex_trylock(&mutex))#endif // GTK_CHECK_VERSION
-	{
-		GtkWidget *dialog = gtk_message_dialog_new(	GTK_WINDOW(gtk_widget_get_toplevel(widget)),
-													GTK_DIALOG_DESTROY_WITH_PARENT,
-													GTK_MESSAGE_ERROR,
-													GTK_BUTTONS_CANCEL,
-													"%s", _(  "Can't start script" ));
-
-		gtk_window_set_title(GTK_WINDOW(dialog),_( "System busy" ));
-		gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),"%s",_( "Please, try again in a few moments" ));
-
-        gtk_dialog_run(GTK_DIALOG (dialog));
-        gtk_widget_destroy(dialog);
-		return;
-	}
-
-	gtk_action_set_sensitive(action,FALSE);
-
-	if(filename)
-	{
-		// Has filename, call it directly
-		call_rexx_script(action,widget,filename);
-	}
-	else
-	{
-		// No filename, ask user
-		static const struct _list
-		{
-			const gchar *name;
-			const gchar *pattern;
-		} list[] =
-		{
-			{ N_( "Rexx script file" ),	"*.rex" },
-			{ N_( "Rexx class file" ),	"*.cls" }
-		};
-
-		GtkFileFilter * filter[G_N_ELEMENTS(list)+1];
-		unsigned int f;
-
-		memset(filter,0,sizeof(filter));
-
-		for(f=0;f<G_N_ELEMENTS(list);f++)
-		{
-			filter[f] = gtk_file_filter_new();
-			gtk_file_filter_set_name(filter[f],gettext(list[f].name));
-			gtk_file_filter_add_pattern(filter[f],list[f].pattern);
-		}
-
-		filename = pw3270_get_filename(widget,"rexx","script",filter,_( "Select script to run" ));
-
-		if(filename)
-		{
-			call_rexx_script(action,widget,filename);
-			g_free(filename);
-		}
-
-
-	}
-
-	gtk_action_set_sensitive(action,TRUE);
-#if GTK_CHECK_VERSION(2,32,0)
-	g_mutex_unlock(&mutex);#else	g_static_mutex_unlock(&mutex);#endif // GTK_CHECK_VERSION
-
- }
-
 }
 

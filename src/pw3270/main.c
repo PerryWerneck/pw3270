@@ -261,6 +261,8 @@ int main(int argc, char *argv[])
 	static const gchar	* host			= NULL;
 	int 				  rc 			= 0;
 
+    trace("%s",__FUNCTION__);
+
 #if ! GLIB_CHECK_VERSION(2,32,0)
 	g_thread_init(NULL);
 #endif // !GLIB(2,32)

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-12 09:54-0300\n"
+"POT-Creation-Date: 2013-06-17 11:06-0300\n"
 "PO-Revision-Date: 2013-05-08 14:30-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
@@ -96,7 +96,7 @@ msgstr "- Emulador 3270 para GTK"
 msgid "16 colors"
 msgstr "16 cores"
 
-#: screen.c:691 screen.c:721 screen.c:735 screen.c:854
+#: screen.c:691 screen.c:721 screen.c:735 screen.c:860
 msgid "3270 Error"
 msgstr "Erro 3270"
 
@@ -632,7 +632,7 @@ msgstr "Apagar até o final do campo"
 msgid "Erase to end of line"
 msgstr "Apagar até o final da linha"
 
-#: print.c:238 v3270/widget.c:215 util.c:1009
+#: print.c:238 v3270/widget.c:215 util.c:1018
 msgid "Error"
 msgstr "Erro"
 
@@ -2070,7 +2070,7 @@ msgstr "Alvo inesperado \"%s\""
 msgid "Unexpected type %d in typeahead queue"
 msgstr "Tipo inesperado %d na fila de teclado"
 
-#: ctlr.c:583
+#: ctlr.c:588
 #, c-format
 msgid "Unknown 3270 Data Stream command: 0x%X"
 msgstr "Unknown 3270 Data Stream command: 0x%X"
