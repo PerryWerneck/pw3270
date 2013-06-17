@@ -29,8 +29,7 @@
  cursor = host~GetCursorAddr()
  next   = cursor
 
- while text <> ""
- do
+ do while text <> ""
     addr = host~GetFieldStart(next)
     next = host~GetNextUnprotected(addr)
 
@@ -51,7 +50,7 @@
 
     when length(text) < field_len then
     do
-        s = strip(text)
+        s = justify(strip(text),field_len)
         text = ""
     end
 
@@ -79,6 +78,38 @@
  end
 
 return 0
+
+justify: procedure
+
+    use arg text, len
+
+    wlen = words(text)
+    if wlen < 3
+        then return text
+
+    ln = .array~new()
+    sz = 0
+
+    do f = 1 to wlen
+        ln[f] = word(text,f)||" "
+        sz  = sz + length(ln[f])
+    end
+
+    do while sz < len
+        do f = wlen-1 to 1 by -1
+            ln[f] = ln[f]||"."
+            sz = sz+1
+            if sz >= len
+                then leave
+        end
+    end
+
+    str = ""
+    do f = 1 to wlen
+        str = str||ln[f]
+    end
+
+return strip(str)
 
 ::requires "rx3270.cls"
 
