@@ -83,6 +83,8 @@
  LIB3270_EXPORT gboolean	  pw3270_get_boolean(GtkWidget *widget, const gchar *group, const gchar *key, gboolean def);
  LIB3270_EXPORT void 		  pw3270_set_boolean(GtkWidget *widget, const gchar *group, const gchar *key, gint val);
 
+ LIB3270_EXPORT gchar       * pw3270_get_datadir(const gchar *first_element, ...);
+
  typedef enum pw3270_src
  {
  	PW3270_SRC_ALL,			/**< Screen contents */

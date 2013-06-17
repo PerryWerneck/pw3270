@@ -185,3 +185,14 @@ LIB3270_EXPORT gchar * pw3270_get_filename(GtkWidget *widget, const gchar *group
 
 	return filename;
 }
+
+LIB3270_EXPORT gchar * pw3270_get_datadir(const gchar *first_element, ...)
+{
+	va_list args;
+	gchar	*path;
+
+	va_start(args, first_element);
+	path = filename_from_va(first_element,args);
+	va_end(args);
+	return path;
+}

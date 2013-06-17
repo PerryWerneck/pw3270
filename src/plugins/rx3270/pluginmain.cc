@@ -103,6 +103,7 @@
 	RexxThreadContext	* threadContext;
 	RexxOption			  options[25];
 	RexxContextExit		  exits[2];
+    RexxLibraryPackage    package;
 
 	memset(options,0,sizeof(options));
 	memset(exits,0,sizeof(exits));
@@ -110,11 +111,27 @@
 	exits[0].sysexit_code	= RXSIO;
 	exits[0].handler 		= Rexx_IO_exit;
 
+    // http://www.oorexx.org/docs/rexxpg/c2539.htm
+
 	options[0].optionName	= DIRECT_EXITS;
 	options[0].option		= (void *) exits;
 
 	options[1].optionName	= APPLICATION_DATA;
 	options[1].option		= (void *) &appdata;
+
+//    options[0].optionName   = LOAD_REQUIRED_LIBRARY;
+//    options[0].option       = "rx3270";
+
+    package.registeredName  = "rx3270";
+    package.table           = &rx3270_package_entry;
+
+    options[2].optionName   = REGISTER_LIBRARY;
+    options[2].option       = (void *) &package;
+
+    options[3].optionName   = EXTERNAL_CALL_PATH;
+    options[3].option       = pw3270_get_datadir(NULL);
+
+    trace("Rexxdir: \"%s\"",(gchar *) ((void *) options[3].option));
 
 	if(!RexxCreateInterpreter(&instance, &threadContext, options))
 	{
@@ -197,6 +214,8 @@
 
 		trace("%s ends",__FUNCTION__);
 	}
+
+    g_free(options[3].option);
 
  }
 
