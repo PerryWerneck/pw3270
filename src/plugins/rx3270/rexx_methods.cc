@@ -33,6 +33,7 @@
  */
 
  #include "rx3270.h"
+ #include <gtk/gtk.h>
  #include <time.h>
  #include <string.h>
  #include <ctype.h>
@@ -527,3 +528,41 @@ RexxMethod5(int, rx3270_method_popup, CSELF, sessionPtr, CSTRING, s_id, CSTRING,
 
     return hSession->popup_dialog(id, title, message, "%s", det ? det : "");
 }
+
+RexxMethod5(RexxStringObject, rx3270_method_get_filename, CSELF, sessionPtr, CSTRING, action_name, CSTRING, title, OPTIONAL_CSTRING, extension, OPTIONAL_CSTRING, filename)
+{
+    static const struct _action
+    {
+        const gchar             * action_name;
+        GtkFileChooserAction      id;
+    } action[] =
+    {
+        { "open",           GTK_FILE_CHOOSER_ACTION_OPEN            },
+        { "save",           GTK_FILE_CHOOSER_ACTION_SAVE            },
+        { "folder",         GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER   },
+        { "select_folder",  GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER   },
+        { "create_folder",  GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER   }
+    };
+
+    GtkFileChooserAction      id = GTK_FILE_CHOOSER_ACTION_OPEN;
+    char                    * ret;
+
+    for(int f=0;f<5;f++)
+    {
+        if(!strcasecmp(action_name,action[f].action_name))
+        {
+            id = action[f].id;
+        }
+    }
+
+    ret = ((rx3270 *) sessionPtr)->file_chooser_dialog(id, title, extension,filename);
+    if(ret)
+    {
+        RexxStringObject obj = context->String(ret);
+        ((rx3270 *) sessionPtr)->free(ret);
+        return obj;
+    }
+
+	return context->String("");
+}
+

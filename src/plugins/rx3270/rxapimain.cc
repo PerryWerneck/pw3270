@@ -154,6 +154,7 @@ RexxMethodEntry rx3270_methods[] =
     REXX_METHOD(rx3270_method_set_clipboard,	rx3270_method_set_clipboard	    ),
 
     REXX_METHOD(rx3270_method_popup,        	rx3270_method_popup	            ),
+    REXX_METHOD(rx3270_method_get_filename,     rx3270_method_get_filename      ),
 
     REXX_METHOD(rx3270_method_get_cursor_addr,	rx3270_method_get_cursor_addr   ),
     REXX_METHOD(rx3270_method_set_cursor_addr,	rx3270_method_set_cursor_addr   ),

@@ -83,6 +83,7 @@
 ::METHOD SETCLIPBOARD EXTERNAL "LIBRARY rx3270 rx3270_method_set_clipboard"
 
 ::METHOD POPUP EXTERNAL "LIBRARY rx3270 rx3270_method_popup"
+::METHOD GETFILENAME EXTERNAL "LIBRARY rx3270 rx3270_method_get_filename"
 
 ::method waitForStringAt
         use arg row, col, key, timeout

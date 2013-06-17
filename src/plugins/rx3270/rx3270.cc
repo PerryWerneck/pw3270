@@ -203,3 +203,8 @@ int rx3270::popup_dialog(LIB3270_NOTIFY id , const char *title, const char *mess
     return -1;
 }
 
+char * rx3270::file_chooser_dialog(GtkFileChooserAction action, const char *title, const char *extension, const char *filename)
+{
+    return NULL;
+}
+
