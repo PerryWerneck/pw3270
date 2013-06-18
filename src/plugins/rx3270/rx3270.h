@@ -124,8 +124,6 @@
 
 /*---[ Globals ]---------------------------------------------------------------------------------------------*/
 
- LIB3270_EXPORT RexxPackageEntry rx3270_package_entry;
-
 /*--[ 3270 Session ]-----------------------------------------------------------------------------------------*/
 
 #if defined (HAVE_GNUC_VISIBILITY)
@@ -211,5 +209,15 @@
  };
 
  rx3270 * create_lib3270_instance(void);
+
+#ifdef __cplusplus
+	extern "C" {
+#endif
+
+    LIB3270_EXPORT void rx3270_set_package_option(RexxOption *option);
+
+#ifdef __cplusplus
+	}
+#endif
 
 #endif // RX3270_H_INCLUDED

@@ -95,15 +95,14 @@
 
  static void call_rexx_script(GtkAction *action, GtkWidget *widget, const gchar *filename)
  {
-	const gchar						* args = (const gchar *) g_object_get_data(G_OBJECT(action),"args");
+	const gchar						* args      = (const gchar *) g_object_get_data(G_OBJECT(action),"args");
 
-	struct rexx_application_data	  appdata = { action, widget, filename };
+	struct rexx_application_data	  appdata   = { action, widget, filename };
 
 	RexxInstance 		* instance;
 	RexxThreadContext	* threadContext;
 	RexxOption			  options[25];
 	RexxContextExit		  exits[2];
-    RexxLibraryPackage    package;
 
 	memset(options,0,sizeof(options));
 	memset(exits,0,sizeof(exits));
@@ -122,11 +121,7 @@
 //    options[0].optionName   = LOAD_REQUIRED_LIBRARY;
 //    options[0].option       = "rx3270";
 
-    package.registeredName  = "rx3270";
-    package.table           = &rx3270_package_entry;
-
-    options[2].optionName   = REGISTER_LIBRARY;
-    options[2].option       = (void *) &package;
+    rx3270_set_package_option(&options[2]);
 
     options[3].optionName   = EXTERNAL_CALL_PATH;
     options[3].option       = pw3270_get_datadir(NULL);
