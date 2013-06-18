@@ -214,9 +214,9 @@
 
  }
 
- static GtkFileChooserConfirmation confirm_overwrite(GtkFileChooser *chooser, GtkAction *action)
+ static GtkFileChooserConfirmation confirm_overwrite(GtkFileChooser *chooser, GObject *action)
  {
-	const gchar					* attr		= g_object_get_data(G_OBJECT(action),"overwrite");
+	const gchar					* attr		= g_object_get_data(action,"overwrite");
 	GtkFileChooserConfirmation	  ret 		= GTK_FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME;
 	GtkWidget					* dialog;
 
@@ -269,7 +269,7 @@
 												NULL );
 
 		gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(dialog), TRUE);
-		g_signal_connect(GTK_FILE_CHOOSER(dialog), "confirm-overwrite", G_CALLBACK(confirm_overwrite), action);
+		g_signal_connect(GTK_FILE_CHOOSER(dialog), "confirm-overwrite", G_CALLBACK(confirm_overwrite), G_OBJECT(action));
 
 		add_option_menus(dialog, action, &encattr);
 
@@ -520,82 +520,70 @@
 	g_free(info);
  }
 
-/*
- G_GNUC_INTERNAL void run_security_dialog(GtkWidget *widget)
+ LIB3270_EXPORT gchar * pw3270_file_chooser(GtkFileChooserAction action, const gchar *name,  const gchar *title, const gchar *file, const gchar *ext)
  {
- 	GtkWidget	* dialog;
-	H3270		* hSession	= pw3270_get_session(widget);
+    static const struct _btn
+    {
+            const gchar          * button;
+            GtkFileChooserAction   action;
+    } btn[] =
+    {
+        { GTK_STOCK_OPEN,     GTK_FILE_CHOOSER_ACTION_OPEN            },
+        { GTK_STOCK_SAVE,     GTK_FILE_CHOOSER_ACTION_SAVE            },
+        { GTK_STOCK_OK,       GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER   },
+        { GTK_STOCK_OK,       GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER   }
+    };
 
-	trace("%s(%p)",__FUNCTION__,widget);
+    GtkWidget	* dialog;
+    gchar		* ptr;
+    const gchar * button        = GTK_STOCK_OK;
+    gchar       * filename      = NULL;
+    int           f;
 
-#ifdef HAVE_LIBSSL
-	if(lib3270_get_secure(hSession) == LIB3270_SSL_UNSECURE)
-#endif // HAVE_LIBSSL
-	{
-		// Connection is insecure, show simple dialog with host and info
+    for(f=0;f<G_N_ELEMENTS(btn);f++)
+    {
+        if(action == btn[f].action)
+        {
+            button = btn[f].button;
+            break;
+        }
+    }
 
-		dialog = gtk_message_dialog_new(
-							GTK_WINDOW(widget),
-							GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
-							GTK_MESSAGE_INFO,
-							GTK_BUTTONS_CLOSE,
-							pw3270_get_host(widget)
-					);
+    dialog = gtk_file_chooser_dialog_new( 	title,
+                                            GTK_WINDOW(pw3270_get_toplevel()),
+                                            action,
+                                            GTK_STOCK_CANCEL,	GTK_RESPONSE_CANCEL,
+                                            button,		        GTK_RESPONSE_ACCEPT,
+                                            NULL );
 
-		gtk_message_dialog_format_secondary_markup(
-					GTK_MESSAGE_DIALOG(dialog),
-					"%s", _( "<b>Identity not verified</b>\nThe connection is insecure" ));
+    if(action == GTK_FILE_CHOOSER_ACTION_SAVE)
+    {
+        gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(dialog), TRUE);
+        g_signal_connect(GTK_FILE_CHOOSER(dialog), "confirm-overwrite", G_CALLBACK(confirm_overwrite), G_OBJECT(dialog));
+    }
 
-	}
-#ifdef HAVE_LIBSSL
-	else
-	{
-		long 			  id		= lib3270_get_SSL_verify_result(hSession);
-		const gchar 	* title		= N_( "Unexpected SSL error");
-		const gchar		* text 		= NULL;
-		const gchar		* icon		= GTK_STOCK_DIALOG_ERROR;
-		int				  f;
+    if(file)
+    {
+        gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog),file);
+    }
+    else
+    {
+        ptr = get_string_from_config("files",name,"");
+        if(*ptr)
+            gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog),ptr);
+        else
+            gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),g_get_user_special_dir(G_USER_DIRECTORY_DOCUMENTS));
+        g_free(ptr);
+    }
 
-		for(f=0;f<G_N_ELEMENTS(sslerror);f++)
-		{
-			if(sslerror[f].id == id)
-			{
-				title	= sslerror[f].title;
-				icon	= sslerror[f].icon;
-				text	= sslerror[f].text;
-				break;
-			}
-		}
+    if(gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
+    {
+        filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+        if(filename)
+            set_string_to_config("files",name,"%s",filename);
+    }
 
-		dialog = gtk_message_dialog_new(
-							GTK_WINDOW(widget),
-							GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
-							GTK_MESSAGE_OTHER,
-							GTK_BUTTONS_CLOSE,
-							"%s",gettext(title)
-					);
+    gtk_widget_destroy(dialog);
 
-		gtk_message_dialog_set_image(GTK_MESSAGE_DIALOG(dialog),gtk_image_new_from_stock(icon,GTK_ICON_SIZE_DIALOG));
-
-		if(text)
-		{
-			gtk_message_dialog_format_secondary_markup(GTK_MESSAGE_DIALOG(dialog),text);
-		}
-		else
-		{
-			gchar *str = g_strdup_printf("Unexpected SSL error <b>%ld</b>",id);
-			gtk_message_dialog_format_secondary_markup(GTK_MESSAGE_DIALOG(dialog),text);
-			g_free(str);
-		}
-
-	}
-#endif // HAVE_LIBSSL
-
-	gtk_window_set_title(GTK_WINDOW(dialog),_("About security"));
-
-	gtk_widget_show_all(GTK_WIDGET(dialog));
-	gtk_dialog_run(GTK_DIALOG(dialog));
-	gtk_widget_destroy(GTK_WIDGET(dialog));
-
+    return filename;
  }
-*/

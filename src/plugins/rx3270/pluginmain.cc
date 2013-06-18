@@ -51,10 +51,12 @@
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
 #if GTK_CHECK_VERSION(2,32,0)
- static GMutex		  mutex;
+ static GMutex            mutex;
 #else
  static GStaticMutex	  mutex = G_STATIC_MUTEX_INIT;
 #endif // GTK_CHECK_VERSION
+
+ static gchar           * script_name = NULL;
 
 /*--[ Rexx application data block ]--------------------------------------------------------------------------*/
 
@@ -63,6 +65,65 @@
 	GtkAction	* action;
 	GtkWidget	* widget;
 	const gchar	* filename;
+ };
+
+/*--[ Plugin session object ]--------------------------------------------------------------------------------*/
+
+ class plugin : public rx3270
+ {
+ public:
+	plugin(H3270 *hSession);
+	virtual ~plugin();
+
+    void              free(void *ptr);
+
+	char			* get_version(void);
+	LIB3270_CSTATE	  get_cstate(void);
+	int				  disconnect(void);
+	int				  connect(const char *uri, bool wait = true);
+	bool			  is_connected(void);
+	bool			  is_ready(void);
+
+	void 			  logva(const char *fmt, va_list args);
+
+	int				  iterate(bool wait);
+	int				  wait(int seconds);
+	int				  wait_for_ready(int seconds);
+
+	char			* get_text(int baddr, size_t len);
+	char 			* get_text_at(int row, int col, size_t sz);
+	int				  cmp_text_at(int row, int col, const char *text);
+	int 			  set_text_at(int row, int col, const char *str);
+
+	int				  set_cursor_position(int row, int col);
+	int				  set_cursor_addr(int addr);
+	int				  get_cursor_addr(void);
+    int               emulate_input(const char *str);
+
+	int 			  set_toggle(LIB3270_TOGGLE ix, bool value);
+
+	int				  enter(void);
+	int				  pfkey(int key);
+	int				  pakey(int key);
+
+	int               get_field_start(int baddr = -1);
+	int               get_field_len(int baddr = -1);
+	int               get_next_unprotected(int baddr = -1);
+
+	int               set_copy(const char *text);
+	char            * get_copy(void);
+
+    char            * get_clipboard(void);
+    int               set_clipboard(const char *text);
+
+	int               popup_dialog(LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, ...);
+	char            * file_chooser_dialog(GtkFileChooserAction action, const char *title, const char *extension, const char *filename);
+
+ protected:
+
+ private:
+	H3270           * hSession;
+
  };
 
 
@@ -166,7 +227,10 @@
 		}
 
 		v3270_set_script(widget,'R',TRUE);
+		script_name = g_path_get_basename(filename);
 		RexxObjectPtr result = threadContext->CallProgram(filename, rxArgs);
+		g_free(script_name);
+		script_name = NULL;
 		v3270_set_script(widget,'R',FALSE);
 
 		if (threadContext->CheckCondition())
@@ -296,64 +360,6 @@ extern "C"
  }
 
 }
-
-/*--[ Plugin session object ]--------------------------------------------------------------------------------*/
-
- class plugin : public rx3270
- {
- public:
-	plugin(H3270 *hSession);
-	virtual ~plugin();
-
-    void              free(void *ptr);
-
-	char			* get_version(void);
-	LIB3270_CSTATE	  get_cstate(void);
-	int				  disconnect(void);
-	int				  connect(const char *uri, bool wait = true);
-	bool			  is_connected(void);
-	bool			  is_ready(void);
-
-	void 			  logva(const char *fmt, va_list args);
-
-	int				  iterate(bool wait);
-	int				  wait(int seconds);
-	int				  wait_for_ready(int seconds);
-
-	char			* get_text(int baddr, size_t len);
-	char 			* get_text_at(int row, int col, size_t sz);
-	int				  cmp_text_at(int row, int col, const char *text);
-	int 			  set_text_at(int row, int col, const char *str);
-
-	int				  set_cursor_position(int row, int col);
-	int				  set_cursor_addr(int addr);
-	int				  get_cursor_addr(void);
-    int               emulate_input(const char *str);
-
-	int 			  set_toggle(LIB3270_TOGGLE ix, bool value);
-
-	int				  enter(void);
-	int				  pfkey(int key);
-	int				  pakey(int key);
-
-	int               get_field_start(int baddr = -1);
-	int               get_field_len(int baddr = -1);
-	int               get_next_unprotected(int baddr = -1);
-
-	int               set_copy(const char *text);
-	char            * get_copy(void);
-
-    char            * get_clipboard(void);
-    int               set_clipboard(const char *text);
-
-	int               popup_dialog(LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, ...);
-
- protected:
-
- private:
-	H3270           * hSession;
-
- };
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
@@ -560,3 +566,7 @@ int plugin::popup_dialog(LIB3270_NOTIFY id , const char *title, const char *mess
     return 0;
 }
 
+char * plugin::file_chooser_dialog(GtkFileChooserAction action, const char *title, const char *extension, const char *filename)
+{
+    return pw3270_file_chooser(action, script_name ? script_name : "rexx", title, filename, extension);
+}

@@ -85,6 +85,8 @@
 
  LIB3270_EXPORT gchar       * pw3270_get_datadir(const gchar *first_element, ...);
 
+ LIB3270_EXPORT gchar       * pw3270_file_chooser(GtkFileChooserAction action, const gchar *name,  const gchar *title, const gchar *file, const gchar *ext);
+
  typedef enum pw3270_src
  {
  	PW3270_SRC_ALL,			/**< Screen contents */

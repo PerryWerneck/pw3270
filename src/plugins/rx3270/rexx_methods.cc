@@ -552,6 +552,7 @@ RexxMethod5(RexxStringObject, rx3270_method_get_filename, CSELF, sessionPtr, CST
         if(!strcasecmp(action_name,action[f].action_name))
         {
             id = action[f].id;
+            break;
         }
     }
 

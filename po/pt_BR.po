@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-17 11:06-0300\n"
+"POT-Creation-Date: 2013-06-18 07:49-0300\n"
 "PO-Revision-Date: 2013-05-08 14:30-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
@@ -88,7 +88,7 @@ msgstr "%s: Familia %d é inválida"
 msgid "%s:%d"
 msgstr "%s:%d"
 
-#: main.c:339
+#: main.c:341
 msgid "- 3270 Emulator for Gtk"
 msgstr "- Emulador 3270 para GTK"
 
@@ -169,7 +169,7 @@ msgstr ""
 msgid "<b>SSL state is undefined</b>Unexpected SSL status %ld"
 msgstr "<b>Estado do SSL é indefinido</b>Estado SSL inesperado %ld"
 
-#: main.c:359
+#: main.c:361
 msgid ""
 "<b>Valid options:</b>\n"
 "\n"
@@ -222,7 +222,7 @@ msgid "An error occurred trying to allocate memory. This should never happen."
 msgstr ""
 "Ocorreu um erro ao tentar alocar memória. Isso nunca deveria acontecer."
 
-#: main.c:319 main.c:321
+#: main.c:321 main.c:323
 msgid "Application name"
 msgstr "Nome da aplicação"
 
@@ -731,7 +731,7 @@ msgstr "Tela cheia"
 msgid "Function bar"
 msgstr "Barra de funções"
 
-#: main.c:93 main.c:406
+#: main.c:93 main.c:408
 msgid "GTK Version mismatch"
 msgstr "Divergência de versão GTK"
 
@@ -800,11 +800,11 @@ msgstr "Servidor rejeitou o tipo de dispositivo ou requisição"
 msgid "Host rejected resource(s)"
 msgstr "Servidor rejeitou recurso(s)"
 
-#: main.c:327
+#: main.c:329
 msgid "Host system type"
 msgstr "Tipo do sistema no servidor"
 
-#: main.c:325
+#: main.c:327
 msgid "Host to connect"
 msgstr "Servidor a conectar"
 
@@ -900,7 +900,7 @@ msgstr "LRECL:"
 msgid "Lateral keypad"
 msgstr "Barra lateral"
 
-#: main.c:334
+#: main.c:336
 #, fuzzy
 msgid "Log to file"
 msgstr "Salvar cópia para arquivo"
@@ -1139,7 +1139,7 @@ msgstr "PF8"
 msgid "PF9"
 msgstr "PF9"
 
-#: main.c:357
+#: main.c:359
 msgid "Parse error"
 msgstr "Erro de interpretação"
 
@@ -1176,7 +1176,7 @@ msgstr "Colar com margem esquerda"
 msgid "Path length constraint exceeded"
 msgstr "Path length constraint exceeded"
 
-#: main.c:322
+#: main.c:324
 msgid "Path to application data files"
 msgstr "Caminho para os arquivos de dados da aplicação"
 
@@ -1593,7 +1593,7 @@ msgstr "Enviar arquivo"
 msgid "Send file to host"
 msgstr "Enviar arquivo para o servidor"
 
-#: main.c:332
+#: main.c:334
 msgid "Send messages to syslog"
 msgstr "Enviar mensagens para o log do sistema"
 
@@ -1601,7 +1601,7 @@ msgstr "Enviar mensagens para o log do sistema"
 msgid "Send/Receive"
 msgstr "Enviar/Receber"
 
-#: main.c:324
+#: main.c:326
 msgid "Session name"
 msgstr "Nome da sessão"
 
@@ -1609,15 +1609,15 @@ msgstr "Nome da sessão"
 msgid "Set hostname"
 msgstr "Selecione servidor"
 
-#: main.c:326
+#: main.c:328
 msgid "Set reported colors (8/16)"
 msgstr "Define número de cores informadas (8/16)"
 
-#: main.c:329
+#: main.c:331
 msgid "Set toggles OFF"
 msgstr "Desativa toggles"
 
-#: main.c:328
+#: main.c:330
 msgid "Set toggles ON"
 msgstr "Ativa toggles"
 
@@ -1901,7 +1901,7 @@ msgstr ""
 "programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple "
 "Place, Suite 330, Boston, MA, 02111-1307, USA"
 
-#: main.c:402
+#: main.c:404
 #, c-format
 msgid "This program requires GTK version %d.%d.%d"
 msgstr "Este programa precisa do GTK versão %d.%d.%d"
