@@ -238,6 +238,8 @@
 
 	<accelerator action='dup' key='<Shift>KP_Multiply' group='online' />
 
+	<!-- accelerator name="newline" action='newline' key='Control_R' group='online' />
+
 	<!--- Mouse actions --->
 	<scroll direction='up' action='pfkey' id='7' />
 	<scroll direction='down' action='pfkey' id='8' />
