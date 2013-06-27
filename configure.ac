@@ -384,16 +384,34 @@ fi
 
 AC_SUBST(PHPCONFIG)
 
+#--[ ooRexx ]-----------------------------------------------------------------------------------------------------------------------------------------------
+
 AC_ARG_VAR([REXX_HOME], [ooRexx home])
 
 if test -z "${REXX_HOME}"; then
 
-	PKG_CHECK_MODULES( [REXX], [ooRexx], app_cv_rexx=yes, AC_MSG_NOTICE([ooRexx integration not present.]) )
-	AC_PATH_TOOL([REXXC], [rexxc], [cp] )
 	REXX_HOME="\$(datarootdir)/ooRexx"
 
-else
+	AC_PATH_TOOL([REXXC], [rexxc], [cp] )
+    AC_PATH_TOOL([REXXCONFIG], [oorexx-config], [no])
 
+	PKG_CHECK_MODULES( [REXX], [ooRexx], app_cv_rexx=yes, AC_MSG_NOTICE([No ooRexx on pkg-config.]) )
+
+    if test "$app_cv_rexx" != "yes"; then
+
+        if test "$REXXCONFIG" != "no"; then
+            app_cv_rexx=yes
+            REXX_CFLAGS=`$REXXCONFIG --cflags`
+            REXX_LIBS=`$REXXCONFIG --libs`
+            REXX_HOME=`$REXXCONFIG --prefix`/share/ooRexx
+            AC_MSG_NOTICE([Got settings from oorexx-config.])
+        else
+            AC_MSG_NOTICE([ooRexx SDK is NOT available.])
+			app_cv_rexx="no"
+        fi
+    fi
+
+else
 	if test -e "${REXX_HOME}/api/oorexxapi.h"; then
 
 		app_cv_rexx="yes"
