@@ -24,6 +24,8 @@ build-stamp:
 	dh_testdir
 
 	# Add here commands to compile the package.
+	aclocal
+	autoconf
 	./configure --prefix=/usr
 	rm -f debian/*.install
 	make Release
@@ -39,7 +41,7 @@ clean:
 	rm -f build-stamp
 
 	# Add here commands to clean up after the build process.
-	if [ -e Makefile ]; then make clean; fi
+	if [ -e Makefile ]; then make clean ; fi
 	# --- end custom part for cleaning up
 
 	dh_clean
@@ -62,7 +64,22 @@ install: build
 	install -d --mode=755 $(PWD)/debian/pw3270/pw3270-plugin-dbus/usr/lib/pw3270-plugins
 	install --mode=755 .bin/Release/plugins/dbus3270.so $(PWD)/debian/pw3270/pw3270-plugin-dbus/usr/lib/pw3270-plugins/dbus3270.so
 
-	find debian
+	# Install REXX plugin
+	#install -d --mode=755 $(PWD)/debian/pw3270/pw3270-plugin-rexx/usr/lib/pw3270-plugins
+	#install --mode=755 .bin/Release/plugins/rx3270.so $(PWD)/debian/pw3270/pw3270-plugin-rexx/usr/lib/pw3270-plugins/rx3270.so
+	#install --mode=755 .bin/Release/lib/librx3270.so* $(PWD)/debian/pw3270/pw3270-plugin-rexx/usr/lib
+
+	#install -d --mode=755 $(PWD)/debian/pw3270/pw3270-plugin-rexx/usr/bin
+	#install --mode=755 src/plugins/rx3270/rx3270.cls $(PWD)/debian/pw3270/pw3270-plugin-rexx/usr/bin/rx3270.cls
+
+	#install -d --mode=755 $(PWD)/debian/pw3270/pw3270-plugin-rexx/usr/share/pw3270/ui
+	#install --mode=644 ui/80rexx.xml $(PWD)/debian/pw3270/pw3270-plugin-rexx/usr/share/pw3270/ui
+
+	make DESTDIR=$(PWD)/debian/pw3270-plugin-rexx install-rexx
+	ln -s /usr/share/ooRexx/rx3270.cls $(PWD)/debian/pw3270/pw3270-plugin-rexx/usr/bin/rx3270.cls
+
+	find $(PWD)/debian/pw3270/pw3270-plugin-rexx -type f | sed -e "s@^$(PWD)/debian/pw3270/pw3270-plugin-rexx/@/@g" > $(PWD)/debian/pw3270-plugin-rexx.install
+    
 	# --- end custom part for installing
 
 # Build architecture-independent files here.
@@ -101,4 +118,3 @@ binary-arch: build install
 
 binary: binary-indep binary-arch
 .PHONY: build clean binary-indep binary-arch binary install
-

@@ -47,7 +47,7 @@ include ../../include/plugin.mak
 
 #---[ Debug Targets ]----------------------------------------------------------
 
-$(BINDBG)/$(PLUGIN_NAME): $(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJDBG)/$(SRC).o) $(BINDBG)$(DLL_NAME)
+$(BINDBG)/$(PLUGIN_NAME): $(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJDBG)/$(SRC).o) $(BINDBG)$(DLL_NAME).$(VERSION)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(CXX) $(DLL_FLAGS) @LDSOFLAGS@ @DBGRPATH@ $(LDFLAGS) -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(GTK_LIBS) $(GLIB_LIBS) $(PW3270_LIBS)
@@ -59,7 +59,7 @@ $(BINDBG)$(DLL_NAME).$(VERSION): $(foreach SRC, $(basename $(EXTAPI_SRC)), $(OBJ
 
 #---[ Release Targets ]--------------------------------------------------------
 
-$(BINRLS)/$(PLUGIN_NAME): $(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJRLS)/$(SRC).o) $(BINRLS)$(DLL_NAME)
+$(BINRLS)/$(PLUGIN_NAME): $(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJRLS)/$(SRC).o) $(BINRLS)$(DLL_NAME).$(VERSION)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
 	$(CXX) $(DLL_FLAGS) @LDSOFLAGS@ $(LDFLAGS) @RLS_LDFLAGS@ -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(GTK_LIBS) $(GLIB_LIBS) $(PW3270_LIBS)
@@ -69,7 +69,7 @@ $(BINRLS)$(DLL_NAME).$(VERSION): $(foreach SRC, $(basename $(EXTAPI_SRC)), $(OBJ
 	@$(MKDIR) `dirname $@`
 	$(CXX) $(DLL_FLAGS) @LDSOFLAGS@ $(LDFLAGS) @RLS_LDFLAGS@ -o $@ $^ $(LIBS) $(LIB3270_LIBS)
 
-install: $(BINRLS)$(DLL_NAME).$(VERSION) $(BINRLS)/$(PLUGIN_NAME)
+install:
 	@$(MKDIR) $(DESTDIR)$(libdir)/$(PACKAGE_NAME)-plugins
 	@$(INSTALL_PROGRAM) $(BINRLS)/$(PLUGIN_NAME) $(DESTDIR)$(libdir)/$(PACKAGE_NAME)-plugins
 
