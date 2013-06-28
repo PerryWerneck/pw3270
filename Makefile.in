@@ -30,6 +30,8 @@
 
 PACKAGE_NAME=@PACKAGE_NAME@
 PACKAGE_VERSION=@PACKAGE_VERSION@
+PACKAGE_LEVEL=@PACKAGE_LEVEL@
+PACKAGE_REVISION=@PACKAGE_REVISION@
 PACKAGE_TARNAME=@PACKAGE_TARNAME@
 
 PLUGINS=@PLUGINS@
@@ -218,13 +220,28 @@ ifneq ($(RPMBUILD),no)
 	@$(RPMBUILD) --define="_srcrpmdir $(PWD)" -bs $(PACKAGE_TARNAME).spec
 endif
 
-nsi: Release
+package: Release
 ifneq ($(MAKENSIS),no)
 	@chmod +x makegtkruntime.sh
 	@echo "  GEN  GTK Runtime"
 	@./makegtkruntime.sh
 	@echo "  GEN  Windows installer"
 	@"$(MAKENSIS)" pw3270-@host_cpu@.nsi
+endif
+
+ifneq ($(DPKGBUILD),no)
+	@rm -fr debian
+	@mkdir debian
+
+	@echo 7 > debian/compat
+	@cp debian.control debian/control
+	@cp debian.rules debian/rules
+	@chmod +x debian/rules
+
+	@EDITOR=true dch --preserve -v $(PACKAGE_VERSION)-$(PACKAGE_LEVEL) -u low --create --package $(PACKAGE_NAME)
+	@sed -i "s@UNRELEASED@unstable@;s@Initial release. (Closes: #XXXXXX)@SVN Revision $(PACKAGE_REVISION)@g" debian/changelog
+
+	@$(DPKGBUILD) -rfakeroot -uc -us
 endif
 
 $(PACKAGE_NAME).po: $(TMPDIR)/$(PACKAGE_NAME).pot
