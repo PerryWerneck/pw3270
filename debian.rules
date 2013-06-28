@@ -52,35 +52,40 @@ install: build
 	dh_clean -k
 	dh_installdirs
 
-	# Add here commands to install the packages
+	# Install main library
 	make DESTDIR=$(PWD)/debian/lib3270 install-lib
-	make DESTDIR=$(PWD)/debian/lib3270-dev install-sdk
+
+	# Install pw3270's GUI
 	make DESTDIR=$(PWD)/debian/pw3270 install-app
+
+	# Install sdk
+	make DESTDIR=$(PWD)/debian/lib3270-dev install-sdk
+
+	mkdir -p $(PWD)/debian/lib3270-dev/usr/share/pw3270/ui
+	mv -f $(PWD)/debian/pw3270/usr/share/pw3270/ui/*debug.xml $(PWD)/debian/lib3270-dev/usr/share/pw3270/ui/
 
 	# Install libreoffice extension
 	make DESTDIR=$(PWD)/debian/libreoffice-extension-pw3270 install-oxt
 
 	# Install DBUS plugin
-	install -d --mode=755 $(PWD)/debian/pw3270/pw3270-plugin-dbus/usr/lib/pw3270-plugins
-	install --mode=755 .bin/Release/plugins/dbus3270.so $(PWD)/debian/pw3270/pw3270-plugin-dbus/usr/lib/pw3270-plugins/dbus3270.so
+	make DESTDIR=$(PWD)/debian/pw3270-plugin-dbus install-plugin-dbus
 
 	# Install REXX plugin
-	#install -d --mode=755 $(PWD)/debian/pw3270/pw3270-plugin-rexx/usr/lib/pw3270-plugins
-	#install --mode=755 .bin/Release/plugins/rx3270.so $(PWD)/debian/pw3270/pw3270-plugin-rexx/usr/lib/pw3270-plugins/rx3270.so
-	#install --mode=755 .bin/Release/lib/librx3270.so* $(PWD)/debian/pw3270/pw3270-plugin-rexx/usr/lib
+	make DESTDIR=$(PWD)/debian/pw3270-plugin-rexx install-plugin-rexx
 
-	#install -d --mode=755 $(PWD)/debian/pw3270/pw3270-plugin-rexx/usr/bin
-	#install --mode=755 src/plugins/rx3270/rx3270.cls $(PWD)/debian/pw3270/pw3270-plugin-rexx/usr/bin/rx3270.cls
-
-	#install -d --mode=755 $(PWD)/debian/pw3270/pw3270-plugin-rexx/usr/share/pw3270/ui
-	#install --mode=644 ui/80rexx.xml $(PWD)/debian/pw3270/pw3270-plugin-rexx/usr/share/pw3270/ui
-
-	make DESTDIR=$(PWD)/debian/pw3270-plugin-rexx install-rexx
-	install -d --mode=755 $(PWD)/debian/pw3270/pw3270-plugin-rexx/usr/bin
-	ln -s /usr/share/ooRexx/rx3270.cls $(PWD)/debian/pw3270/pw3270-plugin-rexx/usr/bin/rx3270.cls
-
-	find $(PWD)/debian/pw3270/pw3270-plugin-rexx -type f | sed -e "s@^$(PWD)/debian/pw3270/pw3270-plugin-rexx/@/@g" > $(PWD)/debian/pw3270-plugin-rexx.install
+	mkdir -p $(PWD)/debian/pw3270-plugin-rexx/usr/share/pw3270/ui/
+	mv -f $(PWD)/debian/pw3270/usr/share/pw3270/ui/*rexx.xml $(PWD)/debian/pw3270-plugin-rexx/usr/share/pw3270/ui/
     
+	# Create updated file lists
+	find $(PWD)/debian/lib3270 -type f | sed -e "s@^$(PWD)/debian/lib3270/@/@g" > $(PWD)/debian/lib3270.install
+
+	find $(PWD)/debian/pw3270 -type f | sed -e "s@^$(PWD)/debian/pw3270/@/@g" > $(PWD)/debian/pw3270.install
+
+	find $(PWD)/debian/libreoffice-extension-pw3270 -type f | sed -e "s@^$(PWD)/debian/libreoffice-extension-pw3270/@/@g" > $(PWD)/debian/libreoffice-extension-pw3270.install
+
+	find $(PWD)/debian/pw3270-plugin-dbus -type f | sed -e "s@^$(PWD)/debian/pw3270-plugin-dbus/@/@g" > $(PWD)/debian/pw3270-plugin-dbus.install
+	find $(PWD)/debian/pw3270-plugin-rexx -type f | sed -e "s@^$(PWD)/debian/pw3270-plugin-rexx/@/@g" > $(PWD)/debian/pw3270-plugin-rexx.install
+
 	# --- end custom part for installing
 
 # Build architecture-independent files here.
