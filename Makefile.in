@@ -351,8 +351,11 @@ install-sdk:
 install-oxt:
 	@$(MAKE) BINDIR=../../.bin LIB3270_CFLAGS="-I../../src/include" -C src/oxt install
 
-install-rexx:
+install-plugin-rexx:
 	@$(MAKE) BINDIR=../../.bin LIB3270_CFLAGS="-I../../src/include" -C src/plugins/rx3270 install
+
+install-plugin-dbus:
+	@$(MAKE) BINDIR=../../.bin LIB3270_CFLAGS="-I../../src/include" -C src/plugins/dbus3270 install
 
 clean:
 	@rm -fr .obj

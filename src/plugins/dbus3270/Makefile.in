@@ -142,7 +142,7 @@ $(BINDBG)/plugins/$(MODULE_NAME).so: $(foreach SRC, $(basename $(PLUGIN_SRC)), $
 
 #---[ Misc targets ]-----------------------------------------------------------
 
-install: $(BINRLS)/plugins/$(MODULE_NAME).so
+install:
 	@$(MKDIR) $(DESTDIR)$(libdir)/$(PACKAGE_NAME)-plugins
 	@$(INSTALL_PROGRAM) $(BINRLS)/plugins/$(MODULE_NAME).so $(DESTDIR)$(libdir)/$(PACKAGE_NAME)-plugins
 
