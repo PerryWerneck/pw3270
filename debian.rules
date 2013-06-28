@@ -76,6 +76,7 @@ install: build
 	#install --mode=644 ui/80rexx.xml $(PWD)/debian/pw3270/pw3270-plugin-rexx/usr/share/pw3270/ui
 
 	make DESTDIR=$(PWD)/debian/pw3270-plugin-rexx install-rexx
+	install -d --mode=755 $(PWD)/debian/pw3270/pw3270-plugin-rexx/usr/bin
 	ln -s /usr/share/ooRexx/rx3270.cls $(PWD)/debian/pw3270/pw3270-plugin-rexx/usr/bin/rx3270.cls
 
 	find $(PWD)/debian/pw3270/pw3270-plugin-rexx -type f | sed -e "s@^$(PWD)/debian/pw3270/pw3270-plugin-rexx/@/@g" > $(PWD)/debian/pw3270-plugin-rexx.install

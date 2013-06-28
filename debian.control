@@ -33,7 +33,7 @@ Description: DBUS plugin for pw3270.
 
 Package: pw3270-plugin-rexx
 Architecture: any
-Depends: ${misc:Depends}, lib3270 (= ${binary:Version}), oorexx >= 4.1.2
+Depends: ${misc:Depends}, lib3270 (= ${binary:Version}), oorexx (>= 4.1.2)
 Description: REXX script support for pw3270.
  This package provides Rexx class and associated libraries allowing rexx scripts to access tn3270e hosts.
 
