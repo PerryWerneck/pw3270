@@ -54,7 +54,7 @@
 				<menuitem action='download' key='<alt>d' label='Receive file' group='online' />
 				<menuitem action='upload' key='<alt>u' label='Send file' group='online' />
 			</menu>
-			<menuitem action='Quit' key='<ctrl>q' icon="quit" sysmenu="quit"/>
+			<menuitem action='Quit' key='<ctrl>q' label='Quit' icon="quit" sysmenu="quit"/>
 		</menu>
 
 		<menu name='EditMenu' label='_Edit' >
