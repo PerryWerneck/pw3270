@@ -539,6 +539,7 @@ void configuration_deinit(void)
 
 		g_file_set_contents(filename,text,-1,NULL);
 
+		g_free(filename);
 		g_free(text);
 	}
 

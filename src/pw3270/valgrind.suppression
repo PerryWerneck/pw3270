@@ -1,118 +1,70 @@
 {
-   Leak on main
-   Memcheck:Leak
-   fun:malloc
-   fun:__vasprintf_chk
-   fun:g_vasprintf
-   fun:(below main)
-}
-
-{
-   libfontconfig.so.Addr4
-   Memcheck:Addr4
-   obj:/usr/lib/libfontconfig.so.*
-}
-
-{
-   libfontconfig.so.malloc
-   Memcheck:Leak
-   fun:malloc
-   obj:/usr/lib/libfontconfig.so.*
-}
-
-{
-   libglib-calloc
-   Memcheck:Leak
-   fun:calloc
-   obj:/usr/lib/libglib-*
-}
-
-{
-   g_type_register_fundamental
+   GTK Init
    Memcheck:Leak
    ...
-   fun:g_type_register_fundamental
+   fun:gtk_init
 }
 
 {
-   g_vfs_get_file_for_path
+   GTK Type Init
    Memcheck:Leak
    ...
-   fun:g_vfs_get_file_for_path
+   fun:g_type_init_with_debug_flags
 }
 
 {
-   g_type_register_static
+   GTK Widget get type
+   Memcheck:Leak
+   ...
+   fun:gtk_widget_get_type
+}
+
+{
+   GTK Class REF
+   Memcheck:Leak
+   ...
+   fun:g_type_class_ref
+}
+
+{
+   GType Add static interface
+   Memcheck:Leak
+   ...
+   fun:g_type_add_interface_static
+}
+
+{
+   GType Add dynamic interface
+   Memcheck:Leak
+   ...
+   fun:g_type_add_interface_dynamic
+}
+
+{
+   GType set qdata
+   Memcheck:Leak
+   ...
+   fun:g_type_set_qdata
+}
+
+{
+   GType set qdata
+   Memcheck:Leak
+   ...
+   fun:gtk_widget_create_pango_context
+}
+
+{
+   GType register static
    Memcheck:Leak
    ...
    fun:g_type_register_static
 }
 
 {
-   libxcb.so.malloc
+   GType register dynamic
    Memcheck:Leak
    ...
-   obj:/usr/lib/libxcb.so.*
+   fun:g_type_register_dynamic
 }
 
-{
-   gtk_module_init
-   Memcheck:Leak
-   ...
-   obj:/usr/lib/libgtk-*
-}
-
-{
-   g_type_create_instance
-   Memcheck:Leak
-   ...
-   obj:/usr/lib/libgobject-*
-}
-
-{
-   Strange leak in main
-   Memcheck:Leak
-   fun:malloc
-   fun:__vasprintf_chk
-   fun:g_vasprintf
-   fun:main
-}
-
-{
-   libfontconfig
-   Memcheck:Leak
-   fun:realloc
-   obj:/usr/lib/libfontconfig.so.1.4.4
-   ...
-}
-
-{
-   XIGrabDevice
-   Memcheck:Addr4
-   fun:memcpy
-   fun:XIGrabDevice
-   ...
-}
-
-{
-   gdk_window_get_root_coords
-   Memcheck:Cond
-   fun:gdk_window_get_root_coords
-   ...
-}
-
-{
-   g_cclosure_marshal_VOID__BOXED
-   Memcheck:Cond
-   ...
-   fun:g_cclosure_marshal_VOID__BOXED
-   ...
-}
-
-{
-   gdk_window_destroy
-   Memcheck:Cond
-   ...
-   fun:gdk_window_destroy
-   ...
-}
