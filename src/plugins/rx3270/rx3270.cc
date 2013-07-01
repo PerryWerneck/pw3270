@@ -193,9 +193,17 @@ int rx3270::set_clipboard(const char *text)
     return EINVAL;
 }
 
+extern "C"
+{
+	static void memfree(void *ptr)
+	{
+		free(ptr);
+	}
+}
+
 void rx3270::free(void *ptr)
 {
-    free(ptr);
+    memfree(ptr);
 }
 
 int rx3270::popup_dialog(LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, ...)

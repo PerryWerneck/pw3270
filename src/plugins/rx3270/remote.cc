@@ -190,6 +190,8 @@ remote::remote(const char *name)
 	char		* str = strdup(name);
 	char		* ptr;
 
+	trace("%s str=%p",__FUNCTION__,str);
+
 	for(ptr=str;*ptr;ptr++)
 		*ptr = tolower(*ptr);
 
@@ -253,6 +255,7 @@ remote::remote(const char *name)
 	dbus_error_init(&err);
 
 	conn = dbus_bus_get(DBUS_BUS_SESSION, &err);
+	trace("dbus_bus_get conn=%p",conn);
 
 	if (dbus_error_is_set(&err))
 	{
@@ -267,6 +270,7 @@ remote::remote(const char *name)
 	}
 
 	rc = dbus_bus_request_name(conn, "br.com.bb." PACKAGE_NAME ".rexx", DBUS_NAME_FLAG_REPLACE_EXISTING , &err);
+	trace("dbus_bus_request_name rc=%d",rc);
 
 	if (dbus_error_is_set(&err))
 	{

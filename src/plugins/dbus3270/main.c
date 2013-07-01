@@ -100,7 +100,7 @@
 		else
 		{
 			session_id = id;
-			trace("DBUS service name is %s",service_name);
+			g_message("DBUS service name is %s",service_name);
 			org_freedesktop_DBus_request_name(proxy, service_name, DBUS_NAME_FLAG_DO_NOT_QUEUE, &result, &error);
 		}
 	}
@@ -133,7 +133,7 @@
 		pw3270_set_session_name(window,session);
 		g_free(session);
 
-		trace("DBUS service path is %s",path);
+		g_message("DBUS service path is %s",path);
 
 		pw3270_dbus_register_object(connection,proxy,PW3270_TYPE_DBUS,&dbus_glib_pw3270_dbus_object_info,path);
 
