@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-01 07:53-0300\n"
-"PO-Revision-Date: 2013-07-01 08:00-0300\n"
+"POT-Creation-Date: 2013-07-03 10:38-0300\n"
+"PO-Revision-Date: 2013-07-03 10:51-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <perry.werneck@gmail.com>\n"
 "Language: pt_BR\n"
@@ -710,19 +710,19 @@ msgstr "Fixo"
 
 #: v3270/security.c:145
 msgid "Format error in CRL's lastUpdate field"
-msgstr "Format error in CRL's lastUpdate field"
+msgstr "Erro de formado no campo \"lastUpdate\" do CRL"
 
 #: v3270/security.c:152
 msgid "Format error in CRL's nextUpdate field"
-msgstr "Format error in CRL's nextUpdate field"
+msgstr "Erro de formato no campo \"nextUpdate\" do CRL"
 
 #: v3270/security.c:138
 msgid "Format error in certificate's notAfter field"
-msgstr "Format error in certificate's notAfter field"
+msgstr "Erro de formato no campo \"notAfter\" do certificado"
 
 #: v3270/security.c:131
 msgid "Format error in certificate's notBefore field"
-msgstr "Format error in certificate's notBefore field"
+msgstr "Erro de formato no campo \"notBefore\" do certificado"
 
 #: ui/00default.xml:385
 msgid "Full Screen"
@@ -750,7 +750,7 @@ msgid ""
 "HTTP Proxy: CONNECT failed:\n"
 "%s"
 msgstr ""
-"HTTP Proxy: CONNECT failed:\n"
+"HTTP Proxy: Falha no CONNECT:\n"
 "%s"
 
 #: proxy.c:460
@@ -902,9 +902,8 @@ msgid "Lateral keypad"
 msgstr "Barra lateral"
 
 #: main.c:336
-#, fuzzy
 msgid "Log to file"
-msgstr "Salvar cópia para arquivo"
+msgstr "Enviar log para arquivo"
 
 #: colors.c:432
 msgid "Misc colors"
@@ -1232,7 +1231,7 @@ msgstr "Sair"
 #: rpq.c:233
 #, c-format
 msgid "RPQ %s term omitted due to insufficient space"
-msgstr "RPQ %s term omitted due to insufficient space"
+msgstr "Termo RPQ %s omitido por falta de espaço"
 
 #: rpq.c:343
 #, c-format
@@ -1242,11 +1241,11 @@ msgstr "RPQ %s term override ignored"
 #: rpq.c:632 rpq.c:702
 #, c-format
 msgid "RPQ ADDRESS term has unrecognized family %u"
-msgstr "RPQ ADDRESS term has unrecognized family %u"
+msgstr "Família %u não reconhecida no termo RPQ ADDRESS"
 
 #: rpq.c:640 rpq.c:669 rpq.c:709
 msgid "RPQ ADDRESS term incomplete due to space limit"
-msgstr "RPQ ADDRESS term incomplete due to space limit"
+msgstr "Termo RPQ ADDRESS incompleto devido ao limite de espaço"
 
 #: rpq.c:226
 msgid "RPQ Error"
@@ -1254,11 +1253,11 @@ msgstr "Erro RPQ"
 
 #: rpq.c:411 rpq.c:420
 msgid "RPQ TIMEZONE term is invalid - use +/-hhmm"
-msgstr "RPQ TIMEZONE term is invalid - use +/-hhmm"
+msgstr "Termo RPQ TIMEZONE é invalido - usar +/-hhmm"
 
 #: rpq.c:509
 msgid "RPQ USER term has non-hex character"
-msgstr "RPQ USER term has non-hex character"
+msgstr "Termo RPQ USER tem caractere não hexadecimal"
 
 #: rpq.c:534
 msgid "RPQ USER term has odd number of hex digits"
@@ -1267,17 +1266,17 @@ msgstr "RPQ USER term has odd number of hex digits"
 #: rpq.c:515
 #, c-format
 msgid "RPQ USER term truncated after %d bytes"
-msgstr "RPQ USER term truncated after %d bytes"
+msgstr "Termo RPQ USER truncado depois de %d bytes"
 
 #: rpq.c:559
 #, c-format
 msgid "RPQ USER term truncated after %d characters"
-msgstr "RPQ USER term truncated after %d characters"
+msgstr "Termo RPQ USER truncado depois de %d caracteres"
 
 #: rpq.c:355
 #, c-format
 msgid "RPQ term \"%s\" is unrecognized"
-msgstr "RPQ term \"%s\" is unrecognized"
+msgstr "Termo RPQ desconhecido: \"%s\" "
 
 #: rpq.c:228
 #, c-format
@@ -1286,15 +1285,15 @@ msgstr "Term RPM %d não foi reconhecido"
 
 #: rpq.c:455
 msgid "RPQ timezone exceeds 12 hour UTC offset"
-msgstr "RPQ timezone exceeds 12 hour UTC offset"
+msgstr "RPQ timezone excede as 12 horas de deslocamento da UTC"
 
 #: rpq.c:440
 msgid "RPQ: Unable to determine workstation UTC time"
-msgstr "RPQ: Unable to determine workstation UTC time"
+msgstr "RPQ: Incapaz de determinar a hora UTC da estação de trabalho"
 
 #: rpq.c:433
 msgid "RPQ: Unable to determine workstation local time"
-msgstr "RPQ: Unable to determine workstation local time"
+msgstr "RPQ: Incapaz de determinar a hora local da estação de trabalho"
 
 #: rpq.c:645
 #, c-format
@@ -1700,15 +1699,15 @@ msgstr "A lista de certificados revogados ainda não é válida."
 
 #: v3270/security.c:146
 msgid "The CRL lastUpdate field contains an invalid time."
-msgstr "The CRL lastUpdate field contains an invalid time."
+msgstr "Campo \"lastUpdate\" do CRL contem horário inválido."
 
 #: v3270/security.c:153
 msgid "The CRL nextUpdate field contains an invalid time."
-msgstr "The CRL nextUpdate field contains an invalid time."
+msgstr "Campo \"nextUpdate\" contem horário inválido."
 
 #: v3270/security.c:62
 msgid "The CRL of a certificate could not be found."
-msgstr "The CRL of a certificate could not be found."
+msgstr "O CRL do certificado não foi encontrado."
 
 #: v3270/security.c:76
 msgid ""
