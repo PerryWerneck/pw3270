@@ -29,8 +29,6 @@ build-stamp:
 	./configure --prefix=/usr
 	rm -f debian/*.install
 	make Release
-	mv debian/dbus3270.install debian/pw3270-plugin-dbus.install
-	mv debian/oxt.install debian/libreoffice-extension-pw3270.install
 	# --- end custom part for compiling
 
 	touch build-stamp

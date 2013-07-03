@@ -86,6 +86,8 @@
     char            * get_clipboard(void);
     int               set_clipboard(const char *text);
 
+    int				  quit(void);
+
  private:
 #if defined(WIN32)
 
@@ -1214,4 +1216,29 @@ char * remote::get_clipboard(void)
 #endif
 
 	return NULL;
+}
+
+int remote::quit(void)
+{
+#if defined(WIN32)
+
+	if(hPipe != INVALID_HANDLE_VALUE)
+	{
+		static const struct hllapi_packet_query query		= { HLLAPI_PACKET_QUIT };
+		struct hllapi_packet_result		  		response;
+		DWORD							  		cbSize		= sizeof(query);
+		TransactNamedPipe(hPipe,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
+		return (int) response.rc;
+	}
+
+	return (int) -1;
+
+#elif defined(HAVE_DBUS)
+
+	return query_intval("quit");
+
+#endif
+
+	return -1;
+
 }

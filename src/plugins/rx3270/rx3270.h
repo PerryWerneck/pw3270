@@ -83,6 +83,7 @@
  REXX_TYPED_ROUTINE_PROTOTYPE(rx3270IsTerminalReady);
  REXX_TYPED_ROUTINE_PROTOTYPE(rx3270queryStringAt);
  REXX_TYPED_ROUTINE_PROTOTYPE(rx3270SetStringAt);
+ REXX_TYPED_ROUTINE_PROTOTYPE(rx3270CloseApplication);
 
  REXX_METHOD_PROTOTYPE(rx3270_method_version);
  REXX_METHOD_PROTOTYPE(rx3270_method_revision);
@@ -201,6 +202,8 @@
 
     virtual char            * get_clipboard(void);
     virtual int               set_clipboard(const char *text);
+
+    virtual int				  quit(void)										= 0;
 
     // Dialogs
 	virtual int               popup_dialog(LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, ...);

@@ -299,6 +299,11 @@
 												((struct hllapi_packet_addr *) source->buffer)->addr));
 		break;
 
+	case HLLAPI_PACKET_QUIT:
+		gtk_main_quit();
+		send_result(source,0);
+		break;
+
 	default:
 		send_result(source, EINVAL);
 		g_message("Invalid remote request (id=%d)",source->buffer[0]);

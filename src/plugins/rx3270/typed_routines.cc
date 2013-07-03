@@ -200,3 +200,8 @@ RexxRoutine3(int, rx3270SetStringAt, int, row, int, col, CSTRING, text)
 	return rc;
 }
 
+RexxRoutine0(int, rx3270CloseApplication)
+{
+	rx3270	* session 	= rx3270::get_default();
+	return session->quit();
+}

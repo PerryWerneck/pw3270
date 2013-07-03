@@ -119,6 +119,8 @@
 	int               popup_dialog(LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, ...);
 	char            * file_chooser_dialog(GtkFileChooserAction action, const char *title, const char *extension, const char *filename);
 
+    int				  quit(void);
+
  protected:
 
  private:
@@ -569,4 +571,10 @@ int plugin::popup_dialog(LIB3270_NOTIFY id , const char *title, const char *mess
 char * plugin::file_chooser_dialog(GtkFileChooserAction action, const char *title, const char *extension, const char *filename)
 {
     return pw3270_file_chooser(action, script_name ? script_name : "rexx", title, filename, extension);
+}
+
+int plugin::quit(void)
+{
+	gtk_main_quit();
+	return 0;
 }

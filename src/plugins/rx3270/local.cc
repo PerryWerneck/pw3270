@@ -90,6 +90,8 @@
 
 	int               popup_dialog(LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, ...);
 
+    int				  quit(void);
+
  private:
 
 	const char * 	(*_get_version)(void);
@@ -587,4 +589,9 @@ int dynamic::popup_dialog(LIB3270_NOTIFY id , const char *title, const char *mes
         return 0;
     }
     return -1;
+}
+
+int dynamic::quit(void)
+{
+	return EINVAL;
 }

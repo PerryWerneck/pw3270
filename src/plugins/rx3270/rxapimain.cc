@@ -112,6 +112,8 @@ RexxRoutineEntry rx3270_functions[] =
 	REXX_TYPED_ROUTINE(rx3270IsTerminalReady,		rx3270IsTerminalReady),
 	REXX_TYPED_ROUTINE(rx3270queryStringAt,			rx3270queryStringAt),
 	REXX_TYPED_ROUTINE(rx3270SetStringAt,			rx3270SetStringAt),
+	REXX_TYPED_ROUTINE(rx3270CloseApplication,		rx3270CloseApplication),
+
 
 	// rx3270Popup
 

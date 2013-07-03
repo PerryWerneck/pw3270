@@ -50,7 +50,7 @@
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
- static rx3270	* defSession	                = NULL;
+ static rx3270	* defSession					= NULL;
  static rx3270  * (*factory)(const char *type)  = factory_default;
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
@@ -116,7 +116,7 @@ char * rx3270::get_revision(void)
 	return strdup(PACKAGE_REVISION);
 }
 
-rx3270 * rx3270::get_default(void)
+rx3270 * rx3270::get_default()
 {
 	if(defSession)
 		return defSession;
