@@ -1165,6 +1165,21 @@ int remote::get_next_unprotected(int baddr)
 
 int remote::set_clipboard(const char *text)
 {
+#if defined(WIN32)
+
+	return -1;
+
+#elif defined(HAVE_DBUS)
+
+	DBusMessage * msg = create_message("setClipboard");
+	if(msg)
+	{
+		dbus_message_append_args(msg, DBUS_TYPE_STRING, &text, DBUS_TYPE_INVALID);
+		return get_intval(call(msg));
+	}
+
+#endif
+
 	return -1;
 }
 

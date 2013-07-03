@@ -99,6 +99,8 @@
 	void		  pw3270_dbus_get_text_at(PW3270Dbus *object, int row, int col, int len, DBusGMethodInvocation *context);
 	void		  pw3270_dbus_cmp_text_at(PW3270Dbus *object, int row, int col, const gchar *text, DBusGMethodInvocation *context);
     void          pw3270_dbus_input(PW3270Dbus *object, const gchar *utftext, DBusGMethodInvocation *context);
+
+	void		  pw3270_dbus_set_clipboard(PW3270Dbus *object, const gchar *text, DBusGMethodInvocation *context);
 	void		  pw3270_dbus_get_clipboard(PW3270Dbus *object, int row, int col, int len, DBusGMethodInvocation *context);
 
 	G_END_DECLS
