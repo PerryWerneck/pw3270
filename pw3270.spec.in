@@ -244,7 +244,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_rexxlibdir}/librx3270.so
 %{_rexxclassdir}/rx3270.cls
 %{_libdir}/@PACKAGE_NAME@-plugins/rx3270.so
-%{_datadir}/pw3270/ui/rexx.xml
+%{_datadir}/pw3270/ui/80rexx.xml
 %endif
 
 #---[ Scripts ]-------------------------------------------------------------------------------------------------------

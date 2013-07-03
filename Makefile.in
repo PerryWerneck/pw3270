@@ -109,12 +109,6 @@ ifneq ($(CONVERT),no)
 	@$(CONVERT) --format=png --output=$@ $<
 endif
 
-debian/%.install: src/%/Makefile
-	@$(MAKE) DEBDIR=../../debian -C $(dir $^) ../../$@
-
-debian/%.install: src/plugins/%/Makefile
-	@$(MAKE) DEBDIR=../../../debian -C $(dir $^) ../../../$@
-
 $(BINDIR)/pot/%.pot: src/%/Makefile
 	@$(MAKE) BINDIR=../../$(BINDIR) -C $(dir $^) ../../$@
 
@@ -147,7 +141,7 @@ all: Release
 
 Release: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) $(foreach PLUGIN, $(PLUGINS), $(BINDIR)/Release/plugins/$(PLUGIN)@DLLEXT@) \
 			$(foreach EXT, $(EXTENSIONS), $(EXT)) \
-			locale pixmaps filelist
+			locale pixmaps
 
 $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT): src/pw3270/* $(BINDIR)/Release@DLLDIR@/lib3270@DLLEXT@ $(DEPENDS)
 	@$(MAKE) BINDIR="../../$(BINDIR)" LIB3270_LIBS="$(RLSLIB)" LIB3270_CFLAGS="-I../../src/include" -C src/pw3270 ../../$(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
@@ -159,25 +153,6 @@ oxt: $(BINDIR)/$(PACKAGE_TARNAME).oxt
 
 $(BINDIR)/$(PACKAGE_TARNAME).oxt: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
 	@$(MAKE) BINDIR=../../.bin LIB3270_CFLAGS="-I../../src/include" -C src/oxt ../../.bin/$(PACKAGE_TARNAME).oxt
-
-#---[ File lists ]-------------------------------------------------------------
-
-filelist: debian/lib3270-dev.install debian/lib3270.install debian/lib3270-dev.install debian/pw3270.install \
-			$(foreach PLUGIN, $(PLUGINS) $(EXTENSIONS), debian/$(PLUGIN).install)
-
-debian/lib3270-dev.install: Makefile
-	@echo "  GEN  `basename $@`"
-	@$(MKDIR) `dirname $@`
-	@echo "$(includedir)/lib3270.h" > $@
-	@echo "$(includedir)/lib3270" >> $@
-	@echo "$(datarootdir)/@PACKAGE_NAME@/ui/99debug.xml" >> $@
-	@echo "$(datarootdir)/@PACKAGE_NAME@/sample/*.c" >> $@
-	@echo "$(datarootdir)/@PACKAGE_NAME@/sample/Makefile" >> $@
-	@echo "$(libdir)/pkgconfig/*.pc" >> $@
-	@echo "$(includedir)/pw3270.h" >> $@
-	@echo "$(includedir)/pw3270" >> $@
-	@echo "$(libdir)/lib3270.so" >> $@
-	@echo "$(libdir)/libpw3270.so" >> $@
 
 #---[ Debug targets ]----------------------------------------------------------
 
@@ -260,9 +235,8 @@ $(TMPDIR)/$(PACKAGE_NAME).pot: $(BINDIR)/pot/pw3270.pot $(BINDIR)/pot/lib3270.po
 
 pixmaps: src/pw3270/$(PACKAGE_NAME).png src/pw3270/$(PACKAGE_NAME)-logo.png
 
-$(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar: clean pixmaps filelist
+$(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar: clean pixmaps
 	@rm -fr $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
-#	@find src -name Makefile -exec rm -f {} \;
 	@$(MKDIR) $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@NOCONFIGURE=1 ./autogen.sh $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@cp *.m4 $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
@@ -276,18 +250,15 @@ $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar: clean pixmaps filelist
 	@cp AUTHORS LICENSE $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@cp -r src $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@cp -r scripts $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
-#	@cp $(PACKAGE_TARNAME).spec $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
+	@cp $(PACKAGE_TARNAME).spec $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 
-	@cp debian.changelog $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
-	@cp debian.control $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
-	@cp debian.rules $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
+	@cp debian.* $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@cp makedeb.sh $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 
 	@$(MKDIR) $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/ui
 	@cp ui/* $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/ui
 
 	@$(MKDIR) $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/debian
-#	@cp debian/*.install $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/debian
 
 	@$(MKDIR) $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/po
 	@cp po/*.po $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/po
