@@ -89,6 +89,8 @@
 	void		  pw3270_dbus_get_field_length(PW3270Dbus *object, int baddr, DBusGMethodInvocation *context);
     void          pw3270_dbus_get_next_unprotected(PW3270Dbus *object, int baddr, DBusGMethodInvocation *context);
 
+	void 		  pw3270_dbus_set_script(PW3270Dbus *object, const gchar *text, int mode, DBusGMethodInvocation *context);
+
 	// Actions
 	void		  pw3270_dbus_enter(PW3270Dbus *object, DBusGMethodInvocation *context);
 	void		  pw3270_dbus_pf_key(PW3270Dbus *object, int key, DBusGMethodInvocation *context);
@@ -97,6 +99,7 @@
 	void		  pw3270_dbus_get_text_at(PW3270Dbus *object, int row, int col, int len, DBusGMethodInvocation *context);
 	void		  pw3270_dbus_cmp_text_at(PW3270Dbus *object, int row, int col, const gchar *text, DBusGMethodInvocation *context);
     void          pw3270_dbus_input(PW3270Dbus *object, const gchar *utftext, DBusGMethodInvocation *context);
+	void		  pw3270_dbus_get_clipboard(PW3270Dbus *object, int row, int col, int len, DBusGMethodInvocation *context);
 
 	G_END_DECLS
 

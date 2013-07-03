@@ -83,6 +83,9 @@
 	int               get_field_len(int baddr = -1);
 	int               get_next_unprotected(int baddr = -1);
 
+    char            * get_clipboard(void);
+    int               set_clipboard(const char *text);
+
  private:
 #if defined(WIN32)
 
@@ -1158,4 +1161,28 @@ int remote::get_next_unprotected(int baddr)
 #endif
 
     return -1;
+}
+
+int remote::set_clipboard(const char *text)
+{
+	return -1;
+}
+
+char * remote::get_clipboard(void)
+{
+#if defined(WIN32)
+
+	return NULL;
+
+#elif defined(HAVE_DBUS)
+
+	DBusMessage * msg = create_message("getClipboard");
+	if(!msg)
+		return NULL;
+
+	return get_string(call(msg));
+
+#endif
+
+	return NULL;
 }

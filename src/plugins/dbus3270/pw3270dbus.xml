@@ -61,6 +61,10 @@
       <arg type="i" name="len" direction="in" />
       <arg type="s" name="text" direction="out" />
     </method>
+    <method name="getClipboard">
+      <annotation name="org.freedesktop.DBus.GLib.Async" value="true"/>
+      <arg type="s" name="text" direction="out" />
+    </method>
     <method name="isConnected">
       <annotation name="org.freedesktop.DBus.GLib.Async" value="true"/>
       <arg type="i" name="result" direction="out" />
@@ -121,5 +125,12 @@
       <arg type="i" name="addr" direction="in" />
       <arg type="i" name="result" direction="out" />
     </method>
+    <method name="setScript">
+      <annotation name="org.freedesktop.DBus.GLib.Async" value="true"/>
+      <arg type="s" name="id" direction="in" />
+      <arg type="i" name="status" direction="in" />
+      <arg type="i" name="result" direction="out" />
+    </method>
   </interface>
+
 </node>

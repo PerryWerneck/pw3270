@@ -34,12 +34,15 @@
  */
 
 #include <glib.h>
+#include <gtk/gtk.h>
 #include <dbus/dbus.h>
 #include <dbus/dbus-glib-lowlevel.h>
 #include <dbus/dbus-glib.h>
 
 #include <lib3270/config.h>
 #include <lib3270.h>
+#include <pw3270.h>
+#include <pw3270/v3270.h>
 #include <lib3270/actions.h>
 
 #include "service.h"
@@ -366,3 +369,41 @@ void pw3270_dbus_pa_key(PW3270Dbus *object, int key, DBusGMethodInvocation *cont
 	trace("%s object=%p context=%p",__FUNCTION__,object,context);
 	dbus_g_method_return(context,lib3270_get_next_unprotected(pw3270_dbus_get_session_handle(object),baddr));
  }
+
+void pw3270_dbus_get_clipboard(PW3270Dbus *object, int row, int col, int len, DBusGMethodInvocation *context)
+{
+	gchar *text;
+
+	if(pw3270_dbus_check_valid_state(object,context))
+		return;
+
+	text = gtk_clipboard_wait_for_text(gtk_widget_get_clipboard(pw3270_get_toplevel(),GDK_SELECTION_CLIPBOARD));
+	if(!text)
+	{
+		GError *error = pw3270_dbus_get_error_from_errno(ENOENT);
+		dbus_g_method_return_error(context,error);
+		g_error_free(error);
+	}
+	else
+	{
+		dbus_g_method_return(context,text);
+		g_free(text);
+	}
+}
+
+void pw3270_dbus_set_script(PW3270Dbus *object, const gchar *text, int mode, DBusGMethodInvocation *context)
+{
+	GtkWidget *widget = pw3270_get_terminal_widget(NULL);
+
+	trace("%s object=%p context=%p",__FUNCTION__,object,context);
+
+	if(!widget)
+	{
+		GError *error = pw3270_dbus_get_error_from_errno(EINVAL);
+		dbus_g_method_return_error(context,error);
+		g_error_free(error);
+		return;
+	}
+
+	dbus_g_method_return(context,v3270_set_script(widget,*text,mode != 0));
+}
