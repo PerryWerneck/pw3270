@@ -118,9 +118,18 @@ char * rx3270::get_revision(void)
 
 rx3270 * rx3270::get_default()
 {
-	if(defSession)
-		return defSession;
-	return create_local();
+	try
+	{
+		if(defSession)
+			return defSession;
+		return create_local();
+	}
+	catch(exception e)
+	{
+		e.logMessage();
+	}
+
+	return NULL;
 }
 
 void rx3270::log(const char *fmt, ...)

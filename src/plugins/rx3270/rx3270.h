@@ -144,6 +144,22 @@
 
  public:
 
+	class exception
+	{
+	public:
+			exception(const char *fmt, ...);
+			~exception();
+
+			const char	* getMessage(void);
+			void 		  logMessage(void);
+
+			void		  RaiseException(RexxMethodContext *context);
+
+	private:
+			char *msg;
+
+	};
+
 	rx3270(const char *local = REXX_DEFAULT_CHARSET, const char *remote = "ISO-8859-1");
 
 	virtual ~rx3270();

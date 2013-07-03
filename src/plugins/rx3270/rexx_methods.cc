@@ -43,8 +43,16 @@
 RexxMethod1(int, rx3270_method_init, CSTRING, type)
 {
 	// Set session class in rexx object
-    RexxPointerObject sessionPtr = context->NewPointer(rx3270::create(type));
-    context->SetObjectVariable("CSELF", sessionPtr);
+	try
+	{
+		RexxPointerObject sessionPtr = context->NewPointer(rx3270::create(type));
+		context->SetObjectVariable("CSELF", sessionPtr);
+	}
+	catch(rx3270::exception e)
+	{
+		e.RaiseException(context);
+	}
+
     return 0;
 }
 

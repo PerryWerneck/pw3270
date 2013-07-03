@@ -29,7 +29,7 @@
 MODULE_NAME=rx3270
 DEPENDS=*.h ../../include/*.h ../../include/lib3270/*.h Makefile
 PLUGIN_SRC=pluginmain.cc
-EXTAPI_SRC=rxapimain.cc text.cc typed_routines.cc local.cc remote.cc rexx_methods.cc rx3270.cc
+EXTAPI_SRC=rxapimain.cc text.cc typed_routines.cc local.cc remote.cc rexx_methods.cc rx3270.cc exception.cc
 
 #---[ Tools ]------------------------------------------------------------------
 
