@@ -192,6 +192,9 @@ remote::remote(const char *name)
 	int			  rc;
 	char		* str = strdup(name);
 	char		* ptr;
+	char		  busname[4096];
+	char		  pidname[10];
+	int			  pid			= (int) getpid();
 
 	trace("%s str=%p",__FUNCTION__,str);
 
@@ -272,7 +275,18 @@ remote::remote(const char *name)
 		return;
 	}
 
-	rc = dbus_bus_request_name(conn, "br.com.bb." PACKAGE_NAME ".rexx", DBUS_NAME_FLAG_REPLACE_EXISTING , &err);
+	memset(pidname,0,10);
+	for(int f = 0; f < 9 && pid > 0;f++)
+	{
+		pidname[f] = 'a'+(pid % 25);
+		pid /= 25;
+	}
+
+	snprintf(busname, 4095, "%s.rx3270.br.com.bb",pidname);
+
+	trace("Busname: [%s]",busname);
+
+	rc = dbus_bus_request_name(conn, busname, DBUS_NAME_FLAG_REPLACE_EXISTING , &err);
 	trace("dbus_bus_request_name rc=%d",rc);
 
 	if (dbus_error_is_set(&err))
@@ -285,10 +299,13 @@ remote::remote(const char *name)
 
 	if(rc != DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER)
 	{
-		log("%s", "DBUS request name failed");
+		trace("%s: DBUS request for name %s failed",__FUNCTION__, busname);
+		log("DBUS for \"%s\" failed",name);
 		conn = NULL;
 		return;
 	}
+
+	trace("%s: Using DBUS name %s",__FUNCTION__,busname);
 
 
 #else
@@ -1191,11 +1208,8 @@ char * remote::get_clipboard(void)
 
 #elif defined(HAVE_DBUS)
 
-	DBusMessage * msg = create_message("getClipboard");
-	if(!msg)
-		return NULL;
-
-	return get_string(call(msg));
+	trace("%s",__FUNCTION__);
+	return query_string("getClipboard");
 
 #endif
 

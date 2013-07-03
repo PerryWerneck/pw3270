@@ -370,14 +370,19 @@ void pw3270_dbus_pa_key(PW3270Dbus *object, int key, DBusGMethodInvocation *cont
 	dbus_g_method_return(context,lib3270_get_next_unprotected(pw3270_dbus_get_session_handle(object),baddr));
  }
 
-void pw3270_dbus_get_clipboard(PW3270Dbus *object, int row, int col, int len, DBusGMethodInvocation *context)
+void pw3270_dbus_get_clipboard(PW3270Dbus *object, DBusGMethodInvocation *context)
 {
 	gchar *text;
+
+	trace("%s object=%p context=%p",__FUNCTION__,object,context);
 
 	if(pw3270_dbus_check_valid_state(object,context))
 		return;
 
 	text = gtk_clipboard_wait_for_text(gtk_widget_get_clipboard(pw3270_get_toplevel(),GDK_SELECTION_CLIPBOARD));
+
+	trace("Clipboard:\n%s\n",text);
+
 	if(!text)
 	{
 		GError *error = pw3270_dbus_get_error_from_errno(ENOENT);
@@ -393,6 +398,7 @@ void pw3270_dbus_get_clipboard(PW3270Dbus *object, int row, int col, int len, DB
 
 void pw3270_dbus_set_clipboard(PW3270Dbus *object, const gchar *text, DBusGMethodInvocation *context)
 {
+	trace("%s object=%p context=%p",__FUNCTION__,object,context);
     gtk_clipboard_set_text(gtk_widget_get_clipboard(pw3270_get_toplevel(),GDK_SELECTION_CLIPBOARD),(gchar *) text, -1);
 	dbus_g_method_return(context,0);
 }
