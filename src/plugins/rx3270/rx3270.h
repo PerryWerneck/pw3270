@@ -147,16 +147,18 @@
 	class exception
 	{
 	public:
+			exception(int code, const char *fmt, ...);
 			exception(const char *fmt, ...);
-			~exception();
 
 			const char	* getMessage(void);
 			void 		  logMessage(void);
 
 			void		  RaiseException(RexxMethodContext *context);
+			void		  RaiseException(RexxCallContext *context);
 
 	private:
-			char *msg;
+			int		code;
+			char	msg[4096];
 
 	};
 

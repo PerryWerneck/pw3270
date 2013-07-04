@@ -34,32 +34,33 @@
 #endif // HAVE_SYSLOG
 
  #include <string.h>
+ #include <oorexxerrors.h>
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
 rx3270::exception::exception(const char *fmt, ...)
 {
-	char buffer[4096];
 	va_list arg_ptr;
 
 	va_start(arg_ptr, fmt);
-	vsnprintf(buffer,4095,fmt,arg_ptr);
+	vsnprintf(this->msg,4095,fmt,arg_ptr);
 	va_end(arg_ptr);
 
-	msg = strdup(buffer);
+	this->code = Rexx_Error_Application_error;
 }
 
-extern "C" {
-	static void memfree(void *ptr)
-	{
-		free(ptr);
-	}
-}
-
-rx3270::exception::~exception()
+rx3270::exception::exception(int code, const char *fmt, ...)
 {
-	memfree(msg);
+	va_list arg_ptr;
+
+	va_start(arg_ptr, fmt);
+	vsnprintf(this->msg,4095,fmt,arg_ptr);
+	va_end(arg_ptr);
+
+	this->code = code;
+
 }
+
 
 const char * rx3270::exception::getMessage(void)
 {
@@ -79,8 +80,21 @@ void rx3270::exception::logMessage(void)
 
 void rx3270::exception::RaiseException(RexxMethodContext *context)
 {
-	// TODO: Raise rexx exception
 	trace("%s: %s",__FUNCTION__,this->getMessage());
     logMessage();
+
+	context->RaiseException1(	this->code,
+								context->NewStringFromAsciiz(this->msg)
+							);
+}
+
+void rx3270::exception::RaiseException(RexxCallContext *context)
+{
+	trace("%s: %s",__FUNCTION__,this->getMessage());
+    logMessage();
+
+	context->RaiseException1(	this->code,
+								context->NewStringFromAsciiz(this->msg)
+							);
 }
 

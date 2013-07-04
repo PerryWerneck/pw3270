@@ -104,6 +104,9 @@
 	char 			* query_string(const char *method);
 	int 			  query_intval(const char *method);
 
+	char 			* get_string(DBusMessage * msg);
+	int 			  get_intval(DBusMessage * msg);
+
 #endif
 
 
@@ -127,7 +130,7 @@ DBusMessage * remote::create_message(const char *method)
 														method);		// method
 
 	if (!msg)
-		log("Error creating message for method %s",method);
+		throw exception("Error creating message for method %s",method);
 
 	return msg;
 }
@@ -167,7 +170,7 @@ remote::remote(const char *name)
 
 	if(!WaitNamedPipe(buffer,NMPWAIT_USE_DEFAULT_WAIT))
 	{
-		log("%s","Invalid service instance");
+		throw exception("%s","Invalid service instance");
 		return;
 	}
 
@@ -175,13 +178,13 @@ remote::remote(const char *name)
 
 	if(hPipe == INVALID_HANDLE_VALUE)
 	{
-		log("%s","Can´t create service pipe");
+		throw exception("%s","Can´t create service pipe");
 		return;
 	}
 
 	if(!SetNamedPipeHandleState(hPipe,&dwMode,NULL,NULL))
 	{
-		log("%s","Can´t set pipe state");
+		throw exception("%s","Can´t set pipe state");
 		CloseHandle(hPipe);
 		hPipe = INVALID_HANDLE_VALUE;
 		return;
@@ -267,13 +270,13 @@ remote::remote(const char *name)
 
 	if (dbus_error_is_set(&err))
 	{
-		log("DBUS Connection Error (%s)", err.message);
+		throw exception("DBUS Connection Error (%s)", err.message);
 		dbus_error_free(&err);
 	}
 
 	if(!conn)
 	{
-		log("%s", "DBUS Connection failed");
+		throw exception("%s", "DBUS Connection failed");
 		return;
 	}
 
@@ -293,7 +296,7 @@ remote::remote(const char *name)
 
 	if (dbus_error_is_set(&err))
 	{
-		log("Name Error (%s)", err.message);
+		throw exception("Name Error (%s)", err.message);
 		dbus_error_free(&err);
 		conn = NULL;
 		return;
@@ -302,7 +305,7 @@ remote::remote(const char *name)
 	if(rc != DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER)
 	{
 		trace("%s: DBUS request for name %s failed",__FUNCTION__, busname);
-		log("DBUS for \"%s\" failed",name);
+		throw exception("DBUS request for \"%s\" failed",name);
 		conn = NULL;
 		return;
 	}
@@ -345,7 +348,7 @@ DBusMessage	* remote::call(DBusMessage *msg)
 
 	if(!reply)
 	{
-		log("%s",error.message);
+		throw exception("%s",error.message);
 		dbus_error_free(&error);
 	}
 
@@ -353,7 +356,7 @@ DBusMessage	* remote::call(DBusMessage *msg)
 
 }
 
-char * get_string(DBusMessage * msg)
+char * remote::get_string(DBusMessage * msg)
 {
 	char *rc = NULL;
 	if(msg)
@@ -369,12 +372,12 @@ char * get_string(DBusMessage * msg)
 				trace("Response: [%s]",str);
 				rc = strdup(str);
 			}
-#ifdef DEBUG
 			else
 			{
-				trace("Return type is %c, expecting %c",dbus_message_iter_get_arg_type(&iter),DBUS_TYPE_STRING);
+				dbus_message_unref(msg);
+				throw exception("DBUS Return type was %c, expecting %c",dbus_message_iter_get_arg_type(&iter),DBUS_TYPE_INT32);
+				return NULL;
 			}
-#endif
 		}
 
 		dbus_message_unref(msg);
@@ -389,7 +392,7 @@ char * remote::query_string(const char *method)
 	return NULL;
 }
 
-int get_intval(DBusMessage * msg)
+int remote::get_intval(DBusMessage * msg)
 {
 	int rc = -1;
 
@@ -405,12 +408,12 @@ int get_intval(DBusMessage * msg)
 				dbus_message_iter_get_basic(&iter, &iSigned);
 				rc = (int) iSigned;
 			}
-#ifdef DEBUG
 			else
 			{
-				trace("Return type is %c, expecting %c",dbus_message_iter_get_arg_type(&iter),DBUS_TYPE_INT32);
+				dbus_message_unref(msg);
+				throw exception("DBUS Return type was %c, expecting %c",dbus_message_iter_get_arg_type(&iter),DBUS_TYPE_INT32);
+				return -1;
 			}
-#endif
 		}
 
 		dbus_message_unref(msg);
@@ -446,7 +449,6 @@ char * remote::get_revision(void)
 #endif
 
 }
-
 
 LIB3270_CSTATE remote::get_cstate(void)
 {

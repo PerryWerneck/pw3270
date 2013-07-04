@@ -125,10 +125,19 @@ RexxMethod2(int, rx3270_method_sleep, CSELF, sessionPtr, int, seconds)
 
 RexxMethod1(logical_t, rx3270_method_is_connected, CSELF, sessionPtr)
 {
-	rx3270 *hSession = (rx3270 *) sessionPtr;
-	if(!hSession)
-		return false;
-	return hSession->is_connected();
+	try
+	{
+		rx3270 *hSession = (rx3270 *) sessionPtr;
+		if(!hSession)
+			return false;
+		return hSession->is_connected();
+	}
+	catch(rx3270::exception e)
+	{
+		e.RaiseException(context);
+	}
+
+	return 0;
 }
 
 RexxMethod1(logical_t, rx3270_method_is_ready, CSELF, sessionPtr)

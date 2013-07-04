@@ -35,7 +35,16 @@
 
 RexxRoutine0(CSTRING, rx3270version)
 {
-	return rx3270::get_default()->get_version();
+	try
+	{
+		return rx3270::get_default()->get_version();
+	}
+	catch(rx3270::exception e)
+	{
+		e.RaiseException(context);
+	}
+
+	return NULL;
 }
 
 RexxRoutine0(CSTRING, rx3270QueryCState)
@@ -184,7 +193,16 @@ RexxRoutine3(int, rx3270queryStringAt, int, row, int, col, CSTRING, key)
 
 RexxRoutine2(int, rx3270SetCursorPosition, int, row, int, col)
 {
-	return rx3270::get_default()->set_cursor_position(row,col);
+	try
+	{
+		return rx3270::get_default()->set_cursor_position(row,col);
+	}
+	catch(rx3270::exception e)
+	{
+		e.RaiseException(context);
+	}
+
+	return -1;
 }
 
 RexxRoutine3(int, rx3270SetStringAt, int, row, int, col, CSTRING, text)
