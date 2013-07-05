@@ -5,8 +5,6 @@
  *
  */
 
-trace "?R"
-
  host = .rx3270~new("pw3270:a")
 
  if host~connected() = 0 then

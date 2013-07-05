@@ -64,6 +64,7 @@
 	#define REXX_DEFAULT_CHARSET "UTF-8"
 #endif // WIN32
 
+#include <exception>
 
 /*---[ Rexx entry points ]-----------------------------------------------------------------------------------*/
 
@@ -144,7 +145,7 @@
 
  public:
 
-	class exception
+	class exception : public std::exception
 	{
 	public:
 			exception(int code, const char *fmt, ...);
@@ -155,6 +156,8 @@
 
 			void		  RaiseException(RexxMethodContext *context);
 			void		  RaiseException(RexxCallContext *context);
+
+			virtual const char * what() const throw();
 
 	private:
 			int		code;
@@ -185,7 +188,6 @@
 	virtual char			* get_version(void);
 	virtual char			* get_revision(void);
 	virtual LIB3270_CSTATE	  get_cstate(void)	= 0;
-
 
 	virtual int				  connect(const char *uri, bool wait = true)		= 0;
 	virtual int				  disconnect(void)									= 0;

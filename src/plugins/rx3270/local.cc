@@ -330,7 +330,7 @@ dynamic::dynamic()
 			FreeLibrary(kernel);
 
 		if(!hModule)
-			return;
+			throw exception("Can't load %s",dllname);
 
 
 #else
@@ -339,8 +339,7 @@ dynamic::dynamic()
 		hModule = dlopen("lib3270.so." PACKAGE_VERSION, RTLD_NOW);
 		if(!hModule)
 		{
-			fprintf(stderr,"Can't load lib3270\n%s\n",dlerror());
-			fflush(stderr);
+			throw exception("Can't load lib3270: %s",dlerror());
 			return;
 		}
 
@@ -358,10 +357,10 @@ dynamic::dynamic()
 		if(!*call[f].entry)
 		{
 #ifndef WIN32
-			fprintf(stderr,"Can't load lib3270::%s\n%s\n",call[f].name,dlerror());
-			fflush(stderr);
+			throw exception("Error \"%s\" loading lib3270::%s",dlerror(),call[f].name);
 			dlclose(hModule);
 #else
+			throw exception("Error loading lib3270::%s",call[f].name);
 			FreeLibrary(hModule);
 #endif // !WIN32
 			hModule = NULL;

@@ -170,7 +170,7 @@ remote::remote(const char *name)
 
 	if(!WaitNamedPipe(buffer,NMPWAIT_USE_DEFAULT_WAIT))
 	{
-		throw exception("%s","Invalid service instance");
+		throw exception("Invalid service instance: %s",name);
 		return;
 	}
 
@@ -178,7 +178,7 @@ remote::remote(const char *name)
 
 	if(hPipe == INVALID_HANDLE_VALUE)
 	{
-		throw exception("%s","Can´t create service pipe");
+		throw exception("Can´t create service pipe %s",buffer);
 		return;
 	}
 
@@ -312,6 +312,15 @@ remote::remote(const char *name)
 
 	trace("%s: Using DBUS name %s",__FUNCTION__,busname);
 
+	DBusMessage * msg = create_message("setScript");
+
+	if(msg)
+	{
+		const char			* id   = "r";
+		static const dbus_int32_t	  flag = 1;
+		dbus_message_append_args(msg, DBUS_TYPE_STRING, &id, DBUS_TYPE_INT32, &flag, DBUS_TYPE_INVALID);
+		get_intval(call(msg));
+	}
 
 #else
 
@@ -326,6 +335,21 @@ remote::~remote()
 		CloseHandle(hPipe);
 
 #elif defined(HAVE_DBUS)
+
+	try
+	{
+		DBusMessage * msg = create_message("setScript");
+		if(msg)
+		{
+			const char					* id   = "r";
+			static const dbus_int32_t	  flag = 0;
+			dbus_message_append_args(msg, DBUS_TYPE_STRING, &id, DBUS_TYPE_INT32, &flag, DBUS_TYPE_INVALID);
+			get_intval(call(msg));
+		}
+	}
+	catch(rx3270::exception e)
+	{
+	}
 
 	free(dest);
 	free(path);

@@ -98,3 +98,7 @@ void rx3270::exception::RaiseException(RexxCallContext *context)
 							);
 }
 
+const char * rx3270::exception::what() const throw()
+{
+	return this->msg;
+}
