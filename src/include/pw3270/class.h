@@ -109,9 +109,9 @@
 		virtual int				  cmp_text_at(int row, int col, const char *text)	= 0;
 		virtual int				  wait_for_text_at(int row, int col, const char *key, int timeout);
 
-//		virtual int				  set_cursor_position(int row, int col)				= 0;
-//		virtual int               set_cursor_addr(int addr)                         = 0;
-//		virtual int               get_cursor_addr(void)                             = 0;
+		virtual int				  set_cursor_position(int row, int col)				= 0;
+		virtual int               set_cursor_addr(int addr)                         = 0;
+		virtual int               get_cursor_addr(void)                             = 0;
 
 //		virtual int 			  set_toggle(LIB3270_TOGGLE ix, bool value)			= 0;
 

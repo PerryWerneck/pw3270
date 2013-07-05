@@ -1132,7 +1132,7 @@ int remote::set_cursor_addr(int addr)
 
 	if(hPipe != INVALID_HANDLE_VALUE)
 	{
-		struct hllapi_packet_addr       query		= { HLLAPI_PACKET_FIELD_LEN, (unsigned short) addr };
+		struct hllapi_packet_addr       query		= { HLLAPI_PACKET_SET_CURSOR, (unsigned short) addr };
 		struct hllapi_packet_result		response;
 		DWORD							cbSize		= sizeof(query);
 		TransactNamedPipe(hPipe,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);

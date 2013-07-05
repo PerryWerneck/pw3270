@@ -43,7 +43,7 @@
 	#include <pw3270/ipcpackets.h>
  #endif // WIN32
 
- #include "pw3270class.h"
+ #include <pw3270/class.h>
  #include <lib3270/log.h>
 
 #if defined(HAVE_DBUS)
@@ -62,6 +62,17 @@
 #if defined(WIN32)
 
 		HANDLE			  hPipe;
+
+		int query_intval(HLLAPI_PACKET id)
+		{
+			struct hllapi_packet_query      query		= { id };
+			struct hllapi_packet_result		response;
+			DWORD							cbSize		= sizeof(query);
+			if(TransactNamedPipe(hPipe,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL))
+				return response.rc;
+
+			throw exception("Error %d in TransactNamedPipe",GetLastError());
+		}
 
 #elif defined(HAVE_DBUS)
 
@@ -390,11 +401,7 @@
 		{
 #if defined(WIN32)
 
-			static const struct hllapi_packet_query query		= { HLLAPI_PACKET_IS_CONNECTED };
-			struct hllapi_packet_result		  		response;
-			DWORD							  		cbSize		= sizeof(query);
-			TransactNamedPipe(hPipe,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
-			return response.rc != 0;
+			return query_intval(HLLAPI_PACKET_IS_CONNECTED) != 0;
 
 #elif defined(HAVE_DBUS)
 
@@ -409,11 +416,7 @@
 		{
 #if defined(WIN32)
 
-			static const struct hllapi_packet_query query		= { HLLAPI_PACKET_GET_CSTATE };
-			struct hllapi_packet_result		  		response;
-			DWORD							  		cbSize		= sizeof(query);
-			TransactNamedPipe(hPipe,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
-			return (LIB3270_CSTATE) response.rc;
+			return (LIB3270_CSTATE) query_intval(HLLAPI_PACKET_GET_CSTATE);
 
 #elif defined(HAVE_DBUS)
 
@@ -531,11 +534,7 @@
 		{
 #if defined(WIN32)
 
-			static const struct hllapi_packet_query query		= { HLLAPI_PACKET_IS_READY };
-			struct hllapi_packet_result		  		response;
-			DWORD							  		cbSize		= sizeof(query);
-			TransactNamedPipe(hPipe,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
-			return response.rc != 0;
+			return query_intval(HLLAPI_PACKET_IS_READY) != 0;
 
 #elif defined(HAVE_DBUS)
 
@@ -551,11 +550,7 @@
 		{
 #if defined(WIN32)
 
-			static const struct hllapi_packet_query query		= { HLLAPI_PACKET_DISCONNECT };
-			struct hllapi_packet_result		  		response;
-			DWORD							  		cbSize		= sizeof(query);
-			TransactNamedPipe(hPipe,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
-			return 0;
+			return query_intval(HLLAPI_PACKET_DISCONNECT);
 
 #elif defined(HAVE_DBUS)
 
@@ -773,6 +768,77 @@
 		{
 			#warning IMPLEMENTAR
 			return NULL;
+		}
+
+
+		int set_cursor_position(int row, int col)
+		{
+#if defined(WIN32)
+
+			struct hllapi_packet_cursor 	query		= { HLLAPI_PACKET_SET_CURSOR_POSITION, (unsigned short) row, (unsigned short) col };
+			struct hllapi_packet_result		response;
+			DWORD							cbSize		= sizeof(query);
+			TransactNamedPipe(hPipe,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
+			return response.rc != 0;
+
+#elif defined(HAVE_DBUS)
+
+			dbus_int32_t r = (dbus_int32_t) row;
+			dbus_int32_t c = (dbus_int32_t) col;
+
+			DBusMessage * msg = create_message("setCursorAt");
+			if(msg)
+			{
+				dbus_message_append_args(msg, DBUS_TYPE_INT32, &r, DBUS_TYPE_INT32, &c, DBUS_TYPE_INVALID);
+				return get_intval(call(msg));
+			}
+
+#endif
+
+			return -1;
+		}
+
+		int set_cursor_addr(int addr)
+		{
+#if defined(WIN32)
+
+			struct hllapi_packet_addr       query		= { HLLAPI_PACKET_SET_CURSOR, (unsigned short) addr };
+			struct hllapi_packet_result		response;
+			DWORD							cbSize		= sizeof(query);
+			TransactNamedPipe(hPipe,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
+			return response.rc;
+
+#elif defined(HAVE_DBUS)
+
+			dbus_int32_t k = (dbus_int32_t) addr;
+
+			DBusMessage * msg = create_message("setCursorAddress");
+			if(msg)
+			{
+				dbus_message_append_args(msg, DBUS_TYPE_INT32, &k, DBUS_TYPE_INVALID);
+				return get_intval(call(msg));
+			}
+
+#endif
+
+			return -1;
+		}
+
+		int get_cursor_addr(void)
+		{
+#if defined(WIN32)
+
+			return query_intval(HLLAPI_PACKET_GET_CURSOR);
+
+#elif defined(HAVE_DBUS)
+
+			return query_intval("getCursorAddress");
+
+#else
+
+			return -1;
+
+#endif
 		}
 
 

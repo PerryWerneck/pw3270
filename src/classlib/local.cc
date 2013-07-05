@@ -46,7 +46,7 @@
 
 #endif
 
-#include "pw3270class.h"
+#include <pw3270/class.h>
 #include <lib3270/log.h>
 #include <lib3270/popup.h>
 #include <string.h>
@@ -466,6 +466,20 @@
 			return new string("");
 		}
 
+		int set_cursor_position(int row, int col)
+		{
+			return _set_cursor_position(hSession,row,col);
+		}
+
+		int set_cursor_addr(int addr)
+		{
+			return _set_cursor_addr(hSession,addr);
+		}
+
+		int get_cursor_addr(void)
+		{
+			return _get_cursor_addr(hSession);
+		}
 
  	};
 

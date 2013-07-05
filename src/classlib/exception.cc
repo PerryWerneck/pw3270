@@ -30,7 +30,7 @@
  #include <stdarg.h>
  #include <stdio.h>
 
- #include "pw3270class.h"
+ #include <pw3270/class.h>
 
 /*--[ Implement ]--------------------------------------------------------------------------------------------------*/
 

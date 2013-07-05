@@ -27,7 +27,7 @@
  *
  */
 
- #include "pw3270class.h"
+ #include <pw3270/class.h>
  #include <iostream>
 
  using namespace std;

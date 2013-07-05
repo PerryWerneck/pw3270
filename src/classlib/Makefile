@@ -57,7 +57,7 @@ DEBUG_CFLAGS=-DDEBUG=1 -g -Wall
 CXX=g++
 LD=g++
 
-DEPENDS=*.h ../include/*.h ../include/lib3270/*.h Makefile
+DEPENDS=../include/*.h ../include/lib3270/*.h ../include/pw3270/*.h Makefile
 
 $(OBJDBG)/%.o: %.cc $(DEPENDS)
 	@echo "  CC   `basename $@`"
