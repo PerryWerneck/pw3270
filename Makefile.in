@@ -286,6 +286,9 @@ install-plugins: $(foreach PLUGIN, $(PLUGINS), $(BINDIR)/Release/plugins/$(PLUGI
 install-lib: $(BINDIR)/Release@DLLDIR@/lib3270@DLLEXT@
 	@$(MAKE) BINRLS="../../.bin/Release@DLLDIR@" -C src/lib3270 install
 
+install-classlib:
+	@$(MAKE) BINRLS="../../.bin/Release" -C src/classlib install
+
 locale: $(foreach MO, $(basename $(LANG_FILES)), $(BINDIR)/Release/$(localedir)/$(notdir $(MO))/LC_MESSAGES/$(PACKAGE_NAME).mo)
 
 install-locale: $(foreach MO, $(basename $(LANG_FILES)), $(BINDIR)/Release/$(localedir)/$(notdir $(MO))/LC_MESSAGES/$(PACKAGE_NAME).mo)

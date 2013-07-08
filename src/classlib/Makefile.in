@@ -24,13 +24,17 @@
 # erico.mendonca@gmail.com	(Erico Mascarenhas de Mendonça)
 #
 
-LIBNAME=pw3270cxx.a
+PACKAGE=@PACKAGE_NAME@
+LIBNAME=$(PACKAGE)cxx.a
 
 #---[ Sources ]----------------------------------------------------------------
 
 SOURCES=main.cc session.cc exception.cc local.cc remote.cc
 
 #---[ Paths ]------------------------------------------------------------------
+
+prefix=@prefix@
+datarootdir=@datarootdir@
 
 ROOTDIR ?= .
 OBJDIR  ?= $(ROOTDIR)/.obj
@@ -45,6 +49,8 @@ OBJRLS = $(OBJDIR)/Release
 
 MKDIR=@MKDIR_P@
 LN_S=@LN_S@
+INSTALL=@INSTALL@
+INSTALL_DATA=$(INSTALL) -m 644
 
 #---[ Flags ]------------------------------------------------------------------
 
@@ -60,11 +66,30 @@ LD=@CXX@
 
 DEPENDS=../include/*.h ../include/lib3270/*.h ../include/pw3270/*.h Makefile
 
+#---[ Rules ]------------------------------------------------------------------
+
 $(OBJDBG)/%.o: %.cc $(DEPENDS)
 	@echo "  CC   `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(CXX) $(CFLAGS) $(DEBUG_CFLAGS) -o $@ -c $<
 
+$(OBJRLS)/%.o: %.cc $(DEPENDS)
+	@echo "  CC   `basename $@`"
+	@$(MKDIR) `dirname $@`
+	@$(CXX) $(CFLAGS) -o $@ -c $<
+
+#---[ Release targets ]--------------------------------------------------------
+
+Release: $(BINRLS)/$(LIBNAME)
+
+$(BINRLS)/$(LIBNAME): $(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SRC).o)
+	@echo "  CCLD `basename $@`"
+	@$(MKDIR) `dirname $@`
+	@ar rs $@ $^
+
+install: Release
+	@$(MKDIR) $(DESTDIR)$(datarootdir)/$(PACKAGE)
+	@$(INSTALL_DATA) $(BINRLS)/$(LIBNAME) $(DESTDIR)$(datarootdir)/$(PACKAGE)
 
 #---[ Debug targets ]----------------------------------------------------------
 
