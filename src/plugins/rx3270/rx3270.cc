@@ -46,7 +46,7 @@
  #include <string.h>
  #include <stdarg.h>
 
- static rx3270 * factory_default(const char *type);
+ static rx3270	* factory_default(const char *type);
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 

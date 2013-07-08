@@ -69,7 +69,13 @@
 
 	};
 
+#if defined (HAVE_GNUC_VISIBILITY)
+	class __attribute__((visibility("default"))) session
+#elif defined(WIN32)
+	class __declspec (dllexport) session
+#else
 	class session
+#endif
 	{
 	public:
 
@@ -82,9 +88,6 @@
 		static session	* get_default(void);
 		static void		  set_plugin(session * (*factory)(const char *name));
 
-		// Object settings
-		void set_charset(const char *charset);
-
 		// Log management
 		void log(const char *fmt, ...);
 		void logva(const char *fmt, va_list args);
@@ -92,6 +95,8 @@
 		// 3270 methods
 		virtual string			  get_version(void);
 		virtual string			  get_revision(void);
+
+		virtual const char		* get_charset(void);
 
 		virtual bool			  is_connected(void)								= 0;
 		virtual bool			  is_ready(void)									= 0;
@@ -138,6 +143,16 @@
 		// Dialogs
 		virtual int               popup_dialog(LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, ...);
 		virtual string          * file_chooser_dialog(GtkFileChooserAction action, const char *title, const char *extension, const char *filename);
+
+		string 					* get_3270_text(string *str);
+		string 					* get_local_text(string *str);
+
+	protected:
+#ifdef WIN32
+		void set_charset(const char *remote = 0, const char *local = "CP1252");
+#else
+		void set_charset(const char *remote = 0, const char *local = "UTF-8");
+#endif // WIN32
 
 	private:
 

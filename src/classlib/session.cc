@@ -29,6 +29,8 @@
 
  #include <stdarg.h>
  #include <stdio.h>
+ #include <string.h>
+ #include <malloc.h>
 
  #include <pw3270/class.h>
 
@@ -46,6 +48,11 @@
 
 	session::session()
 	{
+#ifdef HAVE_ICONV
+		this->conv2Local	= (iconv_t) (-1);
+		this->conv2Host		= (iconv_t) (-1);
+#endif
+
 		if(first)
 		{
 			prev		= last;
@@ -58,10 +65,21 @@
 			prev  = next = 0;
 			first = last = this;
 		}
+
 	}
 
 	session::~session()
 	{
+#ifdef HAVE_ICONV
+
+		if(this->conv2Local != (iconv_t) (-1))
+			iconv_close(this->conv2Local);
+
+		if(this->conv2Host != (iconv_t) (-1))
+			iconv_close(this->conv2Host);
+
+#endif
+
 		if(prev)
 			prev->next = next;
 		else
@@ -103,9 +121,36 @@
 	}
 
 	// Object settings
-	void session::set_charset(const char *charset)
+	void session::set_charset(const char *remote, const char *local)
 	{
+#ifdef HAVE_ICONV
 
+		if(this->conv2Local != (iconv_t) (-1))
+			iconv_close(this->conv2Local);
+
+		if(this->conv2Host != (iconv_t) (-1))
+			iconv_close(this->conv2Host);
+
+		if(!remote)
+			remote = this->get_charset();
+
+		if(strcmp(local,remote))
+		{
+			// Local and remote charsets aren't the same, setup conversion
+			conv2Local	= iconv_open(local, remote);
+			conv2Host	= iconv_open(remote,local);
+		}
+		else
+		{
+			conv2Local = conv2Host = (iconv_t)(-1);
+		}
+#endif
+
+	}
+
+	const char * session::get_charset(void)
+	{
+		return "ISO-8859-1";
 	}
 
 	// 3270 methods
@@ -188,6 +233,57 @@
 	{
 		return NULL;
 	}
+
+	string * session::get_3270_text(string *str)
+	{
+#ifdef HAVE_ICONV
+		if(str && conv2Host != (iconv_t)(-1))
+		{
+			size_t				  in 		= str->length();
+			size_t				  out 		= (in << 1);
+			char				* ptr;
+			char				* outBuffer = (char *) malloc(out);
+			ICONV_CONST char	* inBuffer	= (ICONV_CONST char	*) str->c_str();
+
+			memset(ptr=outBuffer,0,out);
+
+			iconv(conv2Host,NULL,NULL,NULL,NULL);	// Reset state
+
+			if(iconv(conv2Host,&inBuffer,&in,&ptr,&out) != ((size_t) -1))
+				str->assign(outBuffer);
+
+			free(outBuffer);
+		}
+#endif // HAVE_ICONV
+
+		return str;
+	}
+
+	string * session::get_local_text(string *str)
+	{
+#ifdef HAVE_ICONV
+		if(str && conv2Local != (iconv_t)(-1))
+		{
+			size_t				  in 		= str->length();
+			size_t				  out 		= (in << 1);
+			char				* ptr;
+			char				* outBuffer = (char *) malloc(out);
+			ICONV_CONST char	* inBuffer	= (ICONV_CONST char	*) str->c_str();
+
+			memset(ptr=outBuffer,0,out);
+
+			iconv(conv2Local,NULL,NULL,NULL,NULL);	// Reset state
+
+			if(iconv(conv2Local,&inBuffer,&in,&ptr,&out) != ((size_t) -1))
+				str->assign(outBuffer);
+
+			free(outBuffer);
+		}
+#endif // HAVE_ICONV
+
+		return str;
+	}
+
 
  }
 

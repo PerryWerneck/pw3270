@@ -300,6 +300,7 @@
 		int             (*_get_next_unprotected)(H3270 *hSession, int baddr0);
 		void            (*_popup_va)(H3270 *session, LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, va_list);
 		void *			(*_free)(void *);
+		const char *	(*_get_charset)(H3270 *hSession);
 
 	public:
 
@@ -346,6 +347,8 @@
 				{ (void **) & _get_next_unprotected,	"lib3270_get_next_unprotected"	   	},
 				{ (void **) & _popup_va,	            "lib3270_popup_va"          	   	},
 				{ (void **) & _free,					"lib3270_free"						},
+				{ (void **) & _get_charset,				"lib3270_get_charset"				},
+
 			};
 
 
@@ -365,6 +368,8 @@
 			set_log_handler(loghandler);
 			set_trace_handler(tracehandler);
 			this->hSession = lib3270_new("");
+
+			set_charset();
 
 		}
 
@@ -535,6 +540,10 @@
 			return 0;
 		}
 
+		const char * get_charset(void)
+		{
+			return _get_charset(hSession);
+		}
 
  	};
 

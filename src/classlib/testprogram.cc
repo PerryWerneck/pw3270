@@ -48,6 +48,7 @@
 		cout << "\tDisconnected" << endl;
 
 	cout << "\tSession state: " << session->get_cstate() << endl;
+	cout << "\tCharset:       " << session->get_charset() << endl;
 
 	delete session;
  	return 0;
