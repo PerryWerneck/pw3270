@@ -43,19 +43,20 @@ OBJRLS = $(OBJDIR)/Release
 
 #---[ Tools ]------------------------------------------------------------------
 
-MKDIR = mkdir -p
+MKDIR=@MKDIR_P@
+LN_S=@LN_S@
 
 #---[ Flags ]------------------------------------------------------------------
 
-LIBS=-ldl -ldbus-glib-1 -ldbus-1
-CFLAGS=-fPIC -I../include -I/usr/include/dbus-1.0 -I/usr/lib64/dbus-1.0/include
-DEBUG_CFLAGS=-DDEBUG=1 -g -Wall
+CFLAGS=@CFLAGS@ @DBUS_CFLAGS@ -I../include
+LIBS=@LIBS@ @LIBICONV@ @DBUS_LIBS@
 
+DEBUG_CFLAGS=-DDEBUG=1 -g -Wall
 
 #---[ Rules ]------------------------------------------------------------------
 
-CXX=g++
-LD=g++
+CXX=@CXX@
+LD=@CXX@
 
 DEPENDS=../include/*.h ../include/lib3270/*.h ../include/pw3270/*.h Makefile
 

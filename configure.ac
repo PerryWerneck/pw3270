@@ -369,8 +369,9 @@ AC_SUBST(GTKMAC_LIBS)
 AC_SUBST(GTKMAC_CFLAGS)
 
 AC_SEARCH_LIBS( [sin], [m], AC_DEFINE(HAVE_LIBM), AC_MSG_NOTICE([libm not present.]))
-
 AC_SUBST(SOCKET_LIBS)
+
+AC_SEARCH_LIBS([dlopen], [dl], AC_DEFINE(HAVE_LIBDL), AC_MSG_NOTICE([libdl not present.]))
 
 #--[ Optional ]---------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -567,6 +568,7 @@ AC_CONFIG_FILES([
 	src/plugins/hllapi/Makefile
 	src/plugins/rx3270/Makefile
 	src/plugins/dbus3270/Makefile
+	src/classlib/Makefile
 	man/Makefile
 	makegtkruntime.sh
 	src/sample/Makefile
