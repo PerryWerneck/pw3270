@@ -481,6 +481,61 @@
 			return _get_cursor_addr(hSession);
 		}
 
+		int enter(void)
+		{
+			return _enter(hSession);
+		}
+
+		int pfkey(int key)
+		{
+			return _pfkey(hSession,key);
+		}
+
+		int pakey(int key)
+		{
+			return _pakey(hSession,key);
+		}
+
+		int quit(void)
+		{
+			return EINVAL;
+		}
+
+		int set_toggle(LIB3270_TOGGLE ix, bool value)
+		{
+			return _set_toggle(hSession, ix, (int) value);
+		}
+
+		int emulate_input(const char *str)
+		{
+			return _emulate_input(hSession,str,-1,1);
+		}
+
+		int get_field_start(int baddr)
+		{
+			return _get_field_start(hSession,baddr);
+		}
+
+		int get_field_len(int baddr)
+		{
+			return _get_field_len(hSession,baddr);
+		}
+
+		int get_next_unprotected(int baddr)
+		{
+			return _get_next_unprotected(hSession,baddr);
+		}
+
+		int popup_dialog(LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, ...)
+		{
+			va_list	args;
+			va_start(args, fmt);
+			_popup_va(hSession, id, title, message, fmt, args);
+			va_end(args);
+			return 0;
+		}
+
+
  	};
 
 	session	* session::create_local(void)

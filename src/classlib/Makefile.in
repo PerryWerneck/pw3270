@@ -48,7 +48,7 @@ LN_S=@LN_S@
 
 #---[ Flags ]------------------------------------------------------------------
 
-CFLAGS=@CFLAGS@ @DBUS_CFLAGS@ -I../include
+CFLAGS=@CFLAGS@ @DBUS_CFLAGS@ @GTK_CFLAGS@ -I../include
 LIBS=@LIBS@ @LIBICONV@ @DBUS_LIBS@
 
 DEBUG_CFLAGS=-DDEBUG=1 -g -Wall

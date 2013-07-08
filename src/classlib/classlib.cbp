@@ -33,11 +33,10 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="Makefile" />
+		<Unit filename="Makefile.in" />
 		<Unit filename="exception.cc" />
 		<Unit filename="local.cc" />
 		<Unit filename="main.cc" />
-		<Unit filename="pw3270class.h" />
 		<Unit filename="remote.cc" />
 		<Unit filename="session.cc" />
 		<Unit filename="testprogram.cc" />

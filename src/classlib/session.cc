@@ -156,7 +156,38 @@
 		return ETIMEDOUT;
 	}
 
+	int session::set_copy(const char *text)
+	{
+		return EINVAL;
+	}
 
+	string * session::get_copy(void)
+	{
+		errno = EINVAL;
+		return NULL;
+	}
+
+	string * session::get_clipboard(void)
+	{
+		errno = EINVAL;
+		return NULL;
+	}
+
+	int session::set_clipboard(const char *text)
+	{
+		return EINVAL;
+	}
+
+
+	int session::popup_dialog(LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, ...)
+	{
+		return -1;
+	}
+
+	string * session::file_chooser_dialog(GtkFileChooserAction action, const char *title, const char *extension, const char *filename)
+	{
+		return NULL;
+	}
 
  }
 

@@ -842,6 +842,306 @@
 		}
 
 
+		int enter(void)
+		{
+#if defined(WIN32)
+
+			return query_intval(HLLAPI_PACKET_ENTER);
+
+#elif defined(HAVE_DBUS)
+
+			return query_intval("enter");
+
+#else
+
+			return -1;
+
+#endif
+
+		}
+
+		int pfkey(int key)
+		{
+#if defined(WIN32)
+
+			struct hllapi_packet_keycode	query		= { HLLAPI_PACKET_PFKEY, (unsigned short) key };
+			struct hllapi_packet_result		response;
+			DWORD							cbSize		= sizeof(query);
+			TransactNamedPipe(hPipe,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
+			return response.rc;
+
+#elif defined(HAVE_DBUS)
+
+			dbus_int32_t k = (dbus_int32_t) key;
+
+			DBusMessage * msg = create_message("pfKey");
+			if(msg)
+			{
+				dbus_message_append_args(msg, DBUS_TYPE_INT32, &k, DBUS_TYPE_INVALID);
+				return get_intval(call(msg));
+			}
+
+			return -1;
+
+#else
+
+			return -1;
+
+#endif
+
+		}
+
+		int pakey(int key)
+		{
+#if defined(WIN32)
+
+			struct hllapi_packet_keycode	query		= { HLLAPI_PACKET_PAKEY, (unsigned short) key };
+			struct hllapi_packet_result		response;
+			DWORD							cbSize		= sizeof(query);
+			TransactNamedPipe(hPipe,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
+			return response.rc;
+
+#elif defined(HAVE_DBUS)
+
+			dbus_int32_t k = (dbus_int32_t) key;
+
+			DBusMessage * msg = create_message("paKey");
+			if(msg)
+			{
+				dbus_message_append_args(msg, DBUS_TYPE_INT32, &k, DBUS_TYPE_INVALID);
+				return get_intval(call(msg));
+			}
+			return -1;
+
+#else
+
+			return -1;
+
+#endif
+
+		}
+
+		int quit(void)
+		{
+#if defined(WIN32)
+
+			return query_intval(HLLAPI_PACKET_QUIT);
+
+#elif defined(HAVE_DBUS)
+
+			return query_intval("quit");
+
+#else
+
+			return -1;
+
+#endif
+
+		}
+
+		int set_toggle(LIB3270_TOGGLE ix, bool value)
+		{
+#if defined(WIN32)
+
+			struct hllapi_packet_set		query		= { HLLAPI_PACKET_SET_TOGGLE, (unsigned short) ix, (unsigned short) value };
+			struct hllapi_packet_result		response;
+			DWORD							cbSize		= sizeof(query);
+			TransactNamedPipe(hPipe,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
+			return response.rc;
+
+#elif defined(HAVE_DBUS)
+
+			dbus_int32_t i = (dbus_int32_t) ix;
+			dbus_int32_t v = (dbus_int32_t) value;
+
+			DBusMessage * msg = create_message("setToggle");
+			if(msg)
+			{
+				dbus_message_append_args(msg, DBUS_TYPE_INT32, &i, DBUS_TYPE_INT32, &v, DBUS_TYPE_INVALID);
+				return get_intval(call(msg));
+			}
+
+			return -1;
+
+#else
+			return -1;
+
+#endif
+
+		}
+
+		int emulate_input(const char *str)
+		{
+#if defined(WIN32)
+
+			size_t                                len           = strlen(str);
+			struct hllapi_packet_emulate_input 	* query;
+			struct hllapi_packet_result           response;
+			DWORD							      cbSize		= sizeof(struct hllapi_packet_emulate_input)+len;
+
+			query = (struct hllapi_packet_emulate_input *) malloc(cbSize);
+			query->packet_id 	= HLLAPI_PACKET_EMULATE_INPUT;
+			query->len			= len;
+			query->pasting		= 1;
+			strcpy(query->text,str);
+
+			TransactNamedPipe(hPipe,(LPVOID) query, cbSize, &response, sizeof(response), &cbSize,NULL);
+
+			free(query);
+
+			return response.rc;
+
+#elif defined(HAVE_DBUS)
+
+			DBusMessage * msg = create_message("input");
+			if(msg)
+			{
+				dbus_message_append_args(msg, DBUS_TYPE_STRING, &str, DBUS_TYPE_INVALID);
+				return get_intval(call(msg));
+			}
+			return -1;
+
+#else
+
+			return -1;
+
+#endif
+
+		}
+
+		int get_field_start(int baddr)
+		{
+#if defined(WIN32)
+
+			struct hllapi_packet_addr       query		= { HLLAPI_PACKET_FIELD_START, (unsigned short) baddr };
+			struct hllapi_packet_result		response;
+			DWORD							cbSize		= sizeof(query);
+			TransactNamedPipe(hPipe,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
+			return response.rc;
+
+#elif defined(HAVE_DBUS)
+
+			dbus_int32_t k = (dbus_int32_t) baddr;
+
+			DBusMessage * msg = create_message("getFieldStart");
+			if(msg)
+			{
+				dbus_message_append_args(msg, DBUS_TYPE_INT32, &k, DBUS_TYPE_INVALID);
+				return get_intval(call(msg));
+			}
+
+			return -1;
+
+#else
+
+			return -1;
+
+#endif
+
+		}
+
+		int get_field_len(int baddr)
+		{
+#if defined(WIN32)
+
+			struct hllapi_packet_addr       query		= { HLLAPI_PACKET_FIELD_LEN, (unsigned short) baddr };
+			struct hllapi_packet_result		response;
+			DWORD							cbSize		= sizeof(query);
+			TransactNamedPipe(hPipe,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
+			return response.rc;
+
+#elif defined(HAVE_DBUS)
+
+			dbus_int32_t k = (dbus_int32_t) baddr;
+
+			DBusMessage * msg = create_message("getFieldLength");
+			if(msg)
+			{
+				dbus_message_append_args(msg, DBUS_TYPE_INT32, &k, DBUS_TYPE_INVALID);
+				return get_intval(call(msg));
+			}
+
+			return -1;
+
+#else
+
+			return -1;
+
+#endif
+		}
+
+		int get_next_unprotected(int baddr)
+		{
+#if defined(WIN32)
+
+			struct hllapi_packet_addr       query		= { HLLAPI_PACKET_NEXT_UNPROTECTED, (unsigned short) baddr };
+			struct hllapi_packet_result		response;
+			DWORD							cbSize		= sizeof(query);
+			TransactNamedPipe(hPipe,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
+			return response.rc;
+
+#elif defined(HAVE_DBUS)
+
+			dbus_int32_t k = (dbus_int32_t) baddr;
+
+			DBusMessage * msg = create_message("getNextUnprotected");
+			if(msg)
+			{
+				dbus_message_append_args(msg, DBUS_TYPE_INT32, &k, DBUS_TYPE_INVALID);
+				return get_intval(call(msg));
+			}
+
+			return -1;
+
+#else
+
+			return -1;
+
+#endif
+
+		}
+
+		int set_clipboard(const char *text)
+		{
+#if defined(WIN32)
+
+			return -1;
+
+#elif defined(HAVE_DBUS)
+
+			DBusMessage * msg = create_message("setClipboard");
+			if(msg)
+			{
+				dbus_message_append_args(msg, DBUS_TYPE_STRING, &text, DBUS_TYPE_INVALID);
+				return get_intval(call(msg));
+			}
+
+			return -1;
+
+#else
+
+			return -1;
+
+#endif
+
+		}
+
+		string * get_clipboard(void)
+		{
+#if defined(WIN32)
+
+			return NULL;
+
+#elif defined(HAVE_DBUS)
+
+			trace("%s",__FUNCTION__);
+			return query_string("getClipboard");
+
+#endif
+
+			return NULL;
+		}
+
  	};
 
 	session	* session::create_remote(const char *session)

@@ -40,6 +40,7 @@
  #include <exception>
  #include <lib3270/config.h>
  #include <lib3270.h>
+ #include <lib3270/popup.h>
 
  #ifdef HAVE_ICONV
 	#include <iconv.h>
@@ -48,6 +49,7 @@
  #include <string>
  #include <stdarg.h>
  #include <lib3270.h>
+ #include <gtk/gtk.h>
 
  namespace pw3270
  {
@@ -113,29 +115,29 @@
 		virtual int               set_cursor_addr(int addr)                         = 0;
 		virtual int               get_cursor_addr(void)                             = 0;
 
-//		virtual int 			  set_toggle(LIB3270_TOGGLE ix, bool value)			= 0;
+		virtual int 			  set_toggle(LIB3270_TOGGLE ix, bool value)			= 0;
 
-//		virtual int				  enter(void)										= 0;
-//		virtual int				  pfkey(int key)									= 0;
-//		virtual int				  pakey(int key)									= 0;
+		virtual int				  enter(void)										= 0;
+		virtual int				  pfkey(int key)									= 0;
+		virtual int				  pakey(int key)									= 0;
 
-//		virtual int               emulate_input(const char *str)                    = 0;
+		virtual int               emulate_input(const char *str)                    = 0;
 
-//		virtual int               get_field_start(int baddr = -1)                   = 0;
-//		virtual int               get_field_len(int baddr = -1)                     = 0;
-//		virtual int               get_next_unprotected(int baddr = -1)              = 0;
+		virtual int               get_field_start(int baddr = -1)                   = 0;
+		virtual int               get_field_len(int baddr = -1)                     = 0;
+		virtual int               get_next_unprotected(int baddr = -1)              = 0;
 
-//		virtual int               set_copy(const char *text);
-//		virtual char            * get_copy(void);
+		virtual int               set_copy(const char *text);
+		virtual string          * get_copy(void);
 
-//		virtual char            * get_clipboard(void);
-//		virtual int               set_clipboard(const char *text);
+		virtual string          * get_clipboard(void);
+		virtual int               set_clipboard(const char *text);
 
-//		virtual int				  quit(void)										= 0;
+		virtual int				  quit(void)										= 0;
 
 		// Dialogs
-//		virtual int               popup_dialog(LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, ...);
-//		virtual char            * file_chooser_dialog(GtkFileChooserAction action, const char *title, const char *extension, const char *filename);
+		virtual int               popup_dialog(LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, ...);
+		virtual string          * file_chooser_dialog(GtkFileChooserAction action, const char *title, const char *extension, const char *filename);
 
 	private:
 
