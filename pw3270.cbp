@@ -61,6 +61,13 @@
 		<Unit filename="pw3270-x86_64.nsi.in" />
 		<Unit filename="pw3270.nsi.in" />
 		<Unit filename="pw3270.spec.in" />
+		<Unit filename="src/classlib/Makefile.in" />
+		<Unit filename="src/classlib/class.mak.in" />
+		<Unit filename="src/classlib/exception.cc" />
+		<Unit filename="src/classlib/local.cc" />
+		<Unit filename="src/classlib/remote.cc" />
+		<Unit filename="src/classlib/session.cc" />
+		<Unit filename="src/classlib/testprogram.cc" />
 		<Unit filename="src/include/lib3270.h" />
 		<Unit filename="src/include/lib3270/action_table.h" />
 		<Unit filename="src/include/lib3270/actions.h" />
@@ -76,6 +83,7 @@
 		<Unit filename="src/include/lib3270/trace.h" />
 		<Unit filename="src/include/plugin.mak.in" />
 		<Unit filename="src/include/pw3270.h" />
+		<Unit filename="src/include/pw3270/class.h" />
 		<Unit filename="src/include/pw3270/hllapi.h" />
 		<Unit filename="src/include/pw3270/ipcpackets.h" />
 		<Unit filename="src/include/pw3270/plugin.h" />

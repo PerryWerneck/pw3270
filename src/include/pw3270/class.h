@@ -51,7 +51,9 @@
  #include <lib3270.h>
  #include <gtk/gtk.h>
 
- namespace pw3270
+ #define PW3270_NAMESPACE h3270
+
+ namespace PW3270_NAMESPACE
  {
  	using namespace std;
 

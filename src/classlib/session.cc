@@ -40,7 +40,7 @@
 
 /*--[ Implement ]--------------------------------------------------------------------------------------------------*/
 
- namespace pw3270
+ namespace PW3270_NAMESPACE
  {
 	session	* session::first						= 0;
 	session	* session::last							= 0;

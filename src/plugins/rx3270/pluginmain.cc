@@ -47,6 +47,7 @@
  #include <pw3270/v3270.h>
  #include <lib3270/actions.h>
  #include <lib3270/log.h>
+ #include <pw3270/class.h>
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
@@ -69,7 +70,10 @@
 
 /*--[ Plugin session object ]--------------------------------------------------------------------------------*/
 
- class plugin : public rx3270
+ using namespace std;
+ using namespace PW3270_NAMESPACE;
+
+ class plugin : public session
  {
  public:
 	plugin(H3270 *hSession);
@@ -77,7 +81,7 @@
 
     void              free(void *ptr);
 
-	char			* get_version(void);
+	string			  get_version(void);
 	LIB3270_CSTATE	  get_cstate(void);
 	int				  disconnect(void);
 	int				  connect(const char *uri, bool wait = true);
@@ -90,8 +94,8 @@
 	int				  wait(int seconds);
 	int				  wait_for_ready(int seconds);
 
-	char			* get_text(int baddr, size_t len);
-	char 			* get_text_at(int row, int col, size_t sz);
+	string			* get_text(int baddr, size_t len);
+	string 			* get_text_at(int row, int col, size_t sz);
 	int				  cmp_text_at(int row, int col, const char *text);
 	int 			  set_text_at(int row, int col, const char *str);
 
@@ -111,13 +115,13 @@
 	int               get_next_unprotected(int baddr = -1);
 
 	int               set_copy(const char *text);
-	char            * get_copy(void);
+	string			* get_copy(void);
 
-    char            * get_clipboard(void);
+    string			* get_clipboard(void);
     int               set_clipboard(const char *text);
 
 	int               popup_dialog(LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, ...);
-	char            * file_chooser_dialog(GtkFileChooserAction action, const char *title, const char *extension, const char *filename);
+	string			* file_chooser_dialog(GtkFileChooserAction action, const char *title, const char *extension, const char *filename);
 
     int				  quit(void);
 
@@ -365,7 +369,7 @@ extern "C"
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
- static rx3270 * factory(const char *name)
+ static session * factory(const char *name)
  {
     return new plugin(lib3270_get_default_session_handle());
  }
@@ -376,7 +380,7 @@ extern "C"
 #if GTK_CHECK_VERSION(2,32,0)
 	g_mutex_init(&mutex);
 #endif // GTK_CHECK_VERSION
-	rx3270::set_plugin(factory);
+	session::set_plugin(factory);
 	return 0;
  }
 
@@ -389,7 +393,7 @@ extern "C"
 	return 0;
  }
 
- plugin::plugin(H3270 *hSession) : rx3270()
+ plugin::plugin(H3270 *hSession) : session()
  {
 	this->hSession = hSession;
  }
@@ -400,9 +404,9 @@ extern "C"
  }
 
 
- char * plugin::get_version(void)
+ string plugin::get_version(void)
  {
-	return strdup(lib3270_get_version());
+	return string(lib3270_get_version());
  }
 
  LIB3270_CSTATE plugin::get_cstate(void)
@@ -461,9 +465,18 @@ extern "C"
 	return lib3270_wait_for_ready(hSession,seconds);
  }
 
- char * plugin::get_text_at(int row, int col, size_t sz)
+ string * plugin::get_text_at(int row, int col, size_t sz)
  {
-	return lib3270_get_text_at(hSession,row,col,(int) sz);
+	char * ptr = lib3270_get_text_at(hSession,row,col,(int) sz);
+
+	if(ptr)
+	{
+		string *s = new string(ptr);
+		lib3270_free(ptr);
+		return s;
+	}
+
+	return new string("");
  }
 
  int plugin::cmp_text_at(int row, int col, const char *text)
@@ -496,9 +509,17 @@ extern "C"
 	lib3270_write_va_log(hSession,"REXX",fmt,args);
  }
 
- char * plugin::get_text(int baddr, size_t len)
+ string * plugin::get_text(int baddr, size_t len)
  {
-	return lib3270_get_text(hSession,baddr,len);
+	char *ptr = lib3270_get_text(hSession,baddr,len);
+	if(ptr)
+	{
+		string *s = new string(ptr);
+		lib3270_free(ptr);
+		return s;
+	}
+
+	return new string("");
  }
 
  int plugin::get_field_start(int baddr)
@@ -517,15 +538,32 @@ extern "C"
     return 0;
  }
 
- char * plugin::get_copy(void)
+ string * plugin::get_copy(void)
  {
-    return v3270_get_copy(GTK_WIDGET(lib3270_get_widget(hSession)));
+    gchar *ptr = v3270_get_copy(GTK_WIDGET(lib3270_get_widget(hSession)));
+
+    if(ptr)
+	{
+		string *ret = new string((char *) ptr);
+		g_free(ptr);
+		return ret;
+	}
+
+    return NULL;
  }
 
- char * plugin::get_clipboard(void)
+ string * plugin::get_clipboard(void)
  {
-    trace("%s toplevel=%p",__FUNCTION__,pw3270_get_toplevel());
-    return gtk_clipboard_wait_for_text(gtk_widget_get_clipboard(pw3270_get_toplevel(),GDK_SELECTION_CLIPBOARD));
+    gchar *ptr = gtk_clipboard_wait_for_text(gtk_widget_get_clipboard(pw3270_get_toplevel(),GDK_SELECTION_CLIPBOARD));
+
+    if(ptr)
+	{
+		string *ret = new string((char *) ptr);
+		g_free(ptr);
+		return ret;
+	}
+
+    return NULL;
  }
 
  int plugin::set_clipboard(const char *text)
@@ -568,9 +606,18 @@ int plugin::popup_dialog(LIB3270_NOTIFY id , const char *title, const char *mess
     return 0;
 }
 
-char * plugin::file_chooser_dialog(GtkFileChooserAction action, const char *title, const char *extension, const char *filename)
+string * plugin::file_chooser_dialog(GtkFileChooserAction action, const char *title, const char *extension, const char *filename)
 {
-    return pw3270_file_chooser(action, script_name ? script_name : "rexx", title, filename, extension);
+    gchar *ptr = pw3270_file_chooser(action, script_name ? script_name : "rexx", title, filename, extension);
+
+    if(ptr)
+	{
+		string *s = new string((char *) ptr);
+		g_free(ptr);
+		return s;
+	}
+
+	return NULL;
 }
 
 int plugin::quit(void)

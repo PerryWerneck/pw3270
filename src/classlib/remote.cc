@@ -53,7 +53,7 @@
 
 /*--[ Implement ]--------------------------------------------------------------------------------------------------*/
 
- namespace pw3270
+ namespace PW3270_NAMESPACE
  {
 
 	class remote : public session

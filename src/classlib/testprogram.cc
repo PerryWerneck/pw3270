@@ -31,7 +31,7 @@
  #include <iostream>
 
  using namespace std;
- using namespace pw3270;
+ using namespace PW3270_NAMESPACE;
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 

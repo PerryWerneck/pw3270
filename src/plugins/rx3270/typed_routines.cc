@@ -30,6 +30,11 @@
  #include "rx3270.h"
  #include <time.h>
  #include <string.h>
+ #include <exception>
+ #include <pw3270/class.h>
+
+ using namespace std;
+ using namespace PW3270_NAMESPACE;
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
@@ -37,11 +42,11 @@ RexxRoutine0(CSTRING, rx3270version)
 {
 	try
 	{
-		return rx3270::get_default()->get_version();
+		return session::get_default()->get_version().c_str();
 	}
-	catch(rx3270::exception e)
+	catch(std::exception& e)
 	{
-		e.RaiseException(context);
+		context->RaiseException1(Rexx_Error_Application_error,context->NewStringFromAsciiz(e.what()));
 	}
 
 	return NULL;
@@ -70,7 +75,7 @@ RexxRoutine0(CSTRING, rx3270QueryCState)
  	};
 
  	size_t			f;
- 	LIB3270_CSTATE	state = rx3270::get_default()->get_cstate();
+ 	LIB3270_CSTATE	state = session::get_default()->get_cstate();
 
 	for(f=0;f < (sizeof(xlat_state)/sizeof(struct _xlat_state)); f++)
 	{
@@ -83,52 +88,54 @@ RexxRoutine0(CSTRING, rx3270QueryCState)
 
 RexxRoutine0(int, rx3270Disconnect)
 {
-	return rx3270::get_default()->disconnect();
+	return session::get_default()->disconnect();
 }
 
 RexxRoutine2(int, rx3270Connect, CSTRING, hostname, int, wait)
 {
-	return rx3270::get_default()->connect(hostname,wait);
+	return session::get_default()->connect(hostname,wait);
 }
 
 RexxRoutine0(int, rx3270isConnected)
 {
-	return rx3270::get_default()->is_connected();
+	return session::get_default()->is_connected();
 }
 
 RexxRoutine0(int, rx3270WaitForEvents)
 {
-	return rx3270::get_default()->iterate();
+	return session::get_default()->iterate();
 }
 
 RexxRoutine1(int, rx3270Sleep, int, seconds)
 {
-	return rx3270::get_default()->wait(seconds);
+	return session::get_default()->wait(seconds);
 }
 
 RexxRoutine0(int, rx3270SendENTERKey)
 {
-	return rx3270::get_default()->enter();
+	return session::get_default()->enter();
 }
 
 RexxRoutine1(int, rx3270SendPFKey, int, key)
 {
-	return rx3270::get_default()->pfkey(key);
+	return session::get_default()->pfkey(key);
 }
 
 RexxRoutine1(int, rx3270SendPAKey, int, key)
 {
-	return rx3270::get_default()->pakey(key);
+	return session::get_default()->pakey(key);
 }
 
 RexxRoutine1(int, rx3270WaitForTerminalReady, int, seconds)
 {
-	return rx3270::get_default()->wait_for_ready(seconds);
+	return session::get_default()->wait_for_ready(seconds);
 }
 
 RexxRoutine4(int, rx3270WaitForStringAt, int, row, int, col, CSTRING, key, int, timeout)
 {
-	rx3270	* session 	= rx3270::get_default();
+	#warning REIMPLEMENTAR
+/*
+	session	* session 	= session::get_default();
 	time_t	  end		= time(0) + timeout;
 	char	* text		= session->get_3270_string(key);
 
@@ -146,13 +153,15 @@ RexxRoutine4(int, rx3270WaitForStringAt, int, row, int, col, CSTRING, key, int, 
 	}
 
 	free(text);
-
+*/
 	return ETIMEDOUT;
 
 }
 
 RexxRoutine3(RexxStringObject, rx3270GetStringAt, int, row, int, col, int, sz)
 {
+	#warning REIMPLEMENTAR
+/*
 	rx3270	* session 	= rx3270::get_default();
 	char	* str		= session->get_text_at(row,col,sz);
 
@@ -164,17 +173,19 @@ RexxRoutine3(RexxStringObject, rx3270GetStringAt, int, row, int, col, int, sz)
 		free(text);
 		return ret;
 	}
-
+*/
 	return context->String("");
 }
 
 RexxRoutine0(int, rx3270IsTerminalReady)
 {
-	return rx3270::get_default()->is_ready();
+	return session::get_default()->is_ready();
 }
 
 RexxRoutine3(int, rx3270queryStringAt, int, row, int, col, CSTRING, key)
 {
+	#warning Reimplementar
+/*
 	int		  rc		= 0;
 	rx3270	* session 	= rx3270::get_default();
 	char	* str		= session->get_text_at(row,col,strlen(key));
@@ -189,17 +200,19 @@ RexxRoutine3(int, rx3270queryStringAt, int, row, int, col, CSTRING, key)
 	free(str);
 
 	return rc;
+*/
+	return -1;
 }
 
 RexxRoutine2(int, rx3270SetCursorPosition, int, row, int, col)
 {
 	try
 	{
-		return rx3270::get_default()->set_cursor_position(row,col);
+		return session::get_default()->set_cursor_position(row,col);
 	}
-	catch(rx3270::exception e)
+	catch(std::exception &e)
 	{
-		e.RaiseException(context);
+		context->RaiseException1(Rexx_Error_Application_error,context->NewStringFromAsciiz(e.what()));
 	}
 
 	return -1;
@@ -207,6 +220,8 @@ RexxRoutine2(int, rx3270SetCursorPosition, int, row, int, col)
 
 RexxRoutine3(int, rx3270SetStringAt, int, row, int, col, CSTRING, text)
 {
+	#warning Reimplementar
+/*
 	rx3270	* session 	= rx3270::get_default();
 	char	* str		= session->get_3270_string(text);
 	int		  rc;
@@ -216,10 +231,12 @@ RexxRoutine3(int, rx3270SetStringAt, int, row, int, col, CSTRING, text)
 	free(str);
 
 	return rc;
+*/
+	return -1;
 }
 
 RexxRoutine0(int, rx3270CloseApplication)
 {
-	rx3270	* session 	= rx3270::get_default();
+	session	* session 	= session::get_default();
 	return session->quit();
 }

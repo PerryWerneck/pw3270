@@ -34,7 +34,7 @@
 
 /*--[ Implement ]--------------------------------------------------------------------------------------------------*/
 
- namespace pw3270
+ namespace PW3270_NAMESPACE
  {
 
 	 exception::exception(int code, const char *fmt, ...)

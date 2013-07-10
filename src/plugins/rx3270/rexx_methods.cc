@@ -37,6 +37,10 @@
  #include <time.h>
  #include <string.h>
  #include <ctype.h>
+ #include <pw3270/class.h>
+
+ using namespace std;
+ using namespace PW3270_NAMESPACE;
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
@@ -45,12 +49,12 @@ RexxMethod1(int, rx3270_method_init, CSTRING, type)
 	// Set session class in rexx object
 	try
 	{
-		RexxPointerObject sessionPtr = context->NewPointer(rx3270::create(type));
+		RexxPointerObject sessionPtr = context->NewPointer(session::create(type));
 		context->SetObjectVariable("CSELF", sessionPtr);
 	}
-	catch(rx3270::exception e)
+	catch(std::exception &e)
 	{
-		e.RaiseException(context);
+		context->RaiseException1(Rexx_Error_Application_error,context->NewStringFromAsciiz(e.what()));
 	}
 
     return 0;
@@ -58,7 +62,7 @@ RexxMethod1(int, rx3270_method_init, CSTRING, type)
 
 RexxMethod1(int, rx3270_method_uninit, CSELF, sessionPtr)
 {
-	rx3270 *hSession = (rx3270 *) sessionPtr;
+	session *hSession = (session *) sessionPtr;
 
     trace("rx3270_method_uninit hSession=%p",hSession);
 
@@ -71,37 +75,27 @@ RexxMethod1(int, rx3270_method_uninit, CSELF, sessionPtr)
 
 RexxMethod1(RexxStringObject, rx3270_method_version, CSELF, sessionPtr)
 {
-	rx3270	* session 	= (rx3270 *) sessionPtr;
+	session	* hSession = (session *) sessionPtr;
 
-	if(session)
-	{
-		char				* version	= session->get_version();
-		RexxStringObject	  ret 		= context->String((CSTRING) (version ? version : "ERROR:"));
-		free(version);
-		return ret;
-	}
+	if(hSession)
+		return context->String((CSTRING) hSession->get_version().c_str());
 
 	return context->String((CSTRING) PACKAGE_VERSION);
 }
 
 RexxMethod1(RexxStringObject, rx3270_method_revision, CSELF, sessionPtr)
 {
-	rx3270	* session 	= (rx3270 *) sessionPtr;
+	session	* hSession = (session *) sessionPtr;
 
-	if(session)
-	{
-		char				* version	= session->get_revision();
-		RexxStringObject	  ret 		= context->String((CSTRING) (version ? version : PACKAGE_REVISION));
-		free(version);
-		return ret;
-	}
+	if(hSession)
+		return context->String((CSTRING) hSession->get_revision().c_str());
 
 	return context->String((CSTRING) PACKAGE_REVISION);
 }
 
 RexxMethod3(int, rx3270_method_connect, CSELF, sessionPtr, CSTRING, uri, OPTIONAL_int, wait)
 {
-	rx3270 *hSession = (rx3270 *) sessionPtr;
+	session *hSession = (session *) sessionPtr;
 	if(!hSession)
 		return -1;
 	return hSession->connect(uri,wait != 0);
@@ -109,7 +103,7 @@ RexxMethod3(int, rx3270_method_connect, CSELF, sessionPtr, CSTRING, uri, OPTIONA
 
 RexxMethod1(int, rx3270_method_disconnect, CSELF, sessionPtr)
 {
-	rx3270 *hSession = (rx3270 *) sessionPtr;
+	session *hSession = (session *) sessionPtr;
 	if(!hSession)
 		return -1;
 	return hSession->disconnect();
@@ -117,7 +111,7 @@ RexxMethod1(int, rx3270_method_disconnect, CSELF, sessionPtr)
 
 RexxMethod2(int, rx3270_method_sleep, CSELF, sessionPtr, int, seconds)
 {
-	rx3270 *hSession = (rx3270 *) sessionPtr;
+	session *hSession = (session *) sessionPtr;
 	if(!hSession)
 		return -1;
 	return hSession->wait(seconds);
@@ -127,14 +121,14 @@ RexxMethod1(logical_t, rx3270_method_is_connected, CSELF, sessionPtr)
 {
 	try
 	{
-		rx3270 *hSession = (rx3270 *) sessionPtr;
+		session *hSession = (session *) sessionPtr;
 		if(!hSession)
 			return false;
 		return hSession->is_connected();
 	}
-	catch(rx3270::exception e)
+	catch(std::exception e)
 	{
-		e.RaiseException(context);
+		context->RaiseException1(Rexx_Error_Application_error,context->NewStringFromAsciiz(e.what()));
 	}
 
 	return 0;
@@ -142,7 +136,7 @@ RexxMethod1(logical_t, rx3270_method_is_connected, CSELF, sessionPtr)
 
 RexxMethod1(logical_t, rx3270_method_is_ready, CSELF, sessionPtr)
 {
-	rx3270 *hSession = (rx3270 *) sessionPtr;
+	session *hSession = (session *) sessionPtr;
 	if(!hSession)
 		return false;
 	return hSession->is_ready();
@@ -150,7 +144,7 @@ RexxMethod1(logical_t, rx3270_method_is_ready, CSELF, sessionPtr)
 
 RexxMethod2(int, rx3270_method_wait_for_ready, CSELF, sessionPtr, OPTIONAL_int, seconds)
 {
-	rx3270 *hSession = (rx3270 *) sessionPtr;
+	session *hSession = (session *) sessionPtr;
 	if(!hSession)
 		return -1;
 	return hSession->wait_for_ready(seconds > 0 ? seconds : 60);
@@ -158,7 +152,7 @@ RexxMethod2(int, rx3270_method_wait_for_ready, CSELF, sessionPtr, OPTIONAL_int, 
 
 RexxMethod3(int, rx3270_method_set_cursor, CSELF, sessionPtr, int, row, int, col)
 {
-	rx3270 *hSession = (rx3270 *) sessionPtr;
+	session *hSession = (session *) sessionPtr;
 	if(!hSession)
 		return -1;
 	return hSession->set_cursor_position(row,col);
@@ -166,7 +160,7 @@ RexxMethod3(int, rx3270_method_set_cursor, CSELF, sessionPtr, int, row, int, col
 
 RexxMethod1(int, rx3270_method_get_cursor_addr, CSELF, sessionPtr)
 {
-	rx3270 *hSession = (rx3270 *) sessionPtr;
+	session *hSession = (session *) sessionPtr;
 	if(!hSession)
 		return -1;
 	return hSession->get_cursor_addr();
@@ -174,7 +168,7 @@ RexxMethod1(int, rx3270_method_get_cursor_addr, CSELF, sessionPtr)
 
 RexxMethod2(int, rx3270_method_set_cursor_addr, CSELF, sessionPtr, int, addr)
 {
-	rx3270 *hSession = (rx3270 *) sessionPtr;
+	session *hSession = (session *) sessionPtr;
 	if(!hSession)
 		return -1;
 	return hSession->set_cursor_addr(addr);
@@ -182,7 +176,7 @@ RexxMethod2(int, rx3270_method_set_cursor_addr, CSELF, sessionPtr, int, addr)
 
 RexxMethod1(int, rx3270_method_enter, CSELF, sessionPtr)
 {
-	rx3270 *hSession = (rx3270 *) sessionPtr;
+	session *hSession = (session *) sessionPtr;
 	if(!hSession)
 		return -1;
 	return hSession->enter();
@@ -190,7 +184,7 @@ RexxMethod1(int, rx3270_method_enter, CSELF, sessionPtr)
 
 RexxMethod2(int, rx3270_method_pfkey, CSELF, sessionPtr, int, key)
 {
-	rx3270 *hSession = (rx3270 *) sessionPtr;
+	session *hSession = (session *) sessionPtr;
 	if(!hSession)
 		return -1;
 	return hSession->pfkey(key);
@@ -198,7 +192,7 @@ RexxMethod2(int, rx3270_method_pfkey, CSELF, sessionPtr, int, key)
 
 RexxMethod2(int, rx3270_method_pakey, CSELF, sessionPtr, int, key)
 {
-	rx3270 *hSession = (rx3270 *) sessionPtr;
+	session *hSession = (session *) sessionPtr;
 	if(!hSession)
 		return -1;
 	return hSession->pakey(key);
@@ -206,9 +200,11 @@ RexxMethod2(int, rx3270_method_pakey, CSELF, sessionPtr, int, key)
 
 RexxMethod4(RexxStringObject, rx3270_method_get_text_at, CSELF, sessionPtr, int, row, int, col, int, sz)
 {
-	rx3270	* session 	= (rx3270 *) sessionPtr;
+	#warning Reimplementar
+/*
+	session	* hSession 	= (session *) sessionPtr;
 
-	if(session)
+	if(hSession)
 	{
 		char * str = session->get_text_at(row,col,sz);
 
@@ -221,13 +217,15 @@ RexxMethod4(RexxStringObject, rx3270_method_get_text_at, CSELF, sessionPtr, int,
 			return ret;
 		}
 	}
-
+*/
 	return context->String("");
 }
 
 
 RexxMethod4(int, rx3270_method_set_text_at, CSELF, sessionPtr, int, row, int, col, CSTRING, text)
 {
+	#warning Reimplementar
+/*
 	rx3270 * session = (rx3270 *) sessionPtr;
 
 	if(session)
@@ -238,11 +236,14 @@ RexxMethod4(int, rx3270_method_set_text_at, CSELF, sessionPtr, int, row, int, co
 		free(str);
 		return rc;
 	}
+*/
 	return -1;
 }
 
 RexxMethod2(int, rx3270_method_input_text, CSELF, sessionPtr, CSTRING, text)
 {
+#warning Reimplementar
+/*
 	rx3270	* session = (rx3270 *) sessionPtr;
 
 	if(session)
@@ -252,12 +253,14 @@ RexxMethod2(int, rx3270_method_input_text, CSELF, sessionPtr, CSTRING, text)
 		free(str);
 		return rc;
 	}
-
+*/
 	return -1;
 }
 
 RexxMethod4(int, rx3270_method_cmp_text_at, CSELF, sessionPtr, int, row, int, col, CSTRING, key)
 {
+	#warning Reimplementar
+/*
 	int		  rc		= 0;
 	rx3270	* session	= (rx3270 *) sessionPtr;
 
@@ -272,13 +275,15 @@ RexxMethod4(int, rx3270_method_cmp_text_at, CSELF, sessionPtr, int, row, int, co
 		}
 		free(str);
 	}
-
 	return rc;
+*/
+
+	return -1;
 }
 
 RexxMethod2(int, rx3270_method_event_trace, CSELF, sessionPtr, int, flag)
 {
-	rx3270 *hSession = (rx3270 *) sessionPtr;
+	session *hSession = (session *) sessionPtr;
 	if(!hSession)
 		return -1;
 	hSession->set_toggle(LIB3270_TOGGLE_EVENT_TRACE,flag);
@@ -287,7 +292,7 @@ RexxMethod2(int, rx3270_method_event_trace, CSELF, sessionPtr, int, flag)
 
 RexxMethod2(int, rx3270_method_screen_trace, CSELF, sessionPtr, int, flag)
 {
-	rx3270 *hSession = (rx3270 *) sessionPtr;
+	session *hSession = (session *) sessionPtr;
 	if(!hSession)
 		return -1;
 	hSession->set_toggle(LIB3270_TOGGLE_SCREEN_TRACE,flag);
@@ -297,7 +302,7 @@ RexxMethod2(int, rx3270_method_screen_trace, CSELF, sessionPtr, int, flag)
 
 RexxMethod2(int, rx3270_method_ds_trace, CSELF, sessionPtr, int, flag)
 {
-	rx3270 *hSession = (rx3270 *) sessionPtr;
+	session *hSession = (session *) sessionPtr;
 	if(!hSession)
 		return -1;
 	hSession->set_toggle(LIB3270_TOGGLE_DS_TRACE,flag);
@@ -339,7 +344,7 @@ RexxMethod3(int, rx3270_method_set_option, CSELF, sessionPtr, CSTRING, name, int
 			{ "altscreen",		LIB3270_TOGGLE_ALTSCREEN			}
 	};
 
-	rx3270 *hSession = (rx3270 *) sessionPtr;
+	session *hSession = (session *) sessionPtr;
 	if(hSession)
 	{
 		for(int f = 0; f < LIB3270_TOGGLE_COUNT; f++)
@@ -358,7 +363,9 @@ RexxMethod3(int, rx3270_method_set_option, CSELF, sessionPtr, CSTRING, name, int
 
 RexxMethod4(logical_t, rx3270_method_test, CSELF, sessionPtr, CSTRING, key, int, row, int, col)
 {
-	rx3270	* hSession = (rx3270 *) sessionPtr;
+	#warning Reimplementar
+/*
+	session * hSession = (session *) sessionPtr;
 
 	if(!hSession)
 		return false;
@@ -379,22 +386,26 @@ RexxMethod4(logical_t, rx3270_method_test, CSELF, sessionPtr, CSTRING, key, int,
 		free(str);
 		return rc;
 	}
-
+*/
 	return false;
 }
 
 RexxMethod5(int, rx3270_method_wait_for_text_at, CSELF, sessionPtr, int, row, int, col, CSTRING, key, int, timeout)
 {
+	#warning Reimplementar
+/*
 	rx3270	* hSession = (rx3270 *) sessionPtr;
 
 	if(hSession)
 		return hSession->wait_for_text_at(row,col,key,timeout);
-
+*/
 	return -1;
 }
 
 RexxMethod3(RexxStringObject, rx3270_method_get_text, CSELF, sessionPtr, OPTIONAL_int, baddr, OPTIONAL_int, sz)
 {
+	#warning Reimplementar
+/*
 	rx3270	* hSession = (rx3270 *) sessionPtr;
 
 	if(hSession)
@@ -409,14 +420,14 @@ RexxMethod3(RexxStringObject, rx3270_method_get_text, CSELF, sessionPtr, OPTIONA
 			return ret;
 		}
 	}
-
+*/
 	return context->String("");
 }
 
 
 RexxMethod2(int, rx3270_method_get_field_len, CSELF, sessionPtr, OPTIONAL_int, baddr)
 {
-	rx3270 *hSession = (rx3270 *) sessionPtr;
+	session *hSession = (session *) sessionPtr;
 	if(!hSession)
 		return -1;
 	return hSession->get_field_len(baddr);
@@ -424,7 +435,7 @@ RexxMethod2(int, rx3270_method_get_field_len, CSELF, sessionPtr, OPTIONAL_int, b
 
 RexxMethod2(int, rx3270_method_get_field_start, CSELF, sessionPtr, OPTIONAL_int, baddr)
 {
-	rx3270 *hSession = (rx3270 *) sessionPtr;
+	session *hSession = (session *) sessionPtr;
 	if(!hSession)
 		return -1;
 	return hSession->get_field_start(baddr)+1;
@@ -432,7 +443,7 @@ RexxMethod2(int, rx3270_method_get_field_start, CSELF, sessionPtr, OPTIONAL_int,
 
 RexxMethod2(int, rx3270_method_get_next_unprotected, CSELF, sessionPtr, OPTIONAL_int, baddr)
 {
-	rx3270 *hSession = (rx3270 *) sessionPtr;
+	session *hSession = (session *) sessionPtr;
 	if(!hSession)
 		return -1;
 
@@ -445,7 +456,9 @@ RexxMethod2(int, rx3270_method_get_next_unprotected, CSELF, sessionPtr, OPTIONAL
 
 RexxMethod1(RexxStringObject, rx3270_method_get_selection, CSELF, sessionPtr)
 {
-	rx3270	* hSession = (rx3270 *) sessionPtr;
+	#warning Reimplementar
+/*
+	session	* hSession = (session *) sessionPtr;
 
 	if(hSession)
 	{
@@ -459,12 +472,14 @@ RexxMethod1(RexxStringObject, rx3270_method_get_selection, CSELF, sessionPtr)
 			return ret;
 		}
 	}
-
+*/
 	return context->String("");
 }
 
 RexxMethod2(int, rx3270_method_set_selection, CSELF, sessionPtr, CSTRING, text)
 {
+	#warning Reimplementar
+/*
 	rx3270 * session = (rx3270 *) sessionPtr;
 
 	if(session)
@@ -475,23 +490,22 @@ RexxMethod2(int, rx3270_method_set_selection, CSELF, sessionPtr, CSTRING, text)
 		free(str);
 		return rc;
 	}
+*/
 	return -1;
 }
 
 RexxMethod1(RexxStringObject, rx3270_method_get_clipboard, CSELF, sessionPtr)
 {
-	rx3270	* hSession = (rx3270 *) sessionPtr;
+	session * hSession = (session *) sessionPtr;
 
 	if(hSession)
 	{
-		char *str = hSession->get_clipboard();
-
-		trace("str=%p (%s)",str,str);
+		string *str = hSession->get_clipboard();
 
 		if(str)
 		{
-			RexxStringObject ret = context->String((CSTRING) str);
-			hSession->free(str);
+			RexxStringObject ret = context->String((CSTRING) str->c_str());
+			delete str;
 			return ret;
 		}
 	}
@@ -502,7 +516,7 @@ RexxMethod1(RexxStringObject, rx3270_method_get_clipboard, CSELF, sessionPtr)
 
 RexxMethod2(int, rx3270_method_set_clipboard, CSELF, sessionPtr, CSTRING, text)
 {
-	rx3270	* hSession = (rx3270 *) sessionPtr;
+	session	* hSession = (session *) sessionPtr;
 
 	if(hSession)
 		return hSession->set_clipboard(text);
@@ -513,8 +527,8 @@ RexxMethod2(int, rx3270_method_set_clipboard, CSELF, sessionPtr, CSTRING, text)
 
 RexxMethod5(int, rx3270_method_popup, CSELF, sessionPtr, CSTRING, s_id, CSTRING, title, CSTRING, message, OPTIONAL_CSTRING, det)
 {
-    LIB3270_NOTIFY    id        = LIB3270_NOTIFY_INFO;
-	rx3270          * hSession  = (rx3270 *) sessionPtr;
+    LIB3270_NOTIFY	  id        = LIB3270_NOTIFY_INFO;
+	session			* hSession  = (session *) sessionPtr;
 
     if(!hSession)
         return -1;
@@ -562,7 +576,7 @@ RexxMethod5(RexxStringObject, rx3270_method_get_filename, CSELF, sessionPtr, CST
     };
 
     GtkFileChooserAction      id = GTK_FILE_CHOOSER_ACTION_OPEN;
-    char                    * ret;
+    string					* ret;
 
     for(int f=0;f<5;f++)
     {
@@ -573,11 +587,11 @@ RexxMethod5(RexxStringObject, rx3270_method_get_filename, CSELF, sessionPtr, CST
         }
     }
 
-    ret = ((rx3270 *) sessionPtr)->file_chooser_dialog(id, title, extension,filename);
+    ret = ((session *) sessionPtr)->file_chooser_dialog(id, title, extension,filename);
     if(ret)
     {
-        RexxStringObject obj = context->String(ret);
-        ((rx3270 *) sessionPtr)->free(ret);
+        RexxStringObject obj = context->String(ret->c_str());
+        delete ret;
         return obj;
     }
 

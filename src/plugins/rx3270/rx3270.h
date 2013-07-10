@@ -64,7 +64,7 @@
 	#define REXX_DEFAULT_CHARSET "UTF-8"
 #endif // WIN32
 
-#include <exception>
+// #include <exception>
 
 /*---[ Rexx entry points ]-----------------------------------------------------------------------------------*/
 
@@ -128,6 +128,7 @@
 
 /*--[ 3270 Session ]-----------------------------------------------------------------------------------------*/
 
+/*
 #if defined (HAVE_GNUC_VISIBILITY)
  class __attribute__((visibility("default"))) rx3270
 #elif defined(WIN32)
@@ -232,6 +233,7 @@
  };
 
  rx3270 * create_lib3270_instance(void);
+*/
 
 #ifdef __cplusplus
 	extern "C" {

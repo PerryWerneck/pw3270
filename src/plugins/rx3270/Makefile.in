@@ -29,7 +29,8 @@
 MODULE_NAME=rx3270
 DEPENDS=*.h ../../include/*.h ../../include/lib3270/*.h Makefile
 PLUGIN_SRC=pluginmain.cc
-EXTAPI_SRC=rxapimain.cc text.cc typed_routines.cc local.cc remote.cc rexx_methods.cc rx3270.cc exception.cc
+# EXTAPI_SRC=rxapimain.cc text.cc typed_routines.cc local.cc remote.cc rexx_methods.cc rx3270.cc exception.cc
+EXTAPI_SRC=rxapimain.cc typed_routines.cc rexx_methods.cc
 
 #---[ Tools ]------------------------------------------------------------------
 
@@ -43,7 +44,10 @@ CFLAGS=@REXX_CFLAGS@ @DBUS_CFLAGS@
 REXX_HOME=@REXX_HOME@
 REXXLIBDIR=$(libdir)/ooRexx
 
+CLASSLIBDIR=../../classlib
+
 include ../../include/plugin.mak
+include $(CLASSLIBDIR)/class.mak
 
 #---[ Debug Targets ]----------------------------------------------------------
 
@@ -52,7 +56,7 @@ $(BINDBG)/$(PLUGIN_NAME): $(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJDBG)/$(
 	@$(MKDIR) `dirname $@`
 	@$(CXX) $(DLL_FLAGS) @LDSOFLAGS@ @DBGRPATH@ $(LDFLAGS) -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(GTK_LIBS) $(GLIB_LIBS) $(PW3270_LIBS)
 
-$(BINDBG)$(DLL_NAME).$(VERSION): $(foreach SRC, $(basename $(EXTAPI_SRC)), $(OBJDBG)/$(SRC)@OBJEXT@)
+$(BINDBG)$(DLL_NAME).$(VERSION): $(foreach SRC, $(basename $(EXTAPI_SRC) $(CLASS_SRC)), $(OBJDBG)/$(SRC)@OBJEXT@)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(CXX) $(DLL_FLAGS) $(LDFLAGS) @LDSOFLAGS@ @DBGRPATH@ -o $@ $^ $(LIBS) $(LIB3270_LIBS)
