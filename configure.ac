@@ -569,6 +569,7 @@ AC_CONFIG_FILES([
 	src/plugins/rx3270/Makefile
 	src/plugins/dbus3270/Makefile
 	src/classlib/Makefile
+	src/classlib/class.mak
 	man/Makefile
 	makegtkruntime.sh
 	src/sample/Makefile

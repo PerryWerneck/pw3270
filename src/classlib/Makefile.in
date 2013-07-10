@@ -29,7 +29,7 @@ LIBNAME=$(PACKAGE)cxx.a
 
 #---[ Sources ]----------------------------------------------------------------
 
-SOURCES=main.cc session.cc exception.cc local.cc remote.cc
+include class.mak
 
 #---[ Paths ]------------------------------------------------------------------
 
@@ -54,8 +54,8 @@ INSTALL_DATA=$(INSTALL) -m 644
 
 #---[ Flags ]------------------------------------------------------------------
 
-CFLAGS=@CFLAGS@ @DBUS_CFLAGS@ @GTK_CFLAGS@ -I../include
-LIBS=@LIBS@ @LIBICONV@ @DBUS_LIBS@
+CFLAGS=$(CLASS_CFLAGS) -I../include
+LIBS=@LIBS@ $(CLASS_LIBS)
 
 DEBUG_CFLAGS=-DDEBUG=1 -g -Wall
 
@@ -82,7 +82,7 @@ $(OBJRLS)/%.o: %.cc $(DEPENDS)
 
 Release: $(BINRLS)/$(LIBNAME)
 
-$(BINRLS)/$(LIBNAME): $(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SRC).o)
+$(BINRLS)/$(LIBNAME): $(foreach SRC, $(basename $(CLASS_SRC)), $(OBJRLS)/$(SRC).o)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@ar rs $@ $^
@@ -103,7 +103,7 @@ $(BINDBG)/testprogram$(EXEEXT): $(OBJDBG)/testprogram.o $(BINDBG)/$(LIBNAME)
 	@$(MKDIR) `dirname $@`
 	@$(LD) -o $@ $^ $(LIBS)
 
-$(BINDBG)/$(LIBNAME): $(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC).o)
+$(BINDBG)/$(LIBNAME): $(foreach SRC, $(basename $(CLASS_SRC)), $(OBJDBG)/$(SRC).o)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@ar rs $@ $^
