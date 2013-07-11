@@ -52,6 +52,7 @@
 		<Unit filename="autogen.sh" />
 		<Unit filename="colors.conf" />
 		<Unit filename="configure.ac" />
+		<Unit filename="debian.changelog" />
 		<Unit filename="debian.control" />
 		<Unit filename="debian.rules" />
 		<Unit filename="makedeb.sh" />
@@ -59,7 +60,6 @@
 		<Unit filename="man/man1/pw3270.1" />
 		<Unit filename="pw3270-i686.nsi.in" />
 		<Unit filename="pw3270-x86_64.nsi.in" />
-		<Unit filename="pw3270.nsi.in" />
 		<Unit filename="pw3270.spec.in" />
 		<Unit filename="src/classlib/Makefile.in" />
 		<Unit filename="src/classlib/class.mak.in" />

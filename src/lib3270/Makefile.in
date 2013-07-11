@@ -142,13 +142,6 @@ $(BINDBG)/testprogram$(EXEEXT): $(OBJDBG)/testprogram.o $(foreach SRC, $(basenam
 	@$(MKDIR) `dirname $@`
 	$(LD) -pthread -o $@ $^ $(LIBS)
 
-$(DEBDIR)/lib3270.install: Makefile
-	@echo "  GEN  `basename $@`"
-	@$(MKDIR) `dirname $@`
-	@echo "$(libdir)/lib3270@DLLEXT@.@VERSION@" > $@
-	@echo "$(libdir)/lib3270@DLLEXT@.@MAJOR_VERSION@" >> $@
-	@echo "$(libdir)/lib3270@DLLEXT@" >> $@
-
 $(BINDIR)/pot/lib3270.pot: $(foreach SRC, $(basename $(SOURCES)), $(TMPDIR)/pot/$(SRC).pot)
 	@rm -f $@
 	@mkdir -p `dirname $@`

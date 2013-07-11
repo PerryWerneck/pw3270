@@ -140,11 +140,6 @@ install: $(BINRLS)/plugins/$(MODULE_NAME)@DLLEXT@
 	@$(MKDIR) $(DESTDIR)$(libdir)/$(PACKAGE_NAME)-plugins
 	@$(INSTALL_PROGRAM) $(BINRLS)/plugins/$(MODULE_NAME)@DLLEXT@ $(DESTDIR)$(libdir)/$(PACKAGE_NAME)-plugins
 
-$(DEBDIR)/$(MODULE_NAME).install: Makefile
-	@$(MKDIR) `dirname $@`
-	@rm -f $@
-	@echo $(libdir)/$(PACKAGE_NAME)-plugins/$(MODULE_NAME)@DLLEXT@ > $@
-
 clean:
 	@rm -fr $(OBJDIR)
 	@rm -fr $(BINDIR)

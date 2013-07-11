@@ -51,8 +51,6 @@ BINDIR  ?= $(ROOTDIR)/.bin
 BINDBG  ?= $(BINDIR)/Debug
 BINRLS  ?= $(BINDIR)/Release
 
-DEBDIR	?= ./debian
-
 OBJDBG = $(OBJDIR)/Debug
 OBJRLS = $(OBJDIR)/Release
 OBJEXT = o
@@ -145,11 +143,6 @@ $(BINDBG)/plugins/$(MODULE_NAME).so: $(foreach SRC, $(basename $(PLUGIN_SRC)), $
 install:
 	@$(MKDIR) $(DESTDIR)$(libdir)/$(PACKAGE_NAME)-plugins
 	@$(INSTALL_PROGRAM) $(BINRLS)/plugins/$(MODULE_NAME).so $(DESTDIR)$(libdir)/$(PACKAGE_NAME)-plugins
-
-$(DEBDIR)/$(MODULE_NAME).install: Makefile
-	@$(MKDIR) `dirname $@`
-	@rm -f $@
-	@echo $(libdir)/$(PACKAGE_NAME)-plugins/$(MODULE_NAME).so > $@
 
 debug-service: $(BINDBG)/@PACKAGE_NAME@d
 

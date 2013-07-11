@@ -46,8 +46,6 @@ BINDIR  ?= $(ROOTDIR)/.bin
 BINDBG  ?= $(BINDIR)/Debug
 BINRLS  ?= $(BINDIR)/Release
 
-DEBDIR	?= ./debian
-
 OBJDBG = $(OBJDIR)/Debug
 OBJRLS = $(OBJDIR)/Release
 OBJEXT = o

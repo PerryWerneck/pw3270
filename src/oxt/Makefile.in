@@ -7,7 +7,6 @@ prefix=/usr
 exec_prefix=@exec_prefix@
 libdir=@libdir@
 instdir=$(DESTDIR)/$(libdir)/libreoffice/share/extensions/$(PACKAGE)
-DEBDIR ?= debian
 
 #---[ Paths ]------------------------------------------------------------------------------------------
 ROOTDIR ?= .
@@ -140,16 +139,6 @@ $(BINRLS)/$(PACKAGE).uno@DLLEXT@: $(foreach SRC, $(basename $(SOURCES)), $(OBJRL
 
 $(PACKAGE).png: ../pw3270/pixmaps/pw3270.svg
 	@$(CONVERT) $^ --format=png > $@
-
-$(DEBDIR)/oxt.install: Makefile
-	@echo "  GEN  `basename $@`"
-	@$(MKDIR) `dirname $@`
-	@echo "$(libdir)/libreoffice/share/extensions/$(PACKAGE)/META-INF/manifest.xml" > $@
-	@echo "$(libdir)/libreoffice/share/extensions/$(PACKAGE)/description.txt" >> $@
-	@echo "$(libdir)/libreoffice/share/extensions/$(PACKAGE)/description.xml" >> $@
-	@echo "$(libdir)/libreoffice/share/extensions/$(PACKAGE)/pw3270.png" >> $@
-	@echo "$(libdir)/libreoffice/share/extensions/$(PACKAGE)/pw3270.uno.rdb" >> $@
-	@echo "$(libdir)/libreoffice/share/extensions/$(PACKAGE)/pw3270.uno.so" >> $@
 
 #---[ Debug Targets ]----------------------------------------------------------------------------------
 

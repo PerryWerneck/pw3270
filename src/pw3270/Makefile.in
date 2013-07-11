@@ -37,7 +37,6 @@ libdir=@libdir@
 datarootdir=@datarootdir@
 localedir=@localedir@
 desktopdir=$(datarootdir)/applications
-DEBDIR ?= debian
 
 EXEEXT=@EXEEXT@
 STRIP=@STRIP@
@@ -185,19 +184,6 @@ $(PACKAGE_NAME).desktop: Makefile $(PACKAGE_NAME).png
 	@echo "Terminal=false" >> $@
 	@echo "Type=Application" >> $@
 	@echo "StartupNotify=true" >> $@
-
-$(DEBDIR)/pw3270.install: Makefile
-	@echo "  GEN  `basename $@`"
-	@$(MKDIR) `dirname $@`
-	@echo "$(bindir)/@PACKAGE_NAME@" > $@
-	@echo "$(libdir)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@.@VERSION@" >> $@
-	@echo "$(libdir)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@" >> $@
-	@echo "$(datarootdir)/$(PACKAGE_NAME)/colors.conf" >> $@
-	@echo "$(datarootdir)/$(PACKAGE_NAME)/ui/00default.xml" >> $@
-	@echo "$(datarootdir)/$(PACKAGE_NAME)/ui/10keypad.xml" >> $@
-	@echo "$(datarootdir)/$(PACKAGE_NAME)/ui/10functions.xml" >> $@
-	@echo "$(datarootdir)/$(PACKAGE_NAME)/$(PACKAGE_NAME).png" >> $@
-	@echo "$(datarootdir)/$(PACKAGE_NAME)/$(PACKAGE_NAME)-logo.png" >> $@
 
 v3270/marshal.h: v3270/genmarshal
 	@$(MKDIR) `dirname $@`
