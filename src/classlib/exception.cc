@@ -29,6 +29,7 @@
 
  #include <stdarg.h>
  #include <stdio.h>
+ #include <string.h>
 
  #include <pw3270/class.h>
 
@@ -37,14 +38,9 @@
  namespace PW3270_NAMESPACE
  {
 
-	 exception::exception(int code, const char *fmt, ...)
+	 exception::exception(int syscode)
 	 {
-		va_list arg_ptr;
-		va_start(arg_ptr, fmt);
-		vsnprintf(this->msg,4095,fmt,arg_ptr);
-		va_end(arg_ptr);
-
-		this->code = code;
+		snprintf(this->msg,4095,"%s",strerror(syscode));
 	 }
 
 	 exception::exception(const char *fmt, ...)
@@ -53,8 +49,6 @@
 		va_start(arg_ptr, fmt);
 		vsnprintf(this->msg,4095,fmt,arg_ptr);
 		va_end(arg_ptr);
-
-		this->code = -1;
 	 }
 
 	 const char * exception::what() const throw()

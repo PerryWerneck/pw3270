@@ -50,6 +50,7 @@
  #include <stdarg.h>
  #include <lib3270.h>
  #include <gtk/gtk.h>
+ #include <errno.h>
 
  #define PW3270_NAMESPACE h3270
 
@@ -60,13 +61,12 @@
 	class exception : public std::exception
 	{
 	public:
-			exception(int code, const char *fmt, ...);
+			exception(int syserror = errno);
 			exception(const char *fmt, ...);
 
 			virtual const char * what() const throw();
 
 	private:
-			int		code;
 			char	msg[4096];
 
 	};
@@ -81,23 +81,29 @@
 	{
 	public:
 
-		session();
 		virtual ~session();
 
 		// Factory methods and settings
-		static session	* create(const char *name = 0);
 		static session	* start(const char *name = 0);
+		static session	* create(const char *name = 0);
 		static session	* get_default(void);
 		static void		  set_plugin(session * (*factory)(const char *name));
+
+#ifdef WIN32
+		void			  set_charset(const char *remote = 0, const char *local = "CP1252");
+#else
+		void			  set_charset(const char *remote = 0, const char *local = "UTF-8");
+#endif // WIN32
+
+
 
 		// Log management
 		void log(const char *fmt, ...);
 		void logva(const char *fmt, va_list args);
 
-		// 3270 methods
+		// Information
 		virtual string			  get_version(void);
 		virtual string			  get_revision(void);
-
 		virtual const char		* get_charset(void);
 
 		virtual bool			  is_connected(void)								= 0;
@@ -105,63 +111,65 @@
 
 		virtual LIB3270_CSTATE	  get_cstate(void)									= 0;
 
+		// Connection & Network
 		virtual int				  connect(const char *uri, bool wait = true)		= 0;
 		virtual int				  disconnect(void)									= 0;
-
 		virtual int				  wait_for_ready(int seconds)						= 0;
 		virtual int				  wait(int seconds)									= 0;
 		virtual int				  iterate(bool wait = true)							= 0;
 
+		// Get/Set/Test without charset translation
 		virtual string			* get_text(int baddr, size_t len)					= 0;
 		virtual string 			* get_text_at(int row, int col, size_t sz) 			= 0;
 		virtual int 			  set_text_at(int row, int col, const char *str)	= 0;
 		virtual int				  cmp_text_at(int row, int col, const char *text)	= 0;
 		virtual int				  wait_for_text_at(int row, int col, const char *key, int timeout);
+		virtual int               emulate_input(const char *str)                    = 0;
 
+		// Get/Set/Test with charset translation
 		string					* get_string(int baddr, size_t len);
 		string					* get_string_at(int row, int col, size_t sz);
 		int			 			  set_string_at(int row, int col, const char *str);
 		int				  		  cmp_string_at(int row, int col, const char *text);
 		int				  		  wait_for_string_at(int row, int col, const char *key, int timeout);
+		int						  input_string(const char *str);
 
+		// Cursor management
 		virtual int				  set_cursor_position(int row, int col)				= 0;
 		virtual int               set_cursor_addr(int addr)                         = 0;
 		virtual int               get_cursor_addr(void)                             = 0;
 
+		// Toggle management
 		virtual int 			  set_toggle(LIB3270_TOGGLE ix, bool value)			= 0;
 
+		// Keyboard actions
 		virtual int				  enter(void)										= 0;
 		virtual int				  pfkey(int key)									= 0;
 		virtual int				  pakey(int key)									= 0;
+		virtual int				  quit(void)										= 0;
 
-		virtual int               emulate_input(const char *str)                    = 0;
-		int						  input_string(const char *str);
-
+		// Field management
 		virtual int               get_field_start(int baddr = -1)                   = 0;
 		virtual int               get_field_len(int baddr = -1)                     = 0;
 		virtual int               get_next_unprotected(int baddr = -1)              = 0;
 
+		// Clipboard management
 		virtual int               set_copy(const char *text);
 		virtual string          * get_copy(void);
 
 		virtual string          * get_clipboard(void);
 		virtual int               set_clipboard(const char *text);
 
-		virtual int				  quit(void)										= 0;
-
 		// Dialogs
 		virtual int               popup_dialog(LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, ...);
 		virtual string          * file_chooser_dialog(GtkFileChooserAction action, const char *title, const char *extension, const char *filename);
 
+		// Charset translation
 		string 					* get_3270_text(string *str);
 		string 					* get_local_text(string *str);
 
 	protected:
-#ifdef WIN32
-		void set_charset(const char *remote = 0, const char *local = "CP1252");
-#else
-		void set_charset(const char *remote = 0, const char *local = "UTF-8");
-#endif // WIN32
+		session();
 
 	private:
 

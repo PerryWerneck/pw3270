@@ -256,6 +256,8 @@
 			if(symbol)
 				return symbol;
 
+			throw exception("Can't load symbol lib3270::%s",name);
+
 #else
 			void *symbol;
 
