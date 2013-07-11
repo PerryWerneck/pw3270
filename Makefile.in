@@ -322,6 +322,8 @@ install-sdk:
 	@$(INSTALL_DATA) src/sample/sample.cbp $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/sample
 	@$(INSTALL_DATA) src/sample/*.c $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/sample
 
+	@$(MAKE) -C src/classlib install-sdk
+
 install-oxt:
 	@$(MAKE) BINDIR=../../.bin LIB3270_CFLAGS="-I../../src/include" -C src/oxt install
 

@@ -108,6 +108,11 @@ $(BINDBG)/$(LIBNAME): $(foreach SRC, $(basename $(CLASS_SRC)), $(OBJDBG)/$(SRC).
 	@$(MKDIR) `dirname $@`
 	@ar rs $@ $^
 
+#---[ Misc targets ]-----------------------------------------------------------
+install-sdk:
+	$(MKDIR) $(DESTDIR)$(datarootdir)/$(PACKAGE)/sample/classlib
+	$(INSTALL_DATA) *.cc $(DESTDIR)$(datarootdir)/$(PACKAGE)/sample/classlib
+
 clean:
 	@rm -fr $(OBJDIR)
 	@rm -fr $(BINDIR)
