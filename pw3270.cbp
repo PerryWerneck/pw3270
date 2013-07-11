@@ -291,10 +291,7 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/plugins/rx3270/Makefile.in" />
-		<Unit filename="src/plugins/rx3270/exception.cc" />
-		<Unit filename="src/plugins/rx3270/local.cc" />
 		<Unit filename="src/plugins/rx3270/pluginmain.cc" />
-		<Unit filename="src/plugins/rx3270/remote.cc" />
 		<Unit filename="src/plugins/rx3270/rexx_methods.cc" />
 		<Unit filename="src/plugins/rx3270/rx3270.cc" />
 		<Unit filename="src/plugins/rx3270/rx3270.cls" />
