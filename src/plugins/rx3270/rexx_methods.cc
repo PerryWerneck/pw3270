@@ -126,7 +126,7 @@ RexxMethod1(logical_t, rx3270_method_is_connected, CSELF, sessionPtr)
 			return false;
 		return hSession->is_connected();
 	}
-	catch(std::exception e)
+	catch(std::exception &e)
 	{
 		context->RaiseException1(Rexx_Error_Application_error,context->NewStringFromAsciiz(e.what()));
 	}
@@ -200,84 +200,71 @@ RexxMethod2(int, rx3270_method_pakey, CSELF, sessionPtr, int, key)
 
 RexxMethod4(RexxStringObject, rx3270_method_get_text_at, CSELF, sessionPtr, int, row, int, col, int, sz)
 {
-	#warning Reimplementar
-/*
-	session	* hSession 	= (session *) sessionPtr;
 
-	if(hSession)
+	try
 	{
-		char * str = session->get_text_at(row,col,sz);
+		session	* hSession 	= (session *) sessionPtr;
+		string	* str 		= hSession->get_string_at(row,col,sz);
 
 		if(str)
 		{
-			char				* text	= session->get_local_string(str);
-			RexxStringObject	  ret	= context->String((CSTRING) text);
-			free(str);
-			free(text);
+			RexxStringObject ret = context->String((CSTRING) str->c_str());
+			delete str;
 			return ret;
 		}
+
 	}
-*/
+	catch(std::exception &e)
+	{
+		context->RaiseException1(Rexx_Error_Application_error,context->NewStringFromAsciiz(e.what()));
+	}
+
 	return context->String("");
 }
 
 
 RexxMethod4(int, rx3270_method_set_text_at, CSELF, sessionPtr, int, row, int, col, CSTRING, text)
 {
-	#warning Reimplementar
-/*
-	rx3270 * session = (rx3270 *) sessionPtr;
-
-	if(session)
+	try
 	{
-		char	* str		= session->get_3270_string(text);
-		int		  rc;
-		rc = session->set_text_at(row,col,str);
-		free(str);
-		return rc;
+		session	* hSession 	= (session *) sessionPtr;
+		return hSession->set_string_at(row,col,text);
 	}
-*/
+	catch(std::exception &e)
+	{
+		context->RaiseException1(Rexx_Error_Application_error,context->NewStringFromAsciiz(e.what()));
+	}
+
 	return -1;
 }
 
 RexxMethod2(int, rx3270_method_input_text, CSELF, sessionPtr, CSTRING, text)
 {
-#warning Reimplementar
-/*
-	rx3270	* session = (rx3270 *) sessionPtr;
-
-	if(session)
+	try
 	{
-		char	* str	= session->get_3270_string(text);
-		int		  rc    = session->emulate_input(str);
-		free(str);
-		return rc;
+		session	* hSession 	= (session *) sessionPtr;
+        return hSession->input_string(text);
 	}
-*/
+	catch(std::exception &e)
+	{
+		context->RaiseException1(Rexx_Error_Application_error,context->NewStringFromAsciiz(e.what()));
+	}
+
 	return -1;
+
 }
 
 RexxMethod4(int, rx3270_method_cmp_text_at, CSELF, sessionPtr, int, row, int, col, CSTRING, key)
 {
-	#warning Reimplementar
-/*
-	int		  rc		= 0;
-	rx3270	* session	= (rx3270 *) sessionPtr;
-
-	if(session)
+	try
 	{
-		char * str = session->get_text_at(row,col,strlen(key));
-		if(str)
-		{
-			char * text	= session->get_3270_string(key);
-			rc = strcasecmp(str,text);
-			free(text);
-		}
-		free(str);
+		session	* hSession 	= (session *) sessionPtr;
+        return hSession->cmp_string_at(row,col,key);
 	}
-	return rc;
-*/
-
+	catch(std::exception &e)
+	{
+		context->RaiseException1(Rexx_Error_Application_error,context->NewStringFromAsciiz(e.what()));
+	}
 	return -1;
 }
 
@@ -363,64 +350,67 @@ RexxMethod3(int, rx3270_method_set_option, CSELF, sessionPtr, CSTRING, name, int
 
 RexxMethod4(logical_t, rx3270_method_test, CSELF, sessionPtr, CSTRING, key, int, row, int, col)
 {
-	#warning Reimplementar
-/*
-	session * hSession = (session *) sessionPtr;
-
-	if(!hSession)
-		return false;
-
-	if(!hSession->is_ready())
-		hSession->iterate(false);
-
-	if(hSession->is_ready())
+	try
 	{
-		bool	  rc	= false;
-		char	* str	= hSession->get_text_at(row,col,strlen(key));
-		if(str)
+		session * hSession = (session *) sessionPtr;
+
+		if(!hSession->is_ready())
+			hSession->iterate(false);
+
+		if(hSession->is_ready())
 		{
-			char * text	= hSession->get_3270_string(key);
-			rc = (strcasecmp(str,text) == 0);
-			free(text);
+			bool	  rc	= false;
+			string	* str	= hSession->get_string_at(row,col,strlen(key));
+			if(str)
+				rc = (strcasecmp(str->c_str(),key) == 0);
+			delete str;
+			return rc;
 		}
-		free(str);
-		return rc;
+
 	}
-*/
+	catch(std::exception &e)
+	{
+		context->RaiseException1(Rexx_Error_Application_error,context->NewStringFromAsciiz(e.what()));
+	}
+
 	return false;
 }
 
 RexxMethod5(int, rx3270_method_wait_for_text_at, CSELF, sessionPtr, int, row, int, col, CSTRING, key, int, timeout)
 {
-	#warning Reimplementar
-/*
-	rx3270	* hSession = (rx3270 *) sessionPtr;
+	try
+	{
+		session * hSession = (session *) sessionPtr;
+		return hSession->wait_for_string_at(row,col,key,timeout);
 
-	if(hSession)
-		return hSession->wait_for_text_at(row,col,key,timeout);
-*/
+	}
+	catch(std::exception &e)
+	{
+		context->RaiseException1(Rexx_Error_Application_error,context->NewStringFromAsciiz(e.what()));
+	}
+
 	return -1;
 }
 
 RexxMethod3(RexxStringObject, rx3270_method_get_text, CSELF, sessionPtr, OPTIONAL_int, baddr, OPTIONAL_int, sz)
 {
-	#warning Reimplementar
-/*
-	rx3270	* hSession = (rx3270 *) sessionPtr;
-
-	if(hSession)
+	try
 	{
-		char *str = hSession->get_text(baddr,sz > 0 ? sz : -1);
+		session * hSession	= (session *) sessionPtr;
+		string	* str		= hSession->get_string(baddr,sz > 0 ? sz : -1);
+
 		if(str)
 		{
-			char				* text	= hSession->get_local_string(str);
-			RexxStringObject	  ret	= context->String((CSTRING) text);
-			free(str);
-			free(text);
+			RexxStringObject ret = context->String((CSTRING) str->c_str());
+			delete str;
 			return ret;
 		}
 	}
-*/
+	catch(std::exception &e)
+	{
+		context->RaiseException1(Rexx_Error_Application_error,context->NewStringFromAsciiz(e.what()));
+	}
+
 	return context->String("");
 }
 
@@ -456,41 +446,37 @@ RexxMethod2(int, rx3270_method_get_next_unprotected, CSELF, sessionPtr, OPTIONAL
 
 RexxMethod1(RexxStringObject, rx3270_method_get_selection, CSELF, sessionPtr)
 {
-	#warning Reimplementar
-/*
-	session	* hSession = (session *) sessionPtr;
-
-	if(hSession)
+	try
 	{
-		char *str = hSession->get_copy();
+		string *str = ((session *) sessionPtr)->get_copy();
+
 		if(str)
 		{
-			char				* text	= hSession->get_local_string(str);
-			RexxStringObject	  ret	= context->String((CSTRING) text);
-			free(str);
-			free(text);
+			RexxStringObject ret = context->String((CSTRING) str->c_str());
+			delete str;
 			return ret;
 		}
+
 	}
-*/
+	catch(std::exception &e)
+	{
+		context->RaiseException1(Rexx_Error_Application_error,context->NewStringFromAsciiz(e.what()));
+	}
+
 	return context->String("");
 }
 
 RexxMethod2(int, rx3270_method_set_selection, CSELF, sessionPtr, CSTRING, text)
 {
-	#warning Reimplementar
-/*
-	rx3270 * session = (rx3270 *) sessionPtr;
-
-	if(session)
+	try
 	{
-		char	* str		= session->get_3270_string(text);
-		int		  rc;
-		rc = session->set_copy(str);
-		free(str);
-		return rc;
+		return ((session *) sessionPtr)->set_copy(text);
 	}
-*/
+	catch(std::exception &e)
+	{
+		context->RaiseException1(Rexx_Error_Application_error,context->NewStringFromAsciiz(e.what()));
+	}
+
 	return -1;
 }
 
@@ -516,14 +502,8 @@ RexxMethod1(RexxStringObject, rx3270_method_get_clipboard, CSELF, sessionPtr)
 
 RexxMethod2(int, rx3270_method_set_clipboard, CSELF, sessionPtr, CSTRING, text)
 {
-	session	* hSession = (session *) sessionPtr;
-
-	if(hSession)
-		return hSession->set_clipboard(text);
-
-	return -1;
+	return ((session *) sessionPtr)->set_clipboard(text);
 }
-
 
 RexxMethod5(int, rx3270_method_popup, CSELF, sessionPtr, CSTRING, s_id, CSTRING, title, CSTRING, message, OPTIONAL_CSTRING, det)
 {

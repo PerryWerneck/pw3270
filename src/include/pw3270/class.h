@@ -112,11 +112,17 @@
 		virtual int				  wait(int seconds)									= 0;
 		virtual int				  iterate(bool wait = true)							= 0;
 
+		virtual string			* get_text(int baddr, size_t len)					= 0;
 		virtual string 			* get_text_at(int row, int col, size_t sz) 			= 0;
 		virtual int 			  set_text_at(int row, int col, const char *str)	= 0;
-		virtual string			* get_text(int baddr, size_t len)					= 0;
 		virtual int				  cmp_text_at(int row, int col, const char *text)	= 0;
 		virtual int				  wait_for_text_at(int row, int col, const char *key, int timeout);
+
+		string					* get_string(int baddr, size_t len);
+		string					* get_string_at(int row, int col, size_t sz);
+		int			 			  set_string_at(int row, int col, const char *str);
+		int				  		  cmp_string_at(int row, int col, const char *text);
+		int				  		  wait_for_string_at(int row, int col, const char *key, int timeout);
 
 		virtual int				  set_cursor_position(int row, int col)				= 0;
 		virtual int               set_cursor_addr(int addr)                         = 0;
@@ -129,6 +135,7 @@
 		virtual int				  pakey(int key)									= 0;
 
 		virtual int               emulate_input(const char *str)                    = 0;
+		int						  input_string(const char *str);
 
 		virtual int               get_field_start(int baddr = -1)                   = 0;
 		virtual int               get_field_len(int baddr = -1)                     = 0;

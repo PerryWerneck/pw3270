@@ -56,10 +56,10 @@ $(BINDBG)/$(PLUGIN_NAME): $(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJDBG)/$(
 	@$(MKDIR) `dirname $@`
 	@$(CXX) $(DLL_FLAGS) @LDSOFLAGS@ @DBGRPATH@ $(LDFLAGS) -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(GTK_LIBS) $(GLIB_LIBS) $(PW3270_LIBS)
 
-$(BINDBG)$(DLL_NAME).$(VERSION): $(foreach SRC, $(basename $(EXTAPI_SRC) $(CLASS_SRC)), $(OBJDBG)/$(SRC)@OBJEXT@)
+$(BINDBG)$(DLL_NAME).$(VERSION): $(foreach SRC, $(basename $(EXTAPI_SRC)), $(OBJDBG)/$(SRC)@OBJEXT@) $(CLASS_DEBUG_OBJECTS)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CXX) $(DLL_FLAGS) $(LDFLAGS) @LDSOFLAGS@ @DBGRPATH@ -o $@ $^ $(LIBS) $(LIB3270_LIBS)
+	@$(CXX) $(DLL_FLAGS) $(LDFLAGS) @LDSOFLAGS@ @DBGRPATH@ -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(CLASS_LIBS)
 
 #---[ Release Targets ]--------------------------------------------------------
 
@@ -68,10 +68,10 @@ $(BINRLS)/$(PLUGIN_NAME): $(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJRLS)/$(
 	@$(MKDIR) `dirname $@`
 	$(CXX) $(DLL_FLAGS) @LDSOFLAGS@ $(LDFLAGS) @RLS_LDFLAGS@ -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(GTK_LIBS) $(GLIB_LIBS) $(PW3270_LIBS)
 
-$(BINRLS)$(DLL_NAME).$(VERSION): $(foreach SRC, $(basename $(EXTAPI_SRC)), $(OBJRLS)/$(SRC).o)
+$(BINRLS)$(DLL_NAME).$(VERSION): $(foreach SRC, $(basename $(EXTAPI_SRC)), $(OBJRLS)/$(SRC).o) $(CLASS_RELEASE_OBJECTS)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	$(CXX) $(DLL_FLAGS) @LDSOFLAGS@ $(LDFLAGS) @RLS_LDFLAGS@ -o $@ $^ $(LIBS) $(LIB3270_LIBS)
+	$(CXX) $(DLL_FLAGS) @LDSOFLAGS@ $(LDFLAGS) @RLS_LDFLAGS@ -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(CLASS_LIBS)
 
 install:
 	@$(MKDIR) $(DESTDIR)$(libdir)/$(PACKAGE_NAME)-plugin
@@ -84,7 +84,3 @@ install:
 	@$(MKDIR) $(DESTDIR)$(REXX_HOME)
 	@$(INSTALL_DATA) rx3270.cls $(DESTDIR)$(REXX_HOME)
 
-$(DEBDIR)/$(MODULE_NAME).install: Makefile
-	@$(MKDIR) `dirname $@`
-	@rm -f $@
-	@echo $(libdir)/$(PACKAGE_NAME)-plugins/$(MODULE_NAME).so > $@

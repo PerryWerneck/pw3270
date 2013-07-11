@@ -284,6 +284,102 @@
 		return str;
 	}
 
+	string * session::get_string_at(int row, int col, size_t sz)
+	{
+		string *str = this->get_text_at(row,col,sz);
+
+		if(str)
+			return this->get_local_text(str);
+
+		return 0;
+	}
+
+	int session::set_string_at(int row, int col, const char *str)
+	{
+		if(!str)
+			return -1;
+
+#ifdef HAVE_ICONV
+		if(conv2Host != (iconv_t)(-1))
+		{
+			size_t				  in 		= strlen(str);
+			size_t				  out 		= (in << 1);
+			char				* ptr;
+			char				* outBuffer = (char *) malloc(out);
+			ICONV_CONST char	* inBuffer	= (ICONV_CONST char	*) str;
+
+			memset(ptr=outBuffer,0,out);
+
+			iconv(conv2Host,NULL,NULL,NULL,NULL);	// Reset state
+
+			if(iconv(conv2Host,&inBuffer,&in,&ptr,&out) != ((size_t) -1))
+			{
+				int rc = this->set_text_at(row,col,outBuffer);
+				free(outBuffer);
+				return rc;
+			}
+
+			free(outBuffer);
+		}
+#endif // HAVE_ICONV
+
+		return this->set_text_at(row,col,str);
+
+	}
+
+	int session::input_string(const char *str)
+	{
+		if(!str)
+			return -1;
+
+#ifdef HAVE_ICONV
+		if(conv2Host != (iconv_t)(-1))
+		{
+			size_t				  in 		= strlen(str);
+			size_t				  out 		= (in << 1);
+			char				* ptr;
+			char				* outBuffer = (char *) malloc(out);
+			ICONV_CONST char	* inBuffer	= (ICONV_CONST char	*) str;
+
+			memset(ptr=outBuffer,0,out);
+
+			iconv(conv2Host,NULL,NULL,NULL,NULL);	// Reset state
+
+			if(iconv(conv2Host,&inBuffer,&in,&ptr,&out) != ((size_t) -1))
+			{
+				int rc = this->emulate_input(outBuffer);
+				free(outBuffer);
+				return rc;
+			}
+
+			free(outBuffer);
+		}
+#endif // HAVE_ICONV
+
+		return this->emulate_input(str);
+
+	}
+
+	int session::cmp_string_at(int row, int col, const char *text)
+	{
+		string	* str 	= get_3270_text(new string(text));
+		int		  rc	= cmp_text_at(row,col,str->c_str());
+		delete str;
+		return rc;
+	}
+
+	int	session::wait_for_string_at(int row, int col, const char *key, int timeout)
+	{
+		string	* str 	= get_3270_text(new string(key));
+		int		  rc	= wait_for_text_at(row,col,str->c_str(),timeout);
+		delete str;
+		return rc;
+	}
+
+	string * session::get_string(int baddr, size_t len)
+	{
+		return get_local_text(get_text(baddr,len));
+	}
 
  }
 
