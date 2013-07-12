@@ -64,12 +64,17 @@
 			exception(int syserror = errno);
 			exception(const char *fmt, ...);
 
+#ifdef WIN32
+			exception(DWORD error, const char *fmt, ...);
+#endif // WIN32
+
 			virtual const char * what() const throw();
 
 	private:
 			char	msg[4096];
 
 	};
+
 
 #if defined (HAVE_GNUC_VISIBILITY)
 	class __attribute__((visibility("default"))) session

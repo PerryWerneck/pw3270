@@ -71,8 +71,35 @@
 			if(TransactNamedPipe(hPipe,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL))
 				return response.rc;
 
-			throw exception("Error %d in TransactNamedPipe",GetLastError());
+			throw exception(GetLastError(),"%s","Transaction error");
 		}
+
+		string * query_string(void *query, size_t szQuery, size_t len)
+		{
+			struct hllapi_packet_text			* response;
+			DWORD								  cbSize	= sizeof(struct hllapi_packet_text)+len;
+			string								* s;
+
+			response = (struct hllapi_packet_text *) malloc(cbSize+2);
+			memset(response,0,cbSize+2);
+
+			if(TransactNamedPipe(hPipe,(LPVOID) query, szQuery, &response, cbSize, &cbSize,NULL))
+			{
+				if(response->packet_id)
+					s = new string("");
+				else
+					s = new string(response->text);
+			}
+			else
+			{
+				s = new string("");
+			}
+
+			free(response);
+
+			return s;
+		}
+
 
 #elif defined(HAVE_DBUS)
 
@@ -209,7 +236,9 @@
 
 			if(!WaitNamedPipe(buffer,NMPWAIT_USE_DEFAULT_WAIT))
 			{
-				throw exception("Invalid service instance: %s",name);
+				exception e = exception(GetLastError(),"Service instance %s unavailable",str);
+				free(str);
+				throw e;
 				return;
 			}
 
@@ -221,7 +250,7 @@
 			}
 			else if(!SetNamedPipeHandleState(hPipe,&dwMode,NULL,NULL))
 			{
-				exception e = exception("%s","Can´t set pipe state");
+				exception e = exception(GetLastError(),"%s","Can´t set pipe state");
 				CloseHandle(hPipe);
 				hPipe = INVALID_HANDLE_VALUE;
 				throw e;
@@ -309,6 +338,7 @@
 				exception e = exception("DBUS Connection Error (%s)", err.message);
 				dbus_error_free(&err);
 				throw e;
+				return;
 			}
 
 			if(!conn)
@@ -449,12 +479,12 @@
 			if(TransactNamedPipe(hPipe,(LPVOID) pkt, cbSize, &response, sizeof(response), &cbSize,NULL))
 			{
 				free(pkt);
-				return response.rc
+				return response.rc;
 			}
 
 			free(pkt);
 
-			throw exception("Transaction error %d",GetLastError());
+			throw exception(GetLastError(),"%s","Transaction error");
 
 #elif defined(HAVE_DBUS)
 
@@ -616,29 +646,9 @@
 		{
 #if defined(WIN32)
 
-			struct hllapi_packet_query_at	  query		= { HLLAPI_PACKET_GET_TEXT_AT, (unsigned short) row, (unsigned short) col, (unsigned short) sz };
-			struct hllapi_packet_text		* response;
-			DWORD							  cbSize	= sizeof(struct hllapi_packet_text)+sz;
-			string							* s;
+			struct hllapi_packet_query_at query	= { HLLAPI_PACKET_GET_TEXT_AT, (unsigned short) row, (unsigned short) col, (unsigned short) sz };
 
-			response = (struct hllapi_packet_text *) malloc(cbSize+2);
-			memset(response,0,cbSize+2);
-
-			if(TransactNamedPipe(hPipe,(LPVOID) &query, sizeof(struct hllapi_packet_query_at), &response, cbSize, &cbSize,NULL))
-			{
-				if(response->packet_id)
-					s = new string("");
-				else
-					s = new string(response->text);
-			}
-			else
-			{
-				s = new string("");
-			}
-
-			free(response);
-
-			return s;
+			return query_string(&query,sizeof(query),sz);
 
 #elif defined(HAVE_DBUS)
 
@@ -766,8 +776,13 @@
 
 		string * get_text(int baddr, size_t len)
 		{
+#if defined(WIN32)
+			struct hllapi_packet_query_offset query = { HLLAPI_PACKET_GET_TEXT_AT_OFFSET, (unsigned short) baddr, (unsigned short) len };
+			return query_string(&query,sizeof(query),len);
+#else
 			#warning IMPLEMENTAR
 			return NULL;
+#endif
 		}
 
 
