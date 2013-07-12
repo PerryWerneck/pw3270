@@ -61,6 +61,12 @@
       <arg type="i" name="len" direction="in" />
       <arg type="s" name="text" direction="out" />
     </method>
+    <method name="getText">
+      <annotation name="org.freedesktop.DBus.GLib.Async" value="true"/>
+      <arg type="i" name="addr" direction="in" />
+      <arg type="i" name="len" direction="in" />
+      <arg type="s" name="text" direction="out" />
+    </method>
     <method name="setClipboard">
       <annotation name="org.freedesktop.DBus.GLib.Async" value="true"/>
       <arg type="s" name="text" direction="in" />

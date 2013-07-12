@@ -780,8 +780,17 @@
 			struct hllapi_packet_query_offset query = { HLLAPI_PACKET_GET_TEXT_AT_OFFSET, (unsigned short) baddr, (unsigned short) len };
 			return query_string(&query,sizeof(query),len);
 #else
-			#warning IMPLEMENTAR
-			return NULL;
+			dbus_int32_t b = (dbus_int32_t) baddr;
+			dbus_int32_t l = (dbus_int32_t) len;
+
+			DBusMessage * msg = create_message("getText");
+			if(!msg)
+				return NULL;
+
+			trace("%s(%d,%d)",__FUNCTION__,b,l);
+			dbus_message_append_args(msg, DBUS_TYPE_INT32, &b, DBUS_TYPE_INT32, &l, DBUS_TYPE_INVALID);
+
+			return get_string(call(msg));
 #endif
 		}
 
