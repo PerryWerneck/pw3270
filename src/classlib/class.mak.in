@@ -1,0 +1,45 @@
+#
+# "Software pw3270, desenvolvido com base nos códigos fontes do WC3270  e X3270
+# (Paul Mattes Paul.Mattes@usa.net), de emulação de terminal 3270 para acesso a
+# aplicativos mainframe. Registro no INPI sob o nome G3270.
+#
+# Copyright (C) <2008> <Banco do Brasil S.A.>
+#
+# Este programa é software livre. Você pode redistribuí-lo e/ou modificá-lo sob
+# os termos da GPL v.2 - Licença Pública Geral  GNU,  conforme  publicado  pela
+# Free Software Foundation.
+#
+# Este programa é distribuído na expectativa de  ser  útil,  mas  SEM  QUALQUER
+# GARANTIA; sem mesmo a garantia implícita de COMERCIALIZAÇÃO ou  de  ADEQUAÇÃO
+# A QUALQUER PROPÓSITO EM PARTICULAR. Consulte a Licença Pública Geral GNU para
+# obter mais detalhes.
+#
+# Você deve ter recebido uma cópia da Licença Pública Geral GNU junto com este
+# programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple
+# Place, Suite 330, Boston, MA, 02111-1307, USA
+#
+# Contatos:
+#
+# perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
+# erico.mendonca@gmail.com	(Erico Mascarenhas de Mendonça)
+#
+
+CLASS_CFLAGS=@CFLAGS@ @DLL_CFLAGS@ @DBUS_CFLAGS@ @GTK_CFLAGS@
+CLASS_LIBS=@LIBICONV@ @DBUS_LIBS@
+
+CLASS_SRC=session.cc exception.cc local.cc remote.cc
+
+CLASS_DEBUG_OBJECTS=$(foreach SRC, $(basename $(CLASS_SRC)), $(OBJDBG)/classlib/$(SRC)@OBJEXT@)
+CLASS_RELEASE_OBJECTS=$(foreach SRC, $(basename $(CLASS_SRC)), $(OBJRLS)/classlib/$(SRC)@OBJEXT@)
+
+#---[ Rules ]------------------------------------------------------------------
+
+$(OBJDBG)/classlib/%.o: $(CLASSLIBDIR)/%.cc
+	@echo "  CC   `basename $@`"
+	@$(MKDIR) `dirname $@`
+	@$(CXX) $(CLASS_CFLAGS) $(PW3270_CFLAGS) $(DEBUG_CFLAGS) -o $@ -c $<
+
+$(OBJRLS)/classlib/%.o: $(CLASSLIBDIR)/%.cc
+	@echo "  CC   `basename $@`"
+	@$(MKDIR) `dirname $@`
+	@$(CXX) $(CLASS_CFLAGS) $(PW3270_CFLAGS) -o $@ -c $<
