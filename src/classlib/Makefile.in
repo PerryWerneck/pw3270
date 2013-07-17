@@ -25,7 +25,7 @@
 #
 
 PACKAGE=@PACKAGE_NAME@
-LIBNAME=$(PACKAGE)cxx.a
+LIBNAME=$(PACKAGE)class.a
 
 #---[ Sources ]----------------------------------------------------------------
 
@@ -35,6 +35,8 @@ include class.mak
 
 prefix=@prefix@
 datarootdir=@datarootdir@
+includedir=@includedir@
+libdir=@libdir@
 
 ROOTDIR ?= .
 OBJDIR  ?= $(ROOTDIR)/.obj
@@ -109,9 +111,13 @@ $(BINDBG)/$(LIBNAME): $(foreach SRC, $(basename $(CLASS_SRC)), $(OBJDBG)/$(SRC).
 	@ar rs $@ $^
 
 #---[ Misc targets ]-----------------------------------------------------------
-install-sdk:
-	$(MKDIR) $(DESTDIR)$(datarootdir)/$(PACKAGE)/sample/classlib
-	$(INSTALL_DATA) *.cc $(DESTDIR)$(datarootdir)/$(PACKAGE)/sample/classlib
+install-sdk: $(BINRLS)/$(LIBNAME)
+	@$(MKDIR) $(DESTDIR)$(datarootdir)/$(PACKAGE)/sample/classlib
+	@$(INSTALL_DATA) *.cc $(DESTDIR)$(datarootdir)/$(PACKAGE)/sample/classlib
+	@$(MKDIR) $(DESTDIR)/$(includedir)/pw3270
+	@$(INSTALL_DATA) ../include/pw3270/class.h $(DESTDIR)/$(includedir)/pw3270
+	@$(MKDIR) $(DESTDIR)$(libdir)
+	@$(INSTALL_DATA) $(BINRLS)/$(LIBNAME) $(DESTDIR)$(libdir)
 
 clean:
 	@rm -fr $(OBJDIR)

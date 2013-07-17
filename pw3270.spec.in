@@ -222,6 +222,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/pkgconfig/*.pc
 %{_libdir}/lib3270.so
 %{_libdir}/libpw3270.so
+%{_libdir}/*.a
 %dir %{_datadir}/@PACKAGE_NAME@/sample
 %{_datadir}/@PACKAGE_NAME@/sample/*
 
