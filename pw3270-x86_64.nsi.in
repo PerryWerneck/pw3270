@@ -239,16 +239,31 @@ ${if} ${FileExists} `$PROGRAMFILES64\ooRexx\rexx.exe`
 
 ${EndIf}
 
-ReadRegStr $4 HKLM "Software\gtk3win\@GTK_MODVERSION@" "path"
+ReadRegStr $4 HKLM "Software\gtkwin\@GTK_MODVERSION@" "path"
 
-${if} ${FileExists} `$4\*.*`
+${if} $4 == ""
 
 	SectionGetFlags "${SecGTK}" $0
-	IntOp $0 $0 & ${SECTION_OFF}
+	IntOp $0 $0 | ${SF_SELECTED}
 	SectionSetFlags "${SecGTK}" $0
 
-${EndIf}
+${Else}
 
+	${if} ${FileExists} `$4\*.*`
+
+		SectionGetFlags "${SecGTK}" $0
+		IntOp $0 $0 & ${SECTION_OFF}
+		SectionSetFlags "${SecGTK}" $0
+
+	${Else}
+
+		SectionGetFlags "${SecGTK}" $0
+		IntOp $0 $0 | ${SF_SELECTED}
+		SectionSetFlags "${SecGTK}" $0
+
+	${EndIf}
+
+${EndIf}
 
 FunctionEnd
 

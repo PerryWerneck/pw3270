@@ -155,21 +155,26 @@ Section /o "Software Development Kit" SecSDK
 	CreateDirectory "$INSTDIR\sdk\include"
 	CreateDirectory "$INSTDIR\sdk\include\lib3270"
 	CreateDirectory "$INSTDIR\sdk\include\pw3270"
+	CreateDirectory "$INSTDIR\sdk\sample"
+	CreateDirectory "$INSTDIR\sdk\sample\classlib"
 
-	file "/oname=$INSTDIR\sdk\include\lib3270.h" "src\include\lib3270.h"
-	file "/oname=$INSTDIR\sdk\include\pw3270.h" "src\include\pw3270.h"
-	file "/oname=$INSTDIR\sdk\include\pw3270\v3270.h" "src\include\pw3270\v3270.h"
-	file "/oname=$INSTDIR\sdk\include\pw3270\hllapi.h" "src\include\pw3270\hllapi.h"
+	setOutPath $INSTDIR\sdk\include
+	file "src\include\lib3270.h"
+	file "src\include\pw3270.h"
+	file "src\include\pw3270\v3270.h"
+	file "src\include\pw3270\hllapi.h"
 
-	file "/oname=$INSTDIR\sdk\include\lib3270\config.h" "src\include\lib3270\config.h"
-	file "/oname=$INSTDIR\sdk\include\lib3270\rules.mak" "src\include\rules.mak"
+	setOutPath $INSTDIR\sdk\include\lib3270
+	file "src\include\lib3270\config.h"
+	file "src\include\rules.mak"
 
-	file "/oname=$INSTDIR\sdk\sample\Makefile" "src\sample\Makefile"
-	file "/oname=$INSTDIR\sdk\sample\connect.c" "src\sample\connect.c"
+	setOutPath $INSTDIR\sdk\sample\connect
+	file "src\sample\Makefile"
+	file "src\sample\connect.c"
 
-	file "/oname=$INSTDIR\sdk\lib3270.def" 		".bin\Release\lib3270.dll.@PACKAGE_VERSION@.def"
-	file "/oname=$INSTDIR\sdk\pw3270.def" 		".bin\Release\pw3270.dll.@PACKAGE_VERSION@.def"
-	file "/oname=$INSTDIR\sdk\libhllapi.def"	".bin\Release\libhllapi.dll.def"
+	setOutPath $INSTDIR\sdk\sample\classlib
+	file "src\classlib\*.cc"
+	file "src\include\pw3270\class.h"
 
 SectionEnd
 
@@ -217,14 +222,39 @@ sectionEnd
 
 Function .onInit
 
-IfFileExists $PROGRAMFILES\ooRexx\rexx.exe EnableRexx RexxSET
+${if} ${FileExists} `$PROGRAMFILES\ooRexx\rexx.exe`
 
-EnableRexx:
 	SectionGetFlags "${RexxPlugin}" $0
 	IntOp $0 $0 | ${SF_SELECTED}
 	SectionSetFlags "${RexxPlugin}" $0
 
-RexxSET:
+${EndIf}
+
+ReadRegStr $4 HKLM "Software\gtkwin\@GTK_MODVERSION@" "path"
+
+${if} $4 == ""
+
+	SectionGetFlags "${SecGTK}" $0
+	IntOp $0 $0 | ${SF_SELECTED}
+	SectionSetFlags "${SecGTK}" $0
+
+${Else}
+
+	${if} ${FileExists} `$4\*.*`
+
+		SectionGetFlags "${SecGTK}" $0
+		IntOp $0 $0 & ${SECTION_OFF}
+		SectionSetFlags "${SecGTK}" $0
+
+	${Else}
+
+		SectionGetFlags "${SecGTK}" $0
+		IntOp $0 $0 | ${SF_SELECTED}
+		SectionSetFlags "${SecGTK}" $0
+
+	${EndIf}
+
+${EndIf}
 
 FunctionEnd
 
