@@ -100,8 +100,34 @@
 			return s;
 		}
 
+		int query_intval(void *pkt, size_t szQuery, bool dynamic = false)
+		{
+			struct hllapi_packet_result		response;
+			DWORD							cbSize		= (DWORD) szQuery;
+			BOOL 							status;
+
+			status = TransactNamedPipe(hPipe,(LPVOID) pkt, cbSize, &response, sizeof(response), &cbSize,NULL);
+
+			if(dynamic)
+				free(pkt);
+
+			if(status)
+				return response.rc;
+
+			throw exception(GetLastError(),"%s","Transaction error");
+
+		}
+
 
 #elif defined(HAVE_DBUS)
+
+		#define HLLAPI_PACKET_IS_CONNECTED	"isConnected"
+		#define HLLAPI_PACKET_GET_CSTATE	"getConnectionState"
+		#define HLLAPI_PACKET_IS_READY		"isReady"
+		#define HLLAPI_PACKET_DISCONNECT	"disconnect"
+		#define HLLAPI_PACKET_GET_CURSOR	"getCursorAddress"
+		#define HLLAPI_PACKET_ENTER			"enter"
+		#define HLLAPI_PACKET_QUIT			"quit"
 
 		DBusConnection	* conn;
 		char			* dest;
@@ -116,7 +142,7 @@
 																method);		// method
 
 			if (!msg)
-				throw exception("Error creating message for method %s",method);
+				throw exception("Error creating DBUS message for method %s",method);
 
 			return msg;
 
@@ -163,7 +189,7 @@
 					dbus_message_unref(msg);
 
 					throw e;
-					return NULL;
+
 				}
 
 			}
@@ -206,6 +232,14 @@
 			if(conn)
 				return get_intval(call(create_message(method)));
 			return -1;
+		}
+
+#else
+
+		int query_intval(const char *method)
+		{
+			throw exception("Call to unimplemented RPC method \"%s\"",method);
+			return -1
 		}
 
 #endif
@@ -388,7 +422,9 @@
 				get_intval(call(msg));
 			}
 
-	#else
+#else
+
+			throw exception("%s","RPC support is incomplete.");
 
 #endif
 		}
@@ -429,46 +465,20 @@
 
 		bool is_connected(void)
 		{
-#if defined(WIN32)
-
 			return query_intval(HLLAPI_PACKET_IS_CONNECTED) != 0;
-
-#elif defined(HAVE_DBUS)
-
-			return query_intval("isConnected") != 0;
-
-#endif
-
-			return false;
 		}
 
 		LIB3270_CSTATE get_cstate(void)
 		{
-#if defined(WIN32)
-
 			return (LIB3270_CSTATE) query_intval(HLLAPI_PACKET_GET_CSTATE);
-
-#elif defined(HAVE_DBUS)
-
-			return (LIB3270_CSTATE) query_intval("getConnectionState");
-
-#else
-
-			return (LIB3270_CSTATE) -1;
-
-#endif
-
 		}
 
 		int connect(const char *uri, bool wait)
 		{
 #if defined(WIN32)
-			struct hllapi_packet_connect	* pkt;
-			struct hllapi_packet_result		  response;
-			DWORD							  cbSize;
 
-			cbSize	= sizeof(struct hllapi_packet_connect)+strlen(uri);
-			pkt 	= (struct hllapi_packet_connect *) malloc(cbSize);
+			size_t							  cbSize	= sizeof(struct hllapi_packet_connect)+strlen(uri);
+			struct hllapi_packet_connect	* pkt		= (struct hllapi_packet_connect *) malloc(cbSize);
 
 			pkt->packet_id	= HLLAPI_PACKET_CONNECT;
 			pkt->wait		= (unsigned char) wait;
@@ -476,15 +486,7 @@
 
 			trace("Sending %s",pkt->hostname);
 
-			if(TransactNamedPipe(hPipe,(LPVOID) pkt, cbSize, &response, sizeof(response), &cbSize,NULL))
-			{
-				free(pkt);
-				return response.rc;
-			}
-
-			free(pkt);
-
-			throw exception(GetLastError(),"%s","Transaction error");
+			return query_intval((void *) pkt,cbSize,true);
 
 #elif defined(HAVE_DBUS)
 
@@ -562,36 +564,13 @@
 
 		bool is_ready(void)
 		{
-#if defined(WIN32)
-
 			return query_intval(HLLAPI_PACKET_IS_READY) != 0;
-
-#elif defined(HAVE_DBUS)
-
-			return query_intval("isReady") != 0;
-
-#endif
-
-			return false;
 		}
 
 
 		int disconnect(void)
 		{
-#if defined(WIN32)
-
 			return query_intval(HLLAPI_PACKET_DISCONNECT);
-
-#elif defined(HAVE_DBUS)
-
-			return query_intval("disconnect");
-
-#else
-
-			return -1;
-
-#endif
-
 		}
 
 
@@ -720,8 +699,7 @@
 #if defined(WIN32)
 
 			struct hllapi_packet_text_at 	* query;
-			struct hllapi_packet_result	  	  response;
-			DWORD							  cbSize		= sizeof(struct hllapi_packet_text_at)+strlen(text);
+			size_t							  cbSize		= sizeof(struct hllapi_packet_text_at)+strlen(text);
 
 			query = (struct hllapi_packet_text_at *) malloc(cbSize);
 			query->packet_id 	= HLLAPI_PACKET_CMP_TEXT_AT;
@@ -729,11 +707,7 @@
 			query->col			= col;
 			strcpy(query->text,text);
 
-			TransactNamedPipe(hPipe,(LPVOID) query, cbSize, &response, sizeof(response), &cbSize,NULL);
-
-			free(query);
-
-			return response.rc;
+			return query_intval((void *) query, cbSize, true);
 
 #elif defined(HAVE_DBUS)
 
@@ -799,11 +773,9 @@
 		{
 #if defined(WIN32)
 
-			struct hllapi_packet_cursor 	query		= { HLLAPI_PACKET_SET_CURSOR_POSITION, (unsigned short) row, (unsigned short) col };
-			struct hllapi_packet_result		response;
-			DWORD							cbSize		= sizeof(query);
-			TransactNamedPipe(hPipe,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
-			return response.rc != 0;
+			struct hllapi_packet_cursor query = { HLLAPI_PACKET_SET_CURSOR_POSITION, (unsigned short) row, (unsigned short) col };
+
+			return query_intval((void *) &query, sizeof(query));
 
 #elif defined(HAVE_DBUS)
 
@@ -826,11 +798,9 @@
 		{
 #if defined(WIN32)
 
-			struct hllapi_packet_addr       query		= { HLLAPI_PACKET_SET_CURSOR, (unsigned short) addr };
-			struct hllapi_packet_result		response;
-			DWORD							cbSize		= sizeof(query);
-			TransactNamedPipe(hPipe,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
-			return response.rc;
+			struct hllapi_packet_addr query = { HLLAPI_PACKET_SET_CURSOR, (unsigned short) addr };
+
+			return query_intval((void *) &query, sizeof(query));
 
 #elif defined(HAVE_DBUS)
 
@@ -850,49 +820,22 @@
 
 		int get_cursor_addr(void)
 		{
-#if defined(WIN32)
-
 			return query_intval(HLLAPI_PACKET_GET_CURSOR);
-
-#elif defined(HAVE_DBUS)
-
-			return query_intval("getCursorAddress");
-
-#else
-
-			return -1;
-
-#endif
 		}
 
 
 		int enter(void)
 		{
-#if defined(WIN32)
-
 			return query_intval(HLLAPI_PACKET_ENTER);
-
-#elif defined(HAVE_DBUS)
-
-			return query_intval("enter");
-
-#else
-
-			return -1;
-
-#endif
-
 		}
 
 		int pfkey(int key)
 		{
 #if defined(WIN32)
 
-			struct hllapi_packet_keycode	query		= { HLLAPI_PACKET_PFKEY, (unsigned short) key };
-			struct hllapi_packet_result		response;
-			DWORD							cbSize		= sizeof(query);
-			TransactNamedPipe(hPipe,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
-			return response.rc;
+			struct hllapi_packet_keycode query = { HLLAPI_PACKET_PFKEY, (unsigned short) key };
+
+			return query_intval((void *) &query, sizeof(query));
 
 #elif defined(HAVE_DBUS)
 
@@ -919,11 +862,9 @@
 		{
 #if defined(WIN32)
 
-			struct hllapi_packet_keycode	query		= { HLLAPI_PACKET_PAKEY, (unsigned short) key };
-			struct hllapi_packet_result		response;
-			DWORD							cbSize		= sizeof(query);
-			TransactNamedPipe(hPipe,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
-			return response.rc;
+			struct hllapi_packet_keycode query = { HLLAPI_PACKET_PAKEY, (unsigned short) key };
+
+			return query_intval((void *) &query, sizeof(query));
 
 #elif defined(HAVE_DBUS)
 
@@ -947,31 +888,16 @@
 
 		int quit(void)
 		{
-#if defined(WIN32)
-
 			return query_intval(HLLAPI_PACKET_QUIT);
-
-#elif defined(HAVE_DBUS)
-
-			return query_intval("quit");
-
-#else
-
-			return -1;
-
-#endif
-
 		}
 
 		int set_toggle(LIB3270_TOGGLE ix, bool value)
 		{
 #if defined(WIN32)
 
-			struct hllapi_packet_set		query		= { HLLAPI_PACKET_SET_TOGGLE, (unsigned short) ix, (unsigned short) value };
-			struct hllapi_packet_result		response;
-			DWORD							cbSize		= sizeof(query);
-			TransactNamedPipe(hPipe,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
-			return response.rc;
+			struct hllapi_packet_set query = { HLLAPI_PACKET_SET_TOGGLE, (unsigned short) ix, (unsigned short) value };
+
+			return query_intval((void *) &query, sizeof(query));
 
 #elif defined(HAVE_DBUS)
 
@@ -1000,8 +926,7 @@
 
 			size_t                                len           = strlen(str);
 			struct hllapi_packet_emulate_input 	* query;
-			struct hllapi_packet_result           response;
-			DWORD							      cbSize		= sizeof(struct hllapi_packet_emulate_input)+len;
+			size_t							      cbSize		= sizeof(struct hllapi_packet_emulate_input)+len;
 
 			query = (struct hllapi_packet_emulate_input *) malloc(cbSize);
 			query->packet_id 	= HLLAPI_PACKET_EMULATE_INPUT;
@@ -1009,11 +934,7 @@
 			query->pasting		= 1;
 			strcpy(query->text,str);
 
-			TransactNamedPipe(hPipe,(LPVOID) query, cbSize, &response, sizeof(response), &cbSize,NULL);
-
-			free(query);
-
-			return response.rc;
+			return query_intval((void *) query, cbSize, true);
 
 #elif defined(HAVE_DBUS)
 
@@ -1037,11 +958,9 @@
 		{
 #if defined(WIN32)
 
-			struct hllapi_packet_addr       query		= { HLLAPI_PACKET_FIELD_START, (unsigned short) baddr };
-			struct hllapi_packet_result		response;
-			DWORD							cbSize		= sizeof(query);
-			TransactNamedPipe(hPipe,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
-			return response.rc;
+			struct hllapi_packet_addr query = { HLLAPI_PACKET_FIELD_START, (unsigned short) baddr };
+
+			return query_intval((void *) &query, sizeof(query));
 
 #elif defined(HAVE_DBUS)
 
@@ -1068,11 +987,9 @@
 		{
 #if defined(WIN32)
 
-			struct hllapi_packet_addr       query		= { HLLAPI_PACKET_FIELD_LEN, (unsigned short) baddr };
-			struct hllapi_packet_result		response;
-			DWORD							cbSize		= sizeof(query);
-			TransactNamedPipe(hPipe,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
-			return response.rc;
+			struct hllapi_packet_addr query = { HLLAPI_PACKET_FIELD_LEN, (unsigned short) baddr };
+
+			return query_intval((void *) &query, sizeof(query));
 
 #elif defined(HAVE_DBUS)
 
@@ -1098,11 +1015,9 @@
 		{
 #if defined(WIN32)
 
-			struct hllapi_packet_addr       query		= { HLLAPI_PACKET_NEXT_UNPROTECTED, (unsigned short) baddr };
-			struct hllapi_packet_result		response;
-			DWORD							cbSize		= sizeof(query);
-			TransactNamedPipe(hPipe,(LPVOID) &query, cbSize, &response, sizeof(response), &cbSize,NULL);
-			return response.rc;
+			struct hllapi_packet_addr query = { HLLAPI_PACKET_NEXT_UNPROTECTED, (unsigned short) baddr };
+
+			return query_intval((void *) &query, sizeof(query));
 
 #elif defined(HAVE_DBUS)
 
