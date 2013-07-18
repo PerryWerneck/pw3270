@@ -1040,14 +1040,14 @@
 
 		}
 
+#if defined(HAVE_DBUS)
+		string * get_clipboard(void)
+		{
+			return query_string("getClipboard");
+		}
+
 		int set_clipboard(const char *text)
 		{
-#if defined(WIN32)
-
-			return -1;
-
-#elif defined(HAVE_DBUS)
-
 			DBusMessage * msg = create_message("setClipboard");
 			if(msg)
 			{
@@ -1056,30 +1056,8 @@
 			}
 
 			return -1;
-
-#else
-
-			return -1;
-
-#endif
-
 		}
-
-		string * get_clipboard(void)
-		{
-#if defined(WIN32)
-
-			return NULL;
-
-#elif defined(HAVE_DBUS)
-
-			trace("%s",__FUNCTION__);
-			return query_string("getClipboard");
-
-#endif
-
-			return NULL;
-		}
+#endif // HAVE_DBUS
 
  	};
 

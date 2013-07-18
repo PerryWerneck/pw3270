@@ -214,13 +214,75 @@
 
 	string * session::get_clipboard(void)
 	{
+#if defined(WIN32)
+
+		if (! OpenClipboard(0))
+		{
+			throw exception(GetLastError(),"%s","Can´t open system clipboard");
+			return NULL;
+		}
+
+		HANDLE hData = GetClipboardData(CF_TEXT);
+		if(!hData)
+		{
+			throw exception(GetLastError(),"%s","Can´t get clipboard data");
+			return NULL;
+		}
+
+		char * pszText = static_cast<char*>( GlobalLock(hData) );
+		if(!pszText)
+		{
+			throw exception(GetLastError(),"%s","Can´t lock clipboard");
+			return NULL;
+		}
+
+		string *text = new string ( pszText );
+
+		GlobalUnlock( hData );
+
+		CloseClipboard();
+
+		return text;
+
+#else
 		errno = EINVAL;
 		return NULL;
+
+#endif // WIN32
 	}
 
 	int session::set_clipboard(const char *text)
 	{
+#if defined(WIN32)
+		if (! OpenClipboard(0))
+		{
+			throw exception(GetLastError(),"%s","Can´t open system clipboard");
+			return -1;
+		}
+
+		EmptyClipboard();
+
+        size_t size = strlen(text)+1;
+		HGLOBAL hClipboardData = GlobalAlloc(GMEM_MOVEABLE , size);
+
+		strcpy((char *) GlobalLock(hClipboardData), text);
+
+		if(!SetClipboardData(CF_TEXT, hClipboardData))
+		{
+			GlobalUnlock(hClipboardData);
+			CloseClipboard();
+			throw exception(GetLastError(),"%s","Can´t set system clipboard");
+		}
+
+		GlobalUnlock(hClipboardData);
+		CloseClipboard();
+
+		return 0;
+#else
+
 		return EINVAL;
+
+#endif // WIN32
 	}
 
 

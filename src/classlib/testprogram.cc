@@ -50,6 +50,13 @@
 	cout << "\tSession state: " << session->get_cstate() << endl;
 	cout << "\tCharset:       " << session->get_charset() << endl;
 
+	string *str = session->get_clipboard();
+	cout << "\nClipboard:     " << str->c_str();
+
+	delete str;
+
+	session->set_clipboard("Teste de clipboard");
+
 	delete session;
  	return 0;
  }
