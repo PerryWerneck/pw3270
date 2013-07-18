@@ -41,6 +41,14 @@
  #if defined(WIN32)
 	#include <windows.h>
 	#include <pw3270/ipcpackets.h>
+ #else
+	#define HLLAPI_PACKET_IS_CONNECTED	"isConnected"
+	#define HLLAPI_PACKET_GET_CSTATE	"getConnectionState"
+	#define HLLAPI_PACKET_IS_READY		"isReady"
+	#define HLLAPI_PACKET_DISCONNECT	"disconnect"
+	#define HLLAPI_PACKET_GET_CURSOR	"getCursorAddress"
+	#define HLLAPI_PACKET_ENTER			"enter"
+	#define HLLAPI_PACKET_QUIT			"quit"
  #endif // WIN32
 
  #include <pw3270/class.h>
@@ -59,6 +67,7 @@
 	class remote : public session
  	{
 	private:
+
 #if defined(WIN32)
 
 		HANDLE			  hPipe;
@@ -120,14 +129,6 @@
 
 
 #elif defined(HAVE_DBUS)
-
-		#define HLLAPI_PACKET_IS_CONNECTED	"isConnected"
-		#define HLLAPI_PACKET_GET_CSTATE	"getConnectionState"
-		#define HLLAPI_PACKET_IS_READY		"isReady"
-		#define HLLAPI_PACKET_DISCONNECT	"disconnect"
-		#define HLLAPI_PACKET_GET_CURSOR	"getCursorAddress"
-		#define HLLAPI_PACKET_ENTER			"enter"
-		#define HLLAPI_PACKET_QUIT			"quit"
 
 		DBusConnection	* conn;
 		char			* dest;
@@ -257,10 +258,11 @@
 
 #else
 
+
 		int query_intval(const char *method)
 		{
 			throw exception("Call to unimplemented RPC method \"%s\"",method);
-			return -1
+			return -1;
 		}
 
 #endif
@@ -738,7 +740,9 @@
 #if defined(WIN32)
 			struct hllapi_packet_query_offset query = { HLLAPI_PACKET_GET_TEXT_AT_OFFSET, (unsigned short) baddr, (unsigned short) len };
 			return query_string(&query,sizeof(query),len);
-#else
+
+#elif defined(HAVE_DBUS)
+
 			dbus_int32_t b = (dbus_int32_t) baddr;
 			dbus_int32_t l = (dbus_int32_t) len;
 
@@ -750,6 +754,9 @@
 			dbus_message_append_args(msg, DBUS_TYPE_INT32, &b, DBUS_TYPE_INT32, &l, DBUS_TYPE_INVALID);
 
 			return get_string(call(msg));
+#else
+			throw exception("%s","IPC support is unavailable");
+			return NULL;
 #endif
 		}
 

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-17 11:07-0300\n"
+"POT-Creation-Date: 2013-07-18 10:34-0300\n"
 "PO-Revision-Date: 2013-07-03 10:51-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <perry.werneck@gmail.com>\n"
@@ -312,7 +312,7 @@ msgstr "Erro na assinatura CRL"
 msgid "C_haracter Coding:"
 msgstr "C_odificação de caracteres:"
 
-#: print.c:409
+#: print.c:412
 msgid "C_olor scheme:"
 msgstr "Tema de c_ores:"
 
@@ -1011,7 +1011,7 @@ msgstr "Estado normal na OIA"
 msgid "Option '%c:' is not supported"
 msgstr "Opção não suportada: '%c:'"
 
-#: print.c:601
+#: print.c:604
 msgid "Options"
 msgstr "Opções"
 
@@ -1208,11 +1208,11 @@ msgstr "Operação de impressão falhou"
 msgid "Print selected"
 msgstr "Imprimir seleção"
 
-#: print.c:495
+#: print.c:498
 msgid "Print selection box"
 msgstr "Imprimir marca de seleção"
 
-#: print.c:903 ui/00default.xml:372
+#: print.c:906 ui/00default.xml:372
 msgid "Print settings"
 msgstr "Configurações de impressão"
 
@@ -2262,7 +2262,7 @@ msgstr "_Editar"
 msgid "_File"
 msgstr "_Arquivo"
 
-#: print.c:409
+#: print.c:412
 msgid "_Font:"
 msgstr "_Fonte:"
 
