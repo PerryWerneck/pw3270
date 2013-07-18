@@ -36,6 +36,11 @@
 	#include <malloc.h>
 	#include <sys/types.h>
 	#include <unistd.h>
+
+	#ifndef DBUS_TIMEOUT_INFINITE
+		#define DBUS_TIMEOUT_INFINITE ((int) 0x7fffffff)
+	#endif // !DBUS_TIMEOUT_INFINITE
+
  #endif // HAVE_DBUS
 
  #if defined(WIN32)
