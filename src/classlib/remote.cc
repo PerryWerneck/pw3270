@@ -222,7 +222,9 @@
 
 					dbus_message_unref(msg);
 					throw e;
+					return -1;
 				}
+				dbus_message_unref(msg);
 			}
 			return -1;
 		}
@@ -982,6 +984,59 @@
 		{
 			return query_intval("setClipboard", DBUS_TYPE_STRING, &text, DBUS_TYPE_INVALID);
 		}
+
+		int popup_dialog(LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, ...)
+		{
+			DBusMessage * msg = dbus_message_new_method_call(	this->dest,		// Destination
+																this->path,		// Path
+																this->intf,		// Interface
+																"showPopup");	// method
+
+			if (!msg)
+			{
+				throw exception("%s","Error creating DBUS message for popup");
+				return -1;
+			}
+			else
+			{
+				char			  text[4096];
+				char			* ptr = text;
+				va_list			  arg_ptr;
+				dbus_int32_t	  i = (dbus_int32_t) id;
+
+				va_start(arg_ptr, fmt);
+				vsnprintf(text,4095,fmt,arg_ptr);
+				va_end(arg_ptr);
+
+				if(!dbus_message_append_args(msg, DBUS_TYPE_INT32, &i, DBUS_TYPE_STRING, &title, DBUS_TYPE_STRING, &message, DBUS_TYPE_STRING, &ptr, DBUS_TYPE_INVALID))
+				{
+					dbus_message_unref(msg);
+					throw exception("%s","Cant append args for popup message");
+				}
+				else
+				{
+					DBusMessage             * reply;
+					DBusError                 error;
+
+					dbus_error_init(&error);
+					reply = dbus_connection_send_with_reply_and_block(conn,msg,DBUS_TIMEOUT_INFINITE,&error);
+					dbus_message_unref(msg);
+
+					if(!reply)
+					{
+						exception e = exception("%s",error.message);
+						dbus_error_free(&error);
+						throw e;
+						return -1;
+					}
+
+					return get_intval(reply);
+
+				}
+			}
+			return 0;
+		}
+
 #endif // HAVE_DBUS
 
  	};

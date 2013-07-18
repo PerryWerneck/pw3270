@@ -91,6 +91,8 @@
 
 	void 		  pw3270_dbus_set_script(PW3270Dbus *object, const gchar *text, int mode, DBusGMethodInvocation *context);
 
+	void		  pw3270_dbus_show_popup(PW3270Dbus *object, int id, const gchar *title, const gchar *msg, const gchar *text, DBusGMethodInvocation *context);
+
 	// Actions
 	void		  pw3270_dbus_enter(PW3270Dbus *object, DBusGMethodInvocation *context);
 	void		  pw3270_dbus_pf_key(PW3270Dbus *object, int key, DBusGMethodInvocation *context);

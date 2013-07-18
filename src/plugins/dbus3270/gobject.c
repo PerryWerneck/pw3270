@@ -446,3 +446,9 @@ void pw3270_dbus_set_script(PW3270Dbus *object, const gchar *text, int mode, DBu
 
 	dbus_g_method_return(context,v3270_set_script(widget,*text,mode != 0));
 }
+
+void pw3270_dbus_show_popup(PW3270Dbus *object, int id, const gchar *title, const gchar *msg, const gchar *text, DBusGMethodInvocation *context)
+{
+	lib3270_popup_dialog(pw3270_dbus_get_session_handle(object), (LIB3270_NOTIFY) id , title, msg, "%s", text);
+	dbus_g_method_return(context,0);
+}

@@ -142,6 +142,13 @@
       <arg type="i" name="status" direction="in" />
       <arg type="i" name="result" direction="out" />
     </method>
+    <method name="showPopup">
+      <annotation name="org.freedesktop.DBus.GLib.Async" value="true"/>
+      <arg type="i" name="id" direction="in" />
+      <arg type="s" name="title" direction="in" />
+      <arg type="s" name="msg" direction="in" />
+      <arg type="s" name="text" direction="in" />
+    </method>
   </interface>
 
 </node>

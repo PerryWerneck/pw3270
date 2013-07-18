@@ -217,10 +217,10 @@ void v3270_popup_message(GtkWidget *widget, LIB3270_NOTIFY type , const gchar *t
 	if(message)
 	{
 		dialog = gtk_message_dialog_new_with_markup(GTK_WINDOW(toplevel),GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,msgtype,buttons,"%s",message);
-		if(text)
+		if(text && *text)
 			gtk_message_dialog_format_secondary_markup(GTK_MESSAGE_DIALOG(dialog),"%s",text);
 	}
-	else if(text)
+	else if(text && *text)
 	{
 		dialog = gtk_message_dialog_new_with_markup(GTK_WINDOW(toplevel),GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,msgtype,buttons,"%s",text);
 	}
