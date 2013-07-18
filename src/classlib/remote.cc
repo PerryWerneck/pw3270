@@ -229,9 +229,28 @@
 
 		int query_intval(const char *method)
 		{
-			if(conn)
-				return get_intval(call(create_message(method)));
-			return -1;
+			return get_intval(call(create_message(method)));
+		}
+
+		int query_intval(const char *method, int first_arg_type, ...)
+		{
+			va_list 	  var_args;
+			DBusMessage * msg = dbus_message_new_method_call(	this->dest,		// Destination
+																this->path,		// Path
+																this->intf,		// Interface
+																method);		// method
+
+			if (!msg)
+			{
+				throw exception("Error creating DBUS message for method %s",method);
+				return -1;
+			}
+
+			va_start(var_args, first_arg_type);
+			dbus_message_append_args_valist(msg,first_arg_type,var_args);
+			va_end(var_args);
+
+			return get_intval(call(msg));
 		}
 
 #else
@@ -412,15 +431,10 @@
 
 			trace("%s: Using DBUS name %s",__FUNCTION__,busname);
 
-			DBusMessage * msg = create_message("setScript");
+			const char * id   = "r";
+			static const dbus_int32_t flag = 1;
+			query_intval("setScript", DBUS_TYPE_STRING, &id, DBUS_TYPE_INT32, &flag, DBUS_TYPE_INVALID);
 
-			if(msg)
-			{
-				const char			* id   = "r";
-				static const dbus_int32_t	  flag = 1;
-				dbus_message_append_args(msg, DBUS_TYPE_STRING, &id, DBUS_TYPE_INT32, &flag, DBUS_TYPE_INVALID);
-				get_intval(call(msg));
-			}
 
 #else
 
@@ -440,14 +454,9 @@
 
 			try
 			{
-				DBusMessage * msg = create_message("setScript");
-				if(msg)
-				{
-					const char					* id   = "r";
-					static const dbus_int32_t	  flag = 0;
-					dbus_message_append_args(msg, DBUS_TYPE_STRING, &id, DBUS_TYPE_INT32, &flag, DBUS_TYPE_INVALID);
-					get_intval(call(msg));
-				}
+				const char * id   = "r";
+				static const dbus_int32_t flag = 0;
+				query_intval("setScript", DBUS_TYPE_STRING, &id, DBUS_TYPE_INT32, &flag, DBUS_TYPE_INVALID);
 			}
 			catch(exception e)
 			{
@@ -490,14 +499,7 @@
 
 #elif defined(HAVE_DBUS)
 
-			int rc;
-			DBusMessage * msg = create_message("connect");
-			if(!msg)
-				return -1;
-
-			dbus_message_append_args(msg, DBUS_TYPE_STRING, &uri, DBUS_TYPE_INVALID);
-
-			rc = get_intval(call(msg));
+			int rc = query_intval("connect", DBUS_TYPE_STRING, &uri, DBUS_TYPE_INVALID);
 
 			if(!rc && wait)
 				return wait_for_ready(120);
@@ -537,15 +539,8 @@
 			{
 				static const dbus_int32_t delay = 2;
 
-				DBusMessage		* msg = create_message("waitForReady");
-				int				  rc;
+				int rc = query_intval("waitForReady", DBUS_TYPE_INT32, &delay, DBUS_TYPE_INVALID);
 
-				if(!msg)
-					return -1;
-
-				dbus_message_append_args(msg, DBUS_TYPE_INT32, &delay, DBUS_TYPE_INVALID);
-
-				rc = get_intval(call(msg));
 				trace("waitForReady exits with rc=%d",rc);
 
 				if(rc != ETIMEDOUT)
@@ -677,14 +672,7 @@
 			dbus_int32_t r = (dbus_int32_t) row;
 			dbus_int32_t c = (dbus_int32_t) col;
 
-			DBusMessage * msg = create_message("setTextAt");
-			if(msg)
-			{
-				dbus_message_append_args(msg, DBUS_TYPE_INT32, &r, DBUS_TYPE_INT32, &c, DBUS_TYPE_STRING, &str, DBUS_TYPE_INVALID);
-				return get_intval(call(msg));
-			}
-
-			return -1;
+			return query_intval("setTextAt", DBUS_TYPE_INT32, &r, DBUS_TYPE_INT32, &c, DBUS_TYPE_STRING, &str, DBUS_TYPE_INVALID);
 
 #else
 
@@ -714,12 +702,7 @@
 			dbus_int32_t r = (dbus_int32_t) row;
 			dbus_int32_t c = (dbus_int32_t) col;
 
-			DBusMessage * msg = create_message("cmpTextAt");
-			if(msg)
-			{
-				dbus_message_append_args(msg, DBUS_TYPE_INT32, &r, DBUS_TYPE_INT32, &c, DBUS_TYPE_STRING, &text, DBUS_TYPE_INVALID);
-				return get_intval(call(msg));
-			}
+			return query_intval("cmpTextAt", DBUS_TYPE_INT32, &r, DBUS_TYPE_INT32, &c, DBUS_TYPE_STRING, &text, DBUS_TYPE_INVALID);
 
 #endif
 
@@ -782,12 +765,7 @@
 			dbus_int32_t r = (dbus_int32_t) row;
 			dbus_int32_t c = (dbus_int32_t) col;
 
-			DBusMessage * msg = create_message("setCursorAt");
-			if(msg)
-			{
-				dbus_message_append_args(msg, DBUS_TYPE_INT32, &r, DBUS_TYPE_INT32, &c, DBUS_TYPE_INVALID);
-				return get_intval(call(msg));
-			}
+			return query_intval("setCursorAt", DBUS_TYPE_INT32, &r, DBUS_TYPE_INT32, &c, DBUS_TYPE_INVALID);
 
 #endif
 
@@ -806,12 +784,7 @@
 
 			dbus_int32_t k = (dbus_int32_t) addr;
 
-			DBusMessage * msg = create_message("setCursorAddress");
-			if(msg)
-			{
-				dbus_message_append_args(msg, DBUS_TYPE_INT32, &k, DBUS_TYPE_INVALID);
-				return get_intval(call(msg));
-			}
+			return query_intval("setCursorAddress", DBUS_TYPE_INT32, &k, DBUS_TYPE_INVALID);
 
 #endif
 
@@ -841,14 +814,7 @@
 
 			dbus_int32_t k = (dbus_int32_t) key;
 
-			DBusMessage * msg = create_message("pfKey");
-			if(msg)
-			{
-				dbus_message_append_args(msg, DBUS_TYPE_INT32, &k, DBUS_TYPE_INVALID);
-				return get_intval(call(msg));
-			}
-
-			return -1;
+			return query_intval("pfKey", DBUS_TYPE_INT32, &k, DBUS_TYPE_INVALID);
 
 #else
 
@@ -870,13 +836,7 @@
 
 			dbus_int32_t k = (dbus_int32_t) key;
 
-			DBusMessage * msg = create_message("paKey");
-			if(msg)
-			{
-				dbus_message_append_args(msg, DBUS_TYPE_INT32, &k, DBUS_TYPE_INVALID);
-				return get_intval(call(msg));
-			}
-			return -1;
+			return query_intval("paKey", DBUS_TYPE_INT32, &k, DBUS_TYPE_INVALID);
 
 #else
 
@@ -904,14 +864,7 @@
 			dbus_int32_t i = (dbus_int32_t) ix;
 			dbus_int32_t v = (dbus_int32_t) value;
 
-			DBusMessage * msg = create_message("setToggle");
-			if(msg)
-			{
-				dbus_message_append_args(msg, DBUS_TYPE_INT32, &i, DBUS_TYPE_INT32, &v, DBUS_TYPE_INVALID);
-				return get_intval(call(msg));
-			}
-
-			return -1;
+			return query_intval("setToggle", DBUS_TYPE_INT32, &i, DBUS_TYPE_INT32, &v, DBUS_TYPE_INVALID);
 
 #else
 			return -1;
@@ -938,14 +891,7 @@
 
 #elif defined(HAVE_DBUS)
 
-			DBusMessage * msg = create_message("input");
-			if(msg)
-			{
-				dbus_message_append_args(msg, DBUS_TYPE_STRING, &str, DBUS_TYPE_INVALID);
-				return get_intval(call(msg));
-			}
-			return -1;
-
+			return query_intval("input", DBUS_TYPE_STRING, &str, DBUS_TYPE_INVALID);
 #else
 
 			return -1;
@@ -966,14 +912,7 @@
 
 			dbus_int32_t k = (dbus_int32_t) baddr;
 
-			DBusMessage * msg = create_message("getFieldStart");
-			if(msg)
-			{
-				dbus_message_append_args(msg, DBUS_TYPE_INT32, &k, DBUS_TYPE_INVALID);
-				return get_intval(call(msg));
-			}
-
-			return -1;
+			return query_intval("getFieldStart", DBUS_TYPE_INT32, &k, DBUS_TYPE_INVALID);
 
 #else
 
@@ -995,14 +934,7 @@
 
 			dbus_int32_t k = (dbus_int32_t) baddr;
 
-			DBusMessage * msg = create_message("getFieldLength");
-			if(msg)
-			{
-				dbus_message_append_args(msg, DBUS_TYPE_INT32, &k, DBUS_TYPE_INVALID);
-				return get_intval(call(msg));
-			}
-
-			return -1;
+			return query_intval("getFieldLength", DBUS_TYPE_INT32, &k, DBUS_TYPE_INVALID);
 
 #else
 
@@ -1048,14 +980,7 @@
 
 		int set_clipboard(const char *text)
 		{
-			DBusMessage * msg = create_message("setClipboard");
-			if(msg)
-			{
-				dbus_message_append_args(msg, DBUS_TYPE_STRING, &text, DBUS_TYPE_INVALID);
-				return get_intval(call(msg));
-			}
-
-			return -1;
+			return query_intval("setClipboard", DBUS_TYPE_STRING, &text, DBUS_TYPE_INVALID);
 		}
 #endif // HAVE_DBUS
 

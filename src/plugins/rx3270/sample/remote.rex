@@ -1,9 +1,11 @@
 
 use arg uri
 
+trace "?R"
+
 host = .rx3270~new("pw3270:a")
 
-say "PW3270 version is "||host~revision()
+say "PW3270 revision is "||host~revision()
 say "Connection state is "||host~connected()
 say "Ready state is "||host~ready()
 
