@@ -395,6 +395,9 @@ static gchar * enum_to_string(GType type, guint enum_value)
  {
 	gchar *ptr = get_string_from_config("print","colors","");
 
+	trace("info->color=%p",info->color);
+	trace("colorlist=%p",ptr);
+
 	if(*ptr)
 		v3270_set_color_table(info->color,ptr);
 	else

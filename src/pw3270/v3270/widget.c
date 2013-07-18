@@ -1296,15 +1296,24 @@ void v3270_set_color_table(GdkRGBA *table, const gchar *colors)
 
 		g_warning("Color table has %d elements; should be %d.",cnt,V3270_COLOR_COUNT);
 
-		for(f=0;f < cnt;f++)
-			gdk_rgba_parse(table+f,clr[f]);
+		if(cnt < V3270_COLOR_COUNT)
+		{
+			// Less than the required
+			for(f=0;f < cnt;f++)
+				gdk_rgba_parse(table+f,clr[f]);
 
-		for(f=cnt; f < V3270_COLOR_COUNT;f++)
-			gdk_rgba_parse(table+f,clr[cnt-1]);
+			for(f=cnt; f < V3270_COLOR_COUNT;f++)
+				gdk_rgba_parse(table+f,clr[cnt-1]);
 
-		clr[V3270_COLOR_OIA_BACKGROUND] = clr[0];
-		clr[V3270_COLOR_SELECTED_BG] 	= clr[0];
-
+			clr[V3270_COLOR_OIA_BACKGROUND] = clr[0];
+			clr[V3270_COLOR_SELECTED_BG] 	= clr[0];
+		}
+		else
+		{
+			// More than required
+			for(f=0;f < V3270_COLOR_COUNT;f++)
+				gdk_rgba_parse(table+f,clr[f]);
+		}
  	}
 
 	g_strfreev(clr);
