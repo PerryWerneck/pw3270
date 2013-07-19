@@ -87,6 +87,7 @@
 		<Unit filename="src/include/pw3270/hllapi.h" />
 		<Unit filename="src/include/pw3270/ipcpackets.h" />
 		<Unit filename="src/include/pw3270/plugin.h" />
+		<Unit filename="src/include/pw3270/trace.h" />
 		<Unit filename="src/include/pw3270/v3270.h" />
 		<Unit filename="src/include/rules.mak.in" />
 		<Unit filename="src/lib3270/3270ds.h" />
@@ -341,6 +342,9 @@
 			<Option compilerVar="WINDRES" />
 		</Unit>
 		<Unit filename="src/pw3270/tools.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/pw3270/trace.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/pw3270/uiparser/Makefile.in" />
