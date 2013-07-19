@@ -53,6 +53,7 @@
  LIB3270_EXPORT void			  pw3270_trace_vprintf(GtkWidget *widget, const char *fmt, va_list args);
  LIB3270_EXPORT void			  pw3270_trace_printf(GtkWidget *widget, const char *fmt, ... );
  LIB3270_EXPORT gchar			* pw3270_trace_get_command(GtkWidget *widget);
+ LIB3270_EXPORT void			  pw3270_trace_set_destroy_on_close(GtkWidget *widget,gboolean on);
 
  G_END_DECLS
 

@@ -311,6 +311,7 @@ install-sdk:
 
 	@$(MKDIR) $(DESTDIR)$(includedir)/pw3270
 	@$(INSTALL_DATA) src/include/pw3270/v3270.h $(DESTDIR)/$(includedir)/pw3270
+	@$(INSTALL_DATA) src/include/pw3270/trace.h $(DESTDIR)/$(includedir)/pw3270
 	@$(INSTALL_DATA) src/include/pw3270.h $(DESTDIR)/$(includedir)
 
 	@$(MKDIR) $(DESTDIR)/$(libdir)/pkgconfig

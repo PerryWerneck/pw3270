@@ -45,6 +45,7 @@
  #include <pw3270.h>
  #include <pw3270/plugin.h>
  #include <pw3270/v3270.h>
+ #include <pw3270/trace.h>
  #include <lib3270/actions.h>
  #include <lib3270/log.h>
  #include <pw3270/class.h>
@@ -65,6 +66,7 @@
  {
 	GtkAction	* action;
 	GtkWidget	* widget;
+	GtkWidget	* trace;
 	const gchar	* filename;
  };
 
@@ -135,41 +137,133 @@
 
 /*--[ Running rexx scripts ]---------------------------------------------------------------------------------*/
 
- static int REXXENTRY Rexx_IO_exit(RexxExitContext *context, int exitnumber, int subfunction, PEXIT parmBlock)
+ static void trace_cleanup(GtkWidget *widget, gpointer dunno)
  {
-	trace("%s call with ExitNumber: %d Subfunction: %d",__FUNCTION__,(int) exitnumber, (int) subfunction);
+ 	rexx_application_data *data = (rexx_application_data *) g_object_get_data(G_OBJECT(widget),"rexx_app_data");
 
-	if(subfunction == RXSIOSAY)
+	trace("%s: data=%p",__FUNCTION__,data);
+
+	if(data)
+		data->trace = NULL;
+
+ }
+
+ static GtkWidget * get_trace_window(rexx_application_data *data)
+ {
+ 	if(data->trace)
+		return data->trace;
+
+	data->trace = pw3270_trace_new();
+	g_signal_connect(G_OBJECT(data->trace), "destroy",G_CALLBACK(trace_cleanup), NULL);
+
+	pw3270_trace_set_destroy_on_close(data->trace,TRUE);
+
+	g_object_set_data(G_OBJECT(data->trace),"rexx_app_data",data);
+
+	gtk_window_set_title(GTK_WINDOW(data->trace),_("Rexx trace"));
+
+	gtk_window_set_transient_for(GTK_WINDOW(data->trace),GTK_WINDOW(gtk_widget_get_toplevel(data->widget)));
+    gtk_window_set_destroy_with_parent(GTK_WINDOW(data->trace),TRUE);
+
+
+	gtk_window_set_default_size(GTK_WINDOW(data->trace),590,430);
+	gtk_widget_show_all(data->trace);
+	return data->trace;
+ }
+
+ static void read_line(struct rexx_application_data *data, PRXSTRING Retstr)
+ {
+	gchar *value = pw3270_trace_get_command(get_trace_window(data));
+
+	if(value)
 	{
-		GtkWidget *dialog = gtk_message_dialog_new(		GTK_WINDOW(gtk_widget_get_toplevel(((struct rexx_application_data * )context->GetApplicationData())->widget)),
-														GTK_DIALOG_DESTROY_WITH_PARENT,
-														GTK_MESSAGE_INFO,
-														GTK_BUTTONS_OK_CANCEL,
-														"%s", (((RXSIOSAY_PARM *) parmBlock)->rxsio_string).strptr );
-
-		gtk_window_set_title(GTK_WINDOW(dialog), _( "Script message" ) );
-
-        if(gtk_dialog_run(GTK_DIALOG (dialog)) == GTK_RESPONSE_CANCEL)
-			context->RaiseException0(Rexx_Error_Program_interrupted);
-
-        gtk_widget_destroy(dialog);
-
-		return RXEXIT_HANDLED;
+		if(strlen(value) > (RXAUTOBUFLEN-1))
+		{
+			Retstr->strptr = (char *) RexxAllocateMemory(strlen(value)+1);
+			strcpy(Retstr->strptr,value);
+		}
+		else
+		{
+			g_snprintf(Retstr->strptr,RXAUTOBUFLEN-1,"%s",value);
+		}
+		g_free(value);
+	}
+	else
+	{
+		*Retstr->strptr = 0;
 	}
 
-	return RXEXIT_NOT_HANDLED;
+	Retstr->strlength = strlen(Retstr->strptr);
+
+ }
+
+ static int REXXENTRY Rexx_IO_exit(RexxExitContext *context, int exitnumber, int subfunction, PEXIT parmBlock)
+ {
+//	trace("%s call with ExitNumber: %d Subfunction: %d",__FUNCTION__,(int) exitnumber, (int) subfunction);
+
+	switch(subfunction)
+	{
+	case RXSIOSAY:	// SAY a line to STDOUT
+		{
+			struct rexx_application_data *data = (struct rexx_application_data *) context->GetApplicationData();
+
+			GtkWidget *dialog = gtk_message_dialog_new(		GTK_WINDOW(gtk_widget_get_toplevel(data->widget)),
+															GTK_DIALOG_DESTROY_WITH_PARENT,
+															GTK_MESSAGE_INFO,
+															GTK_BUTTONS_OK_CANCEL,
+															"%s", (((RXSIOSAY_PARM *) parmBlock)->rxsio_string).strptr );
+
+			gtk_window_set_title(GTK_WINDOW(dialog), _( "Script message" ) );
+
+			if(data->trace)
+				pw3270_trace_printf(data->trace,"%s\n",(((RXSIOSAY_PARM *) parmBlock)->rxsio_string).strptr);
+
+			if(gtk_dialog_run(GTK_DIALOG (dialog)) == GTK_RESPONSE_CANCEL)
+				context->RaiseException0(Rexx_Error_Program_interrupted);
+
+			gtk_widget_destroy(dialog);
+		}
+		break;
+
+	case RXSIOTRC:  // Trace output
+		{
+			struct rexx_application_data *data = (struct rexx_application_data *) context->GetApplicationData();
+			lib3270_write_log(NULL, "rx3270", "%s", (((RXSIOTRC_PARM *) parmBlock)->rxsio_string).strptr);
+			pw3270_trace_printf(get_trace_window(data),"%s\n",(((RXSIOTRC_PARM *) parmBlock)->rxsio_string).strptr);
+		}
+		break;
+
+	case RXSIOTRD:  // Read from char stream
+		read_line((struct rexx_application_data *) context->GetApplicationData(), & (((RXSIODTR_PARM *) parmBlock)->rxsiodtr_retc) );
+		break;
+
+	case RXSIODTR:  // DEBUG read from char stream
+		read_line((struct rexx_application_data *) context->GetApplicationData(), & (((RXSIODTR_PARM *) parmBlock)->rxsiodtr_retc) );
+		break;
+
+	default:
+		return RXEXIT_NOT_HANDLED;
+
+	}
+
+	return RXEXIT_HANDLED;
  }
 
  static void call_rexx_script(GtkAction *action, GtkWidget *widget, const gchar *filename)
  {
 	const gchar						* args      = (const gchar *) g_object_get_data(G_OBJECT(action),"args");
 
-	struct rexx_application_data	  appdata   = { action, widget, filename };
+	struct rexx_application_data	  appdata;
 
 	RexxInstance 		* instance;
 	RexxThreadContext	* threadContext;
 	RexxOption			  options[25];
 	RexxContextExit		  exits[2];
+
+	memset(&appdata,0,sizeof(appdata));
+	appdata.action 		= action;
+	appdata.widget 		= widget;
+	appdata.filename	= filename;
 
 	memset(options,0,sizeof(options));
 	memset(exits,0,sizeof(exits));
@@ -184,9 +278,6 @@
 
 	options[1].optionName	= APPLICATION_DATA;
 	options[1].option		= (void *) &appdata;
-
-//    options[0].optionName   = LOAD_REQUIRED_LIBRARY;
-//    options[0].option       = "rx3270";
 
     rx3270_set_package_option(&options[2]);
 
@@ -276,6 +367,12 @@
         }
 
 		instance->Terminate();
+
+		if(appdata.trace)
+		{
+			pw3270_trace_printf(appdata.trace,"%s","** Rexx script ends\n");
+			g_object_set_data(G_OBJECT(appdata.trace),"rexx_app_data",NULL);
+		}
 
 		trace("%s ends",__FUNCTION__);
 	}

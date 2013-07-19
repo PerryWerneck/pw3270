@@ -56,6 +56,7 @@
 	GtkWidget		* button;
 	gchar			**line;
 	gboolean		* enabled;
+	gboolean		  destroy_on_close;
  };
 
  const GtkWindowClass	* pw3270_trace_get_parent_class(void);
@@ -78,15 +79,19 @@
 
 	trace("%s",__FUNCTION__);
 
-	if(*hwnd->line)
-		g_free(*hwnd->line);
+	if(hwnd->enabled)
+	{
+		if(*hwnd->line)
+			g_free(*hwnd->line);
 
-	*hwnd->line = g_strdup(gtk_entry_get_text(GTK_ENTRY(hwnd->entry)));
+		*hwnd->line = g_strdup(gtk_entry_get_text(GTK_ENTRY(hwnd->entry)));
 
-	gtk_widget_set_sensitive(hwnd->entry,FALSE);
-	gtk_widget_set_sensitive(hwnd->button,FALSE);
+		gtk_widget_set_sensitive(hwnd->entry,FALSE);
+		gtk_widget_set_sensitive(hwnd->button,FALSE);
 
-	*hwnd->enabled = FALSE;
+		*hwnd->enabled = FALSE;
+	}
+
  }
 
 #if GTK_CHECK_VERSION(3,0,0)
@@ -97,8 +102,11 @@ static void destroy(GtkObject *widget)
  {
 	pw3270_trace * hwnd = PW3270_TRACE(widget);
 
-	hwnd->line = NULL;
-	*hwnd->enabled = FALSE;
+	if(hwnd->line)
+		*hwnd->line = NULL;
+
+	if(hwnd->enabled)
+		*hwnd->enabled = FALSE;
 
 #if GTK_CHECK_VERSION(3,0,0)
 	GTK_WIDGET_CLASS(pw3270_trace_parent_class)->destroy(widget);
@@ -111,9 +119,18 @@ static void destroy(GtkObject *widget)
  static gboolean delete_event(GtkWidget *widget, GdkEventAny  *event)
  {
 	pw3270_trace * hwnd = PW3270_TRACE(widget);
- 	trace("%s",__FUNCTION__);
-	hwnd->line = NULL;
-	*hwnd->enabled = FALSE;
+
+ 	trace("%s destroy=%s",__FUNCTION__,hwnd->destroy_on_close ? "Yes" : "No");
+
+	if(hwnd->line)
+		*hwnd->line = NULL;
+
+	if(hwnd->enabled)
+		*hwnd->enabled = FALSE;
+
+	if(hwnd->destroy_on_close)
+		return FALSE;
+
 	gtk_widget_hide(widget);
 	return TRUE;
  }
@@ -243,5 +260,13 @@ static void destroy(GtkObject *widget)
 		gtk_main_iteration();
 	}
 
+	hwnd->line		= NULL;
+	hwnd->enabled	= NULL;
+
 	return line;
+ }
+
+ LIB3270_EXPORT void pw3270_trace_set_destroy_on_close(GtkWidget *widget,gboolean on)
+ {
+ 	PW3270_TRACE(widget)->destroy_on_close = on;
  }

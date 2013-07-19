@@ -190,9 +190,6 @@ LIB3270_EXPORT void rx3270_set_package_option(RexxOption *option)
 {
     static const RexxLibraryPackage package = { "rx3270", &rx3270_package_entry };
 
-//    package.registeredName  = "rx3270";
-//    package.table           = ;
-
     option->optionName   = REGISTER_LIBRARY;
     option->option       = (void *) &package;
 
