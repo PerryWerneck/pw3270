@@ -38,6 +38,10 @@
  #include <pw3270/trace.h>
  #include <lib3270/log.h>
 
+#if defined( HAVE_SYSLOG )
+ #include <syslog.h>
+#endif // HAVE_SYSLOG
+
 /*--[ Widget definition ]----------------------------------------------------------------------------*/
 
  G_BEGIN_DECLS
@@ -55,6 +59,7 @@
 	GtkWidget		* entry;
 	GtkWidget		* button;
 	gchar			**line;
+	guint 			  log_handler;
 	gboolean		* enabled;
 	gboolean		  destroy_on_close;
  };
@@ -101,6 +106,12 @@ static void destroy(GtkObject *widget)
 #endif
  {
 	pw3270_trace * hwnd = PW3270_TRACE(widget);
+
+	if(hwnd->log_handler)
+	{
+		g_log_remove_handler(NULL,hwnd->log_handler);
+		hwnd->log_handler = 0;
+	}
 
 	if(hwnd->line)
 		*hwnd->line = NULL;
@@ -164,11 +175,127 @@ static void destroy(GtkObject *widget)
  	activate_default(window);
  }
 
+ static void menu_save(GtkWidget *button, pw3270_trace *window)
+ {
+
+ }
+
+ static void menu_close(GtkWidget *button, GtkWidget *window)
+ {
+	gtk_widget_destroy(window);
+ }
+
+ struct submenu
+ {
+	const gchar * stock_id;
+	GCallback	  action;
+ };
+
+ static void build_menu(GtkWidget *menubar, pw3270_trace *window, const gchar *name, const struct submenu *item, size_t sz)
+ {
+ 	int			  f;
+	GtkWidget	* menu		= gtk_menu_new();
+	GtkWidget	* topitem	= gtk_image_menu_item_new_from_stock( name, NULL );
+
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(topitem), menu);
+
+	for(f=0;f<sz;f++)
+	{
+		GtkWidget *widget = gtk_image_menu_item_new_from_stock( item[f].stock_id, NULL );
+		gtk_menu_shell_append(GTK_MENU_SHELL(menu),widget);
+		g_signal_connect(G_OBJECT(widget), "activate",item[f].action,window);
+	}
+
+	gtk_menu_shell_append(GTK_MENU_SHELL(menubar), topitem);
+ }
+
+ static void glog(const gchar *log_domain,GLogLevelFlags log_level,const gchar *message,GtkWidget *window)
+ {
+	#ifndef LOG_INFO
+		#define LOG_INFO 0
+	#endif // LOG_INFO
+
+	#ifndef LOG_ERR
+		#define LOG_ERR 0
+	#endif // LOG_ERR
+
+	#ifndef LOG_DEBUG
+		#define LOG_DEBUG 0
+	#endif // LOG_DEBUG
+
+ 	static const struct _logtype
+ 	{
+ 		GLogLevelFlags	  log_level;
+ 		int 			  priority;
+ 		const gchar		* msg;
+ 	} logtype[] =
+ 	{
+		{ G_LOG_FLAG_RECURSION,	LOG_INFO,		"recursion"			},
+		{ G_LOG_FLAG_FATAL,		LOG_ERR,		"fatal error"		},
+
+		/* GLib log levels */
+		{ G_LOG_LEVEL_ERROR,	LOG_ERR,		"error"				},
+		{ G_LOG_LEVEL_CRITICAL,	LOG_ERR,		"critical error"	},
+		{ G_LOG_LEVEL_WARNING,	LOG_ERR,		"warning"			},
+		{ G_LOG_LEVEL_MESSAGE,	LOG_ERR,		"message"			},
+		{ G_LOG_LEVEL_INFO,		LOG_INFO,		"info"				},
+		{ G_LOG_LEVEL_DEBUG,	LOG_DEBUG,		"debug"				},
+ 	};
+
+	int f;
+
+	for(f=0;f<G_N_ELEMENTS(logtype);f++)
+	{
+		if(logtype[f].log_level == log_level)
+		{
+			gchar *ptr;
+			gchar *text = g_strdup_printf("%s: %s %s",logtype[f].msg,log_domain ? log_domain : "",message);
+			for(ptr = text;*ptr;ptr++)
+			{
+				if(*ptr < ' ')
+					*ptr = ' ';
+			}
+
+			pw3270_trace_printf(window,"%s\n",text);
+
+#ifdef HAVE_SYSLOG
+			syslog(logtype[f].priority,"%s",text);
+#endif // HAVE_SYSLOG
+			g_free(text);
+			return;
+		}
+	}
+
+	pw3270_trace_printf(window,"%s %s\n",log_domain ? log_domain : "", message);
+
+#ifdef HAVE_SYSLOG
+	syslog(LOG_INFO,"%s %s",log_domain ? log_domain : "", message);
+#endif // HAVE_SYSLOG
+
+ }
+
  static void pw3270_trace_init(pw3270_trace *window)
  {
  	GtkWidget *widget;
  	GtkWidget *view;
  	GtkWidget *vbox		= gtk_box_new(GTK_ORIENTATION_VERTICAL,0);
+
+	// Top menu
+	{
+
+		static const struct submenu filemenu[] =
+		{
+			{ GTK_STOCK_SAVE_AS,	G_CALLBACK(menu_save)	},
+			{ GTK_STOCK_QUIT,		G_CALLBACK(menu_close)	},
+
+		};
+
+		widget = gtk_menu_bar_new();
+
+		build_menu(widget, window, GTK_STOCK_FILE, filemenu, G_N_ELEMENTS(filemenu));
+
+		gtk_box_pack_start(GTK_BOX(vbox),widget,FALSE,TRUE,0);
+	}
 
 	// Trace container
 	widget = gtk_scrolled_window_new(NULL,NULL);
@@ -204,6 +331,10 @@ static void destroy(GtkObject *widget)
 	gtk_widget_show_all(vbox);
 
 	gtk_container_add(GTK_CONTAINER(window),vbox);
+
+	window->log_handler = g_log_set_handler(NULL,G_LOG_LEVEL_MASK | G_LOG_FLAG_FATAL | G_LOG_FLAG_RECURSION,(GLogFunc) glog,window);
+	trace("Log handler set to %d",window->log_handler);
+
  }
 
  GtkWidget * pw3270_trace_new(void)
