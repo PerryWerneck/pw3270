@@ -55,6 +55,7 @@
 	GtkWidget		* entry;
 	GtkWidget		* button;
 	gchar			**line;
+	gboolean		* enabled;
  };
 
  const GtkWindowClass	* pw3270_trace_get_parent_class(void);
@@ -73,7 +74,19 @@
 
  static void activate_default(GtkWindow *window)
  {
+	pw3270_trace * hwnd = PW3270_TRACE(window);
+
 	trace("%s",__FUNCTION__);
+
+	if(*hwnd->line)
+		g_free(*hwnd->line);
+
+	*hwnd->line = g_strdup(gtk_entry_get_text(GTK_ENTRY(hwnd->entry)));
+
+	gtk_widget_set_sensitive(hwnd->entry,FALSE);
+	gtk_widget_set_sensitive(hwnd->button,FALSE);
+
+	*hwnd->enabled = FALSE;
  }
 
 #if GTK_CHECK_VERSION(3,0,0)
@@ -85,6 +98,7 @@ static void destroy(GtkObject *widget)
 	pw3270_trace * hwnd = PW3270_TRACE(widget);
 
 	hwnd->line = NULL;
+	*hwnd->enabled = FALSE;
 
 #if GTK_CHECK_VERSION(3,0,0)
 	GTK_WIDGET_CLASS(pw3270_trace_parent_class)->destroy(widget);
@@ -94,17 +108,28 @@ static void destroy(GtkObject *widget)
 
  }
 
+ static gboolean delete_event(GtkWidget *widget, GdkEventAny  *event)
+ {
+	pw3270_trace * hwnd = PW3270_TRACE(widget);
+ 	trace("%s",__FUNCTION__);
+	hwnd->line = NULL;
+	*hwnd->enabled = FALSE;
+	gtk_widget_hide(widget);
+	return TRUE;
+ }
+
  static void pw3270_trace_class_init(pw3270_traceClass *klass)
  {
 	GtkWindowClass	* window_class	= GTK_WINDOW_CLASS(klass);
+	GtkWidgetClass	* widget_class	= GTK_WIDGET_CLASS(klass);
 
 	trace("%s",__FUNCTION__);
 
 	window_class->activate_default	= activate_default;
+	widget_class->delete_event 		= delete_event;
 
 #if GTK_CHECK_VERSION(3,0,0)
 	{
-		GtkWidgetClass	* widget_class	= GTK_WIDGET_CLASS(klass);
 		widget_class->destroy = destroy;
 	}
 #else
@@ -114,6 +139,12 @@ static void destroy(GtkObject *widget)
 	}
 #endif // GTK3
 
+ }
+
+ static void activate(GtkButton *button, GtkWindow *window)
+ {
+ 	trace("%s",__FUNCTION__);
+ 	activate_default(window);
  }
 
  static void pw3270_trace_init(pw3270_trace *window)
@@ -142,13 +173,14 @@ static void destroy(GtkObject *widget)
 	window->entry = gtk_entry_new();
 	gtk_box_pack_start(GTK_BOX(widget),window->entry,TRUE,TRUE,4);
 	gtk_widget_set_sensitive(window->entry,FALSE);
+	g_signal_connect(G_OBJECT(window->entry),"activate",G_CALLBACK(activate),window);
 
 	window->button = gtk_button_new_from_stock(GTK_STOCK_OK);
 	gtk_box_pack_end(GTK_BOX(widget),window->button,FALSE,FALSE,4);
 	gtk_widget_set_sensitive(window->button,FALSE);
 	gtk_button_set_focus_on_click(GTK_BUTTON(window->button),FALSE);
 
-	g_signal_connect(G_OBJECT(window->button),"clicked",G_CALLBACK(gtk_window_activate_default),window);
+	g_signal_connect(G_OBJECT(window->button),"clicked",G_CALLBACK(activate),window);
 
 	gtk_box_pack_start(GTK_BOX(vbox),widget,FALSE,TRUE,0);
 
@@ -194,17 +226,19 @@ static void destroy(GtkObject *widget)
 
  LIB3270_EXPORT gchar * pw3270_trace_get_command(GtkWidget *widget)
  {
-	pw3270_trace	* hwnd = PW3270_TRACE(widget);
-	gchar			* line = NULL;
+	pw3270_trace	* hwnd		= PW3270_TRACE(widget);
+	gchar			* line 		= NULL;
+	gboolean		  enabled	= TRUE;
 
-	hwnd->line = &line;
+	hwnd->line		= &line;
+	hwnd->enabled	= &enabled;
 
 	gtk_window_present(GTK_WINDOW(widget));
 	gtk_widget_set_sensitive(hwnd->entry,TRUE);
 	gtk_widget_set_sensitive(hwnd->button,TRUE);
 	gtk_widget_grab_focus(hwnd->entry);
 
-	while(hwnd->line)
+	while(enabled)
 	{
 		gtk_main_iteration();
 	}
