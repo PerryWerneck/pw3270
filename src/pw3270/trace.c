@@ -52,8 +52,9 @@
 	GtkWindow		  parent;
 	GtkAdjustment	* scroll;
 	GtkTextBuffer	* text;
-	GtkWidget	* entry;
-	GtkWidget	* button;
+	GtkWidget		* entry;
+	GtkWidget		* button;
+	gchar			**line;
  };
 
  const GtkWindowClass	* pw3270_trace_get_parent_class(void);
@@ -70,9 +71,49 @@
 	return GTK_WINDOW_CLASS(pw3270_trace_parent_class);
  }
 
- static void pw3270_trace_class_init(pw3270_traceClass *klass)
+ static void activate_default(GtkWindow *window)
  {
 	trace("%s",__FUNCTION__);
+ }
+
+#if GTK_CHECK_VERSION(3,0,0)
+static void destroy(GtkWidget *widget)
+#else
+static void destroy(GtkObject *widget)
+#endif
+ {
+	pw3270_trace * hwnd = PW3270_TRACE(widget);
+
+	hwnd->line = NULL;
+
+#if GTK_CHECK_VERSION(3,0,0)
+	GTK_WIDGET_CLASS(pw3270_trace_parent_class)->destroy(widget);
+#else
+	GTK_OBJECT_CLASS(pw3270_trace_parent_class)->destroy(widget);
+#endif // GTK3
+
+ }
+
+ static void pw3270_trace_class_init(pw3270_traceClass *klass)
+ {
+	GtkWindowClass	* window_class	= GTK_WINDOW_CLASS(klass);
+
+	trace("%s",__FUNCTION__);
+
+	window_class->activate_default	= activate_default;
+
+#if GTK_CHECK_VERSION(3,0,0)
+	{
+		GtkWidgetClass	* widget_class	= GTK_WIDGET_CLASS(klass);
+		widget_class->destroy = destroy;
+	}
+#else
+	{
+		GtkObjectClass *object_class = (GtkObjectClass*) klass;
+		object_class->destroy = destroy;
+	}
+#endif // GTK3
+
  }
 
  static void pw3270_trace_init(pw3270_trace *window)
@@ -106,6 +147,8 @@
 	gtk_box_pack_end(GTK_BOX(widget),window->button,FALSE,FALSE,4);
 	gtk_widget_set_sensitive(window->button,FALSE);
 	gtk_button_set_focus_on_click(GTK_BUTTON(window->button),FALSE);
+
+	g_signal_connect(G_OBJECT(window->button),"clicked",G_CALLBACK(gtk_window_activate_default),window);
 
 	gtk_box_pack_start(GTK_BOX(vbox),widget,FALSE,TRUE,0);
 
@@ -147,4 +190,24 @@
 	va_start(arg_ptr, fmt);
 	pw3270_trace_vprintf(widget,fmt,arg_ptr);
 	va_end(arg_ptr);
+ }
+
+ LIB3270_EXPORT gchar * pw3270_trace_get_command(GtkWidget *widget)
+ {
+	pw3270_trace	* hwnd = PW3270_TRACE(widget);
+	gchar			* line = NULL;
+
+	hwnd->line = &line;
+
+	gtk_window_present(GTK_WINDOW(widget));
+	gtk_widget_set_sensitive(hwnd->entry,TRUE);
+	gtk_widget_set_sensitive(hwnd->button,TRUE);
+	gtk_widget_grab_focus(hwnd->entry);
+
+	while(hwnd->line)
+	{
+		gtk_main_iteration();
+	}
+
+	return line;
  }
