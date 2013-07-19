@@ -354,7 +354,7 @@ static void destroy(GtkObject *widget)
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(widget),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
 	view = gtk_text_view_new();
 	window->text = gtk_text_view_get_buffer(GTK_TEXT_VIEW(view));
-	gtk_text_view_set_editable(GTK_TEXT_VIEW(view), FALSE);
+	gtk_text_view_set_editable(GTK_TEXT_VIEW(view), TRUE);
 #if GTK_CHECK_VERSION(3,8,0)
 	gtk_container_add(GTK_CONTAINER(widget),view);
 #else
