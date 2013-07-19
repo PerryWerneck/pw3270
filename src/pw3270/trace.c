@@ -177,6 +177,57 @@ static void destroy(GtkObject *widget)
 
  static void menu_save(GtkWidget *button, pw3270_trace *window)
  {
+ 	GtkWindow	* toplevel		= GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(window)));
+	GtkWidget	* dialog;
+
+	dialog = gtk_file_chooser_dialog_new( 	_( "Save trace file" ),
+											toplevel,
+											GTK_FILE_CHOOSER_ACTION_SAVE,
+											GTK_STOCK_CANCEL,	GTK_RESPONSE_CANCEL,
+											GTK_STOCK_SAVE,		GTK_RESPONSE_ACCEPT,
+											NULL );
+
+	gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(dialog), TRUE);
+
+	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),g_get_user_special_dir(G_USER_DIRECTORY_DOCUMENTS));
+
+	if(gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
+	{
+		gchar *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+		if(filename)
+		{
+			GError		* error = NULL;
+			gchar		* text;
+			GtkTextIter	  start;
+			GtkTextIter	  end;
+
+			gtk_text_buffer_get_start_iter(window->text,&start);
+			gtk_text_buffer_get_end_iter(window->text,&end);
+			text = gtk_text_buffer_get_text(window->text,&start,&end,FALSE);
+
+			g_file_set_contents(filename,text,-1,&error);
+
+			g_free(text);
+
+			if(error)
+			{
+				GtkWidget *popup = gtk_message_dialog_new_with_markup(GTK_WINDOW(dialog),GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,_( "Can't save %s" ),filename);
+
+				gtk_window_set_title(GTK_WINDOW(popup),_("Can't save file"));
+
+				gtk_message_dialog_format_secondary_markup(GTK_MESSAGE_DIALOG(popup),"%s",error->message);
+				g_error_free(error);
+
+				gtk_dialog_run(GTK_DIALOG(popup));
+				gtk_widget_destroy(popup);
+
+			}
+
+			g_free(filename);
+		}
+	}
+
+	gtk_widget_destroy(dialog);
 
  }
 
