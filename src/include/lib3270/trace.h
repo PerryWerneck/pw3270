@@ -33,6 +33,10 @@
 
 	#define LIB3270_TRACE_H_INCLUDED 1
 
+#ifdef __cplusplus
+	extern "C" {
+#endif
+
 	typedef void (*LIB3270_TRACE_HANDLER)(H3270 *, const char *, va_list);
 
 
@@ -68,5 +72,8 @@
 	 */
 	LIB3270_EXPORT void lib3270_trace_event(H3270 *session, const char *fmt, ...);
 
+#ifdef __cplusplus
+	}
+#endif
 
 #endif // LIB3270_TRACE_H_INCLUDED
