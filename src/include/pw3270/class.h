@@ -38,6 +38,7 @@
  #endif // WIN32
 
  #include <exception>
+ #include <errno.h>
  #include <lib3270/config.h>
  #include <lib3270.h>
  #include <lib3270/popup.h>
@@ -51,6 +52,10 @@
  #include <lib3270.h>
  #include <gtk/gtk.h>
  #include <errno.h>
+
+ #ifndef ETIMEDOUT
+	#define ETIMEDOUT 1238
+ #endif // !ETIMEDOUT
 
  #define PW3270_NAMESPACE h3270
 
