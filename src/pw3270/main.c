@@ -315,7 +315,11 @@ static void g_trace(H3270 *hSession, const char *fmt, va_list args)
 			pw3270_trace_set_destroy_on_close(trace_window,TRUE);
 			g_signal_connect(trace_window, "destroy", G_CALLBACK(trace_window_destroy), hSession);
 			gtk_window_set_default_size(GTK_WINDOW(trace_window),590,430);
+
+#if GTK_CHECK_VERSION(3,4,0)
 			gtk_window_set_attached_to(GTK_WINDOW(trace_window),toplevel);
+#endif // GTK_CHECK_VERSION(3,4,0)
+
 			gtk_widget_show(trace_window);
 		}
 		pw3270_trace_printf(trace_window,"%s",utftext);
