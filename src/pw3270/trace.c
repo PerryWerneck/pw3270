@@ -323,7 +323,11 @@ static void destroy(GtkObject *widget)
  {
  	GtkWidget				* widget;
  	GtkWidget				* view;
+#if GTK_CHECK_VERSION(3,0,0)
  	GtkWidget				* vbox		= gtk_box_new(GTK_ORIENTATION_VERTICAL,0);
+#else
+ 	GtkWidget				* vbox		= gtk_vbox_new(FALSE,0);
+#endif // GTK_CHECK_VERSION
  	gchar					* fontname	= get_string_from_config("trace", "fontname", "Monospace 8");
 	PangoFontDescription	* fontdesc	= pango_font_description_from_string("Monospace 8");
 
@@ -369,7 +373,11 @@ static void destroy(GtkObject *widget)
 	gtk_box_pack_start(GTK_BOX(vbox),widget,TRUE,TRUE,0);
 
 	// Edit box
+#if GTK_CHECK_VERSION(3,0,0)
 	widget = gtk_box_new(GTK_ORIENTATION_HORIZONTAL,0);
+#else
+	widget = gtk_hbox_new(FALSE,0);
+#endif // GTK_CHECK_VERSION
 	gtk_box_pack_start(GTK_BOX(widget),gtk_label_new( _( "Command:" )),FALSE,TRUE,4);
 	window->entry = gtk_entry_new();
 	gtk_box_pack_start(GTK_BOX(widget),window->entry,TRUE,TRUE,4);
