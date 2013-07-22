@@ -38,6 +38,10 @@
 	#include <syslog.h>
  #endif // HAVE_SYSLOG
 
+ #ifndef ETIMEDOUT
+	#define ETIMEDOUT 1238
+ #endif // !ETIMEDOUT
+
 /*--[ Implement ]--------------------------------------------------------------------------------------------------*/
 
  namespace PW3270_NAMESPACE
