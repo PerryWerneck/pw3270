@@ -36,7 +36,7 @@
  #include <glib/gi18n.h>
 
  #include <pw3270/trace.h>
- #include <lib3270/log.h>
+ #include "common/common.h"
 
 #if defined( HAVE_SYSLOG )
  #include <syslog.h>
@@ -118,12 +118,6 @@ static void destroy(GtkObject *widget)
 
 	if(hwnd->enabled)
 		*hwnd->enabled = FALSE;
-
-#if GTK_CHECK_VERSION(3,0,0)
-	GTK_WIDGET_CLASS(pw3270_trace_parent_class)->destroy(widget);
-#else
-	GTK_OBJECT_CLASS(pw3270_trace_parent_class)->destroy(widget);
-#endif // GTK3
 
  }
 
@@ -327,9 +321,13 @@ static void destroy(GtkObject *widget)
 
  static void pw3270_trace_init(pw3270_trace *window)
  {
- 	GtkWidget *widget;
- 	GtkWidget *view;
- 	GtkWidget *vbox		= gtk_box_new(GTK_ORIENTATION_VERTICAL,0);
+ 	GtkWidget				* widget;
+ 	GtkWidget				* view;
+ 	GtkWidget				* vbox		= gtk_box_new(GTK_ORIENTATION_VERTICAL,0);
+ 	gchar					* fontname	= get_string_from_config("trace", "fontname", "Monospace 8");
+	PangoFontDescription	* fontdesc	= pango_font_description_from_string("Monospace 8");
+
+	g_free(fontname);
 
 	// Top menu
 	{
@@ -353,8 +351,16 @@ static void destroy(GtkObject *widget)
 	window->scroll = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(widget));
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(widget),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
 	view = gtk_text_view_new();
+
+#if GTK_CHECK_VERSION(3,0,0)
+	gtk_widget_override_font(GTK_WIDGET(view), fontdesc);
+#else
+	gtk_widget_modify_font(GTK_WIDGET(view), fontdesc);
+#endif // GTK_CHECK_VERSION
+
 	window->text = gtk_text_view_get_buffer(GTK_TEXT_VIEW(view));
 	gtk_text_view_set_editable(GTK_TEXT_VIEW(view), TRUE);
+
 #if GTK_CHECK_VERSION(3,8,0)
 	gtk_container_add(GTK_CONTAINER(widget),view);
 #else
@@ -382,6 +388,8 @@ static void destroy(GtkObject *widget)
 	gtk_widget_show_all(vbox);
 
 	gtk_container_add(GTK_CONTAINER(window),vbox);
+
+	pango_font_description_free(fontdesc);
 
 	window->log_handler = g_log_set_handler(NULL,G_LOG_LEVEL_MASK | G_LOG_FLAG_FATAL | G_LOG_FLAG_RECURSION,(GLogFunc) glog,window);
 	trace("Log handler set to %d",window->log_handler);

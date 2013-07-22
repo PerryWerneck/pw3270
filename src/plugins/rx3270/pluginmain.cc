@@ -48,6 +48,7 @@
  #include <pw3270/trace.h>
  #include <lib3270/actions.h>
  #include <lib3270/log.h>
+ #include <lib3270/trace.h>
  #include <pw3270/class.h>
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/

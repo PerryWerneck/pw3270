@@ -39,6 +39,7 @@ struct ta;
 #define LIB3270_TA struct ta
 
 #include "globals.h"
+#include <lib3270/trace.h>
 
 #ifndef ANDROID
 	#include <stdlib.h>

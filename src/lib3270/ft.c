@@ -33,6 +33,7 @@
 #include <lib3270.h>
 #include <lib3270/filetransfer.h>
 #include "globals.h"
+#include <lib3270/trace.h>
 
 #include <errno.h>
 

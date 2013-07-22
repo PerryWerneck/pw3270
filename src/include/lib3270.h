@@ -1007,10 +1007,6 @@
 
 	LIB3270_EXPORT int lib3270_clear_operator_error(H3270 *hSession);
 
-	LIB3270_EXPORT void lib3270_trace_event(H3270 *session, const char *fmt, ...) LIB3270_GNUC_FORMAT(2,3);
-	LIB3270_EXPORT void lib3270_set_trace_handler( void (*handler)(H3270 *session, const char *fmt, va_list args) );
-	LIB3270_EXPORT void lib3270_write_dstrace(H3270 *session, const char *fmt, ...) LIB3270_GNUC_FORMAT(2,3);
-
 	LIB3270_EXPORT LIB3270_OPTION lib3270_get_options(H3270 *hSession);
 	LIB3270_EXPORT void lib3270_set_options(H3270 *hSession, LIB3270_OPTION opt);
 	LIB3270_EXPORT int	lib3270_set_color_type(H3270 *hSession, unsigned short colortype);

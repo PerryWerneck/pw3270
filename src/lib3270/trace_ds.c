@@ -38,6 +38,7 @@
  */
 
 #include "globals.h"
+#include <lib3270/trace.h>
 
 #if defined(X3270_TRACE) /*[*/
 
@@ -74,9 +75,11 @@ static void	wtrace(H3270 *session, const char *fmt, ...);
 static void (*vwtrace)(H3270 *session, const char *fmt, va_list args) = __vwtrace;
 
 
-LIB3270_EXPORT void lib3270_set_trace_handler( void (*handler)(H3270 *session, const char *fmt, va_list args) )
+LIB3270_EXPORT LIB3270_TRACE_HANDLER lib3270_set_trace_handler( LIB3270_TRACE_HANDLER handler )
 {
+	void (*ret)(H3270 *session, const char *fmt, va_list args) = vwtrace;
 	vwtrace = handler ? handler : __vwtrace;
+	return ret;
 }
 
 /* display a (row,col) */
@@ -88,10 +91,6 @@ const char * rcba(H3270 *hSession, int baddr)
 }
 
 /* Data Stream trace print, handles line wraps */
-
-// static char *tdsbuf = CN;
-// #define TDS_LEN	75
-
 static void trace_ds_s(H3270 *hSession, char *s, Boolean can_break)
 {
 	static int      dscnt = 0;

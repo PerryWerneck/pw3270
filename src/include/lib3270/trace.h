@@ -33,13 +33,18 @@
 
 	#define LIB3270_TRACE_H_INCLUDED 1
 
+	typedef void (*LIB3270_TRACE_HANDLER)(H3270 *, const char *, va_list);
+
+
 	/**
 	 * Set trace handle callback.
 	 *
-	 * @param handle	Callback to write in trace file or show trace window (NULL send all trace to stdout).
+	 * @param handle	Callback to write in trace file or show trace window (NULL send all trace to stdout/syslog).
+	 * @param data		User data to pass to the trace handler.
 	 *
+	 * @return Current trace handler
 	 */
-	LIB3270_EXPORT void lib3270_set_trace_handler( void (*handler)(H3270 *session, const char *fmt, va_list args) );
+	LIB3270_EXPORT LIB3270_TRACE_HANDLER lib3270_set_trace_handler( LIB3270_TRACE_HANDLER handler);
 
 	/**
 	 * Write on trace file.
