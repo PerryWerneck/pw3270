@@ -72,6 +72,19 @@
 	return 0;
  }
 
+#if GTK_CHECK_VERSION(3,0,0)
+ static void set_row(int row, GtkWidget *widget, GtkGrid *container, const gchar *text)
+ {
+	GtkWidget *label = gtk_label_new_with_mnemonic(text);
+
+	gtk_misc_set_alignment(GTK_MISC(label),0,0.5);
+
+	gtk_grid_attach(container,label,0,row,1,1);
+	gtk_grid_attach(container,widget,1,row,1,1);
+
+	gtk_label_set_mnemonic_widget(GTK_LABEL(label),widget);
+ }
+#else
  static void set_row(int row, GtkWidget *widget, GtkTable *container, const gchar *text)
  {
 	GtkWidget *label = gtk_label_new_with_mnemonic(text);
@@ -80,8 +93,10 @@
 
 	gtk_table_attach(container,label,0,1,row,row+1,GTK_FILL,0,5,0);
 	gtk_table_attach(container,widget,1,2,row,row+1,GTK_FILL,0,0,0);
+
 	gtk_label_set_mnemonic_widget(GTK_LABEL(label),widget);
  }
+#endif // GTK_CHECK_VERSION
 
  static void systype_changed(GtkComboBox *widget, int *iHostType)
  {
@@ -218,7 +233,17 @@
 
 		int			  row		= 0;
 		GtkWidget	* expander	= gtk_expander_new_with_mnemonic(_( "_Host options"));
+
+#if GTK_CHECK_VERSION(3,0,0)
+		GtkGrid		* container	= gtk_grid_new();
+
+		gtk_grid_set_column_spacing(container,5);
+		gtk_grid_set_row_spacing(container,3);
+
+#else
 		GtkTable	* container	= GTK_TABLE(gtk_table_new(3,2,FALSE));
+#endif // GTK_CHECK_VERSION
+
 
 		if(!systype)
 		{
