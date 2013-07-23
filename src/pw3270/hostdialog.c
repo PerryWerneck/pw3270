@@ -124,7 +124,11 @@
  	gboolean		  again			= TRUE;
  	int				  iHostType 	= 0;
  	int				  iColorTable	= 0;
+#if GTK_CHECK_VERSION(3,0,0)
+	GtkGrid			* grid			= gtk_grid_new();
+#else
  	GtkTable		* table			= GTK_TABLE(gtk_table_new(3,4,FALSE));
+#endif // GTK_CHECK_VERSION
  	GtkEntry		* host			= GTK_ENTRY(gtk_entry_new());
  	GtkEntry		* port			= GTK_ENTRY(gtk_entry_new());
  	GtkToggleButton	* sslcheck		= GTK_TOGGLE_BUTTON(gtk_check_button_new_with_mnemonic( _( "_Secure connection" ) ));
@@ -144,6 +148,40 @@
 	gtk_entry_set_width_chars(port,7);
 
 
+#if GTK_CHECK_VERSION(3,0,0)
+
+	gtk_grid_set_column_spacing(grid,5);
+	gtk_grid_set_row_spacing(grid,3);
+
+	{
+		// Host info - GtkGrid version
+		struct _line
+		{
+			const gchar			* label;
+			GtkWidget			* widget;
+		} line[] =
+		{
+			{ N_( "_Hostname:" ),	GTK_WIDGET(host) },
+			{ N_( "_Port:" ),		GTK_WIDGET(port) }
+		};
+
+		int f;
+		int c = 0;
+
+		for(f=0;f<G_N_ELEMENTS(line);f++)
+		{
+			GtkWidget * label = gtk_label_new_with_mnemonic( gettext(line[f].label) );
+			gtk_label_set_mnemonic_widget(GTK_LABEL(label),line[f].widget);
+
+			gtk_grid_attach(grid,label,c,0,1,1);
+			gtk_grid_attach(grid,line[f].widget,c+1,0,3,1);
+			c += 4;
+		}
+
+		gtk_grid_attach_next_to(grid,GTK_WIDGET(sslcheck),GTK_WIDGET(host),GTK_POS_BOTTOM,1,1);
+
+	}
+#else
 	{
 		// Host info - GtkTable version
 		struct _line
@@ -171,6 +209,7 @@
 
 		gtk_table_attach(table,GTK_WIDGET(sslcheck),1,2,1,2,GTK_EXPAND|GTK_FILL,0,0,0);
 	}
+#endif // GTK_CHECK_VERSION
 
 	{
 		// Host options
@@ -270,12 +309,24 @@
 		}
 
 		gtk_container_add(GTK_CONTAINER(expander),GTK_WIDGET(container));
+
+#if GTK_CHECK_VERSION(3,0,0)
+		gtk_grid_attach_next_to(grid,GTK_WIDGET(expander),GTK_WIDGET(sslcheck),GTK_POS_BOTTOM,1,1);
+#else
 		gtk_table_attach(table,expander,1,2,2,3,GTK_EXPAND|GTK_FILL,0,0,0);
+#endif // GTK_CHECK_VERSION
+
 	}
 
+#if GTK_CHECK_VERSION(3,0,0)
+	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),GTK_WIDGET(grid),FALSE,FALSE,2);
+	gtk_widget_show_all(GTK_WIDGET(grid));
+	gtk_container_set_border_width(GTK_CONTAINER(grid),5);
+#else
 	gtk_container_set_border_width(GTK_CONTAINER(table),5);
-
 	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),GTK_WIDGET(table),FALSE,FALSE,2);
+	gtk_widget_show_all(GTK_WIDGET(table));
+#endif
 
 	hostname = cfghost;
 
@@ -304,8 +355,6 @@
 	}
 
 	gtk_entry_set_text(host,hostname);
-
-	gtk_widget_show_all(GTK_WIDGET(table));
 
  	while(again)
  	{
