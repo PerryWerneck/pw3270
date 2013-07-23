@@ -101,7 +101,8 @@
  REXX_METHOD_PROTOTYPE(rx3270_method_set_cursor_addr);
  REXX_METHOD_PROTOTYPE(rx3270_method_enter);
  REXX_METHOD_PROTOTYPE(rx3270_method_pfkey);
- REXX_METHOD_PROTOTYPE(rx3270_method_pakey); REXX_METHOD_PROTOTYPE(rx3270_method_get_text);
+ REXX_METHOD_PROTOTYPE(rx3270_method_pakey);
+ REXX_METHOD_PROTOTYPE(rx3270_method_get_text);
  REXX_METHOD_PROTOTYPE(rx3270_method_get_text_at);
  REXX_METHOD_PROTOTYPE(rx3270_method_set_text_at);
  REXX_METHOD_PROTOTYPE(rx3270_method_cmp_text_at);
@@ -209,7 +210,8 @@
 	virtual int				  pfkey(int key)									= 0;
 	virtual int				  pakey(int key)									= 0;
 
-	virtual char 			* get_text_at(int row, int col, size_t sz) 			= 0;	virtual char			* get_text(int baddr, size_t len)					= 0;
+	virtual char 			* get_text_at(int row, int col, size_t sz) 			= 0;
+	virtual char			* get_text(int baddr, size_t len)					= 0;
 	virtual int				  cmp_text_at(int row, int col, const char *text)	= 0;
 	virtual int 			  set_text_at(int row, int col, const char *str)	= 0;
 	virtual int               emulate_input(const char *str)                    = 0;

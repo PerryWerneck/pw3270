@@ -348,7 +348,6 @@
 	{
 		data[datalen+1] = 0;
 		ret = g_strdup((const gchar *) data);
-		trace("datalen=%d",datalen);
 	}
 	else if(def)
 	{

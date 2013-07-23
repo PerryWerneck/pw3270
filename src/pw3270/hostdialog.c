@@ -117,8 +117,8 @@
 
  void hostname_action(GtkAction *action, GtkWidget *widget)
  {
- 	const gchar 	* title 	= g_object_get_data(G_OBJECT(action),"title");
- 	gchar			* cfghost	= get_string_from_config("host","uri","");
+ 	const gchar 	* title			= g_object_get_data(G_OBJECT(action),"title");
+ 	gchar			* cfghost		= get_string_from_config("host","uri","");
  	gchar			* hostname;
  	gchar			* ptr;
  	gboolean		  again			= TRUE;
@@ -145,19 +145,31 @@
 
 
 	{
-	 	GtkWidget * label;
+		// Host info - GtkTable version
+		struct _line
+		{
+			const gchar			* label;
+			GtkWidget			* widget;
+			GtkAttachOptions	  xoptions;
+		} line[] =
+		{
+			{ N_( "_Hostname:" ),	GTK_WIDGET(host), 	GTK_EXPAND|GTK_FILL },
+			{ N_( "_Port:" ),		GTK_WIDGET(port),	GTK_FILL			}
+		};
 
-		label = gtk_label_new_with_mnemonic( _("_Hostname:") );
-		gtk_label_set_mnemonic_widget(GTK_LABEL(label),GTK_WIDGET(host));
-		gtk_table_attach(table,label,0,1,0,1,0,0,5,0);
-		gtk_table_attach(table,GTK_WIDGET(host), 1,2,0,1,GTK_EXPAND|GTK_FILL,0,0,0);
+		int f;
 
-		label = gtk_label_new_with_mnemonic( _( "_Port:" ) );
-		gtk_label_set_mnemonic_widget(GTK_LABEL(label),GTK_WIDGET(port));
-		gtk_table_attach(table, label, 2,3,0,1,0,0,5,0);
-		gtk_table_attach(table,GTK_WIDGET(port), 3,4,0,1,GTK_FILL,0,0,0);
+		for(f=0;f<G_N_ELEMENTS(line);f++)
+		{
+			int col = f*3;
 
-		gtk_table_attach(table,GTK_WIDGET(sslcheck), 1,2,1,2,GTK_EXPAND|GTK_FILL,0,0,0);
+			GtkWidget * label = gtk_label_new_with_mnemonic( gettext(line[f].label) );
+			gtk_label_set_mnemonic_widget(GTK_LABEL(label),line[f].widget);
+			gtk_table_attach(table,label,col,col+1,0,1,0,0,2,2);
+			gtk_table_attach(table,line[f].widget,col+1,col+2,0,1,line[f].xoptions,0,2,2);
+		}
+
+		gtk_table_attach(table,GTK_WIDGET(sslcheck),1,2,1,2,GTK_EXPAND|GTK_FILL,0,0,0);
 	}
 
 	{
