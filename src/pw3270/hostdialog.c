@@ -330,8 +330,10 @@
 
 	hostname = cfghost;
 
+	trace("hostname=[%s]",hostname);
+
 #ifdef HAVE_LIBSSL
-	if(!strncmp(hostname,"L:",2))
+	if(!g_ascii_strncasecmp(hostname,"L:",2))
 	{
 		gtk_toggle_button_set_active(sslcheck,TRUE);
 		hostname += 2;
@@ -339,9 +341,11 @@
 #else
 	gtk_toggle_button_set_active(sslcheck,FALSE);
 	gtk_widget_set_sensitive(GTK_WIDGET(sslcheck),FALSE);
-	if(!strncmp(hostname,"L:",2))
+	if(!g_ascii_strncasecmp(hostname,"L:",2))
 		hostname += 2;
 #endif
+
+	trace("hostname=[%s]",hostname);
 
 	ptr = strchr(hostname,':');
 	if(ptr)
