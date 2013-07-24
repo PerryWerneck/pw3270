@@ -177,11 +177,7 @@ static void check_entry(GtkEditable *editable, struct ftdialog *dlg)
 	gtk_widget_set_sensitive(dlg->ready,is_dialog_ok(editable,dlg));
 }
 
-#if GTK_CHECK_VERSION(3,0,0)
-static GtkEntry * add_filename_entry(GObject *action, int ix, int row, struct ftdialog *dlg, GtkGrid *grid)
-#else
 static GtkEntry * add_filename_entry(GObject *action, int ix, int row, struct ftdialog *dlg, GtkTable *table)
-#endif // GTK_CHECK_VERSION
 {
 	static const gchar	* label_text[]	= { N_( "_Local file name:" ), N_( "_Host file name:" ) };
 	static const gchar	* attr[]		= { "local", "remote" };
@@ -191,93 +187,52 @@ static GtkEntry * add_filename_entry(GObject *action, int ix, int row, struct ft
 	gchar		* val;
 
 	gtk_misc_set_alignment(GTK_MISC(label),0,.5);
-
-#if GTK_CHECK_VERSION(3,0,0)
-	gtk_grid_attach(grid,label,0,row,1,1);
-#else
 	gtk_table_attach(GTK_TABLE(table),label,0,1,row,row+1,GTK_FILL,GTK_FILL,2,2);
-#endif // GTK_CHECK_VERSION
 
 	gtk_widget_set_name(entry,attr[ix]);
 
 	val = get_attribute(action,dlg,attr[ix]);
-	gtk_entry_set_text(GTK_ENTRY(entry),val);
+	gtk_entry_set_text(dlg->file[ix],val);
 	g_free(val);
 
 	gtk_entry_set_width_chars(GTK_ENTRY(entry),40);
 
 	gtk_label_set_mnemonic_widget(GTK_LABEL(label),entry);
 
-#if GTK_CHECK_VERSION(3,0,0)
-	gtk_grid_attach(grid,entry,1,row,1,1);
-#else
 	gtk_table_attach(GTK_TABLE(table),entry,1,3,row,row+1,GTK_EXPAND|GTK_SHRINK|GTK_FILL,GTK_EXPAND|GTK_SHRINK|GTK_FILL,2,2);
-#endif // GTK_CHECK_VERSION
 
 	return GTK_ENTRY(entry);
 }
 
 static void add_file_fields(GObject *action, struct ftdialog *dlg)
 {
+	GtkTable			* table		= GTK_TABLE(gtk_table_new(2,3,FALSE));
 	GtkWidget			* widget;
 
-#if GTK_CHECK_VERSION(3,0,0)
-	GtkGrid				* grid		= GTK_GRID(gtk_grid_new());
-
-	gtk_container_set_border_width(GTK_CONTAINER(grid),2);
-	gtk_grid_set_column_spacing(grid,5);
-	gtk_grid_set_row_spacing(grid,3);
-
-#else
-
-	GtkTable			* table		= GTK_TABLE(gtk_table_new(2,3,FALSE));
-
 	gtk_container_set_border_width(GTK_CONTAINER(table),2);
-
-#endif // GTK_CHECK_VERSION
-
 
 	if(dlg->option&LIB3270_FT_OPTION_RECEIVE)
 	{
 		// Receiving file, first the remote filename
-		widget = gtk_button_new_with_mnemonic( _( "_Browse" ) );
-
-#if GTK_CHECK_VERSION(3,0,0)
-		dlg->file[1] = add_filename_entry(action,1,0,dlg,grid);
-		dlg->file[0] = add_filename_entry(action,0,1,dlg,grid);
-		gtk_grid_attach(grid,widget,2,1,1,1);
-#else
 		dlg->file[1] = add_filename_entry(action,1,0,dlg,table);
-		dlg->file[0] = add_filename_entry(action,0,1,dlg,table);
-		gtk_table_attach(GTK_TABLE(table),widget,3,4,1,2,0,0,2,2);
-#endif // GTK_CHECK_VERSION
 
+		dlg->file[0] = add_filename_entry(action,0,1,dlg,table);
+		widget = gtk_button_new_with_mnemonic( _( "_Browse" ) );
 		g_signal_connect(G_OBJECT(widget),"clicked",G_CALLBACK(browse_file),dlg);
+		gtk_table_attach(GTK_TABLE(table),widget,3,4,1,2,0,0,2,2);
 	}
 	else
 	{
 		// Sending file, first the local filename
-		widget = gtk_button_new_with_mnemonic( _( "_Browse" ) );
-
-#if GTK_CHECK_VERSION(3,0,0)
-		dlg->file[0] = add_filename_entry(action,0,0,dlg,grid);
-		dlg->file[1] = add_filename_entry(action,1,1,dlg,grid);
-		gtk_grid_attach(grid,widget,2,0,1,1);
-#else
 		dlg->file[0] = add_filename_entry(action,0,0,dlg,table);
-		dlg->file[1] = add_filename_entry(action,1,1,dlg,table);
+		widget = gtk_button_new_with_mnemonic( _( "_Browse" ) );
+		g_signal_connect(G_OBJECT(widget),"clicked",G_CALLBACK(browse_file),dlg);
 		gtk_table_attach(GTK_TABLE(table),widget,3,4,0,1,0,0,2,2);
 
-#endif // GTK_CHECK_VERSION
-
-		g_signal_connect(G_OBJECT(widget),"clicked",G_CALLBACK(browse_file),dlg);
+		dlg->file[1] = add_filename_entry(action,1,1,dlg,table);
 	}
 
-#if GTK_CHECK_VERSION(3,0,0)
-	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dlg->dialog))),GTK_WIDGET(grid),TRUE,TRUE,2);
-#else
 	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dlg->dialog))),GTK_WIDGET(table),FALSE,FALSE,2);
-#endif // GTK_CHECK_VERSION
 
 }
 
@@ -305,21 +260,9 @@ static void add_transfer_options(GObject *action, struct ftdialog *dlg)
 		{   LIB3270_FT_OPTION_REMAP_ASCII,	"remap",	N_( "_Remap ASCII Characters" )			}
 	};
 
+	GtkTable	* table = GTK_TABLE(gtk_table_new(3,2,TRUE));
 	GtkWidget	* frame = gtk_frame_new( _( "Transfer options" ) );
 	int 		  row, col, f;
-
-#if GTK_CHECK_VERSION(3,0,0)
-	GtkGrid		* grid	= GTK_GRID(gtk_grid_new());
-
-	gtk_grid_set_column_spacing(grid,5);
-	gtk_grid_set_row_spacing(grid,3);
-	gtk_container_set_border_width(GTK_CONTAINER(grid),2);
-
-	gtk_grid_set_column_homogeneous(grid,TRUE);
-
-#else
-	GtkTable	* table = GTK_TABLE(gtk_table_new(3,2,TRUE));
-#endif // GTK_CHECK_VERSION
 
 	row=0;
 	col=0;
@@ -345,12 +288,7 @@ static void add_transfer_options(GObject *action, struct ftdialog *dlg)
 		g_object_set_data(G_OBJECT(widget),"dlg",(gpointer) dlg);
 		g_signal_connect(G_OBJECT(widget),"toggled", G_CALLBACK(toggle_option),(gpointer) &option[f]);
 
-#if GTK_CHECK_VERSION(3,0,0)
-		gtk_grid_attach(grid,widget,col,row,1,1);
-#else
 		gtk_table_attach(table,widget,col,col+1,row,row+1,GTK_EXPAND|GTK_SHRINK|GTK_FILL,GTK_EXPAND|GTK_SHRINK|GTK_FILL,2,2);
-#endif // GTK_CHECK_VERSION
-
 		if(col++ > 0)
 		{
 			row++;
@@ -358,12 +296,7 @@ static void add_transfer_options(GObject *action, struct ftdialog *dlg)
 		}
 	}
 
-#if GTK_CHECK_VERSION(3,0,0)
-	gtk_container_add(GTK_CONTAINER(frame),GTK_WIDGET(grid));
-#else
 	gtk_container_add(GTK_CONTAINER(frame),GTK_WIDGET(table));
-#endif // GTK_CHECK_VERSION
-
 	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dlg->dialog))),GTK_WIDGET(frame),FALSE,FALSE,2);
 
 }
@@ -470,6 +403,8 @@ static void run_ft_dialog(GObject *action, GtkWidget *widget, struct ftdialog *d
 	for(f=0;f<2;f++)
 		gtk_widget_set_sensitive(dlg->ready,is_dialog_ok(GTK_EDITABLE(dlg->file[f]),dlg));
 
+	gtk_widget_show_all(dlg->dialog);
+
 	for(f=0;f<G_N_ELEMENTS(dlg->parm);f++)
 	{
 		if(dlg->parm[f])
@@ -485,8 +420,6 @@ static void run_ft_dialog(GObject *action, GtkWidget *widget, struct ftdialog *d
 			g_signal_connect(G_OBJECT(dlg->parm[f]),"changed",G_CALLBACK(check_entry),dlg);
 		}
 	}
-
-	gtk_widget_show_all(dlg->dialog);
 
 	if(gtk_dialog_run(GTK_DIALOG(dlg->dialog)) != GTK_RESPONSE_ACCEPT)
 	{
@@ -916,24 +849,11 @@ void upload_action(GtkAction *action, GtkWidget *widget)
 					{ "dftsize",		N_( "DFT B_uffer size:"	)	}
 				};
 
+		GtkTable	* table = GTK_TABLE(gtk_table_new(2,2,FALSE));
+
 		int 		  row, col, f;
-		gchar 		* dft = g_object_get_data(action,"dft");
-
-#if GTK_CHECK_VERSION(3,0,0)
-
-		GtkGrid		* grid	= GTK_GRID(gtk_grid_new());
-
-		gtk_grid_set_column_spacing(grid,5);
-		gtk_grid_set_row_spacing(grid,3);
-		gtk_grid_set_column_homogeneous(grid,TRUE);
-		gtk_container_set_border_width(GTK_CONTAINER(grid),2);
-
-#else
-		GtkTable	* table	= GTK_TABLE(gtk_table_new(2,2,FALSE));
 
 		gtk_container_set_border_width(GTK_CONTAINER(table),2);
-
-#endif // GTK_CHECK_VERSION
 
 		row=0;
 		col=0;
@@ -948,13 +868,8 @@ void upload_action(GtkAction *action, GtkWidget *widget)
 
 			gtk_label_set_mnemonic_widget(GTK_LABEL(label),GTK_WIDGET(dlg.parm[f]));
 
-#if GTK_CHECK_VERSION(3,0,0)
-			gtk_grid_attach(grid,label,col,row,1,1);
-			gtk_grid_attach(grid,GTK_WIDGET(dlg.parm[f]),col+1,row,1,1);
-#else
 			gtk_table_attach(table,label,col,col+1,row,row+1,GTK_EXPAND|GTK_SHRINK|GTK_FILL,GTK_EXPAND|GTK_SHRINK|GTK_FILL,2,2);
 			gtk_table_attach(table,GTK_WIDGET(dlg.parm[f]),col+1,col+2,row,row+1,GTK_EXPAND|GTK_SHRINK|GTK_FILL,GTK_EXPAND|GTK_SHRINK|GTK_FILL,2,2);
-#endif // GTK_CHECK_VERSION
 
 			col += 2;
 			if(col++ > 3)
@@ -965,13 +880,7 @@ void upload_action(GtkAction *action, GtkWidget *widget)
 
 		}
 
-		gtk_entry_set_text(GTK_ENTRY(dlg.parm[4]),dft ? dft : "4096");
-
-#if GTK_CHECK_VERSION(3,0,0)
-		gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dlg.dialog))),GTK_WIDGET(grid),TRUE,TRUE,2);
-#else
 		gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dlg.dialog))),GTK_WIDGET(table),TRUE,TRUE,2);
-#endif // GTK_CHECK_VERSION
 
 
 	}
