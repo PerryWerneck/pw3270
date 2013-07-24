@@ -176,7 +176,7 @@ void toggle_rectselect(H3270 *session, struct lib3270_toggle *t, LIB3270_TOGGLE_
 		update_selected_region(session);
 }
 
-LIB3270_ACTION(unselect)
+LIB3270_EXPORT int lib3270_unselect(H3270 *hSession)
 {
 	int a;
 
@@ -242,11 +242,14 @@ LIB3270_EXPORT void lib3270_select_region(H3270 *h, int start, int end)
 
 static void do_select(H3270 *h, int start, int end, int rect)
 {
+	if(start < 0 || end > (h->rows * h->cols))
+		return;
 
 	// Do we really need to change selection?
 	if(start == h->select.start && end == h->select.end && h->selected)
 		return;
 
+	// Start address is inside the screen?
 	h->select.start		= start;
 	h->select.end 		= end;
 
@@ -340,20 +343,18 @@ LIB3270_EXPORT int lib3270_select_field_at(H3270 *session, int baddr)
 	return 0;
 }
 
-LIB3270_ACTION( selectfield )
+LIB3270_EXPORT int lib3270_select_field(H3270 *hSession)
 {
 	CHECK_SESSION_HANDLE(hSession);
 	lib3270_select_field_at(hSession,hSession->cursor_addr);
 	return 0;
 }
 
-LIB3270_ACTION( selectall )
+LIB3270_EXPORT int lib3270_select_all(H3270 * hSession)
 {
-//	int len, baddr;
-
 	CHECK_SESSION_HANDLE(hSession);
 
-	do_select(hSession,0,hSession->rows*hSession->cols,0);
+	do_select(hSession,0,(hSession->rows*hSession->cols)-1,0);
 
 	return 0;
 }
@@ -764,7 +765,9 @@ LIB3270_EXPORT int lib3270_move_selected_area(H3270 *hSession, int from, int to)
 {
 	int pos[2];
 	int rows, cols, f, step;
-	// , start, end;
+
+	if(from == to)
+		return from;
 
 	if(!lib3270_get_selection_bounds(hSession,&pos[0],&pos[1]))
 		return from;
@@ -834,6 +837,8 @@ LIB3270_EXPORT int lib3270_drag_selection(H3270 *h, unsigned char flag, int orig
 
 	if(flag & SELECTION_BOTTOM)		// Update bottom margin
 		origin = last = (row*h->cols) + (last%h->cols);
+
+	trace("origin=%d first=%d last=%d",origin,first,last);
 
 	if(first < last)
 		do_select(h,first,last,h->rectsel);

@@ -398,12 +398,13 @@ static void action_reset_toggle(GtkAction *action, GtkWidget *widget)
 
 static void action_select_all(GtkAction *action, GtkWidget *widget)
 {
-	lib3270_selectall(v3270_get_session(widget));
+	lib3270_trace_event(v3270_get_session(widget),"Action %s activated on widget %p\n",gtk_action_get_name(action),widget);
+	lib3270_select_all(v3270_get_session(widget));
 }
 
 static void action_select_field(GtkAction *action, GtkWidget *widget)
 {
-	lib3270_selectfield(v3270_get_session(widget));
+	lib3270_select_field(v3270_get_session(widget));
 }
 
 static void action_select_none(GtkAction *action, GtkWidget *widget)
