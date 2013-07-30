@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-18 10:34-0300\n"
-"PO-Revision-Date: 2013-07-03 10:51-0300\n"
+"POT-Creation-Date: 2013-07-24 09:23-0300\n"
+"PO-Revision-Date: 2013-07-30 15:58-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <perry.werneck@gmail.com>\n"
 "Language: pt_BR\n"
@@ -24,57 +24,57 @@ msgstr ""
 msgid "%s - Disconnected"
 msgstr "%s - Desconectado"
 
-#: actions.c:742 actions.c:754
+#: actions.c:743 actions.c:755
 #, c-format
 msgid "%s action needs a valid id attribute"
 msgstr "Ação %s exige um atributo ID válido"
 
-#: actions.c:590 actions.c:719 actions.c:731
+#: actions.c:591 actions.c:720 actions.c:732
 #, c-format
 msgid "%s action needs a valid toggle name"
 msgstr "Ação %s exige um nome de toggle válido"
 
-#: actions.c:766
+#: actions.c:767
 #, c-format
 msgid "%s action needs a valid value"
 msgstr "Ação %s precisa de um valor válido"
 
-#: actions.c:476
+#: actions.c:477
 #, c-format
 msgid "%s action needs src attribute"
 msgstr "Ação %s precisa do atributo src"
 
-#: main.c:89
+#: main.c:93
 #, c-format
 msgid "%s requires GTK version %d.%d.%d"
 msgstr "%s requer GTK versão %d.%d.%d"
 
-#: kybd.c:2691
+#: kybd.c:2692
 #, c-format
 msgid "%s: Bell not supported"
 msgstr "%s: Alerta sonoro não suportado"
 
-#: kybd.c:2850
+#: kybd.c:2851
 #, c-format
 msgid "%s: Missing hex digits after \\x"
 msgstr "%s: Faltando dígitos hexadecimais após \\x"
 
-#: kybd.c:2790
+#: kybd.c:2791
 #, c-format
 msgid "%s: Unknown character after \\p"
 msgstr "%s: Caractere desconhecido depois de \\p"
 
-#: kybd.c:2826
+#: kybd.c:2827
 #, c-format
 msgid "%s: Unknown character after \\pa"
 msgstr "%s: Caractere desconhecido depois de \\pa"
 
-#: kybd.c:2804
+#: kybd.c:2805
 #, c-format
 msgid "%s: Unknown character after \\pf"
 msgstr "%s: Caractere desconhecido depois de \\pf"
 
-#: kybd.c:2742
+#: kybd.c:2743
 #, c-format
 msgid "%s: Vertical tab not supported"
 msgstr "%s: Tabulação vertical não é suportada"
@@ -89,7 +89,7 @@ msgstr "%s: Familia %d é inválida"
 msgid "%s:%d"
 msgstr "%s:%d"
 
-#: main.c:341
+#: main.c:416
 msgid "- 3270 Emulator for Gtk"
 msgstr "- Emulador 3270 para GTK"
 
@@ -170,7 +170,7 @@ msgstr ""
 msgid "<b>SSL state is undefined</b>Unexpected SSL status %ld"
 msgstr "<b>Estado do SSL é indefinido</b>Estado SSL inesperado %ld"
 
-#: main.c:361
+#: main.c:436
 msgid ""
 "<b>Valid options:</b>\n"
 "\n"
@@ -223,7 +223,7 @@ msgid "An error occurred trying to allocate memory. This should never happen."
 msgstr ""
 "Ocorreu um erro ao tentar alocar memória. Isso nunca deveria acontecer."
 
-#: main.c:321 main.c:323
+#: main.c:395 main.c:397
 msgid "Application name"
 msgstr "Nome da aplicação"
 
@@ -231,7 +231,7 @@ msgstr "Nome da aplicação"
 msgid "Attn"
 msgstr "Attn"
 
-#: actions.c:451
+#: actions.c:452
 #, c-format
 msgid "Attribute \"%s\" is invalid or undefined"
 msgstr "Atributo \"%s\" é invalido ou indefinido"
@@ -312,7 +312,7 @@ msgstr "Erro na assinatura CRL"
 msgid "C_haracter Coding:"
 msgstr "C_odificação de caracteres:"
 
-#: print.c:412
+#: print.c:413
 msgid "C_olor scheme:"
 msgstr "Tema de c_ores:"
 
@@ -339,11 +339,11 @@ msgstr "Não foi possível conectar ao servidor"
 msgid "Can't convert line %d from %s to %s"
 msgstr "Não foi possível converter a linha %d de %s para %s"
 
-#: selection.c:646
+#: selection.c:647
 msgid "Can't cut rectangular regions"
 msgstr "Recortar não permitido em seleção retangular"
 
-#: ft.c:278
+#: ft.c:279
 msgid "Can't get file size"
 msgstr "Não foi possível obter o tamanho do arquivo"
 
@@ -356,7 +356,11 @@ msgstr "Não foi possível carregar %s"
 msgid "Can't load file"
 msgstr "Não foi possível carregar arquivo"
 
-#: ft.c:197
+#: main.c:292
+msgid "Can't open file"
+msgstr "Não foi possível abrir arquivo"
+
+#: ft.c:198
 msgid "Can't open local file"
 msgstr "Não foi possível abrir arquivo local"
 
@@ -373,6 +377,11 @@ msgstr "Incapaz de processar arquivos de descrição de UI em %s"
 msgid "Can't parse unnamed element"
 msgstr "Incapaz de processar elemento sem nome"
 
+#: trace.c:208
+#, c-format
+msgid "Can't save %s"
+msgstr "Não foi possível salvar arquivo %s"
+
 #: dialog.c:355
 #, c-format
 msgid ""
@@ -382,7 +391,7 @@ msgstr ""
 "Não foi possível salvar cópia para o arquivo\n"
 "%s"
 
-#: dialog.c:205
+#: dialog.c:205 trace.c:210
 msgid "Can't save file"
 msgstr "Não foi possível salvar arquivo"
 
@@ -403,6 +412,11 @@ msgid ""
 msgstr ""
 "Não foi possível salvar a seleção para o arquivo\n"
 "%s"
+
+#: main.c:290
+#, c-format
+msgid "Can't save trace data to file %s"
+msgstr "Não foi possível salvar trace no arquivo %s"
 
 #: v3270/iocallback.c:347
 msgid "Can't set lib3270 I/O handlers"
@@ -425,7 +439,7 @@ msgstr "Não foi possível iniciar upload"
 msgid "Can't use winsock version %d.%d"
 msgstr "Não é possível usar a Winsock versão %d.%d"
 
-#: ft.c:123
+#: ft.c:124
 msgid "Cancelled by user"
 msgstr "Cancelado pelo usuário"
 
@@ -495,6 +509,10 @@ msgstr "Configuração de cores"
 #: ui/00default.xml:371
 msgid "Colors"
 msgstr "Cores"
+
+#: trace.c:381
+msgid "Command:"
+msgstr "Command:"
 
 #: ft_cut.c:333
 msgid "Complete"
@@ -581,7 +599,7 @@ msgstr "Apagar campo"
 msgid "Device type rejected"
 msgstr "Tipo de dispositivo rejeitado"
 
-#: ft.c:168
+#: ft.c:169
 msgid "Disconnected from host"
 msgstr "Desconectado do servidor"
 
@@ -633,7 +651,7 @@ msgstr "Apagar até o final do campo"
 msgid "Erase to end of line"
 msgstr "Apagar até o final da linha"
 
-#: print.c:238 v3270/widget.c:215 util.c:1018
+#: print.c:239 v3270/widget.c:215 util.c:1018
 msgid "Error"
 msgstr "Erro"
 
@@ -700,7 +718,7 @@ msgstr "Erro na transferência de arquivos"
 msgid "File transfer is already active"
 msgstr "Transferência de arquivos já está ativa"
 
-#: ft.c:175
+#: ft.c:176
 msgid "File transfer is already active in this session"
 msgstr "Transferência de arquivos já está ativa nesta sessão"
 
@@ -732,7 +750,7 @@ msgstr "Tela cheia"
 msgid "Function bar"
 msgstr "Barra de funções"
 
-#: main.c:93 main.c:408
+#: main.c:97 main.c:485
 msgid "GTK Version mismatch"
 msgstr "Divergência de versão GTK"
 
@@ -777,7 +795,7 @@ msgstr "HTTP Proxy: Resposta desconhecida"
 msgid "Help"
 msgstr "Ajuda"
 
-#: ft.c:492
+#: ft.c:493
 msgid "Host disconnected, transfer cancelled"
 msgstr "Servidor desconectou, transferência cancelada"
 
@@ -801,11 +819,11 @@ msgstr "Servidor rejeitou o tipo de dispositivo ou requisição"
 msgid "Host rejected resource(s)"
 msgstr "Servidor rejeitou recurso(s)"
 
-#: main.c:329
+#: main.c:403
 msgid "Host system type"
 msgstr "Tipo do sistema no servidor"
 
-#: main.c:327
+#: main.c:401
 msgid "Host to connect"
 msgstr "Servidor a conectar"
 
@@ -864,7 +882,7 @@ msgstr "Invalid CGCSGID '%s', ignoring"
 msgid "Invalid charset entry '%s' (#%d)"
 msgstr "Invalid charset entry '%s' (#%d)"
 
-#: selection.c:646
+#: selection.c:647
 msgid "Invalid cut action"
 msgstr "Ação recortar inválida"
 
@@ -901,7 +919,7 @@ msgstr "LRECL:"
 msgid "Lateral keypad"
 msgstr "Barra lateral"
 
-#: main.c:336
+#: main.c:411
 msgid "Log to file"
 msgstr "Enviar log para arquivo"
 
@@ -926,7 +944,7 @@ msgstr "Só Maiúsculas"
 msgid "Monochrome"
 msgstr "Monocromático"
 
-#: actions.c:607
+#: actions.c:608
 msgid "Move action needs target & direction attributes"
 msgstr "Ação \"move\" precisa dos atributos \"target\" e \"direction\""
 
@@ -974,11 +992,11 @@ msgstr "Normal/Protegido"
 msgid "Normal/Unprotected"
 msgstr "Normal/Desprotegido"
 
-#: selection.c:646
+#: selection.c:647
 msgid "Not available"
 msgstr "Não disponível"
 
-#: ft.c:499
+#: ft.c:500
 msgid "Not in 3270 mode, transfer cancelled"
 msgstr "Não está no modo 3270, transferência cancelada"
 
@@ -1011,7 +1029,7 @@ msgstr "Estado normal na OIA"
 msgid "Option '%c:' is not supported"
 msgstr "Opção não suportada: '%c:'"
 
-#: print.c:604
+#: print.c:605
 msgid "Options"
 msgstr "Opções"
 
@@ -1139,7 +1157,7 @@ msgstr "PF8"
 msgid "PF9"
 msgstr "PF9"
 
-#: main.c:359
+#: main.c:434
 msgid "Parse error"
 msgstr "Erro de interpretação"
 
@@ -1176,7 +1194,7 @@ msgstr "Colar com margem esquerda"
 msgid "Path length constraint exceeded"
 msgstr "Path length constraint exceeded"
 
-#: main.c:324
+#: main.c:398
 msgid "Path to application data files"
 msgstr "Caminho para os arquivos de dados da aplicação"
 
@@ -1200,7 +1218,7 @@ msgstr "Imprimir"
 msgid "Print copy"
 msgstr "Imprimir cópia"
 
-#: print.c:234
+#: print.c:235
 msgid "Print operation failed"
 msgstr "Operação de impressão falhou"
 
@@ -1208,11 +1226,11 @@ msgstr "Operação de impressão falhou"
 msgid "Print selected"
 msgstr "Imprimir seleção"
 
-#: print.c:498
+#: print.c:499
 msgid "Print selection box"
 msgstr "Imprimir marca de seleção"
 
-#: print.c:906 ui/00default.xml:372
+#: print.c:907 ui/00default.xml:372
 msgid "Print settings"
 msgstr "Configurações de impressão"
 
@@ -1525,6 +1543,10 @@ msgstr "Salvar seleção"
 msgid "Save selection to file"
 msgstr "Salvar seleção para arquivo"
 
+#: trace.c:177
+msgid "Save trace file"
+msgstr "Salvar arquivo de trace"
+
 #: ui/99debug.xml:206
 msgid "Screen Trace"
 msgstr "Trace de tela"
@@ -1569,7 +1591,7 @@ msgstr "Selecione arquivo a enviar"
 msgid "Select font"
 msgstr "Selecione fonte"
 
-#: hostdialog.c:132
+#: hostdialog.c:151
 msgid "Select hostname"
 msgstr "Selecione host"
 
@@ -1597,7 +1619,7 @@ msgstr "Enviar arquivo"
 msgid "Send file to host"
 msgstr "Enviar arquivo para o servidor"
 
-#: main.c:334
+#: main.c:408
 msgid "Send messages to syslog"
 msgstr "Enviar mensagens para o log do sistema"
 
@@ -1605,7 +1627,7 @@ msgstr "Enviar mensagens para o log do sistema"
 msgid "Send/Receive"
 msgstr "Enviar/Receber"
 
-#: main.c:326
+#: main.c:400
 msgid "Session name"
 msgstr "Nome da sessão"
 
@@ -1613,17 +1635,21 @@ msgstr "Nome da sessão"
 msgid "Set hostname"
 msgstr "Selecione servidor"
 
-#: main.c:328
+#: main.c:402
 msgid "Set reported colors (8/16)"
 msgstr "Define número de cores informadas (8/16)"
 
-#: main.c:331
+#: main.c:405
 msgid "Set toggles OFF"
 msgstr "Desativa toggles"
 
-#: main.c:330
+#: main.c:404
 msgid "Set toggles ON"
 msgstr "Ativa toggles"
+
+#: main.c:410
+msgid "Set trace filename"
+msgstr "Define o nome do arquivo de trace"
 
 #: ui/00default.xml:371
 msgid "Settings"
@@ -1665,7 +1691,7 @@ msgstr "Veloci_dade"
 msgid "Subject issuer mismatch"
 msgstr "Divergência na identidade do emissor"
 
-#: hostdialog.c:198
+#: hostdialog.c:274
 msgid "System _type:"
 msgstr "Tipo de servidor:"
 
@@ -1851,7 +1877,7 @@ msgid ""
 msgstr ""
 "The public key in the certificate SubjectPublicKeyInfo could not be read."
 
-#: ft.c:183
+#: ft.c:184
 msgid "The remote file name is invalid"
 msgstr "O nome do arquivo remoto não é válido"
 
@@ -1905,7 +1931,7 @@ msgstr ""
 "programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple "
 "Place, Suite 330, Boston, MA, 02111-1307, USA"
 
-#: main.c:404
+#: main.c:481
 #, c-format
 msgid "This program requires GTK version %d.%d.%d"
 msgstr "Este programa precisa do GTK versão %d.%d.%d"
@@ -1993,7 +2019,7 @@ msgstr "Unable to get local issuer certificate"
 msgid "Unable to paste text"
 msgstr "Incapaz de colar texto"
 
-#: ft.c:362
+#: ft.c:363
 msgid "Unable to send file-transfer request"
 msgstr "Não foi possível enviar a requisição de transferência de arquivo"
 
@@ -2019,7 +2045,7 @@ msgstr "Erro SSL <b>%ld</b> inesperado"
 msgid "Unexpected action attribute in <%s>"
 msgstr "Atributo inesperado \"action\" em <%s>"
 
-#: ft.c:83
+#: ft.c:84
 #, c-format
 msgid "Unexpected call to %s: No active filetransfer"
 msgstr "Unexpected call to %s: No active filetransfer"
@@ -2038,17 +2064,17 @@ msgstr "Erro inesperado"
 msgid "Unexpected group \"%s\""
 msgstr "Grupo inesperado \"%s\""
 
-#: actions.c:465 actions.c:485
+#: actions.c:466 actions.c:486
 #, c-format
 msgid "Unexpected or invalid %s attribute: \"%s\""
 msgstr "Atributo %s inesperado ou inválido: \"%s\""
 
-#: actions.c:439
+#: actions.c:440
 #, c-format
 msgid "Unexpected or invalid attribute value \"%s\""
 msgstr "Valor de attributo inesperado ou inválido: \"%s\""
 
-#: main.c:194
+#: main.c:198
 #, c-format
 msgid "Unexpected or invalid color value \"%s\""
 msgstr "Valor de cor inválido ou inesperado: \"%s\""
@@ -2069,7 +2095,7 @@ msgstr ""
 msgid "Unexpected target \"%s\""
 msgstr "Alvo inesperado \"%s\""
 
-#: kybd.c:339
+#: kybd.c:340
 #, c-format
 msgid "Unexpected type %d in typeahead queue"
 msgstr "Tipo inesperado %d na fila de teclado"
@@ -2083,12 +2109,12 @@ msgstr "Unknown 3270 Data Stream command: 0x%X"
 msgid "Unknown FT control code from host"
 msgstr "Servidor enviou código de controle FT desconhecido"
 
-#: kybd.c:2440
+#: kybd.c:2441
 #, c-format
 msgid "Unknown PA key %d"
 msgstr "PA %d desconhecida"
 
-#: kybd.c:2455
+#: kybd.c:2456
 #, c-format
 msgid "Unknown PF key %d"
 msgstr "PF %d desconhecida"
@@ -2162,11 +2188,11 @@ msgstr "WSAEventSelect falhou"
 msgid "WSAStartup failed"
 msgstr "WSAStartup falhou"
 
-#: ft.c:371
+#: ft.c:372
 msgid "Waiting for GET response"
 msgstr "Aguardando resposta do pedido de download"
 
-#: ft.c:373
+#: ft.c:374
 msgid "Waiting for PUT response"
 msgstr "Aguardando resposta do pedido de upload"
 
@@ -2242,7 +2268,7 @@ msgstr "_Acrescentar"
 msgid "_Browse"
 msgstr "_Procurar"
 
-#: hostdialog.c:250
+#: hostdialog.c:326
 msgid "_Color table:"
 msgstr "Tabela de cores:"
 
@@ -2262,7 +2288,7 @@ msgstr "_Editar"
 msgid "_File"
 msgstr "_Arquivo"
 
-#: print.c:412
+#: print.c:413
 msgid "_Font:"
 msgstr "_Fonte:"
 
@@ -2274,11 +2300,11 @@ msgstr "_De"
 msgid "_Host file name:"
 msgstr "Arquivo no _Servidor:"
 
-#: hostdialog.c:169
+#: hostdialog.c:235
 msgid "_Host options"
 msgstr "Opções do _Servidor"
 
-#: hostdialog.c:150
+#: hostdialog.c:179 hostdialog.c:209
 msgid "_Hostname:"
 msgstr "Nome do _Host:"
 
@@ -2294,7 +2320,7 @@ msgstr "_Rede"
 msgid "_Options"
 msgstr "_Opções"
 
-#: hostdialog.c:155
+#: hostdialog.c:180 hostdialog.c:210
 msgid "_Port:"
 msgstr "_Porta:"
 
@@ -2302,7 +2328,7 @@ msgstr "_Porta:"
 msgid "_Remap ASCII Characters"
 msgstr "_Remapear caracteres ASCII"
 
-#: hostdialog.c:130
+#: hostdialog.c:149
 msgid "_Secure connection"
 msgstr "Conexão _Segura"
 
@@ -2345,7 +2371,7 @@ msgstr "um atributo \"action\""
 
 #: iocalls.c:450
 msgid "select() failed when dispatching events"
-msgstr "select() failed when dispatching events"
+msgstr "select() falhou ao processar eventos"
 
 #: telnet.c:629 telnet.c:635 telnet.c:642
 #, c-format
