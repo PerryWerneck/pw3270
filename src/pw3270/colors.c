@@ -30,10 +30,9 @@
  #include <gtk/gtk.h>
  #include "globals.h"
 
-//#if GTK_CHECK_VERSION(3,4,0)
- #if defined(DEBUG) && GTK_CHECK_VERSION(3,4,0)
-    #define USE_GTK_COLOR_CHOOSER 1
- #endif // GTK_CHECK_VERSION
+ //#if defined(DEBUG) && GTK_CHECK_VERSION(3,4,0)
+ //   #define USE_GTK_COLOR_CHOOSER 1
+ //#endif // GTK_CHECK_VERSION
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
@@ -354,7 +353,6 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkRGBA *clr)
 	gtk_widget_queue_draw(widget);
 
  }
-
 #else
  static void color_changed(GtkWidget *colorselection, GtkWidget *widget)
  {
