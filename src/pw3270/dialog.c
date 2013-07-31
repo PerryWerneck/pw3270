@@ -448,9 +448,9 @@
 
  G_GNUC_INTERNAL void about_dialog_action(GtkAction *action, GtkWidget *widget)
  {
- 	static const gchar *authors[]	= {	"Paul Mattes <Paul.Mattes@usa.net>",
+ 	static const gchar *authors[]	= {	"Perry Werneck <perry.werneck@gmail.com>",
+										"Paul Mattes <Paul.Mattes@usa.net>",
 										"GTRC",
-										"Perry Werneck <perry.werneck@gmail.com>",
 										"and others",
 										NULL };
 
