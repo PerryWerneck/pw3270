@@ -575,6 +575,7 @@ AC_CONFIG_FILES([
 	man/Makefile
 	makegtkruntime.sh
 	src/sample/Makefile
+	mac/pw3270.bundle
 ])
 
 dnl Output the generated config.status script.
