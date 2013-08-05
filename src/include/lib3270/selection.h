@@ -148,6 +148,6 @@
 	 * @param end_offset :	End offset.
 	 *
 	 */
-	 LIB3270_EXPORT void lib3270_select_region(H3270 *h, int start, int end);
+	 LIB3270_EXPORT int lib3270_select_region(H3270 *h, int start, int end);
 
  #endif // LIB3270_SELECTION_H_INCLUDED

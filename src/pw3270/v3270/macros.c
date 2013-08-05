@@ -47,6 +47,12 @@
  	return 0;
  }
 
+ static int v3270_macro_clearsel(GtkWidget *widget, int argc, const char **argv)
+ {
+	v3270_clear_clipboard(widget);
+ 	return 0;
+ }
+
  static int run_macro(GtkWidget *widget, int argc, const char **argv)
  {
 	#define V3270_MACRO( name )  				{ #name, v3270_macro_ ## name			}
@@ -59,6 +65,7 @@
 	{
 		V3270_MACRO( copy ),
 		V3270_MACRO( append ),
+		V3270_MACRO( clearsel ),
 	};
 
 	int f;

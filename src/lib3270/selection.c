@@ -220,24 +220,25 @@ LIB3270_EXPORT void lib3270_select_to(H3270 *session, int baddr)
 
 }
 
-LIB3270_EXPORT void lib3270_select_region(H3270 *h, int start, int end)
+LIB3270_EXPORT int lib3270_select_region(H3270 *h, int start, int end)
 {
 	int maxlen;
 
 	CHECK_SESSION_HANDLE(h);
 
 	if(!lib3270_connected(h))
-		return;
+		return ENOTCONN;
 
 	maxlen = (h->rows * h->cols);
 
 	// Check bounds
 	if(start < 0 || start > maxlen || end < 0 || end > maxlen || start > end)
-		return;
+		return EINVAL;
 
 	do_select(h,start,end,lib3270_get_toggle(h,LIB3270_TOGGLE_RECTANGLE_SELECT));
 	cursor_move(h,h->select.end);
 
+	return 0;
 }
 
 static void do_select(H3270 *h, int start, int end, int rect)

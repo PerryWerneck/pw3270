@@ -35,6 +35,7 @@
  #include <stdio.h>
  #include <lib3270.h>
  #include <lib3270/macros.h>
+ #include <lib3270/selection.h>
  #include <stdlib.h>
  #include <strings.h>
  #include "globals.h"
@@ -278,6 +279,37 @@
 	return strdup("0");
  }
 
+ LIB3270_MACRO( unselect )
+ {
+	lib3270_unselect(hSession);
+	return strdup("0");
+ }
+
+ LIB3270_MACRO( select )
+ {
+	int rc = -1;
+ 	char ret[10];
+
+ 	switch(argc)
+	{
+    case 1:	// 1 argument, select all
+		rc = lib3270_select_all(hSession);
+		break;
+
+    case 3:	// 2 arguments, first and last addr
+		rc = lib3270_select_region(hSession,atoi(argv[1]),atoi(argv[2]));
+		break;
+
+
+	default:
+		errno = EINVAL;
+		return NULL;
+	}
+
+	snprintf(ret,9,"%d",rc);
+	return strdup(ret);
+
+ }
 
 /*--[ Macro entry point ]----------------------------------------------------------------------------*/
 
@@ -298,6 +330,8 @@
 		LIB3270_MACRO_ENTRY( pf			),
 		LIB3270_MACRO_ENTRY( set		),
 		LIB3270_MACRO_ENTRY( status		),
+		LIB3270_MACRO_ENTRY( select		),
+		LIB3270_MACRO_ENTRY( unselect	),
 
 		{NULL, NULL}
 	};
