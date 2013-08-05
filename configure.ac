@@ -68,6 +68,8 @@ AC_PATH_TOOL([MAKENSIS], [makensis], [no])
 AC_PATH_TOOL([WINDRES], [windres], [no])
 AC_PATH_TOOL([DBUSBINDINGTOOL],[dbus-binding-tool],[no])
 
+AC_PATH_TOOL([MACBUNDLER],[gtk-mac-bundler], [no])
+
 AC_CHECK_PROGS(GZIP,[gzip],no)
 export GZIP;
 if test $GZIP = "no" ; then
@@ -143,7 +145,7 @@ case "$host" in
 
 	*-apple-*)
 		DBG_LDFLAGS="-L.bin/Debug/lib"
-		RLS_LDFLAGS="-L.bin/Release/lib -Wl,--strip-all"
+		RLS_LDFLAGS="-L.bin/Release/lib"
 		LDSOFLAGS=""
 		DLLDIR="/lib"
 		DBGRPATH=""
@@ -577,4 +579,3 @@ AC_CONFIG_FILES([
 
 dnl Output the generated config.status script.
 AC_OUTPUT
-

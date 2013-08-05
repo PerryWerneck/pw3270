@@ -53,7 +53,7 @@
 
   <main-binary>${prefix:bin}/pw3270</main-binary>
   <binary>
-	 ${prefix:bin}/lib/*.so.5.0
+	${prefix:bin}/lib/*.so.5.0
   </binary>
 
   <!-- Copy in GTK+ modules. Note the ${gtkdir} macro, which expands
@@ -131,10 +131,10 @@
   <!-- Copy icons. Note that the .icns file is an Apple format which
        contains up to 4 sizes of icon. You can use
        /Developer/Applications/Utilities/Icon Composer.app to import
-       artwork and create the file. >
+       artwork and create the file. -->
   <data dest="${bundle}/Contents/Resources">
-    ${project}/Giggle.icns
-  </data -->
+    ${project}/pw3270.icns
+  </data>
 
   <!-- This is where theme commands go. You can copy them in from your
        theme of choice if they provide and example, or you can just

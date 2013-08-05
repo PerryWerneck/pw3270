@@ -68,6 +68,7 @@ INSTALL_PROGRAM=@INSTALL_PROGRAM@
 INSTALL_DATA=@INSTALL_DATA@
 RPMBUILD=@RPMBUILD@
 DPKGBUILD=@DPKGBUILD@
+MACBUNDLER=@MACBUNDLER@
 CONVERT=@CONVERT@
 MSGCAT=@MSGCAT@
 MSGINIT=@MSGINIT@
@@ -219,6 +220,12 @@ ifneq ($(DPKGBUILD),no)
 	@$(DPKGBUILD) -rfakeroot -uc -us
 endif
 
+ifneq ($(MACBUNDLER),no)
+	@rm -fr .bin/pw3270.app
+	@$(MACBUNDLER) mac/pw3270.bundle
+endif
+
+
 $(PACKAGE_NAME).po: $(TMPDIR)/$(PACKAGE_NAME).pot
 	@echo "  INIT `basename $@`"
 	@$(MSGINIT) --no-translator -o $@ --locale=en_US -i $^
@@ -339,8 +346,6 @@ clean:
 	@rm -fr .obj
 	@rm -fr .bin
 	@rm -fr .tmp
-	@find . -type d -name .bin -exec echo -e rm -fr "{}\n" \; | sh
-	@find . -type d -name .obj -exec echo -e rm -fr "{}\n" \; | sh
 	@find . -name "*~" -exec rm -f {} \;
 	@rm -f $(PACKAGE_NAME).po
 	@make -C src/lib3270 clean
