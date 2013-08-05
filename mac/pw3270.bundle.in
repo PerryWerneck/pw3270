@@ -89,9 +89,9 @@
     ${prefix}/share/locale
   </translations>
 
-  <translations name="@PACKAGE_NAME@">
-    ${prefix:bin}/usr/local/share/locale
-  </translations>
+  <data dest="${bundle}/Contents/Resources/share/locale/pt_BR/LC_MESSAGES/pw3270.mo">
+    ${project}/../.bin/Release/usr/local/share/locale/pt_BR/LC_MESSAGES/pw3270.mo
+  </data>
 
   <!-- Data to copy in, usually Glade/UI files, images, sounds files
        etc. The destination inside the bundle can be specified if the
