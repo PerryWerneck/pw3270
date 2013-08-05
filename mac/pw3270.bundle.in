@@ -27,7 +27,7 @@
 
     <!-- Comment this out to keep the install names in binaries -->
     <run-install-name-tool/>
- 
+
     <!-- Optionally specify a launcher script to use. If the
          application sets up everything needed itself, like
          environment variable, linker paths, etc, a launcher script is
@@ -89,9 +89,9 @@
     ${prefix}/share/locale
   </translations>
 
-  <translations  name="@PACKAGE_NAME@">
+  <!-- translations name="@PACKAGE_NAME@">
     ${prefix:bin}/usr/local/share/locale
-  </translations>
+  </translations -->
 
   <!-- Data to copy in, usually Glade/UI files, images, sounds files
        etc. The destination inside the bundle can be specified if the
@@ -139,9 +139,9 @@
        theme of choice if they provide and example, or you can just
        change the source path. -->
 
-  <data dest="${bundle}/Contents/Resources/etc/${gtk}/gtkrc">
+  <!--- data dest="${bundle}/Contents/Resources/etc/${gtk}/gtkrc">
     ${project}/gtkrc
-  </data>
+  </data -->
 
   <!-- Icon themes to copy. The "icons" property can be either of
        "auto", "all", or "none". All or none should be
@@ -157,4 +157,3 @@
   </icon-theme -->
 
 </app-bundle>
-

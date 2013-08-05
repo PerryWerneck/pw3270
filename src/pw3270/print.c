@@ -234,7 +234,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
 															GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,
 															"%s",_( "Print operation failed" ));
 
-	g_warning(err->message);
+	g_warning("%s",err->message);
 
 	gtk_window_set_title(GTK_WINDOW(dialog),_("Error"));
 
@@ -926,5 +926,3 @@ void print_settings_action(GtkAction *action, GtkWidget *terminal)
 	gtk_widget_destroy(dialog);
 
 }
-
-
