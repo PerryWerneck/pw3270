@@ -97,6 +97,13 @@
 		}
 
 	}
+#ifdef HAVE_GTKMAC
+        else
+	{
+	      gtk_toolbar_set_style(GTK_TOOLBAR(widget),GTK_TOOLBAR_ICONS);
+	}
+#endif
+
 
 
 	key = ui_get_attribute("size",names,values);

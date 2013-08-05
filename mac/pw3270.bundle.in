@@ -89,9 +89,9 @@
     ${prefix}/share/locale
   </translations>
 
-  <!-- translations name="@PACKAGE_NAME@">
+  <translations name="@PACKAGE_NAME@">
     ${prefix:bin}/usr/local/share/locale
-  </translations -->
+  </translations>
 
   <!-- Data to copy in, usually Glade/UI files, images, sounds files
        etc. The destination inside the bundle can be specified if the
@@ -151,9 +151,9 @@
        icon names. To be safe, you should use "all". "none" is useful
        if you want just the index.theme file but no icons, mostly
        needed for the "hicolor" base theme.
-  >
-  <icon-theme icons="auto">
+  -->
+  <icon-theme icons="all">
     Tango
-  </icon-theme -->
+  </icon-theme>
 
 </app-bundle>
