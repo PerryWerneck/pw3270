@@ -49,7 +49,7 @@
 
  static int v3270_macro_clearsel(GtkWidget *widget, int argc, const char **argv)
  {
-	v3270_clear_clipboard(widget);
+	v3270_clear_clipboard(GTK_V3270(widget));
  	return 0;
  }
 
