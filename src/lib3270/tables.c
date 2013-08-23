@@ -436,7 +436,7 @@ const unsigned short asc2ft0[256] = {
 
 unsigned short ebc2cg[256];
 unsigned short cg2ebc[256];
-unsigned short ebc2asc[256];
+// unsigned short ebc2asc[256];
 unsigned short asc2ebc[256];
 unsigned short asc2ft[256];
 unsigned short ft2asc[256];
@@ -449,7 +449,7 @@ LIB3270_INTERNAL void initialize_tables(H3270 *hSession)
 	/* Go to defaults first. */
 	memcpy(ebc2cg,	ebc2cg0,	sizeof(ebc2cg));
 	memcpy(cg2ebc,	cg2ebc0,	sizeof(cg2ebc));
-	memcpy(ebc2asc,	ebc2asc0,	sizeof(ebc2asc));
+	memcpy(hSession->charset.ebc2asc,	ebc2asc0,	sizeof(hSession->charset.ebc2asc));
 	memcpy(asc2ebc,	asc2ebc0,	sizeof(asc2ebc));
 
 #ifdef EXTENDED_TABLES

@@ -142,7 +142,16 @@
 		char		       		* qualified_host;
 		char					* proxy;				/**< Proxy server (type:host[:port]) */
 		char					* termname;
-		char					* charset;
+
+		struct _charset
+		{
+			const char			* host;
+			char				* display;
+
+			// Translation tables
+			unsigned short		  ebc2asc[256];
+
+		} charset;
 
 		LIB3270_MESSAGE			  oia_status;
 
@@ -154,7 +163,6 @@
 		void					* ft;					/**< Active file transfer data */
 
 		// screen info
-		const char				* host_charset;
 		int						  ov_rows;
 		int						  ov_cols;
 		int						  maxROWS;

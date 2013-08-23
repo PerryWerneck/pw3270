@@ -167,7 +167,7 @@ static int upload_convert(H3270 *hSession, unsigned char *buf, int len)
 		}
 
 		/* Translate to a quadrant index. */
-		ixp = strchr(alphas, ebc2asc[c]);
+		ixp = strchr(alphas, hSession->charset.ebc2asc[c]);
 		if (ixp == (char *)NULL)
 		{
 			/* Try a different quadrant. */
@@ -349,7 +349,7 @@ static void cut_control_code(H3270 *hSession)
 			bp = buf = lib3270_malloc(81);
 
 			for (i = 0; i < 80; i++)
-				*bp++ = ebc2asc[hSession->ea_buf[O_CC_MESSAGE + i].cc];
+				*bp++ = hSession->charset.ebc2asc[hSession->ea_buf[O_CC_MESSAGE + i].cc];
 
 			*bp-- = '\0';
 
@@ -465,9 +465,11 @@ static void  cut_retransmit(H3270 *hSession)
 static unsigned
 from6(unsigned char c)
 {
+	H3270 *hSession = lib3270_get_default_session_handle();
+
 	char *p;
 
-	c = ebc2asc[c];
+	c = hSession->charset.ebc2asc[c];
 	p = strchr(table6, c);
 	if (p == CN)
 		return 0;

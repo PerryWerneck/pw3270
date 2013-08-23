@@ -64,6 +64,7 @@ unknown(unsigned char value)
 const char *
 see_ebc(unsigned char ch)
 {
+	H3270 *hSession = lib3270_get_default_session_handle();
 	static char buf[8];
 
 	switch (ch) {
@@ -91,8 +92,8 @@ see_ebc(unsigned char ch)
 		return "SO";
 	}
 
-	if (ebc2asc[ch])
-		(void) sprintf(buf,"%c", ebc2asc[ch]);
+	if (hSession->charset.ebc2asc[ch])
+		(void) sprintf(buf,"%c", hSession->charset.ebc2asc[ch]);
 	else
 		(void) sprintf(buf, "\\%o", ch);
 

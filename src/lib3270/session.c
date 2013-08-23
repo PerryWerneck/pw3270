@@ -84,7 +84,7 @@ void lib3270_session_free(H3270 *h)
 	// Release memory
 	#define release_pointer(x) lib3270_free(x); x = NULL;
 
-	release_pointer(h->charset);
+	release_pointer(h->charset.display);
 	release_pointer(h->paste_buffer);
 
 	release_pointer(h->ibuf);
@@ -218,7 +218,7 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 	hSession->unlock_delay			=  1;
 	hSession->icrnl 				=  1;
 	hSession->onlcr					=  1;
-	hSession->host_charset			= "bracket";
+	hSession->charset.host			= "bracket";
 	hSession->sock					= -1;
 	hSession->model_num				= -1;
 	hSession->cstate				= LIB3270_NOT_CONNECTED;
@@ -300,7 +300,7 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 	trace("Termtype: %s",hSession->termtype);
 
 	if (hSession->apl_mode)
-		hSession->host_charset = "apl";
+		hSession->charset.host = "apl";
 
 }
 
@@ -324,10 +324,10 @@ H3270 * lib3270_session_new(const char *model)
 	if(screen_init(hSession))
 		return NULL;
 
-	trace("Charset: %s",hSession->host_charset);
-	if (charset_init(hSession,hSession->host_charset) != CS_OKAY)
+	trace("Charset: %s",hSession->charset.host);
+	if (charset_init(hSession,hSession->charset.host) != CS_OKAY)
 	{
-		Warning(hSession, _( "Cannot find charset \"%s\", using defaults" ), hSession->host_charset);
+		Warning(hSession, _( "Cannot find charset \"%s\", using defaults" ), hSession->charset.host);
 		(void) charset_init(hSession,CN);
 	}
 

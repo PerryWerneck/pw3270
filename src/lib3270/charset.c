@@ -88,16 +88,16 @@ static KeySym StringToKeysym(char *s);
 // static void set_charset_name(char *csname);
 // static char *charset_name = CN;
 
-static void charset_defaults(void)
+static void charset_defaults(H3270 *hSession)
 {
 	/* Go to defaults first. */
-	(void) memcpy((char *)ebc2cg,	(const char *)ebc2cg0, 256);
-	(void) memcpy((char *)cg2ebc,	(const char *)cg2ebc0, 256);
-	(void) memcpy((char *)ebc2asc,	(const char *)ebc2asc0, 256);
-	(void) memcpy((char *)asc2ebc,	(const char *)asc2ebc0, 256);
+	(void) memcpy((char *)ebc2cg,						(const char *)ebc2cg0, 256);
+	(void) memcpy((char *)cg2ebc,						(const char *)cg2ebc0, 256);
+	(void) memcpy((char *) hSession->charset.ebc2asc,	(const char *)ebc2asc0, 256);
+	(void) memcpy((char *)asc2ebc,						(const char *)asc2ebc0, 256);
 #if defined(X3270_FT) /*[*/
-	(void) memcpy((char *)ft2asc,	(const char *)ft2asc0, 256);
-	(void) memcpy((char *)asc2ft,	(const char *)asc2ft0, 256);
+	(void) memcpy((char *)ft2asc,						(const char *)ft2asc0, 256);
+	(void) memcpy((char *)asc2ft,						(const char *)asc2ft0, 256);
 #endif /*]*/
 	clear_xks();
 }
@@ -116,11 +116,11 @@ struct charset_buffer
 };
 
 
-static void save_charset(struct charset_buffer *save)
+static void save_charset(H3270 *hSession, struct charset_buffer *save)
 {
 	(void) memcpy((char *)save->ebc2cg, (char *)ebc2cg, 256);
 	(void) memcpy((char *)save->cg2ebc, (char *)cg2ebc, 256);
-	(void) memcpy((char *)save->ebc2asc, (char *)ebc2asc, 256);
+	(void) memcpy((char *)save->ebc2asc, (char *) hSession->charset.ebc2asc, 256);
 	(void) memcpy((char *)save->asc2ebc, (char *)asc2ebc, 256);
 #if defined(X3270_FT) /*[*/
 	(void) memcpy((char *)save->ft2asc, (char *)ft2asc, 256);
@@ -128,11 +128,11 @@ static void save_charset(struct charset_buffer *save)
 #endif /*]*/
 }
 
-static void restore_charset(struct charset_buffer *save)
+static void restore_charset(H3270 *hSession, struct charset_buffer *save)
 {
 	(void) memcpy((char *)ebc2cg, (char *)save->ebc2cg, 256);
 	(void) memcpy((char *)cg2ebc, (char *)save->cg2ebc, 256);
-	(void) memcpy((char *)ebc2asc, (char *)save->ebc2asc, 256);
+	(void) memcpy((char *)hSession->charset.ebc2asc, (char *)save->ebc2asc, 256);
 	(void) memcpy((char *)asc2ebc, (char *)save->asc2ebc, 256);
 #if defined(X3270_FT) /*[*/
 	(void) memcpy((char *)ft2asc, (char *)save->ft2asc, 256);
@@ -189,7 +189,7 @@ enum cs_result charset_init(H3270 *hSession, const char *csname)
 	/* Do nothing, successfully. */
 	if (csname == CN || !strcasecmp(csname, "us"))
 	{
-		charset_defaults();
+		charset_defaults(hSession);
 		set_cgcsgids(hSession,CN);
 		set_display_charset(hSession, "ISO-8859-1");
 		return CS_OKAY;
@@ -220,8 +220,8 @@ enum cs_result charset_init(H3270 *hSession, const char *csname)
 	cftcs = lib3270_get_resource_string(hSession,"ftCharset",csname,NULL);
 
 	/* Save the current definitions, and start over with the defaults. */
-	save_charset(&save);
-	charset_defaults();
+	save_charset(hSession,&save);
+	charset_defaults(hSession);
 
 	/* Check for auto-keymap. */
 	ak = lib3270_get_resource_string(hSession,"autoKeymap", csname, NULL);
@@ -243,7 +243,7 @@ enum cs_result charset_init(H3270 *hSession, const char *csname)
 #endif /*]*/
 
 	if (rc != CS_OKAY)
-		restore_charset(&save);
+		restore_charset(hSession,&save);
 
 /*
 #if defined(X3270_DBCS)
@@ -515,7 +515,7 @@ static void remap_one(H3270 *hSession, unsigned char ebc, KeySym iso, remap_scop
 			}
 			if (ebc > 0x40)
 			{
-				ebc2asc[ebc] = iso;
+				hSession->charset.ebc2asc[ebc] = iso;
 				if (!one_way)
 					asc2ebc[iso] = ebc;
 			}
@@ -548,14 +548,14 @@ static void remap_one(H3270 *hSession, unsigned char ebc, KeySym iso, remap_scop
 				 * and the ISO code that we would normally
 				 * use to display that EBCDIC code.
 				 */
-				ft2asc[iso] = ebc2asc[ebc];
-				asc2ft[ebc2asc[ebc]] = iso;
+				ft2asc[iso] = hSession->charset.ebc2asc[ebc];
+				asc2ft[hSession->charset.ebc2asc[ebc]] = iso;
 			}
 		}
 #endif /*]*/
 	} else {
 		/* Auto-keymap. */
-		add_xk(iso, (KeySym)ebc2asc[ebc]);
+		add_xk(iso, (KeySym)hSession->charset.ebc2asc[ebc]);
 	}
 }
 
@@ -638,7 +638,7 @@ static enum cs_result remap_chars(H3270 *hSession, const char *csname, char *spe
 			for (i = 0; i < 256; i++) {
 				if ((i & 0x7f) > 0x20 && i != 0x7f &&
 						asc2ebc[i] != 0 &&
-						ebc2asc[asc2ebc[i]] != i) {
+						hSession->charset.ebc2asc[asc2ebc[i]] != i) {
 					asc2ebc[i] = 0;
 				}
 			}
@@ -723,7 +723,7 @@ check_charset(void)
 
 void set_display_charset(H3270 *session, const char *dcs)
 {
-	session->charset = strdup(dcs);
+	session->charset.display = strdup(dcs);
 }
 
 LIB3270_EXPORT const char * lib3270_get_default_charset(void)
@@ -731,10 +731,10 @@ LIB3270_EXPORT const char * lib3270_get_default_charset(void)
 	return "ISO-8859-1";
 }
 
-LIB3270_EXPORT const char * lib3270_get_charset(H3270 *session)
+LIB3270_EXPORT const char * lib3270_get_charset(H3270 *hSession)
 {
-	CHECK_SESSION_HANDLE(session);
-	return session->charset ? session->charset : lib3270_get_default_charset();
+	CHECK_SESSION_HANDLE(hSession);
+	return hSession->charset.display ? hSession->charset.display : "ISO-8859-1";
 }
 
 static KeySym StringToKeysym(char *s)
