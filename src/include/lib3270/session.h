@@ -150,6 +150,11 @@
 
 			// Translation tables
 			unsigned short		  ebc2asc[256];
+			unsigned short 		  asc2ebc[256];
+			unsigned short		  ebc2cg[256];
+			unsigned short		  cg2ebc[256];
+			unsigned short		  asc2ft[256];
+			unsigned short		  ft2asc[256];
 
 		} charset;
 

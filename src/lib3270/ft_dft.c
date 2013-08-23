@@ -304,7 +304,7 @@ static void dft_data_insert(H3270 *hSession, struct data_buffer *data_bufr)
 
 			while (len--)
 			{
-				*s = ft2asc[*s];
+				*s = hSession->charset.ft2asc[*s];
 				s++;
 			}
 		}
@@ -413,7 +413,7 @@ static void dft_get_request(H3270 *hSession)
 				total_read++;
 			}
 			ft->ft_last_cr = (c == '\r') ? 1 : 0;
-			*bufptr++ = ft->remap_flag? asc2ft[c]: c;
+			*bufptr++ = ft->remap_flag? hSession->charset.asc2ft[c]: c;
 			numbytes--;
 			total_read++;
 		} else {
@@ -427,7 +427,7 @@ static void dft_get_request(H3270 *hSession)
 				int i = numread;
 
 				while (i) {
-					*s = asc2ft[*s];
+					*s = hSession->charset.asc2ft[*s];
 					s++;
 					i--;
 				}

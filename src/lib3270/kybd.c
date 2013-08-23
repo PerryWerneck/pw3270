@@ -1030,7 +1030,7 @@ void key_ACharacter(H3270 *hSession, unsigned char c, enum keytype keytype, enum
 			lib3270_trace_event(hSession,"  dropped (control char)\n");
 			return;
 		}
-		(void) key_Character(hSession, (int) asc2ebc[c], keytype == KT_GE, False, skipped);
+		(void) key_Character(hSession, (int) hSession->charset.asc2ebc[c], keytype == KT_GE, False, skipped);
 	}
 #if defined(X3270_ANSI) /*[*/
 	else if (IN_ANSI)

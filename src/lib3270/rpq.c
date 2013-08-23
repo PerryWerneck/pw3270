@@ -150,7 +150,7 @@ void do_qr_rpqnames(H3270 *hSession)
 
 	/* Create fixed length portion - program id: x3270 */
 	for (j = 0; j < 5; j++) {
-		*hSession->obptr++ = asc2ebc[(int)"x3270"[j]];
+		*hSession->obptr++ = hSession->charset.asc2ebc[(int)"x3270"[j]];
 		remaining--;
 	}
 
@@ -202,7 +202,7 @@ void do_qr_rpqnames(H3270 *hSession)
 			{
 				for (i = 0; i < x; i++)
 				{
-					*hSession->obptr++ = asc2ebc[(int)(*(build_rpq_version+i) & 0xff)];
+					*hSession->obptr++ = hSession->charset.asc2ebc[(int)(*(build_rpq_version+i) & 0xff)];
 				}
 			}
 			break;
@@ -567,7 +567,7 @@ static int get_rpq_user(H3270 *hSession, unsigned char buf[], const int buflen)
 		if ((*rpqtext == '\\') && (*(rpqtext+1) != '\0'))
 			rpqtext++;
 
-		*buf++ = asc2ebc[(int)(*rpqtext & 0xff)];
+		*buf++ = hSession->charset.asc2ebc[(int)(*rpqtext & 0xff)];
 		x++;
 	}
 	return x;

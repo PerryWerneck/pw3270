@@ -194,7 +194,7 @@ static int upload_convert(H3270 *hSession, unsigned char *buf, int len)
 		if (ft->ascii_flag && ft->cr_flag && (c == '\r' || c == 0x1a))
 			continue;
 		if (ft->ascii_flag && ft->remap_flag)
-			c = ft2asc[c];
+			c = hSession->charset.ft2asc[c];
 		*ob++ = c;
 	}
 
@@ -206,6 +206,7 @@ static int upload_convert(H3270 *hSession, unsigned char *buf, int len)
  */
 static int download_convert(H3270FT *ft, unsigned const char *buf, unsigned len, unsigned char *xobuf)
 {
+	H3270 *hSession = ft->host;
 	unsigned char	* ob0 = xobuf;
 	unsigned char	* ob = ob0;
 
@@ -230,7 +231,7 @@ static int download_convert(H3270FT *ft, unsigned const char *buf, unsigned len,
 
 		/* Translate. */
 		if (ft->ascii_flag && ft->remap_flag)
-			c = asc2ft[c];
+			c = hSession->charset.asc2ft[c];
 
 		/* Quadrant already defined. */
 		if (ft->quadrant >= 0) {
@@ -238,7 +239,7 @@ static int download_convert(H3270FT *ft, unsigned const char *buf, unsigned len,
 			if (ixp != (unsigned char *)NULL)
 			{
 				ix = ixp - conv[ft->quadrant].xlate;
-				*ob++ = asc2ebc[(int)alphas[ix]];
+				*ob++ = hSession->charset.asc2ebc[(int)alphas[ix]];
 				continue;
 			}
 		}
@@ -256,7 +257,7 @@ static int download_convert(H3270FT *ft, unsigned const char *buf, unsigned len,
 				continue;
 			ix = ixp - conv[ft->quadrant].xlate;
 			*ob++ = conv[ft->quadrant].selector;
-			*ob++ = asc2ebc[(int)alphas[ix]];
+			*ob++ = hSession->charset.asc2ebc[(int)alphas[ix]];
 			break;
 		}
 		if (ft->quadrant >= NQ)
@@ -433,9 +434,9 @@ static void cut_data_request(H3270 *hSession)
 	for (i = 0; i < count; i++)
 		cs ^= hSession->ea_buf[O_UP_DATA + i].cc;
 
-	ctlr_add(hSession,O_UP_CSUM, asc2ebc[(int)table6[cs & 0x3f]], 0);
-	ctlr_add(hSession,O_UP_LEN, asc2ebc[(int)table6[(count >> 6) & 0x3f]], 0);
-	ctlr_add(hSession,O_UP_LEN+1, asc2ebc[(int)table6[count & 0x3f]], 0);
+	ctlr_add(hSession,O_UP_CSUM, hSession->charset.asc2ebc[(int)table6[cs & 0x3f]], 0);
+	ctlr_add(hSession,O_UP_LEN, hSession->charset.asc2ebc[(int)table6[(count >> 6) & 0x3f]], 0);
+	ctlr_add(hSession,O_UP_LEN+1, hSession->charset.asc2ebc[(int)table6[count & 0x3f]], 0);
 
 	/* XXX: Change the data field attribute so it doesn't display. */
 	attr = hSession->ea_buf[O_DR_SF].fa;

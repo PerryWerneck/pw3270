@@ -91,13 +91,13 @@ static KeySym StringToKeysym(char *s);
 static void charset_defaults(H3270 *hSession)
 {
 	/* Go to defaults first. */
-	(void) memcpy((char *)ebc2cg,						(const char *)ebc2cg0, 256);
-	(void) memcpy((char *)cg2ebc,						(const char *)cg2ebc0, 256);
+	(void) memcpy((char *) hSession->charset.ebc2cg,	(const char *)ebc2cg0, 256);
+	(void) memcpy((char *) hSession->charset.cg2ebc,	(const char *)cg2ebc0, 256);
 	(void) memcpy((char *) hSession->charset.ebc2asc,	(const char *)ebc2asc0, 256);
-	(void) memcpy((char *)asc2ebc,						(const char *)asc2ebc0, 256);
+	(void) memcpy((char *) hSession->charset.asc2ebc,	(const char *)asc2ebc0, 256);
 #if defined(X3270_FT) /*[*/
-	(void) memcpy((char *)ft2asc,						(const char *)ft2asc0, 256);
-	(void) memcpy((char *)asc2ft,						(const char *)asc2ft0, 256);
+	(void) memcpy((char *)hSession->charset.ft2asc,		(const char *)ft2asc0, 256);
+	(void) memcpy((char *)hSession->charset.asc2ft,		(const char *)asc2ft0, 256);
 #endif /*]*/
 	clear_xks();
 }
@@ -118,25 +118,25 @@ struct charset_buffer
 
 static void save_charset(H3270 *hSession, struct charset_buffer *save)
 {
-	(void) memcpy((char *)save->ebc2cg, (char *)ebc2cg, 256);
-	(void) memcpy((char *)save->cg2ebc, (char *)cg2ebc, 256);
+	(void) memcpy((char *)save->ebc2cg, (char *) hSession->charset.ebc2cg, 256);
+	(void) memcpy((char *)save->cg2ebc, (char *) hSession->charset.cg2ebc, 256);
 	(void) memcpy((char *)save->ebc2asc, (char *) hSession->charset.ebc2asc, 256);
-	(void) memcpy((char *)save->asc2ebc, (char *)asc2ebc, 256);
+	(void) memcpy((char *)save->asc2ebc, (char *) hSession->charset.asc2ebc, 256);
 #if defined(X3270_FT) /*[*/
-	(void) memcpy((char *)save->ft2asc, (char *)ft2asc, 256);
-	(void) memcpy((char *)save->asc2ft, (char *)asc2ft, 256);
+	(void) memcpy((char *)save->ft2asc, (char *) hSession->charset.ft2asc, 256);
+	(void) memcpy((char *)save->asc2ft, (char *) hSession->charset.asc2ft, 256);
 #endif /*]*/
 }
 
 static void restore_charset(H3270 *hSession, struct charset_buffer *save)
 {
-	(void) memcpy((char *)ebc2cg, (char *)save->ebc2cg, 256);
-	(void) memcpy((char *)cg2ebc, (char *)save->cg2ebc, 256);
+	(void) memcpy((char *)hSession->charset.ebc2cg, (char *)save->ebc2cg, 256);
+	(void) memcpy((char *)hSession->charset.cg2ebc, (char *)save->cg2ebc, 256);
 	(void) memcpy((char *)hSession->charset.ebc2asc, (char *)save->ebc2asc, 256);
-	(void) memcpy((char *)asc2ebc, (char *)save->asc2ebc, 256);
+	(void) memcpy((char *)hSession->charset.asc2ebc, (char *)save->asc2ebc, 256);
 #if defined(X3270_FT) /*[*/
-	(void) memcpy((char *)ft2asc, (char *)save->ft2asc, 256);
-	(void) memcpy((char *)asc2ft, (char *)save->asc2ft, 256);
+	(void) memcpy((char *)hSession->charset.ft2asc, (char *)save->ft2asc, 256);
+	(void) memcpy((char *)hSession->charset.asc2ft, (char *)save->asc2ft, 256);
 #endif /*]*/
 }
 
@@ -503,21 +503,21 @@ static void remap_one(H3270 *hSession, unsigned char ebc, KeySym iso, remap_scop
 				if (cg2asc[cg] == iso || iso == 0)
 				{
 					/* well-defined */
-					ebc2cg[ebc] = cg;
+					hSession->charset.ebc2cg[ebc] = cg;
 					if (!one_way)
-						cg2ebc[cg] = ebc;
+						hSession->charset.cg2ebc[cg] = ebc;
 				}
 				else
 				{
 					/* into a hole */
-					ebc2cg[ebc] = CG_boxsolid;
+					hSession->charset.ebc2cg[ebc] = CG_boxsolid;
 				}
 			}
 			if (ebc > 0x40)
 			{
 				hSession->charset.ebc2asc[ebc] = iso;
 				if (!one_way)
-					asc2ebc[iso] = ebc;
+					hSession->charset.asc2ebc[iso] = ebc;
 			}
 		}
 #if defined(X3270_FT) /*[*/
@@ -537,8 +537,8 @@ static void remap_one(H3270 *hSession, unsigned char ebc, KeySym iso, remap_scop
 				 */
 				aa = asc2ft0[ebc2asc0[ebc]];
 				if (aa != ' ') {
-					ft2asc[aa] = iso;
-					asc2ft[iso] = aa;
+					hSession->charset.ft2asc[aa] = iso;
+					hSession->charset.asc2ft[iso] = aa;
 				}
 			} else if (scope == FT_ONLY) {
 				/*
@@ -548,8 +548,8 @@ static void remap_one(H3270 *hSession, unsigned char ebc, KeySym iso, remap_scop
 				 * and the ISO code that we would normally
 				 * use to display that EBCDIC code.
 				 */
-				ft2asc[iso] = hSession->charset.ebc2asc[ebc];
-				asc2ft[hSession->charset.ebc2asc[ebc]] = iso;
+				hSession->charset.ft2asc[iso] = hSession->charset.ebc2asc[ebc];
+				hSession->charset.asc2ft[hSession->charset.ebc2asc[ebc]] = iso;
 			}
 		}
 #endif /*]*/
@@ -637,9 +637,9 @@ static enum cs_result remap_chars(H3270 *hSession, const char *csname, char *spe
 
 			for (i = 0; i < 256; i++) {
 				if ((i & 0x7f) > 0x20 && i != 0x7f &&
-						asc2ebc[i] != 0 &&
-						hSession->charset.ebc2asc[asc2ebc[i]] != i) {
-					asc2ebc[i] = 0;
+						hSession->charset.asc2ebc[i] != 0 &&
+						hSession->charset.ebc2asc[hSession->charset.asc2ebc[i]] != i) {
+					hSession->charset.asc2ebc[i] = 0;
 				}
 			}
 		}

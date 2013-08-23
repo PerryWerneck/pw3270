@@ -1090,16 +1090,16 @@ ansi_printing(H3270 *hSession, int ig1 unused, int ig2 unused)
 		if (hSession->ansi_ch >= 0x5f && hSession->ansi_ch <= 0x7e)
 			ctlr_add(hSession,hSession->cursor_addr, (unsigned char)(hSession->ansi_ch - 0x5f),CS_LINEDRAW);
 		else
-			ctlr_add(hSession,hSession->cursor_addr, asc2ebc[hSession->ansi_ch], CS_BASE);
+			ctlr_add(hSession,hSession->cursor_addr, hSession->charset.asc2ebc[hSession->ansi_ch], CS_BASE);
 		break;
 	    case CSD_UK:	/* UK "A" */
 		if (hSession->ansi_ch == '#')
 			ctlr_add(hSession,hSession->cursor_addr, 0x1e, CS_LINEDRAW);
 		else
-			ctlr_add(hSession,hSession->cursor_addr, asc2ebc[hSession->ansi_ch], CS_BASE);
+			ctlr_add(hSession,hSession->cursor_addr, hSession->charset.asc2ebc[hSession->ansi_ch], CS_BASE);
 		break;
 	    case CSD_US:	/* US "B" */
-		ebc_ch = asc2ebc[hSession->ansi_ch];
+		ebc_ch = hSession->charset.asc2ebc[hSession->ansi_ch];
 #if defined(X3270_DBCS) /*[*/
 		d = ctlr_dbcs_state(cursor_addr);
 		if (dbcs) {
