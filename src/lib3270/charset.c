@@ -88,19 +88,6 @@ static KeySym StringToKeysym(char *s);
 // static void set_charset_name(char *csname);
 // static char *charset_name = CN;
 
-static void charset_defaults(H3270 *hSession)
-{
-	/* Go to defaults first. */
-	(void) memcpy((char *) hSession->charset.ebc2cg,	(const char *)ebc2cg0, 256);
-	(void) memcpy((char *) hSession->charset.cg2ebc,	(const char *)cg2ebc0, 256);
-	(void) memcpy((char *) hSession->charset.ebc2asc,	(const char *)ebc2asc0, 256);
-	(void) memcpy((char *) hSession->charset.asc2ebc,	(const char *)asc2ebc0, 256);
-#if defined(X3270_FT) /*[*/
-	(void) memcpy((char *)hSession->charset.ft2asc,		(const char *)ft2asc0, 256);
-	(void) memcpy((char *)hSession->charset.asc2ft,		(const char *)asc2ft0, 256);
-#endif /*]*/
-	clear_xks();
-}
 
 struct charset_buffer
 {
@@ -498,9 +485,9 @@ static void remap_one(H3270 *hSession, unsigned char ebc, KeySym iso, remap_scop
 
 		if (scope == BOTH || scope == CS_ONLY) {
 			if (iso <= 0xff) {
-				cg = asc2cg[iso];
+				cg = hSession->charset.asc2cg[iso];
 
-				if (cg2asc[cg] == iso || iso == 0)
+				if (hSession->charset.cg2asc[cg] == iso || iso == 0)
 				{
 					/* well-defined */
 					hSession->charset.ebc2cg[ebc] = cg;

@@ -155,6 +155,9 @@
 			unsigned short		  cg2ebc[256];
 			unsigned short		  asc2ft[256];
 			unsigned short		  ft2asc[256];
+			unsigned short		  asc2uc[256];
+			unsigned short		  asc2cg[256];
+			unsigned short		  cg2asc[256];
 
 		} charset;
 

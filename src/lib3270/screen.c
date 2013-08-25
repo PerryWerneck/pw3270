@@ -337,7 +337,7 @@ void screen_update(H3270 *session, int bstart, int bend)
 			else
 			{
 				if(lib3270_get_toggle(session,LIB3270_TOGGLE_MONOCASE))
-					addch(session,baddr,asc2uc[session->charset.ebc2asc[session->ea_buf[baddr].cc]],attr,&first,&last);
+					addch(session,baddr,session->charset.asc2uc[session->charset.ebc2asc[session->ea_buf[baddr].cc]],attr,&first,&last);
 				else
 					addch(session,baddr,session->charset.ebc2asc[session->ea_buf[baddr].cc],attr,&first,&last);
 			}

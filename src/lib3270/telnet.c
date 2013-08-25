@@ -1966,7 +1966,7 @@ static void process_bind(H3270 *hSession, unsigned char *buf, int buflen)
 	if (namelen > BIND_PLU_NAME_MAX)
 		namelen = BIND_PLU_NAME_MAX;
 	for (i = 0; i < namelen; i++) {
-		hSession->plu_name[i] = ebc2asc0[buf[BIND_OFF_PLU_NAME + i]];
+		hSession->plu_name[i] = hSession->charset.ebc2asc[buf[BIND_OFF_PLU_NAME + i]];
 	}
 }
 #endif /*]*/
