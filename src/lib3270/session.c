@@ -299,8 +299,8 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 
 	trace("Termtype: %s",hSession->termtype);
 
-	if (hSession->apl_mode)
-		hSession->charset.host = "apl";
+//	if (hSession->apl_mode)
+//		hSession->charset.host = "apl";
 
 }
 
