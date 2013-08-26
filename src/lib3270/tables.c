@@ -450,13 +450,14 @@ unsigned short ebc2asc7[256];
 LIB3270_INTERNAL void initialize_tables(H3270 *hSession)
 {
 	/* Go to defaults first. */
-	memcpy(hSession->charset.ebc2cg,	ebc2cg0,	sizeof(hSession->charset.ebc2cg));
-	memcpy(hSession->charset.cg2ebc,	cg2ebc0,	sizeof(hSession->charset.cg2ebc));
 	memcpy(hSession->charset.ebc2asc,	ebc2asc0,	sizeof(hSession->charset.ebc2asc));
 	memcpy(hSession->charset.asc2ebc,	asc2ebc0,	sizeof(hSession->charset.asc2ebc));
 	memcpy(hSession->charset.asc2uc,	asc2uc,		sizeof(hSession->charset.asc2uc));
-	memcpy(hSession->charset.asc2cg,	asc2cg,		sizeof(hSession->charset.asc2cg));
-	memcpy(hSession->charset.cg2asc,	cg2asc,		sizeof(hSession->charset.cg2asc));
+
+//	memcpy(hSession->charset.ebc2cg,	ebc2cg0,	sizeof(hSession->charset.ebc2cg));
+//	memcpy(hSession->charset.cg2ebc,	cg2ebc0,	sizeof(hSession->charset.cg2ebc));
+//	memcpy(hSession->charset.asc2cg,	asc2cg,		sizeof(hSession->charset.asc2cg));
+//	memcpy(hSession->charset.cg2asc,	cg2asc,		sizeof(hSession->charset.cg2asc));
 
 #ifdef EXTENDED_TABLES
 	#error Need implementation to the new format
@@ -470,16 +471,18 @@ LIB3270_INTERNAL void initialize_tables(H3270 *hSession)
 
 }
 
+/*
 void charset_defaults(H3270 *hSession)
 {
-	/* Go to defaults first. */
+	// Go to defaults first.
 	(void) memcpy((char *) hSession->charset.ebc2cg,	(const char *)ebc2cg0, 256);
 	(void) memcpy((char *) hSession->charset.cg2ebc,	(const char *)cg2ebc0, 256);
 	(void) memcpy((char *) hSession->charset.ebc2asc,	(const char *)ebc2asc0, 256);
 	(void) memcpy((char *) hSession->charset.asc2ebc,	(const char *)asc2ebc0, 256);
-#if defined(X3270_FT) /*[*/
+#if defined(X3270_FT)
 	(void) memcpy((char *)hSession->charset.ft2asc,		(const char *)ft2asc0, 256);
 	(void) memcpy((char *)hSession->charset.asc2ft,		(const char *)asc2ft0, 256);
-#endif /*]*/
+#endif
 	// clear_xks();
 }
+*/
