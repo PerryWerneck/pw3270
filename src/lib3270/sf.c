@@ -47,7 +47,7 @@
 // #include "ctlr.h"
 #include "resources.h"
 
-#include "charsetc.h"
+// #include "charsetc.h"
 #include "ctlrc.h"
 
 #if defined(X3270_FT)

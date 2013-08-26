@@ -56,7 +56,7 @@
 #include "3270ds.h"
 #include "resources.h"
 
-#include "charsetc.h"
+// #include "charsetc.h"
 #include "ctlrc.h"
 #include "popupsc.h"
 #include "tablesc.h"

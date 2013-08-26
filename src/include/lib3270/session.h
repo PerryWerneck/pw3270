@@ -143,16 +143,18 @@
 		char					* proxy;				/**< Proxy server (type:host[:port]) */
 		char					* termname;
 
-		struct _charset
+		struct lib3270_charset
 		{
 			const char			* host;
-			char				* display;
+			const char			* display;
 
 			// Translation tables
 			unsigned short		  ebc2asc[256];
 			unsigned short 		  asc2ebc[256];
+
 			unsigned short		  asc2ft[256];
 			unsigned short		  ft2asc[256];
+
 			unsigned short		  asc2uc[256];
 
 //			unsigned short		  ebc2cg[256];

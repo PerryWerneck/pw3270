@@ -34,7 +34,7 @@
 #endif // !ANDROID
 
 #include "globals.h"
-#include "charsetc.h"
+// #include "charsetc.h"
 #include "kybdc.h"
 #include "ansic.h"
 #include "togglesc.h"
@@ -46,6 +46,7 @@
 #include "3270ds.h"
 #include "tablesc.h"
 #include "popupsc.h"
+#include "charset.h"
 
 /*---[ Globals ]--------------------------------------------------------------------------------------------------------------*/
 
@@ -84,7 +85,7 @@ void lib3270_session_free(H3270 *h)
 	// Release memory
 	#define release_pointer(x) lib3270_free(x); x = NULL;
 
-	release_pointer(h->charset.display);
+	// release_pointer(h->charset.display);
 	release_pointer(h->paste_buffer);
 
 	release_pointer(h->ibuf);
@@ -185,7 +186,9 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 
 	memset(hSession,0,sizeof(H3270));
 	hSession->sz = sizeof(H3270);
-	initialize_tables(hSession);
+
+	lib3270_load_default_charset(hSession);
+//	initialize_tables(hSession);
 
 	// Default calls
 	hSession->write					= lib3270_sock_send;
@@ -218,7 +221,7 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 	hSession->unlock_delay			=  1;
 	hSession->icrnl 				=  1;
 	hSession->onlcr					=  1;
-	hSession->charset.host			= "bracket";
+//	hSession->charset.host			= "bracket";
 	hSession->sock					= -1;
 	hSession->model_num				= -1;
 	hSession->cstate				= LIB3270_NOT_CONNECTED;

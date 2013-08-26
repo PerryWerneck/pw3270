@@ -58,7 +58,7 @@
 #include "statusc.h"
 #include "togglesc.h"
 #include "api.h"
-#include "charsetc.h"
+// #include "charsetc.h"
 
 #if defined(_WIN32)
 	#include <windows.h>

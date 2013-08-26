@@ -106,7 +106,7 @@
 		<Unit filename="src/lib3270/charset.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/lib3270/charsetc.h" />
+		<Unit filename="src/lib3270/charset.h" />
 		<Unit filename="src/lib3270/ctlr.c">
 			<Option compilerVar="CC" />
 		</Unit>
