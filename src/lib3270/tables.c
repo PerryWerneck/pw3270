@@ -40,6 +40,7 @@
 
 #include "globals.h"
 #include "tablesc.h"
+#include "kybdc.h"
 
 static const unsigned short asc2cg[256] = {
 /*00*/	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -458,6 +459,7 @@ LIB3270_INTERNAL void initialize_tables(H3270 *hSession)
 	memcpy(hSession->charset.cg2asc,	cg2asc,		sizeof(hSession->charset.cg2asc));
 
 #ifdef EXTENDED_TABLES
+	#error Need implementation to the new format
 	memcpy(ebc2asc7,	ebc2asc70,	sizeof(ebc2asc7));
 #endif // EXTENDED_TABLES
 
@@ -479,5 +481,5 @@ void charset_defaults(H3270 *hSession)
 	(void) memcpy((char *)hSession->charset.ft2asc,		(const char *)ft2asc0, 256);
 	(void) memcpy((char *)hSession->charset.asc2ft,		(const char *)asc2ft0, 256);
 #endif /*]*/
-	clear_xks();
+	// clear_xks();
 }

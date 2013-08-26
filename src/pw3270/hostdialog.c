@@ -140,7 +140,7 @@
  	int				  iHostType 	= 0;
  	int				  iColorTable	= 0;
 #if GTK_CHECK_VERSION(3,0,0)
-	GtkGrid			* grid			= gtk_grid_new();
+	GtkGrid			* grid			= GTK_GRID(gtk_grid_new());
 #else
  	GtkTable		* table			= GTK_TABLE(gtk_table_new(3,4,FALSE));
 #endif // GTK_CHECK_VERSION
@@ -235,7 +235,7 @@
 		GtkWidget	* expander	= gtk_expander_new_with_mnemonic(_( "_Host options"));
 
 #if GTK_CHECK_VERSION(3,0,0)
-		GtkGrid		* container	= gtk_grid_new();
+		GtkGrid		* container	= GTK_GRID(gtk_grid_new());
 
 		gtk_grid_set_column_spacing(container,5);
 		gtk_grid_set_row_spacing(container,3);

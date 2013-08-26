@@ -130,12 +130,14 @@ Boolean key_WCharacter(unsigned char code[], Boolean *skipped);
 #endif
 */
 
+/*
 static int nxk = 0;
 static struct xks
 {
 	KeySym key;
 	KeySym assoc;
 } *xk;
+*/
 
 // static Boolean		reverse = False;	/* reverse-input mode */
 
@@ -3070,6 +3072,7 @@ MyStringToKeysym(char *s, enum keytype *keytypep)
 */
 
 /* Add a key to the extended association table. */
+/*
 void
 add_xk(KeySym key, KeySym assoc)
 {
@@ -3085,10 +3088,11 @@ add_xk(KeySym key, KeySym assoc)
 	xk[nxk].assoc = assoc;
 	nxk++;
 }
+*/
 
 /* Clear the extended association table. */
-void
-clear_xks(void)
+/*
+void clear_xks(void)
 {
 	if (nxk) {
 		lib3270_free(xk);
@@ -3096,5 +3100,6 @@ clear_xks(void)
 		nxk = 0;
 	}
 }
+*/
 
 

@@ -324,13 +324,14 @@ H3270 * lib3270_session_new(const char *model)
 	if(screen_init(hSession))
 		return NULL;
 
+/*
 	trace("Charset: %s",hSession->charset.host);
 	if (charset_init(hSession,hSession->charset.host) != CS_OKAY)
 	{
 		Warning(hSession, _( "Cannot find charset \"%s\", using defaults" ), hSession->charset.host);
 		(void) charset_init(hSession,CN);
 	}
-
+*/
 	trace("%s: Initializing KYBD",__FUNCTION__);
 	lib3270_register_schange(hSession,LIB3270_STATE_CONNECT,kybd_connect,NULL);
 	lib3270_register_schange(hSession,LIB3270_STATE_3270_MODE,kybd_in3270,NULL);

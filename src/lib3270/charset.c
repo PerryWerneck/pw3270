@@ -36,6 +36,8 @@
 
 #include "globals.h"
 
+/*
+
 #include "resources.h"
 // #include "appres.h"
 #include "cg.h"
@@ -59,15 +61,10 @@
 #define EURO_SUFFIX	"-euro"
 #define ES_SIZE		(sizeof(EURO_SUFFIX) - 1)
 
-/* Globals. */
-// unsigned long cgcsgid = LIB3270_DEFAULT_CGEN | LIB3270_DEFAULT_CSET;
-// unsigned long cgcsgid_dbcs = 0L;
+// Globals.
 const char *default_display_charset = "3270cg-1a,3270cg-1,iso8859-1";
-// char *encoding;
 
-// unsigned char auto_keymap = 0;
-
-/* Statics. */
+// Statics.
 static enum cs_result resource_charset(H3270 *hSession, const char *csname, char *cs, char *ftcs);
 
 typedef enum { CS_ONLY, FT_ONLY, BOTH } remap_scope;
@@ -75,19 +72,15 @@ typedef enum { CS_ONLY, FT_ONLY, BOTH } remap_scope;
 static enum cs_result remap_chars(H3270 *hSession, const char *csname, char *spec, remap_scope scope, int *ne);
 static void remap_one(H3270 *hSession, unsigned char ebc, KeySym iso, remap_scope scope,Boolean one_way);
 
-#if defined(DEBUG_CHARSET) /*[*/
+#if defined(DEBUG_CHARSET)
 static enum cs_result check_charset(void);
 static char *char_if_ascii7(unsigned long l);
-#endif /*]*/
+#endif
 
 static void set_cgcsgids(H3270 *hSession, const char *spec);
 static int set_cgcsgid(char *spec, unsigned long *idp);
 
 static KeySym StringToKeysym(char *s);
-
-// static void set_charset_name(char *csname);
-// static char *charset_name = CN;
-
 
 struct charset_buffer
 {
@@ -96,10 +89,10 @@ struct charset_buffer
 	unsigned char ebc2asc[256];
 	unsigned char asc2ebc[256];
 
-	#if defined(X3270_FT) /*[*/
+	#if defined(X3270_FT)
 	unsigned char ft2asc[256];
 	unsigned char asc2ft[256];
-	#endif /*]*/
+	#endif
 };
 
 
@@ -109,10 +102,10 @@ static void save_charset(H3270 *hSession, struct charset_buffer *save)
 	(void) memcpy((char *)save->cg2ebc, (char *) hSession->charset.cg2ebc, 256);
 	(void) memcpy((char *)save->ebc2asc, (char *) hSession->charset.ebc2asc, 256);
 	(void) memcpy((char *)save->asc2ebc, (char *) hSession->charset.asc2ebc, 256);
-#if defined(X3270_FT) /*[*/
+#if defined(X3270_FT)
 	(void) memcpy((char *)save->ft2asc, (char *) hSession->charset.ft2asc, 256);
 	(void) memcpy((char *)save->asc2ft, (char *) hSession->charset.asc2ft, 256);
-#endif /*]*/
+#endif
 }
 
 static void restore_charset(H3270 *hSession, struct charset_buffer *save)
@@ -121,59 +114,23 @@ static void restore_charset(H3270 *hSession, struct charset_buffer *save)
 	(void) memcpy((char *)hSession->charset.cg2ebc, (char *)save->cg2ebc, 256);
 	(void) memcpy((char *)hSession->charset.ebc2asc, (char *)save->ebc2asc, 256);
 	(void) memcpy((char *)hSession->charset.asc2ebc, (char *)save->asc2ebc, 256);
-#if defined(X3270_FT) /*[*/
+#if defined(X3270_FT)
 	(void) memcpy((char *)hSession->charset.ft2asc, (char *)save->ft2asc, 256);
 	(void) memcpy((char *)hSession->charset.asc2ft, (char *)save->asc2ft, 256);
-#endif /*]*/
-}
-
-/* Get a character set definition. */
-/*
-static char * get_charset_def(const char *csname)
-{
-	return get_fresource("%s.%s", "charset", csname);
-}
-*/
-
-/*
-#if defined(X3270_DBCS)
-//
-// Initialize the DBCS conversion functions, based on resource values.
-//
-static int
-wide_resource_init(char *csname)
-{
-	char *cn, *en;
-
-	cn = get_fresource("%s.%s", "dbcsConverters", csname);
-	if (cn == CN)
-		return 0;
-
-	en = get_fresource("%s.%s", "localEncoding", csname);
-	if (en == CN)
-		en = appres.local_encoding;
-	Replace(converter_names, cn);
-	Replace(encoding, en);
-
-	return wide_init(cn, en);
-
-}
 #endif
-*/
+}
 
-/*
- * Change character sets.
- */
+//
+// Change character sets.
+//
 enum cs_result charset_init(H3270 *hSession, const char *csname)
 {
-//	char *cs;
-//	const char *ftcs;
 	enum cs_result rc;
 	char *ccs, *cftcs;
 	const char	*ak;
 	struct charset_buffer save;
 
-	/* Do nothing, successfully. */
+	// Do nothing, successfully.
 	if (csname == CN || !strcasecmp(csname, "us"))
 	{
 		charset_defaults(hSession);
@@ -182,81 +139,50 @@ enum cs_result charset_init(H3270 *hSession, const char *csname)
 		return CS_OKAY;
 	}
 
-	/* Figure out if it's already in a resource or in a file. */
+	// Figure out if it's already in a resource or in a file.
 #ifdef ANDROID
 	ccs = strdup("0xad: [ \n 0xba: Yacute \n0xbd: ] \n 0xbb: diaeresis \n");
 #else
 	ccs = lib3270_get_resource_string(hSession,"charset", csname, NULL);
 #endif
-/*
-	if (cs == CN && strlen(csname) > ES_SIZE && !strcasecmp(csname + strlen(csname) - ES_SIZE, EURO_SUFFIX))
-	{
-		char *basename =
-		lib3270_free(cs);
-
-		// Grab the non-Euro definition.
-		basename = xs_buffer("%.*s", (int) (strlen(csname) - ES_SIZE), csname);
-		cs = get_charset_def(basename);
-		lib3270_free(basename);
-	}
-*/
 	if (!ccs)
 		return CS_NOTFOUND;
 
-	/* Grab the File Transfer character set. */
+	// Grab the File Transfer character set.
 	cftcs = lib3270_get_resource_string(hSession,"ftCharset",csname,NULL);
 
-	/* Save the current definitions, and start over with the defaults. */
+	// Save the current definitions, and start over with the defaults.
 	save_charset(hSession,&save);
 	charset_defaults(hSession);
 
-	/* Check for auto-keymap. */
+	// Check for auto-keymap.
 	ak = lib3270_get_resource_string(hSession,"autoKeymap", csname, NULL);
 	if (ak != NULL)
 		hSession->auto_keymap = strcasecmp(ak, "true") ? 0 : 1;
 	else
 		hSession->auto_keymap = 0;
 
-	/* Interpret them. */
+	// Interpret them.
 	rc = resource_charset(hSession,csname, ccs, cftcs);
 
-	/* Free them. */
+	// Free them.
 	lib3270_free(ccs);
 	lib3270_free(cftcs);
 
-#if defined(DEBUG_CHARSET) /*[*/
+#if defined(DEBUG_CHARSET)
 	if (rc == CS_OKAY)
 		rc = check_charset();
-#endif /*]*/
+#endif
 
 	if (rc != CS_OKAY)
 		restore_charset(hSession,&save);
 
-/*
-#if defined(X3270_DBCS)
-	else if (wide_resource_init(csname) < 0) {
-		restore_charset();
-		return CS_NOTFOUND;
-	}
-#endif
-*/
-
-/*
-#if defined(X3270_DISPLAY)
-	// Check for an XK selector.
-	xks = get_fresource("%s.%s", ResXkSelector, csname);
-	if (xks != NULL)
-		xk_selector = (unsigned char) strtoul(xks, NULL, 0);
-	else
-		xk_selector = 0;
-#endif
-*/
 	return rc;
 }
 
-/**
- * Set a CGCSGID.  Return 0 for success, -1 for failure.
- */
+//
+// Set a CGCSGID.  Return 0 for success, -1 for failure.
+//
 static int set_cgcsgid(char *spec, unsigned long *r)
 {
 	unsigned long cp;
@@ -275,7 +201,7 @@ static int set_cgcsgid(char *spec, unsigned long *r)
 		return -1;
 }
 
-/* Set the CGCSGIDs. */
+// Set the CGCSGIDs.
 static void set_cgcsgids(H3270 *hSession, const char *spec)
 {
 	int n_ids = 0;
@@ -293,11 +219,11 @@ static void set_cgcsgids(H3270 *hSession, const char *spec)
 			case 0:
 			    idp = &hSession->cgcsgid;
 			    break;
-#if defined(X3270_DBCS) /*[*/
+#if defined(X3270_DBCS)
 			case 1:
 			    idp = &hSession->cgcsgid_dbcs;
 			    break;
-#endif /*]*/
+#endif
 			default:
 			    popup_an_error(hSession,_( "Extra CGCSGID(s), ignoring" ));
 			    break;
@@ -317,29 +243,12 @@ static void set_cgcsgids(H3270 *hSession, const char *spec)
 	}
 
 	hSession->cgcsgid = LIB3270_DEFAULT_CGEN | LIB3270_DEFAULT_CSET;
-#if defined(X3270_DBCS) /*[*/
+#if defined(X3270_DBCS)
 	hSession->cgcsgid_dbcs = 0L;
-#endif /*]*/
+#endif
 }
 
-/* Set the global charset name. */ /*
-static void
-set_charset_name(char *csname)
-{
-	if (csname == CN) {
-		Replace(charset_name, NewString("us"));
-		charset_changed = False;
-		return;
-	}
-	if ((charset_name != CN && strcmp(charset_name, csname)) ||
-	    (appres.charset != CN && strcmp(appres.charset, csname))) {
-		Replace(charset_name, NewString(csname));
-		charset_changed = True;
-	}
-}
-*/
-
-/* Define a charset from resources. */
+// Define a charset from resources.
 static enum cs_result resource_charset(H3270 *hSession, const char *csname, char *cs, char *ftcs)
 {
 	enum cs_result	  rc;
@@ -348,7 +257,7 @@ static enum cs_result resource_charset(H3270 *hSession, const char *csname, char
 	int				  n_rcs	= 0;
 	char			* dcs;
 
-	/* Interpret the spec. */
+	// Interpret the spec.
 	rc = remap_chars(hSession, csname, cs, (ftcs == NULL)? BOTH: CS_ONLY, &ne);
 	if (rc != CS_OKAY)
 		return rc;
@@ -358,10 +267,9 @@ static enum cs_result resource_charset(H3270 *hSession, const char *csname, char
 			return rc;
 	}
 
-//	rcs = get_fresource("%s.%s", "displayCharset", csname);
 	rcs = lib3270_get_resource_string(hSession,"displayCharset", csname, NULL);
 
-	/* Isolate the pieces. */
+	// Isolate the pieces.
 	if (rcs != CN)
 	{
 		char *buf, *token;
@@ -387,29 +295,7 @@ static enum cs_result resource_charset(H3270 *hSession, const char *csname, char
 
 	lib3270_free(rcs);
 
-/*
-#if defined(X3270_DBCS)
-	// Can't swap DBCS modes while connected.
-	if (IN_3270 && (n_rcs == 2) != dbcs) {
-		popup_an_error(NULL,"Can't change DBCS modes while connected");
-		return CS_ILLEGAL;
-	}
-#endif
-*/
-
-/*
-#if !defined(_WIN32)
-	utf8_set_display_charsets(rcs? rcs: default_display_charset, csname);
-#endif
-#if defined(X3270_DBCS)
-	if (n_rcs > 1)
-		dbcs = True;
-	else
-		dbcs = False;
-#endif
-*/
-
-	/* Set up the cgcsgid. */
+	// Set up the cgcsgid.
 //	set_cgcsgids(get_fresource("%s.%s", "codepage", csname));
 	{
 		char *ptr = lib3270_get_resource_string(hSession,"codepage", csname, NULL);
@@ -427,16 +313,16 @@ static enum cs_result resource_charset(H3270 *hSession, const char *csname, char
 
 	lib3270_free(dcs);
 
-	/* Set up the character set name. */
+	// Set up the character set name.
 //	set_charset_name(csname);
 
 	return CS_OKAY;
 }
 
-/*
- * Map a keysym name or literal string into a character.
- * Returns NoSymbol if there is a problem.
- */
+//
+// Map a keysym name or literal string into a character.
+//Returns NoSymbol if there is a problem.
+//
 static KeySym
 parse_keysym(char *s, Boolean extended)
 {
@@ -463,25 +349,25 @@ parse_keysym(char *s, Boolean extended)
 		return k;
 }
 
-/* Process a single character definition. */
+// Process a single character definition.
 static void remap_one(H3270 *hSession, unsigned char ebc, KeySym iso, remap_scope scope, Boolean one_way)
 {
 	unsigned char cg;
 
-	/* Ignore mappings of EBCDIC control codes and the space character. */
+	// Ignore mappings of EBCDIC control codes and the space character.
 	if (ebc <= 0x40)
 		return;
 
-	/* If they want to map to a NULL or a blank, make it a one-way blank. */
+	// If they want to map to a NULL or a blank, make it a one-way blank.
 	if (iso == 0x0)
 		iso = 0x20;
 	if (iso == 0x20)
 		one_way = True;
 
 	if (!hSession->auto_keymap || iso <= 0xff) {
-#if defined(X3270_FT) /*[*/
+#if defined(X3270_FT)
 		unsigned char aa;
-#endif /*]*/
+#endif
 
 		if (scope == BOTH || scope == CS_ONLY) {
 			if (iso <= 0xff) {
@@ -489,14 +375,14 @@ static void remap_one(H3270 *hSession, unsigned char ebc, KeySym iso, remap_scop
 
 				if (hSession->charset.cg2asc[cg] == iso || iso == 0)
 				{
-					/* well-defined */
+					// well-defined
 					hSession->charset.ebc2cg[ebc] = cg;
 					if (!one_way)
 						hSession->charset.cg2ebc[cg] = ebc;
 				}
 				else
 				{
-					/* into a hole */
+					// into a hole
 					hSession->charset.ebc2cg[ebc] = CG_boxsolid;
 				}
 			}
@@ -507,57 +393,57 @@ static void remap_one(H3270 *hSession, unsigned char ebc, KeySym iso, remap_scop
 					hSession->charset.asc2ebc[iso] = ebc;
 			}
 		}
-#if defined(X3270_FT) /*[*/
+#if defined(X3270_FT)
 		if (iso <= 0xff && ebc > 0x40) {
-			/* Change the file transfer translation table. */
+			// Change the file transfer translation table.
 			if (scope == BOTH) {
-				/*
-				 * We have an alternate mapping of an EBCDIC
-				 * code to an ASCII code.  Modify the existing
-				 * ASCII(ft)-to-ASCII(desired) maps.
-				 *
-				 * This is done by figuring out which ASCII
-				 * code the host usually translates the given
-				 * EBCDIC code to (asc2ft0[ebc2asc0[ebc]]).
-				 * Now we want to translate that code to the
-				 * given ISO code, and vice-versa.
-				 */
+				//
+				// We have an alternate mapping of an EBCDIC
+				// code to an ASCII code.  Modify the existing
+				// ASCII(ft)-to-ASCII(desired) maps.
+				//
+				// This is done by figuring out which ASCII
+				// code the host usually translates the given
+				// EBCDIC code to (asc2ft0[ebc2asc0[ebc]]).
+				// Now we want to translate that code to the
+				// given ISO code, and vice-versa.
+				//
 				aa = asc2ft0[ebc2asc0[ebc]];
 				if (aa != ' ') {
 					hSession->charset.ft2asc[aa] = iso;
 					hSession->charset.asc2ft[iso] = aa;
 				}
 			} else if (scope == FT_ONLY) {
-				/*
-				 * We have a map of how the host translates
-				 * the given EBCDIC code to an ASCII code.
-				 * Generate the translation between that code
-				 * and the ISO code that we would normally
-				 * use to display that EBCDIC code.
-				 */
+				//
+				// We have a map of how the host translates
+				// the given EBCDIC code to an ASCII code.
+				// Generate the translation between that code
+				// and the ISO code that we would normally
+				// use to display that EBCDIC code.
+				//
 				hSession->charset.ft2asc[iso] = hSession->charset.ebc2asc[ebc];
 				hSession->charset.asc2ft[hSession->charset.ebc2asc[ebc]] = iso;
 			}
 		}
-#endif /*]*/
+#endif
 	} else {
-		/* Auto-keymap. */
+		// Auto-keymap.
 		add_xk(iso, (KeySym)hSession->charset.ebc2asc[ebc]);
 	}
 }
 
-/**
- * Parse an EBCDIC character set map, a series of pairs of numeric EBCDIC codes and keysyms.
- *
- * If the keysym is in the range 1..255, it is a remapping of the EBCDIC code
- * for a standard Latin-1 graphic, and the CG-to-EBCDIC map will be modified
- * to match.
- *
- * Otherwise (keysym > 255), it is a definition for the EBCDIC code to use for
- * a multibyte keysym.  This is intended for 8-bit fonts that with special
- * characters that replace certain standard Latin-1 graphics.  The keysym
- * will be entered into the extended keysym translation table.
- */
+//
+// Parse an EBCDIC character set map, a series of pairs of numeric EBCDIC codes and keysyms.
+//
+// If the keysym is in the range 1..255, it is a remapping of the EBCDIC code
+// for a standard Latin-1 graphic, and the CG-to-EBCDIC map will be modified
+// to match.
+//
+// Otherwise (keysym > 255), it is a definition for the EBCDIC code to use for
+// a multibyte keysym.  This is intended for 8-bit fonts that with special
+// characters that replace certain standard Latin-1 graphics.  The keysym
+// will be entered into the extended keysym translation table.
+//
 static enum cs_result remap_chars(H3270 *hSession, const char *csname, char *spec, remap_scope scope, int *ne)
 {
 	char *s;
@@ -569,7 +455,7 @@ static enum cs_result remap_chars(H3270 *hSession, const char *csname, char *spe
 	Boolean is_table = False;
 	Boolean one_way = False;
 
-	/* Pick apart a copy of the spec. */
+	// Pick apart a copy of the spec.
 	s = spec = NewString(spec);
 	while (isspace(*s)) {
 		s++;
@@ -614,12 +500,12 @@ static enum cs_result remap_chars(H3270 *hSession, const char *csname, char *spe
 			popup_an_error(NULL,_( "Charset has %d entries, need 256" ), ebc);
 			rc = CS_BAD;
 		} else {
-			/*
-			 * The entire EBCDIC-to-ASCII mapping has been defined.
-			 * Make sure that any printable ASCII character that
-			 * doesn't now map back onto itself is mapped onto an
-			 * EBCDIC NUL.
-			 */
+			//
+			// The entire EBCDIC-to-ASCII mapping has been defined.
+			// Make sure that any printable ASCII character that
+			// doesn't now map back onto itself is mapped onto an
+			// EBCDIC NUL.
+			//
 			int i;
 
 			for (i = 0; i < 256; i++) {
@@ -655,7 +541,7 @@ static enum cs_result remap_chars(H3270 *hSession, const char *csname, char *spe
 	return rc;
 }
 
-#if defined(DEBUG_CHARSET) /*[*/
+#if defined(DEBUG_CHARSET)
 static char *
 char_if_ascii7(unsigned long l)
 {
@@ -667,15 +553,15 @@ char_if_ascii7(unsigned long l)
 	} else
 		return "";
 }
-#endif /*]*/
+#endif
 
 
-#if defined(DEBUG_CHARSET) /*[*/
-/*
- * Verify that a character set is not ambiguous.
- * (All this checks is that multiple EBCDIC codes map onto the same ISO code.
- *  Hmm.  God, I find the CG stuff confusing.)
- */
+#if defined(DEBUG_CHARSET)
+//
+// Verify that a character set is not ambiguous.
+// (All this checks is that multiple EBCDIC codes map onto the same ISO code.
+//  Hmm.  God, I find the CG stuff confusing.)
+//
 static enum cs_result
 check_charset(void)
 {
@@ -706,22 +592,11 @@ check_charset(void)
 	}
 	return rc;
 }
-#endif /*]*/
+#endif
 
 void set_display_charset(H3270 *session, const char *dcs)
 {
 	session->charset.display = strdup(dcs);
-}
-
-LIB3270_EXPORT const char * lib3270_get_default_charset(void)
-{
-	return "ISO-8859-1";
-}
-
-LIB3270_EXPORT const char * lib3270_get_charset(H3270 *hSession)
-{
-	CHECK_SESSION_HANDLE(hSession);
-	return hSession->charset.display ? hSession->charset.display : "ISO-8859-1";
 }
 
 static KeySym StringToKeysym(char *s)
@@ -952,3 +827,17 @@ static KeySym StringToKeysym(char *s)
 	}
 	return NoSymbol;
 }
+
+*/
+
+LIB3270_EXPORT const char * lib3270_get_default_charset(void)
+{
+	return "ISO-8859-1";
+}
+
+LIB3270_EXPORT const char * lib3270_get_charset(H3270 *hSession)
+{
+	CHECK_SESSION_HANDLE(hSession);
+	return hSession->charset.display ? hSession->charset.display : "ISO-8859-1";
+}
+

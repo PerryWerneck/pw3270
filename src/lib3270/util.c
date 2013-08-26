@@ -952,7 +952,7 @@ LIB3270_EXPORT void * lib3270_strdup(const char *str)
 	return r;
 }
 
-
+/*
 LIB3270_EXPORT char * lib3270_get_resource_string(H3270 *hSession, const char *first_element, ...)
 {
 #ifdef ANDROID
@@ -993,6 +993,7 @@ LIB3270_EXPORT char * lib3270_get_resource_string(H3270 *hSession, const char *f
 #endif
 	return NULL;
 }
+*/
 
 LIB3270_EXPORT const char * lib3270_get_version(void)
 {
@@ -1048,3 +1049,5 @@ int gettimeofday(struct timeval *tv, void *ignored)
 	trace("%s(%p)",__FUNCTION__,h);
 	return h->print(h);
  }
+
+
