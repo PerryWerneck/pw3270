@@ -35,6 +35,6 @@
 
 	const struct lib3270_charset lib3270_default_charset;
 
-	LIB3270_EXPORT struct lib3270_charset * lib3270_load_default_charset(H3270 *hSession);
+	LIB3270_EXPORT struct lib3270_charset * lib3270_load_charset(H3270 *hSession, const char *name);
 
 #endif // LIB3270_CHARSET_H_INCLUDED

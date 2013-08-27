@@ -450,7 +450,7 @@
  {
  	static const gchar *authors[]	= {	"Perry Werneck <perry.werneck@gmail.com>",
 										"Paul Mattes <Paul.Mattes@usa.net>",
-										"GTRC",
+										"Georgia Tech Research Corporation (GTRC)",
 										"and others",
 										NULL };
 

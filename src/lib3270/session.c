@@ -187,8 +187,7 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 	memset(hSession,0,sizeof(H3270));
 	hSession->sz = sizeof(H3270);
 
-	lib3270_load_default_charset(hSession);
-//	initialize_tables(hSession);
+	lib3270_load_charset(hSession,NULL);
 
 	// Default calls
 	hSession->write					= lib3270_sock_send;
