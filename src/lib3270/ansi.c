@@ -53,7 +53,7 @@
 #include "hostc.h"
 #include "screenc.h"
 // #include "scrollc.h"
-#include "tablesc.h"
+// #include "tablesc.h"
 #include "telnetc.h"
 #include "trace_dsc.h"
 #include "utf8c.h"
@@ -1045,6 +1045,7 @@ ansi_printing(H3270 *hSession, int ig1 unused, int ig2 unused)
 	Boolean preserve_right = False;
 #endif /*]*/
 
+/*
 	if ((hSession->pmi == 0) && (hSession->ansi_ch & 0x80)) {
 	    	char mbs[2];
 		enum ulfail fail;
@@ -1052,27 +1053,29 @@ ansi_printing(H3270 *hSession, int ig1 unused, int ig2 unused)
 
 		mbs[0] = (char)hSession->ansi_ch;
 		mbs[1] = '\0';
+
 		ch = utf8_lookup(mbs, &fail, NULL);
 		if (ch == 0) {
 			switch (fail) {
 			case ULFAIL_NOUTF8:
-			    	/* Leave it alone. */
+			    	// Leave it alone.
 				break;
 			case ULFAIL_INCOMPLETE:
-				/* Start munching multi-byte. */
+				// Start munching multi-byte.
 				hSession->pmi = 0;
 				hSession->pending_mbs[hSession->pmi++] = (char)hSession->ansi_ch;
 				return MBPEND;
 			case ULFAIL_INVALID:
-				/* Invalid multi-byte -> '?' */
+				// Invalid multi-byte -> '?'
 				hSession->ansi_ch = '?';
-				/* XXX: If DBCS, we should let
-				 * ICU have a crack at it
-				 */
+				// XXX: If DBCS, we should let
+				// ICU have a crack at it
+				//
 				break;
 			}
 		}
 	}
+	*/
 	hSession->pmi = 0;
 
 	if (hSession->held_wrap)
@@ -1216,7 +1219,7 @@ ansi_multibyte(H3270 *hSession, int ig1, int ig2)
 {
 	char mbs[MB_MAX];
 	unsigned char ch;
-	enum ulfail fail;
+//	enum ulfail fail;
 	afn_t fn;
 
 	if (hSession->pmi >= MB_MAX - 2)
@@ -1231,6 +1234,7 @@ ansi_multibyte(H3270 *hSession, int ig1, int ig2)
 	mbs[hSession->pmi] = (char) hSession->ansi_ch;
 	mbs[hSession->pmi + 1] = '\0';
 
+	/*
 	ch = utf8_lookup(mbs, &fail, NULL);
 	if (ch != 0)
 	{
@@ -1245,6 +1249,7 @@ ansi_multibyte(H3270 *hSession, int ig1, int ig2)
     	hSession->pending_mbs[hSession->pmi++] = (char)hSession->ansi_ch;
 		return MBPEND;
 	}
+	*/
 
 	/* Failure. */
 

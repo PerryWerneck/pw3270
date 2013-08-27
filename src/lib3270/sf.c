@@ -58,7 +58,7 @@
 #include "screenc.h"
 #include "seec.h"
 #include "sf.h"
-#include "tablesc.h"
+// #include "tablesc.h"
 #include "telnetc.h"
 #include "trace_dsc.h"
 #include "utilc.h"

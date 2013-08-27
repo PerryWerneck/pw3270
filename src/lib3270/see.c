@@ -46,7 +46,7 @@
 #include <fcntl.h>
 #include "3270ds.h"
 
-#include "tablesc.h"
+// #include "tablesc.h"
 #if !defined(PR3287) /*[*/
 #include "utf8c.h"
 #endif /*]*/

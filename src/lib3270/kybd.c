@@ -76,7 +76,7 @@ struct ta;
 // #include "selectc.h"
 // #endif /*]*/
 #include "statusc.h"
-#include "tablesc.h"
+// #include "tablesc.h"
 #include "telnetc.h"
 #include "togglesc.h"
 #include "trace_dsc.h"

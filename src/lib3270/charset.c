@@ -213,6 +213,9 @@ LIB3270_EXPORT struct lib3270_charset * lib3270_load_charset(H3270 *hSession, co
 	hSession->charset.host = "bracket";
 	hSession->charset.display = "ISO-8859-1";
 
+	lib3270_write_log(hSession,"charset","host.charset=%s display.charset=%s",
+								hSession->charset.host,hSession->charset.display);
+
 	memcpy(hSession->charset.ebc2asc,	ebc2asc0,	sizeof(hSession->charset.ebc2asc));
 	memcpy(hSession->charset.asc2ebc,	asc2ebc0,	sizeof(hSession->charset.asc2ebc));
 

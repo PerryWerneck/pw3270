@@ -59,7 +59,7 @@
 #include "3270ds.h"
 
 #include "popupsc.h"
-#include "tablesc.h"
+//#include "tablesc.h"
 #include "telnetc.h"
 #include "trace_dsc.h"
 #include "utilc.h"

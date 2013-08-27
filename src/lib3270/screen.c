@@ -47,7 +47,7 @@
 #include "hostc.h"
 #include "kybdc.h"
 #include "screenc.h"
-#include "tablesc.h"
+// #include "tablesc.h"
 #include "trace_dsc.h"
 #include "utilc.h"
 // #include "w3miscc.h"

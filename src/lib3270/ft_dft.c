@@ -49,7 +49,7 @@
 #include "kybdc.h"
 #include "ft_dftc.h"
 #include "ftc.h"
-#include "tablesc.h"
+//#include "tablesc.h"
 #include "telnetc.h"
 #include "trace_dsc.h"
 #include "utilc.h"

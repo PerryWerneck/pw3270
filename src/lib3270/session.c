@@ -44,7 +44,7 @@
 #include "ftc.h"
 #include "kybdc.h"
 #include "3270ds.h"
-#include "tablesc.h"
+// #include "tablesc.h"
 #include "popupsc.h"
 #include "charset.h"
 
