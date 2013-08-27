@@ -46,6 +46,7 @@
 
 		<menu name='debugmenu' label='Debug' >
 			<menuitem action='testpattern' group='offline' label='Show test pattern' />
+			<menuitem action='charsettable' group='offline' label='Display current charset' />
 			<menuitem action='reload' label='Reload buffer contents' />
 			<menuitem action='toggle' id='gdkdebug' label='Debug window updates' />
 		</menu>

@@ -86,5 +86,6 @@
 	DECLARE_LIB3270_ACTION( sysreq )
 
 	DECLARE_LIB3270_ACTION( testpattern )
+	DECLARE_LIB3270_ACTION( charsettable )
 
 

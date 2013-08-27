@@ -243,6 +243,66 @@ LIB3270_EXPORT const char * lib3270_get_charset(H3270 *hSession)
 	return hSession->charset.display ? hSession->charset.display : "ISO-8859-1";
 }
 
+LIB3270_ACTION( charsettable )
+{
+	static const char * hChars = "0123456789ABCDEF";
+
+	int f;
+	int margin_left = 5;
+	int row;
+	int chr;
+	int r;
+
+	CHECK_SESSION_HANDLE(hSession);
+
+	trace("%s","Showing charset table");
+
+	(void) memset((char *) hSession->ea_buf, 0, hSession->rows*hSession->cols*sizeof(struct lib3270_ea));
+
+	int col = margin_left;
+	for(f=4;f<=0x0f;f++)
+	{
+		col += 2;
+		hSession->ea_buf[col].fg = LIB3270_ATTR_COLOR_BLUE;
+		hSession->ea_buf[col].bg = LIB3270_ATTR_COLOR_BLACK;
+		hSession->ea_buf[col].cs = 0;
+		hSession->ea_buf[col].cc = hSession->charset.asc2ebc[(int) hChars[f]];
+		hSession->ea_buf[col].gr = 0;
+	}
+
+	row = margin_left+hSession->maxCOLS;
+	for(f=0;f<=0x0f;f++)
+	{
+		hSession->ea_buf[row].fg = LIB3270_ATTR_COLOR_BLUE;
+		hSession->ea_buf[row].bg = LIB3270_ATTR_COLOR_BLACK;
+		hSession->ea_buf[row].cs = 0;
+		hSession->ea_buf[row].cc = hSession->charset.asc2ebc[(int) hChars[f]];
+		hSession->ea_buf[row].gr = 0;
+
+		row += hSession->maxCOLS;
+	}
+
+	chr = 0x40;
+
+	for(f=0;f<0x0c;f++)
+	{
+		row = (margin_left+hSession->maxCOLS)+(f*2)+2;
+		for(r=0;r<=0x0f;r++)
+		{
+			hSession->ea_buf[row].fg = LIB3270_ATTR_COLOR_WHITE;
+			hSession->ea_buf[row].bg = LIB3270_ATTR_COLOR_BLACK;
+			hSession->ea_buf[row].cs = 0;
+			hSession->ea_buf[row].cc = chr++;
+			hSession->ea_buf[row].gr = 0;
+			row += hSession->maxCOLS;
+		}
+	}
+
+	hSession->display(hSession);
+
+	return 0;
+}
+
 /*ISO-8859-1
 
 #include "resources.h"
