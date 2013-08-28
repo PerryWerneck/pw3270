@@ -404,7 +404,7 @@ int main(int argc, char *argv[])
 			{ "systype",		't', 0, G_OPTION_ARG_STRING,	&system,			N_( "Host system type" ),					"S390"			},
 			{ "toggleset",		'S', 0, G_OPTION_ARG_STRING,	&toggleset,			N_( "Set toggles ON" ),						NULL			},
 			{ "togglereset",	'R', 0, G_OPTION_ARG_STRING,	&togglereset,		N_( "Set toggles OFF" ),					NULL			},
-			{ "charset",	    'C', 0, G_OPTION_ARG_STRING,	&charset,		    N_( "Set host charset" ),					N_( "bracket" )	},
+			{ "charset",	    'C', 0, G_OPTION_ARG_STRING,	&charset,		    N_( "Set host charset" ),					NULL			},
 
 #if defined( HAVE_SYSLOG )
 			{ "syslog",			'l', 0, G_OPTION_ARG_NONE,		&log_to_syslog,		N_( "Send messages to syslog" ),			NULL			},
