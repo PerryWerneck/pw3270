@@ -281,7 +281,7 @@ static void autostart(H3270 *session)
 
 jint JNI_OnLoad(JavaVM *vm, void *reserved)
 {
-	H3270	* session	= lib3270_session_new("");
+	H3270	* session	= lib3270_session_new("","bracket");
 
 	__android_log_print(ANDROID_LOG_VERBOSE, PACKAGE_NAME, "Initializing %s",PACKAGE_NAME);
 

@@ -35,6 +35,16 @@
  */
 
 #include "globals.h"
+#include "X11keysym.h"
+
+typedef enum
+{
+	CS_ONLY,
+	FT_ONLY,
+	BOTH
+} remap_scope;
+
+static void remap_char(H3270 *hSession, unsigned short ebc, unsigned short iso, remap_scope scope, unsigned char one_way);
 
 /*
  * EBCDIC-to-Unicode translation tables.
@@ -44,6 +54,7 @@
 #define UT_SIZE		190
 #define UT_OFFSET	0x41
 
+/*
 typedef struct
 {
 	const char 		* name;
@@ -52,6 +63,7 @@ typedef struct
 	const char		* display_charset;
 	unsigned short	  code[UT_SIZE];
 } charset_table;
+*/
 
 
 /*---[ Statics ]--------------------------------------------------------------------------------------------------------------*/
@@ -197,6 +209,16 @@ static const unsigned short asc2uc[UT_SIZE] =
 };
 
 
+
+//
+// bracket: "0xad: [ \n 0xba: XK_Yacute \n0xbd: ] \n 0xbb: XK_diaeresis \n"
+//
+// remap_char(hSession,0xad, '[', BOTH, 0);
+// remap_char(hSession,0xba, XK_Yacute, BOTH, 0);
+// remap_char(hSession,0xbd, ']', BOTH, 0);
+// remap_char(hSession,0xbb, XK_diaeresis, remap_scope scope,0);
+//
+
 /*---[ Implement ]------------------------------------------------------------------------------------------------------------*/
 
 static void copy_charset(const unsigned short *from, unsigned short *to)
@@ -210,11 +232,11 @@ LIB3270_EXPORT struct lib3270_charset * lib3270_load_charset(H3270 *hSession, co
 {
 	int f;
 
-	hSession->charset.host = "bracket";
+	hSession->charset.host = "us";
 	hSession->charset.display = "ISO-8859-1";
 
-	lib3270_write_log(hSession,"charset","host.charset=%s display.charset=%s",
-								hSession->charset.host,hSession->charset.display);
+//	lib3270_write_log(hSession,"charset","host.charset=%s display.charset=%s",
+//								hSession->charset.host,hSession->charset.display);
 
 	memcpy(hSession->charset.ebc2asc,	ebc2asc0,	sizeof(hSession->charset.ebc2asc));
 	memcpy(hSession->charset.asc2ebc,	asc2ebc0,	sizeof(hSession->charset.asc2ebc));
@@ -227,6 +249,16 @@ LIB3270_EXPORT struct lib3270_charset * lib3270_load_charset(H3270 *hSession, co
 	memcpy(hSession->charset.ft2asc,	ft2asc,		sizeof(hSession->charset.ft2asc));
 	memcpy(hSession->charset.asc2ft,	asc2ft,		sizeof(hSession->charset.asc2ft));
 #endif
+
+	//if(!(name && strcasecmp(name,hSession->charset.host)))
+	//	return &hSession->charset;
+
+	// Bracket
+	remap_char(hSession,0xad, '[', BOTH, 0);
+	remap_char(hSession,0xba, XK_Yacute, BOTH, 0);
+	remap_char(hSession,0xbd, ']', BOTH, 0);
+	remap_char(hSession,0xbb, XK_diaeresis, BOTH, 0);
+
 
 	return &hSession->charset;
 }
@@ -302,6 +334,105 @@ LIB3270_ACTION( charsettable )
 
 	return 0;
 }
+
+// Process a single character definition.
+static void remap_char(H3270 *hSession, unsigned short ebc, unsigned short iso, remap_scope scope, unsigned char one_way)
+{
+//	unsigned char cg;
+
+	// Ignore mappings of EBCDIC control codes and the space character.
+	if (ebc <= 0x40)
+		return;
+
+	// If they want to map to a NULL or a blank, make it a one-way blank.
+	if (iso == 0x0)
+		iso = 0x20;
+	if (iso == 0x20)
+		one_way = True;
+
+	if (iso <= 0xff)
+	{
+#if defined(X3270_FT)
+		unsigned char aa;
+#endif
+
+		if (scope == BOTH || scope == CS_ONLY)
+		{
+			/*
+			if (iso <= 0xff)
+			{
+				cg = hSession->charset.asc2cg[iso];
+
+				if (hSession->charset.cg2asc[cg] == iso || iso == 0)
+				{
+					// well-defined
+					hSession->charset.ebc2cg[ebc] = cg;
+					if (!one_way)
+						hSession->charset.cg2ebc[cg] = ebc;
+				}
+				else
+				{
+					// into a hole
+					hSession->charset.ebc2cg[ebc] = CG_boxsolid;
+				}
+			}
+			*/
+
+			if (ebc > 0x40)
+			{
+				hSession->charset.ebc2asc[ebc] = iso;
+				if (!one_way)
+					hSession->charset.asc2ebc[iso] = ebc;
+			}
+		}
+#if defined(X3270_FT)
+		if (iso <= 0xff && ebc > 0x40)
+		{
+			// Change the file transfer translation table.
+			if (scope == BOTH)
+			{
+				//
+				// We have an alternate mapping of an EBCDIC
+				// code to an ASCII code.  Modify the existing
+				// ASCII(ft)-to-ASCII(desired) maps.
+				//
+				// This is done by figuring out which ASCII
+				// code the host usually translates the given
+				// EBCDIC code to (asc2ft0[ebc2asc0[ebc]]).
+				// Now we want to translate that code to the
+				// given ISO code, and vice-versa.
+				//
+				aa = asc2ft[ebc2asc0[ebc]];
+				if (aa != ' ')
+				{
+					hSession->charset.ft2asc[aa] = iso;
+					hSession->charset.asc2ft[iso] = aa;
+				}
+			}
+			else if (scope == FT_ONLY)
+			{
+				//
+				// We have a map of how the host translates
+				// the given EBCDIC code to an ASCII code.
+				// Generate the translation between that code
+				// and the ISO code that we would normally
+				// use to display that EBCDIC code.
+				//
+				hSession->charset.ft2asc[iso] = hSession->charset.ebc2asc[ebc];
+				hSession->charset.asc2ft[hSession->charset.ebc2asc[ebc]] = iso;
+			}
+		}
+#endif
+	}
+/*
+	else
+	{
+		// Auto-keymap.
+		add_xk(iso, (KeySym)hSession->charset.ebc2asc[ebc]);
+	}
+*/
+}
+
 
 /*ISO-8859-1
 

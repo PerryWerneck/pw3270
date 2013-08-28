@@ -112,7 +112,7 @@
 		int						  trace_skipping			: 1;
 		int						  need_tls_follows			: 1;
 		int						  cut_xfer_in_progress		: 1;
-		int						  auto_keymap				: 1;
+//		int						  auto_keymap				: 1;
 		int						  formatted					: 1;	/**< Formatted screen flag */
 		int						  starting					: 1;	/**< Is starting (no first screen)? */
 

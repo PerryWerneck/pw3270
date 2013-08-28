@@ -177,7 +177,7 @@ static void nop_int(H3270 *session, int width)
 	return;
 }
 
-static void lib3270_session_init(H3270 *hSession, const char *model)
+static void lib3270_session_init(H3270 *hSession, const char *model, const char *charset)
 {
 	int 	ovc, ovr;
 	char	junk;
@@ -187,7 +187,7 @@ static void lib3270_session_init(H3270 *hSession, const char *model)
 	memset(hSession,0,sizeof(H3270));
 	hSession->sz = sizeof(H3270);
 
-	lib3270_load_charset(hSession,NULL);
+	lib3270_load_charset(hSession,charset);
 
 	// Default calls
 	hSession->write					= lib3270_sock_send;
@@ -321,7 +321,7 @@ H3270 * lib3270_session_new(const char *model)
 
 	hSession = default_session = lib3270_malloc(sizeof(H3270));
 
-	lib3270_session_init(hSession, model);
+	lib3270_session_init(hSession, model, "bracket");
 
 	if(screen_init(hSession))
 		return NULL;
