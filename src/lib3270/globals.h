@@ -331,6 +331,10 @@ enum keytype
 	KT_GE
 };
 
+/* default charset translation tables */
+LIB3270_INTERNAL const unsigned short ebc2asc0[256];
+LIB3270_INTERNAL const unsigned short asc2ft0[256];
+
 
 /* Library internal calls */
 LIB3270_INTERNAL void key_ACharacter(H3270 *hSession, unsigned char c, enum keytype keytype, enum iaction cause,Boolean *skipped);

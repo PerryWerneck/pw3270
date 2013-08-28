@@ -33,11 +33,14 @@
 
 	#define LIB3270_CHARSET_H_INCLUDED 1
 
-	LIB3270_INTERNAL const unsigned short ebc2asc0[256];
-	LIB3270_INTERNAL const unsigned short asc2ft0[256];
+	typedef enum
+	{
+		CS_ONLY,
+		FT_ONLY,
+		BOTH
+	} lib3270_remap_scope;
 
-	const struct lib3270_charset lib3270_default_charset;
-
-	LIB3270_EXPORT struct lib3270_charset * lib3270_load_charset(H3270 *hSession, const char *name);
+	LIB3270_EXPORT struct lib3270_charset	* lib3270_load_charset(H3270 *hSession, const char *name);
+	LIB3270_EXPORT void						  lib3270_remap(H3270 *hSession, unsigned short ebc, unsigned short iso, lib3270_remap_scope scope, unsigned char one_way);
 
 #endif // LIB3270_CHARSET_H_INCLUDED

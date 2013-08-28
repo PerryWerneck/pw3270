@@ -36,15 +36,7 @@
 
 #include "globals.h"
 #include "X11keysym.h"
-
-typedef enum
-{
-	CS_ONLY,
-	FT_ONLY,
-	BOTH
-} remap_scope;
-
-static void remap_char(H3270 *hSession, unsigned short ebc, unsigned short iso, remap_scope scope, unsigned char one_way);
+#include <lib3270/charset.h">
 
 /*
  * EBCDIC-to-Unicode translation tables.
@@ -208,16 +200,32 @@ static const unsigned short asc2uc[UT_SIZE] =
 	/*f8*/	0xd8, 0xd9, 0xda, 0xdb, 0xdc, 0xdd, 0xde
 };
 
+typedef struct _info
+{
+	const char					* name;
+	const unsigned short const	* chr;
+} remap;
 
+static const remap charset[] =
+{
+	{
+		"bracket",
+		(const unsigned short const [])
+		{
+			0x00ad, '[',
+			0x00ba, XK_Yacute,
+			0x00bd, ']',
+			0x00bb, XK_diaeresis,
+			0x0000,	0x0000
+		}
+	},
 
-//
-// bracket: "0xad: [ \n 0xba: XK_Yacute \n0xbd: ] \n 0xbb: XK_diaeresis \n"
-//
-// remap_char(hSession,0xad, '[', BOTH, 0);
-// remap_char(hSession,0xba, XK_Yacute, BOTH, 0);
-// remap_char(hSession,0xbd, ']', BOTH, 0);
-// remap_char(hSession,0xbb, XK_diaeresis, remap_scope scope,0);
-//
+	// Terminate list
+	{
+		NULL
+	}
+
+};
 
 /*---[ Implement ]------------------------------------------------------------------------------------------------------------*/
 
@@ -232,8 +240,8 @@ LIB3270_EXPORT struct lib3270_charset * lib3270_load_charset(H3270 *hSession, co
 {
 	int f;
 
-	hSession->charset.host = "us";
-	hSession->charset.display = "ISO-8859-1";
+	hSession->charset.host		= "us";
+	hSession->charset.display	= "ISO-8859-1";
 
 //	lib3270_write_log(hSession,"charset","host.charset=%s display.charset=%s",
 //								hSession->charset.host,hSession->charset.display);
@@ -250,17 +258,29 @@ LIB3270_EXPORT struct lib3270_charset * lib3270_load_charset(H3270 *hSession, co
 	memcpy(hSession->charset.asc2ft,	asc2ft,		sizeof(hSession->charset.asc2ft));
 #endif
 
-	//if(!(name && strcasecmp(name,hSession->charset.host)))
-	//	return &hSession->charset;
+	if(!(name && strcasecmp(name,hSession->charset.host)))
+		return &hSession->charset;
 
-	// Bracket
-	remap_char(hSession,0xad, '[', BOTH, 0);
-	remap_char(hSession,0xba, XK_Yacute, BOTH, 0);
-	remap_char(hSession,0xbd, ']', BOTH, 0);
-	remap_char(hSession,0xbb, XK_diaeresis, BOTH, 0);
+	for(f=0;charset[f].name != NULL;f++)
+	{
+		if(!strcasecmp(name,charset[f].name))
+		{
+			// Found required charset
+			int c;
 
+			hSession->charset.host = charset[f].name;
 
-	return &hSession->charset;
+			for(c=0;charset[f].chr[c];c+=2)
+				lib3270_remap(hSession,charset[f].chr[c],charset[f].chr[c+1], BOTH, 0);
+			errno = 0;
+			return &hSession->charset;
+		}
+	}
+
+	errno = ENOENT;
+
+	return NULL;
+
 }
 
 
@@ -336,7 +356,7 @@ LIB3270_ACTION( charsettable )
 }
 
 // Process a single character definition.
-static void remap_char(H3270 *hSession, unsigned short ebc, unsigned short iso, remap_scope scope, unsigned char one_way)
+LIB3270_EXPORT void lib3270_remap(H3270 *hSession, unsigned short ebc, unsigned short iso, lib3270_remap_scope scope, unsigned char one_way)
 {
 //	unsigned char cg;
 
