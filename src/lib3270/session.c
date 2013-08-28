@@ -46,7 +46,7 @@
 #include "3270ds.h"
 // #include "tablesc.h"
 #include "popupsc.h"
-#include "charset.h"
+//#include "charset.h"
 
 /*---[ Globals ]--------------------------------------------------------------------------------------------------------------*/
 
@@ -187,7 +187,7 @@ static void lib3270_session_init(H3270 *hSession, const char *model, const char 
 	memset(hSession,0,sizeof(H3270));
 	hSession->sz = sizeof(H3270);
 
-	lib3270_load_charset(hSession,charset);
+	lib3270_set_host_charset(hSession,charset);
 
 	// Default calls
 	hSession->write					= lib3270_sock_send;
@@ -321,7 +321,7 @@ H3270 * lib3270_session_new(const char *model)
 
 	hSession = default_session = lib3270_malloc(sizeof(H3270));
 
-	lib3270_session_init(hSession, model, "bracket");
+	lib3270_session_init(hSession, model, _( "bracket" ) );
 
 	if(screen_init(hSession))
 		return NULL;

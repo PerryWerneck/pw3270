@@ -34,6 +34,7 @@
 	#define LIB3270_SESSION_H_INCLUDED 1
 	#include <sys/time.h>
 	#include <lib3270/popup.h>
+	#include <lib3270/charset.h>
 
 	#define LIB3270_LUNAME_LENGTH			16
 	#define LIB3270_FULL_MODEL_NAME_LENGTH	13
@@ -143,26 +144,7 @@
 		char					* proxy;				/**< Proxy server (type:host[:port]) */
 		char					* termname;
 
-		struct lib3270_charset
-		{
-			const char			* host;
-			const char			* display;
-
-			// Translation tables
-			unsigned short		  ebc2asc[256];
-			unsigned short 		  asc2ebc[256];
-
-			unsigned short		  asc2ft[256];
-			unsigned short		  ft2asc[256];
-
-			unsigned short		  asc2uc[256];
-
-//			unsigned short		  ebc2cg[256];
-//			unsigned short		  cg2ebc[256];
-//			unsigned short		  asc2cg[256];
-//			unsigned short		  cg2asc[256];
-
-		} charset;
+		struct lib3270_charset	  charset;
 
 		LIB3270_MESSAGE			  oia_status;
 

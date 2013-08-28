@@ -1528,6 +1528,12 @@ gboolean v3270_is_connected(GtkWidget *widget)
 	return lib3270_connected(GTK_V3270(widget)->host) ? TRUE : FALSE;
 }
 
+int v3270_set_host_charset(GtkWidget *widget, const gchar *name)
+{
+	g_return_val_if_fail(GTK_IS_V3270(widget),FALSE);
+	return lib3270_set_host_charset(GTK_V3270(widget)->host,name);
+}
+
 GtkWidget * v3270_get_default_widget(void)
 {
 	H3270 * hSession = lib3270_get_default_session_handle();

@@ -33,6 +33,22 @@
 
 	#define LIB3270_CHARSET_H_INCLUDED 1
 
+	struct lib3270_charset
+	{
+		const char			* host;
+		const char			* display;
+
+		// Translation tables
+		unsigned short		  ebc2asc[256];
+		unsigned short 		  asc2ebc[256];
+
+		unsigned short		  asc2ft[256];
+		unsigned short		  ft2asc[256];
+
+		unsigned short		  asc2uc[256];
+
+	};
+
 	typedef enum
 	{
 		CS_ONLY,
@@ -40,7 +56,7 @@
 		BOTH
 	} lib3270_remap_scope;
 
-	LIB3270_EXPORT struct lib3270_charset	* lib3270_load_charset(H3270 *hSession, const char *name);
-	LIB3270_EXPORT void						  lib3270_remap(H3270 *hSession, unsigned short ebc, unsigned short iso, lib3270_remap_scope scope, unsigned char one_way);
+	LIB3270_EXPORT int	lib3270_set_host_charset(H3270 *hSession, const char *name);
+	LIB3270_EXPORT void	lib3270_remap(H3270 *hSession, unsigned short ebc, unsigned short iso, lib3270_remap_scope scope, unsigned char one_way);
 
 #endif // LIB3270_CHARSET_H_INCLUDED

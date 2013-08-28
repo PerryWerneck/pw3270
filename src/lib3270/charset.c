@@ -36,7 +36,7 @@
 
 #include "globals.h"
 #include "X11keysym.h"
-#include <lib3270/charset.h">
+#include <lib3270/charset.h>
 
 /*
  * EBCDIC-to-Unicode translation tables.
@@ -220,6 +220,20 @@ static const remap charset[] =
 		}
 	},
 
+	{
+		"cp500",
+		(const unsigned short const [])
+		{
+			0x004a, '[',
+			0x004f, '!',
+			0x005a, ']',
+			0x005f, '^',
+			0x00b0, XK_percent,
+			0x00ba, XK_notsign,
+			0x00bb, XK_bar
+		}
+	},
+
 	// Terminate list
 	{
 		NULL
@@ -236,7 +250,7 @@ static void copy_charset(const unsigned short *from, unsigned short *to)
 		to[f+UT_OFFSET] = from[f];
 }
 
-LIB3270_EXPORT struct lib3270_charset * lib3270_load_charset(H3270 *hSession, const char *name)
+LIB3270_EXPORT int lib3270_set_host_charset(H3270 *hSession, const char *name)
 {
 	int f;
 
@@ -259,7 +273,7 @@ LIB3270_EXPORT struct lib3270_charset * lib3270_load_charset(H3270 *hSession, co
 #endif
 
 	if(!(name && strcasecmp(name,hSession->charset.host)))
-		return &hSession->charset;
+		return 0;
 
 	for(f=0;charset[f].name != NULL;f++)
 	{
@@ -272,14 +286,11 @@ LIB3270_EXPORT struct lib3270_charset * lib3270_load_charset(H3270 *hSession, co
 
 			for(c=0;charset[f].chr[c];c+=2)
 				lib3270_remap(hSession,charset[f].chr[c],charset[f].chr[c+1], BOTH, 0);
-			errno = 0;
-			return &hSession->charset;
+			return 0;
 		}
 	}
 
-	errno = ENOENT;
-
-	return NULL;
+	return ENOENT;
 
 }
 
@@ -358,7 +369,8 @@ LIB3270_ACTION( charsettable )
 // Process a single character definition.
 LIB3270_EXPORT void lib3270_remap(H3270 *hSession, unsigned short ebc, unsigned short iso, lib3270_remap_scope scope, unsigned char one_way)
 {
-//	unsigned char cg;
+	//	unsigned char cg;
+	CHECK_SESSION_HANDLE(hSession);
 
 	// Ignore mappings of EBCDIC control codes and the space character.
 	if (ebc <= 0x40)

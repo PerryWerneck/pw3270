@@ -28,6 +28,7 @@
  */
 
  #include "globals.h"
+ #include <lib3270/charset.h>
 
 #if defined WIN32
 	BOOL WINAPI DllMain(HANDLE hinst, DWORD dwcallpurpose, LPVOID lpvResvd);
@@ -195,4 +196,30 @@ LIB3270_EXPORT gchar * pw3270_get_datadir(const gchar *first_element, ...)
 	path = filename_from_va(first_element,args);
 	va_end(args);
 	return path;
+}
+
+LIB3270_EXPORT void pw3270_set_host_charset(GtkWidget *widget, const gchar *name)
+{
+	H3270 * hSession	= pw3270_get_session(widget);
+
+	if(!hSession)
+		return;
+
+	if(!lib3270_set_host_charset(hSession,name))
+		return;
+
+	// Charset setup failed, notify user
+	GtkWidget	* dialog = gtk_message_dialog_new(	GTK_WINDOW(widget),
+													GTK_DIALOG_DESTROY_WITH_PARENT,
+													GTK_MESSAGE_ERROR,
+													GTK_BUTTONS_OK,
+													"%s", _( "Can't set host charset" ) );
+
+
+	gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),_( "There's no available settings for charset \"%s\"" ),name);
+	gtk_window_set_title(GTK_WINDOW(dialog),_( "Charset error" ));
+
+	gtk_dialog_run(GTK_DIALOG (dialog));
+	gtk_widget_destroy(dialog);
+
 }

@@ -60,6 +60,7 @@
  static const gchar		* togglereset	= NULL;
  static const gchar     * logfile       = NULL;
  static const gchar		* tracefile		= NULL;
+ static const gchar		* charset		= NULL;
 
 #ifdef HAVE_GTKMAC
  GtkOSXApplication		* osxapp		= NULL;
@@ -403,6 +404,7 @@ int main(int argc, char *argv[])
 			{ "systype",		't', 0, G_OPTION_ARG_STRING,	&system,			N_( "Host system type" ),					"S390"			},
 			{ "toggleset",		'S', 0, G_OPTION_ARG_STRING,	&toggleset,			N_( "Set toggles ON" ),						NULL			},
 			{ "togglereset",	'R', 0, G_OPTION_ARG_STRING,	&togglereset,		N_( "Set toggles OFF" ),					NULL			},
+			{ "charset",	    'C', 0, G_OPTION_ARG_STRING,	&charset,		    N_( "Set host charset" ),					N_( "bracket" )	},
 
 #if defined( HAVE_SYSLOG )
 			{ "syslog",			'l', 0, G_OPTION_ARG_NONE,		&log_to_syslog,		N_( "Send messages to syslog" ),			NULL			},
@@ -542,6 +544,10 @@ int main(int argc, char *argv[])
 			g_strfreev(str);
 		}
 
+		if(charset)
+		{
+			pw3270_set_host_charset(toplevel,charset);
+		}
 
 		toplevel_setup(GTK_WINDOW(toplevel));
 

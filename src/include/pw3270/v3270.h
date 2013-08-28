@@ -160,6 +160,8 @@
  LIB3270_EXPORT	int				  v3270_connect(GtkWidget *widget, const gchar *host);
  LIB3270_EXPORT	void			  v3270_disconnect(GtkWidget *widget);
 
+ LIB3270_EXPORT	int				  v3270_set_host_charset(GtkWidget *widget, const gchar *name);
+
  // Clipboard
  typedef enum _v3270_select_format
  {

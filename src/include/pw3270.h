@@ -87,6 +87,8 @@
 
  LIB3270_EXPORT gchar       * pw3270_file_chooser(GtkFileChooserAction action, const gchar *name,  const gchar *title, const gchar *file, const gchar *ext);
 
+ LIB3270_EXPORT	void		  pw3270_set_host_charset(GtkWidget *widget, const gchar *name);
+
  typedef enum pw3270_src
  {
  	PW3270_SRC_ALL,			/**< Screen contents */
