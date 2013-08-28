@@ -244,7 +244,7 @@
 
 	if(option & LIB3270_HTML_OPTION_HEADERS)
 	{
-		char *txt = xs_buffer(element_text[HTML_ELEMENT_HEADER],lib3270_get_charset(session),html_color[0]);
+		char *txt = xs_buffer(element_text[HTML_ELEMENT_HEADER],lib3270_get_display_charset(session),html_color[0]);
 		append_string(&info,txt);
 		lib3270_free(txt);
 	}

@@ -121,9 +121,10 @@
 	}
 
 	// Object settings
-	void session::set_charset(const char *remote, const char *local)
+	void session::set_display_charset(const char *remote, const char *local)
 	{
 #ifdef HAVE_ICONV
+		string *display_charset = this->get_display_charset();
 
 		if(this->conv2Local != (iconv_t) (-1))
 			iconv_close(this->conv2Local);
@@ -132,7 +133,7 @@
 			iconv_close(this->conv2Host);
 
 		if(!remote)
-			remote = this->get_charset();
+			remote = display_charset->c_str();
 
 		if(strcmp(local,remote))
 		{
@@ -144,22 +145,24 @@
 		{
 			conv2Local = conv2Host = (iconv_t)(-1);
 		}
+
+		delete display_charset;
 #endif
 
 	}
 
-	const char * session::get_charset(void)
+	string * session::get_display_charset(void)
 	{
-		return "ISO-8859-1";
+		return new string("ISO-8859-1");
 	}
 
 	// 3270 methods
-	string session::get_version(void)
+	const string session::get_version(void)
 	{
 		return string(PACKAGE_VERSION);
 	}
 
-	string session::get_revision(void)
+	const string session::get_revision(void)
 	{
 		return string(PACKAGE_REVISION);
 	}

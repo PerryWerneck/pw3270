@@ -71,6 +71,7 @@
 		<Unit filename="src/include/lib3270.h" />
 		<Unit filename="src/include/lib3270/action_table.h" />
 		<Unit filename="src/include/lib3270/actions.h" />
+		<Unit filename="src/include/lib3270/charset.h" />
 		<Unit filename="src/include/lib3270/config.h.in" />
 		<Unit filename="src/include/lib3270/filetransfer.h" />
 		<Unit filename="src/include/lib3270/html.h" />
@@ -298,6 +299,7 @@
 		<Unit filename="src/plugins/rx3270/rx3270.cls" />
 		<Unit filename="src/plugins/rx3270/rx3270.h" />
 		<Unit filename="src/plugins/rx3270/rxapimain.cc" />
+		<Unit filename="src/plugins/rx3270/sample/charset.rex" />
 		<Unit filename="src/plugins/rx3270/sample/clipboard.rex" />
 		<Unit filename="src/plugins/rx3270/sample/object.rex" />
 		<Unit filename="src/plugins/rx3270/sample/remote.rex" />

@@ -788,7 +788,9 @@
 	 * @return String with current encoding.
 	 *
 	 */
-	 LIB3270_EXPORT const char * lib3270_get_charset(H3270 *session);
+	 LIB3270_EXPORT const char * lib3270_get_display_charset(H3270 *session);
+
+	 #define lib3270_get_charset(s) lib3270_get_display_charset(s)
 
 	 LIB3270_EXPORT const char * lib3270_get_default_charset(void);
 

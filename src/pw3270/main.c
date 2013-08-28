@@ -308,7 +308,7 @@ static void g_trace(H3270 *hSession, const char *fmt, va_list args)
 	else
 	{
 		// No trace file, open standard window
-		gchar * utftext = g_convert_with_fallback(ptr,-1,"UTF-8",lib3270_get_charset(hSession),"?",NULL,NULL,NULL);
+		gchar * utftext = g_convert_with_fallback(ptr,-1,"UTF-8",lib3270_get_display_charset(hSession),"?",NULL,NULL,NULL);
 
 		if(!trace_window)
 		{

@@ -195,7 +195,7 @@ static gunichar v3270_accessible_get_character_at_offset(AtkText *atk_text, gint
 			gchar		* utfstring	= g_convert_with_fallback(	text,
 																-1,
 																"UTF-8",
-																lib3270_get_charset(host),
+																lib3270_get_display_charset(host),
 																" ",
 																NULL,
 																&bytes_written,
@@ -390,7 +390,7 @@ static gchar * v3270_accessible_get_text_at_offset(AtkText *atk_text, gint offse
 		gchar	* utfchar	= g_convert_with_fallback(	text,
 															-1,
 															"UTF-8",
-															lib3270_get_charset(host),
+															lib3270_get_display_charset(host),
 															" ",
 															NULL,
 															&bytes_written,
@@ -433,7 +433,7 @@ static gchar * v3270_accessible_get_text(AtkText *atk_text, gint start_pos, gint
 		gsize	  bytes_written;
 		GError	* error		= NULL;
 
-		utftext =  g_convert_with_fallback(text,-1,"UTF-8",lib3270_get_charset(host)," ",NULL,&bytes_written, &error);
+		utftext =  g_convert_with_fallback(text,-1,"UTF-8",lib3270_get_display_charset(host)," ",NULL,&bytes_written, &error);
 
 		if(error)
 		{

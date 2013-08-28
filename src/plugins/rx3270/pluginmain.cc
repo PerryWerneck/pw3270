@@ -49,6 +49,7 @@
  #include <lib3270/actions.h>
  #include <lib3270/log.h>
  #include <lib3270/trace.h>
+ #include <lib3270/charset.h>
  #include <pw3270/class.h>
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
@@ -84,7 +85,7 @@
 
     void              free(void *ptr);
 
-	string			  get_version(void);
+	const string	  get_version(void);
 	LIB3270_CSTATE	  get_cstate(void);
 	int				  disconnect(void);
 	int				  connect(const char *uri, bool wait = true);
@@ -125,6 +126,10 @@
 
 	int               popup_dialog(LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, ...);
 	string			* file_chooser_dialog(GtkFileChooserAction action, const char *title, const char *extension, const char *filename);
+
+	int				  set_host_charset(const char *charset);
+	string			* get_host_charset(void);
+	string			* get_display_charset(void);
 
     int				  quit(void);
 
@@ -502,7 +507,7 @@ extern "C"
  }
 
 
- string plugin::get_version(void)
+ const string plugin::get_version(void)
  {
 	return string(lib3270_get_version());
  }
@@ -722,4 +727,19 @@ int plugin::quit(void)
 {
 	gtk_main_quit();
 	return 0;
+}
+
+int plugin::set_host_charset(const char *charset)
+{
+	return lib3270_set_host_charset(hSession,charset);
+}
+
+string * plugin::get_host_charset(void)
+{
+	return new string(lib3270_get_host_charset(hSession));
+}
+
+string * plugin::get_display_charset(void)
+{
+	return new string(lib3270_get_display_charset(hSession));
 }

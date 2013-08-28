@@ -302,7 +302,9 @@
 		int             (*_get_next_unprotected)(H3270 *hSession, int baddr0);
 		void            (*_popup_va)(H3270 *session, LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, va_list);
 		void *			(*_free)(void *);
-		const char *	(*_get_charset)(H3270 *hSession);
+		const char *	(*_get_display_charset)(H3270 *hSession);
+		int				(*_set_host_charset)(H3270 *hSession, const char *name);
+		const char * 	(*_get_host_charset)(H3270 *hSession);
 
 	public:
 
@@ -349,7 +351,9 @@
 				{ (void **) & _get_next_unprotected,	"lib3270_get_next_unprotected"	   	},
 				{ (void **) & _popup_va,	            "lib3270_popup_va"          	   	},
 				{ (void **) & _free,					"lib3270_free"						},
-				{ (void **) & _get_charset,				"lib3270_get_charset"				},
+				{ (void **) & _get_display_charset,		"lib3270_get_display_charset"		},
+				{ (void **) & _set_host_charset,		"lib3270_set_host_charset"			},
+				{ (void **) & _get_host_charset,		"lib3270_get_host_charset"			},
 
 			};
 
@@ -371,7 +375,7 @@
 			set_trace_handler(tracehandler);
 			this->hSession = lib3270_new("");
 
-			set_charset();
+			set_display_charset();
 
 		}
 
@@ -542,9 +546,19 @@
 			return 0;
 		}
 
-		const char * get_charset(void)
+		string * get_display_charset(void)
 		{
-			return _get_charset(hSession);
+			return new string(_get_display_charset(hSession));
+		}
+
+		int set_host_charset(const char *charset)
+		{
+			return _set_host_charset(hSession,charset);
+		}
+
+		string * get_host_charset(void)
+		{
+			return new string(_get_host_charset(hSession));
 		}
 
  	};

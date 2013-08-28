@@ -70,7 +70,7 @@ static void clipboard_get(GtkClipboard *clipboard, GtkSelectionData *selection, 
         }
 		else
         {
-            gchar * text = g_convert(widget->selection.text, -1, "UTF-8", lib3270_get_charset(widget->host), NULL, NULL, NULL);
+            gchar * text = g_convert(widget->selection.text, -1, "UTF-8", lib3270_get_display_charset(widget->host), NULL, NULL, NULL);
 			gtk_selection_data_set_text(selection,text,-1);
 			g_free(text);
         }
@@ -104,7 +104,7 @@ gchar * v3270_get_text(GtkWidget *widget, int offset, int len)
 	if(!str)
 		return NULL;
 
-	text = g_convert(str, -1, "UTF-8", lib3270_get_charset(terminal->host), NULL, NULL, NULL);
+	text = g_convert(str, -1, "UTF-8", lib3270_get_display_charset(terminal->host), NULL, NULL, NULL);
 
 	lib3270_free(str);
 	return text;
@@ -226,7 +226,7 @@ gchar * v3270_get_selected(GtkWidget *widget, gboolean cut)
     text = update_selected_text(widget,cut);
 
     if(text)
-        return g_convert(text, -1, "UTF-8", lib3270_get_charset(GTK_V3270(widget)->host), NULL, NULL, NULL);
+        return g_convert(text, -1, "UTF-8", lib3270_get_display_charset(GTK_V3270(widget)->host), NULL, NULL, NULL);
 
     return NULL;
 }
@@ -242,7 +242,7 @@ gchar * v3270_get_copy(GtkWidget *widget)
         text = update_selected_text(widget,FALSE);
 
     if(text)
-        return g_convert(text, -1, "UTF-8", lib3270_get_charset(GTK_V3270(widget)->host), NULL, NULL, NULL);
+        return g_convert(text, -1, "UTF-8", lib3270_get_display_charset(GTK_V3270(widget)->host), NULL, NULL, NULL);
 
     return NULL;
 }
@@ -266,7 +266,7 @@ void v3270_set_copy(GtkWidget *widget, const gchar *text)
 
     /* Received text, replace the selection buffer */
     terminal->table = 0;
-    isotext = g_convert(text, -1, lib3270_get_charset(terminal->host), "UTF-8", NULL, NULL, NULL);
+    isotext = g_convert(text, -1, lib3270_get_display_charset(terminal->host), "UTF-8", NULL, NULL, NULL);
 
     if(!isotext)
     {
@@ -350,7 +350,7 @@ void v3270_paste_string(GtkWidget *widget, const gchar *text, const gchar *encod
 {
  	gchar 		* buffer 	= NULL;
  	H3270		* session 	= v3270_get_session(widget);
-	const gchar * charset 	= lib3270_get_charset(session);
+	const gchar * charset 	= lib3270_get_display_charset(session);
  	gboolean	  next;
 
  	if(!text)
@@ -504,7 +504,7 @@ gchar * v3270_get_region(GtkWidget *widget, gint start_pos, gint end_pos, gboole
 	if(!str)
 		return NULL;
 
-	utftext = g_convert(str, -1, "UTF-8", lib3270_get_charset(GTK_V3270(widget)->host), NULL, NULL, NULL);
+	utftext = g_convert(str, -1, "UTF-8", lib3270_get_display_charset(GTK_V3270(widget)->host), NULL, NULL, NULL);
 
 	lib3270_free(str);
 

@@ -219,7 +219,7 @@ static void copy_as_html_action(GtkAction *action, GtkWidget *widget)
 	trace_action(action,widget);
 
 	text = lib3270_get_as_html(session,LIB3270_HTML_OPTION_ALL|LIB3270_HTML_OPTION_FORM);
-	utf = g_convert(text, -1, "UTF-8", lib3270_get_charset(session), NULL, NULL, NULL);
+	utf = g_convert(text, -1, "UTF-8", lib3270_get_display_charset(session), NULL, NULL, NULL);
 	lib3270_free(text);
 
 	gtk_clipboard_set_text(clipboard,utf,-1);

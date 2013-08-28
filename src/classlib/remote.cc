@@ -997,6 +997,21 @@
 			return query_intval("setClipboard", DBUS_TYPE_STRING, &text, DBUS_TYPE_INVALID);
 		}
 
+		int set_host_charset(const char *charset)
+		{
+			return query_intval("setHostCharset", DBUS_TYPE_STRING, &charset, DBUS_TYPE_INVALID);
+		}
+
+		string * get_host_charset(void)
+		{
+			return query_string("getHostCharset");
+		}
+
+		string * get_display_charset(void)
+		{
+			return query_string("getDisplayCharset");
+		}
+
 		int popup_dialog(LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, ...)
 		{
 			DBusMessage * msg = dbus_message_new_method_call(	this->dest,		// Destination

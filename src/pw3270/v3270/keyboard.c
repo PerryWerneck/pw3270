@@ -247,7 +247,7 @@
 
 	host = GTK_V3270(widget)->host;
 
-	utf = g_convert((char *) str, -1, lib3270_get_charset(host), "UTF-8", NULL, NULL, NULL);
+	utf = g_convert((char *) str, -1, lib3270_get_display_charset(host), "UTF-8", NULL, NULL, NULL);
 
 	if(utf)
 	{
@@ -259,7 +259,7 @@
 
  void v3270_key_commit(GtkIMContext *imcontext, gchar *str, v3270 *widget)
  {
-	gchar *utf = g_convert((char *) str, -1, lib3270_get_charset(widget->host), "UTF-8", NULL, NULL, NULL);
+	gchar *utf = g_convert((char *) str, -1, lib3270_get_display_charset(widget->host), "UTF-8", NULL, NULL, NULL);
 
 	if(utf)
 	{

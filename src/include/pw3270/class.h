@@ -101,27 +101,29 @@
 		static session	* get_default(void);
 		static void		  set_plugin(session * (*factory)(const char *name));
 
-#ifdef WIN32
-		void			  set_charset(const char *remote = 0, const char *local = "CP1252");
-#else
-		void			  set_charset(const char *remote = 0, const char *local = "UTF-8");
-#endif // WIN32
-
-
-
 		// Log management
 		void log(const char *fmt, ...);
 		void logva(const char *fmt, va_list args);
 
 		// Information
-		virtual string			  get_version(void);
-		virtual string			  get_revision(void);
-		virtual const char		* get_charset(void);
+		virtual const string	  get_version(void);
+		virtual const string	  get_revision(void);
 
 		virtual bool			  is_connected(void)								= 0;
 		virtual bool			  is_ready(void)									= 0;
 
 		virtual LIB3270_CSTATE	  get_cstate(void)									= 0;
+
+		// charset
+#ifdef WIN32
+		void			  set_display_charset(const char *remote = 0, const char *local = "CP1252");
+#else
+		void			  set_display_charset(const char *remote = 0, const char *local = "UTF-8");
+#endif // WIN32
+
+		virtual int				  set_host_charset(const char *charset)				= 0;
+		virtual string			* get_host_charset(void)							= 0;
+		virtual string			* get_display_charset(void);
 
 		// Connection & Network
 		virtual int				  connect(const char *uri, bool wait = true)		= 0;

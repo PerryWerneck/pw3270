@@ -42,7 +42,7 @@ JNIEXPORT jstring JNICALL Java_br_com_bb_pw3270_lib3270_getRevision(JNIEnv *env,
 
 JNIEXPORT jstring JNICALL Java_br_com_bb_pw3270_lib3270_getEncoding(JNIEnv *env, jobject obj)
 {
-	return env->NewStringUTF(lib3270_get_charset(lib3270_get_default_session_handle()));
+	return env->NewStringUTF(lib3270_get_display_charset(lib3270_get_default_session_handle()));
 }
 
 JNIEXPORT void JNICALL Java_br_com_bb_pw3270_lib3270_setToggle(JNIEnv *env, jobject obj, jstring name, jboolean state)

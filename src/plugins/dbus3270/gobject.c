@@ -44,6 +44,7 @@
 #include <pw3270.h>
 #include <pw3270/v3270.h>
 #include <lib3270/actions.h>
+#include <lib3270/charset.h>
 
 #include "service.h"
 
@@ -191,7 +192,7 @@ void pw3270_dbus_get_screen_contents(PW3270Dbus *object, DBusGMethodInvocation *
 
 	text = lib3270_get_text(hSession,0,-1);
 
-	utftext = g_convert_with_fallback(text,-1,"UTF-8",lib3270_get_charset(hSession),"?",NULL,NULL,NULL);
+	utftext = g_convert_with_fallback(text,-1,"UTF-8",lib3270_get_display_charset(hSession),"?",NULL,NULL,NULL);
 
 	lib3270_free(text);
 
@@ -218,7 +219,7 @@ void pw3270_dbus_set_text_at(PW3270Dbus *object, int row, int col, const gchar *
 	if(pw3270_dbus_check_valid_state(object,context))
 		return;
 
-	text = g_convert_with_fallback(utftext,-1,lib3270_get_charset(hSession),"UTF-8","?",NULL,NULL,NULL);
+	text = g_convert_with_fallback(utftext,-1,lib3270_get_display_charset(hSession),"UTF-8","?",NULL,NULL,NULL);
 
 	dbus_g_method_return(context,lib3270_set_string_at(hSession,row,col,(const unsigned char *) text));
 
@@ -234,7 +235,7 @@ void pw3270_dbus_input(PW3270Dbus *object, const gchar *utftext, DBusGMethodInvo
 	if(pw3270_dbus_check_valid_state(object,context))
 		return;
 
-	text = g_convert_with_fallback(utftext,-1,lib3270_get_charset(hSession),"UTF-8","?",NULL,NULL,NULL);
+	text = g_convert_with_fallback(utftext,-1,lib3270_get_display_charset(hSession),"UTF-8","?",NULL,NULL,NULL);
 
 	dbus_g_method_return(context,lib3270_emulate_input(hSession,(const char *) text,-1,1));
 
@@ -260,7 +261,7 @@ void pw3270_dbus_get_text_at(PW3270Dbus *object, int row, int col, int len, DBus
 	}
 	else
 	{
-		gchar * utftext = g_convert_with_fallback(text,-1,"UTF-8",lib3270_get_charset(hSession),"?",NULL,NULL,NULL);
+		gchar * utftext = g_convert_with_fallback(text,-1,"UTF-8",lib3270_get_display_charset(hSession),"?",NULL,NULL,NULL);
 
 		lib3270_free(text);
 
@@ -288,7 +289,7 @@ void pw3270_dbus_get_text_at(PW3270Dbus *object, int row, int col, int len, DBus
 	}
 	else
 	{
-		gchar * utftext = g_convert_with_fallback(text,-1,"UTF-8",lib3270_get_charset(hSession),"?",NULL,NULL,NULL);
+		gchar * utftext = g_convert_with_fallback(text,-1,"UTF-8",lib3270_get_display_charset(hSession),"?",NULL,NULL,NULL);
 
 		lib3270_free(text);
 
@@ -356,7 +357,7 @@ void pw3270_dbus_cmp_text_at(PW3270Dbus *object, int row, int col, const gchar *
 	if(pw3270_dbus_check_valid_state(object,context))
 		return;
 
-	text = g_convert_with_fallback(utftext,-1,lib3270_get_charset(hSession),"UTF-8","?",NULL,NULL,NULL);
+	text = g_convert_with_fallback(utftext,-1,lib3270_get_display_charset(hSession),"UTF-8","?",NULL,NULL,NULL);
 
 	dbus_g_method_return(context,lib3270_cmp_text_at(hSession,row,col,text));
 
@@ -451,4 +452,19 @@ void pw3270_dbus_show_popup(PW3270Dbus *object, int id, const gchar *title, cons
 {
 	lib3270_popup_dialog(pw3270_dbus_get_session_handle(object), (LIB3270_NOTIFY) id , title, msg, "%s", text);
 	dbus_g_method_return(context,0);
+}
+
+void pw3270_dbus_get_host_charset(PW3270Dbus *object, DBusGMethodInvocation *context)
+{
+	dbus_g_method_return(context,lib3270_get_host_charset(pw3270_dbus_get_session_handle(object)));
+}
+
+void pw3270_dbus_get_display_charset(PW3270Dbus *object, DBusGMethodInvocation *context)
+{
+	dbus_g_method_return(context,lib3270_get_display_charset(pw3270_dbus_get_session_handle(object)));
+}
+
+void pw3270_dbus_set_host_charset(PW3270Dbus *object, const gchar *charset, DBusGMethodInvocation *context)
+{
+	dbus_g_method_return(context,lib3270_set_host_charset(pw3270_dbus_get_session_handle(object),charset));
 }

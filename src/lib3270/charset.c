@@ -300,10 +300,16 @@ LIB3270_EXPORT const char * lib3270_get_default_charset(void)
 	return "ISO-8859-1";
 }
 
-LIB3270_EXPORT const char * lib3270_get_charset(H3270 *hSession)
+LIB3270_EXPORT const char * lib3270_get_display_charset(H3270 *hSession)
 {
 	CHECK_SESSION_HANDLE(hSession);
 	return hSession->charset.display ? hSession->charset.display : "ISO-8859-1";
+}
+
+LIB3270_EXPORT const char * lib3270_get_host_charset(H3270 *hSession)
+{
+	CHECK_SESSION_HANDLE(hSession);
+	return hSession->charset.host;
 }
 
 LIB3270_ACTION( charsettable )

@@ -106,6 +106,10 @@
 	void		  pw3270_dbus_set_clipboard(PW3270Dbus *object, const gchar *text, DBusGMethodInvocation *context);
 	void		  pw3270_dbus_get_clipboard(PW3270Dbus *object, DBusGMethodInvocation *context);
 
+	void		  pw3270_dbus_get_display_charset(PW3270Dbus *object, DBusGMethodInvocation *context);
+	void		  pw3270_dbus_get_host_charset(PW3270Dbus *object, DBusGMethodInvocation *context);
+	void		  pw3270_dbus_set_host_charset(PW3270Dbus *object, const gchar *charset, DBusGMethodInvocation *context);
+
 	G_END_DECLS
 
 #endif // _PW3270_DBUS_SERVICE_H

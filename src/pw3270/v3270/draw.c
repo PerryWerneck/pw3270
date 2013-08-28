@@ -275,7 +275,7 @@ void v3270_draw_char(cairo_t *cr, unsigned char chr, unsigned short attr, H3270 
 	}
 	else if(chr)
 	{
-		gchar *utf = g_convert((char *) &chr, 1, "UTF-8", lib3270_get_charset(session), NULL, NULL, NULL);
+		gchar *utf = g_convert((char *) &chr, 1, "UTF-8", lib3270_get_display_charset(session), NULL, NULL, NULL);
 
 		if(utf)
 		{

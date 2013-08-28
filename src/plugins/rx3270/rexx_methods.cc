@@ -578,3 +578,24 @@ RexxMethod5(RexxStringObject, rx3270_method_get_filename, CSELF, sessionPtr, CST
 	return context->String("");
 }
 
+RexxMethod2(int, rx3270_method_set_host_charset, CSELF, sessionPtr, CSTRING, text)
+{
+	return ((session *) sessionPtr)->set_host_charset(text);
+}
+
+RexxMethod1(RexxStringObject, rx3270_method_get_host_charset, CSELF, sessionPtr)
+{
+    string * ret = ((session *) sessionPtr)->get_host_charset();
+	RexxStringObject obj = context->String(ret->c_str());
+    delete ret;
+    return obj;
+}
+
+RexxMethod1(RexxStringObject, rx3270_method_get_display_charset, CSELF, sessionPtr)
+{
+    string * ret = ((session *) sessionPtr)->get_display_charset();
+	RexxStringObject obj = context->String(ret->c_str());
+    delete ret;
+    return obj;
+}
+

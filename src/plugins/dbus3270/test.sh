@@ -45,6 +45,15 @@ run_command()
 			dbus-send --session  --print-reply --dest=$DEST.$SESSION $BPATH $DEST.isConnected
 			;;
 
+		hostcharset)
+			dbus-send --session  --print-reply --dest=$DEST.$SESSION $BPATH $DEST.getHostCharset
+			;;
+
+		displaycharset)
+			dbus-send --session  --print-reply --dest=$DEST.$SESSION $BPATH $DEST.getDisplayCharset
+			;;
+
+
 		*)
 			echo "Comando $1 desconhecido"
 			;;

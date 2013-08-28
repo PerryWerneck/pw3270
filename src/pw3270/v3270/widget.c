@@ -765,7 +765,7 @@ static void changed(H3270 *session, int offset, int len)
 			gchar	* utfchar	= g_convert_with_fallback(	text,
 																-1,
 																"UTF-8",
-																lib3270_get_charset(session),
+																lib3270_get_display_charset(session),
 																" ",
 																NULL,
 																&bytes_written,

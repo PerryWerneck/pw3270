@@ -149,6 +149,20 @@
       <arg type="s" name="msg" direction="in" />
       <arg type="s" name="text" direction="in" />
     </method>
+    <method name="getHostCharset">
+      <annotation name="org.freedesktop.DBus.GLib.Async" value="true"/>
+      <arg type="s" name="charset" direction="out" />
+    </method>
+    <method name="getDisplayCharset">
+      <annotation name="org.freedesktop.DBus.GLib.Async" value="true"/>
+      <arg type="s" name="charset" direction="out" />
+    </method>
+    <method name="setHostCharset">
+      <annotation name="org.freedesktop.DBus.GLib.Async" value="true"/>
+      <arg type="s" name="charset" direction="in" />
+      <arg type="i" name="result" direction="out" />
+    </method>
+
   </interface>
 
 </node>

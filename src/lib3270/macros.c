@@ -88,7 +88,7 @@
 
  LIB3270_MACRO( encoding )
  {
- 	return strdup(lib3270_get_charset(hSession));
+ 	return strdup(lib3270_get_display_charset(hSession));
  }
 
  LIB3270_MACRO( get )

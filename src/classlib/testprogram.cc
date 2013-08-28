@@ -37,7 +37,8 @@
 
  int main(int numpar, char *param[])
  {
- 	session *session = session::start();
+	string	*s;
+ 	session	*session = session::start("pw3270:a");
 
 	cout << "pw3270 version:  " << session->get_version() << endl;
 	cout << "pw3270 revision: " << session->get_revision() << endl << endl;
@@ -47,8 +48,15 @@
 	else
 		cout << "\tDisconnected" << endl;
 
-	cout << "\tSession state: " << session->get_cstate() << endl;
-	cout << "\tCharset:       " << session->get_charset() << endl;
+	cout << "\tSession state:   " << session->get_cstate() << endl;
+
+	s = session->get_display_charset();
+	cout << "\tDisplay charset: " << s->c_str() << endl;
+	delete s;
+
+	s = session->get_host_charset();
+	cout << "\tHost charset:    " << s->c_str() << endl;
+	delete s;
 
 	delete session;
  	return 0;
