@@ -56,6 +56,9 @@
 		HLLAPI_PACKET_NEXT_UNPROTECTED,
 		HLLAPI_PACKET_QUIT,
 
+		HLLAPI_PACKET_SET_HOST_CHARSET,
+		HLLAPI_PACKET_GET_HOST_CHARSET,
+
 		HLLAPI_PACKET_INVALID
 
  } HLLAPI_PACKET;
@@ -160,6 +163,13 @@ struct hllapi_packet_set
 	unsigned char	packet_id;
 	unsigned short	id;
 	unsigned short	value;
+};
+
+struct hllapi_packet_set_text
+{
+	unsigned char	packet_id;
+	unsigned short	len;
+	char 			text[1];
 };
 
 

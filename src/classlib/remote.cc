@@ -986,6 +986,49 @@
 
 		}
 
+		int set_host_charset(const char *charset)
+		{
+#if defined(WIN32)
+
+			size_t							  len		= strlen(charset);
+			struct hllapi_packet_set_text 	* query;
+			size_t							  cbSize	= sizeof(struct hllapi_packet_set_text)+len;
+
+			query = (struct hllapi_packet_set_text *) malloc(cbSize);
+			query->packet_id 	= HLLAPI_PACKET_SET_HOST_CHARSET;
+			query->len			= len;
+			strcpy(query->text,charset);
+
+			return query_intval((void *) query, cbSize, true);
+
+#elif defined(HAVE_DBUS)
+
+			return query_intval("setHostCharset", DBUS_TYPE_STRING, &charset, DBUS_TYPE_INVALID);
+
+#else
+			return -1;
+#endif
+		}
+
+		string * get_host_charset(void)
+		{
+#if defined(WIN32)
+
+			struct hllapi_packet_query query = { HLLAPI_PACKET_GET_HOST_CHARSET };
+			return query_string(&query,sizeof(query),100);
+
+#elif defined(HAVE_DBUS)
+
+			return query_string("getHostCharset");
+
+#else
+
+			return NULL;
+
+#endif
+		}
+
+
 #if defined(HAVE_DBUS)
 		string * get_clipboard(void)
 		{
@@ -995,16 +1038,6 @@
 		int set_clipboard(const char *text)
 		{
 			return query_intval("setClipboard", DBUS_TYPE_STRING, &text, DBUS_TYPE_INVALID);
-		}
-
-		int set_host_charset(const char *charset)
-		{
-			return query_intval("setHostCharset", DBUS_TYPE_STRING, &charset, DBUS_TYPE_INVALID);
-		}
-
-		string * get_host_charset(void)
-		{
-			return query_string("getHostCharset");
 		}
 
 		string * get_display_charset(void)

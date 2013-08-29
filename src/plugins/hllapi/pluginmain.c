@@ -304,6 +304,15 @@
 		send_result(source,0);
 		break;
 
+	case HLLAPI_PACKET_SET_HOST_CHARSET:
+		send_result(source,lib3270_set_host_charset(	lib3270_get_default_session_handle(),
+														(unsigned char *) ((struct hllapi_packet_set_text *) source->buffer)->text));
+		break;
+
+	case HLLAPI_PACKET_GET_HOST_CHARSET:
+		send_text(source,lib3270_get_host_charset(lib3270_get_default_session_handle()));
+		break;
+
 	default:
 		send_result(source, EINVAL);
 		g_message("Invalid remote request (id=%d)",source->buffer[0]);
