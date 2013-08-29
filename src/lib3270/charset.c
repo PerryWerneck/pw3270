@@ -315,12 +315,14 @@ LIB3270_EXPORT const char * lib3270_get_host_charset(H3270 *hSession)
 LIB3270_ACTION( charsettable )
 {
 	static const char * hChars = "0123456789ABCDEF";
+	static const char * label  = "Name:";
 
 	int f;
 	int margin_left = 5;
-	int row;
+	int baddr;
 	int chr;
-	int r;
+	int s,r;
+	const char *ptr;
 
 	CHECK_SESSION_HANDLE(hSession);
 
@@ -328,43 +330,66 @@ LIB3270_ACTION( charsettable )
 
 	(void) memset((char *) hSession->ea_buf, 0, hSession->rows*hSession->cols*sizeof(struct lib3270_ea));
 
-	int col = margin_left;
+	baddr = margin_left+hSession->maxCOLS;
+	s = (hSession->maxCOLS * 0x11);
 	for(f=4;f<=0x0f;f++)
 	{
-		col += 2;
-		hSession->ea_buf[col].fg = LIB3270_ATTR_COLOR_BLUE;
-		hSession->ea_buf[col].bg = LIB3270_ATTR_COLOR_BLACK;
-		hSession->ea_buf[col].cs = 0;
-		hSession->ea_buf[col].cc = hSession->charset.asc2ebc[(int) hChars[f]];
-		hSession->ea_buf[col].gr = 0;
+		baddr += 2;
+		hSession->ea_buf[baddr+s].fg = hSession->ea_buf[baddr].fg = LIB3270_ATTR_COLOR_GRAY;
+		hSession->ea_buf[baddr+s].bg = hSession->ea_buf[baddr].bg = LIB3270_ATTR_COLOR_BLACK;
+		hSession->ea_buf[baddr+s].cs = hSession->ea_buf[baddr].cs = 0;
+		hSession->ea_buf[baddr+s].cc = hSession->ea_buf[baddr].cc = hSession->charset.asc2ebc[(int) hChars[f]];
+		hSession->ea_buf[baddr+s].gr = hSession->ea_buf[baddr].gr = 0;
 	}
 
-	row = margin_left+hSession->maxCOLS;
+	baddr = margin_left+(hSession->maxCOLS*2);
+	s = 0x1a;
 	for(f=0;f<=0x0f;f++)
 	{
-		hSession->ea_buf[row].fg = LIB3270_ATTR_COLOR_BLUE;
-		hSession->ea_buf[row].bg = LIB3270_ATTR_COLOR_BLACK;
-		hSession->ea_buf[row].cs = 0;
-		hSession->ea_buf[row].cc = hSession->charset.asc2ebc[(int) hChars[f]];
-		hSession->ea_buf[row].gr = 0;
-
-		row += hSession->maxCOLS;
+		hSession->ea_buf[baddr+s].fg = hSession->ea_buf[baddr].fg = LIB3270_ATTR_COLOR_GRAY;
+		hSession->ea_buf[baddr+s].bg = hSession->ea_buf[baddr].bg = LIB3270_ATTR_COLOR_BLACK;
+		hSession->ea_buf[baddr+s].cs = hSession->ea_buf[baddr].cs = 0;
+		hSession->ea_buf[baddr+s].cc = hSession->ea_buf[baddr].cc = hSession->charset.asc2ebc[(int) hChars[f]];
+		hSession->ea_buf[baddr+s].gr = hSession->ea_buf[baddr].gr = 0;
+		baddr += hSession->maxCOLS;
 	}
 
 	chr = 0x40;
 
 	for(f=0;f<0x0c;f++)
 	{
-		row = (margin_left+hSession->maxCOLS)+(f*2)+2;
+		baddr = (margin_left+(hSession->maxCOLS*2))+(f*2)+2;
 		for(r=0;r<=0x0f;r++)
 		{
-			hSession->ea_buf[row].fg = LIB3270_ATTR_COLOR_WHITE;
-			hSession->ea_buf[row].bg = LIB3270_ATTR_COLOR_BLACK;
-			hSession->ea_buf[row].cs = 0;
-			hSession->ea_buf[row].cc = chr++;
-			hSession->ea_buf[row].gr = 0;
-			row += hSession->maxCOLS;
+			hSession->ea_buf[baddr].fg = LIB3270_ATTR_COLOR_YELLOW;
+			hSession->ea_buf[baddr].bg = LIB3270_ATTR_COLOR_BLACK;
+			hSession->ea_buf[baddr].cs = 0;
+			hSession->ea_buf[baddr].cc = chr++;
+			hSession->ea_buf[baddr].gr = 0;
+			baddr += hSession->maxCOLS;
 		}
+	}
+
+	baddr = margin_left+0x1d+(hSession->maxCOLS*2);
+	for(ptr=label;*ptr;ptr++)
+	{
+		hSession->ea_buf[baddr].fg = LIB3270_ATTR_COLOR_WHITE;
+		hSession->ea_buf[baddr].bg = LIB3270_ATTR_COLOR_BLACK;
+		hSession->ea_buf[baddr].cs = 0;
+		hSession->ea_buf[baddr].cc = hSession->charset.asc2ebc[(int) *ptr];
+		hSession->ea_buf[baddr].gr = 0;
+		baddr++;
+	}
+	baddr++;
+
+	for(ptr=hSession->charset.host;*ptr;ptr++)
+	{
+		hSession->ea_buf[baddr].fg = LIB3270_ATTR_COLOR_YELLOW;
+		hSession->ea_buf[baddr].bg = LIB3270_ATTR_COLOR_BLACK;
+		hSession->ea_buf[baddr].cs = 0;
+		hSession->ea_buf[baddr].cc = hSession->charset.asc2ebc[(int) *ptr];
+		hSession->ea_buf[baddr].gr = 0;
+		baddr++;
 	}
 
 	hSession->display(hSession);
