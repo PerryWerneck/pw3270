@@ -37,6 +37,7 @@
 	{
 		const char			* host;
 		const char			* display;
+		unsigned long		  cgcsgid;
 
 		// Translation tables
 		unsigned short		  ebc2asc[256];

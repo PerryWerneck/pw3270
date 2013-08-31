@@ -945,17 +945,15 @@ static void do_qr_charsets(H3270 *hSession)
 		*hSession->obptr++ = 0x00;	/*  SUBSN */
 	}
 #endif /*]*/
-	SET32(hSession->obptr, hSession->cgcsgid);		/*  CGCSGID */
+	SET32(hSession->obptr, hSession->charset.cgcsgid);		/*  CGCSGID */
 	if (!*standard_font)
 	{
 		/* special 3270 font, includes APL */
 		*hSession->obptr++ = 0x01;/* SET 1: */
 		if (hSession->apl_mode)
-		    *hSession->obptr++ = 0x00;/*  FLAGS: non-loadable, single-plane,
-					 single-byte, no compare */
+		    *hSession->obptr++ = 0x00;/*  FLAGS: non-loadable, single-plane, single-byte, no compare */
 		else
-		    *hSession->obptr++ = 0x10;/*  FLAGS: non-loadable, single-plane,
-					 single-byte, no compare */
+		    *hSession->obptr++ = 0x10;/*  FLAGS: non-loadable, single-plane, single-byte, no compare */
 		*hSession->obptr++ = 0xf1;/*  LCID */
 #if defined(X3270_DBCS) /*[*/
 		if (dbcs)

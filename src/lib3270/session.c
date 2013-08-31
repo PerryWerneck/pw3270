@@ -236,8 +236,6 @@ static void lib3270_session_init(H3270 *hSession, const char *model, const char 
 	hSession->saved_wraparound_mode	= 1;
 	hSession->once_cset 			= -1;
 	hSession->state					= LIB3270_ANSI_STATE_DATA;
-	hSession->cgcsgid				= LIB3270_DEFAULT_CGEN | LIB3270_DEFAULT_CSET;
-
 
 	for(f=0;f<4;f++)
 		hSession->csd[f] = hSession->saved_csd[f] = LIB3270_ANSI_CSD_US;

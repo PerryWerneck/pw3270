@@ -271,9 +271,6 @@
 		// ft_dft.c
 		int						  dft_buffersize;		/**< Buffer size (LIMIN, LIMOUT) */
 
-		// charset.c
-		unsigned long			  cgcsgid;
-
 		// rpq.c
 		int						  rpq_complained : 1;
 #if !defined(_WIN32)

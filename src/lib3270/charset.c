@@ -203,6 +203,7 @@ static const unsigned short asc2uc[UT_SIZE] =
 typedef struct _info
 {
 	const char					* name;
+	unsigned long				  cgcsgid;
 	const unsigned short const	* chr;
 } remap;
 
@@ -210,6 +211,7 @@ static const remap charset[] =
 {
 	{
 		"bracket",
+		LIB3270_DEFAULT_CGEN|LIB3270_DEFAULT_CSET,
 		(const unsigned short const [])
 		{
 			0x00ad, '[',
@@ -222,6 +224,7 @@ static const remap charset[] =
 
 	{
 		"cp500",
+		LIB3270_DEFAULT_CGEN|0x000001F4,
 		(const unsigned short const [])
 		{
 			0x004a, '[',
@@ -256,6 +259,7 @@ LIB3270_EXPORT int lib3270_set_host_charset(H3270 *hSession, const char *name)
 
 	hSession->charset.host		= "us";
 	hSession->charset.display	= "ISO-8859-1";
+	hSession->charset.cgcsgid	= LIB3270_DEFAULT_CGEN | LIB3270_DEFAULT_CSET; // 0x02b90025
 
 //	lib3270_write_log(hSession,"charset","host.charset=%s display.charset=%s",
 //								hSession->charset.host,hSession->charset.display);
@@ -282,7 +286,8 @@ LIB3270_EXPORT int lib3270_set_host_charset(H3270 *hSession, const char *name)
 			// Found required charset
 			int c;
 
-			hSession->charset.host = charset[f].name;
+			hSession->charset.host		= charset[f].name;
+			hSession->charset.cgcsgid	= charset[f].cgcsgid;
 
 			for(c=0;charset[f].chr[c];c+=2)
 				lib3270_remap(hSession,charset[f].chr[c],charset[f].chr[c+1], BOTH, 0);
