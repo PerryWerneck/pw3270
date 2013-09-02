@@ -273,6 +273,9 @@ $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar: clean pixmaps
 	@$(MKDIR) $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/man
 	@cp -r man/* $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/man
 
+	@$(MKDIR) $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/mac
+	@cp -r mac/* $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/mac
+
 	@$(AMTAR) --format=ustar --create --directory $(TMPDIR) --exclude-vcs --owner=root --group=root --file=$@ $(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 
 	@rm -fr $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
