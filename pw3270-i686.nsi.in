@@ -132,7 +132,7 @@ SubSection "@PACKAGE@" SecMain
 			file "/oname=$INSTDIR\plugins\rxplug.dll" ".bin\Release\plugins\rx3270.dll"
 			file "/oname=$INSTDIR\ui\80rexx.xml" "ui\80rexx.xml"
 
-			file "/oname=$PROGRAMFILES\ooRexx\rx3270.cls" "src/plugins/rx3270/rx3270.cls"
+			file "/oname=$PROGRAMFILES\ooRexx\rx3270.cls" "src\plugins\rx3270\rx3270.cls"
 			file "/oname=$INSTDIR\rx3270.dll.@PACKAGE_VERSION@" ".bin\Release\rx3270.dll.@PACKAGE_VERSION@"
 			file "/oname=$PROGRAMFILES\ooRexx\rx3270.dll" ".bin\Release\rx3270.dll"
 
