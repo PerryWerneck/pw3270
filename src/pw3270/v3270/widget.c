@@ -1276,7 +1276,13 @@ void v3270_set_color_table(GdkRGBA *table, const gchar *colors)
 
 	trace("colors=[%s]",colors);
 
- 	clr = g_strsplit(colors,",",V3270_COLOR_COUNT+1);
+	if(strchr(colors,':'))
+		clr = g_strsplit(colors,":",V3270_COLOR_COUNT+1);
+	else if(strchr(colors,';'))
+		clr = g_strsplit(colors,";",V3270_COLOR_COUNT+1);
+	else
+		clr = g_strsplit(colors,",",V3270_COLOR_COUNT+1);
+
  	cnt = g_strv_length(clr);
 
  	switch(cnt)

@@ -585,7 +585,7 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkRGBA *clr)
 		for(f=0;f<V3270_COLOR_COUNT;f++)
 		{
 			if(f)
-				g_string_append_c(str,',');
+				g_string_append_c(str,';');
 			g_string_append_printf(str,"%s",gdk_rgba_to_string(v3270_get_color(widget,f)));
 		}
 		set_string_to_config("terminal","colors","%s",str->str);
