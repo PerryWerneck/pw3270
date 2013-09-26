@@ -13,15 +13,24 @@ copyFiles() {
 
 	while read FILE
 	do
-		FILEPATH=$(find "$GTK_PREFIX/bin" -name "$FILE")
+		GTKPATH=$(find "$GTK_PREFIX/bin" -name "$FILE")
+		SYSPATH=$(find "/bin" -name "$FILE")
 
-		if [ ! -z $FILEPATH ]; then
-			echo "$FILEPATH ..."
-			cp $FILEPATH "$TARGET_PATH"
+		if [ ! -z "$GTKPATH" ]; then
+			echo "$GTKPATH ..."
+			cp $GTKPATH "$TARGET_PATH"
 			if [ "$?" != "0" ]; then
-				echo "Can´t copy $FILEPATH"
+				echo "Can´t copy $GTKPATH"
 				exit -1
 			fi
+		elif [ ! -z "$SYSPATH" ]; then
+			echo "$SYSPATH ..."
+			cp $SYSPATH "$TARGET_PATH"
+			if [ "$?" != "0" ]; then
+				echo "Can´t copy $SYSPATH"
+				exit -1
+			fi
+
 		else
 			echo "Can´t find $FILE"
 		fi
