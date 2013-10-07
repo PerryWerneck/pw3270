@@ -684,12 +684,13 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 
 	}
 
-	/* set up temporary termtype */
+	/* set up temporary termtype
 	if (session->termname == CN && session->std_ds_host)
 	{
 		sprintf(session->ttype_tmpval, "IBM-327%c-%d",session->m3279 ? '9' : '8', session->model_num);
 		session->termtype = session->ttype_tmpval;
 	}
+	*/
 
 	/* all done */
 #if defined(_WIN32)

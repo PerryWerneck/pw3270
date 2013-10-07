@@ -255,7 +255,7 @@
 		// telnet sub-option buffer
 		unsigned char 			* sbptr;
 		unsigned char			  telnet_state;
-		char					  ttype_tmpval[13];
+//		char					  ttype_tmpval[13];
 
 		unsigned char 			  myopts[LIB3270_TELNET_N_OPTS];
 		unsigned char			  hisopts[LIB3270_TELNET_N_OPTS];
