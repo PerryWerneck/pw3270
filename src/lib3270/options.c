@@ -81,22 +81,28 @@ LIB3270_EXPORT int lib3270_set_color_type(H3270 *hSession, unsigned short colort
 {
 	CHECK_SESSION_HANDLE(hSession);
 
+	if(hSession->cstate != LIB3270_NOT_CONNECTED)
+		return EBUSY;
+
 	switch(colortype)
 	{
 	case 0:
 	case 16:
 		hSession->colors 	= 16;
 		hSession->mono		= 0;
+		hSession->m3279		= 1;
 		break;
 
 	case 8:
 		hSession->colors	= 8;
 		hSession->mono		= 0;
+		hSession->m3279		= 1;
 		break;
 
 	case 2:
 		hSession->colors 	= 16;
 		hSession->mono		= 1;
+		hSession->m3279		= 0;
 		break;
 
 	default:

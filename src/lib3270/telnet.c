@@ -684,6 +684,8 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 
 	}
 
+	snprintf(session->full_model_name,LIB3270_FULL_MODEL_NAME_LENGTH,"IBM-327%c-%d",session->m3279 ? '9' : '8', session->model_num);
+
 	/* set up temporary termtype
 	if (session->termname == CN && session->std_ds_host)
 	{
