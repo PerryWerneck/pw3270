@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-26 16:18-0300\n"
+"POT-Creation-Date: 2013-10-09 18:38-0300\n"
 "PO-Revision-Date: 2013-08-28 08:42-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <perry.werneck@gmail.com>\n"
@@ -84,7 +84,7 @@ msgstr "%s: Tabulação vertical não é suportada"
 msgid "%s: unknown family %d"
 msgstr "%s: Familia %d é inválida"
 
-#: telnet.c:1160
+#: telnet.c:1172
 #, c-format
 msgid "%s:%d"
 msgstr "%s:%d"
@@ -227,7 +227,7 @@ msgstr ""
 msgid "Application name"
 msgstr "Nome da aplicação"
 
-#: ui/10keypad.xml:453
+#: ui/10keypad.xml:454
 msgid "Attn"
 msgstr "Attn"
 
@@ -288,11 +288,11 @@ msgstr "Negrito"
 msgid "Brazilian Public Software Portal"
 msgstr "Portal do Software Público Brasileiro"
 
-#: ui/10keypad.xml:454
+#: ui/10keypad.xml:455
 msgid "Break"
 msgstr "Break"
 
-#: telnet.c:2128
+#: telnet.c:2140
 msgid "Broken pipe"
 msgstr "Conexão interrompida"
 
@@ -320,12 +320,17 @@ msgstr "Tema de c_ores:"
 msgid "C_urrent"
 msgstr "At_ual"
 
+#: toggles.c:173 telnet.c:669
+#, c-format
+msgid "Can't %s network keep-alive"
+msgstr "Can't %s network keep-alive"
+
 #: uiparser/parsefile.c:225
 #, c-format
 msgid "Can't accept unnamed %s"
 msgstr "Não posso aceitar elemento %s sem nome"
 
-#: telnet.c:674
+#: telnet.c:683
 #, c-format
 msgid "Can't connect to %s:%d"
 msgstr "Não foi possível conectar a %s:%d"
@@ -448,7 +453,7 @@ msgstr "Não é possível usar a Winsock versão %d.%d"
 msgid "Cancelled by user"
 msgstr "Cancelado pelo usuário"
 
-#: telnet.c:708
+#: telnet.c:720
 msgid "Cannot create socket handle"
 msgstr "Não foi possível criar um manipulador de socket"
 
@@ -508,7 +513,7 @@ msgstr "Completo"
 msgid "Connect on startup"
 msgstr "Conectar ao iniciar"
 
-#: telnet.c:2132
+#: telnet.c:2144
 msgid "Connection reset by peer"
 msgstr "Conexão foi cancelada pelo servidor"
 
@@ -516,7 +521,7 @@ msgstr "Conexão foi cancelada pelo servidor"
 msgid "Copy"
 msgstr "Copiar"
 
-#: ui/99debug.xml:341
+#: ui/99debug.xml:342
 msgid "Copy as HTML"
 msgstr "Copiar como HTML"
 
@@ -549,7 +554,7 @@ msgstr "Cilindros"
 msgid "DFT B_uffer size:"
 msgstr "Tamanho do b_uffer DFT:"
 
-#: ui/99debug.xml:346
+#: ui/99debug.xml:347
 msgid "DS Trace"
 msgstr "DS Trace"
 
@@ -565,11 +570,11 @@ msgstr "Verde Escuro"
 msgid "Data conversion error"
 msgstr "Erro na conversão de dados"
 
-#: ui/99debug.xml:354
+#: ui/99debug.xml:355
 msgid "Debug"
 msgstr "Depuração"
 
-#: ui/99debug.xml:357
+#: ui/99debug.xml:358
 msgid "Debug window updates"
 msgstr "Mostrar atualizações de janela"
 
@@ -581,7 +586,7 @@ msgstr "Padrão"
 msgid "Delete field"
 msgstr "Apagar campo"
 
-#: telnet.c:1803
+#: telnet.c:1815
 msgid "Device type rejected"
 msgstr "Tipo de dispositivo rejeitado"
 
@@ -589,11 +594,11 @@ msgstr "Tipo de dispositivo rejeitado"
 msgid "Disconnected from host"
 msgstr "Desconectado do servidor"
 
-#: ui/99debug.xml:355
+#: ui/99debug.xml:356
 msgid "Display current charset"
 msgstr "Mostrar a tabela de caracteres ativa"
 
-#: telnet.c:1378
+#: telnet.c:1390
 msgid "EOR received when not in 3270 mode, ignored."
 msgstr "EOR recebido fora do modo 3270, ignorado."
 
@@ -613,7 +618,7 @@ msgstr "Nome do servidor em branco"
 msgid "Empty port name"
 msgstr "Porta em branco"
 
-#: ui/10keypad.xml:449
+#: ui/10keypad.xml:450
 msgid ""
 "Erase\n"
 "EOF"
@@ -621,7 +626,7 @@ msgstr ""
 "Apagar\n"
 "Campo"
 
-#: ui/10keypad.xml:450
+#: ui/10keypad.xml:451
 msgid ""
 "Erase\n"
 "Input"
@@ -660,12 +665,12 @@ msgstr "Erro \"%s\" gravando arquivo local (rc=%d)"
 msgid "Error %d resolving %s"
 msgstr "Erro %d resolvendo %s"
 
-#: telnet.c:3116 telnet.c:3127
+#: telnet.c:3128 telnet.c:3139
 #, c-format
 msgid "Error in fcntl(%s) when setting non blocking mode"
 msgstr "Erro em fcntl(%s) ao ativar o modo não blocante"
 
-#: telnet.c:3106
+#: telnet.c:3118
 #, c-format
 msgid "Error in ioctl(%s) when setting no blocking mode"
 msgstr "Erro em ioctl(%s) ao ativar o modo não blocante"
@@ -680,11 +685,11 @@ msgstr "Erro lendo %s"
 msgid "Error resolving %s: %s"
 msgstr "Erro ao resolver %s: %s"
 
-#: ui/99debug.xml:348
+#: ui/99debug.xml:349
 msgid "Event Trace"
 msgstr "Trace de eventos"
 
-#: ui/80rexx.xml:302
+#: ui/80rexx.xml:303
 msgid "External Rexx script"
 msgstr "Script rexx externo"
 
@@ -732,7 +737,7 @@ msgstr "Erro de formato no campo \"notBefore\" do certificado"
 msgid "Full Screen"
 msgstr "Tela cheia"
 
-#: ui/10functions.xml:498
+#: ui/10functions.xml:499
 msgid "Function bar"
 msgstr "Barra de funções"
 
@@ -777,7 +782,7 @@ msgstr "HTTP Proxy: EOF inesperado"
 msgid "HTTP Proxy: unrecognized reply"
 msgstr "HTTP Proxy: Resposta desconhecida"
 
-#: ui/00default.xml:142
+#: ui/00default.xml:143
 msgid "Help"
 msgstr "Ajuda"
 
@@ -785,7 +790,7 @@ msgstr "Ajuda"
 msgid "Host disconnected, transfer cancelled"
 msgstr "Servidor desconectou, transferência cancelada"
 
-#: telnet.c:1861
+#: telnet.c:1873
 msgid "Host illegally added function(s)"
 msgstr "Host illegally added function(s)"
 
@@ -797,11 +802,11 @@ msgstr "Servidor é AS_400"
 msgid "Host is TSO"
 msgstr "Servidor é TSO"
 
-#: telnet.c:1786
+#: telnet.c:1798
 msgid "Host rejected device type or request type"
 msgstr "Servidor rejeitou o tipo de dispositivo ou requisição"
 
-#: telnet.c:1799
+#: telnet.c:1811
 msgid "Host rejected resource(s)"
 msgstr "Servidor rejeitou recurso(s)"
 
@@ -838,7 +843,7 @@ msgstr "Comprimento de frame inválido"
 msgid "Informations"
 msgstr "Informações"
 
-#: ui/00default.xml:137
+#: ui/00default.xml:138
 msgid "Input method"
 msgstr "Método de entrada"
 
@@ -891,7 +896,7 @@ msgstr "Teclado está bloqueado"
 msgid "LRECL:"
 msgstr "LRECL:"
 
-#: ui/10keypad.xml:399
+#: ui/10keypad.xml:400
 msgid "Lateral keypad"
 msgstr "Barra lateral"
 
@@ -940,15 +945,19 @@ msgstr "Mostarda"
 msgid "N/A"
 msgstr "N/A"
 
-#: telnet.c:359 telnet.c:678
+#: telnet.c:359 telnet.c:687
 msgid "Network error"
 msgstr "Erro de rede"
 
-#: telnet.c:315 telnet.c:326 telnet.c:707 telnet.c:718
+#: ui/00default.xml:134
+msgid "Network keep alive"
+msgstr "Network keep alive"
+
+#: telnet.c:315 telnet.c:326 telnet.c:719 telnet.c:730
 msgid "Network startup error"
 msgstr "Erro ao iniciar a rede"
 
-#: ui/00default.xml:189
+#: ui/00default.xml:190
 msgid "Next field"
 msgstr "Próximo campo"
 
@@ -1025,111 +1034,111 @@ msgstr "Outro (VM/CMS)"
 msgid "Out of memory"
 msgstr "Memória insuficiente"
 
-#: ui/10keypad.xml:436
+#: ui/10keypad.xml:437
 msgid "PA1"
 msgstr "PA1"
 
-#: ui/10keypad.xml:437
+#: ui/10keypad.xml:438
 msgid "PA2"
 msgstr "PA2"
 
-#: ui/10keypad.xml:438
+#: ui/10keypad.xml:439
 msgid "PA3"
 msgstr "PA3"
 
-#: ui/10keypad.xml:401
+#: ui/10keypad.xml:402
 msgid "PF1"
 msgstr "PF1"
 
-#: ui/10keypad.xml:416
+#: ui/10keypad.xml:417
 msgid "PF10"
 msgstr "PF10"
 
-#: ui/10keypad.xml:417
+#: ui/10keypad.xml:418
 msgid "PF11"
 msgstr "PF11"
 
-#: ui/10keypad.xml:418
+#: ui/10keypad.xml:419
 msgid "PF12"
 msgstr "PF12"
 
-#: ui/10functions.xml:513
+#: ui/10functions.xml:514
 msgid "PF13"
 msgstr "PF13"
 
-#: ui/10functions.xml:514
+#: ui/10functions.xml:515
 msgid "PF14"
 msgstr "PF14"
 
-#: ui/10functions.xml:515
+#: ui/10functions.xml:516
 msgid "PF15"
 msgstr "PF15"
 
-#: ui/10functions.xml:516
+#: ui/10functions.xml:517
 msgid "PF16"
 msgstr "PF16"
 
-#: ui/10functions.xml:517
+#: ui/10functions.xml:518
 msgid "PF17"
 msgstr "PF17"
 
-#: ui/10functions.xml:518
+#: ui/10functions.xml:519
 msgid "PF18"
 msgstr "PF18"
 
-#: ui/10functions.xml:519
+#: ui/10functions.xml:520
 msgid "PF19"
 msgstr "PF19"
 
-#: ui/10keypad.xml:402
+#: ui/10keypad.xml:403
 msgid "PF2"
 msgstr "PF2"
 
-#: ui/10functions.xml:520
+#: ui/10functions.xml:521
 msgid "PF20"
 msgstr "PF20"
 
-#: ui/10functions.xml:521
+#: ui/10functions.xml:522
 msgid "PF21"
 msgstr "PF21"
 
-#: ui/10functions.xml:522
+#: ui/10functions.xml:523
 msgid "PF22"
 msgstr "PF22"
 
-#: ui/10functions.xml:523
+#: ui/10functions.xml:524
 msgid "PF23"
 msgstr "PF23"
 
-#: ui/10functions.xml:524
+#: ui/10functions.xml:525
 msgid "PF24"
 msgstr "PF24"
 
-#: ui/10keypad.xml:403
+#: ui/10keypad.xml:404
 msgid "PF3"
 msgstr "PF3"
 
-#: ui/10keypad.xml:406
+#: ui/10keypad.xml:407
 msgid "PF4"
 msgstr "PF4"
 
-#: ui/10keypad.xml:407
+#: ui/10keypad.xml:408
 msgid "PF5"
 msgstr "PF5"
 
-#: ui/10keypad.xml:408
+#: ui/10keypad.xml:409
 msgid "PF6"
 msgstr "PF6"
 
-#: ui/10keypad.xml:411
+#: ui/10keypad.xml:412
 msgid "PF7"
 msgstr "PF7"
 
-#: ui/10keypad.xml:412
+#: ui/10keypad.xml:413
 msgid "PF8"
 msgstr "PF8"
 
-#: ui/10keypad.xml:413
+#: ui/10keypad.xml:414
 msgid "PF9"
 msgstr "PF9"
 
@@ -1178,7 +1187,7 @@ msgstr "Caminho para os arquivos de dados da aplicação"
 msgid "Pink"
 msgstr "Rosa"
 
-#: ui/00default.xml:188
+#: ui/00default.xml:189
 msgid "Previous field"
 msgstr "Campo anterior"
 
@@ -1314,7 +1323,7 @@ msgstr "Formato de registro"
 msgid "Red"
 msgstr "Vermelho"
 
-#: ui/99debug.xml:356
+#: ui/99debug.xml:357
 msgid "Reload buffer contents"
 msgstr "Recarregar conteúdo do buffer"
 
@@ -1326,7 +1335,7 @@ msgstr "Remover seleção"
 msgid "Reselect"
 msgstr "Reselecionar"
 
-#: ui/10keypad.xml:446
+#: ui/10keypad.xml:447
 msgid "Reset"
 msgstr "Reset"
 
@@ -1334,7 +1343,7 @@ msgstr "Reset"
 msgid "Resize on alternate screen"
 msgstr "Mudar tamanho do terminal em tela alternativa"
 
-#: ui/00default.xml:190
+#: ui/00default.xml:191
 msgid "Return"
 msgstr "Return"
 
@@ -1462,15 +1471,15 @@ msgstr "SOCKS5 Proxy: xmit version 5 nmethods 1 (no auth)\n"
 msgid "SOCKS5 proxy: %s/%u: %s"
 msgstr "SOCKS5 proxy: %s/%u: %s"
 
-#: telnet.c:1143
+#: telnet.c:1155
 msgid "SSL Error"
 msgstr "Erro SSL"
 
-#: telnet.c:1143
+#: telnet.c:1155
 msgid "SSL Read error"
 msgstr "Erro de leitura SSL"
 
-#: telnet.c:833 telnet.c:847
+#: telnet.c:845 telnet.c:859
 msgid "SSL connect failed!"
 msgstr "Conexão SSL falhou"
 
@@ -1478,15 +1487,15 @@ msgstr "Conexão SSL falhou"
 msgid "SSL error"
 msgstr "Erro SSL"
 
-#: telnet.c:806
+#: telnet.c:818
 msgid "SSL init failed!"
 msgstr "Inicialização SSL falhou"
 
-#: telnet.c:815
+#: telnet.c:827
 msgid "SSL_set_fd failed!"
 msgstr "SSL_set_fd falhou!"
 
-#: telnet.c:2118
+#: telnet.c:2130
 #, c-format
 msgid ""
 "SSL_write:\n"
@@ -1523,7 +1532,7 @@ msgstr "Salvar seleção para arquivo"
 msgid "Save trace file"
 msgstr "Salvar arquivo de trace"
 
-#: ui/99debug.xml:347
+#: ui/99debug.xml:348
 msgid "Screen Trace"
 msgstr "Trace de tela"
 
@@ -1640,7 +1649,7 @@ msgstr "Configurações"
 msgid "Show Underline"
 msgstr "Mostrar sublinhado"
 
-#: ui/99debug.xml:354
+#: ui/99debug.xml:355
 msgid "Show test pattern"
 msgstr "Mostrar padrão de teste"
 
@@ -1648,11 +1657,11 @@ msgstr "Mostrar padrão de teste"
 msgid "Smart paste"
 msgstr "Colar inteligente"
 
-#: telnet.c:1164
+#: telnet.c:1176
 msgid "Socket read error"
 msgstr "Erro ao ler dados da rede"
 
-#: telnet.c:2139
+#: telnet.c:2151
 msgid "Socket write error"
 msgstr "Erro ao enviar dados para a rede"
 
@@ -1680,7 +1689,7 @@ msgstr "Tipo de servidor:"
 msgid "TELNET Proxy: send error"
 msgstr "TELNET Proxy: Erro ao enviar"
 
-#: telnet.c:3313
+#: telnet.c:3325
 msgid "TLS negotiation failure"
 msgstr "Negociação TLS falhou"
 
@@ -1928,11 +1937,11 @@ msgid ""
 "This version of %s was built without support for secure sockets layer (SSL)."
 msgstr "Esta versão do %s foi gerada sem suporte para conexões seguras (SSL)."
 
-#: ui/00default.xml:148
+#: ui/00default.xml:149
 msgid "Toolbar"
 msgstr "Barra de ferramentas"
 
-#: ui/99debug.xml:346
+#: ui/99debug.xml:347
 msgid "Trace"
 msgstr "Trace"
 
@@ -2118,7 +2127,7 @@ msgstr ""
 "Servidor desconhecido:\n"
 "%s"
 
-#: telnet.c:549
+#: telnet.c:550
 #, c-format
 msgid "Unknown passthru host: %s"
 msgstr "Servidor \"passthru\" desconhecido: %s"
@@ -2128,7 +2137,7 @@ msgstr "Servidor \"passthru\" desconhecido: %s"
 msgid "Unknown popup type \"%s\""
 msgstr "Tipo de popup \"%s\" não é conhecido"
 
-#: telnet.c:578 resolver.c:147
+#: telnet.c:579 resolver.c:147
 #, c-format
 msgid "Unknown port number or service: %s"
 msgstr "Número de porta ou serviço desconhecido: %s"
@@ -2141,7 +2150,7 @@ msgstr "Unsupported RPQ term"
 msgid "Unsupported certificate purpose"
 msgstr "Finalidade do certificado não é suportada"
 
-#: telnet.c:534
+#: telnet.c:535
 msgid "Unsupported passthru host session"
 msgstr "Unsupported passthru host session"
 
@@ -2162,11 +2171,11 @@ msgstr "Variável"
 msgid "Version %s - Revision %s"
 msgstr "Versão %s - Revisão %s"
 
-#: ui/99debug.xml:349
+#: ui/99debug.xml:350
 msgid "View Field Delimiters"
 msgstr "Mostrar delimitadores de campo"
 
-#: telnet.c:719
+#: telnet.c:731
 msgid "WSAEventSelect failed"
 msgstr "WSAEventSelect falhou"
 
@@ -2190,7 +2199,7 @@ msgstr "Europa ocidental (ISO 8859-1)"
 msgid "White"
 msgstr "Branco"
 
-#: ui/00default.xml:159
+#: ui/00default.xml:160
 msgid "Window"
 msgstr "Janela"
 
@@ -2355,21 +2364,30 @@ msgstr "Atributo inesperado \"action\" em <%s>"
 msgid "an action attribute"
 msgstr "um atributo \"action\""
 
-#: session.c:322
+#: session.c:330
 #, fuzzy
 msgid "bracket"
 msgstr "Trilhas"
+
+#: toggles.c:173 telnet.c:669
+#, fuzzy
+msgid "disable"
+msgstr "Variável"
+
+#: toggles.c:173 telnet.c:669
+msgid "enable"
+msgstr "enable"
 
 #: iocalls.c:450
 msgid "select() failed when dispatching events"
 msgstr "select() falhou ao processar eventos"
 
-#: telnet.c:629 telnet.c:635 telnet.c:642
+#: telnet.c:630 telnet.c:637
 #, c-format
 msgid "setsockopt(%s)"
 msgstr "setsockopt(%s)"
 
-#: telnet.c:622
+#: telnet.c:623
 msgid "socket"
 msgstr "socket"
 
@@ -2377,7 +2395,7 @@ msgstr "socket"
 msgid "translator-credits"
 msgstr "translator-credits"
 
-#: telnet.c:1139
+#: telnet.c:1151
 msgid "unknown error"
 msgstr "Erro desconhecido"
 

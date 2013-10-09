@@ -666,7 +666,7 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 
 		if (setsockopt(session->sock, SOL_SOCKET, SO_KEEPALIVE, (char *)&optval, sizeof(optval)) < 0)
 		{
-			popup_a_sockerr(session, N_( "Can´t %s network keep-alive" ), optval ? _( "enable" ) : _( "disable" ));
+			popup_a_sockerr(session, N_( "Can't %s network keep-alive" ), optval ? _( "enable" ) : _( "disable" ));
 			close_fail;
 		}
 		else
