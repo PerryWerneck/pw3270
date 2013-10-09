@@ -328,7 +328,8 @@ RexxMethod3(int, rx3270_method_set_option, CSELF, sessionPtr, CSTRING, name, int
 			{ "kpalternative",	LIB3270_TOGGLE_KP_ALTERNATIVE		},
 			{ "beep",			LIB3270_TOGGLE_BEEP					},
 			{ "fieldattr",		LIB3270_TOGGLE_VIEW_FIELD			},
-			{ "altscreen",		LIB3270_TOGGLE_ALTSCREEN			}
+			{ "altscreen",		LIB3270_TOGGLE_ALTSCREEN			},
+			{ "keepalive",		LIB3270_TOGGLE_KEEP_ALIVE			},
 	};
 
 	session *hSession = (session *) sessionPtr;

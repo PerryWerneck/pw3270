@@ -439,7 +439,7 @@ void set_boolean_to_config(const gchar *group, const gchar *key, gboolean val)
  	DWORD	disp;
 	gchar * path = g_strdup_printf("%s\\%s\\%s",registry_path,g_get_application_name(),group);
 
-	trace("Creating key %s",path);
+//	trace("Creating key %s",path);
 	if(RegCreateKeyEx(HKEY_CURRENT_USER,path,0,NULL,REG_OPTION_NON_VOLATILE,KEY_SET_VALUE,NULL,&hKey,&disp) == ERROR_SUCCESS)
 	{
 		DWORD	value = val ? 1 : 0;

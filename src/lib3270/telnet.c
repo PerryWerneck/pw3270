@@ -488,6 +488,7 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 	int				  passthru_len = 0;
 	unsigned short	  passthru_port = 0;
 	int				  on = 1;
+	int				  optval;
 	char			  errmsg[1024];
 	int				  rc;
 #if defined(OMTU) /*[*/
@@ -630,12 +631,6 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 		close_fail;
 	}
 
-	if (setsockopt(session->sock, SOL_SOCKET, SO_KEEPALIVE, (char *)&on, sizeof(on)) < 0)
-	{
-		popup_a_sockerr(session, N_( "setsockopt(%s)" ), "SO_KEEPALIVE");
-		close_fail;
-	}
-
 #if defined(OMTU)
 	if (setsockopt(session->sock, SOL_SOCKET, SO_SNDBUF, (char *)&mtu,sizeof(mtu)) < 0)
 	{
@@ -666,8 +661,22 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 	if(!rc)
 	{
 		trace_dsn(session,"Connected.\n");
+
+		optval = lib3270_get_toggle(session,LIB3270_TOGGLE_KEEP_ALIVE) ? 1 : 0;
+
+		if (setsockopt(session->sock, SOL_SOCKET, SO_KEEPALIVE, (char *)&optval, sizeof(optval)) < 0)
+		{
+			popup_a_sockerr(session, N_( "Can´t %s network keep-alive" ), optval ? _( "enable" ) : _( "disable" ));
+			close_fail;
+		}
+		else
+		{
+			trace_dsn(session,"Network keep-alive is %s\n",optval ? "enabled" : "disabled" );
+		}
+
 		if(net_connected(session))
 			return -1;
+
 	}
 	else
 	{

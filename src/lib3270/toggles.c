@@ -51,8 +51,6 @@
 #include "togglesc.h"
 #include "api.h"
 
-
-
 static const char *toggle_names[LIB3270_TOGGLE_COUNT] =
 {
 		"monocase",
@@ -79,6 +77,7 @@ static const char *toggle_names[LIB3270_TOGGLE_COUNT] =
 		"beep",						/**< Beep on errors */
 		"fieldattr",				/**< View Field attribute */
 		"altscreen",				/**< auto resize on altscreen */
+		"keepalive",				/**< Enable network keep-alive with SO_KEEPALIVE */
 
 
 };
@@ -158,8 +157,27 @@ static void toggle_redraw(H3270 *session, struct lib3270_toggle *t, LIB3270_TOGG
 /*
  * No-op toggle.
  */
-static void toggle_nop(H3270 *session, struct lib3270_toggle *t unused, LIB3270_TOGGLE_TYPE tt unused)
+static void toggle_nop(H3270 *session, struct lib3270_toggle *t, LIB3270_TOGGLE_TYPE tt unused)
 {
+}
+
+static void toggle_keepalive(H3270 *session, struct lib3270_toggle *t unused, LIB3270_TOGGLE_TYPE tt unused)
+{
+	if(session->sock > 0)
+	{
+		// Update keep-alive option
+		int optval = t->value ? 1 : 0;
+
+		if (setsockopt(session->sock, SOL_SOCKET, SO_KEEPALIVE, (char *)&optval, sizeof(optval)) < 0)
+		{
+			popup_a_sockerr(session, N_( "Can´t %s network keep-alive" ), optval ? _( "enable" ) : _( "disable" ));
+		}
+		else
+		{
+			trace_dsn(session,"Network keep-alive is %s\n",optval ? "enabled" : "disabled" );
+		}
+
+	}
 }
 
 /*
@@ -176,10 +194,8 @@ void initialize_toggles(H3270 *session)
 	session->toggle[LIB3270_TOGGLE_MONOCASE].upcall 		= toggle_redraw;
 	session->toggle[LIB3270_TOGGLE_UNDERLINE].upcall 		= toggle_redraw;
 	session->toggle[LIB3270_TOGGLE_ALTSCREEN].upcall 		= toggle_altscreen;
-
-#if defined(X3270_ANSI)
-	session->toggle[LIB3270_TOGGLE_LINE_WRAP].upcall			= toggle_lineWrap;
-#endif
+	session->toggle[LIB3270_TOGGLE_ALTSCREEN].upcall 		= toggle_altscreen;
+	session->toggle[LIB3270_TOGGLE_KEEP_ALIVE].upcall		= toggle_keepalive;
 
 	static const LIB3270_TOGGLE active_by_default[] =
 	{
@@ -187,6 +203,7 @@ void initialize_toggles(H3270 *session)
 		LIB3270_TOGGLE_CURSOR_POS,
 		LIB3270_TOGGLE_BEEP,
 		LIB3270_TOGGLE_ALTSCREEN,
+		LIB3270_TOGGLE_KEEP_ALIVE
 	};
 
 	for(f=0;f< (sizeof(active_by_default)/sizeof(active_by_default[0])); f++)

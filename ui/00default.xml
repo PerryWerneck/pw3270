@@ -131,6 +131,7 @@
 				<menuitem action='toggle' id='SmartPaste' label='Smart paste' />
 				<menuitem action='toggle' id='Beep' label='Alert sound' />
 				<menuitem action='toggle' id='KPAlternative' label='Use +/- for field navigation' />
+				<menuitem action='toggle' id='keepalive' label='Network keep alive' />
 			</menu>
 
 			<!--- Special action - InputMethod menu will be populated with Gtk input_method menu items --->
