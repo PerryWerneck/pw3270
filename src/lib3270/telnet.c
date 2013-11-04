@@ -849,7 +849,7 @@ static int ssl_negotiate(H3270 *hSession)
 				trace_dsn(hSession,"SSL_connect failed: %s %s\n",
 						ERR_lib_error_string(hSession->ssl_error),
 						ERR_reason_error_string(hSession->ssl_error));
-				popup_an_error(hSession,_( ERR_reason_error_string(hSession->ssl_error) ));
+				popup_an_error(hSession,"%s",_( ERR_reason_error_string(hSession->ssl_error) ));
 			}
 
 		}

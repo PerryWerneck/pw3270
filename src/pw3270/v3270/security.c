@@ -362,7 +362,7 @@
 							GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
 							GTK_MESSAGE_INFO,
 							GTK_BUTTONS_CLOSE,
-							v3270_get_host(widget)
+							"%s",v3270_get_host(widget)
 					);
 
 		gtk_message_dialog_format_secondary_markup(
@@ -401,15 +401,9 @@
 		gtk_message_dialog_set_image(GTK_MESSAGE_DIALOG(dialog),gtk_image_new_from_stock(icon,GTK_ICON_SIZE_DIALOG));
 
 		if(text)
-		{
-			gtk_message_dialog_format_secondary_markup(GTK_MESSAGE_DIALOG(dialog), gettext(text));
-		}
+			gtk_message_dialog_format_secondary_markup(GTK_MESSAGE_DIALOG(dialog), "%s", gettext(text));
 		else
-		{
-			gchar *str = g_strdup_printf( _( "Unexpected SSL error <b>%ld</b>" ),id);
-			gtk_message_dialog_format_secondary_markup(GTK_MESSAGE_DIALOG(dialog),text);
-			g_free(str);
-		}
+			gtk_message_dialog_format_secondary_markup(GTK_MESSAGE_DIALOG(dialog),_( "Unexpected SSL error <b>%ld</b>" ),id);
 
 	}
 #endif // HAVE_LIBSSL
