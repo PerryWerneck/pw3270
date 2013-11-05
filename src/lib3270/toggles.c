@@ -38,7 +38,10 @@
 
 #include <errno.h>
 #include <sys/types.h>
-#include <sys/socket.h>
+
+#ifndef WIN32
+	#include <sys/socket.h>
+#endif // !WIN32
 
 #include <lib3270/config.h>
 #include "toggle.h"
