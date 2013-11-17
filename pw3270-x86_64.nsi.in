@@ -91,7 +91,8 @@ SubSection "@PACKAGE@" SecMain
 
 		# Save DataDir
 		SetRegView 64
-		WriteRegStr HKLM "Software\@PACKAGE@" "datadir" $INSTDIR
+		WriteRegStr HKLM "Software\@PACKAGE@" "datadir" "$INSTDIR"
+		WriteRegStr HKLM "Software\@PACKAGE@" "appName" "$INSTDIR\@PACKAGE@.exe"
 
 		# define uninstaller name
 		SetRegView 32

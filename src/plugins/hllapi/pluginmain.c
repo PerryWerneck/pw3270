@@ -36,6 +36,7 @@
  #include <pw3270/v3270.h>
  #include <pw3270/ipcpackets.h>
  #include <lib3270/actions.h>
+ #include <lib3270/charset.h>
 
 /*--[ Defines ]--------------------------------------------------------------------------------------*/
 
@@ -306,11 +307,11 @@
 
 	case HLLAPI_PACKET_SET_HOST_CHARSET:
 		send_result(source,lib3270_set_host_charset(	lib3270_get_default_session_handle(),
-														(unsigned char *) ((struct hllapi_packet_set_text *) source->buffer)->text));
+														(const char *) ((struct hllapi_packet_set_text *) source->buffer)->text));
 		break;
 
 	case HLLAPI_PACKET_GET_HOST_CHARSET:
-		send_text(source,lib3270_get_host_charset(lib3270_get_default_session_handle()));
+		send_text(source,(char *) lib3270_get_host_charset(lib3270_get_default_session_handle()));
 		break;
 
 	default:

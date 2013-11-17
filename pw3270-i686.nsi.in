@@ -88,7 +88,8 @@ SubSection "@PACKAGE@" SecMain
 		file "/oname=$INSTDIR\@localedir@\pt_BR\LC_MESSAGES\@PACKAGE@.mo" ".bin\Release\@localedir@\pt_BR\LC_MESSAGES\@PACKAGE@.mo"
 
 		# Save DataDir
-		WriteRegStr HKLM "Software\@PACKAGE@" "datadir" $INSTDIR
+		WriteRegStr HKLM "Software\@PACKAGE@" "datadir" "$INSTDIR"
+		WriteRegStr HKLM "Software\@PACKAGE@" "appName" "$INSTDIR\@PACKAGE@.exe"
 
 		# define uninstaller name
 		writeUninstaller $INSTDIR\uninstall.exe

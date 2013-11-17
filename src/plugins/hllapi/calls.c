@@ -35,6 +35,8 @@
  #include <pw3270/hllapi.h>
  #include <stdio.h>
  #include <lib3270/log.h>
+ #include <process.h>
+ #include <time.h>
  #include "client.h"
 
  #undef trace
@@ -114,6 +116,185 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
+ static DWORD load_remote(void)
+ {
+	// Get pointers to the pipe based calls
+	int f;
+
+	trace("%s: Loading pipe based calls",__FUNCTION__);
+	for(f=0;entry_point[f].name;f++)
+		*entry_point[f].call = entry_point[f].pipe;
+
+	return HLLAPI_STATUS_SUCCESS;
+ }
+
+ static DWORD start_session(void)
+ {
+ 	char 					buffer[80];
+ 	char 					appName[4096];
+	HKEY 					hKey	= 0;
+ 	unsigned long			datalen = 4096;
+ 	DWORD					ret;
+	STARTUPINFO				si;
+    PROCESS_INFORMATION		pi;
+
+	// Get application path
+	*appName = 0;
+	if(RegOpenKeyEx(HKEY_LOCAL_MACHINE,"Software\\pw3270",0,KEY_QUERY_VALUE,&hKey) == ERROR_SUCCESS)
+	{
+		unsigned long datatype;					// #defined in winnt.h (predefined types 0-11)
+		if(RegQueryValueExA(hKey,"appName",NULL,&datatype,(LPBYTE) appName,&datalen) != ERROR_SUCCESS)
+			*appName = 0;
+		RegCloseKey(hKey);
+	}
+
+	trace("%s appname=%s\n",__FUNCTION__,appName);
+
+	snprintf(buffer,79,"%s --session=\"H%06d\"",appName,getpid());
+
+	ZeroMemory( &si, sizeof(si) );
+	si.cb = sizeof(si);
+	ZeroMemory( &pi, sizeof(pi) );
+
+	// si.dwFlags = STARTF_PREVENTPINNING;
+	trace("App: %s",appName);
+	trace("CmdLine: %s",buffer);
+
+	if(!CreateProcess(NULL,buffer,NULL,NULL,0,NORMAL_PRIORITY_CLASS,NULL,NULL,&si,&pi))
+		return GetLastError();
+
+	CloseHandle( pi.hProcess );
+	CloseHandle( pi.hThread );
+
+	// Wait for pipe to be available
+    time_t					timer	= time(0)+5;
+	HANDLE			  		hPipe  	= INVALID_HANDLE_VALUE;
+	WIN32_FIND_DATA			FindFileData;
+
+	snprintf(buffer,4095,"\\\\.\\pipe\\H%06d_a",getpid());
+
+	while(hPipe == INVALID_HANDLE_VALUE && time(0) < timer)
+	{
+		Sleep(10);
+		hPipe = FindFirstFile(buffer, &FindFileData);
+	}
+
+	if(hPipe == INVALID_HANDLE_VALUE)
+		return - ETIMEDOUT;
+
+	CloseHandle(hPipe);
+
+	// Load PIPE calls for the created session
+ 	snprintf(buffer,79,"H%06d:a",getpid());
+	ret = load_remote();
+	if(ret)
+		return ret;
+
+	snprintf(buffer,79,"H%06d:A",getpid());
+	hSession = session_new((const char *) buffer);
+	trace("%s ok hSession=%p\n",__FUNCTION__,hSession);
+
+ 	return hSession ? HLLAPI_STATUS_SUCCESS : HLLAPI_STATUS_SYSTEM_ERROR;
+ }
+
+ static DWORD load_dll(void)
+ {
+	// Direct mode, load lib3270.dll, get pointers to the calls
+	static const char *dllname = "lib3270.dll." PACKAGE_VERSION;
+
+	int 		f;
+	HMODULE		kernel;
+	HANDLE		cookie		= NULL;
+	DWORD		rc;
+	HANDLE 		(*AddDllDirectory)(PCWSTR NewDirectory);
+	BOOL 	 	(*RemoveDllDirectory)(HANDLE Cookie);
+	UINT 		errorMode;
+	char		datadir[4096];
+
+	trace("hModule=%p",hModule);
+	if(hModule)
+		return -EBUSY;
+
+	kernel 				= LoadLibrary("kernel32.dll");
+	AddDllDirectory		= (HANDLE (*)(PCWSTR)) GetProcAddress(kernel,"AddDllDirectory");
+	RemoveDllDirectory	= (BOOL (*)(HANDLE)) GetProcAddress(kernel,"RemoveDllDirectory");
+
+	// Notify user in case of error loading protocol DLL
+	// http://msdn.microsoft.com/en-us/library/windows/desktop/ms680621(v=vs.85).aspx
+	errorMode = SetErrorMode(1);
+
+	memset(datadir,' ',4095);
+	datadir[4095] = 0;
+
+	if(hllapi_get_datadir(datadir))
+	{
+		char	buffer[4096];
+		wchar_t	path[4096];
+
+		mbstowcs(path, datadir, 4095);
+		trace("Datadir=[%s] AddDllDirectory=%p RemoveDllDirectory=%p\n",datadir,AddDllDirectory,RemoveDllDirectory);
+		if(AddDllDirectory)
+			cookie = AddDllDirectory(path);
+
+#ifdef DEBUG
+		snprintf(buffer,4096,"%s\\.bin\\Debug\\%s",datadir,dllname);
+#else
+		snprintf(buffer,4096,"%s\\%s",datadir,dllname);
+#endif // DEBUG
+
+		hModule = LoadLibrary(buffer);
+
+		trace("%s hModule=%p rc=%d",buffer,hModule,(int) GetLastError());
+
+		if(hModule == NULL)
+		{
+			// Enable DLL error popup and try again with full path
+			SetErrorMode(0);
+			hModule = LoadLibraryEx(buffer,NULL,LOAD_LIBRARY_SEARCH_DEFAULT_DIRS|LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR);
+		}
+
+		rc = GetLastError();
+
+		trace("%s hModule=%p rc=%d",buffer,hModule,(int) rc);
+	}
+	else
+	{
+		hModule = LoadLibrary(dllname);
+		rc = GetLastError();
+	}
+
+	SetErrorMode(errorMode);
+
+	trace("%s hModule=%p rc=%d",dllname,hModule,(int) rc);
+
+	if(cookie && RemoveDllDirectory)
+		RemoveDllDirectory(cookie);
+
+	if(kernel)
+		FreeLibrary(kernel);
+
+	if(!hModule)
+		return rc;
+
+	// Get library entry pointers
+	for(f=0;entry_point[f].name;f++)
+	{
+		void *ptr = (void *) GetProcAddress(hModule,entry_point[f].name);
+
+		trace("%d %s=%p\n",f,entry_point[f].name,ptr);
+
+		if(!ptr)
+		{
+			trace("Can´t load \"%s\"\n",entry_point[f].name);
+			hllapi_deinit();
+			return -ENOENT;
+		}
+		*entry_point[f].call = ptr;
+	}
+
+	return HLLAPI_STATUS_SUCCESS;
+ }
+
  __declspec (dllexport) DWORD __stdcall hllapi_init(LPSTR mode)
  {
  	if(!mode)
@@ -123,115 +304,21 @@
 
 	if(mode && *mode)
 	{
-		// Get pointers to the pipe based calls
-		int f;
+		if(strcasecmp(mode,"start") == 0 || strcasecmp(mode,"new") == 0)
+			return start_session();
 
-		trace("%s: Loading pipe based calls",__FUNCTION__);
-		for(f=0;entry_point[f].name;f++)
-			*entry_point[f].call = entry_point[f].pipe;
-
+		load_remote();
 	}
 	else
 	{
-		// Direct mode, load lib3270.dll, get pointers to the calls
-		static const char *dllname = "lib3270.dll." PACKAGE_VERSION;
-
-		int 		f;
-		HMODULE		kernel;
-		HANDLE		cookie		= NULL;
-		DWORD		rc;
-		HANDLE 		(*AddDllDirectory)(PCWSTR NewDirectory);
-		BOOL 	 	(*RemoveDllDirectory)(HANDLE Cookie);
-		UINT 		errorMode;
-		char		datadir[4096];
-
-		trace("hModule=%p",hModule);
-		if(hModule)
-			return -EBUSY;
-
-		kernel 				= LoadLibrary("kernel32.dll");
-		AddDllDirectory		= (HANDLE (*)(PCWSTR)) GetProcAddress(kernel,"AddDllDirectory");
-		RemoveDllDirectory	= (BOOL (*)(HANDLE)) GetProcAddress(kernel,"RemoveDllDirectory");
-
-		// Notify user in case of error loading protocol DLL
-		// http://msdn.microsoft.com/en-us/library/windows/desktop/ms680621(v=vs.85).aspx
-		errorMode = SetErrorMode(1);
-
-		memset(datadir,' ',4095);
-		datadir[4095] = 0;
-
-		if(hllapi_get_datadir(datadir))
-		{
-			char	buffer[4096];
-			wchar_t	path[4096];
-
-			mbstowcs(path, datadir, 4095);
-			trace("Datadir=[%s] AddDllDirectory=%p RemoveDllDirectory=%p\n",datadir,AddDllDirectory,RemoveDllDirectory);
-			if(AddDllDirectory)
-				cookie = AddDllDirectory(path);
-
-#ifdef DEBUG
-			snprintf(buffer,4096,"%s\\.bin\\Debug\\%s",datadir,dllname);
-#else
-			snprintf(buffer,4096,"%s\\%s",datadir,dllname);
-#endif // DEBUG
-
-			hModule = LoadLibrary(buffer);
-
-			trace("%s hModule=%p rc=%d",buffer,hModule,(int) GetLastError());
-
-			if(hModule == NULL)
-			{
-				// Enable DLL error popup and try again with full path
-				SetErrorMode(0);
-				hModule = LoadLibraryEx(buffer,NULL,LOAD_LIBRARY_SEARCH_DEFAULT_DIRS|LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR);
-			}
-
-			rc = GetLastError();
-
-			trace("%s hModule=%p rc=%d",buffer,hModule,(int) rc);
-		}
-		else
-		{
-			hModule = LoadLibrary(dllname);
-			rc = GetLastError();
-		}
-
-		SetErrorMode(errorMode);
-
-		trace("%s hModule=%p rc=%d",dllname,hModule,(int) rc);
-
-		if(cookie && RemoveDllDirectory)
-			RemoveDllDirectory(cookie);
-
-		if(kernel)
-			FreeLibrary(kernel);
-
-		if(!hModule)
-			return rc;
-
-		// Get library entry pointers
-		for(f=0;entry_point[f].name;f++)
-		{
-			void *ptr = (void *) GetProcAddress(hModule,entry_point[f].name);
-
-			trace("%d %s=%p\n",f,entry_point[f].name,ptr);
-
-			if(!ptr)
-			{
-				trace("Can´t load \"%s\"\n",entry_point[f].name);
-				hllapi_deinit();
-				return -ENOENT;
-			}
-			*entry_point[f].call = ptr;
-		}
-
+		load_dll();
 	}
+
 	// Get session handle
 	hSession = session_new((const char *) mode);
 	trace("%s ok hSession=%p\n",__FUNCTION__,hSession);
 
- 	return hSession ? 0 : -1;
+ 	return hSession ? HLLAPI_STATUS_SUCCESS : HLLAPI_STATUS_SYSTEM_ERROR;
  }
 
  __declspec (dllexport) DWORD __stdcall hllapi_deinit(void)
