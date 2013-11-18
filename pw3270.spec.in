@@ -227,9 +227,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/@PACKAGE_NAME@/sample/*
 
 %files plugin-dbus
+%defattr(-,root,root)
 %{_libdir}/@PACKAGE_NAME@-plugins/dbus3270.so
 
 %files -n %{name}-libreoffice
+%defattr(-,root,root)
 %dir %{_libdir}/libreoffice/share/extensions/%{name}
 %{_libdir}/libreoffice/share/extensions/%{name}/META-INF/manifest.xml
 %{_libdir}/libreoffice/share/extensions/%{name}/description.txt
