@@ -46,6 +46,7 @@
  #if defined(WIN32)
 	#include <windows.h>
 	#include <pw3270/ipcpackets.h>
+	#include <process.h>
  #else
 	#define HLLAPI_PACKET_IS_CONNECTED	"isConnected"
 	#define HLLAPI_PACKET_GET_CSTATE	"getConnectionState"
@@ -277,34 +278,99 @@
 		remote(const char *session)
 		{
 #if defined(WIN32)
-			static DWORD	  dwMode = PIPE_READMODE_MESSAGE;
-			char	 		  buffer[4096];
-			char			* str = strdup(session);
-			char			* ptr;
+			static DWORD			  dwMode = PIPE_READMODE_MESSAGE;
+			char	 				  buffer[4096];
+			char					* str;
+			char					* ptr;
+			time_t					  timer;
+			WIN32_FIND_DATA			  FindFileData;
+
 
 			hPipe  = INVALID_HANDLE_VALUE;
 
-			for(ptr=str;*ptr;ptr++)
+			if(strcasecmp(session,"start") == 0 || strcasecmp(session,"new") == 0)
 			{
-				if(*ptr == ':')
-					*ptr = '_';
+				// Start a new session
+				char 					buffer[80];
+				char 					appName[4096];
+				HKEY 					hKey	= 0;
+				unsigned long			datalen = 4096;
+				STARTUPINFO				si;
+				PROCESS_INFORMATION		pi;
+
+				// Get application path
+				*appName = 0;
+				if(RegOpenKeyEx(HKEY_LOCAL_MACHINE,"Software\\pw3270",0,KEY_QUERY_VALUE,&hKey) == ERROR_SUCCESS)
+				{
+					unsigned long datatype;					// #defined in winnt.h (predefined types 0-11)
+					if(RegQueryValueExA(hKey,"appName",NULL,&datatype,(LPBYTE) appName,&datalen) != ERROR_SUCCESS)
+						*appName = 0;
+					RegCloseKey(hKey);
+				}
+
+				trace("%s appname=%s\n",__FUNCTION__,appName);
+
+				snprintf(buffer,79,"%s --session=\"H%06d\"",appName,getpid());
+
+				ZeroMemory( &si, sizeof(si) );
+				si.cb = sizeof(si);
+				ZeroMemory( &pi, sizeof(pi) );
+
+				// si.dwFlags = STARTF_PREVENTPINNING;
+				trace("App: %s",appName);
+				trace("CmdLine: %s",buffer);
+
+				if(CreateProcess(NULL,buffer,NULL,NULL,0,NORMAL_PRIORITY_CLASS,NULL,NULL,&si,&pi))
+				{
+					CloseHandle( pi.hProcess );
+					CloseHandle( pi.hThread );
+				}
 				else
-					*ptr = tolower(*ptr);
+				{
+					throw exception("Can't start %s session",PACKAGE_NAME);
+					return;
+				}
+
+				snprintf(buffer,4095,"H%06d_a",getpid());
+				str = strdup(buffer);
+
+			}
+			else
+			{
+				// Use an existing session
+				str = strdup(session);
+
+				// Convert session name
+				for(ptr=str;*ptr;ptr++)
+				{
+					if(*ptr == ':')
+						*ptr = '_';
+					else
+						*ptr = tolower(*ptr);
+				}
 			}
 
 			snprintf(buffer,4095,"\\\\.\\pipe\\%s",str);
 
 			free(str);
 
-			if(!WaitNamedPipe(buffer,NMPWAIT_USE_DEFAULT_WAIT))
+			timer = time(0)+5;
+			while(hPipe == INVALID_HANDLE_VALUE && time(0) < timer)
 			{
-				exception e = exception(GetLastError(),"Service instance %s unavailable",str);
-				free(str);
-				throw e;
-				return;
+				Sleep(10);
+				hPipe = FindFirstFile(buffer, &FindFileData);
 			}
 
-			hPipe = CreateFile(buffer,GENERIC_WRITE|GENERIC_READ,0,NULL,OPEN_EXISTING,0,NULL);
+			if(hPipe != INVALID_HANDLE_VALUE)
+			{
+				CloseHandle(hPipe);
+				hPipe = CreateFile(buffer,GENERIC_WRITE|GENERIC_READ,0,NULL,OPEN_EXISTING,0,NULL);
+			}
+			else
+			{
+				throw exception(GetLastError(),"Timeout waiting for %s instance",PACKAGE_NAME);
+				return;
+			}
 
 			if(hPipe == INVALID_HANDLE_VALUE)
 			{
