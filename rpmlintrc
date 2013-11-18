@@ -1,0 +1,7 @@
+# Requires for ooRexx plugin
+addFilter("devel-file-in-non-devel-package.*/usr/lib.*")
+
+# Requires for Libreoffice (starts whith lib but isn't a library)
+addFilter("shlib-policy-nonversioned-dir.*/libreoffice")
+addFilter("explicit-lib-dependency libreoffice")
+
