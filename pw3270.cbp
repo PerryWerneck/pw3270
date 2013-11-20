@@ -271,9 +271,7 @@
 		<Unit filename="src/plugins/dbus3270/service.h" />
 		<Unit filename="src/plugins/dbus3270/test.sh" />
 		<Unit filename="src/plugins/hllapi/Makefile.in" />
-		<Unit filename="src/plugins/hllapi/calls.c">
-			<Option compilerVar="CC" />
-		</Unit>
+		<Unit filename="src/plugins/hllapi/calls.cc" />
 		<Unit filename="src/plugins/hllapi/client.h" />
 		<Unit filename="src/plugins/hllapi/hllapi.c">
 			<Option compilerVar="CC" />

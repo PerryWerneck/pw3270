@@ -114,6 +114,9 @@
 	int				  pfkey(int key);
 	int				  pakey(int key);
 
+	int				  erase_eof(void);
+	int				  print(void);
+
 	int               get_field_start(int baddr = -1);
 	int               get_field_len(int baddr = -1);
 	int               get_next_unprotected(int baddr = -1);
@@ -742,4 +745,14 @@ string * plugin::get_host_charset(void)
 string * plugin::get_display_charset(void)
 {
 	return new string(lib3270_get_display_charset(hSession));
+}
+
+int	plugin::erase_eof(void)
+{
+	return lib3270_eraseeof(hSession);
+}
+
+int	plugin::print(void)
+{
+	return lib3270_print(hSession);
 }

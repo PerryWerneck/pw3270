@@ -162,6 +162,10 @@
 		virtual int				  pakey(int key)									= 0;
 		virtual int				  quit(void)										= 0;
 
+		// Actions
+		virtual int				  erase_eof(void)									= 0;
+		virtual int				  print(void)										= 0;
+
 		// Field management
 		virtual int               get_field_start(int baddr = -1)                   = 0;
 		virtual int               get_field_len(int baddr = -1)                     = 0;
