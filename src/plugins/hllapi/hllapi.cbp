@@ -37,9 +37,9 @@
 					<Add option="-g" />
 				</Compiler>
 				<Environment>
-					<Variable name="LIB3270_CFLAGS" value='&quot;-I../../../src/include&quot;' />
-					<Variable name="LIB3270_LIBS" value='&quot;-L../../../.bin/Debug  -l3270&quot;' />
-					<Variable name="PW3270_LIBS" value='&quot;-L../../../.bin/Debug -lpw3270 -l3270&quot;' />
+					<Variable name="LIB3270_CFLAGS" value='&quot;-I..\..\..\src\include&quot;' />
+					<Variable name="LIB3270_LIBS" value='&quot;-L..\..\..\.bin\Debug  -l3270&quot;' />
+					<Variable name="PW3270_LIBS" value='&quot;-L..\..\..\.bin\Debug -lpw3270 -l3270&quot;' />
 				</Environment>
 				<MakeCommands>
 					<Build command="$make LIB3270_MODE=Debug -f $makefile $target" />
@@ -55,14 +55,11 @@
 			<Add option="-Wall" />
 		</Compiler>
 		<Unit filename="Makefile.in" />
-		<Unit filename="calls.c">
-			<Option compilerVar="CC" />
-		</Unit>
+		<Unit filename="calls.cc" />
 		<Unit filename="client.h" />
 		<Unit filename="hllapi.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="packets.h" />
 		<Unit filename="pluginmain.c">
 			<Option compilerVar="CC" />
 		</Unit>

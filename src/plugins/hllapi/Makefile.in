@@ -31,7 +31,9 @@
 MODULE_NAME=hllapi
 DEPENDS=*.h ../../include/*.h ../../include/lib3270/*.h Makefile
 PLUGIN_SRC=pluginmain.c
-HLLAPI_SRC=hllapi.c calls.c remote.c
+HLLAPI_SRC=hllapi.c calls.c
+
+CLASSLIBDIR=../../classlib
 
 #---[ Paths ]------------------------------------------------------------------
 
@@ -48,8 +50,8 @@ OBJEXT = o
 #---[ Tools ]------------------------------------------------------------------
 
 MKDIR=@MKDIR_P@
-CC=@CC@
-LD=@CC@
+CC=@CXX@
+LD=@CXX@
 MSGCAT=@MSGCAT@
 XGETTEXT=@XGETTEXT@
 
@@ -81,14 +83,25 @@ ifeq ($(LIB3270_MODE),Default)
 	PW3270_CFLAGS ?= `pkg-config --cflags pw3270 lib3270`
 endif
 
-
 GTK_CFLAGS ?= @GTK_CFLAGS@ @GTKMAC_CFLAGS@
 GTK_LIBS ?= @GTK_LIBS@ @GTKMAC_LIBS@
+
+include $(CLASSLIBDIR)/class.mak
+
+$(OBJDBG)/%.o: %.cc $(DEPENDS)
+	@echo "  CC   `basename $@`"
+	@$(MKDIR) `dirname $@`
+	@$(CXX) $(CFLAGS) $(DEBUG_CFLAGS) $(LIB3270_CFLAGS) $(GTK_CFLAGS) -o $@ -c $<
 
 $(OBJDBG)/%.o: %.c $(DEPENDS)
 	@echo "  CC   `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(CC) $(CFLAGS) $(DEBUG_CFLAGS) $(LIB3270_CFLAGS) $(GTK_CFLAGS) -o $@ -c $<
+
+$(OBJRLS)/%.o: %.cc $(DEPENDS)
+	@echo "  CC   `basename $@`"
+	@$(MKDIR) `dirname $@`
+	@$(CXX) $(CFLAGS) $(LIB3270_CFLAGS) $(GTK_CFLAGS) -o $@ -c $<
 
 $(OBJRLS)/%.o: %.c $(DEPENDS)
 	@echo "  CC   `basename $@`"
@@ -119,17 +132,17 @@ $(BINDBG)/plugins/$(MODULE_NAME)@DLLEXT@: $(foreach SRC, $(basename $(PLUGIN_SRC
 	@$(MKDIR) `dirname $@`
 	@$(LD) $(DLL_FLAGS) @LDSOFLAGS@ $(LDFLAGS) -o $@ $^ $(LIBS) $(PW3270_LIBS) $(GTK_LIBS)
 
-$(BINDBG)/libhllapi@DLLEXT@: $(foreach SRC, $(basename $(HLLAPI_SRC)), $(OBJDBG)/$(SRC).o)
+$(BINDBG)/libhllapi@DLLEXT@: $(foreach SRC, $(basename $(HLLAPI_SRC)), $(OBJDBG)/$(SRC).o) $(CLASS_DEBUG_OBJECTS)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(LD) $(DLL_FLAGS) @LDSOFLAGS@ $(LDFLAGS) @LDLIBFLAGS@ -o $@ $^ $(LIBS)
+	@$(LD) $(DLL_FLAGS) @LDSOFLAGS@ $(LDFLAGS) @LDLIBFLAGS@ -o $@ $^ $(LIBS) $(CLASS_LIBS)
 
 #---[ Misc targets ]-----------------------------------------------------------
 
-$(BINDBG)/testprogram@EXEEXT@: testprogram.c $(BINDBG)/libhllapi@DLLEXT@
+$(BINDBG)/testprogram@EXEEXT@: $(OBJDBG)/testprogram.o $(BINDBG)/libhllapi@DLLEXT@
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CC) $(CFLAGS) $(PW3270_CFLAGS) -L$(BINDBG) $(DEBUG_CFLAGS) -lhllapi -o $@ testprogram.c
+	@$(CXX) $(CFLAGS) $(PW3270_CFLAGS) -L$(BINDBG) $(DEBUG_CFLAGS) -lhllapi -o $@ $(OBJDBG)/testprogram.o
 
 test: $(BINDBG)/testprogram@EXEEXT@
 

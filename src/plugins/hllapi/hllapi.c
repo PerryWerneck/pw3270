@@ -91,7 +91,7 @@
  LIB3270_EXPORT int hllapi(const unsigned long *func, char *buffer, unsigned short *length, unsigned short *rc)
 #endif // _WIN32
 {
-	int f;
+	unsigned int f;
 
 	trace("%s(%d)",__FUNCTION__,*func);
 
@@ -123,7 +123,7 @@ static int connect_ps(char *buffer, unsigned short *length, unsigned short *rc)
 	{
 		int sz = strlen(buffer);
 
-		tempbuffer = malloc(sz+2);
+		tempbuffer = (char *) malloc(sz+2);
 		strcpy(tempbuffer,buffer);
 		tempbuffer[sz-1] = ':';
 		tempbuffer[sz]   = buffer[sz-1];
@@ -197,7 +197,7 @@ static int input_string(char *input, unsigned short *length, unsigned short *rc)
 	if(*length > 0 && *length < szText)
 		szText = *length;
 
-	text = malloc(szText+2);
+	text = (char *) malloc(szText+2);
 	memcpy(text,input,szText);
 	text[szText] = 0;
 

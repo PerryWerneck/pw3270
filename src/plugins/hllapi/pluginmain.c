@@ -32,6 +32,7 @@
  */
 
  #include "server.h"
+ #include <windows.h>
  #include <pw3270/plugin.h>
  #include <pw3270/v3270.h>
  #include <pw3270/ipcpackets.h>
@@ -42,18 +43,20 @@
 
  #pragma pack(1)
 
+ enum PIPE_STATE
+ {
+	PIPE_STATE_WAITING,
+	PIPE_STATE_READ,
+	PIPE_STATE_PENDING_READ,
+	PIPE_STATE_UNDEFINED
+ };
+
  typedef struct _pipe_source
  {
 	GSource 			gsrc;
 	HANDLE				hPipe;
 
-	enum _PIPE_STATE
-	{
-		PIPE_STATE_WAITING,
-		PIPE_STATE_READ,
-		PIPE_STATE_PENDING_READ,
-		PIPE_STATE_UNDEFINED,
-	} 					state;
+	enum PIPE_STATE		state;
 
 	OVERLAPPED			overlap;
 	unsigned char		buffer[PIPE_BUFFER_LENGTH+1];
@@ -145,7 +148,7 @@
 	if(text)
 	{
 		szBlock = sizeof(struct hllapi_packet_text)+strlen(text);
-		pkt = g_malloc0(szBlock);
+		pkt = (struct hllapi_packet_text *) g_malloc0(szBlock);
 		pkt->packet_id = 0;
 		strcpy(pkt->text,text);
 		lib3270_free(text);
@@ -153,7 +156,7 @@
 	else
 	{
 		szBlock = sizeof(struct hllapi_packet_text);
-		pkt = g_malloc0(szBlock);
+		pkt = (struct hllapi_packet_text *) g_malloc0(szBlock);
 		pkt->packet_id = errno ? errno : -1;
 	}
 
@@ -280,7 +283,7 @@
 
 	case HLLAPI_PACKET_SET_TOGGLE:
 		send_result(source,lib3270_set_toggle(lib3270_get_default_session_handle(),
-												((struct hllapi_packet_set *) source->buffer)->id,
+												(LIB3270_TOGGLE) ((struct hllapi_packet_set *) source->buffer)->id,
 												((struct hllapi_packet_set *) source->buffer)->value));
 		break;
 
@@ -456,7 +459,7 @@
 
 	FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM |FORMAT_MESSAGE_IGNORE_INSERTS, NULL, errcode, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR) &lpMsgBuf, 0, NULL);
 
-	for(ptr=lpMsgBuf;*ptr && *ptr != '\n';ptr++);
+	for(ptr= (char *) lpMsgBuf;*ptr && *ptr != '\n';ptr++);
 	*ptr = 0;
 
 	va_start(arg_ptr, fmt);
