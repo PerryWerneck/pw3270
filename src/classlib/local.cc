@@ -305,6 +305,8 @@
 		const char *	(*_get_display_charset)(H3270 *hSession);
 		int				(*_set_host_charset)(H3270 *hSession, const char *name);
 		const char * 	(*_get_host_charset)(H3270 *hSession);
+		int 			(*_print)(H3270 *hSession);
+		int				(*_erase_eof)(H3270 *hSession);
 
 	public:
 
@@ -354,6 +356,8 @@
 				{ (void **) & _get_display_charset,		"lib3270_get_display_charset"		},
 				{ (void **) & _set_host_charset,		"lib3270_set_host_charset"			},
 				{ (void **) & _get_host_charset,		"lib3270_get_host_charset"			},
+				{ (void **) & _erase_eof,				"lib3270_eraseeof"					},
+				{ (void **) & _print,					"lib3270_print"						},
 
 			};
 
@@ -560,6 +564,17 @@
 		{
 			return new string(_get_host_charset(hSession));
 		}
+
+		int	erase_eof(void)
+		{
+			return _erase_eof(hSession);
+		}
+
+		int	print(void)
+		{
+			return _print(hSession);
+		}
+
 
  	};
 

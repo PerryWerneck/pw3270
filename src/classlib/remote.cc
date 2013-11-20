@@ -55,6 +55,8 @@
 	#define HLLAPI_PACKET_GET_CURSOR	"getCursorAddress"
 	#define HLLAPI_PACKET_ENTER			"enter"
 	#define HLLAPI_PACKET_QUIT			"quit"
+	#define HLLAPI_PACKET_ERASE_EOF		"eraseEOF"
+	#define HLLAPI_PACKET_PRINT			"print"
  #endif // WIN32
 
  #include <pw3270/class.h>
@@ -300,12 +302,23 @@
 
 				// Get application path
 				*appName = 0;
-				if(RegOpenKeyEx(HKEY_LOCAL_MACHINE,"Software\\pw3270",0,KEY_QUERY_VALUE,&hKey) == ERROR_SUCCESS)
+				if(RegOpenKeyEx(HKEY_LOCAL_MACHINE,"Software\\pw3270",0,KEY_QUERY_VALUE,&hKey) != ERROR_SUCCESS)
+				{
+					throw exception("Can't open key %s","HKLM\\Software\\pw3270");
+					return;
+				}
+				else
 				{
 					unsigned long datatype;					// #defined in winnt.h (predefined types 0-11)
 					if(RegQueryValueExA(hKey,"appName",NULL,&datatype,(LPBYTE) appName,&datalen) != ERROR_SUCCESS)
 						*appName = 0;
 					RegCloseKey(hKey);
+				}
+
+				if(!*appName)
+				{
+					throw exception("key %s\\appName is invalid","HKLM\\Software\\pw3270");
+					return;
 				}
 
 				trace("%s appname=%s\n",__FUNCTION__,appName);
@@ -327,7 +340,7 @@
 				}
 				else
 				{
-					throw exception("Can't start %s session",PACKAGE_NAME);
+					throw exception("Can't start %s",appName);
 					return;
 				}
 
@@ -354,11 +367,11 @@
 
 			free(str);
 
-			timer = time(0)+5;
+			timer = time(0)+20;
 			while(hPipe == INVALID_HANDLE_VALUE && time(0) < timer)
 			{
-				Sleep(10);
 				hPipe = FindFirstFile(buffer, &FindFileData);
+				Sleep(10);
 			}
 
 			if(hPipe != INVALID_HANDLE_VALUE)
@@ -1164,6 +1177,16 @@
 		}
 
 #endif // HAVE_DBUS
+
+		int	erase_eof(void)
+		{
+			return query_intval(HLLAPI_PACKET_ERASE_EOF);
+		}
+
+		int	print(void)
+		{
+			return query_intval(HLLAPI_PACKET_PRINT);
+		}
 
  	};
 
