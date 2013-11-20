@@ -45,6 +45,8 @@
 
  __declspec (dllexport) DWORD __stdcall hllapi_init(LPSTR mode)
  {
+ 	trace("%s(%s)",__FUNCTION__,mode);
+
 	try
 	{
 		if(hSession)
@@ -61,6 +63,8 @@
 
  __declspec (dllexport) DWORD __stdcall hllapi_deinit(void)
  {
+ 	trace("%s()",__FUNCTION__);
+
  	try
  	{
 		if(hSession)

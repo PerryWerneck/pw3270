@@ -37,7 +37,7 @@
 
  int main(int numpar, char *param[])
  {
- 	const char *session = "new";
+ 	const char *session = "pw3270:a";
 
  	printf("init(%s)=%d\n",session,(int) hllapi_init((LPSTR) session));
 	printf("revision=%d\n",(int) hllapi_get_revision());
