@@ -468,3 +468,14 @@ void pw3270_dbus_set_host_charset(PW3270Dbus *object, const gchar *charset, DBus
 {
 	dbus_g_method_return(context,lib3270_set_host_charset(pw3270_dbus_get_session_handle(object),charset));
 }
+
+void pw3270_dbus_erase_eof(PW3270Dbus *object, DBusGMethodInvocation *context)
+{
+	trace("%s object=%p context=%p",__FUNCTION__,object,context);
+	dbus_g_method_return(context,lib3270_eraseeof(pw3270_dbus_get_session_handle(object)));
+}
+
+void pw3270_dbus_print(PW3270Dbus *object, DBusGMethodInvocation *context)
+{
+	dbus_g_method_return(context,lib3270_print(pw3270_dbus_get_session_handle(object)));
+}
