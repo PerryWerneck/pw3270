@@ -41,11 +41,11 @@
 
  	printf("init(%s)=%d\n",session,(int) hllapi_init((LPSTR) session));
 	printf("revision=%d\n",(int) hllapi_get_revision());
-	printf("connect=%d\n",(int) hllapi_connect((char *) "fandezhi.efglobe.com:23",0));
-	printf("wait=%d\n",(int) hllapi_wait(3));
+	printf("connect=%d\n",(int) hllapi_connect((char *) "fandezhi.efglobe.com:23",1));
+	printf("wait_for_ready=%d\n",(int) hllapi_wait_for_ready(10));
 	printf("connected=%s\n",(int) hllapi_is_connected() ? "Yes" : "No");
 
-//	printf("disconnect=%d\n",(int) hllapi_disconnect("fandezhi.efglobe.com:23",1));
+//	printf("disconnect=%d\n",(int) hllapi_disconnect());
 
 
 	printf("deinit=%d\n",(int) hllapi_deinit());
