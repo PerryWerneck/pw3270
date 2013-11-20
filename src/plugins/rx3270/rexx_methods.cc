@@ -44,11 +44,13 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
-RexxMethod1(int, rx3270_method_init, CSTRING, type)
+RexxMethod1(int, rx3270_method_init, OPTIONAL_CSTRING, type)
 {
 	// Set session class in rexx object
 	try
 	{
+		if(!(type && *type))
+			type = "";
 		RexxPointerObject sessionPtr = context->NewPointer(session::create(type));
 		context->SetObjectVariable("CSELF", sessionPtr);
 	}
