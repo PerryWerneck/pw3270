@@ -64,6 +64,17 @@
 	/**
 	 * Write on trace file.
 	 *
+	 * Write text on trace file, if network trace is enabled.
+	 *
+	 * @param fmt 	String format.
+	 * @param ...	Arguments.
+	 *
+	 */
+	LIB3270_EXPORT void lib3270_write_nettrace(H3270 *session, const char *fmt, ...);
+
+	/**
+	 * Write on trace file.
+	 *
 	 * Write text on trace file, if event is enabled.
 	 *
 	 * @param fmt 	String format.

@@ -102,6 +102,7 @@
 #include "screen.h"
 
 #include <lib3270/internals.h>
+#include <lib3270/trace.h>
 
 #if !defined(TELOPT_NAWS) /*[*/
 #define TELOPT_NAWS	31
@@ -1202,33 +1203,6 @@ void net_input(H3270 *hSession)
 
 		lib3270_data_recv(hSession, nr, buffer);
 
-/*
-		trace_netdata('<', session->netrbuf, nr);
-
-		session->ns_brcvd += nr;
-		for (cp = session->netrbuf; cp < (session->netrbuf + nr); cp++)
-		{
-			if (telnet_fsm(session,*cp))
-			{
-				(void) ctlr_dbcs_postprocess(hSession);
-				host_disconnect(session,True);
-				return;
-			}
-		}
-
-#if defined(X3270_ANSI)
-		if (IN_ANSI)
-		{
-			(void) ctlr_dbcs_postprocess(hSession);
-		}
-
-		if (session->ansi_data)
-		{
-			trace_dsn(session,"\n");
-			session->ansi_data = 0;
-		}
-#endif // X3270_ANSI
-*/
 	}
 
 }
@@ -2736,29 +2710,68 @@ opt(unsigned char c)
 
 void trace_netdata(H3270 *hSession, char direction, unsigned const char *buf, int len)
 {
-	int offset;
-	struct timeval ts;
-	double tdiff;
 
-	if (!lib3270_get_toggle(hSession,LIB3270_TOGGLE_DS_TRACE))
-		return;
-
-	(void) gettimeofday(&ts, (struct timezone *)NULL);
-	if (IN_3270)
+	// IS DS trace ON?
+	if (lib3270_get_toggle(hSession,LIB3270_TOGGLE_DS_TRACE))
 	{
-		tdiff = ((1.0e6 * (double)(ts.tv_sec - hSession->ds_ts.tv_sec)) +
-			(double)(ts.tv_usec - hSession->ds_ts.tv_usec)) / 1.0e6;
-		trace_dsn(hSession,"%c +%gs\n", direction, tdiff);
+		int offset;
+		struct timeval ts;
+		double tdiff;
+
+		(void) gettimeofday(&ts, (struct timezone *)NULL);
+		if (IN_3270)
+		{
+			tdiff = ((1.0e6 * (double)(ts.tv_sec - hSession->ds_ts.tv_sec)) +
+				(double)(ts.tv_usec - hSession->ds_ts.tv_usec)) / 1.0e6;
+			trace_dsn(hSession,"%c +%gs\n", direction, tdiff);
+		}
+
+		hSession->ds_ts = ts;
+		for (offset = 0; offset < len; offset++)
+		{
+			if (!(offset % LINEDUMP_MAX))
+				trace_dsn(hSession,"%s%c 0x%-3x ",(offset ? "\n" : ""), direction, offset);
+			trace_dsn(hSession,"%02x", buf[offset]);
+		}
+		trace_dsn(hSession,"\n");
 	}
 
-	hSession->ds_ts = ts;
-	for (offset = 0; offset < len; offset++)
+	if (lib3270_get_toggle(hSession,LIB3270_TOGGLE_NETWORK_TRACE))
 	{
-		if (!(offset % LINEDUMP_MAX))
-			trace_dsn(hSession,"%s%c 0x%-3x ",(offset ? "\n" : ""), direction, offset);
-		trace_dsn(hSession,"%02x", buf[offset]);
+		char l1[82];
+		char l2[82];
+		char l3[82];
+
+		int offset;
+		int col = 0;
+
+		for (offset = 0; offset < len; offset++)
+		{
+			unsigned char text[4];
+
+			text[0] = hSession->charset.ebc2asc[buf[offset]];
+			l1[col] = (text[0] >= ' ' ? text[0] : '.');
+
+			snprintf((char *) text,4,"%02x",buf[offset]);
+			l2[col] = text[0];
+			l3[col] = text[1];
+
+			if(++col >= 80)
+			{
+				l1[col] = l2[col] = l3[col] = 0;
+				lib3270_write_nettrace(hSession,"%c\t%s\n\t%s\n\t%s\n",direction,l1,l2,l3);
+				col = 0;
+			}
+		}
+
+		if(col)
+		{
+			l1[col] = l2[col] = l3[col] = 0;
+			lib3270_write_nettrace(hSession,"%c\t%s\n\t%s\n\t%s\n",direction,l1,l2,l3);
+		}
+
 	}
-	trace_dsn(hSession,"\n");
+
 }
 #endif // X3270_TRACE
 

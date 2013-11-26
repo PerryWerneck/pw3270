@@ -117,6 +117,8 @@
 		LIB3270_TOGGLE_VIEW_FIELD,					/**< View Field attribute */
 		LIB3270_TOGGLE_ALTSCREEN,					/**< auto resize on altscreen */
 		LIB3270_TOGGLE_KEEP_ALIVE,					/**< Enable network keep-alive with SO_KEEPALIVE */
+		LIB3270_TOGGLE_NETWORK_TRACE,				/**< Enable network in/out trace */
+
 
 //		LIB3270_TOGGLE_ALT_CURSOR,
 //		LIB3270_TOGGLE_AID_WAIT,

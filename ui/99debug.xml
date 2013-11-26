@@ -37,10 +37,11 @@
 
 		<menu name='View' >
 			<menu name='TraceOptions' label='Trace' >
-				<menuitem action='toggle' id='dstrace' label='DS Trace' />
-				<menuitem action='toggle' id='screentrace' label='Screen Trace' />
-				<menuitem action='toggle' id='eventtrace' label='Event Trace' />
-				<menuitem action='toggle' id='fieldattr' label='View Field Delimiters' />
+				<menuitem action='toggle' id='dstrace'		label='DS Trace' />
+				<menuitem action='toggle' id='screentrace'	label='Screen Trace' />
+				<menuitem action='toggle' id='nettrace' 	label='Network Trace' />
+				<menuitem action='toggle' id='eventtrace'	label='Event Trace' />
+				<menuitem action='toggle' id='fieldattr'	label='View Field Delimiters' />
 			</menu>
 		</menu>
 

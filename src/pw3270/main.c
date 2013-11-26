@@ -266,6 +266,7 @@ static void trace_window_destroy(GtkWidget *widget, H3270 *hSession)
 	lib3270_set_toggle(hSession,LIB3270_TOGGLE_DS_TRACE,0);
 	lib3270_set_toggle(hSession,LIB3270_TOGGLE_SCREEN_TRACE,0);
 	lib3270_set_toggle(hSession,LIB3270_TOGGLE_EVENT_TRACE,0);
+	lib3270_set_toggle(hSession,LIB3270_TOGGLE_NETWORK_TRACE,0);
 	trace_window = NULL;
 }
 

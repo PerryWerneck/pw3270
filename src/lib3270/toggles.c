@@ -82,7 +82,7 @@ static const char *toggle_names[LIB3270_TOGGLE_COUNT] =
 		"fieldattr",				/**< View Field attribute */
 		"altscreen",				/**< auto resize on altscreen */
 		"keepalive",				/**< Enable network keep-alive with SO_KEEPALIVE */
-
+		"nettrace",					/**< Enable network in/out trace */
 
 };
 
