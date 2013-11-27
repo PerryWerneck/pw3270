@@ -2711,8 +2711,48 @@ opt(unsigned char c)
 void trace_netdata(H3270 *hSession, char direction, unsigned const char *buf, int len)
 {
 
-	// IS DS trace ON?
-	if (lib3270_get_toggle(hSession,LIB3270_TOGGLE_DS_TRACE))
+	if (lib3270_get_toggle(hSession,LIB3270_TOGGLE_NETWORK_TRACE))
+	{
+		char l1[82];
+		char l2[82];
+		char l3[82];
+
+		int offset;
+		int col = 0;
+
+        time_t  ltime;
+
+        time(&ltime);
+        strftime(l1, 81, "%x %X", localtime(&ltime));
+		lib3270_write_nettrace(hSession,"%c %s %s data len=%d\n\n",direction,l1,direction == '>' ? "outbound" : "inbound", len);
+
+		for (offset = 0; offset < len; offset++)
+		{
+			unsigned char text[4];
+
+			text[0] = hSession->charset.ebc2asc[buf[offset]];
+			l1[col] = (text[0] >= ' ' ? text[0] : '.');
+
+			snprintf((char *) text,4,"%02x",buf[offset]);
+			l2[col] = text[0];
+			l3[col] = text[1];
+
+			if(++col >= 80)
+			{
+				l1[col] = l2[col] = l3[col] = 0;
+				lib3270_write_nettrace(hSession,"\t%s\n\t%s\n\t%s\n\n",l1,l2,l3);
+				col = 0;
+			}
+		}
+
+		if(col)
+		{
+			l1[col] = l2[col] = l3[col] = 0;
+			lib3270_write_nettrace(hSession,"\t%s\n\t%s\n\t%s\n\n",l1,l2,l3);
+		}
+
+	}
+	else if (lib3270_get_toggle(hSession,LIB3270_TOGGLE_DS_TRACE))
 	{
 		int offset;
 		struct timeval ts;
@@ -2734,42 +2774,6 @@ void trace_netdata(H3270 *hSession, char direction, unsigned const char *buf, in
 			trace_dsn(hSession,"%02x", buf[offset]);
 		}
 		trace_dsn(hSession,"\n");
-	}
-
-	if (lib3270_get_toggle(hSession,LIB3270_TOGGLE_NETWORK_TRACE))
-	{
-		char l1[82];
-		char l2[82];
-		char l3[82];
-
-		int offset;
-		int col = 0;
-
-		for (offset = 0; offset < len; offset++)
-		{
-			unsigned char text[4];
-
-			text[0] = hSession->charset.ebc2asc[buf[offset]];
-			l1[col] = (text[0] >= ' ' ? text[0] : '.');
-
-			snprintf((char *) text,4,"%02x",buf[offset]);
-			l2[col] = text[0];
-			l3[col] = text[1];
-
-			if(++col >= 80)
-			{
-				l1[col] = l2[col] = l3[col] = 0;
-				lib3270_write_nettrace(hSession,"%c\t%s\n\t%s\n\t%s\n",direction,l1,l2,l3);
-				col = 0;
-			}
-		}
-
-		if(col)
-		{
-			l1[col] = l2[col] = l3[col] = 0;
-			lib3270_write_nettrace(hSession,"%c\t%s\n\t%s\n\t%s\n",direction,l1,l2,l3);
-		}
-
 	}
 
 }
