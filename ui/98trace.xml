@@ -31,19 +31,16 @@
 <ui>
 	<menubar name='topmenu'>
 
-		<menu name='EditMenu' label='_Edit' >
-			<menuitem action='copyashtml' label='Copy as HTML' />
-		</menu>
-
-		<menu name='debugmenu' label='Debug' >
-			<menuitem action='testpattern' group='offline' label='Show test pattern' />
-			<menuitem action='charsettable' group='offline' label='Display current charset' />
-			<menuitem action='reload' label='Reload buffer contents' />
-			<menuitem action='toggle' id='gdkdebug' label='Debug window updates' />
+		<menu name='View' >
+			<menu name='TraceOptions' label='Trace' >
+				<menuitem action='toggle' id='dstrace'		label='DS Trace' />
+				<menuitem action='toggle' id='screentrace'	label='Screen Trace' />
+				<menuitem action='toggle' id='nettrace' 	label='Network Trace' />
+				<menuitem action='toggle' id='eventtrace'	label='Event Trace' />
+				<menuitem action='toggle' id='fieldattr'	label='View Field Delimiters' />
+			</menu>
 		</menu>
 
 	</menubar>
-
-	<!-- accelerator name='ctrl' action='Enter' key='Control_R' / -->
 
 </ui>

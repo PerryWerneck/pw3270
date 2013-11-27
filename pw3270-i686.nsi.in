@@ -141,6 +141,18 @@ SubSection "@PACKAGE@" SecMain
 
 	SubSectionEnd
 
+	SubSection "Menus, Keypads & Toolbars" SecMenu
+
+		Section /o "View trace Menu" TraceMenu
+			file "/oname=$INSTDIR\ui\98trace.xml" "ui\98trace.xml"
+		sectionEnd
+
+		Section /o "Application debug" DBGMenu
+			file "/oname=$INSTDIR\ui\99debug.xml" "ui\99debug.xml"
+		sectionEnd
+
+	SubSectionEnd
+
 SubSectionEnd
 
 Section "GTK @GTK_MODVERSION@ Runtime" SecGTK
