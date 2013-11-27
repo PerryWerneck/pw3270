@@ -51,6 +51,7 @@ OBJEXT = o
 
 MKDIR=@MKDIR_P@
 CC=@CXX@
+CXX=@CXX@
 LD=@CXX@
 MSGCAT=@MSGCAT@
 XGETTEXT=@XGETTEXT@
@@ -118,7 +119,7 @@ $(BINRLS)/plugins/$(MODULE_NAME)@DLLEXT@: $(foreach SRC, $(basename $(PLUGIN_SRC
 	@$(MKDIR) `dirname $@`
 	@$(LD) $(DLL_FLAGS) @LDSOFLAGS@ $(LDFLAGS) -o $@ $^ $(LIBS) $(PW3270_LIBS) $(GTK_LIBS)
 
-$(BINRLS)/libhllapi@DLLEXT@: $(foreach SRC, $(basename $(HLLAPI_SRC)), $(OBJRLS)/$(SRC).o)
+$(BINRLS)/libhllapi@DLLEXT@: $(foreach SRC, $(basename $(HLLAPI_SRC)), $(OBJRLS)/$(SRC).o) $(CLASS_RELEASE_OBJECTS)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(LD) $(DLL_FLAGS) @LDSOFLAGS@ $(LDFLAGS) @LDLIBFLAGS@ -o $@ $^ $(LIBS)

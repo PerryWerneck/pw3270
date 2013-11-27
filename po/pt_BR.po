@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-26 10:49-0200\n"
+"POT-Creation-Date: 2013-11-27 08:55-0200\n"
 "PO-Revision-Date: 2013-11-12 08:07-0200\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <perry.werneck@gmail.com>\n"
@@ -84,12 +84,12 @@ msgstr "%s: Tabulação vertical não é suportada"
 msgid "%s: unknown family %d"
 msgstr "%s: Familia %d é inválida"
 
-#: telnet.c:1172
+#: telnet.c:1173
 #, c-format
 msgid "%s:%d"
 msgstr "%s:%d"
 
-#: main.c:418
+#: main.c:419
 msgid "- 3270 Emulator for Gtk"
 msgstr "- Emulador 3270 para GTK"
 
@@ -170,7 +170,7 @@ msgstr ""
 msgid "<b>SSL state is undefined</b>Unexpected SSL status %ld"
 msgstr "<b>Estado do SSL é indefinido</b>Estado SSL inesperado %ld"
 
-#: main.c:438
+#: main.c:439
 msgid ""
 "<b>Valid options:</b>\n"
 "\n"
@@ -206,7 +206,7 @@ msgstr "Sobre a segurança"
 msgid "Action failed"
 msgstr "Ação falhou"
 
-#: ui/00default.xml:329
+#: ui/00default.xml:330
 msgid "Add to copy"
 msgstr "Adicionar à cópia"
 
@@ -214,7 +214,7 @@ msgstr "Adicionar à cópia"
 msgid "Add/Remove _CR at end of line"
 msgstr "Adicionar/Remover _CR no final da linha"
 
-#: ui/00default.xml:397
+#: ui/00default.xml:398
 msgid "Alert sound"
 msgstr "Aviso sonoro"
 
@@ -223,7 +223,7 @@ msgid "An error occurred trying to allocate memory. This should never happen."
 msgstr ""
 "Ocorreu um erro ao tentar alocar memória. Isso nunca deveria acontecer."
 
-#: main.c:396 main.c:398
+#: main.c:397 main.c:399
 msgid "Application name"
 msgstr "Nome da aplicação"
 
@@ -244,7 +244,7 @@ msgstr "Divergência nos números de série da autoridade e emissor "
 msgid "Authority and subject key identifier mismatch"
 msgstr "Authority and subject key identifier mismatch"
 
-#: ui/00default.xml:392
+#: ui/00default.xml:393
 msgid "Auto-Reconnect"
 msgstr "Reconectar automaticamente"
 
@@ -260,7 +260,7 @@ msgstr "BLKSIZE:"
 msgid "Background"
 msgstr "Fundo"
 
-#: telnet.c:327
+#: telnet.c:328
 msgid "Bad winsock version"
 msgstr "Versão winsock inválida"
 
@@ -268,11 +268,11 @@ msgstr "Versão winsock inválida"
 msgid "Black"
 msgstr "Preto"
 
-#: ui/00default.xml:390
+#: ui/00default.xml:391
 msgid "Blank Fill"
 msgstr "Completar com espaços"
 
-#: ui/00default.xml:383
+#: ui/00default.xml:384
 msgid "Blinking Cursor"
 msgstr "Cursor piscante"
 
@@ -280,7 +280,7 @@ msgstr "Cursor piscante"
 msgid "Blue"
 msgstr "Azul"
 
-#: ui/00default.xml:393
+#: ui/00default.xml:394
 msgid "Bold"
 msgstr "Negrito"
 
@@ -292,7 +292,7 @@ msgstr "Portal do Software Público Brasileiro"
 msgid "Break"
 msgstr "Break"
 
-#: telnet.c:2140
+#: telnet.c:2114
 msgid "Broken pipe"
 msgstr "Conexão interrompida"
 
@@ -320,7 +320,7 @@ msgstr "Tema de c_ores:"
 msgid "C_urrent"
 msgstr "At_ual"
 
-#: toggles.c:177 telnet.c:669
+#: toggles.c:177 telnet.c:670
 #, c-format
 msgid "Can't %s network keep-alive"
 msgstr "Can't %s network keep-alive"
@@ -330,7 +330,7 @@ msgstr "Can't %s network keep-alive"
 msgid "Can't accept unnamed %s"
 msgstr "Não posso aceitar elemento %s sem nome"
 
-#: telnet.c:683
+#: telnet.c:684
 #, c-format
 msgid "Can't connect to %s:%d"
 msgstr "Não foi possível conectar a %s:%d"
@@ -361,7 +361,7 @@ msgstr "Não foi possível carregar %s"
 msgid "Can't load file"
 msgstr "Não foi possível carregar arquivo"
 
-#: main.c:293
+#: main.c:294
 msgid "Can't open file"
 msgstr "Não foi possível abrir arquivo"
 
@@ -418,7 +418,7 @@ msgstr ""
 "Não foi possível salvar a seleção para o arquivo\n"
 "%s"
 
-#: main.c:291
+#: main.c:292
 #, c-format
 msgid "Can't save trace data to file %s"
 msgstr "Não foi possível salvar trace no arquivo %s"
@@ -443,7 +443,7 @@ msgstr "Não foi possível iniciar transferência de arquivo"
 msgid "Can't start upload"
 msgstr "Não foi possível iniciar upload"
 
-#: telnet.c:328
+#: telnet.c:329
 #, c-format
 msgid "Can't use winsock version %d.%d"
 msgstr "Não é possível usar a Winsock versão %d.%d"
@@ -452,7 +452,7 @@ msgstr "Não é possível usar a Winsock versão %d.%d"
 msgid "Cancelled by user"
 msgstr "Cancelado pelo usuário"
 
-#: telnet.c:720
+#: telnet.c:721
 msgid "Cannot create socket handle"
 msgstr "Não foi possível criar um manipulador de socket"
 
@@ -496,7 +496,7 @@ msgstr "Tema de cores:"
 msgid "Color setup"
 msgstr "Configuração de cores"
 
-#: ui/00default.xml:372
+#: ui/00default.xml:373
 msgid "Colors"
 msgstr "Cores"
 
@@ -508,15 +508,15 @@ msgstr "Command:"
 msgid "Complete"
 msgstr "Completo"
 
-#: ui/00default.xml:382
+#: ui/00default.xml:383
 msgid "Connect on startup"
 msgstr "Conectar ao iniciar"
 
-#: telnet.c:2144
+#: telnet.c:2118
 msgid "Connection reset by peer"
 msgstr "Conexão foi cancelada pelo servidor"
 
-#: ui/00default.xml:326
+#: ui/00default.xml:327
 msgid "Copy"
 msgstr "Copiar"
 
@@ -524,11 +524,11 @@ msgstr "Copiar"
 msgid "Copy as HTML"
 msgstr "Copiar como HTML"
 
-#: ui/00default.xml:327
+#: ui/00default.xml:328
 msgid "Copy as table"
 msgstr "Copiar como tabela"
 
-#: colors.c:460 ui/00default.xml:389
+#: colors.c:460 ui/00default.xml:390
 msgid "Cross hair cursor"
 msgstr "Cursor mira"
 
@@ -541,7 +541,7 @@ msgstr "Atual (%s)"
 msgid "Custom colors"
 msgstr "Cores personalizadas"
 
-#: ui/00default.xml:330
+#: ui/00default.xml:331
 msgid "Cut"
 msgstr "Recortar"
 
@@ -569,11 +569,11 @@ msgstr "Verde Escuro"
 msgid "Data conversion error"
 msgstr "Erro na conversão de dados"
 
-#: ui/99debug.xml:213
+#: ui/99debug.xml:214
 msgid "Debug"
 msgstr "Depuração"
 
-#: ui/99debug.xml:216
+#: ui/99debug.xml:217
 msgid "Debug window updates"
 msgstr "Mostrar atualizações de janela"
 
@@ -581,11 +581,11 @@ msgstr "Mostrar atualizações de janela"
 msgid "Default"
 msgstr "Padrão"
 
-#: ui/00default.xml:346
+#: ui/00default.xml:347
 msgid "Delete field"
 msgstr "Apagar campo"
 
-#: telnet.c:1815
+#: telnet.c:1789
 msgid "Device type rejected"
 msgstr "Tipo de dispositivo rejeitado"
 
@@ -593,11 +593,11 @@ msgstr "Tipo de dispositivo rejeitado"
 msgid "Disconnected from host"
 msgstr "Desconectado do servidor"
 
-#: ui/99debug.xml:214
+#: ui/99debug.xml:215
 msgid "Display current charset"
 msgstr "Mostrar a tabela de caracteres ativa"
 
-#: telnet.c:1390
+#: telnet.c:1364
 msgid "EOR received when not in 3270 mode, ignored."
 msgstr "EOR recebido fora do modo 3270, ignorado."
 
@@ -633,15 +633,15 @@ msgstr ""
 "Apagar\n"
 "Campos"
 
-#: ui/00default.xml:345
+#: ui/00default.xml:346
 msgid "Erase input"
 msgstr "Apagar campos"
 
-#: ui/00default.xml:347
+#: ui/00default.xml:348
 msgid "Erase to end of field"
 msgstr "Apagar até o final do campo"
 
-#: ui/00default.xml:348
+#: ui/00default.xml:349
 msgid "Erase to end of line"
 msgstr "Apagar até o final da linha"
 
@@ -664,12 +664,12 @@ msgstr "Erro \"%s\" gravando arquivo local (rc=%d)"
 msgid "Error %d resolving %s"
 msgstr "Erro %d resolvendo %s"
 
-#: telnet.c:3128 telnet.c:3139
+#: telnet.c:3141 telnet.c:3152
 #, c-format
 msgid "Error in fcntl(%s) when setting non blocking mode"
 msgstr "Erro em fcntl(%s) ao ativar o modo não blocante"
 
-#: telnet.c:3118
+#: telnet.c:3131
 #, c-format
 msgid "Error in ioctl(%s) when setting no blocking mode"
 msgstr "Erro em ioctl(%s) ao ativar o modo não blocante"
@@ -684,11 +684,11 @@ msgstr "Erro lendo %s"
 msgid "Error resolving %s: %s"
 msgstr "Erro ao resolver %s: %s"
 
-#: ui/99debug.xml:207
+#: ui/99debug.xml:208
 msgid "Event Trace"
 msgstr "Trace de eventos"
 
-#: ui/80rexx.xml:261
+#: ui/80rexx.xml:262
 msgid "External Rexx script"
 msgstr "Script rexx externo"
 
@@ -732,7 +732,7 @@ msgstr "Erro de formato no campo \"notAfter\" do certificado"
 msgid "Format error in certificate's notBefore field"
 msgstr "Erro de formato no campo \"notBefore\" do certificado"
 
-#: ui/00default.xml:386
+#: ui/00default.xml:387
 msgid "Full Screen"
 msgstr "Tela cheia"
 
@@ -740,7 +740,7 @@ msgstr "Tela cheia"
 msgid "Function bar"
 msgstr "Barra de funções"
 
-#: main.c:98 main.c:487
+#: main.c:98 main.c:488
 msgid "GTK Version mismatch"
 msgstr "Divergência de versão GTK"
 
@@ -781,15 +781,15 @@ msgstr "HTTP Proxy: EOF inesperado"
 msgid "HTTP Proxy: unrecognized reply"
 msgstr "HTTP Proxy: Resposta desconhecida"
 
-#: ui/00default.xml:408
+#: ui/00default.xml:409
 msgid "Help"
 msgstr "Ajuda"
 
-#: ft.c:493
+#: ft.c:494
 msgid "Host disconnected, transfer cancelled"
 msgstr "Servidor desconectou, transferência cancelada"
 
-#: telnet.c:1873
+#: telnet.c:1847
 msgid "Host illegally added function(s)"
 msgstr "Host illegally added function(s)"
 
@@ -801,19 +801,19 @@ msgstr "Servidor é AS_400"
 msgid "Host is TSO"
 msgstr "Servidor é TSO"
 
-#: telnet.c:1798
+#: telnet.c:1772
 msgid "Host rejected device type or request type"
 msgstr "Servidor rejeitou o tipo de dispositivo ou requisição"
 
-#: telnet.c:1811
+#: telnet.c:1785
 msgid "Host rejected resource(s)"
 msgstr "Servidor rejeitou recurso(s)"
 
-#: main.c:404
+#: main.c:405
 msgid "Host system type"
 msgstr "Tipo do sistema no servidor"
 
-#: main.c:402
+#: main.c:403
 msgid "Host to connect"
 msgstr "Servidor a conectar"
 
@@ -842,7 +842,7 @@ msgstr "Comprimento de frame inválido"
 msgid "Informations"
 msgstr "Informações"
 
-#: ui/00default.xml:403
+#: ui/00default.xml:404
 msgid "Input method"
 msgstr "Método de entrada"
 
@@ -879,7 +879,7 @@ msgstr "Sintaxe de proxy inválida"
 msgid "Invalid proxy type '%.*s'"
 msgstr "Tipo de proxy invalido '%.*s'"
 
-#: ui/00default.xml:395
+#: ui/00default.xml:396
 msgid "Keep selected"
 msgstr "Manter selecionado"
 
@@ -899,7 +899,7 @@ msgstr "LRECL:"
 msgid "Lateral keypad"
 msgstr "Barra lateral"
 
-#: main.c:413
+#: main.c:414
 msgid "Log to file"
 msgstr "Enviar log para arquivo"
 
@@ -916,7 +916,7 @@ msgstr "Faltando ']'"
 msgid "Model %d (%s)"
 msgstr "Modelo %d (%s)"
 
-#: ui/00default.xml:384
+#: ui/00default.xml:385
 msgid "Monocase"
 msgstr "Só Maiúsculas"
 
@@ -944,19 +944,24 @@ msgstr "Mostarda"
 msgid "N/A"
 msgstr "N/A"
 
-#: telnet.c:359 telnet.c:687
+#: ui/99debug.xml:207
+#, fuzzy
+msgid "Network Trace"
+msgstr "Erro de rede"
+
+#: telnet.c:360 telnet.c:688
 msgid "Network error"
 msgstr "Erro de rede"
 
-#: ui/00default.xml:399
+#: ui/00default.xml:400
 msgid "Network keep alive"
 msgstr "Network keep alive"
 
-#: telnet.c:315 telnet.c:326 telnet.c:719 telnet.c:730
+#: telnet.c:316 telnet.c:327 telnet.c:720 telnet.c:731
 msgid "Network startup error"
 msgstr "Erro ao iniciar a rede"
 
-#: ui/00default.xml:455
+#: ui/00default.xml:456
 msgid "Next field"
 msgstr "Próximo campo"
 
@@ -980,7 +985,7 @@ msgstr "Normal/Desprotegido"
 msgid "Not available"
 msgstr "Não disponível"
 
-#: ft.c:500
+#: ft.c:501
 msgid "Not in 3270 mode, transfer cancelled"
 msgstr "Não está no modo 3270, transferência cancelada"
 
@@ -1141,7 +1146,7 @@ msgstr "PF8"
 msgid "PF9"
 msgstr "PF9"
 
-#: main.c:436
+#: main.c:437
 msgid "Parse error"
 msgstr "Erro de interpretação"
 
@@ -1154,15 +1159,15 @@ msgstr "Erro de interpretação em %s"
 msgid "Passthru Proxy: send error"
 msgstr "Passthru Proxy: Erro ao enviar"
 
-#: ui/00default.xml:331
+#: ui/00default.xml:332
 msgid "Paste"
 msgstr "Colar"
 
-#: ui/00default.xml:332
+#: ui/00default.xml:333
 msgid "Paste next"
 msgstr "Colar próximo"
 
-#: ui/00default.xml:335
+#: ui/00default.xml:336
 msgid "Paste text file"
 msgstr "Colar arquivo texto"
 
@@ -1170,7 +1175,7 @@ msgstr "Colar arquivo texto"
 msgid "Paste text file contents"
 msgstr "Colar conteúdo de arquivo texto"
 
-#: ui/00default.xml:388
+#: ui/00default.xml:389
 msgid "Paste with left margin"
 msgstr "Colar com margem esquerda"
 
@@ -1178,7 +1183,7 @@ msgstr "Colar com margem esquerda"
 msgid "Path length constraint exceeded"
 msgstr "Path length constraint exceeded"
 
-#: main.c:399
+#: main.c:400
 msgid "Path to application data files"
 msgstr "Caminho para os arquivos de dados da aplicação"
 
@@ -1186,7 +1191,7 @@ msgstr "Caminho para os arquivos de dados da aplicação"
 msgid "Pink"
 msgstr "Rosa"
 
-#: ui/00default.xml:454
+#: ui/00default.xml:455
 msgid "Previous field"
 msgstr "Campo anterior"
 
@@ -1194,11 +1199,11 @@ msgstr "Campo anterior"
 msgid "Primary space:"
 msgstr "Primary space:"
 
-#: ui/00default.xml:314
+#: ui/00default.xml:315
 msgid "Print"
 msgstr "Imprimir"
 
-#: ui/00default.xml:316
+#: ui/00default.xml:317
 msgid "Print copy"
 msgstr "Imprimir cópia"
 
@@ -1206,7 +1211,7 @@ msgstr "Imprimir cópia"
 msgid "Print operation failed"
 msgstr "Operação de impressão falhou"
 
-#: ui/00default.xml:315
+#: ui/00default.xml:316
 msgid "Print selected"
 msgstr "Imprimir seleção"
 
@@ -1214,7 +1219,7 @@ msgstr "Imprimir seleção"
 msgid "Print selection box"
 msgstr "Imprimir marca de seleção"
 
-#: print.c:907 ui/00default.xml:373
+#: print.c:907 ui/00default.xml:374
 msgid "Print settings"
 msgstr "Configurações de impressão"
 
@@ -1226,7 +1231,7 @@ msgstr "Progresso"
 msgid "Purple"
 msgstr "Púrpura"
 
-#: ui/00default.xml:322
+#: ui/00default.xml:323
 msgid "Quit"
 msgstr "Sair"
 
@@ -1306,7 +1311,7 @@ msgstr "RPQ: Não foi possível resolver '%s': %s"
 msgid "RPQ: gethostbyname error"
 msgstr "RPQ: Erro em gethostbyname"
 
-#: ui/00default.xml:319
+#: ui/00default.xml:320
 msgid "Receive file"
 msgstr "Receber arquivo"
 
@@ -1322,15 +1327,15 @@ msgstr "Formato de registro"
 msgid "Red"
 msgstr "Vermelho"
 
-#: ui/99debug.xml:215
+#: ui/99debug.xml:216
 msgid "Reload buffer contents"
 msgstr "Recarregar conteúdo do buffer"
 
-#: ui/00default.xml:340
+#: ui/00default.xml:341
 msgid "Remove selection"
 msgstr "Remover seleção"
 
-#: ui/00default.xml:341
+#: ui/00default.xml:342
 msgid "Reselect"
 msgstr "Reselecionar"
 
@@ -1338,11 +1343,11 @@ msgstr "Reselecionar"
 msgid "Reset"
 msgstr "Reset"
 
-#: ui/00default.xml:387
+#: ui/00default.xml:388
 msgid "Resize on alternate screen"
 msgstr "Mudar tamanho do terminal em tela alternativa"
 
-#: ui/00default.xml:456
+#: ui/00default.xml:457
 msgid "Return"
 msgstr "Return"
 
@@ -1470,15 +1475,15 @@ msgstr "SOCKS5 Proxy: xmit version 5 nmethods 1 (no auth)\n"
 msgid "SOCKS5 proxy: %s/%u: %s"
 msgstr "SOCKS5 proxy: %s/%u: %s"
 
-#: telnet.c:1155
+#: telnet.c:1156
 msgid "SSL Error"
 msgstr "Erro SSL"
 
-#: telnet.c:1155
+#: telnet.c:1156
 msgid "SSL Read error"
 msgstr "Erro de leitura SSL"
 
-#: telnet.c:845 telnet.c:859
+#: telnet.c:846 telnet.c:860
 msgid "SSL connect failed!"
 msgstr "Conexão SSL falhou"
 
@@ -1486,15 +1491,15 @@ msgstr "Conexão SSL falhou"
 msgid "SSL error"
 msgstr "Erro SSL"
 
-#: telnet.c:818
+#: telnet.c:819
 msgid "SSL init failed!"
 msgstr "Inicialização SSL falhou"
 
-#: telnet.c:827
+#: telnet.c:828
 msgid "SSL_set_fd failed!"
 msgstr "SSL_set_fd falhou!"
 
-#: telnet.c:2130
+#: telnet.c:2104
 #, c-format
 msgid ""
 "SSL_write:\n"
@@ -1503,7 +1508,7 @@ msgstr ""
 "SSL_write:\n"
 "%s"
 
-#: ui/00default.xml:311
+#: ui/00default.xml:312
 msgid "Save copy"
 msgstr "Salvar cópia"
 
@@ -1511,7 +1516,7 @@ msgstr "Salvar cópia"
 msgid "Save copy to file"
 msgstr "Salvar cópia para arquivo"
 
-#: ui/00default.xml:309
+#: ui/00default.xml:310
 msgid "Save screen"
 msgstr "Salvar tela"
 
@@ -1519,7 +1524,7 @@ msgstr "Salvar tela"
 msgid "Save screen to file"
 msgstr "Salvar tela para arquivo"
 
-#: ui/00default.xml:310
+#: ui/00default.xml:311
 msgid "Save selected"
 msgstr "Salvar seleção"
 
@@ -1535,11 +1540,11 @@ msgstr "Salvar arquivo de trace"
 msgid "Screen Trace"
 msgstr "Trace de tela"
 
-#: ui/00default.xml:379
+#: ui/00default.xml:380
 msgid "Screen size"
 msgstr "Tamanho da tela"
 
-#: ui/80rexx.xml:261
+#: ui/80rexx.xml:262
 msgid "Scripts"
 msgstr "Scripts"
 
@@ -1551,15 +1556,15 @@ msgstr "Secondary space:"
 msgid "Secure connection was successful."
 msgstr "Conexão segura efetuada com sucesso."
 
-#: ui/00default.xml:339
+#: ui/00default.xml:340
 msgid "Select Field"
 msgstr "Selecionar campo"
 
-#: ui/00default.xml:338
+#: ui/00default.xml:339
 msgid "Select all"
 msgstr "Selecionar tudo"
 
-#: ui/00default.xml:391
+#: ui/00default.xml:392
 msgid "Select by rectangles"
 msgstr "Seleção retangular"
 
@@ -1571,7 +1576,7 @@ msgstr "Selecione arquivo a receber"
 msgid "Select file to send"
 msgstr "Selecione arquivo a enviar"
 
-#: ui/00default.xml:376
+#: ui/00default.xml:377
 msgid "Select font"
 msgstr "Selecione fonte"
 
@@ -1595,7 +1600,7 @@ msgstr "Certificado auto assinado"
 msgid "Self signed certificate in certificate chain"
 msgstr "Certificado auto assinado na cadeia de certificados"
 
-#: ui/00default.xml:320
+#: ui/00default.xml:321
 msgid "Send file"
 msgstr "Enviar arquivo"
 
@@ -1603,63 +1608,63 @@ msgstr "Enviar arquivo"
 msgid "Send file to host"
 msgstr "Enviar arquivo para o servidor"
 
-#: main.c:410
+#: main.c:411
 msgid "Send messages to syslog"
 msgstr "Enviar mensagens para o log do sistema"
 
-#: ui/00default.xml:319
+#: ui/00default.xml:320
 msgid "Send/Receive"
 msgstr "Enviar/Receber"
 
-#: main.c:401
+#: main.c:402
 msgid "Session name"
 msgstr "Nome da sessão"
 
-#: main.c:407
+#: main.c:408
 msgid "Set host charset"
 msgstr "Define página de código do host"
 
-#: ui/00default.xml:357
+#: ui/00default.xml:358
 msgid "Set hostname"
 msgstr "Selecione servidor"
 
-#: main.c:403
+#: main.c:404
 msgid "Set reported colors (8/16)"
 msgstr "Define número de cores informadas (8/16)"
 
-#: main.c:406
+#: main.c:407
 msgid "Set toggles OFF"
 msgstr "Desativa toggles"
 
-#: main.c:405
+#: main.c:406
 msgid "Set toggles ON"
 msgstr "Ativa toggles"
 
-#: main.c:412
+#: main.c:413
 msgid "Set trace filename"
 msgstr "Define o nome do arquivo de trace"
 
-#: ui/00default.xml:372
+#: ui/00default.xml:373
 msgid "Settings"
 msgstr "Configurações"
 
-#: ui/00default.xml:394
+#: ui/00default.xml:395
 msgid "Show Underline"
 msgstr "Mostrar sublinhado"
 
-#: ui/99debug.xml:213
+#: ui/99debug.xml:214
 msgid "Show test pattern"
 msgstr "Mostrar padrão de teste"
 
-#: ui/00default.xml:396
+#: ui/00default.xml:397
 msgid "Smart paste"
 msgstr "Colar inteligente"
 
-#: telnet.c:1176
+#: telnet.c:1177
 msgid "Socket read error"
 msgstr "Erro ao ler dados da rede"
 
-#: telnet.c:2151
+#: telnet.c:2125
 msgid "Socket write error"
 msgstr "Erro ao enviar dados para a rede"
 
@@ -1687,7 +1692,7 @@ msgstr "Tipo de servidor:"
 msgid "TELNET Proxy: send error"
 msgstr "TELNET Proxy: Erro ao enviar"
 
-#: telnet.c:3325
+#: telnet.c:3338
 msgid "TLS negotiation failure"
 msgstr "Negociação TLS falhou"
 
@@ -1924,7 +1929,7 @@ msgstr ""
 "programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple "
 "Place, Suite 330, Boston, MA, 02111-1307, USA"
 
-#: main.c:483
+#: main.c:484
 #, c-format
 msgid "This program requires GTK version %d.%d.%d"
 msgstr "Este programa precisa do GTK versão %d.%d.%d"
@@ -1935,7 +1940,7 @@ msgid ""
 "This version of %s was built without support for secure sockets layer (SSL)."
 msgstr "Esta versão do %s foi gerada sem suporte para conexões seguras (SSL)."
 
-#: ui/00default.xml:414
+#: ui/00default.xml:415
 msgid "Toolbar"
 msgstr "Barra de ferramentas"
 
@@ -1943,7 +1948,7 @@ msgstr "Barra de ferramentas"
 msgid "Trace"
 msgstr "Trace"
 
-#: ui/00default.xml:385
+#: ui/00default.xml:386
 msgid "Track Cursor"
 msgstr "Mostrar posição do cursor"
 
@@ -2012,7 +2017,7 @@ msgstr "Unable to get local issuer certificate"
 msgid "Unable to paste text"
 msgstr "Incapaz de colar texto"
 
-#: ft.c:363
+#: ft.c:364
 msgid "Unable to send file-transfer request"
 msgstr "Não foi possível enviar a requisição de transferência de arquivo"
 
@@ -2125,7 +2130,7 @@ msgstr ""
 "Servidor desconhecido:\n"
 "%s"
 
-#: telnet.c:550
+#: telnet.c:551
 #, c-format
 msgid "Unknown passthru host: %s"
 msgstr "Servidor \"passthru\" desconhecido: %s"
@@ -2135,7 +2140,7 @@ msgstr "Servidor \"passthru\" desconhecido: %s"
 msgid "Unknown popup type \"%s\""
 msgstr "Tipo de popup \"%s\" não é conhecido"
 
-#: telnet.c:579 resolver.c:147
+#: telnet.c:580 resolver.c:147
 #, c-format
 msgid "Unknown port number or service: %s"
 msgstr "Número de porta ou serviço desconhecido: %s"
@@ -2148,7 +2153,7 @@ msgstr "Unsupported RPQ term"
 msgid "Unsupported certificate purpose"
 msgstr "Finalidade do certificado não é suportada"
 
-#: telnet.c:535
+#: telnet.c:536
 msgid "Unsupported passthru host session"
 msgstr "Unsupported passthru host session"
 
@@ -2156,7 +2161,7 @@ msgstr "Unsupported passthru host session"
 msgid "Unsupported socks 4 proxy"
 msgstr "Unsupported socks 4 proxy"
 
-#: ui/00default.xml:398
+#: ui/00default.xml:399
 msgid "Use +/- for field navigation"
 msgstr "Usar teclas +/- para navegar por campos"
 
@@ -2169,23 +2174,23 @@ msgstr "Variável"
 msgid "Version %s - Revision %s"
 msgstr "Versão %s - Revisão %s"
 
-#: ui/99debug.xml:208
+#: ui/99debug.xml:209
 msgid "View Field Delimiters"
 msgstr "Mostrar delimitadores de campo"
 
-#: telnet.c:731
+#: telnet.c:732
 msgid "WSAEventSelect failed"
 msgstr "WSAEventSelect falhou"
 
-#: telnet.c:316
+#: telnet.c:317
 msgid "WSAStartup failed"
 msgstr "WSAStartup falhou"
 
-#: ft.c:372
+#: ft.c:373
 msgid "Waiting for GET response"
 msgstr "Aguardando resposta do pedido de download"
 
-#: ft.c:374
+#: ft.c:375
 msgid "Waiting for PUT response"
 msgstr "Aguardando resposta do pedido de upload"
 
@@ -2197,7 +2202,7 @@ msgstr "Europa ocidental (ISO 8859-1)"
 msgid "White"
 msgstr "Branco"
 
-#: ui/00default.xml:425
+#: ui/00default.xml:426
 msgid "Window"
 msgstr "Janela"
 
@@ -2265,11 +2270,11 @@ msgstr "_Procurar"
 msgid "_Color table:"
 msgstr "Tabela de cores:"
 
-#: ui/00default.xml:367
+#: ui/00default.xml:368
 msgid "_Connect"
 msgstr "_Conectar"
 
-#: ui/00default.xml:368
+#: ui/00default.xml:369
 msgid "_Disconnect"
 msgstr "_Desconectar"
 
@@ -2277,7 +2282,7 @@ msgstr "_Desconectar"
 msgid "_Edit"
 msgstr "_Editar"
 
-#: ui/80rexx.xml:257
+#: ui/80rexx.xml:258
 msgid "_File"
 msgstr "_Arquivo"
 
@@ -2305,11 +2310,11 @@ msgstr "Nome do _Host:"
 msgid "_Local file name:"
 msgstr "Arquivo _local:"
 
-#: ui/00default.xml:357
+#: ui/00default.xml:358
 msgid "_Network"
 msgstr "_Rede"
 
-#: ui/00default.xml:382
+#: ui/00default.xml:383
 msgid "_Options"
 msgstr "_Opções"
 
@@ -2337,7 +2342,7 @@ msgstr "Arquivo _texto"
 msgid "_To"
 msgstr "_Para"
 
-#: ui/80rexx.xml:259
+#: ui/80rexx.xml:260
 msgid "_View"
 msgstr "_Exibir"
 
@@ -2366,11 +2371,11 @@ msgstr "um atributo \"action\""
 msgid "bracket"
 msgstr "bracket"
 
-#: toggles.c:177 telnet.c:669
+#: toggles.c:177 telnet.c:670
 msgid "disable"
 msgstr "desabilitar"
 
-#: toggles.c:177 telnet.c:669
+#: toggles.c:177 telnet.c:670
 msgid "enable"
 msgstr "enable"
 
@@ -2378,12 +2383,12 @@ msgstr "enable"
 msgid "select() failed when dispatching events"
 msgstr "select() falhou ao processar eventos"
 
-#: telnet.c:630 telnet.c:637
+#: telnet.c:631 telnet.c:638
 #, c-format
 msgid "setsockopt(%s)"
 msgstr "setsockopt(%s)"
 
-#: telnet.c:623
+#: telnet.c:624
 msgid "socket"
 msgstr "socket"
 
@@ -2391,7 +2396,7 @@ msgstr "socket"
 msgid "translator-credits"
 msgstr "translator-credits"
 
-#: telnet.c:1151
+#: telnet.c:1152
 msgid "unknown error"
 msgstr "Erro desconhecido"
 
