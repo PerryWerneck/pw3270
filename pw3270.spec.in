@@ -82,7 +82,13 @@ BuildRequires:	gettext-devel
 BuildRequires:	findutils
 BuildRequires:	coreutils
 BuildRequires:	desktop-file-utils
+BuildRequires:  dbus-1-devel
+BuildRequires:  dbus-1-glib-devel
+
+%if 0%{?_office}
 BuildRequires:	libreoffice-sdk
+%endif
+
 BuildRequires:  rsvg-view
 
 %description
@@ -131,6 +137,7 @@ Plugin exporting a DBUS object from every %{name} open session.
 
 Revision @PACKAGE_REVISION@ from @PACKAGE_SOURCE@
 
+%if 0%{?_office}
 %package -n %{name}-libreoffice
 Summary:	%{name} extension for libreoffice
 Group:		Productivity/Office/Suite
@@ -141,6 +148,7 @@ Requires:	libreoffice
 This package provides 3270 access object to StarBasic.
 
 Revision @PACKAGE_REVISION@ from @PACKAGE_SOURCE@
+%endif
 
 %if 0%{?_ooRexx}
 %package -n %{name}-plugin-rexx
@@ -167,9 +175,14 @@ autoconf
 export CFLAGS="$RPM_OPT_FLAGS"
 export CXXFLAGS="$RPM_OPT_FLAGS"
 export FFLAGS="$RPM_OPT_FLAGS"
+
+%if 0%{?_office}
 export OFFICE_HOME=%{_libdir}/libreoffice
 export OO_SDK_HOME=%{_libdir}/libreoffice/sdk
 %configure
+%else
+%configure --disable-office
+%endif
 
 %build
 make clean
@@ -219,6 +232,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/lib3270.h
 %{_includedir}/pw3270.h
 %{_datadir}/@PACKAGE_NAME@/ui/99debug.xml
+%{_datadir}/@PACKAGE_NAME@/ui/98trace.xml
 %{_libdir}/pkgconfig/*.pc
 %{_libdir}/lib3270.so
 %{_libdir}/libpw3270.so
@@ -230,6 +244,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root)
 %{_libdir}/@PACKAGE_NAME@-plugins/dbus3270.so
 
+%if 0%{?_office}
 %files -n %{name}-libreoffice
 %defattr(-,root,root)
 %dir %{_libdir}/libreoffice/share/extensions/%{name}
@@ -239,6 +254,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libreoffice/share/extensions/%{name}/pw3270.png
 %{_libdir}/libreoffice/share/extensions/%{name}/pw3270.uno.rdb
 %{_libdir}/libreoffice/share/extensions/%{name}/pw3270.uno.so
+%endif
 
 %if 0%{?_ooRexx}
 %files -n %{name}-plugin-rexx
