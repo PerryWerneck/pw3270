@@ -5,10 +5,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-28 13:43-0200\n"
-"PO-Revision-Date: 2013-11-12 08:07-0200\n"
+"POT-Creation-Date: 2013-11-28 15:26-0200\n"
+"PO-Revision-Date: 2013-11-28 15:32-0200\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
-"Language-Team: Português <perry.werneck@gmail.com>\n"
+"Language-Team: Portugues <>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16,7 +16,7 @@ msgstr ""
 "X-Poedit-Language: Portuguese\n"
 "X-Poedit-Country: BRAZIL\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Gtranslator 2.91.6\n"
 
 #: window.c:283
@@ -945,9 +945,8 @@ msgid "N/A"
 msgstr "N/A"
 
 #: ui/98trace.xml:493
-#, fuzzy
 msgid "Network Trace"
-msgstr "Erro de rede"
+msgstr "Trace do tráfego de rede"
 
 #: telnet.c:360 telnet.c:688
 msgid "Network error"
