@@ -304,7 +304,7 @@ static void dft_data_insert(H3270 *hSession, struct data_buffer *data_bufr)
 
 			while (len--)
 			{
-				*s = hSession->charset.ft2asc[*s];
+				*s = ft->charset.ebc2asc[*s];
 				s++;
 			}
 		}
@@ -413,7 +413,7 @@ static void dft_get_request(H3270 *hSession)
 				total_read++;
 			}
 			ft->ft_last_cr = (c == '\r') ? 1 : 0;
-			*bufptr++ = ft->remap_flag? hSession->charset.asc2ft[c]: c;
+			*bufptr++ = ft->remap_flag ? ft->charset.asc2ebc[c]: c;
 			numbytes--;
 			total_read++;
 		} else {
@@ -422,12 +422,14 @@ static void dft_get_request(H3270 *hSession)
 			if (numread <= 0) {
 				break;
 			}
-			if (ft->ascii_flag && ft->remap_flag) {
+			if (ft->ascii_flag && ft->remap_flag)
+			{
 				unsigned char *s = bufptr;
 				int i = numread;
 
-				while (i) {
-					*s = hSession->charset.asc2ft[*s];
+				while (i)
+				{
+					*s = ft->charset.asc2ebc[*s];
 					s++;
 					i--;
 				}

@@ -194,7 +194,7 @@ static int upload_convert(H3270 *hSession, unsigned char *buf, int len)
 		if (ft->ascii_flag && ft->cr_flag && (c == '\r' || c == 0x1a))
 			continue;
 		if (ft->ascii_flag && ft->remap_flag)
-			c = hSession->charset.ft2asc[c];
+			c = ft->charset.ebc2asc[c];
 		*ob++ = c;
 	}
 
@@ -231,7 +231,7 @@ static int download_convert(H3270FT *ft, unsigned const char *buf, unsigned len,
 
 		/* Translate. */
 		if (ft->ascii_flag && ft->remap_flag)
-			c = hSession->charset.asc2ft[c];
+			c = ft->charset.asc2ebc[c];
 
 		/* Quadrant already defined. */
 		if (ft->quadrant >= 0) {

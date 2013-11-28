@@ -35,6 +35,7 @@
 	#define LIB3270_FILETRANSFER_INCLUDED 1
 	#include <stdio.h>
 	#include <sys/time.h>
+	#include <lib3270/charset.h>
 
 	#define LIB3270_FT_OPTION_SEND 0x0000
 
@@ -53,11 +54,11 @@
 	typedef enum _lib3270_FT_FLAG
 	{
 		LIB3270_FT_OPTION_RECEIVE		= 0x0001,
-		LIB3270_FT_OPTION_ASCII			= 0x0002,
-		LIB3270_FT_OPTION_CRLF			= 0x0004,
+		LIB3270_FT_OPTION_ASCII			= 0x0002,		/**< Convert to ascii */
+		LIB3270_FT_OPTION_CRLF			= 0x0004,		/**< Add crlf to each line */
 		LIB3270_FT_OPTION_APPEND		= 0x0008,
-//		LIB3270_FT_OPTION_TSO			= 0x0010,
-		LIB3270_FT_OPTION_REMAP_ASCII	= 0x0020
+		LIB3270_FT_OPTION_REMAP			= 0x0010		/**< Remap ASCII<->EBCDIC */
+
 	} LIB3270_FT_OPTION;
 
 	typedef enum _lib3270_ft_state
@@ -73,53 +74,55 @@
 
 	typedef struct _h3270ft
 	{
-		unsigned short		  sz;					/**< Size of FT data structure */
+		unsigned short			  sz;					/**< Size of FT data structure */
 
-		int					  ft_last_cr	: 1;	/**< CR was last char in local file */
-		int 				  remap_flag	: 1;	/**< Remap ASCII<->EBCDIC */
-		int					  cr_flag		: 1;	/**< Add crlf to each line */
-		int					  message_flag	: 1;	/**< Open Request for msg received */
-		int					  ascii_flag	: 1;	/**< Convert to ascii */
-		int					  ft_is_cut		: 1;	/**< File transfer is CUT-style */
-		int					  dft_eof		: 1;
+		int						  ft_last_cr	: 1;	/**< CR was last char in local file */
+		int 					  remap_flag	: 1;	/**< Remap ASCII<->EBCDIC */
+		int						  cr_flag		: 1;
+		int						  message_flag	: 1;	/**< Open Request for msg received */
+		int						  ascii_flag	: 1;	/**< Convert to ascii */
+		int						  ft_is_cut		: 1;	/**< File transfer is CUT-style */
+		int						  dft_eof		: 1;
 
 
-		H3270				* host;
-		void				* widget;				/**< File transfer dialog handle */
-		FILE 				* local_file;			/**< File descriptor for local file */
-		unsigned long		  length;				/**< File length */
+		H3270					* host;
+		void					* widget;				/**< File transfer dialog handle */
+		FILE 					* local_file;			/**< File descriptor for local file */
+		unsigned long			  length;				/**< File length */
 
-		LIB3270_FT_STATE	  state;
-		LIB3270_FT_OPTION	  flags;
+		LIB3270_FT_STATE		  state;
+		LIB3270_FT_OPTION		  flags;
 
-		int 				  lrecl;
-		int 				  blksize;
-		int					  primspace;
-		int					  secspace;
-		int					  dft;
+		int 					  lrecl;
+		int 					  blksize;
+		int						  primspace;
+		int						  secspace;
+		int						  dft;
 
-		unsigned long		  ft_length;			/**< Length of transfer */
+		unsigned long			  ft_length;			/**< Length of transfer */
 
-		struct timeval		  starting_time;		/**< Starting time */
+		struct timeval			  starting_time;		/**< Starting time */
 
-		const char 			* local;				/**< Local filename */
-		const char			* remote;				/**< Remote filename */
+		const char 				* local;				/**< Local filename */
+		const char				* remote;				/**< Remote filename */
 
 		// ft_dft.c
-		char 				* abort_string;
-		unsigned long		  recnum;
-		unsigned char		* dft_savebuf;
-		int					  dft_savebuf_len;
-		int					  dft_savebuf_max;
+		char 					* abort_string;
+		unsigned long			  recnum;
+		unsigned char			* dft_savebuf;
+		int						  dft_savebuf_len;
+		int						  dft_savebuf_max;
 
 		// ft_cut.c
-		int					  quadrant;
-		unsigned long		  expanded_length;
-		char				* saved_errmsg;
-		int					  xlate_buffered;					/**< buffer count */
-		int					  xlate_buf_ix;						/**< buffer index */
-		unsigned char		  xlate_buf[LIB3270_XLATE_NBUF];	/**< buffer */
+		int						  quadrant;
+		unsigned long			  expanded_length;
+		char					* saved_errmsg;
+		int						  xlate_buffered;					/**< buffer count */
+		int						  xlate_buf_ix;						/**< buffer index */
+		unsigned char			  xlate_buf[LIB3270_XLATE_NBUF];	/**< buffer */
 
+		// Charset
+		struct lib3270_charset	  charset;
 
 		// Callbacks
 		void (*complete)(struct _h3270ft *ft,unsigned long length,double kbytes_sec,const char *mode);

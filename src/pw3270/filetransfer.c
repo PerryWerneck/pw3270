@@ -257,7 +257,7 @@ static void add_transfer_options(GObject *action, struct ftdialog *dlg)
 	{	{	LIB3270_FT_OPTION_ASCII,		"text", 	N_( "_Text file" )						},
 		{	LIB3270_FT_OPTION_CRLF,			"cr",		N_( "Add/Remove _CR at end of line" )	},
 		{	LIB3270_FT_OPTION_APPEND,		"append",	N_( "_Append" )							},
-		{   LIB3270_FT_OPTION_REMAP_ASCII,	"remap",	N_( "_Remap ASCII Characters" )			}
+		{   LIB3270_FT_OPTION_REMAP,		"remap",	N_( "_Remap ASCII Characters" )			}
 	};
 
 	GtkTable	* table = GTK_TABLE(gtk_table_new(3,2,TRUE));

@@ -210,9 +210,10 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 	ftHandle->host			= session;
 
 	ftHandle->ft_last_cr	= 0;
-	ftHandle->remap_flag	= 1;				// Remap ASCII<->EBCDIC
-	ftHandle->cr_flag		= 1;
-	ftHandle->ascii_flag	= 1;
+
+	ftHandle->ascii_flag	= (flags & LIB3270_FT_OPTION_ASCII)	? 1 : 0;
+	ftHandle->cr_flag   	= (flags & LIB3270_FT_OPTION_CRLF)	? 1 : 0;
+	ftHandle->remap_flag	= (flags & LIB3270_FT_OPTION_REMAP)	? 1 : 0;
 	ftHandle->ft_is_cut  	= 0;
 	ftHandle->flags			= flags;
 	ftHandle->local_file	= ft_local_file;
@@ -230,6 +231,7 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 	ftHandle->dft			= dft;
 	ftHandle->quadrant		= -1;
 
+	memcpy(&ftHandle->charset,&session->charset,sizeof(struct lib3270_charset));
 
 	ftHandle->local			= (char *) (ftHandle+1);
 	strcpy((char *) ftHandle->local,local);
@@ -238,6 +240,8 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 	strcpy((char *) ftHandle->remote,remote);
 
 	session->ft				= ftHandle;
+
+
 
  	return ftHandle;
  }
@@ -260,16 +264,23 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 	if(!ft)
 		return EINVAL;
 
- 	recfm		= (ft->flags & FT_RECORD_FORMAT_MASK) >> 8;
- 	units		= (ft->flags & FT_ALLOCATION_UNITS_MASK) >> 12;
-	ft->ascii_flag	= ((ft->flags & LIB3270_FT_OPTION_ASCII) == 0) ? 1 : 0;
-	ft->cr_flag   	= ((ft->flags & LIB3270_FT_OPTION_CRLF) == 0) ? 1 : 0;
-	ft->remap_flag	= ((ft->flags & LIB3270_FT_OPTION_ASCII) == 0) ? 1 : 0;
+ 	recfm			= (ft->flags & FT_RECORD_FORMAT_MASK) >> 8;
+ 	units			= (ft->flags & FT_ALLOCATION_UNITS_MASK) >> 12;
+	ft->ascii_flag	= (ft->flags & LIB3270_FT_OPTION_ASCII)	? 1 : 0;
+	ft->cr_flag   	= (ft->flags & LIB3270_FT_OPTION_CRLF)	? 1 : 0;
+	ft->remap_flag	= (ft->flags & LIB3270_FT_OPTION_REMAP)	? 1 : 0;
 
 	if(ft->flags & LIB3270_FT_OPTION_RECEIVE)
 	{
 		// Receiving file
-		lib3270_write_log(ft->host,"ft","Receiving file %s",ft->local);
+		lib3270_write_log(	ft->host,
+							"ft",
+							"Receiving file %s %s %s %s",
+							ft->local,
+							ft->ascii_flag ?	"ASCII" : "BINARY",
+							ft->cr_flag ?		"CRLF" : "NOCRLF",
+							ft->remap_flag ?	"REMAP" : "NOREMAP"
+						);
 	}
 	else
 	{
@@ -283,7 +294,15 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 		ft->length = ftell(ft->local_file);
 
 
-		lib3270_write_log(ft->host,"ft","Sending file %s (%ld bytes)",ft->local,ft->length);
+		lib3270_write_log(	ft->host,
+							"ft",
+							"Sending file %s (%ld bytes) %s %s %s",
+							ft->local,
+							ft->length,
+							ft->ascii_flag ?	"ASCII" : "BINARY",
+							ft->cr_flag ?		"CRLF" : "NOCRLF",
+							ft->remap_flag ?	"REMAP" : "NOREMAP"
+						);
 		rewind(ft->local_file);
 	}
 

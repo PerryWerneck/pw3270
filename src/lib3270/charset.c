@@ -132,6 +132,7 @@ static const unsigned short asc2ebc0[256] =
 	/*f8*/  0x70, 0xdd, 0xde, 0xdb, 0xdc, 0x8d, 0x8e, 0xdf
 };
 
+/*
 static const unsigned short ft2asc[256] =
 {
 	0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a,0x0b,0x0c,0x0d,0x0e,0x0f,
@@ -171,6 +172,7 @@ const unsigned short asc2ft[256] =
 	0xa3,0xa4,0xa1,0xa5,0xa2,0xa6,0xcd,0xa7,0xac,0xa9,0xaa,0xab,0xb0,0xad,0xae,0xaf,
 	0xc6,0xa8,0xeb,0xec,0xe9,0xed,0xea,0x9f,0xba,0xf1,0xf2,0xef,0xf0,0xc7,0xc8,0xf3
 };
+*/
 
 static const unsigned short asc2uc[UT_SIZE] =
 {
@@ -271,10 +273,12 @@ LIB3270_EXPORT int lib3270_set_host_charset(H3270 *hSession, const char *name)
 		hSession->charset.asc2uc[f] = f;
 	copy_charset(asc2uc,hSession->charset.asc2uc);
 
+/*
 #if defined(X3270_FT)
 	memcpy(hSession->charset.ft2asc,	ft2asc,		sizeof(hSession->charset.ft2asc));
 	memcpy(hSession->charset.asc2ft,	asc2ft,		sizeof(hSession->charset.asc2ft));
 #endif
+*/
 
 	if(!(name && strcasecmp(name,hSession->charset.host)))
 		return 0;
@@ -451,9 +455,9 @@ LIB3270_EXPORT void lib3270_remap(H3270 *hSession, unsigned short ebc, unsigned 
 
 	if (iso <= 0xff)
 	{
-#if defined(X3270_FT)
-		unsigned char aa;
-#endif
+//#if defined(X3270_FT)
+//		unsigned char aa;
+//#endif
 
 		if (scope == BOTH || scope == CS_ONLY)
 		{
@@ -484,6 +488,8 @@ LIB3270_EXPORT void lib3270_remap(H3270 *hSession, unsigned short ebc, unsigned 
 					hSession->charset.asc2ebc[iso] = ebc;
 			}
 		}
+
+/*
 #if defined(X3270_FT)
 		if (iso <= 0xff && ebc > 0x40)
 		{
@@ -522,14 +528,8 @@ LIB3270_EXPORT void lib3270_remap(H3270 *hSession, unsigned short ebc, unsigned 
 			}
 		}
 #endif
-	}
-/*
-	else
-	{
-		// Auto-keymap.
-		add_xk(iso, (KeySym)hSession->charset.ebc2asc[ebc]);
-	}
 */
+	}
 }
 
 
