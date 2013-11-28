@@ -112,6 +112,9 @@
 	void		  pw3270_dbus_erase_eof(PW3270Dbus *object, DBusGMethodInvocation *context);
 	void		  pw3270_dbus_print(PW3270Dbus *object, DBusGMethodInvocation *context);
 
+	void		  pw3270_dbus_asc2ebc(PW3270Dbus *object, const gchar *from, DBusGMethodInvocation *context);
+	void		  pw3270_dbus_ebc2asc(PW3270Dbus *object, const gchar *from, DBusGMethodInvocation *context);
+
 	G_END_DECLS
 
 #endif // _PW3270_DBUS_SERVICE_H

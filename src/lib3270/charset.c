@@ -406,7 +406,7 @@ LIB3270_ACTION( charsettable )
 	return 0;
 }
 
-LIB3270_EXPORT const char * lib3270_asc2ebc(H3270 *hSession, unsigned char *buffer, size_t sz)
+LIB3270_EXPORT const char * lib3270_asc2ebc(H3270 *hSession, unsigned char *buffer, int sz)
 {
 	int f;
 	if(sz < 0)
@@ -421,7 +421,7 @@ LIB3270_EXPORT const char * lib3270_asc2ebc(H3270 *hSession, unsigned char *buff
 	return (const char *) buffer;
 }
 
-LIB3270_EXPORT const char * lib3270_ebc2asc(H3270 *hSession, unsigned char *buffer, size_t sz)
+LIB3270_EXPORT const char * lib3270_ebc2asc(H3270 *hSession, unsigned char *buffer, int sz)
 {
 	int f;
 	if(sz < 0)

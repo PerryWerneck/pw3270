@@ -307,8 +307,8 @@
 		const char * 	(*_get_host_charset)(H3270 *hSession);
 		int 			(*_print)(H3270 *hSession);
 		int				(*_erase_eof)(H3270 *hSession);
-		const char * 	(*_ebc2asc)(H3270 *hSession, unsigned char *buffer, size_t sz);
-		const char * 	(*_asc2ebc)(H3270 *hSession, unsigned char *buffer, size_t sz);
+		const char * 	(*_ebc2asc)(H3270 *hSession, unsigned char *buffer, int sz);
+		const char * 	(*_asc2ebc)(H3270 *hSession, unsigned char *buffer, int sz);
 
 	public:
 
@@ -580,12 +580,12 @@
 		}
 
 
-		const char * asc2ebc(unsigned char *str, size_t sz)
+		const char * asc2ebc(unsigned char *str, int sz)
 		{
 			return _asc2ebc(hSession,str,sz);
 		}
 
-		const char * ebc2asc(unsigned char *str, size_t sz)
+		const char * ebc2asc(unsigned char *str, int sz)
 		{
 			return _ebc2asc(hSession,str,sz);
 		}

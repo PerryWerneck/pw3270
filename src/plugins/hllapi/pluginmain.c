@@ -313,6 +313,20 @@
 														(const char *) ((struct hllapi_packet_set_text *) source->buffer)->text));
 		break;
 
+	case HLLAPI_PACKET_ASC2EBC:
+		send_text(source,(char *) lib3270_asc2ebc(
+								lib3270_get_default_session_handle(),
+								(unsigned char *) ((struct hllapi_packet_set_text *) source->buffer)->text,-1
+								));
+		break;
+
+	case HLLAPI_PACKET_EBC2ASC:
+		send_text(source,(char *) lib3270_ebc2asc(
+								lib3270_get_default_session_handle(),
+								(unsigned char *) ((struct hllapi_packet_set_text *) source->buffer)->text,-1
+								));
+		break;
+
 	case HLLAPI_PACKET_GET_HOST_CHARSET:
 		send_text(source,(char *) lib3270_get_host_charset(lib3270_get_default_session_handle()));
 		break;

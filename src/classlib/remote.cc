@@ -57,6 +57,8 @@
 	#define HLLAPI_PACKET_QUIT			"quit"
 	#define HLLAPI_PACKET_ERASE_EOF		"eraseEOF"
 	#define HLLAPI_PACKET_PRINT			"print"
+	#define HLLAPI_PACKET_ASC2EBC		"asc2ebc"
+	#define HLLAPI_PACKET_EBC2ASC		"ebc2asc"
  #endif // WIN32
 
  #include <pw3270/class.h>
@@ -89,6 +91,41 @@
 				return response.rc;
 
 			throw exception(GetLastError(),"%s","Transaction error");
+		}
+
+		int query_strval(HLLAPI_PACKET id, unsigned char *buffer, size_t sz)
+		{
+			DWORD								  cbSize	= sizeof(struct hllapi_packet_text)+sz;
+			struct hllapi_packet_text			* query;
+			struct hllapi_packet_text			* response;
+			int 								  rc		= -1;
+
+			query = (struct hllapi_packet_text *) malloc(cbSize+2);
+			memset(query,0,cbSize+2);
+			query->packet_id = id;
+			memcpy(query->text,buffer,sz);
+
+			response = (struct hllapi_packet_text *) malloc(cbSize+2);
+			memset(response,0,cbSize+2);
+
+			if(TransactNamedPipe(hPipe,(LPVOID) query, cbSize, &response, cbSize, &cbSize,NULL))
+			{
+				if(response->packet_id)
+				{
+					rc = response->packet_id;
+				}
+				else
+				{
+					rc = 0;
+					strncpy((char *) buffer,response->text,sz);
+				}
+			}
+
+			free(response);
+			free(query);
+
+			return rc;
+
 		}
 
 		string * query_string(void *query, size_t szQuery, size_t len)
@@ -262,6 +299,41 @@
 			va_end(var_args);
 
 			return get_intval(call(msg));
+		}
+
+		int query_strval(const char *method, unsigned char *buffer, size_t sz)
+		{
+			DBusMessage * outMsg = create_message(const char *method);
+
+			if(outMsg)
+			{
+				dbus_message_append_args(outMsg, DBUS_TYPE_STRING, &buffer, DBUS_TYPE_INVALID);
+
+				DBusMessage * rspMsg = call(outMsg);
+				if(rspMsg)
+				{
+					if(dbus_message_iter_init(rspMsg, &iter))
+					{
+						if(dbus_message_iter_get_arg_type(&iter) == DBUS_TYPE_STRING)
+						{
+							const char	* str;
+							dbus_message_iter_get_basic(&iter, &str);
+							trace("Response: [%s]",str);
+							strncpy(buffer,str,sz);
+							dbus_message_unref(msg);
+							return 0;
+						}
+
+						exception e = exception("DBUS Return type was %c, expecting %c",dbus_message_iter_get_arg_type(&iter),DBUS_TYPE_INT32);
+						dbus_message_unref(msg);
+
+						throw e;
+
+					}
+				}
+			}
+
+			return -1;
 		}
 
 #else
@@ -1188,18 +1260,17 @@
 			return query_intval(HLLAPI_PACKET_PRINT);
 		}
 
-		const char * asc2ebc(unsigned char *str, size_t sz)
+		const char * asc2ebc(unsigned char *text, int sz)
 		{
-			#warning Incomplete
-			return (const char *) str;
+			query_strval(HLLAPI_PACKET_ASC2EBC,text,sz);
+			return (const char *) text;
 		}
 
-		const char * ebc2asc(unsigned char *str, size_t sz)
+		const char * ebc2asc(unsigned char *text, int sz)
 		{
-			#warning Incomplete
-			return (const char *) str;
+			query_strval(HLLAPI_PACKET_EBC2ASC,text,sz);
+			return (const char *) text;
 		}
-
 
  	};
 

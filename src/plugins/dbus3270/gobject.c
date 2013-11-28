@@ -479,3 +479,35 @@ void pw3270_dbus_print(PW3270Dbus *object, DBusGMethodInvocation *context)
 {
 	dbus_g_method_return(context,lib3270_print(pw3270_dbus_get_session_handle(object)));
 }
+
+void pw3270_dbus_ebc2asc(PW3270Dbus *object, const gchar *from, DBusGMethodInvocation *context)
+{
+	int sz = strlen(from);
+
+	if(sz > 0)
+	{
+		unsigned char buffer[sz+1];
+		memcpy(buffer,from,sz);
+		dbus_g_method_return(context,lib3270_ebc2asc(pw3270_dbus_get_session_handle(object),buffer,sz));
+		return;
+	}
+
+	dbus_g_method_return(context,"");
+
+}
+
+void pw3270_dbus_asc2ebc(PW3270Dbus *object, const gchar *from, DBusGMethodInvocation *context)
+{
+	int sz = strlen(from);
+
+	if(sz > 0)
+	{
+		unsigned char buffer[sz+1];
+		memcpy(buffer,from,sz);
+		dbus_g_method_return(context,lib3270_asc2ebc(pw3270_dbus_get_session_handle(object),buffer,sz));
+		return;
+	}
+
+	dbus_g_method_return(context,"");
+
+}

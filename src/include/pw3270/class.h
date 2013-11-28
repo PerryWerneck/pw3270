@@ -141,8 +141,8 @@
 		virtual int               emulate_input(const char *str)                    = 0;
 
 		// Ascii<->EBCDIC translation
-		virtual const char  	* asc2ebc(unsigned char *str, size_t sz = -1)		= 0;
-		virtual const char	 	* ebc2asc(unsigned char *str, size_t sz = -1)		= 0;
+		virtual const char  	* asc2ebc(unsigned char *str, int sz = -1)			= 0;
+		virtual const char	 	* ebc2asc(unsigned char *str, int sz = -1)			= 0;
 		string					  asc2ebc(string &str);
 		string					  ebc2asc(string &str);
 
