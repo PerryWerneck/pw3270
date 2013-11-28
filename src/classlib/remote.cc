@@ -303,7 +303,7 @@
 
 		int query_strval(const char *method, unsigned char *buffer, size_t sz)
 		{
-			DBusMessage * outMsg = create_message(const char *method);
+			DBusMessage * outMsg = create_message(method);
 
 			if(outMsg)
 			{
@@ -312,6 +312,8 @@
 				DBusMessage * rspMsg = call(outMsg);
 				if(rspMsg)
 				{
+					DBusMessageIter iter;
+
 					if(dbus_message_iter_init(rspMsg, &iter))
 					{
 						if(dbus_message_iter_get_arg_type(&iter) == DBUS_TYPE_STRING)
@@ -319,13 +321,13 @@
 							const char	* str;
 							dbus_message_iter_get_basic(&iter, &str);
 							trace("Response: [%s]",str);
-							strncpy(buffer,str,sz);
-							dbus_message_unref(msg);
+							strncpy((char *) buffer,str,sz);
+							dbus_message_unref(rspMsg);
 							return 0;
 						}
 
 						exception e = exception("DBUS Return type was %c, expecting %c",dbus_message_iter_get_arg_type(&iter),DBUS_TYPE_INT32);
-						dbus_message_unref(msg);
+						dbus_message_unref(rspMsg);
 
 						throw e;
 
