@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-28 10:23-0200\n"
+"POT-Creation-Date: 2013-11-28 13:43-0200\n"
 "PO-Revision-Date: 2013-11-12 08:07-0200\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <perry.werneck@gmail.com>\n"
@@ -348,7 +348,7 @@ msgstr "Não foi possível converter a linha %d de %s para %s"
 msgid "Can't cut rectangular regions"
 msgstr "Recortar não permitido em seleção retangular"
 
-#: ft.c:279
+#: ft.c:290
 msgid "Can't get file size"
 msgstr "Não foi possível obter o tamanho do arquivo"
 
@@ -649,7 +649,7 @@ msgstr "Apagar até o final da linha"
 msgid "Error"
 msgstr "Erro"
 
-#: ft_cut.c:419 ft_dft.c:448
+#: ft_cut.c:419 ft_dft.c:450
 #, c-format
 msgid "Error \"%s\" reading from local file (rc=%d)"
 msgstr "Erro \"%s\" lendo arquivo local (rc=%d)"
@@ -785,7 +785,7 @@ msgstr "HTTP Proxy: Resposta desconhecida"
 msgid "Help"
 msgstr "Ajuda"
 
-#: ft.c:494
+#: ft.c:513
 msgid "Host disconnected, transfer cancelled"
 msgstr "Servidor desconectou, transferência cancelada"
 
@@ -985,7 +985,7 @@ msgstr "Normal/Desprotegido"
 msgid "Not available"
 msgstr "Não disponível"
 
-#: ft.c:501
+#: ft.c:520
 msgid "Not in 3270 mode, transfer cancelled"
 msgstr "Não está no modo 3270, transferência cancelada"
 
@@ -2017,7 +2017,7 @@ msgstr "Unable to get local issuer certificate"
 msgid "Unable to paste text"
 msgstr "Incapaz de colar texto"
 
-#: ft.c:364
+#: ft.c:383
 msgid "Unable to send file-transfer request"
 msgstr "Não foi possível enviar a requisição de transferência de arquivo"
 
@@ -2186,11 +2186,11 @@ msgstr "WSAEventSelect falhou"
 msgid "WSAStartup failed"
 msgstr "WSAStartup falhou"
 
-#: ft.c:373
+#: ft.c:392
 msgid "Waiting for GET response"
 msgstr "Aguardando resposta do pedido de download"
 
-#: ft.c:375
+#: ft.c:394
 msgid "Waiting for PUT response"
 msgstr "Aguardando resposta do pedido de upload"
 
