@@ -1188,6 +1188,19 @@
 			return query_intval(HLLAPI_PACKET_PRINT);
 		}
 
+		const char * asc2ebc(unsigned char *str, size_t sz)
+		{
+			#warning Incomplete
+			return (const char *) str;
+		}
+
+		const char * ebc2asc(unsigned char *str, size_t sz)
+		{
+			#warning Incomplete
+			return (const char *) str;
+		}
+
+
  	};
 
 	session	* session::create_remote(const char *session)

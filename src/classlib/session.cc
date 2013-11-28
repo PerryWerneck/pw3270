@@ -446,6 +446,23 @@
 		return get_local_text(get_text(baddr,len));
 	}
 
+	string session::asc2ebc(string &str)
+	{
+		size_t			sz 			= str.size();
+		unsigned char	buffer[sz+1];
+
+		memcpy(buffer,str.c_str(),sz);
+		return string(asc2ebc(buffer,sz));
+	}
+
+	string session::ebc2asc(string &str)
+	{
+		size_t			sz 			= str.size();
+		unsigned char	buffer[sz+1];
+		memcpy(buffer,str.c_str(),sz);
+		return string(ebc2asc(buffer,sz));
+	}
+
  }
 
 

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-27 14:51-0200\n"
+"POT-Creation-Date: 2013-11-28 10:23-0200\n"
 "PO-Revision-Date: 2013-11-12 08:07-0200\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <perry.werneck@gmail.com>\n"
@@ -664,12 +664,12 @@ msgstr "Erro \"%s\" gravando arquivo local (rc=%d)"
 msgid "Error %d resolving %s"
 msgstr "Erro %d resolvendo %s"
 
-#: telnet.c:3145 telnet.c:3156
+#: telnet.c:3146 telnet.c:3157
 #, c-format
 msgid "Error in fcntl(%s) when setting non blocking mode"
 msgstr "Erro em fcntl(%s) ao ativar o modo não blocante"
 
-#: telnet.c:3135
+#: telnet.c:3136
 #, c-format
 msgid "Error in ioctl(%s) when setting no blocking mode"
 msgstr "Erro em ioctl(%s) ao ativar o modo não blocante"
@@ -1692,7 +1692,7 @@ msgstr "Tipo de servidor:"
 msgid "TELNET Proxy: send error"
 msgstr "TELNET Proxy: Erro ao enviar"
 
-#: telnet.c:3342
+#: telnet.c:3343
 msgid "TLS negotiation failure"
 msgstr "Negociação TLS falhou"
 

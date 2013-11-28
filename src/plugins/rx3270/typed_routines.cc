@@ -217,3 +217,51 @@ RexxRoutine0(int, rx3270CloseApplication)
 {
 	return session::get_default()->quit();
 }
+
+
+RexxRoutine2(RexxStringObject, asc2ebc, CSTRING, str, OPTIONAL_int, sz)
+{
+	try
+	{
+		if(sz < 1)
+			sz = strlen(str);
+
+		if(sz)
+		{
+			char buffer[sz+1];
+			memcpy(buffer,str,sz);
+			buffer[sz] = 0;
+			return context->String((CSTRING) session::get_default()->asc2ebc((unsigned char *)buffer,sz));
+		}
+	}
+	catch(std::exception &e)
+	{
+		context->RaiseException1(Rexx_Error_Application_error,context->NewStringFromAsciiz(e.what()));
+	}
+
+	return context->String("");
+}
+
+RexxRoutine2(RexxStringObject, ebc2asc, CSTRING, str, OPTIONAL_int, sz)
+{
+	try
+	{
+		if(sz < 1)
+			sz = strlen(str);
+
+		if(sz)
+		{
+			char buffer[sz+1];
+			memcpy(buffer,str,sz);
+			buffer[sz] = 0;
+			return context->String((CSTRING) session::get_default()->ebc2asc((unsigned char *)buffer,sz));
+		}
+	}
+	catch(std::exception &e)
+	{
+		context->RaiseException1(Rexx_Error_Application_error,context->NewStringFromAsciiz(e.what()));
+	}
+
+	return context->String("");
+}
+

@@ -52,6 +52,7 @@
  #include <lib3270/charset.h>
  #include <pw3270/class.h>
 
+
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
 #if GTK_CHECK_VERSION(2,32,0)
@@ -133,6 +134,9 @@
 	int				  set_host_charset(const char *charset);
 	string			* get_host_charset(void);
 	string			* get_display_charset(void);
+
+	const char  	* asc2ebc(unsigned char *str, size_t sz = -1);
+	const char	 	* ebc2asc(unsigned char *str, size_t sz = -1);
 
     int				  quit(void);
 
@@ -756,3 +760,14 @@ int	plugin::print(void)
 {
 	return lib3270_print(hSession);
 }
+
+const char * plugin::asc2ebc(unsigned char *str, size_t sz)
+{
+	return lib3270_asc2ebc(hSession,str,sz);
+}
+
+const char * plugin::ebc2asc(unsigned char *str, size_t sz)
+{
+	return lib3270_ebc2asc(hSession,str,sz);
+}
+

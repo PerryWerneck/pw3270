@@ -402,6 +402,37 @@ LIB3270_ACTION( charsettable )
 	return 0;
 }
 
+LIB3270_EXPORT const char * lib3270_asc2ebc(H3270 *hSession, unsigned char *buffer, size_t sz)
+{
+	int f;
+	if(sz < 0)
+		sz = strlen((const char *) buffer);
+
+	if(sz > 0)
+	{
+		for(f=0;f<sz;f++)
+			buffer[f] = hSession->charset.asc2ebc[buffer[f]];
+	}
+
+	return (const char *) buffer;
+}
+
+LIB3270_EXPORT const char * lib3270_ebc2asc(H3270 *hSession, unsigned char *buffer, size_t sz)
+{
+	int f;
+	if(sz < 0)
+		sz = strlen((const char *) buffer);
+
+	if(sz > 0)
+	{
+		for(f=0;f<sz;f++)
+			buffer[f] = hSession->charset.ebc2asc[buffer[f]];
+	}
+
+	return (const char *) buffer;
+}
+
+
 // Process a single character definition.
 LIB3270_EXPORT void lib3270_remap(H3270 *hSession, unsigned short ebc, unsigned short iso, lib3270_remap_scope scope, unsigned char one_way)
 {

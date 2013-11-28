@@ -140,6 +140,12 @@
 		virtual int				  wait_for_text_at(int row, int col, const char *key, int timeout);
 		virtual int               emulate_input(const char *str)                    = 0;
 
+		// Ascii<->EBCDIC translation
+		virtual const char  	* asc2ebc(unsigned char *str, size_t sz = -1)		= 0;
+		virtual const char	 	* ebc2asc(unsigned char *str, size_t sz = -1)		= 0;
+		string					  asc2ebc(string &str);
+		string					  ebc2asc(string &str);
+
 		// Get/Set/Test with charset translation
 		string					* get_string(int baddr, size_t len);
 		string					* get_string_at(int row, int col, size_t sz);
