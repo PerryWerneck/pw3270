@@ -2710,12 +2710,13 @@ opt(unsigned char c)
 
 void trace_netdata(H3270 *hSession, char direction, unsigned const char *buf, int len)
 {
+	#define NETDUMP_MAX 121
 
 	if (lib3270_get_toggle(hSession,LIB3270_TOGGLE_NETWORK_TRACE))
 	{
-		char l1[82];
-		char l2[82];
-		char l3[82];
+		char l1[NETDUMP_MAX+2];
+		char l2[NETDUMP_MAX+2];
+		char l3[NETDUMP_MAX+2];
 
 		int offset;
 		int col = 0;
@@ -2724,7 +2725,7 @@ void trace_netdata(H3270 *hSession, char direction, unsigned const char *buf, in
 
         time(&ltime);
         strftime(l1, 81, "%x %X", localtime(&ltime));
-		lib3270_write_nettrace(hSession,"%c %s %s data len=%d\n\n",direction,l1,direction == '>' ? "outbound" : "inbound", len);
+		lib3270_write_nettrace(hSession,"%c %s %s data len=%d\n\n",direction,l1,direction == '>' ? "SEND" : "RECV", len);
 
 		for (offset = 0; offset < len; offset++)
 		{
@@ -2737,7 +2738,7 @@ void trace_netdata(H3270 *hSession, char direction, unsigned const char *buf, in
 			l2[col] = text[0];
 			l3[col] = text[1];
 
-			if(++col >= 80)
+			if(++col >= NETDUMP_MAX)
 			{
 				l1[col] = l2[col] = l3[col] = 0;
 				lib3270_write_nettrace(hSession,"\t%s\n\t%s\n\t%s\n\n",l1,l2,l3);
