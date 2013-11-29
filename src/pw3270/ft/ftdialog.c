@@ -135,6 +135,8 @@ static void toggle_option(GtkToggleButton *button, v3270FTD *dialog)
 	else
 		dialog->options &= ~opt->flag;
 
+//	g_message("Option \"%s\" is %s flag=%08lx",opt->label,gtk_toggle_button_get_active(button) ? "ON" : "OFF", (unsigned long) opt->flag);
+
 }
 
 static GtkWidget * ftoption_new(v3270FTD *dialog, const struct ftoptions *opt)
@@ -190,6 +192,32 @@ static GtkWidget * ftvalue_new(v3270FTD *dialog, const struct ftvalues *val)
 
 	return GTK_WIDGET(grid);
 
+}
+
+static GtkWidget * ftradio_new(v3270FTD *dialog, const gchar *title, const gchar *tooltip, const struct ftoptions *opt)
+{
+	GtkContainer	* frame = GTK_CONTAINER(gtk_frame_new(title));
+	GtkBox			* box	= GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL,2));
+	GSList			* lst	= NULL;
+	int				  f;
+
+	for(f=0;opt[f].label;f++)
+	{
+		GtkWidget * button = gtk_radio_button_new_with_label(lst,gettext(opt[f].label));
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),dialog->options & opt[f].flag);
+		if(opt[f].tooltip)
+			gtk_widget_set_tooltip_text(button,gettext(opt[f].tooltip));
+
+		g_object_set_data(G_OBJECT(button),"cfg",(gpointer) &opt[f]);
+		g_signal_connect(G_OBJECT(button),"toggled",G_CALLBACK(toggle_option),dialog);
+
+		gtk_box_pack_start(box,button,FALSE,TRUE,2);
+		lst =  gtk_radio_button_get_group(GTK_RADIO_BUTTON(button));
+	}
+
+	gtk_widget_set_tooltip_text(GTK_WIDGET(frame),tooltip);
+	gtk_container_add(frame,GTK_WIDGET(box));
+	return GTK_WIDGET(frame);
 }
 
 GtkWidget * v3270_dialog_ft_new(LIB3270_FT_OPTION options)
@@ -345,6 +373,76 @@ GtkWidget * v3270_dialog_ft_new(LIB3270_FT_OPTION options)
 		gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),ftoption_new(dialog,opt),FALSE,TRUE,2);
 
 
+		// Create format box
+		GtkBox * box = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL,2));
+
+		// Create record format box
+		static const struct ftoptions recfm[] =
+		{
+			{
+				LIB3270_FT_RECORD_FORMAT_DEFAULT,
+				N_("Default"),
+				N_("Use host default record format.")
+			},
+			{
+				LIB3270_FT_RECORD_FORMAT_FIXED,
+				N_("Fixed"),
+				N_("Creates a file with fixed-length records.")
+			},
+			{
+				LIB3270_FT_RECORD_FORMAT_VARIABLE,
+				N_("Variable"),
+				N_("Creates a file with variable-length records.")
+			},
+			{
+				LIB3270_FT_RECORD_FORMAT_UNDEFINED,
+				N_("Undefined"),
+				N_("Creates a file with undefined-length records (TSO hosts only).")
+			},
+			{
+				0,
+				NULL,
+				NULL
+			}
+		};
+
+		gtk_box_pack_start(	box,
+							ftradio_new(dialog,_("Record format"),_("Controls the record format of files created on the host."),recfm),FALSE,TRUE,2);
+
+
+		// Create allocation unit box
+		static const struct ftoptions units[] =
+		{
+			{
+				LIB3270_FT_ALLOCATION_UNITS_DEFAULT,
+				N_("Default"),
+				NULL
+			},
+			{
+				LIB3270_FT_ALLOCATION_UNITS_TRACKS,
+				N_("Tracks"),
+				NULL
+			},
+			{
+				LIB3270_FT_ALLOCATION_UNITS_CYLINDERS,
+				N_("Cylinders"),
+				NULL
+			},
+			{
+				LIB3270_FT_ALLOCATION_UNITS_AVBLOCK,
+				N_("Avblock"),
+				NULL
+			},
+			{
+				0,
+				NULL,
+				NULL
+			}
+		};
+
+		gtk_box_pack_start(	box,
+							ftradio_new(dialog,_("Space allocation units"),_("Specifies the units for the TSO host primary and secondary space options."),units),FALSE,TRUE,2);
+
 		// Create values box
 		static const struct ftvalues val[] =
 		{
@@ -358,7 +456,7 @@ GtkWidget * v3270_dialog_ft_new(LIB3270_FT_OPTION options)
 			{
 				VALUE_PRIMSPACE,
 				N_( "Primary space:" ),
-				N_( "Primary allocation for a file created on a TSO host.\nThe units are given by the Allocation option." )
+				N_( "Primary allocation for a file created on a TSO host.\nThe units are given by the space allocation units option." )
 			},
 
 			{
@@ -370,7 +468,7 @@ GtkWidget * v3270_dialog_ft_new(LIB3270_FT_OPTION options)
 			{
 				VALUE_SECSPACE,
 				N_( "Secondary space:" ),
-				N_( "Secondary allocation for a file created on a TSO host.\nThe units are given by the Allocation option." )
+				N_( "Secondary allocation for a file created on a TSO host.\nThe units are given by the space allocation units option." )
 			},
 
 			{
@@ -386,12 +484,10 @@ GtkWidget * v3270_dialog_ft_new(LIB3270_FT_OPTION options)
 			}
 		};
 
+		gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),GTK_WIDGET(box),FALSE,TRUE,2);
 		gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),ftvalue_new(dialog,val),FALSE,TRUE,2);
 
 	}
-
-
-	// File transfer options
 
 	return GTK_WIDGET(dialog);
 }
