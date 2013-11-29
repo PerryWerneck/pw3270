@@ -37,7 +37,7 @@ int main (int argc, char *argv[])
 	GtkWidget *win;
 
 	gtk_init (&argc, &argv);
-	win = v3270_dialog_ft_new(LIB3270_FT_OPTION_RECEIVE);
+	win = v3270_dialog_ft_new(LIB3270_FT_OPTION_RECEIVE|LIB3270_FT_OPTION_ASCII);
 
 
 	gtk_widget_show_all (win);

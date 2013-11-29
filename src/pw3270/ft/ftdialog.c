@@ -100,6 +100,49 @@ static void browse_file(GtkButton *button,v3270FTD *parent)
 
 }
 
+	struct ftoptions
+	{
+		LIB3270_FT_OPTION	  flag;
+		const gchar 		* label;
+		const gchar			* tooltip;
+	};
+
+
+static void toggle_option(GtkToggleButton *button, v3270FTD *dialog)
+{
+	const struct ftoptions *opt = (const struct ftoptions *) g_object_get_data(G_OBJECT(button),"cfg");
+
+	if(gtk_toggle_button_get_active(button))
+		dialog->options |= opt->flag;
+	else
+		dialog->options &= ~opt->flag;
+
+}
+
+static GtkWidget * ftoption_new(v3270FTD *dialog, const struct ftoptions *opt)
+{
+	GtkGrid	* grid = GTK_GRID(gtk_grid_new());
+	int		  f;
+
+	gtk_grid_set_row_homogeneous(grid,TRUE);
+	gtk_grid_set_column_homogeneous(grid,TRUE);
+	gtk_grid_set_column_spacing(grid,5);
+	gtk_grid_set_row_spacing(grid,5);
+
+	for(f=0;opt[f].label;f++)
+	{
+		GtkWidget * button = gtk_check_button_new_with_mnemonic(gettext(opt[f].label));
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),dialog->options & opt[f].flag);
+		gtk_widget_set_tooltip_text(GTK_WIDGET(button),gettext(opt[f].tooltip));
+		gtk_widget_set_hexpand(button,TRUE);
+		gtk_grid_attach(grid,button,f&1,f/2,1,1);
+		g_object_set_data(G_OBJECT(button),"cfg",(gpointer) &opt[f]);
+		g_signal_connect(G_OBJECT(button),"toggled",G_CALLBACK(toggle_option),dialog);
+	}
+
+	return GTK_WIDGET(grid);
+}
+
 GtkWidget * v3270_dialog_ft_new(LIB3270_FT_OPTION options)
 {
 	v3270FTD *dialog = g_object_new(GTK_TYPE_V3270FTD, NULL);
@@ -135,9 +178,40 @@ GtkWidget * v3270_dialog_ft_new(LIB3270_FT_OPTION options)
 	gtk_widget_set_tooltip_text(GTK_WIDGET(browse),_("Select file"));
 	g_signal_connect(G_OBJECT(browse),"clicked",G_CALLBACK(browse_file),dialog);
 
+	GtkWidget * ftOptions;
+
 	if(options & LIB3270_FT_OPTION_RECEIVE)
 	{
 		// It's receiving file first host filename, then local filename
+		static const struct ftoptions opt[] =
+		{
+				{
+					LIB3270_FT_OPTION_ASCII,
+					N_( "_Text file" ),
+					N_( "Mark this box if it's a text file.")
+				},
+				{
+					LIB3270_FT_OPTION_CRLF,
+					N_( "Add/Remove _CR at end of line" ),
+					N_( "If check the file will receive a CR/LF at the end of every line.")
+				},
+				{
+					LIB3270_FT_OPTION_APPEND,
+					N_( "_Append" ),
+					N_( "If check the data will be appended to the current file, if uncheck the file will be replaced.")
+				},
+				{
+					LIB3270_FT_OPTION_REMAP,
+					N_("_Remap ASCII Characters"),
+					N_("Check to translate file contents from EBCDIC to ASCII.")
+				},
+				{
+					0,
+					NULL,
+					NULL
+				}
+		};
+
 		gtk_window_set_title(GTK_WINDOW(dialog),_( "Receive file from host" ));
 
 		gtk_grid_attach(grid,label[FILENAME_HOST],0,0,1,1);
@@ -149,6 +223,8 @@ GtkWidget * v3270_dialog_ft_new(LIB3270_FT_OPTION options)
 
 		gtk_widget_set_tooltip_text(dialog->filename[FILENAME_HOST],_("Name of the origin file on the host"));
 		gtk_widget_set_tooltip_text(dialog->filename[FILENAME_LOCAL],_("Where to save the received file"));
+
+		ftOptions = ftoption_new(dialog,opt);
 
 	}
 	else
@@ -168,6 +244,7 @@ GtkWidget * v3270_dialog_ft_new(LIB3270_FT_OPTION options)
 	}
 
 	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),GTK_WIDGET(grid),FALSE,TRUE,2);
+	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),ftOptions,FALSE,TRUE,2);
 
 	// File transfer options
 
