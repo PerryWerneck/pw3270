@@ -141,8 +141,9 @@ static void toggle_option(GtkToggleButton *button, v3270FTD *dialog)
 
 static GtkWidget * ftoption_new(v3270FTD *dialog, const struct ftoptions *opt)
 {
-	GtkGrid	* grid = GTK_GRID(gtk_grid_new());
-	int		  f;
+	GtkContainer	* frame = GTK_CONTAINER(gtk_frame_new(_("Transfer options")));
+	GtkGrid			* grid = GTK_GRID(gtk_grid_new());
+	int				  f;
 
 	gtk_grid_set_row_homogeneous(grid,TRUE);
 	gtk_grid_set_column_homogeneous(grid,TRUE);
@@ -152,7 +153,7 @@ static GtkWidget * ftoption_new(v3270FTD *dialog, const struct ftoptions *opt)
 	for(f=0;opt[f].label;f++)
 	{
 		GtkWidget * button = gtk_check_button_new_with_mnemonic(gettext(opt[f].label));
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),dialog->options & opt[f].flag);
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),(dialog->options & opt[f].flag) != 0);
 		gtk_widget_set_tooltip_text(GTK_WIDGET(button),gettext(opt[f].tooltip));
 		gtk_widget_set_hexpand(button,TRUE);
 		gtk_grid_attach(grid,button,f&1,f/2,1,1);
@@ -160,25 +161,41 @@ static GtkWidget * ftoption_new(v3270FTD *dialog, const struct ftoptions *opt)
 		g_signal_connect(G_OBJECT(button),"toggled",G_CALLBACK(toggle_option),dialog);
 	}
 
-	return GTK_WIDGET(grid);
+	gtk_container_add(frame,GTK_WIDGET(grid));
+
+	return GTK_WIDGET(frame);
 }
 
-static GtkWidget * ftvalue_new(v3270FTD *dialog, const struct ftvalues *val)
+/*
+http://stackoverflow.com/questions/16539127/gtkentry-change-text-on-user-input
+void entry_insert(GtkEntryBuffer *buffer, guint position, gchar *chars, guint n_chars, gpointer user_data)
 {
-	GtkGrid	* grid = GTK_GRID(gtk_grid_new());
-	int		  f;
 
-	gtk_grid_set_row_homogeneous(grid,TRUE);
-	gtk_grid_set_column_homogeneous(grid,TRUE);
-	gtk_grid_set_column_spacing(grid,5);
-	gtk_grid_set_row_spacing(grid,5);
+}
+static void setup_numeric_entry(GtkEntry *entry)
+{
+	gtk_entry_set_max_length(entry,10);
+	gtk_entry_set_width_chars(entry,10);
+	gtk_entry_set_alignment(entry,1);
+	gtk_entry_set_input_purpose(entry,GTK_INPUT_PURPOSE_NUMBER);
+	g_signal_connect_after(G_OBJECT(entry), "insert-text", G_CALLBACK(entry_insert),NULL);
+}
+*/
+
+static GtkWidget * ftvalue_new(v3270FTD *dialog, GtkGrid *grid, int r, const struct ftvalues *val)
+{
+	int		  f;
 
 	for(f=0;val[f].label;f++)
 	{
-		int			  col	= (f&1)*2;
-		int			  row	= f/2;
-		GtkWidget	* label	= gtk_label_new_with_mnemonic(gettext(val[f].label));
-		GtkEntry	* entry = GTK_ENTRY(gtk_entry_new());
+		int				  col	= (f&1)*2;
+		int				  row	= (f/2)+r;
+		GtkWidget		* label	= gtk_label_new_with_mnemonic(gettext(val[f].label));
+		GtkWidget		* entry = GTK_WIDGET(gtk_spin_button_new_with_range(0,99999,1));
+
+		gtk_widget_set_hexpand(GTK_WIDGET(label),TRUE);
+		gtk_widget_set_tooltip_text(GTK_WIDGET(label),gettext(val[f].tooltip));
+		gtk_misc_set_alignment(GTK_MISC(label),0,0.5);
 
 		gtk_label_set_mnemonic_widget(GTK_LABEL(label),GTK_WIDGET(entry));
 		gtk_widget_set_tooltip_text(GTK_WIDGET(entry),gettext(val[f].tooltip));
@@ -204,7 +221,7 @@ static GtkWidget * ftradio_new(v3270FTD *dialog, const gchar *title, const gchar
 	for(f=0;opt[f].label;f++)
 	{
 		GtkWidget * button = gtk_radio_button_new_with_label(lst,gettext(opt[f].label));
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),dialog->options & opt[f].flag);
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),(dialog->options & opt[f].flag) != 0);
 		if(opt[f].tooltip)
 			gtk_widget_set_tooltip_text(button,gettext(opt[f].tooltip));
 
@@ -304,6 +321,7 @@ GtkWidget * v3270_dialog_ft_new(LIB3270_FT_OPTION options)
 		gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),ftoption_new(dialog,opt),FALSE,TRUE,2);
 
 		// Create values box
+		/*
 		static const struct ftvalues val[] =
 		{
 			{
@@ -319,8 +337,8 @@ GtkWidget * v3270_dialog_ft_new(LIB3270_FT_OPTION options)
 			}
 		};
 
-		gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),ftvalue_new(dialog,val),FALSE,TRUE,2);
-
+		// gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),ftvalue_new(dialog,val),FALSE,TRUE,2);
+		*/
 	}
 	else
 	{
@@ -374,7 +392,9 @@ GtkWidget * v3270_dialog_ft_new(LIB3270_FT_OPTION options)
 
 
 		// Create format box
-		GtkBox * box = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL,2));
+		GtkGrid * grid = GTK_GRID(gtk_grid_new());
+		gtk_grid_set_column_spacing(grid,5);
+		gtk_grid_set_row_spacing(grid,5);
 
 		// Create record format box
 		static const struct ftoptions recfm[] =
@@ -406,8 +426,10 @@ GtkWidget * v3270_dialog_ft_new(LIB3270_FT_OPTION options)
 			}
 		};
 
-		gtk_box_pack_start(	box,
-							ftradio_new(dialog,_("Record format"),_("Controls the record format of files created on the host."),recfm),FALSE,TRUE,2);
+		gtk_grid_attach(	grid,
+							ftradio_new(dialog,_("Record format"),_("Controls the record format of files created on the host."),recfm),
+							0,0,2,1
+						);
 
 
 		// Create allocation unit box
@@ -440,15 +462,18 @@ GtkWidget * v3270_dialog_ft_new(LIB3270_FT_OPTION options)
 			}
 		};
 
-		gtk_box_pack_start(	box,
-							ftradio_new(dialog,_("Space allocation units"),_("Specifies the units for the TSO host primary and secondary space options."),units),FALSE,TRUE,2);
+		gtk_grid_attach(	grid,
+							ftradio_new(dialog,_("Space allocation units"),_("Specifies the units for the TSO host primary and secondary space options."),units),
+							2,0,2,1
+						);
+
 
 		// Create values box
 		static const struct ftvalues val[] =
 		{
 			{
 				VALUE_LRECL,
-				N_( "Lrecl:" ),
+				N_( "Record Length:" ),
 				N_( "Specifies the record length (or maximum record length) for files created on the host." )
 			},
 
@@ -461,7 +486,7 @@ GtkWidget * v3270_dialog_ft_new(LIB3270_FT_OPTION options)
 
 			{
 				VALUE_BLKSIZE,
-				N_( "Blksize:" ),
+				N_( "Block size:" ),
 				N_( "Specifies the block size for files created on the host (TSO hosts only)." )
 			},
 
@@ -484,8 +509,9 @@ GtkWidget * v3270_dialog_ft_new(LIB3270_FT_OPTION options)
 			}
 		};
 
-		gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),GTK_WIDGET(box),FALSE,TRUE,2);
-		gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),ftvalue_new(dialog,val),FALSE,TRUE,2);
+		ftvalue_new(dialog,grid,1,val);
+
+		gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),GTK_WIDGET(grid),FALSE,TRUE,2);
 
 	}
 
