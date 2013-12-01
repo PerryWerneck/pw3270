@@ -54,7 +54,8 @@
  {
 	GtkDialog			  parent;
 	GtkWidget			* filename[FILENAME_COUNT];	/**< Filenames for the transfer */
-	int					  value[VALUE_COUNT];
+	GtkWidget			* units;					/**< Units frame box */
+	GtkSpinButton		* value[VALUE_COUNT];
 	LIB3270_FT_OPTION	  options;
  };
 
@@ -166,22 +167,6 @@ static GtkWidget * ftoption_new(v3270FTD *dialog, const struct ftoptions *opt)
 	return GTK_WIDGET(frame);
 }
 
-/*
-http://stackoverflow.com/questions/16539127/gtkentry-change-text-on-user-input
-void entry_insert(GtkEntryBuffer *buffer, guint position, gchar *chars, guint n_chars, gpointer user_data)
-{
-
-}
-static void setup_numeric_entry(GtkEntry *entry)
-{
-	gtk_entry_set_max_length(entry,10);
-	gtk_entry_set_width_chars(entry,10);
-	gtk_entry_set_alignment(entry,1);
-	gtk_entry_set_input_purpose(entry,GTK_INPUT_PURPOSE_NUMBER);
-	g_signal_connect_after(G_OBJECT(entry), "insert-text", G_CALLBACK(entry_insert),NULL);
-}
-*/
-
 static GtkWidget * ftvalue_new(v3270FTD *dialog, GtkGrid *grid, int r, const struct ftvalues *val)
 {
 	int		  f;
@@ -190,20 +175,22 @@ static GtkWidget * ftvalue_new(v3270FTD *dialog, GtkGrid *grid, int r, const str
 	{
 		int				  col	= (f&1)*2;
 		int				  row	= (f/2)+r;
+		int				  id	= val[f].id;
 		GtkWidget		* label	= gtk_label_new_with_mnemonic(gettext(val[f].label));
-		GtkWidget		* entry = GTK_WIDGET(gtk_spin_button_new_with_range(0,99999,1));
+
+		dialog->value[id]	= GTK_SPIN_BUTTON(gtk_spin_button_new_with_range(0,99999,1));
 
 		gtk_widget_set_hexpand(GTK_WIDGET(label),TRUE);
 		gtk_widget_set_tooltip_text(GTK_WIDGET(label),gettext(val[f].tooltip));
 		gtk_misc_set_alignment(GTK_MISC(label),0,0.5);
 
-		gtk_label_set_mnemonic_widget(GTK_LABEL(label),GTK_WIDGET(entry));
-		gtk_widget_set_tooltip_text(GTK_WIDGET(entry),gettext(val[f].tooltip));
+		gtk_label_set_mnemonic_widget(GTK_LABEL(label),GTK_WIDGET(dialog->value[id]));
+		gtk_widget_set_tooltip_text(GTK_WIDGET(dialog->value[id]),gettext(val[f].tooltip));
 
-		g_object_set_data(G_OBJECT(entry),"cfg",(gpointer) &val[f]);
+		g_object_set_data(G_OBJECT(dialog->value[id]),"cfg",(gpointer) &val[f]);
 
 		gtk_grid_attach(grid,GTK_WIDGET(label),col,row,1,1);
-		gtk_grid_attach(grid,GTK_WIDGET(entry),col+1,row,1,1);
+		gtk_grid_attach(grid,GTK_WIDGET(dialog->value[id]),col+1,row,1,1);
 
 	}
 
@@ -237,7 +224,7 @@ static GtkWidget * ftradio_new(v3270FTD *dialog, const gchar *title, const gchar
 	return GTK_WIDGET(frame);
 }
 
-GtkWidget * v3270_dialog_ft_new(LIB3270_FT_OPTION options)
+GtkWidget * v3270_ft_dialog_new(LIB3270_FT_OPTION options)
 {
 	v3270FTD *dialog = g_object_new(GTK_TYPE_V3270FTD, NULL);
 
@@ -266,7 +253,12 @@ GtkWidget * v3270_dialog_ft_new(LIB3270_FT_OPTION options)
 	gtk_grid_set_column_spacing(grid,5);
 	gtk_grid_set_row_spacing(grid,5);
 
+#if GTK_CHECK_VERSION(3,10,0)
 	GtkButton * browse = GTK_BUTTON(gtk_button_new_from_icon_name("text-x-generic",GTK_ICON_SIZE_BUTTON));
+#else
+	GtkButton * browse = GTK_BUTTON(gtk_button_new_from_stock(GTK_STOCK_FILE));
+#endif // GTK_CHECK_VERSION
+
 	gtk_button_set_focus_on_click(browse,FALSE);
 	gtk_widget_set_tooltip_text(GTK_WIDGET(browse),_("Select file"));
 	g_signal_connect(G_OBJECT(browse),"clicked",G_CALLBACK(browse_file),dialog);
@@ -308,7 +300,7 @@ GtkWidget * v3270_dialog_ft_new(LIB3270_FT_OPTION options)
 				},
 				{
 					LIB3270_FT_OPTION_REMAP,
-					N_("_Remap to ASCII Characters."),
+					N_("Re_map to ASCII Characters."),
 					N_("Remap the text to ensure maximum compatibility between the workstation's character set and encoding and the host's EBCDIC code page.")
 				},
 				{
@@ -320,25 +312,19 @@ GtkWidget * v3270_dialog_ft_new(LIB3270_FT_OPTION options)
 
 		gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),ftoption_new(dialog,opt),FALSE,TRUE,2);
 
-		// Create values box
-		/*
-		static const struct ftvalues val[] =
-		{
-			{
-				VALUE_DFT,
-				N_( "DFT B_uffer size:" ),
-				N_( "Buffer size for DFT-mode transfers. Can range from 256 to 32768. Larger values give better performance, but some hosts may not be able to support them." )
-			},
+		// Create DFT
+		GtkBox	* box	= GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL,2));
+		GtkWidget * label	= gtk_label_new_with_mnemonic(_("DFT B_uffer size:"));
+		dialog->value[VALUE_DFT] = GTK_SPIN_BUTTON(gtk_spin_button_new_with_range(256,32768,1));
+		gtk_misc_set_alignment(GTK_MISC(label),0,0.5);
 
-			{
-				0,
-				NULL,
-				NULL
-			}
-		};
+		gtk_label_set_mnemonic_widget(GTK_LABEL(label),GTK_WIDGET(dialog->value[VALUE_DFT]));
 
-		// gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),ftvalue_new(dialog,val),FALSE,TRUE,2);
-		*/
+		gtk_box_pack_start(box,label,FALSE,TRUE,2);
+		gtk_box_pack_start(box,GTK_WIDGET(dialog->value[VALUE_DFT]),FALSE,TRUE,2);
+
+		gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),GTK_WIDGET(box),FALSE,TRUE,2);
+
 	}
 	else
 	{
@@ -378,7 +364,7 @@ GtkWidget * v3270_dialog_ft_new(LIB3270_FT_OPTION options)
 				},
 				{
 					LIB3270_FT_OPTION_REMAP,
-					N_("_Remap to EBCDIC Characters."),
+					N_("Re_map to EBCDIC Characters."),
 					N_("Remap the text to ensure maximum compatibility between the workstation's character set and encoding and the host's EBCDIC code page.")
 				},
 				{
@@ -462,8 +448,10 @@ GtkWidget * v3270_dialog_ft_new(LIB3270_FT_OPTION options)
 			}
 		};
 
+		dialog->units = ftradio_new(dialog,_("Space allocation units"),_("Specifies the units for the TSO host primary and secondary space options."),units);
+
 		gtk_grid_attach(	grid,
-							ftradio_new(dialog,_("Space allocation units"),_("Specifies the units for the TSO host primary and secondary space options."),units),
+							dialog->units,
 							2,0,2,1
 						);
 
@@ -499,7 +487,7 @@ GtkWidget * v3270_dialog_ft_new(LIB3270_FT_OPTION options)
 			{
 				VALUE_DFT,
 				N_( "DFT B_uffer size:" ),
-				N_( "Buffer size for DFT-mode transfers. Can range from 256 to 32768. Larger values give better performance, but some hosts may not be able to support them." )
+				""
 			},
 
 			{
@@ -513,8 +501,79 @@ GtkWidget * v3270_dialog_ft_new(LIB3270_FT_OPTION options)
 
 		gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),GTK_WIDGET(grid),FALSE,TRUE,2);
 
+		gtk_spin_button_set_range(dialog->value[VALUE_DFT],256,32768);
 	}
+
+	gtk_widget_set_tooltip_text(GTK_WIDGET(dialog->value[VALUE_DFT]),_( "Buffer size for DFT-mode transfers. Can range from 256 to 32768. Larger values give better performance, but some hosts may not be able to support them."));
+	gtk_spin_button_set_value(dialog->value[VALUE_DFT],4096);
+
+	gtk_dialog_add_buttons(GTK_DIALOG(dialog),
+				GTK_STOCK_CANCEL,	GTK_RESPONSE_CANCEL,
+				(options & LIB3270_FT_OPTION_RECEIVE) != 0 ? GTK_STOCK_SAVE : GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+				NULL);
+
+	gtk_widget_show_all(gtk_dialog_get_content_area(GTK_DIALOG(dialog)));
 
 	return GTK_WIDGET(dialog);
 }
 
+void v3270_ft_dialog_set_host_filename(GtkWidget *widget, const gchar *name)
+{
+	g_return_if_fail(GTK_IS_V3270FTD(widget));
+	gtk_entry_set_text(GTK_ENTRY(GTK_V3270FTD(widget)->filename[FILENAME_HOST]),name);
+}
+
+void v3270_ft_dialog_set_local_filename(GtkWidget *widget, const gchar *name)
+{
+	g_return_if_fail(GTK_IS_V3270FTD(widget));
+	gtk_entry_set_text(GTK_ENTRY(GTK_V3270FTD(widget)->filename[FILENAME_LOCAL]),name);
+}
+
+const gchar * v3270_ft_dialog_get_host_filename(GtkWidget *widget)
+{
+	g_return_val_if_fail(GTK_IS_V3270FTD(widget),NULL);
+	return gtk_entry_get_text(GTK_ENTRY(GTK_V3270FTD(widget)->filename[FILENAME_HOST]));
+}
+
+const gchar * v3270_ft_dialog_get_local_filename(GtkWidget *widget)
+{
+	g_return_val_if_fail(GTK_IS_V3270FTD(widget),NULL);
+	return gtk_entry_get_text(GTK_ENTRY(GTK_V3270FTD(widget)->filename[FILENAME_LOCAL]));
+}
+
+LIB3270_FT_OPTION v3270_ft_dialog_get_options(GtkWidget *widget)
+{
+	g_return_val_if_fail(GTK_IS_V3270FTD(widget),0);
+	return GTK_V3270FTD(widget)->options;
+}
+
+void v3270_ft_dialog_set_options(GtkWidget *widget,LIB3270_FT_OPTION options)
+{
+	g_return_if_fail(GTK_IS_V3270FTD(widget));
+
+	#warning Implementar
+}
+
+void v3270_ft_dialog_set_tso(GtkWidget *widget,gboolean flag)
+{
+	g_return_if_fail(GTK_IS_V3270FTD(widget));
+
+	v3270FTD *dialog = GTK_V3270FTD(widget);
+
+	GtkWidget *tsoWidget[] =
+	{
+		GTK_WIDGET(dialog->value[VALUE_BLKSIZE]),
+		GTK_WIDGET(dialog->value[VALUE_PRIMSPACE]),
+		GTK_WIDGET(dialog->value[VALUE_SECSPACE]),
+		GTK_WIDGET(dialog->units),
+	};
+
+	int f;
+
+	for(f=0;f<G_N_ELEMENTS(tsoWidget);f++)
+	{
+		if(tsoWidget[f])
+			gtk_widget_set_sensitive(tsoWidget[f],flag);
+	}
+
+}

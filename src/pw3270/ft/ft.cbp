@@ -40,6 +40,9 @@
 		<Unit filename="ftdialog.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="ftprogress.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="testprogram.c">
 			<Option compilerVar="CC" />
 		</Unit>

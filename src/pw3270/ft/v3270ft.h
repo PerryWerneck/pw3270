@@ -47,6 +47,7 @@
 
  G_BEGIN_DECLS
 
+/*--[ Select file dialog ]---------------------------------------------------------------------------*/
  #define GTK_TYPE_V3270FTD				(v3270FTD_get_type ())
  #define GTK_V3270FTD(obj)				(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_V3270FTD, v3270FTD))
  #define GTK_V3270FTD_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_V3270FTD, v3270FTDClass))
@@ -57,9 +58,29 @@
  typedef struct _v3270FTD		v3270FTD;
  typedef struct _v3270FTDClass	v3270FTDClass;
 
- // Prototipes
- GtkWidget		* v3270_dialog_ft_new(LIB3270_FT_OPTION options);
+/*--[ Progress widget ]------------------------------------------------------------------------------*/
 
+ #define GTK_TYPE_V3270FTProgress				(v3270FTProgress_get_type ())
+ #define GTK_V3270FTProcess(obj)				(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_V3270FTProgress, v3270FTProgress))
+ #define GTK_V3270FTProgress_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_V3270FTProgress, v3270FTProgressClass))
+ #define GTK_IS_V3270FTProgress(obj)			(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_V3270FTProgress))
+ #define GTK_IS_V3270FTProgress_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_V3270FTProgress))
+ #define GTK_V3270FTProgress_GET_CLASS(obj)		(G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_V3270FTProgress, v3270FTProgressClass))
+
+ typedef struct _v3270FTProgress		v3270FTProgress;
+ typedef struct _v3270FTProgressClass	v3270FTProgressClass;
+
+/*--[ Prototipes ]-----------------------------------------------------------------------------------*/
+ LIB3270_EXPORT	GtkWidget			* v3270_ft_dialog_new(LIB3270_FT_OPTION options);
+ LIB3270_EXPORT	void				  v3270_ft_dialog_set_host_filename(GtkWidget *widget, const gchar *name);
+ LIB3270_EXPORT	void				  v3270_ft_dialog_set_local_filename(GtkWidget *widget, const gchar *name);
+ LIB3270_EXPORT const gchar			* v3270_ft_dialog_get_host_filename(GtkWidget *widget);
+ LIB3270_EXPORT const gchar			* v3270_ft_dialog_get_local_filename(GtkWidget *widget);
+ LIB3270_EXPORT void				  v3270_ft_dialog_set_options(GtkWidget *widget,LIB3270_FT_OPTION options);
+ LIB3270_EXPORT LIB3270_FT_OPTION	  v3270_ft_dialog_get_options(GtkWidget *widget);
+ LIB3270_EXPORT void				  v3270_ft_dialog_set_tso(GtkWidget *widget,gboolean flag);
+
+ LIB3270_EXPORT GtkWidget			* v3270_ft_progress_new(void);
 
 
  G_END_DECLS
