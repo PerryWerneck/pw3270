@@ -71,7 +71,7 @@
  typedef struct _v3270FTProgressClass	v3270FTProgressClass;
 
 /*--[ Prototipes ]-----------------------------------------------------------------------------------*/
- LIB3270_EXPORT	GtkWidget			* v3270_ft_dialog_new(LIB3270_FT_OPTION options);
+ LIB3270_EXPORT	GtkWidget			* v3270_ft_dialog_new(GtkWidget *parent, LIB3270_FT_OPTION options);
  LIB3270_EXPORT	void				  v3270_ft_dialog_set_host_filename(GtkWidget *widget, const gchar *name);
  LIB3270_EXPORT	void				  v3270_ft_dialog_set_local_filename(GtkWidget *widget, const gchar *name);
  LIB3270_EXPORT const gchar			* v3270_ft_dialog_get_host_filename(GtkWidget *widget);
@@ -79,6 +79,17 @@
  LIB3270_EXPORT void				  v3270_ft_dialog_set_options(GtkWidget *widget,LIB3270_FT_OPTION options);
  LIB3270_EXPORT LIB3270_FT_OPTION	  v3270_ft_dialog_get_options(GtkWidget *widget);
  LIB3270_EXPORT void				  v3270_ft_dialog_set_tso(GtkWidget *widget,gboolean flag);
+ LIB3270_EXPORT void				  v3270_ft_dialog_set_dft_buffer_size(GtkWidget *widget, gint value);
+ LIB3270_EXPORT void 				  v3270_ft_dialog_set_record_length(GtkWidget *widget, gint value);
+ LIB3270_EXPORT void 				  v3270_ft_dialog_set_block_size(GtkWidget *widget, gint value);
+ LIB3270_EXPORT void 				  v3270_ft_dialog_set_primary_space(GtkWidget *widget, gint value);
+ LIB3270_EXPORT void 				  v3270_ft_dialog_set_secondary_space(GtkWidget *widget, gint value);
+
+ LIB3270_EXPORT gint				  v3270_ft_dialog_get_dft_buffer_size(GtkWidget *widget);
+ LIB3270_EXPORT gint 				  v3270_ft_dialog_get_record_length(GtkWidget *widget);
+ LIB3270_EXPORT gint 				  v3270_ft_dialog_get_block_size(GtkWidget *widget);
+ LIB3270_EXPORT gint 				  v3270_ft_dialog_get_primary_space(GtkWidget *widget);
+ LIB3270_EXPORT gint 				  v3270_ft_dialog_get_secondary_space(GtkWidget *widget);
 
  LIB3270_EXPORT GtkWidget			* v3270_ft_progress_new(void);
  LIB3270_EXPORT void				  v3270_ft_progress_update(GtkWidget *widget, unsigned long current, unsigned long total, double kbytes_sec);

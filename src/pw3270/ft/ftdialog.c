@@ -181,11 +181,15 @@ static GtkWidget * ftvalue_new(v3270FTD *dialog, GtkGrid *grid, int r, const str
 		dialog->value[id]	= GTK_SPIN_BUTTON(gtk_spin_button_new_with_range(0,99999,1));
 
 		gtk_widget_set_hexpand(GTK_WIDGET(label),TRUE);
-		gtk_widget_set_tooltip_text(GTK_WIDGET(label),gettext(val[f].tooltip));
 		gtk_misc_set_alignment(GTK_MISC(label),0,0.5);
 
 		gtk_label_set_mnemonic_widget(GTK_LABEL(label),GTK_WIDGET(dialog->value[id]));
-		gtk_widget_set_tooltip_text(GTK_WIDGET(dialog->value[id]),gettext(val[f].tooltip));
+
+		if(val[f].tooltip && *val[f].tooltip)
+		{
+			gtk_widget_set_tooltip_text(GTK_WIDGET(label),gettext(val[f].tooltip));
+			gtk_widget_set_tooltip_text(GTK_WIDGET(dialog->value[id]),gettext(val[f].tooltip));
+		}
 
 		g_object_set_data(G_OBJECT(dialog->value[id]),"cfg",(gpointer) &val[f]);
 
@@ -224,9 +228,12 @@ static GtkWidget * ftradio_new(v3270FTD *dialog, const gchar *title, const gchar
 	return GTK_WIDGET(frame);
 }
 
-GtkWidget * v3270_ft_dialog_new(LIB3270_FT_OPTION options)
+GtkWidget * v3270_ft_dialog_new(GtkWidget *parent, LIB3270_FT_OPTION options)
 {
 	v3270FTD *dialog = g_object_new(GTK_TYPE_V3270FTD, NULL);
+
+	if(parent)
+		gtk_window_set_transient_for(GTK_WINDOW(dialog),GTK_WINDOW(gtk_widget_get_toplevel(parent)));
 
 	// Set defaults
 	dialog->options = options;
@@ -313,8 +320,8 @@ GtkWidget * v3270_ft_dialog_new(LIB3270_FT_OPTION options)
 		gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),ftoption_new(dialog,opt),FALSE,TRUE,2);
 
 		// Create DFT
-		GtkBox	* box	= GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL,2));
-		GtkWidget * label	= gtk_label_new_with_mnemonic(_("DFT B_uffer size:"));
+		GtkBox		* box	= GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL,2));
+		GtkWidget	* label	= gtk_label_new_with_mnemonic(_("DFT B_uffer size:"));
 		dialog->value[VALUE_DFT] = GTK_SPIN_BUTTON(gtk_spin_button_new_with_range(256,32768,1));
 		gtk_misc_set_alignment(GTK_MISC(label),0,0.5);
 
@@ -576,4 +583,78 @@ void v3270_ft_dialog_set_tso(GtkWidget *widget,gboolean flag)
 			gtk_widget_set_sensitive(tsoWidget[f],flag);
 	}
 
+}
+
+LIB3270_EXPORT void v3270_ft_dialog_set_dft_buffer_size(GtkWidget *widget, gint value)
+{
+	g_return_if_fail(GTK_IS_V3270FTD(widget));
+	gtk_spin_button_set_value(GTK_V3270FTD(widget)->value[VALUE_DFT],value);
+}
+
+LIB3270_EXPORT void v3270_ft_dialog_set_record_length(GtkWidget *widget, gint value)
+{
+	g_return_if_fail(GTK_IS_V3270FTD(widget));
+	if(GTK_V3270FTD(widget)->value[VALUE_LRECL])
+		gtk_spin_button_set_value(GTK_V3270FTD(widget)->value[VALUE_LRECL],value);
+}
+
+LIB3270_EXPORT void v3270_ft_dialog_set_block_size(GtkWidget *widget, gint value)
+{
+	g_return_if_fail(GTK_IS_V3270FTD(widget));
+	if(GTK_V3270FTD(widget)->value[VALUE_BLKSIZE])
+		gtk_spin_button_set_value(GTK_V3270FTD(widget)->value[VALUE_BLKSIZE],value);
+}
+
+LIB3270_EXPORT void v3270_ft_dialog_set_primary_space(GtkWidget *widget, gint value)
+{
+	g_return_if_fail(GTK_IS_V3270FTD(widget));
+	if(GTK_V3270FTD(widget)->value[VALUE_PRIMSPACE])
+		gtk_spin_button_set_value(GTK_V3270FTD(widget)->value[VALUE_PRIMSPACE],value);
+}
+
+LIB3270_EXPORT void v3270_ft_dialog_set_secondary_space(GtkWidget *widget, gint value)
+{
+	g_return_if_fail(GTK_IS_V3270FTD(widget));
+	if(GTK_V3270FTD(widget)->value[VALUE_SECSPACE])
+		gtk_spin_button_set_value(GTK_V3270FTD(widget)->value[VALUE_SECSPACE],value);
+}
+
+LIB3270_EXPORT gint	v3270_ft_dialog_get_dft_buffer_size(GtkWidget *widget)
+{
+	g_return_val_if_fail(GTK_IS_V3270FTD(widget),0);
+	return gtk_spin_button_get_value_as_int(GTK_V3270FTD(widget)->value[VALUE_DFT]);
+}
+
+LIB3270_EXPORT gint v3270_ft_dialog_get_record_length(GtkWidget *widget)
+{
+	g_return_val_if_fail(GTK_IS_V3270FTD(widget),0);
+	if(GTK_V3270FTD(widget)->value[VALUE_LRECL])
+		return gtk_spin_button_get_value_as_int(GTK_V3270FTD(widget)->value[VALUE_LRECL]);
+	return 0;
+}
+
+LIB3270_EXPORT gint v3270_ft_dialog_get_block_size(GtkWidget *widget)
+{
+	g_return_val_if_fail(GTK_IS_V3270FTD(widget),0);
+
+	if(GTK_V3270FTD(widget)->value[VALUE_BLKSIZE])
+		return gtk_spin_button_get_value_as_int(GTK_V3270FTD(widget)->value[VALUE_BLKSIZE]);
+	return 0;
+}
+
+LIB3270_EXPORT gint v3270_ft_dialog_get_primary_space(GtkWidget *widget)
+{
+	g_return_val_if_fail(GTK_IS_V3270FTD(widget),0);
+
+	if(GTK_V3270FTD(widget)->value[VALUE_PRIMSPACE])
+		return gtk_spin_button_get_value_as_int(GTK_V3270FTD(widget)->value[VALUE_PRIMSPACE]);
+	return 0;
+}
+
+LIB3270_EXPORT gint v3270_ft_dialog_get_secondary_space(GtkWidget *widget)
+{
+	g_return_val_if_fail(GTK_IS_V3270FTD(widget),0);
+	if(GTK_V3270FTD(widget)->value[VALUE_SECSPACE])
+		return gtk_spin_button_get_value_as_int(GTK_V3270FTD(widget)->value[VALUE_SECSPACE]);
+	return 0;
 }

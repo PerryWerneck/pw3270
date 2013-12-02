@@ -331,7 +331,7 @@ static void cut_control_code(H3270 *hSession)
 		trace_ds(hSession,"XFER_COMPLETE\n");
 		cut_ack(hSession);
 		hSession->cut_xfer_in_progress = 0;
-		ft_complete(ft,N_( "Complete" ) );
+		ft_complete(ft,N_( "Transfer complete" ) );
 		break;
 
 	case SC_ABORT_FILE:

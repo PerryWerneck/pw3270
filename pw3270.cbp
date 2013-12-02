@@ -325,6 +325,13 @@
 		<Unit filename="src/pw3270/fonts.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/pw3270/ft/ftdialog.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/pw3270/ft/ftprogress.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/pw3270/ft/v3270ft.h" />
 		<Unit filename="src/pw3270/globals.h" />
 		<Unit filename="src/pw3270/hostdialog.c">
 			<Option compilerVar="CC" />

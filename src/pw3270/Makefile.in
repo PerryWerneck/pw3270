@@ -61,10 +61,11 @@ include uiparser/sources.mak
 APP_SOURCES=	main.c @APP_GUI_SRC@
 
 LIB_SOURCES=	window.c actions.c fonts.c dialog.c hostdialog.c print.c colors.c \
-				filetransfer.c tools.c plugin.c trace.c \
+				tools.c plugin.c trace.c \
 				$(foreach SRC, $(UI_PARSER_SRC), uiparser/$(SRC)) \
 				$(foreach SRC, $(V3270_SRC), v3270/$(SRC)) \
-				$(foreach SRC, $(COMMON_SRC), common/$(SRC))
+				$(foreach SRC, $(COMMON_SRC), common/$(SRC)) \
+				filetransfer.c ft/ftdialog.c ft/ftprogress.c
 
 DEPENDS=*.h common/*.h uiparser/*.h v3270/*.h $(GLOBAL_DEPS)
 

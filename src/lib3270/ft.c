@@ -126,9 +126,8 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 	return 0;
  }
 
- static void def_complete(H3270FT *ft,unsigned long length,double kbytes_sec,const char *mode)
+ static void def_complete(H3270FT *ft,unsigned long length,double kbytes_sec)
  {
-
  }
 
  static void def_message(H3270FT *ft, const char *errmsg)
@@ -157,7 +156,7 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
  }
 
 
- LIB3270_EXPORT H3270FT * lib3270_ft_new(H3270 *session, LIB3270_FT_OPTION flags, const char *local, const char *remote, int lrecl, int blksize, int primspace, int secspace, int dft, const char **msg)
+ LIB3270_EXPORT H3270FT * lib3270_ft_new(H3270 *session, LIB3270_FT_OPTION flags, const char *local, const char *remote, int lrecl, int blksize, int primspace, int secspace, int dft)
  {
  	H3270FT				* ftHandle		= (H3270FT *) session->ft;
  	FILE				* ft_local_file	= NULL;
@@ -166,14 +165,25 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 //	trace("%s(%s)",__FUNCTION__,local);
 	if(!lib3270_connected(session))
 	{
-		*msg  = N_( "Disconnected from host" );
-		errno = EINVAL;
+		lib3270_popup_dialog(	session,
+								LIB3270_NOTIFY_ERROR,
+								_( "Request failed" ),
+								_( "Can't start file transfer." ),
+								"%s",
+								_( "Disconnected from host." ));
+		errno = ENOTCONN;
 		return NULL;
 	}
 
 	if(ftHandle)
 	{
-		*msg  = N_( "File transfer is already active in this session" );
+		lib3270_popup_dialog(	session,
+								LIB3270_NOTIFY_ERROR,
+								_( "Request failed" ),
+								_( "Can't start file transfer." ),
+								"%s",
+								_( "File transfer is already active in this session." ));
+
 		errno = EBUSY;
 		return NULL;
 	}
@@ -181,7 +191,12 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 	// Check remote file
 	if(!*remote)
 	{
-		*msg  = N_( "The remote file name is invalid" );
+		lib3270_popup_dialog(	session,
+								LIB3270_NOTIFY_ERROR,
+								_( "Request failed" ),
+								_( "Can't start file transfer." ),
+								"%s",
+								_( "The remote file name is invalid." ));
 		errno = EINVAL;
 		return NULL;
 	}
@@ -195,7 +210,12 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 
 	if(!ft_local_file)
 	{
-		*msg = N_( "Can't open local file" );
+		lib3270_popup_dialog(	session,
+								LIB3270_NOTIFY_ERROR,
+								_( "Request failed" ),
+								_( "Can't open local file." ),
+								"%s",
+								strerror(errno));
 		return NULL;
 	}
 
@@ -240,8 +260,6 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 	strcpy((char *) ftHandle->remote,remote);
 
 	session->ft				= ftHandle;
-
-
 
  	return ftHandle;
  }
@@ -426,8 +444,10 @@ void ft_complete(H3270FT *ft, const char *errmsg)
 
 	ft_update_length(ft);
 
-	ft->message(ft,errmsg);
-	ft->complete(ft,ft->ft_length,kbytes_sec,ft->ft_is_cut ? "CUT" : "DFT");
+	if(errmsg)
+		ft->message(ft,errmsg);
+
+	ft->complete(ft,ft->ft_length,kbytes_sec);
 
 }
 
@@ -500,10 +520,11 @@ void ft_running(H3270FT *ft, Boolean is_cut)
 void ft_aborting(H3270FT *h)
 {
 	if (h->state == FT_RUNNING || h->state == FT_ABORT_WAIT)
+	{
 		set_ft_state(h,FT_ABORT_SENT);
-
-	h->aborting(h);
-
+		h->message(h,N_("Aborting..."));
+		h->aborting(h);
+	}
 }
 
 /* Process a disconnect abort. */
