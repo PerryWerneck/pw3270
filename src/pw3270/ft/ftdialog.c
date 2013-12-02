@@ -55,7 +55,10 @@
 	GtkDialog			  parent;
 	GtkWidget			* filename[FILENAME_COUNT];	/**< Filenames for the transfer */
 	GtkWidget			* units;					/**< Units frame box */
+	GtkWidget			* ready;					/**< Send/Save button */
 	GtkSpinButton		* value[VALUE_COUNT];
+	gboolean 			  local;					/**< TRUE if local filename is ok */
+	gboolean			  remote;					/**< TRUE if remote filename is ok */
 	LIB3270_FT_OPTION	  options;
  };
 
@@ -232,6 +235,59 @@ static GtkWidget * ftradio_new(v3270FTD *dialog, const gchar *title, const gchar
 	return GTK_WIDGET(frame);
 }
 
+static void test_remote_file(GtkEditable *editable, v3270FTD *dialog)
+{
+#if GTK_CHECK_VERSION(3,2,0)
+	if(!gtk_entry_get_text_length(GTK_ENTRY(dialog->filename[FILENAME_LOCAL])))
+	{
+		gchar *basename = g_path_get_basename(gtk_entry_get_text(GTK_ENTRY(editable)));
+		gchar *filename = g_build_filename(g_get_user_special_dir(G_USER_DIRECTORY_DOCUMENTS),basename,NULL);
+		gtk_entry_set_placeholder_text(GTK_ENTRY(dialog->filename[FILENAME_LOCAL]),filename);
+		g_free(filename);
+		g_free(basename);
+	}
+#endif // GTK(3,2)
+
+	dialog->remote = gtk_entry_get_text_length(GTK_ENTRY(dialog->filename[FILENAME_HOST])) > 0;
+	gtk_widget_set_sensitive(dialog->ready,dialog->local && dialog->remote);
+
+}
+
+static void test_file_exists(GtkEditable *editable, v3270FTD *dialog)
+{
+	const gchar *filename = gtk_entry_get_text(GTK_ENTRY(dialog->filename[FILENAME_LOCAL]));
+	dialog->local = g_file_test(filename,G_FILE_TEST_EXISTS);
+
+#if GTK_CHECK_VERSION(3,2,0)
+	if(dialog->local && !gtk_entry_get_text_length(GTK_ENTRY(dialog->filename[FILENAME_HOST])))
+	{
+		gchar *basename = g_path_get_basename(gtk_entry_get_text(GTK_ENTRY(editable)));
+		gtk_entry_set_placeholder_text(GTK_ENTRY(dialog->filename[FILENAME_HOST]),basename);
+		g_free(basename);
+	}
+#endif // GTK(3,2)
+
+	gtk_widget_set_sensitive(dialog->ready,dialog->local && dialog->remote);
+
+}
+
+static void test_path_exists(GtkEditable *editable, v3270FTD *dialog)
+{
+	const gchar *filename = gtk_entry_get_text(GTK_ENTRY(dialog->filename[FILENAME_LOCAL]));
+
+	if(!*filename)
+	{
+		dialog->local = FALSE;
+	}
+	else
+	{
+		gchar *dirname = g_path_get_dirname(filename);
+		dialog->local = g_file_test(dirname,G_FILE_TEST_IS_DIR);
+		g_free(dirname);
+
+	}
+}
+
 GtkWidget * v3270_ft_dialog_new(GtkWidget *parent, LIB3270_FT_OPTION options)
 {
 	v3270FTD *dialog = g_object_new(GTK_TYPE_V3270FTD, NULL);
@@ -274,10 +330,22 @@ GtkWidget * v3270_ft_dialog_new(GtkWidget *parent, LIB3270_FT_OPTION options)
 	gtk_widget_set_tooltip_text(GTK_WIDGET(browse),_("Select file"));
 	g_signal_connect(G_OBJECT(browse),"clicked",G_CALLBACK(browse_file),dialog);
 
+	gtk_dialog_add_button(GTK_DIALOG(dialog),_( "_Cancel" ), GTK_RESPONSE_CANCEL);
+
+	dialog->ready = gtk_dialog_add_button(GTK_DIALOG(dialog),
+												(dialog->options & LIB3270_FT_OPTION_RECEIVE) != 0 ? _( "_Send") : _( "_Save" ),
+												GTK_RESPONSE_ACCEPT);
+
+	gtk_widget_set_sensitive(dialog->ready,FALSE);
+	g_signal_connect(G_OBJECT(dialog->filename[FILENAME_HOST]),"changed",G_CALLBACK(test_remote_file),dialog);
+
 	if(options & LIB3270_FT_OPTION_RECEIVE)
 	{
 		// It's receiving file first host filename, then local filename
 		gtk_window_set_title(GTK_WINDOW(dialog),_( "Receive file from host" ));
+
+		g_signal_connect(G_OBJECT(dialog->filename[FILENAME_LOCAL]),"changed",G_CALLBACK(test_path_exists),dialog);
+
 
 		gtk_grid_attach(grid,label[FILENAME_HOST],0,0,1,1);
 		gtk_grid_attach(grid,label[FILENAME_LOCAL],0,1,1,1);
@@ -344,6 +412,8 @@ GtkWidget * v3270_ft_dialog_new(GtkWidget *parent, LIB3270_FT_OPTION options)
 
 		gtk_grid_attach(grid,label[FILENAME_LOCAL],0,0,1,1);
 		gtk_grid_attach(grid,label[FILENAME_HOST],0,1,1,1);
+
+		g_signal_connect(G_OBJECT(dialog->filename[FILENAME_LOCAL]),"changed",G_CALLBACK(test_file_exists),dialog);
 
 		gtk_grid_attach(grid,dialog->filename[FILENAME_LOCAL],1,0,3,1);
 		gtk_grid_attach(grid,GTK_WIDGET(browse),5,0,1,1);
@@ -517,11 +587,6 @@ GtkWidget * v3270_ft_dialog_new(GtkWidget *parent, LIB3270_FT_OPTION options)
 
 	gtk_widget_set_tooltip_text(GTK_WIDGET(dialog->value[VALUE_DFT]),_( "Buffer size for DFT-mode transfers. Can range from 256 to 32768. Larger values give better performance, but some hosts may not be able to support them."));
 	gtk_spin_button_set_value(dialog->value[VALUE_DFT],4096);
-
-	gtk_dialog_add_buttons(GTK_DIALOG(dialog),
-				GTK_STOCK_CANCEL,	GTK_RESPONSE_CANCEL,
-				(options & LIB3270_FT_OPTION_RECEIVE) != 0 ? GTK_STOCK_SAVE : GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
-				NULL);
 
 	gtk_widget_show_all(gtk_dialog_get_content_area(GTK_DIALOG(dialog)));
 
