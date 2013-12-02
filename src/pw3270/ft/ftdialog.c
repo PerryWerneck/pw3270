@@ -286,6 +286,8 @@ static void test_path_exists(GtkEditable *editable, v3270FTD *dialog)
 		g_free(dirname);
 
 	}
+
+	gtk_widget_set_sensitive(dialog->ready,dialog->local && dialog->remote);
 }
 
 GtkWidget * v3270_ft_dialog_new(GtkWidget *parent, LIB3270_FT_OPTION options)

@@ -173,28 +173,28 @@ static void ft_dialog_save(GtkWidget *widget, const gchar *name)
 		// Save extension based file settings
 		HKEY	  hKey;
 		DWORD	  disp;
-		gchar	* path = g_strdup_printf("%s\\%s\\%s\\%s",registry_path,g_get_application_name(),name,ext+1);
+		gchar	* path = g_strdup_printf("%s\\%s\\%s\\%s","SOFTWARE",g_get_application_name(),name,ext+1);
 
 		if(RegCreateKeyEx(HKEY_CURRENT_USER,path,0,NULL,REG_OPTION_NON_VOLATILE,KEY_SET_VALUE,NULL,&hKey,&disp) == ERROR_SUCCESS)
 		{
 			DWORD value;
 
-			value = (DWORD) v3270_ft_dialog_get_options(widget));
+			value = (DWORD) v3270_ft_dialog_get_options(widget);
 			RegSetValueEx(hKey, "options", 0, REG_DWORD,(const BYTE *) &value,sizeof(value));
 
-			value = (DWORD) v3270_ft_dialog_get_dft_buffer_size(widget));
+			value = (DWORD) v3270_ft_dialog_get_dft_buffer_size(widget);
 			RegSetValueEx(hKey, "dft", 0, REG_DWORD,(const BYTE *) &value,sizeof(value));
 
-			value = (DWORD) v3270_ft_dialog_get_record_length(widget));
+			value = (DWORD) v3270_ft_dialog_get_record_length(widget);
 			RegSetValueEx(hKey, "reclen", 0, REG_DWORD,(const BYTE *) &value,sizeof(value));
 
-			value = (DWORD) v3270_ft_dialog_get_block_size(widget));
+			value = (DWORD) v3270_ft_dialog_get_block_size(widget);
 			RegSetValueEx(hKey, "blksize", 0, REG_DWORD,(const BYTE *) &value,sizeof(value));
 
-			value = (DWORD) v3270_ft_dialog_get_primary_space(widget));
+			value = (DWORD) v3270_ft_dialog_get_primary_space(widget);
 			RegSetValueEx(hKey, "primspace", 0, REG_DWORD,(const BYTE *) &value,sizeof(value));
 
-			value = (DWORD) v3270_ft_dialog_get_secondary_space(widget));
+			value = (DWORD) v3270_ft_dialog_get_secondary_space(widget);
 			RegSetValueEx(hKey, "secspace", 0, REG_DWORD,(const BYTE *) &value,sizeof(value));
 
 			RegCloseKey(hKey);

@@ -62,6 +62,8 @@
 		HLLAPI_PACKET_ASC2EBC,
 		HLLAPI_PACKET_EBC2ASC,
 
+		HLLAPI_PACKET_FILE_TRANSFER,
+
 		HLLAPI_PACKET_INVALID
 
  } HLLAPI_PACKET;
@@ -175,6 +177,17 @@ struct hllapi_packet_set_text
 	char 			text[1];
 };
 
+struct hllapi_packet_file_transfer
+{
+	unsigned char		packet_id;
+	unsigned int		options;
+	int					lrecl;
+	int					blksize;
+	int					primspace;
+	int 				secspace;
+	int 				dft;
+	char				text[1];
+};
 
 #pragma pack()
 

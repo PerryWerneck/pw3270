@@ -172,6 +172,22 @@
 	WriteFile(source->hPipe,&pkt,wrote,&wrote,NULL);
  }
 
+ static int do_file_transfer(struct hllapi_packet_file_transfer * source)
+ {
+ 	const gchar	* local		= (const char *) source->text;
+ 	const gchar	* remote	= (const char *) (local+strlen(local)+1);
+
+	return v3270_transfer_file(	v3270_get_default_widget(),
+								source->options,
+								local,
+								remote,
+								source->lrecl,
+								source->blksize,
+								source->primspace,
+								source->secspace,
+								source->dft );
+ }
+
  static void process_input(pipe_source *source, DWORD cbRead)
  {
 
@@ -325,6 +341,10 @@
 								lib3270_get_default_session_handle(),
 								(unsigned char *) ((struct hllapi_packet_set_text *) source->buffer)->text,-1
 								));
+		break;
+
+	case HLLAPI_PACKET_FILE_TRANSFER:
+		send_result(source,do_file_transfer((struct hllapi_packet_file_transfer *) source));
 		break;
 
 	case HLLAPI_PACKET_GET_HOST_CHARSET:
