@@ -50,12 +50,23 @@
  	VALUE_COUNT
  };
 
+ enum _button
+ {
+	BUTTON_ASCII,
+	BUTTON_CRLF,
+	BUTTON_APPEND,
+	BUTTON_REMAP,
+
+ 	BUTTON_COUNT
+ };
+
  struct _v3270FTD
  {
 	GtkDialog			  parent;
 	GtkWidget			* filename[FILENAME_COUNT];	/**< Filenames for the transfer */
 	GtkWidget			* units;					/**< Units frame box */
 	GtkWidget			* ready;					/**< Send/Save button */
+	GtkToggleButton		* button[BUTTON_COUNT];		/**< Buttons */
 	GtkSpinButton		* value[VALUE_COUNT];
 	gboolean 			  local;					/**< TRUE if local filename is ok */
 	gboolean			  remote;					/**< TRUE if remote filename is ok */
@@ -72,6 +83,14 @@
  G_DEFINE_TYPE(v3270FTD, v3270FTD, GTK_TYPE_DIALOG);
 
  struct ftoptions
+ {
+	LIB3270_FT_OPTION	  flag;
+	enum _button		  id;
+	const gchar 		* label;
+	const gchar			* tooltip;
+ };
+
+ struct rdoptions
  {
 	LIB3270_FT_OPTION	  flag;
 	const gchar 		* label;
@@ -167,6 +186,7 @@ static GtkWidget * ftoption_new(v3270FTD *dialog, const struct ftoptions *opt)
 		gtk_grid_attach(grid,button,f&1,f/2,1,1);
 		g_object_set_data(G_OBJECT(button),"cfg",(gpointer) &opt[f]);
 		g_signal_connect(G_OBJECT(button),"toggled",G_CALLBACK(toggle_option),dialog);
+		dialog->button[opt->id] = GTK_TOGGLE_BUTTON(button);
 	}
 
 	gtk_container_add(frame,GTK_WIDGET(grid));
@@ -209,7 +229,7 @@ static GtkWidget * ftvalue_new(v3270FTD *dialog, GtkGrid *grid, int r, const str
 
 }
 
-static GtkWidget * ftradio_new(v3270FTD *dialog, const gchar *title, const gchar *tooltip, const struct ftoptions *opt)
+static GtkWidget * ftradio_new(v3270FTD *dialog, const gchar *title, const gchar *tooltip, const struct rdoptions *opt)
 {
 	GtkContainer	* frame = GTK_CONTAINER(gtk_frame_new(title));
 	GtkBox			* box	= GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL,2));
@@ -366,25 +386,30 @@ GtkWidget * v3270_ft_dialog_new(GtkWidget *parent, LIB3270_FT_OPTION options)
 		{
 				{
 					LIB3270_FT_OPTION_ASCII,
+					BUTTON_ASCII,
 					N_( "_Text file." ),
 					N_( "Check for text files.")
 				},
 				{
 					LIB3270_FT_OPTION_CRLF,
+					BUTTON_CRLF,
 					N_( "Add _CR at end of line." ),
 					N_( "Adds Newline characters to each host file record before transferring it to the local workstation.")
 				},
 				{
 					LIB3270_FT_OPTION_APPEND,
+					BUTTON_APPEND,
 					N_( "_Append to destination" ),
 					N_( "Appends the source file to the destination file.")
 				},
 				{
 					LIB3270_FT_OPTION_REMAP,
+					BUTTON_REMAP,
 					N_("Re_map to ASCII Characters."),
 					N_("Remap the text to ensure maximum compatibility between the workstation's character set and encoding and the host's EBCDIC code page.")
 				},
 				{
+					0,
 					0,
 					NULL,
 					NULL
@@ -432,25 +457,30 @@ GtkWidget * v3270_ft_dialog_new(GtkWidget *parent, LIB3270_FT_OPTION options)
 		{
 				{
 					LIB3270_FT_OPTION_ASCII,
+					BUTTON_ASCII,
 					N_( "_Text file." ),
 					N_( "Check for text files.")
 				},
 				{
 					LIB3270_FT_OPTION_CRLF,
+					BUTTON_CRLF,
 					N_( "_CR delimited file." ),
 					N_( "Remove the default newline characters in local files before transferring them to the host.")
 				},
 				{
 					LIB3270_FT_OPTION_APPEND,
+					BUTTON_APPEND,
 					N_( "_Append to destination" ),
 					N_( "Appends the source file to the destination file.")
 				},
 				{
 					LIB3270_FT_OPTION_REMAP,
+					BUTTON_REMAP,
 					N_("Re_map to EBCDIC Characters."),
 					N_("Remap the text to ensure maximum compatibility between the workstation's character set and encoding and the host's EBCDIC code page.")
 				},
 				{
+					0,
 					0,
 					NULL,
 					NULL
@@ -466,7 +496,7 @@ GtkWidget * v3270_ft_dialog_new(GtkWidget *parent, LIB3270_FT_OPTION options)
 		gtk_grid_set_row_spacing(grid,5);
 
 		// Create record format box
-		static const struct ftoptions recfm[] =
+		static const struct rdoptions recfm[] =
 		{
 			{
 				LIB3270_FT_RECORD_FORMAT_DEFAULT,
@@ -502,7 +532,7 @@ GtkWidget * v3270_ft_dialog_new(GtkWidget *parent, LIB3270_FT_OPTION options)
 
 
 		// Create allocation unit box
-		static const struct ftoptions units[] =
+		static const struct rdoptions units[] =
 		{
 			{
 				LIB3270_FT_ALLOCATION_UNITS_DEFAULT,
@@ -628,6 +658,17 @@ LIB3270_FT_OPTION v3270_ft_dialog_get_options(GtkWidget *widget)
 void v3270_ft_dialog_set_options(GtkWidget *widget,LIB3270_FT_OPTION options)
 {
 	g_return_if_fail(GTK_IS_V3270FTD(widget));
+	int f;
+
+	for(f=0;f<BUTTON_COUNT;f++)
+	{
+		GtkToggleButton *button = GTK_V3270FTD(widget)->button[f];
+		if(button)
+		{
+			const struct ftoptions	* opt = (const struct ftoptions *) g_object_get_data(G_OBJECT(button),"cfg");
+			gtk_toggle_button_set_active(button,(options & opt->flag) != 0);
+		}
+	}
 
 	#warning Implementar
 }
