@@ -35,6 +35,7 @@
  #include <lib3270/config.h>
  #include <lib3270.h>
  #include <lib3270/popup.h>
+ #include <lib3270/filetransfer.h>
 
  #define V3270_H_INCLUDED 1
 
@@ -226,6 +227,7 @@
  LIB3270_EXPORT const gchar		* v3270_get_ssl_status_message(GtkWidget *widget);
  LIB3270_EXPORT	void			  v3270_popup_security_dialog(GtkWidget *widget);
 
+ LIB3270_EXPORT gint			  v3270_transfer_file(GtkWidget *widget, LIB3270_FT_OPTION options, const gchar *local, const gchar *remote, int lrecl, int blksize, int primspace, int secspace, int dft);
 
  G_END_DECLS
 

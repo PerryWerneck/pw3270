@@ -115,6 +115,10 @@ static void browse_file(GtkButton *button,v3270FTD *parent)
 		NULL
 	);
 
+	const gchar * current = gtk_entry_get_text(GTK_ENTRY(parent->filename[FILENAME_LOCAL]));
+	if(current && *current)
+		gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog),current);
+
 	if(gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
 	{
 		gchar *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
