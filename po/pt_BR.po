@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-03 13:07-0200\n"
-"PO-Revision-Date: 2013-12-03 13:06-0200\n"
+"POT-Creation-Date: 2013-12-03 13:26-0200\n"
+"PO-Revision-Date: 2013-12-03 13:26-0200\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Portugues <>\n"
 "Language: pt_BR\n"
@@ -492,7 +492,7 @@ msgstr "Erro de codificação de caracteres"
 
 #: ft/ftdialog.c:393 ft/ftdialog.c:464
 msgid "Check this if the file consists of character data only."
-msgstr "Check this if the file consists of character data only."
+msgstr "Marque se o arquivo contem apenas texto."
 
 #: ui/10keypad.xml:172
 msgid "Clear"
@@ -2413,7 +2413,7 @@ msgstr "_Adicionar ao arquivo de destino"
 
 #: filetransfer.c:250 ft/ftdialog.c:137 ft/ftdialog.c:357
 msgid "_Cancel"
-msgstr "_Cancel"
+msgstr "_Cancelar"
 
 #: hostdialog.c:326
 msgid "_Color table:"
@@ -2467,7 +2467,11 @@ msgstr "_Opções"
 msgid "_Port:"
 msgstr "_Porta:"
 
-#: ft/ftdialog.c:138 ft/ftdialog.c:360
+#: ft/ftdialog.c:360
+msgid "_Receive"
+msgstr "_Receber"
+
+#: ft/ftdialog.c:138
 msgid "_Save"
 msgstr "_Gravar"
 
