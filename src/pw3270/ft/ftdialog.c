@@ -390,13 +390,13 @@ GtkWidget * v3270_ft_dialog_new(GtkWidget *parent, LIB3270_FT_OPTION options)
 					LIB3270_FT_OPTION_ASCII,
 					BUTTON_ASCII,
 					N_( "_Text file." ),
-					N_( "Check for text files.")
+					N_( "Check this if the file consists of character data only.")
 				},
 				{
 					LIB3270_FT_OPTION_CRLF,
 					BUTTON_CRLF,
-					N_( "Add _CR at end of line." ),
-					N_( "Adds Newline characters to each host file record before transferring it to the local workstation.")
+					N_( "Terminate records with _CR/LF." ),
+					N_( "Following the convention for ASCII text files, <CR> <LF> pairs are used to terminate records in the PC file.")
 				},
 				{
 					LIB3270_FT_OPTION_APPEND,
@@ -461,13 +461,13 @@ GtkWidget * v3270_ft_dialog_new(GtkWidget *parent, LIB3270_FT_OPTION options)
 					LIB3270_FT_OPTION_ASCII,
 					BUTTON_ASCII,
 					N_( "_Text file." ),
-					N_( "Check for text files.")
+					N_( "Check this if the file consists of character data only.")
 				},
 				{
 					LIB3270_FT_OPTION_CRLF,
 					BUTTON_CRLF,
-					N_( "_CR delimited file." ),
-					N_( "Remove the default newline characters in local files before transferring them to the host.")
+					N_( "Terminate records with _CR/LF." ),
+					N_( "Following the convention for ASCII text files, <CR> <LF> pairs are used to terminate records in the PC file.")
 				},
 				{
 					LIB3270_FT_OPTION_APPEND,
@@ -528,7 +528,7 @@ GtkWidget * v3270_ft_dialog_new(GtkWidget *parent, LIB3270_FT_OPTION options)
 		};
 
 		gtk_grid_attach(	grid,
-							ftradio_new(dialog,dialog->recfm,_("Record format"),_("Controls the record format of files created on the host."),recfm),
+							ftradio_new(dialog,dialog->recfm,_("Record format"),_("Specifies the record format of the data set."),recfm),
 							0,0,2,1
 						);
 
@@ -590,7 +590,7 @@ GtkWidget * v3270_ft_dialog_new(GtkWidget *parent, LIB3270_FT_OPTION options)
 			{
 				VALUE_BLKSIZE,
 				N_( "Block size:" ),
-				N_( "Specifies the block size for files created on the host (TSO hosts only)." )
+				N_( "Specifies the block size (n) for a new data set. For data sets containing fixed­ length records, the block size must be a multiple of the record length. For data sets containing variable­ length records, the block size must be greater than or equal to the record length plus four bytes. The block size must not exceed the track length of the device on which the data set resides." )
 			},
 
 			{
@@ -621,6 +621,14 @@ GtkWidget * v3270_ft_dialog_new(GtkWidget *parent, LIB3270_FT_OPTION options)
 
 	gtk_widget_set_tooltip_text(GTK_WIDGET(dialog->value[VALUE_DFT]),_( "Buffer size for DFT-mode transfers. Can range from 256 to 32768. Larger values give better performance, but some hosts may not be able to support them."));
 	gtk_spin_button_set_value(dialog->value[VALUE_DFT],4096);
+
+	// Setup limits
+	if(dialog->value[VALUE_LRECL])
+		gtk_spin_button_set_range(dialog->value[VALUE_LRECL],0,32760);
+
+	if(dialog->value[VALUE_BLKSIZE])
+		gtk_spin_button_set_range(dialog->value[VALUE_BLKSIZE],0,32760);
+
 
 	gtk_widget_show_all(gtk_dialog_get_content_area(GTK_DIALOG(dialog)));
 
