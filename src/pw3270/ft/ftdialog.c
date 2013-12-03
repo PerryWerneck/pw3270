@@ -590,7 +590,11 @@ GtkWidget * v3270_ft_dialog_new(GtkWidget *parent, LIB3270_FT_OPTION options)
 			{
 				VALUE_BLKSIZE,
 				N_( "Block size:" ),
-				N_( "Specifies the block size (n) for a new data set. For data sets containing fixed­ length records, the block size must be a multiple of the record length. For data sets containing variable­ length records, the block size must be greater than or equal to the record length plus four bytes. The block size must not exceed the track length of the device on which the data set resides." )
+				N_( "Specifies the block size (n) for a new data set. For data sets containing fixed " \
+					"length records, the block size must be a multiple of the record length. " \
+					"For data sets containing variable length records, the block size must be " \
+					"greater than or equal to the record length plus four bytes. The block size " \
+					"must not exceed the track length of the device on which the data set resides." )
 			},
 
 			{
