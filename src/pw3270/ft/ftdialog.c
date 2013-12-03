@@ -231,7 +231,7 @@ static GtkWidget * ftvalue_new(v3270FTD *dialog, GtkGrid *grid, int r, const str
 
 }
 
-static GtkWidget * ftradio_new(v3270FTD *dialog, GtkToggleButton **button, const gchar *title, const gchar *tooltip, const struct rdoptions *opt)
+static GtkWidget * ftradio_new(v3270FTD *dialog, GtkToggleButton **button, LIB3270_FT_OPTION option, const gchar *title, const gchar *tooltip, const struct rdoptions *opt)
 {
 	GtkContainer	* frame = GTK_CONTAINER(gtk_frame_new(title));
 	GtkBox			* box	= GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL,2));
@@ -241,7 +241,7 @@ static GtkWidget * ftradio_new(v3270FTD *dialog, GtkToggleButton **button, const
 	for(f=0;opt[f].label;f++)
 	{
 		button[f] = GTK_TOGGLE_BUTTON(gtk_radio_button_new_with_label(lst,gettext(opt[f].label)));
-		gtk_toggle_button_set_active(button[f],(dialog->options & opt[f].flag) != 0);
+		gtk_toggle_button_set_active(button[f],(dialog->options & opt[f].flag) == opt[f].flag);
 		if(opt[f].tooltip)
 			gtk_widget_set_tooltip_text(GTK_WIDGET(button[f]),gettext(opt[f].tooltip));
 
@@ -528,7 +528,7 @@ GtkWidget * v3270_ft_dialog_new(GtkWidget *parent, LIB3270_FT_OPTION options)
 		};
 
 		gtk_grid_attach(	grid,
-							ftradio_new(dialog,dialog->recfm,_("Record format"),_("Specifies the record format of the data set."),recfm),
+							ftradio_new(dialog,dialog->recfm,dialog->options,_("Record format"),_("Specifies the record format of the data set."),recfm),
 							0,0,2,1
 						);
 
@@ -563,7 +563,7 @@ GtkWidget * v3270_ft_dialog_new(GtkWidget *parent, LIB3270_FT_OPTION options)
 			}
 		};
 
-		dialog->units = ftradio_new(dialog,dialog->btnUnits,_("Space allocation units"),_("Specifies the units for the TSO host primary and secondary space options."),units);
+		dialog->units = ftradio_new(dialog,dialog->btnUnits,dialog->options,_("Space allocation units"),_("Specifies the units for the TSO host primary and secondary space options."),units);
 
 		gtk_grid_attach(	grid,
 							dialog->units,

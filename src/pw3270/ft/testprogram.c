@@ -47,7 +47,7 @@ int main (int argc, char *argv[])
 	*/
 
 	{
-		GtkWidget *win = v3270_ft_dialog_new(NULL,LIB3270_FT_OPTION_SEND);
+		GtkWidget *win = v3270_ft_dialog_new(NULL,LIB3270_FT_OPTION_SEND|LIB3270_FT_RECORD_FORMAT_VARIABLE);
 		v3270_ft_dialog_set_tso(win,FALSE);
 		gtk_dialog_run(GTK_DIALOG(win));
 	}
