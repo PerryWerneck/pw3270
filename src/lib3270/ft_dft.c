@@ -391,16 +391,20 @@ static void dft_get_request(H3270 *hSession)
 	{
 		if (ft->ascii_flag && ft->cr_flag)
 		{
+			// ASCII text file
+
 			int c;
 
 			/* Read one byte and do CR/LF translation. */
 			c = fgetc(ft->local_file);
-			if (c == EOF) {
+			if (c == EOF)
+			{
 				break;
 			}
 			if (!ft->ft_last_cr && c == '\n')
 			{
-				if (numbytes < 2) {
+				if (numbytes < 2)
+				{
 					/*
 					 * Not enough room to expand NL to
 					 * CR/LF.
@@ -416,14 +420,20 @@ static void dft_get_request(H3270 *hSession)
 			*bufptr++ = ft->remap_flag ? ft->charset.asc2ebc[c]: c;
 			numbytes--;
 			total_read++;
-		} else {
+		}
+		else
+		{
 			/* Binary read. */
 			numread = fread(bufptr, 1, numbytes, ft->local_file);
-			if (numread <= 0) {
+			if (numread <= 0)
+			{
+				lib3270_write_log(hSession,"Error %s reading source file (rc=%d)",strerror(errno),errno);
 				break;
 			}
+
 			if (ft->ascii_flag && ft->remap_flag)
 			{
+				// Remap charset
 				unsigned char *s = bufptr;
 				int i = numread;
 
@@ -434,10 +444,11 @@ static void dft_get_request(H3270 *hSession)
 					i--;
 				}
 			}
-			bufptr += numread;
-			numbytes -= numread;
-			total_read += numread;
+			bufptr 		+= numread;
+			numbytes	-= numread;
+			total_read	+= numread;
 		}
+
 		if (feof(ft->local_file) || ferror(ft->local_file))
 		{
 			break;
@@ -476,7 +487,9 @@ static void dft_get_request(H3270 *hSession)
 			ft->dft_eof = 1;
 		}
 
-	} else {
+	}
+	else
+	{
 		trace_ds(hSession,"> WriteStructuredField FileTransferData EOF\n");
 		*hSession->obptr++ = HIGH8(TR_GET_REQ);
 		*hSession->obptr++ = TR_ERROR_REPLY;
