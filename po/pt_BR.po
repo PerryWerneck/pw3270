@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-03 12:25-0200\n"
-"PO-Revision-Date: 2013-12-03 10:09-0200\n"
+"POT-Creation-Date: 2013-12-03 13:07-0200\n"
+"PO-Revision-Date: 2013-12-03 13:06-0200\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Portugues <>\n"
 "Language: pt_BR\n"
@@ -24,22 +24,22 @@ msgstr ""
 msgid "%s - Disconnected"
 msgstr "%s - Desconectado"
 
-#: actions.c:743 actions.c:755
+#: actions.c:748 actions.c:760
 #, c-format
 msgid "%s action needs a valid id attribute"
 msgstr "Ação %s exige um atributo ID válido"
 
-#: actions.c:591 actions.c:720 actions.c:732
+#: actions.c:596 actions.c:725 actions.c:737
 #, c-format
 msgid "%s action needs a valid toggle name"
 msgstr "Ação %s exige um nome de toggle válido"
 
-#: actions.c:767
+#: actions.c:772
 #, c-format
 msgid "%s action needs a valid value"
 msgstr "Ação %s precisa de um valor válido"
 
-#: actions.c:477
+#: actions.c:482
 #, c-format
 msgid "%s action needs src attribute"
 msgstr "Ação %s precisa do atributo src"
@@ -231,7 +231,7 @@ msgstr "Nome da aplicação"
 msgid "Attn"
 msgstr "Attn"
 
-#: actions.c:452
+#: actions.c:457
 #, c-format
 msgid "Attribute \"%s\" is invalid or undefined"
 msgstr "Atributo \"%s\" é invalido ou indefinido"
@@ -736,8 +736,8 @@ msgid ""
 "Following the convention for ASCII text files, <CR> <LF> pairs are used to "
 "terminate records in the PC file."
 msgstr ""
-"Following the convention for ASCII text files, <CR> <LF> pairs are used to "
-"terminate records in the PC file."
+"Seguir a convenção para arquivos texto ASCII, o par <CR> <LF> é usado para "
+"terminar registros no arquivo local."
 
 #: v3270/security.c:145
 msgid "Format error in CRL's lastUpdate field"
@@ -822,7 +822,7 @@ msgstr "Host illegally added function(s)"
 
 #: options.c:44
 msgid "Host is AS/400"
-msgstr "Servidor é AS_400"
+msgstr "Servidor é AS/400"
 
 #: options.c:51
 msgid "Host is TSO"
@@ -947,7 +947,7 @@ msgstr "Só Maiúsculas"
 msgid "Monochrome"
 msgstr "Monocromático"
 
-#: actions.c:608
+#: actions.c:613
 msgid "Move action needs target & direction attributes"
 msgstr "Ação \"move\" precisa dos atributos \"target\" e \"direction\""
 
@@ -1395,7 +1395,8 @@ msgid ""
 "character set and encoding and the host's EBCDIC code page."
 msgstr ""
 "Converte conteúdo do texto para garantir a máxima compatibilidade entre a "
-"codificação ASCII da estação de trabalho e a página de código EBCDIC do host."
+"codificação ASCII da estação de trabalho e a página de código EBCDIC do "
+"servidor."
 
 #: ui/00default.xml:265
 msgid "Remove selection"
@@ -1763,7 +1764,6 @@ msgid "Space in LU name"
 msgstr "Espaço no nome da LU"
 
 #: ft/ftdialog.c:593
-#, fuzzy
 msgid ""
 "Specifies the block size (n) for a new data set. For data sets containing "
 "fixed length records, the block size must be a multiple of the record "
@@ -1772,15 +1772,16 @@ msgid ""
 "block size must not exceed the track length of the device on which the data "
 "set resides."
 msgstr ""
-"length records, the block size must be a multiple of the record length. For "
-"data sets containing variable length records, the block size must be greater "
-"than or equal to the record length plus four bytes. The block size must not "
-"exceed the track length of the device on which the data set resides."
+"Define o tamanho do bloco para um novo data set. Para data sets contendo "
+"registro de largura fixa o tamanho do bloco deve ser um múltiplo da largura "
+"de registro. Para data sets contendo registros de largura variável o tamanho "
+"do bloco deve ser maior ou igual à largura do registro mais quatro bytes. O "
+"tamanho do bloco não deve exceder a largura de trilha do dispositivo onde o "
+"data set reside."
 
 #: ft/ftdialog.c:531
-#, fuzzy
 msgid "Specifies the record format of the data set."
-msgstr "Controla o formato de registro dos arquivos criados no host."
+msgstr "Controla o formato de registro do data set."
 
 #: ft/ftdialog.c:580
 msgid ""
@@ -1830,7 +1831,7 @@ msgstr "Cores do terminal"
 
 #: ft/ftdialog.c:398 ft/ftdialog.c:469
 msgid "Terminate records with _CR/LF."
-msgstr "Terminate records with _CR/LF."
+msgstr "Termina registros com _CR/LF."
 
 #: host.c:216
 msgid "Text before '['"
@@ -2094,7 +2095,7 @@ msgstr "Trilhas"
 
 #: ft_cut.c:367
 msgid "Transfer cancelled by host"
-msgstr "Transferência cancelada pelo host"
+msgstr "Transferência cancelada pelo servidor"
 
 #: ft_cut.c:396 ft_cut.c:494 ft_dft.c:242 ft_dft.c:380
 msgid "Transfer cancelled by user"
@@ -2202,12 +2203,12 @@ msgstr "Erro inesperado"
 msgid "Unexpected group \"%s\""
 msgstr "Grupo inesperado \"%s\""
 
-#: actions.c:466 actions.c:486
+#: actions.c:471 actions.c:491
 #, c-format
 msgid "Unexpected or invalid %s attribute: \"%s\""
 msgstr "Atributo %s inesperado ou inválido: \"%s\""
 
-#: actions.c:440
+#: actions.c:445
 #, c-format
 msgid "Unexpected or invalid attribute value \"%s\""
 msgstr "Valor de attributo inesperado ou inválido: \"%s\""
@@ -2228,7 +2229,7 @@ msgstr ""
 "Assinatura inválida no objeto H3270, possível divergência de versão na "
 "lib3270"
 
-#: actions.c:365
+#: actions.c:366
 #, c-format
 msgid "Unexpected target \"%s\""
 msgstr "Alvo inesperado \"%s\""
@@ -2307,7 +2308,7 @@ msgstr "Usar teclas +/- para navegar por campos"
 
 #: ft/ftdialog.c:506
 msgid "Use host default record format."
-msgstr "Utilizar o formato de registro padrão do host."
+msgstr "Utilizar o formato de registro padrão do servidor."
 
 #: ft/ftdialog.c:515
 msgid "Variable"
@@ -2468,7 +2469,7 @@ msgstr "_Porta:"
 
 #: ft/ftdialog.c:138 ft/ftdialog.c:360
 msgid "_Save"
-msgstr "_Save"
+msgstr "_Gravar"
 
 #: hostdialog.c:149
 msgid "_Secure connection"
@@ -2476,7 +2477,7 @@ msgstr "Conexão _Segura"
 
 #: ft/ftdialog.c:138 ft/ftdialog.c:360
 msgid "_Send"
-msgstr "_Send"
+msgstr "_Enviar"
 
 #: ft/ftdialog.c:392 ft/ftdialog.c:463
 msgid "_Text file."
