@@ -178,7 +178,7 @@
  	const gchar	* remote	= (const char *) (local+strlen(local)+1);
 
 	return v3270_transfer_file(	v3270_get_default_widget(),
-								source->options,
+								(LIB3270_FT_OPTION) source->options,
 								local,
 								remote,
 								source->lrecl,
