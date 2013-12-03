@@ -181,6 +181,19 @@
       <arg type="s" name="to" direction="out" />
     </method>
 
+    <method name="filetransfer">
+      <annotation name="org.freedesktop.DBus.GLib.Async" value="true"/>
+      <arg type="s" name="local" direction="in" />
+      <arg type="s" name="remote" direction="in" />
+      <arg type="i" name="flags" direction="in" />
+      <arg type="i" name="lrecl" direction="in" />
+      <arg type="i" name="blksize" direction="in" />
+      <arg type="i" name="primspace" direction="in" />
+      <arg type="i" name="secspace" direction="in" />
+      <arg type="i" name="dft" direction="in" />
+      <arg type="i" name="result" direction="out" />
+    </method>
+
   </interface>
 
 </node>
