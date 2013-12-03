@@ -42,6 +42,7 @@
  #include <lib3270/config.h>
  #include <lib3270.h>
  #include <lib3270/popup.h>
+ #include <lib3270/filetransfer.h>
 
  #ifdef HAVE_ICONV
 	#include <iconv.h>
@@ -187,6 +188,9 @@
 		// Dialogs
 		virtual int               popup_dialog(LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, ...);
 		virtual string          * file_chooser_dialog(GtkFileChooserAction action, const char *title, const char *extension, const char *filename);
+
+		// File transfer
+		virtual int				  file_transfer(LIB3270_FT_OPTION options, const gchar *local, const gchar *remote, int lrecl = 0, int blksize = 0, int primspace = 0, int secspace = 0, int dft = 4096);
 
 		// Charset translation
 		string 					* get_3270_text(string *str);

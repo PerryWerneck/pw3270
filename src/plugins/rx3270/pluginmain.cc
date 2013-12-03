@@ -138,6 +138,8 @@
 	const char  	* asc2ebc(unsigned char *str, int sz = -1);
 	const char	 	* ebc2asc(unsigned char *str, int sz = -1);
 
+	int				  file_transfer(LIB3270_FT_OPTION options, const gchar *local, const gchar *remote, int lrecl = 0, int blksize = 0, int primspace = 0, int secspace = 0, int dft = 4096);
+
     int				  quit(void);
 
  protected:
@@ -401,7 +403,11 @@ extern "C"
  {
 	gchar *filename = (gchar *) g_object_get_data(G_OBJECT(action),"src");
 
+#if GTK_CHECK_VERSION(3,10,0)
+	lib3270_trace_event(v3270_get_session(widget),"Action %s activated on widget %p",g_action_get_name(G_ACTION(action)),widget);
+#else
 	lib3270_trace_event(v3270_get_session(widget),"Action %s activated on widget %p",gtk_action_get_name(action),widget);
+#endif // GTK_CHECK_VERSION
 
 #if GTK_CHECK_VERSION(2,32,0)
 	if(!g_mutex_trylock(&mutex))
@@ -423,7 +429,12 @@ extern "C"
 		return;
 	}
 
+#if GTK_CHECK_VERSION(3,10,0)
+	g_simple_action_set_enabled(G_SIMPLE_ACTION(action),FALSE);
+#else
 	gtk_action_set_sensitive(action,FALSE);
+#endif // GTK(3,10)
+
 
 	if(filename)
 	{
@@ -466,7 +477,12 @@ extern "C"
 
 	}
 
+#if GTK_CHECK_VERSION(3,10,0)
+	g_simple_action_set_enabled(G_SIMPLE_ACTION(action),TRUE);
+#else
 	gtk_action_set_sensitive(action,TRUE);
+#endif // GTK(3,10)
+
 #if GTK_CHECK_VERSION(2,32,0)
 	g_mutex_unlock(&mutex);
 #else
@@ -771,3 +787,7 @@ const char * plugin::ebc2asc(unsigned char *str, int sz)
 	return lib3270_ebc2asc(hSession,str,sz);
 }
 
+int plugin::file_transfer(LIB3270_FT_OPTION options, const gchar *local, const gchar *remote, int lrecl, int blksize, int primspace, int secspace, int dft)
+{
+	return v3270_transfer_file(v3270_get_default_widget(),options,local,remote,lrecl,blksize,primspace,secspace,dft);
+}
