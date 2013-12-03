@@ -100,7 +100,7 @@ static LIB3270_FT_OPTION get_options_from_config(const gchar *group)
 	g_free(ptr);
 
 	// Get allocation units
-	ptr = get_string_from_config(group, "recfm", "default");
+	ptr = get_string_from_config(group, "recfm", "variable");
 	for(f=0;f<G_N_ELEMENTS(recfm);f++)
 	{
 		if(!g_ascii_strcasecmp(ptr,recfm[f].name))
