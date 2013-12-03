@@ -403,11 +403,7 @@ extern "C"
  {
 	gchar *filename = (gchar *) g_object_get_data(G_OBJECT(action),"src");
 
-#if GTK_CHECK_VERSION(3,10,0)
-	lib3270_trace_event(v3270_get_session(widget),"Action %s activated on widget %p",g_action_get_name(G_ACTION(action)),widget);
-#else
 	lib3270_trace_event(v3270_get_session(widget),"Action %s activated on widget %p",gtk_action_get_name(action),widget);
-#endif // GTK_CHECK_VERSION
 
 #if GTK_CHECK_VERSION(2,32,0)
 	if(!g_mutex_trylock(&mutex))

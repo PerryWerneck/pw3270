@@ -357,7 +357,7 @@ GtkWidget * v3270_ft_dialog_new(GtkWidget *parent, LIB3270_FT_OPTION options)
 	gtk_dialog_add_button(GTK_DIALOG(dialog),_( "_Cancel" ), GTK_RESPONSE_CANCEL);
 
 	dialog->ready = gtk_dialog_add_button(GTK_DIALOG(dialog),
-												(dialog->options & LIB3270_FT_OPTION_RECEIVE) != 0 ? _( "_Send") : _( "_Save" ),
+												(dialog->options & LIB3270_FT_OPTION_RECEIVE) != 0 ? _( "_Save") : _( "_Send" ),
 												GTK_RESPONSE_ACCEPT);
 
 	gtk_widget_set_sensitive(dialog->ready,FALSE);
