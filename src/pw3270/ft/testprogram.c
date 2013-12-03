@@ -38,11 +38,21 @@ int main (int argc, char *argv[])
 
 	gtk_init (&argc, &argv);
 
+	/*
 	{
 		GtkWidget *win = v3270_ft_dialog_new(NULL,LIB3270_FT_OPTION_RECEIVE);
 		v3270_ft_dialog_set_options(win,LIB3270_FT_OPTION_REMAP);
 		gtk_dialog_run(GTK_DIALOG(win));
 	}
+	*/
+
+	{
+		GtkWidget *win = v3270_ft_dialog_new(NULL,LIB3270_FT_OPTION_SEND);
+		v3270_ft_dialog_set_tso(win,FALSE);
+		gtk_dialog_run(GTK_DIALOG(win));
+	}
+
+
 //	gtk_dialog_run(GTK_DIALOG(v3270_ft_dialog_new(NULL,LIB3270_FT_OPTION_SEND|LIB3270_FT_OPTION_REMAP)));
 
 

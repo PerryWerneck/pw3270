@@ -67,6 +67,8 @@
 	GtkWidget			* units;					/**< Units frame box */
 	GtkWidget			* ready;					/**< Send/Save button */
 	GtkToggleButton		* button[BUTTON_COUNT];		/**< Buttons */
+	GtkToggleButton 	* recfm[4];					/**< Record format buttons */
+	GtkToggleButton 	* btnUnits[4];				/**< Unit buttons */
 	GtkSpinButton		* value[VALUE_COUNT];
 	gboolean 			  local;					/**< TRUE if local filename is ok */
 	gboolean			  remote;					/**< TRUE if remote filename is ok */
@@ -229,7 +231,7 @@ static GtkWidget * ftvalue_new(v3270FTD *dialog, GtkGrid *grid, int r, const str
 
 }
 
-static GtkWidget * ftradio_new(v3270FTD *dialog, const gchar *title, const gchar *tooltip, const struct rdoptions *opt)
+static GtkWidget * ftradio_new(v3270FTD *dialog, GtkToggleButton **button, const gchar *title, const gchar *tooltip, const struct rdoptions *opt)
 {
 	GtkContainer	* frame = GTK_CONTAINER(gtk_frame_new(title));
 	GtkBox			* box	= GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL,2));
@@ -238,16 +240,16 @@ static GtkWidget * ftradio_new(v3270FTD *dialog, const gchar *title, const gchar
 
 	for(f=0;opt[f].label;f++)
 	{
-		GtkWidget * button = gtk_radio_button_new_with_label(lst,gettext(opt[f].label));
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),(dialog->options & opt[f].flag) != 0);
+		button[f] = GTK_TOGGLE_BUTTON(gtk_radio_button_new_with_label(lst,gettext(opt[f].label)));
+		gtk_toggle_button_set_active(button[f],(dialog->options & opt[f].flag) != 0);
 		if(opt[f].tooltip)
-			gtk_widget_set_tooltip_text(button,gettext(opt[f].tooltip));
+			gtk_widget_set_tooltip_text(GTK_WIDGET(button[f]),gettext(opt[f].tooltip));
 
-		g_object_set_data(G_OBJECT(button),"cfg",(gpointer) &opt[f]);
-		g_signal_connect(G_OBJECT(button),"toggled",G_CALLBACK(toggle_option),dialog);
+		g_object_set_data(G_OBJECT(button[f]),"cfg",(gpointer) &opt[f]);
+		g_signal_connect(G_OBJECT(button[f]),"toggled",G_CALLBACK(toggle_option),dialog);
 
-		gtk_box_pack_start(box,button,FALSE,TRUE,2);
-		lst =  gtk_radio_button_get_group(GTK_RADIO_BUTTON(button));
+		gtk_box_pack_start(box,GTK_WIDGET(button[f]),FALSE,TRUE,2);
+		lst =  gtk_radio_button_get_group(GTK_RADIO_BUTTON(button[f]));
 	}
 
 	gtk_widget_set_tooltip_text(GTK_WIDGET(frame),tooltip);
@@ -526,7 +528,7 @@ GtkWidget * v3270_ft_dialog_new(GtkWidget *parent, LIB3270_FT_OPTION options)
 		};
 
 		gtk_grid_attach(	grid,
-							ftradio_new(dialog,_("Record format"),_("Controls the record format of files created on the host."),recfm),
+							ftradio_new(dialog,dialog->recfm,_("Record format"),_("Controls the record format of files created on the host."),recfm),
 							0,0,2,1
 						);
 
@@ -561,7 +563,7 @@ GtkWidget * v3270_ft_dialog_new(GtkWidget *parent, LIB3270_FT_OPTION options)
 			}
 		};
 
-		dialog->units = ftradio_new(dialog,_("Space allocation units"),_("Specifies the units for the TSO host primary and secondary space options."),units);
+		dialog->units = ftradio_new(dialog,dialog->btnUnits,_("Space allocation units"),_("Specifies the units for the TSO host primary and secondary space options."),units);
 
 		gtk_grid_attach(	grid,
 							dialog->units,
@@ -685,6 +687,7 @@ void v3270_ft_dialog_set_tso(GtkWidget *widget,gboolean flag)
 		GTK_WIDGET(dialog->value[VALUE_PRIMSPACE]),
 		GTK_WIDGET(dialog->value[VALUE_SECSPACE]),
 		GTK_WIDGET(dialog->units),
+		GTK_WIDGET(dialog->recfm[3]),
 	};
 
 	int f;
