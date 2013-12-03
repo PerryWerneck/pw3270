@@ -96,6 +96,7 @@
  LIB3270_EXPORT void				  v3270_ft_progress_set_message(GtkWidget *widget, const gchar *msg);
  LIB3270_EXPORT	void				  v3270_ft_progress_set_host_filename(GtkWidget *widget, const gchar *name);
  LIB3270_EXPORT	void				  v3270_ft_progress_set_local_filename(GtkWidget *widget, const gchar *name);
+ LIB3270_EXPORT void				  v3270_ft_progress_complete(GtkWidget *widget,unsigned long length,double kbytes_sec);
 
 
 

@@ -209,7 +209,7 @@ static void ft_dialog_save(GtkWidget *widget, const gchar *name)
 
 static void ft_complete(H3270FT *ft, unsigned long length,double kbytes_sec)
 {
-	v3270_ft_progress_update(GTK_WIDGET(ft->widget),length,length,kbytes_sec);
+	v3270_ft_progress_complete(GTK_WIDGET(ft->widget),length,kbytes_sec);
 }
 
 static void ft_message(struct _h3270ft *ft, const char *text)
@@ -247,7 +247,7 @@ gint v3270_transfer_file(GtkWidget *widget, LIB3270_FT_OPTION options, const gch
 											(options & LIB3270_FT_OPTION_RECEIVE) ? _( "Receiving file" ) : _( "Sending file" ),
 											GTK_WINDOW(gtk_widget_get_toplevel(widget)),
 											GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
-											GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,NULL );
+											_( "_Cancel" ), GTK_RESPONSE_CANCEL,NULL );
 
 
 	// Create FT progress dialog
@@ -300,6 +300,8 @@ void download_action(GtkAction *action, GtkWidget *widget)
 
 	GtkWidget *dialog 	= v3270_ft_dialog_new(widget,LIB3270_FT_OPTION_RECEIVE|get_options_from_config(name));
 
+	v3270_ft_dialog_set_tso(dialog,lib3270_is_tso(v3270_get_session(widget)));
+
 	ft_dialog_load(dialog,name);
 
     if(gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
@@ -343,6 +345,7 @@ void upload_action(GtkAction *action, GtkWidget *widget)
 
 	GtkWidget *dialog 	= v3270_ft_dialog_new(widget,LIB3270_FT_OPTION_SEND|get_options_from_config(name));
 
+	v3270_ft_dialog_set_tso(dialog,lib3270_is_tso(v3270_get_session(widget)));
 	ft_dialog_load(dialog,name);
 
     if(gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)

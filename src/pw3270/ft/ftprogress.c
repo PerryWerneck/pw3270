@@ -207,9 +207,53 @@ void v3270_ft_progress_update(GtkWidget *widget, unsigned long current, unsigned
 	}
 
 	if(total && current)
+	{
+		double remaining = ((double) (total - current))/1024.0;
+
+		if(remaining > 0 && kbytes_sec > 0)
+		{
+			char buffer[40];
+			double	seconds = ((double) remaining) / kbytes_sec;
+			time_t 	eta		= time(0) + ((time_t) seconds);
+			strftime(buffer, 39, "%H:%M:%S", localtime(&eta));
+			gtk_label_set_text(obj->value[VALUE_ETA],buffer);
+		}
+		else
+		{
+			gtk_label_set_text(obj->value[VALUE_ETA],"");
+		}
+
 		gtk_progress_bar_set_fraction(obj->progress,((gdouble) current) / ((gdouble) total));
+	}
 	else
+	{
 		gtk_progress_bar_pulse(obj->progress);
+		gtk_label_set_text(obj->value[VALUE_ETA],"");
+	}
+
+}
+
+void v3270_ft_progress_complete(GtkWidget *widget,unsigned long length, double kbytes_sec)
+{
+	g_return_if_fail(GTK_IS_V3270FTProgress(widget));
+
+	v3270FTProgress *obj = GTK_V3270FTProcess(widget);
+
+	if(length)
+	{
+		gchar *str = g_strdup_printf("%ld",length);
+		gtk_label_set_text(obj->value[VALUE_CURRENT],str);
+		g_free(str);
+	}
+
+	if(kbytes_sec)
+	{
+		gchar *str = g_strdup_printf("%ld KB/s",(unsigned long) kbytes_sec);
+		gtk_label_set_text(obj->value[VALUE_SPEED],str);
+		g_free(str);
+	}
+
+	gtk_label_set_text(obj->value[VALUE_ETA],"");
 
 }
 

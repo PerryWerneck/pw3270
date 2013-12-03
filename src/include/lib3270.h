@@ -1021,6 +1021,16 @@
 
 	LIB3270_EXPORT const LIB3270_OPTION_ENTRY * lib3270_get_option_list(void);
 
+	/**
+	 * The host is TSO?
+	 *
+	 * @param hSession	Session Handle
+	 *
+	 * @return Non zero if the host is TSO.
+	 *
+	 */
+	LIB3270_EXPORT int 	 lib3270_is_tso(H3270 *hSession);
+
 
 #ifdef __cplusplus
 	}

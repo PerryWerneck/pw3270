@@ -118,3 +118,9 @@ LIB3270_EXPORT const LIB3270_OPTION_ENTRY * lib3270_get_option_list(void)
 {
 	return options;
 }
+
+LIB3270_EXPORT int lib3270_is_tso(H3270 *hSession)
+{
+	CHECK_SESSION_HANDLE(hSession);
+	return (hSession->options & LIB3270_OPTION_TSO) != 0;
+}
