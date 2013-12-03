@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-03 08:21-0200\n"
-"PO-Revision-Date: 2013-12-03 08:32-0200\n"
+"POT-Creation-Date: 2013-12-03 09:57-0200\n"
+"PO-Revision-Date: 2013-12-03 10:09-0200\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Portugues <>\n"
 "Language: pt_BR\n"
@@ -219,8 +219,8 @@ msgid ""
 "Adds Newline characters to each host file record before transferring it to "
 "the local workstation."
 msgstr ""
-"Adds Newline characters to each host file record before transferring it to "
-"the local workstation."
+"Adiciona quebras de linha em cada registro do arquivo antes de transferir "
+"para a estação de trabalho."
 
 #: ui/00default.xml:322
 msgid "Alert sound"
@@ -233,7 +233,7 @@ msgstr ""
 
 #: ft/ftdialog.c:403 ft/ftdialog.c:474
 msgid "Appends the source file to the destination file."
-msgstr "Appends the source file to the destination file."
+msgstr "Adiciona conteúdo do arquivo origem ao final do arquivo destino."
 
 #: main.c:397 main.c:399
 msgid "Application name"
@@ -286,7 +286,7 @@ msgstr "Cursor piscante"
 
 #: ft/ftdialog.c:590
 msgid "Block size:"
-msgstr "Block size:"
+msgstr "Comprimento do bloco:"
 
 #: colors.c:436
 msgid "Blue"
@@ -314,9 +314,9 @@ msgid ""
 "values give better performance, but some hosts may not be able to support "
 "them."
 msgstr ""
-"Buffer size for DFT-mode transfers. Can range from 256 to 32768. Larger "
-"values give better performance, but some hosts may not be able to support "
-"them."
+"Tamanho do buffer para transferências no modo DFT. Pode variar de 256 a "
+"32768. Valores maiores trazem maior performance, porem, nem todos os hosts "
+"podem suportá-los."
 
 #: v3270/security.c:124
 msgid "CRL has expired"
@@ -504,7 +504,7 @@ msgstr "Erro de codificação de caracteres"
 
 #: ft/ftdialog.c:391 ft/ftdialog.c:462
 msgid "Check for text files."
-msgstr "Colar arquivo texto."
+msgstr "Marque se o arquivo for texto."
 
 #: ui/10keypad.xml:172
 msgid "Clear"
@@ -536,7 +536,7 @@ msgstr "Conexão foi cancelada pelo servidor"
 
 #: ft/ftdialog.c:529
 msgid "Controls the record format of files created on the host."
-msgstr "Controls the record format of files created on the host."
+msgstr "Controla o formato de registro dos arquivos criados no host."
 
 #: ui/00default.xml:251
 msgid "Copy"
@@ -552,15 +552,16 @@ msgstr "Copiar como tabela"
 
 #: ft/ftdialog.c:509
 msgid "Creates a file with fixed-length records."
-msgstr "Creates a file with fixed-length records."
+msgstr "Cria arquivo com registros de tamanho fixo."
 
 #: ft/ftdialog.c:519
 msgid "Creates a file with undefined-length records (TSO hosts only)."
-msgstr "Creates a file with undefined-length records (TSO hosts only)."
+msgstr ""
+"Cria arquivo com o tamanho de registro indefinido (apenas para hosts TSO)."
 
 #: ft/ftdialog.c:514
 msgid "Creates a file with variable-length records."
-msgstr "Creates a file with variable-length records."
+msgstr "Cria arquivo com registros de tamanho variável."
 
 #: colors.c:460 ui/00default.xml:314
 msgid "Cross hair cursor"
@@ -1382,7 +1383,7 @@ msgstr "Recebendo arquivo"
 
 #: ft/ftdialog.c:577
 msgid "Record Length:"
-msgstr "Record Length:"
+msgstr "Comprimento de registro:"
 
 #: ft/ftdialog.c:529
 msgid "Record format"
@@ -1401,8 +1402,8 @@ msgid ""
 "Remap the text to ensure maximum compatibility between the workstation's "
 "character set and encoding and the host's EBCDIC code page."
 msgstr ""
-"Remap the text to ensure maximum compatibility between the workstation's "
-"character set and encoding and the host's EBCDIC code page."
+"Converte conteúdo do texto para garantir a máxima compatibilidade entre a "
+"codificação ASCII da estação de trabalho e a página de código EBCDIC do host."
 
 #: ui/00default.xml:265
 msgid "Remove selection"
@@ -1413,12 +1414,12 @@ msgid ""
 "Remove the default newline characters in local files before transferring "
 "them to the host."
 msgstr ""
-"Remove the default newline characters in local files before transferring "
-"them to the host."
+"Remove as quebras de linha padrão do arquivo local antes de enviar para o "
+"host."
 
 #: filetransfer.c:293 filetransfer.c:338 ft.c:170 ft.c:182 ft.c:196 ft.c:215
 msgid "Request failed"
-msgstr "Request failed"
+msgstr "Requisição falhou"
 
 #: ui/00default.xml:266
 msgid "Reselect"
@@ -1781,21 +1782,21 @@ msgstr "Espaço no nome da LU"
 msgid ""
 "Specifies the block size for files created on the host (TSO hosts only)."
 msgstr ""
-"Specifies the block size for files created on the host (TSO hosts only)."
+"Define o tamanho do bloco para arquivos criados no host (Apenas hosts TSO)."
 
 #: ft/ftdialog.c:578
 msgid ""
 "Specifies the record length (or maximum record length) for files created on "
 "the host."
 msgstr ""
-"Specifies the record length (or maximum record length) for files created on "
-"the host."
+"Define o tamanho de registro (ou tamanho máximo de registro) para arquivos "
+"criados no host."
 
 #: ft/ftdialog.c:564
 msgid ""
 "Specifies the units for the TSO host primary and secondary space options."
 msgstr ""
-"Specifies the units for the TSO host primary and secondary space options."
+"Define a unidade para os campos que definem o espaço primário e secundário."
 
 #: ft/ftprogress.c:132
 msgid "Speed"
@@ -2091,7 +2092,7 @@ msgstr "Trilhas"
 
 #: ft_cut.c:367
 msgid "Transfer cancelled by host"
-msgstr "Transferência cancelada pelo servidor"
+msgstr "Transferência cancelada pelo host"
 
 #: ft_cut.c:396 ft_cut.c:494 ft_dft.c:242 ft_dft.c:380
 msgid "Transfer cancelled by user"
@@ -2119,7 +2120,7 @@ msgstr "UTF-8"
 
 #: ft_dft.c:182
 msgid "Uknown DFT Open type from host"
-msgstr "Servidor enviou código de abertura DFT desconhecido"
+msgstr "Host enviou código de abertura DFT desconhecido"
 
 #: host.c:141
 msgid "Unable to connect to secure hosts"
@@ -2304,7 +2305,7 @@ msgstr "Usar teclas +/- para navegar por campos"
 
 #: ft/ftdialog.c:504
 msgid "Use host default record format."
-msgstr "Use host default record format."
+msgstr "Utilizar o formato de registro padrão do host."
 
 #: ft/ftdialog.c:513
 msgid "Variable"
@@ -2341,7 +2342,7 @@ msgstr "Europa ocidental (ISO 8859-1)"
 
 #: ft/ftdialog.c:380
 msgid "Where to save the received file."
-msgstr "Where to save the received file."
+msgstr "Onde salvar o arquivo recebido."
 
 #: colors.c:442
 msgid "White"
@@ -2405,11 +2406,11 @@ msgstr "Amarelo"
 
 #: ft/ftdialog.c:402 ft/ftdialog.c:473
 msgid "_Append to destination"
-msgstr "_Append to destination"
+msgstr "_Adicionar ao arquivo de destino"
 
 #: ft/ftdialog.c:467
 msgid "_CR delimited file."
-msgstr "_CR delimited file."
+msgstr "Arquivo delimitado por _CR."
 
 #: filetransfer.c:250 ft/ftdialog.c:135 ft/ftdialog.c:355
 msgid "_Cancel"
