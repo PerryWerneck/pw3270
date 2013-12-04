@@ -113,11 +113,7 @@ static void v3270FTD_class_init(v3270FTDClass *klass)
 //	GtkDialogClass	* widget_class	= GTK_DIALOG_CLASS(klass);
 
 #if GTK_CHECK_VERSION(3,0,0)
-
 #else
-
-	#error Implementar
-
 #endif // GTK_CHECK_VERSION
 
 }
@@ -171,21 +167,38 @@ static void toggle_option(GtkToggleButton *button, v3270FTD *dialog)
 static GtkWidget * ftoption_new(v3270FTD *dialog, const struct ftoptions *opt)
 {
 	GtkContainer	* frame = GTK_CONTAINER(gtk_frame_new(_("Transfer options")));
-	GtkGrid			* grid = GTK_GRID(gtk_grid_new());
 	int				  f;
+
+#if GTK_CHECK_VERSION(3,0,0)
+
+	GtkGrid			* grid = GTK_GRID(gtk_grid_new());
 
 	gtk_grid_set_row_homogeneous(grid,TRUE);
 	gtk_grid_set_column_homogeneous(grid,TRUE);
 	gtk_grid_set_column_spacing(grid,5);
 	gtk_grid_set_row_spacing(grid,5);
 
+#else
+
+	GtkTable		* grid = GTK_TABLE(gtk_table_new(2,3,FALSE));
+
+	gtk_table_set_row_spacings(grid,5);
+	gtk_table_set_col_spacings(grid,5);
+
+#endif // GTK_CHECK_VERSION
+
+
 	for(f=0;opt[f].label;f++)
 	{
 		GtkWidget * button = gtk_check_button_new_with_mnemonic(gettext(opt[f].label));
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),(dialog->options & opt[f].flag) != 0);
 		gtk_widget_set_tooltip_text(GTK_WIDGET(button),gettext(opt[f].tooltip));
+#if GTK_CHECK_VERSION(3,0,0)
 		gtk_widget_set_hexpand(button,TRUE);
 		gtk_grid_attach(grid,button,f&1,f/2,1,1);
+#else
+		gtk_table_attach_defaults(grid,button,f&1,(f&1)+1,f/2,(f/2)+1);
+#endif // GTK_CHECK_VERSION
 		g_object_set_data(G_OBJECT(button),"cfg",(gpointer) &opt[f]);
 		g_signal_connect(G_OBJECT(button),"toggled",G_CALLBACK(toggle_option),dialog);
 		dialog->button[opt->id] = GTK_TOGGLE_BUTTON(button);
@@ -196,7 +209,11 @@ static GtkWidget * ftoption_new(v3270FTD *dialog, const struct ftoptions *opt)
 	return GTK_WIDGET(frame);
 }
 
+#if GTK_CHECK_VERSION(3,0,0)
 static GtkWidget * ftvalue_new(v3270FTD *dialog, GtkGrid *grid, int r, const struct ftvalues *val)
+#else
+static GtkWidget * ftvalue_new(v3270FTD *dialog, GtkTable *grid, int r, const struct ftvalues *val)
+#endif // GTK_CHECK_VERSION
 {
 	int		  f;
 
@@ -209,7 +226,6 @@ static GtkWidget * ftvalue_new(v3270FTD *dialog, GtkGrid *grid, int r, const str
 
 		dialog->value[id]	= GTK_SPIN_BUTTON(gtk_spin_button_new_with_range(0,99999,1));
 
-		gtk_widget_set_hexpand(GTK_WIDGET(label),TRUE);
 		gtk_misc_set_alignment(GTK_MISC(label),0,0.5);
 
 		gtk_label_set_mnemonic_widget(GTK_LABEL(label),GTK_WIDGET(dialog->value[id]));
@@ -222,8 +238,15 @@ static GtkWidget * ftvalue_new(v3270FTD *dialog, GtkGrid *grid, int r, const str
 
 		g_object_set_data(G_OBJECT(dialog->value[id]),"cfg",(gpointer) &val[f]);
 
+#if GTK_CHECK_VERSION(3,0,0)
+		gtk_widget_set_hexpand(GTK_WIDGET(label),TRUE);
 		gtk_grid_attach(grid,GTK_WIDGET(label),col,row,1,1);
 		gtk_grid_attach(grid,GTK_WIDGET(dialog->value[id]),col+1,row,1,1);
+#else
+		gtk_table_attach(grid,GTK_WIDGET(label),col,col+1,row,row+1,GTK_EXPAND|GTK_FILL,GTK_FILL,0,0);
+		gtk_table_attach(grid,GTK_WIDGET(dialog->value[id]),col+1,col+2,row,row+1,GTK_EXPAND|GTK_FILL,GTK_FILL,0,0);
+#endif // GTK_CHECK_VERSION
+
 
 	}
 
@@ -234,7 +257,11 @@ static GtkWidget * ftvalue_new(v3270FTD *dialog, GtkGrid *grid, int r, const str
 static GtkWidget * ftradio_new(v3270FTD *dialog, GtkToggleButton **button, LIB3270_FT_OPTION option, const gchar *title, const gchar *tooltip, const struct rdoptions *opt)
 {
 	GtkContainer	* frame = GTK_CONTAINER(gtk_frame_new(title));
+#if GTK_CHECK_VERSION(3,0,0)
 	GtkBox			* box	= GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL,2));
+#else
+	GtkBox			* box	= GTK_BOX(gtk_hbox_new(FALSE,2));
+#endif // GTK_CHECK_VERSION
 	GSList			* lst	= NULL;
 	int				  f;
 
@@ -335,19 +362,33 @@ GtkWidget * v3270_ft_dialog_new(GtkWidget *parent, LIB3270_FT_OPTION options)
 	{
 		dialog->filename[f] = gtk_entry_new();
 		gtk_label_set_mnemonic_widget(GTK_LABEL(label[f]),dialog->filename[f]);
+#if GTK_CHECK_VERSION(3,0,0)
 		gtk_widget_set_hexpand(dialog->filename[f],TRUE);
+#endif // GTK_CHECK_VERSION
 	}
 
+#if GTK_CHECK_VERSION(3,0,0)
+
 	GtkGrid *grid = GTK_GRID(gtk_grid_new());
+
 	gtk_grid_set_row_homogeneous(grid,FALSE);
 	gtk_grid_set_column_homogeneous(grid,FALSE);
 	gtk_grid_set_column_spacing(grid,5);
 	gtk_grid_set_row_spacing(grid,5);
 
+#else
+	GtkTable *grid = gtk_table_new(2,3,FALSE);
+
+	gtk_table_set_row_spacings(grid,5);
+	gtk_table_set_col_spacings(grid,5);
+
+#endif // GTK_CHECK_VERSION
+
+
 #if GTK_CHECK_VERSION(3,10,0)
 	GtkButton * browse = GTK_BUTTON(gtk_button_new_from_icon_name("text-x-generic",GTK_ICON_SIZE_BUTTON));
 #else
-	GtkButton * browse = GTK_BUTTON(gtk_button_new_from_stock(GTK_STOCK_FILE));
+	GtkButton * browse = GTK_BUTTON(gtk_button_new_with_mnemonic(_( "_Browse" )));
 #endif // GTK_CHECK_VERSION
 
 	gtk_button_set_focus_on_click(browse,FALSE);
@@ -371,12 +412,27 @@ GtkWidget * v3270_ft_dialog_new(GtkWidget *parent, LIB3270_FT_OPTION options)
 		g_signal_connect(G_OBJECT(dialog->filename[FILENAME_LOCAL]),"changed",G_CALLBACK(test_path_exists),dialog);
 
 
+#if GTK_CHECK_VERSION(3,0,0)
+
 		gtk_grid_attach(grid,label[FILENAME_HOST],0,0,1,1);
 		gtk_grid_attach(grid,label[FILENAME_LOCAL],0,1,1,1);
 
 		gtk_grid_attach(grid,dialog->filename[FILENAME_HOST],1,0,3,1);
 		gtk_grid_attach(grid,dialog->filename[FILENAME_LOCAL],1,1,3,1);
+
 		gtk_grid_attach(grid,GTK_WIDGET(browse),5,1,1,1);
+
+#else
+
+		gtk_table_attach(grid,label[FILENAME_HOST],0,1,0,1,GTK_EXPAND|GTK_FILL,GTK_FILL,0,0);
+		gtk_table_attach(grid,label[FILENAME_LOCAL],0,1,1,2,GTK_EXPAND|GTK_FILL,GTK_FILL,0,0);
+
+		gtk_table_attach(grid,dialog->filename[FILENAME_HOST],1,2,0,1,GTK_EXPAND|GTK_FILL,GTK_FILL,0,0);
+		gtk_table_attach(grid,dialog->filename[FILENAME_LOCAL],1,2,1,2,GTK_EXPAND|GTK_FILL,GTK_FILL,0,0);
+
+		gtk_table_attach(grid,GTK_WIDGET(browse),2,3,1,2,GTK_FILL,GTK_FILL,0,0);
+
+#endif
 
 		gtk_widget_set_tooltip_text(dialog->filename[FILENAME_HOST],_("Name of the source file."));
 		gtk_widget_set_tooltip_text(dialog->filename[FILENAME_LOCAL],_("Where to save the received file."));
@@ -421,7 +477,12 @@ GtkWidget * v3270_ft_dialog_new(GtkWidget *parent, LIB3270_FT_OPTION options)
 		gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),ftoption_new(dialog,opt),FALSE,TRUE,2);
 
 		// Create DFT
+#if GTK_CHECK_VERSION(3,0,0)
 		GtkBox		* box	= GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL,2));
+#else
+		GtkBox 		* box	= GTK_BOX(gtk_hbox_new(FALSE,2));
+#endif // GTK_CHECK_VERSION
+
 		GtkWidget	* label	= gtk_label_new_with_mnemonic(_("DFT B_uffer size:"));
 		dialog->value[VALUE_DFT] = GTK_SPIN_BUTTON(gtk_spin_button_new_with_range(256,32768,1));
 		gtk_misc_set_alignment(GTK_MISC(label),0,0.5);
@@ -438,16 +499,30 @@ GtkWidget * v3270_ft_dialog_new(GtkWidget *parent, LIB3270_FT_OPTION options)
 	{
 		// It's sending file first local filename, then hostfilename
 		gtk_window_set_title(GTK_WINDOW(dialog),_( "Send file to host" ));
+		g_signal_connect(G_OBJECT(dialog->filename[FILENAME_LOCAL]),"changed",G_CALLBACK(test_file_exists),dialog);
+
+#if GTK_CHECK_VERSION(3,0,0)
 
 		gtk_grid_attach(grid,label[FILENAME_LOCAL],0,0,1,1);
 		gtk_grid_attach(grid,label[FILENAME_HOST],0,1,1,1);
-
-		g_signal_connect(G_OBJECT(dialog->filename[FILENAME_LOCAL]),"changed",G_CALLBACK(test_file_exists),dialog);
 
 		gtk_grid_attach(grid,dialog->filename[FILENAME_LOCAL],1,0,3,1);
 		gtk_grid_attach(grid,GTK_WIDGET(browse),5,0,1,1);
 
 		gtk_grid_attach(grid,dialog->filename[FILENAME_HOST],1,1,3,1);
+
+#else
+
+		gtk_table_attach(grid,label[FILENAME_LOCAL],0,1,0,1,GTK_FILL,GTK_FILL,0,0);
+		gtk_table_attach(grid,label[FILENAME_HOST],0,1,1,2,GTK_FILL,GTK_FILL,0,0);
+
+		gtk_table_attach(grid,dialog->filename[FILENAME_LOCAL],1,2,0,1,GTK_EXPAND|GTK_FILL,GTK_FILL,0,0);
+		gtk_table_attach(grid,dialog->filename[FILENAME_HOST],1,2,1,2,GTK_EXPAND|GTK_FILL,GTK_FILL,0,0);
+
+		gtk_table_attach(grid,GTK_WIDGET(browse),2,3,0,1,GTK_FILL,GTK_FILL,0,0);
+
+#endif // GTK_CHECK_VERSION
+
 
 		gtk_widget_set_tooltip_text(dialog->filename[FILENAME_HOST],_("Name of the target file."));
 		gtk_widget_set_tooltip_text(dialog->filename[FILENAME_LOCAL],_("Path of the local file to send."));
@@ -493,9 +568,20 @@ GtkWidget * v3270_ft_dialog_new(GtkWidget *parent, LIB3270_FT_OPTION options)
 
 
 		// Create format box
+
+#if GTK_CHECK_VERSION(3,0,0)
+
 		GtkGrid * grid = GTK_GRID(gtk_grid_new());
 		gtk_grid_set_column_spacing(grid,5);
 		gtk_grid_set_row_spacing(grid,5);
+
+#else
+		GtkTable *grid = gtk_table_new(4,4,FALSE);
+
+		gtk_table_set_row_spacings(grid,5);
+		gtk_table_set_col_spacings(grid,5);
+
+#endif // GTK_CHECK_VERSION
 
 		// Create record format box
 		static const struct rdoptions recfm[] =
@@ -527,10 +613,18 @@ GtkWidget * v3270_ft_dialog_new(GtkWidget *parent, LIB3270_FT_OPTION options)
 			}
 		};
 
+#if GTK_CHECK_VERSION(3,0,0)
 		gtk_grid_attach(	grid,
 							ftradio_new(dialog,dialog->recfm,dialog->options,_("Record format"),_("Specifies the record format of the data set."),recfm),
 							0,0,2,1
 						);
+#else
+		gtk_table_attach(	grid,
+							ftradio_new(dialog,dialog->recfm,dialog->options,_("Record format"),_("Specifies the record format of the data set."),recfm),
+							0,2,0,1,GTK_EXPAND|GTK_FILL,GTK_FILL,0,0
+						);
+#endif // GTK_CHECK_VERSION
+
 
 
 		// Create allocation unit box
@@ -565,11 +659,17 @@ GtkWidget * v3270_ft_dialog_new(GtkWidget *parent, LIB3270_FT_OPTION options)
 
 		dialog->units = ftradio_new(dialog,dialog->btnUnits,dialog->options,_("Space allocation units"),_("Specifies the units for the TSO host primary and secondary space options."),units);
 
+#if GTK_CHECK_VERSION(3,0,0)
 		gtk_grid_attach(	grid,
 							dialog->units,
 							2,0,2,1
 						);
-
+#else
+		gtk_table_attach(	grid,
+							dialog->units,
+							2,4,0,1,GTK_EXPAND|GTK_FILL,GTK_FILL,0,0
+						);
+#endif // GTK_CHECK_VERSION
 
 		// Create values box
 		static const struct ftvalues val[] =

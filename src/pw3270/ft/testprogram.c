@@ -38,32 +38,28 @@ int main (int argc, char *argv[])
 
 	gtk_init (&argc, &argv);
 
-	/*
 	{
 		GtkWidget *win = v3270_ft_dialog_new(NULL,LIB3270_FT_OPTION_RECEIVE);
 		v3270_ft_dialog_set_options(win,LIB3270_FT_OPTION_REMAP);
 		gtk_dialog_run(GTK_DIALOG(win));
 	}
-	*/
 
+	/*
 	{
 		GtkWidget *win = v3270_ft_dialog_new(NULL,LIB3270_FT_OPTION_SEND|LIB3270_FT_RECORD_FORMAT_VARIABLE);
 		v3270_ft_dialog_set_tso(win,FALSE);
 		gtk_dialog_run(GTK_DIALOG(win));
 	}
+	*/
 
-
-//	gtk_dialog_run(GTK_DIALOG(v3270_ft_dialog_new(NULL,LIB3270_FT_OPTION_SEND|LIB3270_FT_OPTION_REMAP)));
-
-
-//	v3270_ft_dialog_set_tso(win,TRUE);
-
-//	win = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-//	gtk_container_add(GTK_CONTAINER(win),v3270_ft_progress_new());
-
-
-//	gtk_widget_show_all(win);
-//	gtk_main ();
+	/*
+	{
+		GtkWidget *win = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+		gtk_container_add(GTK_CONTAINER(win),v3270_ft_progress_new());
+		gtk_widget_show_all(win);
+		gtk_main ();
+	}
+	*/
 
 	return 0;
 

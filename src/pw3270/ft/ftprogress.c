@@ -52,7 +52,11 @@
 
  struct _v3270FTProgress
  {
+#if GTK_CHECK_VERSION(3,0,0)
  	GtkBin			  parent;
+#else
+	GtkVBox			  parent;
+#endif // GTK_CHECK_VERSION
  	GtkLabel		* text[TEXT_COUNT];
  	GtkLabel		* value[VALUE_COUNT];
  	GtkProgressBar	* progress;
@@ -60,35 +64,39 @@
 
  struct _v3270FTProgressClass
  {
+#if GTK_CHECK_VERSION(3,0,0)
 	GtkBinClass parent_class;
-
+#else
+	GtkVBoxClass parent_class;
+#endif // GTK_CHECK_VERSION
  };
 
+#if GTK_CHECK_VERSION(3,0,0)
  G_DEFINE_TYPE(v3270FTProgress, v3270FTProgress, GTK_TYPE_BIN);
-
+#else
+ G_DEFINE_TYPE(v3270FTProgress, v3270FTProgress, GTK_TYPE_VBOX);
+#endif // GTK_CHECK_VERSION
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
 static void v3270FTProgress_class_init(v3270FTProgressClass *klass)
 {
-//	GtkDialogClass	* widget_class	= GTK_DIALOG_CLASS(klass);
-
 #if GTK_CHECK_VERSION(3,0,0)
-
 #else
-
-	#error Implementar
-
 #endif // GTK_CHECK_VERSION
-
 }
 
 static void v3270FTProgress_init(v3270FTProgress *widget)
 {
 	GtkWidget	* frame;
+#if GTK_CHECK_VERSION(3,0,0)
 	GtkGrid 	* grid;
-	int			  f;
 	GtkWidget 	* box	= gtk_box_new(GTK_ORIENTATION_VERTICAL,3);
+#else
+	GtkTable	* grid;
+	GtkWidget 	* box	= GTK_WIDGET(widget);
+#endif // GTK_CHECK_VERSION
+	int			  f;
 
 	gtk_container_set_border_width(GTK_CONTAINER(box),3);
 
@@ -96,13 +104,25 @@ static void v3270FTProgress_init(v3270FTProgress *widget)
 	static const gchar * label[TEXT_COUNT] = { N_("From"), N_("To"), N_("Status") };
 
 	frame = gtk_frame_new( _( "Informations" ) );
+
+#if GTK_CHECK_VERSION(3,0,0)
+
 	grid = GTK_GRID(gtk_grid_new());
 
-	gtk_container_set_border_width(GTK_CONTAINER(grid),3);
 	gtk_grid_set_column_spacing(grid,5);
 	gtk_grid_set_row_spacing(grid,5);
 	gtk_widget_set_hexpand(GTK_WIDGET(grid),TRUE);
 
+#else
+
+	grid = GTK_TABLE(gtk_table_new(2,2,FALSE));
+
+	gtk_table_set_row_spacings(grid,5);
+	gtk_table_set_col_spacings(grid,5);
+
+#endif // GTK_CHECK_VERSION
+
+	gtk_container_set_border_width(GTK_CONTAINER(grid),3);
 
 	for(f=0;f<TEXT_COUNT;f++)
 	{
@@ -113,15 +133,24 @@ static void v3270FTProgress_init(v3270FTProgress *widget)
 		gtk_misc_set_alignment(GTK_MISC(l),0,0);
 		g_free(ptr);
 
-		gtk_grid_attach(grid,l,0,f,1,1);
 
 		widget->text[f] = GTK_LABEL(gtk_label_new("-"));
 		gtk_label_set_ellipsize(widget->text[f],PANGO_ELLIPSIZE_START);
 		gtk_label_set_width_chars(widget->text[f],50);
 		gtk_misc_set_alignment(GTK_MISC(widget->text[f]),0,0);
-		gtk_widget_set_hexpand(GTK_WIDGET(widget->text[f]),TRUE);
 
+#if GTK_CHECK_VERSION(3,0,0)
+
+		gtk_widget_set_hexpand(GTK_WIDGET(widget->text[f]),TRUE);
+		gtk_grid_attach(grid,l,0,f,1,1);
 		gtk_grid_attach(grid,GTK_WIDGET(widget->text[f]),1,f,1,1);
+
+#else
+
+		gtk_table_attach(grid,l,0,1,f,f+1,GTK_FILL,GTK_FILL,0,0);
+		gtk_table_attach(grid,GTK_WIDGET(widget->text[f]),1,2,f,f+1,GTK_EXPAND|GTK_FILL,GTK_FILL,0,0);
+
+#endif // GTK_CHECK_VERSION
 
 
 	}
@@ -132,13 +161,26 @@ static void v3270FTProgress_init(v3270FTProgress *widget)
 	static const gchar *progressLabel[VALUE_COUNT] = { N_( "Total" ), N_( "Current" ), N_( "Speed" ), N_( "ETA" ) };
 
 	frame = gtk_frame_new( _( "Progress" ) );
+
+#if GTK_CHECK_VERSION(3,0,0)
+
 	grid	= GTK_GRID(gtk_grid_new());
 
-	gtk_container_set_border_width(GTK_CONTAINER(grid),3);
 	gtk_grid_set_column_spacing(grid,5);
 	gtk_grid_set_row_spacing(grid,5);
 	gtk_widget_set_hexpand(GTK_WIDGET(grid),TRUE);
 	gtk_grid_set_column_homogeneous(grid,TRUE);
+
+#else
+
+	grid = GTK_TABLE(gtk_table_new(3,4,FALSE));
+
+	gtk_table_set_row_spacings(grid,5);
+	gtk_table_set_col_spacings(grid,5);
+
+#endif // GTK_CHECK_VERSION
+
+	gtk_container_set_border_width(GTK_CONTAINER(grid),3);
 
 	for(f=0;f<VALUE_COUNT;f++)
 	{
@@ -151,26 +193,40 @@ static void v3270FTProgress_init(v3270FTProgress *widget)
 		gtk_misc_set_alignment(GTK_MISC(l),0,0);
 		g_free(ptr);
 
-		gtk_grid_attach(grid,l,c,r,1,1);
-
 		widget->value[f] = GTK_LABEL(gtk_label_new(_("N/A")));
 		gtk_misc_set_alignment(GTK_MISC(widget->value[f]),1,0);
-		gtk_widget_set_hexpand(GTK_WIDGET(widget->value[f]),TRUE);
 
+#if GTK_CHECK_VERSION(3,0,0)
+
+		gtk_widget_set_hexpand(GTK_WIDGET(widget->value[f]),TRUE);
+		gtk_grid_attach(grid,l,c,r,1,1);
 		gtk_grid_attach(grid,GTK_WIDGET(widget->value[f]),c+1,r,1,1);
 
+#else
+
+		gtk_table_attach(grid,l,c,c+1,r,r+1,GTK_FILL,GTK_FILL,0,0);
+		gtk_table_attach(grid,GTK_WIDGET(widget->value[f]),c+1,c+2,r,r+1,GTK_EXPAND|GTK_FILL,GTK_FILL,0,0);
+
+#endif // GTK_CHECK_VERSION
 
 	}
 
  	widget->progress = GTK_PROGRESS_BAR(gtk_progress_bar_new());
+
+#if GTK_CHECK_VERSION(3,0,0)
 	gtk_widget_set_hexpand(GTK_WIDGET(widget->progress),TRUE);
 	gtk_grid_attach(grid,GTK_WIDGET(widget->progress),0,2,4,1);
+#else
+	gtk_table_attach(grid,GTK_WIDGET(widget->progress),0,4,2,3,GTK_EXPAND|GTK_FILL,GTK_FILL,0,0);
+#endif // GTK_CHECK_VERSION
 
 	gtk_container_add(GTK_CONTAINER(frame),GTK_WIDGET(grid));
 	gtk_container_add(GTK_CONTAINER(box),GTK_WIDGET(frame));
 
 	// Add box on parent widget
-	gtk_container_add(GTK_CONTAINER(widget),GTK_WIDGET(box));
+#if GTK_CHECK_VERSION(3,0,0)
+	gtk_container_add(GTK_CONTAINER(widget),box);
+#endif // GTK_CHECK_VERSION
 
 }
 
