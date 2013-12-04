@@ -2052,7 +2052,7 @@ void net_exception(H3270 *session)
 
 		if(session->excepting)
 		{
-			RemoveInput(session->ns_exception_id);
+			RemoveSource(session->ns_exception_id);
 			session->ns_exception_id = NULL;
 			session->excepting = 0;
 		}

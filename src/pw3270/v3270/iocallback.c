@@ -120,6 +120,16 @@ static void * AddSource(int source, H3270 *session, gushort events, void (*fn)(H
 }
 
 #ifdef WIN32
+static void * static_AddOutput(HANDLE source, H3270 *session, void (*fn)(H3270 *session))
+#else
+static void * static_AddOutput(int source, H3270 *session, void (*fn)(H3270 *session))
+#endif // WIN32
+{
+	return AddSource(source,session,G_IO_OUT|G_IO_HUP|G_IO_ERR,fn);
+}
+
+
+#ifdef WIN32
 static void * static_AddInput(HANDLE source, H3270 *session, void (*fn)(H3270 *session))
 #else
 static void * static_AddInput(int source, H3270 *session, void (*fn)(H3270 *session))
@@ -326,6 +336,8 @@ void v3270_register_io_handlers(v3270Class *cls)
 		static_RemoveTimeOut,
 
 		static_AddInput,
+		static_AddOutput,
+
 		static_RemoveSource,
 
 		static_AddExcept,

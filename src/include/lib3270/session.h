@@ -33,6 +33,7 @@
 
 	#define LIB3270_SESSION_H_INCLUDED 1
 	#include <sys/time.h>
+
 	#include <lib3270/popup.h>
 	#include <lib3270/charset.h>
 

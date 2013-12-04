@@ -34,6 +34,7 @@ TERMINAL_SOURCES =	bounds.c ctlr.c util.c toggles.c screen.c selection.c kybd.c 
 
 # Network I/O Sources
 NETWORK_SOURCES = iocalls.c proxy.c
+# connect.c
 
 # Full library sources
 SOURCES =			$(TERMINAL_SOURCES) $(NETWORK_SOURCES) ft.c ft_cut.c ft_dft.c glue.c resources.c \

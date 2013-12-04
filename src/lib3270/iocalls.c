@@ -48,19 +48,18 @@
 /*---[ Standard calls ]-------------------------------------------------------------------------------------*/
 
 static void   internal_remove_timeout(void *timer);
+static void	  internal_remove_source(void *id);
 static void * internal_add_timeout(unsigned long interval_ms, H3270 *session, void (*proc)(H3270 *session));
 
 #ifdef WIN32
 	static void * internal_add_input(HANDLE source, H3270 *session, void (*fn)(H3270 *session));
+	static void * internal_add_output(HANDLE source, H3270 *session, void (*fn)(H3270 *session));
 	static void * internal_add_except(HANDLE source, H3270 *session, void (*fn)(H3270 *session));
 #else
 	static void * internal_add_input(int source, H3270 *session, void (*fn)(H3270 *session));
+	static void * internal_add_output(int source, H3270 *session, void (*fn)(H3270 *session));
 	static void * internal_add_except(int source, H3270 *session, void (*fn)(H3270 *session));
 #endif // WIN32
-
-static void   internal_remove_input(void *id);
-
-// static int	  internal_process_events(int block);
 
 static int 	  internal_callthread(int(*callback)(H3270 *, void *), H3270 *session, void *parm);
 static int	  internal_wait(H3270 *hSession, int seconds);
@@ -76,18 +75,24 @@ static void	  internal_ring_bell(H3270 *);
  static void	  (*remove_timeout)(void *timer)
 					= internal_remove_timeout;
 
- static void	  (*remove_input)(void *id)
-					= internal_remove_input;
+ static void	  (*remove_source)(void *id)
+					= internal_remove_source;
 
 #ifdef WIN32
  static void	* (*add_input)(HANDLE source, H3270 *session, void (*fn)(H3270 *session))
 					= internal_add_input;
+
+ static void	* (*add_output)(HANDLE source, H3270 *session, void (*fn)(H3270 *session))
+					= internal_add_output;
 
  static void 	* (*add_except)(HANDLE source, H3270 *session, void (*fn)(H3270 *session))
 					= internal_add_except;
 #else
  static void	* (*add_input)(int source, H3270 *session, void (*fn)(H3270 *session))
 					= internal_add_input;
+
+ static void	* (*add_output)(int source, H3270 *session, void (*fn)(H3270 *session))
+					= internal_add_output;
 
  static void 	* (*add_except)(int source, H3270 *session, void (*fn)(H3270 *session))
 					= internal_add_except;
@@ -266,18 +271,38 @@ static void * internal_add_input(int source, H3270 *session, void (*fn)(H3270 *s
 
 	trace("%s session=%p proc=%p",__FUNCTION__,session,fn);
 
-	ip->source = source;
-	ip->condition = InputReadMask;
-	ip->proc = fn;
-	ip->session = session;
-	ip->next = inputs;
-	inputs = ip;
-	inputs_changed = True;
-
-//	trace("%s: fd=%d callback=%p handle=%p",__FUNCTION__,source,fn,ip);
+	ip->source 		= source;
+	ip->condition	= InputReadMask;
+	ip->proc		= fn;
+	ip->session 	= session;
+	ip->next 		= inputs;
+	inputs 			= ip;
+	inputs_changed 	= True;
 
 	return ip;
 }
+
+#ifdef WIN32
+static void * internal_add_output(HANDLE source, H3270 *session, void (*fn)(H3270 *session))
+#else
+static void * internal_add_output(int source, H3270 *session, void (*fn)(H3270 *session))
+#endif // WIN32
+{
+	input_t *ip = (input_t *) lib3270_malloc(sizeof(input_t));
+
+	trace("%s session=%p proc=%p",__FUNCTION__,session,fn);
+
+	ip->source 		= source;
+	ip->condition	= InputWriteMask;
+	ip->proc		= fn;
+	ip->session 	= session;
+	ip->next 		= inputs;
+	inputs 			= ip;
+	inputs_changed 	= True;
+
+	return ip;
+}
+
 
 #if defined(_WIN32)
 static void * internal_add_except(HANDLE source, H3270 *session, void (*fn)(H3270 *session))
@@ -305,7 +330,7 @@ static void * internal_add_except(int source, H3270 *session, void (*fn)(H3270 *
 }
 #endif // WIN32
 
-static void internal_remove_input(void *id)
+static void internal_remove_source(void *id)
 {
 	input_t *ip;
 	input_t *prev = (input_t *)NULL;
@@ -337,7 +362,7 @@ static int internal_event_dispatcher(H3270 *hSession, int block)
 {
 #if defined(_WIN32)
 	HANDLE ha[MAX_HA];
-	DWORD nha;
+	DWORD events;
 	DWORD tmo;
 	DWORD ret;
 	unsigned long long now;
@@ -346,19 +371,21 @@ static int internal_event_dispatcher(H3270 *hSession, int block)
 	fd_set rfds, wfds, xfds;
 	int ns;
 	struct timeval now, twait, *tp;
+	int events;
 #endif
 	input_t *ip, *ip_next;
 	struct timeout *t;
-	Boolean any_events;
 	int processed_any = 0;
 
-    retry:
+retry:
 
 	// If we've processed any input, then don't block again.
-
 	if(processed_any)
 		block = 0;
-	any_events = False;
+
+	events = 0;
+
+/*
 #if defined(_WIN32)
 	nha = 0;
 #else
@@ -378,12 +405,16 @@ static int internal_event_dispatcher(H3270 *hSession, int block)
 #endif
 			any_events = True;
 		}
-#if !defined(_WIN32)
 		if ((unsigned long)ip->condition & InputWriteMask)
 		{
+#if defined(_WIN32)
+			ha[nha++] = ip->source;
+#else
 			FD_SET(ip->source, &wfds);
+#endif
 			any_events = True;
 		}
+#if !defined(_WIN32)
 		if ((unsigned long)ip->condition & InputExceptMask)
 		{
 			FD_SET(ip->source, &xfds);
@@ -394,7 +425,8 @@ static int internal_event_dispatcher(H3270 *hSession, int block)
 
 	if (block)
 	{
-		if (timeouts != TN) {
+		if (timeouts != TN)
+		{
 #if defined(_WIN32)
 			ms_ts(&now);
 			if (now > timeouts->ts)
@@ -414,7 +446,9 @@ static int internal_event_dispatcher(H3270 *hSession, int block)
 			tp = &twait;
 #endif
 			any_events = True;
-		} else {
+		}
+		else
+		{
 			// Block for 1 second (at maximal)
 #if defined(_WIN32)
 			tmo = 1;
@@ -437,62 +471,169 @@ static int internal_event_dispatcher(H3270 *hSession, int block)
 
 	if (!any_events)
 		return processed_any;
+*/
 
 #if defined(_WIN32)
+
+	for (ip = inputs; ip != (input_t *)NULL; ip = ip->next)
+	{
+		if ((unsigned long)ip->condition & InputReadMask)
+			ha[events++] = ip->source;
+		if ((unsigned long)ip->condition & InputWriteMask)
+			ha[events++] = ip->source;
+	}
+
+	if (block)
+	{
+		if (timeouts != TN)
+		{
+			ms_ts(&now);
+			if (now > timeouts->ts)
+				tmo = 0;
+			else
+				tmo = timeouts->ts - now;
+		}
+		else
+		{
+			// Block for 1 second (at maximal)
+			tmo = 1;
+		}
+	}
+	else if (!events)
+	{
+		// No block & no events, return
+		return processed_any;
+	}
+	else
+	{
+		tmo = 1;
+	}
+
 	ret = WaitForMultipleObjects(nha, ha, FALSE, tmo);
 	if (ret == WAIT_FAILED)
 	{
-#else
-	ns = select(FD_SETSIZE, &rfds, &wfds, &xfds, tp);
-	if (ns < 0)
-	{
-		if (errno != EINTR)
-			lib3270_popup_an_errno(hSession,errno,"%s",_( "select() failed when dispatching events"));
-#endif
-		return processed_any;
+		lib3270_popup_dialog(	hSession,
+								LIB3270_NOTIFY_ERROR,
+								_( "Network error" ),
+								_( "WaitForMultipleObjects() failed when processing for events." ),
+								"Windows error %d",
+								GetLastError());
 	}
 
 	inputs_changed = False;
 
-#if defined(_WIN32)
 	for (i = 0, ip = inputs; ip != (input_t *)NULL; ip = ip_next, i++)
 	{
-#else
-	for (ip = inputs; ip != (input_t *) NULL; ip = ip_next)
-	{
-#endif
-		ip_next = ip->next;
-		if (((unsigned long)ip->condition & InputReadMask) &&
-#if defined(_WIN32)
-		    ret == WAIT_OBJECT_0 + i)
+		if(ret == WAIT_OBJECT_0 + i)
 		{
-#else
-		    FD_ISSET(ip->source, &rfds))
-		{
-#endif
 			(*ip->proc)(ip->session);
 			processed_any = True;
 			if (inputs_changed)
 				goto retry;
 		}
 
-#if !defined(_WIN32)
-		if (((unsigned long)ip->condition & InputWriteMask) && FD_ISSET(ip->source, &wfds))
-		{
-			(*ip->proc)(ip->session);
-			processed_any = True;
-			if (inputs_changed)
-				goto retry;
-		}
-		if (((unsigned long)ip->condition & InputExceptMask) && FD_ISSET(ip->source, &xfds))
-		{
-			(*ip->proc)(ip->session);
-			processed_any = True;
-			if (inputs_changed)
-				goto retry;
-		}
-#endif
 	}
+#else
+
+	FD_ZERO(&rfds);
+	FD_ZERO(&wfds);
+	FD_ZERO(&xfds);
+
+	for (ip = inputs; ip != (input_t *)NULL; ip = ip->next)
+	{
+		if ((unsigned long)ip->condition & InputReadMask)
+		{
+			FD_SET(ip->source, &rfds);
+			events++;
+		}
+
+		if ((unsigned long)ip->condition & InputWriteMask)
+		{
+			FD_SET(ip->source, &wfds);
+			events++;
+		}
+
+		if ((unsigned long)ip->condition & InputExceptMask)
+		{
+			FD_SET(ip->source, &xfds);
+			events++;
+		}
+	}
+
+	if (block)
+	{
+		if (timeouts != TN)
+		{
+			(void) gettimeofday(&now, (void *)NULL);
+			twait.tv_sec = timeouts->tv.tv_sec - now.tv_sec;
+			twait.tv_usec = timeouts->tv.tv_usec - now.tv_usec;
+			if (twait.tv_usec < 0L) {
+				twait.tv_sec--;
+				twait.tv_usec += MILLION;
+			}
+			if (twait.tv_sec < 0L)
+				twait.tv_sec = twait.tv_usec = 0L;
+			tp = &twait;
+		}
+		else
+		{
+			twait.tv_sec = 1;
+			twait.tv_usec = 0L;
+			tp = &twait;
+		}
+	}
+	else
+	{
+		twait.tv_sec = twait.tv_usec = 0L;
+		tp = &twait;
+
+		if(!events)
+			return processed_any;
+	}
+
+	ns = select(FD_SETSIZE, &rfds, &wfds, &xfds, tp);
+	if (ns < 0 && errno != EINTR)
+	{
+		lib3270_popup_dialog(	hSession,
+								LIB3270_NOTIFY_ERROR,
+								_( "Network error" ),
+								_( "Select() failed when processing for events." ),
+								"%s",
+								strerror(errno));
+	}
+	else
+	{
+		for (ip = inputs; ip != (input_t *) NULL; ip = ip_next)
+		{
+			ip_next = ip->next;
+
+			if (((unsigned long)ip->condition & InputReadMask) && FD_ISSET(ip->source, &rfds))
+			{
+				(*ip->proc)(ip->session);
+				processed_any = True;
+				if (inputs_changed)
+					goto retry;
+			}
+
+			if (((unsigned long)ip->condition & InputWriteMask) && FD_ISSET(ip->source, &wfds))
+			{
+				(*ip->proc)(ip->session);
+				processed_any = True;
+				if (inputs_changed)
+					goto retry;
+			}
+
+			if (((unsigned long)ip->condition & InputExceptMask) && FD_ISSET(ip->source, &xfds))
+			{
+				(*ip->proc)(ip->session);
+				processed_any = True;
+				if (inputs_changed)
+					goto retry;
+			}
+		}
+	}
+
+#endif
 
 	// See what's expired.
 	if (timeouts != TN) {
@@ -580,6 +721,16 @@ void * AddInput(int source, H3270 *session, void (*fn)(H3270 *session))
 }
 
 #ifdef WIN32
+void * AddOutput(HANDLE source, H3270 *session, void (*fn)(H3270 *session))
+#else
+void * AddOutput(int source, H3270 *session, void (*fn)(H3270 *session))
+#endif // WIN32
+{
+	CHECK_SESSION_HANDLE(session);
+	return add_output(source,session,fn);
+}
+
+#ifdef WIN32
 void * AddExcept(HANDLE source, H3270 *session, void (*fn)(H3270 *session))
 #else
 void * AddExcept(int source, H3270 *session, void (*fn)(H3270 *session))
@@ -589,9 +740,9 @@ void * AddExcept(int source, H3270 *session, void (*fn)(H3270 *session))
 	return add_except(source,session,fn);
 }
 
-void RemoveInput(void * id)
+void RemoveSource(void * id)
 {
-	remove_input(id);
+	remove_source(id);
 }
 
 void x_except_on(H3270 *h)
@@ -600,7 +751,7 @@ void x_except_on(H3270 *h)
 		return;
 
 	if(h->reading)
-		RemoveInput(h->ns_read_id);
+		RemoveSource(h->ns_read_id);
 
 #ifdef WIN32
 	h->ns_exception_id = AddExcept(h->sockEvent, h, net_exception);
@@ -621,13 +772,13 @@ void remove_input_calls(H3270 *session)
 {
 	if(session->ns_read_id)
 	{
-		RemoveInput(session->ns_read_id);
+		RemoveSource(session->ns_read_id);
 		session->ns_read_id	= NULL;
 		session->reading = 0;
 	}
 	if(session->ns_exception_id)
 	{
-		RemoveInput(session->ns_exception_id);
+		RemoveSource(session->ns_exception_id);
 		session->ns_exception_id = NULL;
 		session->excepting = 0;
 	}
@@ -656,8 +807,11 @@ LIB3270_EXPORT int lib3270_register_handlers(const struct lib3270_callbacks *cbk
 	if(cbk->AddInput)
 		add_input = cbk->AddInput;
 
-	if(cbk->RemoveInput)
-		remove_input = cbk->RemoveInput;
+	if(cbk->AddOutput)
+		add_output = cbk->AddOutput;
+
+	if(cbk->RemoveSource)
+		remove_source = cbk->RemoveSource;
 
 	if(cbk->AddExcept)
 		add_except = cbk->AddExcept;

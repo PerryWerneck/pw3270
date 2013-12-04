@@ -126,6 +126,9 @@
 			}
 		}
 
+		#error Implementar
+
+		/*
 		if(sock > 0)
 		{
 			// Connection in progress, wait until socket is available for write
@@ -203,6 +206,7 @@
 				}
 			}
 		}
+		*/
 
 #else
 		fcntl(sock, F_SETFL,fcntl(sock,F_GETFL,0)|O_NONBLOCK);
@@ -223,6 +227,9 @@
 			}
 		}
 
+		#error Implementar
+
+/*
 		if(sock > 0)
 		{
 			// Connection in progress, wait until socket is available for write
@@ -301,6 +308,7 @@
 				}
 			}
 		}
+		*/
 #endif // WIN32
 	}
 
@@ -308,7 +316,7 @@
 
 	status_changed(hSession,saved_status);
 
-	return sock;
+	return 0;
 
  }
 

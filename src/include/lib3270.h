@@ -628,10 +628,12 @@
 
 #ifdef WIN32
 		void	* (*AddInput)(HANDLE source, H3270 *session, void (*fn)(H3270 *session));
+		void	* (*AddOutput)(HANDLE source, H3270 *session, void (*fn)(H3270 *session));
 #else
 		void	* (*AddInput)(int source, H3270 *session, void (*fn)(H3270 *session));
+		void	* (*AddOutput)(int source, H3270 *session, void (*fn)(H3270 *session));
 #endif // WIN32
-		void	  (*RemoveInput)(void *id);
+		void	  (*RemoveSource)(void *id);
 
 #ifdef WIN32
 		void 	* (*AddExcept)(HANDLE source, H3270 *session, void (*fn)(H3270 *session));
