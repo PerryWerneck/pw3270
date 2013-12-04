@@ -27,16 +27,127 @@
  *
  */
 
+#if defined(_WIN32)
+	#include <winsock2.h>
+	#include <windows.h>
+#endif
+
+#include "globals.h"
+#include <errno.h>
+
+#if defined(_WIN32)
+	#include <ws2tcpip.h>
+#else
+	#include <sys/types.h>
+	#include <sys/socket.h>
+	#include <sys/ioctl.h>
+	#include <netinet/in.h>
+	#include <netdb.h>
+	#include <unistd.h>
+	#include <fcntl.h>
+#endif
+
+
+#if defined(_WIN32) /*[*/
+	#define SOCK_CLOSE(s)	closesocket(s->sock); s->sock = -1;
+#else /*][*/
+	#define SOCK_CLOSE(s)	close(s->sock); s->sock = -1;
+#endif /*]*/
+
+#include <stdlib.h>
+#include "statusc.h"
+#include "hostc.h"
+#include "trace_dsc.h"
+#include "utilc.h"
+#include <lib3270/internals.h>
+
 /*---[ Implement ]-------------------------------------------------------------------------------*/
 
- LIB3270_EXPORT int lib3270_sock_connect(H3270 *hSession, const char *hostname, const char *srvc, int timeout)
+
+static void net_connected(H3270 *hSession)
+{
+	trace("***************** %s",__FUNCTION__);
+
+}
+
+#if defined(_WIN32) /*[*/
+ static void sockstart(H3270 *session)
+ {
+	static int initted = 0;
+	WORD wVersionRequested;
+	WSADATA wsaData;
+
+	if (initted)
+		return;
+
+	initted = 1;
+
+	wVersionRequested = MAKEWORD(2, 2);
+
+	if (WSAStartup(wVersionRequested, &wsaData) != 0)
+	{
+		lib3270_popup_dialog(	session,
+								LIB3270_NOTIFY_CRITICAL,
+								N_( "Network startup error" ),
+								N_( "WSAStartup failed" ),
+								"%s", win32_strerror(GetLastError()) );
+
+		_exit(1);
+	}
+
+	if (LOBYTE(wsaData.wVersion) != 2 || HIBYTE(wsaData.wVersion) != 2)
+	{
+		lib3270_popup_dialog(	session,
+								LIB3270_NOTIFY_CRITICAL,
+								N_( "Network startup error" ),
+								N_( "Bad winsock version" ),
+								N_( "Can't use winsock version %d.%d" ), LOBYTE(wsaData.wVersion), HIBYTE(wsaData.wVersion));
+		_exit(1);
+	}
+ }
+#endif /*]*/
+
+ static void set_ssl_state(H3270 *hSession, LIB3270_SSL_STATE state)
+ {
+	if(state == hSession->secure)
+		return;
+
+	trace_dsn(hSession,"SSL state changes to %d\n",(int) state);
+
+	hSession->update_ssl(hSession,hSession->secure = state);
+ }
+
+ LIB3270_EXPORT int lib3270_connect_host(H3270 *hSession, const char *hostname, const char *srvc)
  {
  	int					  s;
  	int					  sock			= -1;
 	struct addrinfo		  hints;
 	struct addrinfo 	* result		= NULL;
 	struct addrinfo 	* rp			= NULL;
-	LIB3270_MESSAGE		  saved_status	= hSession->oia_status;
+
+	if(!hostname)
+		return EINVAL;
+
+	if(!srvc)
+		srvc = "telnet";
+
+	CHECK_SESSION_HANDLE(hSession);
+
+	lib3270_main_iterate(hSession,0);
+
+	if(hSession->auto_reconnect_inprogress)
+		return EAGAIN;
+
+	if(PCONNECTED)
+		return EBUSY;
+
+#if defined(_WIN32)
+	sockstart(hSession);
+#endif
+
+	set_ssl_state(hSession,LIB3270_SSL_UNSECURE);
+
+	hSession->ever_3270	= False;
 
 	memset(&hints, 0, sizeof(struct addrinfo));
 	hints.ai_family 	= AF_UNSPEC;	/* Allow IPv4 or IPv6 */
@@ -46,9 +157,6 @@
 	hints.ai_canonname	= NULL;
 	hints.ai_addr		= NULL;
 	hints.ai_next		= NULL;
-
-	if(timeout < 0)
-		timeout = 10;
 
 	if(*hostname == '$')
 	{
@@ -61,6 +169,7 @@
 									_( "Unable to find selected hostname." ),
 									_( "Can't determine value for environment variable \"%s\" " ),
 									hostname);
+			lib3270_set_disconnected(hSession);
 			return -1;
 		}
 		hostname = name;
@@ -79,8 +188,7 @@
 								"%s",
 								gai_strerror(s));
 
-		status_changed(hSession,saved_status);
-
+		lib3270_set_disconnected(hSession);
 		return -1;
 	}
 
@@ -88,8 +196,8 @@
 
 	for(rp = result; sock < 0 && rp != NULL; rp = rp->ai_next)
 	{
-		sock = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);
-		if(sock < 0)
+		hSession->sock = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);
+		if(hSession->sock < 0)
 			continue;
 
 #ifdef WIN32
@@ -97,9 +205,9 @@
 		u_int  len		= sizeof(int);
 
 		WSASetLastError(0);
-		block = 1;
+		block = 0;
 
-		if(ioctlsocket(sock,FIONBIO,&block))
+		if(ioctlsocket(hSession->sock,FIONBIO,&block))
 		{
 			lib3270_popup_dialog(	hSession,
 									LIB3270_NOTIFY_ERROR,
@@ -107,10 +215,10 @@
 									_( "ioctlsocket(FIONBIO) failed." ),
 									"Windows error %d",
 									WSAGetLastError() );
-			close(sock);
-			sock = -1;
+
+			SOCK_CLOSE(hSession);
 		}
-		else if(connect(sock, rp->ai_addr, rp->ai_addrlen))
+		else if(connect(hSession->sock, rp->ai_addr, rp->ai_addrlen))
 		{
 			int err = WSAGetLastError();
 			if(err != WSAEWOULDBLOCK)
@@ -121,98 +229,15 @@
 										_( "Can't connect to host." ),
 										"Windows error %d",
 										WSAGetLastError() );
-				close(sock);
-				sock = -1;
+				SOCK_CLOSE(hSession);
 			}
 		}
-
-		#error Implementar
-
-		/*
-		if(sock > 0)
-		{
-			// Connection in progress, wait until socket is available for write
-			fd_set				wr;
-			struct timeval		tm;
-			int					status;
-			int					err;
-			socklen_t			len		= sizeof(err);
-
-			FD_ZERO(&wr);
-			FD_SET(sock, &wr);
-			memset(&tm,0,sizeof(tm));
-			tm.tv_sec = timeout;
-
-			switch(select(sock+1, NULL, &wr, NULL, &tm))
-			{
-			case 0:
-				lib3270_popup_dialog(	hSession,
-										LIB3270_NOTIFY_ERROR,
-										_( "Connection error" ),
-										_( "Can't connect to host." ),
-										"%s",
-										strerror(errno = ETIMEDOUT));
-				close(sock);
-				sock = -1;
-				break;
-
-			case -1:
-				lib3270_popup_dialog(	hSession,
-										LIB3270_NOTIFY_ERROR,
-										_( "Connection error" ),
-										_( "select() error when connecting to host." ),
-										"%s",
-										strerror(errno));
-				close(sock);
-				sock = -1;
-				break;
-
-			default:
-				// Se o socket nao esta disponivel para gravacao o connect falhou
-				if(!FD_ISSET(sock,&wr))
-				{
-					lib3270_popup_dialog(	hSession,
-											LIB3270_NOTIFY_ERROR,
-											_( "Connection error" ),
-											_( "Error when connecting to host." ),
-											"%s",
-											_( "Socket was not available after connect" ));
-					close(sock);
-					sock = -1;
-				}
-				else if(getsockopt(sock, SOL_SOCKET, SO_ERROR, (void *) &err, &len) < 0)
-				{
-					lib3270_popup_dialog(	hSession,
-											LIB3270_NOTIFY_ERROR,
-											_( "Connection error" ),
-											_( "Error getting connection state." ),
-											"%s",
-											strerror(errno));
-
-					close(sock);
-					sock = -1;
-				}
-				else if(err)
-				{
-					lib3270_popup_dialog(	hSession,
-											LIB3270_NOTIFY_ERROR,
-											_( "Connection error" ),
-											_( "socket error when connecting to host." ),
-											"Socket error %d",
-											err);
-
-					close(sock);
-					sock = -1;
-				}
-			}
-		}
-		*/
 
 #else
-		fcntl(sock, F_SETFL,fcntl(sock,F_GETFL,0)|O_NONBLOCK);
+		fcntl(hSession->sock, F_SETFL,fcntl(sock,F_GETFL,0)|O_NONBLOCK);
 
 		errno = 0;
-		if(connect(sock, rp->ai_addr, rp->ai_addrlen))
+		if(connect(hSession->sock, rp->ai_addr, rp->ai_addrlen))
 		{
 			if( errno != EINPROGRESS )
 			{
@@ -222,99 +247,52 @@
 										_( "Can't connect to host." ),
 										"%s",
 										strerror(errno));
-				close(sock);
-				sock = -1;
+				SOCK_CLOSE(hSession);
 			}
 		}
 
-		#error Implementar
-
-/*
-		if(sock > 0)
-		{
-			// Connection in progress, wait until socket is available for write
-			fd_set				wr;
-			struct timeval		tm;
-			int					status;
-			int					err;
-			socklen_t			len		= sizeof(err);
-
-			FD_ZERO(&wr);
-			FD_SET(sock, &wr);
-			memset(&tm,0,sizeof(tm));
-			tm.tv_sec = timeout;
-
-			switch(select(sock+1, NULL, &wr, NULL, &tm))
-			{
-			case 0:
-				lib3270_popup_dialog(	hSession,
-										LIB3270_NOTIFY_ERROR,
-										_( "Connection error" ),
-										_( "Can't connect to host." ),
-										"%s",
-										strerror(errno = ETIMEDOUT));
-				close(sock);
-				sock = -1;
-				break;
-
-			case -1:
-				lib3270_popup_dialog(	hSession,
-										LIB3270_NOTIFY_ERROR,
-										_( "Connection error" ),
-										_( "select() error when connecting to host." ),
-										"%s",
-										strerror(errno));
-				close(sock);
-				sock = -1;
-				break;
-
-			default:
-
-				// Se o socket nao esta disponivel para gravacao o connect falhou
-				if(!FD_ISSET(sock,&wr))
-				{
-					lib3270_popup_dialog(	hSession,
-											LIB3270_NOTIFY_ERROR,
-											_( "Connection error" ),
-											_( "Error when connecting to host." ),
-											"%s",
-											_( "Socket was not available after connect" ));
-					close(sock);
-					sock = -1;
-				}
-				else if(getsockopt(sock, SOL_SOCKET, SO_ERROR, &err, &len) < 0)
-				{
-					lib3270_popup_dialog(	hSession,
-											LIB3270_NOTIFY_ERROR,
-											_( "Connection error" ),
-											_( "Error getting connection state." ),
-											"%s",
-											strerror(errno));
-
-					close(sock);
-					sock = -1;
-				}
-				else if(err)
-				{
-					lib3270_popup_dialog(	hSession,
-											LIB3270_NOTIFY_ERROR,
-											_( "Connection error" ),
-											_( "socket error when connecting to host." ),
-											"Socket error %d",
-											err);
-
-					close(sock);
-					sock = -1;
-				}
-			}
-		}
-		*/
 #endif // WIN32
 	}
 
 	freeaddrinfo(result);
 
-	status_changed(hSession,saved_status);
+	// set options for inline out-of-band data and keepalives
+
+	/*
+	int on = 1;
+	if (setsockopt(hSession->sock, SOL_SOCKET, SO_OOBINLINE, (char *)&on,sizeof(on)) < 0)
+	{
+		popup_a_sockerr(hSession, N_( "setsockopt(%s)" ), "SO_OOBINLINE");
+		SOCK_CLOSE(hSession);
+	}
+
+#if defined(OMTU)
+	else if (setsockopt(hSession->sock, SOL_SOCKET, SO_SNDBUF, (char *)&mtu,sizeof(mtu)) < 0)
+	{
+		popup_a_sockerr(hSession, N_( "setsockopt(%s)" ), "SO_SNDBUF");
+		SOCK_CLOSE(hSession);
+	}
+#endif
+
+	*/
+
+	if(hSession->sock < 0)
+	{
+		lib3270_set_disconnected(hSession);
+		return -1;
+	}
+
+#if !defined(_WIN32)
+	/* don't share the socket with our children */
+	(void) fcntl(hSession->sock, F_SETFD, 1);
+#endif
+
+	// Connecting, set callbacks, wait for connection
+	trace_dsn(hSession,"Half-connected.\n");
+
+	lib3270_st_changed(hSession, LIB3270_STATE_HALF_CONNECT, True);
+
+	hSession->ns_write_id = AddOutput(hSession->sock, hSession, net_connected);
 
 	return 0;
 

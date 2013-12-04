@@ -371,6 +371,7 @@
 
 		// xio
 		void 					* ns_read_id;
+		void 					* ns_write_id;
 		void 					* ns_exception_id;
 
 		int 					  reading				: 1;
