@@ -568,7 +568,7 @@ void status_changed(H3270 *session, LIB3270_STATUS id)
 {
 	CHECK_SESSION_HANDLE(session);
 
-	if(id == session->oia_status)
+	if(id == session->oia_status || id < 0)
 		return;
 
 	session->oia_status = id;
