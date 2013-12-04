@@ -347,6 +347,13 @@
 			return -1;
 		}
 
+		int query_strval(const char *method, unsigned char *buffer, size_t sz)
+		{
+			throw exception("Call to unimplemented RPC method \"%s\"",method);
+			return -1;
+		}
+
+
 #endif
 
 	public:
