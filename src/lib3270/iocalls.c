@@ -269,7 +269,7 @@ static void * internal_add_input(int source, H3270 *session, void (*fn)(H3270 *s
 {
 	input_t *ip = (input_t *) lib3270_malloc(sizeof(input_t));
 
-	trace("%s session=%p proc=%p",__FUNCTION__,session,fn);
+	trace("%s session=%p proc=%p handle=%p",__FUNCTION__,session,fn,ip);
 
 	ip->source 		= source;
 	ip->condition	= InputReadMask;
@@ -290,7 +290,7 @@ static void * internal_add_output(int source, H3270 *session, void (*fn)(H3270 *
 {
 	input_t *ip = (input_t *) lib3270_malloc(sizeof(input_t));
 
-	trace("%s session=%p proc=%p",__FUNCTION__,session,fn);
+	trace("%s session=%p proc=%p handle=%p",__FUNCTION__,session,fn,ip);
 
 	ip->source 		= source;
 	ip->condition	= InputWriteMask;
@@ -346,7 +346,10 @@ static void internal_remove_source(void *id)
 	}
 
 	if (ip == (input_t *)NULL)
+	{
+		lib3270_write_log(NULL,"lib3270","Double removal on %s: Input %p wasnt found in the list",__FUNCTION__,id);
 		return;
+	}
 
 	if (prev != (input_t *)NULL)
 		prev->next = ip->next;
@@ -781,6 +784,12 @@ void remove_input_calls(H3270 *session)
 		RemoveSource(session->ns_exception_id);
 		session->ns_exception_id = NULL;
 		session->excepting = 0;
+	}
+	if(session->ns_write_id)
+	{
+		RemoveSource(session->ns_write_id);
+		session->ns_write_id = NULL;
+		session->writing = 0;
 	}
 }
 

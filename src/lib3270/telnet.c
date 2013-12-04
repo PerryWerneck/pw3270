@@ -1016,24 +1016,30 @@ static void connection_complete(H3270 *session)
 }
 
 
-LIB3270_INTERNAL void lib3270_sock_disconnect(H3270 *session)
+LIB3270_INTERNAL void lib3270_sock_disconnect(H3270 *hSession)
 {
 	trace("%s",__FUNCTION__);
 
 #if defined(HAVE_LIBSSL)
-	if(session->ssl_con != NULL)
+	if(hSession->ssl_con != NULL)
 	{
-		SSL_shutdown(session->ssl_con);
-		SSL_free(session->ssl_con);
-		session->ssl_con = NULL;
+		SSL_shutdown(hSession->ssl_con);
+		SSL_free(hSession->ssl_con);
+		hSession->ssl_con = NULL;
 	}
 #endif
 
-	if(session->sock >= 0)
+	if(hSession->ns_write_id)
 	{
-		shutdown(session->sock, 2);
-		SOCK_CLOSE(session->sock);
-		session->sock = -1;
+		RemoveSource(hSession->ns_write_id);
+		hSession->ns_write_id = 0;
+	}
+
+	if(hSession->sock >= 0)
+	{
+		shutdown(hSession->sock, 2);
+		SOCK_CLOSE(hSession->sock);
+		hSession->sock = -1;
 	}
 }
 

@@ -375,6 +375,7 @@
 		void 					* ns_exception_id;
 
 		int 					  reading				: 1;
+		int 					  writing				: 1;
 		int						  excepting				: 1;
 
 		// SSL Data (Always defined to mantain the same structure size)

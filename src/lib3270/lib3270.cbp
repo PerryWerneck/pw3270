@@ -7,7 +7,7 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output=".bin/Debug/lib3270" prefix_auto="1" extension_auto="1" />
+				<Option output=".bin/Debug/3270" prefix_auto="1" extension_auto="1" />
 				<Option object_output=".obj/Debug/" />
 				<Option type="3" />
 				<Option compiler="gcc" />
@@ -20,7 +20,7 @@
 				</Linker>
 			</Target>
 			<Target title="Release">
-				<Option output=".bin/Release/lib3270" prefix_auto="1" extension_auto="1" />
+				<Option output=".bin/Release/3270" prefix_auto="1" extension_auto="1" />
 				<Option object_output=".obj/Release/" />
 				<Option type="3" />
 				<Option compiler="gcc" />
@@ -58,6 +58,8 @@
 		</Compiler>
 		<Linker>
 			<Add option="-pthread" />
+			<Add option="-lssl" />
+			<Add option="-lcrypto" />
 		</Linker>
 		<Unit filename="../include/lib3270.h" />
 		<Unit filename="../include/lib3270/action_table.h" />
@@ -87,14 +89,14 @@
 		<Unit filename="charset.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="charsetc.h" />
 		<Unit filename="childc.h" />
+		<Unit filename="connect.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="ctlr.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="ctlr.h" />
 		<Unit filename="ctlrc.h" />
-		<Unit filename="dialogc.h" />
 		<Unit filename="fallbacks.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -192,9 +194,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="statusc.h" />
-		<Unit filename="tables.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="tablesc.h" />
 		<Unit filename="telnet.c">
 			<Option compilerVar="CC" />

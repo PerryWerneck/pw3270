@@ -35,6 +35,8 @@ int main(int numpar, char *param[])
 	pthread_create(&thread, NULL, mainloop, NULL);
 	pthread_detach(thread);
 
+	lib3270_connect_host(h, "127.0.0.1", "80");
+
 	while(fgets(line,4095,stdin))
 	{
 //		const LIB3270_MACRO_LIST *cmd = get_3270_calls();
