@@ -67,8 +67,44 @@
 
 static void net_connected(H3270 *hSession)
 {
+	int 		err;
+	socklen_t	len		= sizeof(err);
+
+	trace("%s",__FUNCTION__);
 	RemoveSource(hSession->ns_write_id);
 	hSession->ns_write_id = NULL;
+
+	if(getsockopt(hSession->sock, SOL_SOCKET, SO_ERROR, (char *) &err, &len) < 0)
+	{
+		lib3270_disconnect(hSession);
+		lib3270_popup_dialog(	hSession,
+								LIB3270_NOTIFY_ERROR,
+								_( "Network error" ),
+								_( "Unable to get connection state." ),
+#ifdef _WIN32
+								_( "Winsock Error %d"), WSAGetLastError()
+#else
+								_( "%s" ), strerror(errno)
+#endif // _WIN32
+							);
+		return;
+	}
+	else if(err)
+	{
+		lib3270_disconnect(hSession);
+		lib3270_popup_dialog(	hSession,
+								LIB3270_NOTIFY_ERROR,
+								_( "Network error" ),
+								_( "Unable to connect to server." ),
+#ifdef _WIN32
+								_( "%s"), lib3270_win32_strerror(err)
+#else
+								_( "%s" ), strerror(err)
+#endif // _WIN32
+							);
+		return;
+	}
+
 
 #ifdef _WIN32
 	hSession->ns_exception_id	= AddExcept(hSession->sockEvent, hSession, net_exception);
@@ -114,7 +150,7 @@ static void net_connected(H3270 *hSession)
 								LIB3270_NOTIFY_CRITICAL,
 								N_( "Network startup error" ),
 								N_( "WSAStartup failed" ),
-								"%s", win32_strerror(GetLastError()) );
+								"%s", lib3270_win32_strerror(GetLastError()) );
 
 		_exit(1);
 	}
@@ -223,50 +259,51 @@ static void net_connected(H3270 *hSession)
 		if(hSession->sock < 0)
 			continue;
 
-#ifdef WIN32
-		u_long block;
-		u_int  len		= sizeof(int);
+		trace("sock=%d",hSession->sock);
 
-		if(session->sockEvent == NULL)
+#ifdef WIN32
+
+		if(hSession->sockEvent == NULL)
 		{
 			char ename[256];
 
 			snprintf(ename, 255, "%s-%d", PACKAGE_NAME, getpid());
 
-			session->sockEvent = CreateEvent(NULL, TRUE, FALSE, ename);
-			if(session->sockEvent == NULL)
+			hSession->sockEvent = CreateEvent(NULL, TRUE, FALSE, ename);
+			if(hSession->sockEvent == NULL)
 			{
-				lib3270_popup_dialog(	session,
+				lib3270_popup_dialog(	hSession,
 										LIB3270_NOTIFY_CRITICAL,
 										N_( "Network startup error" ),
 										N_( "Cannot create socket handle" ),
-										"%s", win32_strerror(GetLastError()) );
+										"%s", lib3270_win32_strerror(GetLastError()) );
 				_exit(1);
 			}
 		}
 
-		if (WSAEventSelect(session->sock, session->sockEvent, FD_READ | FD_CONNECT | FD_CLOSE) != 0)
+		if (WSAEventSelect(hSession->sock, hSession->sockEvent, FD_READ | FD_CONNECT | FD_CLOSE) != 0)
 		{
-			lib3270_popup_dialog(	session,
+			lib3270_popup_dialog(	hSession,
 									LIB3270_NOTIFY_CRITICAL,
 									N_( "Network startup error" ),
 									N_( "WSAEventSelect failed" ),
-									"%s", win32_strerror(GetLastError()) );
+									"%s", lib3270_win32_strerror(GetLastError()) );
 			_exit(1);
 		}
 
 
 
 		WSASetLastError(0);
-		block = 0;
+		u_long iMode=1;
+		trace("sock=%d",hSession->sock);
 
-		if(ioctlsocket(hSession->sock,FIONBIO,&block))
+		if(ioctlsocket(hSession->sock,FIONBIO,&iMode))
 		{
 			lib3270_popup_dialog(	hSession,
 									LIB3270_NOTIFY_ERROR,
 									_( "Connection error" ),
 									_( "ioctlsocket(FIONBIO) failed." ),
-									"%s", win32_strerror(GetLastError()));
+									"%s", lib3270_win32_strerror(GetLastError()));
 
 			SOCK_CLOSE(hSession);
 		}
@@ -279,7 +316,7 @@ static void net_connected(H3270 *hSession)
 										LIB3270_NOTIFY_ERROR,
 										_( "Connection error" ),
 										_( "Can't connect to host." ),
-										"%s", win32_strerror(GetLastError()));
+										"%s", lib3270_win32_strerror(GetLastError()));
 				SOCK_CLOSE(hSession);
 			}
 		}
@@ -342,11 +379,13 @@ static void net_connected(H3270 *hSession)
 	lib3270_st_changed(hSession, LIB3270_STATE_HALF_CONNECT, True);
 
 #ifdef _WIN32
+	trace("Sockevent=%08lx callback=%p",hSession->sockEvent,net_connected);
 	hSession->ns_write_id = AddOutput(hSession->sockEvent, hSession, net_connected);
 #else
 	hSession->ns_write_id = AddOutput(hSession->sock, hSession, net_connected);
 #endif // WIN32
 
+	trace("%s: Connection in progress",__FUNCTION__);
 	return 0;
 
  }

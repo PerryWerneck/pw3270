@@ -399,7 +399,7 @@ void lib3270_kybdlock_clear(H3270 *hSession, LIB3270_KL_STATE bits)
 {
 	unsigned int n = hSession->kybdlock & ~( (unsigned int) bits);
 
-	trace("%s: kybdlock=%d",__FUNCTION__,n);
+//	trace("%s: kybdlock=%d",__FUNCTION__,n);
 
 	if (n != hSession->kybdlock)
 	{

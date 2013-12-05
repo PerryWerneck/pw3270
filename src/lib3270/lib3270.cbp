@@ -15,9 +15,6 @@
 					<Add option="-g" />
 					<Add option="-DDEBUG=1" />
 				</Compiler>
-				<Linker>
-					<Add library="pthread" />
-				</Linker>
 			</Target>
 			<Target title="Release">
 				<Option output=".bin/Release/3270" prefix_auto="1" extension_auto="1" />
@@ -50,16 +47,17 @@
 			<Add option="-Wredundant-decls" />
 			<Add option="-Wunreachable-code" />
 			<Add option="-Wmissing-declarations" />
-			<Add option="-Wall" />
 			<Add option="-pthread" />
+			<Add option="-Wno-redundant-decls" />
 			<Add option="-DLIB3270=1" />
 			<Add directory="../include" />
 			<Add directory="../include/lib3270" />
 		</Compiler>
 		<Linker>
-			<Add option="-pthread" />
-			<Add option="-lssl" />
-			<Add option="-lcrypto" />
+			<Add library="intl" />
+			<Add library="ws2_32" />
+			<Add library="ssl" />
+			<Add library="crypto" />
 		</Linker>
 		<Unit filename="../include/lib3270.h" />
 		<Unit filename="../include/lib3270/action_table.h" />

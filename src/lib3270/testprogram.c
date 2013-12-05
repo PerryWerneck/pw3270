@@ -1,14 +1,12 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <pthread.h>
+// #include <pthread.h>
 
 #include "globals.h"
 #include <lib3270/macros.h>
 
 #define MAX_ARGS 10
-
-#include <pthread.h>
 
 static H3270 *session = NULL;
 
@@ -25,18 +23,22 @@ int main(int numpar, char *param[])
 {
 	H3270		* h;
 	char	 	  line[4096];
-	pthread_t	  thread;
+//	pthread_t	  thread;
 
 	lib3270_initialize();
 
 	session = h = lib3270_session_new("");
 	printf("3270 session %p created\n]",h);
 
-	pthread_create(&thread, NULL, mainloop, NULL);
-	pthread_detach(thread);
+//	pthread_create(&thread, NULL, mainloop, NULL);
+//	pthread_detach(thread);
 
-	lib3270_connect_host(h, "127.0.0.1", "80");
+	lib3270_connect_host(h, "fandezhi.efglobe.com", "telnet");
+//	lib3270_connect_host(h, "127.0.0.1", "9090");
 
+	mainloop(0);
+
+/*
 	while(fgets(line,4095,stdin))
 	{
 //		const LIB3270_MACRO_LIST *cmd = get_3270_calls();
@@ -85,6 +87,7 @@ int main(int numpar, char *param[])
 
 	printf("Ending 3270 session %p\n",h);
 	lib3270_session_free(h);
+*/
 
 	return 0;
 }

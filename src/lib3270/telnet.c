@@ -315,7 +315,7 @@ void sockstart(H3270 *session)
 								LIB3270_NOTIFY_CRITICAL,
 								N_( "Network startup error" ),
 								N_( "WSAStartup failed" ),
-								"%s", win32_strerror(GetLastError()) );
+								"%s", lib3270_win32_strerror(GetLastError()) );
 
 		_exit(1);
 	}
@@ -344,7 +344,7 @@ socklen_t ha_len = sizeof(haddr);
 void popup_a_sockerr(H3270 *hSession, char *fmt, ...)
 {
 #if defined(_WIN32)
-	const char *msg = win32_strerror(socket_errno());
+	const char *msg = lib3270_win32_strerror(socket_errno());
 #else
 	const char *msg = strerror(errno);
 #endif // WIN32
@@ -719,7 +719,7 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 									LIB3270_NOTIFY_CRITICAL,
 									N_( "Network startup error" ),
 									N_( "Cannot create socket handle" ),
-									"%s", win32_strerror(GetLastError()) );
+									"%s", lib3270_win32_strerror(GetLastError()) );
 			_exit(1);
 		}
 	}
@@ -730,7 +730,7 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 								LIB3270_NOTIFY_CRITICAL,
 								N_( "Network startup error" ),
 								N_( "WSAEventSelect failed" ),
-								"%s", win32_strerror(GetLastError()) );
+								"%s", lib3270_win32_strerror(GetLastError()) );
 		_exit(1);
 	}
 
@@ -1069,7 +1069,7 @@ LIB3270_EXPORT void lib3270_data_recv(H3270 *hSession, size_t nr, const unsigned
 {
 	register const unsigned char * cp;
 
-	trace("%s: nr=%d",__FUNCTION__,(int) nr);
+//	trace("%s: nr=%d",__FUNCTION__,(int) nr);
 
 	trace_netdata(hSession, '<', netrbuf, nr);
 
@@ -3284,7 +3284,7 @@ static void ssl_info_callback(INFO_CONST SSL *s, int where, int ret)
 #if defined(_WIN32)
 			else if (GetLastError() != 0)
 			{
-				strncpy(err_buf,win32_strerror(GetLastError()),1023);
+				strncpy(err_buf,lib3270_win32_strerror(GetLastError()),1023);
 			}
 #else
 			else if (errno != 0)

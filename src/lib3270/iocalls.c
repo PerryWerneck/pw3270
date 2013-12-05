@@ -269,8 +269,6 @@ static void * internal_add_input(int source, H3270 *session, void (*fn)(H3270 *s
 {
 	input_t *ip = (input_t *) lib3270_malloc(sizeof(input_t));
 
-	trace("%s session=%p proc=%p handle=%p",__FUNCTION__,session,fn,ip);
-
 	ip->source 		= source;
 	ip->condition	= InputReadMask;
 	ip->proc		= fn;
@@ -289,8 +287,6 @@ static void * internal_add_output(int source, H3270 *session, void (*fn)(H3270 *
 #endif // WIN32
 {
 	input_t *ip = (input_t *) lib3270_malloc(sizeof(input_t));
-
-	trace("%s session=%p proc=%p handle=%p",__FUNCTION__,session,fn,ip);
 
 	ip->source 		= source;
 	ip->condition	= InputWriteMask;
@@ -314,8 +310,6 @@ static void * internal_add_except(int source, H3270 *session, void (*fn)(H3270 *
 {
 	input_t *ip = (input_t *) lib3270_malloc(sizeof(input_t));
 
-	trace("%s session=%p proc=%p",__FUNCTION__,session,fn);
-
 	ip->source 		= source;
 	ip->condition	= InputExceptMask;
 	ip->proc		= fn;
@@ -324,7 +318,7 @@ static void * internal_add_except(int source, H3270 *session, void (*fn)(H3270 *
 	inputs 			= ip;
 	inputs_changed	= True;
 
-	trace("%s: fd=%d callback=%p handle=%p",__FUNCTION__,source,fn,ip);
+	trace("%s session=%p proc=%p handle=%p",__FUNCTION__,ip->session,ip->proc,ip);
 
 	return ip;
 }
@@ -334,8 +328,6 @@ static void internal_remove_source(void *id)
 {
 	input_t *ip;
 	input_t *prev = (input_t *)NULL;
-
-	trace("%s: fhandle=%p",__FUNCTION__,(input_t *) id);
 
 	for (ip = inputs; ip != (input_t *)NULL; ip = ip->next)
 	{
@@ -347,7 +339,7 @@ static void internal_remove_source(void *id)
 
 	if (ip == (input_t *)NULL)
 	{
-		lib3270_write_log(NULL,"lib3270","Double removal on %s: Input %p wasnt found in the list",__FUNCTION__,id);
+		lib3270_write_log(NULL,"lib3270","Invalid call to (%s): Input %p wasnt found in the list",__FUNCTION__,id);
 		return;
 	}
 
@@ -367,7 +359,6 @@ static int internal_event_dispatcher(H3270 *hSession, int block)
 	HANDLE ha[MAX_HA];
 	DWORD events;
 	DWORD tmo;
-	DWORD ret;
 	unsigned long long now;
 	int i;
 #else
@@ -376,7 +367,7 @@ static int internal_event_dispatcher(H3270 *hSession, int block)
 	struct timeval now, twait, *tp;
 	int events;
 #endif
-	input_t *ip, *ip_next;
+	input_t *ip;
 	struct timeout *t;
 	int processed_any = 0;
 
@@ -512,30 +503,41 @@ retry:
 		tmo = 1;
 	}
 
-	ret = WaitForMultipleObjects(nha, ha, FALSE, tmo);
-	if (ret == WAIT_FAILED)
+	if(events)
 	{
-		lib3270_popup_dialog(	hSession,
-								LIB3270_NOTIFY_ERROR,
-								_( "Network error" ),
-								_( "WaitForMultipleObjects() failed when processing for events." ),
-								"Windows error %d",
-								GetLastError());
-	}
+		DWORD ret = WaitForMultipleObjects(events, ha, FALSE, tmo);
 
-	inputs_changed = False;
-
-	for (i = 0, ip = inputs; ip != (input_t *)NULL; ip = ip_next, i++)
-	{
-		if(ret == WAIT_OBJECT_0 + i)
+		if (ret == WAIT_FAILED)
 		{
-			(*ip->proc)(ip->session);
-			processed_any = True;
-			if (inputs_changed)
-				goto retry;
+			lib3270_popup_dialog(	hSession,
+									LIB3270_NOTIFY_ERROR,
+									_( "Network error" ),
+									_( "WaitForMultipleObjects() failed when processing for events." ),
+									"%s",
+									lib3270_win32_strerror(GetLastError()));
+			lib3270_disconnect(hSession);
 		}
+		else
+		{
+			inputs_changed = False;
 
+			for (i = 0, ip = inputs; ip != (input_t *)NULL; ip = ip->next, i++)
+			{
+				if(ret == WAIT_OBJECT_0 + i)
+				{
+					(*ip->proc)(ip->session);
+					processed_any = True;
+					if (inputs_changed)
+						goto retry;
+				}
+			}
+		}
 	}
+	else if(block)
+	{
+		Sleep(100);
+	}
+
 #else
 
 	FD_ZERO(&rfds);
@@ -606,10 +608,8 @@ retry:
 	}
 	else
 	{
-		for (ip = inputs; ip != (input_t *) NULL; ip = ip_next)
+		for (ip = inputs; ip != (input_t *) NULL; ip = ip->next)
 		{
-			ip_next = ip->next;
-
 			if (((unsigned long)ip->condition & InputReadMask) && FD_ISSET(ip->source, &rfds))
 			{
 				(*ip->proc)(ip->session);

@@ -146,24 +146,15 @@ const char * inet_ntop(int af, const void *src, char *dst, socklen_t cnt)
 }
 
 // Decode a Win32 error number.
-const char * win32_strerror(int e)
+LIB3270_EXPORT const char * lib3270_win32_strerror(int e)
 {
 	static char buffer[4096];
 
-	if (FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM,
-	    NULL,
-	    e,
-	    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-	    buffer,
-	    sizeof(buffer),
-	    NULL) == 0) {
-
-	    sprintf(buffer, "Windows error %d", e);
-	}
+	if(FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM,NULL,e,MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),buffer,sizeof(buffer),NULL) == 0)
+	    snprintf(buffer, 4095, "Windows error %d", e);
 
 	return buffer;
 }
-
 
 #endif // _WIN32
 

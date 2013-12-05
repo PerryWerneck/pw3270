@@ -1033,6 +1033,9 @@
 	 */
 	LIB3270_EXPORT int 	 lib3270_is_tso(H3270 *hSession);
 
+#ifdef WIN32
+	LIB3270_EXPORT const char	* lib3270_win32_strerror(int e);
+#endif // WIn32
 
 #ifdef __cplusplus
 	}
