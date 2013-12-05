@@ -28,14 +28,6 @@
 
 PACKAGE=@PACKAGE_NAME@
 
-CFLAGS=@CFLAGS@ @DLL_CFLAGS@ -DDATAROOTDIR=\"$(datarootdir)\" -I../include
-SSL_CFLAGS=@LIBSSL_CFLAGS@
-
-DLL_FLAGS=@DLL_FLAGS@
-LDFLAGS=@LDFLAGS@
-
-LIBS=@LIBS@ @LIBSSL_LIBS@ @INTL_LIBS@ @SOCKET_LIBS@
-
 DEBUG_CFLAGS=-DDEBUG=1 -g -Wall
 DEPENDS ?= *.h ../include/*.h ../include/lib3270/*.h Makefile
 
@@ -46,6 +38,18 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
 localedir=@localedir@
+datarootdir=@datarootdir@
+sysconfdir=@sysconfdir@
+
+#---[ Tools ]------------------------------------------------------------------
+
+CFLAGS=@CFLAGS@ @DLL_CFLAGS@ -DDATAROOTDIR=\"$(datarootdir)\" -DSYSCONFDIR=\"$(sysconfdir)\" -I../include
+SSL_CFLAGS=@LIBSSL_CFLAGS@
+
+DLL_FLAGS=@DLL_FLAGS@
+LDFLAGS=@LDFLAGS@
+
+LIBS=@LIBS@ @LIBSSL_LIBS@ @INTL_LIBS@ @SOCKET_LIBS@
 
 #---[ Tools ]------------------------------------------------------------------
 

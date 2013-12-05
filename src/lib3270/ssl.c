@@ -27,6 +27,11 @@
  * licinio@bb.com.br		(Licínio Luis Branco)
  * kraucer@bb.com.br		(Kraucer Fernandes Mazuco)
  *
+ *
+ * References:
+ *
+ * http://www.openssl.org/docs/ssl/
+ *
  */
 
 
@@ -38,6 +43,7 @@
 
 #include "globals.h"
 #include <errno.h>
+#include <lib3270.h>
 #include <lib3270/internals.h>
 #include <lib3270/trace.h>
 #include "trace_dsc.h"
@@ -57,11 +63,9 @@ int ssl_negotiate(H3270 *hSession)
 	non_blocking(hSession,False);
 
 	/* Initialize the SSL library. */
-	ssl_init(hSession);
-	if(hSession->ssl_con == NULL)
+	if(ssl_init(hSession))
 	{
 		/* Failed. */
-		popup_an_error(hSession,_( "SSL init failed!"));
 		lib3270_disconnect(hSession);
 		return -1;
 	}
@@ -69,10 +73,17 @@ int ssl_negotiate(H3270 *hSession)
 	/* Set up the TLS/SSL connection. */
 	if(SSL_set_fd(hSession->ssl_con, hSession->sock) != 1)
 	{
-		trace_dsn(hSession,"SSL_set_fd failed!\n");
-		#warning Show a better popup here
-		// popup_an_error(hSession,_( "SSL_set_fd failed!"));
-		lib32070_disconnect(hSession);
+		trace_dsn(hSession,"%s","SSL_set_fd failed!\n");
+
+		lib3270_popup_dialog(
+				hSession,
+				LIB3270_NOTIFY_ERROR,
+				N_( "Security error" ),
+				N_( "SSL negotiation failed" ),
+				"%s",_( "Cant set the file descriptor for the input/output facility for the TLS/SSL (encrypted) side of ssl." )
+			);
+
+		lib3270_disconnect(hSession);
 		return -1;
 	}
 
@@ -84,51 +95,60 @@ int ssl_negotiate(H3270 *hSession)
 	{
 		int ssl_error =  SSL_get_error(hSession->ssl_con,rv);
 
-		if(ssl_error == SSL_ERROR_SYSCALL)
-		{
-			if(!hSession->ssl_error)
-			{
-				trace_dsn(hSession,"SSL_connect failed (ssl_error=%lu)\n",hSession->ssl_error);
-				popup_an_error(hSession,_( "SSL connect failed!"));
-			}
-			else
-			{
-				trace_dsn(hSession,"SSL_connect failed: %s %s\n",
-						ERR_lib_error_string(hSession->ssl_error),
-						ERR_reason_error_string(hSession->ssl_error));
-				popup_an_error(hSession,"%s",_( ERR_reason_error_string(hSession->ssl_error) ));
-			}
+		if(ssl_error == SSL_ERROR_SYSCALL && hSession->ssl_error)
+			ssl_error = hSession->ssl_error;
 
-		}
-		else
-		{
-			trace_dsn(hSession,"SSL_connect failed (ssl_error=%d errno=%d)\n",ssl_error,errno);
-			popup_an_error(hSession,_( "SSL connect failed!"));
-		}
+		trace_dsn(hSession,"SSL_connect failed: %s %s\n",ERR_lib_error_string(hSession->ssl_error),ERR_reason_error_string(hSession->ssl_error));
+
+		lib3270_popup_dialog(
+				hSession,
+				LIB3270_NOTIFY_ERROR,
+				N_( "Security error" ),
+				N_( "SSL Connect failed" ),
+				"%s",ERR_lib_error_string(ssl_error)
+						);
 
 		lib3270_disconnect(hSession);
 		return -1;
 	}
 
 	/* Success. */
+	X509 * peer = NULL;
+	rv = SSL_get_verify_result(hSession->ssl_con);
+
+	switch(rv)
+	{
+	case X509_V_OK:
+		peer = SSL_get_peer_certificate(hSession->ssl_con);
+		trace_dsn(hSession,"TLS/SSL negotiated connection complete. Peer certificate %s presented.\n", peer ? "was" : "was not");
+		break;
+
+	case X509_V_ERR_SELF_SIGNED_CERT_IN_CHAIN:
+		trace_dsn(hSession,"%s","TLS/SSL negotiated connection complete with self signed certificate in certificate chain\n" );
+		break;
+
+	default:
+		trace_dsn(hSession,"Unexpected or invalid TLS/SSL verify result %d\n",rv);
+	}
+
 	if(lib3270_get_toggle(hSession,LIB3270_TOGGLE_DS_TRACE))
 	{
 		char				  buffer[4096];
 		int 				  alg_bits		= 0;
 		const SSL_CIPHER	* cipher		= SSL_get_current_cipher(hSession->ssl_con);
-		X509				* peer			= SSL_get_peer_certificate(hSession->ssl_con);
-
-		trace_dsn(hSession,"TLS/SSL negotiated connection complete. Connection is now secure.\n");
 
 		trace_dsn(hSession,"TLS/SSL cipher description: %s",SSL_CIPHER_description((SSL_CIPHER *) cipher, buffer, 4095));
 		SSL_CIPHER_get_bits(cipher, &alg_bits);
-		trace_dsn(hSession,"%s version %s with %d bits verify=%ld\n",
+		trace_dsn(hSession,"%s version %s with %d bits\n",
 						SSL_CIPHER_get_name(cipher),
 						SSL_CIPHER_get_version(cipher),
-						alg_bits,
-						SSL_get_verify_result(hSession->ssl_con));
+						alg_bits);
+	}
 
-		if(peer)
+
+	if(peer)
+	{
+		if(lib3270_get_toggle(hSession,LIB3270_TOGGLE_DS_TRACE))
 		{
 			BIO				* out	= BIO_new(BIO_s_mem());
 			unsigned char	* data;
@@ -149,10 +169,11 @@ int ssl_negotiate(H3270 *hSession)
 			X509_free(peer);
 
 		}
+
+		set_ssl_state(hSession,LIB3270_SSL_SECURE);
+		X509_free(peer);
 	}
 
-	if(!SSL_get_verify_result(hSession->ssl_con))
-		set_ssl_state(hSession,LIB3270_SSL_SECURE);
 
 	/* Tell the world that we are (still) connected, now in secure mode. */
 	lib3270_set_connected(hSession);
@@ -162,25 +183,45 @@ int ssl_negotiate(H3270 *hSession)
 
 #if defined(HAVE_LIBSSL) /*[*/
 
-/* Initialize the OpenSSL library. */
-void ssl_init(H3270 *session)
+/**
+ * Initializa openssl library.
+ *
+ * @param hSession lib3270 session handle.
+ *
+ * @return 0 if ok, non zero if fails.
+ *
+ */
+int ssl_init(H3270 *hSession)
 {
 	static SSL_CTX *ssl_ctx = NULL;
 
-	session->ssl_error = 0;
-	set_ssl_state(session,LIB3270_SSL_UNDEFINED);
+	hSession->ssl_error = 0;
+	set_ssl_state(hSession,LIB3270_SSL_UNDEFINED);
 
 	if(ssl_ctx == NULL)
 	{
-		lib3270_write_log(session,"SSL","%s","Initializing SSL context");
+		lib3270_write_log(hSession,"SSL","%s","Initializing SSL context");
+
 		SSL_load_error_strings();
 		SSL_library_init();
+
 		ssl_ctx = SSL_CTX_new(SSLv23_method());
 		if(ssl_ctx == NULL)
 		{
-			popup_an_error(session,"SSL_CTX_new failed");
-			session->ssl_host = False;
-			return;
+			int ssl_error = ERR_get_error();
+
+			lib3270_popup_dialog(
+					hSession,
+					LIB3270_NOTIFY_ERROR,
+					N_( "Security error" ),
+					N_( "SSL_CTX_new() has failed" ),
+					"%s",ERR_reason_error_string(ssl_error)
+				);
+
+			set_ssl_state(hSession,LIB3270_SSL_UNDEFINED);
+
+			hSession->ssl_host = False;
+			return -1;
 		}
 		SSL_CTX_set_options(ssl_ctx, SSL_OP_ALL);
 		SSL_CTX_set_info_callback(ssl_ctx, ssl_info_callback);
@@ -201,12 +242,49 @@ void ssl_init(H3270 *session)
 					strncat(data,"\\certs",4095);
 
 					trace("Loading certs from \"%s\"",data);
-					SSL_CTX_load_verify_locations(ssl_ctx,NULL,data);
+					if(!SSL_CTX_load_verify_locations(ssl_ctx,NULL,data))
+					{
+						char buffer[4096];
+						int ssl_error = ERR_get_error();
+
+						snprintf(buffer,4095,_("Cant set default locations for trusted CA certificates to\n%s"),data);
+
+						lib3270_popup_dialog(
+								hSession,
+								LIB3270_NOTIFY_ERROR,
+								N_( "Security error" ),
+								buffer,
+								N_( "%s" ),ERR_lib_error_string(ssl_error)
+										);
+					}
 				}
 				RegCloseKey(hKey);
 			}
 
 
+		}
+#else
+		static const char * ssldir[] =
+		{
+#ifdef DATAROOTDIR
+			DATAROOTDIR "/" PACKAGE_NAME "/certs",
+#endif // DATAROOTDIR
+#ifdef SYSCONFDIR
+			SYSCONFDIR "/ssl/certs",
+			SYSCONFDIR "/certs",
+#endif
+			"/etc/ssl/certs"
+		};
+
+		int f;
+
+		for(f = 0;f < sizeof(ssldir) / sizeof(ssldir[0]);f++)
+		{
+			if(!access(ssldir[f],R_OK) && SSL_CTX_load_verify_locations(ssl_ctx,NULL,ssldir[f]))
+			{
+				trace_dsn(hSession,"Checking %s for trusted CA certificates.\n",ssldir[f]);
+				break;
+			}
 		}
 
 #endif // _WIN32
@@ -216,22 +294,32 @@ void ssl_init(H3270 *session)
 
 	}
 
-	if(session->ssl_con)
-		SSL_free(session->ssl_con);
+	if(hSession->ssl_con)
+		SSL_free(hSession->ssl_con);
 
-	session->ssl_con = SSL_new(ssl_ctx);
-	if(session->ssl_con == NULL)
+	hSession->ssl_con = SSL_new(ssl_ctx);
+	if(hSession->ssl_con == NULL)
 	{
-		popup_an_error(session,"SSL_new failed");
-		session->ssl_host = False;
-		return;
+		int ssl_error = ERR_get_error();
+
+		lib3270_popup_dialog(
+				hSession,
+				LIB3270_NOTIFY_ERROR,
+				N_( "Security error" ),
+				N_( "Cant create a new SSL structure for current connection." ),
+				N_( "%s" ),ERR_lib_error_string(ssl_error)
+		);
+
+		hSession->ssl_host = False;
+		return -1;
 	}
 
-	SSL_set_ex_data(session->ssl_con,ssl_3270_ex_index,(char *) session);
+	SSL_set_ex_data(hSession->ssl_con,ssl_3270_ex_index,(char *) hSession);
 
 //	SSL_set_verify(session->ssl_con, SSL_VERIFY_FAIL_IF_NO_PEER_CERT, NULL);
-	SSL_set_verify(session->ssl_con, 0, NULL);
+	SSL_set_verify(hSession->ssl_con, 0, NULL);
 
+	return 0;
 }
 
 /* Callback for tracing protocol negotiation. */

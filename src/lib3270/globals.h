@@ -253,7 +253,7 @@ LIB3270_INTERNAL int non_blocking(H3270 *session, Boolean on);
 
 #if defined(HAVE_LIBSSL) /*[*/
 
-	LIB3270_INTERNAL void	ssl_init(H3270 *session);
+	LIB3270_INTERNAL int	ssl_init(H3270 *session);
 	LIB3270_INTERNAL int	ssl_negotiate(H3270 *hSession);
 	LIB3270_INTERNAL void	set_ssl_state(H3270 *session, LIB3270_SSL_STATE state);
 
