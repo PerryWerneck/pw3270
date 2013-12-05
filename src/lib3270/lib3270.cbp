@@ -190,6 +190,9 @@
 		<Unit filename="sfc.h" />
 		<Unit filename="shlobj_missing.h" />
 		<Unit filename="sources.mak" />
+		<Unit filename="ssl.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="state.c">
 			<Option compilerVar="CC" />
 		</Unit>

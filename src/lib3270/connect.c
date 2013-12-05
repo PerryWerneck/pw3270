@@ -60,6 +60,7 @@
 #include "trace_dsc.h"
 #include "utilc.h"
 #include "telnetc.h"
+#include "screen.h"
 #include <lib3270/internals.h>
 
 /*---[ Implement ]-------------------------------------------------------------------------------*/
@@ -116,7 +117,6 @@ static void net_connected(H3270 *hSession)
 	hSession->excepting	= 1;
 	hSession->reading 	= 1;
 
-/*
 #if defined(HAVE_LIBSSL)
 	if(hSession->ssl_con && hSession->secure == LIB3270_SSL_UNDEFINED)
 	{
@@ -124,9 +124,11 @@ static void net_connected(H3270 *hSession)
 			return;
 	}
 #endif
-*/
 
 	lib3270_setup_session(hSession);
+
+
+	lib3270_set_connected(hSession);
 
 }
 
@@ -167,7 +169,7 @@ static void net_connected(H3270 *hSession)
  }
 #endif /*]*/
 
- LIB3270_EXPORT int lib3270_connect_host(H3270 *hSession, const char *hostname, const char *srvc)
+ LIB3270_EXPORT int lib3270_connect_host(H3270 *hSession, const char *hostname, const char *srvc, LIB3270_CONNECT_OPTION opt)
  {
  	int					  s;
 	struct addrinfo		  hints;
@@ -219,7 +221,7 @@ static void net_connected(H3270 *hSession)
 									_( "Can't determine value for environment variable \"%s\" " ),
 									hostname);
 			lib3270_set_disconnected(hSession);
-			return -1;
+			return ENOENT;
 		}
 		hostname = name;
 	}
@@ -230,18 +232,39 @@ static void net_connected(H3270 *hSession)
 
 	if(s != 0)
 	{
+		char buffer[4096];
+
+		snprintf(buffer,4095,_( "Can't connect to %s:%s"), hostname, srvc);
+
 		lib3270_popup_dialog(	hSession,
 								LIB3270_NOTIFY_ERROR,
 								_( "Connection error" ),
-								_( "Can't resolve hostname." ),
+								buffer,
 								"%s",
 								gai_strerror(s));
 
 		lib3270_set_disconnected(hSession);
-		return -1;
+		return ENOENT;
 	}
 
-	status_changed(hSession,LIB3270_STATUS_CONNECTING);
+
+#if !defined(_WIN32)
+	/* don't share the socket with our children */
+	(void) fcntl(hSession->sock, F_SETFD, 1);
+#endif
+
+	hSession->ssl_host = 0;
+
+#if defined(HAVE_LIBSSL)
+	if(opt&LIB3270_CONNECT_OPTION_SSL)
+	{
+		hSession->ssl_host = 1;
+		ssl_init(hSession);
+	}
+#endif
+
+	/* connect */
+	status_connecting(hSession,1);
 
 	for(rp = result; hSession->sock < 0 && rp != NULL; rp = rp->ai_next)
 	{
@@ -265,7 +288,7 @@ static void net_connected(H3270 *hSession)
 				lib3270_popup_dialog(	hSession,
 										LIB3270_NOTIFY_CRITICAL,
 										N_( "Network startup error" ),
-										N_( "Cannot create socket handle" ),
+										N_( "Cannot create socket event" ),
 										"%s", lib3270_win32_strerror(GetLastError()) );
 				_exit(1);
 			}
@@ -280,8 +303,6 @@ static void net_connected(H3270 *hSession)
 									"%s", lib3270_win32_strerror(GetLastError()) );
 			_exit(1);
 		}
-
-
 
 		WSASetLastError(0);
 		u_long iMode=1;
@@ -301,10 +322,13 @@ static void net_connected(H3270 *hSession)
 			int err = WSAGetLastError();
 			if(err != WSAEWOULDBLOCK)
 			{
+				char buffer[4096];
+				snprintf(buffer,4095,_( "Can't connect to %s:%s"), hostname, srvc);
+
 				lib3270_popup_dialog(	hSession,
 										LIB3270_NOTIFY_ERROR,
 										_( "Connection error" ),
-										_( "Can't connect to host." ),
+										buffer,
 										"%s", lib3270_win32_strerror(err));
 				SOCK_CLOSE(hSession);
 			}
@@ -318,10 +342,13 @@ static void net_connected(H3270 *hSession)
 		{
 			if( errno != EINPROGRESS )
 			{
+				char buffer[4096];
+				snprintf(buffer,4095,_( "Can't connect to %s:%s"), hostname, srvc);
+
 				lib3270_popup_dialog(	hSession,
 										LIB3270_NOTIFY_ERROR,
 										_( "Connection error" ),
-										_( "Can't connect to host." ),
+										buffer,
 										"%s",
 										strerror(errno));
 				SOCK_CLOSE(hSession);
@@ -358,11 +385,6 @@ static void net_connected(H3270 *hSession)
 		lib3270_set_disconnected(hSession);
 		return -1;
 	}
-
-#if !defined(_WIN32)
-	/* don't share the socket with our children */
-	(void) fcntl(hSession->sock, F_SETFD, 1);
-#endif
 
 	// Connecting, set callbacks, wait for connection
 	lib3270_st_changed(hSession, LIB3270_STATE_HALF_CONNECT, True);

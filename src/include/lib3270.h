@@ -204,6 +204,17 @@
 
 
 	/**
+	 * Connect options.
+	 *
+	 */
+	typedef enum _LIB3270_CONNECT_OPTION
+	{
+		LIB3270_CONNECT_OPTION_DEFAULTS	= 0x0000,	/**< Default connection options */
+		LIB3270_CONNECT_OPTION_SSL		= 0x0001,	/**< Secure connection */
+
+	} LIB3270_CONNECT_OPTION;
+
+	/**
 	 * Cursor modes.
 	 *
 	 * Cursor modes set by library; an application can us it
@@ -420,6 +431,20 @@
 	 *
 	 */
 	LIB3270_EXPORT int lib3270_connect(H3270 *h,const char *n, int wait);
+
+	/**
+	 * Connect to defined host, keep main loop running.
+	 *
+	 * @param hSession	Session handle.
+	 * @param hostname	Host name.
+	 * @param srvc		Service name (telnet if NULL).
+	 * @param opt		Connect options.
+	 *
+	 * @return 0 for success, EAGAIN if auto-reconnect is in progress, EBUSY if connected, ENOTCONN if connection has failed, -1 on unexpected failure.
+	 *
+	 */
+	LIB3270_EXPORT int lib3270_connect_host(H3270 *hSession, const char *hostname, const char *srvc, LIB3270_CONNECT_OPTION opt);
+
 
 	/**
 	 * Disconnect from host.

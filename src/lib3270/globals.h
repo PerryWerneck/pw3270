@@ -247,8 +247,6 @@ LIB3270_INTERNAL void	lib3270_sock_disconnect(H3270 *hSession);
 	LIB3270_INTERNAL void check_session_handle(H3270 **hSession);
 #endif // DEBUG
 
-LIB3270_EXPORT int lib3270_connect_host(H3270 *hSession, const char *hostname, const char *srvc);
-
 LIB3270_INTERNAL int non_blocking(H3270 *session, Boolean on);
 
 #if defined(HAVE_LIBSSL) /*[*/

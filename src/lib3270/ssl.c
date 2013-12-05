@@ -325,13 +325,14 @@ int ssl_init(H3270 *hSession)
 /* Callback for tracing protocol negotiation. */
 void ssl_info_callback(INFO_CONST SSL *s, int where, int ret)
 {
-//	H3270 *hSession = lib3270_get_default_session_handle(); // TODO: Find a better way!
 	H3270 *hSession = (H3270 *) SSL_get_ex_data(s,ssl_3270_ex_index);
 
 #ifdef DEBUG
-	trace("%s: hsession=%p, session=%p",__FUNCTION__,hSession,lib3270_get_default_session_handle());
 	if(hSession != lib3270_get_default_session_handle())
+	{
+		trace("%s: hsession=%p, session=%p",__FUNCTION__,hSession,lib3270_get_default_session_handle());
 		exit(-1);
+	}
 #endif // DEBUG
 
 	switch(where)

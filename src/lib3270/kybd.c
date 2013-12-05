@@ -449,10 +449,13 @@ void kybd_connect(H3270 *session, int connected, void *dunno)
 
 	lib3270_kybdlock_clear(session, -1);
 
-	if (connected) {
+	if (connected)
+	{
 		/* Wait for any output or a WCC(restore) from the host */
 		kybdlock_set(session,KL_AWAITING_FIRST);
-	} else {
+	}
+	else
+	{
 		kybdlock_set(session,KL_NOT_CONNECTED);
 		(void) flush_ta(session);
 	}
@@ -1163,24 +1166,11 @@ void do_reset(H3270 *hSession, Boolean explicit)
 	 * If explicit (from the keyboard) and there is typeahead or
 	 * a half-composed key, simply flush it.
 	 */
-	if (explicit
-#if defined(X3270_FT) /*[*/
-	    || lib3270_get_ft_state(hSession) != LIB3270_FT_STATE_NONE
-#endif /*]*/
-	    ) {
 
+	if (explicit || lib3270_get_ft_state(hSession) != LIB3270_FT_STATE_NONE)
+	{
 		if (flush_ta(hSession))
 			return;
-
-/*
-		Boolean half_reset = False;
-
-		if (flush_ta(hSession))
-			half_reset = True;
-
-		if (half_reset)
-			return;
-*/
 	}
 
 	/* Always clear insert mode. */
@@ -1201,15 +1191,12 @@ void do_reset(H3270 *hSession, Boolean explicit)
 	 * If explicit (from the keyboard), unlock the keyboard now.
 	 * Otherwise (from the host), schedule a deferred keyboard unlock.
 	 */
-	if (explicit
-#if defined(X3270_FT) /*[*/
-	    || lib3270_get_ft_state(hSession) != LIB3270_FT_STATE_NONE
-#endif /*]*/
-	    || (!hSession->unlock_delay) // && !sms_in_macro())
-	    || (hSession->unlock_delay_time != 0 && (time(NULL) - hSession->unlock_delay_time) > 1)) {
+	if (explicit || lib3270_get_ft_state(hSession) != LIB3270_FT_STATE_NONE || (!hSession->unlock_delay) || (hSession->unlock_delay_time != 0 && (time(NULL) - hSession->unlock_delay_time) > 1))
+	{
 		lib3270_kybdlock_clear(hSession,-1);
-	} else if (hSession->kybdlock &
-  (KL_DEFERRED_UNLOCK | KL_OIA_TWAIT | KL_OIA_LOCKED | KL_AWAITING_FIRST)) {
+	}
+	else if (hSession->kybdlock & (KL_DEFERRED_UNLOCK | KL_OIA_TWAIT | KL_OIA_LOCKED | KL_AWAITING_FIRST))
+	{
 		lib3270_kybdlock_clear(hSession,~KL_DEFERRED_UNLOCK);
 		kybdlock_set(hSession,KL_DEFERRED_UNLOCK);
 		hSession->unlock_id = AddTimeOut(UNLOCK_MS, hSession, defer_unlock);

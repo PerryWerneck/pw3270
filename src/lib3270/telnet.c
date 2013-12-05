@@ -46,6 +46,10 @@
 #endif // !ANDROID
 
 #include <lib3270/config.h>
+#if defined(HAVE_LIBSSL)
+	#include <openssl/ssl.h>
+	#include <openssl/err.h>
+#endif
 
 #include "globals.h"
 #include <errno.h>

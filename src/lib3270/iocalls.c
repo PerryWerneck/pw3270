@@ -174,7 +174,7 @@ static void * internal_add_timeout(unsigned long interval_ms, H3270 *session, vo
 	timeout_t *t;
 	timeout_t *prev = TN;
 
-	trace("%s session=%p proc=%p",__FUNCTION__,session,proc);
+	trace("%s session=%p proc=%p interval=%ld",__FUNCTION__,session,proc,interval_ms);
 
 	t_new = (timeout_t *) lib3270_malloc(sizeof(timeout_t));
 
