@@ -3,6 +3,7 @@
 	<FileVersion major="1" minor="6" />
 	<Project>
 		<Option title="lib3270" />
+		<Option makefile_is_custom="1" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
@@ -30,8 +31,8 @@
 					<Add option="-s" />
 				</Linker>
 			</Target>
-			<Target title="testprogram">
-				<Option output=".bin/Debug/lib3270" prefix_auto="1" extension_auto="1" />
+			<Target title="test">
+				<Option output=".bin/Debug/testprogram" prefix_auto="1" extension_auto="1" />
 				<Option object_output=".obj/testprogram/" />
 				<Option type="1" />
 				<Option compiler="gcc" />

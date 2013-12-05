@@ -140,21 +140,27 @@ $(BINRLS)/lib3270@DLLEXT@.@VERSION@: $(foreach SRC, $(basename $(SOURCES)), $(OB
 $(BINDBG)/testprogram$(EXEEXT): $(OBJDBG)/testprogram.o $(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC)@OBJEXT@)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	$(LD) -pthread -o $@ $^ $(LIBS)
+	@$(LD) -pthread -o $@ $^ $(LIBS)
 
 $(BINDIR)/pot/lib3270.pot: $(foreach SRC, $(basename $(SOURCES)), $(TMPDIR)/pot/$(SRC).pot)
 	@rm -f $@
 	@mkdir -p `dirname $@`
 	@$(MSGCAT) --sort-output $^ > $@
 
+test: $(BINDBG)/testprogram$(EXEEXT)
+
 run: $(BINDBG)/testprogram$(EXEEXT)
-	$(BINDBG)/testprogram$(EXEEXT)
+ifeq ($(VALGRIND),no)
+	@PATH="$(BINDIR)/Debug@DLLDIR@:$(PATH)" "$(BINDBG)/testprogram$(EXEEXT)"
+else
+	@PATH="$(BINDIR)/Debug@DLLDIR@:$(PATH)" G_DEBUG=gc-friendly G_SLICE=always-malloc \$(VALGRIND) --leak-check=full --suppressions=valgrind.suppression --gen-suppressions=all $(BINDBG)/testprogram$(EXEEXT)
+endif
 
 memchk: $(BINDBG)/testprogram$(EXEEXT)
 ifeq ($(VALGRIND),no)
 	@cd "$(ROOTDIR)" ; .bin/Debug/testprogram$(EXEEXT)
 else
-	@cd "$(ROOTDIR)" ; G_DEBUG=gc-friendly G_SLICE=always-malloc \$(VALGRIND) --leak-check=full --gen-suppressions=all $(BINDBG)/testprogram$(EXEEXT)
+	@cd "$(ROOTDIR)" ; \$(VALGRIND) --leak-check=full --gen-suppressions=all $(BINDBG)/testprogram$(EXEEXT)
 endif
 
 version.c: ./mkversion.sh
@@ -167,6 +173,8 @@ fallbacks.c: X3270.xad mkfb.c
 	@$(MKDIR) $(BINDIR)
 	@$(HOST_CC) -g -o $(BINDIR)/mkfb@EXEEXT@ mkfb.c
 	@$(BINDIR)/mkfb@EXEEXT@ -c X3270.xad $@
+
+cleantest: clean
 
 clean:
 	@rm -fr .obj
