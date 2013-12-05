@@ -88,10 +88,33 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 
  static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state)
  {
+ 	static const struct _msg
+ 	{
+ 		LIB3270_FT_STATE 	  state;
+ 		const char			* text;
+ 	} msg[] =
+ 	{
+		{ LIB3270_FT_STATE_NONE,		N_( "No transfer in progress" )				},
+		{ LIB3270_FT_STATE_RUNNING,		N_( "Ack received, data flowing" )			},
+		{ LIB3270_FT_STATE_ABORT_WAIT,	N_( "Awaiting chance to send an abort" )	},
+		{ LIB3270_FT_STATE_ABORT_SENT,	N_( "Abort sent; awaiting response" )		},
+	};
+
+	int f;
+
 	if(session->state == state)
 		return;
 	session->state = state;
 	session->state_changed(session,state);
+
+	for(f = 0; f < sizeof(msg)/sizeof(msg[0]);f++)
+	{
+		if(msg[f].state == state)
+		{
+			ft_message(session,msg[f].text);
+			break;
+		}
+	}
 
  }
 
@@ -407,9 +430,9 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 	lib3270_emulate_input(ft->host, buffer, strlen(buffer), False);
 
 	if(ft->flags & LIB3270_FT_OPTION_RECEIVE)
-		ft->message(ft,N_( "Waiting for GET response" ));
+		ft_message(ft,N_( "Waiting for GET response" ));
 	else
-		ft->message(ft,N_( "Waiting for PUT response" ));
+		ft_message(ft,N_( "Waiting for PUT response" ));
 
 	return 0;
 
@@ -417,6 +440,11 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 
 
 /* External entry points called by ft_dft and ft_cut. */
+void ft_message(H3270FT *ft, const char *msg)
+{
+	lib3270_trace_event(ft->host,"%s\n",msg);
+	ft->message(ft,msg);
+}
 
 /**
  * Pop up a message, end the transfer, release resources.
@@ -444,10 +472,10 @@ void ft_complete(H3270FT *ft, const char *errmsg)
 
 	ft_update_length(ft);
 
-	if(errmsg)
-		ft->message(ft,errmsg);
-
 	ft->complete(ft,ft->ft_length,kbytes_sec);
+
+	ft_message(ft,errmsg ? errmsg : N_("Transfer complete"));
+
 
 }
 

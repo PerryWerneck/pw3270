@@ -88,9 +88,9 @@ struct ta;
 #include "api.h"
 
 
-#ifdef DEBUG
-	#define KYBDLOCK_TRACE
-#endif // DEBUG
+//#ifdef DEBUG
+//	#define KYBDLOCK_TRACE
+//#endif // DEBUG
 
 /* Statics */
 // static enum	{ NONE, COMPOSE, FIRST } composing = NONE;
