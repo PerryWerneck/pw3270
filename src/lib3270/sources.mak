@@ -28,7 +28,7 @@
 TERMINAL_SOURCES =	bounds.c ctlr.c util.c toggles.c screen.c selection.c kybd.c telnet.c \
 				host.c sf.c ansi.c resolver.c charset.c \
 				version.c session.c state.c html.c trace_ds.c see.c \
-				paste.c
+				paste.c ssl.c
 
 # tables.c utf8.c
 

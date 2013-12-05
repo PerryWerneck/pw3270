@@ -137,18 +137,6 @@ enum iaction {
 	IA_IDLE
 };
 
-// LIB3270_INTERNAL int		COLS;
-// LIB3270_INTERNAL int		ROWS;
-
-// LIB3270_INTERNAL H3270		h3270;
-
-/*
-#if defined(X3270_DISPLAY)
-	LIB3270_INTERNAL Atom		a_3270, a_registry, a_encoding;
-	LIB3270_INTERNAL XtAppContext	appcontext;
-#endif
-*/
-
 // Version strings
 LIB3270_INTERNAL const char * build;
 LIB3270_INTERNAL const char * app_defaults_version;
@@ -157,98 +145,14 @@ LIB3270_INTERNAL const char * build_rpq_timestamp;
 LIB3270_INTERNAL const char * build_rpq_version;
 LIB3270_INTERNAL const char * build_rpq_revision;
 
-// LIB3270_INTERNAL int			  children;
-
 #if defined(X3270_DBCS) /*[*/
 	LIB3270_INTERNAL Boolean		dbcs;
 #endif /*]*/
 
-// #if defined(X3270_FT) /*[*/
-//	LIB3270_INTERNAL int		dft_buffersize;
-// #endif /*]*/
-
-// LIB3270_INTERNAL char			*efontname;
-// LIB3270_INTERNAL Boolean		ever_3270;
-// LIB3270_INTERNAL Boolean		exiting;
-
-/*
-#if defined(X3270_DISPLAY)
-	LIB3270_INTERNAL Boolean		*extended_3270font;
-	LIB3270_INTERNAL Font			*fid;
-	LIB3270_INTERNAL Boolean		*font_8bit;
-#endif
-*/
-
-// LIB3270_INTERNAL Boolean	flipped;
-// LIB3270_INTERNAL char		*full_current_host;
-// LIB3270_INTERNAL char		*full_efontname;
 
 #if defined(X3270_DBCS) /*[*/
 	LIB3270_INTERNAL char	*full_efontname_dbcs;
 #endif /*]*/
-
-//LIB3270_INTERNAL char		*funky_font;
-//LIB3270_INTERNAL char		*hostname;
-
-#if defined(X3270_DBCS) /*[*/
-//	LIB3270_INTERNAL char	*local_encoding;
-
-	#if defined(X3270_DISPLAY) /*[*/
-//		LIB3270_INTERNAL char	*locale_name;
-	#endif /*]*/
-
-#endif /*]*/
-
-/*
-#if defined(LOCAL_PROCESS)
-	LIB3270_INTERNAL Boolean	local_process;
-#endif
-*/
-
-// LIB3270_INTERNAL int			maxCOLS;
-// LIB3270_INTERNAL int			maxROWS;
-// LIB3270_INTERNAL char			*model_name;
-// LIB3270_INTERNAL int			model_num;
-// LIB3270_INTERNAL Boolean		no_login_host;
-// LIB3270_INTERNAL Boolean		non_tn3270e_host;
-// LIB3270_INTERNAL int			ov_cols, ov_rows;
-// LIB3270_INTERNAL Boolean		passthru_host;
-// extern const char	*programname;
-// LIB3270_INTERNAL char			*qualified_host;
-// LIB3270_INTERNAL char			*reconnect_host;
-// LIB3270_INTERNAL int			screen_depth;
-// LIB3270_INTERNAL Boolean		scroll_initted;
-
-//#if defined(HAVE_LIBSSL) /*[*/
-//	LIB3270_INTERNAL Boolean	secure_connection;
-//#endif /*]*/
-
-// LIB3270_INTERNAL Boolean		shifted;
-// LIB3270_INTERNAL Boolean		ssl_host;
-// LIB3270_INTERNAL Boolean		*standard_font;
-// LIB3270_INTERNAL Boolean		std_ds_host;
-// LIB3270_INTERNAL char			*termtype;
-// LIB3270_INTERNAL Widget			toplevel;
-// LIB3270_INTERNAL Boolean		visible_control;
-// LIB3270_INTERNAL int			*xtra_width;
-
-/*
-#if defined(X3270_DISPLAY)
-	LIB3270_INTERNAL Atom				a_delete_me;
-	LIB3270_INTERNAL Atom				a_save_yourself;
-	LIB3270_INTERNAL Atom				a_state;
-	LIB3270_INTERNAL Display			*display;
-	LIB3270_INTERNAL Pixmap				gray;
-	LIB3270_INTERNAL Pixel				keypadbg_pixel;
-	LIB3270_INTERNAL XrmDatabase		rdb;
-	LIB3270_INTERNAL Window				root_window;
-	LIB3270_INTERNAL char				*user_title;
-	LIB3270_INTERNAL unsigned char	xk_selector;
-#endif
-*/
-
-/* Connection state */
-// LIB3270_INTERNAL enum ft_state ft_state;
 
 
 /*   keyboard modifer bitmap */
@@ -263,19 +167,7 @@ struct toggle_name {
 };
 
 
-/*   translation lists */ /*
-struct trans_list {
-	char			*name;
-	char			*pathname;
-	Boolean			is_temp;
-	Boolean			from_server;
-	struct trans_list	*next;
-};
-LIB3270_INTERNAL struct trans_list *trans_list;
-*/
-
 /*   input key type */
-// enum keytype { KT_STD, KT_GE };
 
 /* Naming convention for private actions. */
 #define PA_PFX	"PA-"
@@ -341,8 +233,6 @@ LIB3270_INTERNAL void key_ACharacter(H3270 *hSession, unsigned char c, enum keyt
 LIB3270_INTERNAL void lib3270_initialize(void);
 LIB3270_INTERNAL int  cursor_move(H3270 *session, int baddr);
 
-// LIB3270_INTERNAL void add_input_calls(H3270 *, void (*)(H3270 *), void (*)(H3270 *));
-
 LIB3270_INTERNAL void toggle_rectselect(H3270 *session, struct lib3270_toggle *t, LIB3270_TOGGLE_TYPE tt);
 LIB3270_INTERNAL void remove_input_calls(H3270 *session);
 
@@ -358,3 +248,23 @@ LIB3270_INTERNAL void	lib3270_sock_disconnect(H3270 *hSession);
 #endif // DEBUG
 
 LIB3270_EXPORT int lib3270_connect_host(H3270 *hSession, const char *hostname, const char *srvc);
+
+LIB3270_INTERNAL int non_blocking(H3270 *session, Boolean on);
+
+#if defined(HAVE_LIBSSL) /*[*/
+
+	LIB3270_INTERNAL void	ssl_init(H3270 *session);
+	LIB3270_INTERNAL int	ssl_negotiate(H3270 *hSession);
+	LIB3270_INTERNAL void	set_ssl_state(H3270 *session, LIB3270_SSL_STATE state);
+
+
+	#if OPENSSL_VERSION_NUMBER >= 0x00907000L /*[*/
+		#define INFO_CONST const
+	#else /*][*/
+		#define INFO_CONST
+	#endif /*]*/
+
+	LIB3270_INTERNAL void ssl_info_callback(INFO_CONST SSL *s, int where, int ret);
+
+#endif /*]*/
+

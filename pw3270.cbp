@@ -107,7 +107,6 @@
 		<Unit filename="src/lib3270/charset.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/lib3270/charset.h" />
 		<Unit filename="src/lib3270/connect.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -201,6 +200,9 @@
 		<Unit filename="src/lib3270/sf.h" />
 		<Unit filename="src/lib3270/shlobj_missing.h" />
 		<Unit filename="src/lib3270/sources.mak" />
+		<Unit filename="src/lib3270/ssl.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/lib3270/state.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -208,7 +210,6 @@
 		<Unit filename="src/lib3270/tables.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/lib3270/tablesc.h" />
 		<Unit filename="src/lib3270/telnet.c">
 			<Option compilerVar="CC" />
 		</Unit>

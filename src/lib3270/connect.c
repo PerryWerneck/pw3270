@@ -82,7 +82,7 @@ static void net_connected(H3270 *hSession)
 								_( "Network error" ),
 								_( "Unable to get connection state." ),
 #ifdef _WIN32
-								_( "Winsock Error %d"), WSAGetLastError()
+								"%s", lib3270_win32_strerror(WSAGetLastError()));
 #else
 								_( "%s" ), strerror(errno)
 #endif // _WIN32
@@ -166,16 +166,6 @@ static void net_connected(H3270 *hSession)
 	}
  }
 #endif /*]*/
-
- static void set_ssl_state(H3270 *hSession, LIB3270_SSL_STATE state)
- {
-	if(state == hSession->secure)
-		return;
-
-	trace_dsn(hSession,"SSL state changes to %d\n",(int) state);
-
-	hSession->update_ssl(hSession,hSession->secure = state);
- }
 
  LIB3270_EXPORT int lib3270_connect_host(H3270 *hSession, const char *hostname, const char *srvc)
  {
@@ -303,8 +293,7 @@ static void net_connected(H3270 *hSession)
 									LIB3270_NOTIFY_ERROR,
 									_( "Connection error" ),
 									_( "ioctlsocket(FIONBIO) failed." ),
-									"%s", lib3270_win32_strerror(GetLastError()));
-
+									"%s", lib3270_win32_strerror(WSAGetLastError()));
 			SOCK_CLOSE(hSession);
 		}
 		else if(connect(hSession->sock, rp->ai_addr, rp->ai_addrlen))
@@ -316,7 +305,7 @@ static void net_connected(H3270 *hSession)
 										LIB3270_NOTIFY_ERROR,
 										_( "Connection error" ),
 										_( "Can't connect to host." ),
-										"%s", lib3270_win32_strerror(GetLastError()));
+										"%s", lib3270_win32_strerror(err));
 				SOCK_CLOSE(hSession);
 			}
 		}
@@ -389,4 +378,57 @@ static void net_connected(H3270 *hSession)
 	return 0;
 
  }
+
+int non_blocking(H3270 *hSession, Boolean on)
+{
+#ifdef WIN32
+		WSASetLastError(0);
+		u_long iMode= on ? 1 : 0;
+
+		if(ioctlsocket(hSession->sock,FIONBIO,&iMode))
+		{
+			lib3270_popup_dialog(	hSession,
+									LIB3270_NOTIFY_ERROR,
+									_( "Connection error" ),
+									_( "ioctlsocket(FIONBIO) failed." ),
+									"%s", lib3270_win32_strerror(GetLastError()));
+		}
+#else
+
+	int f;
+
+	if ((f = fcntl(hSession->sock, F_GETFL, 0)) == -1)
+	{
+		lib3270_popup_dialog(	hSession,
+								LIB3270_NOTIFY_ERROR,
+								_( "Socket error" ),
+								_( "fcntl() error when getting socket state." ),
+								_( "%s" ), strerror(errno)
+							);
+
+		return -1;
+	}
+
+	if (on)
+		f |= O_NDELAY;
+	else
+		f &= ~O_NDELAY;
+
+	if (fcntl(hSession->sock, F_SETFL, f) < 0)
+	{
+		lib3270_popup_dialog(	hSession,
+								LIB3270_NOTIFY_ERROR,
+								_( "Socket error" ),
+								on ? _( "Can't set socket to blocking mode." ) : _( "Can't set socket to non blocking mode" ),
+								_( "%s" ), strerror(errno)
+							);
+		return -1;
+	}
+
+#endif
+
+	trace("Socket %d is %s",hSession->sock, on ? "non-blocking" : "blocking");
+
+	return 0;
+}
 

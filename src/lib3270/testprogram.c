@@ -22,7 +22,7 @@ static void * mainloop(void *dunno)
 int main(int numpar, char *param[])
 {
 	H3270		* h;
-	char	 	  line[4096];
+//	char	 	  line[4096];
 //	pthread_t	  thread;
 
 	lib3270_initialize();
@@ -30,10 +30,13 @@ int main(int numpar, char *param[])
 	session = h = lib3270_session_new("");
 	printf("3270 session %p created\n]",h);
 
+	lib3270_set_toggle(session,LIB3270_TOGGLE_DS_TRACE,1);
+
 //	pthread_create(&thread, NULL, mainloop, NULL);
 //	pthread_detach(thread);
 
-	lib3270_connect_host(h, "fandezhi.efglobe.com", "telnet");
+	lib3270_connect_host(h, "$HOST3270", "8023");
+//	lib3270_connect_host(h, "fandezhi.efglobe.com", "telnet");
 //	lib3270_connect_host(h, "127.0.0.1", "9090");
 
 	mainloop(0);
