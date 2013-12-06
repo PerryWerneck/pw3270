@@ -310,7 +310,7 @@
  	g_return_val_if_fail(GTK_IS_V3270(widget),"");
 
 	if(lib3270_get_secure(GTK_V3270(widget)->host) == LIB3270_SSL_UNSECURE)
-		return v3270_get_host(widget);
+		return v3270_get_hostname(widget);
 
 #ifdef HAVE_LIBSSL
 	if(lib3270_get_secure(GTK_V3270(widget)->host) != LIB3270_SSL_UNSECURE)
@@ -320,7 +320,7 @@
 			return gettext(info->text);
 	}
 #endif // HAVE_LIBSSL
-	return v3270_get_host(widget);
+	return v3270_get_hostname(widget);
  }
 
  LIB3270_EXPORT const gchar	* v3270_get_ssl_status_message(GtkWidget *widget)
@@ -362,7 +362,7 @@
 							GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
 							GTK_MESSAGE_INFO,
 							GTK_BUTTONS_CLOSE,
-							"%s",v3270_get_host(widget)
+							"%s",v3270_get_hostname(widget)
 					);
 
 		gtk_message_dialog_format_secondary_markup(

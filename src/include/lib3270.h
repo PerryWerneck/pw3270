@@ -409,14 +409,14 @@
 	 LIB3270_EXPORT const char * lib3270_set_host(H3270 *h, const char *url);
 
 	/**
-	 * Get host id for the connect/reconnect operations.
+	 * Get hostname for the connect/reconnect operations.
 	 *
 	 * @param h		Session handle.
 	 *
 	 * @return Pointer to host id set (internal data, do not change it)
 	 *
 	 */
-	 LIB3270_EXPORT const char * lib3270_get_host(H3270 *h);
+	 LIB3270_EXPORT const char * lib3270_get_hostname(H3270 *h);
 
 	/**
 	 * Network connect operation, keep main loop running

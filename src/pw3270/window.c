@@ -239,10 +239,10 @@
  	return v3270_set_host(GTK_PW3270(widget)->terminal,uri);
  }
 
- const gchar * pw3270_get_host(GtkWidget *widget)
+ const gchar * pw3270_get_hostname(GtkWidget *widget)
  {
  	g_return_val_if_fail(GTK_IS_PW3270(widget),"");
- 	return v3270_get_host(GTK_PW3270(widget)->terminal);
+ 	return v3270_get_hostname(GTK_PW3270(widget)->terminal);
  }
 
  gboolean pw3270_get_toggle(GtkWidget *widget, LIB3270_TOGGLE ix)
@@ -271,7 +271,7 @@
 
 	if(v3270_is_connected(widget))
 	{
-		const gchar *host = v3270_get_host(widget);
+		const gchar *host = v3270_get_hostname(widget);
 
 		if(host && *host)
 			title = g_strdup_printf("%s - %s",v3270_get_session_name(widget),host);

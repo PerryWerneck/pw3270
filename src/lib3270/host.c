@@ -714,7 +714,7 @@ LIB3270_EXPORT const char * lib3270_set_host(H3270 *h, const char *n)
 		Replace(h->host.full,
 				lib3270_strdup_printf(
 					"%s%s:%s%s%s",
-						h->host.opt&LIB3270_CONNECT_OPTION_SSL ? "L:" : "",
+						h->host.opt&LIB3270_CONNECT_OPTION_SSL ? "tn3270s://" : "",
 						hostname,
 						srvc,
 						*query ? "?" : "",
@@ -727,10 +727,10 @@ LIB3270_EXPORT const char * lib3270_set_host(H3270 *h, const char *n)
 	return h->host.current;
 }
 
-LIB3270_EXPORT const char * lib3270_get_host(H3270 *h)
+LIB3270_EXPORT const char * lib3270_get_hostname(H3270 *h)
 {
     CHECK_SESSION_HANDLE(h);
-	return h->host.full;
+	return h->host.current;
 }
 
 LIB3270_EXPORT int lib3270_reconnect(H3270 *hSession,int wait)

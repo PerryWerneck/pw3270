@@ -365,7 +365,7 @@ JNIEXPORT void JNICALL Java_br_com_bb_pw3270_lib3270_setStartupScript(JNIEnv *en
 
 JNIEXPORT jstring JNICALL Java_br_com_bb_pw3270_lib3270_getHost(JNIEnv *env, jobject obj)
 {
-	return env->NewStringUTF(lib3270_get_host(lib3270_get_default_session_handle()));
+	return env->NewStringUTF(lib3270_get_hostname(lib3270_get_default_session_handle()));
 }
 
 JNIEXPORT void JNICALL Java_br_com_bb_pw3270_lib3270_set_1connection_1status(JNIEnv *env, jobject obj, jboolean connected)

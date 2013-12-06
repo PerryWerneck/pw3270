@@ -319,7 +319,6 @@
 
 		/* Get connection info */
 		#define get_connected_lu(h) lib3270_get_luname(h)
-//		#define get_current_host(h) lib3270_get_host(h)
 
 		LOCAL_EXTERN SCRIPT_STATE status_script(SCRIPT_STATE state);
 

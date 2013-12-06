@@ -1495,7 +1495,7 @@ static void v3270_activate(GtkWidget *widget)
 
 	if(lib3270_connected(terminal->host))
 		lib3270_enter(terminal->host);
-	else if(lib3270_get_host(terminal->host))
+	else if(lib3270_get_hostname(terminal->host))
 		v3270_connect(widget,NULL);
 	else
 		g_warning("Terminal widget %p activated without connection or valid hostname",terminal);
@@ -1557,10 +1557,10 @@ const gchar * v3270_set_host(GtkWidget *widget, const gchar *uri)
 	return lib3270_set_host(GTK_V3270(widget)->host,uri);
 }
 
-const gchar * v3270_get_host(GtkWidget *widget)
+const gchar * v3270_get_hostname(GtkWidget *widget)
 {
 	g_return_val_if_fail(GTK_IS_V3270(widget),"");
-	return lib3270_get_host(GTK_V3270(widget)->host);
+	return lib3270_get_hostname(GTK_V3270(widget)->host);
 }
 
 const gchar	* v3270_get_session_name(GtkWidget *widget)

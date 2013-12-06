@@ -183,7 +183,7 @@
  {
 	const char	* luname	= (const char *) lib3270_get_luname(hSession);
  	const char	* state		= get_state(hSession);
- 	const char	* host		= (const char *) lib3270_get_host(hSession);
+ 	const char	* host		= (const char *) lib3270_get_hostname(hSession);
  	char		* rsp;
  	size_t		  sz;
 
