@@ -385,8 +385,6 @@ static void net_connected(H3270 *hSession)
 			char buffer[4096];
 			snprintf(buffer,4095,N_( "Can't %s network keep-alive" ), optval ? _( "enable" ) : _( "disable" ));
 
-			popup_a_sockerr(session, );
-
 			lib3270_popup_dialog(	hSession,
 									LIB3270_NOTIFY_ERROR,
 									_( "Connection error" ),
