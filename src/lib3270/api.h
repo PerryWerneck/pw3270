@@ -323,30 +323,11 @@
 
 		LOCAL_EXTERN SCRIPT_STATE status_script(SCRIPT_STATE state);
 
-//		#define Toggled(ix) lib3270_get_toggle(NULL,ix)
-//		#define CallAndWait(c,h,p) lib3270_call_thread(c,h,p)
-
-//		#define RunPendingEvents(x) lib3270_main_iterate(x)
-//		#define Wait(s) lib3270_wait(x)
-
-//        LOCAL_EXTERN int ctlr_get_cols(void) __attribute__ ((deprecated));
-//        LOCAL_EXTERN int ctlr_get_rows(void) __attribute__ ((deprecated));
-
-        /* Screen calls */
-//		LOCAL_EXTERN void screen_resume(H3270 *session);
-//		LOCAL_EXTERN void screen_suspend(H3270 *session);
-//		LOCAL_EXTERN void screen_disp(H3270 *session);
-
 		#include <lib3270/actions.h>
 
 		#define host_connect(n,wait) lib3270_connect(NULL,n,wait)
 		#define host_reconnect(w) lib3270_reconnect(NULL,w)
 
-		/* Console/Trace window */
-//		LOCAL_EXTERN HCONSOLE	  console_window_new(const char *title, const char *label);
-//		LOCAL_EXTERN void	  console_window_delete(HCONSOLE hwnd);
-//		LOCAL_EXTERN int		  console_window_append(HCONSOLE hwnd, const char *fmt, ...);
-//		LOCAL_EXTERN char	* console_window_wait_for_user_entry(HCONSOLE hwnd);
 
 #ifdef __cplusplus
 	}

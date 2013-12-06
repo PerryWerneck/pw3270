@@ -35,8 +35,8 @@ int main(int numpar, char *param[])
 //	pthread_create(&thread, NULL, mainloop, NULL);
 //	pthread_detach(thread);
 
-	lib3270_connect_host(h, "fandezhi.efglobe.com", "telnet", LIB3270_CONNECT_OPTION_DEFAULTS);
-//	lib3270_connect_host(h, "127.0.0.1", "9090", LIB3270_CONNECT_OPTION_DEFAULTS);
+//	lib3270_connect_host(h, "fandezhi.efglobe.com", "telnet", LIB3270_CONNECT_OPTION_WAIT);
+	lib3270_connect_host(h, "127.0.0.1", "9090", LIB3270_CONNECT_OPTION_WAIT);
 
 	mainloop(0);
 

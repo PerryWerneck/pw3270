@@ -49,7 +49,7 @@ SSL_CFLAGS=@LIBSSL_CFLAGS@
 DLL_FLAGS=@DLL_FLAGS@
 LDFLAGS=@LDFLAGS@
 
-LIBS=@LIBS@ @LIBSSL_LIBS@ @INTL_LIBS@ @SOCKET_LIBS@
+LIBS=@LIBS@ @LIBSSL_LIBS@ @INTL_LIBS@ @SOCKET_LIBS@ @LIBICONV@
 
 #---[ Tools ]------------------------------------------------------------------
 
@@ -144,7 +144,7 @@ $(BINRLS)/lib3270@DLLEXT@.@VERSION@: $(foreach SRC, $(basename $(SOURCES)), $(OB
 $(BINDBG)/testprogram$(EXEEXT): $(OBJDBG)/testprogram.o $(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC)@OBJEXT@)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(LD) -pthread -o $@ $^ $(LIBS)
+	@$(LD) -o $@ $^ $(LIBS)
 
 $(BINDIR)/pot/lib3270.pot: $(foreach SRC, $(basename $(SOURCES)), $(TMPDIR)/pot/$(SRC).pot)
 	@rm -f $@

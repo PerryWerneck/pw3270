@@ -47,6 +47,9 @@
 	#include <fcntl.h>
 #endif
 
+#ifdef HAVE_ICONV
+	#include <iconv.h>
+#endif // HAVE_ICONV
 
 #if defined(_WIN32) /*[*/
 	#define SOCK_CLOSE(s)	closesocket(s->sock); s->sock = -1;
@@ -83,7 +86,7 @@ static void net_connected(H3270 *hSession)
 								_( "Network error" ),
 								_( "Unable to get connection state." ),
 #ifdef _WIN32
-								"%s", lib3270_win32_strerror(WSAGetLastError()));
+								"%s", lib3270_win32_strerror(WSAGetLastError())
 #else
 								_( "%s" ), strerror(errno)
 #endif // _WIN32
@@ -103,6 +106,7 @@ static void net_connected(H3270 *hSession)
 								_( "%s" ), strerror(err)
 #endif // _WIN32
 							);
+		trace("%s",__FUNCTION__);
 		return;
 	}
 
@@ -236,12 +240,40 @@ static void net_connected(H3270 *hSession)
 
 		snprintf(buffer,4095,_( "Can't connect to %s:%s"), hostname, srvc);
 
+#if defined(WIN32) && defined(HAVE_ICONV)
+	{
+		char 		  tmpbuffer[4096];
+		const char 	* msg 		= gai_strerror(s);
+		size_t		  in 		= strlen(msg);
+		size_t		  out 		= 4096;
+		char		* ptr		= tmpbuffer;
+
+		iconv_t hConv = iconv_open(lib3270_win32_local_charset(),"UTF-8");
+
+		trace("Antes: [%s]",msg);
+		if(iconv(hConv,&msg,&in,&ptr,&out) != ((size_t) -1))
+			msg = tmpbuffer;
+		trace("Depois: [%s]",msg);
+
+		iconv_close(hConv);
+
+		lib3270_popup_dialog(	hSession,
+								LIB3270_NOTIFY_ERROR,
+								_( "Connection error" ),
+								buffer,
+								"%s",
+								msg);
+	}
+
+#else
 		lib3270_popup_dialog(	hSession,
 								LIB3270_NOTIFY_ERROR,
 								_( "Connection error" ),
 								buffer,
 								"%s",
 								gai_strerror(s));
+#endif // WIN32
+
 
 		lib3270_set_disconnected(hSession);
 		return ENOENT;
@@ -383,10 +415,11 @@ static void net_connected(H3270 *hSession)
 	if(hSession->sock < 0)
 	{
 		lib3270_set_disconnected(hSession);
-		return -1;
+		return ENOTCONN;
 	}
 
 	// Connecting, set callbacks, wait for connection
+	hSession->cstate = LIB3270_PENDING;
 	lib3270_st_changed(hSession, LIB3270_STATE_HALF_CONNECT, True);
 
 #ifdef _WIN32
@@ -397,6 +430,33 @@ static void net_connected(H3270 *hSession)
 #endif // WIN32
 
 	trace("%s: Connection in progress",__FUNCTION__);
+
+	if(opt&LIB3270_CONNECT_OPTION_WAIT)
+	{
+		time_t	end = time(0)+120;
+
+		while(time(0) < end)
+		{
+			lib3270_main_iterate(hSession,1);
+
+			switch(hSession->cstate)
+			{
+			case LIB3270_PENDING:
+				break;
+
+			case CONNECTED_INITIAL:
+				trace("%s: Connected, exiting wait",__FUNCTION__);
+				return 0;
+
+			default:
+				trace("%s: State changed to %d",__FUNCTION__,hSession->cstate);
+				return -1;
+			}
+
+		}
+		return ETIMEDOUT;
+	}
+
 	return 0;
 
  }

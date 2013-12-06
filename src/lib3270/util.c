@@ -65,6 +65,10 @@
 	#include <stdlib.h>
 #endif // !ANDROID
 
+#ifdef HAVE_ICONV
+	#include <iconv.h>
+#endif // HAVE_ICONV
+
 #include <stdarg.h>
 #include "resources.h"
 
@@ -151,10 +155,49 @@ LIB3270_EXPORT const char * lib3270_win32_strerror(int e)
 	static char buffer[4096];
 
 	if(FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM,NULL,e,MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),buffer,sizeof(buffer),NULL) == 0)
-	    snprintf(buffer, 4095, "Windows error %d", e);
+	{
+	    snprintf(buffer, 4095, _( "Windows error %d" ), e);
+		return buffer;
+	}
 
+	trace("%s",buffer);
+
+#ifdef HAVE_ICONV
+	{
+		// Convert from windows codepage to UTF-8 pw3270´s default charset
+		char 	  tmpbuffer[4096];
+		size_t	  in 		= strlen(buffer);
+		size_t	  out 		= 4095;
+		char	* ptr		= tmpbuffer;
+
+		iconv_t hConv = iconv_open("UTF-8",lib3270_win32_local_charset());
+
+		trace("[%s]",buffer);
+
+		if(hConv == (iconv_t) -1)
+		{
+			lib3270_write_log(NULL,"iconv","%s: Error creating charset conversion",__FUNCTION__);
+		}
+		else if(iconv(hConv,(const char **) &buffer,&in,&ptr,&out) != ((size_t) -1))
+		{
+			// strncpy(buffer,tmpbuffer,4096);
+		}
+
+		trace("[%s]",buffer);
+
+		iconv_close(hConv);
+	}
+#endif // HAVE_ICONV
+
+	trace("[%s]",buffer);
 	return buffer;
 }
+
+LIB3270_EXPORT const char * lib3270_win32_local_charset(void)
+{
+	return "CP1252";
+}
+
 
 #endif // _WIN32
 
@@ -942,49 +985,6 @@ LIB3270_EXPORT void * lib3270_strdup(const char *str)
 
 	return r;
 }
-
-/*
-LIB3270_EXPORT char * lib3270_get_resource_string(H3270 *hSession, const char *first_element, ...)
-{
-#ifdef ANDROID
-
-	#warning No resource on Android
-
-#else
-
-	char 		* str		= lib3270_malloc(4097);
-	char 		* ptr 		= str;
-	const char	* element;
-	va_list		  args;
-	const char	* res;
-
-	va_start(args, first_element);
-
-	for(element = first_element;element;element = va_arg(args, const char *))
-    {
-    	if(ptr != str)
-			*(ptr++) = '.';
-
-		strncpy(ptr,element,4096-strlen(str));
-		ptr += strlen(ptr);
-    }
-
-	va_end(args);
-
-	*ptr = 0;
-
-	res = get_resource(hSession,str);
-
-	trace("%s(%s)=%s",__FUNCTION__,str,res ? res : "NULL");
-
-	lib3270_free(str);
-
-	if(res)
-		return strdup(res);
-#endif
-	return NULL;
-}
-*/
 
 LIB3270_EXPORT const char * lib3270_get_version(void)
 {
