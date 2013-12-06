@@ -401,12 +401,12 @@
 	 * Set host id for the connect/reconnect operations.
 	 *
 	 * @param h		Session handle.
-	 * @param n		Host ID to set.
+	 * @param url	URL of host to set in the format tn3270://hostname:service ou tn3270s://hostname:service .
 	 *
-	 * @return Pointer to host id set (internal data, do not change it)
+	 * @return Processed host url
 	 *
 	 */
-	 LIB3270_EXPORT const char * lib3270_set_host(H3270 *h, const char *n);
+	 LIB3270_EXPORT const char * lib3270_set_host(H3270 *h, const char *url);
 
 	/**
 	 * Get host id for the connect/reconnect operations.
@@ -1040,6 +1040,7 @@
 	LIB3270_EXPORT const char * lib3270_get_revision(void);
 
 	LIB3270_EXPORT char * lib3270_vsprintf(const char *fmt, va_list args);
+	LIB3270_EXPORT char * lib3270_strdup_printf(const char *fmt, ...);
 
 	LIB3270_EXPORT int lib3270_clear_operator_error(H3270 *hSession);
 

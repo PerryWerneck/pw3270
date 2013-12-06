@@ -129,7 +129,7 @@
 		}						  toggle[LIB3270_TOGGLE_COUNT];
 
 		// Network & Termtype
-		char   		 			* hostname;
+//		char   		 			* hostname;
 		char					* connected_type;
 		char					* connected_lu;
 		char					  luname[LIB3270_LUNAME_LENGTH+1];
@@ -139,9 +139,15 @@
 		int						  model_num;
 		char  	     	    	* termtype;
 
-		char					* current_host;			/**< the hostname part, stripped of qualifiers, luname and port number */
-		char 	          		* full_current_host;	/**< the entire string, for use in reconnecting */
-		char		       		* qualified_host;
+		struct
+		{
+			LIB3270_CONNECT_OPTION	  opt;			/**< Connect options */
+			char					* current;		/**< The hostname part, stripped of qualifiers, luname and port number */
+			char 	   	    		* full;			/**< The entire string, for use in reconnecting */
+			char					* srvc;			/**< The service name */
+			char	   	    		* qualified;
+		} host;
+
 		char					* proxy;				/**< Proxy server (type:host[:port]) */
 		char					* termname;
 

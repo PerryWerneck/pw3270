@@ -22,7 +22,7 @@ static void * mainloop(void *dunno)
 int main(int numpar, char *param[])
 {
 	H3270		* h;
-	int			  rc;
+	int			  rc	= 0;
 //	char	 	  line[4096];
 //	pthread_t	  thread;
 
@@ -37,7 +37,10 @@ int main(int numpar, char *param[])
 //	pthread_detach(thread);
 
 //	rc = lib3270_connect_host(h, "fandezhi.efglobe.com", "telnet", LIB3270_CONNECT_OPTION_WAIT);
-	rc = lib3270_connect_host(h, "127.0.0.1", "9090", LIB3270_CONNECT_OPTION_WAIT);
+//	rc = lib3270_connect_host(h, "127.0.0.1", "9090", LIB3270_CONNECT_OPTION_WAIT);
+
+//	lib3270_set_host_url(h,"tn3270://fandezhi.efglobe.com:9090?lu=default");
+	lib3270_set_host(h,"tn3270://fandezhi.efglobe.com");
 
 	printf("\nConnect exits with rc=%d\n",rc);
 

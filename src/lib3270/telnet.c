@@ -501,7 +501,7 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 	*resolving = False;
 	*pending = False;
 
-	Replace(session->hostname, NewString(host));
+//	Replace(session->hostname, NewString(host));
 
 	/* get the passthru host and port number */
 	if (session->passthru_host)
@@ -656,7 +656,7 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 	}
 	else
 	{
-		char *msg = xs_buffer( _( "Can't connect to %s:%d" ), session->hostname, session->current_port);
+		char *msg = xs_buffer( _( "Can't connect to %s" ), session->host.current);
 
 		lib3270_popup_dialog(	session,
 								LIB3270_NOTIFY_ERROR,
@@ -778,9 +778,10 @@ static void setup_lus(H3270 *hSession)
 
 static int net_connected(H3270 *hSession)
 {
+	/*
 	if(hSession->proxy_type > 0)
 	{
-		/* Negotiate with the proxy. */
+		// Negotiate with the proxy.
 		trace_dsn(hSession,"Connected to proxy server %s, port %u.\n",hSession->proxy_host, hSession->proxy_port);
 
 		if (proxy_negotiate(hSession, hSession->proxy_type, hSession->sock, hSession->hostname,hSession->current_port) < 0)
@@ -789,8 +790,9 @@ static int net_connected(H3270 *hSession)
 			return -1;
 		}
 	}
+	*/
 
-	trace_dsn(hSession,"Connected to %s, port %u%s.\n", hSession->hostname, hSession->current_port,hSession->ssl_host? " via SSL": "");
+	trace_dsn(hSession,"Connected to %s%s.\n", hSession->host.current,hSession->ssl_host? " using SSL": "");
 
 #if defined(HAVE_LIBSSL)
 	/* Set up SSL. */
@@ -847,6 +849,7 @@ LIB3270_EXPORT void lib3270_setup_session(H3270 *hSession)
 	check_linemode(hSession,True);
 
 	/* write out the passthru hostname and port nubmer */
+	/*
 	if (hSession->passthru_host)
 	{
 		unsigned char *buffer = (unsigned char *) xs_buffer("%s %d\r\n", hSession->hostname, hSession->current_port);
@@ -854,6 +857,7 @@ LIB3270_EXPORT void lib3270_setup_session(H3270 *hSession)
 		lib3270_free(buffer);
 		trace_ds(hSession,"SENT HOSTNAME %s:%d\n", hSession->hostname, hSession->current_port);
 	}
+	*/
 }
 
 /**
@@ -1036,7 +1040,7 @@ void net_input(H3270 *hSession)
 
 			if (HALF_CONNECTED)
 			{
-				popup_a_sockerr(hSession, N_( "%s:%d" ),hSession->hostname, hSession->current_port);
+				popup_a_sockerr(hSession, N_( "%s" ),hSession->host.current);
 			}
 			else if (socket_errno() != SE_ECONNRESET)
 			{

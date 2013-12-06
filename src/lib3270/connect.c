@@ -201,6 +201,19 @@ static void net_connected(H3270 *hSession)
 	sockstart(hSession);
 #endif
 
+	hSession->host.opt = opt;
+	Replace(hSession->host.current,strdup(hostname));
+
+	Replace(hSession->host.full,
+			lib3270_strdup_printf(
+				"%s%s:%s",
+					opt&LIB3270_CONNECT_OPTION_SSL ? "L:" : "",
+					hostname,
+					srvc ));
+
+	trace("current_host=\"%s\"",hSession->host.current);
+
+
 	set_ssl_state(hSession,LIB3270_SSL_UNSECURE);
 
 	hSession->ever_3270	= False;
@@ -231,7 +244,8 @@ static void net_connected(H3270 *hSession)
 		hostname = name;
 	}
 
-	status_changed(hSession,LIB3270_STATUS_RESOLVING);
+	hSession->cstate = LIB3270_RESOLVING;
+	lib3270_st_changed(hSession, LIB3270_STATE_RESOLVING, True);
 
 	s = getaddrinfo(hostname, srvc, &hints, &result);
 
@@ -286,15 +300,25 @@ static void net_connected(H3270 *hSession)
 	(void) fcntl(hSession->sock, F_SETFD, 1);
 #endif
 
-	hSession->ssl_host = 0;
+	hSession->ever_3270 = False;
+	hSession->ssl_host  = 0;
 
-#if defined(HAVE_LIBSSL)
 	if(opt&LIB3270_CONNECT_OPTION_SSL)
 	{
+#if defined(HAVE_LIBSSL)
 		hSession->ssl_host = 1;
 		ssl_init(hSession);
+#else
+		lib3270_popup_dialog(	hSession,
+								LIB3270_NOTIFY_ERROR,
+								_( "SSL error" ),
+								_( "Unable to connect to secure hosts" ),
+								_( "This version of %s was built without support for secure sockets layer (SSL)." ),
+								PACKAGE_NAME));
+
+		return EINVAL;
+#endif // HAVE_LIBSSL
 	}
-#endif
 
 	/* connect */
 	status_connecting(hSession,1);

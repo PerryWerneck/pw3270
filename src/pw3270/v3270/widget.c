@@ -57,6 +57,15 @@
  #define CONTENTS_WIDTH(terminal) (cols * terminal->metrics.width)
  #define CONTENTS_HEIGHT(terminal) (((rows+1) * terminal->metrics.spacing)+OIA_TOP_MARGIN+2)
 
+/**
+ * SECTION:	v3270
+ * @title:	Virtual 3270 widget
+ * @short_description:	The virtual 3270 terminal widget.
+ *
+ * Common functions for interact with the 3270 virtual terminal widget.
+ *
+ */
+
 /*--[ Widget definition ]----------------------------------------------------------------------------*/
 
  G_DEFINE_TYPE(v3270, v3270, GTK_TYPE_WIDGET);
@@ -721,7 +730,7 @@ static void update_connect(H3270 *session, unsigned char connected)
 	if(connected)
 	{
 		widget->cursor.show |= 2;
-		g_signal_emit(GTK_WIDGET(widget), v3270_widget_signal[SIGNAL_CONNECTED], 0, session->full_current_host);
+		g_signal_emit(GTK_WIDGET(widget), v3270_widget_signal[SIGNAL_CONNECTED], 0, session->host.full);
 	}
 	else
 	{
@@ -1380,18 +1389,71 @@ H3270 * v3270_get_session(GtkWidget *widget)
 	return GTK_V3270(widget)->host;
 }
 
-int v3270_connect(GtkWidget *widget, const gchar *host)
+int v3270_connect(GtkWidget *widget, const gchar *uri)
 {
 	v3270 * terminal;
 	int		rc = -1;
 
-	trace("%s widget=%p host=%p",__FUNCTION__,widget,host);
+	trace("%s widget=%p host=%p",__FUNCTION__,widget,uri);
 
 	g_return_val_if_fail(GTK_IS_V3270(widget),EINVAL);
 
 	terminal = GTK_V3270(widget);
 
-	rc = lib3270_connect(terminal->host,host,0);
+#ifdef DEBUG
+	if(uri)
+	{
+		LIB3270_CONNECT_OPTION	  opt		= LIB3270_CONNECT_OPTION_DEFAULTS;
+		gchar					* scheme	= g_uri_unescape_string(uri,NULL);
+		gchar 					* hostname	= strchr(scheme,':');
+		gchar 					* srvc;
+		gchar					* query;
+
+		if(hostname)
+		{
+			*(hostname++) = 0;
+
+			while(*hostname && !g_ascii_isalnum(*hostname))
+				hostname++;
+
+			if(*hostname)
+			{
+				if( ! (g_ascii_strcasecmp(scheme,"l") && g_ascii_strcasecmp(scheme,"ssl")) )
+					opt |= LIB3270_CONNECT_OPTION_SSL;
+
+				srvc = strchr(hostname,':');
+				if(srvc)
+				{
+					*(srvc++) = 0;
+					query = strchr(srvc,'?');
+					if(query)
+						*(query++) = 0;
+					else
+						query = "";
+				}
+				else
+				{
+					srvc = "telnet";
+				}
+
+				rc = lib3270_connect_host(terminal->host,hostname,srvc,opt);
+
+			}
+
+		}
+
+
+		g_free(scheme);
+
+	}
+	else
+	{
+		rc = lib3270_connect(terminal->host,uri,0);
+	}
+
+#else
+	rc = lib3270_connect(terminal->host,uri,0);
+#endif // DEBUG
 
 	trace("%s exits with rc=%d (%s)",__FUNCTION__,rc,strerror(rc));
 
@@ -1476,11 +1538,23 @@ gboolean v3270_get_toggle(GtkWidget *widget, LIB3270_TOGGLE ix)
 	return FALSE;
 }
 
-void v3270_set_host(GtkWidget *widget, const gchar *uri)
+/**
+ * v3270_set_host:
+ *
+ * @widget:	V3270 widget.
+ * @uri:	a valid tn3270 URL.
+ *
+ * Set the default URL for the tn3270e host.
+ *
+ * Returns: The lib3270 processed string as an internal constant.
+ *
+ * Since: 5.0
+ **/
+const gchar * v3270_set_host(GtkWidget *widget, const gchar *uri)
 {
 	g_return_if_fail(GTK_IS_V3270(widget));
 	g_return_if_fail(uri != NULL);
-	lib3270_set_host(GTK_V3270(widget)->host,uri);
+	return lib3270_set_host(GTK_V3270(widget)->host,uri);
 }
 
 const gchar * v3270_get_host(GtkWidget *widget)

@@ -237,6 +237,17 @@ char * lib3270_vsprintf(const char *fmt, va_list args)
 #endif /*]*/
 }
 
+LIB3270_EXPORT char * lib3270_strdup_printf(const char *fmt, ...)
+{
+	va_list args;
+	char *r;
+
+	va_start(args, fmt);
+	r = lib3270_vsprintf(fmt, args);
+	va_end(args);
+	return r;
+}
+
 /*
  * Common helper functions to insert strings, through a template, into a new
  * buffer.
@@ -280,77 +291,6 @@ xs_error(const char *fmt, ...)
 	lib3270_free(r);
 }
 
-/* Prettyprinter for strings with unprintable data. */ /*
-void
-fcatv(FILE *f, char *s)
-{
-	char c;
-
-	while ((c = *s++)) {
-		switch (c) {
-		    case '\n':
-			(void) fprintf(f, "\\n");
-			break;
-		    case '\t':
-			(void) fprintf(f, "\\t");
-			break;
-		    case '\b':
-			(void) fprintf(f, "\\b");
-			break;
-		    default:
-			if ((c & 0x7f) < ' ')
-				(void) fprintf(f, "\\%03o", c & 0xff);
-			else
-				fputc(c, f);
-			break;
-		}
-	}
-}
-*/
-
-/* String version of fcatv. */ /*
-char *
-scatv(const char *s, char *buf, size_t len)
-{
-	char c;
-	char *dst = buf;
-
-	while ((c = *s++) && len > 0) {
-		char cbuf[5];
-		char *t = cbuf;
-
-		// Expand this character.
-		switch (c) {
-		    case '\n':
-			(void) strcpy(cbuf, "\\n");
-			break;
-		    case '\t':
-			(void) strcpy(cbuf, "\\t");
-			break;
-		    case '\b':
-			(void) strcpy(cbuf, "\\b");
-			break;
-		    default:
-			if ((c & 0x7f) < ' ')
-				(void) sprintf(cbuf, "\\%03o", c & 0xff);
-			else {
-				cbuf[0] = c;
-				cbuf[1] = '\0';
-			}
-			break;
-		}
-		// Copy as much as will fit.
-		while ((c = *t++) && len > 0) {
-			*dst++ = c;
-			len--;
-		}
-	}
-	if (len > 0)
-		*dst = '\0';
-
-	return buf;
-}
-*/
 
 /*
  * Definition resource splitter, for resources of the repeating form:

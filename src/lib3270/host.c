@@ -38,6 +38,7 @@
  *		connection.
  */
 
+#include <malloc.h>
 #include "globals.h"
 // #include "appres.h"
 #include "resources.h"
@@ -64,7 +65,7 @@ static void try_reconnect(H3270 *session);
  * Returns the hostname part in a newly-malloc'd string.
  * 'needed' is returned True if anything was actually stripped.
  * Returns NULL if there is a syntax error.
- */
+ */ /*
 static char *
 split_host(H3270 *hSession, char *s, char *ansi, char *std_ds, char *passthru,
 	char *non_e, char *secure, char *no_login, char *xluname,
@@ -85,18 +86,18 @@ split_host(H3270 *hSession, char *s, char *ansi, char *std_ds, char *passthru,
 
 	*needed = False;
 
-	/*
-	 * Hostname syntax is:
-	 *  Zero or more optional prefixes (A:, S:, P:, N:, L:, C:).
-	 *  An optional LU name separated by '@'.
-	 *  A hostname optionally in square brackets (which quote any colons
-	 *   in the name).
-	 *  An optional port name or number separated from the hostname by a
-	 *  space or colon.
-	 * No additional white space or colons are allowed.
-	 */
+	//
+	// Hostname syntax is:
+	// Zero or more optional prefixes (A:, S:, P:, N:, L:, C:).
+	// An optional LU name separated by '@'.
+	// A hostname optionally in square brackets (which quote any colons
+	// in the name).
+	// An optional port name or number separated from the hostname by a
+	// space or colon.
+	// No additional white space or colons are allowed.
+	//
 
-	/* Strip leading whitespace. */
+	// Strip leading whitespace.
 	while (*s && isspace(*s))
 		s++;
 
@@ -106,11 +107,11 @@ split_host(H3270 *hSession, char *s, char *ansi, char *std_ds, char *passthru,
 		goto split_fail;
 	}
 
-	/* Strip trailing whitespace. */
+	// Strip trailing whitespace.
 	while (isspace(*(s + strlen(s) - 1)))
 		*(s + strlen(s) - 1) = '\0';
 
-	/* Start with the prefixes. */
+	// Start with the prefixes.
 	while (*s && *(s + 1) && isalpha(*s) && *(s + 1) == ':') {
 		switch (*s) {
 		case 'a':
@@ -160,12 +161,12 @@ split_host(H3270 *hSession, char *s, char *ansi, char *std_ds, char *passthru,
 		*needed = True;
 		s += 2;
 
-		/* Allow whitespace around the prefixes. */
+		// Allow whitespace around the prefixes.
 		while (*s && isspace(*s))
 			s++;
 	}
 
-	/* Process the LU name. */
+	// Process the LU name.
 	lbracket = strchr(s, '[');
 	at = strchr(s, '@');
 	if (at != CN && lbracket != CN && at > lbracket)
@@ -203,15 +204,15 @@ split_host(H3270 *hSession, char *s, char *ansi, char *std_ds, char *passthru,
 		*needed = True;
 	}
 
-	/*
-	 * Isolate the hostname.
-	 * At this point, we've found its start, so we can malloc the buffer
-	 * that will hold the copy.
-	 */
+	//
+	// Isolate the hostname.
+	// At this point, we've found its start, so we can malloc the buffer
+	// that will hold the copy.
+	///
 	if (lbracket != CN) {
 		char *rbracket;
 
-		/* Check for junk before the '['. */
+		// Check for junk before the '['.
 		if (lbracket != s) {
 			popup_system_error(hSession,NULL,_("Hostname syntax error"),"%s",_("Text before '['"));
 			goto split_fail;
@@ -219,10 +220,10 @@ split_host(H3270 *hSession, char *s, char *ansi, char *std_ds, char *passthru,
 
 		s = r = NewString(lbracket + 1);
 
-		/*
-		 * Take whatever is inside square brackets, including
-		 * whitespace, unmodified -- except for empty strings.
-		 */
+		//
+		// Take whatever is inside square brackets, including
+		// whitespace, unmodified -- except for empty strings.
+		//
 		rbracket = strchr(s, ']');
 		if (rbracket == CN) {
 			popup_system_error(hSession,NULL,_("Hostname syntax error"),"%s",_("Missing ']'"));
@@ -234,7 +235,7 @@ split_host(H3270 *hSession, char *s, char *ansi, char *std_ds, char *passthru,
 		}
 		*rbracket = '\0';
 
-		/* Skip over any whitespace after the bracketed name. */
+		// Skip over any whitespace after the bracketed name.
 		s = rbracket + 1;
 		while (*s && isspace(*s))
 			s++;
@@ -244,7 +245,7 @@ split_host(H3270 *hSession, char *s, char *ansi, char *std_ds, char *passthru,
 	} else {
 		char *name_end;
 
-		/* Check for an empty string. */
+		// Check for an empty string.
 		if (!*s || *s == ':') {
 			popup_an_error(hSession,"Empty hostname");
 			goto split_fail;
@@ -252,19 +253,19 @@ split_host(H3270 *hSession, char *s, char *ansi, char *std_ds, char *passthru,
 
 		s = r = NewString(s);
 
-		/* Find the end of the hostname. */
+		// Find the end of the hostname.
 		while (*s && !isspace(*s) && *s != ':')
 			s++;
 		name_end = s;
 
-		/* If the terminator is whitespace, skip the rest of it. */
+		// If the terminator is whitespace, skip the rest of it.
 		while (*s && isspace(*s))
 			s++;
 
-		/*
-		 * If there's nothing but whitespace (or nothing) after the
-		 * name, we're done.
-		 */
+		//
+		// If there's nothing but whitespace (or nothing) after the
+		// name, we're done.
+		//
 		if (*s == '\0') {
 			*name_end = '\0';
 			goto split_success;
@@ -273,10 +274,10 @@ split_host(H3270 *hSession, char *s, char *ansi, char *std_ds, char *passthru,
 		*name_end = '\0';
 	}
 
-	/*
-	 * If 'colon' is set, 's' points at it (or where it was).  Skip
-	 * it and any whitespace that follows.
-	 */
+	//
+	// If 'colon' is set, 's' points at it (or where it was).  Skip
+	// it and any whitespace that follows.
+	//
 	if (colon) {
 		s++;
 		while (*s && isspace(*s))
@@ -287,11 +288,11 @@ split_host(H3270 *hSession, char *s, char *ansi, char *std_ds, char *passthru,
 		}
 	}
 
-	/*
-	 * Set the portname and find its end.
-	 * Note that trailing spaces were already stripped, so the end of the
-	 * portname must be a NULL.
-	 */
+	//
+	// Set the portname and find its end.
+	// Note that trailing spaces were already stripped, so the end of the
+	// portname must be a NULL.
+	//
 	*port = s;
 	*needed = True;
 	while (*s && !isspace(*s) && *s != ':')
@@ -309,23 +310,25 @@ split_fail:
 split_success:
 	return r;
 }
+*/
 
-static int do_connect(H3270 *hSession, const char *n)
+static int do_connect(H3270 *hSession)
 {
-	char nb[2048];				/* name buffer */
-	char *s;					/* temporary */
-	char *chost = NULL;			/* to whom we will connect */
+//	char nb[2048];				// name buffer
+//	char *s;					// temporary
+	char *chost = NULL;			// to whom we will connect
 //	char *ps = CN;
-	char *port = CN;
+//	char *port = CN;
 	Boolean resolving;
 	Boolean pending;
-	static Boolean ansi_host;
-	Boolean has_colons = False;
+//	static Boolean ansi_host;
+//	Boolean has_colons = False;
 
 	if (lib3270_connected(hSession) || hSession->auto_reconnect_inprogress)
 		return EBUSY;
 
-	/* Skip leading blanks. */
+	/*
+	// Skip leading blanks.
 	while (*n == ' ')
 		n++;
 
@@ -334,22 +337,26 @@ static int do_connect(H3270 *hSession, const char *n)
 		popup_an_error(hSession,_( "Invalid (empty) hostname" ));
 		return -1;
 	}
+	*/
 
-	/* Save in a modifiable buffer. */
+	/*
+	// Save in a modifiable buffer.
 	(void) strncpy(nb, n, 2047);
 
-	/* Strip trailing blanks. */
+	// Strip trailing blanks.
 	s = nb + strlen(nb) - 1;
 	while (*s == ' ')
 		*s-- = '\0';
+	*/
 
 	/* Remember this hostname, as the last hostname we connected to. */
-	lib3270_set_host(hSession,nb);
+	// lib3270_set_host(hSession,nb);
 
+	/*
 	{
 		Boolean needed;
 
-		/* Strip off and remember leading qualifiers. */
+		// Strip off and remember leading qualifiers.
 		if ((s = split_host(hSession, nb, &ansi_host, &hSession->std_ds_host,
 		    &hSession->passthru_host, &hSession->non_tn3270e_host, &hSession->ssl_host,
 		    &hSession->no_login_host, hSession->luname, &port,
@@ -358,35 +365,52 @@ static int do_connect(H3270 *hSession, const char *n)
 
 		chost = s;
 
-		/* Default the port. */
+		// Default the port.
 		if (port == CN)
 			port = "telnet";
 	}
 
-	/*
-	 * Store the original name in globals, even if we fail the connect
-	 * later:
-	 *  current_host is the hostname part, stripped of qualifiers, luname
-	 *   and port number
-	 *  full_current_host is the entire string, for use in reconnecting
-	 */
-	Replace(hSession->current_host, CN);
+	//
+	// Store the original name in globals, even if we fail the connect
+	// later:
+	// current_host is the hostname part, stripped of qualifiers, luname
+	// and port number
+	// full_current_host is the entire string, for use in reconnecting
+	//
+	//
+	// Replace(hSession->current_host, CN);
 
 	has_colons = (strchr(chost, ':') != NULL);
 
-	Replace(hSession->qualified_host,
+	Replace(hSession->host.qualified,
 	    xs_buffer("%s%s%s%s:%s",
 		    hSession->ssl_host? "L:": "",
 		    has_colons? "[": "",
 		    chost,
 		    has_colons? "]": "",
 		    port));
-
+	*/
 
 	/* Attempt contact. */
 	hSession->ever_3270 = False;
+	hSession->ssl_host = 0;
 
-	if(net_connect(hSession, chost, port, 0, &resolving,&pending) != 0 && !resolving)
+	if(hSession->host.opt&LIB3270_CONNECT_OPTION_SSL)
+	{
+#if defined(HAVE_LIBSSL)
+		hSession->ssl_host = 1;
+		ssl_init(hSession);
+#else
+		popup_system_error(hSession,	_( "SSL error" ),
+										_( "Unable to connect to secure hosts" ),
+										_( "This version of %s was built without support for secure sockets layer (SSL)." ),
+										PACKAGE_NAME
+										);
+#endif
+	}
+
+	trace("Conneting to hostname=[%s] service=[%s]",hSession->host.current, hSession->host.srvc);
+	if(net_connect(hSession, hSession->host.current, hSession->host.srvc, 0, &resolving,&pending) != 0 && !resolving)
 	{
 		/* Redundantly signal a disconnect. */
 		lib3270_set_disconnected(hSession);
@@ -457,14 +481,13 @@ int lib3270_connect(H3270 *hSession, const char *n, int wait)
 	if(PCONNECTED)
 		return EBUSY;
 
-	if(!n)
-	{
-		n = hSession->full_current_host;
-		if(!n)
-			return EINVAL;
-	}
+	if(n)
+		lib3270_set_host(hSession,n);
 
-	rc = do_connect(hSession,n);
+	if(!hSession->host.full)
+		return EINVAL;
+
+	rc = do_connect(hSession);
 	if(rc)
 		return rc;
 
@@ -489,7 +512,7 @@ int lib3270_connect(H3270 *hSession, const char *n, int wait)
  */
 static void try_reconnect(H3270 *session)
 {
-	lib3270_write_log(session,"3270","Starting auto-reconnect (Host: %s)",session->full_current_host ? session->full_current_host : "-");
+	lib3270_write_log(session,"3270","Starting auto-reconnect (Host: %s)",session->host.full ? session->host.full : "-");
 	session->auto_reconnect_inprogress = 0;
 	lib3270_reconnect(session,0);
 }
@@ -626,26 +649,88 @@ LIB3270_EXPORT const char * lib3270_set_host(H3270 *h, const char *n)
 {
     CHECK_SESSION_HANDLE(h);
 
-	if(n && n != h->full_current_host)
+	if(n && n != h->host.full)
 	{
-		char *new_hostname = strdup(n);
+		static const struct _sch
+		{
+			LIB3270_CONNECT_OPTION	  opt;
+			const char				* text;
+			const char				* srvc;
+		} sch[] =
+		{
+			{ LIB3270_CONNECT_OPTION_DEFAULTS,  "tn3270://",	"telnet"	},
+			{ LIB3270_CONNECT_OPTION_SSL,		"tn3270s://",	"telnets"	},
+			{ LIB3270_CONNECT_OPTION_DEFAULTS,  "telnet://",	"telnet"	},
+			{ LIB3270_CONNECT_OPTION_DEFAULTS,  "telnets://",	"telnets"	},
+			{ LIB3270_CONNECT_OPTION_SSL,		"L://",			"telnets"	},
 
-		trace("new hostname is \"%s\"",new_hostname);
+			{ LIB3270_CONNECT_OPTION_SSL,		"L:",			"telnets"	}	// The compatibility should be the last option
+		};
 
-		if(h->full_current_host)
-			lib3270_free(h->full_current_host);
+		char					* str 		= strdup(n);
+		char					* hostname 	= str;
+		const char 				* srvc		= "telnet";
+		char					* ptr;
+		char					* query		= "";
+		int						  f;
 
-		h->full_current_host = new_hostname;
+		trace("%s(%s)",__FUNCTION__,str);
+		h->host.opt = LIB3270_CONNECT_OPTION_DEFAULTS;
 
+		for(f=0;f < sizeof(sch)/sizeof(sch[0]);f++)
+		{
+			size_t sz = strlen(sch[f].text);
+			if(!strncasecmp(hostname,sch[f].text,sz))
+			{
+				h->host.opt = sch[f].opt;
+				srvc		= sch[f].srvc;
+				hostname += sz;
+				break;
+			}
+		}
+
+		trace("SRVC=[%s]",srvc);
+
+		if(!*hostname)
+			return h->host.current;
+
+		ptr = strchr(hostname,':');
+		if(ptr)
+		{
+			*(ptr++) = 0;
+			srvc  = ptr;
+			query = strchr(ptr,'?');
+
+			trace("QUERY=[%s]",query);
+
+			if(query)
+				*(query++) = 0;
+			else
+				query = "";
+		}
+
+		Replace(h->host.current,strdup(hostname));
+		Replace(h->host.srvc,strdup(srvc));
+		Replace(h->host.full,
+				lib3270_strdup_printf(
+					"%s%s:%s%s%s",
+						h->host.opt&LIB3270_CONNECT_OPTION_SSL ? "L:" : "",
+						hostname,
+						srvc,
+						*query ? "?" : "",
+						query
+			));
+
+		free(str);
 	}
 
-	return h->full_current_host;
+	return h->host.current;
 }
 
 LIB3270_EXPORT const char * lib3270_get_host(H3270 *h)
 {
     CHECK_SESSION_HANDLE(h);
-	return h->full_current_host;
+	return h->host.full;
 }
 
 LIB3270_EXPORT int lib3270_reconnect(H3270 *hSession,int wait)
@@ -657,13 +742,13 @@ LIB3270_EXPORT int lib3270_reconnect(H3270 *hSession,int wait)
 	if (CONNECTED || HALF_CONNECTED)
 		return EBUSY;
 
-	if (hSession->full_current_host == CN)
+	if (hSession->host.full == CN)
 		return EINVAL;
 
 	if (hSession->auto_reconnect_inprogress)
 		return EBUSY;
 
-	rc = lib3270_connect(hSession,hSession->full_current_host,wait);
+	rc = lib3270_connect(hSession,hSession->host.full,wait);
 
 	if(rc)
 	{
