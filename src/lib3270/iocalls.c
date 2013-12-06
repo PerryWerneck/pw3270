@@ -373,99 +373,13 @@ static int internal_event_dispatcher(H3270 *hSession, int block)
 
 retry:
 
+	inputs_changed = 0;
+
 	// If we've processed any input, then don't block again.
 	if(processed_any)
 		block = 0;
 
 	events = 0;
-
-/*
-#if defined(_WIN32)
-	nha = 0;
-#else
-	FD_ZERO(&rfds);
-	FD_ZERO(&wfds);
-	FD_ZERO(&xfds);
-#endif
-
-	for (ip = inputs; ip != (input_t *)NULL; ip = ip->next)
-	{
-		if ((unsigned long)ip->condition & InputReadMask)
-		{
-#if defined(_WIN32)
-			ha[nha++] = ip->source;
-#else
-			FD_SET(ip->source, &rfds);
-#endif
-			any_events = True;
-		}
-		if ((unsigned long)ip->condition & InputWriteMask)
-		{
-#if defined(_WIN32)
-			ha[nha++] = ip->source;
-#else
-			FD_SET(ip->source, &wfds);
-#endif
-			any_events = True;
-		}
-#if !defined(_WIN32)
-		if ((unsigned long)ip->condition & InputExceptMask)
-		{
-			FD_SET(ip->source, &xfds);
-			any_events = True;
-		}
-#endif
-	}
-
-	if (block)
-	{
-		if (timeouts != TN)
-		{
-#if defined(_WIN32)
-			ms_ts(&now);
-			if (now > timeouts->ts)
-				tmo = 0;
-			else
-				tmo = timeouts->ts - now;
-#else
-			(void) gettimeofday(&now, (void *)NULL);
-			twait.tv_sec = timeouts->tv.tv_sec - now.tv_sec;
-			twait.tv_usec = timeouts->tv.tv_usec - now.tv_usec;
-			if (twait.tv_usec < 0L) {
-				twait.tv_sec--;
-				twait.tv_usec += MILLION;
-			}
-			if (twait.tv_sec < 0L)
-				twait.tv_sec = twait.tv_usec = 0L;
-			tp = &twait;
-#endif
-			any_events = True;
-		}
-		else
-		{
-			// Block for 1 second (at maximal)
-#if defined(_WIN32)
-			tmo = 1;
-#else
-			twait.tv_sec = 1;
-			twait.tv_usec = 0L;
-			tp = &twait;
-#endif
-		}
-	}
-	else
-	{
-#if defined(_WIN32)
-		tmo = 1;
-#else
-		twait.tv_sec = twait.tv_usec = 0L;
-		tp = &twait;
-#endif
-	}
-
-	if (!any_events)
-		return processed_any;
-*/
 
 #if defined(_WIN32)
 
@@ -589,7 +503,8 @@ retry:
 	}
 	else
 	{
-		twait.tv_sec = twait.tv_usec = 0L;
+		twait.tv_sec  = 1;
+		twait.tv_usec = 0L;
 		tp = &twait;
 
 		if(!events)
@@ -597,6 +512,7 @@ retry:
 	}
 
 	ns = select(FD_SETSIZE, &rfds, &wfds, &xfds, tp);
+
 	if (ns < 0 && errno != EINTR)
 	{
 		lib3270_popup_dialog(	hSession,
@@ -639,7 +555,8 @@ retry:
 #endif
 
 	// See what's expired.
-	if (timeouts != TN) {
+	if (timeouts != TN)
+	{
 #if defined(_WIN32)
 		ms_ts(&now);
 #else
@@ -649,11 +566,11 @@ retry:
 		while ((t = timeouts) != TN)
 		{
 #if defined(_WIN32)
-			if (t->ts <= now) {
+			if (t->ts <= now)
 #else
 			if (t->tv.tv_sec < now.tv_sec ||(t->tv.tv_sec == now.tv_sec && t->tv.tv_usec < now.tv_usec))
-			{
 #endif
+			{
 				timeouts = t->next;
 				t->in_play = True;
 				(*t->proc)(t->session);

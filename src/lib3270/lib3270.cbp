@@ -96,9 +96,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="ctlrc.h" />
-		<Unit filename="fallbacks.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="ft.c">
 			<Option compilerVar="CC" />
 		</Unit>
