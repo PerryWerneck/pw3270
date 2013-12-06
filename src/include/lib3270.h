@@ -211,6 +211,7 @@
 	{
 		LIB3270_CONNECT_OPTION_DEFAULTS	= 0x0000,	/**< Default connection options */
 		LIB3270_CONNECT_OPTION_SSL		= 0x0001,	/**< Secure connection */
+		LIB3270_CONNECT_OPTION_WAIT		= 0x0002,	/**< Wait for screen ready */
 
 	} LIB3270_CONNECT_OPTION;
 
@@ -1060,6 +1061,7 @@
 
 #ifdef WIN32
 	LIB3270_EXPORT const char	* lib3270_win32_strerror(int e);
+	LIB3270_EXPORT const char	* lib3270_win32_local_charset(void);
 #endif // WIn32
 
 #ifdef __cplusplus

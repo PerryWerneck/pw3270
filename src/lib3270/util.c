@@ -160,16 +160,9 @@ LIB3270_EXPORT const char * lib3270_win32_strerror(int e)
 		return buffer;
 	}
 
-	trace("%s",buffer);
-
 #ifdef HAVE_ICONV
 	{
 		// Convert from windows codepage to UTF-8 pw3270´s default charset
-		char 	  tmpbuffer[4096];
-		size_t	  in 		= strlen(buffer);
-		size_t	  out 		= 4095;
-		char	* ptr		= tmpbuffer;
-
 		iconv_t hConv = iconv_open("UTF-8",lib3270_win32_local_charset());
 
 		trace("[%s]",buffer);
@@ -178,23 +171,43 @@ LIB3270_EXPORT const char * lib3270_win32_strerror(int e)
 		{
 			lib3270_write_log(NULL,"iconv","%s: Error creating charset conversion",__FUNCTION__);
 		}
-		else if(iconv(hConv,(const char **) &buffer,&in,&ptr,&out) != ((size_t) -1))
+		else
 		{
-			// strncpy(buffer,tmpbuffer,4096);
+			size_t				  in 		= strlen(buffer);
+			size_t				  out 		= (in << 1);
+			char				* ptr;
+			char				* outBuffer = (char *) malloc(out);
+			ICONV_CONST char	* inBuffer	= (ICONV_CONST char	*) buffer;
+
+			memset(ptr=outBuffer,0,out);
+
+			iconv(hConv,NULL,NULL,NULL,NULL);	// Reset state
+
+			if(iconv(hConv,&inBuffer,&in,&ptr,&out) != ((size_t) -1))
+			{
+				strncpy(buffer,outBuffer,4095);
+			}
+
+			free(outBuffer);
+
+			iconv_close(hConv);
 		}
 
-		trace("[%s]",buffer);
-
-		iconv_close(hConv);
 	}
 #endif // HAVE_ICONV
 
-	trace("[%s]",buffer);
 	return buffer;
 }
 
 LIB3270_EXPORT const char * lib3270_win32_local_charset(void)
 {
+	// Reference:
+	// http://msdn.microsoft.com/en-us/library/windows/desktop/dd318070(v=vs.85).aspx
+
+	#warning TODO: Use GetACP() to identify the correct code page
+
+	trace("Windows CHARSET is %u",GetACP());
+
 	return "CP1252";
 }
 
