@@ -200,6 +200,11 @@
 											((struct hllapi_packet_connect *) source->buffer)->wait));
 		break;
 
+	case HLLAPI_PACKET_SET_HOST:
+		send_result(source,lib3270_set_host( lib3270_get_default_session_handle(),
+											((struct hllapi_packet_text *) source->buffer)->text) != NULL);
+		break;
+
 	case HLLAPI_PACKET_DISCONNECT:
 		send_result(source,lib3270_disconnect(lib3270_get_default_session_handle()));
 		break;
