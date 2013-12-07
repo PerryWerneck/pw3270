@@ -100,7 +100,9 @@
 
  	try
  	{
-		rc = session::get_default()->connect(uri,wait);
+ 		if(uri && *uri)
+			session::get_default()->set_host(uri);
+		rc = session::get_default()->connect(wait);
 	}
 	catch(std::exception &e)
 	{

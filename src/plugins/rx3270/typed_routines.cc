@@ -93,7 +93,12 @@ RexxRoutine0(int, rx3270Disconnect)
 
 RexxRoutine2(int, rx3270Connect, CSTRING, hostname, int, wait)
 {
-	return session::get_default()->connect(hostname,wait);
+	session * hSession = session::get_default();
+
+	if(hostname && *hostname)
+		hSession->set_hostname(hostname);
+
+	return hSession->connect(wait);
 }
 
 RexxRoutine0(int, rx3270isConnected)

@@ -393,12 +393,14 @@
 		case GTK_RESPONSE_ACCEPT:
 			gtk_widget_set_sensitive(dialog,FALSE);
 
+			/*
 			hostname = g_strconcat(	gtk_toggle_button_get_active(sslcheck) ? "L:" : "",
 									gtk_entry_get_text(host),
 									":",
 									gtk_entry_get_text(port),
 									NULL
 								);
+			*/
 
 #if GTK_CHECK_VERSION(2,18,0)
 			gtk_widget_set_visible(dialog,FALSE);
@@ -411,7 +413,11 @@
 			v3270_set_session_options(widget,host_type[iHostType].option);
 			v3270_set_session_color_type(widget,colortable[iColorTable].colors);
 
-			if(!lib3270_connect(v3270_get_session(widget),hostname,1))
+//			if(!lib3270_connect(v3270_get_session(widget),hostname,1))
+			if(!lib3270_connect_host(	v3270_get_session(widget),
+										gtk_entry_get_text(host),
+										gtk_entry_get_text(port),
+										gtk_toggle_button_get_active(sslcheck) ? LIB3270_CONNECT_OPTION_SSL : LIB3270_CONNECT_OPTION_DEFAULTS))
 			{
 				again = FALSE;
 			}

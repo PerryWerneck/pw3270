@@ -30,6 +30,7 @@
  typedef enum _hllapi_packet
  {
 		HLLAPI_PACKET_CONNECT,
+		HLLAPI_PACKET_SET_HOST,
 		HLLAPI_PACKET_DISCONNECT,
 		HLLAPI_PACKET_GET_PROGRAM_MESSAGE,
 		HLLAPI_PACKET_GET_TEXT_AT_OFFSET,
@@ -90,7 +91,6 @@ struct hllapi_packet_connect
 {
 	unsigned char	packet_id;
 	unsigned char	wait;
-	char			hostname[1];
 };
 
 struct hllapi_packet_keycode

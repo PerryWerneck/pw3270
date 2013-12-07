@@ -457,17 +457,7 @@ static int do_connect(H3270 *hSession)
 	return 0;
 }
 
-/**
- * Connect to selected host.
- *
- * @param h		Session handle.
- * @param n		Hostname (null to reconnect to the last one;
- * @param wait	Wait for connection ok before return.
- *
- * @return 0 if the connection was ok, non zero on error.
- *
- */
-int lib3270_connect(H3270 *hSession, const char *n, int wait)
+int lib3270_connect(H3270 *hSession, int wait)
 {
 	int		  rc;
 
@@ -475,17 +465,17 @@ int lib3270_connect(H3270 *hSession, const char *n, int wait)
 
 	lib3270_main_iterate(hSession,0);
 
-	if(hSession->auto_reconnect_inprogress)
-		return EAGAIN;
-
-	if(PCONNECTED)
+	if (CONNECTED || HALF_CONNECTED)
 		return EBUSY;
-
-	if(n)
-		lib3270_set_host(hSession,n);
 
 	if(!hSession->host.full)
 		return EINVAL;
+
+	if (hSession->auto_reconnect_inprogress)
+		return EBUSY;
+
+	if(PCONNECTED)
+		return EBUSY;
 
 	rc = do_connect(hSession);
 	if(rc)
@@ -514,7 +504,7 @@ static void try_reconnect(H3270 *session)
 {
 	lib3270_write_log(session,"3270","Starting auto-reconnect (Host: %s)",session->host.full ? session->host.full : "-");
 	session->auto_reconnect_inprogress = 0;
-	lib3270_reconnect(session,0);
+	lib3270_connect(session,0);
 }
 
 LIB3270_EXPORT int lib3270_disconnect(H3270 *h)
@@ -689,8 +679,6 @@ LIB3270_EXPORT const char * lib3270_set_host(H3270 *h, const char *n)
 			}
 		}
 
-		trace("SRVC=[%s]",srvc);
-
 		if(!*hostname)
 			return h->host.current;
 
@@ -709,17 +697,21 @@ LIB3270_EXPORT const char * lib3270_set_host(H3270 *h, const char *n)
 				query = "";
 		}
 
+		trace("SRVC=[%s]",srvc);
+
 		Replace(h->host.current,strdup(hostname));
 		Replace(h->host.srvc,strdup(srvc));
 		Replace(h->host.full,
 				lib3270_strdup_printf(
 					"%s%s:%s%s%s",
-						h->host.opt&LIB3270_CONNECT_OPTION_SSL ? "tn3270s://" : "",
+						h->host.opt&LIB3270_CONNECT_OPTION_SSL ? "tn3270s://" : "tn3270://",
 						hostname,
 						srvc,
 						*query ? "?" : "",
 						query
 			));
+
+		trace("hosturl=[%s]",h->host.full);
 
 		free(str);
 	}
@@ -733,6 +725,7 @@ LIB3270_EXPORT const char * lib3270_get_hostname(H3270 *h)
 	return h->host.current;
 }
 
+/*
 LIB3270_EXPORT int lib3270_reconnect(H3270 *hSession,int wait)
 {
 	int rc;
@@ -742,13 +735,13 @@ LIB3270_EXPORT int lib3270_reconnect(H3270 *hSession,int wait)
 	if (CONNECTED || HALF_CONNECTED)
 		return EBUSY;
 
-	if (hSession->host.full == CN)
+	if (!hSession->host.full)
 		return EINVAL;
 
 	if (hSession->auto_reconnect_inprogress)
 		return EBUSY;
 
-	rc = lib3270_connect(hSession,hSession->host.full,wait);
+	rc = lib3270_connect(hSession,wait);
 
 	if(rc)
 	{
@@ -758,6 +751,7 @@ LIB3270_EXPORT int lib3270_reconnect(H3270 *hSession,int wait)
 
 	return 0;
 }
+*/
 
 LIB3270_EXPORT const char * lib3270_get_luname(H3270 *h)
 {

@@ -254,15 +254,17 @@
 	switch(argc)
 	{
 	case 1:
-		rc = lib3270_reconnect(hSession,0);
+		rc = lib3270_connect(hSession,0);
 		break;
 
 	case 2:
-		rc = lib3270_connect(hSession,argv[1],0);
+		lib3270_set_host(hSession,argv[1]);
+		rc = lib3270_connect(hSession,0);
 		break;
 
 	case 3:
-		rc = lib3270_connect(hSession,argv[1],atoi(argv[2]));
+		lib3270_set_host(hSession,argv[1]);
+		rc = lib3270_connect(hSession,atoi(argv[2]));
 		break;
 
 	default:

@@ -651,7 +651,7 @@
 			return (LIB3270_CSTATE) query_intval(HLLAPI_PACKET_GET_CSTATE);
 		}
 
-		int connect(const char *uri, bool wait)
+		int connect(bool wait)
 		{
 #if defined(WIN32)
 
@@ -660,9 +660,6 @@
 
 			pkt->packet_id	= HLLAPI_PACKET_CONNECT;
 			pkt->wait		= (unsigned char) wait;
-			strcpy(pkt->hostname,uri);
-
-			trace("Sending %s",pkt->hostname);
 
 			return query_intval((void *) pkt,cbSize,true);
 

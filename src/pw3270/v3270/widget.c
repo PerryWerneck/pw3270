@@ -1400,64 +1400,14 @@ int v3270_connect(GtkWidget *widget, const gchar *uri)
 
 	terminal = GTK_V3270(widget);
 
-#ifdef DEBUG
 	if(uri)
 	{
-		LIB3270_CONNECT_OPTION	  opt		= LIB3270_CONNECT_OPTION_DEFAULTS;
-		gchar					* scheme	= g_uri_unescape_string(uri,NULL);
-		gchar 					* hostname	= strchr(scheme,':');
-		gchar 					* srvc;
-		gchar					* query;
-
-		if(hostname)
-		{
-			*(hostname++) = 0;
-
-			while(*hostname && !g_ascii_isalnum(*hostname))
-				hostname++;
-
-			if(*hostname)
-			{
-				if( ! (g_ascii_strcasecmp(scheme,"l") && g_ascii_strcasecmp(scheme,"ssl")) )
-					opt |= LIB3270_CONNECT_OPTION_SSL;
-
-				srvc = strchr(hostname,':');
-				if(srvc)
-				{
-					*(srvc++) = 0;
-					query = strchr(srvc,'?');
-					if(query)
-						*(query++) = 0;
-					else
-						query = "";
-				}
-				else
-				{
-					srvc = "telnet";
-				}
-
-				rc = lib3270_connect_host(terminal->host,hostname,srvc,opt);
-
-			}
-
-		}
-
-
-		g_free(scheme);
-
-	}
-	else
-	{
-		rc = lib3270_connect(terminal->host,uri,0);
+		trace("%s(%s)",__FUNCTION__,uri);
+		lib3270_set_host(terminal->host,uri);
 	}
 
-#else
-	rc = lib3270_connect(terminal->host,uri,0);
-#endif // DEBUG
+	return lib3270_connect(terminal->host,0);
 
-	trace("%s exits with rc=%d (%s)",__FUNCTION__,rc,strerror(rc));
-
-	return rc;
 }
 
 static gboolean notify_focus(GtkWidget *widget, GdkEventFocus *event)

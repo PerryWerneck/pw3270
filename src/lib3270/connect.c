@@ -201,7 +201,7 @@ static void net_connected(H3270 *hSession)
 	sockstart(hSession);
 #endif
 
-	hSession->host.opt = opt;
+	hSession->host.opt = opt & ~LIB3270_CONNECT_OPTION_WAIT;
 	Replace(hSession->host.current,strdup(hostname));
 
 	Replace(hSession->host.full,

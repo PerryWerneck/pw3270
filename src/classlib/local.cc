@@ -279,7 +279,8 @@
 		const char * 	(*_get_version)(void);
 		LIB3270_CSTATE	(*_get_connection_state)(H3270 *h);
 		int 			(*_disconnect)(H3270 *h);
-		int 			(*_connect)(H3270 *h,const char *n, int wait);
+		int 			(*_connect)(H3270 *h,int wait);
+		const char 		(*_set_host)(H3270 *h, const char *n);
 		int 			(*_is_connected)(H3270 *h);
 		void 			(*_main_iterate)(H3270 *h, int wait);
 		int 			(*_wait)(H3270 *hSession, int seconds);
@@ -334,6 +335,7 @@
 				{ (void **) & _get_version,				"lib3270_get_version"				},
 				{ (void **) & _disconnect,				"lib3270_disconnect"				},
 				{ (void **) & _connect,					"lib3270_connect"					},
+				{ (void **) & _set_host,				"lib3270_set_host"					},
 				{ (void **) & _main_iterate,			"lib3270_main_iterate"				},
 				{ (void **) & _wait,					"lib3270_wait"						},
 				{ (void **) & _enter,					"lib3270_enter"						},
@@ -416,9 +418,14 @@
 			return _get_connection_state(hSession);
 		}
 
-		int connect(const char *uri, bool wait)
+		int connect(bool wait)
 		{
-			return _connect(hSession,uri,(int) wait);
+			return _connect(hSession,(int) wait);
+		}
+
+		int set_host(const char *uri)
+		{
+			return _set_host(hSession,uri) != NULL;
 		}
 
 		int disconnect(void)

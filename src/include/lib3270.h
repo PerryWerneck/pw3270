@@ -421,17 +421,13 @@
 	/**
 	 * Network connect operation, keep main loop running
 	 *
-	 * Sets 'reconnect_host', 'current_host' and 'full_current_host' as
-	 * side-effects.
-	 *
 	 * @param h		Session handle.
-	 * @param n		Host ID (NULL to use the last one)
 	 * @param wait	Non zero to wait for connection to be ok.
 	 *
 	 * @return 0 for success, EAGAIN if auto-reconnect is in progress, EBUSY if connected, ENOTCONN if connection has failed, -1 on unexpected failure.
 	 *
 	 */
-	LIB3270_EXPORT int lib3270_connect(H3270 *h,const char *n, int wait);
+	LIB3270_EXPORT int lib3270_connect(H3270 *h,int wait);
 
 	/**
 	 * Connect to defined host, keep main loop running.
@@ -454,14 +450,6 @@
 	 *
 	 */
 	LIB3270_EXPORT int lib3270_disconnect(H3270 *h);
-
-	/**
-	 * Reconnect.
-	 *
-	 * @param h		Session handle.
-	 * @param wait	Non zero to wait for connection to be ok.
-	 */
-	LIB3270_EXPORT int lib3270_reconnect(H3270 *h,int wait);
 
 	/**
 	 * Get connection state.

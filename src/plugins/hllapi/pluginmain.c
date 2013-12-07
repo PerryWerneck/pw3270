@@ -197,7 +197,6 @@
 	{
 	case HLLAPI_PACKET_CONNECT:
 		send_result(source,lib3270_connect(	lib3270_get_default_session_handle(),
-											((struct hllapi_packet_connect *) source->buffer)->hostname,
 											((struct hllapi_packet_connect *) source->buffer)->wait));
 		break;
 

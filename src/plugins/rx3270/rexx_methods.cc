@@ -100,7 +100,11 @@ RexxMethod3(int, rx3270_method_connect, CSELF, sessionPtr, CSTRING, uri, OPTIONA
 	session *hSession = (session *) sessionPtr;
 	if(!hSession)
 		return -1;
-	return hSession->connect(uri,wait != 0);
+
+	if(uri)
+		hSession->set_hostname(uri);
+
+	return hSession->connect(wait != 0);
 }
 
 RexxMethod1(int, rx3270_method_disconnect, CSELF, sessionPtr)

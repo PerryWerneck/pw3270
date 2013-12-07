@@ -89,7 +89,7 @@
 	const string	  get_version(void);
 	LIB3270_CSTATE	  get_cstate(void);
 	int				  disconnect(void);
-	int				  connect(const char *uri, bool wait = true);
+	int				  connect(bool wait = true);
 	bool			  is_connected(void);
 	bool			  is_ready(void);
 
@@ -542,9 +542,9 @@ extern "C"
 	return 0;
  }
 
- int plugin::connect(const char *uri, bool wait)
+ int plugin::connect(bool wait)
  {
- 	return lib3270_connect(hSession,uri,wait);
+ 	return lib3270_connect(hSession,wait);
  }
 
  bool plugin::is_connected(void)

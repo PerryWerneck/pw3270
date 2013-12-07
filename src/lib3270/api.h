@@ -324,8 +324,8 @@
 
 		#include <lib3270/actions.h>
 
-		#define host_connect(n,wait) lib3270_connect(NULL,n,wait)
-		#define host_reconnect(w) lib3270_reconnect(NULL,w)
+		// #define host_connect(n,wait) lib3270_connect(NULL,n,wait)
+		// #define host_reconnect(w) lib3270_reconnect(NULL,w)
 
 
 #ifdef __cplusplus
