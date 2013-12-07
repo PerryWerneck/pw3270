@@ -89,6 +89,7 @@
 	const string	  get_version(void);
 	LIB3270_CSTATE	  get_cstate(void);
 	int				  disconnect(void);
+	int				  set_host(const char *uri);
 	int				  connect(bool wait = true);
 	bool			  is_connected(void);
 	bool			  is_ready(void);
@@ -776,6 +777,11 @@ int	plugin::print(void)
 const char * plugin::asc2ebc(unsigned char *str, int sz)
 {
 	return lib3270_asc2ebc(hSession,str,sz);
+}
+
+int plugin::set_host(const char *uri)
+{
+	return lib3270_set_host(hSession,uri) != NULL;
 }
 
 const char * plugin::ebc2asc(unsigned char *str, int sz)

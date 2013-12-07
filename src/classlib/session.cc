@@ -469,6 +469,19 @@
 		return EINVAL;
 	}
 
+	int session::connect(const char *host, bool wait)
+	{
+		int rc = 0;
+
+		if(host && *host)
+			rc = set_host(host);
+
+		if(!rc)
+			rc = connect(wait);
+
+		return rc;
+	}
+
 #ifdef WIN32
 	string	session::win32_strerror(int e)
 	{

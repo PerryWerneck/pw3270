@@ -128,6 +128,7 @@
 		virtual string			* get_display_charset(void);
 
 		// Connection & Network
+		int						  connect(const char *host, bool wait = true);
 		virtual int				  connect(bool wait = true)							= 0;
 		virtual int				  set_host(const char *hostname)					= 0;
 		virtual int				  disconnect(void)									= 0;

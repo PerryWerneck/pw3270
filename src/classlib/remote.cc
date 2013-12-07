@@ -653,30 +653,63 @@
 
 		int connect(bool wait)
 		{
+			int rc;
+
 #if defined(WIN32)
 
-			size_t							  cbSize	= sizeof(struct hllapi_packet_connect)+strlen(uri);
+			size_t							  cbSize	= sizeof(struct hllapi_packet_connect);
 			struct hllapi_packet_connect	* pkt		= (struct hllapi_packet_connect *) malloc(cbSize);
 
 			pkt->packet_id	= HLLAPI_PACKET_CONNECT;
 			pkt->wait		= (unsigned char) wait;
 
-			return query_intval((void *) pkt,cbSize,true);
+			rc = query_intval((void *) pkt,cbSize,true);
 
 #elif defined(HAVE_DBUS)
 
 			int rc = query_intval("connect", DBUS_TYPE_STRING, &uri, DBUS_TYPE_INVALID);
+
+#else
+			rc = -1;
+
+#endif
 
 			if(!rc && wait)
 				return wait_for_ready(120);
 
 			return rc;
 
-#else
+		}
+
+		int set_host(const char *uri)
+		{
+			int rc;
+
+#if defined(WIN32)
+
+			size_t						  cbSize	= sizeof(struct hllapi_packet_text)+strlen(uri);
+			struct hllapi_packet_text	* pkt		= (struct hllapi_packet_text *) malloc(cbSize);
+
+			pkt->packet_id	= HLLAPI_PACKET_SET_HOST;
+			strcpy(pkt->text,uri);
+
+			rc = query_intval((void *) pkt,cbSize,true);
+
+#elif defined(HAVE_DBUS)
+
+			#warning Implementar
 			return -1;
 
+#else
+
+			rc = -1;
+
 #endif
+
+			return rc;
+
 		}
+
 
 		int wait_for_ready(int seconds)
 		{
