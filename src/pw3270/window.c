@@ -202,11 +202,7 @@
 	if(host)
 	{
 		set_string_to_config("host","uri","%s",host);
-
-		if(pw3270_get_toggle(widget,LIB3270_TOGGLE_CONNECT_ON_STARTUP))
-			pw3270_connect_host(widget,host);
-		else
-			pw3270_set_host(widget,host);
+		pw3270_connect(widget,host);
 	}
 	else
 	{
@@ -215,7 +211,7 @@
 		if(*ptr)
 		{
 			if(pw3270_get_toggle(widget,LIB3270_TOGGLE_CONNECT_ON_STARTUP))
-				pw3270_connect_host(widget,ptr);
+				pw3270_connect(widget,ptr);
 			else
 				pw3270_set_host(widget,ptr);
 		}
@@ -227,7 +223,7 @@
  	return widget;
  }
 
- void pw3270_connect_host(GtkWidget *widget, const gchar *uri)
+ void pw3270_connect(GtkWidget *widget, const gchar *uri)
  {
  	g_return_if_fail(GTK_IS_PW3270(widget));
  	v3270_connect(GTK_PW3270(widget)->terminal,uri);
