@@ -204,18 +204,6 @@
 
 
 	/**
-	 * Connect options.
-	 *
-	 */
-	typedef enum _LIB3270_CONNECT_OPTION
-	{
-		LIB3270_CONNECT_OPTION_DEFAULTS	= 0x0000,	/**< Default connection options */
-		LIB3270_CONNECT_OPTION_SSL		= 0x0001,	/**< Secure connection */
-		LIB3270_CONNECT_OPTION_WAIT		= 0x0002,	/**< Wait for screen ready */
-
-	} LIB3270_CONNECT_OPTION;
-
-	/**
 	 * Cursor modes.
 	 *
 	 * Cursor modes set by library; an application can us it
@@ -256,9 +244,12 @@
 	 */
 	typedef enum lib3270_option
 	{
-		LIB3270_OPTION_KYBD_AS400	= 0x0001,	/**< Prefix every PF with PA1 */
+		LIB3270_OPTION_DEFAULTS		= 0x0000,
+		LIB3270_OPTION_AS400		= 0x0001,	/**< Prefix every PF with PA1 */
 		LIB3270_OPTION_TSO			= 0x0002,	/**< Host is TSO? */
+		LIB3270_OPTION_SSL			= 0x0004,
 
+		LIB3270_OPTION_WAIT			= 0x8000	/**< Wait for session ready on connect ? */
 	} LIB3270_OPTION;
 
 
@@ -430,12 +421,12 @@
 
 
 	/**
-	 * Get connection options.
+	 * Get session options.
 	 *
 	 * @param h		Session handle.
 	 *
 	 */
-	 LIB3270_EXPORT LIB3270_CONNECT_OPTION lib3270_get_connect_options(H3270 *h);
+	LIB3270_EXPORT LIB3270_OPTION lib3270_get_options(H3270 *hSession);
 
 	/**
 	 * Get URL of the hostname for the connect/reconnect operations.
@@ -465,12 +456,12 @@
 	 * @param hSession	Session handle.
 	 * @param hostname	Host name.
 	 * @param srvc		Service name (telnet if NULL).
-	 * @param opt		Connect options.
+	 * @param opt		Session options.
 	 *
 	 * @return 0 for success, EAGAIN if auto-reconnect is in progress, EBUSY if connected, ENOTCONN if connection has failed, -1 on unexpected failure.
 	 *
 	 */
-	LIB3270_EXPORT int lib3270_connect_host(H3270 *hSession, const char *hostname, const char *srvc, LIB3270_CONNECT_OPTION opt);
+	LIB3270_EXPORT int lib3270_connect_host(H3270 *hSession, const char *hostname, const char *srvc, LIB3270_OPTION opt);
 
 
 	/**
@@ -1053,7 +1044,6 @@
 
 	LIB3270_EXPORT int lib3270_clear_operator_error(H3270 *hSession);
 
-	LIB3270_EXPORT LIB3270_OPTION lib3270_get_options(H3270 *hSession);
 	LIB3270_EXPORT void lib3270_set_options(H3270 *hSession, LIB3270_OPTION opt);
 	LIB3270_EXPORT int	lib3270_set_color_type(H3270 *hSession, unsigned short colortype);
 

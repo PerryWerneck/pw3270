@@ -40,7 +40,7 @@
  } host_type[] =
  {
 	{ "S390",		N_( "IBM S/390"			),	LIB3270_OPTION_TSO			},
-	{ "AS400",		N_( "IBM AS/400"		),	LIB3270_OPTION_KYBD_AS400	},
+	{ "AS400",		N_( "IBM AS/400"		),	LIB3270_OPTION_AS400		},
 	{ "TSO",		N_( "Other (TSO)"		),	LIB3270_OPTION_TSO			},
 	{ "VM/CMS",		N_( "Other (VM/CMS)"	),	0 							}
  };
@@ -353,22 +353,19 @@
 	gtk_widget_show_all(GTK_WIDGET(table));
 #endif
 
-	gchar *uri = get_string_from_config("host","uri","");
-
-	if(uri && *uri && lib3270_set_host(v3270_get_session(widget),uri))
 	{
 		H3270 *hSession = v3270_get_session(widget);
+		gchar *uri		= get_string_from_config("host","uri","");
+
+		if(uri && *uri)
+			lib3270_set_host(hSession,uri);
+
+		g_free(uri);
+
 		gtk_entry_set_text(host,lib3270_get_hostname(hSession));
 		gtk_entry_set_text(port,lib3270_get_srvcname(hSession));
-		gtk_toggle_button_set_active(sslcheck,(lib3270_get_connect_options(hSession) & LIB3270_CONNECT_OPTION_SSL) ? TRUE : FALSE);
+		gtk_toggle_button_set_active(sslcheck,(lib3270_get_options(hSession) & LIB3270_OPTION_SSL) ? TRUE : FALSE);
 	}
-	else
-	{
-		gtk_entry_set_text(host,"");
-		gtk_entry_set_text(port,"telnet");
-	}
-
-	g_free(uri);
 
 /*
 	hostname = cfghost;
@@ -427,14 +424,13 @@
 			set_string_to_config("host","systype",host_type[iHostType].name);
 			set_integer_to_config("host","colortype",colortable[iColorTable].colors);
 
-			v3270_set_session_options(widget,host_type[iHostType].option);
 			v3270_set_session_color_type(widget,colortable[iColorTable].colors);
 
 //			if(!lib3270_connect(v3270_get_session(widget),hostname,1))
 			if(!lib3270_connect_host(	v3270_get_session(widget),
 										gtk_entry_get_text(host),
 										gtk_entry_get_text(port),
-										gtk_toggle_button_get_active(sslcheck) ? LIB3270_CONNECT_OPTION_SSL : LIB3270_CONNECT_OPTION_DEFAULTS))
+										host_type[iHostType].option | (gtk_toggle_button_get_active(sslcheck) ? LIB3270_OPTION_SSL : LIB3270_OPTION_DEFAULTS)))
 			{
 				again = FALSE;
 			}

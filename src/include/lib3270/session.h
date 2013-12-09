@@ -141,7 +141,6 @@
 
 		struct
 		{
-			LIB3270_CONNECT_OPTION	  opt;			/**< Connect options */
 			char					* current;		/**< The hostname part, stripped of qualifiers, luname and port number */
 			char 	   	    		* full;			/**< The entire string, for use in reconnecting */
 			char					* srvc;			/**< The service name */

@@ -500,18 +500,18 @@ LIB3270_EXPORT const char * lib3270_set_host(H3270 *h, const char *n)
 	{
 		static const struct _sch
 		{
-			LIB3270_CONNECT_OPTION	  opt;
-			const char				* text;
-			const char				* srvc;
+			LIB3270_OPTION	  opt;
+			const char		* text;
+			const char		* srvc;
 		} sch[] =
 		{
-			{ LIB3270_CONNECT_OPTION_DEFAULTS,  "tn3270://",	"telnet"	},
-			{ LIB3270_CONNECT_OPTION_SSL,		"tn3270s://",	"telnets"	},
-			{ LIB3270_CONNECT_OPTION_DEFAULTS,  "telnet://",	"telnet"	},
-			{ LIB3270_CONNECT_OPTION_DEFAULTS,  "telnets://",	"telnets"	},
-			{ LIB3270_CONNECT_OPTION_SSL,		"L://",			"telnets"	},
+			{ LIB3270_OPTION_DEFAULTS,  "tn3270://",	"telnet"	},
+			{ LIB3270_OPTION_SSL,		"tn3270s://",	"telnets"	},
+			{ LIB3270_OPTION_DEFAULTS,  "telnet://",	"telnet"	},
+			{ LIB3270_OPTION_DEFAULTS,  "telnets://",	"telnets"	},
+			{ LIB3270_OPTION_SSL,		"L://",			"telnets"	},
 
-			{ LIB3270_CONNECT_OPTION_SSL,		"L:",			"telnets"	}	// The compatibility should be the last option
+			{ LIB3270_OPTION_SSL,		"L:",			"telnets"	}	// The compatibility should be the last option
 		};
 
 		char					* str 		= strdup(n);
@@ -522,16 +522,16 @@ LIB3270_EXPORT const char * lib3270_set_host(H3270 *h, const char *n)
 		int						  f;
 
 		trace("%s(%s)",__FUNCTION__,str);
-		h->host.opt = LIB3270_CONNECT_OPTION_DEFAULTS;
+		h->options = LIB3270_OPTION_DEFAULTS;
 
 		for(f=0;f < sizeof(sch)/sizeof(sch[0]);f++)
 		{
 			size_t sz = strlen(sch[f].text);
 			if(!strncasecmp(hostname,sch[f].text,sz))
 			{
-				h->host.opt = sch[f].opt;
-				srvc		= sch[f].srvc;
-				hostname += sz;
+				h->options	 = sch[f].opt;
+				srvc		 = sch[f].srvc;
+				hostname	+= sz;
 				break;
 			}
 		}
@@ -561,7 +561,7 @@ LIB3270_EXPORT const char * lib3270_set_host(H3270 *h, const char *n)
 		Replace(h->host.full,
 				lib3270_strdup_printf(
 					"%s%s:%s%s%s",
-						h->host.opt&LIB3270_CONNECT_OPTION_SSL ? "tn3270s://" : "tn3270://",
+						h->options&LIB3270_OPTION_SSL ? "tn3270s://" : "tn3270://",
 						hostname,
 						srvc,
 						*query ? "?" : "",
@@ -579,19 +579,19 @@ LIB3270_EXPORT const char * lib3270_set_host(H3270 *h, const char *n)
 LIB3270_EXPORT const char * lib3270_get_hostname(H3270 *h)
 {
     CHECK_SESSION_HANDLE(h);
-	return h->host.current;
+
+	if(h->host.current)
+		return h->host.current;
+
+	return "";
 }
 
 LIB3270_EXPORT const char * lib3270_get_srvcname(H3270 *h)
 {
     CHECK_SESSION_HANDLE(h);
-	return h->host.srvc;
-}
-
-LIB3270_EXPORT LIB3270_CONNECT_OPTION lib3270_get_connect_options(H3270 *h)
-{
-    CHECK_SESSION_HANDLE(h);
-	return h->host.opt;
+    if(h->host.srvc)
+		return h->host.srvc;
+	return "telnet";
 }
 
 LIB3270_EXPORT const char * lib3270_get_host(H3270 *h)

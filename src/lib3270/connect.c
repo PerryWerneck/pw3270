@@ -175,7 +175,7 @@ static void net_connected(H3270 *hSession)
  }
 #endif // WIN32
 
- LIB3270_EXPORT int lib3270_connect_host(H3270 *hSession, const char *hostname, const char *srvc, LIB3270_CONNECT_OPTION opt)
+ LIB3270_EXPORT int lib3270_connect_host(H3270 *hSession, const char *hostname, const char *srvc, LIB3270_OPTION opt)
  {
 	CHECK_SESSION_HANDLE(hSession);
 
@@ -202,20 +202,20 @@ static void net_connected(H3270 *hSession)
 		hostname = name;
 	}
 
- 	hSession->host.opt = opt & ~LIB3270_CONNECT_OPTION_WAIT;
+ 	hSession->options = opt & ~LIB3270_OPTION_WAIT;
 	Replace(hSession->host.current,strdup(hostname));
 	Replace(hSession->host.srvc,strdup(srvc));
 
 	Replace(hSession->host.full,
 			lib3270_strdup_printf(
 				"%s%s:%s",
-					opt&LIB3270_CONNECT_OPTION_SSL ? "tn3270s://" : "tn3270://",
+					opt&LIB3270_OPTION_SSL ? "tn3270s://" : "tn3270://",
 					hostname,
 					srvc ));
 
 	trace("current_host=\"%s\"",hSession->host.current);
 
-	return lib3270_connect(hSession,opt & LIB3270_CONNECT_OPTION_WAIT);
+	return lib3270_connect(hSession,opt & LIB3270_OPTION_WAIT);
 
  }
 
@@ -316,7 +316,7 @@ static void net_connected(H3270 *hSession)
 	hSession->ever_3270 = False;
 	hSession->ssl_host  = 0;
 
-	if(hSession->host.opt&LIB3270_CONNECT_OPTION_SSL)
+	if(hSession->options&LIB3270_OPTION_SSL)
 	{
 #if defined(HAVE_LIBSSL)
 		hSession->ssl_host = 1;

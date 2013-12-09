@@ -39,7 +39,7 @@
  static const const LIB3270_OPTION_ENTRY options[LIB3270_OPTION_COUNT+1] =
  {
 	{
-		LIB3270_OPTION_KYBD_AS400,
+		LIB3270_OPTION_AS400,
 		"as400",
 		N_( "Host is AS/400" ),
 		NULL
