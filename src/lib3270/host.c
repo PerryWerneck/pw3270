@@ -582,6 +582,18 @@ LIB3270_EXPORT const char * lib3270_get_hostname(H3270 *h)
 	return h->host.current;
 }
 
+LIB3270_EXPORT const char * lib3270_get_srvcname(H3270 *h)
+{
+    CHECK_SESSION_HANDLE(h);
+	return h->host.srvc;
+}
+
+LIB3270_EXPORT LIB3270_CONNECT_OPTION lib3270_get_connect_options(H3270 *h)
+{
+    CHECK_SESSION_HANDLE(h);
+	return h->host.opt;
+}
+
 LIB3270_EXPORT const char * lib3270_get_host(H3270 *h)
 {
     CHECK_SESSION_HANDLE(h);

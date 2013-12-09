@@ -781,7 +781,7 @@ const char * plugin::asc2ebc(unsigned char *str, int sz)
 
 int plugin::set_host(const char *uri)
 {
-	return lib3270_set_host(hSession,uri) != NULL;
+	return lib3270_set_host(hSession,uri) != NULL ? 1 : 0;
 }
 
 const char * plugin::ebc2asc(unsigned char *str, int sz)

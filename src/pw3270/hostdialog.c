@@ -133,8 +133,8 @@
  void hostname_action(GtkAction *action, GtkWidget *widget)
  {
  	const gchar 	* title			= g_object_get_data(G_OBJECT(action),"title");
- 	gchar			* cfghost		= get_string_from_config("host","uri","");
- 	gchar			* hostname;
+// 	gchar			* cfghost		= get_string_from_config("host","uri","");
+// 	gchar			* hostname;
  	gchar			* ptr;
  	gboolean		  again			= TRUE;
  	int				  iHostType 	= 0;
@@ -353,6 +353,24 @@
 	gtk_widget_show_all(GTK_WIDGET(table));
 #endif
 
+	gchar *uri = get_string_from_config("host","uri","");
+
+	if(uri && *uri && lib3270_set_host(v3270_get_session(widget),uri))
+	{
+		H3270 *hSession = v3270_get_session(widget);
+		gtk_entry_set_text(host,lib3270_get_hostname(hSession));
+		gtk_entry_set_text(port,lib3270_get_srvcname(hSession));
+		gtk_toggle_button_set_active(sslcheck,(lib3270_get_connect_options(hSession) & LIB3270_CONNECT_OPTION_SSL) ? TRUE : FALSE);
+	}
+	else
+	{
+		gtk_entry_set_text(host,"");
+		gtk_entry_set_text(port,"telnet");
+	}
+
+	g_free(uri);
+
+/*
 	hostname = cfghost;
 
 	trace("hostname=[%s]",hostname);
@@ -382,8 +400,7 @@
 	{
 		gtk_entry_set_text(port,"23");
 	}
-
-	gtk_entry_set_text(host,hostname);
+*/
 
  	while(again)
  	{
@@ -430,7 +447,7 @@
 #endif
 			}
 
-			g_free(hostname);
+//			g_free(hostname);
 			break;
 
 		case GTK_RESPONSE_REJECT:
@@ -441,6 +458,6 @@
 
 	gtk_widget_destroy(dialog);
 
-	g_free(cfghost);
+//	g_free(cfghost);
  }
 

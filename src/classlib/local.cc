@@ -425,7 +425,7 @@
 
 		int set_host(const char *uri)
 		{
-			return _set_host(hSession,uri) != NULL;
+			return _set_host(hSession,uri) != NULL ? 1 : 0;
 		}
 
 		int disconnect(void)

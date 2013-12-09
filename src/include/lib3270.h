@@ -419,6 +419,25 @@
 	 LIB3270_EXPORT const char * lib3270_get_hostname(H3270 *h);
 
 	/**
+	 * Get servic or port for the connect/reconnect operations.
+	 *
+	 * @param h		Session handle.
+	 *
+	 * @return Pointer to service name (internal data, do not change it)
+	 *
+	 */
+	 LIB3270_EXPORT const char * lib3270_get_srvcname(H3270 *h);
+
+
+	/**
+	 * Get connection options.
+	 *
+	 * @param h		Session handle.
+	 *
+	 */
+	 LIB3270_EXPORT LIB3270_CONNECT_OPTION lib3270_get_connect_options(H3270 *h);
+
+	/**
 	 * Get URL of the hostname for the connect/reconnect operations.
 	 *
 	 * @param h		Session handle.
@@ -629,15 +648,6 @@
 	 * @return Toggle status.
 	 */
 	LIB3270_EXPORT int lib3270_toggle(H3270 *h, LIB3270_TOGGLE ix);
-
-	/**
-	 * Check if the active connection is secure.
-	 *
-	 * @param h		Session handle.
-	 *
-	 * @return Non 0 if the connection is SSL secured, 0 if not.
-	 */
-	LIB3270_EXPORT int lib3270_get_ssl_state(H3270 *h);
 
 	/** Callback table
 	 *
