@@ -120,7 +120,8 @@
 	#define E_OPT(n)	(1 << (n))
 #endif // X3270_TN3270E
 
-#if defined(X3270_ANSI) /*[*/
+/*
+#if defined(X3270_ANSI)
 static char     vintr;
 static char     vquit;
 static char     verase;
@@ -129,7 +130,10 @@ static char     veof;
 static char     vwerase;
 static char     vrprnt;
 static char     vlnext;
-#endif /*]*/
+#endif
+*/
+
+struct _ansictl ansictl = { 0 };
 
 static int telnet_fsm(H3270 *session, unsigned char c);
 static void net_rawout(H3270 *session, unsigned const char *buf, size_t len);
@@ -164,7 +168,7 @@ static void do_rprnt(H3270 *hSession, char c);
 static void do_eof(H3270 *hSession, char c);
 static void do_eol(H3270 *hSession, char c);
 static void do_lnext(H3270 *hSession, char c);
-static char parse_ctlchar(char *s);
+// static char parse_ctlchar(char *s);
 static void cooked_init(H3270 *hSession);
 #endif /*]*/
 
@@ -270,7 +274,8 @@ static const char *trsp_flag[2] = { "POSITIVE-RESPONSE", "NEGATIVE-RESPONSE" };
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
-#if defined(_WIN32) /*[*/
+/*
+#if defined(_WIN32)
 void sockstart(H3270 *session)
 {
 	static int initted = 0;
@@ -305,7 +310,8 @@ void sockstart(H3270 *session)
 		_exit(1);
 	}
 }
-#endif /*]*/
+#endif
+*/
 
 static union {
 	struct sockaddr sa;
@@ -323,6 +329,7 @@ void popup_a_sockerr(H3270 *hSession, char *fmt, ...)
 #else
 	const char *msg = strerror(errno);
 #endif // WIN32
+
 	va_list args;
 	char *text;
 
@@ -332,11 +339,17 @@ void popup_a_sockerr(H3270 *hSession, char *fmt, ...)
 
 	lib3270_write_log(hSession, "3270", "Network error:\n%s\n%s",text,msg);
 
-	lib3270_popup_dialog(hSession, LIB3270_NOTIFY_ERROR, _( "Network error" ), text, "%s", msg);
+	lib3270_popup_dialog(	hSession,
+							LIB3270_NOTIFY_ERROR,
+							_( "Network error" ),
+							text,
+							"%s", msg);
+
 
 	lib3270_free(text);
 }
 
+/*
 #pragma pack(1)
 struct connect_parm
 {
@@ -347,7 +360,9 @@ struct connect_parm
 	int						  err;
 };
 #pragma pack()
+*/
 
+/*
 static int do_connect_sock(H3270 *h, struct connect_parm *p)
 {
 #ifdef WIN32
@@ -428,7 +443,9 @@ static int do_connect_sock(H3270 *h, struct connect_parm *p)
 
 	return 0;
 }
+*/
 
+/*
 static int connect_sock(H3270 *hSession, int sockfd, const struct sockaddr *addr, socklen_t addrlen)
 {
 	struct connect_parm p = { sizeof(struct connect_parm), sockfd, addr, addrlen, -1 };
@@ -439,7 +456,7 @@ static int connect_sock(H3270 *hSession, int sockfd, const struct sockaddr *addr
 
 	return p.err;
 }
-
+*/
 
 /**
  *  Establish a telnet socket to the given host passed as an argument.
@@ -450,7 +467,7 @@ static int connect_sock(H3270 *hSession, int sockfd, const struct sockaddr *addr
  * @param session	Handle to the session descriptor.
  *
  * @return 0 if ok, non zero if failed
- */
+ */ /*
 int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Boolean *resolving, Boolean *pending)
 {
 //	struct servent	* sp;
@@ -467,9 +484,9 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 	int				  optval;
 	char			  errmsg[1024];
 	int				  rc;
-#if defined(OMTU) /*[*/
+#if defined(OMTU)
 	int			mtu = OMTU;
-#endif /*]*/
+#endif
 
 #define close_fail { (void) SOCK_CLOSE(session->sock); session->sock = -1; return -1; }
 
@@ -482,7 +499,7 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 //	if (session->netrbuf == (unsigned char *)NULL)
 //		session->netrbuf = (unsigned char *)lib3270_malloc(BUFSZ);
 
-#if defined(X3270_ANSI) /*[*/
+#if defined(X3270_ANSI)
 	if (!t_valid)
 	{
 		vintr   = parse_ctlchar("^C");
@@ -496,14 +513,14 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 
 		t_valid = 1;
 	}
-#endif /*]*/
+#endif
 
 	*resolving = False;
 	*pending = False;
 
 //	Replace(session->hostname, NewString(host));
 
-	/* get the passthru host and port number */
+	// get the passthru host and port number
 	if (session->passthru_host)
 	{
 #if defined(HAVE_GETADDRINFO)
@@ -567,7 +584,7 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 			return -1;
 	}
 
-	/* fill in the socket address of the given host */
+	// fill in the socket address of the given host
 	(void) memset((char *) &haddr, 0, sizeof(haddr));
 	if (session->passthru_host)
 	{
@@ -593,14 +610,14 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 		}
 	}
 
-	/* create the socket */
+	// create the socket
 	if((session->sock = socket(haddr.sa.sa_family, SOCK_STREAM, 0)) == -1)
 	{
 		popup_a_sockerr(session, N_( "socket" ) );
 		return -1;
 	}
 
-	/* set options for inline out-of-band data and keepalives */
+	// set options for inline out-of-band data and keepalives
 	if (setsockopt(session->sock, SOL_SOCKET, SO_OOBINLINE, (char *)&on,sizeof(on)) < 0)
 	{
 		popup_a_sockerr(session, N_( "setsockopt(%s)" ), "SO_OOBINLINE");
@@ -615,22 +632,22 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 	}
 #endif
 
-	/* set the socket to be non-delaying during connect */
+	// set the socket to be non-delaying during connect
 	if(non_blocking(session,False) < 0)
 		close_fail;
 
 #if !defined(_WIN32)
-	/* don't share the socket with our children */
+	// don't share the socket with our children
 	(void) fcntl(session->sock, F_SETFD, 1);
 #endif
 
-	/* init ssl */
+	// init ssl
 #if defined(HAVE_LIBSSL)
 	if (session->ssl_host)
 		ssl_init(session);
 #endif
 
-	/* connect */
+	// connect
 	status_connecting(session,1);
 	rc = connect_sock(session, session->sock, &haddr.sa,ha_len);
 
@@ -671,15 +688,8 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 
 	snprintf(session->full_model_name,LIB3270_FULL_MODEL_NAME_LENGTH,"IBM-327%c-%d",session->m3279 ? '9' : '8', session->model_num);
 
-	/* set up temporary termtype
-	if (session->termname == CN && session->std_ds_host)
-	{
-		sprintf(session->ttype_tmpval, "IBM-327%c-%d",session->m3279 ? '9' : '8', session->model_num);
-		session->termtype = session->ttype_tmpval;
-	}
-	*/
 
-	/* all done */
+	// all done
 #if defined(_WIN32)
 	if(session->sockEvent == NULL)
 	{
@@ -718,6 +728,7 @@ int net_connect(H3270 *session, const char *host, char *portname, Boolean ls, Bo
 	return 0;
 }
 #undef close_fail
+*/
 
 /* Set up the LU list. */
 static void setup_lus(H3270 *hSession)
@@ -2113,21 +2124,21 @@ static void net_cookout(H3270 *hSession, const char *buf, int len)
 			/* Control chars. */
 			if (c == '\n')
 				do_eol(hSession,c);
-			else if (c == vintr)
+			else if (c == ansictl.vintr)
 				do_intr(hSession, c);
-			else if (c == vquit)
+			else if (c == ansictl.vquit)
 				do_quit(hSession,c);
-			else if (c == verase)
+			else if (c == ansictl.verase)
 				do_cerase(hSession,c);
-			else if (c == vkill)
+			else if (c == ansictl.vkill)
 				do_kill(hSession,c);
-			else if (c == vwerase)
+			else if (c == ansictl.vwerase)
 				do_werase(hSession,c);
-			else if (c == vrprnt)
+			else if (c == ansictl.vrprnt)
 				do_rprnt(hSession,c);
-			else if (c == veof)
+			else if (c == ansictl.veof)
 				do_eof(hSession,c);
-			else if (c == vlnext)
+			else if (c == ansictl.vlnext)
 				do_lnext(hSession,c);
 			else if (c == 0x08 || c == 0x7f) /* Yes, a hack. */
 				do_cerase(hSession,c);
@@ -2873,7 +2884,7 @@ void net_sends(H3270 *hSession,const char *s)
  */
 void net_send_erase(H3270 *hSession)
 {
-	net_cookout(hSession, &verase, 1);
+	net_cookout(hSession, &ansictl.verase, 1);
 }
 
 /**
@@ -2881,7 +2892,7 @@ void net_send_erase(H3270 *hSession)
  */
 void net_send_kill(H3270 *hSession)
 {
-	net_cookout(hSession, &vkill, 1);
+	net_cookout(hSession, &ansictl.vkill, 1);
 }
 
 /**
@@ -2889,7 +2900,7 @@ void net_send_kill(H3270 *hSession)
  */
 void net_send_werase(H3270 *hSession)
 {
-	net_cookout(hSession, &vwerase, 1);
+	net_cookout(hSession, &ansictl.vwerase, 1);
 }
 #endif /*]*/
 
@@ -2988,29 +2999,6 @@ void net_abort(H3270 *hSession)
 			break;
 		}
 	}
-}
-#endif /*]*/
-
-#if defined(X3270_ANSI) /*[*/
-/*
- * parse_ctlchar
- *	Parse an stty control-character specification.
- *	A cheap, non-complaining implementation.
- */
-static char
-parse_ctlchar(char *s)
-{
-	if (!s || !*s)
-		return 0;
-	if ((int) strlen(s) > 1) {
-		if (*s != '^')
-			return 0;
-		else if (*(s+1) == '?')
-			return 0177;
-		else
-			return *(s+1) - '@';
-	} else
-		return *s;
 }
 #endif /*]*/
 

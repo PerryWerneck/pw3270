@@ -136,7 +136,9 @@ static void net_connected(H3270 *hSession)
 
 }
 
-#if defined(_WIN32) /*[*/
+
+#if defined(_WIN32)
+
  static void sockstart(H3270 *session)
  {
 	static int initted = 0;
@@ -171,61 +173,17 @@ static void net_connected(H3270 *hSession)
 		_exit(1);
 	}
  }
-#endif /*]*/
+#endif // WIN32
 
  LIB3270_EXPORT int lib3270_connect_host(H3270 *hSession, const char *hostname, const char *srvc, LIB3270_CONNECT_OPTION opt)
  {
- 	int					  s;
-	int					  optval;
-	struct addrinfo		  hints;
-	struct addrinfo 	* result		= NULL;
-	struct addrinfo 	* rp			= NULL;
+	CHECK_SESSION_HANDLE(hSession);
 
 	if(!hostname)
 		return EINVAL;
 
 	if(!srvc)
 		srvc = "telnet";
-
-	CHECK_SESSION_HANDLE(hSession);
-
-	lib3270_main_iterate(hSession,0);
-
-	if(hSession->auto_reconnect_inprogress)
-		return EAGAIN;
-
-	if(hSession->sock > 0)
-		return EBUSY;
-
-#if defined(_WIN32)
-	sockstart(hSession);
-#endif
-
-	hSession->host.opt = opt & ~LIB3270_CONNECT_OPTION_WAIT;
-	Replace(hSession->host.current,strdup(hostname));
-
-	Replace(hSession->host.full,
-			lib3270_strdup_printf(
-				"%s%s:%s",
-					opt&LIB3270_CONNECT_OPTION_SSL ? "L:" : "",
-					hostname,
-					srvc ));
-
-	trace("current_host=\"%s\"",hSession->host.current);
-
-
-	set_ssl_state(hSession,LIB3270_SSL_UNSECURE);
-
-	hSession->ever_3270	= False;
-
-	memset(&hints, 0, sizeof(struct addrinfo));
-	hints.ai_family 	= AF_UNSPEC;	/* Allow IPv4 or IPv6 */
-	hints.ai_socktype	= SOCK_STREAM;	/* Stream socket */
-	hints.ai_flags		= AI_PASSIVE;	/* For wildcard IP address */
-	hints.ai_protocol	= 0;			/* Any protocol */
-	hints.ai_canonname	= NULL;
-	hints.ai_addr		= NULL;
-	hints.ai_next		= NULL;
 
 	if(*hostname == '$')
 	{
@@ -244,16 +202,71 @@ static void net_connected(H3270 *hSession)
 		hostname = name;
 	}
 
+ 	hSession->host.opt = opt & ~LIB3270_CONNECT_OPTION_WAIT;
+	Replace(hSession->host.current,strdup(hostname));
+	Replace(hSession->host.srvc,strdup(srvc));
+
+	Replace(hSession->host.full,
+			lib3270_strdup_printf(
+				"%s%s:%s",
+					opt&LIB3270_CONNECT_OPTION_SSL ? "tn3270s://" : "tn3270://",
+					hostname,
+					srvc ));
+
+	trace("current_host=\"%s\"",hSession->host.current);
+
+	return lib3270_connect(hSession,opt & LIB3270_CONNECT_OPTION_WAIT);
+
+ }
+
+ int lib3270_connect(H3270 *hSession, int wait)
+ {
+ 	int					  s;
+	int					  optval;
+	struct addrinfo		  hints;
+	struct addrinfo 	* result		= NULL;
+	struct addrinfo 	* rp			= NULL;
+
+	CHECK_SESSION_HANDLE(hSession);
+
+	lib3270_main_iterate(hSession,0);
+
+	if(hSession->auto_reconnect_inprogress)
+		return EAGAIN;
+
+	if(hSession->sock > 0)
+		return EBUSY;
+
+#if defined(_WIN32)
+	sockstart(hSession);
+#endif
+
+	set_ssl_state(hSession,LIB3270_SSL_UNSECURE);
+	snprintf(hSession->full_model_name,LIB3270_FULL_MODEL_NAME_LENGTH,"IBM-327%c-%d",hSession->m3279 ? '9' : '8', hSession->model_num);
+
+
+	hSession->ever_3270	= False;
+
+	memset(&hints, 0, sizeof(struct addrinfo));
+	hints.ai_family 	= AF_UNSPEC;	/* Allow IPv4 or IPv6 */
+	hints.ai_socktype	= SOCK_STREAM;	/* Stream socket */
+	hints.ai_flags		= AI_PASSIVE;	/* For wildcard IP address */
+	hints.ai_protocol	= 0;			/* Any protocol */
+	hints.ai_canonname	= NULL;
+	hints.ai_addr		= NULL;
+	hints.ai_next		= NULL;
+
+
 	hSession->cstate = LIB3270_RESOLVING;
 	lib3270_st_changed(hSession, LIB3270_STATE_RESOLVING, True);
 
-	s = getaddrinfo(hostname, srvc, &hints, &result);
+	s = getaddrinfo(hSession->host.current, hSession->host.srvc, &hints, &result);
 
 	if(s != 0)
 	{
 		char buffer[4096];
 
-		snprintf(buffer,4095,_( "Can't connect to %s:%s"), hostname, srvc);
+		snprintf(buffer,4095,_( "Can't connect to %s:%s"), hSession->host.current, hSession->host.srvc);
 
 #if defined(WIN32) && defined(HAVE_ICONV)
 	{
@@ -303,7 +316,7 @@ static void net_connected(H3270 *hSession)
 	hSession->ever_3270 = False;
 	hSession->ssl_host  = 0;
 
-	if(opt&LIB3270_CONNECT_OPTION_SSL)
+	if(hSession->host.opt&LIB3270_CONNECT_OPTION_SSL)
 	{
 #if defined(HAVE_LIBSSL)
 		hSession->ssl_host = 1;
@@ -380,7 +393,7 @@ static void net_connected(H3270 *hSession)
 			if(err != WSAEWOULDBLOCK)
 			{
 				char buffer[4096];
-				snprintf(buffer,4095,_( "Can't connect to %s:%s"), hostname, srvc);
+				snprintf(buffer,4095,_( "Can't connect to %s"), lib3270_get_host(hSession));
 
 				lib3270_popup_dialog(	hSession,
 										LIB3270_NOTIFY_ERROR,
@@ -431,7 +444,7 @@ static void net_connected(H3270 *hSession)
 			if( errno != EINPROGRESS )
 			{
 				char buffer[4096];
-				snprintf(buffer,4095,_( "Can't connect to %s:%s"), hostname, srvc);
+				snprintf(buffer,4095,_( "Can't connect to %s:%s"), hSession->host.current, hSession->host.srvc);
 
 				lib3270_popup_dialog(	hSession,
 										LIB3270_NOTIFY_ERROR,
@@ -511,7 +524,7 @@ static void net_connected(H3270 *hSession)
 
 	trace("%s: Connection in progress",__FUNCTION__);
 
-	if(opt&LIB3270_CONNECT_OPTION_WAIT)
+	if(wait)
 	{
 		time_t end = time(0)+120;
 
@@ -564,6 +577,7 @@ int non_blocking(H3270 *hSession, Boolean on)
 									_( "Connection error" ),
 									_( "ioctlsocket(FIONBIO) failed." ),
 									"%s", lib3270_win32_strerror(GetLastError()));
+			return -1;
 		}
 #else
 

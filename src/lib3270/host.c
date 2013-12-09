@@ -312,151 +312,7 @@ split_success:
 }
 */
 
-static int do_connect(H3270 *hSession)
-{
-//	char nb[2048];				// name buffer
-//	char *s;					// temporary
-	char *chost = NULL;			// to whom we will connect
-//	char *ps = CN;
-//	char *port = CN;
-	Boolean resolving;
-	Boolean pending;
-//	static Boolean ansi_host;
-//	Boolean has_colons = False;
-
-	if (lib3270_connected(hSession) || hSession->auto_reconnect_inprogress)
-		return EBUSY;
-
-	/*
-	// Skip leading blanks.
-	while (*n == ' ')
-		n++;
-
-	if (!*n)
-	{
-		popup_an_error(hSession,_( "Invalid (empty) hostname" ));
-		return -1;
-	}
-	*/
-
-	/*
-	// Save in a modifiable buffer.
-	(void) strncpy(nb, n, 2047);
-
-	// Strip trailing blanks.
-	s = nb + strlen(nb) - 1;
-	while (*s == ' ')
-		*s-- = '\0';
-	*/
-
-	/* Remember this hostname, as the last hostname we connected to. */
-	// lib3270_set_host(hSession,nb);
-
-	/*
-	{
-		Boolean needed;
-
-		// Strip off and remember leading qualifiers.
-		if ((s = split_host(hSession, nb, &ansi_host, &hSession->std_ds_host,
-		    &hSession->passthru_host, &hSession->non_tn3270e_host, &hSession->ssl_host,
-		    &hSession->no_login_host, hSession->luname, &port,
-		    &needed)) == CN)
-			return EINVAL;
-
-		chost = s;
-
-		// Default the port.
-		if (port == CN)
-			port = "telnet";
-	}
-
-	//
-	// Store the original name in globals, even if we fail the connect
-	// later:
-	// current_host is the hostname part, stripped of qualifiers, luname
-	// and port number
-	// full_current_host is the entire string, for use in reconnecting
-	//
-	//
-	// Replace(hSession->current_host, CN);
-
-	has_colons = (strchr(chost, ':') != NULL);
-
-	Replace(hSession->host.qualified,
-	    xs_buffer("%s%s%s%s:%s",
-		    hSession->ssl_host? "L:": "",
-		    has_colons? "[": "",
-		    chost,
-		    has_colons? "]": "",
-		    port));
-	*/
-
-	/* Attempt contact. */
-	hSession->ever_3270 = False;
-	hSession->ssl_host = 0;
-
-	if(hSession->host.opt&LIB3270_CONNECT_OPTION_SSL)
-	{
-#if defined(HAVE_LIBSSL)
-		hSession->ssl_host = 1;
-		ssl_init(hSession);
-#else
-		popup_system_error(hSession,	_( "SSL error" ),
-										_( "Unable to connect to secure hosts" ),
-										_( "This version of %s was built without support for secure sockets layer (SSL)." ),
-										PACKAGE_NAME
-										);
-#endif
-	}
-
-	trace("Conneting to hostname=[%s] service=[%s]",hSession->host.current, hSession->host.srvc);
-	if(net_connect(hSession, hSession->host.current, hSession->host.srvc, 0, &resolving,&pending) != 0 && !resolving)
-	{
-		/* Redundantly signal a disconnect. */
-		lib3270_set_disconnected(hSession);
-		return -1;
-	}
-
-	chost = lib3270_free(chost);
-
-	/* Still thinking about it? */
-	if (resolving)
-	{
-		hSession->cstate = RESOLVING;
-		lib3270_st_changed(hSession, LIB3270_STATE_RESOLVING, True);
-		return 0;
-	}
-
-	/* Success. */
-
-	/* Setup socket I/O. */
-//	add_input_calls(hSession,net_input,net_exception);
-#ifdef _WIN32
-	hSession->ns_exception_id	= AddExcept(hSession->sockEvent, hSession, net_exception);
-	hSession->ns_read_id		= AddInput(hSession->sockEvent, hSession, net_input);
-#else
-	hSession->ns_exception_id	= AddExcept(hSession->sock, hSession, net_exception);
-	hSession->ns_read_id		= AddInput(hSession->sock, hSession, net_input);
-#endif // WIN32
-
-	hSession->excepting	= 1;
-	hSession->reading 	= 1;
-
-
-	/* Set state and tell the world. */
-	if (pending)
-	{
-		hSession->cstate = PENDING;
-		lib3270_st_changed(hSession, LIB3270_STATE_HALF_CONNECT, True);
-	}
-	else
-	{
-		lib3270_set_connected(hSession);
-	}
-
-	return 0;
-}
-
+/*
 int lib3270_connect(H3270 *hSession, int wait)
 {
 	int		  rc;
@@ -496,6 +352,7 @@ int lib3270_connect(H3270 *hSession, int wait)
 
 	return rc;
 }
+*/
 
 /*
  * Called from timer to attempt an automatic reconnection.
@@ -723,6 +580,12 @@ LIB3270_EXPORT const char * lib3270_get_hostname(H3270 *h)
 {
     CHECK_SESSION_HANDLE(h);
 	return h->host.current;
+}
+
+LIB3270_EXPORT const char * lib3270_get_host(H3270 *h)
+{
+    CHECK_SESSION_HANDLE(h);
+	return h->host.full;
 }
 
 /*

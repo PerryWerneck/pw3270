@@ -419,6 +419,17 @@
 	 LIB3270_EXPORT const char * lib3270_get_hostname(H3270 *h);
 
 	/**
+	 * Get URL of the hostname for the connect/reconnect operations.
+	 *
+	 * @param h		Session handle.
+	 *
+	 * @return Pointer to host URL set (internal data, do not change it)
+	 *
+	 */
+	 LIB3270_EXPORT const char * lib3270_get_host(H3270 *h);
+
+
+	/**
 	 * Network connect operation, keep main loop running
 	 *
 	 * @param h		Session handle.

@@ -667,7 +667,7 @@
 
 #elif defined(HAVE_DBUS)
 
-			int rc = query_intval("connect", DBUS_TYPE_STRING, &uri, DBUS_TYPE_INVALID);
+			rc = query_intval("connect", DBUS_TYPE_STRING, "", DBUS_TYPE_INVALID);
 
 #else
 			rc = -1;
@@ -697,8 +697,7 @@
 
 #elif defined(HAVE_DBUS)
 
-			#warning Implementar
-			return -1;
+			rc = query_intval("setHost", DBUS_TYPE_STRING, &uri, DBUS_TYPE_INVALID);
 
 #else
 

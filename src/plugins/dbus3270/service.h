@@ -66,6 +66,7 @@
 	void		  pw3270_dbus_get_revision(PW3270Dbus *object, DBusGMethodInvocation *context);
 	void		  pw3270_dbus_quit(PW3270Dbus *object, DBusGMethodInvocation *context);
 	void		  pw3270_dbus_connect(PW3270Dbus *object, const gchar *uri, DBusGMethodInvocation *context);
+	void		  pw3270_dbus_set_host(PW3270Dbus *object, const gchar *uri, DBusGMethodInvocation *context);
 	void		  pw3270_dbus_disconnect(PW3270Dbus *object, DBusGMethodInvocation *context);
 	void		  pw3270_dbus_get_message_id(PW3270Dbus *object, DBusGMethodInvocation *context);
 	void		  pw3270_dbus_get_connection_state(PW3270Dbus *object, DBusGMethodInvocation *context);

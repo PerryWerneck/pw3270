@@ -223,9 +223,21 @@ enum keytype
 	KT_GE
 };
 
+LIB3270_INTERNAL struct _ansictl
+{
+	char     vintr;
+	char     vquit;
+	char     verase;
+	char     vkill;
+	char     veof;
+	char     vwerase;
+	char     vrprnt;
+	char     vlnext;
+} ansictl;
+
 /* default charset translation tables */
-LIB3270_INTERNAL const unsigned short ebc2asc0[256];
-LIB3270_INTERNAL const unsigned short asc2ft0[256];
+// LIB3270_INTERNAL const unsigned short ebc2asc0[256];
+// LIB3270_INTERNAL const unsigned short asc2ft0[256];
 
 
 /* Library internal calls */

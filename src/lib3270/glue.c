@@ -94,28 +94,71 @@
 
 /*---[ Globals ]--------------------------------------------------------------------------------------------------------------*/
 
+/*
+ * parse_ctlchar
+ *	Parse an stty control-character specification.
+ *	A cheap, non-complaining implementation.
+ */
+static char parse_ctlchar(char *s)
+{
+	if (!s || !*s)
+		return 0;
+
+	if ((int) strlen(s) > 1)
+	{
+		if (*s != '^')
+			return 0;
+		else if (*(s+1) == '?')
+			return 0177;
+		else
+			return *(s+1) - '@';
+	} else
+		return *s;
+}
+
+int lib3270_loaded(void)
+{
+	trace("%s",__FUNCTION__);
+
+	ansictl.vintr   = parse_ctlchar("^C");
+	ansictl.vquit   = parse_ctlchar("^\\");
+	ansictl.verase  = parse_ctlchar("^H");
+	ansictl.vkill   = parse_ctlchar("^U");
+	ansictl.veof    = parse_ctlchar("^D");
+	ansictl.vwerase = parse_ctlchar("^W");
+	ansictl.vrprnt  = parse_ctlchar("^R");
+	ansictl.vlnext  = parse_ctlchar("^V");
+
+    return 0;
+}
+
+int lib3270_unloaded(void)
+{
+	trace("%s",__FUNCTION__);
+    return 0;
+}
+
+
 #if defined WIN32
 
 BOOL WINAPI DllMain(HANDLE hinst, DWORD dwcallpurpose, LPVOID lpvResvd)
 {
 //	Trace("%s - Library %s",__FUNCTION__,(dwcallpurpose == DLL_PROCESS_ATTACH) ? "Loaded" : "Unloaded");
 
-    if(dwcallpurpose == DLL_PROCESS_ATTACH)
+    switch(dwcallpurpose)
+    {
+    case DLL_PROCESS_ATTACH:
 		get_version_info();
+		lib3270_loaded();
+		break;
+
+	case DLL_PROCESS_DETACH:
+		lib3270_unloaded();
+		break;
+
+    }
 
     return TRUE;
-}
-
-#else
-
-int lib3270_loaded(void)
-{
-    return 0;
-}
-
-int lib3270_unloaded(void)
-{
-    return 0;
 }
 
 #endif
@@ -124,6 +167,7 @@ int lib3270_unloaded(void)
 #ifdef DEBUG
 extern void lib3270_initialize(void)
 {
+	lib3270_loaded();
 }
 #endif
 
