@@ -75,6 +75,9 @@ static void connect_action(GtkAction *action, GtkWidget *widget)
 
 	trace_action(action,widget);
 
+	#warning Reimplementar
+
+	/*
 	if(!systype)
 		systype = get_string_from_config("host","systype","S390");
 
@@ -87,6 +90,7 @@ static void connect_action(GtkAction *action, GtkWidget *widget)
 
 	v3270_set_session_color_type(widget,colors);
 	v3270_set_session_options(widget,pw3270_options_by_hosttype(systype));
+	*/
 
 	if(host)
 	{

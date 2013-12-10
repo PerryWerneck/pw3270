@@ -492,6 +492,20 @@ void lib3270_st_changed(H3270 *h, LIB3270_STATE tx, int mode)
 	trace("%s ends",__FUNCTION__);
 }
 
+static void update_host(H3270 *h)
+{
+	Replace(h->host.full,
+			lib3270_strdup_printf(
+				"%s%s:%s",
+					h->options&LIB3270_OPTION_SSL ? "tn3270s://" : "tn3270://",
+					h->host.current,
+					h->host.srvc
+		));
+
+	trace("hosturl=[%s]",h->host.full);
+
+}
+
 LIB3270_EXPORT const char * lib3270_set_host(H3270 *h, const char *n)
 {
     CHECK_SESSION_HANDLE(h);
@@ -558,17 +572,8 @@ LIB3270_EXPORT const char * lib3270_set_host(H3270 *h, const char *n)
 
 		Replace(h->host.current,strdup(hostname));
 		Replace(h->host.srvc,strdup(srvc));
-		Replace(h->host.full,
-				lib3270_strdup_printf(
-					"%s%s:%s%s%s",
-						h->options&LIB3270_OPTION_SSL ? "tn3270s://" : "tn3270://",
-						hostname,
-						srvc,
-						*query ? "?" : "",
-						query
-			));
 
-		trace("hosturl=[%s]",h->host.full);
+		update_host(h);
 
 		free(str);
 	}
@@ -586,12 +591,26 @@ LIB3270_EXPORT const char * lib3270_get_hostname(H3270 *h)
 	return "";
 }
 
+LIB3270_EXPORT void lib3270_set_hostname(H3270 *h, const char *hostname)
+{
+    CHECK_SESSION_HANDLE(h);
+	Replace(h->host.current,strdup(hostname));
+	update_host(h);
+}
+
 LIB3270_EXPORT const char * lib3270_get_srvcname(H3270 *h)
 {
     CHECK_SESSION_HANDLE(h);
     if(h->host.srvc)
 		return h->host.srvc;
 	return "telnet";
+}
+
+LIB3270_EXPORT void lib3270_set_srvcname(H3270 *h, const char *srvc)
+{
+    CHECK_SESSION_HANDLE(h);
+	Replace(h->host.srvc,strdup(srvc));
+	update_host(h);
 }
 
 LIB3270_EXPORT const char * lib3270_get_host(H3270 *h)

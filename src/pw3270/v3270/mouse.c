@@ -49,6 +49,8 @@ gint v3270_get_offset_at_point(v3270 *widget, gint x, gint y)
 	GdkPoint point;
 	int r,c;
 
+	g_return_val_if_fail(widget->metrics.width > 0,-1);
+
 	if(x > 0 && y > 0)
 	{
 		point.x = ((x-widget->metrics.left)/widget->metrics.width);

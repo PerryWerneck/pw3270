@@ -32,6 +32,7 @@
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
+/*
  static const struct _host_type
  {
 	const gchar		* name;
@@ -55,9 +56,11 @@
 	{ 8,	N_( "8 colors"	 )	},
 	{ 2,	N_( "Monochrome" )	},
  };
+*/
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
+/*
  LIB3270_OPTION pw3270_options_by_hosttype(const gchar *systype)
  {
 	int f;
@@ -129,12 +132,23 @@
 	trace("Selected color type: %d",(int) colortable[*iColorTable].colors);
 
  }
-
+*/
  void hostname_action(GtkAction *action, GtkWidget *widget)
  {
+ 	H3270 * hSession = v3270_get_session(widget);
+ 	gchar * ptr;
+
+ 	lib3270_set_color_type(hSession,(unsigned short) get_integer_from_config("host","colortype",16));
+
+	ptr = get_string_from_config("host","systype","s390");
+	if(*ptr)
+		lib3270_set_host_type(hSession,ptr);
+	g_free(ptr);
+
+	v3270_select_host(widget);
+
+/*
  	const gchar 	* title			= g_object_get_data(G_OBJECT(action),"title");
-// 	gchar			* cfghost		= get_string_from_config("host","uri","");
-// 	gchar			* hostname;
  	gchar			* ptr;
  	gboolean		  again			= TRUE;
  	int				  iHostType 	= 0;
@@ -367,37 +381,6 @@
 		gtk_toggle_button_set_active(sslcheck,(lib3270_get_options(hSession) & LIB3270_OPTION_SSL) ? TRUE : FALSE);
 	}
 
-/*
-	hostname = cfghost;
-
-	trace("hostname=[%s]",hostname);
-
-#ifdef HAVE_LIBSSL
-	if(!g_ascii_strncasecmp(hostname,"L:",2))
-	{
-		gtk_toggle_button_set_active(sslcheck,TRUE);
-		hostname += 2;
-	}
-#else
-	gtk_toggle_button_set_active(sslcheck,FALSE);
-	gtk_widget_set_sensitive(GTK_WIDGET(sslcheck),FALSE);
-	if(!g_ascii_strncasecmp(hostname,"L:",2))
-		hostname += 2;
-#endif
-
-	trace("hostname=[%s]",hostname);
-
-	ptr = strchr(hostname,':');
-	if(ptr)
-	{
-		*(ptr++) = 0;
-		gtk_entry_set_text(port,ptr);
-	}
-	else
-	{
-		gtk_entry_set_text(port,"23");
-	}
-*/
 
  	while(again)
  	{
@@ -406,15 +389,6 @@
  		{
 		case GTK_RESPONSE_ACCEPT:
 			gtk_widget_set_sensitive(dialog,FALSE);
-
-			/*
-			hostname = g_strconcat(	gtk_toggle_button_get_active(sslcheck) ? "L:" : "",
-									gtk_entry_get_text(host),
-									":",
-									gtk_entry_get_text(port),
-									NULL
-								);
-			*/
 
 #if GTK_CHECK_VERSION(2,18,0)
 			gtk_widget_set_visible(dialog,FALSE);
@@ -455,5 +429,6 @@
 	gtk_widget_destroy(dialog);
 
 //	g_free(cfghost);
+*/
  }
 

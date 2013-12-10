@@ -232,6 +232,7 @@
 
  // Auxiliary widgets
  LIB3270_EXPORT GtkWidget		* v3270_host_select_new(GtkWidget *widget);
+ LIB3270_EXPORT void			  v3270_select_host(GtkWidget *widget);
 
 
  G_END_DECLS

@@ -415,6 +415,9 @@
 	 */
 	 LIB3270_EXPORT const char * lib3270_get_hostname(H3270 *h);
 
+	LIB3270_EXPORT void lib3270_set_hostname(H3270 *h, const char *hostname);
+
+
 	/**
 	 * Get servic or port for the connect/reconnect operations.
 	 *
@@ -425,6 +428,7 @@
 	 */
 	 LIB3270_EXPORT const char * lib3270_get_srvcname(H3270 *h);
 
+	 LIB3270_EXPORT void lib3270_set_srvcname(H3270 *h, const char *srvc);
 
 	/**
 	 * Get session options.
@@ -1054,6 +1058,8 @@
 
 	LIB3270_EXPORT int	lib3270_set_color_type(H3270 *hSession, unsigned short colortype);
 	LIB3270_EXPORT unsigned short lib3270_get_color_type(H3270 *hSession);
+
+	LIB3270_EXPORT int lib3270_set_host_type(H3270 *hSession, const char *name);
 
 	LIB3270_EXPORT const LIB3270_OPTION_ENTRY * lib3270_get_option_list(void);
 

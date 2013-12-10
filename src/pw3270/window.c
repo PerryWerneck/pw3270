@@ -180,6 +180,9 @@
  {
  	GtkWidget * widget	= g_object_new(GTK_TYPE_PW3270, NULL);
 
+	#warning Reimplementar
+
+	/*
 	if(systype)
 	{
 		set_string_to_config("host","uri","%s",systype);
@@ -196,6 +199,8 @@
 		set_integer_to_config("host","colortype",colors);
 	else
 		colors = get_integer_from_config("host","colortype",16);
+
+	*/
 
 	pw3270_set_session_color_type(widget,colors);
 
