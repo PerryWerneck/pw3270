@@ -244,18 +244,24 @@
 	 */
 	typedef enum lib3270_option
 	{
-		LIB3270_OPTION_DEFAULTS		= 0x0000,
-		LIB3270_OPTION_AS400		= 0x0001,	/**< Prefix every PF with PA1 */
+		/* Host types */
+		LIB3270_OPTION_AS400		= 0x0001,	/**< AS400 host - Prefix every PF with PA1 */
 		LIB3270_OPTION_TSO			= 0x0002,	/**< Host is TSO? */
-		LIB3270_OPTION_SSL			= 0x0004,
+		LIB3270_OPTION_S390			= 0x0006,	/**< Host is S390? (TSO included) */
+
+		/* Other options */
+		LIB3270_OPTION_SSL			= 0x0010,	/**< Secure connection ? */
+
 
 		LIB3270_OPTION_WAIT			= 0x8000	/**< Wait for session ready on connect ? */
 	} LIB3270_OPTION;
 
+	#define LIB3270_OPTION_HOST_TYPE	0x0007
+	#define LIB3270_OPTION_DEFAULTS		LIB3270_OPTION_S390
 
 //		LIB3270_OPTION_COLOR8	 	= 0x0001,	/**< If active, pw3270 will respond to a Query(Color) with a list of 8 supported colors. */
 
-	#define LIB3270_OPTION_DEFAULT	0
+//	#define LIB3270_OPTION_DEFAULT	0
 	#define LIB3270_OPTION_COUNT	3
 
 	typedef struct _lib3270_option_entry
@@ -1045,7 +1051,9 @@
 	LIB3270_EXPORT int lib3270_clear_operator_error(H3270 *hSession);
 
 	LIB3270_EXPORT void lib3270_set_options(H3270 *hSession, LIB3270_OPTION opt);
+
 	LIB3270_EXPORT int	lib3270_set_color_type(H3270 *hSession, unsigned short colortype);
+	LIB3270_EXPORT unsigned short lib3270_get_color_type(H3270 *hSession);
 
 	LIB3270_EXPORT const LIB3270_OPTION_ENTRY * lib3270_get_option_list(void);
 

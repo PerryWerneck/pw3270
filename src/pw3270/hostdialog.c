@@ -39,7 +39,7 @@
 	LIB3270_OPTION	  option;
  } host_type[] =
  {
-	{ "S390",		N_( "IBM S/390"			),	LIB3270_OPTION_TSO			},
+	{ "S390",		N_( "IBM S/390"			),	LIB3270_OPTION_S390			},
 	{ "AS400",		N_( "IBM AS/400"		),	LIB3270_OPTION_AS400		},
 	{ "TSO",		N_( "Other (TSO)"		),	LIB3270_OPTION_TSO			},
 	{ "VM/CMS",		N_( "Other (VM/CMS)"	),	0 							}

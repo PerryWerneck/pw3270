@@ -77,6 +77,16 @@ LIB3270_EXPORT void lib3270_set_options(H3270 *hSession, LIB3270_OPTION opt)
 	hSession->options = opt;
 }
 
+LIB3270_EXPORT unsigned short lib3270_get_color_type(H3270 *hSession)
+{
+	CHECK_SESSION_HANDLE(hSession);
+
+	trace("******************* %d",hSession->colors);
+
+	return hSession->mono ? 2 : hSession->colors;
+}
+
+
 LIB3270_EXPORT int lib3270_set_color_type(H3270 *hSession, unsigned short colortype)
 {
 	CHECK_SESSION_HANDLE(hSession);

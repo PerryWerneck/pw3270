@@ -227,7 +227,12 @@
  LIB3270_EXPORT const gchar		* v3270_get_ssl_status_message(GtkWidget *widget);
  LIB3270_EXPORT	void			  v3270_popup_security_dialog(GtkWidget *widget);
 
+ // File transfer
  LIB3270_EXPORT gint			  v3270_transfer_file(GtkWidget *widget, LIB3270_FT_OPTION options, const gchar *local, const gchar *remote, int lrecl, int blksize, int primspace, int secspace, int dft);
+
+ // Auxiliary widgets
+ LIB3270_EXPORT GtkWidget		* v3270_host_select_new(GtkWidget *widget);
+
 
  G_END_DECLS
 

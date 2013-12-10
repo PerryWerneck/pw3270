@@ -101,7 +101,7 @@
 		int						  oerr_lock					: 1;
 		int						  unlock_delay				: 1;
 		int			 			  auto_reconnect_inprogress	: 1;
-		int						  colors					: 5;
+		unsigned int			  colors					: 5;
 		int						  apl_mode					: 1;
 		int						  icrnl						: 1;
 		int						  inlcr						: 1;
