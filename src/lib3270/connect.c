@@ -113,7 +113,6 @@ static void net_connected(H3270 *hSession)
 		return;
 	}
 
-
 #ifdef _WIN32
 	hSession->ns_exception_id	= AddExcept(hSession->sockEvent, hSession, net_exception);
 	hSession->ns_read_id		= AddInput(hSession->sockEvent, hSession, net_input);
@@ -381,6 +380,25 @@ static void net_connected(H3270 *hSession)
 		u_long iMode=1;
 		trace("sock=%d",hSession->sock);
 
+		optval = lib3270_get_toggle(hSession,LIB3270_TOGGLE_KEEP_ALIVE) ? 1 : 0;
+		if (setsockopt(hSession->sock, SOL_SOCKET, SO_KEEPALIVE, (char *)&optval, sizeof(optval)) < 0)
+		{
+			char buffer[4096];
+			snprintf(buffer,4095,N_( "Can't %s network keep-alive" ), optval ? _( "enable" ) : _( "disable" ));
+
+			lib3270_popup_dialog(	hSession,
+									LIB3270_NOTIFY_ERROR,
+									_( "Connection error" ),
+									buffer,
+									"%s", lib3270_win32_strerror(WSAGetLastError()));
+			SOCK_CLOSE(hSession);
+			continue;
+		}
+		else
+		{
+			trace_dsn(hSession,"Network keep-alive is %s\n",optval ? "enabled" : "disabled" );
+		}
+
 		if(ioctlsocket(hSession->sock,FIONBIO,&iMode))
 		{
 			lib3270_popup_dialog(	hSession,
@@ -389,6 +407,7 @@ static void net_connected(H3270 *hSession)
 									_( "ioctlsocket(FIONBIO) failed." ),
 									"%s", lib3270_win32_strerror(WSAGetLastError()));
 			SOCK_CLOSE(hSession);
+			continue;
 		}
 		else if(connect(hSession->sock, rp->ai_addr, rp->ai_addrlen))
 		{
@@ -404,6 +423,8 @@ static void net_connected(H3270 *hSession)
 										buffer,
 										"%s", lib3270_win32_strerror(err));
 				SOCK_CLOSE(hSession);
+				continue;
+
 			}
 		}
 
@@ -414,28 +435,9 @@ static void net_connected(H3270 *hSession)
 									LIB3270_NOTIFY_ERROR,
 									_( "Connection error" ),
 									_( "setsockopt(SO_OOBINLINE) has failed" ),
-									"%s",
-									strerror(errno));
+									"%s", lib3270_win32_strerror(WSAGetLastError()));
 			SOCK_CLOSE(hSession);
-		}
-
-		optval = lib3270_get_toggle(hSession,LIB3270_TOGGLE_KEEP_ALIVE) ? 1 : 0;
-		if (setsockopt(hSession->sock, SOL_SOCKET, SO_KEEPALIVE, (char *)&optval, sizeof(optval)) < 0)
-		{
-			char buffer[4096];
-			snprintf(buffer,4095,N_( "Can't %s network keep-alive" ), optval ? _( "enable" ) : _( "disable" ));
-
-			lib3270_popup_dialog(	hSession,
-									LIB3270_NOTIFY_ERROR,
-									_( "Connection error" ),
-									buffer,
-									"%s",
-									strerror(errno));
-			SOCK_CLOSE(hSession);
-		}
-		else
-		{
-			trace_dsn(hSession,"Network keep-alive is %s\n",optval ? "enabled" : "disabled" );
+			continue;
 		}
 
 #else
@@ -456,6 +458,7 @@ static void net_connected(H3270 *hSession)
 										"%s",
 										strerror(errno));
 				SOCK_CLOSE(hSession);
+				continue;
 			}
 		}
 
@@ -469,6 +472,7 @@ static void net_connected(H3270 *hSession)
 									"%s",
 									strerror(errno));
 			SOCK_CLOSE(hSession);
+			continue;
 		}
 
 		optval = lib3270_get_toggle(hSession,LIB3270_TOGGLE_KEEP_ALIVE) ? 1 : 0;
@@ -484,6 +488,7 @@ static void net_connected(H3270 *hSession)
 									"%s",
 									strerror(errno));
 			SOCK_CLOSE(hSession);
+			continue;
 		}
 		else
 		{

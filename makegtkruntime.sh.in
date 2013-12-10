@@ -132,6 +132,17 @@ if [ "$?" != 0 ]; then
         exit -1
 fi
 
+mkdir -p $TARGET_PATH/share/icons/hicolor
+if [ "$?" != 0 ]; then
+	echo "Can´t create icons folder"
+	exit -1
+fi
+
+cp -rv $GTK_PREFIX/share/icons/hicolor $TARGET_PATH/share/icons/hicolor
+if [ "$?" != 0 ]; then
+	echo "Can´t copy icons"
+	exit -1
+fi
 
 }
 
