@@ -1552,6 +1552,12 @@ int v3270_set_session_color_type(GtkWidget *widget, unsigned short colortype)
 	return lib3270_set_color_type(GTK_V3270(widget)->host,colortype);
 }
 
+int v3270_set_host_type(GtkWidget *widget, const char *name)
+{
+	g_return_val_if_fail(GTK_IS_V3270(widget),EFAULT);
+	return lib3270_set_host_type(GTK_V3270(widget)->host,name);
+}
+
 unsigned short v3270_get_session_color_type(GtkWidget *widget)
 {
 	g_return_val_if_fail(GTK_IS_V3270(widget),-1);

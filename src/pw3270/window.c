@@ -195,12 +195,12 @@
 		g_free(ptr);
 	}
 
+	*/
+
 	if(colors)
 		set_integer_to_config("host","colortype",colors);
 	else
 		colors = get_integer_from_config("host","colortype",16);
-
-	*/
 
 	pw3270_set_session_color_type(widget,colors);
 
