@@ -34,15 +34,14 @@
 
  static const struct _host_type
  {
-	const gchar		* name;
 	const gchar		* description;
 	LIB3270_OPTION	  option;
  } host_type[] =
  {
-	{ "S390",		N_( "IBM S/390"			),	LIB3270_OPTION_S390			},
-	{ "AS400",		N_( "IBM AS/400"		),	LIB3270_OPTION_AS400		},
-	{ "TSO",		N_( "Other (TSO)"		),	LIB3270_OPTION_TSO			},
-	{ "VM/CMS",		N_( "Other (VM/CMS)"	),	0 							}
+	{ N_( "IBM S/390"		),	LIB3270_OPTION_S390			},
+	{ N_( "IBM AS/400"		),	LIB3270_OPTION_AS400		},
+	{ N_( "Other (TSO)"		),	LIB3270_OPTION_TSO			},
+	{ N_( "Other (VM/CMS)"	),	0 							}
  };
 
  static const struct _colortable
@@ -276,7 +275,32 @@ static void V3270HostSelectWidget_init(V3270HostSelectWidget *widget)
 	gtk_table_set_row_spacings(grid,5);
 	gtk_table_set_col_spacings(grid,5);
 
-	#error Implementar
+	gtk_table_attach(grid,label[ENTRY_HOSTNAME],0,1,0,1,GTK_FILL,GTK_FILL,0,0);
+	gtk_table_attach(grid,GTK_WIDGET(widget->entry[ENTRY_HOSTNAME]),1,2,0,1,GTK_EXPAND|GTK_FILL,GTK_EXPAND|GTK_FILL,0,0);
+
+	gtk_table_attach(grid,label[ENTRY_SRVCNAME],2,3,0,1,GTK_FILL,GTK_FILL,0,0);
+	gtk_table_attach(grid,GTK_WIDGET(widget->entry[ENTRY_SRVCNAME]),3,4,0,1,GTK_FILL,GTK_FILL,0,0);
+
+	gtk_table_attach(grid,GTK_WIDGET(widget->ssl),1,2,1,2,GTK_FILL,GTK_FILL,0,0);
+
+	{
+		GtkTable * opt	= GTK_TABLE(gtk_table_new(G_N_ELEMENTS(comboLabel),2,FALSE));
+		gtk_table_set_row_spacings(opt,5);
+		gtk_table_set_col_spacings(opt,5);
+
+		for(f=0;f<G_N_ELEMENTS(comboLabel);f++)
+		{
+			GtkWidget *label = gtk_label_new_with_mnemonic(gettext(comboLabel[f]));
+			gtk_misc_set_alignment(GTK_MISC(label),0,0.5);
+
+			gtk_table_attach(opt,label,0,1,f,f+1,GTK_FILL,GTK_FILL,0,0);
+			gtk_table_attach(opt,GTK_WIDGET(widget->combo[f]),1,2,f,f+1,GTK_FILL,GTK_FILL,0,0);
+		}
+
+		gtk_container_add(GTK_CONTAINER(expander),GTK_WIDGET(opt));
+	}
+	gtk_table_attach(grid,GTK_WIDGET(expander),1,2,2,3,GTK_FILL,GTK_FILL,0,0);
+
 
 #endif // GTK_CHECK_VERSION
 

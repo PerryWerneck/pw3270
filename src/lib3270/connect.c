@@ -95,11 +95,14 @@ static void net_connected(H3270 *hSession)
 	}
 	else if(err)
 	{
+		char buffer[4096];
+		snprintf(buffer,4095,_( "Can't connect to %s" ), hSession->host.current );
+
 		lib3270_disconnect(hSession);
 		lib3270_popup_dialog(	hSession,
 								LIB3270_NOTIFY_ERROR,
-								_( "Network error" ),
-								_( "Unable to connect to host." ),
+								_( "Connection failed" ),
+								buffer,
 #ifdef _WIN32
 								_( "%s"), lib3270_win32_strerror(err)
 #else
