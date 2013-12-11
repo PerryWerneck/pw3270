@@ -33,34 +33,32 @@
 
 /*---[ Globals ]--------------------------------------------------------------------------------------------------------------*/
 
- static const struct _host_type
- {
-	const char		* name;
-	LIB3270_OPTION	  option;
- } host_type[] =
- {
-	{ "S390",		LIB3270_OPTION_S390			},
-	{ "AS400",		LIB3270_OPTION_AS400		},
-	{ "TSO",		LIB3270_OPTION_TSO			},
-	{ "VM/CMS",		0 							}
- };
-
-
 /*---[ Statics ]--------------------------------------------------------------------------------------------------------------*/
 
- static const const LIB3270_OPTION_ENTRY options[LIB3270_OPTION_COUNT+1] =
+ static const const LIB3270_OPTION_ENTRY host_type[] =
  {
 	{
-		LIB3270_OPTION_AS400,
-		"as400",
-		N_( "Host is AS/400" ),
+		LIB3270_OPTION_S390,
+		"S390",
+		N_( "IBM S/390" ),
 		NULL
 	},
-
+	{
+		LIB3270_OPTION_AS400,
+		"AS400",
+		N_( "IBM AS/400" ),
+		NULL
+	},
 	{
 		LIB3270_OPTION_TSO,
-		"tso",
-		N_( "Host is TSO" ),
+		"TSO",
+		N_( "Other (TSO)" ),
+		NULL
+	},
+	{
+		0,
+		"VM/CMS",
+		N_( "Other (VM/CMS)"	),
 		NULL
 	},
 
@@ -70,9 +68,7 @@
 		NULL,
 		NULL
 	}
-
  };
-
 
 
 /*---[ Implement ]------------------------------------------------------------------------------------------------------------*/
@@ -134,7 +130,7 @@ LIB3270_EXPORT int lib3270_set_color_type(H3270 *hSession, unsigned short colort
 
 LIB3270_EXPORT const LIB3270_OPTION_ENTRY * lib3270_get_option_list(void)
 {
-	return options;
+	return host_type;
 }
 
 LIB3270_EXPORT int lib3270_is_tso(H3270 *hSession)
@@ -145,6 +141,7 @@ LIB3270_EXPORT int lib3270_is_tso(H3270 *hSession)
 
 LIB3270_EXPORT LIB3270_OPTION lib3270_parse_host_type(const char *name)
 {
+
 	int f;
 
 	for(f=0;f<(sizeof(host_type)/sizeof(host_type[0]));f++)

@@ -28,21 +28,10 @@
  */
 
  #include "hostselect.h"
+ #include <lib3270/log.h>
  #include <pw3270/v3270.h>
 
 /*--[ Widget definition ]----------------------------------------------------------------------------*/
-
- static const struct _host_type
- {
-	const gchar		* description;
-	LIB3270_OPTION	  option;
- } host_type[] =
- {
-	{ N_( "IBM S/390"		),	LIB3270_OPTION_S390			},
-	{ N_( "IBM AS/400"		),	LIB3270_OPTION_AS400		},
-	{ N_( "Other (TSO)"		),	LIB3270_OPTION_TSO			},
-	{ N_( "Other (VM/CMS)"	),	0 							}
- };
 
  static const struct _colortable
  {
@@ -191,11 +180,12 @@ static void V3270HostSelectWidget_init(V3270HostSelectWidget *widget)
 		gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(widget->combo[0]), renderer, TRUE);
 		gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(widget->combo[0]), renderer, "text", 0, NULL);
 
-		for(f=0;f<G_N_ELEMENTS(host_type);f++)
+		const LIB3270_OPTION_ENTRY *entry = lib3270_get_option_list();
+		for(f=0;entry[f].name != NULL;f++)
 		{
 			GtkTreeIter iter;
 			gtk_list_store_append((GtkListStore *) model,&iter);
-			gtk_list_store_set((GtkListStore *) model, &iter, 0, gettext(host_type[f].description), 1, host_type[f].option, -1);
+			gtk_list_store_set((GtkListStore *) model, &iter, 0, gettext(entry[f].description), 1, entry[f].option, -1);
 		}
 
 		g_signal_connect(G_OBJECT(widget->combo[0]),"changed",G_CALLBACK(systype_changed),widget);

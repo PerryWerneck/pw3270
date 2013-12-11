@@ -259,16 +259,11 @@
 	#define LIB3270_OPTION_HOST_TYPE	0x0007
 	#define LIB3270_OPTION_DEFAULTS		LIB3270_OPTION_S390
 
-//		LIB3270_OPTION_COLOR8	 	= 0x0001,	/**< If active, pw3270 will respond to a Query(Color) with a list of 8 supported colors. */
-
-//	#define LIB3270_OPTION_DEFAULT	0
-	#define LIB3270_OPTION_COUNT	3
-
 	typedef struct _lib3270_option_entry
 	{
-		LIB3270_OPTION	  value;
-		const char		* key;
-		const char		* text;
+		LIB3270_OPTION	  option;
+		const char		* name;
+		const char		* description;
 		const char		* tooltip;
 	} LIB3270_OPTION_ENTRY;
 
@@ -398,7 +393,7 @@
 	 * Set host id for the connect/reconnect operations.
 	 *
 	 * @param h		Session handle.
-	 * @param url	URL of host to set in the format tn3270://hostname:service ou tn3270s://hostname:service .
+	 * @param url	URL of host to set in the format tn3270://hostname:service or tn3270s://hostname:service .
 	 *
 	 * @return Processed host url
 	 *
@@ -415,7 +410,7 @@
 	 */
 	 LIB3270_EXPORT const char * lib3270_get_hostname(H3270 *h);
 
-	LIB3270_EXPORT void lib3270_set_hostname(H3270 *h, const char *hostname);
+	 LIB3270_EXPORT void lib3270_set_hostname(H3270 *h, const char *hostname);
 
 
 	/**
