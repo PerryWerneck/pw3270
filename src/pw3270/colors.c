@@ -473,8 +473,8 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkRGBA *clr)
 	GtkWidget	* dialog = gtk_dialog_new_with_buttons (	gettext(title ? title : N_( "Color setup") ),
 															GTK_WINDOW(gtk_widget_get_toplevel(widget)),
 															GTK_DIALOG_DESTROY_WITH_PARENT,
-															GTK_STOCK_OK,		GTK_RESPONSE_ACCEPT,
 															GTK_STOCK_CANCEL,	GTK_RESPONSE_REJECT,
+															GTK_STOCK_OK,		GTK_RESPONSE_ACCEPT,
 															NULL );
 #if GTK_CHECK_VERSION(3,0,0)
 	GtkWidget	* panned = gtk_box_new(GTK_ORIENTATION_HORIZONTAL,2);

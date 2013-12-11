@@ -395,6 +395,10 @@ GtkWidget * v3270_ft_dialog_new(GtkWidget *parent, LIB3270_FT_OPTION options)
 	gtk_widget_set_tooltip_text(GTK_WIDGET(browse),_("Select file"));
 	g_signal_connect(G_OBJECT(browse),"clicked",G_CALLBACK(browse_file),dialog);
 
+	gtk_widget_set_tooltip_text(gtk_dialog_add_button(GTK_DIALOG(dialog),_( "_Cancel" ), GTK_RESPONSE_CANCEL),
+				(dialog->options & LIB3270_FT_OPTION_RECEIVE) != 0 ? _("Cancel download.") : _("Cancel upload."));
+
+
 	dialog->ready = gtk_dialog_add_button(GTK_DIALOG(dialog),
 												(dialog->options & LIB3270_FT_OPTION_RECEIVE) != 0 ? _( "_Receive") : _( "_Send" ),
 												GTK_RESPONSE_ACCEPT);
@@ -402,10 +406,6 @@ GtkWidget * v3270_ft_dialog_new(GtkWidget *parent, LIB3270_FT_OPTION options)
 
 	gtk_widget_set_tooltip_text(GTK_WIDGET(dialog->ready),
 						(dialog->options & LIB3270_FT_OPTION_RECEIVE) != 0 ? _("Start download.") : _("Start upload."));
-
-
-	gtk_widget_set_tooltip_text(gtk_dialog_add_button(GTK_DIALOG(dialog),_( "_Cancel" ), GTK_RESPONSE_CANCEL),
-				(dialog->options & LIB3270_FT_OPTION_RECEIVE) != 0 ? _("Cancel download.") : _("Cancel upload."));
 
 
 	g_signal_connect(G_OBJECT(dialog->filename[FILENAME_HOST]),"changed",G_CALLBACK(test_remote_file),dialog);

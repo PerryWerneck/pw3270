@@ -386,8 +386,8 @@ LIB3270_EXPORT void v3270_select_host(GtkWidget *widget)
 								_( "Select hostname" ),
 								GTK_WINDOW(gtk_widget_get_toplevel(widget)),
 								GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
-								_( "C_onnect" ),	GTK_RESPONSE_ACCEPT,
 								_( "_Cancel" ),		GTK_RESPONSE_REJECT,
+								_( "C_onnect" ),	GTK_RESPONSE_ACCEPT,
 								NULL	);
 
 
