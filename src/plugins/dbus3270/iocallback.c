@@ -46,13 +46,8 @@
 static int 				  static_CallAndWait(int(*callback)(H3270 *session, void *), H3270 *session, void *parm);
 static void				  static_RemoveSource(void *id);
 
-#ifdef WIN32
-static void 			* static_AddInput(HANDLE source, H3270 *session, void (*fn)(H3270 *session));
-static void 			* static_AddExcept(HANDLE source, H3270 *session, void (*fn)(H3270 *session));
-#else
 static void 			* static_AddInput(int source, H3270 *session, void (*fn)(H3270 *session));
 static void 			* static_AddExcept(int source, H3270 *session, void (*fn)(H3270 *session));
-#endif // WIN32
 
 static void 			* static_AddTimeOut(unsigned long interval_ms, H3270 *session, void (*proc)(H3270 *session));
 static void 			  static_RemoveTimeOut(void * timer);

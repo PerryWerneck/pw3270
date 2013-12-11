@@ -310,11 +310,6 @@ static void lib3270_session_init(H3270 *hSession, const char *model, const char 
 	for(f=0;f<4;f++)
 		hSession->csd[f] = hSession->saved_csd[f] = LIB3270_ANSI_CSD_US;
 
-#ifdef _WIN32
-	hSession->sockEvent			= NULL;
-#endif // _WIN32
-
-
 	// Initialize toggles
 	initialize_toggles(hSession);
 

@@ -1002,10 +1002,6 @@ void net_input(H3270 *hSession)
 		hSession->ansi_data = 0;
 #endif
 
-#if defined(_WIN32)
-		ResetEvent(hSession->sockEvent);
-#endif
-
 #if defined(HAVE_LIBSSL)
 		if (hSession->ssl_con != NULL)
 			nr = SSL_read(hSession->ssl_con, (char *) buffer, BUFSZ);

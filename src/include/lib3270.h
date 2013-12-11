@@ -657,26 +657,18 @@
 		void	* (*AddTimeOut)(unsigned long interval_ms, H3270 *session, void (*proc)(H3270 *session));
 		void	  (*RemoveTimeOut)(void *timer);
 
-#ifdef WIN32
-		void	* (*AddInput)(HANDLE source, H3270 *session, void (*fn)(H3270 *session));
-		void	* (*AddOutput)(HANDLE source, H3270 *session, void (*fn)(H3270 *session));
-#else
 		void	* (*AddInput)(int source, H3270 *session, void (*fn)(H3270 *session));
 		void	* (*AddOutput)(int source, H3270 *session, void (*fn)(H3270 *session));
-#endif // WIN32
+
 		void	  (*RemoveSource)(void *id);
 
-#ifdef WIN32
-		void 	* (*AddExcept)(HANDLE source, H3270 *session, void (*fn)(H3270 *session));
-#else
 		void 	* (*AddExcept)(int source, H3270 *session, void (*fn)(H3270 *session));
-#endif
 
-		int 			(*callthread)(int(*callback)(H3270 *, void *), H3270 *session, void *parm);
+		int 	  (*callthread)(int(*callback)(H3270 *, void *), H3270 *session, void *parm);
 
-		int				(*Wait)(H3270 *hSession, int seconds);
-		int 			(*event_dispatcher)(H3270 *hSession, int wait);
-		void			(*ring_bell)(H3270 *);
+		int		  (*Wait)(H3270 *hSession, int seconds);
+		int		  (*event_dispatcher)(H3270 *hSession, int wait);
+		void	  (*ring_bell)(H3270 *);
 
 	};
 

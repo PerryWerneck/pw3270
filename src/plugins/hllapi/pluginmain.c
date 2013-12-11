@@ -201,7 +201,7 @@
 		break;
 
 	case HLLAPI_PACKET_SET_HOST:
-		send_result(source,lib3270_set_host( lib3270_get_default_session_handle(),
+		send_result(source,lib3270_set_url( lib3270_get_default_session_handle(),
 											((struct hllapi_packet_text *) source->buffer)->text) != NULL);
 		break;
 

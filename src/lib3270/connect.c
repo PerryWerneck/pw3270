@@ -113,15 +113,10 @@ static void net_connected(H3270 *hSession)
 		return;
 	}
 
-#ifdef _WIN32
-	hSession->ns_exception_id	= AddExcept(hSession->sockEvent, hSession, net_exception);
-	hSession->ns_read_id		= AddInput(hSession->sockEvent, hSession, net_input);
-#else
 	hSession->ns_exception_id	= AddExcept(hSession->sock, hSession, net_exception);
 	hSession->ns_read_id		= AddInput(hSession->sock, hSession, net_input);
-#endif // WIN32
-	hSession->excepting	= 1;
-	hSession->reading 	= 1;
+	hSession->excepting			= 1;
+	hSession->reading 			= 1;
 
 #if defined(HAVE_LIBSSL)
 	if(hSession->ssl_con && hSession->secure == LIB3270_SSL_UNDEFINED)
@@ -348,34 +343,6 @@ static void net_connected(H3270 *hSession)
 
 #ifdef WIN32
 
-		if(hSession->sockEvent == NULL)
-		{
-			char ename[256];
-
-			snprintf(ename, 255, "%s-%d", PACKAGE_NAME, getpid());
-
-			hSession->sockEvent = CreateEvent(NULL, TRUE, FALSE, ename);
-			if(hSession->sockEvent == NULL)
-			{
-				lib3270_popup_dialog(	hSession,
-										LIB3270_NOTIFY_CRITICAL,
-										N_( "Network startup error" ),
-										N_( "Cannot create socket event" ),
-										"%s", lib3270_win32_strerror(GetLastError()) );
-				_exit(1);
-			}
-		}
-
-		if (WSAEventSelect(hSession->sock, hSession->sockEvent, FD_READ | FD_CONNECT | FD_CLOSE) != 0)
-		{
-			lib3270_popup_dialog(	hSession,
-									LIB3270_NOTIFY_CRITICAL,
-									N_( "Network startup error" ),
-									N_( "WSAEventSelect failed" ),
-									"%s", lib3270_win32_strerror(GetLastError()) );
-			_exit(1);
-		}
-
 		WSASetLastError(0);
 		u_long iMode=1;
 		trace("sock=%d",hSession->sock);
@@ -523,12 +490,7 @@ static void net_connected(H3270 *hSession)
 	hSession->cstate = LIB3270_PENDING;
 	lib3270_st_changed(hSession, LIB3270_STATE_HALF_CONNECT, True);
 
-#ifdef _WIN32
-	trace("Sockevent=%08lx callback=%p",hSession->sockEvent,net_connected);
-	hSession->ns_write_id = AddOutput(hSession->sockEvent, hSession, net_connected);
-#else
 	hSession->ns_write_id = AddOutput(hSession->sock, hSession, net_connected);
-#endif // WIN32
 
 	trace("%s: Connection in progress",__FUNCTION__);
 

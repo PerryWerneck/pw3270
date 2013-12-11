@@ -36,11 +36,8 @@ int main(int numpar, char *param[])
 //	pthread_create(&thread, NULL, mainloop, NULL);
 //	pthread_detach(thread);
 
-//	rc = lib3270_connect_host(h, "fandezhi.efglobe.com", "telnet", LIB3270_CONNECT_OPTION_WAIT);
-//	rc = lib3270_connect_host(h, "127.0.0.1", "9090", LIB3270_CONNECT_OPTION_WAIT);
-
-//	lib3270_set_host_url(h,"tn3270://fandezhi.efglobe.com:9090?lu=default");
 	lib3270_set_url(h,"tn3270://fandezhi.efglobe.com");
+	rc = lib3270_connect(h,1);
 
 	printf("\nConnect exits with rc=%d\n",rc);
 

@@ -76,14 +76,11 @@
 
 	struct _h3270
 	{
-		unsigned short 		  	  sz;					/**< Struct size */
+		unsigned short 		  	  sz;								/**< Struct size */
 
 		// Connection info
-		int						  sock;					/**< Network socket */
-		#ifdef _WIN32
-			HANDLE				  sockEvent;			/**< Event semaphore */
-		#endif // WIN32
-		LIB3270_CSTATE			  cstate;				/**< Connection state */
+		int						  sock;								/**< Network socket */
+		LIB3270_CSTATE			  cstate;							/**< Connection state */
 
 		// flags
 		LIB3270_OPTION			  options;							/**< Session options */
