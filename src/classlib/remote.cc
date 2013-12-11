@@ -681,7 +681,7 @@
 
 		}
 
-		int set_host(const char *uri)
+		int set_url(const char *uri)
 		{
 			int rc;
 

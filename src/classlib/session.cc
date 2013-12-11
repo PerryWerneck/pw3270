@@ -469,12 +469,17 @@
 		return EINVAL;
 	}
 
+	int session::set_host(const char *host)
+	{
+		return set_url(host);
+	}
+
 	int session::connect(const char *host, bool wait)
 	{
 		int rc = 0;
 
 		if(host && *host)
-			rc = set_host(host);
+			rc = set_url(host);
 
 		if(!rc)
 			rc = connect(wait);

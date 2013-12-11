@@ -337,7 +337,7 @@ JNIEXPORT void JNICALL Java_br_com_bb_pw3270_lib3270_setHost(JNIEnv *env, jobjec
 {
 	PW3270_JNI_BEGIN
 
-	lib3270_set_host(PW3270_SESSION,env->GetStringUTFChars(hostname, 0));
+	lib3270_set_url(PW3270_SESSION,env->GetStringUTFChars(hostname, 0));
 
 	PW3270_JNI_END
 }

@@ -398,7 +398,7 @@
 	 * @return Processed host url
 	 *
 	 */
-	 LIB3270_EXPORT const char * lib3270_set_host(H3270 *h, const char *url);
+	 LIB3270_EXPORT const char * lib3270_set_url(H3270 *h, const char *url);
 
 	/**
 	 * Get hostname for the connect/reconnect operations.

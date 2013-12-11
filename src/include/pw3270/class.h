@@ -129,8 +129,9 @@
 
 		// Connection & Network
 		int						  connect(const char *host, bool wait = true);
+		int						  set_host(const char *host);
 		virtual int				  connect(bool wait = true)							= 0;
-		virtual int				  set_host(const char *hostname)					= 0;
+		virtual int				  set_url(const char *hostname)						= 0;
 		virtual int				  disconnect(void)									= 0;
 		virtual int				  wait_for_ready(int seconds)						= 0;
 		virtual int				  wait(int seconds)									= 0;

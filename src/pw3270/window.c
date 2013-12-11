@@ -178,24 +178,37 @@
 
  GtkWidget * pw3270_new(const gchar *host, const gchar *systype, unsigned short colors)
  {
- 	GtkWidget * widget	= g_object_new(GTK_TYPE_PW3270, NULL);
+ 	GtkWidget	* widget	= g_object_new(GTK_TYPE_PW3270, NULL);
+ 	gboolean	  connct	= FALSE;
 
-	#warning Reimplementar
+	if(host)
+	{
+		set_string_to_config("host","uri","%s",host);
+		pw3270_set_url(widget,host);
+		connct = TRUE;
+	}
+	else
+	{
+		gchar *ptr = get_string_from_config("host","uri","");
+		if(*ptr)
+		{
+			pw3270_set_url(widget,ptr);
+			connct = pw3270_get_toggle(widget,LIB3270_TOGGLE_CONNECT_ON_STARTUP) ? TRUE : FALSE;
+		}
+		g_free(ptr);
+	}
 
-	/*
 	if(systype)
 	{
 		set_string_to_config("host","uri","%s",systype);
-		pw3270_set_session_options(widget,pw3270_options_by_hosttype(systype));
+		pw3270_set_host_type(widget,systype);
 	}
 	else
 	{
 		gchar *ptr = get_string_from_config("host","systype","S390");
-		pw3270_set_session_options(widget,pw3270_options_by_hosttype(ptr));
+		pw3270_set_host_type(widget,ptr);
 		g_free(ptr);
 	}
-
-	*/
 
 	if(colors)
 		set_integer_to_config("host","colortype",colors);
@@ -204,40 +217,24 @@
 
 	pw3270_set_session_color_type(widget,colors);
 
-	if(host)
-	{
-		set_string_to_config("host","uri","%s",host);
-		pw3270_connect(widget,host);
-	}
-	else
-	{
-		gchar *ptr = get_string_from_config("host","uri","");
-
-		if(*ptr)
-		{
-			if(pw3270_get_toggle(widget,LIB3270_TOGGLE_CONNECT_ON_STARTUP))
-				pw3270_connect(widget,ptr);
-			else
-				pw3270_set_host(widget,ptr);
-		}
-		g_free(ptr);
-	}
-
 	v3270_set_scaled_fonts(GTK_PW3270(widget)->terminal,get_boolean_from_config("terminal","sfonts",FALSE));
+
+	if(connct)
+		pw3270_connect(widget);
 
  	return widget;
  }
 
- void pw3270_connect(GtkWidget *widget, const gchar *uri)
+ void pw3270_connect(GtkWidget *widget)
  {
  	g_return_if_fail(GTK_IS_PW3270(widget));
- 	v3270_connect(GTK_PW3270(widget)->terminal,uri);
+ 	v3270_connect(GTK_PW3270(widget)->terminal);
  }
 
- const gchar * pw3270_set_host(GtkWidget *widget, const gchar *uri)
+ const gchar * pw3270_set_url(GtkWidget *widget, const gchar *uri)
  {
  	g_return_if_fail(GTK_IS_PW3270(widget));
- 	return v3270_set_host(GTK_PW3270(widget)->terminal,uri);
+ 	return v3270_set_url(GTK_PW3270(widget)->terminal,uri);
  }
 
  const gchar * pw3270_get_hostname(GtkWidget *widget)
@@ -295,10 +292,10 @@
 	update_window_title(widget);
  }
 
- LIB3270_EXPORT void pw3270_set_session_options(GtkWidget *widget, LIB3270_OPTION options)
+ LIB3270_EXPORT void pw3270_set_host_type(GtkWidget *widget, const gchar *name)
  {
  	g_return_if_fail(GTK_IS_PW3270(widget));
-	v3270_set_session_options(GTK_PW3270(widget)->terminal,options);
+	v3270_set_host_type(GTK_PW3270(widget)->terminal,name);
  }
 
  LIB3270_EXPORT int pw3270_set_session_color_type(GtkWidget *widget, unsigned short colortype)

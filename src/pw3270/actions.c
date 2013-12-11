@@ -75,38 +75,20 @@ static void connect_action(GtkAction *action, GtkWidget *widget)
 
 	trace_action(action,widget);
 
-	#warning Reimplementar
+	if(host)
+		v3270_set_url(widget,host);
 
-	/*
-	if(!systype)
-		systype = get_string_from_config("host","systype","S390");
+	if(systype)
+		v3270_set_host_type(widget,systype);
 
 	if(colortype)
-		colors = atoi(colortype);
-	else
-		colors = (unsigned short) get_integer_from_config("host","colortype",16);
+		v3270_set_session_color_type(widget,atoi(colortype));
 
-	trace("System type=%s System colors=%d",systype,(int) colors);
-
-	v3270_set_session_color_type(widget,colors);
-	v3270_set_session_options(widget,pw3270_options_by_hosttype(systype));
-	*/
-
-	if(host)
+	host = v3270_get_hostname(widget);
+	if(host && *host)
 	{
-		v3270_connect(widget,host);
+		v3270_connect(widget);
 		return;
-	}
-	else
-	{
-		gchar *ptr = get_string_from_config("host","uri","");
-		if(*ptr)
-		{
-			v3270_connect(widget,ptr);
-			g_free(ptr);
-			return;
-		}
-		g_free(ptr);
 	}
 
 	hostname_action(action,widget);

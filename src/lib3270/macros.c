@@ -258,12 +258,12 @@
 		break;
 
 	case 2:
-		lib3270_set_host(hSession,argv[1]);
+		lib3270_set_url(hSession,argv[1]);
 		rc = lib3270_connect(hSession,0);
 		break;
 
 	case 3:
-		lib3270_set_host(hSession,argv[1]);
+		lib3270_set_url(hSession,argv[1]);
 		rc = lib3270_connect(hSession,atoi(argv[2]));
 		break;
 

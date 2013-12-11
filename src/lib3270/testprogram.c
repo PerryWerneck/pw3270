@@ -40,7 +40,7 @@ int main(int numpar, char *param[])
 //	rc = lib3270_connect_host(h, "127.0.0.1", "9090", LIB3270_CONNECT_OPTION_WAIT);
 
 //	lib3270_set_host_url(h,"tn3270://fandezhi.efglobe.com:9090?lu=default");
-	lib3270_set_host(h,"tn3270://fandezhi.efglobe.com");
+	lib3270_set_url(h,"tn3270://fandezhi.efglobe.com");
 
 	printf("\nConnect exits with rc=%d\n",rc);
 

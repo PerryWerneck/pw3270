@@ -158,7 +158,7 @@
  LIB3270_EXPORT	H3270			* v3270_get_session(GtkWidget *widget);
  LIB3270_EXPORT gboolean		  v3270_is_connected(GtkWidget *widget);
 
- LIB3270_EXPORT	int				  v3270_connect(GtkWidget *widget, const gchar *host);
+ LIB3270_EXPORT	int				  v3270_connect(GtkWidget *widget);
  LIB3270_EXPORT	void			  v3270_disconnect(GtkWidget *widget);
 
  LIB3270_EXPORT	int				  v3270_set_host_charset(GtkWidget *widget, const gchar *name);
@@ -214,7 +214,7 @@
  LIB3270_EXPORT void			  v3270_set_session_options(GtkWidget *widget, LIB3270_OPTION options);
  LIB3270_EXPORT int				  v3270_set_session_color_type(GtkWidget *widget, unsigned short colortype);
  LIB3270_EXPORT int				  v3270_set_host_type(GtkWidget *widget, const char *name);
- LIB3270_EXPORT	const gchar		* v3270_set_host(GtkWidget *widget, const gchar *uri);
+ LIB3270_EXPORT	const gchar		* v3270_set_url(GtkWidget *widget, const gchar *uri);
  LIB3270_EXPORT	const gchar		* v3270_get_hostname(GtkWidget *widget);
  LIB3270_EXPORT GtkWidget		* v3270_get_default_widget(void);
 

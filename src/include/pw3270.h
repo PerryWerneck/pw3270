@@ -52,9 +52,9 @@
 
 
  LIB3270_EXPORT GtkWidget	* pw3270_new(const gchar *host, const gchar *systype, unsigned short colors);
- LIB3270_EXPORT const gchar * pw3270_set_host(GtkWidget *widget, const gchar *uri);
+ LIB3270_EXPORT const gchar * pw3270_set_url(GtkWidget *widget, const gchar *uri);
  LIB3270_EXPORT const gchar	* pw3270_get_hostname(GtkWidget *widget);
- LIB3270_EXPORT void		  pw3270_connect(GtkWidget *widget, const gchar *uri);
+ LIB3270_EXPORT void		  pw3270_connect(GtkWidget *widget);
 
  LIB3270_EXPORT gboolean 	  pw3270_get_toggle(GtkWidget *widget, LIB3270_TOGGLE ix);
  LIB3270_EXPORT gboolean	  pw3270_set_toggle_by_name(GtkWidget *widget, const gchar *name, gboolean flag);
@@ -69,7 +69,7 @@
 
  LIB3270_EXPORT const gchar	* pw3270_get_session_name(GtkWidget *widget);
  LIB3270_EXPORT void		  pw3270_set_session_name(GtkWidget *widget, const gchar *name);
- LIB3270_EXPORT void		  pw3270_set_session_options(GtkWidget *widget, LIB3270_OPTION options);
+ LIB3270_EXPORT void		  pw3270_set_host_type(GtkWidget *widget, const gchar *name);
  LIB3270_EXPORT int			  pw3270_set_session_color_type(GtkWidget *widget, unsigned short color_type);
 
  LIB3270_EXPORT gchar		* pw3270_get_filename(GtkWidget *widget, const gchar *group, const gchar *key, GtkFileFilter **filter, const gchar *title);

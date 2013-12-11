@@ -506,7 +506,7 @@ static void update_host(H3270 *h)
 
 }
 
-LIB3270_EXPORT const char * lib3270_set_host(H3270 *h, const char *n)
+LIB3270_EXPORT const char * lib3270_set_url(H3270 *h, const char *n)
 {
     CHECK_SESSION_HANDLE(h);
 

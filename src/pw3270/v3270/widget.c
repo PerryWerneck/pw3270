@@ -1389,25 +1389,11 @@ H3270 * v3270_get_session(GtkWidget *widget)
 	return GTK_V3270(widget)->host;
 }
 
-int v3270_connect(GtkWidget *widget, const gchar *uri)
+int v3270_connect(GtkWidget *widget)
 {
-	v3270 * terminal;
-	int		rc = -1;
-
-	trace("%s widget=%p host=%p",__FUNCTION__,widget,uri);
-
 	g_return_val_if_fail(GTK_IS_V3270(widget),EINVAL);
 
-	terminal = GTK_V3270(widget);
-
-	if(uri)
-	{
-		trace("%s(%s)",__FUNCTION__,uri);
-		lib3270_set_host(terminal->host,uri);
-	}
-
-	return lib3270_connect(terminal->host,0);
-
+	return lib3270_connect(GTK_V3270(widget)->host,0);
 }
 
 static gboolean notify_focus(GtkWidget *widget, GdkEventFocus *event)
@@ -1446,7 +1432,7 @@ static void v3270_activate(GtkWidget *widget)
 	if(lib3270_connected(terminal->host))
 		lib3270_enter(terminal->host);
 	else if(lib3270_get_hostname(terminal->host))
-		v3270_connect(widget,NULL);
+		v3270_connect(widget);
 	else
 		g_warning("Terminal widget %p activated without connection or valid hostname",terminal);
 }
@@ -1500,11 +1486,11 @@ gboolean v3270_get_toggle(GtkWidget *widget, LIB3270_TOGGLE ix)
  *
  * Since: 5.0
  **/
-const gchar * v3270_set_host(GtkWidget *widget, const gchar *uri)
+const gchar * v3270_set_url(GtkWidget *widget, const gchar *uri)
 {
 	g_return_if_fail(GTK_IS_V3270(widget));
 	g_return_if_fail(uri != NULL);
-	return lib3270_set_host(GTK_V3270(widget)->host,uri);
+	return lib3270_set_url(GTK_V3270(widget)->host,uri);
 }
 
 const gchar * v3270_get_hostname(GtkWidget *widget)
