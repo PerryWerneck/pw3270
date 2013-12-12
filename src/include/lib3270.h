@@ -664,7 +664,7 @@
 
 		void 	* (*AddExcept)(int source, H3270 *session, void (*fn)(H3270 *session));
 
-		int 	  (*callthread)(int(*callback)(H3270 *, void *), H3270 *session, void *parm);
+//		int 	  (*callthread)(int(*callback)(H3270 *, void *), H3270 *session, void *parm);
 
 		int		  (*Wait)(H3270 *hSession, int seconds);
 		int		  (*event_dispatcher)(H3270 *hSession, int wait);
@@ -753,7 +753,7 @@
 	 * @param parm		Parameter to be passed to the function.
 	 *
 	 */
-	LIB3270_EXPORT int lib3270_call_thread(int(*callback)(H3270 *h, void *), H3270 *h, void *parm);
+//	LIB3270_EXPORT int lib3270_call_thread(int(*callback)(H3270 *h, void *), H3270 *h, void *parm);
 
 
 	/**

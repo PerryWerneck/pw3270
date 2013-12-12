@@ -17,6 +17,6 @@
  *		Hostname resolution.
  */
 
-LIB3270_INTERNAL int resolve_host_and_port(H3270 *session, const char *host, char *portname, unsigned short *pport,struct sockaddr *sa, socklen_t *sa_len, char *errmsg, int em_size);
+// LIB3270_INTERNAL int resolve_host_and_port(H3270 *session, const char *host, char *portname, unsigned short *pport,struct sockaddr *sa, socklen_t *sa_len, char *errmsg, int em_size);
 
 

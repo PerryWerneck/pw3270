@@ -383,7 +383,7 @@ LIB3270_EXPORT void v3270_select_host(GtkWidget *widget)
 
 	GtkWidget * dialog	= v3270_host_select_new(widget);
 	GtkWidget * win		= gtk_dialog_new_with_buttons(
-								_( "Select hostname" ),
+								_( "Configure host" ),
 								GTK_WINDOW(gtk_widget_get_toplevel(widget)),
 								GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
 								_( "_Cancel" ),		GTK_RESPONSE_REJECT,

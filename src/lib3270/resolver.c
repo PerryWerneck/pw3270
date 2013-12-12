@@ -83,7 +83,7 @@ struct parms
  * Resolve a hostname and port.
  * Returns 0 for success, -1 for fatal error (name resolution impossible),
  *  -2 for simple error (cannot resolve the name).
- */
+ */ /*
 static int cresolve_host_and_port(H3270 *h, struct parms *p)
 {
 #if defined( HAVE_GETADDRINFO ) || defined(WIN32)
@@ -91,7 +91,7 @@ static int cresolve_host_and_port(H3270 *h, struct parms *p)
 	struct addrinfo	 hints, *res;
 	int		 rc;
 
-	/* Use getaddrinfo() to resolve the hostname and port together. */
+	// Use getaddrinfo() to resolve the hostname and port together.
 	(void) memset(&hints, '\0', sizeof(struct addrinfo));
 	hints.ai_flags = 0;
 	hints.ai_family = PF_UNSPEC;
@@ -138,7 +138,7 @@ static int cresolve_host_and_port(H3270 *h, struct parms *p)
 	char		*ptr;
 	struct sockaddr_in *sin = (struct sockaddr_in *) p->sa;
 
-	/* Get the port number. */
+	// Get the port number.
 	lport = strtoul(p->portname, &ptr, 0);
 	if (ptr == p->portname || *ptr != '\0' || lport == 0L || lport & ~0xffff)
 	{
@@ -155,7 +155,7 @@ static int cresolve_host_and_port(H3270 *h, struct parms *p)
 	}
 	*p->pport = ntohs(port);
 
-	/* Use gethostbyname() to resolve the hostname. */
+	// Use gethostbyname() to resolve the hostname.
 	hp = gethostbyname(p->host);
 	if (hp == (struct hostent *) 0)
 	{
@@ -178,8 +178,9 @@ static int cresolve_host_and_port(H3270 *h, struct parms *p)
 #endif // HAVE_GETADDRINFO
 
 	return 0;
-}
+} */
 
+/*
 int resolve_host_and_port(H3270 *hSession, const char *host, char *portname, unsigned short *pport,struct sockaddr *sa, socklen_t *sa_len, char *errmsg, int em_len)
 {
 	int				rc;
@@ -203,3 +204,4 @@ int resolve_host_and_port(H3270 *hSession, const char *host, char *portname, uns
 	return rc;
 
 }
+*/

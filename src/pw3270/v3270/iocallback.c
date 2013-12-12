@@ -43,7 +43,7 @@
 #include <glib.h>
 #include "../globals.h"
 
-static int 				  static_CallAndWait(int(*callback)(H3270 *session, void *), H3270 *session, void *parm);
+// static int 				  static_CallAndWait(int(*callback)(H3270 *session, void *), H3270 *session, void *parm);
 static void				  static_RemoveSource(void *id);
 
 static void 			* static_AddInput(int source, H3270 *session, void (*fn)(H3270 *session));
@@ -265,6 +265,7 @@ gpointer BgCall(struct bgParameter *p)
 	return 0;
 }
 
+/*
 static int static_CallAndWait(int(*callback)(H3270 *session, void *), H3270 *session, void *parm)
 {
 	struct bgParameter p = { TRUE, session, -1, callback, parm };
@@ -286,6 +287,7 @@ static int static_CallAndWait(int(*callback)(H3270 *session, void *), H3270 *ses
 
     return p.rc;
 }
+*/
 
 static int static_Sleep(H3270 *hSession, int seconds)
 {
@@ -333,12 +335,13 @@ void v3270_register_io_handlers(v3270Class *cls)
 
 		static_AddExcept,
 
+/*
 #ifdef G_THREADS_ENABLED
 		static_CallAndWait,
 #else
 		NULL,
 #endif
-
+*/
 		static_Sleep,
 		static_RunPendingEvents,
 		beep

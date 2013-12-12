@@ -55,7 +55,7 @@ static void * internal_add_input(int source, H3270 *session, void (*fn)(H3270 *s
 static void * internal_add_output(int source, H3270 *session, void (*fn)(H3270 *session));
 static void * internal_add_except(int source, H3270 *session, void (*fn)(H3270 *session));
 
-static int 	  internal_callthread(int(*callback)(H3270 *, void *), H3270 *session, void *parm);
+// static int 	  internal_callthread(int(*callback)(H3270 *, void *), H3270 *session, void *parm);
 static int	  internal_wait(H3270 *hSession, int seconds);
 
 static int	  internal_event_dispatcher(H3270 *hSession, int block);
@@ -81,8 +81,8 @@ static void	  internal_ring_bell(H3270 *);
  static void 	* (*add_except)(int source, H3270 *session, void (*fn)(H3270 *session))
 					= internal_add_except;
 
- static int 	  (*callthread)(int(*callback)(H3270 *, void *), H3270 *session, void *parm)
-					= internal_callthread;
+// static int 	  (*callthread)(int(*callback)(H3270 *, void *), H3270 *session, void *parm)
+//					= internal_callthread;
 
  static int		  (*wait)(H3270 *hSession, int seconds)
 					= internal_wait;
@@ -621,10 +621,12 @@ retry:
 
 }
 
+/*
 static int internal_callthread(int(*callback)(H3270 *, void *), H3270 *session, void *parm)
 {
 	return callback(session,parm);
 }
+*/
 
 static int internal_wait(H3270 *hSession, int seconds)
 {
@@ -755,8 +757,8 @@ LIB3270_EXPORT int lib3270_register_handlers(const struct lib3270_callbacks *cbk
 	if(cbk->AddExcept)
 		add_except = cbk->AddExcept;
 
-	if(cbk->callthread)
-		callthread = cbk->callthread;
+//	if(cbk->callthread)
+//		callthread = cbk->callthread;
 
 	if(cbk->Wait)
 		wait = cbk->Wait;
@@ -771,6 +773,7 @@ LIB3270_EXPORT int lib3270_register_handlers(const struct lib3270_callbacks *cbk
 
 }
 
+/*
 LIB3270_EXPORT int lib3270_call_thread(int(*callback)(H3270 *h, void *), H3270 *h, void *parm)
 {
 	int rc;
@@ -786,6 +789,7 @@ LIB3270_EXPORT int lib3270_call_thread(int(*callback)(H3270 *h, void *), H3270 *
 
 	return rc;
 }
+*/
 
 LIB3270_EXPORT void lib3270_main_iterate(H3270 *hSession, int block)
 {

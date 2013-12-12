@@ -89,7 +89,7 @@
 		<menu name='ScriptsMenu' label='Scripts' visible='no' />
 
 		<menu name='NetworkMenu' label='_Network' >
-			<menuitem action='hostname' icon='home' group='offline' label='Set hostname' />
+			<menuitem action='hostname' icon='home' group='offline' label='Configure host' />
 
 			<!--
 				If you want to connect to specific host use host='uri' to set it

@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-11 15:41-0200\n"
-"PO-Revision-Date: 2013-12-11 15:45-0200\n"
+"POT-Creation-Date: 2013-12-12 07:39-0200\n"
+"PO-Revision-Date: 2013-12-12 07:39-0200\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Portugues <>\n"
 "Language: pt_BR\n"
@@ -19,8 +19,8 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Gtranslator 2.91.6\n"
 
-#: telnet.c:1054 ssl.c:257 ssl.c:310 connect.c:91 connect.c:107 connect.c:109
-#: connect.c:600 connect.c:617
+#: telnet.c:1050 ssl.c:257 ssl.c:310 connect.c:91 connect.c:107 connect.c:109
+#: connect.c:562 connect.c:579
 #, c-format
 msgid "%s"
 msgstr "%s"
@@ -84,11 +84,6 @@ msgstr "%s: Caractere desconhecido depois de \\pf"
 #, c-format
 msgid "%s: Vertical tab not supported"
 msgstr "%s: Tabulação vertical não é suportada"
-
-#: resolver.c:122
-#, c-format
-msgid "%s: unknown family %d"
-msgstr "%s: Familia %d é inválida"
 
 #: main.c:419
 msgid "- 3270 Emulator for Gtk"
@@ -209,7 +204,7 @@ msgstr "Sobre a segurança"
 
 #: ft.c:98
 msgid "Ack received, data flowing"
-msgstr "Ack received, data flowing"
+msgstr "Confirmação recebida, transferindo dados"
 
 #: paste.c:300
 msgid "Action failed"
@@ -267,13 +262,13 @@ msgstr "Avblock"
 
 #: ft.c:99
 msgid "Awaiting chance to send an abort"
-msgstr "Awaiting chance to send an abort"
+msgstr "Aguardando para enviar pedido de cancelamento"
 
 #: colors.c:435
 msgid "Background"
 msgstr "Fundo"
 
-#: connect.c:173
+#: connect.c:168
 msgid "Bad winsock version"
 msgstr "Versão winsock inválida"
 
@@ -309,7 +304,7 @@ msgstr "Portal do Software Público Brasileiro"
 msgid "Break"
 msgstr "Break"
 
-#: telnet.c:2018
+#: telnet.c:2014
 msgid "Broken pipe"
 msgstr "Conexão interrompida"
 
@@ -343,26 +338,26 @@ msgstr "C_odificação de caracteres:"
 msgid "C_olor scheme:"
 msgstr "Tema de c_ores:"
 
-#: v3270/hostselect.c:389
+#: v3270/hostselect.c:390
 msgid "C_onnect"
 msgstr "_Conectar"
 
-#: toggles.c:177 connect.c:387 connect.c:482
+#: toggles.c:177 connect.c:354 connect.c:449
 #, c-format
 msgid "Can't %s network keep-alive"
-msgstr "Can't %s network keep-alive"
+msgstr "Não foi possível %s opção \"keep-alive\""
 
 #: uiparser/parsefile.c:225
 #, c-format
 msgid "Can't accept unnamed %s"
 msgstr "Não posso aceitar elemento %s sem nome"
 
-#: connect.c:99 connect.c:418
+#: connect.c:99 connect.c:385
 #, c-format
 msgid "Can't connect to %s"
 msgstr "Não foi possível conectar a %s"
 
-#: connect.c:271 connect.c:452
+#: connect.c:266 connect.c:419
 #, c-format
 msgid "Can't connect to %s:%s"
 msgstr "Não foi possível conectar a %s:%s"
@@ -376,7 +371,7 @@ msgstr "Não foi possível converter a linha %d de %s para %s"
 msgid "Can't cut rectangular regions"
 msgstr "Recortar não permitido em seleção retangular"
 
-#: connect.c:199
+#: connect.c:194
 #, c-format
 msgid "Can't determine value for environment variable \"%s\" "
 msgstr "Can't determine value for environment variable \"%s\" "
@@ -460,15 +455,15 @@ msgstr "Não foi possível salvar trace no arquivo %s"
 msgid "Can't set host charset"
 msgstr "Não foi possível definir o charset do host"
 
-#: v3270/iocallback.c:359
+#: v3270/iocallback.c:353
 msgid "Can't set lib3270 I/O handlers"
 msgstr "Não foi possível registrar manipuladores de I/O 3270"
 
-#: connect.c:616
+#: connect.c:578
 msgid "Can't set socket to blocking mode."
 msgstr "Não foi possível mudar o socket para o modo blocante."
 
-#: connect.c:616
+#: connect.c:578
 msgid "Can't set socket to non blocking mode"
 msgstr "Não foi possível setar o socket para o modo não blocante."
 
@@ -484,26 +479,22 @@ msgstr "Não foi possível iniciar transferência de arquivo."
 msgid "Can't start upload."
 msgstr "Não foi possível iniciar upload."
 
-#: connect.c:174
+#: connect.c:169
 #, c-format
 msgid "Can't use winsock version %d.%d"
 msgstr "Não é possível usar a Winsock versão %d.%d"
 
-#: ft/ftdialog.c:408
+#: ft/ftdialog.c:399
 msgid "Cancel download."
 msgstr "Cancelar recebimento."
 
-#: ft/ftdialog.c:408
+#: ft/ftdialog.c:399
 msgid "Cancel upload."
 msgstr "Cancelar envio."
 
 #: ft.c:147
 msgid "Cancelled by user"
 msgstr "Cancelado pelo usuário"
-
-#: connect.c:363
-msgid "Cannot create socket event"
-msgstr "Não foi possível criar um semáforo para comunicação"
 
 #: ssl.c:309
 msgid "Cant create a new SSL structure for current connection."
@@ -523,8 +514,8 @@ msgid ""
 "Cant set the file descriptor for the input/output facility for the TLS/SSL "
 "(encrypted) side of ssl."
 msgstr ""
-"Cant set the file descriptor for the input/output facility for the TLS/SSL "
-"(encrypted) side of ssl."
+"Não foi possível definir o descritor de arquivo para a conexão TLS/SSL "
+"(encriptada)."
 
 #: v3270/security.c:110
 msgid "Certificate has expired"
@@ -582,13 +573,17 @@ msgstr "Cores"
 msgid "Command:"
 msgstr "Command:"
 
+#: v3270/hostselect.c:386 ui/00default.xml:282
+msgid "Configure host"
+msgstr "Configurar host"
+
 #: ui/00default.xml:307
 msgid "Connect on startup"
 msgstr "Conectar ao iniciar"
 
-#: connect.c:197 connect.c:292 connect.c:301 connect.c:391 connect.c:406
-#: connect.c:422 connect.c:436 connect.c:456 connect.c:470 connect.c:486
-#: connect.c:585
+#: connect.c:192 connect.c:287 connect.c:296 connect.c:358 connect.c:373
+#: connect.c:389 connect.c:403 connect.c:423 connect.c:437 connect.c:453
+#: connect.c:547
 msgid "Connection error"
 msgstr "Erro de conexão"
 
@@ -596,7 +591,7 @@ msgstr "Erro de conexão"
 msgid "Connection failed"
 msgstr "Conexão falhou"
 
-#: telnet.c:2022
+#: telnet.c:2018
 msgid "Connection reset by peer"
 msgstr "Conexão foi cancelada pelo servidor"
 
@@ -686,7 +681,7 @@ msgstr "Padrão"
 msgid "Delete field"
 msgstr "Apagar campo"
 
-#: telnet.c:1693
+#: telnet.c:1689
 msgid "Device type rejected"
 msgstr "Tipo de dispositivo rejeitado"
 
@@ -698,7 +693,7 @@ msgstr "Desconectado do servidor."
 msgid "Display current charset"
 msgstr "Mostrar a tabela de caracteres ativa"
 
-#: telnet.c:1245
+#: telnet.c:1241
 msgid "EOR received when not in 3270 mode, ignored."
 msgstr "EOR recebido fora do modo 3270, ignorado."
 
@@ -748,20 +743,10 @@ msgstr "Erro \"%s\" lendo arquivo local (rc=%d)"
 msgid "Error \"%s\" writing to local file (rc=%d)"
 msgstr "Erro \"%s\" gravando arquivo local (rc=%d)"
 
-#: resolver.c:106
-#, c-format
-msgid "Error %d resolving %s"
-msgstr "Erro %d resolvendo %s"
-
 #: dialog.c:377
 #, c-format
 msgid "Error loading %s"
 msgstr "Erro lendo %s"
-
-#: resolver.c:108
-#, c-format
-msgid "Error resolving %s: %s"
-msgstr "Erro ao resolver %s: %s"
 
 #: ui/98trace.xml:494
 msgid "Event Trace"
@@ -843,15 +828,15 @@ msgstr "Ajuda"
 msgid "Host disconnected, transfer cancelled"
 msgstr "Servidor desconectou, transferência cancelada"
 
-#: telnet.c:1751
+#: telnet.c:1747
 msgid "Host illegally added function(s)"
 msgstr "Host illegally added function(s)"
 
-#: telnet.c:1676
+#: telnet.c:1672
 msgid "Host rejected device type or request type"
 msgstr "Servidor rejeitou o tipo de dispositivo ou requisição"
 
-#: telnet.c:1689
+#: telnet.c:1685
 msgid "Host rejected resource(s)"
 msgstr "Servidor rejeitou recurso(s)"
 
@@ -964,7 +949,7 @@ msgstr "Nome do arquivo destino."
 msgid "Network Trace"
 msgstr "Trace do tráfego de rede"
 
-#: telnet.c:344 iocalls.c:428 iocalls.c:520 connect.c:86
+#: telnet.c:344 iocalls.c:408 iocalls.c:551 connect.c:86
 msgid "Network error"
 msgstr "Erro de rede"
 
@@ -972,7 +957,7 @@ msgstr "Erro de rede"
 msgid "Network keep alive"
 msgstr "Network keep alive"
 
-#: connect.c:161 connect.c:172 connect.c:362 connect.c:373
+#: connect.c:156 connect.c:167
 msgid "Network startup error"
 msgstr "Erro ao iniciar a rede"
 
@@ -1207,7 +1192,7 @@ msgstr "Rosa"
 
 #: v3270/hostselect.c:163
 msgid "Port or service name (empty for \"telnet\")."
-msgstr "Port or service name (empty for \"telnet\")."
+msgstr "Nº da porta ou nome do serviço (em branco para \"telnet\")."
 
 #: ui/00default.xml:379
 msgid "Previous field"
@@ -1410,15 +1395,15 @@ msgstr "Return"
 msgid "SSL Connect failed"
 msgstr "Conexão SSL falhou"
 
-#: telnet.c:1037
+#: telnet.c:1033
 msgid "SSL Error"
 msgstr "Erro SSL"
 
-#: telnet.c:1037
+#: telnet.c:1033
 msgid "SSL Read error"
 msgstr "Erro de leitura SSL"
 
-#: connect.c:329
+#: connect.c:324
 msgid "SSL error"
 msgstr "Erro SSL"
 
@@ -1430,7 +1415,7 @@ msgstr "Negociação SSL falhou"
 msgid "SSL_CTX_new() has failed"
 msgstr "SSL_CTX_new() has failed"
 
-#: telnet.c:2008
+#: telnet.c:2004
 #, c-format
 msgid ""
 "SSL_write:\n"
@@ -1527,11 +1512,7 @@ msgstr "Selecione arquivo a enviar"
 msgid "Select font"
 msgstr "Selecione fonte"
 
-#: v3270/hostselect.c:386
-msgid "Select hostname"
-msgstr "Selecione host"
-
-#: iocalls.c:521
+#: iocalls.c:409 iocalls.c:552
 msgid "Select() failed when processing for events."
 msgstr "Select() falhou ao processar eventos."
 
@@ -1579,10 +1560,6 @@ msgstr "Nome da sessão"
 msgid "Set host charset"
 msgstr "Define página de código do host"
 
-#: ui/00default.xml:282
-msgid "Set hostname"
-msgstr "Selecione servidor"
-
 #: main.c:404
 msgid "Set reported colors (8/16)"
 msgstr "Define número de cores informadas (8/16)"
@@ -1615,15 +1592,15 @@ msgstr "Mostrar padrão de teste"
 msgid "Smart paste"
 msgstr "Colar inteligente"
 
-#: connect.c:598 connect.c:615
+#: connect.c:560 connect.c:577
 msgid "Socket error"
 msgstr "Erro no socket"
 
-#: telnet.c:1058
+#: telnet.c:1054
 msgid "Socket read error"
 msgstr "Erro ao ler dados da rede"
 
-#: telnet.c:2029
+#: telnet.c:2025
 msgid "Socket write error"
 msgstr "Erro ao enviar dados para a rede"
 
@@ -1669,11 +1646,11 @@ msgstr ""
 msgid "Speed"
 msgstr "Velocidade"
 
-#: ft/ftdialog.c:404
+#: ft/ftdialog.c:408
 msgid "Start download."
 msgstr "Iniciar recebimento."
 
-#: ft/ftdialog.c:404
+#: ft/ftdialog.c:408
 msgid "Start upload."
 msgstr "Iniciar envio."
 
@@ -1693,7 +1670,7 @@ msgstr "Divergência na identidade do emissor"
 msgid "System _type:"
 msgstr "Tipo de servidor:"
 
-#: telnet.c:1518
+#: telnet.c:1514
 msgid "TLS negotiation failure"
 msgstr "Negociação TLS falhou"
 
@@ -1931,7 +1908,7 @@ msgstr ""
 msgid "This program requires GTK version %d.%d.%d"
 msgstr "Este programa precisa do GTK versão %d.%d.%d"
 
-#: connect.c:331
+#: connect.c:326
 #, c-format
 msgid ""
 "This version of %s was built without support for secure sockets layer (SSL)."
@@ -1993,7 +1970,7 @@ msgstr "UTF-8"
 msgid "Uknown DFT Open type from host"
 msgstr "Host enviou código de abertura DFT desconhecido"
 
-#: connect.c:330
+#: connect.c:325
 msgid "Unable to connect to secure hosts"
 msgstr "Não é possível conectar em servidores seguros"
 
@@ -2010,7 +1987,7 @@ msgstr ""
 msgid "Unable to decrypt certificate's signature"
 msgstr "Incapaz de decifrar a assinatura do certificado"
 
-#: connect.c:198
+#: connect.c:193
 msgid "Unable to find selected hostname."
 msgstr "Não consegui encontrar o host selecionado."
 
@@ -2138,24 +2115,10 @@ msgstr "PF %d desconhecida"
 msgid "Unknown frame type from host"
 msgstr "Servidor enviou tipo de frame desconhecido"
 
-#: resolver.c:166
-#, c-format
-msgid ""
-"Unknown host:\n"
-"%s"
-msgstr ""
-"Servidor desconhecido:\n"
-"%s"
-
 #: uiparser/popup.c:76
 #, c-format
 msgid "Unknown popup type \"%s\""
 msgstr "Tipo de popup \"%s\" não é conhecido"
-
-#: resolver.c:147
-#, c-format
-msgid "Unknown port number or service: %s"
-msgstr "Número de porta ou serviço desconhecido: %s"
 
 #: rpq.c:227
 msgid "Unsupported RPQ term"
@@ -2186,17 +2149,9 @@ msgstr "Versão %s - Revisão %s"
 msgid "View Field Delimiters"
 msgstr "Mostrar delimitadores de campo"
 
-#: connect.c:374
-msgid "WSAEventSelect failed"
-msgstr "WSAEventSelect falhou"
-
-#: connect.c:162
+#: connect.c:157
 msgid "WSAStartup failed"
 msgstr "WSAStartup falhou"
-
-#: iocalls.c:429
-msgid "WaitForMultipleObjects() failed when processing for events."
-msgstr "WaitForMultipleObjects() falhou ao processar eventos"
 
 #: ft.c:433
 msgid "Waiting for GET response"
@@ -2287,8 +2242,8 @@ msgstr "_Adicionar ao arquivo de destino"
 msgid "_Browse"
 msgstr "_Procurar"
 
-#: v3270/hostselect.c:390 filetransfer.c:250 ft/ftdialog.c:133
-#: ft/ftdialog.c:407
+#: v3270/hostselect.c:389 filetransfer.c:250 ft/ftdialog.c:133
+#: ft/ftdialog.c:398
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -2340,7 +2295,7 @@ msgstr "_Rede"
 msgid "_Options"
 msgstr "_Opções"
 
-#: ft/ftdialog.c:399
+#: ft/ftdialog.c:403
 msgid "_Receive"
 msgstr "_Receber"
 
@@ -2352,13 +2307,13 @@ msgstr "_Gravar"
 msgid "_Secure connection."
 msgstr "Conexão _Segura."
 
-#: ft/ftdialog.c:134 ft/ftdialog.c:399
+#: ft/ftdialog.c:134 ft/ftdialog.c:403
 msgid "_Send"
 msgstr "_Enviar"
 
 #: v3270/hostselect.c:148
 msgid "_Service:"
-msgstr "_Service:"
+msgstr "_Serviço:"
 
 #: ft/ftdialog.c:454 ft/ftdialog.c:544
 msgid "_Text file."
@@ -2389,27 +2344,27 @@ msgstr "Atributo inesperado \"action\" em <%s>"
 msgid "an action attribute"
 msgstr "um atributo \"action\""
 
-#: session.c:340
+#: session.c:335
 msgid "bracket"
 msgstr "bracket"
 
-#: toggles.c:177 connect.c:387 connect.c:482
+#: toggles.c:177 connect.c:354 connect.c:449
 msgid "disable"
 msgstr "desabilitar"
 
-#: toggles.c:177 connect.c:387 connect.c:482
+#: toggles.c:177 connect.c:354 connect.c:449
 msgid "enable"
 msgstr "enable"
 
-#: connect.c:599
+#: connect.c:561
 msgid "fcntl() error when getting socket state."
 msgstr "fcntl() error when getting socket state."
 
-#: connect.c:407 connect.c:586
+#: connect.c:374 connect.c:548
 msgid "ioctlsocket(FIONBIO) failed."
 msgstr "ioctlsocket(FIONBIO) failed."
 
-#: connect.c:437 connect.c:471
+#: connect.c:404 connect.c:438
 msgid "setsockopt(SO_OOBINLINE) has failed"
 msgstr "setsockopt(SO_OOBINLINE) has failed"
 
@@ -2417,9 +2372,43 @@ msgstr "setsockopt(SO_OOBINLINE) has failed"
 msgid "translator-credits"
 msgstr "translator-credits"
 
-#: telnet.c:1033
+#: telnet.c:1029
 msgid "unknown error"
 msgstr "Erro desconhecido"
+
+#~ msgid "Select hostname"
+#~ msgstr "Selecione host"
+
+#~ msgid "Set hostname"
+#~ msgstr "Selecione servidor"
+
+#~ msgid "%s: unknown family %d"
+#~ msgstr "%s: Familia %d é inválida"
+
+#~ msgid "Cannot create socket event"
+#~ msgstr "Não foi possível criar um semáforo para comunicação"
+
+#~ msgid "Error %d resolving %s"
+#~ msgstr "Erro %d resolvendo %s"
+
+#~ msgid "Error resolving %s: %s"
+#~ msgstr "Erro ao resolver %s: %s"
+
+#~ msgid ""
+#~ "Unknown host:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Servidor desconhecido:\n"
+#~ "%s"
+
+#~ msgid "Unknown port number or service: %s"
+#~ msgstr "Número de porta ou serviço desconhecido: %s"
+
+#~ msgid "WSAEventSelect failed"
+#~ msgstr "WSAEventSelect falhou"
+
+#~ msgid "WaitForMultipleObjects() failed when processing for events."
+#~ msgstr "WaitForMultipleObjects() falhou ao processar eventos"
 
 #~ msgid "Host is AS/400"
 #~ msgstr "Servidor é AS/400"

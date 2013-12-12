@@ -694,15 +694,15 @@ static int proxy_socks4(H3270 *hSession, int fd, char *host, unsigned short port
 }
 #endif // HAVE_GETADDRINFO
 
-/* SOCKS version 5 (RFC 1928) proxy. */
+/* SOCKS version 5 (RFC 1928) proxy. */ /*
 static int proxy_socks5(H3270 *hSession, int fd, char *host, unsigned short port, int force_d)
 {
 	union {
 	    	struct sockaddr sa;
 		struct sockaddr_in sin;
-#if defined(AF_INET6) /*[*/
+#if defined(AF_INET6)
 		struct sockaddr_in6 sin6;
-#endif /*]*/
+#endif
 	} ha;
 	socklen_t ha_len = 0;
 	int use_name = 0;
@@ -715,7 +715,7 @@ static int proxy_socks5(H3270 *hSession, int fd, char *host, unsigned short port
 	char nbuf[256];
 	int done = 0;
 
-#if defined(X3270_TRACE) /*[*/
+#if defined(X3270_TRACE)
 	const char *atype_name[] =
 	{
 	    "",
@@ -725,7 +725,7 @@ static int proxy_socks5(H3270 *hSession, int fd, char *host, unsigned short port
 	    "IPv6"
 	};
 	unsigned char *portp;
-#endif /*]*/
+#endif
 	unsigned short rport;
 
 	if (force_d)
@@ -734,7 +734,7 @@ static int proxy_socks5(H3270 *hSession, int fd, char *host, unsigned short port
 	    	char errmsg[1024];
 		int rv;
 
-		/* Resolve the hostname. */
+		// Resolve the hostname.
 		rv = resolve_host_and_port(hSession,host, CN, &rport, &ha.sa, &ha_len,errmsg, sizeof(errmsg));
 		if (rv == -2)
 		    	use_name = 1;
@@ -744,22 +744,22 @@ static int proxy_socks5(H3270 *hSession, int fd, char *host, unsigned short port
 		}
 	}
 
-	/* Send the authentication request to the server. */
+	// Send the authentication request to the server.
 	strcpy((char *)rbuf, "\005\001\000");
-#if defined(X3270_TRACE) /*[*/
+#if defined(X3270_TRACE)
 	trace_dsn(hSession,_("SOCKS5 Proxy: xmit version 5 nmethods 1 (no auth)\n"));
 	trace_netdata(hSession, '>', rbuf, 3);
-#endif /*]*/
+#endif
 	if (send(fd, (const char *) rbuf, 3, 0) < 0)
 	{
 		popup_a_sockerr(hSession,_("SOCKS5 Proxy: send error"));
 		return -1;
 	}
 
-	/*
-	 * Wait for the server reply.
-	 * Read 2 bytes of response.
-	 */
+	//
+	// Wait for the server reply.
+	// Read 2 bytes of response.
+	//
 	nread = 0;
 	for (;;) {
 	    	fd_set rfds;
@@ -772,10 +772,10 @@ static int proxy_socks5(H3270 *hSession, int fd, char *host, unsigned short port
 		if (select(fd + 1, &rfds, NULL, NULL, &tv) < 0)
 		{
 			popup_an_error(hSession,_("SOCKS5 Proxy: server timeout"));
-#if defined(X3270_TRACE) /*[*/
+#if defined(X3270_TRACE)
 			if (nread)
 				trace_netdata(hSession, '<', rbuf, nread);
-#endif /*]*/
+#endif
 			return -1;
 		}
 
@@ -783,28 +783,28 @@ static int proxy_socks5(H3270 *hSession, int fd, char *host, unsigned short port
 		if (nr < 0)
 		{
 			popup_a_sockerr(hSession,_("SOCKS5 Proxy: receive error"));
-#if defined(X3270_TRACE) /*[*/
+#if defined(X3270_TRACE)
 			if (nread)
 				trace_netdata(hSession, '<', rbuf, nread);
-#endif /*]*/
+#endif
 			return -1;
 		}
 		if (nr == 0)
 		{
 			popup_a_sockerr(hSession,_("SOCKS5 Proxy: unexpected EOF"));
-#if defined(X3270_TRACE) /*[*/
+#if defined(X3270_TRACE)
 			if (nread)
 				trace_netdata(hSession, '<', rbuf, nread);
-#endif /*]*/
+#endif
 			return -1;
 		}
 		if (++nread >= 2)
 		    	break;
 	}
 
-#if defined(X3270_TRACE) /*[*/
+#if defined(X3270_TRACE)
 	trace_netdata(hSession, '<', rbuf, nread);
-#endif /*]*/
+#endif
 
 	if (rbuf[0] != 0x05 || (rbuf[1] != 0 && rbuf[1] != 0xff))
 	{
@@ -812,9 +812,9 @@ static int proxy_socks5(H3270 *hSession, int fd, char *host, unsigned short port
 		return -1;
 	}
 
-#if defined(X3270_TRACE) /*[*/
+#if defined(X3270_TRACE)
 	trace_dsn(hSession,"SOCKS5 Proxy: recv version %d method %d\n", rbuf[0],rbuf[1]);
-#endif /*]*/
+#endif
 
 	if (rbuf[1] == 0xff)
 	{
@@ -822,40 +822,40 @@ static int proxy_socks5(H3270 *hSession, int fd, char *host, unsigned short port
 		return -1;
 	}
 
-	/* Send the request to the server. */
+	// Send the request to the server.
 	buf = lib3270_malloc(32 + strlen(host));
 	s = buf;
-	*s++ = 0x05;		/* protocol version 5 */
-	*s++ = 0x01;		/* CONNECT */
-	*s++ = 0x00;		/* reserved */
+	*s++ = 0x05;		// protocol version 5
+	*s++ = 0x01;		// CONNECT
+	*s++ = 0x00;		// reserved
 	if (use_name) {
-	    	*s++ = 0x03;	/* domain name */
+	    	*s++ = 0x03;	// domain name
 		*s++ = strlen(host);
 		strcpy(s, host);
 		s += strlen(host);
 	} else if (ha.sa.sa_family == AF_INET) {
-	    	*s++ = 0x01;	/* IPv4 */
+	    	*s++ = 0x01;	// IPv4
 		memcpy(s, &ha.sin.sin_addr, 4);
 		s += 4;
 		strcpy(nbuf, inet_ntoa(ha.sin.sin_addr));
-#if defined(AF_INET6) /*[*/
+#if defined(AF_INET6)
 	} else {
-	    	*s++ = 0x04;	/* IPv6 */
+	    	*s++ = 0x04;	// IPv6
 		memcpy(s, &ha.sin6.sin6_addr, sizeof(struct in6_addr));
 		s += sizeof(struct in6_addr);
 		(void) inet_ntop(AF_INET6, &ha.sin6.sin6_addr, nbuf, sizeof(nbuf));
-#endif /*]*/
+#endif
 	}
 	SET16(s, port);
 
-#if defined(X3270_TRACE) /*[*/
+#if defined(X3270_TRACE)
 	trace_dsn(hSession,"SOCKS5 Proxy: xmit version 5 connect %s %s port %u\n",
 		use_name? "domainname":
 			  ((ha.sa.sa_family == AF_INET)? "IPv4": "IPv6"),
 		use_name? host: nbuf,
 		port);
 	trace_netdata(hSession, '>', (unsigned char *)buf, s - buf);
-#endif /*]*/
+#endif
 
 	if (send(fd, buf, s - buf, 0) < 0) {
 		popup_a_sockerr(hSession,_("SOCKS5 Proxy: send error"));
@@ -864,11 +864,11 @@ static int proxy_socks5(H3270 *hSession, int fd, char *host, unsigned short port
 	}
 	lib3270_free(buf);
 
-	/*
-	 * Process the reply.
-	 * Only the first two bytes of the response are interesting;
-	 * skip the rest.
-	 */
+	//
+	// Process the reply.
+	// Only the first two bytes of the response are interesting;
+	// skip the rest.
+	//
 	nread = 0;
 	done = 0;
 	buf = NULL;
@@ -892,19 +892,19 @@ static int proxy_socks5(H3270 *hSession, int fd, char *host, unsigned short port
 		if (nr < 0)
 		{
 			popup_a_sockerr(hSession,_("SOCKS5 Proxy: receive error"));
-#if defined(X3270_TRACE) /*[*/
+#if defined(X3270_TRACE)
 			if (nread)
 				trace_netdata(hSession, '<', (unsigned char *)buf, nread);
-#endif /*]*/
+#endif
 			return -1;
 		}
 		if (nr == 0)
 		{
 			popup_an_error(hSession, _("SOCKS5 Proxy: unexpected EOF"));
-#if defined(X3270_TRACE) /*[*/
+#if defined(X3270_TRACE)
 			if (nread)
 				trace_netdata(hSession, '<', (unsigned char *)buf, nread);
-#endif /*]*/
+#endif
 			return -1;
 		}
 
@@ -916,18 +916,18 @@ static int proxy_socks5(H3270 *hSession, int fd, char *host, unsigned short port
 		    	if (r != 0x05)
 				{
 			    	popup_an_error(hSession, _("SOCKS5 Proxy: incorrect reply version 0x%02x"), r);
-#if defined(X3270_TRACE) /*[*/
+#if defined(X3270_TRACE)
 				if (nread)
 					trace_netdata(hSession, '<', (unsigned char *)buf, nread);
-#endif /*]*/
+#endif
 				return -1;
 			}
 			break;
 		case 1:
-#if defined(X3270_TRACE) /*[*/
+#if defined(X3270_TRACE)
 			if (r != 0x00)
 				trace_netdata(hSession, '<', (unsigned char *)buf, nread);
-#endif /*]*/
+#endif
 			switch (r)
 			{
 			case 0x00:
@@ -973,17 +973,17 @@ static int proxy_socks5(H3270 *hSession, int fd, char *host, unsigned short port
 			case 0x03:
 				n2read = -1;
 				break;
-#if defined(AF_INET6) /*[*/
+#if defined(AF_INET6)
 			case 0x04:
 				n2read = sizeof(struct in6_addr) + 2;
 				break;
-#endif /*]*/
+#endif
 			default:
 				popup_an_error(hSession, _("SOCKS5 Proxy: unknown server address type 0x%02x"), r);
-#if defined(X3270_TRACE) /*[*/
+#if defined(X3270_TRACE)
 				if (nread)
 					trace_netdata(hSession, '<', (unsigned char *)buf, nread);
-#endif /*]*/
+#endif
 				return -1;
 			}
 			break;
@@ -996,29 +996,29 @@ static int proxy_socks5(H3270 *hSession, int fd, char *host, unsigned short port
 		}
 	}
 
-#if defined(X3270_TRACE) /*[*/
+#if defined(X3270_TRACE)
 	trace_netdata(hSession, '<', (unsigned char *)buf, nread);
 	switch (buf[3]) {
-	case 0x01: /* IPv4 */
+	case 0x01: // IPv4
 	    	memcpy(&ha.sin.sin_addr, &buf[4], 4);
 		strcpy(nbuf, inet_ntoa(ha.sin.sin_addr));
 		portp = (unsigned char *)&buf[4 + 4];
 		break;
-	case 0x03: /* domainname */
+	case 0x03: // domainname
 	    	strncpy(nbuf, &buf[5], buf[4]);
 		nbuf[(unsigned char)buf[4]] = '\0';
 		portp = (unsigned char *)&buf[5 + (unsigned char)buf[4]];
 		break;
-#if defined(AF_INET6) /*[*/
-	case 0x04: /* IPv6 */
+#if defined(AF_INET6)
+	case 0x04: // IPv6
 	    	memcpy(&ha.sin6.sin6_addr, &buf[4], sizeof(struct in6_addr));
 		(void) inet_ntop(AF_INET6, &ha.sin6.sin6_addr, nbuf,
 				 sizeof(nbuf));
 		portp = (unsigned char *)&buf[4 + sizeof(struct in6_addr)];
 		break;
-#endif /*]*/
+#endif
 	default:
-		/* can't happen */
+		// can't happen
 		nbuf[0] = '\0';
 		portp = (unsigned char *)buf;
 		break;
@@ -1029,8 +1029,9 @@ static int proxy_socks5(H3270 *hSession, int fd, char *host, unsigned short port
 		atype_name[(unsigned char)buf[3]],
 		nbuf,
 		rport);
-#endif /*]*/
+#endif
 	lib3270_free(buf);
 
     	return 0;
 }
+*/
