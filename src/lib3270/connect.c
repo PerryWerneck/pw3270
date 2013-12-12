@@ -28,8 +28,15 @@
  */
 
 #if defined(_WIN32)
+
+	// Compiling for WinXP or later: Expose getaddrinfo()/freeaddrinfo().
+	#undef _WIN32_WINNT
+	#define _WIN32_WINNT 0x0501
+
 	#include <winsock2.h>
 	#include <windows.h>
+	#include <ws2tcpip.h>
+
 #endif
 
 #include "globals.h"

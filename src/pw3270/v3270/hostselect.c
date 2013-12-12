@@ -139,7 +139,7 @@ static void V3270HostSelectWidget_init(V3270HostSelectWidget *widget)
 #if GTK_CHECK_VERSION(3,0,0)
 	GtkGrid 	* grid	= GTK_GRID(gtk_grid_new());
 #else
-	GtkTable	* grid	= gtk_table_new(?,?,FALSE);
+	GtkTable	* grid	= GTK_TABLE(gtk_table_new(3,4,FALSE));
 #endif // GTK_CHECK_VERSION
 
 	GtkWidget * label[ENTRY_COUNT] =
@@ -219,9 +219,9 @@ static void V3270HostSelectWidget_init(V3270HostSelectWidget *widget)
 	gtk_entry_set_max_length(widget->entry[ENTRY_SRVCNAME],6);
 	gtk_entry_set_width_chars(widget->entry[ENTRY_SRVCNAME],7);
 
-	gtk_entry_set_placeholder_text(widget->entry[ENTRY_SRVCNAME],"telnet");
-
 #if GTK_CHECK_VERSION(3,0,0)
+
+	gtk_entry_set_placeholder_text(widget->entry[ENTRY_SRVCNAME],"telnet");
 
 	gtk_widget_set_hexpand(GTK_WIDGET(widget->entry[ENTRY_HOSTNAME]),TRUE);
 	gtk_widget_set_hexpand(GTK_WIDGET(widget->ssl),TRUE);
@@ -398,12 +398,21 @@ LIB3270_EXPORT void v3270_select_host(GtkWidget *widget)
  	while(again)
  	{
  		gtk_widget_set_sensitive(win,TRUE);
+
+#if GTK_CHECK_VERSION(2,18,0)
 		gtk_widget_set_visible(win,TRUE);
+#else
+		gtk_widget_show(win);
+#endif
 
  		switch(gtk_dialog_run(GTK_DIALOG(win)))
  		{
 		case GTK_RESPONSE_ACCEPT:
+#if GTK_CHECK_VERSION(2,18,0)
 			gtk_widget_set_visible(win,FALSE);
+#else
+			gtk_widget_hide(win);
+#endif
 			gtk_widget_set_sensitive(win,FALSE);
 			again = v3270_host_select_apply(GTK_V3270HostSelectWidget(dialog)) != 0;
 			break;
