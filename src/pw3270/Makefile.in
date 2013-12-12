@@ -72,7 +72,7 @@ DEPENDS=*.h common/*.h uiparser/*.h v3270/*.h $(GLOBAL_DEPS)
 VALGRIND=@VALGRIND@
 
 CFLAGS=@CFLAGS@ @DLL_CFLAGS@ @GTK_CFLAGS@ @GTKMAC_CFLAGS@ -DLIBDIR=\"$(libdir)\" -DDATAROOTDIR=\"$(datarootdir)\" -I../../src/include
-LIBS=@LIBS@ @GTK_LIBS@ @GTKMAC_LIBS@
+LIBS=@LIBS@ @GTK_LIBS@ @GTKMAC_LIBS@ @SOCKET_LIBS@
 
 #---[ Rules ]------------------------------------------------------------------
 
