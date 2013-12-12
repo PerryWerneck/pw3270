@@ -592,6 +592,7 @@ retry:
 		struct timeout *t;
 		ms_ts(&now);
 #else
+		struct timeout *t;
 		(void) gettimeofday(&now, (void *)NULL);
 #endif
 
