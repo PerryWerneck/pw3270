@@ -55,35 +55,39 @@
 #include "togglesc.h"
 #include "api.h"
 
-static const char *toggle_names[LIB3270_TOGGLE_COUNT] =
+static const struct _toggle
 {
-		"monocase",
-		"cursorblink",
-		"showtiming",
-		"cursorpos",
-		"dstrace",
-		"linewrap",
-		"blankfill",
-		"screentrace",
-		"eventtrace",
-		"marginedpaste",
-		"rectselect",
-		"crosshair",
-		"fullscreen",
-		"reconnect",
-		"insert",
-		"smartpaste",
-		"bold",
-		"keepselected",
-		"underline",
-		"autoconnect",
-		"kpalternative",			/**< Keypad +/- move to next/previous field */
-		"beep",						/**< Beep on errors */
-		"fieldattr",				/**< View Field attribute */
-		"altscreen",				/**< auto resize on altscreen */
-		"keepalive",				/**< Enable network keep-alive with SO_KEEPALIVE */
-		"nettrace",					/**< Enable network in/out trace */
-
+	const char *name;
+	const char *descr;
+}
+toggle_info[LIB3270_TOGGLE_COUNT] =
+{
+		{ "monocase",		"" },
+		{ "cursorblink",	"" },
+		{ "showtiming",		"" },
+		{ "cursorpos",		"" },
+		{ "dstrace",		"" },
+		{ "linewrap",		"" },
+		{ "blankfill",		"" },
+		{ "screentrace",	"" },
+		{ "eventtrace",		"" },
+		{ "marginedpaste",	"" },
+		{ "rectselect",		"" },
+		{ "crosshair",		"" },
+		{ "fullscreen",		"" },
+		{ "reconnect",		"" },
+		{ "insert",			"" },
+		{ "smartpaste",		"" },
+		{ "bold",			"" },
+		{ "keepselected",	"" },
+		{ "underline",		"" },
+		{ "autoconnect",	"" },
+		{ "kpalternative",	"" },	/**< Keypad +/- move to next/previous field */
+		{ "beep",			"" },	/**< Beep on errors */
+		{ "fieldattr",		"" },	/**< View Field attribute */
+		{ "altscreen",		"" },	/**< auto resize on altscreen */
+		{ "keepalive",		"" },	/**< Enable network keep-alive with SO_KEEPALIVE */
+		{ "nettrace",		"" },	/**< Enable network in/out trace */
 };
 
 LIB3270_EXPORT unsigned char lib3270_get_toggle(H3270 *session, LIB3270_TOGGLE ix)
@@ -235,6 +239,13 @@ void shutdown_toggles(H3270 *session)
 		lib3270_set_toggle(session,disable_on_shutdown[f],0);
 
 #endif
+}
+
+LIB3270_EXPORT const char * lib3270_get_toggle_description(LIB3270_TOGGLE_ID ix)
+{
+	if(ix < N_TOGGLES)
+		return toggle_names[ix];
+	return "";
 }
 
 LIB3270_EXPORT const char * lib3270_get_toggle_name(LIB3270_TOGGLE_ID ix)

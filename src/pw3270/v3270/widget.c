@@ -68,6 +68,21 @@
 
 /*--[ Widget definition ]----------------------------------------------------------------------------*/
 
+ enum
+ {
+	PROP_0,
+
+	/* Construct */
+	PROP_TYPE,
+
+	/* Normal Props */
+	PROP_FULLSCREEN,
+
+
+	/* Toggle - always the last one, the real values are PROP_TOGGLE+LIB3270_TOGGLE */
+	PROP_TOGGLE
+ };
+
  G_DEFINE_TYPE(v3270, v3270, GTK_TYPE_WIDGET);
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
@@ -294,6 +309,25 @@ gboolean v3270_query_tooltip(GtkWidget  *widget, gint x, gint y, gboolean keyboa
 
 	}
 	return FALSE;
+}
+
+static void v3270_set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec)
+{
+	v3270  *window = GTK_V3270(object);
+
+	switch (prop_id)
+	{
+	case PROP_FULLSCREEN:
+		if(g_value_get_boolean (value))
+			gtk_window_fullscreen(GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(object))));
+		else
+			gtk_window_unfullscreen(GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(object))));
+		break;
+
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+	}
+
 }
 
 static void v3270_class_init(v3270Class *klass)
@@ -560,6 +594,36 @@ static void v3270_class_init(v3270Class *klass)
 						NULL, NULL,
 						v3270_VOID__VOID,
 						G_TYPE_NONE, 0);
+
+
+	// Properties
+	gobject_class->set_property = v3270_set_property;
+
+	g_object_class_install_property(
+			gobject_class,
+			PROP_FULLSCREEN,
+			g_param_spec_boolean("fullscreen",
+			"Fullscreen","If TRUE, the toplevel window was set to fullscreen",
+			FALSE,
+			G_PARAM_WRITABLE|G_PARAM_READABLE));
+
+
+	// Toggle properties
+	int f;
+
+	for(f=0;f<LIB3270_TOGGLE_COUNT;f++)
+	{
+		g_object_class_install_property(
+				gobject_class,
+				PROP_TOGGLE+f,
+				g_param_spec_boolean(
+					lib3270_get_toggle_name(f),
+					lib3270_get_toggle_name(f),
+					lib3270_get_toggle_description(f),
+					FALSE,
+					G_PARAM_WRITABLE|G_PARAM_READABLE));
+	}
+
 
 }
 
