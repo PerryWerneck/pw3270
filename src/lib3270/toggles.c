@@ -55,39 +55,40 @@
 #include "togglesc.h"
 #include "api.h"
 
-static const struct _toggle
+static const struct _toggle_info
 {
-	const char *name;
-	const char *description;
+	const char * name;
+	const char   def;
+	const char * description;
 }
 toggle_info[LIB3270_TOGGLE_COUNT] =
 {
-		{ "monocase",		N_( "" )	},
-		{ "cursorblink",	N_( "" )	},
-		{ "showtiming",		N_( "" )	},
-		{ "cursorpos",		N_( "" )	},
-		{ "dstrace",		N_( "" )	},
-		{ "linewrap",		N_( "" )	},
-		{ "blankfill",		N_( "" )	},
-		{ "screentrace",	N_( "" )	},
-		{ "eventtrace",		N_( "" )	},
-		{ "marginedpaste",	N_( "" )	},
-		{ "rectselect",		N_( "" )	},
-		{ "crosshair",		N_( "" )	},
-		{ "fullscreen",		N_( "" )	},
-		{ "reconnect",		N_( "" )	},
-		{ "insert",			N_( "" )	},
-		{ "smartpaste",		N_( "" )	},
-		{ "bold",			N_( "" )	},
-		{ "keepselected",	N_( "" )	},
-		{ "underline",		N_( "" )	},
-		{ "autoconnect",	N_( "" )	},
-		{ "kpalternative",	N_( "Keypad +/- move to next/previous field" )			},
-		{ "beep",			N_( "Beep on errors" )									},
-		{ "fieldattr",		N_( "Show Field attribute" )							},
-		{ "altscreen",		N_( "Auto resize on altscreen" )						},
-		{ "keepalive",		N_( "Enable network keep-alive with SO_KEEPALIVE" )		},
-		{ "nettrace",		N_( "Enable network in/out trace" )						},
+		{ "monocase",		False,	N_( "Uppercase mode." )												},
+		{ "cursorblink",	True,	N_( "" )	},
+		{ "showtiming",		False,	N_( "" )	},
+		{ "cursorpos",		True,	N_( "Display the cursor location in the OIA (the status line)." )	},
+		{ "dstrace",		False,	N_( "" )	},
+		{ "linewrap",		False,	N_( "" )	},
+		{ "blankfill",		False,	N_( "Automatically convert trailing blanks in a field to NULLs in order to insert a character, and will automatically convert leading NULLs to blanks so that input data is not squeezed to the left" )	},
+		{ "screentrace",	False,	N_( "" )	},
+		{ "eventtrace",		False,	N_( "" )	},
+		{ "marginedpaste",	False,	N_( "" )	},
+		{ "rectselect",		False,	N_( "" )	},
+		{ "crosshair",		False,	N_( "" )	},
+		{ "fullscreen",		False,	N_( "" )	},
+		{ "reconnect",		False,	N_( "" )	},
+		{ "insert",			False,	N_( "" )	},
+		{ "smartpaste",		False,	N_( "" )	},
+		{ "bold",			False,	N_( "" )	},
+		{ "keepselected",	False,	N_( "" )	},
+		{ "underline",		False,	N_( "" )	},
+		{ "autoconnect",	False,	N_( "" )	},
+		{ "kpalternative",	False,	N_( "Keypad +/- move to next/previous field" )			},
+		{ "beep",			True,	N_( "Beep on errors" )									},
+		{ "fieldattr",		False,	N_( "Show Field attribute" )							},
+		{ "altscreen",		True,	N_( "Auto resize on altscreen" )						},
+		{ "keepalive",		True,	N_( "Enable network keep-alive with SO_KEEPALIVE" )		},
+		{ "nettrace",		False,	N_( "Enable network in/out trace" )						},
 };
 
 LIB3270_EXPORT unsigned char lib3270_get_toggle(H3270 *session, LIB3270_TOGGLE ix)
@@ -202,23 +203,11 @@ void initialize_toggles(H3270 *session)
 	session->toggle[LIB3270_TOGGLE_MONOCASE].upcall 		= toggle_redraw;
 	session->toggle[LIB3270_TOGGLE_UNDERLINE].upcall 		= toggle_redraw;
 	session->toggle[LIB3270_TOGGLE_ALTSCREEN].upcall 		= toggle_altscreen;
-	session->toggle[LIB3270_TOGGLE_ALTSCREEN].upcall 		= toggle_altscreen;
 	session->toggle[LIB3270_TOGGLE_KEEP_ALIVE].upcall		= toggle_keepalive;
-
-	static const LIB3270_TOGGLE active_by_default[] =
-	{
-		LIB3270_TOGGLE_CURSOR_BLINK,
-		LIB3270_TOGGLE_CURSOR_POS,
-		LIB3270_TOGGLE_BEEP,
-		LIB3270_TOGGLE_ALTSCREEN,
-		LIB3270_TOGGLE_KEEP_ALIVE
-	};
-
-	for(f=0;f< (sizeof(active_by_default)/sizeof(active_by_default[0])); f++)
-		session->toggle[active_by_default[f]].value = True;
 
 	for(f=0;f<LIB3270_TOGGLE_COUNT;f++)
 	{
+		session->toggle[f].value = toggle_info[f].def;
 		if(session->toggle[f].value)
 			session->toggle[f].upcall(session,&session->toggle[f],TT_INITIAL);
 	}

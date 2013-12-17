@@ -75,10 +75,6 @@
 	/* Construct */
 	PROP_TYPE,
 
-	/* Normal Props */
-	PROP_FULLSCREEN,
-
-
 	/* Toggle - always the last one, the real values are PROP_TOGGLE+LIB3270_TOGGLE */
 	PROP_TOGGLE
  };
@@ -321,12 +317,6 @@ static void v3270_set_property(GObject *object, guint prop_id, const GValue *val
 
 	switch (prop_id)
 	{
-	case PROP_FULLSCREEN:
-		if(g_value_get_boolean (value))
-			gtk_window_fullscreen(GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(object))));
-		else
-			gtk_window_unfullscreen(GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(object))));
-		break;
 
 	default:
 		if(prop_id < (PROP_TOGGLE + LIB3270_TOGGLE_COUNT))
@@ -345,10 +335,6 @@ static void v3270_get_property(GObject *object,guint prop_id, GValue *value, GPa
 
 	switch (prop_id)
 	{
-	case PROP_FULLSCREEN:
-		#warning Get the correct value
-		g_value_set_boolean(value,FALSE);
-		break;
 
 	default:
 		if(prop_id < (PROP_TOGGLE + LIB3270_TOGGLE_COUNT))
@@ -630,10 +616,6 @@ static void v3270_class_init(v3270Class *klass)
 	gobject_class->set_property = v3270_set_property;
 	gobject_class->get_property = v3270_get_property;
 
-	v3270_properties[PROP_FULLSCREEN] = g_param_spec_boolean("fullscreen","Fullscreen","If TRUE, the toplevel window was set to fullscreen",FALSE,G_PARAM_WRITABLE|G_PARAM_READABLE);
-	g_object_class_install_property(gobject_class,PROP_FULLSCREEN,v3270_properties[PROP_FULLSCREEN]);
-
-
 	// Toggle properties
 	int f;
 
@@ -760,6 +742,13 @@ static void set_timer(H3270 *session, unsigned char on)
 
 static void update_toggle(H3270 *session, LIB3270_TOGGLE ix, unsigned char value, LIB3270_TOGGLE_TYPE reason, const char *name)
 {
+	if(ix == LIB3270_TOGGLE_FULL_SCREEN)
+	{
+		if(value)
+			gtk_window_fullscreen(GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(session->widget))));
+		else
+			gtk_window_unfullscreen(GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(session->widget))));
+	}
 	g_object_notify_by_pspec(G_OBJECT(session->widget), v3270_properties[PROP_TOGGLE+ix]);
 	g_signal_emit(GTK_WIDGET(session->widget), v3270_widget_signal[SIGNAL_TOGGLE_CHANGED], 0, (guint) ix, (gboolean) (value != 0), (gchar *) name);
 }

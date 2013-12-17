@@ -511,14 +511,6 @@
 	set_boolean_to_config("toggle",nm,toggled);
 	g_free(nm);
 
-	if(id == LIB3270_TOGGLE_FULL_SCREEN)
-	{
-		if(toggled)
-			gtk_window_fullscreen(GTK_WINDOW(toplevel));
-		else
-			gtk_window_unfullscreen(GTK_WINDOW(toplevel));
-	}
-
 	if(list[id])
 		gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(list[id]),toggled);
 
