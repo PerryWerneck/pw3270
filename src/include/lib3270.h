@@ -641,7 +641,7 @@
 	 * @return Constant string with the toggle name.
 	 *
 	 */
-	LIB3270_EXPORT const char * lib3270_get_toggle_description(LIB3270_TOGGLE_ID ix);
+	LIB3270_EXPORT const char * lib3270_get_toggle_description(LIB3270_TOGGLE ix);
 
 	/**
 	 * Revert toggle status.

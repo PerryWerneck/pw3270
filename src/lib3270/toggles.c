@@ -58,36 +58,36 @@
 static const struct _toggle
 {
 	const char *name;
-	const char *descr;
+	const char *description;
 }
 toggle_info[LIB3270_TOGGLE_COUNT] =
 {
-		{ "monocase",		"" },
-		{ "cursorblink",	"" },
-		{ "showtiming",		"" },
-		{ "cursorpos",		"" },
-		{ "dstrace",		"" },
-		{ "linewrap",		"" },
-		{ "blankfill",		"" },
-		{ "screentrace",	"" },
-		{ "eventtrace",		"" },
-		{ "marginedpaste",	"" },
-		{ "rectselect",		"" },
-		{ "crosshair",		"" },
-		{ "fullscreen",		"" },
-		{ "reconnect",		"" },
-		{ "insert",			"" },
-		{ "smartpaste",		"" },
-		{ "bold",			"" },
-		{ "keepselected",	"" },
-		{ "underline",		"" },
-		{ "autoconnect",	"" },
-		{ "kpalternative",	"" },	/**< Keypad +/- move to next/previous field */
-		{ "beep",			"" },	/**< Beep on errors */
-		{ "fieldattr",		"" },	/**< View Field attribute */
-		{ "altscreen",		"" },	/**< auto resize on altscreen */
-		{ "keepalive",		"" },	/**< Enable network keep-alive with SO_KEEPALIVE */
-		{ "nettrace",		"" },	/**< Enable network in/out trace */
+		{ "monocase",		N_( "" )	},
+		{ "cursorblink",	N_( "" )	},
+		{ "showtiming",		N_( "" )	},
+		{ "cursorpos",		N_( "" )	},
+		{ "dstrace",		N_( "" )	},
+		{ "linewrap",		N_( "" )	},
+		{ "blankfill",		N_( "" )	},
+		{ "screentrace",	N_( "" )	},
+		{ "eventtrace",		N_( "" )	},
+		{ "marginedpaste",	N_( "" )	},
+		{ "rectselect",		N_( "" )	},
+		{ "crosshair",		N_( "" )	},
+		{ "fullscreen",		N_( "" )	},
+		{ "reconnect",		N_( "" )	},
+		{ "insert",			N_( "" )	},
+		{ "smartpaste",		N_( "" )	},
+		{ "bold",			N_( "" )	},
+		{ "keepselected",	N_( "" )	},
+		{ "underline",		N_( "" )	},
+		{ "autoconnect",	N_( "" )	},
+		{ "kpalternative",	N_( "Keypad +/- move to next/previous field" )			},
+		{ "beep",			N_( "Beep on errors" )									},
+		{ "fieldattr",		N_( "Show Field attribute" )							},
+		{ "altscreen",		N_( "Auto resize on altscreen" )						},
+		{ "keepalive",		N_( "Enable network keep-alive with SO_KEEPALIVE" )		},
+		{ "nettrace",		N_( "Enable network in/out trace" )						},
 };
 
 LIB3270_EXPORT unsigned char lib3270_get_toggle(H3270 *session, LIB3270_TOGGLE ix)
@@ -109,7 +109,7 @@ static void toggle_notify(H3270 *session, struct lib3270_toggle *t, LIB3270_TOGG
 	t->upcall(session, t, TT_INTERACTIVE);
 
 	if(session->update_toggle)
-		session->update_toggle(session,ix,t->value,TT_INTERACTIVE,toggle_names[ix]);
+		session->update_toggle(session,ix,t->value,TT_INTERACTIVE,toggle_info[ix].name);
 
 }
 
@@ -244,14 +244,14 @@ void shutdown_toggles(H3270 *session)
 LIB3270_EXPORT const char * lib3270_get_toggle_description(LIB3270_TOGGLE_ID ix)
 {
 	if(ix < N_TOGGLES)
-		return toggle_names[ix];
+		return toggle_info[ix].description;
 	return "";
 }
 
 LIB3270_EXPORT const char * lib3270_get_toggle_name(LIB3270_TOGGLE_ID ix)
 {
 	if(ix < N_TOGGLES)
-		return toggle_names[ix];
+		return toggle_info[ix].name;
 	return "";
 }
 
@@ -262,7 +262,7 @@ LIB3270_EXPORT LIB3270_TOGGLE lib3270_get_toggle_id(const char *name)
 		int f;
 		for(f=0;f<N_TOGGLES;f++)
 		{
-			if(!strcasecmp(name,toggle_names[f]))
+			if(!strcasecmp(name,toggle_info[f].name))
 				return f;
 		}
 	}
