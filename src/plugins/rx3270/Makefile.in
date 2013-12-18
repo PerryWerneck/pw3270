@@ -38,15 +38,15 @@ LN_S=@LN_S@
 
 #---[ Include plugin rules ]---------------------------------------------------
 
-LIBS=@REXX_LIBS@ @LIBICONV@ @DBUS_LIBS@
-CFLAGS=@REXX_CFLAGS@ @DBUS_CFLAGS@
-REXX_HOME=@REXX_HOME@
-REXXLIBDIR=$(libdir)
-
 CLASSLIBDIR=../../classlib
 
 include ../../include/plugin.mak
 include $(CLASSLIBDIR)/class.mak
+
+LIBS=@REXX_LIBS@ @LIBICONV@ @DBUS_LIBS@
+CFLAGS=@REXX_CFLAGS@ @DBUS_CFLAGS@
+REXX_HOME=@REXX_HOME@
+REXXLIBDIR=@REXX_LIBDIR@
 
 #---[ Debug Targets ]----------------------------------------------------------
 

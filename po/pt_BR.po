@@ -1,11 +1,14 @@
 #
 # Perry Werneck <perry.werneck@gmail.com>, 2012, 2013.
 #
+#: toggles.c:95 toggles.c:100 toggles.c:101 toggles.c:113 toggles.c:119
+#: toggles.c:155 toggles.c:161 toggles.c:167 toggles.c:173 toggles.c:179
+#: toggles.c:185 toggles.c:203
 msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-12 07:39-0200\n"
+"POT-Creation-Date: 2013-12-18 16:57-0200\n"
 "PO-Revision-Date: 2013-12-12 07:39-0200\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Portugues <>\n"
@@ -19,8 +22,8 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Gtranslator 2.91.6\n"
 
-#: telnet.c:1050 ssl.c:257 ssl.c:310 connect.c:91 connect.c:107 connect.c:109
-#: connect.c:562 connect.c:579
+#: telnet.c:1050 ssl.c:257 ssl.c:310 connect.c:98 connect.c:114 connect.c:116
+#: connect.c:569 connect.c:586
 #, c-format
 msgid "%s"
 msgstr "%s"
@@ -137,7 +140,7 @@ msgstr "<%s> precisa do atributo %s"
 msgid "<%s> should be on toplevel"
 msgstr "<%s> deve estar no primeiro nível"
 
-#: v3270/widget.c:260
+#: v3270/widget.c:275
 msgid ""
 "<b>Identity not verified</b>\n"
 "Disconnected from host"
@@ -145,7 +148,7 @@ msgstr ""
 "<b>Identidade não foi confirmada</b>\n"
 "Desconectado do servidor"
 
-#: v3270/widget.c:265 v3270/security.c:370
+#: v3270/widget.c:280 v3270/security.c:370
 msgid ""
 "<b>Identity not verified</b>\n"
 "The connection is insecure"
@@ -153,7 +156,7 @@ msgstr ""
 "<b>Identidade não foi confirmada</b>\n"
 "A conexão não é segura"
 
-#: v3270/widget.c:270
+#: v3270/widget.c:285
 msgid ""
 "<b>Identity verified</b>\n"
 "The connection is secure"
@@ -161,7 +164,7 @@ msgstr ""
 "<b>Identidade verificada</b>\n"
 "A conexão é segura"
 
-#: v3270/widget.c:285
+#: v3270/widget.c:300
 #, c-format
 msgid "<b>SSL state is undefined</b>Unexpected SSL status %ld"
 msgstr "<b>Estado do SSL é indefinido</b>Estado SSL inesperado %ld"
@@ -218,7 +221,7 @@ msgstr "Adicionar à cópia"
 msgid "Address or name of the host to connect."
 msgstr "Endereço ou nome do host a conectar."
 
-#: ui/00default.xml:322
+#: toggles.c:196 ui/00default.xml:322
 msgid "Alert sound"
 msgstr "Aviso sonoro"
 
@@ -252,9 +255,28 @@ msgstr "Divergência nos números de série da autoridade e emissor "
 msgid "Authority and subject key identifier mismatch"
 msgstr "Authority and subject key identifier mismatch"
 
-#: ui/00default.xml:317
+#: toggles.c:209
+#, fuzzy
+msgid "Auto resize on altscreen"
+msgstr "Mudar tamanho do terminal em tela alternativa"
+
+#: toggles.c:148 ui/00default.xml:317
 msgid "Auto-Reconnect"
 msgstr "Reconectar automaticamente"
+
+#: toggles.c:107
+msgid ""
+"Automatically convert trailing blanks in a field to NULLs in order to insert "
+"a character, and will automatically convert leading NULLs to blanks so that "
+"input data is not squeezed to the left"
+msgstr ""
+"Automatically convert trailing blanks in a field to NULLs in order to insert "
+"a character, and will automatically convert leading NULLs to blanks so that "
+"input data is not squeezed to the left"
+
+#: toggles.c:149
+msgid "Automatically reconnect to the host if it ever disconnects"
+msgstr "Automatically reconnect to the host if it ever disconnects"
 
 #: ft/ftdialog.c:656
 msgid "Avblock"
@@ -268,19 +290,24 @@ msgstr "Aguardando para enviar pedido de cancelamento"
 msgid "Background"
 msgstr "Fundo"
 
-#: connect.c:168
+#: connect.c:175
 msgid "Bad winsock version"
 msgstr "Versão winsock inválida"
+
+#: toggles.c:197
+#, fuzzy
+msgid "Beep on errors"
+msgstr "Erro de conexão"
 
 #: colors.c:443
 msgid "Black"
 msgstr "Preto"
 
-#: ui/00default.xml:315
+#: toggles.c:106 ui/00default.xml:315
 msgid "Blank Fill"
 msgstr "Completar com espaços"
 
-#: ui/00default.xml:308
+#: toggles.c:76 ui/00default.xml:308
 msgid "Blinking Cursor"
 msgstr "Cursor piscante"
 
@@ -292,7 +319,7 @@ msgstr "Comprimento do bloco:"
 msgid "Blue"
 msgstr "Azul"
 
-#: ui/00default.xml:318
+#: toggles.c:166 ui/00default.xml:318
 msgid "Bold"
 msgstr "Negrito"
 
@@ -342,7 +369,7 @@ msgstr "Tema de c_ores:"
 msgid "C_onnect"
 msgstr "_Conectar"
 
-#: toggles.c:177 connect.c:354 connect.c:449
+#: toggles.c:313 connect.c:361 connect.c:456
 #, c-format
 msgid "Can't %s network keep-alive"
 msgstr "Não foi possível %s opção \"keep-alive\""
@@ -352,12 +379,12 @@ msgstr "Não foi possível %s opção \"keep-alive\""
 msgid "Can't accept unnamed %s"
 msgstr "Não posso aceitar elemento %s sem nome"
 
-#: connect.c:99 connect.c:385
+#: connect.c:106 connect.c:392
 #, c-format
 msgid "Can't connect to %s"
 msgstr "Não foi possível conectar a %s"
 
-#: connect.c:266 connect.c:419
+#: connect.c:273 connect.c:426
 #, c-format
 msgid "Can't connect to %s:%s"
 msgstr "Não foi possível conectar a %s:%s"
@@ -371,7 +398,7 @@ msgstr "Não foi possível converter a linha %d de %s para %s"
 msgid "Can't cut rectangular regions"
 msgstr "Recortar não permitido em seleção retangular"
 
-#: connect.c:194
+#: connect.c:201
 #, c-format
 msgid "Can't determine value for environment variable \"%s\" "
 msgstr "Can't determine value for environment variable \"%s\" "
@@ -459,11 +486,11 @@ msgstr "Não foi possível definir o charset do host"
 msgid "Can't set lib3270 I/O handlers"
 msgstr "Não foi possível registrar manipuladores de I/O 3270"
 
-#: connect.c:578
+#: connect.c:585
 msgid "Can't set socket to blocking mode."
 msgstr "Não foi possível mudar o socket para o modo blocante."
 
-#: connect.c:578
+#: connect.c:585
 msgid "Can't set socket to non blocking mode"
 msgstr "Não foi possível setar o socket para o modo não blocante."
 
@@ -479,7 +506,7 @@ msgstr "Não foi possível iniciar transferência de arquivo."
 msgid "Can't start upload."
 msgstr "Não foi possível iniciar upload."
 
-#: connect.c:169
+#: connect.c:176
 #, c-format
 msgid "Can't use winsock version %d.%d"
 msgstr "Não é possível usar a Winsock versão %d.%d"
@@ -577,17 +604,17 @@ msgstr "Command:"
 msgid "Configure host"
 msgstr "Configurar host"
 
-#: ui/00default.xml:307
+#: toggles.c:184 ui/00default.xml:307
 msgid "Connect on startup"
 msgstr "Conectar ao iniciar"
 
-#: connect.c:192 connect.c:287 connect.c:296 connect.c:358 connect.c:373
-#: connect.c:389 connect.c:403 connect.c:423 connect.c:437 connect.c:453
-#: connect.c:547
+#: connect.c:199 connect.c:294 connect.c:303 connect.c:365 connect.c:380
+#: connect.c:396 connect.c:410 connect.c:430 connect.c:444 connect.c:460
+#: connect.c:554
 msgid "Connection error"
 msgstr "Erro de conexão"
 
-#: connect.c:104
+#: connect.c:111
 msgid "Connection failed"
 msgstr "Conexão falhou"
 
@@ -620,7 +647,7 @@ msgstr ""
 msgid "Creates a file with variable-length records."
 msgstr "Cria arquivo com registros de tamanho variável."
 
-#: colors.c:460 ui/00default.xml:314
+#: colors.c:460 toggles.c:136 ui/00default.xml:314
 msgid "Cross hair cursor"
 msgstr "Cursor mira"
 
@@ -648,10 +675,6 @@ msgstr "Cilindros"
 #: ft/ftdialog.c:492 ft/ftdialog.c:714
 msgid "DFT B_uffer size:"
 msgstr "Tamanho do b_uffer DFT:"
-
-#: ui/98trace.xml:491
-msgid "DS Trace"
-msgstr "DS Trace"
 
 #: colors.c:444
 msgid "Dark Blue"
@@ -693,6 +716,10 @@ msgstr "Desconectado do servidor."
 msgid "Display current charset"
 msgstr "Mostrar a tabela de caracteres ativa"
 
+#: toggles.c:89
+msgid "Display the cursor location in the OIA (the status line)"
+msgstr "Display the cursor location in the OIA (the status line)"
+
 #: telnet.c:1241
 msgid "EOR received when not in 3270 mode, ignored."
 msgstr "EOR recebido fora do modo 3270, ignorado."
@@ -700,6 +727,14 @@ msgstr "EOR recebido fora do modo 3270, ignorado."
 #: ft/ftprogress.c:161
 msgid "ETA"
 msgstr "ETA"
+
+#: toggles.c:221
+msgid "Enable network in/out trace"
+msgstr "Enable network in/out trace"
+
+#: toggles.c:215
+msgid "Enable network keep-alive with SO_KEEPALIVE"
+msgstr "Enable network keep-alive with SO_KEEPALIVE"
 
 #: ui/10keypad.xml:176
 msgid ""
@@ -729,7 +764,7 @@ msgstr "Apagar até o final do campo"
 msgid "Erase to end of line"
 msgstr "Apagar até o final da linha"
 
-#: print.c:239 v3270/widget.c:224 util.c:963
+#: print.c:239 v3270/widget.c:239 util.c:963
 msgid "Error"
 msgstr "Erro"
 
@@ -747,10 +782,6 @@ msgstr "Erro \"%s\" gravando arquivo local (rc=%d)"
 #, c-format
 msgid "Error loading %s"
 msgstr "Erro lendo %s"
-
-#: ui/98trace.xml:494
-msgid "Event Trace"
-msgstr "Trace de eventos"
 
 #: ui/80rexx.xml:87
 msgid "External Rexx script"
@@ -800,7 +831,7 @@ msgstr "Erro de formato no campo \"notBefore\" do certificado"
 msgid "From"
 msgstr "De"
 
-#: ui/00default.xml:311
+#: toggles.c:142 ui/00default.xml:311
 msgid "Full Screen"
 msgstr "Tela cheia"
 
@@ -856,9 +887,61 @@ msgstr "IBM AS/400"
 msgid "IBM S/390"
 msgstr "IBM S/390"
 
-#: v3270/widget.c:278
+#: v3270/widget.c:293
 msgid "Identity not verified"
 msgstr "Identidade não verificada"
+
+#: toggles.c:143
+msgid "If set, asks to place the toplevel window in the fullscreen state"
+msgstr "If set, asks to place the toplevel window in the fullscreen state"
+
+#: toggles.c:125
+msgid ""
+"If set, puts restrictions on how pasted text is placed on the screen. The "
+"position of the cursor at the time the paste operation is begun is used as a "
+"left margin. No pasted text will fill any area of the screen to the left of "
+"that position. This option is useful for pasting into certain IBM editors "
+"that use the left side of the screen for control information"
+msgstr ""
+"If set, puts restrictions on how pasted text is placed on the screen. The "
+"position of the cursor at the time the paste operation is begun is used as a "
+"left margin. No pasted text will fill any area of the screen to the left of "
+"that position. This option is useful for pasting into certain IBM editors "
+"that use the left side of the screen for control information"
+
+#: toggles.c:77
+msgid "If set, the cursor blinks"
+msgstr "If set, the cursor blinks"
+
+#: toggles.c:71
+msgid "If set, the terminal operates in uppercase-only mode"
+msgstr "If set, the terminal operates in uppercase-only mode"
+
+#: toggles.c:131
+msgid ""
+"If set, the terminal will always select rectangular areas of the screen. "
+"Otherwise, it selects continuous regions of the screen"
+msgstr ""
+"If set, the terminal will always select rectangular areas of the screen. "
+"Otherwise, it selects continuous regions of the screen"
+
+#: toggles.c:137
+msgid ""
+"If set, the terminal will display a crosshair over the cursor: lines "
+"extending the full width and height of the screen, centered over the cursor "
+"position. This makes locating the cursor on the screen much easier"
+msgstr ""
+"If set, the terminal will display a crosshair over the cursor: lines "
+"extending the full width and height of the screen, centered over the cursor "
+"position. This makes locating the cursor on the screen much easier"
+
+#: toggles.c:83
+msgid ""
+"If set, the time taken by the host to process an AID is displayed on the "
+"status line"
+msgstr ""
+"If set, the time taken by the host to process an AID is displayed on the "
+"status line"
 
 #: ft_cut.c:504
 msgid "Illegal frame length"
@@ -888,7 +971,7 @@ msgstr "Certificado CA inválido"
 msgid "Invalid cut action"
 msgstr "Ação recortar inválida"
 
-#: ui/00default.xml:320
+#: toggles.c:172 ui/00default.xml:320
 msgid "Keep selected"
 msgstr "Manter selecionado"
 
@@ -917,7 +1000,7 @@ msgstr "Cores diversas"
 msgid "Model %d (%s)"
 msgstr "Modelo %d (%s)"
 
-#: ui/00default.xml:309
+#: toggles.c:70 ui/00default.xml:309
 msgid "Monocase"
 msgstr "Só Maiúsculas"
 
@@ -945,19 +1028,15 @@ msgstr "Nome do arquivo origem."
 msgid "Name of the target file."
 msgstr "Nome do arquivo destino."
 
-#: ui/98trace.xml:493
-msgid "Network Trace"
-msgstr "Trace do tráfego de rede"
-
-#: telnet.c:344 iocalls.c:408 iocalls.c:551 connect.c:86
+#: telnet.c:344 iocalls.c:408 iocalls.c:551 connect.c:93
 msgid "Network error"
 msgstr "Erro de rede"
 
-#: ui/00default.xml:324
+#: toggles.c:214 ui/00default.xml:324
 msgid "Network keep alive"
 msgstr "Network keep alive"
 
-#: connect.c:156 connect.c:167
+#: connect.c:163 connect.c:174
 msgid "Network startup error"
 msgstr "Erro ao iniciar a rede"
 
@@ -1170,7 +1249,7 @@ msgstr "Colar arquivo texto"
 msgid "Paste text file contents"
 msgstr "Colar conteúdo de arquivo texto"
 
-#: ui/00default.xml:313
+#: toggles.c:124 ui/00default.xml:313
 msgid "Paste with left margin"
 msgstr "Colar com margem esquerda"
 
@@ -1383,7 +1462,7 @@ msgstr "Reselecionar"
 msgid "Reset"
 msgstr "Reset"
 
-#: ui/00default.xml:312
+#: toggles.c:208 ui/00default.xml:312
 msgid "Resize on alternate screen"
 msgstr "Mudar tamanho do terminal em tela alternativa"
 
@@ -1403,7 +1482,7 @@ msgstr "Erro SSL"
 msgid "SSL Read error"
 msgstr "Erro de leitura SSL"
 
-#: connect.c:324
+#: connect.c:331
 msgid "SSL error"
 msgstr "Erro SSL"
 
@@ -1452,10 +1531,6 @@ msgstr "Salvar seleção para arquivo"
 msgid "Save trace file"
 msgstr "Salvar arquivo de trace"
 
-#: ui/98trace.xml:492
-msgid "Screen Trace"
-msgstr "Trace de tela"
-
 #: ui/00default.xml:304
 msgid "Screen size"
 msgstr "Tamanho da tela"
@@ -1492,7 +1567,7 @@ msgstr "Selecionar campo"
 msgid "Select all"
 msgstr "Selecionar tudo"
 
-#: ui/00default.xml:316
+#: toggles.c:130 ui/00default.xml:316
 msgid "Select by rectangles"
 msgstr "Seleção retangular"
 
@@ -1560,6 +1635,10 @@ msgstr "Nome da sessão"
 msgid "Set host charset"
 msgstr "Define página de código do host"
 
+#: toggles.c:154
+msgid "Set insert mode"
+msgstr "Set insert mode"
+
 #: main.c:404
 msgid "Set reported colors (8/16)"
 msgstr "Define número de cores informadas (8/16)"
@@ -1580,7 +1659,12 @@ msgstr "Define o nome do arquivo de trace"
 msgid "Settings"
 msgstr "Configurações"
 
-#: ui/00default.xml:319
+#: toggles.c:202
+#, fuzzy
+msgid "Show Field attribute"
+msgstr "um attributo \"label\""
+
+#: toggles.c:178 ui/00default.xml:319
 msgid "Show Underline"
 msgstr "Mostrar sublinhado"
 
@@ -1588,11 +1672,15 @@ msgstr "Mostrar sublinhado"
 msgid "Show test pattern"
 msgstr "Mostrar padrão de teste"
 
-#: ui/00default.xml:321
+#: toggles.c:82
+msgid "Show timer when processing"
+msgstr "Show timer when processing"
+
+#: toggles.c:160 ui/00default.xml:321
 msgid "Smart paste"
 msgstr "Colar inteligente"
 
-#: connect.c:560 connect.c:577
+#: connect.c:567 connect.c:584
 msgid "Socket error"
 msgstr "Erro no socket"
 
@@ -1908,7 +1996,7 @@ msgstr ""
 msgid "This program requires GTK version %d.%d.%d"
 msgstr "Este programa precisa do GTK versão %d.%d.%d"
 
-#: connect.c:326
+#: connect.c:333
 #, c-format
 msgid ""
 "This version of %s was built without support for secure sockets layer (SSL)."
@@ -1930,7 +2018,28 @@ msgstr "Total"
 msgid "Trace"
 msgstr "Trace"
 
-#: ui/00default.xml:310
+#: toggles.c:94 ui/98trace.xml:491
+msgid "Trace Data Stream"
+msgstr "Trace Data Stream"
+
+#: toggles.c:118
+msgid "Trace interface events"
+msgstr "Trace interface events"
+
+#: toggles.c:220 ui/98trace.xml:493
+msgid "Trace network data flow"
+msgstr "Trace network data flow"
+
+#: toggles.c:112 ui/98trace.xml:492
+#, fuzzy
+msgid "Trace screen contents"
+msgstr "Colar conteúdo de arquivo texto"
+
+#: ui/98trace.xml:494
+msgid "Trace user interface events"
+msgstr "Trace user interface events"
+
+#: toggles.c:88 ui/00default.xml:310
 msgid "Track Cursor"
 msgstr "Mostrar posição do cursor"
 
@@ -1970,7 +2079,7 @@ msgstr "UTF-8"
 msgid "Uknown DFT Open type from host"
 msgstr "Host enviou código de abertura DFT desconhecido"
 
-#: connect.c:325
+#: connect.c:332
 msgid "Unable to connect to secure hosts"
 msgstr "Não é possível conectar em servidores seguros"
 
@@ -1987,7 +2096,7 @@ msgstr ""
 msgid "Unable to decrypt certificate's signature"
 msgstr "Incapaz de decifrar a assinatura do certificado"
 
-#: connect.c:193
+#: connect.c:200
 msgid "Unable to find selected hostname."
 msgstr "Não consegui encontrar o host selecionado."
 
@@ -1995,7 +2104,7 @@ msgstr "Não consegui encontrar o host selecionado."
 msgid "Unable to get certificate CRL"
 msgstr "Unable to get certificate CRL"
 
-#: connect.c:87
+#: connect.c:94
 msgid "Unable to get connection state."
 msgstr "Não foi possível obter o estado da conexão."
 
@@ -2075,7 +2184,7 @@ msgstr "Valor de cor inválido ou inesperado: \"%s\""
 msgid "Unexpected or unknown security status"
 msgstr "Estado de segurança inesperado ou desconhecido."
 
-#: v3270/widget.c:856
+#: v3270/widget.c:928
 msgid ""
 "Unexpected signature in H3270 object, possible version mismatch in lib3270"
 msgstr ""
@@ -2128,13 +2237,17 @@ msgstr "Unsupported RPQ term"
 msgid "Unsupported certificate purpose"
 msgstr "Finalidade do certificado não é suportada"
 
-#: ui/00default.xml:323
+#: toggles.c:190 ui/00default.xml:323
 msgid "Use +/- for field navigation"
 msgstr "Usar teclas +/- para navegar por campos"
 
 #: ft/ftdialog.c:598
 msgid "Use host default record format."
 msgstr "Utilizar o formato de registro padrão do servidor."
+
+#: toggles.c:191
+msgid "Use the keys +/- from keypad to select editable fields"
+msgstr "Use the keys +/- from keypad to select editable fields"
 
 #: ft/ftdialog.c:607
 msgid "Variable"
@@ -2149,7 +2262,7 @@ msgstr "Versão %s - Revisão %s"
 msgid "View Field Delimiters"
 msgstr "Mostrar delimitadores de campo"
 
-#: connect.c:157
+#: connect.c:164
 msgid "WSAStartup failed"
 msgstr "WSAStartup falhou"
 
@@ -2348,23 +2461,23 @@ msgstr "um atributo \"action\""
 msgid "bracket"
 msgstr "bracket"
 
-#: toggles.c:177 connect.c:354 connect.c:449
+#: toggles.c:313 connect.c:361 connect.c:456
 msgid "disable"
 msgstr "desabilitar"
 
-#: toggles.c:177 connect.c:354 connect.c:449
+#: toggles.c:313 connect.c:361 connect.c:456
 msgid "enable"
 msgstr "enable"
 
-#: connect.c:561
+#: connect.c:568
 msgid "fcntl() error when getting socket state."
 msgstr "fcntl() error when getting socket state."
 
-#: connect.c:374 connect.c:548
+#: connect.c:381 connect.c:555
 msgid "ioctlsocket(FIONBIO) failed."
 msgstr "ioctlsocket(FIONBIO) failed."
 
-#: connect.c:404 connect.c:438
+#: connect.c:411 connect.c:445
 msgid "setsockopt(SO_OOBINLINE) has failed"
 msgstr "setsockopt(SO_OOBINLINE) has failed"
 
@@ -2375,6 +2488,18 @@ msgstr "translator-credits"
 #: telnet.c:1029
 msgid "unknown error"
 msgstr "Erro desconhecido"
+
+#~ msgid "DS Trace"
+#~ msgstr "DS Trace"
+
+#~ msgid "Event Trace"
+#~ msgstr "Trace de eventos"
+
+#~ msgid "Network Trace"
+#~ msgstr "Trace do tráfego de rede"
+
+#~ msgid "Screen Trace"
+#~ msgstr "Trace de tela"
 
 #~ msgid "Select hostname"
 #~ msgstr "Selecione host"

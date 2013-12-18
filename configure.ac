@@ -440,11 +440,14 @@ if test "$app_cv_rexx" == "yes"; then
 	AC_MSG_NOTICE([Rexx plugin enabled.])
 fi
 
+REXX_LIBDIR=$libdir
+
 AC_SUBST(REXXC)
 AC_SUBST(REXXCONFIG)
 AC_SUBST(REXX_CFLAGS)
 AC_SUBST(REXX_LIBS)
 AC_SUBST(REXX_HOME)
+AC_SUBST(REXX_LIBDIR)
 
 #--[ Libreoffice ]--------------------------------------------------------------------------------------------------------------------------------------------
 
