@@ -140,18 +140,18 @@ toggle_info[LIB3270_TOGGLE_COUNT] =
 			"fullscreen",
 			False,
 			N_( "Full Screen" ),
-			N_( "" )
+			N_( "If set, asks to place the toplevel window in the fullscreen state" )
 		},
 		{
 			"reconnect",
 			False,
 			N_( "Auto-Reconnect" ),
-			N_( "" )
+			N_( "Automatically reconnect to the host if it ever disconnects" )
 		},
 		{
 			"insert",
 			False,
-			N_( "" ),
+			N_( "Set insert mode" ),
 			N_( "" )
 		},
 		{
@@ -188,7 +188,7 @@ toggle_info[LIB3270_TOGGLE_COUNT] =
 			"kpalternative",
 			False,
 			N_( "Use +/- for field navigation" ),
-			N_( "Keypad +/- move to next/previous field" )
+			N_( "Use the keys +/- from keypad to select editable fields" )
 		},
 		{
 			"beep",
@@ -199,8 +199,8 @@ toggle_info[LIB3270_TOGGLE_COUNT] =
 		{
 			"fieldattr",
 			False,
-			N_( "" ),
-			N_( "Show Field attribute" )
+			N_( "Show Field attribute" ),
+			N_( "" )
 		},
 		{
 			"altscreen",
