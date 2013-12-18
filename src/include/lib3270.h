@@ -630,12 +630,20 @@
 	LIB3270_EXPORT const char * lib3270_get_toggle_name(LIB3270_TOGGLE ix);
 
 	/**
-	 * Get a small text description of the toggle.
+	 * Get a long description of the toggle.
 	 *
-	 * @return Constant string with the toggle name.
+	 * @return Constant string with the toggle description.
 	 *
 	 */
 	LIB3270_EXPORT const char * lib3270_get_toggle_description(LIB3270_TOGGLE ix);
+
+	/**
+	 * Get a short description of the toggle (for menus).
+	 *
+	 * @return Constant string with the toggle label.
+	 *
+	 */
+	LIB3270_EXPORT const char * lib3270_get_toggle_label(LIB3270_TOGGLE ix);
 
 	/**
 	 * Revert toggle status.

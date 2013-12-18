@@ -786,7 +786,12 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 	case ACTION_TYPE_TOGGLE:
 		action = new_toggle(nm,names,values);
 		if(id < LIB3270_TOGGLE_COUNT)
+		{
+			const gchar *tooltip = lib3270_get_toggle_description(id);
+			if(tooltip && *tooltip)
+				gtk_action_set_tooltip(GTK_ACTION(action),tooltip);
 			toggle_action[id] = action;
+		}
 		g_object_set_data(G_OBJECT(action),"toggle_id",GINT_TO_POINTER(id));
 		gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action),(lib3270_get_toggle(v3270_get_session(widget),id) != 0));
 		g_signal_connect(action,"toggled",G_CALLBACK(lib3270_toggle_action),widget);

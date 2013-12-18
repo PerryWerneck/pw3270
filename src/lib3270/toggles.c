@@ -59,36 +59,167 @@ static const struct _toggle_info
 {
 	const char * name;
 	const char   def;
+	const char * label;
 	const char * description;
 }
 toggle_info[LIB3270_TOGGLE_COUNT] =
 {
-		{ "monocase",		False,	N_( "Uppercase mode." )												},
-		{ "cursorblink",	True,	N_( "" )	},
-		{ "showtiming",		False,	N_( "" )	},
-		{ "cursorpos",		True,	N_( "Display the cursor location in the OIA (the status line)." )	},
-		{ "dstrace",		False,	N_( "" )	},
-		{ "linewrap",		False,	N_( "" )	},
-		{ "blankfill",		False,	N_( "Automatically convert trailing blanks in a field to NULLs in order to insert a character, and will automatically convert leading NULLs to blanks so that input data is not squeezed to the left" )	},
-		{ "screentrace",	False,	N_( "" )	},
-		{ "eventtrace",		False,	N_( "" )	},
-		{ "marginedpaste",	False,	N_( "" )	},
-		{ "rectselect",		False,	N_( "" )	},
-		{ "crosshair",		False,	N_( "" )	},
-		{ "fullscreen",		False,	N_( "" )	},
-		{ "reconnect",		False,	N_( "" )	},
-		{ "insert",			False,	N_( "" )	},
-		{ "smartpaste",		False,	N_( "" )	},
-		{ "bold",			False,	N_( "" )	},
-		{ "keepselected",	False,	N_( "" )	},
-		{ "underline",		False,	N_( "" )	},
-		{ "autoconnect",	False,	N_( "" )	},
-		{ "kpalternative",	False,	N_( "Keypad +/- move to next/previous field" )			},
-		{ "beep",			True,	N_( "Beep on errors" )									},
-		{ "fieldattr",		False,	N_( "Show Field attribute" )							},
-		{ "altscreen",		True,	N_( "Auto resize on altscreen" )						},
-		{ "keepalive",		True,	N_( "Enable network keep-alive with SO_KEEPALIVE" )		},
-		{ "nettrace",		False,	N_( "Enable network in/out trace" )						},
+		{
+			"monocase",
+			False,
+			N_( "Monocase" ),
+			N_( "If set, the terminal operates in uppercase-only mode" )
+		},
+		{
+			"cursorblink",
+			True,
+			N_( "Blinking Cursor" ),
+			N_( "If set, the cursor blinks" )
+		},
+		{
+			"showtiming",
+			True,
+			N_( "Show timer when processing" ),
+			N_( "If set, the time taken by the host to process an AID is displayed on the status line" )
+		},
+		{
+			"cursorpos",
+			True,
+			N_( "Track Cursor" ),
+			N_( "Display the cursor location in the OIA (the status line)" )
+		},
+		{
+			"dstrace",
+			False,
+			N_( "Trace Data Stream" ),
+			N_( "" )
+		},
+		{
+			"linewrap",
+			False,
+			N_( "" ),
+			N_( "" )
+		},
+		{
+			"blankfill",
+			False,
+			N_( "Blank Fill" ),
+			N_( "Automatically convert trailing blanks in a field to NULLs in order to insert a character, and will automatically convert leading NULLs to blanks so that input data is not squeezed to the left" )
+		},
+		{
+			"screentrace",
+			False,
+			N_( "Trace screen contents" ),
+			N_( "" )
+		},
+		{
+			"eventtrace",
+			False,
+			N_( "Trace interface events" ),
+			N_( "" )
+		},
+		{
+			"marginedpaste",
+			False,
+			N_( "Paste with left margin" ),
+			N_( "If set, puts restrictions on how pasted text is placed on the screen. The position of the cursor at the time the paste operation is begun is used as a left margin. No pasted text will fill any area of the screen to the left of that position. This option is useful for pasting into certain IBM editors that use the left side of the screen for control information." )
+		},
+		{
+			"rectselect",
+			False,
+			N_( "Select by rectangles" ),
+			N_( "If set, the terminal will always select rectangular areas of the screen. Otherwise, it selects continuous regions of the screen" )
+		},
+		{
+			"crosshair",
+			False,
+			N_( "Cross hair cursor" ),
+			N_( "If set, the terminal will display a crosshair over the cursor: lines extending the full width and height of the screen, centered over the cursor position. This makes locating the cursor on the screen much easier" )
+		},
+		{
+			"fullscreen",
+			False,
+			N_( "Full Screen" ),
+			N_( "" )
+		},
+		{
+			"reconnect",
+			False,
+			N_( "Auto-Reconnect" ),
+			N_( "" )
+		},
+		{
+			"insert",
+			False,
+			N_( "" ),
+			N_( "" )
+		},
+		{
+			"smartpaste",
+			False,
+			N_( "Smart paste" ),
+			N_( "" )
+		},
+		{
+			"bold",
+			False,
+			N_( "Bold" ),
+			N_( "" )
+		},
+		{
+			"keepselected",
+			False,
+			N_( "Keep selected" ),
+			N_( "" )
+		},
+		{
+			"underline",
+			False,
+			N_( "Show Underline" ),
+			N_( "" )
+		},
+		{
+			"autoconnect",
+			False,
+			N_( "Connect on startup" ),
+			N_( "" )
+		},
+		{
+			"kpalternative",
+			False,
+			N_( "Use +/- for field navigation" ),
+			N_( "Keypad +/- move to next/previous field" )
+		},
+		{
+			"beep",
+			True,
+			N_( "Alert sound" ),
+			N_( "Beep on errors" )
+		},
+		{
+			"fieldattr",
+			False,
+			N_( "" ),
+			N_( "Show Field attribute" )
+		},
+		{
+			"altscreen",
+			True,
+			N_( "Resize on alternate screen" ),
+			N_( "Auto resize on altscreen" )
+		},
+		{
+			"keepalive",
+			True,
+			N_( "Network keep alive" ),
+			N_( "Enable network keep-alive with SO_KEEPALIVE" )
+		},
+		{
+			"nettrace",
+			False,
+			N_( "Trace network data flow" ),
+			N_( "Enable network in/out trace" )
+		},
 };
 
 LIB3270_EXPORT unsigned char lib3270_get_toggle(H3270 *session, LIB3270_TOGGLE ix)
@@ -228,6 +359,13 @@ void shutdown_toggles(H3270 *session)
 		lib3270_set_toggle(session,disable_on_shutdown[f],0);
 
 #endif
+}
+
+LIB3270_EXPORT const char * lib3270_get_toggle_label(LIB3270_TOGGLE_ID ix)
+{
+	if(ix < N_TOGGLES)
+		return toggle_info[ix].label;
+	return "";
 }
 
 LIB3270_EXPORT const char * lib3270_get_toggle_description(LIB3270_TOGGLE_ID ix)
