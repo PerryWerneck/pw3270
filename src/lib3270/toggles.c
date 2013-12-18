@@ -122,7 +122,7 @@ toggle_info[LIB3270_TOGGLE_COUNT] =
 			"marginedpaste",
 			False,
 			N_( "Paste with left margin" ),
-			N_( "If set, puts restrictions on how pasted text is placed on the screen. The position of the cursor at the time the paste operation is begun is used as a left margin. No pasted text will fill any area of the screen to the left of that position. This option is useful for pasting into certain IBM editors that use the left side of the screen for control information." )
+			N_( "If set, puts restrictions on how pasted text is placed on the screen. The position of the cursor at the time the paste operation is begun is used as a left margin. No pasted text will fill any area of the screen to the left of that position. This option is useful for pasting into certain IBM editors that use the left side of the screen for control information" )
 		},
 		{
 			"rectselect",
