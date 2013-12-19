@@ -77,7 +77,8 @@
 
 
 	/* Widget properties */
-	PROP_CONNECTED,
+	PROP_ONLINE,
+	PROP_SELECTION,
 
 	/* Toggles - always the last one, the real values are PROP_TOGGLE+LIB3270_TOGGLE */
 	PROP_TOGGLE
@@ -359,8 +360,12 @@ static void v3270_get_property(GObject *object,guint prop_id, GValue *value, GPa
 
 	switch (prop_id)
 	{
-	case PROP_CONNECTED:
+	case PROP_ONLINE:
 		g_value_set_boolean(value,lib3270_is_connected(window->host) ? TRUE : FALSE );
+		break;
+
+	case PROP_SELECTION:
+		g_value_set_boolean(value,lib3270_has_selection(window->host) ? TRUE : FALSE );
 		break;
 
 	default:
@@ -643,12 +648,19 @@ static void v3270_class_init(v3270Class *klass)
 	gobject_class->set_property = v3270_set_property;
 	gobject_class->get_property = v3270_get_property;
 
-	v3270_properties[PROP_CONNECTED] = g_param_spec_boolean(
-					"connected",
-					"connected",
-					"Indicates the connection state",
+	v3270_properties[PROP_ONLINE] = g_param_spec_boolean(
+					"online",
+					"online",
+					"True if is online",
 					FALSE,G_PARAM_READABLE);
-	g_object_class_install_property(gobject_class,PROP_CONNECTED,v3270_properties[PROP_CONNECTED]);
+	g_object_class_install_property(gobject_class,PROP_ONLINE,v3270_properties[PROP_ONLINE]);
+
+	v3270_properties[PROP_SELECTION] = g_param_spec_boolean(
+					"selection",
+					"selection",
+					"True on selected area",
+					FALSE,G_PARAM_READABLE);
+	g_object_class_install_property(gobject_class,PROP_SELECTION,v3270_properties[PROP_SELECTION]);
 
 	// Toggle properties
 	int f;
@@ -844,7 +856,7 @@ static void update_connect(H3270 *session, unsigned char connected)
 		g_signal_emit(GTK_WIDGET(widget), v3270_widget_signal[SIGNAL_DISCONNECTED], 0);
 	}
 
-	g_object_notify_by_pspec(G_OBJECT(session->widget), v3270_properties[PROP_CONNECTED]);
+	g_object_notify_by_pspec(G_OBJECT(session->widget), v3270_properties[PROP_ONLINE]);
 
 	gtk_widget_queue_draw(GTK_WIDGET(widget));
 }
@@ -922,7 +934,9 @@ static void changed(H3270 *session, int offset, int len)
 
 static void set_selection(H3270 *session, unsigned char status)
 {
-	GtkWidget	* widget	= GTK_WIDGET(session->widget);
+	GtkWidget * widget = GTK_WIDGET(session->widget);
+
+	g_object_notify_by_pspec(G_OBJECT(widget), v3270_properties[PROP_SELECTION]);
 	g_signal_emit(widget,v3270_widget_signal[SIGNAL_SELECTING], 0, status ? TRUE : FALSE);
 }
 

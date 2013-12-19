@@ -844,6 +844,8 @@
 
 	LIB3270_EXPORT char * lib3270_cut_selected(H3270 *hSession);
 
+	LIB3270_EXPORT int	  lib3270_has_selection(H3270 *hSession);
+
 	/**
 	 * Get all text inside the terminal.
 	 *

@@ -572,8 +572,16 @@ LIB3270_EXPORT char * lib3270_get_field_at(H3270 *session, int baddr)
 	return lib3270_get_text(session,first,lib3270_field_length(session,first)+1);
 }
 
+LIB3270_EXPORT int lib3270_has_selection(H3270 *hSession)
+{
+	CHECK_SESSION_HANDLE(hSession);
+	return hSession->selected != 0;
+}
+
 LIB3270_EXPORT char * lib3270_get_selected(H3270 *hSession)
 {
+	CHECK_SESSION_HANDLE(hSession);
+
 	if(!hSession->selected || hSession->select.start == hSession->select.end)
 		return NULL;
 
