@@ -440,7 +440,7 @@ if test "$app_cv_rexx" == "yes"; then
 	AC_MSG_NOTICE([Rexx plugin enabled.])
 fi
 
-REXX_LIBDIR=$libdir
+AC_ARG_WITH([rexxlibdir], [AS_HELP_STRING([--with-rexxlibdir], [Path to rexx extension libs])], [ REXX_LIBDIR=$withval ],[ REXX_LIBDIR=$libdir ])
 
 AC_SUBST(REXXC)
 AC_SUBST(REXXCONFIG)
