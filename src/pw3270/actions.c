@@ -71,7 +71,7 @@ static void connect_action(GtkAction *action, GtkWidget *widget)
 	const gchar 	* host		= (const gchar *) g_object_get_data(G_OBJECT(action),"host");
 	const gchar		* systype 	= (const gchar *) g_object_get_data(G_OBJECT(action),"type");
 	const gchar		* colortype	= (const gchar *) g_object_get_data(G_OBJECT(action),"colors");
-	unsigned short	  colors;
+//	unsigned short	  colors;
 
 	trace_action(action,widget);
 

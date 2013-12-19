@@ -795,7 +795,11 @@ static void update_toggle(H3270 *session, LIB3270_TOGGLE ix, unsigned char value
 		else
 			gtk_window_unfullscreen(GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(session->widget))));
 	}
+#if GTK_CHECK_VERSION(2,26,0)
 	g_object_notify_by_pspec(G_OBJECT(session->widget), v3270_properties[PROP_TOGGLE+ix]);
+#else
+	g_object_notify(G_OBJECT(session->widget),lib3270_get_toggle_name(ix));
+#endif // GTK_CHECK_VERSION
 	g_signal_emit(GTK_WIDGET(session->widget), v3270_widget_signal[SIGNAL_TOGGLE_CHANGED], 0, (guint) ix, (gboolean) (value != 0), (gchar *) name);
 }
 
@@ -856,7 +860,11 @@ static void update_connect(H3270 *session, unsigned char connected)
 		g_signal_emit(GTK_WIDGET(widget), v3270_widget_signal[SIGNAL_DISCONNECTED], 0);
 	}
 
-	g_object_notify_by_pspec(G_OBJECT(session->widget), v3270_properties[PROP_ONLINE]);
+#if GTK_CHECK_VERSION(2,26,0)
+	g_object_notify_by_pspec(G_OBJECT(widget), v3270_properties[PROP_ONLINE]);
+#else
+	g_object_notify(G_OBJECT(widget),"online");
+#endif // GTK_CHECK_VERSION
 
 	gtk_widget_queue_draw(GTK_WIDGET(widget));
 }
@@ -936,7 +944,12 @@ static void set_selection(H3270 *session, unsigned char status)
 {
 	GtkWidget * widget = GTK_WIDGET(session->widget);
 
+#if GTK_CHECK_VERSION(2,26,0)
 	g_object_notify_by_pspec(G_OBJECT(widget), v3270_properties[PROP_SELECTION]);
+#else
+	g_object_notify(G_OBJECT(widget),"selection");
+#endif // GTK_CHECK_VERSION
+
 	g_signal_emit(widget,v3270_widget_signal[SIGNAL_SELECTING], 0, status ? TRUE : FALSE);
 }
 
