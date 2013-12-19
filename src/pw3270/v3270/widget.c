@@ -75,7 +75,11 @@
 	/* Construct */
 	PROP_TYPE,
 
-	/* Toggle - always the last one, the real values are PROP_TOGGLE+LIB3270_TOGGLE */
+
+	/* Widget properties */
+	PROP_CONNECTED,
+
+	/* Toggles - always the last one, the real values are PROP_TOGGLE+LIB3270_TOGGLE */
 	PROP_TOGGLE
  };
 
@@ -271,17 +275,29 @@ gboolean v3270_query_tooltip(GtkWidget  *widget, gint x, gint y, gboolean keyboa
 		{
 			if(!lib3270_connected(GTK_V3270(widget)->host))
 			{
+#if GTK_CHECK_VERSION(2,14,0)
+				gtk_tooltip_set_icon_from_icon_name(tooltip,"gtk-disconnect",GTK_ICON_SIZE_MENU);
+#else
 				gtk_tooltip_set_icon_from_stock(tooltip,GTK_STOCK_DISCONNECT,GTK_ICON_SIZE_MENU);
+#endif // GTK_CHECK_VERSION
 				gtk_tooltip_set_markup(tooltip,_( "<b>Identity not verified</b>\nDisconnected from host" ) );
 			}
 			else if(lib3270_get_secure(GTK_V3270(widget)->host) == LIB3270_SSL_UNSECURE)
 			{
+#if GTK_CHECK_VERSION(2,14,0)
+				gtk_tooltip_set_icon_from_icon_name(tooltip,"dialog-information",GTK_ICON_SIZE_MENU);
+#else
 				gtk_tooltip_set_icon_from_stock(tooltip,GTK_STOCK_INFO,GTK_ICON_SIZE_MENU);
+#endif
 				gtk_tooltip_set_markup(tooltip,_( "<b>Identity not verified</b>\nThe connection is insecure" ) );
 			}
 			else if(!lib3270_get_SSL_verify_result(GTK_V3270(widget)->host))
 			{
+#if GTK_CHECK_VERSION(2,14,0)
+				gtk_tooltip_set_icon_from_icon_name(tooltip,"gtk-dialog-authentication",GTK_ICON_SIZE_MENU);
+#else
 				gtk_tooltip_set_icon_from_stock(tooltip,GTK_STOCK_DIALOG_AUTHENTICATION,GTK_ICON_SIZE_MENU);
+#endif
 				gtk_tooltip_set_markup(tooltip,_( "<b>Identity verified</b>\nThe connection is secure" ) );
 			}
 			else
@@ -291,14 +307,22 @@ gboolean v3270_query_tooltip(GtkWidget  *widget, gint x, gint y, gboolean keyboa
 				if(msg)
 				{
 					gchar *text = g_strdup_printf("<b>%s</b>\n%s",_("Identity not verified"),gettext(msg->text));
+#if GTK_CHECK_VERSION(2,14,0)
+					gtk_tooltip_set_icon_from_icon_name(tooltip,msg->icon,GTK_ICON_SIZE_MENU);
+#else
 					gtk_tooltip_set_icon_from_stock(tooltip,msg->icon,GTK_ICON_SIZE_MENU);
+#endif
 					gtk_tooltip_set_markup(tooltip,text);
 					g_free(text);
 				}
 				else
 				{
 					gchar *text = g_strdup_printf(_("<b>SSL state is undefined</b>Unexpected SSL status %ld"),lib3270_get_SSL_verify_result(GTK_V3270(widget)->host));
+#if GTK_CHECK_VERSION(2,14,0)
+					gtk_tooltip_set_icon_from_icon_name(tooltip,"dialog-error",GTK_ICON_SIZE_MENU);
+#else
 					gtk_tooltip_set_icon_from_stock(tooltip,GTK_STOCK_DIALOG_ERROR,GTK_ICON_SIZE_MENU);
+#endif // GTK_CHECK_VERSION
 					gtk_tooltip_set_markup(tooltip,text);
 					g_free(text);
 				}
@@ -335,6 +359,9 @@ static void v3270_get_property(GObject *object,guint prop_id, GValue *value, GPa
 
 	switch (prop_id)
 	{
+	case PROP_CONNECTED:
+		g_value_set_boolean(value,lib3270_is_connected(window->host) ? TRUE : FALSE );
+		break;
 
 	default:
 		if(prop_id < (PROP_TOGGLE + LIB3270_TOGGLE_COUNT))
@@ -616,6 +643,13 @@ static void v3270_class_init(v3270Class *klass)
 	gobject_class->set_property = v3270_set_property;
 	gobject_class->get_property = v3270_get_property;
 
+	v3270_properties[PROP_CONNECTED] = g_param_spec_boolean(
+					"connected",
+					"connected",
+					"Indicates the connection state",
+					FALSE,G_PARAM_READABLE);
+	g_object_class_install_property(gobject_class,PROP_CONNECTED,v3270_properties[PROP_CONNECTED]);
+
 	// Toggle properties
 	int f;
 
@@ -809,6 +843,8 @@ static void update_connect(H3270 *session, unsigned char connected)
 		widget->cursor.show &= ~2;
 		g_signal_emit(GTK_WIDGET(widget), v3270_widget_signal[SIGNAL_DISCONNECTED], 0);
 	}
+
+	g_object_notify_by_pspec(G_OBJECT(session->widget), v3270_properties[PROP_CONNECTED]);
 
 	gtk_widget_queue_draw(GTK_WIDGET(widget));
 }
