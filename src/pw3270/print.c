@@ -536,7 +536,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
 		{
 			info->color[f] = clr[f];
 			if(f)
-				g_string_append_c(str,',');
+				g_string_append_c(str,';');
 			g_string_append_printf(str,"%s",gdk_rgba_to_string(clr+f));
 		}
 		set_string_to_config("print","colors","%s",str->str);
