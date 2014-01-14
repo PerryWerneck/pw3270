@@ -407,7 +407,7 @@ int main(int argc, char *argv[])
 			{ "toggleset",		'S', 0, G_OPTION_ARG_STRING,	&toggleset,			N_( "Set toggles ON" ),								NULL			},
 			{ "togglereset",	'R', 0, G_OPTION_ARG_STRING,	&togglereset,		N_( "Set toggles OFF" ),							NULL			},
 			{ "charset",	    'C', 0, G_OPTION_ARG_STRING,	&charset,		    N_( "Set host charset" ),							NULL			},
-			{ "model",		    'M', 0, G_OPTION_ARG_STRING,	&model,			    N_( "The model of 3270 display to be emulated." ),	NULL			},
+			{ "model",		    'M', 0, G_OPTION_ARG_STRING,	&model,			    N_( "The model of 3270 display to be emulated" ),	NULL			},
 
 #if defined( HAVE_SYSLOG )
 			{ "syslog",			'l', 0, G_OPTION_ARG_NONE,		&log_to_syslog,		N_( "Send messages to syslog" ),					NULL			},

@@ -979,7 +979,8 @@
 //	LIB3270_EXPORT int lib3270_set_model(H3270 *session, int model);
 	LIB3270_EXPORT int lib3270_set_model(H3270 *hSession, const char *name);
 
-	LIB3270_EXPORT int lib3270_get_model(H3270 *session);
+	LIB3270_EXPORT const char	* lib3270_get_model(H3270 *session);
+	LIB3270_EXPORT int			  lib3270_get_model_number(H3270 *hSession);
 
 	LIB3270_EXPORT int lib3270_is_protected(H3270 *h, unsigned int baddr);
 

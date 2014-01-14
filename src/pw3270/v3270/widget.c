@@ -79,6 +79,7 @@
 	/* Widget properties */
 	PROP_ONLINE,
 	PROP_SELECTION,
+	PROP_MODEL,
 
 	/* Toggles - always the last one, the real values are PROP_TOGGLE+LIB3270_TOGGLE */
 	PROP_TOGGLE
@@ -342,6 +343,9 @@ static void v3270_set_property(GObject *object, guint prop_id, const GValue *val
 
 	switch (prop_id)
 	{
+	case PROP_MODEL:
+		lib3270_set_model(window->host,g_value_get_string(value));
+		break;
 
 	default:
 		if(prop_id < (PROP_TOGGLE + LIB3270_TOGGLE_COUNT))
@@ -360,6 +364,10 @@ static void v3270_get_property(GObject *object,guint prop_id, GValue *value, GPa
 
 	switch (prop_id)
 	{
+	case PROP_MODEL:
+		g_value_set_string(value,lib3270_get_model(window->host));
+		break;
+
 	case PROP_ONLINE:
 		g_value_set_boolean(value,lib3270_is_connected(window->host) ? TRUE : FALSE );
 		break;
@@ -662,6 +670,13 @@ static void v3270_class_init(v3270Class *klass)
 					FALSE,G_PARAM_READABLE);
 	g_object_class_install_property(gobject_class,PROP_SELECTION,v3270_properties[PROP_SELECTION]);
 
+	v3270_properties[PROP_MODEL] = g_param_spec_string(
+					"model",
+					"model",
+					"The model of 3270 display to be emulated",
+					FALSE,G_PARAM_READABLE|G_PARAM_WRITABLE);
+	g_object_class_install_property(gobject_class,PROP_MODEL,v3270_properties[PROP_MODEL]);
+
 	// Toggle properties
 	int f;
 
@@ -878,6 +893,11 @@ static void update_screen_size(H3270 *session,unsigned short rows, unsigned shor
 
 static void update_model(H3270 *session, const char *name, int model, int rows, int cols)
 {
+#if GTK_CHECK_VERSION(2,26,0)
+	g_object_notify_by_pspec(G_OBJECT(session->widget), v3270_properties[PROP_MODEL]);
+#else
+	g_object_notify(G_OBJECT(session->widget),"model");
+#endif // GTK_CHECK_VERSION
 	g_signal_emit(GTK_WIDGET(session->widget),v3270_widget_signal[SIGNAL_MODEL_CHANGED], 0, (guint) model, name);
 }
 

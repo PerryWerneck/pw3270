@@ -347,7 +347,7 @@
 		char name[2];
 		int  model = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(item),"mode_3270"));
 
-		if(model == lib3270_get_model(v3270_get_session(widget)))
+		if(model == lib3270_get_model_number(v3270_get_session(widget)))
 			return;
 
 		trace("screen model on widget %p changes to %d",widget,GPOINTER_TO_INT(g_object_get_data(G_OBJECT(item),"mode_3270")));
@@ -362,7 +362,7 @@
  {
  	static const gchar 	* text[]	= { "80x24", "80x32", "80x43", "132x27" };
 	GtkWidget			* menu		= gtk_menu_new();
- 	int			  		  model		= lib3270_get_model(v3270_get_session(obj))-2;
+ 	int			  		  model		= lib3270_get_model_number(v3270_get_session(obj))-2;
 	GSList 				* group		= NULL;
 	GtkWidget			* item;
  	int					  f;

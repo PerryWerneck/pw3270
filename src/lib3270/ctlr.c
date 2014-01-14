@@ -234,9 +234,16 @@ static int parse_model_number(H3270 *session, const char *m)
  * @param hSession selected 3270 session.
  * @return Current model number.
  */
-int lib3270_get_model(H3270 *hSession)
+int lib3270_get_model_number(H3270 *hSession)
 {
+	CHECK_SESSION_HANDLE(hSession);
 	return hSession->model_num;
+}
+
+const char * lib3270_get_model(H3270 *hSession)
+{
+	CHECK_SESSION_HANDLE(hSession);
+	return hSession->model_name;
 }
 
 /**
