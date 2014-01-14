@@ -976,9 +976,8 @@
 
 	LIB3270_EXPORT int lib3270_get_word_bounds(H3270 *hSession, int baddr, int *start, int *end);
 
-
-	LIB3270_EXPORT int lib3270_set_model(H3270 *session, int model);
-	LIB3270_EXPORT int lib3270_set_model_name(H3270 *hSession, const char *name);
+//	LIB3270_EXPORT int lib3270_set_model(H3270 *session, int model);
+	LIB3270_EXPORT int lib3270_set_model(H3270 *hSession, const char *name);
 
 	LIB3270_EXPORT int lib3270_get_model(H3270 *session);
 

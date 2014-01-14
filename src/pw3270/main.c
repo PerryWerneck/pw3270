@@ -61,6 +61,7 @@
  static const gchar     * logfile       = NULL;
  static const gchar		* tracefile		= NULL;
  static const gchar		* charset		= NULL;
+ static const gchar		* model			= NULL;
 
 #ifdef HAVE_GTKMAC
  GtkOSXApplication		* osxapp		= NULL;
@@ -394,24 +395,25 @@ int main(int argc, char *argv[])
 		static const GOptionEntry app_options[] =
 		{
 #if ! defined( WIN32 )
-			{ "appname",		'a', 0, G_OPTION_ARG_CALLBACK,	appname,			N_( "Application name" ),					PACKAGE_NAME	},
+			{ "appname",		'a', 0, G_OPTION_ARG_CALLBACK,	appname,			N_( "Application name" ),							PACKAGE_NAME	},
 #else
-			{ "appname",		'a', 0, G_OPTION_ARG_STRING,	&appname,			N_( "Application name" ),					PACKAGE_NAME	},
+			{ "appname",		'a', 0, G_OPTION_ARG_STRING,	&appname,			N_( "Application name" ),							PACKAGE_NAME	},
 			{ "datadir",		'd', 0, G_OPTION_ARG_CALLBACK,	datadir,			N_( "Path to application data files" ),				NULL         	},
 #endif // WIN32
-			{ "session",		's', 0, G_OPTION_ARG_STRING,	&session_name,		N_( "Session name" ),						PACKAGE_NAME	},
-			{ "host",			'h', 0, G_OPTION_ARG_STRING,	&host,				N_( "Host to connect"),						NULL			},
-			{ "colors",			'c', 0, G_OPTION_ARG_CALLBACK,	optcolors,			N_( "Set reported colors (8/16)" ),			"16"			},
-			{ "systype",		't', 0, G_OPTION_ARG_STRING,	&system,			N_( "Host system type" ),					"S390"			},
-			{ "toggleset",		'S', 0, G_OPTION_ARG_STRING,	&toggleset,			N_( "Set toggles ON" ),						NULL			},
-			{ "togglereset",	'R', 0, G_OPTION_ARG_STRING,	&togglereset,		N_( "Set toggles OFF" ),					NULL			},
-			{ "charset",	    'C', 0, G_OPTION_ARG_STRING,	&charset,		    N_( "Set host charset" ),					NULL			},
+			{ "session",		's', 0, G_OPTION_ARG_STRING,	&session_name,		N_( "Session name" ),								PACKAGE_NAME	},
+			{ "host",			'h', 0, G_OPTION_ARG_STRING,	&host,				N_( "Host to connect"),								NULL			},
+			{ "colors",			'c', 0, G_OPTION_ARG_CALLBACK,	optcolors,			N_( "Set reported colors (8/16)" ),					"16"			},
+			{ "systype",		't', 0, G_OPTION_ARG_STRING,	&system,			N_( "Host system type" ),							"S390"			},
+			{ "toggleset",		'S', 0, G_OPTION_ARG_STRING,	&toggleset,			N_( "Set toggles ON" ),								NULL			},
+			{ "togglereset",	'R', 0, G_OPTION_ARG_STRING,	&togglereset,		N_( "Set toggles OFF" ),							NULL			},
+			{ "charset",	    'C', 0, G_OPTION_ARG_STRING,	&charset,		    N_( "Set host charset" ),							NULL			},
+			{ "model",		    'M', 0, G_OPTION_ARG_STRING,	&model,			    N_( "The model of 3270 display to be emulated." ),	NULL			},
 
 #if defined( HAVE_SYSLOG )
-			{ "syslog",			'l', 0, G_OPTION_ARG_NONE,		&log_to_syslog,		N_( "Send messages to syslog" ),			NULL			},
+			{ "syslog",			'l', 0, G_OPTION_ARG_NONE,		&log_to_syslog,		N_( "Send messages to syslog" ),					NULL			},
 #endif
-			{ "tracefile",		'T', 0, G_OPTION_ARG_FILENAME,	&tracefile,			N_( "Set trace filename" ),					NULL			},
-			{ "log",		    'L', 0, G_OPTION_ARG_FILENAME,	&logfile,		    N_( "Log to file" ),						NULL        	},
+			{ "tracefile",		'T', 0, G_OPTION_ARG_FILENAME,	&tracefile,			N_( "Set trace filename" ),							NULL			},
+			{ "log",		    'L', 0, G_OPTION_ARG_FILENAME,	&logfile,		    N_( "Log to file" ),								NULL        	},
 
 			{ NULL }
 		};
@@ -556,6 +558,9 @@ int main(int argc, char *argv[])
 			gtk_window_fullscreen(GTK_WINDOW(toplevel));
 		else
 			pw3270_restore_window(toplevel,"toplevel");
+
+		if(model)
+			lib3270_set_model(pw3270_get_session(toplevel),model);
 
 		pw3270_start_plugins(toplevel);
 		gtk_window_present(GTK_WINDOW(toplevel));

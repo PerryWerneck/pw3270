@@ -344,8 +344,13 @@
  {
 	if(gtk_check_menu_item_get_active(item))
 	{
+		char name[2];
+
 		trace("screen model on widget %p changes to %d",widget,GPOINTER_TO_INT(g_object_get_data(G_OBJECT(item),"mode_3270")));
-		lib3270_set_model(v3270_get_session(widget),GPOINTER_TO_INT(g_object_get_data(G_OBJECT(item),"mode_3270")));
+
+		name[0] = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(item),"mode_3270"))+'0';
+		name[1] = 0;
+		lib3270_set_model(v3270_get_session(widget),name);
 	}
  }
 
@@ -450,6 +455,7 @@
  {
  	trace("Widget %p changed to %s (id=%d)",widget,name,id);
 	set_integer_to_config("terminal","model",id);
+ 	set_string_to_config("terminal","model_name","%s",name);
  }
 
  static void selecting(GtkWidget *widget, gboolean on, GtkActionGroup **group)
@@ -572,7 +578,12 @@
 		if(str)
 			g_free(str);
 	}
-	lib3270_set_model(v3270_get_session(widget->terminal),get_integer_from_config("terminal","model",2));
+	{
+		char str[2];
+		str[0] = get_integer_from_config("terminal","model",2)+'0';
+		str[1] = 0;
+		lib3270_set_model(v3270_get_session(widget->terminal),str);
+	}
 
 	for(f=0;f<LIB3270_TOGGLE_COUNT;f++)
 	{

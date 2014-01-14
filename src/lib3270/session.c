@@ -54,8 +54,6 @@
 
 /*---[ Statics ]--------------------------------------------------------------------------------------------------------------*/
 
- static int parse_model_number(H3270 *session, const char *m);
-
 /*---[ Implement ]------------------------------------------------------------------------------------------------------------*/
 
 void lib3270_session_free(H3270 *h)
@@ -184,69 +182,6 @@ static void nop_int(H3270 *session, int width)
 	return;
 }
 
-int lib3270_set_model_name(H3270 *hSession, const char *model)
-{
-	int 	ovc, ovr;
-	char	junk;
-	int		model_number;
-
-	if(hSession->cstate != LIB3270_NOT_CONNECTED)
-		return EBUSY;
-
-	strncpy(hSession->full_model_name,"IBM-",LIB3270_FULL_MODEL_NAME_LENGTH);
-	hSession->model_name = &hSession->full_model_name[4];
-
-	if(!*model)
-		model = "2";	// No model, use the default one
-
-	model_number = parse_model_number(hSession,model);
-	if (model_number < 0)
-	{
-		popup_an_error(hSession,"Invalid model number: %s", model);
-		model_number = 0;
-	}
-
-	if (!model_number)
-	{
-#if defined(RESTRICT_3279)
-		model_number = 3;
-#else
-		model_number = 4;
-#endif
-	}
-
-	if(hSession->mono)
-		hSession->m3279 = 0;
-	else
-		hSession->m3279 = 1;
-
-	if(!hSession->extended)
-		hSession->oversize = CN;
-
-#if defined(RESTRICT_3279)
-	if (hSession->m3279 && model_number == 4)
-		model_number = 3;
-#endif
-
-	trace("Model_number: %d",model_number);
-
-	if (!hSession->extended || hSession->oversize == CN || sscanf(hSession->oversize, "%dx%d%c", &ovc, &ovr, &junk) != 2)
-	{
-		ovc = 0;
-		ovr = 0;
-	}
-	ctlr_set_rows_cols(hSession, model_number, ovc, ovr);
-
-	if (hSession->termname != CN)
-		hSession->termtype = hSession->termname;
-	else
-		hSession->termtype = hSession->full_model_name;
-
-	trace("Termtype: %s",hSession->termtype);
-
-	return 0;
-}
-
 static void lib3270_session_init(H3270 *hSession, const char *model, const char *charset)
 {
 	int		f;
@@ -313,7 +248,7 @@ static void lib3270_session_init(H3270 *hSession, const char *model, const char 
 	// Initialize toggles
 	initialize_toggles(hSession);
 
-	lib3270_set_model_name(hSession,model);
+	lib3270_set_model(hSession,model);
 
 }
 
@@ -355,84 +290,6 @@ H3270 * lib3270_session_new(const char *model)
 
 	errno = 0;
 	return hSession;
-}
-
- /**
-  * Parse the model number.
-  *
-  * @param session	Session Handle.
-  * @param m		Model number.
-  *
-  * @return -1 (error), 0 (default), or the specified number.
-  */
-static int parse_model_number(H3270 *session, const char *m)
-{
-	int sl;
-	int n;
-
-	if(!m)
-		return 0;
-
-	sl = strlen(m);
-
-	/* An empty model number is no good. */
-	if (!sl)
-		return 0;
-
-	if (sl > 1) {
-		/*
-		 * If it's longer than one character, it needs to start with
-		 * '327[89]', and it sets the m3279 resource.
-		 */
-		if (!strncmp(m, "3278", 4))
-		{
-			session->m3279 = 0;
-		}
-		else if (!strncmp(m, "3279", 4))
-		{
-			session->m3279 = 1;
-		}
-		else
-		{
-			return -1;
-		}
-		m += 4;
-		sl -= 4;
-
-		/* Check more syntax.  -E is allowed, but ignored. */
-		switch (m[0]) {
-		case '\0':
-			/* Use default model number. */
-			return 0;
-		case '-':
-			/* Model number specified. */
-			m++;
-			sl--;
-			break;
-		default:
-			return -1;
-		}
-		switch (sl) {
-		case 1: /* n */
-			break;
-		case 3:	/* n-E */
-			if (strcasecmp(m + 1, "-E")) {
-				return -1;
-			}
-			break;
-		default:
-			return -1;
-		}
-	}
-
-	/* Check the numeric model number. */
-	n = atoi(m);
-	if (n >= 2 && n <= 5) {
-		return n;
-	} else {
-		return -1;
-	}
-
 }
 
 #if defined(DEBUG)

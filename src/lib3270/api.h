@@ -314,8 +314,8 @@
 
 		#define query_3270_terminal_status(void) lib3270_get_program_message(NULL)
 
-		#define set_3270_model(h,m)	lib3270_set_model(h,m)
-		#define get_3270_model(h) lib3270_get_model(h)
+//		#define set_3270_model(h,m)	lib3270_set_model(h,m)
+//		#define get_3270_model(h) lib3270_get_model(h)
 
 		/* Get connection info */
 		#define get_connected_lu(h) lib3270_get_luname(h)
