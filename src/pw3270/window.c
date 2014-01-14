@@ -345,10 +345,14 @@
 	if(gtk_check_menu_item_get_active(item))
 	{
 		char name[2];
+		int  model = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(item),"mode_3270"));
+
+		if(model == lib3270_get_model(v3270_get_session(widget)))
+			return;
 
 		trace("screen model on widget %p changes to %d",widget,GPOINTER_TO_INT(g_object_get_data(G_OBJECT(item),"mode_3270")));
 
-		name[0] = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(item),"mode_3270"))+'0';
+		name[0] = model+'0';
 		name[1] = 0;
 		lib3270_set_model(v3270_get_session(widget),name);
 	}
