@@ -39,6 +39,7 @@
 
 #include "globals.h"
 #include <errno.h>
+#include <stdlib.h>
 #include "3270ds.h"
 //#include "appres.h"
 // #include "ctlr.h"

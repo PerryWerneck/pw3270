@@ -51,7 +51,6 @@ G_BEGIN_DECLS
 	void 		(*activate)(GtkWidget *widget);
 	void 		(*toggle_changed)(v3270 *widget,LIB3270_TOGGLE toggle_id,gboolean toggle_state,const gchar *toggle_name);
 	void 		(*message_changed)(v3270 *widget, LIB3270_MESSAGE id);
-	void 		(*luname_changed)(GtkWidget *widget,const gchar *luname);
 	void 		(*popup_message)(GtkWidget *widget, LIB3270_NOTIFY id , const gchar *title, const gchar *message, const gchar *text);
 	gboolean	(*keypress)(GtkWidget *widget,guint keyval,GdkModifierType state);
 
@@ -71,7 +70,6 @@ G_BEGIN_DECLS
  {
  	SIGNAL_TOGGLE_CHANGED,
  	SIGNAL_MESSAGE_CHANGED,
- 	SIGNAL_LUNAME_CHANGED,
  	SIGNAL_KEYPRESS,
  	SIGNAL_CONNECTED,
  	SIGNAL_DISCONNECTED,
@@ -211,11 +209,34 @@ G_BEGIN_DECLS
 
  };
 
+/*--[ Properties ]-----------------------------------------------------------------------------------*/
+
+ enum
+ {
+	PROP_0,
+
+	/* Construct */
+	PROP_TYPE,
+
+
+	/* Widget properties */
+	PROP_ONLINE,
+	PROP_SELECTION,
+	PROP_MODEL,
+	PROP_LUNAME,
+
+	/* Toggles - always the last one, the real values are PROP_TOGGLE+LIB3270_TOGGLE */
+	PROP_TOGGLE
+ };
+
+ #define PROP_LAST (PROP_TOGGLE+LIB3270_TOGGLE_COUNT)
+
+
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
  G_GNUC_INTERNAL guint		  v3270_widget_signal[LAST_SIGNAL];
  G_GNUC_INTERNAL GdkCursor	* v3270_cursor[V3270_CURSOR_COUNT];
-
+ G_GNUC_INTERNAL GParamSpec	* v3270_properties[PROP_LAST];
 
 /*--[ Prototipes ]-----------------------------------------------------------------------------------*/
 
@@ -271,11 +292,12 @@ void		  v3270_update_font_metrics(v3270 *terminal, cairo_t *cr, int width, int h
 
 void		  v3270_update_cursor_rect(v3270 *widget, GdkRectangle *rect, unsigned char chr, unsigned short attr);
 
-void 		  v3270_update_luname(GtkWidget *widget,const gchar *name);
 void		  v3270_update_message(v3270 *widget, LIB3270_MESSAGE id);
 void		  v3270_update_cursor(H3270 *session, unsigned short row, unsigned short col, unsigned char c, unsigned short attr);
 void		  v3270_update_oia(H3270 *session, LIB3270_FLAG id, unsigned char on);
 void		  v3270_update_ssl(H3270 *session, LIB3270_SSL_STATE state);
+
+G_GNUC_INTERNAL void v3270_update_luname(GtkWidget *widget,const gchar *name);
 
 // Keyboard & Mouse
 gboolean	  v3270_key_press_event(GtkWidget *widget, GdkEventKey *event);

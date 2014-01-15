@@ -435,6 +435,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/pw3270/v3270/private.h" />
+		<Unit filename="src/pw3270/v3270/properties.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/pw3270/v3270/security.c">
 			<Option compilerVar="CC" />
 		</Unit>

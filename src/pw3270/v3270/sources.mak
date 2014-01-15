@@ -27,5 +27,5 @@
 #
 
 V3270_SRC=marshal.c widget.c oia.c iocallback.c keyboard.c draw.c mouse.c selection.c \
-			accessible.c security.c macros.c hostselect.c
+			accessible.c security.c macros.c hostselect.c properties.c
 

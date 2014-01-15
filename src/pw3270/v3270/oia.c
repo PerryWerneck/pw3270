@@ -647,22 +647,29 @@ void v3270_update_luname(GtkWidget *widget,const gchar *name)
 	GdkRectangle	* rect;
 	v3270			* terminal = GTK_V3270(widget);
 
-	if(!terminal->surface)
-		return;
-
-	cr = set_update_region(terminal,&rect,V3270_OIA_LUNAME);
-
-	if(name)
+	if(terminal->surface)
 	{
-		cairo_move_to(cr,rect->x,rect->y+terminal->metrics.height);
-		gdk_cairo_set_source_rgba(cr,terminal->color+V3270_COLOR_OIA_LUNAME);
-		cairo_show_text(cr,name);
-		cairo_stroke(cr);
+		cr = set_update_region(terminal,&rect,V3270_OIA_LUNAME);
+
+		if(name)
+		{
+			cairo_move_to(cr,rect->x,rect->y+terminal->metrics.height);
+			gdk_cairo_set_source_rgba(cr,terminal->color+V3270_COLOR_OIA_LUNAME);
+			cairo_show_text(cr,name);
+			cairo_stroke(cr);
+		}
+
+		cairo_destroy(cr);
+
+		gtk_widget_queue_draw_area(GTK_WIDGET(terminal),rect->x,rect->y,rect->width,rect->height);
 	}
 
-    cairo_destroy(cr);
+#if GTK_CHECK_VERSION(2,26,0)
+	g_object_notify_by_pspec(G_OBJECT(widget), v3270_properties[PROP_LUNAME]);
+#else
+	g_object_notify(G_OBJECT(widget),"luname");
+#endif // GTK_CHECK_VERSION
 
-	gtk_widget_queue_draw_area(GTK_WIDGET(terminal),rect->x,rect->y,rect->width,rect->height);
 }
 
 void v3270_update_message(v3270 *widget, LIB3270_MESSAGE id)
