@@ -298,6 +298,7 @@ void		  v3270_update_oia(H3270 *session, LIB3270_FLAG id, unsigned char on);
 void		  v3270_update_ssl(H3270 *session, LIB3270_SSL_STATE state);
 
 G_GNUC_INTERNAL void v3270_update_luname(GtkWidget *widget,const gchar *name);
+G_GNUC_INTERNAL void v3270_init_properties(GObjectClass * gobject_class);
 
 // Keyboard & Mouse
 gboolean	  v3270_key_press_event(GtkWidget *widget, GdkEventKey *event);

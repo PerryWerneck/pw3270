@@ -115,37 +115,9 @@ static void v3270_cursor_draw(v3270 *widget)
 
 }
 
+
 static void v3270_toggle_changed(v3270 *widget,LIB3270_TOGGLE toggle_id, gboolean toggle_state,const gchar *toggle_name)
 {
-	trace("%s: toggle %d (%s)=%s",__FUNCTION__,toggle_id,toggle_name,toggle_state ? "Yes" : "No");
-
-	switch(toggle_id)
-	{
-	case LIB3270_TOGGLE_CURSOR_POS:
-	case LIB3270_TOGGLE_CROSSHAIR:
-		v3270_reload(GTK_WIDGET(widget));
-		gtk_widget_queue_draw(GTK_WIDGET(widget));
-		break;
-
-	case LIB3270_TOGGLE_CURSOR_BLINK:
-		widget->cursor.show |= 1;
-		break;
-
-	case LIB3270_TOGGLE_INSERT:
-		v3270_draw_ins_status(widget);
-		v3270_cursor_draw(widget);
-		break;
-
-	case LIB3270_TOGGLE_BOLD:
-		v3270_reload(GTK_WIDGET(widget));
-		gtk_widget_queue_draw(GTK_WIDGET(widget));
-		break;
-
-	default:
-		return;
-
-	}
-
 }
 
 static void loghandler(H3270 *session, const char *module, int rc, const char *fmt, va_list args)
@@ -688,8 +660,31 @@ static void set_timer(H3270 *session, unsigned char on)
 
 static void update_toggle(H3270 *session, LIB3270_TOGGLE ix, unsigned char value, LIB3270_TOGGLE_TYPE reason, const char *name)
 {
-	if(ix == LIB3270_TOGGLE_FULL_SCREEN)
+	trace("Toggle %s is %s",name,value ? "ON" : "OFF");
+
+	switch(ix)
 	{
+	case LIB3270_TOGGLE_CURSOR_POS:
+	case LIB3270_TOGGLE_CROSSHAIR:
+		v3270_reload(GTK_WIDGET(session->widget));
+		gtk_widget_queue_draw(GTK_WIDGET(session->widget));
+		break;
+
+	case LIB3270_TOGGLE_CURSOR_BLINK:
+		GTK_V3270(session->widget)->cursor.show |= 1;
+		break;
+
+	case LIB3270_TOGGLE_INSERT:
+		v3270_draw_ins_status(GTK_WIDGET(session->widget));
+		v3270_cursor_draw(GTK_WIDGET(session->widget));
+		break;
+
+	case LIB3270_TOGGLE_BOLD:
+		v3270_reload(GTK_WIDGET(session->widget));
+		gtk_widget_queue_draw(GTK_WIDGET(session->widget));
+		break;
+
+	case LIB3270_TOGGLE_FULL_SCREEN:
 		if(value)
 			gtk_window_fullscreen(GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(session->widget))));
 		else
@@ -698,8 +693,9 @@ static void update_toggle(H3270 *session, LIB3270_TOGGLE ix, unsigned char value
 #if GTK_CHECK_VERSION(2,26,0)
 	g_object_notify_by_pspec(G_OBJECT(session->widget), v3270_properties[PROP_TOGGLE+ix]);
 #else
-	g_object_notify(G_OBJECT(session->widget),lib3270_get_toggle_name(ix));
+	g_object_notify(G_OBJECT(session->widget),name);
 #endif // GTK_CHECK_VERSION
+
 	g_signal_emit(GTK_WIDGET(session->widget), v3270_widget_signal[SIGNAL_TOGGLE_CHANGED], 0, (guint) ix, (gboolean) (value != 0), (gchar *) name);
 }
 

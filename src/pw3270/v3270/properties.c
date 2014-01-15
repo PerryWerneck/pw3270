@@ -96,7 +96,7 @@
 	}
  }
 
- void v3270_init_properties(GObjectClass	* gobject_class)
+ void v3270_init_properties(GObjectClass * gobject_class)
  {
 	gobject_class->set_property = v3270_set_property;
 	gobject_class->get_property = v3270_get_property;
