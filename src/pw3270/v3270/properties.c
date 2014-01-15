@@ -122,6 +122,13 @@
 					FALSE,G_PARAM_READABLE|G_PARAM_WRITABLE);
 	g_object_class_install_property(gobject_class,PROP_MODEL,v3270_properties[PROP_MODEL]);
 
+	v3270_properties[PROP_LUNAME] = g_param_spec_string(
+					"luname",
+					"luname",
+					"The logical Unit (LU) name",
+					FALSE,G_PARAM_READABLE|G_PARAM_WRITABLE);
+	g_object_class_install_property(gobject_class,PROP_LUNAME,v3270_properties[PROP_LUNAME]);
+
 	// Toggle properties
 	int f;
 
