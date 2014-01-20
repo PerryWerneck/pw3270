@@ -358,37 +358,59 @@
 	}
  }
 
+ static void update_model(GtkWidget *widget, guint id, const gchar *name, GtkWidget **radio)
+ {
+ 	int f;
+
+ 	trace("Widget %p changed to %s (id=%d)",widget,name,id);
+	set_integer_to_config("terminal","model",id);
+ 	set_string_to_config("terminal","model_name","%s",name);
+
+	id -= 2;
+	for(f=0;radio[f];f++)
+	{
+		if(f == id)
+		{
+			if(!gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(radio[f])))
+				gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(radio[f]),TRUE);
+			return;
+		}
+	}
+ }
+
  static void setup_screen_sizes(GtkWidget *widget, GtkWidget *obj)
  {
  	static const gchar 	* text[]	= { "80x24", "80x32", "80x43", "132x27" };
 	GtkWidget			* menu		= gtk_menu_new();
  	int			  		  model		= lib3270_get_model_number(v3270_get_session(obj))-2;
 	GSList 				* group		= NULL;
-	GtkWidget			* item;
  	int					  f;
+ 	GtkWidget 			**item		= g_new0(GtkWidget *,G_N_ELEMENTS(text)+1);
 
 	gtk_widget_set_sensitive(widget,TRUE);
 
 	for(f=0;f<G_N_ELEMENTS(text);f++)
 	{
-		gchar * name = g_strdup_printf( _( "Model %d (%s)"),f+2,text[f]);
+		gchar 		* name = g_strdup_printf( _( "Model %d (%s)"),f+2,text[f]);
 
-		item = gtk_radio_menu_item_new_with_label(group,name);
+		item[f] = gtk_radio_menu_item_new_with_label(group,name);
 		g_free(name);
 
-		g_object_set_data(G_OBJECT(item),"mode_3270",GINT_TO_POINTER((f+2)));
+		g_object_set_data(G_OBJECT(item[f]),"mode_3270",GINT_TO_POINTER((f+2)));
 
-		group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(item));
+		group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(item[f]));
 
 		gtk_widget_show(item);
-		gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
+		gtk_menu_shell_append(GTK_MENU_SHELL(menu),item[f]);
 
 		if(f == model)
-			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item),TRUE);
+			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item[f]),TRUE);
 
-		g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(set_screen_size),(gpointer) obj);
+		g_signal_connect(G_OBJECT(item[f]),"toggled",G_CALLBACK(set_screen_size),(gpointer) obj);
 
 	}
+	g_object_set_data_full(G_OBJECT(menu),"screen_sizes",item,g_free);
+	g_signal_connect(obj,"model_changed",G_CALLBACK(update_model),item);
 
 	gtk_widget_show_all(menu);
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(widget),menu);
@@ -453,13 +475,6 @@
  static void update_config(GtkWidget *widget, const gchar *name, const gchar *value)
  {
  	set_string_to_config("terminal",name,"%s",value);
- }
-
- static void update_model(GtkWidget *widget, guint id, const gchar *name)
- {
- 	trace("Widget %p changed to %s (id=%d)",widget,name,id);
-	set_integer_to_config("terminal","model",id);
- 	set_string_to_config("terminal","model_name","%s",name);
  }
 
  static void selecting(GtkWidget *widget, gboolean on, GtkActionGroup **group)
@@ -648,7 +663,6 @@
 		g_signal_connect(widget->terminal,"disconnected",G_CALLBACK(disconnected),widget);
 		g_signal_connect(widget->terminal,"connected",G_CALLBACK(connected),widget);
 		g_signal_connect(widget->terminal,"update_config",G_CALLBACK(update_config),0);
-		g_signal_connect(widget->terminal,"model_changed",G_CALLBACK(update_model),0);
 		g_signal_connect(widget->terminal,"selecting",G_CALLBACK(selecting),group);
 		g_signal_connect(widget->terminal,"popup",G_CALLBACK(popup_menu),popup);
 		g_signal_connect(widget->terminal,"has_text",G_CALLBACK(has_text),group);
