@@ -182,14 +182,14 @@ static gboolean IO_check(GSource *source)
 	 */
 #ifdef _WIN32
 
-	fd_set rfds, wfds, xfds;
+	fd_set rfds, wfds;
 	struct timeval tm;
 
 	memset(&tm,0,sizeof(tm));
 
 	FD_ZERO(&rfds);
 	FD_ZERO(&wfds);
-	FD_ZERO(&xfds);
+//	FD_ZERO(&xfds);
 
 	if(((IO_Source *) source)->poll.events & G_IO_IN)
 	{
@@ -201,7 +201,7 @@ static gboolean IO_check(GSource *source)
 		FD_SET(((IO_Source *) source)->poll.fd, &wfds);
 	}
 
-	if(select(((IO_Source *) source)->poll.fd+1, &rfds, &wfds, &xfds, &tm) > 0)
+	if(select(((IO_Source *) source)->poll.fd+1, &rfds, &wfds, NULL, &tm) > 0)
 		return TRUE;
 
 #else
