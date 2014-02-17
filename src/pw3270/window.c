@@ -400,7 +400,7 @@
 
 		group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(item[f]));
 
-		gtk_widget_show(item);
+		gtk_widget_show(item[f]);
 		gtk_menu_shell_append(GTK_MENU_SHELL(menu),item[f]);
 
 		if(f == model)
