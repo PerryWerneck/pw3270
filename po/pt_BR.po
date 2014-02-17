@@ -1,5 +1,5 @@
 #
-# Perry Werneck <perry.werneck@gmail.com>, 2012, 2013.
+# Perry Werneck <perry.werneck@gmail.com>, 2012, 2013, 2014.
 #
 #: toggles.c:95 toggles.c:100 toggles.c:101 toggles.c:113 toggles.c:119
 #: toggles.c:155 toggles.c:161 toggles.c:167 toggles.c:173 toggles.c:179
@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-18 16:57-0200\n"
-"PO-Revision-Date: 2013-12-12 07:39-0200\n"
+"POT-Creation-Date: 2014-02-17 08:03-0300\n"
+"PO-Revision-Date: 2014-02-17 08:05-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Portugues <>\n"
 "Language: pt_BR\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Gtranslator 2.91.6\n"
 
-#: telnet.c:1050 ssl.c:257 ssl.c:310 connect.c:98 connect.c:114 connect.c:116
+#: telnet.c:1050 ssl.c:259 ssl.c:312 connect.c:98 connect.c:114 connect.c:116
 #: connect.c:569 connect.c:586
 #, c-format
 msgid "%s"
@@ -53,7 +53,7 @@ msgstr "Ação %s precisa de um valor válido"
 msgid "%s action needs src attribute"
 msgstr "Ação %s precisa do atributo src"
 
-#: main.c:94
+#: main.c:95
 #, c-format
 msgid "%s requires GTK version %d.%d.%d"
 msgstr "%s requer GTK versão %d.%d.%d"
@@ -88,7 +88,7 @@ msgstr "%s: Caractere desconhecido depois de \\pf"
 msgid "%s: Vertical tab not supported"
 msgstr "%s: Tabulação vertical não é suportada"
 
-#: main.c:419
+#: main.c:421
 msgid "- 3270 Emulator for Gtk"
 msgstr "- Emulador 3270 para GTK"
 
@@ -140,7 +140,7 @@ msgstr "<%s> precisa do atributo %s"
 msgid "<%s> should be on toplevel"
 msgstr "<%s> deve estar no primeiro nível"
 
-#: v3270/widget.c:275
+#: v3270/widget.c:234
 msgid ""
 "<b>Identity not verified</b>\n"
 "Disconnected from host"
@@ -148,7 +148,7 @@ msgstr ""
 "<b>Identidade não foi confirmada</b>\n"
 "Desconectado do servidor"
 
-#: v3270/widget.c:280 v3270/security.c:370
+#: v3270/widget.c:243 v3270/security.c:370
 msgid ""
 "<b>Identity not verified</b>\n"
 "The connection is insecure"
@@ -156,7 +156,7 @@ msgstr ""
 "<b>Identidade não foi confirmada</b>\n"
 "A conexão não é segura"
 
-#: v3270/widget.c:285
+#: v3270/widget.c:252
 msgid ""
 "<b>Identity verified</b>\n"
 "The connection is secure"
@@ -164,12 +164,12 @@ msgstr ""
 "<b>Identidade verificada</b>\n"
 "A conexão é segura"
 
-#: v3270/widget.c:300
+#: v3270/widget.c:271
 #, c-format
 msgid "<b>SSL state is undefined</b>Unexpected SSL status %ld"
 msgstr "<b>Estado do SSL é indefinido</b>Estado SSL inesperado %ld"
 
-#: main.c:439
+#: main.c:441
 msgid ""
 "<b>Valid options:</b>\n"
 "\n"
@@ -234,7 +234,7 @@ msgstr ""
 msgid "Appends the source file to the destination file."
 msgstr "Adiciona conteúdo do arquivo origem ao final do arquivo destino."
 
-#: main.c:397 main.c:399
+#: main.c:398 main.c:400
 msgid "Application name"
 msgstr "Nome da aplicação"
 
@@ -256,9 +256,8 @@ msgid "Authority and subject key identifier mismatch"
 msgstr "Authority and subject key identifier mismatch"
 
 #: toggles.c:209
-#, fuzzy
 msgid "Auto resize on altscreen"
-msgstr "Mudar tamanho do terminal em tela alternativa"
+msgstr "Mudar automaticamente o tamanho do terminal em tela alternativa"
 
 #: toggles.c:148 ui/00default.xml:317
 msgid "Auto-Reconnect"
@@ -295,9 +294,8 @@ msgid "Bad winsock version"
 msgstr "Versão winsock inválida"
 
 #: toggles.c:197
-#, fuzzy
 msgid "Beep on errors"
-msgstr "Erro de conexão"
+msgstr "Emitir som nos erros"
 
 #: colors.c:443
 msgid "Black"
@@ -394,7 +392,7 @@ msgstr "Não foi possível conectar a %s:%s"
 msgid "Can't convert line %d from %s to %s"
 msgstr "Não foi possível converter a linha %d de %s para %s"
 
-#: selection.c:648
+#: selection.c:656
 msgid "Can't cut rectangular regions"
 msgstr "Recortar não permitido em seleção retangular"
 
@@ -416,7 +414,7 @@ msgstr "Não foi possível carregar %s"
 msgid "Can't load file"
 msgstr "Não foi possível carregar arquivo"
 
-#: main.c:294
+#: main.c:295
 msgid "Can't open file"
 msgstr "Não foi possível abrir arquivo"
 
@@ -473,7 +471,7 @@ msgstr ""
 "Não foi possível salvar a seleção para o arquivo\n"
 "%s"
 
-#: main.c:292
+#: main.c:293
 #, c-format
 msgid "Can't save trace data to file %s"
 msgstr "Não foi possível salvar trace no arquivo %s"
@@ -523,11 +521,11 @@ msgstr "Cancelar envio."
 msgid "Cancelled by user"
 msgstr "Cancelado pelo usuário"
 
-#: ssl.c:309
+#: ssl.c:311
 msgid "Cant create a new SSL structure for current connection."
 msgstr "Cant create a new SSL structure for current connection."
 
-#: ssl.c:250
+#: ssl.c:252
 #, c-format
 msgid ""
 "Cant set default locations for trusted CA certificates to\n"
@@ -764,7 +762,7 @@ msgstr "Apagar até o final do campo"
 msgid "Erase to end of line"
 msgstr "Apagar até o final da linha"
 
-#: print.c:239 v3270/widget.c:239 util.c:963
+#: print.c:239 v3270/widget.c:194 util.c:963
 msgid "Error"
 msgstr "Erro"
 
@@ -786,6 +784,10 @@ msgstr "Erro lendo %s"
 #: ui/80rexx.xml:87
 msgid "External Rexx script"
 msgstr "Script rexx externo"
+
+#: ui/98trace.xml:496
+msgid "Field Delimiters"
+msgstr "Delimitadores de campo"
 
 #: colors.c:429
 msgid "Field colors"
@@ -839,7 +841,7 @@ msgstr "Tela cheia"
 msgid "Function bar"
 msgstr "Barra de funções"
 
-#: main.c:98 main.c:488
+#: main.c:99 main.c:490
 msgid "GTK Version mismatch"
 msgstr "Divergência de versão GTK"
 
@@ -871,11 +873,11 @@ msgstr "Servidor rejeitou o tipo de dispositivo ou requisição"
 msgid "Host rejected resource(s)"
 msgstr "Servidor rejeitou recurso(s)"
 
-#: main.c:405
+#: main.c:406
 msgid "Host system type"
 msgstr "Tipo do sistema no servidor"
 
-#: main.c:403
+#: main.c:404
 msgid "Host to connect"
 msgstr "Servidor a conectar"
 
@@ -887,7 +889,7 @@ msgstr "IBM AS/400"
 msgid "IBM S/390"
 msgstr "IBM S/390"
 
-#: v3270/widget.c:293
+#: v3270/widget.c:260
 msgid "Identity not verified"
 msgstr "Identidade não verificada"
 
@@ -967,7 +969,7 @@ msgstr "Intensificado/Desprotegido"
 msgid "Invalid CA certificate"
 msgstr "Certificado CA inválido"
 
-#: selection.c:648
+#: selection.c:656
 msgid "Invalid cut action"
 msgstr "Ação recortar inválida"
 
@@ -987,7 +989,7 @@ msgstr "Teclado está bloqueado"
 msgid "Lateral keypad"
 msgstr "Barra lateral"
 
-#: main.c:414
+#: main.c:416
 msgid "Log to file"
 msgstr "Enviar log para arquivo"
 
@@ -995,7 +997,7 @@ msgstr "Enviar log para arquivo"
 msgid "Misc colors"
 msgstr "Cores diversas"
 
-#: window.c:365
+#: window.c:394
 #, c-format
 msgid "Model %d (%s)"
 msgstr "Modelo %d (%s)"
@@ -1064,7 +1066,7 @@ msgstr "Normal/Protegido"
 msgid "Normal/Unprotected"
 msgstr "Normal/Desprotegido"
 
-#: selection.c:648
+#: selection.c:656
 msgid "Not available"
 msgstr "Não disponível"
 
@@ -1224,7 +1226,7 @@ msgstr "PF8"
 msgid "PF9"
 msgstr "PF9"
 
-#: main.c:437
+#: main.c:439
 msgid "Parse error"
 msgstr "Erro de interpretação"
 
@@ -1261,7 +1263,7 @@ msgstr "Path length constraint exceeded"
 msgid "Path of the local file to send."
 msgstr "Caminho completo do arquivo que vai ser enviado."
 
-#: main.c:400
+#: main.c:401
 msgid "Path to application data files"
 msgstr "Caminho para os arquivos de dados da aplicação"
 
@@ -1490,7 +1492,7 @@ msgstr "Erro SSL"
 msgid "SSL negotiation failed"
 msgstr "Negociação SSL falhou"
 
-#: ssl.c:217
+#: ssl.c:219
 msgid "SSL_CTX_new() has failed"
 msgstr "SSL_CTX_new() has failed"
 
@@ -1555,7 +1557,7 @@ msgstr "Secondary space:"
 msgid "Secure connection was successful."
 msgstr "Conexão segura efetuada com sucesso."
 
-#: ssl.c:81 ssl.c:106 ssl.c:216 ssl.c:255 ssl.c:308
+#: ssl.c:81 ssl.c:106 ssl.c:218 ssl.c:257 ssl.c:310
 msgid "Security error"
 msgstr "Erro de segurança"
 
@@ -1615,7 +1617,7 @@ msgstr "Enviar arquivo"
 msgid "Send file to host"
 msgstr "Enviar arquivo para o servidor"
 
-#: main.c:411
+#: main.c:413
 msgid "Send messages to syslog"
 msgstr "Enviar mensagens para o log do sistema"
 
@@ -1627,11 +1629,11 @@ msgstr "Enviar/Receber"
 msgid "Sending file"
 msgstr "Enviando arquivo"
 
-#: main.c:402
+#: main.c:403
 msgid "Session name"
 msgstr "Nome da sessão"
 
-#: main.c:408
+#: main.c:409
 msgid "Set host charset"
 msgstr "Define página de código do host"
 
@@ -1639,19 +1641,19 @@ msgstr "Define página de código do host"
 msgid "Set insert mode"
 msgstr "Set insert mode"
 
-#: main.c:404
+#: main.c:405
 msgid "Set reported colors (8/16)"
 msgstr "Define número de cores informadas (8/16)"
 
-#: main.c:407
+#: main.c:408
 msgid "Set toggles OFF"
 msgstr "Desativa toggles"
 
-#: main.c:406
+#: main.c:407
 msgid "Set toggles ON"
 msgstr "Ativa toggles"
 
-#: main.c:413
+#: main.c:415
 msgid "Set trace filename"
 msgstr "Define o nome do arquivo de trace"
 
@@ -1660,9 +1662,8 @@ msgid "Settings"
 msgstr "Configurações"
 
 #: toggles.c:202
-#, fuzzy
 msgid "Show Field attribute"
-msgstr "um attributo \"label\""
+msgstr "Mostrar atributos de campo"
 
 #: toggles.c:178 ui/00default.xml:319
 msgid "Show Underline"
@@ -1918,6 +1919,10 @@ msgstr ""
 "The issuer certificate of a looked up certificate could not be found. This "
 "normally means the list of trusted certificates is not complete."
 
+#: main.c:410
+msgid "The model of 3270 display to be emulated"
+msgstr "The model of 3270 display to be emulated"
+
 #: v3270/security.c:167
 msgid ""
 "The passed certificate is self signed and the same certificate cannot be "
@@ -1991,7 +1996,7 @@ msgstr ""
 "programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple "
 "Place, Suite 330, Boston, MA, 02111-1307, USA"
 
-#: main.c:484
+#: main.c:486
 #, c-format
 msgid "This program requires GTK version %d.%d.%d"
 msgstr "Este programa precisa do GTK versão %d.%d.%d"
@@ -2031,9 +2036,8 @@ msgid "Trace network data flow"
 msgstr "Trace network data flow"
 
 #: toggles.c:112 ui/98trace.xml:492
-#, fuzzy
 msgid "Trace screen contents"
-msgstr "Colar conteúdo de arquivo texto"
+msgstr "Trace do conteúdo da tela"
 
 #: ui/98trace.xml:494
 msgid "Trace user interface events"
@@ -2175,7 +2179,7 @@ msgstr "Atributo %s inesperado ou inválido: \"%s\""
 msgid "Unexpected or invalid attribute value \"%s\""
 msgstr "Valor de attributo inesperado ou inválido: \"%s\""
 
-#: main.c:199
+#: main.c:200
 #, c-format
 msgid "Unexpected or invalid color value \"%s\""
 msgstr "Valor de cor inválido ou inesperado: \"%s\""
@@ -2184,7 +2188,7 @@ msgstr "Valor de cor inválido ou inesperado: \"%s\""
 msgid "Unexpected or unknown security status"
 msgstr "Estado de segurança inesperado ou desconhecido."
 
-#: v3270/widget.c:928
+#: v3270/widget.c:892
 msgid ""
 "Unexpected signature in H3270 object, possible version mismatch in lib3270"
 msgstr ""
@@ -2201,7 +2205,7 @@ msgstr "Alvo inesperado \"%s\""
 msgid "Unexpected type %d in typeahead queue"
 msgstr "Tipo inesperado %d na fila de teclado"
 
-#: ctlr.c:588
+#: ctlr.c:740
 #, c-format
 msgid "Unknown 3270 Data Stream command: 0x%X"
 msgstr "Unknown 3270 Data Stream command: 0x%X"
@@ -2257,10 +2261,6 @@ msgstr "Variável"
 #, c-format
 msgid "Version %s - Revision %s"
 msgstr "Versão %s - Revisão %s"
-
-#: ui/98trace.xml:495
-msgid "View Field Delimiters"
-msgstr "Mostrar delimitadores de campo"
 
 #: connect.c:164
 msgid "WSAStartup failed"
@@ -2457,7 +2457,7 @@ msgstr "Atributo inesperado \"action\" em <%s>"
 msgid "an action attribute"
 msgstr "um atributo \"action\""
 
-#: session.c:335
+#: session.c:270
 msgid "bracket"
 msgstr "bracket"
 
