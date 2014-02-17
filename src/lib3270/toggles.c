@@ -92,13 +92,13 @@ toggle_info[LIB3270_TOGGLE_COUNT] =
 			"dstrace",
 			False,
 			N_( "Trace Data Stream" ),
-			N_( "" )
+			""
 		},
 		{
 			"linewrap",
 			False,
-			N_( "" ),
-			N_( "" )
+			"",
+			""
 		},
 		{
 			"blankfill",
@@ -110,13 +110,13 @@ toggle_info[LIB3270_TOGGLE_COUNT] =
 			"screentrace",
 			False,
 			N_( "Trace screen contents" ),
-			N_( "" )
+			""
 		},
 		{
 			"eventtrace",
 			False,
 			N_( "Trace interface events" ),
-			N_( "" )
+			""
 		},
 		{
 			"marginedpaste",
@@ -152,37 +152,37 @@ toggle_info[LIB3270_TOGGLE_COUNT] =
 			"insert",
 			False,
 			N_( "Set insert mode" ),
-			N_( "" )
+			""
 		},
 		{
 			"smartpaste",
 			False,
 			N_( "Smart paste" ),
-			N_( "" )
+			""
 		},
 		{
 			"bold",
 			False,
 			N_( "Bold" ),
-			N_( "" )
+			""
 		},
 		{
 			"keepselected",
 			False,
 			N_( "Keep selected" ),
-			N_( "" )
+			""
 		},
 		{
 			"underline",
 			False,
 			N_( "Show Underline" ),
-			N_( "" )
+			""
 		},
 		{
 			"autoconnect",
 			False,
 			N_( "Connect on startup" ),
-			N_( "" )
+			""
 		},
 		{
 			"kpalternative",
@@ -200,7 +200,7 @@ toggle_info[LIB3270_TOGGLE_COUNT] =
 			"fieldattr",
 			False,
 			N_( "Show Field attribute" ),
-			N_( "" )
+			""
 		},
 		{
 			"altscreen",
