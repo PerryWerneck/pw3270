@@ -1,14 +1,11 @@
 #
 # Perry Werneck <perry.werneck@gmail.com>, 2012, 2013, 2014.
 #
-#: toggles.c:95 toggles.c:100 toggles.c:101 toggles.c:113 toggles.c:119
-#: toggles.c:155 toggles.c:161 toggles.c:167 toggles.c:173 toggles.c:179
-#: toggles.c:185 toggles.c:203
 msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-17 08:08-0300\n"
+"POT-Creation-Date: 2014-02-17 09:19-0300\n"
 "PO-Revision-Date: 2014-02-17 08:05-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Portugues <>\n"
