@@ -573,6 +573,39 @@ LIB3270_EXPORT const char * lib3270_set_url(H3270 *h, const char *n)
 		Replace(h->host.current,strdup(hostname));
 		Replace(h->host.srvc,strdup(srvc));
 
+		// Verifica parâmetros
+		if(query && *query)
+		{
+			char *str 		= strdup(query);
+			char *saveptr	= NULL;
+			char *ptr;
+
+			for(ptr = strtok_r(str,"&",&saveptr);ptr;ptr=strtok_r(NULL,"&",&saveptr))
+			{
+				char *var = ptr;
+				char *val = strchr(ptr,'=');
+				if(val)
+				{
+					*(val++) = 0;
+
+					if(!(strcasecmp(var,"lu") && strcasecmp(var,"luname")))
+					{
+						strncpy(h->luname,val,LIB3270_LUNAME_LENGTH);
+					}
+					else
+					{
+						lib3270_write_log(h,"","Ignoring invalid URL attribute \"%s\"",var);
+					}
+
+
+				}
+
+			}
+
+			free(str);
+		}
+
+		// Notifica atualização
 		update_host(h);
 
 		free(str);

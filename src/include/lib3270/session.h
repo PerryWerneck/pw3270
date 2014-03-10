@@ -126,7 +126,6 @@
 		}						  toggle[LIB3270_TOGGLE_COUNT];
 
 		// Network & Termtype
-//		char   		 			* hostname;
 		char					* connected_type;
 		char					* connected_lu;
 		char					  luname[LIB3270_LUNAME_LENGTH+1];

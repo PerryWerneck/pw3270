@@ -1441,7 +1441,7 @@ static int telnet_fsm(H3270 *hSession, unsigned char c)
 				if (hSession->lus != (char **)NULL && hSession->try_lu == CN)
 				{
 					/* None of the LUs worked. */
-					popup_an_error(NULL,"Cannot connect to specified LU");
+					popup_an_error(hSession, _( "Cannot connect to specified LU" ) );
 					return -1;
 				}
 
