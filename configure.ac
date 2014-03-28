@@ -489,11 +489,10 @@ if test "$IDLC" == "no" ; then
 	app_cv_office="no"
 fi
 
-AC_PATH_TOOL([UCPP], ucpp, "no", path=$PATH:$OO_SDK_HOME/bin)
-if test "$UCPP" == "no" ; then
-	app_cv_office="no"
-fi
-
+#AC_PATH_TOOL([UCPP], ucpp, "no", path=$PATH:$OO_SDK_HOME/bin)
+#if test "$UCPP" == "no" ; then
+#	app_cv_office="no"
+#fi
 
 AC_PATH_TOOL([REGMERGE], regmerge, "no", path=$PATH:$OO_SDK_URE_BIN_DIR)
 if test "$REGMERGE" == "no" ; then
@@ -572,8 +571,6 @@ AC_CONFIG_FILES([
 	src/lib3270/mkversion.sh
 	src/pw3270/Makefile
 	src/oxt/Makefile
-	src/oxt/description.xml
-	src/oxt/manifest.xml
 	src/pw3270/uiparser/Makefile
 	src/tools/Makefile
 	src/plugins/hllapi/Makefile

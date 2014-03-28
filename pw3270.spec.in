@@ -42,6 +42,11 @@
 	%if %{?suse_version} < 1200
 		%define _bldreq gtk2-devel >= 2.16 libopenssl-devel
 	%endif
+
+	%if %{?suse_version} >= 1310
+		%define _office 0
+		%define _bldreq gtk3-devel libopenssl-devel ucpp
+	%endif
 %endif
 
 %if 0%{?fedora}
