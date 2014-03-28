@@ -245,7 +245,10 @@ static void net_connected(H3270 *hSession)
 	sockstart(hSession);
 #endif
 
+#if defined(HAVE_LIBSSL)
 	set_ssl_state(hSession,LIB3270_SSL_UNSECURE);
+#endif // HAVE_LIBSSL
+
 	snprintf(hSession->full_model_name,LIB3270_FULL_MODEL_NAME_LENGTH,"IBM-327%c-%d",hSession->m3279 ? '9' : '8', hSession->model_num);
 
 
@@ -331,7 +334,7 @@ static void net_connected(H3270 *hSession)
 								_( "SSL error" ),
 								_( "Unable to connect to secure hosts" ),
 								_( "This version of %s was built without support for secure sockets layer (SSL)." ),
-								PACKAGE_NAME));
+								PACKAGE_NAME);
 
 		return EINVAL;
 #endif // HAVE_LIBSSL

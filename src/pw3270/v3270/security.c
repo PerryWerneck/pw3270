@@ -38,6 +38,7 @@
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
+#if defined(HAVE_LIBSSL)
  static const struct v3270_ssl_status_msg ssl_status_msg[] =
  {
 	// http://www.openssl.org/docs/apps/verify.html
@@ -266,6 +267,7 @@
 	}
 
  };
+#endif // HAVE_LIBSSL
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 

@@ -141,7 +141,10 @@ static void check_in3270(H3270 *session);
 static void store3270in(H3270 *hSession, unsigned char c);
 static void check_linemode(H3270 *hSession, Boolean init);
 static int net_connected(H3270 *session);
+
+#if defined(HAVE_LIBSSL)
 static void continue_tls(H3270 *hSession, unsigned char *sbbuf, int len);
+#endif // HAVE_LIBSSL
 
 #if defined(X3270_TN3270E) /*[*/
 static int tn3270e_negotiate(H3270 *hSession);
@@ -924,7 +927,9 @@ LIB3270_INTERNAL void lib3270_sock_disconnect(H3270 *hSession)
  */
 void net_disconnect(H3270 *session)
 {
+#if defined(HAVE_LIBSSL)
 	set_ssl_state(session,LIB3270_SSL_UNSECURE);
+#endif // HAVE_LIBSSL
 
 	session->disconnect(session);
 
@@ -1498,6 +1503,7 @@ static int telnet_fsm(H3270 *hSession, unsigned char c)
 	return 0;
 }
 
+#if defined(HAVE_LIBSSL)
 /**
  * Process a STARTTLS subnegotiation.
  */
@@ -1520,6 +1526,7 @@ static void continue_tls(H3270 *hSession, unsigned char *sbbuf, int len)
 	trace_dsn(hSession,"%s FOLLOWS %s\n", opt(TELOPT_STARTTLS), cmd(SE));
 	ssl_negotiate(hSession);
 }
+#endif // HAVE_LIBSSL
 
 #if defined(X3270_TN3270E) /*[*/
 /* Send a TN3270E terminal type request. */

@@ -48,7 +48,9 @@
 #include <lib3270/trace.h>
 #include "trace_dsc.h"
 
+#if defined(HAVE_LIBSSL)
 static int ssl_3270_ex_index = -1;	/**< Index of h3270 handle in SSL session */
+#endif // HAVE_LIBSSL
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
