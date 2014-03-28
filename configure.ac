@@ -489,6 +489,12 @@ if test "$IDLC" == "no" ; then
 	app_cv_office="no"
 fi
 
+AC_PATH_TOOL([UCPP], ucpp, "no", path=$PATH:$OO_SDK_HOME/bin)
+if test "$UCPP" == "no" ; then
+	app_cv_office="no"
+fi
+
+
 AC_PATH_TOOL([REGMERGE], regmerge, "no", path=$PATH:$OO_SDK_URE_BIN_DIR)
 if test "$REGMERGE" == "no" ; then
 	app_cv_office="no"
