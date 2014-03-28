@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<manifest:manifest>
-<manifest:file-entry manifest:media-type= "application/vnd.sun.star.uno-component;type=native;platform=Linux_@host_cpu@" manifest:full-path="@PACKAGE_NAME@.uno.so"/>
-<manifest:file-entry manifest:media-type="application/vnd.sun.star.uno-typelibrary;type=RDB" manifest:full-path="@PACKAGE_NAME@.uno.rdb"/>
-</manifest:manifest>
-
