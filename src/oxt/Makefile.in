@@ -70,7 +70,7 @@ BINRLS=$(BINDIR)/Release
 #---[ Build options ]----------------------------------------------------------
 
 CPPUENV="gcc3"
-CXXFLAGS=@CXXFLAGS@ @DLL_CFLAGS@ -Wno-strict-aliasing -I./include -I$(includedir)/libreoffice -Wno-strict-aliasing -DCPPU_ENV=$(CPPUENV) -DLANGUAGE_BINDING_NAME=\"$(CPPUENV)\"
+CXXFLAGS=@CXXFLAGS@ -fvisibility=hidden @DLL_CFLAGS@ -Wno-strict-aliasing -I./include -I$(includedir)/libreoffice -Wno-strict-aliasing -DCPPU_ENV=$(CPPUENV) -DLANGUAGE_BINDING_NAME=\"$(CPPUENV)\"
 
 OO_LDFLAGS=-L$(OO_SDK_HOME)/lib -L$(OO_SDK_URE_HOME)/lib \
 			-Wl,-rpath-link=$(OO_SDK_URE_HOME)/lib,-rpath=$(OO_SDK_URE_HOME)/lib \

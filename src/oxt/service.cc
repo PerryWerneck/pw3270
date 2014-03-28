@@ -82,17 +82,17 @@ namespace pw3270_impl
 
 extern "C"
 {
-	void * SAL_CALL component_getFactory(sal_Char const * implName, lang::XMultiServiceFactory * xMgr,registry::XRegistryKey * xRegistry )
+	__attribute__((visibility("default"))) void * SAL_CALL component_getFactory(sal_Char const * implName, lang::XMultiServiceFactory * xMgr,registry::XRegistryKey * xRegistry )
 	{
 		return ::cppu::component_getFactoryHelper(implName, xMgr, xRegistry, ::pw3270_impl::s_component_entries );
 	}
 
-	sal_Bool SAL_CALL component_writeInfo(lang::XMultiServiceFactory * xMgr, registry::XRegistryKey * xRegistry )
+	__attribute__((visibility("default"))) sal_Bool SAL_CALL component_writeInfo(lang::XMultiServiceFactory * xMgr, registry::XRegistryKey * xRegistry )
 	{
 		return ::cppu::component_writeInfoHelper(xMgr, xRegistry, ::pw3270_impl::s_component_entries );
 	}
 
-	void SAL_CALL component_getImplementationEnvironment(sal_Char const ** ppEnvTypeName, uno_Environment ** ppEnv )
+	__attribute__((visibility("default"))) void SAL_CALL component_getImplementationEnvironment(sal_Char const ** ppEnvTypeName, uno_Environment ** ppEnv )
 	{
         * ppEnvTypeName = LANGUAGE_BINDING_NAME;
 	}
