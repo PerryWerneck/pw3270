@@ -60,6 +60,8 @@ include $(CLASSLIBDIR)/class.mak
 
 OBJDIR=.obj
 BINDIR=.bin
+RDBDIR=.rdb
+URDDIR=.urd
 
 OBJDBG=$(OBJDIR)/Debug
 BINDBG=$(BINDIR)/Debug
@@ -78,35 +80,25 @@ OO_LDFLAGS=-L$(OO_SDK_HOME)/lib -L$(OO_SDK_URE_HOME)/lib \
 
 #---[ Rules ]------------------------------------------------------------------
 
-include/com/sun/star/uno/%.hpp: %.rdb
+$(URDDIR)/%.urd: %.idl
 	@echo $@ ...
 	@$(MKDIR) `dirname $@`
-	@$(CPPUMAKER) -O./include $(TYPES_RDB) $<
+	$(IDLC) -C -I$(OO_SDK_HOME)/idl -O`dirname $@` $<
 
-include/com/sun/star/registry/%.hpp: %.rdb
+$(URDDIR)/%.urd: /usr/share/idl/libreoffice/%.idl
+	@echo $@ ...
+	@$(MKDIR) `dirname $@`
+	$(IDLC) -C -I$(OO_SDK_HOME)/idl -O`dirname $@` $<
+
+$(RDBDIR)/%.rdb: $(URDDIR)/%.urd
+	@echo $@ ...
+	@$(MKDIR) `dirname $@`
+	$(REGMERGE) $@ /UCR $<
+
+include/%.hpp: $(RDBDIR)/%.rdb
 	@echo $@ ...
 	@$(MKDIR) `dirname $@`
 	$(CPPUMAKER) -O./include $(TYPES_RDB) $<
-
-%.urd: %.idl
-	@echo $@ ...
-	@$(MKDIR) `dirname $@`
-	@$(IDLC) -C -I$(OO_SDK_HOME)/idl -O`dirname $@` $<
-
-%.urd: /usr/share/idl/libreoffice/com/sun/star/uno/%.idl
-	@echo $@ ...
-	@$(MKDIR) `dirname $@`
-	@$(IDLC) -C -I$(OO_SDK_HOME)/idl -O`dirname $@` $<
-
-%.urd: /usr/share/idl/libreoffice/com/sun/star/registry/%.idl
-	@echo $@ ...
-	@$(MKDIR) `dirname $@`
-	@$(IDLC) -C -I$(OO_SDK_HOME)/idl -O`dirname $@` $<
-
-%.rdb: %.urd
-	@echo $@ ...
-	@$(MKDIR) `dirname $@`
-	@$(REGMERGE) $@ /UCR $<
 
 $(OBJDBG)/%.o: %.cc include/pw3270/lib3270.hpp \
 				$(foreach CLS, $(basename $(UNO_CLASSES)), include/com/sun/star/uno/$(CLS).hpp) \
@@ -118,7 +110,7 @@ $(OBJDBG)/%.o: %.cc include/pw3270/lib3270.hpp \
 
 #---[ UNO targets ]------------------------------------------------------------
 
-include/pw3270/lib3270.hpp: pw3270.rdb
+include/pw3270/lib3270.hpp: $(RDBDIR)/pw3270.rdb
 	@echo $@ ...
 	@$(MKDIR) `dirname $@`
 	@$(CPPUMAKER) -O./include -Tpw3270.lib3270 $(TYPES_RDB) $<
@@ -128,8 +120,6 @@ include/pw3270/lib3270.hpp: pw3270.rdb
 
 Debug: $(BINDBG)/pw3270.uno@DLLEXT@
 
-cleanDebug: clean
-
 $(BINDBG)/pw3270.uno@DLLEXT@: $(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC)@OBJEXT@)
 	@echo $@ ...
 	@$(MKDIR) `dirname $@`
@@ -138,11 +128,12 @@ $(BINDBG)/pw3270.uno@DLLEXT@: $(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$
 
 #---[ Misc targets ]-----------------------------------------------------------
 
-all: include/pw3270/lib3270.hpp
+cleanDebug: clean
 
 clean:
 	@rm -f *.urd
-	@rm -f *.rdb
+	@rm -fr $(RDBDIR)
+	@rm -fr $(URDDIR)
 	@rm -fr include
 	@rm -fr $(OBJDIR)
 	@rm -fr $(BINDIR)
