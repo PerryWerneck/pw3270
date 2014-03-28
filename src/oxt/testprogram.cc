@@ -32,12 +32,10 @@
 
 /*---[ Implement ]-----------------------------------------------------------------------------------------*/
 
-using namespace com::sun::star::uno;
-
 int SAL_CALL main(int argc, char **argv)
 {
-
 /*
+
 	Reference< XSimpleRegistry > xReg = createSimpleRegistry();
 
 	OSL_ENSURE( xReg.is(), "### cannot get service instance of \"SimpleRegistry\"!" );
