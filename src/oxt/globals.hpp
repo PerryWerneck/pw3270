@@ -22,8 +22,13 @@
  *
  * Contatos:
  *
- * perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
- * erico.mendonca@gmail.com	(Erico Mascarenhas de Mendonça)
+ *	perry.werneck@gmail.com		(Alexandre Perry de Souza Werneck)
+ *	erico.mendonca@gmail.com	(Erico Mascarenhas de Mendonça)
+ *
+ * Referências:
+ *
+ *	https://wiki.openoffice.org/wiki/Documentation/DevGuide/WritingUNO/C%2B%2B/C%2B%2B_Component
+ *
  *
  */
 
@@ -42,28 +47,50 @@
 	#endif
 
 
-	#include <cppuhelper/implbase2.hxx> // "3" implementing three interfaces
-	#include <cppuhelper/factory.hxx>
-	#include <cppuhelper/implementationentry.hxx>
+	#include <cppuhelper/supportsservice.hxx>
 
-	#include <com/sun/star/lang/XServiceInfo.hpp>
-	#include <com/sun/star/lang/IllegalArgumentException.hpp>
+	#include <cppuhelper/implbase2.hxx> // "3" implementing three interfaces
+//	#include <cppuhelper/factory.hxx>
+//	#include <cppuhelper/implementationentry.hxx>
+//	#include <com/sun/star/lang/XServiceInfo.hpp>
+//	#include <com/sun/star/lang/IllegalArgumentException.hpp>
+
 	#include <pw3270/lib3270.hpp>
 
 
-	using namespace ::rtl; // for OUString
-	using namespace ::com::sun::star; // for sdk interfaces
-	using namespace ::com::sun::star::uno; // for basic types
+	using namespace ::rtl; 					// for OUString
+	using namespace ::com::sun::star; 		// for sdk interfaces
+	using namespace ::com::sun::star::uno;	// for basic types
 
 
 	namespace pw3270_impl
 	{
-
-		class sessionImpl : public ::cppu::WeakImplHelper2< ::pw3270::lib3270,lang::XServiceInfo >
+		// https://wiki.openoffice.org/wiki/Documentation/DevGuide/WritingUNO/C%2B%2B/Class_Definition_with_Helper_Template_Classes
+		class sessionImpl
+		// : public lang::XServiceInfo
+		// ::cppu::WeakImplHelper2< ::pw3270::lib3270, lang::XServiceInfo >
 		{
-
 		};
-	}
+
+		/*
+		// https://wiki.openoffice.org/wiki/Documentation/DevGuide/WritingUNO/C%2B%2B/Implementing_without_Helpers
+		class sessionImpl
+		{
+			oslInterlockedCount m_refcount;
+
+		public:
+			inline sessionImpl() throw () : m_refcount( 0 )
+			{
+			}
+
+			// XInterface
+			virtual Any SAL_CALL queryInterface( Type const & type ) throw (RuntimeException);
+			virtual void SAL_CALL acquire() throw ();
+			virtual void SAL_CALL release() throw ();
+		};
+		*/
+
+	};
 
 
 #endif // PW3270_OXT_GLOBALS_HPP_INCLUDED
