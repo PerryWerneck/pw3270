@@ -38,7 +38,6 @@
 
 using namespace pw3270_impl;
 
-/*
 // XServiceInfo implementation
 OUString session_impl::getImplementationName() throw (RuntimeException)
 {
@@ -46,6 +45,7 @@ OUString session_impl::getImplementationName() throw (RuntimeException)
 	return OUString( RTL_CONSTASCII_USTRINGPARAM("pw3270.pw3270_impl.session") );
 }
 
+/*
 
 sal_Bool session_impl::supportsService( OUString const & serviceName ) throw (RuntimeException)
 {

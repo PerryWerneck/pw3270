@@ -47,11 +47,12 @@
 	#endif
 
 
-	#include <cppuhelper/implbase2.hxx> // "3" implementing three interfaces
+	#include <cppuhelper/implbase3.hxx> // "3" implementing three interfaces
 	#include <cppuhelper/factory.hxx>
+	#include <com/sun/star/lang/XInitialization.hpp>
 //	#include <cppuhelper/implementationentry.hxx>
 	#include <com/sun/star/lang/XServiceInfo.hpp>
-//	#include <com/sun/star/lang/IllegalArgumentException.hpp>
+	#include <com/sun/star/uno/RuntimeException.hpp>
 
 	#include <pw3270/lib3270.hpp>
 
@@ -64,8 +65,11 @@
 	namespace pw3270_impl
 	{
 		// https://wiki.openoffice.org/wiki/Documentation/DevGuide/WritingUNO/C%2B%2B/Class_Definition_with_Helper_Template_Classes
-		class session_impl : public ::cppu::WeakImplHelper2< ::pw3270::lib3270, lang::XServiceInfo >
+		class session_impl : public ::cppu::WeakImplHelper3< ::pw3270::lib3270, lang::XServiceInfo, lang::XInitialization >
 		{
+		public:
+			OUString getImplementationName() throw (RuntimeException);
+
 		};
 
 		/*

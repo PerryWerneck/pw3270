@@ -33,7 +33,7 @@
  */
 
 #include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/lang/XTypeProvider.idl>
+#include <com/sun/star/lang/XInitialization.idl>
 
 module pw3270
 {
@@ -48,6 +48,7 @@ module pw3270
 	service session
 	{
 		interface lib3270;
+		interface com::sun::star::lang::XInitialization;
 	};
 };
 

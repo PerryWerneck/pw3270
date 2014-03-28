@@ -26,6 +26,8 @@
 
 SOURCES=info.cc
 
+UNO_CLASSES=XWeak RuntimeException
+
 #---[ LibreOffice SDK ]--------------------------------------------------------
 
 OO_SDK_HOME=@OO_SDK_HOME@
@@ -91,7 +93,9 @@ OO_LDFLAGS=-L$(OO_SDK_HOME)/lib -L$(OO_SDK_URE_HOME)/lib \
 	@$(MKDIR) `dirname $@`
 	@$(REGMERGE) $@ /UCR $<
 
-$(OBJDBG)/%.o: %.cc include/pw3270/lib3270.hpp include/com/sun/star/uno/XWeak.hpp *.hpp Makefile
+$(OBJDBG)/%.o: %.cc include/pw3270/lib3270.hpp \
+				$(foreach CLS, $(basename $(UNO_CLASSES)), include/com/sun/star/uno/$(CLS).hpp) \
+				*.hpp Makefile
 	@echo $< ...
 	@mkdir -p `dirname $@`
 	$(CXX) -DDEBUG=1 $(CXXFLAGS) -o $@ -c $<
