@@ -32,6 +32,15 @@ REGMERGE=@REGMERGE@
 CPPUMAKER=@CPPUMAKER@
 TYPES_RDB=@OO_SDK_URE_HOME@/share/misc/types.rdb
 
+#---[ Paths ]------------------------------------------------------------------
+
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+bindir=@bindir@
+sbindir=@sbindir@
+libdir=@libdir@
+includedir=@includedir@
+
 #---[ Tools ]------------------------------------------------------------------
 
 CXX=@CXX@
@@ -41,6 +50,22 @@ MKDIR=@MKDIR_P@
 
 CLASSLIBDIR=../classlib
 include $(CLASSLIBDIR)/class.mak
+
+#---[ lib3270 common class ]---------------------------------------------------
+
+OBJDIR=.obj
+BINDIR=.bin
+
+OBJDBG=$(OBJDIR)/Debug
+BINDBG=$(BINDIR)/Debug
+
+OBJRLS=$(OBJDIR)/Release
+BINRLS=$(BINDIR)/Release
+
+#---[ Build options ]----------------------------------------------------------
+
+CPPUENV="gcc3"
+CXXFLAGS=@CXXFLAGS@ -Wno-strict-aliasing -I./include -I$(includedir)/libreoffice -Wno-strict-aliasing -DCPPU_ENV=$(CPPUENV) -DLANGUAGE_BINDING_NAME=\"$(CPPUENV)\"
 
 #---[ Rules ]------------------------------------------------------------------
 
@@ -54,12 +79,26 @@ include $(CLASSLIBDIR)/class.mak
 	@$(MKDIR) `dirname $@`
 	@$(REGMERGE) $@ /UCR $<
 
+$(OBJDBG)/%.o: %.cc include/pw3270/lib3270.hpp Makefile
+	@echo $< ...
+	@mkdir -p `dirname $@`
+	$(CXX) -DDEBUG=1 $(CXXFLAGS) -o $@ $<
+#	 $(DBG_CFLAGS) $(CXXFLAGS) $(LIB3270_CFLAGS) -DLIBNAME=\"$(BINDBG)/$(PROGRAM_NAME).uno@DLLEXT@\" -o $@ -c $<
+
+
 #---[ UNO targets ]------------------------------------------------------------
 
 include/pw3270/lib3270.hpp: pw3270.rdb
 	@echo $@ ...
 	@$(MKDIR) `dirname $@`
 	@$(CPPUMAKER) -O./include -Tpw3270.lib3270 $(TYPES_RDB) $<
+
+
+#---[ Debug targets ]----------------------------------------------------------
+
+Debug: $(OBJDBG)/testprogram.o
+
+cleanDebug: clean
 
 
 #---[ Misc targets ]-----------------------------------------------------------
@@ -70,5 +109,7 @@ clean:
 	@rm -f *.urd
 	@rm -f *.rdb
 	@rm -fr include
+	@rm -fr $(OBJDIR)
+	@rm -fr $(BINDIR)
 
 

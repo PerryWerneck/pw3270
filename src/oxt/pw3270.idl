@@ -45,7 +45,7 @@ module pw3270
 		string  getVersion();
 	};
 
-	service host
+	service session
 	{
 		interface lib3270;
 	};
