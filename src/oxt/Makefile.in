@@ -74,12 +74,17 @@ CXXFLAGS=@CXXFLAGS@ -Wno-strict-aliasing -I./include -I$(includedir)/libreoffice
 	@$(MKDIR) `dirname $@`
 	@$(IDLC) -C -I$(OO_SDK_HOME)/idl -O`dirname $@` $<
 
+%.urd: /usr/share/idl/libreoffice/com/sun/star/uno/%.idl
+	@echo $@ ...
+	@$(MKDIR) `dirname $@`
+	@$(IDLC) -C -I$(OO_SDK_HOME)/idl -O`dirname $@` $<
+
 %.rdb: %.urd
 	@echo $@ ...
 	@$(MKDIR) `dirname $@`
 	@$(REGMERGE) $@ /UCR $<
 
-$(OBJDBG)/%.o: %.cc include/pw3270/lib3270.hpp Makefile
+$(OBJDBG)/%.o: %.cc include/pw3270/lib3270.hpp include/com/sun/star/uno/XWeak.hpp *.hpp Makefile
 	@echo $< ...
 	@mkdir -p `dirname $@`
 	$(CXX) -DDEBUG=1 $(CXXFLAGS) -o $@ $<
@@ -92,6 +97,11 @@ include/pw3270/lib3270.hpp: pw3270.rdb
 	@echo $@ ...
 	@$(MKDIR) `dirname $@`
 	@$(CPPUMAKER) -O./include -Tpw3270.lib3270 $(TYPES_RDB) $<
+
+include/com/sun/star/uno/%.hpp: %.rdb
+	@echo $@ ...
+	@$(MKDIR) `dirname $@`
+	@$(CPPUMAKER) -O./include $(TYPES_RDB) $<
 
 
 #---[ Debug targets ]----------------------------------------------------------
