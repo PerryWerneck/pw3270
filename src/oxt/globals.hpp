@@ -57,37 +57,35 @@
 	#include <pw3270/lib3270.hpp>
 
 
-	using namespace ::rtl; 					// for OUString
-	using namespace ::com::sun::star; 		// for sdk interfaces
-	using namespace ::com::sun::star::uno;	// for basic types
+	using namespace ::rtl; 						// for OUString
+	using namespace ::com::sun::star; 			// for sdk interfaces
+	using namespace ::com::sun::star::lang; 	// for sdk interfaces
+	using namespace ::com::sun::star::uno;		// for basic types
 
 
 	namespace pw3270_impl
 	{
 		// https://wiki.openoffice.org/wiki/Documentation/DevGuide/WritingUNO/C%2B%2B/Class_Definition_with_Helper_Template_Classes
-		class session_impl : public ::cppu::WeakImplHelper3< ::pw3270::lib3270, lang::XServiceInfo, lang::XInitialization >
+		class session_impl : public ::cppu::WeakImplHelper3< ::pw3270::lib3270, XServiceInfo, XInitialization >
 		{
 		public:
-			OUString getImplementationName() throw (RuntimeException);
+			// XInitialization will be called upon createInstanceWithArguments[AndContext]()
+			virtual void SAL_CALL initialize( Sequence< Any > const & args ) throw (Exception);
+
+			// XServiceInfo
+			virtual OUString SAL_CALL getImplementationName() throw (RuntimeException);
+			virtual sal_Bool SAL_CALL supportsService( OUString const & serviceName ) throw (RuntimeException);
+			virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (RuntimeException);
+
+			// lib3270
+			virtual ::rtl::OUString SAL_CALL getVersion() throw (RuntimeException);
 
 		};
 
-		/*
-		// https://wiki.openoffice.org/wiki/Documentation/DevGuide/WritingUNO/C%2B%2B/Implementing_without_Helpers
-		class session_impl : public ::pw3270::lib3270, lang::XServiceInfo
-		{
-		private:
-			oslInterlockedCount m_refcount;
-		public:
+		extern Sequence< OUString > SAL_CALL getSupportedServiceNames_session_impl();
+		extern OUString SAL_CALL getImplementationName_session_impl();
+		extern Reference< XInterface > SAL_CALL create_session_impl(Reference< XComponentContext > const & xContext ) SAL_THROW( () );
 
-			inline session_impl() throw () : m_refcount( 0 ) { }
-
-			// XInterface
-			virtual Any SAL_CALL queryInterface( Type const & type ) throw (RuntimeException);
-			virtual void SAL_CALL acquire() throw ();
-			virtual void SAL_CALL release() throw ();
-		};
-		*/
 	};
 
 

@@ -24,7 +24,7 @@
 # erico.mendonca@gmail.com	(Erico Mascarenhas de Mendonça)
 #
 
-SOURCES=info.cc
+SOURCES=info.cc get.cc service.cc init.cc
 
 UNO_CLASSES=XWeak RuntimeException
 
@@ -70,7 +70,7 @@ BINRLS=$(BINDIR)/Release
 #---[ Build options ]----------------------------------------------------------
 
 CPPUENV="gcc3"
-CXXFLAGS=@CXXFLAGS@ -Wno-strict-aliasing -I./include -I$(includedir)/libreoffice -Wno-strict-aliasing -DCPPU_ENV=$(CPPUENV) -DLANGUAGE_BINDING_NAME=\"$(CPPUENV)\"
+CXXFLAGS=@CXXFLAGS@ @DLL_CFLAGS@ -Wno-strict-aliasing -I./include -I$(includedir)/libreoffice -Wno-strict-aliasing -DCPPU_ENV=$(CPPUENV) -DLANGUAGE_BINDING_NAME=\"$(CPPUENV)\"
 
 OO_LDFLAGS=-L$(OO_SDK_HOME)/lib -L$(OO_SDK_URE_HOME)/lib \
 			-Wl,-rpath-link=$(OO_SDK_URE_HOME)/lib,-rpath=$(OO_SDK_URE_HOME)/lib \

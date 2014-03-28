@@ -38,9 +38,14 @@
 		<Unit filename="../classlib/remote.cc" />
 		<Unit filename="../classlib/session.cc" />
 		<Unit filename="Makefile.in" />
+		<Unit filename="get.cc" />
 		<Unit filename="globals.hpp" />
+		<Unit filename="include/pw3270/lib3270.hdl" />
+		<Unit filename="include/pw3270/lib3270.hpp" />
 		<Unit filename="info.cc" />
+		<Unit filename="init.cc" />
 		<Unit filename="pw3270.idl" />
+		<Unit filename="service.cc" />
 		<Unit filename="testprogram.cc" />
 		<Extensions>
 			<code_completion />
