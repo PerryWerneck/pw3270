@@ -24,9 +24,12 @@
 # erico.mendonca@gmail.com	(Erico Mascarenhas de Mendonça)
 #
 
+SOURCES=info.cc
+
 #---[ LibreOffice SDK ]--------------------------------------------------------
 
 OO_SDK_HOME=@OO_SDK_HOME@
+OO_SDK_URE_HOME=@OO_SDK_URE_HOME@
 IDLC=@IDLC@
 REGMERGE=@REGMERGE@
 CPPUMAKER=@CPPUMAKER@
@@ -67,6 +70,10 @@ BINRLS=$(BINDIR)/Release
 CPPUENV="gcc3"
 CXXFLAGS=@CXXFLAGS@ -Wno-strict-aliasing -I./include -I$(includedir)/libreoffice -Wno-strict-aliasing -DCPPU_ENV=$(CPPUENV) -DLANGUAGE_BINDING_NAME=\"$(CPPUENV)\"
 
+OO_LDFLAGS=-L$(OO_SDK_HOME)/lib -L$(OO_SDK_URE_HOME)/lib \
+			-Wl,-rpath-link=$(OO_SDK_URE_HOME)/lib,-rpath=$(OO_SDK_URE_HOME)/lib \
+			-luno_cppu -luno_cppuhelpergcc3 -luno_salhelpergcc3
+
 #---[ Rules ]------------------------------------------------------------------
 
 %.urd: %.idl
@@ -87,7 +94,7 @@ CXXFLAGS=@CXXFLAGS@ -Wno-strict-aliasing -I./include -I$(includedir)/libreoffice
 $(OBJDBG)/%.o: %.cc include/pw3270/lib3270.hpp include/com/sun/star/uno/XWeak.hpp *.hpp Makefile
 	@echo $< ...
 	@mkdir -p `dirname $@`
-	$(CXX) -DDEBUG=1 $(CXXFLAGS) -o $@ $<
+	$(CXX) -DDEBUG=1 $(CXXFLAGS) -o $@ -c $<
 #	 $(DBG_CFLAGS) $(CXXFLAGS) $(LIB3270_CFLAGS) -DLIBNAME=\"$(BINDBG)/$(PROGRAM_NAME).uno@DLLEXT@\" -o $@ -c $<
 
 
@@ -106,9 +113,14 @@ include/com/sun/star/uno/%.hpp: %.rdb
 
 #---[ Debug targets ]----------------------------------------------------------
 
-Debug: $(OBJDBG)/testprogram.o
+Debug: $(BINDBG)/pw3270.uno@DLLEXT@
 
 cleanDebug: clean
+
+$(BINDBG)/pw3270.uno@DLLEXT@: $(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC)@OBJEXT@)
+	@echo $@ ...
+	@$(MKDIR) `dirname $@`
+	$(CXX) -shared $(LDFLAGS) $(OO_LDFLAGS) -o $@ $^
 
 
 #---[ Misc targets ]-----------------------------------------------------------

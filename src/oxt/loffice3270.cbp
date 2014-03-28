@@ -39,6 +39,7 @@
 		<Unit filename="../classlib/session.cc" />
 		<Unit filename="Makefile.in" />
 		<Unit filename="globals.hpp" />
+		<Unit filename="info.cc" />
 		<Unit filename="pw3270.idl" />
 		<Unit filename="testprogram.cc" />
 		<Extensions>

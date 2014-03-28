@@ -68,6 +68,22 @@
 		{
 		};
 
+		/*
+		// https://wiki.openoffice.org/wiki/Documentation/DevGuide/WritingUNO/C%2B%2B/Implementing_without_Helpers
+		class session_impl : public ::pw3270::lib3270, lang::XServiceInfo
+		{
+		private:
+			oslInterlockedCount m_refcount;
+		public:
+
+			inline session_impl() throw () : m_refcount( 0 ) { }
+
+			// XInterface
+			virtual Any SAL_CALL queryInterface( Type const & type ) throw (RuntimeException);
+			virtual void SAL_CALL acquire() throw ();
+			virtual void SAL_CALL release() throw ();
+		};
+		*/
 	};
 
 
