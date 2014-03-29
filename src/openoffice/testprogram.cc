@@ -28,7 +28,7 @@
  */
 
  #include "globals.hpp"
- #include <com/sun/star/registry/DefaultRegistry.hpp>
+ #include <com/sun/star/registry/XSimpleRegistry.hpp>
  #include "pw3270/lib3270.hpp"
 
 /*---[ Implement ]-----------------------------------------------------------------------------------------*/
@@ -37,8 +37,9 @@ using namespace ::com::sun::star::registry;
 
 int SAL_CALL main(int argc, char **argv)
 {
-	Reference< XSimpleRegistry > xReg = DefaultRegistry();
+
 /*
+	Reference< XSimpleRegistry > xReg = DefaultRegistry();
 
 	Reference< XSimpleRegistry > xReg = createSimpleRegistry();
 
