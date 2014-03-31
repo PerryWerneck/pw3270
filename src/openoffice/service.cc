@@ -37,27 +37,25 @@
 
 /*---[ Implement ]-----------------------------------------------------------------------------------------*/
 
-using namespace pw3270_impl;
-
-Sequence< OUString > SAL_CALL getSupportedServiceNames_session_impl()
-{
-	Sequence<OUString> names(1);
-	names[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("pw3270.session"));
-	return names;
-}
-
-OUString SAL_CALL getImplementationName_session_impl()
-{
-	return OUString( RTL_CONSTASCII_USTRINGPARAM("pw3270.lib3270.session") );
-}
-
-Reference< XInterface > SAL_CALL create_session_impl(Reference< XComponentContext > const & xContext ) SAL_THROW( () )
-{
-    return static_cast< lang::XTypeProvider * >( new session_impl() );
-}
-
 namespace pw3270_impl
 {
+	Sequence< OUString > SAL_CALL getSupportedServiceNames_session_impl()
+	{
+		Sequence<OUString> names(1);
+		names[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("pw3270.session"));
+		return names;
+	}
+
+	OUString SAL_CALL getImplementationName_session_impl()
+	{
+		return OUString( RTL_CONSTASCII_USTRINGPARAM("pw3270.lib3270.session") );
+	}
+
+	Reference< XInterface > SAL_CALL create_session_impl(Reference< XComponentContext > const & xContext ) SAL_THROW( () )
+	{
+		return static_cast< lang::XTypeProvider * >( new session_impl() );
+	}
+
 	static struct ::cppu::ImplementationEntry s_component_entries [] =
 	{
 		{
