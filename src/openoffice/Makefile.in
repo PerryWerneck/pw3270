@@ -165,7 +165,7 @@ $(BINDBG)/$(PACKAGE_NAME).oxt: \
 
 	@cp $(BINDBG)/$(PACKAGE_NAME).uno@DLLEXT@ $(BINDBG)/$(PACKAGE_NAME).oxt.tmp
 	@cp $(PACKAGE_NAME).rdb $(BINDBG)/$(PACKAGE_NAME).oxt.tmp
-	cd $(BINDBG)/$(PACKAGE).oxt.tmp ; $(ZIP) -r -m ../$(PACKAGE_NAME).oxt .
+	@cd $(BINDBG)/$(PACKAGE).oxt.tmp ; $(ZIP) -r -m ../$(PACKAGE_NAME).oxt .
 	@echo $@ Ok.
 
 
