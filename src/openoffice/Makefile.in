@@ -128,6 +128,9 @@ include/$(PACKAGE_NAME)/lib3270.hpp: $(RDBDIR)/$(PACKAGE_NAME).rdb
 
 Debug: $(BINDBG)/$(PACKAGE_NAME).oxt
 
+add: $(BINDBG)/$(PACKAGE_NAME).oxt
+	@$(UNOPKG) add --verbose --force $(BINDBG)/$(PACKAGE_NAME).oxt
+
 $(BINDBG)/testprogram: $(OBJDBG)/testprogram@OBJEXT@ $(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC)@OBJEXT@)
 	@echo $@ ...
 	@$(MKDIR) `dirname $@`
@@ -166,6 +169,7 @@ $(BINDBG)/$(PACKAGE_NAME).oxt: \
 	@cp $(BINDBG)/$(PACKAGE_NAME).uno@DLLEXT@ $(BINDBG)/$(PACKAGE_NAME).oxt.tmp
 	@cp $(PACKAGE_NAME).rdb $(BINDBG)/$(PACKAGE_NAME).oxt.tmp
 	@cd $(BINDBG)/$(PACKAGE).oxt.tmp ; $(ZIP) -r -m ../$(PACKAGE_NAME).oxt .
+	@rm -fr $(BINDBG)/$(PACKAGE).oxt.tmp
 	@echo $@ Ok.
 
 
