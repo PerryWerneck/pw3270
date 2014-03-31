@@ -53,3 +53,11 @@ void session_impl::initialize( Sequence< Any > const & args ) throw (Exception)
 	// Initialize
 
 }
+
+// XMain
+::sal_Int32 SAL_CALL session_impl::run( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aArguments ) throw (Exception)
+{
+
+
+	return 0;
+}

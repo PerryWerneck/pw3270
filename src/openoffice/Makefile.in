@@ -32,6 +32,8 @@ UNO_CLASSES=XWeak RuntimeException
 
 OO_SDK_HOME=@OO_SDK_HOME@
 OO_SDK_URE_HOME=@OO_SDK_URE_HOME@
+
+UNO=@UNO@
 IDLC=@IDLC@
 REGMERGE=@REGMERGE@
 CPPUMAKER=@CPPUMAKER@
@@ -51,11 +53,6 @@ includedir=@includedir@
 CXX=@CXX@
 MKDIR=@MKDIR_P@
 
-#---[ lib3270 common class ]---------------------------------------------------
-
-CLASSLIBDIR=../classlib
-include $(CLASSLIBDIR)/class.mak
-
 #---[ Paths ]------------------------------------------------------------------
 
 OBJDIR=.obj
@@ -69,6 +66,12 @@ BINDBG=$(BINDIR)/Debug
 OBJRLS=$(OBJDIR)/Release
 BINRLS=$(BINDIR)/Release
 
+#---[ lib3270 common class ]---------------------------------------------------
+
+PW3270_CFLAGS=-I../include
+CLASSLIBDIR=../classlib
+include $(CLASSLIBDIR)/class.mak
+
 #---[ Build options ]----------------------------------------------------------
 
 CPPUENV="gcc3"
@@ -81,37 +84,37 @@ OO_LDFLAGS=-L$(OO_SDK_HOME)/lib -L$(OO_SDK_URE_HOME)/lib \
 #---[ Rules ]------------------------------------------------------------------
 
 $(URDDIR)/%.urd: %.idl
-	@echo $@ ...
+	@echo "  IDLC `basename $@`"
 	@$(MKDIR) `dirname $@`
-	$(IDLC) -C -I$(OO_SDK_HOME)/idl -O`dirname $@` $<
+	@$(IDLC) -C -I$(OO_SDK_HOME)/idl -O`dirname $@` $<
 
 $(URDDIR)/%.urd: /usr/share/idl/libreoffice/%.idl
-	@echo $@ ...
+	@echo "  IDLC `basename $@`"
 	@$(MKDIR) `dirname $@`
-	$(IDLC) -C -I$(OO_SDK_HOME)/idl -O`dirname $@` $<
+	@$(IDLC) -C -I$(OO_SDK_HOME)/idl -O`dirname $@` $<
 
 $(RDBDIR)/%.rdb: $(URDDIR)/%.urd
-	@echo $@ ...
+	@echo "  REGM `basename $@`"
 	@$(MKDIR) `dirname $@`
-	$(REGMERGE) $@ /UCR $<
+	@$(REGMERGE) $@ /UCR $<
 
 include/%.hpp: $(RDBDIR)/%.rdb
-	@echo $@ ...
+	@echo "  CPPU `basename $@`"
 	@$(MKDIR) `dirname $@`
-	$(CPPUMAKER) -O./include $(TYPES_RDB) $<
+	@$(CPPUMAKER) -O./include $(TYPES_RDB) $<
 
 $(OBJDBG)/%.o: %.cc include/pw3270/lib3270.hpp \
 				$(foreach CLS, $(basename $(UNO_CLASSES)), include/com/sun/star/uno/$(CLS).hpp) \
 				*.hpp Makefile
-	@echo $< ...
+	@echo "  CC   `basename $@`"
 	@mkdir -p `dirname $@`
-	$(CXX) -DDEBUG=1 $(CXXFLAGS) -o $@ -c $<
+	@$(CXX) -DDEBUG=1 $(CXXFLAGS) -o $@ -c $<
 #	 $(DBG_CFLAGS) $(CXXFLAGS) $(LIB3270_CFLAGS) -DLIBNAME=\"$(BINDBG)/$(PROGRAM_NAME).uno@DLLEXT@\" -o $@ -c $<
 
 #---[ UNO targets ]------------------------------------------------------------
 
 include/pw3270/lib3270.hpp: $(RDBDIR)/pw3270.rdb
-	@echo $@ ...
+	@echo "  CPPU `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(CPPUMAKER) -O./include -Tpw3270.lib3270 $(TYPES_RDB) $<
 
@@ -120,11 +123,17 @@ include/pw3270/lib3270.hpp: $(RDBDIR)/pw3270.rdb
 
 Debug: $(BINDBG)/pw3270.uno@DLLEXT@
 
-$(BINDBG)/pw3270.uno@DLLEXT@: $(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC)@OBJEXT@)
+$(BINDBG)/testprogram: $(OBJDBG)/testprogram@OBJEXT@ $(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC)@OBJEXT@)
 	@echo $@ ...
 	@$(MKDIR) `dirname $@`
-	$(CXX) -shared $(LDFLAGS) $(OO_LDFLAGS) -o $@ $^
+	$(CXX) -shared $(LDFLAGS) $(OO_LDFLAGS) -o $(BINDBG)/pw3270.uno@DLLEXT@ $(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC)@OBJEXT@)
 
+$(BINDBG)/pw3270.uno@DLLEXT@: \
+			$(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC)@OBJEXT@) \
+			$(CLASS_DEBUG_OBJECTS)
+	@echo "  LD   `basename $@`"
+	@$(MKDIR) `dirname $@`
+	$(CXX) -shared $(LDFLAGS) $(OO_LDFLAGS) -o $@ $^
 
 #---[ Misc targets ]-----------------------------------------------------------
 

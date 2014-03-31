@@ -28,15 +28,25 @@
  */
 
  #include "globals.hpp"
- #include <com/sun/star/registry/XSimpleRegistry.hpp>
+
+ #include <cppuhelper/bootstrap.hxx>
+ #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
+ #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+
  #include "pw3270/lib3270.hpp"
 
 /*---[ Implement ]-----------------------------------------------------------------------------------------*/
 
-using namespace ::com::sun::star::registry;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::bridge;
+using namespace rtl;
+using namespace cppu;
 
 int SAL_CALL main(int argc, char **argv)
 {
+	Reference< XComponentContext > rComponentContext = defaultBootstrap_InitialComponentContext();
+	OSL_ENSURE( xContext.is(), "### cannot creage intial component context!" );
 
 /*
 	Reference< XSimpleRegistry > xReg = DefaultRegistry();

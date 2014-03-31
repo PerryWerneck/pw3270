@@ -44,31 +44,41 @@
 		#define UNX 1
 		#define GCC 1
 		#define LINUX 1
+		#define HAVE_GCC_VISIBILITY_FEATURE 1
 	#endif
 
 
-	#include <cppuhelper/implbase3.hxx> // "3" implementing three interfaces
+	#include <cppuhelper/implbase4.hxx> // "3" implementing three interfaces
 	#include <cppuhelper/factory.hxx>
 	#include <com/sun/star/lang/XInitialization.hpp>
 //	#include <cppuhelper/implementationentry.hxx>
 	#include <com/sun/star/lang/XServiceInfo.hpp>
+
+#ifdef DEBUG
+	#include <com/sun/star/lang/XMain.hpp>
+#endif // DEBUG
+
 	#include <com/sun/star/uno/RuntimeException.hpp>
 
 	#include <pw3270/lib3270.hpp>
 
+	#define DLL_PUBLIC __attribute__((visibility("default")))
 
 	using namespace ::rtl; 						// for OUString
 	using namespace ::com::sun::star; 			// for sdk interfaces
 	using namespace ::com::sun::star::lang; 	// for sdk interfaces
 	using namespace ::com::sun::star::uno;		// for basic types
 
-
-	namespace pw3270_impl
+ 	namespace pw3270_impl
 	{
 		// https://wiki.openoffice.org/wiki/Documentation/DevGuide/WritingUNO/C%2B%2B/Class_Definition_with_Helper_Template_Classes
-		class session_impl : public ::cppu::WeakImplHelper3< ::pw3270::lib3270, XServiceInfo, XInitialization >
+		class DLL_PUBLIC session_impl : public ::cppu::WeakImplHelper4< ::pw3270::lib3270, XServiceInfo, XMain, XInitialization >
 		{
 		public:
+
+			// XMain
+		    virtual ::sal_Int32 SAL_CALL run( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aArguments ) throw (Exception);
+
 			// XInitialization will be called upon createInstanceWithArguments[AndContext]()
 			virtual void SAL_CALL initialize( Sequence< Any > const & args ) throw (Exception);
 

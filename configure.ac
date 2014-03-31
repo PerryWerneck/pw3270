@@ -504,6 +504,12 @@ if test "$CPPUMAKER" == "no" ; then
 	app_cv_office="no"
 fi
 
+AC_PATH_TOOL([UNO], uno, "no", path=$PATH:$OO_SDK_URE_BIN_DIR)
+if test "$UNO" == "no" ; then
+	app_cv_office="no"
+fi
+
+
 # Check for OO_SDK_HOME
 if test "_$OO_SDK_HOME" == "_" ; then
 	app_cv_office="no"

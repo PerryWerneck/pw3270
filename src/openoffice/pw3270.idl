@@ -34,6 +34,7 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/lang/XInitialization.idl>
+#include <com/sun/star/lang/XMain.idl>
 
 module pw3270
 {
@@ -49,6 +50,7 @@ module pw3270
 	{
 		interface lib3270;
 		interface com::sun::star::lang::XInitialization;
+		interface com::sun::star::lang::XMain;
 	};
 };
 
