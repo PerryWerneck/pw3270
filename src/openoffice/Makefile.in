@@ -24,6 +24,7 @@
 # erico.mendonca@gmail.com	(Erico Mascarenhas de Mendonça)
 #
 
+PACKAGE_NAME=@PACKAGE_NAME@
 SOURCES=info.cc get.cc service.cc init.cc
 
 UNO_CLASSES=XWeak RuntimeException
@@ -34,9 +35,13 @@ OO_SDK_HOME=@OO_SDK_HOME@
 OO_SDK_URE_HOME=@OO_SDK_URE_HOME@
 
 UNO=@UNO@
+UNOPKG=@UNOPKG@
 IDLC=@IDLC@
 REGMERGE=@REGMERGE@
 CPPUMAKER=@CPPUMAKER@
+CONVERT=@CONVERT@
+ZIP=@ZIP@
+
 TYPES_RDB=@OO_SDK_URE_HOME@/share/misc/types.rdb
 
 #---[ Paths ]------------------------------------------------------------------
@@ -103,7 +108,7 @@ include/%.hpp: $(RDBDIR)/%.rdb
 	@$(MKDIR) `dirname $@`
 	@$(CPPUMAKER) -O./include $(TYPES_RDB) $<
 
-$(OBJDBG)/%.o: %.cc include/pw3270/lib3270.hpp \
+$(OBJDBG)/%.o: %.cc include/$(PACKAGE_NAME)/lib3270.hpp \
 				$(foreach CLS, $(basename $(UNO_CLASSES)), include/com/sun/star/uno/$(CLS).hpp) \
 				*.hpp Makefile
 	@echo "  CC   `basename $@`"
@@ -113,27 +118,56 @@ $(OBJDBG)/%.o: %.cc include/pw3270/lib3270.hpp \
 
 #---[ UNO targets ]------------------------------------------------------------
 
-include/pw3270/lib3270.hpp: $(RDBDIR)/pw3270.rdb
+include/$(PACKAGE_NAME)/lib3270.hpp: $(RDBDIR)/$(PACKAGE_NAME).rdb
 	@echo "  CPPU `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CPPUMAKER) -O./include -Tpw3270.lib3270 $(TYPES_RDB) $<
+	@$(CPPUMAKER) -O./include -T$(PACKAGE_NAME).lib3270 $(TYPES_RDB) $<
 
 
 #---[ Debug targets ]----------------------------------------------------------
 
-Debug: $(BINDBG)/pw3270.uno@DLLEXT@
+Debug: $(BINDBG)/$(PACKAGE_NAME).oxt
 
 $(BINDBG)/testprogram: $(OBJDBG)/testprogram@OBJEXT@ $(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC)@OBJEXT@)
 	@echo $@ ...
 	@$(MKDIR) `dirname $@`
-	$(CXX) -shared $(LDFLAGS) $(OO_LDFLAGS) -o $(BINDBG)/pw3270.uno@DLLEXT@ $(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC)@OBJEXT@)
+	$(CXX) -shared $(LDFLAGS) $(OO_LDFLAGS) -o $(BINDBG)/$(PACKAGE_NAME).uno@DLLEXT@ $(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC)@OBJEXT@)
 
-$(BINDBG)/pw3270.uno@DLLEXT@: \
+$(BINDBG)/$(PACKAGE_NAME).uno@DLLEXT@: \
 			$(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC)@OBJEXT@) \
 			$(CLASS_DEBUG_OBJECTS)
 	@echo "  LD   `basename $@`"
 	@$(MKDIR) `dirname $@`
 	$(CXX) -shared $(LDFLAGS) $(OO_LDFLAGS) -o $@ $^
+
+
+$(BINDBG)/$(PACKAGE_NAME).oxt: \
+			$(BINDBG)/$(PACKAGE_NAME).uno@DLLEXT@ \
+			$(PACKAGE_NAME).rdb \
+			description.xml \
+			manifest.xml \
+			description.txt
+	@rm -f $@
+	@$(MKDIR) `dirname $@`
+
+	@$(MKDIR) $(BINDBG)/$(PACKAGE).oxt.tmp
+
+	@cp $(PACKAGE_NAME).rdb $(BINDBG)/$(PACKAGE).oxt.tmp
+	@cp $(BINDBG)/$(PACKAGE_NAME).uno@DLLEXT@ $(BINDBG)/$(PACKAGE).oxt.tmp
+
+	@$(MKDIR) $(BINDBG)/$(PACKAGE).oxt.tmp/META-INF
+	@cp manifest.xml $(BINDBG)/$(PACKAGE).oxt.tmp/META-INF
+
+	@cp description.xml $(BINDBG)/$(PACKAGE).oxt.tmp
+	@cp description.txt $(BINDBG)/$(PACKAGE).oxt.tmp
+
+	@$(CONVERT) ../$(PACKAGE_NAME)/pixmaps/$(PACKAGE_NAME).svg --format=png > $(BINDBG)/$(PACKAGE).oxt.tmp/$(PACKAGE_NAME).png
+
+	@cp $(BINDBG)/$(PACKAGE_NAME).uno@DLLEXT@ $(BINDBG)/$(PACKAGE_NAME).oxt.tmp
+	@cp $(PACKAGE_NAME).rdb $(BINDBG)/$(PACKAGE_NAME).oxt.tmp
+	cd $(BINDBG)/$(PACKAGE).oxt.tmp ; $(ZIP) -r -m ../$(PACKAGE_NAME).oxt .
+	@echo $@ Ok.
+
 
 #---[ Misc targets ]-----------------------------------------------------------
 

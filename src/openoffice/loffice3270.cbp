@@ -46,6 +46,7 @@
 		<Unit filename="include/pw3270/lib3270.hpp" />
 		<Unit filename="info.cc" />
 		<Unit filename="init.cc" />
+		<Unit filename="manifest.xml.in" />
 		<Unit filename="pw3270.idl" />
 		<Unit filename="service.cc" />
 		<Unit filename="testprogram.cc" />

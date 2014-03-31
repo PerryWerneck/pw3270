@@ -577,6 +577,8 @@ AC_CONFIG_FILES([
 	src/lib3270/mkversion.sh
 	src/pw3270/Makefile
 	src/openoffice/Makefile
+	src/openoffice/description.xml
+	src/openoffice/manifest.xml
 	src/pw3270/uiparser/Makefile
 	src/tools/Makefile
 	src/plugins/hllapi/Makefile
