@@ -48,15 +48,11 @@
 	#endif
 
 
-	#include <cppuhelper/implbase4.hxx> // "3" implementing three interfaces
+	#include <cppuhelper/implbase4.hxx>
 	#include <cppuhelper/factory.hxx>
 	#include <com/sun/star/lang/XInitialization.hpp>
-//	#include <cppuhelper/implementationentry.hxx>
 	#include <com/sun/star/lang/XServiceInfo.hpp>
-
-#ifdef DEBUG
 	#include <com/sun/star/lang/XMain.hpp>
-#endif // DEBUG
 
 	#include <com/sun/star/uno/RuntimeException.hpp>
 

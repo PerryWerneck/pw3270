@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-17 09:19-0300\n"
+"POT-Creation-Date: 2014-04-01 10:24-0300\n"
 "PO-Revision-Date: 2014-02-17 08:05-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Portugues <>\n"
@@ -19,8 +19,8 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Gtranslator 2.91.6\n"
 
-#: telnet.c:1050 ssl.c:259 ssl.c:312 connect.c:98 connect.c:114 connect.c:116
-#: connect.c:569 connect.c:586
+#: telnet.c:1055 ssl.c:261 ssl.c:314 connect.c:98 connect.c:114 connect.c:116
+#: connect.c:572 connect.c:589
 #, c-format
 msgid "%s"
 msgstr "%s"
@@ -145,7 +145,7 @@ msgstr ""
 "<b>Identidade não foi confirmada</b>\n"
 "Desconectado do servidor"
 
-#: v3270/widget.c:243 v3270/security.c:370
+#: v3270/widget.c:243 v3270/security.c:372
 msgid ""
 "<b>Identity not verified</b>\n"
 "The connection is insecure"
@@ -182,7 +182,7 @@ msgstr "<menuitem> deve estar dentro de <menu>"
 msgid "<separator> should be inside a <menu> or <toolbar>"
 msgstr "<separator> só é válido dentro de <menu> ou <toolbar>"
 
-#: v3270/security.c:202
+#: v3270/security.c:203
 msgid ""
 "A CA certificate is invalid. Either it is not a CA or its extensions are not "
 "consistent with the supplied purpose."
@@ -198,7 +198,7 @@ msgstr "Abort sent; awaiting response"
 msgid "Aborting..."
 msgstr "Abortando..."
 
-#: v3270/security.c:411
+#: v3270/security.c:413
 msgid "About security"
 msgstr "Sobre a segurança"
 
@@ -222,7 +222,7 @@ msgstr "Endereço ou nome do host a conectar."
 msgid "Alert sound"
 msgstr "Aviso sonoro"
 
-#: v3270/security.c:160
+#: v3270/security.c:161
 msgid "An error occurred trying to allocate memory. This should never happen."
 msgstr ""
 "Ocorreu um erro ao tentar alocar memória. Isso nunca deveria acontecer."
@@ -244,11 +244,11 @@ msgstr "Attn"
 msgid "Attribute \"%s\" is invalid or undefined"
 msgstr "Atributo \"%s\" é invalido ou indefinido"
 
-#: v3270/security.c:250
+#: v3270/security.c:251
 msgid "Authority and issuer serial number mismatch"
 msgstr "Divergência nos números de série da autoridade e emissor "
 
-#: v3270/security.c:243
+#: v3270/security.c:244
 msgid "Authority and subject key identifier mismatch"
 msgstr "Authority and subject key identifier mismatch"
 
@@ -326,7 +326,7 @@ msgstr "Portal do Software Público Brasileiro"
 msgid "Break"
 msgstr "Break"
 
-#: telnet.c:2014
+#: telnet.c:2021
 msgid "Broken pipe"
 msgstr "Conexão interrompida"
 
@@ -340,15 +340,15 @@ msgstr ""
 "32768. Valores maiores trazem maior performance, porem, nem todos os hosts "
 "podem suportá-los."
 
-#: v3270/security.c:124
+#: v3270/security.c:125
 msgid "CRL has expired"
 msgstr "CRL expirou"
 
-#: v3270/security.c:117
+#: v3270/security.c:118
 msgid "CRL is not yet valid"
 msgstr "CRL ainda não é válido"
 
-#: v3270/security.c:96
+#: v3270/security.c:97
 msgid "CRL signature failure"
 msgstr "Erro na assinatura CRL"
 
@@ -364,7 +364,7 @@ msgstr "Tema de c_ores:"
 msgid "C_onnect"
 msgstr "_Conectar"
 
-#: toggles.c:313 connect.c:361 connect.c:456
+#: toggles.c:313 connect.c:364 connect.c:459
 #, c-format
 msgid "Can't %s network keep-alive"
 msgstr "Não foi possível %s opção \"keep-alive\""
@@ -374,12 +374,12 @@ msgstr "Não foi possível %s opção \"keep-alive\""
 msgid "Can't accept unnamed %s"
 msgstr "Não posso aceitar elemento %s sem nome"
 
-#: connect.c:106 connect.c:392
+#: connect.c:106 connect.c:395
 #, c-format
 msgid "Can't connect to %s"
 msgstr "Não foi possível conectar a %s"
 
-#: connect.c:273 connect.c:426
+#: connect.c:276 connect.c:429
 #, c-format
 msgid "Can't connect to %s:%s"
 msgstr "Não foi possível conectar a %s:%s"
@@ -481,11 +481,11 @@ msgstr "Não foi possível definir o charset do host"
 msgid "Can't set lib3270 I/O handlers"
 msgstr "Não foi possível registrar manipuladores de I/O 3270"
 
-#: connect.c:585
+#: connect.c:588
 msgid "Can't set socket to blocking mode."
 msgstr "Não foi possível mudar o socket para o modo blocante."
 
-#: connect.c:585
+#: connect.c:588
 msgid "Can't set socket to non blocking mode"
 msgstr "Não foi possível setar o socket para o modo não blocante."
 
@@ -518,11 +518,16 @@ msgstr "Cancelar envio."
 msgid "Cancelled by user"
 msgstr "Cancelado pelo usuário"
 
-#: ssl.c:311
+#: telnet.c:1449
+#, fuzzy
+msgid "Cannot connect to specified LU"
+msgstr "Não foi possível conectar a %s"
+
+#: ssl.c:313
 msgid "Cant create a new SSL structure for current connection."
 msgstr "Cant create a new SSL structure for current connection."
 
-#: ssl.c:252
+#: ssl.c:254
 #, c-format
 msgid ""
 "Cant set default locations for trusted CA certificates to\n"
@@ -531,7 +536,7 @@ msgstr ""
 "Cant set default locations for trusted CA certificates to\n"
 "%s"
 
-#: ssl.c:83
+#: ssl.c:85
 msgid ""
 "Cant set the file descriptor for the input/output facility for the TLS/SSL "
 "(encrypted) side of ssl."
@@ -539,27 +544,27 @@ msgstr ""
 "Não foi possível definir o descritor de arquivo para a conexão TLS/SSL "
 "(encriptada)."
 
-#: v3270/security.c:110
+#: v3270/security.c:111
 msgid "Certificate has expired"
 msgstr "O certificado expirou"
 
-#: v3270/security.c:103
+#: v3270/security.c:104
 msgid "Certificate is not yet valid"
 msgstr "O certificado ainda não é válido"
 
-#: v3270/security.c:222
+#: v3270/security.c:223
 msgid "Certificate not trusted"
 msgstr "O certificado não é confiável"
 
-#: v3270/security.c:229
+#: v3270/security.c:230
 msgid "Certificate rejected"
 msgstr "Certificado rejeitado"
 
-#: v3270/security.c:194
+#: v3270/security.c:195
 msgid "Certificate revoked"
 msgstr "Certificado revogado"
 
-#: v3270/security.c:89
+#: v3270/security.c:90
 msgid "Certificate signature failure"
 msgstr "Falha na assinatura do certificado"
 
@@ -603,9 +608,9 @@ msgstr "Configurar host"
 msgid "Connect on startup"
 msgstr "Conectar ao iniciar"
 
-#: connect.c:199 connect.c:294 connect.c:303 connect.c:365 connect.c:380
-#: connect.c:396 connect.c:410 connect.c:430 connect.c:444 connect.c:460
-#: connect.c:554
+#: connect.c:199 connect.c:297 connect.c:306 connect.c:368 connect.c:383
+#: connect.c:399 connect.c:413 connect.c:433 connect.c:447 connect.c:463
+#: connect.c:557
 msgid "Connection error"
 msgstr "Erro de conexão"
 
@@ -613,7 +618,7 @@ msgstr "Erro de conexão"
 msgid "Connection failed"
 msgstr "Conexão falhou"
 
-#: telnet.c:2018
+#: telnet.c:2025
 msgid "Connection reset by peer"
 msgstr "Conexão foi cancelada pelo servidor"
 
@@ -699,7 +704,7 @@ msgstr "Padrão"
 msgid "Delete field"
 msgstr "Apagar campo"
 
-#: telnet.c:1689
+#: telnet.c:1696
 msgid "Device type rejected"
 msgstr "Tipo de dispositivo rejeitado"
 
@@ -715,7 +720,7 @@ msgstr "Mostrar a tabela de caracteres ativa"
 msgid "Display the cursor location in the OIA (the status line)"
 msgstr "Display the cursor location in the OIA (the status line)"
 
-#: telnet.c:1241
+#: telnet.c:1246
 msgid "EOR received when not in 3270 mode, ignored."
 msgstr "EOR recebido fora do modo 3270, ignorado."
 
@@ -810,19 +815,19 @@ msgstr ""
 "Seguir a convenção para arquivos texto ASCII, o par <CR> <LF> é usado para "
 "terminar registros no arquivo local."
 
-#: v3270/security.c:145
+#: v3270/security.c:146
 msgid "Format error in CRL's lastUpdate field"
 msgstr "Erro de formado no campo \"lastUpdate\" do CRL"
 
-#: v3270/security.c:152
+#: v3270/security.c:153
 msgid "Format error in CRL's nextUpdate field"
 msgstr "Erro de formato no campo \"nextUpdate\" do CRL"
 
-#: v3270/security.c:138
+#: v3270/security.c:139
 msgid "Format error in certificate's notAfter field"
 msgstr "Erro de formato no campo \"notAfter\" do certificado"
 
-#: v3270/security.c:131
+#: v3270/security.c:132
 msgid "Format error in certificate's notBefore field"
 msgstr "Erro de formato no campo \"notBefore\" do certificado"
 
@@ -858,15 +863,15 @@ msgstr "Ajuda"
 msgid "Host disconnected, transfer cancelled"
 msgstr "Servidor desconectou, transferência cancelada"
 
-#: telnet.c:1747
+#: telnet.c:1754
 msgid "Host illegally added function(s)"
 msgstr "Host illegally added function(s)"
 
-#: telnet.c:1672
+#: telnet.c:1679
 msgid "Host rejected device type or request type"
 msgstr "Servidor rejeitou o tipo de dispositivo ou requisição"
 
-#: telnet.c:1685
+#: telnet.c:1692
 msgid "Host rejected resource(s)"
 msgstr "Servidor rejeitou recurso(s)"
 
@@ -962,7 +967,7 @@ msgstr "Intensificado/Protegido"
 msgid "Intensified/Unprotected"
 msgstr "Intensificado/Desprotegido"
 
-#: v3270/security.c:201
+#: v3270/security.c:202
 msgid "Invalid CA certificate"
 msgstr "Certificado CA inválido"
 
@@ -974,7 +979,7 @@ msgstr "Ação recortar inválida"
 msgid "Keep selected"
 msgstr "Manter selecionado"
 
-#: v3270/security.c:257
+#: v3270/security.c:258
 msgid "Key usage does not include certificate signing"
 msgstr "Uso da chave não permite assinatura de certificados"
 
@@ -1027,7 +1032,7 @@ msgstr "Nome do arquivo origem."
 msgid "Name of the target file."
 msgstr "Nome do arquivo destino."
 
-#: telnet.c:344 iocalls.c:408 iocalls.c:551 connect.c:93
+#: telnet.c:347 iocalls.c:408 iocalls.c:551 connect.c:93
 msgid "Network error"
 msgstr "Erro de rede"
 
@@ -1043,7 +1048,7 @@ msgstr "Erro ao iniciar a rede"
 msgid "Next field"
 msgstr "Próximo campo"
 
-#: v3270/security.c:188
+#: v3270/security.c:189
 msgid ""
 "No signatures could be verified because the chain contains only one "
 "certificate and it is not self signed."
@@ -1111,7 +1116,7 @@ msgstr "Outro (TSO)"
 msgid "Other (VM/CMS)"
 msgstr "Outro (VM/CMS)"
 
-#: v3270/security.c:159
+#: v3270/security.c:160
 msgid "Out of memory"
 msgstr "Memória insuficiente"
 
@@ -1252,7 +1257,7 @@ msgstr "Colar conteúdo de arquivo texto"
 msgid "Paste with left margin"
 msgstr "Colar com margem esquerda"
 
-#: v3270/security.c:208
+#: v3270/security.c:209
 msgid "Path length constraint exceeded"
 msgstr "Path length constraint exceeded"
 
@@ -1469,31 +1474,31 @@ msgstr "Mudar tamanho do terminal em tela alternativa"
 msgid "Return"
 msgstr "Return"
 
-#: ssl.c:107
+#: ssl.c:109
 msgid "SSL Connect failed"
 msgstr "Conexão SSL falhou"
 
-#: telnet.c:1033
+#: telnet.c:1038
 msgid "SSL Error"
 msgstr "Erro SSL"
 
-#: telnet.c:1033
+#: telnet.c:1038
 msgid "SSL Read error"
 msgstr "Erro de leitura SSL"
 
-#: connect.c:331
+#: connect.c:334
 msgid "SSL error"
 msgstr "Erro SSL"
 
-#: ssl.c:82
+#: ssl.c:84
 msgid "SSL negotiation failed"
 msgstr "Negociação SSL falhou"
 
-#: ssl.c:219
+#: ssl.c:221
 msgid "SSL_CTX_new() has failed"
 msgstr "SSL_CTX_new() has failed"
 
-#: telnet.c:2004
+#: telnet.c:2011
 #, c-format
 msgid ""
 "SSL_write:\n"
@@ -1550,11 +1555,11 @@ msgstr ""
 msgid "Secondary space:"
 msgstr "Secondary space:"
 
-#: v3270/security.c:47
+#: v3270/security.c:48
 msgid "Secure connection was successful."
 msgstr "Conexão segura efetuada com sucesso."
 
-#: ssl.c:81 ssl.c:106 ssl.c:218 ssl.c:257 ssl.c:310
+#: ssl.c:83 ssl.c:108 ssl.c:220 ssl.c:259 ssl.c:312
 msgid "Security error"
 msgstr "Erro de segurança"
 
@@ -1598,11 +1603,11 @@ msgstr "Fundo da seleção"
 msgid "Selection foreground"
 msgstr "Frente da seleção"
 
-#: v3270/security.c:166
+#: v3270/security.c:167
 msgid "Self signed certificate"
 msgstr "Certificado auto assinado"
 
-#: v3270/security.c:173
+#: v3270/security.c:174
 msgid "Self signed certificate in certificate chain"
 msgstr "Certificado auto assinado na cadeia de certificados"
 
@@ -1678,15 +1683,15 @@ msgstr "Show timer when processing"
 msgid "Smart paste"
 msgstr "Colar inteligente"
 
-#: connect.c:567 connect.c:584
+#: connect.c:570 connect.c:587
 msgid "Socket error"
 msgstr "Erro no socket"
 
-#: telnet.c:1054
+#: telnet.c:1059
 msgid "Socket read error"
 msgstr "Erro ao ler dados da rede"
 
-#: telnet.c:2025
+#: telnet.c:2032
 msgid "Socket write error"
 msgstr "Erro ao enviar dados para a rede"
 
@@ -1748,7 +1753,7 @@ msgstr "Iniciando transferência"
 msgid "Status"
 msgstr "Situação"
 
-#: v3270/security.c:236
+#: v3270/security.c:237
 msgid "Subject issuer mismatch"
 msgstr "Divergência na identidade do emissor"
 
@@ -1756,7 +1761,7 @@ msgstr "Divergência na identidade do emissor"
 msgid "System _type:"
 msgstr "Tipo de servidor:"
 
-#: telnet.c:1514
+#: telnet.c:1520
 msgid "TLS negotiation failure"
 msgstr "Negociação TLS falhou"
 
@@ -1768,27 +1773,27 @@ msgstr "Cores do terminal"
 msgid "Terminate records with _CR/LF."
 msgstr "Termina registros com _CR/LF."
 
-#: v3270/security.c:125
+#: v3270/security.c:126
 msgid "The CRL has expired."
 msgstr "A lista de certificados revogados expirou."
 
-#: v3270/security.c:118
+#: v3270/security.c:119
 msgid "The CRL is not yet valid."
 msgstr "A lista de certificados revogados ainda não é válida."
 
-#: v3270/security.c:146
+#: v3270/security.c:147
 msgid "The CRL lastUpdate field contains an invalid time."
 msgstr "Campo \"lastUpdate\" do CRL contem horário inválido."
 
-#: v3270/security.c:153
+#: v3270/security.c:154
 msgid "The CRL nextUpdate field contains an invalid time."
 msgstr "Campo \"nextUpdate\" contem horário inválido."
 
-#: v3270/security.c:62
+#: v3270/security.c:63
 msgid "The CRL of a certificate could not be found."
 msgstr "O CRL do certificado não foi encontrado."
 
-#: v3270/security.c:76
+#: v3270/security.c:77
 msgid ""
 "The CRL signature could not be decrypted: this means that the actual "
 "signature value could not be determined rather than it not matching the "
@@ -1798,11 +1803,11 @@ msgstr ""
 "signature value could not be determined rather than it not matching the "
 "expected value. Unused."
 
-#: v3270/security.c:209
+#: v3270/security.c:210
 msgid "The basicConstraints pathlength parameter has been exceeded."
 msgstr "The basicConstraints pathlength parameter has been exceeded."
 
-#: v3270/security.c:174
+#: v3270/security.c:175
 msgid ""
 "The certificate chain could be built up using the untrusted certificates but "
 "the root could not be found locally."
@@ -1810,11 +1815,11 @@ msgstr ""
 "The certificate chain could be built up using the untrusted certificates but "
 "the root could not be found locally."
 
-#: v3270/security.c:195
+#: v3270/security.c:196
 msgid "The certificate has been revoked."
 msgstr "O certificado foi revogado."
 
-#: v3270/security.c:111
+#: v3270/security.c:112
 msgid ""
 "The certificate has expired: that is the notAfter date is before the current "
 "time."
@@ -1822,7 +1827,7 @@ msgstr ""
 "The certificate has expired: that is the notAfter date is before the current "
 "time."
 
-#: v3270/security.c:104
+#: v3270/security.c:105
 msgid ""
 "The certificate is not yet valid: the notBefore date is after the current "
 "time."
@@ -1830,15 +1835,15 @@ msgstr ""
 "The certificate is not yet valid: the notBefore date is after the current "
 "time."
 
-#: v3270/security.c:139
+#: v3270/security.c:140
 msgid "The certificate notAfter field contains an invalid time."
 msgstr "The certificate notAfter field contains an invalid time."
 
-#: v3270/security.c:132
+#: v3270/security.c:133
 msgid "The certificate notBefore field contains an invalid time."
 msgstr "The certificate notBefore field contains an invalid time."
 
-#: v3270/security.c:69
+#: v3270/security.c:70
 msgid ""
 "The certificate signature could not be decrypted. This means that the actual "
 "signature value could not be determined rather than it not matching the "
@@ -1848,15 +1853,15 @@ msgstr ""
 "signature value could not be determined rather than it not matching the "
 "expected value, this is only meaningful for RSA keys."
 
-#: v3270/security.c:331
+#: v3270/security.c:333
 msgid "The connection is insecure"
 msgstr "A conexão não é segura"
 
-#: v3270/security.c:48
+#: v3270/security.c:49
 msgid "The connection is secure and the host identity was confirmed."
 msgstr "A conexão é segura e a identidade do servidor foi confirmada."
 
-#: v3270/security.c:251
+#: v3270/security.c:252
 msgid ""
 "The current candidate issuer certificate was rejected because its issuer "
 "name and serial number was present and did not match the authority key "
@@ -1868,7 +1873,7 @@ msgstr ""
 "identifier of the current certificate. Only displayed when the -"
 "issuer_checks option is set."
 
-#: v3270/security.c:258
+#: v3270/security.c:259
 msgid ""
 "The current candidate issuer certificate was rejected because its keyUsage "
 "extension does not permit certificate signing."
@@ -1876,7 +1881,7 @@ msgstr ""
 "The current candidate issuer certificate was rejected because its keyUsage "
 "extension does not permit certificate signing."
 
-#: v3270/security.c:244
+#: v3270/security.c:245
 msgid ""
 "The current candidate issuer certificate was rejected because its subject "
 "key identifier was present and did not match the authority key identifier "
@@ -1886,7 +1891,7 @@ msgstr ""
 "key identifier was present and did not match the authority key identifier "
 "current certificate. Only displayed when the -issuer_checks option is set."
 
-#: v3270/security.c:237
+#: v3270/security.c:238
 msgid ""
 "The current candidate issuer certificate was rejected because its subject "
 "name did not match the issuer name of the current certificate. Only "
@@ -1900,7 +1905,7 @@ msgstr ""
 msgid "The file already exists. Replace it?"
 msgstr "O arquivo já existe, substituir?"
 
-#: v3270/security.c:181
+#: v3270/security.c:182
 msgid ""
 "The issuer certificate could not be found: this occurs if the issuer "
 "certificate of an untrusted certificate cannot be found."
@@ -1908,7 +1913,7 @@ msgstr ""
 "The issuer certificate could not be found: this occurs if the issuer "
 "certificate of an untrusted certificate cannot be found."
 
-#: v3270/security.c:55
+#: v3270/security.c:56
 msgid ""
 "The issuer certificate of a looked up certificate could not be found. This "
 "normally means the list of trusted certificates is not complete."
@@ -1920,7 +1925,7 @@ msgstr ""
 msgid "The model of 3270 display to be emulated"
 msgstr "The model of 3270 display to be emulated"
 
-#: v3270/security.c:167
+#: v3270/security.c:168
 msgid ""
 "The passed certificate is self signed and the same certificate cannot be "
 "found in the list of trusted certificates."
@@ -1928,7 +1933,7 @@ msgstr ""
 "The passed certificate is self signed and the same certificate cannot be "
 "found in the list of trusted certificates."
 
-#: v3270/security.c:83
+#: v3270/security.c:84
 msgid ""
 "The public key in the certificate SubjectPublicKeyInfo could not be read."
 msgstr ""
@@ -1938,22 +1943,22 @@ msgstr ""
 msgid "The remote file name is invalid."
 msgstr "O nome do arquivo remoto não é válido."
 
-#: v3270/security.c:230
+#: v3270/security.c:231
 msgid "The root CA is marked to reject the specified purpose."
 msgstr ""
 "O certificado raiz está marcado para rejeitar a finalidade especificada."
 
-#: v3270/security.c:223
+#: v3270/security.c:224
 msgid "The root CA is not marked as trusted for the specified purpose."
 msgstr ""
 "O Certificado raiz não está marcado como confiável para os fins "
 "especificados."
 
-#: v3270/security.c:90 v3270/security.c:97
+#: v3270/security.c:91 v3270/security.c:98
 msgid "The signature of the certificate is invalid."
 msgstr "A assinatura do certificado não é válida."
 
-#: v3270/security.c:216
+#: v3270/security.c:217
 msgid "The supplied certificate cannot be used for the specified purpose."
 msgstr ""
 "O certificado fornecido não pode ser utilizado para a finalidade "
@@ -1998,7 +2003,7 @@ msgstr ""
 msgid "This program requires GTK version %d.%d.%d"
 msgstr "Este programa precisa do GTK versão %d.%d.%d"
 
-#: connect.c:333
+#: connect.c:336
 #, c-format
 msgid ""
 "This version of %s was built without support for secure sockets layer (SSL)."
@@ -2080,20 +2085,20 @@ msgstr "UTF-8"
 msgid "Uknown DFT Open type from host"
 msgstr "Host enviou código de abertura DFT desconhecido"
 
-#: connect.c:332
+#: connect.c:335
 msgid "Unable to connect to secure hosts"
 msgstr "Não é possível conectar em servidores seguros"
 
-#: v3270/security.c:82
+#: v3270/security.c:83
 msgid "Unable to decode issuer public key"
 msgstr "Não é possível decodificar chave pública do emissor"
 
-#: v3270/security.c:75
+#: v3270/security.c:76
 msgid "Unable to decrypt CRL's signature"
 msgstr ""
 "Não foi possível decriptar assinatura da lista de certificados revogados"
 
-#: v3270/security.c:68
+#: v3270/security.c:69
 msgid "Unable to decrypt certificate's signature"
 msgstr "Incapaz de decifrar a assinatura do certificado"
 
@@ -2101,7 +2106,7 @@ msgstr "Incapaz de decifrar a assinatura do certificado"
 msgid "Unable to find selected hostname."
 msgstr "Não consegui encontrar o host selecionado."
 
-#: v3270/security.c:61
+#: v3270/security.c:62
 msgid "Unable to get certificate CRL"
 msgstr "Unable to get certificate CRL"
 
@@ -2109,11 +2114,11 @@ msgstr "Unable to get certificate CRL"
 msgid "Unable to get connection state."
 msgstr "Não foi possível obter o estado da conexão."
 
-#: v3270/security.c:54
+#: v3270/security.c:55
 msgid "Unable to get issuer certificate"
 msgstr "Não foi possível obter emissor do certificado"
 
-#: v3270/security.c:180
+#: v3270/security.c:181
 msgid "Unable to get local issuer certificate"
 msgstr "Unable to get local issuer certificate"
 
@@ -2125,7 +2130,7 @@ msgstr "Incapaz de colar texto"
 msgid "Unable to send file-transfer request"
 msgstr "Não foi possível enviar a requisição de transferência de arquivo"
 
-#: v3270/security.c:187
+#: v3270/security.c:188
 msgid "Unable to verify the first certificate"
 msgstr "Não foi possível verificar o primeiro certificado"
 
@@ -2133,11 +2138,11 @@ msgstr "Não foi possível verificar o primeiro certificado"
 msgid "Undefined"
 msgstr "Indefinido"
 
-#: v3270/security.c:377
+#: v3270/security.c:379
 msgid "Unexpected SSL error"
 msgstr "Erro SSL inesperado"
 
-#: v3270/security.c:406
+#: v3270/security.c:408
 #, c-format
 msgid "Unexpected SSL error <b>%ld</b>"
 msgstr "Erro SSL <b>%ld</b> inesperado"
@@ -2181,7 +2186,7 @@ msgstr "Valor de attributo inesperado ou inválido: \"%s\""
 msgid "Unexpected or invalid color value \"%s\""
 msgstr "Valor de cor inválido ou inesperado: \"%s\""
 
-#: v3270/security.c:342
+#: v3270/security.c:344
 msgid "Unexpected or unknown security status"
 msgstr "Estado de segurança inesperado ou desconhecido."
 
@@ -2234,7 +2239,7 @@ msgstr "Tipo de popup \"%s\" não é conhecido"
 msgid "Unsupported RPQ term"
 msgstr "Unsupported RPQ term"
 
-#: v3270/security.c:215
+#: v3270/security.c:216
 msgid "Unsupported certificate purpose"
 msgstr "Finalidade do certificado não é suportada"
 
@@ -2458,23 +2463,23 @@ msgstr "um atributo \"action\""
 msgid "bracket"
 msgstr "bracket"
 
-#: toggles.c:313 connect.c:361 connect.c:456
+#: toggles.c:313 connect.c:364 connect.c:459
 msgid "disable"
 msgstr "desabilitar"
 
-#: toggles.c:313 connect.c:361 connect.c:456
+#: toggles.c:313 connect.c:364 connect.c:459
 msgid "enable"
 msgstr "enable"
 
-#: connect.c:568
+#: connect.c:571
 msgid "fcntl() error when getting socket state."
 msgstr "fcntl() error when getting socket state."
 
-#: connect.c:381 connect.c:555
+#: connect.c:384 connect.c:558
 msgid "ioctlsocket(FIONBIO) failed."
 msgstr "ioctlsocket(FIONBIO) failed."
 
-#: connect.c:411 connect.c:445
+#: connect.c:414 connect.c:448
 msgid "setsockopt(SO_OOBINLINE) has failed"
 msgstr "setsockopt(SO_OOBINLINE) has failed"
 
@@ -2482,7 +2487,7 @@ msgstr "setsockopt(SO_OOBINLINE) has failed"
 msgid "translator-credits"
 msgstr "translator-credits"
 
-#: telnet.c:1029
+#: telnet.c:1034
 msgid "unknown error"
 msgstr "Erro desconhecido"
 

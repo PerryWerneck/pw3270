@@ -150,10 +150,11 @@ $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT): src/pw3270/* $(BINDIR)/Release@DL
 $(BINDIR)/Release@DLLDIR@/lib3270@DLLEXT@: src/lib3270/* src/include/lib3270/* src/include/* Makefile
 	@$(MAKE) BINRLS=../../.bin/Release@DLLDIR@ -C src/lib3270 ../../.bin/Release@DLLDIR@/lib3270@DLLEXT@
 
-oxt: $(BINDIR)/$(PACKAGE_NAME).oxt
+oxt: $(BINDIR)/Release/$(PACKAGE_NAME).oxt
 
-$(BINDIR)/$(PACKAGE_NAME).oxt: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
-	@$(MAKE) BINDIR=../../.bin LIB3270_CFLAGS="-I../../src/include" -C src/loffice ../../.bin/$(PACKAGE_NAME).oxt
+$(BINDIR)/Release/$(PACKAGE_NAME).oxt:
+	@$(MAKE) -C src/loffice Release
+	@cp src/loffice/.bin/Release/$(PACKAGE_NAME).oxt $@
 
 #---[ Debug targets ]----------------------------------------------------------
 

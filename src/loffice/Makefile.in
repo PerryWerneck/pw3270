@@ -55,11 +55,15 @@ bindir=@bindir@
 sbindir=@sbindir@
 libdir=@libdir@
 includedir=@includedir@
+instdir=$(DESTDIR)/$(libdir)/libreoffice/share/extensions/$(PACKAGE_NAME)
 
 #---[ Tools ]------------------------------------------------------------------
 
 CXX=@CXX@
 MKDIR=@MKDIR_P@
+INSTALL=@INSTALL@
+INSTALL_DATA=@INSTALL_DATA@
+INSTALL_PROGRAM=@INSTALL_PROGRAM@
 
 #---[ Paths ]------------------------------------------------------------------
 
@@ -140,6 +144,24 @@ include/$(PACKAGE_NAME)/lib3270.hpp: $(RDBDIR)/$(PACKAGE_NAME).rdb
 
 Release: $(BINDIR)/$(PACKAGE_NAME).oxt
 
+install: $(BINRLS)/$(PACKAGE_NAME).uno@DLLEXT@ \
+		$(RDBDIR)/$(PACKAGE_NAME).rdb \
+		description.xml \
+		manifest.xml \
+		description.txt
+	@$(MKDIR) $(instdir)
+	@$(MKDIR) $(instdir)/META-INF
+	@$(INSTALL_DATA) manifest.xml $(instdir)/META-INF
+
+	@$(INSTALL_DATA) description.xml $(instdir)
+	@$(INSTALL_DATA) description.txt $(instdir)
+
+	@$(INSTALL_PROGRAM) $(BINRLS)/$(PACKAGE_NAME).uno@DLLEXT@ $(instdir)
+	@$(INSTALL_DATA) $(RDBDIR)/$(PACKAGE_NAME).rdb $(instdir)
+
+	@$(CONVERT) ../$(PACKAGE_NAME)/pixmaps/$(PACKAGE_NAME).svg --format=png > $(instdir)/$(PACKAGE_NAME).png
+	@chmod 644 $(instdir)/$(PACKAGE).png
+
 $(BINDIR)/$(PACKAGE_NAME).oxt: \
 			$(BINRLS)/$(PACKAGE_NAME).uno@DLLEXT@ \
 			$(RDBDIR)/$(PACKAGE_NAME).rdb \
@@ -151,10 +173,10 @@ $(BINDIR)/$(PACKAGE_NAME).oxt: \
 
 	@$(MKDIR) $(BINRLS)/$(PACKAGE).oxt.tmp
 
-	@cp $(RDBDIR)/$(PACKAGE_NAME).rdb $(BINDBG)/$(PACKAGE).oxt.tmp
+	@cp $(RDBDIR)/$(PACKAGE_NAME).rdb $(BINRLS)/$(PACKAGE).oxt.tmp
 	@cp $(BINRLS)/$(PACKAGE_NAME).uno@DLLEXT@ $(BINRLS)/$(PACKAGE).oxt.tmp
 
-	@$(MKDIR) $(BINDBG)/$(PACKAGE).oxt.tmp/META-INF
+	@$(MKDIR) $(BINRLS)/$(PACKAGE).oxt.tmp/META-INF
 	@cp manifest.xml $(BINRLS)/$(PACKAGE).oxt.tmp/META-INF
 
 	@cp description.xml $(BINRLS)/$(PACKAGE).oxt.tmp
@@ -162,8 +184,7 @@ $(BINDIR)/$(PACKAGE_NAME).oxt: \
 
 	@$(CONVERT) ../$(PACKAGE_NAME)/pixmaps/$(PACKAGE_NAME).svg --format=png > $(BINRLS)/$(PACKAGE).oxt.tmp/$(PACKAGE_NAME).png
 
-	@cp $(BINDBG)/$(PACKAGE_NAME).uno@DLLEXT@ $(BINRLS)/$(PACKAGE_NAME).oxt.tmp
-	@cd $(BINDBG)/$(PACKAGE).oxt.tmp ; $(ZIP) -r -m ../$(PACKAGE_NAME).oxt .
+	@cd $(BINRLS)/$(PACKAGE).oxt.tmp ; $(ZIP) -r -m ../$(PACKAGE_NAME).oxt .
 	@rm -fr $(BINRLS)/$(PACKAGE).oxt.tmp
 	@echo $@ Ok.
 
@@ -172,7 +193,7 @@ $(BINRLS)/$(PACKAGE_NAME).uno@DLLEXT@: \
 			$(CLASS_RELEASE_OBJECTS)
 	@echo "  LD   `basename $@`"
 	@$(MKDIR) `dirname $@`
-	$(CXX) -shared $(LDFLAGS) $(OO_LDFLAGS) $(CLASS_LIBS) -o $@ $^
+	@$(CXX) -shared $(LDFLAGS) $(OO_LDFLAGS) $(CLASS_LIBS) -o $@ $^
 
 
 #---[ Debug targets ]----------------------------------------------------------
@@ -192,7 +213,7 @@ $(BINDBG)/$(PACKAGE_NAME).uno@DLLEXT@: \
 			$(CLASS_DEBUG_OBJECTS)
 	@echo "  LD   `basename $@`"
 	@$(MKDIR) `dirname $@`
-	$(CXX) -shared $(LDFLAGS) $(OO_LDFLAGS) $(CLASS_LIBS) -o $@ $^
+	@$(CXX) -shared $(LDFLAGS) $(OO_LDFLAGS) $(CLASS_LIBS) -o $@ $^
 
 
 $(BINDBG)/$(PACKAGE_NAME).oxt: \
