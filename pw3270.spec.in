@@ -44,7 +44,7 @@
 	%endif
 
 	%if %{?suse_version} >= 1310
-		%define _office 0
+		%define _office 1
 		%define _bldreq gtk3-devel libopenssl-devel ucpp
 	%endif
 %endif
@@ -257,7 +257,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libreoffice/share/extensions/%{name}/description.txt
 %{_libdir}/libreoffice/share/extensions/%{name}/description.xml
 %{_libdir}/libreoffice/share/extensions/%{name}/pw3270.png
-%{_libdir}/libreoffice/share/extensions/%{name}/pw3270.uno.rdb
+%{_libdir}/libreoffice/share/extensions/%{name}/pw3270.rdb
 %{_libdir}/libreoffice/share/extensions/%{name}/pw3270.uno.so
 %endif
 

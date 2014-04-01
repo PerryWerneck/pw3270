@@ -338,7 +338,7 @@ install-sdk:
 	@$(MAKE) -C src/classlib install-sdk
 
 install-oxt:
-	@$(MAKE) BINDIR=../../.bin LIB3270_CFLAGS="-I../../src/include" -C src/oxt install
+	@$(MAKE) BINDIR=../../.bin LIB3270_CFLAGS="-I../../src/include" -C src/loffice install
 
 install-plugin-rexx:
 	@$(MAKE) BINDIR=../../../.bin LIB3270_CFLAGS="-I../../src/include" -C src/plugins/rx3270 install
@@ -358,7 +358,7 @@ clean:
 	@make -C src/plugins/hllapi clean
 	@make -C src/plugins/rx3270 clean
 	@make -C src/plugins/dbus3270 clean
-	@make -C src/oxt clean
+	@make -C src/loffice clean
 	@make -C src/classlib clean
 	@rm -f $(PACKAGE_NAME).png
 	@rm -f $(PACKAGE_NAME)-logo.png

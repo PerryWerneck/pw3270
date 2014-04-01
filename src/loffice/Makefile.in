@@ -160,7 +160,7 @@ install: $(BINRLS)/$(PACKAGE_NAME).uno@DLLEXT@ \
 	@$(INSTALL_DATA) $(RDBDIR)/$(PACKAGE_NAME).rdb $(instdir)
 
 	@$(CONVERT) ../$(PACKAGE_NAME)/pixmaps/$(PACKAGE_NAME).svg --format=png > $(instdir)/$(PACKAGE_NAME).png
-	@chmod 644 $(instdir)/$(PACKAGE).png
+	@chmod 644 $(instdir)/$(PACKAGE_NAME).png
 
 $(BINDIR)/$(PACKAGE_NAME).oxt: \
 			$(BINRLS)/$(PACKAGE_NAME).uno@DLLEXT@ \
