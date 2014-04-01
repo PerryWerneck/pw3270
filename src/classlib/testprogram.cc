@@ -28,6 +28,7 @@
  */
 
  #include <pw3270/class.h>
+ #include <unistd.h>
  #include <iostream>
 
  using namespace std;
@@ -37,31 +38,47 @@
 
  int main(int numpar, char *param[])
  {
-	string	*s;
- 	session	*session = session::start("pw3270:a");
-// 	session	*session = session::start("new");
 
-	cout << "pw3270 version:  " << session->get_version() << endl;
-	cout << "pw3270 revision: " << session->get_revision() << endl << endl;
+ 	{
+		string	*s;
+		session	*session = session::start("pw3270:a");
+	// 	session	*session = session::start("new");
 
-	if(session->is_connected())
-		cout << "\tConnected to host" << endl;
-	else
-		cout << "\tDisconnected" << endl;
+		cout << "pw3270 version:  " << session->get_version() << endl;
+		cout << "pw3270 revision: " << session->get_revision() << endl << endl;
 
-	cout << "\tSession state:   " << session->get_cstate() << endl;
+		if(session->is_connected())
+			cout << "\tConnected to host" << endl;
+		else
+			cout << "\tDisconnected" << endl;
 
-	s = session->get_display_charset();
-	cout << "\tDisplay charset: " << s->c_str() << endl;
-	delete s;
+		cout << "\tSession state:   " << session->get_cstate() << endl;
 
-	s = session->get_host_charset();
-	cout << "\tHost charset:    " << s->c_str() << endl;
-	delete s;
+		s = session->get_display_charset();
+		cout << "\tDisplay charset: " << s->c_str() << endl;
+		delete s;
 
-	session->connect(false);
+		s = session->get_host_charset();
+		cout << "\tHost charset:    " << s->c_str() << endl;
+		delete s;
 
-	delete session;
+		session->connect(false);
+		delete session;
+ 	}
+
+	// Waits
+	sleep(2);
+
+	// Create another session
+	{
+		session	*session = session::start("pw3270:a");
+
+		session->disconnect();
+		delete session;
+
+	}
+
+
  	return 0;
  }
 

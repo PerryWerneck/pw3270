@@ -36,6 +36,7 @@
 	#include <malloc.h>
 	#include <sys/types.h>
 	#include <unistd.h>
+	#include <limits.h>
 
 	#ifndef DBUS_TIMEOUT_INFINITE
 		#define DBUS_TIMEOUT_INFINITE ((int) 0x7fffffff)
@@ -179,6 +180,7 @@
 		char			* dest;
 		char			* path;
 		char			* intf;
+		int 			  sequence;
 
 		DBusMessage * create_message(const char *method)
 		{
@@ -358,6 +360,45 @@
 
 	public:
 
+#if defined(HAVE_DBUS)
+		const char * makeBusName(char *buffer, size_t sz)
+		{
+			size_t	  bytes = strlen(buffer);
+			char 	* ptr	= buffer;
+			int 	  val;
+
+			sz -= 2;
+
+			// First uses the object ID
+			val = this->sequence;
+			while(bytes < sz && val > 0)
+			{
+				*(ptr++) = 'a'+(val % 25);
+				val /= 25;
+				bytes++;
+			}
+			*(ptr++) = '.';
+
+			// Then the PID
+			val = (int) getpid();
+			while(bytes < sz && val > 0)
+			{
+				*(ptr++) = 'a'+(val % 25);
+				val /= 25;
+				bytes++;
+			}
+			*(ptr++) = '.';
+
+			// And last, the project info
+			strncpy(ptr,intf,sz);
+
+			trace("Busname=\"%s\" sequence=%d this=%p",buffer,sequence,this);
+
+			return buffer;
+
+		}
+#endif // HAVE_DBUS
+
 		remote(const char *session)
 		{
 #if defined(WIN32)
@@ -480,15 +521,16 @@
 
 #elif defined(HAVE_DBUS)
 
+			static int	  sq	= 0;
 			DBusError	  err;
 			int			  rc;
 			char		* str = strdup(session);
 			char		* ptr;
 			char		  busname[4096];
-			char		  pidname[10];
-			int			  pid			= (int) getpid();
 
-			trace("%s str=%p",__FUNCTION__,str);
+			this->sequence = (++sq) + time(0);
+
+			trace("%s str=%p sequence=%d",__FUNCTION__,str,sequence);
 
 			for(ptr=str;*ptr;ptr++)
 				*ptr = tolower(*ptr);
@@ -569,19 +611,9 @@
 				return;
 			}
 
-			memset(pidname,0,10);
-			for(int f = 0; f < 9 && pid > 0;f++)
-			{
-				pidname[f] = 'a'+(pid % 25);
-				pid /= 25;
-			}
 
-			snprintf(busname, 4095, "%s.rx3270.br.com.bb",pidname);
-
-			trace("Busname: [%s]",busname);
-
-			rc = dbus_bus_request_name(conn, busname, DBUS_NAME_FLAG_REPLACE_EXISTING , &err);
-			trace("dbus_bus_request_name rc=%d",rc);
+			rc = dbus_bus_request_name(conn, makeBusName(busname,4095), DBUS_NAME_FLAG_REPLACE_EXISTING , &err);
+			trace("dbus_bus_request_name(%s) rc=%d",busname,rc);
 
 			if (dbus_error_is_set(&err))
 			{
@@ -632,9 +664,24 @@
 
 			}
 
+			char		busname[4096];
+			makeBusName(busname,4096);
+
 			free(dest);
 			free(path);
 			free(intf);
+
+			DBusError	err;
+
+			dbus_error_init(&err);
+			dbus_bus_release_name(conn,busname,&err);
+
+			if (dbus_error_is_set(&err))
+			{
+				exception e = exception("Error when releasing DBUS name (%s)", err.message);
+				dbus_error_free(&err);
+				throw e;
+			}
 
 #else
 
