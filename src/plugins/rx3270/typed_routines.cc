@@ -150,14 +150,8 @@ RexxRoutine3(RexxStringObject, rx3270GetStringAt, int, row, int, col, int, sz)
 {
 	try
 	{
-        string *str = session::get_default()->get_string_at(row,col,(int) sz);
-
-        if(str)
-		{
-			RexxStringObject ret = context->String((CSTRING) str->c_str());
-			delete str;
-			return ret;
-		}
+        string str = session::get_default()->get_string_at(row,col,(int) sz);
+		return context->String((CSTRING) str.c_str());
 	}
 	catch(std::exception &e)
 	{

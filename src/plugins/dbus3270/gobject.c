@@ -481,7 +481,8 @@ void pw3270_dbus_get_host_charset(PW3270Dbus *object, DBusGMethodInvocation *con
 
 void pw3270_dbus_get_display_charset(PW3270Dbus *object, DBusGMethodInvocation *context)
 {
-	dbus_g_method_return(context,lib3270_get_display_charset(pw3270_dbus_get_session_handle(object)));
+	// Allways return UTF-8 to avoid double conversion
+	dbus_g_method_return(context,"UTF-8");
 }
 
 void pw3270_dbus_set_host_charset(PW3270Dbus *object, const gchar *charset, DBusGMethodInvocation *context)

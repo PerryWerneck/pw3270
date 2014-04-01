@@ -67,10 +67,68 @@
  {
 	try
 	{
-		if(!hSession)
-			hSession = h3270::session::get_default();
+		CHECK_SESSION_HANDLE
 
 		return hSession->disconnect();
+
+	} catch(std::exception &e)
+	{
+		OUString msg = OUString(e.what(),strlen(e.what()),RTL_TEXTENCODING_UTF8,RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE);
+
+		throw css::uno::RuntimeException(msg,static_cast< cppu::OWeakObject * >(this));
+
+	}
+
+	return -1;
+
+ }
+
+ ::sal_Bool SAL_CALL session_impl::isConnected() throw (::com::sun::star::uno::RuntimeException)
+ {
+	try
+	{
+		CHECK_SESSION_HANDLE
+
+		return hSession->is_connected();
+
+	} catch(std::exception &e)
+	{
+		OUString msg = OUString(e.what(),strlen(e.what()),RTL_TEXTENCODING_UTF8,RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE);
+
+		throw css::uno::RuntimeException(msg,static_cast< cppu::OWeakObject * >(this));
+
+	}
+
+	return -1;
+ }
+
+ ::sal_Bool SAL_CALL session_impl::isReady() throw (::com::sun::star::uno::RuntimeException)
+ {
+	try
+	{
+		CHECK_SESSION_HANDLE
+
+		return hSession->is_ready();
+
+	} catch(std::exception &e)
+	{
+		OUString msg = OUString(e.what(),strlen(e.what()),RTL_TEXTENCODING_UTF8,RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE);
+
+		throw css::uno::RuntimeException(msg,static_cast< cppu::OWeakObject * >(this));
+
+	}
+
+	return -1;
+
+ }
+
+ ::sal_Int16 SAL_CALL session_impl::waitForReady( ::sal_Int16 seconds ) throw (::com::sun::star::uno::RuntimeException)
+ {
+	try
+	{
+		CHECK_SESSION_HANDLE
+
+		return hSession->wait_for_ready(seconds);
 
 	} catch(std::exception &e)
 	{

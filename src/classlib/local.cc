@@ -454,18 +454,18 @@
 			return 0;
 		}
 
-		string * get_text_at(int row, int col, size_t sz)
+		string get_text_at(int row, int col, size_t sz)
 		{
+			string 	  rc;
 			char	* ptr	= _get_text_at(hSession,row,col,sz);
 
 			if(ptr)
 			{
-				string *s = new string(ptr);
+				rc.assign(ptr);
 				_free(ptr);
-				return s;
 			}
 
-			return new string("");
+			return rc;
 		}
 
 		int set_text_at(int row, int col, const char *str)
@@ -478,18 +478,18 @@
 			return _cmp_text_at(hSession,row,col,text);
 		}
 
-		string * get_text(int offset, size_t len)
+		string get_text(int offset, size_t len)
 		{
-			char *ptr = _get_text(hSession,offset,len);
+			string	  rc;
+			char	* ptr = _get_text(hSession,offset,len);
 
 			if(ptr)
 			{
-				string *s = new string(ptr);
+				rc.assign(ptr);
 				_free(ptr);
-				return s;
 			}
 
-			return new string("");
+			return rc;
 		}
 
 		int set_cursor_position(int row, int col)
@@ -561,9 +561,9 @@
 			return 0;
 		}
 
-		string * get_display_charset(void)
+		string get_display_charset(void)
 		{
-			return new string(_get_display_charset(hSession));
+			return string(_get_display_charset(hSession));
 		}
 
 		int set_host_charset(const char *charset)
@@ -571,9 +571,9 @@
 			return _set_host_charset(hSession,charset);
 		}
 
-		string * get_host_charset(void)
+		string get_host_charset(void)
 		{
-			return new string(_get_host_charset(hSession));
+			return string(_get_host_charset(hSession));
 		}
 
 		int	erase_eof(void)

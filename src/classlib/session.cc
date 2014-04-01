@@ -124,7 +124,7 @@
 	void session::set_display_charset(const char *remote, const char *local)
 	{
 #ifdef HAVE_ICONV
-		string *display_charset = this->get_display_charset();
+		string display_charset = this->get_display_charset();
 
 		if(this->conv2Local != (iconv_t) (-1))
 			iconv_close(this->conv2Local);
@@ -133,7 +133,7 @@
 			iconv_close(this->conv2Host);
 
 		if(!remote)
-			remote = display_charset->c_str();
+			remote = display_charset.c_str();
 
 		if(strcmp(local,remote))
 		{
@@ -146,14 +146,18 @@
 			conv2Local = conv2Host = (iconv_t)(-1);
 		}
 
-		delete display_charset;
 #endif
 
 	}
 
-	string * session::get_display_charset(void)
+	string session::get_display_charset(void)
 	{
-		return new string("ISO-8859-1");
+		return string(get_encoding());
+	}
+
+	const char * session::get_encoding(void)
+	{
+		return "ISO-8859-1";
 	}
 
 	// 3270 methods
@@ -209,13 +213,13 @@
 		return EINVAL;
 	}
 
-	string * session::get_copy(void)
+	string session::get_copy(void)
 	{
 		errno = EINVAL;
-		return NULL;
+		return string();
 	}
 
-	string * session::get_clipboard(void)
+	string session::get_clipboard(void)
 	{
 #if defined(WIN32)
 
@@ -239,7 +243,7 @@
 			return NULL;
 		}
 
-		string *text = new string ( pszText );
+		string text = string ( pszText );
 
 		GlobalUnlock( hData );
 
@@ -294,69 +298,75 @@
 		return -1;
 	}
 
-	string * session::file_chooser_dialog(int action, const char *title, const char *extension, const char *filename)
+	string session::file_chooser_dialog(int action, const char *title, const char *extension, const char *filename)
 	{
-		return NULL;
+		return string("");
 	}
 
-	string * session::get_3270_text(string *str)
+	string session::get_3270_text(const char *str)
 	{
+		string rc;
+
 #ifdef HAVE_ICONV
-		if(str && conv2Host != (iconv_t)(-1))
+		size_t in = strlen(str);
+
+		if(in && conv2Host != (iconv_t)(-1))
 		{
-			size_t				  in 		= str->length();
 			size_t				  out 		= (in << 1);
 			char				* ptr;
 			char				* outBuffer = (char *) malloc(out);
-			ICONV_CONST char	* inBuffer	= (ICONV_CONST char	*) str->c_str();
+			ICONV_CONST char	* inBuffer	= (ICONV_CONST char	*) str;
 
 			memset(ptr=outBuffer,0,out);
 
 			iconv(conv2Host,NULL,NULL,NULL,NULL);	// Reset state
 
 			if(iconv(conv2Host,&inBuffer,&in,&ptr,&out) != ((size_t) -1))
-				str->assign(outBuffer);
+				rc.assign(outBuffer);
 
 			free(outBuffer);
 		}
+#else
+		rc = str;
 #endif // HAVE_ICONV
 
-		return str;
+		return rc;
 	}
 
-	string * session::get_local_text(string *str)
+	string session::get_local_text(const char *str)
 	{
+		string rc;
+
 #ifdef HAVE_ICONV
-		if(str && conv2Local != (iconv_t)(-1))
+		size_t in = strlen(str);
+
+		if(in && conv2Local != (iconv_t)(-1))
 		{
-			size_t				  in 		= str->length();
 			size_t				  out 		= (in << 1);
 			char				* ptr;
 			char				* outBuffer = (char *) malloc(out);
-			ICONV_CONST char	* inBuffer	= (ICONV_CONST char	*) str->c_str();
+			ICONV_CONST char	* inBuffer	= (ICONV_CONST char	*) str;
 
 			memset(ptr=outBuffer,0,out);
 
 			iconv(conv2Local,NULL,NULL,NULL,NULL);	// Reset state
 
 			if(iconv(conv2Local,&inBuffer,&in,&ptr,&out) != ((size_t) -1))
-				str->assign(outBuffer);
+				rc.assign(outBuffer);
 
 			free(outBuffer);
 		}
+#else
+		rc = str;
 #endif // HAVE_ICONV
 
-		return str;
+		return rc;
 	}
 
-	string * session::get_string_at(int row, int col, size_t sz)
+	string session::get_string_at(int row, int col, size_t sz)
 	{
-		string *str = this->get_text_at(row,col,sz);
-
-		if(str)
-			return this->get_local_text(str);
-
-		return 0;
+		string str = this->get_text_at(row,col,sz);
+		return this->get_local_text(str.c_str());
 	}
 
 	int session::set_string_at(int row, int col, const char *str)
@@ -427,23 +437,17 @@
 
 	int session::cmp_string_at(int row, int col, const char *text)
 	{
-		string	* str 	= get_3270_text(new string(text));
-		int		  rc	= cmp_text_at(row,col,str->c_str());
-		delete str;
-		return rc;
+		return cmp_text_at(row,col,get_3270_text(text).c_str());
 	}
 
 	int	session::wait_for_string_at(int row, int col, const char *key, int timeout)
 	{
-		string	* str 	= get_3270_text(new string(key));
-		int		  rc	= wait_for_text_at(row,col,str->c_str(),timeout);
-		delete str;
-		return rc;
+		return wait_for_text_at(row,col,get_3270_text(key).c_str(),timeout);
 	}
 
-	string * session::get_string(int baddr, size_t len)
+	string session::get_string(int baddr, size_t len)
 	{
-		return get_local_text(get_text(baddr,len));
+		return get_local_text(get_text(baddr,len).c_str());
 	}
 
 	string session::asc2ebc(string &str)

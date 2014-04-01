@@ -42,7 +42,8 @@ using namespace pw3270_impl;
 
 session_impl::session_impl()
 {
-	this->hSession = NULL;
+	this->hSession	= NULL;
+	this->encoding	= RTL_TEXTENCODING_ISO_8859_1;
 }
 
 session_impl::~session_impl()
@@ -76,4 +77,19 @@ void session_impl::initialize( Sequence< Any > const & args ) throw (Exception)
 
 
 	return 0;
+}
+
+::sal_Int16 SAL_CALL session_impl::iterate( ::sal_Bool wait ) throw (::com::sun::star::uno::RuntimeException)
+{
+	try
+	{
+		CHECK_SESSION_HANDLE
+		return hSession->iterate(wait);
+
+	} catch(std::exception &e)
+	{
+		OUString msg = OUString(e.what(),strlen(e.what()),RTL_TEXTENCODING_UTF8,RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE);
+		throw css::uno::RuntimeException(msg,static_cast< cppu::OWeakObject * >(this));
+	}
+	return -1;
 }

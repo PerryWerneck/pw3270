@@ -214,8 +214,10 @@
 			return reply;
 		}
 
-		string * get_string(DBusMessage * msg)
+		string get_string(DBusMessage * msg)
 		{
+			string rc;
+
 			if(msg)
 			{
 				DBusMessageIter iter;
@@ -224,11 +226,10 @@
 				{
 					if(dbus_message_iter_get_arg_type(&iter) == DBUS_TYPE_STRING)
 					{
-						string 		* rc;
 						const char	* str;
 						dbus_message_iter_get_basic(&iter, &str);
 						trace("Response: [%s]",str);
-						rc = new string(str);
+						rc.assign(str);
 						dbus_message_unref(msg);
 						return rc;
 					}
@@ -242,10 +243,10 @@
 
 			}
 
-			return NULL;
+			return rc;
 		}
 
-		string * query_string(const char *method)
+		string query_string(const char *method)
 		{
 			return get_string(call(create_message(method)));
 		}
@@ -863,7 +864,7 @@
 #endif
 		}
 
-		string * get_text_at(int row, int col, size_t sz)
+		string get_text_at(int row, int col, size_t sz)
 		{
 #if defined(WIN32)
 
@@ -888,7 +889,7 @@
 
 #else
 
-			return NULL;
+			return string();
 
 #endif
 
@@ -978,7 +979,7 @@
 			return ETIMEDOUT;
 		}
 
-		string * get_text(int baddr, size_t len)
+		string get_text(int baddr, size_t len)
 		{
 #if defined(WIN32)
 			struct hllapi_packet_query_offset query = { HLLAPI_PACKET_GET_TEXT_AT_OFFSET, (unsigned short) baddr, (unsigned short) len };
@@ -999,7 +1000,7 @@
 			return get_string(call(msg));
 #else
 			throw exception("%s","IPC support is unavailable");
-			return NULL;
+			return string();
 #endif
 		}
 
@@ -1248,7 +1249,7 @@
 #endif
 		}
 
-		string * get_host_charset(void)
+		string get_host_charset(void)
 		{
 #if defined(WIN32)
 
@@ -1268,7 +1269,7 @@
 
 
 #if defined(HAVE_DBUS)
-		string * get_clipboard(void)
+		string get_clipboard(void)
 		{
 			return query_string("getClipboard");
 		}
@@ -1278,7 +1279,7 @@
 			return query_intval("setClipboard", DBUS_TYPE_STRING, &text, DBUS_TYPE_INVALID);
 		}
 
-		string * get_display_charset(void)
+		string get_display_charset(void)
 		{
 			return query_string("getDisplayCharset");
 		}

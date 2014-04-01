@@ -40,7 +40,7 @@
  {
 
  	{
-		string	*s;
+		string	 s;
 		session	*session = session::start("pw3270:a");
 	// 	session	*session = session::start("new");
 
@@ -55,12 +55,10 @@
 		cout << "\tSession state:   " << session->get_cstate() << endl;
 
 		s = session->get_display_charset();
-		cout << "\tDisplay charset: " << s->c_str() << endl;
-		delete s;
+		cout << "\tDisplay charset: " << s.c_str() << endl;
 
 		s = session->get_host_charset();
-		cout << "\tHost charset:    " << s->c_str() << endl;
-		delete s;
+		cout << "\tHost charset:    " << s.c_str() << endl;
 
 		session->connect(false);
 		delete session;

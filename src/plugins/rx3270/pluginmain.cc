@@ -100,8 +100,8 @@
 	int				  wait(int seconds);
 	int				  wait_for_ready(int seconds);
 
-	string			* get_text(int baddr, size_t len);
-	string 			* get_text_at(int row, int col, size_t sz);
+	string			  get_text(int baddr, size_t len);
+	string 			  get_text_at(int row, int col, size_t sz);
 	int				  cmp_text_at(int row, int col, const char *text);
 	int 			  set_text_at(int row, int col, const char *str);
 
@@ -124,17 +124,17 @@
 	int               get_next_unprotected(int baddr = -1);
 
 	int               set_copy(const char *text);
-	string			* get_copy(void);
+	string			  get_copy(void);
 
-    string			* get_clipboard(void);
+    string			  get_clipboard(void);
     int               set_clipboard(const char *text);
 
 	int               popup_dialog(LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, ...);
-	string			* file_chooser_dialog(GtkFileChooserAction action, const char *title, const char *extension, const char *filename);
+	string			  file_chooser_dialog(GtkFileChooserAction action, const char *title, const char *extension, const char *filename);
 
 	int				  set_host_charset(const char *charset);
-	string			* get_host_charset(void);
-	string			* get_display_charset(void);
+	string			  get_host_charset(void);
+	string			  get_display_charset(void);
 
 	const char  	* asc2ebc(unsigned char *str, int sz = -1);
 	const char	 	* ebc2asc(unsigned char *str, int sz = -1);
@@ -588,18 +588,18 @@ extern "C"
 	return lib3270_wait_for_ready(hSession,seconds);
  }
 
- string * plugin::get_text_at(int row, int col, size_t sz)
+ string plugin::get_text_at(int row, int col, size_t sz)
  {
-	char * ptr = lib3270_get_text_at(hSession,row,col,(int) sz);
+ 	string 	  rc;
+	char	* ptr = lib3270_get_text_at(hSession,row,col,(int) sz);
 
 	if(ptr)
 	{
-		string *s = new string(ptr);
+		rc.assign(ptr);
 		lib3270_free(ptr);
-		return s;
 	}
 
-	return new string("");
+	return rc;
  }
 
  int plugin::cmp_text_at(int row, int col, const char *text)
@@ -632,17 +632,18 @@ extern "C"
 	lib3270_write_va_log(hSession,"REXX",fmt,args);
  }
 
- string * plugin::get_text(int baddr, size_t len)
+ string plugin::get_text(int baddr, size_t len)
  {
-	char *ptr = lib3270_get_text(hSession,baddr,len);
+ 	string	  rc;
+	char	* ptr = lib3270_get_text(hSession,baddr,len);
+
 	if(ptr)
 	{
-		string *s = new string(ptr);
+		rc.assign(ptr);
 		lib3270_free(ptr);
-		return s;
 	}
 
-	return new string("");
+	return rc;
  }
 
  int plugin::get_field_start(int baddr)
@@ -661,32 +662,32 @@ extern "C"
     return 0;
  }
 
- string * plugin::get_copy(void)
+ string plugin::get_copy(void)
  {
-    gchar *ptr = v3270_get_copy(GTK_WIDGET(lib3270_get_widget(hSession)));
+ 	string	  rc;
+    gchar	* ptr = v3270_get_copy(GTK_WIDGET(lib3270_get_widget(hSession)));
 
     if(ptr)
 	{
-		string *ret = new string((char *) ptr);
+		rc.assign(ptr);
 		g_free(ptr);
-		return ret;
 	}
 
-    return NULL;
+    return rc;
  }
 
- string * plugin::get_clipboard(void)
+ string plugin::get_clipboard(void)
  {
-    gchar *ptr = gtk_clipboard_wait_for_text(gtk_widget_get_clipboard(pw3270_get_toplevel(),GDK_SELECTION_CLIPBOARD));
+ 	string	  rc;
+    gchar	* ptr = gtk_clipboard_wait_for_text(gtk_widget_get_clipboard(pw3270_get_toplevel(),GDK_SELECTION_CLIPBOARD));
 
     if(ptr)
 	{
-		string *ret = new string((char *) ptr);
+		rc.assign(ptr);
 		g_free(ptr);
-		return ret;
 	}
 
-    return NULL;
+    return rc;
  }
 
  int plugin::set_clipboard(const char *text)
@@ -729,18 +730,18 @@ int plugin::popup_dialog(LIB3270_NOTIFY id , const char *title, const char *mess
     return 0;
 }
 
-string * plugin::file_chooser_dialog(GtkFileChooserAction action, const char *title, const char *extension, const char *filename)
+string plugin::file_chooser_dialog(GtkFileChooserAction action, const char *title, const char *extension, const char *filename)
 {
-    gchar *ptr = pw3270_file_chooser(action, script_name ? script_name : "rexx", title, filename, extension);
+	string	  rc;
+    gchar	* ptr = pw3270_file_chooser(action, script_name ? script_name : "rexx", title, filename, extension);
 
     if(ptr)
 	{
-		string *s = new string((char *) ptr);
+		rc.assign((char *) ptr);
 		g_free(ptr);
-		return s;
 	}
 
-	return NULL;
+	return rc;
 }
 
 int plugin::quit(void)
@@ -754,14 +755,14 @@ int plugin::set_host_charset(const char *charset)
 	return lib3270_set_host_charset(hSession,charset);
 }
 
-string * plugin::get_host_charset(void)
+string plugin::get_host_charset(void)
 {
-	return new string(lib3270_get_host_charset(hSession));
+	return string(lib3270_get_host_charset(hSession));
 }
 
-string * plugin::get_display_charset(void)
+string plugin::get_display_charset(void)
 {
-	return new string(lib3270_get_display_charset(hSession));
+	return string(lib3270_get_display_charset(hSession));
 }
 
 int	plugin::erase_eof(void)

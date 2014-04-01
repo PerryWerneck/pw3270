@@ -25,7 +25,6 @@
  * perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
  * erico.mendonca@gmail.com	(Erico Mascarenhas Mendonça)
  *
- *
  * Referências:
  *
  * https://wiki.openoffice.org/wiki/Documentation/DevGuide/WritingUNO/C++/C++_Component
@@ -51,9 +50,23 @@ module pw3270
 		short 	setHost([in] string url);
 		short   Connect();
         short   Disconnect();
+        short	iterate([in] boolean wait);
+
+		// Screen contents
+        string	getTextAt([in] short row, [in] short col, [in] short size);
+		short 	setTextAt([in] short row, [in] short col, [in] string str);
+		short 	waitForTextAt([in] short row, [in] short col, [in] string str, [in] short seconds);
 
 		// Misc Settings
 		short	setSessionName([in] string name);
+
+		// State
+		boolean isConnected();
+		boolean isReady();
+
+		// Waiting
+		short	waitForReady([in] short seconds);
+
 	};
 
 	service session

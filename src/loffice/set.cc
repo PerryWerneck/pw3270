@@ -34,6 +34,7 @@
  #include "globals.hpp"
  #include <exception>
  #include <com/sun/star/uno/RuntimeException.hdl>
+ #include <com/sun/star/lang/IllegalArgumentException.hpp>
  #include "pw3270/lib3270.hpp"
 
 /*---[ Implement ]-----------------------------------------------------------------------------------------*/
@@ -56,8 +57,10 @@
 
 	try
 	{
+		string charset;
 
 		hSession = h3270::session::create(((const char *) vlr.getStr()));
+
 	 	trace("%s: hSession(\"%s\"=%p",__FUNCTION__,vlr.getStr(),hSession);
 
 	} catch(std::exception &e)
@@ -67,6 +70,29 @@
 		throw css::uno::RuntimeException(msg,static_cast< cppu::OWeakObject * >(this));
 
 		return -1;
+
+	}
+
+	string charset = hSession->get_display_charset();
+
+	trace("Charset=\"%s\"",charset.c_str());
+
+	if(!charset.compare("ISO-8859-1"))
+	{
+		encoding = RTL_TEXTENCODING_ISO_8859_1;
+	}
+	else if(!charset.compare("UTF-8"))
+	{
+		encoding = RTL_TEXTENCODING_UTF8;
+	}
+	else
+	{
+		string s = "Unable to convert the host's display charset " + charset + ".";
+
+		throw lang::IllegalArgumentException(
+					OUString( RTL_CONSTASCII_USTRINGPARAM(s.c_str()) ),
+					(::cppu::OWeakObject *)this,
+					0 );
 
 	}
 
@@ -95,5 +121,23 @@
 	}
 
 	return -1;
+ }
+
+ ::sal_Int16 SAL_CALL session_impl::setTextAt( ::sal_Int16 row, ::sal_Int16 col, const ::rtl::OUString& str ) throw (::com::sun::star::uno::RuntimeException)
+ {
+	try
+	{
+		CHECK_SESSION_HANDLE
+		OString vlr = rtl::OUStringToOString(str,encoding);
+		return hSession->set_text_at(row,col,vlr.getStr());
+
+	} catch(std::exception &e)
+	{
+		OUString msg = OUString(e.what(),strlen(e.what()),RTL_TEXTENCODING_UTF8,RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE);
+		throw css::uno::RuntimeException(msg,static_cast< cppu::OWeakObject * >(this));
+	}
+
+	return -1;
+
  }
 

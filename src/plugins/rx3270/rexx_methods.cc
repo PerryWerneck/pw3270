@@ -207,14 +207,8 @@ RexxMethod4(RexxStringObject, rx3270_method_get_text_at, CSELF, sessionPtr, int,
 	try
 	{
 		session	* hSession 	= (session *) sessionPtr;
-		string	* str 		= hSession->get_string_at(row,col,sz);
-
-		if(str)
-		{
-			RexxStringObject ret = context->String((CSTRING) str->c_str());
-			delete str;
-			return ret;
-		}
+		string	  str 		= hSession->get_string_at(row,col,sz);
+		return context->String((CSTRING) str.c_str());
 
 	}
 	catch(std::exception &e)
@@ -363,12 +357,8 @@ RexxMethod4(logical_t, rx3270_method_test, CSELF, sessionPtr, CSTRING, key, int,
 
 		if(hSession->is_ready())
 		{
-			bool	  rc	= false;
-			string	* str	= hSession->get_string_at(row,col,strlen(key));
-			if(str)
-				rc = (strcasecmp(str->c_str(),key) == 0);
-			delete str;
-			return rc;
+			string str = hSession->get_string_at(row,col,strlen(key));
+			return (strcasecmp(str.c_str(),key) == 0);
 		}
 
 	}
@@ -401,14 +391,8 @@ RexxMethod3(RexxStringObject, rx3270_method_get_text, CSELF, sessionPtr, OPTIONA
 	try
 	{
 		session * hSession	= (session *) sessionPtr;
-		string	* str		= hSession->get_string(baddr,sz > 0 ? sz : -1);
-
-		if(str)
-		{
-			RexxStringObject ret = context->String((CSTRING) str->c_str());
-			delete str;
-			return ret;
-		}
+		string	  str		= hSession->get_string(baddr,sz > 0 ? sz : -1);
+		return context->String((CSTRING) str.c_str());
 	}
 	catch(std::exception &e)
 	{
@@ -452,14 +436,8 @@ RexxMethod1(RexxStringObject, rx3270_method_get_selection, CSELF, sessionPtr)
 {
 	try
 	{
-		string *str = ((session *) sessionPtr)->get_copy();
-
-		if(str)
-		{
-			RexxStringObject ret = context->String((CSTRING) str->c_str());
-			delete str;
-			return ret;
-		}
+		string str = ((session *) sessionPtr)->get_copy();
+		return context->String((CSTRING) str.c_str());
 
 	}
 	catch(std::exception &e)
@@ -490,14 +468,8 @@ RexxMethod1(RexxStringObject, rx3270_method_get_clipboard, CSELF, sessionPtr)
 
 	if(hSession)
 	{
-		string *str = hSession->get_clipboard();
-
-		if(str)
-		{
-			RexxStringObject ret = context->String((CSTRING) str->c_str());
-			delete str;
-			return ret;
-		}
+		string str = hSession->get_clipboard();
+		return context->String((CSTRING) str.c_str());
 	}
 
     trace("%s","rx3270_method_get_clipboard: Clipboard is empty");
@@ -560,7 +532,7 @@ RexxMethod5(RexxStringObject, rx3270_method_get_filename, CSELF, sessionPtr, CST
     };
 
     GtkFileChooserAction      id = GTK_FILE_CHOOSER_ACTION_OPEN;
-    string					* ret;
+    string					  ret;
 
     for(int f=0;f<5;f++)
     {
@@ -572,14 +544,8 @@ RexxMethod5(RexxStringObject, rx3270_method_get_filename, CSELF, sessionPtr, CST
     }
 
     ret = ((session *) sessionPtr)->file_chooser_dialog(id, title, extension,filename);
-    if(ret)
-    {
-        RexxStringObject obj = context->String(ret->c_str());
-        delete ret;
-        return obj;
-    }
 
-	return context->String("");
+	return context->String(ret.c_str());
 }
 
 RexxMethod2(int, rx3270_method_set_host_charset, CSELF, sessionPtr, CSTRING, text)
@@ -589,17 +555,13 @@ RexxMethod2(int, rx3270_method_set_host_charset, CSELF, sessionPtr, CSTRING, tex
 
 RexxMethod1(RexxStringObject, rx3270_method_get_host_charset, CSELF, sessionPtr)
 {
-    string * ret = ((session *) sessionPtr)->get_host_charset();
-	RexxStringObject obj = context->String(ret->c_str());
-    delete ret;
-    return obj;
+    string ret = ((session *) sessionPtr)->get_host_charset();
+	return context->String(ret.c_str());
 }
 
 RexxMethod1(RexxStringObject, rx3270_method_get_display_charset, CSELF, sessionPtr)
 {
-    string * ret = ((session *) sessionPtr)->get_display_charset();
-	RexxStringObject obj = context->String(ret->c_str());
-    delete ret;
-    return obj;
+    string ret = ((session *) sessionPtr)->get_display_charset();
+	return context->String(ret.c_str());
 }
 

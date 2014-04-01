@@ -50,3 +50,39 @@
  	trace("%s: hSession=%p",__FUNCTION__,hSession);
 	return OUString( RTL_CONSTASCII_USTRINGPARAM(PACKAGE_REVISION) );
  }
+
+ ::rtl::OUString SAL_CALL session_impl::getTextAt( ::sal_Int16 row, ::sal_Int16 col, ::sal_Int16 size ) throw (::com::sun::star::uno::RuntimeException)
+ {
+ 	string s;
+
+	try
+	{
+		CHECK_SESSION_HANDLE
+		s = hSession->get_text_at(row,col,size);
+
+	} catch(std::exception &e)
+	{
+		OUString msg = OUString(e.what(),strlen(e.what()),RTL_TEXTENCODING_UTF8,RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE);
+		throw css::uno::RuntimeException(msg,static_cast< cppu::OWeakObject * >(this));
+	}
+
+	return OUString(s.c_str(), s.length(), encoding, RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE);
+ }
+
+ ::sal_Int16 SAL_CALL session_impl::waitForTextAt( ::sal_Int16 row, ::sal_Int16 col, const ::rtl::OUString& str, ::sal_Int16 seconds ) throw (::com::sun::star::uno::RuntimeException)
+ {
+	try
+	{
+		CHECK_SESSION_HANDLE
+		OString vlr = rtl::OUStringToOString(str,encoding);
+		return hSession->wait_for_text_at(row,col,vlr.getStr(),seconds);
+
+	} catch(std::exception &e)
+	{
+		OUString msg = OUString(e.what(),strlen(e.what()),RTL_TEXTENCODING_UTF8,RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE);
+		throw css::uno::RuntimeException(msg,static_cast< cppu::OWeakObject * >(this));
+	}
+
+	return -1;
+
+ }

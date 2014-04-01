@@ -72,6 +72,9 @@
 
 	#define DLL_PUBLIC __attribute__((visibility("default")))
 
+	#define CHECK_SESSION_HANDLE if(!hSession) hSession = h3270::session::get_default();
+
+
 	using namespace ::rtl; 						// for OUString
 	using namespace ::com::sun::star; 			// for sdk interfaces
 	using namespace ::com::sun::star::lang; 	// for sdk interfaces
@@ -102,6 +105,7 @@
 			// lib3270
 			virtual ::rtl::OUString SAL_CALL getVersion() throw (RuntimeException);
 			virtual ::rtl::OUString SAL_CALL getRevision() throw (RuntimeException);
+			virtual ::sal_Int16 SAL_CALL iterate( ::sal_Bool wait ) throw (::com::sun::star::uno::RuntimeException);
 
 			virtual ::sal_Int16 SAL_CALL setSessionName( const ::rtl::OUString& name ) throw (::com::sun::star::uno::RuntimeException);
 
@@ -109,8 +113,23 @@
 			virtual ::sal_Int16 SAL_CALL Connect() throw (::com::sun::star::uno::RuntimeException);
 			virtual ::sal_Int16 SAL_CALL Disconnect() throw (::com::sun::star::uno::RuntimeException);
 
+			// State
+			virtual ::sal_Bool SAL_CALL isConnected() throw (::com::sun::star::uno::RuntimeException);
+			virtual ::sal_Bool SAL_CALL isReady() throw (::com::sun::star::uno::RuntimeException);
+
+			// Screen contents
+			virtual ::rtl::OUString SAL_CALL getTextAt( ::sal_Int16 row, ::sal_Int16 col, ::sal_Int16 size ) throw (::com::sun::star::uno::RuntimeException);
+			virtual ::sal_Int16 SAL_CALL setTextAt( ::sal_Int16 row, ::sal_Int16 col, const ::rtl::OUString& str ) throw (::com::sun::star::uno::RuntimeException);
+
+			// Wait
+			virtual ::sal_Int16 SAL_CALL waitForReady( ::sal_Int16 seconds ) throw (::com::sun::star::uno::RuntimeException);
+			virtual ::sal_Int16 SAL_CALL waitForTextAt( ::sal_Int16 row, ::sal_Int16 col, const ::rtl::OUString& str, ::sal_Int16 seconds ) throw (::com::sun::star::uno::RuntimeException);
+
+
+
 		private:
-			h3270::session *hSession;
+			h3270::session		* hSession;
+			rtl_TextEncoding	  encoding;
 
 		};
 

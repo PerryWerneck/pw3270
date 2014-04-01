@@ -130,8 +130,8 @@
 #endif // WIN32
 
 		virtual int				  set_host_charset(const char *charset)				= 0;
-		virtual string			* get_host_charset(void)							= 0;
-		virtual string			* get_display_charset(void);
+		virtual string			  get_host_charset(void)							= 0;
+		virtual string			  get_display_charset(void);
 
 		// Connection & Network
 		int						  connect(const char *host, bool wait = true);
@@ -144,8 +144,8 @@
 		virtual int				  iterate(bool wait = true)							= 0;
 
 		// Get/Set/Test without charset translation
-		virtual string			* get_text(int baddr, size_t len)					= 0;
-		virtual string 			* get_text_at(int row, int col, size_t sz) 			= 0;
+		virtual string			  get_text(int baddr, size_t len)					= 0;
+		virtual string 			  get_text_at(int row, int col, size_t sz) 			= 0;
 		virtual int 			  set_text_at(int row, int col, const char *str)	= 0;
 		virtual int				  cmp_text_at(int row, int col, const char *text)	= 0;
 		virtual int				  wait_for_text_at(int row, int col, const char *key, int timeout);
@@ -158,8 +158,8 @@
 		string					  ebc2asc(string &str);
 
 		// Get/Set/Test with charset translation
-		string					* get_string(int baddr, size_t len);
-		string					* get_string_at(int row, int col, size_t sz);
+		string					  get_string(int baddr, size_t len);
+		string					  get_string_at(int row, int col, size_t sz);
 		int			 			  set_string_at(int row, int col, const char *str);
 		int				  		  cmp_string_at(int row, int col, const char *text);
 		int				  		  wait_for_string_at(int row, int col, const char *key, int timeout);
@@ -190,21 +190,23 @@
 
 		// Clipboard management
 		virtual int               set_copy(const char *text);
-		virtual string          * get_copy(void);
+		virtual string            get_copy(void);
 
-		virtual string          * get_clipboard(void);
+		virtual string            get_clipboard(void);
 		virtual int               set_clipboard(const char *text);
 
 		// Dialogs
 		virtual int               popup_dialog(LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, ...);
-		virtual string          * file_chooser_dialog(int action, const char *title, const char *extension, const char *filename);
+		virtual string            file_chooser_dialog(int action, const char *title, const char *extension, const char *filename);
 
 		// File transfer
 		virtual int				  file_transfer(LIB3270_FT_OPTION options, const char *local, const char *remote, int lrecl = 0, int blksize = 0, int primspace = 0, int secspace = 0, int dft = 4096);
 
 		// Charset translation
-		string 					* get_3270_text(string *str);
-		string 					* get_local_text(string *str);
+		const char 				* get_encoding(void);
+
+		string 					  get_3270_text(const char *str);
+		string 					  get_local_text(const char *str);
 
 	protected:
 		session();
