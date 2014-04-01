@@ -59,6 +59,8 @@
 	cout << "\tHost charset:    " << s->c_str() << endl;
 	delete s;
 
+	session->connect(false);
+
 	delete session;
  	return 0;
  }

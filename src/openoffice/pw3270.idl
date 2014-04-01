@@ -43,7 +43,17 @@ module pw3270
 	 */
 	interface lib3270 : com::sun::star::uno::XInterface
 	{
+		// Constants
 		string  getVersion();
+		string  getRevision();
+
+		// Host definition
+		short 	setHost([in] string url);
+		short   Connect();
+        short   Disconnect();
+
+		// Misc Settings
+		short	setSessionName([in] string name);
 	};
 
 	service session

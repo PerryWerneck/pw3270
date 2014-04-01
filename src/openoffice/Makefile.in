@@ -25,9 +25,12 @@
 #
 
 PACKAGE_NAME=@PACKAGE_NAME@
-SOURCES=info.cc get.cc service.cc init.cc
+SOURCES=info.cc get.cc set.cc service.cc init.cc connect.cc
 
-UNO_CLASSES=XWeak RuntimeException
+UNO_CLASSES=	/com/sun/star/uno/XWeak \
+				/com/sun/star/uno/RuntimeException \
+				/com/sun/star/lang/WrappedTargetException
+
 
 #---[ LibreOffice SDK ]--------------------------------------------------------
 
@@ -73,6 +76,7 @@ BINRLS=$(BINDIR)/Release
 
 #---[ lib3270 common class ]---------------------------------------------------
 
+DEBUG_CFLAGS=-DDEBUG=1 -g -Wall
 PW3270_CFLAGS=-I../include
 CLASSLIBDIR=../classlib
 include $(CLASSLIBDIR)/class.mak
@@ -80,7 +84,7 @@ include $(CLASSLIBDIR)/class.mak
 #---[ Build options ]----------------------------------------------------------
 
 CPPUENV="gcc3"
-CXXFLAGS=@CXXFLAGS@ -fvisibility=hidden @DLL_CFLAGS@ -Wno-strict-aliasing -I./include -I$(includedir)/libreoffice -Wno-strict-aliasing -DCPPU_ENV=$(CPPUENV) -DLANGUAGE_BINDING_NAME=\"$(CPPUENV)\"
+CXXFLAGS=@CXXFLAGS@ -fvisibility=hidden @DLL_CFLAGS@ -Wno-strict-aliasing -I../include -I./include -I$(includedir)/libreoffice -Wno-strict-aliasing -DCPPU_ENV=$(CPPUENV) -DLANGUAGE_BINDING_NAME=\"$(CPPUENV)\"
 
 OO_LDFLAGS=-L$(OO_SDK_HOME)/lib -L$(OO_SDK_URE_HOME)/lib \
 			-Wl,-rpath-link=$(OO_SDK_URE_HOME)/lib,-rpath=$(OO_SDK_URE_HOME)/lib \
@@ -109,7 +113,7 @@ include/%.hpp: $(RDBDIR)/%.rdb
 	@$(CPPUMAKER) -O./include $(TYPES_RDB) $<
 
 $(OBJDBG)/%.o: %.cc include/$(PACKAGE_NAME)/lib3270.hpp \
-				$(foreach CLS, $(basename $(UNO_CLASSES)), include/com/sun/star/uno/$(CLS).hpp) \
+				$(foreach CLS, $(UNO_CLASSES), include/$(CLS).hpp) \
 				*.hpp Makefile
 	@echo "  CC   `basename $@`"
 	@mkdir -p `dirname $@`
@@ -128,13 +132,13 @@ include/$(PACKAGE_NAME)/lib3270.hpp: $(RDBDIR)/$(PACKAGE_NAME).rdb
 
 Debug: $(BINDBG)/$(PACKAGE_NAME).oxt
 
+run: $(BINDBG)/$(PACKAGE_NAME).oxt
+	@SHARED=false $(UNOPKG) add --verbose --force $(BINDBG)/$(PACKAGE_NAME).oxt
+	@libreoffice testmacros.odt
+	@SHARED=false $(UNOPKG) remove $(PACKAGE_NAME)
+
 add: $(BINDBG)/$(PACKAGE_NAME).oxt
 	@SHARED=false $(UNOPKG) add --verbose --force $(BINDBG)/$(PACKAGE_NAME).oxt
-
-$(BINDBG)/testprogram: $(OBJDBG)/testprogram@OBJEXT@ $(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC)@OBJEXT@)
-	@echo $@ ...
-	@$(MKDIR) `dirname $@`
-	$(CXX) -shared $(LDFLAGS) $(OO_LDFLAGS) -o $(BINDBG)/$(PACKAGE_NAME).uno@DLLEXT@ $(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC)@OBJEXT@)
 
 $(BINDBG)/$(PACKAGE_NAME).uno@DLLEXT@: \
 			$(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC)@OBJEXT@) \
@@ -146,7 +150,7 @@ $(BINDBG)/$(PACKAGE_NAME).uno@DLLEXT@: \
 
 $(BINDBG)/$(PACKAGE_NAME).oxt: \
 			$(BINDBG)/$(PACKAGE_NAME).uno@DLLEXT@ \
-			$(PACKAGE_NAME).rdb \
+			$(RDBDIR)/$(PACKAGE_NAME).rdb \
 			description.xml \
 			manifest.xml \
 			description.txt
@@ -155,7 +159,7 @@ $(BINDBG)/$(PACKAGE_NAME).oxt: \
 
 	@$(MKDIR) $(BINDBG)/$(PACKAGE).oxt.tmp
 
-	@cp $(PACKAGE_NAME).rdb $(BINDBG)/$(PACKAGE).oxt.tmp
+	@cp $(RDBDIR)/$(PACKAGE_NAME).rdb $(BINDBG)/$(PACKAGE).oxt.tmp
 	@cp $(BINDBG)/$(PACKAGE_NAME).uno@DLLEXT@ $(BINDBG)/$(PACKAGE).oxt.tmp
 
 	@$(MKDIR) $(BINDBG)/$(PACKAGE).oxt.tmp/META-INF
@@ -167,7 +171,6 @@ $(BINDBG)/$(PACKAGE_NAME).oxt: \
 	@$(CONVERT) ../$(PACKAGE_NAME)/pixmaps/$(PACKAGE_NAME).svg --format=png > $(BINDBG)/$(PACKAGE).oxt.tmp/$(PACKAGE_NAME).png
 
 	@cp $(BINDBG)/$(PACKAGE_NAME).uno@DLLEXT@ $(BINDBG)/$(PACKAGE_NAME).oxt.tmp
-	@cp $(PACKAGE_NAME).rdb $(BINDBG)/$(PACKAGE_NAME).oxt.tmp
 	@cd $(BINDBG)/$(PACKAGE).oxt.tmp ; $(ZIP) -r -m ../$(PACKAGE_NAME).oxt .
 	@rm -fr $(BINDBG)/$(PACKAGE).oxt.tmp
 	@echo $@ Ok.
@@ -182,6 +185,7 @@ clean:
 	@rm -fr $(RDBDIR)
 	@rm -fr $(URDDIR)
 	@rm -fr include
+	@rm -f *.rdb
 	@rm -fr $(OBJDIR)
 	@rm -fr $(BINDIR)
 

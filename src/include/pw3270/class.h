@@ -51,8 +51,14 @@
  #include <string>
  #include <stdarg.h>
  #include <lib3270.h>
- #include <gtk/gtk.h>
  #include <errno.h>
+
+ #ifdef DEBUG
+	#include <stdio.h>
+	#define trace( fmt, ... )	fprintf(stderr, "%s(%d) " fmt "\n", __FILE__, __LINE__, __VA_ARGS__ ); fflush(stderr);
+ #else
+	#define trace(x, ...) 		// __VA_ARGS__
+ #endif
 
  #ifndef ETIMEDOUT
 	#define ETIMEDOUT 1238
@@ -191,10 +197,10 @@
 
 		// Dialogs
 		virtual int               popup_dialog(LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, ...);
-		virtual string          * file_chooser_dialog(GtkFileChooserAction action, const char *title, const char *extension, const char *filename);
+		virtual string          * file_chooser_dialog(int action, const char *title, const char *extension, const char *filename);
 
 		// File transfer
-		virtual int				  file_transfer(LIB3270_FT_OPTION options, const gchar *local, const gchar *remote, int lrecl = 0, int blksize = 0, int primspace = 0, int secspace = 0, int dft = 4096);
+		virtual int				  file_transfer(LIB3270_FT_OPTION options, const char *local, const char *remote, int lrecl = 0, int blksize = 0, int primspace = 0, int secspace = 0, int dft = 4096);
 
 		// Charset translation
 		string 					* get_3270_text(string *str);

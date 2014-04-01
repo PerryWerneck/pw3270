@@ -667,7 +667,9 @@
 
 #elif defined(HAVE_DBUS)
 
-			rc = query_intval("connect", DBUS_TYPE_STRING, "", DBUS_TYPE_INVALID);
+			static const char * str = "";
+
+			rc = query_intval("connect", DBUS_TYPE_STRING, &str, DBUS_TYPE_INVALID);
 
 #else
 			rc = -1;

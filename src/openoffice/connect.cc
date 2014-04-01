@@ -18,62 +18,70 @@
  * programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple
  * Place, Suite 330, Boston, MA, 02111-1307, USA
  *
- * Este programa está nomeado como init.cc e possui - linhas de código.
+ * Este programa está nomeado como connect.cc e possui - linhas de código.
  *
  * Contatos:
  *
  *	perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
  *	erico.mendonca@gmail.com	(Erico Mascarenhas Mendonça)
  *
- * Referência:
- *
- *	https://wiki.openoffice.org/wiki/Documentation/DevGuide/WritingUNO/C%2B%2B/Create_Instance_with_Arguments
  *
  */
 
  #include "globals.hpp"
- #include <com/sun/star/lang/IllegalArgumentException.hpp>
  #include "pw3270/lib3270.hpp"
+ #include <exception>
+ #include <com/sun/star/uno/RuntimeException.hdl>
 
 /*---[ Implement ]-----------------------------------------------------------------------------------------*/
 
-using namespace pw3270_impl;
+ using namespace pw3270_impl;
 
+ ::sal_Int16 SAL_CALL session_impl::Connect() throw (::com::sun::star::uno::RuntimeException)
+ {
+ 	trace("%s: hSession=%p",__FUNCTION__,hSession);
 
-session_impl::session_impl()
-{
-	this->hSession = NULL;
-}
-
-session_impl::~session_impl()
-{
-	if(this->hSession)
-		delete this->hSession;
-}
-
-
-// XInitialization implementation
-void session_impl::initialize( Sequence< Any > const & args ) throw (Exception)
-{
-	if (1 != args.getLength())
+	try
 	{
-		throw lang::IllegalArgumentException(
-					OUString( RTL_CONSTASCII_USTRINGPARAM("give a string instanciating this component!") ),
-					(::cppu::OWeakObject *)this,
-					0 );
+		if(!hSession)
+			hSession = h3270::session::get_default();
+
+		return hSession->connect(false);
+
+	} catch(std::exception &e)
+	{
+		trace("%s failed: %s",__FUNCTION__,e.what());
+
+		OUString msg = OUString(e.what(),strlen(e.what()),RTL_TEXTENCODING_UTF8,RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE);
+
+		throw css::uno::RuntimeException(msg,static_cast< cppu::OWeakObject * >(this));
+
 	}
 
-	// Initialize
-
-	// TODO: Get arguments.
+	return -1;
 
 
-}
+ }
 
-// XMain
-::sal_Int32 SAL_CALL session_impl::run( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aArguments ) throw (Exception)
-{
+ ::sal_Int16 SAL_CALL session_impl::Disconnect() throw (::com::sun::star::uno::RuntimeException)
+ {
+	try
+	{
+		if(!hSession)
+			hSession = h3270::session::get_default();
+
+		return hSession->disconnect();
+
+	} catch(std::exception &e)
+	{
+		OUString msg = OUString(e.what(),strlen(e.what()),RTL_TEXTENCODING_UTF8,RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE);
+
+		throw css::uno::RuntimeException(msg,static_cast< cppu::OWeakObject * >(this));
+
+	}
+
+	return -1;
+
+ }
 
 
-	return 0;
-}

@@ -33,6 +33,7 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="../include/pw3270/class.h" />
 		<Unit filename="Makefile.in" />
 		<Unit filename="exception.cc" />
 		<Unit filename="local.cc" />

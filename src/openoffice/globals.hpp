@@ -60,7 +60,15 @@
 
 	#include <com/sun/star/uno/RuntimeException.hpp>
 
+	#ifdef DEBUG
+		#include <stdio.h>
+		#define trace( fmt, ... )	fprintf(stderr, "%s(%d) " fmt "\n", __FILE__, __LINE__, __VA_ARGS__ ); fflush(stderr);
+	#else
+		#define trace(x, ...) 		// __VA_ARGS__
+	#endif
+
 	#include <pw3270/lib3270.hpp>
+	#include <pw3270/class.h>
 
 	#define DLL_PUBLIC __attribute__((visibility("default")))
 
@@ -68,6 +76,7 @@
 	using namespace ::com::sun::star; 			// for sdk interfaces
 	using namespace ::com::sun::star::lang; 	// for sdk interfaces
 	using namespace ::com::sun::star::uno;		// for basic types
+	using namespace PW3270_NAMESPACE;
 
  	namespace pw3270_impl
 	{
@@ -75,6 +84,9 @@
 		class DLL_PUBLIC session_impl : public ::cppu::WeakImplHelper4< ::pw3270::lib3270, XServiceInfo, XMain, XInitialization >
 		{
 		public:
+
+			session_impl();
+			virtual ~session_impl();
 
 			// XMain
 		    virtual ::sal_Int32 SAL_CALL run( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aArguments ) throw (Exception);
@@ -89,6 +101,16 @@
 
 			// lib3270
 			virtual ::rtl::OUString SAL_CALL getVersion() throw (RuntimeException);
+			virtual ::rtl::OUString SAL_CALL getRevision() throw (RuntimeException);
+
+			virtual ::sal_Int16 SAL_CALL setSessionName( const ::rtl::OUString& name ) throw (::com::sun::star::uno::RuntimeException);
+
+			virtual ::sal_Int16 SAL_CALL setHost( const ::rtl::OUString& url ) throw (::com::sun::star::uno::RuntimeException);
+			virtual ::sal_Int16 SAL_CALL Connect() throw (::com::sun::star::uno::RuntimeException);
+			virtual ::sal_Int16 SAL_CALL Disconnect() throw (::com::sun::star::uno::RuntimeException);
+
+		private:
+			h3270::session *hSession;
 
 		};
 

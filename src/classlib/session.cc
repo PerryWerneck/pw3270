@@ -294,7 +294,7 @@
 		return -1;
 	}
 
-	string * session::file_chooser_dialog(GtkFileChooserAction action, const char *title, const char *extension, const char *filename)
+	string * session::file_chooser_dialog(int action, const char *title, const char *extension, const char *filename)
 	{
 		return NULL;
 	}
@@ -463,7 +463,7 @@
 		return string(ebc2asc(buffer,sz));
 	}
 
-	int session::file_transfer(LIB3270_FT_OPTION options, const gchar *local, const gchar *remote, int lrecl, int blksize, int primspace, int secspace, int dft)
+	int session::file_transfer(LIB3270_FT_OPTION options, const char *local, const char *remote, int lrecl, int blksize, int primspace, int secspace, int dft)
 	{
 		log("Can't transfer %s: File transfer is unavailable", local ? local : "file");
 		return EINVAL;

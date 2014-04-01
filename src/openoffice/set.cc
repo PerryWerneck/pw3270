@@ -32,21 +32,68 @@
  */
 
  #include "globals.hpp"
- #include <lib3270/config.h>
+ #include <exception>
+ #include <com/sun/star/uno/RuntimeException.hdl>
  #include "pw3270/lib3270.hpp"
 
 /*---[ Implement ]-----------------------------------------------------------------------------------------*/
 
  using namespace pw3270_impl;
+ using namespace com::sun::star::uno;
 
- ::rtl::OUString session_impl::getVersion() throw (RuntimeException)
+ ::sal_Int16 SAL_CALL session_impl::setSessionName( const ::rtl::OUString& name ) throw (::com::sun::star::uno::RuntimeException)
  {
- 	trace("%s: hSession=%p",__FUNCTION__,hSession);
-	return OUString( RTL_CONSTASCII_USTRINGPARAM(PACKAGE_VERSION) );
+ 	if(hSession)
+	{
+		// Remove old session
+		delete hSession;
+		hSession = NULL;
+	}
+
+	OString vlr = rtl::OUStringToOString( name , RTL_TEXTENCODING_UNICODE );
+
+	trace("%s(\"%s\")",__FUNCTION__,vlr.getStr());
+
+	try
+	{
+
+		hSession = h3270::session::create(((const char *) vlr.getStr()));
+	 	trace("%s: hSession(\"%s\"=%p",__FUNCTION__,vlr.getStr(),hSession);
+
+	} catch(std::exception &e)
+	{
+		OUString msg = OUString(e.what(),strlen(e.what()),RTL_TEXTENCODING_UTF8,RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE);
+
+		throw css::uno::RuntimeException(msg,static_cast< cppu::OWeakObject * >(this));
+
+		return -1;
+
+	}
+
+	return 0;
+
  }
 
- ::rtl::OUString session_impl::getRevision() throw (RuntimeException)
+ ::sal_Int16 SAL_CALL session_impl::setHost( const ::rtl::OUString& url ) throw (::com::sun::star::uno::RuntimeException)
  {
- 	trace("%s: hSession=%p",__FUNCTION__,hSession);
-	return OUString( RTL_CONSTASCII_USTRINGPARAM(PACKAGE_REVISION) );
+	if(!hSession)
+		hSession = h3270::session::get_default();
+
+	OString vlr = rtl::OUStringToOString( url , RTL_TEXTENCODING_UNICODE );
+
+	try
+	{
+
+		return hSession->set_url(vlr.getStr());
+
+	} catch(std::exception &e)
+	{
+		OUString msg = OUString(e.what(),strlen(e.what()),RTL_TEXTENCODING_UTF8,RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE);
+
+		throw css::uno::RuntimeException(msg,static_cast< cppu::OWeakObject * >(this));
+
+	}
+
+	return -1;
  }
+
