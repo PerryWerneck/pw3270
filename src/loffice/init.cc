@@ -93,3 +93,22 @@ void session_impl::initialize( Sequence< Any > const & args ) throw (Exception)
 	}
 	return -1;
 }
+
+ ::sal_Int16 SAL_CALL session_impl::quit() throw (::com::sun::star::uno::RuntimeException)
+ {
+	try
+	{
+		CHECK_SESSION_HANDLE
+		return hSession->quit();
+	} catch(std::exception &e)
+	{
+		OUString msg = OUString(e.what(),strlen(e.what()),RTL_TEXTENCODING_UTF8,RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE);
+		throw css::uno::RuntimeException(msg,static_cast< cppu::OWeakObject * >(this));
+	}
+
+	return -1;
+
+ }
+
+
+

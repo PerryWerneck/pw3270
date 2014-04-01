@@ -57,6 +57,25 @@ module pw3270
 		short 	setTextAt([in] short row, [in] short col, [in] string str);
 		short 	waitForTextAt([in] short row, [in] short col, [in] string str, [in] short seconds);
 
+		// Cursor
+		long	setCursorAt([in] short row, [in] short col);
+		long	setCursorAddress([in] long addr);
+		long	getCursorAddress();
+
+		// Field positioning
+		long 	getFieldStart([in] long addr);
+		long 	getFieldLen([in] long addr);
+		long 	getNextUnprotected([in] long addr);
+
+		// Keyboard actions
+		short	enter();
+		short 	pfkey([in] short key);
+		short	pakey([in] short key);
+
+		// Misc actions
+		short	quit();
+		short	erase_eof();
+
 		// Misc Settings
 		short	setSessionName([in] string name);
 

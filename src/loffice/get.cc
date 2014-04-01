@@ -86,3 +86,71 @@
 	return -1;
 
  }
+
+ ::sal_Int32 SAL_CALL session_impl::getCursorAddress() throw (::com::sun::star::uno::RuntimeException)
+ {
+	try
+	{
+		CHECK_SESSION_HANDLE
+		return hSession->get_cursor_addr();
+
+	} catch(std::exception &e)
+	{
+		OUString msg = OUString(e.what(),strlen(e.what()),RTL_TEXTENCODING_UTF8,RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE);
+		throw css::uno::RuntimeException(msg,static_cast< cppu::OWeakObject * >(this));
+	}
+
+	return -1;
+
+ }
+
+ ::sal_Int32 SAL_CALL session_impl::getFieldStart( ::sal_Int32 addr ) throw (::com::sun::star::uno::RuntimeException)
+ {
+	try
+	{
+		CHECK_SESSION_HANDLE
+		return hSession->get_field_start(addr);
+
+	} catch(std::exception &e)
+	{
+		OUString msg = OUString(e.what(),strlen(e.what()),RTL_TEXTENCODING_UTF8,RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE);
+		throw css::uno::RuntimeException(msg,static_cast< cppu::OWeakObject * >(this));
+	}
+
+	return -1;
+
+ }
+
+ ::sal_Int32 SAL_CALL session_impl::getFieldLen( ::sal_Int32 addr ) throw (::com::sun::star::uno::RuntimeException)
+ {
+	try
+	{
+		CHECK_SESSION_HANDLE
+		return hSession->get_field_len(addr);
+
+	} catch(std::exception &e)
+	{
+		OUString msg = OUString(e.what(),strlen(e.what()),RTL_TEXTENCODING_UTF8,RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE);
+		throw css::uno::RuntimeException(msg,static_cast< cppu::OWeakObject * >(this));
+	}
+
+	return -1;
+
+ }
+
+ ::sal_Int32 SAL_CALL session_impl::getNextUnprotected( ::sal_Int32 addr ) throw (::com::sun::star::uno::RuntimeException)
+ {
+	try
+	{
+		CHECK_SESSION_HANDLE
+		return hSession->get_next_unprotected(addr);
+
+	} catch(std::exception &e)
+	{
+		OUString msg = OUString(e.what(),strlen(e.what()),RTL_TEXTENCODING_UTF8,RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE);
+		throw css::uno::RuntimeException(msg,static_cast< cppu::OWeakObject * >(this));
+	}
+
+	return -1;
+
+ }

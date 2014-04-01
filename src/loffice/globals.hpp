@@ -116,12 +116,25 @@
 			// Screen contents
 			virtual ::rtl::OUString SAL_CALL getTextAt( ::sal_Int16 row, ::sal_Int16 col, ::sal_Int16 size ) throw (::com::sun::star::uno::RuntimeException);
 			virtual ::sal_Int16 SAL_CALL setTextAt( ::sal_Int16 row, ::sal_Int16 col, const ::rtl::OUString& str ) throw (::com::sun::star::uno::RuntimeException);
+			virtual ::sal_Int32 SAL_CALL getFieldStart( ::sal_Int32 addr ) throw (::com::sun::star::uno::RuntimeException);
+			virtual ::sal_Int32 SAL_CALL getFieldLen( ::sal_Int32 addr ) throw (::com::sun::star::uno::RuntimeException);
+			virtual ::sal_Int32 SAL_CALL getNextUnprotected( ::sal_Int32 addr ) throw (::com::sun::star::uno::RuntimeException);
 
 			// Wait
 			virtual ::sal_Int16 SAL_CALL waitForReady( ::sal_Int16 seconds ) throw (::com::sun::star::uno::RuntimeException);
 			virtual ::sal_Int16 SAL_CALL waitForTextAt( ::sal_Int16 row, ::sal_Int16 col, const ::rtl::OUString& str, ::sal_Int16 seconds ) throw (::com::sun::star::uno::RuntimeException);
 
+			// Actions
+			virtual ::sal_Int16 SAL_CALL enter() throw (::com::sun::star::uno::RuntimeException);
+			virtual ::sal_Int16 SAL_CALL pfkey( ::sal_Int16 key ) throw (::com::sun::star::uno::RuntimeException);
+			virtual ::sal_Int16 SAL_CALL pakey( ::sal_Int16 key ) throw (::com::sun::star::uno::RuntimeException);
+			virtual ::sal_Int16 SAL_CALL quit() throw (::com::sun::star::uno::RuntimeException);
+			virtual ::sal_Int16 SAL_CALL erase_eof() throw (::com::sun::star::uno::RuntimeException);
 
+			// Cursor
+			virtual ::sal_Int32 SAL_CALL setCursorAt( ::sal_Int16 row, ::sal_Int16 col ) throw (::com::sun::star::uno::RuntimeException);
+			virtual ::sal_Int32 SAL_CALL setCursorAddress( ::sal_Int32 addr ) throw (::com::sun::star::uno::RuntimeException);
+			virtual ::sal_Int32 SAL_CALL getCursorAddress() throw (::com::sun::star::uno::RuntimeException);
 
 		private:
 			h3270::session		* hSession;

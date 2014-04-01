@@ -141,3 +141,104 @@
 
  }
 
+ ::sal_Int16 SAL_CALL session_impl::enter() throw (::com::sun::star::uno::RuntimeException)
+ {
+	try
+	{
+		CHECK_SESSION_HANDLE
+		return hSession->enter();
+
+	} catch(std::exception &e)
+	{
+		OUString msg = OUString(e.what(),strlen(e.what()),RTL_TEXTENCODING_UTF8,RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE);
+		throw css::uno::RuntimeException(msg,static_cast< cppu::OWeakObject * >(this));
+	}
+
+	return -1;
+
+ }
+
+ ::sal_Int16 SAL_CALL session_impl::pfkey( ::sal_Int16 key ) throw (::com::sun::star::uno::RuntimeException)
+ {
+	try
+	{
+		CHECK_SESSION_HANDLE
+		return hSession->pfkey(key);
+
+	} catch(std::exception &e)
+	{
+		OUString msg = OUString(e.what(),strlen(e.what()),RTL_TEXTENCODING_UTF8,RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE);
+		throw css::uno::RuntimeException(msg,static_cast< cppu::OWeakObject * >(this));
+	}
+
+	return -1;
+
+ }
+
+ ::sal_Int16 SAL_CALL session_impl::pakey( ::sal_Int16 key ) throw (::com::sun::star::uno::RuntimeException)
+ {
+	try
+	{
+		CHECK_SESSION_HANDLE
+		return hSession->pakey(key);
+
+	} catch(std::exception &e)
+	{
+		OUString msg = OUString(e.what(),strlen(e.what()),RTL_TEXTENCODING_UTF8,RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE);
+		throw css::uno::RuntimeException(msg,static_cast< cppu::OWeakObject * >(this));
+	}
+
+	return -1;
+
+ }
+
+::sal_Int32 SAL_CALL session_impl::setCursorAt( ::sal_Int16 row, ::sal_Int16 col ) throw (::com::sun::star::uno::RuntimeException)
+ {
+	try
+	{
+		CHECK_SESSION_HANDLE
+		return hSession->set_cursor_position(row,col);
+
+	} catch(std::exception &e)
+	{
+		OUString msg = OUString(e.what(),strlen(e.what()),RTL_TEXTENCODING_UTF8,RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE);
+		throw css::uno::RuntimeException(msg,static_cast< cppu::OWeakObject * >(this));
+	}
+
+	return -1;
+
+ }
+
+ ::sal_Int32 SAL_CALL session_impl::setCursorAddress( ::sal_Int32 addr ) throw (::com::sun::star::uno::RuntimeException)
+ {
+	try
+	{
+		CHECK_SESSION_HANDLE
+		return hSession->set_cursor_addr(addr);
+
+	} catch(std::exception &e)
+	{
+		OUString msg = OUString(e.what(),strlen(e.what()),RTL_TEXTENCODING_UTF8,RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE);
+		throw css::uno::RuntimeException(msg,static_cast< cppu::OWeakObject * >(this));
+	}
+
+	return -1;
+
+ }
+
+ ::sal_Int16 SAL_CALL session_impl::erase_eof() throw (::com::sun::star::uno::RuntimeException)
+ {
+	try
+	{
+		CHECK_SESSION_HANDLE
+		return hSession->erase_eof();
+
+	} catch(std::exception &e)
+	{
+		OUString msg = OUString(e.what(),strlen(e.what()),RTL_TEXTENCODING_UTF8,RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE);
+		throw css::uno::RuntimeException(msg,static_cast< cppu::OWeakObject * >(this));
+	}
+
+	return -1;
+
+ }
