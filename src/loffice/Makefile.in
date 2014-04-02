@@ -102,12 +102,12 @@ OO_LDFLAGS=-L$(OO_SDK_HOME)/lib -L$(OO_SDK_URE_HOME)/lib \
 $(URDDIR)/%.urd: %.idl
 	@echo "  IDLC `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(IDLC) -C -I$(OO_SDK_HOME)/idl -O`dirname $@` $<
+	@$(IDLC) -w -C -I$(OO_SDK_HOME)/idl -O`dirname $@` $<
 
 $(URDDIR)/%.urd: /usr/share/idl/libreoffice/%.idl
 	@echo "  IDLC `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(IDLC) -C -I$(OO_SDK_HOME)/idl -O`dirname $@` $<
+	@$(IDLC) -w -C -I$(OO_SDK_HOME)/idl -O`dirname $@` $<
 
 $(RDBDIR)/%.rdb: $(URDDIR)/%.urd
 	@echo "  REGM `basename $@`"
