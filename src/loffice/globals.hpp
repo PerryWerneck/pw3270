@@ -129,7 +129,7 @@
 			virtual ::sal_Int16 SAL_CALL pfkey( ::sal_Int16 key ) throw (::com::sun::star::uno::RuntimeException);
 			virtual ::sal_Int16 SAL_CALL pakey( ::sal_Int16 key ) throw (::com::sun::star::uno::RuntimeException);
 			virtual ::sal_Int16 SAL_CALL quit() throw (::com::sun::star::uno::RuntimeException);
-			virtual ::sal_Int16 SAL_CALL erase_eof() throw (::com::sun::star::uno::RuntimeException);
+			virtual ::sal_Int16 SAL_CALL eraseEOF() throw (::com::sun::star::uno::RuntimeException);
 
 			// Cursor
 			virtual ::sal_Int32 SAL_CALL setCursorAt( ::sal_Int16 row, ::sal_Int16 col ) throw (::com::sun::star::uno::RuntimeException);

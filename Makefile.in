@@ -154,6 +154,7 @@ oxt: $(BINDIR)/Release/$(PACKAGE_NAME).oxt
 
 $(BINDIR)/Release/$(PACKAGE_NAME).oxt:
 	@$(MAKE) -C src/loffice Release
+	@$(MKDIR) `dirname $@`
 	@cp src/loffice/.bin/Release/$(PACKAGE_NAME).oxt $@
 
 #---[ Debug targets ]----------------------------------------------------------

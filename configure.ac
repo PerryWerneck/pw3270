@@ -238,6 +238,7 @@ CC="$ac_save_cc"])
 AC_MSG_RESULT($app_cv_fvisibility_ok)
 if test $app_cv_fvisibility_ok = yes; then
   CFLAGS="$CFLAGS -fvisibility=hidden"
+  OO_CXXFLAGS="$OO_CXXFLAGS -fvisibility=hidden"
 fi
 
 #--[ Options ]------------------------------------------------------------------------------------------------------------------------------------------------
@@ -273,6 +274,7 @@ AC_ARG_ENABLE([registry],
 
 if test "$app_cv_pic" == "yes"; then
 	DLL_CFLAGS="$DLL_CFLAGS -fPIC"
+	OO_CXXFLAGS="-fPIC $OO_CXXFLAGS"
 fi
 
 AC_ARG_ENABLE([strip],[AS_HELP_STRING([--disable-strip], [disable stripping of binaries])], [ app_cv_strip="$enableval" ],[ app_cv_strip="yes" ])
@@ -481,6 +483,38 @@ if test "_$OO_SDK_URE_HOME" == "_" ; then
 	fi
 fi
 
+# Setup c++ compiler flags
+if test -d "$prefix/include/libreoffice"; then
+	OO_CXXFLAGS="$OO_CXXFLAGS -I$prefix/include/libreoffice"
+	AC_MSG_NOTICE([Found libreoffice includes at $prefix/include/libreoffice]) 
+elif test -d "/usr/include/libreoffice"; then
+	OO_CXXFLAGS="$OO_CXXFLAGS -I/usr/include/libreoffice"
+	AC_MSG_NOTICE([Found libreoffice includes at /usr/include/libreoffice]) 
+elif test -d "$OO_SDK_HOME/include"; then
+	OO_CXXFLAGS="$OO_CXXFLAGS -I$OO_SDK_HOME/include"
+	AC_MSG_NOTICE([Found libreoffice includes at $OO_SDK_HOME/include]) 
+else
+	app_cv_office="no"
+	AC_MSG_NOTICE([Can't libreoffice includes]) 
+fi
+
+OO_CXXFLAGS="-DCPPU_ENV=gcc3 -Wno-strict-aliasing $OO_CXXFLAGS"
+
+# Test for IDL files
+if test -d "$OO_SDK_HOME/idl"; then
+	IDLDIR="$OO_SDK_HOME/idl"
+	AC_MSG_NOTICE([Found idl at $IDLDIR]) 
+elif test -d "/usr/share/idl/libreoffice"; then
+	IDLDIR="/usr/share/idl/libreoffice"
+	AC_MSG_NOTICE([Found idl at $IDLDIR]) 
+elif test -d "$libdir/libreoffice/sdk/idl"; then
+	IDLDIR="$libdir/libreoffice/sdk/idl"
+	AC_MSG_NOTICE([Found idl at $IDLDIR]) 
+else
+	app_cv_office="no"
+	AC_MSG_NOTICE([Can't find idl path]) 
+fi
+
 OO_SDK_URE_BIN_DIR=$OO_SDK_URE_HOME/bin
 OO_SDK_URE_LIB_DIR=$OO_SDK_URE_HOME/lib
 
@@ -531,6 +565,8 @@ fi
 AC_SUBST(OFFICE_HOME)
 AC_SUBST(OO_SDK_HOME)
 AC_SUBST(OO_SDK_URE_HOME)
+AC_SUBST(IDLDIR)
+AC_SUBST(OO_CXXFLAGS)
 
 #--[ Pre-reqs ]-----------------------------------------------------------------------------------------------------------------------------------------------
 AC_SUBST(LIB3270_REQUIRES)

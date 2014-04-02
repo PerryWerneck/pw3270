@@ -74,7 +74,7 @@ module pw3270
 
 		// Misc actions
 		short	quit();
-		short	erase_eof();
+		short	eraseEOF();
 
 		// Misc Settings
 		short	setSessionName([in] string name);

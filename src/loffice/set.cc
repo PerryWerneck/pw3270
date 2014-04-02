@@ -226,7 +226,7 @@
 
  }
 
- ::sal_Int16 SAL_CALL session_impl::erase_eof() throw (::com::sun::star::uno::RuntimeException)
+ ::sal_Int16 SAL_CALL session_impl::eraseEOF() throw (::com::sun::star::uno::RuntimeException)
  {
 	try
 	{

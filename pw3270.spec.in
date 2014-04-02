@@ -45,7 +45,7 @@
 
 	%if %{?suse_version} >= 1310
 		%define _office 1
-		%define _bldreq gtk3-devel libopenssl-devel ucpp
+		%define _bldreq gtk3-devel libopenssl-devel
 	%endif
 %endif
 
@@ -92,6 +92,7 @@ BuildRequires:  dbus-1-glib-devel
 
 %if 0%{?_office}
 BuildRequires:	libreoffice-sdk
+BuildRequires:	ucpp
 %endif
 
 BuildRequires:  rsvg-view

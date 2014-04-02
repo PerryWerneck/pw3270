@@ -56,6 +56,7 @@ session_impl::~session_impl()
 // XInitialization implementation
 void session_impl::initialize( Sequence< Any > const & args ) throw (Exception)
 {
+	/*
 	if (1 != args.getLength())
 	{
 		throw lang::IllegalArgumentException(
@@ -63,10 +64,16 @@ void session_impl::initialize( Sequence< Any > const & args ) throw (Exception)
 					(::cppu::OWeakObject *)this,
 					0 );
 	}
+	*/
 
-	// Initialize
+	trace("%s args=%d",__FUNCTION__,(int) args.getLength());
 
-	// TODO: Get arguments.
+	// Process arguments
+	for(int f = 0; f < args.getLength();f++)
+	{
+		trace("Arg(%d) is %s",f,args[f].getValueType().getTypeName().getStr());
+
+	}
 
 
 }

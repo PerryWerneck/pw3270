@@ -72,11 +72,11 @@ BINDIR ?= .bin
 RDBDIR ?= .rdb
 URDDIR ?= .urd
 
-OBJDBG=$(OBJDIR)/Debug
-BINDBG=$(BINDIR)/Debug
+OBJDBG ?= $(OBJDIR)/Debug
+BINDBG ?= $(BINDIR)/Debug
 
-OBJRLS=$(OBJDIR)/Release
-BINRLS=$(BINDIR)/Release
+OBJRLS ?= $(OBJDIR)/Release
+BINRLS ?= $(BINDIR)/Release
 
 #---[ lib3270 common class ]---------------------------------------------------
 
@@ -87,11 +87,13 @@ include $(CLASSLIBDIR)/class.mak
 
 #---[ Build options ]----------------------------------------------------------
 
-CPPUENV="gcc3"
-
-CXXFLAGS=@CXXFLAGS@ -fvisibility=hidden @DLL_CFLAGS@ -Wno-strict-aliasing \
-			-I../include -I./include -I$(includedir)/libreoffice \
-			-DCPPU_ENV=$(CPPUENV) -DLANGUAGE_BINDING_NAME=\"$(CPPUENV)\"
+CXXFLAGS=@CXXFLAGS@ @OO_CXXFLAGS@ -I../include -I./include -DLANGUAGE_BINDING_NAME=\"gcc3\"
+#
+#CPPUENV="gcc3"
+#CXXFLAGS=@CXXFLAGS@ -fvisibility=hidden @DLL_CFLAGS@ -Wno-strict-aliasing \
+#			-I../include -I./include -I$(includedir)/libreoffice \
+#			-DCPPU_ENV=$(CPPUENV) -DLANGUAGE_BINDING_NAME=\"$(CPPUENV)\"
+#
 
 OO_LDFLAGS=-L$(OO_SDK_HOME)/lib -L$(OO_SDK_URE_HOME)/lib \
 			-Wl,-rpath-link=$(OO_SDK_URE_HOME)/lib,-rpath=$(OO_SDK_URE_HOME)/lib \
@@ -104,7 +106,7 @@ $(URDDIR)/%.urd: %.idl
 	@$(MKDIR) `dirname $@`
 	@$(IDLC) -w -C -I$(OO_SDK_HOME)/idl -O`dirname $@` $<
 
-$(URDDIR)/%.urd: /usr/share/idl/libreoffice/%.idl
+$(URDDIR)/%.urd: @IDLDIR@/%.idl
 	@echo "  IDLC `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(IDLC) -w -C -I$(OO_SDK_HOME)/idl -O`dirname $@` $<
@@ -120,15 +122,17 @@ include/%.hpp: $(RDBDIR)/%.rdb
 	@$(CPPUMAKER) -O./include $(TYPES_RDB) $<
 
 $(OBJDBG)/%.o: %.cc include/$(PACKAGE_NAME)/lib3270.hpp \
-				$(foreach CLS, $(UNO_CLASSES), include/$(CLS).hpp) \
-				*.hpp Makefile
+			$(foreach CLS, $(UNO_CLASSES), include/$(CLS).hpp) \
+			globals.hpp \
+			Makefile
 	@echo "  CC   `basename $@`"
 	@mkdir -p `dirname $@`
 	@$(CXX) -DDEBUG=1 $(CXXFLAGS) -o $@ -c $<
 
 $(OBJRLS)/%.o: %.cc include/$(PACKAGE_NAME)/lib3270.hpp \
-				$(foreach CLS, $(UNO_CLASSES), include/$(CLS).hpp) \
-				*.hpp Makefile
+			$(foreach CLS, $(UNO_CLASSES), include/$(CLS).hpp) \
+			globals.hpp \
+			Makefile
 	@echo "  CC   `basename $@`"
 	@mkdir -p `dirname $@`
 	@$(CXX) -DNDEBUG=1 $(CXXFLAGS) -o $@ -c $<
@@ -142,7 +146,10 @@ include/$(PACKAGE_NAME)/lib3270.hpp: $(RDBDIR)/$(PACKAGE_NAME).rdb
 
 #---[ Release targets ]--------------------------------------------------------
 
-Release: $(BINDIR)/$(PACKAGE_NAME).oxt
+Release: include/$(PACKAGE_NAME)/lib3270.hpp \
+		$(foreach CLS, $(UNO_CLASSES), include/$(CLS).hpp) \
+		$(RDBDIR)/$(PACKAGE_NAME).rdb \
+		$(BINDIR)/$(PACKAGE_NAME).oxt
 
 install: $(BINRLS)/$(PACKAGE_NAME).uno@DLLEXT@ \
 		$(RDBDIR)/$(PACKAGE_NAME).rdb \
