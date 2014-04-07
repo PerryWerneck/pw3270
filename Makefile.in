@@ -278,7 +278,7 @@ $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar: clean pixmaps
 	@$(MKDIR) $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/mac
 	@cp -r mac/* $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/mac
 
-	@$(AMTAR) --format=ustar --create --directory $(TMPDIR) --exclude-vcs --owner=root --group=root --file=$@ $(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
+	@$(AMTAR) --format=ustar --verbose --exclude-backups --exclude="*.bak" --create --directory $(TMPDIR) --exclude-vcs --owner=root --group=root --file=$@ $(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 
 	@rm -fr $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 	@echo $@
@@ -351,7 +351,6 @@ clean:
 	@rm -fr .obj
 	@rm -fr .bin
 	@rm -fr .tmp
-	@find . -name "*~" -exec rm -f {} \;
 	@rm -f $(PACKAGE_NAME).po
 	@make -C src/lib3270 clean
 	@make -C src/pw3270 clean
