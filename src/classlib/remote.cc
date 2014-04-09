@@ -129,11 +129,11 @@
 
 		}
 
-		string * query_string(void *query, size_t szQuery, size_t len)
+		string query_string(void *query, size_t szQuery, size_t len)
 		{
 			struct hllapi_packet_text			* response;
 			DWORD								  cbSize	= sizeof(struct hllapi_packet_text)+len;
-			string								* s;
+			string								  s;
 
 			response = (struct hllapi_packet_text *) malloc(cbSize+2);
 			memset(response,0,cbSize+2);
@@ -141,13 +141,7 @@
 			if(TransactNamedPipe(hPipe,(LPVOID) query, szQuery, &response, cbSize, &cbSize,NULL))
 			{
 				if(response->packet_id)
-					s = new string("");
-				else
-					s = new string(response->text);
-			}
-			else
-			{
-				s = new string("");
+					s.assign(response->text);
 			}
 
 			free(response);

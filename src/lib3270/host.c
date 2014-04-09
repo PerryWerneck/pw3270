@@ -283,10 +283,14 @@ LIB3270_EXPORT const char * lib3270_set_url(H3270 *h, const char *n)
 		if(query && *query)
 		{
 			char *str 		= strdup(query);
-			char *saveptr	= NULL;
 			char *ptr;
 
+#ifdef HAVE_STRTOK_R
+			char *saveptr	= NULL;
 			for(ptr = strtok_r(str,"&",&saveptr);ptr;ptr=strtok_r(NULL,"&",&saveptr))
+#else
+			for(ptr = strtok(str,"&");ptr;ptr=strtok(NULL,"&"))
+#endif
 			{
 				char *var = ptr;
 				char *val = strchr(ptr,'=');

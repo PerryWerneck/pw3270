@@ -174,12 +174,8 @@
 	try
 	{
 		size_t	  sz = strlen(buffer);
-		string	* str = session::get_default()->get_string_at(row,col,sz);
-		if(str)
-		{
-			strncpy(buffer,str->c_str(),sz);
-			delete str;
-		}
+		string	  str = session::get_default()->get_string_at(row,col,sz);
+		strncpy(buffer,str.c_str(),sz);
 	}
 	catch(std::exception &e)
 	{
@@ -275,13 +271,9 @@
 		if(len < szBuffer && len > 0)
 			szBuffer = len;
 
-		string *str = session::get_default()->get_string(offset,szBuffer);
-		if(str)
-		{
-			strncpy(buffer,str->c_str(),szBuffer);
-			delete str;
-			rc = HLLAPI_STATUS_SUCCESS;
-		}
+		string str = session::get_default()->get_string(offset,szBuffer);
+		strncpy(buffer,str.c_str(),szBuffer);
+		rc = HLLAPI_STATUS_SUCCESS;
 	}
 	catch(std::exception &e)
 	{
@@ -312,13 +304,9 @@
  {
 	try
 	{
-		string *str = session::get_default()->get_string(offset-1,len);
-		if(str)
-		{
-			char * ret = strdup(str->c_str());
-			delete str;
-			return ret;
-		}
+		string str = session::get_default()->get_string(offset-1,len);
+		char * ret = strdup(str.c_str());
+		return ret;
 	}
 	catch(std::exception &e)
 	{

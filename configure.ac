@@ -331,6 +331,7 @@ AC_CHECK_HEADER(malloc.h, AC_DEFINE(HAVE_MALLOC_H,,[do we have malloc.h?]))
 
 AC_CHECK_FUNCS(getaddrinfo, AC_DEFINE(HAVE_GETADDRINFO) )
 AC_CHECK_FUNC(vasprintf, AC_DEFINE(HAVE_VASPRINTF) )
+AC_CHECK_FUNC(strtok_r, AC_DEFINE(HAVE_STRTOK_R) )
 
 PKG_CHECK_EXISTS
 
@@ -402,18 +403,15 @@ if test -z "${REXX_HOME}"; then
 
 	PKG_CHECK_MODULES( [REXX], [ooRexx], app_cv_rexx=yes, AC_MSG_NOTICE([No ooRexx on pkg-config.]) )
 
-	if test "$app_cv_rexx" != "yes"; then
-
-		if test "$REXXCONFIG" != "no"; then
-			app_cv_rexx=yes
-			REXX_CFLAGS=`$REXXCONFIG --cflags`
-			REXX_LIBS=`$REXXCONFIG --libs`
-			REXX_HOME=`$REXXCONFIG --prefix`/share/ooRexx
-			AC_MSG_NOTICE([Got settings from oorexx-config.])
-		else
-			AC_MSG_NOTICE([ooRexx SDK is NOT available.])
-			app_cv_rexx="no"
-		fi
+	if test "$REXXCONFIG" != "no"; then
+		app_cv_rexx=yes
+		REXX_CFLAGS=`$REXXCONFIG --cflags`
+		REXX_LIBS=`$REXXCONFIG --libs`
+		REXX_HOME=`$REXXCONFIG --prefix`/share/ooRexx
+		AC_MSG_NOTICE([Got settings from oorexx-config.])
+	else
+		AC_MSG_NOTICE([ooRexx SDK is NOT available.])
+		app_cv_rexx="no"
 	fi
 
 else
@@ -486,16 +484,16 @@ fi
 # Setup c++ compiler flags
 if test -d "$prefix/include/libreoffice"; then
 	OO_CXXFLAGS="$OO_CXXFLAGS -I$prefix/include/libreoffice"
-	AC_MSG_NOTICE([Found libreoffice includes at $prefix/include/libreoffice]) 
+	AC_MSG_NOTICE([Found libreoffice includes at $prefix/include/libreoffice])
 elif test -d "/usr/include/libreoffice"; then
 	OO_CXXFLAGS="$OO_CXXFLAGS -I/usr/include/libreoffice"
-	AC_MSG_NOTICE([Found libreoffice includes at /usr/include/libreoffice]) 
+	AC_MSG_NOTICE([Found libreoffice includes at /usr/include/libreoffice])
 elif test -d "$OO_SDK_HOME/include"; then
 	OO_CXXFLAGS="$OO_CXXFLAGS -I$OO_SDK_HOME/include"
-	AC_MSG_NOTICE([Found libreoffice includes at $OO_SDK_HOME/include]) 
+	AC_MSG_NOTICE([Found libreoffice includes at $OO_SDK_HOME/include])
 else
 	app_cv_office="no"
-	AC_MSG_NOTICE([Can't libreoffice includes]) 
+	AC_MSG_NOTICE([Can't libreoffice includes])
 fi
 
 OO_CXXFLAGS="-DCPPU_ENV=gcc3 -Wno-strict-aliasing $OO_CXXFLAGS"
@@ -503,16 +501,16 @@ OO_CXXFLAGS="-DCPPU_ENV=gcc3 -Wno-strict-aliasing $OO_CXXFLAGS"
 # Test for IDL files
 if test -d "$OO_SDK_HOME/idl"; then
 	IDLDIR="$OO_SDK_HOME/idl"
-	AC_MSG_NOTICE([Found idl at $IDLDIR]) 
+	AC_MSG_NOTICE([Found idl at $IDLDIR])
 elif test -d "/usr/share/idl/libreoffice"; then
 	IDLDIR="/usr/share/idl/libreoffice"
-	AC_MSG_NOTICE([Found idl at $IDLDIR]) 
+	AC_MSG_NOTICE([Found idl at $IDLDIR])
 elif test -d "$libdir/libreoffice/sdk/idl"; then
 	IDLDIR="$libdir/libreoffice/sdk/idl"
-	AC_MSG_NOTICE([Found idl at $IDLDIR]) 
+	AC_MSG_NOTICE([Found idl at $IDLDIR])
 else
 	app_cv_office="no"
-	AC_MSG_NOTICE([Can't find idl path]) 
+	AC_MSG_NOTICE([Can't find idl path])
 fi
 
 OO_SDK_URE_BIN_DIR=$OO_SDK_URE_HOME/bin
@@ -559,7 +557,7 @@ if test "$app_cv_office" == "yes" ; then
 	AC_MSG_NOTICE([libreoffice sdk is present.])
 	EXTENSIONS="$EXTENSIONS oxt"
 else
-	AC_MSG_NOTICE([libreoffice sdk is NOT present.])
+	AC_MSG_NOTICE([libreoffice sdk is NOT present or disabled.])
 fi
 
 AC_SUBST(OFFICE_HOME)

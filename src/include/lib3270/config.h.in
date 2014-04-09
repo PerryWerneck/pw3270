@@ -75,5 +75,6 @@
 
 	#undef HAVE_MALLOC_H
 	#undef HAVE_OOREXXAPI_H
+	#undef HAVE_STRTOK_R
 
 #endif /* LIB3270_CONFIG_INCLUDED */
