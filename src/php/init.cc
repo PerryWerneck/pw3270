@@ -64,6 +64,13 @@ PHP_METHOD(tn3270, __construct)
 		obj->hSession = session::start();
 	}
 
+	if(szURL)
+	{
+		char text[szURL+1];
+		strncpy(text,url,szURL);
+		text[szURL] = 0;
+		obj->hSession->set_url(text);
+	}
 
 }
 

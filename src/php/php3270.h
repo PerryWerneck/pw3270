@@ -48,6 +48,8 @@
 
 	// 3270 session methods
 	PHP_METHOD(tn3270,__construct);
+	PHP_METHOD(tn3270,connect);
+	PHP_METHOD(tn3270,disconnect);
 
 
 	#undef PACKAGE_NAME
