@@ -239,6 +239,7 @@ AC_MSG_RESULT($app_cv_fvisibility_ok)
 if test $app_cv_fvisibility_ok = yes; then
   CFLAGS="$CFLAGS -fvisibility=hidden"
   OO_CXXFLAGS="$OO_CXXFLAGS -fvisibility=hidden"
+  CXXFLAGS="$CXXFLAGS -fvisibility=hidden"
 fi
 
 #--[ Options ]------------------------------------------------------------------------------------------------------------------------------------------------
@@ -624,6 +625,7 @@ AC_CONFIG_FILES([
 	makegtkruntime.sh
 	src/sample/Makefile
 	mac/pw3270.bundle
+	src/php/Makefile
 ])
 
 dnl Output the generated config.status script.

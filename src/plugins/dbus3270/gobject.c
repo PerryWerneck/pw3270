@@ -109,7 +109,7 @@ void pw3270_dbus_set_host(PW3270Dbus *object, const gchar *uri, DBusGMethodInvoc
 
 	g_message("Changing host to \"%s\" by remote request",uri);
 
-	dbus_g_method_return(context,lib3270_set_url(pw3270_dbus_get_session_handle(PW3270_DBUS(object)),uri) != NULL);
+	dbus_g_method_return(context,lib3270_set_url(pw3270_dbus_get_session_handle(PW3270_DBUS(object)),uri) == NULL);
 }
 
 void pw3270_dbus_disconnect(PW3270Dbus *object, DBusGMethodInvocation *context)

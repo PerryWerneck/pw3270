@@ -425,7 +425,7 @@
 
 		int set_url(const char *uri)
 		{
-			return (_set_url(hSession,uri) != 0) ? 1 : 0;
+			return (_set_url(hSession,uri) == 0);
 		}
 
 		int disconnect(void)

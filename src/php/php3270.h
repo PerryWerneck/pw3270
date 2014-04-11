@@ -52,6 +52,9 @@
 	PHP_METHOD(tn3270,disconnect);
 	PHP_METHOD(tn3270,isconnected);
 	PHP_METHOD(tn3270,isready);
+	PHP_METHOD(tn3270,waitforready);
+	PHP_METHOD(tn3270,wait);
+	PHP_METHOD(tn3270,iterate);
 
 	PHP_METHOD(tn3270,pfkey);
 	PHP_METHOD(tn3270,pakey);

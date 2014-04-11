@@ -483,7 +483,10 @@
 		int rc = 0;
 
 		if(host && *host)
+		{
 			rc = set_url(host);
+			trace("%s: set_url(%s) = %d",__FUNCTION__,host,rc);
+		}
 
 		if(!rc)
 			rc = connect(wait);

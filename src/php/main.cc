@@ -43,11 +43,16 @@ static zend_object_handlers	  tn3270_object_handlers;
 zend_function_entry tn3270_methods[] =
 {
     PHP_ME( tn3270,	__construct,	NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
+
     PHP_ME( tn3270,	connect,		NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
     PHP_ME( tn3270,	disconnect,		NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
 
     PHP_ME( tn3270,	isconnected,	NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
     PHP_ME( tn3270,	isready,		NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
+
+    PHP_ME( tn3270,	waitforready,	NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
+    PHP_ME( tn3270,	wait,			NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
+    PHP_ME( tn3270,	iterate,		NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
 
     PHP_ME( tn3270,	pfkey,			NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
     PHP_ME( tn3270,	pakey,			NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
@@ -129,34 +134,3 @@ extern "C"
 }
 // #endif
 
-PHP_METHOD(tn3270, connect)
-{
-	const char		* host;
-	int				  szHost;
-	zend_bool		  wait	= 0;
-	int				  rc	= 0;
-	tn3270_object	* obj	= (tn3270_object *) zend_object_store_get_object(getThis() TSRMLS_CC);
-
-	if(zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|sb", &host, &szHost, &wait) == FAILURE)
-		RETURN_NULL();
-
-	if(szHost)
-	{
-		char text[szHost+1];
-		strncpy(text,host,szHost);
-		text[szHost] = 0;
-		rc = obj->hSession->connect(text,wait);
-	}
-	else
-	{
-		rc = obj->hSession->connect();
-	}
-
-	RETURN_LONG(rc);
-}
-
-PHP_METHOD(tn3270, disconnect)
-{
-	tn3270_object	* obj = (tn3270_object *) zend_object_store_get_object(getThis() TSRMLS_CC);
-	RETURN_LONG(obj->hSession->disconnect());
-}

@@ -7,7 +7,8 @@
 	$rc = $host->connect();
 	print("connect() exits with rc=" . $rc . "\n");
 
-
+	$rc = $host->waitforready(10);
+	print("waitforready() exits with rc=" . $rc . "\n");
 
 	$rc = $host->disconnect();
 	print("disconnect() exits with rc=" . $rc . "\n");
