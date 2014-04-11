@@ -60,6 +60,10 @@
 	PHP_METHOD(tn3270,pakey);
 	PHP_METHOD(tn3270,enter);
 
+	PHP_METHOD(tn3270,getstringat);
+	PHP_METHOD(tn3270,setstringat);
+	PHP_METHOD(tn3270,cmpstringat);
+
 
 	#undef PACKAGE_NAME
 	#undef PACKAGE_VERSION

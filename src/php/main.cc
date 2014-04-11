@@ -58,6 +58,10 @@ zend_function_entry tn3270_methods[] =
     PHP_ME( tn3270,	pakey,			NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
     PHP_ME( tn3270,	enter,			NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
 
+    PHP_ME( tn3270,	getstringat,	NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
+    PHP_ME( tn3270,	setstringat,	NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
+    PHP_ME( tn3270,	cmpstringat,	NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
+
     {NULL, NULL, NULL}
 };
 

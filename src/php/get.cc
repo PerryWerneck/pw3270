@@ -47,3 +47,37 @@ PHP_METHOD(tn3270, isready)
 	RETURN_BOOL(obj->hSession->is_ready());
 }
 
+PHP_METHOD(tn3270, getstringat)
+{
+	tn3270_object	* obj = (tn3270_object *) zend_object_store_get_object(getThis() TSRMLS_CC);
+	long 			  row;
+	long			  col;
+	long 			  sz;
+
+	if(zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lll", &row, &col, &sz) == FAILURE)
+		RETURN_NULL();
+
+	RETURN_STRING(obj->hSession->get_string_at(row,col,sz).c_str(),1);
+}
+
+PHP_METHOD(tn3270, cmpstringat)
+{
+	tn3270_object	* obj = (tn3270_object *) zend_object_store_get_object(getThis() TSRMLS_CC);
+	long 			  row;
+	long			  col;
+	const char 	* text;
+	int 			  szText;
+
+	if(zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lls", &row, &col, &text, &szText) == FAILURE)
+		RETURN_NULL();
+
+	if(!szText)
+		RETURN_NULL();
+
+	char buffer[szText+1];
+	memcpy(buffer,text,szText);
+	buffer[szText] = 0;
+
+	RETURN_LONG(obj->hSession->cmp_string_at(row,col,buffer));
+}
+
