@@ -48,10 +48,12 @@
 		<Unit filename="../classlib/remote.cc" />
 		<Unit filename="../classlib/session.cc" />
 		<Unit filename="../include/pw3270/class.h" />
+		<Unit filename="get.cc" />
 		<Unit filename="init.cc" />
 		<Unit filename="main.cc" />
 		<Unit filename="php3270.h" />
 		<Unit filename="sample.php" />
+		<Unit filename="set.cc" />
 		<Extensions>
 			<code_completion />
 			<envvars />

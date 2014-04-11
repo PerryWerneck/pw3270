@@ -18,7 +18,7 @@
  * programa; se não, escreva para a Free Software Foundation, Inc., 51 Franklin
  * St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * Este programa está nomeado como php3270.h e possui - linhas de código.
+ * Este programa está nomeado como set.cc e possui - linhas de código.
  *
  * Contatos:
  *
@@ -31,46 +31,36 @@
  *
  */
 
-#ifndef PHP_LIB3270_INCLUDED
+ #include "php3270.h"
 
-	#define PHP_LIB3270_INCLUDED 1
+/*--[ Implement ]--------------------------------------------------------------------------------------------------*/
 
-	#define PHP_LIB3270_EXTNAME		"lib3270"
-	#define PHP_LIB3270_EXTVER		"5.0"
+PHP_METHOD(tn3270, pfkey)
+{
+	long			  id;
+	tn3270_object	* obj		= (tn3270_object *) zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	extern "C"
-	{
-		#include "php.h"
-	}
+	// http://www.php.net/manual/pt_BR/internals2.funcs.php
+	if(zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &id) == FAILURE)
+		RETURN_NULL();
 
-	extern zend_module_entry lib3270_module_entry;
-	#define phpext_lib3270_ptr &lib3270_module_entry;
+	RETURN_LONG(obj->hSession->pfkey((int) id));
+}
 
-	// 3270 session methods
-	PHP_METHOD(tn3270,__construct);
-	PHP_METHOD(tn3270,connect);
-	PHP_METHOD(tn3270,disconnect);
-	PHP_METHOD(tn3270,isconnected);
-	PHP_METHOD(tn3270,isready);
+PHP_METHOD(tn3270, pakey)
+{
+	long			  id;
+	tn3270_object	* obj		= (tn3270_object *) zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	PHP_METHOD(tn3270,pfkey);
-	PHP_METHOD(tn3270,pakey);
-	PHP_METHOD(tn3270,enter);
+	// http://www.php.net/manual/pt_BR/internals2.funcs.php
+	if(zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &id) == FAILURE)
+		RETURN_NULL();
 
+	RETURN_LONG(obj->hSession->pakey((int) id));
+}
 
-	#undef PACKAGE_NAME
-	#undef PACKAGE_VERSION
-	#undef HAVE_MALLOC_H
-	#include <pw3270/class.h>
-
-	// PHP object
-	using namespace PW3270_NAMESPACE;
-
-	struct tn3270_object
-	{
-		zend_object	  std;
-		session		* hSession;
-	};
-
-
-#endif // PHP_LIB3270_INCLUDED
+PHP_METHOD(tn3270, enter)
+{
+	tn3270_object	* obj		= (tn3270_object *) zend_object_store_get_object(getThis() TSRMLS_CC);
+	RETURN_LONG(obj->hSession->enter());
+}
