@@ -57,7 +57,10 @@ PHP_METHOD(tn3270, getstringat)
 	if(zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lll", &row, &col, &sz) == FAILURE)
 		RETURN_NULL();
 
-	RETURN_STRING(obj->hSession->get_string_at(row,col,sz).c_str(),1);
+	string str = obj->hSession->get_string_at(row,col,sz);
+
+	trace("String = [%s]",str.c_str());
+	RETURN_STRING(str.c_str(),1);
 }
 
 PHP_METHOD(tn3270, cmpstringat)

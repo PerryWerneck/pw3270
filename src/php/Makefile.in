@@ -35,6 +35,7 @@ bindir=@bindir@
 sbindir=@sbindir@
 libdir=@libdir@
 includedir=@includedir@
+sysconfdir=@sysconfdir@
 
 #---[ Tools ]------------------------------------------------------------------
 
@@ -72,10 +73,25 @@ CXXFLAGS=@CXXFLAGS@ @DLL_CFLAGS@ `$(PHPCONFIG) --includes` -I../include
 $(OBJDBG)/%.o: %.cc php3270.h Makefile
 	@echo "  CC   `basename $@`"
 	@mkdir -p `dirname $@`
-	$(CXX) -DDEBUG=1 $(CXXFLAGS) -o $@ -c $<
+	@$(CXX) -DDEBUG=1 $(CXXFLAGS) -o $@ -c $<
 
+$(OBJRLS)/%.o: %.cc php3270.h Makefile
+	@echo "  CC   `basename $@`"
+	@mkdir -p `dirname $@`
+	@$(CXX) -DNDEBUG=1 $(CXXFLAGS) -o $@ -c $<
 
 #---[ Release targets ]--------------------------------------------------------
+
+all: $(BINRLS)/php3270@DLLEXT@
+
+Release: $(BINRLS)/php3270@DLLEXT@
+
+$(BINRLS)/php3270@DLLEXT@:	$(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SRC)@OBJEXT@) \
+				$(CLASS_RELEASE_OBJECTS)
+	@echo "  LD   `basename $@`"
+	@$(MKDIR) `dirname $@`
+	@$(CXX) -shared $(LDFLAGS) $(OO_LDFLAGS) $(CLASS_LIBS) -o $@ $^
+
 
 #---[ Debug targets ]----------------------------------------------------------
 
@@ -92,6 +108,15 @@ run: $(BINDBG)/php3270@DLLEXT@
 	php -d extension=$(BINDBG)/php3270@DLLEXT@ sample.php
 
 #---[ Misc targets ]-----------------------------------------------------------
+
+install: $(BINDBG)/php3270@DLLEXT@
+	@$(MKDIR) $(DESTDIR)/`$(PHPCONFIG) --extension-dir`
+	@$(INSTALL_PROGRAM) $(BINDBG)/php3270@DLLEXT@ $(DESTDIR)/`$(PHPCONFIG) --extension-dir`/tn3270@DLLEXT@
+
+	@$(MKDIR) $(DESTDIR)/$(sysconfdir)/php`$(PHPCONFIG) --version | cut -d. -f1`/conf.d
+	@$(INSTALL_DATA) php.ini $(DESTDIR)/$(sysconfdir)/php`$(PHPCONFIG) --version | cut -d. -f1`/conf.d/tn3270.ini
+
+cleanDebug: clean
 
 clean:
 	@rm -fr $(OBJDIR)
