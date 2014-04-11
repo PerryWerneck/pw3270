@@ -31,12 +31,12 @@
  *
  */
 
-#ifndef PHP_LIB3270_INCLUDED
+#ifndef PHP3270_INCLUDED
 
-	#define PHP_LIB3270_INCLUDED 1
+	#define PHP3270_INCLUDED 1
 
-	#define PHP_LIB3270_EXTNAME		"lib3270"
-	#define PHP_LIB3270_EXTVER		"5.0"
+	#define PHP3270_EXTNAME		"@PACKAGE_NAME@"
+	#define PHP3270_EXTVER		"@PACKAGE_VERSION@"
 
 	extern "C"
 	{

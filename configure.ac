@@ -626,6 +626,7 @@ AC_CONFIG_FILES([
 	src/sample/Makefile
 	mac/pw3270.bundle
 	src/php/Makefile
+	src/php/php3270.h
 ])
 
 dnl Output the generated config.status script.

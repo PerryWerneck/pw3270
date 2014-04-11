@@ -118,7 +118,7 @@ zend_module_entry lib3270_module_entry =
 #if ZEND_MODULE_API_NO >= 20010901
     STANDARD_MODULE_HEADER,
 #endif
-    PHP_LIB3270_EXTNAME,
+    PHP3270_EXTNAME,
     NULL,                  /* Functions */
     PHP_MINIT(tn3270),
     NULL,                  /* MSHUTDOWN */
@@ -126,7 +126,7 @@ zend_module_entry lib3270_module_entry =
     NULL,                  /* RSHUTDOWN */
     NULL,                  /* MINFO */
 #if ZEND_MODULE_API_NO >= 20010901
-    PHP_LIB3270_EXTVER,
+    PHP3270_EXTVER,
 #endif
     STANDARD_MODULE_PROPERTIES
 };
