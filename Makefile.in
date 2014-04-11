@@ -157,6 +157,13 @@ $(BINDIR)/Release/$(PACKAGE_NAME).oxt:
 	@$(MKDIR) `dirname $@`
 	@cp src/loffice/.bin/Release/$(PACKAGE_NAME).oxt $@
 
+php: $(BINDIR)/Release/tn3270.so
+
+$(BINDIR)/Release/tn3270.so:
+	@$(MAKE) -C src/php Release
+	@$(MKDIR) `dirname $@`
+	@cp src/php/.bin/Release/php3270.so $@
+
 #---[ Debug targets ]----------------------------------------------------------
 
 Debug: $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT) \
@@ -341,6 +348,9 @@ install-sdk:
 install-oxt:
 	@$(MAKE) BINDIR=../../.bin LIB3270_CFLAGS="-I../../src/include" -C src/loffice install
 
+install-php:
+	@$(MAKE) -C src/php install
+
 install-plugin-rexx:
 	@$(MAKE) BINDIR=../../../.bin LIB3270_CFLAGS="-I../../src/include" -C src/plugins/rx3270 install
 
@@ -359,6 +369,7 @@ clean:
 	@make -C src/plugins/rx3270 clean
 	@make -C src/plugins/dbus3270 clean
 	@make -C src/loffice clean
+	@make -C src/php clean
 	@make -C src/classlib clean
 	@rm -f $(PACKAGE_NAME).png
 	@rm -f $(PACKAGE_NAME)-logo.png

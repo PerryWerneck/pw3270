@@ -34,7 +34,12 @@
 %define _release	%{_rel}
 %define _distro		Linux
 %define _redhat		%(test -e /etc/redhat-release && echo 1 || echo 0)
+%define _php		%(which php-config 2> /dev/null > /dev/null  && echo 1 || echo 0)
 %define _bldreq		gtk3-devel libopenssl-devel
+
+%if 0%{?_php}
+	%define phpmajor %(php-config --version | cut -d. -f1)
+%endif
 
 %if 0%{?suse_version}
 	%define _release %{_rel}.suse%{suse_version}
@@ -77,6 +82,8 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 Requires:       openssl shared-mime-info lib3270 = @PACKAGE_VERSION@
 Provides:	lib@PACKAGE@ = @PACKAGE_VERSION@ lib@PACKAGE@.so = @PACKAGE_VERSION@
 Distribution:	%_distro
+
+BuildRequires:	which
 BuildRequires:	autoconf >= 2.61
 BuildRequires:	automake
 BuildRequires:	gcc-c++
@@ -93,6 +100,10 @@ BuildRequires:  dbus-1-glib-devel
 %if 0%{?_office}
 BuildRequires:	libreoffice-sdk
 BuildRequires:	ucpp
+%endif
+
+%if 0%{?_php}
+BuildRequires:	php-devel
 %endif
 
 BuildRequires:  rsvg-view
@@ -170,6 +181,21 @@ allowing rexx scripts to access tn3270e hosts.
 Revision @PACKAGE_REVISION@ from @PACKAGE_SOURCE@
 %endif
 
+%if 0%{?_php}
+
+%package -n php%{phpmajor}-tn3270
+Summary:	PHP%{phpmajor} Extension Module implementing tn3270 protocol
+Group:		Development/Libraries/PHP
+Requires:	lib3270 = @PACKAGE_VERSION@
+
+%description -n php%{phpmajor}-tn3270
+This is an extension for acessing 3270 hosts directly
+from PHP apps.
+
+Revision @PACKAGE_REVISION@ from @PACKAGE_SOURCE@
+
+%endif
+
 #---[ Build & Install ]-----------------------------------------------------------------------------------------------
 
 %prep
@@ -185,9 +211,9 @@ export FFLAGS="$RPM_OPT_FLAGS"
 %if 0%{?_office}
 export OFFICE_HOME=%{_libdir}/libreoffice
 export OO_SDK_HOME=%{_libdir}/libreoffice/sdk
-%configure
+%configure --sysconfdir=%{_sysconfdir}
 %else
-%configure --disable-office
+%configure --disable-office --sysconfdir=%{_sysconfdir}
 %endif
 
 %build
@@ -270,6 +296,13 @@ rm -rf $RPM_BUILD_ROOT
 %{_rexxclassdir}/rx3270.cls
 %{_libdir}/@PACKAGE_NAME@-plugins/rx3270.so
 %{_datadir}/pw3270/ui/80rexx.xml
+%endif
+
+%if 0%{?_php}
+%files -n php%{phpmajor}-tn3270
+%defattr(-,root,root)
+%{_sysconfdir}/php%{phpmajor}/conf.d/tn3270.ini
+%{_libdir}/php%{phpmajor}/extensions/tn3270.so
 %endif
 
 #---[ Scripts ]-------------------------------------------------------------------------------------------------------

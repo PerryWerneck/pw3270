@@ -387,6 +387,7 @@ if test -z "${PHPCONFIG}"; then
 	AC_MSG_NOTICE([Program php-config not found. Use --with-php-config=path to specify absolute path to the php-config tool.])
 else
 	AC_DEFINE(HAVE_PHP)
+	EXTENSIONS="$EXTENSIONS php"
 fi
 
 AC_SUBST(PHPCONFIG)
