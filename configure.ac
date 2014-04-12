@@ -103,6 +103,7 @@ AC_SUBST(PACKAGE_LEVEL,"APP_LEVEL")
 
 DLL_CFLAGS=""
 DLL_FLAGS="-shared"
+SYSDLL_FLAGS="-shared"
 SOCKET_LIBS=""
 LIB3270_REQUIRES=""
 
@@ -131,6 +132,10 @@ case "$host" in
 		CFLAGS="$CFLAGS -mms-bitfields"
 		localedir="locale"
 		DLL_FLAGS="-shared -Wl,--add-stdcall-alias,--enable-stdcall-fixup"
+
+		# http://stackoverflow.com/questions/18138635/mingw-exe-requires-a-few-gcc-dlls-regardless-of-the-code
+		SYSDLL_FLAGS="-shared -static-libgcc -static-libstdc++ -Wl,--add-stdcall-alias,--enable-stdcall-fixup"
+
 		LDSOFLAGS="-Wl,-soname,\`basename \$@\`"
 		LDAPPFLAGS="-mwindows"
 		LDLIBFLAGS="-Wl,--output-def,\$@.def"
@@ -249,11 +254,19 @@ AC_ARG_ENABLE([pic],
 [
 	app_cv_pic="$enableval"
 ],[
-	if test "$host_cpu" = "x86_64"; then
-		app_cv_pic="yes"
-	else
+	case "$host-$host_cpu" in
+        *-mingw32-*)
 		app_cv_pic="no"
-	fi
+		;;
+
+	*-x86_64)
+		app_cv_pic="yes"
+		;;
+
+	*)
+		app_cv_pic="no"
+	esac
+
 ])
 
 AC_ARG_ENABLE([registry],
@@ -394,6 +407,7 @@ AC_SUBST(PHPCONFIG)
 
 #--[ ooRexx ]-----------------------------------------------------------------------------------------------------------------------------------------------
 
+AC_ARG_ENABLE([rexx],[AS_HELP_STRING([--disable-rexx], [Disable ooRexx plugin & extension])],[ app_cv_rexx="$enableval" ],[ app_cv_rexx="yes" ])
 AC_ARG_VAR([REXX_HOME], [ooRexx home])
 
 if test -z "${REXX_HOME}"; then
@@ -406,7 +420,6 @@ if test -z "${REXX_HOME}"; then
 	PKG_CHECK_MODULES( [REXX], [ooRexx], app_cv_rexx=yes, AC_MSG_NOTICE([No ooRexx on pkg-config.]) )
 
 	if test "$REXXCONFIG" != "no"; then
-		app_cv_rexx=yes
 		REXX_CFLAGS=`$REXXCONFIG --cflags`
 		REXX_LIBS=`$REXXCONFIG --libs`
 		REXX_HOME=`$REXXCONFIG --prefix`/share/ooRexx
@@ -418,8 +431,6 @@ if test -z "${REXX_HOME}"; then
 
 else
 	if test -e "${REXX_HOME}/api/oorexxapi.h"; then
-
-		app_cv_rexx="yes"
 
 		AC_MSG_NOTICE([Setting rexx sdk from REXX_HOME])
 
@@ -439,7 +450,9 @@ if test "$app_cv_rexx" == "yes"; then
 	AC_DEFINE(HAVE_REXX)
 	AC_DEFINE(HAVE_OOREXXAPI_H)
 	PLUGINS="$PLUGINS rx3270"
-	AC_MSG_NOTICE([Rexx plugin enabled.])
+	AC_MSG_NOTICE([ooRexx plugin & extension are enabled.])
+else
+	AC_MSG_NOTICE([ooRexx is NOT present or disabled.])
 fi
 
 AC_ARG_WITH([rexxlibdir], [AS_HELP_STRING([--with-rexxlibdir], [Path to rexx extension libs])], [ REXX_LIBDIR=$withval ],[ REXX_LIBDIR=$libdir ])
@@ -583,6 +596,7 @@ AC_SUBST(EXEEXT)
 AC_SUBST(DLLPREFIX)
 AC_SUBST(DLLEXT)
 AC_SUBST(DLL_FLAGS)
+AC_SUBST(SYSDLL_FLAGS)
 AC_SUBST(DLL_CFLAGS)
 AC_SUBST(DLLDIR)
 AC_SUBST(LDSOFLAGS)

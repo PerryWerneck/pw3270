@@ -58,7 +58,8 @@ XGETTEXT=@XGETTEXT@
 
 #---[ Rules ]------------------------------------------------------------------
 
-DLL_FLAGS=@DLL_FLAGS@
+DLL_FLAGS=@SYSDLL_FLAGS@
+
 DEBUG_CFLAGS=-DDEBUG=1 -g -Wall
 
 LIB3270_MODE ?= Default
