@@ -369,11 +369,7 @@
 
 	string session::get_string_at(int row, int col, size_t sz)
 	{
-		string str = this->get_text_at(row,col,sz);
-
-		trace("String não convertida: [%s]",str.c_str());
-
-		return this->get_local_text(str.c_str());
+		return this->get_local_text(this->get_text_at(row,col,sz).c_str());
 	}
 
 	int session::set_string_at(int row, int col, const char *str)
