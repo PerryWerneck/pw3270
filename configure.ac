@@ -366,7 +366,7 @@ AC_SUBST(GLIB_CFLAGS)
 
 #--[ Check DBUS ]---------------------------------------------------------------------------------------------------------------------------------------------
 
-PKG_CHECK_MODULES( [DBUS], [dbus-1] )
+PKG_CHECK_MODULES( [DBUS], [dbus-1], app_cv_libdbus=yes, AC_MSG_NOTICE([ No DBUS support.]) )
 AC_SUBST(DBUS_LIBS)
 AC_SUBST(DBUS_CFLAGS)
 
