@@ -496,29 +496,43 @@ AC_ARG_VAR([OFFICE_HOME], [Libreoffice home])
 AC_ARG_VAR([OO_SDK_HOME], [Libreoffice SDK home])
 AC_ARG_VAR([OO_SDK_URE_HOME], [Libreoffice URE home])
 
-if test "_$OFFICE_HOME" == "_" ; then
-	if test "$host_cpu" = "x86_64"; then
-		OFFICE_HOME="/usr/lib64/libreoffice"
-	else
-		OFFICE_HOME="/usr/lib/libreoffice"
-	fi
-fi
+case "$host" in
+        *-mingw32)
+		app_cv_office="no"
+		;;
 
-if test "_$OO_SDK_HOME" == "_" ; then
-	OO_SDK_HOME=$OFFICE_HOME/sdk
-fi
+	*-apple-*)
+		app_cv_office="no"
+		;;
 
-if test "_$OO_SDK_URE_HOME" == "_" ; then
-	if test -d $OFFICE_HOME/ure; then
-		OO_SDK_URE_HOME="$OFFICE_HOME/ure"
-	else
-		if test "$host_cpu" = "x86_64"; then
-			OO_SDK_URE_HOME="/usr/lib64/ure"
-		else
-			OO_SDK_URE_HOME="/usr/lib/ure"
+	*)
+		OO_LDFLAGS="-luno_cppu -luno_cppuhelpergcc3 -luno_salhelpergcc3"
+
+		if test "_$OFFICE_HOME" == "_" ; then
+			if test "$host_cpu" = "x86_64"; then
+				OFFICE_HOME="/usr/lib64/libreoffice"
+			else
+				OFFICE_HOME="/usr/lib/libreoffice"
+			fi
 		fi
-	fi
-fi
+
+		if test "_$OO_SDK_HOME" == "_" ; then
+			OO_SDK_HOME=$OFFICE_HOME/sdk
+		fi
+
+		if test "_$OO_SDK_URE_HOME" == "_" ; then
+			if test -d $OFFICE_HOME/ure; then
+				OO_SDK_URE_HOME="$OFFICE_HOME/ure"
+			else
+				if test "$host_cpu" = "x86_64"; then
+					OO_SDK_URE_HOME="/usr/lib64/ure"
+				else
+					OO_SDK_URE_HOME="/usr/lib/ure"
+				fi
+			fi
+		fi
+
+esac
 
 # Setup c++ compiler flags
 if test -d "$prefix/include/libreoffice"; then
@@ -604,6 +618,7 @@ AC_SUBST(OO_SDK_HOME)
 AC_SUBST(OO_SDK_URE_HOME)
 AC_SUBST(IDLDIR)
 AC_SUBST(OO_CXXFLAGS)
+AC_SUBST(OO_LDFLAGS)
 
 #--[ Pre-reqs ]-----------------------------------------------------------------------------------------------------------------------------------------------
 AC_SUBST(LIB3270_REQUIRES)

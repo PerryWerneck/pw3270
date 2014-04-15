@@ -88,16 +88,10 @@ include $(CLASSLIBDIR)/class.mak
 #---[ Build options ]----------------------------------------------------------
 
 CXXFLAGS=@CXXFLAGS@ @OO_CXXFLAGS@ -I../include -I./include -DLANGUAGE_BINDING_NAME=\"gcc3\"
-#
-#CPPUENV="gcc3"
-#CXXFLAGS=@CXXFLAGS@ -fvisibility=hidden @DLL_CFLAGS@ -Wno-strict-aliasing \
-#			-I../include -I./include -I$(includedir)/libreoffice \
-#			-DCPPU_ENV=$(CPPUENV) -DLANGUAGE_BINDING_NAME=\"$(CPPUENV)\"
-#
 
 OO_LDFLAGS=-L$(OO_SDK_HOME)/lib -L$(OO_SDK_URE_HOME)/lib \
 			-Wl,-rpath-link=$(OO_SDK_URE_HOME)/lib,-rpath=$(OO_SDK_URE_HOME)/lib \
-			-luno_cppu -luno_cppuhelpergcc3 -luno_salhelpergcc3
+			@OO_LDFLAGS@
 
 #---[ Rules ]------------------------------------------------------------------
 
@@ -145,6 +139,8 @@ include/$(PACKAGE_NAME)/lib3270.hpp: $(RDBDIR)/$(PACKAGE_NAME).rdb
 	@$(CPPUMAKER) -O./include -T$(PACKAGE_NAME).lib3270 $(TYPES_RDB) $<
 
 #---[ Release targets ]--------------------------------------------------------
+
+all: $(BINDIR)/$(PACKAGE_NAME).oxt
 
 Release: include/$(PACKAGE_NAME)/lib3270.hpp \
 		$(foreach CLS, $(UNO_CLASSES), include/$(CLS).hpp) \
