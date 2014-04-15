@@ -200,7 +200,7 @@ $(BINRLS)/$(PACKAGE_NAME).uno@DLLEXT@: \
 			$(CLASS_RELEASE_OBJECTS)
 	@echo "  LD   `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CXX) -shared $(LDFLAGS) $(OO_LDFLAGS) $(CLASS_LIBS) -o $@ $^
+	@$(CXX) @SYSDLL_FLAGS@ $(LDFLAGS) $(OO_LDFLAGS) $(CLASS_LIBS) -o $@ $^
 
 
 #---[ Debug targets ]----------------------------------------------------------
@@ -220,7 +220,7 @@ $(BINDBG)/$(PACKAGE_NAME).uno@DLLEXT@: \
 			$(CLASS_DEBUG_OBJECTS)
 	@echo "  LD   `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CXX) -shared $(LDFLAGS) $(OO_LDFLAGS) $(CLASS_LIBS) -o $@ $^
+	@$(CXX) @SYSDLL_FLAGS@ $(LDFLAGS) $(OO_LDFLAGS) $(CLASS_LIBS) -o $@ $^
 
 
 $(BINDBG)/$(PACKAGE_NAME).oxt: \
