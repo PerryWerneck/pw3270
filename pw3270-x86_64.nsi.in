@@ -51,6 +51,7 @@ SubSection "@PACKAGE@" SecMain
 	Section "Core" SecCore
 
 		SetRegView 64
+		${DisableX64FSRedirection}
 
 		# define the output path for this file
 		setOutPath $INSTDIR
