@@ -58,7 +58,8 @@ XGETTEXT=@XGETTEXT@
 
 #---[ Rules ]------------------------------------------------------------------
 
-DLL_FLAGS=@SYSDLL_FLAGS@
+DLL_FLAGS=@DLL_FLAGS@
+SYSDLL_FLAGS=@SYSDLL_FLAGS@
 
 DEBUG_CFLAGS=-DDEBUG=1 -g -Wall
 
@@ -123,7 +124,7 @@ $(BINRLS)/plugins/$(MODULE_NAME)@DLLEXT@: $(foreach SRC, $(basename $(PLUGIN_SRC
 $(BINRLS)/libhllapi@DLLEXT@: $(foreach SRC, $(basename $(HLLAPI_SRC)), $(OBJRLS)/$(SRC).o) $(CLASS_RELEASE_OBJECTS)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(LD) $(DLL_FLAGS) @LDSOFLAGS@ $(LDFLAGS) @LDLIBFLAGS@ -o $@ $^ $(LIBS)
+	@$(LD) $(SYSDLL_FLAGS) @LDSOFLAGS@ $(LDFLAGS) @LDLIBFLAGS@ -o $@ $^ $(LIBS)
 
 #---[ Debug targets ]----------------------------------------------------------
 
@@ -137,7 +138,7 @@ $(BINDBG)/plugins/$(MODULE_NAME)@DLLEXT@: $(foreach SRC, $(basename $(PLUGIN_SRC
 $(BINDBG)/libhllapi@DLLEXT@: $(foreach SRC, $(basename $(HLLAPI_SRC)), $(OBJDBG)/$(SRC).o) $(CLASS_DEBUG_OBJECTS)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(LD) $(DLL_FLAGS) @LDSOFLAGS@ $(LDFLAGS) @LDLIBFLAGS@ -o $@ $^ $(LIBS) $(CLASS_LIBS)
+	@$(LD) $(SYSDLL_FLAGS) @LDSOFLAGS@ $(LDFLAGS) @LDLIBFLAGS@ -o $@ $^ $(LIBS) $(CLASS_LIBS)
 
 #---[ Misc targets ]-----------------------------------------------------------
 
