@@ -32,6 +32,7 @@
  */
 
  #include "php3270.h"
+ #include <Zend/zend_exceptions.h>
 
 /*--[ Implement ]--------------------------------------------------------------------------------------------------*/
 
@@ -51,25 +52,34 @@ PHP_METHOD(tn3270, __construct)
 
 	trace("szName=%d",szName);
 
-	if(szName)
+	try
 	{
-		char text[szName+1];
-		strncpy(text,name,szName);
-		text[szName] = 0;
-		trace("session_name=\"%s\"",text);
-		obj->hSession = session::start(text);
-	}
-	else
-	{
-		obj->hSession = session::start();
-	}
 
-	if(szURL)
+		if(szName)
+		{
+			char text[szName+1];
+			strncpy(text,name,szName);
+			text[szName] = 0;
+			trace("session_name=\"%s\"",text);
+			obj->hSession = session::start(text);
+		}
+		else
+		{
+			obj->hSession = session::start();
+		}
+
+		if(szURL)
+		{
+			char text[szURL+1];
+			strncpy(text,url,szURL);
+			text[szURL] = 0;
+			obj->hSession->set_url(text);
+		}
+
+	}
+	catch(std::exception &e)
 	{
-		char text[szURL+1];
-		strncpy(text,url,szURL);
-		text[szURL] = 0;
-		obj->hSession->set_url(text);
+		zend_throw_error_exception(zend_exception_get_default(), (char *) e.what(), 0, 0 TSRMLS_DC);
 	}
 
 }
