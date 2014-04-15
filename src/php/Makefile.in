@@ -90,7 +90,7 @@ $(BINRLS)/php3270@DLLEXT@:	$(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SR
 				$(CLASS_RELEASE_OBJECTS)
 	@echo "  LD   `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CXX) -shared $(LDFLAGS) $(OO_LDFLAGS) $(CLASS_LIBS) -o $@ $^
+	@$(CXX) @SYSDLL_FLAGS@ $(LDFLAGS) $(OO_LDFLAGS) $(CLASS_LIBS) -o $@ $^
 
 
 #---[ Debug targets ]----------------------------------------------------------
@@ -101,7 +101,7 @@ $(BINDBG)/php3270@DLLEXT@:	$(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SR
 				$(CLASS_DEBUG_OBJECTS)
 	@echo "  LD   `basename $@`"
 	@$(MKDIR) `dirname $@`
-	$(CXX) -shared $(LDFLAGS) $(OO_LDFLAGS) $(CLASS_LIBS) -o $@ $^
+	@$(CXX) @SYSDLL_FLAGS@ $(LDFLAGS) $(OO_LDFLAGS) $(CLASS_LIBS) -o $@ $^
 
 
 run: $(BINDBG)/php3270@DLLEXT@

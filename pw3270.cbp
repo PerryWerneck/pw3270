@@ -264,6 +264,15 @@
 		<Unit filename="src/oxt/pw3270.idl" />
 		<Unit filename="src/oxt/set.cxx" />
 		<Unit filename="src/oxt/testprogram.cxx" />
+		<Unit filename="src/php/Makefile.in" />
+		<Unit filename="src/php/get.cc" />
+		<Unit filename="src/php/init.cc" />
+		<Unit filename="src/php/main.cc" />
+		<Unit filename="src/php/misc.cc" />
+		<Unit filename="src/php/php.ini" />
+		<Unit filename="src/php/php3270.h" />
+		<Unit filename="src/php/sample.php" />
+		<Unit filename="src/php/set.cc" />
 		<Unit filename="src/plugins/dbus3270/Makefile.in" />
 		<Unit filename="src/plugins/dbus3270/daemon.c">
 			<Option compilerVar="CC" />

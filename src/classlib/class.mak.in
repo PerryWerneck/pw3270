@@ -24,7 +24,7 @@
 # erico.mendonca@gmail.com	(Erico Mascarenhas de Mendonça)
 #
 
-CLASS_CFLAGS=@CFLAGS@ @DLL_CFLAGS@ @DBUS_CFLAGS@ @GTK_CFLAGS@
+CLASS_CFLAGS=@CFLAGS@ @DLL_CFLAGS@ @DBUS_CFLAGS@
 CLASS_LIBS=@LIBICONV@ @DBUS_LIBS@
 
 CLASS_SRC=session.cc exception.cc local.cc remote.cc

@@ -73,11 +73,11 @@ DLL_FLAGS=-shared
 DLL_CFLAGS=@DLL_CFLAGS@
 DEBUG_CFLAGS=-DDEBUG=1 -g -Wall
 
-DBUS_CFLAGS=@DBUS_CFLAGS@
+GDBUS_CFLAGS=@GDBUS_CFLAGS@
 GLIB_CFLAGS=@GLIB_CFLAGS@
 GTK_CFLAGS=@GTK_CFLAGS@
 
-DBUS_LIBS=@DBUS_LIBS@
+GDBUS_LIBS=@GDBUS_LIBS@
 GLIB_LIBS=@GLIB_LIBS@
 GTK_LIBS=@GTK_LIBS@
 
@@ -107,12 +107,12 @@ endif
 $(OBJDBG)/%.o: %.c $(DEPENDS)
 	@echo "  CC   `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CC) $(CFLAGS) $(DLL_CFLAGS) $(DBUS_CFLAGS) $(GLIB_CFLAGS) $(GTK_CFLAGS) $(DEBUG_CFLAGS) $(LIB3270_CFLAGS) $(PW3270_CFLAGS) -o $@ -c $<
+	@$(CC) $(CFLAGS) $(DLL_CFLAGS) $(GDBUS_CFLAGS) $(GLIB_CFLAGS) $(GTK_CFLAGS) $(DEBUG_CFLAGS) $(LIB3270_CFLAGS) $(PW3270_CFLAGS) -o $@ -c $<
 
 $(OBJRLS)/%.o: %.c $(DEPENDS)
 	@echo "  CC   `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CC) $(CFLAGS) $(DLL_CFLAGS) $(DBUS_CFLAGS) $(GLIB_CFLAGS) $(GTK_CFLAGS)  $(LIB3270_CFLAGS) $(PW3270_CFLAGS) -o $@ -c $<
+	@$(CC) $(CFLAGS) $(DLL_CFLAGS) $(GDBUS_CFLAGS) $(GLIB_CFLAGS) $(GTK_CFLAGS)  $(LIB3270_CFLAGS) $(PW3270_CFLAGS) -o $@ -c $<
 
 
 #---[ Release targets ]--------------------------------------------------------
@@ -122,12 +122,12 @@ Release: $(BINRLS)/plugins/$(MODULE_NAME).so
 $(BINRLS)/plugins/$(MODULE_NAME).so: $(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJRLS)/$(SRC).o)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	$(LD) $(DLL_FLAGS) -Wl,-soname,`basename $@` $(LDFLAGS) -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(PW3270_LIBS) $(GLIB_LIBS) $(GTK_LIBS) $(DBUS_LIBS)
+	$(LD) $(DLL_FLAGS) -Wl,-soname,`basename $@` $(LDFLAGS) -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(PW3270_LIBS) $(GLIB_LIBS) $(GTK_LIBS) $(GDBUS_LIBS)
 
 $(BINRLS)/@PACKAGE_NAME@d: $(foreach SRC, $(basename $(DAEMON_SRC)), $(OBJRLS)/$(SRC).o)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CC) $(CFLAGS) -o $@ $^ $(DBUS_LIBS) $(GLIB_LIBS) $(LIB3270_LIBS)
+	@$(CC) $(CFLAGS) -o $@ $^ $(GDBUS_LIBS) $(GLIB_LIBS) $(LIB3270_LIBS)
 
 #---[ Debug targets ]----------------------------------------------------------
 
@@ -136,7 +136,7 @@ Debug: $(BINDBG)/plugins/$(MODULE_NAME).so
 $(BINDBG)/plugins/$(MODULE_NAME).so: $(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJDBG)/$(SRC).o)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(LD) $(DLL_FLAGS) @DBGRPATH@ -Wl,-soname,`basename $@` $(LDFLAGS) -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(PW3270_LIBS) $(GLIB_LIBS) $(GTK_LIBS) $(DBUS_LIBS)
+	@$(LD) $(DLL_FLAGS) @DBGRPATH@ -Wl,-soname,`basename $@` $(LDFLAGS) -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(PW3270_LIBS) $(GLIB_LIBS) $(GTK_LIBS) $(GDBUS_LIBS)
 
 #---[ Misc targets ]-----------------------------------------------------------
 
@@ -153,7 +153,7 @@ dbus-glue.h: pw3270dbus.xml
 $(BINDBG)/@PACKAGE_NAME@d: $(foreach SRC, $(basename $(DAEMON_SRC)), $(OBJDBG)/$(SRC).o)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CC) $(CFLAGS) -o $@ $^ $(DBUS_LIBS) $(GLIB_LIBS) $(LIB3270_LIBS)
+	@$(CC) $(CFLAGS) -o $@ $^ $(GDBUS_LIBS) $(GLIB_LIBS) $(LIB3270_LIBS)
 
 cleandebug-service: clean
 

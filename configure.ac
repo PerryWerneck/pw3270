@@ -366,9 +366,13 @@ AC_SUBST(GLIB_CFLAGS)
 
 #--[ Check DBUS ]---------------------------------------------------------------------------------------------------------------------------------------------
 
-PKG_CHECK_MODULES( [DBUS], [dbus-glib-1], app_cv_dbus=yes, AC_MSG_NOTICE([No DBUS support.])  )
+PKG_CHECK_MODULES( [DBUS], [dbus-1] )
 AC_SUBST(DBUS_LIBS)
 AC_SUBST(DBUS_CFLAGS)
+
+PKG_CHECK_MODULES( [GDBUS], [dbus-glib-1], app_cv_dbus=yes, AC_MSG_NOTICE([No GDBUS support.])  )
+AC_SUBST(GDBUS_LIBS)
+AC_SUBST(GDBUS_CFLAGS)
 
 if test "$app_cv_dbus" == "yes"; then
 	AC_DEFINE(HAVE_DBUS)
