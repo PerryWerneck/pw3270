@@ -113,8 +113,8 @@ install: $(BINDBG)/php3270@DLLEXT@
 	@$(MKDIR) $(DESTDIR)/`$(PHPCONFIG) --extension-dir`
 	@$(INSTALL_PROGRAM) $(BINDBG)/php3270@DLLEXT@ $(DESTDIR)/`$(PHPCONFIG) --extension-dir`/tn3270@DLLEXT@
 
-	@$(MKDIR) $(DESTDIR)/$(sysconfdir)/php`$(PHPCONFIG) --version | cut -d. -f1`/conf.d
-	@$(INSTALL_DATA) php.ini $(DESTDIR)/$(sysconfdir)/php`$(PHPCONFIG) --version | cut -d. -f1`/conf.d/tn3270.ini
+	@$(MKDIR) $(DESTDIR)/@PHPCONFDIR@
+	@$(INSTALL_DATA) php.ini $(DESTDIR)/@PHPCONFDIR@/tn3270.ini
 
 cleanDebug: clean
 

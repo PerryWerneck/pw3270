@@ -415,10 +415,19 @@ case "$host" in
 		else
 			AC_DEFINE(HAVE_PHP)
 			EXTENSIONS="$EXTENSIONS php"
+			PHPMAJOR=`$PHPCONFIG --version | cut -d. -f1`
+			if test -d /etc/php${PHPMAJOR}/conf.d; then
+				PHPCONFDIR=/etc/php${PHPMAJOR}/conf.d
+			else
+				PHPCONFDIR=/etc/php${PHPMAJOR}/cli
+			fi
 		fi
+
 esac
 
 AC_SUBST(PHPCONFIG)
+AC_SUBST(PHPMAJOR)
+AC_SUBST(PHPCONFDIR)
 
 #--[ ooRexx ]-----------------------------------------------------------------------------------------------------------------------------------------------
 
