@@ -134,17 +134,21 @@
 			struct hllapi_packet_text			* response;
 			DWORD								  cbSize	= sizeof(struct hllapi_packet_text)+len;
 			string								  s;
+			char 								  buffer[cbSize+2];
 
-			response = (struct hllapi_packet_text *) malloc(cbSize+2);
-			memset(response,0,cbSize+2);
+			response = (struct hllapi_packet_text *) buffer;
 
-			if(TransactNamedPipe(hPipe,(LPVOID) query, szQuery, &response, cbSize, &cbSize,NULL))
+			if(TransactNamedPipe(hPipe,(LPVOID) query, szQuery, response, cbSize, &cbSize,NULL))
 			{
-				if(response->packet_id)
+				buffer[cbSize] = 0;
+				if(!response->packet_id)
 					s.assign(response->text);
 			}
-
-			free(response);
+			else
+			{
+				trace("TransactNamedPipe error on call %d",(int) *( (unsigned char *) query));
+				s.assign("");
+			}
 
 			return s;
 		}
@@ -402,8 +406,6 @@
 			char					* str;
 			char					* ptr;
 			time_t					  timer;
-			WIN32_FIND_DATA			  FindFileData;
-
 
 			hPipe  = INVALID_HANDLE_VALUE;
 
@@ -484,6 +486,22 @@
 
 			free(str);
 
+			trace("Searching for \"%s\"",buffer);
+
+			hPipe = CreateFile(buffer,GENERIC_WRITE|GENERIC_READ,0,NULL,OPEN_EXISTING,0,NULL);
+
+			if(hPipe == INVALID_HANDLE_VALUE)
+			{
+				timer = time(0)+20;
+				while(hPipe == INVALID_HANDLE_VALUE && time(0) < timer)
+				{
+					hPipe = CreateFile(buffer,GENERIC_WRITE|GENERIC_READ,0,NULL,OPEN_EXISTING,0,NULL);
+					Sleep(10);
+				}
+			}
+			/*
+			WIN32_FIND_DATA			  FindFileData;
+
 			timer = time(0)+20;
 			while(hPipe == INVALID_HANDLE_VALUE && time(0) < timer)
 			{
@@ -501,6 +519,7 @@
 				throw exception(GetLastError(),"Timeout waiting for %s instance",PACKAGE_NAME);
 				return;
 			}
+			*/
 
 			if(hPipe == INVALID_HANDLE_VALUE)
 			{
@@ -762,8 +781,8 @@
 
 			while(time(0) < end)
 			{
-				if(!is_connected())
-					return ENOTCONN;
+				//if(!is_connected())
+				//	return ENOTCONN;
 
 				if(is_ready())
 					return 0;

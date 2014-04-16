@@ -30,9 +30,7 @@
  #include <exception>
  #include <pw3270/class.h>
  #include <pw3270/hllapi.h>
-
- #undef trace
- #define trace( fmt, ... )	{ FILE *out = fopen("c:\\Users\\Perry\\hllapi.log","a"); if(out) { fprintf(out, "%s(%d) " fmt "\n", __FILE__, __LINE__, __VA_ARGS__ ); fclose(out); } }
+ #include "client.h"
 
  using namespace std;
  using namespace PW3270_NAMESPACE;
@@ -52,9 +50,11 @@
 		if(hSession)
 			delete hSession;
 		hSession = session::create(mode);
+		trace("hSession=%p",hSession);
 	}
 	catch(std::exception &e)
 	{
+		trace("Error \"%s\"",e.what());
 		return HLLAPI_STATUS_SYSTEM_ERROR;
 	}
 

@@ -160,6 +160,12 @@
 		pkt->packet_id = errno ? errno : -1;
 	}
 
+	trace("szBlock=%d text=\"%s\"",szBlock, ( (struct hllapi_packet_text *) pkt)->text);
+	for(int f=0;f< (int) szBlock;f++)
+	{
+		trace("rsp(%d)= %d \"%s\"",f,* (((char *) pkt)+f),((char *) pkt)+f);
+	}
+
 	WriteFile(source->hPipe,pkt,szBlock,&szBlock,NULL);
 
 	g_free(pkt);
@@ -352,6 +358,7 @@
 		break;
 
 	case HLLAPI_PACKET_GET_HOST_CHARSET:
+		trace("%s","HLLAPI_PACKET_GET_HOST_CHARSET");
 		send_text(source,(char *) lib3270_get_host_charset(lib3270_get_default_session_handle()));
 		break;
 

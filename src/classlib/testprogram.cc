@@ -61,6 +61,13 @@
 		cout << "\tHost charset:    " << s.c_str() << endl;
 
 		session->connect(false);
+
+		cout << "\tWaitForReady:	" << session->wait_for_ready(10) << endl;
+
+		cout << "\tIsConnected:		" << session->is_connected() << endl;
+		cout << "\tIsReady:			" << session->is_ready() << endl;
+		cout << "\tString(3,2,14)	" << session->get_string_at(3,2,14) << endl;
+
 		delete session;
  	}
 

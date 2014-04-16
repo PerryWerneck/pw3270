@@ -38,6 +38,11 @@
 
  #define set_active(x) /* x */
 
+ #if defined(DEBUG) && defined(_WIN32)
+	#undef trace
+	#define trace( fmt, ... )	{ FILE *out = fopen("c:\\Users\\Perry\\hllapi.log","a"); if(out) { fprintf(out, "%s(%d) " fmt "\n", __FILE__, __LINE__, __VA_ARGS__ ); fclose(out); } }
+ #endif // DEBUG
+
  void				* hllapi_pipe_init(const char *id);
  void				  hllapi_pipe_deinit(void *h);
  const char			* hllapi_pipe_get_revision(void);

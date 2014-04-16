@@ -47,6 +47,7 @@ LIBS=@REXX_LIBS@ @LIBICONV@ @DBUS_LIBS@
 CFLAGS=@REXX_CFLAGS@ @DBUS_CFLAGS@
 REXX_HOME=@REXX_HOME@
 REXXLIBDIR=@REXX_LIBDIR@
+SYSDLL_FLAGS=@SYSDLL_FLAGS@
 
 #---[ Debug Targets ]----------------------------------------------------------
 
@@ -58,7 +59,7 @@ $(BINDBG)/$(PLUGIN_NAME): $(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJDBG)/$(
 $(BINDBG)$(DLL_NAME).$(VERSION): $(foreach SRC, $(basename $(EXTAPI_SRC)), $(OBJDBG)/$(SRC)@OBJEXT@) $(CLASS_DEBUG_OBJECTS)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CXX) $(DLL_FLAGS) $(LDFLAGS) @LDSOFLAGS@ @DBGRPATH@ -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(CLASS_LIBS)
+	@$(CXX) $(SYSDLL_FLAGS) $(LDFLAGS) @LDSOFLAGS@ @DBGRPATH@ -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(CLASS_LIBS)
 
 #---[ Release Targets ]--------------------------------------------------------
 
@@ -70,7 +71,7 @@ $(BINRLS)/$(PLUGIN_NAME): $(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJRLS)/$(
 $(BINRLS)$(DLL_NAME).$(VERSION): $(foreach SRC, $(basename $(EXTAPI_SRC)), $(OBJRLS)/$(SRC).o) $(CLASS_RELEASE_OBJECTS)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CXX) $(DLL_FLAGS) @LDSOFLAGS@ $(LDFLAGS) @RLS_LDFLAGS@ -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(CLASS_LIBS)
+	@$(CXX) $(SYSDLL_FLAGS) @LDSOFLAGS@ $(LDFLAGS) @RLS_LDFLAGS@ -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(CLASS_LIBS)
 
 install:
 	@$(MKDIR) $(DESTDIR)$(libdir)/$(PACKAGE_NAME)-plugin
