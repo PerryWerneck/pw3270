@@ -105,7 +105,7 @@ run: $(BINDBG)/testprogram$(EXEEXT)
 $(BINDBG)/testprogram$(EXEEXT): $(OBJDBG)/testprogram.o $(BINDBG)/$(LIBNAME)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(LD) -o $@ $^
+	@$(LD) $(LIBS) -o $@ $^
 
 $(BINDBG)/$(LIBNAME): $(foreach SRC, $(basename $(CLASS_SRC)), $(OBJDBG)/$(SRC).o)
 	@echo "  CCLD `basename $@`"

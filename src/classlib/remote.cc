@@ -737,6 +737,8 @@
 
 #endif
 
+			trace("%s: rc=%d",__FUNCTION__,rc);
+
 			if(!rc && wait)
 				return wait_for_ready(120);
 
