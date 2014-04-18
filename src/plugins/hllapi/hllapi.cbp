@@ -15,6 +15,14 @@
 				<Compiler>
 					<Add option="-g" />
 				</Compiler>
+				<MakeCommands>
+					<Build command="$make LIB3270_MODE=Debug -f $makefile $target" />
+					<CompileFile command="$make -f $makefile $file" />
+					<Clean command="$make -f $makefile clean$target" />
+					<DistClean command="$make -f $makefile distclean$target" />
+					<AskRebuildNeeded command="$make -q -f $makefile $target" />
+					<SilentBuild command="$make LIB3270_MODE=Debug -f $makefile $target &gt; $(CMD_NULL)" />
+				</MakeCommands>
 			</Target>
 			<Target title="Release">
 				<Option output=".bin/Release/pw3270 HLLAPI" prefix_auto="1" extension_auto="1" />
@@ -37,9 +45,9 @@
 					<Add option="-g" />
 				</Compiler>
 				<Environment>
-					<Variable name="LIB3270_CFLAGS" value='&quot;-I..\..\..\src\include&quot;' />
-					<Variable name="LIB3270_LIBS" value='&quot;-L..\..\..\.bin\Debug  -l3270&quot;' />
-					<Variable name="PW3270_LIBS" value='&quot;-L..\..\..\.bin\Debug -lpw3270 -l3270&quot;' />
+					<Variable name="LIB3270_CFLAGS" value='&quot;-I../../../src/include&quot;' />
+					<Variable name="LIB3270_LIBS" value='&quot;-L../../../.bin/Debug  -l3270&quot;' />
+					<Variable name="PW3270_LIBS" value='&quot;-L../../../.bin/Debug -lpw3270 -l3270&quot;' />
 				</Environment>
 				<MakeCommands>
 					<Build command="$make LIB3270_MODE=Debug -f $makefile $target" />
