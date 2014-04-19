@@ -37,7 +37,8 @@
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
- static session * hSession = NULL;
+ static session	* hSession 			= NULL;
+ static time_t	  hllapi_timeout	= 120;
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
@@ -100,7 +101,7 @@
 
  	try
  	{
-		rc = session::get_default()->connect(uri,wait);
+		rc = session::get_default()->connect(uri,hllapi_timeout);
 	}
 	catch(std::exception &e)
 	{

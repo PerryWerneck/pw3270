@@ -66,23 +66,17 @@ DEBUG_CFLAGS=-DDEBUG=1 -g -Wall
 LIB3270_MODE ?= Default
 
 ifeq ($(LIB3270_MODE),Debug)
-	PW3270_LIBS=-L../../../.bin/Debug@DLLDIR@ -l@PACKAGE_TARNAME@ -l3270
 	PW3270_CFLAGS=-I../../../src/include
-	LIB3270_LIBS=-L../../../.bin/Debug@DLLDIR@  -l3270
 	LIB3270_CFLAGS=-I../../../src/include
 endif
 
 ifeq ($(LIB3270_MODE),Release)
-	PW3270_LIBS=-L../../../.bin/Release@DLLDIR@ -l@PACKAGE_TARNAME@ -l3270
 	PW3270_CFLAGS=-I../../../src/include
-	LIB3270_LIBS=-L../../../.bin/Release@DLLDIR@  -l3270
 	LIB3270_CFLAGS=-I../../../src/include
 endif
 
 ifeq ($(LIB3270_MODE),Default)
-	LIB3270_LIBS ?= `pkg-config --libs lib3270`
 	LIB3270_CFLAGS ?= `pkg-config --cflags lib3270`
-	PW3270_LIBS ?= `pkg-config --libs pw3270 lib3270`
 	PW3270_CFLAGS ?= `pkg-config --cflags pw3270 lib3270`
 endif
 

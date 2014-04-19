@@ -121,6 +121,8 @@ install-sdk: $(BINRLS)/$(LIBNAME)
 	@$(MKDIR) $(DESTDIR)$(libdir)
 	@$(INSTALL_DATA) $(BINRLS)/$(LIBNAME) $(DESTDIR)$(libdir)
 
+cleanDebug: clean
+
 clean:
 	@rm -fr $(OBJDIR)
 	@rm -fr $(BINDIR)

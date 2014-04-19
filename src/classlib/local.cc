@@ -418,9 +418,9 @@
 			return _get_connection_state(hSession);
 		}
 
-		int connect(bool wait)
+		int connect(void)
 		{
-			return _connect(hSession,(int) wait);
+			return _connect(hSession,0);
 		}
 
 		int set_url(const char *uri)

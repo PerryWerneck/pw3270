@@ -41,7 +41,7 @@
 
  	{
 		string	 s;
-		session	*session = session::start("pw3270:a");
+		session	*session = session::start("");
 	// 	session	*session = session::start("new");
 
 		cout << "pw3270 version:  " << session->get_version() << endl;
@@ -60,7 +60,7 @@
 		s = session->get_host_charset();
 		cout << "\tHost charset:    " << s.c_str() << endl;
 
-		session->connect(false);
+		cout << "Connect: " << session->connect("fandezhi.efglobe.com:23",60) << endl << endl;
 
 		cout << "\tWaitForReady:	" << session->wait_for_ready(10) << endl;
 
@@ -75,6 +75,7 @@
 	sleep(2);
 
 	// Create another session
+	/*
 	{
 		session	*session = session::start("pw3270:a");
 
@@ -82,6 +83,7 @@
 		delete session;
 
 	}
+	*/
 
 
  	return 0;

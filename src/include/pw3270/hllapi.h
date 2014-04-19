@@ -100,7 +100,35 @@ extern "C" {
 
 #else
 
-	#error NOT IMPLEMENTED
+	typedef unsigned short DWORD
+
+	LIB3270_EXPORT int __stdcall hllapi(const LPWORD func, LPSTR str, LPWORD length, LPWORD rc);
+
+	LIB3270_EXPORT DWORD __stdcall hllapi_init(LPSTR mode);
+	LIB3270_EXPORT DWORD __stdcall hllapi_deinit(void);
+
+	LIB3270_EXPORT DWORD __stdcall hllapi_get_revision(void);
+	LIB3270_EXPORT DWORD __stdcall hllapi_get_datadir(LPSTR datadir);
+
+	LIB3270_EXPORT DWORD __stdcall hllapi_connect(LPSTR uri, WORD wait);
+	LIB3270_EXPORT DWORD __stdcall hllapi_disconnect(void);
+	LIB3270_EXPORT DWORD __stdcall hllapi_get_message_id(void);
+	LIB3270_EXPORT DWORD __stdcall hllapi_is_connected(void);
+	LIB3270_EXPORT DWORD __stdcall hllapi_get_state(void);
+	LIB3270_EXPORT DWORD __stdcall hllapi_get_screen_at(WORD row, WORD col, LPSTR buffer);
+	LIB3270_EXPORT DWORD __stdcall hllapi_get_screen(WORD pos, LPSTR buffer, WORD len);
+	LIB3270_EXPORT DWORD __stdcall hllapi_enter(void);
+	LIB3270_EXPORT DWORD __stdcall hllapi_set_text_at(WORD row, WORD col, LPSTR text);
+	LIB3270_EXPORT DWORD __stdcall hllapi_cmp_text_at(WORD row, WORD col, LPSTR text);
+    LIB3270_EXPORT DWORD __stdcall hllapi_emulate_input(LPSTR buffer, WORD len, WORD pasting);
+	LIB3270_EXPORT DWORD __stdcall hllapi_wait_for_ready(WORD seconds);
+	LIB3270_EXPORT DWORD __stdcall hllapi_wait(WORD seconds);
+	LIB3270_EXPORT DWORD __stdcall hllapi_pfkey(WORD key);
+	LIB3270_EXPORT DWORD __stdcall hllapi_pakey(WORD key);
+	LIB3270_EXPORT DWORD __stdcall hllapi_setcursor(WORD key);
+	LIB3270_EXPORT DWORD __stdcall hllapi_getcursor();
+	LIB3270_EXPORT DWORD __stdcall hllapi_erase_eof(void);
+	LIB3270_EXPORT DWORD __stdcall hllapi_print(void);
 
 #endif // _WIN32
 

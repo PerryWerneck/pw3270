@@ -712,7 +712,7 @@
 			return (LIB3270_CSTATE) query_intval(HLLAPI_PACKET_GET_CSTATE);
 		}
 
-		int connect(bool wait)
+		int connect(void)
 		{
 			int rc;
 
@@ -736,12 +736,6 @@
 			rc = -1;
 
 #endif
-
-			trace("%s: rc=%d",__FUNCTION__,rc);
-
-			if(!rc && wait)
-				return wait_for_ready(120);
-
 			return rc;
 
 		}
@@ -783,8 +777,8 @@
 
 			while(time(0) < end)
 			{
-				//if(!is_connected())
-				//	return ENOTCONN;
+				if(!is_connected())
+					return ENOTCONN;
 
 				if(is_ready())
 					return 0;
@@ -871,8 +865,12 @@
 		int iterate(bool wait)
 		{
 #if defined(WIN32)
+			if(wait)
+				Sleep(250);
 			return 0;
 #elif defined(HAVE_DBUS)
+			if(wait)
+				usleep(250);
 			return 0;
 #else
 			return -1;

@@ -34,6 +34,10 @@
 
  #include <pw3270/class.h>
 
+#ifndef WIN32
+ #include <unistd.h>
+#endif // !WIN32
+
  #ifdef HAVE_SYSLOG
 	#include <syslog.h>
  #endif // HAVE_SYSLOG
@@ -481,7 +485,7 @@
 		return set_url(host);
 	}
 
-	int session::connect(const char *host, bool wait)
+	int session::connect(const char *host, time_t wait)
 	{
 		int rc = 0;
 
@@ -491,8 +495,22 @@
 			trace("%s: set_url(%s) = %d",__FUNCTION__,host,rc);
 		}
 
-		if(!rc)
-			rc = connect(wait);
+		rc = connect();
+		trace("%s: connect=%d",__FUNCTION__,rc);
+
+		if(!rc && wait)
+		{
+			time_t timeout = time(0)+wait;
+			rc = ETIMEDOUT;
+
+			while(time(0) < timeout && rc == ETIMEDOUT)
+			{
+				trace("%s: Waiting",__FUNCTION__);
+				if(is_connected())
+					rc = 0;
+				iterate(true);
+			}
+		}
 
 		return rc;
 	}
