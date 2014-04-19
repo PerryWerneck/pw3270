@@ -251,7 +251,6 @@ static void net_connected(H3270 *hSession)
 
 	snprintf(hSession->full_model_name,LIB3270_FULL_MODEL_NAME_LENGTH,"IBM-327%c-%d",hSession->m3279 ? '9' : '8', hSession->model_num);
 
-
 	hSession->ever_3270	= False;
 
 	memset(&hints, 0, sizeof(struct addrinfo));
@@ -262,7 +261,6 @@ static void net_connected(H3270 *hSession)
 	hints.ai_canonname	= NULL;
 	hints.ai_addr		= NULL;
 	hints.ai_next		= NULL;
-
 
 	hSession->cstate = LIB3270_RESOLVING;
 	lib3270_st_changed(hSession, LIB3270_STATE_RESOLVING, True);
@@ -276,29 +274,29 @@ static void net_connected(H3270 *hSession)
 		snprintf(buffer,4095,_( "Can't connect to %s:%s"), hSession->host.current, hSession->host.srvc);
 
 #if defined(WIN32) && defined(HAVE_ICONV)
-	{
-		char 		  tmpbuffer[4096];
-		const char 	* msg 		= gai_strerror(s);
-		size_t		  in 		= strlen(msg);
-		size_t		  out 		= 4096;
-		char		* ptr		= tmpbuffer;
+		{
+			char 		  tmpbuffer[4096];
+			const char 	* msg 		= gai_strerror(s);
+			size_t		  in 		= strlen(msg);
+			size_t		  out 		= 4096;
+			char		* ptr		= tmpbuffer;
 
-		iconv_t hConv = iconv_open(lib3270_win32_local_charset(),"UTF-8");
+			iconv_t hConv = iconv_open(lib3270_win32_local_charset(),"UTF-8");
 
-		trace("Antes: [%s]",msg);
-		if(iconv(hConv,&msg,&in,&ptr,&out) != ((size_t) -1))
-			msg = tmpbuffer;
-		trace("Depois: [%s]",msg);
+			trace("Antes: [%s]",msg);
+			if(iconv(hConv,&msg,&in,&ptr,&out) != ((size_t) -1))
+				msg = tmpbuffer;
+			trace("Depois: [%s]",msg);
 
-		iconv_close(hConv);
+			iconv_close(hConv);
 
-		lib3270_popup_dialog(	hSession,
-								LIB3270_NOTIFY_ERROR,
-								_( "Connection error" ),
-								buffer,
-								"%s",
-								msg);
-	}
+			lib3270_popup_dialog(	hSession,
+									LIB3270_NOTIFY_ERROR,
+									_( "Connection error" ),
+									buffer,
+									"%s",
+									msg);
+		}
 
 #else
 		lib3270_popup_dialog(	hSession,

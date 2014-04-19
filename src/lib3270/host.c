@@ -362,34 +362,6 @@ LIB3270_EXPORT const char * lib3270_get_host(H3270 *h)
 	return h->host.full;
 }
 
-/*
-LIB3270_EXPORT int lib3270_reconnect(H3270 *hSession,int wait)
-{
-	int rc;
-
-    CHECK_SESSION_HANDLE(hSession);
-
-	if (CONNECTED || HALF_CONNECTED)
-		return EBUSY;
-
-	if (!hSession->host.full)
-		return EINVAL;
-
-	if (hSession->auto_reconnect_inprogress)
-		return EBUSY;
-
-	rc = lib3270_connect(hSession,wait);
-
-	if(rc)
-	{
-		hSession->auto_reconnect_inprogress = 0;
-		return rc;
-	}
-
-	return 0;
-}
-*/
-
 LIB3270_EXPORT const char * lib3270_get_luname(H3270 *h)
 {
     CHECK_SESSION_HANDLE(h);
