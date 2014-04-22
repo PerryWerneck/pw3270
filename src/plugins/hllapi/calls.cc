@@ -42,7 +42,7 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
- __declspec (dllexport) DWORD __stdcall hllapi_init(LPSTR mode)
+ HLLAPI_API_CALL hllapi_init(LPSTR mode)
  {
  	trace("%s(%s)",__FUNCTION__,mode);
 
@@ -62,7 +62,7 @@
  	return hSession ? HLLAPI_STATUS_SUCCESS : HLLAPI_STATUS_SYSTEM_ERROR;
  }
 
- __declspec (dllexport) DWORD __stdcall hllapi_deinit(void)
+ HLLAPI_API_CALL hllapi_deinit(void)
  {
  	trace("%s()",__FUNCTION__);
 
@@ -82,7 +82,7 @@
  	return HLLAPI_STATUS_SUCCESS;
  }
 
- __declspec (dllexport) DWORD __stdcall hllapi_get_revision(void)
+ HLLAPI_API_CALL hllapi_get_revision(void)
  {
  	try
  	{
@@ -95,7 +95,7 @@
 	return (DWORD) -1;
  }
 
- __declspec (dllexport) DWORD __stdcall hllapi_connect(LPSTR uri, WORD wait)
+ HLLAPI_API_CALL hllapi_connect(LPSTR uri, WORD wait)
  {
  	int rc = HLLAPI_STATUS_SUCCESS;
 
@@ -111,12 +111,12 @@
 	return rc;
  }
 
- __declspec (dllexport) DWORD __stdcall hllapi_is_connected(void)
+ HLLAPI_API_CALL hllapi_is_connected(void)
  {
 	return session::get_default()->is_connected();
  }
 
- __declspec (dllexport) DWORD __stdcall hllapi_get_state(void)
+ HLLAPI_API_CALL hllapi_get_state(void)
  {
 	switch(hllapi_get_message_id())
 	{
@@ -146,28 +146,28 @@
 	return HLLAPI_STATUS_SYSTEM_ERROR;
  }
 
- __declspec (dllexport) DWORD __stdcall hllapi_disconnect(void)
+ HLLAPI_API_CALL hllapi_disconnect(void)
  {
 	session::get_default()->disconnect();
 	return HLLAPI_STATUS_SUCCESS;
  }
 
- __declspec (dllexport) DWORD __stdcall hllapi_wait_for_ready(WORD seconds)
+ HLLAPI_API_CALL hllapi_wait_for_ready(WORD seconds)
  {
 	return session::get_default()->wait_for_ready(seconds);
  }
 
- __declspec (dllexport) DWORD __stdcall hllapi_wait(WORD seconds)
+ HLLAPI_API_CALL hllapi_wait(WORD seconds)
  {
 	return session::get_default()->wait(seconds);
  }
 
- __declspec (dllexport) DWORD __stdcall hllapi_get_message_id(void)
+ HLLAPI_API_CALL hllapi_get_message_id(void)
  {
 	return session::get_default()->get_cstate();
  }
 
- __declspec (dllexport) DWORD __stdcall hllapi_get_screen_at(WORD row, WORD col, LPSTR buffer)
+ HLLAPI_API_CALL hllapi_get_screen_at(WORD row, WORD col, LPSTR buffer)
  {
 	if(!(buffer && *buffer))
 		return HLLAPI_STATUS_SYSTEM_ERROR;
@@ -186,12 +186,12 @@
  	return HLLAPI_STATUS_SUCCESS;
  }
 
- __declspec (dllexport) DWORD __stdcall hllapi_enter(void)
+ HLLAPI_API_CALL hllapi_enter(void)
  {
 	return session::get_default()->enter();
  }
 
- __declspec (dllexport) DWORD __stdcall hllapi_set_text_at(WORD row, WORD col, LPSTR text)
+ HLLAPI_API_CALL hllapi_set_text_at(WORD row, WORD col, LPSTR text)
  {
 	try
 	{
@@ -205,7 +205,7 @@
  	return HLLAPI_STATUS_SUCCESS;
  }
 
- __declspec (dllexport) DWORD __stdcall hllapi_cmp_text_at(WORD row, WORD col, LPSTR text)
+ HLLAPI_API_CALL hllapi_cmp_text_at(WORD row, WORD col, LPSTR text)
  {
  	int rc = HLLAPI_STATUS_SYSTEM_ERROR;
 	try
@@ -220,17 +220,17 @@
  	return rc;
  }
 
- __declspec (dllexport) DWORD __stdcall hllapi_pfkey(WORD key)
+ HLLAPI_API_CALL hllapi_pfkey(WORD key)
  {
 	return session::get_default()->pfkey(key);
  }
 
- __declspec (dllexport) DWORD __stdcall hllapi_pakey(WORD key)
+ HLLAPI_API_CALL hllapi_pakey(WORD key)
  {
 	return session::get_default()->pakey(key);
  }
 
- __declspec (dllexport) DWORD __stdcall hllapi_get_datadir(LPSTR datadir)
+ HLLAPI_API_CALL hllapi_get_datadir(LPSTR datadir)
  {
 	HKEY 			hKey	= 0;
  	unsigned long	datalen = strlen(datadir);
@@ -248,17 +248,17 @@
 	return *datadir;
  }
 
- __declspec (dllexport) DWORD __stdcall hllapi_setcursor(WORD pos)
+ HLLAPI_API_CALL hllapi_setcursor(WORD pos)
  {
 	return session::get_default()->set_cursor_addr(pos-1);
  }
 
- __declspec (dllexport) DWORD __stdcall hllapi_getcursor()
+ HLLAPI_API_CALL hllapi_getcursor()
  {
 	return session::get_default()->get_cursor_addr()+1;
  }
 
- __declspec (dllexport) DWORD __stdcall hllapi_get_screen(WORD offset, LPSTR buffer, WORD len)
+ HLLAPI_API_CALL hllapi_get_screen(WORD offset, LPSTR buffer, WORD len)
  {
 	int rc = HLLAPI_STATUS_SYSTEM_ERROR;
 
@@ -284,19 +284,19 @@
 	return rc;
  }
 
- __declspec (dllexport) DWORD __stdcall hllapi_emulate_input(LPSTR buffer, WORD len, WORD pasting)
+ HLLAPI_API_CALL hllapi_emulate_input(LPSTR buffer, WORD len, WORD pasting)
  {
 	session::get_default()->emulate_input(buffer);
 	return HLLAPI_STATUS_SUCCESS;
  }
 
- __declspec (dllexport) DWORD __stdcall hllapi_erase_eof(void)
+ HLLAPI_API_CALL hllapi_erase_eof(void)
  {
 	session::get_default()->erase_eof();
 	return HLLAPI_STATUS_SUCCESS;
  }
 
- __declspec (dllexport) DWORD __stdcall hllapi_print(void)
+ HLLAPI_API_CALL hllapi_print(void)
  {
 	return session::get_default()->print();
  }

@@ -27,7 +27,6 @@
  *
  */
 
- #include <windows.h>
  #include <pw3270/hllapi.h>
 
  #ifndef ETIMEDOUT
@@ -43,9 +42,14 @@
 	#define trace( fmt, ... )	{ FILE *out = fopen("c:\\Users\\Perry\\hllapi.log","a"); if(out) { fprintf(out, "%s(%d) " fmt "\n", __FILE__, __LINE__, __VA_ARGS__ ); fclose(out); } }
  #endif // DEBUG
 
+ #ifdef __cplusplus
+ extern "C" {
+ #endif
+
+/*
  void				* hllapi_pipe_init(const char *id);
  void				  hllapi_pipe_deinit(void *h);
- const char		* hllapi_pipe_get_revision(void);
+ const char			* hllapi_pipe_get_revision(void);
  void  				  hllapi_pipe_release_memory(void *p);
  int				  hllapi_pipe_connect(void *h, const char *n, int wait);
  void 				  hllapi_pipe_disconnect(void *h);
@@ -65,9 +69,13 @@
  int				  hllapi_pipe_setcursor(void *h, int baddr);
  int				  hllapi_pipe_emulate_input(void *hSession, const char *s, int len, int pasting);
  int				  hllapi_pipe_print(void *h);
+*/
 
  char				* hllapi_get_string(int offset, size_t len);
  void				  hllapi_free(void *p);
 
+ #ifdef __cplusplus
+ }    /* end of extern "C" */
+ #endif
 
 

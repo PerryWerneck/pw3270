@@ -721,8 +721,10 @@
 			size_t							  cbSize	= sizeof(struct hllapi_packet_connect);
 			struct hllapi_packet_connect	* pkt		= (struct hllapi_packet_connect *) malloc(cbSize);
 
+			memset(pkt,0,cbSize);
+
 			pkt->packet_id	= HLLAPI_PACKET_CONNECT;
-			pkt->wait		= (unsigned char) wait;
+			pkt->wait		= 0;
 
 			rc = query_intval((void *) pkt,cbSize,true);
 

@@ -68,69 +68,69 @@ extern "C" {
 
  #define HLLAPI_STATUS_WAITING	HLLAPI_STATUS_TIMEOUT
 
-#ifdef _WIN32
+ #ifdef WIN32
+	#include <windows.h>
+
 	// http://www.mingw.org/wiki/Visual_Basic_DLL
-	__declspec (dllexport) int __stdcall hllapi(const LPWORD func, LPSTR str, LPWORD length, LPWORD rc);
+	#define HLLAPI_API_CALL __declspec (dllexport) DWORD __stdcall
 
-	__declspec (dllexport) DWORD __stdcall hllapi_init(LPSTR mode);
-	__declspec (dllexport) DWORD __stdcall hllapi_deinit(void);
+ #endif // WIN32
 
-	__declspec (dllexport) DWORD __stdcall hllapi_get_revision(void);
-	__declspec (dllexport) DWORD __stdcall hllapi_get_datadir(LPSTR datadir);
+	HLLAPI_API_CALL hllapi(const LPWORD func, LPSTR str, LPWORD length, LPWORD rc);
 
-	__declspec (dllexport) DWORD __stdcall hllapi_connect(LPSTR uri, WORD wait);
-	__declspec (dllexport) DWORD __stdcall hllapi_disconnect(void);
-	__declspec (dllexport) DWORD __stdcall hllapi_get_message_id(void);
-	__declspec (dllexport) DWORD __stdcall hllapi_is_connected(void);
-	__declspec (dllexport) DWORD __stdcall hllapi_get_state(void);
-	__declspec (dllexport) DWORD __stdcall hllapi_get_screen_at(WORD row, WORD col, LPSTR buffer);
-	__declspec (dllexport) DWORD __stdcall hllapi_get_screen(WORD pos, LPSTR buffer, WORD len);
-	__declspec (dllexport) DWORD __stdcall hllapi_enter(void);
-	__declspec (dllexport) DWORD __stdcall hllapi_set_text_at(WORD row, WORD col, LPSTR text);
-	__declspec (dllexport) DWORD __stdcall hllapi_cmp_text_at(WORD row, WORD col, LPSTR text);
-    __declspec (dllexport) DWORD __stdcall hllapi_emulate_input(LPSTR buffer, WORD len, WORD pasting);
-	__declspec (dllexport) DWORD __stdcall hllapi_wait_for_ready(WORD seconds);
-	__declspec (dllexport) DWORD __stdcall hllapi_wait(WORD seconds);
-	__declspec (dllexport) DWORD __stdcall hllapi_pfkey(WORD key);
-	__declspec (dllexport) DWORD __stdcall hllapi_pakey(WORD key);
-	__declspec (dllexport) DWORD __stdcall hllapi_setcursor(WORD key);
-	__declspec (dllexport) DWORD __stdcall hllapi_getcursor();
-	__declspec (dllexport) DWORD __stdcall hllapi_erase_eof(void);
-	__declspec (dllexport) DWORD __stdcall hllapi_print(void);
+	HLLAPI_API_CALL hllapi_init(LPSTR mode);
+	HLLAPI_API_CALL hllapi_deinit(void);
 
-#else
+	HLLAPI_API_CALL hllapi_get_revision(void);
+	HLLAPI_API_CALL hllapi_get_datadir(LPSTR datadir);
 
-	typedef unsigned short DWORD
+	HLLAPI_API_CALL hllapi_connect(LPSTR uri, WORD wait);
+	HLLAPI_API_CALL hllapi_disconnect(void);
+	HLLAPI_API_CALL hllapi_get_message_id(void);
+	HLLAPI_API_CALL hllapi_is_connected(void);
+	HLLAPI_API_CALL hllapi_get_state(void);
+	HLLAPI_API_CALL hllapi_get_screen_at(WORD row, WORD col, LPSTR buffer);
+	HLLAPI_API_CALL hllapi_get_screen(WORD pos, LPSTR buffer, WORD len);
+	HLLAPI_API_CALL hllapi_enter(void);
+	HLLAPI_API_CALL hllapi_set_text_at(WORD row, WORD col, LPSTR text);
+	HLLAPI_API_CALL hllapi_cmp_text_at(WORD row, WORD col, LPSTR text);
+    HLLAPI_API_CALL hllapi_emulate_input(LPSTR buffer, WORD len, WORD pasting);
+	HLLAPI_API_CALL hllapi_wait_for_ready(WORD seconds);
+	HLLAPI_API_CALL hllapi_wait(WORD seconds);
+	HLLAPI_API_CALL hllapi_pfkey(WORD key);
+	HLLAPI_API_CALL hllapi_pakey(WORD key);
+	HLLAPI_API_CALL hllapi_setcursor(WORD key);
+	HLLAPI_API_CALL hllapi_getcursor();
+	HLLAPI_API_CALL hllapi_erase_eof(void);
+	HLLAPI_API_CALL hllapi_print(void);
 
-	LIB3270_EXPORT int __stdcall hllapi(const LPWORD func, LPSTR str, LPWORD length, LPWORD rc);
+	HLLAPI_API_CALL hllapi(const LPWORD func, LPSTR str, LPWORD length, LPWORD rc);
 
-	LIB3270_EXPORT DWORD __stdcall hllapi_init(LPSTR mode);
-	LIB3270_EXPORT DWORD __stdcall hllapi_deinit(void);
+	HLLAPI_API_CALL hllapi_init(LPSTR mode);
+	HLLAPI_API_CALL hllapi_deinit(void);
 
-	LIB3270_EXPORT DWORD __stdcall hllapi_get_revision(void);
-	LIB3270_EXPORT DWORD __stdcall hllapi_get_datadir(LPSTR datadir);
+	HLLAPI_API_CALL hllapi_get_revision(void);
+	HLLAPI_API_CALL hllapi_get_datadir(LPSTR datadir);
 
-	LIB3270_EXPORT DWORD __stdcall hllapi_connect(LPSTR uri, WORD wait);
-	LIB3270_EXPORT DWORD __stdcall hllapi_disconnect(void);
-	LIB3270_EXPORT DWORD __stdcall hllapi_get_message_id(void);
-	LIB3270_EXPORT DWORD __stdcall hllapi_is_connected(void);
-	LIB3270_EXPORT DWORD __stdcall hllapi_get_state(void);
-	LIB3270_EXPORT DWORD __stdcall hllapi_get_screen_at(WORD row, WORD col, LPSTR buffer);
-	LIB3270_EXPORT DWORD __stdcall hllapi_get_screen(WORD pos, LPSTR buffer, WORD len);
-	LIB3270_EXPORT DWORD __stdcall hllapi_enter(void);
-	LIB3270_EXPORT DWORD __stdcall hllapi_set_text_at(WORD row, WORD col, LPSTR text);
-	LIB3270_EXPORT DWORD __stdcall hllapi_cmp_text_at(WORD row, WORD col, LPSTR text);
-    LIB3270_EXPORT DWORD __stdcall hllapi_emulate_input(LPSTR buffer, WORD len, WORD pasting);
-	LIB3270_EXPORT DWORD __stdcall hllapi_wait_for_ready(WORD seconds);
-	LIB3270_EXPORT DWORD __stdcall hllapi_wait(WORD seconds);
-	LIB3270_EXPORT DWORD __stdcall hllapi_pfkey(WORD key);
-	LIB3270_EXPORT DWORD __stdcall hllapi_pakey(WORD key);
-	LIB3270_EXPORT DWORD __stdcall hllapi_setcursor(WORD key);
-	LIB3270_EXPORT DWORD __stdcall hllapi_getcursor();
-	LIB3270_EXPORT DWORD __stdcall hllapi_erase_eof(void);
-	LIB3270_EXPORT DWORD __stdcall hllapi_print(void);
-
-#endif // _WIN32
+	HLLAPI_API_CALL hllapi_connect(LPSTR uri, WORD wait);
+	HLLAPI_API_CALL hllapi_disconnect(void);
+	HLLAPI_API_CALL hllapi_get_message_id(void);
+	HLLAPI_API_CALL hllapi_is_connected(void);
+	HLLAPI_API_CALL hllapi_get_state(void);
+	HLLAPI_API_CALL hllapi_get_screen_at(WORD row, WORD col, LPSTR buffer);
+	HLLAPI_API_CALL hllapi_get_screen(WORD pos, LPSTR buffer, WORD len);
+	HLLAPI_API_CALL hllapi_enter(void);
+	HLLAPI_API_CALL hllapi_set_text_at(WORD row, WORD col, LPSTR text);
+	HLLAPI_API_CALL hllapi_cmp_text_at(WORD row, WORD col, LPSTR text);
+    HLLAPI_API_CALL hllapi_emulate_input(LPSTR buffer, WORD len, WORD pasting);
+	HLLAPI_API_CALL hllapi_wait_for_ready(WORD seconds);
+	HLLAPI_API_CALL hllapi_wait(WORD seconds);
+	HLLAPI_API_CALL hllapi_pfkey(WORD key);
+	HLLAPI_API_CALL hllapi_pakey(WORD key);
+	HLLAPI_API_CALL hllapi_setcursor(WORD key);
+	HLLAPI_API_CALL hllapi_getcursor();
+	HLLAPI_API_CALL hllapi_erase_eof(void);
+	HLLAPI_API_CALL hllapi_print(void);
 
 #ifdef __cplusplus
 }    /* end of extern "C" */

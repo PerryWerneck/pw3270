@@ -144,6 +144,7 @@
  {
  	struct hllapi_packet_text *pkt;
 	DWORD szBlock;
+	int f;
 
 	if(text)
 	{
@@ -161,7 +162,7 @@
 	}
 
 	trace("szBlock=%d text=\"%s\"",szBlock, ( (struct hllapi_packet_text *) pkt)->text);
-	for(int f=0;f< (int) szBlock;f++)
+	for(f=0;f< (int) szBlock;f++)
 	{
 		trace("rsp(%d)= %d \"%s\"",f,* (((char *) pkt)+f),((char *) pkt)+f);
 	}
