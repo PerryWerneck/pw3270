@@ -222,7 +222,7 @@ gboolean v3270_button_release_event(GtkWidget *widget, GdkEventButton*event)
 static void update_mouse_pointer(GtkWidget *widget, int baddr)
 {
 	v3270	* terminal	= GTK_V3270(widget);
-	int		  id		= terminal->pointer;
+	int		  id		= 0;
 
 	if(baddr >= 0 && terminal->pointer_id == LIB3270_CURSOR_EDITABLE)
 	{
@@ -270,9 +270,10 @@ static void update_mouse_pointer(GtkWidget *widget, int baddr)
 
 		}
 
+		gdk_window_set_cursor(gtk_widget_get_window(widget),v3270_cursor[id]);
+
 	}
 
-	gdk_window_set_cursor(gtk_widget_get_window(widget),v3270_cursor[id]);
 
 }
 
