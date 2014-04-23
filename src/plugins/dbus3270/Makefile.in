@@ -122,7 +122,7 @@ Release: $(BINRLS)/plugins/$(MODULE_NAME).so
 $(BINRLS)/plugins/$(MODULE_NAME).so: $(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJRLS)/$(SRC).o)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	$(LD) $(DLL_FLAGS) -Wl,-soname,`basename $@` $(LDFLAGS) -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(PW3270_LIBS) $(GLIB_LIBS) $(GTK_LIBS) $(GDBUS_LIBS)
+	@$(LD) $(DLL_FLAGS) -Wl,-soname,`basename $@` $(LDFLAGS) -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(PW3270_LIBS) $(GLIB_LIBS) $(GTK_LIBS) $(GDBUS_LIBS)
 
 $(BINRLS)/@PACKAGE_NAME@d: $(foreach SRC, $(basename $(DAEMON_SRC)), $(OBJRLS)/$(SRC).o)
 	@echo "  CCLD `basename $@`"

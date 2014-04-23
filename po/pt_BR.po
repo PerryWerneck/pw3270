@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-16 08:48-0300\n"
+"POT-Creation-Date: 2014-04-23 09:34-0300\n"
 "PO-Revision-Date: 2014-02-17 08:05-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Portugues <>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "X-Generator: Gtranslator 2.91.6\n"
 
 #: telnet.c:1055 ssl.c:261 ssl.c:314 connect.c:98 connect.c:114 connect.c:116
-#: connect.c:572 connect.c:589
+#: connect.c:570 connect.c:587
 #, c-format
 msgid "%s"
 msgstr "%s"
@@ -364,7 +364,7 @@ msgstr "Tema de c_ores:"
 msgid "C_onnect"
 msgstr "_Conectar"
 
-#: toggles.c:313 connect.c:364 connect.c:459
+#: toggles.c:313 connect.c:362 connect.c:457
 #, c-format
 msgid "Can't %s network keep-alive"
 msgstr "Não foi possível %s opção \"keep-alive\""
@@ -374,12 +374,12 @@ msgstr "Não foi possível %s opção \"keep-alive\""
 msgid "Can't accept unnamed %s"
 msgstr "Não posso aceitar elemento %s sem nome"
 
-#: connect.c:106 connect.c:395
+#: connect.c:106 connect.c:393
 #, c-format
 msgid "Can't connect to %s"
 msgstr "Não foi possível conectar a %s"
 
-#: connect.c:276 connect.c:429
+#: connect.c:274 connect.c:427
 #, c-format
 msgid "Can't connect to %s:%s"
 msgstr "Não foi possível conectar a %s:%s"
@@ -481,11 +481,11 @@ msgstr "Não foi possível definir o charset do host"
 msgid "Can't set lib3270 I/O handlers"
 msgstr "Não foi possível registrar manipuladores de I/O 3270"
 
-#: connect.c:588
+#: connect.c:586
 msgid "Can't set socket to blocking mode."
 msgstr "Não foi possível mudar o socket para o modo blocante."
 
-#: connect.c:588
+#: connect.c:586
 msgid "Can't set socket to non blocking mode"
 msgstr "Não foi possível setar o socket para o modo não blocante."
 
@@ -608,9 +608,9 @@ msgstr "Configurar host"
 msgid "Connect on startup"
 msgstr "Conectar ao iniciar"
 
-#: connect.c:199 connect.c:297 connect.c:306 connect.c:368 connect.c:383
-#: connect.c:399 connect.c:413 connect.c:433 connect.c:447 connect.c:463
-#: connect.c:557
+#: connect.c:199 connect.c:295 connect.c:304 connect.c:366 connect.c:381
+#: connect.c:397 connect.c:411 connect.c:431 connect.c:445 connect.c:461
+#: connect.c:555
 msgid "Connection error"
 msgstr "Erro de conexão"
 
@@ -1486,7 +1486,7 @@ msgstr "Erro SSL"
 msgid "SSL Read error"
 msgstr "Erro de leitura SSL"
 
-#: connect.c:334
+#: connect.c:332
 msgid "SSL error"
 msgstr "Erro SSL"
 
@@ -1683,7 +1683,7 @@ msgstr "Show timer when processing"
 msgid "Smart paste"
 msgstr "Colar inteligente"
 
-#: connect.c:570 connect.c:587
+#: connect.c:568 connect.c:585
 msgid "Socket error"
 msgstr "Erro no socket"
 
@@ -2003,7 +2003,7 @@ msgstr ""
 msgid "This program requires GTK version %d.%d.%d"
 msgstr "Este programa precisa do GTK versão %d.%d.%d"
 
-#: connect.c:336
+#: connect.c:334
 #, c-format
 msgid ""
 "This version of %s was built without support for secure sockets layer (SSL)."
@@ -2085,7 +2085,7 @@ msgstr "UTF-8"
 msgid "Uknown DFT Open type from host"
 msgstr "Host enviou código de abertura DFT desconhecido"
 
-#: connect.c:335
+#: connect.c:333
 msgid "Unable to connect to secure hosts"
 msgstr "Não é possível conectar em servidores seguros"
 
@@ -2463,23 +2463,23 @@ msgstr "um atributo \"action\""
 msgid "bracket"
 msgstr "bracket"
 
-#: toggles.c:313 connect.c:364 connect.c:459
+#: toggles.c:313 connect.c:362 connect.c:457
 msgid "disable"
 msgstr "desabilitar"
 
-#: toggles.c:313 connect.c:364 connect.c:459
+#: toggles.c:313 connect.c:362 connect.c:457
 msgid "enable"
 msgstr "enable"
 
-#: connect.c:571
+#: connect.c:569
 msgid "fcntl() error when getting socket state."
 msgstr "fcntl() error when getting socket state."
 
-#: connect.c:384 connect.c:558
+#: connect.c:382 connect.c:556
 msgid "ioctlsocket(FIONBIO) failed."
 msgstr "ioctlsocket(FIONBIO) failed."
 
-#: connect.c:414 connect.c:448
+#: connect.c:412 connect.c:446
 msgid "setsockopt(SO_OOBINLINE) has failed"
 msgstr "setsockopt(SO_OOBINLINE) has failed"
 
