@@ -265,30 +265,6 @@ gpointer BgCall(struct bgParameter *p)
 	return 0;
 }
 
-/*
-static int static_CallAndWait(int(*callback)(H3270 *session, void *), H3270 *session, void *parm)
-{
-	struct bgParameter p = { TRUE, session, -1, callback, parm };
-	GThread	*thread;
-
-//	trace("Starting auxiliary thread for callback %p",callback);
-
-	p.running = TRUE;
-    thread = g_thread_create( (GThreadFunc) BgCall, &p, 0, NULL);
-
-    if(!thread)
-    {
-    	g_error("Can't start background thread");
-    	return -1;
-    }
-
-	while(p.running)
-		gtk_main_iteration();
-
-    return p.rc;
-}
-*/
-
 static int static_Sleep(H3270 *hSession, int seconds)
 {
 	time_t end = time(0) + seconds;
