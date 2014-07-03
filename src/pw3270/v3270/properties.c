@@ -53,6 +53,10 @@
 		lib3270_set_model(window->host,g_value_get_string(value));
 		break;
 
+	case PROP_AUTO_DISCONNECT:
+		v3270_set_auto_disconnect(GTK_WIDGET(object),g_value_get_int(value));
+		break;
+
 	default:
 		if(prop_id < (PROP_TOGGLE + LIB3270_TOGGLE_COUNT))
 		{
@@ -72,6 +76,10 @@
 	{
 	case PROP_MODEL:
 		g_value_set_string(value,lib3270_get_model(window->host));
+		break;
+
+	case PROP_AUTO_DISCONNECT:
+		g_value_set_int(value,v3270_get_auto_disconnect(GTK_WIDGET(object)));
 		break;
 
 	case PROP_LUNAME:
@@ -129,6 +137,14 @@
 					FALSE,G_PARAM_READABLE|G_PARAM_WRITABLE);
 	g_object_class_install_property(gobject_class,PROP_LUNAME,v3270_properties[PROP_LUNAME]);
 
+
+	v3270_properties[PROP_AUTO_DISCONNECT] = g_param_spec_string(
+					"auto_disconnect",
+					"auto_disconnect",
+					"Minutes to disconnect when idle",
+					FALSE,G_PARAM_READABLE|G_PARAM_WRITABLE);
+	g_object_class_install_property(gobject_class,PROP_LUNAME,v3270_properties[PROP_LUNAME]);
+
 	// Toggle properties
 	int f;
 
@@ -137,4 +153,16 @@
 		v3270_properties[PROP_TOGGLE+f] = g_param_spec_boolean(lib3270_get_toggle_name(f),lib3270_get_toggle_name(f),lib3270_get_toggle_description(f),FALSE,G_PARAM_WRITABLE|G_PARAM_READABLE);
 		g_object_class_install_property(gobject_class,PROP_TOGGLE+f,v3270_properties[PROP_TOGGLE+f]);
 	}
+ }
+
+ LIB3270_EXPORT	void v3270_set_auto_disconnect(GtkWidget *widget, guint minutes)
+ {
+	g_return_if_fail(GTK_IS_V3270(widget));
+ 	GTK_V3270(widget)->activity.disconnect = minutes;
+ }
+
+ LIB3270_EXPORT guint v3270_get_auto_disconnect(GtkWidget *widget)
+ {
+	g_return_val_if_fail(GTK_IS_V3270(widget),0);
+ 	return GTK_V3270(widget)->activity.disconnect;
  }

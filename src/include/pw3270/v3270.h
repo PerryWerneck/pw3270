@@ -163,6 +163,10 @@
 
  LIB3270_EXPORT	int				  v3270_set_host_charset(GtkWidget *widget, const gchar *name);
 
+ LIB3270_EXPORT	void			  v3270_set_auto_disconnect(GtkWidget *widget, guint minutes);
+ LIB3270_EXPORT guint			  v3270_get_auto_disconnect(GtkWidget *widget);
+
+
  // Clipboard
  typedef enum _v3270_select_format
  {

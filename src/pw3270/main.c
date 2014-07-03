@@ -55,6 +55,7 @@
  static GtkWidget		* toplevel		= NULL;
  static GtkWidget 		* trace_window	= NULL;
  static unsigned int	  syscolors		= 16;
+ static unsigned int	  timer			= 0;
  static const gchar		* systype		= NULL;
  static const gchar		* toggleset		= NULL;
  static const gchar		* togglereset	= NULL;
@@ -408,6 +409,7 @@ int main(int argc, char *argv[])
 			{ "togglereset",	'R', 0, G_OPTION_ARG_STRING,	&togglereset,		N_( "Set toggles OFF" ),							NULL			},
 			{ "charset",	    'C', 0, G_OPTION_ARG_STRING,	&charset,		    N_( "Set host charset" ),							NULL			},
 			{ "model",		    'M', 0, G_OPTION_ARG_STRING,	&model,			    N_( "The model of 3270 display to be emulated" ),	NULL			},
+			{ "autodisconnect",	'D', 0, G_OPTION_ARG_INT,		&timer,			    N_( "Minutes for auto-disconnect" ),				0				},
 
 #if defined( HAVE_SYSLOG )
 			{ "syslog",			'l', 0, G_OPTION_ARG_NONE,		&log_to_syslog,		N_( "Send messages to syslog" ),					NULL			},
@@ -561,6 +563,8 @@ int main(int argc, char *argv[])
 
 		if(model)
 			lib3270_set_model(pw3270_get_session(toplevel),model);
+
+		v3270_set_auto_disconnect(pw3270_get_terminal_widget(toplevel),timer);
 
 		pw3270_start_plugins(toplevel);
 		gtk_window_present(GTK_WINDOW(toplevel));

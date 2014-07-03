@@ -199,6 +199,14 @@ G_BEGIN_DECLS
 	H3270   				* host;							/**< Related 3270 session */
 	gchar					* session_name;					/**< Session name (for window title) */
 
+	// Auto disconnect
+	struct
+	{
+		time_t					  timestamp;				/**< Last action in this widget */
+		guint					  disconnect;				/**< Time (in minutes) for auto disconnect */
+		GSource					* timer;					/**< Auto disconnect timer */
+	} activity;
+
 	// Scripting
 	struct
 	{
@@ -224,6 +232,7 @@ G_BEGIN_DECLS
 	PROP_SELECTION,
 	PROP_MODEL,
 	PROP_LUNAME,
+	PROP_AUTO_DISCONNECT,
 
 	/* Toggles - always the last one, the real values are PROP_TOGGLE+LIB3270_TOGGLE */
 	PROP_TOGGLE

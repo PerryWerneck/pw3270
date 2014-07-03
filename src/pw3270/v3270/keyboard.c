@@ -198,6 +198,7 @@
  {
 	v3270 * terminal = GTK_V3270(widget);
 
+	terminal->activity.timestamp = time(0);
  	update_keyboard_state(terminal,event,TRUE);
 
 	if(gtk_im_context_filter_keypress(terminal->input_method,event))
@@ -229,12 +230,14 @@
  void v3270_tab(GtkWidget *widget)
  {
 	g_return_if_fail(GTK_IS_V3270(widget));
+	GTK_V3270(widget)->activity.timestamp = time(0);
 	lib3270_nextfield(GTK_V3270(widget)->host);
  }
 
  void v3270_backtab(GtkWidget *widget)
  {
 	g_return_if_fail(GTK_IS_V3270(widget));
+	GTK_V3270(widget)->activity.timestamp = time(0);
 	lib3270_previousfield(GTK_V3270(widget)->host);
  }
 
@@ -246,6 +249,7 @@
 	g_return_if_fail(GTK_IS_V3270(widget));
 
 	host = GTK_V3270(widget)->host;
+	GTK_V3270(widget)->activity.timestamp = time(0);
 
 	utf = g_convert((char *) str, -1, lib3270_get_display_charset(host), "UTF-8", NULL, NULL, NULL);
 
@@ -264,7 +268,6 @@
 	if(utf)
 	{
 		lib3270_input_string(GTK_V3270(widget)->host, (const unsigned char *) utf);
-//		lib3270_set_string(GTK_V3270(widget)->host, (const unsigned char *) utf);
 		g_free(utf);
 	}
 	else

@@ -675,8 +675,8 @@ static void update_toggle(H3270 *session, LIB3270_TOGGLE ix, unsigned char value
 		break;
 
 	case LIB3270_TOGGLE_INSERT:
-		v3270_draw_ins_status(GTK_WIDGET(session->widget));
-		v3270_cursor_draw(GTK_WIDGET(session->widget));
+		v3270_draw_ins_status(GTK_V3270(session->widget));
+		v3270_cursor_draw(GTK_V3270(session->widget));
 		break;
 
 	case LIB3270_TOGGLE_BOLD:
@@ -761,6 +761,8 @@ static void update_connect(H3270 *session, unsigned char connected)
 #else
 	g_object_notify(G_OBJECT(widget),"online");
 #endif // GTK_CHECK_VERSION
+
+	widget->activity.timestamp = time(0);
 
 	gtk_widget_queue_draw(GTK_WIDGET(widget));
 }
@@ -881,6 +883,21 @@ static int emit_print_signal(H3270 *session)
 	return 0;
 }
 
+static gboolean activity_tick(v3270 *widget)
+{
+	trace("idle=%d (%d) timeout=%d",time(0) - widget->activity.timestamp,((time(0) - widget->activity.timestamp)/60),widget->activity.disconnect);
+
+	if(widget->activity.disconnect && lib3270_is_connected(widget->host) && ((time(0) - widget->activity.timestamp)/60) >= widget->activity.disconnect)
+		lib3270_disconnect(widget->host);
+
+	return TRUE;
+}
+
+static void release_activity_timer(v3270 *widget)
+{
+	widget->activity.timer = NULL;
+}
+
 static void v3270_init(v3270 *widget)
 {
 	widget->host = lib3270_session_new("");
@@ -917,6 +934,10 @@ static void v3270_init(v3270 *widget)
 	widget->host->update_ssl		= v3270_update_ssl;
 	widget->host->print				= emit_print_signal;
 
+	// Reset timer
+	widget->activity.timestamp		= time(0);
+	widget->activity.disconnect		= 0;
+
 	// Setup input method
 	widget->input_method 			= gtk_im_multicontext_new();
     g_signal_connect(G_OBJECT(widget->input_method),"commit",G_CALLBACK(v3270_key_commit),widget);
@@ -931,6 +952,9 @@ static void v3270_init(v3270 *widget)
 	// Setup widget
     gtk_widget_add_events(GTK_WIDGET(widget),GDK_KEY_PRESS_MASK|GDK_KEY_RELEASE_MASK|GDK_BUTTON_PRESS_MASK|GDK_BUTTON_MOTION_MASK|GDK_BUTTON_RELEASE_MASK|GDK_POINTER_MOTION_MASK|GDK_ENTER_NOTIFY_MASK|GDK_SCROLL_MASK);
 	gtk_widget_set_has_tooltip(GTK_WIDGET(widget),TRUE);
+
+	// Setup auto disconnect timer
+	widget->cursor.timer = NULL;
 
 	trace("%s",__FUNCTION__);
 }
@@ -1013,6 +1037,13 @@ static void v3270_destroy(GtkObject *widget)
 			g_source_unref(terminal->cursor.timer);
 	}
 
+	if(terminal->activity.timer)
+	{
+		g_source_destroy(terminal->activity.timer);
+		while(terminal->activity.timer)
+			g_source_unref(terminal->activity.timer);
+	}
+
 	if(terminal->input_method)
 	{
 		g_object_unref(terminal->input_method);
@@ -1049,7 +1080,7 @@ static gboolean timer_tick(v3270 *widget)
 	return TRUE;
 }
 
-static void release_timer(v3270 *widget)
+static void release_cursor_timer(v3270 *widget)
 {
 	widget->cursor.timer = NULL;
 }
@@ -1144,10 +1175,20 @@ static void v3270_realize(GtkWidget	* widget)
 		v3270 *terminal = GTK_V3270(widget);
 
 		terminal->cursor.timer = g_timeout_source_new(500);
-		g_source_set_callback(terminal->cursor.timer,(GSourceFunc) timer_tick, widget, (GDestroyNotify) release_timer);
+		g_source_set_callback(terminal->cursor.timer,(GSourceFunc) timer_tick, widget, (GDestroyNotify) release_cursor_timer);
 
 		g_source_attach(terminal->cursor.timer, NULL);
 		g_source_unref(terminal->cursor.timer);
+	}
+
+	if(!GTK_V3270(widget)->activity.timer)
+	{
+		v3270 *terminal = GTK_V3270(widget);
+
+		terminal->activity.timer = g_timeout_source_new(10000);
+		g_source_set_callback(terminal->activity.timer,(GSourceFunc) activity_tick, widget, (GDestroyNotify) release_activity_timer);
+		g_source_attach(terminal->activity.timer, NULL);
+		g_source_unref(terminal->activity.timer);
 	}
 
 }
@@ -1464,6 +1505,7 @@ static void v3270_activate(GtkWidget *widget)
 	v3270 * terminal = GTK_V3270(widget);
 
 	trace("%s: %p",__FUNCTION__,terminal);
+	terminal->activity.timestamp = time(0);
 
 	if(lib3270_connected(terminal->host))
 		lib3270_enter(terminal->host);
