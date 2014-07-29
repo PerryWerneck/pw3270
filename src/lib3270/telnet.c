@@ -1029,13 +1029,15 @@ void net_input(H3270 *hSession)
 
 				e = ERR_get_error();
 				if (e != 0)
+				{
 					(void) ERR_error_string(e, err_buf);
+					trace_dsn(hSession,"RCVD SSL_read error %ld (%s)\n", e,err_buf);
+					hSession->message(hSession,LIB3270_NOTIFY_ERROR,_( "SSL Error" ),_( "SSL Read error" ),err_buf );
+				}
 				else
-					strcpy(err_buf, _( "unknown error" ) );
-
-				trace_dsn(hSession,"RCVD SSL_read error %ld (%s)\n", e,err_buf);
-
-				hSession->message(hSession,LIB3270_NOTIFY_ERROR,_( "SSL Error" ),_( "SSL Read error" ),err_buf );
+				{
+					trace_dsn(hSession,"RCVD SSL_read error %ld (%s)\n", e, "unknown");
+				}
 
 				host_disconnect(hSession,True);
 				return;
