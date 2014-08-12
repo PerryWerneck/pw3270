@@ -106,6 +106,8 @@
 
  void v3270_init_properties(GObjectClass * gobject_class)
  {
+ 	memset(v3270_properties,0,sizeof(v3270_properties));
+
 	gobject_class->set_property = v3270_set_property;
 	gobject_class->get_property = v3270_get_property;
 

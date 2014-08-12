@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-23 09:34-0300\n"
+"POT-Creation-Date: 2014-08-12 08:14-0300\n"
 "PO-Revision-Date: 2014-02-17 08:05-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Portugues <>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Gtranslator 2.91.6\n"
 
-#: telnet.c:1055 ssl.c:261 ssl.c:314 connect.c:98 connect.c:114 connect.c:116
+#: telnet.c:1057 ssl.c:261 ssl.c:314 connect.c:98 connect.c:114 connect.c:116
 #: connect.c:570 connect.c:587
 #, c-format
 msgid "%s"
@@ -50,7 +50,7 @@ msgstr "Ação %s precisa de um valor válido"
 msgid "%s action needs src attribute"
 msgstr "Ação %s precisa do atributo src"
 
-#: main.c:95
+#: main.c:96
 #, c-format
 msgid "%s requires GTK version %d.%d.%d"
 msgstr "%s requer GTK versão %d.%d.%d"
@@ -85,7 +85,7 @@ msgstr "%s: Caractere desconhecido depois de \\pf"
 msgid "%s: Vertical tab not supported"
 msgstr "%s: Tabulação vertical não é suportada"
 
-#: main.c:421
+#: main.c:423
 msgid "- 3270 Emulator for Gtk"
 msgstr "- Emulador 3270 para GTK"
 
@@ -166,7 +166,7 @@ msgstr ""
 msgid "<b>SSL state is undefined</b>Unexpected SSL status %ld"
 msgstr "<b>Estado do SSL é indefinido</b>Estado SSL inesperado %ld"
 
-#: main.c:441
+#: main.c:443
 msgid ""
 "<b>Valid options:</b>\n"
 "\n"
@@ -231,7 +231,7 @@ msgstr ""
 msgid "Appends the source file to the destination file."
 msgstr "Adiciona conteúdo do arquivo origem ao final do arquivo destino."
 
-#: main.c:398 main.c:400
+#: main.c:399 main.c:401
 msgid "Application name"
 msgstr "Nome da aplicação"
 
@@ -326,7 +326,7 @@ msgstr "Portal do Software Público Brasileiro"
 msgid "Break"
 msgstr "Break"
 
-#: telnet.c:2021
+#: telnet.c:2023
 msgid "Broken pipe"
 msgstr "Conexão interrompida"
 
@@ -411,7 +411,7 @@ msgstr "Não foi possível carregar %s"
 msgid "Can't load file"
 msgstr "Não foi possível carregar arquivo"
 
-#: main.c:295
+#: main.c:296
 msgid "Can't open file"
 msgstr "Não foi possível abrir arquivo"
 
@@ -468,7 +468,7 @@ msgstr ""
 "Não foi possível salvar a seleção para o arquivo\n"
 "%s"
 
-#: main.c:293
+#: main.c:294
 #, c-format
 msgid "Can't save trace data to file %s"
 msgstr "Não foi possível salvar trace no arquivo %s"
@@ -477,7 +477,7 @@ msgstr "Não foi possível salvar trace no arquivo %s"
 msgid "Can't set host charset"
 msgstr "Não foi possível definir o charset do host"
 
-#: v3270/iocallback.c:353
+#: v3270/iocallback.c:329
 msgid "Can't set lib3270 I/O handlers"
 msgstr "Não foi possível registrar manipuladores de I/O 3270"
 
@@ -518,7 +518,7 @@ msgstr "Cancelar envio."
 msgid "Cancelled by user"
 msgstr "Cancelado pelo usuário"
 
-#: telnet.c:1449
+#: telnet.c:1451
 #, fuzzy
 msgid "Cannot connect to specified LU"
 msgstr "Não foi possível conectar a %s"
@@ -618,7 +618,7 @@ msgstr "Erro de conexão"
 msgid "Connection failed"
 msgstr "Conexão falhou"
 
-#: telnet.c:2025
+#: telnet.c:2027
 msgid "Connection reset by peer"
 msgstr "Conexão foi cancelada pelo servidor"
 
@@ -704,7 +704,7 @@ msgstr "Padrão"
 msgid "Delete field"
 msgstr "Apagar campo"
 
-#: telnet.c:1696
+#: telnet.c:1698
 msgid "Device type rejected"
 msgstr "Tipo de dispositivo rejeitado"
 
@@ -720,7 +720,7 @@ msgstr "Mostrar a tabela de caracteres ativa"
 msgid "Display the cursor location in the OIA (the status line)"
 msgstr "Display the cursor location in the OIA (the status line)"
 
-#: telnet.c:1246
+#: telnet.c:1248
 msgid "EOR received when not in 3270 mode, ignored."
 msgstr "EOR recebido fora do modo 3270, ignorado."
 
@@ -843,7 +843,7 @@ msgstr "Tela cheia"
 msgid "Function bar"
 msgstr "Barra de funções"
 
-#: main.c:99 main.c:490
+#: main.c:100 main.c:492
 msgid "GTK Version mismatch"
 msgstr "Divergência de versão GTK"
 
@@ -863,23 +863,23 @@ msgstr "Ajuda"
 msgid "Host disconnected, transfer cancelled"
 msgstr "Servidor desconectou, transferência cancelada"
 
-#: telnet.c:1754
+#: telnet.c:1756
 msgid "Host illegally added function(s)"
 msgstr "Host illegally added function(s)"
 
-#: telnet.c:1679
+#: telnet.c:1681
 msgid "Host rejected device type or request type"
 msgstr "Servidor rejeitou o tipo de dispositivo ou requisição"
 
-#: telnet.c:1692
+#: telnet.c:1694
 msgid "Host rejected resource(s)"
 msgstr "Servidor rejeitou recurso(s)"
 
-#: main.c:406
+#: main.c:407
 msgid "Host system type"
 msgstr "Tipo do sistema no servidor"
 
-#: main.c:404
+#: main.c:405
 msgid "Host to connect"
 msgstr "Servidor a conectar"
 
@@ -991,9 +991,13 @@ msgstr "Teclado está bloqueado"
 msgid "Lateral keypad"
 msgstr "Barra lateral"
 
-#: main.c:416
+#: main.c:418
 msgid "Log to file"
 msgstr "Enviar log para arquivo"
+
+#: main.c:412
+msgid "Minutes for auto-disconnect"
+msgstr "Minutes for auto-disconnect"
 
 #: colors.c:430
 msgid "Misc colors"
@@ -1228,7 +1232,7 @@ msgstr "PF8"
 msgid "PF9"
 msgstr "PF9"
 
-#: main.c:439
+#: main.c:441
 msgid "Parse error"
 msgstr "Erro de interpretação"
 
@@ -1265,7 +1269,7 @@ msgstr "Path length constraint exceeded"
 msgid "Path of the local file to send."
 msgstr "Caminho completo do arquivo que vai ser enviado."
 
-#: main.c:401
+#: main.c:402
 msgid "Path to application data files"
 msgstr "Caminho para os arquivos de dados da aplicação"
 
@@ -1478,11 +1482,11 @@ msgstr "Return"
 msgid "SSL Connect failed"
 msgstr "Conexão SSL falhou"
 
-#: telnet.c:1038
+#: telnet.c:1035
 msgid "SSL Error"
 msgstr "Erro SSL"
 
-#: telnet.c:1038
+#: telnet.c:1035
 msgid "SSL Read error"
 msgstr "Erro de leitura SSL"
 
@@ -1498,7 +1502,7 @@ msgstr "Negociação SSL falhou"
 msgid "SSL_CTX_new() has failed"
 msgstr "SSL_CTX_new() has failed"
 
-#: telnet.c:2011
+#: telnet.c:2013
 #, c-format
 msgid ""
 "SSL_write:\n"
@@ -1619,7 +1623,7 @@ msgstr "Enviar arquivo"
 msgid "Send file to host"
 msgstr "Enviar arquivo para o servidor"
 
-#: main.c:413
+#: main.c:415
 msgid "Send messages to syslog"
 msgstr "Enviar mensagens para o log do sistema"
 
@@ -1631,11 +1635,11 @@ msgstr "Enviar/Receber"
 msgid "Sending file"
 msgstr "Enviando arquivo"
 
-#: main.c:403
+#: main.c:404
 msgid "Session name"
 msgstr "Nome da sessão"
 
-#: main.c:409
+#: main.c:410
 msgid "Set host charset"
 msgstr "Define página de código do host"
 
@@ -1643,19 +1647,19 @@ msgstr "Define página de código do host"
 msgid "Set insert mode"
 msgstr "Set insert mode"
 
-#: main.c:405
+#: main.c:406
 msgid "Set reported colors (8/16)"
 msgstr "Define número de cores informadas (8/16)"
 
-#: main.c:408
+#: main.c:409
 msgid "Set toggles OFF"
 msgstr "Desativa toggles"
 
-#: main.c:407
+#: main.c:408
 msgid "Set toggles ON"
 msgstr "Ativa toggles"
 
-#: main.c:415
+#: main.c:417
 msgid "Set trace filename"
 msgstr "Define o nome do arquivo de trace"
 
@@ -1687,11 +1691,11 @@ msgstr "Colar inteligente"
 msgid "Socket error"
 msgstr "Erro no socket"
 
-#: telnet.c:1059
+#: telnet.c:1061
 msgid "Socket read error"
 msgstr "Erro ao ler dados da rede"
 
-#: telnet.c:2032
+#: telnet.c:2034
 msgid "Socket write error"
 msgstr "Erro ao enviar dados para a rede"
 
@@ -1761,7 +1765,7 @@ msgstr "Divergência na identidade do emissor"
 msgid "System _type:"
 msgstr "Tipo de servidor:"
 
-#: telnet.c:1520
+#: telnet.c:1522
 msgid "TLS negotiation failure"
 msgstr "Negociação TLS falhou"
 
@@ -1921,7 +1925,7 @@ msgstr ""
 "The issuer certificate of a looked up certificate could not be found. This "
 "normally means the list of trusted certificates is not complete."
 
-#: main.c:410
+#: main.c:411
 msgid "The model of 3270 display to be emulated"
 msgstr "The model of 3270 display to be emulated"
 
@@ -1998,7 +2002,7 @@ msgstr ""
 "programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple "
 "Place, Suite 330, Boston, MA, 02111-1307, USA"
 
-#: main.c:486
+#: main.c:488
 #, c-format
 msgid "This program requires GTK version %d.%d.%d"
 msgstr "Este programa precisa do GTK versão %d.%d.%d"
@@ -2181,7 +2185,7 @@ msgstr "Atributo %s inesperado ou inválido: \"%s\""
 msgid "Unexpected or invalid attribute value \"%s\""
 msgstr "Valor de attributo inesperado ou inválido: \"%s\""
 
-#: main.c:200
+#: main.c:201
 #, c-format
 msgid "Unexpected or invalid color value \"%s\""
 msgstr "Valor de cor inválido ou inesperado: \"%s\""
@@ -2190,7 +2194,7 @@ msgstr "Valor de cor inválido ou inesperado: \"%s\""
 msgid "Unexpected or unknown security status"
 msgstr "Estado de segurança inesperado ou desconhecido."
 
-#: v3270/widget.c:892
+#: v3270/widget.c:909
 msgid ""
 "Unexpected signature in H3270 object, possible version mismatch in lib3270"
 msgstr ""
@@ -2487,9 +2491,8 @@ msgstr "setsockopt(SO_OOBINLINE) has failed"
 msgid "translator-credits"
 msgstr "translator-credits"
 
-#: telnet.c:1034
-msgid "unknown error"
-msgstr "Erro desconhecido"
+#~ msgid "unknown error"
+#~ msgstr "Erro desconhecido"
 
 #~ msgid "DS Trace"
 #~ msgstr "DS Trace"

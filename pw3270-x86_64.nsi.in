@@ -128,7 +128,7 @@ SubSection "@PACKAGE@" SecMain
 
 			CreateDirectory "$INSTDIR\plugins"
 			file "/oname=$INSTDIR\plugins\hllapi.dll" ".bin\Release\plugins\hllapi.dll"
-			file "/oname=$SYSDIR\libhllapi.dll"	".bin\Release\libhllapi.dll"
+			file "/oname=$SYSDIR\libhllapi.dll"	".bin\Release\hllapi.dll"
 
 		sectionEnd
 
