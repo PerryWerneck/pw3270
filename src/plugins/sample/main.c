@@ -34,15 +34,13 @@
 
  static void connected(GtkWidget *terminal, const gchar *host, GtkWidget * window) {
 
-	fprintf(stderr,"%s\n",__FUNCTION__);
-	fflush(stderr);
+	g_message("%s",__FUNCTION__);
 
  }
 
  static void disconnected(GtkWidget *terminal, GtkWidget * window) {
 
-	fprintf(stderr,"%s\n",__FUNCTION__);
-	fflush(stderr);
+	g_message("%s",__FUNCTION__);
 
  }
 
@@ -50,8 +48,7 @@
 
 	GtkWidget * terminal = pw3270_get_terminal_widget(window);
 
-	fprintf(stderr,"%s\n",__FUNCTION__);
-	fflush(stderr);
+	g_message("%s",__FUNCTION__);
 
 	g_signal_connect(terminal,"disconnected",G_CALLBACK(disconnected),window);
 	g_signal_connect(terminal,"connected",G_CALLBACK(connected),window);
