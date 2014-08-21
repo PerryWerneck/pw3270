@@ -159,8 +159,14 @@
 
  }
 
- LIB3270_EXPORT void pw3270_init_plugins(void)
+ LIB3270_EXPORT void pw3270_load_plugins(const gchar *p)
  {
+ 	if(p)
+	{
+		load(p);
+		return;
+	}
+
 #if defined( DEBUG )
 
 	gchar * dir  = g_get_current_dir();
@@ -244,7 +250,7 @@
 
  }
 
- LIB3270_EXPORT void pw3270_deinit_plugins(void)
+ LIB3270_EXPORT void pw3270_unload_plugins(void)
  {
  	int f;
 

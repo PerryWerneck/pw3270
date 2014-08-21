@@ -52,17 +52,18 @@
 
 /*--[ Statics ]--------------------------------------------------------------------------------------*/
 
- static GtkWidget		* toplevel		= NULL;
- static GtkWidget 		* trace_window	= NULL;
- static unsigned int	  syscolors		= 16;
- static unsigned int	  timer			= 0;
+ static GtkWidget			* toplevel		= NULL;
+ static GtkWidget 			* trace_window	= NULL;
+ static unsigned int		  syscolors		= 16;
+ static unsigned int		  timer			= 0;
  static const gchar		* systype		= NULL;
  static const gchar		* toggleset		= NULL;
  static const gchar		* togglereset	= NULL;
- static const gchar     * logfile       = NULL;
+ static const gchar     	* logfile       = NULL;
  static const gchar		* tracefile		= NULL;
  static const gchar		* charset		= NULL;
  static const gchar		* model			= NULL;
+ static const gchar		* pluginpath	= NULL;
 
 #ifdef HAVE_GTKMAC
  GtkOSXApplication		* osxapp		= NULL;
@@ -410,6 +411,7 @@ int main(int argc, char *argv[])
 			{ "charset",	    'C', 0, G_OPTION_ARG_STRING,	&charset,		    N_( "Set host charset" ),							NULL			},
 			{ "model",		    'M', 0, G_OPTION_ARG_STRING,	&model,			    N_( "The model of 3270 display to be emulated" ),	NULL			},
 			{ "autodisconnect",	'D', 0, G_OPTION_ARG_INT,		&timer,			    N_( "Minutes for auto-disconnect" ),				0				},
+			{ "pluginpath",		'P', 0, G_OPTION_ARG_STRING,	&pluginpath,	    N_( "Path for plugin files" ),						NULL			},
 
 #if defined( HAVE_SYSLOG )
 			{ "syslog",			'l', 0, G_OPTION_ARG_NONE,		&log_to_syslog,		N_( "Send messages to syslog" ),					NULL			},
@@ -522,7 +524,7 @@ int main(int argc, char *argv[])
 			gtk_settings_set_string_property(settings,"gtk-menu-bar-accel","Menu","");
 		}
 
-		pw3270_init_plugins();
+		pw3270_load_plugins(pluginpath);
 		toplevel = pw3270_new(host,systype,syscolors);
 		pw3270_set_session_name(toplevel,session_name);
 
@@ -579,7 +581,7 @@ int main(int argc, char *argv[])
 			gtk_widget_destroy(trace_window);
 
 		pw3270_stop_plugins(toplevel);
-		pw3270_deinit_plugins();
+		pw3270_unload_plugins();
 
 	}
 

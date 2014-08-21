@@ -47,8 +47,8 @@
 	LIB3270_EXPORT int pw3270_plugin_stop(GtkWidget *window);
 
 	// plugins
-	LIB3270_EXPORT void pw3270_init_plugins(void);
-	LIB3270_EXPORT void pw3270_deinit_plugins(void);
+	LIB3270_EXPORT void pw3270_load_plugins(const gchar *path);
+	LIB3270_EXPORT void pw3270_unload_plugins(void);
 
 	LIB3270_EXPORT void pw3270_start_plugins(GtkWidget *widget);
 	LIB3270_EXPORT void pw3270_stop_plugins(GtkWidget *widget);
