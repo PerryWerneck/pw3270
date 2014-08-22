@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-12 08:14-0300\n"
+"POT-Creation-Date: 2014-08-22 08:33-0300\n"
 "PO-Revision-Date: 2014-02-17 08:05-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Portugues <>\n"
@@ -50,7 +50,7 @@ msgstr "Ação %s precisa de um valor válido"
 msgid "%s action needs src attribute"
 msgstr "Ação %s precisa do atributo src"
 
-#: main.c:96
+#: main.c:97
 #, c-format
 msgid "%s requires GTK version %d.%d.%d"
 msgstr "%s requer GTK versão %d.%d.%d"
@@ -85,7 +85,7 @@ msgstr "%s: Caractere desconhecido depois de \\pf"
 msgid "%s: Vertical tab not supported"
 msgstr "%s: Tabulação vertical não é suportada"
 
-#: main.c:423
+#: main.c:425
 msgid "- 3270 Emulator for Gtk"
 msgstr "- Emulador 3270 para GTK"
 
@@ -166,7 +166,7 @@ msgstr ""
 msgid "<b>SSL state is undefined</b>Unexpected SSL status %ld"
 msgstr "<b>Estado do SSL é indefinido</b>Estado SSL inesperado %ld"
 
-#: main.c:443
+#: main.c:445
 msgid ""
 "<b>Valid options:</b>\n"
 "\n"
@@ -231,7 +231,7 @@ msgstr ""
 msgid "Appends the source file to the destination file."
 msgstr "Adiciona conteúdo do arquivo origem ao final do arquivo destino."
 
-#: main.c:399 main.c:401
+#: main.c:400 main.c:402
 msgid "Application name"
 msgstr "Nome da aplicação"
 
@@ -411,7 +411,7 @@ msgstr "Não foi possível carregar %s"
 msgid "Can't load file"
 msgstr "Não foi possível carregar arquivo"
 
-#: main.c:296
+#: main.c:297
 msgid "Can't open file"
 msgstr "Não foi possível abrir arquivo"
 
@@ -468,7 +468,7 @@ msgstr ""
 "Não foi possível salvar a seleção para o arquivo\n"
 "%s"
 
-#: main.c:294
+#: main.c:295
 #, c-format
 msgid "Can't save trace data to file %s"
 msgstr "Não foi possível salvar trace no arquivo %s"
@@ -843,7 +843,7 @@ msgstr "Tela cheia"
 msgid "Function bar"
 msgstr "Barra de funções"
 
-#: main.c:100 main.c:492
+#: main.c:101 main.c:494
 msgid "GTK Version mismatch"
 msgstr "Divergência de versão GTK"
 
@@ -875,11 +875,11 @@ msgstr "Servidor rejeitou o tipo de dispositivo ou requisição"
 msgid "Host rejected resource(s)"
 msgstr "Servidor rejeitou recurso(s)"
 
-#: main.c:407
+#: main.c:408
 msgid "Host system type"
 msgstr "Tipo do sistema no servidor"
 
-#: main.c:405
+#: main.c:406
 msgid "Host to connect"
 msgstr "Servidor a conectar"
 
@@ -991,11 +991,11 @@ msgstr "Teclado está bloqueado"
 msgid "Lateral keypad"
 msgstr "Barra lateral"
 
-#: main.c:418
+#: main.c:420
 msgid "Log to file"
 msgstr "Enviar log para arquivo"
 
-#: main.c:412
+#: main.c:413
 msgid "Minutes for auto-disconnect"
 msgstr "Minutes for auto-disconnect"
 
@@ -1232,7 +1232,7 @@ msgstr "PF8"
 msgid "PF9"
 msgstr "PF9"
 
-#: main.c:441
+#: main.c:443
 msgid "Parse error"
 msgstr "Erro de interpretação"
 
@@ -1261,6 +1261,11 @@ msgstr "Colar conteúdo de arquivo texto"
 msgid "Paste with left margin"
 msgstr "Colar com margem esquerda"
 
+#: main.c:414
+#, fuzzy
+msgid "Path for plugin files"
+msgstr "Caminho para os arquivos de dados da aplicação"
+
 #: v3270/security.c:209
 msgid "Path length constraint exceeded"
 msgstr "Path length constraint exceeded"
@@ -1269,7 +1274,7 @@ msgstr "Path length constraint exceeded"
 msgid "Path of the local file to send."
 msgstr "Caminho completo do arquivo que vai ser enviado."
 
-#: main.c:402
+#: main.c:403
 msgid "Path to application data files"
 msgstr "Caminho para os arquivos de dados da aplicação"
 
@@ -1623,7 +1628,7 @@ msgstr "Enviar arquivo"
 msgid "Send file to host"
 msgstr "Enviar arquivo para o servidor"
 
-#: main.c:415
+#: main.c:417
 msgid "Send messages to syslog"
 msgstr "Enviar mensagens para o log do sistema"
 
@@ -1635,11 +1640,11 @@ msgstr "Enviar/Receber"
 msgid "Sending file"
 msgstr "Enviando arquivo"
 
-#: main.c:404
+#: main.c:405
 msgid "Session name"
 msgstr "Nome da sessão"
 
-#: main.c:410
+#: main.c:411
 msgid "Set host charset"
 msgstr "Define página de código do host"
 
@@ -1647,19 +1652,19 @@ msgstr "Define página de código do host"
 msgid "Set insert mode"
 msgstr "Set insert mode"
 
-#: main.c:406
+#: main.c:407
 msgid "Set reported colors (8/16)"
 msgstr "Define número de cores informadas (8/16)"
 
-#: main.c:409
+#: main.c:410
 msgid "Set toggles OFF"
 msgstr "Desativa toggles"
 
-#: main.c:408
+#: main.c:409
 msgid "Set toggles ON"
 msgstr "Ativa toggles"
 
-#: main.c:417
+#: main.c:419
 msgid "Set trace filename"
 msgstr "Define o nome do arquivo de trace"
 
@@ -1925,7 +1930,7 @@ msgstr ""
 "The issuer certificate of a looked up certificate could not be found. This "
 "normally means the list of trusted certificates is not complete."
 
-#: main.c:411
+#: main.c:412
 msgid "The model of 3270 display to be emulated"
 msgstr "The model of 3270 display to be emulated"
 
@@ -2002,7 +2007,7 @@ msgstr ""
 "programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple "
 "Place, Suite 330, Boston, MA, 02111-1307, USA"
 
-#: main.c:488
+#: main.c:490
 #, c-format
 msgid "This program requires GTK version %d.%d.%d"
 msgstr "Este programa precisa do GTK versão %d.%d.%d"
@@ -2185,7 +2190,7 @@ msgstr "Atributo %s inesperado ou inválido: \"%s\""
 msgid "Unexpected or invalid attribute value \"%s\""
 msgstr "Valor de attributo inesperado ou inválido: \"%s\""
 
-#: main.c:201
+#: main.c:202
 #, c-format
 msgid "Unexpected or invalid color value \"%s\""
 msgstr "Valor de cor inválido ou inesperado: \"%s\""
