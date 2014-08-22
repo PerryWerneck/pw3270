@@ -32,18 +32,37 @@
 
 /*--[ Implement ]---------------------------------------------------------------------------------------------------------*/
 
+ /**
+  * @brief Method called when the terminal connects to host.
+  *
+  * @param terminal	Terminal widget.
+  * @param host		Connected host.
+  * @param window		Application window.
+  *
+  */
  static void connected(GtkWidget *terminal, const gchar *host, GtkWidget * window) {
 
-	g_message("%s",__FUNCTION__);
+	g_message("%s - %s",__FUNCTION__,host);
 
  }
 
+ /**
+  * @brief Method called when the terminal loses connection with the host.
+  *
+  * @param terminal	Terminal widget.
+  * @param window		Application window.
+  *
+  */
  static void disconnected(GtkWidget *terminal, GtkWidget * window) {
 
 	g_message("%s",__FUNCTION__);
 
  }
 
+ /**
+  * @brief Plugin has started.
+  *
+  */
  LIB3270_EXPORT int pw3270_plugin_start(GtkWidget *window) {
 
 	GtkWidget * terminal = pw3270_get_terminal_widget(window);
