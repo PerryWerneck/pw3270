@@ -180,8 +180,14 @@ Section /o "Software Development Kit" SecSDK
 	setOutPath $INSTDIR\sdk\include
 	file "src\include\lib3270.h"
 	file "src\include\pw3270.h"
-	file "src\include\pw3270\v3270.h"
+
+	setOutPath $INSTDIR\sdk\include\pw3270
+	file "src\include\pw3270\class.h"
 	file "src\include\pw3270\hllapi.h"
+	file "src\include\pw3270\ipcpackets.h"
+	file "src\include\pw3270\plugin.h"
+	file "src\include\pw3270\trace.h"
+	file "src\include\pw3270\v3270.h"
 
 	setOutPath $INSTDIR\sdk\include\lib3270
 	file "src\include\lib3270\config.h"
