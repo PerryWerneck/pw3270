@@ -73,7 +73,7 @@ $(BINRLS)$(DLL_NAME).$(VERSION): $(foreach SRC, $(basename $(EXTAPI_SRC)), $(OBJ
 	@$(CXX) $(DLL_FLAGS) @LDSOFLAGS@ $(LDFLAGS) @RLS_LDFLAGS@ -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(CLASS_LIBS)
 
 install:
-	@$(MKDIR) $(DESTDIR)$(libdir)/$(PACKAGE_NAME)-plugin
+	@$(MKDIR) $(DESTDIR)$(libdir)/$(PACKAGE_NAME)-plugins
 	@$(INSTALL_PROGRAM) $(BINRLS)/$(PLUGIN_NAME) $(DESTDIR)$(libdir)/$(PACKAGE_NAME)-plugins
 
 	@$(MKDIR) $(DESTDIR)$(REXXLIBDIR)
