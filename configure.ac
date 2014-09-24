@@ -432,48 +432,25 @@ AC_SUBST(PHPCONFDIR)
 
 #--[ ooRexx ]-----------------------------------------------------------------------------------------------------------------------------------------------
 
-AC_ARG_ENABLE([rexx],[AS_HELP_STRING([--disable-rexx], [Disable ooRexx plugin & extension])],[ app_cv_rexx="$enableval" ],[ app_cv_rexx="yes" ])
-AC_ARG_VAR([REXX_HOME], [ooRexx home])
+#AC_ARG_ENABLE([rexx],[AS_HELP_STRING([--disable-rexx], [Disable ooRexx plugin & extension])],[ app_cv_rexx="$enableval" ],[ app_cv_rexx="yes" ])
+#AC_ARG_VAR([REXX_HOME], [ooRexx home])
 
-if test -z "${REXX_HOME}"; then
+AC_PATH_TOOL([REXXC], [rexxc], [cp] )
+AC_PATH_TOOL([REXXCONFIG], [oorexx-config], [no])
 
-	REXX_HOME="\$(datarootdir)/ooRexx"
-
-	AC_PATH_TOOL([REXXC], [rexxc], [cp] )
-	AC_PATH_TOOL([REXXCONFIG], [oorexx-config], [no])
-
-	PKG_CHECK_MODULES( [REXX], [ooRexx], app_cv_rexx=yes, AC_MSG_NOTICE([No ooRexx on pkg-config.]) )
-
-	if test "$REXXCONFIG" != "no"; then
-		REXX_CFLAGS=`$REXXCONFIG --cflags`
-		REXX_LIBS=`$REXXCONFIG --libs`
-		REXX_HOME=`$REXXCONFIG --prefix`/share/ooRexx
-		AC_MSG_NOTICE([Got settings from oorexx-config.])
-	else
-		AC_MSG_NOTICE([ooRexx SDK is NOT available.])
-		app_cv_rexx="no"
-	fi
-
+if test "$REXXCONFIG" != "no"; then
+	REXX_CFLAGS=`$REXXCONFIG --cflags`
+	REXX_LIBS=`$REXXCONFIG --libs`
+	REXX_HOME=`$REXXCONFIG --prefix`/share/ooRexx
+	AC_MSG_NOTICE([Got settings from oorexx-config.])
+	app_cv_rexx="yes"
 else
-	if test -e "${REXX_HOME}/api/oorexxapi.h"; then
-
-		AC_MSG_NOTICE([Setting rexx sdk from REXX_HOME])
-
-		REXX_CFLAGS="$CFLAGS -I\"$REXX_HOME/api\""
-		REXX_LIBS="$LIBS -L\"$REXX_HOME\" -lrexxapi -lrexx"
-
-		AC_PATH_TOOL([REXXC], [rexxc], [cp], path="$PATH:$REXX_HOME" )
-
-	else
-		AC_MSG_NOTICE([ooRexx SDK is NOT available.])
-		app_cv_rexx="no"
-	fi
-
+	PKG_CHECK_MODULES( [REXX], [ooRexx], app_cv_rexx=yes, AC_MSG_NOTICE([No ooRexx on pkg-config.]) )
 fi
 
 if test "$app_cv_rexx" == "yes"; then
 	AC_DEFINE(HAVE_REXX)
-	AC_DEFINE(HAVE_OOREXXAPI_H)
+	AC_CHECK_HEADER(oorexxapi.h, AC_DEFINE(HAVE_OOREXXAPI_H))
 	PLUGINS="$PLUGINS rx3270"
 	AC_MSG_NOTICE([ooRexx plugin & extension are enabled.])
 else
