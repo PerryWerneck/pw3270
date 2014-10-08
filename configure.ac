@@ -447,6 +447,10 @@ if test "$app_cv_rexx" != "yes"; then
 		app_cv_rexx="yes"
 	fi
 
+else
+
+	REXX_HOME=`$PKG_CONFIG --variable=prefix ooRexx`/share/ooRexx
+
 fi
 
 if test "$app_cv_rexx" == "yes"; then
