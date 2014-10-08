@@ -432,20 +432,21 @@ AC_SUBST(PHPCONFDIR)
 
 #--[ ooRexx ]-----------------------------------------------------------------------------------------------------------------------------------------------
 
-#AC_ARG_ENABLE([rexx],[AS_HELP_STRING([--disable-rexx], [Disable ooRexx plugin & extension])],[ app_cv_rexx="$enableval" ],[ app_cv_rexx="yes" ])
-#AC_ARG_VAR([REXX_HOME], [ooRexx home])
-
 AC_PATH_TOOL([REXXC], [rexxc], [cp] )
 AC_PATH_TOOL([REXXCONFIG], [oorexx-config], [no])
 
-if test "$REXXCONFIG" != "no"; then
-	REXX_CFLAGS=`$REXXCONFIG --cflags`
-	REXX_LIBS=`$REXXCONFIG --libs`
-	REXX_HOME=`$REXXCONFIG --prefix`/share/ooRexx
-	AC_MSG_NOTICE([Got settings from oorexx-config.])
-	app_cv_rexx="yes"
-else
-	PKG_CHECK_MODULES( [REXX], [ooRexx], app_cv_rexx=yes, AC_MSG_NOTICE([No ooRexx on pkg-config.]) )
+PKG_CHECK_MODULES( [REXX], [ooRexx], app_cv_rexx=yes, AC_MSG_NOTICE([No ooRexx on pkg-config.]) )
+
+if test "$app_cv_rexx" != "yes"; then
+
+	if test "$REXXCONFIG" != "no"; then
+		REXX_CFLAGS=`$REXXCONFIG --cflags`
+		REXX_LIBS=`$REXXCONFIG --libs`
+		REXX_HOME=`$REXXCONFIG --prefix`/share/ooRexx
+		AC_MSG_NOTICE([Got settings from oorexx-config.])
+		app_cv_rexx="yes"
+	fi
+
 fi
 
 if test "$app_cv_rexx" == "yes"; then

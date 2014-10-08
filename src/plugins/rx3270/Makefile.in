@@ -70,7 +70,7 @@ $(BINRLS)/$(PLUGIN_NAME): $(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJRLS)/$(
 $(BINRLS)$(DLL_NAME).$(VERSION): $(foreach SRC, $(basename $(EXTAPI_SRC)), $(OBJRLS)/$(SRC).o) $(CLASS_RELEASE_OBJECTS)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CXX) $(DLL_FLAGS) @LDSOFLAGS@ $(LDFLAGS) @RLS_LDFLAGS@ -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(CLASS_LIBS)
+	$(CXX) $(DLL_FLAGS) @LDSOFLAGS@ $(LDFLAGS) @RLS_LDFLAGS@ -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(CLASS_LIBS)
 
 install:
 	@$(MKDIR) $(DESTDIR)$(libdir)/$(PACKAGE_NAME)-plugins
