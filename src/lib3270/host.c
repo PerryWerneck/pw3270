@@ -208,7 +208,7 @@ static void update_host(H3270 *h)
 					h->host.srvc
 		));
 
-	trace("hosturl=[%s]",h->host.full);
+	trace("hosturl=[%s] ssl=%s",h->host.full,(h->options&LIB3270_OPTION_SSL) ? "yes" : "no");
 
 }
 

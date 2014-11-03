@@ -433,6 +433,7 @@ LIB3270_EXPORT int v3270_host_select_apply(V3270HostSelectWidget *widget)
 
 	lib3270_set_hostname(widget->hSession,gtk_entry_get_text(widget->entry[ENTRY_HOSTNAME]));
 	lib3270_set_srvcname(widget->hSession,gtk_entry_get_text(widget->entry[ENTRY_SRVCNAME]));
+
 	lib3270_set_options(widget->hSession,widget->options);
 
 	return lib3270_connect(widget->hSession,0);

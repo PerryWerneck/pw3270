@@ -83,6 +83,15 @@ LIB3270_EXPORT void lib3270_set_options(H3270 *hSession, LIB3270_OPTION opt)
 {
 	CHECK_SESSION_HANDLE(hSession);
 	hSession->options = opt;
+
+	Replace(hSession->host.full,
+			lib3270_strdup_printf(
+				"%s%s:%s",
+					hSession->options&LIB3270_OPTION_SSL ? "tn3270s://" : "tn3270://",
+					hSession->host.current,
+					hSession->host.srvc
+		));
+
 }
 
 LIB3270_EXPORT unsigned short lib3270_get_color_type(H3270 *hSession)
