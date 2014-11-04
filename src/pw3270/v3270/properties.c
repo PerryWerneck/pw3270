@@ -145,7 +145,7 @@
 					"auto_disconnect",
 					"Minutes to disconnect when idle",
 					FALSE,G_PARAM_READABLE|G_PARAM_WRITABLE);
-	g_object_class_install_property(gobject_class,PROP_LUNAME,v3270_properties[PROP_LUNAME]);
+	g_object_class_install_property(gobject_class,PROP_AUTO_DISCONNECT,v3270_properties[PROP_AUTO_DISCONNECT]);
 
 	// Toggle properties
 	int f;
@@ -155,6 +155,7 @@
 		v3270_properties[PROP_TOGGLE+f] = g_param_spec_boolean(lib3270_get_toggle_name(f),lib3270_get_toggle_name(f),lib3270_get_toggle_description(f),FALSE,G_PARAM_WRITABLE|G_PARAM_READABLE);
 		g_object_class_install_property(gobject_class,PROP_TOGGLE+f,v3270_properties[PROP_TOGGLE+f]);
 	}
+	debug("%s",__FUNCTION__);
  }
 
  LIB3270_EXPORT	void v3270_set_auto_disconnect(GtkWidget *widget, guint minutes)
