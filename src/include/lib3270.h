@@ -655,6 +655,20 @@
 	 */
 	LIB3270_EXPORT int lib3270_toggle(H3270 *h, LIB3270_TOGGLE ix);
 
+	/**
+	 * @brief IO flags.
+	 *
+	 */
+	typedef enum _lib3270_io_event {
+		LIB3270_IO_FLAG_READ		= 0x01,
+		LIB3270_IO_FLAG_WRITE		= 0x02,
+		LIB3270_IO_FLAG_EXCEPTION	= 0x04
+	} LIB3270_IO_FLAG;
+
+	void	* lib3270_add_poll_fd(H3270 *session, int fd, LIB3270_IO_FLAG flag, void(*proc)(H3270 *, LIB3270_IO_FLAG, void *), void *userdata );
+	void	  lib3270_remove_poll_fd(int fd);
+	void	  lib3270_update_poll_fd(int fd, LIB3270_IO_FLAG flag);
+
 	/** Callback table
 	 *
 	 * Structure with GUI unblocking I/O calls, used to replace the lib3270´s internal ones.
