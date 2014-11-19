@@ -778,6 +778,14 @@
 	LIB3270_EXPORT void lib3270_main_iterate(H3270 *h, int wait);
 
 	/**
+	 * @brief Iterate internal's lib3270 event loop.
+	 *
+	 * Use it only if the internal I/O calls wasn't replaced.
+	 *
+	 */
+	LIB3270_EXPORT void lib3270_iterate(int block);
+
+	/**
 	 * Wait for "N" seconds keeping main loop active.
 	 *
 	 * @param seconds	Number of seconds to wait.

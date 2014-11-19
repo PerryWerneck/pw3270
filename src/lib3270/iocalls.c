@@ -773,23 +773,9 @@ LIB3270_EXPORT int lib3270_register_handlers(const struct lib3270_callbacks *cbk
 
 }
 
-/*
-LIB3270_EXPORT int lib3270_call_thread(int(*callback)(H3270 *h, void *), H3270 *h, void *parm)
-{
-	int rc;
-	CHECK_SESSION_HANDLE(h);
-
-	h->set_timer(h,1);
-
-	lib3270_main_iterate(h,0);
-	rc = callthread(callback,h,parm);
-	lib3270_main_iterate(h,0);
-
-	h->set_timer(h,0);
-
-	return rc;
+LIB3270_EXPORT void lib3270_iterate(int block) {
+	event_dispatcher(NULL,block);
 }
-*/
 
 LIB3270_EXPORT void lib3270_main_iterate(H3270 *hSession, int block)
 {
