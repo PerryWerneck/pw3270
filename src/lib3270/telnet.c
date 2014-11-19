@@ -988,7 +988,7 @@ LIB3270_EXPORT void lib3270_data_recv(H3270 *hSession, size_t nr, const unsigned
  * @param hSession	Session handle
  *
  */
-void net_input(H3270 *hSession, LIB3270_IO_FLAG flag, void *dunno)
+void net_input(H3270 *hSession, int fd, LIB3270_IO_FLAG flag, void *dunno)
 {
 //	register unsigned char	* cp;
 	int						  nr;
@@ -1950,7 +1950,7 @@ process_eor(H3270 *hSession)
  * net_exception
  *	Called when there is an exceptional condition on the socket.
  */
-void net_exception(H3270 *session, LIB3270_IO_FLAG flag, void *dunno)
+void net_exception(H3270 *session, int fd, LIB3270_IO_FLAG flag, void *dunno)
 {
 	CHECK_SESSION_HANDLE(session);
 

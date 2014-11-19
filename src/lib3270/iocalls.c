@@ -281,6 +281,14 @@ static void internal_remove_poll(void *id)
 	inputs_changed = True;
 }
 
+LIB3270_EXPORT void	 lib3270_remove_poll(void *id) {
+	remove_poll(id);
+}
+
+LIB3270_EXPORT void	 * lib3270_add_poll_fd(H3270 *session, int fd, LIB3270_IO_FLAG flag, void(*call)(H3270 *, int, LIB3270_IO_FLAG, void *), void *userdata ) {
+	return add_poll(session,fd,flag,call,userdata);
+}
+
 /* Event dispatcher. */
 static int internal_event_dispatcher(H3270 *hSession, int block)
 {

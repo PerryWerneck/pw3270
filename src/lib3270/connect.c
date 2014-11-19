@@ -77,7 +77,7 @@
 
 
 //static void net_connected(H3270 *hSession)
-static void net_connected(H3270 *hSession, LIB3270_IO_FLAG flag, void *dunno)
+static void net_connected(H3270 *hSession, int fd, LIB3270_IO_FLAG flag, void *dunno)
 {
 	int 		err;
 	socklen_t	len		= sizeof(err);
