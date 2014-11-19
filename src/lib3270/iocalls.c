@@ -81,9 +81,6 @@ static void	  internal_ring_bell(H3270 *);
  static void 	* (*add_except)(int source, H3270 *session, void (*fn)(H3270 *session))
 					= internal_add_except;
 
-// static int 	  (*callthread)(int(*callback)(H3270 *, void *), H3270 *session, void *parm)
-//					= internal_callthread;
-
  static int		  (*wait)(H3270 *hSession, int seconds)
 					= internal_wait;
 
@@ -444,42 +441,6 @@ retry:
 		Sleep(tmo);
 	}
 
-/*
-	if(events)
-	{
-		DWORD ret = WaitForMultipleObjects(events, ha, FALSE, tmo);
-
-		if (ret == WAIT_FAILED)
-		{
-			lib3270_popup_dialog(	hSession,
-									LIB3270_NOTIFY_ERROR,
-									_( "Network error" ),
-									_( "WaitForMultipleObjects() failed when processing for events." ),
-									"%s",
-									lib3270_win32_strerror(GetLastError()));
-			lib3270_disconnect(hSession);
-		}
-		else
-		{
-			inputs_changed = False;
-
-			for (i = 0, ip = inputs; ip != (input_t *)NULL; ip = ip->next, i++)
-			{
-				if(ret == WAIT_OBJECT_0 + i)
-				{
-					(*ip->proc)(ip->session);
-					processed_any = True;
-					if (inputs_changed)
-						goto retry;
-				}
-			}
-		}
-	}
-	else if(block)
-	{
-		Sleep(100);
-	}
-*/
 
 #else
 
@@ -621,13 +582,6 @@ retry:
 
 }
 
-/*
-static int internal_callthread(int(*callback)(H3270 *, void *), H3270 *session, void *parm)
-{
-	return callback(session,parm);
-}
-*/
-
 static int internal_wait(H3270 *hSession, int seconds)
 {
 	time_t end;
@@ -756,9 +710,6 @@ LIB3270_EXPORT int lib3270_register_handlers(const struct lib3270_callbacks *cbk
 
 	if(cbk->AddExcept)
 		add_except = cbk->AddExcept;
-
-//	if(cbk->callthread)
-//		callthread = cbk->callthread;
 
 	if(cbk->Wait)
 		wait = cbk->Wait;
