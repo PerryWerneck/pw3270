@@ -30,34 +30,20 @@ struct ctl_char {
 };
 
 LIB3270_INTERNAL void net_abort(H3270 *hSession);
-// LIB3270_INTERNAL Boolean net_add_dummy_tn3270e(H3270 *hSession);
 LIB3270_INTERNAL void net_add_eor(unsigned char *buf, int len);
 LIB3270_INTERNAL void net_break(H3270 *hSession);
-// LIB3270_INTERNAL void net_charmode(H3270 *hSession);
 LIB3270_INTERNAL int net_connect(H3270 *session, const char *, char *, Boolean, Boolean *, Boolean *);
 LIB3270_INTERNAL void net_disconnect(H3270 *session);
-LIB3270_INTERNAL void net_exception(H3270 *session);
-// LIB3270_INTERNAL void net_hexansi_out(unsigned char *buf, int len);
-LIB3270_INTERNAL void net_input(H3270 *session);
+LIB3270_INTERNAL void net_exception(H3270 *session, LIB3270_IO_FLAG flag, void *dunno);
+LIB3270_INTERNAL void net_input(H3270 *session, LIB3270_IO_FLAG flag, void *dunno);
 LIB3270_INTERNAL void net_interrupt(H3270 *hSession);
-// LIB3270_INTERNAL void net_linemode(void);
-// LIB3270_INTERNAL struct ctl_char *net_linemode_chars(void);
 LIB3270_INTERNAL void net_output(H3270 *hSession);
-//LIB3270_INTERNAL const char *net_query_bind_plu_name(void);
-//LIB3270_INTERNAL const char *net_query_connection_state(void);
-//LIB3270_INTERNAL const char *net_query_host(void);
-//LIB3270_INTERNAL const char *net_query_lu_name(void);
 LIB3270_INTERNAL void net_sendc(H3270 *hSession, char c);
 LIB3270_INTERNAL void net_sends(H3270 *hSession, const char *s);
 LIB3270_INTERNAL void net_send_erase(H3270 *hSession);
 LIB3270_INTERNAL void net_send_kill(H3270 *hSession);
 LIB3270_INTERNAL void net_send_werase(H3270 *hSession);
-// LIB3270_INTERNAL Boolean net_snap_options(void);
 LIB3270_INTERNAL void space3270out(H3270 *hSession, int n);
-// LIB3270_INTERNAL const char *tn3270e_current_opts(void);
-// LIB3270_INTERNAL char *net_proxy_type(void);
-//LIB3270_INTERNAL char *net_proxy_host(void);
-// LIB3270_INTERNAL char *net_proxy_port(void);
 
 #if defined(X3270_TRACE)
 	LIB3270_INTERNAL void trace_netdata(H3270 *hSession, char direction, unsigned const char *buf, int len);

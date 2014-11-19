@@ -37,9 +37,6 @@
 #include "utilc.h"
 
 #define MILLION			1000000L
-#define InputReadMask	0x1
-#define InputExceptMask	0x2
-#define InputWriteMask	0x4
 
 #if defined(_WIN32)
 	#define MAX_HA	256
@@ -47,18 +44,25 @@
 
 /*---[ Standard calls ]-------------------------------------------------------------------------------------*/
 
-static void   internal_remove_timeout(void *timer);
-static void	  internal_remove_source(void *id);
-static void * internal_add_timeout(unsigned long interval_ms, H3270 *session, void (*proc)(H3270 *session));
+// Timeout calls
+static void      internal_remove_timeout(void *timer);
+static void	* internal_add_timeout(unsigned long interval_ms, H3270 *session, void (*proc)(H3270 *session));
 
+static void	* internal_add_poll(H3270 *session, int fd, LIB3270_IO_FLAG flag, void(*proc)(H3270 *, int, LIB3270_IO_FLAG, void *), void *userdata );
+static void	  internal_remove_poll(void *id);
+
+
+/*
+// fdcalls
+static void	internal_remove_source(void *id);
 static void * internal_add_input(int source, H3270 *session, void (*fn)(H3270 *session));
 static void * internal_add_output(int source, H3270 *session, void (*fn)(H3270 *session));
 static void * internal_add_except(int source, H3270 *session, void (*fn)(H3270 *session));
+*/
 
-// static int 	  internal_callthread(int(*callback)(H3270 *, void *), H3270 *session, void *parm);
-static int	  internal_wait(H3270 *hSession, int seconds);
+static int		  internal_wait(H3270 *hSession, int seconds);
 
-static int	  internal_event_dispatcher(H3270 *hSession, int block);
+static int		  internal_event_dispatcher(H3270 *hSession, int block);
 static void	  internal_ring_bell(H3270 *);
 
 /*---[ Active callbacks ]-----------------------------------------------------------------------------------*/
@@ -69,19 +73,13 @@ static void	  internal_ring_bell(H3270 *);
  static void	  (*remove_timeout)(void *timer)
 					= internal_remove_timeout;
 
- static void	  (*remove_source)(void *id)
-					= internal_remove_source;
+ static void	* (*add_poll)(H3270 *session, int fd, LIB3270_IO_FLAG flag, void(*proc)(H3270 *, int, LIB3270_IO_FLAG, void *), void *userdata)
+					= internal_add_poll;
 
- static void	* (*add_input)(int source, H3270 *session, void (*fn)(H3270 *session))
-					= internal_add_input;
+ static void	  (*remove_poll)(void *id)
+					= internal_remove_poll;
 
- static void	* (*add_output)(int source, H3270 *session, void (*fn)(H3270 *session))
-					= internal_add_output;
-
- static void 	* (*add_except)(int source, H3270 *session, void (*fn)(H3270 *session))
-					= internal_add_except;
-
- static int		  (*wait)(H3270 *hSession, int seconds)
+ static int	  (*wait)(H3270 *hSession, int seconds)
 					= internal_wait;
 
  static int 	  (*event_dispatcher)(H3270 *hSession,int wait)
@@ -107,23 +105,25 @@ static void	  internal_ring_bell(H3270 *);
 
  #define TN	(timeout_t *)NULL
 
- /* Input events. */
+/* I/O events. */
 typedef struct input
 {
-        struct input *next;
-        int source;
-        int condition;
-        void (*proc)(H3270 *session);
-        H3270 *session;
-} input_t;
+        struct input	* next;
+        H3270			* session;
+        int 			  fd;
+        LIB3270_IO_FLAG	  flag;
+        void			* userdata;
 
+        void (*call)(H3270 *, int, LIB3270_IO_FLAG, void *);
+
+} input_t;
 
 
 /*---[ Statics ]--------------------------------------------------------------------------------------------*/
 
  static timeout_t	* timeouts			= NULL;
  static input_t 	* inputs 			= NULL;
- static Boolean		  inputs_changed	= False;
+ static Boolean	  inputs_changed	= False;
 
 /*---[ Implement ]------------------------------------------------------------------------------------------*/
 
@@ -235,56 +235,25 @@ static void internal_remove_timeout(void * timer)
 	}
 }
 
-/* Input events. */
+/* I/O events. */
 
-static void * internal_add_input(int source, H3270 *session, void (*fn)(H3270 *session))
+static void * internal_add_poll(H3270 *session, int fd, LIB3270_IO_FLAG flag, void(*call)(H3270 *, int, LIB3270_IO_FLAG, void *), void *userdata )
 {
 	input_t *ip = (input_t *) lib3270_malloc(sizeof(input_t));
 
-	ip->source 		= source;
-	ip->condition	= InputReadMask;
-	ip->proc		= fn;
-	ip->session 	= session;
-	ip->next 		= inputs;
-	inputs 			= ip;
-	inputs_changed 	= True;
-
-	return ip;
-}
-
-static void * internal_add_output(int source, H3270 *session, void (*fn)(H3270 *session))
-{
-	input_t *ip = (input_t *) lib3270_malloc(sizeof(input_t));
-
-	ip->source 		= source;
-	ip->condition	= InputWriteMask;
-	ip->proc		= fn;
-	ip->session 	= session;
-	ip->next 		= inputs;
-	inputs 			= ip;
-	inputs_changed 	= True;
-
-	return ip;
-}
-
-static void * internal_add_except(int source, H3270 *session, void (*fn)(H3270 *session))
-{
-	input_t *ip = (input_t *) lib3270_malloc(sizeof(input_t));
-
-	ip->source 		= source;
-	ip->condition	= InputExceptMask;
-	ip->proc		= fn;
 	ip->session		= session;
-	ip->next 		= inputs;
-	inputs 			= ip;
-	inputs_changed	= True;
+	ip->fd			= fd;
+	ip->flag		= flag;
+	ip->userdata	= userdata;
+	ip->call		= call;
 
-	trace("%s session=%p proc=%p handle=%p",__FUNCTION__,ip->session,ip->proc,ip);
+	inputs 			= ip;
+	inputs_changed 	= True;
 
 	return ip;
 }
 
-static void internal_remove_source(void *id)
+static void internal_remove_poll(void *id)
 {
 	input_t *ip;
 	input_t *prev = (input_t *)NULL;
@@ -349,22 +318,22 @@ retry:
 
 	for (ip = inputs; ip != (input_t *)NULL; ip = ip->next)
 	{
-		if ((unsigned long)ip->condition & InputReadMask)
+		if(ip->flag & LIB3270_IO_FLAG_READ)
 		{
-			FD_SET(ip->source, &rfds);
-			maxSock = max(ip->source,maxSock);
+			FD_SET(ip->fd, &rfds);
+			maxSock = max(ip->fd,maxSock);
 		}
 
-		if ((unsigned long)ip->condition & InputWriteMask)
+		if(ip->flag & LIB3270_IO_FLAG_WRITE)
 		{
-			FD_SET(ip->source, &wfds);
-			maxSock = max(ip->source,maxSock);
+			FD_SET(ip->fd, &wfds);
+			maxSock = max(ip->fd,maxSock);
 		}
 
-		if ((unsigned long)ip->condition & InputExceptMask)
+		if(ip->flag & LIB3270_IO_FLAG_EXCEPTION)
 		{
-			FD_SET(ip->source, &xfds);
-			maxSock = max(ip->source,maxSock);
+			FD_SET(ip->fd, &xfds);
+			maxSock = max(ip->fd,maxSock);
 		}
 	}
 
@@ -410,7 +379,7 @@ retry:
 		{
 			for (ip = inputs; ip != (input_t *) NULL; ip = ip->next)
 			{
-				if (((unsigned long)ip->condition & InputReadMask) && FD_ISSET(ip->source, &rfds))
+				if((ip->flag & LIB3270_IO_FLAG_READ) && FD_ISSET(ip->fd, &rfds))
 				{
 					(*ip->proc)(ip->session);
 					processed_any = True;
@@ -418,7 +387,7 @@ retry:
 						goto retry;
 				}
 
-				if (((unsigned long)ip->condition & InputWriteMask) && FD_ISSET(ip->source, &wfds))
+				if ((ip->flag & LIB3270_IO_FLAG_WRITE) && FD_ISSET(ip->fd, &wfds))
 				{
 					(*ip->proc)(ip->session);
 					processed_any = True;
@@ -426,7 +395,7 @@ retry:
 						goto retry;
 				}
 
-				if (((unsigned long)ip->condition & InputExceptMask) && FD_ISSET(ip->source, &xfds))
+				if ((ip->flag & LIB3270_IO_FLAG_EXCEPTION) && FD_ISSET(ip->fd, &xfds))
 				{
 					(*ip->proc)(ip->session);
 					processed_any = True;
@@ -452,21 +421,21 @@ retry:
 
 	for (ip = inputs; ip != (input_t *)NULL; ip = ip->next)
 	{
-		if ((unsigned long)ip->condition & InputReadMask)
+		if(ip->flag & LIB3270_IO_FLAG_READ)
 		{
-			FD_SET(ip->source, &rfds);
+			FD_SET(ip->fd, &rfds);
 			events++;
 		}
 
-		if ((unsigned long)ip->condition & InputWriteMask)
+		if(ip->flag & LIB3270_IO_FLAG_WRITE)
 		{
-			FD_SET(ip->source, &wfds);
+			FD_SET(ip->fd, &wfds);
 			events++;
 		}
 
-		if ((unsigned long)ip->condition & InputExceptMask)
+		if(ip->flag & LIB3270_IO_FLAG_EXCEPTION)
 		{
-			FD_SET(ip->source, &xfds);
+			FD_SET(ip->fd, &xfds);
 			events++;
 		}
 	}
@@ -518,25 +487,25 @@ retry:
 	{
 		for (ip = inputs; ip != (input_t *) NULL; ip = ip->next)
 		{
-			if (((unsigned long)ip->condition & InputReadMask) && FD_ISSET(ip->source, &rfds))
+			if((ip->flag & LIB3270_IO_FLAG_READ) && FD_ISSET(ip->fd, &rfds))
 			{
-				(*ip->proc)(ip->session);
+				(*ip->call)(ip->session,ip->fd,LIB3270_IO_FLAG_READ,ip->userdata);
 				processed_any = True;
 				if (inputs_changed)
 					goto retry;
 			}
 
-			if (((unsigned long)ip->condition & InputWriteMask) && FD_ISSET(ip->source, &wfds))
+			if((ip->flag & LIB3270_IO_FLAG_WRITE) && FD_ISSET(ip->fd, &wfds))
 			{
-				(*ip->proc)(ip->session);
+				(*ip->call)(ip->session,ip->fd,LIB3270_IO_FLAG_WRITE,ip->userdata);
 				processed_any = True;
 				if (inputs_changed)
 					goto retry;
 			}
 
-			if (((unsigned long)ip->condition & InputExceptMask) && FD_ISSET(ip->source, &xfds))
+			if((ip->flag & LIB3270_IO_FLAG_EXCEPTION) && FD_ISSET(ip->fd, &xfds))
 			{
-				(*ip->proc)(ip->session);
+				(*ip->call)(ip->session,ip->fd,LIB3270_IO_FLAG_EXCEPTION,ip->userdata);
 				processed_any = True;
 				if (inputs_changed)
 					goto retry;
@@ -619,6 +588,7 @@ void RemoveTimeOut(void * timer)
 	return remove_timeout(timer);
 }
 
+/*
 void * AddInput(int source, H3270 *session, void (*fn)(H3270 *session))
 {
 	CHECK_SESSION_HANDLE(session);
@@ -641,6 +611,7 @@ void RemoveSource(void * id)
 {
 	remove_source(id);
 }
+*/
 
 void x_except_on(H3270 *h)
 {
@@ -648,32 +619,36 @@ void x_except_on(H3270 *h)
 		return;
 
 	if(h->reading)
-		RemoveSource(h->ns_read_id);
+		lib3270_remove_poll(h->ns_read_id);
 
-	h->ns_exception_id = AddExcept(h->sock, h, net_exception);
+	h->ns_exception_id = lib3270_add_poll_fd(h,h->sock,LIB3270_IO_FLAG_EXCEPTION,net_exception,0);
+//	h->ns_exception_id = AddExcept(h->sock, h, net_exception);
+
 	h->excepting = 1;
 
 	if(h->reading)
-		h->ns_read_id = AddInput(h->sock, h, net_input);
+		h->ns_read_id = lib3270_add_poll_fd(h,h->sock,LIB3270_IO_FLAG_READ,net_input,0);
+
+//		h->ns_read_id = AddInput(h->sock, h, net_input);
 }
 
 void remove_input_calls(H3270 *session)
 {
 	if(session->ns_read_id)
 	{
-		RemoveSource(session->ns_read_id);
+		lib3270_remove_poll(session->ns_read_id);
 		session->ns_read_id	= NULL;
 		session->reading = 0;
 	}
 	if(session->ns_exception_id)
 	{
-		RemoveSource(session->ns_exception_id);
+		lib3270_remove_poll(session->ns_exception_id);
 		session->ns_exception_id = NULL;
 		session->excepting = 0;
 	}
 	if(session->ns_write_id)
 	{
-		RemoveSource(session->ns_write_id);
+		lib3270_remove_poll(session->ns_write_id);
 		session->ns_write_id = NULL;
 		session->writing = 0;
 	}
@@ -689,6 +664,7 @@ LIB3270_EXPORT void lib3270_register_time_handlers(void * (*add)(unsigned long i
 
 }
 
+/*
 LIB3270_EXPORT int lib3270_register_handlers(const struct lib3270_callbacks *cbk)
 {
 	if(!cbk)
@@ -723,6 +699,7 @@ LIB3270_EXPORT int lib3270_register_handlers(const struct lib3270_callbacks *cbk
 	return 0;
 
 }
+*/
 
 LIB3270_EXPORT void lib3270_iterate(int block) {
 	event_dispatcher(NULL,block);

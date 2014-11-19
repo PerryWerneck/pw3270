@@ -909,7 +909,7 @@ LIB3270_INTERNAL void lib3270_sock_disconnect(H3270 *hSession)
 
 	if(hSession->ns_write_id)
 	{
-		RemoveSource(hSession->ns_write_id);
+		lib3270_remove_poll(hSession->ns_write_id);
 		hSession->ns_write_id = 0;
 	}
 
@@ -988,7 +988,7 @@ LIB3270_EXPORT void lib3270_data_recv(H3270 *hSession, size_t nr, const unsigned
  * @param hSession	Session handle
  *
  */
-void net_input(H3270 *hSession)
+void net_input(H3270 *hSession, LIB3270_IO_FLAG flag, void *dunno)
 {
 //	register unsigned char	* cp;
 	int						  nr;
@@ -1950,7 +1950,7 @@ process_eor(H3270 *hSession)
  * net_exception
  *	Called when there is an exceptional condition on the socket.
  */
-void net_exception(H3270 *session)
+void net_exception(H3270 *session, LIB3270_IO_FLAG flag, void *dunno)
 {
 	CHECK_SESSION_HANDLE(session);
 
@@ -1961,7 +1961,7 @@ void net_exception(H3270 *session)
 
 		if(session->excepting)
 		{
-			RemoveSource(session->ns_exception_id);
+			lib3270_remove_poll(session->ns_exception_id);
 			session->ns_exception_id = NULL;
 			session->excepting = 0;
 		}

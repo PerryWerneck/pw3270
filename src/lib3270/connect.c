@@ -76,13 +76,14 @@
 /*---[ Implement ]-------------------------------------------------------------------------------*/
 
 
-static void net_connected(H3270 *hSession)
+//static void net_connected(H3270 *hSession)
+static void net_connected(H3270 *hSession, LIB3270_IO_FLAG flag, void *dunno)
 {
 	int 		err;
 	socklen_t	len		= sizeof(err);
 
 	trace("%s",__FUNCTION__);
-	RemoveSource(hSession->ns_write_id);
+	lib3270_remove_poll(hSession->ns_write_id);
 	hSession->ns_write_id = NULL;
 
 	if(getsockopt(hSession->sock, SOL_SOCKET, SO_ERROR, (char *) &err, &len) < 0)
@@ -120,8 +121,12 @@ static void net_connected(H3270 *hSession)
 		return;
 	}
 
-	hSession->ns_exception_id	= AddExcept(hSession->sock, hSession, net_exception);
-	hSession->ns_read_id		= AddInput(hSession->sock, hSession, net_input);
+//	hSession->ns_exception_id	= AddExcept(hSession->sock, hSession, net_exception);
+//	hSession->ns_read_id		= AddInput(hSession->sock, hSession, net_input);
+
+	hSession->ns_exception_id	= lib3270_add_poll_fd(hSession,hSession->sock,LIB3270_IO_FLAG_EXCEPTION,net_exception,0);
+	hSession->ns_read_id		= lib3270_add_poll_fd(hSession,hSession->sock,LIB3270_IO_FLAG_READ,net_input,0);
+
 	hSession->excepting			= 1;
 	hSession->reading 			= 1;
 
@@ -498,7 +503,8 @@ static void net_connected(H3270 *hSession)
 	hSession->cstate = LIB3270_PENDING;
 	lib3270_st_changed(hSession, LIB3270_STATE_HALF_CONNECT, True);
 
-	hSession->ns_write_id = AddOutput(hSession->sock, hSession, net_connected);
+	hSession->ns_write_id = lib3270_add_poll_fd(hSession,hSession->sock,LIB3270_IO_FLAG_WRITE,net_connected,0);
+	// hSession->ns_write_id = AddOutput(hSession->sock, hSession, net_connected);
 
 	trace("%s: Connection in progress",__FUNCTION__);
 

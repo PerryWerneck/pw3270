@@ -661,13 +661,17 @@
 	 */
 	typedef enum _lib3270_io_event {
 		LIB3270_IO_FLAG_READ		= 0x01,
-		LIB3270_IO_FLAG_WRITE		= 0x02,
-		LIB3270_IO_FLAG_EXCEPTION	= 0x04
+		LIB3270_IO_FLAG_EXCEPTION	= 0x02,
+		LIB3270_IO_FLAG_WRITE		= 0x04,
+
+		LIB3270_IO_FLAG_MASK		= 0x07
 	} LIB3270_IO_FLAG;
 
-	void	* lib3270_add_poll_fd(H3270 *session, int fd, LIB3270_IO_FLAG flag, void(*proc)(H3270 *, LIB3270_IO_FLAG, void *), void *userdata );
-	void	  lib3270_remove_poll_fd(int fd);
-	void	  lib3270_update_poll_fd(int fd, LIB3270_IO_FLAG flag);
+	LIB3270_EXPORT void		* lib3270_add_poll_fd(H3270 *session, int fd, LIB3270_IO_FLAG flag, void(*call)(H3270 *, LIB3270_IO_FLAG, void *), void *userdata );
+	LIB3270_EXPORT void		  lib3270_remove_poll(void *id);
+
+//	LIB3270_EXPORT void	  lib3270_remove_poll_fd(int fd);
+//	LIB3270_EXPORT void	  lib3270_update_poll_fd(int fd, LIB3270_IO_FLAG flag);
 
 	/** Callback table
 	 *
