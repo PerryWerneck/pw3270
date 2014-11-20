@@ -670,8 +670,8 @@
 	LIB3270_EXPORT void		* lib3270_add_poll_fd(H3270 *session, int fd, LIB3270_IO_FLAG flag, void(*call)(H3270 *, int, LIB3270_IO_FLAG, void *), void *userdata );
 	LIB3270_EXPORT void		  lib3270_remove_poll(void *id);
 
-//	LIB3270_EXPORT void	  lib3270_remove_poll_fd(int fd);
-//	LIB3270_EXPORT void	  lib3270_update_poll_fd(int fd, LIB3270_IO_FLAG flag);
+	LIB3270_EXPORT void		  lib3270_remove_poll_fd(int fd);
+	LIB3270_EXPORT void		  lib3270_update_poll_fd(int fd, LIB3270_IO_FLAG flag);
 
 	/** Callback table
 	 *

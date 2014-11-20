@@ -285,6 +285,43 @@ LIB3270_EXPORT void	 lib3270_remove_poll(void *id) {
 	remove_poll(id);
 }
 
+LIB3270_EXPORT void	 lib3270_remove_poll_fd(int fd)
+{
+
+	input_t *ip;
+
+	for (ip = inputs; ip != (input_t *)NULL; ip = ip->next)
+	{
+		if(ip->fd == fd)
+		{
+			remove_poll(ip);
+			return;
+		}
+	}
+
+	lib3270_write_log(NULL,"iocalls","Invalid or unexpected FD on %s(%d)",__FUNCTION__,fd);
+
+}
+
+LIB3270_EXPORT void	 lib3270_update_poll_fd(int fd, LIB3270_IO_FLAG flag)
+{
+
+	input_t *ip;
+
+	for (ip = inputs; ip != (input_t *)NULL; ip = ip->next)
+	{
+		if(ip->fd == fd)
+		{
+			ip->flag = flag;
+			return;
+		}
+	}
+
+	lib3270_write_log(NULL,"iocalls","Invalid or unexpected FD on %s(%d)",__FUNCTION__,fd);
+
+}
+
+
 LIB3270_EXPORT void	 * lib3270_add_poll_fd(H3270 *session, int fd, LIB3270_IO_FLAG flag, void(*call)(H3270 *, int, LIB3270_IO_FLAG, void *), void *userdata ) {
 	return add_poll(session,fd,flag,call,userdata);
 }
