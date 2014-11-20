@@ -46,8 +46,8 @@
 // static int 				  static_CallAndWait(int(*callback)(H3270 *session, void *), H3270 *session, void *parm);
 static void				  static_RemoveSource(void *id);
 
-static void 			* static_AddInput(int source, H3270 *session, void (*fn)(H3270 *session));
-static void 			* static_AddExcept(int source, H3270 *session, void (*fn)(H3270 *session));
+static void				* static_AddSource(H3270 *session, int fd, LIB3270_IO_FLAG flag, void(*proc)(H3270 *, int, LIB3270_IO_FLAG, void *), void *userdata);
+static void	  			  static_RemoveSource(void *id);
 
 static void 			* static_AddTimeOut(unsigned long interval_ms, H3270 *session, void (*proc)(H3270 *session));
 static void 			  static_RemoveTimeOut(void * timer);
@@ -66,16 +66,18 @@ static gboolean			IO_closure(gpointer data);
  {
 	GSource gsrc;
 	GPollFD	poll;
-	int		source;
-	void	(*fn)(H3270 *session);
+	int		fd;
+	void	(*call)(H3270 *, int, LIB3270_IO_FLAG, void *);
 	H3270 	*session;
+	void	*userdata;
  } IO_Source;
 
  typedef struct _timer
  {
 	unsigned char remove;
-	void	(*fn)(H3270 *session);
-	H3270 	*session;
+	void	* userdata;
+	void	(*call)(H3270 *session);
+	H3270 	* session;
  } TIMER;
 
  static GSourceFuncs IOSources =
@@ -90,15 +92,23 @@ static gboolean			IO_closure(gpointer data);
 
 /*---[ Implement ]-----------------------------------------------------------------------------------------*/
 
-static void * AddSource(int source, H3270 *session, gushort events, void (*fn)(H3270 *session))
+static void	* static_AddSource(H3270 *session, int fd, LIB3270_IO_FLAG flag, void(*call)(H3270 *, int, LIB3270_IO_FLAG, void *), void *userdata)
 {
 	IO_Source *src = (IO_Source *) g_source_new(&IOSources,sizeof(IO_Source));
 
-	src->source			= source;
-	src->fn				= fn;
-	src->poll.fd		= (int) source;
-	src->poll.events	= events;
+	src->fd				= fd;
+	src->call			= call;
+	src->userdata		= userdata;
 	src->session		= session;
+
+	src->poll.fd		= (int) fd;
+	src->poll.events	= G_IO_HUP|G_IO_ERR;
+
+	if(flag & LIB3270_IO_FLAG_READ)
+		src->poll.events |= G_IO_IN;
+
+	if(flag & LIB3270_IO_FLAG_WRITE)
+		src->poll.events |= G_IO_OUT;
 
 	g_source_attach((GSource *) src,NULL);
 	g_source_add_poll((GSource *) src,&src->poll);
@@ -106,6 +116,7 @@ static void * AddSource(int source, H3270 *session, gushort events, void (*fn)(H
 	return src;
 }
 
+/*
 static void * static_AddOutput(int source, H3270 *session, void (*fn)(H3270 *session))
 {
 	return AddSource(source,session,G_IO_OUT|G_IO_HUP|G_IO_ERR,fn);
@@ -116,6 +127,7 @@ static void * static_AddInput(int source, H3270 *session, void (*fn)(H3270 *sess
 {
 	return AddSource(source,session,G_IO_IN|G_IO_HUP|G_IO_ERR,fn);
 }
+*/
 
 static void static_RemoveSource(void *id)
 {
@@ -123,23 +135,25 @@ static void static_RemoveSource(void *id)
 		g_source_destroy((GSource *) id);
 }
 
+/*
 static void * static_AddExcept(int source, H3270 *session, void (*fn)(H3270 *session))
 {
 	return AddSource(source,session,G_IO_HUP|G_IO_ERR,fn);
 }
+*/
 
 static gboolean do_timer(TIMER *t)
 {
 	if(!t->remove)
-		t->fn(t->session);
+		t->call(t->session);
 	return FALSE;
 }
 
-static void * static_AddTimeOut(unsigned long interval, H3270 *session, void (*proc)(H3270 *session))
+static void * static_AddTimeOut(unsigned long interval, H3270 *session, void (*call)(H3270 *session))
 {
 	TIMER *t = g_malloc0(sizeof(TIMER));
 
-	t->fn		= proc;
+	t->call		= call;
 	t->session	= session;
 
 	trace("Adding timeout with %ld ms",interval);
@@ -232,7 +246,10 @@ static gboolean IO_dispatch(GSource *source, GSourceFunc callback, gpointer user
 	 * should call the callback function with user_data and whatever additional
 	 * parameters are needed for this type of event source.
 	 */
-	((IO_Source *) source)->fn(((IO_Source *) source)->session);
+	IO_Source *obj = (IO_Source *) source;
+
+	obj->call(obj->session,obj->fd,0,obj->userdata);
+
 	return TRUE;
 }
 
@@ -304,20 +321,9 @@ void v3270_register_io_handlers(v3270Class *cls)
 		static_AddTimeOut,
 		static_RemoveTimeOut,
 
-		static_AddInput,
-		static_AddOutput,
-
+		static_AddSource,
 		static_RemoveSource,
 
-		static_AddExcept,
-
-/*
-#ifdef G_THREADS_ENABLED
-		static_CallAndWait,
-#else
-		NULL,
-#endif
-*/
 		static_Sleep,
 		static_RunPendingEvents,
 		beep

@@ -351,6 +351,8 @@ void pw3270_dbus_register_io_handlers(void)
 
 	};
 
+	#error Need rewrite
+
 	if(lib3270_register_handlers(&hdl))
 	{
 		g_error("%s","Can't set lib3270 I/O handlers");

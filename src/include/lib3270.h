@@ -685,14 +685,8 @@
 		void	* (*AddTimeOut)(unsigned long interval_ms, H3270 *session, void (*proc)(H3270 *session));
 		void	  (*RemoveTimeOut)(void *timer);
 
-		void	* (*AddInput)(int source, H3270 *session, void (*fn)(H3270 *session));
-		void	* (*AddOutput)(int source, H3270 *session, void (*fn)(H3270 *session));
-
-		void	  (*RemoveSource)(void *id);
-
-		void 	* (*AddExcept)(int source, H3270 *session, void (*fn)(H3270 *session));
-
-//		int 	  (*callthread)(int(*callback)(H3270 *, void *), H3270 *session, void *parm);
+		void	* (*add_poll)(H3270 *session, int fd, LIB3270_IO_FLAG flag, void(*proc)(H3270 *, int, LIB3270_IO_FLAG, void *), void *userdata);
+		void	  (*remove_poll)(void *id);
 
 		int		  (*Wait)(H3270 *hSession, int seconds);
 		int		  (*event_dispatcher)(H3270 *hSession, int wait);
@@ -718,6 +712,8 @@
 	 *
 	 */
 	void LIB3270_EXPORT lib3270_register_time_handlers(void * (*add)(unsigned long interval_ms, H3270 *session, void (*proc)(H3270 *session)), void (*rm)(void *timer));
+
+	void lib3270_register_fd_handlers(void * (*add)(H3270 *session, int fd, LIB3270_IO_FLAG flag, void(*proc)(H3270 *, int, LIB3270_IO_FLAG, void *), void *userdata), void (*rm)(void *id));
 
 	/**
 	 * Get program message.

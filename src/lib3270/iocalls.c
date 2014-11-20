@@ -79,7 +79,7 @@ static void	  internal_ring_bell(H3270 *);
  static void	  (*remove_poll)(void *id)
 					= internal_remove_poll;
 
- static int	  (*wait)(H3270 *hSession, int seconds)
+ static int	  	  (*wait)(H3270 *hSession, int seconds)
 					= internal_wait;
 
  static int 	  (*event_dispatcher)(H3270 *hSession,int wait)
@@ -633,31 +633,6 @@ void RemoveTimeOut(void * timer)
 	return remove_timeout(timer);
 }
 
-/*
-void * AddInput(int source, H3270 *session, void (*fn)(H3270 *session))
-{
-	CHECK_SESSION_HANDLE(session);
-	return add_input(source,session,fn);
-}
-
-void * AddOutput(int source, H3270 *session, void (*fn)(H3270 *session))
-{
-	CHECK_SESSION_HANDLE(session);
-	return add_output(source,session,fn);
-}
-
-void * AddExcept(int source, H3270 *session, void (*fn)(H3270 *session))
-{
-	CHECK_SESSION_HANDLE(session);
-	return add_except(source,session,fn);
-}
-
-void RemoveSource(void * id)
-{
-	remove_source(id);
-}
-*/
-
 void x_except_on(H3270 *h)
 {
 	if(h->excepting)
@@ -709,7 +684,14 @@ LIB3270_EXPORT void lib3270_register_time_handlers(void * (*add)(unsigned long i
 
 }
 
-/*
+LIB3270_EXPORT void lib3270_register_fd_handlers(void * (*add)(H3270 *session, int fd, LIB3270_IO_FLAG flag, void(*proc)(H3270 *, int, LIB3270_IO_FLAG, void *), void *userdata), void (*rm)(void *id)) {
+	if(add)
+		add_poll = add;
+
+	if(rm)
+		remove_poll = rm;
+}
+
 LIB3270_EXPORT int lib3270_register_handlers(const struct lib3270_callbacks *cbk)
 {
 	if(!cbk)
@@ -719,18 +701,7 @@ LIB3270_EXPORT int lib3270_register_handlers(const struct lib3270_callbacks *cbk
 		return EINVAL;
 
 	lib3270_register_time_handlers(cbk->AddTimeOut,cbk->RemoveTimeOut);
-
-	if(cbk->AddInput)
-		add_input = cbk->AddInput;
-
-	if(cbk->AddOutput)
-		add_output = cbk->AddOutput;
-
-	if(cbk->RemoveSource)
-		remove_source = cbk->RemoveSource;
-
-	if(cbk->AddExcept)
-		add_except = cbk->AddExcept;
+	lib3270_register_fd_handlers(cbk->add_poll,cbk->remove_poll);
 
 	if(cbk->Wait)
 		wait = cbk->Wait;
@@ -744,7 +715,7 @@ LIB3270_EXPORT int lib3270_register_handlers(const struct lib3270_callbacks *cbk
 	return 0;
 
 }
-*/
+
 
 LIB3270_EXPORT void lib3270_iterate(int block) {
 	event_dispatcher(NULL,block);
