@@ -711,7 +711,7 @@ static void draw_cursor_position(cairo_t *cr, GdkRectangle *rect, struct v3270_m
 
 void v3270_update_cursor(H3270 *session, unsigned short row, unsigned short col, unsigned char c, unsigned short attr)
 {
-	v3270				* terminal = GTK_V3270(session->widget);
+	v3270				* terminal = GTK_V3270(session->user_data);
 	GdkRectangle		  saved;
 
 	if(!terminal->surface)
@@ -1027,7 +1027,7 @@ void v3270_stop_timer(GtkWidget *widget)
 
 void v3270_update_ssl(H3270 *session, LIB3270_SSL_STATE state)
 {
-	v3270 			* terminal = GTK_V3270(session->widget);
+	v3270 			* terminal = GTK_V3270(session->user_data);
 	cairo_t			* cr;
 	GdkRectangle	* r;
 
@@ -1046,7 +1046,7 @@ void v3270_update_oia(H3270 *session, LIB3270_FLAG id, unsigned char on)
 	cairo_t *cr;
 	GdkRectangle *r;
 
-	v3270 *terminal = GTK_V3270(session->widget);
+	v3270 *terminal = GTK_V3270(session->user_data);
 
 	if(!terminal->surface)
 		return;

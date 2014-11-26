@@ -282,8 +282,8 @@
 		char					* rpq_warnbuf;
 		int						  rpq_wbcnt;
 
-		// Widget info
-		void					* widget;
+		// User data (Usually points to session's widget)
+		void					* user_data;
 
 		// selection
 		char					* paste_buffer;

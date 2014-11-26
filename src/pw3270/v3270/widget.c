@@ -649,7 +649,7 @@ void v3270_update_font_metrics(v3270 *terminal, cairo_t *cr, int width, int heig
 
 static void set_timer(H3270 *session, unsigned char on)
 {
-	GtkWidget *widget = GTK_WIDGET(session->widget);
+	GtkWidget *widget = GTK_WIDGET(session->user_data);
 
 	if(on)
 		v3270_start_timer(widget);
@@ -666,52 +666,52 @@ static void update_toggle(H3270 *session, LIB3270_TOGGLE ix, unsigned char value
 	{
 	case LIB3270_TOGGLE_CURSOR_POS:
 	case LIB3270_TOGGLE_CROSSHAIR:
-		v3270_reload(GTK_WIDGET(session->widget));
-		gtk_widget_queue_draw(GTK_WIDGET(session->widget));
+		v3270_reload(GTK_WIDGET(session->user_data));
+		gtk_widget_queue_draw(GTK_WIDGET(session->user_data));
 		break;
 
 	case LIB3270_TOGGLE_CURSOR_BLINK:
-		GTK_V3270(session->widget)->cursor.show |= 1;
+		GTK_V3270(session->user_data)->cursor.show |= 1;
 		break;
 
 	case LIB3270_TOGGLE_INSERT:
-		v3270_draw_ins_status(GTK_V3270(session->widget));
-		v3270_cursor_draw(GTK_V3270(session->widget));
+		v3270_draw_ins_status(GTK_V3270(session->user_data));
+		v3270_cursor_draw(GTK_V3270(session->user_data));
 		break;
 
 	case LIB3270_TOGGLE_BOLD:
-		v3270_reload(GTK_WIDGET(session->widget));
-		gtk_widget_queue_draw(GTK_WIDGET(session->widget));
+		v3270_reload(GTK_WIDGET(session->user_data));
+		gtk_widget_queue_draw(GTK_WIDGET(session->user_data));
 		break;
 
 	case LIB3270_TOGGLE_FULL_SCREEN:
 		if(value)
-			gtk_window_fullscreen(GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(session->widget))));
+			gtk_window_fullscreen(GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(session->user_data))));
 		else
-			gtk_window_unfullscreen(GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(session->widget))));
+			gtk_window_unfullscreen(GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(session->user_data))));
 	}
 #if GTK_CHECK_VERSION(2,26,0)
-	g_object_notify_by_pspec(G_OBJECT(session->widget), v3270_properties[PROP_TOGGLE+ix]);
+	g_object_notify_by_pspec(G_OBJECT(session->user_data), v3270_properties[PROP_TOGGLE+ix]);
 #else
-	g_object_notify(G_OBJECT(session->widget),name);
+	g_object_notify(G_OBJECT(session->user_data),name);
 #endif // GTK_CHECK_VERSION
 
-	g_signal_emit(GTK_WIDGET(session->widget), v3270_widget_signal[SIGNAL_TOGGLE_CHANGED], 0, (guint) ix, (gboolean) (value != 0), (gchar *) name);
+	g_signal_emit(GTK_WIDGET(session->user_data), v3270_widget_signal[SIGNAL_TOGGLE_CHANGED], 0, (guint) ix, (gboolean) (value != 0), (gchar *) name);
 }
 
 static void update_message(H3270 *session, LIB3270_MESSAGE id)
 {
-	g_signal_emit(GTK_WIDGET(session->widget), v3270_widget_signal[SIGNAL_MESSAGE_CHANGED], 0, (gint) id);
+	g_signal_emit(GTK_WIDGET(session->user_data), v3270_widget_signal[SIGNAL_MESSAGE_CHANGED], 0, (gint) id);
 }
 
 static void update_luname(H3270 *session, const char *name)
 {
-	v3270_update_luname(GTK_WIDGET(session->widget),name);
+	v3270_update_luname(GTK_WIDGET(session->user_data),name);
 }
 
 static void select_cursor(H3270 *session, LIB3270_CURSOR id)
 {
-	GtkWidget *widget = GTK_WIDGET(session->widget);
+	GtkWidget *widget = GTK_WIDGET(session->user_data);
 
 #if GTK_CHECK_VERSION(2,20,0)
 	if(gtk_widget_get_realized(widget) && gtk_widget_get_has_window(widget))
@@ -726,7 +726,7 @@ static void select_cursor(H3270 *session, LIB3270_CURSOR id)
 
 static void ctlr_done(H3270 *session)
 {
-	GtkWidget *widget = GTK_WIDGET(session->widget);
+	GtkWidget *widget = GTK_WIDGET(session->user_data);
 
 #if GTK_CHECK_VERSION(2,20,0)
 	if(gtk_widget_get_realized(widget) && gtk_widget_get_has_window(widget))
@@ -741,7 +741,7 @@ static void ctlr_done(H3270 *session)
 
 static void update_connect(H3270 *session, unsigned char connected)
 {
-	v3270 *widget = GTK_V3270(session->widget);
+	v3270 *widget = GTK_V3270(session->user_data);
 
 	trace("%s - %s",__FUNCTION__,connected ? "Connected" : "Disconnected");
 
@@ -770,23 +770,23 @@ static void update_connect(H3270 *session, unsigned char connected)
 static void update_screen_size(H3270 *session,unsigned short rows, unsigned short cols)
 {
 //	trace("Widget %p changes to %dx%d",session->widget,cols,rows);
-	v3270_reload(GTK_WIDGET(session->widget));
-	gtk_widget_queue_draw(GTK_WIDGET(session->widget));
+	v3270_reload(GTK_WIDGET(session->user_data));
+	gtk_widget_queue_draw(GTK_WIDGET(session->user_data));
 }
 
 static void update_model(H3270 *session, const char *name, int model, int rows, int cols)
 {
 #if GTK_CHECK_VERSION(2,26,0)
-	g_object_notify_by_pspec(G_OBJECT(session->widget), v3270_properties[PROP_MODEL]);
+	g_object_notify_by_pspec(G_OBJECT(session->user_data), v3270_properties[PROP_MODEL]);
 #else
-	g_object_notify(G_OBJECT(session->widget),"model");
+	g_object_notify(G_OBJECT(session->user_data),"model");
 #endif // GTK_CHECK_VERSION
-	g_signal_emit(GTK_WIDGET(session->widget),v3270_widget_signal[SIGNAL_MODEL_CHANGED], 0, (guint) model, name);
+	g_signal_emit(GTK_WIDGET(session->user_data),v3270_widget_signal[SIGNAL_MODEL_CHANGED], 0, (guint) model, name);
 }
 
 static void changed(H3270 *session, int offset, int len)
 {
-	GtkWidget 		* widget	= session->widget;
+	GtkWidget 		* widget	= session->user_data;
 	GtkAccessible	* obj		= GTK_V3270(widget)->accessible;
 
 #ifdef WIN32
@@ -845,7 +845,7 @@ static void changed(H3270 *session, int offset, int len)
 
 static void set_selection(H3270 *session, unsigned char status)
 {
-	GtkWidget * widget = GTK_WIDGET(session->widget);
+	GtkWidget * widget = GTK_WIDGET(session->user_data);
 
 #if GTK_CHECK_VERSION(2,26,0)
 	g_object_notify_by_pspec(G_OBJECT(widget), v3270_properties[PROP_SELECTION]);
@@ -859,7 +859,7 @@ static void set_selection(H3270 *session, unsigned char status)
 static void update_selection(H3270 *session, int start, int end)
 {
 	// Selected region changed
-	GtkWidget		* widget	= GTK_WIDGET(session->widget);
+	GtkWidget		* widget	= GTK_WIDGET(session->user_data);
 	GtkAccessible	* atk_obj	= GTK_V3270(widget)->accessible;
 
 	if(atk_obj)
@@ -869,7 +869,7 @@ static void update_selection(H3270 *session, int start, int end)
 
 static void message(H3270 *session, LIB3270_NOTIFY id , const char *title, const char *message, const char *text)
 {
-	g_signal_emit(	GTK_WIDGET(session->widget), v3270_widget_signal[SIGNAL_MESSAGE], 0,
+	g_signal_emit(	GTK_WIDGET(session->user_data), v3270_widget_signal[SIGNAL_MESSAGE], 0,
 							(int) id,
 							(gchar *) title,
 							(gchar *) message,
@@ -879,7 +879,7 @@ static void message(H3270 *session, LIB3270_NOTIFY id , const char *title, const
 
 static int emit_print_signal(H3270 *session)
 {
-	g_signal_emit(GTK_WIDGET(session->widget), v3270_widget_signal[SIGNAL_PRINT], 0);
+	g_signal_emit(GTK_WIDGET(session->user_data), v3270_widget_signal[SIGNAL_PRINT], 0);
 	return 0;
 }
 
@@ -910,7 +910,7 @@ static void v3270_init(v3270 *widget)
 		return;
 	}
 
-	widget->host->widget			= widget;
+	widget->host->user_data			= widget;
 
 	widget->host->update			= v3270_update_char;
 	widget->host->changed			= changed;
@@ -1650,11 +1650,11 @@ GtkWidget * v3270_get_default_widget(void)
 		return NULL;
 	}
 
-	if(!(hSession->widget && GTK_IS_V3270(hSession->widget)))
+	if(!(hSession->user_data && GTK_IS_V3270(hSession->user_data)))
 	{
 		g_warning("No widget on default session on %s",__FUNCTION__);
 		return NULL;
 	}
 
-	return GTK_WIDGET(hSession->widget);
+	return GTK_WIDGET(hSession->user_data);
 }

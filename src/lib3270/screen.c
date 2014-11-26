@@ -688,7 +688,7 @@ void Error(H3270 *session, const char *fmt, ...)
 
 	va_start(arg_ptr, fmt);
 
-	popup_handler(session,session->widget,LIB3270_NOTIFY_ERROR, _( "3270 Error" ),NULL,fmt,arg_ptr);
+	popup_handler(session,session->user_data,LIB3270_NOTIFY_ERROR, _( "3270 Error" ),NULL,fmt,arg_ptr);
 
 	va_end(arg_ptr);
 
@@ -703,7 +703,7 @@ void Warning(H3270 *session, const char *fmt, ...)
 	trace("%s: title=%s fmt=%s",__FUNCTION__,"3270 Warning",fmt);
 
 	va_start(arg_ptr, fmt);
-	popup_handler(session,session->widget,LIB3270_NOTIFY_WARNING, _( "3270 Warning" ),NULL,fmt,arg_ptr);
+	popup_handler(session,session->user_data,LIB3270_NOTIFY_WARNING, _( "3270 Warning" ),NULL,fmt,arg_ptr);
 	va_end(arg_ptr);
 
 }
@@ -718,7 +718,7 @@ void popup_an_error(H3270 *session, const char *fmt, ...)
 	trace("%s: title=%s fmt=%s",__FUNCTION__,"3270 Error",fmt);
 
 	va_start(args, fmt);
-	popup_handler(session,session->widget,LIB3270_NOTIFY_ERROR,_( "3270 Error" ),NULL,fmt,args);
+	popup_handler(session,session->user_data,LIB3270_NOTIFY_ERROR,_( "3270 Error" ),NULL,fmt,args);
 	va_end(args);
 
 }
@@ -732,7 +732,7 @@ void popup_system_error(H3270 *session, const char *title, const char *message, 
 	trace("%s: title=%s msg=%s",__FUNCTION__,"3270 Error",message);
 
 	va_start(args, fmt);
-	popup_handler(session,session->widget,LIB3270_NOTIFY_ERROR,title ? title : _( "3270 Error" ), message,fmt,args);
+	popup_handler(session,session->user_data,LIB3270_NOTIFY_ERROR,title ? title : _( "3270 Error" ), message,fmt,args);
 	va_end(args);
 }
 
@@ -857,7 +857,7 @@ LIB3270_EXPORT void lib3270_popup_va(H3270 *session, LIB3270_NOTIFY id , const c
 
 	trace("%s: title=%s msg=%s",__FUNCTION__,"3270 Error",message);
 
-	popup_handler(session,session->widget,id,title ? title : _( "3270 Error" ), message,fmt,args);
+	popup_handler(session,session->user_data,id,title ? title : _( "3270 Error" ), message,fmt,args);
 }
 
 LIB3270_EXPORT int lib3270_is_protected(H3270 *h, unsigned int baddr)

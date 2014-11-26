@@ -792,6 +792,18 @@
 	LIB3270_EXPORT void lib3270_main_iterate(H3270 *h, int wait);
 
 	/**
+	 * @brief Associate user data with 3270 session.
+	 *
+	 */
+	LIB3270_EXPORT void lib3270_set_user_data(H3270 *h, void *ptr);
+
+	/**
+	 * @brief Get associated user data.
+	 *
+	 */
+	LIB3270_EXPORT void * lib3270_get_user_data(H3270 *h);
+
+	/**
 	 * @brief Iterate internal's lib3270 event loop.
 	 *
 	 * Use it only if the internal I/O calls wasn't replaced.
@@ -816,18 +828,6 @@
 	 *
 	 */
 	LIB3270_EXPORT int lib3270_wait_for_ready(H3270 *hSession, int seconds);
-
-	/**
-	 * Get the session's widget.
-	 *
-	 * Get the handle to the GtkWidget who's handling this session.
-	 *
-	 * @param h		Session handle.
-	 *
-	 * @return Associated GtkWidget (can be null)
-	 *
-	 */
-	 LIB3270_EXPORT void * lib3270_get_widget(H3270 *h);
 
 	/**
 	 * "beep" to notify user.

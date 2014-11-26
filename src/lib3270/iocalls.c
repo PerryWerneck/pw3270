@@ -51,15 +51,6 @@ static void	* internal_add_timeout(unsigned long interval_ms, H3270 *session, vo
 static void	* internal_add_poll(H3270 *session, int fd, LIB3270_IO_FLAG flag, void(*proc)(H3270 *, int, LIB3270_IO_FLAG, void *), void *userdata );
 static void	  internal_remove_poll(void *id);
 
-
-/*
-// fdcalls
-static void	internal_remove_source(void *id);
-static void * internal_add_input(int source, H3270 *session, void (*fn)(H3270 *session));
-static void * internal_add_output(int source, H3270 *session, void (*fn)(H3270 *session));
-static void * internal_add_except(int source, H3270 *session, void (*fn)(H3270 *session));
-*/
-
 static int		  internal_wait(H3270 *hSession, int seconds);
 
 static int		  internal_event_dispatcher(H3270 *hSession, int block);

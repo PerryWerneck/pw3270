@@ -658,14 +658,14 @@ extern "C"
 
  int plugin::set_copy(const char *text)
  {
-    v3270_set_copy(GTK_WIDGET(lib3270_get_widget(hSession)),text);
+    v3270_set_copy(GTK_WIDGET(lib3270_get_user_data(hSession)),text);
     return 0;
  }
 
  string plugin::get_copy(void)
  {
  	string	  rc;
-    gchar	* ptr = v3270_get_copy(GTK_WIDGET(lib3270_get_widget(hSession)));
+    gchar	* ptr = v3270_get_copy(GTK_WIDGET(lib3270_get_user_data(hSession)));
 
     if(ptr)
 	{

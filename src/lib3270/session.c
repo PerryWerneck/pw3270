@@ -320,9 +320,14 @@ LIB3270_EXPORT H3270 * lib3270_get_default_session_handle(void)
 	return lib3270_session_new("");
 }
 
-LIB3270_EXPORT void * lib3270_get_widget(H3270 *h)
+LIB3270_EXPORT void lib3270_set_user_data(H3270 *h, void *ptr)
 {
 	CHECK_SESSION_HANDLE(h);
-	return h->widget;
+	h->user_data = ptr;
 }
 
+LIB3270_EXPORT void * lib3270_get_user_data(H3270 *h)
+{
+	CHECK_SESSION_HANDLE(h);
+	return h->user_data;
+}
