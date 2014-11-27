@@ -82,7 +82,7 @@ static void net_connected(H3270 *hSession, int fd, LIB3270_IO_FLAG flag, void *d
 	int 		err;
 	socklen_t	len		= sizeof(err);
 
-	trace("%s",__FUNCTION__);
+	trace("%s write=%p",__FUNCTION__,hSession->ns_write_id);
 	lib3270_remove_poll(hSession->ns_write_id);
 	hSession->ns_write_id = NULL;
 
@@ -121,14 +121,8 @@ static void net_connected(H3270 *hSession, int fd, LIB3270_IO_FLAG flag, void *d
 		return;
 	}
 
-//	hSession->ns_exception_id	= AddExcept(hSession->sock, hSession, net_exception);
-//	hSession->ns_read_id		= AddInput(hSession->sock, hSession, net_input);
-
 	hSession->ns_exception_id	= lib3270_add_poll_fd(hSession,hSession->sock,LIB3270_IO_FLAG_EXCEPTION,net_exception,0);
 	hSession->ns_read_id		= lib3270_add_poll_fd(hSession,hSession->sock,LIB3270_IO_FLAG_READ,net_input,0);
-
-	hSession->excepting			= 1;
-	hSession->reading 			= 1;
 
 #if defined(HAVE_LIBSSL)
 	if(hSession->ssl_con && hSession->secure == LIB3270_SSL_UNDEFINED)

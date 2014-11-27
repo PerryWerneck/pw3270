@@ -1959,11 +1959,10 @@ void net_exception(H3270 *session, int fd, LIB3270_IO_FLAG flag, void *dunno)
 	{
 		session->syncing = 1;
 
-		if(session->excepting)
+		if(session->ns_exception_id)
 		{
 			lib3270_remove_poll(session->ns_exception_id);
 			session->ns_exception_id = NULL;
-			session->excepting = 0;
 		}
 	}
 }

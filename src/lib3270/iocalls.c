@@ -273,6 +273,7 @@ static void internal_remove_poll(void *id)
 }
 
 LIB3270_EXPORT void	 lib3270_remove_poll(void *id) {
+	debug("%s %p",__FUNCTION__,id);
 	remove_poll(id);
 }
 
@@ -311,7 +312,6 @@ LIB3270_EXPORT void	 lib3270_update_poll_fd(int fd, LIB3270_IO_FLAG flag)
 	lib3270_write_log(NULL,"iocalls","Invalid or unexpected FD on %s(%d)",__FUNCTION__,fd);
 
 }
-
 
 LIB3270_EXPORT void	 * lib3270_add_poll_fd(H3270 *session, int fd, LIB3270_IO_FLAG flag, void(*call)(H3270 *, int, LIB3270_IO_FLAG, void *), void *userdata ) {
 	return add_poll(session,fd,flag,call,userdata);
@@ -626,21 +626,19 @@ void RemoveTimeOut(void * timer)
 
 void x_except_on(H3270 *h)
 {
-	if(h->excepting)
+	int reading = (h->ns_read_id != NULL);
+
+	if(h->ns_exception_id)
 		return;
 
-	if(h->reading)
+	if(reading)
 		lib3270_remove_poll(h->ns_read_id);
 
 	h->ns_exception_id = lib3270_add_poll_fd(h,h->sock,LIB3270_IO_FLAG_EXCEPTION,net_exception,0);
-//	h->ns_exception_id = AddExcept(h->sock, h, net_exception);
 
-	h->excepting = 1;
-
-	if(h->reading)
+	if(reading)
 		h->ns_read_id = lib3270_add_poll_fd(h,h->sock,LIB3270_IO_FLAG_READ,net_input,0);
 
-//		h->ns_read_id = AddInput(h->sock, h, net_input);
 }
 
 void remove_input_calls(H3270 *session)
@@ -649,19 +647,16 @@ void remove_input_calls(H3270 *session)
 	{
 		lib3270_remove_poll(session->ns_read_id);
 		session->ns_read_id	= NULL;
-		session->reading = 0;
 	}
 	if(session->ns_exception_id)
 	{
 		lib3270_remove_poll(session->ns_exception_id);
 		session->ns_exception_id = NULL;
-		session->excepting = 0;
 	}
 	if(session->ns_write_id)
 	{
 		lib3270_remove_poll(session->ns_write_id);
 		session->ns_write_id = NULL;
-		session->writing = 0;
 	}
 }
 
