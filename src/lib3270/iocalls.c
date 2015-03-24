@@ -417,7 +417,7 @@ retry:
 			{
 				if((ip->flag & LIB3270_IO_FLAG_READ) && FD_ISSET(ip->fd, &rfds))
 				{
-					(*ip->proc)(ip->session);
+					(*ip->call)(ip->session,ip->fd,LIB3270_IO_FLAG_READ,ip->userdata);
 					processed_any = True;
 					if (inputs_changed)
 						goto retry;
@@ -425,7 +425,7 @@ retry:
 
 				if ((ip->flag & LIB3270_IO_FLAG_WRITE) && FD_ISSET(ip->fd, &wfds))
 				{
-					(*ip->proc)(ip->session);
+					(*ip->call)(ip->session,ip->fd,LIB3270_IO_FLAG_WRITE,ip->userdata);
 					processed_any = True;
 					if (inputs_changed)
 						goto retry;
@@ -433,7 +433,7 @@ retry:
 
 				if ((ip->flag & LIB3270_IO_FLAG_EXCEPTION) && FD_ISSET(ip->fd, &xfds))
 				{
-					(*ip->proc)(ip->session);
+					(*ip->call)(ip->session,ip->fd,LIB3270_IO_FLAG_EXCEPTION,ip->userdata);
 					processed_any = True;
 					if (inputs_changed)
 						goto retry;
