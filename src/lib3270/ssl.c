@@ -126,6 +126,7 @@ int ssl_negotiate(H3270 *hSession)
 		break;
 
 	case X509_V_ERR_SELF_SIGNED_CERT_IN_CHAIN:
+		peer = SSL_get_peer_certificate(hSession->ssl_con);
 		trace_dsn(hSession,"%s","TLS/SSL negotiated connection complete with self signed certificate in certificate chain\n" );
 		break;
 
