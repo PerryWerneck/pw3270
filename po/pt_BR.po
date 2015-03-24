@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-22 08:33-0300\n"
+"POT-Creation-Date: 2015-03-24 16:27-0300\n"
 "PO-Revision-Date: 2014-02-17 08:05-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Portugues <>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Gtranslator 2.91.6\n"
 
-#: telnet.c:1057 ssl.c:261 ssl.c:314 connect.c:98 connect.c:114 connect.c:116
+#: telnet.c:1057 ssl.c:262 ssl.c:315 connect.c:99 connect.c:115 connect.c:117
 #: connect.c:570 connect.c:587
 #, c-format
 msgid "%s"
@@ -286,7 +286,7 @@ msgstr "Aguardando para enviar pedido de cancelamento"
 msgid "Background"
 msgstr "Fundo"
 
-#: connect.c:175
+#: connect.c:174
 msgid "Bad winsock version"
 msgstr "Versão winsock inválida"
 
@@ -326,7 +326,7 @@ msgstr "Portal do Software Público Brasileiro"
 msgid "Break"
 msgstr "Break"
 
-#: telnet.c:2023
+#: telnet.c:2022
 msgid "Broken pipe"
 msgstr "Conexão interrompida"
 
@@ -364,7 +364,7 @@ msgstr "Tema de c_ores:"
 msgid "C_onnect"
 msgstr "_Conectar"
 
-#: toggles.c:313 connect.c:362 connect.c:457
+#: toggles.c:313 connect.c:361 connect.c:456
 #, c-format
 msgid "Can't %s network keep-alive"
 msgstr "Não foi possível %s opção \"keep-alive\""
@@ -374,12 +374,12 @@ msgstr "Não foi possível %s opção \"keep-alive\""
 msgid "Can't accept unnamed %s"
 msgstr "Não posso aceitar elemento %s sem nome"
 
-#: connect.c:106 connect.c:393
+#: connect.c:107 connect.c:392
 #, c-format
 msgid "Can't connect to %s"
 msgstr "Não foi possível conectar a %s"
 
-#: connect.c:274 connect.c:427
+#: connect.c:273 connect.c:426
 #, c-format
 msgid "Can't connect to %s:%s"
 msgstr "Não foi possível conectar a %s:%s"
@@ -393,7 +393,7 @@ msgstr "Não foi possível converter a linha %d de %s para %s"
 msgid "Can't cut rectangular regions"
 msgstr "Recortar não permitido em seleção retangular"
 
-#: connect.c:201
+#: connect.c:200
 #, c-format
 msgid "Can't determine value for environment variable \"%s\" "
 msgstr "Can't determine value for environment variable \"%s\" "
@@ -477,7 +477,7 @@ msgstr "Não foi possível salvar trace no arquivo %s"
 msgid "Can't set host charset"
 msgstr "Não foi possível definir o charset do host"
 
-#: v3270/iocallback.c:329
+#: v3270/iocallback.c:335
 msgid "Can't set lib3270 I/O handlers"
 msgstr "Não foi possível registrar manipuladores de I/O 3270"
 
@@ -501,7 +501,7 @@ msgstr "Não foi possível iniciar transferência de arquivo."
 msgid "Can't start upload."
 msgstr "Não foi possível iniciar upload."
 
-#: connect.c:176
+#: connect.c:175
 #, c-format
 msgid "Can't use winsock version %d.%d"
 msgstr "Não é possível usar a Winsock versão %d.%d"
@@ -523,11 +523,11 @@ msgstr "Cancelado pelo usuário"
 msgid "Cannot connect to specified LU"
 msgstr "Não foi possível conectar a %s"
 
-#: ssl.c:313
+#: ssl.c:314
 msgid "Cant create a new SSL structure for current connection."
 msgstr "Cant create a new SSL structure for current connection."
 
-#: ssl.c:254
+#: ssl.c:255
 #, c-format
 msgid ""
 "Cant set default locations for trusted CA certificates to\n"
@@ -608,17 +608,17 @@ msgstr "Configurar host"
 msgid "Connect on startup"
 msgstr "Conectar ao iniciar"
 
-#: connect.c:199 connect.c:295 connect.c:304 connect.c:366 connect.c:381
-#: connect.c:397 connect.c:411 connect.c:431 connect.c:445 connect.c:461
+#: connect.c:198 connect.c:294 connect.c:303 connect.c:365 connect.c:380
+#: connect.c:396 connect.c:410 connect.c:430 connect.c:444 connect.c:460
 #: connect.c:555
 msgid "Connection error"
 msgstr "Erro de conexão"
 
-#: connect.c:111
+#: connect.c:112
 msgid "Connection failed"
 msgstr "Conexão falhou"
 
-#: telnet.c:2027
+#: telnet.c:2026
 msgid "Connection reset by peer"
 msgstr "Conexão foi cancelada pelo servidor"
 
@@ -1036,7 +1036,7 @@ msgstr "Nome do arquivo origem."
 msgid "Name of the target file."
 msgstr "Nome do arquivo destino."
 
-#: telnet.c:347 iocalls.c:408 iocalls.c:551 connect.c:93
+#: telnet.c:347 iocalls.c:410 iocalls.c:517 connect.c:94
 msgid "Network error"
 msgstr "Erro de rede"
 
@@ -1044,7 +1044,7 @@ msgstr "Erro de rede"
 msgid "Network keep alive"
 msgstr "Network keep alive"
 
-#: connect.c:163 connect.c:174
+#: connect.c:162 connect.c:173
 msgid "Network startup error"
 msgstr "Erro ao iniciar a rede"
 
@@ -1495,7 +1495,7 @@ msgstr "Erro SSL"
 msgid "SSL Read error"
 msgstr "Erro de leitura SSL"
 
-#: connect.c:332
+#: connect.c:331
 msgid "SSL error"
 msgstr "Erro SSL"
 
@@ -1503,11 +1503,11 @@ msgstr "Erro SSL"
 msgid "SSL negotiation failed"
 msgstr "Negociação SSL falhou"
 
-#: ssl.c:221
+#: ssl.c:222
 msgid "SSL_CTX_new() has failed"
 msgstr "SSL_CTX_new() has failed"
 
-#: telnet.c:2013
+#: telnet.c:2012
 #, c-format
 msgid ""
 "SSL_write:\n"
@@ -1568,7 +1568,7 @@ msgstr "Secondary space:"
 msgid "Secure connection was successful."
 msgstr "Conexão segura efetuada com sucesso."
 
-#: ssl.c:83 ssl.c:108 ssl.c:220 ssl.c:259 ssl.c:312
+#: ssl.c:83 ssl.c:108 ssl.c:221 ssl.c:260 ssl.c:313
 msgid "Security error"
 msgstr "Erro de segurança"
 
@@ -1600,7 +1600,7 @@ msgstr "Selecione arquivo a enviar"
 msgid "Select font"
 msgstr "Selecione fonte"
 
-#: iocalls.c:409 iocalls.c:552
+#: iocalls.c:411 iocalls.c:518
 msgid "Select() failed when processing for events."
 msgstr "Select() falhou ao processar eventos."
 
@@ -1700,7 +1700,7 @@ msgstr "Erro no socket"
 msgid "Socket read error"
 msgstr "Erro ao ler dados da rede"
 
-#: telnet.c:2034
+#: telnet.c:2033
 msgid "Socket write error"
 msgstr "Erro ao enviar dados para a rede"
 
@@ -2012,7 +2012,7 @@ msgstr ""
 msgid "This program requires GTK version %d.%d.%d"
 msgstr "Este programa precisa do GTK versão %d.%d.%d"
 
-#: connect.c:334
+#: connect.c:333
 #, c-format
 msgid ""
 "This version of %s was built without support for secure sockets layer (SSL)."
@@ -2094,7 +2094,7 @@ msgstr "UTF-8"
 msgid "Uknown DFT Open type from host"
 msgstr "Host enviou código de abertura DFT desconhecido"
 
-#: connect.c:333
+#: connect.c:332
 msgid "Unable to connect to secure hosts"
 msgstr "Não é possível conectar em servidores seguros"
 
@@ -2111,7 +2111,7 @@ msgstr ""
 msgid "Unable to decrypt certificate's signature"
 msgstr "Incapaz de decifrar a assinatura do certificado"
 
-#: connect.c:200
+#: connect.c:199
 msgid "Unable to find selected hostname."
 msgstr "Não consegui encontrar o host selecionado."
 
@@ -2119,7 +2119,7 @@ msgstr "Não consegui encontrar o host selecionado."
 msgid "Unable to get certificate CRL"
 msgstr "Unable to get certificate CRL"
 
-#: connect.c:94
+#: connect.c:95
 msgid "Unable to get connection state."
 msgstr "Não foi possível obter o estado da conexão."
 
@@ -2273,7 +2273,7 @@ msgstr "Variável"
 msgid "Version %s - Revision %s"
 msgstr "Versão %s - Revisão %s"
 
-#: connect.c:164
+#: connect.c:163
 msgid "WSAStartup failed"
 msgstr "WSAStartup falhou"
 
@@ -2472,11 +2472,11 @@ msgstr "um atributo \"action\""
 msgid "bracket"
 msgstr "bracket"
 
-#: toggles.c:313 connect.c:362 connect.c:457
+#: toggles.c:313 connect.c:361 connect.c:456
 msgid "disable"
 msgstr "desabilitar"
 
-#: toggles.c:313 connect.c:362 connect.c:457
+#: toggles.c:313 connect.c:361 connect.c:456
 msgid "enable"
 msgstr "enable"
 
@@ -2484,11 +2484,11 @@ msgstr "enable"
 msgid "fcntl() error when getting socket state."
 msgstr "fcntl() error when getting socket state."
 
-#: connect.c:382 connect.c:556
+#: connect.c:381 connect.c:556
 msgid "ioctlsocket(FIONBIO) failed."
 msgstr "ioctlsocket(FIONBIO) failed."
 
-#: connect.c:412 connect.c:446
+#: connect.c:411 connect.c:445
 msgid "setsockopt(SO_OOBINLINE) has failed"
 msgstr "setsockopt(SO_OOBINLINE) has failed"
 

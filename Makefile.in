@@ -211,6 +211,7 @@ ifneq ($(MAKENSIS),no)
 	@echo "  GEN  GTK Runtime"
 	@./makegtkruntime.sh
 	@echo "  GEN  Windows installer"
+	@cp -rv $(BINDIR)/Release/$(localedir) $(BINDIR)/Release
 	@"$(MAKENSIS)" pw3270-@host_cpu@.nsi
 endif
 
