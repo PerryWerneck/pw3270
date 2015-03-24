@@ -455,7 +455,7 @@ fi
 
 if test "$app_cv_rexx" == "yes"; then
 	AC_DEFINE(HAVE_REXX)
-	AC_CHECK_HEADER(oorexxapi.h, AC_DEFINE(HAVE_OOREXXAPI_H))
+	AC_DEFINE(HAVE_OOREXXAPI_H)
 	PLUGINS="$PLUGINS rx3270"
 	AC_MSG_NOTICE([ooRexx plugin & extension are enabled.])
 else
