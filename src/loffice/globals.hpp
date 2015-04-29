@@ -105,8 +105,7 @@
 
 			virtual ::sal_Int16 SAL_CALL setSessionName( const ::rtl::OUString& name ) throw (::com::sun::star::uno::RuntimeException);
 
-			virtual ::sal_Int16 SAL_CALL setHost( const ::rtl::OUString& url ) throw (::com::sun::star::uno::RuntimeException);
-			virtual ::sal_Int16 SAL_CALL Connect() throw (::com::sun::star::uno::RuntimeException);
+			virtual ::sal_Int16 SAL_CALL Connect( const ::rtl::OUString& url, ::sal_Bool wait) throw (::com::sun::star::uno::RuntimeException);
 			virtual ::sal_Int16 SAL_CALL Disconnect() throw (::com::sun::star::uno::RuntimeException);
 
 			// State

@@ -100,6 +100,7 @@
 
  }
 
+/*
  ::sal_Int16 SAL_CALL session_impl::setHost( const ::rtl::OUString& url ) throw (::com::sun::star::uno::RuntimeException)
  {
 	if(!hSession)
@@ -122,6 +123,7 @@
 
 	return -1;
  }
+*/
 
  ::sal_Int16 SAL_CALL session_impl::setTextAt( ::sal_Int16 row, ::sal_Int16 col, const ::rtl::OUString& str ) throw (::com::sun::star::uno::RuntimeException)
  {

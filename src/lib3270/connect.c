@@ -82,9 +82,11 @@ static void net_connected(H3270 *hSession, int fd, LIB3270_IO_FLAG flag, void *d
 	int 		err;
 	socklen_t	len		= sizeof(err);
 
-	trace("%s write=%p",__FUNCTION__,hSession->ns_write_id);
-	lib3270_remove_poll(hSession->ns_write_id);
-	hSession->ns_write_id = NULL;
+	if(hSession->ns_write_id) {
+		trace("%s write=%p",__FUNCTION__,hSession->ns_write_id);
+		lib3270_remove_poll(hSession->ns_write_id);
+		hSession->ns_write_id = NULL;
+	}
 
 	if(getsockopt(hSession->sock, SOL_SOCKET, SO_ERROR, (char *) &err, &len) < 0)
 	{

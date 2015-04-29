@@ -628,6 +628,7 @@ void x_except_on(H3270 *h)
 {
 	int reading = (h->ns_read_id != NULL);
 
+	debug("%s",__FUNCTION__);
 	if(h->ns_exception_id)
 		return;
 
@@ -638,6 +639,7 @@ void x_except_on(H3270 *h)
 
 	if(reading)
 		h->ns_read_id = lib3270_add_poll_fd(h,h->sock,LIB3270_IO_FLAG_READ,net_input,0);
+	debug("%s",__FUNCTION__);
 
 }
 

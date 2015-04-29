@@ -47,8 +47,7 @@ module pw3270
 		string  getRevision();
 
 		// Host definition
-		short 	setHost([in] string url);
-		short   Connect();
+		short   Connect([in] string url, [in] boolean wait);
         short   Disconnect();
         short	iterate([in] boolean wait);
 

@@ -37,7 +37,8 @@
 
  using namespace pw3270_impl;
 
- ::sal_Int16 SAL_CALL session_impl::Connect() throw (::com::sun::star::uno::RuntimeException)
+/*
+::sal_Int16 SAL_CALL session_impl::Reconnect() throw (::com::sun::star::uno::RuntimeException)
  {
  	trace("%s: hSession=%p",__FUNCTION__,hSession);
 
@@ -46,7 +47,36 @@
 		if(!hSession)
 			hSession = h3270::session::get_default();
 
-		return hSession->connect(false);
+		return hSession->connect();
+
+	} catch(std::exception &e)
+	{
+		trace("%s failed: %s",__FUNCTION__,e.what());
+
+		OUString msg = OUString(e.what(),strlen(e.what()),RTL_TEXTENCODING_UTF8,RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE);
+
+		throw css::uno::RuntimeException(msg,static_cast< cppu::OWeakObject * >(this));
+
+	}
+
+	return -1;
+
+
+ }
+*/
+
+ ::sal_Int16 SAL_CALL session_impl::Connect(const ::rtl::OUString& url, ::sal_Bool wait) throw (::com::sun::star::uno::RuntimeException)
+ {
+ 	trace("%s: hSession=%p",__FUNCTION__,hSession);
+
+	OString vlr = rtl::OUStringToOString( url , RTL_TEXTENCODING_UNICODE );
+
+	try
+	{
+		if(!hSession)
+			hSession = h3270::session::get_default();
+
+		return hSession->connect(vlr.getStr(),wait);
 
 	} catch(std::exception &e)
 	{
