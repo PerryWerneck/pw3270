@@ -419,9 +419,12 @@ case "$host" in
 			PHPMAJOR=`$PHPCONFIG --version | cut -d. -f1`
 			if test -d /etc/php${PHPMAJOR}/conf.d; then
 				PHPCONFDIR=/etc/php${PHPMAJOR}/conf.d
+			elif test -d /etc/php/conf.d; then
+				PHPCONFDIR=/etc/php/conf.d
 			else
 				PHPCONFDIR=/etc/php${PHPMAJOR}/cli
 			fi
+			AC_MSG_NOTICE([Using $PHPCONFDIR for PHP config files.])
 		fi
 
 esac
