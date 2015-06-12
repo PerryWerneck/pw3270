@@ -31,4 +31,32 @@
 
 /*---[ Implement ]----------------------------------------------------------------------------------*/
 
+static jfieldID getHandleField(JNIEnv *env, jobject obj) {
+    jclass c = env->GetObjectClass(obj);
+    // J is the type signature for long:
+    return env->GetFieldID(c, "nativeHandle", "J");
+}
 
+session * getHandle(JNIEnv *env, jobject obj) {
+    jlong handle = env->GetLongField(obj, getHandleField(env, obj));
+    return reinterpret_cast<PW3270_NAMESPACE::session *>(handle);
+}
+
+JNIEXPORT jint JNICALL Java_pw3270_terminal_init(JNIEnv *env, jobject obj, jstring id) {
+
+	jlong handle = reinterpret_cast<jlong>(session::create());
+
+    env->SetLongField(obj, getHandleField(env, obj), handle);
+
+	return 0;
+}
+
+JNIEXPORT jint JNICALL Java_pw3270_terminal_deinit(JNIEnv *env, jobject obj) {
+
+	session *s = getHandle(env,obj);
+	delete s;
+
+    env->SetLongField(obj, getHandleField(env, obj), 0);
+
+	return 0;
+}

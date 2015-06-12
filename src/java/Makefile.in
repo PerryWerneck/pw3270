@@ -74,12 +74,12 @@ CXXFLAGS=@CXXFLAGS@ @DLL_CFLAGS@ @JNI_CPPFLAGS@ -I../include
 
 #---[ Rules ]------------------------------------------------------------------
 
-$(OBJDBG)/%.o: %.cc Makefile jni3270.h
+$(OBJDBG)/%.o: %.cc Makefile *.h
 	@echo "  CC   `basename $@`"
 	@mkdir -p `dirname $@`
 	$(CXX) -DDEBUG=1 $(CXXFLAGS) -o $@ -c $<
 
-$(OBJRLS)/%.o: %.cc Makefile jni3270.h
+$(OBJRLS)/%.o: %.cc Makefile *.h
 	@echo "  CC   `basename $@`"
 	@mkdir -p `dirname $@`
 	@$(CXX) -DNDEBUG=1 $(CXXFLAGS) -o $@ -c $<

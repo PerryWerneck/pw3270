@@ -34,13 +34,25 @@ package pw3270;
 
 public class terminal
 {
+	// PW3270 session handle
+	private long nativeHandle;
+
 	// Init/Deinit
-	private native int init();
+	private native int init(String id);
 	private native int deinit();
 
 	// Get library/extension info
 	public native String	get_version();
 	public native String	get_revision();
+
+
+	public terminal(String id) {
+		init(id);
+	}
+
+	protected void finalize( ) throws Throwable {
+		deinit();
+	}
 
 	static
 	{

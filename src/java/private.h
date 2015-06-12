@@ -31,7 +31,10 @@
 	#define PRIVATE_H_INCLUDED
 
 	#include "jni3270.h"
+	#include <pw3270/class.h>
 
+	using namespace PW3270_NAMESPACE;
 
+	PW3270_NAMESPACE::session * getHandle(JNIEnv *env, jobject obj);
 
 #endif // PRIVATE_H_INCLUDED

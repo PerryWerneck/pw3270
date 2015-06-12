@@ -32,10 +32,16 @@
 
 /*---[ Implement ]----------------------------------------------------------------------------------*/
 
-JNIEXPORT jstring JNICALL Java_pw3270_terminal_getVersion (JNIEnv *env, jobject obj) {
+JNIEXPORT jstring JNICALL Java_pw3270_terminal_get_1version (JNIEnv *env, jobject obj) {
+
+	session *s = getHandle(env,obj);
+	return env->NewStringUTF(s->get_version().c_str());
 
 }
 
-JNIEXPORT jstring JNICALL Java_pw3270_terminal_getRevision(JNIEnv *, jobject) {
+JNIEXPORT jstring JNICALL Java_pw3270_terminal_get_1revision(JNIEnv *env, jobject obj) {
+
+	session *s = getHandle(env,obj);
+	return env->NewStringUTF(s->get_revision().c_str());
 
 }
