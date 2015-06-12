@@ -25,7 +25,7 @@
 #
 
 PACKAGE_NAME=@PACKAGE_NAME@
-SOURCES=
+SOURCES=main.cc info.cc
 
 #---[ Paths ]------------------------------------------------------------------
 
@@ -70,24 +70,24 @@ include $(CLASSLIBDIR)/class.mak
 
 #---[ Build options ]----------------------------------------------------------
 
-CXXFLAGS=@CXXFLAGS@ @DLL_CFLAGS@
+CXXFLAGS=@CXXFLAGS@ @DLL_CFLAGS@ @JNI_CPPFLAGS@ -I../include
 
 #---[ Rules ]------------------------------------------------------------------
 
 $(OBJDBG)/%.o: %.cc Makefile jni3270.h
 	@echo "  CC   `basename $@`"
 	@mkdir -p `dirname $@`
-	@$(CXX) -DDEBUG=1 $(CXXFLAGS) -o $@ -c $<
+	$(CXX) -DDEBUG=1 $(CXXFLAGS) -o $@ -c $<
 
 $(OBJRLS)/%.o: %.cc Makefile jni3270.h
 	@echo "  CC   `basename $@`"
 	@mkdir -p `dirname $@`
 	@$(CXX) -DNDEBUG=1 $(CXXFLAGS) -o $@ -c $<
 
-$(BINDIR)/java/$(PACKAGE)/%.class: %.java
+$(BINDIR)/java/$(PACKAGE_NAME)/%.class: %.java
 	@echo $< ...
 	@mkdir -p `dirname $@`
-	$(JAVAC) -encoding utf-8 -cp $(BINDIR)/java -sourcepath $(PWD) -d $(BINDIR)/java $^
+	$(JAVAC) -encoding utf-8 -d $(BINDIR)/java $^
 
 #---[ Release targets ]--------------------------------------------------------
 
@@ -117,10 +117,10 @@ run: $(BINDBG)/jni3270@DLLEXT@
 
 #---[ Misc targets ]-----------------------------------------------------------
 
-jni3270.h: $(BINDIR)/java/$(PACKAGE)/terminal.class
+jni3270.h: $(BINDIR)/java/$(PACKAGE_NAME)/terminal.class
 	@echo $< ...
 	@mkdir -p `dirname $@`
-	@$(JAVAH) -o $@ -classpath $(BINDIR)/java $(PACKAGE).terminal
+	$(JAVAH) -o $@ -classpath $(BINDIR)/java $(PACKAGE_NAME).terminal
 
 
 install: $(BINRLS)/jni3270@DLLEXT@

@@ -18,33 +18,17 @@
  * programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple
  * Place, Suite 330, Boston, MA, 02111-1307, USA
  *
- * Este programa está nomeado como lib3270.java e possui - linhas de código.
+ * Este programa está nomeado como main.cc e possui - linhas de código.
  *
  * Contatos:
  *
  * perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
  * erico.mendonca@gmail.com	(Erico Mascarenhas Mendonça)
- * licinio@bb.com.br		(Licínio Luis Branco)
- * kraucer@bb.com.br		(Kraucer Fernandes Mazuco)
- * macmiranda@bb.com.br		(Marco Aurélio Caldas Miranda)
  *
  */
 
-package pw3270;
+ #include "private.h"
 
-public class terminal
-{
-	// Init/Deinit
-	private native int init();
-	private native int deinit();
+/*---[ Implement ]----------------------------------------------------------------------------------*/
 
-	// Get library/extension info
-	public native String	get_version();
-	public native String	get_revision();
 
-	static
-	{
-		System.loadLibrary("pw3270_jni");
-	}
-
-};

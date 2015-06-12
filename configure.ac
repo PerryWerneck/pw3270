@@ -146,6 +146,7 @@ case "$host" in
 		PLUGINS="hllapi"
 		APP_GUI_SRC="resources.rc"
 		DLLPREFIX=""
+		JNI_CPPFLAGS="-I\$(JDK_HOME)/include -I\$(JDK_HOME)/include/win32"
 		;;
 
 	*-apple-*)
@@ -169,6 +170,7 @@ case "$host" in
 		LDAPPFLAGS=""
 		DBGRPATH="-Wl,--rpath,.bin/Debug/lib"
 		DBGCMDPREFIX="LD_LIBRARY_PATH=\$(BINDIR)/Debug/lib"
+		JNI_CPPFLAGS="-I\$(JDK_HOME)/include -I\$(JDK_HOME)/include/linux"
 
 esac
 
@@ -339,6 +341,7 @@ AC_SUBST(JAVAH)
 AC_SUBST(JAR)
 AC_SUBST(JDK_HOME)
 AC_SUBST(JRE_HOME)
+AC_SUBST(JNI_CPPFLAGS)
 
 #--[ Headers ]------------------------------------------------------------------------------------------------------------------------------------------------
 

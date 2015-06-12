@@ -32,8 +32,13 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="../../configure.ac" />
+		<Unit filename="../include/pw3270/class.h" />
 		<Unit filename="Makefile.in" />
+		<Unit filename="info.cc" />
 		<Unit filename="jni3270.h" />
+		<Unit filename="main.cc" />
+		<Unit filename="private.h" />
 		<Unit filename="terminal.java" />
 		<Extensions>
 			<code_completion />
