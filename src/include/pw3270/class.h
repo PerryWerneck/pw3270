@@ -177,9 +177,9 @@
 		virtual int				  enter(void)										= 0;
 		virtual int				  pfkey(int key)									= 0;
 		virtual int				  pakey(int key)									= 0;
-		virtual int				  quit(void)										= 0;
 
 		// Actions
+		virtual int				  quit(void)										= 0;
 		virtual int				  erase_eof(void)									= 0;
 		virtual int				  print(void)										= 0;
 

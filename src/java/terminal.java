@@ -35,9 +35,9 @@ public class terminal
 	private long nativeHandle;
 
 	// Init/Deinit
-	private native int init();
-	private native int init(String id);
-	private native int deinit();
+	private native int		init();
+	private native int		init(String id);
+	private native int		deinit();
 
 	// Get library/extension info
 	public native String	get_version();
@@ -60,6 +60,11 @@ public class terminal
 	public native int		enter();
 	public native int		pfkey(int key);
 	public native int		pakey(int key);
+
+	// Actions
+	public native int		quit();
+	public native int		erase_eof();
+	public native int		print();
 
 	// Connect/Disconnect
 	public native int		connect(String host, int seconds);

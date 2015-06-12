@@ -41,6 +41,7 @@
 		<Unit filename="../../configure.ac" />
 		<Unit filename="../include/pw3270/class.h" />
 		<Unit filename="Makefile.in" />
+		<Unit filename="actions.cc" />
 		<Unit filename="connect.cc" />
 		<Unit filename="cursor.cc" />
 		<Unit filename="getset.cc" />
