@@ -53,7 +53,7 @@ public class terminal
 
 	static
 	{
-		System.loadLibrary("pw3270_jni");
+		System.loadLibrary("jni3270");
 	}
 
 };

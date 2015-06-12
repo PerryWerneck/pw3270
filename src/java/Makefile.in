@@ -74,12 +74,12 @@ CXXFLAGS=@CXXFLAGS@ @DLL_CFLAGS@ @JNI_CPPFLAGS@ -I../include
 
 #---[ Rules ]------------------------------------------------------------------
 
-$(OBJDBG)/%.o: %.cc Makefile *.h
+$(OBJDBG)/%.o: %.cc Makefile private.h jni3270.h
 	@echo "  CC   `basename $@`"
 	@mkdir -p `dirname $@`
 	$(CXX) -DDEBUG=1 $(CXXFLAGS) -o $@ -c $<
 
-$(OBJRLS)/%.o: %.cc Makefile *.h
+$(OBJRLS)/%.o: %.cc Makefile private.h jni3270.h
 	@echo "  CC   `basename $@`"
 	@mkdir -p `dirname $@`
 	@$(CXX) -DNDEBUG=1 $(CXXFLAGS) -o $@ -c $<
@@ -96,11 +96,11 @@ $(BINDIR)/java/$(PACKAGE_NAME)/%.class: %.java
 
 #---[ Release targets ]--------------------------------------------------------
 
-all: $(BINRLS)/jni3270@DLLEXT@
+all: $(BINRLS)/@DLLPREFIX@jni3270@DLLEXT@
 
-Release: $(BINRLS)/jni3270@DLLEXT@
+Release: $(BINRLS)/@DLLPREFIX@jni3270@DLLEXT@
 
-$(BINRLS)/jni3270@DLLEXT@:	$(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SRC)@OBJEXT@) \
+$(BINRLS)/@DLLPREFIX@jni3270@DLLEXT@:	$(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SRC)@OBJEXT@) \
 				$(CLASS_RELEASE_OBJECTS)
 	@echo "  LD   `basename $@`"
 	@$(MKDIR) `dirname $@`
@@ -109,16 +109,17 @@ $(BINRLS)/jni3270@DLLEXT@:	$(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SR
 
 #---[ Debug targets ]----------------------------------------------------------
 
-Debug: $(BINDBG)/jni3270@DLLEXT@
+Debug: $(BINDBG)/@DLLPREFIX@jni3270@DLLEXT@ $(BINDIR)/java/testprogram.class
 
-$(BINDBG)/jni3270@DLLEXT@:	$(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC)@OBJEXT@) \
+$(BINDBG)/@DLLPREFIX@jni3270@DLLEXT@:	$(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC)@OBJEXT@) \
 				$(CLASS_DEBUG_OBJECTS)
 	@echo "  LD   `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(CXX) @SYSDLL_FLAGS@ $(LDFLAGS) $(OO_LDFLAGS) -o $@ $^ $(CLASS_LIBS)
 
 
-run: $(BINDBG)/jni3270@DLLEXT@
+run: $(BINDBG)/@DLLPREFIX@jni3270@DLLEXT@ $(BINDIR)/java/testprogram.class
+	java -Djava.library.path=$(BINDBG) -cp .bin/java/ testprogram
 
 #---[ Misc targets ]-----------------------------------------------------------
 
@@ -128,7 +129,7 @@ jni3270.h: $(BINDIR)/java/$(PACKAGE_NAME)/terminal.class
 	$(JAVAH) -o $@ -classpath $(BINDIR)/java $(PACKAGE_NAME).terminal
 
 
-install: $(BINRLS)/jni3270@DLLEXT@
+install: $(BINRLS)/@DLLPREFIX@jni3270@DLLEXT@
 
 cleanDebug: clean
 

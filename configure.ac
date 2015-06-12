@@ -132,6 +132,7 @@ case "$host" in
 		CFLAGS="$CFLAGS -mms-bitfields"
 		localedir="locale"
 		DLL_FLAGS="-shared -Wl,--add-stdcall-alias,--enable-stdcall-fixup"
+		DLLPREFIX=""
 
 		# http://stackoverflow.com/questions/18138635/mingw-exe-requires-a-few-gcc-dlls-regardless-of-the-code
 		SYSDLL_FLAGS="-shared -static-libgcc -static-libstdc++ -Wl,--add-stdcall-alias,--enable-stdcall-fixup"
@@ -159,6 +160,7 @@ case "$host" in
 		LDSOFLAGS="-Wl,-install_name,\`basename \$@\`"
 		LDARCH="-arch $build_cpu"
 		LDAPPFLAGS=""
+		DLLPREFIX="lib"
 		;;
 
 	*)
@@ -171,6 +173,7 @@ case "$host" in
 		DBGRPATH="-Wl,--rpath,.bin/Debug/lib"
 		DBGCMDPREFIX="LD_LIBRARY_PATH=\$(BINDIR)/Debug/lib"
 		JNI_CPPFLAGS="-I\$(JDK_HOME)/include -I\$(JDK_HOME)/include/linux"
+		DLLPREFIX="lib"
 
 esac
 
@@ -627,6 +630,7 @@ AC_SUBST(DLL_FLAGS)
 AC_SUBST(SYSDLL_FLAGS)
 AC_SUBST(DLL_CFLAGS)
 AC_SUBST(DLLDIR)
+AC_SUBST(DLLPREFIX)
 AC_SUBST(LDSOFLAGS)
 AC_SUBST(LDAPPFLAGS)
 AC_SUBST(LDLIBFLAGS)
