@@ -44,9 +44,17 @@ session * getHandle(JNIEnv *env, jobject obj) {
 
 JNIEXPORT jint JNICALL Java_pw3270_terminal_init(JNIEnv *env, jobject obj, jstring id) {
 
-	jlong handle = reinterpret_cast<jlong>(session::create());
+	try {
 
-    env->SetLongField(obj, getHandleField(env, obj), handle);
+		jlong handle = reinterpret_cast<jlong>(session::create());
+		env->SetLongField(obj, getHandleField(env, obj), handle);
+
+	} catch(std::exception &e) {
+
+		env->ThrowNew(env->FindClass("java/lang/Exception"), e.what());
+
+	}
+
 
 	return 0;
 }

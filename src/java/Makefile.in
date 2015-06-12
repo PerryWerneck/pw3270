@@ -92,7 +92,7 @@ $(BINDIR)/java/%.class: %.java $(BINDIR)/java/$(PACKAGE_NAME)/terminal.class
 $(BINDIR)/java/$(PACKAGE_NAME)/%.class: %.java
 	@echo $< ...
 	@mkdir -p `dirname $@`
-	$(JAVAC) -encoding utf-8 -d $(BINDIR)/java $^
+	@$(JAVAC) -encoding utf-8 -d $(BINDIR)/java $^
 
 #---[ Release targets ]--------------------------------------------------------
 
@@ -104,7 +104,7 @@ $(BINRLS)/@DLLPREFIX@jni3270@DLLEXT@:	$(foreach SRC, $(basename $(SOURCES)), $(O
 				$(CLASS_RELEASE_OBJECTS)
 	@echo "  LD   `basename $@`"
 	@$(MKDIR) `dirname $@`
-	$(CXX) @SYSDLL_FLAGS@ $(LDFLAGS) $(OO_LDFLAGS) -o $@ $^ $(CLASS_LIBS)
+	@$(CXX) @SYSDLL_FLAGS@ $(LDFLAGS) $(OO_LDFLAGS) -o $@ $^ $(CLASS_LIBS)
 
 
 #---[ Debug targets ]----------------------------------------------------------
@@ -119,7 +119,7 @@ $(BINDBG)/@DLLPREFIX@jni3270@DLLEXT@:	$(foreach SRC, $(basename $(SOURCES)), $(O
 
 
 run: $(BINDBG)/@DLLPREFIX@jni3270@DLLEXT@ $(BINDIR)/java/testprogram.class
-	java -Djava.library.path=$(BINDBG) -cp .bin/java/ testprogram
+	@LD_LIBRARY_PATH=../../.bin/Debug/lib/ java -Djava.library.path=$(BINDBG) -cp .bin/java/ testprogram
 
 #---[ Misc targets ]-----------------------------------------------------------
 
