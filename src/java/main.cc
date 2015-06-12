@@ -55,6 +55,7 @@ JNIEXPORT jint JNICALL Java_pw3270_terminal_init__(JNIEnv *env, jobject obj) {
 
 	}
 
+	return 0;
 }
 
 
