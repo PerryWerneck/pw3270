@@ -90,7 +90,7 @@ $(BINRLS)/php3270@DLLEXT@:	$(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SR
 				$(CLASS_RELEASE_OBJECTS)
 	@echo "  LD   `basename $@`"
 	@$(MKDIR) `dirname $@`
-	$(CXX) @SYSDLL_FLAGS@ $(LDFLAGS) $(OO_LDFLAGS) -o $@ $^ $(CLASS_LIBS) 
+	$(CXX) @SYSDLL_FLAGS@ $(LDFLAGS) $(OO_LDFLAGS) -o $@ $^ $(CLASS_LIBS)
 
 
 #---[ Debug targets ]----------------------------------------------------------
@@ -101,7 +101,7 @@ $(BINDBG)/php3270@DLLEXT@:	$(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SR
 				$(CLASS_DEBUG_OBJECTS)
 	@echo "  LD   `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CXX) @SYSDLL_FLAGS@ $(LDFLAGS) $(OO_LDFLAGS) -o $@ $^ $(CLASS_LIBS) 
+	@$(CXX) @SYSDLL_FLAGS@ $(LDFLAGS) $(OO_LDFLAGS) -o $@ $^ $(CLASS_LIBS)
 
 
 run: $(BINDBG)/php3270@DLLEXT@
@@ -109,9 +109,9 @@ run: $(BINDBG)/php3270@DLLEXT@
 
 #---[ Misc targets ]-----------------------------------------------------------
 
-install: $(BINDBG)/php3270@DLLEXT@
+install: $(BINRLS)/php3270@DLLEXT@
 	@$(MKDIR) $(DESTDIR)/`$(PHPCONFIG) --extension-dir`
-	@$(INSTALL_PROGRAM) $(BINDBG)/php3270@DLLEXT@ $(DESTDIR)/`$(PHPCONFIG) --extension-dir`/tn3270@DLLEXT@
+	@$(INSTALL_PROGRAM) $(BINRLS)/php3270@DLLEXT@ $(DESTDIR)/`$(PHPCONFIG) --extension-dir`/tn3270@DLLEXT@
 
 	@$(MKDIR) $(DESTDIR)/@PHPCONFDIR@
 	@$(INSTALL_DATA) php.ini $(DESTDIR)/@PHPCONFDIR@/tn3270.ini
