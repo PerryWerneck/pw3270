@@ -36,7 +36,7 @@ public class testprogram
         try
         {
             System.err.println("Begin");
-            terminal host = new terminal("pw3270:a");
+            terminal host = new terminal();
             System.err.println("pw3270 version " + host.get_version() + " revision " + host.get_revision());
             System.err.println("End");
         }
