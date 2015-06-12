@@ -36,6 +36,7 @@
 %define _redhat		%(test -e /etc/redhat-release && echo 1 || echo 0)
 %define _php		%(which php-config 2> /dev/null > /dev/null  && echo 1 || echo 0)
 %define _bldreq		gtk3-devel libopenssl-devel
+%define _java		1
 
 %if 0%{?_php}
 	%define phpmajor %(php-config --version | cut -d. -f1)
@@ -104,6 +105,10 @@ BuildRequires:	ucpp
 
 %if 0%{?_php}
 BuildRequires:	php-devel
+%endif
+
+%if 0%{?_java}
+BuildRequires:	java-devel
 %endif
 
 BuildRequires:  rsvg-view
@@ -195,6 +200,21 @@ from PHP apps.
 Revision @PACKAGE_REVISION@ from @PACKAGE_SOURCE@
 
 %endif
+
+%if 0%{?_java}
+
+%package 	java
+Summary:	Java class to interact with pw3270
+Group:		Development/Libraries/PHP
+Requires:	lib3270 = @PACKAGE_VERSION@
+
+%description java
+Java class for lib3270/pw3270 interaction.
+
+Revision @PACKAGE_REVISION@ from @PACKAGE_SOURCE@
+
+%endif
+
 
 #---[ Build & Install ]-----------------------------------------------------------------------------------------------
 
@@ -304,6 +324,14 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/php%{phpmajor}/conf.d/tn3270.ini
 %{_libdir}/php%{phpmajor}/extensions/tn3270.so
 %endif
+
+%if 0%{?_java}
+%files java
+%defattr(-,root,root)
+%{_jnidir}/libjni3270.so
+%{_jvmjardir}/pw3270.jar
+%endif
+
 
 #---[ Scripts ]-------------------------------------------------------------------------------------------------------
 
