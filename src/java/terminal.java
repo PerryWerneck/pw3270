@@ -42,7 +42,18 @@ public class terminal
 	// Get library/extension info
 	public native String	get_version();
 	public native String	get_revision();
+	public native String	get_encoding();
 
+	// Get/Set/Text with charset translation
+	public native String	get_string(int baddr, int len);
+	public native String	get_string_at(int row, int col, int sz);
+	public native int		set_string_at(int row, int col, String str);
+	public native int		cmp_string_at(int row, int col, String text);
+	public native int		input_string(String str);
+
+	// Connect/Disconnect
+	public native int		connect(String host, int seconds);
+	public native int		disconnect();
 
 	public terminal() {
 		init();

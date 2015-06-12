@@ -45,3 +45,10 @@ JNIEXPORT jstring JNICALL Java_pw3270_terminal_get_1revision(JNIEnv *env, jobjec
 	return env->NewStringUTF(s->get_revision().c_str());
 
 }
+
+JNIEXPORT jstring JNICALL Java_pw3270_terminal_get_1encoding(JNIEnv *env, jobject obj) {
+
+	session *s = getHandle(env,obj);
+	return env->NewStringUTF(s->get_encoding());
+
+}

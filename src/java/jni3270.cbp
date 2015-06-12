@@ -41,6 +41,8 @@
 		<Unit filename="../../configure.ac" />
 		<Unit filename="../include/pw3270/class.h" />
 		<Unit filename="Makefile.in" />
+		<Unit filename="connect.cc" />
+		<Unit filename="getset.cc" />
 		<Unit filename="info.cc" />
 		<Unit filename="jni3270.h" />
 		<Unit filename="main.cc" />

@@ -25,7 +25,7 @@
 #
 
 PACKAGE_NAME=@PACKAGE_NAME@
-SOURCES=main.cc info.cc
+SOURCES=main.cc info.cc connect.cc getset.cc
 
 #---[ Paths ]------------------------------------------------------------------
 
@@ -77,7 +77,7 @@ CXXFLAGS=@CXXFLAGS@ @DLL_CFLAGS@ @JNI_CPPFLAGS@ -I../include
 $(OBJDBG)/%.o: %.cc Makefile private.h jni3270.h
 	@echo "  CC   `basename $@`"
 	@mkdir -p `dirname $@`
-	$(CXX) -DDEBUG=1 $(CXXFLAGS) -o $@ -c $<
+	@$(CXX) -DDEBUG=1 $(CXXFLAGS) -o $@ -c $<
 
 $(OBJRLS)/%.o: %.cc Makefile private.h jni3270.h
 	@echo "  CC   `basename $@`"
