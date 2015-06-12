@@ -312,6 +312,9 @@ fi
 AC_ARG_VAR([JDK_HOME], [JDK home directory])
 AC_ARG_VAR([JRE_HOME], [JRE home directory])
 
+AC_ARG_WITH([jnidir], [AS_HELP_STRING([--with-jnidir], [Directory for JNI libraries])], [ jnidir="$withval" ],[ jnidir=\$"{libdir}/java" ])
+AC_ARG_WITH([jvmjardir], [AS_HELP_STRING([--with-jvmjardir], [Directory for JAR files])], [ jvmjardir="$withval" ],[ jvmjardir=\$"{libdir}/jvm-exports" ])
+
 AC_ARG_ENABLE([java],[AS_HELP_STRING([--disable-java], [Disable java integration])],[ app_cv_java="$enableval" ],[ app_cv_java="yes" ])
 
 if test "$app_cv_java" = "yes" ; then
@@ -337,10 +340,15 @@ if test "$app_cv_java" = "yes" ; then
 	AC_PATH_TOOL([JAVAC], [javac], [no], [$JDK_HOME/bin:$JRE_HOME/bin:$PATH])
 	AC_PATH_TOOL([JAVAH], [javah], [no], [$JDK_HOME/bin:$JRE_HOME/bin:$PATH])
 	AC_PATH_TOOL([JAR], [jar], [no], [$JDK_HOME/bin:$JRE_HOME/bin:$PATH])
+
+	EXTENSIONS="$EXTENSIONS java"
+
 fi
 
 AC_SUBST(JAVAC)
 AC_SUBST(JAVAH)
+AC_SUBST(jnidir)
+AC_SUBST(jvmjardir)
 AC_SUBST(JAR)
 AC_SUBST(JDK_HOME)
 AC_SUBST(JRE_HOME)

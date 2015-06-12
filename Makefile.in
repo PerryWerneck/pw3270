@@ -157,12 +157,20 @@ $(BINDIR)/Release/$(PACKAGE_NAME).oxt:
 	@$(MKDIR) `dirname $@`
 	@cp src/loffice/.bin/Release/$(PACKAGE_NAME).oxt $@
 
-php: $(BINDIR)/Release/tn3270.so
+php: $(BINDIR)/Release/tn3270@DLLEXT@
 
-$(BINDIR)/Release/tn3270.so:
+$(BINDIR)/Release/tn3270.so: src/php/*
 	@$(MAKE) -C src/php Release
 	@$(MKDIR) `dirname $@`
 	@cp src/php/.bin/Release/php3270.so $@
+
+java: $(BINDIR)/Release/@DLLPREFIX@jni3270@DLLEXT@
+
+$(BINDIR)/Release/@DLLPREFIX@jni3270@DLLEXT@: src/java/*
+	@$(MAKE) -C src/java Release
+	@$(MKDIR) `dirname $@`
+	@cp src/java/.bin/Release/*@DLLEXT@ $(BINDIR)/Release
+	@cp src/java/.bin/Release/*.jar $(BINDIR)/Release
 
 #---[ Debug targets ]----------------------------------------------------------
 

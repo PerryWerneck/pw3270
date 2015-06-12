@@ -36,6 +36,8 @@ sbindir=@sbindir@
 libdir=@libdir@
 includedir=@includedir@
 sysconfdir=@sysconfdir@
+jnidir=@jnidir@
+jvmjardir=@jvmjardir@
 
 #---[ Tools ]------------------------------------------------------------------
 
@@ -94,6 +96,11 @@ $(BINDIR)/java/$(PACKAGE_NAME)/%.class: %.java
 	@mkdir -p `dirname $@`
 	@$(JAVAC) -encoding utf-8 -d $(BINDIR)/java $^
 
+$(BINRLS)/$(PACKAGE_NAME).jar: $(BINDIR)/java/$(PACKAGE_NAME)/terminal.class Makefile
+	@echo $@ ...
+	@mkdir -p `dirname $@`
+	@$(JAR) -cvf "$@" -C "$(BINDIR)/java" "$(PACKAGE_NAME)"
+
 #---[ Release targets ]--------------------------------------------------------
 
 all: $(BINRLS)/@DLLPREFIX@jni3270@DLLEXT@
@@ -122,6 +129,13 @@ run: $(BINDBG)/@DLLPREFIX@jni3270@DLLEXT@ $(BINDIR)/java/testprogram.class
 	@LD_LIBRARY_PATH=../../.bin/Debug/lib/ java -Djava.library.path=$(BINDBG) -cp .bin/java/ testprogram
 
 #---[ Misc targets ]-----------------------------------------------------------
+
+install: $(BINRLS)/@DLLPREFIX@jni3270@DLLEXT@
+	@$(MKDIR) $(DESTDIR)/$(jnidir)
+	@$(INSTALL_PROGRAM) $(BINRLS)/@DLLPREFIX@jni3270@DLLEXT@ $(DESTDIR)/$(jnidir)
+
+	@mkdir -p $(DESTDIR)/$(jvmjardir)
+	@$(INSTALL_DATA) $(BINRLS)/$(PACKAGE_NAME).jar $(DESTDIR)/$(jvmjardir)
 
 jni3270.h: $(BINDIR)/java/$(PACKAGE_NAME)/terminal.class
 	@echo $< ...
