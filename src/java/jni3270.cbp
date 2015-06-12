@@ -42,9 +42,11 @@
 		<Unit filename="../include/pw3270/class.h" />
 		<Unit filename="Makefile.in" />
 		<Unit filename="connect.cc" />
+		<Unit filename="cursor.cc" />
 		<Unit filename="getset.cc" />
 		<Unit filename="info.cc" />
 		<Unit filename="jni3270.h" />
+		<Unit filename="keyboard.cc" />
 		<Unit filename="main.cc" />
 		<Unit filename="private.h" />
 		<Unit filename="terminal.java" />

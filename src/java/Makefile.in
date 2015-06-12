@@ -25,7 +25,7 @@
 #
 
 PACKAGE_NAME=@PACKAGE_NAME@
-SOURCES=main.cc info.cc connect.cc getset.cc
+SOURCES=main.cc info.cc connect.cc getset.cc cursor.cc keyboard.cc
 
 #---[ Paths ]------------------------------------------------------------------
 

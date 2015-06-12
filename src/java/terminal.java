@@ -51,6 +51,16 @@ public class terminal
 	public native int		cmp_string_at(int row, int col, String text);
 	public native int		input_string(String str);
 
+	// Cursor management
+	public native int		set_cursor_position(int row, int col);
+	public native int		set_cursor_addr(int addr);
+	public native int		get_cursor_addr();
+
+	// Keyboard actions
+	public native int		enter();
+	public native int		pfkey(int key);
+	public native int		pakey(int key);
+
 	// Connect/Disconnect
 	public native int		connect(String host, int seconds);
 	public native int		disconnect();
