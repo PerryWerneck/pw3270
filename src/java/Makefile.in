@@ -84,6 +84,11 @@ $(OBJRLS)/%.o: %.cc Makefile *.h
 	@mkdir -p `dirname $@`
 	@$(CXX) -DNDEBUG=1 $(CXXFLAGS) -o $@ -c $<
 
+$(BINDIR)/java/%.class: %.java $(BINDIR)/java/$(PACKAGE_NAME)/terminal.class
+	@echo $< ...
+	@mkdir -p `dirname $@`
+	@$(JAVAC) -encoding utf-8 -cp $(BINDIR)/java -d $(BINDIR)/java $<
+
 $(BINDIR)/java/$(PACKAGE_NAME)/%.class: %.java
 	@echo $< ...
 	@mkdir -p `dirname $@`

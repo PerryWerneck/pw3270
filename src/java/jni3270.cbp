@@ -40,6 +40,7 @@
 		<Unit filename="main.cc" />
 		<Unit filename="private.h" />
 		<Unit filename="terminal.java" />
+		<Unit filename="testprogram.java" />
 		<Extensions>
 			<code_completion />
 			<envvars />

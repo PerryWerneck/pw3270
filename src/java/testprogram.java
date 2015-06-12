@@ -18,27 +18,32 @@
  * programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple
  * Place, Suite 330, Boston, MA, 02111-1307, USA
  *
- * Este programa está nomeado como private.h e possui - linhas de código.
+ * Este programa está nomeado como lib3270.java e possui - linhas de código.
  *
  * Contatos:
  *
  * perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
  * erico.mendonca@gmail.com	(Erico Mascarenhas Mendonça)
  *
- * Referências:
- *
- * http://thebreakfastpost.com/2012/01/26/wrapping-a-c-library-with-jni-part-2/
- *
  */
-#ifndef PRIVATE_H_INCLUDED
 
-	#define PRIVATE_H_INCLUDED
+import pw3270.*;
 
-	#include "jni3270.h"
-	#include <pw3270/class.h>
+public class testprogram
+{
+    public static void main (String[] args)
+    {
+        try
+        {
+            System.err.println("Begin");
+            terminal host = new terminal("pw3270:a");
+            System.err.println("pw3270 version " + host.get_version() + " revision " + host.get_revision());
+            System.err.println("End");
+        }
+        catch( Exception e )
+        {
+            System.err.println(e);
+        }
+    }
+};
 
-	using namespace PW3270_NAMESPACE;
-
-	PW3270_NAMESPACE::session * getHandle(JNIEnv *env, jobject obj);
-
-#endif // PRIVATE_H_INCLUDED
