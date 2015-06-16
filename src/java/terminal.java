@@ -54,11 +54,40 @@ public class terminal
 	 *
 	 */
 	public native String	get_revision();
+
+	/**
+	 * Get the current lib3270 encoding.
+	 *
+	 * @return String with the current lib3270 encoding (ISO-8859-1).
+	 *
+	 */
 	public native String	get_encoding();
 
 	// Get/Set/Text with charset translation
+
+	/**
+	 * Get terminal contents starting at desired address.
+	 *
+	 * @param baddr	Address of the beginning of the string.
+	 * @param len	Length of the string.
+	 *
+	 * @return Terminal contents with "len" bytes starting at "baddr" position.
+	 *
+	 */
 	public native String	get_string(int baddr, int len);
+
+	/**
+	 * Get terminal contents starting at row, col.
+	 *
+	 * @param row	Row of the text.
+	 * @param col	Column of the text.
+	 * @param sz	Size to read.
+	 *
+	 * @return Contents of terminal at row, col with sz bytes.
+	 *
+	 */
 	public native String	get_string_at(int row, int col, int sz);
+
 	public native int		set_string_at(int row, int col, String str);
 	public native int		cmp_string_at(int row, int col, String text);
 	public native int		input_string(String str);
