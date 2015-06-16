@@ -100,3 +100,19 @@ JNIEXPORT jint JNICALL Java_pw3270_terminal_deinit(JNIEnv *env, jobject obj) {
 
 	return 0;
 }
+
+JNIEXPORT jint JNICALL Java_pw3270_terminal_wait_1for_1ready(JNIEnv *env, jobject obj, jint seconds) {
+
+	try {
+
+		return getHandle(env,obj)->wait_for_ready((int) seconds);
+
+	} catch(std::exception &e) {
+
+		env->ThrowNew(env->FindClass("java/lang/Exception"), e.what());
+
+	}
+
+	return 0;
+
+}

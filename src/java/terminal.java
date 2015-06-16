@@ -40,6 +40,16 @@ public class terminal
 	private native int		deinit();
 
 	/**
+	 * Wait for terminal negociation.
+	 * <p>
+	 * Wait on a loop until the terminal contents are
+	 * ready for reading.
+	 *
+	 * @param seconds Maximum time (in seconds) to wait for.
+	 */
+	public native int wait_for_ready(int seconds);
+
+	/**
 	 * Get the current lib3270 version.
 	 *
 	 * @return String with the current lib3270 version.
@@ -108,7 +118,28 @@ public class terminal
 	public native int		print();
 
 	// Connect/Disconnect
+
+	/**
+	 * Connect to 3270 host.
+	 * <p>
+	 * Connect to the 3270 host
+	 * <p>
+	 * URI formats:
+	 * <ul>
+	 * <li>tn3270://[HOSTNAME]:[HOSTPORT] for non SSL connections.</li>
+	 * <li>tn3270s://[HOSTNAME]:[HOSTPORT] for ssl connection.</li>
+	 * </ul>
+	 *
+	 * @param host		Host URI.
+	 * @param seconds	How many seconds to wait for a connection.
+	 *
+	 */
 	public native int		connect(String host, int seconds);
+
+	/**
+	 * Disconnect from host.
+	 *
+	 */
 	public native int		disconnect();
 
 	/**
