@@ -143,6 +143,9 @@ jni3270.h: $(BINDIR)/java/$(PACKAGE_NAME)/terminal.class
 	$(JAVAH) -o $@ -classpath $(BINDIR)/java $(PACKAGE_NAME).terminal
 
 
+doc: terminal.java
+	@javadoc -d doc $^
+
 install: $(BINRLS)/@DLLPREFIX@jni3270@DLLEXT@
 
 cleanDebug: clean
@@ -150,4 +153,5 @@ cleanDebug: clean
 clean:
 	@rm -fr $(OBJDIR)
 	@rm -fr $(BINDIR)
+	@rm -fr doc
 	@rm -f jni3270.h

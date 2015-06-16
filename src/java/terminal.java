@@ -39,8 +39,20 @@ public class terminal
 	private native int		init(String id);
 	private native int		deinit();
 
-	// Get library/extension info
+	/**
+	 * Get the current lib3270 version.
+	 *
+	 * @return String with the current lib3270 version.
+	 *
+	 */
 	public native String	get_version();
+
+	/**
+	 * Get the current lib3270 revision.
+	 *
+	 * @return String with the current lib3270 revision.
+	 *
+	 */
 	public native String	get_revision();
 	public native String	get_encoding();
 
@@ -70,10 +82,22 @@ public class terminal
 	public native int		connect(String host, int seconds);
 	public native int		disconnect();
 
+	/**
+	 * Creates a tn3270 terminal without associating it
+	 * with any pw3270 window.
+	 *
+	 */
 	public terminal() {
 		init();
 	}
 
+	/**
+	 * Creates a tn3270 terminal associated with a
+	 * pw3270 window.
+	 *
+	 * @param id String identifying the target window.
+	 *
+	 */
 	public terminal(String id) {
 		init(id);
 	}
