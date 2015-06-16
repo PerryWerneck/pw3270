@@ -242,7 +242,6 @@ make all
 
 %install
 rm -rf $RPM_BUILD_ROOT
-cd %{_builddir}/%{name}-%{version}
 %makeinstall
 %find_lang %{name} langfiles
 
@@ -330,6 +329,11 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root)
 %{_jnidir}/libjni3270.so
 %{_jvmjardir}/pw3270.jar
+
+
+%dir %{_javadocdir}/%{name}/*
+%{_javadocdir}/%{name}/*
+
 %endif
 
 

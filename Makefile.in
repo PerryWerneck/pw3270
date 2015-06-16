@@ -140,9 +140,11 @@ $(BINDIR)/Release/plugins/%@DLLEXT@: src/plugins/%/* $(BINDIR)/Release/$(PACKAGE
 
 all: Release
 
-Release: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) $(foreach PLUGIN, $(PLUGINS), $(BINDIR)/Release/plugins/$(PLUGIN)@DLLEXT@) \
-			$(foreach EXT, $(EXTENSIONS), $(EXT)) \
-			locale pixmaps
+Release: \
+	$(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) \
+	$(foreach PLUGIN, $(PLUGINS), $(BINDIR)/Release/plugins/$(PLUGIN)@DLLEXT@) \
+	$(foreach EXT, $(EXTENSIONS), $(EXT)) \
+	locale pixmaps
 
 $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT): src/pw3270/* $(BINDIR)/Release@DLLDIR@/lib3270@DLLEXT@ $(DEPENDS)
 	@$(MAKE) BINDIR="../../$(BINDIR)" LIB3270_LIBS="$(RLSLIB)" LIB3270_CFLAGS="-I../../src/include" -C src/pw3270 ../../$(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
@@ -164,7 +166,8 @@ $(BINDIR)/Release/tn3270.so: src/php/*
 	@$(MKDIR) `dirname $@`
 	@cp src/php/.bin/Release/php3270.so $@
 
-java: $(BINDIR)/Release/@DLLPREFIX@jni3270@DLLEXT@
+java: src/java/Makefile src/java/*.cc src/java/*.h src/java/*.java
+	@$(MAKE) -C src/java Release
 
 $(BINDIR)/Release/@DLLPREFIX@jni3270@DLLEXT@: src/java/*
 	@$(MAKE) -C src/java Release

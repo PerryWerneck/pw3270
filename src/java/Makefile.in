@@ -99,7 +99,7 @@ $(BINDIR)/java/$(PACKAGE_NAME)/%.class: %.java
 	@mkdir -p `dirname $@`
 	@$(JAVAC) -encoding utf-8 -d $(BINDIR)/java $^
 
-$(BINRLS)/$(PACKAGE_NAME).jar: $(BINDIR)/java/$(PACKAGE_NAME)/terminal.class Makefile
+$(BINRLS)/$(PACKAGE_NAME).jar: $(BINDIR)/java/$(PACKAGE_NAME)/terminal.class
 	@echo $@ ...
 	@mkdir -p `dirname $@`
 	@$(JAR) -cvf "$@" -C "$(BINDIR)/java" "$(PACKAGE_NAME)"
@@ -112,19 +112,19 @@ Release: $(BINRLS)/@DLLPREFIX@jni3270@DLLEXT@
 
 zip: jni3270.zip 
 
-jni3270.zip: $(BINRLS)/libjni3270.so $(BINRLS)/$(PACKAGE_NAME).jar testprogram.java doc
+jni3270.zip: $(BINRLS)/@DLLPREFIX@jni3270@DLLEXT@ $(BINRLS)/$(PACKAGE_NAME).jar testprogram.java doc
 	@rm -fr .tmp.zip
 	@rm -f $@
-	@zip -9 -j $@ $(BINRLS)/libjni3270.so $(BINRLS)/$(PACKAGE_NAME).jar testprogram.java
+	@zip -9 -j $@ $(BINRLS)/@DLLPREFIX@jni3270@DLLEXT@ $(BINRLS)/$(PACKAGE_NAME).jar testprogram.java
 	@zip -9 -r $@ doc
 
 doc: terminal.java
 	@$(JAVADOC) -d doc $^
 
+$(BINRLS)/@DLLPREFIX@jni3270@DLLEXT@: \
+		$(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SRC)@OBJEXT@) \
+		$(CLASS_RELEASE_OBJECTS)
 
-
-$(BINRLS)/@DLLPREFIX@jni3270@DLLEXT@:	$(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SRC)@OBJEXT@) \
-				$(CLASS_RELEASE_OBJECTS)
 	@echo "  LD   `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(CXX) @SYSDLL_FLAGS@ $(LDFLAGS) $(OO_LDFLAGS) -o $@ $^ $(CLASS_LIBS)
@@ -146,7 +146,8 @@ run: $(BINDBG)/@DLLPREFIX@jni3270@DLLEXT@ $(BINDIR)/java/testprogram.class
 
 #---[ Misc targets ]-----------------------------------------------------------
 
-install: $(BINRLS)/@DLLPREFIX@jni3270@DLLEXT@ doc
+install: $(BINRLS)/@DLLPREFIX@jni3270@DLLEXT@ $(BINRLS)/$(PACKAGE_NAME).jar doc
+
 	@$(MKDIR) $(DESTDIR)/$(jnidir)
 	@$(INSTALL_PROGRAM) $(BINRLS)/@DLLPREFIX@jni3270@DLLEXT@ $(DESTDIR)/$(jnidir)
 
@@ -158,12 +159,10 @@ install: $(BINRLS)/@DLLPREFIX@jni3270@DLLEXT@ doc
 	@find $(DESTDIR)/$(javadocdir)/$(PACKAGE_NAME) -type f -exec chmod 644 {} \;
 	@find $(DESTDIR)/$(javadocdir)/$(PACKAGE_NAME) -type d -exec chmod 755 {} \;
 
-
 jni3270.h: $(BINDIR)/java/$(PACKAGE_NAME)/terminal.class
 	@echo $< ...
 	@mkdir -p `dirname $@`
-	$(JAVAH) -o $@ -classpath $(BINDIR)/java $(PACKAGE_NAME).terminal
-
+	@$(JAVAH) -o $@ -classpath $(BINDIR)/java $(PACKAGE_NAME).terminal
 
 cleanDebug: clean
 
