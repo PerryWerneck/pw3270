@@ -124,7 +124,7 @@ jni3270.zip: $(BINRLS)/@DLLPREFIX@jni3270@DLLEXT@ $(BINRLS)/$(PACKAGE_NAME).jar 
 	@zip -9 -r $@ doc
 
 doc: terminal.java
-	@$(JAVADOC) -d doc $^
+	@$(JAVADOC) -encoding utf-8 -d doc $^
 
 $(BINRLS)/@DLLPREFIX@jni3270@DLLEXT@: \
 		$(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SRC)@OBJEXT@) \
