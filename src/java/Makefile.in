@@ -107,6 +107,19 @@ all: $(BINRLS)/@DLLPREFIX@jni3270@DLLEXT@
 
 Release: $(BINRLS)/@DLLPREFIX@jni3270@DLLEXT@
 
+zip: jni3270.zip 
+
+jni3270.zip: $(BINRLS)/libjni3270.so $(BINRLS)/$(PACKAGE_NAME).jar testprogram.java doc
+	@rm -fr .tmp.zip
+	@rm -f $@
+	@zip -9 -m -j $@ $(BINRLS)/libjni3270.so $(BINRLS)/$(PACKAGE_NAME).jar testprogram.java
+	@zip -9 -r $@ doc
+
+doc: terminal.java
+	@javadoc -d doc $^
+
+
+
 $(BINRLS)/@DLLPREFIX@jni3270@DLLEXT@:	$(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SRC)@OBJEXT@) \
 				$(CLASS_RELEASE_OBJECTS)
 	@echo "  LD   `basename $@`"
@@ -142,9 +155,6 @@ jni3270.h: $(BINDIR)/java/$(PACKAGE_NAME)/terminal.class
 	@mkdir -p `dirname $@`
 	$(JAVAH) -o $@ -classpath $(BINDIR)/java $(PACKAGE_NAME).terminal
 
-
-doc: terminal.java
-	@javadoc -d doc $^
 
 install: $(BINRLS)/@DLLPREFIX@jni3270@DLLEXT@
 

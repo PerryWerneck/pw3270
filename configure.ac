@@ -396,7 +396,7 @@ fi
 
 #--[ SSL ]----------------------------------------------------------------------------------------------------------------------------------------------------
 
-PKG_CHECK_MODULES( [LIBSSL], [libssl], AC_DEFINE(HAVE_LIBSSL), AC_MSG_NOTICE([libssl not present.]) )
+PKG_CHECK_MODULES( [LIBSSL], [openssl], AC_DEFINE(HAVE_LIBSSL), AC_MSG_NOTICE([libssl not present.]) )
 
 AC_SUBST(LIBSSL_LIBS)
 AC_SUBST(LIBSSL_CFLAGS)
@@ -650,6 +650,7 @@ AC_SUBST(EXTENSIONS)
 AC_SUBST(APP_GUI_SRC)
 
 AC_SUBST(RLS_LDFLAGS)
+AC_SUBST(CLASS_LIBS)
 
 #--[ Output files ]-------------------------------------------------------------------------------------------------------------------------------------------
 

@@ -97,7 +97,6 @@ clean-common:
 	@rm -fr $(BINDIR)
 	@rm -fr $(TMPDIR)
 	@rm -f *.log
-	@find . -name "*~" -exec rm -f {} \;
 
 
 
