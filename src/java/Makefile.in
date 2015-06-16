@@ -34,10 +34,12 @@ exec_prefix=@exec_prefix@
 bindir=@bindir@
 sbindir=@sbindir@
 libdir=@libdir@
+datadir=@datadir@
 includedir=@includedir@
 sysconfdir=@sysconfdir@
 jnidir=@jnidir@
 jvmjardir=@jvmjardir@
+javadocdir=@javadocdir@
 
 #---[ Tools ]------------------------------------------------------------------
 
@@ -49,6 +51,7 @@ INSTALL_PROGRAM=@INSTALL_PROGRAM@
 JAVAC=@JAVAC@
 JAVAH=@JAVAH@
 JAR=@JAR@
+JAVADOC=@JAVADOC@
 JDK_HOME=@JDK_HOME@
 JRE_HOME=@JRE_HOME@
 
@@ -112,11 +115,11 @@ zip: jni3270.zip
 jni3270.zip: $(BINRLS)/libjni3270.so $(BINRLS)/$(PACKAGE_NAME).jar testprogram.java doc
 	@rm -fr .tmp.zip
 	@rm -f $@
-	@zip -9 -m -j $@ $(BINRLS)/libjni3270.so $(BINRLS)/$(PACKAGE_NAME).jar testprogram.java
+	@zip -9 -j $@ $(BINRLS)/libjni3270.so $(BINRLS)/$(PACKAGE_NAME).jar testprogram.java
 	@zip -9 -r $@ doc
 
 doc: terminal.java
-	@javadoc -d doc $^
+	@$(JAVADOC) -d doc $^
 
 
 
@@ -143,20 +146,24 @@ run: $(BINDBG)/@DLLPREFIX@jni3270@DLLEXT@ $(BINDIR)/java/testprogram.class
 
 #---[ Misc targets ]-----------------------------------------------------------
 
-install: $(BINRLS)/@DLLPREFIX@jni3270@DLLEXT@
+install: $(BINRLS)/@DLLPREFIX@jni3270@DLLEXT@ doc
 	@$(MKDIR) $(DESTDIR)/$(jnidir)
 	@$(INSTALL_PROGRAM) $(BINRLS)/@DLLPREFIX@jni3270@DLLEXT@ $(DESTDIR)/$(jnidir)
 
 	@mkdir -p $(DESTDIR)/$(jvmjardir)
 	@$(INSTALL_DATA) $(BINRLS)/$(PACKAGE_NAME).jar $(DESTDIR)/$(jvmjardir)
 
+	@$(MKDIR) $(DESTDIR)/$(javadocdir)/$(PACKAGE_NAME)
+	@cp -r doc/* $(DESTDIR)/$(javadocdir)/$(PACKAGE_NAME)
+	@find $(DESTDIR)/$(javadocdir)/$(PACKAGE_NAME) -type f -exec chmod 644 {} \;
+	@find $(DESTDIR)/$(javadocdir)/$(PACKAGE_NAME) -type d -exec chmod 755 {} \;
+
+
 jni3270.h: $(BINDIR)/java/$(PACKAGE_NAME)/terminal.class
 	@echo $< ...
 	@mkdir -p `dirname $@`
 	$(JAVAH) -o $@ -classpath $(BINDIR)/java $(PACKAGE_NAME).terminal
 
-
-install: $(BINRLS)/@DLLPREFIX@jni3270@DLLEXT@
 
 cleanDebug: clean
 
