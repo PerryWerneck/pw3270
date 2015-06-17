@@ -26,6 +26,7 @@
 
 PACKAGE_NAME=@PACKAGE_NAME@
 SOURCES=main.cc info.cc connect.cc getset.cc cursor.cc keyboard.cc actions.cc
+PLUGIN_SRC=plugin.cc
 
 #---[ Paths ]------------------------------------------------------------------
 
@@ -77,6 +78,8 @@ include $(CLASSLIBDIR)/class.mak
 #---[ Build options ]----------------------------------------------------------
 
 CXXFLAGS=@CXXFLAGS@ @DLL_CFLAGS@ @JNI_CPPFLAGS@ -I../include
+PLUGIN_CFLAGS=@CXXFLAGS@ @DLL_CFLAGS@ @JNI_CPPFLAGS@ @GTK_CFLAGS@ @GTKMAC_CFLAGS@ -I../include
+PLUGINS_LIBS=@GTK_LIBS@ @GTKMAC_LIBS@
 
 #---[ Rules ]------------------------------------------------------------------
 
@@ -85,10 +88,20 @@ $(OBJDBG)/%.o: %.cc Makefile private.h jni3270.h
 	@mkdir -p `dirname $@`
 	@$(CXX) -DDEBUG=1 $(CXXFLAGS) -o $@ -c $<
 
+$(OBJDBG)/j3270/%.o: %.cc Makefile private.h
+	@echo "  CC   `basename $@`"
+	@mkdir -p `dirname $@`
+	@$(CXX) -DDEBUG=1 $(PLUGIN_CFLAGS) -o $@ -c $<
+
 $(OBJRLS)/%.o: %.cc Makefile private.h jni3270.h
 	@echo "  CC   `basename $@`"
 	@mkdir -p `dirname $@`
 	@$(CXX) -DNDEBUG=1 $(CXXFLAGS) -o $@ -c $<
+
+$(OBJRLS)/j3270/%.o: %.cc Makefile private.h
+	@echo "  CC   `basename $@`"
+	@mkdir -p `dirname $@`
+	@$(CXX) -DNDEBUG=1 $(PLUGIN_CFLAGS) -o $@ -c $<
 
 $(BINDIR)/java/%.class: %.java $(BINDIR)/java/$(PACKAGE_NAME)/terminal.class
 	@echo $< ...
@@ -116,7 +129,7 @@ all: $(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@
 
 Release: $(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@
 
-zip: jni3270.zip 
+zip: jni3270.zip
 
 jni3270.zip: $(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@ $(BINRLS)/$(PACKAGE_NAME).jar testprogram.java doc
 	@rm -fr .tmp.zip
@@ -133,19 +146,36 @@ $(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@: \
 
 	@echo "  LD   `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CXX) @SYSDLL_FLAGS@ $(LDFLAGS) $(OO_LDFLAGS) -o $@ $^ $(CLASS_LIBS)
+	@$(CXX) @SYSDLL_FLAGS@ $(LDFLAGS) -o $@ $^ $(CLASS_LIBS)
 
+$(BINRLS)/plugins/j3270@DLLEXT@: \
+	$(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJRLS)/j3270/$(SRC)@OBJEXT@)
+
+	@echo "  LD   `basename $@`"
+	@$(MKDIR) `dirname $@`
+	@$(CXX) @SYSDLL_FLAGS@ $(LDFLAGS) -o $@ $^ $(CLASS_LIBS) $(PLUGIN_LIBS) -ljni3270
 
 #---[ Debug targets ]----------------------------------------------------------
 
-Debug: $(BINDBG)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@ $(BINDIR)/java/testprogram.class
+Debug:	$(BINDBG)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@ \
+		$(BINDIR)/java/testprogram.class \
+		$(BINDBG)/plugins/j3270@DLLEXT@
 
-$(BINDBG)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@:	$(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC)@OBJEXT@) \
-				$(CLASS_DEBUG_OBJECTS)
+$(BINDBG)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@: \
+	$(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC)@OBJEXT@) \
+	$(CLASS_DEBUG_OBJECTS)
+
 	@echo "  LD   `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CXX) @SYSDLL_FLAGS@ $(LDFLAGS) $(OO_LDFLAGS) -o $@ $^ $(CLASS_LIBS)
+	@$(CXX) @SYSDLL_FLAGS@ $(LDFLAGS) -o $@ $^ $(CLASS_LIBS)
 
+$(BINDBG)/plugins/j3270@DLLEXT@: \
+	$(BINDBG)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@ \
+	$(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJDBG)/j3270/$(SRC)@OBJEXT@)
+
+	@echo "  LD   `basename $@`"
+	@$(MKDIR) `dirname $@`
+	@$(CXX) @SYSDLL_FLAGS@ @DBGRPATH@ $(LDFLAGS) -o $@ $^ $(CLASS_LIBS) $(PLUGIN_LIBS) -L$(BINDBG)@DLLDIR@ -ljni3270
 
 run: $(BINDBG)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@ $(BINDIR)/java/testprogram.class
 	@LD_LIBRARY_PATH=../../.bin/Debug/lib/ java -Djava.library.path=$(BINDBG)@DLLDIR@ -cp .bin/java/ testprogram

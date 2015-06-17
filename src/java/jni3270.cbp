@@ -50,6 +50,7 @@
 		<Unit filename="jni3270.h" />
 		<Unit filename="keyboard.cc" />
 		<Unit filename="main.cc" />
+		<Unit filename="plugin.cc" />
 		<Unit filename="private.h" />
 		<Unit filename="terminal.java" />
 		<Unit filename="testprogram.java" />

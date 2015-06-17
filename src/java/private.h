@@ -34,7 +34,7 @@
 
 	#define PRIVATE_H_INCLUDED
 
-	#include "jni3270.h"
+	#include <jni.h>
 	#include <pw3270/class.h>
 
 	using namespace PW3270_NAMESPACE;
