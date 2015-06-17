@@ -57,14 +57,15 @@ JRE_HOME=@JRE_HOME@
 
 #---[ Paths ]------------------------------------------------------------------
 
-OBJDIR = .obj
-BINDIR = .bin
+ROOTDIR ?= .
+OBJDIR  ?= $(ROOTDIR)/.obj
+BINDIR  ?= $(ROOTDIR)/.bin
 
-OBJDBG = $(OBJDIR)/Debug
-BINDBG = $(BINDIR)/Debug
+BINDBG  ?= $(BINDIR)/Debug
+BINRLS  ?= $(BINDIR)/Release
 
-OBJRLS = $(OBJDIR)/Release
-BINRLS = $(BINDIR)/Release
+OBJDBG	?= $(OBJDIR)/Debug
+OBJRLS	?= $(OBJDIR)/Release
 
 #---[ lib3270 common class ]---------------------------------------------------
 
@@ -111,22 +112,22 @@ $(BINRLS)/$(PACKAGE_NAME).jar: $(BINDIR)/java/$(PACKAGE_NAME)/terminal.class
 
 #---[ Release targets ]--------------------------------------------------------
 
-all: $(BINRLS)/@DLLPREFIX@jni3270@DLLEXT@
+all: $(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@
 
-Release: $(BINRLS)/@DLLPREFIX@jni3270@DLLEXT@
+Release: $(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@
 
 zip: jni3270.zip 
 
-jni3270.zip: $(BINRLS)/@DLLPREFIX@jni3270@DLLEXT@ $(BINRLS)/$(PACKAGE_NAME).jar testprogram.java doc
+jni3270.zip: $(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@ $(BINRLS)/$(PACKAGE_NAME).jar testprogram.java doc
 	@rm -fr .tmp.zip
 	@rm -f $@
-	@zip -9 -j $@ $(BINRLS)/@DLLPREFIX@jni3270@DLLEXT@ $(BINRLS)/$(PACKAGE_NAME).jar testprogram.java
+	@zip -9 -j $@ $(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@ $(BINRLS)/$(PACKAGE_NAME).jar testprogram.java
 	@zip -9 -r $@ doc
 
 doc: terminal.java
 	@$(JAVADOC) -encoding utf-8 -d doc $^
 
-$(BINRLS)/@DLLPREFIX@jni3270@DLLEXT@: \
+$(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@: \
 		$(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SRC)@OBJEXT@) \
 		$(CLASS_RELEASE_OBJECTS)
 
@@ -137,24 +138,24 @@ $(BINRLS)/@DLLPREFIX@jni3270@DLLEXT@: \
 
 #---[ Debug targets ]----------------------------------------------------------
 
-Debug: $(BINDBG)/@DLLPREFIX@jni3270@DLLEXT@ $(BINDIR)/java/testprogram.class
+Debug: $(BINDBG)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@ $(BINDIR)/java/testprogram.class
 
-$(BINDBG)/@DLLPREFIX@jni3270@DLLEXT@:	$(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC)@OBJEXT@) \
+$(BINDBG)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@:	$(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC)@OBJEXT@) \
 				$(CLASS_DEBUG_OBJECTS)
 	@echo "  LD   `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(CXX) @SYSDLL_FLAGS@ $(LDFLAGS) $(OO_LDFLAGS) -o $@ $^ $(CLASS_LIBS)
 
 
-run: $(BINDBG)/@DLLPREFIX@jni3270@DLLEXT@ $(BINDIR)/java/testprogram.class
-	@LD_LIBRARY_PATH=../../.bin/Debug/lib/ java -Djava.library.path=$(BINDBG) -cp .bin/java/ testprogram
+run: $(BINDBG)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@ $(BINDIR)/java/testprogram.class
+	@LD_LIBRARY_PATH=../../.bin/Debug/lib/ java -Djava.library.path=$(BINDBG)@DLLDIR@ -cp .bin/java/ testprogram
 
 #---[ Misc targets ]-----------------------------------------------------------
 
-install: $(BINRLS)/@DLLPREFIX@jni3270@DLLEXT@ $(BINRLS)/$(PACKAGE_NAME).jar doc
+install: $(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@ $(BINRLS)/$(PACKAGE_NAME).jar doc
 
 	@$(MKDIR) $(DESTDIR)/$(jnidir)
-	@$(INSTALL_PROGRAM) $(BINRLS)/@DLLPREFIX@jni3270@DLLEXT@ $(DESTDIR)/$(jnidir)
+	@$(INSTALL_PROGRAM) $(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@ $(DESTDIR)/$(jnidir)
 
 	@mkdir -p $(DESTDIR)/$(jvmjardir)
 	@$(INSTALL_DATA) $(BINRLS)/$(PACKAGE_NAME).jar $(DESTDIR)/$(jvmjardir)

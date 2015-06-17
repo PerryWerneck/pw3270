@@ -41,4 +41,12 @@
 
 	PW3270_NAMESPACE::session * getHandle(JNIEnv *env, jobject obj);
 
+	extern "C" {
+
+		LIB3270_EXPORT void set_java_session_factory(PW3270_NAMESPACE::session * (*factory)(const char *name));
+
+	}
+
+
+
 #endif // PRIVATE_H_INCLUDED

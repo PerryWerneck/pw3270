@@ -31,6 +31,10 @@
 
 /*---[ Implement ]----------------------------------------------------------------------------------*/
 
+void set_java_session_factory(PW3270_NAMESPACE::session * (*factory)(const char *name)) {
+    session::set_plugin(factory);
+}
+
 static jfieldID getHandleField(JNIEnv *env, jobject obj) {
     jclass c = env->GetObjectClass(obj);
     // J is the type signature for long:
