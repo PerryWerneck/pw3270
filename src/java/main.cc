@@ -33,6 +33,7 @@
 /*---[ Implement ]----------------------------------------------------------------------------------*/
 
 void set_java_session_factory(PW3270_NAMESPACE::session * (*factory)(const char *name)) {
+	trace("%s(%p)",__FUNCTION__,factory);
     session::set_plugin(factory);
 }
 
@@ -49,6 +50,8 @@ session * getHandle(JNIEnv *env, jobject obj) {
 
 JNIEXPORT jint JNICALL Java_pw3270_terminal_init__(JNIEnv *env, jobject obj) {
 
+	trace("%s",__FUNCTION__);
+
 	try {
 
 		jlong handle = reinterpret_cast<jlong>(session::create());
@@ -56,6 +59,7 @@ JNIEXPORT jint JNICALL Java_pw3270_terminal_init__(JNIEnv *env, jobject obj) {
 
 	} catch(std::exception &e) {
 
+		trace("%s: %s",__FUNCTION__,e.what());
 		env->ThrowNew(env->FindClass("java/lang/Exception"), e.what());
 
 	}

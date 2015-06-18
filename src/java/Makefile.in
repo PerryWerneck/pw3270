@@ -120,6 +120,16 @@ $(BINDIR)/java/%.class: sample/%.java $(BINDIR)/java/$(PACKAGE_NAME)/terminal.cl
 	@mkdir -p `dirname $@`
 	$(JAVAC) -encoding utf-8 -cp $(BINDIR)/java -d $(BINDIR)/java $<
 
+$(BINDIR)/%.class: sample/%.java $(BINDIR)/java/$(PACKAGE_NAME)/terminal.class
+	@echo $< ...
+	@mkdir -p `dirname $@`
+	$(JAVAC) -encoding utf-8 -cp $(BINDIR)/java -d $(BINDIR)/java $<
+
+%.class: sample/%.java $(BINDIR)/java/$(PACKAGE_NAME)/terminal.class
+	@echo $< ...
+	@mkdir -p `dirname $@`
+	$(JAVAC) -encoding utf-8 -cp $(BINDIR)/java -d `dirname $@` $<
+
 $(BINDIR)/java/$(PACKAGE_NAME)/%.class: %.java
 	@echo $< ...
 	@mkdir -p `dirname $@`
@@ -144,6 +154,8 @@ zip: jni3270.zip
 jni3270.zip: $(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@ $(BINRLS)/$(PACKAGE_NAME).jar testprogram.java doc
 	@rm -fr .tmp.zip
 	@rm -f $@
+	@mkdir -p .tmp.zip
+	@mkdir -p .tmp.zip/
 	@zip -9 -j $@ $(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@ $(BINRLS)/$(PACKAGE_NAME).jar testprogram.java
 	@zip -9 -r $@ doc
 

@@ -306,10 +306,22 @@
 
 /*---[ Implement ]----------------------------------------------------------------------------------*/
 
- static session * factory(const char *name)
- {
-    return new plugin(lib3270_get_default_session_handle());
- }
+extern "C" {
+
+	static session * factory(const char *name)
+	{
+		debug("---> %s",__FUNCTION__);
+		return new plugin(lib3270_get_default_session_handle());
+	}
+
+	static jint JNICALL jni_vfprintf(FILE *fp, const char *format, va_list args)
+	{
+		lib3270_write_va_log(lib3270_get_default_session_handle(),"java",format,args);
+		return 0;
+	}
+
+}
+
 
  LIB3270_EXPORT int pw3270_plugin_start(GtkWidget *window)
  {
@@ -367,20 +379,32 @@
 	memset(&vm_args,0,sizeof(vm_args));
 	memset(options,0,sizeof(options));
 
-	vm_args.version		= JNI_VERSION_1_2;
-	vm_args.nOptions	= 0;
-	vm_args.options 	= options;
+	vm_args.version				= JNI_VERSION_1_4;
+	vm_args.nOptions			= 0;
+	vm_args.options 			= options;
+	vm_args.ignoreUnrecognized	= JNI_FALSE;
 
-#ifdef DEBUG
-	options[vm_args.nOptions++].optionString = g_strdup("-verbose");
-#endif
+	options[vm_args.nOptions].optionString = g_strdup("vfprintf");
+	options[vm_args.nOptions].extraInfo = (void *) jni_vfprintf;
+	vm_args.nOptions++;
+
+//#ifdef DEBUG
+//	options[vm_args.nOptions++].optionString = g_strdup("-verbose");
+//#endif
 
 	gchar * dirname = g_path_get_dirname(filename);
 
 #if defined( WIN32 )
 
+	g_mkdir_with_parents("./jvm-exports",0777);
+
 	options[vm_args.nOptions++].optionString = g_strdup_printf("-Djava.library.path=%s",".");
-	options[vm_args.nOptions++].optionString = g_strdup_printf("-Djava.class.path=.;%s",dirname);
+	options[vm_args.nOptions++].optionString = g_strdup_printf("-Djava.class.path=./jvm-exports;%s",dirname);
+
+#elif defined(DEBUG)
+
+	options[vm_args.nOptions++].optionString = g_strdup_printf("-Djava.library.path=%s:.bin/Debug:.bin/Debug/lib",JNIDIR);
+	options[vm_args.nOptions++].optionString = g_strdup_printf("-Djava.class.path=%s:%s:./src/java/.bin/java",JARDIR,dirname);
 
 #else
 
@@ -458,7 +482,15 @@
 
 				jobjectArray args = env->NewObjectArray(0, env->FindClass("java/lang/String"), env->NewStringUTF(""));
 
-				env->CallStaticVoidMethod(cls, mid, args);
+				try {
+
+					env->CallStaticVoidMethod(cls, mid, args);
+
+				} catch(std::exception &e) {
+
+					trace("%s",e.what());
+				}
+
 
 			}
 

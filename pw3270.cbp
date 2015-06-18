@@ -150,6 +150,10 @@
 			<Option target="Debug" />
 			<Option target="Release" />
 		</Unit>
+		<Unit filename="src/java/sample/popup.java">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
 		<Unit filename="src/java/terminal.java">
 			<Option target="Debug" />
 			<Option target="Release" />

@@ -121,6 +121,7 @@
 
 	void session::set_plugin(session * (*factory)(const char *name))
 	{
+		trace("%s(%p)",__FUNCTION__,factory);
 		session::factory = factory;
 	}
 
