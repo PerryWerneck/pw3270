@@ -533,7 +533,10 @@ fi
 if test "$app_cv_rexx" == "yes"; then
 	AC_DEFINE(HAVE_REXX)
 	AC_DEFINE(HAVE_OOREXXAPI_H)
+
 	PLUGINS="$PLUGINS rx3270"
+	EXTENSIONS="$EXTENSIONS rexx"
+
 	AC_MSG_NOTICE([ooRexx plugin & extension are enabled.])
 else
 	AC_MSG_NOTICE([ooRexx is NOT present or disabled.])

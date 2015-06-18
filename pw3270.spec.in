@@ -347,6 +347,10 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_javadocdir}/%{name}/*
 %{_javadocdir}/%{name}/*
 
+%files -n %{name}-plugin-java
+%{_libdir}/@PACKAGE_NAME@-plugins/j3270.so
+%{_datadir}/pw3270/ui/80java.xml
+
 %endif
 
 

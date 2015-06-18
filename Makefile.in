@@ -148,12 +148,16 @@ $(DESTDIR)$(libdir)/$(PACKAGE_NAME)-plugins/%@DLLEXT@: $(BINDIR)/Release/plugins
 
 #---[ Release targets ]--------------------------------------------------------
 
-all: Release
+all: \
+	$(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) \
+	$(foreach EXT, $(EXTENSIONS), $(EXT)) \
+	$(foreach PLUGIN, $(PLUGINS), $(BINDIR)/Release/plugins/$(PLUGIN)@DLLEXT@) \
+	locale pixmaps
 
 Release: \
 	$(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) \
-	$(foreach PLUGIN, $(PLUGINS), $(BINDIR)/Release/plugins/$(PLUGIN)@DLLEXT@) \
 	$(foreach EXT, $(EXTENSIONS), $(EXT)) \
+	$(foreach PLUGIN, $(PLUGINS), $(BINDIR)/Release/plugins/$(PLUGIN)@DLLEXT@) \
 	locale pixmaps
 
 $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT): src/pw3270/* $(BINDIR)/Release@DLLDIR@/lib3270@DLLEXT@ $(DEPENDS)
@@ -176,14 +180,13 @@ $(BINDIR)/Release/tn3270.so: src/php/*
 	@$(MKDIR) `dirname $@`
 	@cp src/php/.bin/Release/php3270.so $@
 
-java: src/java/Makefile src/java/*.cc src/java/*.h src/java/*.java
-	@$(MAKE) -C src/java Release
+java: $(BINDIR)/Release/@DLLPREFIX@jni3270@DLLEXT@
 
 $(BINDIR)/Release/@DLLPREFIX@jni3270@DLLEXT@: src/java/*
-	@$(MAKE) -C src/java Release
 	@$(MKDIR) `dirname $@`
-	@cp src/java/.bin/Release/*@DLLEXT@ $(BINDIR)/Release
-	@cp src/java/.bin/Release/*.jar $(BINDIR)/Release
+	@$(MAKE) BINDIR="../../$(BINDIR)" LIB3270_LIBS="$(RLSLIB)" LIB3270_CFLAGS="-I../../src/include" -C src/java Release
+
+rexx: $(BINDIR)/Debug/plugins/rx3270@DLLEXT@
 
 #---[ Debug targets ]----------------------------------------------------------
 
@@ -314,13 +317,17 @@ $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar: clean pixmaps
 
 install: $(foreach EXT, sdk lib app man plugins $(EXTENSIONS), install-$(EXT))
 
-install-app: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) install-locale
+install-app: \
+	$(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) \
+	install-locale
+
 	@$(MAKE) BINDIR="../../$(BINDIR)" LIB3270_LIBS="$(RLSLIB)" LIB3270_CFLAGS="-I../../src/include" -C src/pw3270 install
 	@$(MKDIR) $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/ui
 	@$(INSTALL_DATA) colors.conf $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)
 	@$(INSTALL_DATA) ui/*.xml $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/ui
 
-install-plugins: $(foreach PLUGIN, $(PLUGINS), $(DESTDIR)$(libdir)/$(PACKAGE_NAME)-plugins/$(PLUGIN)@DLLEXT@)
+install-plugins: \
+	$(foreach PLUGIN, $(PLUGINS), $(DESTDIR)$(libdir)/$(PACKAGE_NAME)-plugins/$(PLUGIN)@DLLEXT@)
 
 install-lib: $(BINDIR)/Release@DLLDIR@/lib3270@DLLEXT@
 	@$(MAKE) BINRLS="../../.bin/Release@DLLDIR@" -C src/lib3270 install
@@ -375,11 +382,14 @@ install-php:
 install-java:
 	@$(MAKE) BINDIR=../../.bin LIB3270_CFLAGS="-I../../src/include" -C src/java install
 
-install-plugin-rexx:
+install-rexx:
 	@$(MAKE) BINDIR=../../../.bin LIB3270_CFLAGS="-I../../src/include" -C src/plugins/rx3270 install
 
-install-plugin-dbus:
-	@$(MAKE) BINDIR=../../../.bin LIB3270_CFLAGS="-I../../src/include" -C src/plugins/dbus3270 install
+#install-plugin-rexx:
+#	@$(MAKE) BINDIR=../../../.bin LIB3270_CFLAGS="-I../../src/include" -C src/plugins/rx3270 install
+#
+#install-plugin-dbus:
+#	@$(MAKE) BINDIR=../../../.bin LIB3270_CFLAGS="-I../../src/include" -C src/plugins/dbus3270 install
 
 clean:
 	@rm -fr .obj
