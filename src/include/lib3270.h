@@ -284,20 +284,25 @@
 
 	#if defined( ANDROID )
 
-		#define LIB3270_EXPORT	extern __attribute__((visibility("hidden")))
+		#define LIB3270_INTERNAL	extern __attribute__((visibility("hidden")))
+		#define LIB3270_EXPORT		extern __attribute__((visibility("hidden")))
 
 	#elif defined(_WIN32)
 
 		#include <windows.h>
-		#define LIB3270_EXPORT	extern __declspec (dllexport)
+
+		#define LIB3270_INTERNAL	extern
+		#define LIB3270_EXPORT		extern __declspec (dllexport)
 
 	#elif defined(__SUNPRO_C) && (__SUNPRO_C >= 0x550)
 
-		#define LIB3270_EXPORT extern
+		#define LIB3270_INTERNAL	extern
+		#define LIB3270_EXPORT		extern
 
 	#elif defined (HAVE_GNUC_VISIBILITY)
 
-		#define LIB3270_EXPORT	extern __attribute__((visibility("default")))
+		#define LIB3270_INTERNAL	extern __attribute__((visibility("hidden")))
+		#define LIB3270_EXPORT		extern __attribute__((visibility("default")))
 
 	#else
 

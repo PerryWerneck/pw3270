@@ -214,20 +214,21 @@ rm -f conftest.$ac_objext conftest.err m4_ifval([$1], [conftest.$ac_ext])[]dnl
 
 AC_MSG_CHECKING(for GNUC visibility attribute)
 GLIB_CHECK_COMPILE_WARNINGS([AC_LANG_SOURCE([
-void
-__attribute__ ((visibility ("hidden")))
-     f_hidden (void)
-{
-}
-void
-__attribute__ ((visibility ("default")))
-     f_default (void)
-{
-}
+
+#define LIB3270_INTERNAL	extern __attribute__((visibility("hidden")))
+#define LIB3270_EXPORT		extern __attribute__((visibility("default")))
+
+LIB3270_INTERNAL	void f_hidden(void);
+LIB3270_EXPORT		void f_export(void);
+
+void f_hidden (void) { }
+
+void f_export (void) { }
+
 int main (int argc, char **argv)
 {
         f_hidden();
-        f_internal();
+        f_export();
         return 0;
 }
 ])],g_have_gnuc_visibility=yes,g_have_gnuc_visibility=no)
