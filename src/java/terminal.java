@@ -251,6 +251,103 @@ public class terminal
 	}
 
 	/**
+	 * Get the field start address.
+	 *
+	 * @param baddr address of the field.
+	 *
+	 * @return Address of current field start.
+	 *
+	 */
+	public native int get_field_start(int baddr);
+
+	/**
+	 * Get the current field start address.
+	 *
+	 * @return Current field start address.
+	 *
+	 */
+	public int get_field_start() {
+		return get_field_start(-1);
+	}
+
+	/**
+	 * Get the field length.
+	 *
+	 * @param baddr Address of the field.
+	 *
+	 * @return Field length.
+	 *
+	 */
+	public native int get_field_len(int baddr);
+
+	/**
+	 * Get the current field length.
+	 *
+	 * @return Current field length.
+	 *
+	 */
+	public int get_field_len() {
+		return get_field_len(-1);
+	}
+
+	/**
+	 * Get next field address.
+	 *
+	 * @param Field address.
+	 *
+	 * @return Address of the next field.
+	 *
+	 */
+	public native int get_next_unprotected(int baddr);
+
+	/**
+	 * Get next field address.
+	 *
+	 * @return Address of the next field.
+	 *
+	 */
+	public int get_next_unprotected() {
+		return get_next_unprotected(-1);
+	}
+
+	/**
+	 * Open popup dialog.
+	 *
+	 * @param id		Dialog type.
+	 * @param title		Window title.
+	 * @param message	Dialog message.
+	 * @param secondary Dialog secondary text.
+	 *
+	 * @return reserved.
+	 *
+	 */
+	public native int popup_dialog(int id, String title, String message, String secondary);
+
+	/**
+	 * File selection dialog.
+	 *
+	 * @param action	Dialog action.
+	 * @param title		Window title.
+	 * @param extension	File extension.
+	 * @param filename	Default file name;
+	 *
+	 * @return Selected file name.
+	 *
+	 */
+	public native String file_chooser_dialog(int action, String title, String extension, String filename);
+
+	public native int               set_copy(String text);
+	public native String            get_copy();
+
+	public native String            get_clipboard();
+	public native int               set_clipboard(String text);
+
+	public native boolean			is_connected();
+	public native boolean			is_ready();
+
+	public native void				log(String msg);
+
+	/**
 	 * Creates a tn3270 terminal associated with a
 	 * pw3270 window.
 	 *

@@ -345,12 +345,67 @@ if test "$app_cv_java" = "yes" ; then
 	AC_PATH_TOOL([JAVADOC], [javadoc], [no], [$JDK_HOME/bin:$JRE_HOME/bin:$PATH])
 
 	EXTENSIONS="$EXTENSIONS java"
+	PLUGINS="$PLUGINS j3270"
 
 fi
+
+# Set JVM arch
+case $host_cpu in
+
+x86_64)
+	jvm_arch=amd64
+	;;
+
+i?86)
+	jvm_arch=i386
+	;;
+
+*)
+	jvm_arch="$host_cpu"
+	;;
+
+esac
+
+# JVMDIR
+if test "_$JVMDIR" = "_" ; then
+
+	case "$host" in
+		*-mingw32)
+			JVMDIR="\$(JRE_HOME)/bin"
+			;;
+
+		*-apple-*)
+			JVMDIR="\$(JRE_HOME)/lib/$jvm_arch/server"
+			;;
+
+		*)
+			JVMDIR="\$(JRE_HOME)/lib/$jvm_arch/server"
+	esac
+
+fi
+
+
+# Java link options depends on OS
+case "$host" in
+	*-mingw32)
+		jvm_libs="-L\$(JVMDIR) -Wl,-rpath,\$(JVMDIR) -ljvm"
+		;;
+
+	*-apple-*)
+		jvm_libs="-L\$(JVMDIR) -Wl,-rpath,\$(JVMDIR) -ljvm"
+		;;
+
+	*)
+		jvm_libs="-L\$(JVMDIR) -Wl,-rpath,\$(JVMDIR) -ljvm"
+esac
+
+
+AC_SUBST(JVM_LIBS,$jvm_libs)
 
 AC_SUBST(JAVAC)
 AC_SUBST(JAVAH)
 AC_SUBST(JAVADOC)
+AC_SUBST(JVMDIR)
 AC_SUBST(jnidir)
 AC_SUBST(jvmjardir)
 AC_SUBST(javadocdir)

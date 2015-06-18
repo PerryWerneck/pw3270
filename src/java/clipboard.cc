@@ -18,7 +18,7 @@
  * programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple
  * Place, Suite 330, Boston, MA, 02111-1307, USA
  *
- * Este programa está nomeado como main.cc e possui - linhas de código.
+ * Este programa está nomeado como dialog.cc e possui - linhas de código.
  *
  * Contatos:
  *
@@ -32,112 +32,86 @@
 
 /*---[ Implement ]----------------------------------------------------------------------------------*/
 
-void set_java_session_factory(PW3270_NAMESPACE::session * (*factory)(const char *name)) {
-    session::set_plugin(factory);
-}
-
-static jfieldID getHandleField(JNIEnv *env, jobject obj) {
-    jclass c = env->GetObjectClass(obj);
-    // J is the type signature for long:
-    return env->GetFieldID(c, "nativeHandle", "J");
-}
-
-session * getHandle(JNIEnv *env, jobject obj) {
-    jlong handle = env->GetLongField(obj, getHandleField(env, obj));
-    return reinterpret_cast<PW3270_NAMESPACE::session *>(handle);
-}
-
-JNIEXPORT jint JNICALL Java_pw3270_terminal_init__(JNIEnv *env, jobject obj) {
-
-	try {
-
-		jlong handle = reinterpret_cast<jlong>(session::create());
-		env->SetLongField(obj, getHandleField(env, obj), handle);
-
-	} catch(std::exception &e) {
-
-		env->ThrowNew(env->FindClass("java/lang/Exception"), e.what());
-
-	}
-
-	return 0;
-}
-
-
-JNIEXPORT jint JNICALL Java_pw3270_terminal_init__Ljava_lang_String_2(JNIEnv *env, jobject obj, jstring j_id) {
-
-	const char * id = env->GetStringUTFChars(j_id, 0);
-
-	try {
-
-		jlong handle = reinterpret_cast<jlong>(session::create(id));
-		env->SetLongField(obj, getHandleField(env, obj), handle);
-		env->ReleaseStringUTFChars( j_id, id);
-
-	} catch(std::exception &e) {
-
-		env->ReleaseStringUTFChars( j_id, id);
-		env->ThrowNew(env->FindClass("java/lang/Exception"), e.what());
-
-	}
-
-
-	return 0;
-}
-
-JNIEXPORT jint JNICALL Java_pw3270_terminal_deinit(JNIEnv *env, jobject obj) {
-
-	try {
-
-		session *s = getHandle(env,obj);
-
-		if(s) {
-			delete s;
-		}
-
-		env->SetLongField(obj, getHandleField(env, obj), 0);
-
-	} catch(std::exception &e) {
-
-		env->ThrowNew(env->FindClass("java/lang/Exception"), e.what());
-
-	}
-
-	return 0;
-}
-
-JNIEXPORT jint JNICALL Java_pw3270_terminal_wait_1for_1ready(JNIEnv *env, jobject obj, jint seconds) {
-
-	try {
-
-		return getHandle(env,obj)->wait_for_ready((int) seconds);
-
-	} catch(std::exception &e) {
-
-		env->ThrowNew(env->FindClass("java/lang/Exception"), e.what());
-
-	}
-
-	return 0;
-
-}
-
-JNIEXPORT void JNICALL Java_pw3270_terminal_log(JNIEnv *env, jobject obj, jstring j_str) {
+JNIEXPORT jint JNICALL Java_pw3270_terminal_set_1copy(JNIEnv *env, jobject obj, jstring j_str) {
 
 	const char	* str = env->GetStringUTFChars(j_str, 0);
+	jint 		  rc	= -1;
 
 	try {
 
-		getHandle(env,obj)->log("%s", str);
+		rc = getHandle(env,obj)->set_copy(str);
 
 	} catch(std::exception &e) {
 
 		env->ReleaseStringUTFChars( j_str, str);
 		env->ThrowNew(env->FindClass("java/lang/Exception"), e.what());
-		return;
+		return -1;
 
 	}
 
 	env->ReleaseStringUTFChars( j_str, str);
+	return rc;
+
+}
+
+JNIEXPORT jstring JNICALL Java_pw3270_terminal_get_1copy(JNIEnv *env, jobject obj) {
+
+	string str;
+
+	try {
+
+		str = getHandle(env,obj)->get_copy();
+
+
+	} catch(std::exception &e) {
+
+		env->ThrowNew(env->FindClass("java/lang/Exception"), e.what());
+
+	}
+
+	return env->NewStringUTF(str.c_str());
+
+
+}
+
+JNIEXPORT jstring JNICALL Java_pw3270_terminal_get_1clipboard(JNIEnv *env, jobject obj) {
+
+	string str;
+
+	try {
+
+		str = getHandle(env,obj)->get_clipboard();
+
+
+	} catch(std::exception &e) {
+
+		env->ThrowNew(env->FindClass("java/lang/Exception"), e.what());
+
+	}
+
+	return env->NewStringUTF(str.c_str());
+
+}
+
+JNIEXPORT jint JNICALL Java_pw3270_terminal_set_1clipboard(JNIEnv *env, jobject obj, jstring j_str) {
+
+	const char	* str = env->GetStringUTFChars(j_str, 0);
+	jint 		  rc	= -1;
+
+	try {
+
+		rc = getHandle(env,obj)->set_clipboard(str);
+
+	} catch(std::exception &e) {
+
+		env->ReleaseStringUTFChars( j_str, str);
+		env->ThrowNew(env->FindClass("java/lang/Exception"), e.what());
+		return -1;
+
+	}
+
+	env->ReleaseStringUTFChars( j_str, str);
+	return rc;
+
 
 }

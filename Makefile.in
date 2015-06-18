@@ -136,6 +136,12 @@ $(BINDIR)/Debug/plugins/%@DLLEXT@: src/plugins/%/* $(BINDIR)/Debug/$(PACKAGE_TAR
 $(BINDIR)/Release/plugins/%@DLLEXT@: src/plugins/%/* $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
 	@make $(PLUGIN_RELEASE_ARGS) -C $(dir $<) Release
 
+$(BINDIR)/Debug/plugins/j3270@DLLEXT@: src/java/* $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
+	@make BINDIR="../../$(BINDIR)" PW3270_LIBS="-L../../$(BINDIR)/Debug@DLLDIR@ -l3270 -lpw3270" PW3270_CFLAGS="-I../include" -C $(dir $<) Debug
+
+$(BINDIR)/Release/plugins/j3270@DLLEXT@: src/java/* $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
+	@make BINDIR="../../$(BINDIR)" PW3270_LIBS="-L../../$(BINDIR)/Release@DLLDIR@ -l3270 -lpw3270" PW3270_CFLAGS="-I../include" -C $(dir $<) Release
+
 #---[ Release targets ]--------------------------------------------------------
 
 all: Release

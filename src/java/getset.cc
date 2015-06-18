@@ -138,3 +138,43 @@ JNIEXPORT jint JNICALL Java_pw3270_terminal_input_1string(JNIEnv *env, jobject o
 
 }
 
+JNIEXPORT jboolean JNICALL Java_pw3270_terminal_is_1connected(JNIEnv *env, jobject obj) {
+
+	jboolean rc = false;
+
+	try {
+
+		rc = getHandle(env,obj)->is_connected();
+
+	} catch(std::exception &e) {
+
+		env->ThrowNew(env->FindClass("java/lang/Exception"), e.what());
+		return rc;
+
+	}
+
+
+	return rc;
+
+}
+
+JNIEXPORT jboolean JNICALL Java_pw3270_terminal_is_1ready(JNIEnv *env, jobject obj) {
+
+	jboolean rc = false;
+
+	try {
+
+		rc = getHandle(env,obj)->is_ready();
+
+	} catch(std::exception &e) {
+
+		env->ThrowNew(env->FindClass("java/lang/Exception"), e.what());
+		return rc;
+
+	}
+
+
+	return rc;
+
+}
+

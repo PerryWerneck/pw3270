@@ -18,7 +18,7 @@
  * programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple
  * Place, Suite 330, Boston, MA, 02111-1307, USA
  *
- * Este programa está nomeado como lib3270.java e possui - linhas de código.
+ * Este programa está nomeado como field.cc e possui - linhas de código.
  *
  * Contatos:
  *
@@ -27,29 +27,65 @@
  *
  */
 
-import pw3270.*;
+ #include "jni3270.h"
+ #include "private.h"
 
-public class testprogram
-{
-    public static void main (String[] args)
-    {
-        try
-        {
-            System.err.println("Begin");
+/*---[ Implement ]----------------------------------------------------------------------------------*/
 
-            terminal host = new terminal();
+JNIEXPORT jint JNICALL Java_pw3270_terminal_get_1field_1start (JNIEnv *env, jobject obj, jint baddr) {
 
-            host.log("Sample message");
+	jint rc;
 
-            System.err.println("pw3270 version " + host.get_version() + " revision " + host.get_revision() + " encoding " + host.get_encoding());
+	try {
+
+		rc = getHandle(env,obj)->get_field_start((int) baddr);
 
 
-            System.err.println("End");
-        }
-        catch( Exception e )
-        {
-            System.err.println(e);
-        }
-    }
-};
+	} catch(std::exception &e) {
 
+		env->ThrowNew(env->FindClass("java/lang/Exception"), e.what());
+
+	}
+
+	return rc;
+
+}
+
+JNIEXPORT jint JNICALL Java_pw3270_terminal_get_1field_1len (JNIEnv *env, jobject obj, jint baddr) {
+
+	jint rc;
+
+	try {
+
+		rc = getHandle(env,obj)->get_field_len((int) baddr);
+
+
+	} catch(std::exception &e) {
+
+		env->ThrowNew(env->FindClass("java/lang/Exception"), e.what());
+
+	}
+
+	return rc;
+
+}
+
+JNIEXPORT jint JNICALL Java_pw3270_terminal_get_1next_1unprotected(JNIEnv *env, jobject obj, jint baddr) {
+
+	jint rc;
+
+	try {
+
+		rc = getHandle(env,obj)->get_next_unprotected((int) baddr);
+
+
+	} catch(std::exception &e) {
+
+		env->ThrowNew(env->FindClass("java/lang/Exception"), e.what());
+
+	}
+
+	return rc;
+
+
+}

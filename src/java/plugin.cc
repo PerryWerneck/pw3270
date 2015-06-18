@@ -313,7 +313,7 @@
 
  LIB3270_EXPORT int pw3270_plugin_start(GtkWidget *window)
  {
-	trace("%s",__FUNCTION__);
+	trace("JAVA: %s",__FUNCTION__);
 #if GTK_CHECK_VERSION(2,32,0)
 	g_mutex_init(&mutex);
 #endif // GTK_CHECK_VERSION
@@ -326,7 +326,224 @@
 #if GTK_CHECK_VERSION(2,32,0)
 	g_mutex_clear(&mutex);
 #endif // GTK_CHECK_VERSION
-    trace("%s",__FUNCTION__);
+    trace("JAVA: %s",__FUNCTION__);
 	return 0;
  }
+
+ void call_java_program(GtkAction *action, GtkWidget *widget, const gchar *filename)
+ {
+
+#if GTK_CHECK_VERSION(2,32,0)
+	if(!g_mutex_trylock(&mutex)) {
+#else
+	if(!g_static_mutex_trylock(&mutex)) {
+#endif // GTK_CHECK_VERSION
+
+		GtkWidget *dialog = gtk_message_dialog_new(	GTK_WINDOW(gtk_widget_get_toplevel(widget)),
+													GTK_DIALOG_DESTROY_WITH_PARENT,
+													GTK_MESSAGE_ERROR,
+													GTK_BUTTONS_CANCEL,
+													_(  "Can't start %s program" ), "java" );
+
+		gtk_window_set_title(GTK_WINDOW(dialog),_( "JVM busy" ));
+		gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),_( "%s interpreter is busy" ), "java");
+
+        gtk_dialog_run(GTK_DIALOG (dialog));
+        gtk_widget_destroy(dialog);
+
+		return;
+ 	}
+
+	v3270_set_script(widget,'J',TRUE);
+
+	// Start JNI
+	JavaVMInitArgs	  vm_args;
+	JavaVMOption	  options[5];
+
+	JavaVM			* jvm		= NULL;
+	JNIEnv			* env		= NULL;
+	jint			  rc		= 0;
+
+	memset(&vm_args,0,sizeof(vm_args));
+	memset(options,0,sizeof(options));
+
+	vm_args.version		= JNI_VERSION_1_2;
+	vm_args.nOptions	= 0;
+	vm_args.options 	= options;
+
+#ifdef DEBUG
+	options[vm_args.nOptions++].optionString = g_strdup("-verbose");
+#endif
+
+	gchar * dirname = g_path_get_dirname(filename);
+
+#if defined( WIN32 )
+
+	options[vm_args.nOptions++].optionString = g_strdup_printf("-Djava.library.path=%s",".");
+	options[vm_args.nOptions++].optionString = g_strdup_printf("-Djava.class.path=.;%s",dirname);
+
+#else
+
+	options[vm_args.nOptions++].optionString = g_strdup_printf("-Djava.library.path=%s",JNIDIR);
+	options[vm_args.nOptions++].optionString = g_strdup_printf("-Djava.class.path=%s:%s",JARDIR,dirname);
+
+#endif // JNIDIR
+
+	g_free(dirname);
+
+	rc = JNI_CreateJavaVM(&jvm,(void **)&env,&vm_args);
+
+	// Release options
+	for(size_t f=0;f<vm_args.nOptions;f++) {
+		trace("Releasing option %d: %s",f,options[f].optionString);
+		g_free(options[f].optionString);
+	}
+
+	if(rc < 0) {
+
+		GtkWidget *dialog = gtk_message_dialog_new(	GTK_WINDOW(gtk_widget_get_toplevel(widget)),
+													GTK_DIALOG_DESTROY_WITH_PARENT,
+													GTK_MESSAGE_ERROR,
+													GTK_BUTTONS_CANCEL,
+													"%s", _(  "Can't create java VM" ));
+
+		gtk_window_set_title(GTK_WINDOW(dialog), _( "Script startup failure" ));
+		gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),_( "The error code was %d" ), (int) rc);
+
+		gtk_dialog_run(GTK_DIALOG (dialog));
+		gtk_widget_destroy(dialog);
+
+	} else {
+
+		gchar * classname = g_path_get_basename(filename);
+
+		gchar * ptr = strchr(classname,'.');
+		if(ptr) {
+			*ptr = 0;
+		}
+
+		jclass cls = env->FindClass(classname);
+
+		if(cls == 0) {
+
+			GtkWidget *dialog = gtk_message_dialog_new(	GTK_WINDOW(gtk_widget_get_toplevel(widget)),
+														GTK_DIALOG_DESTROY_WITH_PARENT,
+														GTK_MESSAGE_ERROR,
+														GTK_BUTTONS_CANCEL,
+														_(  "Can't find class %s" ), classname );
+
+			gtk_window_set_title(GTK_WINDOW(dialog), _( "Java script failure" ));
+			if(gtk_dialog_run(GTK_DIALOG (dialog)) == GTK_RESPONSE_CANCEL)
+				gtk_main_quit();
+			gtk_widget_destroy(dialog);
+
+		} else {
+
+			jmethodID mid = env->GetStaticMethodID(cls, "main", "([Ljava/lang/String;)V");
+
+			if(mid == 0) {
+
+				GtkWidget *dialog = gtk_message_dialog_new(	GTK_WINDOW(gtk_widget_get_toplevel(widget)),
+															GTK_DIALOG_DESTROY_WITH_PARENT,
+															GTK_MESSAGE_ERROR,
+															GTK_BUTTONS_OK_CANCEL,
+															_(  "Can't find class \"%s\"" ), classname );
+
+				gtk_window_set_title(GTK_WINDOW(dialog), _( "Java script failure" ));
+				if(gtk_dialog_run(GTK_DIALOG (dialog)) == GTK_RESPONSE_CANCEL)
+					gtk_main_quit();
+				gtk_widget_destroy(dialog);
+
+			} else {
+
+				jobjectArray args = env->NewObjectArray(0, env->FindClass("java/lang/String"), env->NewStringUTF(""));
+
+				env->CallStaticVoidMethod(cls, mid, args);
+
+			}
+
+		}
+
+		g_free(classname);
+
+
+		jvm->DestroyJavaVM();
+	}
+
+	// And release
+	v3270_set_script(widget,'J',FALSE);
+
+#if GTK_CHECK_VERSION(2,32,0)
+	g_mutex_unlock(&mutex);
+#else
+	g_static_mutex_unlock(&mutex);
+#endif // GTK_CHECK_VERSION
+
+
+ }
+
+
+extern "C"
+{
+ LIB3270_EXPORT void pw3270_action_java_activated(GtkAction *action, GtkWidget *widget)
+ {
+	gchar *filename = (gchar *) g_object_get_data(G_OBJECT(action),"src");
+
+	lib3270_trace_event(v3270_get_session(widget),"Action %s activated on widget %p",gtk_action_get_name(action),widget);
+
+#if GTK_CHECK_VERSION(3,10,0)
+	g_simple_action_set_enabled(G_SIMPLE_ACTION(action),FALSE);
+#else
+	gtk_action_set_sensitive(action,FALSE);
+#endif // GTK(3,10)
+
+	if(filename)
+	{
+		// Has filename, call it directly
+		call_java_program(action,widget,filename);
+	}
+	else
+	{
+		// No filename, ask user
+		static const struct _list
+		{
+			const gchar *name;
+			const gchar *pattern;
+		} list[] =
+		{
+			{ N_( "Java class file" ),	"*.class" }
+		};
+
+		GtkFileFilter * filter[G_N_ELEMENTS(list)+1];
+		unsigned int f;
+
+		memset(filter,0,sizeof(filter));
+
+		for(f=0;f<G_N_ELEMENTS(list);f++)
+		{
+			filter[f] = gtk_file_filter_new();
+			gtk_file_filter_set_name(filter[f],gettext(list[f].name));
+			gtk_file_filter_add_pattern(filter[f],list[f].pattern);
+		}
+
+		filename = pw3270_get_filename(widget,"java","script",filter,_( "Select script to run" ));
+
+		if(filename)
+		{
+			call_java_program(action,widget,filename);
+			g_free(filename);
+		}
+
+
+	}
+
+#if GTK_CHECK_VERSION(3,10,0)
+	g_simple_action_set_enabled(G_SIMPLE_ACTION(action),TRUE);
+#else
+	gtk_action_set_sensitive(action,TRUE);
+#endif // GTK(3,10)
+
+ }
+
+}
 

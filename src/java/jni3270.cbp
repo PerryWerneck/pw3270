@@ -39,12 +39,20 @@
 			<Add option="-Wall" />
 		</Compiler>
 		<Unit filename="../../configure.ac" />
+		<Unit filename="../classlib/exception.cc" />
+		<Unit filename="../classlib/local.cc" />
+		<Unit filename="../classlib/remote.cc" />
+		<Unit filename="../classlib/session.cc" />
+		<Unit filename="../classlib/testprogram.cc" />
 		<Unit filename="../include/lib3270.h" />
 		<Unit filename="../include/pw3270/class.h" />
 		<Unit filename="Makefile.in" />
 		<Unit filename="actions.cc" />
+		<Unit filename="clipboard.cc" />
 		<Unit filename="connect.cc" />
 		<Unit filename="cursor.cc" />
+		<Unit filename="dialog.cc" />
+		<Unit filename="field.cc" />
 		<Unit filename="getset.cc" />
 		<Unit filename="info.cc" />
 		<Unit filename="jni3270.h" />
