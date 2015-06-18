@@ -219,22 +219,40 @@ LIB3270_EXPORT const char * lib3270_win32_local_charset(void)
  */
 char * lib3270_vsprintf(const char *fmt, va_list args)
 {
-	char *r;
-#if defined(HAVE_VASPRINTF) /*[*/
-	(void) vasprintf(&r, fmt, args);
-	if(!r)
+	char *r = NULL;
+
+#if defined(HAVE_VASPRINTF)
+
+	if(vasprintf(&r, fmt, args) < 0 || !r)
 		Error(NULL,"Out of memory in %s",__FUNCTION__);
-	return r;
-#else /*][*/
+
+#else
+
 	char buf[16384];
 	int nc;
 
 	nc = vsnprintf(buf, sizeof(buf), fmt, args);
-	if (nc > sizeof(buf))
-		Error(NULL,"Internal buffer overflow");
-	r = lib3270_malloc(nc + 1);
-	return strcpy(r, buf);
-#endif /*]*/
+	if(nc < 0)
+	{
+		Error(NULL,"Out of memory in %s",__FUNCTION__);
+	}
+	else if (nc < sizeof(buf))
+	{
+		r = lib3270_malloc(nc + 1);
+		strcpy(r, buf);
+
+	}
+	else
+	{
+		r = lib3270_malloc(nc + 1);
+		if(vsnprintf(r, nc, fmt, args) < 0)
+			Error(NULL,"Out of memory in %s",__FUNCTION__);
+
+	}
+
+#endif
+
+	return r;
 }
 
 LIB3270_EXPORT char * lib3270_strdup_printf(const char *fmt, ...)

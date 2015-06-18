@@ -418,7 +418,7 @@ extern "C" {
 	rc = JNI_CreateJavaVM(&jvm,(void **)&env,&vm_args);
 
 	// Release options
-	for(size_t f=0;f<vm_args.nOptions;f++) {
+	for(int f=0;f<vm_args.nOptions;f++) {
 		trace("Releasing option %d: %s",f,options[f].optionString);
 		g_free(options[f].optionString);
 	}

@@ -118,17 +118,17 @@ $(BINDIR)/java/%.class: %.java $(BINDIR)/java/$(PACKAGE_NAME)/terminal.class
 $(BINDIR)/java/%.class: sample/%.java $(BINDIR)/java/$(PACKAGE_NAME)/terminal.class
 	@echo $< ...
 	@mkdir -p `dirname $@`
-	$(JAVAC) -encoding utf-8 -cp $(BINDIR)/java -d $(BINDIR)/java $<
+	@$(JAVAC) -encoding utf-8 -cp $(BINDIR)/java -d $(BINDIR)/java $<
 
 $(BINDIR)/%.class: sample/%.java $(BINDIR)/java/$(PACKAGE_NAME)/terminal.class
 	@echo $< ...
 	@mkdir -p `dirname $@`
-	$(JAVAC) -encoding utf-8 -cp $(BINDIR)/java -d $(BINDIR)/java $<
+	@$(JAVAC) -encoding utf-8 -cp $(BINDIR)/java -d $(BINDIR)/java $<
 
 %.class: sample/%.java $(BINDIR)/java/$(PACKAGE_NAME)/terminal.class
 	@echo $< ...
 	@mkdir -p `dirname $@`
-	$(JAVAC) -encoding utf-8 -cp $(BINDIR)/java -d `dirname $@` $<
+	@$(JAVAC) -encoding utf-8 -cp $(BINDIR)/java -d `dirname $@` $<
 
 $(BINDIR)/java/$(PACKAGE_NAME)/%.class: %.java
 	@echo $< ...
@@ -175,7 +175,7 @@ $(BINRLS)/plugins/j3270@DLLEXT@: \
 
 	@echo "  LD   `basename $@`"
 	@$(MKDIR) `dirname $@`
-	$(CXX) @SYSDLL_FLAGS@ -Wl,--rpath,$(jnidir) $(LDFLAGS) -Wl,-soname,`basename $@` -o $@ $^ $(CLASS_LIBS) $(PLUGIN_LIBS) -L$(BINRLS)@DLLDIR@ -ljni3270
+	@$(CXX) @SYSDLL_FLAGS@ -Wl,--rpath,$(jnidir) $(LDFLAGS) -Wl,-soname,`basename $@` -o $@ $^ $(CLASS_LIBS) $(PLUGIN_LIBS) -L$(BINRLS)@DLLDIR@ -ljni3270
 
 #---[ Debug targets ]----------------------------------------------------------
 
@@ -197,7 +197,7 @@ $(BINDBG)/plugins/j3270@DLLEXT@: \
 
 	@echo "  LD   `basename $@`"
 	@$(MKDIR) `dirname $@`
-	$(CXX) @SYSDLL_FLAGS@ -Wl,--rpath,.bin/Debug@DLLDIR@ $(LDFLAGS) -Wl,-soname,`basename $@` -o $@ $^ $(CLASS_LIBS) $(PLUGIN_LIBS) -L$(BINDBG)@DLLDIR@ -ljni3270
+	@$(CXX) @SYSDLL_FLAGS@ -Wl,--rpath,.bin/Debug@DLLDIR@ $(LDFLAGS) -Wl,-soname,`basename $@` -o $@ $^ $(CLASS_LIBS) $(PLUGIN_LIBS) -L$(BINDBG)@DLLDIR@ -ljni3270
 
 run: $(BINDBG)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@ $(BINDIR)/java/testprogram.class
 	@LD_LIBRARY_PATH=../../.bin/Debug@DLLDIR@/ java -Djava.library.path=$(BINDBG)@DLLDIR@ -cp .bin/java/ testprogram

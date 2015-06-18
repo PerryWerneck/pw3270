@@ -34,7 +34,7 @@
 
 JNIEXPORT jint JNICALL Java_pw3270_terminal_get_1field_1start (JNIEnv *env, jobject obj, jint baddr) {
 
-	jint rc;
+	jint rc = -1;
 
 	try {
 
@@ -53,7 +53,7 @@ JNIEXPORT jint JNICALL Java_pw3270_terminal_get_1field_1start (JNIEnv *env, jobj
 
 JNIEXPORT jint JNICALL Java_pw3270_terminal_get_1field_1len (JNIEnv *env, jobject obj, jint baddr) {
 
-	jint rc;
+	jint rc = -1;
 
 	try {
 
@@ -72,7 +72,7 @@ JNIEXPORT jint JNICALL Java_pw3270_terminal_get_1field_1len (JNIEnv *env, jobjec
 
 JNIEXPORT jint JNICALL Java_pw3270_terminal_get_1next_1unprotected(JNIEnv *env, jobject obj, jint baddr) {
 
-	jint rc;
+	jint rc = -1;
 
 	try {
 

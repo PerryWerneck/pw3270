@@ -340,6 +340,7 @@ if test "$app_cv_java" = "yes" ; then
 fi
 
 if test "$app_cv_java" = "yes" ; then
+
 	AC_PATH_TOOL([JAVA], [java], [no], [$JDK_HOME/bin:$JRE_HOME/bin:$PATH])
 	AC_PATH_TOOL([JAVAC], [javac], [no], [$JDK_HOME/bin:$JRE_HOME/bin:$PATH])
 	AC_PATH_TOOL([JAVAH], [javah], [no], [$JDK_HOME/bin:$JRE_HOME/bin:$PATH])
@@ -348,6 +349,9 @@ if test "$app_cv_java" = "yes" ; then
 
 	EXTENSIONS="$EXTENSIONS java"
 	PLUGINS="$PLUGINS j3270"
+else
+
+	AC_MSG_NOTICE([jdk is NOT present or disabled.])
 
 fi
 
