@@ -101,6 +101,7 @@ AC_SUBST(PACKAGE_LEVEL,"APP_LEVEL")
 
 #--[ Set host based options ]---------------------------------------------------------------------------------------------------------------------------------
 
+CFLAGS="$CFLAGS -Wno-deprecated-declarations"
 DLL_CFLAGS=""
 DLL_FLAGS="-shared"
 SYSDLL_FLAGS="-shared"
@@ -215,8 +216,8 @@ rm -f conftest.$ac_objext conftest.err m4_ifval([$1], [conftest.$ac_ext])[]dnl
 AC_MSG_CHECKING(for GNUC visibility attribute)
 GLIB_CHECK_COMPILE_WARNINGS([AC_LANG_SOURCE([
 
-#define LIB3270_INTERNAL	extern __attribute__((visibility("hidden")))
-#define LIB3270_EXPORT		extern __attribute__((visibility("default")))
+#define LIB3270_INTERNAL	__attribute__((visibility("hidden"))) extern
+#define LIB3270_EXPORT		__attribute__((visibility("default"))) extern
 
 LIB3270_INTERNAL	void f_hidden(void);
 LIB3270_EXPORT		void f_export(void);

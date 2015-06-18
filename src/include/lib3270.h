@@ -296,13 +296,13 @@
 
 	#elif defined(__SUNPRO_C) && (__SUNPRO_C >= 0x550)
 
-		#define LIB3270_INTERNAL	extern
+		#define LIB3270_INTERNAL	__hidden extern
 		#define LIB3270_EXPORT		extern
 
 	#elif defined (HAVE_GNUC_VISIBILITY)
 
-		#define LIB3270_INTERNAL	extern __attribute__((visibility("hidden")))
-		#define LIB3270_EXPORT		extern __attribute__((visibility("default")))
+		#define LIB3270_INTERNAL	__attribute__((visibility("hidden"))) extern
+		#define LIB3270_EXPORT		__attribute__((visibility("default"))) extern
 
 	#else
 

@@ -78,7 +78,7 @@ include $(CLASSLIBDIR)/class.mak
 
 #---[ Build options ]----------------------------------------------------------
 
-CXXFLAGS=@CXXFLAGS@ @DLL_CFLAGS@ @JNI_CPPFLAGS@ -I../include
+CXXFLAGS=@CFLAGS@ @CXXFLAGS@ @DLL_CFLAGS@ @JNI_CPPFLAGS@ -I../include
 
 PW3270_LIBS		?= -L../../.bin/Debug@DLLDIR@ -l3270 -lpw3270
 PW3270_CFLAGS	?= -I../include

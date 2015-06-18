@@ -35,15 +35,6 @@
 #include <lib3270.h>			/* lib3270 API calls and defs */
 #include "api.h"
 
-/* From glibconfig.h */
-#if defined(__SUNPRO_C) && (__SUNPRO_C >= 0x550)
-	#define LIB3270_INTERNAL __hidden extern
-#elif defined (__GNUC__) && defined (HAVE_GNUC_VISIBILITY)
-	#define LIB3270_INTERNAL __attribute__((visibility("hidden"))) extern
-#else
-	#define LIB3270_INTERNAL
-#endif
-
 #if defined(X3270_TN3270E) && !defined(X3270_ANSI) /*[*/
 		#define X3270_ANSI	1	/* RFC2355 requires NVT mode */
 #endif /*]*/

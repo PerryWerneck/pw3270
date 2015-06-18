@@ -349,9 +349,9 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 
  	/* Build the ind$file command */
  	snprintf(op,4095,"%s%s%s",
-						(ft->flags & LIB3270_FT_OPTION_ASCII) 	? " ascii"	: "",
-						(ft->flags & LIB3270_FT_OPTION_CRLF) 	? " crlf"	: "",
-						(ft->flags & LIB3270_FT_OPTION_APPEND)	? " append"	: ""
+						(ft->flags & LIB3270_FT_OPTION_ASCII) 	? " ASCII"	: "",
+						(ft->flags & LIB3270_FT_OPTION_CRLF) 	? " CRLF"	: "",
+						(ft->flags & LIB3270_FT_OPTION_APPEND)	? " APPEND"	: ""
 			);
 
 	trace("tso=%s",hSession->options & LIB3270_OPTION_TSO ? "yes" : "No");
@@ -365,13 +365,13 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 			// TSO Host
 			if(recfm > 0)
 			{
-				snconcat(op,4096," recfm(%c)",rec[recfm-1]);
+				snconcat(op,4096," RECFM(%c)",rec[recfm-1]);
 
 				if(ft->lrecl > 0)
-					snconcat(op,4096," lrecl(%d)",ft->lrecl);
+					snconcat(op,4096," LRECL(%d)",ft->lrecl);
 
 				if(ft->blksize > 0)
-					snconcat(op,4096," blksize(%d)", ft->blksize);
+					snconcat(op,4096," BLKSIZE(%d)", ft->blksize);
 			}
 
 			if(units > 0)
@@ -380,7 +380,7 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 
 				if(ft->primspace > 0)
 				{
-					snconcat(op,4096," space(%d",ft->primspace);
+					snconcat(op,4096," SPACE(%d",ft->primspace);
 					if(ft->secspace)
 						snconcat(op,4096,",%d",ft->secspace);
 					snconcat(op,4096,"%s",")");
@@ -392,10 +392,10 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 			// VM Host
 			if(recfm > 0)
 			{
-				snconcat(op,4096," recfm %c",rec[recfm-1]);
+				snconcat(op,4096," RECFM %c",rec[recfm-1]);
 
 				if(ft->lrecl > 0)
-					snconcat(op,4096," lrecl %d",ft->lrecl);
+					snconcat(op,4096," LRECL %d",ft->lrecl);
 
 			}
 		}
