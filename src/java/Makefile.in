@@ -134,7 +134,10 @@ $(BINRLS)/$(PACKAGE_NAME).jar: $(BINDIR)/java/$(PACKAGE_NAME)/terminal.class
 
 all: $(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@
 
-Release: $(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@
+Release: \
+	$(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@ \
+	$(BINDIR)/java/testprogram.class \
+	$(BINRLS)/plugins/j3270@DLLEXT@
 
 zip: jni3270.zip
 
@@ -160,7 +163,7 @@ $(BINRLS)/plugins/j3270@DLLEXT@: \
 
 	@echo "  LD   `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CXX) @SYSDLL_FLAGS@ -Wl,--rpath,$(jnidir) $(LDFLAGS) -o $@ $^ $(CLASS_LIBS) $(PLUGIN_LIBS) -L$(BINDBG)@DLLDIR@ -ljni3270
+	$(CXX) @SYSDLL_FLAGS@ -Wl,--rpath,$(jnidir) $(LDFLAGS) -Wl,-soname,`basename $@` -o $@ $^ $(CLASS_LIBS) $(PLUGIN_LIBS) -L$(BINRLS)@DLLDIR@ -ljni3270
 
 #---[ Debug targets ]----------------------------------------------------------
 
@@ -189,10 +192,17 @@ run: $(BINDBG)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@ $(BINDIR)/java/testprogram.cla
 
 #---[ Misc targets ]-----------------------------------------------------------
 
-install: $(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@ $(BINRLS)/$(PACKAGE_NAME).jar doc
+install: \
+	$(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@ \
+	$(BINRLS)/$(PACKAGE_NAME).jar \
+	$(BINRLS)/plugins/j3270@DLLEXT@ \
+	doc
 
 	@$(MKDIR) $(DESTDIR)/$(jnidir)
 	@$(INSTALL_PROGRAM) $(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@ $(DESTDIR)/$(jnidir)
+
+	@$(MKDIR) $(DESTDIR)$(libdir)/$(PACKAGE_NAME)-plugins
+	@$(INSTALL_PROGRAM) $(BINRLS)/plugins/j3270@DLLEXT@ $(DESTDIR)$(libdir)/$(PACKAGE_NAME)-plugins
 
 	@mkdir -p $(DESTDIR)/$(jvmjardir)
 	@$(INSTALL_DATA) $(BINRLS)/$(PACKAGE_NAME).jar $(DESTDIR)/$(jvmjardir)

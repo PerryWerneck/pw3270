@@ -205,11 +205,24 @@ Revision @PACKAGE_REVISION@ from @PACKAGE_SOURCE@
 
 %package 	java
 Summary:	Java class to interact with pw3270
-Group:		Development/Libraries/PHP
+Group:		Development/Libraries/Java
 Requires:	lib3270 = @PACKAGE_VERSION@
 
 %description java
 Java class for lib3270/pw3270 interaction.
+
+Revision @PACKAGE_REVISION@ from @PACKAGE_SOURCE@
+
+
+%package -n %{name}-plugin-java
+Summary:	Java plugin for %{name}
+Group:		Development/Libraries/Java
+Requires:	%{name} = @PACKAGE_VERSION@
+Requires:	%{name}-java = @PACKAGE_VERSION@
+
+%description -n %{name}-plugin-java
+This package provides a plugin allowing calling of java classes
+from pw3270 application.
 
 Revision @PACKAGE_REVISION@ from @PACKAGE_SOURCE@
 

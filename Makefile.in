@@ -140,7 +140,11 @@ $(BINDIR)/Debug/plugins/j3270@DLLEXT@: src/java/* $(BINDIR)/Debug/$(PACKAGE_TARN
 	@make BINDIR="../../$(BINDIR)" PW3270_LIBS="-L../../$(BINDIR)/Debug@DLLDIR@ -l3270 -lpw3270" PW3270_CFLAGS="-I../include" -C $(dir $<) Debug
 
 $(BINDIR)/Release/plugins/j3270@DLLEXT@: src/java/* $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
-	@make BINDIR="../../$(BINDIR)" PW3270_LIBS="-L../../$(BINDIR)/Release@DLLDIR@ -l3270 -lpw3270" PW3270_CFLAGS="-I../include" -C $(dir $<) Release
+	make BINDIR="../../$(BINDIR)" PW3270_LIBS="-L../../$(BINDIR)/Release@DLLDIR@ -l3270 -lpw3270" PW3270_CFLAGS="-I../include" -C $(dir $<) Release
+
+$(DESTDIR)$(libdir)/$(PACKAGE_NAME)-plugins/%@DLLEXT@: $(BINDIR)/Release/plugins/%@DLLEXT@
+	@$(MKDIR) `dirname $@`
+	@$(INSTALL_PROGRAM) "$^" "$@"
 
 #---[ Release targets ]--------------------------------------------------------
 
@@ -316,9 +320,7 @@ install-app: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) install-locale
 	@$(INSTALL_DATA) colors.conf $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)
 	@$(INSTALL_DATA) ui/*.xml $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/ui
 
-install-plugins: $(foreach PLUGIN, $(PLUGINS), $(BINDIR)/Release/plugins/$(PLUGIN)@DLLEXT@)
-	@$(MKDIR) $(DESTDIR)$(libdir)/$(PACKAGE_NAME)-plugins
-	@echo -e $(foreach PLUGIN, $(PLUGINS), $(MAKE) DESTDIR=$(DESTDIR) $(PLUGIN_RELEASE_ARGS) -C src/plugins/$(PLUGIN) install\\n ) | $(SHELL)
+install-plugins: $(foreach PLUGIN, $(PLUGINS), $(DESTDIR)$(libdir)/$(PACKAGE_NAME)-plugins/$(PLUGIN)@DLLEXT@)
 
 install-lib: $(BINDIR)/Release@DLLDIR@/lib3270@DLLEXT@
 	@$(MAKE) BINRLS="../../.bin/Release@DLLDIR@" -C src/lib3270 install
