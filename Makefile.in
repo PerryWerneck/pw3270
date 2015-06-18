@@ -373,7 +373,7 @@ install-php:
 	@$(MAKE) -C src/php install
 
 install-java:
-	@$(MAKE) -C src/java install
+	@$(MAKE) BINDIR=../../.bin LIB3270_CFLAGS="-I../../src/include" -C src/java install
 
 install-plugin-rexx:
 	@$(MAKE) BINDIR=../../../.bin LIB3270_CFLAGS="-I../../src/include" -C src/plugins/rx3270 install
