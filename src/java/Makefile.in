@@ -151,13 +151,35 @@ Release: \
 
 zip: jni3270.zip
 
-jni3270.zip: $(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@ $(BINRLS)/$(PACKAGE_NAME).jar testprogram.java doc
-	@rm -fr .tmp.zip
+jni3270.zip: \
+	$(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@ \
+	$(BINRLS)/plugins/j3270@DLLEXT@ \
+	$(BINRLS)/$(PACKAGE_NAME).jar \
+	testprogram.java \
+	doc
+
 	@rm -f $@
-	@mkdir -p .tmp.zip
-	@mkdir -p .tmp.zip/
-	@zip -9 -j $@ $(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@ $(BINRLS)/$(PACKAGE_NAME).jar testprogram.java
-	@zip -9 -r $@ doc
+
+	@rm -fr plugins
+	@mkdir plugins
+	@cp $(BINRLS)/plugins/j3270@DLLEXT@ plugins/j3270@DLLEXT@
+	@zip -9 -m -r $@ plugins
+	@rm -fr plugins
+
+	@rm -fr jvm-exports
+	@mkdir jvm-exports
+	@cp $(BINRLS)/$(PACKAGE_NAME).jar jvm-exports/$(PACKAGE_NAME).jar
+	@zip -9 -m -r $@ jvm-exports
+	@rm -fr jvm-exports
+
+	@rm -fr ui
+	@mkdir ui
+	@cp ../../ui/*java.xml ui
+	@zip -9 -m -r $@ ui
+	@rm -fr ui
+	
+	@zip -9 -j $@ $(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@
+	@zip -9 -r $@ doc sample/efglobe.java sample/popup.java
 
 doc: terminal.java
 	@$(JAVADOC) -encoding utf-8 -d doc $^
