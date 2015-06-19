@@ -311,6 +311,7 @@ fi
 
 #--[ Check For Java ]-----------------------------------------------------------------------------------------------------------------------------------------
 
+AC_ARG_VAR([JAVA_HOME], [JAVA home directory])
 AC_ARG_VAR([JDK_HOME], [JDK home directory])
 AC_ARG_VAR([JRE_HOME], [JRE home directory])
 
@@ -325,7 +326,7 @@ if test "$app_cv_java" = "yes" ; then
 
 	# Check for JAVA_HOME
 	if test "_$JAVA_HOME" = "_" ; then
-		app_cv_java="no"
+		JAVA_HOME=$libdir/jvm/java
 	fi
 
 	# Check for JDK_HOME
@@ -342,13 +343,38 @@ fi
 if test "$app_cv_java" = "yes" ; then
 
 	AC_PATH_TOOL([JAVA], [java], [no], [$JDK_HOME/bin:$JRE_HOME/bin:$PATH])
+	if test "$JAVA" = "no" ; then
+		app_cv_java="no"
+	fi
+
 	AC_PATH_TOOL([JAVAC], [javac], [no], [$JDK_HOME/bin:$JRE_HOME/bin:$PATH])
+	if test "$JAVAC" = "no" ; then
+		app_cv_java="no"
+	fi
+
 	AC_PATH_TOOL([JAVAH], [javah], [no], [$JDK_HOME/bin:$JRE_HOME/bin:$PATH])
+	if test "$JAVAH" = "no" ; then
+		app_cv_java="no"
+	fi
+
 	AC_PATH_TOOL([JAR], [jar], [no], [$JDK_HOME/bin:$JRE_HOME/bin:$PATH])
+	if test "$JAVA" = "no" ; then
+		app_cv_java="no"
+	fi
+
 	AC_PATH_TOOL([JAVADOC], [javadoc], [no], [$JDK_HOME/bin:$JRE_HOME/bin:$PATH])
+	if test "$JAVADOC" = "no" ; then
+		app_cv_java="no"
+	fi
+
+fi
+
+if test "$app_cv_java" = "yes" ; then
 
 	EXTENSIONS="$EXTENSIONS java"
 	PLUGINS="$PLUGINS j3270"
+	AC_MSG_NOTICE([jdk is present and enabled.])
+
 else
 
 	AC_MSG_NOTICE([jdk is NOT present or disabled.])
