@@ -401,8 +401,8 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 		}
 	}
 
-	snprintf(buffer,4095,"%s %s %s",	"ind$file",
-										(ft->flags & LIB3270_FT_OPTION_RECEIVE) ? "get" : "put",
+	snprintf(buffer,4095,"%s %s %s",	"IND$FILE",
+										(ft->flags & LIB3270_FT_OPTION_RECEIVE) ? "GET" : "PUT",
 										ft->remote );
 
 	if(*op)
