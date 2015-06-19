@@ -316,7 +316,7 @@ AC_ARG_VAR([JDK_HOME], [JDK home directory])
 AC_ARG_VAR([JRE_HOME], [JRE home directory])
 
 AC_ARG_WITH([jnidir], [AS_HELP_STRING([--with-jnidir], [Directory for JNI libraries])], [ jnidir="$withval" ],[ jnidir=\$"{libdir}/java" ])
-AC_ARG_WITH([jnidir], [AS_HELP_STRING([--with-javadocdir], [Directory for javadoc files])], [ javadocdir="$withval" ],[ javadocdir=\$"{datadir}/javadoc" ])
+AC_ARG_WITH([javadocdir], [AS_HELP_STRING([--with-javadocdir], [Directory for javadoc files])], [ javadocdir="$withval" ],[ javadocdir=\$"{datadir}/javadoc" ])
 
 AC_ARG_WITH([jvmjardir], [AS_HELP_STRING([--with-jvmjardir], [Directory for JAR files])], [ jvmjardir="$withval" ],[ jvmjardir=\$"{libdir}/jvm-exports" ])
 

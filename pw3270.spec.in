@@ -226,6 +226,16 @@ from pw3270 application.
 
 Revision @PACKAGE_REVISION@ from @PACKAGE_SOURCE@
 
+%package javadoc 
+Summary:        Javadoc for %{name} 
+Group:          Documentation 
+Requires:       jpackage-utils
+
+%description javadoc 
+API documentation for %{name}. 
+
+Revision @PACKAGE_REVISION@ from @PACKAGE_SOURCE@
+
 %endif
 
 
@@ -244,10 +254,18 @@ export FFLAGS="$RPM_OPT_FLAGS"
 %if 0%{?_office}
 export OFFICE_HOME=%{_libdir}/libreoffice
 export OO_SDK_HOME=%{_libdir}/libreoffice/sdk
-%configure --sysconfdir=%{_sysconfdir}
-%else
-%configure --disable-office --sysconfdir=%{_sysconfdir}
 %endif
+
+%if 0%{?_java}
+export JAVA_HOME=%{java_home}
+%endif
+
+%configure	--disable-strip \
+			--enable-pic \
+			--with-jnidir="%{_jnidir}" \
+			--with-jvmjardir="%{_jvmjardir}" \
+			--with-javadocdir="%{_javadocdir}"
+
 
 %build
 make clean
@@ -343,13 +361,13 @@ rm -rf $RPM_BUILD_ROOT
 %{_jnidir}/libjni3270.so
 %{_jvmjardir}/pw3270.jar
 
-
-%dir %{_javadocdir}/%{name}/*
-%{_javadocdir}/%{name}/*
-
 %files -n %{name}-plugin-java
 %{_libdir}/@PACKAGE_NAME@-plugins/j3270.so
 %{_datadir}/pw3270/ui/80java.xml
+
+%files javadoc
+%dir %{_javadocdir}/%{name}/*
+%{_javadocdir}/%{name}/*
 
 %endif
 

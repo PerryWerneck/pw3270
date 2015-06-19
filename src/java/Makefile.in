@@ -177,7 +177,7 @@ jni3270.zip: \
 	@cp ../../ui/*java.xml ui
 	@zip -9 -m -r $@ ui
 	@rm -fr ui
-	
+
 	@zip -9 -j $@ $(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@
 	@zip -9 -r $@ doc sample/efglobe.java sample/popup.java
 
@@ -244,6 +244,8 @@ install-extension: \
 
 install-doc: \
 	doc
+
+	@echo "javadocdir=$(javadocdir)"
 
 	@$(MKDIR) $(DESTDIR)/$(javadocdir)/$(PACKAGE_NAME)
 	@cp -r doc/* $(DESTDIR)/$(javadocdir)/$(PACKAGE_NAME)

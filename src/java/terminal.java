@@ -293,7 +293,7 @@ public class terminal
 	/**
 	 * Get next field address.
 	 *
-	 * @param Field address.
+	 * @param baddr Field address.
 	 *
 	 * @return Address of the next field.
 	 *
