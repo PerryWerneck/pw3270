@@ -226,25 +226,34 @@ run: $(BINDBG)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@ $(BINDIR)/java/testprogram.cla
 
 #---[ Misc targets ]-----------------------------------------------------------
 
-install: \
-	$(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@ \
-	$(BINRLS)/$(PACKAGE_NAME).jar \
-	$(BINRLS)/plugins/j3270@DLLEXT@ \
-	doc
-
-	@$(MKDIR) $(DESTDIR)/$(jnidir)
-	@$(INSTALL_PROGRAM) $(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@ $(DESTDIR)/$(jnidir)
+install-plugin: \
+	$(BINRLS)/plugins/j3270@DLLEXT@
 
 	@$(MKDIR) $(DESTDIR)$(libdir)/$(PACKAGE_NAME)-plugins
 	@$(INSTALL_PROGRAM) $(BINRLS)/plugins/j3270@DLLEXT@ $(DESTDIR)$(libdir)/$(PACKAGE_NAME)-plugins
 
+install-extension: \
+	$(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@ \
+	$(BINRLS)/$(PACKAGE_NAME).jar \
+
+	@$(MKDIR) $(DESTDIR)/$(jnidir)
+	@$(INSTALL_PROGRAM) $(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@ $(DESTDIR)/$(jnidir)
+
 	@mkdir -p $(DESTDIR)/$(jvmjardir)
 	@$(INSTALL_DATA) $(BINRLS)/$(PACKAGE_NAME).jar $(DESTDIR)/$(jvmjardir)
+
+install-doc: \
+	doc
 
 	@$(MKDIR) $(DESTDIR)/$(javadocdir)/$(PACKAGE_NAME)
 	@cp -r doc/* $(DESTDIR)/$(javadocdir)/$(PACKAGE_NAME)
 	@find $(DESTDIR)/$(javadocdir)/$(PACKAGE_NAME) -type f -exec chmod 644 {} \;
 	@find $(DESTDIR)/$(javadocdir)/$(PACKAGE_NAME) -type d -exec chmod 755 {} \;
+
+install: \
+	install-extension \
+	install-plugin \
+	install-doc
 
 jni3270.h: $(BINDIR)/java/$(PACKAGE_NAME)/terminal.class
 	@echo $< ...
