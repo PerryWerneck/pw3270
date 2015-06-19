@@ -156,7 +156,7 @@ jni3270.zip: \
 	$(BINRLS)/plugins/j3270@DLLEXT@ \
 	$(BINRLS)/$(PACKAGE_NAME).jar \
 	testprogram.java \
-	doc
+	javadoc
 
 	@rm -f $@
 
@@ -179,10 +179,10 @@ jni3270.zip: \
 	@rm -fr ui
 
 	@zip -9 -j $@ $(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@
-	@zip -9 -r $@ doc sample/efglobe.java sample/popup.java
+	@zip -9 -r $@ javadoc sample/efglobe.java sample/popup.java
 
-doc: terminal.java
-	@$(JAVADOC) -encoding utf-8 -d doc $^
+javadoc: terminal.java
+	@$(JAVADOC) -encoding utf-8 -d $@ $^
 
 $(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@: \
 		$(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SRC)@OBJEXT@) \
@@ -243,12 +243,12 @@ install-extension: \
 	@$(INSTALL_DATA) $(BINRLS)/$(PACKAGE_NAME).jar $(DESTDIR)/$(jvmjardir)
 
 install-doc: \
-	doc
+	javadoc
 
 	@echo "javadocdir=$(javadocdir)"
 
 	@$(MKDIR) $(DESTDIR)/$(javadocdir)/$(PACKAGE_NAME)
-	@cp -r doc/* $(DESTDIR)/$(javadocdir)/$(PACKAGE_NAME)
+	@cp -r javadoc/* $(DESTDIR)/$(javadocdir)/$(PACKAGE_NAME)
 	@find $(DESTDIR)/$(javadocdir)/$(PACKAGE_NAME) -type f -exec chmod 644 {} \;
 	@find $(DESTDIR)/$(javadocdir)/$(PACKAGE_NAME) -type d -exec chmod 755 {} \;
 
@@ -267,5 +267,5 @@ cleanDebug: clean
 clean:
 	@rm -fr $(OBJDIR)
 	@rm -fr $(BINDIR)
-	@rm -fr doc
+	@rm -fr javadoc
 	@rm -f jni3270.h
