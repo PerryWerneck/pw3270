@@ -396,10 +396,31 @@ extern "C" {
 
 #if defined( WIN32 )
 
-	g_mkdir_with_parents("./jvm-exports",0777);
+	gchar	* exports = NULL;
+	char	  buffer[1024];
+
+	if(GetModuleFileName(NULL,buffer,sizeof(buffer)) < sizeof(buffer)) {
+
+		gchar * d = g_path_get_dirname(buffer);
+
+		exports = g_build_filename(d,"jvm-exports",NULL);
+
+		g_free(d);
+
+	} else {
+
+		exports = g_build_filename(".","jvm-exports");
+
+	}
+
+	debug("java.class.path=%s;%s",dirname,exports);
+
+	g_mkdir_with_parents(exports,0777);
 
 	options[vm_args.nOptions++].optionString = g_strdup_printf("-Djava.library.path=%s",".");
-	options[vm_args.nOptions++].optionString = g_strdup_printf("-Djava.class.path=./jvm-exports;%s",dirname);
+	options[vm_args.nOptions++].optionString = g_strdup_printf("-Djava.class.path=%s;%s",dirname,exports);
+
+	g_free(exports);
 
 #elif defined(DEBUG)
 
