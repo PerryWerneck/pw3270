@@ -398,28 +398,30 @@ extern "C" {
 
 	gchar	* exports = NULL;
 	char	  buffer[1024];
+	gchar 	* myDir;
 
 	if(GetModuleFileName(NULL,buffer,sizeof(buffer)) < sizeof(buffer)) {
 
-		gchar * d = g_path_get_dirname(buffer);
+		gchar * myDir = g_path_get_dirname(buffer);
 
-		exports = g_build_filename(d,"jvm-exports",NULL);
-
-		g_free(d);
 
 	} else {
 
-		exports = g_build_filename(".","jvm-exports");
+		myDir = g_strdup(".");
 
 	}
 
-	debug("java.class.path=%s;%s",dirname,exports);
-
+	exports = g_build_filename(myDir,"jvm-exports",NULL);
 	g_mkdir_with_parents(exports,0777);
 
-	options[vm_args.nOptions++].optionString = g_strdup_printf("-Djava.library.path=%s",".");
+	lib3270_trace_event(v3270_get_session(widget),"java.class.path=%s;%s",dirname,exports);
+	lib3270_trace_event(v3270_get_session(widget),"java.library.path=%s",myDIR);
+
+
+	options[vm_args.nOptions++].optionString = g_strdup_printf("-Djava.library.path=%s",myDIR);
 	options[vm_args.nOptions++].optionString = g_strdup_printf("-Djava.class.path=%s;%s",dirname,exports);
 
+	g_free(myDir);
 	g_free(exports);
 
 #elif defined(DEBUG)
