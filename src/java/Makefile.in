@@ -193,16 +193,17 @@ $(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@: \
 	@$(CXX) @SYSDLL_FLAGS@ $(LDFLAGS) -Wl,-soname,`basename $@` -o $@ $^ $(CLASS_LIBS)
 
 $(BINRLS)/plugins/j3270@DLLEXT@: \
-	$(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJRLS)/j3270/$(SRC)@OBJEXT@)
+	$(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJRLS)/j3270/$(SRC)@OBJEXT@) \
+	$(CLASS_RELEASE_OBJECTS)
 
 	@echo "  LD   `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(CXX) @SYSDLL_FLAGS@ \
-	-Wl,--rpath,$(jnidir) $(LDFLAGS) -Wl,-soname,`basename $@` \
-	-o $@ $^ \
-	$(CLASS_LIBS) \
-	$(PLUGIN_LIBS) \
-	-L../../.bin/Release@DLLDIR@ -l3270 -lpw3270 \
+		-Wl,--rpath,$(jnidir) $(LDFLAGS) -Wl,-soname,`basename $@` \
+		-o $@ $^ \
+		$(CLASS_LIBS) \
+		$(PLUGIN_LIBS) \
+		-L../../.bin/Release@DLLDIR@ -l3270 -lpw3270 \
 
 #---[ Debug targets ]----------------------------------------------------------
 
@@ -220,7 +221,8 @@ $(BINDBG)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@: \
 
 $(BINDBG)/plugins/j3270@DLLEXT@: \
 	$(BINDBG)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@ \
-	$(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJDBG)/j3270/$(SRC)@OBJEXT@)
+	$(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJDBG)/j3270/$(SRC)@OBJEXT@) \
+	$(CLASS_DEBUG_OBJECTS)
 
 	@echo "  LD   `basename $@`"
 	@$(MKDIR) `dirname $@`
