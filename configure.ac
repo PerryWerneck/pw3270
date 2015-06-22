@@ -724,8 +724,7 @@ if test "$app_cv_registry" == "yes"; then
 	AC_DEFINE(HAVE_WIN_REGISTRY)
 fi
 
-AC_SUBST(VERSION)
-AC_SUBST(MAJOR_VERSION,"$(echo $VERSION | cut -d. -f1)")
+AC_SUBST(MAJOR_VERSION,"$(echo $PACKAGE_VERSION | cut -d. -f1)")
 AC_SUBST(HOST_CC)
 AC_SUBST(EXEEXT)
 AC_SUBST(DLLPREFIX)

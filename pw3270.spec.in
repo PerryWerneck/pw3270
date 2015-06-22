@@ -226,13 +226,13 @@ from pw3270 application.
 
 Revision @PACKAGE_REVISION@ from @PACKAGE_SOURCE@
 
-%package javadoc 
-Summary:        Javadoc for %{name} 
-Group:          Documentation 
+%package javadoc
+Summary:        Javadoc for %{name}
+Group:          Documentation
 Requires:       jpackage-utils
 
-%description javadoc 
-API documentation for %{name}. 
+%description javadoc
+API documentation for %{name}.
 
 Revision @PACKAGE_REVISION@ from @PACKAGE_SOURCE@
 
@@ -293,7 +293,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %{_bindir}/@PACKAGE_NAME@
 %{_libdir}/libpw3270.so.@MAJOR_VERSION@
-%{_libdir}/libpw3270.so.@VERSION@
+%{_libdir}/libpw3270.so.@PACKAGE_VERSION@
 
 %{_datadir}/@PACKAGE_NAME@/colors.conf
 %{_datadir}/@PACKAGE_NAME@/ui/00default.xml
@@ -305,7 +305,7 @@ rm -rf $RPM_BUILD_ROOT
 %files -n lib3270
 %defattr(-,root,root)
 %{_libdir}/lib3270.so.@MAJOR_VERSION@
-%{_libdir}/lib3270.so.@VERSION@
+%{_libdir}/lib3270.so.@PACKAGE_VERSION@
 
 %files -n lib3270-devel
 %defattr(-,root,root)
@@ -341,7 +341,7 @@ rm -rf $RPM_BUILD_ROOT
 %if 0%{?_ooRexx}
 %files -n %{name}-plugin-rexx
 %defattr(-,root,root)
-%{_rexxlibdir}/librx3270.so.@VERSION@
+%{_rexxlibdir}/librx3270.so.@PACKAGE_VERSION@
 %{_rexxlibdir}/librx3270.so
 %{_rexxclassdir}/rx3270.cls
 %{_libdir}/@PACKAGE_NAME@-plugins/rx3270.so

@@ -27,6 +27,7 @@
 #
 
 PACKAGE=@PACKAGE_NAME@
+PACKAGE_VERSION=@PACKAGE_VERSION@
 
 DEBUG_CFLAGS=-DDEBUG=1 -g -Wall
 DEPENDS ?= *.h ../include/*.h ../include/lib3270/*.h Makefile
@@ -116,26 +117,26 @@ Release: $(BINRLS)/lib3270@DLLEXT@
 
 install: Release
 	$(MKDIR) $(DESTDIR)$(libdir)
-	$(INSTALL_PROGRAM) $(BINRLS)/lib3270@DLLEXT@.@VERSION@ $(DESTDIR)$(libdir)
-	$(LN_S) lib3270@DLLEXT@.@VERSION@ $(DESTDIR)$(libdir)/lib3270@DLLEXT@.@MAJOR_VERSION@
+	$(INSTALL_PROGRAM) $(BINRLS)/lib3270@DLLEXT@.$(PACKAGE_VERSION) $(DESTDIR)$(libdir)
+	$(LN_S) lib3270@DLLEXT@.$(PACKAGE_VERSION) $(DESTDIR)$(libdir)/lib3270@DLLEXT@.@MAJOR_VERSION@
 	$(LN_S) lib3270@DLLEXT@.@MAJOR_VERSION@ $(DESTDIR)$(libdir)/lib3270@DLLEXT@
 
 Debug: $(BINDBG)/lib3270@DLLEXT@
 
-$(BINDBG)/lib3270@DLLEXT@: $(BINDBG)/lib3270@DLLEXT@.@VERSION@
+$(BINDBG)/lib3270@DLLEXT@: $(BINDBG)/lib3270@DLLEXT@.$(PACKAGE_VERSION)
 	@rm -f $@
-	@cd $(BINDBG) && $(LN_S) lib3270@DLLEXT@.@VERSION@ lib3270@DLLEXT@
+	@cd $(BINDBG) && $(LN_S) lib3270@DLLEXT@.$(PACKAGE_VERSION) lib3270@DLLEXT@
 
-$(BINDBG)/lib3270@DLLEXT@.@VERSION@: $(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC)@OBJEXT@)
+$(BINDBG)/lib3270@DLLEXT@.$(PACKAGE_VERSION): $(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC)@OBJEXT@)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(LD) $(DLL_FLAGS) $(LDFLAGS) @LDSOFLAGS@ @LDLIBFLAGS@ -o $@ $^ $(LIBS)
 
-$(BINRLS)/lib3270@DLLEXT@: $(BINRLS)/lib3270@DLLEXT@.@VERSION@
+$(BINRLS)/lib3270@DLLEXT@: $(BINRLS)/lib3270@DLLEXT@.$(PACKAGE_VERSION)
 	@rm -f $@
-	@cd $(BINRLS) && $(LN_S) lib3270@DLLEXT@.@VERSION@ lib3270@DLLEXT@
+	@cd $(BINRLS) && $(LN_S) lib3270@DLLEXT@.$(PACKAGE_VERSION) lib3270@DLLEXT@
 
-$(BINRLS)/lib3270@DLLEXT@.@VERSION@: $(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SRC)@OBJEXT@)
+$(BINRLS)/lib3270@DLLEXT@.$(PACKAGE_VERSION): $(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SRC)@OBJEXT@)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(LD) $(DLL_FLAGS) $(LDFLAGS) @LDSOFLAGS@ @LDLIBFLAGS@ -o $@ $^ $(LIBS)
