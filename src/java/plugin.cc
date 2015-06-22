@@ -415,10 +415,9 @@ extern "C" {
 	g_mkdir_with_parents(exports,0777);
 
 	lib3270_trace_event(v3270_get_session(widget),"java.class.path=%s;%s",dirname,exports);
-	lib3270_trace_event(v3270_get_session(widget),"java.library.path=%s",myDIR);
+	lib3270_trace_event(v3270_get_session(widget),"java.library.path=%s",myDir);
 
-
-	options[vm_args.nOptions++].optionString = g_strdup_printf("-Djava.library.path=%s",myDIR);
+	options[vm_args.nOptions++].optionString = g_strdup_printf("-Djava.library.path=%s",myDir);
 	options[vm_args.nOptions++].optionString = g_strdup_printf("-Djava.class.path=%s;%s",dirname,exports);
 
 	g_free(myDir);

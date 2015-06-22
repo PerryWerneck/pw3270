@@ -80,13 +80,13 @@ include $(CLASSLIBDIR)/class.mak
 
 CXXFLAGS=@CFLAGS@ @CXXFLAGS@ @DLL_CFLAGS@ @JNI_CPPFLAGS@ -I../include
 
-PW3270_LIBS		?= -L../../.bin/Debug@DLLDIR@ -l3270 -lpw3270
+# PW3270_LIBS		?= -L../../.bin/Debug@DLLDIR@ -l3270 -lpw3270
 PW3270_CFLAGS	?= -I../include
 
 PLUGIN_CFLAGS=@CXXFLAGS@ @DLL_CFLAGS@ @JNI_CPPFLAGS@ -DJNIDIR="\"$(jnidir)\"" \
 				-DJARDIR="\"$(jvmjardir)\"" @GTK_CFLAGS@ @GTKMAC_CFLAGS@ $(PW3270_CFLAGS)
 
-PLUGIN_LIBS=@GTK_LIBS@ @GTKMAC_LIBS@ $(PW3270_LIBS) @JVM_LIBS@
+PLUGIN_LIBS=@GTK_LIBS@ @GTKMAC_LIBS@ @JVM_LIBS@
 
 #---[ Rules ]------------------------------------------------------------------
 
@@ -197,7 +197,12 @@ $(BINRLS)/plugins/j3270@DLLEXT@: \
 
 	@echo "  LD   `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CXX) @SYSDLL_FLAGS@ -Wl,--rpath,$(jnidir) $(LDFLAGS) -Wl,-soname,`basename $@` -o $@ $^ $(CLASS_LIBS) $(PLUGIN_LIBS) -L$(BINRLS)@DLLDIR@ -ljni3270
+	@$(CXX) @SYSDLL_FLAGS@ \
+	-Wl,--rpath,$(jnidir) $(LDFLAGS) -Wl,-soname,`basename $@` \
+	-o $@ $^ \
+	$(CLASS_LIBS) \
+	$(PLUGIN_LIBS) \
+	-L../../.bin/Release@DLLDIR@ -l3270 -lpw3270 \
 
 #---[ Debug targets ]----------------------------------------------------------
 
@@ -219,7 +224,14 @@ $(BINDBG)/plugins/j3270@DLLEXT@: \
 
 	@echo "  LD   `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CXX) @SYSDLL_FLAGS@ -Wl,--rpath,.bin/Debug@DLLDIR@ $(LDFLAGS) -Wl,-soname,`basename $@` -o $@ $^ $(CLASS_LIBS) $(PLUGIN_LIBS) -L$(BINDBG)@DLLDIR@ -ljni3270
+
+	@$(CXX) @SYSDLL_FLAGS@ \
+	-Wl,--rpath,.bin/Debug@DLLDIR@ $(LDFLAGS) -Wl,-soname,`basename $@` \
+	-o $@ $^ \
+	$(CLASS_LIBS) \
+	$(PLUGIN_LIBS) \
+	-L../../.bin/Debug@DLLDIR@ -l3270 -lpw3270 \
+	-L$(BINDBG)@DLLDIR@ -ljni3270
 
 run: $(BINDBG)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@ $(BINDIR)/java/testprogram.class
 	@LD_LIBRARY_PATH=../../.bin/Debug@DLLDIR@/ java -Djava.library.path=$(BINDBG)@DLLDIR@ -cp .bin/java/ testprogram

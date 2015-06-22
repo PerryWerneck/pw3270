@@ -140,4 +140,4 @@ clean:
 	@rm -fr $(OBJDIR)
 	@rm -fr $(BINDIR)
 	@rm -f testprogram@EXEEXT@
-	@find . -name "*~" -exec rm -f {} \;
+

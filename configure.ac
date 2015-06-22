@@ -420,7 +420,7 @@ fi
 # Java link options depends on OS
 case "$host" in
 	*-mingw32)
-		jvm_libs="-L\$(JVMDIR) -Wl,-rpath,\$(JVMDIR) -ljvm"
+		jvm_libs="-L\"\$(JRE_HOME)/bin/client\" -ljvm"
 		;;
 
 	*-apple-*)
@@ -724,6 +724,7 @@ if test "$app_cv_registry" == "yes"; then
 	AC_DEFINE(HAVE_WIN_REGISTRY)
 fi
 
+AC_SUBST()
 AC_SUBST(MAJOR_VERSION,"$(echo $VERSION | cut -d. -f1)")
 AC_SUBST(HOST_CC)
 AC_SUBST(EXEEXT)

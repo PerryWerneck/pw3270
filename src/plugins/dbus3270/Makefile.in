@@ -162,4 +162,4 @@ clean:
 	@rm -fr $(BINDIR)
 	@rm -fr .tmp
 	@rm -f dbus-glue.h
-	@find . -name "*~" -exec rm -f {} \;
+
