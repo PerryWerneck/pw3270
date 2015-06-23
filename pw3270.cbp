@@ -110,6 +110,11 @@
 			<Option target="Debug" />
 			<Option target="Release" />
 		</Unit>
+		<Unit filename="src/java/call.c">
+			<Option compilerVar="CC" />
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
 		<Unit filename="src/java/clipboard.cc">
 			<Option target="Debug" />
 			<Option target="Release" />

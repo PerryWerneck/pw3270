@@ -83,7 +83,7 @@ CXXFLAGS=@CFLAGS@ @CXXFLAGS@ @DLL_CFLAGS@ @JNI_CPPFLAGS@ -I../include
 # PW3270_LIBS		?= -L../../.bin/Debug@DLLDIR@ -l3270 -lpw3270
 PW3270_CFLAGS	?= -I../include
 
-PLUGIN_CFLAGS=@CXXFLAGS@ @DLL_CFLAGS@ @JNI_CPPFLAGS@ -DJNIDIR="\"$(jnidir)\"" \
+PLUGIN_CFLAGS=@CXXFLAGS@ -Wno-deprecated-declarations @DLL_CFLAGS@ @JNI_CPPFLAGS@ -DJNIDIR="\"$(jnidir)\"" \
 				-DJARDIR="\"$(jvmjardir)\"" @GTK_CFLAGS@ @GTKMAC_CFLAGS@ $(PW3270_CFLAGS)
 
 PLUGIN_LIBS=@GTK_LIBS@ @GTKMAC_LIBS@ @JVM_LIBS@
@@ -204,6 +204,7 @@ $(BINRLS)/plugins/j3270@DLLEXT@: \
 		$(CLASS_LIBS) \
 		$(PLUGIN_LIBS) \
 		-L../../.bin/Release@DLLDIR@ -l3270 -lpw3270 \
+		-L$(BINDBG)@DLLDIR@ -ljni3270
 
 #---[ Debug targets ]----------------------------------------------------------
 

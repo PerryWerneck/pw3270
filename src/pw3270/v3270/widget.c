@@ -665,7 +665,16 @@ static void update_toggle(H3270 *session, LIB3270_TOGGLE ix, unsigned char value
 	switch(ix)
 	{
 	case LIB3270_TOGGLE_CURSOR_POS:
+	case LIB3270_TOGGLE_MONOCASE:
+	case LIB3270_TOGGLE_LINE_WRAP:
 	case LIB3270_TOGGLE_CROSSHAIR:
+	case LIB3270_TOGGLE_BLANK_FILL:
+	case LIB3270_TOGGLE_MARGINED_PASTE:
+	case LIB3270_TOGGLE_SHOW_TIMING:
+	case LIB3270_TOGGLE_RECTANGLE_SELECT:
+	case LIB3270_TOGGLE_UNDERLINE:
+	case LIB3270_TOGGLE_VIEW_FIELD:
+	case LIB3270_TOGGLE_ALTSCREEN:
 		v3270_reload(GTK_WIDGET(session->user_data));
 		gtk_widget_queue_draw(GTK_WIDGET(session->user_data));
 		break;
@@ -689,6 +698,25 @@ static void update_toggle(H3270 *session, LIB3270_TOGGLE ix, unsigned char value
 			gtk_window_fullscreen(GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(session->user_data))));
 		else
 			gtk_window_unfullscreen(GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(session->user_data))));
+
+		break;
+
+	case LIB3270_TOGGLE_DS_TRACE:
+	case LIB3270_TOGGLE_SCREEN_TRACE:
+	case LIB3270_TOGGLE_EVENT_TRACE:
+	case LIB3270_TOGGLE_RECONNECT:
+	case LIB3270_TOGGLE_SMART_PASTE:
+	case LIB3270_TOGGLE_KEEP_SELECTED:
+	case LIB3270_TOGGLE_CONNECT_ON_STARTUP:
+	case LIB3270_TOGGLE_KP_ALTERNATIVE:
+	case LIB3270_TOGGLE_NETWORK_TRACE:
+	case LIB3270_TOGGLE_BEEP:
+	case LIB3270_TOGGLE_KEEP_ALIVE:
+		break;
+
+	case LIB3270_TOGGLE_COUNT:
+		break;
+
 	}
 #if GTK_CHECK_VERSION(2,26,0)
 	g_object_notify_by_pspec(G_OBJECT(session->user_data), v3270_properties[PROP_TOGGLE+ix]);
@@ -885,7 +913,7 @@ static int emit_print_signal(H3270 *session)
 
 static gboolean activity_tick(v3270 *widget)
 {
-	trace("idle=%d (%d) timeout=%d",time(0) - widget->activity.timestamp,((time(0) - widget->activity.timestamp)/60),widget->activity.disconnect);
+//	trace("idle=%d (%d) timeout=%d",(int) (time(0) - widget->activity.timestamp),(int) (((time(0) - widget->activity.timestamp)/60),widget->activity.disconnect));
 
 	if(widget->activity.disconnect && lib3270_is_connected(widget->host) && ((time(0) - widget->activity.timestamp)/60) >= widget->activity.disconnect)
 		lib3270_disconnect(widget->host);

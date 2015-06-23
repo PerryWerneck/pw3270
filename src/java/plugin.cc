@@ -342,6 +342,9 @@ extern "C" {
 	return 0;
  }
 
+extern "C"
+{
+
  void call_java_program(GtkAction *action, GtkWidget *widget, const gchar *filename)
  {
 
@@ -423,21 +426,26 @@ extern "C" {
 	g_free(myDir);
 	g_free(exports);
 
-#elif defined(DEBUG)
-
-	options[vm_args.nOptions++].optionString = g_strdup_printf("-Djava.library.path=%s:.bin/Debug:.bin/Debug/lib",JNIDIR);
-	options[vm_args.nOptions++].optionString = g_strdup_printf("-Djava.class.path=%s:%s:./src/java/.bin/java",JARDIR,dirname);
+	rc = JNI_CreateJavaVM(&jvm,(void **)&env,&vm_args);
 
 #else
 
+#if defined(DEBUG)
+	options[vm_args.nOptions++].optionString = g_strdup_printf("-Djava.library.path=%s:.bin/Debug:.bin/Debug/lib",JNIDIR);
+	options[vm_args.nOptions++].optionString = g_strdup_printf("-Djava.class.path=%s:%s:./src/java/.bin/java",JARDIR,dirname);
+#else
 	options[vm_args.nOptions++].optionString = g_strdup_printf("-Djava.library.path=%s",JNIDIR);
 	options[vm_args.nOptions++].optionString = g_strdup_printf("-Djava.class.path=%s:%s",JARDIR,dirname);
-
 #endif // JNIDIR
+
+	rc = JNI_CreateJavaVM(&jvm,(void **)&env,&vm_args);
+
+#endif // _WIn32
+
+	debug("JNI_CreateJavaVM exits with rc=%d",rc);
 
 	g_free(dirname);
 
-	rc = JNI_CreateJavaVM(&jvm,(void **)&env,&vm_args);
 
 	// Release options
 	for(int f=0;f<vm_args.nOptions;f++) {
@@ -536,9 +544,6 @@ extern "C" {
 
  }
 
-
-extern "C"
-{
  LIB3270_EXPORT void pw3270_action_java_activated(GtkAction *action, GtkWidget *widget)
  {
 	gchar *filename = (gchar *) g_object_get_data(G_OBJECT(action),"src");
