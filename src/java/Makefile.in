@@ -149,9 +149,9 @@ Release: \
 	$(BINDIR)/java/testprogram.class \
 	$(BINRLS)/plugins/j3270@DLLEXT@
 
-zip: jni3270.zip
+zip: jni3270-@host_cpu@.zip
 
-jni3270.zip: \
+jni3270-@host_cpu@.zip: \
 	$(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@ \
 	$(BINRLS)/plugins/j3270@DLLEXT@ \
 	$(BINRLS)/$(PACKAGE_NAME).jar \
