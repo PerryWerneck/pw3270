@@ -398,7 +398,7 @@
 		}
 #endif // HAVE_DBUS
 
-		remote(const char *session)
+		remote(const char *session) throw (std::exception)
 		{
 #if defined(WIN32)
 			static DWORD			  dwMode = PIPE_READMODE_MESSAGE;
@@ -499,27 +499,6 @@
 					Sleep(10);
 				}
 			}
-			/*
-			WIN32_FIND_DATA			  FindFileData;
-
-			timer = time(0)+20;
-			while(hPipe == INVALID_HANDLE_VALUE && time(0) < timer)
-			{
-				hPipe = FindFirstFile(buffer, &FindFileData);
-				Sleep(10);
-			}
-
-			if(hPipe != INVALID_HANDLE_VALUE)
-			{
-				CloseHandle(hPipe);
-				hPipe = CreateFile(buffer,GENERIC_WRITE|GENERIC_READ,0,NULL,OPEN_EXISTING,0,NULL);
-			}
-			else
-			{
-				throw exception(GetLastError(),"Timeout waiting for %s instance",PACKAGE_NAME);
-				return;
-			}
-			*/
 
 			if(hPipe == INVALID_HANDLE_VALUE)
 			{
@@ -1377,7 +1356,7 @@
 
  	};
 
-	session	* session::create_remote(const char *session)
+	session	* session::create_remote(const char *session) throw (std::exception)
 	{
 		return new remote(session);
 	}

@@ -89,6 +89,32 @@
 
 	};
 
+#if defined (HAVE_GNUC_VISIBILITY)
+	class __attribute__((visibility("default"))) module
+#elif defined(WIN32)
+	class __declspec (dllexport) module
+#else
+	class module
+#endif
+	{
+	private:
+#ifdef WIN32
+		HMODULE		  hModule;
+		int			  get_datadir(LPSTR datadir);
+#else
+		void		* hModule;
+
+#endif // WIN32
+
+	public:
+		module(const char *name, const char *version = NULL) throw (std::exception);
+		~module();
+
+		void * get_symbol(const char *name);
+
+	};
+
+
 
 #if defined (HAVE_GNUC_VISIBILITY)
 	class __attribute__((visibility("default"))) session
@@ -104,7 +130,7 @@
 
 		// Factory methods and settings
 		static session	* start(const char *name = 0);
-		static session	* create(const char *name = 0);
+		static session	* create(const char *name = 0) throw (std::exception);
 		static session	* get_default(void);
 		static void		  set_plugin(session * (*factory)(const char *name));
 
@@ -221,8 +247,8 @@
 
 		static session	* (*factory)(const char *name);
 
-		static session	* create_remote(const char *name);
-		static session	* create_local(void);
+		static session	* create_remote(const char *name) throw (std::exception);
+		static session	* create_local(void) throw (std::exception);
 
 #ifdef HAVE_ICONV
 		iconv_t			  conv2Local;

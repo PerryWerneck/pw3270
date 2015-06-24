@@ -76,6 +76,10 @@
 		<Unit filename="src/classlib/class.mak.in" />
 		<Unit filename="src/classlib/exception.cc" />
 		<Unit filename="src/classlib/local.cc" />
+		<Unit filename="src/classlib/module.cc">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
 		<Unit filename="src/classlib/remote.cc" />
 		<Unit filename="src/classlib/session.cc" />
 		<Unit filename="src/classlib/testprogram.cc" />

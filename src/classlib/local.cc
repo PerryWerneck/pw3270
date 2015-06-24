@@ -114,166 +114,11 @@
  namespace PW3270_NAMESPACE
  {
 
- 	class local : public session
+ 	class local : public session, private module
  	{
 	private:
 
-		H3270 			* hSession;
-
-	#ifdef WIN32
-
-		HMODULE			  hModule;
-
-		int get_datadir(LPSTR datadir)
-		{
-			HKEY 			hKey	= 0;
-			unsigned long	datalen = strlen(datadir);
-
-			*datadir = 0;
-
-			if(RegOpenKeyEx(HKEY_LOCAL_MACHINE,"Software\\pw3270",0,KEY_QUERY_VALUE,&hKey) == ERROR_SUCCESS)
-			{
-				unsigned long datatype;					// #defined in winnt.h (predefined types 0-11)
-				if(RegQueryValueExA(hKey,"datadir",NULL,&datatype,(LPBYTE) datadir,&datalen) != ERROR_SUCCESS)
-					*datadir = 0;
-				RegCloseKey(hKey);
-			}
-
-			return *datadir;
-		}
-	#else
-
-		void			* hModule;
-
-	#endif // WIN32
-
-		/**
-		 * Dynamically load lib3270
-		 *
-		 * @return 0 if the library was loaded, -1 on error.
-		 *
-		 */
-		int load3270(void)
-		{
-		#ifdef WIN32
-				static const char *dllname = "lib3270.dll." PACKAGE_VERSION;
-
-				HMODULE		kernel;
-				HANDLE		cookie		= NULL;
-				DWORD		rc;
-				HANDLE 		WINAPI (*AddDllDirectory)(PCWSTR NewDirectory);
-				BOOL 	 	WINAPI (*RemoveDllDirectory)(HANDLE Cookie);
-				UINT 		errorMode;
-				char		datadir[4096];
-				char		buffer[4096];
-
-				kernel 				= LoadLibrary("kernel32.dll");
-				AddDllDirectory		= (HANDLE WINAPI (*)(PCWSTR)) GetProcAddress(kernel,"AddDllDirectory");
-				RemoveDllDirectory	= (BOOL WINAPI (*)(HANDLE)) GetProcAddress(kernel,"RemoveDllDirectory");
-
-				// Notify user in case of error loading protocol DLL
-				// http://msdn.microsoft.com/en-us/library/windows/desktop/ms680621(v=vs.85).aspx
-				errorMode = SetErrorMode(1);
-
-				memset(datadir,' ',4095);
-				datadir[4095] = 0;
-
-				if(get_datadir(datadir))
-				{
-					trace("Datadir=[%s] AddDllDirectory=%p RemoveDllDirectory=%p\n",datadir,AddDllDirectory,RemoveDllDirectory);
-
-					if(AddDllDirectory)
-					{
-						wchar_t	*path = (wchar_t *) malloc(4096*sizeof(wchar_t));
-						mbstowcs(path, datadir, 4095);
-						cookie = AddDllDirectory(path);
-						free(path);
-					}
-
-		#ifdef DEBUG
-					snprintf(buffer,4096,"%s\\.bin\\Debug\\%s",datadir,dllname);
-		#else
-					snprintf(buffer,4096,"%s\\%s",datadir,dllname);
-		#endif // DEBUG
-
-					trace("Loading [%s] [%s]",buffer,datadir);
-					hModule = LoadLibrary(buffer);
-
-					trace("Module=%p rc=%d",hModule,(int) GetLastError());
-
-					if(hModule == NULL)
-					{
-						// Enable DLL error popup and try again with full path
-						SetErrorMode(0);
-						hModule = LoadLibraryEx(buffer,NULL,LOAD_LIBRARY_SEARCH_DEFAULT_DIRS|LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR);
-					}
-
-					rc = GetLastError();
-
-					trace("%s hModule=%p rc=%d",buffer,hModule,(int) rc);
-				}
-				else
-				{
-					hModule = LoadLibrary(dllname);
-					rc = GetLastError();
-				}
-
-				SetErrorMode(errorMode);
-
-				trace("%s hModule=%p rc=%d",dllname,hModule,(int) rc);
-
-				if(cookie && RemoveDllDirectory)
-					RemoveDllDirectory(cookie);
-
-				if(kernel)
-					FreeLibrary(kernel);
-
-				if(hModule)
-					return 0;
-
-				throw exception("Can't load %s",dllname);
-
-		#else
-				dlerror();
-
-				hModule = dlopen("lib3270.so." PACKAGE_VERSION, RTLD_NOW);
-				if(hModule)
-					return 0;
-
-				throw exception("Can't load lib3270: %s",dlerror());
-
-		#endif // WIN32
-
-			return -1;
-
-		}
-
-		void * get_symbol(const char *name)
-		{
-#ifdef WIN32
-			void *symbol = (void *) GetProcAddress(hModule,name);
-
-			if(symbol)
-				return symbol;
-
-			throw exception("Can't load symbol lib3270::%s",name);
-
-#else
-			void *symbol;
-
-			symbol = dlsym(hModule,name);
-
-			if(symbol)
-				return symbol;
-
-			throw exception("Can't load symbol lib3270::%s dlerror was \"%s\"",name,dlerror());
-
-#endif // WIN32
-
-			return NULL;
-
-		}
-
+		H3270 * hSession;
 
 		// Lib3270 entry points
 		const char * 	(*_get_version)(void);
@@ -313,7 +158,7 @@
 
 	public:
 
-		local()
+		local() throw(std::exception) : module("lib3270",PACKAGE_VERSION)
 		{
 			H3270 * (*lib3270_new)(const char *);
 			void	(*set_log_handler)(void (*loghandler)(H3270 *, const char *, int, const char *, va_list));
@@ -367,17 +212,11 @@
 
 			};
 
-
-			if(load3270())
-				return;
-
-			trace("hModule=%p",hModule);
-
 			for(unsigned int f = 0; f < (sizeof (call) / sizeof ((call)[0]));f++)
 			{
 				*call[f].entry = (void *) get_symbol(call[f].name);
 				if(!*call[f].entry)
-					return;
+					throw exception("Can't find symbol %s",call[f].name);
 			}
 
 			// Get Session handle, setup base callbacks
@@ -399,12 +238,6 @@
 					session_free(this->hSession);
 			}
 			catch(exception e) { }
-
-		#ifdef WIN32
-			FreeLibrary(hModule);
-		#else
-			dlclose(hModule);
-		#endif // WIN32
 
 		}
 
@@ -599,7 +432,7 @@
 
  	};
 
-	session	* session::create_local(void)
+	session	* session::create_local(void) throw (std::exception)
 	{
 		return new local();
 	}

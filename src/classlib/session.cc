@@ -96,7 +96,7 @@
 	}
 
 	// Factory methods and settings
-	session	* session::create(const char *name)
+	session	* session::create(const char *name) throw (std::exception)
 	{
 		if(factory)
 			return factory(name);

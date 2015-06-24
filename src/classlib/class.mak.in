@@ -27,7 +27,7 @@
 CLASS_CFLAGS=@CFLAGS@ @DLL_CFLAGS@ @DBUS_CFLAGS@
 CLASS_LIBS=@LIBICONV@ @DBUS_LIBS@
 
-CLASS_SRC=session.cc exception.cc local.cc remote.cc
+CLASS_SRC=session.cc exception.cc local.cc remote.cc module.cc
 
 CLASS_DEBUG_OBJECTS=$(foreach SRC, $(basename $(CLASS_SRC)), $(OBJDBG)/classlib/$(SRC)@OBJEXT@)
 CLASS_RELEASE_OBJECTS=$(foreach SRC, $(basename $(CLASS_SRC)), $(OBJRLS)/classlib/$(SRC)@OBJEXT@)
