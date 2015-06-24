@@ -143,13 +143,13 @@ namespace PW3270_NAMESPACE
 		}
 		else
 		{
-			hModule = LoadLibrary(dllname);
+			hModule = LoadLibrary(dllname.c_str());
 			rc = GetLastError();
 		}
 
 		SetErrorMode(errorMode);
 
-		trace("%s hModule=%p rc=%d",dllname,hModule,(int) rc);
+		trace("%s hModule=%p rc=%d",dllname.c_str(),hModule,(int) rc);
 
 		if(cookie && RemoveDllDirectory)
 			RemoveDllDirectory(cookie);
@@ -158,7 +158,7 @@ namespace PW3270_NAMESPACE
 			FreeLibrary(kernel);
 
 		if(!hModule)
-			throw exception("Can't load %s",dllname.c_str());
+			throw exception("Can't load %s: %s",dllname.c_str(),session::win32_strerror(rc));
 
 #else
 		dllname += ".so";

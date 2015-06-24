@@ -150,7 +150,7 @@
 		// charset
 #ifdef WIN32
 		void			  		  set_display_charset(const char *remote = 0, const char *local = "CP1252");
-		string					  win32_strerror(int e);
+		static string			  win32_strerror(int e);
 #else
 		void			  		  set_display_charset(const char *remote = 0, const char *local = "UTF-8");
 #endif // WIN32
