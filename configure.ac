@@ -148,7 +148,6 @@ case "$host" in
 		PLUGINS="hllapi"
 		APP_GUI_SRC="resources.rc"
 		DLLPREFIX=""
-		JNI_CPPFLAGS="-I\$(JDK_HOME)/include -I\$(JDK_HOME)/include/win32"
 		;;
 
 	*-apple-*)
@@ -173,7 +172,6 @@ case "$host" in
 		LDAPPFLAGS=""
 		DBGRPATH="-Wl,--rpath,.bin/Debug/lib"
 		DBGCMDPREFIX="LD_LIBRARY_PATH=\$(BINDIR)/Debug/lib"
-		JNI_CPPFLAGS="-I\$(JDK_HOME)/include -I\$(JDK_HOME)/include/linux"
 		DLLPREFIX="lib"
 
 esac
@@ -369,18 +367,6 @@ if test "$app_cv_java" = "yes" ; then
 
 fi
 
-if test "$app_cv_java" = "yes" ; then
-
-	EXTENSIONS="$EXTENSIONS java"
-	PLUGINS="$PLUGINS j3270"
-	AC_MSG_NOTICE([jdk is present and enabled.])
-
-else
-
-	AC_MSG_NOTICE([jdk is NOT present or disabled.])
-
-fi
-
 # Set JVM arch
 case $host_cpu in
 
@@ -403,14 +389,17 @@ if test "_$JVMDIR" = "_" ; then
 
 	case "$host" in
 		*-mingw32)
+			jniinc=$JDK_HOME/include/win32
 			JVMDIR="\$(JRE_HOME)/bin"
 			;;
 
 		*-apple-*)
+			jniinc=$JDK_HOME/include/apple
 			JVMDIR="\$(JRE_HOME)/lib/$jvm_arch/server"
 			;;
 
 		*)
+			jniinc=$JDK_HOME/include/linux
 			JVMDIR="\$(JRE_HOME)/lib/$jvm_arch/server"
 	esac
 
@@ -431,6 +420,25 @@ case "$host" in
 		jvm_libs="-L\$(JVMDIR) -Wl,-rpath,\$(JVMDIR) -ljvm"
 esac
 
+if test -d "$jniinc"; then
+	AC_MSG_NOTICE([Found $jniinc.])
+else
+	AC_MSG_NOTICE([Can't find $jniinc.])
+	app_cv_java="no"
+fi
+
+if test "$app_cv_java" = "yes" ; then
+
+	EXTENSIONS="$EXTENSIONS java"
+	PLUGINS="$PLUGINS j3270"
+	AC_MSG_NOTICE([jdk is present and enabled.])
+
+else
+
+	AC_MSG_NOTICE([jdk is NOT present or disabled.])
+
+fi
+
 
 AC_SUBST(JVM_LIBS,$jvm_libs)
 
@@ -444,7 +452,7 @@ AC_SUBST(javadocdir)
 AC_SUBST(JAR)
 AC_SUBST(JDK_HOME)
 AC_SUBST(JRE_HOME)
-AC_SUBST(JNI_CPPFLAGS)
+AC_SUBST(JNI_CPPFLAGS,"-I$JDK_HOME/include -I$jniinc")
 
 #--[ Headers ]------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -544,25 +552,31 @@ AC_SUBST(PHPCONFDIR)
 AC_PATH_TOOL([REXXC], [rexxc], [cp] )
 AC_PATH_TOOL([REXXCONFIG], [oorexx-config], [no])
 
-PKG_CHECK_MODULES( [REXX], [ooRexx], app_cv_rexx=yes, AC_MSG_NOTICE([No ooRexx on pkg-config.]) )
+AC_ARG_ENABLE([rexx],[AS_HELP_STRING([--disable-rexx], [Disable ooRexx integration])],[ app_cv_rexx="$enableval" ],[ app_cv_rexx="yes" ])
 
-if test "$app_cv_rexx" != "yes"; then
+if test "$app_cv_rexx" == "yes"; then
 
-	if test "$REXXCONFIG" != "no"; then
-		REXX_CFLAGS=`$REXXCONFIG --cflags`
-		REXX_LIBS=`$REXXCONFIG --libs`
-		REXX_HOME=`$REXXCONFIG --prefix`/share/ooRexx
-		AC_MSG_NOTICE([Got settings from oorexx-config.])
-		app_cv_rexx="yes"
+	PKG_CHECK_MODULES( [REXX], [ooRexx], app_cv_rexx=yes, AC_MSG_NOTICE([No ooRexx on pkg-config.]) )
+
+	if test "$app_cv_rexx" != "yes"; then
+
+		if test "$REXXCONFIG" != "no"; then
+			REXX_CFLAGS=`$REXXCONFIG --cflags`
+			REXX_LIBS=`$REXXCONFIG --libs`
+			REXX_HOME=`$REXXCONFIG --prefix`/share/ooRexx
+			AC_MSG_NOTICE([Got settings from oorexx-config.])
+		fi
+
+	else
+
+		REXX_HOME=`$PKG_CONFIG --variable=prefix ooRexx`/share/ooRexx
+
 	fi
-
-else
-
-	REXX_HOME=`$PKG_CONFIG --variable=prefix ooRexx`/share/ooRexx
 
 fi
 
 if test "$app_cv_rexx" == "yes"; then
+
 	AC_DEFINE(HAVE_REXX)
 	AC_DEFINE(HAVE_OOREXXAPI_H)
 
