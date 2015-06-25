@@ -132,11 +132,10 @@ case "$host" in
 		SOCKET_LIBS="-lws2_32"
 		CFLAGS="$CFLAGS -mms-bitfields"
 		localedir="locale"
-		DLL_FLAGS="-shared -Wl,--add-stdcall-alias,--enable-stdcall-fixup"
 		DLLPREFIX=""
 
 		# http://stackoverflow.com/questions/18138635/mingw-exe-requires-a-few-gcc-dlls-regardless-of-the-code
-		SYSDLL_FLAGS="-shared -static-libgcc -static-libstdc++ -Wl,--add-stdcall-alias,--enable-stdcall-fixup"
+		SYSDLL_FLAGS="-shared -static-libgcc -static-libstdc++ -Wl,--add-stdcall-alias,--enable-stdcall-fixup,--enable-auto-import"
 
 		LDSOFLAGS="-Wl,-soname,\`basename \$@\`"
 		LDAPPFLAGS="-mwindows"
@@ -409,7 +408,7 @@ fi
 # Java link options depends on OS
 case "$host" in
 	*-mingw32)
-		jvm_libs="-L\"\$(JRE_HOME)/bin/client\" -ljvm"
+		jvm_libs="-L\"\$(JDK_HOME)/lib\" -ljvm"
 		;;
 
 	*-apple-*)

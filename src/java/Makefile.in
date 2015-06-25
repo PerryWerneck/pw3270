@@ -204,7 +204,7 @@ $(BINRLS)/plugins/j3270@DLLEXT@: \
 		$(CLASS_LIBS) \
 		$(PLUGIN_LIBS) \
 		-L../../.bin/Release@DLLDIR@ -l3270 -lpw3270 \
-		-L$(BINDBG)@DLLDIR@ -ljni3270
+		-L$(BINRLS)@DLLDIR@ -ljni3270
 
 #---[ Debug targets ]----------------------------------------------------------
 
