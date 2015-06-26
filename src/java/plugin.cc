@@ -358,33 +358,52 @@ extern "C" {
 		{ "JDK_HOME", "jre\\bin\\client",	0 }
 	};
 
-	kernel 				= LoadLibrary("kernel32.dll");
-	AddDllDirectory		= (HANDLE WINAPI (*)(PCWSTR)) GetProcAddress(kernel,"AddDllDirectory");
-	RemoveDllDirectory	= (BOOL WINAPI (*)(HANDLE)) GetProcAddress(kernel,"RemoveDllDirectory");
+	kernel = LoadLibrary("kernel32.dll");
 
-	// Acrescenta mais caminhos para achar a dll
-	for(size_t f = 0; f < G_N_ELEMENTS(dlldir); f++) {
+	debug("---[ %s ]---------------------------------------------------",__FUNCTION__);
 
-		const char *env = getenv(dlldir[f].env);
-		if(env && AddDllDirectory) {
+	AddDllDirectory	= (HANDLE WINAPI (*)(PCWSTR)) GetProcAddress(kernel,"AddDllDirectory");
+	if(AddDllDirectory) {
 
-			gchar *p = g_build_filename(env,dlldir[f].path,NULL);
+		// Acrescenta mais caminhos para achar a dll
+		for(size_t f = 0; f < G_N_ELEMENTS(dlldir); f++) {
 
-			debug("Adicionando diretório \"%s\"",p);
+			const char *env = getenv(dlldir[f].env);
 
-			wchar_t	*path = (wchar_t *) malloc(4096*sizeof(wchar_t));
-			mbstowcs(path, p, 4095);
-			dlldir[f].cookie = AddDllDirectory(path);
-			free(path);
+			debug("%s=\"%s\"",dlldir[f].env,env);
 
-			g_free(p);
+			if(env) {
 
+				gchar *p = g_build_filename(env,dlldir[f].path,NULL);
+
+				debug("Adicionando diretório \"%s\"",p);
+
+				wchar_t	*path = (wchar_t *) malloc(4096*sizeof(wchar_t));
+				mbstowcs(path, p, 4095);
+				dlldir[f].cookie = AddDllDirectory(path);
+				free(path);
+
+				g_free(p);
+
+			}
 		}
+
 	}
+#ifdef DEBUG
+	else {
+		debug("Can't get %s: %s","AddDllDirectory",session::win32_strerror(GetLastError()).c_str())
+	}
+#endif // DEBUG
 
 	hModule = LoadLibrary("jvm.dll");
 
+	debug("hModule=%08lx",(long) hModule);
+
 	if(!hModule) {
+
+		DWORD err = GetLastError();
+
+		debug("%s",session::win32_strerror(err).c_str());
 
 		GtkWidget *dialog = gtk_message_dialog_new(	GTK_WINDOW(gtk_widget_get_toplevel(widget)),
 													GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -393,7 +412,7 @@ extern "C" {
 													"%s", _(  "Can't load java virtual machine" ) );
 
 		gtk_window_set_title(GTK_WINDOW(dialog),_( "JVM error" ));
-		gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),"%s", session::win32_strerror(GetLastError()).c_str());
+		gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),"%s", session::win32_strerror(err).c_str());
 
         gtk_dialog_run(GTK_DIALOG (dialog));
         gtk_widget_destroy(dialog);
@@ -401,17 +420,26 @@ extern "C" {
 	}
 
 	// Libera caminhos extras.
-	for(size_t f = 0; f < G_N_ELEMENTS(dlldir); f++) {
+	RemoveDllDirectory	= (BOOL WINAPI (*)(HANDLE)) GetProcAddress(kernel,"RemoveDllDirectory");
+	if(RemoveDllDirectory) {
 
-		if(dlldir[f].cookie && RemoveDllDirectory) {
+		for(size_t f = 0; f < G_N_ELEMENTS(dlldir); f++) {
 
-			RemoveDllDirectory(dlldir[f].cookie);
+			if(dlldir[f].cookie) {
 
+				RemoveDllDirectory(dlldir[f].cookie);
+
+			}
 		}
+
 	}
+#ifdef DEBUG
+	else {
+		debug("Can't get %s: %s","RemoveDllDirectory",session::win32_strerror(GetLastError()).c_str())
+	}
+#endif // DEBUG
 
 	FreeLibrary(kernel);
-
 
  }
 
@@ -473,6 +501,8 @@ extern "C"
 
 	load_jvm(widget,hJVM);
 
+	debug("hJVM=%p",hJVM);
+
 	if(!hJVM) {
 		v3270_set_script(widget,'J',FALSE);
 
@@ -488,6 +518,7 @@ extern "C"
 
 #endif // _WIN32
 
+	debug("%s",__FUNCTION__);
 
 	// Start JNI
 	JavaVMInitArgs	  vm_args;
@@ -515,6 +546,8 @@ extern "C"
 
 	gchar * dirname = g_path_get_dirname(filename);
 
+	debug("Dirname=%s",dirname);
+
 #if defined( WIN32 )
 
 	gchar	* exports = NULL;
@@ -523,7 +556,13 @@ extern "C"
 
 	if(GetModuleFileName(NULL,buffer,sizeof(buffer)) < sizeof(buffer)) {
 
-		gchar * myDir = g_path_get_dirname(buffer);
+		gchar * ptr = strrchr(buffer,G_DIR_SEPARATOR);
+		if(ptr) {
+			*ptr = 0;
+			myDir = g_strdup(buffer);
+		} else {
+			myDir = g_strdup(".");
+		}
 
 
 	} else {
@@ -531,6 +570,8 @@ extern "C"
 		myDir = g_strdup(".");
 
 	}
+
+	debug("myDir=%s",myDir);
 
 	exports = g_build_filename(myDir,"jvm-exports",NULL);
 	g_mkdir_with_parents(exports,0777);
@@ -550,7 +591,9 @@ extern "C"
 	if(!CreateJavaVM) {
 		rc = ENOENT;
 	} else {
+		debug("Calling %s","CreateJavaVM");
 		rc = CreateJavaVM(&jvm,(void **)&env,&vm_args);
+		debug("%s exits with rc=%d","CreateJavaVM",rc);
 	}
 
 #else
@@ -640,10 +683,13 @@ extern "C"
 
 				try {
 
+					debug("%s: Calling CallStaticVoidMethod()",__FUNCTION__);
 					env->CallStaticVoidMethod(cls, mid, args);
+					debug("%s: CallStaticVoidMethod() has returned",__FUNCTION__);
 
 				} catch(std::exception &e) {
 
+					debug("Java error: %s",e.what());
 					trace("%s",e.what());
 				}
 
@@ -654,6 +700,7 @@ extern "C"
 
 		g_free(classname);
 
+		exit(-1);
 
 		jvm->DestroyJavaVM();
 	}
