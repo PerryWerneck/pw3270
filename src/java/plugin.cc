@@ -27,6 +27,21 @@
  *
  */
 
+#if defined WIN32
+
+	// http://msdn.microsoft.com/en-us/library/windows/desktop/ms684179(v=vs.85).aspx
+	#ifndef LOAD_LIBRARY_SEARCH_DEFAULT_DIRS
+		#define LOAD_LIBRARY_SEARCH_DEFAULT_DIRS	0x00001000
+	#endif // LOAD_LIBRARY_SEARCH_DEFAULT_DIRS
+
+	#ifndef LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR
+		#define LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR 	0x00000100
+	#endif // LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR
+
+	#include <windows.h>
+
+#endif
+
  #include "private.h"
 
  #include <libintl.h>
@@ -322,6 +337,87 @@ extern "C" {
 
 }
 
+#ifdef _WIN32
+ /*
+  * Dynamically load jvm to avoid naming and path problems
+  *
+  */
+ static void load_jvm(GtkWidget *widget, HMODULE &hModule) {
+
+	// Dynamically load jvm library to avoid naming and path problems.
+	HMODULE		  kernel;
+	HANDLE 		  WINAPI (*AddDllDirectory)(PCWSTR NewDirectory);
+	BOOL 	 	  WINAPI (*RemoveDllDirectory)(HANDLE Cookie);
+
+	struct _dlldir {
+		const gchar	* env;
+		const gchar	* path;
+		HANDLE		  cookie;
+	} dlldir[] = {
+		{ "JRE_HOME", "bin\\client", 		0 },
+		{ "JDK_HOME", "jre\\bin\\client",	0 }
+	};
+
+	kernel 				= LoadLibrary("kernel32.dll");
+	AddDllDirectory		= (HANDLE WINAPI (*)(PCWSTR)) GetProcAddress(kernel,"AddDllDirectory");
+	RemoveDllDirectory	= (BOOL WINAPI (*)(HANDLE)) GetProcAddress(kernel,"RemoveDllDirectory");
+
+	// Acrescenta mais caminhos para achar a dll
+	for(size_t f = 0; f < G_N_ELEMENTS(dlldir); f++) {
+
+		const char *env = getenv(dlldir[f].env);
+		if(env && AddDllDirectory) {
+
+			gchar *p = g_build_filename(env,dlldir[f].path,NULL);
+
+			debug("Adicionando diretório \"%s\"",p);
+
+			wchar_t	*path = (wchar_t *) malloc(4096*sizeof(wchar_t));
+			mbstowcs(path, p, 4095);
+			dlldir[f].cookie = AddDllDirectory(path);
+			free(path);
+
+			g_free(p);
+
+		}
+	}
+
+	hModule = LoadLibrary("jvm.dll");
+
+	if(!hModule) {
+
+		GtkWidget *dialog = gtk_message_dialog_new(	GTK_WINDOW(gtk_widget_get_toplevel(widget)),
+													GTK_DIALOG_DESTROY_WITH_PARENT,
+													GTK_MESSAGE_ERROR,
+													GTK_BUTTONS_CANCEL,
+													"%s", _(  "Can't load java virtual machine" ) );
+
+		gtk_window_set_title(GTK_WINDOW(dialog),_( "JVM error" ));
+		gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),"%s", session::win32_strerror(GetLastError()).c_str());
+
+        gtk_dialog_run(GTK_DIALOG (dialog));
+        gtk_widget_destroy(dialog);
+
+	}
+
+	// Libera caminhos extras.
+	for(size_t f = 0; f < G_N_ELEMENTS(dlldir); f++) {
+
+		if(dlldir[f].cookie && RemoveDllDirectory) {
+
+			RemoveDllDirectory(dlldir[f].cookie);
+
+		}
+	}
+
+	FreeLibrary(kernel);
+
+
+ }
+
+
+#endif // _WIN32
+
 
  LIB3270_EXPORT int pw3270_plugin_start(GtkWidget *window)
  {
@@ -370,6 +466,28 @@ extern "C"
  	}
 
 	v3270_set_script(widget,'J',TRUE);
+
+#ifdef _WIN32
+
+	HMODULE hJVM = 0;
+
+	load_jvm(widget,hJVM);
+
+	if(!hJVM) {
+		v3270_set_script(widget,'J',FALSE);
+
+#if GTK_CHECK_VERSION(2,32,0)
+		g_mutex_unlock(&mutex);
+#else
+		g_static_mutex_unlock(&mutex);
+#endif // GTK_CHECK_VERSION
+
+		return;
+
+	}
+
+#endif // _WIN32
+
 
 	// Start JNI
 	JavaVMInitArgs	  vm_args;
@@ -426,7 +544,14 @@ extern "C"
 	g_free(myDir);
 	g_free(exports);
 
-	rc = JNI_CreateJavaVM(&jvm,(void **)&env,&vm_args);
+	// Windows, first find the method, then call it.
+	jint JNICALL (*CreateJavaVM)(JavaVM **, void **, void *) = (jint JNICALL (*)(JavaVM **, void **, void *)) GetProcAddress(hJVM,"JNI_CreateJavaVM");
+
+	if(!CreateJavaVM) {
+		rc = ENOENT;
+	} else {
+		rc = CreateJavaVM(&jvm,(void **)&env,&vm_args);
+	}
 
 #else
 
@@ -438,6 +563,7 @@ extern "C"
 	options[vm_args.nOptions++].optionString = g_strdup_printf("-Djava.class.path=%s:%s",JARDIR,dirname);
 #endif // JNIDIR
 
+	// Linux, just create JVM
 	rc = JNI_CreateJavaVM(&jvm,(void **)&env,&vm_args);
 
 #endif // _WIn32
@@ -531,6 +657,11 @@ extern "C"
 
 		jvm->DestroyJavaVM();
 	}
+
+#ifdef _WIN32
+	if(hJVM)
+		FreeLibrary(hJVM);
+#endif // _WIN32
 
 	// And release
 	v3270_set_script(widget,'J',FALSE);

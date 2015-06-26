@@ -408,7 +408,8 @@ fi
 # Java link options depends on OS
 case "$host" in
 	*-mingw32)
-		jvm_libs="-L\"\$(JDK_HOME)/lib\" -ljvm"
+#		jvm_libs="-L\"\$(JDK_HOME)/lib\" -ljvm"
+		jvm_libs="-L\"\$(JRE_HOME)/bin/client\" -ljvm"
 		;;
 
 	*-apple-*)

@@ -41,6 +41,7 @@
 		<Unit filename="../../configure.ac" />
 		<Unit filename="../classlib/exception.cc" />
 		<Unit filename="../classlib/local.cc" />
+		<Unit filename="../classlib/module.cc" />
 		<Unit filename="../classlib/remote.cc" />
 		<Unit filename="../classlib/session.cc" />
 		<Unit filename="../classlib/testprogram.cc" />
