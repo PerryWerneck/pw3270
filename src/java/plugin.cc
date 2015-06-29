@@ -44,6 +44,7 @@
 
  #include "private.h"
 
+ #include <malloc.h>
  #include <libintl.h>
  #include <glib/gi18n.h>
  #include <gtk/gtk.h>
@@ -56,6 +57,7 @@
  #include <lib3270/trace.h>
  #include <lib3270/charset.h>
  #include <pw3270/class.h>
+ #include <pw3270/trace.h>
 
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
@@ -323,15 +325,46 @@
 
 extern "C" {
 
-	static session * factory(const char *name)
-	{
+	static session * factory(const char *name) {
 		debug("---> %s",__FUNCTION__);
 		return new plugin(lib3270_get_default_session_handle());
 	}
 
-	static jint JNICALL jni_vfprintf(FILE *fp, const char *format, va_list args)
-	{
-		lib3270_write_va_log(lib3270_get_default_session_handle(),"java",format,args);
+	static void trace_cleanup(GtkWidget *widget, GtkWidget **window) {
+		*window = NULL;
+	}
+
+	static jint JNICALL jni_vfprintf(FILE *fp, const char *fmt, va_list args) {
+
+		char 				* msg	= NULL;
+		static GtkWidget	* trace = NULL;
+
+		if(vasprintf(&msg,fmt,args) < 1) {
+			lib3270_write_log(lib3270_get_default_session_handle(),"java","vasprintf() error on \"%s\"",fmt);
+			return 0;
+		}
+
+		fprintf(fp,"%s",msg);
+		lib3270_write_log(lib3270_get_default_session_handle(),"java","%s",msg);
+
+		if(!trace) {
+			// Cria janela de trace.
+			trace = pw3270_trace_new();
+			g_signal_connect(G_OBJECT(trace), "destroy",G_CALLBACK(trace_cleanup), &trace);
+
+			pw3270_trace_set_destroy_on_close(trace,TRUE);
+
+			// gtk_window_set_transient_for(GTK_WINDOW(trace),GTK_WINDOW(gtk_widget_get_toplevel(widget)));
+			gtk_window_set_destroy_with_parent(GTK_WINDOW(trace),TRUE);
+
+			gtk_window_set_default_size(GTK_WINDOW(trace),590,430);
+			gtk_widget_show_all(trace);
+
+			pw3270_trace_printf(trace,"%s",msg);
+
+			free(msg);
+		}
+
 		return 0;
 	}
 
@@ -655,7 +688,7 @@ extern "C"
 														GTK_BUTTONS_CANCEL,
 														_(  "Can't find class %s" ), classname );
 
-			gtk_window_set_title(GTK_WINDOW(dialog), _( "Java script failure" ));
+			gtk_window_set_title(GTK_WINDOW(dialog), _( "Java error" ));
 			if(gtk_dialog_run(GTK_DIALOG (dialog)) == GTK_RESPONSE_CANCEL)
 				gtk_main_quit();
 			gtk_widget_destroy(dialog);
@@ -672,7 +705,8 @@ extern "C"
 															GTK_BUTTONS_OK_CANCEL,
 															_(  "Can't find class \"%s\"" ), classname );
 
-				gtk_window_set_title(GTK_WINDOW(dialog), _( "Java script failure" ));
+				gtk_window_set_title(GTK_WINDOW(dialog), _( "Java error" ));
+
 				if(gtk_dialog_run(GTK_DIALOG (dialog)) == GTK_RESPONSE_CANCEL)
 					gtk_main_quit();
 				gtk_widget_destroy(dialog);
@@ -687,6 +721,40 @@ extern "C"
 					env->CallStaticVoidMethod(cls, mid, args);
 					debug("%s: CallStaticVoidMethod() has returned",__FUNCTION__);
 
+					jthrowable exc = env->ExceptionOccurred();
+					env->ExceptionClear();
+
+					if (exc) {
+						jclass throwable_class = env->FindClass("java/lang/Throwable");
+
+						jmethodID jni_getMessage = env->GetMethodID(throwable_class,"getMessage","()Ljava/lang/String;");
+						jstring j_msg = (jstring) env->CallObjectMethod(exc,jni_getMessage);
+
+						GtkWidget *dialog = gtk_message_dialog_new(	GTK_WINDOW(gtk_widget_get_toplevel(widget)),
+																	GTK_DIALOG_DESTROY_WITH_PARENT,
+																	GTK_MESSAGE_ERROR,
+																	GTK_BUTTONS_OK_CANCEL,
+																	_(  "Java application \"%s\" has failed." ), classname );
+
+						gtk_window_set_title(GTK_WINDOW(dialog), _( "Java failure" ));
+
+						if(!env->IsSameObject(j_msg,NULL)) {
+
+							const char	* msg = env->GetStringUTFChars(j_msg, 0);
+
+							debug("jni_getMessage = %s",msg);
+							gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),"%s",msg);
+
+							env->ReleaseStringUTFChars( j_msg, msg);
+						}
+
+						if(gtk_dialog_run(GTK_DIALOG (dialog)) == GTK_RESPONSE_CANCEL)
+							gtk_main_quit();
+						gtk_widget_destroy(dialog);
+
+
+					}
+
 				} catch(std::exception &e) {
 
 					debug("Java error: %s",e.what());
@@ -699,8 +767,6 @@ extern "C"
 		}
 
 		g_free(classname);
-
-		exit(-1);
 
 		jvm->DestroyJavaVM();
 	}
