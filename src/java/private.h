@@ -43,7 +43,8 @@
 
 	extern "C" {
 
-		LIB3270_EXPORT void set_java_session_factory(PW3270_NAMESPACE::session * (*factory)(const char *name));
+		LIB3270_EXPORT void		  set_java_session_factory(PW3270_NAMESPACE::session * (*factory)(const char *name));
+		extern session			* factory(const char *name);
 
 	}
 

@@ -61,6 +61,7 @@
 		<Unit filename="main.cc" />
 		<Unit filename="plugin.cc" />
 		<Unit filename="private.h" />
+		<Unit filename="startstop.cc" />
 		<Unit filename="terminal.java" />
 		<Unit filename="testprogram.java" />
 		<Extensions>
