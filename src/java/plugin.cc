@@ -70,6 +70,8 @@
 
 /*--[ Plugin session object ]--------------------------------------------------------------------------------*/
 
+ using namespace std;
+
  class plugin : public PW3270_NAMESPACE::session
  {
  private:
@@ -325,7 +327,7 @@
 
 extern "C" {
 
-	session * factory(const char *name) {
+	PW3270_NAMESPACE::session * factory(const char *name) {
 		debug("---> %s",__FUNCTION__);
 		return new plugin(lib3270_get_default_session_handle());
 	}

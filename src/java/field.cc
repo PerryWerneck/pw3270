@@ -32,13 +32,15 @@
 
 /*---[ Implement ]----------------------------------------------------------------------------------*/
 
+using namespace PW3270_NAMESPACE;
+
 JNIEXPORT jint JNICALL Java_pw3270_terminal_get_1field_1start (JNIEnv *env, jobject obj, jint baddr) {
 
 	jint rc = -1;
 
 	try {
 
-		rc = getHandle(env,obj)->get_field_start((int) baddr);
+		rc = java::getHandle(env,obj)->get_field_start((int) baddr);
 
 
 	} catch(std::exception &e) {
@@ -57,7 +59,7 @@ JNIEXPORT jint JNICALL Java_pw3270_terminal_get_1field_1len (JNIEnv *env, jobjec
 
 	try {
 
-		rc = getHandle(env,obj)->get_field_len((int) baddr);
+		rc = java::getHandle(env,obj)->get_field_len((int) baddr);
 
 
 	} catch(std::exception &e) {
@@ -76,7 +78,7 @@ JNIEXPORT jint JNICALL Java_pw3270_terminal_get_1next_1unprotected(JNIEnv *env, 
 
 	try {
 
-		rc = getHandle(env,obj)->get_next_unprotected((int) baddr);
+		rc = java::getHandle(env,obj)->get_next_unprotected((int) baddr);
 
 
 	} catch(std::exception &e) {

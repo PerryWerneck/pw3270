@@ -48,11 +48,6 @@
 
  #include "private.h"
 
- #include <malloc.h>
- #include <libintl.h>
- #include <glib/gi18n.h>
- #include <gtk/gtk.h>
-
  #include <pw3270.h>
  #include <pw3270/plugin.h>
  #include <pw3270/v3270.h>
@@ -68,20 +63,14 @@
 #if GTK_CHECK_VERSION(2,32,0)
  static GMutex            mutex;
 
- #define trylock() 	g_mutex_trylock(&mutex)
- #define lock() 	g_mutex_lock(&mutex)
- #define unlock() 	g_mutex_unlock(&mutex)
-
 #else
  static GStaticMutex	  mutex = G_STATIC_MUTEX_INIT;
-
- #define trylock()	g_static_mutex_trylock(&mutex)
- #define lock()		g_static_mutex_lock(&mutex)
- #define unlock()	g_static_mutex_unlock(&mutex)
 
 #endif // GTK_CHECK_VERSION
 
 /*---[ Implement ]----------------------------------------------------------------------------------*/
+
+using namespace PW3270_NAMESPACE::java;
 
 extern "C" {
 
@@ -123,117 +112,7 @@ extern "C" {
 		return 0;
 	}
 
-}
-
-#ifdef _WIN32
- /*
-  * Dynamically load jvm to avoid naming and path problems
-  *
-  */
- static void load_jvm(GtkWidget *widget, HMODULE &hModule) {
-
-	// Dynamically load jvm library to avoid naming and path problems.
-	HMODULE		  kernel;
-	HANDLE 		  WINAPI (*AddDllDirectory)(PCWSTR NewDirectory);
-	BOOL 	 	  WINAPI (*RemoveDllDirectory)(HANDLE Cookie);
-
-	struct _dlldir {
-		const gchar	* env;
-		const gchar	* path;
-		HANDLE		  cookie;
-	} dlldir[] = {
-		{ "JRE_HOME", "bin\\client", 		0 },
-		{ "JDK_HOME", "jre\\bin\\client",	0 }
-	};
-
-	kernel = LoadLibrary("kernel32.dll");
-
-	debug("---[ %s ]---------------------------------------------------",__FUNCTION__);
-
-	AddDllDirectory	= (HANDLE WINAPI (*)(PCWSTR)) GetProcAddress(kernel,"AddDllDirectory");
-	if(AddDllDirectory) {
-
-		// Acrescenta mais caminhos para achar a dll
-		for(size_t f = 0; f < G_N_ELEMENTS(dlldir); f++) {
-
-			const char *env = getenv(dlldir[f].env);
-
-			debug("%s=\"%s\"",dlldir[f].env,env);
-
-			if(env) {
-
-				gchar *p = g_build_filename(env,dlldir[f].path,NULL);
-
-				debug("Adicionando diretório \"%s\"",p);
-
-				wchar_t	*path = (wchar_t *) malloc(4096*sizeof(wchar_t));
-				mbstowcs(path, p, 4095);
-				dlldir[f].cookie = AddDllDirectory(path);
-				free(path);
-
-				g_free(p);
-
-			}
-		}
-
-	}
-#ifdef DEBUG
-	else {
-		debug("Can't get %s: %s","AddDllDirectory",session::win32_strerror(GetLastError()).c_str())
-	}
-#endif // DEBUG
-
-	hModule = LoadLibrary("jvm.dll");
-
-	debug("hModule=%08lx",(long) hModule);
-
-	if(!hModule) {
-
-		DWORD err = GetLastError();
-
-		debug("%s",session::win32_strerror(err).c_str());
-
-		GtkWidget *dialog = gtk_message_dialog_new(	GTK_WINDOW(gtk_widget_get_toplevel(widget)),
-													GTK_DIALOG_DESTROY_WITH_PARENT,
-													GTK_MESSAGE_ERROR,
-													GTK_BUTTONS_CANCEL,
-													"%s", _(  "Can't load java virtual machine" ) );
-
-		gtk_window_set_title(GTK_WINDOW(dialog),_( "JVM error" ));
-		gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),"%s", session::win32_strerror(err).c_str());
-
-        gtk_dialog_run(GTK_DIALOG (dialog));
-        gtk_widget_destroy(dialog);
-
-	}
-
-	// Libera caminhos extras.
-	RemoveDllDirectory	= (BOOL WINAPI (*)(HANDLE)) GetProcAddress(kernel,"RemoveDllDirectory");
-	if(RemoveDllDirectory) {
-
-		for(size_t f = 0; f < G_N_ELEMENTS(dlldir); f++) {
-
-			if(dlldir[f].cookie) {
-
-				RemoveDllDirectory(dlldir[f].cookie);
-
-			}
-		}
-
-	}
-#ifdef DEBUG
-	else {
-		debug("Can't get %s: %s","RemoveDllDirectory",session::win32_strerror(GetLastError()).c_str())
-	}
-#endif // DEBUG
-
-	FreeLibrary(kernel);
-
  }
-
-
-#endif // _WIN32
-
 
  LIB3270_EXPORT int pw3270_plugin_start(GtkWidget *window)
  {
@@ -247,292 +126,23 @@ extern "C" {
 
  LIB3270_EXPORT int pw3270_plugin_stop(GtkWidget *window)
  {
+ 	lock();
+
+ 	if(jvm) {
+		jvm->DestroyJavaVM();
+		jvm = NULL;
+ 	}
+
+ 	unlock();
+
 #if GTK_CHECK_VERSION(2,32,0)
 	g_mutex_clear(&mutex);
 #endif // GTK_CHECK_VERSION
     trace("JAVA: %s",__FUNCTION__);
+
+
+
 	return 0;
- }
-
-extern "C"
-{
-
- void call_java_program(GtkAction *action, GtkWidget *widget, const gchar *filename)
- {
-
-	if(!trylock()) {
-
-		GtkWidget *dialog = gtk_message_dialog_new(	GTK_WINDOW(gtk_widget_get_toplevel(widget)),
-													GTK_DIALOG_DESTROY_WITH_PARENT,
-													GTK_MESSAGE_ERROR,
-													GTK_BUTTONS_CANCEL,
-													_(  "Can't start %s program" ), "java" );
-
-		gtk_window_set_title(GTK_WINDOW(dialog),_( "JVM busy" ));
-		gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),_( "%s interpreter is busy" ), "java");
-
-        gtk_dialog_run(GTK_DIALOG (dialog));
-        gtk_widget_destroy(dialog);
-
-		return;
- 	}
-
-	v3270_set_script(widget,'J',TRUE);
-
-#ifdef _WIN32
-
-	HMODULE hJVM = 0;
-
-	load_jvm(widget,hJVM);
-
-	debug("hJVM=%p",hJVM);
-
-	if(!hJVM) {
-		v3270_set_script(widget,'J',FALSE);
-
-#if GTK_CHECK_VERSION(2,32,0)
-		g_mutex_unlock(&mutex);
-#else
-		g_static_mutex_unlock(&mutex);
-#endif // GTK_CHECK_VERSION
-
-		return;
-
-	}
-
-#endif // _WIN32
-
-	debug("%s",__FUNCTION__);
-
-	// Start JNI
-	JavaVMInitArgs	  vm_args;
-	JavaVMOption	  options[5];
-
-	JavaVM			* jvm		= NULL;
-	JNIEnv			* env		= NULL;
-	jint			  rc		= 0;
-
-	memset(&vm_args,0,sizeof(vm_args));
-	memset(options,0,sizeof(options));
-
-	vm_args.version				= JNI_VERSION_1_4;
-	vm_args.nOptions			= 0;
-	vm_args.options 			= options;
-	vm_args.ignoreUnrecognized	= JNI_FALSE;
-
-	options[vm_args.nOptions].optionString = g_strdup("vfprintf");
-	options[vm_args.nOptions].extraInfo = (void *) jni_vfprintf;
-	vm_args.nOptions++;
-
-//#ifdef DEBUG
-//	options[vm_args.nOptions++].optionString = g_strdup("-verbose");
-//#endif
-
-	gchar * dirname = g_path_get_dirname(filename);
-
-	debug("Dirname=%s",dirname);
-
-#if defined( WIN32 )
-
-	gchar	* exports = NULL;
-	char	  buffer[1024];
-	gchar 	* myDir;
-
-	if(GetModuleFileName(NULL,buffer,sizeof(buffer)) < sizeof(buffer)) {
-
-		gchar * ptr = strrchr(buffer,G_DIR_SEPARATOR);
-		if(ptr) {
-			*ptr = 0;
-			myDir = g_strdup(buffer);
-		} else {
-			myDir = g_strdup(".");
-		}
-
-
-	} else {
-
-		myDir = g_strdup(".");
-
-	}
-
-	debug("myDir=%s",myDir);
-
-	exports = g_build_filename(myDir,"jvm-exports",NULL);
-	g_mkdir_with_parents(exports,0777);
-
-	lib3270_trace_event(v3270_get_session(widget),"java.class.path=%s;%s",dirname,exports);
-	lib3270_trace_event(v3270_get_session(widget),"java.library.path=%s",myDir);
-
-	options[vm_args.nOptions++].optionString = g_strdup_printf("-Djava.library.path=%s",myDir);
-	options[vm_args.nOptions++].optionString = g_strdup_printf("-Djava.class.path=%s;%s",dirname,exports);
-
-	g_free(myDir);
-	g_free(exports);
-
-	// Windows, first find the method, then call it.
-	jint JNICALL (*CreateJavaVM)(JavaVM **, void **, void *) = (jint JNICALL (*)(JavaVM **, void **, void *)) GetProcAddress(hJVM,"JNI_CreateJavaVM");
-
-	if(!CreateJavaVM) {
-		rc = ENOENT;
-	} else {
-		debug("Calling %s","CreateJavaVM");
-		rc = CreateJavaVM(&jvm,(void **)&env,&vm_args);
-		debug("%s exits with rc=%d","CreateJavaVM",rc);
-	}
-
-#else
-
-#if defined(DEBUG)
-	options[vm_args.nOptions++].optionString = g_strdup_printf("-Djava.library.path=%s:.bin/Debug:.bin/Debug/lib",JNIDIR);
-	options[vm_args.nOptions++].optionString = g_strdup_printf("-Djava.class.path=%s:%s:./src/java/.bin/java",JARDIR,dirname);
-#else
-	options[vm_args.nOptions++].optionString = g_strdup_printf("-Djava.library.path=%s",JNIDIR);
-	options[vm_args.nOptions++].optionString = g_strdup_printf("-Djava.class.path=%s:%s",JARDIR,dirname);
-#endif // JNIDIR
-
-	// Linux, just create JVM
-	rc = JNI_CreateJavaVM(&jvm,(void **)&env,&vm_args);
-
-#endif // _WIn32
-
-	debug("JNI_CreateJavaVM exits with rc=%d",rc);
-
-	g_free(dirname);
-
-
-	// Release options
-	for(int f=0;f<vm_args.nOptions;f++) {
-		trace("Releasing option %d: %s",f,options[f].optionString);
-		g_free(options[f].optionString);
-	}
-
-	if(rc < 0) {
-
-		GtkWidget *dialog = gtk_message_dialog_new(	GTK_WINDOW(gtk_widget_get_toplevel(widget)),
-													GTK_DIALOG_DESTROY_WITH_PARENT,
-													GTK_MESSAGE_ERROR,
-													GTK_BUTTONS_CANCEL,
-													"%s", _(  "Can't create java VM" ));
-
-		gtk_window_set_title(GTK_WINDOW(dialog), _( "Script startup failure" ));
-		gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),_( "The error code was %d" ), (int) rc);
-
-		gtk_dialog_run(GTK_DIALOG (dialog));
-		gtk_widget_destroy(dialog);
-
-	} else {
-
-		gchar * classname = g_path_get_basename(filename);
-
-		gchar * ptr = strchr(classname,'.');
-		if(ptr) {
-			*ptr = 0;
-		}
-
-		jclass cls = env->FindClass(classname);
-
-		if(cls == 0) {
-
-			GtkWidget *dialog = gtk_message_dialog_new(	GTK_WINDOW(gtk_widget_get_toplevel(widget)),
-														GTK_DIALOG_DESTROY_WITH_PARENT,
-														GTK_MESSAGE_ERROR,
-														GTK_BUTTONS_CANCEL,
-														_(  "Can't find class %s" ), classname );
-
-			gtk_window_set_title(GTK_WINDOW(dialog), _( "Java error" ));
-			if(gtk_dialog_run(GTK_DIALOG (dialog)) == GTK_RESPONSE_CANCEL)
-				gtk_main_quit();
-			gtk_widget_destroy(dialog);
-
-		} else {
-
-			jmethodID mid = env->GetStaticMethodID(cls, "main", "([Ljava/lang/String;)V");
-
-			if(mid == 0) {
-
-				GtkWidget *dialog = gtk_message_dialog_new(	GTK_WINDOW(gtk_widget_get_toplevel(widget)),
-															GTK_DIALOG_DESTROY_WITH_PARENT,
-															GTK_MESSAGE_ERROR,
-															GTK_BUTTONS_OK_CANCEL,
-															_(  "Can't find class \"%s\"" ), classname );
-
-				gtk_window_set_title(GTK_WINDOW(dialog), _( "Java error" ));
-
-				if(gtk_dialog_run(GTK_DIALOG (dialog)) == GTK_RESPONSE_CANCEL)
-					gtk_main_quit();
-				gtk_widget_destroy(dialog);
-
-			} else {
-
-				jobjectArray args = env->NewObjectArray(0, env->FindClass("java/lang/String"), env->NewStringUTF(""));
-
-				try {
-
-					debug("%s: Calling CallStaticVoidMethod()",__FUNCTION__);
-					env->CallStaticVoidMethod(cls, mid, args);
-					debug("%s: CallStaticVoidMethod() has returned",__FUNCTION__);
-
-					jthrowable exc = env->ExceptionOccurred();
-					env->ExceptionClear();
-
-					if (exc) {
-						jclass throwable_class = env->FindClass("java/lang/Throwable");
-
-						jmethodID jni_getMessage = env->GetMethodID(throwable_class,"getMessage","()Ljava/lang/String;");
-						jstring j_msg = (jstring) env->CallObjectMethod(exc,jni_getMessage);
-
-						GtkWidget *dialog = gtk_message_dialog_new(	GTK_WINDOW(gtk_widget_get_toplevel(widget)),
-																	GTK_DIALOG_DESTROY_WITH_PARENT,
-																	GTK_MESSAGE_ERROR,
-																	GTK_BUTTONS_OK_CANCEL,
-																	_(  "Java application \"%s\" has failed." ), classname );
-
-						gtk_window_set_title(GTK_WINDOW(dialog), _( "Java failure" ));
-
-						if(!env->IsSameObject(j_msg,NULL)) {
-
-							const char	* msg = env->GetStringUTFChars(j_msg, 0);
-
-							debug("jni_getMessage = %s",msg);
-							gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),"%s",msg);
-
-							env->ReleaseStringUTFChars( j_msg, msg);
-						}
-
-						if(gtk_dialog_run(GTK_DIALOG (dialog)) == GTK_RESPONSE_CANCEL)
-							gtk_main_quit();
-						gtk_widget_destroy(dialog);
-
-
-					}
-
-				} catch(std::exception &e) {
-
-					debug("Java error: %s",e.what());
-					trace("%s",e.what());
-				}
-
-
-			}
-
-		}
-
-		g_free(classname);
-
-		rc = jvm->DestroyJavaVM();
-		debug("DestroyJavaVM=%d",(int) rc);
-	}
-
-#ifdef _WIN32
-	if(hJVM)
-		FreeLibrary(hJVM);
-#endif // _WIN32
-
-	// And release
-	v3270_set_script(widget,'J',FALSE);
-
-	unlock();
-
  }
 
  LIB3270_EXPORT void pw3270_action_java_activated(GtkAction *action, GtkWidget *widget)
@@ -544,7 +154,7 @@ extern "C"
 	if(filename)
 	{
 		// Has filename, call it directly
-		call_java_program(action,widget,filename);
+		call(widget,filename);
 	}
 	else
 	{
@@ -574,7 +184,7 @@ extern "C"
 
 		if(filename)
 		{
-			call_java_program(action,widget,filename);
+			call(widget,filename);
 			g_free(filename);
 		}
 
@@ -583,5 +193,35 @@ extern "C"
 
  }
 
-}
+ namespace PW3270_NAMESPACE {
+
+	JavaVM	* java::jvm	= NULL;
+	JNIEnv	* java::env	= NULL;
+
+	void java::lock() {
+#if GTK_CHECK_VERSION(2,32,0)
+		g_mutex_lock(&mutex);
+#else
+		g_static_mutex_lock(&mutex);
+#endif // GTK_CHECK_VERSION
+	}
+
+	void java::unlock() {
+#if GTK_CHECK_VERSION(2,32,0)
+		g_mutex_unlock(&mutex);
+#else
+		g_static_mutex_unlock(&mutex);
+#endif // GTK_CHECK_VERSION
+	}
+
+	bool java::trylock() {
+#if GTK_CHECK_VERSION(2,32,0)
+		return g_mutex_trylock(&mutex);
+#else
+		return g_static_mutex_trylock(&mutex);
+#endif // GTK_CHECK_VERSION
+	}
+
+ }
+
 

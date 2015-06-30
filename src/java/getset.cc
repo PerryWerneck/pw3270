@@ -32,6 +32,8 @@
 
 /*---[ Implement ]----------------------------------------------------------------------------------*/
 
+using namespace std;
+using namespace PW3270_NAMESPACE;
 
 JNIEXPORT jstring JNICALL Java_pw3270_terminal_get_1string(JNIEnv *env, jobject obj, jint baddr, jint len) {
 
@@ -39,7 +41,7 @@ JNIEXPORT jstring JNICALL Java_pw3270_terminal_get_1string(JNIEnv *env, jobject 
 
 	try {
 
-		str = getHandle(env,obj)->get_string((int) baddr, (int) len);
+		str = java::getHandle(env,obj)->get_string((int) baddr, (int) len);
 
 
 	} catch(std::exception &e) {
@@ -58,7 +60,7 @@ JNIEXPORT jstring JNICALL Java_pw3270_terminal_get_1string_1at(JNIEnv *env, jobj
 
 	try {
 
-		str = getHandle(env,obj)->get_string_at((int) row, (int) col, (int) sz);
+		str = java::getHandle(env,obj)->get_string_at((int) row, (int) col, (int) sz);
 
 
 	} catch(std::exception &e) {
@@ -78,7 +80,7 @@ JNIEXPORT jint JNICALL Java_pw3270_terminal_set_1string_1at(JNIEnv *env, jobject
 
 	try {
 
-		rc = getHandle(env,obj)->set_string_at((int) row, (int) col, str);
+		rc = java::getHandle(env,obj)->set_string_at((int) row, (int) col, str);
 
 	} catch(std::exception &e) {
 
@@ -101,7 +103,7 @@ JNIEXPORT jint JNICALL Java_pw3270_terminal_cmp_1string_1at(JNIEnv *env, jobject
 
 	try {
 
-		rc = getHandle(env,obj)->cmp_string_at((int) row, (int) col, str);
+		rc = java::getHandle(env,obj)->cmp_string_at((int) row, (int) col, str);
 
 	} catch(std::exception &e) {
 
@@ -123,7 +125,7 @@ JNIEXPORT jint JNICALL Java_pw3270_terminal_input_1string(JNIEnv *env, jobject o
 
 	try {
 
-		rc = getHandle(env,obj)->input_string(str);
+		rc = java::getHandle(env,obj)->input_string(str);
 
 	} catch(std::exception &e) {
 
@@ -144,7 +146,7 @@ JNIEXPORT jboolean JNICALL Java_pw3270_terminal_is_1connected(JNIEnv *env, jobje
 
 	try {
 
-		rc = getHandle(env,obj)->is_connected();
+		rc = java::getHandle(env,obj)->is_connected();
 
 	} catch(std::exception &e) {
 
@@ -164,7 +166,7 @@ JNIEXPORT jboolean JNICALL Java_pw3270_terminal_is_1ready(JNIEnv *env, jobject o
 
 	try {
 
-		rc = getHandle(env,obj)->is_ready();
+		rc = java::getHandle(env,obj)->is_ready();
 
 	} catch(std::exception &e) {
 

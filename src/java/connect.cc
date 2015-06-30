@@ -32,6 +32,8 @@
 
 /*---[ Implement ]----------------------------------------------------------------------------------*/
 
+using namespace PW3270_NAMESPACE;
+
 JNIEXPORT jint JNICALL Java_pw3270_terminal_connect(JNIEnv *env, jobject obj, jstring j_host, jint seconds) {
 
 	const char	* host = env->GetStringUTFChars(j_host, 0);
@@ -39,7 +41,7 @@ JNIEXPORT jint JNICALL Java_pw3270_terminal_connect(JNIEnv *env, jobject obj, js
 
 	try {
 
-		rc = getHandle(env,obj)->connect(host,(time_t) seconds);
+		rc = java::getHandle(env,obj)->connect(host,(time_t) seconds);
 
 	} catch(std::exception &e) {
 
@@ -58,7 +60,7 @@ JNIEXPORT jint JNICALL Java_pw3270_terminal_disconnect(JNIEnv *env, jobject obj)
 
 	try {
 
-		return (jint) getHandle(env,obj)->disconnect();
+		return (jint) java::getHandle(env,obj)->disconnect();
 
 	} catch(std::exception &e) {
 

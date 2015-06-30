@@ -32,6 +32,9 @@
 
 /*---[ Implement ]----------------------------------------------------------------------------------*/
 
+using namespace std;
+using namespace PW3270_NAMESPACE::java;
+
 JNIEXPORT jint JNICALL Java_pw3270_terminal_set_1copy(JNIEnv *env, jobject obj, jstring j_str) {
 
 	const char	* str = env->GetStringUTFChars(j_str, 0);

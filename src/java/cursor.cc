@@ -32,13 +32,15 @@
 
 /*---[ Implement ]----------------------------------------------------------------------------------*/
 
+using namespace PW3270_NAMESPACE;
+
 JNIEXPORT jint JNICALL Java_pw3270_terminal_set_1cursor_1position(JNIEnv *env, jobject obj, jint row, jint col) {
 
 	jint rc	= -1;
 
 	try {
 
-		rc = getHandle(env,obj)->set_cursor_position((int) row, (int) col);
+		rc = java::getHandle(env,obj)->set_cursor_position((int) row, (int) col);
 
 	} catch(std::exception &e) {
 
@@ -57,7 +59,7 @@ JNIEXPORT jint JNICALL Java_pw3270_terminal_set_1cursor_1addr(JNIEnv *env, jobje
 
 	try {
 
-		rc = getHandle(env,obj)->set_cursor_addr((int) addr);
+		rc = java::getHandle(env,obj)->set_cursor_addr((int) addr);
 
 	} catch(std::exception &e) {
 
@@ -77,7 +79,7 @@ JNIEXPORT jint JNICALL Java_pw3270_terminal_get_1cursor_1addr(JNIEnv *env, jobje
 
 	try {
 
-		rc = getHandle(env,obj)->get_cursor_addr();
+		rc = java::getHandle(env,obj)->get_cursor_addr();
 
 	} catch(std::exception &e) {
 

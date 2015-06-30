@@ -37,14 +37,47 @@
 	#include <jni.h>
 	#include <pw3270/class.h>
 
-	using namespace PW3270_NAMESPACE;
+	#include <malloc.h>
+	#include <libintl.h>
 
-	PW3270_NAMESPACE::session * getHandle(JNIEnv *env, jobject obj);
+#ifdef PW3270_PLUGIN
+	#include <glib/gi18n.h>
+	#include <gtk/gtk.h>
+#endif // PW3270_PLUGIN
+
+	namespace PW3270_NAMESPACE {
+
+		namespace java {
+
+			extern JavaVM	* jvm;
+			extern JNIEnv	* env;
+
+			void set_factory(PW3270_NAMESPACE::session * (*factory)(const char *name));
+
+			PW3270_NAMESPACE::session * getHandle(JNIEnv *env, jobject obj);
+			jfieldID getHandleField(JNIEnv *env, jobject obj);
+
+			void lock();
+			void unlock();
+			bool trylock();
+
+#ifdef PW3270_PLUGIN
+			void call(GtkWidget *widget, const char *filename);
+			void failed(GtkWidget *widget, const char *msg, const char *format, ...);
+#endif // PW3270_PLUGIN
+
+
+
+
+		}
+
+
+	}
 
 	extern "C" {
 
-		LIB3270_EXPORT void		  set_java_session_factory(PW3270_NAMESPACE::session * (*factory)(const char *name));
-		extern session			* factory(const char *name);
+		LIB3270_EXPORT void					  set_java_session_factory(PW3270_NAMESPACE::session * (*factory)(const char *name));
+		extern PW3270_NAMESPACE::session	* factory(const char *name);
 
 	}
 

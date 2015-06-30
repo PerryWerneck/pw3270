@@ -32,13 +32,15 @@
 
 /*---[ Implement ]----------------------------------------------------------------------------------*/
 
+using namespace PW3270_NAMESPACE;
+
 JNIEXPORT jint JNICALL Java_pw3270_terminal_quit(JNIEnv *env, jobject obj) {
 
 	jint rc	= -1;
 
 	try {
 
-		rc = getHandle(env,obj)->quit();
+		rc = java::getHandle(env,obj)->quit();
 
 	} catch(std::exception &e) {
 
@@ -57,7 +59,7 @@ JNIEXPORT jint JNICALL Java_pw3270_terminal_erase_1eof(JNIEnv *env, jobject obj)
 
 	try {
 
-		rc = getHandle(env,obj)->erase_eof();
+		rc = java::getHandle(env,obj)->erase_eof();
 
 	} catch(std::exception &e) {
 
@@ -76,7 +78,7 @@ JNIEXPORT jint JNICALL Java_pw3270_terminal_print(JNIEnv *env, jobject obj) {
 
 	try {
 
-		rc = getHandle(env,obj)->print();
+		rc = java::getHandle(env,obj)->print();
 
 	} catch(std::exception &e) {
 
