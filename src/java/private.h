@@ -62,6 +62,7 @@
 			bool trylock();
 
 #ifdef PW3270_PLUGIN
+			bool load_jvm(GtkWidget *widget);
 			void call(GtkWidget *widget, const char *filename);
 			void failed(GtkWidget *widget, const char *msg, const char *format, ...);
 #endif // PW3270_PLUGIN

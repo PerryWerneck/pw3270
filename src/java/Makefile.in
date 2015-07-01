@@ -26,7 +26,7 @@
 
 PACKAGE_NAME=@PACKAGE_NAME@
 SOURCES=main.cc info.cc connect.cc getset.cc cursor.cc keyboard.cc actions.cc field.cc dialog.cc clipboard.cc
-PLUGIN_SRC=plugin.cc startstop.cc
+PLUGIN_SRC=plugin.cc startstop.cc call.cc
 
 #---[ Paths ]------------------------------------------------------------------
 

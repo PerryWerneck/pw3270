@@ -120,7 +120,9 @@ extern "C" {
 #if GTK_CHECK_VERSION(2,32,0)
 	g_mutex_init(&mutex);
 #endif // GTK_CHECK_VERSION
-	set_java_session_factory(factory);
+
+	set_factory(factory);
+
 	return 0;
  }
 
@@ -221,6 +223,84 @@ extern "C" {
 		return g_static_mutex_trylock(&mutex);
 #endif // GTK_CHECK_VERSION
 	}
+
+	void java::failed(GtkWidget *widget, const char *msg, const char *format, ...) {
+
+		GtkWidget *dialog = gtk_message_dialog_new(	GTK_WINDOW(gtk_widget_get_toplevel(widget)),
+													GTK_DIALOG_DESTROY_WITH_PARENT,
+													GTK_MESSAGE_ERROR,
+													GTK_BUTTONS_OK_CANCEL,
+													"%s", msg );
+
+		gtk_window_set_title(GTK_WINDOW(dialog), _( "Java error" ));
+
+		if(gtk_dialog_run(GTK_DIALOG (dialog)) == GTK_RESPONSE_CANCEL)
+			gtk_main_quit();
+		gtk_widget_destroy(dialog);
+
+	}
+
+
+#ifdef WIN32
+
+	bool java::load_jvm(GtkWidget *widget) {
+
+		#error Implementar
+
+	}
+
+
+
+#else
+
+	bool java::load_jvm(GtkWidget *widget) {
+
+		if(jvm != NULL) {
+			return true;
+		}
+
+		// Start JNI
+		JavaVMInitArgs	  vm_args;
+		JavaVMOption	  options[5];
+		jint			  rc		= 0;
+
+
+		memset(&vm_args,0,sizeof(vm_args));
+		memset(options,0,sizeof(options));
+
+		vm_args.version				= JNI_VERSION_1_4;
+		vm_args.nOptions			= 0;
+		vm_args.options 			= options;
+		vm_args.ignoreUnrecognized	= JNI_FALSE;
+
+		options[vm_args.nOptions].optionString = g_strdup("vfprintf");
+		options[vm_args.nOptions].extraInfo = (void *) jni_vfprintf;
+		vm_args.nOptions++;
+
+#if defined(DEBUG)
+
+//		options[vm_args.nOptions++].optionString = g_strdup("-verbose");
+		options[vm_args.nOptions++].optionString = g_strdup_printf("-Djava.library.path=%s:.bin/Debug:.bin/Debug/lib",JNIDIR);
+
+#else
+
+		options[vm_args.nOptions++].optionString = g_strdup_printf("-Djava.library.path=%s",JNIDIR);
+
+#endif // JNIDIR
+
+		// Linux, just create JVM
+		rc = JNI_CreateJavaVM(&jvm,(void **)&env,&vm_args);
+
+		if(rc) {
+			jvm = NULL;
+			failed(widget, _( "Can't create java virtual machine" ), _( "The return code was %d" ), (int) rc);
+		}
+
+		return jvm != NULL;
+	}
+
+
+#endif // WIN32
 
  }
 
