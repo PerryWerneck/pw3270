@@ -152,7 +152,11 @@
 		int				(*_set_host_charset)(H3270 *hSession, const char *name);
 		const char * 	(*_get_host_charset)(H3270 *hSession);
 		int 			(*_print)(H3270 *hSession);
+		int				(*_erase)(H3270 *hSession);
 		int				(*_erase_eof)(H3270 *hSession);
+		int				(*_erase_eol)(H3270 *hSession);
+		int				(*_erase_input)(H3270 *hSession);
+
 		const char * 	(*_ebc2asc)(H3270 *hSession, unsigned char *buffer, int sz);
 		const char * 	(*_asc2ebc)(H3270 *hSession, unsigned char *buffer, int sz);
 
@@ -205,7 +209,12 @@
 				{ (void **) & _get_display_charset,		"lib3270_get_display_charset"		},
 				{ (void **) & _set_host_charset,		"lib3270_set_host_charset"			},
 				{ (void **) & _get_host_charset,		"lib3270_get_host_charset"			},
+
+				{ (void **) & _erase,					"lib3270_erase"						},
 				{ (void **) & _erase_eof,				"lib3270_eraseeof"					},
+				{ (void **) & _erase_eol,				"lib3270_eraseeol"					},
+				{ (void **) & _erase_input,				"lib3270_eraseinput"				},
+
 				{ (void **) & _print,					"lib3270_print"						},
 				{ (void **) & _ebc2asc,					"lib3270_ebc2asc"					},
 				{ (void **) & _asc2ebc,					"lib3270_asc2ebc"					},
@@ -409,9 +418,24 @@
 			return string(_get_host_charset(hSession));
 		}
 
+		int	erase(void)
+		{
+			return _erase(hSession);
+		}
+
 		int	erase_eof(void)
 		{
 			return _erase_eof(hSession);
+		}
+
+		int	erase_eol(void)
+		{
+			return _erase_eol(hSession);
+		}
+
+		int	erase_input(void)
+		{
+			return _erase_input(hSession);
 		}
 
 		int	print(void)

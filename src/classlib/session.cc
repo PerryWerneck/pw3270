@@ -528,6 +528,29 @@
 	}
 #endif // WIN32
 
+	int session::erase(int mode) {
+
+		switch(mode) {
+		case 0:
+			erase();
+			break;
+
+		case 1:
+			erase_eof();
+			break;
+
+		case 2:
+			erase_eol();
+			break;
+
+		case 3:
+			erase_input();
+			break;
+
+		}
+	}
+
+
  }
 
 

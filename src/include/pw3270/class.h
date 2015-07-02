@@ -206,7 +206,14 @@
 
 		// Actions
 		virtual int				  quit(void)										= 0;
+
+		int						  erase(int mode);
+
+		virtual int				  erase(void)										= 0;
 		virtual int				  erase_eof(void)									= 0;
+		virtual int				  erase_eol(void)									= 0;
+		virtual int				  erase_input(void)									= 0;
+
 		virtual int				  print(void)										= 0;
 
 		// Field management
