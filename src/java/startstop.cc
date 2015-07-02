@@ -104,18 +104,19 @@ extern "C" {
 
 	LIB3270_EXPORT void pw3270_action_java_activated(GtkAction *action, GtkWidget *widget) {
 
-		gchar *filename = (gchar *) g_object_get_data(G_OBJECT(action),"src");
+		gchar *classname = (gchar *) g_object_get_data(G_OBJECT(action),"src");
 
-		lib3270_trace_event(v3270_get_session(widget),"Action %s activated on widget %p",gtk_action_get_name(action),widget);
+		lib3270_trace_event(v3270_get_session(widget),"Action %s activated on widget %p\n",gtk_action_get_name(action),widget);
 
-		if(filename)
+		if(classname)
 		{
 			// Has filename, call it directly
-			call(widget,filename);
+			call(widget,classname);
 		}
 		else
 		{
-			// No filename, ask user
+/*
+			// No classname, ask user
 			static const struct _list
 			{
 				const gchar *name;
@@ -144,7 +145,7 @@ extern "C" {
 				call(widget,filename);
 				g_free(filename);
 			}
-
+*/
 		}
 
 	}
@@ -165,6 +166,17 @@ extern "C" {
 													"%s", msg );
 
 		gtk_window_set_title(GTK_WINDOW(dialog), _( "Java error" ));
+
+		if(format) {
+
+			va_list arg_ptr;
+			va_start(arg_ptr, format);
+			gchar *msg = g_strdup_vprintf(format,arg_ptr);
+			va_end(arg_ptr);
+			gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),"%s",msg);
+			g_free(msg);
+
+		}
 
 		if(gtk_dialog_run(GTK_DIALOG (dialog)) == GTK_RESPONSE_CANCEL)
 			gtk_main_quit();
@@ -212,11 +224,13 @@ extern "C" {
 #if defined(DEBUG)
 
 //		options[vm_args.nOptions++].optionString = g_strdup("-verbose");
-		options[vm_args.nOptions++].optionString = g_strdup_printf("-Djava.library.path=%s:.bin/Debug:.bin/Debug/lib",JNIDIR);
+		options[vm_args.nOptions++].optionString = g_strdup_printf("-Djava.library.path=.bin/Debug:.bin/Debug/lib:%s",JNIDIR);
+		options[vm_args.nOptions++].optionString = g_strdup_printf("-Djava.class.path=./src/java:.bin/java:%s",JARDIR);
 
 #else
 
 		options[vm_args.nOptions++].optionString = g_strdup_printf("-Djava.library.path=%s",JNIDIR);
+		options[vm_args.nOptions++].optionString = g_strdup_printf("-Djava.class.path=%s",JARDIR);
 
 #endif // JNIDIR
 

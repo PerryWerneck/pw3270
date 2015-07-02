@@ -34,8 +34,10 @@
 		<menu name='FileMenu' label='_File' />
 		<menu name='EditMenu' label='_Edit' />
 		<menu name='View' label='_View' />
-		<menu name='ScriptsMenu' label='Scripts' visible='yes' >
-			<menuitem action='java' label='External Java Application'/>
+		<menu name='Java' label='Java' visible='yes' >
+			<menuitem name='java_except' action='java' label='Exception test' src='except'/>
+			<menuitem name='java_output' action='java' label='Output test' src='out'/>
+			<menuitem name='java_popup' action='java' label='Popup test' src='popup'/>
 		</menu>
 	</menubar>
 </ui>
