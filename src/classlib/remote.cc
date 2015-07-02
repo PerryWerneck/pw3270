@@ -56,7 +56,10 @@
 	#define HLLAPI_PACKET_GET_CURSOR	"getCursorAddress"
 	#define HLLAPI_PACKET_ENTER			"enter"
 	#define HLLAPI_PACKET_QUIT			"quit"
+	#define HLLAPI_PACKET_ERASE			"erase"
 	#define HLLAPI_PACKET_ERASE_EOF		"eraseEOF"
+	#define HLLAPI_PACKET_ERASE_EOL		"eraseEOL"
+	#define HLLAPI_PACKET_ERASE_INPUT	"eraseInput"
 	#define HLLAPI_PACKET_PRINT			"print"
 	#define HLLAPI_PACKET_ASC2EBC		"asc2ebc"
 	#define HLLAPI_PACKET_EBC2ASC		"ebc2asc"
@@ -1338,9 +1341,24 @@
 
 #endif // HAVE_DBUS
 
+		int	erase(void)
+		{
+			return query_intval(HLLAPI_PACKET_ERASE);
+		}
+
 		int	erase_eof(void)
 		{
 			return query_intval(HLLAPI_PACKET_ERASE_EOF);
+		}
+
+		int	erase_eol(void)
+		{
+			return query_intval(HLLAPI_PACKET_ERASE_EOL);
+		}
+
+		int	erase_input(void)
+		{
+			return query_intval(HLLAPI_PACKET_ERASE_INPUT);
 		}
 
 		int	print(void)

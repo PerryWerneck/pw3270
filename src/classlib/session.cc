@@ -532,22 +532,20 @@
 
 		switch(mode) {
 		case 0:
-			erase();
-			break;
+			return erase();
 
 		case 1:
-			erase_eof();
-			break;
+			return erase_eof();
 
 		case 2:
-			erase_eol();
-			break;
+			return erase_eol();
 
 		case 3:
-			erase_input();
-			break;
+			return erase_input();
 
 		}
+
+		return -1;
 	}
 
 

@@ -236,8 +236,20 @@
 		send_result(source,lib3270_print(lib3270_get_default_session_handle()));
 		break;
 
+	case HLLAPI_PACKET_ERASE:
+		send_result(source,lib3270_erase(lib3270_get_default_session_handle()));
+		break;
+
 	case HLLAPI_PACKET_ERASE_EOF:
 		send_result(source,lib3270_eraseeof(lib3270_get_default_session_handle()));
+		break;
+
+	case HLLAPI_PACKET_ERASE_EOL:
+		send_result(source,lib3270_eraseeol(lib3270_get_default_session_handle()));
+		break;
+
+	case HLLAPI_PACKET_ERASE_INPUT:
+		send_result(source,lib3270_eraseinput(lib3270_get_default_session_handle()));
 		break;
 
 	case HLLAPI_PACKET_PFKEY:

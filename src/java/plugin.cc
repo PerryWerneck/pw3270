@@ -202,8 +202,20 @@
 		return lib3270_pakey(hSession,key);
 	}
 
+	int erase(void) {
+		return lib3270_erase(hSession);
+	}
+
 	int erase_eof(void) {
 		return lib3270_eraseeof(hSession);
+	}
+
+	int erase_eol(void) {
+		return lib3270_eraseeol(hSession);
+	}
+
+	int erase_input(void) {
+		return lib3270_eraseinput(hSession);
 	}
 
 	int print(void) {

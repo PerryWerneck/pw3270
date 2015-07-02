@@ -116,7 +116,11 @@
 	int				  pfkey(int key);
 	int				  pakey(int key);
 
+	int				  erase(void);
 	int				  erase_eof(void);
+	int				  erase_eol(void);
+	int				  erase_input(void);
+
 	int				  print(void);
 
 	int               get_field_start(int baddr = -1);
@@ -765,9 +769,24 @@ string plugin::get_display_charset(void)
 	return string(lib3270_get_display_charset(hSession));
 }
 
+int	plugin::erase(void)
+{
+	return lib3270_erase(hSession);
+}
+
 int	plugin::erase_eof(void)
 {
 	return lib3270_eraseeof(hSession);
+}
+
+int	plugin::erase_eol(void)
+{
+	return lib3270_eraseeol(hSession);
+}
+
+int	plugin::erase_input(void)
+{
+	return lib3270_eraseinput(hSession);
 }
 
 int	plugin::print(void)
