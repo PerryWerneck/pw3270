@@ -131,16 +131,22 @@
 
 		string query_string(void *query, size_t szQuery, size_t len)
 		{
-			struct hllapi_packet_text			* response;
-			DWORD								  cbSize	= sizeof(struct hllapi_packet_text)+len;
-			string								  s;
-			char 								  buffer[cbSize+2];
+			struct hllapi_packet_text	* response;
+			DWORD 						  sz		= sizeof(struct hllapi_packet_text)+len;
+			DWORD						  cbSize	= (DWORD) sz;
+			string						  s;
+			char						  buffer[sz+2];
+
+			memset(buffer,0,sz+2);
 
 			response = (struct hllapi_packet_text *) buffer;
 
-			if(TransactNamedPipe(hPipe,(LPVOID) query, szQuery, response, cbSize, &cbSize,NULL))
+			if(TransactNamedPipe(hPipe,(LPVOID) query, szQuery, response, sz, &cbSize,NULL))
 			{
-				buffer[cbSize] = 0;
+				buffer[min(cbSize,sz)] = 0;
+
+				trace("TransactNamedPipe call %d returns \"%s\"",(int) *( (unsigned char *) query), response->text);
+
 				if(!response->packet_id)
 					s.assign(response->text);
 			}
