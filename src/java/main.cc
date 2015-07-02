@@ -34,11 +34,6 @@
 
 namespace PW3270_NAMESPACE {
 
-	void java::set_factory(PW3270_NAMESPACE::session * (*factory)(const char *name)) {
-		trace("%s(%p)",__FUNCTION__,factory);
-		session::set_plugin(factory);
-	}
-
 	jfieldID java::getHandleField(JNIEnv *env, jobject obj) {
 		jclass c = env->GetObjectClass(obj);
 		// J is the type signature for long:

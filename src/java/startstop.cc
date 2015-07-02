@@ -58,16 +58,6 @@
  #include <pw3270/class.h>
  #include <pw3270/trace.h>
 
-/*--[ Globals ]--------------------------------------------------------------------------------------*/
-
-#if GTK_CHECK_VERSION(2,32,0)
- static GMutex            mutex;
-
-#else
- static GStaticMutex	  mutex = G_STATIC_MUTEX_INIT;
-
-#endif // GTK_CHECK_VERSION
-
 /*---[ Implement ]----------------------------------------------------------------------------------*/
 
 using namespace PW3270_NAMESPACE::java;
@@ -112,117 +102,59 @@ extern "C" {
 		return 0;
 	}
 
- }
+	LIB3270_EXPORT void pw3270_action_java_activated(GtkAction *action, GtkWidget *widget) {
 
- LIB3270_EXPORT int pw3270_plugin_start(GtkWidget *window)
- {
-	trace("JAVA: %s",__FUNCTION__);
-#if GTK_CHECK_VERSION(2,32,0)
-	g_mutex_init(&mutex);
-#endif // GTK_CHECK_VERSION
+		gchar *filename = (gchar *) g_object_get_data(G_OBJECT(action),"src");
 
-	set_factory(factory);
-
-	return 0;
- }
-
- LIB3270_EXPORT int pw3270_plugin_stop(GtkWidget *window)
- {
- 	lock();
-
- 	if(jvm) {
-		jvm->DestroyJavaVM();
-		jvm = NULL;
- 	}
-
- 	unlock();
-
-#if GTK_CHECK_VERSION(2,32,0)
-	g_mutex_clear(&mutex);
-#endif // GTK_CHECK_VERSION
-    trace("JAVA: %s",__FUNCTION__);
-
-
-
-	return 0;
- }
-
- LIB3270_EXPORT void pw3270_action_java_activated(GtkAction *action, GtkWidget *widget)
- {
-	gchar *filename = (gchar *) g_object_get_data(G_OBJECT(action),"src");
-
-	lib3270_trace_event(v3270_get_session(widget),"Action %s activated on widget %p",gtk_action_get_name(action),widget);
-
-	if(filename)
-	{
-		// Has filename, call it directly
-		call(widget,filename);
-	}
-	else
-	{
-		// No filename, ask user
-		static const struct _list
-		{
-			const gchar *name;
-			const gchar *pattern;
-		} list[] =
-		{
-			{ N_( "Java class file" ),	"*.class" }
-		};
-
-		GtkFileFilter * filter[G_N_ELEMENTS(list)+1];
-		unsigned int f;
-
-		memset(filter,0,sizeof(filter));
-
-		for(f=0;f<G_N_ELEMENTS(list);f++)
-		{
-			filter[f] = gtk_file_filter_new();
-			gtk_file_filter_set_name(filter[f],gettext(list[f].name));
-			gtk_file_filter_add_pattern(filter[f],list[f].pattern);
-		}
-
-		filename = pw3270_get_filename(widget,"java","script",filter,_( "Select script to run" ));
+		lib3270_trace_event(v3270_get_session(widget),"Action %s activated on widget %p",gtk_action_get_name(action),widget);
 
 		if(filename)
 		{
+			// Has filename, call it directly
 			call(widget,filename);
-			g_free(filename);
+		}
+		else
+		{
+			// No filename, ask user
+			static const struct _list
+			{
+				const gchar *name;
+				const gchar *pattern;
+			} list[] =
+			{
+				{ N_( "Java class file" ),	"*.class" }
+			};
+
+			GtkFileFilter * filter[G_N_ELEMENTS(list)+1];
+			unsigned int f;
+
+			memset(filter,0,sizeof(filter));
+
+			for(f=0;f<G_N_ELEMENTS(list);f++)
+			{
+				filter[f] = gtk_file_filter_new();
+				gtk_file_filter_set_name(filter[f],gettext(list[f].name));
+				gtk_file_filter_add_pattern(filter[f],list[f].pattern);
+			}
+
+			filename = pw3270_get_filename(widget,"java","script",filter,_( "Select script to run" ));
+
+			if(filename)
+			{
+				call(widget,filename);
+				g_free(filename);
+			}
+
 		}
 
-
 	}
-
  }
+
 
  namespace PW3270_NAMESPACE {
 
 	JavaVM	* java::jvm	= NULL;
 	JNIEnv	* java::env	= NULL;
-
-	void java::lock() {
-#if GTK_CHECK_VERSION(2,32,0)
-		g_mutex_lock(&mutex);
-#else
-		g_static_mutex_lock(&mutex);
-#endif // GTK_CHECK_VERSION
-	}
-
-	void java::unlock() {
-#if GTK_CHECK_VERSION(2,32,0)
-		g_mutex_unlock(&mutex);
-#else
-		g_static_mutex_unlock(&mutex);
-#endif // GTK_CHECK_VERSION
-	}
-
-	bool java::trylock() {
-#if GTK_CHECK_VERSION(2,32,0)
-		return g_mutex_trylock(&mutex);
-#else
-		return g_static_mutex_trylock(&mutex);
-#endif // GTK_CHECK_VERSION
-	}
 
 	void java::failed(GtkWidget *widget, const char *msg, const char *format, ...) {
 

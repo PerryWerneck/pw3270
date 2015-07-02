@@ -52,8 +52,6 @@
 			extern JavaVM	* jvm;
 			extern JNIEnv	* env;
 
-			void set_factory(PW3270_NAMESPACE::session * (*factory)(const char *name));
-
 			PW3270_NAMESPACE::session * getHandle(JNIEnv *env, jobject obj);
 			jfieldID getHandleField(JNIEnv *env, jobject obj);
 
@@ -75,12 +73,6 @@
 
 	}
 
-	extern "C" {
-
-		LIB3270_EXPORT void					  set_java_session_factory(PW3270_NAMESPACE::session * (*factory)(const char *name));
-		extern PW3270_NAMESPACE::session	* factory(const char *name);
-
-	}
 
 
 

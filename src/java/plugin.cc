@@ -325,12 +325,76 @@
 
 /*---[ Implement ]----------------------------------------------------------------------------------*/
 
+namespace PW3270_NAMESPACE {
+
+	void java::lock() {
+#if GTK_CHECK_VERSION(2,32,0)
+		g_mutex_lock(&mutex);
+#else
+		g_static_mutex_lock(&mutex);
+#endif // GTK_CHECK_VERSION
+	}
+
+	void java::unlock() {
+#if GTK_CHECK_VERSION(2,32,0)
+		g_mutex_unlock(&mutex);
+#else
+		g_static_mutex_unlock(&mutex);
+#endif // GTK_CHECK_VERSION
+	}
+
+	bool java::trylock() {
+#if GTK_CHECK_VERSION(2,32,0)
+		return g_mutex_trylock(&mutex);
+#else
+		return g_static_mutex_trylock(&mutex);
+#endif // GTK_CHECK_VERSION
+	}
+
+}
+
+using namespace PW3270_NAMESPACE;
+
 extern "C" {
 
-	PW3270_NAMESPACE::session * factory(const char *name) {
+	static PW3270_NAMESPACE::session * factory(const char *name) {
 		debug("---> %s",__FUNCTION__);
 		return new plugin(lib3270_get_default_session_handle());
 	}
+
+	LIB3270_EXPORT int pw3270_plugin_start(GtkWidget *window) {
+
+		trace("JAVA: %s",__FUNCTION__);
+
+		#if GTK_CHECK_VERSION(2,32,0)
+			g_mutex_init(&mutex);
+		#endif // GTK_CHECK_VERSION
+
+		session::set_plugin(factory);
+
+		return 0;
+	}
+
+	LIB3270_EXPORT int pw3270_plugin_stop(GtkWidget *window) {
+
+		java::lock();
+
+		if(java::jvm) {
+			java::jvm->DestroyJavaVM();
+			java::jvm = NULL;
+		}
+
+		java::unlock();
+
+		#if GTK_CHECK_VERSION(2,32,0)
+			g_mutex_clear(&mutex);
+		#endif // GTK_CHECK_VERSION
+
+		trace("JAVA: %s",__FUNCTION__);
+
+		return 0;
+	}
+
 
 }
 
