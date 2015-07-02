@@ -46,31 +46,6 @@
  extern "C" {
  #endif
 
-/*
- void				* hllapi_pipe_init(const char *id);
- void				  hllapi_pipe_deinit(void *h);
- const char			* hllapi_pipe_get_revision(void);
- void  				  hllapi_pipe_release_memory(void *p);
- int				  hllapi_pipe_connect(void *h, const char *n, int wait);
- void 				  hllapi_pipe_disconnect(void *h);
- LIB3270_MESSAGE	  hllapi_pipe_get_message(void *h);
- char 				* hllapi_pipe_get_text_at(void *h, int row, int col, int len);
- char 				* hllapi_pipe_get_text(void *h, int offset, int len);
- int  			  	  hllapi_pipe_enter(void *h);
- int  			  	  hllapi_pipe_erase_eof(void *h);
- int 			  	  hllapi_pipe_set_text_at(void *h, int row, int col, const unsigned char *str);
- int 			      hllapi_pipe_cmp_text_at(void *h, int row, int col, const char *text);
- int				  hllapi_pipe_pfkey(void *h, int key);
- int				  hllapi_pipe_pakey(void *h, int key);
- int 				  hllapi_pipe_wait_for_ready(void *h, int seconds);
- int 				  hllapi_pipe_sleep(void *h, int seconds);
- int 				  hllapi_pipe_is_connected(void *h);
- int				  hllapi_pipe_getcursor(void *h);
- int				  hllapi_pipe_setcursor(void *h, int baddr);
- int				  hllapi_pipe_emulate_input(void *hSession, const char *s, int len, int pasting);
- int				  hllapi_pipe_print(void *h);
-*/
-
  char				* hllapi_get_string(int offset, size_t len);
  void				  hllapi_free(void *p);
 

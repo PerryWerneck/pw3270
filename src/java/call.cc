@@ -50,62 +50,6 @@ namespace PW3270_NAMESPACE {
 		if(jvm || load_jvm(widget)) {
 
 			v3270_set_script(widget,'J',TRUE);
-/*
-
-			gchar * dirname		= g_path_get_dirname(filename);
-			gchar * classname	= g_path_get_basename(filename);
-
-			gchar * ptr			= strrchr(classname,'.');
-			if(ptr) {
-				*ptr = 0;
-			}
-
-			gchar	* classpath;
-
-#ifdef _WIN32
-
-			char	  buffer[1024];
-			gchar	* exports;
-
-			if(GetModuleFileName(NULL,buffer,sizeof(buffer)) < sizeof(buffer)) {
-
-				gchar * ptr = strrchr(buffer,G_DIR_SEPARATOR);
-				if(ptr) {
-					*ptr = 0;
-					exports = g_build_filename(buffer,"jvm-exports",NULL);
-				} else {
-					exports = g_build_filename(".","jvm-exports",NULL);
-				}
-
-
-			} else {
-
-				exports = g_build_filename(".","jvm-exports",NULL);
-
-			}
-
-			debug("myDir=%s",myDir);
-
-			g_mkdir_with_parents(exports,0777);
-
-#ifdef DEBUG
-			classpath = g_strdup_printf("%s;%s;.bin/java",dirname,exports);
-#else
-			classpath = g_strdup_printf("%s;%s",dirname,exports);
-#endif
-
-			g_free(exports);
-#else
-
-#ifdef DEBUG
-			classpath = g_strdup_printf("%s:%s:.bin/java",dirname,JARDIR);
-#else
-			classpath = g_strdup_printf("%s:%s",dirname,JARDIR);
-#endif
-
-#endif // _WIN32
-
-*/
 
 			try {
 
@@ -158,7 +102,38 @@ namespace PW3270_NAMESPACE {
 				env->CallStaticVoidMethod(cls, mid, args);
 
 				// Check for exception
+				jthrowable exc = env->ExceptionOccurred();
+				env->ExceptionClear();
 
+				if (exc) {
+					jclass throwable_class = env->FindClass("java/lang/Throwable");
+
+					jmethodID jni_getMessage = env->GetMethodID(throwable_class,"getMessage","()Ljava/lang/String;");
+					jstring j_msg = (jstring) env->CallObjectMethod(exc,jni_getMessage);
+
+					GtkWidget *dialog = gtk_message_dialog_new(	GTK_WINDOW(gtk_widget_get_toplevel(widget)),
+																GTK_DIALOG_DESTROY_WITH_PARENT,
+																GTK_MESSAGE_ERROR,
+																GTK_BUTTONS_OK_CANCEL,
+																_(  "Java application \"%s\" has failed." ), classname );
+
+					gtk_window_set_title(GTK_WINDOW(dialog), _( "Java error" ));
+
+					if(!env->IsSameObject(j_msg,NULL)) {
+
+						const char	* msg = env->GetStringUTFChars(j_msg, 0);
+
+						gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),"%s",msg);
+
+						env->ReleaseStringUTFChars( j_msg, msg);
+					}
+
+					if(gtk_dialog_run(GTK_DIALOG (dialog)) == GTK_RESPONSE_CANCEL)
+						gtk_main_quit();
+					gtk_widget_destroy(dialog);
+
+
+				}
 
 				// And finish
 				env->DeleteLocalRef(args);
