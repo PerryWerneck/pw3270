@@ -290,11 +290,30 @@
 	return HLLAPI_STATUS_SUCCESS;
  }
 
+ HLLAPI_API_CALL hllapi_erase(void)
+ {
+	session::get_default()->erase();
+	return HLLAPI_STATUS_SUCCESS;
+ }
+
  HLLAPI_API_CALL hllapi_erase_eof(void)
  {
 	session::get_default()->erase_eof();
 	return HLLAPI_STATUS_SUCCESS;
  }
+
+ HLLAPI_API_CALL hllapi_erase_eol(void)
+ {
+	session::get_default()->erase_eol();
+	return HLLAPI_STATUS_SUCCESS;
+ }
+
+ HLLAPI_API_CALL hllapi_erase_input(void)
+ {
+	session::get_default()->erase_input();
+	return HLLAPI_STATUS_SUCCESS;
+ }
+
 
  HLLAPI_API_CALL hllapi_print(void)
  {

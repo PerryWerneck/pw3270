@@ -201,6 +201,11 @@ public class terminal
 	 */
 	public native int		quit();
 
+	public native int		erase();
+	public native int		erase_eol();
+	public native int		erase_input();
+
+
 	/**
 	 * Erase from cursor position until the end of the field.
 	 *

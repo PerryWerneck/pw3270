@@ -185,6 +185,39 @@ RexxMethod1(int, rx3270_method_enter, CSELF, sessionPtr)
 	return hSession->enter();
 }
 
+RexxMethod1(int, rx3270_method_erase, CSELF, sessionPtr)
+{
+	session *hSession = (session *) sessionPtr;
+	if(!hSession)
+		return -1;
+	return hSession->erase();
+}
+
+RexxMethod1(int, rx3270_method_erase_eof, CSELF, sessionPtr)
+{
+	session *hSession = (session *) sessionPtr;
+	if(!hSession)
+		return -1;
+	return hSession->erase_eof();
+}
+
+RexxMethod1(int, rx3270_method_erase_eol, CSELF, sessionPtr)
+{
+	session *hSession = (session *) sessionPtr;
+	if(!hSession)
+		return -1;
+	return hSession->erase_eol();
+}
+
+RexxMethod1(int, rx3270_method_erase_input, CSELF, sessionPtr)
+{
+	session *hSession = (session *) sessionPtr;
+	if(!hSession)
+		return -1;
+	return hSession->erase_input();
+}
+
+
 RexxMethod2(int, rx3270_method_pfkey, CSELF, sessionPtr, int, key)
 {
 	session *hSession = (session *) sessionPtr;

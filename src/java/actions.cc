@@ -72,6 +72,63 @@ JNIEXPORT jint JNICALL Java_pw3270_terminal_erase_1eof(JNIEnv *env, jobject obj)
 
 }
 
+JNIEXPORT jint JNICALL Java_pw3270_terminal_erase(JNIEnv *env, jobject obj) {
+
+	jint rc	= -1;
+
+	try {
+
+		rc = java::getHandle(env,obj)->erase();
+
+	} catch(std::exception &e) {
+
+		env->ThrowNew(env->FindClass("java/lang/Exception"), e.what());
+		return -1;
+
+	}
+
+	return rc;
+
+}
+JNIEXPORT jint JNICALL Java_pw3270_terminal_erase_1eol(JNIEnv *env, jobject obj) {
+
+	jint rc	= -1;
+
+	try {
+
+		rc = java::getHandle(env,obj)->erase_eol();
+
+	} catch(std::exception &e) {
+
+		env->ThrowNew(env->FindClass("java/lang/Exception"), e.what());
+		return -1;
+
+	}
+
+	return rc;
+
+}
+
+JNIEXPORT jint JNICALL Java_pw3270_terminal_erase_1input(JNIEnv *env, jobject obj) {
+
+	jint rc	= -1;
+
+	try {
+
+		rc = java::getHandle(env,obj)->erase_input();
+
+	} catch(std::exception &e) {
+
+		env->ThrowNew(env->FindClass("java/lang/Exception"), e.what());
+		return -1;
+
+	}
+
+	return rc;
+
+}
+
+
 JNIEXPORT jint JNICALL Java_pw3270_terminal_print(JNIEnv *env, jobject obj) {
 
 	jint rc	= -1;

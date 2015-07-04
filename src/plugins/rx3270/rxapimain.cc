@@ -113,6 +113,12 @@ RexxRoutineEntry rx3270_functions[] =
 	REXX_TYPED_ROUTINE(rx3270queryStringAt,			rx3270queryStringAt),
 	REXX_TYPED_ROUTINE(rx3270SetStringAt,			rx3270SetStringAt),
 	REXX_TYPED_ROUTINE(rx3270CloseApplication,		rx3270CloseApplication),
+
+	REXX_TYPED_ROUTINE(rx3270Erase,					rx3270Erase),
+	REXX_TYPED_ROUTINE(rx3270EraseEOF,				rx3270EraseEOF),
+	REXX_TYPED_ROUTINE(rx3270EraseEOL,				rx3270EraseEOL),
+	REXX_TYPED_ROUTINE(rx3270EraseInput,			rx3270EraseInput),
+
 	REXX_TYPED_ROUTINE(ebc2asc,						ebc2asc),
 	REXX_TYPED_ROUTINE(asc2ebc,						asc2ebc),
 
@@ -138,6 +144,10 @@ RexxMethodEntry rx3270_methods[] =
     REXX_METHOD(rx3270_method_set_cursor, 		rx3270_method_get_cursor_addr	),
     REXX_METHOD(rx3270_method_set_cursor, 		rx3270_method_set_cursor_addr	),
     REXX_METHOD(rx3270_method_enter, 			rx3270_method_enter				),
+    REXX_METHOD(rx3270_method_enter, 			rx3270_method_erase				),
+    REXX_METHOD(rx3270_method_enter, 			rx3270_method_erase_eof			),
+    REXX_METHOD(rx3270_method_enter, 			rx3270_method_erase_eol			),
+    REXX_METHOD(rx3270_method_enter, 			rx3270_method_erase_input		),
     REXX_METHOD(rx3270_method_pfkey, 			rx3270_method_pfkey				),
     REXX_METHOD(rx3270_method_pakey, 			rx3270_method_pakey				),
     REXX_METHOD(rx3270_method_get_text,			rx3270_method_get_text			),

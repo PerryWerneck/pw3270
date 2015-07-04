@@ -116,6 +116,26 @@ RexxRoutine0(int, rx3270SendENTERKey)
 	return session::get_default()->enter();
 }
 
+RexxRoutine0(int, rx3270Erase)
+{
+	return session::get_default()->erase();
+}
+
+RexxRoutine0(int, rx3270EraseEOF)
+{
+	return session::get_default()->erase_eof();
+}
+
+RexxRoutine0(int, rx3270EraseEOL)
+{
+	return session::get_default()->erase_eol();
+}
+
+RexxRoutine0(int, rx3270EraseInput)
+{
+	return session::get_default()->erase_input();
+}
+
 RexxRoutine1(int, rx3270SendPFKey, int, key)
 {
 	return session::get_default()->pfkey(key);
