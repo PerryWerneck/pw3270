@@ -86,7 +86,7 @@ PW3270_CFLAGS	?= -I../include
 PLUGIN_CFLAGS=@CXXFLAGS@ -DPW3270_PLUGIN -Wno-deprecated-declarations @DLL_CFLAGS@ @JNI_CPPFLAGS@ -DJNIDIR="\"$(jnidir)\"" \
 				-DJARDIR="\"$(jvmjardir)\"" @GTK_CFLAGS@ @GTKMAC_CFLAGS@ $(PW3270_CFLAGS)
 
-PLUGIN_LIBS=@GTK_LIBS@ @GTKMAC_LIBS@ @JVM_LIBS@
+PLUGIN_LIBS=@GTK_LIBS@ @GTKMAC_LIBS@ @INTL_LIBS@ @JVM_LIBS@
 
 #---[ Rules ]------------------------------------------------------------------
 
@@ -190,7 +190,7 @@ $(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@: \
 
 	@echo "  LD   `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CXX) @SYSDLL_FLAGS@ $(LDFLAGS) -Wl,-soname,`basename $@` -o $@ $^ $(CLASS_LIBS)
+	@$(CXX) @SYSDLL_FLAGS@ $(LDFLAGS) -Wl,-soname,`basename $@` -o $@ $^ $(CLASS_LIBS) @INTL_LIBS@
 
 $(BINRLS)/plugins/j3270@DLLEXT@: \
 	$(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJRLS)/j3270/$(SRC)@OBJEXT@) \
@@ -218,7 +218,7 @@ $(BINDBG)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@: \
 
 	@echo "  LD   `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CXX) @SYSDLL_FLAGS@ $(LDFLAGS) -Wl,-soname,`basename $@` -o $@ $^ $(CLASS_LIBS)
+	@$(CXX) @SYSDLL_FLAGS@ $(LDFLAGS) -Wl,-soname,`basename $@` -o $@ $^ $(CLASS_LIBS) @INTL_LIBS@
 
 $(BINDBG)/plugins/j3270@DLLEXT@: \
 	$(BINDBG)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@ \

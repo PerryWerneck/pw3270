@@ -49,6 +49,10 @@
 
 		namespace java {
 
+#ifdef _WIN32
+			extern HMODULE	  hModule;
+#endif // WIN32
+
 			extern JavaVM	* jvm;
 			extern JNIEnv	* env;
 
