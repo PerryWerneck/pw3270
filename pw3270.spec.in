@@ -230,6 +230,7 @@ Revision @PACKAGE_REVISION@ from @PACKAGE_SOURCE@
 Summary:        Javadoc for %{name}
 Group:          Documentation
 Requires:       jpackage-utils
+Requires:	%{name}-plugin-java
 
 %description javadoc
 API documentation for %{name}.
@@ -363,12 +364,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n %{name}-plugin-java
 %{_libdir}/@PACKAGE_NAME@-plugins/j3270.so
-%{_datadir}/pw3270/ui/80java.xml
 
 %files javadoc
 %dir %{_javadocdir}/%{name}/*
 %{_javadocdir}/%{name}/*
-
+%{_datadir}/pw3270/ui/80javasamples.xml
 %endif
 
 
