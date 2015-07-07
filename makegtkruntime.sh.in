@@ -157,6 +157,14 @@ if [ "$?" != 0 ]; then
 	exit -1
 fi
 
+mkdir -p $TARGET_PATH/etc
+cp -rv $GTK_PREFIX/etc/gtk-3.0 $TARGET_PATH/etc
+if [ "$?" != 0 ]; then
+	echo "Can´t copy theme"
+	exit -1
+fi
+
+
 }
 
 gtk2() {
