@@ -32,11 +32,9 @@
  #define RX3270_H_INCLUDED 1
 
  #include <lib3270/config.h>
+ #include <stdint.h>
 
  #ifdef HAVE_OOREXXAPI_H
-	#ifdef WIN32
-		#define _SSIZE_T_DEFINED
-	#endif
 	#include <oorexxapi.h>
  #else
 	#error Only Rexx 4
