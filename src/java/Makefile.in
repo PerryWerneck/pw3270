@@ -174,7 +174,7 @@ jni3270-@host_cpu@.zip: \
 
 	@rm -fr ui
 	@mkdir ui
-	@cp ../../ui/*java.xml ui
+	@cp ../../ui/*java*.xml ui
 	@zip -9 -m -r $@ ui
 	@rm -fr ui
 

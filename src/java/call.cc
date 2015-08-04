@@ -31,6 +31,7 @@
  #include "private.h"
  #include <pw3270/v3270.h>
  #include <lib3270/trace.h>
+ #include <lib3270/log.h>
 
 
 /*---[ Implement ]----------------------------------------------------------------------------------*/
@@ -39,6 +40,8 @@ namespace PW3270_NAMESPACE {
 
 
 	void java::call(GtkWidget *widget, const char *classname) {
+
+		debug("%s(%s)",__FUNCTION__,classname);
 
 		if(!trylock()) {
 

@@ -370,7 +370,6 @@ using namespace PW3270_NAMESPACE;
 extern "C" {
 
 	static PW3270_NAMESPACE::session * factory(const char *name) {
-		debug("---> %s",__FUNCTION__);
 		return new plugin(lib3270_get_default_session_handle());
 	}
 

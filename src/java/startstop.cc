@@ -212,11 +212,51 @@ extern "C" {
 
 		kernel = LoadLibrary("kernel32.dll");
 
-		AddDllDirectory	= (HANDLE WINAPI (*)(PCWSTR)) GetProcAddress(kernel,"AddDllDirectory");
-		if(AddDllDirectory) {
+		if(kernel) {
 
-			// Acrescenta mais caminhos para achar a dll
-			for(size_t f = 0; f < G_N_ELEMENTS(dlldir); f++) {
+			AddDllDirectory	= (HANDLE WINAPI (*)(PCWSTR)) GetProcAddress(kernel,"AddDllDirectory");
+			if(AddDllDirectory) {
+
+				// Acrescenta mais caminhos para achar a dll
+				for(size_t f = 0; f < G_N_ELEMENTS(dlldir); f++) {
+
+					const char *env = getenv(dlldir[f].env);
+
+					debug("%s=\"%s\"",dlldir[f].env,env);
+
+					if(env) {
+
+						gchar *p = g_build_filename(env,dlldir[f].path,NULL);
+
+						lib3270_trace_event(v3270_get_session(widget),"Adding \"%s\" to DLL search path",p);
+
+						wchar_t	*path = (wchar_t *) malloc(4096*sizeof(wchar_t));
+						mbstowcs(path, p, 4095);
+						dlldir[f].cookie = AddDllDirectory(path);
+						free(path);
+
+						g_free(p);
+
+					}
+				}
+
+			} else {
+
+				lib3270_trace_event(v3270_get_session(widget),"Can't find %s: %s","AddDllDirectory",session::win32_strerror(GetLastError()).c_str());
+
+			}
+
+		} else {
+
+			lib3270_trace_event(v3270_get_session(widget),"Can't load %s: %s\n","kernel32.dll",session::win32_strerror(GetLastError()).c_str());
+
+		}
+
+		hModule = LoadLibrary("jvm.dll");
+		if(!hModule) {
+			lib3270_trace_event(v3270_get_session(widget),"Can't load %s\n","jvm.dll",session::win32_strerror(GetLastError()).c_str());
+
+			for(size_t f = 0; !hModule && f < G_N_ELEMENTS(dlldir); f++) {
 
 				const char *env = getenv(dlldir[f].env);
 
@@ -224,48 +264,40 @@ extern "C" {
 
 				if(env) {
 
-					gchar *p = g_build_filename(env,dlldir[f].path,NULL);
-
-					debug("Adicionando diretório \"%s\"",p);
-
-					wchar_t	*path = (wchar_t *) malloc(4096*sizeof(wchar_t));
-					mbstowcs(path, p, 4095);
-					dlldir[f].cookie = AddDllDirectory(path);
-					free(path);
-
+					gchar *p = g_build_filename(env,dlldir[f].path,"jvm.dll",NULL);
+					hModule = LoadLibrary(p);
+					if(!hModule) {
+						lib3270_trace_event(v3270_get_session(widget),"Can't load %s: %s\n",p,session::win32_strerror(GetLastError()).c_str());
+					}
 					g_free(p);
 
 				}
 			}
-
 		}
-	#ifdef DEBUG
-		else {
-			debug("Can't get %s: %s","AddDllDirectory",session::win32_strerror(GetLastError()).c_str())
-		}
-	#endif // DEBUG
 
-		hModule = LoadLibrary("jvm.dll");
-
-		if(hModule) {
+		if(!hModule) {
 			failed(widget, _(  "Can't load java virtual machine" ), "%s", session::win32_strerror(GetLastError()).c_str());
 		}
 
-		RemoveDllDirectory	= (BOOL WINAPI (*)(HANDLE)) GetProcAddress(kernel,"RemoveDllDirectory");
-		if(RemoveDllDirectory) {
+		if(kernel) {
 
-			for(size_t f = 0; f < G_N_ELEMENTS(dlldir); f++) {
+			RemoveDllDirectory	= (BOOL WINAPI (*)(HANDLE)) GetProcAddress(kernel,"RemoveDllDirectory");
+			if(RemoveDllDirectory) {
 
-				if(dlldir[f].cookie) {
+				for(size_t f = 0; f < G_N_ELEMENTS(dlldir); f++) {
 
-					RemoveDllDirectory(dlldir[f].cookie);
+					if(dlldir[f].cookie) {
 
+						RemoveDllDirectory(dlldir[f].cookie);
+
+					}
 				}
+
 			}
 
-		}
+			FreeLibrary(kernel);
 
-		FreeLibrary(kernel);
+		}
 
 		if(!hModule) {
 			return false;
