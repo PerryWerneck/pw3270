@@ -245,11 +245,8 @@ gtk-theme-name = Adwaita
 gtk-icon-theme-name = Adwaita
 gtk-fallback-icon-theme = Adwaita
 gtk-font-name = Sans 10
-gtk-toolbar-style =
-gtk-menu-images = 1
 gtk-button-images = 1
 EOF
-
 }
 
 gtk2() {
