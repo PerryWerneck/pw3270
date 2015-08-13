@@ -268,7 +268,8 @@ void		  v3270_update_cursor_surface(v3270 *widget,unsigned char chr,unsigned sho
 
 void		  v3270_register_io_handlers(v3270Class *cls);
 
-void 		  v3270_draw_char(cairo_t *cr, unsigned char chr, unsigned short attr, H3270 *session, guint height, GdkRectangle *rect, GdkRGBA *fg, GdkRGBA *bg);
+void 		  v3270_draw_char(cairo_t *cr, unsigned char chr, unsigned short attr, H3270 *session, v3270FontInfo *font, GdkRectangle *rect, GdkRGBA *fg, GdkRGBA *bg);
+void		  v3270_draw_text(cairo_t *cr, const GdkRectangle *rect, v3270FontInfo *font, const char *str);
 
 void		  v3270_start_timer(GtkWidget *terminal);
 void		  v3270_stop_timer(GtkWidget *terminal);

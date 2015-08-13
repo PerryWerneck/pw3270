@@ -158,7 +158,7 @@ static void setup_spinner_position(GdkRectangle *rect, v3270FontInfo *metrics, c
 //	draw_spinner(cr,rect,color,0);
 }
 
-static void setup_luname_position(GdkRectangle *rect, v3270FontInfo *metrics, cairo_t *cr, H3270 *host, int cols, GdkRGBA *color)
+static void setup_luname_position(GdkRectangle *rect, v3270FontInfo *font, cairo_t *cr, H3270 *host, int cols, GdkRGBA *color)
 {
 	const char *luname = lib3270_get_luname(host);
 
@@ -180,10 +180,13 @@ static void setup_luname_position(GdkRectangle *rect, v3270FontInfo *metrics, ca
 
 	if(luname)
 	{
-		cairo_move_to(cr,rect->x,rect->y+metrics->height);
+//		cairo_move_to(cr,rect->x,rect->y+font->height);
+
 		gdk_cairo_set_source_rgba(cr,color+V3270_COLOR_OIA_LUNAME);
-		cairo_show_text(cr,luname);
-		cairo_stroke(cr);
+		v3270_draw_text(cr,rect,font,luname);
+
+//		cairo_show_text(cr,luname);
+//		cairo_stroke(cr);
 	}
 
 	cairo_restore(cr);
@@ -278,16 +281,6 @@ static void draw_undera(cairo_t *cr, H3270 *host, v3270FontInfo *metrics, GdkRGB
 	}
 
 }
-
-/*
-static void draw_centered_text(cairo_t *cr, struct v3270_metrics *metrics, int x, int y, const gchar *str)
-{
-	cairo_text_extents_t extents;
-	cairo_text_extents(cr,str,&extents);
-	cairo_move_to(cr,x+(((metrics->width+2)/2)-(extents.width/2)),y+extents.height+( (metrics->spacing/2) - (extents.height/2)));
-	cairo_show_text(cr,str);
-}
-*/
 
 static void draw_centered_char(cairo_t *cr, v3270FontInfo *metrics, int x, int y, const gchar chr)
 {
@@ -396,7 +389,7 @@ void v3270_draw_ssl_status(cairo_t *cr, H3270 *host, v3270FontInfo *metrics, Gdk
 
 }
 
-static void draw_status_message(cairo_t *cr, LIB3270_MESSAGE id, v3270FontInfo *metrics, GdkRGBA *color, GdkRectangle *rect)
+static void draw_status_message(cairo_t *cr, LIB3270_MESSAGE id, v3270FontInfo *font, GdkRGBA *color, const GdkRectangle *r)
 {
 	#ifdef DEBUG
 		#define OIA_MESSAGE(x,c,y) { #x, c, y }
@@ -477,7 +470,10 @@ static void draw_status_message(cairo_t *cr, LIB3270_MESSAGE id, v3270FontInfo *
 
 	};
 
-	const gchar *msg = message[0].msg;
+	GdkRectangle	  rect;
+	const gchar		* msg = message[0].msg;
+
+	memcpy(&rect,r,sizeof(GdkRectangle));
 
 //	trace("%s: id=%d",__FUNCTION__,id);
 
@@ -492,7 +488,7 @@ static void draw_status_message(cairo_t *cr, LIB3270_MESSAGE id, v3270FontInfo *
 
 	// Limpa o bloco
 	gdk_cairo_set_source_rgba(cr,color+V3270_COLOR_OIA_BACKGROUND);
-	cairo_rectangle(cr, rect->x, rect->y, rect->width, rect->height);
+	cairo_rectangle(cr, rect.x, rect.y, rect.width, rect.height);
 	cairo_fill(cr);
 
 	if(msg && *msg)
@@ -502,7 +498,7 @@ static void draw_status_message(cairo_t *cr, LIB3270_MESSAGE id, v3270FontInfo *
 
 	if(msg && *msg)
 	{
-		int x = rect->x+1;
+		rect.x++;
 
 		debug("%s(%s)",__FUNCTION__,msg);
 
@@ -512,13 +508,13 @@ static void draw_status_message(cairo_t *cr, LIB3270_MESSAGE id, v3270FontInfo *
 		{
 			cairo_save(cr);
 
-			cairo_move_to(cr,x+1,rect->y+(metrics->height)-(metrics->ascent));
-			cairo_rel_line_to(cr,metrics->width,metrics->ascent);
-			cairo_rel_move_to(cr,-metrics->width,0);
-			cairo_rel_line_to(cr,metrics->width,-metrics->ascent);
+			cairo_move_to(cr,rect.x+1,rect.y+(font->height)-(font->ascent));
+			cairo_rel_line_to(cr,font->width,font->ascent);
+			cairo_rel_move_to(cr,-font->width,0);
+			cairo_rel_line_to(cr,font->width,-font->ascent);
 
 			cairo_stroke(cr);
-			x += metrics->width;
+			rect.x += font->width;
 			msg++;
 
 			cairo_restore(cr);
@@ -527,13 +523,14 @@ static void draw_status_message(cairo_t *cr, LIB3270_MESSAGE id, v3270FontInfo *
 		while(isspace(*msg))
 		{
 			msg++;
-			x += metrics->width;
+			rect.x += font->width;
 		}
 
 		if(*msg)
 		{
-			cairo_move_to(cr,x,rect->y+metrics->height);
-			cairo_show_text(cr,msg);
+			v3270_draw_text(cr,&rect, font, msg);
+//			cairo_move_to(cr,x,rect->y+metrics->height);
+//			cairo_show_text(cr,msg);
 		}
 
 	}

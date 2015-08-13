@@ -112,13 +112,13 @@ static void get_element_colors(unsigned short attr, GdkRGBA **fg, GdkRGBA **bg, 
 	}
 }
 
-void v3270_draw_element(cairo_t *cr, unsigned char chr, unsigned short attr, H3270 *session, guint height, GdkRectangle *rect, GdkRGBA *color)
+void v3270_draw_element(cairo_t *cr, unsigned char chr, unsigned short attr, H3270 *session, v3270FontInfo *fontInfo, GdkRectangle *rect, GdkRGBA *color)
 {
 	GdkRGBA *fg;
 	GdkRGBA *bg;
 
 	get_element_colors(attr,&fg,&bg,color);
-	v3270_draw_char(cr,chr,attr,session,height,rect,fg,bg);
+	v3270_draw_char(cr,chr,attr,session,fontInfo,rect,fg,bg);
 
 	if(attr & LIB3270_ATTR_UNDERLINE)
 	{
@@ -142,7 +142,7 @@ void v3270_draw_element(cairo_t *cr, unsigned char chr, unsigned short attr, H32
 
 }
 
-void v3270_draw_text(cairo_t *cr, const GdkRectangle *rect, guint height, const char *str) {
+void v3270_draw_text(cairo_t *cr, const GdkRectangle *rect, v3270FontInfo *font, const char *str) {
 
 	cairo_status_t		 		  status;
 	cairo_glyph_t				* glyphs			= NULL;
@@ -154,13 +154,13 @@ void v3270_draw_text(cairo_t *cr, const GdkRectangle *rect, guint height, const 
 
 	status = cairo_scaled_font_text_to_glyphs(
 					scaled_font,
-					(double) rect->x, (double) (rect->y+height),
+					(double) rect->x, (double) (rect->y+font->height),
 					str, strlen(str),
 					&glyphs, &num_glyphs,
 					&clusters, &num_clusters, &cluster_flags );
 
 	if (status == CAIRO_STATUS_SUCCESS) {
-		cairo_show_text_glyphs (cr,str,strlen(str),glyphs, num_glyphs,clusters, num_clusters, cluster_flags);
+		cairo_show_text_glyphs(cr,str,strlen(str),glyphs, num_glyphs,clusters, num_clusters, cluster_flags);
 	}
 
     if(glyphs)
@@ -169,14 +169,9 @@ void v3270_draw_text(cairo_t *cr, const GdkRectangle *rect, guint height, const 
     if(clusters)
 		cairo_text_cluster_free(clusters);
 
-/*
-	cairo_move_to(cr,rect->x,rect->y+height);
-	cairo_show_text(cr, str);
-*/
-
 }
 
-void v3270_draw_char(cairo_t *cr, unsigned char chr, unsigned short attr, H3270 *session, guint height, GdkRectangle *rect, GdkRGBA *fg, GdkRGBA *bg)
+void v3270_draw_char(cairo_t *cr, unsigned char chr, unsigned short attr, H3270 *session, v3270FontInfo *font, GdkRectangle *rect, GdkRGBA *fg, GdkRGBA *bg)
 {
 	// Clear element area
 	gdk_cairo_set_source_rgba(cr,bg);
@@ -277,23 +272,23 @@ void v3270_draw_char(cairo_t *cr, unsigned char chr, unsigned short attr, H3270 
 			break;
 
 		case 0x8c: // CG 0xf7, less or equal "≤"
-			v3270_draw_text(cr,rect,height,"≤");
+			v3270_draw_text(cr,rect,font,"≤");
 			break;
 
 		case 0xae: // CG 0xd9, greater or equal "≥"
-			v3270_draw_text(cr,rect,height,"≥");
+			v3270_draw_text(cr,rect,font,"≥");
 			break;
 
 		case 0xbe: // CG 0x3e, not equal "≠"
-			v3270_draw_text(cr,rect,height,"≠");
+			v3270_draw_text(cr,rect,font,"≠");
 			break;
 
 		case 0xad: // "["
-			v3270_draw_text(cr,rect,height,"[");
+			v3270_draw_text(cr,rect,font,"[");
 			break;
 
 		case 0xbd: // "]"
-			v3270_draw_text(cr,rect,height,"]");
+			v3270_draw_text(cr,rect,font,"]");
 			break;
 
 		default:
@@ -306,7 +301,7 @@ void v3270_draw_char(cairo_t *cr, unsigned char chr, unsigned short attr, H3270 
 
 		if(utf)
 		{
-			v3270_draw_text(cr,rect,height,utf);
+			v3270_draw_text(cr,rect,font,utf);
 			g_free(utf);
 		}
 	}
@@ -386,7 +381,7 @@ void v3270_reload(GtkWidget *widget)
 			if(addr == cursor)
 				v3270_update_cursor_rect(terminal,&rect,chr,attr);
 
-			v3270_draw_element(cr,chr,attr,terminal->host,terminal->font.height,&rect,terminal->color);
+			v3270_draw_element(cr,chr,attr,terminal->host,&terminal->font,&rect,terminal->color);
 
 			addr++;
 			rect.x += rect.width;
@@ -432,7 +427,7 @@ void v3270_update_char(H3270 *session, int addr, unsigned char chr, unsigned sho
 
 	cr = cairo_create(terminal->surface);
 	cairo_set_scaled_font(cr,terminal->font.scaled);
-	v3270_draw_element(cr, chr, attr, terminal->host, terminal->font.height, &rect,terminal->color);
+	v3270_draw_element(cr, chr, attr, terminal->host, &terminal->font, &rect,terminal->color);
     cairo_destroy(cr);
 	if(cursor)
 		v3270_update_cursor_rect(terminal,&rect,chr,attr);
@@ -458,7 +453,7 @@ void v3270_update_cursor_surface(v3270 *widget,unsigned char chr,unsigned short 
 
 		rect.x = 0;
 		rect.y = 0;
-		v3270_draw_char(cr,chr,attr,widget->host,widget->font.height,&rect,bg,fg);
+		v3270_draw_char(cr,chr,attr,widget->host,&widget->font,&rect,bg,fg);
 
 		cairo_destroy(cr);
 	}

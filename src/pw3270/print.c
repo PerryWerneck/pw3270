@@ -189,7 +189,7 @@
 			{
 				if(!info->show_selection)
 					attr &= ~LIB3270_ATTR_SELECTED;
-				v3270_draw_element(cr,c,attr,info->session,info->font.height,&rect,info->color);
+				v3270_draw_element(cr,c,attr,info->session,&info->font,&rect,info->color);
 			}
 
 			rect.x += (rect.width-1);

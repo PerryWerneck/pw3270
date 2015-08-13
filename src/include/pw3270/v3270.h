@@ -225,7 +225,7 @@
  LIB3270_EXPORT	void 			  v3270_set_color_table(GdkRGBA *table, const gchar *colors);
  LIB3270_EXPORT	const GdkRGBA	* v3270_get_color_table(GtkWidget *widget);
  LIB3270_EXPORT	void 			  v3270_set_mono_color_table(GdkRGBA *table, const gchar *fg, const gchar *bg);
- LIB3270_EXPORT	void		  	  v3270_draw_element(cairo_t *cr, unsigned char chr, unsigned short attr, H3270 *session, guint height, GdkRectangle *rect, GdkRGBA *color);
+ LIB3270_EXPORT	void		  	  v3270_draw_element(cairo_t *cr, unsigned char chr, unsigned short attr, H3270 *session, v3270FontInfo *font, GdkRectangle *rect, GdkRGBA *color);
  LIB3270_EXPORT	void			  v3270_set_color(GtkWidget *widget, enum V3270_COLOR id, GdkRGBA *color);
  LIB3270_EXPORT	GdkRGBA 		* v3270_get_color(GtkWidget *widget, enum V3270_COLOR id);
 
