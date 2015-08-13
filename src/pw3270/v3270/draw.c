@@ -142,6 +142,13 @@ void v3270_draw_element(cairo_t *cr, unsigned char chr, unsigned short attr, H32
 
 }
 
+void v3270_draw_text(cairo_t *cr, const GdkRectangle *rect, guint height, const char *str) {
+
+	cairo_move_to(cr,rect->x,rect->y+height);
+	cairo_show_text(cr, str);
+
+}
+
 void v3270_draw_char(cairo_t *cr, unsigned char chr, unsigned short attr, H3270 *session, guint height, GdkRectangle *rect, GdkRGBA *fg, GdkRGBA *bg)
 {
 	// Clear element area
@@ -166,7 +173,6 @@ void v3270_draw_char(cairo_t *cr, unsigned char chr, unsigned short attr, H3270 
 		cairo_translate(cr, rect->x + (rect->width / 2), rect->y + (rect->height / 2));
 		cairo_scale(cr, sz, sz);
 		cairo_arc(cr, 0., 0., 1., 0., 2 * M_PI);
-
 
 		cairo_restore(cr);
 	}
@@ -244,28 +250,23 @@ void v3270_draw_char(cairo_t *cr, unsigned char chr, unsigned short attr, H3270 
 			break;
 
 		case 0x8c: // CG 0xf7, less or equal "≤"
-			cairo_move_to(cr,rect->x,rect->y+height);
-			cairo_show_text(cr, "≤");
+			v3270_draw_text(cr,rect,height,"≤");
 			break;
 
 		case 0xae: // CG 0xd9, greater or equal "≥"
-			cairo_move_to(cr,rect->x,rect->y+height);
-			cairo_show_text(cr, "≥");
+			v3270_draw_text(cr,rect,height,"≥");
 			break;
 
 		case 0xbe: // CG 0x3e, not equal "≠"
-			cairo_move_to(cr,rect->x,rect->y+height);
-			cairo_show_text(cr, "≠");
+			v3270_draw_text(cr,rect,height,"≠");
 			break;
 
 		case 0xad: // "["
-			cairo_move_to(cr,rect->x,rect->y+height);
-			cairo_show_text(cr, "[");
+			v3270_draw_text(cr,rect,height,"[");
 			break;
 
 		case 0xbd: // "]"
-			cairo_move_to(cr,rect->x,rect->y+height);
-			cairo_show_text(cr, "]");
+			v3270_draw_text(cr,rect,height,"]");
 			break;
 
 		default:
@@ -278,8 +279,7 @@ void v3270_draw_char(cairo_t *cr, unsigned char chr, unsigned short attr, H3270 
 
 		if(utf)
 		{
-			cairo_move_to(cr,rect->x,rect->y+height);
-			cairo_show_text(cr, utf);
+			v3270_draw_text(cr,rect,height,utf);
 			g_free(utf);
 		}
 	}
