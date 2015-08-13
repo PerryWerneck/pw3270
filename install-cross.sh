@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PREFIX="mingw32"
+PREFIX="mingw64"
 
 TEMPFILE=$(mktemp)
 
@@ -28,7 +28,13 @@ gtk3-tools
 headers
 gnome-icon-theme
 hicolor-icon-theme
+gdk-pixbuf-loader-rsvg
+libgdk_pixbuf-2_0-0
+gdk-pixbuf-query-loaders
 EOF
+
+# Instala o tema usado no pacote windows
+sudo zypper in adwaita-icon-theme
 
 while read FILE
 do

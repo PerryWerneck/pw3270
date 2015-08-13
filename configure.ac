@@ -135,6 +135,7 @@ case "$host" in
 		DLLPREFIX=""
 
 		# http://stackoverflow.com/questions/18138635/mingw-exe-requires-a-few-gcc-dlls-regardless-of-the-code
+		DLL_FLAGS="-shared -Wl,--add-stdcall-alias,--enable-stdcall-fixup,--enable-auto-import"
 		SYSDLL_FLAGS="-shared -static-libgcc -static-libstdc++ -Wl,--add-stdcall-alias,--enable-stdcall-fixup,--enable-auto-import"
 
 		LDSOFLAGS="-Wl,-soname,\`basename \$@\`"

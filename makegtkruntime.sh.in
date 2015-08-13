@@ -30,7 +30,7 @@ copyFile() {
 		fi
 
 	else
-		echo "Can´t find $1"
+		echo "Can´t find ${GTK_PREFIX}/bin/${1}"
 		return 1
 	fi
 
@@ -71,6 +71,36 @@ copy_locale() {
 	rm -f $1
 }
 
+CopyGTK3Theme() {
+
+	mkdir -p ${TARGET_PATH}/share/icons
+	if [ "$?" != 0 ]; then
+		echo "Can´t create icons folder"
+		exit -1
+	fi
+
+	cp -rv /usr/share/icons/${1} ${TARGET_PATH}/share/icons
+	if [ "$?" != 0 ]; then
+		echo "Can´t copy ${1} icons"
+		exit -1
+	fi
+
+	mkdir -p ${TARGET_PATH}/share/themes
+	if [ "$?" != 0 ]; then
+		echo "Can´t create themes folder"
+		exit -1
+	fi
+
+	cp -rv /usr/share/themes/${1} ${TARGET_PATH}/share/themes
+	if [ "$?" != 0 ]; then
+		echo "Can´t copy ${1} theme"
+		exit -1
+	fi
+
+
+}
+
+
 gtk3() {
 
 TEMPFILE="temp1.tmp"
@@ -109,11 +139,27 @@ icule53.dll
 icuuc53.dll
 icudata53.dll
 libgraphite2.dll
+librsvg-*.dll
 gspawn-win*-helper-console.exe
 gspawn-win*-helper.exe
 gdk-pixbuf-query-loaders.exe
 EOF
 copyFiles $TEMPFILE
+
+
+# Copy loaders
+GDK_LOADERS=$(${PKG_CONFIG} --variable=gdk_pixbuf_binarydir gdk-pixbuf-2.0)/loaders
+GDK_PREFIX=$(${PKG_CONFIG} --variable=prefix gdk-pixbuf-2.0)
+GDK_TARGET=$(echo ${GDK_LOADERS}/ | sed -e "s@${GDK_PREFIX}@@g")
+
+mkdir -p ${TARGET_PATH}/${GDK_TARGET}
+
+cp -v ${GDK_LOADERS}/* ${TARGET_PATH}/${GDK_TARGET}
+if [ "$?" != 0 ]; then
+	echo "Can´t copy loaders"
+	exit -1
+fi
+
 
 # Copy optional files
 copyFile libgcc_s_sjlj-1.dll
@@ -145,25 +191,64 @@ if [ "$?" != 0 ]; then
         exit -1
 fi
 
-mkdir -p $TARGET_PATH/share/icons/hicolor
-if [ "$?" != 0 ]; then
-	echo "Can´t create icons folder"
-	exit -1
-fi
+# Copia Adwaita
+CopyGTK3Theme "Adwaita"
 
-cp -rv $GTK_PREFIX/share/icons/hicolor $TARGET_PATH/share/icons/hicolor
-if [ "$?" != 0 ]; then
-	echo "Can´t copy icons"
-	exit -1
-fi
+#mkdir -p $TARGET_PATH/share/icons/Adwaita
+#if [ "$?" != 0 ]; then
+#	echo "Can´t create icons folder"
+#	exit -1
+#fi
+#
+#cp -rv /usr/share/icons/Adwaita $TARGET_PATH/share/icons/Adwaita
+#if [ "$?" != 0 ]; then
+#	echo "Can´t copy icons"
+#	exit -1
+#fi
+#
+#mkdir -p $TARGET_PATH/share/themes/Adwaita
+#if [ "$?" != 0 ]; then
+#	echo "Can´t create Adwaita theme"
+#	exit -1
+#fi
+#
+#cp -rv /usr/share/themes/Adwaita $TARGET_PATH/share/themes/Adwaita
+#if [ "$?" != 0 ]; then
+#	echo "Can´t copy Adwaita theme"
+#	exit -1
+#fi
+
+
+# Copia gnome
+#mkdir -p $TARGET_PATH/share/icons/gnome
+#if [ "$?" != 0 ]; then
+#	echo "Can´t create icons folder"
+#	exit -1
+#fi
+#
+#cp -rv $GTK_PREFIX/share/icons/gnome $TARGET_PATH/share/icons/gnome
+#if [ "$?" != 0 ]; then
+#	echo "Can´t copy icons"
+#	exit -1
+#fi
 
 mkdir -p $TARGET_PATH/etc
-cp -rv $GTK_PREFIX/etc/gtk-3.0 $TARGET_PATH/etc
+cp -rv $GTK_PREFIX/etc/gtk-3.0 $TARGET_PATH/etc/gtk-3.0
 if [ "$?" != 0 ]; then
 	echo "Can´t copy theme"
 	exit -1
 fi
 
+cat > $TARGET_PATH/etc/gtk-3.0/settings.ini  << EOF
+[Settings]
+gtk-theme-name = Adwaita
+gtk-icon-theme-name = Adwaita
+gtk-fallback-icon-theme = Adwaita
+gtk-font-name = Sans 10
+gtk-toolbar-style =
+gtk-menu-images = 1
+gtk-button-images = 1
+EOF
 
 }
 

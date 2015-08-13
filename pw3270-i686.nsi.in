@@ -122,7 +122,7 @@ SubSection "@PACKAGE@" SecMain
 
 			CreateDirectory "$INSTDIR\plugins"
 			file "/oname=$INSTDIR\plugins\hllapi.dll"	".bin\Release\plugins\hllapi.dll"
-			file "/oname=$SYSDIR\libhllapi.dll"		".bin\Release\hllapi.dll"
+			file "/oname=$SYSDIR\libhllapi.dll"			".bin\Release\hllapi.dll.@PACKAGE_VERSION@"
 
 		sectionEnd
 
@@ -135,7 +135,7 @@ SubSection "@PACKAGE@" SecMain
 
 			file "/oname=$PROGRAMFILES\ooRexx\rx3270.cls" "src\plugins\rx3270\rx3270.cls"
 			file "/oname=$INSTDIR\rx3270.dll.@PACKAGE_VERSION@" ".bin\Release\rx3270.dll.@PACKAGE_VERSION@"
-			file "/oname=$PROGRAMFILES\ooRexx\rx3270.dll" ".bin\Release\rx3270.dll"
+			file "/oname=$PROGRAMFILES\ooRexx\rx3270.dll" ".bin\Release\rx3270.dll.@PACKAGE_VERSION@"
 
 		sectionEnd
 
