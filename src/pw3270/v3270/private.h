@@ -24,8 +24,6 @@
  *
  * perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
  * erico.mendonca@gmail.com	(Erico Mascarenhas Mendonça)
- * licinio@bb.com.br		(Licínio Luis Branco)
- * kraucer@bb.com.br		(Kraucer Fernandes Mazuco)
  *
  */
 
@@ -109,25 +107,34 @@ G_BEGIN_DECLS
  #define V3270_CURSOR_COUNT						LIB3270_CURSOR_USER+11
 
 
- struct v3270_metrics
- {
-	guint width;
-	guint height;
-	guint ascent;
-	guint descent;
-
-	guint spacing;
-
-	guint left;
-	guint top;
- };
-
  struct v3270_ssl_status_msg
  {
 	long			  id;
 	const gchar		* icon;
 	const gchar		* text;
 	const gchar		* message;
+ };
+
+ /**
+  * @brief Informações para desenho de fontes com o cairo.
+  *
+  */
+ struct _v3270FontInfo {
+
+	guint					  width;
+	guint					  height;
+	guint					  ascent;
+	guint					  descent;
+
+	guint					  spacing;
+
+	guint					  left;
+	guint					  top;
+
+	gchar 					* family;
+	cairo_font_weight_t		  weight;
+	cairo_scaled_font_t		* scaled;
+
  };
 
 /*--[ Widget data ]----------------------------------------------------------------------------------*/
@@ -166,18 +173,14 @@ G_BEGIN_DECLS
 	V3270_OIA_FIELD			  selected_field;		/**< Clicked OIA field */
 
 	// Font info
-	gchar 					* font_family;
-	cairo_font_weight_t		  font_weight;
-	cairo_scaled_font_t		* font_scaled;
 	cairo_surface_t			* surface;
-
-	struct v3270_metrics	  metrics;
+	v3270FontInfo			  font;
 
 	gint     				  minimum_width;
 	gint					  minimum_height;
 
 	// Colors
-	GdkRGBA				  color[V3270_COLOR_COUNT];	/**< Terminal widget colors */
+	GdkRGBA					  color[V3270_COLOR_COUNT];	/**< Terminal widget colors */
 
 	// Regions
 	GdkRectangle			  oia_rect[V3270_OIA_FIELD_COUNT];
@@ -252,7 +255,7 @@ G_BEGIN_DECLS
 const GtkWidgetClass	* v3270_get_parent_class(void);
 
 gboolean	  v3270_draw(GtkWidget * widget, cairo_t * cr);
-void 		  v3270_draw_oia(cairo_t *cr, H3270 *host, int row, int cols, struct v3270_metrics *metrics, GdkRGBA *color, GdkRectangle *rect);
+void 		  v3270_draw_oia(cairo_t *cr, H3270 *host, int row, int cols, v3270FontInfo *metrics, GdkRGBA *color, GdkRectangle *rect);
 void		  v3270_update_mouse_pointer(GtkWidget *widget);
 
 #if ! GTK_CHECK_VERSION(2,18,0)
@@ -292,8 +295,8 @@ void 		  v3270_draw_char(cairo_t *cr, unsigned char chr, unsigned short attr, H3
 void		  v3270_start_timer(GtkWidget *terminal);
 void		  v3270_stop_timer(GtkWidget *terminal);
 
-void		  v3270_draw_connection(cairo_t *cr, H3270 *host, struct v3270_metrics *metrics, GdkRGBA *color, const GdkRectangle *rect);
-void		  v3270_draw_ssl_status(cairo_t *cr, H3270 *host, struct v3270_metrics *metrics, GdkRGBA *color, GdkRectangle *rect);
+void		  v3270_draw_connection(cairo_t *cr, H3270 *host, v3270FontInfo *metrics, GdkRGBA *color, const GdkRectangle *rect);
+void		  v3270_draw_ssl_status(cairo_t *cr, H3270 *host, v3270FontInfo *metrics, GdkRGBA *color, GdkRectangle *rect);
 
 void		  v3270_update_char(H3270 *session, int addr, unsigned char chr, unsigned short attr, unsigned char cursor);
 

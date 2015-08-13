@@ -64,6 +64,7 @@
 
  typedef struct _v3270			v3270;
  typedef struct _v3270Class		v3270Class;
+ typedef struct _v3270FontInfo	v3270FontInfo;
 
  enum V3270_COLOR
  {

@@ -49,12 +49,12 @@ gint v3270_get_offset_at_point(v3270 *widget, gint x, gint y)
 	GdkPoint point;
 	int r,c;
 
-	g_return_val_if_fail(widget->metrics.width > 0,-1);
+	g_return_val_if_fail(widget->font.width > 0,-1);
 
 	if(x > 0 && y > 0)
 	{
-		point.x = ((x-widget->metrics.left)/widget->metrics.width);
-		point.y = ((y-widget->metrics.top)/widget->metrics.spacing);
+		point.x = ((x-widget->font.left)/widget->font.width);
+		point.y = ((y-widget->font.top)/widget->font.spacing);
 
 		lib3270_get_screen_size(widget->host,&r,&c);
 

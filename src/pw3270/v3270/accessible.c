@@ -308,10 +308,10 @@ static void v3270_accessible_get_character_extents(	AtkText      *text,
 	gdk_window_get_origin(window, x, y);
 
 	// Get screen position
-	*x     	+= widget->metrics.left + ((offset%cols) * widget->metrics.width);
-	*y      += widget->metrics.top  + ((offset/cols) * widget->metrics.spacing);
-	*width	 = widget->metrics.width;
-	*height	 = widget->metrics.spacing;
+	*x     	+= widget->font.left + ((offset%cols) * widget->font.width);
+	*y      += widget->font.top  + ((offset/cols) * widget->font.spacing);
+	*width	 = widget->font.width;
+	*height	 = widget->font.spacing;
 
 	if(coords == ATK_XY_WINDOW)
 	{
@@ -631,7 +631,7 @@ static AtkAttributeSet * v3270_accessible_get_run_attributes(AtkText *text, gint
 	// The font family name
 	attributes = add_attribute(	attributes,
 								ATK_TEXT_ATTR_FAMILY_NAME,
-								GTK_V3270(widget)->font_family );
+								GTK_V3270(widget)->font.family );
 
   return attributes;
 }

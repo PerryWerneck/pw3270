@@ -51,7 +51,7 @@ gboolean v3270_draw(GtkWidget * widget, cairo_t * cr)
 
 		gdk_cairo_set_source_rgba(cr,terminal->color+V3270_COLOR_CROSS_HAIR);
 
-		cairo_rectangle(cr,	0,terminal->cursor.rect.y+terminal->metrics.height,allocation.width,1);
+		cairo_rectangle(cr,	0,terminal->cursor.rect.y+terminal->font.height,allocation.width,1);
 		cairo_fill(cr);
 
 		cairo_rectangle(cr,	terminal->cursor.rect.x,0,1,terminal->oia_rect->y-3);
@@ -72,9 +72,9 @@ gboolean v3270_draw(GtkWidget * widget, cairo_t * cr)
 		else
 		{
 			cairo_rectangle(cr,	terminal->cursor.rect.x,
-								terminal->cursor.rect.y+terminal->metrics.height,
+								terminal->cursor.rect.y+terminal->font.height,
 								terminal->cursor.rect.width,
-								terminal->metrics.descent );
+								terminal->font.descent );
 		}
 
 		cairo_fill(cr);
@@ -364,9 +364,9 @@ void v3270_reload(GtkWidget *widget)
 	lib3270_get_screen_size(terminal->host,&rows,&cols);
 
 	memset(&rect,0,sizeof(rect));
-	rect.y		= terminal->metrics.top;
-	rect.width	= terminal->metrics.width;
-	rect.height	= terminal->metrics.spacing;
+	rect.y		= terminal->font.top;
+	rect.width	= terminal->font.width;
+	rect.height	= terminal->font.spacing;
 	addr 		= 0;
 	cursor		= lib3270_get_cursor_address(terminal->host);
 
@@ -374,7 +374,7 @@ void v3270_reload(GtkWidget *widget)
 	{
 		int c;
 
-		rect.x = terminal->metrics.left;
+		rect.x = terminal->font.left;
 
 		for(c=0;c < cols;c++)
 		{
@@ -386,18 +386,18 @@ void v3270_reload(GtkWidget *widget)
 			if(addr == cursor)
 				v3270_update_cursor_rect(terminal,&rect,chr,attr);
 
-			v3270_draw_element(cr,chr,attr,terminal->host,terminal->metrics.height,&rect,terminal->color);
+			v3270_draw_element(cr,chr,attr,terminal->host,terminal->font.height,&rect,terminal->color);
 
 			addr++;
 			rect.x += rect.width;
 		}
 
-		rect.y += terminal->metrics.spacing;
+		rect.y += terminal->font.spacing;
 
 	}
 
-	cairo_set_scaled_font(cr,terminal->font_scaled);
-	v3270_draw_oia(cr, terminal->host, rect.y, cols, &terminal->metrics, terminal->color,terminal->oia_rect);
+	cairo_set_scaled_font(cr,terminal->font.scaled);
+	v3270_draw_oia(cr, terminal->host, rect.y, cols, &terminal->font, terminal->color,terminal->oia_rect);
 
     cairo_destroy(cr);
 
@@ -423,16 +423,16 @@ void v3270_update_char(H3270 *session, int addr, unsigned char chr, unsigned sho
 	lib3270_get_screen_size(terminal->host,&rows,&cols);
 
 	memset(&rect,0,sizeof(rect));
-	rect.x          = terminal->metrics.left + ((addr % cols) * terminal->metrics.width);
-	rect.y          = terminal->metrics.top  + ((addr / cols) * terminal->metrics.spacing);
-	rect.width      = terminal->metrics.width;
-	rect.height     = terminal->metrics.spacing;
+	rect.x          = terminal->font.left + ((addr % cols) * terminal->font.width);
+	rect.y          = terminal->font.top  + ((addr / cols) * terminal->font.spacing);
+	rect.width      = terminal->font.width;
+	rect.height     = terminal->font.spacing;
 
 //	trace("%s: c=%c attr=%04x addr=%d pos=%d,%d x=%d y=%d w=%d h=%d",__FUNCTION__,chr,(int) attr,addr,(addr / cols),(addr % cols),rect.x,rect.y,rect.width,rect.height);
 
 	cr = cairo_create(terminal->surface);
-	cairo_set_scaled_font(cr,terminal->font_scaled);
-	v3270_draw_element(cr, chr, attr, terminal->host, terminal->metrics.height, &rect,terminal->color);
+	cairo_set_scaled_font(cr,terminal->font.scaled);
+	v3270_draw_element(cr, chr, attr, terminal->host, terminal->font.height, &rect,terminal->color);
     cairo_destroy(cr);
 	if(cursor)
 		v3270_update_cursor_rect(terminal,&rect,chr,attr);
@@ -454,11 +454,11 @@ void v3270_update_cursor_surface(v3270 *widget,unsigned char chr,unsigned short 
 
 		get_element_colors(attr,&fg,&bg,widget->color);
 
-		cairo_set_scaled_font(cr,widget->font_scaled);
+		cairo_set_scaled_font(cr,widget->font.scaled);
 
 		rect.x = 0;
 		rect.y = 0;
-		v3270_draw_char(cr,chr,attr,widget->host,widget->metrics.height,&rect,bg,fg);
+		v3270_draw_char(cr,chr,attr,widget->host,widget->font.height,&rect,bg,fg);
 
 		cairo_destroy(cr);
 	}
@@ -471,7 +471,7 @@ void v3270_update_cursor_rect(v3270 *widget, GdkRectangle *rect, unsigned char c
 	widget->cursor.chr  = chr;
 	widget->cursor.rect = *rect;
 	widget->cursor.attr = attr;
-	widget->cursor.rect.height = widget->metrics.height + widget->metrics.descent;
+	widget->cursor.rect.height = widget->font.height + widget->font.descent;
 	v3270_update_cursor_surface(widget,chr,attr);
 }
 

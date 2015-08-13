@@ -54,8 +54,8 @@
  #define WIDTH_IN_PIXELS(terminal,x) (x * cols)
  #define HEIGHT_IN_PIXELS(terminal,x) (x * (rows+1))
 
- #define CONTENTS_WIDTH(terminal) (cols * terminal->metrics.width)
- #define CONTENTS_HEIGHT(terminal) (((rows+1) * terminal->metrics.spacing)+OIA_TOP_MARGIN+2)
+ #define CONTENTS_WIDTH(terminal) (cols * terminal->font.width)
+ #define CONTENTS_HEIGHT(terminal) (((rows+1) * terminal->font.spacing)+OIA_TOP_MARGIN+2)
 
 /**
  * SECTION:	v3270
@@ -554,11 +554,11 @@ void v3270_update_font_metrics(v3270 *terminal, cairo_t *cr, int width, int heig
 
 	lib3270_get_screen_size(terminal->host,&rows,&cols);
 
-	terminal->font_weight = lib3270_get_toggle(terminal->host,LIB3270_TOGGLE_BOLD) ? CAIRO_FONT_WEIGHT_BOLD : CAIRO_FONT_WEIGHT_NORMAL;
+	terminal->font.weight = lib3270_get_toggle(terminal->host,LIB3270_TOGGLE_BOLD) ? CAIRO_FONT_WEIGHT_BOLD : CAIRO_FONT_WEIGHT_NORMAL;
 
-	cairo_select_font_face(cr, terminal->font_family, CAIRO_FONT_SLANT_NORMAL,terminal->font_weight);
+	cairo_select_font_face(cr,terminal->font.family, CAIRO_FONT_SLANT_NORMAL,terminal->font.weight);
 
-	if(terminal->scaled_fonts)
+	if(terminal->font.scaled)
 	{
 		double w = ((double) width) / ((double)cols);
 		double h = ((double) height) / ((double) (rows+2));
@@ -612,38 +612,38 @@ void v3270_update_font_metrics(v3270 *terminal, cairo_t *cr, int width, int heig
 	cairo_font_extents(cr,&extents);
 
 	// Save scaled font for use on next drawings
-	if(terminal->font_scaled)
-		cairo_scaled_font_destroy(terminal->font_scaled);
+	if(terminal->font.scaled)
+		cairo_scaled_font_destroy(terminal->font.scaled);
 
-	terminal->font_scaled = cairo_get_scaled_font(cr);
-	cairo_scaled_font_reference(terminal->font_scaled);
+	terminal->font.scaled = cairo_get_scaled_font(cr);
+	cairo_scaled_font_reference(terminal->font.scaled);
 
-	cairo_scaled_font_extents(terminal->font_scaled,&extents);
+	cairo_scaled_font_extents(terminal->font.scaled,&extents);
 
-	terminal->metrics.width    = (int) extents.max_x_advance;
-	terminal->metrics.height   = (int) extents.height;
-	terminal->metrics.ascent   = (int) extents.ascent;
-	terminal->metrics.descent  = (int) extents.descent;
+	terminal->font.width    = (int) extents.max_x_advance;
+	terminal->font.height   = (int) extents.height;
+	terminal->font.ascent   = (int) extents.ascent;
+	terminal->font.descent  = (int) extents.descent;
 
-	hFont = terminal->metrics.height + terminal->metrics.descent;
+	hFont = terminal->font.height + terminal->font.descent;
 
 	// Create new cursor surface
 	if(terminal->cursor.surface)
 		cairo_surface_destroy(terminal->cursor.surface);
 
-	terminal->cursor.surface = gdk_window_create_similar_surface(gtk_widget_get_window(GTK_WIDGET(terminal)),CAIRO_CONTENT_COLOR,terminal->metrics.width,hFont);
+	terminal->cursor.surface = gdk_window_create_similar_surface(gtk_widget_get_window(GTK_WIDGET(terminal)),CAIRO_CONTENT_COLOR,terminal->font.width,hFont);
 
 	// Center image
 	size = CONTENTS_WIDTH(terminal);
-	terminal->metrics.left = (width >> 1) - ((size) >> 1);
+	terminal->font.left = (width >> 1) - ((size) >> 1);
 
-	terminal->metrics.spacing = height / (rows+2);
-	if(terminal->metrics.spacing < hFont)
-		terminal->metrics.spacing = hFont;
+	terminal->font.spacing = height / (rows+2);
+	if(terminal->font.spacing < hFont)
+		terminal->font.spacing = hFont;
 
 	size = CONTENTS_HEIGHT(terminal);
 
-	terminal->metrics.top = (height >> 1) - (size >> 1);
+	terminal->font.top = (height >> 1) - (size >> 1);
 
 }
 
@@ -1021,16 +1021,16 @@ static void v3270_destroy(GtkObject *widget)
 		terminal->host = NULL;
 	}
 
-	if(terminal->font_family)
+	if(terminal->font.family)
 	{
-		g_free(terminal->font_family);
-		terminal->font_family = 0;
+		g_free(terminal->font.family);
+		terminal->font.family = 0;
 	}
 
-	if(terminal->font_scaled)
+	if(terminal->font.scaled)
 	{
-		cairo_scaled_font_destroy(terminal->font_scaled);
-		terminal->font_scaled = NULL;
+		cairo_scaled_font_destroy(terminal->font.scaled);
+		terminal->font.scaled = NULL;
 	}
 
 	if(terminal->surface)
@@ -1455,18 +1455,18 @@ void v3270_set_font_family(GtkWidget *widget, const gchar *name)
 		name = "courier new";
 	}
 
-	if(terminal->font_family)
+	if(terminal->font.family)
 	{
-		if(!g_ascii_strcasecmp(terminal->font_family,name))
+		if(!g_ascii_strcasecmp(terminal->font.family,name))
 			return;
-		g_free(terminal->font_family);
-		terminal->font_family = NULL;
+		g_free(terminal->font.family);
+		terminal->font.family = NULL;
 	}
 
-	terminal->font_family = g_strdup(name);
-	terminal->font_weight = lib3270_get_toggle(terminal->host,LIB3270_TOGGLE_BOLD) ? CAIRO_FONT_WEIGHT_BOLD : CAIRO_FONT_WEIGHT_NORMAL;
+	terminal->font.family = g_strdup(name);
+	terminal->font.weight = lib3270_get_toggle(terminal->host,LIB3270_TOGGLE_BOLD) ? CAIRO_FONT_WEIGHT_BOLD : CAIRO_FONT_WEIGHT_NORMAL;
 
-	trace("%s: %s (%p)",__FUNCTION__,terminal->font_family,terminal->font_family);
+	trace("%s: %s (%p)",__FUNCTION__,terminal->font.family,terminal->font.family);
 
 	g_signal_emit(widget,v3270_widget_signal[SIGNAL_UPDATE_CONFIG], 0, "font-family", name);
 
@@ -1479,7 +1479,7 @@ void v3270_set_font_family(GtkWidget *widget, const gchar *name)
 const gchar	* v3270_get_font_family(GtkWidget *widget)
 {
 	g_return_val_if_fail(GTK_IS_V3270(widget),NULL);
-	return GTK_V3270(widget)->font_family;
+	return GTK_V3270(widget)->font.family;
 }
 
 void v3270_disconnect(GtkWidget *widget)
