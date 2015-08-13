@@ -140,7 +140,6 @@ void v3270_draw_element(cairo_t *cr, unsigned char chr, unsigned short attr, H32
 		cairo_stroke(cr);
 	}
 
-
 }
 
 void v3270_draw_char(cairo_t *cr, unsigned char chr, unsigned short attr, H3270 *session, guint height, GdkRectangle *rect, GdkRGBA *fg, GdkRGBA *bg)

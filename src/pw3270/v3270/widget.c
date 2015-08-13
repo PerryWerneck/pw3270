@@ -962,6 +962,7 @@ static void v3270_init(v3270 *widget)
 	widget->host->update_ssl		= v3270_update_ssl;
 	widget->host->print				= emit_print_signal;
 
+
 	// Reset timer
 	widget->activity.timestamp		= time(0);
 	widget->activity.disconnect		= 0;
