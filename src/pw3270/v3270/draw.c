@@ -144,8 +144,35 @@ void v3270_draw_element(cairo_t *cr, unsigned char chr, unsigned short attr, H32
 
 void v3270_draw_text(cairo_t *cr, const GdkRectangle *rect, guint height, const char *str) {
 
+	cairo_status_t		 		  status;
+	cairo_glyph_t				* glyphs			= NULL;
+	int							  num_glyphs		= 0;
+	cairo_text_cluster_t		* clusters			= NULL;
+	int							  num_clusters		= 0;
+	cairo_text_cluster_flags_t	  cluster_flags;
+	cairo_scaled_font_t			* scaled_font		= cairo_get_scaled_font (cr);
+
+	status = cairo_scaled_font_text_to_glyphs(
+					scaled_font,
+					(double) rect->x, (double) (rect->y+height),
+					str, strlen(str),
+					&glyphs, &num_glyphs,
+					&clusters, &num_clusters, &cluster_flags );
+
+	if (status == CAIRO_STATUS_SUCCESS) {
+		cairo_show_text_glyphs (cr,str,strlen(str),glyphs, num_glyphs,clusters, num_clusters, cluster_flags);
+	}
+
+    if(glyphs)
+		cairo_glyph_free(glyphs);
+
+    if(clusters)
+		cairo_text_cluster_free(clusters);
+
+/*
 	cairo_move_to(cr,rect->x,rect->y+height);
 	cairo_show_text(cr, str);
+*/
 
 }
 
