@@ -60,13 +60,17 @@
 	int						  cols;				/**< Max line width */
 	int						  pages;
 	int						  lpp;				/**< Lines per page */
-	cairo_font_extents_t	  extents;
+
+	v3270FontInfo			  font;
+
+//	cairo_font_extents_t	  extents;
+//	cairo_scaled_font_t		* font_scaled;
+//	gchar					* font;				/**< Font name */
+
 	double					  left;
 	double					  width;			/**< Report width */
 	double					  height;			/**< Report height (all pages) */
-	cairo_scaled_font_t		* font_scaled;
 
-	gchar					* font;				/**< Font name */
 	gchar					**text;
 
  } PRINT_INFO;
@@ -76,13 +80,14 @@
 
  static void begin_print(GtkPrintOperation *prt, GtkPrintContext *context, PRINT_INFO *info)
  {
+   	cairo_font_extents_t    extents;
+
  	cairo_t * cr	= gtk_print_context_get_cairo_context(context);
  	gchar	* font	= get_string_from_config("print",FONT_CONFIG,DEFAULT_FONT);
 
 	trace("%s: operation=%p context=%p font=\"%s\"",__FUNCTION__,prt,context,font);
 
 	// Setup font
-
 	if(*font)
 	{
 		PangoFontDescription * descr = pango_font_description_from_string(font);
@@ -102,7 +107,6 @@
 #endif // GTK(3,0,0)
                 double                  current  = width / cols;
                 double                  valid    = current;
-               	cairo_font_extents_t    extents;
 
                 do
                 {
@@ -124,12 +128,16 @@
 	}
 	g_free(font);
 
-	info->font_scaled = cairo_get_scaled_font(cr);
-	cairo_scaled_font_reference(info->font_scaled);
-	cairo_scaled_font_extents(info->font_scaled,&info->extents);
+	info->font.scaled = cairo_get_scaled_font(cr);
+	cairo_scaled_font_reference(info->font.scaled);
+	cairo_scaled_font_extents(info->font.scaled,&extents);
 
-	info->width  = ((double) info->cols) * info->extents.max_x_advance;
-	info->height = ((double) info->rows) * (info->extents.height + info->extents.descent);
+	info->font.height		= extents.height;
+	info->font.descent		= extents.descent;
+	info->font.width		= extents.max_x_advance;
+
+	info->width  			= ((double) info->cols) * extents.max_x_advance;
+	info->height 			= ((double) info->rows) * (extents.height + extents.descent);
 
 	// Center image
 	info->left = (gtk_print_context_get_width(context)-info->width)/2;
@@ -137,7 +145,7 @@
 		info->left = 2;
 
 	// Setup page size
-	info->lpp	= (gtk_print_context_get_height(context) / (info->extents.height + info->extents.descent));
+	info->lpp	= (gtk_print_context_get_height(context) / (extents.height + extents.descent));
 	info->pages = (info->rows / info->lpp)+1;
 
 	trace("%d lines per page, %d pages to print",info->lpp,info->pages);
@@ -153,12 +161,12 @@
 	int		  		  baddr	= info->baddr;
 	GdkRectangle	  rect;
 
-	cairo_set_scaled_font(cr,info->font_scaled);
+	cairo_set_scaled_font(cr,info->font.scaled);
 
 	memset(&rect,0,sizeof(rect));
 	rect.y 		= 2;
-	rect.height	= (info->extents.height + info->extents.descent);
-	rect.width	= info->extents.max_x_advance;
+	rect.height	= (info->font.height + info->font.descent);
+	rect.width	= info->font.width;
 
 	// Clear page
 	gdk_cairo_set_source_rgba(cr,info->color+V3270_COLOR_BACKGROUND);
@@ -181,7 +189,7 @@
 			{
 				if(!info->show_selection)
 					attr &= ~LIB3270_ATTR_SELECTED;
-				v3270_draw_element(cr,c,attr,info->session,info->extents.height,&rect,info->color);
+				v3270_draw_element(cr,c,attr,info->session,info->font.height,&rect,info->color);
 			}
 
 			rect.x += (rect.width-1);
@@ -335,14 +343,14 @@ static gchar * enum_to_string(GType type, guint enum_value)
 
 	}
 
-	if(info->font_scaled)
-		cairo_scaled_font_destroy(info->font_scaled);
+	if(info->font.scaled)
+		cairo_scaled_font_destroy(info->font.scaled);
 
 	if(info->text)
 		g_strfreev(info->text);
 
-	if(info->font)
-		g_free(info->font);
+	if(info->font.family)
+		g_free(info->font.family);
 
 	g_free(info);
  }
@@ -376,10 +384,10 @@ static gchar * enum_to_string(GType type, guint enum_value)
 
 	gtk_tree_model_get_value(gtk_combo_box_get_model(combo),&iter,0,&value);
 
-	if(info->font)
-		g_free(info->font);
+	if(info->font.family)
+		g_free(info->font.family);
 
-	info->font = g_value_dup_string(&value);
+	info->font.family = g_value_dup_string(&value);
 
  }
 
@@ -424,14 +432,14 @@ static gchar * enum_to_string(GType type, guint enum_value)
 		gtk_table_attach(GTK_TABLE(container),label[f],0,1,f,f+1,GTK_FILL,GTK_FILL,0,0);
 	}
 
-	if(info->font)
-		g_free(info->font);
+	if(info->font.family)
+		g_free(info->font.family);
 
-	info->font = get_string_from_config("print",FONT_CONFIG,DEFAULT_FONT);
-	if(!*info->font)
+	info->font.family = get_string_from_config("print",FONT_CONFIG,DEFAULT_FONT);
+	if(!*info->font.family)
 	{
-		g_free(info->font);
-		info->font = g_strdup(DEFAULT_FONT);
+		g_free(info->font.family);
+		info->font.family = g_strdup(DEFAULT_FONT);
 	}
 
 	// Font selection button
@@ -460,7 +468,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
 				gtk_list_store_append((GtkListStore *) model,&iter);
 				gtk_list_store_set((GtkListStore *) model, &iter,0, name, -1);
 
-				if(!g_ascii_strcasecmp(name,info->font))
+				if(!g_ascii_strcasecmp(name,info->font.family))
 					gtk_combo_box_set_active_iter(GTK_COMBO_BOX(widget),&iter);
 			}
 		}
@@ -525,8 +533,8 @@ static gchar * enum_to_string(GType type, guint enum_value)
 
 	trace("%s starts combo=%p clr=%p widget=%p",__FUNCTION__,combo,clr,widget);
 
-	if(info->font)
-		set_string_to_config("print",FONT_CONFIG,info->font);
+	if(info->font.family)
+		set_string_to_config("print",FONT_CONFIG,info->font.family);
 
 	if(clr)
 	{
@@ -805,12 +813,12 @@ static gchar * enum_to_string(GType type, guint enum_value)
 	int			  	  row	= pg*info->lpp;
 	int			  	  l;
 
-	cairo_set_scaled_font(cr,info->font_scaled);
+	cairo_set_scaled_font(cr,info->font.scaled);
 
 	memset(&rect,0,sizeof(rect));
 	rect.y          = 2;
-	rect.height     = (info->extents.height + info->extents.descent)+1;
-	rect.width      = info->extents.max_x_advance+1;
+	rect.height     = (info->font.height + info->font.descent)+1;
+	rect.width      = info->font.width+1;
 
 	for(l=0;l<info->lpp && row < info->rows;l++)
 	{
