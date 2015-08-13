@@ -226,7 +226,7 @@ static void setup_insert_position(GdkRectangle *rect, v3270FontInfo *metrics, ca
 
 
 
-static void setup_double_char_position(GdkRectangle *rect, struct v3270_metrics *metrics, cairo_t *cr, H3270 *host, int cols, GdkRGBA *color)
+static void setup_double_char_position(GdkRectangle *rect, v3270FontInfo *metrics, cairo_t *cr, H3270 *host, int cols, GdkRGBA *color)
 {
 	rect->width <<= 1;
 	rect->x -= rect->width;

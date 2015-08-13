@@ -115,28 +115,6 @@ G_BEGIN_DECLS
 	const gchar		* message;
  };
 
- /**
-  * @brief Informações para desenho de fontes com o cairo.
-  *
-  */
- struct _v3270FontInfo {
-
-	guint					  width;
-	guint					  height;
-	guint					  ascent;
-	guint					  descent;
-
-	guint					  spacing;
-
-	guint					  left;
-	guint					  top;
-
-	gchar 					* family;
-	cairo_font_weight_t		  weight;
-	cairo_scaled_font_t		* scaled;
-
- };
-
 /*--[ Widget data ]----------------------------------------------------------------------------------*/
 
  struct _v3270

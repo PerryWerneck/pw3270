@@ -64,7 +64,28 @@
 
  typedef struct _v3270			v3270;
  typedef struct _v3270Class		v3270Class;
- typedef struct _v3270FontInfo	v3270FontInfo;
+
+ /**
+  * @brief Informações para desenho de fontes com o cairo.
+  *
+  */
+ typedef struct _v3270FontInfo {
+
+	guint					  width;
+	guint					  height;
+	guint					  ascent;
+	guint					  descent;
+
+	guint					  spacing;
+
+	guint					  left;
+	guint					  top;
+
+	gchar 					* family;
+	cairo_font_weight_t		  weight;
+	cairo_scaled_font_t		* scaled;
+
+ } v3270FontInfo;
 
  enum V3270_COLOR
  {
