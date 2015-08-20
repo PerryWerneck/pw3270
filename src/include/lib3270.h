@@ -935,6 +935,13 @@
 	LIB3270_EXPORT int lib3270_get_next_unprotected(H3270 *hSession, int baddr0);
 
 	/**
+	 * @brief Check if the screen position is unprotected.
+	 *
+	 */
+	LIB3270_EXPORT int lib3270_get_is_protected(H3270 *hSession, int baddr0);
+
+
+	/**
 	 * Get address of the first blank.
 	 *
 	 * Get address of the first blank after the last nonblank in the

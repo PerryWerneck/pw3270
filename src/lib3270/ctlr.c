@@ -612,6 +612,19 @@ LIB3270_EXPORT int lib3270_get_next_unprotected(H3270 *hSession, int baddr0)
 	return 0;
 }
 
+LIB3270_EXPORT int lib3270_get_is_protected(H3270 *hSession, int baddr)
+{
+    CHECK_SESSION_HANDLE(hSession);
+
+    if(baddr < 0)
+        baddr = hSession->cursor_addr;
+
+	int faddr = find_field_attribute(hSession,baddr);
+
+	return FA_IS_PROTECTED(hSession->ea_buf[faddr].fa);
+}
+
+
 /**
  * Perform an erase command, which may include changing the (virtual) screen size.
  *
