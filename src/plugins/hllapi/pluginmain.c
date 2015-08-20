@@ -342,6 +342,17 @@
 												((struct hllapi_packet_addr *) source->buffer)->addr));
 		break;
 
+    case HLLAPI_PACKET_IS_PROTECTED:
+		send_result(source,lib3270_get_is_protected(lib3270_get_default_session_handle(),
+												((struct hllapi_packet_addr *) source->buffer)->addr));
+		break;
+
+    case HLLAPI_PACKET_IS_PROTECTED_AT:
+		send_result(source,lib3270_get_is_protected_at(	lib3270_get_default_session_handle(),
+												((struct hllapi_packet_query_at *) source->buffer)->row,
+												((struct hllapi_packet_query_at *) source->buffer)->col));
+		break;
+
 	case HLLAPI_PACKET_QUIT:
 		gtk_main_quit();
 		send_result(source,0);
