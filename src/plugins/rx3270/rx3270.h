@@ -91,6 +91,9 @@
  REXX_TYPED_ROUTINE_PROTOTYPE(rx3270EraseEOL);
  REXX_TYPED_ROUTINE_PROTOTYPE(rx3270EraseInput);
 
+ REXX_TYPED_ROUTINE_PROTOTYPE(rx3270IsProtected);
+ REXX_TYPED_ROUTINE_PROTOTYPE(rx3270IsProtectedAt);
+
  REXX_METHOD_PROTOTYPE(rx3270_method_version);
  REXX_METHOD_PROTOTYPE(rx3270_method_revision);
  REXX_METHOD_PROTOTYPE(rx3270_method_init);
@@ -125,6 +128,7 @@
  REXX_METHOD_PROTOTYPE(rx3270_method_get_field_start);
  REXX_METHOD_PROTOTYPE(rx3270_method_get_next_unprotected);
  REXX_METHOD_PROTOTYPE(rx3270_method_get_is_protected);
+ REXX_METHOD_PROTOTYPE(rx3270_method_get_is_protected_at);
  REXX_METHOD_PROTOTYPE(rx3270_method_get_selection);
  REXX_METHOD_PROTOTYPE(rx3270_method_set_selection);
  REXX_METHOD_PROTOTYPE(rx3270_method_get_clipboard);

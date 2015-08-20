@@ -1257,6 +1257,36 @@
 
 		}
 
+		int get_is_protected_at(int row,int col)
+		{
+#if defined(WIN32)
+
+			struct hllapi_packet_query_at query	= { HLLAPI_PACKET_IS_PROTECTED_AT, (unsigned short) row, (unsigned short) col, 0 };
+
+			return query_intval((void *) &query, sizeof(query));
+
+#elif defined(HAVE_DBUS)
+
+			dbus_int32_t r = (dbus_int32_t) row;
+			dbus_int32_t c = (dbus_int32_t) col;
+
+			DBusMessage * msg = create_message("getIsProtectedAt");
+			if(msg)
+			{
+				dbus_message_append_args(msg, DBUS_TYPE_INT32, &r, DBUS_TYPE_INT32, &c, DBUS_TYPE_INVALID);
+				return get_intval(call(msg));
+			}
+
+			return -1;
+
+#else
+
+			return -1;
+
+#endif
+
+		}
+
 
 		int set_host_charset(const char *charset)
 		{

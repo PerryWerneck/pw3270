@@ -612,6 +612,11 @@ LIB3270_EXPORT int lib3270_get_next_unprotected(H3270 *hSession, int baddr0)
 	return 0;
 }
 
+LIB3270_EXPORT int lib3270_get_is_protected_at(H3270 *h, int row, int col) {
+	CHECK_SESSION_HANDLE(h);
+	return lib3270_get_is_protected(h, ((row-1) * h->cols) + (col-1));
+}
+
 LIB3270_EXPORT int lib3270_get_is_protected(H3270 *hSession, int baddr)
 {
     CHECK_SESSION_HANDLE(hSession);
@@ -621,7 +626,7 @@ LIB3270_EXPORT int lib3270_get_is_protected(H3270 *hSession, int baddr)
 
 	int faddr = find_field_attribute(hSession,baddr);
 
-	return FA_IS_PROTECTED(hSession->ea_buf[faddr].fa);
+	return FA_IS_PROTECTED(hSession->ea_buf[faddr].fa) ? 1 : 0;
 }
 
 

@@ -119,12 +119,14 @@ RexxRoutineEntry rx3270_functions[] =
 	REXX_TYPED_ROUTINE(rx3270EraseEOL,				rx3270EraseEOL),
 	REXX_TYPED_ROUTINE(rx3270EraseInput,			rx3270EraseInput),
 
+	REXX_TYPED_ROUTINE(rx3270Erase,					rx3270IsProtected),
+	REXX_TYPED_ROUTINE(rx3270Erase,					rx3270IsProtectedAt),
+
 	REXX_TYPED_ROUTINE(ebc2asc,						ebc2asc),
 	REXX_TYPED_ROUTINE(asc2ebc,						asc2ebc),
 
 
 	// rx3270Popup
-
 	REXX_LAST_METHOD()
 };
 
@@ -164,10 +166,19 @@ RexxMethodEntry rx3270_methods[] =
     REXX_METHOD(rx3270_method_get_field_len,	rx3270_method_get_field_len	    ),
     REXX_METHOD(rx3270_method_get_field_start,	rx3270_method_get_field_start	),
     REXX_METHOD(rx3270_method_get_next_unprotected, rx3270_method_get_next_unprotected  ),
+
+    REXX_METHOD(rx3270_method_get_is_protected, rx3270_method_get_is_protected  ),
+    REXX_METHOD(rx3270_method_get_is_protected_at, rx3270_method_get_is_protected_at  ),
+
     REXX_METHOD(rx3270_method_get_selection,	rx3270_method_get_selection	    ),
     REXX_METHOD(rx3270_method_set_selection,	rx3270_method_set_selection 	),
     REXX_METHOD(rx3270_method_get_clipboard,	rx3270_method_get_clipboard	    ),
     REXX_METHOD(rx3270_method_set_clipboard,	rx3270_method_set_clipboard	    ),
+
+    REXX_METHOD(rx3270_method_erase,			rx3270_method_erase				),
+    REXX_METHOD(rx3270_method_erase_eof,		rx3270_method_erase_eof			),
+    REXX_METHOD(rx3270_method_erase_eol,		rx3270_method_erase_eol			),
+    REXX_METHOD(rx3270_method_erase_input,		rx3270_method_erase_input		),
 
     REXX_METHOD(rx3270_method_popup,        	rx3270_method_popup	            ),
     REXX_METHOD(rx3270_method_get_filename,     rx3270_method_get_filename      ),

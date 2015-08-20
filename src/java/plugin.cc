@@ -238,6 +238,10 @@
 		return lib3270_is_protected(hSession,baddr);
 	}
 
+	int get_is_protected_at(int row, int col) {
+		return lib3270_is_protected_at(hSession,row,col);
+	}
+
 	int set_copy(const char *text) {
 		v3270_set_copy(GTK_WIDGET(lib3270_get_user_data(hSession)),text);
 		return 0;

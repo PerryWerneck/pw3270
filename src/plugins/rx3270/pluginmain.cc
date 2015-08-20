@@ -127,6 +127,7 @@
 	int               get_field_len(int baddr = -1);
 	int               get_next_unprotected(int baddr = -1);
 	int               get_is_protected(int baddr = -1);
+	int               get_is_protected_at(int row, int col);
 
 	int               set_copy(const char *text);
 	string			  get_copy(void);
@@ -724,6 +725,16 @@ extern "C"
  int plugin::get_next_unprotected(int baddr)
  {
      return lib3270_get_next_unprotected(hSession,baddr);
+ }
+
+ int plugin::get_is_protected(int baddr)
+ {
+     return lib3270_get_is_protected(hSession,baddr);
+ }
+
+ int plugin::get_is_protected_at(int row, int col)
+ {
+     return lib3270_get_is_protected_at(hSession,row,col);
  }
 
 int plugin::popup_dialog(LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, ...)

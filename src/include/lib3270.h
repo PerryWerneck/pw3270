@@ -935,11 +935,20 @@
 	LIB3270_EXPORT int lib3270_get_next_unprotected(H3270 *hSession, int baddr0);
 
 	/**
-	 * @brief Check if the screen position is unprotected.
+	 * @brief Check if the screen position is protected.
 	 *
 	 */
 	LIB3270_EXPORT int lib3270_get_is_protected(H3270 *hSession, int baddr0);
 
+	/**
+	 * Get Check if the screen position is protected.
+	 *
+	 * @param h			Session Handle.
+	 * @param row		Desired row.
+	 * @param col		Desired col.
+	 *
+	 */
+	LIB3270_EXPORT int lib3270_get_is_protected_at(H3270 *h, int row, int col);
 
 	/**
 	 * Get address of the first blank.
@@ -1017,6 +1026,7 @@
 	LIB3270_EXPORT int			  lib3270_get_model_number(H3270 *hSession);
 
 	LIB3270_EXPORT int lib3270_is_protected(H3270 *h, unsigned int baddr);
+	LIB3270_EXPORT int lib3270_is_protected_at(H3270 *h, unsigned int row, unsigned int col);
 
 	/**
 	 * Alloc/Realloc memory buffer.

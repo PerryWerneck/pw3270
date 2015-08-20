@@ -279,3 +279,30 @@ RexxRoutine2(RexxStringObject, ebc2asc, CSTRING, str, OPTIONAL_int, sz)
 	return context->String("");
 }
 
+RexxRoutine1(int, rx3270IsProtected, int, baddr)
+{
+	try
+	{
+		return session::get_default()->get_is_protected(baddr);
+	}
+	catch(std::exception &e)
+	{
+		context->RaiseException1(Rexx_Error_Application_error,context->NewStringFromAsciiz(e.what()));
+	}
+
+	return -1;
+}
+
+RexxRoutine2(int, rx3270IsProtectedAt, int, row, int, col)
+{
+	try
+	{
+		return session::get_default()->get_is_protected_at(row,col);
+	}
+	catch(std::exception &e)
+	{
+		context->RaiseException1(Rexx_Error_Application_error,context->NewStringFromAsciiz(e.what()));
+	}
+
+	return -1;
+}
