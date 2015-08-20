@@ -126,6 +126,7 @@
 	int               get_field_start(int baddr = -1);
 	int               get_field_len(int baddr = -1);
 	int               get_next_unprotected(int baddr = -1);
+	int               get_is_protected(int baddr = -1);
 
 	int               set_copy(const char *text);
 	string			  get_copy(void);

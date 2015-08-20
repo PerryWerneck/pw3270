@@ -306,6 +306,16 @@ public class terminal
 	public native int get_next_unprotected(int baddr);
 
 	/**
+	 * Check if the address is protected.
+	 *
+	 * @param baddr Field address.
+	 *
+	 * @return Protect state.
+	 *
+	 */
+	public native int get_is_protected(int baddr);
+
+	/**
 	 * Get next field address.
 	 *
 	 * @return Address of the next field.

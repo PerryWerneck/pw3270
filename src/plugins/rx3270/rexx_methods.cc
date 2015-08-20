@@ -465,6 +465,15 @@ RexxMethod2(int, rx3270_method_get_next_unprotected, CSELF, sessionPtr, OPTIONAL
 	return baddr;
 }
 
+RexxMethod2(int, rx3270_method_get_is_protected, CSELF, sessionPtr, OPTIONAL_int, baddr)
+{
+	session *hSession = (session *) sessionPtr;
+	if(!hSession)
+		return -1;
+
+	return hSession->get_is_protected(baddr);
+}
+
 RexxMethod1(RexxStringObject, rx3270_method_get_selection, CSELF, sessionPtr)
 {
 	try

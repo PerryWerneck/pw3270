@@ -124,6 +124,7 @@
  REXX_METHOD_PROTOTYPE(rx3270_method_get_field_len);
  REXX_METHOD_PROTOTYPE(rx3270_method_get_field_start);
  REXX_METHOD_PROTOTYPE(rx3270_method_get_next_unprotected);
+ REXX_METHOD_PROTOTYPE(rx3270_method_get_is_protected);
  REXX_METHOD_PROTOTYPE(rx3270_method_get_selection);
  REXX_METHOD_PROTOTYPE(rx3270_method_set_selection);
  REXX_METHOD_PROTOTYPE(rx3270_method_get_clipboard);
@@ -140,114 +141,6 @@
 /*---[ Globals ]---------------------------------------------------------------------------------------------*/
 
 /*--[ 3270 Session ]-----------------------------------------------------------------------------------------*/
-
-/*
-#if defined (HAVE_GNUC_VISIBILITY)
- class __attribute__((visibility("default"))) rx3270
-#elif defined(WIN32)
- class __declspec (dllexport) rx3270
-#else
-	#error NOT_IMPLEMENTED
-#endif
- {
-
- protected:
-#ifdef HAVE_ICONV
-	iconv_t conv2Local;
-	iconv_t conv2Host;
-#endif
-
- public:
-
-	class exception : public std::exception
-	{
-	public:
-			exception(int code, const char *fmt, ...);
-			exception(const char *fmt, ...);
-
-			const char	* getMessage(void);
-			void 		  logMessage(void);
-
-			void		  RaiseException(RexxMethodContext *context);
-			void		  RaiseException(RexxCallContext *context);
-
-			virtual const char * what() const throw();
-
-	private:
-			int		code;
-			char	msg[4096];
-
-	};
-
-	rx3270(const char *local = REXX_DEFAULT_CHARSET, const char *remote = "ISO-8859-1");
-
-	virtual ~rx3270();
-
-    virtual void free(void *ptr);
-
-
-	static rx3270			* create(const char *name = NULL);
-	static rx3270			* create_remote(const char *name);
-	static rx3270			* create_local(void);
-	static rx3270			* get_default(void);
-
-	static void				  set_plugin(rx3270 * (*factory)(const char *name));
-
-	char 					* get_3270_string(const char *str);
-	char 					* get_local_string(const char *str);
-
-	void			  		  log(const char *fmt, ...);
-	virtual void			  logva(const char *fmt, va_list arg);
-
-	virtual char			* get_version(void);
-	virtual char			* get_revision(void);
-	virtual LIB3270_CSTATE	  get_cstate(void)	= 0;
-
-	virtual int				  connect(const char *uri, bool wait = true)		= 0;
-	virtual int				  disconnect(void)									= 0;
-	virtual bool			  is_connected(void)								= 0;
-	virtual bool			  is_ready(void)									= 0;
-	virtual int				  iterate(bool wait = true)							= 0;
-	virtual int				  wait(int seconds)									= 0;
-	virtual int				  wait_for_ready(int seconds)						= 0;
-	virtual int				  wait_for_text_at(int row, int col, const char *key, int timeout);
-
-	virtual int				  set_cursor_position(int row, int col)				= 0;
-	virtual int               set_cursor_addr(int addr)                         = 0;
-	virtual int               get_cursor_addr(void)                             = 0;
-
-	virtual int 			  set_toggle(LIB3270_TOGGLE ix, bool value)			= 0;
-
-	virtual int				  enter(void)										= 0;
-	virtual int				  pfkey(int key)									= 0;
-	virtual int				  pakey(int key)									= 0;
-
-	virtual char 			* get_text_at(int row, int col, size_t sz) 			= 0;
-	virtual char			* get_text(int baddr, size_t len)					= 0;
-	virtual int				  cmp_text_at(int row, int col, const char *text)	= 0;
-	virtual int 			  set_text_at(int row, int col, const char *str)	= 0;
-	virtual int               emulate_input(const char *str)                    = 0;
-
-	virtual int               get_field_start(int baddr = -1)                   = 0;
-	virtual int               get_field_len(int baddr = -1)                     = 0;
-	virtual int               get_next_unprotected(int baddr = -1)              = 0;
-
-	virtual int               set_copy(const char *text);
-	virtual char            * get_copy(void);
-
-    virtual char            * get_clipboard(void);
-    virtual int               set_clipboard(const char *text);
-
-    virtual int				  quit(void)										= 0;
-
-    // Dialogs
-	virtual int               popup_dialog(LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, ...);
-	virtual char            * file_chooser_dialog(GtkFileChooserAction action, const char *title, const char *extension, const char *filename);
-
- };
-
- rx3270 * create_lib3270_instance(void);
-*/
 
 #ifdef __cplusplus
 	extern "C" {

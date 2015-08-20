@@ -1228,6 +1228,36 @@
 
 		}
 
+		int get_is_protected(int baddr)
+		{
+#if defined(WIN32)
+
+			struct hllapi_packet_addr query = { HLLAPI_PACKET_IS_PROTECTED, (unsigned short) baddr };
+
+			return query_intval((void *) &query, sizeof(query));
+
+#elif defined(HAVE_DBUS)
+
+			dbus_int32_t k = (dbus_int32_t) baddr;
+
+			DBusMessage * msg = create_message("getIsProtected");
+			if(msg)
+			{
+				dbus_message_append_args(msg, DBUS_TYPE_INT32, &k, DBUS_TYPE_INVALID);
+				return get_intval(call(msg));
+			}
+
+			return -1;
+
+#else
+
+			return -1;
+
+#endif
+
+		}
+
+
 		int set_host_charset(const char *charset)
 		{
 #if defined(WIN32)

@@ -146,6 +146,7 @@
 		int             (*_get_cursor_addr)(H3270 *h);
 		int             (*_emulate_input)(H3270 *session, const char *s, int len, int pasting);
 		int             (*_get_next_unprotected)(H3270 *hSession, int baddr0);
+		int 			(*_get_is_protected)(H3270 *hSession, int baddr);
 		void            (*_popup_va)(H3270 *session, LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, va_list);
 		void *			(*_free)(void *);
 		const char *	(*_get_display_charset)(H3270 *hSession);
@@ -204,6 +205,7 @@
 				{ (void **) & _get_cursor_addr,			"lib3270_get_cursor_address"		},
 				{ (void **) & _emulate_input,			"lib3270_emulate_input"	        	},
 				{ (void **) & _get_next_unprotected,	"lib3270_get_next_unprotected"	   	},
+				{ (void **) & _get_is_protected,		"lib3270_get_is_protected"			},
 				{ (void **) & _popup_va,	            "lib3270_popup_va"          	   	},
 				{ (void **) & _free,					"lib3270_free"						},
 				{ (void **) & _get_display_charset,		"lib3270_get_display_charset"		},
@@ -392,6 +394,11 @@
 		int get_next_unprotected(int baddr)
 		{
 			return _get_next_unprotected(hSession,baddr);
+		}
+
+		int get_is_protected(int baddr)
+		{
+			return _get_is_protected(hSession,baddr);
 		}
 
 		int popup_dialog(LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, ...)

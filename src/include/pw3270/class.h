@@ -220,6 +220,7 @@
 		virtual int               get_field_start(int baddr = -1)                   = 0;
 		virtual int               get_field_len(int baddr = -1)                     = 0;
 		virtual int               get_next_unprotected(int baddr = -1)              = 0;
+		virtual int               get_is_protected(int baddr = -1)              	= 0;
 
 		// Clipboard management
 		virtual int               set_copy(const char *text);
