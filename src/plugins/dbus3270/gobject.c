@@ -418,6 +418,19 @@ void pw3270_dbus_pa_key(PW3270Dbus *object, int key, DBusGMethodInvocation *cont
 	dbus_g_method_return(context,lib3270_get_next_unprotected(pw3270_dbus_get_session_handle(object),baddr));
  }
 
+ void pw3270_dbus_get_is_protected(PW3270Dbus *object, int baddr, DBusGMethodInvocation *context)
+ {
+	trace("%s object=%p context=%p",__FUNCTION__,object,context);
+	dbus_g_method_return(context,lib3270_get_is_protected(pw3270_dbus_get_session_handle(object),baddr));
+ }
+
+ void pw3270_dbus_get_is_protected_at(PW3270Dbus *object, int row, int col, DBusGMethodInvocation *context)
+ {
+	trace("%s object=%p context=%p",__FUNCTION__,object,context);
+	dbus_g_method_return(context,lib3270_get_is_protected_at(pw3270_dbus_get_session_handle(object),row,col));
+ }
+
+
 void pw3270_dbus_get_clipboard(PW3270Dbus *object, DBusGMethodInvocation *context)
 {
 	gchar *text;

@@ -88,7 +88,10 @@
 
 	void		  pw3270_dbus_get_field_start(PW3270Dbus *object, int baddr, DBusGMethodInvocation *context);
 	void		  pw3270_dbus_get_field_length(PW3270Dbus *object, int baddr, DBusGMethodInvocation *context);
-    void          pw3270_dbus_get_next_unprotected(PW3270Dbus *object, int baddr, DBusGMethodInvocation *context);
+	void			pw3270_dbus_get_next_unprotected(PW3270Dbus *object, int baddr, DBusGMethodInvocation *context);
+
+	void			pw3270_dbus_get_is_protected(PW3270Dbus *object, int baddr, DBusGMethodInvocation *context);
+	void		  pw3270_dbus_get_is_protected_at(PW3270Dbus *object, int row, int col, DBusGMethodInvocation *context);
 
 	void 		  pw3270_dbus_set_script(PW3270Dbus *object, const gchar *text, int mode, DBusGMethodInvocation *context);
 
