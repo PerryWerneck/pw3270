@@ -64,6 +64,8 @@
 	PHP_METHOD(tn3270,setstringat);
 	PHP_METHOD(tn3270,cmpstringat);
 
+	PHP_METHOD(tn3270,getisprotected);
+	PHP_METHOD(tn3270,getisprotectedat);
 
 	#undef PACKAGE_NAME
 	#undef PACKAGE_VERSION

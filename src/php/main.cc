@@ -42,25 +42,28 @@ static zend_object_handlers	  tn3270_object_handlers;
 
 zend_function_entry tn3270_methods[] =
 {
-    PHP_ME( tn3270,	__construct,	NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
+    PHP_ME( tn3270,	__construct,		NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
 
-    PHP_ME( tn3270,	connect,		NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
-    PHP_ME( tn3270,	disconnect,		NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
+    PHP_ME( tn3270,	connect,			NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
+    PHP_ME( tn3270,	disconnect,			NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
 
-    PHP_ME( tn3270,	isconnected,	NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
-    PHP_ME( tn3270,	isready,		NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
+    PHP_ME( tn3270,	isconnected,		NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
+    PHP_ME( tn3270,	isready,			NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
 
-    PHP_ME( tn3270,	waitforready,	NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
-    PHP_ME( tn3270,	wait,			NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
-    PHP_ME( tn3270,	iterate,		NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
+    PHP_ME( tn3270,	waitforready,		NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
+    PHP_ME( tn3270,	wait,				NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
+    PHP_ME( tn3270,	iterate,			NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
 
-    PHP_ME( tn3270,	pfkey,			NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
-    PHP_ME( tn3270,	pakey,			NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
-    PHP_ME( tn3270,	enter,			NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
+    PHP_ME( tn3270,	pfkey,				NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
+    PHP_ME( tn3270,	pakey,				NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
+    PHP_ME( tn3270,	enter,				NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
 
-    PHP_ME( tn3270,	getstringat,	NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
-    PHP_ME( tn3270,	setstringat,	NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
-    PHP_ME( tn3270,	cmpstringat,	NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
+    PHP_ME( tn3270,	getstringat,		NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
+    PHP_ME( tn3270,	setstringat,		NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
+    PHP_ME( tn3270,	cmpstringat,		NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
+
+    PHP_ME( tn3270,	getisprotected,		NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
+    PHP_ME( tn3270,	getisprotectedat,	NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
 
     {NULL, NULL, NULL}
 };

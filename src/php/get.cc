@@ -84,3 +84,25 @@ PHP_METHOD(tn3270, cmpstringat)
 	RETURN_LONG(obj->hSession->cmp_string_at(row,col,buffer));
 }
 
+PHP_METHOD(tn3270, getisprotected)
+{
+	tn3270_object	* obj = (tn3270_object *) zend_object_store_get_object(getThis() TSRMLS_CC);
+	long 			  baddr;
+
+	if(zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &baddr) == FAILURE)
+		RETURN_NULL();
+
+	RETURN_LONG(obj->hSession->get_is_protected(baddr));
+}
+
+PHP_METHOD(tn3270, getisprotectedat)
+{
+	tn3270_object	* obj = (tn3270_object *) zend_object_store_get_object(getThis() TSRMLS_CC);
+	long 			  row;
+	long 			  col;
+
+	if(zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll", &row, &col) == FAILURE)
+		RETURN_NULL();
+
+	RETURN_LONG(obj->hSession->get_is_protected_at(row,col));
+}
