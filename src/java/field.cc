@@ -91,3 +91,42 @@ JNIEXPORT jint JNICALL Java_pw3270_terminal_get_1next_1unprotected(JNIEnv *env, 
 
 
 }
+
+JNIEXPORT jint JNICALL Java_pw3270_terminal_get_1is_1protected(JNIEnv *env, jobject obj, jint baddr) {
+
+	jint rc = -1;
+
+	try {
+
+		rc = java::getHandle(env,obj)->get_is_protected((int) baddr);
+
+
+	} catch(std::exception &e) {
+
+		env->ThrowNew(env->FindClass("java/lang/Exception"), e.what());
+
+	}
+
+	return rc;
+
+
+}
+
+JNIEXPORT jint JNICALL Java_pw3270_terminal_get_1is_1protected_1at(JNIEnv *env, jobject obj, jint row, jint col) {
+
+	jint rc = -1;
+
+	try {
+
+		rc = java::getHandle(env,obj)->get_is_protected_at((int) row, (int) col);
+
+	} catch(std::exception &e) {
+
+		env->ThrowNew(env->FindClass("java/lang/Exception"), e.what());
+
+	}
+
+	return rc;
+
+
+}

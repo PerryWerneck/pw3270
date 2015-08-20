@@ -316,6 +316,17 @@ public class terminal
 	public native int get_is_protected(int baddr);
 
 	/**
+	 * Check if the address is protected.
+	 *
+	 * @param row Screen row.
+	 * @param col Screen col.
+	 *
+	 * @return Protect state.
+	 *
+	 */
+	public native int get_is_protected_at(int row, int col);
+
+	/**
 	 * Get next field address.
 	 *
 	 * @return Address of the next field.

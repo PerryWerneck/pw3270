@@ -38,7 +38,7 @@
 			<menuitem name='java_except' action='java' label='Exception test' src='except'/>
 			<menuitem name='java_output' action='java' label='Output test' src='out'/>
 			<menuitem name='java_popup' action='java' label='Popup test' src='popup'/>
+			<menuitem name='java_protect' action='java' label='Protection test' src='prot'/>
 		</menu>
 	</menubar>
 </ui>
-

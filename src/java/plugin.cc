@@ -235,11 +235,11 @@
 	}
 
 	int get_is_protected(int baddr = -1) {
-		return lib3270_is_protected(hSession,baddr);
+		return lib3270_get_is_protected(hSession,baddr);
 	}
 
 	int get_is_protected_at(int row, int col) {
-		return lib3270_is_protected_at(hSession,row,col);
+		return lib3270_get_is_protected_at(hSession,row,col);
 	}
 
 	int set_copy(const char *text) {
