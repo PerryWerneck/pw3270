@@ -41,6 +41,10 @@ run_command()
 			dbus-send --session  --print-reply --dest=$DEST.$SESSION $BPATH $DEST.setTextAt int32:$2 int32:$3 string:$4
 			;;
 
+		action)
+			dbus-send --session  --print-reply --dest=$DEST.$SESSION $BPATH $DEST.action string:$2
+			;;
+
 		enter)
 			dbus-send --session  --print-reply --dest=$DEST.$SESSION $BPATH $DEST.enter
 			;;

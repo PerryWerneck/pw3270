@@ -388,7 +388,7 @@
 
 	case HLLAPI_PACKET_ACTION:
 		send_result(source,lib3270_action(lib3270_get_default_session_handle(),
-								(const char *) ((struct hllapi_packet_text *) source->buffer)->text);
+								(const char *) ((struct hllapi_packet_text *) source->buffer)->text));
 		break;
 
 

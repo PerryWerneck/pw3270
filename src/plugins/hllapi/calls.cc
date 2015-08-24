@@ -314,6 +314,10 @@
 	return HLLAPI_STATUS_SUCCESS;
  }
 
+ HLLAPI_API_CALL hllapi_action(LPSTR buffer) {
+	session::get_default()->action((const char *) buffer);
+	return HLLAPI_STATUS_SUCCESS;
+ }
 
  HLLAPI_API_CALL hllapi_print(void)
  {

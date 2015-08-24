@@ -107,6 +107,8 @@ extern "C" {
 	HLLAPI_API_CALL hllapi_erase_eol(void);
 	HLLAPI_API_CALL hllapi_erase_input(void);
 
+  HLLAPI_API_CALL hllapi_action(LPSTR buffer);
+
 	HLLAPI_API_CALL hllapi_print(void);
 
 	HLLAPI_API_CALL hllapi(const LPWORD func, LPSTR str, LPWORD length, LPWORD rc);
