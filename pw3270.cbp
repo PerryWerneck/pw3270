@@ -193,6 +193,9 @@
 		<Unit filename="src/lib3270/3270ds.h" />
 		<Unit filename="src/lib3270/Makefile.in" />
 		<Unit filename="src/lib3270/X11keysym.h" />
+		<Unit filename="src/lib3270/actions.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/lib3270/ansi.c">
 			<Option compilerVar="CC" />
 		</Unit>

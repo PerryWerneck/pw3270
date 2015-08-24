@@ -148,6 +148,7 @@
 	int				  file_transfer(LIB3270_FT_OPTION options, const gchar *local, const gchar *remote, int lrecl = 0, int blksize = 0, int primspace = 0, int secspace = 0, int dft = 4096);
 
     int				  quit(void);
+	int				  action(const char *name);
 
  protected:
 
@@ -764,6 +765,11 @@ int plugin::quit(void)
 {
 	gtk_main_quit();
 	return 0;
+}
+
+int plugin::action(const char *name)
+{
+	return lib3270_action(hSession,name);
 }
 
 int plugin::set_host_charset(const char *charset)

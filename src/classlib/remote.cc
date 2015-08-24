@@ -1156,6 +1156,33 @@
 
 		}
 
+		int action(const char *str)
+		{
+
+#if defined(WIN32)
+
+			size_t						  len           = strlen(str);
+			struct hllapi_packet_text 	* query;
+			size_t					      cbSize		= sizeof(struct hllapi_packet_text)+len;
+
+			query = (struct hllapi_packet_text *) malloc(cbSize);
+			query->packet_id 	= HLLAPI_PACKET_ACTION;
+			strcpy(query->text,str);
+
+			return query_intval((void *) query, cbSize, true);
+
+#elif defined(HAVE_DBUS)
+
+			return query_intval("action", DBUS_TYPE_STRING, &str, DBUS_TYPE_INVALID);
+#else
+
+			return -1;
+
+#endif
+
+		}
+
+
 		int get_field_start(int baddr)
 		{
 #if defined(WIN32)

@@ -350,6 +350,16 @@ public class terminal
 	public native int popup_dialog(int id, String title, String message, String secondary);
 
 	/**
+	 * Launch a lib3270 action by name.
+	 *
+	 * @param name		Name of the action to fire.
+	 *
+	 * @return Return code of the action call.
+	 *
+	 */
+	public native int action(String name);
+
+	/**
 	 * File selection dialog.
 	 *
 	 * @param action	Dialog action.

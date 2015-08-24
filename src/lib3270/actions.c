@@ -18,122 +18,67 @@
  * programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple
  * Place, Suite 330, Boston, MA, 02111-1307, USA
  *
- * Este programa está nomeado como actions.c e possui 877 linhas de código.
+ * Este programa está nomeado como actions.c e possui - linhas de código.
  *
  * Contatos:
  *
  * perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
  * erico.mendonca@gmail.com	(Erico Mascarenhas Mendonça)
- * licinio@bb.com.br		(Licínio Luis Branco)
- * kraucer@bb.com.br		(Kraucer Fernandes Mazuco)
- * macmiranda@bb.com.br		(Marco Aurélio Caldas Miranda)
  *
- */
-
-/*
- *	actions.c
- *		The X actions table and action debugging code.
  */
 
 #include "globals.h"
-#include "appres.h"
+#include <lib3270/trace.h>
 
-#include "actionsc.h"
-#include "hostc.h"
-#include "kybdc.h"
-#include "popupsc.h"
-#include "printc.h"
-#include "resources.h"
-#include "togglesc.h"
-#include "trace_dsc.h"
-#include "utilc.h"
-#include "xioc.h"
+/*---[ Globals ]--------------------------------------------------------------------------------------------------------------*/
 
-#if defined(X3270_FT) /*[*/
-#include "ftc.h"
-#endif /*]*/
-// #if defined(X3270_DISPLAY)
-// #include "keypadc.h"
-//#endif
-#if defined(X3270_DISPLAY) || defined(C3270) || defined(WC3270) /*[*/
-#include "screenc.h"
-#endif /*]*/
+/*---[ Statics ]--------------------------------------------------------------------------------------------------------------*/
 
-#error Deprecated
+/*---[ Implement ]------------------------------------------------------------------------------------------------------------*/
 
-/*
-
-#if defined(X3270_DISPLAY)
-#include <X11/keysym.h>
-
-#define MODMAP_SIZE	8
-#define MAP_SIZE	13
-#define MAX_MODS_PER	4
-static struct {
-        const char *name[MAX_MODS_PER];
-        unsigned int mask;
-	Boolean is_meta;
-} skeymask[MAP_SIZE] = {
-	{ { "Shift" }, ShiftMask, False },
-	{ { (char *)NULL } //, LockMask, False },
-	{ { "Ctrl" }, ControlMask, False },
-	{ { CN }, Mod1Mask, False },
-	{ { CN }, Mod2Mask, False },
-	{ { CN }, Mod3Mask, False },
-	{ { CN }, Mod4Mask, False },
-	{ { CN }, Mod5Mask, False },
-	{ { "Button1" }, Button1Mask, False },
-	{ { "Button2" }, Button2Mask, False },
-	{ { "Button3" }, Button3Mask, False },
-	{ { "Button4" }, Button4Mask, False },
-	{ { "Button5" }, Button5Mask, False }
-};
-static Boolean know_mods = False;
-#endif */
-
-/* Actions that are aliases for other actions. */
-/*
-static char *aliased_actions[] = {
-	"Close", "HardPrint", "Open", NULL
-};
-*/
-
-/*
-enum iaction ia_cause;
-const char *ia_name[] = {
-	"String", "Paste", "Screen redraw", "Keypad", "Default", "Key",
-	"Macro", "Script", "Peek", "Typeahead", "File transfer", "Command",
-	"Keymap", "Idle"
-};
-*/
-
-/*
- * Return a name for an action.
- */ /*
-const char * action_name(XtActionProc action)
-{
-	// TODO (perry#1#): Remove all calls to action_name; move all action processing to main program.
-	return "Action";
-}
-*/
-/*
- * Check the number of argument to an action, and possibly pop up a usage
- * message.
+/**
+ * @brief Launch an action by name.
  *
- * Returns 0 if the argument count is correct, -1 otherwise.
- */ /*
-int
-check_usage(XtActionProc action, Cardinal nargs, Cardinal nargs_min,
-    Cardinal nargs_max)
+ */
+LIB3270_EXPORT int lib3270_action(H3270 *hSession, const char *name)
 {
-	if (nargs >= nargs_min && nargs <= nargs_max)
-		return 0;
-	if (nargs_min == nargs_max)
-		popup_an_error("Action requires %d argument%s",action, nargs_min, nargs_min == 1 ? "" : "s");
-	else
-		popup_an_error("Action requires %d or %d arguments",nargs_min, nargs_max);
-//	cancel_if_idle_command();
+	#undef DECLARE_LIB3270_ACTION
+	#undef DECLARE_LIB3270_CLEAR_SELECTION_ACTION
+	#undef DECLARE_LIB3270_KEY_ACTION
+	#undef DECLARE_LIB3270_CURSOR_ACTION
+	#undef DECLARE_LIB3270_FKEY_ACTION
+
+	#define DECLARE_LIB3270_ACTION( name )						{ #name, lib3270_ ## name			},
+	#define DECLARE_LIB3270_CLEAR_SELECTION_ACTION( name )		{ #name, lib3270_ ## name			},
+	#define DECLARE_LIB3270_KEY_ACTION( name )					{ #name, lib3270_ ## name			},
+	#define DECLARE_LIB3270_CURSOR_ACTION( name )				{ #name, lib3270_cursor_ ## name	},
+	#define DECLARE_LIB3270_FKEY_ACTION( name )					// name
+
+	static const struct _action
+	{
+		const char	* name;
+		int			  (*call)(H3270 *h);
+	} action[] =
+	{
+		#include <lib3270/action_table.h>
+	};
+
+	size_t f;
+
+	CHECK_SESSION_HANDLE(hSession);
+
+	for(f=0; f< (sizeof(action)/sizeof(action[0])); f++)
+	{
+		if(!strcasecmp(name,action[f].name))
+		{
+			lib3270_trace_event(hSession,"Action %s activated\n",name);
+			return action[f].call(hSession);
+		}
+
+	}
+
+	lib3270_trace_event(hSession,"Unknown action %s\n",name);
+	errno = ENOENT;
 	return -1;
-} */
 
-
+}

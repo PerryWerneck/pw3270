@@ -340,6 +340,10 @@
 		return 0;
     }
 
+	int action(const char *name) {
+		return lib3270_action(hSession,name);
+	}
+
  };
 
 

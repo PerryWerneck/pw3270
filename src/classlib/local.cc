@@ -158,6 +158,7 @@
 		int				(*_erase_eof)(H3270 *hSession);
 		int				(*_erase_eol)(H3270 *hSession);
 		int				(*_erase_input)(H3270 *hSession);
+		int				(*_action)(H3270 *hSession, const char *name);
 
 		const char * 	(*_ebc2asc)(H3270 *hSession, unsigned char *buffer, int sz);
 		const char * 	(*_asc2ebc)(H3270 *hSession, unsigned char *buffer, int sz);
@@ -223,6 +224,7 @@
 				{ (void **) & _ebc2asc,					"lib3270_ebc2asc"					},
 				{ (void **) & _asc2ebc,					"lib3270_asc2ebc"					},
 
+				{ (void **) & _action,					"lib3270_action"					},
 			};
 
 			for(unsigned int f = 0; f < (sizeof (call) / sizeof ((call)[0]));f++)
@@ -466,6 +468,11 @@
 		const char * ebc2asc(unsigned char *str, int sz)
 		{
 			return _ebc2asc(hSession,str,sz);
+		}
+
+		int action(const char *name)
+		{
+			return _action(hSession,name);
 		}
 
  	};

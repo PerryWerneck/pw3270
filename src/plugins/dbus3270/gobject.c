@@ -430,9 +430,14 @@ void pw3270_dbus_pa_key(PW3270Dbus *object, int key, DBusGMethodInvocation *cont
 	dbus_g_method_return(context,lib3270_get_is_protected_at(pw3270_dbus_get_session_handle(object),row,col));
  }
 
+ void pw3270_dbus_action(PW3270Dbus *object, const gchar *text, DBusGMethodInvocation *context)
+ {
+	trace("%s object=%p context=%p",__FUNCTION__,object,context);
+	dbus_g_method_return(context,lib3270_action(pw3270_dbus_get_session_handle(object),text));
+ }
 
-void pw3270_dbus_get_clipboard(PW3270Dbus *object, DBusGMethodInvocation *context)
-{
+ void pw3270_dbus_get_clipboard(PW3270Dbus *object, DBusGMethodInvocation *context)
+ {
 	gchar *text;
 
 	trace("%s object=%p context=%p",__FUNCTION__,object,context);

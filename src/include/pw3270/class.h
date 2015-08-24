@@ -206,6 +206,7 @@
 
 		// Actions
 		virtual int				  quit(void)										= 0;
+		virtual int				  action(const char *name)							= 0;
 
 		int						  erase(int mode);
 

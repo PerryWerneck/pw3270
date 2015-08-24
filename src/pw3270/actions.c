@@ -57,7 +57,7 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
-static void lib3270_action(GtkAction *action, GtkWidget *widget)
+static void do_lib3270_action(GtkAction *action, GtkWidget *widget)
 {
 	int	(*call)(H3270 *h) = (int (*)(H3270 *h)) g_object_get_data(G_OBJECT(action),"lib3270_call");
 
@@ -270,7 +270,7 @@ static void connect_standard_action(GtkAction *action, GtkWidget *widget, const 
 		if(!g_ascii_strcasecmp(name,lib3270_entry[f].name))
 		{
 			g_object_set_data(G_OBJECT(action),"lib3270_call",lib3270_entry[f].call);
-			g_signal_connect(action,"activate",G_CALLBACK(lib3270_action),widget);
+			g_signal_connect(action,"activate",G_CALLBACK(do_lib3270_action),widget);
 			return;
 		}
 	}
@@ -834,7 +834,7 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 	case ACTION_TYPE_LIB3270:
 		action = new_action(nm,names,values);
 		g_object_set_data(G_OBJECT(action),"lib3270_call",callback[id]);
-		g_signal_connect(action,"activate",G_CALLBACK(lib3270_action),widget);
+		g_signal_connect(action,"activate",G_CALLBACK(do_lib3270_action),widget);
 		break;
 
 	case ACTION_TYPE_STRING:

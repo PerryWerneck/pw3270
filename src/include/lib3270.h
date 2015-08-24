@@ -1028,6 +1028,9 @@
 	LIB3270_EXPORT int lib3270_is_protected(H3270 *h, unsigned int baddr);
 	LIB3270_EXPORT int lib3270_is_protected_at(H3270 *h, unsigned int row, unsigned int col);
 
+	LIB3270_EXPORT int lib3270_action(H3270 *hSession, const char *name);
+
+
 	/**
 	 * Alloc/Realloc memory buffer.
 	 *

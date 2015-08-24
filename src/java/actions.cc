@@ -147,3 +147,25 @@ JNIEXPORT jint JNICALL Java_pw3270_terminal_print(JNIEnv *env, jobject obj) {
 	return rc;
 
 }
+
+JNIEXPORT jint JNICALL Java_pw3270_terminal_action(JNIEnv *env, jobject obj, jstring j_name) {
+
+	jint		  rc	= -1;
+	const char	* name	= env->GetStringUTFChars(j_name, 0);
+
+	try {
+
+		rc = java::getHandle(env,obj)->action(name);
+
+	} catch(std::exception &e) {
+
+		env->ReleaseStringUTFChars( j_name, name);
+		env->ThrowNew(env->FindClass("java/lang/Exception"), e.what());
+		return -1;
+
+	}
+
+	env->ReleaseStringUTFChars( j_name, name);
+	return rc;
+
+}
