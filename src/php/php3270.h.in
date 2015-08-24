@@ -67,6 +67,8 @@
 	PHP_METHOD(tn3270,getisprotected);
 	PHP_METHOD(tn3270,getisprotectedat);
 
+	PHP_METHOD(tn3270,action);
+
 	#undef PACKAGE_NAME
 	#undef PACKAGE_VERSION
 	#undef HAVE_MALLOC_H

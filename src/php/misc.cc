@@ -115,3 +115,25 @@ PHP_METHOD(tn3270, iterate)
 
 	RETURN_LONG(obj->hSession->iterate(wait));
 }
+
+PHP_METHOD(tn3270, action)
+{
+
+	tn3270_object	* obj	= (tn3270_object *) zend_object_store_get_object(getThis() TSRMLS_CC);
+
+	const char 		* text;
+	int 					  szText;
+
+	if(zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &text, &szText) == FAILURE)
+		RETURN_NULL();
+
+	if(!szText)
+		RETURN_NULL();
+
+	char buffer[szText+1];
+	memcpy(buffer,text,szText);
+	buffer[szText] = 0;
+
+	RETURN_LONG(obj->hSession->action(buffer));
+
+}

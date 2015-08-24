@@ -19,6 +19,9 @@
 	$rc = $host->getisprotectedat(20,39);
 	print("GetIsprotectedAt(20,39) saiu com \"" . $rc . "\"\n");
 
+	$rc = $host->action("clear");
+	print("Action(\"clear\") saiu com \"" . $rc . "\"\n");
+
 	$rc = $host->disconnect();
 	print("disconnect() exits with rc=" . $rc . "\n");
 
