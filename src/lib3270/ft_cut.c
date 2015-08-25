@@ -517,7 +517,9 @@ static void cut_data(H3270 *hSession)
 
 	conv_length = upload_convert(hSession, cvbuf, raw_length);
 	if (conv_length < 0)
+	{
 		return;
+	}
 
 	/* Write it to the file. */
 	if (fwrite((char *)cvbuf, conv_length, 1, ft->local_file) == 0)

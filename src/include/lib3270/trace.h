@@ -24,7 +24,6 @@
  *
  * perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
  * erico.mendonca@gmail.com	(Erico Mascarenhas Mendonça)
- * licinio@bb.com.br		(Licínio Luis Branco)
  * kraucer@bb.com.br		(Kraucer Fernandes Mazuco)
  *
  */
@@ -59,7 +58,7 @@
 	 * @param ...	Arguments.
 	 *
 	 */
-	LIB3270_EXPORT void lib3270_write_dstrace(H3270 *session, const char *fmt, ...);
+	LIB3270_EXPORT void lib3270_write_dstrace(H3270 *session, const char *fmt, ...) __attribute__((format(printf, 2, 3)));
 
 	/**
 	 * Write on trace file.
@@ -70,7 +69,7 @@
 	 * @param ...	Arguments.
 	 *
 	 */
-	LIB3270_EXPORT void lib3270_write_nettrace(H3270 *session, const char *fmt, ...);
+	LIB3270_EXPORT void lib3270_write_nettrace(H3270 *session, const char *fmt, ...) __attribute__((format(printf, 2, 3)));
 
 	/**
 	 * Write on trace file.
@@ -81,7 +80,7 @@
 	 * @param ...	Arguments.
 	 *
 	 */
-	LIB3270_EXPORT void lib3270_trace_event(H3270 *session, const char *fmt, ...);
+	LIB3270_EXPORT void lib3270_trace_event(H3270 *session, const char *fmt, ...) __attribute__((format(printf, 2, 3)));
 
 #ifdef __cplusplus
 	}

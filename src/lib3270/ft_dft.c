@@ -24,9 +24,7 @@
  *
  * perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
  * erico.mendonca@gmail.com	(Erico Mascarenhas Mendonça)
- * licinio@bb.com.br		(Licínio Luis Branco)
  * kraucer@bb.com.br		(Kraucer Fernandes Mazuco)
- * macmiranda@bb.com.br		(Marco Aurélio Caldas Miranda)
  *
  */
 
@@ -76,18 +74,6 @@ struct data_buffer
 	char data_length[2];		/**< Data Length in 3270 byte order+5 */
 	char data[256];				/**< The actual data */
 };
-
-/* Globals. */
-// int dft_buffersize = 0;			/* Buffer size (LIMIN, LIMOUT) */
-
-/* Statics. */
-// static Boolean message_flag = False;	/* Open Request for msg received */
-// static int dft_eof;
-// static unsigned long recnum;
-// static char *abort_string = CN;
-// static unsigned char *dft_savebuf = NULL;
-// static int dft_savebuf_len = 0;
-// static int dft_savebuf_max = 0;
 
 static void dft_abort(H3270 *hSession, unsigned short code, const char *fmt, ...);
 
