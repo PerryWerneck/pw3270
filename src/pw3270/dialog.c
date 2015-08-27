@@ -507,7 +507,7 @@
 	gtk_about_dialog_set_license(dialog, gettext( license ) );
 	gtk_about_dialog_set_wrap_license(dialog,TRUE);
 
-	gtk_about_dialog_set_website(dialog,"http://www.softwarepublico.gov.br/dotlrn/clubs/pw3270");
+	gtk_about_dialog_set_website(dialog,"https://portal.softwarepublico.gov.br/social/pw3270/");
 	gtk_about_dialog_set_website_label(dialog,_( "Brazilian Public Software Portal" ));
 
 	gtk_about_dialog_set_authors(dialog,authors);

@@ -79,6 +79,7 @@ Version:        @PACKAGE_VERSION@
 Release:        %_release
 Summary:        IBM 3270 Terminal emulator for gtk
 Source:         %{name}-%{version}.tar.bz2
+Url:            https://portal.softwarepublico.gov.br/social/pw3270/
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 Requires:       openssl shared-mime-info lib3270 = @PACKAGE_VERSION@
 Provides:	lib@PACKAGE@ = @PACKAGE_VERSION@ lib@PACKAGE@.so = @PACKAGE_VERSION@

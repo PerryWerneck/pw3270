@@ -41,7 +41,7 @@ fi
 
 if test -z $PACKAGE_SOURCE ; then
 	echo "Can´t detect package source, using default one"
-	PACKAGE_SOURCE="http://www.softwarepublico.gov.br/dotlrn/clubs/pw3270"
+	PACKAGE_SOURCE="https://portal.softwarepublico.gov.br/social/pw3270/"
 fi
 
 echo "PACKAGE_REVISION=$PACKAGE_REVISION" > $srcdir/revision
