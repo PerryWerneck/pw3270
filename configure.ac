@@ -163,7 +163,7 @@ case "$host" in
 		AC_CONFIG_FILES(nsi/j3270.nsi)
 		AC_CONFIG_FILES(nsi/rx3270.nsi)
 
-		AC_CONFIG_FILES(nsi/runtime-init-$host_cpu.nsi)
+		AC_CONFIG_FILES(nsi/runtime-init.nsi)
 
 		AC_CONFIG_FILES(src/plugins/hllapi/Makefile)
 		AC_CONFIG_FILES(makegtkruntime.sh)

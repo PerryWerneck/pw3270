@@ -58,7 +58,8 @@ $(PACKAGE_NAME)-$(HOST_CPU).nsi: \
 	runtime.nsi \
 	sdk.nsi \
 	uninstall-$(HOST_CPU).nsi \
-	oninit-$(HOST_CPU).nsi
+	oninit-$(HOST_CPU).nsi \
+	$(foreach PLUGIN, $(PLUGINS), $(PLUGIN)-init.nsi )
 
 	@rm -f $@
 	@cat header-$(HOST_CPU).nsi		> 	$@
@@ -78,8 +79,8 @@ $(PACKAGE_NAME)-$(HOST_CPU).nsi: \
 
 	# Install plugin scripts
 
-	@cat runtime-init-$(HOST_CPU).nsi >> $@
-	@cat $(foreach PLUGIN, $(PLUGINS), $(PLUGIN)-init-$(HOST_CPU).nsi ) >> $@
+	@cat runtime-init.nsi >> $@
+	@cat $(foreach PLUGIN, $(PLUGINS), $(PLUGIN)-init.nsi ) >> $@
 
 	# Finalize onInit script
 
