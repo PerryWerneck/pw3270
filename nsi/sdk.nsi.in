@@ -1,0 +1,37 @@
+
+Section /o "Software Development Kit" SecSDK
+
+	CreateDirectory "$INSTDIR\sdk"
+	CreateDirectory "$INSTDIR\sdk\include"
+	CreateDirectory "$INSTDIR\sdk\include\lib3270"
+	CreateDirectory "$INSTDIR\sdk\include\pw3270"
+	CreateDirectory "$INSTDIR\sdk\sample"
+	CreateDirectory "$INSTDIR\sdk\sample\classlib"
+
+	setOutPath $INSTDIR\sdk\include
+	file "src\include\lib3270.h"
+	file "src\include\pw3270.h"
+
+	setOutPath $INSTDIR\sdk\include\pw3270
+	file "src\include\pw3270\class.h"
+	file "src\include\pw3270\hllapi.h"
+	file "src\include\pw3270\ipcpackets.h"
+	file "src\include\pw3270\plugin.h"
+	file "src\include\pw3270\trace.h"
+	file "src\include\pw3270\v3270.h"
+
+	setOutPath $INSTDIR\sdk\include\lib3270
+	file "src\include\lib3270\config.h"
+	file "src\include\rules.mak"
+
+	setOutPath $INSTDIR\sdk\sample\connect
+	file "src\sample\Makefile"
+	file "src\sample\connect.c"
+
+	setOutPath $INSTDIR\sdk\sample\classlib
+	file "src\classlib\*.cc"
+	file "src\include\pw3270\class.h"
+
+SectionEnd
+
+

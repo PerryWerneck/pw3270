@@ -148,6 +148,26 @@ case "$host" in
 		PLUGINS="hllapi"
 		APP_GUI_SRC="resources.rc"
 		DLLPREFIX=""
+
+		AC_CONFIG_FILES(nsi/header-$host_cpu-no-gtk.nsi)
+		AC_CONFIG_FILES(nsi/header-$host_cpu.nsi)
+		AC_CONFIG_FILES(nsi/main-begin-$host_cpu.nsi)
+		AC_CONFIG_FILES(nsi/main-end.nsi)
+		AC_CONFIG_FILES(nsi/runtime.nsi)
+		AC_CONFIG_FILES(nsi/sdk.nsi)
+		AC_CONFIG_FILES(nsi/uninstall-$host_cpu.nsi)
+		AC_CONFIG_FILES(nsi/oninit-$host_cpu.nsi)
+		AC_CONFIG_FILES(nsi/Makefile)
+
+		AC_CONFIG_FILES(nsi/hllapi.nsi)
+		AC_CONFIG_FILES(nsi/j3270.nsi)
+		AC_CONFIG_FILES(nsi/rx3270.nsi)
+
+		AC_CONFIG_FILES(nsi/runtime-init-$host_cpu.nsi)
+
+		AC_CONFIG_FILES(src/plugins/hllapi/Makefile)
+		AC_CONFIG_FILES(makegtkruntime.sh)
+
 		;;
 
 	*-apple-*)
@@ -161,6 +181,9 @@ case "$host" in
 		LDARCH="-arch $build_cpu"
 		LDAPPFLAGS=""
 		DLLPREFIX="lib"
+
+		AC_CONFIG_FILES(mac/pw3270.bundle)
+
 		;;
 
 	*)
@@ -173,6 +196,8 @@ case "$host" in
 		DBGRPATH="-Wl,--rpath,.bin/Debug/lib"
 		DBGCMDPREFIX="LD_LIBRARY_PATH=\$(BINDIR)/Debug/lib"
 		DLLPREFIX="lib"
+
+		AC_CONFIG_FILES(pw3270.spec)
 
 esac
 
@@ -434,6 +459,8 @@ if test "$app_cv_java" = "yes" ; then
 	PLUGINS="$PLUGINS j3270"
 	AC_MSG_NOTICE([jdk is present and enabled.])
 
+	AC_CONFIG_FILES(src/java/Makefile)
+
 else
 
 	AC_MSG_NOTICE([jdk is NOT present or disabled.])
@@ -491,8 +518,11 @@ AC_SUBST(GDBUS_LIBS)
 AC_SUBST(GDBUS_CFLAGS)
 
 if test "$app_cv_dbus" == "yes"; then
+
 	AC_DEFINE(HAVE_DBUS)
+	AC_CONFIG_FILES(src/plugins/dbus3270/Makefile)
 	PLUGINS="$PLUGINS dbus3270"
+
 fi
 
 #--[ SSL ]----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -527,8 +557,11 @@ case "$host" in
 
 	*)
 		if test -z "${PHPCONFIG}"; then
+
 			AC_MSG_NOTICE([Program php-config not found. Use --with-php-config=path to specify absolute path to the php-config tool.])
+
 		else
+
 			AC_DEFINE(HAVE_PHP)
 			EXTENSIONS="$EXTENSIONS php"
 			PHPMAJOR=`$PHPCONFIG --version | cut -d. -f1`
@@ -540,6 +573,10 @@ case "$host" in
 				PHPCONFDIR=/etc/php${PHPMAJOR}/cli
 			fi
 			AC_MSG_NOTICE([Using $PHPCONFDIR for PHP config files.])
+
+			AC_CONFIG_FILES(src/php/Makefile)
+			AC_CONFIG_FILES(src/php/php3270.h)
+
 		fi
 
 esac
@@ -578,6 +615,8 @@ if test "$app_cv_rexx" == "yes"; then
 
 	PLUGINS="$PLUGINS rx3270"
 	EXTENSIONS="$EXTENSIONS rexx"
+
+	AC_CONFIG_FILES(src/plugins/rx3270/Makefile)
 
 	AC_MSG_NOTICE([ooRexx plugin & extension are enabled.])
 else
@@ -712,10 +751,19 @@ fi
 
 # Set targets
 if test "$app_cv_office" == "yes" ; then
+
 	AC_MSG_NOTICE([libreoffice sdk is present.])
 	EXTENSIONS="$EXTENSIONS oxt"
+
+	AC_CONFIG_FILES(src/loffice/Makefile)
+	AC_CONFIG_FILES(src/loffice/description.xml)
+	AC_CONFIG_FILES(src/loffice/manifest.xml)
+
+
 else
+
 	AC_MSG_NOTICE([libreoffice sdk is NOT present or disabled.])
+
 fi
 
 AC_SUBST(OFFICE_HOME)
@@ -759,38 +807,39 @@ AC_SUBST(CLASS_LIBS)
 
 #--[ Output files ]-------------------------------------------------------------------------------------------------------------------------------------------
 
-AC_CONFIG_FILES([
+AC_CONFIG_FILES(Makefile)
+AC_CONFIG_FILES(lib3270.pc)
+AC_CONFIG_FILES(pw3270.pc)
 
-	Makefile
-	lib3270.pc
-	pw3270.pc
-	pw3270.spec
-	pw3270-i686.nsi
-	pw3270-x86_64.nsi
-	src/include/rules.mak
-	src/include/plugin.mak
-	src/lib3270/Makefile
-	src/lib3270/mkversion.sh
-	src/pw3270/Makefile
-	src/loffice/Makefile
-	src/loffice/description.xml
-	src/loffice/manifest.xml
-	src/pw3270/uiparser/Makefile
-	src/tools/Makefile
-	src/plugins/hllapi/Makefile
-	src/plugins/rx3270/Makefile
-	src/plugins/dbus3270/Makefile
-	src/classlib/Makefile
-	src/classlib/class.mak
-	man/Makefile
-	makegtkruntime.sh
-	src/sample/Makefile
-	mac/pw3270.bundle
-	src/php/Makefile
-	src/php/php3270.h
-	src/java/Makefile
+AC_CONFIG_FILES(src/include/rules.mak)
+AC_CONFIG_FILES(src/include/plugin.mak)
 
-])
+AC_CONFIG_FILES(src/lib3270/mkversion.sh)
+
+AC_CONFIG_FILES(src/lib3270/Makefile)
+AC_CONFIG_FILES(src/pw3270/Makefile)
+AC_CONFIG_FILES(src/pw3270/uiparser/Makefile)
+AC_CONFIG_FILES(src/tools/Makefile)
+
+AC_CONFIG_FILES(src/classlib/Makefile)
+AC_CONFIG_FILES(src/classlib/class.mak)
+
+AC_CONFIG_FILES(man/Makefile)
+AC_CONFIG_FILES(src/sample/Makefile)
+
+
+case "$host" in
+	*-mingw32)
+		;;
+
+	*-apple-*)
+		;;
+
+	*)
+		;;
+esac
+
+
 
 dnl Output the generated config.status script.
 AC_OUTPUT
