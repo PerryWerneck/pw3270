@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-05 08:41-0300\n"
+"POT-Creation-Date: 2015-08-28 07:44-0300\n"
 "PO-Revision-Date: 2014-02-17 08:05-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Portugues <>\n"
@@ -356,7 +356,7 @@ msgstr "Erro na assinatura CRL"
 msgid "C_haracter Coding:"
 msgstr "C_odificação de caracteres:"
 
-#: print.c:413
+#: print.c:421
 msgid "C_olor scheme:"
 msgstr "Tema de c_ores:"
 
@@ -764,16 +764,16 @@ msgstr "Apagar até o final do campo"
 msgid "Erase to end of line"
 msgstr "Apagar até o final da linha"
 
-#: print.c:239 v3270/widget.c:194 util.c:981
+#: print.c:247 v3270/widget.c:194 util.c:981
 msgid "Error"
 msgstr "Erro"
 
-#: ft_cut.c:419 ft_dft.c:461
+#: ft_cut.c:419 ft_dft.c:447
 #, c-format
 msgid "Error \"%s\" reading from local file (rc=%d)"
 msgstr "Erro \"%s\" lendo arquivo local (rc=%d)"
 
-#: ft_cut.c:525 ft_dft.c:339
+#: ft_cut.c:527 ft_dft.c:325
 #, c-format
 msgid "Error \"%s\" writing to local file (rc=%d)"
 msgstr "Erro \"%s\" gravando arquivo local (rc=%d)"
@@ -1112,7 +1112,7 @@ msgstr "Estado inválido na OIA"
 msgid "OIA status ok"
 msgstr "Estado normal na OIA"
 
-#: print.c:605
+#: print.c:613
 msgid "Options"
 msgstr "Opções"
 
@@ -1326,7 +1326,7 @@ msgstr "Imprimir"
 msgid "Print copy"
 msgstr "Imprimir cópia"
 
-#: print.c:235
+#: print.c:243
 msgid "Print operation failed"
 msgstr "Operação de impressão falhou"
 
@@ -1334,17 +1334,22 @@ msgstr "Operação de impressão falhou"
 msgid "Print selected"
 msgstr "Imprimir seleção"
 
-#: print.c:499
+#: print.c:507
 msgid "Print selection box"
 msgstr "Imprimir marca de seleção"
 
-#: print.c:907 ui/00default.xml:342
+#: print.c:915 ui/00default.xml:342
 msgid "Print settings"
 msgstr "Configurações de impressão"
 
 #: ft/ftprogress.c:163
 msgid "Progress"
 msgstr "Progresso"
+
+#: ui/80javasamples.xml:90
+#, fuzzy
+msgid "Protection test"
+msgstr "Exception test"
 
 #: colors.c:446
 msgid "Purple"
@@ -2082,7 +2087,7 @@ msgstr "Trilhas"
 msgid "Transfer cancelled by host"
 msgstr "Transferência cancelada pelo servidor"
 
-#: ft_cut.c:396 ft_cut.c:494 ft_dft.c:242 ft_dft.c:380
+#: ft_cut.c:396 ft_cut.c:494 ft_dft.c:228 ft_dft.c:366
 msgid "Transfer cancelled by user"
 msgstr "Transferência cancelada pelo usuário"
 
@@ -2106,7 +2111,7 @@ msgstr "Turquesa"
 msgid "UTF-8"
 msgstr "UTF-8"
 
-#: ft_dft.c:182
+#: ft_dft.c:168
 msgid "Uknown DFT Open type from host"
 msgstr "Host enviou código de abertura DFT desconhecido"
 
@@ -2232,7 +2237,7 @@ msgstr "Alvo inesperado \"%s\""
 msgid "Unexpected type %d in typeahead queue"
 msgstr "Tipo inesperado %d na fila de teclado"
 
-#: ctlr.c:740
+#: ctlr.c:758
 #, c-format
 msgid "Unknown 3270 Data Stream command: 0x%X"
 msgstr "Unknown 3270 Data Stream command: 0x%X"
@@ -2326,47 +2331,47 @@ msgstr "Windows ocidental (CP1252)"
 msgid "Windows error %d"
 msgstr "Erro windows %d"
 
-#: v3270/oia.c:424 v3270/oia.c:448 v3270/oia.c:452
+#: v3270/oia.c:432 v3270/oia.c:456 v3270/oia.c:460
 msgid "X"
 msgstr "X"
 
-#: v3270/oia.c:428
+#: v3270/oia.c:436
 msgid "X -f"
 msgstr "X -f"
 
-#: v3270/oia.c:460
+#: v3270/oia.c:468
 msgid "X Connecting"
 msgstr "X Conectando"
 
-#: v3270/oia.c:444
+#: v3270/oia.c:452
 msgid "X Inhibit"
 msgstr "X Inibido"
 
-#: v3270/oia.c:420
+#: v3270/oia.c:428
 msgid "X Not Connected"
 msgstr "X Desconectado"
 
-#: v3270/oia.c:436
+#: v3270/oia.c:444
 msgid "X Numeric"
 msgstr "X Numérico"
 
-#: v3270/oia.c:440
+#: v3270/oia.c:448
 msgid "X Overflow"
 msgstr "X Estouro"
 
-#: v3270/oia.c:432
+#: v3270/oia.c:440
 msgid "X Protected"
 msgstr "X Protegido"
 
-#: v3270/oia.c:456
+#: v3270/oia.c:464
 msgid "X Resolving"
 msgstr "X Resolvendo"
 
-#: v3270/oia.c:408
+#: v3270/oia.c:416
 msgid "X System"
 msgstr "X Sistema"
 
-#: v3270/oia.c:412
+#: v3270/oia.c:420
 msgid "X Wait"
 msgstr "X Aguarde"
 
@@ -2407,7 +2412,7 @@ msgstr "_Editar"
 msgid "_File"
 msgstr "_Arquivo"
 
-#: print.c:413
+#: print.c:421
 msgid "_Font:"
 msgstr "_Fonte:"
 
