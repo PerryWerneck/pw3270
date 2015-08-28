@@ -14,9 +14,36 @@ cleanup()
 
 failed()
 {
+	echo -e "\e]2;Failed!\a"
 	echo $1
 	cleanup	
 }
+
+#
+# Copia pacote gerado
+#
+# $1 = Arquitetura (x86_32/x86_64)
+# $2 = Tipo do link
+#
+CopyPacket()
+{
+
+	FILENAME=$(find . -maxdepth 1 -name "*.exe" | head --lines 1 | sed "s@./@@g")
+
+	mkdir -p ${DESTDIR}/${1}
+
+	cp ${FILENAME} ${DESTDIR}/${1}
+	if [ "$?" != "0" ]; then
+		failed "Erro ao copiar instalador"
+	fi
+
+	ln -sf ${FILENAME} ${DESTDIR}/${1}/pw3270-${1}-${2}.exe
+	if [ "$?" != "0" ]; then
+		failed "Erro ao criar o link simbólico"
+	fi
+
+}
+
 
 #
 # Gera pacote windows
@@ -30,13 +57,13 @@ build()
 	case ${1} in
 	x86_32)
 		host=i686-w64-mingw32
-		nsi=pw3270-i686
+		host_cpu=i686
 		prefix=/usr/i686-w64-mingw32/sys-root/mingw
 		;;
 
 	x86_64)
 		host=x86_64-w64-mingw32
-		nsi=pw3270-x86_64
+		host_cpu=x86_64
 		prefix=/usr/x86_64-w64-mingw32/sys-root/mingw
 		;;
 
@@ -59,22 +86,39 @@ build()
 	make clean
 	rm -f *.exe
 
+	make -C nsi pw3270-${host_cpu}.nsi
+	if [ "$?" != "0" ]; then
+		failed "Erro ao gerar script de empacotamento windows"
+	fi
+
 	make Release
 	if [ "$?" != "0" ]; then
 		failed "Erro ao compilar fontes"
 	fi
 
-	make package
+	ln -sf .${prefix}/share/locale .bin/Release/locale
 	if [ "$?" != "0" ]; then
-		failed "Erro ao gerar instalador"
+		failed "Erro ao criar link para traduções"
 	fi
 
-	mkdir -p ${DESTDIR}/${1}
-
-	cp *.exe ${DESTDIR}/${1}
+	chmod +x makegtkruntime.sh
+	./makegtkruntime.sh
 	if [ "$?" != "0" ]; then
-		failed "Erro ao copiar instalador"
+		failed "Erro ao construir runtime gtk"
 	fi
+
+	echo -e "\e]2;pw3270-install-${host_cpu}.exe\a"
+	cat nsi/pw3270-${host_cpu}.nsi | makensis \
+                -DLOCALEDIR=".bin/Release${prefix}/share/locale" \
+				-
+
+#                -Onsis-${host_cpu}.log -
+
+	if [ "$?" != "0" ]; then
+		failed "Erro ao gerar pacote windows"
+	fi
+
+	CopyPacket ${1} "latest"
 
 	make clean
 	rm -f *.exe
@@ -138,14 +182,7 @@ done
 # Gera pacotes
 for i in ${ARCHS}; do
 
-	if [ "${COMPLETE}" == "1" ]; then
-		build "${i}"
-	fi
-
-#	if [ "${RUNTIME}" == "1" ]; then
-#		build "${i}"
-#	fi
-
+	build "${i}"
 
 done
 
@@ -208,6 +245,13 @@ fi
 cd $myDIR
 rm -fr ${TEMPDIR}
 rm -fr ${RUNTIMEDIR}
+
+zip -r -j ${HOME}/public_html/win/pw3270-latest.zip \
+			${HOME}/public_html/win/x86_32/pw3270-x86_32-latest.exe \
+			${HOME}/public_html/win/x86_64/pw3270-x86_64-latest.exe 
+
+echo -e "\e]2;Success!\a"
+
 
 
 
