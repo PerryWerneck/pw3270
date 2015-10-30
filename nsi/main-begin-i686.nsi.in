@@ -34,7 +34,6 @@ SubSection "@PACKAGE@" SecMain
 		CreateDirectory "$INSTDIR\ui"
 
 		file "/oname=$INSTDIR\ui\00default.xml" 	"ui\00default.xml"
-		file "/oname=$INSTDIR\ui\10keypad.xml" 		"ui\10keypad.xml"
 
 		# Locale files
 		CreateDirectory "$INSTDIR\@localedir@\pt_BR\LC_MESSAGES"

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PREFIX="mingw64"
+PREFIX="mingw32"
 
 TEMPFILE=$(mktemp)
 
@@ -34,11 +34,11 @@ gdk-pixbuf-query-loaders
 EOF
 
 # Instala o tema usado no pacote windows
-sudo zypper in adwaita-icon-theme
+sudo zypper --non-interactive in adwaita-icon-theme
 
 while read FILE
 do
-	sudo zypper in ${PREFIX}-${FILE}
+	sudo zypper --non-interactive in ${PREFIX}-${FILE}
 done < ${TEMPFILE}
 
 rm -f ${TEMPFILE}

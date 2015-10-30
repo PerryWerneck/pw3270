@@ -1,0 +1,10 @@
+ChangeLog
+ChangeLog.new
+Makefile
+aclocal.m4
+.bin
+*.log
+*.status
+configure
+*.pc
+
