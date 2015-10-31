@@ -11,6 +11,8 @@
 				<Option object_output=".obj/Debug/" />
 				<Option type="3" />
 				<Option compiler="gcc" />
+				<Option host_application="./test.sh" />
+				<Option run_host_application_in_terminal="1" />
 				<Compiler>
 					<Add option="-g" />
 					<Add option="-DDEBUG=1" />
@@ -42,15 +44,18 @@
 		</Compiler>
 		<Linker>
 			<Add option="`python2-config --libs`" />
+			<Add option="`pkg-config --libs dbus-1`" />
 		</Linker>
 		<Unit filename="../classlib/exception.cc" />
 		<Unit filename="../classlib/local.cc" />
 		<Unit filename="../classlib/module.cc" />
 		<Unit filename="../classlib/remote.cc" />
 		<Unit filename="../classlib/session.cc" />
+		<Unit filename="../include/lib3270/config.h" />
 		<Unit filename="../include/pw3270/class.h" />
-		<Unit filename="main.cc" />
 		<Unit filename="private.h" />
+		<Unit filename="py3270.cc" />
+		<Unit filename="sample.py" />
 		<Extensions>
 			<code_completion />
 			<envvars />
