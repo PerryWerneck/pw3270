@@ -16,6 +16,9 @@ term.Connect("tn3270://zos.efglobe.com:telnet",10);
 print term.IsConnected()
 print term.IsReady()
 
+print term.GetStringAt(14,19,38)
+
+
 
 
 

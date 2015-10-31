@@ -36,6 +36,8 @@
 	#include <lib3270/config.h>
 	#include <pw3270/class.h>
 
+	using namespace std;
+
 	typedef struct {
 
 		PyObject_HEAD
@@ -60,6 +62,9 @@
 
 		PyObject	* terminal_connect(PyObject *self, PyObject *args);
 		PyObject	* terminal_disconnect(PyObject *self, PyObject *args);
+
+		PyObject 	* terminal_get_string_at(PyObject *self, PyObject *args);
+		PyObject	* terminal_cmp_string_at(PyObject *self, PyObject *args);
 
 	}
 

@@ -61,3 +61,50 @@ PyObject * terminal_is_ready(PyObject *self, PyObject *args) {
 
 }
 
+PyObject * terminal_cmp_string_at(PyObject *self, PyObject *args) {
+
+	int row, col, rc;
+	const char *text;
+
+	if (!PyArg_ParseTuple(args, "iis", &row, &col, &text)) {
+		PyErr_SetString(terminalError, strerror(EINVAL));
+		return NULL;
+	}
+
+	try {
+
+		rc = ((pw3270_TerminalObject *) self)->session->cmp_string_at(row,col,text);
+
+	} catch(std::exception &e) {
+
+		PyErr_SetString(terminalError, e.what());
+		return NULL;
+	}
+
+	return PyLong_FromLong(rc);
+
+}
+
+PyObject * terminal_get_string_at(PyObject *self, PyObject *args) {
+
+	int row, col, sz;
+	string rc;
+
+	if (!PyArg_ParseTuple(args, "iii", &row, &col, &sz)) {
+		PyErr_SetString(terminalError, strerror(EINVAL));
+		return NULL;
+	}
+
+	try {
+
+		rc = ((pw3270_TerminalObject *) self)->session->get_string_at(row,col,sz);
+
+	} catch(std::exception &e) {
+
+		PyErr_SetString(terminalError, e.what());
+		return NULL;
+	}
+
+	return PyString_FromString(rc.c_str());
+
+}

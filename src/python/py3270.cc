@@ -59,6 +59,9 @@ static PyMethodDef terminal_methods[] = {
     { "Connect",		terminal_connect,		METH_VARARGS,	"Connect to the host."									},
     { "Disconnect",  	terminal_disconnect,	METH_NOARGS,	"Disconnect from host."									},
 
+    { "CmpStringAt",	terminal_cmp_string_at,	METH_VARARGS,	"Compare string with terminal buffer at the position."	},
+    { "GetStringAt",  	terminal_get_string_at,	METH_VARARGS,	"Get string from terminal buffer."						},
+
     {NULL}	// Sentinel
 
 };
