@@ -41,18 +41,7 @@
 
 PyObject * terminal_new(PyTypeObject *type, PyObject *args, PyObject *kwds) {
 
-    pw3270_TerminalObject *self = (pw3270_TerminalObject *) type->tp_alloc(type, 0);
-
-	trace("%s: self=%p",__FUNCTION__,self);
-
-	self->session = NULL;
-
-    return (PyObject *)self;
-}
-
-
-int terminal_init(pw3270_TerminalObject *self, PyObject *args, PyObject *kwds) {
-
+	PW3270_NAMESPACE::session * session;
 	const char *id = "";
 
 	if (!PyArg_ParseTuple(args, "s", &id)) {
@@ -63,15 +52,25 @@ int terminal_init(pw3270_TerminalObject *self, PyObject *args, PyObject *kwds) {
 
 	try {
 
-		self->session = PW3270_NAMESPACE::session::create(id);
+		session = PW3270_NAMESPACE::session::create(id);
 
 	} catch(std::exception &e) {
 
 		trace("%s failed: %s",__FUNCTION__,e.what());
 		PyErr_SetString(terminalError, e.what());
+		return NULL;
 
 	}
 
+    pw3270_TerminalObject *self = (pw3270_TerminalObject *) type->tp_alloc(type, 0);
+
+	self->session = session;
+
+    return (PyObject *)self;
+}
+
+
+int terminal_init(pw3270_TerminalObject *self, PyObject *args, PyObject *kwds) {
 
 	return 0;
 
