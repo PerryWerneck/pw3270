@@ -7,4 +7,6 @@ print "Teste extensão pw3270"
 
 print py3270.revision()
 
+term = py3270.terminal("")
+
 

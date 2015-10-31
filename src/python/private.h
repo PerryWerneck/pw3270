@@ -44,5 +44,6 @@
 
 	} pw3270_TerminalObject;
 
+	extern PyObject * terminalError;
 
 #endif // PRIVATE_H_INCLUDED
