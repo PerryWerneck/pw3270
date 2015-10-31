@@ -132,3 +132,23 @@ PyObject * terminal_get_string_at(PyObject *self, PyObject *args) {
 	return PyString_FromString(rc.c_str());
 
 }
+
+PyObject * terminal_get_contents(PyObject *self) {
+
+	string rc;
+
+	try {
+
+		rc = ((pw3270_TerminalObject *) self)->session->get_string();
+
+	} catch(std::exception &e) {
+
+		PyErr_SetString(terminalError, e.what());
+		return NULL;
+	}
+
+	return PyString_FromString(rc.c_str());
+
+
+
+}

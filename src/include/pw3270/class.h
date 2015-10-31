@@ -184,7 +184,7 @@
 		string					  ebc2asc(string &str);
 
 		// Get/Set/Text with charset translation
-		string					  get_string(int baddr, size_t len);
+		string					  get_string(int baddr = 0, size_t len = -1);
 		string					  get_string_at(int row, int col, size_t sz);
 		int			 			  set_string_at(int row, int col, const char *str);
 		int				  		  cmp_string_at(int row, int col, const char *text);

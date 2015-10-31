@@ -103,7 +103,7 @@ static PyTypeObject pw3270_TerminalType = {
     0,								/*tp_as_mapping*/
     0,								/*tp_hash */
     0,								/*tp_call*/
-    0,								/*tp_str*/
+    terminal_get_contents,			/*tp_str*/
     0,								/*tp_getattro*/
     0,								/*tp_setattro*/
     0,								/*tp_as_buffer*/

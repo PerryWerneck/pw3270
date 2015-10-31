@@ -64,6 +64,7 @@
 		PyObject	* terminal_disconnect(PyObject *self, PyObject *args);
 
 		PyObject 	* terminal_get_string_at(PyObject *self, PyObject *args);
+		PyObject 	* terminal_get_contents(PyObject *self);
 		PyObject 	* terminal_set_string_at(PyObject *self, PyObject *args);
 		PyObject	* terminal_cmp_string_at(PyObject *self, PyObject *args);
 
