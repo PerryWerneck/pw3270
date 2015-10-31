@@ -18,49 +18,46 @@
  * programa; se não, escreva para a Free Software Foundation, Inc., 51 Franklin
  * St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * Este programa está nomeado como private.h e possui - linhas de código.
+ * Este programa está nomeado como get.cc e possui - linhas de código.
  *
  * Contatos:
  *
  * perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
  * erico.mendonca@gmail.com	(Erico Mascarenhas Mendonça)
  *
+ * Referências:
+ *
+ * <https://docs.python.org/2/extending/newtypes.html>
+ * <https://docs.python.org/2.7/extending/extending.html#a-simple-example>
+ *
  */
 
-#ifndef PRIVATE_H_INCLUDED
+ #include "private.h"
 
-	#define PRIVATE_H_INCLUDED
 
-	#include <Python.h>
+/*---[ Implement ]----------------------------------------------------------------------------------*/
 
-	#include <lib3270/config.h>
-	#include <pw3270/class.h>
+PyObject * terminal_get_version(PyObject *self, PyObject *args) {
 
-	typedef struct {
+    return PyString_FromString( ((pw3270_TerminalObject *) self)->session->get_version().c_str() );
 
-		PyObject_HEAD
+}
 
-		PW3270_NAMESPACE::session * session;
+PyObject * terminal_get_revision(PyObject *self, PyObject *args) {
 
-	} pw3270_TerminalObject;
+    return PyString_FromString( ((pw3270_TerminalObject *) self)->session->get_revision().c_str() );
 
-	extern PyObject * terminalError;
+}
 
-	extern "C" {
+PyObject * terminal_is_connected(PyObject *self, PyObject *args) {
 
-		PyObject	* terminal_new(PyTypeObject *type, PyObject *args, PyObject *kwds);
-		int			  terminal_init(pw3270_TerminalObject *self, PyObject *args, PyObject *kwds);
-		void		  terminal_dealloc(pw3270_TerminalObject * self);
+    return PyBool_FromLong( ((pw3270_TerminalObject *) self)->session->is_connected() );
 
-		PyObject	* terminal_get_version(PyObject *self, PyObject *args);
-		PyObject	* terminal_get_revision(PyObject *self, PyObject *args);
+}
 
-		PyObject	* terminal_is_connected(PyObject *self, PyObject *args);
-		PyObject	* terminal_is_ready(PyObject *self, PyObject *args);
+PyObject * terminal_is_ready(PyObject *self, PyObject *args) {
 
-		PyObject	* terminal_connect(PyObject *self, PyObject *args);
-		PyObject	* terminal_disconnect(PyObject *self, PyObject *args);
+    return PyBool_FromLong( ((pw3270_TerminalObject *) self)->session->is_ready() );
 
-	}
+}
 
-#endif // PRIVATE_H_INCLUDED

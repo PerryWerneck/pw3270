@@ -18,7 +18,7 @@
  * programa; se não, escreva para a Free Software Foundation, Inc., 51 Franklin
  * St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * Este programa está nomeado como main.cc e possui - linhas de código.
+ * Este programa está nomeado como py3270.cc e possui - linhas de código.
  *
  * Contatos:
  *
@@ -48,55 +48,16 @@ static PyObject * get_revision(PyObject *self, PyObject *args) {
 
 }
 
-static PyObject * terminal_new(PyTypeObject *type, PyObject *args, PyObject *kwds) {
-
-    pw3270_TerminalObject *self = (pw3270_TerminalObject *) type->tp_alloc(type, 0);
-
-	trace("%s: self=%p",__FUNCTION__,self);
-
-	self->session = NULL;
-
-    return (PyObject *)self;
-}
-
-
-static int terminal_init(pw3270_TerminalObject *self, PyObject *args, PyObject *kwds) {
-
-	const char *id = "";
-
-	if (!PyArg_ParseTuple(args, "s", &id)) {
-		id = "";
-	}
-
-	trace("%s(%s)",__FUNCTION__,id);
-
-	try {
-
-		self->session = PW3270_NAMESPACE::session::create(id);
-
-	} catch(std::exception &e) {
-
-		trace("%s failed: %s",__FUNCTION__,e.what());
-		PyErr_SetString(terminalError, e.what());
-
-	}
-
-
-	return 0;
-
-}
-
-static void terminal_dealloc(pw3270_TerminalObject * self) {
-
-	trace("%s",__FUNCTION__);
-
-	delete self->session;
-
-    self->ob_type->tp_free((PyObject*)self);
-
-}
-
 static PyMethodDef terminal_methods[] = {
+
+    { "Version",  		terminal_get_version,	METH_NOARGS,	"Get the lib3270 version string."						},
+    { "Revision",  		terminal_get_revision,	METH_NOARGS,	"Get the lib3270 revision number."						},
+
+    { "IsConnected",	terminal_is_connected,	METH_NOARGS,	"True if the terminal is connected to the host."		},
+    { "IsReady",  		terminal_is_ready,		METH_NOARGS,	"True if the terminal has finished network activity."	},
+
+    { "Connect",		terminal_connect,		METH_VARARGS,	"Connect to the host."									},
+    { "Disconnect",  	terminal_disconnect,	METH_NOARGS,	"Disconnect from host."									},
 
     {NULL}	// Sentinel
 
@@ -155,7 +116,7 @@ static PyTypeObject pw3270_TerminalType = {
 
 static PyMethodDef MyMethods[] = {
 
-    { "revision",  get_revision, METH_VARARGS,	"Get module revision."	},
+    { "Revision",  get_revision, METH_VARARGS,	"Get module revision."	},
 
     {NULL, NULL, 0, NULL}        /* Sentinel */
 
@@ -181,6 +142,6 @@ PyMODINIT_FUNC initpy3270(void) {
         return
 
 	(void) Py_INCREF(&pw3270_TerminalType);
-    PyModule_AddObject(m, "terminal", (PyObject *)&pw3270_TerminalType);
+    PyModule_AddObject(m, "Terminal", (PyObject *)&pw3270_TerminalType);
 
 }
