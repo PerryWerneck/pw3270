@@ -64,7 +64,19 @@
 		PyObject	* terminal_disconnect(PyObject *self, PyObject *args);
 
 		PyObject 	* terminal_get_string_at(PyObject *self, PyObject *args);
+		PyObject 	* terminal_set_string_at(PyObject *self, PyObject *args);
 		PyObject	* terminal_cmp_string_at(PyObject *self, PyObject *args);
+
+		PyObject 	* terminal_pfkey(PyObject *self, PyObject *args);
+		PyObject 	* terminal_pakey(PyObject *self, PyObject *args);
+		PyObject 	* terminal_enter(PyObject *self, PyObject *args);
+		PyObject 	* terminal_action(PyObject *self, PyObject *args);
+
+		PyObject 	* terminal_is_protected_at(PyObject *self, PyObject *args);
+		PyObject 	* terminal_set_cursor_at(PyObject *self, PyObject *args);
+
+		PyObject	* terminal_wait_for_ready(PyObject *self, PyObject *args);
+		PyObject	* terminal_wait_for_string_at(PyObject *self, PyObject *args);
 
 	}
 

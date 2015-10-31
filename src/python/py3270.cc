@@ -50,17 +50,29 @@ static PyObject * get_revision(PyObject *self, PyObject *args) {
 
 static PyMethodDef terminal_methods[] = {
 
-    { "Version",  		terminal_get_version,	METH_NOARGS,	"Get the lib3270 version string."						},
-    { "Revision",  		terminal_get_revision,	METH_NOARGS,	"Get the lib3270 revision number."						},
+    { "Version",  				terminal_get_version,			METH_NOARGS,	"Get the lib3270 version string."						},
+    { "Revision",  				terminal_get_revision,			METH_NOARGS,	"Get the lib3270 revision number."						},
 
-    { "IsConnected",	terminal_is_connected,	METH_NOARGS,	"True if the terminal is connected to the host."		},
-    { "IsReady",  		terminal_is_ready,		METH_NOARGS,	"True if the terminal has finished network activity."	},
+    { "IsConnected",			terminal_is_connected,			METH_NOARGS,	"True if the terminal is connected to the host."		},
+    { "IsReady",  				terminal_is_ready,				METH_NOARGS,	"True if the terminal has finished network activity."	},
+    { "IsProtected",  			terminal_is_protected_at,		METH_VARARGS,	"True if the position is read-only."					},
 
-    { "Connect",		terminal_connect,		METH_VARARGS,	"Connect to the host."									},
-    { "Disconnect",  	terminal_disconnect,	METH_NOARGS,	"Disconnect from host."									},
+    { "SetCursorPosition",		terminal_set_cursor_at,			METH_VARARGS,	"Set cursor position."									},
 
-    { "CmpStringAt",	terminal_cmp_string_at,	METH_VARARGS,	"Compare string with terminal buffer at the position."	},
-    { "GetStringAt",  	terminal_get_string_at,	METH_VARARGS,	"Get string from terminal buffer."						},
+    { "WaitForStringAt",		terminal_wait_for_string_at,	METH_VARARGS,	"Wait for string at position"							},
+    { "WaitForReady",			terminal_wait_for_ready,		METH_VARARGS,	"Wait for network communication to finish"				},
+
+    { "Connect",				terminal_connect,				METH_VARARGS,	"Connect to the host."									},
+    { "Disconnect",  			terminal_disconnect,			METH_NOARGS,	"Disconnect from host."									},
+
+    { "CmpStringAt",			terminal_cmp_string_at,			METH_VARARGS,	"Compare string with terminal buffer at the position."	},
+    { "GetStringAt",  			terminal_get_string_at,			METH_VARARGS,	"Get string from terminal buffer."						},
+    { "SetStringAt",  			terminal_set_string_at,			METH_VARARGS,	"Set string in terminal buffer."						},
+
+    { "PFKey",  				terminal_pfkey,					METH_VARARGS,	"Send PF key."											},
+    { "PAKey",  				terminal_pakey,					METH_VARARGS,	"Send PA key."											},
+    { "Enter",  				terminal_enter,					METH_NOARGS,	"Send Enter Key."										},
+    { "Action",  				terminal_action,				METH_VARARGS,	"Send Action by name."									},
 
     {NULL}	// Sentinel
 

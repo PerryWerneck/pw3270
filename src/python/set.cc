@@ -18,9 +18,9 @@
  * programa; se não, escreva para a Free Software Foundation, Inc., 51 Franklin
  * St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * Este programa está nomeado como get.cc e possui - linhas de código.
+ * Este programa está nomeado como set.cc e possui - linhas de código.
  *
- * Contatos:
+ * Contatos
  *
  * perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
  * erico.mendonca@gmail.com	(Erico Mascarenhas Mendonça)
@@ -37,55 +37,7 @@
 
 /*---[ Implement ]----------------------------------------------------------------------------------*/
 
-PyObject * terminal_get_version(PyObject *self, PyObject *args) {
-
-    return PyString_FromString( ((pw3270_TerminalObject *) self)->session->get_version().c_str() );
-
-}
-
-PyObject * terminal_get_revision(PyObject *self, PyObject *args) {
-
-    return PyString_FromString( ((pw3270_TerminalObject *) self)->session->get_revision().c_str() );
-
-}
-
-PyObject * terminal_is_connected(PyObject *self, PyObject *args) {
-
-    return PyBool_FromLong( ((pw3270_TerminalObject *) self)->session->is_connected() );
-
-}
-
-PyObject * terminal_is_ready(PyObject *self, PyObject *args) {
-
-    return PyBool_FromLong( ((pw3270_TerminalObject *) self)->session->is_ready() );
-
-}
-
-PyObject * terminal_is_protected_at(PyObject *self, PyObject *args) {
-
-	int rc, row, col;
-
-	if (!PyArg_ParseTuple(args, "ii", &row, &col)) {
-		PyErr_SetString(terminalError, strerror(EINVAL));
-		return NULL;
-	}
-
-	try {
-
-		rc = ((pw3270_TerminalObject *) self)->session->get_is_protected_at(row,col);
-
-	} catch(std::exception &e) {
-
-		PyErr_SetString(terminalError, e.what());
-		return NULL;
-	}
-
-    return PyBool_FromLong( rc );
-
-}
-
-
-PyObject * terminal_cmp_string_at(PyObject *self, PyObject *args) {
+ PyObject * terminal_set_string_at(PyObject *self, PyObject *args) {
 
 	int row, col, rc;
 	const char *text;
@@ -97,7 +49,7 @@ PyObject * terminal_cmp_string_at(PyObject *self, PyObject *args) {
 
 	try {
 
-		rc = ((pw3270_TerminalObject *) self)->session->cmp_string_at(row,col,text);
+		rc = ((pw3270_TerminalObject *) self)->session->set_string_at(row,col,text);
 
 	} catch(std::exception &e) {
 
@@ -107,21 +59,20 @@ PyObject * terminal_cmp_string_at(PyObject *self, PyObject *args) {
 
 	return PyLong_FromLong(rc);
 
-}
+ }
 
-PyObject * terminal_get_string_at(PyObject *self, PyObject *args) {
+ PyObject * terminal_set_cursor_at(PyObject *self, PyObject *args) {
 
-	int row, col, sz;
-	string rc;
+ 	int row, col, rc;
 
-	if (!PyArg_ParseTuple(args, "iii", &row, &col, &sz)) {
+	if (!PyArg_ParseTuple(args, "ii", &row, &col)) {
 		PyErr_SetString(terminalError, strerror(EINVAL));
 		return NULL;
 	}
 
 	try {
 
-		rc = ((pw3270_TerminalObject *) self)->session->get_string_at(row,col,sz);
+		rc = ((pw3270_TerminalObject *) self)->session->set_cursor_position(row,col);
 
 	} catch(std::exception &e) {
 
@@ -129,6 +80,7 @@ PyObject * terminal_get_string_at(PyObject *self, PyObject *args) {
 		return NULL;
 	}
 
-	return PyString_FromString(rc.c_str());
+	return PyLong_FromLong(rc);
 
-}
+ }
+

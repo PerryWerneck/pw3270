@@ -81,3 +81,54 @@
 	return PyLong_FromLong(rc);
 
  }
+
+ PyObject * terminal_wait_for_ready(PyObject *self, PyObject *args) {
+
+	int rc;
+	int timeout = 60;
+
+	if (!PyArg_ParseTuple(args, "|i", &timeout)) {
+		PyErr_SetString(terminalError, strerror(EINVAL));
+		return NULL;
+	}
+
+	try {
+
+		rc = ((pw3270_TerminalObject *) self)->session->wait_for_ready(timeout);
+
+	} catch(std::exception &e) {
+
+		PyErr_SetString(terminalError, e.what());
+		return NULL;
+	}
+
+	return PyLong_FromLong(rc);
+
+ }
+
+
+ PyObject * terminal_wait_for_string_at(PyObject *self, PyObject *args) {
+
+	int row, col, rc;
+	int timeout = 10;
+	const char *text;
+
+	if (!PyArg_ParseTuple(args, "iis|i", &row, &col, &text, &timeout)) {
+		PyErr_SetString(terminalError, strerror(EINVAL));
+		return NULL;
+	}
+
+	try {
+
+		rc = ((pw3270_TerminalObject *) self)->session->wait_for_string_at(row,col,text,timeout);
+
+	} catch(std::exception &e) {
+
+		PyErr_SetString(terminalError, e.what());
+		return NULL;
+	}
+
+	return PyLong_FromLong(rc);
+
+ }
+

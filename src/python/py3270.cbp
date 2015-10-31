@@ -53,12 +53,14 @@
 		<Unit filename="../classlib/session.cc" />
 		<Unit filename="../include/lib3270/config.h" />
 		<Unit filename="../include/pw3270/class.h" />
+		<Unit filename="actions.cc" />
 		<Unit filename="get.cc" />
 		<Unit filename="init.cc" />
 		<Unit filename="misc.cc" />
 		<Unit filename="private.h" />
 		<Unit filename="py3270.cc" />
 		<Unit filename="sample.py" />
+		<Unit filename="set.cc" />
 		<Extensions>
 			<code_completion />
 			<envvars />
