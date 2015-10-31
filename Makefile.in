@@ -186,6 +186,13 @@ $(BINDIR)/Release/@DLLPREFIX@jni3270@DLLEXT@: src/java/*
 	@$(MKDIR) `dirname $@`
 	@$(MAKE) BINDIR="../../$(BINDIR)" LIB3270_LIBS="$(RLSLIB)" LIB3270_CFLAGS="-I../../src/include" -C src/java Release
 
+python: $(BINDIR)/Release/py3270@DLLEXT@
+
+$(BINDIR)/Release/py3270.so: src/python/*
+	@$(MAKE) -C src/python Release
+	@$(MKDIR) `dirname $@`
+	@cp src/python/.bin/Release/py3270.so $@
+
 rexx: $(BINDIR)/Debug/plugins/rx3270@DLLEXT@
 
 #---[ Debug targets ]----------------------------------------------------------
@@ -382,6 +389,9 @@ install-oxt:
 install-php:
 	@$(MAKE) -C src/php install
 
+install-python:
+	@$(MAKE) -C src/python install
+
 install-java:
 	@$(MAKE) BINDIR=../../.bin LIB3270_CFLAGS="-I../../src/include" -C src/java install
 
@@ -401,6 +411,7 @@ clean:
 	@make -C src/plugins/dbus3270 clean
 	@make -C src/loffice clean
 	@make -C src/php clean
+	@make -C src/python clean
 	@make -C src/java clean
 	@make -C src/classlib clean
 	@rm -f $(PACKAGE_NAME).png

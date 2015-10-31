@@ -542,7 +542,7 @@ AC_SUBST(SOCKET_LIBS)
 
 AC_SEARCH_LIBS([dlopen], [dl], AC_DEFINE(HAVE_LIBDL), AC_MSG_NOTICE([libdl not present.]))
 
-#--[ Optional ]---------------------------------------------------------------------------------------------------------------------------------------------
+#--[ PHP ]--------------------------------------------------------------------------------------------------------------------------------------------------
 
 AC_ARG_WITH([php-config], [AS_HELP_STRING([--with-php-config], [Path to php-config tool])], [ PHPCONFIG="$withval" ],[ AC_PATH_TOOL(PHPCONFIG, php-config, , $PATH) ])
 
@@ -584,6 +584,25 @@ esac
 AC_SUBST(PHPCONFIG)
 AC_SUBST(PHPMAJOR)
 AC_SUBST(PHPCONFDIR)
+
+
+#--[ Python ]-----------------------------------------------------------------------------------------------------------------------------------------------
+
+AC_ARG_WITH([python-config], [AS_HELP_STRING([--with-python-config], [Path to python-config tool])], [ PYCONFIG="$withval" ],[ AC_PATH_TOOL(PYCONFIG, python-config, , $PATH) ])
+
+if test -z "${PYCONFIG}"; then
+
+	AC_MSG_NOTICE([Program python-config not found. Use --with-python-config=path to specify absolute path to the python-config tool.])
+
+else
+
+	AC_DEFINE(HAVE_PYTHON)
+	EXTENSIONS="$EXTENSIONS python"
+	AC_CONFIG_FILES(src/python/Makefile)
+
+fi
+
+AC_SUBST(PYCONFIG)
 
 #--[ ooRexx ]-----------------------------------------------------------------------------------------------------------------------------------------------
 

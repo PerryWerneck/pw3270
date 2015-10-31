@@ -1,0 +1,119 @@
+#
+# "Software pw3270, desenvolvido com base nos códigos fontes do WC3270  e X3270
+# (Paul Mattes Paul.Mattes@usa.net), de emulação de terminal 3270 para acesso a
+# aplicativos mainframe. Registro no INPI sob o nome G3270.
+#
+# Copyright (C) <2008> <Banco do Brasil S.A.>
+#
+# Este programa é software livre. Você pode redistribuí-lo e/ou modificá-lo sob
+# os termos da GPL v.2 - Licença Pública Geral  GNU,  conforme  publicado  pela
+# Free Software Foundation.
+#
+# Este programa é distribuído na expectativa de  ser  útil,  mas  SEM  QUALQUER
+# GARANTIA; sem mesmo a garantia implícita de COMERCIALIZAÇÃO ou  de  ADEQUAÇÃO
+# A QUALQUER PROPÓSITO EM PARTICULAR. Consulte a Licença Pública Geral GNU para
+# obter mais detalhes.
+#
+# Você deve ter recebido uma cópia da Licença Pública Geral GNU junto com este
+# programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple
+# Place, Suite 330, Boston, MA, 02111-1307, USA
+#
+# Contatos:
+#
+# perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
+# erico.mendonca@gmail.com	(Erico Mascarenhas de Mendonça)
+#
+
+PACKAGE_NAME=@PACKAGE_NAME@
+SOURCES=py3270.cc actions.cc get.cc init.cc misc.cc set.cc
+
+#---[ Paths ]------------------------------------------------------------------
+
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+bindir=@bindir@
+sbindir=@sbindir@
+libdir=@libdir@
+includedir=@includedir@
+sysconfdir=@sysconfdir@
+
+#---[ Tools ]------------------------------------------------------------------
+
+CXX=@CXX@
+MKDIR=@MKDIR_P@
+INSTALL=@INSTALL@
+INSTALL_DATA=@INSTALL_DATA@
+INSTALL_PROGRAM=@INSTALL_PROGRAM@
+PYCONFIG=@PYCONFIG@
+
+#---[ Paths ]------------------------------------------------------------------
+
+OBJDIR = .obj
+BINDIR = .bin
+
+OBJDBG = $(OBJDIR)/Debug
+BINDBG = $(BINDIR)/Debug
+
+OBJRLS = $(OBJDIR)/Release
+BINRLS = $(BINDIR)/Release
+
+#---[ lib3270 common class ]---------------------------------------------------
+
+DEBUG_CFLAGS=-DDEBUG=1 -g -Wall
+PW3270_CFLAGS=-I../include
+CLASSLIBDIR=../classlib
+include $(CLASSLIBDIR)/class.mak
+
+#---[ Build options ]----------------------------------------------------------
+
+CXXFLAGS=@CXXFLAGS@ @DLL_CFLAGS@ `$(PYCONFIG) --cflags` -I../include
+
+#---[ Rules ]------------------------------------------------------------------
+
+$(OBJRLS)/%.o: %.cc private.h Makefile
+	@echo "  CC   `basename $@`"
+	@mkdir -p `dirname $@`
+	@$(CXX) -DNDEBUG=1 $(CXXFLAGS) -o $@ -c $<
+
+$(OBJDBG)/%.o: %.cc private.h Makefile
+	@echo "  CC   `basename $@`"
+	@mkdir -p `dirname $@`
+	@$(CXX) -DDEBUG=1 $(CXXFLAGS) -o $@ -c $<
+
+#---[ Release targets ]--------------------------------------------------------
+
+all: $(BINRLS)/py3270@DLLEXT@
+
+Release: $(BINRLS)/py3270@DLLEXT@
+
+$(BINRLS)/py3270@DLLEXT@:	$(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SRC)@OBJEXT@) \
+				$(CLASS_RELEASE_OBJECTS)
+	@echo "  LD   `basename $@`"
+	@$(MKDIR) `dirname $@`
+	@$(CXX) @SYSDLL_FLAGS@ $(LDFLAGS) $(OO_LDFLAGS) -o $@ $^ $(CLASS_LIBS)
+
+
+#---[ Debug targets ]----------------------------------------------------------
+
+Debug: $(BINDBG)/py3270@DLLEXT@
+
+$(BINDBG)/py3270@DLLEXT@:	$(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC)@OBJEXT@) \
+				$(CLASS_DEBUG_OBJECTS)
+	@echo "  LD   `basename $@`"
+	@$(MKDIR) `dirname $@`
+	@$(CXX) @SYSDLL_FLAGS@ $(LDFLAGS) $(OO_LDFLAGS) -o $@ $^ $(CLASS_LIBS)
+
+
+run: $(BINDBG)/py3270@DLLEXT@
+
+#---[ Misc targets ]-----------------------------------------------------------
+
+install: $(BINRLS)/py3270@DLLEXT@
+
+
+cleanDebug: clean
+
+clean:
+	@rm -fr $(OBJDIR)
+	@rm -fr $(BINDIR)
+
