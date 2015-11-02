@@ -35,6 +35,7 @@
 %define _distro		Linux
 %define _redhat		%(test -e /etc/redhat-release && echo 1 || echo 0)
 %define _php		%(which php-config 2> /dev/null > /dev/null  && echo 1 || echo 0)
+%define _python		%(which python-config 2> /dev/null > /dev/null  && echo 1 || echo 0)
 %define _bldreq		gtk3-devel libopenssl-devel
 %define _java		1
 
@@ -110,6 +111,10 @@ BuildRequires:	php-devel
 
 %if 0%{?_java}
 BuildRequires:	java-devel
+%endif
+
+%if 0%{?_python}
+BuildRequires:	python-devel
 %endif
 
 BuildRequires:  rsvg-view
@@ -202,6 +207,22 @@ Revision @PACKAGE_REVISION@ from @PACKAGE_SOURCE@
 
 %endif
 
+%if 0%{?_python}
+
+%package -n python-tn3270
+Summary:	Python Extension Module implementing tn3270 protocol
+Group:		Development/Libraries/PHP
+Requires:	lib3270 = @PACKAGE_VERSION@
+
+%description -n python-tn3270
+This is an extension for acessing 3270 hosts directly
+from python apps.
+
+Revision @PACKAGE_REVISION@ from @PACKAGE_SOURCE@
+
+%endif
+
+
 %if 0%{?_java}
 
 %package 	java
@@ -266,7 +287,8 @@ export JAVA_HOME=%{java_home}
 			--enable-pic \
 			--with-jnidir="%{_jnidir}" \
 			--with-jvmjardir="%{_jvmjardir}" \
-			--with-javadocdir="%{_javadocdir}"
+			--with-javadocdir="%{_javadocdir}" \
+			--with-rexxlibdir="%{_rexxlibdir}"
 
 
 %build
@@ -299,8 +321,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %{_datadir}/@PACKAGE_NAME@/colors.conf
 %{_datadir}/@PACKAGE_NAME@/ui/00default.xml
-%{_datadir}/pw3270/ui/10functions.xml
-%{_datadir}/pw3270/ui/10keypad.xml
+%{_datadir}/@PACKAGE_NAME@/ui/10functions.xml
+%{_datadir}/@PACKAGE_NAME@/ui/10keypad.xml
 %{_datadir}/@PACKAGE_NAME@/@PACKAGE_NAME@.png
 %{_datadir}/@PACKAGE_NAME@/@PACKAGE_NAME@-logo.png
 
@@ -356,6 +378,13 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/php%{phpmajor}/conf.d/tn3270.ini
 %{_libdir}/php%{phpmajor}/extensions/tn3270.so
 %endif
+
+%if 0%{?_php}
+%files -n python-tn3270
+%defattr(-,root,root)
+%{_libdir}/python/site-packages/py3270.so
+%endif
+
 
 %if 0%{?_java}
 %files java

@@ -10,6 +10,8 @@
 *.layout
 *.bak
 *.depend
+*.tar
+*.bz2
 ChangeLog*
 Makefile
 aclocal.m4
