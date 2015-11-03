@@ -379,7 +379,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/php%{phpmajor}/extensions/tn3270.so
 %endif
 
-%if 0%{?_php}
+%if 0%{?_python}
 %files -n python-tn3270
 %defattr(-,root,root)
 %{_libdir}/python/site-packages/py3270.so

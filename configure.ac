@@ -588,21 +588,32 @@ AC_SUBST(PHPCONFDIR)
 
 #--[ Python ]-----------------------------------------------------------------------------------------------------------------------------------------------
 
-AC_ARG_WITH([python-config], [AS_HELP_STRING([--with-python-config], [Path to python-config tool])], [ PYCONFIG="$withval" ],[ AC_PATH_TOOL(PYCONFIG, python-config, , $PATH) ])
+#AC_ARG_WITH([python-config], [AS_HELP_STRING([--with-python-config], [Path to python-config tool])], [ PYCONFIG="$withval" ],[ AC_PATH_TOOL(PYCONFIG, python-config, , $PATH) ])
+#
+#if test -z "${PYCONFIG}"; then
+#
+#	AC_MSG_NOTICE([Program python-config not found. Use --with-python-config=path to specify absolute path to the python-config tool.])
+#
+#else
+#
+#	AC_DEFINE(HAVE_PYTHON)
+#	EXTENSIONS="$EXTENSIONS python"
+#	AC_CONFIG_FILES(src/python/Makefile)
+#
+#fi
+#
+#AC_SUBST(PYCONFIG)
 
-if test -z "${PYCONFIG}"; then
+PKG_CHECK_MODULES( [PYTHON], [python], app_have_python=1, AC_MSG_NOTICE([python-devel not present.]) )
 
-	AC_MSG_NOTICE([Program python-config not found. Use --with-python-config=path to specify absolute path to the python-config tool.])
+AC_SUBST(PYTHON_LIBS)
+AC_SUBST(PYTHON_CFLAGS)
 
-else
-
+if test "$app_have_python" == "1"; then
 	AC_DEFINE(HAVE_PYTHON)
 	EXTENSIONS="$EXTENSIONS python"
 	AC_CONFIG_FILES(src/python/Makefile)
-
 fi
-
-AC_SUBST(PYCONFIG)
 
 #--[ ooRexx ]-----------------------------------------------------------------------------------------------------------------------------------------------
 

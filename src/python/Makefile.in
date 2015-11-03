@@ -44,7 +44,6 @@ MKDIR=@MKDIR_P@
 INSTALL=@INSTALL@
 INSTALL_DATA=@INSTALL_DATA@
 INSTALL_PROGRAM=@INSTALL_PROGRAM@
-PYCONFIG=@PYCONFIG@
 
 #---[ Paths ]------------------------------------------------------------------
 
@@ -66,7 +65,7 @@ include $(CLASSLIBDIR)/class.mak
 
 #---[ Build options ]----------------------------------------------------------
 
-CXXFLAGS=@CXXFLAGS@ @DLL_CFLAGS@ `$(PYCONFIG) --cflags` -I../include
+CXXFLAGS=@CXXFLAGS@ @DLL_CFLAGS@ @PYTHON_CFLAGS@ -I../include
 
 #---[ Rules ]------------------------------------------------------------------
 
@@ -90,7 +89,7 @@ $(BINRLS)/py3270@DLLEXT@:	$(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SRC
 				$(CLASS_RELEASE_OBJECTS)
 	@echo "  LD   `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CXX) @SYSDLL_FLAGS@ $(LDFLAGS) $(OO_LDFLAGS) -o $@ $^ $(CLASS_LIBS)
+	@$(CXX) @SYSDLL_FLAGS@ $(LDFLAGS) $(OO_LDFLAGS) -o $@ $^ $(CLASS_LIBS) @PYTHON_LIBS@
 
 
 #---[ Debug targets ]----------------------------------------------------------
@@ -101,7 +100,7 @@ $(BINDBG)/py3270@DLLEXT@:	$(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC
 				$(CLASS_DEBUG_OBJECTS)
 	@echo "  LD   `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CXX) @SYSDLL_FLAGS@ $(LDFLAGS) $(OO_LDFLAGS) -o $@ $^ $(CLASS_LIBS)
+	@$(CXX) @SYSDLL_FLAGS@ $(LDFLAGS) $(OO_LDFLAGS) -o $@ $^ $(CLASS_LIBS) @PYTHON_LIBS@
 
 
 run: $(BINDBG)/py3270@DLLEXT@

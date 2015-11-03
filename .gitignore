@@ -40,5 +40,7 @@ src/pw3270/pw3270.png
 src/pw3270/v3270/marshal.c
 src/pw3270/v3270/marshal.h
 src/plugins/dbus3270/dbus-glue.h
-
+src/java/javadoc/
+src/loffice/.rdb/
+src/loffice/include/
 
