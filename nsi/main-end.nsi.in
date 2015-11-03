@@ -3,20 +3,20 @@
 
 	SubSection "Menus, Keypads & Toolbars" SecMenu
 
-		Section "Keypad" TraceMenu
-			file "/oname=$INSTDIR\ui\10keypad.xml" "ui\10keypad.xml"
+		Section "Keypad" KeypadMenu
+			file "/oname=$INSTDIR\ui\10keypad.xml" "..\ui\10keypad.xml"
 		sectionEnd
 
-		Section "Functions" TraceMenu
-			file "/oname=$INSTDIR\ui\10functions.xml" "ui\10functions.xml"
+		Section "Functions" FunctionsMenu
+			file "/oname=$INSTDIR\ui\10functions.xml" "..\ui\10functions.xml"
 		sectionEnd
 
 		Section /o "View trace Menu" TraceMenu
-			file "/oname=$INSTDIR\ui\98trace.xml" "ui\98trace.xml"
+			file "/oname=$INSTDIR\ui\98trace.xml" "..\ui\98trace.xml"
 		sectionEnd
 
 		Section /o "Application debug" DBGMenu
-			file "/oname=$INSTDIR\ui\99debug.xml" "ui\99debug.xml"
+			file "/oname=$INSTDIR\ui\99debug.xml" "..\ui\99debug.xml"
 		sectionEnd
 
 	SubSectionEnd

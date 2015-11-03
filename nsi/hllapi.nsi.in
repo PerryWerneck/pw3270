@@ -2,8 +2,8 @@
 			setOutPath $INSTDIR
 
 			CreateDirectory "$INSTDIR\plugins"
-			file "/oname=$INSTDIR\plugins\hllapi.dll"	".bin\Release\plugins\hllapi.dll"
-			file "/oname=$SYSDIR\libhllapi.dll"			".bin\Release\hllapi.dll.@PACKAGE_VERSION@"
+			file "/oname=$INSTDIR\plugins\hllapi.dll"	"..\.bin\Release\plugins\hllapi.dll"
+			file "/oname=$SYSDIR\libhllapi.dll"			"..\.bin\Release\hllapi.dll.@PACKAGE_VERSION@"
 
 		sectionEnd
 

@@ -32,6 +32,7 @@ section "Uninstall"
 
 	# Delete System libraries
 	delete $SYSDIR\libhllapi.dll
+	delete $SYSDIR\py3270.dll
 
 	# Delete extension libraries
 	delete "$PROGRAMFILES\ooRexx\rx3270.cls"

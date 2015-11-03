@@ -65,7 +65,8 @@ $(PACKAGE_NAME)-$(HOST_CPU).nsi: \
 	sdk.nsi \
 	uninstall-$(HOST_CPU).nsi \
 	oninit-$(HOST_CPU).nsi \
-	$(foreach PLUGIN, $(PLUGINS), $(PLUGIN)-init.nsi )
+	$(foreach PLUGIN, $(PLUGINS), $(PLUGIN)-init.nsi ) \
+	$(foreach EXTENSION, $(EXTENSIONS), $(EXTENSION)-extension.nsi )
 
 	@rm -f $@
 	@cat header-$(HOST_CPU).nsi		> 	$@
@@ -74,6 +75,7 @@ $(PACKAGE_NAME)-$(HOST_CPU).nsi: \
 	# Install plugins
 
 	@cat $(foreach PLUGIN, $(PLUGINS), $(PLUGIN).nsi )	>> $@
+	@cat $(foreach EXTENSION, $(EXTENSIONS), $(EXTENSION)-extension.nsi )	>> $@
 
 	# Finalize
 

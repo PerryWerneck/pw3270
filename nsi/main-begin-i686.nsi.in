@@ -11,20 +11,20 @@ SubSection "@PACKAGE@" SecMain
 		createShortCut "$DESKTOP\@PACKAGE@.lnk" "$INSTDIR\@PACKAGE@.exe"
 
 		# Binary files
-		file "/oname=$INSTDIR\@PACKAGE@.exe"	".bin\Release\@PACKAGE@.exe"
-		file "/oname=$INSTDIR\@PACKAGE@.ico"	"src\pw3270\@PACKAGE@.ico"
-		file "/oname=$INSTDIR\lib3270.dll.@PACKAGE_VERSION@"	".bin\Release\lib3270.dll.@PACKAGE_VERSION@"
-		file "/oname=$INSTDIR\pw3270.dll.@PACKAGE_VERSION@"		".bin\Release\pw3270.dll.@PACKAGE_VERSION@"
+		file "/oname=$INSTDIR\@PACKAGE@.exe"					"..\.bin\Release\@PACKAGE@.exe"
+		file "/oname=$INSTDIR\@PACKAGE@.ico"					"..\src\pw3270\@PACKAGE@.ico"
+		file "/oname=$INSTDIR\lib3270.dll.@PACKAGE_VERSION@"	"..\.bin\Release\lib3270.dll.@PACKAGE_VERSION@"
+		file "/oname=$INSTDIR\pw3270.dll.@PACKAGE_VERSION@"		"..\.bin\Release\pw3270.dll.@PACKAGE_VERSION@"
 
 		# Configuration files
-		file "/oname=$INSTDIR\@PACKAGE@-logo.png"	"src\pw3270\@PACKAGE@-logo.png"
-		file "/oname=$INSTDIR\@PACKAGE@.png"		"src\pw3270\@PACKAGE@.png"
-		file "/oname=$INSTDIR\colors.conf"		"colors.conf"
+		file "/oname=$INSTDIR\@PACKAGE@-logo.png"				"..\src\pw3270\@PACKAGE@-logo.png"
+		file "/oname=$INSTDIR\@PACKAGE@.png"					"..\src\pw3270\@PACKAGE@.png"
+		file "/oname=$INSTDIR\colors.conf"						"..\colors.conf"
 
 		# Documentation files
-		file "/oname=$INSTDIR\ChangeLog"		"ChangeLog"
-		file "/oname=$INSTDIR\AUTHORS"			"AUTHORS"
-		file "/oname=$INSTDIR\LICENSE"			"LICENSE"
+		file "/oname=$INSTDIR\ChangeLog"						"..\ChangeLog"
+		file "/oname=$INSTDIR\AUTHORS"							"..\AUTHORS"
+		file "/oname=$INSTDIR\LICENSE"							"..\LICENSE"
 
 		# Misc folders
 		CreateDirectory "$INSTDIR\certs"
@@ -33,11 +33,11 @@ SubSection "@PACKAGE@" SecMain
 		# UI definition files
 		CreateDirectory "$INSTDIR\ui"
 
-		file "/oname=$INSTDIR\ui\00default.xml" 	"ui\00default.xml"
+		file "/oname=$INSTDIR\ui\00default.xml" 				"..\ui\00default.xml"
 
 		# Locale files
 		CreateDirectory "$INSTDIR\@localedir@\pt_BR\LC_MESSAGES"
-		file "/oname=$INSTDIR\@localedir@\pt_BR\LC_MESSAGES\@PACKAGE@.mo" ".bin\Release\@localedir@\pt_BR\LC_MESSAGES\@PACKAGE@.mo"
+		file "/oname=$INSTDIR\@localedir@\pt_BR\LC_MESSAGES\@PACKAGE@.mo" "..\.bin\Release\@localedir@\pt_BR\LC_MESSAGES\@PACKAGE@.mo"
 
 		# Save DataDir
 		WriteRegStr HKLM "Software\@PACKAGE@" "datadir" "$INSTDIR"
