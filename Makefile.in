@@ -188,10 +188,10 @@ $(BINDIR)/Release/@DLLPREFIX@jni3270@DLLEXT@: src/java/*
 
 python: $(BINDIR)/Release/py3270@DLLEXT@
 
-$(BINDIR)/Release/py3270.so: src/python/*
+$(BINDIR)/Release/py3270@DLLEXT@: src/python/*
 	@$(MAKE) -C src/python Release
 	@$(MKDIR) `dirname $@`
-	@cp src/python/.bin/Release/py3270.so $@
+	@cp src/python/.bin/Release/py3270@DLLEXT@ $@
 
 rexx: $(BINDIR)/Debug/plugins/rx3270@DLLEXT@
 
