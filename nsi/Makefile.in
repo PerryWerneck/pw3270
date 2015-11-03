@@ -40,7 +40,7 @@ EXTENSIONS=@EXTENSIONS@
 #---[ Tools ]------------------------------------------------------------------
 
 MAKENSIS=@MAKENSIS@
-
+MKDIR=@MKDIR_P@
 
 #---[ Rules ]------------------------------------------------------------------
 
@@ -56,8 +56,19 @@ $(PACKAGE_NAME).nsi: \
 	$(PACKAGE_NAME)-$(HOST_CPU).nsi
 	@cp $^ $@
 
+package: \
+	$(PACKAGE_NAME)-$(HOST_CPU).nsi
 
-$(PACKAGE_NAME)-$(HOST_CPU).nsi: \
+	@echo "Installer for $(PACKAGE_NAME)-$(HOST_CPU)..."
+	@$(MAKENSIS) $(PACKAGE_NAME)-$(HOST_CPU).nsi
+
+package-no-gtk: \
+	$(PACKAGE_NAME)-$(HOST_CPU)-no-gtk.nsi
+
+	@echo "Installer for $(PACKAGE_NAME)-$(HOST_CPU)-no-gtk..."
+	@$(MAKENSIS) $(PACKAGE_NAME)-$(HOST_CPU)-no-gtk.nsi
+
+.tmp/prefix-$(HOST_CPU).nsi: \
 	header-$(HOST_CPU).nsi \
 	main-begin-$(HOST_CPU).nsi \
 	main-end.nsi \
@@ -66,10 +77,13 @@ $(PACKAGE_NAME)-$(HOST_CPU).nsi: \
 	uninstall-$(HOST_CPU).nsi \
 	oninit-$(HOST_CPU).nsi \
 	$(foreach PLUGIN, $(PLUGINS), $(PLUGIN)-init.nsi ) \
+	$(foreach EXTENSION, $(EXTENSIONS), $(EXTENSION)-extension-init.nsi ) \
 	$(foreach EXTENSION, $(EXTENSIONS), $(EXTENSION)-extension.nsi )
 
+	@$(MKDIR) `dirname $@`
+
 	@rm -f $@
-	@cat header-$(HOST_CPU).nsi		> 	$@
+
 	@cat main-begin-$(HOST_CPU).nsi	>>	$@
 
 	# Install plugins
@@ -80,20 +94,64 @@ $(PACKAGE_NAME)-$(HOST_CPU).nsi: \
 	# Finalize
 
 	@cat main-end.nsi				>>	$@
-	@cat runtime.nsi				>>	$@
+
+
+.tmp/suffix-$(HOST_CPU).nsi: \
+	header-$(HOST_CPU).nsi \
+	main-begin-$(HOST_CPU).nsi \
+	main-end.nsi \
+	runtime.nsi \
+	sdk.nsi \
+	uninstall-$(HOST_CPU).nsi \
+	oninit-$(HOST_CPU).nsi \
+	$(foreach PLUGIN, $(PLUGINS), $(PLUGIN)-init.nsi ) \
+	$(foreach EXTENSION, $(EXTENSIONS), $(EXTENSION)-extension-init.nsi ) \
+	$(foreach EXTENSION, $(EXTENSIONS), $(EXTENSION)-extension.nsi )
+
+	@$(MKDIR) `dirname $@`
+
+	@rm -f $@
+
 	@cat sdk.nsi					>>	$@
 	@cat uninstall-$(HOST_CPU).nsi	>>	$@
 	@cat oninit-$(HOST_CPU).nsi		>>	$@
 
-	# Install plugin scripts
+$(PACKAGE_NAME)-$(HOST_CPU).nsi: \
+	.tmp/prefix-$(HOST_CPU).nsi \
+	.tmp/suffix-$(HOST_CPU).nsi \
+
+	@cat header-$(HOST_CPU).nsi			>  $@
+	@cat .tmp/prefix-$(HOST_CPU).nsi	>> $@
+	@cat runtime.nsi					>> $@
+	@cat .tmp/suffix-$(HOST_CPU).nsi	>> $@
 
 	@cat runtime-init.nsi >> $@
 	@cat $(foreach PLUGIN, $(PLUGINS), $(PLUGIN)-init.nsi ) >> $@
+	@cat $(foreach EXTENSION, $(EXTENSIONS), $(EXTENSION)-extension-init.nsi ) >> $@
 
 	# Finalize onInit script
 
 	@echo FunctionEnd >> $@
 
+
+	@chmod 644 $@	
+
+	@echo $@
+
+$(PACKAGE_NAME)-$(HOST_CPU)-no-gtk.nsi: \
+	.tmp/prefix-$(HOST_CPU).nsi \
+	.tmp/suffix-$(HOST_CPU).nsi \
+
+	@cat header-$(HOST_CPU)-no-gtk.nsi	>  $@
+	@cat .tmp/prefix-$(HOST_CPU).nsi	>> $@
+	@cat .tmp/suffix-$(HOST_CPU).nsi	>> $@
+
+	@cat $(foreach PLUGIN, $(PLUGINS), $(PLUGIN)-init.nsi ) >> $@
+	@cat $(foreach EXTENSION, $(EXTENSIONS), $(EXTENSION)-extension-init.nsi ) >> $@
+
+	# Finalize onInit script
+
+	@echo FunctionEnd >> $@
 	@chmod 644 $@	
 
 	@echo $@

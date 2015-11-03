@@ -238,15 +238,13 @@ endif
 
 package: Release
 ifneq ($(MAKENSIS),no)
-	@make -C nsi $(PACKAGE_NAME)-@host_cpu@.nsi
 	@chmod +x makegtkruntime.sh
 	@echo "  GEN  GTK Runtime"
 	@./makegtkruntime.sh
 	@echo "  GEN  Windows installer"
 	@cp -rv $(BINDIR)/Release/$(localedir) $(BINDIR)/Release
-	@cat nsi/$(PACKAGE_NAME)-@host_cpu@.nsi | "$(MAKENSIS)" \
-			-DLOCALEDIR="$(BINDIR)/Release$(localedir)" \
-			-Onsis.log -
+	@make -C nsi package-no-gtk
+	@make -C nsi package
 endif
 
 ifneq ($(DPKGBUILD),no)

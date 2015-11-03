@@ -28,7 +28,7 @@ failed()
 CopyPacket()
 {
 
-	FILENAME=$(find . -maxdepth 1 -name "*.exe" | head --lines 1 | sed "s@./@@g")
+	FILENAME=$(find nsi -maxdepth 1 -name "*.exe" | head --lines 1 | sed "s@./@@g")
 
 	mkdir -p ${DESTDIR}/${1}
 
@@ -76,9 +76,8 @@ build()
 	./configure \
 		--cache-file=${1}.cache \
 		--host=${host} \
-		--prefix=${prefix} \
-		--disable-java
-
+		--prefix=${prefix}
+ 
 	if [ "$?" != "0" ]; then
 		failed "Erro ao configurar"
 	fi
@@ -108,12 +107,12 @@ build()
 	fi
 
 	echo -e "\e]2;pw3270-install-${host_cpu}.exe\a"
-	cat nsi/pw3270-${host_cpu}.nsi | makensis \
-                -DLOCALEDIR=".bin/Release${prefix}/share/locale" \
-				-
+	make -C nsi package
+	if [ "$?" != "0" ]; then
+		failed "Erro ao gerar pacote windows"
+	fi
 
-#                -Onsis-${host_cpu}.log -
-
+	make -C nsi package-no-gtk
 	if [ "$?" != "0" ]; then
 		failed "Erro ao gerar pacote windows"
 	fi
