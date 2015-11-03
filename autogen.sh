@@ -14,23 +14,41 @@ fi
 
 touch ChangeLog
 
-SVN=`which svn 2> /dev/null`
+# Inicia com os defaults
+TEMPFILE=autogen.tmp
 
-if test -x "$SVN" ; then
+if [ -d .svn ]; then
 
-	TEMPFILE=.bootstrap.tmp
-	LANG="EN_US" "$SVN" info > $TEMPFILE 2>&1
-
-	if [ "$?" == "0" ]; then
-		PACKAGE_REVISION=$(cat $TEMPFILE | grep "^Revision: " | cut -d" " -f2)
-		PACKAGE_SOURCE=$(cat $TEMPFILE | grep "^URL: " | cut -d" " -f2)
+	# Tenta detectar a versão
+	SVNVERSION=$(which svnversion 2> /dev/null)
+	if test -x "${SVNVERSION}" ; then
+		svnversion | cut -d: -f2 | sed 's@[M|m]@@g' > ${TEMPFILE} 2> /dev/null
+		if [ "$?" == "0" ]; then
+			PACKAGE_REVISION=$(cat ${TEMPFILE})
+		fi
 	fi
 
-	rm -f $TEMPFILE
+	# Tenta detectar a URL
+	SVN=$(which svn 2> /dev/null)
+	if test -x "${SVN}" ; then
 
-	if [ -x updateChangeLog.sh ]; then
-		./updateChangeLog.sh
+		LANG="EN_US" "${SVN}" info > ${TEMPFILE} 2>&1
+		if [ "$?" == "0" ]; then
+			PACKAGE_SOURCE=$(cat ${TEMPFILE} | grep "^URL: " | cut -d" " -f2)
+		fi
+
 	fi
+
+elif [ -d .git ]; then
+
+	# Obtém revisão via git
+	# Referência: http://stackoverflow.com/questions/4120001/what-is-the-git-equivalent-for-revision-number
+
+	# Obtém URL via git
+	PACKAGE_SOURCE=$(git config --get remote.origin.url)
+
+	# Obtém número total de commits
+	PACKAGE_REVISION=$(git rev-list HEAD --count)
 
 fi
 
