@@ -8,7 +8,6 @@ cleanup()
 	cd ${myDIR}
 	rm -fr ${TEMPDIR}
 	rm -fr ${RUNTIMEDIR}
-	rm -fr ${DESTDIR}
 	exit -1
 }
 
@@ -22,24 +21,58 @@ failed()
 #
 # Copia pacote gerado
 #
-# $1 = Arquitetura (x86_32/x86_64)
+# $1 = Arquitetura (i686/x86_64)
 # $2 = Tipo do link
 #
 CopyPacket()
 {
+	#
+	# Primeiro move a versão baseada no runtime
+	#
+	FILENAME=$(find nsi -maxdepth 1 -name "pw3270-*-requires-gtk-*-${1}.exe" | head --lines 1)
 
-	FILENAME=$(find nsi -maxdepth 1 -name "*.exe" | head --lines 1 | sed "s@./@@g")
+	if [ ! -z ${FILENAME} ]; then
 
-	mkdir -p ${DESTDIR}/${1}
+		mkdir -p ${DESTDIR}/${1}
 
-	cp ${FILENAME} ${DESTDIR}/${1}
-	if [ "$?" != "0" ]; then
-		failed "Erro ao copiar instalador"
+		echo "Copiando ${FILENAME} para ${DESTDIR}/${1}"
+
+		mv "${FILENAME}" "${DESTDIR}/${1}"
+		if [ "$?" != "0" ]; then
+			echo "src=${FILENAME}"
+			echo "dst=${DESTDIR}/${1}"
+			failed "Erro ao copiar instalador sem o runtime"
+		fi
+
 	fi
 
-	ln -sf ${FILENAME} ${DESTDIR}/${1}/pw3270-${1}-${2}.exe
-	if [ "$?" != "0" ]; then
-		failed "Erro ao criar o link simbólico"
+	#
+	# Depois copia o pacote completo
+	#
+	FILENAME=$(find nsi -maxdepth 1 -name "pw3270-*-gtk-*-${1}.exe" | head --lines 1)
+
+	if [ ! -z ${FILENAME} ]; then
+
+		mkdir -p ${DESTDIR}/${1}
+
+		echo "Copiando ${FILENAME} para ${DESTDIR}/${1}"
+
+		mv "${FILENAME}" "${DESTDIR}/${1}"
+		if [ "$?" != "0" ]; then
+			echo "src=${FILENAME}"
+			echo "dst=${DESTDIR}/${1}"
+			failed "Erro ao copiar instalador completo"
+		fi
+
+		#
+		# Cria link do pacote completo para "latest"
+		#
+		ln -sf $(basename ${FILENAME}) ${DESTDIR}/${1}/pw3270-with-gtk-${2}-${1}.exe
+		if [ "$?" != "0" ]; then
+			failed "Erro ao criar o link simbólico"
+		fi
+
+
 	fi
 
 }
@@ -74,7 +107,7 @@ build()
 	esac
 
 	./configure \
-		--cache-file=${1}.cache \
+		--cache-file=.${1}.cache \
 		--host=${host} \
 		--prefix=${prefix}
  
@@ -117,7 +150,7 @@ build()
 		failed "Erro ao gerar pacote windows"
 	fi
 
-	CopyPacket ${1} "latest"
+	CopyPacket ${host_cpu} "latest"
 
 	make clean
 	rm -f *.exe
@@ -128,7 +161,6 @@ myDIR=$(readlink -f $(dirname $0))
 TEMPDIR=$(mktemp -d)
 DESTDIR=${HOME}/public_html/win
 RUNTIMEDIR=$(mktemp -d)
-SRC=svn
 ARCHS="x86_32 x86_64"
 RUNTIME=0
 COMPLETE=1
@@ -144,13 +176,16 @@ do
 
 		case $parameter in
 
-		SRC)
-			value=${tmp##*=}
-			eval SRC=$value
+		32)
+			ARCHS="x86_32"
+			;;
+
+		64)
+			ARCHS="x86_64"
 			;;
 
 		FULL)
-			RUNTIME=0
+			RUNTIME=1
 			COMPLETE=1
 			;;
 
@@ -200,12 +235,11 @@ if [ "${RUNTIME}" == "1" ]; then
 
 	for i in ${ARCHS}; do
 
-		rm -f *.exe
-
 		echo -e "\e]2;gtk-runtime-${i}\a"
 
 		case ${i} in
 		x86_32)
+			host_cpu=i686
 			./win32.sh
 			if [ "$?" != "0" ]; then
 				exit -1
@@ -213,6 +247,7 @@ if [ "${RUNTIME}" == "1" ]; then
 			;;
 
 		x86_64)
+			host_cpu=x86_64
 			./win64.sh
 			if [ "$?" != "0" ]; then
 				exit -1
@@ -225,6 +260,9 @@ if [ "${RUNTIME}" == "1" ]; then
 
 		esac
 
+		rm -f gtk-runtime-*-${host_cpu}.exe
+
+
 		chmod +x ./makeruntime.sh
 
 		./makeruntime.sh
@@ -232,9 +270,19 @@ if [ "${RUNTIME}" == "1" ]; then
 			exit -1
 		fi
 
-		cp *.exe ${DESTDIR}/${i}
+		# Copia o pacote gerado
+		FILENAME=$(find . -maxdepth 1 -name "gtk-runtime-*-${host_cpu}.exe" | head --lines 1)
+
+		mkdir -p ${DESTDIR}/${host_cpu}
+
+		mv gtk-runtime-*-${host_cpu}.exe ${DESTDIR}/${host_cpu}
 		if [ "$?" != "0" ]; then
 			failed "Erro ao copiar instalador"
+		fi
+
+		ln -sf $(basename ${FILENAME}) "${DESTDIR}/${host_cpu}/gtk-runtime-latest-${host_cpu}.exe"
+		if [ "$?" != "0" ]; then
+			failed "Erro ao criar o link simbólico"
 		fi
 
 	done
@@ -245,9 +293,9 @@ cd $myDIR
 rm -fr ${TEMPDIR}
 rm -fr ${RUNTIMEDIR}
 
-zip -r -j ${HOME}/public_html/win/pw3270-latest.zip \
-			${HOME}/public_html/win/x86_32/pw3270-x86_32-latest.exe \
-			${HOME}/public_html/win/x86_64/pw3270-x86_64-latest.exe 
+#zip -r -j ${HOME}/public_html/win/pw3270-latest.zip \
+#			${HOME}/public_html/win/x86_32/pw3270-x86_32-latest.exe \
+#			${HOME}/public_html/win/x86_64/pw3270-x86_64-latest.exe 
 
 echo -e "\e]2;Success!\a"
 

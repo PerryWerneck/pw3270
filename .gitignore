@@ -13,6 +13,7 @@
 *.depend
 *.tar
 *.bz2
+*.cache
 ChangeLog*
 Makefile
 aclocal.m4
