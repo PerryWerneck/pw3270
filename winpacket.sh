@@ -213,6 +213,17 @@ do
 	shift
 done
 
+# Configura
+aclocal
+if [ "$?" != "0" ]; then
+	exit -1
+fi
+
+autoconf
+if [ "$?" != "0" ]; then
+	exit -1
+fi
+
 # Gera pacotes
 for i in ${ARCHS}; do
 
