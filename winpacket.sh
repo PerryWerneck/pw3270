@@ -1,5 +1,7 @@
 #!/bin/bash
 
+PACKAGE_NAME="pw3270"
+
 cleanup() 
 {
     #
@@ -29,7 +31,7 @@ CopyPacket()
 	#
 	# Primeiro move a versão baseada no runtime
 	#
-	FILENAME=$(find nsi -maxdepth 1 -name "pw3270-*-requires-gtk-*-${1}.exe" | head --lines 1)
+	FILENAME=$(find nsi -maxdepth 1 -name "${PACKAGE_NAME}-*-requires-gtk-*-${1}.exe" | head --lines 1)
 
 	if [ ! -z ${FILENAME} ]; then
 
@@ -44,12 +46,21 @@ CopyPacket()
 			failed "Erro ao copiar instalador sem o runtime"
 		fi
 
+		#
+		# Cria link do pacote sem GTK para "latest"
+		#
+		ln -sf $(basename ${FILENAME}) ${DESTDIR}/${1}/${PACKAGE_NAME}-without-gtk-${2}-${1}.exe
+		if [ "$?" != "0" ]; then
+			failed "Erro ao criar o link simbólico"
+		fi
+
+
 	fi
 
 	#
 	# Depois copia o pacote completo
 	#
-	FILENAME=$(find nsi -maxdepth 1 -name "pw3270-*-gtk-*-${1}.exe" | head --lines 1)
+	FILENAME=$(find nsi -maxdepth 1 -name "${PACKAGE_NAME}-*-gtk-*-${1}.exe" | head --lines 1)
 
 	if [ ! -z ${FILENAME} ]; then
 
@@ -67,11 +78,10 @@ CopyPacket()
 		#
 		# Cria link do pacote completo para "latest"
 		#
-		ln -sf $(basename ${FILENAME}) ${DESTDIR}/${1}/pw3270-with-gtk-${2}-${1}.exe
+		ln -sf $(basename ${FILENAME}) ${DESTDIR}/${1}/${PACKAGE_NAME}-with-gtk-${2}-${1}.exe
 		if [ "$?" != "0" ]; then
 			failed "Erro ao criar o link simbólico"
 		fi
-
 
 	fi
 
@@ -85,19 +95,21 @@ CopyPacket()
 #
 build()
 {
-	echo -e "\e]2;pw3270-${1}\a"
+	echo -e "\e]2;${PACKAGE_NAME}-${1}\a"
 
 	case ${1} in
 	x86_32)
 		host=i686-w64-mingw32
 		host_cpu=i686
 		prefix=/usr/i686-w64-mingw32/sys-root/mingw
+		tools=i686-w64-mingw32
 		;;
 
 	x86_64)
 		host=x86_64-w64-mingw32
 		host_cpu=x86_64
 		prefix=/usr/x86_64-w64-mingw32/sys-root/mingw
+		tools=x86_64-w64-mingw32
 		;;
 
 
@@ -106,10 +118,20 @@ build()
 
 	esac
 
+	# Detecto argumentos
+	ARGS=""
+
+	REXXCONFIG=$(which ${tools}-oorexx-config)
+	if [ -z ${REXXCONFIG} ]; then
+		echo "Desabilitando suporte ooRexx"
+		ARGS="${ARGS} --disable-rexx"
+	fi
+
 	./configure \
 		--cache-file=.${1}.cache \
 		--host=${host} \
-		--prefix=${prefix}
+		--prefix=${prefix} \
+		${ARGS}
  
 	if [ "$?" != "0" ]; then
 		failed "Erro ao configurar"
@@ -118,7 +140,7 @@ build()
 	make clean
 	rm -f *.exe
 
-	make -C nsi pw3270-${host_cpu}.nsi
+	make -C nsi ${PACKAGE_NAME}-${host_cpu}.nsi
 	if [ "$?" != "0" ]; then
 		failed "Erro ao gerar script de empacotamento windows"
 	fi
@@ -133,21 +155,31 @@ build()
 		failed "Erro ao criar link para traduções"
 	fi
 
-	chmod +x makegtkruntime.sh
-	./makegtkruntime.sh
-	if [ "$?" != "0" ]; then
-		failed "Erro ao construir runtime gtk"
+	if [ "${COMPLETE}" != "0" ]; then
+
+		# Gera pacote completo
+
+		chmod +x makegtkruntime.sh
+		./makegtkruntime.sh
+		if [ "$?" != "0" ]; then
+			failed "Erro ao construir runtime gtk"
+		fi
+
+		echo -e "\e]2;${PACKAGE_NAME}-install-${host_cpu}.exe\a"
+		make -C nsi package
+		if [ "$?" != "0" ]; then
+			failed "Erro ao gerar pacote windows"
+		fi
+
 	fi
 
-	echo -e "\e]2;pw3270-install-${host_cpu}.exe\a"
-	make -C nsi package
-	if [ "$?" != "0" ]; then
-		failed "Erro ao gerar pacote windows"
-	fi
+	if [ "${RUNTIME}" != "0" ]; then
 
-	make -C nsi package-no-gtk
-	if [ "$?" != "0" ]; then
-		failed "Erro ao gerar pacote windows"
+		make -C nsi package-no-gtk
+		if [ "$?" != "0" ]; then
+			failed "Erro ao gerar pacote windows"
+		fi
+
 	fi
 
 	CopyPacket ${host_cpu} "latest"
@@ -162,7 +194,7 @@ TEMPDIR=$(mktemp -d)
 DESTDIR=${HOME}/public_html/win
 RUNTIMEDIR=$(mktemp -d)
 ARCHS="x86_32 x86_64"
-RUNTIME=0
+RUNTIME=1
 COMPLETE=1
 
 trap cleanup INT 
@@ -185,13 +217,17 @@ do
 			;;
 
 		FULL)
-			RUNTIME=1
+			RUNTIME=0
 			COMPLETE=1
 			;;
 
 		RT)
 			RUNTIME=1
 			COMPLETE=0
+			;;
+
+		NAME)
+			PACKAGE_NAME=$value
 			;;
 
 		OUT)
@@ -304,9 +340,10 @@ cd $myDIR
 rm -fr ${TEMPDIR}
 rm -fr ${RUNTIMEDIR}
 
-#zip -r -j ${HOME}/public_html/win/pw3270-latest.zip \
-#			${HOME}/public_html/win/x86_32/pw3270-x86_32-latest.exe \
-#			${HOME}/public_html/win/x86_64/pw3270-x86_64-latest.exe 
+# Gera pacotes para envio ao SPB
+zip -9 -r -j	${HOME}/public_html/win/${PACKAGE_NAME}-latest.zip \
+				${HOME}/public_html/win/x86_32/${PACKAGE_NAME}-with-gtk-latest-i686.exe \
+				${HOME}/public_html/win/x86_64/${PACKAGE_NAME}-with-gtk-latest-x86_64.exe 
 
 echo -e "\e]2;Success!\a"
 
