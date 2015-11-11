@@ -140,6 +140,7 @@ icuuc53.dll
 icudata53.dll
 libgraphite2.dll
 librsvg-*.dll
+libepoxy-*.dll
 gspawn-win*-helper-console.exe
 gspawn-win*-helper.exe
 gdk-pixbuf-query-loaders.exe

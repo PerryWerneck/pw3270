@@ -1,13 +1,15 @@
 #!/bin/bash
 
-PREFIX="mingw32"
-
 install_packages()
 {
 
 TEMPFILE=$(mktemp)
 
 cat > ${TEMPFILE} << EOF
+libopenssl-devel
+libintl-devel
+libepoxy0
+libgdk_pixbuf-2_0-0
 atk-devel
 pango-devel
 win_iconv-devel
@@ -17,8 +19,6 @@ cairo-devel
 freetype-devel
 winpthreads-devel
 gtk3-devel
-libopenssl-devel
-libintl-devel
 cross-gcc-c++
 cross-pkg-config
 cross-cpp
@@ -32,7 +32,6 @@ headers
 gnome-icon-theme
 hicolor-icon-theme
 gdk-pixbuf-loader-rsvg
-libgdk_pixbuf-2_0-0
 gdk-pixbuf-query-loaders
 python-devel
 EOF
