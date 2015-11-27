@@ -57,14 +57,47 @@ extern "C" {
  #define HLLAPI_CMD_GETREVISION				2000	/**< Get lib3270 revision								*/
 
 
- /* Result codes */
+ /* Standard Return Codes - http://ps-2.kev009.com/tl/techlib/manuals/adoclib/3270hcon/hconugd/retrncod.htm#C20819C058kmar */
+
+ // 00	Either the function was successfully executed, or there were no host updates since the last call was issued.
  #define HLLAPI_STATUS_SUCCESS				   0	/**< Good return code */
+
+ // 01	Either the presentation space short session ID was invalid, or the application is not connected.
  #define HLLAPI_STATUS_DISCONNECTED			   1	/**< The presentation space was not valid or not connected. */
+
+ // 02	A parameter error occurred.
  #define HLLAPI_STATUS_BAD_PARAMETER		   2	/**< An incorrect option was specified. */
+
+ // 04	The execution of the function was inhibited because the target presentation space was busy.
+ // 	For example, X or XSYSTEM is displayed in the OIA for the 3270 terminal emulation.
  #define HLLAPI_STATUS_TIMEOUT				   4	/**< Timeout */
+
+ // 05	The execution of the function was inhibited for some reason other than the reasons stated in return code 4.
  #define HLLAPI_STATUS_KEYBOARD_LOCKED		   5	/**< The keyboard is locked. */
- #define HLLAPI_STATUS_UNAVAILABLE			  11	/**< Resource unavailable at this time */
+
+ // 06	A data error occurred due to specification of an invalid parameter (for example, a length error causing truncation).
+ // 07	The specified presentation space position was invalid.
+ // 08	No prerequisite function was issued.
+
+ // 09	A system error occurred.
  #define HLLAPI_STATUS_SYSTEM_ERROR			   9 	/**< A system error occurred */
+
+ // 10	The function number is not supported by the emulation program.
+ #define HLLAPI_STATUS_UNSUPPORTED			  10
+
+ // 11	The resource that you requested is unavailable (for example, too many attempts have been made to connect to the same presentation space (PS) or another application is connected to the PS).
+ #define HLLAPI_STATUS_UNAVAILABLE			  11	/**< Resource unavailable at this time */
+
+ // 20	Invalid keystroke caused by ESC= option.
+ // 21	OIA was updated.
+ // 22	PS was updated.
+ // 23	Both OIA and PS were updated.
+ // 24	Either the string was not found, or the presentation space is unformatted.
+ // 25	Keystrokes were not available on input queue.
+ // 26	A host event occurred. See QUERY HOST UPDATE (24) for details.
+ // 28	Field length was 0.
+ // 31	Keystroke queue overflow. Keystrokes were lost.
+
 
  #define HLLAPI_STATUS_WAITING	HLLAPI_STATUS_TIMEOUT
 

@@ -102,7 +102,10 @@ HLLAPI_API_CALL hllapi(LPWORD func, LPSTR buffer, LPWORD length, LPWORD rc)
 	}
 
 	trace("hllapi(%d) failed",*func);
-	return invalid_request(buffer, length, rc);
+
+	*rc = HLLAPI_STATUS_UNSUPPORTED;
+	return *rc;
+
 }
 
 static int invalid_request(char *buffer, unsigned short *length, unsigned short *rc)
