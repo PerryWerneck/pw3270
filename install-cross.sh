@@ -64,6 +64,11 @@ do
 
 		case $parameter in
 
+		ar)
+			zypper ar --refresh http://download.opensuse.org/repositories/windows:/mingw:/win32/openSUSE_42.1/ mingw32
+			zypper ar --refresh http://download.opensuse.org/repositories/windows:/mingw:/win64/openSUSE_42.1/ mingw64
+			;;
+
 		32)
 			install_packages mingw32
 			;;

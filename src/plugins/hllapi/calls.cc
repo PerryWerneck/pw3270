@@ -97,18 +97,16 @@
 
  HLLAPI_API_CALL hllapi_connect(LPSTR uri, WORD wait)
  {
- 	int rc = HLLAPI_STATUS_SUCCESS;
-
  	try
  	{
-		rc = session::get_default()->connect(uri,hllapi_timeout);
+		session::get_default()->connect(uri,hllapi_timeout);
 	}
 	catch(std::exception &e)
 	{
 		return HLLAPI_STATUS_SYSTEM_ERROR;
 	}
 
-	return rc;
+	return hllapi_get_state();
  }
 
  HLLAPI_API_CALL hllapi_is_connected(void)
@@ -120,11 +118,11 @@
  {
 	switch(hllapi_get_message_id())
 	{
-	case LIB3270_MESSAGE_NONE:				/* 0 - No message */
-		return HLLAPI_STATUS_SUCCESS;
+	case LIB3270_MESSAGE_NONE:				// 0 - No message
+		return HLLAPI_STATUS_SUCCESS;		// keyboard was unlocked and ready for input.
 
-	case LIB3270_MESSAGE_DISCONNECTED:		/* 4 - Disconnected from host */
-		return HLLAPI_STATUS_DISCONNECTED;
+	case LIB3270_MESSAGE_DISCONNECTED:		// 4 - Disconnected from host
+		return HLLAPI_STATUS_DISCONNECTED;	// Your application program was not connected to a valid session.
 
 	case LIB3270_MESSAGE_MINUS:
 	case LIB3270_MESSAGE_PROTECTED:
@@ -132,7 +130,7 @@
 	case LIB3270_MESSAGE_OVERFLOW:
 	case LIB3270_MESSAGE_INHIBIT:
 	case LIB3270_MESSAGE_KYBDLOCK:
-		return HLLAPI_STATUS_KEYBOARD_LOCKED;
+		return HLLAPI_STATUS_KEYBOARD_LOCKED;	// keyboard is locked.
 
 	case LIB3270_MESSAGE_SYSWAIT:
 	case LIB3270_MESSAGE_TWAIT:
@@ -140,7 +138,7 @@
 	case LIB3270_MESSAGE_X:
 	case LIB3270_MESSAGE_RESOLVING:
 	case LIB3270_MESSAGE_CONNECTING:
-		return HLLAPI_STATUS_WAITING;
+		return HLLAPI_STATUS_WAITING;			// time-out while still busy (in XCLOCK or XSYSTEM in X) for the 3270 terminal emulation.
 	}
 
 	return HLLAPI_STATUS_SYSTEM_ERROR;
@@ -154,12 +152,14 @@
 
  HLLAPI_API_CALL hllapi_wait_for_ready(WORD seconds)
  {
-	return session::get_default()->wait_for_ready(seconds);
+	session::get_default()->wait_for_ready(seconds);
+	return hllapi_get_state();
  }
 
  HLLAPI_API_CALL hllapi_wait(WORD seconds)
  {
-	return session::get_default()->wait(seconds);
+	session::get_default()->wait(seconds);
+	return hllapi_get_state();
  }
 
  HLLAPI_API_CALL hllapi_get_message_id(void)
