@@ -123,6 +123,8 @@
 		// Lib3270 entry points
 		const char * 	(*_get_version)(void);
 		LIB3270_CSTATE	(*_get_connection_state)(H3270 *h);
+		LIB3270_MESSAGE	(*_get_program_message)(H3270 *h);
+
 		int 			(*_disconnect)(H3270 *h);
 		int 			(*_connect)(H3270 *h,int wait);
 		const char 		(*_set_url)(H3270 *h, const char *n);
@@ -183,6 +185,7 @@
 
 				{ (void **) & _is_connected,			"lib3270_is_connected"				},
 				{ (void **) & _get_connection_state,	"lib3270_get_connection_state"		},
+				{ (void **) & _get_program_message,		"lib3270_get_program_message"		},
 
 				{ (void **) & _get_version,				"lib3270_get_version"				},
 				{ (void **) & _disconnect,				"lib3270_disconnect"				},
@@ -264,6 +267,10 @@
 		LIB3270_CSTATE get_cstate(void)
 		{
 			return _get_connection_state(hSession);
+		}
+
+		LIB3270_MESSAGE get_program_message(void) {
+			return _get_program_message(hSession);
 		}
 
 		int connect(void)

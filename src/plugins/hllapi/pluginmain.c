@@ -216,10 +216,6 @@
 		send_result(source,lib3270_disconnect(lib3270_get_default_session_handle()));
 		break;
 
-	case HLLAPI_PACKET_GET_PROGRAM_MESSAGE:
-		send_result(source,lib3270_get_program_message(lib3270_get_default_session_handle()));
-		break;
-
 	case HLLAPI_PACKET_IS_CONNECTED:
 		send_result(source,lib3270_in_tn3270e(lib3270_get_default_session_handle()));
 		break;
@@ -318,6 +314,10 @@
 
 	case HLLAPI_PACKET_GET_CSTATE:
 		send_result(source,lib3270_get_connection_state(lib3270_get_default_session_handle()));
+		break;
+
+	case HLLAPI_PACKET_GET_PROGRAM_MESSAGE:
+		send_result(source,lib3270_get_program_message(lib3270_get_default_session_handle()));
 		break;
 
 	case HLLAPI_PACKET_SET_TOGGLE:

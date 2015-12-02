@@ -36,8 +36,11 @@ gdk-pixbuf-query-loaders
 python-devel
 EOF
 
-# Instala o tema usado no pacote windows
-sudo zypper --non-interactive in adwaita-icon-theme
+# Instala apicativos e temas necessários
+sudo zypper --non-interactive in \
+	adwaita-icon-theme \
+	gettext-tools \
+	glib2-devel
 
 while read FILE
 do

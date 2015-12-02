@@ -164,7 +164,7 @@
 
  HLLAPI_API_CALL hllapi_get_message_id(void)
  {
-	return session::get_default()->get_cstate();
+	return session::get_default()->get_program_message();
  }
 
  HLLAPI_API_CALL hllapi_get_screen_at(WORD row, WORD col, LPSTR buffer)

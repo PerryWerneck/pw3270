@@ -49,20 +49,21 @@
 	#include <pw3270/ipcpackets.h>
 	#include <process.h>
  #else
-	#define HLLAPI_PACKET_IS_CONNECTED	"isConnected"
-	#define HLLAPI_PACKET_GET_CSTATE	"getConnectionState"
-	#define HLLAPI_PACKET_IS_READY		"isReady"
-	#define HLLAPI_PACKET_DISCONNECT	"disconnect"
-	#define HLLAPI_PACKET_GET_CURSOR	"getCursorAddress"
-	#define HLLAPI_PACKET_ENTER			"enter"
-	#define HLLAPI_PACKET_QUIT			"quit"
-	#define HLLAPI_PACKET_ERASE			"erase"
-	#define HLLAPI_PACKET_ERASE_EOF		"eraseEOF"
-	#define HLLAPI_PACKET_ERASE_EOL		"eraseEOL"
-	#define HLLAPI_PACKET_ERASE_INPUT	"eraseInput"
-	#define HLLAPI_PACKET_PRINT			"print"
-	#define HLLAPI_PACKET_ASC2EBC		"asc2ebc"
-	#define HLLAPI_PACKET_EBC2ASC		"ebc2asc"
+	#define HLLAPI_PACKET_IS_CONNECTED			"isConnected"
+	#define HLLAPI_PACKET_GET_CSTATE			"getConnectionState"
+	#define HLLAPI_PACKET_GET_PROGRAM_MESSAGE	"getProgramMessage"
+	#define HLLAPI_PACKET_IS_READY				"isReady"
+	#define HLLAPI_PACKET_DISCONNECT			"disconnect"
+	#define HLLAPI_PACKET_GET_CURSOR			"getCursorAddress"
+	#define HLLAPI_PACKET_ENTER					"enter"
+	#define HLLAPI_PACKET_QUIT					"quit"
+	#define HLLAPI_PACKET_ERASE					"erase"
+	#define HLLAPI_PACKET_ERASE_EOF				"eraseEOF"
+	#define HLLAPI_PACKET_ERASE_EOL				"eraseEOL"
+	#define HLLAPI_PACKET_ERASE_INPUT			"eraseInput"
+	#define HLLAPI_PACKET_PRINT					"print"
+	#define HLLAPI_PACKET_ASC2EBC				"asc2ebc"
+	#define HLLAPI_PACKET_EBC2ASC				"ebc2asc"
  #endif // WIN32
 
  #include <pw3270/class.h>
@@ -698,6 +699,10 @@
 		LIB3270_CSTATE get_cstate(void)
 		{
 			return (LIB3270_CSTATE) query_intval(HLLAPI_PACKET_GET_CSTATE);
+		}
+
+		LIB3270_MESSAGE get_program_message(void) {
+			return (LIB3270_MESSAGE) query_intval(HLLAPI_PACKET_GET_PROGRAM_MESSAGE);
 		}
 
 		int connect(void)

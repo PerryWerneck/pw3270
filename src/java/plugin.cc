@@ -94,6 +94,10 @@
 		return lib3270_get_connection_state(hSession);
 	}
 
+	LIB3270_MESSAGE get_program_message(void) {
+		return lib3270_get_program_message(hSession);
+	}
+
 	int disconnect(void) {
 		lib3270_disconnect(hSession);
 		return 0;
