@@ -135,10 +135,7 @@ static int connect_ps(char *buffer, unsigned short *length, unsigned short *rc)
 		buffer = tempbuffer;
 	}
 
-	if(hllapi_init(buffer) == 0)
-		*rc = HLLAPI_STATUS_SUCCESS;
-	else
-		*rc = HLLAPI_STATUS_UNAVAILABLE;
+	*rc = hllapi_init(buffer);
 
 	if(tempbuffer)
 		free(tempbuffer);
