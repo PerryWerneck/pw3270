@@ -32,7 +32,11 @@
  */
 
  #include "server.h"
+
+#ifdef _WIN32
  #include <windows.h>
+#endif // _WIN32
+
  #include <pw3270/plugin.h>
  #include <pw3270/v3270.h>
  #include <pw3270/ipcpackets.h>

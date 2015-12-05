@@ -408,6 +408,34 @@
 		}
 #endif // HAVE_DBUS
 
+#if defined(WIN32)
+
+		static string getRegistryKey(const char *name) throw (std::exception)
+		{
+			char 					buffer[4096];
+			HKEY 					hKey	= 0;
+			unsigned long			datalen = sizeof(buffer);
+
+			*buffer = 0;
+			if(RegOpenKeyEx(HKEY_LOCAL_MACHINE,"Software\\pw3270",0,KEY_QUERY_VALUE,&hKey) != ERROR_SUCCESS)
+			{
+				throw exception("Can't open key %s","HKLM\\Software\\pw3270");
+			}
+			else
+			{
+				unsigned long datatype;	// #defined in winnt.h (predefined types 0-11)
+
+				if(RegQueryValueExA(hKey,name,NULL,&datatype,(LPBYTE) buffer,&datalen) != ERROR_SUCCESS)
+					*buffer = 0;
+				RegCloseKey(hKey);
+			}
+
+			return string(buffer);
+
+		}
+
+#endif // defined
+
 		remote(const char *session) throw (std::exception)
 		{
 #if defined(WIN32)
@@ -415,51 +443,36 @@
 			char	 				  buffer[4096];
 			char					* str;
 			char					* ptr;
-			time_t					  timer;
+			time_t					  timer	= time(0)+1;
 
 			hPipe  = INVALID_HANDLE_VALUE;
 
 			if(strcasecmp(session,"start") == 0 || strcasecmp(session,"new") == 0)
 			{
 				// Start a new session
+				string					appName = getRegistryKey("appName");
 				char 					buffer[80];
-				char 					appName[4096];
-				HKEY 					hKey	= 0;
-				unsigned long			datalen = 4096;
 				STARTUPINFO				si;
 				PROCESS_INFORMATION		pi;
 
 				// Get application path
-				*appName = 0;
-				if(RegOpenKeyEx(HKEY_LOCAL_MACHINE,"Software\\pw3270",0,KEY_QUERY_VALUE,&hKey) != ERROR_SUCCESS)
-				{
-					throw exception("Can't open key %s","HKLM\\Software\\pw3270");
-					return;
-				}
-				else
-				{
-					unsigned long datatype;					// #defined in winnt.h (predefined types 0-11)
-					if(RegQueryValueExA(hKey,"appName",NULL,&datatype,(LPBYTE) appName,&datalen) != ERROR_SUCCESS)
-						*appName = 0;
-					RegCloseKey(hKey);
-				}
 
-				if(!*appName)
+				if(!appName.size())
 				{
 					throw exception("key %s\\appName is invalid","HKLM\\Software\\pw3270");
 					return;
 				}
 
-				trace("%s appname=%s\n",__FUNCTION__,appName);
+				trace("%s appname=%s\n",__FUNCTION__,appName.c_str());
 
-				snprintf(buffer,79,"%s --session=\"H%06d\"",appName,getpid());
+				snprintf(buffer,79,"%s --session=\"H%06d\"",appName.c_str(),getpid());
 
 				ZeroMemory( &si, sizeof(si) );
 				si.cb = sizeof(si);
 				ZeroMemory( &pi, sizeof(pi) );
 
 				// si.dwFlags = STARTF_PREVENTPINNING;
-				trace("App: %s",appName);
+				trace("App: %s",appName.c_str());
 				trace("CmdLine: %s",buffer);
 
 				if(CreateProcess(NULL,buffer,NULL,NULL,0,NORMAL_PRIORITY_CLASS,NULL,NULL,&si,&pi))
@@ -469,12 +482,15 @@
 				}
 				else
 				{
-					throw exception("Can't start %s",appName);
+					throw exception("Can't start %s",appName.c_str());
 					return;
 				}
 
 				snprintf(buffer,4095,"H%06d_a",getpid());
 				str = strdup(buffer);
+
+				// Até 20 segundos para o processo iniciar.
+				timer = time(0)+20;
 
 			}
 			else
@@ -490,6 +506,15 @@
 					else
 						*ptr = tolower(*ptr);
 				}
+
+				// Wait?
+				int delay = atoi(getRegistryKey("hllapiWait").c_str());
+
+				if(delay) {
+					timer = time(0) + delay;
+				}
+
+
 			}
 
 			snprintf(buffer,4095,"\\\\.\\pipe\\%s",str);
@@ -502,11 +527,11 @@
 
 			if(hPipe == INVALID_HANDLE_VALUE)
 			{
-				timer = time(0)+20;
+				// Cant get session, wait.
 				while(hPipe == INVALID_HANDLE_VALUE && time(0) < timer)
 				{
 					hPipe = CreateFile(buffer,GENERIC_WRITE|GENERIC_READ,0,NULL,OPEN_EXISTING,0,NULL);
-					Sleep(10);
+					Sleep(1);
 				}
 			}
 

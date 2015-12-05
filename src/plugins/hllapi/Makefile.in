@@ -29,7 +29,7 @@
 #---[ Sources ]----------------------------------------------------------------
 
 MODULE_NAME=hllapi
-DEPENDS=*.h ../../include/*.h ../../include/lib3270/*.h Makefile
+DEPENDS=*.h ../../include/*.h ../../include/lib3270/*.h Makefile ../../classlib/*.cc
 PLUGIN_SRC=pluginmain.c
 EXTAPI_SRC=calls.c hllapi.c
 
@@ -64,5 +64,11 @@ $(BINDBG)/$(PLUGIN_NAME): $(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJDBG)/$(
 $(BINDBG)$(DLL_NAME).$(VERSION): $(foreach SRC, $(basename $(EXTAPI_SRC)), $(OBJDBG)/$(SRC)@OBJEXT@) $(CLASS_DEBUG_OBJECTS)
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CXX) $(SYSDLL_FLAGS) $(LDFLAGS) @LDSOFLAGS@ @DBGRPATH@ -o $@ $^ $(CLASS_LIBS)
+	@$(CXX) $(SYSDLL_FLAGS) $(LDFLAGS) @LDSOFLAGS@ @DBGRPATH@ -L../../../.bin/Debug -o $@ $^ $(CLASS_LIBS)
 
+test: $(BINDBG)/test@EXEEXT@
+
+$(BINDBG)/test@EXEEXT@: $(BINDBG)$(DLL_NAME).$(VERSION) $(OBJDBG)/testprogram.o
+	@echo "  CCLD `basename $@`"
+	@$(MKDIR) `dirname $@`
+	@$(LD) -o $@ $^ $(LIBS) $(BINDBG)$(DLL_NAME).$(VERSION)

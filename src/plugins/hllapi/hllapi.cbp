@@ -62,6 +62,12 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="../../classlib/exception.cc" />
+		<Unit filename="../../classlib/local.cc" />
+		<Unit filename="../../classlib/module.cc" />
+		<Unit filename="../../classlib/remote.cc" />
+		<Unit filename="../../classlib/session.cc" />
+		<Unit filename="../../include/lib3270.h" />
 		<Unit filename="Makefile.in" />
 		<Unit filename="calls.cc" />
 		<Unit filename="client.h" />
@@ -69,9 +75,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="pluginmain.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="remote.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="remotectl.h" />

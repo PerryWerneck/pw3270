@@ -33,6 +33,7 @@
 
 	#define HLLAPI_H_INCLUDED 1
 	#include <lib3270.h>
+	#include <stdint.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -101,11 +102,20 @@ extern "C" {
 
  #define HLLAPI_STATUS_WAITING	HLLAPI_STATUS_TIMEOUT
 
- #ifdef WIN32
+ #if defined(WIN32)
+
 	#include <windows.h>
 
 	// http://www.mingw.org/wiki/Visual_Basic_DLL
 	#define HLLAPI_API_CALL __declspec (dllexport) DWORD __stdcall
+
+ #else
+
+	#define HLLAPI_API_CALL		__attribute__((visibility("default"))) extern
+	#define WORD				uint32_t
+	#define LPWORD				uint32_t *
+	#define LPSTR				char *
+	#define HANDLE				int
 
  #endif // WIN32
 
