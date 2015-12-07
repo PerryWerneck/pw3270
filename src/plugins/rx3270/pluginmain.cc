@@ -87,7 +87,10 @@
     void              free(void *ptr);
 
 	const string	  get_version(void);
+
 	LIB3270_CSTATE	  get_cstate(void);
+	LIB3270_MESSAGE	  get_program_message(void);
+
 	int				  disconnect(void);
 	int				  set_url(const char *uri);
 	int				  connect(void);
@@ -542,6 +545,11 @@ extern "C"
  LIB3270_CSTATE plugin::get_cstate(void)
  {
  	return lib3270_get_connection_state(hSession);
+ }
+
+ LIB3270_MESSAGE plugin::get_program_message(void)
+ {
+ 	return lib3270_get_program_message(hSession);
  }
 
  int plugin::disconnect(void)
