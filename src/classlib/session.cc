@@ -521,8 +521,21 @@
 	{
 		static char buffer[4096];
 
+		memset(buffer,0,sizeof(buffer));
+
 		if(FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM,NULL,e,MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),buffer,sizeof(buffer),NULL) == 0)
+		{
 			snprintf(buffer,4095,"Windows error %d", e);
+		}
+
+		for(size_t f=0;f<sizeof(buffer);f++)
+		{
+			if(buffer[f] < ' ')
+			{
+				buffer[f] = 0;
+				break;
+			}
+		}
 
 		return string(buffer);
 	}

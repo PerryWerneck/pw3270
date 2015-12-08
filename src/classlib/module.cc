@@ -158,7 +158,9 @@ namespace PW3270_NAMESPACE
 			FreeLibrary(kernel);
 
 		if(!hModule)
-			throw exception("Can't load %s: %s",dllname.c_str(),session::win32_strerror(rc));
+		{
+			throw exception("%s: %s",dllname.c_str(),session::win32_strerror(rc).c_str());
+		}
 
 #else
 		dllname += ".so";
