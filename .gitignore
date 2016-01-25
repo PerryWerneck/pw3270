@@ -15,6 +15,7 @@
 *.bz2
 *.cache
 *.png
+versions
 ChangeLog*
 Makefile
 aclocal.m4
