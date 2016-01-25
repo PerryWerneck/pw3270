@@ -840,6 +840,7 @@ AC_SUBST(CLASS_LIBS)
 AC_CONFIG_FILES(Makefile)
 AC_CONFIG_FILES(lib3270.pc)
 AC_CONFIG_FILES(pw3270.pc)
+AC_CONFIG_FILES(versions)
 
 AC_CONFIG_FILES(src/include/rules.mak)
 AC_CONFIG_FILES(src/include/plugin.mak)
