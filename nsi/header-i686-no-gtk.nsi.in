@@ -1,4 +1,5 @@
 !include "MUI2.nsh"
+!include "FileFunc.nsh"
 
 Name "@PACKAGE@"
 Caption "@PACKAGE@ - 3270 Emulator for windows/gtk"
