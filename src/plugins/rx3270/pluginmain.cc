@@ -436,12 +436,7 @@ extern "C"
 		return;
 	}
 
-#if GTK_CHECK_VERSION(3,10,0)
-	g_simple_action_set_enabled(G_SIMPLE_ACTION(action),FALSE);
-#else
-	gtk_action_set_sensitive(action,FALSE);
-#endif // GTK(3,10)
-
+	pw3270_set_action_state(action,FALSE);
 
 	if(filename)
 	{
@@ -484,11 +479,7 @@ extern "C"
 
 	}
 
-#if GTK_CHECK_VERSION(3,10,0)
-	g_simple_action_set_enabled(G_SIMPLE_ACTION(action),TRUE);
-#else
-	gtk_action_set_sensitive(action,TRUE);
-#endif // GTK(3,10)
+	pw3270_set_action_state(action,TRUE);
 
 #if GTK_CHECK_VERSION(2,32,0)
 	g_mutex_unlock(&mutex);

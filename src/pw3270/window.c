@@ -416,17 +416,9 @@
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(widget),menu);
  }
 
- static void setSensitive(GtkAction *action, gboolean on)
- {
- 	if(action)
-	{
-		gtk_action_set_sensitive(action,on);
-	}
- }
-
  static void pastenext(GtkWidget *widget, gboolean on, GtkAction **action)
  {
- 	setSensitive(action[ACTION_PASTENEXT],on);
+ 	pw3270_set_action_state(action[ACTION_PASTENEXT],on);
  }
 
  static void disconnected(GtkWidget *terminal, GtkWidget * window)
@@ -485,7 +477,7 @@
  {
 	GtkAction **action = (GtkAction **) g_object_get_data(G_OBJECT(widget),"named_actions");
 	gtk_action_group_set_sensitive(group[ACTION_GROUP_SELECTION],on);
-	setSensitive(action[ACTION_RESELECT],!on);
+	pw3270_set_action_state(action[ACTION_RESELECT],!on);
  }
 
  static gboolean popup_menu(GtkWidget *widget, gboolean selected, gboolean online, GdkEventButton *event, GtkWidget **popup)
@@ -647,11 +639,11 @@
 
 		if(action[ACTION_PASTENEXT])
 		{
-			setSensitive(action[ACTION_PASTENEXT],FALSE);
+			pw3270_set_action_state(action[ACTION_PASTENEXT],FALSE);
 			g_signal_connect(widget->terminal,"pastenext",G_CALLBACK(pastenext),action);
 		}
 
-		setSensitive(action[ACTION_RESELECT],FALSE);
+		pw3270_set_action_state(action[ACTION_RESELECT],FALSE);
 
 		// Connect action signals
 		g_signal_connect(widget->terminal,"disconnected",G_CALLBACK(disconnected),widget);

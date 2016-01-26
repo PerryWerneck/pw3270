@@ -89,6 +89,9 @@
 
  LIB3270_EXPORT	void		  pw3270_set_host_charset(GtkWidget *widget, const gchar *name);
 
+ LIB3270_EXPORT void 		  pw3270_set_action_state(GtkAction *action, gboolean on);
+
+
  typedef enum pw3270_src
  {
  	PW3270_SRC_ALL,			/**< Screen contents */

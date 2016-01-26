@@ -223,3 +223,24 @@ LIB3270_EXPORT void pw3270_set_host_charset(GtkWidget *widget, const gchar *name
 	gtk_widget_destroy(dialog);
 
 }
+
+LIB3270_EXPORT void pw3270_set_action_state(GtkAction *action, gboolean on)
+{
+
+ 	if(!action)
+	{
+		return;
+	}
+#if GTK_CHECK_VERSION(3,10,0)
+	else if(G_IS_SIMPLE_ACTION(action))
+	{
+		g_simple_action_set_enabled(G_SIMPLE_ACTION(action),FALSE);
+	}
+#endif // GTK(3,10)
+	else
+	{
+		gtk_action_set_sensitive(action,FALSE);
+	}
+
+ }
+
