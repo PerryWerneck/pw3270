@@ -1489,9 +1489,13 @@ void v3270_disconnect(GtkWidget *widget)
 {
 	g_return_if_fail(GTK_IS_V3270(widget));
 	v3270_disable_updates(widget);
+	debug("%s",__FUNCTION__);
 	lib3270_unselect(GTK_V3270(widget)->host);
+	debug("%s",__FUNCTION__);
 	lib3270_disconnect(GTK_V3270(widget)->host);
+	debug("%s",__FUNCTION__);
 	v3270_enable_updates(widget);
+	debug("%s",__FUNCTION__);
 }
 
 H3270 * v3270_get_session(GtkWidget *widget)

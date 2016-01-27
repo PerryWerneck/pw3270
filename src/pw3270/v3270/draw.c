@@ -438,7 +438,7 @@ void v3270_update_char(H3270 *session, int addr, unsigned char chr, unsigned sho
 
 void v3270_update_cursor_surface(v3270 *widget,unsigned char chr,unsigned short attr)
 {
-	if(widget->cursor.surface)
+	if(widget->cursor.surface && widget->drawing)
 	{
 		GdkRectangle	  rect	= widget->cursor.rect;
 		cairo_t			* cr 	= cairo_create(widget->cursor.surface);
