@@ -390,7 +390,7 @@ static void action_reset_toggle(GtkAction *action, GtkWidget *widget)
 static void action_select_all(GtkAction *action, GtkWidget *widget)
 {
 	trace_action(action,widget);
-	lib3270_select_all(v3270_get_session(widget));
+	v3270_select_all(widget);
 }
 
 static void action_select_field(GtkAction *action, GtkWidget *widget)

@@ -429,7 +429,7 @@ LIB3270_EXPORT void v3270_select_host(GtkWidget *widget)
 
 LIB3270_EXPORT int v3270_host_select_apply(V3270HostSelectWidget *widget)
 {
-	g_return_if_fail(GTK_IS_V3270HostSelectWidget(widget));
+	g_return_val_if_fail(GTK_IS_V3270HostSelectWidget(widget),0);
 
 	lib3270_set_hostname(widget->hSession,gtk_entry_get_text(widget->entry[ENTRY_HOSTNAME]));
 	lib3270_set_srvcname(widget->hSession,gtk_entry_get_text(widget->entry[ENTRY_SRVCNAME]));

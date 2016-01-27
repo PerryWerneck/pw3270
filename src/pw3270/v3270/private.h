@@ -127,6 +127,7 @@ G_BEGIN_DECLS
 	int resizing		: 1;	/**< Resizing selected region */
 	int table			: 1;	/**< Copy mode is table */
 	int scaled_fonts	: 1;	/**< Use scaled fonts */
+	int drawing			: 1;	/**< Draw widget? */
 
 #if GTK_CHECK_VERSION(3,0,0)
 
@@ -290,6 +291,10 @@ void		  v3270_update_ssl(H3270 *session, LIB3270_SSL_STATE state);
 
 G_GNUC_INTERNAL void v3270_update_luname(GtkWidget *widget,const gchar *name);
 G_GNUC_INTERNAL void v3270_init_properties(GObjectClass * gobject_class);
+G_GNUC_INTERNAL	void v3270_queue_draw_area(GtkWidget *widget, gint x, gint y, gint width, gint height);
+
+G_GNUC_INTERNAL void v3270_disable_updates(GtkWidget *widget);
+G_GNUC_INTERNAL void v3270_enable_updates(GtkWidget *widget);
 
 // Keyboard & Mouse
 gboolean	  v3270_key_press_event(GtkWidget *widget, GdkEventKey *event);

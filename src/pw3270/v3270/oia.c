@@ -714,7 +714,7 @@ void v3270_update_luname(GtkWidget *widget,const gchar *name)
 
 		cairo_destroy(cr);
 
-		gtk_widget_queue_draw_area(GTK_WIDGET(terminal),rect->x,rect->y,rect->width,rect->height);
+		v3270_queue_draw_area(GTK_WIDGET(terminal),rect->x,rect->y,rect->width,rect->height);
 	}
 
 #if GTK_CHECK_VERSION(2,26,0)
@@ -739,7 +739,7 @@ void v3270_update_message(v3270 *widget, LIB3270_MESSAGE id)
 
     cairo_destroy(cr);
 
-	gtk_widget_queue_draw_area(GTK_WIDGET(widget),rect->x,rect->y,rect->width,rect->height);
+	v3270_queue_draw_area(GTK_WIDGET(widget),rect->x,rect->y,rect->width,rect->height);
 
 	if(widget->accessible)
 		v3270_acessible_set_state(widget->accessible,id);
@@ -780,28 +780,28 @@ void v3270_update_cursor(H3270 *session, unsigned short row, unsigned short col,
 	terminal->cursor.rect.height     = terminal->font.height+terminal->font.descent;
 	terminal->cursor.show |= 1;
 
-	gtk_widget_queue_draw_area( GTK_WIDGET(terminal),	saved.x,
-														saved.y,
-														saved.width,
-														saved.height);
+	v3270_queue_draw_area( GTK_WIDGET(terminal),	saved.x,
+													saved.y,
+													saved.width,
+													saved.height);
 
 
 	v3270_update_cursor_surface(terminal,c,attr);
 
-	gtk_widget_queue_draw_area(	GTK_WIDGET(terminal),
-								terminal->cursor.rect.x,terminal->cursor.rect.y,
-								terminal->cursor.rect.width,terminal->cursor.rect.height);
+	v3270_queue_draw_area(	GTK_WIDGET(terminal),
+							terminal->cursor.rect.x,terminal->cursor.rect.y,
+							terminal->cursor.rect.width,terminal->cursor.rect.height);
 
 	if(lib3270_get_toggle(session,LIB3270_TOGGLE_CROSSHAIR))
 	{
 		GtkAllocation allocation;
 		gtk_widget_get_allocation(GTK_WIDGET(terminal), &allocation);
 
-		gtk_widget_queue_draw_area(GTK_WIDGET(terminal),0,saved.y+terminal->font.height,allocation.width,1);
-		gtk_widget_queue_draw_area(GTK_WIDGET(terminal),saved.x,0,1,terminal->oia_rect->y-3);
+		v3270_queue_draw_area(GTK_WIDGET(terminal),0,saved.y+terminal->font.height,allocation.width,1);
+		v3270_queue_draw_area(GTK_WIDGET(terminal),saved.x,0,1,terminal->oia_rect->y-3);
 
-		gtk_widget_queue_draw_area(GTK_WIDGET(terminal),0,terminal->cursor.rect.y+terminal->font.height,allocation.width,1);
-		gtk_widget_queue_draw_area(GTK_WIDGET(terminal),terminal->cursor.rect.x,0,1,terminal->oia_rect->y-3);
+		v3270_queue_draw_area(GTK_WIDGET(terminal),0,terminal->cursor.rect.y+terminal->font.height,allocation.width,1);
+		v3270_queue_draw_area(GTK_WIDGET(terminal),terminal->cursor.rect.x,0,1,terminal->oia_rect->y-3);
 	}
 
 	if(lib3270_get_toggle(session,LIB3270_TOGGLE_CURSOR_POS))
@@ -816,7 +816,7 @@ void v3270_update_cursor(H3270 *session, unsigned short row, unsigned short col,
 
 		cairo_destroy(cr);
 
-		gtk_widget_queue_draw_area(GTK_WIDGET(terminal),rect->x,rect->y,rect->width,rect->height);
+		v3270_queue_draw_area(GTK_WIDGET(terminal),rect->x,rect->y,rect->width,rect->height);
 	}
 
 	if(terminal->accessible)
@@ -862,7 +862,7 @@ static void release_timer(struct timer_info *info)
 			GdkRectangle *rect = info->terminal->oia_rect + id[f];
 			cairo_rectangle(cr, rect->x, rect->y, rect->width, rect->height);
 			cairo_fill(cr);
-			gtk_widget_queue_draw_area(GTK_WIDGET(info->terminal),rect->x,rect->y,rect->width,rect->height);
+			v3270_queue_draw_area(GTK_WIDGET(info->terminal),rect->x,rect->y,rect->width,rect->height);
 		}
 		cairo_destroy(cr);
 	}
@@ -919,7 +919,7 @@ void v3270_draw_shift_status(v3270 *terminal)
 	}
 
     cairo_destroy(cr);
-	gtk_widget_queue_draw_area(GTK_WIDGET(terminal),r->x,r->y,r->width,r->height);
+	v3270_queue_draw_area(GTK_WIDGET(terminal),r->x,r->y,r->width,r->height);
 
 }
 
@@ -943,7 +943,7 @@ static void update_text_field(v3270 *terminal, gboolean flag, V3270_OIA_FIELD id
 	}
 
     cairo_destroy(cr);
-	gtk_widget_queue_draw_area(GTK_WIDGET(terminal),r->x,r->y,r->width,r->height);
+	v3270_queue_draw_area(GTK_WIDGET(terminal),r->x,r->y,r->width,r->height);
 }
 
 void v3270_draw_alt_status(v3270 *terminal)
@@ -966,7 +966,7 @@ void v3270_draw_ins_status(v3270 *terminal)
 	draw_insert(cr,terminal->host,terminal->color,r);
 
     cairo_destroy(cr);
-	gtk_widget_queue_draw_area(GTK_WIDGET(terminal),r->x,r->y,r->width,r->height);
+	v3270_queue_draw_area(GTK_WIDGET(terminal),r->x,r->y,r->width,r->height);
 
 }
 
@@ -1010,7 +1010,7 @@ static gboolean update_timer(struct timer_info *info)
 		cairo_stroke(cr);
 
 		info->last = now;
-		gtk_widget_queue_draw_area(GTK_WIDGET(info->terminal),rect->x,rect->y,rect->width,rect->height);
+		v3270_queue_draw_area(GTK_WIDGET(info->terminal),rect->x,rect->y,rect->width,rect->height);
 	}
 
 #ifdef HAVE_LIBM
@@ -1030,7 +1030,7 @@ static gboolean update_timer(struct timer_info *info)
 
     info->step = draw_spinner(cr, rect, info->terminal->color, info->step);
 
-    gtk_widget_queue_draw_area(GTK_WIDGET(info->terminal),rect->x,rect->y,rect->width,rect->height);
+    v3270_queue_draw_area(GTK_WIDGET(info->terminal),rect->x,rect->y,rect->width,rect->height);
 
 #endif // HAVE_LIBM
 
@@ -1090,7 +1090,7 @@ void v3270_update_ssl(H3270 *session, LIB3270_SSL_STATE state)
 
 	cr = set_update_region(terminal,&r,V3270_OIA_SSL);
 	v3270_draw_ssl_status(cr,terminal->host,&terminal->font,terminal->color,r);
-	gtk_widget_queue_draw_area(GTK_WIDGET(terminal),r->x,r->y,r->width,r->height);
+	v3270_queue_draw_area(GTK_WIDGET(terminal),r->x,r->y,r->width,r->height);
 	cairo_destroy(cr);
 
 }
@@ -1102,7 +1102,7 @@ void v3270_update_oia(H3270 *session, LIB3270_FLAG id, unsigned char on)
 
 	v3270 *terminal = GTK_V3270(session->user_data);
 
-	if(!terminal->surface)
+	if(!(terminal->surface && terminal->drawing))
 		return;
 
 	switch(id)
@@ -1111,7 +1111,7 @@ void v3270_update_oia(H3270 *session, LIB3270_FLAG id, unsigned char on)
 		debug("%s",__FUNCTION__);
 		cr = set_update_region(terminal,&r,V3270_OIA_CONNECTION);
 		v3270_draw_connection(cr,terminal->host,&terminal->font,terminal->color,r);
-		gtk_widget_queue_draw_area(GTK_WIDGET(terminal),r->x,r->y,r->width,r->height);
+		v3270_queue_draw_area(GTK_WIDGET(terminal),r->x,r->y,r->width,r->height);
 		cairo_destroy(cr);
 		break;
 
@@ -1119,7 +1119,7 @@ void v3270_update_oia(H3270 *session, LIB3270_FLAG id, unsigned char on)
 		debug("%s",__FUNCTION__);
 		cr = set_update_region(terminal,&r,V3270_OIA_UNDERA);
 		draw_undera(cr,terminal->host,&terminal->font,terminal->color,r);
-		gtk_widget_queue_draw_area(GTK_WIDGET(terminal),r->x,r->y,r->width,r->height);
+		v3270_queue_draw_area(GTK_WIDGET(terminal),r->x,r->y,r->width,r->height);
 		cairo_destroy(cr);
 		break;
 

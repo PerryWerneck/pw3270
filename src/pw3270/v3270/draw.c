@@ -337,7 +337,7 @@ void v3270_reload(GtkWidget *widget)
 
 	cairo_t * cr;
 
-	if(!gtk_widget_get_realized(widget))
+	if(!(gtk_widget_get_realized(widget) && terminal->drawing))
 		return;
 
 	// Create new terminal image
@@ -405,7 +405,7 @@ void v3270_update_char(H3270 *session, int addr, unsigned char chr, unsigned sho
 	GdkRectangle	  rect;
 	int				  rows,cols;
 
-	if(!gtk_widget_get_realized(GTK_WIDGET(terminal)))
+	if(!(gtk_widget_get_realized(GTK_WIDGET(terminal)) && terminal->drawing))
 		return;
 
 	if(!terminal->surface)
@@ -432,9 +432,7 @@ void v3270_update_char(H3270 *session, int addr, unsigned char chr, unsigned sho
 	if(cursor)
 		v3270_update_cursor_rect(terminal,&rect,chr,attr);
 
-// #ifndef _WIN32
-	gtk_widget_queue_draw_area(GTK_WIDGET(terminal),rect.x,rect.y,rect.width,rect.height);
-// #endif // WIN32
+	v3270_queue_draw_area(GTK_WIDGET(terminal),rect.x,rect.y,rect.width,rect.height);
 
 }
 
@@ -470,3 +468,11 @@ void v3270_update_cursor_rect(v3270 *widget, GdkRectangle *rect, unsigned char c
 	v3270_update_cursor_surface(widget,chr,attr);
 }
 
+void v3270_queue_draw_area(GtkWidget *widget, gint x, gint y, gint width, gint height)
+{
+	if(GTK_V3270(widget)->drawing && gtk_widget_get_realized(widget))
+	{
+		gtk_widget_queue_draw_area(widget,x,y,width,height);
+	}
+
+}

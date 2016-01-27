@@ -236,7 +236,7 @@ static void ft_state_changed(H3270FT *ft, LIB3270_FT_STATE state)
 
 gint v3270_transfer_file(GtkWidget *widget, LIB3270_FT_OPTION options, const gchar *local, const gchar *remote, int lrecl, int blksize, int primspace, int secspace, int dft)
 {
-	g_return_val_if_fail(GTK_IS_V3270(widget),NULL);
+	g_return_val_if_fail(GTK_IS_V3270(widget),0);
 
 	H3270FT		* ft		= lib3270_ft_new(v3270_get_session(widget),options,local,remote,lrecl,blksize,primspace,secspace,dft);
 

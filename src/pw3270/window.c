@@ -233,7 +233,7 @@
 
  const gchar * pw3270_set_url(GtkWidget *widget, const gchar *uri)
  {
- 	g_return_if_fail(GTK_IS_PW3270(widget));
+ 	g_return_val_if_fail(GTK_IS_PW3270(widget),"");
  	return v3270_set_url(GTK_PW3270(widget)->terminal,uri);
  }
 

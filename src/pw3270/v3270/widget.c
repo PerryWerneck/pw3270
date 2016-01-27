@@ -109,9 +109,9 @@ static void v3270_cursor_draw(v3270 *widget)
 
 	lib3270_get_contents(widget->host,pos,pos,&c,&attr);
 	v3270_update_cursor_surface(widget,c,attr);
-	gtk_widget_queue_draw_area(	GTK_WIDGET(widget),
-								widget->cursor.rect.x,widget->cursor.rect.y,
-								widget->cursor.rect.width,widget->cursor.rect.height);
+	v3270_queue_draw_area(	GTK_WIDGET(widget),
+							widget->cursor.rect.x,widget->cursor.rect.y,
+							widget->cursor.rect.width,widget->cursor.rect.height);
 
 }
 
@@ -985,6 +985,9 @@ static void v3270_init(v3270 *widget)
 	// Setup auto disconnect timer
 	widget->cursor.timer = NULL;
 
+	// Enable drawing
+	widget->drawing	= 1;
+
 	trace("%s",__FUNCTION__);
 }
 
@@ -1100,10 +1103,10 @@ static gboolean timer_tick(v3270 *widget)
 	if(lib3270_get_toggle(widget->host,LIB3270_TOGGLE_CURSOR_BLINK))
 	{
 		widget->cursor.show ^= 1;
-		gtk_widget_queue_draw_area(GTK_WIDGET(widget),	widget->cursor.rect.x,
-														widget->cursor.rect.y,
-														widget->cursor.rect.width,
-														widget->cursor.rect.height );
+		v3270_queue_draw_area(GTK_WIDGET(widget),	widget->cursor.rect.x,
+													widget->cursor.rect.y,
+													widget->cursor.rect.width,
+													widget->cursor.rect.height );
 	}
 
 	return TRUE;
@@ -1485,7 +1488,10 @@ const gchar	* v3270_get_font_family(GtkWidget *widget)
 void v3270_disconnect(GtkWidget *widget)
 {
 	g_return_if_fail(GTK_IS_V3270(widget));
+	v3270_disable_updates(widget);
+	lib3270_unselect(GTK_V3270(widget)->host);
 	lib3270_disconnect(GTK_V3270(widget)->host);
+	v3270_enable_updates(widget);
 }
 
 H3270 * v3270_get_session(GtkWidget *widget)
@@ -1595,8 +1601,8 @@ gboolean v3270_get_toggle(GtkWidget *widget, LIB3270_TOGGLE ix)
  **/
 const gchar * v3270_set_url(GtkWidget *widget, const gchar *uri)
 {
-	g_return_if_fail(GTK_IS_V3270(widget));
-	g_return_if_fail(uri != NULL);
+	g_return_val_if_fail(GTK_IS_V3270(widget),"");
+	g_return_val_if_fail(uri != NULL,"");
 	return lib3270_set_url(GTK_V3270(widget)->host,uri);
 }
 
@@ -1686,4 +1692,19 @@ GtkWidget * v3270_get_default_widget(void)
 	}
 
 	return GTK_WIDGET(hSession->user_data);
+}
+
+void v3270_disable_updates(GtkWidget *widget)
+{
+	GTK_V3270(widget)->drawing = 0;
+}
+
+void v3270_enable_updates(GtkWidget *widget)
+{
+	if(gtk_widget_get_realized(widget))
+	{
+		GTK_V3270(widget)->drawing = 1;
+		v3270_reload(widget);
+		gtk_widget_queue_draw(widget);
+	}
 }

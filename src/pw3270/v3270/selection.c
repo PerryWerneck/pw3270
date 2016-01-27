@@ -484,7 +484,9 @@ void v3270_paste(GtkWidget *widget)
 
 void v3270_unselect(GtkWidget *widget)
 {
+	v3270_disable_updates(widget);
 	lib3270_unselect(v3270_get_session(widget));
+	v3270_enable_updates(widget);
 }
 
 gboolean v3270_get_selection_bounds(GtkWidget *widget, gint *start, gint *end)
@@ -516,5 +518,13 @@ gchar * v3270_get_region(GtkWidget *widget, gint start_pos, gint end_pos, gboole
  	g_return_if_fail(GTK_IS_V3270(widget));
  	lib3270_select_region(GTK_V3270(widget)->host,start,end);
  }
+
+void v3270_select_all(GtkWidget *widget)
+{
+ 	g_return_if_fail(GTK_IS_V3270(widget));
+	v3270_disable_updates(widget);
+	lib3270_select_all(v3270_get_session(widget));
+	v3270_enable_updates(widget);
+}
 
 

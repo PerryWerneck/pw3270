@@ -216,6 +216,7 @@
  // Cut & Paste
  LIB3270_EXPORT	gboolean  		  v3270_get_selection_bounds(GtkWidget *widget, gint *start, gint *end);
  LIB3270_EXPORT	void 			  v3270_unselect(GtkWidget *widget);
+ LIB3270_EXPORT void 			  v3270_select_all(GtkWidget *widget);
  LIB3270_EXPORT	void 			  v3270_paste(GtkWidget *widget);
  LIB3270_EXPORT	void 			  v3270_paste_string(GtkWidget *widget, const gchar *text, const gchar *encoding);
  LIB3270_EXPORT	void	  		  v3270_select_region(GtkWidget *widget, gint start, gint end);

@@ -71,9 +71,11 @@ static void single_click(v3270 *widget, int baddr)
 	{
 	case 0x00:
 		// Unselected area, move cursor and remove selection
+		v3270_disable_updates(widget);
 		lib3270_set_cursor_address(widget->host,baddr);
 		lib3270_unselect(widget->host);
 		widget->selecting = 1;
+		v3270_enable_updates(widget);
 		break;
 
 
