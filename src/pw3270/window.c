@@ -294,8 +294,47 @@
 
  LIB3270_EXPORT void pw3270_set_host_type(GtkWidget *widget, const gchar *name)
  {
+ 	size_t f;
+ 	size_t sz;
+
  	g_return_if_fail(GTK_IS_PW3270(widget));
-	v3270_set_host_type(GTK_PW3270(widget)->terminal,name);
+
+	int rc = v3270_set_host_type(GTK_PW3270(widget)->terminal,name);
+
+	if(!rc) {
+		return;
+	}
+
+	GtkWidget *popup = gtk_message_dialog_new_with_markup(
+						GTK_WINDOW(widget),
+						GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
+						GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,
+						_( "Can't recognize \"%s\" as a valid host type" ), name);
+
+	gtk_window_set_title(GTK_WINDOW(popup),strerror(rc));
+
+	// Obtenho as opções válidas.
+	char text[4096];
+	const LIB3270_OPTION_ENTRY *host_type = lib3270_get_option_list();
+
+	*text = 0;
+	for(f=1;host_type[f].name;f++)
+	{
+		sz = strlen(text);
+		snprintf(text+sz,4095-sz,_( "%s<b>%s</b> for %s"), *text ? ", " : "",host_type[f].name,gettext(host_type[f].description));
+
+	}
+
+	sz = strlen(text);
+	snprintf(text+sz,4095-sz,_( " and <b>%s</b> for %s."),host_type[0].name,gettext(host_type[0].description));
+
+	gtk_message_dialog_format_secondary_markup(GTK_MESSAGE_DIALOG(popup),_( "The known types are %s" ),text);
+
+	gtk_dialog_run(GTK_DIALOG(popup));
+
+	gtk_widget_destroy(popup);
+
+
  }
 
  LIB3270_EXPORT int pw3270_set_session_color_type(GtkWidget *widget, unsigned short colortype)

@@ -153,7 +153,7 @@ LIB3270_EXPORT LIB3270_OPTION lib3270_parse_host_type(const char *name)
 
 	int f;
 
-	for(f=0;f<(sizeof(host_type)/sizeof(host_type[0]));f++)
+	for(f=0;host_type[f].name;f++)
 	{
 		if(!strcasecmp(host_type[f].name,name))
 			return host_type[f].option;
