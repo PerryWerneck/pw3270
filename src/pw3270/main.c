@@ -405,7 +405,7 @@ int main(int argc, char *argv[])
 			{ "session",		's', 0, G_OPTION_ARG_STRING,	&session_name,		N_( "Session name" ),								PACKAGE_NAME	},
 			{ "host",			'h', 0, G_OPTION_ARG_STRING,	&host,				N_( "Host to connect"),								NULL			},
 			{ "colors",			'c', 0, G_OPTION_ARG_CALLBACK,	optcolors,			N_( "Set reported colors (8/16)" ),					"16"			},
-			{ "systype",		't', 0, G_OPTION_ARG_STRING,	&system,			N_( "Host system type" ),							"S390"			},
+            { "systype",		't', 0, G_OPTION_ARG_STRING,	&systype,			N_( "Host system type" ),							"S390"			},
 			{ "toggleset",		'S', 0, G_OPTION_ARG_STRING,	&toggleset,			N_( "Set toggles ON" ),								NULL			},
 			{ "togglereset",	'R', 0, G_OPTION_ARG_STRING,	&togglereset,		N_( "Set toggles OFF" ),							NULL			},
 			{ "charset",	    'C', 0, G_OPTION_ARG_STRING,	&charset,		    N_( "Set host charset" ),							NULL			},

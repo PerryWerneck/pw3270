@@ -168,7 +168,7 @@ LIB3270_EXPORT int lib3270_set_host_type(H3270 *hSession, const char *name)
 
 	for(f=0;f<(sizeof(host_type)/sizeof(host_type[0]));f++)
 	{
-		if(!strcasecmp(host_type[f].name,name))
+		if(host_type[f].name && !strcasecmp(host_type[f].name,name))
 		{
 			hSession->options &= ~LIB3270_OPTION_HOST_TYPE;
 			hSession->options |= host_type[f].option;

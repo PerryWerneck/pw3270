@@ -200,7 +200,7 @@
 
 	if(systype)
 	{
-		set_string_to_config("host","uri","%s",systype);
+        set_string_to_config("host","systype","%s",systype);
 		pw3270_set_host_type(widget,systype);
 	}
 	else
