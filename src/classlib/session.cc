@@ -199,15 +199,22 @@
 	{
 		time_t end = time(0)+timeout;
 
+		iterate(false);
 		while(time(0) < end)
 		{
-			if(!is_connected())
-				return ENOTCONN;
+			trace("Aguardar %d segundos",(int) (end - time(0)));
 
-			if(!cmp_text_at(row,col,key))
+			int rc = wait_for_ready(end - time(0));
+			if(rc) {
+				return rc;
+			}
+
+			if(!cmp_text_at(row,col,key)) {
 				return 0;
+			}
 
-			iterate();
+			iterate(true);
+
 		}
 
 		return ETIMEDOUT;

@@ -118,6 +118,29 @@ JNIEXPORT jint JNICALL Java_pw3270_terminal_cmp_1string_1at(JNIEnv *env, jobject
 
 }
 
+JNIEXPORT jint JNICALL Java_pw3270_terminal_wait_1for_1string_1at(JNIEnv *env, jobject obj, jint row, jint col, jstring j_str, jint timeout) {
+
+	const char	* str = env->GetStringUTFChars(j_str, 0);
+	jint 		  rc	= -1;
+
+	try {
+
+		rc = java::getHandle(env,obj)->wait_for_string_at((int) row, (int) col, str, timeout);
+
+	} catch(std::exception &e) {
+
+		env->ReleaseStringUTFChars( j_str, str);
+		env->ThrowNew(env->FindClass("java/lang/Exception"), e.what());
+		return -1;
+
+	}
+
+	env->ReleaseStringUTFChars( j_str, str);
+	return rc;
+
+
+}
+
 JNIEXPORT jint JNICALL Java_pw3270_terminal_input_1string(JNIEnv *env, jobject obj, jstring j_str) {
 
 	const char	* str = env->GetStringUTFChars(j_str, 0);

@@ -53,6 +53,19 @@ public class terminal
 	public native int wait_for_ready(int seconds);
 
 	/**
+	 * Wait for text at defined position
+	 *
+	 * @param row	Row for text to compare.
+	 * @param col	Column for text to compare.
+	 * @param text	String to compare.
+	 * @param seconds Maximum time (in seconds) to wait for.
+	 *
+	 * @return 0 for success, error code if not.
+	 *
+	 */
+	public native int wait_for_string_at(int row, int col, String text, int seconds);
+
+	/**
 	 * Get the current lib3270 version.
 	 *
 	 * @return String with the current lib3270 version.
