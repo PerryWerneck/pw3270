@@ -565,14 +565,26 @@ case "$host" in
 			AC_DEFINE(HAVE_PHP)
 			EXTENSIONS="$EXTENSIONS php"
 			PHPMAJOR=`$PHPCONFIG --version | cut -d. -f1`
-			if test -d /etc/php${PHPMAJOR}/conf.d; then
-				PHPCONFDIR=/etc/php${PHPMAJOR}/conf.d
-			elif test -d /etc/php/conf.d; then
-				PHPCONFDIR=/etc/php/conf.d
+
+			PHPCONFDIR=`$PHPCONFIG | sed "s@ @\n@g" | grep "^--with-config-file-scan-dir=" | cut -d= -f2`
+
+			if test -z "${PHPCONFDIR}"; then
+
+				if test -d /etc/php${PHPMAJOR}/conf.d; then
+					PHPCONFDIR=/etc/php${PHPMAJOR}/conf.d
+				elif test -d /etc/php/conf.d; then
+					PHPCONFDIR=/etc/php/conf.d
+				else
+					PHPCONFDIR=/etc/php${PHPMAJOR}/cli
+				fi
+
+				AC_MSG_NOTICE([Using $PHPCONFDIR for PHP config files.])
+
 			else
-				PHPCONFDIR=/etc/php${PHPMAJOR}/cli
+
+				AC_MSG_NOTICE([Detected $PHPCONFDIR for PHP config files.])
+
 			fi
-			AC_MSG_NOTICE([Using $PHPCONFDIR for PHP config files.])
 
 			AC_CONFIG_FILES(src/php/Makefile)
 			AC_CONFIG_FILES(src/php/php3270.h)
