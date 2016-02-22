@@ -1,3 +1,5 @@
+
+
 #
 # "Software pw3270, desenvolvido com base nos códigos fontes do WC3270  e X3270
 # (Paul Mattes Paul.Mattes@usa.net), de emulação de terminal 3270 para acesso a
@@ -36,6 +38,7 @@ sbindir=@sbindir@
 libdir=@libdir@
 includedir=@includedir@
 sysconfdir=@sysconfdir@
+PYTHONLIBPATH=`python -c "from distutils.sysconfig import get_python_lib; print get_python_lib()"`
 
 #---[ Tools ]------------------------------------------------------------------
 
@@ -108,8 +111,8 @@ run: $(BINDBG)/py3270@DLLEXT@
 #---[ Misc targets ]-----------------------------------------------------------
 
 install: $(BINRLS)/py3270@DLLEXT@
-	@$(MKDIR) $(DESTDIR)/$(libdir)/python/site-packages
-	@$(INSTALL_PROGRAM) $(BINRLS)/py3270@DLLEXT@ $(DESTDIR)/$(libdir)/python/site-packages/py3270@DLLEXT@
+	@$(MKDIR) $(DESTDIR)/$(PYTHONLIBPATH)/py3270@DLLEXT@
+	@$(INSTALL_PROGRAM) $(BINRLS)/py3270@DLLEXT@ $(DESTDIR)/$(PYTHONLIBPATH)/py3270@DLLEXT@
 
 cleanDebug: clean
 

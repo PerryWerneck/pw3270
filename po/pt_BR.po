@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-25 11:20-0200\n"
+"POT-Creation-Date: 2016-02-22 07:47-0300\n"
 "PO-Revision-Date: 2014-02-17 08:05-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Portugues <>\n"
@@ -18,6 +18,11 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Gtranslator 2.91.6\n"
+
+#: window.c:329
+#, c-format
+msgid " and <b>%s</b> for %s."
+msgstr " and <b>%s</b> for %s."
 
 #: telnet.c:1057 ssl.c:262 ssl.c:315 connect.c:101 connect.c:117 connect.c:119
 #: connect.c:572 connect.c:589
@@ -84,6 +89,11 @@ msgstr "%s: Caractere desconhecido depois de \\pf"
 #, c-format
 msgid "%s: Vertical tab not supported"
 msgstr "%s: Tabulação vertical não é suportada"
+
+#: window.c:324
+#, fuzzy, c-format
+msgid "%s<b>%s</b> for %s"
+msgstr "<b>%s</b>\n"
 
 #: main.c:425
 msgid "- 3270 Emulator for Gtk"
@@ -431,6 +441,11 @@ msgstr "Incapaz de processar arquivos de descrição de UI em %s"
 #: uiparser/parsefile.c:102 uiparser/parsefile.c:128
 msgid "Can't parse unnamed element"
 msgstr "Incapaz de processar elemento sem nome"
+
+#: window.c:312
+#, c-format
+msgid "Can't recognize \"%s\" as a valid host type"
+msgstr "Can't recognize \"%s\" as a valid host type"
 
 #: trace.c:208
 #, c-format
@@ -1011,7 +1026,7 @@ msgstr "Minutes for auto-disconnect"
 msgid "Misc colors"
 msgstr "Cores diversas"
 
-#: window.c:394
+#: window.c:433
 #, c-format
 msgid "Model %d (%s)"
 msgstr "Modelo %d (%s)"
@@ -1951,6 +1966,11 @@ msgstr ""
 "The issuer certificate of a looked up certificate could not be found. This "
 "normally means the list of trusted certificates is not complete."
 
+#: window.c:331
+#, c-format
+msgid "The known types are %s"
+msgstr "The known types are %s"
+
 #: main.c:412
 msgid "The model of 3270 display to be emulated"
 msgstr "The model of 3270 display to be emulated"
@@ -2836,9 +2856,6 @@ msgstr "translator-credits"
 
 #~ msgid "Invalid charset entry '%s' (#%d)"
 #~ msgstr "Invalid charset entry '%s' (#%d)"
-
-#~ msgid "<b>%s</b>\n"
-#~ msgstr "<b>%s</b>\n"
 
 #, fuzzy
 #~ msgid "Can't load plugin"
