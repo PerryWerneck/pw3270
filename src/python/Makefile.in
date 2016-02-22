@@ -68,7 +68,7 @@ include $(CLASSLIBDIR)/class.mak
 
 #---[ Build options ]----------------------------------------------------------
 
-CXXFLAGS=@CXXFLAGS@ @DLL_CFLAGS@ @PYTHON_CFLAGS@ -I../include
+CXXFLAGS=@PYTHON_CFLAGS@ @DLL_CFLAGS@ -I../include
 
 #---[ Rules ]------------------------------------------------------------------
 
