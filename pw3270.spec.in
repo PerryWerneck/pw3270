@@ -115,6 +115,7 @@ BuildRequires:	java-devel
 
 %if 0%{?_python}
 BuildRequires:	python-devel
+%define pythonextpath %(python -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")
 %endif
 
 BuildRequires:  rsvg-view
@@ -382,7 +383,7 @@ rm -rf $RPM_BUILD_ROOT
 %if 0%{?_python}
 %files -n python-tn3270
 %defattr(-,root,root)
-%{_libdir}/python/site-packages/py3270.so
+%{pythonextpath}/py3270.so
 %endif
 
 

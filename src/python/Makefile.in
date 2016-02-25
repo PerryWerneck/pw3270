@@ -111,7 +111,7 @@ run: $(BINDBG)/py3270@DLLEXT@
 #---[ Misc targets ]-----------------------------------------------------------
 
 install: $(BINRLS)/py3270@DLLEXT@
-	@$(MKDIR) $(DESTDIR)/$(PYTHONLIBPATH)/py3270@DLLEXT@
+	@$(MKDIR) $(DESTDIR)/$(PYTHONLIBPATH)
 	@$(INSTALL_PROGRAM) $(BINRLS)/py3270@DLLEXT@ $(DESTDIR)/$(PYTHONLIBPATH)/py3270@DLLEXT@
 
 cleanDebug: clean
