@@ -36,58 +36,89 @@
 /*---[ Implement ]----------------------------------------------------------------------------------*/
 
 #ifdef WIN32
+
+struct file
+{
+	OPENFILENAME 	ofn;
+	char		  	szName[260];	// buffer for file name
+	int				mode;
+	BOOL			ok;
+};
+
+static gpointer select_file(struct file *fl)
+{
+	if(fl->mode == 1)
+	{
+		fl->ok = GetSaveFileName(&fl->ofn);
+	}
+	else
+	{
+		fl->ok = GetOpenFileName(&fl->ofn);
+	}
+
+	fl->mode = 3;
+
+	return 0;
+}
+
 void browse_file(GtkButton *button,v3270FTD *parent)
 {
-	char		  szFile[260];	// buffer for file name
+	GThread 	* thd;
+	struct file	  fl;
 	GdkWindow	* win 	= gtk_widget_get_window(GTK_WIDGET(parent));
 
 	gtk_widget_set_sensitive(GTK_WIDGET(parent),FALSE);
 
-	OPENFILENAME ofn;
-
-	memset(&ofn,0,sizeof(ofn));
-	ofn.lStructSize		= sizeof(ofn);
-	ofn.hwndOwner		= GDK_WINDOW_HWND(win);
-	ofn.lpstrFile		= szFile;
+	memset(&fl,0,sizeof(fl));
+	fl.ofn.lStructSize		= sizeof(fl.ofn);
+	fl.ofn.hwndOwner		= GDK_WINDOW_HWND(win);
+	fl.ofn.lpstrFile		= fl.szName;
 
 	// Set lpstrFile[0] to '\0' so that GetOpenFileName does not
 	// use the contents of szFile to initialize itself.
-	ofn.lpstrFile[0] 	= '\0';
+	fl.ofn.lpstrFile[0] 	= '\0';
 
-	ofn.nMaxFile 		= sizeof(szFile);
-	ofn.lpstrFilter		= "All\0*.*\0Text\0*.TXT\0";
-	ofn.nFilterIndex	= 1;
-	ofn.nMaxFileTitle	= 0;
-	ofn.lpstrInitialDir	= NULL;
+	fl.ofn.nMaxFile 		= sizeof(fl.szName);
+	fl.ofn.lpstrFilter		= "All\0*.*\0Text\0*.TXT\0";
+	fl.ofn.nFilterIndex		= 1;
+	fl.ofn.nMaxFileTitle	= 0;
+	fl.ofn.lpstrInitialDir	= NULL;
 
-	if(parent->options & LIB3270_FT_OPTION_RECEIVE)
+	// Guarda o valor atual
+	strncpy(fl.szName,gtk_entry_get_text(GTK_ENTRY(parent->filename[FILENAME_LOCAL])),fl.ofn.nMaxFile);
+
+	fl.mode = (parent->options & LIB3270_FT_OPTION_RECEIVE) ? 1 : 0;
+
+	if(fl.mode == 1)
 	{
 		// Receber arquivo
 		// https://msdn.microsoft.com/en-us/library/windows/desktop/ms646839(v=vs.85).aspx
 		// https://msdn.microsoft.com/en-us/library/windows/desktop/ms646829(v=vs.85).aspx#open_file
 
-//		ofn.lpstrFileTitle	= _( "Select file to receive" );
-		ofn.Flags			= OFN_OVERWRITEPROMPT;
-
-		if(GetSaveFileName(&ofn)==TRUE)
-		{
-			gtk_entry_set_text(GTK_ENTRY(parent->filename[FILENAME_LOCAL]),szFile);
-		}
+//		fl.ofn.lpstrFileTitle	= _( "Select file to receive" );
+		fl.ofn.Flags			= OFN_OVERWRITEPROMPT;
 
 	}
 	else
 	{
 		// Enviar arquivo
 		// https://msdn.microsoft.com/en-us/library/windows/desktop/ms646928(v=vs.85).aspx
-		OPENFILENAME ofn;
+//		fl.ofn.lpstrFileTitle	= _( "Select file to send" );
+		fl.ofn.Flags 			= OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
 
-//		ofn.lpstrFileTitle	= _( "Select file to send" );
-		ofn.Flags 			= OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+	}
 
-		if(GetOpenFileName(&ofn)==TRUE)
-		{
-			gtk_entry_set_text(GTK_ENTRY(parent->filename[FILENAME_LOCAL]),szFile);
-		}
+	thd = g_thread_new("GetFileName",(GThreadFunc) select_file, &fl);
+
+	while(fl.mode != 3) {
+		g_main_context_iteration(NULL,TRUE);
+	}
+
+	g_thread_unref(thd);
+
+	if(fl.ok)
+	{
+		gtk_entry_set_text(GTK_ENTRY(parent->filename[FILENAME_LOCAL]),fl.szName);
 	}
 
 	gtk_widget_set_sensitive(GTK_WIDGET(parent),TRUE);
