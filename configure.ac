@@ -149,6 +149,7 @@ case "$host" in
 		PLUGINS="hllapi"
 		APP_GUI_SRC="resources.rc"
 		DLLPREFIX=""
+		LIBS="$LIBS -lcomdlg32"
 
 		AC_CONFIG_FILES(nsi/header-$host_cpu-no-gtk.nsi)
 		AC_CONFIG_FILES(nsi/header-$host_cpu.nsi)
@@ -792,7 +793,7 @@ if test "_$OFFICE_HOME" == "_" ; then
 fi
 
 # Find types.rdb
-AC_CHECK_FILE($OO_SDK_URE_HOME/share/misc/types.rdb,OO_TYPES=$OO_SDK_URE_HOME/share/misc/types.rdb,app_cv_office="no")
+OO_TYPES=$OO_SDK_URE_HOME/share/misc/types.rdb
 
 # Set targets
 if test "$app_cv_office" == "yes" ; then
