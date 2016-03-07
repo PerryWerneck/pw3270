@@ -45,7 +45,7 @@ CPPUMAKER=@CPPUMAKER@
 CONVERT=@CONVERT@
 ZIP=@ZIP@
 
-TYPES_RDB=@OO_SDK_URE_HOME@/share/misc/types.rdb
+TYPES_RDB=@OO_TYPES@
 
 #---[ Paths ]------------------------------------------------------------------
 

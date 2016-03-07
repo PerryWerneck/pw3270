@@ -710,6 +710,8 @@ case "$host" in
 		if test "_$OO_SDK_URE_HOME" == "_" ; then
 			if test -d $OFFICE_HOME/ure; then
 				OO_SDK_URE_HOME="$OFFICE_HOME/ure"
+			elif test -d $OFFICE_HOME/program/types.rdb; then
+				OO_SDK_URE_HOME="$OFFICE_HOME/program"
 			else
 				if test "$host_cpu" = "x86_64"; then
 					OO_SDK_URE_HOME="/usr/lib64/ure"
@@ -753,9 +755,6 @@ else
 	AC_MSG_NOTICE([Can't find idl path])
 fi
 
-OO_SDK_URE_BIN_DIR=$OO_SDK_URE_HOME/bin
-OO_SDK_URE_LIB_DIR=$OO_SDK_URE_HOME/lib
-
 AC_PATH_TOOL([IDLC], idlc, "no", path=$PATH:$OO_SDK_HOME/bin)
 if test "$IDLC" == "no" ; then
 	app_cv_office="no"
@@ -766,7 +765,7 @@ if test "$UNOPKG" == "no" ; then
 	app_cv_office="no"
 fi
 
-AC_PATH_TOOL([REGMERGE], regmerge, "no", path=$PATH:$OO_SDK_URE_BIN_DIR)
+AC_PATH_TOOL([REGMERGE], regmerge, "no", path=$PATH:$OO_SDK_URE_HOME/bin:$OFFICE_HOME/program)
 if test "$REGMERGE" == "no" ; then
 	app_cv_office="no"
 fi
@@ -776,11 +775,10 @@ if test "$CPPUMAKER" == "no" ; then
 	app_cv_office="no"
 fi
 
-AC_PATH_TOOL([UNO], uno, "no", path=$PATH:$OO_SDK_URE_BIN_DIR)
+AC_PATH_TOOL([UNO], uno, "no", path=$PATH:$OO_SDK_URE_HOME/bin:$OFFICE_HOME/program)
 if test "$UNO" == "no" ; then
 	app_cv_office="no"
 fi
-
 
 # Check for OO_SDK_HOME
 if test "_$OO_SDK_HOME" == "_" ; then
@@ -791,6 +789,9 @@ fi
 if test "_$OFFICE_HOME" == "_" ; then
 	app_cv_office="no"
 fi
+
+# Find types.rdb
+AC_CHECK_FILE($OO_SDK_URE_HOME/share/misc/types.rdb,OO_TYPES=$OO_SDK_URE_HOME/share/misc/types.rdb,app_cv_office="no")
 
 # Set targets
 if test "$app_cv_office" == "yes" ; then
@@ -815,6 +816,7 @@ AC_SUBST(OO_SDK_URE_HOME)
 AC_SUBST(IDLDIR)
 AC_SUBST(OO_CXXFLAGS)
 AC_SUBST(OO_LDFLAGS)
+AC_SUBST(OO_TYPES)
 
 #--[ Pre-reqs ]-----------------------------------------------------------------------------------------------------------------------------------------------
 AC_SUBST(LIB3270_REQUIRES)
