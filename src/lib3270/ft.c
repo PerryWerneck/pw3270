@@ -226,7 +226,21 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 
 	// Open local file
 #ifdef _WIN32
-	ft_local_file = fopen(local,(flags & LIB3270_FT_OPTION_RECEIVE) ? ((flags & LIB3270_FT_OPTION_APPEND) ? "ab" : "wb") : "rb");
+
+	char 	openmode[5] = "";
+	int		opensize = 0;
+
+	openmode[opensize++] = flags & LIB3270_FT_OPTION_RECEIVE	? "r" : "w";
+	openmode[opensize++] = flags & LIB3270_FT_OPTION_CRLF 		? "t" : "b";
+
+	// É para adicionar?
+	if(flags & LIB3270_FT_OPTION_APPEND) {
+		openmode[opensize++] = 'a';
+	}
+
+	openmode[opensize++] = 0;
+	ft_local_file = fopen(local,openmode);
+
 #else
 	ft_local_file = fopen(local,(flags & LIB3270_FT_OPTION_RECEIVE) ? ((flags & LIB3270_FT_OPTION_APPEND) ? "a" : "w") : "r");
 #endif // _WIN32
@@ -289,7 +303,7 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 
  LIB3270_EXPORT int lib3270_ft_start(H3270 *hSession)
  {
- 	static const char	* rec			= "fvu";
+ 	static const char	* rec			= "FVU";
  	static const char	* un[]			= { "tracks", "cylinders", "avblock" };
 
  	char 				  op[4096];

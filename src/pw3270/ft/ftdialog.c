@@ -457,8 +457,13 @@ GtkWidget * v3270_ft_dialog_new(GtkWidget *parent, LIB3270_FT_OPTION options)
 				{
 					LIB3270_FT_OPTION_CRLF,
 					BUTTON_CRLF,
+#ifdef _WIN32
 					N_( "Terminate records with _CR/LF." ),
 					N_( "Following the convention for ASCII text files, <CR> <LF> pairs are used to terminate records in the PC file.")
+#else
+					N_( "Terminate records with _LF." ),
+					N_( "Following the convention for ASCII text files, <LF> is used to terminate records in the PC file.")
+#endif // _WIN32
 				},
 				{
 					LIB3270_FT_OPTION_APPEND,
@@ -547,8 +552,13 @@ GtkWidget * v3270_ft_dialog_new(GtkWidget *parent, LIB3270_FT_OPTION options)
 				{
 					LIB3270_FT_OPTION_CRLF,
 					BUTTON_CRLF,
+#ifdef _WIN32
 					N_( "Terminate records with _CR/LF." ),
 					N_( "Following the convention for ASCII text files, <CR> <LF> pairs are used to terminate records in the PC file.")
+#else
+					N_( "Terminate records with _LF." ),
+					N_( "Following the convention for ASCII text files, <LF> is used to terminate records in the PC file.")
+#endif // _WIN32
 				},
 				{
 					LIB3270_FT_OPTION_APPEND,
