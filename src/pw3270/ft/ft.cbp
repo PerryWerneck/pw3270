@@ -39,12 +39,16 @@
 			<Add option="`pkg-config --libs gtk+-3.0`" />
 		</Linker>
 		<Unit filename="Makefile.in" />
+		<Unit filename="browse.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="ftdialog.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="ftprogress.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="private.h" />
 		<Unit filename="testprogram.c">
 			<Option compilerVar="CC" />
 		</Unit>

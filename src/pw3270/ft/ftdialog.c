@@ -27,60 +27,7 @@
  *
  */
 
- #include "v3270ft.h"
-
-/*--[ Widget definition ]----------------------------------------------------------------------------*/
-
- enum _filename
- {
- 	FILENAME_LOCAL,
- 	FILENAME_HOST,
-
-	FILENAME_COUNT
- };
-
- enum _value
- {
- 	VALUE_LRECL,
- 	VALUE_BLKSIZE,
- 	VALUE_PRIMSPACE,
- 	VALUE_SECSPACE,
- 	VALUE_DFT,
-
- 	VALUE_COUNT
- };
-
- enum _button
- {
-	BUTTON_ASCII,
-	BUTTON_CRLF,
-	BUTTON_APPEND,
-	BUTTON_REMAP,
-
- 	BUTTON_COUNT
- };
-
- struct _v3270FTD
- {
-	GtkDialog			  parent;
-	GtkWidget			* filename[FILENAME_COUNT];	/**< Filenames for the transfer */
-	GtkWidget			* units;					/**< Units frame box */
-	GtkWidget			* ready;					/**< Send/Save button */
-	GtkToggleButton		* button[BUTTON_COUNT];		/**< Buttons */
-	GtkToggleButton 	* recfm[4];					/**< Record format buttons */
-	GtkToggleButton 	* btnUnits[4];				/**< Unit buttons */
-	GtkSpinButton		* value[VALUE_COUNT];
-	gboolean 			  local;					/**< TRUE if local filename is ok */
-	gboolean			  remote;					/**< TRUE if remote filename is ok */
-	LIB3270_FT_OPTION	  options;
- };
-
- struct _v3270FTDClass
- {
-	GtkDialogClass parent_class;
-
-	int dummy;
- };
+ #include "private.h"
 
  G_DEFINE_TYPE(v3270FTD, v3270FTD, GTK_TYPE_DIALOG);
 
@@ -120,35 +67,6 @@ static void v3270FTD_class_init(v3270FTDClass *klass)
 
 static void v3270FTD_init(v3270FTD *widget)
 {
-}
-
-static void browse_file(GtkButton *button,v3270FTD *parent)
-{
-	gboolean	  recv		= (parent->options & LIB3270_FT_OPTION_RECEIVE);
-	GtkWidget 	* dialog	= gtk_file_chooser_dialog_new
-	(
-		recv ? _( "Select file to receive" ) : _( "Select file to send" ),
-		GTK_WINDOW(parent),
-		GTK_FILE_CHOOSER_ACTION_OPEN,
-		_("_Cancel" ),	GTK_RESPONSE_CANCEL,
-		recv ? _("_Save") : _("_Send"), GTK_RESPONSE_ACCEPT,
-		NULL
-	);
-
-	const gchar * current = gtk_entry_get_text(GTK_ENTRY(parent->filename[FILENAME_LOCAL]));
-	if(current && *current)
-		gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog),current);
-
-	if(gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
-	{
-		gchar *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
-		gtk_entry_set_text(GTK_ENTRY(parent->filename[FILENAME_LOCAL]),filename);
-		g_free(filename);
-	}
-
-	gtk_widget_destroy(dialog);
-
-
 }
 
 static void toggle_option(GtkToggleButton *button, v3270FTD *dialog)

@@ -99,7 +99,6 @@
  LIB3270_EXPORT void				  v3270_ft_progress_complete(GtkWidget *widget,unsigned long length,double kbytes_sec);
 
 
-
  G_END_DECLS
 
 #endif // V3270_H_INCLUDED

@@ -26,7 +26,7 @@
 
 MODULE_NAME=ft3270
 
-SOURCES=ftdialog.c ftprogress.c
+SOURCES=ftdialog.c ftprogress.c browse.c
 
 #---[ Paths ]------------------------------------------------------------------
 
@@ -43,6 +43,7 @@ desktopdir=$(datarootdir)/applications
 MKDIR=@MKDIR_P@
 CC=@CC@
 LD=@CC@
+AR=@AR@
 
 #---[ Environment ]------------------------------------------------------------
 
@@ -53,7 +54,7 @@ CFLAGS=@CFLAGS@ @DLL_CFLAGS@ @GTK_CFLAGS@ @GTKMAC_CFLAGS@ -DLIBDIR=\"$(libdir)\"
 LIBS=@LIBS@ @GTK_LIBS@ @GTKMAC_LIBS@
 
 DEBUG_CFLAGS=-DDEBUG=1 -g -Wall
-DEPENDS ?= *.h ../../include/*.h ../../include/lib3270/*.h
+DEPENDS ?= *.h ../../include/*.h ../../include/lib3270/*.h Makefile
 
 #---[ Paths ]------------------------------------------------------------------
 
@@ -83,28 +84,39 @@ $(OBJRLS)/%.o: %.c $(DEPENDS)
 
 #---[ Targets ]----------------------------------------------------------------
 
+Release: \
+	$(BINRLS)/$(MODULE_NAME).a
+
 Debug: \
 	$(BINDBG)/$(MODULE_NAME)@EXEEXT@
 
 run: \
 	$(BINDBG)/$(MODULE_NAME)@EXEEXT@
-
 	@$(BINDBG)/$(MODULE_NAME)@EXEEXT@
+
+$(BINDBG)/$(MODULE_NAME).a: \
+	$(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC).o)
+
+	@$(MKDIR) `dirname $@`
+	@$(AR) rcs $@ $^
+
+$(BINRLS)/$(MODULE_NAME).a: \
+	$(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SRC).o)
+
+	@$(MKDIR) `dirname $@`
+	@$(AR) rcs $@ $^
 
 $(BINDBG)/$(MODULE_NAME)@EXEEXT@: \
 	$(OBJDBG)/testprogram.o \
 	$(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC).o)
 
 	@$(MKDIR) `dirname $@`
-	@$(LD) @LDARCH@ @DBGRPATH@ \
-		-o $@ \
-		$(OBJDBG)/testprogram.o \
-		$(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC).o) $(LIBS)
+	@$(LD) @LDARCH@ @DBGRPATH@ -o $@ $^ $(LIBS)
 
 cleanDebug: \
 	clean
 
-clean: 
+clean:
 	@rm -fr .bin
 	@rm -fr .obj
 

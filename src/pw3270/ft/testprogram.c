@@ -34,8 +34,6 @@
 
 int main (int argc, char *argv[])
 {
-//	GtkWidget *win;
-
 	gtk_init (&argc, &argv);
 
 	{
