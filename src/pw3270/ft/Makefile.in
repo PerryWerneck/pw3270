@@ -1,0 +1,111 @@
+#
+# "Software pw3270, desenvolvido com base nos códigos fontes do WC3270  e X3270
+# (Paul Mattes Paul.Mattes@usa.net), de emulação de terminal 3270 para acesso a
+# aplicativos mainframe. Registro no INPI sob o nome G3270.
+#
+# Copyright (C) <2008> <Banco do Brasil S.A.>
+#
+# Este programa é software livre. Você pode redistribuí-lo e/ou modificá-lo sob
+# os termos da GPL v.2 - Licença Pública Geral  GNU,  conforme  publicado  pela
+# Free Software Foundation.
+#
+# Este programa é distribuído na expectativa de  ser  útil,  mas  SEM  QUALQUER
+# GARANTIA; sem mesmo a garantia implícita de COMERCIALIZAÇÃO ou  de  ADEQUAÇÃO
+# A QUALQUER PROPÓSITO EM PARTICULAR. Consulte a Licença Pública Geral GNU para
+# obter mais detalhes.
+#
+# Você deve ter recebido uma cópia da Licença Pública Geral GNU junto com este
+# programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple
+# Place, Suite 330, Boston, MA, 02111-1307, USA
+#
+# Contatos:
+#
+# perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
+# erico.mendonca@gmail.com	(Erico Mascarenhas de Mendonça)
+#
+
+MODULE_NAME=ft3270
+
+SOURCES=ftdialog.c ftprogress.c
+
+#---[ Paths ]------------------------------------------------------------------
+
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+bindir=@bindir@
+libdir=@libdir@
+datarootdir=@datarootdir@
+localedir=@localedir@
+desktopdir=$(datarootdir)/applications
+
+#---[ Tools ]-----------------------------------------------------------------
+
+MKDIR=@MKDIR_P@
+CC=@CC@
+LD=@CC@
+
+#---[ Environment ]------------------------------------------------------------
+
+LIB3270_CFLAGS=-I../../include
+LIB3270_LIBS=-L../../../.bin/Debug@DLLDIR@ -l3270
+
+CFLAGS=@CFLAGS@ @DLL_CFLAGS@ @GTK_CFLAGS@ @GTKMAC_CFLAGS@ -DLIBDIR=\"$(libdir)\" -I../../include
+LIBS=@LIBS@ @GTK_LIBS@ @GTKMAC_LIBS@
+
+DEBUG_CFLAGS=-DDEBUG=1 -g -Wall
+DEPENDS ?= *.h ../../include/*.h ../../include/lib3270/*.h
+
+#---[ Paths ]------------------------------------------------------------------
+
+ROOTDIR ?= .
+OBJDIR  ?= $(ROOTDIR)/.obj
+BINDIR  ?= $(ROOTDIR)/.bin
+TMPDIR  ?= $(ROOTDIR)/.tmp
+
+BINDBG  ?= $(BINDIR)/Debug
+BINRLS  ?= $(BINDIR)/Release
+LIBDBG	?= $(BINDBG)@DLLDIR@
+
+OBJDBG = $(OBJDIR)/Debug
+OBJRLS = $(OBJDIR)/Release
+
+#---[ Rules ]------------------------------------------------------------------
+
+$(OBJDBG)/%.o: %.c $(DEPENDS)
+	@echo "  CC   `basename $@`"
+	@$(MKDIR) `dirname $@`
+	@$(CC) $(DEBUG_CFLAGS) $(CFLAGS) $(LIB3270_CFLAGS) -o $@ -c $<
+
+$(OBJRLS)/%.o: %.c $(DEPENDS)
+	@echo "  CC   `basename $@`"
+	@$(MKDIR) `dirname $@`
+	@$(CC) $(CFLAGS) $(LIB3270_CFLAGS) -o $@ -c $<
+
+#---[ Targets ]----------------------------------------------------------------
+
+Debug: \
+	$(BINDBG)/$(MODULE_NAME)@EXEEXT@
+
+run: \
+	$(BINDBG)/$(MODULE_NAME)@EXEEXT@
+
+	@$(BINDBG)/$(MODULE_NAME)@EXEEXT@
+
+$(BINDBG)/$(MODULE_NAME)@EXEEXT@: \
+	$(OBJDBG)/testprogram.o \
+	$(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC).o)
+
+	@$(MKDIR) `dirname $@`
+	@$(LD) @LDARCH@ @DBGRPATH@ \
+		-o $@ \
+		$(OBJDBG)/testprogram.o \
+		$(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC).o) $(LIBS)
+
+cleanDebug: \
+	clean
+
+clean: 
+	@rm -fr .bin
+	@rm -fr .obj
+
+
