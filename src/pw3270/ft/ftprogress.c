@@ -33,8 +33,8 @@
 
  enum _filename
  {
- 	TEXT_LOCALFILE,
- 	TEXT_HOSTFILE,
+ 	TEXT_FROM,
+ 	TEXT_TO,
  	TEXT_STATUS,
 
 	TEXT_COUNT
@@ -319,14 +319,9 @@ void v3270_ft_progress_set_message(GtkWidget *widget, const gchar *msg)
 	gtk_label_set_text(GTK_V3270FTProcess(widget)->text[TEXT_STATUS],msg);
 }
 
-void v3270_ft_progress_set_host_filename(GtkWidget *widget, const gchar *name)
+void v3270_ft_progress_set_filenames(GtkWidget *widget, const gchar *from, const gchar *to)
 {
 	g_return_if_fail(GTK_IS_V3270FTProgress(widget));
-	gtk_label_set_text(GTK_V3270FTProcess(widget)->text[TEXT_HOSTFILE],name);
-}
-
-void v3270_ft_progress_set_local_filename(GtkWidget *widget, const gchar *name)
-{
-	g_return_if_fail(GTK_IS_V3270FTProgress(widget));
-	gtk_label_set_text(GTK_V3270FTProcess(widget)->text[TEXT_LOCALFILE],name);
+	gtk_label_set_text(GTK_V3270FTProcess(widget)->text[TEXT_FROM],from);
+	gtk_label_set_text(GTK_V3270FTProcess(widget)->text[TEXT_TO],to);
 }

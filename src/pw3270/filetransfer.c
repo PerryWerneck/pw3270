@@ -247,7 +247,7 @@ gint v3270_transfer_file(GtkWidget *widget, LIB3270_FT_OPTION options, const gch
 											(options & LIB3270_FT_OPTION_RECEIVE) ? _( "Receiving file" ) : _( "Sending file" ),
 											GTK_WINDOW(gtk_widget_get_toplevel(widget)),
 											GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
-											_( "_Cancel" ), GTK_RESPONSE_CANCEL,NULL );
+											_( "_Close" ), GTK_RESPONSE_CANCEL,NULL );
 
 
 	// Create FT progress dialog
@@ -261,8 +261,18 @@ gint v3270_transfer_file(GtkWidget *widget, LIB3270_FT_OPTION options, const gch
 	ft->state_changed	= ft_state_changed;
 	ft->message			= ft_message;
 
-	v3270_ft_progress_set_host_filename(progress,remote);
-	v3270_ft_progress_set_local_filename(progress,local);
+	if(options & LIB3270_FT_OPTION_RECEIVE) {
+
+		// Recebendo arquivo
+		v3270_ft_progress_set_filenames(progress,remote,local);
+
+	} else {
+
+		// Enviando arquivo
+		v3270_ft_progress_set_filenames(progress,local,remote);
+
+	}
+
 	v3270_ft_progress_set_message(progress,_("Starting transfer"));
 
 	gtk_widget_show_all(progress);
