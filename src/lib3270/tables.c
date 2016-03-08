@@ -340,31 +340,6 @@ static const unsigned short ebc2uc[256] = {
 unsigned short ebc2asc7[256];
 #endif //EXTENDED_TABLES
 
-/*
-LIB3270_INTERNAL void initialize_tables(H3270 *hSession)
-{
-	// Go to defaults first.
-	memcpy(hSession->charset.ebc2asc,	ebc2asc0,	sizeof(hSession->charset.ebc2asc));
-	memcpy(hSession->charset.asc2ebc,	asc2ebc0,	sizeof(hSession->charset.asc2ebc));
-	memcpy(hSession->charset.asc2uc,	asc2uc,		sizeof(hSession->charset.asc2uc));
-
-//	memcpy(hSession->charset.ebc2cg,	ebc2cg0,	sizeof(hSession->charset.ebc2cg));
-//	memcpy(hSession->charset.cg2ebc,	cg2ebc0,	sizeof(hSession->charset.cg2ebc));
-//	memcpy(hSession->charset.asc2cg,	asc2cg,		sizeof(hSession->charset.asc2cg));
-//	memcpy(hSession->charset.cg2asc,	cg2asc,		sizeof(hSession->charset.cg2asc));
-
-#ifdef EXTENDED_TABLES
-	#error Need implementation to the new format
-	memcpy(ebc2asc7,	ebc2asc70,	sizeof(ebc2asc7));
-#endif // EXTENDED_TABLES
-
-#if defined(X3270_FT)
-	memcpy(hSession->charset.ft2asc,	ft2asc0,	sizeof(hSession->charset.ft2asc));
-	memcpy(hSession->charset.asc2ft,	asc2ft0,	sizeof(hSession->charset.asc2ft));
-#endif
-
-}
-*/
 
 /*
 void charset_defaults(H3270 *hSession)

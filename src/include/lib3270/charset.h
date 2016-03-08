@@ -47,9 +47,6 @@
 		unsigned short		  ebc2asc[256];
 		unsigned short 		  asc2ebc[256];
 
-//		unsigned short		  asc2ft[256];
-//		unsigned short		  ft2asc[256];
-
 		unsigned short		  asc2uc[256];
 
 	};
