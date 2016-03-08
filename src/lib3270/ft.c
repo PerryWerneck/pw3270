@@ -230,8 +230,8 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 	char 	openmode[5] = "";
 	int		opensize = 0;
 
-	openmode[opensize++] = flags & LIB3270_FT_OPTION_RECEIVE	? "r" : "w";
-	openmode[opensize++] = flags & LIB3270_FT_OPTION_CRLF 		? "t" : "b";
+	openmode[opensize++] = (flags & LIB3270_FT_OPTION_RECEIVE)	? 'r' : 'w';
+	openmode[opensize++] = (flags & LIB3270_FT_OPTION_CRLF)		? 't' : 'b';
 
 	// É para adicionar?
 	if(flags & LIB3270_FT_OPTION_APPEND) {
@@ -239,6 +239,9 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 	}
 
 	openmode[opensize++] = 0;
+
+	debug("Opening \"%s\" with \"%s\"",local,openmode);
+
 	ft_local_file = fopen(local,openmode);
 
 #else
