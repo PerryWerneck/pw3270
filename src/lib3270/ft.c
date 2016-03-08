@@ -226,24 +226,7 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 
 	// Open local file
 #ifdef _WIN32
-
-	char 	openmode[5] = "";
-	int		opensize = 0;
-
-	openmode[opensize++] = (flags & LIB3270_FT_OPTION_RECEIVE)	? 'w' : 'r';
-	openmode[opensize++] = (flags & LIB3270_FT_OPTION_CRLF)		? 't' : 'b';
-
-	// É para adicionar?
-	if(flags & LIB3270_FT_OPTION_APPEND) {
-		openmode[opensize++] = 'a';
-	}
-
-	openmode[opensize++] = 0;
-
-	debug("Opening \"%s\" with \"%s\"",local,openmode);
-
-	ft_local_file = fopen(local,openmode);
-
+	ft_local_file = fopen(local,(flags & LIB3270_FT_OPTION_RECEIVE) ? ((flags & LIB3270_FT_OPTION_APPEND) ? "ab" : "wb") : "rb");
 #else
 	ft_local_file = fopen(local,(flags & LIB3270_FT_OPTION_RECEIVE) ? ((flags & LIB3270_FT_OPTION_APPEND) ? "a" : "w") : "r");
 #endif // _WIN32
