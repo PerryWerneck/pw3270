@@ -793,7 +793,14 @@ if test "_$OFFICE_HOME" == "_" ; then
 fi
 
 # Find types.rdb
-OO_TYPES=$OO_SDK_URE_HOME/share/misc/types.rdb
+if test -e "$OO_SDK_URE_HOME/share/misc/types.rdb"; then
+	OO_TYPES=$OO_SDK_URE_HOME/share/misc/types.rdb
+elif test -e "$OFFICE_HOME/program/types.rdb"; then
+	OO_TYPES=$OFFICE_HOME/program/types.rdb
+else
+	app_cv_office="no"
+	AC_MSG_NOTICE([Can't find types.rd])
+fi
 
 # Set targets
 if test "$app_cv_office" == "yes" ; then
