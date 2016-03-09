@@ -799,11 +799,13 @@ elif test -e "$OFFICE_HOME/program/types.rdb"; then
 	OO_TYPES=$OFFICE_HOME/program/types.rdb
 else
 	app_cv_office="no"
-	AC_MSG_NOTICE([Can't find types.rd])
+	AC_MSG_NOTICE([Can't find types.rdb])
 fi
 
 # Set targets
 if test "$app_cv_office" == "yes" ; then
+
+	AC_MSG_NOTICE([Found $OO_TYPES])
 
 	AC_MSG_NOTICE([libreoffice sdk is present.])
 	EXTENSIONS="$EXTENSIONS oxt"
