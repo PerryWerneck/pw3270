@@ -434,6 +434,12 @@ x86_64)
 i?86)
 	jvm_arch=i386
 	;;
+powerpc64le)
+	jvm_arch=ppc64le
+	;;
+powerpc64)
+	jvm_arch=ppc64
+	;;
 
 *)
 	jvm_arch="$host_cpu"
