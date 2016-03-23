@@ -153,18 +153,11 @@ zip: jni3270-@host_cpu@.zip
 
 jni3270-@host_cpu@.zip: \
 	$(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@ \
-	$(BINRLS)/plugins/j3270@DLLEXT@ \
 	$(BINRLS)/$(PACKAGE_NAME).jar \
 	testprogram.java \
 	javadoc
 
 	@rm -f $@
-
-	@rm -fr plugins
-	@mkdir plugins
-	@cp $(BINRLS)/plugins/j3270@DLLEXT@ plugins/j3270@DLLEXT@
-	@zip -9 -m -r $@ plugins
-	@rm -fr plugins
 
 	@rm -fr jvm-exports
 	@mkdir jvm-exports
