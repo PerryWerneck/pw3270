@@ -36,6 +36,12 @@
 	extern "C" {
 #endif
 
+#ifdef _WIN32
+	#define LIB3270_AS_PRINTF(a,b) /* __attribute__((format(printf, a, b))) */
+#else
+	#define LIB3270_AS_PRINTF(a,b) __attribute__((format(printf, a, b)))
+#endif
+
 	typedef void (*LIB3270_TRACE_HANDLER)(H3270 *, const char *, va_list);
 
 
@@ -58,7 +64,7 @@
 	 * @param ...	Arguments.
 	 *
 	 */
-	LIB3270_EXPORT void lib3270_write_dstrace(H3270 *session, const char *fmt, ...) __attribute__((format(printf, 2, 3)));
+	LIB3270_EXPORT void lib3270_write_dstrace(H3270 *session, const char *fmt, ...) LIB3270_AS_PRINTF(2,3);
 
 	/**
 	 * Write on trace file.
@@ -69,7 +75,7 @@
 	 * @param ...	Arguments.
 	 *
 	 */
-	LIB3270_EXPORT void lib3270_write_nettrace(H3270 *session, const char *fmt, ...) __attribute__((format(printf, 2, 3)));
+	LIB3270_EXPORT void lib3270_write_nettrace(H3270 *session, const char *fmt, ...) LIB3270_AS_PRINTF(2,3);
 
 	/**
 	 * Write on trace file.
@@ -80,7 +86,7 @@
 	 * @param ...	Arguments.
 	 *
 	 */
-	LIB3270_EXPORT void lib3270_trace_event(H3270 *session, const char *fmt, ...) __attribute__((format(printf, 2, 3)));
+	LIB3270_EXPORT void lib3270_trace_event(H3270 *session, const char *fmt, ...) LIB3270_AS_PRINTF(2,3);
 
 #ifdef __cplusplus
 	}
