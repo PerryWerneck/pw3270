@@ -421,6 +421,10 @@ void ssl_info_callback(INFO_CONST SSL *s, int where, int ret)
 LIB3270_EXPORT LIB3270_SSL_STATE lib3270_get_secure(H3270 *session)
 {
 	CHECK_SESSION_HANDLE(session);
+
+	if(!lib3270_is_connected(session))
+		return LIB3270_SSL_UNDEFINED;
+
 	return session->secure;
 }
 

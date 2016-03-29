@@ -17,6 +17,10 @@ run_command()
 			dbus-send --session  --print-reply --dest=$DEST.$SESSION $BPATH $DEST.getMessageID
 			;;
 
+		ssl)
+			dbus-send --session  --print-reply --dest=$DEST.$SESSION $BPATH $DEST.getSecureState
+			;;
+
 		connect)
 			dbus-send --session  --print-reply --dest=$DEST.$SESSION $BPATH $DEST.connect string:$2
 			;;
