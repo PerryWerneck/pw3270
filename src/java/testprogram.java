@@ -42,7 +42,7 @@ public class testprogram
             host.log("Sample message");
 
             System.err.println("pw3270 version " + host.get_version() + " revision " + host.get_revision() + " encoding " + host.get_encoding());
-
+            System.err.println("SSL state is " + host.get_secure());
 
             System.err.println("End");
         }
@@ -52,4 +52,3 @@ public class testprogram
         }
     }
 };
-
