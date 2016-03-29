@@ -324,6 +324,10 @@
 		send_result(source,lib3270_get_program_message(lib3270_get_default_session_handle()));
 		break;
 
+	case HLLAPI_PACKET_GET_SSL_STATE:
+		send_result(source,lib3270_get_secure(lib3270_get_default_session_handle()));
+		break;
+
 	case HLLAPI_PACKET_SET_TOGGLE:
 		send_result(source,lib3270_set_toggle(lib3270_get_default_session_handle(),
 												(LIB3270_TOGGLE) ((struct hllapi_packet_set *) source->buffer)->id,

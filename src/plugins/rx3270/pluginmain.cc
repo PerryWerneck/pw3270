@@ -90,6 +90,7 @@
 
 	LIB3270_CSTATE	  get_cstate(void);
 	LIB3270_MESSAGE	  get_program_message(void);
+	LIB3270_SSL_STATE get_secure(void);
 
 	int				  disconnect(void);
 	int				  set_url(const char *uri);

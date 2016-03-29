@@ -55,3 +55,21 @@ JNIEXPORT jstring JNICALL Java_pw3270_terminal_get_1encoding(JNIEnv *env, jobjec
 	return env->NewStringUTF(s->get_encoding());
 
 }
+
+JNIEXPORT jint JNICALL Java_pw3270_terminal_get_1secure(JNIEnv *env, jobject obj) {
+
+	jint rc	= -1;
+
+	try {
+
+		rc = java::getHandle(env,obj)->get_secure();
+
+	} catch(std::exception &e) {
+
+		env->ThrowNew(env->FindClass("java/lang/Exception"), e.what());
+
+	}
+
+	return rc;
+
+}

@@ -142,16 +142,18 @@ $(BINRLS)/$(PACKAGE_NAME).jar: $(BINDIR)/java/$(PACKAGE_NAME)/terminal.class
 
 #---[ Release targets ]--------------------------------------------------------
 
-all: $(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@
+all: \
+	$(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@
 
 Release: \
 	$(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@ \
 	$(BINDIR)/java/testprogram.class \
 	$(BINRLS)/plugins/j3270@DLLEXT@
 
-zip: jni3270-@host_cpu@.zip
+zip: \
+	jni3270-@jvm_arch@.zip
 
-jni3270-@host_cpu@.zip: \
+jni3270-@jvm_arch@.zip: \
 	$(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@ \
 	$(BINRLS)/$(PACKAGE_NAME).jar \
 	testprogram.java \
@@ -229,7 +231,10 @@ $(BINDBG)/plugins/j3270@DLLEXT@: \
 	-L../../.bin/Debug@DLLDIR@ -l3270 -lpw3270 \
 	-L$(BINDBG)@DLLDIR@ -ljni3270
 
-run: $(BINDBG)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@ $(BINDIR)/java/testprogram.class
+run: \
+	$(BINDBG)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@ \
+	$(BINDIR)/java/testprogram.class
+
 	@LD_LIBRARY_PATH=../../.bin/Debug@DLLDIR@/ java -Djava.library.path=$(BINDBG)@DLLDIR@ -cp .bin/java/ testprogram
 
 #---[ Misc targets ]-----------------------------------------------------------

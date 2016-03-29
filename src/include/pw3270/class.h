@@ -147,6 +147,7 @@
 
 		virtual LIB3270_CSTATE	  get_cstate(void)									= 0;
 		virtual LIB3270_MESSAGE	  get_program_message(void)							= 0;
+		virtual LIB3270_SSL_STATE get_secure(void)									= 0;
 
 		// charset
 #ifdef WIN32

@@ -133,6 +133,11 @@ void pw3270_dbus_get_connection_state(PW3270Dbus *object, DBusGMethodInvocation 
 	dbus_g_method_return(context,lib3270_get_connection_state(pw3270_dbus_get_session_handle(object)));
 }
 
+void pw3270_dbus_get_secure_state(PW3270Dbus *object, DBusGMethodInvocation *context)
+{
+	trace("%s object=%p context=%p",__FUNCTION__,object,context);
+	dbus_g_method_return(context,lib3270_get_secure(pw3270_dbus_get_session_handle(object)));
+}
 
 GError * pw3270_dbus_get_error_from_errno(int code)
 {

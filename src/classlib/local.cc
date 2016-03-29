@@ -121,49 +121,51 @@
 		H3270 * hSession;
 
 		// Lib3270 entry points
-		const char * 	(*_get_version)(void);
-		LIB3270_CSTATE	(*_get_connection_state)(H3270 *h);
-		LIB3270_MESSAGE	(*_get_program_message)(H3270 *h);
+		const char * 		(*_get_version)(void);
+		LIB3270_CSTATE		(*_get_connection_state)(H3270 *h);
+		LIB3270_MESSAGE		(*_get_program_message)(H3270 *h);
+		LIB3270_SSL_STATE	(*_get_secure)(H3270 *h);
 
-		int 			(*_disconnect)(H3270 *h);
-		int 			(*_connect)(H3270 *h,int wait);
-		const char 		(*_set_url)(H3270 *h, const char *n);
-		int 			(*_is_connected)(H3270 *h);
-		void 			(*_main_iterate)(H3270 *h, int wait);
-		int 			(*_wait)(H3270 *hSession, int seconds);
-		int 			(*_enter)(H3270 *hSession);
-		int 			(*_pfkey)(H3270 *hSession, int key);
-		int 			(*_pakey)(H3270 *hSession, int key);
-		int 			(*_wait_for_ready)(H3270 *hSession, int seconds);
-		char * 			(*_get_text)(H3270 *h, int offset, int len);
-		char *  		(*_get_text_at)(H3270 *h, int row, int col, int len);
-		int 			(*_cmp_text_at)(H3270 *h, int row, int col, const char *text);
-		int 			(*_set_text_at)(H3270 *h, int row, int col, const unsigned char *str);
-		int 			(*_is_ready)(H3270 *h);
-		int 			(*_set_cursor_position)(H3270 *h, int row, int col);
-		int 			(*_set_toggle)(H3270 *h, LIB3270_TOGGLE ix, int value);
-		int             (*_get_field_start)(H3270 *h, int baddr);
-		int             (*_get_field_len)(H3270 *h, int baddr);
-		int             (*_set_cursor_addr)(H3270 *h, int addr);
-		int             (*_get_cursor_addr)(H3270 *h);
-		int             (*_emulate_input)(H3270 *session, const char *s, int len, int pasting);
-		int             (*_get_next_unprotected)(H3270 *hSession, int baddr0);
-		int 			(*_get_is_protected)(H3270 *hSession, int baddr);
-		int 			(*_get_is_protected_at)(H3270 *hSession, int row, int col);
-		void            (*_popup_va)(H3270 *session, LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, va_list);
-		void *			(*_free)(void *);
-		const char *	(*_get_display_charset)(H3270 *hSession);
-		int				(*_set_host_charset)(H3270 *hSession, const char *name);
-		const char * 	(*_get_host_charset)(H3270 *hSession);
-		int 			(*_print)(H3270 *hSession);
-		int				(*_erase)(H3270 *hSession);
-		int				(*_erase_eof)(H3270 *hSession);
-		int				(*_erase_eol)(H3270 *hSession);
-		int				(*_erase_input)(H3270 *hSession);
-		int				(*_action)(H3270 *hSession, const char *name);
 
-		const char * 	(*_ebc2asc)(H3270 *hSession, unsigned char *buffer, int sz);
-		const char * 	(*_asc2ebc)(H3270 *hSession, unsigned char *buffer, int sz);
+		int 				(*_disconnect)(H3270 *h);
+		int 				(*_connect)(H3270 *h,int wait);
+		const char 			(*_set_url)(H3270 *h, const char *n);
+		int 				(*_is_connected)(H3270 *h);
+		void 				(*_main_iterate)(H3270 *h, int wait);
+		int 				(*_wait)(H3270 *hSession, int seconds);
+		int 				(*_enter)(H3270 *hSession);
+		int 				(*_pfkey)(H3270 *hSession, int key);
+		int 				(*_pakey)(H3270 *hSession, int key);
+		int 				(*_wait_for_ready)(H3270 *hSession, int seconds);
+		char * 				(*_get_text)(H3270 *h, int offset, int len);
+		char *  			(*_get_text_at)(H3270 *h, int row, int col, int len);
+		int 				(*_cmp_text_at)(H3270 *h, int row, int col, const char *text);
+		int 				(*_set_text_at)(H3270 *h, int row, int col, const unsigned char *str);
+		int 				(*_is_ready)(H3270 *h);
+		int 				(*_set_cursor_position)(H3270 *h, int row, int col);
+		int 				(*_set_toggle)(H3270 *h, LIB3270_TOGGLE ix, int value);
+		int             	(*_get_field_start)(H3270 *h, int baddr);
+		int             	(*_get_field_len)(H3270 *h, int baddr);
+		int             	(*_set_cursor_addr)(H3270 *h, int addr);
+		int             	(*_get_cursor_addr)(H3270 *h);
+		int             	(*_emulate_input)(H3270 *session, const char *s, int len, int pasting);
+		int             	(*_get_next_unprotected)(H3270 *hSession, int baddr0);
+		int 				(*_get_is_protected)(H3270 *hSession, int baddr);
+		int 				(*_get_is_protected_at)(H3270 *hSession, int row, int col);
+		void            	(*_popup_va)(H3270 *session, LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, va_list);
+		void *				(*_free)(void *);
+		const char *		(*_get_display_charset)(H3270 *hSession);
+		int					(*_set_host_charset)(H3270 *hSession, const char *name);
+		const char * 		(*_get_host_charset)(H3270 *hSession);
+		int 				(*_print)(H3270 *hSession);
+		int					(*_erase)(H3270 *hSession);
+		int					(*_erase_eof)(H3270 *hSession);
+		int					(*_erase_eol)(H3270 *hSession);
+		int					(*_erase_input)(H3270 *hSession);
+		int					(*_action)(H3270 *hSession, const char *name);
+
+		const char * 		(*_ebc2asc)(H3270 *hSession, unsigned char *buffer, int sz);
+		const char * 		(*_asc2ebc)(H3270 *hSession, unsigned char *buffer, int sz);
 
 	public:
 
@@ -186,6 +188,7 @@
 				{ (void **) & _is_connected,			"lib3270_is_connected"				},
 				{ (void **) & _get_connection_state,	"lib3270_get_connection_state"		},
 				{ (void **) & _get_program_message,		"lib3270_get_program_message"		},
+				{ (void **) & _get_secure,				"lib3270_get_secure"				},
 
 				{ (void **) & _get_version,				"lib3270_get_version"				},
 				{ (void **) & _disconnect,				"lib3270_disconnect"				},
@@ -272,6 +275,10 @@
 		LIB3270_MESSAGE get_program_message(void) {
 			return _get_program_message(hSession);
 		}
+
+		LIB3270_SSL_STATE get_secure(void) {
+			return _get_secure(hSession);
+		};
 
 		int connect(void)
 		{

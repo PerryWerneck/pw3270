@@ -98,6 +98,10 @@
 		return lib3270_get_program_message(hSession);
 	}
 
+	LIB3270_SSL_STATE get_secure(void) {
+		return lib3270_get_secure(hSession);
+	}
+
 	int disconnect(void) {
 		lib3270_disconnect(hSession);
 		return 0;

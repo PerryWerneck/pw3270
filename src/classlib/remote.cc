@@ -52,6 +52,7 @@
 	#define HLLAPI_PACKET_IS_CONNECTED			"isConnected"
 	#define HLLAPI_PACKET_GET_CSTATE			"getConnectionState"
 	#define HLLAPI_PACKET_GET_PROGRAM_MESSAGE	"getProgramMessage"
+	#define HLLAPI_PACKET_GET_SSL_STATE			"getSecureState"
 	#define HLLAPI_PACKET_IS_READY				"isReady"
 	#define HLLAPI_PACKET_DISCONNECT			"disconnect"
 	#define HLLAPI_PACKET_GET_CURSOR			"getCursorAddress"
@@ -729,6 +730,11 @@
 		LIB3270_MESSAGE get_program_message(void) {
 			return (LIB3270_MESSAGE) query_intval(HLLAPI_PACKET_GET_PROGRAM_MESSAGE);
 		}
+
+		LIB3270_SSL_STATE get_secure(void) {
+			return (LIB3270_SSL_STATE) query_intval(HLLAPI_PACKET_GET_SSL_STATE);
+		}
+
 
 		int connect(void)
 		{

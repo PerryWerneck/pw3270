@@ -397,10 +397,18 @@ public class terminal
 	public native void				log(String msg);
 
 	/**
+	 * Get connection SSL state
+	 *
+	 * @return State of SSL connection (0 = Inseguro, 1 = CA válido, 2 = CA inválido ou auto-assinado, 3 = Negociando, 4 = Indefinido)
+	 *
+	 */
+	public native int               get_secure();
+
+	/**
 	 * Creates a tn3270 terminal associated with a
 	 * pw3270 window.
 	 *
-	 * @param id String identifying the target window.
+	 * @param id String identifying the target window ("pw3270:a") or "" to run without window.
 	 *
 	 */
 	public terminal(String id) {
