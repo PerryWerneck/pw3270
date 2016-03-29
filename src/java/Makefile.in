@@ -151,13 +151,14 @@ Release: \
 	$(BINRLS)/plugins/j3270@DLLEXT@
 
 zip: \
-	jni3270-@jvm_arch@.zip
+	jni3270-@PACKAGE_VERSION@.@PACKAGE_REVISION@.@jvm_arch@.zip
 
-jni3270-@jvm_arch@.zip: \
+jni3270-@PACKAGE_VERSION@.@PACKAGE_REVISION@.@jvm_arch@.zip: \
 	$(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@ \
 	$(BINRLS)/$(PACKAGE_NAME).jar \
 	testprogram.java \
-	javadoc
+	javadoc \
+	Makefile
 
 	@rm -f $@
 
