@@ -42,12 +42,16 @@ include $(CLASSLIBDIR)/class.mak
 
 #---[ Release Targets ]--------------------------------------------------------
 
-$(BINRLS)/$(PLUGIN_NAME): $(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJRLS)/$(SRC).o) $(BINRLS)$(DLL_NAME)
+$(BINRLS)/$(PLUGIN_NAME): \
+	$(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJRLS)/$(SRC).o) $(BINRLS)$(DLL_NAME)
+
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(CXX) $(DLL_FLAGS) @LDSOFLAGS@ $(LDFLAGS) @RLS_LDFLAGS@ -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(GTK_LIBS) $(GLIB_LIBS) $(PW3270_LIBS)
 
-$(BINRLS)$(DLL_NAME).$(VERSION): $(foreach SRC, $(basename $(EXTAPI_SRC)), $(OBJRLS)/$(SRC).o) $(CLASS_RELEASE_OBJECTS)
+$(BINRLS)$(DLL_NAME).$(VERSION): \
+	$(foreach SRC, $(basename $(EXTAPI_SRC)), $(OBJRLS)/$(SRC).o) $(CLASS_RELEASE_OBJECTS)
+
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(CXX) $(SYSDLL_FLAGS) @LDSOFLAGS@ $(LDFLAGS) @RLS_LDFLAGS@ -o $@ $^ $(CLASS_LIBS)
@@ -56,19 +60,30 @@ install:
 
 #---[ Debug Targets ]----------------------------------------------------------
 
-$(BINDBG)/$(PLUGIN_NAME): $(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJDBG)/$(SRC).o) $(BINDBG)$(DLL_NAME)
+$(BINDBG)/$(PLUGIN_NAME): \
+	$(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJDBG)/$(SRC).o) $(BINDBG)$(DLL_NAME)
+
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(CXX) $(DLL_FLAGS) @LDSOFLAGS@ @DBGRPATH@ $(LDFLAGS) -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(GTK_LIBS) $(GLIB_LIBS) $(PW3270_LIBS)
 
-$(BINDBG)$(DLL_NAME).$(VERSION): $(foreach SRC, $(basename $(EXTAPI_SRC)), $(OBJDBG)/$(SRC)@OBJEXT@) $(CLASS_DEBUG_OBJECTS)
+$(BINDBG)$(DLL_NAME).$(VERSION): \
+	$(foreach SRC, $(basename $(EXTAPI_SRC)), $(OBJDBG)/$(SRC)@OBJEXT@) $(CLASS_DEBUG_OBJECTS)
+
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(CXX) $(SYSDLL_FLAGS) $(LDFLAGS) @LDSOFLAGS@ @DBGRPATH@ -L../../../.bin/Debug -o $@ $^ $(CLASS_LIBS)
 
-test: $(BINDBG)/test@EXEEXT@
+test: \
+	$(BINDBG)/test@EXEEXT@
 
-$(BINDBG)/test@EXEEXT@: $(BINDBG)$(DLL_NAME).$(VERSION) $(OBJDBG)/testprogram.o
+cleanDebug: \
+	clean
+
+$(BINDBG)/test@EXEEXT@: \
+	$(BINDBG)$(DLL_NAME).$(VERSION) $(OBJDBG)/testprogram.o
+
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(LD) -o $@ $^ $(LIBS) $(BINDBG)$(DLL_NAME).$(VERSION)
+

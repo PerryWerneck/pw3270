@@ -114,8 +114,31 @@ extern "C" {
  #else
 
 	#define HLLAPI_API_CALL		__attribute__((visibility("default"))) extern
-	#define WORD				uint32_t
-	#define LPWORD				uint32_t *
+
+	// From wtypesbase.h
+	typedef byte BYTE;
+	typedef unsigned short WORD;
+	typedef unsigned int UINT;
+	typedef int INT;
+	typedef LONG WINBOOL;
+	typedef LONG LONG;
+	typedef ULONG DWORD;
+	typedef void *HANDLE;
+	typedef WORD *LPWORD;
+	typedef DWORD *LPDWORD;
+	typedef char CHAR;
+	typedef CHAR *LPSTR;
+	typedef const CHAR *LPCSTR;
+	typedef wchar_t WCHAR;
+	typedef WCHAR TCHAR;
+	typedef WCHAR *LPWSTR;
+	typedef TCHAR *LPTSTR;
+	typedef const WCHAR *LPCWSTR;
+	typedef const TCHAR *LPCTSTR;
+	typedef HANDLE *LPHANDLE;
+
+	#define LPWORD				uint16_t *
+
 	#define LPSTR				char *
 	#define HANDLE				int
 
