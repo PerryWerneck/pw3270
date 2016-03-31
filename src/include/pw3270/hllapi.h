@@ -94,6 +94,8 @@ extern "C" {
  // 22	PS was updated.
  // 23	Both OIA and PS were updated.
  // 24	Either the string was not found, or the presentation space is unformatted.
+ #define HLLAPI_STATUS_NOT_FOUND			  24	/**< String not found or unformatted presentation space */
+
  // 25	Keystrokes were not available on input queue.
  // 26	A host event occurred. See QUERY HOST UPDATE (24) for details.
  // 28	Field length was 0.

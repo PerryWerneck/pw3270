@@ -325,7 +325,10 @@ static int search_ps(char *buffer, unsigned short *length, unsigned short *ps)
 	 */
 	size_t   szBuffer = strlen(buffer);
 	char   * text;
-	int		 rc = -1;
+	int		 rc = HLLAPI_STATUS_SYSTEM_ERROR;
+
+	if(!hllapi_is_connected())
+		return HLLAPI_STATUS_DISCONNECTED;
 
 	if(*length < szBuffer)
 		szBuffer = *length;
@@ -339,13 +342,13 @@ static int search_ps(char *buffer, unsigned short *length, unsigned short *ps)
 	{
 		// String not found
 		*ps = 0;
-		rc = 24;
+		rc = HLLAPI_STATUS_NOT_FOUND;
 	}
 	else
 	{
 		// String found
 		*ps = 1;
-		rc = 0;
+		rc = HLLAPI_STATUS_SUCCESS;
 	}
 
 	hllapi_free(text);
