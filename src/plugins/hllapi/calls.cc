@@ -278,6 +278,13 @@
  {
 	int rc = HLLAPI_STATUS_SYSTEM_ERROR;
 
+	if(offset < 1)
+	{
+		return HLLAPI_STATUS_BAD_PARAMETER;
+	}
+
+	offset--;
+
 	if(!session::has_default())
 	{
 		return HLLAPI_STATUS_DISCONNECTED;
