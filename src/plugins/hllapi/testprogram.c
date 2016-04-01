@@ -28,16 +28,41 @@
  */
 
  #include <stdio.h>
+ #include <string.h>
  #include <time.h>
  #include <pw3270/hllapi.h>
 
- #define BUFFER_LENGTH 8000
+ #define MAX_DATA_SIZE 8000	//< Maximum data size for this application.
+
+ static CHAR hllapi_data[MAX_DATA_SIZE];
 
 /*---[ Implement ]--------------------------------------------------------------------------------*/
+
+ static void connect(const char *session)
+ {
+ 	WORD len;
+ 	WORD fn		= HLLAPI_CMD_CONNECTPS;
+ 	WORD rc 	= 0;
+
+	strncpy(hllapi_data,session,MAX_DATA_SIZE);
+
+	len = strlen(session);
+	hllapi(&fn,hllapi_data,&len,&rc);
+
+	if(rc)
+	{
+		fprintf(stderr,"HLLAPI_CMD_CONNECTPS exits with rc=%d",(int) rc);
+	}
+
+ }
 
  int main(int numpar, char *param[])
  {
  	const char *session = "pw3270:a";
+
+ 	connect(session);
+
+ 	/*
 
  	printf("init(%s)=%d\n",session,(int) hllapi_init((LPSTR) session));
 	printf("revision=%d\n",(int) hllapi_get_revision());
@@ -50,7 +75,6 @@
 
 	printf("deinit=%d\n",(int) hllapi_deinit());
 
-/*
  	DWORD	revision;
  	int 	rc;
 

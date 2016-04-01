@@ -36,6 +36,7 @@ EXTAPI_SRC=calls.c hllapi.c
 #---[ Include plugin rules ]---------------------------------------------------
 
 CLASSLIBDIR=../../classlib
+LIBS=@LIBS@
 
 include ../../include/plugin.mak
 include $(CLASSLIBDIR)/class.mak
@@ -47,7 +48,7 @@ $(BINRLS)/$(PLUGIN_NAME): \
 
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CXX) $(DLL_FLAGS) @LDSOFLAGS@ $(LDFLAGS) @RLS_LDFLAGS@ -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(GTK_LIBS) $(GLIB_LIBS) $(PW3270_LIBS)
+	@$(CXX) $(DLL_FLAGS) @LDSOFLAGS@ $(LDFLAGS) @RLS_LDFLAGS@ -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(CLASS_LIBS)
 
 $(BINRLS)$(DLL_NAME).$(VERSION): \
 	$(foreach SRC, $(basename $(EXTAPI_SRC)), $(OBJRLS)/$(SRC).o) $(CLASS_RELEASE_OBJECTS)
@@ -65,7 +66,7 @@ $(BINDBG)/$(PLUGIN_NAME): \
 
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CXX) $(DLL_FLAGS) @LDSOFLAGS@ @DBGRPATH@ $(LDFLAGS) -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(GTK_LIBS) $(GLIB_LIBS) $(PW3270_LIBS)
+	@$(CXX) $(DLL_FLAGS) @LDSOFLAGS@ @DBGRPATH@ $(LDFLAGS) -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(CLASS_LIBS)
 
 $(BINDBG)$(DLL_NAME).$(VERSION): \
 	$(foreach SRC, $(basename $(EXTAPI_SRC)), $(OBJDBG)/$(SRC)@OBJEXT@) $(CLASS_DEBUG_OBJECTS)
@@ -85,5 +86,5 @@ $(BINDBG)/test@EXEEXT@: \
 
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(LD) -o $@ $^ $(LIBS) $(BINDBG)$(DLL_NAME).$(VERSION)
+	$(LD) -o $@ $^ -Wl,-rpath,$(BINDBG)/lib $(LIBS) $(BINDBG)$(DLL_NAME).$(VERSION)
 

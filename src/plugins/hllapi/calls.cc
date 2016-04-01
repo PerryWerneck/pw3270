@@ -28,6 +28,9 @@
  */
 
  #include <exception>
+ #include <cstdlib>
+ #include <cstring>
+
  #include <pw3270/class.h>
  #include <pw3270/hllapi.h>
  #include "client.h"
@@ -232,6 +235,7 @@
 
  HLLAPI_API_CALL hllapi_get_datadir(LPSTR datadir)
  {
+ #ifdef _WIN32
 	HKEY 			hKey	= 0;
  	unsigned long	datalen = strlen(datadir);
 
@@ -244,6 +248,7 @@
 			*datadir = 0;
 		RegCloseKey(hKey);
 	}
+#endif // _WIN32
 
 	return *datadir;
  }

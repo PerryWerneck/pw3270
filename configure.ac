@@ -167,7 +167,6 @@ case "$host" in
 
 		AC_CONFIG_FILES(nsi/runtime-init.nsi)
 
-		AC_CONFIG_FILES(src/plugins/hllapi/Makefile)
 		AC_CONFIG_FILES(makegtkruntime.sh)
 
 		;;
@@ -202,6 +201,9 @@ case "$host" in
 		AC_CONFIG_FILES(pw3270.spec)
 
 esac
+
+# It's easier to test hllapi on linux
+AC_CONFIG_FILES(src/plugins/hllapi/Makefile)
 
 #--[ Check gettext ]------------------------------------------------------------------------------------------------------------------------------------------
 

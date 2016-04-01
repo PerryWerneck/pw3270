@@ -85,7 +85,7 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
-HLLAPI_API_CALL hllapi(LPWORD func, LPSTR buffer, LPWORD length, LPWORD rc)
+HLLAPI_API_CALL hllapi(const LPWORD func, LPSTR buffer, LPWORD length, LPWORD rc)
 {
 	unsigned int f;
 

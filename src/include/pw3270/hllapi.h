@@ -113,23 +113,21 @@ extern "C" {
 
  #else
 
-	#define HLLAPI_API_CALL		__attribute__((visibility("default"))) extern
-
 	// From wtypesbase.h
-	typedef byte BYTE;
-	typedef unsigned short WORD;
+	typedef uint8_t BYTE;
+	typedef uint16_t WORD;
 	typedef unsigned int UINT;
 	typedef int INT;
+	typedef uint32_t LONG;
 	typedef LONG WINBOOL;
-	typedef LONG LONG;
-	typedef ULONG DWORD;
+	typedef uint32_t DWORD;
 	typedef void *HANDLE;
 	typedef WORD *LPWORD;
 	typedef DWORD *LPDWORD;
 	typedef char CHAR;
 	typedef CHAR *LPSTR;
 	typedef const CHAR *LPCSTR;
-	typedef wchar_t WCHAR;
+	typedef char WCHAR;
 	typedef WCHAR TCHAR;
 	typedef WCHAR *LPWSTR;
 	typedef TCHAR *LPTSTR;
@@ -141,6 +139,8 @@ extern "C" {
 
 	#define LPSTR				char *
 	#define HANDLE				int
+
+	#define HLLAPI_API_CALL		__attribute__((visibility("default"))) extern DWORD
 
  #endif // WIN32
 
@@ -178,8 +178,6 @@ extern "C" {
 	HLLAPI_API_CALL hllapi_action(LPSTR buffer);
 
 	HLLAPI_API_CALL hllapi_print(void);
-
-	HLLAPI_API_CALL hllapi(const LPWORD func, LPSTR str, LPWORD length, LPWORD rc);
 
 	HLLAPI_API_CALL hllapi_init(LPSTR mode);
 	HLLAPI_API_CALL hllapi_deinit(void);
