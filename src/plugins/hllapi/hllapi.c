@@ -37,10 +37,7 @@
  #include <lib3270/log.h>
  #include "client.h"
 
- #undef trace
- #define trace( fmt, ... )	{ FILE *out = fopen("c:\\Users\\Perry\\hllapi.log","a"); if(out) { fprintf(out, "%s(%d) " fmt "\n", __FILE__, __LINE__, __VA_ARGS__ ); fclose(out); } }
-
-/*--[ Prototipes ]-----------------------------------------------------------------------------------*/
+ /*--[ Prototipes ]-----------------------------------------------------------------------------------*/
 
  static int connect_ps(char *buffer, unsigned short *length, unsigned short *rc);
  static int disconnect_ps(char *buffer, unsigned short *length, unsigned short *rc);
@@ -177,15 +174,23 @@ static int set_cursor_position(char *buffer, unsigned short *length, unsigned sh
 
 static int copy_ps_to_str(char *buffer, unsigned short *length, unsigned short *rc)
 {
+
 	// Length		Length of the target data string.
 	// PS Position	Position within the host presentation space of the first byte in your target data string.
-	return hllapi_get_screen(*rc,buffer,*length);
+	*rc = hllapi_get_screen(*rc,buffer,*length);
+
+	return 0;
 }
 
 static int input_string(char *input, unsigned short *length, unsigned short *rc)
 {
 	size_t	  szText;
 	char 	* text;
+
+	if(!hllapi_is_connected()) {
+		*rc = HLLAPI_STATUS_DISCONNECTED;
+		return HLLAPI_STATUS_DISCONNECTED;
+	}
 
 	if(!input)
 	{

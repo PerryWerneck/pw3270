@@ -114,6 +114,11 @@
 
  HLLAPI_API_CALL hllapi_is_connected(void)
  {
+ 	if(!session::has_default())
+	{
+		return 0;
+	}
+
 	return session::get_default()->is_connected();
  }
 
@@ -255,7 +260,13 @@
 
  HLLAPI_API_CALL hllapi_setcursor(WORD pos)
  {
-	return session::get_default()->set_cursor_addr(pos-1);
+	if(!hllapi_is_connected())
+		return HLLAPI_STATUS_DISCONNECTED;
+
+	session::get_default()->set_cursor_addr(pos-1);
+
+	return HLLAPI_STATUS_SUCCESS;
+
  }
 
  HLLAPI_API_CALL hllapi_getcursor()
@@ -267,15 +278,28 @@
  {
 	int rc = HLLAPI_STATUS_SYSTEM_ERROR;
 
+	if(!session::has_default())
+	{
+		return HLLAPI_STATUS_DISCONNECTED;
+	}
+
 	if(!(buffer && *buffer))
 		return rc;
 
 	try
 	{
-		size_t szBuffer = strlen(buffer);
+		size_t szBuffer;
 
-		if(len < szBuffer && len > 0)
-			szBuffer = len;
+		if(len > 0)
+		{
+			szBuffer = (size_t) len;
+		}
+		else
+		{
+			return HLLAPI_STATUS_BAD_PARAMETER;
+		}
+
+		memset(buffer,' ',szBuffer);
 
 		string str = session::get_default()->get_string(offset,szBuffer);
 		strncpy(buffer,str.c_str(),szBuffer);

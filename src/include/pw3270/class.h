@@ -132,6 +132,7 @@
 		static session	* start(const char *name = 0);
 		static session	* create(const char *name = 0) throw (std::exception);
 		static session	* get_default(void);
+		static bool		  has_default(void);
 		static void		  set_plugin(session * (*factory)(const char *name));
 
 		// Log management

@@ -38,20 +38,25 @@
  #include <unistd.h>
 #endif // !WIN32
 
- #ifdef HAVE_SYSLOG
+#ifdef HAVE_SYSLOG
 	#include <syslog.h>
- #endif // HAVE_SYSLOG
+#endif // HAVE_SYSLOG
+
+#if __cplusplus < 201103L
+	#define nullptr	NULL
+#endif // !c11
 
 /*--[ Implement ]--------------------------------------------------------------------------------------------------*/
 
  namespace PW3270_NAMESPACE
  {
-	session	* session::first						= 0;
-	session	* session::last							= 0;
-	session	* (*session::factory)(const char *name)	= 0;
+	session	* session::first						= nullptr;
+	session	* session::last							= nullptr;
+	session	* (*session::factory)(const char *name)	= nullptr;
 
 	session::session()
 	{
+
 #ifdef HAVE_ICONV
 		this->conv2Local	= (iconv_t) (-1);
 		this->conv2Host		= (iconv_t) (-1);
@@ -98,6 +103,8 @@
 	// Factory methods and settings
 	session	* session::create(const char *name) throw (std::exception)
 	{
+		trace("%s(%s)",__FUNCTION__,name);
+
 		if(factory)
 			return factory(name);
 
@@ -110,6 +117,11 @@
 	session	* session::start(const char *name)
 	{
 		return create(name);
+	}
+
+	bool session::has_default(void)
+	{
+		return first != nullptr;
 	}
 
 	session	* session::get_default(void)

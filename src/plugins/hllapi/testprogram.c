@@ -32,13 +32,18 @@
  #include <time.h>
  #include <pw3270/hllapi.h>
 
+ #if defined(DEBUG) && defined(_WIN32)
+	#undef trace
+	#define trace( fmt, ... )	{ FILE *out = fopen("c:\\Users\\Perry\\hllapi.log","a"); if(out) { fprintf(out, "%s(%d) " fmt "\n", __FILE__, __LINE__, __VA_ARGS__ ); fclose(out); } }
+ #endif // DEBUG
+
  #define MAX_DATA_SIZE 8000	//< Maximum data size for this application.
 
  static CHAR hllapi_data[MAX_DATA_SIZE];
 
 /*---[ Implement ]--------------------------------------------------------------------------------*/
 
- static void connect(const char *session)
+ static void connect_ps(const char *session)
  {
  	WORD len;
  	WORD fn		= HLLAPI_CMD_CONNECTPS;
@@ -51,16 +56,16 @@
 
 	if(rc)
 	{
-		fprintf(stderr,"HLLAPI_CMD_CONNECTPS exits with rc=%d",(int) rc);
+		trace("HLLAPI_CMD_CONNECTPS(%s) exits with rc=%d", session, (int) rc);
 	}
 
  }
 
  int main(int numpar, char *param[])
  {
- 	const char *session = "pw3270:a";
+ 	const char *session = "pw3270:A";
 
- 	connect(session);
+ 	connect_ps(session);
 
  	/*
 

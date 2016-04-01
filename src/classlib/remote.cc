@@ -417,6 +417,8 @@
 			HKEY 					hKey	= 0;
 			unsigned long			datalen = sizeof(buffer);
 
+			debug("%s(%s)",__FUNCTION__,name);
+
 			*buffer = 0;
 			if(RegOpenKeyEx(HKEY_LOCAL_MACHINE,"Software\\pw3270",0,KEY_QUERY_VALUE,&hKey) != ERROR_SUCCESS)
 			{
@@ -447,6 +449,8 @@
 			time_t					  timer	= time(0)+1;
 
 			hPipe  = INVALID_HANDLE_VALUE;
+
+			trace("%s(%s)",__FUNCTION__,session);
 
 			if(strcasecmp(session,"start") == 0 || strcasecmp(session,"new") == 0)
 			{
@@ -509,7 +513,16 @@
 				}
 
 				// Wait?
-				int delay = atoi(getRegistryKey("hllapiWait").c_str());
+				int delay;
+
+				try
+				{
+					delay = atoi(getRegistryKey("hllapiWait").c_str());
+				}
+				catch(std::exception &e)
+				{
+					delay = 0;
+				}
 
 				if(delay) {
 					timer = time(0) + delay;
