@@ -41,7 +41,7 @@ extern "C" {
 
  #define HLLAPI_MAXLENGTH					4096
 
- /* Function codes */
+ /* Function codes - Reference http://www.ibm.com/support/knowledgecenter/SSEQ5Y_6.0.0/com.ibm.pcomm.doc/books/html/emulator_programming08.htm */
  #define HLLAPI_CMD_CONNECTPS				   1	/**< connect presentation space							*/
  #define HLLAPI_CMD_DISCONNECTPS			   2	/**< disconnect presentation space        				*/
  #define HLLAPI_CMD_INPUTSTRING				   3	/**< send string										*/
@@ -50,7 +50,10 @@ extern "C" {
  #define HLLAPI_CMD_SEARCHPS				   6	/**< Search the presentation space for a specified string. */
  #define HLLAPI_CMD_QUERYCURSOR				   7	/**< Determines the location of the cursor in the presentation space. */
  #define HLLAPI_CMD_COPYPSTOSTR				   8	/**< Copy presentation space to string					*/
+ #define HLLAPI_SET_SESSION_PARAMETERS		   9	/**< Lets you change certain default session options in EHLLAPI for all sessions. */
  #define HLLAPI_CMD_COPYSTRTOPS				  15	/**< Copies an ASCII string directly to a specified position in the presentation space. */
+ #define HLLAPI_CMD_PAUSE					  18	/**< Waits for a specified amount of time. */
+ #define HLLAPI_RESET_SYSTEM				  21	/**< Reinitializes EHLLAPI to its starting state. */
  #define HLLAPI_CMD_SETCURSOR				  40	/**< Places the cursor at a specified position in presentation space.*/
  #define HLLAPI_CMD_SENDFILE				  90	/**< Send file to the host */
  #define HLLAPI_CMD_RECEIVEFILE				  91	/**< Receive a file from the host */
@@ -148,6 +151,8 @@ extern "C" {
 
 	HLLAPI_API_CALL hllapi_init(LPSTR mode);
 	HLLAPI_API_CALL hllapi_deinit(void);
+
+	HLLAPI_API_CALL hllapi_reset(void);
 
 	HLLAPI_API_CALL hllapi_get_revision(void);
 	HLLAPI_API_CALL hllapi_get_datadir(LPSTR datadir);

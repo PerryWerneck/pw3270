@@ -379,3 +379,12 @@
  {
  	free(p);
  }
+
+ HLLAPI_API_CALL hllapi_reset(void)
+ {
+
+
+	return HLLAPI_STATUS_SUCCESS;
+ }
+
+

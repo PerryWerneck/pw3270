@@ -80,6 +80,9 @@ $(BINDBG)$(DLL_NAME).$(VERSION): \
 test: \
 	$(BINDBG)/test@EXEEXT@
 
+cleantest: \
+	clean
+
 cleanDebug: \
 	clean
 

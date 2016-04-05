@@ -47,6 +47,8 @@
  static int search_ps(char *buffer, unsigned short *length, unsigned short *rc);
  static int copy_ps(char *buffer, unsigned short *length, unsigned short *rc);
  static int wait_system(char *buffer, unsigned short *length, unsigned short *rc);
+ static int reset_system(char *buffer, unsigned short *length, unsigned short *rc);
+ static int pause_system(char *buffer, unsigned short *length, unsigned short *rc);
 
  static int get_cursor_position(char *buffer, unsigned short *length, unsigned short *rc);
  static int set_cursor_position(char *buffer, unsigned short *length, unsigned short *rc);
@@ -75,6 +77,8 @@
 	{ HLLAPI_CMD_COPYSTRTOPS,		copy_str_to_ps			},
 	{ HLLAPI_CMD_SENDFILE,			invalid_request			},
 	{ HLLAPI_CMD_RECEIVEFILE,		invalid_request			},
+	{ HLLAPI_RESET_SYSTEM,			reset_system			},
+	{ HLLAPI_CMD_PAUSE,				pause_system			},
 
  };
 
@@ -409,14 +413,16 @@ static int wait_system(char *buffer, unsigned short *length, unsigned short *rc)
 	/*
 	 * Return Code	Definition
 	 *
-	 * 0	The keyboard is unlocked and ready for input.
-	 * 1	Your application program is not connected to a valid session.
-	 * 4	Timeout while still in XCLOCK (X []) or XSYSTEM.
-	 * 5	The keyboard is locked.
-	 * 9	A system error was encountered.
+	 * HLLAPI_STATUS_SUCCESS			0	The keyboard is unlocked and ready for input.
+	 * HLLAPI_STATUS_DISCONNECTED		1	Your application program is not connected to a valid session.
+	 * HLLAPI_STATUS_TIMEOUT			4	Timeout while still in XCLOCK (X []) or XSYSTEM.
+	 * HLLAPI_STATUS_KEYBOARD_LOCKED	5	The keyboard is locked.
+	 * HLLAPI_STATUS_SYSTEM_ERROR		9	A system error was encountered.
 	 *
 	 */
-	 time_t end = time(0) + 3600;
+
+	 /*
+	 time_t end = time(0) + 60;
 
 	 while(time(0) < end)
 	 {
@@ -425,12 +431,16 @@ static int wait_system(char *buffer, unsigned short *length, unsigned short *rc)
 		if(state != HLLAPI_STATUS_WAITING)
 			return state;
 
-		if(hllapi_wait(1))
-			return HLLAPI_STATUS_SYSTEM_ERROR;
+		hllapi_wait(1);
 
 	 }
 
 	 return HLLAPI_STATUS_TIMEOUT;
+	 */
+
+	 int state = hllapi_wait_for_ready(60);
+	 return (state == HLLAPI_STATUS_WAITING ? HLLAPI_STATUS_TIMEOUT : state);
+
 }
 
 static int copy_str_to_ps(char *text, unsigned short *length, unsigned short *ps)
@@ -438,19 +448,19 @@ static int copy_str_to_ps(char *text, unsigned short *length, unsigned short *ps
 	/*
 	 * Call Parameters
 	 *
-	 * Data String	String of ASCII data to be copied into the host presentation space.
+	 * Data 	String of ASCII data to be copied into the host presentation space.
 	 * Length	Length, in number of bytes, of the source data string. Overridden if in EOT mode.
-	 * PS Position	Position in the host presentation space to begin the copy, a value between 1 and the configured size of your host presentation space.
+	 * PS 		Position in the host presentation space to begin the copy, a value between 1 and the configured size of your host presentation space.
 	 *
 	 * Return Parameters
 	 *
-	 * 0	The Copy String to Presentation Space function was successful.
-	 * 1	Your program is not connected to a host session.
-	 * 2	Parameter error or zero length for copy.
-	 * 5	The target presentation space is protected or inhibited, or incorrect data was sent to the target presentation space (such as a field attribute byte).
-	 * 6	The copy was completed, but the data was truncated.
-	 * 7	The host presentation space position is not valid.
-	 * 9	A system error was encountered.
+	 * HLLAPI_STATUS_SUCCESS			0	The Copy String to Presentation Space function was successful.
+	 * HLLAPI_STATUS_DISCONNECTED		1	Your program is not connected to a host session.
+	 * HLLAPI_STATUS_BAD_PARAMETER		2	Parameter error or zero length for copy.
+	 * HLLAPI_STATUS_KEYBOARD_LOCKED	5	The target presentation space is protected or inhibited, or incorrect data was sent to the target presentation space (such as a field attribute byte).
+	 * 									6	The copy was completed, but the data was truncated.
+	 * 									7	The host presentation space position is not valid.
+	 * HLLAPI_STATUS_SYSTEM_ERROR		9	A system error was encountered.
 	 *
 	 */
 	size_t szText = strlen(text);
@@ -459,7 +469,7 @@ static int copy_str_to_ps(char *text, unsigned short *length, unsigned short *ps
 		szText = *length;
 
 	if(!szText)
-		return 2;
+		return HLLAPI_STATUS_BAD_PARAMETER;
 
 	switch(hllapi_get_message_id())
 	{
@@ -482,4 +492,14 @@ static int copy_str_to_ps(char *text, unsigned short *length, unsigned short *ps
 	}
 
 	return hllapi_emulate_input(text,szText,0);
+}
+
+static int reset_system(char *buffer, unsigned short *length, unsigned short *rc)
+{
+	return hllapi_reset();
+}
+
+static int pause_system(char *buffer, unsigned short *length, unsigned short *rc)
+{
+	return hllapi_wait_for_ready((*length) / 2);
 }

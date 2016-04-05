@@ -54,10 +54,12 @@
 	len = strlen(session);
 	hllapi(&fn,hllapi_data,&len,&rc);
 
+	/*
 	if(rc)
 	{
 		trace("HLLAPI_CMD_CONNECTPS(%s) exits with rc=%d", session, (int) rc);
 	}
+	*/
 
  }
 
