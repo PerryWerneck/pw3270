@@ -47,6 +47,7 @@ MKDIR=@MKDIR_P@
 INSTALL=@INSTALL@
 INSTALL_DATA=@INSTALL_DATA@
 INSTALL_PROGRAM=@INSTALL_PROGRAM@
+ZIP=@ZIP@
 
 #---[ Paths ]------------------------------------------------------------------
 
@@ -72,12 +73,16 @@ CXXFLAGS=@PYTHON_CFLAGS@ @DLL_CFLAGS@ -I../include
 
 #---[ Rules ]------------------------------------------------------------------
 
-$(OBJRLS)/%.o: %.cc private.h Makefile
+$(OBJRLS)/%.o: \
+	%.cc private.h Makefile
+
 	@echo "  CC   `basename $@`"
 	@mkdir -p `dirname $@`
 	@$(CXX) -DNDEBUG=1 $(CXXFLAGS) -o $@ -c $<
 
-$(OBJDBG)/%.o: %.cc private.h Makefile
+$(OBJDBG)/%.o: \
+	%.cc private.h Makefile
+
 	@echo "  CC   `basename $@`"
 	@mkdir -p `dirname $@`
 	@$(CXX) -DDEBUG=1 $(CXXFLAGS) -o $@ -c $<
@@ -88,8 +93,10 @@ all: $(BINRLS)/py3270@DLLEXT@
 
 Release: $(BINRLS)/py3270@DLLEXT@
 
-$(BINRLS)/py3270@DLLEXT@:	$(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SRC)@OBJEXT@) \
-				$(CLASS_RELEASE_OBJECTS)
+$(BINRLS)/py3270@DLLEXT@: \
+	$(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SRC)@OBJEXT@) \
+	$(CLASS_RELEASE_OBJECTS)
+
 	@echo "  LD   `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(CXX) @SYSDLL_FLAGS@ $(LDFLAGS) $(OO_LDFLAGS) -o $@ $^ $(CLASS_LIBS) @PYTHON_LIBS@
@@ -99,8 +106,10 @@ $(BINRLS)/py3270@DLLEXT@:	$(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SRC
 
 Debug: $(BINDBG)/py3270@DLLEXT@
 
-$(BINDBG)/py3270@DLLEXT@:	$(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC)@OBJEXT@) \
-				$(CLASS_DEBUG_OBJECTS)
+$(BINDBG)/py3270@DLLEXT@: \
+	$(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC)@OBJEXT@) \
+	$(CLASS_DEBUG_OBJECTS)
+
 	@echo "  LD   `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(CXX) @SYSDLL_FLAGS@ $(LDFLAGS) $(OO_LDFLAGS) -o $@ $^ $(CLASS_LIBS) @PYTHON_LIBS@
@@ -110,9 +119,22 @@ run: $(BINDBG)/py3270@DLLEXT@
 
 #---[ Misc targets ]-----------------------------------------------------------
 
-install: $(BINRLS)/py3270@DLLEXT@
+install: \
+	$(BINRLS)/py3270@DLLEXT@
+
 	@$(MKDIR) $(DESTDIR)/$(PYTHONLIBPATH)
 	@$(INSTALL_PROGRAM) $(BINRLS)/py3270@DLLEXT@ $(DESTDIR)/$(PYTHONLIBPATH)/py3270@DLLEXT@
+
+zip: \
+	py3270-@PACKAGE_VERSION@.@PACKAGE_REVISION@.@host_cpu@.zip
+
+py3270-@PACKAGE_VERSION@.@PACKAGE_REVISION@.@host_cpu@.zip: \
+	Makefile \
+	$(BINRLS)/py3270@DLLEXT@
+
+	@rm -f $@
+	@zip -9 -j $@ $(BINRLS)/py3270@DLLEXT@
+
 
 cleanDebug: clean
 
