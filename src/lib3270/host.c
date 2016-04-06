@@ -135,12 +135,19 @@ void lib3270_set_disconnected(H3270 *hSession)
 
 	hSession->cstate	= LIB3270_NOT_CONNECTED;
 	hSession->starting	= 0;
+	hSession->secure	= LIB3270_SSL_UNDEFINED;
 
 	set_status(hSession,OIA_FLAG_UNDERA,False);
+
 	lib3270_st_changed(hSession,LIB3270_STATE_CONNECT, False);
+
 	status_changed(hSession,LIB3270_MESSAGE_DISCONNECTED);
+
 	if(hSession->update_connect)
 		hSession->update_connect(hSession,0);
+
+	hSession->update_ssl(hSession,hSession->secure);
+
 }
 
 /* Register a function interested in a state change. */

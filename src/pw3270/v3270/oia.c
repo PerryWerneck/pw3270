@@ -1081,6 +1081,8 @@ void v3270_stop_timer(GtkWidget *widget)
 
 void v3270_update_ssl(H3270 *session, LIB3270_SSL_STATE state)
 {
+	debug("%s **************************************** %d",__FUNCTION__,(int) state);
+
 	v3270 			* terminal = GTK_V3270(session->user_data);
 	cairo_t			* cr;
 	GdkRectangle	* r;

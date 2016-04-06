@@ -418,16 +418,6 @@ void ssl_info_callback(INFO_CONST SSL *s, int where, int ret)
 
 #endif /*]*/
 
-LIB3270_EXPORT LIB3270_SSL_STATE lib3270_get_secure(H3270 *session)
-{
-	CHECK_SESSION_HANDLE(session);
-
-	if(!lib3270_is_connected(session))
-		return LIB3270_SSL_UNDEFINED;
-
-	return session->secure;
-}
-
 LIB3270_EXPORT int lib3270_is_secure(H3270 *hSession)
 {
 	return lib3270_get_secure(hSession) == LIB3270_SSL_SECURE;
@@ -443,12 +433,22 @@ LIB3270_EXPORT long lib3270_get_SSL_verify_result(H3270 *hSession)
 	return -1;
 }
 
+LIB3270_EXPORT LIB3270_SSL_STATE lib3270_get_secure(H3270 *session)
+{
+	CHECK_SESSION_HANDLE(session);
+
+	return session->secure;
+}
+
 void set_ssl_state(H3270 *session, LIB3270_SSL_STATE state)
 {
+	CHECK_SESSION_HANDLE(session);
+
 	if(state == session->secure)
 		return;
 
+	session->secure = state;
 	trace_dsn(session,"SSL state changes to %d\n",(int) state);
 
-	session->update_ssl(session,session->secure = state);
+	session->update_ssl(session,session->secure);
 }

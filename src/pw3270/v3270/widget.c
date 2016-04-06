@@ -226,28 +226,22 @@ gboolean v3270_query_tooltip(GtkWidget  *widget, gint x, gint y, gboolean keyboa
 		{
 			if(!lib3270_connected(GTK_V3270(widget)->host))
 			{
-#if GTK_CHECK_VERSION(2,14,0)
+#ifndef _WIN32
 				gtk_tooltip_set_icon_from_icon_name(tooltip,"gtk-disconnect",GTK_ICON_SIZE_MENU);
-#else
-				gtk_tooltip_set_icon_from_stock(tooltip,GTK_STOCK_DISCONNECT,GTK_ICON_SIZE_MENU);
 #endif // GTK_CHECK_VERSION
 				gtk_tooltip_set_markup(tooltip,_( "<b>Identity not verified</b>\nDisconnected from host" ) );
 			}
 			else if(lib3270_get_secure(GTK_V3270(widget)->host) == LIB3270_SSL_UNSECURE)
 			{
-#if GTK_CHECK_VERSION(2,14,0)
+#ifndef _WIN32
 				gtk_tooltip_set_icon_from_icon_name(tooltip,"dialog-information",GTK_ICON_SIZE_MENU);
-#else
-				gtk_tooltip_set_icon_from_stock(tooltip,GTK_STOCK_INFO,GTK_ICON_SIZE_MENU);
 #endif
 				gtk_tooltip_set_markup(tooltip,_( "<b>Identity not verified</b>\nThe connection is insecure" ) );
 			}
 			else if(!lib3270_get_SSL_verify_result(GTK_V3270(widget)->host))
 			{
-#if GTK_CHECK_VERSION(2,14,0)
+#ifndef _WIN32
 				gtk_tooltip_set_icon_from_icon_name(tooltip,"gtk-dialog-authentication",GTK_ICON_SIZE_MENU);
-#else
-				gtk_tooltip_set_icon_from_stock(tooltip,GTK_STOCK_DIALOG_AUTHENTICATION,GTK_ICON_SIZE_MENU);
 #endif
 				gtk_tooltip_set_markup(tooltip,_( "<b>Identity verified</b>\nThe connection is secure" ) );
 			}
@@ -258,10 +252,8 @@ gboolean v3270_query_tooltip(GtkWidget  *widget, gint x, gint y, gboolean keyboa
 				if(msg)
 				{
 					gchar *text = g_strdup_printf("<b>%s</b>\n%s",_("Identity not verified"),gettext(msg->text));
-#if GTK_CHECK_VERSION(2,14,0)
+#ifndef _WIN32
 					gtk_tooltip_set_icon_from_icon_name(tooltip,msg->icon,GTK_ICON_SIZE_MENU);
-#else
-					gtk_tooltip_set_icon_from_stock(tooltip,msg->icon,GTK_ICON_SIZE_MENU);
 #endif
 					gtk_tooltip_set_markup(tooltip,text);
 					g_free(text);
@@ -269,10 +261,8 @@ gboolean v3270_query_tooltip(GtkWidget  *widget, gint x, gint y, gboolean keyboa
 				else
 				{
 					gchar *text = g_strdup_printf(_("<b>SSL state is undefined</b>Unexpected SSL status %ld"),lib3270_get_SSL_verify_result(GTK_V3270(widget)->host));
-#if GTK_CHECK_VERSION(2,14,0)
+#ifndef _WIN32
 					gtk_tooltip_set_icon_from_icon_name(tooltip,"dialog-error",GTK_ICON_SIZE_MENU);
-#else
-					gtk_tooltip_set_icon_from_stock(tooltip,GTK_STOCK_DIALOG_ERROR,GTK_ICON_SIZE_MENU);
 #endif // GTK_CHECK_VERSION
 					gtk_tooltip_set_markup(tooltip,text);
 					g_free(text);
