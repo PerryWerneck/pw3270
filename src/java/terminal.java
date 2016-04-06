@@ -31,6 +31,9 @@ package pw3270;
 
 public class terminal
 {
+	// Is native library loaded?
+	private static boolean	loaded = false;
+
 	// lib3270's session handle
 	private long nativeHandle;
 
@@ -228,6 +231,14 @@ public class terminal
 	public native int		erase_eof();
 
 
+	/**
+	 * Open print dialog.
+	 * <p>
+	 * Only valid if connected to a remote window
+	 *
+	 * @return reserved
+	 *
+	 */
 	public native int		print();
 
 	// Connect/Disconnect
@@ -260,12 +271,28 @@ public class terminal
 	public native int		disconnect();
 
 	/**
+	 * Load native module.
+	 *
+	 */
+	private synchronized void load()  {
+
+		if(!loaded) {
+			System.loadLibrary("jni3270");
+			loaded = true;
+		}
+
+	}
+
+	/**
 	 * Creates a tn3270 terminal without associating it
 	 * with any pw3270 window.
 	 *
 	 */
 	public terminal() {
+
+		load();
 		init();
+
 	}
 
 	/**
@@ -383,7 +410,7 @@ public class terminal
 	 * @return Selected file name.
 	 *
 	 */
-	public native String file_chooser_dialog(int action, String title, String extension, String filename);
+	public native String			file_chooser_dialog(int action, String title, String extension, String filename);
 
 	public native int               set_copy(String text);
 	public native String            get_copy();
@@ -399,7 +426,7 @@ public class terminal
 	/**
 	 * Get connection SSL state
 	 *
-	 * @return State of SSL connection (0 = Inseguro, 1 = CA válido, 2 = CA inválido ou auto-assinado, 3 = Negociando, 4 = Indefinido)
+	 * @return State of SSL connection (0 = Unsafe, 1 = Valid CA, 2 = Invalid CA or self-signed, 3 = Negotiating, 4 = Undefined)
 	 *
 	 */
 	public native int               get_secure();
@@ -417,11 +444,6 @@ public class terminal
 
 	protected void finalize( ) throws Throwable {
 		deinit();
-	}
-
-	static
-	{
-		System.loadLibrary("jni3270");
 	}
 
 };
