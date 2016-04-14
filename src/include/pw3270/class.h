@@ -128,6 +128,10 @@
 
 		virtual ~session();
 
+		// Internal methods, used to init/deinit control tables.
+		static void		  init();
+		static void		  deinit();
+
 		// Factory methods and settings
 		static session	* start(const char *name = 0);
 		static session	* create(const char *name = 0) throw (std::exception);

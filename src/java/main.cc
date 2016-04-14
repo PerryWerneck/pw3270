@@ -32,6 +32,23 @@
 
 /*---[ Implement ]----------------------------------------------------------------------------------*/
 
+#if defined(linux)
+ static void onLoad() __attribute__((constructor));
+ static void onUnLoad() __attribute__((destructor));
+#endif // linux
+
+ using namespace PW3270_NAMESPACE;
+
+ static void onLoad()
+ {
+	session::init();
+ }
+
+ static void onUnLoad()
+ {
+	session::deinit();
+ }
+
 namespace PW3270_NAMESPACE {
 
 	jfieldID java::getHandleField(JNIEnv *env, jobject obj) {

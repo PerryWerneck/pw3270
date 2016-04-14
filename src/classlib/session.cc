@@ -46,13 +46,29 @@
 	#define nullptr	NULL
 #endif // !c11
 
+
 /*--[ Implement ]--------------------------------------------------------------------------------------------------*/
 
- namespace PW3270_NAMESPACE
- {
+ namespace PW3270_NAMESPACE {
+
 	session	* session::first						= nullptr;
 	session	* session::last							= nullptr;
 	session	* (*session::factory)(const char *name)	= nullptr;
+
+	void session::init()
+	{
+		trace("Loading %s objects",PACKAGE_NAME);
+	}
+
+	void session::deinit()
+	{
+		trace("Unloading %s objects",PACKAGE_NAME);
+		while(first)
+		{
+			delete first;
+		}
+
+	}
 
 	session::session()
 	{
