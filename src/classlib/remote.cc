@@ -984,6 +984,8 @@
 
 		int cmp_text_at(int row, int col, const char *text)
 		{
+			debug("%s(%d,%d,\"%s\")",__FUNCTION__,row,col,text);
+
 #if defined(WIN32)
 
 			struct hllapi_packet_text_at 	* query;

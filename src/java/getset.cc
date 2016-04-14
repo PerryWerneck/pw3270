@@ -113,6 +113,8 @@ JNIEXPORT jint JNICALL Java_pw3270_terminal_cmp_1string_1at(JNIEnv *env, jobject
 
 	}
 
+	trace("cmp_string_at(%d,%d,\"%s\") = %d",(int) row, (int) col, str, (int) rc);
+
 	env->ReleaseStringUTFChars( j_str, str);
 	return rc;
 

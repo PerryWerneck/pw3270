@@ -347,14 +347,21 @@
 
 			iconv(conv2Host,NULL,NULL,NULL,NULL);	// Reset state
 
-			if(iconv(conv2Host,&inBuffer,&in,&ptr,&out) != ((size_t) -1))
+			if(iconv(conv2Host,&inBuffer,&in,&ptr,&out) == ((size_t) -1)) {
+				rc.assign(str);
+			} else {
 				rc.assign(outBuffer);
+			}
 
 			free(outBuffer);
+		} else {
+			rc.assign(str);
 		}
 #else
-		rc = str;
+		rc.assign(str);
 #endif // HAVE_ICONV
+
+		trace("%s(\"%s\")=\"%s\"",__FUNCTION__,str,rc.c_str());
 
 		return rc;
 	}
