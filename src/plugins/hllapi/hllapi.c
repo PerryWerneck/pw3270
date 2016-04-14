@@ -49,6 +49,7 @@
  static int wait_system(char *buffer, unsigned short *length, unsigned short *rc);
  static int reset_system(char *buffer, unsigned short *length, unsigned short *rc);
  static int pause_system(char *buffer, unsigned short *length, unsigned short *rc);
+ static int set_session_parameters(char *buffer, unsigned short *length, unsigned short *rc);
 
  static int get_cursor_position(char *buffer, unsigned short *length, unsigned short *rc);
  static int set_cursor_position(char *buffer, unsigned short *length, unsigned short *rc);
@@ -64,23 +65,30 @@
 	int (*exec)(char *buffer, unsigned short *length, unsigned short *rc);
  } hllapi_call[] =
  {
-	{ HLLAPI_CMD_CONNECTPS,			connect_ps				},
-	{ HLLAPI_CMD_DISCONNECTPS,		disconnect_ps			},
-	{ HLLAPI_CMD_GETREVISION,		get_library_revision	},
-	{ HLLAPI_CMD_QUERYCURSOR,		get_cursor_position		},
-	{ HLLAPI_CMD_SETCURSOR,			set_cursor_position		},
-	{ HLLAPI_CMD_COPYPSTOSTR,		copy_ps_to_str			},
-	{ HLLAPI_CMD_INPUTSTRING,		input_string			},
-	{ HLLAPI_CMD_WAIT,				wait_system				},
-	{ HLLAPI_CMD_COPYPS,			copy_ps					},
-	{ HLLAPI_CMD_SEARCHPS,			search_ps				},
-	{ HLLAPI_CMD_COPYSTRTOPS,		copy_str_to_ps			},
-	{ HLLAPI_CMD_SENDFILE,			invalid_request			},
-	{ HLLAPI_CMD_RECEIVEFILE,		invalid_request			},
-	{ HLLAPI_RESET_SYSTEM,			reset_system			},
-	{ HLLAPI_CMD_PAUSE,				pause_system			},
+	{ HLLAPI_CMD_CONNECTPS,				connect_ps				},
+	{ HLLAPI_CMD_DISCONNECTPS,			disconnect_ps			},
+	{ HLLAPI_CMD_GETREVISION,			get_library_revision	},
+	{ HLLAPI_CMD_QUERYCURSOR,			get_cursor_position		},
+	{ HLLAPI_CMD_SETCURSOR,				set_cursor_position		},
+	{ HLLAPI_CMD_COPYPSTOSTR,			copy_ps_to_str			},
+	{ HLLAPI_CMD_INPUTSTRING,			input_string			},
+	{ HLLAPI_CMD_WAIT,					wait_system				},
+	{ HLLAPI_CMD_COPYPS,				copy_ps					},
+	{ HLLAPI_CMD_SEARCHPS,				search_ps				},
+	{ HLLAPI_CMD_COPYSTRTOPS,			copy_str_to_ps			},
+	{ HLLAPI_CMD_SENDFILE,				invalid_request			},
+	{ HLLAPI_CMD_RECEIVEFILE,			invalid_request			},
+	{ HLLAPI_RESET_SYSTEM,				reset_system			},
+	{ HLLAPI_CMD_PAUSE,					pause_system			},
+	{ HLLAPI_SET_SESSION_PARAMETERS,	set_session_parameters	}
 
  };
+
+ static enum _pause_mode
+ {
+	PAUSE_MODE_IPAUSE,		///< @brief Interruptible pause. After the Start Host Notification (23) function is executed, a host event satisfies a pause.
+	PAUSE_MODE_FPAUSE		///< @brief A full-duration pause lasts for however long you specified in the Pause (18) function.
+ } pause_mode = PAUSE_MODE_IPAUSE;
 
  static const char control_char = '@';
 
@@ -501,5 +509,52 @@ static int reset_system(char *buffer, unsigned short *length, unsigned short *rc
 
 static int pause_system(char *buffer, unsigned short *length, unsigned short *rc)
 {
+	if(!*length)
+	{
+		// If you use the IPAUSE option and the pause value is zero, then the function
+		// waits up to 2400 half-second intervals, unless interrupted sooner. If you use the
+		// FPAUSE option and the pause value is zero, then the function returns
+		// immediately.
+
+		if(pause_mode == PAUSE_MODE_FPAUSE)
+		{
+			return HLLAPI_STATUS_SUCCESS;
+		}
+		return hllapi_wait_for_ready(1200);
+	}
+
+	if(pause_mode == PAUSE_MODE_FPAUSE)
+	{
+		// Pause fixo - Aguarda pelo tempo informado, independente de eventos.
+		return hllapi_wait( (*length) / 2);
+	}
+
+	// Pause "flexivel", aguarda tela limpa
 	return hllapi_wait_for_ready((*length) / 2);
+}
+
+static int set_session_parameters(char *buffer, unsigned short *length, unsigned short *rc)
+{
+	if(!(*length && buffer && *buffer))
+	{
+		return HLLAPI_STATUS_BAD_PARAMETER;
+	}
+
+	if(!strncasecmp(buffer,"IPAUSE",*length))
+	{
+		// IPAUSE
+		pause_mode = PAUSE_MODE_IPAUSE;
+	}
+	else if(!strncasecmp(buffer,"FPAUSE",*length))
+	{
+		// FPAUSE
+		pause_mode = PAUSE_MODE_FPAUSE;
+	}
+	else
+	{
+		return HLLAPI_STATUS_BAD_PARAMETER;
+	}
+
+	return HLLAPI_STATUS_SUCCESS;
+
 }
