@@ -35,6 +35,24 @@
 using namespace std;
 using namespace PW3270_NAMESPACE;
 
+JNIEXPORT jstring JNICALL Java_pw3270_terminal_toString(JNIEnv *env, jobject obj) {
+
+	string str;
+
+	try {
+
+		str = java::getHandle(env,obj)->get_string();
+
+	} catch(std::exception &e) {
+
+		env->ThrowNew(env->FindClass("java/lang/Exception"), e.what());
+
+	}
+
+	return env->NewStringUTF(str.c_str());
+
+}
+
 JNIEXPORT jstring JNICALL Java_pw3270_terminal_get_1string(JNIEnv *env, jobject obj, jint baddr, jint len) {
 
 	string str;

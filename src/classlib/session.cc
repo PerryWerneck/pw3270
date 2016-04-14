@@ -216,7 +216,7 @@
 		iterate(false);
 		while(time(0) < end)
 		{
-			trace("Aguardar %d segundos",(int) (end - time(0)));
+			trace("Aguardar %d segundos por \"%s\" @%d,%d (%s)",(int) (end - time(0)),key,row,col,get_text_at(row,col,strlen(key)).c_str());
 
 			int rc = wait_for_ready(end - time(0));
 			if(rc) {
@@ -230,6 +230,8 @@
 			iterate(true);
 
 		}
+
+		trace("Tela:\n%s\n", ((string) *this).c_str());
 
 		return ETIMEDOUT;
 	}

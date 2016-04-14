@@ -173,7 +173,7 @@
 		virtual int				  iterate(bool wait = true)							= 0;
 
 		// Get/Set/Test without charset translation
-		virtual string			  get_text(int baddr, size_t len)					= 0;
+		virtual string			  get_text(int baddr = 0, size_t len = 1)			= 0;
 		virtual string 			  get_text_at(int row, int col, size_t sz) 			= 0;
 		virtual int 			  set_text_at(int row, int col, const char *str)	= 0;
 		virtual int				  cmp_text_at(int row, int col, const char *text)	= 0;
@@ -193,6 +193,10 @@
 		int				  		  cmp_string_at(int row, int col, const char *text);
 		int				  		  wait_for_string_at(int row, int col, const char *key, int timeout);
 		int						  input_string(const char *str);
+
+		inline operator string() {
+			return get_string();
+		}
 
 		// Cursor management
 		virtual int				  set_cursor_position(int row, int col)				= 0;

@@ -434,6 +434,12 @@ public class terminal
 	public native void				log(String msg);
 
 	/**
+	 * Get Screen contents.
+	 *
+	 */
+	public native String 			toString();
+
+	/**
 	 * Get connection SSL state
 	 *
 	 * @return State of SSL connection (0 = Unsafe, 1 = Valid CA, 2 = Invalid CA or self-signed, 3 = Negotiating, 4 = Undefined)
