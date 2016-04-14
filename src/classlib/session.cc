@@ -211,6 +211,8 @@
 	{
 		time_t end = time(0)+timeout;
 
+		trace("%s(%d,%d,%s,%d)",__FUNCTION__,row,col,key,timeout);
+
 		iterate(false);
 		while(time(0) < end)
 		{
