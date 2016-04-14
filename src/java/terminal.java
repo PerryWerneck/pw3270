@@ -43,6 +43,16 @@ public class terminal
 	private native int		deinit();
 
 	/**
+	 * Wait for an specified amount of time.
+	 * <p>
+	 * Wait for the specified time keeping the main loop active.
+	 *
+	 * @param seconds Number of seconds to wait.
+	 *
+	 */
+	public native int wait(int seconds);
+
+	/**
 	 * Wait for terminal negociation.
 	 * <p>
 	 * Wait on a loop until the terminal contents are
@@ -439,6 +449,7 @@ public class terminal
 	 *
 	 */
 	public terminal(String id) {
+		load();
 		init(id);
 	}
 

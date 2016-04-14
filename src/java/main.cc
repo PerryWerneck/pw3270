@@ -128,6 +128,23 @@ JNIEXPORT jint JNICALL Java_pw3270_terminal_wait_1for_1ready(JNIEnv *env, jobjec
 
 }
 
+JNIEXPORT jint JNICALL Java_pw3270_terminal_wait(JNIEnv *env, jobject obj, jint seconds) {
+
+	try {
+
+		return getHandle(env,obj)->wait((int) seconds);
+
+	} catch(std::exception &e) {
+
+		env->ThrowNew(env->FindClass("java/lang/Exception"), e.what());
+
+	}
+
+	return 0;
+
+}
+
+
 JNIEXPORT void JNICALL Java_pw3270_terminal_log(JNIEnv *env, jobject obj, jstring j_str) {
 
 	const char	* str = env->GetStringUTFChars(j_str, 0);
