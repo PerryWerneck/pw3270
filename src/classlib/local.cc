@@ -339,7 +339,9 @@
 
 		int iterate(bool wait)
 		{
+			session::lock();
 			_main_iterate(hSession,wait);
+			session::unlock();
 			return 0;
 		}
 
