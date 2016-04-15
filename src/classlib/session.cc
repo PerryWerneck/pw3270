@@ -49,6 +49,43 @@
 
 /*--[ Implement ]--------------------------------------------------------------------------------------------------*/
 
+ using namespace PW3270_NAMESPACE;
+
+#if defined(linux)
+ static void onLoad() __attribute__((constructor));
+ static void onUnLoad() __attribute__((destructor));
+
+ static void onLoad()
+ {
+	session::init();
+ }
+
+ static void onUnLoad()
+ {
+	session::deinit();
+ }
+
+#endif // linux
+
+#ifdef _WIN32
+
+ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
+ {
+	switch(reason)
+	{
+	case DLL_PROCESS_ATTACH:
+		session::init();
+		break;
+
+	case DLL_PROCESS_DETACH
+		session::deinit();
+		break;
+	}
+ }
+
+#endif // _WIN32
+
+
  namespace PW3270_NAMESPACE {
 
 	session	* session::first						= nullptr;
