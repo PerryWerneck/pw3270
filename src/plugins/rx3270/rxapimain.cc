@@ -45,53 +45,9 @@
 
  #include <string.h>
 
-#if defined WIN32
-	BOOL WINAPI DllMain(HANDLE hinst, DWORD dwcallpurpose, LPVOID lpvResvd);
-	static int librx3270_loaded(void);
-	static int librx3270_unloaded(void);
-#else
-
-	int librx3270_loaded(void) __attribute__((constructor));
-	int librx3270_unloaded(void) __attribute__((destructor));
-#endif
-
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
-//	LIB3270_EXPORT RexxRoutineEntry rx3270_functions[];
-//	LIB3270_EXPORT RexxPackageEntry rx3270_package_entry;
-
 /*--[ Implement ]------------------------------------------------------------------------------------*/
-
-#if defined WIN32
-BOOL WINAPI DllMain(HANDLE hinst, DWORD dwcallpurpose, LPVOID lpvResvd)
-{
-//	Trace("%s - Library %s",__FUNCTION__,(dwcallpurpose == DLL_PROCESS_ATTACH) ? "Loaded" : "Unloaded");
-
-    switch(dwcallpurpose)
-    {
-	case DLL_PROCESS_ATTACH:
-		librx3270_loaded();
-		break;
-
-	case DLL_PROCESS_DETACH:
-		librx3270_unloaded();
-		break;
-    }
-    return TRUE;
-}
-#endif
-
-int librx3270_loaded(void)
-{
-    trace("%s",__FUNCTION__);
-	return 0;
-}
-
-int librx3270_unloaded(void)
-{
-    trace("%s",__FUNCTION__);
-	return 0;
-}
 
 // now build the actual entry list
 RexxRoutineEntry rx3270_functions[] =

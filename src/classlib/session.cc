@@ -71,16 +71,18 @@
 
  BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
  {
-	switch(reason)
+	switch(fdwReason)
 	{
 	case DLL_PROCESS_ATTACH:
 		session::init();
 		break;
 
-	case DLL_PROCESS_DETACH
+	case DLL_PROCESS_DETACH:
 		session::deinit();
 		break;
 	}
+
+	return TRUE;
  }
 
 #endif // _WIN32
