@@ -240,6 +240,8 @@
 					throw exception("Can't find symbol %s",call[f].name);
 			}
 
+			session::lock();
+
 			// Get Session handle, setup base callbacks
 			set_log_handler(loghandler);
 			set_trace_handler(tracehandler);
@@ -247,18 +249,35 @@
 
 			set_display_charset();
 
+			session::unlock();
+
 		}
 
 		virtual ~local()
 		{
+			session::lock();
+
+			debug("%s(%p,%p)",__FUNCTION__,this,this->hSession);
+			if(is_connected()) {
+				disconnect();
+			}
+
+			debug("%s(%p,%p)",__FUNCTION__,this,this->hSession);
 			try
 			{
 				static void	(*session_free)(H3270 *h) = (void (*)(H3270 *)) get_symbol("lib3270_session_free");
 
+				debug("%s(%p,%p)",__FUNCTION__,this,this->hSession);
+
 				if(session_free && this->hSession)
 					session_free(this->hSession);
+
+				this->hSession = 0;
+
 			}
 			catch(exception e) { }
+
+			session::unlock();
 
 		}
 
@@ -282,7 +301,11 @@
 
 		int connect(void)
 		{
-			return _connect(hSession,0);
+			session::lock();
+			int rc = _connect(hSession,0);
+			session::unlock();
+
+			return rc;
 		}
 
 		int set_url(const char *uri)
@@ -292,7 +315,11 @@
 
 		int disconnect(void)
 		{
-			return _disconnect(hSession);
+			session::lock();
+			int rc = _disconnect(hSession);
+			session::unlock();
+
+			return rc;
 		}
 
 		bool is_ready(void)

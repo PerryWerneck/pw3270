@@ -97,13 +97,13 @@ void lib3270_session_free(H3270 *h)
 	if(h == default_session)
 		default_session = NULL;
 
-
 	// Release hostname info
 	release_pointer(h->host.current);
 	release_pointer(h->host.full);
 	release_pointer(h->host.srvc);
 	release_pointer(h->host.qualified);
 
+	trace("Releasing session %p",h);
 	lib3270_free(h);
 
 }
@@ -258,14 +258,10 @@ H3270 * lib3270_session_new(const char *model)
 
 	trace("%s - configured=%s",__FUNCTION__,default_session ? "Yes" : "No");
 
-	if(default_session)
-	{
-		// TODO (perry#5#): Allocate a new structure.
-		errno = EBUSY;
-		return lib3270_get_default_session_handle();
-	}
+	hSession = lib3270_malloc(sizeof(H3270));
 
-	hSession = default_session = lib3270_malloc(sizeof(H3270));
+	if(!default_session)
+		default_session = hSession;
 
 	lib3270_session_init(hSession, model, _( "bracket" ) );
 

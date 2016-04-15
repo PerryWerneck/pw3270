@@ -76,9 +76,13 @@ JNIEXPORT jint JNICALL Java_pw3270_terminal_init__Ljava_lang_String_2(JNIEnv *en
 
 	try {
 
+		session::lock();
+
 		jlong handle = reinterpret_cast<jlong>(session::create(id));
 		env->SetLongField(obj, getHandleField(env, obj), handle);
 		env->ReleaseStringUTFChars( j_id, id);
+
+		session::unlock();
 
 	} catch(std::exception &e) {
 
@@ -95,13 +99,23 @@ JNIEXPORT jint JNICALL Java_pw3270_terminal_deinit(JNIEnv *env, jobject obj) {
 
 	try {
 
+		session::lock();
+
 		session *s = getHandle(env,obj);
 
+		trace("********************* Destruindo objeto %p",s);
+
 		if(s) {
+		trace("********************* Destruindo objeto %p",s);
 			delete s;
+		trace("********************* Destruindo objeto %p",s);
 		}
 
+		trace("********************* Destruindo objeto %p",s);
 		env->SetLongField(obj, getHandleField(env, obj), 0);
+		trace("********************* Destruindo objeto %p",s);
+
+		session::unlock();
 
 	} catch(std::exception &e) {
 

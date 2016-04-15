@@ -43,7 +43,56 @@
 #endif // HAVE_SYSLOG
 
 #if __cplusplus < 201103L
+
 	#define nullptr	NULL
+
+	#ifdef _WIN32
+
+		#error Implementar
+
+	#else
+
+		class recursive_mutex {
+		private:
+			pthread_mutex_t           mtx;
+			pthread_mutexattr_t       mtxAttr;
+
+		public:
+			recursive_mutex() {
+
+				memset(&mtx,0,sizeof(mtx));
+				memset(&mtxAttr,0,sizeof(mtxAttr));
+
+				pthread_mutexattr_init(&mtxAttr);
+				pthread_mutexattr_settype(&mtxAttr, PTHREAD_MUTEX_RECURSIVE);
+				pthread_mutex_init(&mtx, &mtxAttr);
+			};
+
+			~recursive_mutex() {
+				pthread_mutex_destroy(&mtx);
+			};
+
+			void lock(void) {
+				pthread_mutex_lock(&mtx);
+			};
+
+			void unlock(void) {
+				pthread_mutex_unlock(&mtx);
+			};
+
+			bool try_lock(void) {
+				 return pthread_mutex_trylock(&mtx) == 0;
+			};
+		};
+
+
+
+	#endif // _WIN32
+
+#else
+
+	#include <recursive_mutex>
+
 #endif // !c11
 
 
@@ -93,6 +142,19 @@
 	session	* session::first						= nullptr;
 	session	* session::last							= nullptr;
 	session	* (*session::factory)(const char *name)	= nullptr;
+
+	static recursive_mutex	mtx;
+
+
+	void session::lock()
+	{
+		mtx.lock();
+	}
+
+	void session::unlock()
+	{
+		mtx.unlock();
+	}
 
 	void session::init()
 	{
