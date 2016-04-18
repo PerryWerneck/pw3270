@@ -43,7 +43,7 @@
 	#include <windows.h>
 #endif // _WIN32
 
-#include "globals.h"
+#include "private.h"
 
 #if defined(_WIN32)
 

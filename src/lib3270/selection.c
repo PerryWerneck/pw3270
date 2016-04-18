@@ -27,7 +27,7 @@
  *
  */
 
- #include "globals.h"
+ #include "private.h"
 // #include "appres.h"
  #include <lib3270.h>
  #include <lib3270/session.h>

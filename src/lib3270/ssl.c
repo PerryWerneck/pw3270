@@ -41,7 +41,7 @@
 	#include <openssl/err.h>
 #endif
 
-#include "globals.h"
+#include "private.h"
 #include <errno.h>
 #include <lib3270.h>
 #include <lib3270/internals.h>

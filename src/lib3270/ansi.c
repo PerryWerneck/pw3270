@@ -34,7 +34,7 @@
  *		ANSI terminal emulation.
  */
 
-#include "globals.h"
+#include "private.h"
 
 #if defined(X3270_ANSI) /*[*/
 

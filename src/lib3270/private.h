@@ -18,7 +18,7 @@
  * programa; se não, escreva para a Free Software Foundation, Inc., 51 Franklin
  * St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * Este programa está nomeado como globals.h e possui 315 linhas de código.
+ * Este programa está nomeado como private.h e possui - linhas de código.
  *
  * Contatos:
  *
@@ -241,6 +241,8 @@ LIB3270_INTERNAL void remove_input_calls(H3270 *session);
 
 LIB3270_INTERNAL int	lib3270_sock_send(H3270 *hSession, unsigned const char *buf, int len);
 LIB3270_INTERNAL void	lib3270_sock_disconnect(H3270 *hSession);
+
+LIB3270_INTERNAL int	lib3270_default_event_dispatcher(H3270 *hSession, int block);
 
 #if defined(DEBUG)
 	#define CHECK_SESSION_HANDLE(x) check_session_handle(&x,__FUNCTION__);

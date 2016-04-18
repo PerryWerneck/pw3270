@@ -386,7 +386,7 @@ main(int argc, char *argv[])
 	fprintf(t, "/* This file was created automatically from %s by mkfb. */\n\n",
 	    filename);
 	if (cmode) {
-		fprintf(t, "#include \"globals.h\"\n");
+		fprintf(t, "#include \"private.h\"\n");
 		fprintf(t, "static unsigned char fsd[] = {\n");
 	} else {
 		fprintf(t, "unsigned char common_fallbacks[] = {\n");
@@ -640,7 +640,7 @@ FILE * osx_tmpfile( void )
 {
 	int fd = -1;
 	FILE *file = NULL;
-	
+
 	do
 	{
 		char *tempname = tempnam(NULL,"XXXXXX");
@@ -648,8 +648,8 @@ FILE * osx_tmpfile( void )
 			return NULL;
 		fd = open (tempname,O_CREAT | O_EXCL | O_RDWR,S_IREAD | S_IWRITE);
 	} while (fd < 0 && errno == EEXIST);
-	
-	
+
+
 	file = fdopen (fd, "w+b");
 	if (file == NULL)
 	{
@@ -657,7 +657,7 @@ FILE * osx_tmpfile( void )
 		close (fd);
 		errno = save_errno;
 	}
-	
+
 	return file;
 }
 

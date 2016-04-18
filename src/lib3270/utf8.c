@@ -36,7 +36,7 @@
  *		UTF-8 conversions
  */
 
-#include "globals.h"
+#include "private.h"
 #include "api.h"
 
 #include "popupsc.h"

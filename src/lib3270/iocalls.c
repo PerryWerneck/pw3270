@@ -29,7 +29,7 @@
  *
  */
 
-#include "globals.h"
+#include "private.h"
 #include <sys/time.h>
 #include <sys/types.h>
 #include "xioc.h"
@@ -45,15 +45,14 @@
 /*---[ Standard calls ]-------------------------------------------------------------------------------------*/
 
 // Timeout calls
-static void      internal_remove_timeout(void *timer);
-static void	* internal_add_timeout(unsigned long interval_ms, H3270 *session, void (*proc)(H3270 *session));
+static void       internal_remove_timeout(void *timer);
+static void		* internal_add_timeout(unsigned long interval_ms, H3270 *session, void (*proc)(H3270 *session));
 
-static void	* internal_add_poll(H3270 *session, int fd, LIB3270_IO_FLAG flag, void(*proc)(H3270 *, int, LIB3270_IO_FLAG, void *), void *userdata );
-static void	  internal_remove_poll(void *id);
+static void		* internal_add_poll(H3270 *session, int fd, LIB3270_IO_FLAG flag, void(*proc)(H3270 *, int, LIB3270_IO_FLAG, void *), void *userdata );
+static void		  internal_remove_poll(void *id);
 
 static int		  internal_wait(H3270 *hSession, int seconds);
 
-static int		  internal_event_dispatcher(H3270 *hSession, int block);
 static void	  internal_ring_bell(H3270 *);
 
 /*---[ Active callbacks ]-----------------------------------------------------------------------------------*/
@@ -74,7 +73,7 @@ static void	  internal_ring_bell(H3270 *);
 					= internal_wait;
 
  static int 	  (*event_dispatcher)(H3270 *hSession,int wait)
-					= internal_event_dispatcher;
+					= lib3270_default_event_dispatcher;
 
  static void	  (*ring_bell)(H3270 *)
 					= internal_ring_bell;
@@ -318,7 +317,7 @@ LIB3270_EXPORT void	 * lib3270_add_poll_fd(H3270 *session, int fd, LIB3270_IO_FL
 }
 
 /* Event dispatcher. */
-static int internal_event_dispatcher(H3270 *hSession, int block)
+int lib3270_default_event_dispatcher(H3270 *hSession, int block)
 {
 #if defined(_WIN32)
 	unsigned long long now;
@@ -702,11 +701,6 @@ LIB3270_EXPORT int lib3270_register_handlers(const struct lib3270_callbacks *cbk
 
 	return 0;
 
-}
-
-
-LIB3270_EXPORT void lib3270_iterate(int block) {
-	event_dispatcher(NULL,block);
 }
 
 LIB3270_EXPORT void lib3270_main_iterate(H3270 *hSession, int block)

@@ -39,7 +39,7 @@
  */
 
 #include <malloc.h>
-#include "globals.h"
+#include "private.h"
 // #include "appres.h"
 #include "resources.h"
 

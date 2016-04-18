@@ -45,11 +45,11 @@
 	#include <windows.h>
 	#include <ws2tcpip.h>
 
-	#include "globals.h"
+	#include "private.h"
 
 #else
 
-	#include "globals.h"
+	#include "private.h"
 
 	#include <sys/socket.h>
 	#include <netinet/in.h>

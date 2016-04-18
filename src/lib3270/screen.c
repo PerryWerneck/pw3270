@@ -35,7 +35,7 @@
  *		Screen drawing
  */
 
-#include "globals.h"
+#include "private.h"
 #include <signal.h>
 //#include "appres.h"
 #include "3270ds.h"

@@ -37,7 +37,7 @@
  *
  */
 
-#include "globals.h"
+#include "private.h"
 #include <errno.h>
 #include <stdlib.h>
 #include "3270ds.h"

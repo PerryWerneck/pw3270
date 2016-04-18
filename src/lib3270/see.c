@@ -36,7 +36,7 @@
  *
  */
 
-#include "globals.h"
+#include "private.h"
 
 #if defined(X3270_TRACE) /*[*/
 

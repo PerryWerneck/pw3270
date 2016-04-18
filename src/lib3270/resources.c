@@ -34,7 +34,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "globals.h"
+#include "private.h"
 #include "utilc.h"
 
 extern String fallbacks[];

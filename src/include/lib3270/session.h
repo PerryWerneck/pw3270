@@ -173,7 +173,7 @@
 		// Screen contents
 		void 					* buffer[2];			/**< Internal buffers */
 		struct lib3270_ea  		* ea_buf;				/**< 3270 device buffer. ea_buf[-1] is the dummy default field attribute */
-		struct lib3270_ea		* aea_buf;				/** alternate 3270 extended attribute buffer */
+		struct lib3270_ea		* aea_buf;				/**< alternate 3270 extended attribute buffer */
 		struct lib3270_text		* text;					/**< Converted 3270 chars */
 
 		// host.c

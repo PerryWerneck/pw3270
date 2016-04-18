@@ -38,7 +38,7 @@
  #include <lib3270/selection.h>
  #include <stdlib.h>
  #include <strings.h>
- #include "globals.h"
+ #include "private.h"
  #include "utilc.h"
  #include "api.h"
 

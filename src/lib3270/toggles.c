@@ -45,7 +45,7 @@
 
 #include <lib3270/config.h>
 #include "toggle.h"
-#include "globals.h"
+#include "private.h"
 
 #include "ansic.h"
 #include "ctlrc.h"

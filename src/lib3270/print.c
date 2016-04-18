@@ -35,4 +35,4 @@
  *		Screen printing functions.
  */
 
-#include "globals.h"
+#include "private.h"

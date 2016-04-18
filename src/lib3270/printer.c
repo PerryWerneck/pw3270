@@ -36,7 +36,7 @@
  *		Printer session support
  */
 
-#include "globals.h"
+#include "private.h"
 
 #if (defined(C3270) || defined(X3270_DISPLAY)) && defined(X3270_PRINTER) /*[*/
 

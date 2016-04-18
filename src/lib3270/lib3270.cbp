@@ -110,7 +110,6 @@
 		<Unit filename="ft_dft_ds.h" />
 		<Unit filename="ft_dftc.h" />
 		<Unit filename="ftc.h" />
-		<Unit filename="globals.h" />
 		<Unit filename="glue.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -135,6 +134,9 @@
 		<Unit filename="macros.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="mkfb.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="mkversion.sh.in" />
 		<Unit filename="objects.h" />
 		<Unit filename="paste.c">
@@ -149,6 +151,7 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="printerc.h" />
+		<Unit filename="private.h" />
 		<Unit filename="proxy.c">
 			<Option compilerVar="CC" />
 		</Unit>

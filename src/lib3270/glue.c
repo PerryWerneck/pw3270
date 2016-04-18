@@ -38,7 +38,7 @@
 
 
 
-#include "globals.h"
+#include "private.h"
 
 #if !defined(_WIN32) /*[*/
 	#include <sys/wait.h>

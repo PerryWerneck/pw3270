@@ -214,6 +214,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/lib3270/ctlrc.h" />
+		<Unit filename="src/lib3270/dispatcher.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/lib3270/ft.c">
 			<Option compilerVar="CC" />
 		</Unit>

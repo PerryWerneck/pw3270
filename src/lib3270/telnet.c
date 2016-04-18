@@ -51,7 +51,7 @@
 	#include <openssl/err.h>
 #endif
 
-#include "globals.h"
+#include "private.h"
 #include <errno.h>
 
 #if defined(_WIN32)

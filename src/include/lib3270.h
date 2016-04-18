@@ -809,14 +809,6 @@
 	LIB3270_EXPORT void * lib3270_get_user_data(H3270 *h);
 
 	/**
-	 * @brief Iterate internal's lib3270 event loop.
-	 *
-	 * Use it only if the internal I/O calls wasn't replaced.
-	 *
-	 */
-	LIB3270_EXPORT void lib3270_iterate(int block);
-
-	/**
 	 * Wait for "N" seconds keeping main loop active.
 	 *
 	 * @param seconds	Number of seconds to wait.

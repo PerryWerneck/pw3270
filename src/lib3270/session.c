@@ -33,7 +33,7 @@
 	#include <stdlib.h>
 #endif // !ANDROID
 
-#include "globals.h"
+#include "private.h"
 // #include "charsetc.h"
 #include "kybdc.h"
 #include "ansic.h"

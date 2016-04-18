@@ -33,7 +33,7 @@
 #include "3270ds.h"
  #include <lib3270/html.h>
 
- #include "globals.h"
+ #include "private.h"
  #include "utilc.h"
 
  struct chr_xlat

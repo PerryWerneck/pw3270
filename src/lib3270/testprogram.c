@@ -1,9 +1,10 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 // #include <pthread.h>
 
-#include "globals.h"
+#include "private.h"
 #include <lib3270/macros.h>
 
 #define MAX_ARGS 10
@@ -23,6 +24,7 @@ int main(int numpar, char *param[])
 {
 	H3270		* h;
 	int			  rc	= 0;
+	const char  * url	= getenv("LIB3270HOST");
 //	char	 	  line[4096];
 //	pthread_t	  thread;
 
@@ -36,7 +38,7 @@ int main(int numpar, char *param[])
 //	pthread_create(&thread, NULL, mainloop, NULL);
 //	pthread_detach(thread);
 
-	lib3270_set_url(h,"tn3270://fandezhi.efglobe.com");
+	lib3270_set_url(h,url ? url : "tn3270://fandezhi.efglobe.com");
 	rc = lib3270_connect(h,1);
 
 	printf("\nConnect exits with rc=%d\n",rc);

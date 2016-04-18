@@ -42,7 +42,7 @@
 	#include <windows.h>
 #endif // _WIN32
 
-#include "globals.h"
+#include "private.h"
 #include "utilc.h"
 
 //#include "appres.h"
