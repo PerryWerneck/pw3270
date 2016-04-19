@@ -909,7 +909,7 @@ LIB3270_INTERNAL void lib3270_sock_disconnect(H3270 *hSession)
 
 	if(hSession->ns_write_id)
 	{
-		lib3270_remove_poll(hSession->ns_write_id);
+		lib3270_remove_poll(hSession, hSession->ns_write_id);
 		hSession->ns_write_id = 0;
 	}
 
@@ -1961,7 +1961,7 @@ void net_exception(H3270 *session, int fd, LIB3270_IO_FLAG flag, void *dunno)
 
 		if(session->ns_exception_id)
 		{
-			lib3270_remove_poll(session->ns_exception_id);
+			lib3270_remove_poll(session, session->ns_exception_id);
 			session->ns_exception_id = NULL;
 		}
 	}

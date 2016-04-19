@@ -40,9 +40,9 @@ LIB3270_INTERNAL void 	* AddInput(int, H3270 *session, void (*fn)(H3270 *session
 LIB3270_INTERNAL void 	* AddOutput(int, H3270 *session, void (*fn)(H3270 *session));
 LIB3270_INTERNAL void 	* AddExcept(int, H3270 *session, void (*fn)(H3270 *session));
 
-LIB3270_INTERNAL void     RemoveSource(void *);
+LIB3270_INTERNAL void     RemoveSource(H3270 *session, void *cookie);
 LIB3270_INTERNAL void	* AddTimeOut(unsigned long msec, H3270 *session, void (*fn)(H3270 *session));
-LIB3270_INTERNAL void	  RemoveTimeOut(void *cookie);
+LIB3270_INTERNAL void	  RemoveTimeOut(H3270 *session, void *cookie);
 
 LIB3270_INTERNAL const char * KeysymToString(KeySym k);
 

@@ -242,6 +242,10 @@ static void lib3270_session_init(H3270 *hSession, const char *model, const char 
 	hSession->colors				= 16;
 	hSession->m3279					= 1;
 
+	// Keyboard unlock
+	hSession->unlock_delay_ms		= 350; /* 0.35s after last unlock */
+
+	// CSD
 	for(f=0;f<4;f++)
 		hSession->csd[f] = hSession->saved_csd[f] = LIB3270_ANSI_CSD_US;
 

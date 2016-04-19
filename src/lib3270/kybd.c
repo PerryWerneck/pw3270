@@ -124,27 +124,6 @@ static int	flush_ta(H3270 *hSession);
 static void	key_AID(H3270 *session, unsigned char aid_code);
 static void	kybdlock_set(H3270 *session, unsigned int bits);
 
-/*
-#if defined(X3270_DBCS)
-Boolean key_WCharacter(unsigned char code[], Boolean *skipped);
-#endif
-*/
-
-/*
-static int nxk = 0;
-static struct xks
-{
-	KeySym key;
-	KeySym assoc;
-} *xk;
-*/
-
-// static Boolean		reverse = False;	/* reverse-input mode */
-
-/* Globals */
-// unsigned int	kybdlock = KL_NOT_CONNECTED;
-//unsigned char	aid = AID_NO;		/* current attention ID */
-
 /* Composite key mappings. */
 
 struct akeysym
@@ -152,14 +131,6 @@ struct akeysym
 	KeySym keysym;
 	enum keytype keytype;
 };
-/*
-static struct akeysym cc_first;
-static struct composite {
-	struct akeysym k1, k2;
-	struct akeysym translation;
-} *composites = NULL;
-static int n_composites = 0;
-*/
 
 #define ak_eq(k1, k2)	(((k1).keysym  == (k2).keysym) && \
 			 ((k1).keytype == (k2).keytype))
@@ -179,12 +150,6 @@ struct ta
 	char *parm[2];
 	unsigned char aid_code;
 };
-
-/*
-*ta_head = (struct ta *) NULL,
-  *ta_tail = (struct ta *) NULL;
-*/
-
 
 #if defined(DEBUG)
 	#define ENQUEUE_ACTION(x) enq_ta(hSession, (void (*)(H3270 *, const char *, const char *)) x, NULL, NULL, #x)
@@ -445,7 +410,7 @@ void kybd_inhibit(H3270 *session, Boolean inhibit)
 void kybd_connect(H3270 *session, int connected, void *dunno)
 {
 	if (session->kybdlock & KL_DEFERRED_UNLOCK)
-		RemoveTimeOut(session->unlock_id);
+		RemoveTimeOut(session, session->unlock_id);
 
 	lib3270_kybdlock_clear(session, -1);
 
@@ -467,7 +432,8 @@ void kybd_connect(H3270 *session, int connected, void *dunno)
 void kybd_in3270(H3270 *hSession, int in3270 unused, void *dunno)
 {
 	if (hSession->kybdlock & KL_DEFERRED_UNLOCK)
-		RemoveTimeOut(hSession->unlock_id);
+		RemoveTimeOut(hSession, hSession->unlock_id);
+
 	lib3270_kybdlock_clear(hSession,~KL_AWAITING_FIRST);
 
 	/* There might be a macro pending. */
@@ -1185,7 +1151,7 @@ void do_reset(H3270 *hSession, Boolean explicit)
 	 * keyboard now, or want to defer further into the future.
 	 */
 	if (hSession->kybdlock & KL_DEFERRED_UNLOCK)
-		RemoveTimeOut(hSession->unlock_id);
+		RemoveTimeOut(hSession, hSession->unlock_id);
 
 	/*
 	 * If explicit (from the keyboard), unlock the keyboard now.
@@ -1199,7 +1165,17 @@ void do_reset(H3270 *hSession, Boolean explicit)
 	{
 		lib3270_kybdlock_clear(hSession,~KL_DEFERRED_UNLOCK);
 		kybdlock_set(hSession,KL_DEFERRED_UNLOCK);
-		hSession->unlock_id = AddTimeOut(UNLOCK_MS, hSession, defer_unlock);
+
+		if(hSession->unlock_delay_ms)
+		{
+			hSession->unlock_id = AddTimeOut(hSession->unlock_delay_ms, hSession, defer_unlock);
+		}
+		else
+		{
+			hSession->unlock_id = 0;
+			defer_unlock(hSession);
+		}
+
 	}
 
 	/* Clean up other modes. */
@@ -2998,95 +2974,8 @@ int kybd_prime(H3270 *hSession)
 }
 #endif /*]*/
 
-/*
- * Translate a keysym name to a keysym, including APL and extended
- * characters.
- */ /*
-static KeySym
-MyStringToKeysym(char *s, enum keytype *keytypep)
+LIB3270_EXPORT void lib3270_set_unlock_delay(H3270 *session, unsigned short delay)
 {
-	KeySym k;
-	int cc;
-	char *ptr;
-	unsigned char xc;
-
-
-#if defined(X3270_APL)
-	if (!strncmp(s, "apl_", 4)) {
-		int is_ge;
-
-		k = APLStringToKeysym(s, &is_ge);
-		if (is_ge)
-			*keytypep = KT_GE;
-		else
-			*keytypep = KT_STD;
-	} else
-#endif
-	{
-		k = StringToKeysym(s);
-		*keytypep = KT_STD;
-	}
-	if (k == NoSymbol && ((xc = utf8_lookup(s, NULL, NULL)) != 0))
-		k = xc;
-	if (k == NoSymbol && !strcasecmp(s, "euro"))
-		k = 0xa4;
-	if (k == NoSymbol && strlen(s) == 1)
-		k = s[0] & 0xff;
-	if (k < ' ')
-		k = NoSymbol;
-	else if (k > 0xff) {
-		int i;
-
-		for (i = 0; i < nxk; i++)
-			if (xk[i].key == k) {
-				k = xk[i].assoc;
-				break;
-			}
-		if (k > 0xff)
-			k &= 0xff;
-	}
-
-	// Allow arbitrary values, e.g., 0x03 for ^C.
-	if (k == NoSymbol &&
-	    (cc = strtoul(s, &ptr, 0)) > 0 &&
-	    cc < 0xff &&
-	    ptr != s &&
-	    *ptr == '\0')
-		k = cc;
-
-	return k;
+	CHECK_SESSION_HANDLE(session);
+	session->unlock_delay_ms = delay;
 }
-*/
-
-/* Add a key to the extended association table. */
-/*
-void
-add_xk(KeySym key, KeySym assoc)
-{
-	int i;
-
-	for (i = 0; i < nxk; i++)
-		if (xk[i].key == key) {
-			xk[i].assoc = assoc;
-			return;
-		}
-	xk = (struct xks *) Realloc(xk, (nxk + 1) * sizeof(struct xks));
-	xk[nxk].key = key;
-	xk[nxk].assoc = assoc;
-	nxk++;
-}
-*/
-
-/* Clear the extended association table. */
-/*
-void clear_xks(void)
-{
-	if (nxk) {
-		lib3270_free(xk);
-		xk = (struct xks *)NULL;
-		nxk = 0;
-	}
-}
-*/
-
-

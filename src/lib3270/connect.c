@@ -84,7 +84,7 @@ static void net_connected(H3270 *hSession, int fd, LIB3270_IO_FLAG flag, void *d
 
 	if(hSession->ns_write_id) {
 		trace("%s write=%p",__FUNCTION__,hSession->ns_write_id);
-		lib3270_remove_poll(hSession->ns_write_id);
+		lib3270_remove_poll(hSession, hSession->ns_write_id);
 		hSession->ns_write_id = NULL;
 	}
 

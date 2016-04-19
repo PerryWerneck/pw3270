@@ -673,10 +673,10 @@
 	} LIB3270_IO_FLAG;
 
 	LIB3270_EXPORT void		* lib3270_add_poll_fd(H3270 *session, int fd, LIB3270_IO_FLAG flag, void(*call)(H3270 *, int, LIB3270_IO_FLAG, void *), void *userdata );
-	LIB3270_EXPORT void		  lib3270_remove_poll(void *id);
+	LIB3270_EXPORT void		  lib3270_remove_poll(H3270 *session, void *id);
 
-	LIB3270_EXPORT void		  lib3270_remove_poll_fd(int fd);
-	LIB3270_EXPORT void		  lib3270_update_poll_fd(int fd, LIB3270_IO_FLAG flag);
+	LIB3270_EXPORT void		  lib3270_remove_poll_fd(H3270 *session, int fd);
+	LIB3270_EXPORT void		  lib3270_update_poll_fd(H3270 *session, int fd, LIB3270_IO_FLAG flag);
 
 	/** Callback table
 	 *
@@ -687,15 +687,15 @@
 	{
 		unsigned short sz;
 
-		void	* (*AddTimeOut)(unsigned long interval_ms, H3270 *session, void (*proc)(H3270 *session));
-		void	  (*RemoveTimeOut)(void *timer);
+		void	* (*AddTimeOut)(H3270 *session, unsigned long interval_ms, void (*proc)(H3270 *session));
+		void	  (*RemoveTimeOut)(H3270 *session, void *timer);
 
 		void	* (*add_poll)(H3270 *session, int fd, LIB3270_IO_FLAG flag, void(*proc)(H3270 *, int, LIB3270_IO_FLAG, void *), void *userdata);
-		void	  (*remove_poll)(void *id);
+		void	  (*remove_poll)(H3270 *session, void *id);
 
 		int		  (*Wait)(H3270 *hSession, int seconds);
-		int		  (*event_dispatcher)(H3270 *hSession, int wait);
-		void	  (*ring_bell)(H3270 *);
+		int		  (*event_dispatcher)(H3270 *session, int wait);
+		void	  (*ring_bell)(H3270 *session);
 
 	};
 
@@ -716,9 +716,9 @@
 	 * @param rm	Callback for removing a timeout
 	 *
 	 */
-	void LIB3270_EXPORT lib3270_register_time_handlers(void * (*add)(unsigned long interval_ms, H3270 *session, void (*proc)(H3270 *session)), void (*rm)(void *timer));
+	void LIB3270_EXPORT lib3270_register_time_handlers(void * (*add)(H3270 *session, unsigned long interval_ms, void (*proc)(H3270 *session)), void (*rm)(H3270 *session, void *timer));
 
-	void lib3270_register_fd_handlers(void * (*add)(H3270 *session, int fd, LIB3270_IO_FLAG flag, void(*proc)(H3270 *, int, LIB3270_IO_FLAG, void *), void *userdata), void (*rm)(void *id));
+	void LIB3270_EXPORT lib3270_register_fd_handlers(void * (*add)(H3270 *session, int fd, LIB3270_IO_FLAG flag, void(*proc)(H3270 *, int, LIB3270_IO_FLAG, void *), void *userdata), void (*rm)(H3270 *, void *id));
 
 	/**
 	 * Get program message.
@@ -1011,7 +1011,6 @@
 
 	LIB3270_EXPORT int lib3270_get_word_bounds(H3270 *hSession, int baddr, int *start, int *end);
 
-//	LIB3270_EXPORT int lib3270_set_model(H3270 *session, int model);
 	LIB3270_EXPORT int lib3270_set_model(H3270 *hSession, const char *name);
 
 	LIB3270_EXPORT const char	* lib3270_get_model(H3270 *session);
@@ -1021,6 +1020,18 @@
 	LIB3270_EXPORT int lib3270_is_protected_at(H3270 *h, unsigned int row, unsigned int col);
 
 	LIB3270_EXPORT int lib3270_action(H3270 *hSession, const char *name);
+
+	/**
+	 *
+	 * Overrides the default value for the unlock delay (the delay between the host unlocking the
+	 * keyboard and lib3270 actually performing the unlock).
+	 * The value is in milliseconds; use 0 to turn off the delay completely.
+	 *
+	 * @param session	lib3270 session.
+	 * @param			Delay in milliseconds.
+	 *
+	 */
+	LIB3270_EXPORT void lib3270_set_unlock_delay(H3270 *session, unsigned short delay);
 
 
 	/**

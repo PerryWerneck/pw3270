@@ -2860,8 +2860,10 @@ void ticking_start(H3270 *hSession, Boolean anyway)
 			return;
 
 		status_untiming(hSession);
+
 		if (hSession->ticking)
-			RemoveTimeOut(hSession->tick_id);
+			RemoveTimeOut(hSession, hSession->tick_id);
+
 		hSession->ticking = 1;
 		hSession->tick_id = AddTimeOut(1000, hSession, keep_ticking);
 		hSession->t_want = hSession->t_start;
@@ -2889,7 +2891,7 @@ static void ticking_stop(H3270 *hSession)
 
 		if (!hSession->ticking)
 			return;
-		RemoveTimeOut(hSession->tick_id);
+		RemoveTimeOut(hSession, hSession->tick_id);
 		hSession->ticking = 0;
 		status_timing(hSession,&hSession->t_start, &t1);
 	}

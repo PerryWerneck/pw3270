@@ -263,15 +263,16 @@
 		unsigned char			  hisopts[LIB3270_TELNET_N_OPTS];
 
 		// kybd.c
-		unsigned int			  kybdlock;				/**< keyboard lock state */
-		unsigned char			  aid;					/**< current attention ID */
+		unsigned int			  kybdlock;				///< @brief keyboard lock state
+		unsigned char			  aid;					///< @brief current attention ID
 		void					* unlock_id;
 		time_t					  unlock_delay_time;
+		unsigned long 			  unlock_delay_ms;		///< @brief Delay before actually unlocking the keyboard after the host permits it.
 		LIB3270_TA				* ta_head;
 		LIB3270_TA				* ta_tail;
 
 		// ft_dft.c
-		int						  dft_buffersize;		/**< Buffer size (LIMIN, LIMOUT) */
+		int						  dft_buffersize;		///< @brief Buffer size (LIMIN, LIMOUT)
 
 		// rpq.c
 		int						  rpq_complained : 1;
