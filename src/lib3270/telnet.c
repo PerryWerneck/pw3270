@@ -1866,10 +1866,11 @@ static void process_bind(H3270 *hSession, unsigned char *buf, int buflen)
 }
 #endif /*]*/
 
-static int
-process_eor(H3270 *hSession)
+static int process_eor(H3270 *hSession)
 {
+
 	trace("%s: syncing=%s",__FUNCTION__,hSession->syncing ? "Yes" : "No");
+
 	if (hSession->syncing || !(hSession->ibptr - hSession->ibuf))
 		return(0);
 

@@ -83,8 +83,6 @@
 
 	struct lib3270_session_callbacks
 	{
-		unsigned short sz;
-
 		int	 (*write)(H3270 *hSession, unsigned const char *buf, int len);
 		void (*disconnect)(H3270 *hSession);
 
@@ -118,6 +116,8 @@
 
 	};
 
+
+	LIB3270_EXPORT struct lib3270_session_callbacks * lib3270_get_session_callbacks(H3270 *session, unsigned short sz);
 
 	struct _h3270
 	{
@@ -182,10 +182,10 @@
 
 		struct
 		{
-			char					* current;		/**< The hostname part, stripped of qualifiers, luname and port number */
-			char 	   	    		* full;			/**< The entire string, for use in reconnecting */
-			char					* srvc;			/**< The service name */
-			char	   	    		* qualified;
+			char				* current;		/**< The hostname part, stripped of qualifiers, luname and port number */
+			char 	   	    	* full;			/**< The entire string, for use in reconnecting */
+			char				* srvc;			/**< The service name */
+			char	   	    	* qualified;
 		} host;
 
 		char					* proxy;				/**< Proxy server (type:host[:port]) */

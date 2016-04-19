@@ -918,7 +918,11 @@ static void release_activity_timer(v3270 *widget)
 
 static void v3270_init(v3270 *widget)
 {
-	widget->host = lib3270_session_new("");
+	struct lib3270_session_callbacks *cbk;
+
+	widget->host 				= lib3270_session_new("");
+	widget->host->user_data		= widget;
+
 
 	trace("%s host->sz=%d expected=%d revision=%s expected=%s",__FUNCTION__,widget->host->sz,(int) sizeof(H3270),lib3270_get_revision(),PACKAGE_REVISION);
 
@@ -928,29 +932,35 @@ static void v3270_init(v3270 *widget)
 		return;
 	}
 
-	widget->host->user_data			= widget;
+	cbk = lib3270_get_session_callbacks(widget->host,sizeof(struct lib3270_session_callbacks));
+	if(!cbk)
+	{
+		g_error( _( "Invalid callback table, possible version mismatch in lib3270") );
+		return;
+	}
 
-	widget->host->cbk.update			= v3270_update_char;
-	widget->host->cbk.changed			= changed;
-	widget->host->cbk.set_timer 		= set_timer;
 
-	widget->host->cbk.set_selection		= set_selection;
-	widget->host->cbk.update_selection	= update_selection;
+	cbk->update				= v3270_update_char;
+	cbk->changed				= changed;
+	cbk->set_timer 			= set_timer;
 
-	widget->host->cbk.update_luname		= update_luname;
-	widget->host->cbk.configure			= update_screen_size;
-	widget->host->cbk.update_status 	= update_message;
-	widget->host->cbk.update_cursor 	= v3270_update_cursor;
-	widget->host->cbk.update_toggle 	= update_toggle;
-	widget->host->cbk.update_oia		= v3270_update_oia;
-	widget->host->cbk.cursor			= select_cursor;
-	widget->host->cbk.update_connect	= update_connect;
-	widget->host->cbk.update_model		= update_model;
-	widget->host->cbk.changed			= changed;
-	widget->host->cbk.ctlr_done			= ctlr_done;
-	widget->host->cbk.message			= message;
-	widget->host->cbk.update_ssl		= v3270_update_ssl;
-	widget->host->cbk.print				= emit_print_signal;
+	cbk->set_selection		= set_selection;
+	cbk->update_selection	= update_selection;
+
+	cbk->update_luname		= update_luname;
+	cbk->configure			= update_screen_size;
+	cbk->update_status 		= update_message;
+	cbk->update_cursor 		= v3270_update_cursor;
+	cbk->update_toggle 		= update_toggle;
+	cbk->update_oia			= v3270_update_oia;
+	cbk->cursor				= select_cursor;
+	cbk->update_connect		= update_connect;
+	cbk->update_model		= update_model;
+	cbk->changed			= changed;
+	cbk->ctlr_done			= ctlr_done;
+	cbk->message			= message;
+	cbk->update_ssl			= v3270_update_ssl;
+	cbk->print				= emit_print_signal;
 
 
 	// Reset timer

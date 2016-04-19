@@ -2696,27 +2696,6 @@ void ctlr_scroll(H3270 *hSession)
 #endif /*]*/
 
 /*
- * Note that a particular region of the screen has changed.
- */
-
-// void changed(H3270 *session, int bstart, int bend)
-// {
-	/*
-	if(session->first_changed < 0)
-	{
-		session->first_changed = bstart;
-		session->last_changed  = bend;
-		return;
-	}
-	if(bstart < session->first_changed)
-		session->first_changed = bstart;
-
-	if(bend > session->last_changed)
-		session->last_changed = bend;
-	*/
-// }
-
-/*
  * Swap the regular and alternate screen buffers
  */
 void ctlr_altbuffer(H3270 *session, int alt)

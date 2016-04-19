@@ -331,3 +331,15 @@ LIB3270_EXPORT void * lib3270_get_user_data(H3270 *h)
 	CHECK_SESSION_HANDLE(h);
 	return h->user_data;
 }
+
+struct lib3270_session_callbacks * lib3270_get_session_callbacks(H3270 *session, unsigned short sz)
+{
+	CHECK_SESSION_HANDLE(session);
+
+	if(sz != sizeof(struct lib3270_session_callbacks))
+		return NULL;
+
+	return &session->cbk;
+}
+
+
