@@ -343,6 +343,11 @@
 		return v3270_transfer_file(v3270_get_default_widget(),options,local,remote,lrecl,blksize,primspace,secspace,dft);
 	}
 
+	void set_unlock_delay(unsigned short ms)
+	{
+		lib3270_set_unlock_delay(hSession, ms);
+	}
+
     int quit(void) {
 		gtk_main_quit();
 		return 0;

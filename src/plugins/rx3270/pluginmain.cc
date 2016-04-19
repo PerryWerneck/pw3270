@@ -154,6 +154,8 @@
     int				  quit(void);
 	int				  action(const char *name);
 
+	void			  set_unlock_delay(unsigned short ms);
+
  protected:
 
  private:
@@ -835,4 +837,9 @@ const char * plugin::ebc2asc(unsigned char *str, int sz)
 int plugin::file_transfer(LIB3270_FT_OPTION options, const gchar *local, const gchar *remote, int lrecl, int blksize, int primspace, int secspace, int dft)
 {
 	return v3270_transfer_file(v3270_get_default_widget(),options,local,remote,lrecl,blksize,primspace,secspace,dft);
+}
+
+void plugin::set_unlock_delay(unsigned short ms)
+{
+	lib3270_set_unlock_delay(hSession, (unsigned short) ms);
 }

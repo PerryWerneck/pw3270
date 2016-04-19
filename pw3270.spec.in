@@ -51,7 +51,7 @@
 	%endif
 
 	%if %{?suse_version} >= 1310
-		%define _office 1
+		%define _office 0
 		%define _bldreq gtk3-devel libopenssl-devel
 	%endif
 %endif

@@ -65,6 +65,9 @@ run_command()
 			dbus-send --session  --print-reply --dest=$DEST.$SESSION $BPATH $DEST.getDisplayCharset
 			;;
 
+		unlockdelay)
+			dbus-send --session  --print-reply --dest=$DEST.$SESSION $BPATH $DEST.setUnlockDelay int32:$2
+			;;
 
 		*)
 			echo "Comando $1 desconhecido"

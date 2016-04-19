@@ -126,6 +126,8 @@
 
 	void		  pw3270_dbus_filetransfer(PW3270Dbus *object, const gchar *local, const gchar *remote, int flags, int lrecl, int blksize, int primspace, int secspace, int dft, DBusGMethodInvocation *context);
 
+	void 		  pw3270_dbus_set_unlock_delay(PW3270Dbus *object, int value, DBusGMethodInvocation *context);
+
 	G_END_DECLS
 
 #endif // _PW3270_DBUS_SERVICE_H

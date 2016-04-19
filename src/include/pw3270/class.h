@@ -157,6 +157,9 @@
 		virtual LIB3270_MESSAGE	  get_program_message(void)							= 0;
 		virtual LIB3270_SSL_STATE get_secure(void)									= 0;
 
+		// Misc
+		virtual void			  set_unlock_delay(unsigned short ms)				= 0;
+
 		// charset
 #ifdef WIN32
 		void			  		  set_display_charset(const char *remote = 0, const char *local = "CP1252");

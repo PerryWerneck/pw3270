@@ -47,6 +47,7 @@
 		<Unit filename="../classlib/testprogram.cc" />
 		<Unit filename="../include/lib3270.h" />
 		<Unit filename="../include/pw3270/class.h" />
+		<Unit filename="../include/pw3270/ipcpackets.h" />
 		<Unit filename="Makefile.in" />
 		<Unit filename="actions.cc" />
 		<Unit filename="clipboard.cc" />

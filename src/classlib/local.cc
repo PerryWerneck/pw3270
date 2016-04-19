@@ -163,6 +163,7 @@
 		int					(*_erase_eol)(H3270 *hSession);
 		int					(*_erase_input)(H3270 *hSession);
 		int					(*_action)(H3270 *hSession, const char *name);
+		int					(*_set_unlock_delay)(H3270 *hSession, unsigned short ms);
 
 		const char * 		(*_ebc2asc)(H3270 *hSession, unsigned char *buffer, int sz);
 		const char * 		(*_asc2ebc)(H3270 *hSession, unsigned char *buffer, int sz);
@@ -231,6 +232,8 @@
 				{ (void **) & _asc2ebc,					"lib3270_asc2ebc"					},
 
 				{ (void **) & _action,					"lib3270_action"					},
+				{ (void **) & _set_unlock_delay,		"lib3270_set_unlock_delay"			},
+
 			};
 
 			for(unsigned int f = 0; f < (sizeof (call) / sizeof ((call)[0]));f++)
@@ -516,6 +519,11 @@
 		int action(const char *name)
 		{
 			return _action(hSession,name);
+		}
+
+		void set_unlock_delay(unsigned short ms)
+		{
+			_set_unlock_delay(hSession,ms);
 		}
 
  	};

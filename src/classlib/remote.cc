@@ -65,6 +65,7 @@
 	#define HLLAPI_PACKET_PRINT					"print"
 	#define HLLAPI_PACKET_ASC2EBC				"asc2ebc"
 	#define HLLAPI_PACKET_EBC2ASC				"ebc2asc"
+	#define HLLAPI_PACKET_SET_UNLOCK_DELAY		"setUnlockDelay"
  #endif // WIN32
 
  #include <pw3270/class.h>
@@ -177,6 +178,25 @@
 
 			if(status)
 				return response.rc;
+
+			throw exception(GetLastError(),"%s","Transaction error");
+
+		}
+
+		void set_intval(HLLAPI_PACKET id, int value)
+		{
+			struct hllapi_packet_set_int	packet;
+			DWORD							cbSize		= (DWORD) sizeof(packet);
+			BOOL 							status;
+
+			memset(&packet,0,sizeof(packet));
+			packet.packet_id	= id;
+			packet.value		= value;
+
+			status = TransactNamedPipe(hPipe,(LPVOID) &packet, cbSize, &packet, sizeof(packet), &cbSize,NULL);
+
+			if(status)
+				return packet.rc;
 
 			throw exception(GetLastError(),"%s","Transaction error");
 
@@ -348,6 +368,22 @@
 			}
 
 			return -1;
+		}
+
+		void set_intval(const char *method, int value)
+		{
+			DBusMessage * outMsg = create_message(method);
+
+			if(outMsg)
+			{
+				dbus_int32_t v = (dbus_int32_t) value;
+
+				dbus_message_append_args(outMsg, DBUS_TYPE_INT32, &v, DBUS_TYPE_INVALID);
+
+				DBusMessage * rspMsg = call(outMsg);
+				dbus_message_unref(rspMsg);
+
+			}
 		}
 
 #else
@@ -1514,6 +1550,11 @@
 		{
 			query_strval(HLLAPI_PACKET_EBC2ASC,text,sz);
 			return (const char *) text;
+		}
+
+		void set_unlock_delay(unsigned short ms)
+		{
+			set_intval(HLLAPI_PACKET_SET_UNLOCK_DELAY,(int) ms);
 		}
 
  	};

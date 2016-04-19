@@ -2977,5 +2977,8 @@ int kybd_prime(H3270 *hSession)
 LIB3270_EXPORT void lib3270_set_unlock_delay(H3270 *session, unsigned short delay)
 {
 	CHECK_SESSION_HANDLE(session);
+
+	trace("%s(%d)",__FUNCTION__,(int) delay);
+
 	session->unlock_delay_ms = delay;
 }

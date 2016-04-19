@@ -72,6 +72,7 @@
 		HLLAPI_PACKET_FILE_TRANSFER,
 
 		HLLAPI_PACKET_GET_SSL_STATE,
+		HLLAPI_PACKET_SET_UNLOCK_DELAY,
 
 		HLLAPI_PACKET_INVALID
 
@@ -183,6 +184,13 @@ struct hllapi_packet_set_text
 	unsigned char	packet_id;
 	unsigned short	len;
 	char 			text[1];
+};
+
+struct hllapi_packet_set_int
+{
+	unsigned char	packet_id;
+	int 			rc;
+	int				value;
 };
 
 struct hllapi_packet_file_transfer
