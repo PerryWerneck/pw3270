@@ -231,7 +231,6 @@
 		<Unit filename="src/lib3270/ft_dft_ds.h" />
 		<Unit filename="src/lib3270/ft_dftc.h" />
 		<Unit filename="src/lib3270/ftc.h" />
-		<Unit filename="src/lib3270/globals.h" />
 		<Unit filename="src/lib3270/glue.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -267,6 +266,7 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/lib3270/popupsc.h" />
+		<Unit filename="src/lib3270/private.h" />
 		<Unit filename="src/lib3270/proxy.c">
 			<Option compilerVar="CC" />
 		</Unit>

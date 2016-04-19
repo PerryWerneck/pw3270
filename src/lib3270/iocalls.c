@@ -588,10 +588,7 @@ retry:
 
 static int internal_wait(H3270 *hSession, int seconds)
 {
-	time_t end;
-
-	// Alternative wait call
-	end = time(0) + seconds;
+	time_t end = time(0) + seconds;
 
 	while(time(0) < end)
 	{

@@ -297,6 +297,54 @@ static int input_string(char *input, unsigned short *length, unsigned short *rc)
 			case 'c':	// PF12
 				hllapi_pfkey(12);
 				break;
+
+			case 'd':	// PF13
+				hllapi_pfkey(13);
+				break;
+
+			case 'e':	// PF14
+				hllapi_pfkey(14);
+				break;
+
+			case 'f':	// PF15
+				hllapi_pfkey(15);
+				break;
+
+			case 'g':	// PF16
+				hllapi_pfkey(16);
+				break;
+
+			case 'h':	// PF17
+				hllapi_pfkey(17);
+				break;
+
+			case 'i':	// PF18
+				hllapi_pfkey(18);
+				break;
+
+			case 'j':	// PF19
+				hllapi_pfkey(19);
+				break;
+
+			case 'k':	// PF20
+				hllapi_pfkey(20);
+				break;
+
+			case 'l':	// PF21
+				hllapi_pfkey(21);
+				break;
+
+			case 'm':	// PF22
+				hllapi_pfkey(22);
+				break;
+
+			case 'n':	// PF23
+				hllapi_pfkey(23);
+				break;
+
+			case 'o':	// PF24
+				hllapi_pfkey(24);
+				break;
 			}
 
 			buffer = ptr;
