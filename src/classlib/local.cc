@@ -260,17 +260,13 @@
 		{
 			session::lock();
 
-			debug("%s(%p,%p)",__FUNCTION__,this,this->hSession);
 			if(is_connected()) {
 				disconnect();
 			}
 
-			debug("%s(%p,%p)",__FUNCTION__,this,this->hSession);
 			try
 			{
 				static void	(*session_free)(H3270 *h) = (void (*)(H3270 *)) get_symbol("lib3270_session_free");
-
-				debug("%s(%p,%p)",__FUNCTION__,this,this->hSession);
 
 				if(session_free && this->hSession)
 					session_free(this->hSession);

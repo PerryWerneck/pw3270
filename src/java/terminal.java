@@ -431,6 +431,19 @@ public class terminal
 	public native boolean			is_connected();
 	public native boolean			is_ready();
 
+	/**
+	 * Set unlock delay in milliseconds.
+	 *
+	 * Overrides the default value for the unlock delay (the delay between the host unlocking the
+	 * keyboard and lib3270 actually performing the unlock).
+	 *
+	 * The value is in milliseconds; use 0 to turn off the delay completely.
+	 *
+	 * @param ms	Delay in milliseconds.
+	 *
+	 */
+	public native void				set_unlock_delay(int ms);
+
 	public native void				log(String msg);
 
 	/**

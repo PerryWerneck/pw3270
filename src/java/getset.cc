@@ -218,8 +218,20 @@ JNIEXPORT jboolean JNICALL Java_pw3270_terminal_is_1ready(JNIEnv *env, jobject o
 
 	}
 
-
 	return rc;
 
 }
 
+JNIEXPORT void JNICALL Java_pw3270_terminal_set_1unlock_1delay(JNIEnv *env, jobject obj, jint ms) {
+
+	try {
+
+		java::getHandle(env,obj)->set_unlock_delay((unsigned short) ms);
+
+	} catch(std::exception &e) {
+
+		env->ThrowNew(env->FindClass("java/lang/Exception"), e.what());
+
+	}
+
+}
