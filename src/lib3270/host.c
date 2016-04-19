@@ -125,8 +125,8 @@ void lib3270_set_connected(H3270 *hSession)
 	hSession->starting	= 1;	// Enable autostart
 
 	lib3270_st_changed(hSession, LIB3270_STATE_CONNECT, True);
-	if(hSession->update_connect)
-		hSession->update_connect(hSession,1);
+	if(hSession->cbk.update_connect)
+		hSession->cbk.update_connect(hSession,1);
 }
 
 void lib3270_set_disconnected(H3270 *hSession)
@@ -143,10 +143,10 @@ void lib3270_set_disconnected(H3270 *hSession)
 
 	status_changed(hSession,LIB3270_MESSAGE_DISCONNECTED);
 
-	if(hSession->update_connect)
-		hSession->update_connect(hSession,0);
+	if(hSession->cbk.update_connect)
+		hSession->cbk.update_connect(hSession,0);
 
-	hSession->update_ssl(hSession,hSession->secure);
+	hSession->cbk.update_ssl(hSession,hSession->secure);
 
 }
 

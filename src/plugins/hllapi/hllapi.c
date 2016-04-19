@@ -507,6 +507,7 @@ static int reset_system(char *buffer, unsigned short *length, unsigned short *rc
 	return hllapi_reset();
 }
 
+
 static int pause_system(char *buffer, unsigned short *length, unsigned short *rc)
 {
 	if(!*length)
@@ -529,7 +530,10 @@ static int pause_system(char *buffer, unsigned short *length, unsigned short *rc
 		return hllapi_wait( (*length) / 2);
 	}
 
-	// Pause "flexivel", aguarda tela limpa
+	// Pause "flexivel", aguarda mudança no conteúdo da tela!!!
+
+	#warning Mudar comportamento na lib!
+
 	return hllapi_wait_for_ready((*length) / 2);
 }
 
@@ -549,6 +553,11 @@ static int set_session_parameters(char *buffer, unsigned short *length, unsigned
 	{
 		// FPAUSE
 		pause_mode = PAUSE_MODE_FPAUSE;
+	}
+	else if(!strncasecmp(buffer,"UNLOCKDELAY",*length))
+	{
+		// UNLOCKDELAY
+		hllapi_set_unlock_delay((WORD) *rc);
 	}
 	else
 	{

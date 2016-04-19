@@ -240,8 +240,8 @@ static void toggle_notify(H3270 *session, struct lib3270_toggle *t, LIB3270_TOGG
 	trace("%s: ix=%d upcall=%p",__FUNCTION__,ix,t->upcall);
 	t->upcall(session, t, TT_INTERACTIVE);
 
-	if(session->update_toggle)
-		session->update_toggle(session,ix,t->value,TT_INTERACTIVE,toggle_info[ix].name);
+	if(session->cbk.update_toggle)
+		session->cbk.update_toggle(session,ix,t->value,TT_INTERACTIVE,toggle_info[ix].name);
 
 }
 
@@ -291,7 +291,7 @@ static void toggle_altscreen(H3270 *session, struct lib3270_toggle *t, LIB3270_T
 
 static void toggle_redraw(H3270 *session, struct lib3270_toggle *t, LIB3270_TOGGLE_TYPE tt)
 {
-	session->display(session);
+	session->cbk.display(session);
 }
 
 /*

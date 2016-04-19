@@ -401,7 +401,7 @@ LIB3270_ACTION( charsettable )
 		baddr++;
 	}
 
-	hSession->display(hSession);
+	hSession->cbk.display(hSession);
 
 	return 0;
 }

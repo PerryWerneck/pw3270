@@ -195,10 +195,8 @@
 
 			status = TransactNamedPipe(hPipe,(LPVOID) &packet, cbSize, &packet, sizeof(packet), &cbSize,NULL);
 
-			if(status)
-				return packet.rc;
-
-			throw exception(GetLastError(),"%s","Transaction error");
+			if(!status)
+				throw exception(GetLastError(),"%s","Transaction error");
 
 		}
 

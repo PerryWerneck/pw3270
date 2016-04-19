@@ -238,12 +238,12 @@ LIB3270_EXPORT int lib3270_set_string_at(H3270 *hSession, int row, int col, cons
 
 	if(row >= 0 && col >= 0 && row <= hSession->rows && col <= hSession->cols)
 	{
-		hSession->suspend(hSession);
+		hSession->cbk.suspend(hSession);
 
 		hSession->cursor_addr = (row * hSession->cols) + col;
 		rc = set_string(hSession, str);
 
-		hSession->resume(hSession);
+		hSession->cbk.resume(hSession);
 	}
 
 	return rc;
@@ -268,9 +268,9 @@ LIB3270_EXPORT int lib3270_set_string(H3270 *hSession, const unsigned char *str)
 	if(hSession->kybdlock)
 		return -EINVAL;
 
-	hSession->suspend(hSession);
+	hSession->cbk.suspend(hSession);
 	rc = set_string(hSession, str);
-	hSession->resume(hSession);
+	hSession->cbk.resume(hSession);
 
 	return rc;
 }

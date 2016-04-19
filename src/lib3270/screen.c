@@ -104,7 +104,7 @@ static void addch(H3270 *session, int baddr, unsigned char c, unsigned short att
 	session->text[baddr].chr  = c;
 	session->text[baddr].attr = attr;
 
-	session->update(session,baddr,c,attr,baddr == session->cursor_addr);
+	session->cbk.update(session,baddr,c,attr,baddr == session->cursor_addr);
 }
 
 LIB3270_EXPORT int lib3270_get_element(H3270 *h, int baddr, unsigned char *c, unsigned short *attr)
@@ -140,7 +140,7 @@ int screen_init(H3270 *session)
 	ctlr_reinit(session,-1);
 
 	/* Finish screen initialization. */
-	session->suspend(session);
+	session->cbk.suspend(session);
 
 	return 0;
 }
@@ -259,8 +259,8 @@ void update_model_info(H3270 *session, int model, int cols, int rows)
 	/* Update the model name. */
 	(void) sprintf(session->model_name, "327%c-%d%s",session->m3279 ? '9' : '8',session->model_num,session->extended ? "-E" : "");
 
-	trace("%s: %p",__FUNCTION__,session->update_model);
-	session->update_model(session, session->model_name,session->model_num,rows,cols);
+	trace("%s: %p",__FUNCTION__,session->cbk.update_model);
+	session->cbk.update_model(session, session->model_name,session->model_num,rows,cols);
 }
 
 LIB3270_EXPORT int lib3270_get_contents(H3270 *h, int first, int last, unsigned char *chr, unsigned short *attr)
@@ -355,7 +355,7 @@ void screen_update(H3270 *session, int bstart, int bend)
 				len++;
 		}
 
-		session->changed(session,first,len);
+		session->cbk.changed(session,first,len);
 	}
 
 	if(session->starting && session->formatted && !session->kybdlock && lib3270_in_3270(session))
@@ -364,7 +364,7 @@ void screen_update(H3270 *session, int bstart, int bend)
 
 //		cursor_move(session,next_unprotected(session,0));
 //		lib3270_emulate_input(session,"\\n",-1,0);
-		session->autostart(session);
+		session->cbk.autostart(session);
 
 #ifdef DEBUG
 		{
@@ -416,7 +416,7 @@ LIB3270_EXPORT int lib3270_set_cursor_position(H3270 *h, int row, int col)
 		if(baddr != h->cursor_addr)
 		{
 			h->cursor_addr = baddr;
-			h->update_cursor(h,(unsigned short) row,(unsigned short) col,h->text[baddr].chr,h->text[baddr].attr);
+			h->cbk.update_cursor(h,(unsigned short) row,(unsigned short) col,h->text[baddr].chr,h->text[baddr].attr);
 		}
 	}
 
@@ -434,7 +434,7 @@ int cursor_move(H3270 *h, int baddr)
 	if(baddr >= 0)
 	{
 		h->cursor_addr = baddr;
-		h->update_cursor(h,(unsigned short) (baddr/h->cols),(unsigned short) (baddr%h->cols),h->text[baddr].chr,h->text[baddr].attr);
+		h->cbk.update_cursor(h,(unsigned short) (baddr/h->cols),(unsigned short) (baddr%h->cols),h->text[baddr].chr,h->text[baddr].attr);
 	}
 
     return ret;
@@ -447,7 +447,7 @@ void set_status(H3270 *session, LIB3270_FLAG id, Boolean on)
 	CHECK_SESSION_HANDLE(session);
 
 	session->oia_flag[id] = (on != 0);
-	session->update_oia(session,id,session->oia_flag[id]);
+	session->cbk.update_oia(session,id,session->oia_flag[id]);
 
 }
 
@@ -455,7 +455,7 @@ void status_ctlr_done(H3270 *session)
 {
 	CHECK_SESSION_HANDLE(session);
 	set_status(session,OIA_FLAG_UNDERA,True);
-	session->ctlr_done(session);
+	session->cbk.ctlr_done(session);
 }
 
 void status_oerr(H3270 *session, int error_type)
@@ -486,8 +486,8 @@ void status_oerr(H3270 *session, int error_type)
 
 void status_connecting(H3270 *session, Boolean on)
 {
-	if(session->cursor)
-		session->cursor(session,on ? CURSOR_MODE_LOCKED : CURSOR_MODE_NORMAL);
+	if(session->cbk.cursor)
+		session->cbk.cursor(session,on ? CURSOR_MODE_LOCKED : CURSOR_MODE_NORMAL);
 
 	status_changed(session, on ? LIB3270_MESSAGE_CONNECTING : LIB3270_MESSAGE_NONE);
 }
@@ -506,12 +506,12 @@ void status_reset(H3270 *session)
 	}
 	else
 	{
-		if(session->cursor)
-			session->cursor(session,CURSOR_MODE_NORMAL);
+		if(session->cbk.cursor)
+			session->cbk.cursor(session,CURSOR_MODE_NORMAL);
 		status_changed(session,LIB3270_MESSAGE_NONE);
 	}
 
-	session->display(session);
+	session->cbk.display(session);
 
 }
 
@@ -573,7 +573,7 @@ void status_changed(H3270 *session, LIB3270_STATUS id)
 
 	session->oia_status = id;
 
-	session->update_status(session,id);
+	session->cbk.update_status(session,id);
 }
 
 void status_twait(H3270 *session)
@@ -593,8 +593,8 @@ void set_viewsize(H3270 *session, int rows, int cols)
 	session->rows = rows;
 	session->cols = cols;
 
-	if(session->configure)
-		session->configure(session,session->rows,session->cols);
+	if(session->cbk.configure)
+		session->cbk.configure(session,session->rows,session->cols);
 
 }
 
@@ -602,8 +602,8 @@ void status_lu(H3270 *session, const char *lu)
 {
 	CHECK_SESSION_HANDLE(session);
 
-	if(session->update_luname)
-		session->update_luname(session,lu);
+	if(session->cbk.update_luname)
+		session->cbk.update_luname(session,lu);
 
 }
 
@@ -660,8 +660,8 @@ void status_untiming(H3270 *session)
 {
 	CHECK_SESSION_HANDLE(session);
 
-	if(session->set_timer)
-		session->set_timer(session,0);
+	if(session->cbk.set_timer)
+		session->cbk.set_timer(session,0);
 }
 
 static int logpopup(H3270 *session, void *widget, LIB3270_NOTIFY type, const char *title, const char *msg, const char *fmt, va_list arg)
@@ -740,8 +740,8 @@ void mcursor_set(H3270 *session,LIB3270_CURSOR m)
 {
 	CHECK_SESSION_HANDLE(session);
 
-	if(session->cursor)
-		session->cursor(session,m);
+	if(session->cbk.cursor)
+		session->cbk.cursor(session,m);
 }
 
 LIB3270_ACTION( testpattern )
@@ -832,7 +832,7 @@ LIB3270_ACTION( testpattern )
 		hSession->ea_buf[f].gr = gr[grpos];
 	}
 
-	hSession->display(hSession);
+	hSession->cbk.display(hSession);
 
 	return 0;
 }

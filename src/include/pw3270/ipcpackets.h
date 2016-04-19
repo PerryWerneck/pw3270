@@ -189,7 +189,6 @@ struct hllapi_packet_set_text
 struct hllapi_packet_set_int
 {
 	unsigned char	packet_id;
-	int 			rc;
 	int				value;
 };
 

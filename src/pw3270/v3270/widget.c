@@ -930,27 +930,27 @@ static void v3270_init(v3270 *widget)
 
 	widget->host->user_data			= widget;
 
-	widget->host->update			= v3270_update_char;
-	widget->host->changed			= changed;
-	widget->host->set_timer 		= set_timer;
+	widget->host->cbk.update			= v3270_update_char;
+	widget->host->cbk.changed			= changed;
+	widget->host->cbk.set_timer 		= set_timer;
 
-	widget->host->set_selection		= set_selection;
-	widget->host->update_selection	= update_selection;
+	widget->host->cbk.set_selection		= set_selection;
+	widget->host->cbk.update_selection	= update_selection;
 
-	widget->host->update_luname		= update_luname;
-	widget->host->configure			= update_screen_size;
-	widget->host->update_status 	= update_message;
-	widget->host->update_cursor 	= v3270_update_cursor;
-	widget->host->update_toggle 	= update_toggle;
-	widget->host->update_oia		= v3270_update_oia;
-	widget->host->cursor			= select_cursor;
-	widget->host->update_connect	= update_connect;
-	widget->host->update_model		= update_model;
-	widget->host->changed			= changed;
-	widget->host->ctlr_done			= ctlr_done;
-	widget->host->message			= message;
-	widget->host->update_ssl		= v3270_update_ssl;
-	widget->host->print				= emit_print_signal;
+	widget->host->cbk.update_luname		= update_luname;
+	widget->host->cbk.configure			= update_screen_size;
+	widget->host->cbk.update_status 	= update_message;
+	widget->host->cbk.update_cursor 	= v3270_update_cursor;
+	widget->host->cbk.update_toggle 	= update_toggle;
+	widget->host->cbk.update_oia		= v3270_update_oia;
+	widget->host->cbk.cursor			= select_cursor;
+	widget->host->cbk.update_connect	= update_connect;
+	widget->host->cbk.update_model		= update_model;
+	widget->host->cbk.changed			= changed;
+	widget->host->cbk.ctlr_done			= ctlr_done;
+	widget->host->cbk.message			= message;
+	widget->host->cbk.update_ssl		= v3270_update_ssl;
+	widget->host->cbk.print				= emit_print_signal;
 
 
 	// Reset timer

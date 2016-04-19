@@ -44,35 +44,80 @@
 	#define LIB3270_TELNET_N_OPTS			256
 
 	/**  extended attributes */
+	struct lib3270_ea;
+	struct lib3270_text;
+
+	/*
 	struct lib3270_ea
 	{
-		unsigned char cc;		/**< EBCDIC or ASCII character code */
-		unsigned char fa;		/**< field attribute, it nonzero */
-		unsigned char fg;		/**< foreground color (0x00 or 0xf<n>) */
-		unsigned char bg;		/**< background color (0x00 or 0xf<n>) */
-		unsigned char gr;		/**< ANSI graphics rendition bits */
-		unsigned char cs;		/**< character set (GE flag, or 0..2) */
-		unsigned char ic;		/**< input control (DBCS) */
-		unsigned char db;		/**< DBCS state */
+		unsigned char cc;		///< @brief EBCDIC or ASCII character code
+		unsigned char fa;		///< @brief field attribute, it nonzero
+		unsigned char fg;		///< @brief foreground color (0x00 or 0xf<n>)
+		unsigned char bg;		///< @brief background color (0x00 or 0xf<n>)
+		unsigned char gr;		///< @brief ANSI graphics rendition bits
+		unsigned char cs;		///< @brief character set (GE flag, or 0..2)
+		unsigned char ic;		///< @brief input control (DBCS)
+		unsigned char db;		///< @brief DBCS state
 	};
+	*/
 
+	/*
 	struct lib3270_text
 	{
-		unsigned char  chr;		/**< ASCII character code */
-		unsigned short attr;	/**< Converted character attribute (color & etc) */
+		unsigned char  chr;		///< ASCII character code
+		unsigned short attr;	///< Converted character attribute (color & etc)
 	};
+	*/
 
-#ifndef HEADER_SSL_H
-	#define SSL void
-#endif // !HEADER_SSL_H
+	#ifndef HEADER_SSL_H
+		#define SSL void
+	#endif // !HEADER_SSL_H
 
-#ifndef LIB3270_TA
-	#define LIB3270_TA void
-#endif // !LIB3270_TA
+	#ifndef LIB3270_TA
+		#define LIB3270_TA void
+	#endif // !LIB3270_TA
 
 	#define LIB3270_MB_MAX			16
 	#define LIB3270_DEFAULT_CGEN	0x02b90000
 	#define LIB3270_DEFAULT_CSET	0x00000025
+
+	struct lib3270_session_callbacks
+	{
+		unsigned short sz;
+
+		int	 (*write)(H3270 *hSession, unsigned const char *buf, int len);
+		void (*disconnect)(H3270 *hSession);
+
+		void (*configure)(H3270 *session, unsigned short rows, unsigned short cols);
+		void (*update)(H3270 *session, int baddr, unsigned char c, unsigned short attr, unsigned char cursor);
+		void (*changed)(H3270 *session, int offset, int len);
+		void (*display)(H3270 *session);
+		void (*set_width)(H3270 *session, int width);
+
+		void (*update_cursor)(H3270 *session, unsigned short row, unsigned short col, unsigned char c, unsigned short attr);
+		void (*update_oia)(H3270 *session, LIB3270_FLAG id, unsigned char on);
+		void (*update_toggle)(H3270 *session, LIB3270_TOGGLE ix, unsigned char value, LIB3270_TOGGLE_TYPE reason, const char *name);
+		void (*update_luname)(H3270 *session, const char *name);
+		void (*update_status)(H3270 *session, LIB3270_MESSAGE id);
+		void (*update_connect)(H3270 *session, unsigned char connected);
+		void (*update_model)(H3270 *session, const char *name, int model, int rows, int cols);
+		void (*update_selection)(H3270 *session, int start, int end);
+		void (*update_ssl)(H3270 *session, LIB3270_SSL_STATE state);
+
+		void (*set_timer)(H3270 *session, unsigned char on);
+		void (*erase)(H3270 *session);
+		void (*suspend)(H3270 *session);
+		void (*resume)(H3270 *session);
+		void (*cursor)(H3270 *session, LIB3270_CURSOR id);
+		void (*set_selection)(H3270 *session, unsigned char on);
+		void (*ctlr_done)(H3270 *session);
+		void (*autostart)(H3270 *session);
+		int  (*print)(H3270 *session);
+
+		void (*message)(H3270 *session, LIB3270_NOTIFY id , const char *title, const char *message, const char *text);
+
+	};
+
 
 	struct _h3270
 	{
@@ -380,11 +425,13 @@
 		unsigned long 			  ssl_error;
 		SSL 					* ssl_con;
 
-		// State change callbacks.
-		struct lib3270_state_callback *st_callbacks[LIB3270_STATE_USER];
-		struct lib3270_state_callback *st_last[LIB3270_STATE_USER];
+		// Callbacks.
+		struct lib3270_state_callback		* st_callbacks[LIB3270_STATE_USER];
+		struct lib3270_state_callback		* st_last[LIB3270_STATE_USER];
+		struct lib3270_session_callbacks	  cbk;
 
 		// Session based callbacks
+		/*
 		int	 (*write)(H3270 *hSession, unsigned const char *buf, int len);
 		void (*disconnect)(H3270 *hSession);
 
@@ -415,6 +462,7 @@
 		int  (*print)(H3270 *session);
 
 		void (*message)(H3270 *session, LIB3270_NOTIFY id , const char *title, const char *message, const char *text);
+		*/
 
 	};
 

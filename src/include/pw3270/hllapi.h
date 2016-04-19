@@ -169,6 +169,7 @@ extern "C" {
 	HLLAPI_API_CALL hllapi_cmp_text_at(WORD row, WORD col, LPSTR text);
     HLLAPI_API_CALL hllapi_emulate_input(LPSTR buffer, WORD len, WORD pasting);
 	HLLAPI_API_CALL hllapi_wait_for_ready(WORD seconds);
+	HLLAPI_API_CALL hllapi_wait_for_change(WORD seconds);
 	HLLAPI_API_CALL hllapi_wait(WORD seconds);
 	HLLAPI_API_CALL hllapi_pfkey(WORD key);
 	HLLAPI_API_CALL hllapi_pakey(WORD key);
@@ -209,6 +210,7 @@ extern "C" {
 	HLLAPI_API_CALL hllapi_getcursor();
 	HLLAPI_API_CALL hllapi_erase_eof(void);
 	HLLAPI_API_CALL hllapi_print(void);
+	HLLAPI_API_CALL hllapi_set_unlock_delay(WORD ms);
 
 #ifdef __cplusplus
 }    /* end of extern "C" */

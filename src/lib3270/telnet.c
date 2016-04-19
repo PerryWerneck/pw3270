@@ -931,7 +931,7 @@ void net_disconnect(H3270 *session)
 	set_ssl_state(session,LIB3270_SSL_UNSECURE);
 #endif // HAVE_LIBSSL
 
-	session->disconnect(session);
+	session->cbk.disconnect(session);
 
 	trace_dsn(session,"SENT disconnect\n");
 
@@ -1032,7 +1032,7 @@ void net_input(H3270 *hSession, int fd, LIB3270_IO_FLAG flag, void *dunno)
 				{
 					(void) ERR_error_string(e, err_buf);
 					trace_dsn(hSession,"RCVD SSL_read error %ld (%s)\n", e,err_buf);
-					hSession->message(hSession,LIB3270_NOTIFY_ERROR,_( "SSL Error" ),_( "SSL Read error" ),err_buf );
+					hSession->cbk.message(hSession,LIB3270_NOTIFY_ERROR,_( "SSL Error" ),_( "SSL Read error" ),err_buf );
 				}
 				else
 				{
@@ -2054,7 +2054,7 @@ static void net_rawout(H3270 *hSession, unsigned const char *buf, size_t len)
 
 	while (len)
 	{
-		int nw = hSession->write(hSession,buf,len);
+		int nw = hSession->cbk.write(hSession,buf,len);
 
 		if (nw > 0)
 		{

@@ -114,11 +114,6 @@
 	#undef X3270_MENUS
 #endif /*]*/
 
-/* Functions we may need to supply. */
-#if defined(NEED_STRTOK_R) /*[*/
-	extern char *strtok_r(char *str, const char *sep, char **last);
-#endif /*]*/
-
 /* types of internal actions */
 enum iaction {
 	IA_STRING, IA_PASTE, IA_REDRAW,
@@ -140,16 +135,6 @@ LIB3270_INTERNAL const char * build_rpq_revision;
 	LIB3270_INTERNAL Boolean		dbcs;
 #endif /*]*/
 
-
-#if defined(X3270_DBCS) /*[*/
-	LIB3270_INTERNAL char	*full_efontname_dbcs;
-#endif /*]*/
-
-
-/*   keyboard modifer bitmap */
-#define ShiftKeyDown	0x01
-#define MetaKeyDown	0x02
-#define AltKeyDown	0x04
 
 /*   toggle names */
 struct toggle_name {
@@ -225,6 +210,28 @@ LIB3270_INTERNAL struct _ansictl
 	char     vrprnt;
 	char     vlnext;
 } ansictl;
+
+/**  extended attributes */
+struct lib3270_ea
+{
+	unsigned char cc;		///< @brief EBCDIC or ASCII character code
+	unsigned char fa;		///< @brief field attribute, it nonzero
+	unsigned char fg;		///< @brief foreground color (0x00 or 0xf<n>)
+	unsigned char bg;		///< @brief background color (0x00 or 0xf<n>)
+	unsigned char gr;		///< @brief ANSI graphics rendition bits
+	unsigned char cs;		///< @brief character set (GE flag, or 0..2)
+	unsigned char ic;		///< @brief input control (DBCS)
+	unsigned char db;		///< @brief DBCS state
+};
+
+struct lib3270_text
+{
+	unsigned char  chr;		///< @brief ASCII character code
+	unsigned short attr;	///< @brief Converted character attribute (color & etc)
+};
+
+
+
 
 /* default charset translation tables */
 // LIB3270_INTERNAL const unsigned short ebc2asc0[256];

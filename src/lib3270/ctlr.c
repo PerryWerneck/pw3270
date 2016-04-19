@@ -95,9 +95,9 @@ static const unsigned char code_table[64] =
 #define IsBlank(c)	((c == EBC_null) || (c == EBC_space))
 
 
-#define ALL_CHANGED(h)	if(lib3270_in_ansi(h)) (h)->changed(h,0,(h)->rows*(h)->cols);
-#define REGION_CHANGED(h, f, l) if(lib3270_in_ansi(h)) (h)->changed(h,f,l)
-#define ONE_CHANGED(h,n)	if(lib3270_in_ansi(h)) (h)->changed(h,n,n+1);
+#define ALL_CHANGED(h)	if(lib3270_in_ansi(h)) (h)->cbk.changed(h,0,(h)->rows*(h)->cols);
+#define REGION_CHANGED(h, f, l) if(lib3270_in_ansi(h)) (h)->cbk.changed(h,f,l)
+#define ONE_CHANGED(h,n)	if(lib3270_in_ansi(h)) (h)->cbk.changed(h,n,n+1);
 
 #define DECODE_BADDR(c1, c2) \
 	((((c1) & 0xC0) == 0x00) ? \
@@ -379,16 +379,6 @@ void ctlr_set_rows_cols(H3270 *session, int mn, int ovc, int ovr)
 static void set_formatted(H3270 *hSession, int state)
 {
 	hSession->formatted = state;
-/*
-	int last = (int) hSession->formatted;
-	hSession->formatted = state;
-
-	if( ((int) hSession->formatted) != last)
-	{
-		trace("Screen is now %s",hSession->formatted ? "formatted" : "unformatted");
-		hSession->update_formatted(hSession,hSession->formatted);
-	}
-*/
 }
 
 /**
@@ -640,7 +630,7 @@ void ctlr_erase(H3270 *session, int alt)
 
 	kybd_inhibit(session,False);
 	ctlr_clear(session,True);
-	session->erase(session);
+	session->cbk.erase(session);
 
 	if(alt == session->screen_alt)
 		return;
@@ -648,7 +638,7 @@ void ctlr_erase(H3270 *session, int alt)
 	if (alt)
 	{
 		/* Going from 24x80 to maximum. */
-		session->display(session);
+		session->cbk.display(session);
 
 		set_viewsize(session,session->maxROWS,session->maxCOLS);
 	}
@@ -660,7 +650,7 @@ void ctlr_erase(H3270 *session, int alt)
 			if(session->vcontrol)
 			{
 				ctlr_blanks(session);
-				session->display(session);
+				session->cbk.display(session);
 			}
 
 			if(lib3270_get_toggle(session,LIB3270_TOGGLE_ALTSCREEN))
@@ -2465,7 +2455,7 @@ void ctlr_clear(H3270 *session, Boolean can_snap)
 	session->sscp_start = 0;
 
 //	ALL_CHANGED;
-	session->erase(session);
+	session->cbk.erase(session);
 }
 
 /**
@@ -2700,7 +2690,7 @@ void ctlr_scroll(H3270 *hSession)
 	/* Clear the last line. */
 	(void) memset((char *) &hSession->ea_buf[qty], 0, hSession->cols * sizeof(struct lib3270_ea));
 
-	hSession->display(hSession);
+	hSession->cbk.display(hSession);
 
 }
 #endif /*]*/
@@ -2845,10 +2835,10 @@ void ticking_start(H3270 *hSession, Boolean anyway)
 {
 	CHECK_SESSION_HANDLE(hSession);
 
-	if(hSession->set_timer)
+	if(hSession->cbk.set_timer)
 	{
 		if(lib3270_get_toggle(hSession,LIB3270_TOGGLE_SHOW_TIMING) || anyway)
-			hSession->set_timer(hSession,1);
+			hSession->cbk.set_timer(hSession,1);
 	}
 	else
 	{
@@ -2875,9 +2865,9 @@ static void ticking_stop(H3270 *hSession)
 {
 	CHECK_SESSION_HANDLE(hSession);
 
-	if(hSession->set_timer)
+	if(hSession->cbk.set_timer)
 	{
-		hSession->set_timer(hSession,0);
+		hSession->cbk.set_timer(hSession,0);
 	}
 	else
 	{

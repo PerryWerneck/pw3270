@@ -228,6 +228,13 @@
  	return rc;
  }
 
+ HLLAPI_API_CALL hllapi_set_unlock_delay(WORD ms)
+ {
+	session::get_default()->set_unlock_delay(ms);
+	return 0;
+ }
+
+
  HLLAPI_API_CALL hllapi_pfkey(WORD key)
  {
 	return session::get_default()->pfkey(key);

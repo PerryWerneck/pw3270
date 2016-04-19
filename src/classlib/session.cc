@@ -48,7 +48,33 @@
 
 	#ifdef _WIN32
 
-		#error Implementar
+		class recursive_mutex {
+		private:
+			HANDLE hMutex;
+
+		public:
+			recursive_mutex() {
+				hMutex = CreateMutex(NULL,FALSE,NULL);
+			};
+
+			~recursive_mutex() {
+				CloseHandle(hMutex);
+			};
+
+			void lock(void) {
+				WaitForSingleObject(hMutex,INFINITE);
+			};
+
+			void unlock(void) {
+				ReleaseMutex(hMutex);
+			};
+
+			bool try_lock(void) {
+				if(WaitForSingleObject(hMutex,1) == WAIT_OBJECT_0)
+					return true;
+				return false;
+			};
+		};
 
 	#else
 

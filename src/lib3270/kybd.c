@@ -1396,7 +1396,7 @@ LIB3270_ACTION( delete )
 		if (!hSession->ea_buf[baddr].fa)
 			cursor_move(hSession,baddr);
 	}
-	hSession->display(hSession);
+	hSession->cbk.display(hSession);
 	return 0;
 }
 
@@ -1428,7 +1428,7 @@ LIB3270_ACTION( backspace )
 		DEC_BA(baddr);
 		cursor_move(hSession,baddr);
 	}
-	hSession->display(hSession);
+	hSession->cbk.display(hSession);
 	return 0;
 }
 
@@ -1495,7 +1495,7 @@ static void do_erase(H3270 *hSession)
 		cursor_move(hSession,baddr);
 		(void) do_delete(hSession);
 	}
-	hSession->display(hSession);
+	hSession->cbk.display(hSession);
 }
 
 LIB3270_ACTION( erase )
@@ -1876,7 +1876,7 @@ LIB3270_ACTION( dup )
 #endif
 	if (key_Character(hSession, EBC_dup, False, False, NULL))
 	{
-		hSession->display(hSession);
+		hSession->cbk.display(hSession);
 		cursor_move(hSession,next_unprotected(hSession,hSession->cursor_addr));
 	}
 
@@ -2036,7 +2036,7 @@ LIB3270_ACTION( eraseeol )
 			hSession->ea_buf[hSession->cursor_addr].cc = EBC_si;
 	}
 	(void) ctlr_dbcs_postprocess(hSession);
-	hSession->display(hSession);
+	hSession->cbk.display(hSession);
 	return 0;
 }
 
@@ -2093,7 +2093,7 @@ LIB3270_ACTION( eraseeof )
 			hSession->ea_buf[hSession->cursor_addr].cc = EBC_si;
 	}
 	(void) ctlr_dbcs_postprocess(hSession);
-	hSession->display(hSession);
+	hSession->cbk.display(hSession);
 	return 0;
 }
 
@@ -2149,7 +2149,7 @@ LIB3270_ACTION( eraseinput )
 		ctlr_clear(hSession,True);
 		cursor_move(hSession,0);
 	}
-	hSession->display(hSession);
+	hSession->cbk.display(hSession);
 	return 0;
 }
 
@@ -2218,7 +2218,7 @@ LIB3270_ACTION( deleteword )
 		else
 			do_erase(hSession);
 	}
-	hSession->display(hSession);
+	hSession->cbk.display(hSession);
 	return 0;
 }
 
@@ -2264,7 +2264,7 @@ LIB3270_ACTION( deletefield )
 		ctlr_add(hSession,baddr, EBC_null, 0);
 		INC_BA(baddr);
 	}
-	hSession->display(hSession);
+	hSession->cbk.display(hSession);
 	return 0;
 }
 
@@ -2909,7 +2909,7 @@ LIB3270_EXPORT int lib3270_emulate_input(H3270 *hSession, const char *s, int len
 			break;
 	}
 
-	hSession->display(hSession);
+	hSession->cbk.display(hSession);
 	return len;
 }
 

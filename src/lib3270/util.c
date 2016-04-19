@@ -1009,7 +1009,7 @@ int gettimeofday(struct timeval *tv, void *ignored)
  {
 	CHECK_SESSION_HANDLE(h);
 	trace("%s(%p)",__FUNCTION__,h);
-	return h->print(h);
+	return h->cbk.print(h);
  }
 
 

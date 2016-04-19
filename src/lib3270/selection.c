@@ -104,7 +104,7 @@ static void update_selected_rectangle(H3270 *session)
 			if(!(row >= p[0].row && row <= p[1].row && col >= p[0].col && col <= p[1].col) && (session->text[baddr].attr & LIB3270_ATTR_SELECTED))
 			{
 				session->text[baddr].attr &= ~LIB3270_ATTR_SELECTED;
-				session->update(session,baddr,session->text[baddr].chr,session->text[baddr].attr,baddr == session->cursor_addr);
+				session->cbk.update(session,baddr,session->text[baddr].chr,session->text[baddr].attr,baddr == session->cursor_addr);
 			}
 			baddr++;
 		}
@@ -119,7 +119,7 @@ static void update_selected_rectangle(H3270 *session)
 			if((row >= p[0].row && row <= p[1].row && col >= p[0].col && col <= p[1].col) && !(session->text[baddr].attr & LIB3270_ATTR_SELECTED))
 			{
 				session->text[baddr].attr |= LIB3270_ATTR_SELECTED;
-				session->update(session,baddr,session->text[baddr].chr,session->text[baddr].attr,baddr == session->cursor_addr);
+				session->cbk.update(session,baddr,session->text[baddr].chr,session->text[baddr].attr,baddr == session->cursor_addr);
 			}
 			baddr++;
 		}
@@ -140,7 +140,7 @@ static void update_selected_region(H3270 *session)
 		if(session->text[baddr].attr & LIB3270_ATTR_SELECTED)
 		{
 			session->text[baddr].attr &= ~LIB3270_ATTR_SELECTED;
-			session->update(session,baddr,session->text[baddr].chr,session->text[baddr].attr,baddr == session->cursor_addr);
+			session->cbk.update(session,baddr,session->text[baddr].chr,session->text[baddr].attr,baddr == session->cursor_addr);
 		}
 	}
 
@@ -149,7 +149,7 @@ static void update_selected_region(H3270 *session)
 		if(session->text[baddr].attr & LIB3270_ATTR_SELECTED)
 		{
 			session->text[baddr].attr &= ~LIB3270_ATTR_SELECTED;
-			session->update(session,baddr,session->text[baddr].chr,session->text[baddr].attr,baddr == session->cursor_addr);
+			session->cbk.update(session,baddr,session->text[baddr].chr,session->text[baddr].attr,baddr == session->cursor_addr);
 		}
 	}
 
@@ -159,7 +159,7 @@ static void update_selected_region(H3270 *session)
 		if(!(session->text[baddr].attr & LIB3270_ATTR_SELECTED))
 		{
 			session->text[baddr].attr |= LIB3270_ATTR_SELECTED;
-			session->update(session,baddr,session->text[baddr].chr,session->text[baddr].attr,baddr == session->cursor_addr);
+			session->cbk.update(session,baddr,session->text[baddr].chr,session->text[baddr].attr,baddr == session->cursor_addr);
 		}
 	}
 
@@ -191,13 +191,13 @@ LIB3270_EXPORT int lib3270_unselect(H3270 *hSession)
 			if(hSession->text[a].attr & LIB3270_ATTR_SELECTED)
 			{
 				hSession->text[a].attr &= ~LIB3270_ATTR_SELECTED;
-				if(hSession->update)
-					hSession->update(hSession,a,hSession->text[a].chr,hSession->text[a].attr,a == hSession->cursor_addr);
+				if(hSession->cbk.update)
+					hSession->cbk.update(hSession,a,hSession->text[a].chr,hSession->text[a].attr,a == hSession->cursor_addr);
 			}
 		}
 
-		hSession->set_selection(hSession,0);
-		hSession->update_selection(hSession,-1,-1);
+		hSession->cbk.set_selection(hSession,0);
+		hSession->cbk.update_selection(hSession,-1,-1);
 	}
 
 	return 0;
@@ -268,10 +268,10 @@ static void do_select(H3270 *h, int start, int end, int rect)
 	if(!h->selected)
 	{
 		h->selected = 1;
-		h->set_selection(h,1);
+		h->cbk.set_selection(h,1);
 	}
 
-	h->update_selection(h,start,end);
+	h->cbk.update_selection(h,start,end);
 
 }
 
@@ -602,11 +602,11 @@ static void copy_chr(H3270 *hSession, int from, int to)
 	memcpy(&hSession->ea_buf[to], &hSession->ea_buf[from],sizeof(struct lib3270_ea));
 	hSession->ea_buf[from].fa = 0;
 
-	hSession->update(	hSession,
-						to,
-						hSession->text[to].chr,
-						hSession->text[to].attr,
-						to == hSession->cursor_addr );
+	hSession->cbk.update(	hSession,
+							to,
+							hSession->text[to].chr,
+							hSession->text[to].attr,
+							to == hSession->cursor_addr );
 }
 
 static void clear_chr(H3270 *hSession, int baddr)
@@ -616,11 +616,11 @@ static void clear_chr(H3270 *hSession, int baddr)
 	hSession->ea_buf[baddr].cc = EBC_null;
 	hSession->ea_buf[baddr].cs = 0;
 
-	hSession->update(	hSession,
-						baddr,
-						hSession->text[baddr].chr,
-						hSession->text[baddr].attr,
-						baddr == hSession->cursor_addr );
+	hSession->cbk.update(	hSession,
+							baddr,
+							hSession->text[baddr].chr,
+							hSession->text[baddr].attr,
+							baddr == hSession->cursor_addr );
 }
 
 int cut_addr(H3270 *hSession, int daddr, int saddr, int maxlen, int *sattr)
@@ -727,7 +727,7 @@ char * cut_text(H3270 *hSession, char tok)
 		if(!hSession->ea_buf[daddr].fa)
 			clear_chr(hSession,daddr);
 
-		hSession->changed(hSession,0,maxlen);
+		hSession->cbk.changed(hSession,0,maxlen);
 
 		lib3270_unselect(hSession);
 		return text;

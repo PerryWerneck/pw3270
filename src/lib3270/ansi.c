@@ -618,7 +618,7 @@ static enum lib3270_ansi_state ansi_reset(H3270 *hSession, int ig1 unused, int i
 		ctlr_aclear(hSession, 0, hSession->rows * hSession->cols, 1);
 		ctlr_altbuffer(hSession,False);
 		ctlr_clear(hSession,False);
-		hSession->set_width(hSession,80);
+		hSession->cbk.set_width(hSession,80);
 		hSession->ansi_reset = 1;
 	}
 	hSession->pmi = 0;
@@ -1459,7 +1459,7 @@ dec_set(H3270 *hSession, int ig1 unused, int ig2 unused)
 			if(hSession->allow_wide_mode)
 			{
 				hSession->wide_mode = 1;
-				hSession->set_width(hSession,132);
+				hSession->cbk.set_width(hSession,132);
 			}
 			break;
 		case 7:	/* wraparound mode */
@@ -1493,7 +1493,7 @@ dec_reset(H3270 *hSession, int ig1 unused, int ig2 unused)
 			if (hSession->allow_wide_mode)
 			{
 				hSession->wide_mode = 0;
-				hSession->set_width(hSession,80);
+				hSession->cbk.set_width(hSession,80);
 			}
 			break;
 		case 7:	/* no wraparound mode */
@@ -1556,7 +1556,7 @@ dec_restore(H3270 *hSession, int ig1 unused, int ig2 unused)
 			if (hSession->allow_wide_mode)
 			{
 				hSession->wide_mode = hSession->saved_wide_mode;
-				hSession->set_width(hSession,hSession->wide_mode ? 132 : 80);
+				hSession->cbk.set_width(hSession,hSession->wide_mode ? 132 : 80);
 			}
 			break;
 		case 7:	/* wraparound mode */
