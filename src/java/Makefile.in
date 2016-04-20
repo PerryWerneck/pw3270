@@ -222,6 +222,7 @@ $(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@: \
 	@$(CXX) @SYSDLL_FLAGS@ $(LDFLAGS) -Wl,-soname,`basename $@` -o $@ $^ $(CLASS_LIBS) @INTL_LIBS@
 
 $(BINRLS)/plugins/j3270@DLLEXT@: \
+	../../.bin/Release@DLLDIR@/lib3270@DLLEXT@ \
 	$(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJRLS)/j3270/$(SRC)@OBJEXT@) \
 	$(CLASS_RELEASE_OBJECTS)
 
@@ -232,8 +233,11 @@ $(BINRLS)/plugins/j3270@DLLEXT@: \
 		-o $@ $^ \
 		$(CLASS_LIBS) \
 		$(PLUGIN_LIBS) \
-		-L../../.bin/Release@DLLDIR@ -l3270 -lpw3270 \
+		-L../../.bin/Release@DLLDIR@ -l3270 \
 		-L$(BINRLS)@DLLDIR@ -ljni3270
+
+../../.bin/Release@DLLDIR@/lib3270@DLLEXT@:
+	make -C ../.. .bin/Release@DLLDIR@/lib3270@DLLEXT@
 
 #---[ Debug targets ]----------------------------------------------------------
 
@@ -262,7 +266,7 @@ $(BINDBG)/plugins/j3270@DLLEXT@: \
 	-o $@ $^ \
 	$(CLASS_LIBS) \
 	$(PLUGIN_LIBS) \
-	-L../../.bin/Debug@DLLDIR@ -l3270 -lpw3270 \
+	-L../../.bin/Debug@DLLDIR@ -l3270 \
 	-L$(BINDBG)@DLLDIR@ -ljni3270
 
 run: \
