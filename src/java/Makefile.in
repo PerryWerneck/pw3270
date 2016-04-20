@@ -80,7 +80,7 @@ include $(CLASSLIBDIR)/class.mak
 
 CXXFLAGS=@CFLAGS@ @CXXFLAGS@ @DLL_CFLAGS@ @JNI_CPPFLAGS@ -I../include
 
-# PW3270_LIBS		?= -L../../.bin/Debug@DLLDIR@ -l3270 -lpw3270
+PW3270_LIBS		?= -L../../.bin/Debug@DLLDIR@ -l3270 -lpw3270
 PW3270_CFLAGS	?= -I../include
 
 PLUGIN_CFLAGS=@CXXFLAGS@ -DPW3270_PLUGIN -Wno-deprecated-declarations @DLL_CFLAGS@ @JNI_CPPFLAGS@ -DJNIDIR="\"$(jnidir)\"" \
@@ -233,7 +233,7 @@ $(BINRLS)/plugins/j3270@DLLEXT@: \
 		-o $@ $^ \
 		$(CLASS_LIBS) \
 		$(PLUGIN_LIBS) \
-		-L../../.bin/Release@DLLDIR@ -l3270 \
+		-L../../.bin/Release@DLLDIR@ -l3270 -lpw3270\
 		-L$(BINRLS)@DLLDIR@ -ljni3270
 
 ../../.bin/Release@DLLDIR@/lib3270@DLLEXT@:
@@ -266,7 +266,7 @@ $(BINDBG)/plugins/j3270@DLLEXT@: \
 	-o $@ $^ \
 	$(CLASS_LIBS) \
 	$(PLUGIN_LIBS) \
-	-L../../.bin/Debug@DLLDIR@ -l3270 \
+	-L../../.bin/Debug@DLLDIR@ -l3270 -lpw3270 \
 	-L$(BINDBG)@DLLDIR@ -ljni3270
 
 run: \

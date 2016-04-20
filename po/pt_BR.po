@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-29 14:53-0300\n"
+"POT-Creation-Date: 2016-04-20 17:14-0300\n"
 "PO-Revision-Date: 2014-02-17 08:05-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Portugues <>\n"
@@ -60,32 +60,32 @@ msgstr "Ação %s precisa do atributo src"
 msgid "%s requires GTK version %d.%d.%d"
 msgstr "%s requer GTK versão %d.%d.%d"
 
-#: kybd.c:2681
+#: kybd.c:2659
 #, c-format
 msgid "%s: Bell not supported"
 msgstr "%s: Alerta sonoro não suportado"
 
-#: kybd.c:2840
+#: kybd.c:2818
 #, c-format
 msgid "%s: Missing hex digits after \\x"
 msgstr "%s: Faltando dígitos hexadecimais após \\x"
 
-#: kybd.c:2780
+#: kybd.c:2758
 #, c-format
 msgid "%s: Unknown character after \\p"
 msgstr "%s: Caractere desconhecido depois de \\p"
 
-#: kybd.c:2816
+#: kybd.c:2794
 #, c-format
 msgid "%s: Unknown character after \\pa"
 msgstr "%s: Caractere desconhecido depois de \\pa"
 
-#: kybd.c:2794
+#: kybd.c:2772
 #, c-format
 msgid "%s: Unknown character after \\pf"
 msgstr "%s: Caractere desconhecido depois de \\pf"
 
-#: kybd.c:2732
+#: kybd.c:2710
 #, c-format
 msgid "%s: Vertical tab not supported"
 msgstr "%s: Tabulação vertical não é suportada"
@@ -147,7 +147,7 @@ msgstr "<%s> precisa do atributo %s"
 msgid "<%s> should be on toplevel"
 msgstr "<%s> deve estar no primeiro nível"
 
-#: v3270/widget.c:234
+#: v3270/widget.c:232
 msgid ""
 "<b>Identity not verified</b>\n"
 "Disconnected from host"
@@ -155,7 +155,7 @@ msgstr ""
 "<b>Identidade não foi confirmada</b>\n"
 "Desconectado do servidor"
 
-#: v3270/widget.c:243 v3270/security.c:372
+#: v3270/widget.c:239 v3270/security.c:372
 msgid ""
 "<b>Identity not verified</b>\n"
 "The connection is insecure"
@@ -163,7 +163,7 @@ msgstr ""
 "<b>Identidade não foi confirmada</b>\n"
 "A conexão não é segura"
 
-#: v3270/widget.c:252
+#: v3270/widget.c:246
 msgid ""
 "<b>Identity verified</b>\n"
 "The connection is secure"
@@ -171,7 +171,7 @@ msgstr ""
 "<b>Identidade verificada</b>\n"
 "A conexão é segura"
 
-#: v3270/widget.c:271
+#: v3270/widget.c:263
 #, c-format
 msgid "<b>SSL state is undefined</b>Unexpected SSL status %ld"
 msgstr "<b>Estado do SSL é indefinido</b>Estado SSL inesperado %ld"
@@ -345,7 +345,7 @@ msgstr "Portal do Software Público Brasileiro"
 msgid "Break"
 msgstr "Break"
 
-#: telnet.c:2022
+#: telnet.c:2023
 msgid "Broken pipe"
 msgstr "Conexão interrompida"
 
@@ -501,7 +501,7 @@ msgstr "Não foi possível salvar trace no arquivo %s"
 msgid "Can't set host charset"
 msgstr "Não foi possível definir o charset do host"
 
-#: v3270/iocallback.c:335
+#: v3270/iocallback.c:312
 msgid "Can't set lib3270 I/O handlers"
 msgstr "Não foi possível registrar manipuladores de I/O 3270"
 
@@ -642,7 +642,7 @@ msgstr "Erro de conexão"
 msgid "Connection failed"
 msgstr "Conexão falhou"
 
-#: telnet.c:2026
+#: telnet.c:2027
 msgid "Connection reset by peer"
 msgstr "Conexão foi cancelada pelo servidor"
 
@@ -920,7 +920,7 @@ msgstr "IBM AS/400"
 msgid "IBM S/390"
 msgstr "IBM S/390"
 
-#: v3270/widget.c:260
+#: v3270/widget.c:254
 msgid "Identity not verified"
 msgstr "Identidade não verificada"
 
@@ -1000,6 +1000,13 @@ msgstr "Intensificado/Desprotegido"
 msgid "Invalid CA certificate"
 msgstr "Certificado CA inválido"
 
+#: v3270/widget.c:942
+#, fuzzy
+msgid "Invalid callback table, possible version mismatch in lib3270"
+msgstr ""
+"Assinatura inválida no objeto H3270, possível divergência de versão na "
+"lib3270"
+
 #: selection.c:656
 msgid "Invalid cut action"
 msgstr "Ação recortar inválida"
@@ -1069,7 +1076,7 @@ msgstr "Nome do arquivo origem."
 msgid "Name of the target file."
 msgstr "Nome do arquivo destino."
 
-#: telnet.c:347 iocalls.c:410 iocalls.c:517 connect.c:96
+#: telnet.c:347 iocalls.c:409 iocalls.c:516 connect.c:96
 msgid "Network error"
 msgstr "Erro de rede"
 
@@ -1558,7 +1565,7 @@ msgstr "Negociação SSL falhou"
 msgid "SSL_CTX_new() has failed"
 msgstr "SSL_CTX_new() has failed"
 
-#: telnet.c:2012
+#: telnet.c:2013
 #, c-format
 msgid ""
 "SSL_write:\n"
@@ -1651,7 +1658,7 @@ msgstr "Selecione arquivo a enviar"
 msgid "Select font"
 msgstr "Selecione fonte"
 
-#: iocalls.c:411 iocalls.c:518
+#: iocalls.c:410 iocalls.c:517
 msgid "Select() failed when processing for events."
 msgstr "Select() falhou ao processar eventos."
 
@@ -1751,7 +1758,7 @@ msgstr "Erro no socket"
 msgid "Socket read error"
 msgstr "Erro ao ler dados da rede"
 
-#: telnet.c:2033
+#: telnet.c:2034
 msgid "Socket write error"
 msgstr "Erro ao enviar dados para a rede"
 
@@ -2251,24 +2258,17 @@ msgstr "Valor de cor inválido ou inesperado: \"%s\""
 msgid "Unexpected or unknown security status"
 msgstr "Estado de segurança inesperado ou desconhecido."
 
-#: v3270/widget.c:937
-msgid ""
-"Unexpected signature in H3270 object, possible version mismatch in lib3270"
-msgstr ""
-"Assinatura inválida no objeto H3270, possível divergência de versão na "
-"lib3270"
-
 #: actions.c:352
 #, c-format
 msgid "Unexpected target \"%s\""
 msgstr "Alvo inesperado \"%s\""
 
-#: kybd.c:342
+#: kybd.c:307
 #, c-format
 msgid "Unexpected type %d in typeahead queue"
 msgstr "Tipo inesperado %d na fila de teclado"
 
-#: ctlr.c:758
+#: ctlr.c:748
 #, c-format
 msgid "Unknown 3270 Data Stream command: 0x%X"
 msgstr "Unknown 3270 Data Stream command: 0x%X"
@@ -2277,12 +2277,12 @@ msgstr "Unknown 3270 Data Stream command: 0x%X"
 msgid "Unknown FT control code from host"
 msgstr "Servidor enviou código de controle FT desconhecido"
 
-#: kybd.c:2430
+#: kybd.c:2408
 #, c-format
 msgid "Unknown PA key %d"
 msgstr "PA %d desconhecida"
 
-#: kybd.c:2445
+#: kybd.c:2423
 #, c-format
 msgid "Unknown PF key %d"
 msgstr "PF %d desconhecida"
@@ -2523,7 +2523,7 @@ msgstr "Atributo inesperado \"action\" em <%s>"
 msgid "an action attribute"
 msgstr "um atributo \"action\""
 
-#: session.c:270
+#: session.c:267
 msgid "bracket"
 msgstr "bracket"
 
