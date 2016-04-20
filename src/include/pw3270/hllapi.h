@@ -167,7 +167,8 @@ extern "C" {
 	HLLAPI_API_CALL hllapi_enter(void);
 	HLLAPI_API_CALL hllapi_set_text_at(WORD row, WORD col, LPSTR text);
 	HLLAPI_API_CALL hllapi_cmp_text_at(WORD row, WORD col, LPSTR text);
-    HLLAPI_API_CALL hllapi_emulate_input(LPSTR buffer, WORD len, WORD pasting);
+    HLLAPI_API_CALL hllapi_emulate_input(const LPSTR buffer, WORD len, WORD pasting);
+    HLLAPI_API_CALL hllapi_input_string(LPSTR buffer, WORD len);
 	HLLAPI_API_CALL hllapi_wait_for_ready(WORD seconds);
 	HLLAPI_API_CALL hllapi_wait_for_change(WORD seconds);
 	HLLAPI_API_CALL hllapi_wait(WORD seconds);
@@ -175,6 +176,8 @@ extern "C" {
 	HLLAPI_API_CALL hllapi_pakey(WORD key);
 	HLLAPI_API_CALL hllapi_setcursor(WORD key);
 	HLLAPI_API_CALL hllapi_getcursor();
+
+    HLLAPI_API_CALL hllapi_set_session_parameter(LPSTR param, WORD len, WORD value);
 
 	HLLAPI_API_CALL hllapi_erase(void);
 	HLLAPI_API_CALL hllapi_erase_eof(void);
@@ -201,7 +204,6 @@ extern "C" {
 	HLLAPI_API_CALL hllapi_enter(void);
 	HLLAPI_API_CALL hllapi_set_text_at(WORD row, WORD col, LPSTR text);
 	HLLAPI_API_CALL hllapi_cmp_text_at(WORD row, WORD col, LPSTR text);
-    HLLAPI_API_CALL hllapi_emulate_input(LPSTR buffer, WORD len, WORD pasting);
 	HLLAPI_API_CALL hllapi_wait_for_ready(WORD seconds);
 	HLLAPI_API_CALL hllapi_wait(WORD seconds);
 	HLLAPI_API_CALL hllapi_pfkey(WORD key);

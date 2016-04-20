@@ -90,8 +90,6 @@
 	PAUSE_MODE_FPAUSE		///< @brief A full-duration pause lasts for however long you specified in the Pause (18) function.
  } pause_mode = PAUSE_MODE_IPAUSE;
 
- static const char control_char = '@';
-
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
 HLLAPI_API_CALL hllapi(const LPWORD func, LPSTR buffer, LPWORD length, LPWORD rc)
@@ -194,174 +192,9 @@ static int copy_ps_to_str(char *buffer, unsigned short *length, unsigned short *
 	return 0;
 }
 
-static int input_string(char *input, unsigned short *length, unsigned short *rc)
+static int input_string(char *buffer, unsigned short *length, unsigned short *rc)
 {
-	size_t	  szText;
-	char 	* text;
-
-	if(!hllapi_is_connected()) {
-		*rc = HLLAPI_STATUS_DISCONNECTED;
-		return HLLAPI_STATUS_DISCONNECTED;
-	}
-
-	if(!input)
-	{
-		*rc = HLLAPI_STATUS_BAD_PARAMETER;
-		return HLLAPI_STATUS_BAD_PARAMETER;
-	}
-
-	szText = strlen(input);
-
-	if(*length > 0 && *length < szText)
-		szText = *length;
-
-	text = (char *) malloc(szText+2);
-	memcpy(text,input,szText);
-	text[szText] = 0;
-
-	*rc = 0;
-
-	trace("input[%s]",text);
-
-	if(strchr(text,control_char))
-	{
-		// Convert control char
-		char	* buffer = text;
-		char	* ptr;
-
-		for(ptr = strchr(text,control_char);ptr;ptr = strchr(buffer,control_char))
-		{
-			*(ptr++) = 0;
-
-			trace("input[%s]",buffer);
-			hllapi_emulate_input(buffer,-1,0);
-
-			switch(*(ptr++))
-			{
-			case 'P':	// Print
-				*rc = hllapi_print();
-				break;
-
-			case 'E':	// Enter
-				hllapi_enter();
-				break;
-
-			case 'F':	// Erase EOF
-				hllapi_erase_eof();
-				break;
-
-			case '1':	// PF1
-				hllapi_pfkey(1);
-				break;
-
-			case '2':	// PF2
-				hllapi_pfkey(2);
-				break;
-
-			case '3':	// PF3
-				hllapi_pfkey(3);
-				break;
-
-			case '4':	// PF4
-				hllapi_pfkey(4);
-				break;
-
-			case '5':	// PF5
-				hllapi_pfkey(5);
-				break;
-
-			case '6':	// PF6
-				hllapi_pfkey(6);
-				break;
-
-			case '7':	// PF7
-				hllapi_pfkey(7);
-				break;
-
-			case '8':	// PF8
-				hllapi_pfkey(8);
-				break;
-
-			case '9':	// PF9
-				hllapi_pfkey(9);
-				break;
-
-			case 'a':	// PF10
-				hllapi_pfkey(10);
-				break;
-
-			case 'b':	// PF11
-				hllapi_pfkey(11);
-				break;
-
-			case 'c':	// PF12
-				hllapi_pfkey(12);
-				break;
-
-			case 'd':	// PF13
-				hllapi_pfkey(13);
-				break;
-
-			case 'e':	// PF14
-				hllapi_pfkey(14);
-				break;
-
-			case 'f':	// PF15
-				hllapi_pfkey(15);
-				break;
-
-			case 'g':	// PF16
-				hllapi_pfkey(16);
-				break;
-
-			case 'h':	// PF17
-				hllapi_pfkey(17);
-				break;
-
-			case 'i':	// PF18
-				hllapi_pfkey(18);
-				break;
-
-			case 'j':	// PF19
-				hllapi_pfkey(19);
-				break;
-
-			case 'k':	// PF20
-				hllapi_pfkey(20);
-				break;
-
-			case 'l':	// PF21
-				hllapi_pfkey(21);
-				break;
-
-			case 'm':	// PF22
-				hllapi_pfkey(22);
-				break;
-
-			case 'n':	// PF23
-				hllapi_pfkey(23);
-				break;
-
-			case 'o':	// PF24
-				hllapi_pfkey(24);
-				break;
-			}
-
-			buffer = ptr;
-
-		}
-
-		if(*buffer)
-			hllapi_emulate_input(buffer,-1,0);
-
-	}
-	else
-	{
-		hllapi_emulate_input(text,szText,0);
-	}
-
-	free(text);
-
+	*rc = hllapi_input_string(buffer,*length);
 	return 0;
 }
 
@@ -592,20 +425,37 @@ static int set_session_parameters(char *buffer, unsigned short *length, unsigned
 		return HLLAPI_STATUS_BAD_PARAMETER;
 	}
 
-	if(!strncasecmp(buffer,"IPAUSE",*length))
+	*rc = hllapi_set_session_parameter(buffer, *length, *rc);
+
+	return 0;
+}
+
+HLLAPI_API_CALL hllapi_set_session_parameter(LPSTR param, WORD len, WORD value)
+{
+ 	if(!param)
+	{
+		return HLLAPI_STATUS_BAD_PARAMETER;
+	}
+
+	if(!len)
+	{
+		len = strlen(param);
+	}
+
+	if(!strncasecmp(param,"IPAUSE",len))
 	{
 		// IPAUSE
 		pause_mode = PAUSE_MODE_IPAUSE;
 	}
-	else if(!strncasecmp(buffer,"FPAUSE",*length))
+	else if(!strncasecmp(param,"FPAUSE",len))
 	{
 		// FPAUSE
 		pause_mode = PAUSE_MODE_FPAUSE;
 	}
-	else if(!strncasecmp(buffer,"UNLOCKDELAY",*length))
+	else if(!strncasecmp(param,"UNLOCKDELAY",len))
 	{
 		// UNLOCKDELAY
-		hllapi_set_unlock_delay((WORD) *rc);
+		hllapi_set_unlock_delay(value);
 	}
 	else
 	{
@@ -613,5 +463,4 @@ static int set_session_parameters(char *buffer, unsigned short *length, unsigned
 	}
 
 	return HLLAPI_STATUS_SUCCESS;
-
 }
