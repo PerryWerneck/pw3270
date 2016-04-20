@@ -619,3 +619,21 @@ RexxMethod1(RexxStringObject, rx3270_method_get_display_charset, CSELF, sessionP
 	return context->String(ret.c_str());
 }
 
+RexxMethod2(int, rx3270_method_set_unlock_delay, CSELF, sessionPtr, int, delay)
+{
+	session *hSession = (session *) sessionPtr;
+
+	if(!hSession)
+		return -1;
+
+	try
+	{
+		hSession->set_unlock_delay((unsigned short) delay);
+	}
+	catch(std::exception &e)
+	{
+		context->RaiseException1(Rexx_Error_Application_error,context->NewStringFromAsciiz(e.what()));
+	}
+
+	return 0;
+}

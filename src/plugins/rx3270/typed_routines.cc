@@ -306,3 +306,18 @@ RexxRoutine2(int, rx3270IsProtectedAt, int, row, int, col)
 
 	return -1;
 }
+
+RexxRoutine1(int, rx3270SetUnlockDelay, int, delay)
+{
+	try
+	{
+		session::get_default()->set_unlock_delay((unsigned short) delay);
+	}
+	catch(std::exception &e)
+	{
+		context->RaiseException1(Rexx_Error_Application_error,context->NewStringFromAsciiz(e.what()));
+	}
+
+	return 0;
+}
+

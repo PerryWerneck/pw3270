@@ -93,6 +93,7 @@
 
  REXX_TYPED_ROUTINE_PROTOTYPE(rx3270IsProtected);
  REXX_TYPED_ROUTINE_PROTOTYPE(rx3270IsProtectedAt);
+ REXX_TYPED_ROUTINE_PROTOTYPE(rx3270SetUnlockDelay);
 
  REXX_METHOD_PROTOTYPE(rx3270_method_version);
  REXX_METHOD_PROTOTYPE(rx3270_method_revision);
@@ -141,6 +142,7 @@
  REXX_METHOD_PROTOTYPE(rx3270_method_get_display_charset);
  REXX_METHOD_PROTOTYPE(rx3270_method_get_host_charset);
  REXX_METHOD_PROTOTYPE(rx3270_method_set_host_charset);
+ REXX_METHOD_PROTOTYPE(rx3270_method_set_unlock_delay);
 
 /*---[ Globals ]---------------------------------------------------------------------------------------------*/
 
