@@ -460,7 +460,7 @@ void status_ctlr_done(H3270 *session)
 
 void status_oerr(H3270 *session, int error_type)
 {
-	LIB3270_STATUS sts = LIB3270_MESSAGE_USER;
+	LIB3270_MESSAGE sts = LIB3270_MESSAGE_USER;
 
 	CHECK_SESSION_HANDLE(session);
 
@@ -520,9 +520,9 @@ void status_reset(H3270 *session)
  *
  * @return status-code.
  *
- * @see LIB3270_STATUS
+ * @see LIB3270_MESSAGE
  */
-LIB3270_EXPORT LIB3270_STATUS lib3270_get_program_message(H3270 *session)
+LIB3270_EXPORT LIB3270_MESSAGE lib3270_get_program_message(H3270 *session)
 {
 	CHECK_SESSION_HANDLE(session);
 	return session->oia_status;
@@ -564,7 +564,7 @@ LIB3270_EXPORT int lib3270_is_ready(H3270 *hSession)
 }
 
 
-void status_changed(H3270 *session, LIB3270_STATUS id)
+void status_changed(H3270 *session, LIB3270_MESSAGE id)
 {
 	CHECK_SESSION_HANDLE(session);
 
@@ -580,7 +580,7 @@ void status_twait(H3270 *session)
 {
 	CHECK_SESSION_HANDLE(session);
 	set_status(session,OIA_FLAG_UNDERA,False);
-	status_changed(session,LIB3270_STATUS_TWAIT);
+	status_changed(session,LIB3270_MESSAGE_TWAIT);
 }
 
 void set_viewsize(H3270 *session, int rows, int cols)
@@ -609,7 +609,7 @@ void status_lu(H3270 *session, const char *lu)
 
 static void status_connect(H3270 *hSession, int connected, void *dunno)
 {
-	LIB3270_STATUS id = LIB3270_STATUS_USER;
+	LIB3270_MESSAGE id = LIB3270_MESSAGE_USER;
 
 	ctlr_erase(hSession,1);
 
@@ -618,15 +618,15 @@ static void status_connect(H3270 *hSession, int connected, void *dunno)
 		set_status(hSession,OIA_FLAG_BOXSOLID,IN_3270 && !IN_SSCP);
 
 		if (hSession->kybdlock & KL_AWAITING_FIRST)
-			id = LIB3270_STATUS_AWAITING_FIRST;
+			id = LIB3270_MESSAGE_AWAITING_FIRST;
 		else
-			id = LIB3270_STATUS_CONNECTED;
+			id = LIB3270_MESSAGE_CONNECTED;
 
 	}
 	else
 	{
 		set_status(hSession,OIA_FLAG_BOXSOLID,False);
-		id = LIB3270_STATUS_DISCONNECTED;
+		id = LIB3270_MESSAGE_DISCONNECTED;
 	}
 
 	status_changed(hSession,id);

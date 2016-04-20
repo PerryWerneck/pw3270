@@ -110,9 +110,9 @@ void host_disconnect(H3270 *hSession, int failed)
 /* The host has entered 3270 or ANSI mode, or switched between them. */
 void host_in3270(H3270 *hSession, LIB3270_CSTATE new_cstate)
 {
-	Boolean now3270 = (new_cstate == CONNECTED_3270 ||
-			   new_cstate == CONNECTED_SSCP ||
-			   new_cstate == CONNECTED_TN3270E);
+	Boolean now3270 = (new_cstate == LIB3270_CONNECTED_3270 ||
+			   new_cstate == LIB3270_CONNECTED_SSCP ||
+			   new_cstate == LIB3270_CONNECTED_TN3270E);
 
 	hSession->cstate = new_cstate;
 	hSession->ever_3270 = now3270;
@@ -121,7 +121,7 @@ void host_in3270(H3270 *hSession, LIB3270_CSTATE new_cstate)
 
 void lib3270_set_connected(H3270 *hSession)
 {
-	hSession->cstate	= CONNECTED_INITIAL;
+	hSession->cstate	= LIB3270_CONNECTED_INITIAL;
 	hSession->starting	= 1;	// Enable autostart
 
 	lib3270_st_changed(hSession, LIB3270_STATE_CONNECT, True);
@@ -151,7 +151,7 @@ void lib3270_set_disconnected(H3270 *hSession)
 }
 
 /* Register a function interested in a state change. */
-LIB3270_EXPORT void lib3270_register_schange(H3270 *h, LIB3270_STATE_CHANGE tx, void (*func)(H3270 *, int, void *),void *data)
+LIB3270_EXPORT void lib3270_register_schange(H3270 *h, LIB3270_STATE tx, void (*func)(H3270 *, int, void *),void *data)
 {
 	struct lib3270_state_callback *st;
 

@@ -249,7 +249,9 @@ struct lib3270_text
 /** @brief lib3270 session data */
 struct _h3270
 {
-	unsigned short 		  	  sz;								/**< Struct size */
+	struct lib3270_session_callbacks	  cbk;		// Callback table - Always the first one.
+
+//	unsigned short 		  	  sz;								/**< Struct size */
 
 	// Connection info
 	int						  sock;								/**< Network socket */
@@ -556,7 +558,6 @@ struct _h3270
 	// Callbacks.
 	struct lib3270_state_callback		* st_callbacks[LIB3270_STATE_USER];
 	struct lib3270_state_callback		* st_last[LIB3270_STATE_USER];
-	struct lib3270_session_callbacks	  cbk;
 
 };
 

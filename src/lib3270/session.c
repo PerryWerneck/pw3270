@@ -70,7 +70,7 @@ void lib3270_session_free(H3270 *h)
 	shutdown_toggles(h);
 
 	// Release state change callbacks
-	for(f=0;f<N_ST;f++)
+	for(f=0;f<LIB3270_STATE_USER;f++)
 	{
 		while(h->st_callbacks[f])
 		{
@@ -187,7 +187,7 @@ static void lib3270_session_init(H3270 *hSession, const char *model, const char 
 	int		f;
 
 	memset(hSession,0,sizeof(H3270));
-	hSession->sz = sizeof(H3270);
+//	hSession->sz = sizeof(H3270);
 
 	lib3270_set_host_charset(hSession,charset);
 
@@ -210,7 +210,7 @@ static void lib3270_session_init(H3270 *hSession, const char *model, const char 
 	hSession->cbk.update_ssl		= update_ssl;
 	hSession->cbk.display			= screen_disp;
 	hSession->cbk.set_width			= nop_int;
-	hSession->cbk.update_status		= (void (*)(H3270 *, LIB3270_STATUS)) nop_int;
+	hSession->cbk.update_status		= (void (*)(H3270 *, LIB3270_MESSAGE)) nop_int;
 	hSession->cbk.autostart			= nop;
 	hSession->cbk.set_timer			= set_timer;
 	hSession->cbk.print				= print;
@@ -222,7 +222,6 @@ static void lib3270_session_init(H3270 *hSession, const char *model, const char 
 	hSession->unlock_delay			=  1;
 	hSession->icrnl 				=  1;
 	hSession->onlcr					=  1;
-//	hSession->charset.host			= "bracket";
 	hSession->sock					= -1;
 	hSession->model_num				= -1;
 	hSession->cstate				= LIB3270_NOT_CONNECTED;
@@ -241,9 +240,7 @@ static void lib3270_session_init(H3270 *hSession, const char *model, const char 
 	hSession->options				= LIB3270_OPTION_DEFAULTS;
 	hSession->colors				= 16;
 	hSession->m3279					= 1;
-
-	// Keyboard unlock
-	hSession->unlock_delay_ms		= 350; /* 0.35s after last unlock */
+	hSession->unlock_delay_ms		= 350; // 0.35s after last unlock
 
 	// CSD
 	for(f=0;f<4;f++)

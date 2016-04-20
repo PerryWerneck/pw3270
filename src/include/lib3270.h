@@ -170,27 +170,27 @@
 
 
 	/**
-	 * 3270 program messages.
+	 * @brief 3270 program messages.
 	 *
 	 */
 	typedef enum _LIB3270_MESSAGE
 	{
-		LIB3270_MESSAGE_NONE,				/**<  0 - No message */
-		LIB3270_MESSAGE_SYSWAIT,			/**<  1 - */
-		LIB3270_MESSAGE_TWAIT,				/**<  2 - */
-		LIB3270_MESSAGE_CONNECTED,			/**<  3 - Connected */
-		LIB3270_MESSAGE_DISCONNECTED,		/**<  4 - Disconnected from host */
-		LIB3270_MESSAGE_AWAITING_FIRST,		/**<  5 - */
-		LIB3270_MESSAGE_MINUS,				/**<  6 - */
-		LIB3270_MESSAGE_PROTECTED,			/**<  7 - */
-		LIB3270_MESSAGE_NUMERIC,			/**<  8 - */
-		LIB3270_MESSAGE_OVERFLOW,			/**<  9 - */
-		LIB3270_MESSAGE_INHIBIT,			/**< 10 - */
-		LIB3270_MESSAGE_KYBDLOCK,			/**< 11 - Keyboard is locked */
+		LIB3270_MESSAGE_NONE,				///< @brief No message
+		LIB3270_MESSAGE_SYSWAIT,			///< @brief --
+		LIB3270_MESSAGE_TWAIT,				///< @brief --
+		LIB3270_MESSAGE_CONNECTED,			///< @brief Connected
+		LIB3270_MESSAGE_DISCONNECTED,		///< @brief Disconnected from host
+		LIB3270_MESSAGE_AWAITING_FIRST,		///< @brief --
+		LIB3270_MESSAGE_MINUS,				///< @brief --
+		LIB3270_MESSAGE_PROTECTED,			///< @brief --
+		LIB3270_MESSAGE_NUMERIC,			///< @brief --
+		LIB3270_MESSAGE_OVERFLOW,			///< @brief --
+		LIB3270_MESSAGE_INHIBIT,			///< @brief --
+		LIB3270_MESSAGE_KYBDLOCK,			///< @brief Keyboard is locked
 
-		LIB3270_MESSAGE_X,					/**< 12 - */
-		LIB3270_MESSAGE_RESOLVING,			/**< 13 - Resolving hostname (running DNS query) */
-		LIB3270_MESSAGE_CONNECTING,			/**< 14 - Connecting to host */
+		LIB3270_MESSAGE_X,					///< @brief --
+		LIB3270_MESSAGE_RESOLVING,			///< @brief Resolving hostname (running DNS query)
+		LIB3270_MESSAGE_CONNECTING,			///< @brief Connecting to host
 
 		LIB3270_MESSAGE_USER
 

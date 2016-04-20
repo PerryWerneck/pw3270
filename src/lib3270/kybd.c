@@ -502,7 +502,7 @@ static void key_AID(H3270 *hSession, unsigned char aid_code)
 			return;
 		if (aid_code != AID_ENTER && aid_code != AID_CLEAR)
 		{
-			status_changed(hSession,LIB3270_STATUS_MINUS);
+			status_changed(hSession,LIB3270_MESSAGE_MINUS);
 			kybdlock_set(hSession,KL_OIA_MINUS);
 			return;
 		}
@@ -752,11 +752,13 @@ static Boolean key_Character(H3270 *hSession, int code, Boolean with_ge, Boolean
 	baddr = hSession->cursor_addr;
 	faddr = find_field_attribute(hSession,baddr);
 	fa = get_field_attribute(hSession,baddr);
+
 	if (hSession->ea_buf[baddr].fa || FA_IS_PROTECTED(fa))
 	{
 		operator_error(hSession,KL_OERR_PROTECTED);
 		return False;
 	}
+
 	if (hSession->numeric_lock && FA_IS_NUMERIC(fa) &&
 	    !((code >= EBC_0 && code <= EBC_9) ||
 	      code == EBC_minus || code == EBC_period)) {

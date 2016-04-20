@@ -29,7 +29,7 @@ LIB3270_INTERNAL void 		status_twait(H3270 *session);
 
 
 
-LIB3270_INTERNAL void 		status_changed(H3270 *session, LIB3270_STATUS id);
+LIB3270_INTERNAL void 		status_changed(H3270 *session, LIB3270_MESSAGE id);
 
 LIB3270_INTERNAL void 		set_status(H3270 *session, OIA_FLAG id, Boolean on);
 

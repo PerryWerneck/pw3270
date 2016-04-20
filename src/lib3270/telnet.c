@@ -1171,7 +1171,7 @@ static int telnet_fsm(H3270 *hSession, unsigned char c)
 			if (hSession->linemode)
 				cooked_init(hSession);
 #endif /*]*/
-			host_in3270(hSession,CONNECTED_ANSI);
+			host_in3270(hSession,LIB3270_CONNECTED_ANSI);
 			lib3270_kybdlock_clear(hSession,KL_AWAITING_FIRST);
 			status_reset(hSession);
 			ps_process(hSession);
@@ -2406,19 +2406,19 @@ static void check_in3270(H3270 *hSession)
 #if defined(X3270_TN3270E) /*[*/
 	if (hSession->myopts[TELOPT_TN3270E]) {
 		if (!hSession->tn3270e_negotiated)
-			new_cstate = CONNECTED_INITIAL_E;
+			new_cstate = LIB3270_CONNECTED_INITIAL_E;
 		else switch (hSession->tn3270e_submode) {
 		case E_NONE:
-			new_cstate = CONNECTED_INITIAL_E;
+			new_cstate = LIB3270_CONNECTED_INITIAL_E;
 			break;
 		case E_NVT:
-			new_cstate = CONNECTED_NVT;
+			new_cstate = LIB3270_CONNECTED_NVT;
 			break;
 		case E_3270:
-			new_cstate = CONNECTED_TN3270E;
+			new_cstate = LIB3270_CONNECTED_TN3270E;
 			break;
 		case E_SSCP:
-			new_cstate = CONNECTED_SSCP;
+			new_cstate = LIB3270_CONNECTED_SSCP;
 			break;
 		}
 	} else
@@ -2428,12 +2428,12 @@ static void check_in3270(H3270 *hSession)
 	           hSession->myopts[TELOPT_TTYPE] &&
 	           hSession->hisopts[TELOPT_BINARY] &&
 	           hSession->hisopts[TELOPT_EOR]) {
-		new_cstate = CONNECTED_3270;
-	} else if (hSession->cstate == CONNECTED_INITIAL) {
+		new_cstate = LIB3270_CONNECTED_3270;
+	} else if (hSession->cstate == LIB3270_CONNECTED_INITIAL) {
 		/* Nothing has happened, yet. */
 		return;
 	} else {
-		new_cstate = CONNECTED_ANSI;
+		new_cstate = LIB3270_CONNECTED_ANSI;
 	}
 
 	if (new_cstate != hSession->cstate) {
@@ -2454,7 +2454,7 @@ static void check_in3270(H3270 *hSession)
 #endif /*]*/
 
 		/* Allocate the initial 3270 input buffer. */
-		if(new_cstate >= CONNECTED_INITIAL && !(hSession->ibuf_size && hSession->ibuf))
+		if(new_cstate >= LIB3270_CONNECTED_INITIAL && !(hSession->ibuf_size && hSession->ibuf))
 		{
 			hSession->ibuf 		= (unsigned char *) lib3270_malloc(BUFSIZ);
 			hSession->ibuf_size	= BUFSIZ;
@@ -2463,8 +2463,8 @@ static void check_in3270(H3270 *hSession)
 
 #if defined(X3270_ANSI) /*[*/
 		/* Reinitialize line mode. */
-		if ((new_cstate == CONNECTED_ANSI && hSession->linemode) ||
-		    new_cstate == CONNECTED_NVT)
+		if ((new_cstate == LIB3270_CONNECTED_ANSI && hSession->linemode) ||
+		    new_cstate == LIB3270_CONNECTED_NVT)
 			cooked_init(hSession);
 #endif /*]*/
 

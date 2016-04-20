@@ -189,7 +189,7 @@ int resolve_host_and_port(H3270 *hSession, const char *host, char *portname, uns
 
 	trace("Calling resolver for %s status=%d", p.host, (int) saved_status);
 
-	status_changed(hSession,LIB3270_STATUS_RESOLVING);
+	status_changed(hSession,LIB3270_MESSAGE_RESOLVING);
 	hSession->cursor(hSession,CURSOR_MODE_LOCKED);
 
 	rc = lib3270_call_thread((int (*)(H3270 *, void *)) cresolve_host_and_port,hSession,&p);

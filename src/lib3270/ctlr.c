@@ -1980,7 +1980,7 @@ enum pds ctlr_write(H3270 *hSession, unsigned char buf[], int buflen, Boolean er
 		do_reset(hSession,False);
 	} else if (hSession->kybdlock & KL_OIA_TWAIT) {
 		lib3270_kybdlock_clear(hSession,KL_OIA_TWAIT);
-		status_changed(hSession,LIB3270_STATUS_SYSWAIT);
+		status_changed(hSession,LIB3270_MESSAGE_SYSWAIT);
 	}
 	if (wcc_sound_alarm)
 		lib3270_ring_bell(hSession);
