@@ -375,3 +375,26 @@ LIB3270_EXPORT const char * lib3270_get_luname(H3270 *h)
 	return h->connected_lu;
 }
 
+LIB3270_EXPORT int lib3270_has_active_script(H3270 *h)
+{
+    CHECK_SESSION_HANDLE(h);
+	return (h->oia_flag[LIB3270_FLAG_SCRIPT] != 0);
+}
+
+LIB3270_EXPORT int lib3270_get_typeahead(H3270 *h)
+{
+    CHECK_SESSION_HANDLE(h);
+	return (h->oia_flag[LIB3270_FLAG_TYPEAHEAD] != 0);
+}
+
+LIB3270_EXPORT int lib3270_get_undera(H3270 *h)
+{
+    CHECK_SESSION_HANDLE(h);
+	return (h->oia_flag[LIB3270_FLAG_UNDERA] != 0);
+}
+
+LIB3270_EXPORT int lib3270_get_oia_box_solid(H3270 *h)
+{
+    CHECK_SESSION_HANDLE(h);
+	return (h->oia_flag[LIB3270_FLAG_BOXSOLID] != 0);
+}

@@ -400,7 +400,7 @@ void v3270_reload(GtkWidget *widget)
 
 void v3270_update_char(H3270 *session, int addr, unsigned char chr, unsigned short attr, unsigned char cursor)
 {
-	v3270			* terminal = GTK_V3270(session->user_data);
+	v3270			* terminal = GTK_V3270(lib3270_get_user_data(session));
 	cairo_t			* cr;
 	GdkRectangle	  rect;
 	int				  rows,cols;
