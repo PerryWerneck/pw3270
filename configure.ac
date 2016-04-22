@@ -474,8 +474,17 @@ fi
 # Java link options depends on OS
 case "$host" in
 	*-mingw32)
-#		jvm_libs="-L\"\$(JDK_HOME)/lib\" -ljvm"
-		jvm_libs="-L\"\$(JRE_HOME)/bin/client\" -ljvm"
+
+		if test -e "$JRE_HOME/bin/client/jvm.dll"; then
+			AC_MSG_NOTICE(Found $JRE_HOME/bin/client/jvm.dll)
+			jvm_libs="-L\"\$(JRE_HOME)/bin/client\" -ljvm"
+		elif test -e "$JRE_HOME/bin/server/jvm.dll"; then
+			AC_MSG_NOTICE(Found $JRE_HOME/bin/server/jvm.dll)
+			jvm_libs="-L\"\$(JRE_HOME)/bin/server\" -ljvm"
+		else
+			AC_MSG_NOTICE([Can't find jvm.dll.])
+			app_cv_java="no"
+		fi
 		;;
 
 	*-apple-*)
