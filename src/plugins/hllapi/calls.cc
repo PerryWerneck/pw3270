@@ -331,7 +331,7 @@
  {
 	try
 	{
-		session::get_default()->emulate_input(buffer);
+		session::get_default()->input_string(buffer);
 	}
 	catch(std::exception &e)
 	{
@@ -587,7 +587,7 @@
 				break;
 
 			case '@':	// Send '@' character
-				hllapi_emulate_input("@",-1,0);
+				hllapi_emulate_input((LPSTR) "@",-1,0);
 				break;
 
 			case 'x':	// PA1
