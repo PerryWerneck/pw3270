@@ -132,9 +132,6 @@
 		static void		  init();
 		static void		  deinit();
 
-		static void		  lock();
-		static void		  unlock();
-
 		// Factory methods and settings
 		static session	* start(const char *name = 0);
 		static session	* create(const char *name = 0) throw (std::exception);

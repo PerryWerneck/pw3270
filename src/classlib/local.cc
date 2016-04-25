@@ -46,7 +46,8 @@
 
 #endif
 
-#include <pw3270/class.h>
+#include "private.h"
+
 #include <lib3270/log.h>
 #include <lib3270/popup.h>
 #include <string.h>
@@ -114,7 +115,7 @@
  namespace PW3270_NAMESPACE
  {
 
- 	class local : public session, private module
+ 	class local : public session, private module, private recursive_mutex
  	{
 	private:
 
@@ -243,8 +244,6 @@
 					throw exception("Can't find symbol %s",call[f].name);
 			}
 
-			session::lock();
-
 			// Get Session handle, setup base callbacks
 			set_log_handler(loghandler);
 			set_trace_handler(tracehandler);
@@ -252,13 +251,11 @@
 
 			set_display_charset();
 
-			session::unlock();
-
 		}
 
 		virtual ~local()
 		{
-			session::lock();
+			this->lock();
 
 			if(is_connected()) {
 				disconnect();
@@ -276,7 +273,7 @@
 			}
 			catch(exception e) { }
 
-			session::unlock();
+			this->unlock();
 
 		}
 
@@ -300,9 +297,9 @@
 
 		int connect(void)
 		{
-			session::lock();
+			this->lock();
 			int rc = _connect(hSession,0);
-			session::unlock();
+			this->unlock();
 
 			return rc;
 		}
@@ -314,9 +311,9 @@
 
 		int disconnect(void)
 		{
-			session::lock();
+			this->lock();
 			int rc = _disconnect(hSession);
-			session::unlock();
+			this->unlock();
 
 			return rc;
 		}
@@ -338,9 +335,9 @@
 
 		int iterate(bool wait)
 		{
-			session::lock();
+			this->lock();
 			_main_iterate(hSession,wait);
-			session::unlock();
+			this->unlock();
 			return 0;
 		}
 

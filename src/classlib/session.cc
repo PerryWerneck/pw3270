@@ -32,7 +32,7 @@
  #include <string.h>
  #include <malloc.h>
 
- #include <pw3270/class.h>
+ #include "private.h"
 
 #ifndef WIN32
  #include <unistd.h>
@@ -41,85 +41,6 @@
 #ifdef HAVE_SYSLOG
 	#include <syslog.h>
 #endif // HAVE_SYSLOG
-
-#if __cplusplus < 201103L
-
-	#define nullptr	NULL
-
-	#ifdef _WIN32
-
-		class recursive_mutex {
-		private:
-			HANDLE hMutex;
-
-		public:
-			recursive_mutex() {
-				hMutex = CreateMutex(NULL,FALSE,NULL);
-			};
-
-			~recursive_mutex() {
-				CloseHandle(hMutex);
-			};
-
-			void lock(void) {
-				WaitForSingleObject(hMutex,INFINITE);
-			};
-
-			void unlock(void) {
-				ReleaseMutex(hMutex);
-			};
-
-			bool try_lock(void) {
-				if(WaitForSingleObject(hMutex,1) == WAIT_OBJECT_0)
-					return true;
-				return false;
-			};
-		};
-
-	#else
-
-		class recursive_mutex {
-		private:
-			pthread_mutex_t           mtx;
-			pthread_mutexattr_t       mtxAttr;
-
-		public:
-			recursive_mutex() {
-
-				memset(&mtx,0,sizeof(mtx));
-				memset(&mtxAttr,0,sizeof(mtxAttr));
-
-				pthread_mutexattr_init(&mtxAttr);
-				pthread_mutexattr_settype(&mtxAttr, PTHREAD_MUTEX_RECURSIVE);
-				pthread_mutex_init(&mtx, &mtxAttr);
-			};
-
-			~recursive_mutex() {
-				pthread_mutex_destroy(&mtx);
-			};
-
-			void lock(void) {
-				pthread_mutex_lock(&mtx);
-			};
-
-			void unlock(void) {
-				pthread_mutex_unlock(&mtx);
-			};
-
-			bool try_lock(void) {
-				 return pthread_mutex_trylock(&mtx) == 0;
-			};
-		};
-
-
-
-	#endif // _WIN32
-
-#else
-
-	#include <recursive_mutex>
-
-#endif // !c11
 
 
 /*--[ Implement ]--------------------------------------------------------------------------------------------------*/
@@ -171,13 +92,12 @@
 
 	static recursive_mutex	mtx;
 
-
-	void session::lock()
+	inline void lock()
 	{
 		mtx.lock();
 	}
 
-	void session::unlock()
+	inline void unlock()
 	{
 		mtx.unlock();
 	}
@@ -246,15 +166,31 @@
 	// Factory methods and settings
 	session	* session::create(const char *name) throw (std::exception)
 	{
+		session	*rc = nullptr;
+
 		trace("%s(%s)",__FUNCTION__,name);
 
-		if(factory)
-			return factory(name);
+		lock();
 
-		if(name && *name)
-			return create_remote(name);
+		try
+		{
+			if(factory)
+				rc = factory(name);
+			else if(name && *name)
+				rc = create_remote(name);
+			else
+				rc = create_local();
 
-		return create_local();
+		}
+		catch(std::exception &e)
+		{
+			unlock();
+			throw e;
+		}
+
+		unlock();
+
+		return rc;
 	}
 
 	session	* session::start(const char *name)
