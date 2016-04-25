@@ -179,14 +179,6 @@
 		virtual int				  wait(int seconds)									= 0;
 		virtual int				  iterate(bool wait = true)							= 0;
 
-		// Get/Set/Test without charset translation
-		virtual string			  get_text(int baddr = 0, size_t len = 1)			= 0;
-		virtual string 			  get_text_at(int row, int col, size_t sz) 			= 0;
-		virtual int 			  set_text_at(int row, int col, const char *str)	= 0;
-		virtual int				  cmp_text_at(int row, int col, const char *text)	= 0;
-		virtual int				  wait_for_text_at(int row, int col, const char *key, int timeout);
-		virtual int               emulate_input(const char *str)                    = 0;
-
 		// Ascii<->EBCDIC translation
 		virtual const char  	* asc2ebc(unsigned char *str, int sz = -1)			= 0;
 		virtual const char	 	* ebc2asc(unsigned char *str, int sz = -1)			= 0;
@@ -261,6 +253,14 @@
 
 	protected:
 		session();
+
+		// Get/Set/Test without charset translation
+		virtual string			  get_text(int baddr = 0, size_t len = 1)			= 0;
+		virtual string 			  get_text_at(int row, int col, size_t sz) 			= 0;
+		virtual int 			  set_text_at(int row, int col, const char *str)	= 0;
+		virtual int				  cmp_text_at(int row, int col, const char *text)	= 0;
+		virtual int				  wait_for_text_at(int row, int col, const char *key, int timeout);
+		virtual int               emulate_input(const char *str)                    = 0;
 
 	private:
 
