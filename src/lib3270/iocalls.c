@@ -318,7 +318,7 @@ retry:
 	FD_ZERO(&wfds);
 	FD_ZERO(&xfds);
 
-	for (ip = inputs; ip != (input_t *)NULL; ip = ip->next)
+	for (ip = hSession->inputs; ip != (input_t *)NULL; ip = ip->next)
 	{
 		if(ip->flag & LIB3270_IO_FLAG_READ)
 		{
@@ -341,13 +341,13 @@ retry:
 
 	if (block)
 	{
-		if (timeouts != TN)
+		if (hSession->timeouts != TN)
 		{
 			ms_ts(&now);
-			if (now > timeouts->ts)
+			if (now > hSession->timeouts->ts)
 				tmo = 0;
 			else
-				tmo = timeouts->ts - now;
+				tmo = hSession->timeouts->ts - now;
 		}
 		else
 		{
@@ -379,13 +379,13 @@ retry:
 		}
 		else
 		{
-			for (ip = inputs; ip != (input_t *) NULL; ip = ip->next)
+			for (ip = hSession->inputs; ip != (input_t *) NULL; ip = ip->next)
 			{
 				if((ip->flag & LIB3270_IO_FLAG_READ) && FD_ISSET(ip->fd, &rfds))
 				{
 					(*ip->call)(ip->session,ip->fd,LIB3270_IO_FLAG_READ,ip->userdata);
 					processed_any = True;
-					if (inputs_changed)
+					if (hSession->inputs_changed)
 						goto retry;
 				}
 
@@ -393,7 +393,7 @@ retry:
 				{
 					(*ip->call)(ip->session,ip->fd,LIB3270_IO_FLAG_WRITE,ip->userdata);
 					processed_any = True;
-					if (inputs_changed)
+					if (hSession->inputs_changed)
 						goto retry;
 				}
 
@@ -401,7 +401,7 @@ retry:
 				{
 					(*ip->call)(ip->session,ip->fd,LIB3270_IO_FLAG_EXCEPTION,ip->userdata);
 					processed_any = True;
-					if (inputs_changed)
+					if (hSession->inputs_changed)
 						goto retry;
 				}
 			}
