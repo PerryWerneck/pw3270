@@ -245,8 +245,52 @@ struct lib3270_text
 
 #define LIB3270_TELNET_N_OPTS			256
 
+/**
+ *
+ * @brief Timeout control structure.
+ *
+ */
+typedef struct timeout
+{
+	struct timeout *next;
 
-/** @brief lib3270 session data */
+#if defined(_WIN32) /*[*/
+	unsigned long long ts;
+#else /*][*/
+	struct timeval tv;
+#endif /*]*/
+
+	void (*proc)(H3270 *session);
+
+	H3270 *session;
+
+	unsigned char in_play;
+} timeout_t;
+
+
+/**
+ *
+ * @brief I/O events.
+ *
+ */
+typedef struct input
+{
+        struct input	* next;
+        H3270			* session;
+        int 			  fd;
+        LIB3270_IO_FLAG	  flag;
+        void			* userdata;
+
+        void (*call)(H3270 *, int, LIB3270_IO_FLAG, void *);
+
+} input_t;
+
+
+/**
+ *
+ * @brief lib3270 session data
+ *
+ */
 struct _h3270
 {
 	struct lib3270_session_callbacks	  cbk;		// Callback table - Always the first one.
@@ -554,6 +598,10 @@ struct _h3270
 	// SSL Data (Always defined to mantain the same structure size)
 	unsigned long 			  ssl_error;
 	SSL 					* ssl_con;
+
+	timeout_t				* timeouts;
+	input_t 				* inputs;
+	int						  inputs_changed : 1;
 
 	// Callbacks.
 	struct lib3270_state_callback		* st_callbacks[LIB3270_STATE_USER];

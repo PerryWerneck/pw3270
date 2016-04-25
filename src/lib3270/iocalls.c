@@ -80,40 +80,7 @@ static void		  internal_ring_bell(H3270 *session);
 
 /*---[ Typedefs ]-------------------------------------------------------------------------------------------*/
 
- typedef struct timeout
- {
-	struct timeout *next;
-#if defined(_WIN32) /*[*/
-	unsigned long long ts;
-#else /*][*/
-	struct timeval tv;
-#endif /*]*/
-	void (*proc)(H3270 *session);
-	H3270 *session;
-	Boolean in_play;
- } timeout_t;
-
  #define TN	(timeout_t *)NULL
-
-/* I/O events. */
-typedef struct input
-{
-        struct input	* next;
-        H3270			* session;
-        int 			  fd;
-        LIB3270_IO_FLAG	  flag;
-        void			* userdata;
-
-        void (*call)(H3270 *, int, LIB3270_IO_FLAG, void *);
-
-} input_t;
-
-
-/*---[ Statics ]--------------------------------------------------------------------------------------------*/
-
- static timeout_t	* timeouts			= NULL;
- static input_t 	* inputs 			= NULL;
- static Boolean	  inputs_changed	= False;
 
 /*---[ Implement ]------------------------------------------------------------------------------------------*/
 
@@ -165,7 +132,7 @@ static void * internal_add_timeout(H3270 *session, unsigned long interval_ms, vo
 #endif /*]*/
 
 	/* Find where to insert this item. */
-	for (t = timeouts; t != TN; t = t->next)
+	for (t = session->timeouts; t != TN; t = t->next)
 	{
 #if defined(_WIN32)
 		if (t->ts > t_new->ts)
@@ -180,8 +147,8 @@ static void * internal_add_timeout(H3270 *session, unsigned long interval_ms, vo
 	// Insert it.
 	if (prev == TN)
 	{	// Front.
-		t_new->next = timeouts;
-		timeouts = t_new;
+		t_new->next = session->timeouts;
+		session->timeouts = t_new;
 	}
 	else if (t == TN)
 	{	// Rear.
@@ -210,14 +177,14 @@ static void internal_remove_timeout(H3270 *session, void * timer)
 	if (st->in_play)
 		return;
 
-	for (t = timeouts; t != TN; t = t->next)
+	for (t = session->timeouts; t != TN; t = t->next)
 	{
 		if (t == st)
 		{
 			if (prev != TN)
 				prev->next = t->next;
 			else
-				timeouts = t->next;
+				session->timeouts = t->next;
 			lib3270_free(t);
 			return;
 		}
@@ -231,14 +198,14 @@ static void * internal_add_poll(H3270 *session, int fd, LIB3270_IO_FLAG flag, vo
 {
 	input_t *ip = (input_t *) lib3270_malloc(sizeof(input_t));
 
-	ip->session		= session;
-	ip->fd			= fd;
-	ip->flag		= flag;
-	ip->userdata	= userdata;
-	ip->call		= call;
+	ip->session					= session;
+	ip->fd						= fd;
+	ip->flag					= flag;
+	ip->userdata				= userdata;
+	ip->call					= call;
 
-	inputs 			= ip;
-	inputs_changed 	= True;
+	session->inputs 			= ip;
+	session->inputs_changed 	= 1;
 
 	return ip;
 }
@@ -248,7 +215,7 @@ static void internal_remove_poll(H3270 *session, void *id)
 	input_t *ip;
 	input_t *prev = (input_t *)NULL;
 
-	for (ip = inputs; ip != (input_t *)NULL; ip = ip->next)
+	for (ip = session->inputs; ip != (input_t *)NULL; ip = ip->next)
 	{
 		if (ip == (input_t *)id)
 			break;
@@ -265,10 +232,10 @@ static void internal_remove_poll(H3270 *session, void *id)
 	if (prev != (input_t *)NULL)
 		prev->next = ip->next;
 	else
-		inputs = ip->next;
+		session->inputs = ip->next;
 
 	lib3270_free(ip);
-	inputs_changed = True;
+	session->inputs_changed = 1;
 }
 
 LIB3270_EXPORT void	 lib3270_remove_poll(H3270 *session, void *id) {
@@ -281,7 +248,7 @@ LIB3270_EXPORT void	 lib3270_remove_poll_fd(H3270 *session, int fd)
 
 	input_t *ip;
 
-	for (ip = inputs; ip != (input_t *)NULL; ip = ip->next)
+	for (ip = session->inputs; ip != (input_t *)NULL; ip = ip->next)
 	{
 		if(ip->fd == fd)
 		{
@@ -299,7 +266,7 @@ LIB3270_EXPORT void	 lib3270_update_poll_fd(H3270 *session, int fd, LIB3270_IO_F
 
 	input_t *ip;
 
-	for (ip = inputs; ip != (input_t *)NULL; ip = ip->next)
+	for (ip = session->inputs; ip != (input_t *)NULL; ip = ip->next)
 	{
 		if(ip->fd == fd)
 		{
@@ -337,7 +304,7 @@ int lib3270_default_event_dispatcher(H3270 *hSession, int block)
 
 retry:
 
-	inputs_changed = 0;
+	hSession->inputs_changed = 0;
 
 	// If we've processed any input, then don't block again.
 	if(processed_any)
@@ -454,7 +421,7 @@ retry:
 	FD_ZERO(&wfds);
 	FD_ZERO(&xfds);
 
-	for (ip = inputs; ip != (input_t *)NULL; ip = ip->next)
+	for (ip = hSession->inputs; ip != (input_t *)NULL; ip = ip->next)
 	{
 		if(ip->flag & LIB3270_IO_FLAG_READ)
 		{
@@ -477,11 +444,11 @@ retry:
 
 	if (block)
 	{
-		if (timeouts != TN)
+		if (hSession->timeouts != TN)
 		{
 			(void) gettimeofday(&now, (void *)NULL);
-			twait.tv_sec = timeouts->tv.tv_sec - now.tv_sec;
-			twait.tv_usec = timeouts->tv.tv_usec - now.tv_usec;
+			twait.tv_sec = hSession->timeouts->tv.tv_sec - now.tv_sec;
+			twait.tv_usec = hSession->timeouts->tv.tv_usec - now.tv_usec;
 			if (twait.tv_usec < 0L) {
 				twait.tv_sec--;
 				twait.tv_usec += MILLION;
@@ -520,13 +487,13 @@ retry:
 	}
 	else
 	{
-		for (ip = inputs; ip != (input_t *) NULL; ip = ip->next)
+		for (ip = hSession->inputs; ip != (input_t *) NULL; ip = ip->next)
 		{
 			if((ip->flag & LIB3270_IO_FLAG_READ) && FD_ISSET(ip->fd, &rfds))
 			{
 				(*ip->call)(ip->session,ip->fd,LIB3270_IO_FLAG_READ,ip->userdata);
 				processed_any = True;
-				if (inputs_changed)
+				if (hSession->inputs_changed)
 					goto retry;
 			}
 
@@ -534,7 +501,7 @@ retry:
 			{
 				(*ip->call)(ip->session,ip->fd,LIB3270_IO_FLAG_WRITE,ip->userdata);
 				processed_any = True;
-				if (inputs_changed)
+				if (hSession->inputs_changed)
 					goto retry;
 			}
 
@@ -542,7 +509,7 @@ retry:
 			{
 				(*ip->call)(ip->session,ip->fd,LIB3270_IO_FLAG_EXCEPTION,ip->userdata);
 				processed_any = True;
-				if (inputs_changed)
+				if (hSession->inputs_changed)
 					goto retry;
 			}
 		}
@@ -551,7 +518,7 @@ retry:
 #endif
 
 	// See what's expired.
-	if (timeouts != TN)
+	if (hSession->timeouts != TN)
 	{
 #if defined(_WIN32)
 		struct timeout *t;
@@ -561,7 +528,7 @@ retry:
 		(void) gettimeofday(&now, (void *)NULL);
 #endif
 
-		while ((t = timeouts) != TN)
+		while ((t = hSession->timeouts) != TN)
 		{
 #if defined(_WIN32)
 			if (t->ts <= now)
@@ -569,7 +536,7 @@ retry:
 			if (t->tv.tv_sec < now.tv_sec ||(t->tv.tv_sec == now.tv_sec && t->tv.tv_usec < now.tv_usec))
 #endif
 			{
-				timeouts = t->next;
+				hSession->timeouts = t->next;
 				t->in_play = True;
 				(*t->proc)(t->session);
 				processed_any = True;
@@ -579,7 +546,7 @@ retry:
 		}
 	}
 
-	if (inputs_changed)
+	if (hSession->inputs_changed)
 		goto retry;
 
 	return processed_any;
