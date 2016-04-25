@@ -996,6 +996,8 @@ void net_input(H3270 *hSession, int fd, LIB3270_IO_FLAG flag, void *dunno)
 
 	CHECK_SESSION_HANDLE(hSession);
 
+	memset(buffer,0,BUFSZ);
+
 #if defined(_WIN32)
  	for (;;)
 #endif

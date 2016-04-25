@@ -95,19 +95,22 @@ int ssl_negotiate(H3270 *hSession)
 
 	if (rv != 1)
 	{
-		int ssl_error =  SSL_get_error(hSession->ssl_con,rv);
+		int 		  ssl_error =  SSL_get_error(hSession->ssl_con,rv);
+		const char	* msg 		= "";
 
 		if(ssl_error == SSL_ERROR_SYSCALL && hSession->ssl_error)
 			ssl_error = hSession->ssl_error;
 
-		trace_dsn(hSession,"SSL_connect failed: %s %s\n",ERR_lib_error_string(hSession->ssl_error),ERR_reason_error_string(hSession->ssl_error));
+		msg = ERR_lib_error_string(ssl_error);
+
+		trace_dsn(hSession,"SSL_connect failed: %s %s\n",msg,ERR_reason_error_string(hSession->ssl_error));
 
 		lib3270_popup_dialog(
 				hSession,
 				LIB3270_NOTIFY_ERROR,
 				N_( "Security error" ),
 				N_( "SSL Connect failed" ),
-				"%s",ERR_lib_error_string(ssl_error)
+				"%s",msg ? msg : ""
 						);
 
 		lib3270_disconnect(hSession);

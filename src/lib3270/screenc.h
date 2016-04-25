@@ -39,10 +39,6 @@
 #define display_height()	1
 #define display_widthMM()	100
 #define display_width()		1
-// #define screen_obscured()	False
-// #define screen_scroll()		screen_disp()
-// #define screen_132()	/* */
-// #define screen_80()		/* */
 
 LIB3270_INTERNAL int		screen_init(H3270 *session);
 // LIB3270_INTERNAL Boolean	screen_new_display_charsets(char *cslist, char *csname);

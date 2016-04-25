@@ -142,9 +142,8 @@ void ctlr_reinit(H3270 *session, unsigned cmask)
 		session->buffer[1] = tmp = lib3270_calloc(sizeof(struct lib3270_ea),sz+1,session->buffer[1]);
 		session->aea_buf = tmp + 1;
 
-		session->text = lib3270_calloc(sizeof(struct lib3270_text),sz,session->text);
-
-		Replace(session->zero_buf, (unsigned char *)Calloc(sizeof(struct lib3270_ea),sz));
+		session->text 		= lib3270_calloc(sizeof(struct lib3270_text),sz,session->text);
+		session->zero_buf	= lib3270_calloc(sizeof(struct lib3270_ea),sz,session->zero_buf);
 
 		session->cursor_addr = 0;
 		session->buffer_addr = 0;
@@ -246,23 +245,6 @@ const char * lib3270_get_model(H3270 *hSession)
 	CHECK_SESSION_HANDLE(hSession);
 	return hSession->model_name;
 }
-
-/**
- * Deal with the relationships between model numbers and rows/cols.
- *
- * @param hSession	Session handle.
- * @param model		New model (updates model name)
- */ /*
-int	lib3270_set_model(H3270 *hSession, int model)
-{
-	if(CONNECTED)
-		return EBUSY;
-
-	ctlr_set_rows_cols(hSession,model,hSession->ov_cols,hSession->ov_rows);
-	ctlr_reinit(hSession,MODEL_CHANGE);
-	screen_update(hSession,0,hSession->rows*hSession->cols);
-	return 0;
-} */
 
 int lib3270_set_model(H3270 *hSession, const char *model)
 {
