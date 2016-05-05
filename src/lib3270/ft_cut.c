@@ -192,11 +192,12 @@ static int upload_convert(H3270 *hSession, unsigned char *buf, int len)
 		/* Map it. */
 		c = conv[ft->quadrant].xlate[ix];
 
-		if (ft->ascii_flag && ft->cr_flag && (c == '\r' || c == 0x1a))
+//		if (ft->ascii_flag && ft->cr_flag && (c == '\r' || c == 0x1a))
+		if (ft->unix_text && (c == '\r' || c == 0x1a))
 			continue;
-
-		if (ft->ascii_flag && ft->remap_flag)
+		else if (ft->ascii_flag && ft->remap_flag)
 			c = ft->charset.ebc2asc[c];
+
 		*ob++ = c;
 	}
 

@@ -375,8 +375,12 @@ GtkWidget * v3270_ft_dialog_new(GtkWidget *parent, LIB3270_FT_OPTION options)
 				{
 					LIB3270_FT_OPTION_CRLF,
 					BUTTON_CRLF,
-					N_( "Remove <_CR> from end of the line." ),
-					N_( "Following the convention for LINUX text files, <LF> are used to terminate records in the PC file.")
+					N_( "Follow the convention for ASCII text files." ),
+#ifdef _WIN32
+					N_( "Following the convention for ASCII text files, <CR> <LF> pairs are used to terminate records in the PC file, and a CTRL-Z (x'1A') marks the end of file.")
+#else
+					N_( "Following the convention for ASCII text files, <LF> is used to terminate records in the PC file.")
+#endif // _WIN32
 				},
 				{
 					LIB3270_FT_OPTION_APPEND,
@@ -465,8 +469,12 @@ GtkWidget * v3270_ft_dialog_new(GtkWidget *parent, LIB3270_FT_OPTION options)
 				{
 					LIB3270_FT_OPTION_CRLF,
 					BUTTON_CRLF,
-					N_( "Add <CR> at end of the line." ),
-					N_( "Add an extra <CR> to follow the convention for ASCII text files.")
+					N_( "Follow the convention for ASCII text files." ),
+#ifdef _WIN32
+					N_( "Following the convention for ASCII text files, <CR> <LF> pairs are used to terminate records in the PC file, and a CTRL-Z (x'1A') marks the end of file.")
+#else
+					N_( "Following the convention for ASCII text files, <LF> is used to terminate records in the PC file.")
+#endif // _WIN32
 				},
 				{
 					LIB3270_FT_OPTION_APPEND,
@@ -689,8 +697,20 @@ const gchar * v3270_ft_dialog_get_local_filename(GtkWidget *widget)
 
 LIB3270_FT_OPTION v3270_ft_dialog_get_options(GtkWidget *widget)
 {
+	LIB3270_FT_OPTION opt;
+
 	g_return_val_if_fail(GTK_IS_V3270FTD(widget),0);
-	return GTK_V3270FTD(widget)->options;
+
+	opt = GTK_V3270FTD(widget)->options;
+
+#ifndef _WIN32
+	if( (opt & (LIB3270_FT_OPTION_ASCII|LIB3270_FT_OPTION_CRLF)) == (LIB3270_FT_OPTION_ASCII|LIB3270_FT_OPTION_CRLF) )
+	{
+		opt |= LIB3270_FT_OPTION_UNIX;
+	}
+#endif // _WIN32
+
+	return opt;
 }
 
 void v3270_ft_dialog_set_options(GtkWidget *widget,LIB3270_FT_OPTION options)

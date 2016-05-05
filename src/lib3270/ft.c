@@ -298,6 +298,7 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 	ftHandle->ascii_flag	= (flags & LIB3270_FT_OPTION_ASCII)	? 1 : 0;
 	ftHandle->cr_flag   	= (flags & LIB3270_FT_OPTION_CRLF)	? 1 : 0;
 	ftHandle->remap_flag	= (flags & LIB3270_FT_OPTION_REMAP)	? 1 : 0;
+	ftHandle->unix_text		= (flags & LIB3270_FT_OPTION_UNIX)	? 1 : 0;
 	ftHandle->ft_is_cut  	= 0;
 	ftHandle->flags			= flags;
 	ftHandle->local_file	= ft_local_file;
@@ -366,11 +367,12 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 		// Receiving file
 		lib3270_write_dstrace(
 					ft->host,
-					"\nReceiving file %s (%s %s %s)\n",
+					"\nReceiving file %s (%s %s %s %s)\n",
 					ft->local,
-					ft->ascii_flag	?	"ASCII" : "BINARY",
-					ft->cr_flag 	?	"CRLF" 	: "NOCRLF",
-					ft->remap_flag	?	"REMAP" : "NOREMAP"
+					ft->ascii_flag	?	"ASCII" 	: "BINARY",
+					ft->cr_flag 	?	"CRLF" 		: "NOCRLF",
+					ft->remap_flag	?	"REMAP" 	: "NOREMAP",
+					ft->unix_text	?	"LF Only"	: "CR/LF"
 				);
 	}
 	else
@@ -386,12 +388,13 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 
 		lib3270_write_dstrace(
 				ft->host,
-				"\nSending file %s (%ld bytes %s %s %s)\n",
+				"\nSending file %s (%ld bytes %s %s %s %s)\n",
 				ft->local,
 				ft->length,
-				ft->ascii_flag	?	"ASCII" : "BINARY",
-				ft->cr_flag		?	"CRLF"	: "NOCRLF",
-				ft->remap_flag	?	"REMAP" : "NOREMAP"
+				ft->ascii_flag	?	"ASCII" 	: "BINARY",
+				ft->cr_flag		?	"CRLF"		: "NOCRLF",
+				ft->remap_flag	?	"REMAP" 	: "NOREMAP",
+				ft->unix_text	?	"LF only"	: "CR/LF"
 			);
 
 		rewind(ft->local_file);

@@ -37,32 +37,16 @@
 	#include <sys/time.h>
 	#include <lib3270/charset.h>
 
-
-/*
-	#define LIB3270_FT_RECORD_FORMAT_DEFAULT		0x0000
-	#define LIB3270_FT_RECORD_FORMAT_FIXED			0x0100
-	#define LIB3270_FT_RECORD_FORMAT_VARIABLE		0x0200
-	#define LIB3270_FT_RECORD_FORMAT_UNDEFINED		0x0300
-	#define LIB3270_FT_RECORD_FORMAT_MASK 			LIB3270_FT_RECORD_FORMAT_UNDEFINED
-*/
-
-/*
-	#define LIB3270_FT_ALLOCATION_UNITS_DEFAULT		0x0000
-	#define LIB3270_FT_ALLOCATION_UNITS_TRACKS		0x1000
-	#define LIB3270_FT_ALLOCATION_UNITS_CYLINDERS	0x2000
-	#define LIB3270_FT_ALLOCATION_UNITS_AVBLOCK		0x3000
-	#define LIB3270_FT_ALLOCATION_UNITS_MASK		LIB3270_FT_ALLOCATION_UNITS_AVBLOCK
-*/
-
 	typedef enum _lib3270_FT_OPTION
 	{
 		LIB3270_FT_OPTION_SEND 					= 0x0000,
 
 		LIB3270_FT_OPTION_RECEIVE				= 0x0001,
-		LIB3270_FT_OPTION_ASCII					= 0x0002,		/**< Convert to ascii */
-		LIB3270_FT_OPTION_CRLF					= 0x0004,		/**< Add crlf to each line */
+		LIB3270_FT_OPTION_ASCII					= 0x0002,		///< @brief Convert to ascii
+		LIB3270_FT_OPTION_CRLF					= 0x0004,		///< @brief Add crlf to each line
 		LIB3270_FT_OPTION_APPEND				= 0x0008,
-		LIB3270_FT_OPTION_REMAP					= 0x0010,		/**< Remap ASCII<->EBCDIC */
+		LIB3270_FT_OPTION_REMAP					= 0x0010,		///< @brief Remap ASCII<->EBCDIC
+		LIB3270_FT_OPTION_UNIX					= 0x0020,		///< @brief Unix text file
 
 		LIB3270_FT_RECORD_FORMAT_DEFAULT		= 0x0000,
 		LIB3270_FT_RECORD_FORMAT_FIXED			= 0x0100,
@@ -92,21 +76,22 @@
 
 	typedef struct _h3270ft
 	{
-		unsigned short			  sz;					/**< Size of FT data structure */
+		unsigned short			  sz;					///< @brief Size of FT data structure
 
-		int						  ft_last_cr	: 1;	/**< CR was last char in local file */
-		int 					  remap_flag	: 1;	/**< Remap ASCII<->EBCDIC */
-		int						  cr_flag		: 1;
-		int						  message_flag	: 1;	/**< Open Request for msg received */
-		int						  ascii_flag	: 1;	/**< Convert to ascii */
-		int						  ft_is_cut		: 1;	/**< File transfer is CUT-style */
+		int						  ft_last_cr	: 1;	///< @brief CR was last char in local file
+		int 					  remap_flag	: 1;	///< @brief Remap ASCII<->EBCDIC
+		int						  cr_flag		: 1;	///< @brief Add crlf to each line
+		int						  unix_text		: 1;	///< @brief Following the convention for UNIX text files.
+		int						  message_flag	: 1;	///< @brief Open Request for msg received
+		int						  ascii_flag	: 1;	///< @brief Convert to ascii
+		int						  ft_is_cut		: 1;	///< @brief File transfer is CUT-style
 		int						  dft_eof		: 1;
 
 
 		H3270					* host;
-		void					* widget;				/**< File transfer dialog handle */
-		FILE 					* local_file;			/**< File descriptor for local file */
-		unsigned long			  length;				/**< File length */
+		void					* widget;				///< @brief File transfer dialog handle
+		FILE 					* local_file;			///< @brief File descriptor for local file
+		unsigned long			  length;				///< @brief File length
 
 		LIB3270_FT_STATE		  state;
 		LIB3270_FT_OPTION		  flags;

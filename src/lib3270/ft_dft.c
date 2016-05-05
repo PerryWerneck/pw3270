@@ -294,12 +294,15 @@ static void dft_data_insert(H3270 *hSession, struct data_buffer *data_bufr)
 				s++;
 			}
 		}
-		if (ft->ascii_flag && ft->cr_flag)
+
+//		if (ft->ascii_flag && ft->cr_flag)
+		if (ft->unix_text)
 		{
+			/* Delete CRs and ^Zs. */
+
 			char *s = (char *)data_bufr->data;
 			unsigned len = my_length;
 
-			/* Delete CRs and ^Zs. */
 			while (len) {
 				unsigned l = filter_len(s, len);
 
@@ -375,7 +378,7 @@ static void dft_get_request(H3270 *hSession)
 
 	while (!ft->dft_eof && numbytes)
 	{
-		if (ft->ascii_flag && ft->cr_flag)
+		if (ft->unix_text)
 		{
 			// ASCII text file
 
