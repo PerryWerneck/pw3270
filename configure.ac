@@ -703,45 +703,48 @@ AC_ARG_VAR([OFFICE_HOME], [Libreoffice home])
 AC_ARG_VAR([OO_SDK_HOME], [Libreoffice SDK home])
 AC_ARG_VAR([OO_SDK_URE_HOME], [Libreoffice URE home])
 
-case "$host" in
-        *-mingw32)
-		app_cv_office="no"
-		;;
+# Disabled due to problems with the latest libreoffice API.
+app_cv_office="no"
 
-	*-apple-*)
-		app_cv_office="no"
-		;;
-
-	*)
-		OO_LDFLAGS="-luno_cppu -luno_cppuhelpergcc3 -luno_salhelpergcc3"
-
-		if test "_$OFFICE_HOME" == "_" ; then
-			if test "$host_cpu" = "x86_64"; then
-				OFFICE_HOME="/usr/lib64/libreoffice"
-			else
-				OFFICE_HOME="/usr/lib/libreoffice"
-			fi
-		fi
-
-		if test "_$OO_SDK_HOME" == "_" ; then
-			OO_SDK_HOME=$OFFICE_HOME/sdk
-		fi
-
-		if test "_$OO_SDK_URE_HOME" == "_" ; then
-			if test -d $OFFICE_HOME/ure; then
-				OO_SDK_URE_HOME="$OFFICE_HOME/ure"
-			elif test -d $OFFICE_HOME/program/types.rdb; then
-				OO_SDK_URE_HOME="$OFFICE_HOME/program"
-			else
-				if test "$host_cpu" = "x86_64"; then
-					OO_SDK_URE_HOME="/usr/lib64/ure"
-				else
-					OO_SDK_URE_HOME="/usr/lib/ure"
-				fi
-			fi
-		fi
-
-esac
+#case "$host" in
+#        *-mingw32)
+#		app_cv_office="no"
+#		;;
+#
+#	*-apple-*)
+#		app_cv_office="no"
+#		;;
+#
+#	*)
+#		OO_LDFLAGS="-luno_cppu -luno_cppuhelpergcc3 -luno_salhelpergcc3"
+#
+#		if test "_$OFFICE_HOME" == "_" ; then
+#			if test "$host_cpu" = "x86_64"; then
+#				OFFICE_HOME="/usr/lib64/libreoffice"
+#			else
+#				OFFICE_HOME="/usr/lib/libreoffice"
+#			fi
+#		fi
+#
+#		if test "_$OO_SDK_HOME" == "_" ; then
+#			OO_SDK_HOME=$OFFICE_HOME/sdk
+#		fi
+#
+#		if test "_$OO_SDK_URE_HOME" == "_" ; then
+#			if test -d $OFFICE_HOME/ure; then
+#				OO_SDK_URE_HOME="$OFFICE_HOME/ure"
+#			elif test -d $OFFICE_HOME/program/types.rdb; then
+#				OO_SDK_URE_HOME="$OFFICE_HOME/program"
+#			else
+#				if test "$host_cpu" = "x86_64"; then
+#					OO_SDK_URE_HOME="/usr/lib64/ure"
+#				else
+#					OO_SDK_URE_HOME="/usr/lib/ure"
+#				fi
+#			fi
+#		fi
+#
+#esac
 
 # Setup c++ compiler flags
 if test -d "$prefix/include/libreoffice"; then
