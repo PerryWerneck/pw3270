@@ -150,6 +150,7 @@ Revision @PACKAGE_REVISION@ from @PACKAGE_SOURCE@
 Summary:	Devel for 3270 Communication library for %{name}
 Group:		Development/Libraries/C and C++
 Requires:	lib3270 = @PACKAGE_VERSION@
+Requires:	pw3270 = @PACKAGE_VERSION@
 
 %description -n lib3270-devel
 devel for tn3270 protocol library for %{name}
