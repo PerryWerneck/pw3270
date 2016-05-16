@@ -54,6 +54,12 @@
 	#define LIB3270_BIND_PLU_NAME_MAX		8
 
 	/**
+	 * Maximum size for LUNAME
+	 *
+	 */
+	#define LIB3270_LUNAME_LENGTH			16
+
+	/**
 	 * Character attributes
 	 */
 	typedef enum _lib3270_attr
