@@ -367,6 +367,7 @@ install-sdk:
 	@$(INSTALL_DATA) src/include/lib3270/charset.h $(DESTDIR)/$(includedir)/lib3270
 	@$(INSTALL_DATA) src/include/lib3270/filetransfer.h $(DESTDIR)/$(includedir)/lib3270
 	@$(INSTALL_DATA) src/include/lib3270/log.h $(DESTDIR)/$(includedir)/lib3270
+	@$(INSTALL_DATA) src/include/lib3270/session.h $(DESTDIR)/$(includedir)/lib3270
 
 	@$(MKDIR) $(DESTDIR)$(includedir)/pw3270
 	@$(INSTALL_DATA) src/include/pw3270/v3270.h $(DESTDIR)/$(includedir)/pw3270
