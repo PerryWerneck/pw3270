@@ -183,7 +183,7 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 	errno = rc;
 
 	if(!dest) {
-		// Não tem destino para a mensagem, apresenta
+		// Nao tem destino para a mensagem, apresenta
 		lib3270_popup_dialog(session, LIB3270_NOTIFY_ERROR, _( "Request failed" ), _( "Can't start file transfer." ), "%s", message);
 	} else {
 		*dest = message;
