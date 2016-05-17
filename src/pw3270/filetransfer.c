@@ -207,9 +207,10 @@ static void ft_dialog_save(GtkWidget *widget, const gchar *name)
 
 }
 
-static void ft_complete(H3270FT *ft, unsigned long length,double kbytes_sec)
+static void ft_complete(H3270FT *ft, unsigned long length,double kbytes_sec, const char *msg)
 {
 	v3270_ft_progress_complete(GTK_WIDGET(ft->widget),length,kbytes_sec);
+	v3270_ft_progress_set_message(GTK_WIDGET(ft->widget),gettext(msg));
 }
 
 static void ft_message(struct _h3270ft *ft, const char *text)
@@ -255,6 +256,7 @@ gint v3270_transfer_file(GtkWidget *widget, LIB3270_FT_OPTION options, const gch
 
 	ft->widget 			= progress;
 	ft->complete 		= ft_complete;
+	ft->failed 			= ft_complete;
 	ft->update			= ft_update;
 	ft->running			= ft_running;
 	ft->aborting		= ft_aborting;

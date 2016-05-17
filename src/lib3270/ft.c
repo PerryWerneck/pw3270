@@ -144,13 +144,19 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 		return EBUSY;
 
 	// Impatient user or hung host -- just clean up.
-	ft_complete(ft, N_("Cancelled by user") );
+	ft_failed(ft, N_("Cancelled by user") );
 
 	return 0;
  }
 
- static void def_complete(H3270FT *ft,unsigned long length,double kbytes_sec)
+ static void def_complete(H3270FT *ft,unsigned long length,double kbytes_sec,const char *msg)
  {
+ 	ft->message(ft,msg);
+ }
+
+ static void def_failed(struct _h3270ft *ft,unsigned long length,double kbytes_sec,const char *msg)
+ {
+	ft->complete(ft,ft->ft_length,kbytes_sec,msg ? msg : N_("Transfer failed"));
  }
 
  static void def_message(H3270FT *ft, const char *errmsg)
@@ -289,6 +295,7 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 	ftHandle->local_file	= ft_local_file;
 	ftHandle->state			= LIB3270_FT_STATE_AWAIT_ACK;
 	ftHandle->complete 		= def_complete;
+	ftHandle->failed		= def_failed;
 	ftHandle->message 		= def_message;
 	ftHandle->update 		= def_update;
 	ftHandle->running 		= def_running;
@@ -365,7 +372,7 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 		// Sending file
 		if(fseek(ft->local_file,0L,SEEK_END) < 0)
 		{
-			ft_complete(ft,N_( "Can't get file size" ));
+			ft_failed(ft,N_( "Can't get file size" ));
 			return errno ? errno : -1;
 		}
 
@@ -459,7 +466,7 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 	if (!flen || flen < strlen(buffer) - 1)
 	{
 		lib3270_write_log(ft->host, "Unable to send command \"%s\" (flen=%d szBuffer=%d)",buffer,flen,strlen(buffer));
-		ft_complete(ft,N_( "Unable to send file-transfer request" ));
+		ft_failed(ft,N_( "Unable to send file-transfer request" ));
 		return errno = EINVAL;
 	}
 
@@ -484,11 +491,7 @@ void ft_message(H3270FT *ft, const char *msg)
 	ft->message(ft,msg);
 }
 
-/**
- * Pop up a message, end the transfer, release resources.
- *
- */
-void ft_complete(H3270FT *ft, const char *errmsg)
+static double finish(H3270FT *ft)
 {
 	double			  kbytes_sec = 0;
 	struct timeval	  t1;
@@ -510,11 +513,17 @@ void ft_complete(H3270FT *ft, const char *errmsg)
 
 	ft_update_length(ft);
 
-	ft->complete(ft,ft->ft_length,kbytes_sec);
+	return kbytes_sec;
+}
 
-	ft_message(ft,errmsg ? errmsg : N_("Transfer complete"));
+void ft_complete(H3270FT *ft, const char *errmsg)
+{
+	ft->complete(ft,ft->ft_length,finish(ft),errmsg ? errmsg : N_("Transfer complete"));
+}
 
-
+void ft_failed(H3270FT *ft, const char *errmsg)
+{
+	ft->failed(ft,ft->ft_length,finish(ft),errmsg ? errmsg : N_("Transfer failed"));
 }
 
 LIB3270_EXPORT int lib3270_ft_destroy(H3270 *hSession)
@@ -528,7 +537,9 @@ LIB3270_EXPORT int lib3270_ft_destroy(H3270 *hSession)
 		return EINVAL;
 
 	if (session->state != LIB3270_FT_STATE_NONE)
+	{
 		lib3270_ft_cancel(hSession,1);
+	}
 
 	if(session->local_file)
 	{
@@ -597,14 +608,14 @@ void ft_aborting(H3270FT *h)
 static void ft_connected(H3270 *hSession, int ignored, void *dunno)
 {
 	if (!CONNECTED && lib3270_get_ft_state(hSession) != LIB3270_FT_STATE_NONE)
-		ft_complete(get_ft_handle(hSession),_("Host disconnected, transfer cancelled"));
+		ft_failed(get_ft_handle(hSession),_("Host disconnected, transfer cancelled"));
 }
 
 /* Process an abort from no longer being in 3270 mode. */
 static void ft_in3270(H3270 *hSession, int ignored, void *dunno)
 {
 	if (!IN_3270 && lib3270_get_ft_state(hSession) != LIB3270_FT_STATE_NONE)
-		ft_complete(get_ft_handle(hSession),_("Not in 3270 mode, transfer cancelled"));
+		ft_failed(get_ft_handle(hSession),_("Not in 3270 mode, transfer cancelled"));
 }
 
 LIB3270_EXPORT LIB3270_FT_STATE lib3270_get_ft_state(H3270 *session)

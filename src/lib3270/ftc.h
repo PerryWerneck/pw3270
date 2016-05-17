@@ -34,6 +34,7 @@
 
 	LIB3270_INTERNAL void		  ft_aborting(H3270FT *h);
 	LIB3270_INTERNAL void		  ft_complete(H3270FT *h, const char *errmsg);
+	LIB3270_INTERNAL void		  ft_failed(H3270FT *h, const char *errmsg);
 	LIB3270_INTERNAL void		  ft_message(H3270FT *h, const char *msg);
 	LIB3270_INTERNAL void		  ft_running(H3270FT *h, Boolean is_cut);
 	LIB3270_INTERNAL void		  ft_update_length(H3270FT *h);

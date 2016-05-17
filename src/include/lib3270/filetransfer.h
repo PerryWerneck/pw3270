@@ -141,7 +141,8 @@
 		struct lib3270_charset	  charset;
 
 		// Callbacks
-		void (*complete)(struct _h3270ft *ft,unsigned long length,double kbytes_sec);
+		void (*complete)(struct _h3270ft *ft,unsigned long length,double kbytes_sec,const char *msg);
+		void (*failed)(struct _h3270ft *ft,unsigned long length,double kbytes_sec,const char *msg);
 		void (*message)(struct _h3270ft *ft, const char *msg);
 		void (*update)(struct _h3270ft *ft, unsigned long current, unsigned long length, double kbytes_sec);
 		void (*running)(struct _h3270ft *ft, int is_cut);

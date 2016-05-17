@@ -270,12 +270,12 @@ static void dft_data_insert(H3270 *hSession, struct data_buffer *data_bufr)
 		else if (lib3270_get_ft_state(hSession) == FT_ABORT_SENT && ((H3270FT *) hSession->ft)->abort_string != CN)
 		{
 			lib3270_free(msgp);
-			ft_complete(ft,ft->abort_string);
+			ft_failed(ft,ft->abort_string);
 			lib3270_free(ft->abort_string);
 		}
 		else
 		{
-			ft_complete(hSession->ft,(char *)msgp);
+			ft_failed(hSession->ft,(char *)msgp);
 			lib3270_free(msgp);
 		}
 	} else if (my_length > 0) {

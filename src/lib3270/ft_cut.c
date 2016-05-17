@@ -334,7 +334,7 @@ static void cut_control_code(H3270 *hSession)
 		trace_ds(hSession,"XFER_COMPLETE\n");
 		cut_ack(hSession);
 		hSession->cut_xfer_in_progress = 0;
-		ft_complete(ft,N_( "Transfer complete" ) );
+		ft_complete(ft,NULL);
 		break;
 
 	case SC_ABORT_FILE:
@@ -369,7 +369,7 @@ static void cut_control_code(H3270 *hSession)
 			if (!*buf)
 				strcpy(buf, N_( "Transfer cancelled by host" ) );
 		}
-		ft_complete(hSession->ft,buf);
+		ft_failed(hSession->ft,buf);
 		lib3270_free(buf);
 		break;
 
