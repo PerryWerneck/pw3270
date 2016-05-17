@@ -238,7 +238,7 @@ gint v3270_transfer_file(GtkWidget *widget, LIB3270_FT_OPTION options, const gch
 {
 	g_return_val_if_fail(GTK_IS_V3270(widget),0);
 
-	H3270FT		* ft		= lib3270_ft_new(v3270_get_session(widget),options,local,remote,lrecl,blksize,primspace,secspace,dft);
+	H3270FT		* ft		= lib3270_ft_new(v3270_get_session(widget),options,local,remote,lrecl,blksize,primspace,secspace,dft,NULL);
 
 	if(!ft)
 		return -1;

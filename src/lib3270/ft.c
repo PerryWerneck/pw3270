@@ -178,8 +178,21 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 
  }
 
+ static H3270FT * ft_creation_failed(H3270 *session, int rc, const char **dest, const char *message) {
 
- LIB3270_EXPORT H3270FT * lib3270_ft_new(H3270 *session, LIB3270_FT_OPTION flags, const char *local, const char *remote, int lrecl, int blksize, int primspace, int secspace, int dft)
+	errno = rc;
+
+	if(!dest) {
+		// Não tem destino para a mensagem, apresenta
+		lib3270_popup_dialog(session, LIB3270_NOTIFY_ERROR, _( "Request failed" ), _( "Can't start file transfer." ), "%s", message);
+	} else {
+		*dest = message;
+	}
+
+	return NULL;
+ }
+
+ LIB3270_EXPORT H3270FT * lib3270_ft_new(H3270 *session, LIB3270_FT_OPTION flags, const char *local, const char *remote, int lrecl, int blksize, int primspace, int secspace, int dft, const char **message)
  {
 	static const unsigned short asc2ft[256] =
 	{
@@ -229,40 +242,18 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 //	trace("%s(%s)",__FUNCTION__,local);
 	if(!lib3270_connected(session))
 	{
-		lib3270_popup_dialog(	session,
-								LIB3270_NOTIFY_ERROR,
-								_( "Request failed" ),
-								_( "Can't start file transfer." ),
-								"%s",
-								_( "Disconnected from host." ));
-		errno = ENOTCONN;
-		return NULL;
+		return ft_creation_failed(session,ENOTCONN,message,_( "Disconnected from host." ));
 	}
 
 	if(ftHandle)
 	{
-		lib3270_popup_dialog(	session,
-								LIB3270_NOTIFY_ERROR,
-								_( "Request failed" ),
-								_( "Can't start file transfer." ),
-								"%s",
-								_( "File transfer is already active in this session." ));
-
-		errno = EBUSY;
-		return NULL;
+		return ft_creation_failed(session,EBUSY,message,_( "File transfer is already active in this session." ));
 	}
 
 	// Check remote file
 	if(!*remote)
 	{
-		lib3270_popup_dialog(	session,
-								LIB3270_NOTIFY_ERROR,
-								_( "Request failed" ),
-								_( "Can't start file transfer." ),
-								"%s",
-								_( "The remote file name is invalid." ));
-		errno = EINVAL;
-		return NULL;
+		return ft_creation_failed(session,EINVAL,message,_( "The remote file name is invalid." ));
 	}
 
 	// Open local file
@@ -274,13 +265,7 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 
 	if(!ft_local_file)
 	{
-		lib3270_popup_dialog(	session,
-								LIB3270_NOTIFY_ERROR,
-								_( "Request failed" ),
-								_( "Can't open local file." ),
-								"%s",
-								strerror(errno));
-		return NULL;
+		return ft_creation_failed(session,errno,message,strerror(errno));
 	}
 
 	// Set options

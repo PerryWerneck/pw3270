@@ -162,11 +162,12 @@
 	 * @param primspace
 	 * @param secspace
 	 * @param dft
+	 * @param msg		Pointer to receive message text.
 	 *
 	 * @return Filetransfer handle if ok, NULL if failed
 	 *
 	 */
-	LIB3270_EXPORT H3270FT	* lib3270_ft_new(H3270 *hSession, LIB3270_FT_OPTION flags, const char *local, const char *remote, int lrecl, int blksize, int primspace, int secspace, int dft);
+	LIB3270_EXPORT H3270FT	* lib3270_ft_new(H3270 *hSession, LIB3270_FT_OPTION flags, const char *local, const char *remote, int lrecl, int blksize, int primspace, int secspace, int dft, const char **msg);
 
 	LIB3270_EXPORT int		  lib3270_ft_start(H3270 *hSession);
 	LIB3270_EXPORT int	 	  lib3270_ft_destroy(H3270 *hSession);
