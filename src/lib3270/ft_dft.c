@@ -264,11 +264,13 @@ static void dft_data_insert(H3270 *hSession, struct data_buffer *data_bufr)
 
 		/* If transfer completed ok, use our msg. */
 		if (memcmp(msgp, END_TRANSFER, strlen(END_TRANSFER)) == 0) {
+			trace_ds(hSession,"END_TRANSFER\n");
+			ft_complete(hSession->ft,(const char *) msgp);
 			lib3270_free(msgp);
-			ft_complete(hSession->ft,NULL);
 		}
 		else if (lib3270_get_ft_state(hSession) == FT_ABORT_SENT && ((H3270FT *) hSession->ft)->abort_string != CN)
 		{
+			trace_ds(hSession,"ABORT_TRANSFER [%s]\n",msgp);
 			lib3270_free(msgp);
 			ft_failed(ft,ft->abort_string);
 			lib3270_free(ft->abort_string);

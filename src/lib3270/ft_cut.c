@@ -375,7 +375,7 @@ static void cut_control_code(H3270 *hSession)
 
 	default:
 		trace_ds(hSession,"unknown 0x%04x\n", code);
-		cut_abort(hSession,SC_ABORT_XMIT, "%s", _("Unknown FT control code from host"));
+		cut_abort(hSession,SC_ABORT_XMIT, "%s", N_("Unknown FT control code from host"));
 		break;
 	}
 }
