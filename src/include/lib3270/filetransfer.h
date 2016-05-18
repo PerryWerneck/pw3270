@@ -87,9 +87,24 @@
 
 	#define LIB3270_XLATE_NBUF	4
 
-	typedef struct _h3270ft
+	struct lib3270_ft_callbacks
 	{
-		unsigned short			  sz;					///< @brief Size of FT data structure
+		void (*complete)(H3270 *hSession, unsigned long length,double kbytes_sec,const char *msg, void *userdata);
+		void (*failed)(H3270 *hSession, unsigned long length,double kbytes_sec,const char *msg, void *userdata);
+		void (*message)(H3270 *hSession, const char *msg, void *userdata);
+		void (*update)(H3270 *hSession, unsigned long current, unsigned long length, double kbytes_sec, void *userdata);
+		void (*running)(H3270 *hSession, int is_cut, void *userdata);
+		void (*aborting)(H3270 *hSession, void *userdata);
+		void (*state_changed)(H3270 *hSession, LIB3270_FT_STATE state, const char *text, void *userdata);
+	};
+
+	/**
+	 * @brief File transfer data.
+	 *
+	 */
+	struct _h3270ft
+	{
+		struct lib3270_ft_callbacks	  cbk;				///< @brief Callback table - Always the first one.
 
 		int						  ft_last_cr	: 1;	///< @brief CR was last char in local file
 		int 					  remap_flag	: 1;	///< @brief Remap ASCII<->EBCDIC
@@ -102,7 +117,7 @@
 
 
 		H3270					* host;
-		void					* widget;				///< @brief File transfer dialog handle
+		void					* user_data;			///< @brief File transfer dialog handle
 		FILE 					* local_file;			///< @brief File descriptor for local file
 		unsigned long			  length;				///< @brief File length
 
@@ -115,12 +130,12 @@
 		int						  secspace;
 		int						  dft;
 
-		unsigned long			  ft_length;			/**< Length of transfer */
+		unsigned long			  ft_length;			///< Length of transfer
 
-		struct timeval			  starting_time;		/**< Starting time */
+		struct timeval			  starting_time;		///< Starting time
 
-		const char 				* local;				/**< Local filename */
-		const char				* remote;				/**< Remote filename */
+		const char 				* local;				///< Local filename
+		const char				* remote;				///< Remote filename
 
 		// ft_dft.c
 		char 					* abort_string;
@@ -133,23 +148,16 @@
 		int						  quadrant;
 		unsigned long			  expanded_length;
 		char					* saved_errmsg;
-		int						  xlate_buffered;					/**< buffer count */
-		int						  xlate_buf_ix;						/**< buffer index */
-		unsigned char			  xlate_buf[LIB3270_XLATE_NBUF];	/**< buffer */
+		int						  xlate_buffered;					///< buffer count
+		int						  xlate_buf_ix;						///< buffer index
+		unsigned char			  xlate_buf[LIB3270_XLATE_NBUF];	///< buffer
 
 		// Charset
 		struct lib3270_charset	  charset;
 
-		// Callbacks
-		void (*complete)(struct _h3270ft *ft,unsigned long length,double kbytes_sec,const char *msg);
-		void (*failed)(struct _h3270ft *ft,unsigned long length,double kbytes_sec,const char *msg);
-		void (*message)(struct _h3270ft *ft, const char *msg);
-		void (*update)(struct _h3270ft *ft, unsigned long current, unsigned long length, double kbytes_sec);
-		void (*running)(struct _h3270ft *ft, int is_cut);
-		void (*aborting)(struct _h3270ft *ft);
-		void (*state_changed)(struct _h3270ft *ft, LIB3270_FT_STATE state);
+	};
 
-	} H3270FT;
+
 
 	/**
 	 * Create a new file transfer session.
@@ -165,18 +173,22 @@
 	 * @param dft
 	 * @param msg		Pointer to receive message text.
 	 *
-	 * @return Filetransfer handle if ok, NULL if failed
+	 * @return Filetransfer callback table
 	 *
 	 */
-	LIB3270_EXPORT H3270FT	* lib3270_ft_new(H3270 *hSession, LIB3270_FT_OPTION flags, const char *local, const char *remote, int lrecl, int blksize, int primspace, int secspace, int dft, const char **msg);
+	LIB3270_EXPORT H3270FT						* lib3270_ft_new(H3270 *hSession, LIB3270_FT_OPTION flags, const char *local, const char *remote, int lrecl, int blksize, int primspace, int secspace, int dft, const char **msg);
 
-	LIB3270_EXPORT int		  lib3270_ft_start(H3270 *hSession);
-	LIB3270_EXPORT int	 	  lib3270_ft_destroy(H3270 *hSession);
+	LIB3270_EXPORT int							  lib3270_ft_start(H3270 *hSession);
+	LIB3270_EXPORT int							  lib3270_ft_destroy(H3270 *hSession);
 
-	LIB3270_EXPORT int		  lib3270_ft_cancel(H3270 *hSession, int force);
+	LIB3270_EXPORT int							  lib3270_ft_cancel(H3270 *hSession, int force);
 
+	LIB3270_EXPORT void							  lib3270_ft_set_user_data(H3270 *h, void *ptr);
+	LIB3270_EXPORT void						 	* lib3270_ft_get_user_data(H3270 *h);
 
-	LIB3270_EXPORT LIB3270_FT_STATE lib3270_get_ft_state(H3270 *session);
+	LIB3270_EXPORT LIB3270_FT_STATE				  lib3270_get_ft_state(H3270 *session);
+
+	LIB3270_EXPORT struct lib3270_ft_callbacks	* lib3270_get_ft_callbacks(H3270 *session, unsigned short sz);
 
 
 #endif // LIB3270_FILETRANSFER_INCLUDED

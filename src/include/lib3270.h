@@ -332,7 +332,8 @@
 		LIB3270_STATE_USER				// Always the last one
 	} LIB3270_STATE;
 
-	typedef struct _h3270 H3270;
+	typedef struct _h3270	H3270;
+	typedef struct _h3270ft	H3270FT;
 
 	/**
 	 * Get current screen size.

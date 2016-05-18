@@ -101,20 +101,27 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 	};
 
 	int f;
+	const char *message = NULL;
 
 	if(session->state == state)
 		return;
-	session->state = state;
-	session->state_changed(session,state);
+
+	// State changed, notify
 
 	for(f = 0; f < sizeof(msg)/sizeof(msg[0]);f++)
 	{
 		if(msg[f].state == state)
 		{
-			ft_message(session,msg[f].text);
+			message = msg[f].text;
 			break;
 		}
 	}
+
+	session->state = state;
+
+	ft_message(session,message);
+	session->cbk.state_changed(session->host,state,message,session->user_data);
+
 
  }
 
@@ -136,7 +143,7 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 	if (ft->state == LIB3270_FT_STATE_RUNNING)
 	{
 		set_ft_state(ft,LIB3270_FT_STATE_ABORT_WAIT);
-		ft->aborting(ft);
+		ft->cbk.aborting(hSession,ft->user_data);
 		return 0;
 	}
 
@@ -149,37 +156,37 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 	return 0;
  }
 
- static void def_complete(H3270FT *ft,unsigned long length,double kbytes_sec,const char *msg)
+ static void def_complete(H3270 *hSession, unsigned long length,double kbytes_sec,const char *msg, void *userdata)
  {
- 	ft->message(ft,msg);
+ 	hSession->ft->cbk.message(hSession,msg,hSession->ft->user_data);
  }
 
- static void def_failed(struct _h3270ft *ft,unsigned long length,double kbytes_sec,const char *msg)
+ static void def_failed(H3270 *hSession, unsigned long length,double kbytes_sec,const char *msg, void *userdata)
  {
-	ft->complete(ft,ft->ft_length,kbytes_sec,msg ? msg : N_("Transfer failed"));
+ 	hSession->ft->cbk.complete(hSession,length,kbytes_sec,msg,userdata);
  }
 
- static void def_message(H3270FT *ft, const char *errmsg)
+ static void def_message(H3270 *hSession, const char *msg, void *userdata)
  {
-	lib3270_write_log(ft->host,"ft","%s",errmsg);
+	lib3270_write_log(hSession,"ft","%s",msg);
  }
 
- static void def_update(H3270FT *ft, unsigned long current, unsigned long length, double kbytes_sec)
- {
-
- }
-
- static void def_running(H3270FT *ft, int is_cut)
+ static void def_update(H3270 *hSession, unsigned long current, unsigned long length, double kbytes_sec, void *userdata)
  {
 
  }
 
- static void def_aborting(H3270FT *ft)
+ static void def_running(H3270 *hSession, int is_cut, void *userdata)
  {
 
  }
 
- static void def_state_changed(H3270FT *ft, LIB3270_FT_STATE state)
+ static void def_aborting(H3270 *hSession, void *userdata)
+ {
+
+ }
+
+ static void def_state_changed(H3270 *hSession, LIB3270_FT_STATE state, const char *text, void *userdata)
  {
 
  }
@@ -281,32 +288,33 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 	// Create & Initialize ft control structure.
 	ftHandle = lib3270_malloc(sizeof(H3270FT)+strlen(local)+strlen(remote)+3);
 
-	ftHandle->sz 			= sizeof(H3270FT);
-	ftHandle->host			= session;
+	ftHandle->host				= session;
 
-	ftHandle->ft_last_cr	= 0;
+	ftHandle->ft_last_cr		= 0;
 
-	ftHandle->ascii_flag	= (flags & LIB3270_FT_OPTION_ASCII)	? 1 : 0;
-	ftHandle->cr_flag   	= (flags & LIB3270_FT_OPTION_CRLF)	? 1 : 0;
-	ftHandle->remap_flag	= (flags & LIB3270_FT_OPTION_REMAP)	? 1 : 0;
-	ftHandle->unix_text		= (flags & LIB3270_FT_OPTION_UNIX)	? 1 : 0;
-	ftHandle->ft_is_cut  	= 0;
-	ftHandle->flags			= flags;
-	ftHandle->local_file	= ft_local_file;
-	ftHandle->state			= LIB3270_FT_STATE_AWAIT_ACK;
-	ftHandle->complete 		= def_complete;
-	ftHandle->failed		= def_failed;
-	ftHandle->message 		= def_message;
-	ftHandle->update 		= def_update;
-	ftHandle->running 		= def_running;
-	ftHandle->aborting 		= def_aborting;
-	ftHandle->state_changed	= def_state_changed;
-	ftHandle->lrecl			= lrecl;
-	ftHandle->blksize		= blksize;
-	ftHandle->primspace		= primspace;
-	ftHandle->secspace		= secspace;
-	ftHandle->dft			= dft;
-	ftHandle->quadrant		= -1;
+	ftHandle->ascii_flag		= (flags & LIB3270_FT_OPTION_ASCII)	? 1 : 0;
+	ftHandle->cr_flag   		= (flags & LIB3270_FT_OPTION_CRLF)	? 1 : 0;
+	ftHandle->remap_flag		= (flags & LIB3270_FT_OPTION_REMAP)	? 1 : 0;
+	ftHandle->unix_text			= (flags & LIB3270_FT_OPTION_UNIX)	? 1 : 0;
+	ftHandle->ft_is_cut  		= 0;
+	ftHandle->flags				= flags;
+	ftHandle->local_file		= ft_local_file;
+	ftHandle->state				= LIB3270_FT_STATE_AWAIT_ACK;
+	ftHandle->lrecl				= lrecl;
+	ftHandle->blksize			= blksize;
+	ftHandle->primspace			= primspace;
+	ftHandle->secspace			= secspace;
+	ftHandle->dft				= dft;
+	ftHandle->quadrant			= -1;
+
+	ftHandle->cbk.complete 		= def_complete;
+	ftHandle->cbk.failed		= def_failed;
+	ftHandle->cbk.message 		= def_message;
+	ftHandle->cbk.update 		= def_update;
+	ftHandle->cbk.running 		= def_running;
+	ftHandle->cbk.aborting 		= def_aborting;
+	ftHandle->cbk.state_changed	= def_state_changed;
+
 
 	// Setup file transfer charset.
 	memcpy(&ftHandle->charset,&session->charset,sizeof(struct lib3270_charset));
@@ -328,6 +336,33 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 	session->ft				= ftHandle;
 
  	return ftHandle;
+ }
+
+ LIB3270_EXPORT void lib3270_ft_set_user_data(H3270 *hSession, void *ptr)
+ {
+ 	H3270FT * ft;
+
+	CHECK_SESSION_HANDLE(hSession);
+
+	ft = get_ft_handle(hSession);
+	if(!ft)
+		return;
+
+	ft->user_data = ptr;
+
+ }
+
+ LIB3270_EXPORT void * lib3270_ft_get_user_data(H3270 *hSession)
+ {
+ 	H3270FT * ft;
+
+	CHECK_SESSION_HANDLE(hSession);
+
+	ft = get_ft_handle(hSession);
+	if(!ft)
+		return NULL;
+
+	return ft->user_data;
  }
 
  LIB3270_EXPORT int lib3270_ft_start(H3270 *hSession)
@@ -488,7 +523,7 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 void ft_message(H3270FT *ft, const char *msg)
 {
 	lib3270_trace_event(ft->host,"%s\n",msg);
-	ft->message(ft,msg);
+	ft->cbk.message(ft->host,msg,ft->user_data);
 }
 
 static double finish(H3270FT *ft)
@@ -518,12 +553,12 @@ static double finish(H3270FT *ft)
 
 void ft_complete(H3270FT *ft, const char *errmsg)
 {
-	ft->complete(ft,ft->ft_length,finish(ft),errmsg ? errmsg : N_("Transfer complete"));
+	ft->cbk.complete(ft->host,ft->ft_length,finish(ft),errmsg ? errmsg : N_("Transfer complete"),ft->user_data);
 }
 
 void ft_failed(H3270FT *ft, const char *errmsg)
 {
-	ft->failed(ft,ft->ft_length,finish(ft),errmsg ? errmsg : N_("Transfer failed"));
+	ft->cbk.failed(ft->host,ft->ft_length,finish(ft),errmsg ? errmsg : N_("Transfer failed"),ft->user_data);
 }
 
 LIB3270_EXPORT int lib3270_ft_destroy(H3270 *hSession)
@@ -569,7 +604,7 @@ void ft_update_length(H3270FT *session)
 			 (double)(t1.tv_usec - session->starting_time.tv_usec) / 1.0e6);
 	}
 
-	session->update(session,session->ft_length,session->length,kbytes_sec);
+	session->cbk.update(session->host,session->ft_length,session->length,kbytes_sec,session->user_data);
 
 }
 
@@ -587,11 +622,27 @@ void ft_running(H3270FT *ft, Boolean is_cut)
 	if (ft->state == FT_AWAIT_ACK)
 		set_ft_state(ft,FT_RUNNING);
 
-	ft->running(ft,is_cut);
+	ft->cbk.running(ft->host,is_cut,ft->user_data);
 
 	ft_update_length(ft);
 
 }
+
+LIB3270_EXPORT struct lib3270_ft_callbacks * lib3270_get_ft_callbacks(H3270 *session, unsigned short sz)
+{
+
+	CHECK_SESSION_HANDLE(session);
+
+	if(sz != sizeof(struct lib3270_ft_callbacks))
+		return NULL;
+
+	if(session->ft)
+		return &(session->ft->cbk);
+
+	return NULL;
+
+}
+
 
 // Process a protocol-generated abort.
 void ft_aborting(H3270FT *h)
@@ -599,8 +650,8 @@ void ft_aborting(H3270FT *h)
 	if (h->state == FT_RUNNING || h->state == FT_ABORT_WAIT)
 	{
 		set_ft_state(h,FT_ABORT_SENT);
-		h->message(h,N_("Aborting..."));
-		h->aborting(h);
+		h->cbk.message(h->host,N_("Aborting..."),h->user_data);
+		h->cbk.aborting(h->host,h->user_data);
 	}
 }
 

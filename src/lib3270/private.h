@@ -373,7 +373,7 @@ struct _h3270
 	unsigned short			  current_port;
 
 	// Misc
-	void					* ft;					/**< Active file transfer data */
+	H3270FT					* ft;					/**< Active file transfer data */
 
 	// screen info
 	int						  ov_rows;

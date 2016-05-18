@@ -68,6 +68,17 @@
 
 	};
 
+	/**
+	 * Register application Handlers.
+	 *
+	 * @param cbk	Structure with the application I/O handles to set.
+	 *
+	 * @return 0 if ok, error code if not.
+	 *
+	 */
+	int LIB3270_EXPORT lib3270_set_session_callbacks(const struct lib3270_callbacks *cbk);
+
+
 	LIB3270_EXPORT struct lib3270_session_callbacks * lib3270_get_session_callbacks(H3270 *session, unsigned short sz);
 
 #endif // LIB3270_SESSION_H_INCLUDED

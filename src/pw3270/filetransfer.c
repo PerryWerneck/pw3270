@@ -34,7 +34,7 @@
 #include <stdlib.h>
 #include "globals.h"
 #include "ft/v3270ft.h"
-
+#include <lib3270/filetransfer.h>
 
 /*--[ Constants ]------------------------------------------------------------------------------------*/
 
@@ -207,39 +207,28 @@ static void ft_dialog_save(GtkWidget *widget, const gchar *name)
 
 }
 
-static void ft_complete(H3270FT *ft, unsigned long length,double kbytes_sec, const char *msg)
+static void ft_complete(H3270 *hSession, unsigned long length,double kbytes_sec, const char *msg, void *widget)
 {
-	v3270_ft_progress_complete(GTK_WIDGET(ft->widget),length,kbytes_sec);
-	v3270_ft_progress_set_message(GTK_WIDGET(ft->widget),gettext(msg));
+	v3270_ft_progress_complete(GTK_WIDGET(widget),length,kbytes_sec);
+	v3270_ft_progress_set_message(GTK_WIDGET(widget),gettext(msg));
 }
 
-static void ft_message(struct _h3270ft *ft, const char *text)
+static void ft_message(H3270 *hSession, const char *text, void *widget)
 {
-	v3270_ft_progress_set_message(GTK_WIDGET(ft->widget),gettext(text));
+	v3270_ft_progress_set_message(GTK_WIDGET(widget),gettext(text));
 }
 
-static void ft_update(H3270FT *ft, unsigned long current, unsigned long length, double kbytes_sec)
+static void ft_update(H3270 *hSession, unsigned long current, unsigned long length, double kbytes_sec, void *widget)
 {
-	v3270_ft_progress_update(GTK_WIDGET(ft->widget), current, length, kbytes_sec);
-}
-
-static void ft_running(H3270FT *ft, int is_cut)
-{
-}
-
-static void ft_aborting(H3270FT *ft)
-{
-}
-
-static void ft_state_changed(H3270FT *ft, LIB3270_FT_STATE state)
-{
+	v3270_ft_progress_update(GTK_WIDGET(widget), current, length, kbytes_sec);
 }
 
 gint v3270_transfer_file(GtkWidget *widget, LIB3270_FT_OPTION options, const gchar *local, const gchar *remote, int lrecl, int blksize, int primspace, int secspace, int dft)
 {
 	g_return_val_if_fail(GTK_IS_V3270(widget),0);
 
-	H3270FT		* ft		= lib3270_ft_new(v3270_get_session(widget),options,local,remote,lrecl,blksize,primspace,secspace,dft,NULL);
+	H3270		* hSession	= v3270_get_session(widget);
+	H3270FT		* ft		= lib3270_ft_new(hSession,options,local,remote,lrecl,blksize,primspace,secspace,dft,NULL);
 
 	if(!ft)
 		return -1;
@@ -254,14 +243,18 @@ gint v3270_transfer_file(GtkWidget *widget, LIB3270_FT_OPTION options, const gch
 	// Create FT progress dialog
 	GtkWidget	* progress	= v3270_ft_progress_new();
 
-	ft->widget 			= progress;
-	ft->complete 		= ft_complete;
-	ft->failed 			= ft_complete;
-	ft->update			= ft_update;
-	ft->running			= ft_running;
-	ft->aborting		= ft_aborting;
-	ft->state_changed	= ft_state_changed;
-	ft->message			= ft_message;
+	lib3270_ft_set_user_data(hSession,progress);
+
+
+	struct lib3270_ft_callbacks *cbk = lib3270_get_ft_callbacks(hSession,sizeof(struct lib3270_ft_callbacks));
+
+	cbk->complete 		= ft_complete;
+	cbk->failed 		= ft_complete;
+	cbk->update			= ft_update;
+//	cbk->running		= ft_running;
+//	cbk->aborting		= ft_aborting;
+//	cbk->state_changed	= ft_state_changed;
+	cbk->message		= ft_message;
 
 	if(options & LIB3270_FT_OPTION_RECEIVE) {
 
