@@ -79,10 +79,12 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 
  H3270FT * get_ft_handle(H3270 *hSession)
  {
+ 	/*
  	if(!hSession->ft)
 	{
 		popup_an_error(hSession,_( "Unexpected call to %s: No active filetransfer" ),__FUNCTION__);
 	}
+	*/
  	return hSession->ft;
  }
 
@@ -139,6 +141,8 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 	CHECK_SESSION_HANDLE(hSession);
 
 	ft = get_ft_handle(hSession);
+	if(!ft)
+		return EINVAL;
 
 	if (ft->state == LIB3270_FT_STATE_RUNNING)
 	{
