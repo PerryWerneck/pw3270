@@ -28,8 +28,8 @@ MODULE_NAME=v3270ft
 
 #---[ Application sources ]--------------------------------------------------------------
 
-SOURCES=filelist.c load.c misc.c select.c tables.c transfer.c \
-		v3270ftprogress.c get.c marshal.c save.c set.c testprogram.c v3270ft.c
+SOURCES=filelist.c load.c misc.c select.c transfer.c v3270ftprogress.c get.c \
+		marshal.c save.c set.c testprogram.c v3270ft.c
 
 #---[ Configuration values ]-------------------------------------------------------------
 
@@ -79,7 +79,7 @@ GTK_LIBS=@GTK_LIBS@
 GLIB_CFLAGS=@GLIB_CFLAGS@
 GLIB_LIBS=@GLIB_LIBS@
 
-CFLAGS=@CFLAGS@ \
+CFLAGS=@CFLAGS@ @DLL_CFLAGS@ \
 		-I../include \
 		-DBUILD_DATE=`date +"0x%Y%m%d"` \
 		$(GTK_CFLAGS)

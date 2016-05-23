@@ -220,16 +220,35 @@ static void copy_as_html_action(GtkAction *action, GtkWidget *widget)
 
 G_GNUC_INTERNAL void transfer_action(GtkAction *action, GtkWidget *widget)
 {
+	GtkWidget * dialog = v3270ft_new();
 
-}
+	gtk_window_set_transient_for(GTK_WINDOW(dialog),GTK_WINDOW(gtk_widget_get_toplevel(widget)));
 
-G_GNUC_INTERNAL void download_action(GtkAction *action, GtkWidget *widget)
-{
+	do {
 
-}
+		gtk_widget_show_all(dialog);
 
-G_GNUC_INTERNAL void upload_action(GtkAction *action, GtkWidget *widget)
-{
+		switch(gtk_dialog_run(GTK_DIALOG(dialog))) {
+		case GTK_RESPONSE_APPLY:
+		case GTK_RESPONSE_OK:
+		case GTK_RESPONSE_YES:
+			gtk_widget_hide(dialog);
+			v3270ft_transfer(dialog,v3270_get_session(widget));
+			break;
+
+		case GTK_RESPONSE_CANCEL:
+		case GTK_RESPONSE_NO:
+		case GTK_RESPONSE_DELETE_EVENT:
+			v3270ft_remove_all(dialog);
+			break;
+
+		default:
+			g_warning("Unexpected response from v3270ft");
+		}
+
+	} while(v3270ft_get_length(dialog) > 0);
+
+	gtk_widget_destroy(dialog);
 
 }
 
@@ -273,8 +292,8 @@ static void connect_standard_action(GtkAction *action, GtkWidget *widget, const 
 		{ "about",			about_dialog_action		},
 		{ "kpsubtract", 	kp_subtract_action		},
 		{ "kpadd",			kp_add_action			},
-		{ "download",		download_action			},
-		{ "upload",			upload_action			},
+		{ "download",		transfer_action			},
+		{ "upload",			transfer_action			},
 		{ "transfer",		transfer_action			},
 #ifdef DEBUG
 		{ "copyashtml",		copy_as_html_action		},

@@ -75,6 +75,8 @@
 	void				  v3270ft_append_file(GtkWidget *widget, const gchar *filename, gboolean text);
 	guint				  v3270ft_append_selection(GtkWidget *widget, GtkSelectionData *data);
 
+	gchar				* v3270ft_select_file(v3270ft *dialog, const gchar *title, const gchar *button, GtkFileChooserAction action, const gchar *filename);
+
 	gint				  v3270ft_transfer(GtkWidget *dialog, H3270 *session);
 
 	G_END_DECLS

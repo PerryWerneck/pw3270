@@ -112,9 +112,6 @@
 		<Unit filename="set.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="tables.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="testprogram.c">
 			<Option compilerVar="CC" />
 		</Unit>

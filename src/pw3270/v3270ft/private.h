@@ -183,7 +183,6 @@
 	G_GNUC_INTERNAL void 	  v3270ft_set_active(v3270ft *dialog, GList * active);
 	G_GNUC_INTERNAL GtkGrid	* v3270ft_new_grid(void);
 	G_GNUC_INTERNAL	void	  v3270ft_clear(v3270ft *dialog);
-	G_GNUC_INTERNAL gchar	* v3270ft_select_file(v3270ft *dialog, const gchar *title, const gchar *button, GtkFileChooserAction action, const gchar *filename);
 
 	G_GNUC_INTERNAL void	  v3270ftprogress_set_session(GtkWidget *widget, H3270 *session);
 	G_GNUC_INTERNAL void	  v3270ftprogress_update(GtkWidget *widget, unsigned long current, unsigned long total, double kbytes_sec);

@@ -83,33 +83,44 @@ LIBS=@LIBS@ @GTK_LIBS@ @GTKMAC_LIBS@ @SOCKET_LIBS@
 
 include ../include/rules.mak
 
-%.png: pixmaps/%.svg
+%.png: \
+	pixmaps/%.svg
+
 ifneq ($(CONVERT),no)
 	@echo "  GEN  `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(CONVERT) $< --format=png > $@
 endif
 
-%@OBJEXT@: %.rc
+%@OBJEXT@: \
+	%.rc
+
 	@echo "  RC   `basename $@`"
 	@mkdir -p `dirname $@`
 	@$(WINDRES) --include-dir=. -i $< -o $@
 
-$(OBJDBG)/%@OBJEXT@: %.rc
+$(OBJDBG)/%@OBJEXT@: \
+	%.rc
+
 	@echo "  RC   `basename $@`"
 	@mkdir -p `dirname $@`
 	@$(WINDRES) --include-dir=. -i $< -o $@
 
-$(OBJRLS)/%@OBJEXT@: %.rc
+$(OBJRLS)/%@OBJEXT@: \
+	%.rc
+
 	@echo "  RC   `basename $@`"
 	@mkdir -p `dirname $@`
 	@$(WINDRES) --include-dir=. -i $< -o $@
 
 #---[ Release targets ]--------------------------------------------------------
 
-Release: $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
+Release: \
+	$(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
 
-install: Release $(PACKAGE_NAME).desktop $(PACKAGE_NAME)-logo.png
+install: \
+	Release $(PACKAGE_NAME).desktop $(PACKAGE_NAME)-logo.png
+
 	$(MKDIR) $(DESTDIR)$(bindir)
 	$(INSTALL_PROGRAM) $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) $(DESTDIR)$(bindir)
 
@@ -128,18 +139,24 @@ install: Release $(PACKAGE_NAME).desktop $(PACKAGE_NAME)-logo.png
 				--add-category TerminalEmulator \
 				$(PACKAGE_NAME).desktop
 
-$(BINRLS)/$(PACKAGE_TARNAME)$(EXEEXT):	$(LIBRLS)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@ \
-					$(foreach SRC, $(basename $(APP_SOURCES)), $(OBJRLS)/$(SRC)$(OBJEXT))
+$(BINRLS)/$(PACKAGE_TARNAME)$(EXEEXT):	\
+	$(LIBRLS)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@ \
+	$(foreach SRC, $(basename $(APP_SOURCES)), $(OBJRLS)/$(SRC)$(OBJEXT))
+
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(LD) @LDARCH@ @LDAPPFLAGS@ -o $@ $(foreach SRC, $(basename $(APP_SOURCES)), $(OBJRLS)/$(SRC)$(OBJEXT)) $(LIBS) $(LIB3270_LIBS) -l$(PACKAGE_TARNAME)
 	@$(STRIP) $@
 
-$(LIBRLS)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@: $(LIBRLS)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@.$(PACKAGE_VERSION)
+$(LIBRLS)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@: \
+	$(LIBRLS)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@.$(PACKAGE_VERSION)
+
 	@rm -f $@
 	@cd $(LIBRLS) && $(LN_S) @DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@.$(PACKAGE_VERSION) @DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@
 
-$(LIBRLS)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@.$(PACKAGE_VERSION):	$(foreach SRC, $(basename $(LIB_SOURCES)), $(OBJRLS)/$(SRC)$(OBJEXT))
+$(LIBRLS)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@.$(PACKAGE_VERSION):	\
+	$(foreach SRC, $(basename $(LIB_SOURCES)), $(OBJRLS)/$(SRC)$(OBJEXT))
+
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(LD) $(DLL_FLAGS) $(LDFLAGS) @LDSOFLAGS@ @LDLIBFLAGS@ @RLS_LDFLAGS@ -o $@ $^ $(LIBS) $(LIB3270_LIBS)
@@ -149,20 +166,34 @@ $(LIBRLS)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@.$(PACKAGE_VERSION):	$(foreach SR
 
 Debug: $(BINDBG)/$(PACKAGE_TARNAME)$(EXEEXT)
 
-$(BINDBG)/$(PACKAGE_TARNAME)$(EXEEXT):	$(LIBDBG)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@ \
-					$(foreach SRC, $(basename $(APP_SOURCES)), $(OBJDBG)/$(SRC)$(OBJEXT))
+$(BINDBG)/$(PACKAGE_TARNAME)$(EXEEXT): \
+	$(LIBDBG)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@ \
+	$(foreach SRC, $(basename $(APP_SOURCES)), $(OBJDBG)/$(SRC)$(OBJEXT))
+
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(LD) @LDARCH@ @DBGRPATH@ -o $@ $(foreach SRC, $(basename $(APP_SOURCES)), $(OBJDBG)/$(SRC)$(OBJEXT)) $(LIBS) $(LIB3270_LIBS) -l$(PACKAGE_TARNAME)
 
-$(LIBDBG)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@: $(LIBDBG)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@.$(PACKAGE_VERSION)
+.bin/Debug/v3270ft.a: \
+	v3270ft/*
+
+	$(MAKE) BINDIR=../.bin -C v3270ft Debug
+
+
+$(LIBDBG)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@: \
+	$(LIBDBG)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@.$(PACKAGE_VERSION)
+
 	@rm -f $@
 	@cd $(LIBDBG) && $(LN_S) @DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@.$(PACKAGE_VERSION) @DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@
 
-$(LIBDBG)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@.$(PACKAGE_VERSION):	$(foreach SRC, $(basename $(LIB_SOURCES)), $(OBJDBG)/$(SRC)$(OBJEXT))
+$(LIBDBG)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@.$(PACKAGE_VERSION):	\
+	$(foreach SRC, $(basename $(LIB_SOURCES)), $(OBJDBG)/$(SRC)$(OBJEXT)) \
+	.bin/Debug/v3270ft.a
+
 	@echo "  CCLD `basename $@`"
-	@$(MKDIR) `dirname $@`
-	@$(LD) $(DLL_FLAGS) $(LDFLAGS) @LDSOFLAGS@ @DBGRPATH@ -o $@ $^ $(LIBS) $(LIB3270_LIBS)
+	@$(MKDIR) `dirname $@` AAA
+	$(LD) $(DLL_FLAGS) $(LDFLAGS) @LDSOFLAGS@ @DBGRPATH@ -o $@ $^ $(LIBS) $(LIB3270_LIBS)
+
 
 run: $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
 	@cd "$(ROOTDIR)" ; .bin/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
@@ -209,6 +240,7 @@ distclean: clean
 	@rm -f $(PACKAGE_NAME)-logo.png
 
 clean: clean-common
+	@$(MAKE) -C v3270ft clean
 	@rm -f v3270/marshal.c
 	@rm -f v3270/marshal.h
 	@rm -fr uiparser/.bin
