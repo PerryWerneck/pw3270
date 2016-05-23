@@ -29,7 +29,7 @@ MODULE_NAME=v3270ft
 #---[ Application sources ]--------------------------------------------------------------
 
 SOURCES=filelist.c load.c misc.c select.c transfer.c v3270ftprogress.c get.c \
-		marshal.c save.c set.c testprogram.c v3270ft.c
+		marshal.c save.c set.c testprogram.c v3270ft.c tables.c
 
 #---[ Configuration values ]-------------------------------------------------------------
 

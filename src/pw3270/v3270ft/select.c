@@ -64,7 +64,7 @@ gchar * v3270ft_select_file(v3270ft *dialog, const gchar *title, const gchar *bu
 	(
 		title,
 		GTK_WINDOW(dialog),
-		GTK_FILE_CHOOSER_ACTION_OPEN,
+		action,
 		_("_Cancel" ),	GTK_RESPONSE_CANCEL,
 		button, GTK_RESPONSE_ACCEPT,
 		NULL

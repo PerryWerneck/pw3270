@@ -56,23 +56,24 @@
 		FT_BUTTON_COUNT
 	} FT_BUTTON;
 
-	const struct v3270ft_option {
+	struct v3270ft_option {
 
 		LIB3270_FT_OPTION	  opt;
 		const char			* name;
 		const char			* label;
 		const char			* tooltip;
 
-	} ft_option[NUM_OPTIONS_WIDGETS];
+	};
 
-	const struct v3270ft_type {
+
+	struct v3270ft_type {
 		LIB3270_FT_OPTION	  opt;
 		const gchar			* name;
 		const gchar			* type;
 		const gchar			* label;
-	} ft_type[NUM_TYPES];
+	};
 
-	const struct v3270ft_value {
+	struct v3270ft_value {
 
 		const gchar * name;
 		guint		  minval;
@@ -80,7 +81,11 @@
 		const gchar * label;
 		const gchar * tooltip;
 
-	} ft_value[LIB3270_FT_VALUE_COUNT];
+	};
+
+	extern const struct v3270ft_option	ft_option[];
+	extern const struct v3270ft_type	ft_type[];
+	extern const struct v3270ft_value	ft_value[];
 
 	struct v3270ft_entry {
 		gint				  type;								///< Transfer type.
