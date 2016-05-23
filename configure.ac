@@ -897,7 +897,7 @@ AC_CONFIG_FILES(src/lib3270/mkversion.sh)
 AC_CONFIG_FILES(src/lib3270/Makefile)
 AC_CONFIG_FILES(src/pw3270/Makefile)
 AC_CONFIG_FILES(src/pw3270/uiparser/Makefile)
-AC_CONFIG_FILES(src/pw3270/ft/Makefile)
+AC_CONFIG_FILES(src/pw3270/v3270ft/Makefile)
 AC_CONFIG_FILES(src/tools/Makefile)
 
 AC_CONFIG_FILES(src/classlib/Makefile)

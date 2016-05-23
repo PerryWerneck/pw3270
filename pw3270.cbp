@@ -433,24 +433,15 @@
 		<Unit filename="src/pw3270/dialog.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/pw3270/filetransfer.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/pw3270/filetransfer.h" />
 		<Unit filename="src/pw3270/fonts.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/pw3270/ft/ftdialog.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pw3270/ft/ftprogress.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pw3270/ft/v3270ft.h" />
 		<Unit filename="src/pw3270/globals.h" />
 		<Unit filename="src/pw3270/hostdialog.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/pw3270/include/v3270ft.h" />
 		<Unit filename="src/pw3270/main.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -557,6 +548,42 @@
 		</Unit>
 		<Unit filename="src/pw3270/v3270/sources.mak" />
 		<Unit filename="src/pw3270/v3270/widget.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/pw3270/v3270ft/Makefile.in" />
+		<Unit filename="src/pw3270/v3270ft/filelist.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/pw3270/v3270ft/genmarshal" />
+		<Unit filename="src/pw3270/v3270ft/get.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/pw3270/v3270ft/load.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/pw3270/v3270ft/misc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/pw3270/v3270ft/private.h" />
+		<Unit filename="src/pw3270/v3270ft/save.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/pw3270/v3270ft/select.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/pw3270/v3270ft/set.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/pw3270/v3270ft/tables.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/pw3270/v3270ft/transfer.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/pw3270/v3270ft/v3270ft.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/pw3270/v3270ft/v3270ftprogress.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/pw3270/window.c">

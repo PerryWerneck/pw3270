@@ -31,9 +31,12 @@
 
  #include "globals.h"
  #include "uiparser/parser.h"
- #include <pw3270/v3270.h>
+
+ #include <v3270.h>
+ #include <v3270ft.h>
+
  #include <pw3270/plugin.h>
- #include "filetransfer.h"
+ // #include "filetransfer.h"
  #include <lib3270/actions.h>
  #include <lib3270/selection.h>
  #include <lib3270/trace.h>
@@ -215,6 +218,21 @@ static void copy_as_html_action(GtkAction *action, GtkWidget *widget)
 }
 #endif // DEBUG
 
+G_GNUC_INTERNAL void transfer_action(GtkAction *action, GtkWidget *widget)
+{
+
+}
+
+G_GNUC_INTERNAL void download_action(GtkAction *action, GtkWidget *widget)
+{
+
+}
+
+G_GNUC_INTERNAL void upload_action(GtkAction *action, GtkWidget *widget)
+{
+
+}
+
 static void connect_standard_action(GtkAction *action, GtkWidget *widget, const gchar *name)
 {
 	#undef DECLARE_LIB3270_ACTION
@@ -257,6 +275,7 @@ static void connect_standard_action(GtkAction *action, GtkWidget *widget, const 
 		{ "kpadd",			kp_add_action			},
 		{ "download",		download_action			},
 		{ "upload",			upload_action			},
+		{ "transfer",		transfer_action			},
 #ifdef DEBUG
 		{ "copyashtml",		copy_as_html_action		},
 #endif // DEBUG
