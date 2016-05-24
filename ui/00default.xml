@@ -49,7 +49,7 @@
 			<menuitem action='print' src='copy' group='clipboard' label='Print copy' />
 			<separator/>
 
-			<menuitem action='Transfer' key='<alt>t' label='Send/Receive'/>
+			<menuitem action='transfer' key='<alt>t' label='Send/Receive' />
 			<menuitem action='Quit' key='<ctrl>q' label='Quit' icon="quit" sysmenu="quit"/>
 
 		</menu>
@@ -143,21 +143,24 @@
 	</menubar>
 
 	<toolbar name='toolbar.default' label='Toolbar' key='<alt>t' >
-		<toolitem action='selectall' />
-		<toolitem action='copy' append='no' format='text' />
-		<toolitem action='paste' src='clipboard' />
-		<toolitem action='erase' target='input' />
+		<toolitem action='selectall' tooltip='Select all'/>
+		<toolitem action='copy' append='no' format='text' tooltip='Copy selected area to clipboard' />
+		<toolitem action='paste' src='clipboard' tooltip='Paste from clipboard'/>
+		<toolitem action='erase' target='input' tooltip='Erase screen contents' />
 
 		<separator/>
-		<toolitem action='connect' />
-		<toolitem action='disconnect' />
+		<toolitem action='transfer' icon='harddisk' tooltip='Send/Receive files'/>
 
 		<separator/>
-		<toolitem action='set' toggle='fullscreen' icon='fullscreen' label='Full Screen' />
-		<toolitem action='reset' toggle='fullscreen' icon='leave-fullscreen' label='Window' />
-		<toolitem action='editcolors' />
-		<toolitem action='print' src='all' />
-		<toolitem action='Quit' />
+		<toolitem action='connect' tooltip='Connect to host'/>
+		<toolitem action='disconnect' tooltip='Disconnect from host'/>
+
+		<separator/>
+		<toolitem action='set' toggle='fullscreen' icon='fullscreen' label='Full Screen' tooltip='Go to fullscreen mode'/>
+		<toolitem action='reset' toggle='fullscreen' icon='leave-fullscreen' label='Window' tooltip='Go back to window mode'/>
+		<toolitem action='editcolors' tooltip='Select terminal colors'/>
+		<toolitem action='print' src='all' tooltip='Print screen contents'/>
+		<toolitem action='Quit' tooltip='Quit pw3270'/>
 	</toolbar>
 
 	<popup name='selectionpopup' type='selection'>
