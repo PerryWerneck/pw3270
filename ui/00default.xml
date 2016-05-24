@@ -24,8 +24,6 @@
 
  perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
  erico.mendonca@gmail.com	(Erico Mascarenhas Mendonça)
- licinio@bb.com.br			(Licínio Luis Branco)
- kraucer@bb.com.br			(Kraucer Fernandes Mazuco)
 
 ------------------------------------------------------------------------------>
 
@@ -50,11 +48,10 @@
 			<menuitem action='print' src='selected' group='selection' label='Print selected' />
 			<menuitem action='print' src='copy' group='clipboard' label='Print copy' />
 			<separator/>
-			<menu name='FTMenu' label='Send/Receive' >
-				<menuitem action='download' key='<alt>d' label='Receive file' group='online' />
-				<menuitem action='upload' key='<alt>u' label='Send file' group='online' />
-			</menu>
+
+			<menuitem action='Transfer' key='<alt>t' label='Send/Receive'/>
 			<menuitem action='Quit' key='<ctrl>q' label='Quit' icon="quit" sysmenu="quit"/>
+
 		</menu>
 
 		<menu name='EditMenu' label='_Edit' >

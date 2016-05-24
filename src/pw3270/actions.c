@@ -292,8 +292,8 @@ static void connect_standard_action(GtkAction *action, GtkWidget *widget, const 
 		{ "about",			about_dialog_action		},
 		{ "kpsubtract", 	kp_subtract_action		},
 		{ "kpadd",			kp_add_action			},
-		{ "download",		transfer_action			},
-		{ "upload",			transfer_action			},
+//		{ "download",		transfer_action			},
+//		{ "upload",			transfer_action			},
 		{ "transfer",		transfer_action			},
 #ifdef DEBUG
 		{ "copyashtml",		copy_as_html_action		},
