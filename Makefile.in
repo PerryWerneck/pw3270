@@ -370,7 +370,8 @@ install-sdk:
 	@$(INSTALL_DATA) src/include/lib3270/session.h $(DESTDIR)/$(includedir)/lib3270
 
 	@$(MKDIR) $(DESTDIR)$(includedir)/pw3270
-	@$(INSTALL_DATA) src/include/pw3270/v3270.h $(DESTDIR)/$(includedir)/pw3270
+	@$(INSTALL_DATA) src/pw3270/include/*.h $(DESTDIR)/$(includedir)/pw3270
+
 	@$(INSTALL_DATA) src/include/pw3270/trace.h $(DESTDIR)/$(includedir)/pw3270
 	@$(INSTALL_DATA) src/include/pw3270/plugin.h $(DESTDIR)/$(includedir)/pw3270
 	@$(INSTALL_DATA) src/include/pw3270.h $(DESTDIR)/$(includedir)
