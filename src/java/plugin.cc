@@ -340,7 +340,10 @@
 	}
 
 	int file_transfer(LIB3270_FT_OPTION options, const gchar *local, const gchar *remote, int lrecl = 0, int blksize = 0, int primspace = 0, int secspace = 0, int dft = 4096) {
+		/*
 		return v3270_transfer_file(v3270_get_default_widget(),options,local,remote,lrecl,blksize,primspace,secspace,dft);
+		*/
+		return EINVAL;
 	}
 
 	void set_unlock_delay(unsigned short ms)

@@ -185,6 +185,7 @@
 
  static int do_file_transfer(struct hllapi_packet_file_transfer * source)
  {
+ 	/*
  	const gchar	* local		= (const char *) source->text;
  	const gchar	* remote	= (const char *) (local+strlen(local)+1);
 
@@ -197,6 +198,7 @@
 								source->primspace,
 								source->secspace,
 								source->dft );
+	*/
  }
 
  static void process_input(pipe_source *source, DWORD cbRead)

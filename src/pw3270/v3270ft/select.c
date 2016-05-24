@@ -30,7 +30,46 @@
 
  #include "private.h"
 
+#ifdef WIN32
+	#include <gdk/gdkwin32.h>
+#endif // WIN32
+
 /*--[ Implement ]------------------------------------------------------------------------------------*/
+
+#if defined(_WIN32)
+
+struct file {
+	OPENFILENAME		 	ofn;
+	gboolean				enabled;
+	char				  	szName[260];	// buffer for file name
+	GtkFileChooserAction	action;
+	BOOL					ok;
+};
+
+static gpointer select_file(struct file *fl) {
+
+
+	switch(fl->action) {
+	case GTK_FILE_CHOOSER_ACTION_SAVE:	// Receber arquivo
+										// https://msdn.microsoft.com/en-us/library/windows/desktop/ms646839(v=vs.85).aspx
+										// https://msdn.microsoft.com/en-us/library/windows/desktop/ms646829(v=vs.85).aspx#open_file
+		fl->ofn.Flags = OFN_OVERWRITEPROMPT;
+		fl->ok = GetSaveFileName(&fl->ofn);
+		break;
+
+	case GTK_FILE_CHOOSER_ACTION_OPEN:	// Enviar arquivo
+										// https://msdn.microsoft.com/en-us/library/windows/desktop/ms646928(v=vs.85).aspx
+		fl->ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+		fl->ok = GetOpenFileName(&fl->ofn);
+		break;
+	}
+
+	fl->enabled = FALSE;
+
+	return 0;
+}
+
+#endif // _WIN32
 
 gchar * v3270ft_select_file(v3270ft *dialog, const gchar *title, const gchar *button, GtkFileChooserAction action, const gchar *filename) {
 
@@ -56,7 +95,47 @@ gchar * v3270ft_select_file(v3270ft *dialog, const gchar *title, const gchar *bu
 
 #elif defined(_WIN32)
 
-	#error Usar diálogo nativo windows
+	GThread 	* thd;
+	struct file	  fl;
+	GdkWindow	* win 	= gtk_widget_get_window(GTK_WIDGET(dialog));
+
+	gtk_widget_set_sensitive(GTK_WIDGET(dialog),FALSE);
+
+	memset(&fl,0,sizeof(fl));
+	fl.ofn.lStructSize		= sizeof(fl.ofn);
+	fl.ofn.hwndOwner		= GDK_WINDOW_HWND(win);
+	fl.ofn.lpstrFile		= fl.szName;
+
+	// Set lpstrFile[0] to '\0' so that GetOpenFileName does not
+	// use the contents of szFile to initialize itself.
+	fl.ofn.lpstrFile[0] 	= '\0';
+
+	fl.ofn.nMaxFile 		= sizeof(fl.szName);
+	fl.ofn.lpstrFilter		= "All\0*.*\0Text\0*.TXT\0";
+	fl.ofn.nFilterIndex		= 1;
+	fl.ofn.nMaxFileTitle	= 0;
+	fl.ofn.lpstrInitialDir	= NULL;
+
+	// Guarda o valor atual
+	strncpy(fl.szName,filename,fl.ofn.nMaxFile);
+
+	fl.action = action;
+
+	thd = g_thread_new("GetFileName",(GThreadFunc) select_file, &fl);
+
+	fl.enabled = TRUE;
+	while(fl.enabled) {
+		g_main_context_iteration(NULL,TRUE);
+	}
+
+	g_thread_unref(thd);
+
+	if(fl.ok) {
+		rc = g_strdup(fl.szName);
+	}
+
+	gtk_widget_set_sensitive(GTK_WIDGET(dialog),TRUE);
+
 
 #else
 
