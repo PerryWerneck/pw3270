@@ -42,7 +42,7 @@ Release:        @PACKAGE_LEVEL@
 Summary:        IBM 3270 Terminal emulator for GTK
 License:        GPL-2.0
 Group:          System/X11/Terminals
-Url:            https://portal.softwarepublico.gov.br/social/@PACKAGE@/
+Url:            https://portal.softwarepublico.gov.br/social/pw3270/
 
 Source:         %{name}-%{version}.tar.bz2
 
@@ -233,7 +233,7 @@ BuildRequires:  sed
 
 %description
 Open-source GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
-Based on the original x3270 code, @PACKAGE@ was originally created for Banco do Brasil, and is now used worldwide. 
+Based on the original x3270 code, pw3270 was originally created for Banco do Brasil, and is now used worldwide. 
 
 #--[ lib3270 ]--------------------------------------------------------------------------------------------------------
 
