@@ -31,7 +31,7 @@
 
  #include <lib3270/config.h>
  #include "globals.h"
- #include <pw3270/v3270.h>
+ #include <v3270.h>
 
  #if defined(HAVE_LIBSSL)
 	#include <openssl/ssl.h>

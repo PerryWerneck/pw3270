@@ -38,7 +38,7 @@
 
  #include <pw3270.h>
  #include <lib3270/log.h>
- #include <pw3270/v3270.h>
+ #include <v3270.h>
  #include "private.h"
  #include "accessible.h"
 

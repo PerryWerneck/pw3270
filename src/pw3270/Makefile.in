@@ -177,7 +177,7 @@ $(BINDBG)/$(PACKAGE_TARNAME)$(EXEEXT): \
 .bin/Debug/v3270ft.a: \
 	v3270ft/*
 
-	$(MAKE) BINDIR=../.bin -C v3270ft Debug
+	@$(MAKE) BINDIR=../.bin -C v3270ft Debug
 
 
 $(LIBDBG)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@: \

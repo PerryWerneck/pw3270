@@ -34,7 +34,7 @@
  #include <lib3270/log.h>
  #include <lib3270/macros.h>
  #include <errno.h>
- #include <pw3270/v3270.h>
+ #include <v3270.h>
  #include "private.h"
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/

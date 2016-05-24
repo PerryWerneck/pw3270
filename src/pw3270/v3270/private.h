@@ -36,7 +36,7 @@
 #include <glib/gi18n.h>
 
 #ifndef V3270_H_INCLUDED
-	#include <pw3270/v3270.h>
+	#include <v3270.h>
 #endif
 
 G_BEGIN_DECLS

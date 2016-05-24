@@ -38,7 +38,7 @@
  #include <string.h>
  #include <gdk/gdk.h>
 
- #include <pw3270/v3270.h>
+ #include <v3270.h>
  #include "private.h"
 
 #if GTK_CHECK_VERSION(3,0,0)

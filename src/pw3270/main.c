@@ -37,7 +37,7 @@
  #include <gtkosxapplication.h>
 #endif // HAVE_GTKMAC
 
-#include <pw3270/v3270.h>
+#include <v3270.h>
 #include <pw3270/plugin.h>
 #include "v3270/accessible.h"
 #include <lib3270/trace.h>

@@ -44,7 +44,7 @@
  #include <string.h>
  #include <pw3270.h>
  #include <pw3270/plugin.h>
- #include <pw3270/v3270.h>
+ #include <v3270.h>
  #include <pw3270/trace.h>
  #include <lib3270/actions.h>
  #include <lib3270/log.h>

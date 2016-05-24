@@ -30,7 +30,7 @@
  */
 
  #include "private.h"
- #include <pw3270/v3270.h>
+ #include <v3270.h>
 
  #ifdef HAVE_GTKMAC
 	#include <gtkmacintegration/gtk-mac-menu.h>

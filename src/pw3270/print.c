@@ -30,7 +30,7 @@
  */
 
  #include "globals.h"
- #include <pw3270/v3270.h>
+ #include <v3270.h>
  #include <lib3270/selection.h>
  #include <lib3270/trace.h>
 

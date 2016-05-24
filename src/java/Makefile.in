@@ -72,7 +72,6 @@ OBJRLS	?= $(OBJDIR)/Release
 #---[ lib3270 common class ]---------------------------------------------------
 
 DEBUG_CFLAGS=-DDEBUG=1 -g -Wall
-PW3270_CFLAGS=-I../include
 CLASSLIBDIR=../classlib
 include $(CLASSLIBDIR)/class.mak
 
@@ -80,11 +79,10 @@ include $(CLASSLIBDIR)/class.mak
 
 CXXFLAGS=@CFLAGS@ @CXXFLAGS@ @DLL_CFLAGS@ @JNI_CPPFLAGS@ -I../include
 
-PW3270_LIBS		?= -L../../.bin/Debug@DLLDIR@ -l3270 -lpw3270
-PW3270_CFLAGS	?= -I../include
+PW3270_LIBS	?= -L../../.bin/Debug@DLLDIR@ -l3270 -lpw3270
 
 PLUGIN_CFLAGS=@CXXFLAGS@ -DPW3270_PLUGIN -Wno-deprecated-declarations @DLL_CFLAGS@ @JNI_CPPFLAGS@ -DJNIDIR="\"$(jnidir)\"" \
-				-DJARDIR="\"$(jvmjardir)\"" @GTK_CFLAGS@ @GTKMAC_CFLAGS@ $(PW3270_CFLAGS)
+				-DJARDIR="\"$(jvmjardir)\"" @GTK_CFLAGS@ @GTKMAC_CFLAGS@ @PW3270_CFLAGS@ @LIB3270_CFLAGS@
 
 PLUGIN_LIBS=@GTK_LIBS@ @GTKMAC_LIBS@ @INTL_LIBS@ @JVM_LIBS@
 

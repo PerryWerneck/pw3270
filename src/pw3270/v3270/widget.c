@@ -40,7 +40,7 @@
 	#include <malloc.h>
 #endif // HAVE_MALLOC_H
 
- #include <pw3270/v3270.h>
+ #include <v3270.h>
  #include "private.h"
  #include "accessible.h"
  #include "marshal.h"

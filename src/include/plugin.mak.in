@@ -74,27 +74,26 @@ LIB3270_MODE ?= Default
 DLL_NAME ?= @DLLDIR@/@DLLPREFIX@$(MODULE_NAME)@DLLEXT@
 PLUGIN_NAME ?= plugins/$(MODULE_NAME)@DLLEXT@
 
+PW3270_CFLAGS=@PW3270_CFLAGS@
+LIB3270_CFLAGS=@LIB3270_CFLAGS@
+
 ifeq ($(LIB3270_MODE),Debug)
 	PW3270_LIBS=-L../../../.bin/Debug@DLLDIR@ -l$(PACKAGE_TARNAME)
-	PW3270_CFLAGS=-I../../../src/include
 	LIB3270_LIBS=-L../../../.bin/Debug@DLLDIR@  -l3270
-	LIB270_CFLAGS=-I../../../src/include
 endif
 
 ifeq ($(LIB3270_MODE),Release)
 	BINRLS=../../../.bin/Release
 	PW3270_LIBS=-L$(BINRLS)@DLLDIR@ -l$(PACKAGE_TARNAME)
-	PW3270_CFLAGS=-I../../../src/include
 	LIB3270_LIBS=-L$(BINRLS)@DLLDIR@  -l3270
-	LIB270_CFLAGS=-I../../../src/include
 endif
 
-ifeq ($(LIB3270_MODE),Default)
-	LIB3270_LIBS ?= `pkg-config --libs lib3270`
-	LIB3270_CFLAGS ?= `pkg-config --cflags lib3270`
-	PW3270_LIBS ?= `pkg-config --libs pw3270 lib3270`
-	PW3270_CFLAGS ?= `pkg-config --cflags pw3270 lib3270`
-endif
+#ifeq ($(LIB3270_MODE),Default)
+#	LIB3270_LIBS ?= `pkg-config --libs lib3270`
+#	LIB3270_CFLAGS ?= `pkg-config --cflags lib3270`
+#	PW3270_LIBS ?= `pkg-config --libs pw3270 lib3270`
+#	PW3270_CFLAGS ?= `pkg-config --cflags pw3270 lib3270`
+#endif
 
 GTK_CFLAGS ?= @GTK_CFLAGS@ @GTKMAC_CFLAGS@
 GTK_LIBS ?= @GTK_LIBS@ @GTKMAC_LIBS@
@@ -102,22 +101,22 @@ GTK_LIBS ?= @GTK_LIBS@ @GTKMAC_LIBS@
 $(OBJDBG)/%.o: %.c $(DEPENDS)
 	@echo "  CC   `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CC) $(DLL_CFLAGS) $(CFLAGS) $(DEBUG_CFLAGS) $(PW3270_CFLAGS) $(GTK_CFLAGS) -o $@ -c $<
+	@$(CC) $(DLL_CFLAGS) $(CFLAGS) $(DEBUG_CFLAGS) $(PW3270_CFLAGS) $(LIB3270_CFLAGS) $(GTK_CFLAGS) -o $@ -c $<
 
 $(OBJDBG)/%.o: %.cc $(DEPENDS)
 	@echo "  CC   `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CXX) $(DLL_CFLAGS) $(CFLAGS) $(DEBUG_CFLAGS) $(PW3270_CFLAGS) $(GTK_CFLAGS) -o $@ -c $<
+	@$(CXX) $(DLL_CFLAGS) $(CFLAGS) $(DEBUG_CFLAGS) $(PW3270_CFLAGS) $(LIB3270_CFLAGS) $(GTK_CFLAGS) -o $@ -c $<
 
 $(OBJRLS)/%.o: %.c $(DEPENDS)
 	@echo "  CC   `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CC) $(DLL_CFLAGS) $(CFLAGS) $(PW3270_CFLAGS) $(GTK_CFLAGS) -o $@ -c $<
+	@$(CC) $(DLL_CFLAGS) $(CFLAGS) $(PW3270_CFLAGS) $(LIB3270_CFLAGS) $(GTK_CFLAGS) -o $@ -c $<
 
 $(OBJRLS)/%.o: %.cc $(DEPENDS)
 	@echo "  CC   `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CXX) $(DLL_CFLAGS) $(CFLAGS) $(PW3270_CFLAGS) $(GTK_CFLAGS) -o $@ -c $<
+	@$(CXX) $(DLL_CFLAGS) $(CFLAGS) $(PW3270_CFLAGS) $(LIB3270_CFLAGS) $(GTK_CFLAGS) -o $@ -c $<
 
 #---[ Targets ]----------------------------------------------------------------
 

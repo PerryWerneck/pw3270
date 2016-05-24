@@ -42,7 +42,7 @@
 #include <lib3270/config.h>
 #include <lib3270.h>
 #include <pw3270.h>
-#include <pw3270/v3270.h>
+#include <v3270.h>
 #include <lib3270/actions.h>
 #include <lib3270/charset.h>
 

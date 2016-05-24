@@ -205,6 +205,14 @@ esac
 # It's easier to test hllapi on linux
 AC_CONFIG_FILES(src/plugins/hllapi/Makefile)
 
+#--[ lib3270 defines ]----------------------------------------------------------------------------------------------------------------------------------------
+
+LIB3270_CFLAGS=-I$ac_pwd/src/include
+PW3270_CFLAGS=-I$ac_pwd/src/pw3270/include
+
+AC_SUBST(LIB3270_CFLAGS)
+AC_SUBST(PW3270_CFLAGS)
+
 #--[ Check gettext ]------------------------------------------------------------------------------------------------------------------------------------------
 
 AC_PATH_TOOL([XGETTEXT], [xgettext], [no])
@@ -539,6 +547,8 @@ AC_CHECK_HEADER(malloc.h, AC_DEFINE(HAVE_MALLOC_H,,[do we have malloc.h?]))
 AC_CHECK_FUNCS(getaddrinfo, AC_DEFINE(HAVE_GETADDRINFO) )
 AC_CHECK_FUNC(vasprintf, AC_DEFINE(HAVE_VASPRINTF) )
 AC_CHECK_FUNC(strtok_r, AC_DEFINE(HAVE_STRTOK_R) )
+
+
 
 PKG_CHECK_EXISTS
 
