@@ -149,9 +149,6 @@
 		<toolitem action='erase' target='input' tooltip='Erase screen contents' />
 
 		<separator/>
-		<toolitem action='transfer' icon='harddisk' tooltip='Send/Receive files'/>
-
-		<separator/>
 		<toolitem action='connect' tooltip='Connect to host'/>
 		<toolitem action='disconnect' tooltip='Disconnect from host'/>
 
@@ -159,6 +156,7 @@
 		<toolitem action='set' toggle='fullscreen' icon='fullscreen' label='Full Screen' tooltip='Go to fullscreen mode'/>
 		<toolitem action='reset' toggle='fullscreen' icon='leave-fullscreen' label='Window' tooltip='Go back to window mode'/>
 		<toolitem action='editcolors' tooltip='Select terminal colors'/>
+		<toolitem action='transfer' icon='harddisk' tooltip='Send/Receive files'/>
 		<toolitem action='print' src='all' tooltip='Print screen contents'/>
 		<toolitem action='Quit' tooltip='Quit pw3270'/>
 	</toolbar>
