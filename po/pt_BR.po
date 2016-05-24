@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-17 15:07-0300\n"
+"POT-Creation-Date: 2016-05-24 15:57-0300\n"
 "PO-Revision-Date: 2016-05-05 17:03-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <perry.werneck@gmail.com>\n"
@@ -35,22 +35,22 @@ msgstr "%s"
 msgid "%s - Disconnected"
 msgstr "%s - Desconectado"
 
-#: actions.c:734 actions.c:746
+#: actions.c:772 actions.c:784
 #, c-format
 msgid "%s action needs a valid id attribute"
 msgstr "Ação %s exige um atributo ID válido"
 
-#: actions.c:582 actions.c:711 actions.c:723
+#: actions.c:620 actions.c:749 actions.c:761
 #, c-format
 msgid "%s action needs a valid toggle name"
 msgstr "Ação %s exige um nome de toggle válido"
 
-#: actions.c:758
+#: actions.c:796
 #, c-format
 msgid "%s action needs a valid value"
 msgstr "Ação %s precisa de um valor válido"
 
-#: actions.c:468
+#: actions.c:506
 #, c-format
 msgid "%s action needs src attribute"
 msgstr "Ação %s precisa do atributo src"
@@ -200,11 +200,11 @@ msgstr ""
 "A CA certificate is invalid. Either it is not a CA or its extensions are not "
 "consistent with the supplied purpose."
 
-#: ft.c:100
+#: ft.c:96
 msgid "Abort sent; awaiting response"
 msgstr "Cancelamento enviado; aguardando resposta"
 
-#: ft.c:591
+#: ft.c:651
 msgid "Aborting..."
 msgstr "Cancelando..."
 
@@ -212,7 +212,7 @@ msgstr "Cancelando..."
 msgid "About security"
 msgstr "Sobre a segurança"
 
-#: ft.c:98
+#: ft.c:94
 msgid "Ack received, data flowing"
 msgstr "Confirmação recebida, transferindo dados"
 
@@ -220,7 +220,7 @@ msgstr "Confirmação recebida, transferindo dados"
 msgid "Action failed"
 msgstr "Ação falhou"
 
-#: ui/00default.xml:298
+#: ui/00default.xml:295
 msgid "Add to copy"
 msgstr "Adicionar à cópia"
 
@@ -228,7 +228,7 @@ msgstr "Adicionar à cópia"
 msgid "Address or name of the host to connect."
 msgstr "Endereço ou nome do host a conectar."
 
-#: toggles.c:196 ui/00default.xml:366
+#: toggles.c:196 ui/00default.xml:363
 msgid "Alert sound"
 msgstr "Aviso sonoro"
 
@@ -236,10 +236,6 @@ msgstr "Aviso sonoro"
 msgid "An error occurred trying to allocate memory. This should never happen."
 msgstr ""
 "Ocorreu um erro ao tentar alocar memória. Isso nunca deveria acontecer."
-
-#: ft/ftdialog.c:389 ft/ftdialog.c:483
-msgid "Appends the source file to the destination file."
-msgstr "Adiciona conteúdo do arquivo origem ao final do arquivo destino."
 
 #: main.c:400 main.c:402
 msgid "Application name"
@@ -249,7 +245,7 @@ msgstr "Nome da aplicação"
 msgid "Attn"
 msgstr "Attn"
 
-#: actions.c:443
+#: actions.c:481
 #, c-format
 msgid "Attribute \"%s\" is invalid or undefined"
 msgstr "Atributo \"%s\" é invalido ou indefinido"
@@ -266,7 +262,7 @@ msgstr "Authority and subject key identifier mismatch"
 msgid "Auto resize on altscreen"
 msgstr "Mudar automaticamente o tamanho do terminal em tela alternativa"
 
-#: toggles.c:148 ui/00default.xml:361
+#: toggles.c:148 ui/00default.xml:358
 msgid "Auto-Reconnect"
 msgstr "Reconectar automaticamente"
 
@@ -284,11 +280,7 @@ msgstr ""
 msgid "Automatically reconnect to the host if it ever disconnects"
 msgstr "Reconecta automaticamente caso o servidor desconecte"
 
-#: ft/ftdialog.c:582
-msgid "Avblock"
-msgstr "Avblock"
-
-#: ft.c:99
+#: ft.c:95
 msgid "Awaiting chance to send an abort"
 msgstr "Aguardando para enviar pedido de cancelamento"
 
@@ -308,23 +300,19 @@ msgstr "Emitir som nos erros"
 msgid "Black"
 msgstr "Preto"
 
-#: toggles.c:106 ui/00default.xml:359
+#: toggles.c:106 ui/00default.xml:356
 msgid "Blank Fill"
 msgstr "Completar com espaços"
 
-#: toggles.c:76 ui/00default.xml:352
+#: toggles.c:76 ui/00default.xml:349
 msgid "Blinking Cursor"
 msgstr "Cursor piscante"
-
-#: ft/ftdialog.c:624
-msgid "Block size:"
-msgstr "Comprimento do bloco:"
 
 #: colors.c:436
 msgid "Blue"
 msgstr "Azul"
 
-#: toggles.c:166 ui/00default.xml:362
+#: toggles.c:166 ui/00default.xml:359
 msgid "Bold"
 msgstr "Negrito"
 
@@ -339,16 +327,6 @@ msgstr "Break"
 #: telnet.c:2025
 msgid "Broken pipe"
 msgstr "Conexão interrompida"
-
-#: ft/ftdialog.c:658
-msgid ""
-"Buffer size for DFT-mode transfers. Can range from 256 to 32768. Larger "
-"values give better performance, but some hosts may not be able to support "
-"them."
-msgstr ""
-"Tamanho do buffer para transferências no modo DFT. Pode variar de 256 a "
-"32768. Valores maiores trazem maior performance, porem, nem todos os hosts "
-"podem suportá-los."
 
 #: v3270/security.c:125
 msgid "CRL has expired"
@@ -408,7 +386,7 @@ msgstr "Recortar não permitido em seleção retangular"
 msgid "Can't determine value for environment variable \"%s\" "
 msgstr "Não consigo determinar o valor da variável de ambiente \"%s\" "
 
-#: ft.c:368
+#: ft.c:408
 msgid "Can't get file size"
 msgstr "Não foi possível obter o tamanho do arquivo"
 
@@ -500,32 +478,16 @@ msgstr "Não foi possível mudar o socket para o modo blocante."
 msgid "Can't set socket to non blocking mode"
 msgstr "Não foi possível setar o socket para o modo não blocante."
 
-#: filetransfer.c:304
-msgid "Can't start download."
-msgstr "Não foi possível iniciar o download."
-
-#: ft.c:187
+#: ft.c:198
 msgid "Can't start file transfer."
 msgstr "Não foi possível iniciar transferência de arquivo."
-
-#: filetransfer.c:349
-msgid "Can't start upload."
-msgstr "Não foi possível iniciar upload."
 
 #: connect.c:177
 #, c-format
 msgid "Can't use winsock version %d.%d"
 msgstr "Não é possível usar a Winsock versão %d.%d"
 
-#: ft/ftdialog.c:317
-msgid "Cancel download."
-msgstr "Cancelar recebimento."
-
-#: ft/ftdialog.c:317
-msgid "Cancel upload."
-msgstr "Cancelar envio."
-
-#: ft.c:147
+#: ft.c:152
 msgid "Cancelled by user"
 msgstr "Cancelado pelo usuário"
 
@@ -587,10 +549,6 @@ msgstr "Erro de codificação de caracteres"
 msgid "Check for SSL secure connection."
 msgstr "Marcar para ativar a conexão segura via SSL."
 
-#: ft/ftdialog.c:373 ft/ftdialog.c:467
-msgid "Check this if the file consists of character data only."
-msgstr "Marque se o arquivo contem apenas texto."
-
 #: ui/10keypad.xml:216
 msgid "Clear"
 msgstr "Limpar"
@@ -603,7 +561,7 @@ msgstr "Tema de cores:"
 msgid "Color setup"
 msgstr "Configuração de cores"
 
-#: ui/00default.xml:341
+#: ui/00default.xml:338
 msgid "Colors"
 msgstr "Cores"
 
@@ -611,11 +569,11 @@ msgstr "Cores"
 msgid "Command:"
 msgstr "Command:"
 
-#: v3270/hostselect.c:386 ui/00default.xml:326
+#: v3270/hostselect.c:386 ui/00default.xml:323
 msgid "Configure host"
 msgstr "Configurar host"
 
-#: toggles.c:184 ui/00default.xml:351
+#: toggles.c:184 ui/00default.xml:348
 msgid "Connect on startup"
 msgstr "Conectar ao iniciar"
 
@@ -633,7 +591,7 @@ msgstr "Conexão falhou"
 msgid "Connection reset by peer"
 msgstr "Conexão foi cancelada pelo servidor"
 
-#: ui/00default.xml:295
+#: ui/00default.xml:292
 msgid "Copy"
 msgstr "Copiar"
 
@@ -641,30 +599,13 @@ msgstr "Copiar"
 msgid "Copy as HTML"
 msgstr "Copiar como HTML"
 
-#: ui/00default.xml:296
+#: ui/00default.xml:293
 msgid "Copy as table"
 msgstr "Copiar como tabela"
 
-#: ft/ftdialog.c:529
-msgid "Creates a file with fixed-length records."
-msgstr "Cria arquivo com registros de tamanho fixo."
-
-#: ft/ftdialog.c:539
-msgid "Creates a file with undefined-length records (TSO hosts only)."
-msgstr ""
-"Cria arquivo com o tamanho de registro indefinido (apenas para hosts TSO)."
-
-#: ft/ftdialog.c:534
-msgid "Creates a file with variable-length records."
-msgstr "Cria arquivo com registros de tamanho variável."
-
-#: colors.c:460 toggles.c:136 ui/00default.xml:358
+#: colors.c:460 toggles.c:136 ui/00default.xml:355
 msgid "Cross hair cursor"
 msgstr "Cursor mira"
-
-#: ft/ftprogress.c:161
-msgid "Current"
-msgstr "Atual"
 
 #: dialog.c:126
 #, c-format
@@ -675,17 +616,9 @@ msgstr "Atual (%s)"
 msgid "Custom colors"
 msgstr "Cores personalizadas"
 
-#: ui/00default.xml:299
+#: ui/00default.xml:296
 msgid "Cut"
 msgstr "Recortar"
-
-#: ft/ftdialog.c:577
-msgid "Cylinders"
-msgstr "Cilindros"
-
-#: ft/ftdialog.c:414 ft/ftdialog.c:640
-msgid "DFT B_uffer size:"
-msgstr "Tamanho do b_uffer DFT:"
 
 #: colors.c:444
 msgid "Dark Blue"
@@ -707,11 +640,7 @@ msgstr "Depuração"
 msgid "Debug window updates"
 msgstr "Mostrar atualizações de janela"
 
-#: ft/ftdialog.c:523 ft/ftdialog.c:567
-msgid "Default"
-msgstr "Padrão"
-
-#: ui/00default.xml:315
+#: ui/00default.xml:312
 msgid "Delete field"
 msgstr "Apagar campo"
 
@@ -719,7 +648,7 @@ msgstr "Apagar campo"
 msgid "Device type rejected"
 msgstr "Tipo de dispositivo rejeitado"
 
-#: ft.c:245
+#: ft.c:256
 msgid "Disconnected from host."
 msgstr "Desconectado do servidor."
 
@@ -734,10 +663,6 @@ msgstr "Mostra posição do cursor na lista de informações ao operador"
 #: telnet.c:1250
 msgid "EOR received when not in 3270 mode, ignored."
 msgstr "EOR recebido fora do modo 3270, ignorado."
-
-#: ft/ftprogress.c:161
-msgid "ETA"
-msgstr "ETA"
 
 #: toggles.c:221
 msgid "Enable network in/out trace"
@@ -763,15 +688,15 @@ msgstr ""
 "Apagar\n"
 "Campos"
 
-#: ui/00default.xml:314
+#: ui/00default.xml:311
 msgid "Erase input"
 msgstr "Apagar campos"
 
-#: ui/00default.xml:316
+#: ui/00default.xml:313
 msgid "Erase to end of field"
 msgstr "Apagar até o final do campo"
 
-#: ui/00default.xml:317
+#: ui/00default.xml:314
 msgid "Erase to end of line"
 msgstr "Apagar até o final da linha"
 
@@ -779,12 +704,12 @@ msgstr "Apagar até o final da linha"
 msgid "Error"
 msgstr "Erro"
 
-#: ft_cut.c:422 ft_dft.c:450
+#: ft_cut.c:422 ft_dft.c:452
 #, c-format
 msgid "Error \"%s\" reading from local file (rc=%d)"
 msgstr "Erro \"%s\" lendo arquivo local (rc=%d)"
 
-#: ft_cut.c:530 ft_dft.c:328
+#: ft_cut.c:530 ft_dft.c:330
 #, c-format
 msgid "Error \"%s\" writing to local file (rc=%d)"
 msgstr "Erro \"%s\" gravando arquivo local (rc=%d)"
@@ -810,38 +735,9 @@ msgstr "Delimitadores de campo"
 msgid "Field colors"
 msgstr "Cor dos campos"
 
-#: ft.c:250
+#: ft.c:261
 msgid "File transfer is already active in this session."
 msgstr "Transferência de arquivos já está ativa nesta sessão."
-
-#: filetransfer.c:306 filetransfer.c:351
-msgid "File transfer is already active."
-msgstr "Transferência de arquivos já está ativa."
-
-#: ft/ftdialog.c:528
-msgid "Fixed"
-msgstr "Fixo"
-
-#: ft/ftdialog.c:378 ft/ftdialog.c:472
-msgid "Follow the convention for ASCII text files."
-msgstr "Seguir a convenção para arquivos texto ASCII"
-
-#: ft/ftdialog.c:380 ft/ftdialog.c:474
-msgid ""
-"Following the convention for ASCII text files, <CR> <LF> pairs are used to "
-"terminate records in the PC file, and a CTRL-Z (x'1A') marks the end of file."
-msgstr ""
-"Seguindo a convenção para arquivos texto ASCII, a sequência <CR> <LF> é "
-"usada para terminar registros no arquivo do PC e um CTRL-| (x'1A') marca o "
-"final do arquivo."
-
-#: ft/ftdialog.c:382 ft/ftdialog.c:476
-msgid ""
-"Following the convention for ASCII text files, <LF> is used to terminate "
-"records in the PC file."
-msgstr ""
-"Seguindo a convenção para arquivos texto ASCII, <LF> é usado para terminar "
-"registros no arquivo do PC."
 
 #: v3270/security.c:146
 msgid "Format error in CRL's lastUpdate field"
@@ -859,11 +755,7 @@ msgstr "Erro de formato no campo \"notAfter\" do certificado"
 msgid "Format error in certificate's notBefore field"
 msgstr "Erro de formato no campo \"notBefore\" do certificado"
 
-#: ft/ftprogress.c:104
-msgid "From"
-msgstr "De"
-
-#: toggles.c:142 ui/00default.xml:355
+#: toggles.c:142 ui/00default.xml:352
 msgid "Full Screen"
 msgstr "Tela cheia"
 
@@ -883,11 +775,11 @@ msgstr "Cinza"
 msgid "Green"
 msgstr "Verde"
 
-#: ui/00default.xml:377
+#: ui/00default.xml:374
 msgid "Help"
 msgstr "Ajuda"
 
-#: ft.c:600
+#: ft.c:660
 msgid "Host disconnected, transfer cancelled"
 msgstr "Servidor desconectou, transferência cancelada"
 
@@ -979,11 +871,7 @@ msgstr ""
 msgid "Illegal frame length"
 msgstr "Comprimento de frame inválido"
 
-#: ft/ftprogress.c:106
-msgid "Informations"
-msgstr "Informações"
-
-#: ui/00default.xml:372
+#: ui/00default.xml:369
 msgid "Input method"
 msgstr "Método de entrada"
 
@@ -1012,7 +900,7 @@ msgstr "Ação recortar inválida"
 msgid "Java"
 msgstr "Java"
 
-#: toggles.c:172 ui/00default.xml:364
+#: toggles.c:172 ui/00default.xml:361
 msgid "Keep selected"
 msgstr "Manter selecionado"
 
@@ -1045,7 +933,7 @@ msgstr "Cores diversas"
 msgid "Model %d (%s)"
 msgstr "Modelo %d (%s)"
 
-#: toggles.c:70 ui/00default.xml:353
+#: toggles.c:70 ui/00default.xml:350
 msgid "Monocase"
 msgstr "Só Maiúsculas"
 
@@ -1053,7 +941,7 @@ msgstr "Só Maiúsculas"
 msgid "Monochrome"
 msgstr "Monocromático"
 
-#: actions.c:599
+#: actions.c:637
 msgid "Move action needs target & direction attributes"
 msgstr "Ação \"move\" precisa dos atributos \"target\" e \"direction\""
 
@@ -1061,23 +949,11 @@ msgstr "Ação \"move\" precisa dos atributos \"target\" e \"direction\""
 msgid "Mustard"
 msgstr "Mostarda"
 
-#: ft/ftprogress.c:187 ft/ftprogress.c:196
-msgid "N/A"
-msgstr "N/A"
-
-#: ft/ftdialog.c:361
-msgid "Name of the source file."
-msgstr "Nome do arquivo origem."
-
-#: ft/ftdialog.c:455
-msgid "Name of the target file."
-msgstr "Nome do arquivo destino."
-
 #: telnet.c:347 iocalls.c:376 iocalls.c:483 connect.c:96
 msgid "Network error"
 msgstr "Erro de rede"
 
-#: toggles.c:214 ui/00default.xml:368
+#: toggles.c:214 ui/00default.xml:365
 msgid "Network keep alive"
 msgstr "Network keep alive"
 
@@ -1097,7 +973,7 @@ msgstr ""
 "Nenhuma assinatura pode ser verificada, porque a cadeia contém apenas um "
 "certificado e não é auto assinado."
 
-#: ft.c:97
+#: ft.c:93
 msgid "No transfer in progress"
 msgstr "Nenhuma transferência em andamento"
 
@@ -1113,7 +989,7 @@ msgstr "Normal/Desprotegido"
 msgid "Not available"
 msgstr "Não disponível"
 
-#: ft.c:607
+#: ft.c:667
 msgid "Not in 3270 mode, transfer cancelled"
 msgstr "Não está no modo 3270, transferência cancelada"
 
@@ -1282,15 +1158,15 @@ msgstr "Erro de interpretação"
 msgid "Parse error in %s"
 msgstr "Erro de interpretação em %s"
 
-#: ui/00default.xml:300
+#: ui/00default.xml:297
 msgid "Paste"
 msgstr "Colar"
 
-#: ui/00default.xml:301
+#: ui/00default.xml:298
 msgid "Paste next"
 msgstr "Colar próximo"
 
-#: ui/00default.xml:304
+#: ui/00default.xml:301
 msgid "Paste text file"
 msgstr "Colar arquivo texto"
 
@@ -1298,7 +1174,7 @@ msgstr "Colar arquivo texto"
 msgid "Paste text file contents"
 msgstr "Colar conteúdo de arquivo texto"
 
-#: toggles.c:124 ui/00default.xml:357
+#: toggles.c:124 ui/00default.xml:354
 msgid "Paste with left margin"
 msgstr "Colar com margem esquerda"
 
@@ -1310,10 +1186,6 @@ msgstr "Caminho para os arquivos de dados da aplicação"
 #: v3270/security.c:209
 msgid "Path length constraint exceeded"
 msgstr "Path length constraint exceeded"
-
-#: ft/ftdialog.c:456
-msgid "Path of the local file to send."
-msgstr "Caminho completo do arquivo que vai ser enviado."
 
 #: main.c:403
 msgid "Path to application data files"
@@ -1335,23 +1207,11 @@ msgstr "Nº da porta ou nome do serviço (em branco para \"telnet\")."
 msgid "Previous field"
 msgstr "Campo anterior"
 
-#: ft/ftdialog.c:619
-msgid ""
-"Primary allocation for a file created on a TSO host.\n"
-"The units are given by the space allocation units option."
-msgstr ""
-"Primary allocation for a file created on a TSO host.\n"
-"The units are given by the space allocation units option."
-
-#: ft/ftdialog.c:618
-msgid "Primary space:"
-msgstr "Primary space:"
-
-#: ui/00default.xml:283
+#: ui/00default.xml:281
 msgid "Print"
 msgstr "Imprimir"
 
-#: ui/00default.xml:285
+#: ui/00default.xml:283
 msgid "Print copy"
 msgstr "Imprimir cópia"
 
@@ -1359,7 +1219,7 @@ msgstr "Imprimir cópia"
 msgid "Print operation failed"
 msgstr "Operação de impressão falhou"
 
-#: ui/00default.xml:284
+#: ui/00default.xml:282
 msgid "Print selected"
 msgstr "Imprimir seleção"
 
@@ -1367,13 +1227,9 @@ msgstr "Imprimir seleção"
 msgid "Print selection box"
 msgstr "Imprimir marca de seleção"
 
-#: print.c:915 ui/00default.xml:342
+#: print.c:915 ui/00default.xml:339
 msgid "Print settings"
 msgstr "Configurações de impressão"
-
-#: ft/ftprogress.c:163
-msgid "Progress"
-msgstr "Progresso"
 
 #: ui/80javasamples.xml:90
 msgid "Protection test"
@@ -1383,7 +1239,7 @@ msgstr "Protection test"
 msgid "Purple"
 msgstr "Púrpura"
 
-#: ui/00default.xml:291
+#: ui/00default.xml:287
 msgid "Quit"
 msgstr "Sair"
 
@@ -1463,34 +1319,6 @@ msgstr "RPQ: Não foi possível resolver '%s': %s"
 msgid "RPQ: gethostbyname error"
 msgstr "RPQ: Erro em gethostbyname"
 
-#: ft/ftdialog.c:394
-msgid "Re_map to ASCII Characters."
-msgstr "Re_mapear para caracteres ASCII"
-
-#: ft/ftdialog.c:488
-msgid "Re_map to EBCDIC Characters."
-msgstr "Re_mapear para caracteres EBCDIC."
-
-#: ui/00default.xml:288
-msgid "Receive file"
-msgstr "Receber arquivo"
-
-#: ft/ftdialog.c:334
-msgid "Receive file from host"
-msgstr "Receber arquivo do servidor"
-
-#: filetransfer.c:247
-msgid "Receiving file"
-msgstr "Recebendo arquivo"
-
-#: ft/ftdialog.c:611
-msgid "Record Length:"
-msgstr "Comprimento de registro:"
-
-#: ft/ftdialog.c:550 ft/ftdialog.c:555
-msgid "Record format"
-msgstr "Formato de registro"
-
 #: colors.c:437
 msgid "Red"
 msgstr "Vermelho"
@@ -1499,24 +1327,15 @@ msgstr "Vermelho"
 msgid "Reload buffer contents"
 msgstr "Recarregar conteúdo do buffer"
 
-#: ft/ftdialog.c:395 ft/ftdialog.c:489
-msgid ""
-"Remap the text to ensure maximum compatibility between the workstation's "
-"character set and encoding and the host's EBCDIC code page."
-msgstr ""
-"Converte conteúdo do texto para garantir a máxima compatibilidade entre a "
-"codificação ASCII da estação de trabalho e a página de código EBCDIC do "
-"servidor."
-
-#: ui/00default.xml:309
+#: ui/00default.xml:306
 msgid "Remove selection"
 msgstr "Remover seleção"
 
-#: filetransfer.c:303 filetransfer.c:348 ft.c:187
+#: ft.c:198
 msgid "Request failed"
 msgstr "Requisição falhou"
 
-#: ui/00default.xml:310
+#: ui/00default.xml:307
 msgid "Reselect"
 msgstr "Reselecionar"
 
@@ -1524,7 +1343,7 @@ msgstr "Reselecionar"
 msgid "Reset"
 msgstr "Reset"
 
-#: toggles.c:208 ui/00default.xml:356
+#: toggles.c:208 ui/00default.xml:353
 msgid "Resize on alternate screen"
 msgstr "Mudar tamanho do terminal em tela alternativa"
 
@@ -1565,7 +1384,7 @@ msgstr ""
 "SSL_write:\n"
 "%s"
 
-#: ui/00default.xml:280
+#: ui/00default.xml:278
 msgid "Save copy"
 msgstr "Salvar cópia"
 
@@ -1573,7 +1392,7 @@ msgstr "Salvar cópia"
 msgid "Save copy to file"
 msgstr "Salvar cópia para arquivo"
 
-#: ui/00default.xml:278
+#: ui/00default.xml:276
 msgid "Save screen"
 msgstr "Salvar tela"
 
@@ -1581,7 +1400,7 @@ msgstr "Salvar tela"
 msgid "Save screen to file"
 msgstr "Salvar tela para arquivo"
 
-#: ui/00default.xml:279
+#: ui/00default.xml:277
 msgid "Save selected"
 msgstr "Salvar seleção"
 
@@ -1593,25 +1412,13 @@ msgstr "Salvar seleção para arquivo"
 msgid "Save trace file"
 msgstr "Salvar arquivo de trace"
 
-#: ui/00default.xml:348
+#: ui/00default.xml:345
 msgid "Screen size"
 msgstr "Tamanho da tela"
 
 #: ui/80rexx.xml:131
 msgid "Scripts"
 msgstr "Scripts"
-
-#: ft/ftdialog.c:635
-msgid ""
-"Secondary allocation for a file created on a TSO host.\n"
-"The units are given by the space allocation units option."
-msgstr ""
-"Secondary allocation for a file created on a TSO host.\n"
-"The units are given by the space allocation units option."
-
-#: ft/ftdialog.c:634
-msgid "Secondary space:"
-msgstr "Secondary space:"
 
 #: v3270/security.c:48
 msgid "Secure connection was successful."
@@ -1621,31 +1428,19 @@ msgstr "Conexão segura efetuada com sucesso."
 msgid "Security error"
 msgstr "Erro de segurança"
 
-#: ui/00default.xml:308
+#: ui/00default.xml:305
 msgid "Select Field"
 msgstr "Selecionar campo"
 
-#: ui/00default.xml:307
+#: ui/00default.xml:304
 msgid "Select all"
 msgstr "Selecionar tudo"
 
-#: toggles.c:130 ui/00default.xml:360
+#: toggles.c:130 ui/00default.xml:357
 msgid "Select by rectangles"
 msgstr "Seleção retangular"
 
-#: ft/ftdialog.c:313
-msgid "Select file"
-msgstr "Selecionar arquivo"
-
-#: ft/browse.c:133
-msgid "Select file to receive"
-msgstr "Selecione arquivo a receber"
-
-#: ft/browse.c:133
-msgid "Select file to send"
-msgstr "Selecione arquivo a enviar"
-
-#: ui/00default.xml:345
+#: ui/00default.xml:342
 msgid "Select font"
 msgstr "Selecione fonte"
 
@@ -1669,25 +1464,13 @@ msgstr "Certificado auto assinado"
 msgid "Self signed certificate in certificate chain"
 msgstr "Certificado auto assinado na cadeia de certificados"
 
-#: ui/00default.xml:289
-msgid "Send file"
-msgstr "Enviar arquivo"
-
-#: ft/ftdialog.c:429
-msgid "Send file to host"
-msgstr "Enviar arquivo para o servidor"
-
 #: main.c:417
 msgid "Send messages to syslog"
 msgstr "Enviar mensagens para o log do sistema"
 
-#: ui/00default.xml:288
+#: ui/00default.xml:286
 msgid "Send/Receive"
 msgstr "Enviar/Receber"
-
-#: filetransfer.c:247
-msgid "Sending file"
-msgstr "Enviando arquivo"
 
 #: main.c:405
 msgid "Session name"
@@ -1717,7 +1500,7 @@ msgstr "Ativa toggles"
 msgid "Set trace filename"
 msgstr "Define o nome do arquivo de trace"
 
-#: ui/00default.xml:341
+#: ui/00default.xml:338
 msgid "Settings"
 msgstr "Configurações"
 
@@ -1725,7 +1508,7 @@ msgstr "Configurações"
 msgid "Show Field attribute"
 msgstr "Mostrar atributos de campo"
 
-#: toggles.c:178 ui/00default.xml:363
+#: toggles.c:178 ui/00default.xml:360
 msgid "Show Underline"
 msgstr "Mostrar sublinhado"
 
@@ -1737,7 +1520,7 @@ msgstr "Mostrar padrão de teste"
 msgid "Show timer when processing"
 msgstr "Show timer when processing"
 
-#: toggles.c:160 ui/00default.xml:365
+#: toggles.c:160 ui/00default.xml:362
 msgid "Smart paste"
 msgstr "Colar inteligente"
 
@@ -1752,64 +1535,6 @@ msgstr "Erro ao ler dados da rede"
 #: telnet.c:2036
 msgid "Socket write error"
 msgstr "Erro ao enviar dados para a rede"
-
-#: ft/ftdialog.c:592
-msgid "Space allocation units"
-msgstr "Unidades de alocação de espaço"
-
-#: ft/ftdialog.c:625
-msgid ""
-"Specifies the block size (n) for a new data set. For data sets containing "
-"fixed length records, the block size must be a multiple of the record "
-"length. For data sets containing variable length records, the block size "
-"must be greater than or equal to the record length plus four bytes. The "
-"block size must not exceed the track length of the device on which the data "
-"set resides."
-msgstr ""
-"Define o tamanho do bloco para um novo data set. Para data sets contendo "
-"registro de largura fixa o tamanho do bloco deve ser um múltiplo da largura "
-"de registro. Para data sets contendo registros de largura variável o tamanho "
-"do bloco deve ser maior ou igual à largura do registro mais quatro bytes. O "
-"tamanho do bloco não deve exceder a largura de trilha do dispositivo onde o "
-"data set reside."
-
-#: ft/ftdialog.c:550 ft/ftdialog.c:555
-msgid "Specifies the record format of the data set."
-msgstr "Controla o formato de registro do data set."
-
-#: ft/ftdialog.c:612
-msgid ""
-"Specifies the record length (or maximum record length) for files created on "
-"the host."
-msgstr ""
-"Define o tamanho de registro (ou tamanho máximo de registro) para arquivos "
-"criados no host."
-
-#: ft/ftdialog.c:592
-msgid ""
-"Specifies the units for the TSO host primary and secondary space options."
-msgstr ""
-"Define a unidade para os campos que definem o espaço primário e secundário."
-
-#: ft/ftprogress.c:161
-msgid "Speed"
-msgstr "Velocidade"
-
-#: ft/ftdialog.c:326
-msgid "Start download."
-msgstr "Iniciar recebimento."
-
-#: ft/ftdialog.c:326
-msgid "Start upload."
-msgstr "Iniciar envio."
-
-#: filetransfer.c:276
-msgid "Starting transfer"
-msgstr "Iniciando transferência"
-
-#: ft/ftprogress.c:104
-msgid "Status"
-msgstr "Situação"
 
 #: v3270/security.c:237
 msgid "Subject issuer mismatch"
@@ -1998,7 +1723,7 @@ msgid ""
 msgstr ""
 "The public key in the certificate SubjectPublicKeyInfo could not be read."
 
-#: ft.c:256
+#: ft.c:267
 msgid "The remote file name is invalid."
 msgstr "O nome do arquivo remoto não é válido."
 
@@ -2068,17 +1793,9 @@ msgid ""
 "This version of %s was built without support for secure sockets layer (SSL)."
 msgstr "Esta versão do %s foi gerada sem suporte para conexões seguras (SSL)."
 
-#: ft/ftprogress.c:104
-msgid "To"
-msgstr "Para"
-
-#: ui/00default.xml:383
+#: ui/00default.xml:380
 msgid "Toolbar"
 msgstr "Barra de ferramentas"
-
-#: ft/ftprogress.c:161
-msgid "Total"
-msgstr "Total"
 
 #: ui/98trace.xml:535
 msgid "Trace"
@@ -2104,29 +1821,26 @@ msgstr "Trace do conteúdo da tela"
 msgid "Trace user interface events"
 msgstr "Trace user interface events"
 
-#: toggles.c:88 ui/00default.xml:354
+#: toggles.c:88 ui/00default.xml:351
 msgid "Track Cursor"
 msgstr "Mostrar posição do cursor"
-
-#: ft/ftdialog.c:572
-msgid "Tracks"
-msgstr "Trilhas"
 
 #: ft_cut.c:370
 msgid "Transfer cancelled by host"
 msgstr "Transferência cancelada pelo servidor"
 
-#: ft_cut.c:399 ft_cut.c:497 ft_dft.c:228 ft_dft.c:369
+#: ft_cut.c:399 ft_cut.c:497 ft_dft.c:228 ft_dft.c:371
 msgid "Transfer cancelled by user"
 msgstr "Transferência cancelada pelo usuário"
 
-#: ft.c:515 ft_cut.c:337
+#: ft.c:554
 msgid "Transfer complete"
 msgstr "Transferência completa"
 
-#: ft/ftdialog.c:87
-msgid "Transfer options"
-msgstr "Opções de transferência"
+#: ft.c:559
+#, fuzzy
+msgid "Transfer failed"
+msgstr "Transferência completa"
 
 #: ft_cut.c:463
 msgid "Transmission error"
@@ -2185,17 +1899,13 @@ msgstr "Unable to get local issuer certificate"
 msgid "Unable to paste text"
 msgstr "Incapaz de colar texto"
 
-#: ft.c:462
+#: ft.c:502
 msgid "Unable to send file-transfer request"
 msgstr "Não foi possível enviar a requisição de transferência de arquivo"
 
 #: v3270/security.c:188
 msgid "Unable to verify the first certificate"
 msgstr "Não foi possível verificar o primeiro certificado"
-
-#: ft/ftdialog.c:538
-msgid "Undefined"
-msgstr "Indefinido"
 
 #: v3270/security.c:379
 msgid "Unexpected SSL error"
@@ -2211,11 +1921,6 @@ msgstr "Erro SSL <b>%ld</b> inesperado"
 msgid "Unexpected action attribute in <%s>"
 msgstr "Atributo inesperado \"action\" em <%s>"
 
-#: ft.c:84
-#, c-format
-msgid "Unexpected call to %s: No active filetransfer"
-msgstr "Unexpected call to %s: No active filetransfer"
-
 #: uiparser/keypad.c:67
 #, c-format
 msgid "Unexpected element <%s>"
@@ -2230,12 +1935,12 @@ msgstr "Erro inesperado"
 msgid "Unexpected group \"%s\""
 msgstr "Grupo inesperado \"%s\""
 
-#: actions.c:457 actions.c:477
+#: actions.c:495 actions.c:515
 #, c-format
 msgid "Unexpected or invalid %s attribute: \"%s\""
 msgstr "Atributo %s inesperado ou inválido: \"%s\""
 
-#: actions.c:431
+#: actions.c:469
 #, c-format
 msgid "Unexpected or invalid attribute value \"%s\""
 msgstr "Valor de attributo inesperado ou inválido: \"%s\""
@@ -2249,7 +1954,7 @@ msgstr "Valor de cor inválido ou inesperado: \"%s\""
 msgid "Unexpected or unknown security status"
 msgstr "Estado de segurança inesperado ou desconhecido."
 
-#: actions.c:352
+#: actions.c:390
 #, c-format
 msgid "Unexpected target \"%s\""
 msgstr "Alvo inesperado \"%s\""
@@ -2295,21 +2000,13 @@ msgstr "Unsupported RPQ term"
 msgid "Unsupported certificate purpose"
 msgstr "Finalidade do certificado não é suportada"
 
-#: toggles.c:190 ui/00default.xml:367
+#: toggles.c:190 ui/00default.xml:364
 msgid "Use +/- for field navigation"
 msgstr "Usar teclas +/- para navegar por campos"
-
-#: ft/ftdialog.c:524
-msgid "Use host default record format."
-msgstr "Utilizar o formato de registro padrão do servidor."
 
 #: toggles.c:191
 msgid "Use the keys +/- from keypad to select editable fields"
 msgstr "Use the keys +/- from keypad to select editable fields"
-
-#: ft/ftdialog.c:533
-msgid "Variable"
-msgstr "Variável"
 
 #: dialog.c:498
 #, c-format
@@ -2320,21 +2017,17 @@ msgstr "Versão %s - Revisão %s"
 msgid "WSAStartup failed"
 msgstr "WSAStartup falhou"
 
-#: ft.c:471
+#: ft.c:511
 msgid "Waiting for GET response"
 msgstr "Aguardando resposta do pedido de download"
 
-#: ft.c:473
+#: ft.c:513
 msgid "Waiting for PUT response"
 msgstr "Aguardando resposta do pedido de upload"
 
 #: dialog.c:51
 msgid "Western Europe (ISO 8859-1)"
 msgstr "Europa ocidental (ISO 8859-1)"
-
-#: ft/ftdialog.c:362
-msgid "Where to save the received file."
-msgstr "Onde salvar o arquivo recebido."
 
 #: colors.c:442
 msgid "White"
@@ -2401,31 +2094,19 @@ msgstr "X Aguarde"
 msgid "Yellow"
 msgstr "Amarelo"
 
-#: ft/ftdialog.c:388 ft/ftdialog.c:482
-msgid "_Append to destination"
-msgstr "_Adicionar ao arquivo de destino"
-
-#: ft/ftdialog.c:309
-msgid "_Browse"
-msgstr "_Procurar"
-
-#: v3270/hostselect.c:389 ft/ftdialog.c:316 ft/browse.c:136
+#: v3270/hostselect.c:389
 msgid "_Cancel"
 msgstr "_Cancelar"
-
-#: filetransfer.c:250
-msgid "_Close"
-msgstr "_Close"
 
 #: v3270/hostselect.c:55
 msgid "_Color table:"
 msgstr "Tabela de cores:"
 
-#: ui/00default.xml:336
+#: ui/00default.xml:333
 msgid "_Connect"
 msgstr "_Conectar"
 
-#: ui/00default.xml:337
+#: ui/00default.xml:334
 msgid "_Disconnect"
 msgstr "_Desconectar"
 
@@ -2441,10 +2122,6 @@ msgstr "_Arquivo"
 msgid "_Font:"
 msgstr "_Fonte:"
 
-#: ft/ftdialog.c:276
-msgid "_Host file name:"
-msgstr "Arquivo no _Servidor:"
-
 #: v3270/hostselect.c:171
 msgid "_Host options"
 msgstr "Opções do _Servidor"
@@ -2453,41 +2130,21 @@ msgstr "Opções do _Servidor"
 msgid "_Host:"
 msgstr "Nome do _Host:"
 
-#: ft/ftdialog.c:275
-msgid "_Local file name:"
-msgstr "Arquivo _local:"
-
-#: ui/00default.xml:326
+#: ui/00default.xml:323
 msgid "_Network"
 msgstr "_Rede"
 
-#: ui/00default.xml:351
+#: ui/00default.xml:348
 msgid "_Options"
 msgstr "_Opções"
-
-#: ft/ftdialog.c:321
-msgid "_Receive"
-msgstr "_Receber"
-
-#: ft/browse.c:137
-msgid "_Save"
-msgstr "_Gravar"
 
 #: v3270/hostselect.c:166
 msgid "_Secure connection."
 msgstr "Conexão _Segura."
 
-#: ft/ftdialog.c:321 ft/browse.c:137
-msgid "_Send"
-msgstr "_Enviar"
-
 #: v3270/hostselect.c:148
 msgid "_Service:"
 msgstr "_Serviço:"
-
-#: ft/ftdialog.c:372 ft/ftdialog.c:466
-msgid "_Text file."
-msgstr "Arquivo _texto."
 
 #: ui/80javasamples.xml:85
 msgid "_View"
@@ -2541,6 +2198,280 @@ msgstr "setsockopt(SO_OOBINLINE) has failed"
 #: dialog.c:514
 msgid "translator-credits"
 msgstr "translator-credits"
+
+#~ msgid "Appends the source file to the destination file."
+#~ msgstr "Adiciona conteúdo do arquivo origem ao final do arquivo destino."
+
+#~ msgid "Avblock"
+#~ msgstr "Avblock"
+
+#~ msgid "Block size:"
+#~ msgstr "Comprimento do bloco:"
+
+#~ msgid ""
+#~ "Buffer size for DFT-mode transfers. Can range from 256 to 32768. Larger "
+#~ "values give better performance, but some hosts may not be able to support "
+#~ "them."
+#~ msgstr ""
+#~ "Tamanho do buffer para transferências no modo DFT. Pode variar de 256 a "
+#~ "32768. Valores maiores trazem maior performance, porem, nem todos os "
+#~ "hosts podem suportá-los."
+
+#~ msgid "Can't start download."
+#~ msgstr "Não foi possível iniciar o download."
+
+#~ msgid "Can't start upload."
+#~ msgstr "Não foi possível iniciar upload."
+
+#~ msgid "Cancel download."
+#~ msgstr "Cancelar recebimento."
+
+#~ msgid "Cancel upload."
+#~ msgstr "Cancelar envio."
+
+#~ msgid "Check this if the file consists of character data only."
+#~ msgstr "Marque se o arquivo contem apenas texto."
+
+#~ msgid "Creates a file with fixed-length records."
+#~ msgstr "Cria arquivo com registros de tamanho fixo."
+
+#~ msgid "Creates a file with undefined-length records (TSO hosts only)."
+#~ msgstr ""
+#~ "Cria arquivo com o tamanho de registro indefinido (apenas para hosts TSO)."
+
+#~ msgid "Creates a file with variable-length records."
+#~ msgstr "Cria arquivo com registros de tamanho variável."
+
+#~ msgid "Current"
+#~ msgstr "Atual"
+
+#~ msgid "Cylinders"
+#~ msgstr "Cilindros"
+
+#~ msgid "DFT B_uffer size:"
+#~ msgstr "Tamanho do b_uffer DFT:"
+
+#~ msgid "Default"
+#~ msgstr "Padrão"
+
+#~ msgid "ETA"
+#~ msgstr "ETA"
+
+#~ msgid "File transfer is already active."
+#~ msgstr "Transferência de arquivos já está ativa."
+
+#~ msgid "Fixed"
+#~ msgstr "Fixo"
+
+#~ msgid "Follow the convention for ASCII text files."
+#~ msgstr "Seguir a convenção para arquivos texto ASCII"
+
+#~ msgid ""
+#~ "Following the convention for ASCII text files, <CR> <LF> pairs are used "
+#~ "to terminate records in the PC file, and a CTRL-Z (x'1A') marks the end "
+#~ "of file."
+#~ msgstr ""
+#~ "Seguindo a convenção para arquivos texto ASCII, a sequência <CR> <LF> é "
+#~ "usada para terminar registros no arquivo do PC e um CTRL-| (x'1A') marca "
+#~ "o final do arquivo."
+
+#~ msgid ""
+#~ "Following the convention for ASCII text files, <LF> is used to terminate "
+#~ "records in the PC file."
+#~ msgstr ""
+#~ "Seguindo a convenção para arquivos texto ASCII, <LF> é usado para "
+#~ "terminar registros no arquivo do PC."
+
+#~ msgid "From"
+#~ msgstr "De"
+
+#~ msgid "Informations"
+#~ msgstr "Informações"
+
+#~ msgid "N/A"
+#~ msgstr "N/A"
+
+#~ msgid "Name of the source file."
+#~ msgstr "Nome do arquivo origem."
+
+#~ msgid "Name of the target file."
+#~ msgstr "Nome do arquivo destino."
+
+#~ msgid "Path of the local file to send."
+#~ msgstr "Caminho completo do arquivo que vai ser enviado."
+
+#~ msgid ""
+#~ "Primary allocation for a file created on a TSO host.\n"
+#~ "The units are given by the space allocation units option."
+#~ msgstr ""
+#~ "Primary allocation for a file created on a TSO host.\n"
+#~ "The units are given by the space allocation units option."
+
+#~ msgid "Primary space:"
+#~ msgstr "Primary space:"
+
+#~ msgid "Progress"
+#~ msgstr "Progresso"
+
+#~ msgid "Re_map to ASCII Characters."
+#~ msgstr "Re_mapear para caracteres ASCII"
+
+#~ msgid "Re_map to EBCDIC Characters."
+#~ msgstr "Re_mapear para caracteres EBCDIC."
+
+#~ msgid "Receive file"
+#~ msgstr "Receber arquivo"
+
+#~ msgid "Receive file from host"
+#~ msgstr "Receber arquivo do servidor"
+
+#~ msgid "Receiving file"
+#~ msgstr "Recebendo arquivo"
+
+#~ msgid "Record Length:"
+#~ msgstr "Comprimento de registro:"
+
+#~ msgid "Record format"
+#~ msgstr "Formato de registro"
+
+#~ msgid ""
+#~ "Remap the text to ensure maximum compatibility between the workstation's "
+#~ "character set and encoding and the host's EBCDIC code page."
+#~ msgstr ""
+#~ "Converte conteúdo do texto para garantir a máxima compatibilidade entre a "
+#~ "codificação ASCII da estação de trabalho e a página de código EBCDIC do "
+#~ "servidor."
+
+#~ msgid ""
+#~ "Secondary allocation for a file created on a TSO host.\n"
+#~ "The units are given by the space allocation units option."
+#~ msgstr ""
+#~ "Secondary allocation for a file created on a TSO host.\n"
+#~ "The units are given by the space allocation units option."
+
+#~ msgid "Secondary space:"
+#~ msgstr "Secondary space:"
+
+#~ msgid "Select file"
+#~ msgstr "Selecionar arquivo"
+
+#~ msgid "Select file to receive"
+#~ msgstr "Selecione arquivo a receber"
+
+#~ msgid "Select file to send"
+#~ msgstr "Selecione arquivo a enviar"
+
+#~ msgid "Send file"
+#~ msgstr "Enviar arquivo"
+
+#~ msgid "Send file to host"
+#~ msgstr "Enviar arquivo para o servidor"
+
+#~ msgid "Sending file"
+#~ msgstr "Enviando arquivo"
+
+#~ msgid "Space allocation units"
+#~ msgstr "Unidades de alocação de espaço"
+
+#~ msgid ""
+#~ "Specifies the block size (n) for a new data set. For data sets containing "
+#~ "fixed length records, the block size must be a multiple of the record "
+#~ "length. For data sets containing variable length records, the block size "
+#~ "must be greater than or equal to the record length plus four bytes. The "
+#~ "block size must not exceed the track length of the device on which the "
+#~ "data set resides."
+#~ msgstr ""
+#~ "Define o tamanho do bloco para um novo data set. Para data sets contendo "
+#~ "registro de largura fixa o tamanho do bloco deve ser um múltiplo da "
+#~ "largura de registro. Para data sets contendo registros de largura "
+#~ "variável o tamanho do bloco deve ser maior ou igual à largura do registro "
+#~ "mais quatro bytes. O tamanho do bloco não deve exceder a largura de "
+#~ "trilha do dispositivo onde o data set reside."
+
+#~ msgid "Specifies the record format of the data set."
+#~ msgstr "Controla o formato de registro do data set."
+
+#~ msgid ""
+#~ "Specifies the record length (or maximum record length) for files created "
+#~ "on the host."
+#~ msgstr ""
+#~ "Define o tamanho de registro (ou tamanho máximo de registro) para "
+#~ "arquivos criados no host."
+
+#~ msgid ""
+#~ "Specifies the units for the TSO host primary and secondary space options."
+#~ msgstr ""
+#~ "Define a unidade para os campos que definem o espaço primário e "
+#~ "secundário."
+
+#~ msgid "Speed"
+#~ msgstr "Velocidade"
+
+#~ msgid "Start download."
+#~ msgstr "Iniciar recebimento."
+
+#~ msgid "Start upload."
+#~ msgstr "Iniciar envio."
+
+#~ msgid "Starting transfer"
+#~ msgstr "Iniciando transferência"
+
+#~ msgid "Status"
+#~ msgstr "Situação"
+
+#~ msgid "To"
+#~ msgstr "Para"
+
+#~ msgid "Total"
+#~ msgstr "Total"
+
+#~ msgid "Tracks"
+#~ msgstr "Trilhas"
+
+#~ msgid "Transfer options"
+#~ msgstr "Opções de transferência"
+
+#~ msgid "Undefined"
+#~ msgstr "Indefinido"
+
+#~ msgid "Unexpected call to %s: No active filetransfer"
+#~ msgstr "Unexpected call to %s: No active filetransfer"
+
+#~ msgid "Use host default record format."
+#~ msgstr "Utilizar o formato de registro padrão do servidor."
+
+#~ msgid "Variable"
+#~ msgstr "Variável"
+
+#~ msgid "Where to save the received file."
+#~ msgstr "Onde salvar o arquivo recebido."
+
+#~ msgid "_Append to destination"
+#~ msgstr "_Adicionar ao arquivo de destino"
+
+#~ msgid "_Browse"
+#~ msgstr "_Procurar"
+
+#~ msgid "_Close"
+#~ msgstr "_Close"
+
+#~ msgid "_Host file name:"
+#~ msgstr "Arquivo no _Servidor:"
+
+#~ msgid "_Local file name:"
+#~ msgstr "Arquivo _local:"
+
+#~ msgid "_Receive"
+#~ msgstr "_Receber"
+
+#~ msgid "_Save"
+#~ msgstr "_Gravar"
+
+#~ msgid "_Send"
+#~ msgstr "_Enviar"
+
+#~ msgid "_Text file."
+#~ msgstr "Arquivo _texto."
 
 #~ msgid "Can't open local file."
 #~ msgstr "Não foi possível abrir arquivo local."

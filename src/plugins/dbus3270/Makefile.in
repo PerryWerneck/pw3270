@@ -91,9 +91,7 @@ endif
 
 ifeq ($(LIB3270_MODE),Release)
 	PW3270_LIBS=-L../../../.bin/Release@DLLDIR@ -l$(PACKAGE_TARNAME)
-	PW3270_CFLAGS=-I../../../src/include
 	LIB3270_LIBS=-L../../../.bin/Release@DLLDIR@  -l3270
-	LIB3270_CFLAGS=-I../../../src/include
 endif
 
 #ifeq ($(LIB3270_MODE),Default)
@@ -105,15 +103,22 @@ endif
 
 #---[ Rules ]------------------------------------------------------------------
 
-$(OBJDBG)/%.o: %.c $(DEPENDS)
-	@echo "  CC   `basename $@`"
-	@$(MKDIR) `dirname $@`
-	@$(CC) $(CFLAGS) $(DLL_CFLAGS) $(GDBUS_CFLAGS) $(GLIB_CFLAGS) $(GTK_CFLAGS) $(DEBUG_CFLAGS) $(LIB3270_CFLAGS) $(PW3270_CFLAGS) -o $@ -c $<
+$(OBJDBG)/%.o: \
+	%.c $(DEPENDS)
 
-$(OBJRLS)/%.o: %.c $(DEPENDS)
 	@echo "  CC   `basename $@`"
 	@$(MKDIR) `dirname $@`
-	@$(CC) $(CFLAGS) $(DLL_CFLAGS) $(GDBUS_CFLAGS) $(GLIB_CFLAGS) $(GTK_CFLAGS)  $(LIB3270_CFLAGS) $(PW3270_CFLAGS) -o $@ -c $<
+	@$(CC) $(CFLAGS) \
+		$(DLL_CFLAGS) $(GDBUS_CFLAGS) $(GLIB_CFLAGS) $(GTK_CFLAGS) $(DEBUG_CFLAGS) \
+		$(LIB3270_CFLAGS) $(PW3270_CFLAGS) -o $@ -c $<
+
+$(OBJRLS)/%.o: \
+	%.c $(DEPENDS)
+
+	@echo "  CC   `basename $@`"
+	@$(MKDIR) `dirname $@`
+	@$(CC) $(CFLAGS) $(DLL_CFLAGS) $(GDBUS_CFLAGS) $(GLIB_CFLAGS) $(GTK_CFLAGS)  \
+		$(LIB3270_CFLAGS) $(PW3270_CFLAGS) -o $@ -c $<
 
 
 #---[ Release targets ]--------------------------------------------------------
