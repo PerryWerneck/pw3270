@@ -276,13 +276,25 @@ static gboolean spin_format(GtkSpinButton *spin, gpointer data) {
 	return TRUE;
 }
 
-void icon_press(GtkEntry *entry, GtkEntryIconPosition icon_pos, GdkEvent *event, v3270ft *dialog) {
+#ifdef WIN32
+static void select_local_file(GtkButton *button, v3270ft *dialog) {
+#else
+static void icon_press(GtkEntry *entry, GtkEntryIconPosition icon_pos, GdkEvent *event, v3270ft *dialog) {
+#endif // WIN32
 
 	gchar *filename = v3270ft_select_file(dialog, _("Select local file"), _("Select"), GTK_FILE_CHOOSER_ACTION_OPEN, gtk_entry_get_text(dialog->local));
 
 	if(filename) {
 
+		const gchar *remote = gtk_entry_get_text(dialog->remote);
+
 		gtk_entry_set_text(dialog->local,filename);
+
+		if(!*remote) {
+			gchar * text = g_path_get_basename(filename);
+			gtk_entry_set_text(dialog->remote,text);
+			g_free(text);
+		}
 
 		g_free(filename);
 	}
@@ -452,22 +464,30 @@ static void v3270ft_init(v3270ft *dialog) {
 			}
 	}
 
-	// File selection box
+	// Local file entry
 	dialog->local   = GTK_ENTRY(gtk_entry_new());
 	entry[1] 		= GTK_WIDGET(dialog->local);
 
 	gtk_widget_set_hexpand(GTK_WIDGET(dialog->local),TRUE);
+
+#ifdef WIN32
+	widget = gtk_button_new_from_icon_name("document-open",GTK_ICON_SIZE_BUTTON);
+	g_signal_connect(G_OBJECT(widget),"clicked",G_CALLBACK(select_local_file),dialog);
+	gtk_grid_attach(grid,widget,2,1,1,1);
+#else
 	gtk_entry_set_icon_from_icon_name(dialog->local,GTK_ENTRY_ICON_SECONDARY,"document-open");
 	gtk_entry_set_icon_activatable(dialog->local,GTK_ENTRY_ICON_SECONDARY,TRUE);
 	gtk_entry_set_icon_tooltip_text(dialog->local,GTK_ENTRY_ICON_SECONDARY,_("Select file"));
-
 	g_signal_connect(G_OBJECT(dialog->local),"icon-press",G_CALLBACK(icon_press),dialog);
+#endif // WIN32
+
 	g_signal_connect(G_OBJECT(dialog->local),"changed",G_CALLBACK(local_file_changed),dialog);
 
 	gtk_entry_set_width_chars(dialog->local,60);
 	gtk_entry_set_max_length(dialog->local,PATH_MAX);
 	gtk_grid_attach(grid,GTK_WIDGET(dialog->local),1,1,1,1);
 
+	// Remote file entry
 	dialog->remote  = GTK_ENTRY(gtk_entry_new());
 	entry[2] 		= GTK_WIDGET(dialog->remote);
 

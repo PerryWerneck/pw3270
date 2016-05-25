@@ -106,6 +106,8 @@ gchar * v3270ft_select_file(v3270ft *dialog, const gchar *title, const gchar *bu
 	fl.ofn.hwndOwner		= GDK_WINDOW_HWND(win);
 	fl.ofn.lpstrFile		= fl.szName;
 
+	fl.ofn.lpstrTitle		= title;
+
 	// Set lpstrFile[0] to '\0' so that GetOpenFileName does not
 	// use the contents of szFile to initialize itself.
 	fl.ofn.lpstrFile[0] 	= '\0';
@@ -117,7 +119,8 @@ gchar * v3270ft_select_file(v3270ft *dialog, const gchar *title, const gchar *bu
 	fl.ofn.lpstrInitialDir	= NULL;
 
 	// Guarda o valor atual
-	strncpy(fl.szName,filename,fl.ofn.nMaxFile);
+	if(filename)
+		strncpy(fl.szName,filename,fl.ofn.nMaxFile);
 
 	fl.action = action;
 

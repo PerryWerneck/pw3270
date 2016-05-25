@@ -199,6 +199,7 @@
 								source->secspace,
 								source->dft );
 	*/
+	return EINVAL;
  }
 
  static void process_input(pipe_source *source, DWORD cbRead)
