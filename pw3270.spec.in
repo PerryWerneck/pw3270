@@ -16,8 +16,7 @@
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
-%define LIBVERSION %(echo @PACKAGE_VERSION@ | sed -e "s@.@_@g")
-#5_1
+%define LIBVERSION @MAJOR_VERSION@_@MINOR_VERSION@
 
 # 
 # References:
