@@ -180,13 +180,8 @@ static void setup_luname_position(GdkRectangle *rect, v3270FontInfo *font, cairo
 
 	if(luname)
 	{
-//		cairo_move_to(cr,rect->x,rect->y+font->height);
-
 		gdk_cairo_set_source_rgba(cr,color+V3270_COLOR_OIA_LUNAME);
 		v3270_draw_text(cr,rect,font,luname);
-
-//		cairo_show_text(cr,luname);
-//		cairo_stroke(cr);
 	}
 
 	cairo_restore(cr);
@@ -242,55 +237,41 @@ static void setup_double_char_position(GdkRectangle *rect, v3270FontInfo *metric
 
 }
 
+static int draw_centered_char(cairo_t *cr, v3270FontInfo *metrics, int x, int y, const gchar chr)
+{
+	char str[2] = { chr, 0 };
+//	cairo_text_extents_t extents;
+
+	cairo_set_scaled_font(cr,metrics->scaled);
+//	cairo_text_extents(cr,str,&extents);
+
+	v3270_draw_text_at(cr, x, y, metrics, str);
+
+	return y+metrics->height+2;
+
+}
+
 static void draw_undera(cairo_t *cr, H3270 *host, v3270FontInfo *metrics, GdkRGBA *color, GdkRectangle *rect)
 {
-#ifdef DEBUG
-	cairo_set_source_rgb(cr,0.1,0.1,0.1);
-#else
 	gdk_cairo_set_source_rgba(cr,color+V3270_COLOR_OIA_BACKGROUND);
-#endif
 
 	cairo_rectangle(cr, rect->x, rect->y, rect->width, rect->height);
 	cairo_fill(cr);
 
 	if(lib3270_get_undera(host))
 	{
-		const gchar *chr = lib3270_in_e(host) ? "B" : "A";
-		cairo_text_extents_t extents;
-		int x,y;
-
-		gdk_cairo_set_source_rgba(cr,color+V3270_COLOR_OIA_BACKGROUND);
-		cairo_rectangle(cr, rect->x, rect->y, rect->width, rect->height);
-		cairo_fill(cr);
+		int y;
 
 		gdk_cairo_set_source_rgba(cr,color+V3270_COLOR_OIA_FOREGROUND);
 
-		cairo_text_extents(cr,chr,&extents);
+		y = draw_centered_char(cr, metrics,rect->x,rect->y, lib3270_in_e(host) ? 'B' : 'A');
 
-		x = rect->x + ((rect->width/2) - ((extents.width+extents.x_bearing)/2));
-		y = rect->y + extents.height+((rect->height/2) - (extents.height/2));
-
-		cairo_move_to(cr,x,y);
-		cairo_show_text(cr,chr);
-
-		cairo_move_to(cr,x+extents.x_bearing,y+2);
-		cairo_rel_line_to(cr,extents.width,0);
-
+		cairo_move_to(cr,rect->x,y);
+		cairo_rel_line_to(cr,10,0);
 		cairo_stroke(cr);
 
 	}
-
-}
-
-static void draw_centered_char(cairo_t *cr, v3270FontInfo *metrics, int x, int y, const gchar chr)
-{
-	char str[2] = { chr, 0 };
-
-	cairo_text_extents_t extents;
-	cairo_text_extents(cr,str,&extents);
-
-	cairo_move_to(cr,x+(((metrics->width+2)/2)-(extents.width/2)),y+extents.height+( (metrics->spacing/2) - (extents.height/2)));
-	cairo_show_text(cr,str);
+	debug("%s",__FUNCTION__);
 
 }
 
@@ -706,10 +687,12 @@ void v3270_update_luname(GtkWidget *widget,const gchar *name)
 
 		if(name)
 		{
-			cairo_move_to(cr,rect->x,rect->y+terminal->font.height);
+//			cairo_move_to(cr,rect->x,rect->y+terminal->font.height);
+//			cairo_show_text(cr,name);
+//			cairo_stroke(cr);
 			gdk_cairo_set_source_rgba(cr,terminal->color+V3270_COLOR_OIA_LUNAME);
-			cairo_show_text(cr,name);
-			cairo_stroke(cr);
+			v3270_draw_text_at(cr, rect->x, rect->y, &terminal->font, name);
+
 		}
 
 		cairo_destroy(cr);
@@ -757,10 +740,7 @@ static void draw_cursor_position(cairo_t *cr, GdkRectangle *rect, v3270FontInfo 
 	buffer[7] = 0;
 
 	cairo_text_extents(cr,buffer,&extents);
-
-	cairo_move_to(cr,(rect->x+rect->width)-(extents.width+2),rect->y+metrics->height);
-	cairo_show_text(cr, buffer);
-	cairo_stroke(cr);
+	v3270_draw_text_at(cr,(rect->x+rect->width)-(extents.width+2),rect->y,metrics,buffer);
 }
 
 void v3270_update_cursor(H3270 *session, unsigned short row, unsigned short col, unsigned char c, unsigned short attr)
@@ -937,9 +917,10 @@ static void update_text_field(v3270 *terminal, gboolean flag, V3270_OIA_FIELD id
 
 	if(flag)
 	{
-		cairo_move_to(cr,0,terminal->font.height);
-		cairo_show_text(cr, text);
-		cairo_stroke(cr);
+		v3270_draw_text_at(cr,0,0,&terminal->font,text);
+//		cairo_move_to(cr,0,terminal->font.height);
+//		cairo_show_text(cr, text);
+//		cairo_stroke(cr);
 	}
 
     cairo_destroy(cr);
@@ -1108,29 +1089,33 @@ void v3270_update_oia(H3270 *session, LIB3270_FLAG id, unsigned char on)
 	switch(id)
 	{
 	case LIB3270_FLAG_BOXSOLID:
-		debug("%s",__FUNCTION__);
+		debug("%s LIB3270_FLAG_BOXSOLID",__FUNCTION__);
 		cr = set_update_region(terminal,&r,V3270_OIA_CONNECTION);
 		v3270_draw_connection(cr,terminal->host,&terminal->font,terminal->color,r);
-		v3270_queue_draw_area(GTK_WIDGET(terminal),r->x,r->y,r->width,r->height);
 		cairo_destroy(cr);
+		v3270_queue_draw_area(GTK_WIDGET(terminal),r->x,r->y,r->width,r->height);
 		break;
 
 	case LIB3270_FLAG_UNDERA:
-		debug("%s",__FUNCTION__);
+		debug("%s LIB3270_FLAG_UNDERA",__FUNCTION__);
 		cr = set_update_region(terminal,&r,V3270_OIA_UNDERA);
+		debug("%s LIB3270_FLAG_UNDERA",__FUNCTION__);
 		draw_undera(cr,terminal->host,&terminal->font,terminal->color,r);
-		v3270_queue_draw_area(GTK_WIDGET(terminal),r->x,r->y,r->width,r->height);
+		debug("%s LIB3270_FLAG_UNDERA",__FUNCTION__);
 		cairo_destroy(cr);
+		debug("%s LIB3270_FLAG_UNDERA",__FUNCTION__);
+		v3270_queue_draw_area(GTK_WIDGET(terminal),r->x,r->y,r->width,r->height);
+		debug("%s LIB3270_FLAG_UNDERA",__FUNCTION__);
 		break;
 
 	case LIB3270_FLAG_TYPEAHEAD:
-		debug("%s",__FUNCTION__);
+		debug("%s LIB3270_FLAG_TYPEAHEAD",__FUNCTION__);
 		update_text_field(terminal,on,V3270_OIA_TYPEAHEAD,'T');
 		break;
 
 #ifdef HAVE_PRINTER
 	case LIB3270_FLAG_PRINTER:
-		debug("%s",__FUNCTION__);
+		debug("%s LIB3270_FLAG_PRINTER",__FUNCTION__);
 		update_text_field(terminal,on,V3270_OIA_PRINTER,'P');
 		break;
 #endif // HAVE_PRINTER

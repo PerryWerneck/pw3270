@@ -440,6 +440,7 @@
 		<Unit filename="src/pw3270/hostdialog.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/pw3270/include/v3270.h" />
 		<Unit filename="src/pw3270/include/v3270ft.h" />
 		<Unit filename="src/pw3270/main.c">
 			<Option compilerVar="CC" />

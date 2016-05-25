@@ -271,6 +271,7 @@ void		  v3270_register_io_handlers(v3270Class *cls);
 
 void 		  v3270_draw_char(cairo_t *cr, unsigned char chr, unsigned short attr, H3270 *session, v3270FontInfo *font, GdkRectangle *rect, GdkRGBA *fg, GdkRGBA *bg);
 void		  v3270_draw_text(cairo_t *cr, const GdkRectangle *rect, v3270FontInfo *font, const char *str);
+void		  v3270_draw_text_at(cairo_t *cr, int x, int y, v3270FontInfo *font, const char *str);
 
 void		  v3270_start_timer(GtkWidget *terminal);
 void		  v3270_stop_timer(GtkWidget *terminal);
