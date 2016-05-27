@@ -136,7 +136,7 @@ static void setup_cursor_position(GdkRectangle *rect, v3270FontInfo *metrics, ca
 	}
 }
 
-static void setup_timer_position(GdkRectangle *rect, v3270FontInfo *metrics, cairo_t *cr, H3270 *host, int cols, GdkRGBA *color)
+static void setup_ticking_position(GdkRectangle *rect, v3270FontInfo *metrics, cairo_t *cr, H3270 *host, int cols, GdkRGBA *color)
 {
 	char buffer[7];
 	cairo_text_extents_t extents;
@@ -546,7 +546,7 @@ void v3270_draw_oia(cairo_t *cr, H3270 *host, int row, int cols, v3270FontInfo *
 	} right[] =
 	{
 		{ V3270_OIA_CURSOR_POSITION,	setup_cursor_position 		},
-		{ V3270_OIA_TIMER,				setup_timer_position		},
+		{ V3270_OIA_TIMER,				setup_ticking_position		},
 		{ V3270_OIA_SPINNER, 			setup_spinner_position		},
 		{ V3270_OIA_LUNAME, 			setup_luname_position		},
 #ifdef HAVE_PRINTER
@@ -1041,6 +1041,8 @@ void v3270_start_timer(GtkWidget *widget)
 	info = g_new0(struct timer_info,1);
 	info->terminal	= terminal;
 	info->start		= time(0);
+
+	update_timer(info);
 
 	terminal->timer = g_timeout_source_new(100);
 	g_source_set_callback(terminal->timer,(GSourceFunc) update_timer, info, (GDestroyNotify) release_timer);
