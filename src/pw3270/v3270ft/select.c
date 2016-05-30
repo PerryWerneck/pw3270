@@ -28,7 +28,8 @@
  *
  */
 
- #include "private.h"
+#include "private.h"
+#include <stdarg.h>
 
 #ifdef WIN32
 	#include <gdk/gdkwin32.h>
@@ -53,13 +54,13 @@ static gpointer select_file(struct file *fl) {
 	case GTK_FILE_CHOOSER_ACTION_SAVE:	// Receber arquivo
 										// https://msdn.microsoft.com/en-us/library/windows/desktop/ms646839(v=vs.85).aspx
 										// https://msdn.microsoft.com/en-us/library/windows/desktop/ms646829(v=vs.85).aspx#open_file
-		fl->ofn.Flags = OFN_OVERWRITEPROMPT;
+		fl->ofn.Flags = OFN_OVERWRITEPROMPT | OFN_CREATEPROMPT | OFN_HIDEREADONLY;
 		fl->ok = GetSaveFileName(&fl->ofn);
 		break;
 
 	case GTK_FILE_CHOOSER_ACTION_OPEN:	// Enviar arquivo
 										// https://msdn.microsoft.com/en-us/library/windows/desktop/ms646928(v=vs.85).aspx
-		fl->ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+		fl->ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
 		fl->ok = GetOpenFileName(&fl->ofn);
 		break;
 	}
@@ -71,7 +72,7 @@ static gpointer select_file(struct file *fl) {
 
 #endif // _WIN32
 
-gchar * v3270ft_select_file(v3270ft *dialog, const gchar *title, const gchar *button, GtkFileChooserAction action, const gchar *filename) {
+gchar * v3270ft_select_file(v3270ft *dialog, const gchar *title, const gchar *button, GtkFileChooserAction action, const gchar *filename, const gchar *filter, ...) {
 
 	gchar *rc = NULL;
 
@@ -113,10 +114,35 @@ gchar * v3270ft_select_file(v3270ft *dialog, const gchar *title, const gchar *bu
 	fl.ofn.lpstrFile[0] 	= '\0';
 
 	fl.ofn.nMaxFile 		= sizeof(fl.szName);
-	fl.ofn.lpstrFilter		= "All\0*.*\0Text\0*.TXT\0";
+
+	// Monta lista de arquivos.
+	va_list		  args;
+	size_t		  ix		= 0;
+
+	fl.ofn.lpstrFilter = (char *) g_malloc0(4096);
+
+	va_start (args, filter);
+	while(filter) {
+
+		filter = gettext(filter);
+		size_t sz = strlen(filter)+1;
+
+		if(ix+sz > 4095)
+			break;
+
+		debug("%s",filter);
+
+		memcpy(((char *) fl.ofn.lpstrFilter)+ix,filter,sz);
+		ix += sz;
+		filter = va_arg(args, const char *);
+	}
+	va_end (args);
+
+	debug("%s",fl.ofn.lpstrFilter);
+
 	fl.ofn.nFilterIndex		= 1;
-	fl.ofn.nMaxFileTitle	= 0;
 	fl.ofn.lpstrInitialDir	= NULL;
+	fl.ofn.nMaxFileTitle	= 0;
 
 	// Guarda o valor atual
 	if(filename)
@@ -137,6 +163,7 @@ gchar * v3270ft_select_file(v3270ft *dialog, const gchar *title, const gchar *bu
 		rc = g_strdup(fl.szName);
 	}
 
+	g_free( ((char *) fl.ofn.lpstrFilter) );
 	gtk_widget_set_sensitive(GTK_WIDGET(dialog),TRUE);
 
 

@@ -188,7 +188,13 @@ static void remove_file(GtkButton *button, v3270ft *dialog) {
 
 static void load_file(GtkButton *button, v3270ft *dialog) {
 
-	gchar * filename = v3270ft_select_file(dialog, _("Load queue from file"), _("Load"), GTK_FILE_CHOOSER_ACTION_OPEN, NULL);
+	gchar * filename = v3270ft_select_file(
+								dialog,
+								_("Load queue from file"),
+								_("Load"), GTK_FILE_CHOOSER_ACTION_OPEN,
+								"",
+								N_("XML file"), "*.xml",
+								NULL );
 
 	if(filename) {
 		v3270ft_load(GTK_WIDGET(dialog),filename);
@@ -201,7 +207,14 @@ static void load_file(GtkButton *button, v3270ft *dialog) {
 
 static void save_file(GtkButton *button, v3270ft *dialog) {
 
-	gchar * filename = v3270ft_select_file(dialog, _("Save queue to file"), _("Save"), GTK_FILE_CHOOSER_ACTION_SAVE, NULL);
+	gchar * filename = v3270ft_select_file(
+								dialog,
+								_("Save queue to file"),
+								_("Save"),
+								GTK_FILE_CHOOSER_ACTION_SAVE,
+								"",
+								N_("XML file"), "*.xml",
+								NULL );
 
 	if(filename) {
 		v3270ft_save(GTK_WIDGET(dialog),filename);
@@ -282,7 +295,15 @@ static void select_local_file(GtkButton *button, v3270ft *dialog) {
 static void icon_press(GtkEntry *entry, GtkEntryIconPosition icon_pos, GdkEvent *event, v3270ft *dialog) {
 #endif // WIN32
 
-	gchar *filename = v3270ft_select_file(dialog, _("Select local file"), _("Select"), GTK_FILE_CHOOSER_ACTION_OPEN, gtk_entry_get_text(dialog->local));
+	gchar *filename = v3270ft_select_file(
+								dialog,
+								_("Select local file"),
+								_("Select"),
+								GTK_FILE_CHOOSER_ACTION_OPEN,
+								gtk_entry_get_text(dialog->local),
+								N_("All files"), "*.*",
+								N_("Text files"), "*.txt",
+								NULL );
 
 	if(filename) {
 
