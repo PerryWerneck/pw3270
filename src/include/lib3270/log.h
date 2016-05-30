@@ -59,9 +59,11 @@
 
 		#ifdef DEBUG
 			#include <stdio.h>
+			#undef trace
 			#define trace( fmt, ... )	fprintf(stderr, "%s(%d) " fmt "\n", __FILE__, __LINE__, __VA_ARGS__ ); fflush(stderr);
 			#define debug( fmt, ... )	fprintf(stderr, "%s(%d) " fmt "\n", __FILE__, __LINE__, __VA_ARGS__ ); fflush(stderr);
 		#else
+			#undef trace
 			#define trace(x, ...) 		// __VA_ARGS__
 			#define debug(x, ...) 		// __VA_ARGS__
 		#endif

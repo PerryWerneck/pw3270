@@ -437,7 +437,7 @@ LIB3270_EXPORT int lib3270_get_field_start(H3270 *hSession, int baddr)
 		return -1;
 
     if(baddr < 0)
-        baddr = hSession->cursor_addr;
+		baddr = hSession->cursor_addr;
 
 	sbaddr = baddr;
 	do
@@ -462,8 +462,8 @@ LIB3270_EXPORT int lib3270_get_field_len(H3270 *hSession, int baddr)
 	if (!hSession->formatted)
 		return -1;
 
-    if(baddr < 0)
-        baddr = hSession->cursor_addr;
+	if(baddr < 0)
+		baddr = hSession->cursor_addr;
 
 	addr = find_field_attribute(hSession,baddr);
 
@@ -569,8 +569,8 @@ LIB3270_EXPORT int lib3270_get_next_unprotected(H3270 *hSession, int baddr0)
 
     CHECK_SESSION_HANDLE(hSession);
 
-    if(baddr0 < 0)
-        baddr0 = hSession->cursor_addr;
+	if(baddr0 < 0)
+		baddr0 = hSession->cursor_addr;
 
 	nbaddr = baddr0;
 	do
@@ -594,7 +594,7 @@ LIB3270_EXPORT int lib3270_get_is_protected(H3270 *hSession, int baddr)
     CHECK_SESSION_HANDLE(hSession);
 
     if(baddr < 0)
-        baddr = hSession->cursor_addr;
+		baddr = hSession->cursor_addr;
 
 	int faddr = find_field_attribute(hSession,baddr);
 
