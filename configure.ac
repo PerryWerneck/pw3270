@@ -290,36 +290,6 @@ if test $app_cv_fvisibility_ok = yes; then
   CXXFLAGS="$CXXFLAGS -fvisibility=hidden"
 fi
 
-#--[ Python ]-----------------------------------------------------------------------------------------------------------------------------------------------
-
-#AC_ARG_WITH([python-config], [AS_HELP_STRING([--with-python-config], [Path to python-config tool])], [ PYCONFIG="$withval" ],[ AC_PATH_TOOL(PYCONFIG, python-config, , $PATH) ])
-#
-#if test -z "${PYCONFIG}"; then
-#
-#	AC_MSG_NOTICE([Program python-config not found. Use --with-python-config=path to specify absolute path to the python-config tool.])
-#
-#else
-#
-#	AC_DEFINE(HAVE_PYTHON)
-#	EXTENSIONS="$EXTENSIONS python"
-#	AC_CONFIG_FILES(src/python/Makefile)
-#
-#fi
-#
-#AC_SUBST(PYCONFIG)
-
-PKG_CHECK_MODULES( [PYTHON], [python], app_have_python=1, AC_MSG_NOTICE([python-devel not present.]) )
-
-AC_SUBST(PYTHON_LIBS)
-AC_SUBST(PYTHON_CFLAGS)
-
-if test "$app_have_python" == "1"; then
-	AC_DEFINE(HAVE_PYTHON)
-	EXTENSIONS="$EXTENSIONS python"
-	AC_CONFIG_FILES(src/python/Makefile)
-fi
-
-
 #--[ Options ]------------------------------------------------------------------------------------------------------------------------------------------------
 
 AC_ARG_ENABLE([pic],
@@ -551,6 +521,25 @@ AC_CHECK_FUNC(strtok_r, AC_DEFINE(HAVE_STRTOK_R) )
 
 
 PKG_CHECK_EXISTS
+
+#--[ Python ]-----------------------------------------------------------------------------------------------------------------------------------------------
+
+AC_ARG_ENABLE([python],[AS_HELP_STRING([--disable-python], [Disable python integration])],[ app_cv_python="$enableval" ],[ app_cv_python="yes" ])
+
+if test "$app_cv_python" == "yes"; then
+
+	PKG_CHECK_MODULES( [PYTHON], [python], app_have_python=1 )
+
+fi
+
+AC_SUBST(PYTHON_LIBS)
+AC_SUBST(PYTHON_CFLAGS)
+
+if test "$app_have_python" == "1"; then
+	AC_DEFINE(HAVE_PYTHON)
+	EXTENSIONS="$EXTENSIONS python"
+	AC_CONFIG_FILES(src/python/Makefile)
+fi
 
 #--[ GTK 2/3 check ]------------------------------------------------------------------------------------------------------------------------------------------
 
