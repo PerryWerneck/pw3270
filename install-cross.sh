@@ -33,8 +33,9 @@ gnome-icon-theme
 hicolor-icon-theme
 gdk-pixbuf-loader-rsvg
 gdk-pixbuf-query-loaders
-python-devel
 EOF
+
+# python-devel
 
 # Instala apicativos e temas necessários
 sudo zypper --non-interactive in \

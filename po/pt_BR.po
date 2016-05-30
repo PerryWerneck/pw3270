@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-24 15:57-0300\n"
+"POT-Creation-Date: 2016-05-30 17:04-0300\n"
 "PO-Revision-Date: 2016-05-05 17:03-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <perry.werneck@gmail.com>\n"
@@ -35,22 +35,22 @@ msgstr "%s"
 msgid "%s - Disconnected"
 msgstr "%s - Desconectado"
 
-#: actions.c:772 actions.c:784
+#: actions.c:773 actions.c:785
 #, c-format
 msgid "%s action needs a valid id attribute"
 msgstr "Ação %s exige um atributo ID válido"
 
-#: actions.c:620 actions.c:749 actions.c:761
+#: actions.c:621 actions.c:750 actions.c:762
 #, c-format
 msgid "%s action needs a valid toggle name"
 msgstr "Ação %s exige um nome de toggle válido"
 
-#: actions.c:796
+#: actions.c:797
 #, c-format
 msgid "%s action needs a valid value"
 msgstr "Ação %s precisa de um valor válido"
 
-#: actions.c:506
+#: actions.c:507
 #, c-format
 msgid "%s action needs src attribute"
 msgstr "Ação %s precisa do atributo src"
@@ -245,7 +245,7 @@ msgstr "Nome da aplicação"
 msgid "Attn"
 msgstr "Attn"
 
-#: actions.c:481
+#: actions.c:482
 #, c-format
 msgid "Attribute \"%s\" is invalid or undefined"
 msgstr "Atributo \"%s\" é invalido ou indefinido"
@@ -727,7 +727,7 @@ msgstr "Exception test"
 msgid "External Rexx script"
 msgstr "Script rexx externo"
 
-#: ui/98trace.xml:540
+#: ui/98trace.xml:538
 msgid "Field Delimiters"
 msgstr "Delimitadores de campo"
 
@@ -759,7 +759,7 @@ msgstr "Erro de formato no campo \"notBefore\" do certificado"
 msgid "Full Screen"
 msgstr "Tela cheia"
 
-#: ui/10functions.xml:580
+#: ui/10functions.xml:578
 msgid "Function bar"
 msgstr "Barra de funções"
 
@@ -941,7 +941,7 @@ msgstr "Só Maiúsculas"
 msgid "Monochrome"
 msgstr "Monocromático"
 
-#: actions.c:637
+#: actions.c:638
 msgid "Move action needs target & direction attributes"
 msgstr "Ação \"move\" precisa dos atributos \"target\" e \"direction\""
 
@@ -961,7 +961,7 @@ msgstr "Network keep alive"
 msgid "Network startup error"
 msgstr "Erro ao iniciar a rede"
 
-#: ui/00default.xml:424
+#: ui/00default.xml:422
 msgid "Next field"
 msgstr "Próximo campo"
 
@@ -1069,31 +1069,31 @@ msgstr "PF11"
 msgid "PF12"
 msgstr "PF12"
 
-#: ui/10functions.xml:595
+#: ui/10functions.xml:593
 msgid "PF13"
 msgstr "PF13"
 
-#: ui/10functions.xml:596
+#: ui/10functions.xml:594
 msgid "PF14"
 msgstr "PF14"
 
-#: ui/10functions.xml:597
+#: ui/10functions.xml:595
 msgid "PF15"
 msgstr "PF15"
 
-#: ui/10functions.xml:598
+#: ui/10functions.xml:596
 msgid "PF16"
 msgstr "PF16"
 
-#: ui/10functions.xml:599
+#: ui/10functions.xml:597
 msgid "PF17"
 msgstr "PF17"
 
-#: ui/10functions.xml:600
+#: ui/10functions.xml:598
 msgid "PF18"
 msgstr "PF18"
 
-#: ui/10functions.xml:601
+#: ui/10functions.xml:599
 msgid "PF19"
 msgstr "PF19"
 
@@ -1101,23 +1101,23 @@ msgstr "PF19"
 msgid "PF2"
 msgstr "PF2"
 
-#: ui/10functions.xml:602
+#: ui/10functions.xml:600
 msgid "PF20"
 msgstr "PF20"
 
-#: ui/10functions.xml:603
+#: ui/10functions.xml:601
 msgid "PF21"
 msgstr "PF21"
 
-#: ui/10functions.xml:604
+#: ui/10functions.xml:602
 msgid "PF22"
 msgstr "PF22"
 
-#: ui/10functions.xml:605
+#: ui/10functions.xml:603
 msgid "PF23"
 msgstr "PF23"
 
-#: ui/10functions.xml:606
+#: ui/10functions.xml:604
 msgid "PF24"
 msgstr "PF24"
 
@@ -1203,7 +1203,7 @@ msgstr "Popup test"
 msgid "Port or service name (empty for \"telnet\")."
 msgstr "Nº da porta ou nome do serviço (em branco para \"telnet\")."
 
-#: ui/00default.xml:423
+#: ui/00default.xml:421
 msgid "Previous field"
 msgstr "Campo anterior"
 
@@ -1347,7 +1347,7 @@ msgstr "Reset"
 msgid "Resize on alternate screen"
 msgstr "Mudar tamanho do terminal em tela alternativa"
 
-#: ui/00default.xml:425
+#: ui/00default.xml:423
 msgid "Return"
 msgstr "Return"
 
@@ -1797,11 +1797,11 @@ msgstr "Esta versão do %s foi gerada sem suporte para conexões seguras (SSL)."
 msgid "Toolbar"
 msgstr "Barra de ferramentas"
 
-#: ui/98trace.xml:535
+#: ui/98trace.xml:533
 msgid "Trace"
 msgstr "Trace"
 
-#: toggles.c:94 ui/98trace.xml:535
+#: toggles.c:94 ui/98trace.xml:533
 msgid "Trace Data Stream"
 msgstr "Trace Data Stream"
 
@@ -1809,15 +1809,15 @@ msgstr "Trace Data Stream"
 msgid "Trace interface events"
 msgstr "Trace interface events"
 
-#: toggles.c:220 ui/98trace.xml:537
+#: toggles.c:220 ui/98trace.xml:535
 msgid "Trace network data flow"
 msgstr "Trace network data flow"
 
-#: toggles.c:112 ui/98trace.xml:536
+#: toggles.c:112 ui/98trace.xml:534
 msgid "Trace screen contents"
 msgstr "Trace do conteúdo da tela"
 
-#: ui/98trace.xml:538
+#: ui/98trace.xml:536
 msgid "Trace user interface events"
 msgstr "Trace user interface events"
 
@@ -1935,12 +1935,12 @@ msgstr "Erro inesperado"
 msgid "Unexpected group \"%s\""
 msgstr "Grupo inesperado \"%s\""
 
-#: actions.c:495 actions.c:515
+#: actions.c:496 actions.c:516
 #, c-format
 msgid "Unexpected or invalid %s attribute: \"%s\""
 msgstr "Atributo %s inesperado ou inválido: \"%s\""
 
-#: actions.c:469
+#: actions.c:470
 #, c-format
 msgid "Unexpected or invalid attribute value \"%s\""
 msgstr "Valor de attributo inesperado ou inválido: \"%s\""
@@ -1954,7 +1954,7 @@ msgstr "Valor de cor inválido ou inesperado: \"%s\""
 msgid "Unexpected or unknown security status"
 msgstr "Estado de segurança inesperado ou desconhecido."
 
-#: actions.c:390
+#: actions.c:391
 #, c-format
 msgid "Unexpected target \"%s\""
 msgstr "Alvo inesperado \"%s\""
@@ -2033,7 +2033,7 @@ msgstr "Europa ocidental (ISO 8859-1)"
 msgid "White"
 msgstr "Branco"
 
-#: ui/00default.xml:394
+#: ui/00default.xml:391
 msgid "Window"
 msgstr "Janela"
 
@@ -2046,47 +2046,47 @@ msgstr "Windows ocidental (CP1252)"
 msgid "Windows error %d"
 msgstr "Erro windows %d"
 
-#: v3270/oia.c:432 v3270/oia.c:456 v3270/oia.c:460
+#: v3270/oia.c:413 v3270/oia.c:437 v3270/oia.c:441
 msgid "X"
 msgstr "X"
 
-#: v3270/oia.c:436
+#: v3270/oia.c:417
 msgid "X -f"
 msgstr "X -f"
 
-#: v3270/oia.c:468
+#: v3270/oia.c:449
 msgid "X Connecting"
 msgstr "X Conectando"
 
-#: v3270/oia.c:452
+#: v3270/oia.c:433
 msgid "X Inhibit"
 msgstr "X Inibido"
 
-#: v3270/oia.c:428
+#: v3270/oia.c:409
 msgid "X Not Connected"
 msgstr "X Desconectado"
 
-#: v3270/oia.c:444
+#: v3270/oia.c:425
 msgid "X Numeric"
 msgstr "X Numérico"
 
-#: v3270/oia.c:448
+#: v3270/oia.c:429
 msgid "X Overflow"
 msgstr "X Estouro"
 
-#: v3270/oia.c:440
+#: v3270/oia.c:421
 msgid "X Protected"
 msgstr "X Protegido"
 
-#: v3270/oia.c:464
+#: v3270/oia.c:445
 msgid "X Resolving"
 msgstr "X Resolvendo"
 
-#: v3270/oia.c:416
+#: v3270/oia.c:397
 msgid "X System"
 msgstr "X Sistema"
 
-#: v3270/oia.c:420
+#: v3270/oia.c:401
 msgid "X Wait"
 msgstr "X Aguarde"
 
