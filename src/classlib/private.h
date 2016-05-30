@@ -34,79 +34,72 @@
 	#include <cstring>
 	#include <pw3270/class.h>
 
-	#if __cplusplus < 201103L
+	#if defined(_WIN32)
+
+		class recursive_mutex {
+		private:
+			HANDLE hMutex;
+
+		public:
+			recursive_mutex() {
+				hMutex = CreateMutex(NULL,FALSE,NULL);
+			};
+
+			~recursive_mutex() {
+				CloseHandle(hMutex);
+			};
+
+			void lock(void) {
+				WaitForSingleObject(hMutex,INFINITE);
+			};
+
+			void unlock(void) {
+				ReleaseMutex(hMutex);
+			};
+
+			bool try_lock(void) {
+				if(WaitForSingleObject(hMutex,1) == WAIT_OBJECT_0)
+					return true;
+				return false;
+			};
+		};
+
+	#elif __cplusplus < 201103L
 
 		#define nullptr	NULL
 
+		class recursive_mutex {
+		private:
+			pthread_mutex_t           mtx;
+			pthread_mutexattr_t       mtxAttr;
 
-		#ifdef _WIN32
+		public:
+			recursive_mutex() {
 
-			class recursive_mutex {
-			private:
-				HANDLE hMutex;
+				memset(&mtx,0,sizeof(mtx));
+				memset(&mtxAttr,0,sizeof(mtxAttr));
 
-			public:
-				recursive_mutex() {
-					hMutex = CreateMutex(NULL,FALSE,NULL);
-				};
-
-				~recursive_mutex() {
-					CloseHandle(hMutex);
-				};
-
-				void lock(void) {
-					WaitForSingleObject(hMutex,INFINITE);
-				};
-
-				void unlock(void) {
-					ReleaseMutex(hMutex);
-				};
-
-				bool try_lock(void) {
-					if(WaitForSingleObject(hMutex,1) == WAIT_OBJECT_0)
-						return true;
-					return false;
-				};
+				pthread_mutexattr_init(&mtxAttr);
+				pthread_mutexattr_settype(&mtxAttr, PTHREAD_MUTEX_RECURSIVE);
+				pthread_mutex_init(&mtx, &mtxAttr);
 			};
 
-		#else
-
-			class recursive_mutex {
-			private:
-				pthread_mutex_t           mtx;
-				pthread_mutexattr_t       mtxAttr;
-
-			public:
-				recursive_mutex() {
-
-					memset(&mtx,0,sizeof(mtx));
-					memset(&mtxAttr,0,sizeof(mtxAttr));
-
-					pthread_mutexattr_init(&mtxAttr);
-					pthread_mutexattr_settype(&mtxAttr, PTHREAD_MUTEX_RECURSIVE);
-					pthread_mutex_init(&mtx, &mtxAttr);
-				};
-
-				~recursive_mutex() {
-					pthread_mutex_destroy(&mtx);
-				};
-
-				void lock(void) {
-					pthread_mutex_lock(&mtx);
-				};
-
-				void unlock(void) {
-					pthread_mutex_unlock(&mtx);
-				};
-
-				bool try_lock(void) {
-					 return pthread_mutex_trylock(&mtx) == 0;
-				};
+			~recursive_mutex() {
+				pthread_mutex_destroy(&mtx);
 			};
 
+			void lock(void) {
+				pthread_mutex_lock(&mtx);
+			};
 
+			void unlock(void) {
+				pthread_mutex_unlock(&mtx);
+			};
 
-		#endif // _WIN32
+			bool try_lock(void) {
+				 return pthread_mutex_trylock(&mtx) == 0;
+			};
+		};
 
 	#else
 
