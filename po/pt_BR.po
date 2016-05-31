@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-05-30 17:04-0300\n"
-"PO-Revision-Date: 2016-05-05 17:03-0300\n"
+"PO-Revision-Date: 2016-05-31 09:47-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <perry.werneck@gmail.com>\n"
 "Language: pt_BR\n"
@@ -91,9 +91,9 @@ msgid "%s: Vertical tab not supported"
 msgstr "%s: Tabulação vertical não é suportada"
 
 #: window.c:324
-#, fuzzy, c-format
+#, c-format
 msgid "%s<b>%s</b> for %s"
-msgstr "<b>%s</b>\n"
+msgstr "%s<b>%s</b> para %s"
 
 #: main.c:425
 msgid "- 3270 Emulator for Gtk"
@@ -492,13 +492,14 @@ msgid "Cancelled by user"
 msgstr "Cancelado pelo usuário"
 
 #: telnet.c:1453
-#, fuzzy
 msgid "Cannot connect to specified LU"
-msgstr "Não foi possível conectar a %s"
+msgstr "Não foi possível conectar na LU pedida"
 
 #: ssl.c:317
 msgid "Cant create a new SSL structure for current connection."
-msgstr "Cant create a new SSL structure for current connection."
+msgstr ""
+"Não foi possível criar uma nova estrutura de controle SSL para a conexão "
+"atual."
 
 #: ssl.c:258
 #, c-format
@@ -741,7 +742,7 @@ msgstr "Transferência de arquivos já está ativa nesta sessão."
 
 #: v3270/security.c:146
 msgid "Format error in CRL's lastUpdate field"
-msgstr "Erro de formado no campo \"lastUpdate\" do CRL"
+msgstr "Erro de formato no campo \"lastUpdate\" do CRL"
 
 #: v3270/security.c:153
 msgid "Format error in CRL's nextUpdate field"
@@ -1179,9 +1180,8 @@ msgid "Paste with left margin"
 msgstr "Colar com margem esquerda"
 
 #: main.c:414
-#, fuzzy
 msgid "Path for plugin files"
-msgstr "Caminho para os arquivos de dados da aplicação"
+msgstr "Caminho para os arquivos de plugin"
 
 #: v3270/security.c:209
 msgid "Path length constraint exceeded"
@@ -1296,7 +1296,7 @@ msgstr "Termo RPQ desconhecido: \"%s\" "
 #: rpq.c:228
 #, c-format
 msgid "RPQ term %d is unknown"
-msgstr "Term RPM %d não foi reconhecido"
+msgstr "Termo RPM %d não foi reconhecido"
 
 #: rpq.c:455
 msgid "RPQ timezone exceeds 12 hour UTC offset"
@@ -1373,7 +1373,7 @@ msgstr "Negociação SSL falhou"
 
 #: ssl.c:225
 msgid "SSL_CTX_new() has failed"
-msgstr "SSL_CTX_new() has failed"
+msgstr "SSL_CTX_new() falhou"
 
 #: telnet.c:2015
 #, c-format
@@ -1707,7 +1707,7 @@ msgstr "The known types are %s"
 
 #: main.c:412
 msgid "The model of 3270 display to be emulated"
-msgstr "The model of 3270 display to be emulated"
+msgstr "Modelo de tela 3270 a ser emulada"
 
 #: v3270/security.c:168
 msgid ""
@@ -1838,9 +1838,8 @@ msgid "Transfer complete"
 msgstr "Transferência completa"
 
 #: ft.c:559
-#, fuzzy
 msgid "Transfer failed"
-msgstr "Transferência completa"
+msgstr "Transferência falhou"
 
 #: ft_cut.c:463
 msgid "Transmission error"
@@ -2181,11 +2180,11 @@ msgstr "desabilitar"
 
 #: toggles.c:313 connect.c:363 connect.c:458
 msgid "enable"
-msgstr "enable"
+msgstr "habilitar"
 
 #: connect.c:571
 msgid "fcntl() error when getting socket state."
-msgstr "fcntl() error when getting socket state."
+msgstr "erro fcntl() ao obter estado do socket."
 
 #: connect.c:383 connect.c:558
 msgid "ioctlsocket(FIONBIO) failed."
