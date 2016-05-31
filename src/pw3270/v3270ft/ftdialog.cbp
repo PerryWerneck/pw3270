@@ -83,6 +83,9 @@
 		<Unit filename="../v3270/signals.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="../v3270/text.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="../v3270/v3270.c">
 			<Option compilerVar="CC" />
 		</Unit>
