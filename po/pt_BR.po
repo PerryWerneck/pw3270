@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-30 17:04-0300\n"
+"POT-Creation-Date: 2016-05-31 10:44-0300\n"
 "PO-Revision-Date: 2016-05-31 09:47-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <perry.werneck@gmail.com>\n"
@@ -107,6 +107,11 @@ msgstr "16 cores"
 msgid "3270 Error"
 msgstr "Erro 3270"
 
+#: v3270ftprogress.c:424 v3270ft.c:354
+#, fuzzy
+msgid "3270 File transfer"
+msgstr "Transferência de arquivos"
+
 #: screen.c:706
 msgid "3270 Warning"
 msgstr "Alerta 3270"
@@ -200,9 +205,19 @@ msgstr ""
 "A CA certificate is invalid. Either it is not a CA or its extensions are not "
 "consistent with the supplied purpose."
 
+#: tables.c:60
+#, fuzzy
+msgid "A_ppend to file"
+msgstr "Enviar arquivo"
+
 #: ft.c:96
 msgid "Abort sent; awaiting response"
 msgstr "Cancelamento enviado; aguardando resposta"
+
+#: v3270ftprogress.c:694
+#, fuzzy
+msgid "Aborting transfer"
+msgstr "Iniciando transferência"
 
 #: ft.c:651
 msgid "Aborting..."
@@ -232,10 +247,35 @@ msgstr "Endereço ou nome do host a conectar."
 msgid "Alert sound"
 msgstr "Aviso sonoro"
 
+#: v3270ft.c:304
+#, fuzzy
+msgid "All files"
+msgstr "Selecionar arquivo"
+
+#: v3270ftprogress.c:121
+msgid "An error exists in the PC's file name."
+msgstr "An error exists in the PC's file name."
+
+#: v3270ftprogress.c:103
+msgid ""
+"An error occurred in the file transfer, which may be an error in the data "
+"being transferred, or an unidentified system error."
+msgstr ""
+"An error occurred in the file transfer, which may be an error in the data "
+"being transferred, or an unidentified system error."
+
 #: v3270/security.c:161
 msgid "An error occurred trying to allocate memory. This should never happen."
 msgstr ""
 "Ocorreu um erro ao tentar alocar memória. Isso nunca deveria acontecer."
+
+#: v3270ftprogress.c:151
+msgid "An invalid SEND or RECEIVE parameter was sent to the host."
+msgstr "An invalid SEND or RECEIVE parameter was sent to the host."
+
+#: tables.c:61
+msgid "Appends the source file to the destination file."
+msgstr "Adiciona conteúdo do arquivo origem ao final do arquivo destino."
 
 #: main.c:400 main.c:402
 msgid "Application name"
@@ -280,6 +320,10 @@ msgstr ""
 msgid "Automatically reconnect to the host if it ever disconnects"
 msgstr "Reconecta automaticamente caso o servidor desconecte"
 
+#: tables.c:118
+msgid "Avblock"
+msgstr "Avblock"
+
 #: ft.c:95
 msgid "Awaiting chance to send an abort"
 msgstr "Aguardando para enviar pedido de cancelamento"
@@ -307,6 +351,10 @@ msgstr "Completar com espaços"
 #: toggles.c:76 ui/00default.xml:349
 msgid "Blinking Cursor"
 msgstr "Cursor piscante"
+
+#: tables.c:171
+msgid "Block size:"
+msgstr "Comprimento do bloco:"
 
 #: colors.c:436
 msgid "Blue"
@@ -390,7 +438,7 @@ msgstr "Não consigo determinar o valor da variável de ambiente \"%s\" "
 msgid "Can't get file size"
 msgstr "Não foi possível obter o tamanho do arquivo"
 
-#: uiparser/parsefile.c:328
+#: load.c:251 uiparser/parsefile.c:328
 #, c-format
 msgid "Can't load %s"
 msgstr "Não foi possível carregar %s"
@@ -421,7 +469,7 @@ msgstr "Incapaz de processar elemento sem nome"
 msgid "Can't recognize \"%s\" as a valid host type"
 msgstr "Não reconheço \"%s\" como um tipo de host válido"
 
-#: trace.c:208
+#: save.c:89 trace.c:208
 #, c-format
 msgid "Can't save %s"
 msgstr "Não foi possível salvar arquivo %s"
@@ -462,6 +510,11 @@ msgstr ""
 msgid "Can't save trace data to file %s"
 msgstr "Não foi possível salvar trace no arquivo %s"
 
+#: v3270ftprogress.c:780
+#, fuzzy
+msgid "Can't set callback table"
+msgstr "Não foi possível abrir arquivo local."
+
 #: tools.c:216
 msgid "Can't set host charset"
 msgstr "Não foi possível definir o charset do host"
@@ -478,6 +531,11 @@ msgstr "Não foi possível mudar o socket para o modo blocante."
 msgid "Can't set socket to non blocking mode"
 msgstr "Não foi possível setar o socket para o modo não blocante."
 
+#: v3270ftprogress.c:767
+#, fuzzy
+msgid "Can't start file transfer session"
+msgstr "Não foi possível iniciar transferência de arquivo."
+
 #: ft.c:198
 msgid "Can't start file transfer."
 msgstr "Não foi possível iniciar transferência de arquivo."
@@ -486,6 +544,16 @@ msgstr "Não foi possível iniciar transferência de arquivo."
 #, c-format
 msgid "Can't use winsock version %d.%d"
 msgstr "Não é possível usar a Winsock versão %d.%d"
+
+#: transfer.c:89 v3270ftprogress.c:474
+#, fuzzy
+msgid "Cancel"
+msgstr "_Cancelar"
+
+#: transfer.c:90
+#, fuzzy
+msgid "Cancel transfer operation."
+msgstr "Opções de transferência"
 
 #: ft.c:152
 msgid "Cancelled by user"
@@ -550,6 +618,10 @@ msgstr "Erro de codificação de caracteres"
 msgid "Check for SSL secure connection."
 msgstr "Marcar para ativar a conexão segura via SSL."
 
+#: tables.c:44
+msgid "Check this if the file consists of character data only."
+msgstr "Marque se o arquivo contem apenas texto."
+
 #: ui/10keypad.xml:216
 msgid "Clear"
 msgstr "Limpar"
@@ -604,6 +676,19 @@ msgstr "Copiar como HTML"
 msgid "Copy as table"
 msgstr "Copiar como tabela"
 
+#: tables.c:81
+msgid "Creates a file with fixed-length records."
+msgstr "Cria arquivo com registros de tamanho fixo."
+
+#: tables.c:93
+msgid "Creates a file with undefined-length records (TSO hosts only)."
+msgstr ""
+"Cria arquivo com o tamanho de registro indefinido (apenas para hosts TSO)."
+
+#: tables.c:87
+msgid "Creates a file with variable-length records."
+msgstr "Cria arquivo com registros de tamanho variável."
+
 #: colors.c:460 toggles.c:136 ui/00default.xml:355
 msgid "Cross hair cursor"
 msgstr "Cursor mira"
@@ -613,6 +698,21 @@ msgstr "Cursor mira"
 msgid "Current (%s)"
 msgstr "Atual (%s)"
 
+#: v3270ftprogress.c:428
+#, fuzzy
+msgid "Current file"
+msgstr "Atual"
+
+#: v3270ftprogress.c:75
+#, fuzzy
+msgid "Current transfer position"
+msgstr "Opções de transferência"
+
+#: v3270ftprogress.c:74
+#, fuzzy
+msgid "Current:"
+msgstr "Atual"
+
 #: colors.c:321
 msgid "Custom colors"
 msgstr "Cores personalizadas"
@@ -620,6 +720,14 @@ msgstr "Cores personalizadas"
 #: ui/00default.xml:296
 msgid "Cut"
 msgstr "Recortar"
+
+#: tables.c:112
+msgid "Cylinders"
+msgstr "Cilindros"
+
+#: tables.c:189
+msgid "DFT B_uffer size:"
+msgstr "Tamanho do b_uffer DFT:"
 
 #: colors.c:444
 msgid "Dark Blue"
@@ -640,6 +748,10 @@ msgstr "Depuração"
 #: ui/99debug.xml:42
 msgid "Debug window updates"
 msgstr "Mostrar atualizações de janela"
+
+#: tables.c:74 tables.c:100
+msgid "Default"
+msgstr "Padrão"
 
 #: ui/00default.xml:312
 msgid "Delete field"
@@ -664,6 +776,10 @@ msgstr "Mostra posição do cursor na lista de informações ao operador"
 #: telnet.c:1250
 msgid "EOR received when not in 3270 mode, ignored."
 msgstr "EOR recebido fora do modo 3270, ignorado."
+
+#: v3270ftprogress.c:84
+msgid "ETA:"
+msgstr "ETA:"
 
 #: toggles.c:221
 msgid "Enable network in/out trace"
@@ -720,6 +836,10 @@ msgstr "Erro \"%s\" gravando arquivo local (rc=%d)"
 msgid "Error loading %s"
 msgstr "Erro lendo %s"
 
+#: v3270ftprogress.c:85
+msgid "Estimated transfer arrival"
+msgstr "Estimated transfer arrival"
+
 #: ui/80javasamples.xml:87
 msgid "Exception test"
 msgstr "Exception test"
@@ -739,6 +859,34 @@ msgstr "Cor dos campos"
 #: ft.c:261
 msgid "File transfer is already active in this session."
 msgstr "Transferência de arquivos já está ativa nesta sessão."
+
+#: tables.c:80
+msgid "Fixed"
+msgstr "Fixo"
+
+#: tables.c:49
+#, fuzzy
+msgid "Follow the convention for _ASCII text files."
+msgstr "Seguir a convenção para arquivos texto ASCII"
+
+#: tables.c:51
+#, fuzzy
+msgid ""
+"Following the convention for ASCII text files, CR/LF pairs are used to "
+"terminate records in the PC file, and a CTRL-Z (x'1A') marks the end of file."
+msgstr ""
+"Seguindo a convenção para arquivos texto ASCII, a sequência <CR> <LF> é "
+"usada para terminar registros no arquivo do PC e um CTRL-| (x'1A') marca o "
+"final do arquivo."
+
+#: tables.c:53
+#, fuzzy
+msgid ""
+"Following the convention for ASCII text files, LF is used to terminate "
+"records in the PC file."
+msgstr ""
+"Seguindo a convenção para arquivos texto ASCII, <LF> é usado para terminar "
+"registros no arquivo do PC."
 
 #: v3270/security.c:146
 msgid "Format error in CRL's lastUpdate field"
@@ -767,6 +915,10 @@ msgstr "Barra de funções"
 #: main.c:101 main.c:494
 msgid "GTK Version mismatch"
 msgstr "Divergência de versão GTK"
+
+#: v3270ft.c:409
+msgid "Get transfer queue from an external XML file"
+msgstr "Get transfer queue from an external XML file"
 
 #: colors.c:450
 msgid "Gray"
@@ -868,6 +1020,14 @@ msgstr ""
 "If set, the time taken by the host to process an AID is displayed on the "
 "status line"
 
+#: transfer.c:80
+msgid "Ignore"
+msgstr "Ignore"
+
+#: transfer.c:81
+msgid "Ignore the fail and remove the file from queue."
+msgstr "Ignore the fail and remove the file from queue."
+
 #: ft_cut.c:507
 msgid "Illegal frame length"
 msgstr "Comprimento de frame inválido"
@@ -875,6 +1035,11 @@ msgstr "Comprimento de frame inválido"
 #: ui/00default.xml:369
 msgid "Input method"
 msgstr "Método de entrada"
+
+#: v3270ft.c:424
+#, fuzzy
+msgid "Insert new file in the transfer queue"
+msgstr "Não foi possível enviar a requisição de transferência de arquivo"
 
 #: colors.c:455
 msgid "Intensified/Protected"
@@ -916,6 +1081,18 @@ msgstr "Teclado está bloqueado"
 #: ui/10keypad.xml:170
 msgid "Lateral keypad"
 msgstr "Barra lateral"
+
+#: v3270ft.c:194
+msgid "Load"
+msgstr "Load"
+
+#: v3270ft.c:193
+msgid "Load queue from file"
+msgstr "Load queue from file"
+
+#: v3270ftprogress.c:59
+msgid "Local:"
+msgstr "Local:"
 
 #: main.c:420
 msgid "Log to file"
@@ -965,6 +1142,11 @@ msgstr "Erro ao iniciar a rede"
 #: ui/00default.xml:422
 msgid "Next field"
 msgstr "Próximo campo"
+
+#: v3270ftprogress.c:467
+#, fuzzy
+msgid "No active transfer"
+msgstr "Transferência de arquivos"
 
 #: v3270/security.c:189
 msgid ""
@@ -1017,6 +1199,11 @@ msgstr "Estado inválido na OIA"
 #: colors.c:466
 msgid "OIA status ok"
 msgstr "Estado normal na OIA"
+
+#: load.c:253 save.c:91
+#, fuzzy
+msgid "Operation has failed"
+msgstr "Operação de impressão falhou"
 
 #: print.c:613
 msgid "Options"
@@ -1179,6 +1366,11 @@ msgstr "Colar conteúdo de arquivo texto"
 msgid "Paste with left margin"
 msgstr "Colar com margem esquerda"
 
+#: v3270ftprogress.c:60
+#, fuzzy
+msgid "Path and name of the local file"
+msgstr "Caminho completo do arquivo que vai ser enviado."
+
 #: main.c:414
 msgid "Path for plugin files"
 msgstr "Caminho para os arquivos de plugin"
@@ -1203,9 +1395,25 @@ msgstr "Popup test"
 msgid "Port or service name (empty for \"telnet\")."
 msgstr "Nº da porta ou nome do serviço (em branco para \"telnet\")."
 
+#: set.c:174
+msgid "Preparing"
+msgstr "Preparing"
+
 #: ui/00default.xml:421
 msgid "Previous field"
 msgstr "Campo anterior"
+
+#: tables.c:165
+msgid ""
+"Primary allocation for a file created on a TSO host.\n"
+"The units are given by the space allocation units option."
+msgstr ""
+"Primary allocation for a file created on a TSO host.\n"
+"The units are given by the space allocation units option."
+
+#: tables.c:164
+msgid "Primary space:"
+msgstr "Primary space:"
 
 #: ui/00default.xml:281
 msgid "Print"
@@ -1230,6 +1438,10 @@ msgstr "Imprimir marca de seleção"
 #: print.c:915 ui/00default.xml:339
 msgid "Print settings"
 msgstr "Configurações de impressão"
+
+#: v3270ftprogress.c:445
+msgid "Progress"
+msgstr "Progresso"
 
 #: ui/80javasamples.xml:90
 msgid "Protection test"
@@ -1319,6 +1531,32 @@ msgstr "RPQ: Não foi possível resolver '%s': %s"
 msgid "RPQ: gethostbyname error"
 msgstr "RPQ: Erro em gethostbyname"
 
+#: tables.c:66
+#, fuzzy
+msgid "Re_map ASCII Characters."
+msgstr "Re_mapear para caracteres ASCII"
+
+#: tables.c:136
+msgid "Receive file"
+msgstr "Receber arquivo"
+
+#: tables.c:148
+#, fuzzy
+msgid "Receive text file"
+msgstr "Receber arquivo"
+
+#: v3270ftprogress.c:746
+msgid "Receiving file"
+msgstr "Recebendo arquivo"
+
+#: tables.c:156
+msgid "Record Length:"
+msgstr "Comprimento de registro:"
+
+#: v3270ft.c:341
+msgid "Record format"
+msgstr "Formato de registro"
+
 #: colors.c:437
 msgid "Red"
 msgstr "Vermelho"
@@ -1326,6 +1564,23 @@ msgstr "Vermelho"
 #: ui/99debug.xml:41
 msgid "Reload buffer contents"
 msgstr "Recarregar conteúdo do buffer"
+
+#: tables.c:67
+msgid ""
+"Remap the text to ensure maximum compatibility between the workstation's "
+"character set and encoding and the host's EBCDIC code page."
+msgstr ""
+"Converte conteúdo do texto para garantir a máxima compatibilidade entre a "
+"codificação ASCII da estação de trabalho e a página de código EBCDIC do "
+"servidor."
+
+#: v3270ftprogress.c:64
+msgid "Remote:"
+msgstr "Remote:"
+
+#: v3270ft.c:431
+msgid "Remove selected file from the transfer queue"
+msgstr "Remove selected file from the transfer queue"
 
 #: ui/00default.xml:306
 msgid "Remove selection"
@@ -1347,9 +1602,21 @@ msgstr "Reset"
 msgid "Resize on alternate screen"
 msgstr "Mudar tamanho do terminal em tela alternativa"
 
+#: transfer.c:83
+msgid "Retry"
+msgstr "Retry"
+
 #: ui/00default.xml:423
 msgid "Return"
 msgstr "Return"
+
+#: v3270ftprogress.c:225
+msgid ""
+"SPACE can be specified in units of TRACKS, CYLINDERS, or AVBLOCK, and only "
+"one option can be used."
+msgstr ""
+"SPACE can be specified in units of TRACKS, CYLINDERS, or AVBLOCK, and only "
+"one option can be used."
 
 #: ssl.c:112
 msgid "SSL Connect failed"
@@ -1384,6 +1651,11 @@ msgstr ""
 "SSL_write:\n"
 "%s"
 
+#: v3270ft.c:213
+#, fuzzy
+msgid "Save"
+msgstr "_Gravar"
+
 #: ui/00default.xml:278
 msgid "Save copy"
 msgstr "Salvar cópia"
@@ -1391,6 +1663,11 @@ msgstr "Salvar cópia"
 #: dialog.c:354
 msgid "Save copy to file"
 msgstr "Salvar cópia para arquivo"
+
+#: v3270ft.c:212
+#, fuzzy
+msgid "Save queue to file"
+msgstr "Salvar tela para arquivo"
 
 #: ui/00default.xml:276
 msgid "Save screen"
@@ -1412,6 +1689,10 @@ msgstr "Salvar seleção para arquivo"
 msgid "Save trace file"
 msgstr "Salvar arquivo de trace"
 
+#: v3270ft.c:417
+msgid "Save transfer queue to an external XML file"
+msgstr "Save transfer queue to an external XML file"
+
 #: ui/00default.xml:345
 msgid "Screen size"
 msgstr "Tamanho da tela"
@@ -1420,6 +1701,18 @@ msgstr "Tamanho da tela"
 msgid "Scripts"
 msgstr "Scripts"
 
+#: tables.c:183
+msgid ""
+"Secondary allocation for a file created on a TSO host.\n"
+"The units are given by the space allocation units option."
+msgstr ""
+"Secondary allocation for a file created on a TSO host.\n"
+"The units are given by the space allocation units option."
+
+#: tables.c:182
+msgid "Secondary space:"
+msgstr "Secondary space:"
+
 #: v3270/security.c:48
 msgid "Secure connection was successful."
 msgstr "Conexão segura efetuada com sucesso."
@@ -1427,6 +1720,11 @@ msgstr "Conexão segura efetuada com sucesso."
 #: ssl.c:83 ssl.c:111 ssl.c:224 ssl.c:263 ssl.c:316
 msgid "Security error"
 msgstr "Erro de segurança"
+
+#: v3270ft.c:301
+#, fuzzy
+msgid "Select"
+msgstr "Selecionar tudo"
 
 #: ui/00default.xml:305
 msgid "Select Field"
@@ -1440,9 +1738,38 @@ msgstr "Selecionar tudo"
 msgid "Select by rectangles"
 msgstr "Seleção retangular"
 
+#: v3270ft.c:501
+msgid "Select file"
+msgstr "Selecionar arquivo"
+
+#: v3270ft.c:401
+#, fuzzy
+msgid "Select first file"
+msgstr "Selecionar arquivo"
+
 #: ui/00default.xml:342
 msgid "Select font"
 msgstr "Selecione fonte"
+
+#: v3270ft.c:380
+#, fuzzy
+msgid "Select last file"
+msgstr "Selecionar arquivo"
+
+#: v3270ft.c:300
+#, fuzzy
+msgid "Select local file"
+msgstr "Selecionar arquivo"
+
+#: v3270ft.c:387
+#, fuzzy
+msgid "Select next file"
+msgstr "Selecionar arquivo"
+
+#: v3270ft.c:394
+#, fuzzy
+msgid "Select previous file"
+msgstr "Selecionar arquivo"
 
 #: iocalls.c:377 iocalls.c:484
 msgid "Select() failed when processing for events."
@@ -1464,13 +1791,26 @@ msgstr "Certificado auto assinado"
 msgid "Self signed certificate in certificate chain"
 msgstr "Certificado auto assinado na cadeia de certificados"
 
+#: tables.c:130
+msgid "Send file"
+msgstr "Enviar arquivo"
+
 #: main.c:417
 msgid "Send messages to syslog"
 msgstr "Enviar mensagens para o log do sistema"
 
+#: tables.c:142
+#, fuzzy
+msgid "Send text file"
+msgstr "Enviar arquivo"
+
 #: ui/00default.xml:286
 msgid "Send/Receive"
 msgstr "Enviar/Receber"
+
+#: v3270ftprogress.c:746
+msgid "Sending file"
+msgstr "Enviando arquivo"
 
 #: main.c:405
 msgid "Session name"
@@ -1520,6 +1860,14 @@ msgstr "Mostrar padrão de teste"
 msgid "Show timer when processing"
 msgstr "Show timer when processing"
 
+#: transfer.c:86
+msgid "Skip"
+msgstr "Skip"
+
+#: transfer.c:87
+msgid "Skip this transfer, keep the file on queue."
+msgstr "Skip this transfer, keep the file on queue."
+
 #: toggles.c:160 ui/00default.xml:362
 msgid "Smart paste"
 msgstr "Colar inteligente"
@@ -1536,6 +1884,55 @@ msgstr "Erro ao ler dados da rede"
 msgid "Socket write error"
 msgstr "Erro ao enviar dados para a rede"
 
+#: v3270ft.c:342
+msgid "Space allocation units"
+msgstr "Unidades de alocação de espaço"
+
+#: tables.c:172
+msgid ""
+"Specifies the block size (n) for a new data set. For data sets containing "
+"fixed length records, the block size must be a multiple of the record "
+"length. For data sets containing variable length records, the block size "
+"must be greater than or equal to the record length plus four bytes. The "
+"block size must not exceed the track length of the device on which the data "
+"set resides."
+msgstr ""
+"Define o tamanho do bloco para um novo data set. Para data sets contendo "
+"registro de largura fixa o tamanho do bloco deve ser um múltiplo da largura "
+"de registro. Para data sets contendo registros de largura variável o tamanho "
+"do bloco deve ser maior ou igual à largura do registro mais quatro bytes. O "
+"tamanho do bloco não deve exceder a largura de trilha do dispositivo onde o "
+"data set reside."
+
+#: tables.c:190
+msgid "Specifies the default buffer size for DFT IND$FILE file transfers."
+msgstr "Specifies the default buffer size for DFT IND$FILE file transfers."
+
+#: tables.c:157
+msgid ""
+"Specifies the logical record length (n) for a data set consisting of fixed "
+"length records or the maximum logical record length for a data set "
+"consisting of variable length records."
+msgstr ""
+"Specifies the logical record length (n) for a data set consisting of fixed "
+"length records or the maximum logical record length for a data set "
+"consisting of variable length records."
+
+#: v3270ftprogress.c:79
+#, fuzzy
+msgid "Speed:"
+msgstr "Velocidade"
+
+#: v3270ft.c:373
+#, fuzzy
+msgid "Start file transfer"
+msgstr "Iniciando transferência"
+
+#: v3270ftprogress.c:797
+#, fuzzy
+msgid "Starting"
+msgstr "Configurações"
+
 #: v3270/security.c:237
 msgid "Subject issuer mismatch"
 msgstr "Divergência na identidade do emissor"
@@ -1551,6 +1948,21 @@ msgstr "Negociação TLS falhou"
 #: colors.c:428
 msgid "Terminal colors"
 msgstr "Cores do terminal"
+
+#: v3270ft.c:305
+#, fuzzy
+msgid "Text files"
+msgstr "Arquivo _texto."
+
+#: v3270ftprogress.c:249
+msgid ""
+"The CMS disk is full, or the maximum number of files on the minidisk (3400) "
+"has been reached, or the maximum number of data blocks per file (16060) has "
+"been reached."
+msgstr ""
+"The CMS disk is full, or the maximum number of files on the minidisk (3400) "
+"has been reached, or the maximum number of data blocks per file (16060) has "
+"been reached."
 
 #: v3270/security.c:126
 msgid "The CRL has expired."
@@ -1684,6 +2096,28 @@ msgstr ""
 msgid "The file already exists. Replace it?"
 msgstr "O arquivo já existe, substituir?"
 
+#: v3270ftprogress.c:115
+msgid ""
+"The file transfer operation has been completed, and any record greater than "
+"the logical record length (LRECL) of the file being appended has been "
+"divided and becomes multiple records."
+msgstr ""
+"The file transfer operation has been completed, and any record greater than "
+"the logical record length (LRECL) of the file being appended has been "
+"divided and becomes multiple records."
+
+#: v3270ftprogress.c:109
+msgid "The file transfer operation has been successfully completed."
+msgstr "The file transfer operation has been successfully completed."
+
+#: v3270ftprogress.c:133 v3270ftprogress.c:139
+msgid ""
+"The host program has detected an error in the file data during a RECEIVE "
+"operation."
+msgstr ""
+"The host program has detected an error in the file data during a RECEIVE "
+"operation."
+
 #: v3270/security.c:182
 msgid ""
 "The issuer certificate could not be found: this occurs if the issuer "
@@ -1708,6 +2142,10 @@ msgstr "The known types are %s"
 #: main.c:412
 msgid "The model of 3270 display to be emulated"
 msgstr "Modelo de tela 3270 a ser emulada"
+
+#: v3270ftprogress.c:65
+msgid "The name of the file in the host"
+msgstr "The name of the file in the host"
 
 #: v3270/security.c:168
 msgid ""
@@ -1748,10 +2186,18 @@ msgstr ""
 "O certificado fornecido não pode ser utilizado para a finalidade "
 "especificada."
 
+#: v3270ftprogress.c:189
+msgid "There is not enough space available for data on the host."
+msgstr "There is not enough space available for data on the host."
+
 #: tools.c:219
 #, c-format
 msgid "There's no available settings for charset \"%s\""
 msgstr "Não encontrei configuração para a tabela de caracteres \"%s\""
+
+#: v3270ftprogress.c:255
+msgid "This is a host program error."
+msgstr "This is a host program error."
 
 #: dialog.c:458
 msgid ""
@@ -1797,6 +2243,16 @@ msgstr "Esta versão do %s foi gerada sem suporte para conexões seguras (SSL)."
 msgid "Toolbar"
 msgstr "Barra de ferramentas"
 
+#: v3270ftprogress.c:70
+#, fuzzy
+msgid "Total bytes to transfer"
+msgstr "Transferência de arquivos"
+
+#: v3270ftprogress.c:69
+#, fuzzy
+msgid "Total:"
+msgstr "Total"
+
 #: ui/98trace.xml:533
 msgid "Trace"
 msgstr "Trace"
@@ -1825,6 +2281,10 @@ msgstr "Trace user interface events"
 msgid "Track Cursor"
 msgstr "Mostrar posição do cursor"
 
+#: tables.c:106
+msgid "Tracks"
+msgstr "Trilhas"
+
 #: ft_cut.c:370
 msgid "Transfer cancelled by host"
 msgstr "Transferência cancelada pelo servidor"
@@ -1837,13 +2297,26 @@ msgstr "Transferência cancelada pelo usuário"
 msgid "Transfer complete"
 msgstr "Transferência completa"
 
-#: ft.c:559
+#: v3270ftprogress.c:728 ft.c:559
 msgid "Transfer failed"
 msgstr "Transferência falhou"
+
+#: v3270ft.c:340
+msgid "Transfer options"
+msgstr "Opções de transferência"
+
+#: v3270ftprogress.c:80
+#, fuzzy
+msgid "Transfer speed"
+msgstr "Transferência completa"
 
 #: ft_cut.c:463
 msgid "Transmission error"
 msgstr "Erro de transmissão"
+
+#: transfer.c:84
+msgid "Try again with the same file."
+msgstr "Try again with the same file."
 
 #: colors.c:440 colors.c:448
 msgid "Turquoise"
@@ -1905,6 +2378,10 @@ msgstr "Não foi possível enviar a requisição de transferência de arquivo"
 #: v3270/security.c:188
 msgid "Unable to verify the first certificate"
 msgstr "Não foi possível verificar o primeiro certificado"
+
+#: tables.c:92
+msgid "Undefined"
+msgstr "Indefinido"
 
 #: v3270/security.c:379
 msgid "Unexpected SSL error"
@@ -2003,9 +2480,17 @@ msgstr "Finalidade do certificado não é suportada"
 msgid "Use +/- for field navigation"
 msgstr "Usar teclas +/- para navegar por campos"
 
+#: tables.c:75
+msgid "Use host default record format."
+msgstr "Utilizar o formato de registro padrão do servidor."
+
 #: toggles.c:191
 msgid "Use the keys +/- from keypad to select editable fields"
 msgstr "Use the keys +/- from keypad to select editable fields"
+
+#: tables.c:86
+msgid "Variable"
+msgstr "Variável"
 
 #: dialog.c:498
 #, c-format
@@ -2089,11 +2574,86 @@ msgstr "X Sistema"
 msgid "X Wait"
 msgstr "X Aguarde"
 
+#: v3270ft.c:196 v3270ft.c:216
+#, fuzzy
+msgid "XML file"
+msgstr "Enviar log para arquivo"
+
 #: colors.c:441
 msgid "Yellow"
 msgstr "Amarelo"
 
-#: v3270/hostselect.c:389
+#: v3270ftprogress.c:127
+msgid ""
+"You did not enter the required parameters after a SEND or RECEIVE command."
+msgstr ""
+"You did not enter the required parameters after a SEND or RECEIVE command."
+
+#: v3270ftprogress.c:231
+msgid "You did not specify an existing CMS file for RECEIVE."
+msgstr "You did not specify an existing CMS file for RECEIVE."
+
+#: v3270ftprogress.c:145
+msgid ""
+"You need 30 KB of main storage (not disk space) on the host for the file "
+"transfer, in addition to the host requirement."
+msgstr ""
+"You need 30 KB of main storage (not disk space) on the host for the file "
+"transfer, in addition to the host requirement."
+
+#: v3270ftprogress.c:213
+msgid ""
+"You selected an option that can only be used if SPACE is also specified."
+msgstr ""
+"You selected an option that can only be used if SPACE is also specified."
+
+#: v3270ftprogress.c:195
+msgid ""
+"You selected an option that is either not recognized, is specified as a "
+"positional keyword, or has an associated value that is incorrect."
+msgstr ""
+"You selected an option that is either not recognized, is specified as a "
+"positional keyword, or has an associated value that is incorrect."
+
+#: v3270ftprogress.c:219
+msgid ""
+"You selected an option that is invalid with a host-partitioned data set."
+msgstr ""
+"You selected an option that is invalid with a host-partitioned data set."
+
+#: v3270ftprogress.c:207
+msgid ""
+"You selected an option that is not valid with APPEND, but otherwise may be "
+"used."
+msgstr ""
+"You selected an option that is not valid with APPEND, but otherwise may be "
+"used."
+
+#: v3270ftprogress.c:201
+msgid ""
+"You selected an option that is not valid with RECEIVE, but can be used with "
+"SEND."
+msgstr ""
+"You selected an option that is not valid with RECEIVE, but can be used with "
+"SEND."
+
+#: v3270ftprogress.c:237
+msgid ""
+"You specified a CMS file mode for the SEND key that does not allow write "
+"access."
+msgstr ""
+"You specified a CMS file mode for the SEND key that does not allow write "
+"access."
+
+#: v3270ftprogress.c:243
+msgid "You specified a CMS file mode that is not in the CMS search order."
+msgstr "You specified a CMS file mode that is not in the CMS search order."
+
+#: v3270ftprogress.c:183
+msgid "You specified an option that is invalid."
+msgstr "You specified an option that is invalid."
+
+#: select.c:87 select.c:177 v3270/hostselect.c:389
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -2129,13 +2689,28 @@ msgstr "Opções do _Servidor"
 msgid "_Host:"
 msgstr "Nome do _Host:"
 
+#: v3270ft.c:335
+#, fuzzy
+msgid "_Local file:"
+msgstr "Arquivo _local:"
+
 #: ui/00default.xml:323
 msgid "_Network"
 msgstr "_Rede"
 
+#: v3270ft.c:334
+#, fuzzy
+msgid "_Operation:"
+msgstr "_Opções"
+
 #: ui/00default.xml:348
 msgid "_Options"
 msgstr "_Opções"
+
+#: v3270ft.c:336
+#, fuzzy
+msgid "_Remote file:"
+msgstr "Arquivo delimitado por _CR."
 
 #: v3270/hostselect.c:166
 msgid "_Secure connection."
@@ -2144,6 +2719,11 @@ msgstr "Conexão _Segura."
 #: v3270/hostselect.c:148
 msgid "_Service:"
 msgstr "_Serviço:"
+
+#: tables.c:43
+#, fuzzy
+msgid "_Text file"
+msgstr "Arquivo _texto."
 
 #: ui/80javasamples.xml:85
 msgid "_View"
@@ -2198,15 +2778,6 @@ msgstr "setsockopt(SO_OOBINLINE) has failed"
 msgid "translator-credits"
 msgstr "translator-credits"
 
-#~ msgid "Appends the source file to the destination file."
-#~ msgstr "Adiciona conteúdo do arquivo origem ao final do arquivo destino."
-
-#~ msgid "Avblock"
-#~ msgstr "Avblock"
-
-#~ msgid "Block size:"
-#~ msgstr "Comprimento do bloco:"
-
 #~ msgid ""
 #~ "Buffer size for DFT-mode transfers. Can range from 256 to 32768. Larger "
 #~ "values give better performance, but some hosts may not be able to support "
@@ -2228,58 +2799,11 @@ msgstr "translator-credits"
 #~ msgid "Cancel upload."
 #~ msgstr "Cancelar envio."
 
-#~ msgid "Check this if the file consists of character data only."
-#~ msgstr "Marque se o arquivo contem apenas texto."
-
-#~ msgid "Creates a file with fixed-length records."
-#~ msgstr "Cria arquivo com registros de tamanho fixo."
-
-#~ msgid "Creates a file with undefined-length records (TSO hosts only)."
-#~ msgstr ""
-#~ "Cria arquivo com o tamanho de registro indefinido (apenas para hosts TSO)."
-
-#~ msgid "Creates a file with variable-length records."
-#~ msgstr "Cria arquivo com registros de tamanho variável."
-
-#~ msgid "Current"
-#~ msgstr "Atual"
-
-#~ msgid "Cylinders"
-#~ msgstr "Cilindros"
-
-#~ msgid "DFT B_uffer size:"
-#~ msgstr "Tamanho do b_uffer DFT:"
-
-#~ msgid "Default"
-#~ msgstr "Padrão"
-
 #~ msgid "ETA"
 #~ msgstr "ETA"
 
 #~ msgid "File transfer is already active."
 #~ msgstr "Transferência de arquivos já está ativa."
-
-#~ msgid "Fixed"
-#~ msgstr "Fixo"
-
-#~ msgid "Follow the convention for ASCII text files."
-#~ msgstr "Seguir a convenção para arquivos texto ASCII"
-
-#~ msgid ""
-#~ "Following the convention for ASCII text files, <CR> <LF> pairs are used "
-#~ "to terminate records in the PC file, and a CTRL-Z (x'1A') marks the end "
-#~ "of file."
-#~ msgstr ""
-#~ "Seguindo a convenção para arquivos texto ASCII, a sequência <CR> <LF> é "
-#~ "usada para terminar registros no arquivo do PC e um CTRL-| (x'1A') marca "
-#~ "o final do arquivo."
-
-#~ msgid ""
-#~ "Following the convention for ASCII text files, <LF> is used to terminate "
-#~ "records in the PC file."
-#~ msgstr ""
-#~ "Seguindo a convenção para arquivos texto ASCII, <LF> é usado para "
-#~ "terminar registros no arquivo do PC."
 
 #~ msgid "From"
 #~ msgstr "De"
@@ -2296,63 +2820,11 @@ msgstr "translator-credits"
 #~ msgid "Name of the target file."
 #~ msgstr "Nome do arquivo destino."
 
-#~ msgid "Path of the local file to send."
-#~ msgstr "Caminho completo do arquivo que vai ser enviado."
-
-#~ msgid ""
-#~ "Primary allocation for a file created on a TSO host.\n"
-#~ "The units are given by the space allocation units option."
-#~ msgstr ""
-#~ "Primary allocation for a file created on a TSO host.\n"
-#~ "The units are given by the space allocation units option."
-
-#~ msgid "Primary space:"
-#~ msgstr "Primary space:"
-
-#~ msgid "Progress"
-#~ msgstr "Progresso"
-
-#~ msgid "Re_map to ASCII Characters."
-#~ msgstr "Re_mapear para caracteres ASCII"
-
 #~ msgid "Re_map to EBCDIC Characters."
 #~ msgstr "Re_mapear para caracteres EBCDIC."
 
-#~ msgid "Receive file"
-#~ msgstr "Receber arquivo"
-
 #~ msgid "Receive file from host"
 #~ msgstr "Receber arquivo do servidor"
-
-#~ msgid "Receiving file"
-#~ msgstr "Recebendo arquivo"
-
-#~ msgid "Record Length:"
-#~ msgstr "Comprimento de registro:"
-
-#~ msgid "Record format"
-#~ msgstr "Formato de registro"
-
-#~ msgid ""
-#~ "Remap the text to ensure maximum compatibility between the workstation's "
-#~ "character set and encoding and the host's EBCDIC code page."
-#~ msgstr ""
-#~ "Converte conteúdo do texto para garantir a máxima compatibilidade entre a "
-#~ "codificação ASCII da estação de trabalho e a página de código EBCDIC do "
-#~ "servidor."
-
-#~ msgid ""
-#~ "Secondary allocation for a file created on a TSO host.\n"
-#~ "The units are given by the space allocation units option."
-#~ msgstr ""
-#~ "Secondary allocation for a file created on a TSO host.\n"
-#~ "The units are given by the space allocation units option."
-
-#~ msgid "Secondary space:"
-#~ msgstr "Secondary space:"
-
-#~ msgid "Select file"
-#~ msgstr "Selecionar arquivo"
 
 #~ msgid "Select file to receive"
 #~ msgstr "Selecione arquivo a receber"
@@ -2360,32 +2832,8 @@ msgstr "translator-credits"
 #~ msgid "Select file to send"
 #~ msgstr "Selecione arquivo a enviar"
 
-#~ msgid "Send file"
-#~ msgstr "Enviar arquivo"
-
 #~ msgid "Send file to host"
 #~ msgstr "Enviar arquivo para o servidor"
-
-#~ msgid "Sending file"
-#~ msgstr "Enviando arquivo"
-
-#~ msgid "Space allocation units"
-#~ msgstr "Unidades de alocação de espaço"
-
-#~ msgid ""
-#~ "Specifies the block size (n) for a new data set. For data sets containing "
-#~ "fixed length records, the block size must be a multiple of the record "
-#~ "length. For data sets containing variable length records, the block size "
-#~ "must be greater than or equal to the record length plus four bytes. The "
-#~ "block size must not exceed the track length of the device on which the "
-#~ "data set resides."
-#~ msgstr ""
-#~ "Define o tamanho do bloco para um novo data set. Para data sets contendo "
-#~ "registro de largura fixa o tamanho do bloco deve ser um múltiplo da "
-#~ "largura de registro. Para data sets contendo registros de largura "
-#~ "variável o tamanho do bloco deve ser maior ou igual à largura do registro "
-#~ "mais quatro bytes. O tamanho do bloco não deve exceder a largura de "
-#~ "trilha do dispositivo onde o data set reside."
 
 #~ msgid "Specifies the record format of the data set."
 #~ msgstr "Controla o formato de registro do data set."
@@ -2403,17 +2851,11 @@ msgstr "translator-credits"
 #~ "Define a unidade para os campos que definem o espaço primário e "
 #~ "secundário."
 
-#~ msgid "Speed"
-#~ msgstr "Velocidade"
-
 #~ msgid "Start download."
 #~ msgstr "Iniciar recebimento."
 
 #~ msgid "Start upload."
 #~ msgstr "Iniciar envio."
-
-#~ msgid "Starting transfer"
-#~ msgstr "Iniciando transferência"
 
 #~ msgid "Status"
 #~ msgstr "Situação"
@@ -2421,26 +2863,8 @@ msgstr "translator-credits"
 #~ msgid "To"
 #~ msgstr "Para"
 
-#~ msgid "Total"
-#~ msgstr "Total"
-
-#~ msgid "Tracks"
-#~ msgstr "Trilhas"
-
-#~ msgid "Transfer options"
-#~ msgstr "Opções de transferência"
-
-#~ msgid "Undefined"
-#~ msgstr "Indefinido"
-
 #~ msgid "Unexpected call to %s: No active filetransfer"
 #~ msgstr "Unexpected call to %s: No active filetransfer"
-
-#~ msgid "Use host default record format."
-#~ msgstr "Utilizar o formato de registro padrão do servidor."
-
-#~ msgid "Variable"
-#~ msgstr "Variável"
 
 #~ msgid "Where to save the received file."
 #~ msgstr "Onde salvar o arquivo recebido."
@@ -2457,23 +2881,11 @@ msgstr "translator-credits"
 #~ msgid "_Host file name:"
 #~ msgstr "Arquivo no _Servidor:"
 
-#~ msgid "_Local file name:"
-#~ msgstr "Arquivo _local:"
-
 #~ msgid "_Receive"
 #~ msgstr "_Receber"
 
-#~ msgid "_Save"
-#~ msgstr "_Gravar"
-
 #~ msgid "_Send"
 #~ msgstr "_Enviar"
-
-#~ msgid "_Text file."
-#~ msgstr "Arquivo _texto."
-
-#~ msgid "Can't open local file."
-#~ msgstr "Não foi possível abrir arquivo local."
 
 #, fuzzy
 #~ msgid "Add <CR> at end of the line."
@@ -2764,17 +3176,11 @@ msgstr "translator-credits"
 #~ "Define o tamanho do bloco para arquivos criados no host (Apenas hosts "
 #~ "TSO)."
 
-#~ msgid "_CR delimited file."
-#~ msgstr "Arquivo delimitado por _CR."
-
 #~ msgid "BLKSIZE:"
 #~ msgstr "BLKSIZE:"
 
 #~ msgid "Complete"
 #~ msgstr "Completo"
-
-#~ msgid "File transfer"
-#~ msgstr "Transferência de arquivos"
 
 #~ msgid "LRECL:"
 #~ msgstr "LRECL:"

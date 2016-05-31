@@ -168,7 +168,7 @@ $(LIBRLS)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@.$(PACKAGE_VERSION):	\
 
 	@$(MAKE) BINDIR=../.bin -C v3270ft Release
 
-.bin/Release/v3270ft.pot: \
+.bin/pot/v3270ft.pot: \
 	v3270ft/*
 
 	@$(MAKE) BINDIR=../.bin -C v3270ft pot
@@ -242,7 +242,7 @@ v3270/marshal.c: v3270/genmarshal v3270/marshal.h
 	@glib-genmarshal --prefix=v3270 --body v3270/genmarshal > $@
 
 $(BINDIR)/pot/pw3270.pot: \
-	$(BINDIR)/pot/v3270ft.pot \
+	.bin/pot/v3270ft.pot \
 	$(foreach SRC, $(basename $(APP_SOURCES) $(LIB_SOURCES)), $(TMPDIR)/pot/$(SRC).pot)
 
 	@rm -f $@
