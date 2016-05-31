@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-05-31 10:44-0300\n"
-"PO-Revision-Date: 2016-05-31 10:50-0300\n"
+"PO-Revision-Date: 2016-05-31 11:16-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <perry.werneck@gmail.com>\n"
 "Language: pt_BR\n"
@@ -250,15 +250,15 @@ msgstr "Todos os arquivos"
 
 #: v3270ftprogress.c:121
 msgid "An error exists in the PC's file name."
-msgstr "An error exists in the PC's file name."
+msgstr "Existe um erro no nome do arquivo do PC."
 
 #: v3270ftprogress.c:103
 msgid ""
 "An error occurred in the file transfer, which may be an error in the data "
 "being transferred, or an unidentified system error."
 msgstr ""
-"An error occurred in the file transfer, which may be an error in the data "
-"being transferred, or an unidentified system error."
+"Um erro ocorreu na tranferência de arquivos, pode ser um erro nos dados que "
+"sendo transferidos ou um erro de sistema não identificado."
 
 #: v3270/security.c:161
 msgid "An error occurred trying to allocate memory. This should never happen."
@@ -267,7 +267,7 @@ msgstr ""
 
 #: v3270ftprogress.c:151
 msgid "An invalid SEND or RECEIVE parameter was sent to the host."
-msgstr "An invalid SEND or RECEIVE parameter was sent to the host."
+msgstr "Um parametro de ENVIO/RECEBIMENTO inválido foi enviado para o host."
 
 #: tables.c:61
 msgid "Appends the source file to the destination file."
@@ -827,7 +827,7 @@ msgstr "Erro lendo %s"
 
 #: v3270ftprogress.c:85
 msgid "Estimated transfer arrival"
-msgstr "Estimated transfer arrival"
+msgstr "Tempo estimado para a transferência"
 
 #: ui/80javasamples.xml:87
 msgid "Exception test"
@@ -904,7 +904,7 @@ msgstr "Divergência de versão GTK"
 
 #: v3270ft.c:409
 msgid "Get transfer queue from an external XML file"
-msgstr "Get transfer queue from an external XML file"
+msgstr "Obtém a fila de transferência de um arquivo XML externo"
 
 #: colors.c:450
 msgid "Gray"
@@ -1073,7 +1073,7 @@ msgstr "Load"
 
 #: v3270ft.c:193
 msgid "Load queue from file"
-msgstr "Load queue from file"
+msgstr "Ler a fila de um arquivo"
 
 #: v3270ftprogress.c:59
 msgid "Local:"
@@ -1379,7 +1379,7 @@ msgstr "Nº da porta ou nome do serviço (em branco para \"telnet\")."
 
 #: set.c:174
 msgid "Preparing"
-msgstr "Preparing"
+msgstr "Preparando"
 
 #: ui/00default.xml:421
 msgid "Previous field"
@@ -1556,11 +1556,11 @@ msgstr ""
 
 #: v3270ftprogress.c:64
 msgid "Remote:"
-msgstr "Remote:"
+msgstr "Remoto:"
 
 #: v3270ft.c:431
 msgid "Remove selected file from the transfer queue"
-msgstr "Remove selected file from the transfer queue"
+msgstr "Remove arquivo selecionado da fila de transferência"
 
 #: ui/00default.xml:306
 msgid "Remove selection"
@@ -1584,7 +1584,7 @@ msgstr "Mudar tamanho do terminal em tela alternativa"
 
 #: transfer.c:83
 msgid "Retry"
-msgstr "Retry"
+msgstr "Repetir"
 
 #: ui/00default.xml:423
 msgid "Return"
@@ -1669,7 +1669,7 @@ msgstr "Salvar arquivo de trace"
 
 #: v3270ft.c:417
 msgid "Save transfer queue to an external XML file"
-msgstr "Save transfer queue to an external XML file"
+msgstr "Guarda fila de transferência num arquivo XML externo"
 
 #: ui/00default.xml:345
 msgid "Screen size"
@@ -1877,7 +1877,7 @@ msgstr ""
 
 #: tables.c:190
 msgid "Specifies the default buffer size for DFT IND$FILE file transfers."
-msgstr "Specifies the default buffer size for DFT IND$FILE file transfers."
+msgstr "Define o tamanho de buffer padrão para transferências IND$FILE DFT."
 
 #: tables.c:157
 msgid ""
@@ -1885,9 +1885,9 @@ msgid ""
 "length records or the maximum logical record length for a data set "
 "consisting of variable length records."
 msgstr ""
-"Specifies the logical record length (n) for a data set consisting of fixed "
-"length records or the maximum logical record length for a data set "
-"consisting of variable length records."
+"Define o comprimento lógico do registro (N) para um dataset com registros de "
+"largura fixa ou o comprimento máximo de registros para um dataset contendo "
+"registro de tamanho variável."
 
 #: v3270ftprogress.c:79
 msgid "Speed:"
@@ -2069,21 +2069,18 @@ msgid ""
 "the logical record length (LRECL) of the file being appended has been "
 "divided and becomes multiple records."
 msgstr ""
-"The file transfer operation has been completed, and any record greater than "
-"the logical record length (LRECL) of the file being appended has been "
-"divided and becomes multiple records."
+"A transferência de arquivos foi concluída e qualquer registro maior que o "
+"comprimento definido foi dividido e se transformou em vários registros."
 
 #: v3270ftprogress.c:109
 msgid "The file transfer operation has been successfully completed."
-msgstr "The file transfer operation has been successfully completed."
+msgstr "A transferência de arquivos terminou com sucesso."
 
 #: v3270ftprogress.c:133 v3270ftprogress.c:139
 msgid ""
 "The host program has detected an error in the file data during a RECEIVE "
 "operation."
-msgstr ""
-"The host program has detected an error in the file data during a RECEIVE "
-"operation."
+msgstr "O host detectou um erro no arquivo durante a operação de recebimento."
 
 #: v3270/security.c:182
 msgid ""
@@ -2104,7 +2101,7 @@ msgstr ""
 #: window.c:331
 #, c-format
 msgid "The known types are %s"
-msgstr "The known types are %s"
+msgstr "Os tipos conhecidos são %s"
 
 #: main.c:412
 msgid "The model of 3270 display to be emulated"
@@ -2112,7 +2109,7 @@ msgstr "Modelo de tela 3270 a ser emulada"
 
 #: v3270ftprogress.c:65
 msgid "The name of the file in the host"
-msgstr "The name of the file in the host"
+msgstr "Nome do arquivo no host"
 
 #: v3270/security.c:168
 msgid ""
@@ -2155,7 +2152,7 @@ msgstr ""
 
 #: v3270ftprogress.c:189
 msgid "There is not enough space available for data on the host."
-msgstr "There is not enough space available for data on the host."
+msgstr "Não existe espaço suficiente no host para os dados."
 
 #: tools.c:219
 #, c-format
@@ -2164,7 +2161,7 @@ msgstr "Não encontrei configuração para a tabela de caracteres \"%s\""
 
 #: v3270ftprogress.c:255
 msgid "This is a host program error."
-msgstr "This is a host program error."
+msgstr "Este é um erro no programa do host."
 
 #: dialog.c:458
 msgid ""
@@ -2252,7 +2249,7 @@ msgstr "Trilhas"
 
 #: ft_cut.c:370
 msgid "Transfer cancelled by host"
-msgstr "Transferência cancelada pelo servidor"
+msgstr "Transferência cancelada pelo host"
 
 #: ft_cut.c:399 ft_cut.c:497 ft_dft.c:228 ft_dft.c:371
 msgid "Transfer cancelled by user"
@@ -2280,7 +2277,7 @@ msgstr "Erro de transmissão"
 
 #: transfer.c:84
 msgid "Try again with the same file."
-msgstr "Try again with the same file."
+msgstr "Tente de novo com o mesmo arquivo."
 
 #: colors.c:440 colors.c:448
 msgid "Turquoise"
@@ -2550,71 +2547,76 @@ msgstr "Amarelo"
 msgid ""
 "You did not enter the required parameters after a SEND or RECEIVE command."
 msgstr ""
-"You did not enter the required parameters after a SEND or RECEIVE command."
+"Você não entrou os parametros necessários para um comando ENVIAR/RECEBER."
 
 #: v3270ftprogress.c:231
 msgid "You did not specify an existing CMS file for RECEIVE."
-msgstr "You did not specify an existing CMS file for RECEIVE."
+msgstr ""
+"Você não especificou um arquivo CMS existente para a operação de recebimento."
 
 #: v3270ftprogress.c:145
 msgid ""
 "You need 30 KB of main storage (not disk space) on the host for the file "
 "transfer, in addition to the host requirement."
 msgstr ""
-"You need 30 KB of main storage (not disk space) on the host for the file "
-"transfer, in addition to the host requirement."
+"Você precisa de 30 KB de armazenamento principal (não espaço em disco) no "
+"host para a transferência de arquivo, além do requerido pelo host."
 
 #: v3270ftprogress.c:213
 msgid ""
 "You selected an option that can only be used if SPACE is also specified."
 msgstr ""
-"You selected an option that can only be used if SPACE is also specified."
+"Você selecionou uma opção que só pode ser usada se \"ESPAÇO\" também for "
+"específicado."
 
 #: v3270ftprogress.c:195
 msgid ""
 "You selected an option that is either not recognized, is specified as a "
 "positional keyword, or has an associated value that is incorrect."
 msgstr ""
-"You selected an option that is either not recognized, is specified as a "
-"positional keyword, or has an associated value that is incorrect."
+"Você selecionou uma opção que, ou não foi reconhecida, foi especificada como "
+"uma palavra-chave posicional ou não tem um valor associado."
 
 #: v3270ftprogress.c:219
 msgid ""
 "You selected an option that is invalid with a host-partitioned data set."
 msgstr ""
-"You selected an option that is invalid with a host-partitioned data set."
+"Você selecionou uma opção que é inválida para um dataset particionado pelo "
+"host."
 
 #: v3270ftprogress.c:207
 msgid ""
 "You selected an option that is not valid with APPEND, but otherwise may be "
 "used."
 msgstr ""
-"You selected an option that is not valid with APPEND, but otherwise may be "
-"used."
+"Você selecionou uma opção que não é válida com \"Adicionar\", porém, pode "
+"ser usada."
 
 #: v3270ftprogress.c:201
 msgid ""
 "You selected an option that is not valid with RECEIVE, but can be used with "
 "SEND."
 msgstr ""
-"You selected an option that is not valid with RECEIVE, but can be used with "
-"SEND."
+"Você selecionou uma opção que não é válida para recebimento de arquivos, "
+"porém, pode ser usada para envio."
 
 #: v3270ftprogress.c:237
 msgid ""
 "You specified a CMS file mode for the SEND key that does not allow write "
 "access."
 msgstr ""
-"You specified a CMS file mode for the SEND key that does not allow write "
-"access."
+"Você especificou modo de arquivo CMS para um envio que não permite acesso de "
+"gravação."
 
 #: v3270ftprogress.c:243
 msgid "You specified a CMS file mode that is not in the CMS search order."
-msgstr "You specified a CMS file mode that is not in the CMS search order."
+msgstr ""
+"Você especificou um modo de arquivo CMS que não está na ordem de pesquisa "
+"CMS."
 
 #: v3270ftprogress.c:183
 msgid "You specified an option that is invalid."
-msgstr "You specified an option that is invalid."
+msgstr "Você especificou uma opção inválida."
 
 #: select.c:87 select.c:177 v3270/hostselect.c:389
 msgid "_Cancel"
