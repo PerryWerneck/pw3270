@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-05-31 10:44-0300\n"
-"PO-Revision-Date: 2016-05-31 09:47-0300\n"
+"PO-Revision-Date: 2016-05-31 10:50-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <perry.werneck@gmail.com>\n"
 "Language: pt_BR\n"
@@ -108,9 +108,8 @@ msgid "3270 Error"
 msgstr "Erro 3270"
 
 #: v3270ftprogress.c:424 v3270ft.c:354
-#, fuzzy
 msgid "3270 File transfer"
-msgstr "Transferência de arquivos"
+msgstr "Transferência de arquivos 3270"
 
 #: screen.c:706
 msgid "3270 Warning"
@@ -206,18 +205,16 @@ msgstr ""
 "consistent with the supplied purpose."
 
 #: tables.c:60
-#, fuzzy
 msgid "A_ppend to file"
-msgstr "Enviar arquivo"
+msgstr "_Adicionar ao arquivo"
 
 #: ft.c:96
 msgid "Abort sent; awaiting response"
 msgstr "Cancelamento enviado; aguardando resposta"
 
 #: v3270ftprogress.c:694
-#, fuzzy
 msgid "Aborting transfer"
-msgstr "Iniciando transferência"
+msgstr "Cancelando transferência"
 
 #: ft.c:651
 msgid "Aborting..."
@@ -248,9 +245,8 @@ msgid "Alert sound"
 msgstr "Aviso sonoro"
 
 #: v3270ft.c:304
-#, fuzzy
 msgid "All files"
-msgstr "Selecionar arquivo"
+msgstr "Todos os arquivos"
 
 #: v3270ftprogress.c:121
 msgid "An error exists in the PC's file name."
@@ -511,9 +507,8 @@ msgid "Can't save trace data to file %s"
 msgstr "Não foi possível salvar trace no arquivo %s"
 
 #: v3270ftprogress.c:780
-#, fuzzy
 msgid "Can't set callback table"
-msgstr "Não foi possível abrir arquivo local."
+msgstr "Não foi possível setar a tabela de retornos"
 
 #: tools.c:216
 msgid "Can't set host charset"
@@ -532,9 +527,8 @@ msgid "Can't set socket to non blocking mode"
 msgstr "Não foi possível setar o socket para o modo não blocante."
 
 #: v3270ftprogress.c:767
-#, fuzzy
 msgid "Can't start file transfer session"
-msgstr "Não foi possível iniciar transferência de arquivo."
+msgstr "Não foi possível iniciar transferência de arquivo"
 
 #: ft.c:198
 msgid "Can't start file transfer."
@@ -546,14 +540,12 @@ msgid "Can't use winsock version %d.%d"
 msgstr "Não é possível usar a Winsock versão %d.%d"
 
 #: transfer.c:89 v3270ftprogress.c:474
-#, fuzzy
 msgid "Cancel"
 msgstr "_Cancelar"
 
 #: transfer.c:90
-#, fuzzy
 msgid "Cancel transfer operation."
-msgstr "Opções de transferência"
+msgstr "Cancelar transferência"
 
 #: ft.c:152
 msgid "Cancelled by user"
@@ -699,19 +691,16 @@ msgid "Current (%s)"
 msgstr "Atual (%s)"
 
 #: v3270ftprogress.c:428
-#, fuzzy
 msgid "Current file"
-msgstr "Atual"
+msgstr "Arquivo atual"
 
 #: v3270ftprogress.c:75
-#, fuzzy
 msgid "Current transfer position"
-msgstr "Opções de transferência"
+msgstr "Posição atual da transferência"
 
 #: v3270ftprogress.c:74
-#, fuzzy
 msgid "Current:"
-msgstr "Atual"
+msgstr "Atual:"
 
 #: colors.c:321
 msgid "Custom colors"
@@ -865,12 +854,10 @@ msgid "Fixed"
 msgstr "Fixo"
 
 #: tables.c:49
-#, fuzzy
 msgid "Follow the convention for _ASCII text files."
-msgstr "Seguir a convenção para arquivos texto ASCII"
+msgstr "Seguir a convenção para arquivos texto ASCII."
 
 #: tables.c:51
-#, fuzzy
 msgid ""
 "Following the convention for ASCII text files, CR/LF pairs are used to "
 "terminate records in the PC file, and a CTRL-Z (x'1A') marks the end of file."
@@ -880,7 +867,6 @@ msgstr ""
 "final do arquivo."
 
 #: tables.c:53
-#, fuzzy
 msgid ""
 "Following the convention for ASCII text files, LF is used to terminate "
 "records in the PC file."
@@ -1037,9 +1023,8 @@ msgid "Input method"
 msgstr "Método de entrada"
 
 #: v3270ft.c:424
-#, fuzzy
 msgid "Insert new file in the transfer queue"
-msgstr "Não foi possível enviar a requisição de transferência de arquivo"
+msgstr "Inserir um novo arquivo na fila de transferência"
 
 #: colors.c:455
 msgid "Intensified/Protected"
@@ -1144,9 +1129,8 @@ msgid "Next field"
 msgstr "Próximo campo"
 
 #: v3270ftprogress.c:467
-#, fuzzy
 msgid "No active transfer"
-msgstr "Transferência de arquivos"
+msgstr "Nenhuma transferência ativa"
 
 #: v3270/security.c:189
 msgid ""
@@ -1201,9 +1185,8 @@ msgid "OIA status ok"
 msgstr "Estado normal na OIA"
 
 #: load.c:253 save.c:91
-#, fuzzy
 msgid "Operation has failed"
-msgstr "Operação de impressão falhou"
+msgstr "Operação falhou"
 
 #: print.c:613
 msgid "Options"
@@ -1367,9 +1350,8 @@ msgid "Paste with left margin"
 msgstr "Colar com margem esquerda"
 
 #: v3270ftprogress.c:60
-#, fuzzy
 msgid "Path and name of the local file"
-msgstr "Caminho completo do arquivo que vai ser enviado."
+msgstr "Caminho e nome do arquivo local"
 
 #: main.c:414
 msgid "Path for plugin files"
@@ -1532,18 +1514,16 @@ msgid "RPQ: gethostbyname error"
 msgstr "RPQ: Erro em gethostbyname"
 
 #: tables.c:66
-#, fuzzy
 msgid "Re_map ASCII Characters."
-msgstr "Re_mapear para caracteres ASCII"
+msgstr "Re_mapear para caracteres ASCII."
 
 #: tables.c:136
 msgid "Receive file"
 msgstr "Receber arquivo"
 
 #: tables.c:148
-#, fuzzy
 msgid "Receive text file"
-msgstr "Receber arquivo"
+msgstr "Receber arquivo texto"
 
 #: v3270ftprogress.c:746
 msgid "Receiving file"
@@ -1652,9 +1632,8 @@ msgstr ""
 "%s"
 
 #: v3270ft.c:213
-#, fuzzy
 msgid "Save"
-msgstr "_Gravar"
+msgstr "Salvar"
 
 #: ui/00default.xml:278
 msgid "Save copy"
@@ -1665,9 +1644,8 @@ msgid "Save copy to file"
 msgstr "Salvar cópia para arquivo"
 
 #: v3270ft.c:212
-#, fuzzy
 msgid "Save queue to file"
-msgstr "Salvar tela para arquivo"
+msgstr "Salvar a fila para um arquivo"
 
 #: ui/00default.xml:276
 msgid "Save screen"
@@ -1722,9 +1700,8 @@ msgid "Security error"
 msgstr "Erro de segurança"
 
 #: v3270ft.c:301
-#, fuzzy
 msgid "Select"
-msgstr "Selecionar tudo"
+msgstr "Selecionar"
 
 #: ui/00default.xml:305
 msgid "Select Field"
@@ -1743,33 +1720,28 @@ msgid "Select file"
 msgstr "Selecionar arquivo"
 
 #: v3270ft.c:401
-#, fuzzy
 msgid "Select first file"
-msgstr "Selecionar arquivo"
+msgstr "Selecionar primeiro arquivo"
 
 #: ui/00default.xml:342
 msgid "Select font"
 msgstr "Selecione fonte"
 
 #: v3270ft.c:380
-#, fuzzy
 msgid "Select last file"
-msgstr "Selecionar arquivo"
+msgstr "Selecionar último arquivo"
 
 #: v3270ft.c:300
-#, fuzzy
 msgid "Select local file"
-msgstr "Selecionar arquivo"
+msgstr "Selecionar arquivo local"
 
 #: v3270ft.c:387
-#, fuzzy
 msgid "Select next file"
-msgstr "Selecionar arquivo"
+msgstr "Selecionar próximo arquivo"
 
 #: v3270ft.c:394
-#, fuzzy
 msgid "Select previous file"
-msgstr "Selecionar arquivo"
+msgstr "Selecionar arquivo anterior"
 
 #: iocalls.c:377 iocalls.c:484
 msgid "Select() failed when processing for events."
@@ -1800,9 +1772,8 @@ msgid "Send messages to syslog"
 msgstr "Enviar mensagens para o log do sistema"
 
 #: tables.c:142
-#, fuzzy
 msgid "Send text file"
-msgstr "Enviar arquivo"
+msgstr "Enviar arquivo texto"
 
 #: ui/00default.xml:286
 msgid "Send/Receive"
@@ -1919,19 +1890,16 @@ msgstr ""
 "consisting of variable length records."
 
 #: v3270ftprogress.c:79
-#, fuzzy
 msgid "Speed:"
-msgstr "Velocidade"
+msgstr "Velocidade:"
 
 #: v3270ft.c:373
-#, fuzzy
 msgid "Start file transfer"
-msgstr "Iniciando transferência"
+msgstr "Iniciar transferência de arquivo"
 
 #: v3270ftprogress.c:797
-#, fuzzy
 msgid "Starting"
-msgstr "Configurações"
+msgstr "Iniciando"
 
 #: v3270/security.c:237
 msgid "Subject issuer mismatch"
@@ -1950,9 +1918,8 @@ msgid "Terminal colors"
 msgstr "Cores do terminal"
 
 #: v3270ft.c:305
-#, fuzzy
 msgid "Text files"
-msgstr "Arquivo _texto."
+msgstr "Arquivos de texto"
 
 #: v3270ftprogress.c:249
 msgid ""
@@ -2244,14 +2211,12 @@ msgid "Toolbar"
 msgstr "Barra de ferramentas"
 
 #: v3270ftprogress.c:70
-#, fuzzy
 msgid "Total bytes to transfer"
-msgstr "Transferência de arquivos"
+msgstr "Total de bytes a transferir"
 
 #: v3270ftprogress.c:69
-#, fuzzy
 msgid "Total:"
-msgstr "Total"
+msgstr "Total:"
 
 #: ui/98trace.xml:533
 msgid "Trace"
@@ -2306,9 +2271,8 @@ msgid "Transfer options"
 msgstr "Opções de transferência"
 
 #: v3270ftprogress.c:80
-#, fuzzy
 msgid "Transfer speed"
-msgstr "Transferência completa"
+msgstr "Velocidade de transferência"
 
 #: ft_cut.c:463
 msgid "Transmission error"
@@ -2575,9 +2539,8 @@ msgid "X Wait"
 msgstr "X Aguarde"
 
 #: v3270ft.c:196 v3270ft.c:216
-#, fuzzy
 msgid "XML file"
-msgstr "Enviar log para arquivo"
+msgstr "Arquivo XML"
 
 #: colors.c:441
 msgid "Yellow"
@@ -2690,7 +2653,6 @@ msgid "_Host:"
 msgstr "Nome do _Host:"
 
 #: v3270ft.c:335
-#, fuzzy
 msgid "_Local file:"
 msgstr "Arquivo _local:"
 
@@ -2699,18 +2661,16 @@ msgid "_Network"
 msgstr "_Rede"
 
 #: v3270ft.c:334
-#, fuzzy
 msgid "_Operation:"
-msgstr "_Opções"
+msgstr "_Operação:"
 
 #: ui/00default.xml:348
 msgid "_Options"
 msgstr "_Opções"
 
 #: v3270ft.c:336
-#, fuzzy
 msgid "_Remote file:"
-msgstr "Arquivo delimitado por _CR."
+msgstr "Arquivo _remoto:"
 
 #: v3270/hostselect.c:166
 msgid "_Secure connection."
@@ -2721,9 +2681,8 @@ msgid "_Service:"
 msgstr "_Serviço:"
 
 #: tables.c:43
-#, fuzzy
 msgid "_Text file"
-msgstr "Arquivo _texto."
+msgstr "Arquivo _texto"
 
 #: ui/80javasamples.xml:85
 msgid "_View"
