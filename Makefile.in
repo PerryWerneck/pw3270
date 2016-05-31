@@ -277,7 +277,11 @@ $(BINDIR)/pot/ui.pot: $(XML2POT) $(wildcard ui/*.xml)
 	@$(MKDIR) `dirname $@`
 	@$(XML2POT) $(wildcard ui/*.xml) > $@
 
-$(TMPDIR)/$(PACKAGE_NAME).pot: $(BINDIR)/pot/pw3270.pot $(BINDIR)/pot/lib3270.pot $(BINDIR)/pot/ui.pot
+$(TMPDIR)/$(PACKAGE_NAME).pot: \
+	$(BINDIR)/pot/pw3270.pot \
+	$(BINDIR)/pot/lib3270.pot \
+	$(BINDIR)/pot/ui.pot
+
 	@echo "  TEXT `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(MSGCAT) --sort-output $^ | sed "s&VERSION&$(PACKAGE_VERSION)&;s&CHARSET&UTF-8&;s&PACKAGE&$(PACKAGE_NAME)&g" > $@

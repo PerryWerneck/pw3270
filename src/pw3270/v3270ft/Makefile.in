@@ -65,6 +65,8 @@ AMTAR=@AMTAR@
 SHELL=@SHELL@
 MKDIR=@MKDIR_P@
 GENMARSHAL=@GENMARSHAL@
+XGETTEXT=@XGETTEXT@
+MSGCAT=@MSGCAT@
 
 CC=@CC@
 LD=@CC@
@@ -104,6 +106,29 @@ $(BINRLS)/$(MODULE_NAME).a: \
 
 	@$(AR) rcs $@ $^
 
+$(OBJDIR)/pot/%.pot: \
+	%.c
+
+	@echo $(notdir $@) ...
+	@$(MKDIR) `dirname $@`
+
+	@$(XGETTEXT) \
+		--default-domain=$(PACKAGE_NAME) \
+		--language=C \
+		--keyword=_ \
+		--keyword=N_ \
+		--keyword=MSG_:2 \
+		--force-po \
+		--output=$@ $<
+
+
+$(BINDIR)/pot/$(MODULE_NAME).pot: \
+	$(foreach SRC, $(basename $(SOURCES)), $(OBJDIR)/pot/$(SRC).pot)
+
+	@echo $(notdir $@) ...
+	@$(MKDIR) `dirname $@`
+
+	@$(MSGCAT) --sort-output $^ > $@
 
 #---[ Debug Rules ]----------------------------------------------------------------------
 
