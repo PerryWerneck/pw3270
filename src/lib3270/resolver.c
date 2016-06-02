@@ -180,28 +180,3 @@ static int cresolve_host_and_port(H3270 *h, struct parms *p)
 	return 0;
 } */
 
-/*
-int resolve_host_and_port(H3270 *hSession, const char *host, char *portname, unsigned short *pport,struct sockaddr *sa, socklen_t *sa_len, char *errmsg, int em_len)
-{
-	int				rc;
-	LIB3270_MESSAGE	saved_status	= hSession->oia_status;
-	struct parms	p				= { sizeof(struct parms), host, portname, pport, sa, sa_len, errmsg, em_len };
-
-	trace("Calling resolver for %s status=%d", p.host, (int) saved_status);
-
-	status_changed(hSession,LIB3270_MESSAGE_RESOLVING);
-	hSession->cursor(hSession,CURSOR_MODE_LOCKED);
-
-	rc = lib3270_call_thread((int (*)(H3270 *, void *)) cresolve_host_and_port,hSession,&p);
-
-	hSession->cursor(hSession,CURSOR_MODE_NORMAL);
-
-	if(saved_status != -1)
-		status_changed(hSession,saved_status);
-
-	trace("Calling resolver for %s exits with %d", p.host, rc);
-
-	return rc;
-
-}
-*/

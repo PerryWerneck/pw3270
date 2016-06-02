@@ -88,6 +88,7 @@ G_BEGIN_DECLS
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
+/*
  #define V3270_CURSOR_UNPROTECTED				LIB3270_CURSOR_EDITABLE
  #define V3270_CURSOR_WAITING					LIB3270_CURSOR_WAITING
  #define V3270_CURSOR_LOCKED					LIB3270_CURSOR_LOCKED
@@ -105,7 +106,7 @@ G_BEGIN_DECLS
  #define V3270_CURSOR_QUESTION					LIB3270_CURSOR_USER+10
 
  #define V3270_CURSOR_COUNT						LIB3270_CURSOR_USER+11
-
+*/
 
  struct v3270_ssl_status_msg
  {
@@ -146,7 +147,7 @@ G_BEGIN_DECLS
         int                   baddr;	        	/**< Selection addr */
 	} selection;
 
-	LIB3270_CURSOR 			  pointer_id;
+	LIB3270_POINTER 		  pointer_id;
 	unsigned char			  pointer;				/**< Mouse pointer ID */
 
 	V3270_OIA_FIELD			  selected_field;		/**< Clicked OIA field */
@@ -226,7 +227,7 @@ G_BEGIN_DECLS
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
  G_GNUC_INTERNAL guint		  v3270_widget_signal[LAST_SIGNAL];
- G_GNUC_INTERNAL GdkCursor	* v3270_cursor[V3270_CURSOR_COUNT];
+ G_GNUC_INTERNAL GdkCursor	* v3270_cursor[LIB3270_POINTER_COUNT];
  G_GNUC_INTERNAL GParamSpec	* v3270_properties[PROP_LAST];
 
 /*--[ Prototipes ]-----------------------------------------------------------------------------------*/

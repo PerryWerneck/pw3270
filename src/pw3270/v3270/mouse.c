@@ -224,59 +224,12 @@ gboolean v3270_button_release_event(GtkWidget *widget, GdkEventButton*event)
 static void update_mouse_pointer(GtkWidget *widget, int baddr)
 {
 	v3270	* terminal	= GTK_V3270(widget);
-	int		  id		= 0;
+//	int		  id		= 0;
 
-	if(baddr >= 0 && terminal->pointer_id == LIB3270_CURSOR_EDITABLE)
+	if(baddr >= 0 && terminal->pointer_id == LIB3270_POINTER_UNLOCKED)
 	{
-
-		switch(lib3270_get_selection_flags(terminal->host,baddr) & 0x8f)
-		{
-		case 0x80:
-			id = V3270_CURSOR_MOVE_SELECTION;
-			break;
-
-		case 0x82:
-			id = V3270_CURSOR_SELECTION_TOP;
-			break;
-
-		case 0x86:
-			id = V3270_CURSOR_SELECTION_TOP_RIGHT;
-			break;
-
-		case 0x84:
-			id = V3270_CURSOR_SELECTION_RIGHT;
-			break;
-
-		case 0x81:
-			id = V3270_CURSOR_SELECTION_LEFT;
-			break;
-
-		case 0x89:
-			id = V3270_CURSOR_SELECTION_BOTTOM_LEFT;
-			break;
-
-		case 0x88:
-			id = V3270_CURSOR_SELECTION_BOTTOM;
-			break;
-
-		case 0x8c:
-			id = V3270_CURSOR_SELECTION_BOTTOM_RIGHT;
-			break;
-
-		case 0x83:
-			id = V3270_CURSOR_SELECTION_TOP_LEFT;
-			break;
-
-		default:
-			id = lib3270_is_protected(terminal->host,baddr) ? V3270_CURSOR_PROTECTED : V3270_CURSOR_UNPROTECTED;
-
-		}
-
-		gdk_window_set_cursor(gtk_widget_get_window(widget),v3270_cursor[id]);
-
+		gdk_window_set_cursor(gtk_widget_get_window(widget),v3270_cursor[lib3270_get_pointer(terminal->host,baddr)]);
 	}
-
-
 }
 
 void v3270_update_mouse_pointer(GtkWidget *widget)
@@ -298,7 +251,7 @@ gboolean v3270_motion_notify_event(GtkWidget *widget, GdkEventMotion *event)
 
 	if(!lib3270_connected(terminal->host))
 	{
-		gdk_window_set_cursor(gtk_widget_get_window(widget),v3270_cursor[V3270_CURSOR_PROTECTED]);
+		gdk_window_set_cursor(gtk_widget_get_window(widget),v3270_cursor[LIB3270_POINTER_LOCKED]);
 		return FALSE;
 	}
 
@@ -323,30 +276,30 @@ gboolean v3270_motion_notify_event(GtkWidget *widget, GdkEventMotion *event)
 	}
 	else if(event->y >= terminal->oia_rect->y)
 	{
-		int id = V3270_CURSOR_PROTECTED;
+		int id = LIB3270_POINTER_PROTECTED;
 
 		if(event->x >= terminal->oia_rect[V3270_OIA_SSL].x && event->x <= (terminal->oia_rect[V3270_OIA_SSL].x + terminal->oia_rect[V3270_OIA_SSL].width))
 		{
 			switch(lib3270_get_secure(terminal->host))
 			{
 			case LIB3270_SSL_UNSECURE:	/**< No secure connection */
-				id = V3270_CURSOR_QUESTION;
+				id = LIB3270_POINTER_QUESTION;
 				break;
 
 			case LIB3270_SSL_NEGOTIATING:	/**< Negotiating SSL */
-				id = V3270_CURSOR_WAITING;
+				id = LIB3270_POINTER_WAITING;
 				break;
 
 			case LIB3270_SSL_NEGOTIATED:	/**< Connection secure, no CA or self-signed */
-				id = V3270_CURSOR_QUESTION;
+				id = LIB3270_POINTER_QUESTION;
 				break;
 
 			case LIB3270_SSL_SECURE:	/**< Connection secure with CA check */
-				id = V3270_CURSOR_QUESTION;
+				id = LIB3270_POINTER_QUESTION;
 				break;
 
 			default:
-				id = V3270_CURSOR_LOCKED;
+				id = LIB3270_POINTER_LOCKED;
 			}
 		}
 

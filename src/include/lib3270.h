@@ -204,20 +204,33 @@
 
 
 	/**
-	 * Cursor modes.
+	 * Pointer modes.
 	 *
-	 * Cursor modes set by library; an application can us it
-	 * as a hint to change the mouse cursor based on connection status.
+	 * Pointer modes set by library; an application can use it
+	 * as a hint to change the mouse pointer based on connection status.
 	 *
 	 */
-	typedef enum _LIB3270_CURSOR
+	typedef enum _LIB3270_POINTER
 	{
-		LIB3270_CURSOR_EDITABLE,	/**< Ready for user actions */
-		LIB3270_CURSOR_WAITING,		/**< Waiting for host */
-		LIB3270_CURSOR_LOCKED,		/**< Locked, can't receive user actions */
+		LIB3270_POINTER_UNLOCKED,				/**< Ready for user actions */
+		LIB3270_POINTER_WAITING,				/**< Waiting for host */
+		LIB3270_POINTER_LOCKED,					/**< Locked, can't receive user actions */
 
-		LIB3270_CURSOR_USER
-	} LIB3270_CURSOR;
+		LIB3270_POINTER_PROTECTED,
+		LIB3270_POINTER_MOVE_SELECTION,
+		LIB3270_POINTER_SELECTION_TOP_LEFT,
+		LIB3270_POINTER_SELECTION_TOP_RIGHT,
+		LIB3270_POINTER_SELECTION_TOP,
+		LIB3270_POINTER_SELECTION_BOTTOM_LEFT,
+		LIB3270_POINTER_SELECTION_BOTTOM_RIGHT,
+		LIB3270_POINTER_SELECTION_BOTTOM,
+		LIB3270_POINTER_SELECTION_LEFT,
+		LIB3270_POINTER_SELECTION_RIGHT,
+		LIB3270_POINTER_QUESTION,
+
+		LIB3270_POINTER_COUNT
+
+	} LIB3270_POINTER;
 
 
 	/**
@@ -1117,6 +1130,9 @@
 	LIB3270_EXPORT LIB3270_OPTION lib3270_parse_host_type(const char *name);
 
 	LIB3270_EXPORT const LIB3270_OPTION_ENTRY * lib3270_get_option_list(void);
+
+	LIB3270_EXPORT LIB3270_POINTER lib3270_get_pointer(H3270 *hSession, int baddr);
+
 
 	/**
 	 * The host is TSO?

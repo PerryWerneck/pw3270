@@ -486,9 +486,7 @@ void status_oerr(H3270 *session, int error_type)
 
 void status_connecting(H3270 *session, Boolean on)
 {
-	if(session->cbk.cursor)
-		session->cbk.cursor(session,on ? CURSOR_MODE_LOCKED : CURSOR_MODE_NORMAL);
-
+	mcursor_set(session,on ? LIB3270_POINTER_LOCKED : LIB3270_POINTER_UNLOCKED);
 	status_changed(session, on ? LIB3270_MESSAGE_CONNECTING : LIB3270_MESSAGE_NONE);
 }
 
@@ -506,8 +504,7 @@ void status_reset(H3270 *session)
 	}
 	else
 	{
-		if(session->cbk.cursor)
-			session->cbk.cursor(session,CURSOR_MODE_NORMAL);
+		mcursor_set(session,LIB3270_POINTER_UNLOCKED);
 		status_changed(session,LIB3270_MESSAGE_NONE);
 	}
 
@@ -736,12 +733,17 @@ void popup_system_error(H3270 *session, const char *title, const char *message, 
 	va_end(args);
 }
 
-void mcursor_set(H3270 *session,LIB3270_CURSOR m)
+void mcursor_set(H3270 *session,LIB3270_POINTER m)
 {
 	CHECK_SESSION_HANDLE(session);
 
-	if(session->cbk.cursor)
-		session->cbk.cursor(session,m);
+	if(session->pointer != ((unsigned short) m)) {
+
+		// Pointer changed
+		session->pointer = (unsigned short) m;
+		session->cbk.cursor(session,m & 0x03);
+
+	}
 }
 
 LIB3270_ACTION( testpattern )

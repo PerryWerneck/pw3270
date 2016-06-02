@@ -75,6 +75,7 @@
 #include "utilc.h"
 #include "popupsc.h"
 #include "api.h"
+#include <lib3270/selection.h>
 
 #define my_isspace(c)	isspace((unsigned char)c)
 
@@ -1013,3 +1014,37 @@ int gettimeofday(struct timeval *tv, void *ignored)
  }
 
 
+ LIB3270_EXPORT LIB3270_POINTER lib3270_get_pointer(H3270 *hSession, int baddr)
+ {
+	static const struct _ptr {
+		unsigned short	id;
+		LIB3270_POINTER	value;
+	} ptr[] = {
+		{ 0x80,	LIB3270_POINTER_MOVE_SELECTION			},
+		{ 0x82,	LIB3270_POINTER_SELECTION_TOP			},
+		{ 0x86,	LIB3270_POINTER_SELECTION_TOP_RIGHT		},
+		{ 0x84,	LIB3270_POINTER_SELECTION_RIGHT			},
+		{ 0x81,	LIB3270_POINTER_SELECTION_LEFT			},
+		{ 0x89,	LIB3270_POINTER_SELECTION_BOTTOM_LEFT	},
+		{ 0x88,	LIB3270_POINTER_SELECTION_BOTTOM		},
+		{ 0x8c,	LIB3270_POINTER_SELECTION_BOTTOM_RIGHT	},
+		{ 0x83,	LIB3270_POINTER_SELECTION_TOP_LEFT		}
+	};
+
+	int f;
+	unsigned short id = lib3270_get_selection_flags(hSession,baddr) & 0x8f;
+
+	if(!lib3270_connected(hSession) || baddr < 0)
+		return LIB3270_POINTER_LOCKED;
+
+	for(f = 0; f < (sizeof(ptr)/sizeof(ptr[0]));f++)
+	{
+		if(ptr[f].id == id)
+		{
+			return ptr[f].value;
+		}
+	}
+
+	return hSession->pointer;
+
+ }

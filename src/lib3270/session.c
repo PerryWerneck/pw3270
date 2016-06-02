@@ -140,7 +140,7 @@ static void update_selection(H3270 *session, int start, int end)
 {
 }
 
-static void set_cursor(H3270 *session, LIB3270_CURSOR id)
+static void set_cursor(H3270 *session, LIB3270_POINTER id)
 {
 }
 
@@ -241,6 +241,7 @@ static void lib3270_session_init(H3270 *hSession, const char *model, const char 
 	hSession->colors				= 16;
 	hSession->m3279					= 1;
 	hSession->unlock_delay_ms		= 350; // 0.35s after last unlock
+	hSession->pointer				= (unsigned short) LIB3270_POINTER_LOCKED;
 
 	// CSD
 	for(f=0;f<4;f++)

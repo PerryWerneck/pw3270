@@ -58,7 +58,7 @@
 		void (*erase)(H3270 *session);
 		void (*suspend)(H3270 *session);
 		void (*resume)(H3270 *session);
-		void (*cursor)(H3270 *session, LIB3270_CURSOR id);
+		void (*cursor)(H3270 *session, LIB3270_POINTER id);
 		void (*set_selection)(H3270 *session, unsigned char on);
 		void (*ctlr_done)(H3270 *session);
 		void (*autostart)(H3270 *session);

@@ -72,8 +72,8 @@
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
- guint		  		  v3270_widget_signal[LAST_SIGNAL]	= { 0 };
- GdkCursor			* v3270_cursor[V3270_CURSOR_COUNT]	= { 0 };
+ guint		  		  v3270_widget_signal[LAST_SIGNAL]		= { 0 };
+ GdkCursor			* v3270_cursor[LIB3270_POINTER_COUNT]	= { 0 };
 
 /*--[ Prototipes ]-----------------------------------------------------------------------------------*/
 
@@ -354,7 +354,7 @@ static void v3270_class_init(v3270Class *klass)
 			"help",		//	V3270_CURSOR_QUESTION
 		};
 #else
-		static const int	  cr[V3270_CURSOR_COUNT] =
+		static const int	  cr[LIB3270_POINTER_COUNT] =
 		{
 			GDK_XTERM,					// V3270_CURSOR_UNPROTECTED
 			GDK_WATCH,					// V3270_CURSOR_WAITING
@@ -375,7 +375,7 @@ static void v3270_class_init(v3270Class *klass)
 
 		int f;
 
-		for(f=0;f<V3270_CURSOR_COUNT;f++)
+		for(f=0;f<LIB3270_POINTER_COUNT;f++)
 		{
 	#ifdef WIN32
 			v3270_cursor[f] = gdk_cursor_new_from_name(gdk_display_get_default(),cr[f]);
@@ -729,7 +729,7 @@ static void update_luname(H3270 *session, const char *name)
 	v3270_update_luname(GTK_WIDGET(lib3270_get_user_data(session)),name);
 }
 
-static void select_cursor(H3270 *session, LIB3270_CURSOR id)
+static void select_cursor(H3270 *session, LIB3270_POINTER id)
 {
 	GtkWidget *widget = GTK_WIDGET(lib3270_get_user_data(session));
 

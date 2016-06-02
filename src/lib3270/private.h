@@ -382,6 +382,7 @@ struct _h3270
 	int						  maxCOLS;
 	unsigned short			  rows;
 	unsigned short			  cols;
+	unsigned short			  pointer;				/**< @brief Current pointer. */
 	int						  cursor_addr;
 	int						  buffer_addr;
 	char					  flipped;
