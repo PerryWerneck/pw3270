@@ -77,14 +77,17 @@ include $(CLASSLIBDIR)/class.mak
 
 #---[ Build options ]----------------------------------------------------------
 
-CXXFLAGS=@CFLAGS@ @CXXFLAGS@ @DLL_CFLAGS@ @JNI_CPPFLAGS@ -I../include
-
-PW3270_LIBS	?= -L../../.bin/Debug@DLLDIR@ -l3270 -lpw3270
+LIB3270_LIBS=@LIB3270_LIBS@
+PW3270_LIBS=@PW3270_LIBS@
 
 PLUGIN_CFLAGS=@CXXFLAGS@ -DPW3270_PLUGIN -Wno-deprecated-declarations @DLL_CFLAGS@ @JNI_CPPFLAGS@ -DJNIDIR="\"$(jnidir)\"" \
-				-DJARDIR="\"$(jvmjardir)\"" @GTK_CFLAGS@ @GTKMAC_CFLAGS@ @PW3270_CFLAGS@ @LIB3270_CFLAGS@
+				-DJARDIR="\"$(jvmjardir)\"" @GTK_CFLAGS@ @GTKMAC_CFLAGS@ \
+				@PW3270_CFLAGS@ @LIB3270_CFLAGS@
 
-PLUGIN_LIBS=@GTK_LIBS@ @GTKMAC_LIBS@ @INTL_LIBS@ @JVM_LIBS@
+CXXFLAGS=@CFLAGS@ @CXXFLAGS@ @DLL_CFLAGS@ @JNI_CPPFLAGS@ @PW3270_CFLAGS@
+
+
+PLUGIN_LIBS=@GTK_LIBS@ @GTKMAC_LIBS@ @INTL_LIBS@ @JVM_LIBS@ @PW3270_LIBS@ @LIB3270_LIBS@
 
 #---[ Rules ]------------------------------------------------------------------
 
@@ -231,7 +234,6 @@ $(BINRLS)/plugins/j3270@DLLEXT@: \
 		-o $@ $^ \
 		$(CLASS_LIBS) \
 		$(PLUGIN_LIBS) \
-		-L../../.bin/Release@DLLDIR@ -l3270 -lpw3270\
 		-L$(BINRLS)@DLLDIR@ -ljni3270
 
 ../../.bin/Release@DLLDIR@/lib3270@DLLEXT@:
@@ -264,7 +266,6 @@ $(BINDBG)/plugins/j3270@DLLEXT@: \
 	-o $@ $^ \
 	$(CLASS_LIBS) \
 	$(PLUGIN_LIBS) \
-	-L../../.bin/Debug@DLLDIR@ -l3270 -lpw3270 \
 	-L$(BINDBG)@DLLDIR@ -ljni3270
 
 run: \
