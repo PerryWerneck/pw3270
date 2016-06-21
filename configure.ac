@@ -211,7 +211,7 @@ LIB3270_CFLAGS="-I$ac_pwd/src/include"
 LIB3270_LIBS="-L$ac_pwd/.bin/Debug$DLLDIR -l3270"
 
 PW3270_CFLAGS="-I$ac_pwd/src/pw3270/include -I$ac_pwd/src/include"
-PW3270_LIBS="-L$ac_pwd/.bin/Debug$DLLDIR -lpw3270"
+PW3270_LIBS="-L$ac_pwd/.bin/Debug$DLLDIR -l$PACKAGE_TARNAME"
 
 AC_SUBST(LIB3270_CFLAGS)
 AC_SUBST(LIB3270_LIBS)
