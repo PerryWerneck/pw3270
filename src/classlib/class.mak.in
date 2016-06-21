@@ -34,12 +34,16 @@ CLASS_RELEASE_OBJECTS=$(foreach SRC, $(basename $(CLASS_SRC)), $(OBJRLS)/classli
 
 #---[ Rules ]------------------------------------------------------------------
 
-$(OBJDBG)/classlib/%.o: $(CLASSLIBDIR)/%.cc
+$(OBJDBG)/classlib/%.o: \
+	$(CLASSLIBDIR)/%.cc
+
 	@echo "  CC   `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(CXX) $(CLASS_CFLAGS) $(PW3270_CFLAGS) $(LIB3270_CFLAGS) $(DEBUG_CFLAGS) -o $@ -c $<
 
-$(OBJRLS)/classlib/%.o: $(CLASSLIBDIR)/%.cc
+$(OBJRLS)/classlib/%.o: \
+	$(CLASSLIBDIR)/%.cc
+
 	@echo "  CC   `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@$(CXX) $(CLASS_CFLAGS) $(PW3270_CFLAGS) $(LIB3270_CFLAGS) -o $@ -c $<

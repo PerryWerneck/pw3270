@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-31 10:44-0300\n"
+"POT-Creation-Date: 2016-06-07 08:45-0300\n"
 "PO-Revision-Date: 2016-05-31 11:16-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <perry.werneck@gmail.com>\n"
@@ -103,7 +103,7 @@ msgstr "- Emulador 3270 para GTK"
 msgid "16 colors"
 msgstr "16 cores"
 
-#: screen.c:691 screen.c:721 screen.c:735 screen.c:860
+#: screen.c:688 screen.c:718 screen.c:732 screen.c:862
 msgid "3270 Error"
 msgstr "Erro 3270"
 
@@ -111,7 +111,7 @@ msgstr "Erro 3270"
 msgid "3270 File transfer"
 msgstr "Transferência de arquivos 3270"
 
-#: screen.c:706
+#: screen.c:703
 msgid "3270 Warning"
 msgstr "Alerta 3270"
 
@@ -806,7 +806,7 @@ msgstr "Apagar até o final do campo"
 msgid "Erase to end of line"
 msgstr "Apagar até o final da linha"
 
-#: print.c:247 v3270/widget.c:194 util.c:981
+#: print.c:247 v3270/widget.c:194 util.c:982
 msgid "Error"
 msgstr "Erro"
 
@@ -2486,7 +2486,7 @@ msgstr "Janela"
 msgid "Windows Western languages (CP1252)"
 msgstr "Windows ocidental (CP1252)"
 
-#: util.c:159
+#: util.c:160
 #, c-format
 msgid "Windows error %d"
 msgstr "Erro windows %d"
@@ -2711,7 +2711,7 @@ msgstr "Atributo inesperado \"action\" em <%s>"
 msgid "an action attribute"
 msgstr "um atributo \"action\""
 
-#: session.c:267
+#: session.c:268
 msgid "bracket"
 msgstr "bracket"
 

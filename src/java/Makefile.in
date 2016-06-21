@@ -111,32 +111,48 @@ $(OBJRLS)/j3270/%.o: %.cc Makefile private.h
 	@mkdir -p `dirname $@`
 	@$(CXX) -DNDEBUG=1 $(PLUGIN_CFLAGS) -o $@ -c $<
 
-$(BINDIR)/java/%.class: %.java $(BINDIR)/java/$(PACKAGE_NAME)/terminal.class
+$(BINDIR)/java/%.class: \
+	%.java \
+	$(BINDIR)/java/pw3270/terminal.class
+
 	@echo $< ...
 	@mkdir -p `dirname $@`
 	@$(JAVAC) -encoding utf-8 -cp $(BINDIR)/java -d $(BINDIR)/java $<
 
-$(BINDIR)/java/%.class: sample/%.java $(BINDIR)/java/$(PACKAGE_NAME)/terminal.class
+$(BINDIR)/java/%.class: \
+	sample/%.java \
+	$(BINDIR)/java/pw3270/terminal.class
+
 	@echo $< ...
 	@mkdir -p `dirname $@`
 	@$(JAVAC) -encoding utf-8 -cp $(BINDIR)/java -d $(BINDIR)/java $<
 
-$(BINDIR)/%.class: sample/%.java $(BINDIR)/java/$(PACKAGE_NAME)/terminal.class
+$(BINDIR)/%.class: \
+	sample/%.java \
+	$(BINDIR)/java/pw3270/terminal.class
+
 	@echo $< ...
 	@mkdir -p `dirname $@`
 	@$(JAVAC) -encoding utf-8 -cp $(BINDIR)/java -d $(BINDIR)/java $<
 
-%.class: sample/%.java $(BINDIR)/java/$(PACKAGE_NAME)/terminal.class
+%.class: \
+	sample/%.java \
+	$(BINDIR)/java/pw3270/terminal.class
+
 	@echo $< ...
 	@mkdir -p `dirname $@`
 	@$(JAVAC) -encoding utf-8 -cp $(BINDIR)/java -d `dirname $@` $<
 
-$(BINDIR)/java/$(PACKAGE_NAME)/%.class: %.java
+$(BINDIR)/java/pw3270/%.class: \
+	%.java
+
 	@echo $< ...
 	@mkdir -p `dirname $@`
 	@$(JAVAC) -encoding utf-8 -d $(BINDIR)/java $^
 
-$(BINRLS)/$(PACKAGE_NAME).jar: $(BINDIR)/java/$(PACKAGE_NAME)/terminal.class
+$(BINRLS)/$(PACKAGE_NAME).jar: \
+	$(BINDIR)/java/pw3270/terminal.class
+
 	@echo $@ ...
 	@mkdir -p `dirname $@`
 	@$(JAR) -cvf "$@" -C "$(BINDIR)/java" "$(PACKAGE_NAME)"
@@ -307,10 +323,12 @@ install: \
 	install-plugin \
 	install-doc
 
-jni3270.h: $(BINDIR)/java/$(PACKAGE_NAME)/terminal.class
+jni3270.h: \
+	$(BINDIR)/java/pw3270/terminal.class
+
 	@echo $< ...
 	@mkdir -p `dirname $@`
-	@$(JAVAH) -o $@ -classpath $(BINDIR)/java $(PACKAGE_NAME).terminal
+	@$(JAVAH) -o $@ -classpath $(BINDIR)/java pw3270.terminal
 
 cleanDebug: clean
 
