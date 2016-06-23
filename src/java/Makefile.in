@@ -150,12 +150,12 @@ $(BINDIR)/java/pw3270/%.class: \
 	@mkdir -p `dirname $@`
 	@$(JAVAC) -encoding utf-8 -d $(BINDIR)/java $^
 
-$(BINRLS)/$(PACKAGE_NAME).jar: \
+$(BINRLS)/pw3270.jar: \
 	$(BINDIR)/java/pw3270/terminal.class
 
 	@echo $@ ...
 	@mkdir -p `dirname $@`
-	@$(JAR) -cvf "$@" -C "$(BINDIR)/java" "$(PACKAGE_NAME)"
+	@$(JAR) -cvf "$@" -C "$(BINDIR)/java" "pw3270"
 
 #---[ Release targets ]--------------------------------------------------------
 
@@ -173,14 +173,14 @@ zip: \
 @PACKAGE_NAME@-java-@PACKAGE_VERSION@.@PACKAGE_REVISION@.@jvm_arch@.zip: \
 	$(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@ \
 	$(BINRLS)/plugins/j3270@DLLEXT@ \
-	$(BINRLS)/$(PACKAGE_NAME).jar \
+	$(BINRLS)/pw3270.jar \
 	javadoc
 
 	@rm -f $@
 
 	@rm -fr jvm-exports
 	@mkdir jvm-exports
-	@cp $(BINRLS)/$(PACKAGE_NAME).jar jvm-exports/$(PACKAGE_NAME).jar
+	@cp $(BINRLS)/pw3270.jar jvm-exports/pw3270.jar
 	@zip -9 -m -r $@ jvm-exports
 	@rm -fr jvm-exports
 
@@ -205,7 +205,7 @@ zip: \
 
 jni3270-@PACKAGE_VERSION@.@PACKAGE_REVISION@.@jvm_arch@.zip: \
 	$(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@ \
-	$(BINRLS)/$(PACKAGE_NAME).jar \
+	$(BINRLS)/pw3270.jar \
 	testprogram.java \
 	javadoc \
 	Makefile
@@ -214,7 +214,7 @@ jni3270-@PACKAGE_VERSION@.@PACKAGE_REVISION@.@jvm_arch@.zip: \
 
 	@rm -fr jvm-exports
 	@mkdir jvm-exports
-	@cp $(BINRLS)/$(PACKAGE_NAME).jar jvm-exports/$(PACKAGE_NAME).jar
+	@cp $(BINRLS)/pw3270.jar jvm-exports/pw3270.jar
 	@zip -9 -m -r $@ jvm-exports
 	@rm -fr jvm-exports
 
@@ -300,13 +300,13 @@ install-plugin: \
 
 install-extension: \
 	$(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@ \
-	$(BINRLS)/$(PACKAGE_NAME).jar \
+	$(BINRLS)/pw3270.jar \
 
 	@$(MKDIR) $(DESTDIR)/$(jnidir)
 	@$(INSTALL_PROGRAM) $(BINRLS)@DLLDIR@/@DLLPREFIX@jni3270@DLLEXT@ $(DESTDIR)/$(jnidir)
 
 	@mkdir -p $(DESTDIR)/$(jvmjardir)
-	@$(INSTALL_DATA) $(BINRLS)/$(PACKAGE_NAME).jar $(DESTDIR)/$(jvmjardir)
+	@$(INSTALL_DATA) $(BINRLS)/pw3270.jar $(DESTDIR)/$(jvmjardir)
 
 install-doc: \
 	javadoc

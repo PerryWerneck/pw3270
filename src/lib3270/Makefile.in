@@ -65,7 +65,7 @@ INSTALL_DATA=$(INSTALL) -m 644
 VALGRIND=@VALGRIND@
 XGETTEXT=@XGETTEXT@
 MSGCAT=@MSGCAT@
-LN_S=@LN_S@
+LN_S=@LN_S@ -f
 
 #---[       ]------------------------------------------------------------------
 
