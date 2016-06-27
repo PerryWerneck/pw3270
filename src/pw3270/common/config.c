@@ -229,7 +229,7 @@
 	sysconfig = g_get_system_data_dirs();
  	for(f=0;sysconfig[f];f++)
 	{
-		filename = g_strdup_printf(mask,sysconfig[f],g_get_application_name());
+		filename = g_strdup_printf("%s" G_DIR_SEPARATOR_S PACKAGE_NAME G_DIR_SEPARATOR_S "%s.conf",sysconfig[f],g_get_application_name());
 		trace("Checking for %s",filename);
 		if(g_file_test(filename,G_FILE_TEST_IS_REGULAR))
 			return filename;
