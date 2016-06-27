@@ -41,7 +41,7 @@
 	#define NUM_TYPES			4
 	#define ERROR_DOMAIN 		g_quark_from_static_string("v3270ft")
 
-	#if GTK_CHECK_VERSION(3,10,0)
+	#if GTK_CHECK_VERSION(3,14,0)
 		#define HAVE_GTK_HEADER_BAR 1
 	#endif // GTK 3.10
 
