@@ -143,7 +143,11 @@ void v3270ft_set_options(GtkWidget *widget, LIB3270_FT_OPTION opt) {
 
 void v3270ftprogress_set_header(GtkWidget *widget, const gchar *status) {
 
+#ifdef HAVE_GTK_HEADER_BAR
 	gtk_header_bar_set_subtitle(GTK_HEADER_BAR(gtk_dialog_get_header_bar(GTK_DIALOG(widget))),status);
+#else
+	#warning aqui
+#endif
 
 }
 

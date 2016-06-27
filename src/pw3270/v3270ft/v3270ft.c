@@ -347,7 +347,7 @@ static void v3270ft_init(v3270ft *dialog) {
 	GtkTreeModel    * model;
 	GtkCellRenderer * renderer;
 	GtkWidget		* widget;
-	GtkBox			* box			= GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog)));
+	GtkBox			* box = GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog)));
 	GtkWidget		* entry[G_N_ELEMENTS(label)];
 
 	// Initialize
@@ -367,42 +367,6 @@ static void v3270ft_init(v3270ft *dialog) {
 	} action[FT_BUTTON_COUNT] = {
 
 		{
-			FT_BUTTON_START_TRANSFER,
-			FALSE,
-			"network-server",
-			N_("Start file transfer"),
-			G_CALLBACK(start_transfer)
-		},
-		{
-			FT_BUTTON_GO_LAST,
-			FALSE,
-			"go-last",
-			N_("Select last file"),
-			G_CALLBACK(select_last)
-		},
-		{
-			FT_BUTTON_GO_NEXT,
-			FALSE,
-			"go-next",
-			N_("Select next file"),
-			G_CALLBACK(select_next)
-		},
-		{
-			FT_BUTTON_GO_PREVIOUS,
-			FALSE,
-			"go-previous",
-			N_("Select previous file"),
-			G_CALLBACK(select_previous)
-		},
-		{
-			FT_BUTTON_GO_FIRST,
-			FALSE,
-			"go-first",
-			N_("Select first file"),
-			G_CALLBACK(select_first)
-		},
-
-		{
 			FT_BUTTON_LOAD_LIST,
 			TRUE,
 			"document-open",
@@ -417,6 +381,7 @@ static void v3270ft_init(v3270ft *dialog) {
 			N_("Save transfer queue to an external XML file"),
 			G_CALLBACK(save_file)
 		},
+
 		{
 			FT_BUTTON_INSERT_FILE,
 			TRUE,
@@ -424,6 +389,7 @@ static void v3270ft_init(v3270ft *dialog) {
 			N_("Insert new file in the transfer queue"),
 			G_CALLBACK(insert_file)
 		},
+
 		{
 			FT_BUTTON_REMOVE_FILE,
 			TRUE,
@@ -431,9 +397,88 @@ static void v3270ft_init(v3270ft *dialog) {
 			N_("Remove selected file from the transfer queue"),
 			G_CALLBACK(remove_file)
 		},
+
+		{
+			FT_BUTTON_START_TRANSFER,
+			FALSE,
+			"network-server",
+			N_("Start file transfer"),
+			G_CALLBACK(start_transfer)
+		},
+
+#if HAVE_GTK_HEADER_BAR
+		{
+			FT_BUTTON_GO_LAST,
+			FALSE,
+			"go-last",
+			N_("Select last file"),
+			G_CALLBACK(select_last)
+		},
+
+		{
+			FT_BUTTON_GO_NEXT,
+			FALSE,
+			"go-next",
+			N_("Select next file"),
+			G_CALLBACK(select_next)
+		},
+
+		{
+			FT_BUTTON_GO_PREVIOUS,
+			FALSE,
+			"go-previous",
+			N_("Select previous file"),
+			G_CALLBACK(select_previous)
+		},
+
+		{
+			FT_BUTTON_GO_FIRST,
+			FALSE,
+			"go-first",
+			N_("Select first file"),
+			G_CALLBACK(select_first)
+		},
+
+#else
+		{
+			FT_BUTTON_GO_FIRST,
+			FALSE,
+			"go-first",
+			N_("Select first file"),
+			G_CALLBACK(select_first)
+		},
+
+		{
+			FT_BUTTON_GO_PREVIOUS,
+			FALSE,
+			"go-previous",
+			N_("Select previous file"),
+			G_CALLBACK(select_previous)
+		},
+
+		{
+			FT_BUTTON_GO_NEXT,
+			FALSE,
+			"go-next",
+			N_("Select next file"),
+			G_CALLBACK(select_next)
+		},
+
+		{
+			FT_BUTTON_GO_LAST,
+			FALSE,
+			"go-last",
+			N_("Select last file"),
+			G_CALLBACK(select_last)
+		},
+
+#endif // HAVE_GTK_HEADER_BAR
+
 	};
 
+#if HAVE_GTK_HEADER_BAR
 	widget = gtk_dialog_get_header_bar(GTK_DIALOG(dialog));
+
 	for(f=0;f<G_N_ELEMENTS(action);f++) {
 
 		GtkWidget *button = gtk_button_new_from_icon_name(action[f].name,GTK_ICON_SIZE_BUTTON);
@@ -452,6 +497,30 @@ static void v3270ft_init(v3270ft *dialog) {
 		gtk_widget_set_sensitive(button,FALSE);
 
 	}
+
+#else
+
+	widget = gtk_toolbar_new();
+	gtk_toolbar_set_icon_size(GTK_TOOLBAR(widget),GTK_ICON_SIZE_SMALL_TOOLBAR);
+
+	gtk_box_pack_start(box,GTK_WIDGET(widget),FALSE,FALSE,2);
+
+	for(f=0;f<G_N_ELEMENTS(action);f++) {
+
+		GtkWidget *button = GTK_WIDGET(gtk_tool_button_new(gtk_image_new_from_icon_name(action[f].name,GTK_ICON_SIZE_SMALL_TOOLBAR),NULL));
+
+		gtk_widget_set_tooltip_markup(button,gettext(action[f].tooltip));
+
+		gtk_toolbar_insert(GTK_TOOLBAR(widget),GTK_TOOL_ITEM(button),-1);
+
+		g_signal_connect(button,"clicked",action[f].callback,dialog);
+
+		dialog->button[action[f].id] = button;
+		gtk_widget_set_sensitive(button,FALSE);
+
+	}
+
+#endif
 
 	gtk_widget_set_sensitive(dialog->button[FT_BUTTON_LOAD_LIST],TRUE);
 	gtk_widget_set_sensitive(dialog->button[FT_BUTTON_REMOVE_FILE],TRUE);

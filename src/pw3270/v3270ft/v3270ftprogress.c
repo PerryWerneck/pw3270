@@ -468,12 +468,16 @@ static void v3270ftprogress_init(v3270ftprogress *dialog) {
 
 
 	// Buttons
-	frame = gtk_dialog_get_header_bar(GTK_DIALOG(dialog));
-
-	// https://developer.gnome.org/icon-naming-spec/
 	widget = gtk_button_new_with_label(_("Cancel"));
 	g_signal_connect(widget,"clicked",G_CALLBACK(cancel_clicked),dialog);
+
+#ifdef HAVE_GTK_HEADER_BAR
+	frame = gtk_dialog_get_header_bar(GTK_DIALOG(dialog));
 	gtk_header_bar_pack_start(GTK_HEADER_BAR(frame),widget);
+#else
+	frame = gtk_dialog_get_action_area(GTK_DIALOG(dialog));
+	gtk_box_pack_end(GTK_BOX(frame),widget,FALSE,TRUE,2);
+#endif
 
 }
 
