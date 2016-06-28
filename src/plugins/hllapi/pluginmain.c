@@ -570,7 +570,7 @@
 	LocalFree(lpMsgBuf);
  }
 
- LIB3270_EXPORT int pw3270_plugin_start(GtkWidget *window)
+ LIB3270_EXPORT int pw3270_plugin_start(GtkWidget *window, GtkWidget *terminal)
  {
 	char id;
 
@@ -634,7 +634,7 @@
 	return -1;
  }
 
- LIB3270_EXPORT int pw3270_plugin_stop(GtkWidget *window)
+ LIB3270_EXPORT int pw3270_plugin_stop(GtkWidget *window, GtkWidget *terminal)
  {
 
 	return 0;

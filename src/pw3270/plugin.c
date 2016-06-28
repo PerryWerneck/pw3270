@@ -228,10 +228,10 @@
 
 	for(f=0;f<nPlugin;f++)
 	{
-		int (*start)(GtkWidget *);
+		int (*start)(GtkWidget *, GtkWidget *);
 
 		if(g_module_symbol(hPlugin[f], "pw3270_plugin_start", (gpointer) &start))
-			start(widget);
+			start(widget,pw3270_get_terminal_widget(widget));
 	}
 
  }
@@ -242,10 +242,10 @@
 
 	for(f=0;f<nPlugin;f++)
 	{
-		int (*stop)(GtkWidget *);
+		int (*stop)(GtkWidget *, GtkWidget *);
 
 		if(g_module_symbol(hPlugin[f], "pw3270_plugin_stop", (gpointer) &stop))
-			stop(widget);
+			stop(widget,pw3270_get_terminal_widget(widget));
 	}
 
  }

@@ -51,7 +51,7 @@
 
 /*---[ Implement ]-------------------------------------------------------------------------------*/
 
- LIB3270_EXPORT int pw3270_plugin_start(GtkWidget *window)
+ LIB3270_EXPORT int pw3270_plugin_start(GtkWidget *window, GtkWidget *terminal)
  {
 
 	GError	* error 		= NULL;
@@ -143,7 +143,7 @@
 	return 0;
  }
 
- LIB3270_EXPORT int pw3270_plugin_stop(GtkWidget *window)
+ LIB3270_EXPORT int pw3270_plugin_stop(GtkWidget *window, GtkWidget *terminal)
  {
 	if(service_name)
 	{

@@ -501,7 +501,7 @@ extern "C"
     return new plugin(lib3270_get_default_session_handle());
  }
 
- LIB3270_EXPORT int pw3270_plugin_start(GtkWidget *window)
+ LIB3270_EXPORT int pw3270_plugin_start(GtkWidget *window, GtkWidget *terminal)
  {
 	trace("%s",__FUNCTION__);
 #if GTK_CHECK_VERSION(2,32,0)
@@ -511,7 +511,7 @@ extern "C"
 	return 0;
  }
 
- LIB3270_EXPORT int pw3270_plugin_stop(GtkWidget *window)
+ LIB3270_EXPORT int pw3270_plugin_stop(GtkWidget *window, GtkWidget *terminal)
  {
 #if GTK_CHECK_VERSION(2,32,0)
 	g_mutex_clear(&mutex);
