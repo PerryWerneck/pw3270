@@ -1620,6 +1620,12 @@ const gchar * v3270_get_hostname(GtkWidget *widget)
 	return lib3270_get_hostname(GTK_V3270(widget)->host);
 }
 
+const gchar	* v3270_get_luname(GtkWidget *widget)
+{
+	g_return_val_if_fail(GTK_IS_V3270(widget),"");
+	return lib3270_get_luname(GTK_V3270(widget)->host);
+}
+
 const gchar	* v3270_get_session_name(GtkWidget *widget)
 {
 	if(!GTK_IS_V3270(widget) || GTK_V3270(widget)->session_name == NULL)
