@@ -6,7 +6,7 @@ includedir=@includedir@
 Name: pw3270
 Description: @PACKAGE@ GTK widgets and support calls for plugin development
 Version: @PACKAGE_VERSION@
-Libs: -L\@libdir@ -lpw3270
+Libs: -L\@libdir@ -l@PACKAGE_TARNAME@
 Libs.private: lib3270
 Cflags: -I@includedir@
 
