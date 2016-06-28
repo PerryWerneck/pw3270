@@ -1342,7 +1342,7 @@ enum pds ctlr_write(H3270 *hSession, unsigned char buf[], int buflen, Boolean er
 			 * Otherwise, advance to the first position of the
 			 * next unprotected field.
 			 */
-			baddr = next_unprotected(hSession,hSession->buffer_addr);
+			baddr = lib3270_get_next_unprotected(hSession,hSession->buffer_addr);
 			if (baddr < hSession->buffer_addr)
 				baddr = 0;
 			/*

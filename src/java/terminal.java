@@ -346,7 +346,7 @@ public class terminal
 	}
 
 	/**
-	 * Get next field address.
+	 * Get next field address from informed position.
 	 *
 	 * @param baddr Field address.
 	 *

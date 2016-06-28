@@ -960,7 +960,7 @@ static Boolean key_Character(H3270 *hSession, int code, Boolean with_ge, Boolean
 			if (skipped != NULL)
 				*skipped = True;
 			if (FA_IS_SKIP(hSession->ea_buf[baddr].fa))
-				baddr = next_unprotected(hSession,baddr);
+				baddr = lib3270_get_next_unprotected(hSession,baddr);
 			else
 				INC_BA(baddr);
 		}
@@ -1041,7 +1041,7 @@ LIB3270_ACTION( nextfield )
 		return 0;
 	}
 #endif /*]*/
-	cursor_move(hSession,next_unprotected(hSession,hSession->cursor_addr));
+	cursor_move(hSession,lib3270_get_next_unprotected(hSession,hSession->cursor_addr));
 	return 0;
 }
 
@@ -1216,7 +1216,7 @@ LIB3270_ACTION( firstfield )
 		cursor_move(hSession,0);
 		return 0;
 	}
-	cursor_move(hSession,next_unprotected(hSession,hSession->rows*hSession->cols-1));
+	cursor_move(hSession,lib3270_get_next_unprotected(hSession,hSession->rows*hSession->cols-1));
 
 	return 0;
 }
@@ -1856,7 +1856,7 @@ LIB3270_CURSOR_ACTION( newline )
 	if (faddr != baddr && !FA_IS_PROTECTED(fa))
 		cursor_move(hSession,baddr);
 	else
-		cursor_move(hSession,next_unprotected(hSession,baddr));
+		cursor_move(hSession,lib3270_get_next_unprotected(hSession,baddr));
 
 	return 0;
 }
@@ -1879,7 +1879,7 @@ LIB3270_ACTION( dup )
 	if (key_Character(hSession, EBC_dup, False, False, NULL))
 	{
 		hSession->cbk.display(hSession);
-		cursor_move(hSession,next_unprotected(hSession,hSession->cursor_addr));
+		cursor_move(hSession,lib3270_get_next_unprotected(hSession,hSession->cursor_addr));
 	}
 
 	return 0;
@@ -2466,7 +2466,7 @@ static Boolean remargin(H3270 *hSession, int lmargin)
 
 		if (faddr == baddr || FA_IS_PROTECTED(fa))
 		{
-			baddr = next_unprotected(hSession,baddr);
+			baddr = lib3270_get_next_unprotected(hSession,baddr);
 			if (baddr <= b0)
 				return False;
 		}
@@ -2941,7 +2941,7 @@ int kybd_prime(H3270 *hSession)
 		 * The cursor is not in an unprotected field.  Find the
 		 * next one.
 		 */
-		baddr = next_unprotected(hSession,hSession->cursor_addr);
+		baddr = lib3270_get_next_unprotected(hSession,hSession->cursor_addr);
 
 		/* If there isn't any, give up. */
 		if (!baddr)
