@@ -334,6 +334,19 @@ static void g_trace(H3270 *hSession, const char *fmt, va_list args)
 	g_free(ptr);
 }
 
+static gboolean startup(GtkWidget *toplevel)
+{
+	gtk_window_present(GTK_WINDOW(toplevel));
+
+#ifdef HAVE_GTKMAC
+	gtk_osxapplication_ready(osxapp);
+#endif // HAVE_GTKMAC
+
+	pw3270_start_plugins(toplevel);
+
+	return FALSE;
+}
+
 int main(int argc, char *argv[])
 {
 	static const gchar	* session_name	= PACKAGE_NAME;
@@ -568,12 +581,16 @@ int main(int argc, char *argv[])
 
 		v3270_set_auto_disconnect(pw3270_get_terminal_widget(toplevel),timer);
 
+		/*
 		pw3270_start_plugins(toplevel);
 		gtk_window_present(GTK_WINDOW(toplevel));
 
 #ifdef HAVE_GTKMAC
 		gtk_osxapplication_ready(osxapp);
 #endif // HAVE_GTKMAC
+		*/
+
+		g_idle_add((GSourceFunc) startup, toplevel);
 
 		gtk_main();
 
