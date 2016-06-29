@@ -75,10 +75,11 @@
 #include "utilc.h"
 #include "popupsc.h"
 #include "api.h"
+
+#include <lib3270/session.h>
 #include <lib3270/selection.h>
 
 #define my_isspace(c)	isspace((unsigned char)c)
-
 
 #if defined(_WIN32)
 
@@ -1047,4 +1048,33 @@ int gettimeofday(struct timeval *tv, void *ignored)
 
 	return hSession->pointer;
 
+ }
+
+ LIB3270_EXPORT int lib3270_getpeername(H3270 *hSession, struct sockaddr *addr, socklen_t *addrlen)
+ {
+	CHECK_SESSION_HANDLE(hSession);
+
+ 	memset(addr,0,*addrlen);
+
+ 	if(hSession->sock < 0) {
+		errno = ENOTCONN;
+		return -1;
+ 	}
+
+	return getpeername(hSession->sock, addr, addrlen);
+
+ }
+
+ LIB3270_EXPORT int lib3270_getsockname(H3270 *hSession, struct sockaddr *addr, socklen_t *addrlen)
+ {
+	CHECK_SESSION_HANDLE(hSession);
+
+ 	memset(addr,0,*addrlen);
+
+ 	if(hSession->sock < 0) {
+		errno = ENOTCONN;
+		return -1;
+ 	}
+
+	return getsockname(hSession->sock, addr, addrlen);
  }

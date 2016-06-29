@@ -1133,7 +1133,6 @@
 
 	LIB3270_EXPORT LIB3270_POINTER lib3270_get_pointer(H3270 *hSession, int baddr);
 
-
 	/**
 	 * The host is TSO?
 	 *

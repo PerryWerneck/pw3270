@@ -31,6 +31,7 @@
 
 	#define LIB3270_SESSION_H_INCLUDED 1
 
+	#include <sys/socket.h>
 	#include <lib3270/popup.h>
 
 	struct lib3270_session_callbacks
@@ -78,6 +79,8 @@
 	 */
 	int LIB3270_EXPORT lib3270_set_session_callbacks(const struct lib3270_callbacks *cbk);
 
+	LIB3270_EXPORT int lib3270_getpeername(H3270 *hSession, struct sockaddr *addr, socklen_t *addrlen);
+	LIB3270_EXPORT int lib3270_getsockname(H3270 *hSession, struct sockaddr *addr, socklen_t *addrlen);
 
 	LIB3270_EXPORT struct lib3270_session_callbacks * lib3270_get_session_callbacks(H3270 *session, unsigned short sz);
 
