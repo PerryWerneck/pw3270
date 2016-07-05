@@ -816,7 +816,7 @@ struct timer_info
 
 static void release_timer(struct timer_info *info)
 {
-	trace("Timer %p stops",info);
+	trace("%s: info=%p",__FUNCTION__,info);
 
 	info->terminal->timer = NULL;
 
@@ -1030,10 +1030,9 @@ void v3270_start_timer(GtkWidget *widget)
 	struct timer_info *info;
 	v3270 *terminal = GTK_V3270(widget);
 
-	trace("Timer %p starts",terminal);
-
 	if(terminal->timer)
 	{
+		trace("Timer %p starts again",terminal->timer);
 		g_source_ref(terminal->timer);
 		return;
 	}
@@ -1047,9 +1046,10 @@ void v3270_start_timer(GtkWidget *widget)
 	terminal->timer = g_timeout_source_new(100);
 	g_source_set_callback(terminal->timer,(GSourceFunc) update_timer, info, (GDestroyNotify) release_timer);
 
-	g_source_attach(terminal->timer, NULL);
+	g_source_attach(terminal->timer,NULL);
 	g_source_unref(terminal->timer);
 
+	trace("Timer %p starts",terminal->timer);
 
 }
 
@@ -1057,17 +1057,20 @@ void v3270_stop_timer(GtkWidget *widget)
 {
 	v3270 *terminal = GTK_V3270(widget);
 
-	trace("%s(%p)",__FUNCTION__,terminal->timer);
-
-//	if(!terminal->timer)
-//		return;
-
-//	trace("Timer=%p",terminal->timer);
-//	if(terminal->timer->ref_count < 2)
-//		g_source_destroy(terminal->timer);
+	trace("Timer %p stops",terminal->timer);
 
 	if(terminal->timer)
-		g_source_unref(terminal->timer);
+	{
+		if(terminal->timer->ref_count < 2)
+		{
+			g_source_destroy(terminal->timer);
+		}
+		else
+		{
+			g_source_unref(terminal->timer);
+		}
+	}
+
 }
 
 void v3270_update_ssl(H3270 *session, LIB3270_SSL_STATE state)
