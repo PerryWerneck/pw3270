@@ -131,6 +131,7 @@ build()
 		--cache-file=.${1}.cache \
 		--host=${host} \
 		--prefix=${prefix} \
+		--disable-python \
 		${ARGS}
  
 	if [ "$?" != "0" ]; then

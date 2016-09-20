@@ -31,6 +31,9 @@
 
 	#define PRIVATE_H_INCLUDED
 
+	// http://stackoverflow.com/questions/28683358/error-hypot-has-not-been-declared-in-cmath-while-trying-to-embed-python
+	#include <cmath>
+
 	#include <Python.h>
 
 	#include <lib3270/config.h>
