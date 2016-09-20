@@ -29,6 +29,11 @@
  *
  */
 
+#ifdef WIN32
+	#include <winsock2.h>
+	#include <windows.h>
+#endif // WIN32
+
 #include <lib3270/config.h>
 #include <lib3270.h>
 #include <lib3270/filetransfer.h>

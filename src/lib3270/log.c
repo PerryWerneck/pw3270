@@ -30,6 +30,11 @@
  *
  */
 
+#ifdef WIN32
+	#include <winsock2.h>
+	#include <windows.h>
+#endif // WIN32
+
 #include <stdio.h>
 #include <stdarg.h>
 #include <lib3270/config.h>

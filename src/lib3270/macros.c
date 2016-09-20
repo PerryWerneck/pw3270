@@ -30,6 +30,11 @@
  *
  */
 
+#ifdef WIN32
+	#include <winsock2.h>
+	#include <windows.h>
+#endif // WIN32
+
  #include <errno.h>
  #include <string.h>
  #include <stdio.h>

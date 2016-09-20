@@ -27,6 +27,12 @@
  *
  */
 
+#ifdef WIN32
+	#include <winsock2.h>
+	#include <windows.h>
+	#include <ws2tcpip.h>
+#endif // WIN32
+
  #include <pw3270.h>
  #include <lib3270.h>
  #include <lib3270/session.h>

@@ -98,7 +98,7 @@ static void button_1_press(GtkWidget *widget, GdkEventType type, int baddr)
 		break;
 
 	case GDK_2BUTTON_PRESS:		// Double click - Select word
-		if(lib3270_select_word_at(GTK_V3270(widget)->host,baddr));
+		if(lib3270_select_word_at(GTK_V3270(widget)->host,baddr))
 			lib3270_ring_bell(GTK_V3270(widget)->host);
 		break;
 

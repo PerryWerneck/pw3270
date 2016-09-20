@@ -39,7 +39,11 @@
 #include <errno.h>
 #include <sys/types.h>
 
-#ifndef WIN32
+#ifdef WIN32
+	#include <winsock2.h>
+	#include <windows.h>
+	#include <ws2tcpip.h>
+#else
 	#include <sys/socket.h>
 #endif // !WIN32
 

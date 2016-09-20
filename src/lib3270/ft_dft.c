@@ -34,6 +34,11 @@
  *		File transfer: DFT-style data processing functions
  */
 
+#ifdef WIN32
+	#include <winsock2.h>
+	#include <windows.h>
+#endif // WIN32
+
 #include <lib3270.h>
 #include "private.h"
 

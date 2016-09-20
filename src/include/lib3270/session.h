@@ -31,7 +31,14 @@
 
 	#define LIB3270_SESSION_H_INCLUDED 1
 
-	#include <sys/socket.h>
+	#ifdef WIN32
+		#include <winsock2.h>
+		#include <windows.h>
+		#include <ws2tcpip.h>
+	#else
+		#include <sys/socket.h>
+	#endif // WIN32
+
 	#include <lib3270/popup.h>
 
 	struct lib3270_session_callbacks

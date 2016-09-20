@@ -27,6 +27,12 @@
  *
  */
 
+#ifdef WIN32
+	#include <winsock2.h>
+	#include <windows.h>
+	#include <ws2tcpip.h>
+#endif // WIN32
+
  #include <gtk/gtk.h>
  #include <pw3270.h>
  #include <lib3270.h>
@@ -336,7 +342,7 @@ static void v3270_class_init(v3270Class *klass)
 #ifdef WIN32
 		// http://git.gnome.org/browse/gtk+/tree/gdk/win32/gdkcursor-win32.c
 		// http://www.functionx.com/win32/Lesson02b.htm
-		static const gchar	* cr[V3270_CURSOR_COUNT] =
+		static const gchar	* cr[LIB3270_POINTER_COUNT] =
 		{
 			"ibeam",	//	V3270_CURSOR_UNPROTECTED
 			"wait",		//	V3270_CURSOR_WAITING

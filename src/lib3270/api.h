@@ -32,6 +32,11 @@
 
 #ifndef LIB3270_API_INCLUDED
 
+#ifdef WIN32
+	#include <winsock2.h>
+	#include <windows.h>
+#endif // WIN32
+
 #ifdef __cplusplus
 	extern "C" {
 #endif

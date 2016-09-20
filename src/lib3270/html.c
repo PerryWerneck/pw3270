@@ -25,12 +25,16 @@
  * perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
  *
  */
+#ifdef WIN32
+	#include <winsock2.h>
+	#include <windows.h>
+#endif // WIN32
 
  #include <string.h>
  #include <stdlib.h>
  #include <lib3270.h>
  #include <lib3270/session.h>
-#include "3270ds.h"
+ #include "3270ds.h"
  #include <lib3270/html.h>
 
  #include "private.h"

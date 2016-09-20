@@ -27,6 +27,12 @@
  *
  */
 
+#ifdef WIN32
+	#include <winsock2.h>
+	#include <windows.h>
+	#include <ws2tcpip.h>
+#endif // WIN32
+
  #include <gtk/gtk.h>
  #include <math.h>
  #include <pw3270.h>

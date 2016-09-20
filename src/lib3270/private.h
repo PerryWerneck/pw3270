@@ -27,6 +27,11 @@
  *
  */
 
+#ifdef WIN32
+	#include <winsock2.h>
+	#include <windows.h>
+#endif // WIN32
+
 /* Autoconf settings. */
 #include <lib3270/config.h>		/* autoconf settings */
 #include <lib3270.h>			/* lib3270 API calls and defs */
