@@ -81,7 +81,7 @@ gchar * v3270ft_select_file(v3270ft *dialog, const gchar *title, const gchar *bu
 	GtkFileChooserNative *native =	gtk_file_chooser_native_new
 									(
 										title,
-										GTK_WIDGET(dialog),
+										GTK_WINDOW(dialog),
 										action,
 										button,
 										_( "_Cancel" )

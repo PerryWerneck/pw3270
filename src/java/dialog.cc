@@ -39,7 +39,7 @@ JNIEXPORT jint JNICALL Java_pw3270_terminal_popup_1dialog(JNIEnv *env, jobject o
 	const char	* title		= env->GetStringUTFChars(j_title, 0);
 	const char	* message	= env->GetStringUTFChars(j_message, 0);
 	const char	* secondary	= env->GetStringUTFChars(j_secondary, 0);
-	jint		  rc;
+	jint		  rc		= -1;
 
 	try {
 
@@ -68,7 +68,6 @@ JNIEXPORT jstring JNICALL Java_pw3270_terminal_file_1chooser_1dialog(JNIEnv *env
 	const char	* title		= env->GetStringUTFChars(j_title, 0);
 	const char	* extension	= env->GetStringUTFChars(j_extension, 0);
 	const char	* filename	= env->GetStringUTFChars(j_filename, 0);
-	jint		  rc;
 
 	try {
 

@@ -91,6 +91,9 @@ static void single_click(v3270 *widget, int baddr)
 
 static void button_1_press(GtkWidget *widget, GdkEventType type, int baddr)
 {
+	#pragma GCC diagnostic push
+	#pragma GCC diagnostic ignored "-Wswitch"
+
 	switch(type)
 	{
 	case GDK_BUTTON_PRESS: 		// Single click - set mode
@@ -112,6 +115,9 @@ static void button_1_press(GtkWidget *widget, GdkEventType type, int baddr)
 		trace("Unexpected button 1 type %d",type);
 #endif
 	}
+
+	#pragma GCC diagnostic pop
+
 }
 
 void v3270_emit_popup(v3270 *widget, int baddr, GdkEventButton *event)
