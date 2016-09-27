@@ -28,6 +28,7 @@
  */
 
  #include <lib3270/config.h>
+ #include <iostream>
 
  #if defined(HAVE_DBUS)
 	#include <stdio.h>
@@ -737,7 +738,7 @@
 			}
 			catch(exception e)
 			{
-
+				std::cerr << e.what();
 			}
 
 			char		busname[4096];
@@ -754,9 +755,10 @@
 
 			if (dbus_error_is_set(&err))
 			{
-				exception e = exception("Error when releasing DBUS name (%s)", err.message);
+				//exception e = exception("Error when releasing DBUS name (%s)", err.message);
+				std::cerr << err.message;
 				dbus_error_free(&err);
-				throw e;
+				//throw e;
 			}
 
 #else
