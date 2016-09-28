@@ -36,6 +36,7 @@
  {
 	int			  width 	= 1;
 	int			  height	= 1;
+	const gchar	* tmp;
 
  	trace("%s(%s,%d,%d)",__FUNCTION__,element_name,(int) keypad->row, (int) keypad->col);
 
@@ -45,21 +46,19 @@
 		keypad_button_start(context, names, values, error, keypad);
  	}
 
+	tmp = ui_get_attribute("width", names, values);
+	if(tmp) {
+		width = atoi(tmp);
+	}
+
+	tmp = ui_get_attribute("height", names, values);
+	if(tmp) {
+		height = atoi(tmp);
+	}
+
  	if(keypad->widget) {
 
 		// Criou widget, incluir
-		const gchar	* tmp;
-
-		tmp = ui_get_attribute("width", names, values);
-		if(tmp) {
-			width = atoi(tmp);
-		}
-
-		tmp = ui_get_attribute("height", names, values);
-		if(tmp) {
-			height = atoi(tmp);
-		}
-
 		tmp = ui_get_attribute("column", names, values);
 		if(tmp) {
 			keypad->col = atoi(tmp);
@@ -71,7 +70,7 @@
  	}
 
  	if(!strcasecmp(element_name,"row")) {
-		keypad->row++;
+		keypad->row += height;
 		keypad->col = 0;
  	} else {
 		keypad->col += width;
@@ -170,7 +169,7 @@
 	keypad->relief		= ui_get_relief(names, values, GTK_RELIEF_NORMAL);
 	keypad->grid		= GTK_GRID(gtk_grid_new());
 
-	// gtk_grid_set_row_homogeneous(keypad->grid,TRUE);
+	gtk_grid_set_row_homogeneous(keypad->grid,TRUE);
 	gtk_grid_set_column_homogeneous(keypad->grid,TRUE);
 
 	g_object_set_data(G_OBJECT(keypad->grid),"position",(gpointer) keypad->pos);
