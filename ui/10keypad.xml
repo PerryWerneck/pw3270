@@ -34,64 +34,60 @@
 	<keypad name="keypad.right" label="Lateral keypad" position="right" key='<alt>k' relief='half' >
 
 		<row>
-			<button action='pfkey' id='1' label='PF1' />
-			<button action='pfkey' id='2' label='PF2' />
-			<button action='pfkey' id='3' label='PF3' />
+			<button action='pfkey' id='1' label='PF1' width='2'/>
+			<button action='pfkey' id='2' label='PF2' width='2' />
+			<button action='pfkey' id='3' label='PF3' width='2' />
 		</row>
 		<row>
-			<button action='pfkey' id='4' label='PF4' />
-			<button action='pfkey' id='5' label='PF5' />
-			<button action='pfkey' id='6' label='PF6' />
+			<button action='pfkey' id='4' label='PF4' width='2' />
+			<button action='pfkey' id='5' label='PF5' width='2' />
+			<button action='pfkey' id='6' label='PF6' width='2' />
 		</row>
 		<row>
-			<button action='pfkey' id='7' label='PF7' />
-			<button action='pfkey' id='8' label='PF8' />
-			<button action='pfkey' id='9' label='PF9' />
+			<button action='pfkey' id='7' label='PF7' width='2' />
+			<button action='pfkey' id='8' label='PF8' width='2' />
+			<button action='pfkey' id='9' label='PF9' width='2' />
 		</row>
 		<row>
-			<button action='pfkey' id='10' label='PF10' />
-			<button action='pfkey' id='11' label='PF11' />
-			<button action='pfkey' id='12' label='PF12' />
+			<button action='pfkey' id='10' label='PF10' width='2' />
+			<button action='pfkey' id='11' label='PF11' width='2' />
+			<button action='pfkey' id='12' label='PF12' width='2' />
 		</row>
 		<row>
-			<button />
-			<button action='move' target='cursor' direction='up' icon="go-up" />
-			<button />
+			<button action='move' target='cursor' direction='up' icon="go-up"  column='2' width='2' />
 		</row>
 		<row>
-			<button action='move' target='cursor' direction='left' icon="go-back" />
-			<button action="firstfield" icon="goto-top" />
-			<button action='move' target='cursor' direction='right' icon="go-forward" />
+			<button action='move' target='cursor' direction='left' icon="go-back" width='2' />
+			<button action="firstfield" icon="goto-top" width='2' />
+			<button action='move' target='cursor' direction='right' icon="go-forward" width='2' />
 		</row>
 		<row>
-			<button />
-			<button action='move' target='cursor' direction='down' icon="go-down"/>
-			<button />
+			<button action='move' target='cursor' direction='down' icon="go-down" column='2' width='2'/>
 		</row>
 		<row>
-			<button action='pakey' id='1' label='PA1' />
-			<button action='pakey' id='2' label='PA2' />
-			<button action='pakey' id='3' label='PA3' />
+			<button action='pakey' id='1' label='PA1' width='2' />
+			<button action='pakey' id='2' label='PA2' width='2' />
+			<button action='pakey' id='3' label='PA3' width='2' />
 		</row>
 		<row>
-			<button action='PreviousField' icon="goto-first" />
-			<button action='NextField' icon="goto-last" />
+			<button action='PreviousField' icon="goto-first" width='3' />
+			<button action='NextField' icon="goto-last" width='3' />
 		</row>
 		<row>
-			<button action='erase' target='all' label="Clear" />
-			<button action='kybdreset' label="Reset" />
+			<button action='erase' target='all' label="Clear" width='3' />
+			<button action='kybdreset' label="Reset" width='3' />
 		</row>
 		<row>
-			<button action='EraseEOF' label="Erase\nEOF" />
-			<button action='EraseInput' label="Erase\nInput" />
+			<button action='EraseEOF' label="Erase\nEOF" width='3' />
+			<button action='EraseInput' label="Erase\nInput" width='3' />
 		</row>
 		<row>
-			<button action='Attn' label="Attn" />
-			<button action='Break' label="Break" />
+			<button action='Attn' label="Attn" width='3' />
+			<button action='Break' label="Break" width='3' />
 		</row>
 
 		<row>
-			<button action='Enter' icon="ok" />
+			<button action='Enter' icon="ok" width='6'/>
 		</row>
 
 	</keypad>

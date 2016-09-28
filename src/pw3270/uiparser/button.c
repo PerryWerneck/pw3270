@@ -84,32 +84,13 @@
  	GtkAction		* action	= NULL;
 
 	if(label) {
-		keypad->widget = gtk_button_new_with_label(label);
+		keypad->widget = gtk_button_new_with_label(gettext(g_strcompress(label)));
 	} else {
 		gchar *text = g_strconcat("gtk-",icon,NULL);
 		keypad->widget = gtk_button_new();
 		gtk_container_add(GTK_CONTAINER(keypad->widget),gtk_image_new_from_stock(text,GTK_ICON_SIZE_SMALL_TOOLBAR));
 		g_free(text);
 	}
-
- 	/*
- 	const gchar		* label		= ui_get_attribute("label", names, values);
- 	const gchar		* icon		= ui_get_attribute("icon", names, values);
- 	const gchar		* name		= ui_get_attribute("action", names, values);
-	GtkWidget		* widget	= NULL;
-
-	if(label)
-	{
-		widget = gtk_button_new_with_label(gettext(g_strcompress(label)));
-	}
-	else if(icon)
-	{
-		gchar *text = g_strconcat("gtk-",icon,NULL);
-		widget = gtk_button_new();
-		gtk_container_add(GTK_CONTAINER(widget),gtk_image_new_from_stock(text,GTK_ICON_SIZE_SMALL_TOOLBAR));
-		g_free(text);
-	}
-*/
 
 #if GTK_CHECK_VERSION(2,18,0)
 	gtk_widget_set_can_focus(keypad->widget,FALSE);

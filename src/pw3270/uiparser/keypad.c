@@ -28,11 +28,15 @@
  */
 
  #include "keypad.h"
+ #include <stdlib.h>
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
  static void element_start(GMarkupParseContext *context, const gchar *element_name, const gchar **names,const gchar **values, struct keypad *keypad, GError **error)
  {
+	int			  width 	= 1;
+	int			  height	= 1;
+
  	trace("%s(%s,%d,%d)",__FUNCTION__,element_name,(int) keypad->row, (int) keypad->col);
 
  	keypad->widget = NULL;
@@ -41,21 +45,42 @@
 		keypad_button_start(context, names, values, error, keypad);
  	}
 
- }
-
- static void element_end(GMarkupParseContext *context, const gchar *element_name, struct keypad *keypad, GError **error)
- {
  	if(keypad->widget) {
-		gtk_grid_attach(keypad->grid,keypad->widget,keypad->col,keypad->row,1,1);
+
+		// Criou widget, incluir
+		const gchar	* tmp;
+
+		tmp = ui_get_attribute("width", names, values);
+		if(tmp) {
+			width = atoi(tmp);
+		}
+
+		tmp = ui_get_attribute("height", names, values);
+		if(tmp) {
+			height = atoi(tmp);
+		}
+
+		tmp = ui_get_attribute("column", names, values);
+		if(tmp) {
+			keypad->col = atoi(tmp);
+		}
+
+		gtk_grid_attach(keypad->grid,keypad->widget,keypad->col,keypad->row,width,height);
 		keypad->widget = NULL;
+
  	}
 
  	if(!strcasecmp(element_name,"row")) {
 		keypad->row++;
 		keypad->col = 0;
  	} else {
-		keypad->col++;
+		keypad->col += width;
  	}
+
+ }
+
+ static void element_end(GMarkupParseContext *context, const gchar *element_name, struct keypad *keypad, GError **error)
+ {
 
  }
 
@@ -145,7 +170,7 @@
 	keypad->relief		= ui_get_relief(names, values, GTK_RELIEF_NORMAL);
 	keypad->grid		= GTK_GRID(gtk_grid_new());
 
-	gtk_grid_set_row_homogeneous(keypad->grid,TRUE);
+	// gtk_grid_set_row_homogeneous(keypad->grid,TRUE);
 	gtk_grid_set_column_homogeneous(keypad->grid,TRUE);
 
 	g_object_set_data(G_OBJECT(keypad->grid),"position",(gpointer) keypad->pos);
