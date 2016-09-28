@@ -79,6 +79,9 @@
  {
  	const gchar		* label		= ui_get_attribute("label", names, values);
  	const gchar		* icon		= ui_get_attribute("icon", names, values);
+ 	const gchar		* name		= ui_get_attribute("action", names, values);
+	struct parser	* info		= keypad->parser;
+ 	GtkAction		* action	= NULL;
 
 	if(label) {
 		keypad->widget = gtk_button_new_with_label(label);
@@ -93,9 +96,7 @@
  	const gchar		* label		= ui_get_attribute("label", names, values);
  	const gchar		* icon		= ui_get_attribute("icon", names, values);
  	const gchar		* name		= ui_get_attribute("action", names, values);
-	struct parser	* info		= keypad->parser;
- 	GtkAction		* action	= NULL;
- 	GtkWidget		* widget	= NULL;
+	GtkWidget		* widget	= NULL;
 
 	if(label)
 	{
@@ -108,18 +109,19 @@
 		gtk_container_add(GTK_CONTAINER(widget),gtk_image_new_from_stock(text,GTK_ICON_SIZE_SMALL_TOOLBAR));
 		g_free(text);
 	}
+*/
 
 #if GTK_CHECK_VERSION(2,18,0)
-	gtk_widget_set_can_focus(widget,FALSE);
-	gtk_widget_set_can_default(widget,FALSE);
+	gtk_widget_set_can_focus(keypad->widget,FALSE);
+	gtk_widget_set_can_default(keypad->widget,FALSE);
 #else
-	GTK_WIDGET_UNSET_FLAGS(widget,GTK_CAN_FOCUS);
-	GTK_WIDGET_UNSET_FLAGS(widget,GTK_CAN_DEFAULT);
+	GTK_WIDGET_UNSET_FLAGS(keypad->widget,GTK_CAN_FOCUS);
+	GTK_WIDGET_UNSET_FLAGS(keypad->widget,GTK_CAN_DEFAULT);
 #endif // GTK(2,18)
 
-	gtk_button_set_relief(GTK_BUTTON(widget),ui_get_relief(names, values, keypad->relief));
-	gtk_button_set_alignment(GTK_BUTTON(widget),0.5,0.5);
-	gtk_button_set_focus_on_click(GTK_BUTTON(widget),FALSE);
+	gtk_button_set_relief(GTK_BUTTON(keypad->widget),ui_get_relief(names, values, keypad->relief));
+	gtk_button_set_alignment(GTK_BUTTON(keypad->widget),0.5,0.5);
+	gtk_button_set_focus_on_click(GTK_BUTTON(keypad->widget),FALSE);
 
 	if(name)
 		action = ui_get_action(info->center_widget,name,info->actions,names,values,error);
@@ -127,14 +129,13 @@
 	if(action)
 	{
 		ui_action_set_options(action,info,names,values,error);
-		g_signal_connect(G_OBJECT(widget),"clicked",G_CALLBACK(button_clicked),action);
+		g_signal_connect(G_OBJECT(keypad->widget),"clicked",G_CALLBACK(button_clicked),action);
 	}
 	else
 	{
-		keypad->widget = widget;
-		gtk_widget_set_sensitive(widget,FALSE);
-		g_signal_connect(G_OBJECT(widget),"clicked",G_CALLBACK(button_script),info->center_widget);
+		gtk_widget_set_sensitive(keypad->widget,FALSE);
+		g_signal_connect(G_OBJECT(keypad->widget),"clicked",G_CALLBACK(button_script),info->center_widget);
 	}
-*/
+
  }
 

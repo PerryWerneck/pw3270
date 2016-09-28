@@ -145,6 +145,9 @@
 	keypad->relief		= ui_get_relief(names, values, GTK_RELIEF_NORMAL);
 	keypad->grid		= GTK_GRID(gtk_grid_new());
 
+	gtk_grid_set_row_homogeneous(keypad->grid,TRUE);
+	gtk_grid_set_column_homogeneous(keypad->grid,TRUE);
+
 	g_object_set_data(G_OBJECT(keypad->grid),"position",(gpointer) keypad->pos);
 
 	label = ui_get_attribute("label",names,values);
