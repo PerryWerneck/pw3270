@@ -31,46 +31,14 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
- void keypad_row_start(GMarkupParseContext *context, const gchar **names,const gchar **values, GError **error, struct keypad *keypad)
- {
-	keypad->row = g_malloc0(sizeof(struct row));
-
-	keypad->row->pos = ++keypad->num_rows;
-	keypad->col	= 0;
-
-	keypad->rows = g_list_append(keypad->rows,keypad->row);
- }
-
  static void element_start(GMarkupParseContext *context, const gchar *element_name, const gchar **names,const gchar **values, struct keypad *keypad, GError **error)
  {
- 	static const struct _cmd
- 	{
-		const gchar *element_name;
-		void (*start)(GMarkupParseContext *, const gchar **,const gchar **, GError **, struct keypad *);
- 	} cmd[] =
- 	{
- 		{ "row",	keypad_row_start	},
- 		{ "button",	keypad_button_start	},
- 	};
-
- 	int f;
-
- 	for(f = 0; f < G_N_ELEMENTS(cmd); f++)
-	{
-		if(!g_ascii_strcasecmp(cmd[f].element_name,element_name))
-		{
-			cmd[f].start(context,names,values,error,keypad);
-			return;
-		}
-	}
-
-	*error = g_error_new(ERROR_DOMAIN,EINVAL, _( "Unexpected element <%s>"), element_name);
+ 	trace("%s(%s)",__FUNCTION__,element_name);
  }
 
  static void element_end(GMarkupParseContext *context, const gchar *element_name, struct keypad *keypad, GError **error)
  {
- 	keypad->widget = NULL;
-// 	trace("%s: %s",__FUNCTION__,element_name);
+ 	trace("%s(%s)",__FUNCTION__,element_name);
  }
 
  static void toggled(GtkToggleAction *action, GtkWidget *widget)
@@ -88,44 +56,37 @@
 
  }
 
- UI_ATTR_DIRECTION ui_get_position_attribute(const gchar **names, const gchar **values)
+ GtkPositionType ui_get_position_attribute(const gchar **names, const gchar **values)
  {
- 	static const gchar	* posname[]	= { "top", "bottom", "left", "right" };
-	const gchar			* dir		= ui_get_attribute("position",names,values);
-	int					  f;
+	static const struct _pos {
+		GtkPositionType	  type;
+		const gchar		* name;
+	} pos [] = {
+
+		{	GTK_POS_LEFT,	"left"		},
+		{	GTK_POS_RIGHT,	"right"		},
+		{	GTK_POS_TOP,	"top"		},
+		{	GTK_POS_BOTTOM,	"bottom"	},
+
+	};
+
+	const gchar	* dir		= ui_get_attribute("position",names,values);
+	int			  f;
 
 	if(dir)
 	{
-		for(f=0;f<G_N_ELEMENTS(posname);f++)
+		for(f=0;f<G_N_ELEMENTS(pos);f++)
 		{
-			if(!g_ascii_strcasecmp(dir,posname[f]))
-				return f;
+			if(!g_ascii_strcasecmp(dir,pos[f].name))
+				return pos[f].type;
 		}
 	}
 
-	return UI_ATTR_DIRECTION_NONE;
+	return GTK_POS_TOP;
  }
 
  static void element_text(GMarkupParseContext *context, const gchar *text, gsize sz, struct keypad *keypad, GError **error)
  {
-		if(keypad->widget)
-		{
-			gchar *base = g_strstrip(g_strdup(text));
-			gchar *text = g_strdup(base);
-			g_free(base);
-
-			if(*text)
-			{
-				gtk_widget_set_sensitive(keypad->widget,TRUE);
-				g_object_set_data_full(G_OBJECT(keypad->widget),"script_text",text,g_free);
-			}
-			else
-			{
-				g_free(text);
-			}
-
-		}
-
  }
 
  GObject * ui_create_keypad(GMarkupParseContext *context,GtkAction *action,struct parser *info,const gchar **names, const gchar **values, GError **error)
@@ -162,100 +123,33 @@
 	info->block_data = keypad = g_malloc0(sizeof(struct keypad));
 
 	keypad->parser 		= info;
-	keypad->handle		= gtk_handle_box_new();
 	keypad->pos			= ui_get_position_attribute(names,values);
 	keypad->relief		= ui_get_relief(names, values, GTK_RELIEF_NORMAL);
+	keypad->grid		= GTK_GRID(gtk_grid_new());
 
-	switch(keypad->pos)
-	{
-	case UI_ATTR_UP:
-#if GTK_CHECK_VERSION(3,0,0)
-        keypad->box = gtk_box_new(GTK_ORIENTATION_VERTICAL,0);
-#else
-		keypad->box = gtk_vbox_new(FALSE,0);
-#endif // GTK(3,0,0)
-		gtk_handle_box_set_handle_position(GTK_HANDLE_BOX(keypad->handle),GTK_POS_BOTTOM);
-		break;
-
-	case UI_ATTR_DOWN:
-#if GTK_CHECK_VERSION(3,0,0)
-        keypad->box = gtk_box_new(GTK_ORIENTATION_VERTICAL,0);
-#else
-		keypad->box = gtk_vbox_new(FALSE,0);
-#endif // GTK(3,0,0)
-		gtk_handle_box_set_handle_position(GTK_HANDLE_BOX(keypad->handle),GTK_POS_TOP);
-		break;
-
-	case UI_ATTR_LEFT:
-#if GTK_CHECK_VERSION(3,0,0)
-        keypad->box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL,0);
-#else
-		keypad->box = gtk_hbox_new(FALSE,0);
-#endif // GTK(3,0,0)
-		gtk_handle_box_set_handle_position(GTK_HANDLE_BOX(keypad->handle),GTK_POS_RIGHT);
-		break;
-
-	default:
-#if GTK_CHECK_VERSION(3,0,0)
-        keypad->box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL,0);
-#else
-		keypad->box = gtk_hbox_new(FALSE,0);
-#endif // GTK(3,0,0)
-		keypad->pos = UI_ATTR_RIGHT;
-		gtk_handle_box_set_handle_position(GTK_HANDLE_BOX(keypad->handle),GTK_POS_LEFT);
-
-	}
+	g_object_set_data(G_OBJECT(keypad->grid),"position",(gpointer) keypad->pos);
 
 	label = ui_get_attribute("label",names,values);
 	if(label)
 	{
 		// Keypad has label, create and setup an action
 		const gchar *name = ui_get_attribute("name",names,values);
+
+		trace("%s name=%s",__FUNCTION__,name);
+
 		if(name)
 		{
 			GtkToggleAction *action = gtk_toggle_action_new(name,gettext(label),NULL,NULL);
 			ui_action_set_options(GTK_ACTION(action),info,names,values,error);
-			g_object_set_data_full(G_OBJECT(keypad->handle),"view_action",action,g_object_unref);
-			g_signal_connect(action,"toggled",G_CALLBACK(toggled),keypad->handle);
+			g_object_set_data_full(G_OBJECT(keypad->grid),"view_action",action,g_object_unref);
+			g_signal_connect(action,"toggled",G_CALLBACK(toggled),keypad->grid);
+			gtk_widget_set_name(GTK_WIDGET(keypad->grid),name);
 		}
 	}
 
-	gtk_handle_box_set_shadow_type(GTK_HANDLE_BOX(keypad->handle),GTK_SHADOW_ETCHED_IN);
-    gtk_container_add(GTK_CONTAINER(keypad->handle),keypad->box);
-
 	g_markup_parse_context_push(context,(GMarkupParser *) &parser,keypad);
 
-	return G_OBJECT(ui_insert_element(info, action, UI_ELEMENT_KEYPAD, names, values, G_OBJECT(keypad->handle), error));
- }
-
- static void create_col(GtkWidget *widget, struct keypad *keypad)
- {
-	if(widget)
-	{
-		gtk_table_attach(	GTK_TABLE(keypad->table),
-							widget,
-							keypad->col,keypad->col+keypad->button_width,
-							keypad->num_rows,keypad->num_rows+1,
-							GTK_EXPAND|GTK_FILL,GTK_EXPAND|GTK_FILL,0,0 );
-
-	}
-	keypad->col += keypad->button_width;
-
- }
-
- static void create_row(struct row *info, struct keypad *keypad)
- {
- 	if(info->cols)
-	{
-		keypad->col = 0;
-		keypad->button_width = keypad->num_cols / info->num_cols;
-
-//		trace("Max cols=%d row cols=%d width=%d",keypad->num_cols,info->num_cols,keypad->button_width);
-
-		g_list_foreach(info->cols,(GFunc) create_col,keypad);
-		g_list_free(info->cols);
-	}
-	keypad->num_rows++;
+	return G_OBJECT(ui_insert_element(info, action, UI_ELEMENT_KEYPAD, names, values, G_OBJECT(keypad->grid), error));
  }
 
  void ui_end_keypad(GMarkupParseContext *context,GObject *widget,struct parser *info,GError **error)
@@ -263,33 +157,7 @@
 	struct keypad *keypad  = (struct keypad *) info->block_data;
 	info->block_data = NULL;
 
-	keypad->num_cols *= 2;
-
-	if(keypad->rows)
-	{
-		// Create Widgets & Release memory
-		keypad->table = gtk_table_new(keypad->num_rows,keypad->num_cols,FALSE);
-
-#if GTK_CHECK_VERSION(2,18,0)
-		gtk_widget_set_can_focus(keypad->table,FALSE);
-		gtk_widget_set_can_default(keypad->table,FALSE);
-#else
-		GTK_WIDGET_UNSET_FLAGS(keypad->table,GTK_CAN_FOCUS);
-		GTK_WIDGET_UNSET_FLAGS(keypad->table,GTK_CAN_DEFAULT);
-#endif // GTK(2,18)
-
-		keypad->num_rows = 0;
-		g_list_foreach(keypad->rows,(GFunc) create_row,keypad);
-#if GTK_CHECK_VERSION(2,28,0)
-		g_list_free_full(keypad->rows,g_free);
-#else
-		g_list_foreach(keypad->rows,(GFunc) g_free,NULL);
-		g_list_free(keypad->rows);
-#endif // GTK(2,28)
-		gtk_box_pack_start(GTK_BOX(keypad->box),keypad->table,FALSE,FALSE,0);
-
-		gtk_widget_show_all(keypad->box);
-	}
+	gtk_widget_show_all(GTK_WIDGET(keypad->grid));
 
 	g_free(keypad);
  	g_markup_parse_context_pop(context);

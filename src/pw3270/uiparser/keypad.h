@@ -33,6 +33,16 @@
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
+ struct keypad {
+	struct parser		* parser;
+	unsigned short		  row;
+	unsigned short		  col;
+	GtkGrid				* grid;
+	GtkReliefStyle		  relief;
+	UI_ATTR_DIRECTION	  pos;
+ };
+
+/*
  struct row
  {
  	unsigned short		  pos;
@@ -58,5 +68,6 @@
 	GtkWidget			* widget;
 
  };
+*/
 
  G_GNUC_INTERNAL void keypad_button_start(GMarkupParseContext *context, const gchar **names,const gchar **values, GError **error, struct keypad *keypad);

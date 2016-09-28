@@ -73,6 +73,7 @@ static void pack_start(gpointer key, GtkWidget *widget, struct parser *p)
 	gtk_box_pack_start(GTK_BOX(p->element),widget,FALSE,FALSE,0);
 }
 
+
 struct keypad
 {
 	GtkWidget		* box;
@@ -82,10 +83,13 @@ struct keypad
 
 static void pack_keypad(gpointer key, GtkWidget *widget, struct keypad *k)
 {
-	if(gtk_handle_box_get_handle_position(GTK_HANDLE_BOX(widget)) != k->filter)
+	if((GtkPositionType) g_object_get_data(G_OBJECT(widget),"position") != k->filter) {
 		return;
+	}
 
+	trace("%s %s",__FUNCTION__,gtk_widget_get_name(widget));
 	k->pack(GTK_BOX(k->box),widget,FALSE,FALSE,0);
+
 }
 
 static void pack_view(gpointer key, GtkWidget *widget, GtkWidget *parent)
@@ -231,15 +235,17 @@ void parser_build(struct parser *p, GtkWidget *widget)
 	ui_setup_keypads(p->element_list[UI_ELEMENT_KEYPAD], p->toplevel, p->center_widget);
 
 	// Pack top keypads
+	trace("Packing %s keypads","top");
 	memset(&keypad,0,sizeof(keypad));
 	keypad.box 		= vbox;
-	keypad.filter 	= GTK_POS_BOTTOM;
+	keypad.filter 	= GTK_POS_TOP;
 	keypad.pack 	= gtk_box_pack_start;
 	g_hash_table_foreach(p->element_list[UI_ELEMENT_KEYPAD],(GHFunc) pack_keypad, &keypad);
 
 	// Pack left keypads
+	trace("Packing %s keypads","left");
 	keypad.box 		= hbox;
-	keypad.filter 	= GTK_POS_RIGHT;
+	keypad.filter 	= GTK_POS_LEFT;
 	g_hash_table_foreach(p->element_list[UI_ELEMENT_KEYPAD],(GHFunc) pack_keypad, &keypad);
 
 	// Pack & configure center widget
@@ -252,13 +258,15 @@ void parser_build(struct parser *p, GtkWidget *widget)
 	gtk_box_pack_start(GTK_BOX(hbox),vbox,TRUE,TRUE,0);
 
 	// Pack right keypads
-	keypad.filter 	= GTK_POS_LEFT;
+	trace("Packing %s keypads","right");
+	keypad.filter 	= GTK_POS_RIGHT;
 	keypad.pack 	= gtk_box_pack_end;
 	g_hash_table_foreach(p->element_list[UI_ELEMENT_KEYPAD],(GHFunc) pack_keypad, &keypad);
 
 	// Pack bottom keypads
+	trace("Packing %s keypads","bottom");
 	keypad.box 		= vbox;
-	keypad.filter 	= GTK_POS_TOP;
+	keypad.filter 	= GTK_POS_BOTTOM;
 	g_hash_table_foreach(p->element_list[UI_ELEMENT_KEYPAD],(GHFunc) pack_keypad, &keypad);
 
 	// Finish building

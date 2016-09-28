@@ -77,6 +77,7 @@
 
  void keypad_button_start(GMarkupParseContext *context, const gchar **names,const gchar **values, GError **error, struct keypad *keypad)
  {
+ 	/*
  	const gchar		* label		= ui_get_attribute("label", names, values);
  	const gchar		* icon		= ui_get_attribute("icon", names, values);
  	const gchar		* name		= ui_get_attribute("action", names, values);
@@ -132,5 +133,6 @@
 		gtk_widget_set_sensitive(widget,FALSE);
 		g_signal_connect(G_OBJECT(widget),"clicked",G_CALLBACK(button_script),info->center_widget);
 	}
+	*/
  }
 
