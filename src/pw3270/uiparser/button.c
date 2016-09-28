@@ -77,6 +77,18 @@
 
  void keypad_button_start(GMarkupParseContext *context, const gchar **names,const gchar **values, GError **error, struct keypad *keypad)
  {
+ 	const gchar		* label		= ui_get_attribute("label", names, values);
+ 	const gchar		* icon		= ui_get_attribute("icon", names, values);
+
+	if(label) {
+		keypad->widget = gtk_button_new_with_label(label);
+	} else {
+		gchar *text = g_strconcat("gtk-",icon,NULL);
+		keypad->widget = gtk_button_new();
+		gtk_container_add(GTK_CONTAINER(keypad->widget),gtk_image_new_from_stock(text,GTK_ICON_SIZE_SMALL_TOOLBAR));
+		g_free(text);
+	}
+
  	/*
  	const gchar		* label		= ui_get_attribute("label", names, values);
  	const gchar		* icon		= ui_get_attribute("icon", names, values);
@@ -84,11 +96,6 @@
 	struct parser	* info		= keypad->parser;
  	GtkAction		* action	= NULL;
  	GtkWidget		* widget	= NULL;
-
-	if(++keypad->col > keypad->num_cols)
-		keypad->num_cols = keypad->col;
-
-	keypad->row->num_cols++;
 
 	if(label)
 	{
@@ -101,11 +108,6 @@
 		gtk_container_add(GTK_CONTAINER(widget),gtk_image_new_from_stock(text,GTK_ICON_SIZE_SMALL_TOOLBAR));
 		g_free(text);
 	}
-
-	keypad->row->cols = g_list_append(keypad->row->cols,widget);
-
-	if(!widget)
-		return;
 
 #if GTK_CHECK_VERSION(2,18,0)
 	gtk_widget_set_can_focus(widget,FALSE);
@@ -133,6 +135,6 @@
 		gtk_widget_set_sensitive(widget,FALSE);
 		g_signal_connect(G_OBJECT(widget),"clicked",G_CALLBACK(button_script),info->center_widget);
 	}
-	*/
+*/
  }
 

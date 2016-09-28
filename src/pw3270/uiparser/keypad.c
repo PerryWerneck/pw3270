@@ -33,12 +33,30 @@
 
  static void element_start(GMarkupParseContext *context, const gchar *element_name, const gchar **names,const gchar **values, struct keypad *keypad, GError **error)
  {
- 	trace("%s(%s)",__FUNCTION__,element_name);
+ 	trace("%s(%s,%d,%d)",__FUNCTION__,element_name,(int) keypad->row, (int) keypad->col);
+
+ 	keypad->widget = NULL;
+
+ 	if(!strcasecmp(element_name,"button")) {
+		keypad_button_start(context, names, values, error, keypad);
+ 	}
+
  }
 
  static void element_end(GMarkupParseContext *context, const gchar *element_name, struct keypad *keypad, GError **error)
  {
- 	trace("%s(%s)",__FUNCTION__,element_name);
+ 	if(keypad->widget) {
+		gtk_grid_attach(keypad->grid,keypad->widget,keypad->col,keypad->row,1,1);
+		keypad->widget = NULL;
+ 	}
+
+ 	if(!strcasecmp(element_name,"row")) {
+		keypad->row++;
+		keypad->col = 0;
+ 	} else {
+		keypad->col++;
+ 	}
+
  }
 
  static void toggled(GtkToggleAction *action, GtkWidget *widget)

@@ -38,6 +38,7 @@
 	unsigned short		  row;
 	unsigned short		  col;
 	GtkGrid				* grid;
+	GtkWidget			* widget;
 	GtkReliefStyle		  relief;
 	UI_ATTR_DIRECTION	  pos;
  };
