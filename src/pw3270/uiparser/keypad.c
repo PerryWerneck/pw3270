@@ -64,7 +64,32 @@
 			keypad->col = atoi(tmp);
 		}
 
+#if GTK_CHECK_VERSION(3,0,0)
+
 		gtk_grid_attach(keypad->grid,keypad->widget,keypad->col,keypad->row,width,height);
+
+#else
+		guint r = 0, c = 0;
+
+		gtk_table_get_size(keypad->grid,&r,&c);
+
+		if(r < keypad->row || c < (keypad->col+1)) {
+			trace("Resize to %u,%u to %u,%u",r,c,keypad->row,keypad->col+1);
+			gtk_table_resize(keypad->grid,keypad->row,keypad->col+1);
+		}
+
+		r = keypad->row-1;
+		c = keypad->col;
+
+		gtk_table_attach(	keypad->grid,
+							keypad->widget,
+							c,c+width,
+							r,r+height,
+							GTK_EXPAND|GTK_FILL,
+							GTK_EXPAND|GTK_FILL,
+							1,1);
+#endif
+
 		keypad->widget = NULL;
 
  	}
@@ -167,10 +192,15 @@
 	keypad->parser 		= info;
 	keypad->pos			= ui_get_position_attribute(names,values);
 	keypad->relief		= ui_get_relief(names, values, GTK_RELIEF_NORMAL);
-	keypad->grid		= GTK_GRID(gtk_grid_new());
 
+#if GTK_CHECK_VERSION(3,0,0)
+	keypad->grid		= GTK_GRID(gtk_grid_new());
 	gtk_grid_set_row_homogeneous(keypad->grid,TRUE);
 	gtk_grid_set_column_homogeneous(keypad->grid,TRUE);
+#else
+	keypad->grid		= GTK_TABLE(gtk_table_new(1,1,TRUE));
+#endif	// GTK3
+
 
 	g_object_set_data(G_OBJECT(keypad->grid),"position",(gpointer) keypad->pos);
 

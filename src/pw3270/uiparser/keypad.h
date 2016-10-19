@@ -37,38 +37,14 @@
 	struct parser		* parser;
 	unsigned short		  row;
 	unsigned short		  col;
+#if GTK_CHECK_VERSION(3,0,0)
 	GtkGrid				* grid;
+#else
+	GtkTable			* grid;
+#endif // GTK3
 	GtkWidget			* widget;
 	GtkReliefStyle		  relief;
 	UI_ATTR_DIRECTION	  pos;
  };
-
-/*
- struct row
- {
- 	unsigned short		  pos;
- 	unsigned short		  num_cols;
-	GList				* cols;
- };
-
- struct keypad
- {
-	struct parser		* parser;
-	unsigned short		  num_rows;
-	unsigned short	  	  num_cols;
-	unsigned short		  col;
-	unsigned short		  button_width;
-	struct row			* row;
-	GtkWidget			* box;
-	GtkWidget			* handle;
-	GtkWidget			* table;
-	GtkReliefStyle		  relief;
-	UI_ATTR_DIRECTION	  pos;
-	GList				* rows;
-
-	GtkWidget			* widget;
-
- };
-*/
 
  G_GNUC_INTERNAL void keypad_button_start(GMarkupParseContext *context, const gchar **names,const gchar **values, GError **error, struct keypad *keypad);
