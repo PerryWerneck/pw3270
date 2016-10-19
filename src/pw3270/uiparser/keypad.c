@@ -69,13 +69,11 @@
 		gtk_grid_attach(keypad->grid,keypad->widget,keypad->col,keypad->row,width,height);
 
 #else
-		guint r = 0, c = 0;
-
-		gtk_table_get_size(keypad->grid,&r,&c);
+		guint r = keypad->rows, c = keypad->cols;
 
 		if(r < keypad->row || c < (keypad->col+1)) {
 			trace("Resize to %u,%u to %u,%u",r,c,keypad->row,keypad->col+1);
-			gtk_table_resize(keypad->grid,keypad->row,keypad->col+1);
+			gtk_table_resize(keypad->grid,keypad->rows = keypad->row,keypad->cols = (keypad->col+1));
 		}
 
 		r = keypad->row-1;
@@ -198,9 +196,10 @@
 	gtk_grid_set_row_homogeneous(keypad->grid,TRUE);
 	gtk_grid_set_column_homogeneous(keypad->grid,TRUE);
 #else
-	keypad->grid		= GTK_TABLE(gtk_table_new(1,1,TRUE));
+	keypad->rows	= 1;
+	keypad->cols	= 1;
+	keypad->grid	= GTK_TABLE(gtk_table_new(keypad->rows,keypad->cols,TRUE));
 #endif	// GTK3
-
 
 	g_object_set_data(G_OBJECT(keypad->grid),"position",(gpointer) keypad->pos);
 

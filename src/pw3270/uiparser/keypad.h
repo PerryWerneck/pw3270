@@ -41,6 +41,8 @@
 	GtkGrid				* grid;
 #else
 	GtkTable			* grid;
+	guint				  rows;
+	guint				  cols;
 #endif // GTK3
 	GtkWidget			* widget;
 	GtkReliefStyle		  relief;
