@@ -508,7 +508,7 @@ GtkWidget * v3270_ft_dialog_new(GtkWidget *parent, LIB3270_FT_OPTION options)
 		gtk_grid_set_row_spacing(grid,5);
 
 #else
-		GtkTable *grid = gtk_table_new(4,4,FALSE);
+		GtkTable *grid = GTK_TABLE(gtk_table_new(4,4,FALSE));
 
 		gtk_table_set_row_spacings(grid,5);
 		gtk_table_set_col_spacings(grid,5);
