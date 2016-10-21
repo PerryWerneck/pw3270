@@ -418,7 +418,15 @@ static void destroy(GtkObject *widget)
 	gtk_text_buffer_get_end_iter(hwnd->text,&itr);
 
 	msg = g_strdup_vprintf(fmt,args);
-	gtk_text_buffer_insert(hwnd->text,&itr,msg,strlen(msg));
+
+	if(g_utf8_validate(msg,strlen(msg),NULL))
+	{
+		gtk_text_buffer_insert(hwnd->text,&itr,msg,strlen(msg));
+	}
+	else
+	{
+		gtk_text_buffer_insert(hwnd->text,&itr,"** Invalid UTF8 String **",-1);
+	}
 	g_free(msg);
 
 	gtk_text_buffer_get_end_iter(hwnd->text,&itr);

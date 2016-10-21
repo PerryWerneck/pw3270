@@ -416,7 +416,6 @@
 		<Unit filename="src/plugins/rx3270/sample/clipboard.rex" />
 		<Unit filename="src/plugins/rx3270/sample/object.rex" />
 		<Unit filename="src/plugins/rx3270/sample/remote.rex" />
-		<Unit filename="src/plugins/rx3270/text.cc" />
 		<Unit filename="src/plugins/rx3270/typed_routines.cc" />
 		<Unit filename="src/pw3270/Makefile.in" />
 		<Unit filename="src/pw3270/actions.c">

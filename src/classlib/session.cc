@@ -472,10 +472,28 @@
 		}
 		else
 		{
-			rc = str;
+			char * text = strdup(str);
+			for(char *ptr = text;*ptr;ptr++)
+			{
+				if(*ptr < ' ' || *ptr > 128)
+				{
+					*ptr = '?';
+				}
+			}
+			rc = text;
+			free(text);
 		}
 #else
-		rc = str;
+		char * text = strdup(str);
+		for(char *ptr = text;*ptr;ptr++)
+		{
+			if(*ptr < ' ' || *ptr > 128)
+			{
+				*ptr = '?';
+			}
+		}
+		rc = text;
+		free(text);
 #endif // HAVE_ICONV
 
 		return rc;

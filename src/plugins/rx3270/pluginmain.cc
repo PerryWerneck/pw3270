@@ -523,6 +523,7 @@ extern "C"
  plugin::plugin(H3270 *hSession) : session()
  {
 	this->hSession = hSession;
+	set_display_charset();
  }
 
  plugin::~plugin()
