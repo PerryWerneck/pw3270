@@ -302,9 +302,9 @@
 		return 0;
 	}
 
-	string file_chooser_dialog(GtkFileChooserAction action, const char *title, const char *extension, const char *filename) {
+	string file_chooser_dialog(int action, const char *title, const char *extension, const char *filename) {
 		string	  rc;
-		gchar	* ptr = pw3270_file_chooser(action, "java", title, filename, extension);
+		gchar	* ptr = pw3270_file_chooser((GtkFileChooserAction) action, "java", title, filename, extension);
 
 		if(ptr)
 		{

@@ -140,7 +140,7 @@
     int               set_clipboard(const char *text);
 
 	int               popup_dialog(LIB3270_NOTIFY id , const char *title, const char *message, const char *fmt, ...);
-	string			  file_chooser_dialog(GtkFileChooserAction action, const char *title, const char *extension, const char *filename);
+	string			  file_chooser_dialog(int action, const char *title, const char *extension, const char *filename);
 
 	int				  set_host_charset(const char *charset);
 	string			  get_host_charset(void);
@@ -755,10 +755,10 @@ int plugin::popup_dialog(LIB3270_NOTIFY id , const char *title, const char *mess
     return 0;
 }
 
-string plugin::file_chooser_dialog(GtkFileChooserAction action, const char *title, const char *extension, const char *filename)
+string plugin::file_chooser_dialog(int action, const char *title, const char *extension, const char *filename)
 {
 	string	  rc;
-    gchar	* ptr = pw3270_file_chooser(action, script_name ? script_name : "rexx", title, filename, extension);
+    gchar	* ptr = pw3270_file_chooser((GtkFileChooserAction) action, script_name ? script_name : "rexx", title, filename, extension);
 
     if(ptr)
 	{
@@ -847,3 +847,4 @@ void plugin::set_unlock_delay(unsigned short ms)
 {
 	lib3270_set_unlock_delay(hSession, (unsigned short) ms);
 }
+
