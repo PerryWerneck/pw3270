@@ -151,6 +151,14 @@ case "$host" in
 		DLLPREFIX=""
 		LIBS="$LIBS -lcomdlg32"
 
+		if test $host_cpu = "x86_64" ; then
+			PROGRAMFILES="PROGRAMFILES64"
+		else
+			PROGRAMFILES="PROGRAMFILES"
+		fi
+
+		AC_SUBST(PROGRAMFILES)
+
 		AC_CONFIG_FILES(nsi/header-$host_cpu-no-gtk.nsi)
 		AC_CONFIG_FILES(nsi/header-$host_cpu.nsi)
 		AC_CONFIG_FILES(nsi/main-begin-$host_cpu.nsi)

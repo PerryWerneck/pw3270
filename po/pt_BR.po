@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-24 14:58-0200\n"
+"POT-Creation-Date: 2016-10-24 17:01-0200\n"
 "PO-Revision-Date: 2016-05-31 11:16-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <perry.werneck@gmail.com>\n"
@@ -119,7 +119,7 @@ msgstr "Alerta 3270"
 msgid "3270 screen"
 msgstr "Tela 3270"
 
-#: dialog.c:504
+#: dialog.c:518
 #, c-format
 msgid "3270 terminal emulator for GTK %d.%d"
 msgstr "Emulador 3270 para GTK+ %d.%d"
@@ -365,7 +365,7 @@ msgstr "Azul"
 msgid "Bold"
 msgstr "Negrito"
 
-#: dialog.c:511
+#: dialog.c:525
 msgid "Brazilian Public Software Portal"
 msgstr "Portal do Software Público Brasileiro"
 
@@ -389,7 +389,7 @@ msgstr "CRL ainda não é válido"
 msgid "CRL signature failure"
 msgstr "Erro na assinatura CRL"
 
-#: dialog.c:109
+#: dialog.c:123
 msgid "C_haracter Coding:"
 msgstr "C_odificação de caracteres:"
 
@@ -444,7 +444,7 @@ msgstr "Não foi possível obter o tamanho do arquivo"
 msgid "Can't load %s"
 msgstr "Não foi possível carregar %s"
 
-#: dialog.c:379
+#: dialog.c:393
 msgid "Can't load file"
 msgstr "Não foi possível carregar arquivo"
 
@@ -485,7 +485,7 @@ msgstr "Não reconheço \"%s\" como um tipo de host válido"
 msgid "Can't save %s"
 msgstr "Não foi possível salvar arquivo %s"
 
-#: dialog.c:355
+#: dialog.c:369
 #, c-format
 msgid ""
 "Can't save copy to file\n"
@@ -494,11 +494,11 @@ msgstr ""
 "Não foi possível salvar cópia para o arquivo\n"
 "%s"
 
-#: dialog.c:205 trace.c:210
+#: dialog.c:219 trace.c:210
 msgid "Can't save file"
 msgstr "Não foi possível salvar arquivo"
 
-#: dialog.c:320
+#: dialog.c:334
 #, c-format
 msgid ""
 "Can't save screen to file\n"
@@ -507,7 +507,7 @@ msgstr ""
 "Não foi possível salvar a tela no arquivo\n"
 "%s"
 
-#: dialog.c:338
+#: dialog.c:352
 #, c-format
 msgid ""
 "Can't save selection to file\n"
@@ -525,7 +525,7 @@ msgstr "Não foi possível salvar trace no arquivo %s"
 msgid "Can't set callback table"
 msgstr "Não foi possível setar a tabela de retornos"
 
-#: tools.c:216
+#: tools.c:298
 msgid "Can't set host charset"
 msgstr "Não foi possível definir o charset do host"
 
@@ -617,7 +617,7 @@ msgstr "Certificado revogado"
 msgid "Certificate signature failure"
 msgstr "Falha na assinatura do certificado"
 
-#: tools.c:220 v3270/selection.c:427
+#: tools.c:302 v3270/selection.c:427
 msgid "Charset error"
 msgstr "Erro de codificação de caracteres"
 
@@ -700,7 +700,7 @@ msgstr "Cria arquivo com registros de tamanho variável."
 msgid "Cross hair cursor"
 msgstr "Cursor mira"
 
-#: dialog.c:126
+#: dialog.c:140
 #, c-format
 msgid "Current (%s)"
 msgstr "Atual (%s)"
@@ -835,7 +835,7 @@ msgstr "Erro \"%s\" lendo arquivo local (rc=%d)"
 msgid "Error \"%s\" writing to local file (rc=%d)"
 msgstr "Erro \"%s\" gravando arquivo local (rc=%d)"
 
-#: dialog.c:377
+#: dialog.c:391
 #, c-format
 msgid "Error loading %s"
 msgstr "Erro lendo %s"
@@ -1356,7 +1356,7 @@ msgstr "Colar próximo"
 msgid "Paste text file"
 msgstr "Colar arquivo texto"
 
-#: dialog.c:414
+#: dialog.c:428
 msgid "Paste text file contents"
 msgstr "Colar conteúdo de arquivo texto"
 
@@ -1654,7 +1654,7 @@ msgstr "Salvar"
 msgid "Save copy"
 msgstr "Salvar cópia"
 
-#: dialog.c:354
+#: dialog.c:368
 msgid "Save copy to file"
 msgstr "Salvar cópia para arquivo"
 
@@ -1666,7 +1666,7 @@ msgstr "Salvar a fila para um arquivo"
 msgid "Save screen"
 msgstr "Salvar tela"
 
-#: dialog.c:319
+#: dialog.c:333
 msgid "Save screen to file"
 msgstr "Salvar tela para arquivo"
 
@@ -1674,7 +1674,7 @@ msgstr "Salvar tela para arquivo"
 msgid "Save selected"
 msgstr "Salvar seleção"
 
-#: dialog.c:337
+#: dialog.c:351
 msgid "Save selection to file"
 msgstr "Salvar seleção para arquivo"
 
@@ -2074,7 +2074,7 @@ msgstr ""
 "name did not match the issuer name of the current certificate. Only "
 "displayed when the -issuer_checks option is set."
 
-#: dialog.c:229
+#: dialog.c:243
 msgid "The file already exists. Replace it?"
 msgstr "O arquivo já existe, substituir?"
 
@@ -2169,7 +2169,7 @@ msgstr ""
 msgid "There is not enough space available for data on the host."
 msgstr "Não existe espaço suficiente no host para os dados."
 
-#: tools.c:219
+#: tools.c:301
 #, c-format
 msgid "There's no available settings for charset \"%s\""
 msgstr "Não encontrei configuração para a tabela de caracteres \"%s\""
@@ -2178,7 +2178,7 @@ msgstr "Não encontrei configuração para a tabela de caracteres \"%s\""
 msgid "This is a host program error."
 msgstr "Este é um erro no programa do host."
 
-#: dialog.c:458
+#: dialog.c:472
 msgid ""
 "This program is free software; you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -2298,7 +2298,7 @@ msgstr "Tente de novo com o mesmo arquivo."
 msgid "Turquoise"
 msgstr "Turquesa"
 
-#: dialog.c:50
+#: dialog.c:64
 msgid "UTF-8"
 msgstr "UTF-8"
 
@@ -2463,7 +2463,7 @@ msgstr "Use the keys +/- from keypad to select editable fields"
 msgid "Variable"
 msgstr "Variável"
 
-#: dialog.c:498
+#: dialog.c:512
 #, c-format
 msgid "Version %s - Revision %s"
 msgstr "Versão %s - Revisão %s"
@@ -2480,7 +2480,7 @@ msgstr "Aguardando resposta do pedido de download"
 msgid "Waiting for PUT response"
 msgstr "Aguardando resposta do pedido de upload"
 
-#: dialog.c:51
+#: dialog.c:65
 msgid "Western Europe (ISO 8859-1)"
 msgstr "Europa ocidental (ISO 8859-1)"
 
@@ -2492,7 +2492,7 @@ msgstr "Branco"
 msgid "Window"
 msgstr "Janela"
 
-#: dialog.c:52
+#: dialog.c:66
 msgid "Windows Western languages (CP1252)"
 msgstr "Windows ocidental (CP1252)"
 
@@ -2745,7 +2745,7 @@ msgstr "ioctlsocket(FIONBIO) failed."
 msgid "setsockopt(SO_OOBINLINE) has failed"
 msgstr "setsockopt(SO_OOBINLINE) has failed"
 
-#: dialog.c:514
+#: dialog.c:528
 msgid "translator-credits"
 msgstr "translator-credits"
 
