@@ -565,6 +565,7 @@ void pw3270_dbus_asc2ebc(PW3270Dbus *object, const gchar *from, DBusGMethodInvoc
 
 void pw3270_dbus_filetransfer(PW3270Dbus *object, const gchar *local, const gchar *remote, int flags, int lrecl, int blksize, int primspace, int secspace, int dft, DBusGMethodInvocation *context)
 {
+	/*
 	dbus_g_method_return(context,
 			v3270_transfer_file(
 							v3270_get_default_widget(),
@@ -577,6 +578,7 @@ void pw3270_dbus_filetransfer(PW3270Dbus *object, const gchar *local, const gcha
 							secspace,
 							dft
 			));
+	*/
 	return;
 }
 

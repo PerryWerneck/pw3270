@@ -597,7 +597,9 @@ RexxMethod5(RexxStringObject, rx3270_method_get_filename, CSELF, sessionPtr, CST
         }
     }
 
+	debug("%s(%s)","rx3270_method_get_filename",action_name);
     ret = ((session *) sessionPtr)->file_chooser_dialog(id, title, extension,filename);
+	debug("%s(%s)","rx3270_method_get_filename",action_name);
 
 	return context->String(ret.c_str());
 }

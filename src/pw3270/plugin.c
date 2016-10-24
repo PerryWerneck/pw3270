@@ -66,6 +66,7 @@
 #ifdef WIN32
 	// http://msdn.microsoft.com/en-us/library/windows/desktop/ms680621(v=vs.85).aspx
 	errorMode = SetErrorMode(1);
+	SetErrorMode(errorMode);
 #endif // WIN32
 
 	name = g_dir_read_name(dir);
@@ -82,7 +83,7 @@
 			if(!handle)
 			{
 				g_message("Error \"%s\" loading %s",g_module_error(),filename);
-/*
+
 			    gchar       * text  = g_strdup(g_module_error());
 			    gchar       * name  = g_path_get_basename(filename);
                 GtkWidget   * popup = gtk_message_dialog_new_with_markup(
@@ -102,11 +103,10 @@
 
 				g_free(text);
 				g_free(name);
-*/
 			}
 			else
 			{
-				int (*init)();
+				int (*init)() = NULL;
 
 				if(g_module_symbol(handle, "pw3270_plugin_init", (gpointer) &init))
 				{
@@ -242,7 +242,7 @@
 
 	for(f=0;f<nPlugin;f++)
 	{
-		int (*stop)(GtkWidget *, GtkWidget *);
+		int (*stop)(GtkWidget *, GtkWidget *) = NULL;
 
 		if(g_module_symbol(hPlugin[f], "pw3270_plugin_stop", (gpointer) &stop))
 			stop(widget,pw3270_get_terminal_widget(widget));
@@ -260,7 +260,7 @@
 	trace("Unloading %d plugin(s)",nPlugin);
 	for(f=0;f<nPlugin;f++)
 	{
-		void (*deinit)(void);
+		void (*deinit)(void) = NULL;
 
 		if(g_module_symbol(hPlugin[f], "pw3270_plugin_deinit", (gpointer) &deinit))
 			deinit();
@@ -288,7 +288,7 @@
 
 	for(f=0;f<nPlugin;f++)
 	{
-		int (*setup)(GtkAction *action, GtkWidget *widget);
+		int (*setup)(GtkAction *action, GtkWidget *widget) = NULL;
 
 		if(g_module_symbol(hPlugin[f], fname, (gpointer) &setup))
 		{
@@ -305,7 +305,7 @@
 
 	for(f=0;f<nPlugin;f++)
 	{
-		void (*call)(GtkAction *action, GtkWidget *widget);
+		void (*call)(GtkAction *action, GtkWidget *widget) = NULL;
 
 		if(g_module_symbol(hPlugin[f], fname, (gpointer) &call))
 		{

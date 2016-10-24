@@ -117,28 +117,7 @@ extern "C" {
 		{
 /*
 			// No classname, ask user
-			static const struct _list
-			{
-				const gchar *name;
-				const gchar *pattern;
-			} list[] =
-			{
-				{ N_( "Java class file" ),	"*.class" }
-			};
-
-			GtkFileFilter * filter[G_N_ELEMENTS(list)+1];
-			unsigned int f;
-
-			memset(filter,0,sizeof(filter));
-
-			for(f=0;f<G_N_ELEMENTS(list);f++)
-			{
-				filter[f] = gtk_file_filter_new();
-				gtk_file_filter_set_name(filter[f],gettext(list[f].name));
-				gtk_file_filter_add_pattern(filter[f],list[f].pattern);
-			}
-
-			filename = pw3270_get_filename(widget,"java","script",filter,_( "Select script to run" ));
+			filename = pw3270_file_chooser(GTK_FILE_CHOOSER_ACTION_OPEN, "java", _( "Select script to run" ), "", "class");
 
 			if(filename)
 			{

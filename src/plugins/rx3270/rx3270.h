@@ -34,12 +34,6 @@
  #include <lib3270/config.h>
  #include <stdint.h>
 
- #ifdef HAVE_OOREXXAPI_H
-	#include <oorexxapi.h>
- #else
-	#error Only Rexx 4
- #endif
-
  #include <errno.h>
  #include <stdio.h>
  #include <lib3270.h>
@@ -58,11 +52,13 @@
 
 #ifdef WIN32
 	#define REXX_DEFAULT_CHARSET "CP1252"
+	#define int8_t		REXX_INT8_T
+	#define ssize_t		REXX_SSIZE_T
 #else
 	#define REXX_DEFAULT_CHARSET "UTF-8"
 #endif // WIN32
 
-// #include <exception>
+#include <oorexxapi.h>
 
 /*---[ Rexx entry points ]-----------------------------------------------------------------------------------*/
 

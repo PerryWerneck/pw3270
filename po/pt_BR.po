@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-20 08:58-0200\n"
+"POT-Creation-Date: 2016-10-24 14:58-0200\n"
 "PO-Revision-Date: 2016-05-31 11:16-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <perry.werneck@gmail.com>\n"
@@ -150,6 +150,11 @@ msgstr "<%s> precisa do atributo %s"
 #, c-format
 msgid "<%s> should be on toplevel"
 msgstr "<%s> deve estar no primeiro nível"
+
+#: plugin.c:99
+#, fuzzy, c-format
+msgid "<b>%s</b>\n"
+msgstr "%s<b>%s</b> para %s"
 
 #: v3270/widget.c:238
 msgid ""
@@ -442,6 +447,16 @@ msgstr "Não foi possível carregar %s"
 #: dialog.c:379
 msgid "Can't load file"
 msgstr "Não foi possível carregar arquivo"
+
+#: plugin.c:95
+#, fuzzy
+msgid "Can't load plugin"
+msgstr "Não foi possível carregar arquivo"
+
+#: plugin.c:93
+#, fuzzy, c-format
+msgid "Can't load plugin %s"
+msgstr "Não foi possível carregar %s"
 
 #: main.c:297
 msgid "Can't open file"
@@ -3167,14 +3182,6 @@ msgstr "translator-credits"
 
 #~ msgid "Invalid charset entry '%s' (#%d)"
 #~ msgstr "Invalid charset entry '%s' (#%d)"
-
-#, fuzzy
-#~ msgid "Can't load plugin"
-#~ msgstr "Não foi possível carregar arquivo"
-
-#, fuzzy
-#~ msgid "Can't load plugin %s"
-#~ msgstr "Não foi possível carregar %s"
 
 #, fuzzy
 #~ msgid "Script"

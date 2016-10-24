@@ -333,7 +333,7 @@
 	{
 		RexxArrayObject rxArgs;
 
-		trace("%s start",__FUNCTION__);
+		trace("%s %s(%s)",__FUNCTION__,filename,args);
 
 		if(args)
 		{
@@ -354,7 +354,9 @@
 
 		v3270_set_script(widget,'R',TRUE);
 		script_name = g_path_get_basename(filename);
+		trace("%s: Calling",filename);
 		RexxObjectPtr result = threadContext->CallProgram(filename, rxArgs);
+		trace("%s: Returns",filename);
 		g_free(script_name);
 		script_name = NULL;
 		v3270_set_script(widget,'R',FALSE);
@@ -415,6 +417,7 @@ extern "C"
 {
  LIB3270_EXPORT void pw3270_action_rexx_activated(GtkAction *action, GtkWidget *widget)
  {
+
 	gchar *filename = (gchar *) g_object_get_data(G_OBJECT(action),"src");
 
 	lib3270_trace_event(v3270_get_session(widget),"Action %s activated on widget %p",gtk_action_get_name(action),widget);
@@ -441,41 +444,22 @@ extern "C"
 
 	pw3270_set_action_state(action,FALSE);
 
-	if(filename)
+	if(filename && *filename)
 	{
 		// Has filename, call it directly
 		call_rexx_script(action,widget,filename);
 	}
 	else
 	{
-		// No filename, ask user
-		static const struct _list
-		{
-			const gchar *name;
-			const gchar *pattern;
-		} list[] =
-		{
-			{ N_( "Rexx script file" ),	"*.rex" },
-			{ N_( "Rexx class file" ),	"*.cls" }
-		};
 
-		GtkFileFilter * filter[G_N_ELEMENTS(list)+1];
-		unsigned int f;
-
-		memset(filter,0,sizeof(filter));
-
-		for(f=0;f<G_N_ELEMENTS(list);f++)
-		{
-			filter[f] = gtk_file_filter_new();
-			gtk_file_filter_set_name(filter[f],gettext(list[f].name));
-			gtk_file_filter_add_pattern(filter[f],list[f].pattern);
-		}
-
-		filename = pw3270_get_filename(widget,"rexx","script",filter,_( "Select script to run" ));
+		filename = pw3270_file_chooser(GTK_FILE_CHOOSER_ACTION_OPEN, "rexx", _( "Select script to run" ), NULL, "rex");
 
 		if(filename)
 		{
-			call_rexx_script(action,widget,filename);
+			if(*filename)
+			{
+				call_rexx_script(action,widget,filename);
+			}
 			g_free(filename);
 		}
 
@@ -758,6 +742,7 @@ int plugin::popup_dialog(LIB3270_NOTIFY id , const char *title, const char *mess
 string plugin::file_chooser_dialog(int action, const char *title, const char *extension, const char *filename)
 {
 	string	  rc;
+
     gchar	* ptr = pw3270_file_chooser((GtkFileChooserAction) action, script_name ? script_name : "rexx", title, filename, extension);
 
     if(ptr)

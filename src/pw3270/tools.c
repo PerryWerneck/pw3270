@@ -143,10 +143,90 @@ LIB3270_EXPORT gboolean pw3270_set_toggle_by_name(GtkWidget *widget, const gchar
 	return TRUE;
 }
 
+/*
 LIB3270_EXPORT gchar * pw3270_get_filename(GtkWidget *widget, const gchar *group, const gchar *key, GtkFileFilter **filter, const gchar *title)
 {
-	gchar 		* filename = NULL;
-	gchar		* ptr;
+
+	gchar * filename = pw3270_get_string(widget,group,key,NULL);
+
+#if defined(_WIN32)
+
+	GThread 	* thd;
+	struct file	  fl;
+	GtkWidget	* dialog	= gtk_widget_get_toplevel(widget);
+	GdkWindow	* win		= gtk_widget_get_window(GTK_WIDGET(dialog));
+
+	gtk_widget_set_sensitive(GTK_WIDGET(dialog),FALSE);
+
+	memset(&fl,0,sizeof(fl));
+	fl.ofn.lStructSize		= sizeof(fl.ofn);
+	fl.ofn.hwndOwner		= GDK_WINDOW_HWND(win);
+	fl.ofn.lpstrFile		= fl.szName;
+
+	fl.ofn.lpstrTitle		= title;
+
+	// Set lpstrFile[0] to '\0' so that GetOpenFileName does not
+	// use the contents of szFile to initialize itself.
+	fl.ofn.lpstrFile[0] 	= '\0';
+
+	fl.ofn.nMaxFile 		= sizeof(fl.szName);
+
+	// Monta lista de arquivos.
+//	va_list		  args;
+//	size_t		  ix		= 0;
+
+	fl.ofn.lpstrFilter = (char *) g_malloc0(4096);
+
+	va_start (args, filter);
+	while(filter) {
+
+		filter = gettext(filter);
+		size_t sz = strlen(filter)+1;
+
+		if(ix+sz > 4095)
+			break;
+
+		debug("%s",filter);
+
+		memcpy(((char *) fl.ofn.lpstrFilter)+ix,filter,sz);
+		ix += sz;
+		filter = va_arg(args, const char *);
+	}
+	va_end (args);
+	debug("%s",fl.ofn.lpstrFilter);
+	fl.ofn.nFilterIndex		= 1;
+
+	fl.ofn.lpstrInitialDir	= NULL;
+	fl.ofn.nMaxFileTitle	= 0;
+
+	// Guarda o valor atual
+	if(filename)
+	{
+		strncpy(fl.szName,filename,fl.ofn.nMaxFile);
+		g_free(filename);
+		filename = NULL;
+	}
+
+	fl.action = GTK_FILE_CHOOSER_ACTION_OPEN;
+
+	thd = g_thread_new("GetFileName",(GThreadFunc) select_file, &fl);
+
+	fl.enabled = TRUE;
+	while(fl.enabled) {
+		g_main_context_iteration(NULL,TRUE);
+	}
+
+	g_thread_unref(thd);
+
+	if(fl.ok) {
+		filename = g_strdup(fl.szName);
+	}
+
+	g_free( ((char *) fl.ofn.lpstrFilter) );
+	gtk_widget_set_sensitive(GTK_WIDGET(dialog),TRUE);
+
+#else
+
 	GtkWidget 	* dialog = gtk_file_chooser_dialog_new(	title,
 														GTK_WINDOW(gtk_widget_get_toplevel(widget)),
 														GTK_FILE_CHOOSER_ACTION_OPEN,
@@ -164,28 +244,30 @@ LIB3270_EXPORT gchar * pw3270_get_filename(GtkWidget *widget, const gchar *group
 
 	gtk_file_chooser_set_show_hidden(GTK_FILE_CHOOSER(dialog),FALSE);
 
-	ptr = pw3270_get_string(widget,group,key,NULL);
-	if(ptr)
+	if(filename)
 	{
-		gtk_file_chooser_set_uri(GTK_FILE_CHOOSER(dialog),ptr);
-		g_free(ptr);
+		gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog),filename);
+		g_free(filename);
+		filename = NULL;
 	}
 
 	if(gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
 	{
-		gchar *uri 		= gtk_file_chooser_get_uri(GTK_FILE_CHOOSER(dialog));
-
 		filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
-
-		pw3270_set_string(widget,group,key,uri);
-		g_free(uri);
-
 	}
 
 	gtk_widget_destroy(dialog);
 
+#endif
+
+	if(filename && *filename)
+	{
+		pw3270_set_string(widget,group,key,filename);
+	}
+
 	return filename;
 }
+*/
 
 LIB3270_EXPORT gchar * pw3270_get_datadir(const gchar *first_element, ...)
 {

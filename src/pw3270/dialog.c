@@ -33,6 +33,20 @@
  #include "globals.h"
  #include <v3270.h>
 
+ #if defined WIN32
+	#include <gdk/gdkwin32.h>
+
+ 	struct file {
+		OPENFILENAME		 	ofn;
+		gboolean				enabled;
+		char				  	szName[260];	// buffer for file name
+		GtkFileChooserAction	action;
+		BOOL					ok;
+	};
+
+
+ #endif // WIN32
+
  #if defined(HAVE_LIBSSL)
 	#include <openssl/ssl.h>
 	#include <openssl/err.h>
@@ -520,8 +534,90 @@
 	g_free(info);
  }
 
+#ifdef WIN32
+static gpointer select_file(struct file *fl) {
+
+
+	switch(fl->action) {
+	case GTK_FILE_CHOOSER_ACTION_SAVE:	// Receber arquivo
+										// https://msdn.microsoft.com/en-us/library/windows/desktop/ms646839(v=vs.85).aspx
+										// https://msdn.microsoft.com/en-us/library/windows/desktop/ms646829(v=vs.85).aspx#open_file
+		fl->ofn.Flags = OFN_OVERWRITEPROMPT | OFN_CREATEPROMPT | OFN_HIDEREADONLY;
+		fl->ok = GetSaveFileName(&fl->ofn);
+		break;
+
+	case GTK_FILE_CHOOSER_ACTION_OPEN:	// Enviar arquivo
+										// https://msdn.microsoft.com/en-us/library/windows/desktop/ms646928(v=vs.85).aspx
+		fl->ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
+		fl->ok = GetOpenFileName(&fl->ofn);
+		break;
+	}
+
+	fl->enabled = FALSE;
+
+	return 0;
+}
+#endif // _WIN32
+
  LIB3270_EXPORT gchar * pw3270_file_chooser(GtkFileChooserAction action, const gchar *name,  const gchar *title, const gchar *file, const gchar *ext)
  {
+    gchar       * filename      = NULL;
+
+#if defined(_WIN32)
+
+	GThread 	* thd;
+	struct file	  fl;
+	GtkWidget	* dialog	= pw3270_get_toplevel();
+	GdkWindow	* win		= gtk_widget_get_window(GTK_WIDGET(dialog));
+
+	gtk_widget_set_sensitive(GTK_WIDGET(dialog),FALSE);
+
+	memset(&fl,0,sizeof(fl));
+	fl.ofn.lStructSize		= sizeof(fl.ofn);
+	fl.action				= action;
+	fl.ofn.hwndOwner		= GDK_WINDOW_HWND(win);
+	fl.ofn.lpstrFile		= fl.szName;
+	fl.ofn.lpstrTitle		= title;
+
+	// Set lpstrFile[0] to '\0' so that GetOpenFileName does not
+	// use the contents of szFile to initialize itself.
+	fl.ofn.lpstrFile[0] 	= '\0';
+	fl.ofn.nMaxFile 		= sizeof(fl.szName);
+
+	fl.ofn.lpstrInitialDir	= NULL;
+	fl.ofn.nMaxFileTitle	= 0;
+
+	// Guarda o valor atual
+    if(file && *file)
+    {
+		strncpy(fl.szName,file,fl.ofn.nMaxFile);
+    }
+    else
+    {
+        gchar *ptr = get_string_from_config("files",name,"");
+        if(*ptr)
+			strncpy(fl.szName,ptr,fl.ofn.nMaxFile);
+        else
+			fl.ofn.lpstrInitialDir = g_get_user_special_dir(G_USER_DIRECTORY_DOCUMENTS);
+        g_free(ptr);
+    }
+
+	thd = g_thread_new("GetFileName",(GThreadFunc) select_file, &fl);
+
+	fl.enabled = TRUE;
+	while(fl.enabled) {
+		g_main_context_iteration(NULL,TRUE);
+	}
+
+	g_thread_unref(thd);
+
+	if(fl.ok) {
+		filename = g_strdup(fl.szName);
+	}
+
+	gtk_widget_set_sensitive(GTK_WIDGET(dialog),TRUE);
+
+#else
     static const struct _btn
     {
             const gchar          * button;
@@ -537,7 +633,6 @@
     GtkWidget	* dialog;
     gchar		* ptr;
     const gchar * button        = GTK_STOCK_OK;
-    gchar       * filename      = NULL;
     int           f;
 
     for(f=0;f<G_N_ELEMENTS(btn);f++)
@@ -562,7 +657,7 @@
         g_signal_connect(GTK_FILE_CHOOSER(dialog), "confirm-overwrite", G_CALLBACK(confirm_overwrite), G_OBJECT(dialog));
     }
 
-    if(file)
+    if(file && *file)
     {
         gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog),file);
     }
@@ -579,11 +674,13 @@
     if(gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
     {
         filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
-        if(filename)
-            set_string_to_config("files",name,"%s",filename);
     }
 
     gtk_widget_destroy(dialog);
+#endif // WIN32
+
+	if(filename && *filename)
+		set_string_to_config("files",name,"%s",filename);
 
     return filename;
  }
