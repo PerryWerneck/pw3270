@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-24 17:44-0200\n"
-"PO-Revision-Date: 2016-05-31 11:16-0300\n"
+"POT-Creation-Date: 2016-10-25 10:31-0200\n"
+"PO-Revision-Date: 2016-10-25 10:47-0200\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <perry.werneck@gmail.com>\n"
 "Language: pt_BR\n"
@@ -152,9 +152,9 @@ msgid "<%s> should be on toplevel"
 msgstr "<%s> deve estar no primeiro nível"
 
 #: plugin.c:99
-#, fuzzy, c-format
+#, c-format
 msgid "<b>%s</b>\n"
-msgstr "%s<b>%s</b> para %s"
+msgstr "<b>%s</b>\n"
 
 #: v3270/widget.c:238
 msgid ""
@@ -262,7 +262,7 @@ msgid ""
 "An error occurred in the file transfer, which may be an error in the data "
 "being transferred, or an unidentified system error."
 msgstr ""
-"Um erro ocorreu na tranferência de arquivos, pode ser um erro nos dados que "
+"Um erro ocorreu na transferência de arquivos, pode ser um erro nos dados "
 "sendo transferidos ou um erro de sistema não identificado."
 
 #: v3270/security.c:161
@@ -449,14 +449,13 @@ msgid "Can't load file"
 msgstr "Não foi possível carregar arquivo"
 
 #: plugin.c:95
-#, fuzzy
 msgid "Can't load plugin"
-msgstr "Não foi possível carregar arquivo"
+msgstr "Não foi possível carregar plugin"
 
 #: plugin.c:93
-#, fuzzy, c-format
+#, c-format
 msgid "Can't load plugin %s"
-msgstr "Não foi possível carregar %s"
+msgstr "Não foi possível carregar plugin %s"
 
 #: main.c:297
 msgid "Can't open file"
