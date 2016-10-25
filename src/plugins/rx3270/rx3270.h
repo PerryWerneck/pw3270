@@ -136,6 +136,7 @@
  REXX_METHOD_PROTOTYPE(rx3270_method_set_cursor_addr);
  REXX_METHOD_PROTOTYPE(rx3270_method_input_text);
  REXX_METHOD_PROTOTYPE(rx3270_method_get_display_charset);
+ REXX_METHOD_PROTOTYPE(rx3270_method_set_display_charset);
  REXX_METHOD_PROTOTYPE(rx3270_method_get_host_charset);
  REXX_METHOD_PROTOTYPE(rx3270_method_set_host_charset);
  REXX_METHOD_PROTOTYPE(rx3270_method_set_unlock_delay);

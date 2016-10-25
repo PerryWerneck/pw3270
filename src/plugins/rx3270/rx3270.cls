@@ -95,8 +95,11 @@
 ::METHOD GETFILENAME EXTERNAL "LIBRARY rx3270 rx3270_method_get_filename"
 
 ::METHOD GETDISPLAYCHARSET EXTERNAL "LIBRARY rx3270 rx3270_method_get_display_charset"
+::METHOD SETDISPLAYCHARSET EXTERNAL "LIBRARY rx3270 rx3270_method_set_display_charset"
+
 ::METHOD GETHOSTCHARSET EXTERNAL "LIBRARY rx3270 rx3270_method_get_host_charset"
 ::METHOD SETHOSTCHARSET EXTERNAL "LIBRARY rx3270 rx3270_method_set_host_charset"
+
 ::METHOD SETUNLOCKDELAY EXTERNAL "LIBRARY rx3270 rx3270_method_set_unlock_delay"
 
 ::method waitForStringAt

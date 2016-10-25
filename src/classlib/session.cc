@@ -219,6 +219,8 @@
 	// Object settings
 	void session::set_display_charset(const char *remote, const char *local)
 	{
+		trace("%s(%s,%s)",__FUNCTION__,remote,local);
+
 #ifdef HAVE_ICONV
 		string display_charset = this->get_display_charset();
 
@@ -230,6 +232,8 @@
 
 		if(!remote)
 			remote = display_charset.c_str();
+
+		trace("%s remote=%s local=%s",__FUNCTION__,remote,local);
 
 		if(strcmp(local,remote))
 		{

@@ -145,6 +145,8 @@ RexxMethodEntry rx3270_methods[] =
     REXX_METHOD(rx3270_method_input_text,   		rx3270_method_input_text		    ),
 
 	REXX_METHOD(rx3270_method_get_display_charset,	rx3270_method_get_display_charset	),
+	REXX_METHOD(rx3270_method_set_display_charset,	rx3270_method_set_display_charset	),
+
 	REXX_METHOD(rx3270_method_get_host_charset,		rx3270_method_get_host_charset		),
 	REXX_METHOD(rx3270_method_set_host_charset,		rx3270_method_set_host_charset		),
 

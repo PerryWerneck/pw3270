@@ -621,6 +621,12 @@ RexxMethod1(RexxStringObject, rx3270_method_get_display_charset, CSELF, sessionP
 	return context->String(ret.c_str());
 }
 
+RexxMethod2(int, rx3270_method_set_display_charset, CSELF, sessionPtr, CSTRING, text)
+{
+    ((session *) sessionPtr)->set_display_charset(NULL,text);
+	return 0;
+}
+
 RexxMethod2(int, rx3270_method_set_unlock_delay, CSELF, sessionPtr, int, delay)
 {
 	session *hSession = (session *) sessionPtr;
