@@ -93,7 +93,13 @@ zend_object_value tn3270_create_handler(zend_class_entry *type TSRMLS_DC)
 
 	zend_object_std_init( &(obj->std), type TSRMLS_CC );
 
-	object_properties_init((zend_object*) &(obj->std), type);
+	// http://stackoverflow.com/questions/14105529/writing-a-c-extension-for-php-5-4-example-code-is-obsolete
+	// object_properties_init((zend_object*) &(obj->std), type);
+#if PHP_VERSION_ID < 50399
+    zend_hash_copy(obj->std.properties, &(type->default_properties),(copy_ctor_func_t) zval_add_ref, NULL, sizeof(zval*));
+#else
+    object_properties_init(&obj->std, type);
+#endif
 
     retval.handle	= zend_objects_store_put(obj, NULL, tn3270_free_storage, NULL TSRMLS_CC);
     retval.handlers	= &tn3270_object_handlers;
