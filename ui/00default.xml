@@ -211,7 +211,6 @@
 	<accelerator action='DeleteWord' key='<Ctrl>w' group='online' />
 	<accelerator action='Delete' key='Delete' group='online' />
 	<accelerator action='erase' target='char' key='BackSpace' group='online' />
-	<accelerator action='erase' target='eof' key='End' group='online' />
 
 	<accelerator action='SysREQ' key='Sys_Req' group='online' />
 	<accelerator action='SysREQ' key='<shift>Print' group='online' />
@@ -237,7 +236,8 @@
 
 	<accelerator action='dup' key='<Shift>KP_Multiply' group='online' />
 
-	<!-- accelerator name="newline" action='newline' key='Control_R' group='online' />
+	<!-- accelerator action='fieldend' key='End' group='online' / -->
+	<!-- accelerator name="newline" action='newline' key='Control_R' group='online' / -->
 
 	<!--- Mouse actions --->
 	<scroll direction='up' action='pfkey' id='7' />
