@@ -28,7 +28,7 @@
 %define _office	  	0
 %define _php		0
 %define _ooRexx		1
-%define _java		1
+%define _java		0
 %define _python		1
 
 %define _distro		linux
@@ -484,8 +484,10 @@ rm -rf %{buildroot}
 %{_datadir}/@PACKAGE@/ui/98trace.xml
 %{_datadir}/@PACKAGE@/ui/99debug.xml
 %{_libdir}/lib@PACKAGE@.so
-%{_libdir}/@PACKAGE@class.a
 %{_libdir}/pkgconfig/@PACKAGE@.pc
+
+%{_libdir}/@PACKAGE@cpp.a
+%{_includedir}/@PACKAGE@cpp.h
 
 %dir %{_datadir}/@PACKAGE@/sample
 %{_datadir}/@PACKAGE@/sample/*

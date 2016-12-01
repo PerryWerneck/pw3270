@@ -25,7 +25,7 @@
 #
 
 PACKAGE=@PACKAGE_NAME@
-LIBNAME=$(PACKAGE)class.a
+LIBNAME=$(PACKAGE)cpp.a
 
 #---[ Sources ]----------------------------------------------------------------
 
@@ -92,8 +92,8 @@ $(BINRLS)/$(LIBNAME): $(foreach SRC, $(basename $(CLASS_SRC)), $(OBJRLS)/$(SRC).
 	@ar rs $@ $^
 
 install: Release
-	@$(MKDIR) $(DESTDIR)$(datarootdir)/$(PACKAGE)
-	@$(INSTALL_DATA) $(BINRLS)/$(LIBNAME) $(DESTDIR)$(datarootdir)/$(PACKAGE)
+	@$(MKDIR) $(DESTDIR)$(libdir)
+	@$(INSTALL_DATA) $(BINRLS)/$(LIBNAME) $(DESTDIR)$(libdir)
 
 #---[ Debug targets ]----------------------------------------------------------
 
@@ -117,7 +117,8 @@ install-sdk: $(BINRLS)/$(LIBNAME)
 	@$(MKDIR) $(DESTDIR)$(datarootdir)/$(PACKAGE)/sample/classlib
 	@$(INSTALL_DATA) *.cc $(DESTDIR)$(datarootdir)/$(PACKAGE)/sample/classlib
 	@$(MKDIR) $(DESTDIR)/$(includedir)/pw3270
-	@$(INSTALL_DATA) ../include/pw3270/class.h $(DESTDIR)/$(includedir)/pw3270
+	@$(INSTALL_DATA) ../include/pw3270/class.h $(DESTDIR)/$(includedir)/pw3270 
+	@$(LN_S) ./pw3270/class.h $(DESTDIR)/$(includedir)/$(PACKAGE)cpp.h
 	@$(MKDIR) $(DESTDIR)$(libdir)
 	@$(INSTALL_DATA) $(BINRLS)/$(LIBNAME) $(DESTDIR)$(libdir)
 
