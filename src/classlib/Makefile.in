@@ -25,7 +25,7 @@
 #
 
 PACKAGE=@PACKAGE_NAME@
-LIBNAME=$(PACKAGE)cpp.a
+LIBNAME=lib$(PACKAGE)cpp.a
 
 #---[ Sources ]----------------------------------------------------------------
 

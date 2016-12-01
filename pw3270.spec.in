@@ -486,7 +486,7 @@ rm -rf %{buildroot}
 %{_libdir}/lib@PACKAGE@.so
 %{_libdir}/pkgconfig/@PACKAGE@.pc
 
-%{_libdir}/@PACKAGE@cpp.a
+%{_libdir}/lib@PACKAGE@cpp.a
 %{_includedir}/@PACKAGE@cpp.h
 
 %dir %{_datadir}/@PACKAGE@/sample
