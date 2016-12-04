@@ -84,16 +84,36 @@ $(OBJRLS)/%.o: %.cc $(DEPENDS)
 
 #---[ Release targets ]--------------------------------------------------------
 
-Release: $(BINRLS)/$(LIBNAME)
+Release: \
+	$(BINRLS)/$(LIBNAME)
 
-$(BINRLS)/$(LIBNAME): $(foreach SRC, $(basename $(CLASS_SRC)), $(OBJRLS)/$(SRC).o)
+$(BINRLS)/$(LIBNAME): \
+	$(foreach SRC, $(basename $(CLASS_SRC)), $(OBJRLS)/$(SRC).o)
+
 	@echo "  CCLD `basename $@`"
 	@$(MKDIR) `dirname $@`
 	@ar rs $@ $^
 
-install: Release
+install: \
+	Release
+
 	@$(MKDIR) $(DESTDIR)$(libdir)
 	@$(INSTALL_DATA) $(BINRLS)/$(LIBNAME) $(DESTDIR)$(libdir)
+
+zip: \
+	lib$(PACKAGE)cpp-@PACKAGE_VERSION@.@PACKAGE_REVISION@.@host_cpu@.zip
+
+lib$(PACKAGE)cpp-@PACKAGE_VERSION@.@PACKAGE_REVISION@.@host_cpu@.zip: \
+	$(BINRLS)/$(LIBNAME)
+
+	@rm -f $@
+
+	@$(INSTALL_DATA) ../include/pw3270/class.h $(BINRLS)/@PACKAGE_NAME@cpp.h
+
+	@zip -9 -j $@ \
+		$(BINRLS)/$(LIBNAME) \
+		$(BINRLS)/@PACKAGE_NAME@cpp.h
+
 
 #---[ Debug targets ]----------------------------------------------------------
 
