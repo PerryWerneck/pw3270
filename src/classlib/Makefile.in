@@ -101,9 +101,9 @@ install: \
 	@$(INSTALL_DATA) $(BINRLS)/$(LIBNAME) $(DESTDIR)$(libdir)
 
 zip: \
-	lib$(PACKAGE)cpp-@PACKAGE_VERSION@.@PACKAGE_REVISION@.@host_cpu@.zip
+	lib$(PACKAGE)cpp-@PACKAGE_VERSION@.@PACKAGE_REVISION@.@host@.zip
 
-lib$(PACKAGE)cpp-@PACKAGE_VERSION@.@PACKAGE_REVISION@.@host_cpu@.zip: \
+lib$(PACKAGE)cpp-@PACKAGE_VERSION@.@PACKAGE_REVISION@.@host@.zip: \
 	$(BINRLS)/$(LIBNAME)
 
 	@rm -f $@
