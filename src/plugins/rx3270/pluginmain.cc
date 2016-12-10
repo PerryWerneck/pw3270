@@ -395,10 +395,6 @@ extern "C"
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
- static session * factory(const char *name)
- {
-    return session::create_local(lib3270_get_default_session_handle());
- }
 
  LIB3270_EXPORT int pw3270_plugin_start(GtkWidget *window, GtkWidget *terminal)
  {
@@ -407,7 +403,7 @@ extern "C"
 	g_mutex_init(&mutex);
 #endif // GTK_CHECK_VERSION
 
-	rx3270_set_factory_method(factory);
+	rx3270_set_session(lib3270_get_default_session_handle());
 
 	return 0;
  }

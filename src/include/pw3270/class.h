@@ -130,6 +130,7 @@
 		static session	* start(const char *name = 0);
 		static session	* create(const char *name = 0) throw (std::exception);
 		static session	* create_local(H3270 *hSession) throw (std::exception);
+		static session	* create_local() throw (std::exception);
 
 		static session	* get_default(void);
 		static bool		  has_default(void);
@@ -273,7 +274,6 @@
 		static session	* (*factory)(const char *name);
 
 		static session	* create_remote(const char *name) throw (std::exception);
-		static session	* create_local(void) throw (std::exception);
 
 #ifdef HAVE_ICONV
 		iconv_t			  conv2Local;

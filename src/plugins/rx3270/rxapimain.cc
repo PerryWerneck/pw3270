@@ -47,10 +47,21 @@
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
+ static H3270 * default_session = NULL;
+
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
-void rx3270_set_factory_method(PW3270_NAMESPACE::session * (* factory)(const char *))
+static PW3270_NAMESPACE::session * factory(const char *name)
 {
+	if(!default_session)
+		return PW3270_NAMESPACE::session::create_local();
+
+    return PW3270_NAMESPACE::session::create_local(default_session);
+}
+
+void rx3270_set_session(H3270 *session)
+{
+	default_session = session;
 	PW3270_NAMESPACE::session::set_plugin(factory);
 }
 

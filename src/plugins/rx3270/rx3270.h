@@ -151,7 +151,7 @@
 #endif
 
     LIB3270_EXPORT void rx3270_set_package_option(RexxOption *option);
-    LIB3270_EXPORT void rx3270_set_factory_method(PW3270_NAMESPACE::session * (*)(const char *));
+    LIB3270_EXPORT void rx3270_set_session(H3270 *hSession);
 
 #ifdef __cplusplus
 	}
