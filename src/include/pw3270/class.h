@@ -135,6 +135,8 @@
 		// Factory methods and settings
 		static session	* start(const char *name = 0);
 		static session	* create(const char *name = 0) throw (std::exception);
+		static session	* create_local(H3270 *hSession) throw (std::exception);
+
 		static session	* get_default(void);
 		static bool		  has_default(void);
 		static void		  set_plugin(session * (*factory)(const char *name));
@@ -254,8 +256,6 @@
 
 		string 					  get_3270_text(const char *str);
 		string 					  get_local_text(const char *str);
-
-		static session			* create_local(H3270 *hSession) throw (std::exception);
 
 	protected:
 		session();

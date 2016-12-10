@@ -115,11 +115,9 @@
  namespace PW3270_NAMESPACE
  {
 
- 	class local : public session, private module, private recursive_mutex
+ 	class local : public session, protected module, protected recursive_mutex
  	{
 	private:
-
-		H3270 * hSession;
 
 		// Lib3270 entry points
 		const char * 		(*_get_version)(void);
@@ -172,6 +170,10 @@
 
 		const char * 		(*_ebc2asc)(H3270 *hSession, unsigned char *buffer, int sz);
 		const char * 		(*_asc2ebc)(H3270 *hSession, unsigned char *buffer, int sz);
+
+	protected:
+
+		H3270 * hSession;
 
 		void load_methods() {
 
@@ -260,45 +262,10 @@
 
 		local() throw(std::exception) : module("lib3270",PACKAGE_VERSION)
 		{
-			H3270 * (*lib3270_new)(const char *) = (H3270 * (*)(const char *)) get_symbol("lib3270_session_new");
-
-			if(!lib3270_new)
-				throw exception("Can't find symbol %s","lib3270_session_new");
-
-			this->hSession = lib3270_new("");
-
-			load_methods();
-
-		}
-
-		local(H3270 * hSession) throw(std::exception) : module("lib3270",PACKAGE_VERSION)
-		{
-			this->hSession = hSession;
-			load_methods();
 		}
 
 		virtual ~local()
 		{
-			this->lock();
-
-			if(is_connected()) {
-				disconnect();
-			}
-
-			try
-			{
-				static void	(*session_free)(H3270 *h) = (void (*)(H3270 *)) get_symbol("lib3270_session_free");
-
-				if(session_free && this->hSession)
-					session_free(this->hSession);
-
-				this->hSession = 0;
-
-			}
-			catch(exception e) { }
-
-			this->unlock();
-
 		}
 
 		bool is_connected(void)
@@ -559,12 +526,65 @@
 
 	session	* session::create_local(void) throw (std::exception)
 	{
-		return new local();
+		class obj : public local {
+		public:
+			obj() : local() {
+
+				H3270 * (*lib3270_new)(const char *) = (H3270 * (*)(const char *)) get_symbol("lib3270_session_new");
+
+				if(!lib3270_new)
+					throw exception("Can't find symbol %s","lib3270_session_new");
+
+				this->hSession = lib3270_new("");
+
+				load_methods();
+
+			}
+
+			virtual ~obj() {
+
+				this->lock();
+
+				if(is_connected()) {
+					disconnect();
+				}
+
+				try
+				{
+					static void	(*session_free)(H3270 *h) = (void (*)(H3270 *)) get_symbol("lib3270_session_free");
+
+					if(session_free && this->hSession)
+						session_free(this->hSession);
+
+					this->hSession = 0;
+
+				}
+				catch(exception e) { }
+
+				this->unlock();
+
+			}
+		};
+
+		return new obj();
 	}
 
 	session	* session::create_local(H3270 *hSession) throw (std::exception)
 	{
-		return new local(hSession);
+		class obj : public local {
+		public:
+			obj(H3270 *hSession) : local()
+			{
+				this->hSession = hSession;
+				load_methods();
+			}
+
+			virtual ~obj() {
+			}
+
+		};
+
+		return new obj(hSession);
 	}
 
  }
