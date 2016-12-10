@@ -278,6 +278,7 @@
 
 		static session	* create_remote(const char *name) throw (std::exception);
 		static session	* create_local(void) throw (std::exception);
+		static session	* create_local(H3270 *hSession) throw (std::exception);
 
 #ifdef HAVE_ICONV
 		iconv_t			  conv2Local;

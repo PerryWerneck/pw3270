@@ -173,11 +173,8 @@
 		const char * 		(*_ebc2asc)(H3270 *hSession, unsigned char *buffer, int sz);
 		const char * 		(*_asc2ebc)(H3270 *hSession, unsigned char *buffer, int sz);
 
-	public:
+		void load_methods() {
 
-		local() throw(std::exception) : module("lib3270",PACKAGE_VERSION)
-		{
-			H3270 * (*lib3270_new)(const char *);
 			void	(*set_log_handler)(void (*loghandler)(H3270 *, const char *, int, const char *, va_list));
 			void 	(*set_trace_handler)( void (*handler)(H3270 *session, const char *fmt, va_list args) );
 
@@ -187,7 +184,6 @@
 				const char 	* name;
 			} call[] =
 			{
-				{ (void **) & lib3270_new,				"lib3270_session_new"				},
 				{ (void **) & set_log_handler,			"lib3270_set_log_handler"			},
 				{ (void **) & set_trace_handler,		"lib3270_set_trace_handler"			},
 
@@ -255,10 +251,30 @@
 			// Get Session handle, setup base callbacks
 			set_log_handler(loghandler);
 			set_trace_handler(tracehandler);
-			this->hSession = lib3270_new("");
 
 			set_display_charset();
 
+		}
+
+	public:
+
+		local() throw(std::exception) : module("lib3270",PACKAGE_VERSION)
+		{
+			H3270 * (*lib3270_new)(const char *) = (H3270 * (*)(const char *)) get_symbol("lib3270_session_new");
+
+			if(!lib3270_new)
+				throw exception("Can't find symbol %s","lib3270_session_new");
+
+			this->hSession = lib3270_new("");
+
+			load_methods();
+
+		}
+
+		local(H3270 * hSession) throw(std::exception) : module("lib3270",PACKAGE_VERSION)
+		{
+			this->hSession = hSession;
+			load_methods();
 		}
 
 		virtual ~local()
@@ -544,6 +560,11 @@
 	session	* session::create_local(void) throw (std::exception)
 	{
 		return new local();
+	}
+
+	session	* session::create_local(H3270 *hSession) throw (std::exception)
+	{
+		return new local(hSession);
 	}
 
  }
