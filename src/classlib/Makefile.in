@@ -53,6 +53,7 @@ MKDIR=@MKDIR_P@
 LN_S=@LN_S@
 INSTALL=@INSTALL@
 INSTALL_DATA=$(INSTALL) -m 644
+INSTALL_PROGRAM=@INSTALL_PROGRAM@
 
 #---[ Flags ]------------------------------------------------------------------
 
@@ -98,12 +99,15 @@ install: \
 	Release
 
 	@$(MKDIR) $(DESTDIR)$(libdir)
-	@$(INSTALL_DATA) $(BINRLS)/$(LIBNAME) $(DESTDIR)$(libdir)
+	@$(INSTALL_PROGRAM) $(BINRLS)/$(LIBNAME) $(DESTDIR)$(libdir)
+
+	@$(MKDIR) $(DESTDIR)$(includedir)
+	@$(INSTALL_DATA) ../include/pw3270/class.h $(DESTDIR)/$(includedir)/@PACKAGE_NAME@cpp.h
 
 zip: \
-	lib$(PACKAGE)cpp-@PACKAGE_VERSION@.@PACKAGE_REVISION@.@host_cpu@.zip
+	lib$(PACKAGE)cpp-@PACKAGE_VERSION@.@PACKAGE_REVISION@.@host@.zip
 
-lib$(PACKAGE)cpp-@PACKAGE_VERSION@.@PACKAGE_REVISION@.@host_cpu@.zip: \
+lib$(PACKAGE)cpp-@PACKAGE_VERSION@.@PACKAGE_REVISION@.@host@.zip: \
 	$(BINRLS)/$(LIBNAME)
 
 	@rm -f $@
