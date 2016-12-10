@@ -117,6 +117,18 @@
       <annotation name="org.freedesktop.DBus.GLib.Async" value="true"/>
       <arg type="i" name="addr" direction="out" />
     </method>
+    <method name="getScreenWidth">
+      <annotation name="org.freedesktop.DBus.GLib.Async" value="true"/>
+      <arg type="i" name="width" direction="out" />
+    </method>
+    <method name="getScreenHeight">
+      <annotation name="org.freedesktop.DBus.GLib.Async" value="true"/>
+      <arg type="i" name="height" direction="out" />
+    </method>
+    <method name="getScreenLength">
+      <annotation name="org.freedesktop.DBus.GLib.Async" value="true"/>
+      <arg type="i" name="len" direction="out" />
+    </method>
     <method name="getNextUnprotected">
       <annotation name="org.freedesktop.DBus.GLib.Async" value="true"/>
       <arg type="i" name="addr" direction="in" />

@@ -372,6 +372,16 @@
 	 */
 	LIB3270_EXPORT int lib3270_get_width(H3270 *h);
 
+	/**
+	 * Get current screen width in rows.
+	 *
+	 * @param h	Handle of the desired session.
+	 *
+	 * @return screen rows.
+	 *
+	 */
+	LIB3270_EXPORT int lib3270_get_height(H3270 *h);
+
 	LIB3270_EXPORT unsigned int lib3270_get_length(H3270 *h);
 
 	/**

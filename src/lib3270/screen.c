@@ -247,6 +247,12 @@ LIB3270_EXPORT int lib3270_get_width(H3270 *h)
 	return h->cols;
 }
 
+LIB3270_EXPORT int lib3270_get_height(H3270 *h)
+{
+	CHECK_SESSION_HANDLE(h);
+	return h->rows;
+}
+
 void update_model_info(H3270 *session, int model, int cols, int rows)
 {
 	if(model == session->model_num && session->maxROWS == rows && session->maxCOLS == cols)

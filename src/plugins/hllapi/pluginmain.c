@@ -319,8 +319,20 @@
 		send_result(source,lib3270_get_cursor_address(lib3270_get_default_session_handle()));
 		break;
 
-	case HLLAPI_PACKET_GET_CSTATE:
-		send_result(source,lib3270_get_connection_state(lib3270_get_default_session_handle()));
+	case HLLAPI_PACKET_GET_CURSOR:
+		send_result(source,lib3270_get_cursor_address(lib3270_get_default_session_handle()));
+		break;
+
+	case HLLAPI_PACKET_GET_WIDTH:
+		send_result(source,lib3270_get_width(lib3270_get_default_session_handle()));
+		break;
+
+	case HLLAPI_PACKET_GET_HEIGHT:
+		send_result(source,lib3270_get_height(lib3270_get_default_session_handle()));
+		break;
+
+	case HLLAPI_PACKET_GET_LENGTH:
+		send_result(source,lib3270_get_length(lib3270_get_default_session_handle()));
 		break;
 
 	case HLLAPI_PACKET_GET_PROGRAM_MESSAGE:

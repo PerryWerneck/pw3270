@@ -85,6 +85,10 @@
 	void		  pw3270_dbus_set_cursor_address(PW3270Dbus *object, int addr, DBusGMethodInvocation *context);
 	void		  pw3270_dbus_get_cursor_address(PW3270Dbus *object, DBusGMethodInvocation *context);
 
+	void		  pw3270_dbus_get_screen_width(PW3270Dbus *object, DBusGMethodInvocation *context);
+	void		  pw3270_dbus_get_screen_height(PW3270Dbus *object, DBusGMethodInvocation *context);
+	void		  pw3270_dbus_get_screen_length(PW3270Dbus *object, DBusGMethodInvocation *context);
+
 	void		  pw3270_dbus_set_toggle(PW3270Dbus *object, int id, int value, DBusGMethodInvocation *context);
 
 	void		  pw3270_dbus_wait_for_ready(PW3270Dbus *object, int timeout, DBusGMethodInvocation *context);

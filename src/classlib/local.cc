@@ -166,6 +166,10 @@
 		int					(*_action)(H3270 *hSession, const char *name);
 		int					(*_set_unlock_delay)(H3270 *hSession, unsigned short ms);
 
+		int				  	(*_get_width)(H3270 *hSession);
+		int				  	(*_get_height)(H3270 *hSession);
+		int				  	(*_get_length)(H3270 *hSession);
+
 		const char * 		(*_ebc2asc)(H3270 *hSession, unsigned char *buffer, int sz);
 		const char * 		(*_asc2ebc)(H3270 *hSession, unsigned char *buffer, int sz);
 
@@ -234,6 +238,10 @@
 
 				{ (void **) & _action,					"lib3270_action"					},
 				{ (void **) & _set_unlock_delay,		"lib3270_set_unlock_delay"			},
+
+				{ (void **) & _get_width,				"lib3270_get_width"					},
+				{ (void **) & _get_height,				"lib3270_get_height"				},
+				{ (void **) & _get_length,				"lib3270_get_length"				},
 
 			};
 
@@ -517,6 +525,18 @@
 		void set_unlock_delay(unsigned short ms)
 		{
 			_set_unlock_delay(hSession,ms);
+		}
+
+		int get_width(void) {
+			return _get_width(hSession);
+		}
+
+		int get_height(void) {
+			return _get_height(hSession);
+		}
+
+		int	get_length(void) {
+			return _get_length(hSession);
 		}
 
  	};

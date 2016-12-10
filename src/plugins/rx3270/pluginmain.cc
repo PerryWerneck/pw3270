@@ -112,6 +112,7 @@
 	int				  set_cursor_position(int row, int col);
 	int				  set_cursor_addr(int addr);
 	int				  get_cursor_addr(void);
+
     int               emulate_input(const char *str);
 
 	int 			  set_toggle(LIB3270_TOGGLE ix, bool value);
@@ -145,6 +146,10 @@
 	int				  set_host_charset(const char *charset);
 	string			  get_host_charset(void);
 	string			  get_display_charset(void);
+
+	int				  get_width(void);
+	int				  get_height(void);
+	int				  get_length(void);
 
 	const char  	* asc2ebc(unsigned char *str, int sz = -1);
 	const char	 	* ebc2asc(unsigned char *str, int sz = -1);
@@ -708,6 +713,21 @@ extern "C"
  int plugin::get_cursor_addr(void)
  {
     return lib3270_get_cursor_address(hSession);
+ }
+
+ int plugin::get_width(void)
+ {
+    return lib3270_get_width(hSession);
+ }
+
+ int plugin::get_height(void)
+ {
+    return lib3270_get_height(hSession);
+ }
+
+ int plugin::get_length(void)
+ {
+    return lib3270_get_length(hSession);
  }
 
  int plugin::emulate_input(const char *str)

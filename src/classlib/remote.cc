@@ -57,6 +57,9 @@
 	#define HLLAPI_PACKET_IS_READY				"isReady"
 	#define HLLAPI_PACKET_DISCONNECT			"disconnect"
 	#define HLLAPI_PACKET_GET_CURSOR			"getCursorAddress"
+	#define HLLAPI_PACKET_GET_WIDTH				"getScreenWidth"
+	#define HLLAPI_PACKET_GET_HEIGHT			"getScreenHeight"
+	#define HLLAPI_PACKET_GET_LENGTH			"getScreenLength"
 	#define HLLAPI_PACKET_ENTER					"enter"
 	#define HLLAPI_PACKET_QUIT					"quit"
 	#define HLLAPI_PACKET_ERASE					"erase"
@@ -1139,6 +1142,17 @@
 			return query_intval(HLLAPI_PACKET_GET_CURSOR);
 		}
 
+		int get_width(void) {
+			return query_intval(HLLAPI_PACKET_GET_WIDTH);
+		}
+
+		int get_height(void) {
+			return query_intval(HLLAPI_PACKET_GET_HEIGHT);
+		}
+
+		int	get_length(void) {
+			return query_intval(HLLAPI_PACKET_GET_LENGTH);
+		}
 
 		int enter(void)
 		{

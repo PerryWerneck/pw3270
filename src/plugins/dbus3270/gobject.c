@@ -367,6 +367,24 @@ void pw3270_dbus_get_text_at(PW3270Dbus *object, int row, int col, int len, DBus
 	dbus_g_method_return(context,lib3270_get_cursor_address(pw3270_dbus_get_session_handle(object)));
  }
 
+ void pw3270_dbus_get_screen_width(PW3270Dbus *object, DBusGMethodInvocation *context)
+ {
+	trace("%s object=%p context=%p",__FUNCTION__,object,context);
+	dbus_g_method_return(context,lib3270_get_width(pw3270_dbus_get_session_handle(object)));
+ }
+
+ void pw3270_dbus_get_screen_height(PW3270Dbus *object, DBusGMethodInvocation *context)
+ {
+	trace("%s object=%p context=%p",__FUNCTION__,object,context);
+	dbus_g_method_return(context,lib3270_get_height(pw3270_dbus_get_session_handle(object)));
+ }
+
+ void pw3270_dbus_get_screen_length(PW3270Dbus *object, DBusGMethodInvocation *context)
+ {
+	trace("%s object=%p context=%p",__FUNCTION__,object,context);
+	dbus_g_method_return(context,lib3270_get_width(pw3270_dbus_get_session_handle(object)));
+ }
+
  void pw3270_dbus_set_toggle(PW3270Dbus *object, int id, int value, DBusGMethodInvocation *context)
  {
 	trace("%s object=%p context=%p",__FUNCTION__,object,context);
