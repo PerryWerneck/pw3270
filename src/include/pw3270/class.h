@@ -116,13 +116,7 @@
 
 
 
-#if defined (HAVE_GNUC_VISIBILITY)
-	class __attribute__((visibility("default"))) session
-#elif defined(WIN32)
-	class __declspec (dllexport) session
-#else
 	class session
-#endif
 	{
 	public:
 

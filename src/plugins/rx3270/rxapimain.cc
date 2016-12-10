@@ -49,6 +49,11 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
+void rx3270_set_factory_method(PW3270_NAMESPACE::session * (* factory)(const char *))
+{
+	PW3270_NAMESPACE::session::set_plugin(factory);
+}
+
 // now build the actual entry list
 RexxRoutineEntry rx3270_functions[] =
 {

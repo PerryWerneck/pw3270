@@ -41,6 +41,7 @@
  #include <lib3270/popup.h>
  #include <stdarg.h>
  #include <gtk/gtk.h>
+ #include <pw3270/class.h>
 
 #ifndef ETIMEDOUT
 	#define ETIMEDOUT -1
@@ -150,6 +151,7 @@
 #endif
 
     LIB3270_EXPORT void rx3270_set_package_option(RexxOption *option);
+    LIB3270_EXPORT void rx3270_set_factory_method(PW3270_NAMESPACE::session * (*)(const char *));
 
 #ifdef __cplusplus
 	}

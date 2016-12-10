@@ -406,7 +406,9 @@ extern "C"
 #if GTK_CHECK_VERSION(2,32,0)
 	g_mutex_init(&mutex);
 #endif // GTK_CHECK_VERSION
-	session::set_plugin(factory);
+
+	rx3270_set_factory_method(factory);
+
 	return 0;
  }
 
