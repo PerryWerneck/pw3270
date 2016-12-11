@@ -29,6 +29,10 @@ run_command()
 			dbus-send --session  --print-reply --dest=$DEST.$SESSION $BPATH $DEST.disconnect
 			;;
 
+		url)
+			dbus-send --session  --print-reply --dest=$DEST.$SESSION $BPATH $DEST.getURL
+			;;
+
 		quit)
 			dbus-send --session  --print-reply --dest=$DEST.$SESSION $BPATH $DEST.quit
 			;;
