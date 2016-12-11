@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-25 10:31-0200\n"
+"POT-Creation-Date: 2016-12-11 04:37-0200\n"
 "PO-Revision-Date: 2016-10-25 10:47-0200\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <perry.werneck@gmail.com>\n"
@@ -103,7 +103,7 @@ msgstr "- Emulador 3270 para GTK"
 msgid "16 colors"
 msgstr "16 cores"
 
-#: screen.c:688 screen.c:718 screen.c:732 screen.c:862
+#: screen.c:694 screen.c:724 screen.c:738 screen.c:868
 msgid "3270 Error"
 msgstr "Erro 3270"
 
@@ -111,7 +111,7 @@ msgstr "Erro 3270"
 msgid "3270 File transfer"
 msgstr "Transferência de arquivos 3270"
 
-#: screen.c:703
+#: screen.c:709
 msgid "3270 Warning"
 msgstr "Alerta 3270"
 
@@ -1052,7 +1052,7 @@ msgstr "Intensificado/Desprotegido"
 msgid "Invalid CA certificate"
 msgstr "Certificado CA inválido"
 
-#: v3270/widget.c:948
+#: v3270/widget.c:951
 msgid "Invalid callback table, possible version mismatch in lib3270"
 msgstr ""
 "Tabela de callbacks inválida, possível divergência de versão na lib3270"
