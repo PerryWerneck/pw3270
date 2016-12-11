@@ -89,13 +89,7 @@
 
 	};
 
-#if defined (HAVE_GNUC_VISIBILITY)
-	class __attribute__((visibility("default"))) module
-#elif defined(WIN32)
-	class __declspec (dllexport) module
-#else
 	class module
-#endif
 	{
 	private:
 #ifdef WIN32
@@ -113,8 +107,6 @@
 		void * get_symbol(const char *name);
 
 	};
-
-
 
 	class session
 	{
