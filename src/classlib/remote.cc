@@ -56,6 +56,8 @@
 	#define HLLAPI_PACKET_GET_SSL_STATE			"getSecureState"
 	#define HLLAPI_PACKET_IS_READY				"isReady"
 	#define HLLAPI_PACKET_DISCONNECT			"disconnect"
+	#define HLLAPI_PACKET_GET_HOST				"getURL"
+	#define HLLAPI_PACKET_SET_HOST				"setURL"
 	#define HLLAPI_PACKET_GET_CURSOR			"getCursorAddress"
 	#define HLLAPI_PACKET_GET_WIDTH				"getScreenWidth"
 	#define HLLAPI_PACKET_GET_HEIGHT			"getScreenHeight"
@@ -834,7 +836,7 @@
 
 #elif defined(HAVE_DBUS)
 
-			rc = query_intval("setHost", DBUS_TYPE_STRING, &uri, DBUS_TYPE_INVALID);
+			rc = query_intval(HLLAPI_PACKET_SET_HOST, DBUS_TYPE_STRING, &uri, DBUS_TYPE_INVALID);
 
 #else
 
@@ -846,6 +848,21 @@
 
 		}
 
+		string get_url()
+		{
+#if defined(WIN32)
+
+			struct hllapi_packet_query query	= { HLLAPI_PACKET_GET_HOST };
+			return query_string(&query,sizeof(query),1024);
+
+#elif defined(HAVE_DBUS)
+
+			return query_string(HLLAPI_PACKET_GET_HOST);
+
+#else
+			return string();
+#endif
+		}
 
 		int wait_for_ready(int seconds)
 		{

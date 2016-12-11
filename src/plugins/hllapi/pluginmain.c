@@ -219,6 +219,11 @@
 											((struct hllapi_packet_text *) source->buffer)->text) != NULL);
 		break;
 
+	case HLLAPI_PACKET_GET_HOST:
+//		send_text(source,lib3270_get_host(lib3270_get_default_session_handle(),((struct hllapi_packet_text *) source->buffer)->text),-1);
+		#error Alocar buffer dinâmico
+		break;
+
 	case HLLAPI_PACKET_DISCONNECT:
 		send_result(source,lib3270_disconnect(lib3270_get_default_session_handle()));
 		break;

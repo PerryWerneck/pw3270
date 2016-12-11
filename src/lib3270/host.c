@@ -219,6 +219,19 @@ static void update_host(H3270 *h)
 
 }
 
+LIB3270_EXPORT const char * lib3270_get_url(H3270 *h, char *buffer, int len)
+{
+	CHECK_SESSION_HANDLE(h);
+
+	snprintf(buffer,len,"%s://%s:%s",
+			((h->options & LIB3270_OPTION_SSL) == 0) ? "tn3270" : "tn3270s",
+			h->host.current,
+			h->host.srvc
+	);
+
+	return buffer;
+}
+
 LIB3270_EXPORT const char * lib3270_set_url(H3270 *h, const char *n)
 {
     CHECK_SESSION_HANDLE(h);

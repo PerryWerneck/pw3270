@@ -767,9 +767,12 @@ static void ctlr_done(H3270 *session)
 
 static void update_connect(H3270 *session, unsigned char connected)
 {
+#ifdef DEBUG
+	char dbg[1024];
+#endif // DEBUG
 	v3270 *widget = GTK_V3270(lib3270_get_user_data(session));
 
-	trace("%s - %s",__FUNCTION__,connected ? "Connected" : "Disconnected");
+	trace("%s - %s %s",__FUNCTION__,lib3270_get_url(session,dbg,sizeof(dbg)),connected ? "Connected" : "Disconnected");
 
 	if(connected)
 	{

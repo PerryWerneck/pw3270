@@ -129,6 +129,7 @@
 		int 				(*_disconnect)(H3270 *h);
 		int 				(*_connect)(H3270 *h,int wait);
 		const char 			(*_set_url)(H3270 *h, const char *n);
+		const char *		(*_get_url)(H3270 *h, char *str, int len);
 		int 				(*_is_connected)(H3270 *h);
 		void 				(*_main_iterate)(H3270 *h, int wait);
 		int 				(*_wait)(H3270 *hSession, int seconds);
@@ -198,6 +199,7 @@
 				{ (void **) & _disconnect,				"lib3270_disconnect"				},
 				{ (void **) & _connect,					"lib3270_connect"					},
 				{ (void **) & _set_url,					"lib3270_set_url"					},
+				{ (void **) & _get_url,					"lib3270_get_url"					},
 				{ (void **) & _main_iterate,			"lib3270_main_iterate"				},
 				{ (void **) & _wait,					"lib3270_wait"						},
 				{ (void **) & _enter,					"lib3270_enter"						},
@@ -298,6 +300,12 @@
 		int set_url(const char *uri)
 		{
 			return (_set_url(hSession,uri) == 0);
+		}
+
+		string get_url()
+		{
+			char buffer[1024];
+			return string(_get_url(hSession,buffer,sizeof(buffer)));
 		}
 
 		int disconnect(void)

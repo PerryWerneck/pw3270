@@ -166,7 +166,10 @@
 		int						  connect(const char *host, time_t wait = 0);
 		int						  set_host(const char *host);
 		virtual int				  connect(void)										= 0;
+
 		virtual int				  set_url(const char *hostname)						= 0;
+		virtual string			  get_url()											= 0;
+
 		virtual int				  disconnect(void)									= 0;
 		virtual int				  wait_for_ready(int seconds)						= 0;
 		virtual int				  wait(int seconds)									= 0;

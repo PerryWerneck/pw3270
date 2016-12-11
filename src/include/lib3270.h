@@ -443,7 +443,7 @@
 
 
 	/**
-	 * Get servic or port for the connect/reconnect operations.
+	 * Get service or port for the connect/reconnect operations.
 	 *
 	 * @param h		Session handle.
 	 *
@@ -453,6 +453,8 @@
 	 LIB3270_EXPORT const char * lib3270_get_srvcname(H3270 *h);
 
 	 LIB3270_EXPORT void lib3270_set_srvcname(H3270 *h, const char *srvc);
+
+	 LIB3270_EXPORT const char * lib3270_get_url(H3270 *h, char *buffer, int len);
 
 	/**
 	 * Get session options.
