@@ -198,6 +198,8 @@ ARCHS="x86_32 x86_64"
 RUNTIME=1
 COMPLETE=1
 
+find . -exec touch {} \;
+
 trap cleanup INT 
 
 until [ -z "$1" ]

@@ -28,8 +28,8 @@ MODULE_NAME=v3270ft
 
 #---[ Application sources ]--------------------------------------------------------------
 
-SOURCES=filelist.c load.c misc.c select.c transfer.c v3270ftprogress.c get.c \
-		marshal.c save.c set.c v3270ft.c tables.c
+SOURCES=marshal.c filelist.c load.c misc.c select.c transfer.c v3270ftprogress.c \
+		get.c save.c set.c v3270ft.c tables.c
 
 #---[ Configuration values ]-------------------------------------------------------------
 
@@ -161,7 +161,7 @@ marshal.c: \
 
 	@echo $(notdir $<) ...
 	@$(MKDIR) `dirname $@`
-	@$(GENMARSHAL) --prefix=$(MODULE_NAME) --header $< > $@
+	@$(GENMARSHAL) --prefix=$(MODULE_NAME) --body $< > $@
 
 #---[ Targets ]--------------------------------------------------------------------------
 
@@ -184,4 +184,7 @@ cleanDebug: clean
 clean:
 	@rm -fr $(BINDIR)
 	@rm -fr $(OBJDIR)
+	@rm -f marshal.h
+	@rm -f marshal.c
+
 
