@@ -360,6 +360,7 @@ install-man:
 	@$(INSTALL_DATA) man/man5/pw3270.5 $(DESTDIR)/$(mandir)/man5/pw3270.5
 
 install-sdk:
+
 	@$(MKDIR) $(DESTDIR)$(includedir)/lib3270
 	@$(INSTALL_DATA) src/include/lib3270.h $(DESTDIR)/$(includedir)
 	@$(INSTALL_DATA) src/include/lib3270/config.h $(DESTDIR)/$(includedir)/lib3270

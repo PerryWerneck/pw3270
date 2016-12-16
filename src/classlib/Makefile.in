@@ -34,6 +34,7 @@ include class.mak
 #---[ Paths ]------------------------------------------------------------------
 
 prefix=@prefix@
+exec_prefix=@exec_prefix@
 datarootdir=@datarootdir@
 includedir=@includedir@
 libdir=@libdir@
@@ -137,14 +138,19 @@ $(BINDBG)/$(LIBNAME): $(foreach SRC, $(basename $(CLASS_SRC)), $(OBJDBG)/$(SRC).
 	@ar rs $@ $^
 
 #---[ Misc targets ]-----------------------------------------------------------
-install-sdk: $(BINRLS)/$(LIBNAME)
+install-sdk: \
+	$(BINRLS)/$(LIBNAME)
+
 	@$(MKDIR) $(DESTDIR)$(datarootdir)/$(PACKAGE)/sample/classlib
 	@$(INSTALL_DATA) *.cc $(DESTDIR)$(datarootdir)/$(PACKAGE)/sample/classlib
+
 	@$(MKDIR) $(DESTDIR)/$(includedir)/pw3270
 	@$(INSTALL_DATA) ../include/pw3270/class.h $(DESTDIR)/$(includedir)/pw3270 
+
 	@$(LN_S) ./pw3270/class.h $(DESTDIR)/$(includedir)/$(PACKAGE)cpp.h
-	@$(MKDIR) $(DESTDIR)$(libdir)
-	@$(INSTALL_DATA) $(BINRLS)/$(LIBNAME) $(DESTDIR)$(libdir)
+
+	@$(MKDIR) $(DESTDIR)/$(libdir)
+	@$(INSTALL_DATA) $(BINRLS)/$(LIBNAME) $(DESTDIR)/$(libdir)
 
 cleanDebug: clean
 
