@@ -155,3 +155,24 @@ $(BINDBG)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@: \
 	@$(MKDIR) `dirname $@`
 	@$(LD) -shared -Wl,-soname,$(LIBNAME) $(LDFLAGS) -o $@ $^ $(LIBS)
 
+cleanDebug:
+
+	@rm -fr	$(OBJDBG) \
+			$(BINDBG)/$(LIBNAME) \
+			$(BINDBG)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@ \
+			$(BINDBG)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@
+
+cleanRelease:
+
+	@rm -fr	$(OBJRLS) \
+			$(BINRLS)/$(LIBNAME) \
+			$(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@ \
+			$(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@
+
+clean: \
+	cleanDebug \
+	cleanRelease
+
+
+
+
