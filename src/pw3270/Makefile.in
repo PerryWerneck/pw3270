@@ -22,245 +22,106 @@
 #
 # perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
 # erico.mendonca@gmail.com	(Erico Mascarenhas de Mendonça)
-# licinio@bb.com.br			(Licínio Luis Branco)
-# kraucer@bb.com.br			(Kraucer Fernandes Mazuco)
 #
+
+LIBNAME=@DLLPREFIX@pw3270@DLLEXT@
+
+LIB_SOURCES=window.c actions.c fonts.c dialog.c hostdialog.c print.c colors.c
+APP_SOURCES=main.c
+
+#---[ Configuration values ]-------------------------------------------------------------
 
 PACKAGE_NAME=@PACKAGE_NAME@
 PACKAGE_VERSION=@PACKAGE_VERSION@
-
-#---[ Paths ]------------------------------------------------------------------
+PACKAGE_TARNAME=@PACKAGE_TARNAME@
 
 prefix=@prefix@
 exec_prefix=@exec_prefix@
 bindir=@bindir@
+sbindir=@sbindir@
 libdir=@libdir@
-datarootdir=@datarootdir@
-localedir=@localedir@
-desktopdir=$(datarootdir)/applications
 
-EXEEXT=@EXEEXT@
-STRIP=@STRIP@
+BASEDIR=@BASEDIR@
+
+OBJDIR=$(BASEDIR)/.obj/pw3270
+OBJDBG=$(OBJDIR)/Debug
+OBJRLS=$(OBJDIR)/Release
+
+BINDIR=$(BASEDIR)/.bin
+BINDBG=$(BINDIR)/Debug
+BINRLS=$(BINDIR)/Release
+
 INSTALL=@INSTALL@
-INSTALL_PROGRAM=$(INSTALL) -m 755
-INSTALL_DATA=$(INSTALL) -m 644
-CONVERT=@CONVERT@
-WINDRES=@WINDRES@
-LN_S=@LN_S@ -f
+INSTALL_DATA=@INSTALL_DATA@
+INSTALL_PROGRAM=@INSTALL_PROGRAM@
 
-DLL_FLAGS=@DLL_FLAGS@
+LN_S=@LN_S@
+
+AMTAR=@AMTAR@
+SHELL=@SHELL@
+MKDIR=@MKDIR_P@
+
+CC=@CC@
+LD=@CC@
+
+CFLAGS=@CFLAGS@ @LIB3270_CFLAGS@ -Wno-deprecated-declarations @LIBSSL_CFLAGS@ @GTK_CFLAGS@ -I$(BASEDIR)/src/include/pw3270
+LIBS=@LIBS@ @LIBSSL_LIBS@ @GTK_LIBS@ @LIB3270_LIBS@
 LDFLAGS=@LDFLAGS@
 
-#---[ Sources ]----------------------------------------------------------------
+#---[ Rules ]----------------------------------------------------------------------------
 
-include common/sources.mak
-include v3270/sources.mak
-include uiparser/sources.mak
+DEPENDS=$(BASEDIR)/src/include/*.h $(BASEDIR)/src/include/lib3270/*.h $(BASEDIR)/src/include/pw3270/*.h *.h Makefile
 
-#---[ Targets ]----------------------------------------------------------------
+$(OBJDBG)/%.o: \
+	%.c \
+	$(DEPENDS)
 
-APP_SOURCES=	main.c @APP_GUI_SRC@
-
-LIB_SOURCES=	window.c actions.c fonts.c dialog.c hostdialog.c print.c colors.c \
-				tools.c plugin.c trace.c \
-				$(foreach SRC, $(UI_PARSER_SRC), uiparser/$(SRC)) \
-				$(foreach SRC, $(V3270_SRC), v3270/$(SRC)) \
-				$(foreach SRC, $(COMMON_SRC), common/$(SRC))
-				
-# ft/filetransfer.c 
-# ft/ftdialog.c ft/ftprogress.c ft/browse.c
-
-DEPENDS=*.h common/*.h uiparser/*.h v3270/*.h $(GLOBAL_DEPS)
-
-VALGRIND=@VALGRIND@
-
-CFLAGS=@CFLAGS@ @DLL_CFLAGS@ @GTK_CFLAGS@ @GTKMAC_CFLAGS@ -DLIBDIR=\"$(libdir)\" \
-		-DDATAROOTDIR=\"$(datarootdir)\" -I../../src/include -I./include
-
-LIBS=@LIBS@ @GTK_LIBS@ @GTKMAC_LIBS@ @SOCKET_LIBS@
-
-#---[ Rules ]------------------------------------------------------------------
-
-include ../include/rules.mak
-
-%.png: \
-	pixmaps/%.svg
-
-ifneq ($(CONVERT),no)
-	@echo "  GEN  `basename $@`"
+	@echo $< ...
 	@$(MKDIR) `dirname $@`
-	@$(CONVERT) $< --format=png > $@
-endif
+	@$(CC) $(CFLAGS) \
+				@DBG_CFLAGS@ \
+				-DBUILD_DATE=`date +"0x%Y%m%d"`\
+				-o $@ -c $<
 
-%@OBJEXT@: \
-	%.rc
+$(OBJRLS)/%.o: \
+	%.c \
+	$(DEPENDS)
 
-	@echo "  RC   `basename $@`"
-	@mkdir -p `dirname $@`
-	@$(WINDRES) --include-dir=. -i $< -o $@
-
-$(OBJDBG)/%@OBJEXT@: \
-	%.rc
-
-	@echo "  RC   `basename $@`"
-	@mkdir -p `dirname $@`
-	@$(WINDRES) --include-dir=. -i $< -o $@
-
-$(OBJRLS)/%@OBJEXT@: \
-	%.rc
-
-	@echo "  RC   `basename $@`"
-	@mkdir -p `dirname $@`
-	@$(WINDRES) --include-dir=. -i $< -o $@
-
-#---[ Release targets ]--------------------------------------------------------
-
-Release: \
-	$(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
-
-install: \
-	Release $(PACKAGE_NAME).desktop $(PACKAGE_NAME)-logo.png
-
-	$(MKDIR) $(DESTDIR)$(bindir)
-	$(INSTALL_PROGRAM) $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) $(DESTDIR)$(bindir)
-
-	$(MKDIR) $(DESTDIR)$(libdir)
-	$(INSTALL_PROGRAM) $(LIBRLS)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@.$(PACKAGE_VERSION) $(DESTDIR)$(libdir)
-	$(LN_S) @DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@.$(PACKAGE_VERSION) $(DESTDIR)$(libdir)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@.@MAJOR_VERSION@
-	$(LN_S) @DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@.@MAJOR_VERSION@ $(DESTDIR)$(libdir)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@
-
-	@$(MKDIR) $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)
-	@$(INSTALL_DATA) $(PACKAGE_NAME).png $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)
-	@$(INSTALL_DATA) $(PACKAGE_NAME)-logo.png $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)
-	@$(MKDIR) $(DESTDIR)$(desktopdir)
-	@desktop-file-install	--mode 644 \
-				--dir $(DESTDIR)/$(desktopdir) \
-				--add-category System \
-				--add-category TerminalEmulator \
-				$(PACKAGE_NAME).desktop
-
-$(BINRLS)/$(PACKAGE_TARNAME)$(EXEEXT):	\
-	$(LIBRLS)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@ \
-	$(foreach SRC, $(basename $(APP_SOURCES)), $(OBJRLS)/$(SRC)$(OBJEXT))
-
-	@echo "  CCLD `basename $@`"
+	@echo $< ...
 	@$(MKDIR) `dirname $@`
-	@$(LD) @LDARCH@ @LDAPPFLAGS@ -o $@ $(foreach SRC, $(basename $(APP_SOURCES)), $(OBJRLS)/$(SRC)$(OBJEXT)) $(LIBS) $(LIB3270_LIBS) -l$(PACKAGE_TARNAME)
-	@$(STRIP) $@
+	@$(CC) $(CFLAGS) \
+				@RLS_CFLAGS@ \
+				-DBUILD_DATE=`date +"0x%Y%m%d"` \
+				-o $@ -c $<
 
-$(LIBRLS)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@: \
-	$(LIBRLS)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@.$(PACKAGE_VERSION)
 
-	@rm -f $@
-	@cd $(LIBRLS) && $(LN_S) @DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@.$(PACKAGE_VERSION) @DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@
+#---[ Release Targets ]------------------------------------------------------------------
 
-$(LIBRLS)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@.$(PACKAGE_VERSION):	\
-	$(foreach SRC, $(basename $(LIB_SOURCES)), $(OBJRLS)/$(SRC)$(OBJEXT)) \
-	.bin/Release/v3270ft.a
 
-	@echo "  CCLD `basename $@`"
+#---[ Debug Targets ]--------------------------------------------------------------------
+
+Debug: \
+	$(BINDBG)/$(LIBNAME)
+
+$(BINDBG)/$(LIBNAME): \
+	$(BINDBG)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@
+
+	@echo $(basename $@) ...
 	@$(MKDIR) `dirname $@`
-	@$(LD) $(DLL_FLAGS) $(LDFLAGS) @LDSOFLAGS@ @LDLIBFLAGS@ @RLS_LDFLAGS@ -o $@ $^ $(LIBS) $(LIB3270_LIBS)
-	@$(STRIP) $@
+	@$(LN_S) -f $(LIBNAME).@PACKAGE_MAJOR_VERSION@ $@
 
-.bin/Release/v3270ft.a: \
-	v3270ft/*
+$(BINDBG)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@: \
+	$(BINDBG)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@
 
-	@$(MAKE) BINDIR=../.bin -C v3270ft Release
-
-.bin/pot/v3270ft.pot: \
-	v3270ft/*
-
-	@$(MAKE) BINDIR=../.bin -C v3270ft pot
-
-#---[ Debug targets ]----------------------------------------------------------
-
-Debug: $(BINDBG)/$(PACKAGE_TARNAME)$(EXEEXT)
-
-$(BINDBG)/$(PACKAGE_TARNAME)$(EXEEXT): \
-	$(LIBDBG)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@ \
-	$(foreach SRC, $(basename $(APP_SOURCES)), $(OBJDBG)/$(SRC)$(OBJEXT))
-
-	@echo "  CCLD `basename $@`"
+	@echo $(basename $@) ...
 	@$(MKDIR) `dirname $@`
-	@$(LD) @LDARCH@ @DBGRPATH@ -o $@ $(foreach SRC, $(basename $(APP_SOURCES)), $(OBJDBG)/$(SRC)$(OBJEXT)) $(LIBS) $(LIB3270_LIBS) -l$(PACKAGE_TARNAME)
+	@$(LN_S) -f $(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@ $@
 
-.bin/Debug/v3270ft.a: \
-	v3270ft/*
+$(BINDBG)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@: \
+	$(foreach SRC, $(basename $(LIB_SOURCES)), $(OBJDBG)/$(SRC).o)
 
-	@$(MAKE) BINDIR=../.bin -C v3270ft Debug
-
-
-$(LIBDBG)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@: \
-	$(LIBDBG)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@.$(PACKAGE_VERSION)
-
-	@rm -f $@
-	@cd $(LIBDBG) && $(LN_S) @DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@.$(PACKAGE_VERSION) @DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@
-
-$(LIBDBG)/@DLLPREFIX@$(PACKAGE_TARNAME)@DLLEXT@.$(PACKAGE_VERSION):	\
-	$(foreach SRC, $(basename $(LIB_SOURCES)), $(OBJDBG)/$(SRC)$(OBJEXT)) \
-	.bin/Debug/v3270ft.a
-
-	@echo "  CCLD `basename $@`"
-	@$(MKDIR) `dirname $@` AAA
-	$(LD) $(DLL_FLAGS) $(LDFLAGS) @LDSOFLAGS@ @DBGRPATH@ -o $@ $^ $(LIBS) $(LIB3270_LIBS)
-
-
-run: $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
-	@cd "$(ROOTDIR)" ; .bin/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
-
-memchk: $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
-ifeq ($(VALGRIND),no)
-	@cd "$(ROOTDIR)" ; .bin/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
-else
-	@cd "$(ROOTDIR)" ; G_DEBUG=gc-friendly G_SLICE=always-malloc \$(VALGRIND) --leak-check=full --suppressions=valgrind.suppression --gen-suppressions=all .bin/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
-#	@cd "$(ROOTDIR)" ; G_DEBUG=gc-friendly G_SLICE=always-malloc \$(VALGRIND) --leak-check=full --suppressions=valgrind.suppression .bin/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
-endif
-
-#---[ Misc targets ]-----------------------------------------------------------
-
-$(PACKAGE_NAME).desktop: Makefile $(PACKAGE_NAME).png
-	@rm -f $@
-	@echo "[Desktop Entry]" > $@
-	@echo "Encoding=UTF-8" >> $@
-	@echo "GenericName=$(PACKAGE_NAME)" >> $@
-	@echo "Name=3270 Terminal" >> $@
-	@echo "Name[pt_BR]=Terminal 3270" >> $@
-	@echo "Comment=IBM 3270 Terminal emulator" >> $@
-	@echo "Exec=$(bindir)/$(PACKAGE_NAME)@EXEEXT@" >> $@
-	@echo "Icon=$(datarootdir)/$(PACKAGE_NAME)/$(PACKAGE_NAME).png" >> $@
-	@echo "Terminal=false" >> $@
-	@echo "Type=Application" >> $@
-	@echo "StartupNotify=true" >> $@
-
-v3270/marshal.h: v3270/genmarshal
+	@echo $(basename $@) ...
 	@$(MKDIR) `dirname $@`
-	@glib-genmarshal --prefix=v3270 --header v3270/genmarshal > $@
+	@$(LD) -shared -Wl,-soname,$(LIBNAME) $(LDFLAGS) -L$(BINDBG) -o $@ $^ $(LIBS)
 
-v3270/marshal.c: v3270/genmarshal v3270/marshal.h
-	@$(MKDIR) `dirname $@`
-	@glib-genmarshal --prefix=v3270 --body v3270/genmarshal > $@
-
-$(BINDIR)/pot/pw3270.pot: \
-	.bin/pot/v3270ft.pot \
-	$(foreach SRC, $(basename $(APP_SOURCES) $(LIB_SOURCES)), $(TMPDIR)/pot/$(SRC).pot)
-
-	@rm -f $@
-	@mkdir -p `dirname $@`
-	@$(MSGCAT) --sort-output $^ > $@
-
-distclean: clean
-	@rm -f $(PACKAGE_NAME).png
-	@rm -f $(PACKAGE_NAME)-logo.png
-
-clean: clean-common
-	@$(MAKE) -C v3270ft clean
-	@rm -f v3270/marshal.c
-	@rm -f v3270/marshal.h
-	@rm -fr uiparser/.bin
-	@rm -fr uiparser/.obj
-	@rm -fr v3270/.bin
-	@rm -fr v3270/.obj
-	@rm -fr debian
-	@rm -f $(PACKAGE_NAME).desktop
 

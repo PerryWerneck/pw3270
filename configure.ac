@@ -77,7 +77,7 @@ case "$host" in
 		DLLPREFIX=""
 		DLLEXT=".dll"
 
-		CFLAGS="$CFLAGS -Wall -Werror -D_WIN32_WINNT=0x0600"
+		CFLAGS="$CFLAGS -D_WIN32_WINNT=0x0600"
 		LIBS="$LIBS -lws2_32 -lntdll -lwtsapi32"
 
 		;;
@@ -96,8 +96,6 @@ case "$host" in
 		EXEEXT=""
 		DLLPREFIX="lib"
 		DLLEXT=".so"
-
-		CFLAGS="$CFLAGS -Wall -Werror"
 
 		# LIBS="-Wl,--no-allow-shlib-undefined,--as-needed,--no-undefined -pthread $LIBS"
 		LIBS="-pthread $LIBS"
@@ -284,6 +282,7 @@ dnl Lib3270 flags
 dnl ---------------------------------------------------------------------------
 
 AC_SUBST(LIB3270_CFLAGS,-I$ac_pwd/src/include)
+AC_SUBST(LIB3270_LIBS,-l3270)
 
 dnl ---------------------------------------------------------------------------
 dnl Check for headers
@@ -338,6 +337,7 @@ dnl Configure which files to generate.
 dnl ---------------------------------------------------------------------------
 
 AC_CONFIG_FILES(src/lib3270/Makefile)
+AC_CONFIG_FILES(src/pw3270/Makefile)
 dnl AC_CONFIG_FILES(Makefile)
 
 dnl ---------------------------------------------------------------------------
