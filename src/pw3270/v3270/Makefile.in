@@ -24,10 +24,10 @@
 # erico.mendonca@gmail.com	(Erico Mascarenhas de Mendonça)
 #
 
-LIBNAME=@DLLPREFIX@pw3270@DLLEXT@
+MODULE_NAME=v3270
 
-LIB_SOURCES=window.c actions.c fonts.c dialog.c hostdialog.c print.c colors.c
-APP_SOURCES=main.c
+SOURCES=marshal.c widget.c oia.c iocallback.c keyboard.c draw.c mouse.c selection.c \
+		accessible.c security.c macros.c hostselect.c properties.c
 
 #---[ Configuration values ]-------------------------------------------------------------
 
@@ -43,30 +43,17 @@ libdir=@libdir@
 
 BASEDIR=@BASEDIR@
 
-OBJDIR=$(BASEDIR)/.obj/pw3270
+OBJDIR=.obj
 OBJDBG=$(OBJDIR)/Debug
 OBJRLS=$(OBJDIR)/Release
 
-BINDIR=$(BASEDIR)/.bin
-BINDBG=$(BINDIR)/Debug
-BINRLS=$(BINDIR)/Release
-
-INSTALL=@INSTALL@
-INSTALL_DATA=@INSTALL_DATA@
-INSTALL_PROGRAM=@INSTALL_PROGRAM@
-
-LN_S=@LN_S@
-
-AMTAR=@AMTAR@
-SHELL=@SHELL@
 MKDIR=@MKDIR_P@
-
 CC=@CC@
 LD=@CC@
+AR=@AR@
 
-CFLAGS=@CFLAGS@ @LIB3270_CFLAGS@ -Wno-deprecated-declarations @LIBSSL_CFLAGS@ @GTK_CFLAGS@ -I$(BASEDIR)/src/include/pw3270
-LIBS=@LIBS@ @LIBSSL_LIBS@ @GTK_LIBS@ @LIB3270_LIBS@
-LDFLAGS=@LDFLAGS@
+CFLAGS=@CFLAGS@ @LIB3270_CFLAGS@ -Wno-deprecated-declarations @GTK_CFLAGS@ -I$(BASEDIR)/src/include/pw3270
+LIBS=@LIBS@ @GTK_LIBS@ @LIB3270_LIBS@
 
 #---[ Rules ]----------------------------------------------------------------------------
 
@@ -83,13 +70,6 @@ $(OBJDBG)/%.o: \
 				-DBUILD_DATE=`date +"0x%Y%m%d"`\
 				-o $@ -c $<
 
-$(BASEDIR)/.obj/Debug/%.a: \
-	./%/* \
-	$(DEPENDS)
- 
-	@$(MAKE) -C $(basename $(notdir $@)) $@
-
-
 $(OBJRLS)/%.o: \
 	%.c \
 	$(DEPENDS)
@@ -101,59 +81,58 @@ $(OBJRLS)/%.o: \
 				-DBUILD_DATE=`date +"0x%Y%m%d"` \
 				-o $@ -c $<
 
+marshal.h: \
+	genmarshal
+
+	@echo $< ...
+	@$(MKDIR) `dirname $@`
+	@glib-genmarshal --prefix=v3270 --header genmarshal > $@
+
+marshal.c: \
+	marshal.h
+
+	@echo $< ...
+	@$(MKDIR) `dirname $@`
+	@glib-genmarshal --prefix=v3270 --body genmarshal > $@
 
 #---[ Release Targets ]------------------------------------------------------------------
 
+Release: \
+	$(BASEDIR)/.obj/Release/$(MODULE_NAME).a
+
+$(BASEDIR)/.obj/Release/$(MODULE_NAME).a: \
+	$(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SRC).o)
+
+	@echo $@ ...
+	@$(MKDIR) `dirname $@`
+	@$(AR) rcs $@ $^
 
 #---[ Debug Targets ]--------------------------------------------------------------------
 
 Debug: \
-	$(BINDBG)/$(LIBNAME)
+	$(BASEDIR)/.obj/Debug/$(MODULE_NAME).a
 
-$(BINDBG)/$(LIBNAME): \
-	$(BINDBG)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@
+$(BASEDIR)/.obj/Debug/$(MODULE_NAME).a: \
+	$(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC).o)
 
-	@echo $(basename $@) ...
+	@echo $@ ...
 	@$(MKDIR) `dirname $@`
-	@$(LN_S) -f $(LIBNAME).@PACKAGE_MAJOR_VERSION@ $@
-
-$(BINDBG)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@: \
-	$(BINDBG)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@
-
-	@echo $(basename $@) ...
-	@$(MKDIR) `dirname $@`
-	@$(LN_S) -f $(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@ $@
-
-$(BINDBG)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@: \
-	$(foreach SRC, $(basename $(LIB_SOURCES)), $(OBJDBG)/$(SRC).o) \
-	$(BASEDIR)/.obj/Debug/v3270.a
-
-	@echo $(basename $@) ...
-	@$(MKDIR) `dirname $@`
-	@$(LD) -shared -Wl,-soname,$(LIBNAME) $(LDFLAGS) -L$(BINDBG) -o $@ $^ $(LIBS)
-
+	@$(AR) rcs $@ $^
 
 #---[ Clean Targets]---------------------------------------------------------------------
 
 cleanDebug:
 
-	@rm -fr	$(OBJDBG) \
-			$(BINDBG)/$(LIBNAME) \
-			$(BINDBG)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@ \
-			$(BINDBG)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@
-
-	@make -C v3270 cleanDebug
+	@rm -fr	$(BASEDIR)/.obj/Debug/$(MODULE_NAME).a \
+			$(OBJDBG)
 
 cleanRelease:
 
-	@rm -fr	$(OBJRLS) \
-			$(BINRLS)/$(LIBNAME) \
-			$(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@ \
-			$(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@
-
-	@make -C v3270 cleanRelease
+	@rm -fr	$(BASEDIR)/.obj/Release/$(MODULE_NAME).a \
+			$(OBJRLS)
 
 clean: \
 	cleanDebug \
 	cleanRelease
+
 

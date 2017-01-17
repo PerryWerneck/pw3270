@@ -56,6 +56,7 @@ AC_PROG_CXX
 AC_PROG_CC
 AC_PROG_SED
 AC_PROG_LN_S
+AC_PATH_TOOL([AR], [ar], [ar])
 
 AC_LANG([C])
 
@@ -316,7 +317,10 @@ dnl Configure which files to generate.
 dnl ---------------------------------------------------------------------------
 
 AC_CONFIG_FILES(src/lib3270/Makefile)
+
 AC_CONFIG_FILES(src/pw3270/Makefile)
+AC_CONFIG_FILES(src/pw3270/v3270/Makefile)
+
 dnl AC_CONFIG_FILES(Makefile)
 
 dnl ---------------------------------------------------------------------------
