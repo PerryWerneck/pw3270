@@ -89,12 +89,12 @@ $(OBJDBG)/%.o: \
 				-o $@ -c $<
 
 $(OBJRLS)/%.o: \
-	%.cc \
+	%.c \
 	$(DEPENDS)
 
 	@echo $< ...
 	@$(MKDIR) `dirname $@`
-	@$(CXX) $(CFLAGS) \
+	@$(CC) $(CFLAGS) \
 				@RLS_CFLAGS@ \
 				-DBUILD_DATE=`date +"0x%Y%m%d"` \
 				-o $@ -c $<
@@ -107,6 +107,27 @@ all: \
 
 Release: \
 	$(BINRLS)/$(LIBNAME)
+
+$(BINRLS)/$(LIBNAME): \
+	$(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@
+
+	@echo $(basename $@) ...
+	@$(MKDIR) `dirname $@`
+	@$(LN_S) -f $(LIBNAME).@PACKAGE_MAJOR_VERSION@ $@
+
+$(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@: \
+	$(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@
+
+	@echo $(basename $@) ...
+	@$(MKDIR) `dirname $@`
+	@$(LN_S) -f $(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@ $@
+
+$(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@: \
+	$(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SRC).o)
+
+	@echo $(basename $@) ...
+	@$(MKDIR) `dirname $@`
+	@$(LD) -shared -Wl,-soname,$(LIBNAME) $(LDFLAGS) -o $@ $^ $(LIBS)
 
 #---[ Debug Targets ]--------------------------------------------------------------------
 
