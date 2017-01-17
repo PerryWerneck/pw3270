@@ -22,201 +22,115 @@
 #
 # perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
 # erico.mendonca@gmail.com	(Erico Mascarenhas de Mendonça)
-# licinio@bb.com.br			(Licínio Luis Branco)
-# kraucer@bb.com.br			(Kraucer Fernandes Mazuco)
 #
 
-PACKAGE=@PACKAGE_NAME@
+LIBNAME=lib3270@DLLEXT@
+
+SOURCES =	bounds.c ctlr.c util.c toggles.c screen.c selection.c kybd.c telnet.c \
+				iocalls.c connect.c \
+				host.c sf.c ansi.c resolver.c charset.c \
+				version.c session.c state.c html.c trace_ds.c see.c \
+				paste.c ssl.c actions.c \
+				ft.c ft_cut.c ft_dft.c glue.c resources.c \
+				rpq.c macros.c fallbacks.c log.c options.c
+
+#---[ Configuration values ]-------------------------------------------------------------
+
+PACKAGE_NAME=@PACKAGE_NAME@
 PACKAGE_VERSION=@PACKAGE_VERSION@
-
-DEBUG_CFLAGS=-DDEBUG=1 -g -Wall
-DEPENDS ?= *.h ../include/*.h ../include/lib3270/*.h Makefile
-
-#---[ Paths ]------------------------------------------------------------------
+PACKAGE_TARNAME=@PACKAGE_TARNAME@
 
 prefix=@prefix@
 exec_prefix=@exec_prefix@
+bindir=@bindir@
+sbindir=@sbindir@
 libdir=@libdir@
-includedir=@includedir@
-localedir=@localedir@
-datarootdir=@datarootdir@
-sysconfdir=@sysconfdir@
 
-#---[ Tools ]------------------------------------------------------------------
+BASEDIR=@BASEDIR@
 
-CFLAGS=@CFLAGS@ @DLL_CFLAGS@ -DDATAROOTDIR=\"$(datarootdir)\" -DSYSCONFDIR=\"$(sysconfdir)\" -I../include
-SSL_CFLAGS=@LIBSSL_CFLAGS@
+OBJDIR=$(BASEDIR)/.obj/lib3270
+OBJDBG=$(OBJDIR)/Debug
+OBJRLS=$(OBJDIR)/Release
 
-DLL_FLAGS=@DLL_FLAGS@
-LDFLAGS=@LDFLAGS@
+BINDIR=$(BASEDIR)/.bin
+BINDBG=$(BINDIR)/Debug
+BINRLS=$(BINDIR)/Release
 
-LIBS=@LIBS@ @LIBSSL_LIBS@ @INTL_LIBS@ @SOCKET_LIBS@ @LIBICONV@
+INSTALL=@INSTALL@
+INSTALL_DATA=@INSTALL_DATA@
+INSTALL_PROGRAM=@INSTALL_PROGRAM@
 
-#---[ Tools ]------------------------------------------------------------------
+LN_S=@LN_S@
 
+AMTAR=@AMTAR@
+SHELL=@SHELL@
 MKDIR=@MKDIR_P@
+
 CC=@CC@
 LD=@CC@
-HOST_CC=@HOST_CC@
-STRIP=@STRIP@
-INSTALL=@INSTALL@
-INSTALL_PROGRAM=$(INSTALL) -m 755
-INSTALL_DATA=$(INSTALL) -m 644
-VALGRIND=@VALGRIND@
-XGETTEXT=@XGETTEXT@
-MSGCAT=@MSGCAT@
-LN_S=@LN_S@ -f
 
-#---[       ]------------------------------------------------------------------
+CFLAGS=@CFLAGS@ @LIB3270_CFLAGS@ @LIBSSL_CFLAGS@
+LIBS=@LIBS@ @LIBSSL_LIBS@
+LDFLAGS=@LDFLAGS@
 
-OBJEXT=.o
+#---[ Rules ]----------------------------------------------------------------------------
 
-#---[ Paths ]------------------------------------------------------------------
+DEPENDS=$(BASEDIR)/src/include/*.h $(BASEDIR)/src/include/lib3270/*.h *.h Makefile
 
-ROOTDIR ?= .
-OBJDIR  ?= $(ROOTDIR)/.obj
-BINDIR  ?= $(ROOTDIR)/.bin
-TMPDIR  ?= $(ROOTDIR)/.tmp
-DEPENDS ?= *.h Makefile
+$(OBJDBG)/%.o: \
+	%.c \
+	$(DEPENDS)
 
-BINDBG  ?= $(BINDIR)/Debug
-BINRLS  ?= $(BINDIR)/Release
-LIBDBG  ?= $(BINDIR)/Debug@DLLDIR@
-
-OBJDBG = $(OBJDIR)/Debug
-OBJRLS = $(OBJDIR)/Release
-LIBRLS = $(OBJDIR)/Release@DLLDIR@
-
-#---[ Rules ]------------------------------------------------------------------
-
-$(OBJDBG)/%.o: %.c $(DEPENDS)
-	@echo "  CC   `basename $@`"
+	@echo $< ...
 	@$(MKDIR) `dirname $@`
-	@$(CC) $(DEBUG_CFLAGS) $(CFLAGS) $(SSL_CFLAGS) -o $@ -c $<
+	@$(CC) $(CFLAGS) \
+				@DBG_CFLAGS@ \
+				-DBUILD_DATE=`date +"0x%Y%m%d"`\
+				-o $@ -c $<
 
-$(OBJRLS)/%.o: %.c $(DEPENDS)
-	@echo "  CC   `basename $@`"
+$(OBJRLS)/%.o: \
+	%.cc \
+	$(DEPENDS)
+
+	@echo $< ...
 	@$(MKDIR) `dirname $@`
-	@$(CC) $(CFLAGS) $(SSL_CFLAGS) -o $@ -c $<
-
-$(TMPDIR)/pot/%.pot: %.c
-	@echo "  TEXT `basename $@`"
-	@$(MKDIR) `dirname $@`
-	@$(XGETTEXT)	--default-domain=$(PACKAGE) --language=C \
-			--keyword=_ --keyword=N_ --keyword=MSG_:2 --output=$@ $<
-	@touch $@
+	@$(CXX) $(CFLAGS) \
+				@RLS_CFLAGS@ \
+				-DBUILD_DATE=`date +"0x%Y%m%d"` \
+				-o $@ -c $<
 
 
-#---[ Sources ]----------------------------------------------------------------
+#---[ Release Targets ]------------------------------------------------------------------
 
-include sources.mak
-
-#---[ Misc targets ]-----------------------------------------------------------
+all: \
+	$(BINRLS)/$(LIBNAME)
 
 Release: \
-	$(BINRLS)/lib3270@DLLEXT@
+	$(BINRLS)/$(LIBNAME)
 
-install: \
-	Release
-
-	$(MKDIR) $(DESTDIR)$(libdir)
-	$(INSTALL_PROGRAM) $(BINRLS)/lib3270@DLLEXT@.$(PACKAGE_VERSION) $(DESTDIR)$(libdir)
-	$(LN_S) lib3270@DLLEXT@.$(PACKAGE_VERSION) $(DESTDIR)$(libdir)/lib3270@DLLEXT@.@MAJOR_VERSION@
-	$(LN_S) lib3270@DLLEXT@.@MAJOR_VERSION@ $(DESTDIR)$(libdir)/lib3270@DLLEXT@
+#---[ Debug Targets ]--------------------------------------------------------------------
 
 Debug: \
-	$(BINDBG)/lib3270@DLLEXT@
+	$(BINDBG)/$(LIBNAME)
 
-$(BINDBG)/lib3270@DLLEXT@: \
-	$(BINDBG)/lib3270@DLLEXT@.$(PACKAGE_VERSION)
+$(BINDBG)/$(LIBNAME): \
+	$(BINDBG)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@
 
-	@rm -f $@
-	@cd $(BINDBG) && $(LN_S) lib3270@DLLEXT@.$(PACKAGE_VERSION) lib3270@DLLEXT@
-
-$(BINDBG)/lib3270@DLLEXT@.$(PACKAGE_VERSION): \
-	$(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC)@OBJEXT@)
-
-	@echo "  CCLD `basename $@`"
+	@echo $(basename $@) ...
 	@$(MKDIR) `dirname $@`
-	@$(LD) $(DLL_FLAGS) $(LDFLAGS) @LDSOFLAGS@ @LDLIBFLAGS@ -o $@ $^ $(LIBS)
+	@$(LN_S) -f $(LIBNAME).@PACKAGE_MAJOR_VERSION@ $@
 
-$(BINRLS)/lib3270@DLLEXT@: \
-	$(BINRLS)/lib3270@DLLEXT@.$(PACKAGE_VERSION)
+$(BINDBG)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@: \
+	$(BINDBG)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@
 
-	@rm -f $@
-	@cd $(BINRLS) && $(LN_S) lib3270@DLLEXT@.$(PACKAGE_VERSION) lib3270@DLLEXT@
-
-$(BINRLS)/lib3270@DLLEXT@.$(PACKAGE_VERSION): \
-	$(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SRC)@OBJEXT@)
-
-	@echo "  CCLD `basename $@`"
+	@echo $(basename $@) ...
 	@$(MKDIR) `dirname $@`
-	@$(LD) $(DLL_FLAGS) $(LDFLAGS) @LDSOFLAGS@ @LDLIBFLAGS@ -o $@ $^ $(LIBS)
-	@$(STRIP) $@
+	@$(LN_S) -f $(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@ $@
 
-$(BINDBG)/testprogram$(EXEEXT): \
-	$(OBJDBG)/testprogram.o $(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC)@OBJEXT@)
+$(BINDBG)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@: \
+	$(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC).o)
 
-	@echo "  CCLD `basename $@`"
+	@echo $(basename $@) ...
 	@$(MKDIR) `dirname $@`
-	@$(LD) -o $@ $^ $(LIBS)
-
-$(BINDIR)/pot/lib3270.pot: \
-	$(foreach SRC, $(basename $(SOURCES)), $(TMPDIR)/pot/$(SRC).pot)
-
-	@rm -f $@
-	@mkdir -p `dirname $@`
-	@$(MSGCAT) --sort-output $^ > $@
-
-test: \
-	$(BINDBG)/testprogram$(EXEEXT)
-
-run: \
-	$(BINDBG)/testprogram$(EXEEXT)
-
-ifeq ($(VALGRIND),no)
-	@PATH="$(BINDIR)/Debug@DLLDIR@:$(PATH)" "$(BINDBG)/testprogram$(EXEEXT)"
-else
-	@PATH="$(BINDIR)/Debug@DLLDIR@:$(PATH)" G_DEBUG=gc-friendly G_SLICE=always-malloc \$(VALGRIND) --leak-check=full --suppressions=valgrind.suppression --gen-suppressions=all $(BINDBG)/testprogram$(EXEEXT)
-endif
-
-memchk: \
-	$(BINDBG)/testprogram$(EXEEXT)
-
-ifeq ($(VALGRIND),no)
-	@cd "$(ROOTDIR)" ; .bin/Debug/testprogram$(EXEEXT)
-else
-	@cd "$(ROOTDIR)" ; \$(VALGRIND) --leak-check=full --gen-suppressions=all $(BINDBG)/testprogram$(EXEEXT)
-endif
-
-version.c: \
-	./mkversion.sh
-
-	@echo "  GEN  $@"
-	@chmod +x ./mkversion.sh
-	@./mkversion.sh
-
-fallbacks.c: \
-	X3270.xad mkfb.c
-
-	@echo "  GEN  $@"
-	@$(MKDIR) $(BINDIR)
-	@$(HOST_CC) -g -o $(BINDIR)/mkfb@EXEEXT@ mkfb.c
-	@$(BINDIR)/mkfb@EXEEXT@ -c X3270.xad $@
-
-cleantest: \
-	clean
-
-cleanDebug: \
-	clean
-
-clean:
-	@rm -fr .obj
-	@rm -fr .bin
-	@rm -fr .tmp
-	@rm -f *.log
-	@rm -f version.c
-	@rm -f fallbacks.c
-	@rm -f lib3270.pot
-	@rm -fr debian
+	@$(LD) -shared -Wl,-soname,$(LIBNAME) $(LDFLAGS) -o $@ $^ $(LIBS)
 

@@ -32,9 +32,6 @@ dnl Process this file with autoconf to produce a configure script.
 dnl The minimum version of autoconf required.
 AC_PREREQ(2.61)
 
-dnl Load svn revision file info
-m4_include([revision.m4])
-
 dnl Initialise automake with the package name, version and
 dnl bug-reporting address.
 AC_INIT([pw3270], [5.1], [perry.werneck@gmail.com])
@@ -54,204 +51,142 @@ AM_INIT_AUTOMAKE
 dnl Check for iconv
 AM_ICONV
 
-#--[ Check for tools & Libraries ]----------------------------------------------------------------------------------------------------------------------------
-
+dnl Checks for programs.
 AC_PROG_CXX
 AC_PROG_CC
-AC_PROG_INSTALL
-AC_PROG_MKDIR_P
+AC_PROG_SED
 AC_PROG_LN_S
 
-AC_PATH_TOOL([VALGRIND], [valgrind], [no])
-AC_PATH_TOOL([AR], [ar], [ar])
+AC_LANG([C])
 
-AC_PATH_TOOL([MAKENSIS], [makensis], [no])
-AC_PATH_TOOL([WINDRES], [windres], [no])
-AC_PATH_TOOL([DBUSBINDINGTOOL],[dbus-binding-tool],[no])
+dnl ---------------------------------------------------------------------------
+dnl Initialize defaults
+dnl ---------------------------------------------------------------------------
 
-AC_PATH_TOOL([MACBUNDLER],[gtk-mac-bundler], [no])
+DBG_CFLAGS="-g -fstack-check -DDEBUG=1"
+RLS_CFLAGS="-DNDEBUG=1"
 
-AC_CHECK_PROGS(GZIP,[gzip],no)
-export GZIP;
-if test $GZIP = "no" ; then
-        AC_MSG_ERROR([Unable to find the gzip application]);
-fi
-AC_SUBST(GZIP)
-
-AC_CHECK_PROGS(ZIP,[zip],no)
-export ZIP;
-if test $GZIP = "no" ; then
-        AC_MSG_ERROR([Unable to find the gzip application]);
-fi
-AC_SUBST(ZIP)
-
-AC_CHECK_PROGS(CONVERT,[rsvg-convert],no)
-AC_SUBST(CONVERT)
-
-
-#--[ Version & Revision ]-------------------------------------------------------------------------------------------------------------------------------------
-
-AC_DEFINE(PACKAGE_REVISION,"SVN_REVISION")
-AC_SUBST(PACKAGE_REVISION,"SVN_REVISION")
-
-AC_DEFINE(PACKAGE_SOURCE,"SVN_URL")
-AC_SUBST(PACKAGE_SOURCE,"SVN_URL")
-
-AC_DEFINE(PACKAGE_LEVEL,"APP_LEVEL")
-AC_SUBST(PACKAGE_LEVEL,"APP_LEVEL")
-
-#--[ Set host based options ]---------------------------------------------------------------------------------------------------------------------------------
-
-CFLAGS="$CFLAGS -Wno-deprecated-declarations"
-DLL_CFLAGS=""
-DLL_FLAGS="-shared"
-SYSDLL_FLAGS="-shared"
-SOCKET_LIBS=""
-LIB3270_REQUIRES=""
-
-DLLEXT=".so"
-OBJEXT=".o"
-EXEEXT=""
-DLLPREFIX="lib"
-PLUGINS=""
-APP_GUI_SRC=""
-LDLIBFLAGS=""
-EXTENSIONS=""
-
-if test $host != $build; then
-	AC_CHECK_PROGS(HOST_CC, gcc cc)
-else
-	HOST_CC=$CC
-fi
+dnl ---------------------------------------------------------------------------
+dnl Check for OS specifics
+dnl ---------------------------------------------------------------------------
 
 case "$host" in
 	*-mingw32)
-		DBG_LDFLAGS="-L.bin/Debug/lib"
-		RLS_LDFLAGS="-L.bin/Release/lib -Wl,--strip-all"
-		DLLEXT=".dll"
+
 		EXEEXT=".exe"
-		SOCKET_LIBS="-lws2_32"
-		CFLAGS="$CFLAGS -mms-bitfields"
-		localedir="locale"
 		DLLPREFIX=""
+		DLLEXT=".dll"
 
-		# http://stackoverflow.com/questions/18138635/mingw-exe-requires-a-few-gcc-dlls-regardless-of-the-code
-		DLL_FLAGS="-shared -Wl,--add-stdcall-alias,--enable-stdcall-fixup,--enable-auto-import"
-		SYSDLL_FLAGS="-shared -static-libgcc -static-libstdc++ -Wl,--add-stdcall-alias,--enable-stdcall-fixup,--enable-auto-import"
-
-		LDSOFLAGS="-Wl,-soname,\`basename \$@\`"
-		LDAPPFLAGS="-mwindows"
-		LDLIBFLAGS="-Wl,--output-def,\$@.def"
-		DBGRPATH=""
-		DLLDIR=""
-		DBGCMDPREFIX=""
-		LDARCH=""
-		PLUGINS="hllapi"
-		APP_GUI_SRC="resources.rc"
-		DLLPREFIX=""
-		LIBS="$LIBS -lcomdlg32"
-
-		if test $host_cpu = "x86_64" ; then
-			PROGRAMFILES="PROGRAMFILES64"
-		else
-			PROGRAMFILES="PROGRAMFILES"
-		fi
-
-		AC_SUBST(PROGRAMFILES)
-
-		AC_CONFIG_FILES(nsi/header-$host_cpu-no-gtk.nsi)
-		AC_CONFIG_FILES(nsi/header-$host_cpu.nsi)
-		AC_CONFIG_FILES(nsi/main-begin-$host_cpu.nsi)
-		AC_CONFIG_FILES(nsi/main-end.nsi)
-		AC_CONFIG_FILES(nsi/runtime.nsi)
-		AC_CONFIG_FILES(nsi/sdk.nsi)
-		AC_CONFIG_FILES(nsi/uninstall-$host_cpu.nsi)
-		AC_CONFIG_FILES(nsi/oninit-$host_cpu.nsi)
-		AC_CONFIG_FILES(nsi/Makefile)
-
-		AC_CONFIG_FILES(nsi/hllapi.nsi)
-		AC_CONFIG_FILES(nsi/j3270.nsi)
-		AC_CONFIG_FILES(nsi/rx3270.nsi)
-
-		AC_CONFIG_FILES(nsi/runtime-init.nsi)
-
-		AC_CONFIG_FILES(makegtkruntime.sh)
+		CFLAGS="$CFLAGS -Wall -Werror -D_WIN32_WINNT=0x0600"
+		LIBS="$LIBS -lws2_32 -lntdll -lwtsapi32"
 
 		;;
 
 	*-apple-*)
-		DBG_LDFLAGS="-L.bin/Debug/lib"
-		RLS_LDFLAGS="-L.bin/Release/lib"
-		LDSOFLAGS=""
-		DLLDIR="/lib"
-		DBGRPATH=""
-		DBGCMDPREFIX="DYLD_LIBRARY_PATH=\$(BINDIR)/Debug/lib"
-		LDSOFLAGS="-Wl,-install_name,\`basename \$@\`"
-		LDARCH="-arch $build_cpu"
-		LDAPPFLAGS=""
+		EXEEXT=""
 		DLLPREFIX="lib"
+		DLLEXT=".so"
 
-		AC_CONFIG_FILES(mac/pw3270.bundle)
+		CFLAGS="$CFLAGS -Wall -Werror"
 
+		LIBS="-pthread $LIBS"
 		;;
 
-	*)
-		DLLDIR="/lib"
-		DBG_LDFLAGS="-L.bin/Debug/$DLLDIR"
-		RLS_LDFLAGS="-Wl,-rpath,\$(libdir)"
-		LDARCH=""
-		LDSOFLAGS="-Wl,-soname,\`basename \$@\`"
-		LDAPPFLAGS=""
-		DBGRPATH="-Wl,--rpath,.bin/Debug/lib"
-		DBGCMDPREFIX="LD_LIBRARY_PATH=\$(BINDIR)/Debug/lib"
+ 	*)
+		EXEEXT=""
 		DLLPREFIX="lib"
+		DLLEXT=".so"
 
-		AC_CONFIG_FILES(pw3270.spec)
+		CFLAGS="$CFLAGS -Wall -Werror"
+
+		# LIBS="-Wl,--no-allow-shlib-undefined,--as-needed,--no-undefined -pthread $LIBS"
+		LIBS="-pthread $LIBS"
 
 esac
 
-# It's easier to test hllapi on linux
-AC_CONFIG_FILES(src/plugins/hllapi/Makefile)
+AC_SUBST(DBG_CFLAGS)
+AC_SUBST(RLS_CFLAGS)
+AC_SUBST(EXEEXT)
+AC_SUBST(DLLPREFIX)
+AC_SUBST(DLLEXT)
 
-#--[ lib3270 defines ]----------------------------------------------------------------------------------------------------------------------------------------
+dnl ---------------------------------------------------------------------------
+dnl Check for other programs
+dnl ---------------------------------------------------------------------------
 
-LIB3270_CFLAGS="-I$ac_pwd/src/include"
-LIB3270_LIBS="-L$ac_pwd/.bin/Debug$DLLDIR -l3270"
+AC_PATH_TOOL([RPMBUILD], [rpmbuild], [no])
+AC_PATH_TOOL([MAKENSIS], [makensis], [no])
+AC_PATH_TOOL([AR], [ar], [ar])
 
-PW3270_CFLAGS="-I$ac_pwd/src/pw3270/include -I$ac_pwd/src/include"
-PW3270_LIBS="-L$ac_pwd/.bin/Debug$DLLDIR -l$PACKAGE_TARNAME"
+PKG_CHECK_EXISTS
 
-AC_SUBST(LIB3270_CFLAGS)
-AC_SUBST(LIB3270_LIBS)
+dnl ---------------------------------------------------------------------------
+dnl Version info
+dnl ---------------------------------------------------------------------------
 
-AC_SUBST(PW3270_CFLAGS)
-AC_SUBST(PW3270_LIBS)
+app_vrs_major=$(echo $VERSION | cut -d. -f1)
+app_vrs_minor=$(echo $VERSION | cut -d. -f2)
 
-#--[ Check gettext ]------------------------------------------------------------------------------------------------------------------------------------------
+AC_SUBST(PACKAGE_MAJOR_VERSION,$app_vrs_major)
+AC_SUBST(PACKAGE_MINOR_VERSION,$app_vrs_minor)
+
+AC_DEFINE_UNQUOTED(PACKAGE_MAJOR_VERSION, $app_vrs_major)
+AC_DEFINE_UNQUOTED(PACKAGE_MINOR_VERSION, $app_vrs_minor)
+
+AC_SUBST(PACKAGE_MAJOR_VERSION,$app_vrs_major)
+AC_SUBST(PACKAGE_MINOR_VERSION,$app_vrs_minor)
+
+dnl ---------------------------------------------------------------------------
+dnl Check for D-Bus
+dnl ---------------------------------------------------------------------------
+
+PKG_CHECK_MODULES( [DBUS], [dbus-1], AC_DEFINE(HAVE_DBUS), AC_MSG_NOTICE([ No DBUS support.]) )
+AC_SUBST(DBUS_LIBS)
+AC_SUBST(DBUS_CFLAGS)
+
+dnl ---------------------------------------------------------------------------
+dnl Check for libintl
+dnl ---------------------------------------------------------------------------
 
 AC_PATH_TOOL([XGETTEXT], [xgettext], [no])
 AC_PATH_TOOL([MSGCAT], [msgcat], [no])
 AC_PATH_TOOL([MSGINIT], [msginit], [no])
 AC_PATH_TOOL([MSGMERGE], [msgmerge], [no])
 AC_PATH_TOOL([MSGFMT], [msgfmt], [no])
-AC_PATH_TOOL([RPMBUILD], [rpmbuild], [no])
-AC_PATH_TOOL([DPKGBUILD], [dpkg-buildpackage], [no])
-AC_PATH_TOOL([GENMARSHAL], [glib-genmarshal])
 
-AC_CHECK_HEADER(libintl.h, AC_DEFINE(HAVE_LIBINTL))
-AC_CHECK_HEADER(syslog.h, AC_DEFINE(HAVE_SYSLOG))
-AC_CHECK_LIB(intl, gettext,[INTL_LIBS="-lintl"])
+AC_CHECK_HEADER(libintl.h, [
+	AC_DEFINE(HAVE_LIBINTL, 1)
+])
 
-AC_SUBST(INTL_LIBS)
+dnl ---------------------------------------------------------------------------
+dnl Check for C++ 2011 support
+dnl ---------------------------------------------------------------------------
+AC_DEFUN([AX_CHECK_COMPILE_FLAG],
+[AC_PREREQ(2.59)dnl for _AC_LANG_PREFIX
+AS_VAR_PUSHDEF([CACHEVAR],[ax_cv_check_[]_AC_LANG_ABBREV[]flags_$4_$1])dnl
+AC_CACHE_CHECK([whether _AC_LANG compiler accepts $1], CACHEVAR, [
+  ax_check_save_flags=$[]_AC_LANG_PREFIX[]FLAGS
+  _AC_LANG_PREFIX[]FLAGS="$[]_AC_LANG_PREFIX[]FLAGS $4 $1"
+  AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
+    [AS_VAR_SET(CACHEVAR,[yes])],
+    [AS_VAR_SET(CACHEVAR,[no])])
+  _AC_LANG_PREFIX[]FLAGS=$ax_check_save_flags])
+AS_IF([test x"AS_VAR_GET(CACHEVAR)" = xyes],
+  [m4_default([$2], :)],
+  [m4_default([$3], :)])
+AS_VAR_POPDEF([CACHEVAR])dnl
+])dnl AX_CHECK_COMPILE_FLAGS
 
-#--[ Check for ELF symbol visibility support ]----------------------------------------------------------------------------------------------------------------
+AX_CHECK_COMPILE_FLAG([-std=gnu++11], [CFLAGS="$CFLAGS -std=gnu++11"])
 
-# Try to compile PROGRAM, check for warnings
+dnl ---------------------------------------------------------------------------
+dnl Check for ELF symbol visibility support
+dnl ---------------------------------------------------------------------------
 m4_define([GLIB_CHECK_COMPILE_WARNINGS],
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])dnl
 rm -f conftest.$ac_objext
 glib_ac_compile_save="$ac_compile"
-ac_compile='$CC -c conftest.$ac_ext'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext'
 AS_IF([_AC_EVAL_STDERR($ac_compile) &&
          AC_TRY_COMMAND([(if test -s conftest.err; then false ; else true; fi)])],
       [$2],
@@ -263,31 +198,44 @@ rm -f conftest.$ac_objext conftest.err m4_ifval([$1], [conftest.$ac_ext])[]dnl
 ])# GLIB_CHECK_COMPILE_WARNINGS
 
 AC_MSG_CHECKING(for GNUC visibility attribute)
-GLIB_CHECK_COMPILE_WARNINGS([AC_LANG_SOURCE([
-
-#define LIB3270_INTERNAL	__attribute__((visibility("hidden"))) extern
-#define LIB3270_EXPORT		__attribute__((visibility("default"))) extern
-
-LIB3270_INTERNAL	void f_hidden(void);
-LIB3270_EXPORT		void f_export(void);
-
-void f_hidden (void) { }
-
-void f_export (void) { }
-
+GLIB_CHECK_COMPILE_WARNINGS([
+void
+__attribute__ ((visibility ("hidden")))
+     f_hidden (void)
+{
+}
+void
+__attribute__ ((visibility ("internal")))
+     f_internal (void)
+{
+}
+void
+__attribute__ ((visibility ("protected")))
+     f_protected (void)
+{
+}
+void
+__attribute__ ((visibility ("default")))
+     f_default (void)
+{
+}
 int main (int argc, char **argv)
 {
         f_hidden();
-        f_export();
+        f_internal();
+        f_protected();
+        f_default();
         return 0;
 }
-])],g_have_gnuc_visibility=yes,g_have_gnuc_visibility=no)
+],g_have_gnuc_visibility=yes,g_have_gnuc_visibility=no)
 AC_MSG_RESULT($g_have_gnuc_visibility)
 if test x$g_have_gnuc_visibility = xyes; then
   AC_DEFINE(HAVE_GNUC_VISIBILITY, 1, [supports GCC visibility attributes])
 fi
 
-# Check for compiler visibility flag
+dnl ---------------------------------------------------------------------------
+dnl Check for compiler visibility flag
+dnl ---------------------------------------------------------------------------
 AC_MSG_CHECKING(whether $CC accepts -fvisibility=hidden)
 AC_CACHE_VAL(app_cv_fvisibility_ok,
 [ac_save_cc="$CC"
@@ -300,231 +248,46 @@ CC="$ac_save_cc"])
 AC_MSG_RESULT($app_cv_fvisibility_ok)
 if test $app_cv_fvisibility_ok = yes; then
   CFLAGS="$CFLAGS -fvisibility=hidden"
-  OO_CXXFLAGS="$OO_CXXFLAGS -fvisibility=hidden"
   CXXFLAGS="$CXXFLAGS -fvisibility=hidden"
 fi
 
-#--[ Options ]------------------------------------------------------------------------------------------------------------------------------------------------
-
+dnl ---------------------------------------------------------------------------
+dnl Check for pic
+dnl ---------------------------------------------------------------------------
 AC_ARG_ENABLE([pic],
-	[AS_HELP_STRING([--disable-pic], [disable support for PIC libraries (required to compile PW3270 on some systems)])],
+	[AS_HELP_STRING([--disable-pic], [disable support for PIC libraries (required to compile on 64bits)])],
 [
 	app_cv_pic="$enableval"
 ],[
-	case "$host-$host_cpu" in
-        *-mingw32-*)
-		app_cv_pic="no"
-		;;
-
-	*-x86_64)
-		app_cv_pic="yes"
-		;;
-
-	*)
-		app_cv_pic="no"
-	esac
-
-])
-
-AC_ARG_ENABLE([registry],
-	[AS_HELP_STRING([--disable-registry], [disable configurations in windows registry])],
-[
-	app_cv_registry="$enableval"
-],[
-	case "$host" in
-        *-mingw32)
-			app_cv_registry="yes"
-			;;
-
-		*)
-			app_cv_registry="no"
-	esac
-
-])
-
-
-if test "$app_cv_pic" == "yes"; then
-	DLL_CFLAGS="$DLL_CFLAGS -fPIC"
-	OO_CXXFLAGS="-fPIC $OO_CXXFLAGS"
-fi
-
-AC_ARG_ENABLE([strip],[AS_HELP_STRING([--disable-strip], [disable stripping of binaries])], [ app_cv_strip="$enableval" ],[ app_cv_strip="yes" ])
-
-if test "$app_cv_strip" == "yes"; then
-	AC_PATH_TOOL([STRIP], [strip], "true")
-	AC_SUBST(STRIP)
-else
-	AC_SUBST(STRIP,"true")
-fi
-
-
-#--[ Check For Java ]-----------------------------------------------------------------------------------------------------------------------------------------
-
-AC_ARG_VAR([JAVA_HOME], [JAVA home directory])
-AC_ARG_VAR([JDK_HOME], [JDK home directory])
-AC_ARG_VAR([JRE_HOME], [JRE home directory])
-
-AC_ARG_WITH([jnidir], [AS_HELP_STRING([--with-jnidir], [Directory for JNI libraries])], [ jnidir="$withval" ],[ jnidir=\$"{libdir}/java" ])
-AC_ARG_WITH([javadocdir], [AS_HELP_STRING([--with-javadocdir], [Directory for javadoc files])], [ javadocdir="$withval" ],[ javadocdir=\$"{datadir}/javadoc" ])
-
-AC_ARG_WITH([jvmjardir], [AS_HELP_STRING([--with-jvmjardir], [Directory for JAR files])], [ jvmjardir="$withval" ],[ jvmjardir=\$"{libdir}/jvm-exports" ])
-
-AC_ARG_ENABLE([java],[AS_HELP_STRING([--disable-java], [Disable java integration])],[ app_cv_java="$enableval" ],[ app_cv_java="yes" ])
-
-if test "$app_cv_java" = "yes" ; then
-
-	# Check for JAVA_HOME
-	if test "_$JAVA_HOME" = "_" ; then
-		JAVA_HOME=$libdir/jvm/java
-	fi
-
-	# Check for JDK_HOME
-	if test "_$JDK_HOME" = "_" ; then
-		JDK_HOME=$JAVA_HOME
-	fi
-
-	# Check for JRE_HOME
-	if test "_$JRE_HOME" = "_" ; then
-		JRE_HOME=$JAVA_HOME/jre
-	fi
-fi
-
-if test "$app_cv_java" = "yes" ; then
-
-	AC_PATH_TOOL([JAVA], [java], [no], [$JDK_HOME/bin:$JRE_HOME/bin:$PATH])
-	if test "$JAVA" = "no" ; then
-		app_cv_java="no"
-	fi
-
-	AC_PATH_TOOL([JAVAC], [javac], [no], [$JDK_HOME/bin:$JRE_HOME/bin:$PATH])
-	if test "$JAVAC" = "no" ; then
-		app_cv_java="no"
-	fi
-
-	AC_PATH_TOOL([JAVAH], [javah], [no], [$JDK_HOME/bin:$JRE_HOME/bin:$PATH])
-	if test "$JAVAH" = "no" ; then
-		app_cv_java="no"
-	fi
-
-	AC_PATH_TOOL([JAR], [jar], [no], [$JDK_HOME/bin:$JRE_HOME/bin:$PATH])
-	if test "$JAVA" = "no" ; then
-		app_cv_java="no"
-	fi
-
-	AC_PATH_TOOL([JAVADOC], [javadoc], [no], [$JDK_HOME/bin:$JRE_HOME/bin:$PATH])
-	if test "$JAVADOC" = "no" ; then
-		app_cv_java="no"
-	fi
-
-fi
-
-# Set JVM arch
-case $host_cpu in
-
-x86_64)
-	jvm_arch=amd64
-	;;
-
-i?86)
-	jvm_arch=i386
-	;;
-powerpc64le)
-	jvm_arch=ppc64le
-	;;
-powerpc64)
-	jvm_arch=ppc64
-	;;
-
-*)
-	jvm_arch="$host_cpu"
-	;;
-
-esac
-
-# JVMDIR
-if test "_$JVMDIR" = "_" ; then
 
 	case "$host" in
 		*-mingw32)
-			jniinc=$JDK_HOME/include/win32
-			JVMDIR="\$(JRE_HOME)/bin"
+			app_cv_pic="no"
 			;;
-
-		*-apple-*)
-			jniinc=$JDK_HOME/include/apple
-			JVMDIR="\$(JRE_HOME)/lib/$jvm_arch/server"
-			;;
-
-		*)
-			jniinc=$JDK_HOME/include/linux
-			JVMDIR="\$(JRE_HOME)/lib/$jvm_arch/server"
-	esac
-
-fi
-
-
-# Java link options depends on OS
-case "$host" in
-	*-mingw32)
-
-		if test -e "$JRE_HOME/bin/client/jvm.dll"; then
-			AC_MSG_NOTICE(Found $JRE_HOME/bin/client/jvm.dll)
-			jvm_libs="-L\"\$(JRE_HOME)/bin/client\" -ljvm"
-		elif test -e "$JRE_HOME/bin/server/jvm.dll"; then
-			AC_MSG_NOTICE(Found $JRE_HOME/bin/server/jvm.dll)
-			jvm_libs="-L\"\$(JRE_HOME)/bin/server\" -ljvm"
-		else
-			AC_MSG_NOTICE([Can't find jvm.dll.])
-			app_cv_java="no"
-		fi
-		;;
-
-	*-apple-*)
-		jvm_libs="-L\$(JVMDIR) -Wl,-rpath,\$(JVMDIR) -ljvm"
-		;;
 
 	*)
-		jvm_libs="-L\$(JVMDIR) -Wl,-rpath,\$(JVMDIR) -ljvm"
-esac
+		if test "$host_cpu" = "x86_64"; then
+			app_cv_pic="yes"
+		else
+			app_cv_pic="no"
+		fi
+	esac
+])
 
-if test -d "$jniinc"; then
-	AC_MSG_NOTICE([Found $jniinc.])
-else
-	AC_MSG_NOTICE([Can't find $jniinc.])
-	app_cv_java="no"
+if test "$app_cv_pic" == "yes"; then
+	CFLAGS="$CFLAGS -fPIC"
+	CXXFLAGS="$CXXFLAGS -fPIC"
 fi
 
-if test "$app_cv_java" = "yes" ; then
+dnl ---------------------------------------------------------------------------
+dnl Lib3270 flags
+dnl ---------------------------------------------------------------------------
 
-	EXTENSIONS="$EXTENSIONS java"
-	PLUGINS="$PLUGINS j3270"
-	AC_MSG_NOTICE([jdk is present and enabled.])
+AC_SUBST(LIB3270_CFLAGS,-I$ac_pwd/src/include)
 
-	AC_CONFIG_FILES(src/java/Makefile)
-
-else
-
-	AC_MSG_NOTICE([jdk is NOT present or disabled.])
-
-fi
-
-
-AC_SUBST(JVM_LIBS,$jvm_libs)
-
-AC_SUBST(JAVAC)
-AC_SUBST(JAVAH)
-AC_SUBST(JAVADOC)
-AC_SUBST(JVMDIR)
-AC_SUBST(jnidir)
-AC_SUBST(jvmjardir)
-AC_SUBST(javadocdir)
-AC_SUBST(JAR)
-AC_SUBST(jvm_arch)
-AC_SUBST(JDK_HOME)
-AC_SUBST(JRE_HOME)
-AC_SUBST(JNI_CPPFLAGS,"-I$JDK_HOME/include -I$jniinc")
-
-#--[ Headers ]------------------------------------------------------------------------------------------------------------------------------------------------
+dnl ---------------------------------------------------------------------------
+dnl Check for headers
+dnl ---------------------------------------------------------------------------
 
 AC_CHECK_HEADER(malloc.h, AC_DEFINE(HAVE_MALLOC_H,,[do we have malloc.h?]))
 
@@ -532,30 +295,11 @@ AC_CHECK_FUNCS(getaddrinfo, AC_DEFINE(HAVE_GETADDRINFO) )
 AC_CHECK_FUNC(vasprintf, AC_DEFINE(HAVE_VASPRINTF) )
 AC_CHECK_FUNC(strtok_r, AC_DEFINE(HAVE_STRTOK_R) )
 
-
-
 PKG_CHECK_EXISTS
 
-#--[ Python ]-----------------------------------------------------------------------------------------------------------------------------------------------
-
-AC_ARG_ENABLE([python],[AS_HELP_STRING([--disable-python], [Disable python integration])],[ app_cv_python="$enableval" ],[ app_cv_python="yes" ])
-
-if test "$app_cv_python" == "yes"; then
-
-	PKG_CHECK_MODULES( [PYTHON], [python], app_have_python=1 )
-
-fi
-
-AC_SUBST(PYTHON_LIBS)
-AC_SUBST(PYTHON_CFLAGS)
-
-if test "$app_have_python" == "1"; then
-	AC_DEFINE(HAVE_PYTHON)
-	EXTENSIONS="$EXTENSIONS python"
-	AC_CONFIG_FILES(src/python/Makefile)
-fi
-
-#--[ GTK 2/3 check ]------------------------------------------------------------------------------------------------------------------------------------------
+dnl ---------------------------------------------------------------------------
+dnl Check for GTK
+dnl ---------------------------------------------------------------------------
 
 PKG_CHECK_MODULES( [GTK], [gtk+-3.0 gmodule-2.0], [ GTK_VERSION="3.0" ], [ PKG_CHECK_MODULES( [GTK], [gtk+-2.0 >= 2.14 gthread-2.0 gmodule-2.0], [ GTK_VERSION="2.0" ] ) ], [  ] )
 
@@ -564,375 +308,41 @@ AC_SUBST(GTK_CFLAGS)
 AC_SUBST(GTK_VERSION)
 AC_SUBST(GTK_MODVERSION,`$PKG_CONFIG --modversion gtk+-$GTK_VERSION`)
 
-#--[ GLIB check ]---------------------------------------------------------------------------------------------------------------------------------------------
+dnl ---------------------------------------------------------------------------
+dnl Check for GLIB
+dnl ---------------------------------------------------------------------------
 
 PKG_CHECK_MODULES( [GLIB], [glib-2.0], AC_DEFINE(HAVE_GLIB) )
 AC_SUBST(GLIB_LIBS)
 AC_SUBST(GLIB_CFLAGS)
 
-#--[ Check DBUS ]---------------------------------------------------------------------------------------------------------------------------------------------
+dnl ---------------------------------------------------------------------------
+dnl Check for Libraries
+dnl ---------------------------------------------------------------------------
 
-PKG_CHECK_MODULES( [DBUS], [dbus-1], app_cv_libdbus=yes, AC_MSG_NOTICE([ No DBUS support.]) )
-AC_SUBST(DBUS_LIBS)
-AC_SUBST(DBUS_CFLAGS)
-
-PKG_CHECK_MODULES( [GDBUS], [dbus-glib-1], app_cv_dbus=yes, AC_MSG_NOTICE([No GDBUS support.])  )
-AC_SUBST(GDBUS_LIBS)
-AC_SUBST(GDBUS_CFLAGS)
-
-if test "$app_cv_dbus" == "yes"; then
-
-	AC_DEFINE(HAVE_DBUS)
-	AC_CONFIG_FILES(src/plugins/dbus3270/Makefile)
-	PLUGINS="$PLUGINS dbus3270"
-
-fi
-
-#--[ SSL ]----------------------------------------------------------------------------------------------------------------------------------------------------
-
-PKG_CHECK_MODULES( [LIBSSL], [openssl], AC_DEFINE(HAVE_LIBSSL), AC_MSG_NOTICE([libssl not present.]) )
+PKG_CHECK_MODULES( [LIBSSL], [libssl libcrypto], AC_DEFINE(HAVE_LIBSSL), AC_MSG_NOTICE([libssl not present.]) )
 
 AC_SUBST(LIBSSL_LIBS)
 AC_SUBST(LIBSSL_CFLAGS)
 
-#--[ Libraries ]----------------------------------------------------------------------------------------------------------------------------------------------
-PKG_CHECK_MODULES( [GTKMAC], [gtk-mac-integration], AC_DEFINE(HAVE_GTKMAC), AC_MSG_NOTICE([macosx integration not present.]) )
-AC_SUBST(GTKMAC_LIBS)
-AC_SUBST(GTKMAC_CFLAGS)
-
-AC_SEARCH_LIBS( [sin], [m], AC_DEFINE(HAVE_LIBM), AC_MSG_NOTICE([libm not present.]))
-AC_SUBST(SOCKET_LIBS)
-
 AC_SEARCH_LIBS([dlopen], [dl], AC_DEFINE(HAVE_LIBDL), AC_MSG_NOTICE([libdl not present.]))
 
-#--[ PHP ]--------------------------------------------------------------------------------------------------------------------------------------------------
-
-AC_ARG_WITH([php-config], [AS_HELP_STRING([--with-php-config], [Path to php-config tool])], [ PHPCONFIG="$withval" ],[ AC_PATH_TOOL(PHPCONFIG, php-config, , $PATH) ])
-
-case "$host" in
-        *-mingw32)
-		AC_MSG_NOTICE([PHP disabled on windows platforms.])
-		;;
-
-	*-apple-*)
-		AC_MSG_NOTICE([PHP disabled on apple platforms.])
-		;;
-
-	*)
-		if test -z "${PHPCONFIG}"; then
-
-			AC_MSG_NOTICE([Program php-config not found. Use --with-php-config=path to specify absolute path to the php-config tool.])
-
-		else
-
-			AC_DEFINE(HAVE_PHP)
-			EXTENSIONS="$EXTENSIONS php"
-			PHPMAJOR=`$PHPCONFIG --version | cut -d. -f1`
-
-			PHPCONFDIR=`$PHPCONFIG | sed "s@ @\n@g" | grep "^--with-config-file-scan-dir=" | cut -d= -f2`
-
-			if test -z "${PHPCONFDIR}"; then
-
-				if test -d /etc/php${PHPMAJOR}/conf.d; then
-					PHPCONFDIR=/etc/php${PHPMAJOR}/conf.d
-				elif test -d /etc/php/conf.d; then
-					PHPCONFDIR=/etc/php/conf.d
-				else
-					PHPCONFDIR=/etc/php${PHPMAJOR}/cli
-				fi
-
-				AC_MSG_NOTICE([Using $PHPCONFDIR for PHP config files.])
-
-			else
-
-				AC_MSG_NOTICE([Detected $PHPCONFDIR for PHP config files.])
-
-			fi
-
-			AC_CONFIG_FILES(src/php/Makefile)
-			AC_CONFIG_FILES(src/php/php3270.h)
-
-		fi
-
-esac
-
-AC_SUBST(PHPCONFIG)
-AC_SUBST(PHPMAJOR)
-AC_SUBST(PHPCONFDIR)
-
-
-#--[ ooRexx ]-----------------------------------------------------------------------------------------------------------------------------------------------
-
-AC_PATH_TOOL([REXXC], [rexxc], [cp] )
-
-AC_ARG_ENABLE([rexx],[AS_HELP_STRING([--disable-rexx], [Disable ooRexx integration])],[ app_cv_rexx="$enableval" ],[ app_cv_rexx="yes" ])
-
-if test "$app_cv_rexx" == "yes"; then
-
-	AC_PATH_TOOL([REXXCONFIG], [oorexx-config], [no])
-
-	if test "$REXXCONFIG" != "no"; then
-		app_cv_rexx='yes'
-		REXX_CFLAGS=`$REXXCONFIG --cflags`
-		REXX_LIBS=`$REXXCONFIG --libs`
-		REXX_HOME=`$REXXCONFIG --prefix`/share/ooRexx
-		AC_MSG_NOTICE([Got settings from oorexx-config.])
-	else
-		AC_MSG_NOTICE([Can't find oorexx-config.])
-		app_cv_rexx='no'
-	fi
-
-fi
-
-if test "$app_cv_rexx" == "yes"; then
-
-	AC_DEFINE(HAVE_REXX)
-	AC_DEFINE(HAVE_OOREXXAPI_H)
-
-	PLUGINS="$PLUGINS rx3270"
-	EXTENSIONS="$EXTENSIONS rexx"
-
-	AC_CONFIG_FILES(src/plugins/rx3270/Makefile)
-
-	AC_MSG_NOTICE([ooRexx plugin & extension are enabled.])
-else
-	AC_MSG_NOTICE([ooRexx is NOT present or disabled.])
-fi
-
-AC_ARG_WITH([rexxlibdir], [AS_HELP_STRING([--with-rexxlibdir], [Path to rexx extension libs])], [ REXX_LIBDIR=$withval ],[ REXX_LIBDIR=$libdir ])
-
-AC_SUBST(REXXC)
-AC_SUBST(REXXCONFIG)
-AC_SUBST(REXX_CFLAGS)
-AC_SUBST(REXX_LIBS)
-AC_SUBST(REXX_HOME)
-AC_SUBST(REXX_LIBDIR)
-
-#--[ Libreoffice ]--------------------------------------------------------------------------------------------------------------------------------------------
-
-AC_ARG_ENABLE([office],[AS_HELP_STRING([--disable-office], [Disable libreoffice extension])],[ app_cv_office="$enableval" ],[ app_cv_office="yes" ])
-
-AC_ARG_VAR([OFFICE_HOME], [Libreoffice home])
-AC_ARG_VAR([OO_SDK_HOME], [Libreoffice SDK home])
-AC_ARG_VAR([OO_SDK_URE_HOME], [Libreoffice URE home])
-
-# Disabled due to problems with the latest libreoffice API.
-app_cv_office="no"
-
-#case "$host" in
-#        *-mingw32)
-#		app_cv_office="no"
-#		;;
-#
-#	*-apple-*)
-#		app_cv_office="no"
-#		;;
-#
-#	*)
-#		OO_LDFLAGS="-luno_cppu -luno_cppuhelpergcc3 -luno_salhelpergcc3"
-#
-#		if test "_$OFFICE_HOME" == "_" ; then
-#			if test "$host_cpu" = "x86_64"; then
-#				OFFICE_HOME="/usr/lib64/libreoffice"
-#			else
-#				OFFICE_HOME="/usr/lib/libreoffice"
-#			fi
-#		fi
-#
-#		if test "_$OO_SDK_HOME" == "_" ; then
-#			OO_SDK_HOME=$OFFICE_HOME/sdk
-#		fi
-#
-#		if test "_$OO_SDK_URE_HOME" == "_" ; then
-#			if test -d $OFFICE_HOME/ure; then
-#				OO_SDK_URE_HOME="$OFFICE_HOME/ure"
-#			elif test -d $OFFICE_HOME/program/types.rdb; then
-#				OO_SDK_URE_HOME="$OFFICE_HOME/program"
-#			else
-#				if test "$host_cpu" = "x86_64"; then
-#					OO_SDK_URE_HOME="/usr/lib64/ure"
-#				else
-#					OO_SDK_URE_HOME="/usr/lib/ure"
-#				fi
-#			fi
-#		fi
-#
-#esac
-
-# Setup c++ compiler flags
-if test -d "$prefix/include/libreoffice"; then
-	OO_CXXFLAGS="$OO_CXXFLAGS -I$prefix/include/libreoffice"
-	AC_MSG_NOTICE([Found libreoffice includes at $prefix/include/libreoffice])
-elif test -d "/usr/include/libreoffice"; then
-	OO_CXXFLAGS="$OO_CXXFLAGS -I/usr/include/libreoffice"
-	AC_MSG_NOTICE([Found libreoffice includes at /usr/include/libreoffice])
-elif test -d "$OO_SDK_HOME/include"; then
-	OO_CXXFLAGS="$OO_CXXFLAGS -I$OO_SDK_HOME/include"
-	AC_MSG_NOTICE([Found libreoffice includes at $OO_SDK_HOME/include])
-else
-	app_cv_office="no"
-	AC_MSG_NOTICE([Can't libreoffice includes])
-fi
-
-OO_CXXFLAGS="-DCPPU_ENV=gcc3 -Wno-strict-aliasing $OO_CXXFLAGS"
-
-# Test for IDL files
-if test -d "$OO_SDK_HOME/idl"; then
-	IDLDIR="$OO_SDK_HOME/idl"
-	AC_MSG_NOTICE([Found idl at $IDLDIR])
-elif test -d "/usr/share/idl/libreoffice"; then
-	IDLDIR="/usr/share/idl/libreoffice"
-	AC_MSG_NOTICE([Found idl at $IDLDIR])
-elif test -d "$libdir/libreoffice/sdk/idl"; then
-	IDLDIR="$libdir/libreoffice/sdk/idl"
-	AC_MSG_NOTICE([Found idl at $IDLDIR])
-else
-	app_cv_office="no"
-	AC_MSG_NOTICE([Can't find idl path])
-fi
-
-AC_PATH_TOOL([IDLC], idlc, "no", path=$PATH:$OO_SDK_HOME/bin)
-if test "$IDLC" == "no" ; then
-	app_cv_office="no"
-fi
-
-AC_PATH_TOOL([UNOPKG], unopkg, "no", path=$PATH:$OO_SDK_HOME/bin)
-if test "$UNOPKG" == "no" ; then
-	app_cv_office="no"
-fi
-
-AC_PATH_TOOL([REGMERGE], regmerge, "no", path=$PATH:$OO_SDK_URE_HOME/bin:$OFFICE_HOME/program)
-if test "$REGMERGE" == "no" ; then
-	app_cv_office="no"
-fi
-
-AC_PATH_TOOL([CPPUMAKER], cppumaker, "no", path=$PATH:$OO_SDK_HOME/bin)
-if test "$CPPUMAKER" == "no" ; then
-	app_cv_office="no"
-fi
-
-AC_PATH_TOOL([UNO], uno, "no", path=$PATH:$OO_SDK_URE_HOME/bin:$OFFICE_HOME/program)
-if test "$UNO" == "no" ; then
-	app_cv_office="no"
-fi
-
-# Check for OO_SDK_HOME
-if test "_$OO_SDK_HOME" == "_" ; then
-	app_cv_office="no"
-fi
-
-# Check for OFFICE_HOME
-if test "_$OFFICE_HOME" == "_" ; then
-	app_cv_office="no"
-fi
-
-# Find types.rdb
-if test -e "$OO_SDK_URE_HOME/share/misc/types.rdb"; then
-	OO_TYPES=$OO_SDK_URE_HOME/share/misc/types.rdb
-elif test -e "$OFFICE_HOME/program/types.rdb"; then
-	OO_TYPES=$OFFICE_HOME/program/types.rdb
-else
-	app_cv_office="no"
-	AC_MSG_NOTICE([Can't find types.rdb])
-fi
-
-# Set targets
-if test "$app_cv_office" == "yes" ; then
-
-	AC_MSG_NOTICE([Found $OO_TYPES])
-
-	AC_MSG_NOTICE([libreoffice sdk is present.])
-	EXTENSIONS="$EXTENSIONS oxt"
-
-	AC_CONFIG_FILES(src/loffice/Makefile)
-	AC_CONFIG_FILES(src/loffice/description.xml)
-	AC_CONFIG_FILES(src/loffice/manifest.xml)
-
-
-else
-
-	AC_MSG_NOTICE([libreoffice sdk is NOT present or disabled.])
-
-fi
-
-AC_SUBST(OFFICE_HOME)
-AC_SUBST(OO_SDK_HOME)
-AC_SUBST(OO_SDK_URE_HOME)
-AC_SUBST(IDLDIR)
-AC_SUBST(OO_CXXFLAGS)
-AC_SUBST(OO_LDFLAGS)
-AC_SUBST(OO_TYPES)
-
-#--[ Pre-reqs ]-----------------------------------------------------------------------------------------------------------------------------------------------
-AC_SUBST(LIB3270_REQUIRES)
-
-#--[ Misc options ]-------------------------------------------------------------------------------------------------------------------------------------------
-
-if test "$app_cv_registry" == "yes"; then
-	AC_DEFINE(HAVE_WIN_REGISTRY)
-fi
-
-AC_SUBST(MAJOR_VERSION,"$(echo $PACKAGE_VERSION | cut -d. -f1)")
-AC_SUBST(MINOR_VERSION,"$(echo $PACKAGE_VERSION | cut -d. -f2)")
-AC_SUBST(HOST_CC)
-AC_SUBST(EXEEXT)
-AC_SUBST(DLLPREFIX)
-AC_SUBST(DLLEXT)
-AC_SUBST(DLL_FLAGS)
-AC_SUBST(SYSDLL_FLAGS)
-AC_SUBST(DLL_CFLAGS)
-AC_SUBST(DLLDIR)
-AC_SUBST(DLLPREFIX)
-AC_SUBST(LDSOFLAGS)
-AC_SUBST(LDAPPFLAGS)
-AC_SUBST(LDLIBFLAGS)
-AC_SUBST(DBGRPATH)
-AC_SUBST(DBGCMDPREFIX)
-AC_SUBST(LDARCH)
-AC_SUBST(PLUGINS)
-AC_SUBST(EXTENSIONS)
-AC_SUBST(APP_GUI_SRC)
-
-AC_SUBST(RLS_LDFLAGS)
-AC_SUBST(CLASS_LIBS)
-
-#--[ Output files ]-------------------------------------------------------------------------------------------------------------------------------------------
-
-AC_CONFIG_FILES(Makefile)
-AC_CONFIG_FILES(lib3270.pc)
-AC_CONFIG_FILES(pw3270.pc)
-AC_CONFIG_FILES(versions)
-
-AC_CONFIG_FILES(src/include/rules.mak)
-AC_CONFIG_FILES(src/include/plugin.mak)
-
-AC_CONFIG_FILES(src/lib3270/mkversion.sh)
+dnl ---------------------------------------------------------------------------
+dnl Output config
+dnl ---------------------------------------------------------------------------
+
+AC_SUBST(BASEDIR,$ac_pwd)
+
+dnl ---------------------------------------------------------------------------
+dnl Configure which files to generate.
+dnl ---------------------------------------------------------------------------
 
 AC_CONFIG_FILES(src/lib3270/Makefile)
-AC_CONFIG_FILES(src/pw3270/Makefile)
-AC_CONFIG_FILES(src/pw3270/uiparser/Makefile)
-AC_CONFIG_FILES(src/pw3270/v3270ft/Makefile)
-AC_CONFIG_FILES(src/tools/Makefile)
+dnl AC_CONFIG_FILES(Makefile)
 
-AC_CONFIG_FILES(src/classlib/Makefile)
-AC_CONFIG_FILES(src/classlib/class.mak)
-
-AC_CONFIG_FILES(man/Makefile)
-AC_CONFIG_FILES(src/sample/Makefile)
-
-
-case "$host" in
-	*-mingw32)
-		;;
-
-	*-apple-*)
-		;;
-
-	*)
-		;;
-esac
-
-
-
+dnl ---------------------------------------------------------------------------
 dnl Output the generated config.status script.
+dnl ---------------------------------------------------------------------------
 AC_OUTPUT
+
+
