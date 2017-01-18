@@ -53,6 +53,10 @@ BINRLS=$(BINDIR)/Release
 
 #---[ Tools ]------------------------------------------------------------------
 
+INSTALL=@INSTALL@
+INSTALL_DATA=@INSTALL_DATA@
+INSTALL_PROGRAM=@INSTALL_PROGRAM@
+MKDIR=@MKDIR_P@
 
 #---[ Rules ]------------------------------------------------------------------
 
@@ -110,6 +114,11 @@ install: \
 	$(DESTDIR)$(libdir)/lib3270@DLLEXT@ \
 	$(DESTDIR)$(libdir)/$(PACKAGE_TARNAME)@EXEEXT@
 
+	@$(MKDIR) $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)
+	@$(INSTALL_DATA) conf/colors.conf $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)
+
+	@$(MKDIR) $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/ui
+	@$(INSTALL_DATA) ui/*.xml $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/ui
 
 #---[ Debug targets ]----------------------------------------------------------
 
