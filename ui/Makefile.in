@@ -1,0 +1,140 @@
+#
+# "Software pw3270, desenvolvido com base nos códigos fontes do WC3270  e X3270
+# (Paul Mattes Paul.Mattes@usa.net), de emulação de terminal 3270 para acesso a
+# aplicativos mainframe. Registro no INPI sob o nome G3270.
+#
+# Copyright (C) <2008> <Banco do Brasil S.A.>
+#
+# Este programa é software livre. Você pode redistribuí-lo e/ou modificá-lo sob
+# os termos da GPL v.2 - Licença Pública Geral  GNU,  conforme  publicado  pela
+# Free Software Foundation.
+#
+# Este programa é distribuído na expectativa de  ser  útil,  mas  SEM  QUALQUER
+# GARANTIA; sem mesmo a garantia implícita de COMERCIALIZAÇÃO ou  de  ADEQUAÇÃO
+# A QUALQUER PROPÓSITO EM PARTICULAR. Consulte a Licença Pública Geral GNU para
+# obter mais detalhes.
+#
+# Você deve ter recebido uma cópia da Licença Pública Geral GNU junto com este
+# programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple
+# Place, Suite 330, Boston, MA, 02111-1307, USA
+#
+# Contatos:
+#
+# perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
+# erico.mendonca@gmail.com	(Erico Mascarenhas de Mendonça)
+#
+
+MODULE_NAME=xml2pot
+SOURCES=xml2pot.c
+
+#---[ Configuration values ]-------------------------------------------------------------
+
+PACKAGE_NAME=@PACKAGE_NAME@
+PACKAGE_VERSION=@PACKAGE_VERSION@
+PACKAGE_TARNAME=@PACKAGE_TARNAME@
+
+BASEDIR=@BASEDIR@
+POTDIR=$(BASEDIR)/.pot/ui
+
+OBJDIR=.obj
+OBJDBG=$(OBJDIR)/Debug
+OBJRLS=$(OBJDIR)/Release
+
+BINDIR=$(BASEDIR)/.bin
+BINDBG=$(BINDIR)/Debug
+BINRLS=$(BINDIR)/Release
+
+MKDIR=@MKDIR_P@
+CC=@HOST_CC@
+LD=@HOST_CC@
+MSGCAT=@MSGCAT@
+
+CFLAGS=@CFLAGS@ -Wno-deprecated-declarations @GTK_CFLAGS@
+LIBS=@LIBS@ @GTK_LIBS@
+
+#---[ Rules ]----------------------------------------------------------------------------
+
+$(OBJDBG)/%.o: \
+	%.c \
+	Makefile
+
+	@echo $< ...
+	@$(MKDIR) `dirname $@`
+	@$(CC) $(CFLAGS) \
+				@DBG_CFLAGS@ \
+				-DBUILD_DATE=`date +"0x%Y%m%d"`\
+				-o $@ -c $<
+
+$(OBJRLS)/%.o: \
+	%.c \
+	Makefile
+
+	@echo $< ...
+	@$(MKDIR) `dirname $@`
+	@$(CC) $(CFLAGS) \
+				@RLS_CFLAGS@ \
+				-DBUILD_DATE=`date +"0x%Y%m%d"` \
+				-o $@ -c $<
+
+$(POTDIR)/%.pot: \
+	%.xml \
+	$(BINRLS)/$(MODULE_NAME)
+
+	@echo $(notdir $@) ...
+	@$(MKDIR) `dirname $@`
+	@$(BINRLS)/$(MODULE_NAME) $< > $@
+	@touch $@
+
+
+#---[ Targets ]----------------------------------------------------------------
+
+all: \
+	$(BINRLS)/$(MODULE_NAME)$(EXEEXT)
+
+Release: \
+	$(BINRLS)/$(MODULE_NAME)$(EXEEXT)
+
+pot: \
+	$(BASEDIR)/.pot/ui.pot
+
+$(BASEDIR)/.pot/ui.pot: \
+	$(foreach SRC, $(basename $(wildcard *.xml)), $(POTDIR)/$(SRC).pot)
+
+	@rm -f $@
+	@mkdir -p `dirname $@`
+	@$(MSGCAT) --sort-output $^ > $@
+
+$(BINRLS)/$(MODULE_NAME)$(EXEEXT): \
+	$(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SRC).o)
+
+	@echo $< ...
+	@$(MKDIR) `dirname $@`
+	@$(LD) -o $@ $^ $(LIBS)
+
+Debug: \
+	$(BINDBG)/$(MODULE_NAME)$(EXEEXT)
+
+$(BINDBG)/$(MODULE_NAME)$(EXEEXT): \
+	$(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC).o)
+
+	echo $@
+
+	@echo $< ...
+	@$(MKDIR) `dirname $@`
+	@$(LD) -o $@ $^ $(LIBS)
+
+
+cleanDebug:
+
+	@rm -fr	$(OBJDBG) \
+			$(BINDBG)/$(MODULE_NAME)$(EXEEXT)
+
+cleanRelease:
+
+	@rm -fr	$(OBJRLS) \
+			$(BINRLS)/$(MODULE_NAME)$(EXEEXT)
+
+clean: \
+	cleanDebug \
+	cleanRelease
+
