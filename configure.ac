@@ -82,6 +82,8 @@ case "$host" in
 		CFLAGS="$CFLAGS -D_WIN32_WINNT=0x0600"
 		LIBS="$LIBS -lws2_32 -lntdll -lwtsapi32"
 
+		AC_CONFIG_FILES(win/makegtkruntime.sh)
+
 		;;
 
 	*-apple-*)
@@ -101,6 +103,9 @@ case "$host" in
 
 		# LIBS="-Wl,--no-allow-shlib-undefined,--as-needed,--no-undefined -pthread $LIBS"
 		LIBS="-pthread $LIBS"
+
+		AC_CONFIG_FILES(devel/lib3270.pc)
+		AC_CONFIG_FILES(devel/pw3270.pc)
 
 esac
 
