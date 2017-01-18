@@ -49,7 +49,7 @@ desktopdir=$(datarootdir)/applications
 
 BASEDIR=@BASEDIR@
 
-OBJDIR=$(BASEDIR)/.obj/pw3270
+OBJDIR=.obj
 OBJDBG=$(OBJDIR)/Debug
 OBJRLS=$(OBJDIR)/Release
 

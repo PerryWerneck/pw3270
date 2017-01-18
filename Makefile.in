@@ -22,8 +22,6 @@
 #
 # perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
 # erico.mendonca@gmail.com	(Erico Mascarenhas de Mendonça)
-# licinio@bb.com.br		(Licínio Luis Branco)
-# kraucer@bb.com.br		(Kraucer Fernandes Mazuco)
 #
 
 #---[ Configuration values ]---------------------------------------------------
@@ -31,11 +29,7 @@
 PACKAGE_NAME=@PACKAGE_NAME@
 PACKAGE_VERSION=@PACKAGE_VERSION@
 PACKAGE_LEVEL=@PACKAGE_LEVEL@
-PACKAGE_REVISION=@PACKAGE_REVISION@
 PACKAGE_TARNAME=@PACKAGE_TARNAME@
-
-PLUGINS=@PLUGINS@
-EXTENSIONS=@EXTENSIONS@
 
 #---[ Paths ]------------------------------------------------------------------
 
@@ -51,413 +45,82 @@ docdir=@docdir@
 sysconfdir=@sysconfdir@
 mandir=@mandir@
 
-BINDIR=.bin
-EXEEXT=@EXEEXT@
-DBGLIB=-L../../$(BINDIR)/Debug@DLLDIR@ -l3270
-RLSLIB=-L../../$(BINDIR)/Release@DLLDIR@ -l3270
-TMPDIR = .tmp
-GLOBAL_DEPS=$(PWD)/include/*.h $(PWD)/include/lib3270/*.h
-LANG_FILES=$(wildcard po/*.po)
+BASEDIR=@BASEDIR@
+
+BINDIR=$(BASEDIR)/.bin
+BINDBG=$(BINDIR)/Debug
+BINRLS=$(BINDIR)/Release
 
 #---[ Tools ]------------------------------------------------------------------
 
-VALGRIND=@VALGRIND@
-MKDIR=@MKDIR_P@
-INSTALL=@INSTALL@
-INSTALL_PROGRAM=@INSTALL_PROGRAM@
-INSTALL_DATA=@INSTALL_DATA@
-RPMBUILD=@RPMBUILD@
-DPKGBUILD=@DPKGBUILD@
-MACBUNDLER=@MACBUNDLER@
-CONVERT=@CONVERT@
-MSGCAT=@MSGCAT@
-MSGINIT=@MSGINIT@
-MSGMERGE=@MSGMERGE@
-MSGFMT=@MSGFMT@
-XML2POT=src/tools/xml2pot@EXEEXT@
-SHELL=@SHELL@
-AMTAR=@AMTAR@
-DBGCMDPREFIX=@DBGCMDPREFIX@
-MAKENSIS=@MAKENSIS@
-
-PLUGIN_RELEASE_ARGS=BINDIR="../../../$(BINDIR)" LIB3270_MODE=Release
-PLUGIN_DEBUG_ARGS=BINDIR="../../../$(BINDIR)" LIB3270_MODE=Debug
 
 #---[ Rules ]------------------------------------------------------------------
 
-%.tar.bz2: %.tar
-	@echo "  GEN  `basename $@`"
-	@bzip2 --compress -9 --stdout $< > $@
-	@chmod 0644 $@
+DEPENDS=$(BASEDIR)/src/include/*.h $(BASEDIR)/src/include/lib3270/*.h $(BASEDIR)/src/include/pw3270/*.h Makefile
 
-%.tar.gz: %.tar
-	@echo "  GEN  `basename $@`"
-	@gzip -9 --stdout $< > $@
-	@chmod 0644 $@
+$(BINDBG)/%@DLLEXT@: \
+	$(DEPENDS) \
+	./src/%/*
+ 
+	@$(MAKE) -C src/$(basename $(notdir $@)) $@
 
+$(BINDBG)/%@EXEEXT@: \
+	$(DEPENDS) \
+	./src/%/*
+ 
+	@$(MAKE) -C src/$(basename $(notdir $@)) $@
 
-src/pw3270/%.png: src/pw3270/pixmaps/%.svg
-ifneq ($(CONVERT),no)
-	@echo "  GEN  `basename $@`"
-	@$(MKDIR) `dirname $@`
-	@$(CONVERT) --format=png --output=$@ $<
-endif
+$(BINRLS)/%@DLLEXT@: \
+	$(DEPENDS) \
+	./src/%/*
+ 
+	@$(MAKE) -C src/$(basename $(notdir $@)) $@
 
-%.png: src/pw3270/pixmaps/%.svg
-ifneq ($(CONVERT),no)
-	@echo "  GEN  `basename $@`"
-	@$(MKDIR) `dirname $@`
-	@$(CONVERT) --format=png --output=$@ $<
-endif
+$(BINRLS)/%@EXEEXT@: \
+	$(DEPENDS) \
+	./src/%/*
+ 
+	@$(MAKE) -C src/$(basename $(notdir $@)) $@
 
-$(BINDIR)/pot/%.pot: src/%/Makefile
-	@$(MAKE) BINDIR=../../$(BINDIR) -C $(dir $^) ../../$@
-
-po/%.po: $(PACKAGE_NAME).po
-	@echo "  GEN  `basename $@`"
-	@$(MKDIR) `dirname $@`
-	@$(MKDIR) $(TMPDIR)/po
-	@cp $@ $(TMPDIR)/$@ 2> $(TMPDIR)/cp.err > $(TMPDIR)/cp.out || true
-	@touch $(TMPDIR)/$@
-	@$(MSGMERGE) $(TMPDIR)/$@ $(PACKAGE_NAME).po --output-file=$@
-	@rm -fr $(TMPDIR)/po
-
-$(BINDIR)/Release/$(localedir)/%/LC_MESSAGES/$(PACKAGE_NAME).mo: po/%.po
-	@echo "  FMT  `basename $@`"
-	@$(MKDIR) `dirname $@`
-	@$(MSGFMT) -c -v -o $@ $^
-
-src/tools/%@EXEEXT@: src/tools/%.c
-	@make -C src/tools $(notdir $@)
-
-$(BINDIR)/Debug/plugins/%@DLLEXT@: src/plugins/%/* $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
-	@make BINDIR="../../../$(BINDIR)" PW3270_LIBS="-L../../../$(BINDIR)/Debug@DLLDIR@ -l3270 -lpw3270" PW3270_CFLAGS="-I../../../src/include" -C $(dir $<) Debug
-
-$(BINDIR)/Release/plugins/%@DLLEXT@: src/plugins/%/* $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
-	@make $(PLUGIN_RELEASE_ARGS) -C $(dir $<) Release
-
-$(BINDIR)/Debug/plugins/j3270@DLLEXT@: src/java/* $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
-	@make BINDIR="../../$(BINDIR)" PW3270_LIBS="-L../../$(BINDIR)/Debug@DLLDIR@ -l3270 -lpw3270" PW3270_CFLAGS="-I../include" -C $(dir $<) Debug
-
-$(BINDIR)/Release/plugins/j3270@DLLEXT@: src/java/* $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
-	make BINDIR="../../$(BINDIR)" PW3270_LIBS="-L../../$(BINDIR)/Release@DLLDIR@ -l3270 -lpw3270" PW3270_CFLAGS="-I../include" -C $(dir $<) Release
-
-$(DESTDIR)$(libdir)/$(PACKAGE_NAME)-plugins/%@DLLEXT@: $(BINDIR)/Release/plugins/%@DLLEXT@
-	@$(MKDIR) `dirname $@`
-	@$(INSTALL_PROGRAM) "$^" "$@"
 
 #---[ Release targets ]--------------------------------------------------------
 
-all: \
-	$(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) \
-	$(foreach EXT, $(EXTENSIONS), $(EXT)) \
-	$(foreach PLUGIN, $(PLUGINS), $(BINDIR)/Release/plugins/$(PLUGIN)@DLLEXT@) \
-	locale pixmaps
-
 Release: \
-	$(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) \
-	$(foreach EXT, $(EXTENSIONS), $(EXT)) \
-	$(foreach PLUGIN, $(PLUGINS), $(BINDIR)/Release/plugins/$(PLUGIN)@DLLEXT@) \
-	locale pixmaps
-
-$(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT): src/pw3270/* $(BINDIR)/Release@DLLDIR@/lib3270@DLLEXT@ $(DEPENDS)
-	@$(MAKE) BINDIR="../../$(BINDIR)" LIB3270_LIBS="$(RLSLIB)" LIB3270_CFLAGS="-I../../src/include" -C src/pw3270 ../../$(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
-
-$(BINDIR)/Release@DLLDIR@/lib3270@DLLEXT@: src/lib3270/* src/include/lib3270/* src/include/* Makefile
-	@$(MAKE) BINRLS=../../.bin/Release@DLLDIR@ -C src/lib3270 ../../.bin/Release@DLLDIR@/lib3270@DLLEXT@
-
-oxt: $(BINDIR)/Release/$(PACKAGE_NAME).oxt
-
-$(BINDIR)/Release/$(PACKAGE_NAME).oxt:
-	@$(MAKE) -C src/loffice Release
-	@$(MKDIR) `dirname $@`
-	@cp src/loffice/.bin/Release/$(PACKAGE_NAME).oxt $@
-
-php: $(BINDIR)/Release/tn3270@DLLEXT@
-
-$(BINDIR)/Release/tn3270.so: src/php/*
-	@$(MAKE) -C src/php Release
-	@$(MKDIR) `dirname $@`
-	@cp src/php/.bin/Release/php3270.so $@
-
-java: $(BINDIR)/Release/@DLLPREFIX@jni3270@DLLEXT@
-
-$(BINDIR)/Release/@DLLPREFIX@jni3270@DLLEXT@: src/java/*
-	@$(MKDIR) `dirname $@`
-	@$(MAKE) BINDIR="../../$(BINDIR)" LIB3270_LIBS="$(RLSLIB)" LIB3270_CFLAGS="-I../../src/include" -C src/java Release
-
-python: $(BINDIR)/Release/py3270@DLLEXT@
-
-$(BINDIR)/Release/py3270@DLLEXT@: src/python/*
-	@$(MAKE) -C src/python Release
-	@$(MKDIR) `dirname $@`
-	@cp src/python/.bin/Release/py3270@DLLEXT@ $@
-
-rexx: $(BINDIR)/Debug/plugins/rx3270@DLLEXT@
+	$(BINRLS)/lib3270@DLLEXT@ \
+	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@
 
 #---[ Debug targets ]----------------------------------------------------------
 
-Debug: $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT) \
-		$(foreach PLUGIN, $(PLUGINS), $(BINDIR)/Debug/plugins/$(PLUGIN)@DLLEXT@)
+Debug: \
+	$(BINDBG)/lib3270@DLLEXT@ \
+	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@
 
-$(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT): src/pw3270/* $(BINDIR)/Debug@DLLDIR@/lib3270@DLLEXT@ $(DEPENDS)
-	@$(MAKE) BINDIR="../../$(BINDIR)" LIB3270_LIBS="$(DBGLIB)" LIB3270_CFLAGS="-I../../src/include" -C src/pw3270 ../../$(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
+run: \
+	$(BINDBG)/lib3270@DLLEXT@ \
+	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@
 
-$(BINDIR)/Debug@DLLDIR@/lib3270@DLLEXT@: src/lib3270/* src/include/lib3270/* src/include/* Makefile
-	@$(MAKE) BINDBG=../../.bin/Debug@DLLDIR@ -C src/lib3270 ../../.bin/Debug@DLLDIR@/lib3270@DLLEXT@
+	@LD_LIBRARY_PATH=$(BINDBG) $(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@
 
-run: $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT) $(PACKAGE_NAME).png $(PACKAGE_NAME)-logo.png \
-		$(foreach PLUGIN, $(PLUGINS), $(BINDIR)/Debug/plugins/$(PLUGIN)@DLLEXT@)
-	@$(DBGCMDPREFIX) "$(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)"
-
-memchk: $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
-	@$(MKDIR) $(PWD)/$(TMPDIR)
-ifeq ($(VALGRIND),no)
-	@PATH="$(BINDIR)/Debug@DLLDIR@:$(PATH)" "$(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)"
-else
-	@PATH="$(BINDIR)/Debug@DLLDIR@:$(PATH)" G_DEBUG=gc-friendly G_SLICE=always-malloc \$(VALGRIND) --leak-check=full --suppressions=src/pw3270/valgrind.suppression --gen-suppressions=all $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
-endif
-
-#---[ Targets ]----------------------------------------------------------------
-
-tgz: $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz
-
-bz2: $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.bz2
-
-rpm: $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.bz2
-ifneq ($(RPMBUILD),no)
-	@$(MKDIR) $(PWD)/$(TMPDIR)/rpmbuild
-	@TMPDIR=$(PWD)/$(TMPDIR)/rpmbuild $(RPMBUILD) --define="_sourcedir $(PWD)" -ba --clean $(PACKAGE_TARNAME).spec
-	@rm -fr $(PWD)/$(TMPDIR)/rpmbuild
-endif
-
-srpm: $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.bz2
-ifneq ($(RPMBUILD),no)
-	@$(RPMBUILD) --define="_srcrpmdir $(PWD)" -bs $(PACKAGE_TARNAME).spec
-endif
-
-package: Release
-ifneq ($(MAKENSIS),no)
-	@chmod +x makegtkruntime.sh
-	@echo "  GEN  GTK Runtime"
-	@./makegtkruntime.sh
-	@echo "  GEN  Windows installer"
-	@cp -rv $(BINDIR)/Release/$(localedir) $(BINDIR)/Release
-	@make -C nsi package-no-gtk
-	@make -C nsi package
-endif
-
-ifneq ($(DPKGBUILD),no)
-	@rm -fr debian
-	@mkdir debian
-
-	@echo 7 > debian/compat
-	@cp debian.control debian/control
-	@cp debian.rules debian/rules
-	@chmod +x debian/rules
-
-	@EDITOR=true dch --preserve -v $(PACKAGE_VERSION)-$(PACKAGE_LEVEL) -u low --create --package $(PACKAGE_NAME)
-	@sed -i "s@UNRELEASED@unstable@;s@Initial release. (Closes: #XXXXXX)@SVN Revision $(PACKAGE_REVISION)@g" debian/changelog
-
-	@$(DPKGBUILD) -rfakeroot -uc -us
-endif
-
-ifneq ($(MACBUNDLER),no)
-	@rm -fr .bin/pw3270.app
-	@$(MACBUNDLER) mac/pw3270.bundle
-endif
+#---[ Install Targets ]--------------------------------------------------------
 
 
-$(PACKAGE_NAME).po: $(TMPDIR)/$(PACKAGE_NAME).pot
-	@echo "  INIT `basename $@`"
-	@$(MSGINIT) --no-translator -o $@ --locale=en_US -i $^
+#---[ Clean Targets ]----------------------------------------------------------
 
-$(BINDIR)/pot/ui.pot: $(XML2POT) $(wildcard ui/*.xml)
-	@echo "  TEXT `basename $@`"
-	@$(MKDIR) `dirname $@`
-	@$(XML2POT) $(wildcard ui/*.xml) > $@
+cleanDebug:
+	
+	@$(MAKE) -C src/lib3270 cleanDebug
+	@$(MAKE) -C src/pw3270 cleanDebug
 
-$(TMPDIR)/$(PACKAGE_NAME).pot: \
-	$(BINDIR)/pot/pw3270.pot \
-	$(BINDIR)/pot/lib3270.pot \
-	$(BINDIR)/pot/ui.pot
+cleanRelease:
 
-	@echo "  TEXT `basename $@`"
-	@$(MKDIR) `dirname $@`
-	@$(MSGCAT) --sort-output $^ | sed "s&VERSION&$(PACKAGE_VERSION)&;s&CHARSET&UTF-8&;s&PACKAGE&$(PACKAGE_NAME)&g" > $@
+	@$(MAKE) -C src/lib3270 cleanRelease
+	@$(MAKE) -C src/pw3270 cleanRelease
 
-pixmaps: src/pw3270/$(PACKAGE_NAME).png src/pw3270/$(PACKAGE_NAME)-logo.png
 
-$(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar: clean pixmaps
-	@rm -fr $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
-	@$(MKDIR) $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
-	@NOCONFIGURE=1 ./autogen.sh $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
-	@cp *.m4 $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
-	@cp revision $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
-	@cp ChangeLog $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
-	@cp colors.conf $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
-	@cp autogen.sh $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
-	@cp configure.ac $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
-#	@cp configure $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
-	@cp *.in $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
-	@cp AUTHORS LICENSE $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
-	@cp -r src $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
-	@cp -r scripts $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
-	@cp -r nsi $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
-	@cp $(PACKAGE_TARNAME).spec $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
+clean: \
+	cleanDebug \
+	cleanRelease
 
-	@cp debian.* $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
-	@cp makedeb.sh $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
+	@rm -fr $(BINDIR)
 
-	@$(MKDIR) $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/ui
-	@cp ui/* $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/ui
 
-	@$(MKDIR) $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/debian
-
-	@$(MKDIR) $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/po
-	@cp po/*.po $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/po
-
-	@$(MKDIR) $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/man
-	@cp -r man/* $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/man
-
-	@$(MKDIR) $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/mac
-	@cp -r mac/* $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/mac
-
-	@$(AMTAR) --format=ustar --verbose --exclude-backups --exclude="*.bak" --create --directory $(TMPDIR) --exclude-vcs --owner=root --group=root --file=$@ $(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
-
-	@rm -fr $(TMPDIR)/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
-	@echo $@
-
-install: $(foreach EXT, sdk lib app man plugins $(EXTENSIONS), install-$(EXT))
-
-install-app: \
-	$(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT) \
-	install-locale
-
-	@$(MAKE) BINDIR="../../$(BINDIR)" LIB3270_LIBS="$(RLSLIB)" LIB3270_CFLAGS="-I../../src/include" -C src/pw3270 install
-	@$(MKDIR) $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/ui
-	@$(INSTALL_DATA) colors.conf $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)
-	@$(INSTALL_DATA) ui/*.xml $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/ui
-
-install-plugins: \
-	$(foreach PLUGIN, $(PLUGINS), $(DESTDIR)$(libdir)/$(PACKAGE_NAME)-plugins/$(PLUGIN)@DLLEXT@)
-
-install-lib: $(BINDIR)/Release@DLLDIR@/lib3270@DLLEXT@
-	@$(MAKE) BINRLS="../../.bin/Release@DLLDIR@" -C src/lib3270 install
-
-install-classlib:
-	@$(MAKE) BINRLS="../../.bin/Release" -C src/classlib install
-
-locale: $(foreach MO, $(basename $(LANG_FILES)), $(BINDIR)/Release/$(localedir)/$(notdir $(MO))/LC_MESSAGES/$(PACKAGE_NAME).mo)
-
-install-locale: $(foreach MO, $(basename $(LANG_FILES)), $(BINDIR)/Release/$(localedir)/$(notdir $(MO))/LC_MESSAGES/$(PACKAGE_NAME).mo)
-	@echo -e $(foreach MO, $(notdir $(basename $(LANG_FILES))), mkdir -p $(DESTDIR)/$(localedir)/$(MO)/LC_MESSAGES\\n$(INSTALL_DATA) $(BINDIR)/Release/$(localedir)/$(MO)/LC_MESSAGES/$(PACKAGE_NAME).mo $(DESTDIR)/$(localedir)/$(MO)/LC_MESSAGES/$(PACKAGE_NAME).mo \\n ) | $(SHELL)
-
-install-man:
-	@$(MKDIR) $(DESTDIR)$(mandir)/man1
-	@$(INSTALL_DATA) man/man1/pw3270.1 $(DESTDIR)/$(mandir)/man1/pw3270.1
-	@$(MKDIR) $(DESTDIR)$(mandir)/man5
-	@$(INSTALL_DATA) man/man5/pw3270.5 $(DESTDIR)/$(mandir)/man5/pw3270.5
-
-install-sdk:
-
-	@$(MKDIR) $(DESTDIR)$(includedir)/lib3270
-	@$(INSTALL_DATA) src/include/lib3270.h $(DESTDIR)/$(includedir)
-	@$(INSTALL_DATA) src/include/lib3270/config.h $(DESTDIR)/$(includedir)/lib3270
-	@$(INSTALL_DATA) src/include/lib3270/selection.h $(DESTDIR)/$(includedir)/lib3270
-	@$(INSTALL_DATA) src/include/lib3270/popup.h $(DESTDIR)/$(includedir)/lib3270
-	@$(INSTALL_DATA) src/include/lib3270/actions.h $(DESTDIR)/$(includedir)/lib3270
-	@$(INSTALL_DATA) src/include/lib3270/action_table.h $(DESTDIR)/$(includedir)/lib3270
-	@$(INSTALL_DATA) src/include/lib3270/trace.h $(DESTDIR)/$(includedir)/lib3270
-	@$(INSTALL_DATA) src/include/lib3270/charset.h $(DESTDIR)/$(includedir)/lib3270
-	@$(INSTALL_DATA) src/include/lib3270/filetransfer.h $(DESTDIR)/$(includedir)/lib3270
-	@$(INSTALL_DATA) src/include/lib3270/log.h $(DESTDIR)/$(includedir)/lib3270
-	@$(INSTALL_DATA) src/include/lib3270/session.h $(DESTDIR)/$(includedir)/lib3270
-
-	@$(MKDIR) $(DESTDIR)$(includedir)/pw3270
-	@$(INSTALL_DATA) src/pw3270/include/*.h $(DESTDIR)/$(includedir)/pw3270
-
-	@$(INSTALL_DATA) src/include/pw3270/trace.h $(DESTDIR)/$(includedir)/pw3270
-	@$(INSTALL_DATA) src/include/pw3270/plugin.h $(DESTDIR)/$(includedir)/pw3270
-	@$(INSTALL_DATA) src/include/pw3270.h $(DESTDIR)/$(includedir)
-
-	@$(MKDIR) $(DESTDIR)/$(libdir)/pkgconfig
-	@$(INSTALL_DATA) lib3270.pc $(DESTDIR)/$(libdir)/pkgconfig
-	@$(INSTALL_DATA) pw3270.pc $(DESTDIR)/$(libdir)/pkgconfig
-
-	@$(MKDIR) $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/sample
-	@$(INSTALL_DATA) src/sample/Makefile $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/sample
-	@$(INSTALL_DATA) src/sample/sample.cbp $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/sample
-	@$(INSTALL_DATA) src/sample/*.c $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/sample
-
-	@$(MAKE) -C src/classlib install-sdk
-
-install-oxt:
-	@$(MAKE) BINDIR=../../.bin LIB3270_CFLAGS="-I../../src/include" -C src/loffice install
-
-install-php:
-	@$(MAKE) -C src/php install
-
-install-python:
-	@$(MAKE) -C src/python install
-
-install-java:
-	@$(MAKE) BINDIR=../../.bin LIB3270_CFLAGS="-I../../src/include" -C src/java install
-
-install-rexx:
-	@$(MAKE) BINDIR=../../../.bin LIB3270_CFLAGS="-I../../src/include" -C src/plugins/rx3270 install
-
-clean:
-	@rm -fr .obj
-	@rm -fr .bin
-	@rm -fr .tmp
-	@find . -type d -name .obj -exec echo rm -fr {} \; | sh
-	@find . -type d -name .bin -exec echo rm -fr {} \; | sh
-	@rm -f $(PACKAGE_NAME).po
-	@make -C src/lib3270 clean
-	@make -C src/pw3270 clean
-	@make -C src/tools clean
-	@make -C src/classlib clean
-	@rm -f $(PACKAGE_NAME).png
-	@rm -f $(PACKAGE_NAME)-logo.png
-	@rm -f *.log
-	@echo "$@"
-
-cleanDebug: clean
-	@echo "$@"
-
-distclean: clean
-	@make -C src/pw3270 distclean
-	@rm -f src/pw3270/Makefile
-	@rm -f config.status
-	@rm -f src/lib3270/mkversion.sh
-	@rm -f src/lib3270/Makefile
-	@rm -f src/include/lib3270/config.h
-	@rm -f src/pw3270/uiparser/Makefile
-	@rm -fr autom4te.cache
-	@rm -f *.pc
-	@rm -f $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar*
-	@find ./src -name "Makefile" -exec rm -f {} \;
-
-	@rm -f Makefile
-	@echo "$@"
-
-#---[ Plugins ]----------------------------------------------------------------
-
-$(BINDIR)/Debug/plugins/hllapi@DLLEXT@: src/plugins/hllapi/* $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
-	@make $(PLUGIN_DEBUG_ARGS) -C $(dir $<) Debug
-
-$(BINDIR)/Release/plugins/hllapi@DLLEXT@: src/plugins/hllapi/* $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
-	@make $(PLUGIN_RELEASE_ARGS) -C $(dir $<) Release
-
-$(BINDIR)/Debug/plugins/rx3270@DLLEXT@: src/plugins/rx3270/* $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
-	@make $(PLUGIN_DEBUG_ARGS) -C $(dir $<) Debug
-
-$(BINDIR)/Release/plugins/rx3270@DLLEXT@: src/plugins/rx3270/* $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
-	@make $(PLUGIN_RELEASE_ARGS) -C $(dir $<) Release
-
-$(BINDIR)/Debug/plugins/dbus3270@DLLEXT@: src/plugins/dbus3270/* $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
-	@make $(PLUGIN_DEBUG_ARGS) -C $(dir $<) Debug
-
-$(BINDIR)/Release/plugins/dbus3270@DLLEXT@: src/plugins/dbus3270/* $(BINDIR)/Release/$(PACKAGE_TARNAME)$(EXEEXT)
-	@make $(PLUGIN_RELEASE_ARGS) -C $(dir $<) Release
