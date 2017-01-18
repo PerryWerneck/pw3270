@@ -72,6 +72,8 @@ CC=@CC@
 LD=@CC@
 XGETTEXT=@XGETTEXT@
 MSGCAT=@MSGCAT@
+SVG2PNG=@SVG2PNG@
+OPTIPNG=@OPTIPNG@
 
 CFLAGS=@CFLAGS@ @LIB3270_CFLAGS@ \
 			-Wno-deprecated-declarations \
@@ -141,6 +143,14 @@ $(SRCDIR)/%: \
 
 	@make -C `dirname $<` $@
 
+$(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/%.png: \
+	svg/%.svg
+
+	@echo $< ...
+	@$(MKDIR) `dirname $@`
+	@$(SVG2PNG) $< --format=png > $@
+	@$(OPTIPNG) -o7 $@
+
 #---[ Release Targets ]------------------------------------------------------------------
 
 all: \
@@ -189,7 +199,9 @@ $(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@: \
 	@$(LD) -shared -Wl,-soname,$(@F) $(LDFLAGS) -L$(BINRLS) -o $@ $^ $(LIBS)
 
 install: \
-	$(BINRLS)/$(PACKAGE_TARNAME)$(EXEEXT)
+	$(BINRLS)/$(PACKAGE_TARNAME)$(EXEEXT) \
+	$(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/$(PACKAGE_NAME).png \
+	$(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/$(PACKAGE_NAME)-logo.png
 
 	@$(MKDIR) $(DESTDIR)$(libdir)
 
@@ -218,6 +230,10 @@ $(SRCDIR): \
 
 	@$(MKDIR) $@
 	@$(INSTALL_DATA) *.c *.h *.in *.cbp $@
+
+	@$(MKDIR) $@/svg
+	@$(INSTALL_DATA) svg/*.svg $@/svg
+
 
 #---[ Debug Targets ]--------------------------------------------------------------------
 

@@ -129,7 +129,7 @@ BuildRequires:  gettext-devel
 BuildRequires:  m4
 BuildRequires:  pkgconfig
 BuildRequires:  sed
-
+BuildRequires:	optipng
 
 %description
 Open-source GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
