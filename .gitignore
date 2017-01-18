@@ -27,7 +27,6 @@ aclocal.m4
 configure
 autom4te.cache
 makegtkruntime.sh
-pw3270.po
 pw3270.spec
 revision
 revision.m4

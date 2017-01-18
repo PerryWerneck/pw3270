@@ -2748,8 +2748,52 @@ msgstr "setsockopt(SO_OOBINLINE) has failed"
 msgid "translator-credits"
 msgstr "translator-credits"
 
-#~ msgid "Unexpected element <%s>"
-#~ msgstr "Elemento <%s> inesperado"
+#~ msgid "%s: unknown family %d"
+#~ msgstr "%s: Familia %d é inválida"
+
+#~ msgid "%s:%d"
+#~ msgstr "%s:%d"
+
+#~ msgid ""
+#~ "<b>Connection state:</b> %s\n"
+#~ "<b>Alert message:</b> %s"
+#~ msgstr ""
+#~ "<b>Estado da conexão:</b> %s\n"
+#~ "<b>Mensagem de alerta:</b> %s"
+
+#, fuzzy
+#~ msgid ""
+#~ "<b>Disconnected from host</b>\n"
+#~ "No security info"
+#~ msgstr "Desconectado do servidor"
+
+#~ msgid ""
+#~ "<b>Identity not verified</b>\n"
+#~ "Connection is insecure"
+#~ msgstr ""
+#~ "<b>Identidade não foi confirmada</b>\n"
+#~ "A conexão não é segura"
+
+#~ msgid ""
+#~ "<b>Unexpected SSL status %ld</b>\n"
+#~ "Security status is undefined"
+#~ msgstr ""
+#~ "<b>Unexpected SSL status %ld</b>\n"
+#~ "Security status is undefined"
+
+#, fuzzy
+#~ msgid "Add <CR> at end of the line."
+#~ msgstr "Adicionar/Remover _CR no final da linha."
+
+#~ msgid ""
+#~ "Adds Newline characters to each host file record before transferring it "
+#~ "to the local workstation."
+#~ msgstr ""
+#~ "Adiciona quebras de linha em cada registro do arquivo antes de transferir "
+#~ "para a estação de trabalho."
+
+#~ msgid "BLKSIZE:"
+#~ msgstr "BLKSIZE:"
 
 #~ msgid ""
 #~ "Buffer size for DFT-mode transfers. Can range from 256 to 32768. Larger "
@@ -2759,6 +2803,9 @@ msgstr "translator-credits"
 #~ "Tamanho do buffer para transferências no modo DFT. Pode variar de 256 a "
 #~ "32768. Valores maiores trazem maior performance, porem, nem todos os "
 #~ "hosts podem suportá-los."
+
+#~ msgid "Can't connect to host"
+#~ msgstr "Não foi possível conectar ao servidor"
 
 #~ msgid "Can't start download."
 #~ msgstr "Não foi possível iniciar o download."
@@ -2772,178 +2819,42 @@ msgstr "translator-credits"
 #~ msgid "Cancel upload."
 #~ msgstr "Cancelar envio."
 
-#~ msgid "ETA"
-#~ msgstr "ETA"
+#~ msgid "Cannot create socket event"
+#~ msgstr "Não foi possível criar um semáforo para comunicação"
 
-#~ msgid "File transfer is already active."
-#~ msgstr "Transferência de arquivos já está ativa."
+#~ msgid "Cannot create socket handle"
+#~ msgstr "Não foi possível criar um manipulador de socket"
 
-#~ msgid "From"
-#~ msgstr "De"
+#~ msgid "Cannot find charset \"%s\", using defaults"
+#~ msgstr "Não encontrei codificação \"%s\", usando padrão"
 
-#~ msgid "Informations"
-#~ msgstr "Informações"
+#~ msgid "Cannot parse %s \"%s\", entry %d"
+#~ msgstr "Impossível interpretar %s \"%s\", entrada %d"
 
-#~ msgid "N/A"
-#~ msgstr "N/A"
+#~ msgid "Charset has %d entries, need 256"
+#~ msgstr "Tabela de tradução tem %d entradas, precisa de 256"
 
-#~ msgid "Name of the source file."
-#~ msgstr "Nome do arquivo origem."
+#~ msgid "Charset has more than 256 entries"
+#~ msgstr "Tabela de tradução tem mais de 256 caracteres"
 
-#~ msgid "Name of the target file."
-#~ msgstr "Nome do arquivo destino."
+#~ msgid "Check for text files."
+#~ msgstr "Marque se o arquivo for texto."
 
-#~ msgid "Re_map to EBCDIC Characters."
-#~ msgstr "Re_mapear para caracteres EBCDIC."
+#~ msgid "Complete"
+#~ msgstr "Completo"
 
-#~ msgid "Receive file from host"
-#~ msgstr "Receber arquivo do servidor"
-
-#~ msgid "Select file to receive"
-#~ msgstr "Selecione arquivo a receber"
-
-#~ msgid "Select file to send"
-#~ msgstr "Selecione arquivo a enviar"
-
-#~ msgid "Send file to host"
-#~ msgstr "Enviar arquivo para o servidor"
-
-#~ msgid "Specifies the record format of the data set."
-#~ msgstr "Controla o formato de registro do data set."
-
-#~ msgid ""
-#~ "Specifies the record length (or maximum record length) for files created "
-#~ "on the host."
-#~ msgstr ""
-#~ "Define o tamanho de registro (ou tamanho máximo de registro) para "
-#~ "arquivos criados no host."
-
-#~ msgid ""
-#~ "Specifies the units for the TSO host primary and secondary space options."
-#~ msgstr ""
-#~ "Define a unidade para os campos que definem o espaço primário e "
-#~ "secundário."
-
-#~ msgid "Start download."
-#~ msgstr "Iniciar recebimento."
-
-#~ msgid "Start upload."
-#~ msgstr "Iniciar envio."
-
-#~ msgid "Status"
-#~ msgstr "Situação"
-
-#~ msgid "To"
-#~ msgstr "Para"
-
-#~ msgid "Unexpected call to %s: No active filetransfer"
-#~ msgstr "Unexpected call to %s: No active filetransfer"
-
-#~ msgid "Where to save the received file."
-#~ msgstr "Onde salvar o arquivo recebido."
-
-#~ msgid "_Append to destination"
-#~ msgstr "_Adicionar ao arquivo de destino"
-
-#~ msgid "_Browse"
-#~ msgstr "_Procurar"
-
-#~ msgid "_Close"
-#~ msgstr "_Close"
-
-#~ msgid "_Host file name:"
-#~ msgstr "Arquivo no _Servidor:"
-
-#~ msgid "_Receive"
-#~ msgstr "_Receber"
-
-#~ msgid "_Send"
-#~ msgstr "_Enviar"
+#~ msgid "Copiar tudo"
+#~ msgstr "Copiar tudo"
 
 #, fuzzy
-#~ msgid "Add <CR> at end of the line."
-#~ msgstr "Adicionar/Remover _CR no final da linha."
-
-#, fuzzy
-#~ msgid "Remove <_CR> from end of the line."
-#~ msgstr "Adicionar/Remover _CR no final da linha."
-
-#~ msgid "Terminate records with _CR/LF."
-#~ msgstr "Termina registros com _CR/LF."
-
-#~ msgid "External Java Application"
-#~ msgstr "External Java Application"
-
-#~ msgid "unknown error"
-#~ msgstr "Erro desconhecido"
+#~ msgid "Cross hair Cursor"
+#~ msgstr "Cursor mira"
 
 #~ msgid "DS Trace"
 #~ msgstr "DS Trace"
 
-#~ msgid "Event Trace"
-#~ msgstr "Trace de eventos"
-
-#~ msgid "Network Trace"
-#~ msgstr "Trace do tráfego de rede"
-
-#~ msgid "Screen Trace"
-#~ msgstr "Trace de tela"
-
-#~ msgid "Select hostname"
-#~ msgstr "Selecione host"
-
-#~ msgid "Set hostname"
-#~ msgstr "Selecione servidor"
-
-#~ msgid "%s: unknown family %d"
-#~ msgstr "%s: Familia %d é inválida"
-
-#~ msgid "Cannot create socket event"
-#~ msgstr "Não foi possível criar um semáforo para comunicação"
-
-#~ msgid "Error %d resolving %s"
-#~ msgstr "Erro %d resolvendo %s"
-
-#~ msgid "Error resolving %s: %s"
-#~ msgstr "Erro ao resolver %s: %s"
-
-#~ msgid ""
-#~ "Unknown host:\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Servidor desconhecido:\n"
-#~ "%s"
-
-#~ msgid "Unknown port number or service: %s"
-#~ msgstr "Número de porta ou serviço desconhecido: %s"
-
-#~ msgid "WSAEventSelect failed"
-#~ msgstr "WSAEventSelect falhou"
-
-#~ msgid "WaitForMultipleObjects() failed when processing for events."
-#~ msgstr "WaitForMultipleObjects() falhou ao processar eventos"
-
-#~ msgid "Host is AS/400"
-#~ msgstr "Servidor é AS/400"
-
-#~ msgid "Host is TSO"
-#~ msgstr "Servidor é TSO"
-
-#, fuzzy
-#~ msgid "Unable to connect to host."
-#~ msgstr "Não é possível conectar em servidores seguros"
-
-#~ msgid "_Port:"
-#~ msgstr "_Porta:"
-
-#~ msgid "%s:%d"
-#~ msgstr "%s:%d"
-
-#~ msgid "Can't connect to host"
-#~ msgstr "Não foi possível conectar ao servidor"
-
-#~ msgid "Cannot create socket handle"
-#~ msgstr "Não foi possível criar um manipulador de socket"
+#~ msgid "ETA"
+#~ msgstr "ETA"
 
 #~ msgid "Empty LU name"
 #~ msgstr "Nome da LU está em branco"
@@ -2953,6 +2864,39 @@ msgstr "translator-credits"
 
 #~ msgid "Empty port name"
 #~ msgstr "Porta em branco"
+
+#~ msgid "Error \"%s\" reading local file (rc=%d)"
+#~ msgstr "Error \"%s\" reading local file (rc=%d)"
+
+#~ msgid "Error \"%s\" writing to file (rc=%d)"
+#~ msgstr "Error \"%s\" writing to file (rc=%d)"
+
+#~ msgid "Error %d resolving %s"
+#~ msgstr "Erro %d resolvendo %s"
+
+#~ msgid "Error in ioctl(%s) when setting no blocking mode"
+#~ msgstr "Erro em ioctl(%s) ao ativar o modo não blocante"
+
+#~ msgid "Error resolving %s: %s"
+#~ msgstr "Erro ao resolver %s: %s"
+
+#~ msgid "Event Trace"
+#~ msgstr "Trace de eventos"
+
+#~ msgid "External Java Application"
+#~ msgstr "External Java Application"
+
+#~ msgid "Extra CGCSGID(s), ignoring"
+#~ msgstr "Extra CGCSGID(s), ignoring"
+
+#~ msgid "File transfer is already active."
+#~ msgstr "Transferência de arquivos já está ativa."
+
+#~ msgid "Forces monochrome display"
+#~ msgstr "Força tela monocromática"
+
+#~ msgid "From"
+#~ msgstr "De"
 
 #~ msgid ""
 #~ "HTTP Proxy: CONNECT failed:\n"
@@ -2976,11 +2920,33 @@ msgstr "translator-credits"
 #~ msgid "HTTP Proxy: unrecognized reply"
 #~ msgstr "HTTP Proxy: Resposta desconhecida"
 
+#~ msgid "Host is AS/400"
+#~ msgstr "Servidor é AS/400"
+
+#~ msgid "Host is TSO"
+#~ msgstr "Servidor é TSO"
+
 #~ msgid "Hostname syntax error"
 #~ msgstr "Formato inválido no nome do servidor"
 
+#~ msgid ""
+#~ "If active, pw3270 will respond to a Query(Color) with a list of 8 "
+#~ "supported colors."
+#~ msgstr ""
+#~ "Quanto ativo o pw3270 response à uma consulta \"color\" com uma lista de "
+#~ "apenas 8 cores."
+
+#~ msgid "Informations"
+#~ msgstr "Informações"
+
 #~ msgid "Invalid (empty) hostname"
 #~ msgstr "Nome do host é invalido (vazio)"
+
+#~ msgid "Invalid CGCSGID '%s', ignoring"
+#~ msgstr "Invalid CGCSGID '%s', ignoring"
+
+#~ msgid "Invalid charset entry '%s' (#%d)"
+#~ msgstr "Invalid charset entry '%s' (#%d)"
 
 #~ msgid "Invalid proxy hostname syntax"
 #~ msgstr "Erro de sintaxe no nome do proxy"
@@ -2991,6 +2957,9 @@ msgstr "translator-credits"
 #~ msgid "Invalid proxy type '%.*s'"
 #~ msgstr "Tipo de proxy invalido '%.*s'"
 
+#~ msgid "LRECL:"
+#~ msgstr "LRECL:"
+
 #~ msgid "Missing ']'"
 #~ msgstr "Faltando ']'"
 
@@ -3000,11 +2969,43 @@ msgstr "translator-credits"
 #~ msgid "Must specify port for telnet proxy"
 #~ msgstr "Proxy telnet precisa de porta"
 
+#~ msgid "N/A"
+#~ msgstr "N/A"
+
+#~ msgid "Name of the source file."
+#~ msgstr "Nome do arquivo origem."
+
+#~ msgid "Name of the target file."
+#~ msgstr "Nome do arquivo destino."
+
+#~ msgid "Network Trace"
+#~ msgstr "Trace do tráfego de rede"
+
 #~ msgid "Option '%c:' is not supported"
 #~ msgstr "Opção não suportada: '%c:'"
 
 #~ msgid "Passthru Proxy: send error"
 #~ msgstr "Passthru Proxy: Erro ao enviar"
+
+#~ msgid "Proxy server (type:host[:port])"
+#~ msgstr "Servidor proxy (tipo:nome[:port])"
+
+#~ msgid "Re_map to EBCDIC Characters."
+#~ msgstr "Re_mapear para caracteres EBCDIC."
+
+#~ msgid "Receive file from host"
+#~ msgstr "Receber arquivo do servidor"
+
+#, fuzzy
+#~ msgid "Remove <_CR> from end of the line."
+#~ msgstr "Adicionar/Remover _CR no final da linha."
+
+#~ msgid ""
+#~ "Remove the default newline characters in local files before transferring "
+#~ "them to the host."
+#~ msgstr ""
+#~ "Remove as quebras de linha padrão do arquivo local antes de enviar para o "
+#~ "host."
 
 #~ msgid "SOCKS4 Proxy: client is not reachable"
 #~ msgstr "SOCKS4 Proxy: client is not reachable"
@@ -3093,163 +3094,36 @@ msgstr "translator-credits"
 #~ msgid "SOCKS5 proxy: %s/%u: %s"
 #~ msgstr "SOCKS5 proxy: %s/%u: %s"
 
-#~ msgid "Space in LU name"
-#~ msgstr "Espaço no nome da LU"
-
-#~ msgid "TELNET Proxy: send error"
-#~ msgstr "TELNET Proxy: Erro ao enviar"
-
-#~ msgid "Text before '['"
-#~ msgstr "Texto antes de '['"
-
-#~ msgid "Unknown passthru host: %s"
-#~ msgstr "Servidor \"passthru\" desconhecido: %s"
-
-#~ msgid "Unsupported passthru host session"
-#~ msgstr "Unsupported passthru host session"
-
-#~ msgid "Unsupported socks 4 proxy"
-#~ msgstr "Unsupported socks 4 proxy"
-
-#~ msgid "setsockopt(%s)"
-#~ msgstr "setsockopt(%s)"
-
-#~ msgid "socket"
-#~ msgstr "socket"
-
-#~ msgid "Error in ioctl(%s) when setting no blocking mode"
-#~ msgstr "Erro em ioctl(%s) ao ativar o modo não blocante"
-
 #~ msgid "SSL init failed!"
 #~ msgstr "Inicialização SSL falhou"
 
 #~ msgid "SSL_set_fd failed!"
 #~ msgstr "SSL_set_fd falhou!"
 
-#~ msgid ""
-#~ "Adds Newline characters to each host file record before transferring it "
-#~ "to the local workstation."
-#~ msgstr ""
-#~ "Adiciona quebras de linha em cada registro do arquivo antes de transferir "
-#~ "para a estação de trabalho."
+#~ msgid "SSLv2/v3 read server hello A"
+#~ msgstr "SSLv2/v3 read server hello A"
 
-#~ msgid "Check for text files."
-#~ msgstr "Marque se o arquivo for texto."
-
-#~ msgid ""
-#~ "Remove the default newline characters in local files before transferring "
-#~ "them to the host."
-#~ msgstr ""
-#~ "Remove as quebras de linha padrão do arquivo local antes de enviar para o "
-#~ "host."
-
-#~ msgid ""
-#~ "Specifies the block size for files created on the host (TSO hosts only)."
-#~ msgstr ""
-#~ "Define o tamanho do bloco para arquivos criados no host (Apenas hosts "
-#~ "TSO)."
-
-#~ msgid "BLKSIZE:"
-#~ msgstr "BLKSIZE:"
-
-#~ msgid "Complete"
-#~ msgstr "Completo"
-
-#~ msgid "LRECL:"
-#~ msgstr "LRECL:"
-
-#~ msgid "_Append"
-#~ msgstr "_Acrescentar"
-
-#~ msgid "Cannot find charset \"%s\", using defaults"
-#~ msgstr "Não encontrei codificação \"%s\", usando padrão"
-
-#~ msgid "Cannot parse %s \"%s\", entry %d"
-#~ msgstr "Impossível interpretar %s \"%s\", entrada %d"
-
-#~ msgid "Charset has %d entries, need 256"
-#~ msgstr "Tabela de tradução tem %d entradas, precisa de 256"
-
-#~ msgid "Charset has more than 256 entries"
-#~ msgstr "Tabela de tradução tem mais de 256 caracteres"
-
-#~ msgid "Extra CGCSGID(s), ignoring"
-#~ msgstr "Extra CGCSGID(s), ignoring"
-
-#~ msgid "Invalid CGCSGID '%s', ignoring"
-#~ msgstr "Invalid CGCSGID '%s', ignoring"
-
-#~ msgid "Invalid charset entry '%s' (#%d)"
-#~ msgstr "Invalid charset entry '%s' (#%d)"
+#~ msgid "Screen Trace"
+#~ msgstr "Trace de tela"
 
 #, fuzzy
 #~ msgid "Script"
 #~ msgstr "Scripts"
 
-#~ msgid "Teste01"
-#~ msgstr "Teste01"
+#~ msgid "Select file to receive"
+#~ msgstr "Selecione arquivo a receber"
 
-#~ msgid "Teste02"
-#~ msgstr "Teste02"
+#~ msgid "Select file to send"
+#~ msgstr "Selecione arquivo a enviar"
 
-#~ msgid "Teste03"
-#~ msgstr "Teste03"
+#~ msgid "Select hostname"
+#~ msgstr "Selecione host"
 
-#, fuzzy
-#~ msgid "Cross hair Cursor"
-#~ msgstr "Cursor mira"
+#~ msgid "Send file to host"
+#~ msgstr "Enviar arquivo para o servidor"
 
-#~ msgid ""
-#~ "<b>Identity not verified</b>\n"
-#~ "Connection is insecure"
-#~ msgstr ""
-#~ "<b>Identidade não foi confirmada</b>\n"
-#~ "A conexão não é segura"
-
-#~ msgid ""
-#~ "<b>Connection state:</b> %s\n"
-#~ "<b>Alert message:</b> %s"
-#~ msgstr ""
-#~ "<b>Estado da conexão:</b> %s\n"
-#~ "<b>Mensagem de alerta:</b> %s"
-
-#, fuzzy
-#~ msgid ""
-#~ "<b>Disconnected from host</b>\n"
-#~ "No security info"
-#~ msgstr "Desconectado do servidor"
-
-#~ msgid ""
-#~ "<b>Unexpected SSL status %ld</b>\n"
-#~ "Security status is undefined"
-#~ msgstr ""
-#~ "<b>Unexpected SSL status %ld</b>\n"
-#~ "Security status is undefined"
-
-#~ msgid ""
-#~ "If active, pw3270 will respond to a Query(Color) with a list of 8 "
-#~ "supported colors."
-#~ msgstr ""
-#~ "Quanto ativo o pw3270 response à uma consulta \"color\" com uma lista de "
-#~ "apenas 8 cores."
-
-#~ msgid "Copiar tudo"
-#~ msgstr "Copiar tudo"
-
-#~ msgid "fcntl(%s)"
-#~ msgstr "fcntl(%s)"
-
-#~ msgid "ioctl(%s)"
-#~ msgstr "ioctl(%s)"
-
-#~ msgid "Forces monochrome display"
-#~ msgstr "Força tela monocromática"
-
-#~ msgid "Proxy server (type:host[:port])"
-#~ msgstr "Servidor proxy (tipo:nome[:port])"
-
-#~ msgid "SSLv2/v3 read server hello A"
-#~ msgstr "SSLv2/v3 read server hello A"
+#~ msgid "Set hostname"
+#~ msgstr "Selecione servidor"
 
 #~ msgid "Set terminal model (screen size)"
 #~ msgstr "Modelo de terminal (tamanho da tela)"
@@ -3261,13 +3135,139 @@ msgstr "translator-credits"
 #~ "Define que as dimensões da tela serão maiores do que o padrão para o "
 #~ "modelo escolhido (COLSxROWS)."
 
+#~ msgid "Space in LU name"
+#~ msgstr "Espaço no nome da LU"
+
+#~ msgid ""
+#~ "Specifies the block size for files created on the host (TSO hosts only)."
+#~ msgstr ""
+#~ "Define o tamanho do bloco para arquivos criados no host (Apenas hosts "
+#~ "TSO)."
+
+#~ msgid "Specifies the record format of the data set."
+#~ msgstr "Controla o formato de registro do data set."
+
+#~ msgid ""
+#~ "Specifies the record length (or maximum record length) for files created "
+#~ "on the host."
+#~ msgstr ""
+#~ "Define o tamanho de registro (ou tamanho máximo de registro) para "
+#~ "arquivos criados no host."
+
 #~ msgid ""
 #~ "Specifies the terminal name to be transmitted over the telnet connection."
 #~ msgstr ""
 #~ "Define o nome do terminal a ser transmitido através da conexão telnet."
 
-#~ msgid "Error \"%s\" reading local file (rc=%d)"
-#~ msgstr "Error \"%s\" reading local file (rc=%d)"
+#~ msgid ""
+#~ "Specifies the units for the TSO host primary and secondary space options."
+#~ msgstr ""
+#~ "Define a unidade para os campos que definem o espaço primário e "
+#~ "secundário."
 
-#~ msgid "Error \"%s\" writing to file (rc=%d)"
-#~ msgstr "Error \"%s\" writing to file (rc=%d)"
+#~ msgid "Start download."
+#~ msgstr "Iniciar recebimento."
+
+#~ msgid "Start upload."
+#~ msgstr "Iniciar envio."
+
+#~ msgid "Status"
+#~ msgstr "Situação"
+
+#~ msgid "TELNET Proxy: send error"
+#~ msgstr "TELNET Proxy: Erro ao enviar"
+
+#~ msgid "Terminate records with _CR/LF."
+#~ msgstr "Termina registros com _CR/LF."
+
+#~ msgid "Teste01"
+#~ msgstr "Teste01"
+
+#~ msgid "Teste02"
+#~ msgstr "Teste02"
+
+#~ msgid "Teste03"
+#~ msgstr "Teste03"
+
+#~ msgid "Text before '['"
+#~ msgstr "Texto antes de '['"
+
+#~ msgid "To"
+#~ msgstr "Para"
+
+#, fuzzy
+#~ msgid "Unable to connect to host."
+#~ msgstr "Não é possível conectar em servidores seguros"
+
+#~ msgid "Unexpected call to %s: No active filetransfer"
+#~ msgstr "Unexpected call to %s: No active filetransfer"
+
+#~ msgid "Unexpected element <%s>"
+#~ msgstr "Elemento <%s> inesperado"
+
+#~ msgid ""
+#~ "Unknown host:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Servidor desconhecido:\n"
+#~ "%s"
+
+#~ msgid "Unknown passthru host: %s"
+#~ msgstr "Servidor \"passthru\" desconhecido: %s"
+
+#~ msgid "Unknown port number or service: %s"
+#~ msgstr "Número de porta ou serviço desconhecido: %s"
+
+#~ msgid "Unsupported passthru host session"
+#~ msgstr "Unsupported passthru host session"
+
+#~ msgid "Unsupported socks 4 proxy"
+#~ msgstr "Unsupported socks 4 proxy"
+
+#~ msgid "WSAEventSelect failed"
+#~ msgstr "WSAEventSelect falhou"
+
+#~ msgid "WaitForMultipleObjects() failed when processing for events."
+#~ msgstr "WaitForMultipleObjects() falhou ao processar eventos"
+
+#~ msgid "Where to save the received file."
+#~ msgstr "Onde salvar o arquivo recebido."
+
+#~ msgid "_Append"
+#~ msgstr "_Acrescentar"
+
+#~ msgid "_Append to destination"
+#~ msgstr "_Adicionar ao arquivo de destino"
+
+#~ msgid "_Browse"
+#~ msgstr "_Procurar"
+
+#~ msgid "_Close"
+#~ msgstr "_Close"
+
+#~ msgid "_Host file name:"
+#~ msgstr "Arquivo no _Servidor:"
+
+#~ msgid "_Port:"
+#~ msgstr "_Porta:"
+
+#~ msgid "_Receive"
+#~ msgstr "_Receber"
+
+#~ msgid "_Send"
+#~ msgstr "_Enviar"
+
+#~ msgid "fcntl(%s)"
+#~ msgstr "fcntl(%s)"
+
+#~ msgid "ioctl(%s)"
+#~ msgstr "ioctl(%s)"
+
+#~ msgid "setsockopt(%s)"
+#~ msgstr "setsockopt(%s)"
+
+#~ msgid "socket"
+#~ msgstr "socket"
+
+#~ msgid "unknown error"
+#~ msgstr "Erro desconhecido"

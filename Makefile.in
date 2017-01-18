@@ -119,16 +119,14 @@ $(DESTDIR)$(libdir)/%@EXEEXT@: \
 all: \
 	$(BINRLS)/lib3270@DLLEXT@ \
 	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ \
-	$(PACKAGE_TARNAME).pot
+	locale/$(PACKAGE_TARNAME).pot
 
 Release: \
 	$(BINRLS)/lib3270@DLLEXT@ \
-	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@
+	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ \
+	locale/$(PACKAGE_TARNAME).pot
 
-pot: \
-	po/$(PACKAGE_TARNAME).po
-
-po/$(PACKAGE_TARNAME).po: \
+locale/$(PACKAGE_TARNAME).pot: \
 	$(POTDIR)/lib3270.pot \
 	$(POTDIR)/pw3270.pot \
 	$(POTDIR)/ui.pot
@@ -140,15 +138,13 @@ po/$(PACKAGE_TARNAME).po: \
 install: \
 	$(DESTDIR)$(libdir)/lib3270@DLLEXT@ \
 	$(DESTDIR)$(libdir)/$(PACKAGE_TARNAME)@EXEEXT@ \
-	po/$(PACKAGE_TARNAME).po
+	locale/$(PACKAGE_TARNAME).po
 
 	@$(MKDIR) $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)
 	@$(INSTALL_DATA) conf/colors.conf $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)
 
-	@$(MKDIR) $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/po
-	@$(INSTALL_DATA) po/*.po $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/po
-
 	@$(MAKE) -C ui install
+	@$(MAKE) -C locale install
 
 #---[ Debug targets ]----------------------------------------------------------
 
@@ -186,7 +182,6 @@ clean: \
 
 	@rm -fr $(BINDIR)
 	@rm -fr $(POTDIR)
-	@rm -f po/$(PACKAGE_TARNAME).po
 
 
 
