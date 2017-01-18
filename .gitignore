@@ -36,5 +36,6 @@ fallbacks.c
 version.c
 config.h
 mkversion.sh
+dbus-glue.h
 
 
