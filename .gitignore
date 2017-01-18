@@ -37,5 +37,10 @@ version.c
 config.h
 mkversion.sh
 dbus-glue.h
-
+BUILD
+BUILDROOT
+RPMS
+SOURCES
+SPECS
+SRPMS
 
