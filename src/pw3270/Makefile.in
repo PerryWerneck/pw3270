@@ -131,6 +131,11 @@ $(POTDIR)/%.pot: %.c
 
 	@touch $@
 
+$(POTDIR)/%.pot: \
+	./%/*
+ 
+	@$(MAKE) -C $(basename $(notdir $@)) $@
+
 #---[ Release Targets ]------------------------------------------------------------------
 
 all: \
@@ -139,8 +144,12 @@ all: \
 Release: \
 	$(BINRLS)/$(PACKAGE_TARNAME)$(EXEEXT)
 
+pot: \
+	$(BASEDIR)/.pot/pw3270.pot
+
 $(BASEDIR)/.pot/pw3270.pot: \
-	$(foreach SRC, $(basename $(LIB_SOURCES) $(APP_SOURCES)), $(POTDIR)/$(SRC).pot)
+	$(foreach SRC, $(basename $(LIB_SOURCES) $(APP_SOURCES)), $(POTDIR)/$(SRC).pot) \
+	$(foreach MOD, $(MODULES), $(POTDIR)/$(MOD).pot)
 
 	@rm -f $@
 	@mkdir -p `dirname $@`

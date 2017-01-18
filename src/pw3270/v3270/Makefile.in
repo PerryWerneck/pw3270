@@ -42,6 +42,7 @@ sbindir=@sbindir@
 libdir=@libdir@
 
 BASEDIR=@BASEDIR@
+POTDIR=$(BASEDIR)/.pot/$(PACKAGE_TARNAME)/$(MODULE_NAME)
 
 OBJDIR=.obj
 OBJDBG=$(OBJDIR)/Debug
@@ -52,6 +53,8 @@ CC=@CC@
 LD=@CC@
 AR=@AR@
 GENMARSHAL=@GENMARSHAL@
+XGETTEXT=@XGETTEXT@
+MSGCAT=@MSGCAT@
 
 CFLAGS=@CFLAGS@ @LIB3270_CFLAGS@ -Wno-deprecated-declarations @GTK_CFLAGS@ -I$(BASEDIR)/src/include/pw3270
 LIBS=@LIBS@ @GTK_LIBS@ @LIB3270_LIBS@
@@ -82,6 +85,21 @@ $(OBJRLS)/%.o: \
 				-DBUILD_DATE=`date +"0x%Y%m%d"` \
 				-o $@ -c $<
 
+$(POTDIR)/%.pot: %.c
+
+	@echo $< ...
+	@$(MKDIR) `dirname $@`
+	@$(XGETTEXT) \
+		--default-domain=$(PACKAGE) \
+		--language=C \
+		--keyword=_ \
+		--keyword=N_ \
+		--keyword=MSG_:2 \
+		--output=$@ \
+		$<
+
+	@touch $@
+
 marshal.h: \
 	genmarshal
 
@@ -108,6 +126,16 @@ $(BASEDIR)/.obj/Release/$(MODULE_NAME).a: \
 	@$(MKDIR) `dirname $@`
 	@$(AR) rcs $@ $^
 
+pot: \
+	$(BASEDIR)/.pot/$(PACKAGE_TARNAME)/$(MODULE_NAME).pot
+
+$(BASEDIR)/.pot/$(PACKAGE_TARNAME)/$(MODULE_NAME).pot: \
+	$(foreach SRC, $(basename $(SOURCES)), $(POTDIR)/$(SRC).pot)
+
+	@rm -f $@
+	@mkdir -p `dirname $@`
+	@$(MSGCAT) --sort-output $^ > $@
+
 #---[ Debug Targets ]--------------------------------------------------------------------
 
 Debug: \
@@ -132,8 +160,10 @@ cleanRelease:
 	@rm -fr	$(BASEDIR)/.obj/Release/$(MODULE_NAME).a \
 			$(OBJRLS)
 
+	@rm -fr $(POTDIR)
+
 clean: \
 	cleanDebug \
 	cleanRelease
 
-
+	
