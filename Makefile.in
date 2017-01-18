@@ -58,6 +58,7 @@ INSTALL=@INSTALL@
 INSTALL_DATA=@INSTALL_DATA@
 INSTALL_PROGRAM=@INSTALL_PROGRAM@
 MKDIR=@MKDIR_P@
+MSGCAT=@MSGCAT@
 
 #---[ Rules ]------------------------------------------------------------------
 
@@ -119,9 +120,15 @@ Release: \
 	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@
 
 pot: \
+	$(PACKAGE_TARNAME).pot
+
+$(PACKAGE_TARNAME).pot: \
 	$(POTDIR)/lib3270.pot \
 	$(POTDIR)/pw3270.pot
 
+	@rm -f $@
+	@mkdir -p `dirname $@`
+	@$(MSGCAT) --sort-output $^ > $@
 
 install: \
 	$(DESTDIR)$(libdir)/lib3270@DLLEXT@ \

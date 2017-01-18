@@ -85,7 +85,7 @@ $(OBJRLS)/%.o: \
 
 $(POTDIR)/%.pot: %.c
 
-	@echo $< ...
+	@$(notdir $@) ...
 	@$(MKDIR) `dirname $@`
 	@$(XGETTEXT) \
 		--default-domain=$(PACKAGE) \
