@@ -150,6 +150,28 @@ $(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@: \
 	@$(MKDIR) `dirname $@`
 	@$(LD) -shared -Wl,-soname,$(@F) $(LDFLAGS) -L$(BINRLS) -o $@ $^ $(LIBS)
 
+install: \
+	$(BINRLS)/$(PACKAGE_TARNAME)$(EXEEXT)
+
+	@$(MKDIR) $(DESTDIR)$(libdir)
+
+	@$(INSTALL_PROGRAM) \
+				$(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@ \
+				$(DESTDIR)$(libdir)
+
+	@$(LN_S) -f \
+				$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@ \
+				$(DESTDIR)$(libdir)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@
+
+	@$(LN_S) -f \
+				$(LIBNAME).@PACKAGE_MAJOR_VERSION@ \
+				$(DESTDIR)$(libdir)/$(LIBNAME)
+
+	@$(MKDIR) $(DESTDIR)$(bindir)
+
+	@$(INSTALL_PROGRAM) \
+		$(BINRLS)/$(PACKAGE_TARNAME)$(EXEEXT) \
+		$(DESTDIR)$(bindir)
 
 #---[ Debug Targets ]--------------------------------------------------------------------
 

@@ -104,8 +104,8 @@ case "$host" in
 		# LIBS="-Wl,--no-allow-shlib-undefined,--as-needed,--no-undefined -pthread $LIBS"
 		LIBS="-pthread $LIBS"
 
-		AC_CONFIG_FILES(devel/lib3270.pc)
-		AC_CONFIG_FILES(devel/pw3270.pc)
+		AC_CONFIG_FILES(sdk/lib3270.pc)
+		AC_CONFIG_FILES(sdk/pw3270.pc)
 
 esac
 

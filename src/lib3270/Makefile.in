@@ -129,6 +129,23 @@ $(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@: \
 	@$(MKDIR) `dirname $@`
 	@$(LD) -shared -Wl,-soname,$(@F) $(LDFLAGS) -o $@ $^ $(LIBS)
 
+install: \
+	$(BINRLS)/$(LIBNAME)
+
+	@$(MKDIR) $(DESTDIR)$(libdir)
+
+	@$(INSTALL_PROGRAM) \
+				$(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@ \
+				$(DESTDIR)$(libdir)
+
+	@$(LN_S) -f \
+				$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@ \
+				$(DESTDIR)$(libdir)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@
+
+	@$(LN_S) -f \
+				$(LIBNAME).@PACKAGE_MAJOR_VERSION@ \
+				$(DESTDIR)$(libdir)/$(LIBNAME)
+
 #---[ Debug Targets ]--------------------------------------------------------------------
 
 Debug: \

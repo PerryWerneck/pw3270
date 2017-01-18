@@ -76,18 +76,40 @@ $(BINRLS)/%@DLLEXT@: \
  
 	@$(MAKE) -C src/$(basename $(notdir $@)) $@
 
+$(DESTDIR)$(libdir)/%@DLLEXT@: \
+	$(DEPENDS) \
+	./src/%/*
+ 
+	@$(MAKE) DESTDIR=$(DESTDIR) -C src/$(basename $(notdir $@)) install
+
+
 $(BINRLS)/%@EXEEXT@: \
 	$(DEPENDS) \
 	./src/%/*
  
 	@$(MAKE) -C src/$(basename $(notdir $@)) $@
 
+$(DESTDIR)$(libdir)/%@EXEEXT@: \
+	$(DEPENDS) \
+	./src/%/*
+ 
+	@$(MAKE) DESTDIR=$(DESTDIR) -C src/$(basename $(notdir $@)) install
+
 
 #---[ Release targets ]--------------------------------------------------------
+
+all: \
+	$(BINRLS)/lib3270@DLLEXT@ \
+	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@
 
 Release: \
 	$(BINRLS)/lib3270@DLLEXT@ \
 	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@
+
+install: \
+	$(DESTDIR)$(libdir)/lib3270@DLLEXT@ \
+	$(DESTDIR)$(libdir)/$(PACKAGE_TARNAME)@EXEEXT@
+
 
 #---[ Debug targets ]----------------------------------------------------------
 
@@ -101,7 +123,7 @@ run: \
 
 	@LD_LIBRARY_PATH=$(BINDBG) $(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@
 
-#---[ Install Targets ]--------------------------------------------------------
+#---[ Package Targets ]--------------------------------------------------------
 
 
 #---[ Clean Targets ]----------------------------------------------------------
