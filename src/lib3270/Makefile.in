@@ -69,8 +69,10 @@ SHELL=@SHELL@
 MKDIR=@MKDIR_P@
 XGETTEXT=@XGETTEXT@
 MSGCAT=@MSGCAT@
+VALGRIND=@VALGRIND@
 
 CC=@CC@
+HOST_CC=@HOST_CC@
 LD=@CC@
 
 CFLAGS=@CFLAGS@ @LIB3270_CFLAGS@ @LIBSSL_CFLAGS@
@@ -198,6 +200,41 @@ $(BINDBG)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@: \
 	@$(MKDIR) `dirname $@`
 	@$(LD) -shared -Wl,-soname,$(@F) $(LDFLAGS) -o $@ $^ $(LIBS)
 
+#---[ Misc Targets ]---------------------------------------------------------------------
+
+fallbacks.c: \
+	X3270.xad \
+	mkfb.c
+
+	@echo $(basename $@) ...
+	@$(MKDIR) $(BINDIR)
+	@$(HOST_CC) -g -o $(BINDIR)/mkfb@EXEEXT@ mkfb.c
+	@$(BINDIR)/mkfb@EXEEXT@ -c X3270.xad $@
+
+version.c: \
+	./mkversion.sh
+
+	@echo $(basename $@) ...
+	@chmod +x ./mkversion.sh
+	@./mkversion.sh
+
+$(BINDBG)/testprogram$(EXEEXT): \
+	$(OBJDBG)/testprogram.o \
+	$(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC).o)
+
+	@echo $(basename $@) ...
+	@$(MKDIR) `dirname $@`
+	@$(LD) -o $@ $^ $(LIBS)
+
+run: \
+	$(BINDBG)/testprogram$(EXEEXT)
+
+ifeq ($(VALGRIND),no)
+	@cd "$(ROOTDIR)" ; .bin/Debug/testprogram$(EXEEXT)
+else
+	@cd "$(ROOTDIR)" ; \$(VALGRIND) --leak-check=full --gen-suppressions=all $(BINDBG)/testprogram$(EXEEXT)
+endif
+
 #---[ Clean Targets]---------------------------------------------------------------------
 
 cleanDebug:
@@ -218,6 +255,11 @@ cleanRelease:
 clean: \
 	cleanDebug \
 	cleanRelease
+
+	@rm -f \
+		fallbacks.c \
+		version.c
+
 
 
 
