@@ -49,6 +49,8 @@ desktopdir=$(datarootdir)/applications
 
 BASEDIR=@BASEDIR@
 
+POTDIR=$(BASEDIR)/.pot/$(PACKAGE_TARNAME)
+
 OBJDIR=.obj
 OBJDBG=$(OBJDIR)/Debug
 OBJRLS=$(OBJDIR)/Release
@@ -66,9 +68,10 @@ LN_S=@LN_S@
 AMTAR=@AMTAR@
 SHELL=@SHELL@
 MKDIR=@MKDIR_P@
-
 CC=@CC@
 LD=@CC@
+XGETTEXT=@XGETTEXT@
+MSGCAT=@MSGCAT@
 
 CFLAGS=@CFLAGS@ @LIB3270_CFLAGS@ \
 			-Wno-deprecated-declarations \
@@ -113,6 +116,20 @@ $(OBJRLS)/%.o: \
 				-DBUILD_DATE=`date +"0x%Y%m%d"` \
 				-o $@ -c $<
 
+$(POTDIR)/%.pot: %.c
+
+	@echo $< ...
+	@$(MKDIR) `dirname $@`
+	@$(XGETTEXT) \
+		--default-domain=$(PACKAGE) \
+		--language=C \
+		--keyword=_ \
+		--keyword=N_ \
+		--keyword=MSG_:2 \
+		--output=$@ \
+		$<
+
+	@touch $@
 
 #---[ Release Targets ]------------------------------------------------------------------
 
@@ -121,6 +138,13 @@ all: \
 
 Release: \
 	$(BINRLS)/$(PACKAGE_TARNAME)$(EXEEXT)
+
+$(BASEDIR)/.pot/pw3270.pot: \
+	$(foreach SRC, $(basename $(LIB_SOURCES) $(APP_SOURCES)), $(POTDIR)/$(SRC).pot)
+
+	@rm -f $@
+	@mkdir -p `dirname $@`
+	@$(MSGCAT) --sort-output $^ > $@
 
 $(BINRLS)/$(PACKAGE_TARNAME)$(EXEEXT): \
 	$(BINRLS)/$(LIBNAME) \

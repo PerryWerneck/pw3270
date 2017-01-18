@@ -48,6 +48,8 @@ libdir=@libdir@
 
 BASEDIR=@BASEDIR@
 
+POTDIR=$(BASEDIR)/.pot/lib3270
+
 OBJDIR=$(BASEDIR)/.obj/lib3270
 OBJDBG=$(OBJDIR)/Debug
 OBJRLS=$(OBJDIR)/Release
@@ -65,6 +67,8 @@ LN_S=@LN_S@
 AMTAR=@AMTAR@
 SHELL=@SHELL@
 MKDIR=@MKDIR_P@
+XGETTEXT=@XGETTEXT@
+MSGCAT=@MSGCAT@
 
 CC=@CC@
 LD=@CC@
@@ -100,6 +104,21 @@ $(OBJRLS)/%.o: \
 				-o $@ -c $<
 
 
+$(POTDIR)/%.pot: %.c
+
+	@echo $< ...
+	@$(MKDIR) `dirname $@`
+	@$(XGETTEXT) \
+		--default-domain=$(PACKAGE) \
+		--language=C \
+		--keyword=_ \
+		--keyword=N_ \
+		--keyword=MSG_:2 \
+		--output=$@ \
+		$<
+
+	@touch $@
+
 #---[ Release Targets ]------------------------------------------------------------------
 
 all: \
@@ -107,6 +126,13 @@ all: \
 
 Release: \
 	$(BINRLS)/$(LIBNAME)
+
+$(BASEDIR)/.pot/lib3270.pot: \
+	$(foreach SRC, $(basename $(SOURCES)), $(POTDIR)/$(SRC).pot)
+
+	@rm -f $@
+	@mkdir -p `dirname $@`
+	@$(MSGCAT) --sort-output $^ > $@
 
 $(BINRLS)/$(LIBNAME): \
 	$(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@
@@ -186,12 +212,12 @@ cleanRelease:
 	@rm -fr	$(OBJRLS) \
 			$(BINRLS)/$(LIBNAME) \
 			$(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@ \
-			$(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@
+			$(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@ \
+			$(POTDIR)
 
 clean: \
 	cleanDebug \
 	cleanRelease
-
 
 
 
