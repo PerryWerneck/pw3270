@@ -112,6 +112,7 @@ case "$host" in
 
 		AC_CONFIG_FILES(sdk/lib3270.pc)
 		AC_CONFIG_FILES(sdk/pw3270.pc)
+		AC_CONFIG_FILES(sdk/Makefile)
 
 esac
 

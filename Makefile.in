@@ -38,7 +38,6 @@ exec_prefix=@exec_prefix@
 bindir=@bindir@
 sbindir=@sbindir@
 libdir=@libdir@
-includedir=@includedir@
 datarootdir=@datarootdir@
 localedir=${datarootdir}/locale
 docdir=@docdir@
@@ -167,6 +166,7 @@ install: \
 
 	@$(MAKE) -C ui install
 	@$(MAKE) -C locale install
+	@$(MAKE) -C sdk install
 
 #---[ Debug targets ]----------------------------------------------------------
 
@@ -225,7 +225,8 @@ $(SRCDIR): \
         clean \
 		$(SRCDIR)/ui \
 		$(SRCDIR)/src/lib3270 \
-		$(SRCDIR)/src/pw3270
+		$(SRCDIR)/src/pw3270 \
+		$(SRCDIR)/sdk
 
 	@$(MKDIR) $(SRCDIR)
 	@$(INSTALL_DATA) \
@@ -257,30 +258,9 @@ $(SRCDIR): \
 		scripts/* \
 		$(SRCDIR)/scripts
 
-	@$(MKDIR) $(SRCDIR)/sdk
-	@$(INSTALL_DATA) \
-		sdk/*.in \
-		$(SRCDIR)/sdk
-
 	@$(INSTALL_DATA) \
 		rpm/*.spec \
 		$(SRCDIR)
-
-	@$(MKDIR) $(SRCDIR)/src/include
-	@$(INSTALL_DATA) \
-		src/include/*.h \
-		$(SRCDIR)/src/include
-
-	@$(MKDIR) $(SRCDIR)/src/include/lib3270
-	@$(INSTALL_DATA) \
-		src/include/lib3270/*.h \
-		src/include/lib3270/*.in \
-		$(SRCDIR)/src/include/lib3270
-
-	@$(MKDIR) $(SRCDIR)/src/include/pw3270
-	@$(INSTALL_DATA) \
-		src/include/pw3270/*.h \
-		$(SRCDIR)/src/include/pw3270
 
 
 #---[ Clean Targets ]----------------------------------------------------------$(
