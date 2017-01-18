@@ -27,7 +27,6 @@ aclocal.m4
 configure
 autom4te.cache
 makegtkruntime.sh
-pw3270.spec
 revision
 revision.m4
 stamp-h1
@@ -35,5 +34,7 @@ marshal.c
 marshal.h
 fallbacks.c
 version.c
+config.h
+mkversion.sh
 
 
