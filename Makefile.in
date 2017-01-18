@@ -61,6 +61,7 @@ INSTALL_PROGRAM=@INSTALL_PROGRAM@
 MKDIR=@MKDIR_P@
 MSGCAT=@MSGCAT@
 AMTAR=@AMTAR@
+RPMBUILD=@RPMBUILD@
 
 #---[ Rules ]------------------------------------------------------------------
 
@@ -190,6 +191,22 @@ bz2: \
 tar: \
         $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar
 
+rpm: \
+	$(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.bz2
+
+	@$(MKDIR) $(BASEDIR)/rpm
+	@$(MKDIR) $(BASEDIR)/rpm/SPECS
+	@$(MKDIR) $(BASEDIR)/rpm/SOURCES
+	@$(MKDIR) $(BASEDIR)/rpm/SRPMS
+	@$(MKDIR) $(BASEDIR)/rpm/RPMS
+	@$(MKDIR) $(BASEDIR)/rpm/BUILD
+	@$(MKDIR) $(BASEDIR)/rpm/BUILDROOT
+	@umask 002 ; $(RPMBUILD) \
+		--define="_topdir $(BASEDIR)/rpm" \
+		--define="_packager $(USER)@$(HOSTNAME)" \
+		--clean \
+		-ta $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.bz2
+
 $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar: \
 	$(SRCDIR)
 
@@ -234,6 +251,16 @@ $(SRCDIR): \
 	@$(INSTALL_DATA) \
 		debian/* \
 		$(SRCDIR)/debian
+
+	@$(MKDIR) $(SRCDIR)/scripts
+	@$(INSTALL_DATA) \
+		scripts/* \
+		$(SRCDIR)/scripts
+
+	@$(MKDIR) $(SRCDIR)/sdk
+	@$(INSTALL_DATA) \
+		sdk/*.in \
+		$(SRCDIR)/sdk
 
 	@$(INSTALL_DATA) \
 		rpm/*.spec \
