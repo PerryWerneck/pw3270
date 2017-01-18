@@ -80,7 +80,10 @@ $(SRCDIR)/sdk: \
 	$(SRCDIR)/src/include/lib3270.h \
 	$(SRCDIR)/src/include/pw3270.h
 
-	@$(MKDIR) $@/sdk
-	@$(INSTALL_DATA) *.in $@/sdk
+	@$(MKDIR) $@
+	@$(INSTALL_DATA) *.in $@
+
+	@$(INSTALL_DATA) $(BASEDIR)/src/include/lib3270/*.in $(SRCDIR)/src/include/lib3270
+
 
 
