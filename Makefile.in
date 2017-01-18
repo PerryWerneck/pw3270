@@ -126,9 +126,9 @@ Release: \
 	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@
 
 pot: \
-	$(PACKAGE_TARNAME).pot
+	po/$(PACKAGE_TARNAME).po
 
-$(PACKAGE_TARNAME).pot: \
+po/$(PACKAGE_TARNAME).po: \
 	$(POTDIR)/lib3270.pot \
 	$(POTDIR)/pw3270.pot \
 	$(POTDIR)/ui.pot
@@ -140,11 +140,13 @@ $(PACKAGE_TARNAME).pot: \
 install: \
 	$(DESTDIR)$(libdir)/lib3270@DLLEXT@ \
 	$(DESTDIR)$(libdir)/$(PACKAGE_TARNAME)@EXEEXT@ \
-	$(PACKAGE_TARNAME).pot
+	po/$(PACKAGE_TARNAME).po
 
 	@$(MKDIR) $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)
 	@$(INSTALL_DATA) conf/colors.conf $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)
-	@$(INSTALL_DATA) $(PACKAGE_TARNAME).pot $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)
+
+	@$(MKDIR) $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/po
+	@$(INSTALL_DATA) po/*.po $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/po
 
 	@$(MAKE) -C ui install
 
@@ -184,7 +186,7 @@ clean: \
 
 	@rm -fr $(BINDIR)
 	@rm -fr $(POTDIR)
-	@rm -f $(PACKAGE_TARNAME).pot
+	@rm -f po/$(PACKAGE_TARNAME).po
 
 
 
