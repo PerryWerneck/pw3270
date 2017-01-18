@@ -138,7 +138,7 @@ locale/$(PACKAGE_TARNAME).pot: \
 install: \
 	$(DESTDIR)$(libdir)/lib3270@DLLEXT@ \
 	$(DESTDIR)$(libdir)/$(PACKAGE_TARNAME)@EXEEXT@ \
-	locale/$(PACKAGE_TARNAME).po
+	locale/$(PACKAGE_TARNAME).pot
 
 	@$(MKDIR) $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)
 	@$(INSTALL_DATA) conf/colors.conf $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)
