@@ -46,6 +46,7 @@ sysconfdir=@sysconfdir@
 mandir=@mandir@
 
 BASEDIR=@BASEDIR@
+SRCDIR=$(BASEDIR)/.src/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 POTDIR=$(BASEDIR)/.pot
 
 BINDIR=$(BASEDIR)/.bin
@@ -59,6 +60,7 @@ INSTALL_DATA=@INSTALL_DATA@
 INSTALL_PROGRAM=@INSTALL_PROGRAM@
 MKDIR=@MKDIR_P@
 MSGCAT=@MSGCAT@
+AMTAR=@AMTAR@
 
 #---[ Rules ]------------------------------------------------------------------
 
@@ -113,6 +115,25 @@ $(DESTDIR)$(libdir)/%@EXEEXT@: \
  
 	@$(MAKE) DESTDIR=$(DESTDIR) -C src/$(basename $(notdir $@)) install
 
+$(SRCDIR)/%: \
+	%/Makefile
+
+	@make -C `dirname $<` $@
+
+%.tar.bz2: \
+	%.tar
+
+	@echo $< ...
+	@bzip2 --compress -9 --stdout $< > $@
+	@chmod 0644 $@
+
+%.tar.gz: \
+	%.tar
+
+	@echo $< ...
+	@gzip -9 --stdout $< > $@
+	@chmod 0644 $@
+
 
 #---[ Release targets ]--------------------------------------------------------
 
@@ -160,8 +181,82 @@ run: \
 
 #---[ Package Targets ]--------------------------------------------------------
 
+tgz: \
+        $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz
 
-#---[ Clean Targets ]----------------------------------------------------------
+bz2: \
+        $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.bz2
+
+tar: \
+        $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar
+
+$(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar: \
+	$(SRCDIR)
+
+	@$(AMTAR) \
+		--verbose \
+		--format=ustar \
+		--create \
+		--exclude-vcs \
+		--directory $(BASEDIR)/.src \
+		--owner=root \
+		--group=root \
+		--file=$@ \
+		$(PACKAGE_TARNAME)-@PACKAGE_VERSION@
+
+$(SRCDIR): \
+        clean \
+		$(SRCDIR)/ui \
+		$(SRCDIR)/src/lib3270 \
+		$(SRCDIR)/src/pw3270
+
+	@$(MKDIR) $(SRCDIR)
+	@$(INSTALL_DATA) \
+		*.in configure.ac *.cbp LICENCA LICENSE AUTHORS \
+		$(SRCDIR)
+
+	@$(INSTALL_PROGRAM) \
+		autogen.sh \
+		$(SRCDIR)
+
+	@$(MKDIR) $(SRCDIR)/locale
+	@$(INSTALL_DATA) \
+		locale/*.po \
+		locale/*.in \
+		$(SRCDIR)/locale
+
+	@$(MKDIR) $(SRCDIR)/conf
+	@$(INSTALL_DATA) \
+		conf/*.conf \
+		$(SRCDIR)/conf
+
+	@$(MKDIR) $(SRCDIR)/debian
+	@$(INSTALL_DATA) \
+		debian/* \
+		$(SRCDIR)/debian
+
+	@$(INSTALL_DATA) \
+		rpm/*.spec \
+		$(SRCDIR)
+
+	@$(MKDIR) $(SRCDIR)/src/include
+	@$(INSTALL_DATA) \
+		src/include/*.h \
+		$(SRCDIR)/src/include
+
+	@$(MKDIR) $(SRCDIR)/src/include/lib3270
+	@$(INSTALL_DATA) \
+		src/include/lib3270/*.h \
+		src/include/lib3270/*.in \
+		$(SRCDIR)/src/include/lib3270
+
+	@$(MKDIR) $(SRCDIR)/src/include/pw3270
+	@$(INSTALL_DATA) \
+		src/include/pw3270/*.h \
+		$(SRCDIR)/src/include/pw3270
+
+
+#---[ Clean Targets ]----------------------------------------------------------$(
 
 cleanDebug:
 	
@@ -182,6 +277,7 @@ clean: \
 
 	@rm -fr $(BINDIR)
 	@rm -fr $(POTDIR)
+	@rm -fr $(SRCDIR)
 
 
 

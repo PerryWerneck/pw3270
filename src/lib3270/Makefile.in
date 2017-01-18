@@ -47,7 +47,7 @@ sbindir=@sbindir@
 libdir=@libdir@
 
 BASEDIR=@BASEDIR@
-
+SRCDIR=$(BASEDIR)/.src/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/src/lib3270
 POTDIR=$(BASEDIR)/.pot/lib3270
 
 OBJDIR=$(BASEDIR)/.obj/lib3270
@@ -234,6 +234,13 @@ ifeq ($(VALGRIND),no)
 else
 	@cd "$(ROOTDIR)" ; \$(VALGRIND) --leak-check=full --gen-suppressions=all $(BINDBG)/testprogram$(EXEEXT)
 endif
+
+$(SRCDIR): \
+	clean
+
+	@$(MKDIR) $@
+	@$(INSTALL_DATA) *.c *.h *.in *.cbp *.xad *.sh $@
+
 
 #---[ Clean Targets]---------------------------------------------------------------------
 

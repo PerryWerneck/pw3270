@@ -42,6 +42,7 @@ sbindir=@sbindir@
 libdir=@libdir@
 
 BASEDIR=@BASEDIR@
+SRCDIR=$(BASEDIR)/.src/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/src/pw3270/$(MODULE_NAME)
 POTDIR=$(BASEDIR)/.pot/$(PACKAGE_TARNAME)/$(MODULE_NAME)
 
 OBJDIR=.obj
@@ -55,6 +56,8 @@ AR=@AR@
 GENMARSHAL=@GENMARSHAL@
 XGETTEXT=@XGETTEXT@
 MSGCAT=@MSGCAT@
+INSTALL=@INSTALL@
+INSTALL_DATA=@INSTALL_DATA@
 
 CFLAGS=@CFLAGS@ @LIB3270_CFLAGS@ -Wno-deprecated-declarations @GTK_CFLAGS@ -I$(BASEDIR)/src/include/pw3270
 LIBS=@LIBS@ @GTK_LIBS@ @LIB3270_LIBS@
@@ -135,6 +138,13 @@ $(BASEDIR)/.pot/$(PACKAGE_TARNAME)/$(MODULE_NAME).pot: \
 	@rm -f $@
 	@mkdir -p `dirname $@`
 	@$(MSGCAT) --sort-output $^ > $@
+
+$(SRCDIR): \
+	clean
+
+	@$(MKDIR) $@
+	@$(INSTALL_DATA) *.c *.h *.in *.xbm *.cbp genmarshal $@
+
 
 #---[ Debug Targets ]--------------------------------------------------------------------
 

@@ -48,7 +48,7 @@ localedir=@localedir@
 desktopdir=$(datarootdir)/applications
 
 BASEDIR=@BASEDIR@
-
+SRCDIR=$(BASEDIR)/.src/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/src/pw3270
 POTDIR=$(BASEDIR)/.pot/$(PACKAGE_TARNAME)
 
 OBJDIR=.obj
@@ -136,6 +136,11 @@ $(POTDIR)/%.pot: \
  
 	@$(MAKE) -C $(basename $(notdir $@)) $@
 
+$(SRCDIR)/%: \
+	%/Makefile
+
+	@make -C `dirname $<` $@
+
 #---[ Release Targets ]------------------------------------------------------------------
 
 all: \
@@ -205,6 +210,14 @@ install: \
 	@$(INSTALL_PROGRAM) \
 		$(BINRLS)/$(PACKAGE_TARNAME)$(EXEEXT) \
 		$(DESTDIR)$(bindir)
+
+$(SRCDIR): \
+	clean \
+	$(foreach MOD, $(MODULES), $(SRCDIR)/$(MOD))
+
+
+	@$(MKDIR) $@
+	@$(INSTALL_DATA) *.c *.h *.in *.cbp $@
 
 #---[ Debug Targets ]--------------------------------------------------------------------
 

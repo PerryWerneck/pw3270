@@ -39,6 +39,7 @@ PACKAGE_TARNAME=@PACKAGE_TARNAME@
 
 BASEDIR=@BASEDIR@
 POTDIR=$(BASEDIR)/.pot/ui
+SRCDIR=$(BASEDIR)/.src/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/ui
 
 OBJDIR=.obj
 OBJDBG=$(OBJDIR)/Debug
@@ -104,6 +105,12 @@ install:
 
 	@$(MKDIR) $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/ui
 	@$(INSTALL_DATA) *.xml $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/ui
+
+$(SRCDIR): \
+	clean
+
+	@$(MKDIR) $@
+	@$(INSTALL_DATA) *.xml *.in *.c $@
 
 pot: \
 	$(BASEDIR)/.pot/ui.pot
