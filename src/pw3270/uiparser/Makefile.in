@@ -22,61 +22,118 @@
 #
 # perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
 # erico.mendonca@gmail.com	(Erico Mascarenhas de Mendonça)
-# licinio@bb.com.br			(Licínio Luis Branco)
-# kraucer@bb.com.br			(Kraucer Fernandes Mazuco)
 #
 
-PACKAGE_NAME=@PACKAGE_NAME@
+MODULE_NAME=uiparser
 
-#---[ Paths & Tools ]----------------------------------------------------------
+SOURCES=accelerator.c action.c menubar.c menu.c menuitem.c parser.c \
+			parsefile.c separator.c toolbar.c toolitem.c popup.c script.c \
+			scroll.c keypad.c button.c
+
+#---[ Configuration values ]-------------------------------------------------------------
+
+PACKAGE_NAME=@PACKAGE_NAME@
+PACKAGE_VERSION=@PACKAGE_VERSION@
+PACKAGE_TARNAME=@PACKAGE_TARNAME@
 
 prefix=@prefix@
 exec_prefix=@exec_prefix@
 bindir=@bindir@
 sbindir=@sbindir@
 libdir=@libdir@
-includedir=@includedir@
-datarootdir=@datarootdir@
-localedir=@localedir@
-docdir=@docdir@
-sysconfdir=@sysconfdir@
 
-VALGRIND=@VALGRIND@
+BASEDIR=@BASEDIR@
 
-#---[ Sources ]----------------------------------------------------------------
+OBJDIR=.obj
+OBJDBG=$(OBJDIR)/Debug
+OBJRLS=$(OBJDIR)/Release
 
-include sources.mak
+MKDIR=@MKDIR_P@
+CC=@CC@
+LD=@CC@
+AR=@AR@
 
-#---[ Targets ]----------------------------------------------------------------
+CFLAGS=@CFLAGS@ @LIB3270_CFLAGS@ -Wno-deprecated-declarations @GTK_CFLAGS@ -I$(BASEDIR)/src/include/pw3270
+LIBS=@LIBS@ @GTK_LIBS@ @LIB3270_LIBS@
 
-SOURCES=testprogram.c ../common/config.c $(foreach SRC, $(UI_PARSER_SRC), $(SRC))
+#---[ Rules ]----------------------------------------------------------------------------
 
-DEPENDS=*.h ../common/*.h Makefile
+DEPENDS=$(BASEDIR)/src/include/*.h $(BASEDIR)/src/include/lib3270/*.h $(BASEDIR)/src/include/pw3270/*.h *.h Makefile
 
-CFLAGS=@CFLAGS@ @GTK_CFLAGS@ -DDATAROOTDIR=\"$(datarootdir)\" -I../../include
-LIBS=@LIBS@ @GTK_LIBS@
+$(OBJDBG)/%.o: \
+	%.c \
+	$(DEPENDS)
 
-include ../../include/rules.mak
+	@echo $< ...
+	@$(MKDIR) `dirname $@`
+	@$(CC) $(CFLAGS) \
+				@DBG_CFLAGS@ \
+				-DBUILD_DATE=`date +"0x%Y%m%d"`\
+				-o $@ -c $<
 
-#---[ Debug targets ]----------------------------------------------------------
+$(OBJRLS)/%.o: \
+	%.c \
+	$(DEPENDS)
 
-Debug: $(BINDIR)/Debug/$(PACKAGE_TARNAME)$(EXEEXT)
+	@echo $< ...
+	@$(MKDIR) `dirname $@`
+	@$(CC) $(CFLAGS) \
+				@RLS_CFLAGS@ \
+				-DBUILD_DATE=`date +"0x%Y%m%d"` \
+				-o $@ -c $<
 
-$(BINDIR)/Debug/testprogram$(EXEEXT):	$(foreach SRC, $(basename $(SOURCES)), $(OBJDIR)/Debug/$(SRC)$(OBJEXT))
+marshal.h: \
+	genmarshal
+
+	@echo $< ...
+	@$(MKDIR) `dirname $@`
+	@glib-genmarshal --prefix=v3270 --header genmarshal > $@
+
+marshal.c: \
+	marshal.h
+
+	@echo $< ...
+	@$(MKDIR) `dirname $@`
+	@glib-genmarshal --prefix=v3270 --body genmarshal > $@
+
+#---[ Release Targets ]------------------------------------------------------------------
+
+Release: \
+	$(BASEDIR)/.obj/Release/$(MODULE_NAME).a
+
+$(BASEDIR)/.obj/Release/$(MODULE_NAME).a: \
+	$(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SRC).o)
 
 	@echo $@ ...
 	@$(MKDIR) `dirname $@`
-	@$(LD) -Wl,--rpath,.bin/Debug -o $@ $^ $(LIBS)
+	@$(AR) rcs $@ $^
 
-run: $(BINDIR)/Debug/testprogram$(EXEEXT)
-	@cd "$(ROOTDIR)" ; .bin/Debug/testprogram$(EXEEXT)
+#---[ Debug Targets ]--------------------------------------------------------------------
 
-memchk: $(BINDIR)/Debug/testprogram$(EXEEXT)
-ifeq ($(VALGRIND),no)
-	@cd "$(ROOTDIR)" ; .bin/Debug/testprogram$(EXEEXT)
-else
-	@cd "$(ROOTDIR)" ; G_DEBUG=gc-friendly G_SLICE=always-malloc \$(VALGRIND) --leak-check=full --suppressions=../valgrind.suppression --gen-suppressions=all $(BINDIR)/Debug/testprogram$(EXEEXT)
-endif
+Debug: \
+	$(BASEDIR)/.obj/Debug/$(MODULE_NAME).a
 
-clean: clean-common
+$(BASEDIR)/.obj/Debug/$(MODULE_NAME).a: \
+	$(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC).o)
+
+	@echo $@ ...
+	@$(MKDIR) `dirname $@`
+	@$(AR) rcs $@ $^
+
+#---[ Clean Targets]---------------------------------------------------------------------
+
+cleanDebug:
+
+	@rm -fr	$(BASEDIR)/.obj/Debug/$(MODULE_NAME).a \
+			$(OBJDBG)
+
+cleanRelease:
+
+	@rm -fr	$(BASEDIR)/.obj/Release/$(MODULE_NAME).a \
+			$(OBJRLS)
+
+clean: \
+	cleanDebug \
+	cleanRelease
+
 

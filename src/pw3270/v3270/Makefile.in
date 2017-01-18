@@ -51,6 +51,7 @@ MKDIR=@MKDIR_P@
 CC=@CC@
 LD=@CC@
 AR=@AR@
+GENMARSHAL=@GENMARSHAL@
 
 CFLAGS=@CFLAGS@ @LIB3270_CFLAGS@ -Wno-deprecated-declarations @GTK_CFLAGS@ -I$(BASEDIR)/src/include/pw3270
 LIBS=@LIBS@ @GTK_LIBS@ @LIB3270_LIBS@
@@ -86,14 +87,14 @@ marshal.h: \
 
 	@echo $< ...
 	@$(MKDIR) `dirname $@`
-	@glib-genmarshal --prefix=v3270 --header genmarshal > $@
+	@$(GENMARSHAL) --prefix=$(MODULE_NAME) --header genmarshal > $@
 
 marshal.c: \
 	marshal.h
 
 	@echo $< ...
 	@$(MKDIR) `dirname $@`
-	@glib-genmarshal --prefix=v3270 --body genmarshal > $@
+	@glib-genmarshal --prefix=$(MODULE_NAME) --body genmarshal > $@
 
 #---[ Release Targets ]------------------------------------------------------------------
 

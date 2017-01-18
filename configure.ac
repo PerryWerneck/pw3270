@@ -57,6 +57,7 @@ AC_PROG_CC
 AC_PROG_SED
 AC_PROG_LN_S
 AC_PATH_TOOL([AR], [ar], [ar])
+AC_PATH_TOOL([GENMARSHAL], [glib-genmarshal], [glib-genmarshal])
 
 AC_LANG([C])
 
@@ -320,6 +321,9 @@ AC_CONFIG_FILES(src/lib3270/Makefile)
 
 AC_CONFIG_FILES(src/pw3270/Makefile)
 AC_CONFIG_FILES(src/pw3270/v3270/Makefile)
+AC_CONFIG_FILES(src/pw3270/v3270ft/Makefile)
+AC_CONFIG_FILES(src/pw3270/uiparser/Makefile)
+AC_CONFIG_FILES(src/pw3270/common/Makefile)
 
 dnl AC_CONFIG_FILES(Makefile)
 

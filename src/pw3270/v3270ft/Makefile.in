@@ -26,10 +26,8 @@
 
 MODULE_NAME=v3270ft
 
-#---[ Application sources ]--------------------------------------------------------------
-
 SOURCES=marshal.c filelist.c load.c misc.c select.c transfer.c v3270ftprogress.c \
-		get.c save.c set.c v3270ft.c tables.c
+                get.c save.c set.c v3270ft.c tables.c
 
 #---[ Configuration values ]-------------------------------------------------------------
 
@@ -42,149 +40,100 @@ exec_prefix=@exec_prefix@
 bindir=@bindir@
 sbindir=@sbindir@
 libdir=@libdir@
-includedir=@includedir@
-datarootdir=@datarootdir@
-localedir=@localedir@
-docdir=@docdir@
-documentroot=@documentroot@
-sysconfdir=@sysconfdir@
-cachedir=/var/cache
-logdir=@LOGDIR@
 
-OBJDIR?=.obj
+BASEDIR=@BASEDIR@
+
+OBJDIR=.obj
 OBJDBG=$(OBJDIR)/Debug
 OBJRLS=$(OBJDIR)/Release
 
-BINDIR?=.bin
-BINDBG=$(BINDIR)/Debug
-BINRLS=$(BINDIR)/Release
-
-VALGRIND=@VALGRIND@
-DOXYGEN=@DOXYGEN@
-AMTAR=@AMTAR@
-SHELL=@SHELL@
 MKDIR=@MKDIR_P@
-GENMARSHAL=@GENMARSHAL@
-XGETTEXT=@XGETTEXT@
-MSGCAT=@MSGCAT@
-
 CC=@CC@
 LD=@CC@
 AR=@AR@
+GENMARSHAL=@GENMARSHAL@
 
-GTK_CFLAGS=@GTK_CFLAGS@
-GTK_LIBS=@GTK_LIBS@
+CFLAGS=@CFLAGS@ @LIB3270_CFLAGS@ -Wno-deprecated-declarations @GTK_CFLAGS@ -I$(BASEDIR)/src/include/pw3270
+LIBS=@LIBS@ @GTK_LIBS@ @LIB3270_LIBS@
 
-GLIB_CFLAGS=@GLIB_CFLAGS@
-GLIB_LIBS=@GLIB_LIBS@
+#---[ Rules ]----------------------------------------------------------------------------
 
-CFLAGS=@CFLAGS@ \
-		@DLL_CFLAGS@ \
-		-DBUILD_DATE=`date +"0x%Y%m%d"` \
-		@LIB3270_CFLAGS@ \
-		@PW3270_CFLAGS@ \
-		$(GTK_CFLAGS)
-
-LIBS=@LIBS@ $(GTK_LIBS)
-
-DEPENDS=*.h ../include/*.h marshal.c marshal.h Makefile
-
-#---[ Release Rules ]--------------------------------------------------------------------
-
-$(OBJRLS)/%.o: \
-	%.c $(DEPENDS)
-
-	@echo $(notdir $@) ...
-	@$(MKDIR) `dirname $@`
-	@$(CC) $(CFLAGS) -DNDEBUG=1 -o $@ -c $<
-
-$(BINRLS)/$(MODULE_NAME).a: \
-	$(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SRC).o)
-
-	@echo $(notdir $@) ...
-	@$(MKDIR) `dirname $@`
-
-	@$(AR) rcs $@ $^
-
-$(OBJDIR)/pot/%.pot: \
-	%.c
-
-	@echo $(notdir $@) ...
-	@$(MKDIR) `dirname $@`
-
-	@$(XGETTEXT) \
-		--default-domain=$(PACKAGE_NAME) \
-		--language=C \
-		--keyword=_ \
-		--keyword=N_ \
-		--keyword=MSG_:2 \
-		--force-po \
-		--output=$@ $<
-
-
-$(BINDIR)/pot/$(MODULE_NAME).pot: \
-	$(foreach SRC, $(basename $(SOURCES)), $(OBJDIR)/pot/$(SRC).pot)
-
-	@echo $(notdir $@) ...
-	@$(MKDIR) `dirname $@`
-
-	@$(MSGCAT) --sort-output $^ > $@
-
-#---[ Debug Rules ]----------------------------------------------------------------------
+DEPENDS=$(BASEDIR)/src/include/*.h $(BASEDIR)/src/include/lib3270/*.h $(BASEDIR)/src/include/pw3270/*.h *.h Makefile
 
 $(OBJDBG)/%.o: \
-	%.c $(DEPENDS)
+	%.c \
+	$(DEPENDS)
 
-	@echo $(notdir $@) ...
+	@echo $< ...
 	@$(MKDIR) `dirname $@`
-	@$(CC) $(CFLAGS) -DDEBUG=1 -o $@ -c $<
+	@$(CC) $(CFLAGS) \
+				@DBG_CFLAGS@ \
+				-DBUILD_DATE=`date +"0x%Y%m%d"`\
+				-o $@ -c $<
 
-$(BINDBG)/$(MODULE_NAME).a: \
-	$(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC).o)
+$(OBJRLS)/%.o: \
+	%.c \
+	$(DEPENDS)
 
-	@echo $(notdir $@) ...
+	@echo $< ...
 	@$(MKDIR) `dirname $@`
-
-	@$(AR) rcs $@ $^
-
-#---[ Misc Rules ]-----------------------------------------------------------------------
+	@$(CC) $(CFLAGS) \
+				@RLS_CFLAGS@ \
+				-DBUILD_DATE=`date +"0x%Y%m%d"` \
+				-o $@ -c $<
 
 marshal.h: \
 	genmarshal
 
-	@echo $(notdir $<) ...
+	@echo $< ...
 	@$(MKDIR) `dirname $@`
-	@$(GENMARSHAL) --prefix=$(MODULE_NAME) --header $< > $@
+	@$(GENMARSHAL) --prefix=$(MODULE_NAME) --header genmarshal > $@
 
 marshal.c: \
-	genmarshal
+	marshal.h
 
-	@echo $(notdir $<) ...
+	@echo $< ...
 	@$(MKDIR) `dirname $@`
-	@$(GENMARSHAL) --prefix=$(MODULE_NAME) --body $< > $@
+	@$(GENMARSHAL) --prefix=$(MODULE_NAME) --body genmarshal > $@
 
-#---[ Targets ]--------------------------------------------------------------------------
-
-all: \
-	$(BINRLS)/$(MODULE_NAME).a
+#---[ Release Targets ]------------------------------------------------------------------
 
 Release: \
-	$(BINRLS)/$(MODULE_NAME).a
+	$(BASEDIR)/.obj/Release/$(MODULE_NAME).a
+
+$(BASEDIR)/.obj/Release/$(MODULE_NAME).a: \
+	$(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SRC).o)
+
+	@echo $@ ...
+	@$(MKDIR) `dirname $@`
+	@$(AR) rcs $@ $^
+
+#---[ Debug Targets ]--------------------------------------------------------------------
 
 Debug: \
-	$(BINDBG)/$(MODULE_NAME).a
+	$(BASEDIR)/.obj/Debug/$(MODULE_NAME).a
 
-pot: \
-	$(BINDIR)/pot/$(MODULE_NAME).pot
+$(BASEDIR)/.obj/Debug/$(MODULE_NAME).a: \
+	$(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC).o)
 
-cleanRelease: clean
+	@echo $@ ...
+	@$(MKDIR) `dirname $@`
+	@$(AR) rcs $@ $^
 
-cleanDebug: clean
+#---[ Clean Targets]---------------------------------------------------------------------
 
-clean:
-	@rm -fr $(BINDIR)
-	@rm -fr $(OBJDIR)
-	@rm -f marshal.h
-	@rm -f marshal.c
+cleanDebug:
+
+	@rm -fr	$(BASEDIR)/.obj/Debug/$(MODULE_NAME).a \
+			$(OBJDBG)
+
+cleanRelease:
+
+	@rm -fr	$(BASEDIR)/.obj/Release/$(MODULE_NAME).a \
+			$(OBJRLS)
+
+clean: \
+	cleanDebug \
+	cleanRelease
 
 
