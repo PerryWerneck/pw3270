@@ -29,6 +29,10 @@ SOURCES=xml2pot.c
 
 #---[ Configuration values ]-------------------------------------------------------------
 
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+datarootdir=@datarootdir@
+
 PACKAGE_NAME=@PACKAGE_NAME@
 PACKAGE_VERSION=@PACKAGE_VERSION@
 PACKAGE_TARNAME=@PACKAGE_TARNAME@
@@ -48,6 +52,8 @@ MKDIR=@MKDIR_P@
 CC=@HOST_CC@
 LD=@HOST_CC@
 MSGCAT=@MSGCAT@
+INSTALL=@INSTALL@
+INSTALL_DATA=@INSTALL_DATA@
 
 CFLAGS=@CFLAGS@ -Wno-deprecated-declarations @GTK_CFLAGS@
 LIBS=@LIBS@ @GTK_LIBS@
@@ -93,6 +99,11 @@ all: \
 
 Release: \
 	$(BINRLS)/$(MODULE_NAME)$(EXEEXT)
+
+install:
+
+	@$(MKDIR) $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/ui
+	@$(INSTALL_DATA) *.xml $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/ui
 
 pot: \
 	$(BASEDIR)/.pot/ui.pot

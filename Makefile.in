@@ -146,8 +146,7 @@ install: \
 	@$(INSTALL_DATA) conf/colors.conf $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)
 	@$(INSTALL_DATA) $(PACKAGE_TARNAME).pot $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)
 
-	@$(MKDIR) $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/ui
-	@$(INSTALL_DATA) ui/*.xml $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/ui
+	@$(MAKE) -C ui install
 
 #---[ Debug targets ]----------------------------------------------------------
 
