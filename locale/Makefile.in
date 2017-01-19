@@ -48,6 +48,7 @@ INSTALL_DATA=@INSTALL_DATA@
 %.po: \
 	$(PACKAGE_NAME).pot
 
+	@echo $(basename $@) ...
 	@touch $@
 	@$(MSGMERGE) --update --sort-output $@ $(PACKAGE_NAME).pot
 
@@ -60,6 +61,9 @@ $(DESTDIR)/$(localedir)/%/LC_MESSAGES/$(PACKAGE_NAME).mo: \
 
 
 #---[ Targets ]--------------------------------------------------------------------------
+
+all: \
+	$(wildcard *.po)
 
 install: \
 	$(foreach SRC, $(basename $(wildcard *.po)), $(DESTDIR)/$(localedir)/$(SRC)/LC_MESSAGES/$(PACKAGE_NAME).mo)
