@@ -91,6 +91,12 @@ $(BINRLS)/%@DLLEXT@: \
  
 	@$(MAKE) -C src/$(basename $(notdir $@)) $@
 
+$(BINRLS)/%.a: \
+	$(DEPENDS) \
+	./src/%/*
+ 
+	@$(MAKE) -C src/$(basename $(notdir $@)) $@
+
 $(BINRLS)/plugins/%@DLLEXT@: \
 	$(DEPENDS) \
 	./src/plugins/%/*
@@ -170,6 +176,7 @@ $(SRCDIR)/%: \
 all: \
 	$(BINRLS)/lib3270@DLLEXT@ \
 	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ \
+	$(BINRLS)/libpw3270cpp.a \
 	$(foreach PLG, $(PLUGINS), $(BINRLS)/plugins/$(PLG)@DLLEXT@) \
 	locale/$(PACKAGE_TARNAME).pot
 
@@ -190,10 +197,16 @@ locale/$(PACKAGE_TARNAME).pot: \
 	@$(MSGCAT) --sort-output $^ > $@
 
 install: \
+	install-lib \
+	install-app \
+	install-sdk \
+	$(foreach PLG, $(PLUGINS), $(DESTDIR)$(libdir)/$(PACKAGE_TARNAME)-plugins/$(PLG)@DLLEXT@)
+
+install-lib: \
 	$(DESTDIR)$(libdir)/lib3270@DLLEXT@ \
+
+install-app: \
 	$(DESTDIR)$(libdir)/$(PACKAGE_TARNAME)@EXEEXT@ \
-	$(DESTDIR)$(libdir)/libpw3270cpp.a \
-	$(foreach PLG, $(PLUGINS), $(DESTDIR)$(libdir)/$(PACKAGE_TARNAME)-plugins/$(PLG)@DLLEXT@) \
 	locale/$(PACKAGE_TARNAME).pot
 
 	@$(MKDIR) $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)
@@ -201,7 +214,11 @@ install: \
 
 	@$(MAKE) -C ui install
 	@$(MAKE) -C locale install
+
+install-sdk:
+
 	@$(MAKE) -C sdk install
+	@$(MAKE) -C src/libpw3270cpp install
 
 #---[ Debug targets ]----------------------------------------------------------
 

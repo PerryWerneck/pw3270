@@ -62,6 +62,7 @@ XGETTEXT=@XGETTEXT@
 MSGCAT=@MSGCAT@
 INSTALL=@INSTALL@
 INSTALL_DATA=@INSTALL_DATA@
+INSTALL_PROGRAM=@INSTALL_PROGRAM@
 
 CFLAGS=@CFLAGS@ @GTK_CFLAGS@ -I$(BASEDIR)/src/include
 LIBS=@LIBS@ @GTK_LIBS@ @GLIB_LIBS@ @GDBUS_LIBS@ @LIB3270_LIBS@ @PW3270_LIBS@
@@ -122,18 +123,22 @@ dbus-glue.h: \
 Release: \
 	$(BINRLS)/$(MODULE_NAME)@DLLEXT@
 
-$(BINRLS)/$(MODULE_NAME)@DLLEXT@: \
-	$(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SRC).o)
+install: \
+	$(BINRLS)/$(MODULE_NAME)@DLLEXT@
 
 	@echo $@ ...
 	@$(MKDIR) `dirname $@`
-	@$(LD) \
-		-shared \
-		-L$(BASEDIR)/.bin/Release \
-		-o $@ $^ \
-		$(LIBS)
+	$(INSTALL_PROGRAM) $(BINRLS)/$(MODULE_NAME)@DLLEXT@ $(DESTDIR)$(libdir)/$(PACKAGE_TARNAME)-plugins/$(MODULE_NAME)@DLLEXT@
 
 $(DESTDIR)$(libdir)/$(PACKAGE_TARNAME)-plugins/$(MODULE_NAME)@DLLEXT@: \
+	$(BINRLS)/$(MODULE_NAME)@DLLEXT@
+
+	@echo $@ ...
+	@$(MKDIR) `dirname $@`
+	$(INSTALL_PROGRAM) $(BINRLS)/$(MODULE_NAME)@DLLEXT@ $@
+
+
+$(BINRLS)/$(MODULE_NAME)@DLLEXT@: \
 	$(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SRC).o)
 
 	@echo $@ ...

@@ -102,20 +102,23 @@ $(POTDIR)/%.pot: %.c
 
 #---[ Release Targets ]------------------------------------------------------------------
 
+all: \
+	$(BASEDIR)/.bin/Release/$(MODULE_NAME).a
+
 Release: \
-	$(BASEDIR)/.obj/Release/$(MODULE_NAME).a
+	$(BASEDIR)/.bin/Release/$(MODULE_NAME).a
 
 install: \
 	$(DESTDIR)$(libdir)/$(MODULE_NAME).a
 
 $(DESTDIR)$(libdir)/$(MODULE_NAME).a: \
-	$(BASEDIR)/.obj/Release/$(MODULE_NAME).a
+	$(BASEDIR)/.bin/Release/$(MODULE_NAME).a
 
 	@echo $@ ...
 	@$(MKDIR) `dirname $@`
-	@$(INSTALL_PROGRAM) $^ $@
+	@$(INSTALL_DATA) $^ $@
 
-$(BASEDIR)/.obj/Release/$(MODULE_NAME).a: \
+$(BASEDIR)/.bin/Release/$(MODULE_NAME).a: \
 	$(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SRC).o)
 
 	@echo $@ ...
