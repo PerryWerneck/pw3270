@@ -42,6 +42,8 @@ Source:         pw3270-%{version}.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
 Requires:       shared-mime-info
+Provides:       libpw3270-%{MAJOR_VERSION}_%{MINOR_VERSION} = %{version}
+
 
 #--[ Setup by distribution ]------------------------------------------------------------------------------------------
 # 
@@ -139,6 +141,7 @@ Summary:        3270 Communication library for %{name}
 Group:          Development/Libraries/C and C++
 Requires:       openssl
 Provides:       lib3270 = %{version}
+Provides:       lib3270-%{MAJOR_VERSION}_%{MINOR_VERSION} = %{version}
 
 %description -n lib3270-%{_libvrs}
 Open-source GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
@@ -150,7 +153,7 @@ This package contains the tn3270 protocol library for %{name}
 %package -n lib3270-devel
 Summary:        Devel for 3270 Communication library for %{name}
 Group:          Development/Libraries/C and C++
-Provides:       lib3270-devel-%{MAJOR_VERSION}_%{MINOR_VERSION}
+Provides:       lib3270-devel-%{MAJOR_VERSION}_%{MINOR_VERSION} = %{version}
 Requires:       lib3270-%{MAJOR_VERSION}_%{MINOR_VERSION} = %{version}
 
 %description -n lib3270-devel
