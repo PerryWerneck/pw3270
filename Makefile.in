@@ -120,6 +120,11 @@ $(DESTDIR)$(libdir)/%@DLLEXT@: \
  
 	@$(MAKE) DESTDIR=$(DESTDIR) -C src/$(basename $(notdir $@)) install
 
+$(DESTDIR)$(libdir)/$(PACKAGE_TARNAME)-plugins/%@DLLEXT@: \
+	$(DEPENDS) \
+	./src/plugins/%/*
+
+	@$(MAKE) -C src/plugins/$(basename $(notdir $@)) $@
 
 $(BINRLS)/%@EXEEXT@: \
 	$(DEPENDS) \
@@ -173,7 +178,6 @@ locale/$(PACKAGE_TARNAME).pot: \
 	$(POTDIR)/ui.pot \
 	$(foreach PLG, $(PLUGINS), $(POTDIR)/plugins/$(PLG).pot)
 
-
 	@rm -f $@
 	@mkdir -p `dirname $@`
 	@$(MSGCAT) --sort-output $^ > $@
@@ -181,6 +185,7 @@ locale/$(PACKAGE_TARNAME).pot: \
 install: \
 	$(DESTDIR)$(libdir)/lib3270@DLLEXT@ \
 	$(DESTDIR)$(libdir)/$(PACKAGE_TARNAME)@EXEEXT@ \
+	$(foreach PLG, $(PLUGINS), $(DESTDIR)$(libdir)/$(PACKAGE_TARNAME)-plugins/$(PLG)@DLLEXT@) \
 	locale/$(PACKAGE_TARNAME).pot
 
 	@$(MKDIR) $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)
@@ -250,7 +255,9 @@ $(SRCDIR): \
 		$(SRCDIR)/ui \
 		$(SRCDIR)/src/lib3270 \
 		$(SRCDIR)/src/pw3270 \
-		$(SRCDIR)/sdk
+		$(SRCDIR)/sdk \
+		$(SRCDIR)/src/plugins/dbus3270
+
 
 	@$(MKDIR) $(SRCDIR)
 	@$(INSTALL_DATA) \

@@ -133,6 +133,16 @@ $(BINRLS)/$(MODULE_NAME)@DLLEXT@: \
 		-o $@ $^ \
 		$(LIBS)
 
+$(DESTDIR)$(libdir)/$(PACKAGE_TARNAME)-plugins/$(MODULE_NAME)@DLLEXT@: \
+	$(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SRC).o)
+
+	@echo $@ ...
+	@$(MKDIR) `dirname $@`
+	@$(LD) \
+		-shared \
+		-L$(BASEDIR)/.bin/Release \
+		-o $@ $^ \
+		$(LIBS)
 
 pot: \
 	$(BASEDIR)/.pot/plugins/$(MODULE_NAME).pot
@@ -148,7 +158,7 @@ $(SRCDIR): \
 	clean
 
 	@$(MKDIR) $@
-	@$(INSTALL_DATA) *.c *.h *.xml *.cbp $@
+	@$(INSTALL_DATA) *.c *.h *.in *.xml *.cbp $@
 
 
 #---[ Debug Targets ]--------------------------------------------------------------------
