@@ -34,7 +34,8 @@ cd `dirname $0`
 LANG="EN_us"
 
 version="@PACKAGE_VERSION@"
-revision="@PACKAGE_REVISION@"
+adversion="@PACKAGE_VERSION@"
+revision=$(date +"%Y%m%d")
 builddate=`date`
 sccsdate=`date +%Y/%m/%d`
 user=${LOGNAME-$USER}

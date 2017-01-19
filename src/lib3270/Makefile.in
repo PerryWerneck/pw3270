@@ -239,7 +239,7 @@ $(SRCDIR): \
 	clean
 
 	@$(MKDIR) $@
-	@$(INSTALL_DATA) *.c *.h *.in *.cbp *.xad *.sh $@
+	@$(INSTALL_DATA) *.c *.h *.in *.cbp *.xad $@
 
 
 #---[ Clean Targets]---------------------------------------------------------------------
@@ -251,6 +251,10 @@ cleanDebug:
 			$(BINDBG)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@ \
 			$(BINDBG)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@
 
+	@rm -f \
+		fallbacks.c \
+		version.c
+
 cleanRelease:
 
 	@rm -fr	$(OBJRLS) \
@@ -259,13 +263,13 @@ cleanRelease:
 			$(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@ \
 			$(POTDIR)
 
+	@rm -f \
+		fallbacks.c \
+		version.c
 clean: \
 	cleanDebug \
 	cleanRelease
 
-	@rm -f \
-		fallbacks.c \
-		version.c
 
 
 
