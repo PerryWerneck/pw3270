@@ -71,14 +71,16 @@ install: \
 	$(foreach SRC, $(notdir $(wildcard $(BASEDIR)/src/include/lib3270/*.h)), $(DESTDIR)$(includedir)/lib3270/$(SRC)) \
 	$(foreach SRC, $(notdir $(wildcard $(BASEDIR)/src/include/pw3270/*.h)), $(DESTDIR)$(includedir)/pw3270/$(SRC)) \
 	$(DESTDIR)$(includedir)/lib3270.h \
-	$(DESTDIR)$(includedir)/pw3270.h
+	$(DESTDIR)$(includedir)/pw3270.h \
+	$(DESTDIR)$(includedir)/pw3270cpp.h \
 
 
 $(SRCDIR)/sdk: \
 	$(foreach SRC, $(notdir $(wildcard $(BASEDIR)/src/include/lib3270/*.h)), $(SRCDIR)/src/include/lib3270/$(SRC)) \
 	$(foreach SRC, $(notdir $(wildcard $(BASEDIR)/src/include/pw3270/*.h)), $(SRCDIR)/src/include/pw3270/$(SRC)) \
 	$(SRCDIR)/src/include/lib3270.h \
-	$(SRCDIR)/src/include/pw3270.h
+	$(SRCDIR)/src/include/pw3270.h \
+	$(SRCDIR)/src/include/pw3270cpp.h
 
 	@$(MKDIR) $@
 	@$(INSTALL_DATA) *.in $@

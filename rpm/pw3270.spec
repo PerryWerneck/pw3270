@@ -44,8 +44,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 Requires:       lib3270-%{_libvrs} = %{version}
 Requires:       shared-mime-info
 
-Provides:       libpw3270 = %{version}
-Provides:       libpw3270.so = %{version}
+Requires:       libpw3270-%{MAJOR_VERSION}_%{MINOR_VERSION}
 
 #--[ Setup by distribution ]------------------------------------------------------------------------------------------
 # 
@@ -130,6 +129,7 @@ BuildRequires:  m4
 BuildRequires:  pkgconfig
 BuildRequires:  sed
 BuildRequires:	optipng
+BuildRequires:	fdupes
 
 %description
 Open-source GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
@@ -153,7 +153,8 @@ This package contains the tn3270 protocol library for %{name}
 %package -n lib3270-devel
 Summary:        Devel for 3270 Communication library for %{name}
 Group:          Development/Libraries/C and C++
-Requires:       lib3270 = %{version}
+Provides:       lib3270-devel-%{MAJOR_VERSION}_%{MINOR_VERSION}
+Requires:       lib3270-%{MAJOR_VERSION}_%{MINOR_VERSION}
 
 %description -n lib3270-devel
 Open-source GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
@@ -162,11 +163,8 @@ This package contains the development files for tn3270 protocol library for %{na
 %package -n %{name}-devel
 Summary:        Files required for development of %{name} plugins
 Group:          Development/Libraries/C and C++
-
-Requires:       lib3270-devel = %{version}
-Requires:       %{name} = %{version}
-
-Provides:		pw3270-devel = %{MAJOR_VERSION}.%{MINOR_VERSION}
+Requires:       lib3270-devel-%{MAJOR_VERSION}_%{MINOR_VERSION}
+Requires:       libpw3270-%{MAJOR_VERSION}_%{MINOR_VERSION}
 
 %description -n %{name}-devel
 Open-source GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
@@ -240,6 +238,8 @@ rm ${RPM_BUILD_ROOT}/%{_datadir}/pw3270/ui/*java*.xml
 # ooRexx now lives in another package
 rm ${RPM_BUILD_ROOT}/%{_datadir}/pw3270/ui/*rexx*.xml
 
+%fdupes $RPM_BUILD_ROOT
+
 %clean
 rm -rf %{buildroot}
 
@@ -265,7 +265,6 @@ rm -rf %{buildroot}
 %{_datadir}/pw3270/colors.conf
 %{_datadir}/pw3270/pw3270.png
 %{_datadir}/pw3270/pw3270-logo.png
-%{_datadir}/locale/pt_BR/LC_MESSAGES/pw3270.mo
 %dir %{_libdir}/pw3270-plugins
 
 %files -n lib3270-%{_libvrs}
@@ -279,6 +278,7 @@ rm -rf %{buildroot}
 %{_includedir}/lib3270.h
 %{_libdir}/pkgconfig/lib3270.pc
 %{_libdir}/lib3270.so
+%{_datadir}/pw3270/locale
 
 %files -n %{name}-devel
 %defattr(-,root,root)
@@ -291,9 +291,6 @@ rm -rf %{buildroot}
 
 %{_libdir}/libpw3270cpp.a
 %{_includedir}/pw3270cpp.h
-
-%dir %{_datadir}/pw3270/sample
-%{_datadir}/pw3270/sample/*
 
 %if 0%{?_dbus}
 %files plugin-dbus

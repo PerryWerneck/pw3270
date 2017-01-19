@@ -268,7 +268,11 @@
 
 	const string session::get_revision(void)
 	{
+#ifdef PACKAGE_REVISION
 		return string(PACKAGE_REVISION);
+#else
+		return string(STRINGIZE_VALUE_OF(BUILD_DATE));
+#endif // PACKAGE_REVISION
 	}
 
 	void session::log(const char *fmt, ...)

@@ -64,6 +64,23 @@
 	#define ETIMEDOUT 1238
  #endif // !ETIMEDOUT
 
+/**
+ * @brief Obtém nome de variável como string.
+ *
+ */
+ #define STRINGIZE(x) #x
+
+/**
+ * @brief Converte valor passado ao gcc via linha de comando em string.
+ *
+ * Macro usada para converter valores passados ao gcc via definições de
+ * linha de comando em uma string. Geralmente usado para converter os
+ * nomes de diretórios ajustados pelo ./configure.
+ *
+ * <http://stackoverflow.com/questions/2410976/how-to-define-a-string-in-gcc-command-line>
+ */
+ #define STRINGIZE_VALUE_OF(x) STRINGIZE(x)
+
  #define PW3270_NAMESPACE h3270
 
  namespace PW3270_NAMESPACE
