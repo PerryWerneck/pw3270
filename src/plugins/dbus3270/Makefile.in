@@ -43,11 +43,11 @@ libdir=@libdir@
 
 BASEDIR=@BASEDIR@
 SRCDIR=$(BASEDIR)/.src/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/src/plugins/$(MODULE_NAME)
-POTDIR=$(BASEDIR)/.pot/$(PACKAGE_TARNAME)/plugins/$(MODULE_NAME)
+POTDIR=$(BASEDIR)/.pot/plugins/$(MODULE_NAME)
 
-OBJDIR=$(BASEDIR)/src/pw3270/.obj
-OBJDBG=$(OBJDIR)/Debug/plugins/$(MODULE_NAME)
-OBJRLS=$(OBJDIR)/Release/plugins/$(MODULE_NAME)
+OBJDIR=$(BASEDIR)/.obj/plugins/$(MODULE_NAME)
+OBJDBG=$(OBJDIR)/Debug
+OBJRLS=$(OBJDIR)/Release
 
 BINDIR=$(BASEDIR)/.bin
 BINDBG=$(BINDIR)/Debug/plugins
@@ -135,9 +135,9 @@ $(BINRLS)/$(MODULE_NAME)@DLLEXT@: \
 
 
 pot: \
-	$(BASEDIR)/.pot/$(PACKAGE_TARNAME)/$(MODULE_NAME).pot
+	$(BASEDIR)/.pot/plugins/$(MODULE_NAME).pot
 
-$(BASEDIR)/.pot/$(PACKAGE_TARNAME)/$(MODULE_NAME).pot: \
+$(BASEDIR)/.pot/plugins/$(MODULE_NAME).pot: \
 	$(foreach SRC, $(basename $(SOURCES)), $(POTDIR)/$(SRC).pot)
 
 	@rm -f $@

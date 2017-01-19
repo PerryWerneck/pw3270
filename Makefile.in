@@ -108,6 +108,11 @@ $(POTDIR)/%.pot: \
  
 	@$(MAKE) -C $(basename $(notdir $@)) $@
 
+$(POTDIR)/plugins/%.pot: \
+	$(DEPENDS) \
+	./src/plugins/%/*
+ 
+	@$(MAKE) -C src/plugins/$(basename $(notdir $@)) $@
 
 $(DESTDIR)$(libdir)/%@DLLEXT@: \
 	$(DEPENDS) \
@@ -165,7 +170,9 @@ Release: \
 locale/$(PACKAGE_TARNAME).pot: \
 	$(POTDIR)/lib3270.pot \
 	$(POTDIR)/pw3270.pot \
-	$(POTDIR)/ui.pot
+	$(POTDIR)/ui.pot \
+	$(foreach PLG, $(PLUGINS), $(POTDIR)/plugins/$(PLG).pot)
+
 
 	@rm -f $@
 	@mkdir -p `dirname $@`
@@ -302,6 +309,7 @@ clean: \
 	@rm -fr $(BINDIR)
 	@rm -fr $(POTDIR)
 	@rm -fr $(SRCDIR)
+	@rm -fr $(BASEDIR)/.obj
 
 
 
