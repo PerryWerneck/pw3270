@@ -27,7 +27,7 @@
  *
  */
 
- #include <pw3270/class.h>
+ #include <pw3270cpp.h>
  #include <unistd.h>
  #include <iostream>
 

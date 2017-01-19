@@ -74,7 +74,7 @@
 	#define HLLAPI_PACKET_SET_UNLOCK_DELAY		"setUnlockDelay"
  #endif // WIN32
 
- #include <pw3270/class.h>
+ #include <pw3270cpp.h>
  #include <lib3270/log.h>
 
 #if defined(HAVE_DBUS)
