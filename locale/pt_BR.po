@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-16 16:03-0200\n"
+"POT-Creation-Date: 2017-01-19 21:55-0200\n"
 "PO-Revision-Date: 2016-10-25 10:47-0200\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <perry.werneck@gmail.com>\n"
@@ -24,8 +24,8 @@ msgstr ""
 msgid " and <b>%s</b> for %s."
 msgstr " e <b>%s</b> para %s."
 
-#: telnet.c:1059 ssl.c:265 ssl.c:318 connect.c:101 connect.c:117 connect.c:119
-#: connect.c:572 connect.c:589
+#: telnet.c:1059 connect.c:101 connect.c:117 connect.c:119 connect.c:572
+#: connect.c:589 ssl.c:265 ssl.c:318
 #, c-format
 msgid "%s"
 msgstr "%s"
@@ -99,7 +99,7 @@ msgstr "%s<b>%s</b> para %s"
 msgid "- 3270 Emulator for Gtk"
 msgstr "- Emulador 3270 para GTK"
 
-#: v3270/hostselect.c:42
+#: hostselect.c:42
 msgid "16 colors"
 msgstr "16 cores"
 
@@ -115,38 +115,36 @@ msgstr "Transferência de arquivos 3270"
 msgid "3270 Warning"
 msgstr "Alerta 3270"
 
-#: v3270/accessible.c:84
+#: accessible.c:84
 msgid "3270 screen"
 msgstr "Tela 3270"
 
-#: dialog.c:518
+#: dialog.c:523
 #, c-format
 msgid "3270 terminal emulator for GTK %d.%d"
 msgstr "Emulador 3270 para GTK+ %d.%d"
 
-#: v3270/hostselect.c:43
+#: hostselect.c:43
 msgid "8 colors"
 msgstr "8 cores"
 
-#: uiparser/menu.c:43 uiparser/menuitem.c:87 uiparser/separator.c:93
-#: uiparser/toolitem.c:42 uiparser/script.c:83
+#: menu.c:43 menuitem.c:87 separator.c:93 toolitem.c:42 script.c:83
 #, c-format
 msgid "<%s> is invalid at this context"
 msgstr "<%s> é inválido neste contexto"
 
-#: uiparser/accelerator.c:47 uiparser/menu.c:57 uiparser/popup.c:61
-#: uiparser/scroll.c:49 uiparser/scroll.c:55
+#: accelerator.c:47 menu.c:57 popup.c:61 scroll.c:49 scroll.c:55
 #, c-format
 msgid "<%s> requires %s"
 msgstr "<%s> exige %s"
 
-#: uiparser/menuitem.c:101
+#: menuitem.c:101
 #, c-format
 msgid "<%s> requires a %s attribute"
 msgstr "<%s> precisa do atributo %s"
 
-#: uiparser/accelerator.c:41 uiparser/menubar.c:42 uiparser/toolbar.c:59
-#: uiparser/popup.c:45 uiparser/scroll.c:43 uiparser/keypad.c:178
+#: accelerator.c:41 menubar.c:42 toolbar.c:59 popup.c:45 scroll.c:43
+#: keypad.c:178
 #, c-format
 msgid "<%s> should be on toplevel"
 msgstr "<%s> deve estar no primeiro nível"
@@ -156,7 +154,7 @@ msgstr "<%s> deve estar no primeiro nível"
 msgid "<b>%s</b>\n"
 msgstr "<b>%s</b>\n"
 
-#: v3270/widget.c:238
+#: widget.c:238
 msgid ""
 "<b>Identity not verified</b>\n"
 "Disconnected from host"
@@ -164,7 +162,7 @@ msgstr ""
 "<b>Identidade não foi confirmada</b>\n"
 "Desconectado do servidor"
 
-#: v3270/widget.c:245 v3270/security.c:372
+#: widget.c:245 security.c:372
 msgid ""
 "<b>Identity not verified</b>\n"
 "The connection is insecure"
@@ -172,7 +170,7 @@ msgstr ""
 "<b>Identidade não foi confirmada</b>\n"
 "A conexão não é segura"
 
-#: v3270/widget.c:252
+#: widget.c:252
 msgid ""
 "<b>Identity verified</b>\n"
 "The connection is secure"
@@ -180,7 +178,7 @@ msgstr ""
 "<b>Identidade verificada</b>\n"
 "A conexão é segura"
 
-#: v3270/widget.c:269
+#: widget.c:269
 #, c-format
 msgid "<b>SSL state is undefined</b>Unexpected SSL status %ld"
 msgstr "<b>Estado do SSL é indefinido</b>Estado SSL inesperado %ld"
@@ -193,15 +191,15 @@ msgstr ""
 "<b>Opções válidas:</b>\n"
 "\n"
 
-#: uiparser/menuitem.c:70
+#: menuitem.c:70
 msgid "<menuitem> should be inside a <menu>"
 msgstr "<menuitem> deve estar dentro de <menu>"
 
-#: uiparser/separator.c:53
+#: separator.c:53
 msgid "<separator> should be inside a <menu> or <toolbar>"
 msgstr "<separator> só é válido dentro de <menu> ou <toolbar>"
 
-#: v3270/security.c:203
+#: security.c:203
 msgid ""
 "A CA certificate is invalid. Either it is not a CA or its extensions are not "
 "consistent with the supplied purpose."
@@ -225,7 +223,7 @@ msgstr "Cancelando transferência"
 msgid "Aborting..."
 msgstr "Cancelando..."
 
-#: v3270/security.c:413
+#: security.c:413
 msgid "About security"
 msgstr "Sobre a segurança"
 
@@ -237,15 +235,15 @@ msgstr "Confirmação recebida, transferindo dados"
 msgid "Action failed"
 msgstr "Ação falhou"
 
-#: ui/00default.xml:291
+#: 00default.xml:61
 msgid "Add to copy"
 msgstr "Adicionar à cópia"
 
-#: v3270/hostselect.c:162
+#: hostselect.c:162
 msgid "Address or name of the host to connect."
 msgstr "Endereço ou nome do host a conectar."
 
-#: toggles.c:200 ui/00default.xml:359
+#: toggles.c:200 00default.xml:129
 msgid "Alert sound"
 msgstr "Aviso sonoro"
 
@@ -265,7 +263,7 @@ msgstr ""
 "Um erro ocorreu na transferência de arquivos, pode ser um erro nos dados "
 "sendo transferidos ou um erro de sistema não identificado."
 
-#: v3270/security.c:161
+#: security.c:161
 msgid "An error occurred trying to allocate memory. This should never happen."
 msgstr ""
 "Ocorreu um erro ao tentar alocar memória. Isso nunca deveria acontecer."
@@ -282,7 +280,7 @@ msgstr "Adiciona conteúdo do arquivo origem ao final do arquivo destino."
 msgid "Application name"
 msgstr "Nome da aplicação"
 
-#: ui/10keypad.xml:220
+#: 10keypad.xml:85
 msgid "Attn"
 msgstr "Attn"
 
@@ -291,11 +289,11 @@ msgstr "Attn"
 msgid "Attribute \"%s\" is invalid or undefined"
 msgstr "Atributo \"%s\" é invalido ou indefinido"
 
-#: v3270/security.c:251
+#: security.c:251
 msgid "Authority and issuer serial number mismatch"
 msgstr "Divergência nos números de série da autoridade e emissor "
 
-#: v3270/security.c:244
+#: security.c:244
 msgid "Authority and subject key identifier mismatch"
 msgstr "Authority and subject key identifier mismatch"
 
@@ -303,7 +301,7 @@ msgstr "Authority and subject key identifier mismatch"
 msgid "Auto resize on altscreen"
 msgstr "Mudar automaticamente o tamanho do terminal em tela alternativa"
 
-#: toggles.c:152 ui/00default.xml:354
+#: toggles.c:152 00default.xml:124
 msgid "Auto-Reconnect"
 msgstr "Reconectar automaticamente"
 
@@ -345,11 +343,11 @@ msgstr "Emitir som nos erros"
 msgid "Black"
 msgstr "Preto"
 
-#: toggles.c:110 ui/00default.xml:352
+#: toggles.c:110 00default.xml:122
 msgid "Blank Fill"
 msgstr "Completar com espaços"
 
-#: toggles.c:80 ui/00default.xml:345
+#: toggles.c:80 00default.xml:115
 msgid "Blinking Cursor"
 msgstr "Cursor piscante"
 
@@ -361,15 +359,15 @@ msgstr "Comprimento do bloco:"
 msgid "Blue"
 msgstr "Azul"
 
-#: toggles.c:170 ui/00default.xml:355
+#: toggles.c:170 00default.xml:125
 msgid "Bold"
 msgstr "Negrito"
 
-#: dialog.c:525
+#: dialog.c:530
 msgid "Brazilian Public Software Portal"
 msgstr "Portal do Software Público Brasileiro"
 
-#: ui/10keypad.xml:221
+#: 10keypad.xml:86
 msgid "Break"
 msgstr "Break"
 
@@ -377,15 +375,15 @@ msgstr "Break"
 msgid "Broken pipe"
 msgstr "Conexão interrompida"
 
-#: v3270/security.c:125
+#: security.c:125
 msgid "CRL has expired"
 msgstr "CRL expirou"
 
-#: v3270/security.c:118
+#: security.c:118
 msgid "CRL is not yet valid"
 msgstr "CRL ainda não é válido"
 
-#: v3270/security.c:97
+#: security.c:97
 msgid "CRL signature failure"
 msgstr "Erro na assinatura CRL"
 
@@ -397,7 +395,7 @@ msgstr "C_odificação de caracteres:"
 msgid "C_olor scheme:"
 msgstr "Tema de c_ores:"
 
-#: v3270/hostselect.c:390
+#: hostselect.c:390
 msgid "C_onnect"
 msgstr "_Conectar"
 
@@ -406,7 +404,7 @@ msgstr "_Conectar"
 msgid "Can't %s network keep-alive"
 msgstr "Não foi possível %s opção \"keep-alive\""
 
-#: uiparser/parsefile.c:225
+#: parsefile.c:225
 #, c-format
 msgid "Can't accept unnamed %s"
 msgstr "Não posso aceitar elemento %s sem nome"
@@ -421,7 +419,12 @@ msgstr "Não foi possível conectar a %s"
 msgid "Can't connect to %s:%s"
 msgstr "Não foi possível conectar a %s:%s"
 
-#: v3270/selection.c:425
+#: main.c:70
+#, fuzzy
+msgid "Can't connect to DBUS server"
+msgstr "Não foi possível conectar a %s"
+
+#: selection.c:425
 #, c-format
 msgid "Can't convert line %d from %s to %s"
 msgstr "Não foi possível converter a linha %d de %s para %s"
@@ -435,11 +438,15 @@ msgstr "Recortar não permitido em seleção retangular"
 msgid "Can't determine value for environment variable \"%s\" "
 msgstr "Não consigo determinar o valor da variável de ambiente \"%s\" "
 
+#: main.c:115
+msgid "Can't get DBUS object name"
+msgstr ""
+
 #: ft.c:413
 msgid "Can't get file size"
 msgstr "Não foi possível obter o tamanho do arquivo"
 
-#: load.c:251 uiparser/parsefile.c:328
+#: parsefile.c:328 load.c:251
 #, c-format
 msgid "Can't load %s"
 msgstr "Não foi possível carregar %s"
@@ -461,16 +468,16 @@ msgstr "Não foi possível carregar plugin %s"
 msgid "Can't open file"
 msgstr "Não foi possível abrir arquivo"
 
-#: uiparser/parser.c:351 uiparser/parsefile.c:332 uiparser/parsefile.c:360
+#: parser.c:351 parsefile.c:332 parsefile.c:360
 msgid "Can't parse UI"
 msgstr "Não foi possível processar a UI"
 
-#: uiparser/parser.c:349
+#: parser.c:349
 #, c-format
 msgid "Can't parse UI description files in %s"
 msgstr "Incapaz de processar arquivos de descrição de UI em %s"
 
-#: uiparser/parsefile.c:102 uiparser/parsefile.c:128
+#: parsefile.c:102 parsefile.c:128
 msgid "Can't parse unnamed element"
 msgstr "Incapaz de processar elemento sem nome"
 
@@ -479,7 +486,7 @@ msgstr "Incapaz de processar elemento sem nome"
 msgid "Can't recognize \"%s\" as a valid host type"
 msgstr "Não reconheço \"%s\" como um tipo de host válido"
 
-#: save.c:89 trace.c:208
+#: trace.c:208 save.c:89
 #, c-format
 msgid "Can't save %s"
 msgstr "Não foi possível salvar arquivo %s"
@@ -528,7 +535,7 @@ msgstr "Não foi possível setar a tabela de retornos"
 msgid "Can't set host charset"
 msgstr "Não foi possível definir o charset do host"
 
-#: v3270/iocallback.c:312
+#: iocallback.c:312
 msgid "Can't set lib3270 I/O handlers"
 msgstr "Não foi possível registrar manipuladores de I/O 3270"
 
@@ -592,35 +599,35 @@ msgstr ""
 "Não foi possível definir o descritor de arquivo para a conexão TLS/SSL "
 "(encriptada)."
 
-#: v3270/security.c:111
+#: security.c:111
 msgid "Certificate has expired"
 msgstr "O certificado expirou"
 
-#: v3270/security.c:104
+#: security.c:104
 msgid "Certificate is not yet valid"
 msgstr "O certificado ainda não é válido"
 
-#: v3270/security.c:223
+#: security.c:223
 msgid "Certificate not trusted"
 msgstr "O certificado não é confiável"
 
-#: v3270/security.c:230
+#: security.c:230
 msgid "Certificate rejected"
 msgstr "Certificado rejeitado"
 
-#: v3270/security.c:195
+#: security.c:195
 msgid "Certificate revoked"
 msgstr "Certificado revogado"
 
-#: v3270/security.c:90
+#: security.c:90
 msgid "Certificate signature failure"
 msgstr "Falha na assinatura do certificado"
 
-#: tools.c:302 v3270/selection.c:427
+#: tools.c:302 selection.c:427
 msgid "Charset error"
 msgstr "Erro de codificação de caracteres"
 
-#: v3270/hostselect.c:167
+#: hostselect.c:167
 msgid "Check for SSL secure connection."
 msgstr "Marcar para ativar a conexão segura via SSL."
 
@@ -628,7 +635,7 @@ msgstr "Marcar para ativar a conexão segura via SSL."
 msgid "Check this if the file consists of character data only."
 msgstr "Marque se o arquivo contem apenas texto."
 
-#: ui/10keypad.xml:212
+#: 10keypad.xml:77 00default.xml:76
 msgid "Clear"
 msgstr "Limpar"
 
@@ -640,7 +647,7 @@ msgstr "Tema de cores:"
 msgid "Color setup"
 msgstr "Configuração de cores"
 
-#: ui/00default.xml:334
+#: 00default.xml:104
 msgid "Colors"
 msgstr "Cores"
 
@@ -648,13 +655,18 @@ msgstr "Cores"
 msgid "Command:"
 msgstr "Command:"
 
-#: v3270/hostselect.c:386 ui/00default.xml:319
+#: hostselect.c:386 00default.xml:89
 msgid "Configure host"
 msgstr "Configurar host"
 
-#: toggles.c:188 ui/00default.xml:344
+#: toggles.c:188 00default.xml:114
 msgid "Connect on startup"
 msgstr "Conectar ao iniciar"
+
+#: gobject.c:205
+#, fuzzy
+msgid "Connecting to host"
+msgstr "Não foi possível conectar ao servidor"
 
 #: connect.c:200 connect.c:296 connect.c:305 connect.c:367 connect.c:382
 #: connect.c:398 connect.c:412 connect.c:432 connect.c:446 connect.c:462
@@ -670,15 +682,15 @@ msgstr "Conexão falhou"
 msgid "Connection reset by peer"
 msgstr "Conexão foi cancelada pelo servidor"
 
-#: ui/00default.xml:288
+#: 00default.xml:58
 msgid "Copy"
 msgstr "Copiar"
 
-#: ui/99debug.xml:35
+#: 99debug.xml:35
 msgid "Copy as HTML"
 msgstr "Copiar como HTML"
 
-#: ui/00default.xml:289
+#: 00default.xml:59
 msgid "Copy as table"
 msgstr "Copiar como tabela"
 
@@ -695,7 +707,7 @@ msgstr ""
 msgid "Creates a file with variable-length records."
 msgstr "Cria arquivo com registros de tamanho variável."
 
-#: colors.c:460 toggles.c:140 ui/00default.xml:351
+#: toggles.c:140 colors.c:460 00default.xml:121
 msgid "Cross hair cursor"
 msgstr "Cursor mira"
 
@@ -720,7 +732,7 @@ msgstr "Atual:"
 msgid "Custom colors"
 msgstr "Cores personalizadas"
 
-#: ui/00default.xml:292
+#: 00default.xml:62
 msgid "Cut"
 msgstr "Recortar"
 
@@ -744,11 +756,11 @@ msgstr "Verde Escuro"
 msgid "Data conversion error"
 msgstr "Erro na conversão de dados"
 
-#: ui/99debug.xml:39
+#: 99debug.xml:39
 msgid "Debug"
 msgstr "Depuração"
 
-#: ui/99debug.xml:42
+#: 99debug.xml:42
 msgid "Debug window updates"
 msgstr "Mostrar atualizações de janela"
 
@@ -756,7 +768,7 @@ msgstr "Mostrar atualizações de janela"
 msgid "Default"
 msgstr "Padrão"
 
-#: ui/00default.xml:308
+#: 00default.xml:78
 msgid "Delete field"
 msgstr "Apagar campo"
 
@@ -768,7 +780,7 @@ msgstr "Tipo de dispositivo rejeitado"
 msgid "Disconnected from host."
 msgstr "Desconectado do servidor."
 
-#: ui/99debug.xml:40
+#: 99debug.xml:40
 msgid "Display current charset"
 msgstr "Mostrar a tabela de caracteres ativa"
 
@@ -792,7 +804,7 @@ msgstr "Habilitar trace de entrada/saída de rede"
 msgid "Enable network keep-alive with SO_KEEPALIVE"
 msgstr "Enable network keep-alive with SO_KEEPALIVE"
 
-#: ui/10keypad.xml:216
+#: 10keypad.xml:81
 msgid ""
 "Erase\n"
 "EOF"
@@ -800,7 +812,7 @@ msgstr ""
 "Apagar\n"
 "Campo"
 
-#: ui/10keypad.xml:217
+#: 10keypad.xml:82
 msgid ""
 "Erase\n"
 "Input"
@@ -808,19 +820,19 @@ msgstr ""
 "Apagar\n"
 "Campos"
 
-#: ui/00default.xml:307
+#: 00default.xml:77
 msgid "Erase input"
 msgstr "Apagar campos"
 
-#: ui/00default.xml:309
+#: 00default.xml:79
 msgid "Erase to end of field"
 msgstr "Apagar até o final do campo"
 
-#: ui/00default.xml:310
+#: 00default.xml:80
 msgid "Erase to end of line"
 msgstr "Apagar até o final da linha"
 
-#: print.c:247 v3270/widget.c:200 util.c:983
+#: util.c:983 print.c:247 widget.c:200
 msgid "Error"
 msgstr "Erro"
 
@@ -843,15 +855,15 @@ msgstr "Erro lendo %s"
 msgid "Estimated transfer arrival"
 msgstr "Tempo estimado para a transferência"
 
-#: ui/80javasamples.xml:87
+#: 80javasamples.xml:38
 msgid "Exception test"
 msgstr "Exception test"
 
-#: ui/80rexx.xml:131
+#: 80rexx.xml:38
 msgid "External Rexx script"
 msgstr "Script rexx externo"
 
-#: ui/98trace.xml:534
+#: 98trace.xml:41
 msgid "Field Delimiters"
 msgstr "Delimitadores de campo"
 
@@ -888,27 +900,27 @@ msgstr ""
 "Seguindo a convenção para arquivos texto ASCII, <LF> é usado para terminar "
 "registros no arquivo do PC."
 
-#: v3270/security.c:146
+#: security.c:146
 msgid "Format error in CRL's lastUpdate field"
 msgstr "Erro de formato no campo \"lastUpdate\" do CRL"
 
-#: v3270/security.c:153
+#: security.c:153
 msgid "Format error in CRL's nextUpdate field"
 msgstr "Erro de formato no campo \"nextUpdate\" do CRL"
 
-#: v3270/security.c:139
+#: security.c:139
 msgid "Format error in certificate's notAfter field"
 msgstr "Erro de formato no campo \"notAfter\" do certificado"
 
-#: v3270/security.c:132
+#: security.c:132
 msgid "Format error in certificate's notBefore field"
 msgstr "Erro de formato no campo \"notBefore\" do certificado"
 
-#: toggles.c:146 ui/00default.xml:348
+#: toggles.c:146 00default.xml:118
 msgid "Full Screen"
 msgstr "Tela cheia"
 
-#: ui/10functions.xml:574
+#: 10functions.xml:35
 msgid "Function bar"
 msgstr "Barra de funções"
 
@@ -928,7 +940,7 @@ msgstr "Cinza"
 msgid "Green"
 msgstr "Verde"
 
-#: ui/00default.xml:370
+#: 00default.xml:140
 msgid "Help"
 msgstr "Ajuda"
 
@@ -964,7 +976,7 @@ msgstr "IBM AS/400"
 msgid "IBM S/390"
 msgstr "IBM S/390"
 
-#: v3270/widget.c:260
+#: widget.c:260
 msgid "Identity not verified"
 msgstr "Identidade não verificada"
 
@@ -1032,7 +1044,7 @@ msgstr "Ignore the fail and remove the file from queue."
 msgid "Illegal frame length"
 msgstr "Comprimento de frame inválido"
 
-#: ui/00default.xml:365
+#: 00default.xml:135
 msgid "Input method"
 msgstr "Método de entrada"
 
@@ -1048,11 +1060,11 @@ msgstr "Intensificado/Protegido"
 msgid "Intensified/Unprotected"
 msgstr "Intensificado/Desprotegido"
 
-#: v3270/security.c:202
+#: security.c:202
 msgid "Invalid CA certificate"
 msgstr "Certificado CA inválido"
 
-#: v3270/widget.c:951
+#: widget.c:951
 msgid "Invalid callback table, possible version mismatch in lib3270"
 msgstr ""
 "Tabela de callbacks inválida, possível divergência de versão na lib3270"
@@ -1061,15 +1073,15 @@ msgstr ""
 msgid "Invalid cut action"
 msgstr "Ação recortar inválida"
 
-#: ui/80javasamples.xml:87
+#: 80javasamples.xml:38
 msgid "Java"
 msgstr "Java"
 
-#: toggles.c:176 ui/00default.xml:357
+#: toggles.c:176 00default.xml:127
 msgid "Keep selected"
 msgstr "Manter selecionado"
 
-#: v3270/security.c:258
+#: security.c:258
 msgid "Key usage does not include certificate signing"
 msgstr "Uso da chave não permite assinatura de certificados"
 
@@ -1077,7 +1089,7 @@ msgstr "Uso da chave não permite assinatura de certificados"
 msgid "Keyboard is locked"
 msgstr "Teclado está bloqueado"
 
-#: ui/10keypad.xml:170
+#: 10keypad.xml:35
 msgid "Lateral keypad"
 msgstr "Barra lateral"
 
@@ -1110,11 +1122,11 @@ msgstr "Cores diversas"
 msgid "Model %d (%s)"
 msgstr "Modelo %d (%s)"
 
-#: toggles.c:74 ui/00default.xml:346
+#: toggles.c:74 00default.xml:116
 msgid "Monocase"
 msgstr "Só Maiúsculas"
 
-#: v3270/hostselect.c:44
+#: hostselect.c:44
 msgid "Monochrome"
 msgstr "Monocromático"
 
@@ -1130,7 +1142,7 @@ msgstr "Mostarda"
 msgid "Network error"
 msgstr "Erro de rede"
 
-#: toggles.c:218 ui/00default.xml:361
+#: toggles.c:218 00default.xml:131
 msgid "Network keep alive"
 msgstr "Network keep alive"
 
@@ -1138,7 +1150,7 @@ msgstr "Network keep alive"
 msgid "Network startup error"
 msgstr "Erro ao iniciar a rede"
 
-#: ui/00default.xml:418
+#: 00default.xml:188
 msgid "Next field"
 msgstr "Próximo campo"
 
@@ -1146,7 +1158,7 @@ msgstr "Próximo campo"
 msgid "No active transfer"
 msgstr "Nenhuma transferência ativa"
 
-#: v3270/security.c:189
+#: security.c:189
 msgid ""
 "No signatures could be verified because the chain contains only one "
 "certificate and it is not self signed."
@@ -1218,119 +1230,119 @@ msgstr "Outro (TSO)"
 msgid "Other (VM/CMS)"
 msgstr "Outro (VM/CMS)"
 
-#: v3270/security.c:160
+#: security.c:160
 msgid "Out of memory"
 msgstr "Memória insuficiente"
 
-#: ui/80javasamples.xml:88
+#: 80javasamples.xml:39
 msgid "Output test"
 msgstr "Output test"
 
-#: ui/10keypad.xml:203
+#: 10keypad.xml:68
 msgid "PA1"
 msgstr "PA1"
 
-#: ui/10keypad.xml:204
+#: 10keypad.xml:69
 msgid "PA2"
 msgstr "PA2"
 
-#: ui/10keypad.xml:205
+#: 10keypad.xml:70
 msgid "PA3"
 msgstr "PA3"
 
-#: ui/10keypad.xml:172
+#: 10functions.xml:36 10keypad.xml:37
 msgid "PF1"
 msgstr "PF1"
 
-#: ui/10keypad.xml:187
+#: 10functions.xml:45 10keypad.xml:52
 msgid "PF10"
 msgstr "PF10"
 
-#: ui/10keypad.xml:188
+#: 10functions.xml:46 10keypad.xml:53
 msgid "PF11"
 msgstr "PF11"
 
-#: ui/10keypad.xml:189
+#: 10functions.xml:47 10keypad.xml:54
 msgid "PF12"
 msgstr "PF12"
 
-#: ui/10functions.xml:589
+#: 10functions.xml:50
 msgid "PF13"
 msgstr "PF13"
 
-#: ui/10functions.xml:590
+#: 10functions.xml:51
 msgid "PF14"
 msgstr "PF14"
 
-#: ui/10functions.xml:591
+#: 10functions.xml:52
 msgid "PF15"
 msgstr "PF15"
 
-#: ui/10functions.xml:592
+#: 10functions.xml:53
 msgid "PF16"
 msgstr "PF16"
 
-#: ui/10functions.xml:593
+#: 10functions.xml:54
 msgid "PF17"
 msgstr "PF17"
 
-#: ui/10functions.xml:594
+#: 10functions.xml:55
 msgid "PF18"
 msgstr "PF18"
 
-#: ui/10functions.xml:595
+#: 10functions.xml:56
 msgid "PF19"
 msgstr "PF19"
 
-#: ui/10keypad.xml:173
+#: 10functions.xml:37 10keypad.xml:38
 msgid "PF2"
 msgstr "PF2"
 
-#: ui/10functions.xml:596
+#: 10functions.xml:57
 msgid "PF20"
 msgstr "PF20"
 
-#: ui/10functions.xml:597
+#: 10functions.xml:58
 msgid "PF21"
 msgstr "PF21"
 
-#: ui/10functions.xml:598
+#: 10functions.xml:59
 msgid "PF22"
 msgstr "PF22"
 
-#: ui/10functions.xml:599
+#: 10functions.xml:60
 msgid "PF23"
 msgstr "PF23"
 
-#: ui/10functions.xml:600
+#: 10functions.xml:61
 msgid "PF24"
 msgstr "PF24"
 
-#: ui/10keypad.xml:174
+#: 10functions.xml:38 10keypad.xml:39
 msgid "PF3"
 msgstr "PF3"
 
-#: ui/10keypad.xml:177
+#: 10functions.xml:39 10keypad.xml:42
 msgid "PF4"
 msgstr "PF4"
 
-#: ui/10keypad.xml:178
+#: 10functions.xml:40 10keypad.xml:43
 msgid "PF5"
 msgstr "PF5"
 
-#: ui/10keypad.xml:179
+#: 10functions.xml:41 10keypad.xml:44
 msgid "PF6"
 msgstr "PF6"
 
-#: ui/10keypad.xml:182
+#: 10functions.xml:42 10keypad.xml:47
 msgid "PF7"
 msgstr "PF7"
 
-#: ui/10keypad.xml:183
+#: 10functions.xml:43 10keypad.xml:48
 msgid "PF8"
 msgstr "PF8"
 
-#: ui/10keypad.xml:184
+#: 10functions.xml:44 10keypad.xml:49
 msgid "PF9"
 msgstr "PF9"
 
@@ -1338,20 +1350,20 @@ msgstr "PF9"
 msgid "Parse error"
 msgstr "Erro de interpretação"
 
-#: uiparser/parsefile.c:356
+#: parsefile.c:356
 #, c-format
 msgid "Parse error in %s"
 msgstr "Erro de interpretação em %s"
 
-#: ui/00default.xml:293
+#: 00default.xml:63
 msgid "Paste"
 msgstr "Colar"
 
-#: ui/00default.xml:294
+#: 00default.xml:64
 msgid "Paste next"
 msgstr "Colar próximo"
 
-#: ui/00default.xml:297
+#: 00default.xml:67
 msgid "Paste text file"
 msgstr "Colar arquivo texto"
 
@@ -1359,7 +1371,7 @@ msgstr "Colar arquivo texto"
 msgid "Paste text file contents"
 msgstr "Colar conteúdo de arquivo texto"
 
-#: toggles.c:128 ui/00default.xml:350
+#: toggles.c:128 00default.xml:120
 msgid "Paste with left margin"
 msgstr "Colar com margem esquerda"
 
@@ -1371,7 +1383,7 @@ msgstr "Caminho e nome do arquivo local"
 msgid "Path for plugin files"
 msgstr "Caminho para os arquivos de plugin"
 
-#: v3270/security.c:209
+#: security.c:209
 msgid "Path length constraint exceeded"
 msgstr "Path length constraint exceeded"
 
@@ -1383,11 +1395,11 @@ msgstr "Caminho para os arquivos de dados da aplicação"
 msgid "Pink"
 msgstr "Rosa"
 
-#: ui/80javasamples.xml:89
+#: 80javasamples.xml:40
 msgid "Popup test"
 msgstr "Popup test"
 
-#: v3270/hostselect.c:163
+#: hostselect.c:163
 msgid "Port or service name (empty for \"telnet\")."
 msgstr "Nº da porta ou nome do serviço (em branco para \"telnet\")."
 
@@ -1395,7 +1407,7 @@ msgstr "Nº da porta ou nome do serviço (em branco para \"telnet\")."
 msgid "Preparing"
 msgstr "Preparando"
 
-#: ui/00default.xml:417
+#: 00default.xml:187
 msgid "Previous field"
 msgstr "Campo anterior"
 
@@ -1411,11 +1423,11 @@ msgstr ""
 msgid "Primary space:"
 msgstr "Primary space:"
 
-#: ui/00default.xml:277
+#: 00default.xml:47
 msgid "Print"
 msgstr "Imprimir"
 
-#: ui/00default.xml:279
+#: 00default.xml:49
 msgid "Print copy"
 msgstr "Imprimir cópia"
 
@@ -1423,7 +1435,7 @@ msgstr "Imprimir cópia"
 msgid "Print operation failed"
 msgstr "Operação de impressão falhou"
 
-#: ui/00default.xml:278
+#: 00default.xml:48
 msgid "Print selected"
 msgstr "Imprimir seleção"
 
@@ -1431,7 +1443,7 @@ msgstr "Imprimir seleção"
 msgid "Print selection box"
 msgstr "Imprimir marca de seleção"
 
-#: print.c:915 ui/00default.xml:335
+#: print.c:915 00default.xml:105
 msgid "Print settings"
 msgstr "Configurações de impressão"
 
@@ -1439,7 +1451,7 @@ msgstr "Configurações de impressão"
 msgid "Progress"
 msgstr "Progresso"
 
-#: ui/80javasamples.xml:90
+#: 80javasamples.xml:41
 msgid "Protection test"
 msgstr "Protection test"
 
@@ -1447,7 +1459,7 @@ msgstr "Protection test"
 msgid "Purple"
 msgstr "Púrpura"
 
-#: ui/00default.xml:283
+#: 00default.xml:53
 msgid "Quit"
 msgstr "Sair"
 
@@ -1555,7 +1567,7 @@ msgstr "Formato de registro"
 msgid "Red"
 msgstr "Vermelho"
 
-#: ui/99debug.xml:41
+#: 99debug.xml:41
 msgid "Reload buffer contents"
 msgstr "Recarregar conteúdo do buffer"
 
@@ -1576,7 +1588,7 @@ msgstr "Remoto:"
 msgid "Remove selected file from the transfer queue"
 msgstr "Remove arquivo selecionado da fila de transferência"
 
-#: ui/00default.xml:302
+#: 00default.xml:72
 msgid "Remove selection"
 msgstr "Remover seleção"
 
@@ -1584,15 +1596,15 @@ msgstr "Remover seleção"
 msgid "Request failed"
 msgstr "Requisição falhou"
 
-#: ui/00default.xml:303
+#: 00default.xml:73
 msgid "Reselect"
 msgstr "Reselecionar"
 
-#: ui/10keypad.xml:213
+#: 10keypad.xml:78
 msgid "Reset"
 msgstr "Reset"
 
-#: toggles.c:212 ui/00default.xml:349
+#: toggles.c:212 00default.xml:119
 msgid "Resize on alternate screen"
 msgstr "Mudar tamanho do terminal em tela alternativa"
 
@@ -1600,7 +1612,7 @@ msgstr "Mudar tamanho do terminal em tela alternativa"
 msgid "Retry"
 msgstr "Repetir"
 
-#: ui/00default.xml:419
+#: 00default.xml:189
 msgid "Return"
 msgstr "Return"
 
@@ -1649,7 +1661,7 @@ msgstr ""
 msgid "Save"
 msgstr "Salvar"
 
-#: ui/00default.xml:274
+#: 00default.xml:44
 msgid "Save copy"
 msgstr "Salvar cópia"
 
@@ -1661,7 +1673,7 @@ msgstr "Salvar cópia para arquivo"
 msgid "Save queue to file"
 msgstr "Salvar a fila para um arquivo"
 
-#: ui/00default.xml:272
+#: 00default.xml:42
 msgid "Save screen"
 msgstr "Salvar tela"
 
@@ -1669,7 +1681,7 @@ msgstr "Salvar tela"
 msgid "Save screen to file"
 msgstr "Salvar tela para arquivo"
 
-#: ui/00default.xml:273
+#: 00default.xml:43
 msgid "Save selected"
 msgstr "Salvar seleção"
 
@@ -1685,11 +1697,11 @@ msgstr "Salvar arquivo de trace"
 msgid "Save transfer queue to an external XML file"
 msgstr "Guarda fila de transferência num arquivo XML externo"
 
-#: ui/00default.xml:341
+#: 00default.xml:111
 msgid "Screen size"
 msgstr "Tamanho da tela"
 
-#: ui/80rexx.xml:131
+#: 80rexx.xml:38 00default.xml:86
 msgid "Scripts"
 msgstr "Scripts"
 
@@ -1705,7 +1717,7 @@ msgstr ""
 msgid "Secondary space:"
 msgstr "Secondary space:"
 
-#: v3270/security.c:48
+#: security.c:48
 msgid "Secure connection was successful."
 msgstr "Conexão segura efetuada com sucesso."
 
@@ -1717,15 +1729,15 @@ msgstr "Erro de segurança"
 msgid "Select"
 msgstr "Selecionar"
 
-#: ui/00default.xml:301
+#: 00default.xml:71
 msgid "Select Field"
 msgstr "Selecionar campo"
 
-#: ui/00default.xml:300
+#: 00default.xml:70
 msgid "Select all"
 msgstr "Selecionar tudo"
 
-#: toggles.c:134 ui/00default.xml:353
+#: toggles.c:134 00default.xml:123
 msgid "Select by rectangles"
 msgstr "Seleção retangular"
 
@@ -1737,7 +1749,7 @@ msgstr "Selecionar arquivo"
 msgid "Select first file"
 msgstr "Selecionar primeiro arquivo"
 
-#: ui/00default.xml:338
+#: 00default.xml:108
 msgid "Select font"
 msgstr "Selecione fonte"
 
@@ -1769,11 +1781,11 @@ msgstr "Fundo da seleção"
 msgid "Selection foreground"
 msgstr "Frente da seleção"
 
-#: v3270/security.c:167
+#: security.c:167
 msgid "Self signed certificate"
 msgstr "Certificado auto assinado"
 
-#: v3270/security.c:174
+#: security.c:174
 msgid "Self signed certificate in certificate chain"
 msgstr "Certificado auto assinado na cadeia de certificados"
 
@@ -1789,7 +1801,7 @@ msgstr "Enviar mensagens para o log do sistema"
 msgid "Send text file"
 msgstr "Enviar arquivo texto"
 
-#: ui/00default.xml:282
+#: 00default.xml:52
 msgid "Send/Receive"
 msgstr "Enviar/Receber"
 
@@ -1825,7 +1837,7 @@ msgstr "Ativa toggles"
 msgid "Set trace filename"
 msgstr "Define o nome do arquivo de trace"
 
-#: ui/00default.xml:334
+#: 00default.xml:104
 msgid "Settings"
 msgstr "Configurações"
 
@@ -1833,11 +1845,11 @@ msgstr "Configurações"
 msgid "Show Field attribute"
 msgstr "Mostrar atributos de campo"
 
-#: toggles.c:182 ui/00default.xml:356
+#: toggles.c:182 00default.xml:126
 msgid "Show Underline"
 msgstr "Mostrar sublinhado"
 
-#: ui/99debug.xml:39
+#: 99debug.xml:39
 msgid "Show test pattern"
 msgstr "Mostrar padrão de teste"
 
@@ -1853,7 +1865,7 @@ msgstr "Skip"
 msgid "Skip this transfer, keep the file on queue."
 msgstr "Skip this transfer, keep the file on queue."
 
-#: toggles.c:164 ui/00default.xml:358
+#: toggles.c:164 00default.xml:128
 msgid "Smart paste"
 msgstr "Colar inteligente"
 
@@ -1915,11 +1927,16 @@ msgstr "Iniciar transferência de arquivo"
 msgid "Starting"
 msgstr "Iniciando"
 
-#: v3270/security.c:237
+#: gobject.c:193
+#, c-format
+msgid "State %04d can't accept requests"
+msgstr ""
+
+#: security.c:237
 msgid "Subject issuer mismatch"
 msgstr "Divergência na identidade do emissor"
 
-#: v3270/hostselect.c:55
+#: hostselect.c:55
 msgid "System _type:"
 msgstr "Tipo de servidor:"
 
@@ -1945,27 +1962,27 @@ msgstr ""
 "has been reached, or the maximum number of data blocks per file (16060) has "
 "been reached."
 
-#: v3270/security.c:126
+#: security.c:126
 msgid "The CRL has expired."
 msgstr "A lista de certificados revogados expirou."
 
-#: v3270/security.c:119
+#: security.c:119
 msgid "The CRL is not yet valid."
 msgstr "A lista de certificados revogados ainda não é válida."
 
-#: v3270/security.c:147
+#: security.c:147
 msgid "The CRL lastUpdate field contains an invalid time."
 msgstr "Campo \"lastUpdate\" do CRL contem horário inválido."
 
-#: v3270/security.c:154
+#: security.c:154
 msgid "The CRL nextUpdate field contains an invalid time."
 msgstr "Campo \"nextUpdate\" contem horário inválido."
 
-#: v3270/security.c:63
+#: security.c:63
 msgid "The CRL of a certificate could not be found."
 msgstr "O CRL do certificado não foi encontrado."
 
-#: v3270/security.c:77
+#: security.c:77
 msgid ""
 "The CRL signature could not be decrypted: this means that the actual "
 "signature value could not be determined rather than it not matching the "
@@ -1975,11 +1992,11 @@ msgstr ""
 "signature value could not be determined rather than it not matching the "
 "expected value. Unused."
 
-#: v3270/security.c:210
+#: security.c:210
 msgid "The basicConstraints pathlength parameter has been exceeded."
 msgstr "The basicConstraints pathlength parameter has been exceeded."
 
-#: v3270/security.c:175
+#: security.c:175
 msgid ""
 "The certificate chain could be built up using the untrusted certificates but "
 "the root could not be found locally."
@@ -1987,11 +2004,11 @@ msgstr ""
 "The certificate chain could be built up using the untrusted certificates but "
 "the root could not be found locally."
 
-#: v3270/security.c:196
+#: security.c:196
 msgid "The certificate has been revoked."
 msgstr "O certificado foi revogado."
 
-#: v3270/security.c:112
+#: security.c:112
 msgid ""
 "The certificate has expired: that is the notAfter date is before the current "
 "time."
@@ -1999,7 +2016,7 @@ msgstr ""
 "The certificate has expired: that is the notAfter date is before the current "
 "time."
 
-#: v3270/security.c:105
+#: security.c:105
 msgid ""
 "The certificate is not yet valid: the notBefore date is after the current "
 "time."
@@ -2007,15 +2024,15 @@ msgstr ""
 "The certificate is not yet valid: the notBefore date is after the current "
 "time."
 
-#: v3270/security.c:140
+#: security.c:140
 msgid "The certificate notAfter field contains an invalid time."
 msgstr "The certificate notAfter field contains an invalid time."
 
-#: v3270/security.c:133
+#: security.c:133
 msgid "The certificate notBefore field contains an invalid time."
 msgstr "The certificate notBefore field contains an invalid time."
 
-#: v3270/security.c:70
+#: security.c:70
 msgid ""
 "The certificate signature could not be decrypted. This means that the actual "
 "signature value could not be determined rather than it not matching the "
@@ -2025,15 +2042,15 @@ msgstr ""
 "signature value could not be determined rather than it not matching the "
 "expected value, this is only meaningful for RSA keys."
 
-#: v3270/security.c:333
+#: security.c:333
 msgid "The connection is insecure"
 msgstr "A conexão não é segura"
 
-#: v3270/security.c:49
+#: security.c:49
 msgid "The connection is secure and the host identity was confirmed."
 msgstr "A conexão é segura e a identidade do servidor foi confirmada."
 
-#: v3270/security.c:252
+#: security.c:252
 msgid ""
 "The current candidate issuer certificate was rejected because its issuer "
 "name and serial number was present and did not match the authority key "
@@ -2045,7 +2062,7 @@ msgstr ""
 "identifier of the current certificate. Only displayed when the -"
 "issuer_checks option is set."
 
-#: v3270/security.c:259
+#: security.c:259
 msgid ""
 "The current candidate issuer certificate was rejected because its keyUsage "
 "extension does not permit certificate signing."
@@ -2053,7 +2070,7 @@ msgstr ""
 "The current candidate issuer certificate was rejected because its keyUsage "
 "extension does not permit certificate signing."
 
-#: v3270/security.c:245
+#: security.c:245
 msgid ""
 "The current candidate issuer certificate was rejected because its subject "
 "key identifier was present and did not match the authority key identifier "
@@ -2063,7 +2080,7 @@ msgstr ""
 "key identifier was present and did not match the authority key identifier "
 "current certificate. Only displayed when the -issuer_checks option is set."
 
-#: v3270/security.c:238
+#: security.c:238
 msgid ""
 "The current candidate issuer certificate was rejected because its subject "
 "name did not match the issuer name of the current certificate. Only "
@@ -2096,7 +2113,7 @@ msgid ""
 "operation."
 msgstr "O host detectou um erro no arquivo durante a operação de recebimento."
 
-#: v3270/security.c:182
+#: security.c:182
 msgid ""
 "The issuer certificate could not be found: this occurs if the issuer "
 "certificate of an untrusted certificate cannot be found."
@@ -2104,7 +2121,7 @@ msgstr ""
 "The issuer certificate could not be found: this occurs if the issuer "
 "certificate of an untrusted certificate cannot be found."
 
-#: v3270/security.c:56
+#: security.c:56
 msgid ""
 "The issuer certificate of a looked up certificate could not be found. This "
 "normally means the list of trusted certificates is not complete."
@@ -2125,7 +2142,7 @@ msgstr "Modelo de tela 3270 a ser emulada"
 msgid "The name of the file in the host"
 msgstr "Nome do arquivo no host"
 
-#: v3270/security.c:168
+#: security.c:168
 msgid ""
 "The passed certificate is self signed and the same certificate cannot be "
 "found in the list of trusted certificates."
@@ -2133,7 +2150,7 @@ msgstr ""
 "The passed certificate is self signed and the same certificate cannot be "
 "found in the list of trusted certificates."
 
-#: v3270/security.c:84
+#: security.c:84
 msgid ""
 "The public key in the certificate SubjectPublicKeyInfo could not be read."
 msgstr ""
@@ -2143,22 +2160,22 @@ msgstr ""
 msgid "The remote file name is invalid."
 msgstr "O nome do arquivo remoto não é válido."
 
-#: v3270/security.c:231
+#: security.c:231
 msgid "The root CA is marked to reject the specified purpose."
 msgstr ""
 "O certificado raiz está marcado para rejeitar a finalidade especificada."
 
-#: v3270/security.c:224
+#: security.c:224
 msgid "The root CA is not marked as trusted for the specified purpose."
 msgstr ""
 "O Certificado raiz não está marcado como confiável para os fins "
 "especificados."
 
-#: v3270/security.c:91 v3270/security.c:98
+#: security.c:91 security.c:98
 msgid "The signature of the certificate is invalid."
 msgstr "A assinatura do certificado não é válida."
 
-#: v3270/security.c:217
+#: security.c:217
 msgid "The supplied certificate cannot be used for the specified purpose."
 msgstr ""
 "O certificado fornecido não pode ser utilizado para a finalidade "
@@ -2217,7 +2234,7 @@ msgid ""
 "This version of %s was built without support for secure sockets layer (SSL)."
 msgstr "Esta versão do %s foi gerada sem suporte para conexões seguras (SSL)."
 
-#: ui/00default.xml:376
+#: 00default.xml:146
 msgid "Toolbar"
 msgstr "Barra de ferramentas"
 
@@ -2229,11 +2246,11 @@ msgstr "Total de bytes a transferir"
 msgid "Total:"
 msgstr "Total:"
 
-#: ui/98trace.xml:529
+#: 98trace.xml:36
 msgid "Trace"
 msgstr "Trace"
 
-#: toggles.c:98 ui/98trace.xml:529
+#: toggles.c:98 98trace.xml:36
 msgid "Trace Data Stream"
 msgstr "Trace Data Stream"
 
@@ -2241,19 +2258,19 @@ msgstr "Trace Data Stream"
 msgid "Trace interface events"
 msgstr "Trace interface events"
 
-#: toggles.c:224 ui/98trace.xml:531
+#: toggles.c:224 98trace.xml:38
 msgid "Trace network data flow"
 msgstr "Trace network data flow"
 
-#: toggles.c:116 ui/98trace.xml:530
+#: toggles.c:116 98trace.xml:37
 msgid "Trace screen contents"
 msgstr "Trace do conteúdo da tela"
 
-#: ui/98trace.xml:532
+#: 98trace.xml:39
 msgid "Trace user interface events"
 msgstr "Trace user interface events"
 
-#: toggles.c:92 ui/00default.xml:347
+#: toggles.c:92 00default.xml:117
 msgid "Track Cursor"
 msgstr "Mostrar posição do cursor"
 
@@ -2273,7 +2290,7 @@ msgstr "Transferência cancelada pelo usuário"
 msgid "Transfer complete"
 msgstr "Transferência completa"
 
-#: v3270ftprogress.c:732 ft.c:564
+#: ft.c:564 v3270ftprogress.c:732
 msgid "Transfer failed"
 msgstr "Transferência falhou"
 
@@ -2309,16 +2326,16 @@ msgstr "Host enviou código de abertura DFT desconhecido"
 msgid "Unable to connect to secure hosts"
 msgstr "Não é possível conectar em servidores seguros"
 
-#: v3270/security.c:83
+#: security.c:83
 msgid "Unable to decode issuer public key"
 msgstr "Não é possível decodificar chave pública do emissor"
 
-#: v3270/security.c:76
+#: security.c:76
 msgid "Unable to decrypt CRL's signature"
 msgstr ""
 "Não foi possível decriptar assinatura da lista de certificados revogados"
 
-#: v3270/security.c:69
+#: security.c:69
 msgid "Unable to decrypt certificate's signature"
 msgstr "Incapaz de decifrar a assinatura do certificado"
 
@@ -2326,7 +2343,7 @@ msgstr "Incapaz de decifrar a assinatura do certificado"
 msgid "Unable to find selected hostname."
 msgstr "Não consegui encontrar o host selecionado."
 
-#: v3270/security.c:62
+#: security.c:62
 msgid "Unable to get certificate CRL"
 msgstr "Unable to get certificate CRL"
 
@@ -2334,11 +2351,11 @@ msgstr "Unable to get certificate CRL"
 msgid "Unable to get connection state."
 msgstr "Não foi possível obter o estado da conexão."
 
-#: v3270/security.c:55
+#: security.c:55
 msgid "Unable to get issuer certificate"
 msgstr "Não foi possível obter emissor do certificado"
 
-#: v3270/security.c:181
+#: security.c:181
 msgid "Unable to get local issuer certificate"
 msgstr "Unable to get local issuer certificate"
 
@@ -2350,7 +2367,7 @@ msgstr "Incapaz de colar texto"
 msgid "Unable to send file-transfer request"
 msgstr "Não foi possível enviar a requisição de transferência de arquivo"
 
-#: v3270/security.c:188
+#: security.c:188
 msgid "Unable to verify the first certificate"
 msgstr "Não foi possível verificar o primeiro certificado"
 
@@ -2358,16 +2375,16 @@ msgstr "Não foi possível verificar o primeiro certificado"
 msgid "Undefined"
 msgstr "Indefinido"
 
-#: v3270/security.c:379
+#: security.c:379
 msgid "Unexpected SSL error"
 msgstr "Erro SSL inesperado"
 
-#: v3270/security.c:408
+#: security.c:408
 #, c-format
 msgid "Unexpected SSL error <b>%ld</b>"
 msgstr "Erro SSL <b>%ld</b> inesperado"
 
-#: uiparser/menubar.c:48 uiparser/toolbar.c:65 uiparser/popup.c:51
+#: menubar.c:48 toolbar.c:65 popup.c:51
 #, c-format
 msgid "Unexpected action attribute in <%s>"
 msgstr "Atributo inesperado \"action\" em <%s>"
@@ -2376,7 +2393,7 @@ msgstr "Atributo inesperado \"action\" em <%s>"
 msgid "Unexpected error"
 msgstr "Erro inesperado"
 
-#: uiparser/action.c:77
+#: action.c:77
 #, c-format
 msgid "Unexpected group \"%s\""
 msgstr "Grupo inesperado \"%s\""
@@ -2396,9 +2413,14 @@ msgstr "Valor de attributo inesperado ou inválido: \"%s\""
 msgid "Unexpected or invalid color value \"%s\""
 msgstr "Valor de cor inválido ou inesperado: \"%s\""
 
-#: v3270/security.c:344
+#: security.c:344
 msgid "Unexpected or unknown security status"
 msgstr "Estado de segurança inesperado ou desconhecido."
+
+#: gobject.c:208
+#, fuzzy, c-format
+msgid "Unexpected state %04d"
+msgstr "Alvo inesperado \"%s\""
 
 #: actions.c:391
 #, c-format
@@ -2433,7 +2455,7 @@ msgstr "PF %d desconhecida"
 msgid "Unknown frame type from host"
 msgstr "Servidor enviou tipo de frame desconhecido"
 
-#: uiparser/popup.c:76
+#: popup.c:76
 #, c-format
 msgid "Unknown popup type \"%s\""
 msgstr "Tipo de popup \"%s\" não é conhecido"
@@ -2442,11 +2464,11 @@ msgstr "Tipo de popup \"%s\" não é conhecido"
 msgid "Unsupported RPQ term"
 msgstr "Unsupported RPQ term"
 
-#: v3270/security.c:216
+#: security.c:216
 msgid "Unsupported certificate purpose"
 msgstr "Finalidade do certificado não é suportada"
 
-#: toggles.c:194 ui/00default.xml:360
+#: toggles.c:194 00default.xml:130
 msgid "Use +/- for field navigation"
 msgstr "Usar teclas +/- para navegar por campos"
 
@@ -2462,7 +2484,12 @@ msgstr "Use the keys +/- from keypad to select editable fields"
 msgid "Variable"
 msgstr "Variável"
 
-#: dialog.c:512
+#: dialog.c:515
+#, fuzzy, c-format
+msgid "Version %s - Revision %08lx"
+msgstr "Versão %s - Revisão %s"
+
+#: dialog.c:513
 #, c-format
 msgid "Version %s - Revision %s"
 msgstr "Versão %s - Revisão %s"
@@ -2487,7 +2514,7 @@ msgstr "Europa ocidental (ISO 8859-1)"
 msgid "White"
 msgstr "Branco"
 
-#: ui/00default.xml:387
+#: 00default.xml:157
 msgid "Window"
 msgstr "Janela"
 
@@ -2500,47 +2527,47 @@ msgstr "Windows ocidental (CP1252)"
 msgid "Windows error %d"
 msgstr "Erro windows %d"
 
-#: v3270/oia.c:419 v3270/oia.c:443 v3270/oia.c:447
+#: oia.c:419 oia.c:443 oia.c:447
 msgid "X"
 msgstr "X"
 
-#: v3270/oia.c:423
+#: oia.c:423
 msgid "X -f"
 msgstr "X -f"
 
-#: v3270/oia.c:455
+#: oia.c:455
 msgid "X Connecting"
 msgstr "X Conectando"
 
-#: v3270/oia.c:439
+#: oia.c:439
 msgid "X Inhibit"
 msgstr "X Inibido"
 
-#: v3270/oia.c:415
+#: oia.c:415
 msgid "X Not Connected"
 msgstr "X Desconectado"
 
-#: v3270/oia.c:431
+#: oia.c:431
 msgid "X Numeric"
 msgstr "X Numérico"
 
-#: v3270/oia.c:435
+#: oia.c:435
 msgid "X Overflow"
 msgstr "X Estouro"
 
-#: v3270/oia.c:427
+#: oia.c:427
 msgid "X Protected"
 msgstr "X Protegido"
 
-#: v3270/oia.c:451
+#: oia.c:451
 msgid "X Resolving"
 msgstr "X Resolvendo"
 
-#: v3270/oia.c:403
+#: oia.c:403
 msgid "X System"
 msgstr "X Sistema"
 
-#: v3270/oia.c:407
+#: oia.c:407
 msgid "X Wait"
 msgstr "X Aguarde"
 
@@ -2627,27 +2654,27 @@ msgstr ""
 msgid "You specified an option that is invalid."
 msgstr "Você especificou uma opção inválida."
 
-#: select.c:87 select.c:177 v3270/hostselect.c:389
+#: hostselect.c:389 select.c:87 select.c:177
 msgid "_Cancel"
 msgstr "_Cancelar"
 
-#: v3270/hostselect.c:55
+#: hostselect.c:55
 msgid "_Color table:"
 msgstr "Tabela de cores:"
 
-#: ui/00default.xml:329
+#: 00default.xml:99
 msgid "_Connect"
 msgstr "_Conectar"
 
-#: ui/00default.xml:330
+#: 00default.xml:100
 msgid "_Disconnect"
 msgstr "_Desconectar"
 
-#: ui/99debug.xml:35
+#: 99debug.xml:35 80javasamples.xml:35 80rexx.xml:35 00default.xml:58
 msgid "_Edit"
 msgstr "_Editar"
 
-#: ui/80javasamples.xml:83
+#: 80javasamples.xml:34 80rexx.xml:34 00default.xml:34
 msgid "_File"
 msgstr "_Arquivo"
 
@@ -2655,11 +2682,11 @@ msgstr "_Arquivo"
 msgid "_Font:"
 msgstr "_Fonte:"
 
-#: v3270/hostselect.c:171
+#: hostselect.c:171
 msgid "_Host options"
 msgstr "Opções do _Servidor"
 
-#: v3270/hostselect.c:147
+#: hostselect.c:147
 msgid "_Host:"
 msgstr "Nome do _Host:"
 
@@ -2667,7 +2694,7 @@ msgstr "Nome do _Host:"
 msgid "_Local file:"
 msgstr "Arquivo _local:"
 
-#: ui/00default.xml:319
+#: 00default.xml:89
 msgid "_Network"
 msgstr "_Rede"
 
@@ -2675,7 +2702,7 @@ msgstr "_Rede"
 msgid "_Operation:"
 msgstr "_Operação:"
 
-#: ui/00default.xml:344
+#: 00default.xml:114
 msgid "_Options"
 msgstr "_Opções"
 
@@ -2683,11 +2710,11 @@ msgstr "_Opções"
 msgid "_Remote file:"
 msgstr "Arquivo _remoto:"
 
-#: v3270/hostselect.c:166
+#: hostselect.c:166
 msgid "_Secure connection."
 msgstr "Conexão _Segura."
 
-#: v3270/hostselect.c:148
+#: hostselect.c:148
 msgid "_Service:"
 msgstr "_Serviço:"
 
@@ -2695,28 +2722,28 @@ msgstr "_Serviço:"
 msgid "_Text file"
 msgstr "Arquivo _texto"
 
-#: ui/80javasamples.xml:85
+#: 80javasamples.xml:36 80rexx.xml:36 00default.xml:84
 msgid "_View"
 msgstr "_Exibir"
 
-#: uiparser/scroll.c:55
+#: scroll.c:55
 msgid "a direction attribute"
 msgstr "um atributo \"direction\""
 
-#: uiparser/menu.c:57
+#: menu.c:57
 msgid "a label attribute"
 msgstr "um attributo \"label\""
 
-#: uiparser/popup.c:61
+#: popup.c:61
 msgid "a type or group attribute"
 msgstr "um atributo \"type\" ou \"group\""
 
-#: uiparser/script.c:75 uiparser/keypad.c:184
+#: script.c:75 keypad.c:184
 #, c-format
 msgid "action attribute is invalid for <%s>"
 msgstr "Atributo inesperado \"action\" em <%s>"
 
-#: uiparser/accelerator.c:47 uiparser/scroll.c:49
+#: accelerator.c:47 scroll.c:49
 msgid "an action attribute"
 msgstr "um atributo \"action\""
 
@@ -2744,7 +2771,7 @@ msgstr "ioctlsocket(FIONBIO) failed."
 msgid "setsockopt(SO_OOBINLINE) has failed"
 msgstr "setsockopt(SO_OOBINLINE) has failed"
 
-#: dialog.c:528
+#: dialog.c:533
 msgid "translator-credits"
 msgstr "translator-credits"
 
@@ -2803,9 +2830,6 @@ msgstr "translator-credits"
 #~ "Tamanho do buffer para transferências no modo DFT. Pode variar de 256 a "
 #~ "32768. Valores maiores trazem maior performance, porem, nem todos os "
 #~ "hosts podem suportá-los."
-
-#~ msgid "Can't connect to host"
-#~ msgstr "Não foi possível conectar ao servidor"
 
 #~ msgid "Can't start download."
 #~ msgstr "Não foi possível iniciar o download."

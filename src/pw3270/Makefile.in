@@ -106,7 +106,6 @@ $(BASEDIR)/.obj/Debug/%.a: \
  
 	@$(MAKE) -C $(basename $(notdir $@)) $@
 
-
 $(OBJRLS)/%.o: \
 	%.c \
 	$(DEPENDS)
@@ -117,6 +116,12 @@ $(OBJRLS)/%.o: \
 				@RLS_CFLAGS@ \
 				-DBUILD_DATE=`date +"0x%Y%m%d"` \
 				-o $@ -c $<
+
+$(BASEDIR)/.obj/Release/%.a: \
+	./%/* \
+	$(DEPENDS)
+ 
+	@$(MAKE) -C $(basename $(notdir $@)) $@
 
 $(POTDIR)/%.pot: %.c
 
@@ -192,7 +197,7 @@ $(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@: \
 
 $(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@: \
 	$(foreach SRC, $(basename $(LIB_SOURCES)), $(OBJRLS)/$(SRC).o) \
-	$(foreach MOD, $(MODULES), $(BASEDIR)/.obj/Debug/$(MOD).a)
+	$(foreach MOD, $(MODULES), $(BASEDIR)/.obj/Release/$(MOD).a)
 
 	@echo $(basename $@) ...
 	@$(MKDIR) `dirname $@`

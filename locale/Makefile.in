@@ -45,11 +45,11 @@ INSTALL_DATA=@INSTALL_DATA@
 
 #---[ Rules ]----------------------------------------------------------------------------
 
-%.pot: \
-	%.po \
-	$(PACKAGE_NAME).pot 
+%.po: \
+	$(PACKAGE_NAME).pot
 
-	@$(MSGCAT) --sort-output $^ > $@
+	@touch $@
+	@$(MSGMERGE) --update --sort-output $@ $(PACKAGE_NAME).pot
 
 $(DESTDIR)/$(localedir)/%/LC_MESSAGES/$(PACKAGE_NAME).mo: \
 	%.po
