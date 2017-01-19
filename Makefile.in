@@ -30,6 +30,7 @@ PACKAGE_NAME=@PACKAGE_NAME@
 PACKAGE_VERSION=@PACKAGE_VERSION@
 PACKAGE_LEVEL=@PACKAGE_LEVEL@
 PACKAGE_TARNAME=@PACKAGE_TARNAME@
+PLUGINS=@PLUGINS@
 
 #---[ Paths ]------------------------------------------------------------------
 
@@ -72,6 +73,12 @@ $(BINDBG)/%@DLLEXT@: \
  
 	@$(MAKE) -C src/$(basename $(notdir $@)) $@
 
+$(BINDBG)/plugins/%@DLLEXT@: \
+	$(DEPENDS) \
+	./src/plugins/%/*
+ 
+	@$(MAKE) -C src/plugins/$(basename $(notdir $@)) $@
+
 $(BINDBG)/%@EXEEXT@: \
 	$(DEPENDS) \
 	./src/%/*
@@ -83,6 +90,12 @@ $(BINRLS)/%@DLLEXT@: \
 	./src/%/*
  
 	@$(MAKE) -C src/$(basename $(notdir $@)) $@
+
+$(BINRLS)/plugins/%@DLLEXT@: \
+	$(DEPENDS) \
+	./src/plugins/%/*
+ 
+	@$(MAKE) -C src/plugins/$(basename $(notdir $@)) $@
 
 $(POTDIR)/%.pot: \
 	$(DEPENDS) \
@@ -140,11 +153,13 @@ $(SRCDIR)/%: \
 all: \
 	$(BINRLS)/lib3270@DLLEXT@ \
 	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ \
+	$(foreach PLG, $(PLUGINS), $(BINRLS)/plugins/$(PLG)@DLLEXT@) \
 	locale/$(PACKAGE_TARNAME).pot
 
 Release: \
 	$(BINRLS)/lib3270@DLLEXT@ \
 	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ \
+	$(foreach PLG, $(PLUGINS), $(BINRLS)/plugins/$(PLG)@DLLEXT@) \
 	locale/$(PACKAGE_TARNAME).pot
 
 locale/$(PACKAGE_TARNAME).pot: \
@@ -172,11 +187,13 @@ install: \
 
 Debug: \
 	$(BINDBG)/lib3270@DLLEXT@ \
-	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@
+	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@ \
+	$(foreach PLG, $(PLUGINS), $(BINDBG)/plugins/$(PLG)@DLLEXT@)
 
 run: \
 	$(BINDBG)/lib3270@DLLEXT@ \
-	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@
+	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@ \
+	$(foreach PLG, $(PLUGINS), $(BINDBG)/plugins/$(PLG)@DLLEXT@)
 
 	@LD_LIBRARY_PATH=$(BINDBG) $(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@
 

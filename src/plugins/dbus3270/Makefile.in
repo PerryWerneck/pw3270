@@ -22,150 +22,171 @@
 #
 # perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
 # erico.mendonca@gmail.com	(Erico Mascarenhas de Mendonça)
-# licinio@bb.com.br			(Licínio Luis Branco)
-# kraucer@bb.com.br			(Kraucer Fernandes Mazuco)
 #
 
-PACKAGE_NAME=@PACKAGE_NAME@
-PACKAGE_TARNAME=@PACKAGE_TARNAME@
 MODULE_NAME=dbus3270
+
+SOURCES=main.c gobject.c misc.c
+# DAEMON_SRC=daemon.c gobject.c iocallback.c misc.c
+
+#---[ Configuration values ]-------------------------------------------------------------
+
+PACKAGE_NAME=@PACKAGE_NAME@
+PACKAGE_VERSION=@PACKAGE_VERSION@
+PACKAGE_TARNAME=@PACKAGE_TARNAME@
 
 prefix=@prefix@
 exec_prefix=@exec_prefix@
 bindir=@bindir@
+sbindir=@sbindir@
 libdir=@libdir@
-datarootdir=@datarootdir@
-localedir=@localedir@
 
-#---[ Sources ]----------------------------------------------------------------
+BASEDIR=@BASEDIR@
+SRCDIR=$(BASEDIR)/.src/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/src/plugins/$(MODULE_NAME)
+POTDIR=$(BASEDIR)/.pot/$(PACKAGE_TARNAME)/plugins/$(MODULE_NAME)
 
-DEPENDS=Makefile dbus-glue.h
-PLUGIN_SRC=main.c gobject.c misc.c
-DAEMON_SRC=daemon.c gobject.c iocallback.c misc.c
+OBJDIR=$(BASEDIR)/src/pw3270/.obj
+OBJDBG=$(OBJDIR)/Debug/plugins/$(MODULE_NAME)
+OBJRLS=$(OBJDIR)/Release/plugins/$(MODULE_NAME)
 
-#---[ Paths ]------------------------------------------------------------------
-
-ROOTDIR ?= .
-OBJDIR  ?= $(ROOTDIR)/.obj
-BINDIR  ?= $(ROOTDIR)/.bin
-BINDBG  ?= $(BINDIR)/Debug
-BINRLS  ?= $(BINDIR)/Release
-
-OBJDBG = $(OBJDIR)/Debug
-OBJRLS = $(OBJDIR)/Release
-OBJEXT = o
-
-#---[ Tools ]------------------------------------------------------------------
+BINDIR=$(BASEDIR)/.bin
+BINDBG=$(BINDIR)/Debug/plugins
+BINRLS=$(BINDIR)/Release/plugins
 
 MKDIR=@MKDIR_P@
 CC=@CC@
 LD=@CC@
+AR=@AR@
 DBUSBINDINGTOOL=@DBUSBINDINGTOOL@
+XGETTEXT=@XGETTEXT@
+MSGCAT=@MSGCAT@
 INSTALL=@INSTALL@
-INSTALL_PROGRAM=@INSTALL_PROGRAM@
 INSTALL_DATA=@INSTALL_DATA@
 
-#---[ Flags ]------------------------------------------------------------------
+CFLAGS=@CFLAGS@ @GTK_CFLAGS@ -I$(BASEDIR)/src/include
+LIBS=@LIBS@ @GTK_LIBS@ @GLIB_LIBS@ @GDBUS_LIBS@ @LIB3270_LIBS@ @PW3270_LIBS@
 
-LIB3270_MODE ?= Default
+#---[ Rules ]----------------------------------------------------------------------------
 
-DLL_FLAGS=-shared
-DLL_CFLAGS=@DLL_CFLAGS@
-DEBUG_CFLAGS=-DDEBUG=1 -g -Wall
-
-GDBUS_CFLAGS=@GDBUS_CFLAGS@
-GLIB_CFLAGS=@GLIB_CFLAGS@
-GTK_CFLAGS=@GTK_CFLAGS@
-
-GDBUS_LIBS=@GDBUS_LIBS@
-GLIB_LIBS=@GLIB_LIBS@
-GTK_LIBS=@GTK_LIBS@
-
-PW3270_CFLAGS=@PW3270_CFLAGS@
-LIB3270_CFLAGS=@LIB3270_CFLAGS@
-
-ifeq ($(LIB3270_MODE),Debug)
-	PW3270_LIBS=-L../../../.bin/Debug@DLLDIR@ -l$(PACKAGE_TARNAME)
-	LIB3270_LIBS=-L../../../.bin/Debug@DLLDIR@  -l3270
-endif
-
-ifeq ($(LIB3270_MODE),Release)
-	PW3270_LIBS=-L../../../.bin/Release@DLLDIR@ -l$(PACKAGE_TARNAME)
-	LIB3270_LIBS=-L../../../.bin/Release@DLLDIR@  -l3270
-endif
-
-#ifeq ($(LIB3270_MODE),Default)
-#	LIB3270_LIBS ?= `pkg-config --libs lib3270`
-#	LIB3270_CFLAGS ?= `pkg-config --cflags lib3270`
-#	PW3270_LIBS ?= `pkg-config --libs pw3270 lib3270`
-#	PW3270_CFLAGS ?= `pkg-config --cflags pw3270 lib3270`
-#endif
-
-#---[ Rules ]------------------------------------------------------------------
+DEPENDS=dbus-glue.h globals.h service.h Makefile
 
 $(OBJDBG)/%.o: \
-	%.c $(DEPENDS)
+	%.c \
+	$(DEPENDS)
 
-	@echo "  CC   `basename $@`"
+	@echo $< ...
 	@$(MKDIR) `dirname $@`
 	@$(CC) $(CFLAGS) \
-		$(DLL_CFLAGS) $(GDBUS_CFLAGS) $(GLIB_CFLAGS) $(GTK_CFLAGS) $(DEBUG_CFLAGS) \
-		$(LIB3270_CFLAGS) $(PW3270_CFLAGS) -o $@ -c $<
+				@DBG_CFLAGS@ \
+				-DBUILD_DATE=`date +"0x%Y%m%d"`\
+				-o $@ -c $<
 
 $(OBJRLS)/%.o: \
-	%.c $(DEPENDS)
+	%.c \
+	$(DEPENDS)
 
-	@echo "  CC   `basename $@`"
+	@echo $< ...
 	@$(MKDIR) `dirname $@`
-	@$(CC) $(CFLAGS) $(DLL_CFLAGS) $(GDBUS_CFLAGS) $(GLIB_CFLAGS) $(GTK_CFLAGS)  \
-		$(LIB3270_CFLAGS) $(PW3270_CFLAGS) -o $@ -c $<
+	@$(CC) $(CFLAGS) \
+				@RLS_CFLAGS@ \
+				-DBUILD_DATE=`date +"0x%Y%m%d"` \
+				-o $@ -c $<
 
+$(POTDIR)/%.pot: %.c
 
-#---[ Release targets ]--------------------------------------------------------
-
-Release: $(BINRLS)/plugins/$(MODULE_NAME).so
-
-$(BINRLS)/plugins/$(MODULE_NAME).so: $(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJRLS)/$(SRC).o)
-	@echo "  CCLD `basename $@`"
+	@echo $(notdir $@) ...
 	@$(MKDIR) `dirname $@`
-	@$(LD) $(DLL_FLAGS) -Wl,-soname,`basename $@` $(LDFLAGS) -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(PW3270_LIBS) $(GLIB_LIBS) $(GTK_LIBS) $(GDBUS_LIBS)
+	@$(XGETTEXT) \
+		--default-domain=$(PACKAGE) \
+		--language=C \
+		--keyword=_ \
+		--keyword=N_ \
+		--keyword=MSG_:2 \
+		--output=$@ \
+		$<
 
-$(BINRLS)/@PACKAGE_NAME@d: $(foreach SRC, $(basename $(DAEMON_SRC)), $(OBJRLS)/$(SRC).o)
-	@echo "  CCLD `basename $@`"
+	@touch $@
+
+dbus-glue.h: \
+	pw3270dbus.xml
+
+	@echo $@ ...
+	@$(DBUSBINDINGTOOL) \
+		--mode=glib-server \
+		--output=$@ \
+		--prefix=pw3270_dbus $^
+
+
+#---[ Release Targets ]------------------------------------------------------------------
+
+Release: \
+	$(BINRLS)/$(MODULE_NAME)@DLLEXT@
+
+$(BINRLS)/$(MODULE_NAME)@DLLEXT@: \
+	$(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SRC).o)
+
+	@echo $@ ...
 	@$(MKDIR) `dirname $@`
-	@$(CC) $(CFLAGS) -o $@ $^ $(GDBUS_LIBS) $(GLIB_LIBS) $(LIB3270_LIBS)
+	@$(LD) \
+		-shared \
+		-L$(BASEDIR)/.bin/Release \
+		-o $@ $^ \
+		$(LIBS)
 
-#---[ Debug targets ]----------------------------------------------------------
 
-Debug: $(BINDBG)/plugins/$(MODULE_NAME).so
+pot: \
+	$(BASEDIR)/.pot/$(PACKAGE_TARNAME)/$(MODULE_NAME).pot
 
-$(BINDBG)/plugins/$(MODULE_NAME).so: $(foreach SRC, $(basename $(PLUGIN_SRC)), $(OBJDBG)/$(SRC).o)
-	@echo "  CCLD `basename $@`"
+$(BASEDIR)/.pot/$(PACKAGE_TARNAME)/$(MODULE_NAME).pot: \
+	$(foreach SRC, $(basename $(SOURCES)), $(POTDIR)/$(SRC).pot)
+
+	@rm -f $@
+	@mkdir -p `dirname $@`
+	@$(MSGCAT) --sort-output $^ > $@
+
+$(SRCDIR): \
+	clean
+
+	@$(MKDIR) $@
+	@$(INSTALL_DATA) *.c *.h *.xml *.cbp $@
+
+
+#---[ Debug Targets ]--------------------------------------------------------------------
+
+Debug: \
+	$(BINDBG)/$(MODULE_NAME)@DLLEXT@
+
+$(BINDBG)/$(MODULE_NAME)@DLLEXT@: \
+	$(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC).o)
+
+	@echo $@ ...
 	@$(MKDIR) `dirname $@`
-	@$(LD) $(DLL_FLAGS) @DBGRPATH@ -Wl,-soname,`basename $@` $(LDFLAGS) -o $@ $^ $(LIBS) $(LIB3270_LIBS) $(PW3270_LIBS) $(GLIB_LIBS) $(GTK_LIBS) $(GDBUS_LIBS)
+	@$(LD) \
+		-shared \
+		-Wl,-soname,`basename $@`,--rpath,$(BASEDIR)/.bin/Debug \
+		-L$(BASEDIR)/.bin/Debug \
+		-o $@ $^ \
+		$(LIBS)
 
-#---[ Misc targets ]-----------------------------------------------------------
 
-install:
-	@$(MKDIR) $(DESTDIR)$(libdir)/$(PACKAGE_NAME)-plugins
-	@$(INSTALL_PROGRAM) $(BINRLS)/plugins/$(MODULE_NAME).so $(DESTDIR)$(libdir)/$(PACKAGE_NAME)-plugins
+#---[ Clean Targets]---------------------------------------------------------------------
 
-debug-service: $(BINDBG)/@PACKAGE_NAME@d
+cleanDebug:
 
-dbus-glue.h: pw3270dbus.xml
-	@$(MKDIR) .tmp
-	@$(DBUSBINDINGTOOL) --mode=glib-server --output=$@ --prefix=pw3270_dbus $^
+	@rm -fr	$(BINDBG)/$(MODULE_NAME)@DLLEXT@ \
+			$(OBJDBG) \
+			dbus-glue.h
 
-$(BINDBG)/@PACKAGE_NAME@d: $(foreach SRC, $(basename $(DAEMON_SRC)), $(OBJDBG)/$(SRC).o)
-	@echo "  CCLD `basename $@`"
-	@$(MKDIR) `dirname $@`
-	@$(CC) $(CFLAGS) -o $@ $^ $(GDBUS_LIBS) $(GLIB_LIBS) $(LIB3270_LIBS)
+cleanRelease:
 
-cleandebug-service: clean
+	@rm -fr	$(BINRLS)/$(MODULE_NAME)@DLLEXT@ \
+			$(OBJRLS) \
+			dbus-glue.h
 
-clean:
-	@rm -fr $(OBJDIR)
-	@rm -fr $(BINDIR)
-	@rm -fr .tmp
-	@rm -f dbus-glue.h
+	@rm -fr $(POTDIR)
 
+clean: \
+	cleanDebug \
+	cleanRelease
+
+	

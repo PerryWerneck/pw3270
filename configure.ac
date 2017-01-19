@@ -67,6 +67,7 @@ dnl ---------------------------------------------------------------------------
 
 DBG_CFLAGS="-g -fstack-check -DDEBUG=1"
 RLS_CFLAGS="-DNDEBUG=1"
+PLUGINS=""
 
 dnl ---------------------------------------------------------------------------
 dnl Check for OS specifics
@@ -129,6 +130,8 @@ dnl ---------------------------------------------------------------------------
 AC_PATH_TOOL([RPMBUILD], [rpmbuild], [no])
 AC_PATH_TOOL([MAKENSIS], [makensis], [no])
 AC_PATH_TOOL([AR], [ar], [ar])
+AC_PATH_TOOL([WINDRES], [windres], [no])
+AC_PATH_TOOL([DBUSBINDINGTOOL],[dbus-binding-tool],[no])
 
 PKG_CHECK_EXISTS
 
@@ -152,9 +155,21 @@ dnl ---------------------------------------------------------------------------
 dnl Check for D-Bus
 dnl ---------------------------------------------------------------------------
 
-PKG_CHECK_MODULES( [DBUS], [dbus-1], AC_DEFINE(HAVE_DBUS), AC_MSG_NOTICE([ No DBUS support.]) )
+PKG_CHECK_MODULES( [DBUS], [dbus-1], app_cv_libdbus=yes, AC_MSG_NOTICE([ No DBUS support.]) )
 AC_SUBST(DBUS_LIBS)
 AC_SUBST(DBUS_CFLAGS)
+
+PKG_CHECK_MODULES( [GDBUS], [dbus-glib-1], app_cv_dbus=yes, AC_MSG_NOTICE([No GDBUS support.])  )
+AC_SUBST(GDBUS_LIBS)
+AC_SUBST(GDBUS_CFLAGS)
+
+if test "$app_cv_dbus" == "yes"; then
+
+	AC_DEFINE(HAVE_DBUS)
+	AC_CONFIG_FILES(src/plugins/dbus3270/Makefile)
+	PLUGINS="$PLUGINS dbus3270"
+
+fi
 
 dnl ---------------------------------------------------------------------------
 dnl Check for libintl
@@ -279,6 +294,7 @@ dnl ---------------------------------------------------------------------------
 
 AC_SUBST(LIB3270_CFLAGS,-I$ac_pwd/src/include)
 AC_SUBST(LIB3270_LIBS,-l3270)
+AC_SUBST(PW3270_LIBS,-lpw3270)
 
 dnl ---------------------------------------------------------------------------
 dnl Check for headers
@@ -327,6 +343,7 @@ dnl Output config
 dnl ---------------------------------------------------------------------------
 
 AC_SUBST(BASEDIR,$ac_pwd)
+AC_SUBST(PLUGINS)
 
 dnl ---------------------------------------------------------------------------
 dnl Configure which files to generate.

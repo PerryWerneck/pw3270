@@ -42,7 +42,7 @@
 #include <lib3270/config.h>
 #include <lib3270.h>
 #include <pw3270.h>
-#include <v3270.h>
+#include <pw3270/v3270.h>
 #include <lib3270/actions.h>
 #include <lib3270/charset.h>
 
@@ -81,7 +81,11 @@ PW3270Dbus * pw3270_dbus_new(void)
 void pw3270_dbus_get_revision(PW3270Dbus *object, DBusGMethodInvocation *context)
 {
 	trace("%s object=%p context=%p",__FUNCTION__,object,context);
+#ifdef PACKAGE_REVISION
 	dbus_g_method_return(context,PACKAGE_REVISION);
+#else
+	dbus_g_method_return(context,BUILD_DATE);
+#endif
 }
 
 void pw3270_dbus_connect(PW3270Dbus *object, const gchar *uri, DBusGMethodInvocation *context)

@@ -157,7 +157,7 @@ all: \
 	Release
 
 Release: \
-	$(BINRLS)/$(PACKAGE_TARNAME)$(EXEEXT)
+	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@
 
 pot: \
 	$(BASEDIR)/.pot/pw3270.pot
@@ -170,7 +170,7 @@ $(BASEDIR)/.pot/pw3270.pot: \
 	@mkdir -p `dirname $@`
 	@$(MSGCAT) --sort-output $^ > $@
 
-$(BINRLS)/$(PACKAGE_TARNAME)$(EXEEXT): \
+$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@: \
 	$(BINRLS)/$(LIBNAME) \
 	$(foreach SRC, $(basename $(APP_SOURCES)), $(OBJRLS)/$(SRC).o)
 
@@ -199,7 +199,7 @@ $(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@: \
 	@$(LD) -shared -Wl,-soname,$(@F) $(LDFLAGS) -L$(BINRLS) -o $@ $^ $(LIBS)
 
 install: \
-	$(BINRLS)/$(PACKAGE_TARNAME)$(EXEEXT) \
+	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ \
 	$(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/$(PACKAGE_NAME).png \
 	$(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/$(PACKAGE_NAME)-logo.png
 
@@ -220,7 +220,7 @@ install: \
 	@$(MKDIR) $(DESTDIR)$(bindir)
 
 	@$(INSTALL_PROGRAM) \
-		$(BINRLS)/$(PACKAGE_TARNAME)$(EXEEXT) \
+		$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ \
 		$(DESTDIR)$(bindir)
 
 $(SRCDIR): \
@@ -238,9 +238,9 @@ $(SRCDIR): \
 #---[ Debug Targets ]--------------------------------------------------------------------
 
 Debug: \
-	$(BINDBG)/$(PACKAGE_TARNAME)$(EXEEXT)
+	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@
 
-$(BINDBG)/$(PACKAGE_TARNAME)$(EXEEXT): \
+$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@: \
 	$(BINDBG)/$(LIBNAME) \
 	$(foreach SRC, $(basename $(APP_SOURCES)), $(OBJDBG)/$(SRC).o)
 
