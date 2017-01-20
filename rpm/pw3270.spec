@@ -160,6 +160,7 @@ This package contains the development files for tn3270 protocol library for %{na
 Summary:        Files required for development of %{name} plugins
 Group:          Development/Libraries/C and C++
 Requires:       pkgconfig(lib3270) = %{MAJOR_VERSION}.%{MINOR_VERSION}
+Requires:		pkgconfig(gtk+-3.0)
 Requires:       libpw3270-%{_libvrs}
 
 %description -n %{name}-devel
