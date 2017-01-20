@@ -80,6 +80,7 @@ install-pw3270: \
 	$(DESTDIR)$(includedir)/pw3270.h \
 	$(DESTDIR)$(includedir)/pw3270cpp.h \
 
+	@$(MKDIR) $(DESTDIR)$(libdir)/pkgconfig
 	@$(INSTALL_DATA) pw3270.pc $(DESTDIR)$(libdir)/pkgconfig/$(PACKAGE_TARNAME).pc
 
 $(SRCDIR)/sdk: \
