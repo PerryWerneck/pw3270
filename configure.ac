@@ -101,8 +101,7 @@ case "$host" in
 		DLLPREFIX="lib"
 		DLLEXT=".so"
 
-		DBG_CFLAGS="-DDEBUG=1 -DDATADIR=\$(BASEDIR)"
-		RLS_CFLAGS="-DNDEBUG=1"
+		DBG_CFLAGS="$DBG_CFLAGS -DDATADIR=\$(BASEDIR)"
 
 		CFLAGS="$CFLAGS -Wall -Werror"
 
@@ -114,8 +113,8 @@ case "$host" in
 		DLLPREFIX="lib"
 		DLLEXT=".so"
 
-		DBG_CFLAGS="-DDEBUG=1 -DDATADIR=\$(BASEDIR)"
-		RLS_CFLAGS="-DNDEBUG=1 -DDATADIR=\$(datarootdir)/\$(PACKAGE_NAME)"
+		DBG_CFLAGS="$DBG_CFLAGS -DDATADIR=\$(BASEDIR)"
+		RLS_CFLAGS="$RLS_CFLAGS -DDATADIR=\$(datarootdir)/\$(PACKAGE_NAME)"
 
 		# LIBS="-Wl,--no-allow-shlib-undefined,--as-needed,--no-undefined -pthread $LIBS"
 		LIBS="-pthread $LIBS"
