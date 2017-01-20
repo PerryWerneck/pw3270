@@ -30,7 +30,7 @@
 #---[ Packaging ]-----------------------------------------------------------------------------------------------------
 
 Name:           mingw64-pw3270
-Version:        %{MAJOR_VERSION}.%{MINOR_VERSION}
+Version:        5.1
 Release:        0
 Summary:        IBM 3270 Terminal emulator for GTK
 License:        GPL-2.0
@@ -82,7 +82,7 @@ Provides:	mingw64-lib3270 = %{version}
 Provides:	mingw64-lib3270-%{MAJOR_VERSION}_%{MINOR_VERSION} = %{version}
 Provides:	mingw64(lib:3270) = %{version}
 
-%description -n mingw64-lib3270-unstable-%{MAJOR_VERSION}_%{MINOR_VERSION}
+%description -n mingw64-lib3270-%{MAJOR_VERSION}_%{MINOR_VERSION}
 Open-source GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
 
 This package contains the tn3270 protocol library for %{name}
@@ -97,7 +97,7 @@ Requires:       mingw64-lib3270-%{MAJOR_VERSION}_%{MINOR_VERSION} = %{version}
 Provides:       mingw64-lib3270-devel-%{MAJOR_VERSION}_%{MINOR_VERSION} = %{version}
 Requires:       mingw64-lib3270-%{MAJOR_VERSION}_%{MINOR_VERSION} = %{version}
 
-%description -n mingw64-lib3270-unstable-devel
+%description -n mingw64-lib3270-devel
 Open-source GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
 This package contains the development files for tn3270 protocol library for %{name}
 
