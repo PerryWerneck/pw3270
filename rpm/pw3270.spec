@@ -30,7 +30,7 @@
 
 Name:           pw3270
 Version:        5.1 
-Release:        0
+Release:        1
 Summary:        IBM 3270 Terminal emulator for GTK
 License:        GPL-2.0
 Group:          System/X11/Terminals
@@ -42,8 +42,7 @@ Source:         pw3270-%{version}.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
 Requires:       shared-mime-info
-Provides:       libpw3270-%{MAJOR_VERSION}_%{MINOR_VERSION} = %{version}
-
+Provides:       libpw3270-%{_libvrs}
 
 #--[ Setup by distribution ]------------------------------------------------------------------------------------------
 # 
@@ -140,8 +139,6 @@ Based on the original x3270 code, pw3270 was originally created for Banco do Bra
 Summary:        3270 Communication library for %{name}
 Group:          Development/Libraries/C and C++
 Requires:       openssl
-Provides:       lib3270 = %{version}
-Provides:       lib3270-%{MAJOR_VERSION}_%{MINOR_VERSION} = %{version}
 
 %description -n lib3270-%{_libvrs}
 Open-source GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
@@ -153,18 +150,17 @@ This package contains the tn3270 protocol library for %{name}
 %package -n lib3270-devel
 Summary:        Devel for 3270 Communication library for %{name}
 Group:          Development/Libraries/C and C++
-Provides:       lib3270-devel-%{MAJOR_VERSION}_%{MINOR_VERSION} = %{version}
-Requires:       lib3270-%{MAJOR_VERSION}_%{MINOR_VERSION} = %{version}
+Requires:       lib3270-%{_libvrs}
 
 %description -n lib3270-devel
 Open-source GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
 This package contains the development files for tn3270 protocol library for %{name}
 
-%package -n %{name}-devel
+%package devel
 Summary:        Files required for development of %{name} plugins
 Group:          Development/Libraries/C and C++
-Requires:       lib3270-devel-%{MAJOR_VERSION}_%{MINOR_VERSION} = %{version}
-Requires:       libpw3270-%{MAJOR_VERSION}_%{MINOR_VERSION} = %{version}
+Requires:       pkgconfig(lib3270) = %{MAJOR_VERSION}.%{MINOR_VERSION}
+Requires:       libpw3270-%{_libvrs}
 
 %description -n %{name}-devel
 Open-source GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
@@ -280,7 +276,7 @@ rm -rf %{buildroot}
 %{_libdir}/lib3270.so
 %{_datadir}/pw3270/locale
 
-%files -n %{name}-devel
+%files devel
 %defattr(-,root,root)
 %{_includedir}/pw3270
 %{_includedir}/pw3270.h
