@@ -86,6 +86,9 @@ case "$host" in
 		DLLPREFIX=""
 		DLLEXT=".dll"
 
+		DBG_CFLAGS="-DDEBUG=1"
+		RLS_CFLAGS="-DNDEBUG=1"
+
 		CFLAGS="$CFLAGS -D_WIN32_WINNT=0x0600"
 		LIBS="$LIBS -lws2_32 -lntdll -lwtsapi32"
 
@@ -98,6 +101,9 @@ case "$host" in
 		DLLPREFIX="lib"
 		DLLEXT=".so"
 
+		DBG_CFLAGS="-DDEBUG=1 -DDATADIR=\$(BASEDIR)"
+		RLS_CFLAGS="-DNDEBUG=1"
+
 		CFLAGS="$CFLAGS -Wall -Werror"
 
 		LIBS="-pthread $LIBS"
@@ -107,6 +113,9 @@ case "$host" in
 		EXEEXT=""
 		DLLPREFIX="lib"
 		DLLEXT=".so"
+
+		DBG_CFLAGS="-DDEBUG=1 -DDATADIR=\$(BASEDIR)"
+		RLS_CFLAGS="-DNDEBUG=1 -DDATADIR=\$(datarootdir)/\$(PACKAGE_NAME)"
 
 		# LIBS="-Wl,--no-allow-shlib-undefined,--as-needed,--no-undefined -pthread $LIBS"
 		LIBS="-pthread $LIBS"
