@@ -77,9 +77,10 @@ install-lib3270: \
 
 install-pw3270: \
 	$(foreach SRC, $(notdir $(wildcard $(BASEDIR)/src/include/pw3270/*.h)), $(DESTDIR)$(includedir)/pw3270/$(SRC)) \
-	$(DESTDIR)$(libdir)/pkgconfig/pw3270.pc \
 	$(DESTDIR)$(includedir)/pw3270.h \
 	$(DESTDIR)$(includedir)/pw3270cpp.h \
+
+	@$(INSTALL_DATA) pw3270.pc $(DESTDIR)$(libdir)/pkgconfig/$(PACKAGE_TARNAME).pc
 
 $(SRCDIR)/sdk: \
 	$(foreach SRC, $(notdir $(wildcard $(BASEDIR)/src/include/lib3270/*.h)), $(SRCDIR)/src/include/lib3270/$(SRC)) \

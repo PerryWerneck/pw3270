@@ -3,7 +3,7 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
 
-Name: pw3270
+Name: @PACKAGE_TARNAME@
 Description: @PACKAGE@ GTK widgets and support calls for plugin development
 Version: @PACKAGE_VERSION@
 Libs: -L\@libdir@ -l@PACKAGE_TARNAME@
