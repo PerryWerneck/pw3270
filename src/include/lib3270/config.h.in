@@ -44,6 +44,7 @@
 	#undef HAVE_SYSLOG
 	#undef HAVE_DBUS
 	#undef HAVE_VASPRINTF
+	#undef HAVE_INET_NTOP
 
 	#undef HAVE_ICONV
 	#undef ICONV_CONST

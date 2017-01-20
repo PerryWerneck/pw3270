@@ -16,7 +16,12 @@
  *		Miscellaneous Win32 functions.
  */
 
-#if defined(_WIN32)
+ #include <lib3270/config.h>
+
+ #ifndef HAVE_INET_NTOP
 	LIB3270_INTERNAL const char *inet_ntop(int af, const void *src, char *dst,socklen_t cnt);
+ #endif // HAVE_INET_NTOP
+
+ #if defined(_WIN32)
 	LIB3270_INTERNAL const char *win32_strerror(int e);
-#endif
+ #endif // WIN32

@@ -113,6 +113,7 @@ int get_version_info(void)
 }
 
 // Convert a network address to a string.
+#ifndef HAVE_INET_NTOP
 const char * inet_ntop(int af, const void *src, char *dst, socklen_t cnt)
 {
     	union {
@@ -150,6 +151,7 @@ const char * inet_ntop(int af, const void *src, char *dst, socklen_t cnt)
 
 	return dst;
 }
+#endif // HAVE_INET_NTOP
 
 // Decode a Win32 error number.
 LIB3270_EXPORT const char * lib3270_win32_strerror(int e)

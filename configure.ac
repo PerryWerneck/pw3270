@@ -90,7 +90,7 @@ case "$host" in
 		RLS_CFLAGS="-DNDEBUG=1"
 
 		CFLAGS="$CFLAGS -D_WIN32_WINNT=0x0600"
-		LIBS="$LIBS -lws2_32 -lntdll -lwtsapi32"
+		LIBS="$LIBS -lws2_32 -lntdll -lwtsapi32 -lintl"
 
 		AC_CONFIG_FILES(win/makegtkruntime.sh)
 
@@ -314,6 +314,7 @@ AC_CHECK_HEADER(malloc.h, AC_DEFINE(HAVE_MALLOC_H,,[do we have malloc.h?]))
 AC_CHECK_FUNCS(getaddrinfo, AC_DEFINE(HAVE_GETADDRINFO) )
 AC_CHECK_FUNC(vasprintf, AC_DEFINE(HAVE_VASPRINTF) )
 AC_CHECK_FUNC(strtok_r, AC_DEFINE(HAVE_STRTOK_R) )
+AC_CHECK_FUNC(inet_ntop, AC_DEFINE(HAVE_INET_NTOP) )
 
 PKG_CHECK_EXISTS
 
