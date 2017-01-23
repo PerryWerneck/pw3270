@@ -31,7 +31,7 @@
  #include <cstdlib>
  #include <cstring>
 
- #include <pw3270/class.h>
+ #include <pw3270cpp.h>
  #include <pw3270/hllapi.h>
  #include "client.h"
 

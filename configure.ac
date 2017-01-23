@@ -93,7 +93,9 @@ case "$host" in
 		LIBS="$LIBS -lws2_32 -lntdll -lwtsapi32 -lintl -lcomdlg32"
 
 		AC_CONFIG_FILES(win/makegtkruntime.sh)
+		AC_CONFIG_FILES(src/plugins/hllapi/Makefile)
 
+		PLUGINS="$PLUGINS hllapi"
 		;;
 
 	*-apple-*)
