@@ -215,7 +215,7 @@ $(SRCDIR): \
 	clean
 
 	@$(MKDIR) $@
-	@$(INSTALL_DATA) *.c *.h *.in *.xml *.cbp $@
+	@$(INSTALL_DATA) *.c *.h *.in *.cbp $@
 
 
 #---[ Debug Targets ]--------------------------------------------------------------------

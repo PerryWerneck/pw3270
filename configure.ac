@@ -93,7 +93,6 @@ case "$host" in
 		LIBS="$LIBS -lws2_32 -lntdll -lwtsapi32 -lintl -lcomdlg32"
 
 		AC_CONFIG_FILES(win/makegtkruntime.sh)
-		AC_CONFIG_FILES(src/plugins/hllapi/Makefile)
 
 		PLUGINS="$PLUGINS hllapi"
 		;;
@@ -176,7 +175,6 @@ AC_SUBST(GDBUS_CFLAGS)
 if test "$app_cv_dbus" == "yes"; then
 
 	AC_DEFINE(HAVE_DBUS)
-	AC_CONFIG_FILES(src/plugins/dbus3270/Makefile)
 	PLUGINS="$PLUGINS dbus3270"
 
 fi
@@ -372,6 +370,9 @@ AC_CONFIG_FILES(src/libpw3270cpp/Makefile)
 
 AC_CONFIG_FILES(ui/Makefile)
 AC_CONFIG_FILES(locale/Makefile)
+
+AC_CONFIG_FILES(src/plugins/hllapi/Makefile)
+AC_CONFIG_FILES(src/plugins/dbus3270/Makefile)
 
 AC_CONFIG_FILES(Makefile)
 

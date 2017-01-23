@@ -282,13 +282,19 @@ $(SRCDIR): \
 		$(SRCDIR)/src/pw3270 \
 		$(SRCDIR)/src/libpw3270cpp \
 		$(SRCDIR)/sdk \
-		$(SRCDIR)/src/plugins/dbus3270
+		$(SRCDIR)/src/plugins/dbus3270 \
+		$(SRCDIR)/src/plugins/hllapi
 
 
 	@$(MKDIR) $(SRCDIR)
 	@$(INSTALL_DATA) \
 		*.in configure.ac *.cbp LICENCA LICENSE AUTHORS \
 		$(SRCDIR)
+
+	@$(MKDIR) $(SRCDIR)/win
+	@$(INSTALL_DATA) \
+		win/*.in win/*.spec \
+		$(SRCDIR)/win
 
 	@$(INSTALL_PROGRAM) \
 		autogen.sh \
