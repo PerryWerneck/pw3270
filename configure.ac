@@ -298,7 +298,7 @@ dnl ---------------------------------------------------------------------------
 
 AC_SUBST(LIB3270_CFLAGS,-I$ac_pwd/src/include)
 AC_SUBST(LIB3270_LIBS,-l3270)
-AC_SUBST(PW3270_LIBS,-lpw3270)
+AC_SUBST(PW3270_LIBS,-l$PACKAGE_TARNAME)
 
 dnl ---------------------------------------------------------------------------
 dnl Check for headers
