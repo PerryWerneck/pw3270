@@ -56,8 +56,8 @@ MSGCAT=@MSGCAT@
 INSTALL=@INSTALL@
 INSTALL_DATA=@INSTALL_DATA@
 
-CFLAGS=@CFLAGS@ -Wno-deprecated-declarations @GTK_CFLAGS@
-LIBS=@LIBS@ @GTK_LIBS@
+CFLAGS=@CFLAGS@ -Wno-deprecated-declarations `pkg-config --cflags gtk+-3.0`
+LIBS=`pkg-config --libs gtk+-3.0`
 
 #---[ Rules ]----------------------------------------------------------------------------
 

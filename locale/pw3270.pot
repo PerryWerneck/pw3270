@@ -9,7 +9,7 @@ msgstr ""
 "#-#-#-#-#  lib3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-20 09:01-0200\n"
+"POT-Creation-Date: 2017-01-24 09:51-0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "#-#-#-#-#  pw3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-20 09:01-0200\n"
+"POT-Creation-Date: 2017-01-24 09:51-0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,17 +32,6 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-01-18 17:12-0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  dbus3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-20 09:01-0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -435,10 +424,6 @@ msgstr ""
 msgid "Can't connect to %s:%s"
 msgstr ""
 
-#: main.c:70
-msgid "Can't connect to DBUS server"
-msgstr ""
-
 #: selection.c:425
 #, c-format
 msgid "Can't convert line %d from %s to %s"
@@ -451,10 +436,6 @@ msgstr ""
 #: connect.c:202
 #, c-format
 msgid "Can't determine value for environment variable \"%s\" "
-msgstr ""
-
-#: main.c:115
-msgid "Can't get DBUS object name"
 msgstr ""
 
 #: ft.c:413
@@ -666,10 +647,6 @@ msgstr ""
 msgid "Connect on startup"
 msgstr ""
 
-#: gobject.c:205
-msgid "Connecting to host"
-msgstr ""
-
 #: connect.c:200 connect.c:296 connect.c:305 connect.c:367 connect.c:382
 #: connect.c:398 connect.c:412 connect.c:432 connect.c:446 connect.c:462
 #: connect.c:557
@@ -829,7 +806,7 @@ msgstr ""
 msgid "Erase to end of line"
 msgstr ""
 
-#: util.c:983 print.c:247 widget.c:200
+#: util.c:985 print.c:247 widget.c:200
 msgid "Error"
 msgstr ""
 
@@ -1884,11 +1861,6 @@ msgstr ""
 msgid "Starting"
 msgstr ""
 
-#: gobject.c:193
-#, c-format
-msgid "State %04d can't accept requests"
-msgstr ""
-
 #: security.c:237
 msgid "Subject issuer mismatch"
 msgstr ""
@@ -2320,11 +2292,6 @@ msgstr ""
 msgid "Unexpected or unknown security status"
 msgstr ""
 
-#: gobject.c:208
-#, c-format
-msgid "Unexpected state %04d"
-msgstr ""
-
 #: actions.c:391
 #, c-format
 msgid "Unexpected target \"%s\""
@@ -2425,7 +2392,7 @@ msgstr ""
 msgid "Windows Western languages (CP1252)"
 msgstr ""
 
-#: util.c:161
+#: util.c:163
 #, c-format
 msgid "Windows error %d"
 msgstr ""
