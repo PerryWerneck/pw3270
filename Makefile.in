@@ -85,6 +85,12 @@ $(BINDBG)/%@EXEEXT@: \
  
 	@$(MAKE) -C src/$(basename $(notdir $@)) $@
 
+$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@: \
+	$(DEPENDS) \
+	./src/pw3270/*
+ 
+	@$(MAKE) -C src/pw3270 $@
+
 $(BINRLS)/%@DLLEXT@: \
 	$(DEPENDS) \
 	./src/%/*
@@ -144,6 +150,13 @@ $(BINRLS)/%@EXEEXT@: \
 	./src/%/*
  
 	@$(MAKE) -C src/$(basename $(notdir $@)) $@
+
+$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@: \
+	$(DEPENDS) \
+	./src/pw3270/*
+ 
+	@$(MAKE) -C src/pw3270 $@
+
 
 $(DESTDIR)$(libdir)/%@EXEEXT@: \
 	$(DEPENDS) \
@@ -310,6 +323,11 @@ $(SRCDIR): \
 	@$(INSTALL_DATA) \
 		conf/*.conf \
 		$(SRCDIR)/conf
+
+	@$(MKDIR) $(SRCDIR)/rpm
+	@$(INSTALL_DATA) \
+		rpm/*.spec \
+		$(SRCDIR)/rpm
 
 	@$(MKDIR) $(SRCDIR)/debian
 	@$(INSTALL_DATA) \
