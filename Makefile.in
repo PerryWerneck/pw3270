@@ -158,9 +158,15 @@ $(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@: \
 	@$(MAKE) -C src/pw3270 $@
 
 
-$(DESTDIR)$(libdir)/%@EXEEXT@: \
+$(DESTDIR)$(BINRLS)/%@EXEEXT@: \
 	$(DEPENDS) \
 	./src/%/*
+ 
+	@$(MAKE) DESTDIR=$(DESTDIR) -C src/$(basename $(notdir $@)) install
+
+$(DESTDIR)$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@: \
+	$(DEPENDS) \
+	./src/pw3270/*
  
 	@$(MAKE) DESTDIR=$(DESTDIR) -C src/$(basename $(notdir $@)) install
 
@@ -219,7 +225,7 @@ install-lib: \
 	$(DESTDIR)$(libdir)/lib3270@DLLEXT@ \
 
 install-app: \
-	$(DESTDIR)$(libdir)/$(PACKAGE_TARNAME)@EXEEXT@ \
+	$(DESTDIR)$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ \
 	locale/$(PACKAGE_TARNAME).pot
 
 	@$(MKDIR) $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)
