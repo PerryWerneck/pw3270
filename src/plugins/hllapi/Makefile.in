@@ -242,7 +242,7 @@ $(BINDBG)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@: \
 
 	@echo $@ ...
 	@$(MKDIR) `dirname $@`
-	$(LD) \
+	@$(LD) \
 		-shared \
 		-Wl,-soname,`basename $@` \
 		-L$(BASEDIR)/.bin/Debug \

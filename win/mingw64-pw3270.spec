@@ -39,8 +39,6 @@ Url:            http://www.softwarepublico.gov.br/dotlrn/clubs/pw3270
 Source:         pw3270-%{version}.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
-BuildArch:		noarch
-
 Requires:		mingw64-gtk3
 Requires:		mingw64-lib3270 = %{version}
 
@@ -52,7 +50,10 @@ BuildRequires:	automake
 BuildRequires:	rsvg-view
 BuildRequires:	gettext-tools
 BuildRequires:	glib2-devel
-BuildRequires:	gtk3-devel
+
+#BuildRequires:	gtk3-devel
+BuildRequires:	pkgconfig(gtk+-3.0)
+
 BuildRequires:  desktop-file-utils
 BuildRequires:	optipng
 
@@ -63,7 +64,9 @@ BuildRequires:	mingw64-cross-pkg-config
 BuildRequires:	mingw64-filesystem
 BuildRequires:	mingw64-libopenssl-devel
 BuildRequires:	mingw64-zlib-devel
-BuildRequires:	mingw64-gtk3-devel
+#BuildRequires:	mingw64-gtk3-devel
+
+BuildRequires:	mingw64(pkg:gtk+-win32-3.0)
 
 #---------------------------------------------------------------------------------------------------------------------
 
@@ -76,10 +79,8 @@ Based on the original x3270 code, pw3270 was originally created for Banco do Bra
 %package -n mingw64-lib3270-%{MAJOR_VERSION}_%{MINOR_VERSION}
 Summary:	3270 Communication library for %{name}
 Group:		Development/Libraries/C and C++
-Requires:	openssl
 
 Provides:	mingw64-lib3270 = %{version}
-Provides:	mingw64-lib3270-%{MAJOR_VERSION}_%{MINOR_VERSION} = %{version}
 Provides:	mingw64(lib:3270) = %{version}
 
 %description -n mingw64-lib3270-%{MAJOR_VERSION}_%{MINOR_VERSION}
@@ -105,8 +106,8 @@ This package contains the development files for tn3270 protocol library for %{na
 Summary:	Files required for development of %{name} plugins
 Group:		Development/Libraries/C and C++
 
-Requires:   mingw64-lib3270-devel-%{MAJOR_VERSION}_%{MINOR_VERSION} = %{version}
-Requires:   mingw64-libpw3270-%{MAJOR_VERSION}_%{MINOR_VERSION} = %{version}
+Requires:   mingw64(lib:3270) = %{version}
+Requires:   mingw64(lib:pw3270) = %{version}
 
 %description -n %{name}-devel
 Open-source GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
@@ -132,14 +133,16 @@ autoconf
 make clean
 make all
 
+%{_mingw64_strip} --strip-all .bin/Release/*.dll.%{MAJOR_VERSION}.%{MINOR_VERSION}
+%{_mingw64_strip} --strip-all .bin/Release/*.exe
+%{_mingw64_strip} --strip-all .bin/Release/plugins/*.dll
+
 %install
 %{_mingw64_makeinstall}
 
 rm -f %{buildroot}%{_mingw64_datadir}/pw3270/ui/80javasamples.xml
 rm -f %{buildroot}%{_mingw64_datadir}/pw3270/ui/80rexx.xml
 
-#install --mode=755 .bin/Release/hllapi.dll.%{MAJOR_VERSION}.%{MINOR_VERSION} %{buildroot}%{_mingw64_libdir}/libhllapi.dll
-#install --mode=755 .bin/Release/plugins/hllapi.dll %{buildroot}%{_mingw64_libdir}/pw3270-plugins/hllapi.dll
 
 %clean
 rm -rf %{buildroot}
@@ -158,9 +161,6 @@ rm -rf %{buildroot}
 %{_mingw64_libdir}/pw3270.dll
 %{_mingw64_libdir}/pw3270.dll.%{MAJOR_VERSION}
 %{_mingw64_libdir}/pw3270.dll.%{MAJOR_VERSION}.%{MINOR_VERSION}
-
-#%dir %{_mingw64_datadir}/applications
-#%{_mingw64_datadir}/applications/pw3270.desktop
 
 %{_mingw64_datadir}/pw3270/ui/00default.xml
 %{_mingw64_datadir}/pw3270/ui/10functions.xml
@@ -198,15 +198,13 @@ rm -rf %{buildroot}
 %{_mingw64_datadir}/pw3270/ui/98trace.xml
 %{_mingw64_datadir}/pw3270/ui/99debug.xml
 
+%dir %{_mingw64_datadir}/pw3270/locale
 %{_mingw64_datadir}/pw3270/locale/Makefile
 %{_mingw64_datadir}/pw3270/locale/pt_BR.po
 %{_mingw64_datadir}/pw3270/locale/pw3270.pot
 
 %{_mingw64_includedir}/pw3270cpp.h
 %{_mingw64_libdir}/libpw3270cpp.a
-
-#%dir %{_mingw64_datadir}/pw3270/sample
-#%{_mingw64_datadir}/pw3270/sample/*
 
 %changelog
 
