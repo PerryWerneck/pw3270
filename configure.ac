@@ -120,10 +120,6 @@ case "$host" in
 		# LIBS="-Wl,--no-allow-shlib-undefined,--as-needed,--no-undefined -pthread $LIBS"
 		LIBS="-pthread $LIBS"
 
-		AC_CONFIG_FILES(sdk/lib3270.pc)
-		AC_CONFIG_FILES(sdk/pw3270.pc)
-		AC_CONFIG_FILES(sdk/Makefile)
-
 esac
 
 AC_SUBST(DBG_CFLAGS)
@@ -373,6 +369,10 @@ AC_CONFIG_FILES(locale/Makefile)
 
 AC_CONFIG_FILES(src/plugins/hllapi/Makefile)
 AC_CONFIG_FILES(src/plugins/dbus3270/Makefile)
+
+AC_CONFIG_FILES(sdk/lib3270.pc)
+AC_CONFIG_FILES(sdk/pw3270.pc)
+AC_CONFIG_FILES(sdk/Makefile)
 
 AC_CONFIG_FILES(Makefile)
 

@@ -149,7 +149,7 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root)
 %doc AUTHORS LICENSE 
-%{_mingw64_mandir}/*/*
+# %{_mingw64_mandir}/*/*
 
 # Main application
 %dir %{_mingw64_datadir}/pw3270
@@ -159,8 +159,8 @@ rm -rf %{buildroot}
 %{_mingw64_libdir}/pw3270.dll.%{MAJOR_VERSION}
 %{_mingw64_libdir}/pw3270.dll.%{MAJOR_VERSION}.%{MINOR_VERSION}
 
-%dir %{_mingw64_datadir}/applications
-%{_mingw64_datadir}/applications/pw3270.desktop
+#%dir %{_mingw64_datadir}/applications
+#%{_mingw64_datadir}/applications/pw3270.desktop
 
 %{_mingw64_datadir}/pw3270/ui/00default.xml
 %{_mingw64_datadir}/pw3270/ui/10functions.xml
@@ -198,11 +198,15 @@ rm -rf %{buildroot}
 %{_mingw64_datadir}/pw3270/ui/98trace.xml
 %{_mingw64_datadir}/pw3270/ui/99debug.xml
 
+%{_mingw64_datadir}/pw3270/locale/Makefile
+%{_mingw64_datadir}/pw3270/locale/pt_BR.po
+%{_mingw64_datadir}/pw3270/locale/pw3270.pot
+
 %{_mingw64_includedir}/pw3270cpp.h
 %{_mingw64_libdir}/libpw3270cpp.a
 
-%dir %{_mingw64_datadir}/pw3270/sample
-%{_mingw64_datadir}/pw3270/sample/*
+#%dir %{_mingw64_datadir}/pw3270/sample
+#%{_mingw64_datadir}/pw3270/sample/*
 
 %changelog
 
