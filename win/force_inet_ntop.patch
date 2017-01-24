@@ -1,0 +1,11 @@
+--- src/include/lib3270/config.h.in	2017-01-20 15:37:46.462843502 -0200
++++ src/include/lib3270/config.h.in	2017-01-24 15:19:45.547022420 -0200
+@@ -44,7 +44,7 @@
+ 	#undef HAVE_SYSLOG
+ 	#undef HAVE_DBUS
+ 	#undef HAVE_VASPRINTF
+-	#undef HAVE_INET_NTOP
++	#define HAVE_INET_NTOP
+ 
+ 	#undef HAVE_ICONV
+ 	#undef ICONV_CONST
