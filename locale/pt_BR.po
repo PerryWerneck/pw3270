@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-19 21:55-0200\n"
+"POT-Creation-Date: 2017-01-24 10:43-0200\n"
 "PO-Revision-Date: 2016-10-25 10:47-0200\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <perry.werneck@gmail.com>\n"
@@ -419,11 +419,6 @@ msgstr "Não foi possível conectar a %s"
 msgid "Can't connect to %s:%s"
 msgstr "Não foi possível conectar a %s:%s"
 
-#: main.c:70
-#, fuzzy
-msgid "Can't connect to DBUS server"
-msgstr "Não foi possível conectar a %s"
-
 #: selection.c:425
 #, c-format
 msgid "Can't convert line %d from %s to %s"
@@ -437,10 +432,6 @@ msgstr "Recortar não permitido em seleção retangular"
 #, c-format
 msgid "Can't determine value for environment variable \"%s\" "
 msgstr "Não consigo determinar o valor da variável de ambiente \"%s\" "
-
-#: main.c:115
-msgid "Can't get DBUS object name"
-msgstr ""
 
 #: ft.c:413
 msgid "Can't get file size"
@@ -663,11 +654,6 @@ msgstr "Configurar host"
 msgid "Connect on startup"
 msgstr "Conectar ao iniciar"
 
-#: gobject.c:205
-#, fuzzy
-msgid "Connecting to host"
-msgstr "Não foi possível conectar ao servidor"
-
 #: connect.c:200 connect.c:296 connect.c:305 connect.c:367 connect.c:382
 #: connect.c:398 connect.c:412 connect.c:432 connect.c:446 connect.c:462
 #: connect.c:557
@@ -832,7 +818,7 @@ msgstr "Apagar até o final do campo"
 msgid "Erase to end of line"
 msgstr "Apagar até o final da linha"
 
-#: util.c:983 print.c:247 widget.c:200
+#: util.c:985 print.c:247 widget.c:200
 msgid "Error"
 msgstr "Erro"
 
@@ -1927,11 +1913,6 @@ msgstr "Iniciar transferência de arquivo"
 msgid "Starting"
 msgstr "Iniciando"
 
-#: gobject.c:193
-#, c-format
-msgid "State %04d can't accept requests"
-msgstr ""
-
 #: security.c:237
 msgid "Subject issuer mismatch"
 msgstr "Divergência na identidade do emissor"
@@ -2417,11 +2398,6 @@ msgstr "Valor de cor inválido ou inesperado: \"%s\""
 msgid "Unexpected or unknown security status"
 msgstr "Estado de segurança inesperado ou desconhecido."
 
-#: gobject.c:208
-#, fuzzy, c-format
-msgid "Unexpected state %04d"
-msgstr "Alvo inesperado \"%s\""
-
 #: actions.c:391
 #, c-format
 msgid "Unexpected target \"%s\""
@@ -2522,7 +2498,7 @@ msgstr "Janela"
 msgid "Windows Western languages (CP1252)"
 msgstr "Windows ocidental (CP1252)"
 
-#: util.c:161
+#: util.c:163
 #, c-format
 msgid "Windows error %d"
 msgstr "Erro windows %d"
@@ -2831,6 +2807,10 @@ msgstr "translator-credits"
 #~ "32768. Valores maiores trazem maior performance, porem, nem todos os "
 #~ "hosts podem suportá-los."
 
+#, fuzzy
+#~ msgid "Can't connect to DBUS server"
+#~ msgstr "Não foi possível conectar a %s"
+
 #~ msgid "Can't start download."
 #~ msgstr "Não foi possível iniciar o download."
 
@@ -2866,6 +2846,10 @@ msgstr "translator-credits"
 
 #~ msgid "Complete"
 #~ msgstr "Completo"
+
+#, fuzzy
+#~ msgid "Connecting to host"
+#~ msgstr "Não foi possível conectar ao servidor"
 
 #~ msgid "Copiar tudo"
 #~ msgstr "Copiar tudo"
@@ -3228,6 +3212,10 @@ msgstr "translator-credits"
 
 #~ msgid "Unexpected element <%s>"
 #~ msgstr "Elemento <%s> inesperado"
+
+#, fuzzy
+#~ msgid "Unexpected state %04d"
+#~ msgstr "Alvo inesperado \"%s\""
 
 #~ msgid ""
 #~ "Unknown host:\n"

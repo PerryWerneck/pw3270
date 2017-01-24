@@ -157,7 +157,7 @@ $(DESTDIR)$(libdir)/$(PACKAGE_TARNAME)-plugins/$(MODULE_NAME)@DLLEXT@: \
 
 	@echo $@ ...
 	@$(MKDIR) `dirname $@`
-	@$(INSTALL_PROGRAM) $(BINRLS)/$(MODULE_NAME)@DLLEXT@ $@
+	@$(INSTALL_PROGRAM) $(BINRLS)/plugins/$(MODULE_NAME)@DLLEXT@ $@
 
 	@$(MKDIR) $(DESTDIR)$(libdir)
 	@$(INSTALL_PROGRAM) $(BINRLS)/$(LIBNAME) $(DESTDIR)$(libdir)
@@ -181,7 +181,7 @@ $(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@: \
 
 	@echo $@ ...
 	@$(MKDIR) `dirname $@`
-	$(LD) \
+	@$(LD) \
 		-shared \
 		-Wl,-soname,`basename $@` \
 		-L$(BASEDIR)/.bin/Release \
