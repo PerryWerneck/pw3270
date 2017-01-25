@@ -135,7 +135,7 @@ $(DESTDIR)$(libdir)/$(PACKAGE_TARNAME)-plugins/$(MODULE_NAME)@DLLEXT@: \
 
 	@echo $@ ...
 	@$(MKDIR) `dirname $@`
-	$(INSTALL_PROGRAM) $(BINRLS)/$(MODULE_NAME)@DLLEXT@ $@
+	@$(INSTALL_PROGRAM) $(BINRLS)/$(MODULE_NAME)@DLLEXT@ $@
 
 
 $(BINRLS)/$(MODULE_NAME)@DLLEXT@: \

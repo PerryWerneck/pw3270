@@ -85,12 +85,6 @@ $(BINDBG)/%@EXEEXT@: \
  
 	@$(MAKE) -C src/$(basename $(notdir $@)) $@
 
-$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@: \
-	$(DEPENDS) \
-	./src/pw3270/*
- 
-	@$(MAKE) -C src/pw3270 $@
-
 $(BINRLS)/%@DLLEXT@: \
 	$(DEPENDS) \
 	./src/%/*
@@ -151,22 +145,9 @@ $(BINRLS)/%@EXEEXT@: \
  
 	@$(MAKE) -C src/$(basename $(notdir $@)) $@
 
-$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@: \
-	$(DEPENDS) \
-	./src/pw3270/*
- 
-	@$(MAKE) -C src/pw3270 $@
-
-
-$(DESTDIR)$(BINRLS)/%@EXEEXT@: \
+$(DESTDIR)$(bindir)/%@EXEEXT@: \
 	$(DEPENDS) \
 	./src/%/*
- 
-	@$(MAKE) DESTDIR=$(DESTDIR) -C src/$(basename $(notdir $@)) install
-
-$(DESTDIR)$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@: \
-	$(DEPENDS) \
-	./src/pw3270/*
  
 	@$(MAKE) DESTDIR=$(DESTDIR) -C src/$(basename $(notdir $@)) install
 
@@ -225,7 +206,7 @@ install-lib: \
 	$(DESTDIR)$(libdir)/lib3270@DLLEXT@ \
 
 install-app: \
-	$(DESTDIR)$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ \
+	$(DESTDIR)$(bindir)/$(PACKAGE_TARNAME)@EXEEXT@ \
 	locale/$(PACKAGE_TARNAME).pot
 
 	@$(MKDIR) $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)
@@ -312,7 +293,7 @@ $(SRCDIR): \
 
 	@$(MKDIR) $(SRCDIR)/win
 	@$(INSTALL_DATA) \
-		win/*.in win/*.spec \
+		win/*.in \
 		$(SRCDIR)/win
 
 	@$(INSTALL_PROGRAM) \
