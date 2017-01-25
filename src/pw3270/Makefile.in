@@ -161,8 +161,7 @@ $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/%.png: \
 
 	@echo $< ...
 	@$(MKDIR) `dirname $@`
-	@$(SVG2PNG) $< --format=png > $@
-	@$(OPTIPNG) -o7 $@
+	@$(OPTIPNG) -out $@ -o7 $<
 
 #---[ Release Targets ]------------------------------------------------------------------
 
