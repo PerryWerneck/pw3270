@@ -8,6 +8,9 @@ export DH_VERBOSE=1
 # This is the debhelper compatibility version to use.
 export DH_COMPAT=9
 
+# Name of the package
+PACKAGE_NAME=pw3270
+
 CFLAGS = -g
 ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
 CFLAGS += -O0
@@ -53,30 +56,28 @@ install: build
 	make DESTDIR=$(PWD)/debian/lib3270 install-lib
 
 	# Install pw3270's GUI
-	make DESTDIR=$(PWD)/debian/pw3270 install-app
+	make DESTDIR=$(PWD)/debian/$(PACKAGE_NAME) install-app
 
 	# Install lib3270-sdk
 	make DESTDIR=$(PWD)/debian/lib3270-dev -C sdk install-lib3270
 
-	# Install pw3270-sdk
-	make DESTDIR=$(PWD)/debian/pw3270-dev -C sdk install-pw3270
-	make DESTDIR=$(PWD)/debian/pw3270-dev -C src/libpw3270cpp install
+	# Install $(PACKAGE_NAME)-sdk
+	make DESTDIR=$(PWD)/debian/$(PACKAGE_NAME)-dev -C sdk install-$(PACKAGE_NAME)
+	make DESTDIR=$(PWD)/debian/$(PACKAGE_NAME)-dev -C src/libpw3270cpp install
 
 	mkdir -p $(PWD)/debian/lib3270-dev/lib3270
 	install --mode=644 src/include/lib3270.h $(PWD)/debian/lib3270-dev
 	install --mode=644 src/include/lib3270/*.h $(PWD)/debian/lib3270-dev/lib3270
 
-	# Move SDK's ui files
-
 	# Install DBUS plugin
-	make DESTDIR=$(PWD)/debian/pw3270-plugin-dbus -C src/plugins/dbus3270/ install
+	make DESTDIR=$(PWD)/debian/$(PACKAGE_NAME)-plugin-dbus -C src/plugins/dbus3270/ install
 
 	# Get file lists
 	find $(PWD)/debian/lib3270 -type f | sed -e "s@^$(PWD)/debian/lib3270/@/@g" > $(PWD)/debian/lib3270.install
-	find $(PWD)/debian/pw3270 -type f | sed -e "s@^$(PWD)/debian/pw3270/@/@g" > $(PWD)/debian/pw3270.install
-	find $(PWD)/debian/pw3270-plugin-dbus -type f | sed -e "s@^$(PWD)/debian/pw3270-plugin-dbus/@/@g" > $(PWD)/debian/pw3270-plugin-dbus.install
+	find $(PWD)/debian/$(PACKAGE_NAME) -type f | sed -e "s@^$(PWD)/debian/$(PACKAGE_NAME)/@/@g" > $(PWD)/debian/$(PACKAGE_NAME).install
+	find $(PWD)/debian/$(PACKAGE_NAME)-plugin-dbus -type f | sed -e "s@^$(PWD)/debian/$(PACKAGE_NAME)-plugin-dbus/@/@g" > $(PWD)/debian/$(PACKAGE_NAME)-plugin-dbus.install
 	find $(PWD)/debian/lib3270-dev -type f | sed -e "s@^$(PWD)/debian/lib3270-dev/@/@g" > $(PWD)/debian/lib3270-dev.install
-	find $(PWD)/debian/pw3270-dev -type f | sed -e "s@^$(PWD)/debian/pw3270-dev/@/@g" > $(PWD)/debian/pw3270-dev.install
+	find $(PWD)/debian/$(PACKAGE_NAME)-dev -type f | sed -e "s@^$(PWD)/debian/$(PACKAGE_NAME)-dev/@/@g" > $(PWD)/debian/$(PACKAGE_NAME)-dev.install
 	# --- end custom part for installing
 
 # Build architecture-independent files here.
