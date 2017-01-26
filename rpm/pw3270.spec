@@ -65,7 +65,7 @@ BuildRequires:  dbus-devel
 BuildRequires:  dbus-glib-devel
 BuildRequires:  openssl-devel
 BuildRequires:  gtk3-devel
-BuildRequires:  librsvg2
+BuildRequires:  librsvg2-tools
 
 %endif
 
@@ -79,7 +79,7 @@ BuildRequires:  pkgconfig(dbus-1)
 BuildRequires:  pkgconfig(dbus-glib-1)
 BuildRequires:  pkgconfig(openssl)
 BuildRequires:  pkgconfig(gtk+-3.0)
-BuildRequires:  librsvg2
+BuildRequires:  librsvg2-tools
 
 %endif
 
@@ -93,7 +93,7 @@ BuildRequires:  pkgconfig(dbus-1)
 BuildRequires:  pkgconfig(dbus-glib-1)
 BuildRequires:  pkgconfig(openssl)
 BuildRequires:  pkgconfig(gtk+-3.0)
-BuildRequires:  librsvg2
+BuildRequires:  librsvg2-tools
 
 %endif
 
