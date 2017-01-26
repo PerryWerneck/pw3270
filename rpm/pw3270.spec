@@ -64,6 +64,7 @@ BuildRequires:  dbus-devel
 BuildRequires:  dbus-glib-devel
 BuildRequires:  openssl-devel
 BuildRequires:  gtk3-devel
+BuildRequires:  librsvg2
 
 %endif
 
@@ -77,6 +78,7 @@ BuildRequires:  pkgconfig(dbus-1)
 BuildRequires:  pkgconfig(dbus-glib-1)
 BuildRequires:  pkgconfig(openssl)
 BuildRequires:  pkgconfig(gtk+-3.0)
+BuildRequires:  librsvg2
 
 %endif
 
@@ -90,6 +92,7 @@ BuildRequires:  pkgconfig(dbus-1)
 BuildRequires:  pkgconfig(dbus-glib-1)
 BuildRequires:  pkgconfig(openssl)
 BuildRequires:  pkgconfig(gtk+-3.0)
+BuildRequires:  librsvg2
 
 %endif
 
@@ -108,6 +111,7 @@ BuildRequires:  pkgconfig(openssl)
 BuildRequires:  pkgconfig(dbus-1)
 BuildRequires:  pkgconfig(dbus-glib-1)
 BuildRequires:  pkgconfig(gtk+-3.0)
+BuildRequires:  rsvg-view
 
 %endif
 
@@ -126,7 +130,6 @@ BuildRequires:  pkgconfig
 BuildRequires:  sed
 BuildRequires:	optipng
 BuildRequires:	fdupes
-BuildRequires:  rsvg-view
 
 %description
 Open-source GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
