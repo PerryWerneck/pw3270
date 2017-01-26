@@ -109,10 +109,7 @@ binary-arch: build install
 	dh_makeshlibs
 	dh_installdeb
 #	dh_perl
-
-	cat debian/pw3270/DEBIAN/shlibs
 	dh_shlibdeps
-
 	dh_gencontrol
 	dh_md5sums
 	dh_builddeb
