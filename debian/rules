@@ -89,7 +89,7 @@ binary-arch: build install
 	dh_testdir
 	dh_testroot
 #	dh_installdebconf
-	dh_installdocs
+	dh_installdocs AUTHORS LICENSE
 	dh_installexamples
 	dh_installmenu
 #	dh_installlogrotate
@@ -103,13 +103,16 @@ binary-arch: build install
 #	dh_undocumented
 	dh_installchangelogs
 	dh_link
-	dh_strip
+	dh_strip --dbg-package=pw3270-dbg
 	dh_compress
 	dh_fixperms
-#	dh_makeshlibs
+	dh_makeshlibs
 	dh_installdeb
 #	dh_perl
+
+	cat debian/pw3270/DEBIAN/shlibs
 	dh_shlibdeps
+
 	dh_gencontrol
 	dh_md5sums
 	dh_builddeb
