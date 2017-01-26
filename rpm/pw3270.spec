@@ -21,9 +21,10 @@
 %define MAJOR_VERSION 5
 %define MINOR_VERSION 1
 
+%define _libvrs %{MAJOR_VERSION}_%{MINOR_VERSION}
+
 #---[ Selected modules ]----------------------------------------------------------------------------------------------
 
-%define _libvrs		%{MAJOR_VERSION}_%{MINOR_VERSION}
 %define _dbus     	1
 
 #---[ Packaging ]-----------------------------------------------------------------------------------------------------
