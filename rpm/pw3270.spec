@@ -104,9 +104,7 @@ BuildRequires:  pkgconfig(gtk+-3.0)
 	%define _distro suse%{suse_version}
 %endif
 
-BuildRequires:  libopenssl-devel
-BuildRequires:  rsvg-view
-
+BuildRequires:  pkgconfig(openssl)
 BuildRequires:  pkgconfig(dbus-1)
 BuildRequires:  pkgconfig(dbus-glib-1)
 BuildRequires:  pkgconfig(gtk+-3.0)
@@ -128,6 +126,7 @@ BuildRequires:  pkgconfig
 BuildRequires:  sed
 BuildRequires:	optipng
 BuildRequires:	fdupes
+BuildRequires:  rsvg-view
 
 %description
 Open-source GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
