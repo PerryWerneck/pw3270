@@ -21,7 +21,7 @@ Description: pw3270 shared libraries.
 Package: lib3270-dev
 Architecture: any
 Section: libdevel
-Depends: ${misc:Depends}, lib3270 (= ${binary:Version}), pkgconfig
+Depends: ${misc:Depends}, lib3270 (= ${binary:Version}), pkg-config
 Description: lib3270 development files.
  This package contains the files needed for development of lib3270 based applications
 
