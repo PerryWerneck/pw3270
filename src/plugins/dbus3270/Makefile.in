@@ -64,7 +64,7 @@ INSTALL=@INSTALL@
 INSTALL_DATA=@INSTALL_DATA@
 INSTALL_PROGRAM=@INSTALL_PROGRAM@
 
-CFLAGS=@CFLAGS@ @GTK_CFLAGS@ -I$(BASEDIR)/src/include
+CFLAGS=@CFLAGS@ @GTK_CFLAGS@ @DBUS_CFLAGS@ -I$(BASEDIR)/src/include
 LIBS=@LIBS@ @GTK_LIBS@ @GLIB_LIBS@ @GDBUS_LIBS@ @LIB3270_LIBS@ @PW3270_LIBS@
 
 #---[ Rules ]----------------------------------------------------------------------------
