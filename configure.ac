@@ -90,7 +90,7 @@ case "$host" in
 		RLS_CFLAGS="-DNDEBUG=1"
 
 		CFLAGS="$CFLAGS -D_WIN32_WINNT=0x0600"
-		LIBS="$LIBS -lws2_32 -lntdll -lwtsapi32 -lintl -lcomdlg32"
+		LIBS="$LIBS -lws2_32 -lwtsapi32 -lintl -lcomdlg32"
 
 		AC_CONFIG_FILES(win/makegtkruntime.sh)
 
