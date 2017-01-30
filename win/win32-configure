@@ -1,0 +1,37 @@
+#!/bin/bash
+
+export HOST_CC=/usr/bin/gcc
+export cache=win32.cache
+
+OPT=$@
+
+OFFICE=$(grep -c 'AC_ARG_ENABLE(\[office' configure.ac)
+
+if [ "$OFFICE" != "0" ]; then
+	OPT="$OPT --disable-office"
+fi
+
+if [ -d ~/win32/jdk ]; then
+	export JDK_HOME=$(readlink -f ~/win32/jdk)
+else
+	unset JDK_HOME
+fi
+
+if [ -d ~/win32/jre ]; then
+	export JRE_HOME=$(readlink -f ~/win32/jre)
+else
+	unset JRE_HOME
+fi
+
+./configure --cache-file=$cache \
+			--host=i686-w64-mingw32 \
+			--prefix=/usr/i686-w64-mingw32/sys-root/mingw \
+			--libdir=/usr/i686-w64-mingw32/sys-root/mingw/lib \
+			$OPT
+
+
+status=$?
+
+rm -f "$cache"
+exit $status
+
