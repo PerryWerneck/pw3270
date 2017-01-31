@@ -70,11 +70,11 @@ SubSection "@PACKAGE@" SecMain
 		file "/oname=$INSTDIR\@PACKAGE@.exe"					"..\.bin\Release\@PACKAGE@.exe"
 		file "/oname=$INSTDIR\@PACKAGE@.ico"					"@PACKAGE@.ico"
 		file "/oname=$INSTDIR\lib3270.dll.@PACKAGE_VERSION@"	"..\.bin\Release\lib3270.dll.@PACKAGE_VERSION@"
-		file "/oname=$INSTDIR\pw3270.dll.@PACKAGE_VERSION@"		"..\.bin\Release\pw3270.dll.@PACKAGE_VERSION@"
+		file "/oname=$INSTDIR\@PACKAGE@.dll.@PACKAGE_VERSION@"	"..\.bin\Release\@PACKAGE@.dll.@PACKAGE_VERSION@"
 
 		# Configuration files
-		#file "/oname=$INSTDIR\@PACKAGE@-logo.png"	"..\src\pw3270\@PACKAGE@-logo.png"
-		#file "/oname=$INSTDIR\@PACKAGE@.png"		"..\src\pw3270\@PACKAGE@.png"
+		file "/oname=$INSTDIR\@PACKAGE@-logo.png"	"..\.bin\@PACKAGE@-logo.png"
+		file "/oname=$INSTDIR\@PACKAGE@.png"		"..\.bin\@PACKAGE@.png"
 		file "/oname=$INSTDIR\colors.conf"			"..\conf\colors.conf"
 
 		# Documentation files

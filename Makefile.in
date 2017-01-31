@@ -156,6 +156,17 @@ $(SRCDIR)/%: \
 
 	@make -C `dirname $<` $@
 
+$(BINDIR)/%.png: \
+	branding/%.svg
+
+	@$(MAKE) -C branding $@	
+
+$(BINDIR)/%.png: \
+	branding/%.png
+
+	@$(MAKE) -C branding $@	
+
+
 %.tar.bz2: \
 	%.tar
 
@@ -176,14 +187,17 @@ $(SRCDIR)/%: \
 all: \
 	$(BINRLS)/lib3270@DLLEXT@ \
 	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ \
-	$(BINRLS)/libpw3270cpp.a \
 	$(foreach PLG, $(PLUGINS), $(BINRLS)/plugins/$(PLG)@DLLEXT@) \
+	$(BINDIR)/$(PACKAGE_NAME).png \
+	$(BINDIR)/$(PACKAGE_NAME)-logo.png \
 	locale/$(PACKAGE_TARNAME).pot
 
 Release: \
 	$(BINRLS)/lib3270@DLLEXT@ \
 	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ \
 	$(foreach PLG, $(PLUGINS), $(BINRLS)/plugins/$(PLG)@DLLEXT@) \
+	$(BINDIR)/$(PACKAGE_NAME).png \
+	$(BINDIR)/$(PACKAGE_NAME)-logo.png \
 	locale/$(PACKAGE_TARNAME).pot
 
 locale/$(PACKAGE_TARNAME).pot: \
@@ -206,6 +220,7 @@ install-lib: \
 	$(DESTDIR)$(libdir)/lib3270@DLLEXT@ \
 
 install-app: \
+	install-branding \
 	$(DESTDIR)$(bindir)/$(PACKAGE_TARNAME)@EXEEXT@ \
 	locale/$(PACKAGE_TARNAME).pot
 
@@ -219,6 +234,10 @@ install-sdk:
 
 	@$(MAKE) -C sdk install
 	@$(MAKE) -C src/libpw3270cpp install
+
+install-branding:
+
+	@$(MAKE) -C branding install
 
 #---[ Debug targets ]----------------------------------------------------------
 
