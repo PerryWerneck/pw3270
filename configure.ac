@@ -93,8 +93,21 @@ case "$host" in
 		LIBS="$LIBS -lws2_32 -lwtsapi32 -lintl -lcomdlg32"
 
 		AC_CONFIG_FILES(win/makegtkruntime.sh)
+		AC_CONFIG_FILES(win/pw3270.nsi)
 
 		PLUGINS="$PLUGINS hllapi"
+
+		if test "$host_cpu" = "x86_64"; then
+			app_cv_programfiles="PROGRAMFILES64"
+			app_cv_winarch="64"
+		else
+			app_cv_programfiles="PROGRAMFILES"
+			app_cv_winarch="32"
+		fi
+
+		AC_SUBST(PROGRAMFILES,$app_cv_programfiles)
+		AC_SUBST(WINARCH,$app_cv_winarch)
+
 		;;
 
 	*-apple-*)

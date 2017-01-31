@@ -135,10 +135,6 @@ libcrypto-*.dll
 libssl-*.dll
 libharfbuzz-0.dll
 libstdc++-6.dll
-icule53.dll
-icuuc53.dll
-icudata53.dll
-libgraphite2.dll
 librsvg-*.dll
 libepoxy-*.dll
 gspawn-win*-helper-console.exe
@@ -182,15 +178,15 @@ if [ "$?" != 0 ]; then
 	exit -1
 fi
 
-if [ ! -e $GTK_PREFIX/share/glib-2.0/schemas/gschemas.compiled ]; then
-	glib-compile-schemas $GTK_PREFIX/share/glib-2.0/schemas
-fi
+#if [ ! -e $GTK_PREFIX/share/glib-2.0/schemas/gschemas.compiled ]; then
+#	glib-compile-schemas $GTK_PREFIX/share/glib-2.0/schemas
+#fi
 
-cp $GTK_PREFIX/share/glib-2.0/schemas/gschemas.compiled $TARGET_PATH/share/glib-2.0/schemas/gschemas.compiled
-if [ "$?" != 0 ]; then
-        echo "Can´t copy gshemas.compiled"
-        exit -1
-fi
+#cp $GTK_PREFIX/share/glib-2.0/schemas/gschemas.compiled $TARGET_PATH/share/glib-2.0/schemas/gschemas.compiled
+#if [ "$?" != 0 ]; then
+#        echo "Can´t copy gshemas.compiled"
+#        exit -1
+#fi
 
 # Copia Adwaita
 CopyGTK3Theme "Adwaita"
