@@ -389,6 +389,7 @@ AC_CONFIG_FILES(sdk/pw3270.pc)
 AC_CONFIG_FILES(sdk/Makefile)
 
 AC_CONFIG_FILES(Makefile)
+AC_CONFIG_FILES(versions)
 
 dnl ---------------------------------------------------------------------------
 dnl Output the generated config.status script.
