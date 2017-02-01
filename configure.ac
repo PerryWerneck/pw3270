@@ -69,6 +69,7 @@ DBG_CFLAGS="-g -fstack-check -DDEBUG=1"
 RLS_CFLAGS="-DNDEBUG=1"
 PLUGINS=""
 APP_RESOURCES=""
+APP_LDFLAGS=""
 
 dnl ---------------------------------------------------------------------------
 dnl Check for OS specifics
@@ -87,6 +88,7 @@ case "$host" in
 		DLLPREFIX=""
 		DLLEXT=".dll"
 		APP_RESOURCES="resources.rc"
+		APP_LDFLAGS="-mwindows"
 
 		DBG_CFLAGS="-DDEBUG=1"
 		RLS_CFLAGS="-DNDEBUG=1"
@@ -144,6 +146,8 @@ AC_SUBST(EXEEXT)
 AC_SUBST(DLLPREFIX)
 AC_SUBST(DLLEXT)
 AC_SUBST(APP_RESOURCES)
+AC_SUBST(APP_LDFLAGS)
+
 
 dnl ---------------------------------------------------------------------------
 dnl Check for other programs

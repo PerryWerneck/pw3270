@@ -83,6 +83,7 @@ CFLAGS=@CFLAGS@ @LIB3270_CFLAGS@ \
 
 LIBS=@LIBS@ @LIBSSL_LIBS@ @GTK_LIBS@ @LIB3270_LIBS@
 LDFLAGS=@LDFLAGS@
+APP_LDFLAGS=@APP_LDFLAGS@
 
 #---[ Rules ]----------------------------------------------------------------------------
 
@@ -134,7 +135,8 @@ $(BASEDIR)/.obj/Release/%.a: \
  
 	@$(MAKE) -C $(basename $(notdir $@)) $@
 
-$(POTDIR)/%.pot: %.c
+$(POTDIR)/%.pot: \
+	%.c
 
 	@echo $(notdir $@) ...
 	@$(MKDIR) `dirname $@`
@@ -146,6 +148,11 @@ $(POTDIR)/%.pot: %.c
 		--keyword=MSG_:2 \
 		--output=$@ \
 		$<
+
+	@touch $@
+
+$(POTDIR)/%.pot: \
+	%.rc
 
 	@touch $@
 
@@ -182,7 +189,7 @@ $(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@: \
 	$(BINRLS)/$(LIBNAME) \
 	$(foreach SRC, $(basename $(APP_SOURCES)), $(OBJRLS)/$(SRC).o)
 
-	@$(LD) -o $@ $^ -L$(BINRLS) $(LIBS) -l@PACKAGE_TARNAME@
+	@$(LD) $(APP_LDFLAGS) -o $@ $^ -L$(BINRLS) $(LIBS) -l@PACKAGE_TARNAME@
 
 $(BINRLS)/$(LIBNAME): \
 	$(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@
