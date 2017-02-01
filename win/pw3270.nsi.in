@@ -92,8 +92,8 @@ SubSection "@PACKAGE@" SecMain
 		file "/oname=$INSTDIR\ui\00default.xml" 	"..\ui\00default.xml"
 
 		# Locale files
-		#CreateDirectory "$INSTDIR\@localedir@\pt_BR\LC_MESSAGES"
-		#file "/oname=$INSTDIR\@localedir@\pt_BR\LC_MESSAGES\@PACKAGE@.mo" "..\.bin\Release\@localedir@\pt_BR\LC_MESSAGES\@PACKAGE@.mo"
+		CreateDirectory "$INSTDIR\locale\pt_BR\LC_MESSAGES"
+		file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\@PACKAGE@.mo" "..\.bin\locale\pt_BR\LC_MESSAGES\@PACKAGE@.mo"
 
 		# Save DataDir
 		SetRegView @WINARCH@

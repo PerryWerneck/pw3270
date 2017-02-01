@@ -192,6 +192,8 @@ all: \
 	$(BINDIR)/$(PACKAGE_NAME)-logo.png \
 	locale/$(PACKAGE_TARNAME).pot
 
+	@$(MAKE) -C locale all
+
 Release: \
 	$(BINRLS)/lib3270@DLLEXT@ \
 	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ \
@@ -199,6 +201,8 @@ Release: \
 	$(BINDIR)/$(PACKAGE_NAME).png \
 	$(BINDIR)/$(PACKAGE_NAME)-logo.png \
 	locale/$(PACKAGE_TARNAME).pot
+
+	@$(MAKE) -C locale all
 
 locale/$(PACKAGE_TARNAME).pot: \
 	$(POTDIR)/lib3270.pot \

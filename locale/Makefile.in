@@ -36,6 +36,9 @@ PACKAGE_NAME=@PACKAGE_NAME@
 PACKAGE_VERSION=@PACKAGE_VERSION@
 PACKAGE_TARNAME=@PACKAGE_TARNAME@
 
+BASEDIR=@BASEDIR@
+BINDIR=$(BASEDIR)/.bin/locale
+
 MKDIR=@MKDIR_P@
 MSGCAT=@MSGCAT@
 MSGFMT=@MSGFMT@
@@ -52,18 +55,24 @@ INSTALL_DATA=@INSTALL_DATA@
 	@touch $@
 	@$(MSGMERGE) --update --sort-output $@ $(PACKAGE_NAME).pot
 
-$(DESTDIR)/$(localedir)/%/LC_MESSAGES/$(PACKAGE_NAME).mo: \
+$(BINDIR)/%/LC_MESSAGES/$(PACKAGE_NAME).mo: \
 	%.po
 
 	@echo $< ...
 	@$(MKDIR) `dirname $@`
 	@$(MSGFMT) -c -v -o $@ $^
 
+$(DESTDIR)/$(localedir)/%/LC_MESSAGES/$(PACKAGE_NAME).mo: \
+	$(BINDIR)/%/LC_MESSAGES/$(PACKAGE_NAME).mo
+
+	@echo $< ...
+	@$(MKDIR) `dirname $@`
+	@echo $(INSTALL_DATA) $^ $@
 
 #---[ Targets ]--------------------------------------------------------------------------
 
 all: \
-	$(wildcard *.po)
+	$(foreach SRC, $(basename $(wildcard *.po)), $(BINDIR)/$(SRC)/LC_MESSAGES/$(PACKAGE_NAME).mo)
 
 install: \
 	$(foreach SRC, $(basename $(wildcard *.po)), $(DESTDIR)/$(localedir)/$(SRC)/LC_MESSAGES/$(PACKAGE_NAME).mo)
