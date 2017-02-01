@@ -1,0 +1,23 @@
+1 ICON @PACKAGE_NAME@.ico
+
+2 VERSIONINFO
+FILEVERSION     @PACKAGE_MAJOR_VERSION@,@PACKAGE_MINOR_VERSION@,0,0
+PRODUCTVERSION  @PACKAGE_MAJOR_VERSION@,@PACKAGE_MINOR_VERSION@,0,0
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "040904E4"
+    BEGIN
+      VALUE "FileDescription", "@PACKAGE_DESCRIPTION@"
+      VALUE "FileVersion", "@PACKAGE_VERSION@"
+      VALUE "InternalName", "@PACKAGE_NAME@"
+      VALUE "LegalCopyright", "Copyright (c) Banco do Brasil S.A."
+      VALUE "OriginalFilename", "@PACKAGE_NAME@.exe"
+      VALUE "ProductName", "@PACKAGE_NAME@"
+      VALUE "ProductVersion", "@PACKAGE_VERSION@"
+    END
+  END
+END
+
+
+

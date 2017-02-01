@@ -68,6 +68,7 @@ dnl ---------------------------------------------------------------------------
 DBG_CFLAGS="-g -fstack-check -DDEBUG=1"
 RLS_CFLAGS="-DNDEBUG=1"
 PLUGINS=""
+APP_RESOURCES=""
 
 dnl ---------------------------------------------------------------------------
 dnl Check for OS specifics
@@ -85,6 +86,7 @@ case "$host" in
 		EXEEXT=".exe"
 		DLLPREFIX=""
 		DLLEXT=".dll"
+		APP_RESOURCES="resources.rc"
 
 		DBG_CFLAGS="-DDEBUG=1"
 		RLS_CFLAGS="-DNDEBUG=1"
@@ -94,6 +96,7 @@ case "$host" in
 
 		AC_CONFIG_FILES(win/makegtkruntime.sh)
 		AC_CONFIG_FILES(win/pw3270.nsi)
+		AC_CONFIG_FILES(src/pw3270/resources.rc)
 
 		PLUGINS="$PLUGINS hllapi"
 
@@ -140,6 +143,7 @@ AC_SUBST(RLS_CFLAGS)
 AC_SUBST(EXEEXT)
 AC_SUBST(DLLPREFIX)
 AC_SUBST(DLLEXT)
+AC_SUBST(APP_RESOURCES)
 
 dnl ---------------------------------------------------------------------------
 dnl Check for other programs
@@ -168,6 +172,8 @@ AC_DEFINE_UNQUOTED(PACKAGE_MINOR_VERSION, $app_vrs_minor)
 
 AC_SUBST(PACKAGE_MAJOR_VERSION,$app_vrs_major)
 AC_SUBST(PACKAGE_MINOR_VERSION,$app_vrs_minor)
+
+AC_SUBST(PACKAGE_DESCRIPTION,"3270 Emulator for windows/gtk")
 
 dnl ---------------------------------------------------------------------------
 dnl Check for D-Bus
