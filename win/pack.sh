@@ -54,6 +54,7 @@ build()
 	export cache=${1}.cache
 
 	./configure \
+		--with-inet-ntop \
 		--host=${host} \
 		--prefix=${prefix} \
 		--libdir=${prefix}/lib
@@ -104,7 +105,7 @@ TEMPDIR=$(mktemp -d)
 ARCHS="x86_32 x86_64"
 DESTDIR=${HOME}/public_html/win
 RUNTIME=0
-COMPLETE=0
+COMPLETE=1
 
 rm -f	${myDIR}/*.exe \
 		${myDIR}/*.zip
