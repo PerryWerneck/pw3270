@@ -165,16 +165,10 @@ dnl ---------------------------------------------------------------------------
 dnl Version info
 dnl ---------------------------------------------------------------------------
 
-AC_ARG_WITH([release], [AS_HELP_STRING([--with-release], [Set release])], [ app_cv_release="$withval" ],[ app_cv_release="`date +%Y%m%d`" ])
-
-AC_DEFINE_UNQUOTED(PACKAGE_RELEASE, $app_cv_release)
-AC_SUBST(PACKAGE_RELEASE,$app_cv_release)
+AC_SUBST(PACKAGE_DESCRIPTION,"3270 Emulator for gtk")
 
 app_vrs_major=$(echo $VERSION | cut -d. -f1)
 app_vrs_minor=$(echo $VERSION | cut -d. -f2)
-
-AC_SUBST(PACKAGE_MAJOR_VERSION,$app_vrs_major)
-AC_SUBST(PACKAGE_MINOR_VERSION,$app_vrs_minor)
 
 AC_DEFINE_UNQUOTED(PACKAGE_MAJOR_VERSION, $app_vrs_major)
 AC_DEFINE_UNQUOTED(PACKAGE_MINOR_VERSION, $app_vrs_minor)
@@ -182,7 +176,18 @@ AC_DEFINE_UNQUOTED(PACKAGE_MINOR_VERSION, $app_vrs_minor)
 AC_SUBST(PACKAGE_MAJOR_VERSION,$app_vrs_major)
 AC_SUBST(PACKAGE_MINOR_VERSION,$app_vrs_minor)
 
-AC_SUBST(PACKAGE_DESCRIPTION,"3270 Emulator for windows/gtk")
+AC_ARG_WITH([release], [AS_HELP_STRING([--with-release], [Set release])], [ app_cv_release="$withval" ],[ app_cv_release="`date +%y`.`date +%m`.`date +%d`" ])
+
+app_rls_major=$(echo $app_cv_release.0.0 | cut -d. -f1)
+app_rls_minor=$(echo $app_cv_release.0.0 | cut -d. -f2)
+
+AC_DEFINE_UNQUOTED(PACKAGE_RELEASE, $app_cv_release)
+AC_DEFINE_UNQUOTED(PACKAGE_MAJOR_RELEASE, $app_rls_major)
+AC_DEFINE_UNQUOTED(PACKAGE_MINOR_RELEASE, $app_rls_minor)
+
+AC_SUBST(PACKAGE_RELEASE,$app_cv_release)
+AC_SUBST(PACKAGE_MAJOR_RELEASE,$app_rls_major)
+AC_SUBST(PACKAGE_MINOR_RELEASE,$app_rls_minor)
 
 dnl ---------------------------------------------------------------------------
 dnl Check for D-Bus
