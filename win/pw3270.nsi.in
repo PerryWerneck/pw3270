@@ -25,7 +25,7 @@ InstallDirRegKey HKLM "Software\@PACKAGE@" "InstallLocation"
 RequestExecutionLevel admin
 
 # Properties
-VIProductVersion "@PACKAGE_VERSION@.0.0"
+VIProductVersion "@PACKAGE_VERSION@.@PACKAGE_MAJOR_RELEASE@.@PACKAGE_MINOR_RELEASE@"
 VIAddVersionKey "ProductName" "@PACKAGE@"
 VIAddVersionKey "FileDescription" "@PACKAGE_DESCRIPTION@"
 VIAddVersionKey "FileVersion" "@PACKAGE_VERSION@"
