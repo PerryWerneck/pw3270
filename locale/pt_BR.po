@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-01 10:21-0200\n"
+"POT-Creation-Date: 2017-02-02 16:38-0200\n"
 "PO-Revision-Date: 2016-10-25 10:47-0200\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <perry.werneck@gmail.com>\n"
@@ -2460,14 +2460,9 @@ msgstr "Use the keys +/- from keypad to select editable fields"
 msgid "Variable"
 msgstr "Variável"
 
-#: dialog.c:515
+#: dialog.c:513 dialog.c:515
 #, fuzzy, c-format
-msgid "Version %s - Revision %08lx"
-msgstr "Versão %s - Revisão %s"
-
-#: dialog.c:513
-#, c-format
-msgid "Version %s - Revision %s"
+msgid "Version %s-%s"
 msgstr "Versão %s - Revisão %s"
 
 #: connect.c:165
@@ -3235,6 +3230,10 @@ msgstr "translator-credits"
 
 #~ msgid "Unsupported socks 4 proxy"
 #~ msgstr "Unsupported socks 4 proxy"
+
+#, fuzzy
+#~ msgid "Version %s - Revision %08lx"
+#~ msgstr "Versão %s - Revisão %s"
 
 #~ msgid "WSAEventSelect failed"
 #~ msgstr "WSAEventSelect falhou"
