@@ -190,10 +190,6 @@ Plugin exporting a DBUS object from every %{name} open session.
 
 %setup -q -n pw3270-%{version}
 
-echo "m4_define([SVN_REVISION], %{release})" > revision.m4
-echo "m4_define([SVN_URL], http://softwarepublico.gov.br/gitlab/pw3270/principal.git)" >> revision.m4
-echo "m4_define([APP_LEVEL], 0)" >> revision.m4
-
 aclocal
 autoconf
 
@@ -201,14 +197,16 @@ export CFLAGS="$RPM_OPT_FLAGS"
 export CXXFLAGS="$RPM_OPT_FLAGS"
 export FFLAGS="$RPM_OPT_FLAGS"
 
-%configure
+%configure --with-release=%{release}
+
+cat src/include/lib3270/config.h
 
 %build
 make clean
 make all
 
 %install
-%makeinstall
+%make_install
 
 %find_lang pw3270 langfiles
 

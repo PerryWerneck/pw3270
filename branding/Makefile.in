@@ -33,6 +33,7 @@ exec_prefix=@exec_prefix@
 datarootdir=@datarootdir@
 
 BASEDIR=@BASEDIR@
+SRCDIR=$(BASEDIR)/.src/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/branding
 BINDIR=$(BASEDIR)/.bin
 
 MKDIR=@MKDIR_P@
@@ -51,6 +52,11 @@ $(BINDIR)/%.png: \
 	@$(MKDIR) `dirname $@`
 	@$(SVG2PNG) $< --format=png > $@
 	@$(OPTIPNG) -o7 $@
+
+$(SRCDIR):
+
+	@$(MKDIR) $@
+	@$(INSTALL_DATA) $(PACKAGE_NAME).svg $(PACKAGE_NAME)-logo.svg *.in $@
 
 $(BINDIR)/%.png: \
 	%.png

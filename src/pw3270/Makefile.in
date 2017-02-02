@@ -244,10 +244,6 @@ $(SRCDIR): \
 	@$(MKDIR) $@
 	@$(INSTALL_DATA) *.c *.h *.in *.cbp $@
 
-	@$(MKDIR) $@/svg
-	@$(INSTALL_DATA) svg/*.svg $@/svg
-
-
 #---[ Debug Targets ]--------------------------------------------------------------------
 
 Debug: \

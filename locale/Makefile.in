@@ -67,7 +67,7 @@ $(DESTDIR)/$(localedir)/%/LC_MESSAGES/$(PACKAGE_NAME).mo: \
 
 	@echo $< ...
 	@$(MKDIR) `dirname $@`
-	@echo $(INSTALL_DATA) $^ $@
+	@$(INSTALL_DATA) $^ $@
 
 #---[ Targets ]--------------------------------------------------------------------------
 
