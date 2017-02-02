@@ -8,7 +8,6 @@ cleanup()
     #
 	cd ${myDIR}
 	rm -fr ${TEMPDIR}
-	rm -fr ${RUNTIMEDIR}
 	exit -1
 }
 
@@ -76,24 +75,47 @@ build()
 
 	rm -f ./win/*.exe
 
-	makensis ./win/pw3270.nsi
-	if [ "$?" != "0" ]; then
-		failed "Erro ao gerar instalador sem runtime"
+	mkdir -p ${DESTDIR}/${PACKAGE_NAME}/${1}
+
+	if [ "${RUNTIME}" == "1" ]; then
+
+		makensis ./win/${PACKAGE}.nsi
+		if [ "$?" != "0" ]; then
+			failed "Erro ao gerar instalador sem gtk"
+		fi
+	
+		mv -f	./win/${PACKAGE}-${PACKAGE_VERSION}-requires-gtk-${GTK_MODVERSION}-${host_cpu}.exe \
+				${DESTDIR}/${PACKAGE_NAME}/${1}
+
+		if [ "$?" != "0" ]; then
+			failed "Erro ao copiar instalador sem gtk para ${1}"
+		fi
+
 	fi
 
 	if [ "${COMPLETE}" == "1" ]; then
+
 		chmod +x ./win/makegtkruntime.sh
 		./win/makegtkruntime.sh
-		makensis -DWITHGTK ./win/pw3270.nsi
+
+		makensis -DWITHGTK ./win/${PACKAGE}.nsi
 		if [ "$?" != "0" ]; then
 			failed "Erro ao gerar instalador com runtime"
 		fi
-	fi
 
-	mkdir -p ${DESTDIR}/${PACKAGE_NAME}/${1}
-	mv -f ./win/*.exe ${DESTDIR}/${PACKAGE_NAME}/${1}
-	if [ "$?" != "0" ]; then
-		failed "Erro ao copiar pacotes de instalação"
+		mv -f	./win/${PACKAGE}-${PACKAGE_VERSION}-gtk-${GTK_MODVERSION}-${host_cpu}.exe \
+				${DESTDIR}/${PACKAGE_NAME}/${1}
+
+		if [ "$?" != "0" ]; then
+			failed "Erro ao copiar instalador completo para ${1}"
+		fi
+
+		ln -sf	${1}/${PACKAGE}-${PACKAGE_VERSION}-gtk-${GTK_MODVERSION}-${host_cpu}.exe \
+				${DESTDIR}/${PACKAGE_NAME}/${PACKAGE}-latest-${host_cpu}.exe
+
+		if [ "$?" != "0" ]; then
+			failed "Erro ao criar link para ${1}"
+		fi
 	fi
 
 	make clean
@@ -131,9 +153,11 @@ do
 
 		FULL)
 			COMPLETE=1
+			RUNTIME=1
 			;;
 
 		RT)
+			COMPLETE=0
 			RUNTIME=1
 			;;
 
@@ -169,88 +193,86 @@ fi
 
 # Gera pacotes
 for i in ${ARCHS}; do
-
 	build "${i}"
-
 done
 
-if [ "${RUNTIME}" == "1" ]; then
+#if [ "${RUNTIME}" == "1" ]; then
+#
+#	echo -e "\e]2;Baixando runtime\a"
+#
+#	mkdir -p ${TEMPDIR}/runtime
+#	cd ${TEMPDIR}/runtime
+#
+#	#
+#	# Puxo scripts de construção do GTK direto da sourceforge.
+#	#
+#	git clone http://git.code.sf.net/p/gtk3win/code .
+#	if [ "$?" != "0" ]; then
+#		echo "Erro ao baixar fontes do runtime"
+#		exit -1
+#	fi
+#
+#	for i in ${ARCHS}; do
+#
+#		echo -e "\e]2;gtk-runtime-${i}\a"
+#
+#		case ${i} in
+#		x86_32)
+#			host_cpu=i686
+#			./win32.sh
+#			if [ "$?" != "0" ]; then
+#				exit -1
+#			fi
+#			;;
+#
+#		x86_64)
+#			host_cpu=x86_64
+#			./win64.sh
+#			if [ "$?" != "0" ]; then
+#				exit -1
+#			fi
+#			;;
+#
+#		*)
+#			echo "Arquitetura desconhecida ${i}"
+#			exit -1
+#
+#		esac
+#
+#		chmod +x ./win/makeruntime.sh
+#
+#		./win/makeruntime.sh
+#		if [ "$?" != "0" ]; then
+#			exit -1
+#		fi
+#
+#		# Copia o pacote gerado
+#		FILENAME=$(find . -maxdepth 1 -name "gtk-runtime-*-${host_cpu}.exe" | head --lines 1)
+#
+#		mkdir -p ${DESTDIR}/${host_cpu}
+#
+#		mv gtk-runtime-*-${host_cpu}.exe ${DESTDIR}/${host_cpu}
+#		if [ "$?" != "0" ]; then
+#			failed "Erro ao copiar instalador"
+#		fi
+#
+#		ln -sf $(basename ${FILENAME}) "${DESTDIR}/${host_cpu}/gtk-runtime-latest-${host_cpu}.exe"
+#		if [ "$?" != "0" ]; then
+#			failed "Erro ao criar o link simbólico"
+#		fi
+#
+#	done
+#
+#fi
 
-	echo -e "\e]2;Baixando runtime\a"
-
-	#
-	# Puxo scripts de construção do GTK direto da sourceforge.
-	#
-	cd ${RUNTIMEDIR}
-	git clone http://git.code.sf.net/p/gtk3win/code .
-	if [ "$?" != "0" ]; then
-		exit -1
-	fi
-
-	for i in ${ARCHS}; do
-
-		echo -e "\e]2;gtk-runtime-${i}\a"
-
-		case ${i} in
-		x86_32)
-			host_cpu=i686
-			./win32.sh
-			if [ "$?" != "0" ]; then
-				exit -1
-			fi
-			;;
-
-		x86_64)
-			host_cpu=x86_64
-			./win64.sh
-			if [ "$?" != "0" ]; then
-				exit -1
-			fi
-			;;
-
-		*)
-			echo "Arquitetura desconhecida ${i}"
-			exit -1
-
-		esac
-
-		rm -f gtk-runtime-*-${host_cpu}.exe
-
-
-		chmod +x ./makeruntime.sh
-
-		./makeruntime.sh
-		if [ "$?" != "0" ]; then
-			exit -1
-		fi
-
-		# Copia o pacote gerado
-		FILENAME=$(find . -maxdepth 1 -name "gtk-runtime-*-${host_cpu}.exe" | head --lines 1)
-
-		mkdir -p ${DESTDIR}/${host_cpu}
-
-		mv gtk-runtime-*-${host_cpu}.exe ${DESTDIR}/${host_cpu}
-		if [ "$?" != "0" ]; then
-			failed "Erro ao copiar instalador"
-		fi
-
-		ln -sf $(basename ${FILENAME}) "${DESTDIR}/${host_cpu}/gtk-runtime-latest-${host_cpu}.exe"
-		if [ "$?" != "0" ]; then
-			failed "Erro ao criar o link simbólico"
-		fi
-
-	done
-
-fi
-
-cd $myDIR
+cd $(dirname $myDIR)
 rm -fr ${TEMPDIR}
-rm -fr ${RUNTIMEDIR}
 
 # Gera pacotes para envio ao SPB
-#zip -9 -r -j	${DESTDIR}/${PACKAGE}-latest.zip \
-#				${DESTDIR}/${PACKAGE}/x86_32/${PACKAGE_NAME}-with-gtk-latest-i686.exe \
-#				${DESTDIR}/${PACKAGE}/x86_64/${PACKAGE_NAME}-with-gtk-latest-x86_64.exe 
+zip -9 -r -j \
+		${DESTDIR}/${PACKAGE}-latest.zip \
+		$(readlink -f ${DESTDIR}/${PACKAGE}/${PACKAGE}-latest-i686.exe) \
+		$(readlink -f ${DESTDIR}/${PACKAGE}/${PACKAGE}-latest-x86_64.exe) 
 
 echo -e "\e]2;Success!\a"
 

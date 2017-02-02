@@ -3,7 +3,7 @@
 !include "FileFunc.nsh"
 
 Name "@PACKAGE@"
-Caption "@PACKAGE@ - 3270 Emulator for windows/gtk"
+Caption "@PACKAGE@ - @PACKAGE_DESCRIPTION@"
 !ifdef WITHGTK
 outfile "@PACKAGE@-@PACKAGE_VERSION@-gtk-@GTK_MODVERSION@-@host_cpu@.exe"
 !else
@@ -12,7 +12,7 @@ outfile "@PACKAGE@-@PACKAGE_VERSION@-requires-gtk-@GTK_MODVERSION@-@host_cpu@.ex
 
 XPStyle on
 
-installDir "$@PROGRAMFILES@\pw3270"
+installDir "$@PROGRAMFILES@\@PACKAGE@"
 
 #define the installer icon
 !define MUI_ICON "@PACKAGE@.ico"
@@ -27,7 +27,7 @@ RequestExecutionLevel admin
 # Properties
 VIProductVersion "@PACKAGE_VERSION@.0.0"
 VIAddVersionKey "ProductName" "@PACKAGE@"
-VIAddVersionKey "FileDescription" "3270 Emulator for windows/gtk"
+VIAddVersionKey "FileDescription" "@PACKAGE_DESCRIPTION@"
 VIAddVersionKey "FileVersion" "@PACKAGE_VERSION@"
 VIAddVersionKey "LegalCopyright" "GPL-2.0"
 
@@ -106,7 +106,7 @@ SubSection "@PACKAGE@" SecMain
 		writeUninstaller $INSTDIR\uninstall.exe
 
 		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PACKAGE@" \
-			         "DisplayName" "@PACKAGE@ - 3270 emulator for windows/gtk"
+			         "DisplayName" "@PACKAGE@ - @PACKAGE_DESCRIPTION@"
 		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PACKAGE@" \
 			         "DisplayIcon" "$INSTDIR\@PACKAGE@.ico"
 		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PACKAGE@" \

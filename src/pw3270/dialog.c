@@ -510,7 +510,7 @@
 	g_free(text);
 
 #ifdef PACKAGE_REVISION
-	text = g_strdup_printf(_("Version %s - Revision %s"),PACKAGE_VERSION,PACKAGE_REVISION);
+	text = g_strdup_printf(_("Version %s - Revision %s"),PACKAGE_VERSION,G_STRINGIFY(PACKAGE_REVISION));
 #else
 	text = g_strdup_printf(_("Version %s - Revision %08lx"),PACKAGE_VERSION,BUILD_DATE);
 #endif // PACKAGE_REVISION

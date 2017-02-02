@@ -165,6 +165,11 @@ dnl ---------------------------------------------------------------------------
 dnl Version info
 dnl ---------------------------------------------------------------------------
 
+AC_ARG_WITH([revision], [AS_HELP_STRING([--with-revision], [Set revision])], [ app_cv_revision="$withval" ],[ app_cv_revision="`date +%Y%m%d`" ])
+
+AC_DEFINE_UNQUOTED(PACKAGE_REVISION, $app_cv_revision)
+AC_SUBST(PACKAGE_REVISION,$app_cv_revision)
+
 app_vrs_major=$(echo $VERSION | cut -d. -f1)
 app_vrs_minor=$(echo $VERSION | cut -d. -f2)
 
