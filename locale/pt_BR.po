@@ -1,12 +1,12 @@
 #
-# Perry Werneck <perry.werneck@gmail.com>, 2012, 2013, 2014, 2016.
+# Perry Werneck <perry.werneck@gmail.com>, 2012, 2013, 2014, 2016, 2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-02-02 16:38-0200\n"
-"PO-Revision-Date: 2016-10-25 10:47-0200\n"
+"PO-Revision-Date: 2017-02-02 17:52-0200\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <perry.werneck@gmail.com>\n"
 "Language: pt_BR\n"
@@ -16,8 +16,8 @@ msgstr ""
 "X-Poedit-Language: Portuguese\n"
 "X-Poedit-Country: BRAZIL\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Gtranslator 2.91.6\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : (n == 2 ? 1 : 2);\n"
+"X-Generator: Gtranslator 2.91.7\n"
 
 #: window.c:329
 #, c-format
@@ -2461,9 +2461,9 @@ msgid "Variable"
 msgstr "Variável"
 
 #: dialog.c:513 dialog.c:515
-#, fuzzy, c-format
+#, c-format
 msgid "Version %s-%s"
-msgstr "Versão %s - Revisão %s"
+msgstr "Versão %s-%s"
 
 #: connect.c:165
 msgid "WSAStartup failed"
