@@ -3,6 +3,10 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
 
+version_major=@PACKAGE_MAJOR_VERSION@
+version_minor=@PACKAGE_MINOR_VERSION@
+gtk_version=@GTK_MODVERSION@
+
 Name: @PACKAGE_TARNAME@
 Description: @PACKAGE@ GTK widgets and support calls for plugin development
 Version: @PACKAGE_VERSION@

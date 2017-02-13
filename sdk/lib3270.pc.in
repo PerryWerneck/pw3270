@@ -3,6 +3,9 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
 
+version_major=@PACKAGE_MAJOR_VERSION@
+version_minor=@PACKAGE_MINOR_VERSION@
+
 Name: lib3270
 Description: TN3270E Library calls used by @PACKAGE@
 Version: @PACKAGE_VERSION@
