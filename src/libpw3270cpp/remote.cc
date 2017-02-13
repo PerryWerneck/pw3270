@@ -411,8 +411,33 @@
 	public:
 
 #if defined(HAVE_DBUS)
-		const char * makeBusName(char *buffer, size_t sz)
+		const char * makeBusName(string &name)
 		{
+			int val;
+
+			// First uses the object ID
+			val = this->sequence;
+			while(val > 0)
+			{
+				char str[] = { 'a'+(val % 25), 0 };
+				name.append(str);
+				val /= 25;
+			}
+			name.append(".");
+
+			val = (int) getpid();
+			while(val > 0)
+			{
+				char str[] = { 'a'+(val % 25), 0 };
+				name.append(str);
+				val /= 25;
+			}
+			name.append(".");
+
+			// And last, the project info
+			name.append(intf);
+
+			/*
 			size_t	  bytes = strlen(buffer);
 			char 	* ptr	= buffer;
 			int 	  val;
@@ -442,9 +467,10 @@
 			// And last, the project info
 			strncpy(ptr,intf,sz);
 
-			trace("Busname=\"%s\" sequence=%d this=%p",buffer,sequence,this);
+			*/
+			trace("Busname=\"%s\" sequence=%d this=%p",name.c_str(),sequence,this);
 
-			return buffer;
+			return name.c_str();
 
 		}
 #endif // HAVE_DBUS
@@ -608,7 +634,7 @@
 			int			  rc;
 			char		* str = strdup(session);
 			char		* ptr;
-			char		  busname[4096];
+			string		  busName;
 
 			this->sequence = (++sq) + time(0);
 
@@ -694,8 +720,8 @@
 			}
 
 
-			rc = dbus_bus_request_name(conn, makeBusName(busname,4095), DBUS_NAME_FLAG_REPLACE_EXISTING , &err);
-			trace("dbus_bus_request_name(%s) rc=%d",busname,rc);
+			rc = dbus_bus_request_name(conn, makeBusName(busName), DBUS_NAME_FLAG_REPLACE_EXISTING , &err);
+			trace("dbus_bus_request_name(%s) rc=%d",busName.c_str(),rc);
 
 			if (dbus_error_is_set(&err))
 			{
@@ -707,12 +733,12 @@
 
 			if(rc != DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER)
 			{
-				trace("%s: DBUS request for name %s failed",__FUNCTION__, busname);
+				trace("%s: DBUS request for name %s failed",__FUNCTION__, busName.c_str());
 				throw exception("DBUS request for \"%s\" failed",session);
 				return;
 			}
 
-			trace("%s: Using DBUS name %s",__FUNCTION__,busname);
+			trace("%s: Using DBUS name %s",__FUNCTION__,busName.c_str());
 
 			const char * id   = "r";
 			static const dbus_int32_t flag = 1;
@@ -746,8 +772,8 @@
 				std::cerr << e.what();
 			}
 
-			char		busname[4096];
-			makeBusName(busname,4096);
+			string busName;
+			makeBusName(busName);
 
 			free(dest);
 			free(path);
@@ -756,7 +782,7 @@
 			DBusError	err;
 
 			dbus_error_init(&err);
-			dbus_bus_release_name(conn,busname,&err);
+			dbus_bus_release_name(conn,busName.c_str(),&err);
 
 			if (dbus_error_is_set(&err))
 			{

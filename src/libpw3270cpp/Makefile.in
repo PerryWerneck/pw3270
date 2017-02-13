@@ -50,14 +50,17 @@ OBJRLS=$(OBJDIR)/Release
 
 MKDIR=@MKDIR_P@
 CC=@CXX@
+LD=@CXX@
 AR=@AR@
 XGETTEXT=@XGETTEXT@
 MSGCAT=@MSGCAT@
 INSTALL=@INSTALL@
+VALGRIND=@VALGRIND@
 INSTALL_DATA=@INSTALL_DATA@
 INSTALL_PROGRAM=@INSTALL_PROGRAM@
 
 CFLAGS=@CFLAGS@ @LIB3270_CFLAGS@ @DBUS_CFLAGS@ -Wno-deprecated-declarations @GTK_CFLAGS@ -I$(BASEDIR)/src/include/pw3270
+LIBS=@LIBS@ @DBUS_LIBS@
 
 #---[ Rules ]----------------------------------------------------------------------------
 
@@ -71,7 +74,7 @@ $(OBJDBG)/%.o: \
 	@$(MKDIR) `dirname $@`
 	@$(CC) $(CFLAGS) \
 				@DBG_CFLAGS@ \
-				-DBUILD_DATE=`date +"0x%Y%m%d"`\
+				-DBUILD_DATE=`date +"%Y%m%d"`\
 				-o $@ -c $<
 
 $(OBJRLS)/%.o: \
@@ -82,7 +85,7 @@ $(OBJRLS)/%.o: \
 	@$(MKDIR) `dirname $@`
 	@$(CC) $(CFLAGS) \
 				@RLS_CFLAGS@ \
-				-DBUILD_DATE=`date +"0x%Y%m%d"` \
+				-DBUILD_DATE=`date +"%Y%m%d"` \
 				-o $@ -c $<
 
 $(POTDIR)/%.pot: %.c
@@ -153,6 +156,28 @@ $(BASEDIR)/.obj/Debug/$(MODULE_NAME).a: \
 	@echo $@ ...
 	@$(MKDIR) `dirname $@`
 	@$(AR) rcs $@ $^
+
+$(BASEDIR)/.obj/Debug/$(MODULE_NAME)@EXEEXT@: \
+	$(OBJDBG)/testprogram.o \
+	$(BASEDIR)/.obj/Debug/$(MODULE_NAME).a
+
+	@$(LD) $(APP_LDFLAGS) -o $@ $^ $(LIBS)
+
+run: \
+	$(BASEDIR)/.obj/Debug/$(MODULE_NAME)@EXEEXT@
+
+ifeq ($(VALGRIND),no)
+	$(BASEDIR)/.obj/Debug/$(MODULE_NAME)@EXEEXT@
+else
+	@touch valgrind.suppression
+	@$(VALGRIND) \
+		--leak-check=full \
+		--track-origins=yes \
+		--gen-suppressions=all \
+		--suppressions=valgrind.suppression \
+		$(BASEDIR)/.obj/Debug/$(MODULE_NAME)@EXEEXT@
+endif
+
 
 #---[ Clean Targets]---------------------------------------------------------------------
 

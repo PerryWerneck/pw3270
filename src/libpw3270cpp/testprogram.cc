@@ -41,7 +41,8 @@
 
  	{
 		string	 s;
-		session	*session = session::start("");
+		session	*session = session::start("pw3270:a");
+	//	session	*session = session::start("");
 	// 	session	*session = session::start("new");
 
 		cout << "pw3270 version:  " << session->get_version() << endl;
