@@ -28,7 +28,7 @@ Description: lib3270 development files.
 Package: pw3270-dev
 Architecture: any
 Section: libdevel
-Depends: ${misc:Depends}, lib3270-dev (= ${binary:Version}), pw3270 (= ${binary:Version})
+Depends: ${misc:Depends}, libdbus-1-dev, lib3270-dev (= ${binary:Version}), pw3270 (= ${binary:Version})
 Description: lib3270 development files.
  This package contains the files needed for development of pw3270 extensions and plugins
 
