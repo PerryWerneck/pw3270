@@ -34,7 +34,7 @@
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
-const struct v3270ft_option ft_option[] = {
+const struct v3270ft_option ft_option[NUM_OPTIONS_WIDGETS] = {
 
 	// Transfer options
 	{

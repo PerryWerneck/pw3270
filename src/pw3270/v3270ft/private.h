@@ -69,7 +69,6 @@
 
 	};
 
-
 	struct v3270ft_type {
 		LIB3270_FT_OPTION	  opt;
 		const gchar			* name;
