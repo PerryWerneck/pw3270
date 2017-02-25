@@ -33,7 +33,8 @@
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="`pkg-config --cflags gtk+-3.0 lib3270`" />
-			<Add directory="../include" />
+			<Add directory="../../include" />
+			<Add directory="../../include/pw3270" />
 		</Compiler>
 		<Linker>
 			<Add option="`pkg-config --libs gtk+-3.0 lib3270`" />
@@ -45,25 +46,24 @@
 		<Unit filename="../include/v3270.h" />
 		<Unit filename="../include/v3270ft.h" />
 		<Unit filename="../include/v3270ftprogress.h" />
-		<Unit filename="../v3270/actions.c">
+		<Unit filename="../v3270/accessible.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="../v3270/colors.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="../v3270/cursor.c">
-			<Option compilerVar="CC" />
-		</Unit>
+		<Unit filename="../v3270/accessible.h" />
 		<Unit filename="../v3270/draw.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="../v3270/font.c">
+		<Unit filename="../v3270/hostselect.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="../v3270/hostselect.h" />
 		<Unit filename="../v3270/iocallback.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../v3270/keyboard.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../v3270/macros.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../v3270/marshal.c">
@@ -80,13 +80,13 @@
 		<Unit filename="../v3270/properties.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="../v3270/signals.c">
+		<Unit filename="../v3270/security.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="../v3270/text.c">
+		<Unit filename="../v3270/selection.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="../v3270/v3270.c">
+		<Unit filename="../v3270/widget.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="filelist.c">

@@ -38,6 +38,29 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
+static LIB3270_FT_OPTION getFlagByName(const gchar *option, const char *optval) {
+
+	LIB3270_FT_OPTION	  rc	= 0;
+	int					  f;
+	gchar				* key	= g_strconcat(option,".",optval,NULL);
+
+	for(f=0;f<NUM_OPTIONS_WIDGETS;f++) {
+
+//		debug("%u %s",f,ft_option[f].name);
+
+		if(!g_ascii_strcasecmp(key,ft_option[f].name)) {
+			rc = ft_option[f].opt;
+			debug("%s=%08lx",key,(unsigned int) rc);
+			break;
+		}
+
+	}
+
+	g_free(key);
+
+	return rc;
+}
+
 static void entry_start(GMarkupParseContext *context, const gchar *element_name, const gchar **names,const gchar **values, struct v3270ft_entry *info, GError **error) {
 
 	int f;
@@ -72,8 +95,8 @@ static void entry_start(GMarkupParseContext *context, const gchar *element_name,
 
 	} if(!g_ascii_strcasecmp(element_name,"option")) {
 
-		const gchar *option;
-		const gchar	*optval;
+		const gchar *option = NULL;
+		const gchar	*optval = NULL;
 
 		if(!g_markup_collect_attributes(
 				element_name,names,values,error,
@@ -86,43 +109,39 @@ static void entry_start(GMarkupParseContext *context, const gchar *element_name,
 
 		}
 
-		// Check for options
-		for(f=0;f<NUM_OPTIONS_WIDGETS;f++) {
+		debug("%s=%s",option,optval);
 
-			char *name	= g_strdup(ft_option[f].name);
-			char *value	= strchr(name,'.');
+		if(!g_ascii_strcasecmp(option,"recfm")) {
 
-			if(value) {
-				*(value++) = 0;
-			}
+			// Recfm, limpo todas as flags correspondentes e remonto
+			info->options &= ~(LIB3270_FT_RECORD_FORMAT_DEFAULT|LIB3270_FT_RECORD_FORMAT_FIXED|LIB3270_FT_RECORD_FORMAT_VARIABLE|LIB3270_FT_RECORD_FORMAT_UNDEFINED);	// Reseta flags
+			info->options |= getFlagByName(option,optval);
 
-			if( !g_ascii_strcasecmp(option,name)) {
+		} else if(!g_ascii_strcasecmp(option,"units")) {
 
-				if(!value) {
+			// Units, limpo todas as flags correspondentes e remonto
+			info->options &= ~(LIB3270_FT_ALLOCATION_UNITS_DEFAULT|LIB3270_FT_ALLOCATION_UNITS_TRACKS|LIB3270_FT_ALLOCATION_UNITS_CYLINDERS|LIB3270_FT_ALLOCATION_UNITS_AVBLOCK);
+			info->options |= getFlagByName(option,optval);
 
-					// Opção é boolean
+		} else {
 
-//					debug("%s=%s",option,optval);
+			for(f=0;f<NUM_OPTIONS_WIDGETS;f++) {
 
-					if( toupper(*optval) == 'Y' || toupper(*optval) == 'S' || *optval == '1') {
+				if(!g_ascii_strcasecmp(option,ft_option[f].name)) {
+
+					if(!g_ascii_strcasecmp(optval,"yes")) {
 						info->options |= ft_option[f].opt;
+					} else if(!g_ascii_strcasecmp(optval,"no")) {
+						info->options &= ~ft_option[f].opt;
+					} else {
+						g_warning("Unexpected value for %s: %s",option,optval);
 					}
-
-				} else if(!g_ascii_strcasecmp(value,optval)) {
-
-					// Opção tem valor
-//					debug("%s=%s",option,optval);
-
-					info->options |= ft_option[f].opt;
-
+					break;
 				}
 
-
-				g_free(name);
-				return;
 			}
 
-			g_free(name);
+
 		}
 
 		// Check for FT values
@@ -136,7 +155,6 @@ static void entry_start(GMarkupParseContext *context, const gchar *element_name,
 
 			}
 		}
-
 
 	}
 

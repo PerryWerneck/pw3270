@@ -30,11 +30,29 @@
 
  #include "private.h"
 
-
 /*--[ Statics ]--------------------------------------------------------------------------------------*/
 
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
+
+static const gchar * getNameByFlag(LIB3270_FT_OPTION opt, LIB3270_FT_OPTION mask) {
+
+	const gchar * rc = "Default";
+	const gchar * ptr;
+	int			  f;
+
+	opt &= mask;
+
+	for(f=0;f<NUM_OPTIONS_WIDGETS;f++) {
+
+		if(opt == ft_option[f].opt) {
+			ptr = strchr(ft_option[f].name,'.');
+			rc = ptr ? ptr+1 : ft_option[f].name;
+		}
+	}
+
+	return rc;
+}
 
  void get_item(struct v3270ft_entry *entry, GString *str) {
 
@@ -44,22 +62,31 @@
 	g_string_append_printf(str,"\t\t<file type=\"%s\" path=\"%s\"/>\n","local",entry->local);
 	g_string_append_printf(str,"\t\t<file type=\"%s\" path=\"%s\"/>\n","remote",entry->remote);
 
-	for(f=0;f<NUM_OPTIONS_WIDGETS;f++) {
+	g_string_append_printf(str,"\t\t<option name=\"%s\" value=\"%s\"/>\n",
+			"ascii", entry->options & LIB3270_FT_OPTION_ASCII ? "yes" : "no");
 
-		if( (entry->options & ft_option[f].opt) == ft_option[f].opt) {
-			char *name	= g_strdup(ft_option[f].name);
-			char *value	= strchr(name,'.');
+	g_string_append_printf(str,"\t\t<option name=\"%s\" value=\"%s\"/>\n",
+			"crlf", entry->options & LIB3270_FT_OPTION_CRLF ? "yes" : "no");
 
-			if(value)
-				*(value++) = 0;
-			else
-				value = "yes";
+	g_string_append_printf(str,"\t\t<option name=\"%s\" value=\"%s\"/>\n",
+			"append", entry->options & LIB3270_FT_OPTION_APPEND ? "yes" : "no");
 
-			g_string_append_printf(str,"\t\t<option name=\"%s\" value=\"%s\"/>\n",name,value);
+	g_string_append_printf(str,"\t\t<option name=\"%s\" value=\"%s\"/>\n",
+			"remap", entry->options & LIB3270_FT_OPTION_REMAP ? "yes" : "no");
 
-			g_free(name);
-		}
-	}
+	g_string_append_printf(str,"\t\t<option name=\"%s\" value=\"%s\"/>\n",
+			"recfm", getNameByFlag(entry->options,
+								LIB3270_FT_RECORD_FORMAT_DEFAULT
+								|LIB3270_FT_RECORD_FORMAT_FIXED
+								|LIB3270_FT_RECORD_FORMAT_VARIABLE
+								|LIB3270_FT_RECORD_FORMAT_UNDEFINED));
+
+	g_string_append_printf(str,"\t\t<option name=\"%s\" value=\"%s\"/>\n",
+			"units", getNameByFlag(entry->options,
+								LIB3270_FT_ALLOCATION_UNITS_DEFAULT
+								|LIB3270_FT_ALLOCATION_UNITS_TRACKS
+								|LIB3270_FT_ALLOCATION_UNITS_CYLINDERS
+								|LIB3270_FT_ALLOCATION_UNITS_AVBLOCK));
 
 	for(f=0;f<LIB3270_FT_VALUE_COUNT;f++) {
 		g_string_append_printf(str,"\t\t<option name=\"%s\" value=\"%u\"/>\n",ft_value[f].name,entry->value[f]);
