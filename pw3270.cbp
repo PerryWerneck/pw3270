@@ -72,16 +72,7 @@
 		<Unit filename="pw3270.spec.in" />
 		<Unit filename="src/classlib/Makefile.in" />
 		<Unit filename="src/classlib/class.mak.in" />
-		<Unit filename="src/classlib/exception.cc" />
-		<Unit filename="src/classlib/local.cc" />
-		<Unit filename="src/classlib/module.cc">
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
 		<Unit filename="src/classlib/private.h" />
-		<Unit filename="src/classlib/remote.cc" />
-		<Unit filename="src/classlib/session.cc" />
-		<Unit filename="src/classlib/testprogram.cc" />
 		<Unit filename="src/include/lib3270.h" />
 		<Unit filename="src/include/lib3270/action_table.h" />
 		<Unit filename="src/include/lib3270/actions.h" />
@@ -340,6 +331,13 @@
 		<Unit filename="src/lib3270/winversc.h" />
 		<Unit filename="src/lib3270/xioc.h" />
 		<Unit filename="src/lib3270/xl.h" />
+		<Unit filename="src/libpw3270cpp/exception.cc" />
+		<Unit filename="src/libpw3270cpp/local.cc" />
+		<Unit filename="src/libpw3270cpp/module.cc" />
+		<Unit filename="src/libpw3270cpp/private.h" />
+		<Unit filename="src/libpw3270cpp/remote.cc" />
+		<Unit filename="src/libpw3270cpp/session.cc" />
+		<Unit filename="src/libpw3270cpp/testprogram.cc" />
 		<Unit filename="src/loffice/Makefile.in" />
 		<Unit filename="src/loffice/connect.cc" />
 		<Unit filename="src/loffice/description.txt" />
