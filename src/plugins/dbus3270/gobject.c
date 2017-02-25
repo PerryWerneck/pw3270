@@ -342,7 +342,7 @@ void pw3270_dbus_get_text_at(PW3270Dbus *object, int row, int col, int len, DBus
 
  void pw3270_dbus_is_connected(PW3270Dbus *object, DBusGMethodInvocation *context)
  {
-	trace("%s object=%p context=%p",__FUNCTION__,object,context);
+	trace("%s object=%p context=%p connected=%s",__FUNCTION__,object,context, lib3270_is_connected(pw3270_dbus_get_session_handle(object)) ? "Yes" : "No");
 	dbus_g_method_return(context,lib3270_is_connected(pw3270_dbus_get_session_handle(object)));
  }
 

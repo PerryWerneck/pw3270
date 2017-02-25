@@ -48,6 +48,7 @@
 		cout << "pw3270 version:  " << session->get_version() << endl;
 		cout << "pw3270 revision: " << session->get_revision() << endl << endl;
 
+		/*
 		if(session->is_connected())
 			cout << "\tConnected to host" << endl;
 		else
@@ -60,6 +61,7 @@
 
 		s = session->get_host_charset();
 		cout << "\tHost charset:    " << s.c_str() << endl;
+		*/
 
 		cout << "Connect: " << session->connect("fandezhi.efglobe.com:23",60) << endl << endl;
 
@@ -69,6 +71,7 @@
 		cout << "\tIsReady:			" << session->is_ready() << endl;
 		cout << "\tString(3,2,14)	" << session->get_string_at(3,2,14) << endl;
 
+		session->disconnect();
 		delete session;
  	}
 

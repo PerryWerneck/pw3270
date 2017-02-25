@@ -632,7 +632,7 @@
 		}
 
 		rc = connect();
-		trace("%s: connect=%d",__FUNCTION__,rc);
+		trace("%s: connect=%d wait=%u",__FUNCTION__,rc,(unsigned int) wait);
 
 		if(!rc && wait)
 		{

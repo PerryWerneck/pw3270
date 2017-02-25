@@ -537,6 +537,7 @@ static void net_connected(H3270 *hSession, int fd, LIB3270_IO_FLAG flag, void *d
 		}
 
 		lib3270_disconnect(hSession);
+		lib3270_write_log(hSession,"connect", "%s",__FUNCTION__,strerror(ETIMEDOUT));
 		return ETIMEDOUT;
 	}
 

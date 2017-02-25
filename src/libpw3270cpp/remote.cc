@@ -915,14 +915,13 @@
 
 			while(time(0) < end)
 			{
-				static const dbus_int32_t delay = 2;
+				if(!is_connected())
+					return ENOTCONN;
 
-				int rc = query_intval("waitForReady", DBUS_TYPE_INT32, &delay, DBUS_TYPE_INVALID);
+				if(is_ready())
+					return 0;
 
-				trace("waitForReady exits with rc=%d",rc);
-
-				if(rc != ETIMEDOUT)
-					return rc;
+				sleep(1);
 			}
 
 			return ETIMEDOUT;
@@ -991,7 +990,7 @@
 			return 0;
 #elif defined(HAVE_DBUS)
 			if(wait)
-				usleep(250);
+				sleep(1);
 			return 0;
 #else
 			return -1;
