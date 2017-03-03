@@ -200,6 +200,14 @@
 
 		virtual string get_text(int baddr = 0, size_t len = 1)
 		{
+			dbus_int32_t a = (dbus_int32_t) baddr;
+			dbus_int32_t s = (dbus_int32_t) len;
+
+			return getString(	"getText",
+								DBUS_TYPE_STRING, &this->id,
+								DBUS_TYPE_INT32, &a,
+								DBUS_TYPE_INT32, &s,
+								DBUS_TYPE_INVALID);
 
 		}
 
@@ -227,7 +235,7 @@
 								DBUS_TYPE_STRING, &this->id,
 								DBUS_TYPE_INT32, &r,
 								DBUS_TYPE_INT32, &c,
-								DBUS_TYPE_STRING, str,
+								DBUS_TYPE_STRING, &str,
 								DBUS_TYPE_INVALID);
 		}
 
@@ -240,12 +248,16 @@
 								DBUS_TYPE_STRING, &this->id,
 								DBUS_TYPE_INT32, &r,
 								DBUS_TYPE_INT32, &c,
-								DBUS_TYPE_STRING, str,
+								DBUS_TYPE_STRING, &str,
 								DBUS_TYPE_INVALID);
 		}
 
 		virtual int emulate_input(const char *str)
 		{
+			return getInteger(	"input",
+								DBUS_TYPE_STRING, &this->id,
+								DBUS_TYPE_STRING, &str,
+								DBUS_TYPE_INVALID);
 
 		}
 
@@ -342,12 +354,12 @@
 
 		virtual int set_host_charset(const char *charset)
 		{
-
+			return getInteger("setHostCharset", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_STRING, &charset, DBUS_TYPE_INVALID);
 		}
 
 		virtual string get_host_charset(void)
 		{
-
+			return getString("getHostCharset", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INVALID);
 		}
 
 		virtual int connect()
@@ -384,7 +396,7 @@
 
 		virtual string get_url()
 		{
-
+			return getString("getUrl", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INVALID);
 		}
 
 		virtual int disconnect(void)
@@ -448,21 +460,38 @@
 
 		virtual int set_cursor_position(int row, int col)
 		{
+			dbus_int32_t r = (dbus_int32_t) row;
+			dbus_int32_t c = (dbus_int32_t) col;
+
+			return getInteger(	"setCursorAt",
+								DBUS_TYPE_STRING, &this->id,
+								DBUS_TYPE_INT32, &r,
+								DBUS_TYPE_INT32, &c,
+								DBUS_TYPE_INVALID);
 
 		}
 
 		virtual int set_cursor_addr(int addr)
 		{
-
+			dbus_int32_t a = (dbus_int32_t) addr;
+			return getInteger("setCursorAddr", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INT32, &addr, DBUS_TYPE_INVALID);
 		}
 
 		virtual int get_cursor_addr(void)
 		{
-
+			return getInteger("getCursorAddr", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INVALID);
 		}
 
 		virtual int set_toggle(LIB3270_TOGGLE ix, bool value)
 		{
+			dbus_int32_t i = (dbus_int32_t) ix;
+			dbus_int32_t v = (dbus_int32_t) value;
+
+			return getInteger("setToggle",
+								DBUS_TYPE_STRING, &this->id,
+								DBUS_TYPE_INT32, &i,
+								DBUS_TYPE_INT32, &v,
+								DBUS_TYPE_INVALID);
 
 		}
 
@@ -485,37 +514,42 @@
 
 		virtual int	quit(void)
 		{
-
+			return getInteger("quit",
+								DBUS_TYPE_STRING, &this->id,
+								DBUS_TYPE_INVALID);
 		}
 
 		virtual int	action(const char *name)
 		{
-
+			return getInteger("action",
+								DBUS_TYPE_STRING, &this->id,
+								DBUS_TYPE_STRING, &name,
+								DBUS_TYPE_INVALID);
 		}
 
 		virtual int erase(void)
 		{
-
+			getInteger("erase", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INVALID);
 		}
 
 		virtual int erase_eof(void)
 		{
-
+			getInteger("eraseEof", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INVALID);
 		}
 
 		virtual int erase_eol(void)
 		{
-
+			getInteger("eraseEol", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INVALID);
 		}
 
 		virtual int erase_input(void)
 		{
-
+			getInteger("eraseInput", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INVALID);
 		}
 
 		virtual int print(void)
 		{
-
+			getInteger("print", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INVALID);
 		}
 
 		virtual int get_field_start(int baddr = -1)
