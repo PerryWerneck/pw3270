@@ -180,6 +180,19 @@ static void net_connected(H3270 *hSession, int fd, LIB3270_IO_FLAG flag, void *d
  }
 #endif // WIN32
 
+ LIB3270_EXPORT int lib3270_connect_url(H3270 *hSession, const char *url, int wait)
+ {
+	CHECK_SESSION_HANDLE(hSession);
+
+	if(url && *url)
+	{
+		lib3270_set_url(hSession,url);
+	}
+
+	return lib3270_connect(hSession, wait);
+
+ }
+
  LIB3270_EXPORT int lib3270_connect_host(H3270 *hSession, const char *hostname, const char *srvc, LIB3270_OPTION opt)
  {
 	CHECK_SESSION_HANDLE(hSession);

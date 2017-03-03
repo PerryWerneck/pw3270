@@ -89,11 +89,11 @@
 		<Unit filename="src/include/lib3270/trace.h" />
 		<Unit filename="src/include/plugin.mak.in" />
 		<Unit filename="src/include/pw3270.h" />
-		<Unit filename="src/include/pw3270/class.h" />
 		<Unit filename="src/include/pw3270/hllapi.h" />
 		<Unit filename="src/include/pw3270/ipcpackets.h" />
 		<Unit filename="src/include/pw3270/plugin.h" />
 		<Unit filename="src/include/pw3270/trace.h" />
+		<Unit filename="src/include/pw3270cpp.h" />
 		<Unit filename="src/include/rules.mak.in" />
 		<Unit filename="src/java/Makefile.in">
 			<Option target="Debug" />

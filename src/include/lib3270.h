@@ -499,6 +499,18 @@
 	 */
 	LIB3270_EXPORT int lib3270_connect_host(H3270 *hSession, const char *hostname, const char *srvc, LIB3270_OPTION opt);
 
+	/**
+	 * @brief Connect by URL
+	 *
+	 * @param hSession	Session handle.
+	 * @param url		Host URL
+	 * @param wait	Seconds to wait for connection.
+	 *
+	 * @see lib3270_wait
+	 *
+	 * @return 0 for success, EAGAIN if auto-reconnect is in progress, EBUSY if connected, ENOTCONN if connection has failed, -1 on unexpected failure.
+	 */
+	LIB3270_EXPORT int lib3270_connect_url(H3270 *hSession, const char *url, int wait);
 
 	/**
 	 * Disconnect from host.
