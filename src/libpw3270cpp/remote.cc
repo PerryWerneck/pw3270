@@ -77,6 +77,8 @@
  #include <pw3270cpp.h>
  #include <lib3270/log.h>
 
+ #include "private.h"
+
 #if defined(HAVE_DBUS)
  static const char	* prefix_dest	= "br.com.bb.";
  static const char	* prefix_path	= "/br/com/bb/";
@@ -1617,7 +1619,18 @@
 
 	session	* session::create_remote(const char *session) throw (std::exception)
 	{
-		return new remote(session);
+		debug("create(%s)",session);
+
+		if(strncasecmp(session,"service://",10)) {
+			return new remote(session);
+		}
+
+#ifdef HAVE_DBUS
+		return create_service_client(session+10);
+#else
+		throw exception("Can't create session \"%s\"",session);
+#endif // HAVE_DBUS
+
 	}
 
  }

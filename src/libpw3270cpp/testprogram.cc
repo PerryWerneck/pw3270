@@ -39,11 +39,14 @@
  int main(int numpar, char *param[])
  {
 
+	try
  	{
 		string	 s;
-		session	*session = session::start("pw3270:a");
+		session	*session = session::start("service://?");
 	//	session	*session = session::start("");
 	// 	session	*session = session::start("new");
+
+		return 0;
 
 		cout << "pw3270 version:  " << session->get_version() << endl;
 		cout << "pw3270 revision: " << session->get_revision() << endl << endl;
@@ -73,6 +76,11 @@
 
 		session->disconnect();
 		delete session;
+ 	}
+ 	catch(std::exception &e) {
+
+		cerr << e.what() << endl;
+		return -1;
  	}
 
 	// Waits

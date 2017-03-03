@@ -26,7 +26,7 @@
 
 MODULE_NAME=libpw3270cpp
 
-SOURCES=session.cc exception.cc local.cc remote.cc module.cc
+SOURCES=session.cc exception.cc local.cc remote.cc service.cc module.cc
 
 #---[ Configuration values ]-------------------------------------------------------------
 
@@ -148,7 +148,7 @@ $(SRCDIR): \
 #---[ Debug Targets ]--------------------------------------------------------------------
 
 Debug: \
-	$(BASEDIR)/.obj/Debug/$(MODULE_NAME).a
+	.bin/Debug/$(MODULE_NAME)@EXEEXT@
 
 $(BASEDIR)/.obj/Debug/$(MODULE_NAME).a: \
 	$(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC).o)
@@ -157,14 +157,15 @@ $(BASEDIR)/.obj/Debug/$(MODULE_NAME).a: \
 	@$(MKDIR) `dirname $@`
 	@$(AR) rcs $@ $^
 
-$(BASEDIR)/.obj/Debug/$(MODULE_NAME)@EXEEXT@: \
+.bin/Debug/$(MODULE_NAME)@EXEEXT@: \
 	$(OBJDBG)/testprogram.o \
 	$(BASEDIR)/.obj/Debug/$(MODULE_NAME).a
 
+	@$(MKDIR) `dirname $@`
 	@$(LD) $(APP_LDFLAGS) -o $@ $^ $(LIBS)
 
 run: \
-	$(BASEDIR)/.obj/Debug/$(MODULE_NAME)@EXEEXT@
+	.bin/Debug/$(MODULE_NAME)@EXEEXT@
 
 ifeq ($(VALGRIND),no)
 	$(BASEDIR)/.obj/Debug/$(MODULE_NAME)@EXEEXT@
@@ -185,6 +186,7 @@ cleanDebug:
 
 	@rm -fr	$(BASEDIR)/.obj/Debug/$(MODULE_NAME).a \
 			$(OBJDBG)
+	@rm -fr .bin
 
 cleanRelease:
 
