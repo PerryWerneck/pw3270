@@ -817,7 +817,6 @@
 			return (LIB3270_SSL_STATE) query_intval(HLLAPI_PACKET_GET_SSL_STATE);
 		}
 
-
 		int connect(void)
 		{
 			int rc;

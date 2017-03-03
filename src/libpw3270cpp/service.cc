@@ -60,7 +60,8 @@
 		#define DBUS_INTERFACE		"br.com.bb.pw3270.service"
 
 		DBusConnection	* conn;
-		string 			  id;
+		string 			  name;
+		const char		* id;
 
 		DBusMessage * createMessage(const char *method)
 		{
@@ -184,6 +185,17 @@
 			return getInteger(call(msg));
 		}
 
+		string getString(const char *method, int first_arg_type, ...)
+		{
+			va_list 	  var_args;
+			DBusMessage * msg = createMessage(method);
+
+			va_start(var_args, first_arg_type);
+			dbus_message_append_args_valist(msg,first_arg_type,var_args);
+			va_end(var_args);
+
+			return getString(call(msg));
+		}
 
 	protected:
 
@@ -194,17 +206,43 @@
 
 		virtual string get_text_at(int row, int col, size_t sz)
 		{
+			dbus_int32_t r = (dbus_int32_t) row;
+			dbus_int32_t c = (dbus_int32_t) col;
+			dbus_int32_t s = (dbus_int32_t) sz;
+
+			return getString(	"getTextAt",
+								DBUS_TYPE_STRING, this->id,
+								DBUS_TYPE_INT32, &r,
+								DBUS_TYPE_INT32, &c,
+								DBUS_TYPE_INT32, &s,
+								DBUS_TYPE_INVALID);
 
 		}
 
 		virtual int set_text_at(int row, int col, const char *str)
 		{
+			dbus_int32_t r = (dbus_int32_t) row;
+			dbus_int32_t c = (dbus_int32_t) col;
 
+			return getInteger(	"setTextAt",
+								DBUS_TYPE_STRING, this->id,
+								DBUS_TYPE_INT32, &r,
+								DBUS_TYPE_INT32, &c,
+								DBUS_TYPE_STRING, str,
+								DBUS_TYPE_INVALID);
 		}
 
-		virtual int cmp_text_at(int row, int col, const char *text)
+		virtual int cmp_text_at(int row, int col, const char *str)
 		{
+			dbus_int32_t r = (dbus_int32_t) row;
+			dbus_int32_t c = (dbus_int32_t) col;
 
+			return getInteger(	"cmpTextAt",
+								DBUS_TYPE_STRING, this->id,
+								DBUS_TYPE_INT32, &r,
+								DBUS_TYPE_INT32, &c,
+								DBUS_TYPE_STRING, str,
+								DBUS_TYPE_INVALID);
 		}
 
 		virtual int emulate_input(const char *str)
@@ -235,16 +273,17 @@
 			if(*session != '?')
 			{
 				// Já tem sessão definida, usa.
-				this->id = session;
+				this->name = session;
 			}
 			else
 			{
 				// Obter um ID de sessão no serviço
-				this->id = getString("createSession");
+				this->name = getString("createSession");
 			}
 
-			trace("Session=%s",this->id.c_str());
+			trace("Session=%s",this->name.c_str());
 
+			this->id = this->name.c_str();
 		}
 
 		virtual ~client()
@@ -254,48 +293,48 @@
 
 		virtual bool is_connected(void)
 		{
-			return getInteger("isConnected", DBUS_TYPE_STRING, this->id.c_str(), DBUS_TYPE_INVALID);
+			return getInteger("isConnected", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INVALID);
 		}
 
 		virtual bool is_ready(void)
 		{
-			return getInteger("isReady", DBUS_TYPE_STRING, this->id.c_str(), DBUS_TYPE_INVALID);
+			return getInteger("isReady", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INVALID);
 		}
 
 		virtual LIB3270_CSTATE get_cstate(void)
 		{
-			return (LIB3270_CSTATE) getInteger("getConnectionState", DBUS_TYPE_STRING, this->id.c_str(), DBUS_TYPE_INVALID);
+			return (LIB3270_CSTATE) getInteger("getConnectionState", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INVALID);
 		}
 
 		virtual LIB3270_MESSAGE get_program_message(void)
 		{
-			return (LIB3270_MESSAGE) getInteger("getProgramMessage", DBUS_TYPE_STRING, this->id.c_str(), DBUS_TYPE_INVALID);
+			return (LIB3270_MESSAGE) getInteger("getProgramMessage", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INVALID);
 		}
 
 		virtual LIB3270_SSL_STATE get_secure(void)
 		{
-			return (LIB3270_SSL_STATE) getInteger("getSecureState", DBUS_TYPE_STRING, this->id.c_str(), DBUS_TYPE_INVALID);
+			return (LIB3270_SSL_STATE) getInteger("getSecureState", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INVALID);
 		}
 
 		virtual int get_width(void)
 		{
-			return getInteger("getScreenWidth", DBUS_TYPE_STRING, this->id.c_str(), DBUS_TYPE_INVALID);
+			return getInteger("getScreenWidth", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INVALID);
 		}
 
 		virtual int get_height(void)
 		{
-			return getInteger("getScreenHeight", DBUS_TYPE_STRING, this->id.c_str(), DBUS_TYPE_INVALID);
+			return getInteger("getScreenHeight", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INVALID);
 		}
 
 		virtual int get_length(void)
 		{
-			return getInteger("getScreenLength", DBUS_TYPE_STRING, this->id.c_str(), DBUS_TYPE_INVALID);
+			return getInteger("getScreenLength", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INVALID);
 		}
 
 		virtual void set_unlock_delay(unsigned short ms)
 		{
 			dbus_int32_t val = (dbus_int32_t) ms;
-			getInteger("setUnlockDelay", DBUS_TYPE_STRING, this->id.c_str(), DBUS_TYPE_INT32, val, DBUS_TYPE_INVALID);
+			getInteger("setUnlockDelay", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INT32, &val, DBUS_TYPE_INVALID);
 		}
 
 		virtual int set_host_charset(const char *charset)
@@ -308,14 +347,26 @@
 
 		}
 
-		virtual int connect(void)
+		virtual int connect()
 		{
-			return getInteger("connect", DBUS_TYPE_STRING, this->id.c_str(), DBUS_TYPE_STRING, "", DBUS_TYPE_INVALID);
+			return connect("",0);
+		}
+
+		virtual int connect(const char *url, time_t wait)
+		{
+			int rc = getInteger("connect", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_STRING, &url, DBUS_TYPE_INVALID);
+
+			if(!rc && wait) {
+				rc = wait_for_ready(wait);
+			}
+
+			return rc;
+
 		}
 
 		virtual int	set_url(const char *hostname)
 		{
-			return getInteger("setURL", DBUS_TYPE_STRING, this->id.c_str(), DBUS_TYPE_STRING, hostname, DBUS_TYPE_INVALID);
+			return getInteger("setURL", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_STRING, &hostname, DBUS_TYPE_INVALID);
 		}
 
 		virtual string get_url()
@@ -325,7 +376,7 @@
 
 		virtual int disconnect(void)
 		{
-			return getInteger("disconnect", DBUS_TYPE_STRING, this->id.c_str(), DBUS_TYPE_INVALID);
+			return getInteger("disconnect", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INVALID);
 		}
 
 		virtual int wait_for_ready(int seconds)
@@ -398,27 +449,29 @@
 
 		}
 
-		virtual int	 enter(void)
+		virtual int	enter(void)
+		{
+			return getInteger("enter", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INVALID);
+		}
+
+		virtual int	pfkey(int key)
+		{
+			dbus_int32_t val = (dbus_int32_t) key;
+			getInteger("pfKey", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INT32, &val, DBUS_TYPE_INVALID);
+		}
+
+		virtual int	pakey(int key)
+		{
+			dbus_int32_t val = (dbus_int32_t) key;
+			getInteger("paKey", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INT32, &val, DBUS_TYPE_INVALID);
+		}
+
+		virtual int	quit(void)
 		{
 
 		}
 
-		virtual int	 pfkey(int key)
-		{
-
-		}
-
-		virtual int	 pakey(int key)
-		{
-
-		}
-
-		virtual int	 quit(void)
-		{
-
-		}
-
-		virtual int	 action(const char *name)
+		virtual int	action(const char *name)
 		{
 
 		}

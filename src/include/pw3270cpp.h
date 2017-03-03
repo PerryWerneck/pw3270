@@ -180,8 +180,11 @@
 		virtual string			  get_display_charset(void);
 
 		// Connection & Network
-		virtual int				  connect(const char *host = "", time_t wait = 0)	= 0;
+		virtual int				  connect()											= 0;
+		virtual int				  connect(const char *url, time_t wait = 0);
 		int						  set_host(const char *host);
+		virtual int				  set_url(const char *uri)							= 0;
+		virtual string			  get_url()											= 0;
 
 		virtual int				  disconnect(void)									= 0;
 		virtual int				  wait_for_ready(int seconds)						= 0;

@@ -46,12 +46,9 @@
 	//	session	*session = session::start("");
 	// 	session	*session = session::start("new");
 
-		return 0;
-
 		cout << "pw3270 version:  " << session->get_version() << endl;
 		cout << "pw3270 revision: " << session->get_revision() << endl << endl;
 
-		/*
 		if(session->is_connected())
 			cout << "\tConnected to host" << endl;
 		else
@@ -64,7 +61,8 @@
 
 		s = session->get_host_charset();
 		cout << "\tHost charset:    " << s.c_str() << endl;
-		*/
+
+		return 0;
 
 		cout << "Connect: " << session->connect("fandezhi.efglobe.com:23",60) << endl << endl;
 

@@ -621,14 +621,13 @@
 		return set_url(host);
 	}
 
-	int session::connect(const char *host, time_t wait)
+	int session::connect(const char *url, time_t wait)
 	{
 		int rc = 0;
 
-		if(host && *host)
+		if(url && *url)
 		{
-			rc = set_url(host);
-			trace("%s: set_url(%s) = %d",__FUNCTION__,host,rc);
+			set_url(url);
 		}
 
 		rc = connect();
@@ -636,16 +635,7 @@
 
 		if(!rc && wait)
 		{
-			time_t timeout = time(0)+wait;
-			rc = ETIMEDOUT;
-
-			while(time(0) < timeout && rc == ETIMEDOUT)
-			{
-				trace("%s: Waiting",__FUNCTION__);
-				if(is_connected())
-					rc = 0;
-				iterate(true);
-			}
+			rc = wait_for_ready(wait);
 		}
 
 		return rc;

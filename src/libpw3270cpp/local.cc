@@ -127,7 +127,7 @@
 
 
 		int 				(*_disconnect)(H3270 *h);
-		int 				(*_connect)(H3270 *h,int wait);
+		int 				(*_connect)(H3270 *h, const char *url, int wait);
 		const char 			(*_set_url)(H3270 *h, const char *n);
 		const char *		(*_get_url)(H3270 *h, char *str, int len);
 		int 				(*_is_connected)(H3270 *h);
@@ -197,7 +197,7 @@
 
 				{ (void **) & _get_version,				"lib3270_get_version"				},
 				{ (void **) & _disconnect,				"lib3270_disconnect"				},
-				{ (void **) & _connect,					"lib3270_connect"					},
+				{ (void **) & _connect,					"lib3270_connect_url"				},
 				{ (void **) & _set_url,					"lib3270_set_url"					},
 				{ (void **) & _get_url,					"lib3270_get_url"					},
 				{ (void **) & _main_iterate,			"lib3270_main_iterate"				},
@@ -288,6 +288,18 @@
 			return _get_secure(hSession);
 		};
 
+		int	connect(const char *host, time_t wait = 0)	{
+			this->lock();
+			int rc = _connect(hSession,host,wait);
+			this->unlock();
+			return rc;
+		}
+
+		int connect() {
+			return connect("");
+		}
+
+		/*
 		int connect(void)
 		{
 			this->lock();
@@ -296,6 +308,7 @@
 
 			return rc;
 		}
+		*/
 
 		int set_url(const char *uri)
 		{
