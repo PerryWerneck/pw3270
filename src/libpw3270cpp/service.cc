@@ -54,14 +54,19 @@
 	class client : public session
 	{
 	private:
+
+		#define DBUS_DESTINATION	"br.com.bb.pw3270.service"
+		#define DBUS_PATH			"/br/com/bb/pw3270/service"
+		#define DBUS_INTERFACE		"br.com.bb.pw3270.service"
+
 		DBusConnection	* conn;
 		string 			  id;
 
 		DBusMessage * createMessage(const char *method)
 		{
-			DBusMessage * msg = dbus_message_new_method_call(	"br.com.bb.pw3270.service",		// Destination
-																"/br/com/bb/pw3270/service",	// Path
-																"br.com.bb.pw3270.service",		// Interface
+			DBusMessage * msg = dbus_message_new_method_call(	DBUS_DESTINATION,				// Destination
+																DBUS_PATH,						// Path
+																DBUS_INTERFACE,					// Interface
 																method);						// method
 
 			if (!msg)
@@ -129,10 +134,56 @@
 
 		}
 
+		int getInteger(DBusMessage *msg) {
+
+			if(msg)
+			{
+				DBusMessageIter iter;
+
+				if(dbus_message_iter_init(msg, &iter))
+				{
+					if(dbus_message_iter_get_arg_type(&iter) == DBUS_TYPE_INT32)
+					{
+						dbus_int32_t iSigned;
+						dbus_message_iter_get_basic(&iter, &iSigned);
+						dbus_message_unref(msg);
+						return (int) iSigned;
+					}
+
+					exception e = exception("DBUS Return type was %c, expecting %c",dbus_message_iter_get_arg_type(&iter),DBUS_TYPE_INT32);
+
+					dbus_message_unref(msg);
+					throw e;
+					return -1;
+				}
+				dbus_message_unref(msg);
+			}
+			return -1;
+
+		}
+
 		string getString(const char *method)
 		{
 			return getString(call(createMessage(method)));
 		}
+
+		int getInteger(const char *method)
+		{
+			return getInteger(call(createMessage(method)));
+		}
+
+		int getInteger(const char *method, int first_arg_type, ...)
+		{
+			va_list 	  var_args;
+			DBusMessage * msg = createMessage(method);
+
+			va_start(var_args, first_arg_type);
+			dbus_message_append_args_valist(msg,first_arg_type,var_args);
+			va_end(var_args);
+
+			return getInteger(call(msg));
+		}
+
 
 	protected:
 
@@ -203,47 +254,48 @@
 
 		virtual bool is_connected(void)
 		{
-
+			return getInteger("isConnected", DBUS_TYPE_STRING, this->id.c_str(), DBUS_TYPE_INVALID);
 		}
 
 		virtual bool is_ready(void)
 		{
-
+			return getInteger("isReady", DBUS_TYPE_STRING, this->id.c_str(), DBUS_TYPE_INVALID);
 		}
 
 		virtual LIB3270_CSTATE get_cstate(void)
 		{
-
+			return (LIB3270_CSTATE) getInteger("getConnectionState", DBUS_TYPE_STRING, this->id.c_str(), DBUS_TYPE_INVALID);
 		}
 
 		virtual LIB3270_MESSAGE get_program_message(void)
 		{
-
+			return (LIB3270_MESSAGE) getInteger("getProgramMessage", DBUS_TYPE_STRING, this->id.c_str(), DBUS_TYPE_INVALID);
 		}
 
 		virtual LIB3270_SSL_STATE get_secure(void)
 		{
-
+			return (LIB3270_SSL_STATE) getInteger("getSecureState", DBUS_TYPE_STRING, this->id.c_str(), DBUS_TYPE_INVALID);
 		}
 
 		virtual int get_width(void)
 		{
-
+			return getInteger("getScreenWidth", DBUS_TYPE_STRING, this->id.c_str(), DBUS_TYPE_INVALID);
 		}
 
 		virtual int get_height(void)
 		{
-
+			return getInteger("getScreenHeight", DBUS_TYPE_STRING, this->id.c_str(), DBUS_TYPE_INVALID);
 		}
 
 		virtual int get_length(void)
 		{
-
+			return getInteger("getScreenLength", DBUS_TYPE_STRING, this->id.c_str(), DBUS_TYPE_INVALID);
 		}
 
 		virtual void set_unlock_delay(unsigned short ms)
 		{
-
+			dbus_int32_t val = (dbus_int32_t) ms;
+			getInteger("setUnlockDelay", DBUS_TYPE_STRING, this->id.c_str(), DBUS_TYPE_INT32, val, DBUS_TYPE_INVALID);
 		}
 
 		virtual int set_host_charset(const char *charset)
@@ -258,12 +310,12 @@
 
 		virtual int connect(void)
 		{
-
+			return getInteger("connect", DBUS_TYPE_STRING, this->id.c_str(), DBUS_TYPE_STRING, "", DBUS_TYPE_INVALID);
 		}
 
 		virtual int	set_url(const char *hostname)
 		{
-
+			return getInteger("setURL", DBUS_TYPE_STRING, this->id.c_str(), DBUS_TYPE_STRING, hostname, DBUS_TYPE_INVALID);
 		}
 
 		virtual string get_url()
@@ -273,22 +325,47 @@
 
 		virtual int disconnect(void)
 		{
-
+			return getInteger("disconnect", DBUS_TYPE_STRING, this->id.c_str(), DBUS_TYPE_INVALID);
 		}
 
 		virtual int wait_for_ready(int seconds)
 		{
+			time_t end = time(0)+seconds;
 
+			while(time(0) < end)
+			{
+				if(!is_connected())
+					return ENOTCONN;
+
+				if(is_ready())
+					return 0;
+
+				usleep(500);
+			}
+
+			return ETIMEDOUT;
 		}
 
 		virtual int wait(int seconds)
 		{
 
+			time_t end = time(0)+seconds;
+
+			while(time(0) < end)
+			{
+				if(!is_connected())
+					return ENOTCONN;
+				usleep(500);
+			}
+
+			return 0;
 		}
 
-		virtual int iterate(bool wait = true)
+		virtual int iterate(bool wait)
 		{
-
+			if(wait)
+				usleep(100);
+			return 0;
 		}
 
 		virtual const char * asc2ebc(unsigned char *str, int sz = -1)

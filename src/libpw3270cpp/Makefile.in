@@ -168,7 +168,7 @@ run: \
 	.bin/Debug/$(MODULE_NAME)@EXEEXT@
 
 ifeq ($(VALGRIND),no)
-	$(BASEDIR)/.obj/Debug/$(MODULE_NAME)@EXEEXT@
+	.bin/Debug/$(MODULE_NAME)@EXEEXT@
 else
 	@touch valgrind.suppression
 	@$(VALGRIND) \
@@ -176,7 +176,7 @@ else
 		--track-origins=yes \
 		--gen-suppressions=all \
 		--suppressions=valgrind.suppression \
-		$(BASEDIR)/.obj/Debug/$(MODULE_NAME)@EXEEXT@
+		.bin/Debug/$(MODULE_NAME)@EXEEXT@
 endif
 
 
