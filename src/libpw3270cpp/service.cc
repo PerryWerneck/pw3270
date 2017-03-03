@@ -88,15 +88,14 @@
 
 			if(dbus_error_is_set(&error))
 			{
-				exception e = exception("%s",error.message);
+				string msg = error.message;
 				dbus_error_free(&error);
-				throw e;
+				throw exception("%s",msg.c_str());
 			}
 
 			if(!reply)
 			{
-				exception e = exception("No reply for %s message","DBUS");
-				throw e;
+				throw exception("No reply for %s message","DBUS");
 			}
 
 			return reply;

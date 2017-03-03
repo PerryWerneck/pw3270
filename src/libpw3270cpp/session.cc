@@ -185,7 +185,7 @@
 		catch(std::exception &e)
 		{
 			unlock();
-			throw e;
+			throw exception("%s",e.what());
 		}
 
 		unlock();
