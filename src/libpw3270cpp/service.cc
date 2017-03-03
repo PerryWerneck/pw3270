@@ -155,7 +155,6 @@
 
 					dbus_message_unref(msg);
 					throw e;
-					return -1;
 				}
 				dbus_message_unref(msg);
 			}
@@ -211,7 +210,7 @@
 			dbus_int32_t s = (dbus_int32_t) sz;
 
 			return getString(	"getTextAt",
-								DBUS_TYPE_STRING, this->id,
+								DBUS_TYPE_STRING, &this->id,
 								DBUS_TYPE_INT32, &r,
 								DBUS_TYPE_INT32, &c,
 								DBUS_TYPE_INT32, &s,
@@ -225,7 +224,7 @@
 			dbus_int32_t c = (dbus_int32_t) col;
 
 			return getInteger(	"setTextAt",
-								DBUS_TYPE_STRING, this->id,
+								DBUS_TYPE_STRING, &this->id,
 								DBUS_TYPE_INT32, &r,
 								DBUS_TYPE_INT32, &c,
 								DBUS_TYPE_STRING, str,
@@ -238,7 +237,7 @@
 			dbus_int32_t c = (dbus_int32_t) col;
 
 			return getInteger(	"cmpTextAt",
-								DBUS_TYPE_STRING, this->id,
+								DBUS_TYPE_STRING, &this->id,
 								DBUS_TYPE_INT32, &r,
 								DBUS_TYPE_INT32, &c,
 								DBUS_TYPE_STRING, str,
@@ -274,6 +273,10 @@
 			{
 				// Já tem sessão definida, usa.
 				this->name = session;
+				int rc = getInteger("chkId");
+				if(rc) {
+					throw exception("%s",strerror(rc));
+				}
 			}
 			else
 			{
@@ -356,10 +359,20 @@
 		{
 			int rc = getInteger("connect", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_STRING, &url, DBUS_TYPE_INVALID);
 
+			debug("connect rc=%d (%s)",rc,strerror(rc));;
+
 			if(!rc && wait) {
-				rc = wait_for_ready(wait);
+				time_t end = time(0) + wait;
+				while(!is_connected()) {
+					if(time(0) > end) {
+						debug("%s: Timeout",__FUNCTION__);
+						return ETIMEDOUT;
+					}
+					usleep(500);
+				}
 			}
 
+			debug("connect rc=%d (%s)",rc,strerror(rc));;
 			return rc;
 
 		}
@@ -383,10 +396,13 @@
 		{
 			time_t end = time(0)+seconds;
 
+			debug("%s(%d)",__FUNCTION__,seconds);
 			while(time(0) < end)
 			{
-				if(!is_connected())
+				if(!is_connected()) {
+					debug("%s: %s",__FUNCTION__,strerror(ENOTCONN));
 					return ENOTCONN;
+				}
 
 				if(is_ready())
 					return 0;
@@ -394,6 +410,7 @@
 				usleep(500);
 			}
 
+			debug("%s: Timeout",__FUNCTION__);
 			return ETIMEDOUT;
 		}
 

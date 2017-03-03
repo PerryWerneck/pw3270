@@ -56,13 +56,11 @@
 
 		cout << "\tSession state:   " << session->get_cstate() << endl;
 
-		s = session->get_display_charset();
-		cout << "\tDisplay charset: " << s.c_str() << endl;
+		// s = session->get_display_charset();
+		// cout << "\tDisplay charset: " << s.c_str() << endl;
 
-		s = session->get_host_charset();
-		cout << "\tHost charset:    " << s.c_str() << endl;
-
-		return 0;
+		// s = session->get_host_charset();
+		// cout << "\tHost charset:    " << s.c_str() << endl;
 
 		cout << "Connect: " << session->connect("fandezhi.efglobe.com:23",60) << endl << endl;
 
