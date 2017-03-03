@@ -204,6 +204,7 @@
 		int				  		  cmp_string_at(int row, int col, const char *text);
 		int				  		  wait_for_string_at(int row, int col, const char *key, int timeout);
 		int						  input_string(const char *str);
+		string			  		  get_contents();
 
 		inline operator string() {
 			return get_string();

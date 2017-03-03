@@ -70,6 +70,8 @@
 		cout << "\tIsReady:			" << session->is_ready() << endl;
 		cout << "\tString(1,2,26)	" << session->get_string_at(1,2,26) << endl;
 
+		cout << "Conteúdo:" << endl << session->get_contents() << endl;
+
 		session->disconnect();
 		delete session;
  	}

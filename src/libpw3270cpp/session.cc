@@ -686,6 +686,20 @@
 		return -1;
 	}
 
+	string session::get_contents()
+	{
+		string	rc = "";
+		int		rows = get_height();
+		int		cols = get_width();
+
+		for(int r = 0; r < rows; r++) {
+			rc += get_string_at(r+1,0,cols).c_str();
+			rc += "\n";
+		}
+
+		return rc;
+	}
+
 
  }
 
