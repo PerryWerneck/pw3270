@@ -28,6 +28,7 @@
  */
 
 #include <gtk/gtk.h>
+#include <config.h>
 
 #define ENABLE_NLS
 #define GETTEXT_PACKAGE PACKAGE_NAME

@@ -39,7 +39,7 @@
 #include <dbus/dbus-glib-lowlevel.h>
 #include <dbus/dbus-glib.h>
 
-#include <lib3270/config.h>
+#include <config.h>
 #include <lib3270.h>
 #include <pw3270.h>
 #include <pw3270/v3270.h>

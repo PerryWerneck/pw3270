@@ -31,7 +31,7 @@
 
 	#define PW3270_FT_H_INCLUDED 1
 	#include <pw3270.h>
-	#include <lib3270/config.h>
+	#include <config.h>
 	#include <lib3270/filetransfer.h>
 
 

@@ -30,7 +30,7 @@
  */
 
  #include <gtk/gtk.h>
- #include <lib3270/config.h>
+ #include <config.h>
  #include "../common/common.h"
  #include "parser.h"
 

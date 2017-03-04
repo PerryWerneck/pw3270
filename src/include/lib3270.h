@@ -299,8 +299,6 @@
 	extern "C" {
 #endif
 
-	#include <lib3270/config.h>
-
 	#if defined( ANDROID )
 
 		#define LIB3270_INTERNAL	extern __attribute__((visibility("hidden")))
@@ -318,14 +316,10 @@
 		#define LIB3270_INTERNAL	__hidden extern
 		#define LIB3270_EXPORT		extern
 
-	#elif defined (HAVE_GNUC_VISIBILITY)
+	#else
 
 		#define LIB3270_INTERNAL	__attribute__((visibility("hidden"))) extern
 		#define LIB3270_EXPORT		__attribute__((visibility("default"))) extern
-
-	#else
-
-		#error Unable to set visibility attribute
 
 	#endif
 

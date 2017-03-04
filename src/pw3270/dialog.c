@@ -29,7 +29,7 @@
  *
  */
 
- #include <lib3270/config.h>
+ #include <config.h>
  #include "globals.h"
  #include <v3270.h>
 

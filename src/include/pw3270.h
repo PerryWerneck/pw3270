@@ -32,7 +32,6 @@
 #ifndef PW3270_H_INCLUDED
 
  #include <gtk/gtk.h>
- #include <lib3270/config.h>
  #include <lib3270.h>
 
  #define PW3270_H_INCLUDED 1

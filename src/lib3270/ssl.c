@@ -35,7 +35,7 @@
  */
 
 
-#include <lib3270/config.h>
+#include <config.h>
 #if defined(HAVE_LIBSSL)
 	#include <openssl/ssl.h>
 	#include <openssl/err.h>

@@ -33,7 +33,7 @@
 #endif // WIN32
 
 /* Autoconf settings. */
-#include <lib3270/config.h>		/* autoconf settings */
+#include <config.h>				/* autoconf settings */
 #include <lib3270.h>			/* lib3270 API calls and defs */
 #include <lib3270/charset.h>
 #include "api.h"

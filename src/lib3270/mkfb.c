@@ -35,7 +35,7 @@
  *	file
  */
 
-#include "../include/lib3270/config.h"
+#include "../include/config.h"
 
 
 #if defined( WIN32 )

@@ -30,7 +30,6 @@
  #include <stdio.h>
  #include <pthread.h>
  #include <string.h>
- #include <lib3270/config.h>
  #include <lib3270/popup.h>
  #include <lib3270/internals.h>
  #include <lib3270/html.h>

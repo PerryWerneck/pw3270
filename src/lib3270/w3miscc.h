@@ -16,7 +16,7 @@
  *		Miscellaneous Win32 functions.
  */
 
- #include <lib3270/config.h>
+ #include <config.h>
 
  #ifndef HAVE_INET_NTOP
 	LIB3270_INTERNAL const char *inet_ntop(int af, const void *src, char *dst,socklen_t cnt);

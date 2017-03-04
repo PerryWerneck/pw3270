@@ -34,7 +34,7 @@
 	#include <windows.h>
 #endif // WIN32
 
-#include <lib3270/config.h>
+#include <config.h>
 #include <lib3270.h>
 #include <lib3270/filetransfer.h>
 #include "private.h"

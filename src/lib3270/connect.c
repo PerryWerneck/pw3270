@@ -27,6 +27,8 @@
  *
  */
 
+#include <config.h>
+
 #if defined(_WIN32)
 
 	// Compiling for WinXP or later: Expose getaddrinfo()/freeaddrinfo().

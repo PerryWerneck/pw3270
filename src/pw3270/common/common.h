@@ -34,7 +34,7 @@
  // "PW" Standards
  #include <gtk/gtk.h>
  #include <errno.h>
- #include <lib3270/config.h>
+ #include <config.h>
 
  #ifdef WIN32
 

@@ -39,7 +39,6 @@
 
  #include <exception>
  #include <errno.h>
- #include <lib3270/config.h>
  #include <lib3270.h>
  #include <lib3270/popup.h>
  #include <lib3270/filetransfer.h>

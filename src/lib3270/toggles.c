@@ -47,7 +47,7 @@
 	#include <sys/socket.h>
 #endif // !WIN32
 
-#include <lib3270/config.h>
+#include <config.h>
 #include "toggle.h"
 #include "private.h"
 

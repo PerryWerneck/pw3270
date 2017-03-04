@@ -37,7 +37,7 @@
 
 #include <stdio.h>
 #include <stdarg.h>
-#include <lib3270/config.h>
+#include <config.h>
 #include <lib3270.h>
 #include <lib3270/log.h>
 #include "api.h"
