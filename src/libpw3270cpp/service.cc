@@ -26,7 +26,7 @@
  *
  */
 
- #include <lib3270/config.h>
+ #include <config.h>
 
  #include <iostream>
  #include <stdio.h>
