@@ -31,6 +31,7 @@
 
 	#define PRIVATE_H_INCLUDED
 
+	#include <config.h>
 	#include <cstring>
 	#include <pw3270cpp.h>
 

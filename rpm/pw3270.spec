@@ -199,8 +199,6 @@ export FFLAGS="$RPM_OPT_FLAGS"
 
 %configure --with-release=%{release}
 
-cat src/include/lib3270/config.h
-
 %build
 make clean
 make all

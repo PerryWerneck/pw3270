@@ -93,7 +93,7 @@ $(SRCDIR)/sdk: \
 	@$(MKDIR) $@
 	@$(INSTALL_DATA) *.in $@
 
-	@$(INSTALL_DATA) $(BASEDIR)/src/include/lib3270/*.in $(SRCDIR)/src/include/lib3270
+	@$(INSTALL_DATA) $(BASEDIR)/src/include/*.in $(SRCDIR)/src/include
 
 
 
