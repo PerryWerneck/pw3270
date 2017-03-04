@@ -467,6 +467,7 @@
 		<Unit filename="src/pw3270/v3270/hostselect.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/pw3270/v3270/hostselect.h" />
 		<Unit filename="src/pw3270/v3270/iocallback.c">
 			<Option compilerVar="CC" />
 		</Unit>

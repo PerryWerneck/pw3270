@@ -29,7 +29,7 @@
 
 #ifndef V3270HOST_H_INCLUDED
 
- #include <lib3270/config.h>
+ #include <config.h>
  #define ENABLE_NLS
 
  #ifndef GETTEXT_PACKAGE

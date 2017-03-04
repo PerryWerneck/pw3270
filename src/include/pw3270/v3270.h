@@ -32,7 +32,6 @@
 #ifndef V3270_H_INCLUDED
 
  #include <gtk/gtk.h>
- #include <lib3270/config.h>
  #include <lib3270.h>
  #include <lib3270/popup.h>
  #include <lib3270/filetransfer.h>
