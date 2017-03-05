@@ -50,6 +50,9 @@
 		cout << "pw3270 revision: " << session->get_revision() << endl;
 		cout << "pw3270 session:  " << session->get_session_name() << endl << endl;
 
+		session->set_timeout(60);
+		session->set_autoclose(60);
+
 		if(session->is_connected())
 			cout << "\tConnected to host" << endl;
 		else
