@@ -145,6 +145,7 @@
 		static void		  set_plugin(session * (*factory)(const char *name));
 
 		virtual string	  get_session_name(void) const;
+		virtual int		  close(void);
 
 		// Log management
 		void log(const char *fmt, ...);

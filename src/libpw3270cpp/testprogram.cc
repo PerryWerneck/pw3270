@@ -74,6 +74,8 @@
 		cout << "Conteúdo:" << endl << session->get_contents() << endl;
 
 		session->disconnect();
+		session->close();
+
 		delete session;
  	}
  	catch(std::exception &e) {

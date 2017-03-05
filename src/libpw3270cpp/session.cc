@@ -706,6 +706,9 @@
 		return string();
 	}
 
+	int	session::close(void) {
+		return 0;
+	}
  }
 
 

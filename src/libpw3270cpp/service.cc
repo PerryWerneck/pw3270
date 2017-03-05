@@ -326,6 +326,11 @@
 			return getInteger("isReady", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INVALID);
 		}
 
+		virtual int	close(void)
+		{
+			return getInteger("destroySession", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INVALID);
+		}
+
 		virtual LIB3270_CSTATE get_cstate(void)
 		{
 			return (LIB3270_CSTATE) getInteger("getConnectionState", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INVALID);
