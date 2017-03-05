@@ -694,7 +694,7 @@
 
 		for(int r = 0; r < rows; r++)
 		{
-			rc += get_string_at(r+1,0,cols).c_str();
+			rc += get_string_at(r+1,1,cols).c_str();
 			rc += "\n";
 		}
 
