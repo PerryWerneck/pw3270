@@ -147,6 +147,9 @@
 		virtual string	  get_session_name(void) const;
 		virtual int		  close(void);
 
+		virtual void	  set_timeout(time_t timeout);
+		virtual void	  set_autoclose(time_t timeout);
+
 		// Log management
 		void log(const char *fmt, ...);
 		void logva(const char *fmt, va_list args);

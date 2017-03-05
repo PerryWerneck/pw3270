@@ -709,6 +709,25 @@
 	int	session::close(void) {
 		return 0;
 	}
+
+	/**
+	 * @brief Define após quantos segundos uma sessão IDLE será cancelada.
+	 *
+	 * @param timeout Nº de segundos a esperar em sessão inativa.
+	 *
+	 */
+	void session::set_timeout(time_t timeout) {
+	}
+
+	/**
+	 * @brief Define após quantos segundos uma sessão offline será cancelada.
+	 *
+	 * @param timeout Nº de segundos a esperar em sessão offline.
+	 *
+	 */
+	void session::set_autoclose(time_t timeout) {
+	}
+
  }
 
 

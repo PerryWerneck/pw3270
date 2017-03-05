@@ -331,6 +331,16 @@
 			return getInteger("destroySession", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INVALID);
 		}
 
+		void set_timeout(time_t timeout) {
+			dbus_int32_t val = (dbus_int32_t) timeout;
+			getInteger("setTimeout", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INT32, &val, DBUS_TYPE_INVALID);
+		}
+
+		void set_autoclose(time_t timeout) {
+			dbus_int32_t val = (dbus_int32_t) timeout;
+			getInteger("setAutoClose", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INT32, &val, DBUS_TYPE_INVALID);
+		}
+
 		virtual LIB3270_CSTATE get_cstate(void)
 		{
 			return (LIB3270_CSTATE) getInteger("getConnectionState", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INVALID);
