@@ -692,7 +692,8 @@
 		int		rows = get_height();
 		int		cols = get_width();
 
-		for(int r = 0; r < rows; r++) {
+		for(int r = 0; r < rows; r++)
+		{
 			rc += get_string_at(r+1,0,cols).c_str();
 			rc += "\n";
 		}
@@ -700,6 +701,10 @@
 		return rc;
 	}
 
+	string session::get_session_name(void) const
+	{
+		return string();
+	}
 
  }
 

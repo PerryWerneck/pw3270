@@ -266,7 +266,11 @@
 			DBusError err;
 
 			dbus_error_init(&err);
+#ifdef DEBUG
 			conn = dbus_bus_get(DBUS_BUS_SESSION, &err);
+#else
+			conn = dbus_bus_get(DBUS_BUS_SYSTEM, &err);
+#endif
 
 			if(dbus_error_is_set(&err))
 			{
@@ -303,6 +307,13 @@
 		virtual ~client()
 		{
 
+		}
+
+		virtual string get_session_name(void) const
+		{
+			string rc = "service://";
+			rc += this->name;
+			return rc;
 		}
 
 		virtual bool is_connected(void)

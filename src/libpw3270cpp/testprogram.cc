@@ -47,7 +47,8 @@
 	// 	session	*session = session::start("new");
 
 		cout << "pw3270 version:  " << session->get_version() << endl;
-		cout << "pw3270 revision: " << session->get_revision() << endl << endl;
+		cout << "pw3270 revision: " << session->get_revision() << endl;
+		cout << "pw3270 session:  " << session->get_session_name() << endl << endl;
 
 		if(session->is_connected())
 			cout << "\tConnected to host" << endl;

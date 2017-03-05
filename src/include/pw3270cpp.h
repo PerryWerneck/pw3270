@@ -144,6 +144,8 @@
 		static bool		  has_default(void);
 		static void		  set_plugin(session * (*factory)(const char *name));
 
+		virtual string	  get_session_name(void) const;
+
 		// Log management
 		void log(const char *fmt, ...);
 		void logva(const char *fmt, va_list args);
