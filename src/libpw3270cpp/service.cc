@@ -381,7 +381,7 @@
 		{
 			int rc = getInteger("connect", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_STRING, &url, DBUS_TYPE_INVALID);
 
-			debug("connect rc=%d (%s)",rc,strerror(rc));;
+			debug("connect(%s) rc=%d (%s)",url,rc,strerror(rc));
 
 			if(!rc && wait) {
 				time_t end = time(0) + wait;
@@ -394,7 +394,8 @@
 				}
 			}
 
-			debug("connect rc=%d (%s)",rc,strerror(rc));;
+			debug("connect(%s) rc=%d (%s)",url,rc,strerror(rc));
+
 			return rc;
 
 		}
