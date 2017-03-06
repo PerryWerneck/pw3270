@@ -291,8 +291,7 @@
 				if(rc) {
 					throw exception("%s",strerror(rc));
 				}
-				this->name = "service://";
-				this->name += session;
+				this->name = session;
 			}
 			else
 			{

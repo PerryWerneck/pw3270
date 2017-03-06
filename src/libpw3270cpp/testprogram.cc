@@ -78,14 +78,15 @@
 
 		cout << "Conteúdo:" << endl << session->get_contents() << endl;
 
-		session->disconnect();
-
 		delete session;
 
 		session = session::start(name.c_str());
 		cout << "Restored session:  " << name << endl << endl;
-		session->close();
+		cout << "\tIsConnected:		" << session->is_connected() << endl;
+		cout << "\tIsReady:			" << session->is_ready() << endl;
 
+		session->disconnect();
+		session->close();
 		delete session;
 
  	}
