@@ -287,11 +287,12 @@
 			if(*session != '?')
 			{
 				// Já tem sessão definida, usa.
-				this->name = session;
-				int rc = getInteger("chkId");
+				int rc = getInteger("chkId",DBUS_TYPE_STRING, &session, DBUS_TYPE_INVALID);
 				if(rc) {
 					throw exception("%s",strerror(rc));
 				}
+				this->name = "service://";
+				this->name += session;
 			}
 			else
 			{

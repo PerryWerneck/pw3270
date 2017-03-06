@@ -46,9 +46,11 @@
 	//	session	*session = session::start("");
 	// 	session	*session = session::start("new");
 
+		string name = session->get_session_name();
+
 		cout << "pw3270 version:  " << session->get_version() << endl;
 		cout << "pw3270 revision: " << session->get_revision() << endl;
-		cout << "pw3270 session:  " << session->get_session_name() << endl << endl;
+		cout << "pw3270 session:  " << name << endl << endl;
 
 		session->set_timeout(60);
 		session->set_autoclose(60);
@@ -77,9 +79,15 @@
 		cout << "Conteúdo:" << endl << session->get_contents() << endl;
 
 		session->disconnect();
+
+		delete session;
+
+		session = session::start(name.c_str());
+		cout << "Restored session:  " << name << endl << endl;
 		session->close();
 
 		delete session;
+
  	}
  	catch(std::exception &e) {
 
