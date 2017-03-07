@@ -22,7 +22,7 @@ run_command()
 			;;
 
 		connect)
-			dbus-send --session  --print-reply --dest=$DEST.$SESSION $BPATH $DEST.connect string:$2
+			dbus-send --session  --print-reply --dest=$DEST.$SESSION $BPATH $DEST.connect string:$2 int32:10
 			;;
 
 		disconnect)

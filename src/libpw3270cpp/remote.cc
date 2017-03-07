@@ -817,6 +817,7 @@
 			return (LIB3270_SSL_STATE) query_intval(HLLAPI_PACKET_GET_SSL_STATE);
 		}
 
+/*
 		int connect(void)
 		{
 			int rc;
@@ -843,6 +844,47 @@
 			rc = -1;
 
 #endif
+			return rc;
+
+		}
+*/
+
+		virtual int connect()
+		{
+			return connect("",0);
+		}
+
+		virtual int connect(const char *url, time_t wait)
+		{
+			debug("%s(%s,%u)",__FUNCTION__,url,(unsigned int) wait);
+
+#if defined(WIN32)
+
+			#error Reimplementar
+
+#elif defined(HAVE_DBUS)
+
+			int rc = query_intval("connect", DBUS_TYPE_STRING, &url, DBUS_TYPE_INVALID);
+
+			debug("connect(%s) rc=%d (%s)",url,rc,strerror(rc));
+
+			if(!rc && wait) {
+				time_t end = time(0) + wait;
+				while(!is_connected()) {
+					if(time(0) > end) {
+						debug("%s: Timeout",__FUNCTION__);
+						return ETIMEDOUT;
+					}
+					usleep(500);
+				}
+			}
+
+#else
+			rc = EINVAL;
+
+#endif
+			debug("connect(%s) rc=%d (%s)",url,rc,strerror(rc));
+
 			return rc;
 
 		}

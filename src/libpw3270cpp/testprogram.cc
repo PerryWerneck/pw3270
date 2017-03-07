@@ -42,9 +42,9 @@
 	try
  	{
 		string	 s;
-		session	*session = session::start("service://?");
+	//	session	*session = session::start("service://?");
 	//	session	*session = session::start("");
-	// 	session	*session = session::start("new");
+	 	session	*session = session::start("pw3270:A");
 
 		string name = session->get_session_name();
 
@@ -68,7 +68,7 @@
 		// s = session->get_host_charset();
 		// cout << "\tHost charset:    " << s.c_str() << endl;
 
-		cout << "Connect: " << session->connect("fandezhi.efglobe.com:23",60) << endl << endl;
+		cout << "Connect: " << session->connect("tn3270://fandezhi.efglobe.com:23",60) << endl << endl;
 
 		cout << "\tWaitForReady:	" << session->wait_for_ready(10) << endl;
 
@@ -80,6 +80,7 @@
 
 		delete session;
 
+		/*
 		session = session::start(name.c_str());
 		cout << "Restored session:  " << name << endl << endl;
 		cout << "\tIsConnected:		" << session->is_connected() << endl;
@@ -88,6 +89,7 @@
 		session->disconnect();
 		session->close();
 		delete session;
+		*/
 
  	}
  	catch(std::exception &e) {

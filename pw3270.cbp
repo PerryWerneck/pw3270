@@ -284,6 +284,7 @@
 		<Unit filename="src/libpw3270cpp/module.cc" />
 		<Unit filename="src/libpw3270cpp/private.h" />
 		<Unit filename="src/libpw3270cpp/remote.cc" />
+		<Unit filename="src/libpw3270cpp/service.cc" />
 		<Unit filename="src/libpw3270cpp/session.cc" />
 		<Unit filename="src/libpw3270cpp/testprogram.cc" />
 		<Unit filename="src/loffice/Makefile.in" />
