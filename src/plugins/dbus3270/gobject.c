@@ -261,7 +261,10 @@ void pw3270_dbus_set_text_at(PW3270Dbus *object, int row, int col, const gchar *
 
 	text = g_convert_with_fallback(utftext,-1,lib3270_get_display_charset(hSession),"UTF-8","?",NULL,NULL,NULL);
 
-	dbus_g_method_return(context,lib3270_set_string_at(hSession,row,col,(const unsigned char *) text));
+	int sz = lib3270_set_string_at(hSession,row,col,(const unsigned char *) text);
+
+	trace("%s returns %d",__FUNCTION__,sz);
+	dbus_g_method_return(context,sz);
 
 	g_free(text);
 }

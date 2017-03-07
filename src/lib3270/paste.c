@@ -223,7 +223,7 @@ static int set_string(H3270 *hSession, const unsigned char *str)
 
 LIB3270_EXPORT int lib3270_set_string_at(H3270 *hSession, int row, int col, const unsigned char *str)
 {
-    int rc = -1;
+    int rc = 0;
 
 	CHECK_SESSION_HANDLE(hSession);
 
@@ -241,11 +241,12 @@ LIB3270_EXPORT int lib3270_set_string_at(H3270 *hSession, int row, int col, cons
 		hSession->cbk.suspend(hSession);
 
 		hSession->cursor_addr = (row * hSession->cols) + col;
-		rc = set_string(hSession, str);
+		rc += set_string(hSession, str);
 
 		hSession->cbk.resume(hSession);
 	}
 
+	trace("%s rc=%d",__FUNCTION__,rc);
 	return rc;
 }
 
