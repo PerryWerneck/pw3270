@@ -68,7 +68,7 @@ BuildRequires:	mingw32-zlib-devel
 
 BuildRequires:	mingw32(pkg:gtk+-win32-3.0)
 
-Patch0:			force_inet_ntop.patch
+#Patch0:			force_inet_ntop.patch
 
 #---------------------------------------------------------------------------------------------------------------------
 
@@ -121,7 +121,7 @@ This package contains the development files for %{name}
 %prep
 
 %setup -q -n pw3270-%{version}
-%patch0 -p0
+#%patch0 -p0
 
 echo "m4_define([SVN_REVISION], %{release})" > revision.m4
 echo "m4_define([SVN_URL], http://softwarepublico.gov.br/gitlab/pw3270/principal.git)" >> revision.m4
