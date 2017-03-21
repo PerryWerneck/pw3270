@@ -477,12 +477,12 @@
 
 		virtual const char * asc2ebc(unsigned char *str, int sz = -1)
 		{
-
+			return str;
 		}
 
 		virtual const char * ebc2asc(unsigned char *str, int sz = -1)
 		{
-
+			return str;
 		}
 
 		virtual int set_cursor_position(int row, int col)
@@ -530,13 +530,13 @@
 		virtual int	pfkey(int key)
 		{
 			dbus_int32_t val = (dbus_int32_t) key;
-			getInteger("pfKey", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INT32, &val, DBUS_TYPE_INVALID);
+			return getInteger("pfKey", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INT32, &val, DBUS_TYPE_INVALID);
 		}
 
 		virtual int	pakey(int key)
 		{
 			dbus_int32_t val = (dbus_int32_t) key;
-			getInteger("paKey", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INT32, &val, DBUS_TYPE_INVALID);
+			return getInteger("paKey", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INT32, &val, DBUS_TYPE_INVALID);
 		}
 
 		virtual int	quit(void)
@@ -556,52 +556,52 @@
 
 		virtual int erase(void)
 		{
-			getInteger("erase", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INVALID);
+			return getInteger("erase", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INVALID);
 		}
 
 		virtual int erase_eof(void)
 		{
-			getInteger("eraseEof", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INVALID);
+			return getInteger("eraseEof", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INVALID);
 		}
 
 		virtual int erase_eol(void)
 		{
-			getInteger("eraseEol", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INVALID);
+			return getInteger("eraseEol", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INVALID);
 		}
 
 		virtual int erase_input(void)
 		{
-			getInteger("eraseInput", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INVALID);
+			return getInteger("eraseInput", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INVALID);
 		}
 
 		virtual int print(void)
 		{
-			getInteger("print", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INVALID);
+			return getInteger("print", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INVALID);
 		}
 
 		virtual int get_field_start(int baddr = -1)
 		{
-
+			return -1;
 		}
 
 		virtual int get_field_len(int baddr = -1)
 		{
-
+			return -1;
 		}
 
 		virtual int get_next_unprotected(int baddr = -1)
 		{
-
+			return -1;
 		}
 
 		virtual int get_is_protected(int baddr = -1)
 		{
-
+			return -1;
 		}
 
 		virtual int get_is_protected_at(int row, int col)
 		{
-
+			return -1;
 		}
 
 
