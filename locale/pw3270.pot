@@ -9,7 +9,7 @@ msgstr ""
 "#-#-#-#-#  lib3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-16 13:31-0200\n"
+"POT-Creation-Date: 2017-03-21 16:09-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "#-#-#-#-#  pw3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-16 13:31-0200\n"
+"POT-Creation-Date: 2017-03-21 16:09-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,8 +45,8 @@ msgstr ""
 msgid " and <b>%s</b> for %s."
 msgstr ""
 
-#: telnet.c:1059 connect.c:101 connect.c:117 connect.c:119 connect.c:572
-#: connect.c:589 ssl.c:265 ssl.c:318
+#: telnet.c:1059 connect.c:103 connect.c:119 connect.c:121 connect.c:588
+#: connect.c:605 ssl.c:265 ssl.c:318
 #, c-format
 msgid "%s"
 msgstr ""
@@ -242,7 +242,7 @@ msgstr ""
 msgid "Ack received, data flowing"
 msgstr ""
 
-#: paste.c:300
+#: paste.c:301
 msgid "Action failed"
 msgstr ""
 
@@ -336,7 +336,7 @@ msgstr ""
 msgid "Background"
 msgstr ""
 
-#: connect.c:176
+#: connect.c:178
 msgid "Bad winsock version"
 msgstr ""
 
@@ -404,7 +404,7 @@ msgstr ""
 msgid "C_onnect"
 msgstr ""
 
-#: toggles.c:317 connect.c:363 connect.c:458
+#: toggles.c:317 connect.c:378 connect.c:473
 #, c-format
 msgid "Can't %s network keep-alive"
 msgstr ""
@@ -414,12 +414,12 @@ msgstr ""
 msgid "Can't accept unnamed %s"
 msgstr ""
 
-#: connect.c:109 connect.c:394
+#: connect.c:111 connect.c:409
 #, c-format
 msgid "Can't connect to %s"
 msgstr ""
 
-#: connect.c:275 connect.c:428
+#: connect.c:290 connect.c:443
 #, c-format
 msgid "Can't connect to %s:%s"
 msgstr ""
@@ -433,7 +433,7 @@ msgstr ""
 msgid "Can't cut rectangular regions"
 msgstr ""
 
-#: connect.c:202
+#: connect.c:217
 #, c-format
 msgid "Can't determine value for environment variable \"%s\" "
 msgstr ""
@@ -529,11 +529,11 @@ msgstr ""
 msgid "Can't set lib3270 I/O handlers"
 msgstr ""
 
-#: connect.c:588
+#: connect.c:604
 msgid "Can't set socket to blocking mode."
 msgstr ""
 
-#: connect.c:588
+#: connect.c:604
 msgid "Can't set socket to non blocking mode"
 msgstr ""
 
@@ -545,7 +545,7 @@ msgstr ""
 msgid "Can't start file transfer."
 msgstr ""
 
-#: connect.c:177
+#: connect.c:179
 #, c-format
 msgid "Can't use winsock version %d.%d"
 msgstr ""
@@ -647,13 +647,13 @@ msgstr ""
 msgid "Connect on startup"
 msgstr ""
 
-#: connect.c:200 connect.c:296 connect.c:305 connect.c:367 connect.c:382
-#: connect.c:398 connect.c:412 connect.c:432 connect.c:446 connect.c:462
-#: connect.c:557
+#: connect.c:215 connect.c:311 connect.c:320 connect.c:382 connect.c:397
+#: connect.c:413 connect.c:427 connect.c:447 connect.c:461 connect.c:477
+#: connect.c:573
 msgid "Connection error"
 msgstr ""
 
-#: connect.c:114
+#: connect.c:116
 msgid "Connection failed"
 msgstr ""
 
@@ -1041,7 +1041,7 @@ msgstr ""
 msgid "Key usage does not include certificate signing"
 msgstr ""
 
-#: paste.c:302
+#: paste.c:303
 msgid "Keyboard is locked"
 msgstr ""
 
@@ -1094,7 +1094,7 @@ msgstr ""
 msgid "Mustard"
 msgstr ""
 
-#: telnet.c:347 iocalls.c:376 iocalls.c:483 connect.c:96
+#: telnet.c:347 iocalls.c:376 iocalls.c:483 connect.c:98
 msgid "Network error"
 msgstr ""
 
@@ -1102,7 +1102,7 @@ msgstr ""
 msgid "Network keep alive"
 msgstr ""
 
-#: connect.c:164 connect.c:175
+#: connect.c:166 connect.c:177
 msgid "Network startup error"
 msgstr ""
 
@@ -1583,7 +1583,7 @@ msgstr ""
 msgid "SSL Read error"
 msgstr ""
 
-#: connect.c:333
+#: connect.c:348
 msgid "SSL error"
 msgstr ""
 
@@ -1812,7 +1812,7 @@ msgstr ""
 msgid "Smart paste"
 msgstr ""
 
-#: connect.c:570 connect.c:587
+#: connect.c:586 connect.c:603
 msgid "Socket error"
 msgstr ""
 
@@ -2104,7 +2104,7 @@ msgstr ""
 msgid "This program requires GTK version %d.%d.%d"
 msgstr ""
 
-#: connect.c:335
+#: connect.c:350
 #, c-format
 msgid ""
 "This version of %s was built without support for secure sockets layer (SSL)."
@@ -2198,7 +2198,7 @@ msgstr ""
 msgid "Uknown DFT Open type from host"
 msgstr ""
 
-#: connect.c:334
+#: connect.c:349
 msgid "Unable to connect to secure hosts"
 msgstr ""
 
@@ -2214,7 +2214,7 @@ msgstr ""
 msgid "Unable to decrypt certificate's signature"
 msgstr ""
 
-#: connect.c:201
+#: connect.c:216
 msgid "Unable to find selected hostname."
 msgstr ""
 
@@ -2222,7 +2222,7 @@ msgstr ""
 msgid "Unable to get certificate CRL"
 msgstr ""
 
-#: connect.c:97
+#: connect.c:99
 msgid "Unable to get connection state."
 msgstr ""
 
@@ -2234,7 +2234,7 @@ msgstr ""
 msgid "Unable to get local issuer certificate"
 msgstr ""
 
-#: paste.c:301
+#: paste.c:302
 msgid "Unable to paste text"
 msgstr ""
 
@@ -2264,7 +2264,7 @@ msgstr ""
 msgid "Unexpected action attribute in <%s>"
 msgstr ""
 
-#: paste.c:302
+#: paste.c:303
 msgid "Unexpected error"
 msgstr ""
 
@@ -2359,7 +2359,7 @@ msgstr ""
 msgid "Version %s-%s"
 msgstr ""
 
-#: connect.c:165
+#: connect.c:167
 msgid "WSAStartup failed"
 msgstr ""
 
@@ -2598,23 +2598,23 @@ msgstr ""
 msgid "bracket"
 msgstr ""
 
-#: toggles.c:317 connect.c:363 connect.c:458
+#: toggles.c:317 connect.c:378 connect.c:473
 msgid "disable"
 msgstr ""
 
-#: toggles.c:317 connect.c:363 connect.c:458
+#: toggles.c:317 connect.c:378 connect.c:473
 msgid "enable"
 msgstr ""
 
-#: connect.c:571
+#: connect.c:587
 msgid "fcntl() error when getting socket state."
 msgstr ""
 
-#: connect.c:383 connect.c:558
+#: connect.c:398 connect.c:574
 msgid "ioctlsocket(FIONBIO) failed."
 msgstr ""
 
-#: connect.c:413 connect.c:447
+#: connect.c:428 connect.c:462
 msgid "setsockopt(SO_OOBINLINE) has failed"
 msgstr ""
 

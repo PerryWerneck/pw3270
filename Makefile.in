@@ -99,6 +99,7 @@ $(BINRLS)/%.a: \
 
 $(BINRLS)/plugins/%@DLLEXT@: \
 	$(DEPENDS) \
+	$(BINRLS)/libpw3270cpp.a \
 	./src/plugins/%/*
  
 	@$(MAKE) -C src/plugins/$(basename $(notdir $@)) $@
@@ -187,6 +188,7 @@ $(BINDIR)/%.png: \
 all: \
 	$(BINRLS)/lib3270@DLLEXT@ \
 	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ \
+	$(BINRLS)/libpw3270cpp.a \
 	$(foreach PLG, $(PLUGINS), $(BINRLS)/plugins/$(PLG)@DLLEXT@) \
 	$(BINDIR)/$(PACKAGE_NAME).png \
 	$(BINDIR)/$(PACKAGE_NAME)-logo.png \
@@ -233,6 +235,11 @@ install-app: \
 
 	@$(MAKE) -C ui install
 	@$(MAKE) -C locale install
+
+$(BINRLS)/libpw3270cpp.a: \
+	src/libpw3270cpp/*
+
+	@$(MAKE) -C src/libpw3270cpp Release
 
 install-sdk:
 
