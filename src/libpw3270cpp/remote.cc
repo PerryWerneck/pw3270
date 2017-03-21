@@ -421,7 +421,7 @@
 			val = this->sequence;
 			while(val > 0)
 			{
-				char str[] = { 'a'+(val % 25), 0 };
+				char str[] = { (char) ('a'+(val % 25)), 0 };
 				name.append(str);
 				val /= 25;
 			}

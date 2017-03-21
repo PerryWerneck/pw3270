@@ -477,12 +477,12 @@
 
 		virtual const char * asc2ebc(unsigned char *str, int sz = -1)
 		{
-			return str;
+			return (const char *) str;
 		}
 
 		virtual const char * ebc2asc(unsigned char *str, int sz = -1)
 		{
-			return str;
+			return (const char *) str;
 		}
 
 		virtual int set_cursor_position(int row, int col)
