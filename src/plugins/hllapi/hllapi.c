@@ -413,7 +413,7 @@ static int pause_system(char *buffer, unsigned short *length, unsigned short *rc
 
 	// Pause "flexivel", aguarda mudança no conteúdo da tela!!!
 
-	#warning Mudar comportamento na lib!
+	// #warning Mudar comportamento na lib!
 
 	return hllapi_wait_for_ready((*length) / 2);
 }
