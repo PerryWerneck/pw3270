@@ -856,15 +856,41 @@
 
 		virtual int connect(const char *url, time_t wait)
 		{
+			int rc = EINVAL;
+
 			debug("%s(%s,%u)",__FUNCTION__,url,(unsigned int) wait);
+
+			if(!url) {
+				url = "";
+			}
 
 #if defined(WIN32)
 
-			#error Reimplementar
+			size_t						  cbSize	= sizeof(struct hllapi_packet_query) + strlen(url) + 1;
+			struct hllapi_packet_query	* pkt		= (struct hllapi_packet_query *) malloc(cbSize);
+
+			memset(pkt,0,cbSize);
+
+			pkt->packet_id = HLLAPI_PACKET_CONNECT_URL;
+
+			strcpy(((char *) (pkt+1)), url);
+
+			rc = query_intval((void *) pkt, cbSize, true);
+
+			if(!rc && wait) {
+				time_t end = time(0) + wait;
+				while(!is_connected()) {
+					if(time(0) > end) {
+						debug("%s: Timeout",__FUNCTION__);
+						return ETIMEDOUT;
+					}
+					Sleep(500);
+				}
+			}
 
 #elif defined(HAVE_DBUS)
 
-			int rc = query_intval("connect", DBUS_TYPE_STRING, &url, DBUS_TYPE_INVALID);
+			rc = query_intval("connect", DBUS_TYPE_STRING, &url, DBUS_TYPE_INVALID);
 
 			debug("connect(%s) rc=%d (%s)",url,rc,strerror(rc));
 
@@ -878,9 +904,6 @@
 					usleep(500);
 				}
 			}
-
-#else
-			rc = EINVAL;
 
 #endif
 			debug("connect(%s) rc=%d (%s)",url,rc,strerror(rc));

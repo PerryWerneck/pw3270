@@ -33,6 +33,7 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="../include/pw3270/ipcpackets.h" />
 		<Unit filename="../include/pw3270cpp.h" />
 		<Unit filename="Makefile.in" />
 		<Unit filename="exception.cc" />

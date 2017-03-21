@@ -9,7 +9,7 @@ msgstr ""
 "#-#-#-#-#  lib3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-02 17:07-0200\n"
+"POT-Creation-Date: 2017-02-16 13:31-0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "#-#-#-#-#  pw3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-02 17:07-0200\n"
+"POT-Creation-Date: 2017-02-16 13:31-0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -442,7 +442,7 @@ msgstr ""
 msgid "Can't get file size"
 msgstr ""
 
-#: parsefile.c:328 load.c:251
+#: parsefile.c:328 load.c:269
 #, c-format
 msgid "Can't load %s"
 msgstr ""
@@ -482,7 +482,7 @@ msgstr ""
 msgid "Can't recognize \"%s\" as a valid host type"
 msgstr ""
 
-#: trace.c:208 save.c:89
+#: trace.c:208 save.c:116
 #, c-format
 msgid "Can't save %s"
 msgstr ""
@@ -1164,7 +1164,7 @@ msgstr ""
 msgid "OIA status ok"
 msgstr ""
 
-#: load.c:253 save.c:91
+#: load.c:271 save.c:118
 msgid "Operation has failed"
 msgstr ""
 

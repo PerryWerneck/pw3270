@@ -28,6 +28,8 @@
 
  #include <config.h>
 
+ #ifdef HAVE_DBUS
+
  #include <iostream>
  #include <stdio.h>
  #include <dbus/dbus.h>
@@ -46,7 +48,6 @@
 
 /*--[ Implement ]--------------------------------------------------------------------------------------------------*/
 
- #ifdef HAVE_DBUS
  namespace PW3270_NAMESPACE
  {
 	DBusConnection	* conn;

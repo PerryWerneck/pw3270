@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-02 16:38-0200\n"
+"POT-Creation-Date: 2017-02-16 13:21-0200\n"
 "PO-Revision-Date: 2017-02-15 17:08-0200\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <perry.werneck@gmail.com>\n"
@@ -437,7 +437,7 @@ msgstr "Não consigo determinar o valor da variável de ambiente \"%s\" "
 msgid "Can't get file size"
 msgstr "Não foi possível obter o tamanho do arquivo"
 
-#: parsefile.c:328 load.c:251
+#: parsefile.c:328 load.c:269
 #, c-format
 msgid "Can't load %s"
 msgstr "Não foi possível carregar %s"
@@ -477,7 +477,7 @@ msgstr "Incapaz de processar elemento sem nome"
 msgid "Can't recognize \"%s\" as a valid host type"
 msgstr "Não reconheço \"%s\" como um tipo de host válido"
 
-#: trace.c:208 save.c:89
+#: trace.c:208 save.c:116
 #, c-format
 msgid "Can't save %s"
 msgstr "Não foi possível salvar arquivo %s"
@@ -1196,7 +1196,7 @@ msgstr "Estado inválido na OIA"
 msgid "OIA status ok"
 msgstr "Estado normal na OIA"
 
-#: load.c:253 save.c:91
+#: load.c:271 save.c:118
 msgid "Operation has failed"
 msgstr "Operação falhou"
 

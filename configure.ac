@@ -346,7 +346,17 @@ AC_CHECK_FUNC(strtok_r, AC_DEFINE(HAVE_STRTOK_R) )
 AC_ARG_WITH([inet-ntop], [AS_HELP_STRING([--with-inet-ntop], [Assume that inet_nto() is available])], [ app_cv_inet_ntop="$withval" ],[ app_cv_inet_ntop="auto" ])
 
 if test "$app_cv_inet_ntop" == "auto"; then
-	AC_CHECK_FUNC(inet_ntop, app_cv_inet_ntop="yes" )
+
+	case "$host" in
+	*-mingw32)
+		app_cv_inet_ntop="yes"
+		;;
+
+	*)
+		AC_CHECK_FUNC(inet_ntop, app_cv_inet_ntop="yes" )
+
+	esac
+
 fi
 
 if test "$app_cv_inet_ntop" == "yes"; then

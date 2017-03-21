@@ -34,7 +34,9 @@
  #include "server.h"
 
 #ifdef _WIN32
- #include <windows.h>
+	#include <windows.h>
+#else
+	#error HLLAPI is designed for windows.
 #endif // _WIN32
 
  #include <pw3270/plugin.h>
@@ -211,14 +213,19 @@
 
  static void process_input(pipe_source *source, DWORD cbRead)
  {
+	const struct hllapi_packet_query * query = ((struct hllapi_packet_query *) source->buffer);
 
- 	trace("%s id=%d",__FUNCTION__,((struct hllapi_packet_query *) source->buffer)->packet_id);
+ 	trace("%s id=%d",__FUNCTION__,query->packet_id);
 
-	switch(((struct hllapi_packet_query *) source->buffer)->packet_id)
+	switch(query->packet_id)
 	{
 	case HLLAPI_PACKET_CONNECT:
 		send_result(source,lib3270_connect(	lib3270_get_default_session_handle(),
 											((struct hllapi_packet_connect *) source->buffer)->wait));
+		break;
+
+	case HLLAPI_PACKET_CONNECT_URL:
+		send_result(source,lib3270_connect_url(lib3270_get_default_session_handle(),(const char *) (query+1),0));
 		break;
 
 	case HLLAPI_PACKET_SET_HOST:
