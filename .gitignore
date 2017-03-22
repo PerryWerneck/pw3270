@@ -27,6 +27,7 @@ aclocal.m4
 configure
 autom4te.cache
 makegtkruntime.sh
+copydeps.sh
 revision
 revision.m4
 stamp-h1

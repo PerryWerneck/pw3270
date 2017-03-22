@@ -97,6 +97,7 @@ case "$host" in
 		LIBS="$LIBS -lws2_32 -lwtsapi32 -lintl -lcomdlg32"
 
 		AC_CONFIG_FILES(win/makegtkruntime.sh)
+		AC_CONFIG_FILES(win/copydeps.sh)
 		AC_CONFIG_FILES(win/pw3270.nsi)
 		AC_CONFIG_FILES(src/pw3270/resources.rc)
 

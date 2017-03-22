@@ -2,8 +2,8 @@
 myDIR=$(dirname $(readlink -f $0))
 
 # Updated by ./configure
-BASEDIR=/home/c1103788/project/pw3270/current
-prefix=/usr/x86_64-w64-mingw32/sys-root/mingw
+BASEDIR=@BASEDIR@
+prefix=@prefix@
 
 # Crio diretório temporário
 TEMPDIR=$(mktemp -d)
