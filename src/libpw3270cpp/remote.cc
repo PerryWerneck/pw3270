@@ -1183,7 +1183,8 @@
 		string get_text(int baddr, size_t len)
 		{
 #if defined(WIN32)
-			struct hllapi_packet_query_offset query = { HLLAPI_PACKET_GET_TEXT_AT_OFFSET, (unsigned short) baddr, (unsigned short) len };
+
+			struct hllapi_packet_query_offset query = { HLLAPI_PACKET_GET_TEXT_AT_OFFSET, (unsigned short) baddr, (unsigned short) len, '\n' };
 			return query_string(&query,sizeof(query),len);
 
 #elif defined(HAVE_DBUS)

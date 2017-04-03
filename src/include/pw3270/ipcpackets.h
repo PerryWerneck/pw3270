@@ -169,6 +169,7 @@ struct hllapi_packet_query_offset
 	unsigned char	packet_id;
 	unsigned short	addr;
 	unsigned short	len;
+	char			lf;
 };
 
 struct hllapi_packet_emulate_input
