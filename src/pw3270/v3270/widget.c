@@ -826,7 +826,7 @@ static void changed(H3270 *session, int offset, int len)
 	{
 		// Get new text, notify atk
 		gsize	  bytes_written	= 0;
-		char	* text 			= lib3270_get_text(session,offset,len);
+		char	* text 			= lib3270_get_text(session,offset,len,'\n');
 
 		if(text)
 		{

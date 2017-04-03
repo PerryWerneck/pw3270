@@ -374,7 +374,7 @@ void screen_update(H3270 *session, int bstart, int bend)
 
 #ifdef DEBUG
 		{
-			char *text = lib3270_get_text(session,0,-1);
+			char *text = lib3270_get_text(session,0,-1,'\n');
 			trace("First screen:\n%s\n",text);
 			lib3270_free(text);
 		}

@@ -907,11 +907,12 @@
 	 * @param h			Session Handle.
 	 * @param offset	Start position.
 	 * @param len		Text length or -1 to all text.
+	 * @param lf		Line break char (0 to disable line breaks).
 	 *
 	 * @return Contents at position if available, or NULL. Release it with lib3270_free()
 	 *
 	 */
-	LIB3270_EXPORT char * lib3270_get_text(H3270 *h, int offset, int len);
+	LIB3270_EXPORT char * lib3270_get_text(H3270 *h, int offset, int len, char lf);
 
 	/**
 	 * Get text at requested position

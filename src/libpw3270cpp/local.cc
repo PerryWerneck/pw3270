@@ -137,7 +137,7 @@
 		int 				(*_pfkey)(H3270 *hSession, int key);
 		int 				(*_pakey)(H3270 *hSession, int key);
 		int 				(*_wait_for_ready)(H3270 *hSession, int seconds);
-		char * 				(*_get_text)(H3270 *h, int offset, int len);
+		char * 				(*_get_text)(H3270 *h, int offset, int len, char lf);
 		char *  			(*_get_text_at)(H3270 *h, int row, int col, int len);
 		int 				(*_cmp_text_at)(H3270 *h, int row, int col, const char *text);
 		int 				(*_set_text_at)(H3270 *h, int row, int col, const unsigned char *str);
@@ -380,7 +380,7 @@
 		string get_text(int offset, size_t len)
 		{
 			string	  rc;
-			char	* ptr = _get_text(hSession,offset,len);
+			char	* ptr = _get_text(hSession,offset,len,'\n');
 
 			if(ptr)
 			{

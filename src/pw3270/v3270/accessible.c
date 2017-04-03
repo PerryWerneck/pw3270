@@ -185,7 +185,7 @@ static gunichar v3270_accessible_get_character_at_offset(AtkText *atk_text, gint
 	if(widget == NULL)
 	{
 		H3270	* host = v3270_get_session(widget);
-		gchar	* text = lib3270_get_text(host,offset,1);
+		gchar	* text = lib3270_get_text(host,offset,1,'\n');
 
 		if(text)
 		{
@@ -346,7 +346,7 @@ static gchar * v3270_accessible_get_text_at_offset(AtkText *atk_text, gint offse
 		case ATK_TEXT_BOUNDARY_CHAR:			// Boundary is the boundary between characters
 												// (including non-printing characters)
 
-			text = lib3270_get_text(host,offset,1);
+			text = lib3270_get_text(host,offset,1,'\n');
 			break;
 
 		case ATK_TEXT_BOUNDARY_WORD_START:		// Boundary is the start (i.e. first character) of a word.
@@ -373,7 +373,7 @@ static gchar * v3270_accessible_get_text_at_offset(AtkText *atk_text, gint offse
 			pos = (offset/cols)*cols;
 			if(pos == offset)
 				offset++;
-			text = lib3270_get_text(host,pos,(offset-pos));
+			text = lib3270_get_text(host,pos,(offset-pos),'\n');
 			break;
 
 
@@ -426,7 +426,7 @@ static gchar * v3270_accessible_get_text(AtkText *atk_text, gint start_pos, gint
 	if(!lib3270_connected(host))
 		return g_strdup( "" );
 
-	text = lib3270_get_text(host,start_pos,end_pos < start_pos ? -1 : (end_pos - start_pos));
+	text = lib3270_get_text(host,start_pos,end_pos < start_pos ? -1 : (end_pos - start_pos),'\n');
 
 	if(text)
 	{

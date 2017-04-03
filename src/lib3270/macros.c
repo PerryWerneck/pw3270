@@ -103,7 +103,7 @@
 	switch(argc)
 	{
 	case 1:	// Get entire screen
-		buffer = lib3270_get_text(hSession,0,-1);
+		buffer = lib3270_get_text(hSession,0,-1,'\n');
 		break;
 
 /*
