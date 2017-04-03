@@ -41,6 +41,10 @@ run_command()
 			dbus-send --session  --print-reply --dest=$DEST.$SESSION $BPATH $DEST.getScreenContents
 			;;
 
+		gettext)
+			dbus-send --session  --print-reply --dest=$DEST.$SESSION $BPATH $DEST.getText int32:1 int32:-1 byte:0
+			;;
+
 		protect)
 			dbus-send --session  --print-reply --dest=$DEST.$SESSION $BPATH $DEST.getIsProtectedAt int32:$2 int32:$3 
 			;;

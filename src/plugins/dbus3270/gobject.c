@@ -314,7 +314,7 @@ void pw3270_dbus_get_text_at(PW3270Dbus *object, int row, int col, int len, DBus
 	}
  }
 
- void pw3270_dbus_get_text(PW3270Dbus *object, int offset, int len, DBusGMethodInvocation *context)
+ void pw3270_dbus_get_text(PW3270Dbus *object, int offset, int len, char lf, DBusGMethodInvocation *context)
  {
 	gchar	* text;
 	H3270	* hSession = pw3270_dbus_get_session_handle(object);
@@ -323,7 +323,11 @@ void pw3270_dbus_get_text_at(PW3270Dbus *object, int row, int col, int len, DBus
 	if(pw3270_dbus_check_valid_state(object,context))
 		return;
 
-	text = lib3270_get_text(hSession,offset,len,'\n');
+	if(len < 0) {
+		len = lib3270_get_length(hSession);
+	}
+
+	text = lib3270_get_text(hSession,offset,len,lf);
 	if(!text)
 	{
 		GError *error = pw3270_dbus_get_error_from_errno(errno);
@@ -335,6 +339,8 @@ void pw3270_dbus_get_text_at(PW3270Dbus *object, int row, int col, int len, DBus
 		gchar * utftext = g_convert_with_fallback(text,-1,"UTF-8",lib3270_get_display_charset(hSession),"?",NULL,NULL,NULL);
 
 		lib3270_free(text);
+
+		debug("\n%s\n",utftext);
 
 		dbus_g_method_return(context,utftext);
 
