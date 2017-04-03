@@ -817,38 +817,6 @@
 			return (LIB3270_SSL_STATE) query_intval(HLLAPI_PACKET_GET_SSL_STATE);
 		}
 
-/*
-		int connect(void)
-		{
-			int rc;
-
-#if defined(WIN32)
-
-			size_t							  cbSize	= sizeof(struct hllapi_packet_connect);
-			struct hllapi_packet_connect	* pkt		= (struct hllapi_packet_connect *) malloc(cbSize);
-
-			memset(pkt,0,cbSize);
-
-			pkt->packet_id	= HLLAPI_PACKET_CONNECT;
-			pkt->wait		= 0;
-
-			rc = query_intval((void *) pkt,cbSize,true);
-
-#elif defined(HAVE_DBUS)
-
-			static const char * str = "";
-
-			rc = query_intval("connect", DBUS_TYPE_STRING, &str, DBUS_TYPE_INVALID);
-
-#else
-			rc = -1;
-
-#endif
-			return rc;
-
-		}
-*/
-
 		virtual int connect()
 		{
 			return connect("",0);
@@ -1191,13 +1159,14 @@
 
 			dbus_int32_t b = (dbus_int32_t) baddr;
 			dbus_int32_t l = (dbus_int32_t) len;
+			unsigned char d = '\n';
 
 			DBusMessage * msg = create_message("getText");
 			if(!msg)
 				return NULL;
 
 			trace("%s(%d,%d)",__FUNCTION__,b,l);
-			dbus_message_append_args(msg, DBUS_TYPE_INT32, &b, DBUS_TYPE_INT32, &l, DBUS_TYPE_INVALID);
+			dbus_message_append_args(msg, DBUS_TYPE_INT32, &b, DBUS_TYPE_INT32, &l, DBUS_TYPE_BYTE, &d, DBUS_TYPE_INVALID);
 
 			return get_string(call(msg));
 #else
