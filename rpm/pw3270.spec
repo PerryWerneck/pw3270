@@ -206,6 +206,9 @@ make all
 %install
 %make_install
 
+sed -i -e "s@^Version:.*@Version: %{version}@g" ${RPM_BUILD_ROOT}/%{_libdir}/pkgconfig/lib3270.pc
+sed -i -e "s@^Version:.*@Version: %{version}@g" ${RPM_BUILD_ROOT}/%{_libdir}/pkgconfig/pw3270.pc
+
 %find_lang pw3270 langfiles
 
 cat > pw3270.desktop << EOF
