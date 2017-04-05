@@ -142,6 +142,7 @@ Based on the original x3270 code, pw3270 was originally created for Banco do Bra
 Summary:        3270 Communication library for %{name}
 Group:          Development/Libraries/C and C++
 Requires:       openssl
+Provides:		lib3270 = %{version}
 
 %description -n lib3270-%{_libvrs}
 Open-source GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
