@@ -25,12 +25,11 @@
 # erico.mendonca@gmail.com      (Erico Mascarenhas de Mendonça)
 #
 
-
 myDIR=$(dirname $(readlink -f $0))
 
-prefix="/usr/i686-w64-mingw32/sys-root/mingw"
-PKG_CONFIG="/usr/bin/i686-w64-mingw32-pkg-config"
-GTK_VERSION="gtk+-3.0"
+prefix="@prefix@"
+PKG_CONFIG="@PKG_CONFIG@"
+GTK_VERSION="gtk+-@GTK_VERSION@"
 
 GTK_PREFIX=$($PKG_CONFIG --variable=prefix ${GTK_VERSION})
 GDK_LOADERS=$(${PKG_CONFIG} --variable=gdk_pixbuf_binarydir gdk-pixbuf-2.0 | sed -e "s@${prefix}@@g")

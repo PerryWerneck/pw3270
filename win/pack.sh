@@ -84,7 +84,7 @@ build()
 			failed "Erro ao gerar instalador sem gtk"
 		fi
 	
-		mv -f	./win/${PACKAGE}-${PACKAGE_VERSION}-requires-gtk-${GTK_MODVERSION}-${host_cpu}.exe \
+		mv -f ./win/${PACKAGE}-${PACKAGE_VERSION}-requires-gtk-${GTK_MODVERSION}-${host_cpu}.exe \
 				${DESTDIR}/${PACKAGE_NAME}/${1}
 
 		if [ "$?" != "0" ]; then
@@ -95,8 +95,8 @@ build()
 
 	if [ "${COMPLETE}" == "1" ]; then
 
-		chmod +x ./win/makegtkruntime.sh
-		./win/makegtkruntime.sh
+		chmod +x ./win/makeruntime.sh
+		./win/makeruntime.sh
 
 		makensis -DWITHGTK ./win/${PACKAGE}.nsi
 		if [ "$?" != "0" ]; then

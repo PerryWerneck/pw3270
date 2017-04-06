@@ -166,7 +166,7 @@ SubSectionEnd
 Section /o "GTK+ Runtime" SecGTK
 
 	setOutPath $INSTDIR
-	file /r "..\.bin\gtkruntime\*.*"
+	file /r "..\.bin\runtime\*.*"
 
 SectionEnd
 !endif
