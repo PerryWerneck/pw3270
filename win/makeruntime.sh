@@ -188,10 +188,54 @@ copy_loaders() {
 
 }
 
+copy_theme() {
+
+	mkdir -p "${TARGET}/etc"
+	cp -rv "${prefix}/etc/gtk-3.0" "${TARGET}/etc"
+
+	rm -f $TARGET_PATH/etc/gtk-3.0/settings.ini
+	echo "[Settings]" >> $TARGET_PATH/etc/gtk-3.0/settings.ini
+	echo "gtk-theme-name = MS-Windows" >> $TARGET_PATH/etc/gtk-3.0/settings.ini
+	echo "gtk-icon-theme-name = ${1}" >> $TARGET_PATH/etc/gtk-3.0/settings.ini
+	echo "gtk-fallback-icon-theme = ${1}" >> $TARGET_PATH/etc/gtk-3.0/settings.ini
+	echo "gtk-font-name = Sans 10" >> $TARGET_PATH/etc/gtk-3.0/settings.ini
+	echo "gtk-button-images = 1" >> $TARGET_PATH/etc/gtk-3.0/settings.ini
+
+	mkdir -p ${TARGET}/share/icons
+	if [ "$?" != 0 ]; then
+		echo "Can´t create icons folder"
+		exit -1
+	fi
+
+	cp -rv /usr/share/icons/${1} ${TARGET}/share/icons
+	if [ "$?" != 0 ]; then
+		echo "Can´t copy ${1} icons"
+		exit -1
+	fi
+
+	mkdir -p ${TARGET}/share/themes
+	if [ "$?" != 0 ]; then
+		echo "Can´t create themes folder"
+		exit -1
+	fi
+
+	cp -rv /usr/share/themes/${1} ${TARGET}/share/themes
+	if [ "$?" != 0 ]; then
+		echo "Can´t copy ${1} theme"
+		exit -1
+	fi
+
+}
+
 copy_dll
 copy_locale
 copy_loaders
+copy_theme "Adwaita"
 
-echo ${GDK_LOADERS}
+# Otimiza todos os pngs
+#echo "Optimizing..."
+#find ${TARGET} -iname *.png -exec optipng -o7 -quiet {} \; 2>&1 > /dev/null
+
+
 
 echo "Runtime ok"

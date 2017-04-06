@@ -40,7 +40,8 @@ EOF
 sudo zypper --non-interactive in \
 	adwaita-icon-theme \
 	gettext-tools \
-	glib2-devel
+	glib2-devel \
+	optipng
 
 while read FILE
 do
