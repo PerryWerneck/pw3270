@@ -50,8 +50,6 @@ BuildRequires:	automake
 BuildRequires:	rsvg-view
 BuildRequires:	gettext-tools
 BuildRequires:	glib2-devel
-
-#BuildRequires:	gtk3-devel
 BuildRequires:	pkgconfig(gtk+-3.0)
 
 BuildRequires:  desktop-file-utils
@@ -64,7 +62,7 @@ BuildRequires:	mingw64-cross-pkg-config
 BuildRequires:	mingw64-filesystem
 BuildRequires:	mingw64-libopenssl-devel
 BuildRequires:	mingw64-zlib-devel
-#BuildRequires:	mingw64-gtk3-devel
+BuildRequires:	sed
 
 BuildRequires:	mingw64(pkg:gtk+-win32-3.0)
 
@@ -139,6 +137,9 @@ make all
 
 %install
 %{_mingw64_makeinstall}
+
+sed -i -e "s@^Version:.*@Version: %{version}@g" %{buildroot}%{_mingw64_libdir}/pkgconfig/lib3270.pc
+sed -i -e "s@^Version:.*@Version: %{version}@g" %{buildroot}%{_mingw64_libdir}/pkgconfig/pw3270.pc
 
 rm -f %{buildroot}%{_mingw64_datadir}/pw3270/ui/80javasamples.xml
 rm -f %{buildroot}%{_mingw64_datadir}/pw3270/ui/80rexx.xml
