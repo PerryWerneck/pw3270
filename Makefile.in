@@ -319,7 +319,7 @@ $(SRCDIR): \
 
 	@$(MKDIR) $(SRCDIR)
 	@$(INSTALL_DATA) \
-		*.in configure.ac *.cbp LICENCA LICENSE AUTHORS \
+		*.in configure.ac *.cbp LICENCA LICENSE AUTHORS README.md \
 		$(SRCDIR)
 
 	@$(MKDIR) $(SRCDIR)/win

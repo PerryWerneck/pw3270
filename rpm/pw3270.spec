@@ -247,7 +247,7 @@ rm -rf %{buildroot}
 
 %files -f langfiles
 %defattr(-,root,root)
-%doc AUTHORS LICENSE 
+%doc AUTHORS LICENSE README.md
 # %{_mandir}/*/*
 
 # Main application
