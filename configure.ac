@@ -58,6 +58,7 @@ AC_PROG_SED
 AC_PROG_LN_S
 AC_PATH_TOOL([AR], [ar], [ar])
 AC_PATH_TOOL([GENMARSHAL], [glib-genmarshal], [glib-genmarshal])
+AC_PATH_TOOL([HELP2MAN], [help2man], [help2man])
 
 AC_LANG([C])
 

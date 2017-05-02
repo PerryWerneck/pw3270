@@ -30,6 +30,7 @@ PACKAGE_NAME=@PACKAGE_NAME@
 PACKAGE_VERSION=@PACKAGE_VERSION@
 PACKAGE_LEVEL=@PACKAGE_LEVEL@
 PACKAGE_TARNAME=@PACKAGE_TARNAME@
+PACKAGE_DESCRIPTION=@PACKAGE_DESCRIPTION@
 PLUGINS=@PLUGINS@
 
 #---[ Paths ]------------------------------------------------------------------
@@ -62,6 +63,7 @@ MKDIR=@MKDIR_P@
 MSGCAT=@MSGCAT@
 AMTAR=@AMTAR@
 RPMBUILD=@RPMBUILD@
+HELP2MAN=@HELP2MAN@
 
 #---[ Rules ]------------------------------------------------------------------
 
@@ -235,6 +237,11 @@ install-app: \
 
 	@$(MAKE) -C ui install
 	@$(MAKE) -C locale install
+
+	@$(MKDIR) $(DESTDIR)/$(mandir)/man1
+	@$(HELP2MAN) \
+		--version-string="$(PACKAGE_TARNAME) - $(PACKAGE_DESCRIPTION) Vrs. $(PACKAGE_VERSION)" \
+		$(DESTDIR)$(bindir)/$(PACKAGE_TARNAME)@EXEEXT@ | gzip --best --stdout - > $(DESTDIR)/$(mandir)/man1/$(PACKAGE_NAME).1.gz
 
 $(BINRLS)/libpw3270cpp.a: \
 	src/libpw3270cpp/*

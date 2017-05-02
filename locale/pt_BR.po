@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-21 15:58-0300\n"
+"POT-Creation-Date: 2017-05-02 17:27-0300\n"
 "PO-Revision-Date: 2017-02-15 17:08-0200\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <perry.werneck@gmail.com>\n"
@@ -95,7 +95,7 @@ msgstr "%s: Tabulação vertical não é suportada"
 msgid "%s<b>%s</b> for %s"
 msgstr "%s<b>%s</b> para %s"
 
-#: main.c:438
+#: main.c:400
 msgid "- 3270 Emulator for Gtk"
 msgstr "- Emulador 3270 para GTK"
 
@@ -183,7 +183,7 @@ msgstr ""
 msgid "<b>SSL state is undefined</b>Unexpected SSL status %ld"
 msgstr "<b>Estado do SSL é indefinido</b>Estado SSL inesperado %ld"
 
-#: main.c:458
+#: main.c:420
 msgid ""
 "<b>Valid options:</b>\n"
 "\n"
@@ -276,7 +276,7 @@ msgstr "Um parametro de ENVIO/RECEBIMENTO inválido foi enviado para o host."
 msgid "Appends the source file to the destination file."
 msgstr "Adiciona conteúdo do arquivo origem ao final do arquivo destino."
 
-#: main.c:413 main.c:415
+#: main.c:375 main.c:377
 msgid "Application name"
 msgstr "Nome da aplicação"
 
@@ -419,6 +419,11 @@ msgstr "Não foi possível conectar a %s"
 msgid "Can't connect to %s:%s"
 msgstr "Não foi possível conectar a %s:%s"
 
+#: main.c:70
+#, fuzzy
+msgid "Can't connect to DBUS server"
+msgstr "Não foi possível conectar a %s"
+
 #: selection.c:425
 #, c-format
 msgid "Can't convert line %d from %s to %s"
@@ -432,6 +437,10 @@ msgstr "Recortar não permitido em seleção retangular"
 #, c-format
 msgid "Can't determine value for environment variable \"%s\" "
 msgstr "Não consigo determinar o valor da variável de ambiente \"%s\" "
+
+#: main.c:115
+msgid "Can't get DBUS object name"
+msgstr ""
 
 #: ft.c:413
 msgid "Can't get file size"
@@ -653,6 +662,11 @@ msgstr "Configurar host"
 #: toggles.c:188 00default.xml:114
 msgid "Connect on startup"
 msgstr "Conectar ao iniciar"
+
+#: gobject.c:205
+#, fuzzy
+msgid "Connecting to host"
+msgstr "Não foi possível conectar ao servidor"
 
 #: connect.c:215 connect.c:311 connect.c:320 connect.c:382 connect.c:397
 #: connect.c:413 connect.c:427 connect.c:447 connect.c:461 connect.c:477
@@ -910,7 +924,7 @@ msgstr "Tela cheia"
 msgid "Function bar"
 msgstr "Barra de funções"
 
-#: main.c:101 main.c:507
+#: main.c:101 main.c:510
 msgid "GTK Version mismatch"
 msgstr "Divergência de versão GTK"
 
@@ -946,11 +960,11 @@ msgstr "Servidor rejeitou o tipo de dispositivo ou requisição"
 msgid "Host rejected resource(s)"
 msgstr "Servidor rejeitou recurso(s)"
 
-#: main.c:421
+#: main.c:383
 msgid "Host system type"
 msgstr "Tipo do sistema no servidor"
 
-#: main.c:419
+#: main.c:381
 msgid "Host to connect"
 msgstr "Servidor a conectar"
 
@@ -1091,11 +1105,11 @@ msgstr "Ler a fila de um arquivo"
 msgid "Local:"
 msgstr "Local:"
 
-#: main.c:433
+#: main.c:395
 msgid "Log to file"
 msgstr "Enviar log para arquivo"
 
-#: main.c:426
+#: main.c:388
 msgid "Minutes for auto-disconnect"
 msgstr "Minutos para desconexão automática"
 
@@ -1332,7 +1346,7 @@ msgstr "PF8"
 msgid "PF9"
 msgstr "PF9"
 
-#: main.c:456
+#: main.c:418
 msgid "Parse error"
 msgstr "Erro de interpretação"
 
@@ -1365,7 +1379,7 @@ msgstr "Colar com margem esquerda"
 msgid "Path and name of the local file"
 msgstr "Caminho e nome do arquivo local"
 
-#: main.c:427
+#: main.c:389
 msgid "Path for plugin files"
 msgstr "Caminho para os arquivos de plugin"
 
@@ -1373,7 +1387,7 @@ msgstr "Caminho para os arquivos de plugin"
 msgid "Path length constraint exceeded"
 msgstr "Path length constraint exceeded"
 
-#: main.c:416
+#: main.c:378
 msgid "Path to application data files"
 msgstr "Caminho para os arquivos de dados da aplicação"
 
@@ -1779,7 +1793,7 @@ msgstr "Certificado auto assinado na cadeia de certificados"
 msgid "Send file"
 msgstr "Enviar arquivo"
 
-#: main.c:430
+#: main.c:392
 msgid "Send messages to syslog"
 msgstr "Enviar mensagens para o log do sistema"
 
@@ -1795,11 +1809,11 @@ msgstr "Enviar/Receber"
 msgid "Sending file"
 msgstr "Enviando arquivo"
 
-#: main.c:418
+#: main.c:380
 msgid "Session name"
 msgstr "Nome da sessão"
 
-#: main.c:424
+#: main.c:386
 msgid "Set host charset"
 msgstr "Define página de código do host"
 
@@ -1807,19 +1821,19 @@ msgstr "Define página de código do host"
 msgid "Set insert mode"
 msgstr "Set insert mode"
 
-#: main.c:420
+#: main.c:382
 msgid "Set reported colors (8/16)"
 msgstr "Define número de cores informadas (8/16)"
 
-#: main.c:423
+#: main.c:385
 msgid "Set toggles OFF"
 msgstr "Desativa toggles"
 
-#: main.c:422
+#: main.c:384
 msgid "Set toggles ON"
 msgstr "Ativa toggles"
 
-#: main.c:432
+#: main.c:394
 msgid "Set trace filename"
 msgstr "Define o nome do arquivo de trace"
 
@@ -1912,6 +1926,11 @@ msgstr "Iniciar transferência de arquivo"
 #: v3270ftprogress.c:801
 msgid "Starting"
 msgstr "Iniciando"
+
+#: gobject.c:193
+#, c-format
+msgid "State %04d can't accept requests"
+msgstr ""
 
 #: security.c:237
 msgid "Subject issuer mismatch"
@@ -2115,7 +2134,7 @@ msgstr ""
 msgid "The known types are %s"
 msgstr "Os tipos conhecidos são %s"
 
-#: main.c:425
+#: main.c:387
 msgid "The model of 3270 display to be emulated"
 msgstr "Modelo de tela 3270 a ser emulada"
 
@@ -2204,7 +2223,7 @@ msgstr ""
 "programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple "
 "Place, Suite 330, Boston, MA, 02111-1307, USA"
 
-#: main.c:503
+#: main.c:506
 #, c-format
 msgid "This program requires GTK version %d.%d.%d"
 msgstr "Este programa precisa do GTK versão %d.%d.%d"
@@ -2397,6 +2416,11 @@ msgstr "Valor de cor inválido ou inesperado: \"%s\""
 #: security.c:344
 msgid "Unexpected or unknown security status"
 msgstr "Estado de segurança inesperado ou desconhecido."
+
+#: gobject.c:208
+#, fuzzy, c-format
+msgid "Unexpected state %04d"
+msgstr "Alvo inesperado \"%s\""
 
 #: actions.c:391
 #, c-format
@@ -2802,10 +2826,6 @@ msgstr "translator-credits"
 #~ "32768. Valores maiores trazem maior performance, porem, nem todos os "
 #~ "hosts podem suportá-los."
 
-#, fuzzy
-#~ msgid "Can't connect to DBUS server"
-#~ msgstr "Não foi possível conectar a %s"
-
 #~ msgid "Can't start download."
 #~ msgstr "Não foi possível iniciar o download."
 
@@ -2841,10 +2861,6 @@ msgstr "translator-credits"
 
 #~ msgid "Complete"
 #~ msgstr "Completo"
-
-#, fuzzy
-#~ msgid "Connecting to host"
-#~ msgstr "Não foi possível conectar ao servidor"
 
 #~ msgid "Copiar tudo"
 #~ msgstr "Copiar tudo"
@@ -3207,10 +3223,6 @@ msgstr "translator-credits"
 
 #~ msgid "Unexpected element <%s>"
 #~ msgstr "Elemento <%s> inesperado"
-
-#, fuzzy
-#~ msgid "Unexpected state %04d"
-#~ msgstr "Alvo inesperado \"%s\""
 
 #~ msgid ""
 #~ "Unknown host:\n"

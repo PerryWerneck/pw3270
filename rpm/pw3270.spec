@@ -131,6 +131,7 @@ BuildRequires:  pkgconfig
 BuildRequires:  sed
 BuildRequires:	optipng
 BuildRequires:	fdupes
+BuildRequires:	help2man
 
 %description
 Open-source GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
@@ -248,7 +249,7 @@ rm -rf %{buildroot}
 %files -f langfiles
 %defattr(-,root,root)
 %doc AUTHORS LICENSE README.md
-# %{_mandir}/*/*
+%{_mandir}/*/*
 
 # Main application
 %dir %{_datadir}/pw3270

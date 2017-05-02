@@ -359,48 +359,10 @@ int main(int argc, char *argv[])
 	g_thread_init(NULL);
 #endif // !GLIB(2,32)
 
-	gtk_init(&argc, &argv);
-
 	// Setup locale
 #ifdef LC_ALL
 	setlocale( LC_ALL, "" );
 #endif
-
-#if defined( WIN32 )
-	{
-		gchar * appdir = g_win32_get_package_installation_directory_of_module(NULL);
-		gchar * locdir = g_build_filename(appdir,"locale",NULL);
-
-		g_chdir(appdir);
-		bindtextdomain( PACKAGE_NAME, locdir );
-
-		g_free(locdir);
-		g_free(appdir);
-
-	}
-#elif defined(HAVE_GTKMAC)
-	{
-		GtkMacBundle * macbundle = gtk_mac_bundle_get_default();
-
-		g_chdir(gtk_mac_bundle_get_datadir(macbundle));
-		bindtextdomain(PACKAGE_NAME,gtk_mac_bundle_get_localedir(macbundle));
-
-		osxapp = GTK_OSX_APPLICATION(g_object_new(GTK_TYPE_OSX_APPLICATION,NULL));
-
-	}
-#elif defined( DATAROOTDIR )
-	{
-		gchar * appdir = g_build_filename(DATAROOTDIR,PACKAGE_NAME,NULL);
-		gchar * locdir = g_build_filename(DATAROOTDIR,"locale",NULL);
-
-		g_chdir(appdir);
-		bindtextdomain( PACKAGE_NAME, locdir);
-
-		g_free(locdir);
-		g_free(appdir);
-
-	}
-#endif // DATAROOTDIR
 
 	bind_textdomain_codeset(PACKAGE_NAME, "UTF-8");
 	textdomain(PACKAGE_NAME);
@@ -470,25 +432,66 @@ int main(int argc, char *argv[])
 
 			return -1;
 		}
-
-#if defined( HAVE_SYSLOG )
-		if(log_to_syslog)
-		{
-			openlog(g_get_prgname(), LOG_NDELAY, LOG_USER);
-			g_log_set_default_handler(g_syslog,NULL);
-		}
-		else if(logfile)
-#else
-        if(logfile)
-#endif // HAVE_SYSLOG
-        {
-			g_log_set_default_handler(g_logfile,NULL);
-        }
-
-		lib3270_set_trace_handler(g_trace);
-
 	}
 
+	// Init GTK
+	gtk_init(&argc, &argv);
+
+	// Get DATADIR
+#if defined( WIN32 )
+	{
+		gchar * appdir = g_win32_get_package_installation_directory_of_module(NULL);
+		gchar * locdir = g_build_filename(appdir,"locale",NULL);
+
+		g_chdir(appdir);
+		bindtextdomain( PACKAGE_NAME, locdir );
+
+		g_free(locdir);
+		g_free(appdir);
+
+	}
+#elif defined(HAVE_GTKMAC)
+	{
+		GtkMacBundle * macbundle = gtk_mac_bundle_get_default();
+
+		g_chdir(gtk_mac_bundle_get_datadir(macbundle));
+		bindtextdomain(PACKAGE_NAME,gtk_mac_bundle_get_localedir(macbundle));
+
+		osxapp = GTK_OSX_APPLICATION(g_object_new(GTK_TYPE_OSX_APPLICATION,NULL));
+
+	}
+#elif defined( DATAROOTDIR )
+	{
+		gchar * appdir = g_build_filename(DATAROOTDIR,PACKAGE_NAME,NULL);
+		gchar * locdir = g_build_filename(DATAROOTDIR,"locale",NULL);
+
+		g_chdir(appdir);
+		bindtextdomain( PACKAGE_NAME, locdir);
+
+		g_free(locdir);
+		g_free(appdir);
+
+	}
+#endif // DATAROOTDIR
+
+
+#if defined( HAVE_SYSLOG )
+	if(log_to_syslog)
+	{
+		openlog(g_get_prgname(), LOG_NDELAY, LOG_USER);
+		g_log_set_default_handler(g_syslog,NULL);
+	}
+	else if(logfile)
+#else
+	if(logfile)
+#endif // HAVE_SYSLOG
+	{
+		g_log_set_default_handler(g_logfile,NULL);
+	}
+
+	lib3270_set_trace_handler(g_trace);
+
+	// Check GTK Version
 	{
 		const gchar	*msg = gtk_check_version(GTK_MAJOR_VERSION, GTK_MINOR_VERSION, GTK_MICRO_VERSION);
 

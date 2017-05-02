@@ -9,7 +9,7 @@ msgstr ""
 "#-#-#-#-#  lib3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-12 14:32-0300\n"
+"POT-Creation-Date: 2017-05-02 17:27-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "#-#-#-#-#  pw3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-12 14:32-0300\n"
+"POT-Creation-Date: 2017-05-02 17:27-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,6 +32,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-01-18 17:12-0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  dbus3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-05-02 17:27-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -116,7 +127,7 @@ msgstr ""
 msgid "%s<b>%s</b> for %s"
 msgstr ""
 
-#: main.c:438
+#: main.c:400
 msgid "- 3270 Emulator for Gtk"
 msgstr ""
 
@@ -198,7 +209,7 @@ msgstr ""
 msgid "<b>SSL state is undefined</b>Unexpected SSL status %ld"
 msgstr ""
 
-#: main.c:458
+#: main.c:420
 msgid ""
 "<b>Valid options:</b>\n"
 "\n"
@@ -284,7 +295,7 @@ msgstr ""
 msgid "Appends the source file to the destination file."
 msgstr ""
 
-#: main.c:413 main.c:415
+#: main.c:375 main.c:377
 msgid "Application name"
 msgstr ""
 
@@ -424,6 +435,10 @@ msgstr ""
 msgid "Can't connect to %s:%s"
 msgstr ""
 
+#: main.c:70
+msgid "Can't connect to DBUS server"
+msgstr ""
+
 #: selection.c:425
 #, c-format
 msgid "Can't convert line %d from %s to %s"
@@ -436,6 +451,10 @@ msgstr ""
 #: connect.c:217
 #, c-format
 msgid "Can't determine value for environment variable \"%s\" "
+msgstr ""
+
+#: main.c:115
+msgid "Can't get DBUS object name"
 msgstr ""
 
 #: ft.c:413
@@ -645,6 +664,10 @@ msgstr ""
 
 #: toggles.c:188 00default.xml:114
 msgid "Connect on startup"
+msgstr ""
+
+#: gobject.c:205
+msgid "Connecting to host"
 msgstr ""
 
 #: connect.c:215 connect.c:311 connect.c:320 connect.c:382 connect.c:397
@@ -893,7 +916,7 @@ msgstr ""
 msgid "Function bar"
 msgstr ""
 
-#: main.c:101 main.c:507
+#: main.c:101 main.c:510
 msgid "GTK Version mismatch"
 msgstr ""
 
@@ -929,11 +952,11 @@ msgstr ""
 msgid "Host rejected resource(s)"
 msgstr ""
 
-#: main.c:421
+#: main.c:383
 msgid "Host system type"
 msgstr ""
 
-#: main.c:419
+#: main.c:381
 msgid "Host to connect"
 msgstr ""
 
@@ -1061,11 +1084,11 @@ msgstr ""
 msgid "Local:"
 msgstr ""
 
-#: main.c:433
+#: main.c:395
 msgid "Log to file"
 msgstr ""
 
-#: main.c:426
+#: main.c:388
 msgid "Minutes for auto-disconnect"
 msgstr ""
 
@@ -1300,7 +1323,7 @@ msgstr ""
 msgid "PF9"
 msgstr ""
 
-#: main.c:456
+#: main.c:418
 msgid "Parse error"
 msgstr ""
 
@@ -1333,7 +1356,7 @@ msgstr ""
 msgid "Path and name of the local file"
 msgstr ""
 
-#: main.c:427
+#: main.c:389
 msgid "Path for plugin files"
 msgstr ""
 
@@ -1341,7 +1364,7 @@ msgstr ""
 msgid "Path length constraint exceeded"
 msgstr ""
 
-#: main.c:416
+#: main.c:378
 msgid "Path to application data files"
 msgstr ""
 
@@ -1736,7 +1759,7 @@ msgstr ""
 msgid "Send file"
 msgstr ""
 
-#: main.c:430
+#: main.c:392
 msgid "Send messages to syslog"
 msgstr ""
 
@@ -1752,11 +1775,11 @@ msgstr ""
 msgid "Sending file"
 msgstr ""
 
-#: main.c:418
+#: main.c:380
 msgid "Session name"
 msgstr ""
 
-#: main.c:424
+#: main.c:386
 msgid "Set host charset"
 msgstr ""
 
@@ -1764,19 +1787,19 @@ msgstr ""
 msgid "Set insert mode"
 msgstr ""
 
-#: main.c:420
+#: main.c:382
 msgid "Set reported colors (8/16)"
 msgstr ""
 
-#: main.c:423
+#: main.c:385
 msgid "Set toggles OFF"
 msgstr ""
 
-#: main.c:422
+#: main.c:384
 msgid "Set toggles ON"
 msgstr ""
 
-#: main.c:432
+#: main.c:394
 msgid "Set trace filename"
 msgstr ""
 
@@ -1859,6 +1882,11 @@ msgstr ""
 
 #: v3270ftprogress.c:801
 msgid "Starting"
+msgstr ""
+
+#: gobject.c:193
+#, c-format
+msgid "State %04d can't accept requests"
 msgstr ""
 
 #: security.c:237
@@ -2030,7 +2058,7 @@ msgstr ""
 msgid "The known types are %s"
 msgstr ""
 
-#: main.c:425
+#: main.c:387
 msgid "The model of 3270 display to be emulated"
 msgstr ""
 
@@ -2099,7 +2127,7 @@ msgid ""
 "Franklin St, Fifth Floor, Boston, MA 02111-1307 USA"
 msgstr ""
 
-#: main.c:503
+#: main.c:506
 #, c-format
 msgid "This program requires GTK version %d.%d.%d"
 msgstr ""
@@ -2290,6 +2318,11 @@ msgstr ""
 
 #: security.c:344
 msgid "Unexpected or unknown security status"
+msgstr ""
+
+#: gobject.c:208
+#, c-format
+msgid "Unexpected state %04d"
 msgstr ""
 
 #: actions.c:391
