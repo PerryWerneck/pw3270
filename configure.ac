@@ -308,18 +308,31 @@ AC_ARG_ENABLE([pic],
 	app_cv_pic="$enableval"
 ],[
 
-	case "$host" in
-		*-mingw32)
-			app_cv_pic="no"
-			;;
+	case "$host_cpu" in
+	x86_64)
+		app_cv_pic="yes"
+		;;
+
+	aarch64)
+		app_cv_pic="yes"
+		;;
 
 	*)
-		if test "$host_cpu" = "x86_64"; then
-			app_cv_pic="yes"
-		else
-			app_cv_pic="no"
-		fi
+		app_cv_pic="no"
 	esac
+
+dnl	case "$host" in
+dnl		*-mingw32)
+dnl			app_cv_pic="no"
+dnl			;;
+dnl
+dnl	*)
+dnl		if test "$host_cpu" = "x86_64"; then
+dnl			app_cv_pic="yes"
+dnl		else
+dnl			app_cv_pic="no"
+dnl		fi
+dnl	esac
 ])
 
 if test "$app_cv_pic" == "yes"; then
