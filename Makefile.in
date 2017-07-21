@@ -238,10 +238,13 @@ install-app: \
 	@$(MAKE) -C ui install
 	@$(MAKE) -C locale install
 
+ifneq ($(HELP2MAN),no)
 	@$(MKDIR) $(DESTDIR)/$(mandir)/man1
 	@$(HELP2MAN) \
 		--version-string="$(PACKAGE_TARNAME) - $(PACKAGE_DESCRIPTION) Vrs. $(PACKAGE_VERSION)" \
 		$(DESTDIR)$(bindir)/$(PACKAGE_TARNAME)@EXEEXT@ | gzip --best --stdout - > $(DESTDIR)/$(mandir)/man1/$(PACKAGE_NAME).1.gz
+endif
+
 
 $(BINRLS)/libpw3270cpp.a: \
 	src/libpw3270cpp/*
