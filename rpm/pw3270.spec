@@ -26,6 +26,7 @@
 #---[ Selected modules ]----------------------------------------------------------------------------------------------
 
 %define _dbus     	1
+%define _help2man  	1
 
 #---[ Packaging ]-----------------------------------------------------------------------------------------------------
 
@@ -60,6 +61,7 @@ Provides:       libpw3270-%{_libvrs}
 %if 0%{?rhel_version}
 
 %define _distro rhel%{rhel_version}
+%define _help2man  	0
 
 BuildRequires:  dbus-devel
 BuildRequires:  dbus-glib-devel
@@ -74,11 +76,12 @@ BuildRequires:  librsvg2-tools
 %if 0%{?centos_version}
 
 %define _distro centos%{centos_version}
+%define _help2man  	0
 
-BuildRequires:  pkgconfig(dbus-1)
-BuildRequires:  pkgconfig(dbus-glib-1)
-BuildRequires:  pkgconfig(openssl)
-BuildRequires:  pkgconfig(gtk+-3.0)
+BuildRequires:  dbus-devel
+BuildRequires:  dbus-glib-devel
+BuildRequires:  openssl-devel
+BuildRequires:  gtk3-devel
 BuildRequires:  librsvg2-tools
 
 %endif
@@ -131,7 +134,9 @@ BuildRequires:  pkgconfig
 BuildRequires:  sed
 BuildRequires:	optipng
 BuildRequires:	fdupes
+%if 0%{?_help2man}
 BuildRequires:	help2man
+%endif
 
 %description
 Open-source GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
@@ -246,7 +251,9 @@ rm -rf %{buildroot}
 %files -f langfiles
 %defattr(-,root,root)
 %doc AUTHORS LICENSE README.md
+%if 0%{?_help2man}
 %{_mandir}/*/*
+%endif
 
 # Main application
 %dir %{_datadir}/pw3270
