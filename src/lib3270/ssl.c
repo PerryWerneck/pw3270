@@ -397,8 +397,6 @@ void ssl_info_callback(INFO_CONST SSL *s, int where, int ret)
 		trace_dsn(hSession,"SSL Current state is \"%s\"\n",SSL_state_string_long(s));
 	}
 
-//	trace("%s: state=%04x where=%04x ret=%d",__FUNCTION__,SSL_state(s),where,ret);
-
 #ifdef DEBUG
 	if(where & SSL_CB_EXIT)
 	{
@@ -411,8 +409,8 @@ void ssl_info_callback(INFO_CONST SSL *s, int where, int ret)
 
 	if(where & SSL_CB_HANDSHAKE_DONE)
 	{
-		trace_dsn(hSession,"%s: SSL_CB_HANDSHAKE_DONE state=%04x\n",__FUNCTION__,SSL_state(s));
-		if(SSL_state(s) == 0x03)
+		trace_dsn(hSession,"%s: SSL_CB_HANDSHAKE_DONE state=%04x\n",__FUNCTION__,SSL_get_state(s));
+		if(SSL_get_state(s) == SSL_ST_OK)
 			set_ssl_state(hSession,LIB3270_SSL_NEGOTIATED);
 		else
 			set_ssl_state(hSession,LIB3270_SSL_UNSECURE);
