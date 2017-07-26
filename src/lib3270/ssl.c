@@ -39,6 +39,11 @@
 #if defined(HAVE_LIBSSL)
 	#include <openssl/ssl.h>
 	#include <openssl/err.h>
+
+	#ifndef SSL_ST_OK
+		#define SSL_ST_OK 3
+	#endif // !SSL_ST_OK
+
 #endif
 
 #include "private.h"
