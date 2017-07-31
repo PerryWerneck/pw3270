@@ -45,3 +45,4 @@ SOURCES
 SPECS
 SRPMS
 resources.rc
+makeruntime.sh

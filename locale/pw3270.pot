@@ -9,7 +9,7 @@ msgstr ""
 "#-#-#-#-#  lib3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-21 14:22-0300\n"
+"POT-Creation-Date: 2017-07-28 14:24-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "#-#-#-#-#  pw3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-21 14:22-0300\n"
+"POT-Creation-Date: 2017-07-28 14:24-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,17 +39,6 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  dbus3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-21 14:22-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
 
 #: window.c:329
 #, c-format
@@ -57,7 +46,7 @@ msgid " and <b>%s</b> for %s."
 msgstr ""
 
 #: telnet.c:1059 connect.c:103 connect.c:119 connect.c:121 connect.c:588
-#: connect.c:605 ssl.c:265 ssl.c:318
+#: connect.c:605 ssl.c:270 ssl.c:323
 #, c-format
 msgid "%s"
 msgstr ""
@@ -435,10 +424,6 @@ msgstr ""
 msgid "Can't connect to %s:%s"
 msgstr ""
 
-#: main.c:70
-msgid "Can't connect to DBUS server"
-msgstr ""
-
 #: selection.c:425
 #, c-format
 msgid "Can't convert line %d from %s to %s"
@@ -451,10 +436,6 @@ msgstr ""
 #: connect.c:217
 #, c-format
 msgid "Can't determine value for environment variable \"%s\" "
-msgstr ""
-
-#: main.c:115
-msgid "Can't get DBUS object name"
 msgstr ""
 
 #: ft.c:413
@@ -585,18 +566,18 @@ msgstr ""
 msgid "Cannot connect to specified LU"
 msgstr ""
 
-#: ssl.c:317
+#: ssl.c:322
 msgid "Cant create a new SSL structure for current connection."
 msgstr ""
 
-#: ssl.c:258
+#: ssl.c:263
 #, c-format
 msgid ""
 "Cant set default locations for trusted CA certificates to\n"
 "%s"
 msgstr ""
 
-#: ssl.c:85
+#: ssl.c:90
 msgid ""
 "Cant set the file descriptor for the input/output facility for the TLS/SSL "
 "(encrypted) side of ssl."
@@ -664,10 +645,6 @@ msgstr ""
 
 #: toggles.c:188 00default.xml:114
 msgid "Connect on startup"
-msgstr ""
-
-#: gobject.c:205
-msgid "Connecting to host"
 msgstr ""
 
 #: connect.c:215 connect.c:311 connect.c:320 connect.c:382 connect.c:397
@@ -1594,7 +1571,7 @@ msgid ""
 "one option can be used."
 msgstr ""
 
-#: ssl.c:112
+#: ssl.c:117
 msgid "SSL Connect failed"
 msgstr ""
 
@@ -1610,11 +1587,11 @@ msgstr ""
 msgid "SSL error"
 msgstr ""
 
-#: ssl.c:84
+#: ssl.c:89
 msgid "SSL negotiation failed"
 msgstr ""
 
-#: ssl.c:225
+#: ssl.c:230
 msgid "SSL_CTX_new() has failed"
 msgstr ""
 
@@ -1687,7 +1664,7 @@ msgstr ""
 msgid "Secure connection was successful."
 msgstr ""
 
-#: ssl.c:83 ssl.c:111 ssl.c:224 ssl.c:263 ssl.c:316
+#: ssl.c:88 ssl.c:116 ssl.c:229 ssl.c:268 ssl.c:321
 msgid "Security error"
 msgstr ""
 
@@ -1882,11 +1859,6 @@ msgstr ""
 
 #: v3270ftprogress.c:801
 msgid "Starting"
-msgstr ""
-
-#: gobject.c:193
-#, c-format
-msgid "State %04d can't accept requests"
 msgstr ""
 
 #: security.c:237
@@ -2318,11 +2290,6 @@ msgstr ""
 
 #: security.c:344
 msgid "Unexpected or unknown security status"
-msgstr ""
-
-#: gobject.c:208
-#, c-format
-msgid "Unexpected state %04d"
 msgstr ""
 
 #: actions.c:391
