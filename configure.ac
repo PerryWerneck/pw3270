@@ -96,6 +96,7 @@ case "$host" in
 
 		CFLAGS="$CFLAGS -D_WIN32_WINNT=0x0600"
 		LIBS="$LIBS -lws2_32 -lwtsapi32 -lintl -lcomdlg32"
+		HLLAPI_LDFLAGS="-static-libstdc++ -static-libgcc"
 
 		AC_CONFIG_FILES(win/makeruntime.sh)
 		AC_CONFIG_FILES(win/copydeps.sh)
@@ -114,6 +115,7 @@ case "$host" in
 
 		AC_SUBST(PROGRAMFILES,$app_cv_programfiles)
 		AC_SUBST(WINARCH,$app_cv_winarch)
+		AC_SUBST(HLLAPI_LDFLAGS)
 
 		;;
 

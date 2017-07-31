@@ -185,6 +185,7 @@ $(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@: \
 		-shared \
 		-Wl,-soname,`basename $@` \
 		-L$(BASEDIR)/.bin/Release \
+		@HLLAPI_LDFLAGS@ \
 		-o $@ $^ \
 		$(API_LIBS)
 
