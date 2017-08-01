@@ -167,6 +167,7 @@ extern "C" {
 	HLLAPI_API_CALL hllapi_enter(void);
 	HLLAPI_API_CALL hllapi_set_text_at(WORD row, WORD col, LPSTR text);
 	HLLAPI_API_CALL hllapi_cmp_text_at(WORD row, WORD col, LPSTR text);
+	HLLAPI_API_CALL hllapi_find_text_at(LPSTR text);
     HLLAPI_API_CALL hllapi_emulate_input(const LPSTR buffer, WORD len, WORD pasting);
     HLLAPI_API_CALL hllapi_input_string(LPSTR buffer, WORD len);
 	HLLAPI_API_CALL hllapi_wait_for_ready(WORD seconds);

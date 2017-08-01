@@ -228,6 +228,30 @@
  	return rc;
  }
 
+ HLLAPI_API_CALL hllapi_find_text_at(LPSTR text)
+ {
+	int rc = 0;
+
+	try
+	{
+		size_t pos = session::get_default()->get_contents().find((const char *) text);
+
+		if(pos != string::npos) {
+			rc = ((int) pos) + 1;
+		}
+
+	}
+	catch(std::exception &e)
+	{
+		rc = 0;
+	}
+
+ 	return rc;
+ }
+
+
+
+
  HLLAPI_API_CALL hllapi_set_unlock_delay(WORD ms)
  {
 	session::get_default()->set_unlock_delay(ms);

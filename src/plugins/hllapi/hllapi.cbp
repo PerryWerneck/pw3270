@@ -68,7 +68,6 @@
 		<Unit filename="../../classlib/remote.cc" />
 		<Unit filename="../../classlib/session.cc" />
 		<Unit filename="../../include/lib3270.h" />
-		<Unit filename="../../include/pw3270/class.h" />
 		<Unit filename="../../include/pw3270/hllapi.h" />
 		<Unit filename="Makefile.in" />
 		<Unit filename="calls.cc" />

@@ -224,6 +224,12 @@ $(SRCDIR): \
 Debug: \
 	$(BINDBG)/plugins/$(MODULE_NAME)@DLLEXT@
 
+test: \
+	$(BINDBG)/$(LIBNAME) \
+	$(OBJDBG)/testprogram.o
+
+	$(LD) -Wl,--rpath,$(BINDBG) -o $(BINDBG)/$(MODULE_NAME)@EXEEXT@ $(OBJDBG)/testprogram.o -L$(BINDBG) $(LIBS) -l$(MODULE_NAME)
+
 $(BINDBG)/$(LIBNAME): \
 	$(BINDBG)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@
 
