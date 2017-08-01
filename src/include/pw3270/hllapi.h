@@ -175,8 +175,6 @@ extern "C" {
 	HLLAPI_API_CALL hllapi_wait(WORD seconds);
 	HLLAPI_API_CALL hllapi_pfkey(WORD key);
 	HLLAPI_API_CALL hllapi_pakey(WORD key);
-	HLLAPI_API_CALL hllapi_setcursor(WORD key);
-	HLLAPI_API_CALL hllapi_getcursor();
 
     HLLAPI_API_CALL hllapi_set_session_parameter(LPSTR param, WORD len, WORD value);
 
@@ -211,6 +209,9 @@ extern "C" {
 	HLLAPI_API_CALL hllapi_pakey(WORD key);
 	HLLAPI_API_CALL hllapi_setcursor(WORD key);
 	HLLAPI_API_CALL hllapi_getcursor();
+	HLLAPI_API_CALL hllapi_get_cursor_address();
+	HLLAPI_API_CALL hllapi_setcursor(WORD addr);
+	HLLAPI_API_CALL hllapi_set_cursor_address(WORD addr);
 	HLLAPI_API_CALL hllapi_erase_eof(void);
 	HLLAPI_API_CALL hllapi_print(void);
 	HLLAPI_API_CALL hllapi_set_unlock_delay(WORD ms);

@@ -300,6 +300,22 @@
 
  }
 
+ HLLAPI_API_CALL hllapi_set_cursor_address(WORD pos)
+ {
+	if(!hllapi_is_connected())
+		return HLLAPI_STATUS_DISCONNECTED;
+
+	session::get_default()->set_cursor_addr(pos-1);
+
+	return HLLAPI_STATUS_SUCCESS;
+
+ }
+
+ HLLAPI_API_CALL hllapi_get_cursor_address()
+ {
+	return session::get_default()->get_cursor_addr()+1;
+ }
+
  HLLAPI_API_CALL hllapi_getcursor()
  {
 	return session::get_default()->get_cursor_addr()+1;
