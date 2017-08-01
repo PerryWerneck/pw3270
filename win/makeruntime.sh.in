@@ -145,9 +145,6 @@ copy_dll() {
 
 		done < ${REQUIRES}
 
-		# Anexo as obrigatórias
-		cp ${prefix}/bin/libwinpthread-1.dll ${TARGET}
-
 		rm -f ${SOURCES}
 		rm -f ${REQUIRES}
 

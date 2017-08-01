@@ -76,7 +76,7 @@ HOST_CC=@HOST_CC@
 LD=@CC@
 
 CFLAGS=@CFLAGS@ @LIB3270_CFLAGS@ @LIBSSL_CFLAGS@
-LIBS=@LIBS@ @LIBSSL_LIBS@ @LIBICONV@
+LIBS=@LIBS@ @LIBSSL_LIBS@ @LIBICONV@ @INTL_LIBS@
 LDFLAGS=@LDFLAGS@
 
 #---[ Rules ]----------------------------------------------------------------------------

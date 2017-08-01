@@ -95,10 +95,10 @@ case "$host" in
 		RLS_CFLAGS="-DNDEBUG=1"
 
 		CFLAGS="$CFLAGS -D_WIN32_WINNT=0x0600"
-		LIBS="$LIBS -lws2_32 -lwtsapi32 -lintl -lcomdlg32"
+		LIBS="$LIBS -lws2_32 -lwtsapi32 -lcomdlg32"
 
 		dnl https://stackoverflow.com/questions/13768515/how-to-do-static-linking-of-libwinpthread-1-dll-in-mingw
-		STATIC_LDFLAGS="-static-libstdc++ -static-libgcc"
+		STATIC_LDFLAGS="-static-libstdc++ -static-libgcc -static"
 
 		AC_CONFIG_FILES(win/makeruntime.sh)
 		AC_CONFIG_FILES(win/copydeps.sh)
@@ -218,6 +218,8 @@ dnl ---------------------------------------------------------------------------
 dnl Check for libintl
 dnl ---------------------------------------------------------------------------
 
+INTL_LIBS=""
+
 AC_PATH_TOOL([XGETTEXT], [xgettext], [no])
 AC_PATH_TOOL([MSGCAT], [msgcat], [no])
 AC_PATH_TOOL([MSGINIT], [msginit], [no])
@@ -229,7 +231,20 @@ AC_PATH_TOOL([OPTIPNG],[optipng],[no])
 
 AC_CHECK_HEADER(libintl.h, [
 	AC_DEFINE(HAVE_LIBINTL, 1)
+
+	case "$host" in
+	*-mingw32)
+		INTL_LIBS="-lintl"
+		;;
+
+	*)
+		INTL_LIBS=""
+
+	esac
+
 ])
+
+AC_SUBST(INTL_LIBS)
 
 dnl ---------------------------------------------------------------------------
 dnl Check for ELF symbol visibility support
