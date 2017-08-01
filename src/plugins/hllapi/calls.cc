@@ -228,7 +228,7 @@
  	return rc;
  }
 
- HLLAPI_API_CALL hllapi_find_text_at(LPSTR text)
+ HLLAPI_API_CALL hllapi_find_text(LPSTR text)
  {
 	int rc = 0;
 
