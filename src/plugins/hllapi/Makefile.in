@@ -182,7 +182,7 @@ $(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@: \
 	@echo $@ ...
 	@$(MKDIR) `dirname $@`
 	@$(LD) \
-		-shared \
+		@DLL_LDFLAGS@ \
 		-Wl,-soname,`basename $@` \
 		-L$(BASEDIR)/.bin/Release \
 		@STATIC_LDFLAGS@ \
@@ -196,7 +196,7 @@ $(BINRLS)/plugins/$(MODULE_NAME)@DLLEXT@: \
 	@echo $@ ...
 	@$(MKDIR) `dirname $@`
 	@$(LD) \
-		-shared \
+		@DLL_LDFLAGS@ \
 		-Wl,-soname,$(MODULE_NAME)d \
 		-L$(BASEDIR)/.bin/Release \
 		-o $@ $(foreach SRC, $(basename $(PLUGIN_SOURCES)), $(OBJRLS)/$(SRC).o) \

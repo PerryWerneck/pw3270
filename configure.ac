@@ -71,6 +71,8 @@ RLS_CFLAGS="-DNDEBUG=1"
 PLUGINS=""
 APP_RESOURCES=""
 APP_LDFLAGS=""
+DLL_LDFLAGS="-shared"
+STATIC_LDFLAGS=""
 
 dnl ---------------------------------------------------------------------------
 dnl Check for OS specifics
@@ -99,6 +101,7 @@ case "$host" in
 
 		dnl https://stackoverflow.com/questions/13768515/how-to-do-static-linking-of-libwinpthread-1-dll-in-mingw
 		STATIC_LDFLAGS="-static-libstdc++ -static-libgcc -static"
+		DLL_LDFLAGS="-shared -Wl,--add-stdcall-alias"
 
 		AC_CONFIG_FILES(win/makeruntime.sh)
 		AC_CONFIG_FILES(win/copydeps.sh)
@@ -117,8 +120,6 @@ case "$host" in
 
 		AC_SUBST(PROGRAMFILES,$app_cv_programfiles)
 		AC_SUBST(WINARCH,$app_cv_winarch)
-		AC_SUBST(STATIC_LDFLAGS)
-
 		;;
 
 	*-apple-*)
@@ -153,7 +154,8 @@ AC_SUBST(DLLPREFIX)
 AC_SUBST(DLLEXT)
 AC_SUBST(APP_RESOURCES)
 AC_SUBST(APP_LDFLAGS)
-
+AC_SUBST(DLL_LDFLAGS)
+AC_SUBST(STATIC_LDFLAGS)
 
 dnl ---------------------------------------------------------------------------
 dnl Check for other programs
