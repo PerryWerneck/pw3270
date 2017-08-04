@@ -33,7 +33,6 @@ gnome-icon-theme
 hicolor-icon-theme
 gdk-pixbuf-loader-rsvg
 gdk-pixbuf-query-loaders
-python-devel
 EOF
 
 # Instala apicativos e temas necessários
@@ -69,8 +68,8 @@ do
 		case $parameter in
 
 		ar)
-			zypper ar --refresh http://download.opensuse.org/repositories/windows:/mingw:/win32/openSUSE_42.1/ mingw32
-			zypper ar --refresh http://download.opensuse.org/repositories/windows:/mingw:/win64/openSUSE_42.1/ mingw64
+			zypper ar --refresh http://download.opensuse.org/repositories/windows:/mingw:/win32/openSUSE_42.3/ mingw32
+			zypper ar --refresh http://download.opensuse.org/repositories/windows:/mingw:/win64/openSUSE_42.3/ mingw64
 			;;
 
 		32)

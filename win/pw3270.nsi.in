@@ -129,10 +129,14 @@ SubSection "@PACKAGE@" SecMain
 	SubSection "Plugins" SecPLugin
 
 		Section /o "HLLAPI" HLLAPIPlugin
+
 			setOutPath $INSTDIR
 
+			${DisableX64FSRedirection}
 			CreateDirectory "$INSTDIR\plugins"
 			file "/oname=$INSTDIR\plugins\hllapi.dll"	"..\.bin\Release\plugins\hllapi.dll"
+
+			${EnableX64FSRedirection}
 			file "/oname=$SYSDIR\libhllapi.dll"			"..\.bin\Release\libhllapi.dll.@PACKAGE_VERSION@"
 
 		sectionEnd
