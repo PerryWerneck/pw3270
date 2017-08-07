@@ -230,7 +230,7 @@
 
  HLLAPI_API_CALL hllapi_find_text(LPSTR text)
  {
- 	return (int) session::get_default()->find_string((const char *text),false);
+ 	return (int) session::get_default()->find_string((const char *) text, false);
 
  	/*
 	int rc = 0;
