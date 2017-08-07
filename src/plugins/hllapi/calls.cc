@@ -230,11 +230,14 @@
 
  HLLAPI_API_CALL hllapi_find_text(LPSTR text)
  {
+ 	return (int) session::get_default()->find_string((const char *text),false);
+
+ 	/*
 	int rc = 0;
 
 	try
 	{
-		size_t pos = session::get_default()->get_contents().find((const char *) text);
+		size_t pos = session::get_default()->get_contents(true).find((const char *) text);
 
 		if(pos != string::npos) {
 			rc = ((int) pos) + 1;
@@ -247,6 +250,7 @@
 	}
 
  	return rc;
+ 	*/
  }
 
 

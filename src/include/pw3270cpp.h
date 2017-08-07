@@ -209,7 +209,8 @@
 		int				  		  cmp_string_at(int row, int col, const char *text);
 		int				  		  wait_for_string_at(int row, int col, const char *key, int timeout);
 		int						  input_string(const char *str);
-		string			  		  get_contents();
+		string			  		  get_contents(bool lf = true);
+		size_t					  find_string(const char *str, bool lf = false);
 
 		inline operator string() {
 			return get_string();

@@ -686,7 +686,7 @@
 		return -1;
 	}
 
-	string session::get_contents()
+	string session::get_contents(bool lf)
 	{
 		string	rc = "";
 		int		rows = get_height();
@@ -695,11 +695,36 @@
 		for(int r = 0; r < rows; r++)
 		{
 			rc += get_string_at(r+1,1,cols).c_str();
-			rc += "\n";
+			if(lf) {
+				rc += "\n";
+			}
 		}
 
 		return rc;
 	}
+
+	size_t session::find_string(const char *str, bool lf) {
+
+		int rc = 0;
+
+		try
+		{
+			size_t pos = get_contents(lf).find(str);
+
+			if(pos != string::npos) {
+				rc = ((int) pos) + 1;
+			}
+
+		}
+		catch(std::exception &e)
+		{
+			rc = 0;
+		}
+
+		return rc;
+
+	}
+
 
 	string session::get_session_name(void) const
 	{
