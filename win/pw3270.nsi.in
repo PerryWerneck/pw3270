@@ -1,5 +1,5 @@
 !include "MUI2.nsh"
-!include x64.nsh
+!include "x64.nsh"
 !include "FileFunc.nsh"
 
 Name "@PACKAGE@"
@@ -226,15 +226,15 @@ Function .onInit
 
 	${if} $0 == "NO"
 
-		SectionGetFlags "${HLLAPIPlugin}" $0
+		SectionGetFlags ${HLLAPIPlugin} $0
 		IntOp $0 $0 & ${SECTION_OFF}
-		SectionSetFlags "${HLLAPIPlugin}" $0
+		SectionSetFlags ${HLLAPIPlugin} $0
 
 	${else}
 
-		SectionGetFlags "${HLLAPIPlugin}" $0
+		SectionGetFlags ${HLLAPIPlugin} $0
 		IntOp $0 $0 | ${SF_SELECTED}
-		SectionSetFlags "${HLLAPIPlugin}" $0
+		SectionSetFlags ${HLLAPIPlugin} $0
 
 	${EndIf}
 
@@ -250,23 +250,23 @@ Function .onInit
 
 	${if} $4 == ""
 
-		SectionGetFlags "SecGTK" $0
+		SectionGetFlags ${SecGTK} $0
 		IntOp $0 $0 | ${SF_SELECTED}
-		SectionSetFlags "SecGTK" $0
+		SectionSetFlags ${SecGTK} $0
 
 	${Else}
 
 		${if} ${FileExists} `$4\*.*`
 
-			SectionGetFlags "SecGTK" $0
+			SectionGetFlags ${SecGTK}  $0
 			IntOp $0 $0 & ${SECTION_OFF}
-			SectionSetFlags "SecGTK" $0
+			SectionSetFlags ${SecGTK}  $0
 
 		${Else}
 
-			SectionGetFlags "SecGTK" $0
+			SectionGetFlags ${SecGTK}  $0
 			IntOp $0 $0 | ${SF_SELECTED}
-			SectionSetFlags "SecGTK" $0
+			SectionSetFlags ${SecGTK}  $0
 
 		${EndIf}
 
