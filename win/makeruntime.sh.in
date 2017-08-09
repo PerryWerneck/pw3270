@@ -123,6 +123,8 @@ copy_dll() {
 				COUNT=$(find "$(dirname ${myDIR})/.bin/Release/" -iname ${FILENAME} | wc --lines)
 				if [ "${COUNT}" == "0" ]; then
 
+					echo ${FILENAME}
+
 					if [ -e ${prefix}/bin/${FILENAME} ]; then
 
 						echo "Copiando $(basename ${FILENAME})..."
@@ -135,6 +137,7 @@ copy_dll() {
 					else 
 
 						echo "Can't find ${FILENAME}"
+						exit -1
 
 					fi
 

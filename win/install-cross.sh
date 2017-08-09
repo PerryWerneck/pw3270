@@ -6,6 +6,7 @@ install_packages()
 TEMPFILE=$(mktemp)
 
 cat > ${TEMPFILE} << EOF
+libopenssl
 libopenssl-devel
 libintl-devel
 libepoxy0
