@@ -54,6 +54,9 @@
 		if(hSession)
 			delete hSession;
 		hSession = session::create(mode);
+
+		session::get_default()->set_display_charset();
+
 		trace("hSession=%p",hSession);
 	}
 	catch(std::exception &e)
@@ -239,6 +242,21 @@
 	return 0;
  }
 
+ HLLAPI_API_CALL hllapi_set_charset(LPSTR text)
+ {
+ 	try
+ 	{
+
+		session::get_default()->set_display_charset(NULL, (const char *) text);
+
+ 	}
+	catch(std::exception &e)
+	{
+		return HLLAPI_STATUS_SYSTEM_ERROR;
+	}
+
+	return 0;
+ }
 
  HLLAPI_API_CALL hllapi_pfkey(WORD key)
  {

@@ -222,6 +222,7 @@
 		trace("%s(%s,%s)",__FUNCTION__,remote,local);
 
 #ifdef HAVE_ICONV
+
 		string display_charset = this->get_display_charset();
 
 		if(this->conv2Local != (iconv_t) (-1))
@@ -243,8 +244,15 @@
 		}
 		else
 		{
+			// Same charset, doesn't convert
 			conv2Local = conv2Host = (iconv_t)(-1);
 		}
+
+#else
+
+		#error aqui
+		throw exception("%s",strerror(ENOSUP));
+
 
 #endif
 

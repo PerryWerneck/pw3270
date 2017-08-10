@@ -154,9 +154,6 @@ extern "C" {
 
 	HLLAPI_API_CALL hllapi_reset(void);
 
-	HLLAPI_API_CALL hllapi_get_revision(void);
-	HLLAPI_API_CALL hllapi_get_datadir(LPSTR datadir);
-
 	HLLAPI_API_CALL hllapi_connect(LPSTR uri, WORD wait);
 	HLLAPI_API_CALL hllapi_disconnect(void);
 	HLLAPI_API_CALL hllapi_get_message_id(void);
@@ -192,6 +189,7 @@ extern "C" {
 
 	HLLAPI_API_CALL hllapi_get_revision(void);
 	HLLAPI_API_CALL hllapi_get_datadir(LPSTR datadir);
+	HLLAPI_API_CALL hllapi_set_charset(LPSTR datadir);
 
 	HLLAPI_API_CALL hllapi_connect(LPSTR uri, WORD wait);
 	HLLAPI_API_CALL hllapi_disconnect(void);
