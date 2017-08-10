@@ -64,6 +64,7 @@
 		</Compiler>
 		<Unit filename="../../include/lib3270.h" />
 		<Unit filename="../../include/pw3270/hllapi.h" />
+		<Unit filename="../../include/pw3270cpp.h" />
 		<Unit filename="Makefile.in" />
 		<Unit filename="calls.cc" />
 		<Unit filename="client.h" />

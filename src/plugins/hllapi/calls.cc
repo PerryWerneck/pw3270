@@ -318,8 +318,9 @@
 		return HLLAPI_STATUS_DISCONNECTED;
 	}
 
-	if(!(buffer && *buffer))
-		return rc;
+	if(!(buffer && *buffer)) {
+		return HLLAPI_STATUS_BAD_PARAMETER;
+	}
 
 	try
 	{
@@ -336,7 +337,7 @@
 
 		memset(buffer,' ',szBuffer);
 
-		string str = session::get_default()->get_string(offset,szBuffer);
+		string str = session::get_default()->get_string(offset,szBuffer,false);
 		strncpy(buffer,str.c_str(),szBuffer);
 		rc = HLLAPI_STATUS_SUCCESS;
 	}

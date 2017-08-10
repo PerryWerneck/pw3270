@@ -1148,18 +1148,18 @@
 			return ETIMEDOUT;
 		}
 
-		string get_text(int baddr, size_t len)
+		string get_text(int baddr, size_t len, bool lf)
 		{
 #if defined(WIN32)
 
-			struct hllapi_packet_query_offset query = { HLLAPI_PACKET_GET_TEXT_AT_OFFSET, (unsigned short) baddr, (unsigned short) len, '\n' };
+			struct hllapi_packet_query_offset query = { HLLAPI_PACKET_GET_TEXT_AT_OFFSET, (unsigned short) baddr, (unsigned short) len, lf ? '\n' : 0 };
 			return query_string(&query,sizeof(query),len);
 
 #elif defined(HAVE_DBUS)
 
 			dbus_int32_t b = (dbus_int32_t) baddr;
 			dbus_int32_t l = (dbus_int32_t) len;
-			unsigned char d = '\n';
+			unsigned char d = lf ? '\n' : 0;
 
 			DBusMessage * msg = create_message("getText");
 			if(!msg)

@@ -203,7 +203,7 @@
 		string					  ebc2asc(string &str);
 
 		// Get/Set/Text with charset translation
-		string					  get_string(int baddr = 0, size_t len = -1);
+		string					  get_string(int baddr = 0, size_t len = -1, bool lf = false);
 		string					  get_string_at(int row, int col, size_t sz);
 		int			 			  set_string_at(int row, int col, const char *str);
 		int				  		  cmp_string_at(int row, int col, const char *text);
@@ -274,12 +274,12 @@
 		session();
 
 		// Get/Set/Test without charset translation
-		virtual string			  get_text(int baddr = 0, size_t len = 1)			= 0;
-		virtual string 			  get_text_at(int row, int col, size_t sz) 			= 0;
-		virtual int 			  set_text_at(int row, int col, const char *str)	= 0;
-		virtual int				  cmp_text_at(int row, int col, const char *text)	= 0;
+		virtual string			  get_text(int baddr = 0, size_t len = 1, bool lf = false)	= 0;
+		virtual string 			  get_text_at(int row, int col, size_t sz) 					= 0;
+		virtual int 			  set_text_at(int row, int col, const char *str)			= 0;
+		virtual int				  cmp_text_at(int row, int col, const char *text)			= 0;
+		virtual int               emulate_input(const char *str)							= 0;
 		virtual int				  wait_for_text_at(int row, int col, const char *key, int timeout);
-		virtual int               emulate_input(const char *str)                    = 0;
 
 	private:
 

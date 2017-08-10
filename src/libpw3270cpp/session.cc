@@ -588,9 +588,9 @@
 		return wait_for_text_at(row,col,get_3270_text(key).c_str(),timeout);
 	}
 
-	string session::get_string(int baddr, size_t len)
+	string session::get_string(int baddr, size_t len, bool lf)
 	{
-		return get_local_text(get_text(baddr,len).c_str());
+		return get_local_text(get_text(baddr,len,lf).c_str());
 	}
 
 	string session::asc2ebc(string &str)

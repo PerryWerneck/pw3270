@@ -198,15 +198,17 @@
 
 	protected:
 
-		virtual string get_text(int baddr = 0, size_t len = 1)
+		virtual string get_text(int baddr = 0, size_t len = 1, bool lf = true)
 		{
-			dbus_int32_t a = (dbus_int32_t) baddr;
-			dbus_int32_t s = (dbus_int32_t) len;
+			dbus_int32_t 	a = (dbus_int32_t) baddr;
+			dbus_int32_t 	s = (dbus_int32_t) len;
+			char			c = lf ? '\n' : 0;
 
 			return getString(	"getText",
 								DBUS_TYPE_STRING, &this->id,
-								DBUS_TYPE_INT32, &a,
-								DBUS_TYPE_INT32, &s,
+								DBUS_TYPE_INT32, 	&a,
+								DBUS_TYPE_INT32, 	&s,
+								DBUS_TYPE_BYTE,		&c,
 								DBUS_TYPE_INVALID);
 
 		}

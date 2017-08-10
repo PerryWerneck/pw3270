@@ -377,10 +377,10 @@
 			return _cmp_text_at(hSession,row,col,text);
 		}
 
-		string get_text(int offset, size_t len)
+		string get_text(int offset, size_t len, bool lf)
 		{
 			string	  rc;
-			char	* ptr = _get_text(hSession,offset,len,'\n');
+			char	* ptr = _get_text(hSession,offset,len,lf ? '\n' : 0);
 
 			if(ptr)
 			{
