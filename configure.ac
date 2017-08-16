@@ -105,7 +105,7 @@ case "$host" in
 
 		AC_CONFIG_FILES(win/makeruntime.sh)
 		AC_CONFIG_FILES(win/copydeps.sh)
-		AC_CONFIG_FILES(win/pw3270.nsi)
+		AC_CONFIG_FILES(win/$PACKAGE_TARNAME.nsi)
 		AC_CONFIG_FILES(src/pw3270/resources.rc)
 
 		PLUGINS="$PLUGINS hllapi"
