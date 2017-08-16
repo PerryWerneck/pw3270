@@ -273,8 +273,8 @@ rm -f ${DESTDIR}/${PACKAGE}-latest.zip
 
 zip -9 -r -j \
 		${DESTDIR}/${PACKAGE}-latest.zip \
-		$(readlink -f ${DESTDIR}/${PACKAGE}/${PACKAGE}-latest-i686.exe) \
-		$(readlink -f ${DESTDIR}/${PACKAGE}/${PACKAGE}-latest-x86_64.exe) 
+		$(readlink -f ${DESTDIR}/${PACKAGE_NAME}/${PACKAGE}-latest-i686.exe) \
+		$(readlink -f ${DESTDIR}/${PACKAGE_NAME}/${PACKAGE}-latest-x86_64.exe) 
 
 echo -e "\e]2;Success!\a"
 
