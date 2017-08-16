@@ -1,4 +1,4 @@
-1 ICON @PACKAGE_NAME@.ico
+1 ICON @PACKAGE_TARNAME@.ico
 
 2 VERSIONINFO
 FILEVERSION     @PACKAGE_MAJOR_VERSION@,@PACKAGE_MINOR_VERSION@,@PACKAGE_MAJOR_RELEASE@
@@ -12,7 +12,7 @@ BEGIN
       VALUE "FileVersion", "@PACKAGE_VERSION@"
       VALUE "InternalName", "@PACKAGE_NAME@"
       VALUE "LegalCopyright", "Copyright (c) Banco do Brasil S.A."
-      VALUE "OriginalFilename", "@PACKAGE_NAME@.exe"
+      VALUE "OriginalFilename", "@PACKAGE_TARNAME@.exe"
       VALUE "ProductName", "@PACKAGE_NAME@"
       VALUE "ProductVersion", "@PACKAGE_VERSION@-@PACKAGE_MAJOR_RELEASE@.@PACKAGE_MINOR_RELEASE@"
     END
