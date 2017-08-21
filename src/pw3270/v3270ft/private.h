@@ -183,9 +183,6 @@
 	G_GNUC_INTERNAL guint	  v3270ftprogress_signal[V3270FTPROGRESS_SIGNAL_COUNT];
 
 
-//	G_GNUC_INTERNAL void v3270ft_store(v3270ft *dialog, struct v3270ft_entry *info);
-//	G_GNUC_INTERNAL void v3270ft_restore(v3270ft *dialog, struct v3270ft_entry *info);
-
 	G_GNUC_INTERNAL void	  v3270ft_update_actions(v3270ft *dialog);
 	G_GNUC_INTERNAL void	  v3270ft_update_state(struct v3270ft_entry *entry);
 	G_GNUC_INTERNAL void 	  v3270ft_set_active(v3270ft *dialog, GList * active);

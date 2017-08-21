@@ -410,6 +410,32 @@
 
  void paste_file_action(GtkAction *action, GtkWidget *widget)
  {
+ 	const gchar * name		= g_object_get_data(G_OBJECT(action),"filename");
+ 	const gchar * charset	= g_object_get_data(G_OBJECT(action),"charset");
+
+	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
+
+ 	if(name) {
+
+		// Tem nome pre-definido, colca direto
+		paste_filename(widget,name,charset);
+		return;
+
+ 	}
+
+
+ 	gchar * filename = pw3270_file_chooser(	GTK_FILE_CHOOSER_ACTION_OPEN,
+											"paste",
+											g_object_get_data(G_OBJECT(action),"title"),
+											name
+										);
+
+	if(filename) {
+		paste_filename(widget,filename,charset);
+		g_free(filename);
+	}
+
+ 	/*
  	const gchar * user_title	= g_object_get_data(G_OBJECT(action),"title");
  	const gchar * filename		= g_object_get_data(G_OBJECT(action),"filename");
  	gchar 		* encattr		= NULL;
@@ -458,6 +484,7 @@
 
 	if(encattr)
 		g_free(encattr);
+	*/
  }
 
  G_GNUC_INTERNAL void about_dialog_action(GtkAction *action, GtkWidget *widget)
@@ -564,7 +591,7 @@ static gpointer select_file(struct file *fl) {
 }
 #endif // _WIN32
 
- LIB3270_EXPORT gchar * pw3270_file_chooser(GtkFileChooserAction action, const gchar *name,  const gchar *title, const gchar *file, const gchar *ext)
+ LIB3270_EXPORT gchar * pw3270_file_chooser(GtkFileChooserAction action, const gchar *name,  const gchar *title, const gchar *file)
  {
     gchar       * filename      = NULL;
 

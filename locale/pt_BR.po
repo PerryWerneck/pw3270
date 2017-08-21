@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-10 10:21-0300\n"
+"POT-Creation-Date: 2017-08-21 09:51-0300\n"
 "PO-Revision-Date: 2017-02-15 17:08-0200\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <perry.werneck@gmail.com>\n"
@@ -119,7 +119,7 @@ msgstr "Alerta 3270"
 msgid "3270 screen"
 msgstr "Tela 3270"
 
-#: dialog.c:523
+#: dialog.c:531
 #, c-format
 msgid "3270 terminal emulator for GTK %d.%d"
 msgstr "Emulador 3270 para GTK+ %d.%d"
@@ -363,7 +363,7 @@ msgstr "Azul"
 msgid "Bold"
 msgstr "Negrito"
 
-#: dialog.c:530
+#: dialog.c:538
 msgid "Brazilian Public Software Portal"
 msgstr "Portal do Software Público Brasileiro"
 
@@ -419,6 +419,11 @@ msgstr "Não foi possível conectar a %s"
 msgid "Can't connect to %s:%s"
 msgstr "Não foi possível conectar a %s:%s"
 
+#: main.c:70
+#, fuzzy
+msgid "Can't connect to DBUS server"
+msgstr "Não foi possível conectar a %s"
+
 #: selection.c:425
 #, c-format
 msgid "Can't convert line %d from %s to %s"
@@ -432,6 +437,10 @@ msgstr "Recortar não permitido em seleção retangular"
 #, c-format
 msgid "Can't determine value for environment variable \"%s\" "
 msgstr "Não consigo determinar o valor da variável de ambiente \"%s\" "
+
+#: main.c:115
+msgid "Can't get DBUS object name"
+msgstr ""
 
 #: ft.c:413
 msgid "Can't get file size"
@@ -653,6 +662,11 @@ msgstr "Configurar host"
 #: toggles.c:188 00default.xml:114
 msgid "Connect on startup"
 msgstr "Conectar ao iniciar"
+
+#: gobject.c:205
+#, fuzzy
+msgid "Connecting to host"
+msgstr "Não foi possível conectar ao servidor"
 
 #: connect.c:215 connect.c:311 connect.c:320 connect.c:382 connect.c:397
 #: connect.c:413 connect.c:427 connect.c:447 connect.c:461 connect.c:477
@@ -1353,10 +1367,6 @@ msgstr "Colar próximo"
 msgid "Paste text file"
 msgstr "Colar arquivo texto"
 
-#: dialog.c:428
-msgid "Paste text file contents"
-msgstr "Colar conteúdo de arquivo texto"
-
 #: toggles.c:128 00default.xml:120
 msgid "Paste with left margin"
 msgstr "Colar com margem esquerda"
@@ -1913,6 +1923,11 @@ msgstr "Iniciar transferência de arquivo"
 msgid "Starting"
 msgstr "Iniciando"
 
+#: gobject.c:193
+#, c-format
+msgid "State %04d can't accept requests"
+msgstr ""
+
 #: security.c:237
 msgid "Subject issuer mismatch"
 msgstr "Divergência na identidade do emissor"
@@ -2175,7 +2190,7 @@ msgstr "Não encontrei configuração para a tabela de caracteres \"%s\""
 msgid "This is a host program error."
 msgstr "Este é um erro no programa do host."
 
-#: dialog.c:472
+#: dialog.c:480
 msgid ""
 "This program is free software; you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -2398,6 +2413,11 @@ msgstr "Valor de cor inválido ou inesperado: \"%s\""
 msgid "Unexpected or unknown security status"
 msgstr "Estado de segurança inesperado ou desconhecido."
 
+#: gobject.c:208
+#, fuzzy, c-format
+msgid "Unexpected state %04d"
+msgstr "Alvo inesperado \"%s\""
+
 #: actions.c:391
 #, c-format
 msgid "Unexpected target \"%s\""
@@ -2460,7 +2480,7 @@ msgstr "Use the keys +/- from keypad to select editable fields"
 msgid "Variable"
 msgstr "Variável"
 
-#: dialog.c:513 dialog.c:515
+#: dialog.c:521 dialog.c:523
 #, c-format
 msgid "Version %s-%s"
 msgstr "Versão %s-%s"
@@ -2742,7 +2762,7 @@ msgstr "ioctlsocket(FIONBIO) failed."
 msgid "setsockopt(SO_OOBINLINE) has failed"
 msgstr "setsockopt(SO_OOBINLINE) has failed"
 
-#: dialog.c:533
+#: dialog.c:541
 msgid "translator-credits"
 msgstr "translator-credits"
 
@@ -2802,10 +2822,6 @@ msgstr "translator-credits"
 #~ "32768. Valores maiores trazem maior performance, porem, nem todos os "
 #~ "hosts podem suportá-los."
 
-#, fuzzy
-#~ msgid "Can't connect to DBUS server"
-#~ msgstr "Não foi possível conectar a %s"
-
 #~ msgid "Can't start download."
 #~ msgstr "Não foi possível iniciar o download."
 
@@ -2841,10 +2857,6 @@ msgstr "translator-credits"
 
 #~ msgid "Complete"
 #~ msgstr "Completo"
-
-#, fuzzy
-#~ msgid "Connecting to host"
-#~ msgstr "Não foi possível conectar ao servidor"
 
 #~ msgid "Copiar tudo"
 #~ msgstr "Copiar tudo"
@@ -2989,6 +3001,9 @@ msgstr "translator-credits"
 
 #~ msgid "Passthru Proxy: send error"
 #~ msgstr "Passthru Proxy: Erro ao enviar"
+
+#~ msgid "Paste text file contents"
+#~ msgstr "Colar conteúdo de arquivo texto"
 
 #~ msgid "Proxy server (type:host[:port])"
 #~ msgstr "Servidor proxy (tipo:nome[:port])"
@@ -3207,10 +3222,6 @@ msgstr "translator-credits"
 
 #~ msgid "Unexpected element <%s>"
 #~ msgstr "Elemento <%s> inesperado"
-
-#, fuzzy
-#~ msgid "Unexpected state %04d"
-#~ msgstr "Alvo inesperado \"%s\""
 
 #~ msgid ""
 #~ "Unknown host:\n"
