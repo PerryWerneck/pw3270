@@ -9,7 +9,7 @@ msgstr ""
 "#-#-#-#-#  lib3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-21 09:51-0300\n"
+"POT-Creation-Date: 2017-08-21 10:23-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "#-#-#-#-#  pw3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-21 09:51-0300\n"
+"POT-Creation-Date: 2017-08-21 10:23-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,17 +32,6 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-01-18 17:12-0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  dbus3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-21 09:51-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -151,7 +140,7 @@ msgstr ""
 msgid "3270 screen"
 msgstr ""
 
-#: dialog.c:531
+#: dialog.c:550
 #, c-format
 msgid "3270 terminal emulator for GTK %d.%d"
 msgstr ""
@@ -379,7 +368,7 @@ msgstr ""
 msgid "Bold"
 msgstr ""
 
-#: dialog.c:538
+#: dialog.c:557
 msgid "Brazilian Public Software Portal"
 msgstr ""
 
@@ -435,10 +424,6 @@ msgstr ""
 msgid "Can't connect to %s:%s"
 msgstr ""
 
-#: main.c:70
-msgid "Can't connect to DBUS server"
-msgstr ""
-
 #: selection.c:425
 #, c-format
 msgid "Can't convert line %d from %s to %s"
@@ -451,10 +436,6 @@ msgstr ""
 #: connect.c:217
 #, c-format
 msgid "Can't determine value for environment variable \"%s\" "
-msgstr ""
-
-#: main.c:115
-msgid "Can't get DBUS object name"
 msgstr ""
 
 #: ft.c:413
@@ -664,10 +645,6 @@ msgstr ""
 
 #: toggles.c:188 00default.xml:114
 msgid "Connect on startup"
-msgstr ""
-
-#: gobject.c:205
-msgid "Connecting to host"
 msgstr ""
 
 #: connect.c:215 connect.c:311 connect.c:320 connect.c:382 connect.c:397
@@ -1880,11 +1857,6 @@ msgstr ""
 msgid "Starting"
 msgstr ""
 
-#: gobject.c:193
-#, c-format
-msgid "State %04d can't accept requests"
-msgstr ""
-
 #: security.c:237
 msgid "Subject issuer mismatch"
 msgstr ""
@@ -2106,7 +2078,7 @@ msgstr ""
 msgid "This is a host program error."
 msgstr ""
 
-#: dialog.c:480
+#: dialog.c:499
 msgid ""
 "This program is free software; you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -2316,11 +2288,6 @@ msgstr ""
 msgid "Unexpected or unknown security status"
 msgstr ""
 
-#: gobject.c:208
-#, c-format
-msgid "Unexpected state %04d"
-msgstr ""
-
 #: actions.c:391
 #, c-format
 msgid "Unexpected target \"%s\""
@@ -2383,7 +2350,7 @@ msgstr ""
 msgid "Variable"
 msgstr ""
 
-#: dialog.c:521 dialog.c:523
+#: dialog.c:540 dialog.c:542
 #, c-format
 msgid "Version %s-%s"
 msgstr ""
@@ -2647,6 +2614,6 @@ msgstr ""
 msgid "setsockopt(SO_OOBINLINE) has failed"
 msgstr ""
 
-#: dialog.c:541
+#: dialog.c:560
 msgid "translator-credits"
 msgstr ""

@@ -265,7 +265,14 @@ install-branding:
 Debug: \
 	$(BINDBG)/lib3270@DLLEXT@ \
 	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@ \
+	$(BINDBG)/libpw3270cpp.a \
 	$(foreach PLG, $(PLUGINS), $(BINDBG)/plugins/$(PLG)@DLLEXT@)
+
+$(BINDBG)/libpw3270cpp.a: \
+	src/libpw3270cpp/*
+
+	@$(MAKE) -C src/libpw3270cpp Debug
+
 
 run: \
 	$(BINDBG)/lib3270@DLLEXT@ \

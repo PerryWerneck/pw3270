@@ -196,7 +196,6 @@ extern "C" {
 	HLLAPI_API_CALL hllapi_get_message_id(void);
 	HLLAPI_API_CALL hllapi_is_connected(void);
 	HLLAPI_API_CALL hllapi_get_state(void);
-	HLLAPI_API_CALL hllapi_get_screen_at(WORD row, WORD col, LPSTR buffer);
 	HLLAPI_API_CALL hllapi_get_screen(WORD pos, LPSTR buffer, WORD len);
 	HLLAPI_API_CALL hllapi_enter(void);
 	HLLAPI_API_CALL hllapi_set_text_at(WORD row, WORD col, LPSTR text);

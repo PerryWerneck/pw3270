@@ -148,9 +148,9 @@ $(SRCDIR): \
 #---[ Debug Targets ]--------------------------------------------------------------------
 
 Debug: \
-	.bin/Debug/$(MODULE_NAME)@EXEEXT@
+	$(BASEDIR)/.bin/Debug/$(MODULE_NAME).a
 
-$(BASEDIR)/.obj/Debug/$(MODULE_NAME).a: \
+$(BASEDIR)/.bin/Debug/$(MODULE_NAME).a: \
 	$(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC).o)
 
 	@echo $@ ...
@@ -159,7 +159,7 @@ $(BASEDIR)/.obj/Debug/$(MODULE_NAME).a: \
 
 .bin/Debug/$(MODULE_NAME)@EXEEXT@: \
 	$(OBJDBG)/testprogram.o \
-	$(BASEDIR)/.obj/Debug/$(MODULE_NAME).a
+	$(BASEDIR)/.bin/Debug/$(MODULE_NAME).a
 
 	@$(MKDIR) `dirname $@`
 	@$(LD) $(APP_LDFLAGS) -o $@ $^ $(LIBS)

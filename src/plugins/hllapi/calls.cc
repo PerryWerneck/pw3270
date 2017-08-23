@@ -129,11 +129,11 @@
  {
 	switch(hllapi_get_message_id())
 	{
-	case LIB3270_MESSAGE_NONE:				// 0 - No message
-		return HLLAPI_STATUS_SUCCESS;		// keyboard was unlocked and ready for input.
+	case LIB3270_MESSAGE_NONE:					// 0 - No message
+		return HLLAPI_STATUS_SUCCESS;			// keyboard was unlocked and ready for input.
 
-	case LIB3270_MESSAGE_DISCONNECTED:		// 4 - Disconnected from host
-		return HLLAPI_STATUS_DISCONNECTED;	// Your application program was not connected to a valid session.
+	case LIB3270_MESSAGE_DISCONNECTED:			// 4 - Disconnected from host
+		return HLLAPI_STATUS_DISCONNECTED;		// Your application program was not connected to a valid session.
 
 	case LIB3270_MESSAGE_MINUS:
 	case LIB3270_MESSAGE_PROTECTED:
@@ -163,23 +163,37 @@
 
  HLLAPI_API_CALL hllapi_wait_for_ready(WORD seconds)
  {
+	if(!hllapi_is_connected())
+		return HLLAPI_STATUS_DISCONNECTED;
+
 	session::get_default()->wait_for_ready(seconds);
+
 	return hllapi_get_state();
  }
 
  HLLAPI_API_CALL hllapi_wait(WORD seconds)
  {
+	if(!hllapi_is_connected())
+		return HLLAPI_STATUS_DISCONNECTED;
+
 	session::get_default()->wait(seconds);
+
 	return hllapi_get_state();
  }
 
  HLLAPI_API_CALL hllapi_get_message_id(void)
  {
+	if(!hllapi_is_connected())
+		return HLLAPI_STATUS_DISCONNECTED;
+
 	return session::get_default()->get_program_message();
  }
 
  HLLAPI_API_CALL hllapi_get_screen_at(WORD row, WORD col, LPSTR buffer)
  {
+	if(!hllapi_is_connected())
+		return HLLAPI_STATUS_DISCONNECTED;
+
 	if(!(buffer && *buffer))
 		return HLLAPI_STATUS_SYSTEM_ERROR;
 
@@ -199,11 +213,17 @@
 
  HLLAPI_API_CALL hllapi_enter(void)
  {
+	if(!hllapi_is_connected())
+		return HLLAPI_STATUS_DISCONNECTED;
+
 	return session::get_default()->enter();
  }
 
  HLLAPI_API_CALL hllapi_set_text_at(WORD row, WORD col, LPSTR text)
  {
+	if(!hllapi_is_connected())
+		return HLLAPI_STATUS_DISCONNECTED;
+
 	try
 	{
 		session::get_default()->set_string_at(row,col,text);
@@ -218,7 +238,12 @@
 
  HLLAPI_API_CALL hllapi_cmp_text_at(WORD row, WORD col, LPSTR text)
  {
+
+	if(!hllapi_is_connected())
+		return HLLAPI_STATUS_DISCONNECTED;
+
  	int rc = HLLAPI_STATUS_SYSTEM_ERROR;
+
 	try
 	{
 		rc = session::get_default()->cmp_string_at(row,col,text);
@@ -233,6 +258,9 @@
 
  HLLAPI_API_CALL hllapi_find_text(LPSTR text)
  {
+	if(!hllapi_is_connected())
+		return HLLAPI_STATUS_DISCONNECTED;
+
  	return (int) session::get_default()->find_string((const char *) text, false);
  }
 
@@ -260,11 +288,17 @@
 
  HLLAPI_API_CALL hllapi_pfkey(WORD key)
  {
+	if(!hllapi_is_connected())
+		return HLLAPI_STATUS_DISCONNECTED;
+
 	return session::get_default()->pfkey(key);
  }
 
  HLLAPI_API_CALL hllapi_pakey(WORD key)
  {
+	if(!hllapi_is_connected())
+		return HLLAPI_STATUS_DISCONNECTED;
+
 	return session::get_default()->pakey(key);
  }
 
@@ -322,6 +356,9 @@
 
  HLLAPI_API_CALL hllapi_get_screen(WORD offset, LPSTR buffer, WORD len)
  {
+	if(!hllapi_is_connected())
+		return HLLAPI_STATUS_DISCONNECTED;
+
 	int rc = HLLAPI_STATUS_SYSTEM_ERROR;
 
 	if(offset < 1)
@@ -369,6 +406,9 @@
 
  HLLAPI_API_CALL hllapi_emulate_input(const LPSTR buffer, WORD len, WORD pasting)
  {
+	if(!hllapi_is_connected())
+		return HLLAPI_STATUS_DISCONNECTED;
+
 	try
 	{
 		session::get_default()->input_string(buffer);
@@ -396,6 +436,9 @@
 
  HLLAPI_API_CALL hllapi_erase_eof(void)
  {
+	if(!hllapi_is_connected())
+		return HLLAPI_STATUS_DISCONNECTED;
+
  	try
  	{
 		session::get_default()->erase_eof();
@@ -409,6 +452,9 @@
 
  HLLAPI_API_CALL hllapi_erase_eol(void)
  {
+	if(!hllapi_is_connected())
+		return HLLAPI_STATUS_DISCONNECTED;
+
  	try
  	{
 		session::get_default()->erase_eol();
@@ -422,6 +468,9 @@
 
  HLLAPI_API_CALL hllapi_erase_input(void)
  {
+	if(!hllapi_is_connected())
+		return HLLAPI_STATUS_DISCONNECTED;
+
  	try
  	{
 		session::get_default()->erase_input();
