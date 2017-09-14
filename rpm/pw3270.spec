@@ -31,8 +31,8 @@
 #---[ Packaging ]-----------------------------------------------------------------------------------------------------
 
 Name:           pw3270
-Version:        5.1 
-Release:        1
+Version:        5.1
+Release:        0
 Summary:        IBM 3270 Terminal emulator for GTK
 License:        GPL-2.0
 Group:          System/X11/Terminals
@@ -44,7 +44,6 @@ Source:         pw3270-%{version}.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
 Requires:       shared-mime-info
-Provides:       libpw3270-%{_libvrs}
 
 #--[ Setup by distribution ]------------------------------------------------------------------------------------------
 # 
@@ -139,50 +138,60 @@ BuildRequires:	help2man
 %endif
 
 %description
-Open-source GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
-Based on the original x3270 code, pw3270 was originally created for Banco do Brasil, and is now used worldwide. 
+GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
+
+Based on the original x3270 code, pw3270 was originally created for Banco do Brasil, and is now used worldwide.
 
 #--[ lib3270 ]--------------------------------------------------------------------------------------------------------
 
 %package -n lib3270-%{_libvrs}
 Summary:        3270 Communication library for %{name}
-Group:          Development/Libraries/C and C++
-Requires:       openssl
+Group:          System/Libraries
 Provides:		lib3270 = %{version}
 
 %description -n lib3270-%{_libvrs}
-Open-source GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
+GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
 
-This package contains the tn3270 protocol library for %{name}
+This package contains the tn3270 protocol library for %{name}.
+
+%package -n libpw3270-%{_libvrs}
+Summary:        3270 terminal emulation library
+Group:          System/Libraries
+
+%description -n libpw3270-%{_libvrs}
+GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
+
+This package contains the terminal emulator library.
 
 #--[ Devel ]----------------------------------------------------------------------------------------------------------
 
 %package -n lib3270-devel
 Summary:        Devel for 3270 Communication library for %{name}
 Group:          Development/Libraries/C and C++
-Requires:       lib3270-%{_libvrs}
+Requires:       lib3270-%{_libvrs} = %{version}
 
 %description -n lib3270-devel
-Open-source GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
-This package contains the development files for tn3270 protocol library for %{name}
+GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
+
+This package contains the development files for tn3270 protocol library for %{name}.
 
 %package devel
 Summary:        Files required for development of %{name} plugins
 Group:          Development/Libraries/C and C++
 Requires:       pkgconfig(lib3270) = %{version}
 Requires:		pkgconfig(gtk+-3.0)
-Requires:       libpw3270-%{_libvrs}
+Requires:       libpw3270-%{_libvrs} = %{version}
 
 %description -n %{name}-devel
-Open-source GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
+GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
 
-This package contains the development files for %{name}
+This package contains the development files for %{name}.
 
 #--[ Plugins ]--------------------------------------------------------------------------------------------------------
 
 %if 0%{?_dbus}
 %package plugin-dbus
-Summary:        DBUS object for %{name}
+Summary:        D-Bus object for %{name}
 Group:          System/X11/Terminals
 Requires:       %{name} = %{version}
 Requires:       dbus-1
@@ -199,16 +208,12 @@ Plugin exporting a DBUS object from every %{name} open session.
 
 aclocal
 autoconf
-
-export CFLAGS="$RPM_OPT_FLAGS"
-export CXXFLAGS="$RPM_OPT_FLAGS"
-export FFLAGS="$RPM_OPT_FLAGS"
-
 %configure --with-release=%{release}
 
 %build
 make clean
-make all
+# parallel build is broken
+make all -j1
 
 %install
 %make_install
@@ -230,21 +235,17 @@ EOF
 chmod 644 pw3270.desktop
 
 desktop-file-install	--mode 644 \
-			--dir $RPM_BUILD_ROOT/%{_datadir}/applications \
+			--dir %{buildroot}/%{_datadir}/applications \
 			--add-category System \
 			--add-category TerminalEmulator \
 			pw3270.desktop
 
 # Java now lives in another package
-rm ${RPM_BUILD_ROOT}/%{_datadir}/pw3270/ui/*java*.xml
+rm %{buildroot}/%{_datadir}/pw3270/ui/*java*.xml
 
 # ooRexx now lives in another package
-rm ${RPM_BUILD_ROOT}/%{_datadir}/pw3270/ui/*rexx*.xml
-
-%fdupes $RPM_BUILD_ROOT
-
-%clean
-rm -rf %{buildroot}
+rm %{buildroot}/%{_datadir}/pw3270/ui/*rexx*.xml
+%fdupes %{buildroot}/%{_prefix}
 
 #---[ Files ]---------------------------------------------------------------------------------------------------------
 
@@ -259,9 +260,6 @@ rm -rf %{buildroot}
 %dir %{_datadir}/pw3270
 %dir %{_datadir}/pw3270/ui
 %{_bindir}/pw3270
-%{_libdir}/libpw3270.so.%{MAJOR_VERSION}
-%{_libdir}/libpw3270.so.%{MAJOR_VERSION}.%{MINOR_VERSION}
-
 %{_datadir}/applications/pw3270.desktop
 
 %{_datadir}/pw3270/ui/00default.xml
@@ -276,6 +274,11 @@ rm -rf %{buildroot}
 %defattr(-,root,root)
 %{_libdir}/lib3270.so.%{MAJOR_VERSION}.%{MINOR_VERSION}
 %{_libdir}/lib3270.so.%{MAJOR_VERSION}
+
+%files -n libpw3270-%{_libvrs}
+%defattr(-,root,root)
+%{_libdir}/libpw3270.so.%{MAJOR_VERSION}.%{MINOR_VERSION}
+%{_libdir}/libpw3270.so.%{MAJOR_VERSION}
 
 %files -n lib3270-devel
 %defattr(-,root,root)
@@ -305,20 +308,10 @@ rm -rf %{buildroot}
 
 #---[ Scripts ]-------------------------------------------------------------------------------------------------------
 
-%post
-/sbin/ldconfig
-exit 0
-
-%postun
-/sbin/ldconfig
-exit 0
-
-%post -n lib3270-%{_libvrs}
-/sbin/ldconfig
-exit 0
-
-%postun -n lib3270-%{_libvrs}
-/sbin/ldconfig
-exit 0
+%post   -n lib3270-%{_libvrs} -p /sbin/ldconfig
+%postun -n lib3270-%{_libvrs} -p /sbin/ldconfig
+%post   -n libpw3270-%{_libvrs} -p /sbin/ldconfig
+%postun -n libpw3270-%{_libvrs} -p /sbin/ldconfig
 
 %changelog
+
