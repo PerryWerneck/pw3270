@@ -38,7 +38,7 @@
 	int			  height	= 1;
 	const gchar	* tmp;
 
- 	trace("%s(%s,%d,%d)",__FUNCTION__,element_name,(int) keypad->row, (int) keypad->col);
+// 	trace("%s(%s,%d,%d)",__FUNCTION__,element_name,(int) keypad->row, (int) keypad->col);
 
  	keypad->widget = NULL;
 

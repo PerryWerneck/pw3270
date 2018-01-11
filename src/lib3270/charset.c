@@ -212,6 +212,15 @@ typedef struct _info
 static const remap charset[] =
 {
 	{
+		"us",
+		LIB3270_DEFAULT_CGEN | LIB3270_DEFAULT_CSET,
+		(const unsigned short const [])
+		{
+			0x0000,	0x0000
+		}
+	},
+
+	{
 		"bracket",
 		LIB3270_DEFAULT_CGEN|LIB3270_DEFAULT_CSET,
 		(const unsigned short const [])
@@ -255,31 +264,16 @@ static void copy_charset(const unsigned short *from, unsigned short *to)
 		to[f+UT_OFFSET] = from[f];
 }
 
-LIB3270_EXPORT void lib3270_remap(H3270 *hSession,const char *host, const char *display, unsigned long cgcsgid, const unsigned short *chr)
-{
-	int c;
-
-	hSession->charset.host		= host;
-	hSession->charset.display	= display;
-	hSession->charset.cgcsgid	= cgcsgid;
-
-	for(c=0;chr[c];c+=2)
-	{
-		lib3270_remap_char(hSession,chr[c],chr[c+1], BOTH, 0);
-	}
-
-}
-
-LIB3270_EXPORT int lib3270_set_host_charset(H3270 *hSession, const char *name)
+LIB3270_EXPORT void lib3270_reset_charset(H3270 *hSession, const char * host, const char * display, unsigned long cgcsgid)
 {
 	int f;
 
-	hSession->charset.host		= "us";
-	hSession->charset.display	= "ISO-8859-1";
-	hSession->charset.cgcsgid	= LIB3270_DEFAULT_CGEN | LIB3270_DEFAULT_CSET; // 0x02b90025
+	#define replace_pointer(x,v) if(x) { lib3270_free(x); }; x = strdup(v)
 
-//	lib3270_write_log(hSession,"charset","host.charset=%s display.charset=%s",
-//								hSession->charset.host,hSession->charset.display);
+	replace_pointer(hSession->charset.host, host);
+	replace_pointer(hSession->charset.display,display);
+
+	hSession->charset.cgcsgid = cgcsgid;
 
 	memcpy(hSession->charset.ebc2asc,	ebc2asc0,	sizeof(hSession->charset.ebc2asc));
 	memcpy(hSession->charset.asc2ebc,	asc2ebc0,	sizeof(hSession->charset.asc2ebc));
@@ -296,7 +290,19 @@ LIB3270_EXPORT int lib3270_set_host_charset(H3270 *hSession, const char *name)
 #endif
 */
 
-	if(!(name && strcasecmp(name,hSession->charset.host)))
+}
+
+LIB3270_EXPORT int lib3270_set_host_charset(H3270 *hSession, const char *name)
+{
+	int f;
+
+	if(!name)
+	{
+		lib3270_reset_charset(hSession,"us","ISO-8859-1", LIB3270_DEFAULT_CGEN | LIB3270_DEFAULT_CSET);
+		return 0;
+	}
+
+	if(hSession->charset.host && !strcasecmp(name,hSession->charset.host))
 		return 0;
 
 	for(f=0;charset[f].name != NULL;f++)
@@ -304,16 +310,15 @@ LIB3270_EXPORT int lib3270_set_host_charset(H3270 *hSession, const char *name)
 		if(!strcasecmp(name,charset[f].name))
 		{
 			// Found required charset
-			lib3270_remap(hSession,charset[f].name,"ISO-8859-1",charset[f].cgcsgid,charset[f].chr);
-			/*
 			int c;
 
-			hSession->charset.host		= charset[f].name;
-			hSession->charset.cgcsgid	= charset[f].cgcsgid;
+			debug("%s: %s -> %s",__FUNCTION__,hSession->charset.host,charset[f].name);
+
+			lib3270_reset_charset(hSession,charset[f].name,"ISO-8859-1", charset[f].cgcsgid);
 
 			for(c=0;charset[f].chr[c];c+=2)
 				lib3270_remap_char(hSession,charset[f].chr[c],charset[f].chr[c+1], BOTH, 0);
-			*/
+
 			return 0;
 		}
 	}

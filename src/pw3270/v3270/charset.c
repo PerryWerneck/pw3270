@@ -45,10 +45,10 @@
 	size_t			  len;
 
 	struct {
-		unsigned short	ebc;
-		unsigned short	iso;
-		unsigned char	scope;
-		unsigned char	oneway;
+		unsigned short		ebc;
+		unsigned short		iso;
+		lib3270_remap_scope	scope;
+		unsigned char		oneway;
 	} map[256];
 
  };
@@ -303,6 +303,25 @@
  	return (unsigned short) *id;
  }
 
+ static lib3270_remap_scope getRemapScope(const gchar *str, GError **error) {
+
+ 	static const char *text[] = { "CS_ONLY","FT_ONLY", "BOTH" };
+ 	int i;
+
+ 	if(!error)
+	{
+		for(i=0;i < N_ELEMENTS(text);i++)
+		{
+			if(!g_ascii_strcasecmp(str,text[i]))
+				return (lib3270_remap_scope) i;
+		}
+
+		*error = g_error_new(ERROR_DOMAIN,EINVAL,"%s",_( "Invalid remap scope" ));
+	}
+
+	return BOTH;
+ }
+
  static void element_start(GMarkupParseContext *context, const gchar *element_name, const gchar **names,const gchar **values, struct parse *info, GError **error)
  {
 	trace("%s(%s)",__FUNCTION__,element_name);
@@ -385,8 +404,9 @@
 			oneway = "no";
 		}
 
-		info->map[info->len].ebc = getChar(ebc,error);
-		info->map[info->len].iso = getChar(iso,error);
+		info->map[info->len].ebc 	= getChar(ebc,error);
+		info->map[info->len].iso 	= getChar(iso,error);
+		info->map[info->len].scope	= getRemapScope(scope,error);
 
 		trace("%u: ebc=%04x iso=%04x %c",(unsigned int) info->len,info->map[info->len].ebc,info->map[info->len].iso,info->map[info->len].iso);
 
@@ -424,7 +444,6 @@
  	GError				* error		= NULL;
  	gchar				* text 		= NULL;
 	struct parse		  cfg;
-	v3270				* terminal	= GTK_V3270(widget);
 
 	memset(&cfg,0,sizeof(cfg));
 
@@ -462,12 +481,32 @@
 		gtk_dialog_run(GTK_DIALOG (dialog));
 		gtk_widget_destroy(dialog);
 
+	} else {
+
+		H3270 * hSession = v3270_get_session(widget);
+
+
+		if(hSession)
+		{
+			unsigned int i;
+
+			trace("cgcsgid = %lx",cfg.cgcsgid);
+			trace("display = %s",cfg.display);
+			trace("host = %s",cfg.host);
+			trace("length = %u",(unsigned int) cfg.len);
+
+			lib3270_reset_charset(hSession, cfg.host, cfg.display, cfg.cgcsgid);
+
+			for(i=0;i < cfg.len; i++)
+			{
+				lib3270_remap_char(hSession,cfg.map[i].ebc,cfg.map[i].iso, BOTH, 0);
+			}
+
+		}
+
+
 	}
 
-	trace("cgcsgid = %lx",cfg.cgcsgid);
-	trace("display = %s",cfg.display);
-	trace("host = %s",cfg.host);
-	trace("length = %u",(unsigned int) cfg.len);
 
 	g_free(text);
 	g_free(cfg.host);

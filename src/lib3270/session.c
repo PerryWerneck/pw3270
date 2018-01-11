@@ -103,6 +103,9 @@ void lib3270_session_free(H3270 *h)
 	release_pointer(h->host.srvc);
 	release_pointer(h->host.qualified);
 
+	release_pointer(h->charset.host);
+	release_pointer(h->charset.display);
+
 	trace("Releasing session %p",h);
 	lib3270_free(h);
 
