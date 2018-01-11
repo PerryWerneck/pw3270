@@ -35,7 +35,7 @@
  */
 
 #include "private.h"
-#include "X11keysym.h"
+#include <lib3270/X11keysym.h>
 #include <lib3270/charset.h>
 
 /*

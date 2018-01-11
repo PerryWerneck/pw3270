@@ -14,6 +14,7 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Option use_console_runner="0" />
+				<Option parameters="--remap=./charsets/bracket.xml" />
 				<Compiler>
 					<Add option="-g" />
 					<Add option="-DDEBUG=1" />
@@ -74,6 +75,7 @@
 		<Unit filename="src/classlib/class.mak.in" />
 		<Unit filename="src/classlib/private.h" />
 		<Unit filename="src/include/lib3270.h" />
+		<Unit filename="src/include/lib3270/X11keysym.h" />
 		<Unit filename="src/include/lib3270/action_table.h" />
 		<Unit filename="src/include/lib3270/actions.h" />
 		<Unit filename="src/include/lib3270/charset.h" />

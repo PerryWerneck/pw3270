@@ -31,8 +31,13 @@
 <pw3270-remap host='bracket' cgcsgid='0x02b90025' display='ISO-8859-1'>
 
 	<char ebc='0x00ad' iso='[' scope='both' one-way='no' />
-	<char ebc='0x00ba' iso='0x0dd' scope='both' one-way='no' />
+
+	<!-- char ebc='0x00ba' iso='0x0dd' scope='both' one-way='no' / -->
+	<char ebc='0x00ba' iso='Yacute' scope='both' one-way='no' />
+
 	<char ebc='0x00bd' iso=']' scope='both' one-way='no' />
-	<char ebc='0x00bb' iso='0x0a8' scope='both' one-way='no' />
+
+	<!-- char ebc='0x00bb' iso='0x0a8' scope='both' one-way='no' / -->
+	<char ebc='0x00bb' iso='diaeresis' scope='both' one-way='no' />
 
 </pw3270-remap>
