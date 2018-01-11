@@ -453,6 +453,7 @@ AC_CONFIG_FILES(src/pw3270/common/Makefile)
 AC_CONFIG_FILES(src/libpw3270cpp/Makefile)
 
 AC_CONFIG_FILES(ui/Makefile)
+AC_CONFIG_FILES(charsets/Makefile)
 AC_CONFIG_FILES(branding/Makefile)
 AC_CONFIG_FILES(locale/Makefile)
 

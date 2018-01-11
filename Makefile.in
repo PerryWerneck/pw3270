@@ -236,6 +236,7 @@ install-app: \
 	@$(INSTALL_DATA) conf/colors.conf $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)
 
 	@$(MAKE) -C ui install
+	@$(MAKE) -C charsets install
 	@$(MAKE) -C locale install
 
 ifneq ($(HELP2MAN),no)
@@ -325,6 +326,7 @@ $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar: \
 $(SRCDIR): \
         clean \
 		$(SRCDIR)/ui \
+		$(SRCDIR)/charsets \
 		$(SRCDIR)/src/lib3270 \
 		$(SRCDIR)/src/pw3270 \
 		$(SRCDIR)/src/libpw3270cpp \
