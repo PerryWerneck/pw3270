@@ -255,6 +255,21 @@ static void copy_charset(const unsigned short *from, unsigned short *to)
 		to[f+UT_OFFSET] = from[f];
 }
 
+LIB3270_EXPORT void lib3270_remap(H3270 *hSession,const char *host, const char *display, unsigned long cgcsgid, const unsigned short *chr)
+{
+	int c;
+
+	hSession->charset.host		= host;
+	hSession->charset.display	= display;
+	hSession->charset.cgcsgid	= cgcsgid;
+
+	for(c=0;chr[c];c+=2)
+	{
+		lib3270_remap_char(hSession,chr[c],chr[c+1], BOTH, 0);
+	}
+
+}
+
 LIB3270_EXPORT int lib3270_set_host_charset(H3270 *hSession, const char *name)
 {
 	int f;
@@ -271,6 +286,7 @@ LIB3270_EXPORT int lib3270_set_host_charset(H3270 *hSession, const char *name)
 
 	for(f=0;f<UT_OFFSET;f++)
 		hSession->charset.asc2uc[f] = f;
+
 	copy_charset(asc2uc,hSession->charset.asc2uc);
 
 /*
@@ -288,13 +304,16 @@ LIB3270_EXPORT int lib3270_set_host_charset(H3270 *hSession, const char *name)
 		if(!strcasecmp(name,charset[f].name))
 		{
 			// Found required charset
+			lib3270_remap(hSession,charset[f].name,"ISO-8859-1",charset[f].cgcsgid,charset[f].chr);
+			/*
 			int c;
 
 			hSession->charset.host		= charset[f].name;
 			hSession->charset.cgcsgid	= charset[f].cgcsgid;
 
 			for(c=0;charset[f].chr[c];c+=2)
-				lib3270_remap(hSession,charset[f].chr[c],charset[f].chr[c+1], BOTH, 0);
+				lib3270_remap_char(hSession,charset[f].chr[c],charset[f].chr[c+1], BOTH, 0);
+			*/
 			return 0;
 		}
 	}
@@ -438,7 +457,7 @@ LIB3270_EXPORT const char * lib3270_ebc2asc(H3270 *hSession, unsigned char *buff
 
 
 // Process a single character definition.
-LIB3270_EXPORT void lib3270_remap(H3270 *hSession, unsigned short ebc, unsigned short iso, lib3270_remap_scope scope, unsigned char one_way)
+LIB3270_EXPORT void lib3270_remap_char(H3270 *hSession, unsigned short ebc, unsigned short iso, lib3270_remap_scope scope, unsigned char one_way)
 {
 	//	unsigned char cg;
 	CHECK_SESSION_HANDLE(hSession);

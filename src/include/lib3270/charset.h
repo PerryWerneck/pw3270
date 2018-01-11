@@ -60,7 +60,8 @@
 
 	LIB3270_EXPORT int			  lib3270_set_host_charset(H3270 *hSession, const char *name);
 	LIB3270_EXPORT const char	* lib3270_get_host_charset(H3270 *hSession);
-	LIB3270_EXPORT void			  lib3270_remap(H3270 *hSession, unsigned short ebc, unsigned short iso, lib3270_remap_scope scope, unsigned char one_way);
+	LIB3270_EXPORT void			  lib3270_remap(H3270 *hSession,const char *host, const char *display, unsigned long cgcsgid, const unsigned short *chr);
+	LIB3270_EXPORT void			  lib3270_remap_char(H3270 *hSession, unsigned short ebc, unsigned short iso, lib3270_remap_scope scope, unsigned char one_way);
 	LIB3270_EXPORT const char	* lib3270_ebc2asc(H3270 *hSession, unsigned char *buffer, int sz);
 	LIB3270_EXPORT const char	* lib3270_asc2ebc(H3270 *hSession, unsigned char *buffer, int sz);
 
