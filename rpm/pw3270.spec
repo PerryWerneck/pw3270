@@ -268,6 +268,8 @@ rm %{buildroot}/%{_datadir}/pw3270/ui/*rexx*.xml
 %{_datadir}/pw3270/colors.conf
 %{_datadir}/pw3270/pw3270.png
 %{_datadir}/pw3270/pw3270-logo.png
+
+%dir %{_datadir}/pw3270/charsets
 %{_datadir}/pw3270/charsets/bracket.xml
 
 %dir %{_libdir}/pw3270-plugins
