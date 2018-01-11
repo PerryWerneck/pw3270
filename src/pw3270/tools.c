@@ -280,11 +280,19 @@ LIB3270_EXPORT gchar * pw3270_get_datadir(const gchar *first_element, ...)
 	return path;
 }
 
+LIB3270_EXPORT void pw3270_remap_from_xml(GtkWidget *widget, const gchar *name)
+{
+	if(name)
+	{
+		v3270_remap_from_xml(pw3270_get_terminal_widget(widget),name);
+	}
+}
+
 LIB3270_EXPORT void pw3270_set_host_charset(GtkWidget *widget, const gchar *name)
 {
 	H3270 * hSession	= pw3270_get_session(widget);
 
-	if(!hSession)
+	if(!(hSession && name))
 		return;
 
 	if(!lib3270_set_host_charset(hSession,name))

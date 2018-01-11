@@ -52,16 +52,17 @@
 
 /*--[ Statics ]--------------------------------------------------------------------------------------*/
 
- static GtkWidget			* toplevel		= NULL;
- static GtkWidget 			* trace_window	= NULL;
- static unsigned int		  syscolors		= 16;
- static unsigned int		  timer			= 0;
+ static GtkWidget		* toplevel		= NULL;
+ static GtkWidget 		* trace_window	= NULL;
+ static unsigned int	  syscolors		= 16;
+ static unsigned int	  timer			= 0;
  static const gchar		* systype		= NULL;
  static const gchar		* toggleset		= NULL;
  static const gchar		* togglereset	= NULL;
- static const gchar     	* logfile       = NULL;
+ static const gchar     * logfile       = NULL;
  static const gchar		* tracefile		= NULL;
  static const gchar		* charset		= NULL;
+ static const gchar		* remap			= NULL;
  static const gchar		* model			= NULL;
  static const gchar		* pluginpath	= NULL;
 
@@ -384,6 +385,7 @@ int main(int argc, char *argv[])
 			{ "toggleset",		'S', 0, G_OPTION_ARG_STRING,	&toggleset,			N_( "Set toggles ON" ),								NULL			},
 			{ "togglereset",	'R', 0, G_OPTION_ARG_STRING,	&togglereset,		N_( "Set toggles OFF" ),							NULL			},
 			{ "charset",	    'C', 0, G_OPTION_ARG_STRING,	&charset,		    N_( "Set host charset" ),							NULL			},
+			{ "remap",		    'm', 0, G_OPTION_ARG_FILENAME,	&remap,			    N_( "Remap charset from xml file" ),				NULL			},
 			{ "model",		    'M', 0, G_OPTION_ARG_STRING,	&model,			    N_( "The model of 3270 display to be emulated" ),	NULL			},
 			{ "autodisconnect",	'D', 0, G_OPTION_ARG_INT,		&timer,			    N_( "Minutes for auto-disconnect" ),				0				},
 			{ "pluginpath",		'P', 0, G_OPTION_ARG_STRING,	&pluginpath,	    N_( "Path for plugin files" ),						NULL			},
@@ -567,10 +569,8 @@ int main(int argc, char *argv[])
 			g_strfreev(str);
 		}
 
-		if(charset)
-		{
-			pw3270_set_host_charset(toplevel,charset);
-		}
+		pw3270_set_host_charset(toplevel,charset);
+		pw3270_remap_from_xml(toplevel,remap);
 
 		toplevel_setup(GTK_WINDOW(toplevel));
 

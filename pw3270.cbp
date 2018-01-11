@@ -93,6 +93,10 @@
 		<Unit filename="src/include/pw3270/ipcpackets.h" />
 		<Unit filename="src/include/pw3270/plugin.h" />
 		<Unit filename="src/include/pw3270/trace.h" />
+		<Unit filename="src/include/pw3270/v3270.h">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
 		<Unit filename="src/include/pw3270cpp.h" />
 		<Unit filename="src/include/rules.mak.in" />
 		<Unit filename="src/java/Makefile.in">
@@ -461,6 +465,11 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/pw3270/v3270/accessible.h" />
+		<Unit filename="src/pw3270/v3270/charset.c">
+			<Option compilerVar="CC" />
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
 		<Unit filename="src/pw3270/v3270/draw.c">
 			<Option compilerVar="CC" />
 		</Unit>

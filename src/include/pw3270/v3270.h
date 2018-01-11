@@ -245,6 +245,8 @@
  LIB3270_EXPORT const char		* v3270_get_luname(GtkWidget *widget);
  LIB3270_EXPORT GtkWidget		* v3270_get_default_widget(void);
 
+ LIB3270_EXPORT	void			  v3270_remap_from_xml(GtkWidget *widget, const gchar *path);
+
  // Keyboard & Mouse special actions
  LIB3270_EXPORT gboolean		  v3270_set_keyboard_action(GtkWidget *widget, const gchar *key_name, GtkAction *action);
  LIB3270_EXPORT void			  v3270_set_scroll_action(GtkWidget *widget, GdkScrollDirection direction, GtkAction *action);
