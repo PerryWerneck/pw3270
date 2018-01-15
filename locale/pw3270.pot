@@ -9,7 +9,7 @@ msgstr ""
 "#-#-#-#-#  lib3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-20 13:50-0300\n"
+"POT-Creation-Date: 2018-01-11 17:20-0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "#-#-#-#-#  pw3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-20 13:50-0300\n"
+"POT-Creation-Date: 2018-01-11 17:20-0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -76,7 +76,7 @@ msgstr ""
 msgid "%s action needs src attribute"
 msgstr ""
 
-#: main.c:97
+#: main.c:98
 #, c-format
 msgid "%s requires GTK version %d.%d.%d"
 msgstr ""
@@ -116,7 +116,7 @@ msgstr ""
 msgid "%s<b>%s</b> for %s"
 msgstr ""
 
-#: main.c:400
+#: main.c:402
 msgid "- 3270 Emulator for Gtk"
 msgstr ""
 
@@ -198,7 +198,7 @@ msgstr ""
 msgid "<b>SSL state is undefined</b>Unexpected SSL status %ld"
 msgstr ""
 
-#: main.c:420
+#: main.c:422
 msgid ""
 "<b>Valid options:</b>\n"
 "\n"
@@ -284,7 +284,7 @@ msgstr ""
 msgid "Appends the source file to the destination file."
 msgstr ""
 
-#: main.c:375 main.c:377
+#: main.c:376 main.c:378
 msgid "Application name"
 msgstr ""
 
@@ -460,8 +460,13 @@ msgstr ""
 msgid "Can't load plugin %s"
 msgstr ""
 
-#: main.c:297
+#: main.c:298
 msgid "Can't open file"
+msgstr ""
+
+#: charset.c:470
+#, c-format
+msgid "Can't parse %s"
 msgstr ""
 
 #: parser.c:351 parsefile.c:332 parsefile.c:360
@@ -471,6 +476,14 @@ msgstr ""
 #: parser.c:349
 #, c-format
 msgid "Can't parse UI description files in %s"
+msgstr ""
+
+#: charset.c:366
+msgid "Can't parse cgcsgid value"
+msgstr ""
+
+#: charset.c:284
+msgid "Can't parse character value"
 msgstr ""
 
 #: parsefile.c:102 parsefile.c:128
@@ -512,7 +525,7 @@ msgid ""
 "%s"
 msgstr ""
 
-#: main.c:295
+#: main.c:296
 #, c-format
 msgid "Can't save trace data to file %s"
 msgstr ""
@@ -521,7 +534,7 @@ msgstr ""
 msgid "Can't set callback table"
 msgstr ""
 
-#: tools.c:298
+#: tools.c:306
 msgid "Can't set host charset"
 msgstr ""
 
@@ -607,7 +620,7 @@ msgstr ""
 msgid "Certificate signature failure"
 msgstr ""
 
-#: tools.c:302 selection.c:427
+#: tools.c:310 selection.c:427
 msgid "Charset error"
 msgstr ""
 
@@ -893,7 +906,7 @@ msgstr ""
 msgid "Function bar"
 msgstr ""
 
-#: main.c:101 main.c:510
+#: main.c:102 main.c:512
 msgid "GTK Version mismatch"
 msgstr ""
 
@@ -929,11 +942,11 @@ msgstr ""
 msgid "Host rejected resource(s)"
 msgstr ""
 
-#: main.c:383
+#: main.c:384
 msgid "Host system type"
 msgstr ""
 
-#: main.c:381
+#: main.c:382
 msgid "Host to connect"
 msgstr ""
 
@@ -1025,8 +1038,20 @@ msgstr ""
 msgid "Invalid callback table, possible version mismatch in lib3270"
 msgstr ""
 
+#: charset.c:361
+msgid "Invalid cgcsgid value"
+msgstr ""
+
+#: charset.c:299
+msgid "Invalid character value"
+msgstr ""
+
 #: selection.c:656
 msgid "Invalid cut action"
+msgstr ""
+
+#: charset.c:319
+msgid "Invalid remap scope"
 msgstr ""
 
 #: 80javasamples.xml:38
@@ -1061,11 +1086,11 @@ msgstr ""
 msgid "Local:"
 msgstr ""
 
-#: main.c:395
+#: main.c:397
 msgid "Log to file"
 msgstr ""
 
-#: main.c:388
+#: main.c:390
 msgid "Minutes for auto-disconnect"
 msgstr ""
 
@@ -1300,7 +1325,7 @@ msgstr ""
 msgid "PF9"
 msgstr ""
 
-#: main.c:418
+#: main.c:420
 msgid "Parse error"
 msgstr ""
 
@@ -1329,7 +1354,7 @@ msgstr ""
 msgid "Path and name of the local file"
 msgstr ""
 
-#: main.c:389
+#: main.c:391
 msgid "Path for plugin files"
 msgstr ""
 
@@ -1337,7 +1362,7 @@ msgstr ""
 msgid "Path length constraint exceeded"
 msgstr ""
 
-#: main.c:378
+#: main.c:379
 msgid "Path to application data files"
 msgstr ""
 
@@ -1517,6 +1542,14 @@ msgstr ""
 
 #: 99debug.xml:41
 msgid "Reload buffer contents"
+msgstr ""
+
+#: charset.c:474
+msgid "Remap Failed"
+msgstr ""
+
+#: main.c:388
+msgid "Remap charset from xml file"
 msgstr ""
 
 #: tables.c:67
@@ -1732,7 +1765,7 @@ msgstr ""
 msgid "Send file"
 msgstr ""
 
-#: main.c:392
+#: main.c:394
 msgid "Send messages to syslog"
 msgstr ""
 
@@ -1748,11 +1781,11 @@ msgstr ""
 msgid "Sending file"
 msgstr ""
 
-#: main.c:380
+#: main.c:381
 msgid "Session name"
 msgstr ""
 
-#: main.c:386
+#: main.c:387
 msgid "Set host charset"
 msgstr ""
 
@@ -1760,19 +1793,19 @@ msgstr ""
 msgid "Set insert mode"
 msgstr ""
 
-#: main.c:382
+#: main.c:383
 msgid "Set reported colors (8/16)"
 msgstr ""
 
-#: main.c:385
+#: main.c:386
 msgid "Set toggles OFF"
 msgstr ""
 
-#: main.c:384
+#: main.c:385
 msgid "Set toggles ON"
 msgstr ""
 
-#: main.c:394
+#: main.c:396
 msgid "Set trace filename"
 msgstr ""
 
@@ -2026,7 +2059,7 @@ msgstr ""
 msgid "The known types are %s"
 msgstr ""
 
-#: main.c:387
+#: main.c:389
 msgid "The model of 3270 display to be emulated"
 msgstr ""
 
@@ -2069,7 +2102,7 @@ msgstr ""
 msgid "There is not enough space available for data on the host."
 msgstr ""
 
-#: tools.c:301
+#: tools.c:309
 #, c-format
 msgid "There's no available settings for charset \"%s\""
 msgstr ""
@@ -2095,7 +2128,7 @@ msgid ""
 "Franklin St, Fifth Floor, Boston, MA 02111-1307 USA"
 msgstr ""
 
-#: main.c:506
+#: main.c:508
 #, c-format
 msgid "This program requires GTK version %d.%d.%d"
 msgstr ""
@@ -2104,6 +2137,10 @@ msgstr ""
 #, c-format
 msgid ""
 "This version of %s was built without support for secure sockets layer (SSL)."
+msgstr ""
+
+#: charset.c:376
+msgid "Too many remaps"
 msgstr ""
 
 #: 00default.xml:146
@@ -2279,7 +2316,7 @@ msgstr ""
 msgid "Unexpected or invalid attribute value \"%s\""
 msgstr ""
 
-#: main.c:202
+#: main.c:203
 #, c-format
 msgid "Unexpected or invalid color value \"%s\""
 msgstr ""
@@ -2590,7 +2627,7 @@ msgstr ""
 msgid "an action attribute"
 msgstr ""
 
-#: session.c:268
+#: session.c:271
 msgid "bracket"
 msgstr ""
 

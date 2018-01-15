@@ -135,7 +135,7 @@ static void do_copy(GtkAction *action, GtkWidget *widget, gboolean cut)
 
 		int f;
 
-		for(f=0;f<G_N_ELEMENTS(format);f++)
+		for(f=0;f < G_N_ELEMENTS(format);f++)
 		{
 			if(!g_ascii_strcasecmp(format[f].name,str))
 			{

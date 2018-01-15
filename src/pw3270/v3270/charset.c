@@ -310,7 +310,7 @@
 
  	if(!error)
 	{
-		for(i=0;i < N_ELEMENTS(text);i++)
+		for(i=0;i < G_N_ELEMENTS(text);i++)
 		{
 			if(!g_ascii_strcasecmp(str,text[i]))
 				return (lib3270_remap_scope) i;

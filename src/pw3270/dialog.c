@@ -71,7 +71,7 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
-
+#ifndef _WIN32
  static void charset_changed(GtkComboBox *widget,gchar **encoding)
  {
  	gchar *new_encoding = NULL;
@@ -102,7 +102,6 @@
 
 	*encoding = new_encoding;
  }
-
  static void add_option_menus(GtkWidget *widget, GtkAction *action, gchar **encoding)
  {
 #if GTK_CHECK_VERSION(3,0,0)
@@ -185,13 +184,14 @@
 	gtk_widget_show_all(box);
 	gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(widget),box);
 
-}
+ }
+#endif // _WIN32
 
  static void save_text(GtkWindow *toplevel,const gchar *filename, const gchar *text, const gchar *encoding, const gchar *errmsg)
  {
 	GError * error = NULL;
 
-	if(g_ascii_strcasecmp(encoding,"UTF-8"))
+	if(encoding && g_ascii_strcasecmp(encoding,"UTF-8"))
 	{
 		// Convert to target charset and save
 		gsize	  bytes_written;
@@ -257,13 +257,17 @@
  	GtkWindow	* toplevel		= GTK_WINDOW(gtk_widget_get_toplevel(widget));
  	const gchar * user_title	= g_object_get_data(G_OBJECT(action),"title");
  	const gchar * filename		= g_object_get_data(G_OBJECT(action),"filename");
+
+ 	/*
  	const gchar * extension		= g_object_get_data(G_OBJECT(action),"extension");
 
 	if(!extension)
 		extension = "txt";
+	*/
 
 	if(!text)
 		return 0;
+
 
 	if(filename)
 	{
@@ -271,6 +275,14 @@
 	}
 	else
 	{
+#ifdef _WIN32
+		gchar *name = pw3270_file_chooser(GTK_FILE_CHOOSER_ACTION_SAVE, "save_contents",  gettext(user_title ? user_title : title), filename);
+		if(name)
+		{
+			save_text(toplevel,name,text,NULL,errmsg);
+			g_free(name);
+		}
+#else
 		GtkWidget	* dialog;
 		gchar		* ptr;
 		gchar 		* encattr		= NULL;
@@ -311,6 +323,7 @@
 
 		trace("Removing dialog %p",dialog);
 		gtk_widget_destroy(dialog);
+#endif // _WIN32
 	}
 
 	return 0;
@@ -438,7 +451,7 @@
  	/*
  	const gchar * user_title	= g_object_get_data(G_OBJECT(action),"title");
  	const gchar * filename		= g_object_get_data(G_OBJECT(action),"filename");
- 	gchar 		* encattr		= NULL;
+ 	gchar 		* encattr		= NULL;g_get_charset(&encoding)
 	GtkWidget	* dialog;
 	gchar		* ptr;
 

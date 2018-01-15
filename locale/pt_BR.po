@@ -1,12 +1,12 @@
 #
-# Perry Werneck <perry.werneck@gmail.com>, 2012, 2013, 2014, 2016, 2017.
+# Perry Werneck <perry.werneck@gmail.com>, 2012, 2013, 2014, 2016, 2017, 2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-21 10:15-0300\n"
-"PO-Revision-Date: 2017-02-15 17:08-0200\n"
+"POT-Creation-Date: 2018-01-11 17:10-0200\n"
+"PO-Revision-Date: 2018-01-15 13:50-0200\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <perry.werneck@gmail.com>\n"
 "Language: pt_BR\n"
@@ -55,7 +55,7 @@ msgstr "Ação %s precisa de um valor válido"
 msgid "%s action needs src attribute"
 msgstr "Ação %s precisa do atributo src"
 
-#: main.c:97
+#: main.c:98
 #, c-format
 msgid "%s requires GTK version %d.%d.%d"
 msgstr "%s requer GTK versão %d.%d.%d"
@@ -95,7 +95,7 @@ msgstr "%s: Tabulação vertical não é suportada"
 msgid "%s<b>%s</b> for %s"
 msgstr "%s<b>%s</b> para %s"
 
-#: main.c:400
+#: main.c:402
 msgid "- 3270 Emulator for Gtk"
 msgstr "- Emulador 3270 para GTK"
 
@@ -183,7 +183,7 @@ msgstr ""
 msgid "<b>SSL state is undefined</b>Unexpected SSL status %ld"
 msgstr "<b>Estado do SSL é indefinido</b>Estado SSL inesperado %ld"
 
-#: main.c:420
+#: main.c:422
 msgid ""
 "<b>Valid options:</b>\n"
 "\n"
@@ -276,7 +276,7 @@ msgstr "Um parametro de ENVIO/RECEBIMENTO inválido foi enviado para o host."
 msgid "Appends the source file to the destination file."
 msgstr "Adiciona conteúdo do arquivo origem ao final do arquivo destino."
 
-#: main.c:375 main.c:377
+#: main.c:376 main.c:378
 msgid "Application name"
 msgstr "Nome da aplicação"
 
@@ -455,9 +455,14 @@ msgstr "Não foi possível carregar plugin"
 msgid "Can't load plugin %s"
 msgstr "Não foi possível carregar plugin %s"
 
-#: main.c:297
+#: main.c:298
 msgid "Can't open file"
 msgstr "Não foi possível abrir arquivo"
+
+#: charset.c:470
+#, c-format
+msgid "Can't parse %s"
+msgstr "Erro ao analisar %s"
 
 #: parser.c:351 parsefile.c:332 parsefile.c:360
 msgid "Can't parse UI"
@@ -467,6 +472,14 @@ msgstr "Não foi possível processar a UI"
 #, c-format
 msgid "Can't parse UI description files in %s"
 msgstr "Incapaz de processar arquivos de descrição de UI em %s"
+
+#: charset.c:366
+msgid "Can't parse cgcsgid value"
+msgstr "Erro ao converter valor do cgcsid"
+
+#: charset.c:284
+msgid "Can't parse character value"
+msgstr "Erro ao analisar valor de caractere"
 
 #: parsefile.c:102 parsefile.c:128
 msgid "Can't parse unnamed element"
@@ -513,7 +526,7 @@ msgstr ""
 "Não foi possível salvar a seleção para o arquivo\n"
 "%s"
 
-#: main.c:295
+#: main.c:296
 #, c-format
 msgid "Can't save trace data to file %s"
 msgstr "Não foi possível salvar trace no arquivo %s"
@@ -522,7 +535,7 @@ msgstr "Não foi possível salvar trace no arquivo %s"
 msgid "Can't set callback table"
 msgstr "Não foi possível setar a tabela de retornos"
 
-#: tools.c:298
+#: tools.c:306
 msgid "Can't set host charset"
 msgstr "Não foi possível definir o charset do host"
 
@@ -614,7 +627,7 @@ msgstr "Certificado revogado"
 msgid "Certificate signature failure"
 msgstr "Falha na assinatura do certificado"
 
-#: tools.c:302 selection.c:427
+#: tools.c:310 selection.c:427
 msgid "Charset error"
 msgstr "Erro de codificação de caracteres"
 
@@ -910,7 +923,7 @@ msgstr "Tela cheia"
 msgid "Function bar"
 msgstr "Barra de funções"
 
-#: main.c:101 main.c:510
+#: main.c:102 main.c:512
 msgid "GTK Version mismatch"
 msgstr "Divergência de versão GTK"
 
@@ -946,11 +959,11 @@ msgstr "Servidor rejeitou o tipo de dispositivo ou requisição"
 msgid "Host rejected resource(s)"
 msgstr "Servidor rejeitou recurso(s)"
 
-#: main.c:383
+#: main.c:384
 msgid "Host system type"
 msgstr "Tipo do sistema no servidor"
 
-#: main.c:381
+#: main.c:382
 msgid "Host to connect"
 msgstr "Servidor a conectar"
 
@@ -1055,9 +1068,21 @@ msgid "Invalid callback table, possible version mismatch in lib3270"
 msgstr ""
 "Tabela de callbacks inválida, possível divergência de versão na lib3270"
 
+#: charset.c:361
+msgid "Invalid cgcsgid value"
+msgstr "Valor cgcsgid é inválido"
+
+#: charset.c:299
+msgid "Invalid character value"
+msgstr "Valor de caractere inválido"
+
 #: selection.c:656
 msgid "Invalid cut action"
 msgstr "Ação recortar inválida"
+
+#: charset.c:319
+msgid "Invalid remap scope"
+msgstr "Escopo de mapeamento inválido"
 
 #: 80javasamples.xml:38
 msgid "Java"
@@ -1091,11 +1116,11 @@ msgstr "Ler a fila de um arquivo"
 msgid "Local:"
 msgstr "Local:"
 
-#: main.c:395
+#: main.c:397
 msgid "Log to file"
 msgstr "Enviar log para arquivo"
 
-#: main.c:388
+#: main.c:390
 msgid "Minutes for auto-disconnect"
 msgstr "Minutos para desconexão automática"
 
@@ -1332,7 +1357,7 @@ msgstr "PF8"
 msgid "PF9"
 msgstr "PF9"
 
-#: main.c:418
+#: main.c:420
 msgid "Parse error"
 msgstr "Erro de interpretação"
 
@@ -1361,7 +1386,7 @@ msgstr "Colar com margem esquerda"
 msgid "Path and name of the local file"
 msgstr "Caminho e nome do arquivo local"
 
-#: main.c:389
+#: main.c:391
 msgid "Path for plugin files"
 msgstr "Caminho para os arquivos de plugin"
 
@@ -1369,7 +1394,7 @@ msgstr "Caminho para os arquivos de plugin"
 msgid "Path length constraint exceeded"
 msgstr "Path length constraint exceeded"
 
-#: main.c:378
+#: main.c:379
 msgid "Path to application data files"
 msgstr "Caminho para os arquivos de dados da aplicação"
 
@@ -1552,6 +1577,14 @@ msgstr "Vermelho"
 #: 99debug.xml:41
 msgid "Reload buffer contents"
 msgstr "Recarregar conteúdo do buffer"
+
+#: charset.c:474
+msgid "Remap Failed"
+msgstr "Remapeamento falhou"
+
+#: main.c:388
+msgid "Remap charset from xml file"
+msgstr "Remapear caracteres por um arquivo xml"
 
 #: tables.c:67
 msgid ""
@@ -1775,7 +1808,7 @@ msgstr "Certificado auto assinado na cadeia de certificados"
 msgid "Send file"
 msgstr "Enviar arquivo"
 
-#: main.c:392
+#: main.c:394
 msgid "Send messages to syslog"
 msgstr "Enviar mensagens para o log do sistema"
 
@@ -1791,11 +1824,11 @@ msgstr "Enviar/Receber"
 msgid "Sending file"
 msgstr "Enviando arquivo"
 
-#: main.c:380
+#: main.c:381
 msgid "Session name"
 msgstr "Nome da sessão"
 
-#: main.c:386
+#: main.c:387
 msgid "Set host charset"
 msgstr "Define página de código do host"
 
@@ -1803,19 +1836,19 @@ msgstr "Define página de código do host"
 msgid "Set insert mode"
 msgstr "Set insert mode"
 
-#: main.c:382
+#: main.c:383
 msgid "Set reported colors (8/16)"
 msgstr "Define número de cores informadas (8/16)"
 
-#: main.c:385
+#: main.c:386
 msgid "Set toggles OFF"
 msgstr "Desativa toggles"
 
-#: main.c:384
+#: main.c:385
 msgid "Set toggles ON"
 msgstr "Ativa toggles"
 
-#: main.c:394
+#: main.c:396
 msgid "Set trace filename"
 msgstr "Define o nome do arquivo de trace"
 
@@ -2111,7 +2144,7 @@ msgstr ""
 msgid "The known types are %s"
 msgstr "Os tipos conhecidos são %s"
 
-#: main.c:387
+#: main.c:389
 msgid "The model of 3270 display to be emulated"
 msgstr "Modelo de tela 3270 a ser emulada"
 
@@ -2162,7 +2195,7 @@ msgstr ""
 msgid "There is not enough space available for data on the host."
 msgstr "Não existe espaço suficiente no host para os dados."
 
-#: tools.c:301
+#: tools.c:309
 #, c-format
 msgid "There's no available settings for charset \"%s\""
 msgstr "Não encontrei configuração para a tabela de caracteres \"%s\""
@@ -2200,7 +2233,7 @@ msgstr ""
 "programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple "
 "Place, Suite 330, Boston, MA, 02111-1307, USA"
 
-#: main.c:506
+#: main.c:508
 #, c-format
 msgid "This program requires GTK version %d.%d.%d"
 msgstr "Este programa precisa do GTK versão %d.%d.%d"
@@ -2210,6 +2243,10 @@ msgstr "Este programa precisa do GTK versão %d.%d.%d"
 msgid ""
 "This version of %s was built without support for secure sockets layer (SSL)."
 msgstr "Esta versão do %s foi gerada sem suporte para conexões seguras (SSL)."
+
+#: charset.c:376
+msgid "Too many remaps"
+msgstr "Muitos remapeamentos"
 
 #: 00default.xml:146
 msgid "Toolbar"
@@ -2385,7 +2422,7 @@ msgstr "Atributo %s inesperado ou inválido: \"%s\""
 msgid "Unexpected or invalid attribute value \"%s\""
 msgstr "Valor de attributo inesperado ou inválido: \"%s\""
 
-#: main.c:202
+#: main.c:203
 #, c-format
 msgid "Unexpected or invalid color value \"%s\""
 msgstr "Valor de cor inválido ou inesperado: \"%s\""
@@ -2714,7 +2751,7 @@ msgstr "Atributo inesperado \"action\" em <%s>"
 msgid "an action attribute"
 msgstr "um atributo \"action\""
 
-#: session.c:268
+#: session.c:271
 msgid "bracket"
 msgstr "bracket"
 
@@ -2937,9 +2974,6 @@ msgstr "translator-credits"
 
 #~ msgid "Informations"
 #~ msgstr "Informações"
-
-#~ msgid "Invalid (empty) hostname"
-#~ msgstr "Nome do host é invalido (vazio)"
 
 #~ msgid "Invalid CGCSGID '%s', ignoring"
 #~ msgstr "Invalid CGCSGID '%s', ignoring"

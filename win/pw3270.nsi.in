@@ -88,8 +88,11 @@ SubSection "@PACKAGE@" SecMain
 
 		# UI definition files
 		CreateDirectory "$INSTDIR\ui"
-
 		file "/oname=$INSTDIR\ui\00default.xml" 	"..\ui\00default.xml"
+
+		# Charset definition files
+		CreateDirectory "$INSTDIR\charsets"
+		file "/oname=$INSTDIR\charsets\bracket.xml.xml" 	"..\charsets\bracket.xml"
 
 		# Locale files
 		CreateDirectory "$INSTDIR\locale\pt_BR\LC_MESSAGES"
