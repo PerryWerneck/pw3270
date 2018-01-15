@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-11 17:10-0200\n"
+"POT-Creation-Date: 2018-01-15 13:53-0200\n"
 "PO-Revision-Date: 2018-01-15 13:50-0200\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <perry.werneck@gmail.com>\n"
@@ -119,7 +119,7 @@ msgstr "Alerta 3270"
 msgid "3270 screen"
 msgstr "Tela 3270"
 
-#: dialog.c:550
+#: dialog.c:563
 #, c-format
 msgid "3270 terminal emulator for GTK %d.%d"
 msgstr "Emulador 3270 para GTK+ %d.%d"
@@ -363,7 +363,7 @@ msgstr "Azul"
 msgid "Bold"
 msgstr "Negrito"
 
-#: dialog.c:557
+#: dialog.c:570
 msgid "Brazilian Public Software Portal"
 msgstr "Portal do Software Público Brasileiro"
 
@@ -387,7 +387,7 @@ msgstr "CRL ainda não é válido"
 msgid "CRL signature failure"
 msgstr "Erro na assinatura CRL"
 
-#: dialog.c:123
+#: dialog.c:122
 msgid "C_haracter Coding:"
 msgstr "C_odificação de caracteres:"
 
@@ -442,7 +442,7 @@ msgstr "Não foi possível obter o tamanho do arquivo"
 msgid "Can't load %s"
 msgstr "Não foi possível carregar %s"
 
-#: dialog.c:393
+#: dialog.c:406
 msgid "Can't load file"
 msgstr "Não foi possível carregar arquivo"
 
@@ -495,7 +495,7 @@ msgstr "Não reconheço \"%s\" como um tipo de host válido"
 msgid "Can't save %s"
 msgstr "Não foi possível salvar arquivo %s"
 
-#: dialog.c:369
+#: dialog.c:382
 #, c-format
 msgid ""
 "Can't save copy to file\n"
@@ -508,7 +508,7 @@ msgstr ""
 msgid "Can't save file"
 msgstr "Não foi possível salvar arquivo"
 
-#: dialog.c:334
+#: dialog.c:347
 #, c-format
 msgid ""
 "Can't save screen to file\n"
@@ -517,7 +517,7 @@ msgstr ""
 "Não foi possível salvar a tela no arquivo\n"
 "%s"
 
-#: dialog.c:352
+#: dialog.c:365
 #, c-format
 msgid ""
 "Can't save selection to file\n"
@@ -710,7 +710,7 @@ msgstr "Cria arquivo com registros de tamanho variável."
 msgid "Cross hair cursor"
 msgstr "Cursor mira"
 
-#: dialog.c:140
+#: dialog.c:139
 #, c-format
 msgid "Current (%s)"
 msgstr "Atual (%s)"
@@ -845,7 +845,7 @@ msgstr "Erro \"%s\" lendo arquivo local (rc=%d)"
 msgid "Error \"%s\" writing to local file (rc=%d)"
 msgstr "Erro \"%s\" gravando arquivo local (rc=%d)"
 
-#: dialog.c:391
+#: dialog.c:404
 #, c-format
 msgid "Error loading %s"
 msgstr "Erro lendo %s"
@@ -1680,7 +1680,7 @@ msgstr "Salvar"
 msgid "Save copy"
 msgstr "Salvar cópia"
 
-#: dialog.c:368
+#: dialog.c:381
 msgid "Save copy to file"
 msgstr "Salvar cópia para arquivo"
 
@@ -1692,7 +1692,7 @@ msgstr "Salvar a fila para um arquivo"
 msgid "Save screen"
 msgstr "Salvar tela"
 
-#: dialog.c:333
+#: dialog.c:346
 msgid "Save screen to file"
 msgstr "Salvar tela para arquivo"
 
@@ -1700,7 +1700,7 @@ msgstr "Salvar tela para arquivo"
 msgid "Save selected"
 msgstr "Salvar seleção"
 
-#: dialog.c:351
+#: dialog.c:364
 msgid "Save selection to file"
 msgstr "Salvar seleção para arquivo"
 
@@ -2204,7 +2204,7 @@ msgstr "Não encontrei configuração para a tabela de caracteres \"%s\""
 msgid "This is a host program error."
 msgstr "Este é um erro no programa do host."
 
-#: dialog.c:499
+#: dialog.c:512
 msgid ""
 "This program is free software; you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -2493,7 +2493,7 @@ msgstr "Use the keys +/- from keypad to select editable fields"
 msgid "Variable"
 msgstr "Variável"
 
-#: dialog.c:540 dialog.c:542
+#: dialog.c:553 dialog.c:555
 #, c-format
 msgid "Version %s-%s"
 msgstr "Versão %s-%s"
@@ -2775,7 +2775,7 @@ msgstr "ioctlsocket(FIONBIO) failed."
 msgid "setsockopt(SO_OOBINLINE) has failed"
 msgstr "setsockopt(SO_OOBINLINE) has failed"
 
-#: dialog.c:560
+#: dialog.c:573
 msgid "translator-credits"
 msgstr "translator-credits"
 

@@ -9,7 +9,7 @@ msgstr ""
 "#-#-#-#-#  lib3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-11 17:20-0200\n"
+"POT-Creation-Date: 2018-01-15 14:01-0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "#-#-#-#-#  pw3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-11 17:20-0200\n"
+"POT-Creation-Date: 2018-01-15 14:01-0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -140,7 +140,7 @@ msgstr ""
 msgid "3270 screen"
 msgstr ""
 
-#: dialog.c:550
+#: dialog.c:563
 #, c-format
 msgid "3270 terminal emulator for GTK %d.%d"
 msgstr ""
@@ -368,7 +368,7 @@ msgstr ""
 msgid "Bold"
 msgstr ""
 
-#: dialog.c:557
+#: dialog.c:570
 msgid "Brazilian Public Software Portal"
 msgstr ""
 
@@ -392,7 +392,7 @@ msgstr ""
 msgid "CRL signature failure"
 msgstr ""
 
-#: dialog.c:123
+#: dialog.c:122
 msgid "C_haracter Coding:"
 msgstr ""
 
@@ -447,7 +447,7 @@ msgstr ""
 msgid "Can't load %s"
 msgstr ""
 
-#: dialog.c:393
+#: dialog.c:406
 msgid "Can't load file"
 msgstr ""
 
@@ -500,7 +500,7 @@ msgstr ""
 msgid "Can't save %s"
 msgstr ""
 
-#: dialog.c:369
+#: dialog.c:382
 #, c-format
 msgid ""
 "Can't save copy to file\n"
@@ -511,14 +511,14 @@ msgstr ""
 msgid "Can't save file"
 msgstr ""
 
-#: dialog.c:334
+#: dialog.c:347
 #, c-format
 msgid ""
 "Can't save screen to file\n"
 "%s"
 msgstr ""
 
-#: dialog.c:352
+#: dialog.c:365
 #, c-format
 msgid ""
 "Can't save selection to file\n"
@@ -702,7 +702,7 @@ msgstr ""
 msgid "Cross hair cursor"
 msgstr ""
 
-#: dialog.c:140
+#: dialog.c:139
 #, c-format
 msgid "Current (%s)"
 msgstr ""
@@ -833,7 +833,7 @@ msgstr ""
 msgid "Error \"%s\" writing to local file (rc=%d)"
 msgstr ""
 
-#: dialog.c:391
+#: dialog.c:404
 #, c-format
 msgid "Error loading %s"
 msgstr ""
@@ -1639,7 +1639,7 @@ msgstr ""
 msgid "Save copy"
 msgstr ""
 
-#: dialog.c:368
+#: dialog.c:381
 msgid "Save copy to file"
 msgstr ""
 
@@ -1651,7 +1651,7 @@ msgstr ""
 msgid "Save screen"
 msgstr ""
 
-#: dialog.c:333
+#: dialog.c:346
 msgid "Save screen to file"
 msgstr ""
 
@@ -1659,7 +1659,7 @@ msgstr ""
 msgid "Save selected"
 msgstr ""
 
-#: dialog.c:351
+#: dialog.c:364
 msgid "Save selection to file"
 msgstr ""
 
@@ -2111,7 +2111,7 @@ msgstr ""
 msgid "This is a host program error."
 msgstr ""
 
-#: dialog.c:499
+#: dialog.c:512
 msgid ""
 "This program is free software; you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -2387,7 +2387,7 @@ msgstr ""
 msgid "Variable"
 msgstr ""
 
-#: dialog.c:540 dialog.c:542
+#: dialog.c:553 dialog.c:555
 #, c-format
 msgid "Version %s-%s"
 msgstr ""
@@ -2651,6 +2651,6 @@ msgstr ""
 msgid "setsockopt(SO_OOBINLINE) has failed"
 msgstr ""
 
-#: dialog.c:560
+#: dialog.c:573
 msgid "translator-credits"
 msgstr ""
