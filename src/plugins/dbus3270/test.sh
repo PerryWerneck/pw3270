@@ -42,6 +42,8 @@ run_command()
 			;;
 
 		gettext)
+#			addr,len,lf
+#			dbus-send --session  --print-reply --dest=$DEST.$SESSION $BPATH $DEST.getText int32:1 int32:-1 byte:0
 			dbus-send --session  --print-reply --dest=$DEST.$SESSION $BPATH $DEST.getText int32:1 int32:-1 byte:0
 			;;
 
