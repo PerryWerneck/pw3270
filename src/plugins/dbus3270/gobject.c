@@ -286,7 +286,7 @@ void pw3270_dbus_input(PW3270Dbus *object, const gchar *utftext, DBusGMethodInvo
 }
 
 
-void pw3270_dbus_get_text_at(PW3270Dbus *object, int row, int col, int len, DBusGMethodInvocation *context)
+void pw3270_dbus_get_text_at(PW3270Dbus *object, int row, int col, int len, char lf, DBusGMethodInvocation *context)
 {
 	gchar	* text;
 	H3270	* hSession = pw3270_dbus_get_session_handle(object);
@@ -295,7 +295,7 @@ void pw3270_dbus_get_text_at(PW3270Dbus *object, int row, int col, int len, DBus
 	if(pw3270_dbus_check_valid_state(object,context))
 		return;
 
-	text = lib3270_get_text_at(hSession, row, col, len);
+	text = lib3270_get_text_at(hSession, row, col, len, lf);
 	if(!text)
 	{
 		GError *error = pw3270_dbus_get_error_from_errno(errno);
@@ -415,7 +415,7 @@ void pw3270_dbus_get_text_at(PW3270Dbus *object, int row, int col, int len, DBus
 	dbus_g_method_return(context,lib3270_set_toggle(pw3270_dbus_get_session_handle(object),id,value));
  }
 
-void pw3270_dbus_cmp_text_at(PW3270Dbus *object, int row, int col, const gchar *utftext, DBusGMethodInvocation *context)
+void pw3270_dbus_cmp_text_at(PW3270Dbus *object, int row, int col, const gchar *utftext, char lf, DBusGMethodInvocation *context)
 {
 	gchar	* text;
 	H3270	* hSession = pw3270_dbus_get_session_handle(object);
@@ -426,7 +426,7 @@ void pw3270_dbus_cmp_text_at(PW3270Dbus *object, int row, int col, const gchar *
 
 	text = g_convert_with_fallback(utftext,-1,lib3270_get_display_charset(hSession),"UTF-8","?",NULL,NULL,NULL);
 
-	dbus_g_method_return(context,lib3270_cmp_text_at(hSession,row,col,text));
+	dbus_g_method_return(context,lib3270_cmp_text_at(hSession,row,col,text,lf));
 
 	g_free(text);
 }

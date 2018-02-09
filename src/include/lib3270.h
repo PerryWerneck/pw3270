@@ -921,11 +921,12 @@
 	 * @param row		Desired row.
 	 * @param col		Desired col.
 	 * @param length	Text length
+	 * @param lf		Line break char (0 to disable line breaks).
 	 *
 	 * @return Contents at position if available, or NULL. Release it with lib3270_free()
 	 *
 	 */
-	LIB3270_EXPORT char * lib3270_get_text_at(H3270 *h, int row, int col, int len);
+	LIB3270_EXPORT char * lib3270_get_text_at(H3270 *h, int row, int col, int len, char lf);
 
 	/**
 	 * Check for text at requested position
@@ -934,11 +935,12 @@
 	 * @param row		Desired row.
 	 * @param col		Desired col.
 	 * @param text		Text to check.
+	 * @param lf		Line break char (0 to disable line breaks).
 	 *
 	 * @return Test result from strcmp
 	 *
 	 */
-	 LIB3270_EXPORT int lib3270_cmp_text_at(H3270 *h, int row, int col, const char *text);
+	 LIB3270_EXPORT int lib3270_cmp_text_at(H3270 *h, int row, int col, const char *text, char lf);
 
 
 	/**

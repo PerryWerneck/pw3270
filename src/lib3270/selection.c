@@ -530,19 +530,19 @@ LIB3270_EXPORT char * lib3270_get_text(H3270 *h, int offset, int len, char lf)
 	return buffer;
 }
 
-LIB3270_EXPORT char * lib3270_get_text_at(H3270 *h, int row, int col, int len)
+LIB3270_EXPORT char * lib3270_get_text_at(H3270 *h, int row, int col, int len, char lf)
 {
 	CHECK_SESSION_HANDLE(h);
-	return lib3270_get_text(h, ((row-1) * h->cols) + (col-1), len, '\n');
+	return lib3270_get_text(h, ((row-1) * h->cols) + (col-1), len, lf);
 }
 
-LIB3270_EXPORT int lib3270_cmp_text_at(H3270 *h, int row, int col, const char *text)
+LIB3270_EXPORT int lib3270_cmp_text_at(H3270 *h, int row, int col, const char *text, char lf)
 {
 	int		  rc;
 	size_t	  sz		= strlen(text);
 	char	* contents;
 
-	contents = lib3270_get_text_at(h,row,col,sz);
+	contents = lib3270_get_text_at(h,row,col,sz,lf);
 	if(!contents)
 		return -1;
 

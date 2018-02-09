@@ -141,6 +141,7 @@ struct hllapi_packet_text_at
 	unsigned char	packet_id;
 	unsigned short	row;
 	unsigned short	col;
+	char			lf;
 	char 			text[1];
 };
 
@@ -150,6 +151,7 @@ struct hllapi_packet_query_at
 	unsigned short	row;
 	unsigned short	col;
 	unsigned short	len;
+	char			lf;
 };
 
 struct hllapi_packet_wait

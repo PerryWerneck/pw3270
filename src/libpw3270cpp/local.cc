@@ -138,8 +138,8 @@
 		int 				(*_pakey)(H3270 *hSession, int key);
 		int 				(*_wait_for_ready)(H3270 *hSession, int seconds);
 		char * 				(*_get_text)(H3270 *h, int offset, int len, char lf);
-		char *  			(*_get_text_at)(H3270 *h, int row, int col, int len);
-		int 				(*_cmp_text_at)(H3270 *h, int row, int col, const char *text);
+		char *  			(*_get_text_at)(H3270 *h, int row, int col, int len, char lf);
+		int 				(*_cmp_text_at)(H3270 *h, int row, int col, const char *text, char lf);
 		int 				(*_set_text_at)(H3270 *h, int row, int col, const unsigned char *str);
 		int 				(*_is_ready)(H3270 *h);
 		int 				(*_set_cursor_position)(H3270 *h, int row, int col);
@@ -353,10 +353,10 @@
 			return 0;
 		}
 
-		string get_text_at(int row, int col, size_t sz)
+		string get_text_at(int row, int col, size_t sz, bool lf)
 		{
 			string 	  rc;
-			char	* ptr	= _get_text_at(hSession,row,col,sz);
+			char	* ptr	= _get_text_at(hSession,row,col,sz,lf ? '\n' : 0);
 
 			if(ptr)
 			{
@@ -372,9 +372,9 @@
 			return _set_text_at(hSession,row,col,(const unsigned char *) str);
 		}
 
-		int cmp_text_at(int row, int col, const char *text)
+		int cmp_text_at(int row, int col, const char *text, bool lf)
 		{
-			return _cmp_text_at(hSession,row,col,text);
+			return _cmp_text_at(hSession,row,col,text,lf ? '\n' : 0);
 		}
 
 		string get_text(int offset, size_t len, bool lf)

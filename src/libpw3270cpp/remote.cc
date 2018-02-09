@@ -1031,11 +1031,11 @@
 #endif
 		}
 
-		string get_text_at(int row, int col, size_t sz)
+		string get_text_at(int row, int col, size_t sz, bool lf)
 		{
 #if defined(WIN32)
 
-			struct hllapi_packet_query_at query	= { HLLAPI_PACKET_GET_TEXT_AT, (unsigned short) row, (unsigned short) col, (unsigned short) sz };
+			struct hllapi_packet_query_at query	= { HLLAPI_PACKET_GET_TEXT_AT, (unsigned short) row, (unsigned short) col, (unsigned short) sz, lf ? '\n' : 0 };
 
 			return query_string(&query,sizeof(query),sz);
 
@@ -1044,13 +1044,14 @@
 			dbus_int32_t r = (dbus_int32_t) row;
 			dbus_int32_t c = (dbus_int32_t) col;
 			dbus_int32_t l = (dbus_int32_t) sz;
+			unsigned char d = lf ? '\n' : 0;
 
 			DBusMessage * msg = create_message("getTextAt");
 			if(!msg)
 				return NULL;
 
 			trace("%s(%d,%d,%d)",__FUNCTION__,r,c,l);
-			dbus_message_append_args(msg, DBUS_TYPE_INT32, &r, DBUS_TYPE_INT32, &c, DBUS_TYPE_INT32, &l, DBUS_TYPE_INVALID);
+			dbus_message_append_args(msg, DBUS_TYPE_INT32, &r, DBUS_TYPE_INT32, &c, DBUS_TYPE_INT32, &l, DBUS_TYPE_BYTE, &d, DBUS_TYPE_INVALID);
 
 			return get_string(call(msg));
 
@@ -1097,7 +1098,7 @@
 
 		}
 
-		int cmp_text_at(int row, int col, const char *text)
+		int cmp_text_at(int row, int col, const char *text, bool lf)
 		{
 			debug("%s(%d,%d,\"%s\")",__FUNCTION__,row,col,text);
 
@@ -1110,6 +1111,7 @@
 			query->packet_id 	= HLLAPI_PACKET_CMP_TEXT_AT;
 			query->row			= row;
 			query->col			= col;
+			query->lf 			= lf ? '\n' : 0
 			strcpy(query->text,text);
 
 			return query_intval((void *) query, cbSize, true);
@@ -1118,8 +1120,9 @@
 
 			dbus_int32_t r = (dbus_int32_t) row;
 			dbus_int32_t c = (dbus_int32_t) col;
+			unsigned char d = lf ? '\n' : 0;
 
-			return query_intval("cmpTextAt", DBUS_TYPE_INT32, &r, DBUS_TYPE_INT32, &c, DBUS_TYPE_STRING, &text, DBUS_TYPE_INVALID);
+			return query_intval("cmpTextAt", DBUS_TYPE_INT32, &r, DBUS_TYPE_INT32, &c, DBUS_TYPE_STRING, &text, DBUS_TYPE_BYTE, &d, DBUS_TYPE_INVALID);
 
 #endif
 
@@ -1135,7 +1138,7 @@
 				if(!is_connected())
 					return ENOTCONN;
 
-				if(!cmp_text_at(row,col,key))
+				if(!cmp_text_at(row,col,key,false))
 					return 0;
 
 #ifdef WIN32

@@ -213,17 +213,19 @@
 
 		}
 
-		virtual string get_text_at(int row, int col, size_t sz)
+		virtual string get_text_at(int row, int col, size_t sz, bool lf = true)
 		{
 			dbus_int32_t r = (dbus_int32_t) row;
 			dbus_int32_t c = (dbus_int32_t) col;
 			dbus_int32_t s = (dbus_int32_t) sz;
+			char l = lf ? '\n' : 0;
 
 			return getString(	"getTextAt",
 								DBUS_TYPE_STRING, &this->id,
 								DBUS_TYPE_INT32, &r,
 								DBUS_TYPE_INT32, &c,
 								DBUS_TYPE_INT32, &s,
+								DBUS_TYPE_BYTE, &l,
 								DBUS_TYPE_INVALID);
 
 		}
@@ -241,16 +243,18 @@
 								DBUS_TYPE_INVALID);
 		}
 
-		virtual int cmp_text_at(int row, int col, const char *str)
+		virtual int cmp_text_at(int row, int col, const char *str, bool lf)
 		{
 			dbus_int32_t r = (dbus_int32_t) row;
 			dbus_int32_t c = (dbus_int32_t) col;
+			char l = lf ? '\n' : 0;
 
 			return getInteger(	"cmpTextAt",
 								DBUS_TYPE_STRING, &this->id,
 								DBUS_TYPE_INT32, &r,
 								DBUS_TYPE_INT32, &c,
 								DBUS_TYPE_STRING, &str,
+								DBUS_TYPE_BYTE,	&l,
 								DBUS_TYPE_INVALID);
 		}
 
