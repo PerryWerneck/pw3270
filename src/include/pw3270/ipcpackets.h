@@ -134,6 +134,7 @@ struct hllapi_packet_at
 	unsigned short	row;
 	unsigned short	col;
 	unsigned short	len;
+	char			lf;
 };
 
 struct hllapi_packet_text_at

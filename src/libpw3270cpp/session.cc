@@ -515,9 +515,9 @@
 		return rc;
 	}
 
-	string session::get_string_at(int row, int col, size_t sz)
+	string session::get_string_at(int row, int col, size_t sz, bool lf)
 	{
-		return this->get_local_text(this->get_text_at(row,col,sz).c_str());
+		return this->get_local_text(this->get_text_at(row,col,sz,lf).c_str());
 	}
 
 	int session::set_string_at(int row, int col, const char *str)
@@ -586,9 +586,9 @@
 
 	}
 
-	int session::cmp_string_at(int row, int col, const char *text)
+	int session::cmp_string_at(int row, int col, const char *text, bool lf)
 	{
-		return cmp_text_at(row,col,get_3270_text(text).c_str());
+		return cmp_text_at(row,col,get_3270_text(text).c_str(),lf);
 	}
 
 	int	session::wait_for_string_at(int row, int col, const char *key, int timeout)

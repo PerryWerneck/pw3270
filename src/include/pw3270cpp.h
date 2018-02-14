@@ -204,9 +204,9 @@
 
 		// Get/Set/Text with charset translation
 		string					  get_string(int baddr = 0, size_t len = -1, bool lf = false);
-		string					  get_string_at(int row, int col, size_t sz);
+		string					  get_string_at(int row, int col, size_t sz, bool lf = false);
 		int			 			  set_string_at(int row, int col, const char *str);
-		int				  		  cmp_string_at(int row, int col, const char *text);
+		int				  		  cmp_string_at(int row, int col, const char *text, bool lf = false);
 		int				  		  wait_for_string_at(int row, int col, const char *key, int timeout);
 		int						  input_string(const char *str);
 		string			  		  get_contents(bool lf = true);

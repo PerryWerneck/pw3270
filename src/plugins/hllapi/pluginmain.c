@@ -300,7 +300,8 @@
 		send_text(source,lib3270_get_text_at(	lib3270_get_default_session_handle(),
 											((struct hllapi_packet_at *) source->buffer)->row,
 											((struct hllapi_packet_at *) source->buffer)->col,
-											((struct hllapi_packet_at *) source->buffer)->len));
+											((struct hllapi_packet_at *) source->buffer)->len,
+											((struct hllapi_packet_at *) source->buffer)->lf));
 		break;
 
 	case HLLAPI_PACKET_GET_TEXT_AT_OFFSET:
@@ -314,7 +315,8 @@
 		send_result(source,lib3270_cmp_text_at(	lib3270_get_default_session_handle(),
 											((struct hllapi_packet_text_at *) source->buffer)->row,
 											((struct hllapi_packet_text_at *) source->buffer)->col,
-											((struct hllapi_packet_text_at *) source->buffer)->text));
+											((struct hllapi_packet_text_at *) source->buffer)->text,
+											((struct hllapi_packet_text_at *) source->buffer)->lf));
 		break;
 
 	case HLLAPI_PACKET_INPUT_STRING:

@@ -1111,7 +1111,7 @@
 			query->packet_id 	= HLLAPI_PACKET_CMP_TEXT_AT;
 			query->row			= row;
 			query->col			= col;
-			query->lf 			= lf ? '\n' : 0
+			query->lf 			= lf ? '\n' : 0;
 			strcpy(query->text,text);
 
 			return query_intval((void *) query, cbSize, true);
