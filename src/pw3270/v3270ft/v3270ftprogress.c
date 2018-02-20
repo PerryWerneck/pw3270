@@ -497,10 +497,17 @@ void v3270ftprogress_update(GtkWidget *widget, unsigned long current, unsigned l
 	gchar			* text;
 	v3270ftprogress	* dialog = GTK_V3270FTPROGRESS(widget);
 
+	debug("%s(current=%lu total=%lu kbytes/sec=%u)",__FUNCTION__,current,total,(unsigned int) kbytes_sec);
+
 	if(current) {
 
-		// Tem dados, atualiza
-		dialog->timeout = time(NULL) + 10;
+		if(current != dialog->current) {
+
+			// Recebi um bloco de dados, cancelo timeout por 10 segundos.
+			dialog->timeout = time(NULL) + 10;
+			dialog->current	= current;
+
+		}
 
 		if(total) {
 
@@ -528,27 +535,34 @@ void v3270ftprogress_update(GtkWidget *widget, unsigned long current, unsigned l
 
 			gtk_progress_bar_set_fraction(dialog->progress, ((gdouble) current) / ((gdouble) total));
 
+			text = g_strdup_printf("%lu",total);
+			gtk_entry_set_text(dialog->info[PROGRESS_FIELD_TOTAL],text);
+			g_free(text);
+
+		} else {
+
+			gtk_entry_set_text(dialog->info[PROGRESS_FIELD_TOTAL],_("N/A"));
+
 		}
 
+		text = g_strdup_printf("%lu",current);
+		gtk_entry_set_text(dialog->info[PROGRESS_FIELD_CURRENT],text);
+		g_free(text);
+
+	} else {
+
+		// Não tem posição de arquivo
+		gtk_entry_set_text(dialog->info[PROGRESS_FIELD_CURRENT],_("N/A"));
+
 	}
 
-	debug("%s(current=%lu total=%lu kbytes/sec=%u)",__FUNCTION__,current,total,(unsigned int) kbytes_sec);
-
-	text = g_strdup_printf("%lu",current);
-	gtk_entry_set_text(dialog->info[PROGRESS_FIELD_CURRENT],text);
-	g_free(text);
-
-	if(total) {
-		text = g_strdup_printf("%lu",total);
-		gtk_entry_set_text(dialog->info[PROGRESS_FIELD_TOTAL],text);
+	if(kbytes_sec > 0) {
+		text = g_strdup_printf("%ld KB/s",(unsigned long) kbytes_sec);
+		gtk_entry_set_text(dialog->info[PROGRESS_FIELD_SPEED],text);
 		g_free(text);
 	} else {
-		gtk_entry_set_text(dialog->info[PROGRESS_FIELD_TOTAL],_("N/A"));
+		gtk_entry_set_text(dialog->info[PROGRESS_FIELD_SPEED],"");
 	}
-
-	text = g_strdup_printf("%ld KB/s",(unsigned long) kbytes_sec);
-	gtk_entry_set_text(dialog->info[PROGRESS_FIELD_SPEED],text);
-	g_free(text);
 
 
 }

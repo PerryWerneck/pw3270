@@ -143,6 +143,7 @@
 
 		struct v3270ft_entry	* active;						///< Transferência em andamento.
 		H3270					* session;						///< lib3270 session handle.
+		unsigned long			  current;						///< Quantidade de bytes recebidos/enviados.
 		time_t					  timeout;						///< When the transfer will fail with timeout.
 
 		GtkEntry				* info[PROGRESS_FIELD_COUNT];	///< Widgets com informações da transferência atual.
