@@ -497,43 +497,54 @@ void v3270ftprogress_update(GtkWidget *widget, unsigned long current, unsigned l
 	gchar			* text;
 	v3270ftprogress	* dialog = GTK_V3270FTPROGRESS(widget);
 
-	if(current && total) {
+	if(current) {
 
-		if(dialog->pulse) {
-			g_source_destroy(dialog->pulse);
-			dialog->pulse = NULL;
+		// Tem dados, atualiza
+		dialog->timeout = time(NULL) + 10;
+
+		if(total) {
+
+			if(dialog->pulse) {
+				g_source_destroy(dialog->pulse);
+				dialog->pulse = NULL;
+			}
+
+			double remaining = ((double) (total - current))/1024.0;
+
+			if(remaining > 0 && kbytes_sec > 0) {
+
+				char buffer[40];
+				double	seconds = ((double) remaining) / kbytes_sec;
+				time_t 	eta		= time(0) + ((time_t) seconds);
+				strftime(buffer, 39, "%H:%M:%S", localtime(&eta));
+
+				gtk_entry_set_text(dialog->info[PROGRESS_FIELD_ETA],buffer);
+
+			} else {
+
+				gtk_entry_set_text(dialog->info[PROGRESS_FIELD_ETA],"-");
+
+			}
+
+			gtk_progress_bar_set_fraction(dialog->progress, ((gdouble) current) / ((gdouble) total));
+
 		}
-
-		double remaining = ((double) (total - current))/1024.0;
-
-		if(remaining > 0 && kbytes_sec > 0) {
-
-			char buffer[40];
-			double	seconds = ((double) remaining) / kbytes_sec;
-			time_t 	eta		= time(0) + ((time_t) seconds);
-			strftime(buffer, 39, "%H:%M:%S", localtime(&eta));
-
-			gtk_entry_set_text(dialog->info[PROGRESS_FIELD_ETA],buffer);
-
-		} else {
-
-			gtk_entry_set_text(dialog->info[PROGRESS_FIELD_ETA],"-");
-
-		}
-
-		gtk_progress_bar_set_fraction(dialog->progress, ((gdouble) current) / ((gdouble) total));
 
 	}
 
-	debug("%s(%lu/%lu)",__FUNCTION__,current,total);
+	debug("%s(current=%lu total=%lu kbytes/sec=%u)",__FUNCTION__,current,total,(unsigned int) kbytes_sec);
 
 	text = g_strdup_printf("%lu",current);
 	gtk_entry_set_text(dialog->info[PROGRESS_FIELD_CURRENT],text);
 	g_free(text);
 
-	text = g_strdup_printf("%lu",total);
-	gtk_entry_set_text(dialog->info[PROGRESS_FIELD_TOTAL],text);
-	g_free(text);
+	if(total) {
+		text = g_strdup_printf("%lu",total);
+		gtk_entry_set_text(dialog->info[PROGRESS_FIELD_TOTAL],text);
+		g_free(text);
+	} else {
+		gtk_entry_set_text(dialog->info[PROGRESS_FIELD_TOTAL],_("N/A"));
+	}
 
 	text = g_strdup_printf("%ld KB/s",(unsigned long) kbytes_sec);
 	gtk_entry_set_text(dialog->info[PROGRESS_FIELD_SPEED],text);
@@ -689,6 +700,7 @@ static void ft_update(H3270 *hSession, unsigned long current, unsigned long tota
 }
 
 static void ft_running(H3270 *hSession, int is_cut, void *widget) {
+	debug("%s",__FUNCTION__);
 	GTK_V3270FTPROGRESS(widget)->timeout = time(NULL)+10;
 }
 
@@ -719,6 +731,7 @@ static gboolean do_timer(v3270ftprogress *dialog) {
 
 	if(time(NULL) > dialog->timeout) {
 
+		debug("%s: Dialog timeout",__FUNCTION__);
 		v3270ftprogress_set_header(GTK_WIDGET(dialog),strerror(ETIMEDOUT));
 
 		stop_pulse(dialog);
