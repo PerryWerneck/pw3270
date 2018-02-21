@@ -497,6 +497,9 @@ static void set_ft_state(H3270FT *session, LIB3270_FT_STATE state);
 	}
 
 	snconcat(buffer,4095,"%s","\n");
+
+	trace("%s file using %s",(ft->flags & LIB3270_FT_OPTION_RECEIVE) ? "Receiving" : "Sending",buffer);
+
 	trace_ds(hSession,"\n%s file using %s",(ft->flags & LIB3270_FT_OPTION_RECEIVE) ? "Receiving" : "Sending",buffer);
 
 	// Erase the line and enter the command.
