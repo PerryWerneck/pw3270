@@ -541,7 +541,7 @@ void v3270ftprogress_update(GtkWidget *widget, unsigned long current, unsigned l
 
 		} else {
 
-			gtk_entry_set_text(dialog->info[PROGRESS_FIELD_TOTAL],_("N/A"));
+			gtk_entry_set_text(dialog->info[PROGRESS_FIELD_TOTAL],"-");
 
 		}
 
@@ -551,8 +551,8 @@ void v3270ftprogress_update(GtkWidget *widget, unsigned long current, unsigned l
 
 	} else {
 
-		// Não tem posição de arquivo
-		gtk_entry_set_text(dialog->info[PROGRESS_FIELD_CURRENT],_("N/A"));
+		// Não tem posicao de arquivo
+		gtk_entry_set_text(dialog->info[PROGRESS_FIELD_CURRENT],"-");
 
 	}
 
