@@ -346,6 +346,47 @@ void v3270_copy(GtkWidget *widget, V3270_SELECT_FORMAT mode, gboolean cut)
     update_system_clipboard(widget);
 }
 
+#ifdef _WIN32
+
+void v3270_paste(GtkWidget *widget)
+{
+	HGLOBAL hglb;
+
+	if (!IsClipboardFormatAvailable(CF_TEXT))
+		return;
+
+	if (!OpenClipboard(NULL))
+		return;
+
+	hglb = GetClipboardData(CF_TEXT);
+	if (hglb != NULL)
+	{
+		LPTSTR lptstr = GlobalLock(hglb);
+		if (lptstr != NULL)
+		{
+			v3270_paste_string(widget,lptstr,"CP1252");
+			GlobalUnlock(hglb);
+		}
+	}
+
+	CloseClipboard();
+
+}
+
+#else
+
+static void text_received(GtkClipboard *clipboard, const gchar *text, GtkWidget *widget)
+{
+	v3270_paste_string(widget,text,"UTF-8");
+}
+
+void v3270_paste(GtkWidget *widget)
+{
+	gtk_clipboard_request_text(gtk_widget_get_clipboard(widget,GDK_SELECTION_CLIPBOARD),(GtkClipboardTextReceivedFunc) text_received,(gpointer) widget);
+}
+
+#endif // _WIN32
+
 void v3270_paste_string(GtkWidget *widget, const gchar *text, const gchar *encoding)
 {
  	gchar 		* buffer 	= NULL;
@@ -470,16 +511,6 @@ void v3270_paste_string(GtkWidget *widget, const gchar *text, const gchar *encod
 
 	g_signal_emit(widget,v3270_widget_signal[SIGNAL_PASTENEXT], 0, next);
 
-}
-
-static void text_received(GtkClipboard *clipboard, const gchar *text, GtkWidget *widget)
-{
-	v3270_paste_string(widget,text,"UTF-8");
-}
-
-void v3270_paste(GtkWidget *widget)
-{
-	gtk_clipboard_request_text(gtk_widget_get_clipboard(widget,GDK_SELECTION_CLIPBOARD),(GtkClipboardTextReceivedFunc) text_received,(gpointer) widget);
 }
 
 void v3270_unselect(GtkWidget *widget)
