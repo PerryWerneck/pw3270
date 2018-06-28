@@ -83,6 +83,9 @@ BuildRequires:  openssl-devel
 BuildRequires:  gtk3-devel
 BuildRequires:  librsvg2-tools
 
+# Genmarshal do CENTOS não tem dependência do python!
+BuildRequires:	python
+
 %endif
 
 #--[ Fedora ]---------------------------------------------------------------------------------------------------------
