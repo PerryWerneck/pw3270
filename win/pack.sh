@@ -125,9 +125,14 @@ build()
 
 TEMPDIR=$(mktemp -d)
 ARCHS="x86_32 x86_64"
+WINREPO=""
 DESTDIR=${HOME}/public_html/win
 RUNTIME=0
 COMPLETE=1
+
+if [ -e ~/.config/pw3270-win.conf ]; then
+	. ~/.config/pw3270-win.conf
+fi
 
 rm -f	${myDIR}/*.exe \
 		${myDIR}/*.zip
@@ -163,6 +168,10 @@ do
 
 		OUT)
 			DESTDIR=$value
+			;;
+
+		REPO)
+			WINREPO=$value
 			;;
 
 		ARCH)
@@ -277,5 +286,24 @@ zip -9 -r -j \
 		$(readlink -f ${DESTDIR}/${PACKAGE_NAME}/${PACKAGE}-latest-x86_64.exe) 
 
 echo -e "\e]2;Success!\a"
+
+# Copia para repositório
+if [ "${WINREPO}" != "" ]; then
+
+	echo "Copiando arquivos para ${WINREPO}..."
+
+	scp $(readlink -f ${DESTDIR}/${PACKAGE_NAME}/${PACKAGE}-latest-i686.exe) ${WINREPO}/x86_32
+	if [ "$?" != "0" ]; then
+		echo "Erro ao copiar versão de 32 bits para o repositório"
+		exit -1
+	fi
+
+	scp $(readlink -f ${DESTDIR}/${PACKAGE_NAME}/${PACKAGE}-latest-x86_64.exe) ${WINREPO}/x86_64
+	if [ "$?" != "0" ]; then
+		echo "Erro ao copiar versão de 64 bits para o repositório"
+		exit -1
+	fi
+
+fi
 
 

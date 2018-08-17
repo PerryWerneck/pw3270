@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-05 14:19-0300\n"
+"POT-Creation-Date: 2018-07-23 16:29-0300\n"
 "PO-Revision-Date: 2018-01-15 13:50-0200\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <perry.werneck@gmail.com>\n"
@@ -1261,19 +1261,19 @@ msgstr "PA2"
 msgid "PA3"
 msgstr "PA3"
 
-#: 10functions.xml:36 10keypad.xml:37
+#: 10keypad.xml:37 10functions.xml:36
 msgid "PF1"
 msgstr "PF1"
 
-#: 10functions.xml:45 10keypad.xml:52
+#: 10keypad.xml:52 10functions.xml:45
 msgid "PF10"
 msgstr "PF10"
 
-#: 10functions.xml:46 10keypad.xml:53
+#: 10keypad.xml:53 10functions.xml:46
 msgid "PF11"
 msgstr "PF11"
 
-#: 10functions.xml:47 10keypad.xml:54
+#: 10keypad.xml:54 10functions.xml:47
 msgid "PF12"
 msgstr "PF12"
 
@@ -1305,7 +1305,7 @@ msgstr "PF18"
 msgid "PF19"
 msgstr "PF19"
 
-#: 10functions.xml:37 10keypad.xml:38
+#: 10keypad.xml:38 10functions.xml:37
 msgid "PF2"
 msgstr "PF2"
 
@@ -1329,31 +1329,31 @@ msgstr "PF23"
 msgid "PF24"
 msgstr "PF24"
 
-#: 10functions.xml:38 10keypad.xml:39
+#: 10keypad.xml:39 10functions.xml:38
 msgid "PF3"
 msgstr "PF3"
 
-#: 10functions.xml:39 10keypad.xml:42
+#: 10keypad.xml:42 10functions.xml:39
 msgid "PF4"
 msgstr "PF4"
 
-#: 10functions.xml:40 10keypad.xml:43
+#: 10keypad.xml:43 10functions.xml:40
 msgid "PF5"
 msgstr "PF5"
 
-#: 10functions.xml:41 10keypad.xml:44
+#: 10keypad.xml:44 10functions.xml:41
 msgid "PF6"
 msgstr "PF6"
 
-#: 10functions.xml:42 10keypad.xml:47
+#: 10keypad.xml:47 10functions.xml:42
 msgid "PF7"
 msgstr "PF7"
 
-#: 10functions.xml:43 10keypad.xml:48
+#: 10keypad.xml:48 10functions.xml:43
 msgid "PF8"
 msgstr "PF8"
 
-#: 10functions.xml:44 10keypad.xml:49
+#: 10keypad.xml:49 10functions.xml:44
 msgid "PF9"
 msgstr "PF9"
 
@@ -2674,11 +2674,11 @@ msgstr "_Conectar"
 msgid "_Disconnect"
 msgstr "_Desconectar"
 
-#: 99debug.xml:35 80javasamples.xml:35 80rexx.xml:35 00default.xml:58
+#: 99debug.xml:35 80rexx.xml:35 80javasamples.xml:35 00default.xml:58
 msgid "_Edit"
 msgstr "_Editar"
 
-#: 80javasamples.xml:34 80rexx.xml:34 00default.xml:34
+#: 80rexx.xml:34 80javasamples.xml:34 00default.xml:34
 msgid "_File"
 msgstr "_Arquivo"
 
@@ -2726,7 +2726,7 @@ msgstr "_Serviço:"
 msgid "_Text file"
 msgstr "Arquivo _texto"
 
-#: 80javasamples.xml:36 80rexx.xml:36 00default.xml:84
+#: 80rexx.xml:36 80javasamples.xml:36 00default.xml:84
 msgid "_View"
 msgstr "_Exibir"
 

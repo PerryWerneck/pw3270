@@ -9,7 +9,7 @@ msgstr ""
 "#-#-#-#-#  lib3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-05 14:51-0300\n"
+"POT-Creation-Date: 2018-08-16 09:57-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "#-#-#-#-#  pw3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-05 14:51-0300\n"
+"POT-Creation-Date: 2018-08-16 09:57-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1229,19 +1229,19 @@ msgstr ""
 msgid "PA3"
 msgstr ""
 
-#: 10functions.xml:36 10keypad.xml:37
+#: 10keypad.xml:37 10functions.xml:36
 msgid "PF1"
 msgstr ""
 
-#: 10functions.xml:45 10keypad.xml:52
+#: 10keypad.xml:52 10functions.xml:45
 msgid "PF10"
 msgstr ""
 
-#: 10functions.xml:46 10keypad.xml:53
+#: 10keypad.xml:53 10functions.xml:46
 msgid "PF11"
 msgstr ""
 
-#: 10functions.xml:47 10keypad.xml:54
+#: 10keypad.xml:54 10functions.xml:47
 msgid "PF12"
 msgstr ""
 
@@ -1273,7 +1273,7 @@ msgstr ""
 msgid "PF19"
 msgstr ""
 
-#: 10functions.xml:37 10keypad.xml:38
+#: 10keypad.xml:38 10functions.xml:37
 msgid "PF2"
 msgstr ""
 
@@ -1297,31 +1297,31 @@ msgstr ""
 msgid "PF24"
 msgstr ""
 
-#: 10functions.xml:38 10keypad.xml:39
+#: 10keypad.xml:39 10functions.xml:38
 msgid "PF3"
 msgstr ""
 
-#: 10functions.xml:39 10keypad.xml:42
+#: 10keypad.xml:42 10functions.xml:39
 msgid "PF4"
 msgstr ""
 
-#: 10functions.xml:40 10keypad.xml:43
+#: 10keypad.xml:43 10functions.xml:40
 msgid "PF5"
 msgstr ""
 
-#: 10functions.xml:41 10keypad.xml:44
+#: 10keypad.xml:44 10functions.xml:41
 msgid "PF6"
 msgstr ""
 
-#: 10functions.xml:42 10keypad.xml:47
+#: 10keypad.xml:47 10functions.xml:42
 msgid "PF7"
 msgstr ""
 
-#: 10functions.xml:43 10keypad.xml:48
+#: 10keypad.xml:48 10functions.xml:43
 msgid "PF8"
 msgstr ""
 
-#: 10functions.xml:44 10keypad.xml:49
+#: 10keypad.xml:49 10functions.xml:44
 msgid "PF9"
 msgstr ""
 
@@ -2550,11 +2550,11 @@ msgstr ""
 msgid "_Disconnect"
 msgstr ""
 
-#: 99debug.xml:35 80javasamples.xml:35 80rexx.xml:35 00default.xml:58
+#: 99debug.xml:35 80rexx.xml:35 80javasamples.xml:35 00default.xml:58
 msgid "_Edit"
 msgstr ""
 
-#: 80javasamples.xml:34 80rexx.xml:34 00default.xml:34
+#: 80rexx.xml:34 80javasamples.xml:34 00default.xml:34
 msgid "_File"
 msgstr ""
 
@@ -2602,7 +2602,7 @@ msgstr ""
 msgid "_Text file"
 msgstr ""
 
-#: 80javasamples.xml:36 80rexx.xml:36 00default.xml:84
+#: 80rexx.xml:36 80javasamples.xml:36 00default.xml:84
 msgid "_View"
 msgstr ""
 
