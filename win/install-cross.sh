@@ -41,7 +41,8 @@ sudo zypper --non-interactive in \
 	adwaita-icon-theme \
 	gettext-tools \
 	glib2-devel \
-	optipng
+	optipng \
+	rsvg-view
 
 while read FILE
 do
