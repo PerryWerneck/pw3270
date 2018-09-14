@@ -237,7 +237,7 @@ install: \
 	$(foreach PLG, $(PLUGINS), $(DESTDIR)$(libdir)/$(PACKAGE_TARNAME)-plugins/$(PLG)@DLLEXT@)
 
 install-lib: \
-	$(DESTDIR)$(libdir)/@LIB3270_NAME@@DLLEXT@ \
+	$(DESTDIR)$(libdir)/lib@LIB3270_NAME@@DLLEXT@ \
 
 install-app: \
 	install-branding \
