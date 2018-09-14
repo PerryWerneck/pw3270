@@ -75,6 +75,12 @@ $(BINDBG)/%@DLLEXT@: \
  
 	@$(MAKE) -C src/$(basename $(notdir $@)) $@
 
+$(BINDBG)/lib@LIB3270_NAME@@DLLEXT@: \
+	$(DEPENDS) \
+	./src/lib3270/*
+ 
+	@$(MAKE) -C src/lib3270 $@
+
 $(BINDBG)/plugins/%@DLLEXT@: \
 	$(DEPENDS) \
 	./src/plugins/%/*
@@ -92,6 +98,12 @@ $(BINRLS)/%@DLLEXT@: \
 	./src/%/*
  
 	@$(MAKE) -C src/$(basename $(notdir $@)) $@
+
+$(BINRLS)/lib@LIB3270_NAME@@DLLEXT@: \
+	$(DEPENDS) \
+	./src/lib3270/*
+ 
+	@$(MAKE) -C src/lib3270 $@
 
 $(BINRLS)/%.a: \
 	$(DEPENDS) \
@@ -188,7 +200,7 @@ $(BINDIR)/%.png: \
 #---[ Release targets ]--------------------------------------------------------
 
 all: \
-	$(BINRLS)/lib3270@DLLEXT@ \
+	$(BINRLS)/lib@LIB3270_NAME@@DLLEXT@ \
 	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ \
 	$(BINRLS)/libpw3270cpp.a \
 	$(foreach PLG, $(PLUGINS), $(BINRLS)/plugins/$(PLG)@DLLEXT@) \
@@ -199,7 +211,7 @@ all: \
 	@$(MAKE) -C locale all
 
 Release: \
-	$(BINRLS)/lib3270@DLLEXT@ \
+	$(BINRLS)/lib@LIB3270_NAME@@DLLEXT@ \
 	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ \
 	$(foreach PLG, $(PLUGINS), $(BINRLS)/plugins/$(PLG)@DLLEXT@) \
 	$(BINDIR)/$(PACKAGE_NAME).png \
@@ -209,7 +221,7 @@ Release: \
 	@$(MAKE) -C locale all
 
 locale/$(PACKAGE_TARNAME).pot: \
-	$(POTDIR)/lib3270.pot \
+	$(POTDIR)/lib@LIB3270_NAME@.pot \
 	$(POTDIR)/pw3270.pot \
 	$(POTDIR)/ui.pot \
 	$(foreach PLG, $(PLUGINS), $(POTDIR)/plugins/$(PLG).pot)
@@ -225,7 +237,7 @@ install: \
 	$(foreach PLG, $(PLUGINS), $(DESTDIR)$(libdir)/$(PACKAGE_TARNAME)-plugins/$(PLG)@DLLEXT@)
 
 install-lib: \
-	$(DESTDIR)$(libdir)/lib3270@DLLEXT@ \
+	$(DESTDIR)$(libdir)/@LIB3270_NAME@@DLLEXT@ \
 
 install-app: \
 	install-branding \
@@ -264,7 +276,7 @@ install-branding:
 #---[ Debug targets ]----------------------------------------------------------
 
 Debug: \
-	$(BINDBG)/lib3270@DLLEXT@ \
+	$(BINDBG)/lib@LIB3270_NAME@@DLLEXT@ \
 	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@ \
 	$(BINDBG)/libpw3270cpp.a \
 	$(foreach PLG, $(PLUGINS), $(BINDBG)/plugins/$(PLG)@DLLEXT@)
@@ -276,7 +288,7 @@ $(BINDBG)/libpw3270cpp.a: \
 
 
 run: \
-	$(BINDBG)/lib3270@DLLEXT@ \
+	$(BINDBG)/lib@LIB3270_NAME@@DLLEXT@ \
 	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@ \
 	$(foreach PLG, $(PLUGINS), $(BINDBG)/plugins/$(PLG)@DLLEXT@)
 

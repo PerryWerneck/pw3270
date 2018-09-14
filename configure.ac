@@ -365,9 +365,15 @@ dnl ---------------------------------------------------------------------------
 dnl Lib3270 flags
 dnl ---------------------------------------------------------------------------
 
+AC_ARG_WITH([libname], [AS_HELP_STRING([--with-libname], [Setup library name])], [ app_cv_libname="$withval" ],[ app_cv_libname="3270" ])
+
+
 AC_SUBST(LIB3270_CFLAGS,-I$ac_pwd/src/include)
-AC_SUBST(LIB3270_LIBS,-l3270)
+AC_SUBST(LIB3270_LIBS,-l$app_cv_libname)
 AC_SUBST(PW3270_LIBS,-l$PACKAGE_TARNAME)
+
+AC_DEFINE(LIB3270_NAME,$app_cv_libname)
+AC_SUBST(LIB3270_NAME,$app_cv_libname)
 
 dnl ---------------------------------------------------------------------------
 dnl Check for headers

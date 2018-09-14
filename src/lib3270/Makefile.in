@@ -24,7 +24,7 @@
 # erico.mendonca@gmail.com	(Erico Mascarenhas de Mendonça)
 #
 
-LIBNAME=lib3270@DLLEXT@
+LIBNAME=lib@LIB3270_NAME@@DLLEXT@
 
 SOURCES =	bounds.c ctlr.c util.c toggles.c screen.c selection.c kybd.c telnet.c \
 				iocalls.c connect.c \
@@ -129,7 +129,7 @@ all: \
 Release: \
 	$(BINRLS)/$(LIBNAME)
 
-$(BASEDIR)/.pot/lib3270.pot: \
+$(BASEDIR)/.pot/lib@LIB3270_NAME@.pot: \
 	$(foreach SRC, $(basename $(SOURCES)), $(POTDIR)/$(SRC).pot)
 
 	@rm -f $@
