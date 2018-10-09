@@ -141,6 +141,13 @@ int ssl_negotiate(H3270 *hSession)
 		break;
 #else
 		lib3270_disconnect(hSession);
+		lib3270_popup_dialog(	hSession,
+								LIB3270_NOTIFY_ERROR,
+								_( "SSL error" ),
+								_( "The SSL certificate for this host is not trusted." ),
+								_( "The security certificate presented by this host was not issued by a trusted certificate authority." )
+							);
+
 		return -1;
 #endif // ENABLE_SELF_SIGNED_CERT
 
