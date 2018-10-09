@@ -136,7 +136,13 @@ int ssl_negotiate(H3270 *hSession)
 	case X509_V_ERR_SELF_SIGNED_CERT_IN_CHAIN:
 		peer = SSL_get_peer_certificate(hSession->ssl_con);
 		trace_dsn(hSession,"%s","TLS/SSL negotiated connection complete with self signed certificate in certificate chain\n" );
+
+#ifdef ENABLE_SELF_SIGNED_CERT
 		break;
+#else
+		lib3270_disconnect(hSession);
+		return -1;
+#endif // ENABLE_SELF_SIGNED_CERT
 
 	default:
 		trace_dsn(hSession,"Unexpected or invalid TLS/SSL verify result %d\n",rv);

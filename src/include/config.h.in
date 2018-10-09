@@ -49,6 +49,8 @@
 	#undef HAVE_ICONV
 	#undef ICONV_CONST
 
+	#undef ENABLE_SELF_SIGNED_CERT
+
 #ifdef WIN32
 	#undef HAVE_WIN_REGISTRY
 #endif // HAVE_WIN_REGISTRY

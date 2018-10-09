@@ -321,6 +321,23 @@ if test $app_cv_fvisibility_ok = yes; then
 fi
 
 dnl ---------------------------------------------------------------------------
+dnl Allow self signed certificates in SSL connections?
+dnl ---------------------------------------------------------------------------
+
+AC_ARG_ENABLE([self-signed-certs],
+	[AS_HELP_STRING([--disable-self-signed-certs], [disable SSL connection when host presents a self signed certificate])],
+[
+	app_cv_self_signed_certs="$enableval"
+],[
+	app_cv_self_signed_certs="yes"
+])
+
+if test "$app_cv_self_signed_certs" == "yes"; then
+	AC_DEFINE(ENABLE_SELF_SIGNED_CERT)
+fi
+
+
+dnl ---------------------------------------------------------------------------
 dnl Check for pic
 dnl ---------------------------------------------------------------------------
 AC_ARG_ENABLE([pic],
