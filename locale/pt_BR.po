@@ -5,10 +5,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-14 16:06-0300\n"
-"PO-Revision-Date: 2018-01-15 13:50-0200\n"
+"POT-Creation-Date: 2018-10-10 09:35-0300\n"
+"PO-Revision-Date: 2018-10-10 09:38-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
-"Language-Team: Português <perry.werneck@gmail.com>\n"
+"Language-Team: Português <>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16,7 +16,7 @@ msgstr ""
 "X-Poedit-Language: Portuguese\n"
 "X-Poedit-Country: BRAZIL\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : (n == 2 ? 1 : 2);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Gtranslator 2.91.7\n"
 
 #: window.c:329
@@ -25,7 +25,7 @@ msgid " and <b>%s</b> for %s."
 msgstr " e <b>%s</b> para %s."
 
 #: telnet.c:1059 connect.c:103 connect.c:119 connect.c:121 connect.c:588
-#: connect.c:605 ssl.c:270 ssl.c:323
+#: connect.c:605 ssl.c:283 ssl.c:336
 #, c-format
 msgid "%s"
 msgstr "%s"
@@ -420,9 +420,8 @@ msgid "Can't connect to %s:%s"
 msgstr "Não foi possível conectar a %s:%s"
 
 #: main.c:70
-#, fuzzy
 msgid "Can't connect to DBUS server"
-msgstr "Não foi possível conectar a %s"
+msgstr "Não foi possível conectar ao servidor DBUS"
 
 #: selection.c:466
 #, c-format
@@ -440,7 +439,7 @@ msgstr "Não consigo determinar o valor da variável de ambiente \"%s\" "
 
 #: main.c:115
 msgid "Can't get DBUS object name"
-msgstr ""
+msgstr "Não foi possível obter o nome do objeto DBUS"
 
 #: ft.c:413
 msgid "Can't get file size"
@@ -589,13 +588,13 @@ msgstr "Cancelado pelo usuário"
 msgid "Cannot connect to specified LU"
 msgstr "Não foi possível conectar na LU pedida"
 
-#: ssl.c:322
+#: ssl.c:335
 msgid "Cant create a new SSL structure for current connection."
 msgstr ""
 "Não foi possível criar uma nova estrutura de controle SSL para a conexão "
 "atual."
 
-#: ssl.c:263
+#: ssl.c:276
 #, c-format
 msgid ""
 "Cant set default locations for trusted CA certificates to\n"
@@ -677,9 +676,8 @@ msgid "Connect on startup"
 msgstr "Conectar ao iniciar"
 
 #: gobject.c:205
-#, fuzzy
 msgid "Connecting to host"
-msgstr "Não foi possível conectar ao servidor"
+msgstr "Conectando ao servidor"
 
 #: connect.c:215 connect.c:311 connect.c:320 connect.c:382 connect.c:397
 #: connect.c:413 connect.c:427 connect.c:447 connect.c:461 connect.c:477
@@ -1665,7 +1663,7 @@ msgstr "Erro SSL"
 msgid "SSL Read error"
 msgstr "Erro de leitura SSL"
 
-#: connect.c:348
+#: connect.c:348 ssl.c:146
 msgid "SSL error"
 msgstr "Erro SSL"
 
@@ -1673,7 +1671,7 @@ msgstr "Erro SSL"
 msgid "SSL negotiation failed"
 msgstr "Negociação SSL falhou"
 
-#: ssl.c:230
+#: ssl.c:243
 msgid "SSL_CTX_new() has failed"
 msgstr "SSL_CTX_new() falhou"
 
@@ -1750,7 +1748,7 @@ msgstr "Secondary space:"
 msgid "Secure connection was successful."
 msgstr "Conexão segura efetuada com sucesso."
 
-#: ssl.c:88 ssl.c:116 ssl.c:229 ssl.c:268 ssl.c:321
+#: ssl.c:88 ssl.c:116 ssl.c:242 ssl.c:281 ssl.c:334
 msgid "Security error"
 msgstr "Erro de segurança"
 
@@ -1959,7 +1957,7 @@ msgstr "Iniciando"
 #: gobject.c:193
 #, c-format
 msgid "State %04d can't accept requests"
-msgstr ""
+msgstr "Não é possível receber requisições no estado %04d"
 
 #: security.c:237
 msgid "Subject issuer mismatch"
@@ -2020,6 +2018,10 @@ msgstr ""
 "The CRL signature could not be decrypted: this means that the actual "
 "signature value could not be determined rather than it not matching the "
 "expected value. Unused."
+
+#: ssl.c:147
+msgid "The SSL certificate for this host is not trusted."
+msgstr "O certificado SSL deste servidor não é confiável"
 
 #: security.c:210
 msgid "The basicConstraints pathlength parameter has been exceeded."
@@ -2199,6 +2201,14 @@ msgid "The root CA is not marked as trusted for the specified purpose."
 msgstr ""
 "O Certificado raiz não está marcado como confiável para os fins "
 "especificados."
+
+#: ssl.c:148
+msgid ""
+"The security certificate presented by this host was not issued by a trusted "
+"certificate authority."
+msgstr ""
+"O certificado de segurança apresentado pelo servidor não foi assinado por "
+"uma autoridade certificadora confiável."
 
 #: security.c:91 security.c:98
 msgid "The signature of the certificate is invalid."
@@ -2451,9 +2461,9 @@ msgid "Unexpected or unknown security status"
 msgstr "Estado de segurança inesperado ou desconhecido."
 
 #: gobject.c:208
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected state %04d"
-msgstr "Alvo inesperado \"%s\""
+msgstr "Estado inesperado %04d"
 
 #: actions.c:391
 #, c-format

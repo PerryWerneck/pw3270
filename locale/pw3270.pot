@@ -9,7 +9,7 @@ msgstr ""
 "#-#-#-#-#  lib3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-14 16:26-0300\n"
+"POT-Creation-Date: 2018-10-10 09:35-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "#-#-#-#-#  pw3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-14 16:26-0300\n"
+"POT-Creation-Date: 2018-10-10 09:35-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,7 +42,7 @@ msgstr ""
 "#-#-#-#-#  dbus3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-14 16:26-0300\n"
+"POT-Creation-Date: 2018-10-10 09:35-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -57,7 +57,7 @@ msgid " and <b>%s</b> for %s."
 msgstr ""
 
 #: telnet.c:1059 connect.c:103 connect.c:119 connect.c:121 connect.c:588
-#: connect.c:605 ssl.c:270 ssl.c:323
+#: connect.c:605 ssl.c:283 ssl.c:336
 #, c-format
 msgid "%s"
 msgstr ""
@@ -598,11 +598,11 @@ msgstr ""
 msgid "Cannot connect to specified LU"
 msgstr ""
 
-#: ssl.c:322
+#: ssl.c:335
 msgid "Cant create a new SSL structure for current connection."
 msgstr ""
 
-#: ssl.c:263
+#: ssl.c:276
 #, c-format
 msgid ""
 "Cant set default locations for trusted CA certificates to\n"
@@ -1635,7 +1635,7 @@ msgstr ""
 msgid "SSL Read error"
 msgstr ""
 
-#: connect.c:348
+#: connect.c:348 ssl.c:146
 msgid "SSL error"
 msgstr ""
 
@@ -1643,7 +1643,7 @@ msgstr ""
 msgid "SSL negotiation failed"
 msgstr ""
 
-#: ssl.c:230
+#: ssl.c:243
 msgid "SSL_CTX_new() has failed"
 msgstr ""
 
@@ -1716,7 +1716,7 @@ msgstr ""
 msgid "Secure connection was successful."
 msgstr ""
 
-#: ssl.c:88 ssl.c:116 ssl.c:229 ssl.c:268 ssl.c:321
+#: ssl.c:88 ssl.c:116 ssl.c:242 ssl.c:281 ssl.c:334
 msgid "Security error"
 msgstr ""
 
@@ -1972,6 +1972,10 @@ msgid ""
 "expected value. Unused."
 msgstr ""
 
+#: ssl.c:147
+msgid "The SSL certificate for this host is not trusted."
+msgstr ""
+
 #: security.c:210
 msgid "The basicConstraints pathlength parameter has been exceeded."
 msgstr ""
@@ -2116,6 +2120,12 @@ msgstr ""
 
 #: security.c:224
 msgid "The root CA is not marked as trusted for the specified purpose."
+msgstr ""
+
+#: ssl.c:148
+msgid ""
+"The security certificate presented by this host was not issued by a trusted "
+"certificate authority."
 msgstr ""
 
 #: security.c:91 security.c:98
