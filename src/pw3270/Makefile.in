@@ -72,6 +72,7 @@ CC=@CC@
 LD=@CC@
 XGETTEXT=@XGETTEXT@
 MSGCAT=@MSGCAT@
+CONVERT=@CONVERT@
 WINDRES=@WINDRES@
 
 CFLAGS=@CFLAGS@ @LIB3270_CFLAGS@ \
@@ -87,7 +88,12 @@ APP_LDFLAGS=@APP_LDFLAGS@
 
 #---[ Rules ]----------------------------------------------------------------------------
 
-DEPENDS=$(BASEDIR)/src/include/*.h $(BASEDIR)/src/include/lib3270/*.h $(BASEDIR)/src/include/pw3270/*.h *.h Makefile
+DEPENDS=\
+	$(BASEDIR)/src/include/*.h \
+	$(BASEDIR)/src/include/lib3270/*.h \
+	$(BASEDIR)/src/include/pw3270/*.h \
+	*.h \
+	Makefile
 
 $(OBJDBG)/%.o: \
 	%.c \
@@ -100,11 +106,21 @@ $(OBJDBG)/%.o: \
 				-DBUILD_DATE=`date +"0x%Y%m%d"`\
 				-o $@ -c $<
 
+%.ico: \
+	$(BASEDIR)/branding/%.svg
+
+	@echo $< ...
+	@$(MKDIR) `dirname $@`
+	@$(CONVERT) -density 384 -background transparent $< -define icon:auto-resize -colors 256 $@
+
 $(OBJDBG)/%.o: \
 	%.rc \
+	@PACKAGE_TARNAME@.ico \
 	$(DEPENDS)
 
-	@$(WINDRES) --include-dir=$(BASEDIR)/win -i $< -o $@
+	@echo $< ...
+	@$(MKDIR) `dirname $@`
+	@$(WINDRES) -i $< -o $@
 
 $(BASEDIR)/.obj/Debug/%.a: \
 	./%/* \
@@ -253,7 +269,7 @@ $(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@: \
 	$(BINDBG)/$(LIBNAME) \
 	$(foreach SRC, $(basename $(APP_SOURCES)), $(OBJDBG)/$(SRC).o)
 
-	$(LD) -Wl,--rpath,$(BINDBG) -o $@ $^ -L$(BINDBG) $(LIBS) -l@PACKAGE_TARNAME@
+	@$(LD) -Wl,--rpath,$(BINDBG) -o $@ $^ -L$(BINDBG) $(LIBS) -l@PACKAGE_TARNAME@
 
 $(BINDBG)/$(LIBNAME): \
 	$(BINDBG)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@

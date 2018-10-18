@@ -40,7 +40,7 @@ MKDIR=@MKDIR_P@
 INSTALL=@INSTALL@
 INSTALL_DATA=@INSTALL_DATA@
 INSTALL_PROGRAM=@INSTALL_PROGRAM@
-SVG2PNG=@SVG2PNG@
+CONVERT=@CONVERT@
 OPTIPNG=@OPTIPNG@
 
 #---[ Rules ]----------------------------------------------------------------------------
@@ -50,11 +50,17 @@ $(BINDIR)/%.png: \
 
 	@echo $< ...
 	@$(MKDIR) `dirname $@`
-	@$(SVG2PNG) $< --format=png > $@
+	@$(CONVERT) -background transparent $< $@
 	@$(OPTIPNG) -o7 $@
 
-$(SRCDIR):
+$(BINDIR)/%.ico: \
+	%.svg
 
+	@echo $< ...
+	@$(MKDIR) `dirname $@`
+	@$(CONVERT) -density 384 -background transparent $< -define icon:auto-resize -colors 256 $@
+
+$(SRCDIR):
 	@$(MKDIR) $@
 	@$(INSTALL_DATA) $(PACKAGE_NAME).svg $(PACKAGE_NAME)-logo.svg *.in $@
 

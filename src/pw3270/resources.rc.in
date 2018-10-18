@@ -13,7 +13,7 @@ BEGIN
 		BLOCK "080904E4"
 		BEGIN
 			VALUE "FileDescription",	"@PACKAGE_DESCRIPTION@"
-			VALUE "CompanyName",        "Banco do Brasil S.A.\0"
+			VALUE "CompanyName",		"Banco do Brasil S.A.\0"
 			VALUE "FileVersion",		"@PACKAGE_VERSION@"
 			VALUE "InternalName",		"@PACKAGE_NAME@"
 			VALUE "LegalCopyright",		"Copyright (c) Banco do Brasil S.A."

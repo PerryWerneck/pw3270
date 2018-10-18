@@ -42,7 +42,8 @@ sudo zypper --non-interactive in \
 	gettext-tools \
 	glib2-devel \
 	optipng \
-	rsvg-view
+	rsvg-view \
+	ImageMagick
 
 while read FILE
 do

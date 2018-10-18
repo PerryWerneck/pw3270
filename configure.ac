@@ -229,6 +229,7 @@ AC_PATH_TOOL([MSGMERGE], [msgmerge], [no])
 AC_PATH_TOOL([MSGFMT], [msgfmt], [no])
 AC_PATH_TOOL([VALGRIND], [valgrind], [no])
 AC_PATH_TOOL([SVG2PNG],[rsvg-convert],[no])
+AC_PATH_TOOL([CONVERT], [convert], [no])
 AC_PATH_TOOL([OPTIPNG],[optipng],[no])
 
 AC_CHECK_HEADER(libintl.h, [
