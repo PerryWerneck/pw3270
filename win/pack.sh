@@ -75,6 +75,11 @@ build()
 
 	rm -f ./win/*.exe
 
+	if [ -e branding/${PACKAGE_TARNAME}.svg ]; then
+		rm -f win/${PACKAGE_TARNAME}.ico
+		convert -density 384 -background transparent branding/${PACKAGE_TARNAME}.svg -define icon:auto-resize -colors 256 win/${PACKAGE_TARNAME}.ico
+	fi
+
 	mkdir -p ${DESTDIR}/${PACKAGE_NAME}/${1}
 
 	if [ "${RUNTIME}" == "1" ]; then

@@ -141,9 +141,12 @@ $(OBJRLS)/%.o: \
 
 $(OBJRLS)/%.o: \
 	%.rc \
+	@PACKAGE_TARNAME@.ico \
 	$(DEPENDS)
 
-	@$(WINDRES) --include-dir=$(BASEDIR)/win -i $< -o $@
+	@echo $< ...
+	@$(MKDIR) `dirname $@`
+	@$(WINDRES) -i $< -o $@
 
 $(BASEDIR)/.obj/Release/%.a: \
 	./%/* \
