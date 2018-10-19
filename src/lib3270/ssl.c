@@ -135,6 +135,17 @@ int ssl_negotiate(H3270 *hSession)
 		trace_dsn(hSession,"TLS/SSL negotiated connection complete. Peer certificate %s presented.\n", peer ? "was" : "was not");
 		break;
 
+	case X509_V_ERR_UNABLE_TO_GET_CRL:
+		trace_dsn(hSession,"%s","The CRL of a certificate could not be found.\n" );
+		lib3270_disconnect(hSession);
+		lib3270_popup_dialog(	hSession,
+								LIB3270_NOTIFY_ERROR,
+								_( "SSL error" ),
+								_( "Unable to get certificate CRL." ),
+								_( "The CRL of a certificate could not be found." )
+							);
+		return -1;
+
 	case X509_V_ERR_SELF_SIGNED_CERT_IN_CHAIN:
 		peer = SSL_get_peer_certificate(hSession->ssl_con);
 		trace_dsn(hSession,"%s","TLS/SSL negotiated connection complete with self signed certificate in certificate chain\n" );
@@ -255,20 +266,6 @@ int ssl_init(H3270 *hSession)
 		SSL_CTX_set_info_callback(ssl_ctx, ssl_info_callback);
 		SSL_CTX_set_default_verify_paths(ssl_ctx);
 
-#if defined(SSL_ENABLE_CRL_CHECK)
-		// Set up CRL validation
-		// https://stackoverflow.com/questions/4389954/does-openssl-automatically-handle-crls-certificate-revocation-lists-now
-		X509_STORE *store = SSL_CTX_get_cert_store(ssl_ctx);
-
-		// Enable CRL checking
-		X509_VERIFY_PARAM *param = X509_VERIFY_PARAM_new();
-		X509_VERIFY_PARAM_set_flags(param, X509_V_FLAG_CRL_CHECK);
-		X509_STORE_set1_param(store, param);
-		X509_VERIFY_PARAM_free(param);
-
-		// X509_STORE_free(store);
-#endif // SSL_ENABLE_CRL_CHECK
-
 #if defined(_WIN32)
 		{
 			HKEY hKey = 0;
@@ -330,6 +327,27 @@ int ssl_init(H3270 *hSession)
 		}
 
 #endif // _WIN32
+
+#if defined(SSL_ENABLE_CRL_CHECK)
+		// Set up CRL validation
+		// https://stackoverflow.com/questions/4389954/does-openssl-automatically-handle-crls-certificate-revocation-lists-now
+		X509_STORE *store = SSL_CTX_get_cert_store(ssl_ctx);
+
+		// Enable CRL checking
+		X509_VERIFY_PARAM *param = X509_VERIFY_PARAM_new();
+		X509_VERIFY_PARAM_set_flags(param, X509_V_FLAG_CRL_CHECK);
+		X509_STORE_set1_param(store, param);
+		X509_VERIFY_PARAM_free(param);
+
+		// X509_STORE_free(store);
+
+		trace_dsn(hSession,"CRL CHECK is enabled.\n");
+
+#else
+
+		trace_dsn(hSession,"CRL CHECK is disabled.\n");
+
+#endif // SSL_ENABLE_CRL_CHECK
 
 		ssl_3270_ex_index = SSL_get_ex_new_index(0,NULL,NULL,NULL,NULL);
 
