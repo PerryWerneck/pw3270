@@ -139,7 +139,7 @@ int ssl_negotiate(H3270 *hSession)
 		peer = SSL_get_peer_certificate(hSession->ssl_con);
 		trace_dsn(hSession,"%s","TLS/SSL negotiated connection complete with self signed certificate in certificate chain\n" );
 
-#ifdef ENABLE_SELF_SIGNED_CERT
+#ifdef SSL_ALLOW_SELF_SIGNED_CERT
 		break;
 #else
 		lib3270_disconnect(hSession);
@@ -151,7 +151,7 @@ int ssl_negotiate(H3270 *hSession)
 							);
 
 		return -1;
-#endif // ENABLE_SELF_SIGNED_CERT
+#endif // SSL_ALLOW_SELF_SIGNED_CERT
 
 	default:
 		trace_dsn(hSession,"Unexpected or invalid TLS/SSL verify result %d\n",rv);
@@ -255,7 +255,7 @@ int ssl_init(H3270 *hSession)
 		SSL_CTX_set_info_callback(ssl_ctx, ssl_info_callback);
 		SSL_CTX_set_default_verify_paths(ssl_ctx);
 
-		/*
+#if defined(SSL_ENABLE_CRL_CHECK)
 		// Set up CRL validation
 		// https://stackoverflow.com/questions/4389954/does-openssl-automatically-handle-crls-certificate-revocation-lists-now
 		X509_STORE *store = SSL_CTX_get_cert_store(ssl_ctx);
@@ -265,9 +265,9 @@ int ssl_init(H3270 *hSession)
 		X509_VERIFY_PARAM_set_flags(param, X509_V_FLAG_CRL_CHECK);
 		X509_STORE_set1_param(store, param);
 		X509_VERIFY_PARAM_free(param);
-		*/
 
 		// X509_STORE_free(store);
+#endif // SSL_ENABLE_CRL_CHECK
 
 #if defined(_WIN32)
 		{
