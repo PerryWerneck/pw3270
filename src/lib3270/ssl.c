@@ -39,6 +39,7 @@
 #if defined(HAVE_LIBSSL)
 	#include <openssl/ssl.h>
 	#include <openssl/err.h>
+	#include <openssl/x509_vfy.h>
 
 	#ifndef SSL_ST_OK
 		#define SSL_ST_OK 3
@@ -54,6 +55,7 @@
 #include "trace_dsc.h"
 
 #if defined(HAVE_LIBSSL)
+
 static int ssl_3270_ex_index = -1;	/**< Index of h3270 handle in SSL session */
 #endif // HAVE_LIBSSL
 
@@ -252,6 +254,20 @@ int ssl_init(H3270 *hSession)
 		SSL_CTX_set_options(ssl_ctx, SSL_OP_ALL);
 		SSL_CTX_set_info_callback(ssl_ctx, ssl_info_callback);
 		SSL_CTX_set_default_verify_paths(ssl_ctx);
+
+		/*
+		// Set up CRL validation
+		// https://stackoverflow.com/questions/4389954/does-openssl-automatically-handle-crls-certificate-revocation-lists-now
+		X509_STORE *store = SSL_CTX_get_cert_store(ssl_ctx);
+
+		// Enable CRL checking
+		X509_VERIFY_PARAM *param = X509_VERIFY_PARAM_new();
+		X509_VERIFY_PARAM_set_flags(param, X509_V_FLAG_CRL_CHECK);
+		X509_STORE_set1_param(store, param);
+		X509_VERIFY_PARAM_free(param);
+		*/
+
+		// X509_STORE_free(store);
 
 #if defined(_WIN32)
 		{
