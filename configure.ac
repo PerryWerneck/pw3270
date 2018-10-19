@@ -99,6 +99,9 @@ case "$host" in
 		CFLAGS="$CFLAGS -D_WIN32_WINNT=0x0600"
 		LIBS="$LIBS -lws2_32 -lwtsapi32 -lcomdlg32"
 
+		app_win32_revision=$(date +%y.%m.%d.%H)
+		AC_SUBST(WIN32_VERSION,$app_win32_revision)
+
 		dnl https://stackoverflow.com/questions/13768515/how-to-do-static-linking-of-libwinpthread-1-dll-in-mingw
 		STATIC_LDFLAGS="-static-libstdc++ -static-libgcc -static"
 		DLL_LDFLAGS="-shared -Wl,--add-stdcall-alias"
