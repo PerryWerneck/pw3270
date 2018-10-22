@@ -136,6 +136,8 @@ BuildRequires:  pkgconfig
 BuildRequires:  sed
 BuildRequires:	optipng
 BuildRequires:	fdupes
+BuildRequires:	ImageMagick
+
 %if 0%{?_help2man}
 BuildRequires:	help2man
 %endif
