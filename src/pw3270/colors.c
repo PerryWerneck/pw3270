@@ -29,6 +29,10 @@
 
  #include <gtk/gtk.h>
  #include "globals.h"
+ #include <lib3270/trace.h>
+
+ #define V3270_COLOR_BASE V3270_COLOR_GRAY+1
+
 
  //#if defined(DEBUG) && GTK_CHECK_VERSION(3,4,0)
  //   #define USE_GTK_COLOR_CHOOSER 1
@@ -36,10 +40,65 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
+static void store_color_scheme(GtkWidget *widget)
+{
+	int f;
+
+	GString *text = g_string_new("");
+	// Base colors
+	// base=#000000,#7890F0,#FF0000,#FF00FF,#00FF00,#00FFFF,#FFFF00,#FFFFFF,#000000,#000080,#FFA200,#800080,#008000,#008080,#A0A000,#C0C0C0
+	for(f=0;f<V3270_COLOR_BASE;f++)
+	{
+		if(f)
+			g_string_append_c(text,';');
+		g_string_append_printf(text,"%s",gdk_rgba_to_string(v3270_get_color(widget,f)));
+	}
+	set_string_to_config("color-scheme","base","%s",text->str);
+	g_string_truncate(text,0);
+
+	// Field colors.
+	// field=#00FF00,#FF0000,#00FFFF,#FFFFFF
+	for(f=0;f<4;f++)
+	{
+		if(f)
+			g_string_append_c(text,';');
+		g_string_append_printf(text,"%s",gdk_rgba_to_string(v3270_get_color(widget,V3270_COLOR_FIELD+f)));
+	}
+	set_string_to_config("color-scheme","field","%s",text->str);
+	g_string_truncate(text,0);
+
+	// Selection colors
+	// selection=#404040,#ffffff
+	for(f=0;f<2;f++)
+	{
+		if(f)
+			g_string_append_c(text,';');
+		g_string_append_printf(text,"%s",gdk_rgba_to_string(v3270_get_color(widget,V3270_COLOR_SELECTED_BG+f)));
+	}
+	set_string_to_config("color-scheme","selection","%s",text->str);
+	g_string_truncate(text,0);
+
+	// OIA colors
+	// OIA=#000000,#00FF00,#7890F0,#FFFFFF,#FF0000
+	for(f=0;f<5;f++)
+	{
+		if(f)
+			g_string_append_c(text,';');
+		g_string_append_printf(text,"%s",gdk_rgba_to_string(v3270_get_color(widget,V3270_COLOR_OIA_BACKGROUND+f)));
+	}
+	set_string_to_config("color-scheme","OIA","%s",text->str);
+	g_string_truncate(text,0);
+
+	// Cross-hair
+	g_string_append_printf(text,"%s",gdk_rgba_to_string(v3270_get_color(widget,V3270_COLOR_CROSS_HAIR)));
+
+	set_string_to_config("color-scheme","cross-hair","%s",text->str);
+	g_string_free(text,TRUE);
+
+}
+
 static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkRGBA *clr)
 {
-	#define V3270_COLOR_BASE V3270_COLOR_GRAY+1
-
 	const gchar	* val;
 	int		  	  f;
 
@@ -48,7 +107,7 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkRGBA *clr)
 	if(val)
 	{
 		// Process base colors
-		gchar **str = g_strsplit(val,",",V3270_COLOR_BASE);
+		gchar **str = g_strsplit(val,";",V3270_COLOR_BASE);
 
 		switch(g_strv_length(str))
 		{
@@ -102,7 +161,7 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkRGBA *clr)
 	val = g_key_file_get_string(conf,group,"field",NULL);
 	if(val)
 	{
-		gchar **str = g_strsplit(val,",",5);
+		gchar **str = g_strsplit(val,";",5);
 
 		for(f=0;f< MIN(g_strv_length(str),4); f++)
 			gdk_rgba_parse(clr+V3270_COLOR_FIELD+f,str[f]);
@@ -116,7 +175,7 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkRGBA *clr)
 	val = g_key_file_get_string(conf,group,"selection",NULL);
 	if(val)
 	{
-		gchar **str = g_strsplit(val,",",3);
+		gchar **str = g_strsplit(val,";",3);
 
 		for(f=0;f< MIN(g_strv_length(str),2); f++)
 			gdk_rgba_parse(clr+V3270_COLOR_SELECTED_BG+f,str[f]);
@@ -135,7 +194,7 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkRGBA *clr)
 	val = g_key_file_get_string(conf,group,"OIA",NULL);
 	if(val)
 	{
-		gchar **str = g_strsplit(val,",",6);
+		gchar **str = g_strsplit(val,";",6);
 
 		// 0 = V3270_COLOR_OIA_BACKGROUND,
 		// 1 = V3270_COLOR_OIA_FOREGROUND,
@@ -590,6 +649,8 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkRGBA *clr)
 		}
 		set_string_to_config("terminal","colors","%s",str->str);
 		g_string_free(str,TRUE);
+
+		store_color_scheme(widget);
 	}
 	else
 	{
