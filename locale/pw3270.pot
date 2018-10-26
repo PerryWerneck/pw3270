@@ -9,7 +9,7 @@ msgstr ""
 "#-#-#-#-#  lib3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-22 16:50-0300\n"
+"POT-Creation-Date: 2018-10-26 17:17-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "#-#-#-#-#  pw3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-22 16:50-0300\n"
+"POT-Creation-Date: 2018-10-26 17:17-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,6 +32,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-01-18 17:12-0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  dbus3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-10-26 17:17-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -332,7 +343,7 @@ msgstr ""
 msgid "Awaiting chance to send an abort"
 msgstr ""
 
-#: colors.c:435
+#: colors.c:494
 msgid "Background"
 msgstr ""
 
@@ -344,7 +355,7 @@ msgstr ""
 msgid "Beep on errors"
 msgstr ""
 
-#: colors.c:443
+#: colors.c:502
 msgid "Black"
 msgstr ""
 
@@ -360,7 +371,7 @@ msgstr ""
 msgid "Block size:"
 msgstr ""
 
-#: colors.c:436
+#: colors.c:495
 msgid "Blue"
 msgstr ""
 
@@ -424,6 +435,10 @@ msgstr ""
 msgid "Can't connect to %s:%s"
 msgstr ""
 
+#: main.c:70
+msgid "Can't connect to DBUS server"
+msgstr ""
+
 #: selection.c:466
 #, c-format
 msgid "Can't convert line %d from %s to %s"
@@ -436,6 +451,10 @@ msgstr ""
 #: connect.c:217
 #, c-format
 msgid "Can't determine value for environment variable \"%s\" "
+msgstr ""
+
+#: main.c:115
+msgid "Can't get DBUS object name"
 msgstr ""
 
 #: ft.c:413
@@ -636,11 +655,11 @@ msgstr ""
 msgid "Clear"
 msgstr ""
 
-#: colors.c:572
+#: colors.c:631
 msgid "Color scheme:"
 msgstr ""
 
-#: colors.c:473
+#: colors.c:532
 msgid "Color setup"
 msgstr ""
 
@@ -658,6 +677,10 @@ msgstr ""
 
 #: toggles.c:188 00default.xml:114
 msgid "Connect on startup"
+msgstr ""
+
+#: gobject.c:205
+msgid "Connecting to host"
 msgstr ""
 
 #: connect.c:215 connect.c:311 connect.c:320 connect.c:382 connect.c:397
@@ -698,7 +721,7 @@ msgstr ""
 msgid "Creates a file with variable-length records."
 msgstr ""
 
-#: toggles.c:140 colors.c:460 00default.xml:121
+#: toggles.c:140 colors.c:519 00default.xml:121
 msgid "Cross hair cursor"
 msgstr ""
 
@@ -719,7 +742,7 @@ msgstr ""
 msgid "Current:"
 msgstr ""
 
-#: colors.c:321
+#: colors.c:380
 msgid "Custom colors"
 msgstr ""
 
@@ -735,12 +758,16 @@ msgstr ""
 msgid "DFT B_uffer size:"
 msgstr ""
 
-#: colors.c:444
+#: colors.c:503
 msgid "Dark Blue"
 msgstr ""
 
-#: colors.c:447
+#: colors.c:506
 msgid "Dark Green"
+msgstr ""
+
+#: colors.c:507
+msgid "Dark Turquoise"
 msgstr ""
 
 #: ft_cut.c:156 ft_cut.c:165
@@ -854,7 +881,7 @@ msgstr ""
 msgid "Field Delimiters"
 msgstr ""
 
-#: colors.c:429
+#: colors.c:488
 msgid "Field colors"
 msgstr ""
 
@@ -914,11 +941,11 @@ msgstr ""
 msgid "Get transfer queue from an external XML file"
 msgstr ""
 
-#: colors.c:450
+#: colors.c:509
 msgid "Gray"
 msgstr ""
 
-#: colors.c:439
+#: colors.c:498
 msgid "Green"
 msgstr ""
 
@@ -1022,11 +1049,11 @@ msgstr ""
 msgid "Insert new file in the transfer queue"
 msgstr ""
 
-#: colors.c:455
+#: colors.c:514
 msgid "Intensified/Protected"
 msgstr ""
 
-#: colors.c:453
+#: colors.c:512
 msgid "Intensified/Unprotected"
 msgstr ""
 
@@ -1094,7 +1121,7 @@ msgstr ""
 msgid "Minutes for auto-disconnect"
 msgstr ""
 
-#: colors.c:430
+#: colors.c:489
 msgid "Misc colors"
 msgstr ""
 
@@ -1115,7 +1142,7 @@ msgstr ""
 msgid "Move action needs target & direction attributes"
 msgstr ""
 
-#: colors.c:449
+#: colors.c:508
 msgid "Mustard"
 msgstr ""
 
@@ -1149,11 +1176,11 @@ msgstr ""
 msgid "No transfer in progress"
 msgstr ""
 
-#: colors.c:454
+#: colors.c:513
 msgid "Normal/Protected"
 msgstr ""
 
-#: colors.c:452
+#: colors.c:511
 msgid "Normal/Unprotected"
 msgstr ""
 
@@ -1165,27 +1192,27 @@ msgstr ""
 msgid "Not in 3270 mode, transfer cancelled"
 msgstr ""
 
-#: colors.c:467
+#: colors.c:526
 msgid "OIA Warning"
 msgstr ""
 
-#: colors.c:463
+#: colors.c:522
 msgid "OIA background"
 msgstr ""
 
-#: colors.c:464
+#: colors.c:523
 msgid "OIA foreground"
 msgstr ""
 
-#: colors.c:465
+#: colors.c:524
 msgid "OIA separator"
 msgstr ""
 
-#: colors.c:468
+#: colors.c:527
 msgid "OIA status invalid"
 msgstr ""
 
-#: colors.c:466
+#: colors.c:525
 msgid "OIA status ok"
 msgstr ""
 
@@ -1197,7 +1224,7 @@ msgstr ""
 msgid "Options"
 msgstr ""
 
-#: colors.c:445
+#: colors.c:504
 msgid "Orange"
 msgstr ""
 
@@ -1366,7 +1393,7 @@ msgstr ""
 msgid "Path to application data files"
 msgstr ""
 
-#: colors.c:438
+#: colors.c:497
 msgid "Pink"
 msgstr ""
 
@@ -1428,7 +1455,7 @@ msgstr ""
 msgid "Protection test"
 msgstr ""
 
-#: colors.c:446
+#: colors.c:505
 msgid "Purple"
 msgstr ""
 
@@ -1536,7 +1563,7 @@ msgstr ""
 msgid "Record format"
 msgstr ""
 
-#: colors.c:437
+#: colors.c:496
 msgid "Red"
 msgstr ""
 
@@ -1745,11 +1772,11 @@ msgstr ""
 msgid "Select() failed when processing for events."
 msgstr ""
 
-#: colors.c:457
+#: colors.c:516
 msgid "Selection background"
 msgstr ""
 
-#: colors.c:458
+#: colors.c:517
 msgid "Selection foreground"
 msgstr ""
 
@@ -1890,6 +1917,11 @@ msgstr ""
 msgid "Starting"
 msgstr ""
 
+#: gobject.c:193
+#, c-format
+msgid "State %04d can't accept requests"
+msgstr ""
+
 #: security.c:237
 msgid "Subject issuer mismatch"
 msgstr ""
@@ -1902,7 +1934,7 @@ msgstr ""
 msgid "TLS negotiation failure"
 msgstr ""
 
-#: colors.c:428
+#: colors.c:487
 msgid "Terminal colors"
 msgstr ""
 
@@ -2234,7 +2266,7 @@ msgstr ""
 msgid "Try again with the same file."
 msgstr ""
 
-#: colors.c:440 colors.c:448
+#: colors.c:499
 msgid "Turquoise"
 msgstr ""
 
@@ -2344,6 +2376,11 @@ msgstr ""
 msgid "Unexpected or unknown security status"
 msgstr ""
 
+#: gobject.c:208
+#, c-format
+msgid "Unexpected state %04d"
+msgstr ""
+
 #: actions.c:391
 #, c-format
 msgid "Unexpected target \"%s\""
@@ -2427,7 +2464,7 @@ msgstr ""
 msgid "Western Europe (ISO 8859-1)"
 msgstr ""
 
-#: colors.c:442
+#: colors.c:501
 msgid "White"
 msgstr ""
 
@@ -2492,7 +2529,7 @@ msgstr ""
 msgid "XML file"
 msgstr ""
 
-#: colors.c:441
+#: colors.c:500
 msgid "Yellow"
 msgstr ""
 

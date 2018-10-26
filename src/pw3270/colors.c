@@ -504,7 +504,7 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkRGBA *clr)
 		N_( "Orange" ),						// V3270_COLOR_ORANGE
 		N_( "Purple" ),						// V3270_COLOR_PURPLE
 		N_( "Dark Green" ),					// V3270_COLOR_DARK_GREEN
-		N_( "Turquoise" ),					// V3270_COLOR_DARK_TURQUOISE
+		N_( "Dark Turquoise" ),				// V3270_COLOR_DARK_TURQUOISE
 		N_( "Mustard" ),					// V3270_COLOR_MUSTARD
 		N_( "Gray" ),						// V3270_COLOR_GRAY
 
