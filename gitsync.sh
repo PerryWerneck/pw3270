@@ -4,6 +4,8 @@
 #
 # https://help.github.com/articles/configuring-a-remote-for-a-fork/
 #
+# https://www.opentechguides.com/how-to/article/git/177/git-sync-repos.html
+#
 # git remote add bitbucket https://bitbucket.org/pw3270/pw3270-application.git
 #
 
