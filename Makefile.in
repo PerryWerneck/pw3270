@@ -70,20 +70,12 @@ all: \
 	$(BINRLS)/@DLLPREFIX@3270@DLLEXT@ \
 	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@
 
+	@$(make) -C locale $@
+
 Release: \
 	$(BINRLS)/@DLLPREFIX@3270@DLLEXT@ \
 	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@
 
-
-$(BINRLS)/@DLLPREFIX@3270@DLLEXT@: \
-	modules/lib3270/* \
-	modules/lib3270/src/lib3270/* \
-	modules/lib3270/src/include/*
-
-	@$(MKDIR) `dirname $@`
-	$(MAKE) -C modules/lib3270 Release
-
-	@cp ./modules/lib3270/.bin/lib3270/Debug/* $(BINRLS)
 
 #---[ Debug Rules ]----------------------------------------------------------------------
 
@@ -95,6 +87,7 @@ $(BINDBG)/@DLLPREFIX@3270@DLLEXT@: \
 	@$(MKDIR) `dirname $@`
 	@$(MAKE) -C modules/lib3270 Debug
 
+	@$(MKDIR) $(BINDBG)
 	@cp ./modules/lib3270/.bin/lib3270/Debug/* $(BINDBG)
 
 $(BINDBG)/%@EXEEXT@: \
@@ -115,10 +108,10 @@ $(BINRLS)/@DLLPREFIX@3270@DLLEXT@: \
 	@$(MKDIR) `dirname $@`
 	@$(MAKE) -C modules/lib3270 Release
 
-	@cp ./modules/lib3270/.bin/lib3270/Debug/* $(BINDBG)
+	@cp ./modules/lib3270/.bin/lib3270/Release/* $(BINRLS)
 
 $(BINRLS)/%@EXEEXT@: \
-	$(BINDBG)/@DLLPREFIX@3270@DLLEXT@ \
+	$(BINRLS)/@DLLPREFIX@3270@DLLEXT@ \
         src/% \
         src/%/*
 
@@ -141,7 +134,7 @@ $(POTDIR)/%.pot: \
 	@echo $(notdir $@) ...
 	@mkdir -p `dirname $@`
 	@$(MAKE) -C modules/$(basename $(notdir $@)) locale
-	@echo cp modules/$(basename $(notdir $@))/$(basename $(notdir $@)) $@
+	@cp modules/$(basename $(notdir $@))/$(basename $(notdir $@)).pot $@
 
 $(POTDIR)/%.pot: \
 	./%/*
