@@ -31,7 +31,7 @@
 #---[ Packaging ]-----------------------------------------------------------------------------------------------------
 
 Name:           pw3270
-Version:        5.1
+Version:        5.2
 Release:        0
 Summary:        IBM 3270 Terminal emulator for GTK
 License:        GPL-2.0
@@ -211,12 +211,19 @@ Plugin exporting a DBUS object from every %{name} open session.
 
 %setup -q -n pw3270-%{version}
 
+mkdir -p scripts
+automake --add-missing 2> /dev/null | true
+
 aclocal
 autoconf
+
+NOCONFIGURE=1 ./modules/lib3270/autogen.sh
+
 %configure --with-release=%{release}
 
 %build
 make clean
+
 # parallel build is broken
 make all -j1
 
