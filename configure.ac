@@ -482,9 +482,6 @@ dnl ---------------------------------------------------------------------------
 dnl Configure which files to generate.
 dnl ---------------------------------------------------------------------------
 
-AC_CONFIG_FILES(src/lib3270/Makefile)
-AC_CONFIG_FILES(src/lib3270/mkversion.sh)
-
 AC_CONFIG_FILES(src/pw3270/Makefile)
 AC_CONFIG_FILES(src/pw3270/v3270/Makefile)
 AC_CONFIG_FILES(src/pw3270/v3270ft/Makefile)
@@ -500,7 +497,6 @@ AC_CONFIG_FILES(locale/Makefile)
 AC_CONFIG_FILES(src/plugins/hllapi/Makefile)
 AC_CONFIG_FILES(src/plugins/dbus3270/Makefile)
 
-AC_CONFIG_FILES(sdk/lib3270.pc)
 AC_CONFIG_FILES(sdk/pw3270.pc)
 AC_CONFIG_FILES(sdk/Makefile)
 
