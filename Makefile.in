@@ -140,6 +140,8 @@ install: \
 	install-charsets \
 	install-locale
 
+	@$(INSTALL_DATA) conf/colors.conf $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)
+
 install-%: \
 	modules/%/Makefile
 
