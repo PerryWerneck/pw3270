@@ -68,9 +68,8 @@ INSTALL_PROGRAM=@INSTALL_PROGRAM@
 
 all: \
 	$(BINRLS)/@DLLPREFIX@3270@DLLEXT@ \
-	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@
-
-	@$(make) -C locale $@
+	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ \
+	locale/$(PACKAGE_TARNAME).pot
 
 Release: \
 	$(BINRLS)/@DLLPREFIX@3270@DLLEXT@ \
@@ -115,7 +114,34 @@ $(BINRLS)/%@EXEEXT@: \
         src/% \
         src/%/*
 
-	@make -C src/$(notdir $(basename $@)) $@
+	@$(MAKE) -C src/$(notdir $(basename $@)) $@
+
+#---[ Install Rules ]--------------------------------------------------------------------
+
+install: \
+	locale/$(PACKAGE_TARNAME).pot \
+	install-lib3270 \
+	install-pw3270 \
+	install-branding \
+	install-ui \
+	install-charsets \
+	install-locale
+
+install-%: \
+	modules/%/Makefile
+
+	@$(MAKE) -C `dirname $<` DESTDIR=$(DESTDIR) install
+
+install-%: \
+	src/%/Makefile
+
+	@$(MAKE) -C `dirname $<` DESTDIR=$(DESTDIR) install
+
+install-%: \
+	%/Makefile
+
+	@$(MAKE) -C `dirname $<` DESTDIR=$(DESTDIR) install
+
 
 #---[ Misc Rules ]-----------------------------------------------------------------------
 
