@@ -92,7 +92,7 @@ $(BINDBG)/@DLLPREFIX@3270@DLLEXT@: \
 	submodules/lib3270/src/include/*
 
 	@$(MKDIR) `dirname $@`
-	$(MAKE) -C submodules/lib3270 Debug
+	@$(MAKE) -C submodules/lib3270 Debug
 
 	@cp ./submodules/lib3270/.bin/lib3270/Debug/* $(BINDBG)
 
@@ -109,6 +109,24 @@ $(BINDBG)/%@EXEEXT@: \
 Debug: \
 	$(BINDBG)/@DLLPREFIX@3270@DLLEXT@ \
 	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@
+
+#---[ Clean Targets ]--------------------------------------------------------------------
+
+clean: \
+	cleanDebug \
+	cleanRelease
+
+cleanDebug:
+
+	@rm -fr $(OBJDBG)
+	@rm -fr $(BINDBG)
+	@$(MAKE) -C submodules/lib3270 $@
+
+cleanRelease:
+
+	@rm -fr $(OBJRLS)
+	@rm -fr $(BINRLS)
+	@$(MAKE) -C submodules/lib3270 $@
 
 
 
