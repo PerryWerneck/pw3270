@@ -38,7 +38,7 @@ AC_INIT([pw3270], [5.2], [perry.werneck@gmail.com])
 
 dnl Place auxilliary scripts here.
 AC_CONFIG_AUX_DIR([scripts])
-AC_CONFIG_SUBDIRS([submodules/lib3270])
+AC_CONFIG_SUBDIRS([modules/lib3270])
 
 dnl Compute the canonical host-system type
 AC_CANONICAL_HOST

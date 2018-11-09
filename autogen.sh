@@ -55,7 +55,7 @@ if test $? != 0 ; then
 	exit -1
 fi
 
-NOCONFIGURE=1 ./submodules/lib3270/autogen.sh
+NOCONFIGURE=1 ./modules/lib3270/autogen.sh
 
 echo "Package set to revision $PACKAGE_REVISION and source $PACKAGE_SOURCE"
 
