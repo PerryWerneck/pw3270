@@ -1,0 +1,29 @@
+#include <windows.h>
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION     @PACKAGE_MAJOR_VERSION@,@PACKAGE_MINOR_VERSION@,@PACKAGE_MAJOR_RELEASE@,0
+PRODUCTVERSION  @PACKAGE_MAJOR_VERSION@,@PACKAGE_MINOR_VERSION@,@PACKAGE_MAJOR_RELEASE@,0
+
+BEGIN
+
+	BLOCK "StringFileInfo"
+	BEGIN
+        	BLOCK "080904E4"
+		BEGIN
+			VALUE "FileDescription",	"@PACKAGE_DESCRIPTION@\0"
+			VALUE "CompanyName",		"Banco do Brasil S/A.\0"
+			VALUE "FileVersion",		"@WIN32_VERSION@\0"
+            		VALUE "LegalCopyright",		"(C) 2017 Banco do Brasil S/A. All Rights Reserved\0"
+			VALUE "OriginalFilename",	"@PACKAGE_TARNAME@.exe\0"
+			VALUE "ProductName",		"@PACKAGE_NAME@\0"
+			VALUE "ProductVersion",		"@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.@PACKAGE_MAJOR_RELEASE@.0\0"
+		END
+	END
+
+	BLOCK "VarFileInfo"
+	BEGIN
+		VALUE "Translation", 0x809, 0x04E4
+	END
+
+END
+

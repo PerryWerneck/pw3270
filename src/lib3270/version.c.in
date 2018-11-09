@@ -1,0 +1,8 @@
+char *build = "@PACKAGE_TARNAME@ v@PACKAGE_VERSION@ @RPQ_BUILD_DATE@ @SCCS_USER@";
+char *app_defaults_version = "@PACKAGE_VERSION@";
+char *sccsid = "@(#)@PACKAGE_TARNAME@ v@PACKAGE_VERSION@ @SCCS_DATE@ @SCCS_USER@";
+
+const char *build_rpq_timestamp = "@RPQ_TIMESTAMP@";
+const char *build_rpq_version = "@PACKAGE_VERSION@";
+const char *build_rpq_revision = "@RPQ_REVISION@";
+
