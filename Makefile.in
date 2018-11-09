@@ -63,6 +63,7 @@ MSGCAT=@MSGCAT@
 INSTALL=@INSTALL@
 INSTALL_DATA=@INSTALL_DATA@
 INSTALL_PROGRAM=@INSTALL_PROGRAM@
+HELP2MAN=@HELP2MAN@
 
 #---[ Release Targets ]------------------------------------------------------------------
 
@@ -129,6 +130,11 @@ $(BINRLS)/plugins/%@DLLEXT@: \
  
 	@$(MAKE) -C src/plugins/$(basename $(notdir $@)) $@
 
+$(DESTDIR)/$(libdir)/pw3270-plugins/%@DLLEXT@: \
+	src/plugins/%/*
+
+	@$(MAKE) -C src/plugins/$(basename $(notdir $@)) install
+
 #---[ Install Rules ]--------------------------------------------------------------------
 
 install: \
@@ -138,9 +144,20 @@ install: \
 	install-branding \
 	install-ui \
 	install-charsets \
-	install-locale
+	install-locale \
+	install-plugins
 
 	@$(INSTALL_DATA) conf/colors.conf $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)
+
+ifneq ($(HELP2MAN),no)
+	@$(MKDIR) $(DESTDIR)/$(mandir)/man1
+	@$(HELP2MAN) \
+		--version-string="$(PACKAGE_TARNAME) - $(PACKAGE_DESCRIPTION) Vrs. $(PACKAGE_VERSION)" \
+		$(DESTDIR)$(bindir)/$(PACKAGE_TARNAME)@EXEEXT@ | gzip --best --stdout - > $(DESTDIR)/$(mandir)/man1/$(PACKAGE_NAME).1.gz
+endif
+
+install-plugins: \
+	$(foreach PLG, $(PLUGINS), $(DESTDIR)/$(libdir)/pw3270-plugins/$(PLG)@DLLEXT@)
 
 install-%: \
 	modules/%/Makefile
