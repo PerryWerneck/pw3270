@@ -69,11 +69,13 @@ INSTALL_PROGRAM=@INSTALL_PROGRAM@
 all: \
 	$(BINRLS)/@DLLPREFIX@3270@DLLEXT@ \
 	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ \
+	$(foreach PLG, $(PLUGINS), $(BINRLS)/plugins/$(PLG)@DLLEXT@) \
 	locale/$(PACKAGE_TARNAME).pot
 
 Release: \
 	$(BINRLS)/@DLLPREFIX@3270@DLLEXT@ \
-	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@
+	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ \
+	$(foreach PLG, $(PLUGINS), $(BINRLS)/plugins/$(PLG)@DLLEXT@)
 
 
 #---[ Debug Rules ]----------------------------------------------------------------------
@@ -91,11 +93,16 @@ $(BINDBG)/@DLLPREFIX@3270@DLLEXT@: \
 
 $(BINDBG)/%@EXEEXT@: \
 	$(BINDBG)/@DLLPREFIX@3270@DLLEXT@ \
-        src/% \
-        src/%/*
+	src/% \
+	src/%/*
 
 	@make -C src/$(notdir $(basename $@)) $@
 
+$(BINDBG)/plugins/%@DLLEXT@: \
+	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@ \
+	src/plugins/%/*
+
+	@$(MAKE) -C src/plugins/$(basename $(notdir $@)) $@
 
 #---[ Release Rules ]--------------------------------------------------------------------
 
@@ -115,6 +122,12 @@ $(BINRLS)/%@EXEEXT@: \
         src/%/*
 
 	@$(MAKE) -C src/$(notdir $(basename $@)) $@
+
+$(BINRLS)/plugins/%@DLLEXT@: \
+	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ \
+	src/plugins/%/*
+ 
+	@$(MAKE) -C src/plugins/$(basename $(notdir $@)) $@
 
 #---[ Install Rules ]--------------------------------------------------------------------
 
@@ -145,6 +158,13 @@ install-%: \
 
 #---[ Misc Rules ]-----------------------------------------------------------------------
 
+$(POTDIR)/plugins/%.pot: \
+	./src/plugins/%/*
+ 
+	@echo $(notdir $@) ...
+	@mkdir -p `dirname $@`
+	@$(MAKE) -C src/plugins/$(basename $(notdir $@)) $@
+
 $(POTDIR)/%.pot: \
 	$(DEPENDS) \
 	./src/%/*
@@ -174,7 +194,8 @@ $(POTDIR)/%.pot: \
 
 Debug: \
 	$(BINDBG)/@DLLPREFIX@3270@DLLEXT@ \
-	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@
+	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@ \
+	$(foreach PLG, $(PLUGINS), $(BINDBG)/plugins/$(PLG)@DLLEXT@)
 
 run: \
 	$(BINDBG)/@DLLPREFIX@3270@DLLEXT@ \
@@ -190,7 +211,8 @@ locale: \
 locale/$(PACKAGE_TARNAME).pot: \
 	$(POTDIR)/pw3270.pot \
 	$(POTDIR)/lib3270.pot \
-	$(POTDIR)/ui.pot
+	$(POTDIR)/ui.pot \
+	$(foreach PLG, $(PLUGINS), $(POTDIR)/plugins/$(PLG).pot)
 
 	@rm -f $@
 	@mkdir -p `dirname $@`
