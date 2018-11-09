@@ -11,6 +11,13 @@
 # git remote add github https://github.com/PerryWerneck/pw3270.git
 # git push github --all
 #
+# SUBTREES: 
+#
+# https://www.atlassian.com/blog/git/alternatives-to-git-submodule-git-subtree
+# 
+#
+
+# git fetch lib3270
 
 git fetch origin
 git checkout master
