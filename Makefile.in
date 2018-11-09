@@ -76,26 +76,26 @@ Release: \
 
 
 $(BINRLS)/@DLLPREFIX@3270@DLLEXT@: \
-	submodules/lib3270/* \
-	submodules/lib3270/src/lib3270/* \
-	submodules/lib3270/src/include/*
+	modules/lib3270/* \
+	modules/lib3270/src/lib3270/* \
+	modules/lib3270/src/include/*
 
 	@$(MKDIR) `dirname $@`
-	$(MAKE) -C submodules/lib3270 Release
+	$(MAKE) -C modules/lib3270 Release
 
-	@cp ./submodules/lib3270/.bin/lib3270/Debug/* $(BINRLS)
+	@cp ./modules/lib3270/.bin/lib3270/Debug/* $(BINRLS)
 
 #---[ Debug Rules ]----------------------------------------------------------------------
 
 $(BINDBG)/@DLLPREFIX@3270@DLLEXT@: \
-	submodules/lib3270/* \
-	submodules/lib3270/src/lib3270/* \
-	submodules/lib3270/src/include/*
+	modules/lib3270/* \
+	modules/lib3270/src/lib3270/* \
+	modules/lib3270/src/include/*
 
 	@$(MKDIR) `dirname $@`
-	@$(MAKE) -C submodules/lib3270 Debug
+	@$(MAKE) -C modules/lib3270 Debug
 
-	@cp ./submodules/lib3270/.bin/lib3270/Debug/* $(BINDBG)
+	@cp ./modules/lib3270/.bin/lib3270/Debug/* $(BINDBG)
 
 $(BINDBG)/%@EXEEXT@: \
 	$(BINDBG)/@DLLPREFIX@3270@DLLEXT@ \
@@ -108,14 +108,14 @@ $(BINDBG)/%@EXEEXT@: \
 #---[ Release Rules ]--------------------------------------------------------------------
 
 $(BINRLS)/@DLLPREFIX@3270@DLLEXT@: \
-	submodules/lib3270/* \
-	submodules/lib3270/src/lib3270/* \
-	submodules/lib3270/src/include/*
+	modules/lib3270/* \
+	modules/lib3270/src/lib3270/* \
+	modules/lib3270/src/include/*
 
 	@$(MKDIR) `dirname $@`
-	@$(MAKE) -C submodules/lib3270 Release
+	@$(MAKE) -C modules/lib3270 Release
 
-	@cp ./submodules/lib3270/.bin/lib3270/Debug/* $(BINDBG)
+	@cp ./modules/lib3270/.bin/lib3270/Debug/* $(BINDBG)
 
 $(BINRLS)/%@EXEEXT@: \
 	$(BINDBG)/@DLLPREFIX@3270@DLLEXT@ \
@@ -135,13 +135,13 @@ $(POTDIR)/%.pot: \
 	@$(MAKE) -C src/$(basename $(notdir $@)) $@
 
 $(POTDIR)/%.pot: \
-	./submodules/%/* \
-	./submodules/%/src/*
+	./modules/%/* \
+	./modules/%/src/*
  
 	@echo $(notdir $@) ...
 	@mkdir -p `dirname $@`
-	@$(MAKE) -C submodules/$(basename $(notdir $@)) locale
-	@echo cp submodules/$(basename $(notdir $@))/$(basename $(notdir $@)) $@
+	@$(MAKE) -C modules/$(basename $(notdir $@)) locale
+	@echo cp modules/$(basename $(notdir $@))/$(basename $(notdir $@)) $@
 
 $(POTDIR)/%.pot: \
 	./%/*
@@ -189,13 +189,13 @@ cleanDebug:
 
 	@rm -fr $(OBJDBG)
 	@rm -fr $(BINDBG)
-	@$(MAKE) -C submodules/lib3270 $@
+	@$(MAKE) -C modules/lib3270 $@
 
 cleanRelease:
 
 	@rm -fr $(OBJRLS)
 	@rm -fr $(BINRLS)
-	@$(MAKE) -C submodules/lib3270 $@
+	@$(MAKE) -C modules/lib3270 $@
 
 
 
