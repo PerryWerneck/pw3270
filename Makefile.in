@@ -110,6 +110,13 @@ Debug: \
 	$(BINDBG)/@DLLPREFIX@3270@DLLEXT@ \
 	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@
 
+run: \
+	$(BINDBG)/@DLLPREFIX@3270@DLLEXT@ \
+	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@
+
+	@LD_LIBRARY_PATH=$(BINDBG) $(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@
+
+
 #---[ Clean Targets ]--------------------------------------------------------------------
 
 clean: \
