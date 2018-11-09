@@ -47,375 +47,68 @@ sysconfdir=@sysconfdir@
 mandir=@mandir@
 
 BASEDIR=@BASEDIR@
-SRCDIR=$(BASEDIR)/.src/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
-POTDIR=$(BASEDIR)/.pot
 
+POTDIR=$(BASEDIR)/.pot
 BINDIR=$(BASEDIR)/.bin
 BINDBG=$(BINDIR)/Debug
 BINRLS=$(BINDIR)/Release
 
 #---[ Tools ]------------------------------------------------------------------
 
+CC=@CC@
+LD=@CC@
+LN_S=@LN_S@
+MKDIR=@MKDIR_P@
 INSTALL=@INSTALL@
 INSTALL_DATA=@INSTALL_DATA@
 INSTALL_PROGRAM=@INSTALL_PROGRAM@
-MKDIR=@MKDIR_P@
-MSGCAT=@MSGCAT@
-AMTAR=@AMTAR@
-RPMBUILD=@RPMBUILD@
-HELP2MAN=@HELP2MAN@
 
-#---[ Rules ]------------------------------------------------------------------
-
-DEPENDS=$(BASEDIR)/src/include/*.h $(BASEDIR)/src/include/lib3270/*.h $(BASEDIR)/src/include/pw3270/*.h Makefile
-
-$(BINDBG)/%@DLLEXT@: \
-	$(DEPENDS) \
-	./src/%/*
- 
-	@$(MAKE) -C src/$(basename $(notdir $@)) $@
-
-$(BINDBG)/lib@LIB3270_NAME@@DLLEXT@: \
-	$(DEPENDS) \
-	./src/lib3270/*
- 
-	@$(MAKE) -C src/lib3270 $@
-
-$(BINDBG)/plugins/%@DLLEXT@: \
-	$(DEPENDS) \
-	./src/plugins/%/*
- 
-	@$(MAKE) -C src/plugins/$(basename $(notdir $@)) $@
-
-$(BINDBG)/%@EXEEXT@: \
-	$(DEPENDS) \
-	./src/%/*
- 
-	@$(MAKE) -C src/$(basename $(notdir $@)) $@
-
-$(BINRLS)/%@DLLEXT@: \
-	$(DEPENDS) \
-	./src/%/*
- 
-	@$(MAKE) -C src/$(basename $(notdir $@)) $@
-
-$(BINRLS)/lib@LIB3270_NAME@@DLLEXT@: \
-	$(DEPENDS) \
-	./src/lib3270/*
- 
-	@$(MAKE) -C src/lib3270 $@
-
-$(BINRLS)/%.a: \
-	$(DEPENDS) \
-	./src/%/*
- 
-	@$(MAKE) -C src/$(basename $(notdir $@)) $@
-
-$(BINRLS)/plugins/%@DLLEXT@: \
-	$(DEPENDS) \
-	$(BINRLS)/libpw3270cpp.a \
-	./src/plugins/%/*
- 
-	@$(MAKE) -C src/plugins/$(basename $(notdir $@)) $@
-
-$(POTDIR)/%.pot: \
-	$(DEPENDS) \
-	./src/%/*
- 
-	@$(MAKE) -C src/$(basename $(notdir $@)) $@
-
-$(POTDIR)/%.pot: \
-	./%/*
- 
-	@$(MAKE) -C $(basename $(notdir $@)) $@
-
-$(POTDIR)/plugins/%.pot: \
-	$(DEPENDS) \
-	./src/plugins/%/*
- 
-	@$(MAKE) -C src/plugins/$(basename $(notdir $@)) $@
-
-$(DESTDIR)$(libdir)/%@DLLEXT@: \
-	$(DEPENDS) \
-	./src/%/*
- 
-	@$(MAKE) DESTDIR=$(DESTDIR) -C src/$(basename $(notdir $@)) install
-
-$(DESTDIR)$(libdir)/%.a: \
-	$(DEPENDS) \
-	./src/%/*
- 
-	@$(MAKE) DESTDIR=$(DESTDIR) -C src/$(basename $(notdir $@)) $@
-
-
-$(DESTDIR)$(libdir)/$(PACKAGE_TARNAME)-plugins/%@DLLEXT@: \
-	$(DEPENDS) \
-	./src/plugins/%/*
-
-	@$(MAKE) -C src/plugins/$(basename $(notdir $@)) $@
-
-$(BINRLS)/%@EXEEXT@: \
-	$(DEPENDS) \
-	./src/%/*
- 
-	@$(MAKE) -C src/$(basename $(notdir $@)) $@
-
-$(DESTDIR)$(bindir)/%@EXEEXT@: \
-	$(DEPENDS) \
-	./src/%/*
- 
-	@$(MAKE) DESTDIR=$(DESTDIR) -C src/$(basename $(notdir $@)) install
-
-$(SRCDIR)/%: \
-	%/Makefile
-
-	@make -C `dirname $<` $@
-
-$(BINDIR)/%.png: \
-	branding/%.svg
-
-	@$(MAKE) -C branding $@	
-
-$(BINDIR)/%.png: \
-	branding/%.png
-
-	@$(MAKE) -C branding $@	
-
-
-%.tar.bz2: \
-	%.tar
-
-	@echo $< ...
-	@bzip2 --compress -9 --stdout $< > $@
-	@chmod 0644 $@
-
-%.tar.gz: \
-	%.tar
-
-	@echo $< ...
-	@gzip -9 --stdout $< > $@
-	@chmod 0644 $@
-
-
-#---[ Release targets ]--------------------------------------------------------
+#---[ Release Targets ]------------------------------------------------------------------
 
 all: \
-	$(BINRLS)/lib@LIB3270_NAME@@DLLEXT@ \
-	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ \
-	$(BINRLS)/libpw3270cpp.a \
-	$(foreach PLG, $(PLUGINS), $(BINRLS)/plugins/$(PLG)@DLLEXT@) \
-	$(BINDIR)/$(PACKAGE_NAME).png \
-	$(BINDIR)/$(PACKAGE_NAME)-logo.png \
-	locale/$(PACKAGE_TARNAME).pot
-
-	@$(MAKE) -C locale all
+	$(BINRLS)/@DLLPREFIX@3270@DLLEXT@ \
+	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@
 
 Release: \
-	$(BINRLS)/lib@LIB3270_NAME@@DLLEXT@ \
-	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ \
-	$(foreach PLG, $(PLUGINS), $(BINRLS)/plugins/$(PLG)@DLLEXT@) \
-	$(BINDIR)/$(PACKAGE_NAME).png \
-	$(BINDIR)/$(PACKAGE_NAME)-logo.png \
-	locale/$(PACKAGE_TARNAME).pot
-
-	@$(MAKE) -C locale all
-
-locale/$(PACKAGE_TARNAME).pot: \
-	$(POTDIR)/lib@LIB3270_NAME@.pot \
-	$(POTDIR)/pw3270.pot \
-	$(POTDIR)/ui.pot \
-	$(foreach PLG, $(PLUGINS), $(POTDIR)/plugins/$(PLG).pot)
-
-	@rm -f $@
-	@mkdir -p `dirname $@`
-	@$(MSGCAT) --sort-output $^ > $@
-
-install: \
-	install-lib \
-	install-app \
-	install-sdk \
-	$(foreach PLG, $(PLUGINS), $(DESTDIR)$(libdir)/$(PACKAGE_TARNAME)-plugins/$(PLG)@DLLEXT@)
-
-install-lib: \
-	$(DESTDIR)$(libdir)/lib@LIB3270_NAME@@DLLEXT@ \
-
-install-app: \
-	install-branding \
-	$(DESTDIR)$(bindir)/$(PACKAGE_TARNAME)@EXEEXT@ \
-	locale/$(PACKAGE_TARNAME).pot
-
-	@$(MKDIR) $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)
-	@$(INSTALL_DATA) conf/colors.conf $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)
-
-	@$(MAKE) -C ui install
-	@$(MAKE) -C charsets install
-	@$(MAKE) -C locale install
-
-ifneq ($(HELP2MAN),no)
-	@$(MKDIR) $(DESTDIR)/$(mandir)/man1
-	@$(HELP2MAN) \
-		--version-string="$(PACKAGE_TARNAME) - $(PACKAGE_DESCRIPTION) Vrs. $(PACKAGE_VERSION)" \
-		$(DESTDIR)$(bindir)/$(PACKAGE_TARNAME)@EXEEXT@ | gzip --best --stdout - > $(DESTDIR)/$(mandir)/man1/$(PACKAGE_NAME).1.gz
-endif
+	$(BINRLS)/@DLLPREFIX@3270@DLLEXT@ \
+	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@
 
 
-$(BINRLS)/libpw3270cpp.a: \
-	src/libpw3270cpp/*
+$(BINRLS)/@DLLPREFIX@3270@DLLEXT@: \
+	submodules/lib3270/* \
+	submodules/lib3270/src/lib3270/* \
+	submodules/lib3270/src/include/*
 
-	@$(MAKE) -C src/libpw3270cpp Release
+	@$(MKDIR) `dirname $@`
+	$(MAKE) -C submodules/lib3270 Release
 
-install-sdk:
+	@cp ./submodules/lib3270/.bin/lib3270/Debug/* $(BINRLS)
 
-	@$(MAKE) -C sdk install
-	@$(MAKE) -C src/libpw3270cpp install
+#---[ Debug Rules ]----------------------------------------------------------------------
 
-install-branding:
+$(BINDBG)/@DLLPREFIX@3270@DLLEXT@: \
+	submodules/lib3270/* \
+	submodules/lib3270/src/lib3270/* \
+	submodules/lib3270/src/include/*
 
-	@$(MAKE) -C branding install
+	@$(MKDIR) `dirname $@`
+	$(MAKE) -C submodules/lib3270 Debug
 
-#---[ Debug targets ]----------------------------------------------------------
+	@cp ./submodules/lib3270/.bin/lib3270/Debug/* $(BINDBG)
+
+$(BINDBG)/%@EXEEXT@: \
+	$(BINDBG)/@DLLPREFIX@3270@DLLEXT@ \
+        src/% \
+        src/%/*
+
+	@make -C src/$(notdir $(basename $@)) $@
+
+
+#---[ Debug Targets ]--------------------------------------------------------------------
 
 Debug: \
-	$(BINDBG)/lib@LIB3270_NAME@@DLLEXT@ \
-	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@ \
-	$(BINDBG)/libpw3270cpp.a \
-	$(foreach PLG, $(PLUGINS), $(BINDBG)/plugins/$(PLG)@DLLEXT@)
-
-$(BINDBG)/libpw3270cpp.a: \
-	src/libpw3270cpp/*
-
-	@$(MAKE) -C src/libpw3270cpp Debug
-
-
-run: \
-	$(BINDBG)/lib@LIB3270_NAME@@DLLEXT@ \
-	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@ \
-	$(foreach PLG, $(PLUGINS), $(BINDBG)/plugins/$(PLG)@DLLEXT@)
-
-	@LD_LIBRARY_PATH=$(BINDBG) $(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@
-
-#---[ Package Targets ]--------------------------------------------------------
-
-tgz: \
-        $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz
-
-bz2: \
-        $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.bz2
-
-tar: \
-        $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar
-
-rpm: \
-	$(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.bz2
-
-	@$(MKDIR) $(BASEDIR)/rpm
-	@$(MKDIR) $(BASEDIR)/rpm/SPECS
-	@$(MKDIR) $(BASEDIR)/rpm/SOURCES
-	@$(MKDIR) $(BASEDIR)/rpm/SRPMS
-	@$(MKDIR) $(BASEDIR)/rpm/RPMS
-	@$(MKDIR) $(BASEDIR)/rpm/BUILD
-	@$(MKDIR) $(BASEDIR)/rpm/BUILDROOT
-	@umask 002 ; $(RPMBUILD) \
-		--define="_topdir $(BASEDIR)/rpm" \
-		--define="_packager $(USER)@$(HOSTNAME)" \
-		--clean \
-		-ta $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.bz2
-
-$(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar: \
-	$(SRCDIR)
-
-	@$(AMTAR) \
-		--verbose \
-		--format=ustar \
-		--create \
-		--exclude-vcs \
-		--directory $(BASEDIR)/.src \
-		--owner=root \
-		--group=root \
-		--file=$@ \
-		$(PACKAGE_TARNAME)-@PACKAGE_VERSION@
-
-$(SRCDIR): \
-        clean \
-		$(SRCDIR)/ui \
-		$(SRCDIR)/charsets \
-		$(SRCDIR)/src/lib3270 \
-		$(SRCDIR)/src/pw3270 \
-		$(SRCDIR)/src/libpw3270cpp \
-		$(SRCDIR)/sdk \
-		$(SRCDIR)/branding \
-		$(SRCDIR)/src/plugins/dbus3270 \
-		$(SRCDIR)/src/plugins/hllapi
-
-
-	@$(MKDIR) $(SRCDIR)
-	@$(INSTALL_DATA) \
-		*.in configure.ac *.cbp LICENCA LICENSE AUTHORS README.md \
-		$(SRCDIR)
-
-	@$(MKDIR) $(SRCDIR)/win
-	@$(INSTALL_DATA) \
-		win/*.in \
-		$(SRCDIR)/win
-
-	@$(INSTALL_PROGRAM) \
-		autogen.sh \
-		$(SRCDIR)
-
-	@$(MKDIR) $(SRCDIR)/locale
-	@$(INSTALL_DATA) \
-		locale/*.po \
-		locale/*.in \
-		$(SRCDIR)/locale
-
-	@$(MKDIR) $(SRCDIR)/conf
-	@$(INSTALL_DATA) \
-		conf/*.conf \
-		$(SRCDIR)/conf
-
-	@$(MKDIR) $(SRCDIR)/rpm
-	@$(INSTALL_DATA) \
-		rpm/*.spec \
-		$(SRCDIR)/rpm
-
-	@$(MKDIR) $(SRCDIR)/debian
-	@$(INSTALL_DATA) \
-		debian/* \
-		$(SRCDIR)/debian
-
-	@$(MKDIR) $(SRCDIR)/scripts
-	@$(INSTALL_DATA) \
-		scripts/* \
-		$(SRCDIR)/scripts
-
-	@$(INSTALL_DATA) \
-		rpm/*.spec \
-		$(SRCDIR)
-
-
-#---[ Clean Targets ]----------------------------------------------------------$(
-
-cleanDebug:
-	
-	@$(MAKE) -C src/lib3270 cleanDebug
-	@$(MAKE) -C src/pw3270 cleanDebug
-	@$(MAKE) -C ui cleanDebug
-
-cleanRelease:
-
-	@$(MAKE) -C src/lib3270 cleanRelease
-	@$(MAKE) -C src/pw3270 cleanRelease
-	@$(MAKE) -C ui cleanRelease
-
-
-clean: \
-	cleanDebug \
-	cleanRelease
-
-	@rm -fr $(BINDIR)
-	@rm -fr $(POTDIR)
-	@rm -fr $(SRCDIR)
-	@rm -fr $(BASEDIR)/.obj
+	$(BINDBG)/@DLLPREFIX@3270@DLLEXT@ \
+	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@
 
 
 
