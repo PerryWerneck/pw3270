@@ -59,6 +59,7 @@ CC=@CC@
 LD=@CC@
 LN_S=@LN_S@
 MKDIR=@MKDIR_P@
+MSGCAT=@MSGCAT@
 INSTALL=@INSTALL@
 INSTALL_DATA=@INSTALL_DATA@
 INSTALL_PROGRAM=@INSTALL_PROGRAM@
@@ -104,6 +105,52 @@ $(BINDBG)/%@EXEEXT@: \
 	@make -C src/$(notdir $(basename $@)) $@
 
 
+#---[ Release Rules ]--------------------------------------------------------------------
+
+$(BINRLS)/@DLLPREFIX@3270@DLLEXT@: \
+	submodules/lib3270/* \
+	submodules/lib3270/src/lib3270/* \
+	submodules/lib3270/src/include/*
+
+	@$(MKDIR) `dirname $@`
+	@$(MAKE) -C submodules/lib3270 Release
+
+	@cp ./submodules/lib3270/.bin/lib3270/Debug/* $(BINDBG)
+
+$(BINRLS)/%@EXEEXT@: \
+	$(BINDBG)/@DLLPREFIX@3270@DLLEXT@ \
+        src/% \
+        src/%/*
+
+	@make -C src/$(notdir $(basename $@)) $@
+
+#---[ Misc Rules ]-----------------------------------------------------------------------
+
+$(POTDIR)/%.pot: \
+	$(DEPENDS) \
+	./src/%/*
+ 
+	@echo $(notdir $@) ...
+	@mkdir -p `dirname $@`
+	@$(MAKE) -C src/$(basename $(notdir $@)) $@
+
+$(POTDIR)/%.pot: \
+	./submodules/%/* \
+	./submodules/%/src/*
+ 
+	@echo $(notdir $@) ...
+	@mkdir -p `dirname $@`
+	@$(MAKE) -C submodules/$(basename $(notdir $@)) locale
+	@echo cp submodules/$(basename $(notdir $@))/$(basename $(notdir $@)) $@
+
+$(POTDIR)/%.pot: \
+	./%/*
+ 
+	@echo $(notdir $@) ...
+	@mkdir -p `dirname $@`
+	@$(MAKE) -C $(basename $(notdir $@)) $@
+
+
 #---[ Debug Targets ]--------------------------------------------------------------------
 
 Debug: \
@@ -116,12 +163,27 @@ run: \
 
 	@LD_LIBRARY_PATH=$(BINDBG) $(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@
 
+#---[ Misc Targets ]---------------------------------------------------------------------
+
+locale: \
+	locale/$(PACKAGE_TARNAME).pot
+
+locale/$(PACKAGE_TARNAME).pot: \
+	$(POTDIR)/pw3270.pot \
+	$(POTDIR)/lib3270.pot \
+	$(POTDIR)/ui.pot
+
+	@rm -f $@
+	@mkdir -p `dirname $@`
+	@$(MSGCAT) --sort-output $^ > $@
 
 #---[ Clean Targets ]--------------------------------------------------------------------
 
 clean: \
 	cleanDebug \
 	cleanRelease
+
+	@rm -fr $(POTDIR)
 
 cleanDebug:
 
