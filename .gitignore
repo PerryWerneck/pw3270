@@ -48,3 +48,4 @@ resources.rc
 makeruntime.sh
 scripts
 locale
+*.xz
