@@ -305,8 +305,13 @@ rm %{buildroot}/%{_datadir}/pw3270/ui/*rexx*.xml
 
 %files devel
 %defattr(-,root,root)
+
 %{_includedir}/pw3270
 %{_includedir}/pw3270.h
+
+%{_includedir}/v3270
+%{_includedir}/v3270.h
+
 %{_datadir}/pw3270/ui/98trace.xml
 %{_datadir}/pw3270/ui/99debug.xml
 %{_libdir}/libpw3270.so
