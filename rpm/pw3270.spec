@@ -19,7 +19,7 @@
 #---[ Versions ]------------------------------------------------------------------------------------------------------
 
 %define MAJOR_VERSION 5
-%define MINOR_VERSION 1
+%define MINOR_VERSION 2
 
 %define _libvrs %{MAJOR_VERSION}_%{MINOR_VERSION}
 
@@ -39,7 +39,6 @@ Group:          System/X11/Terminals
 Url:            https://portal.softwarepublico.gov.br/social/pw3270/
 
 Source:         pw3270-%{version}.tar.bz2
-#Source1:        %{name}.rpmlintrc
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
