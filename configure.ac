@@ -405,6 +405,8 @@ AC_SUBST(LIB3270_LIBPATH,$ac_pwd/modules/lib3270/src/include)
 
 AC_SUBST(LIB3270_CFLAGS,-I$ac_pwd/modules/lib3270/src/include)
 AC_SUBST(LIB3270_LIBS,-l$app_cv_libname)
+
+AC_SUBST(PW3270_CFLAGS,-I$ac_pwd/src/include)
 AC_SUBST(PW3270_LIBS,-l$PACKAGE_TARNAME)
 
 AC_DEFINE(LIB3270_NAME,$app_cv_libname)
