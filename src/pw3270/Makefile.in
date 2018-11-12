@@ -283,10 +283,6 @@ install-devel:
 		$(BASEDIR)/src/include/v3270.h \
 		$(DESTDIR)$(includedir)
 
-	@$(INSTALL_DATA) \
-		$(BASEDIR)/src/include/v3270ft.h \
-		$(DESTDIR)$(includedir)
-
 	# Install PKG-CONFIG files
 	@$(INSTALL_DATA) \
 		$(BASEDIR)/sdk/*.pc \
