@@ -45,6 +45,7 @@ bindir=@bindir@
 libdir=@libdir@
 datarootdir=@datarootdir@
 localedir=@localedir@
+includedir=@includedir@
 desktopdir=$(datarootdir)/applications
 
 BASEDIR=@BASEDIR@
@@ -233,7 +234,8 @@ $(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@: \
 	@$(LD) -shared -Wl,-soname,$(@F) $(LDFLAGS) -L$(BINRLS) -o $@ $^ $(LIBS)
 
 install: \
-	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@
+	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ \
+	install-devel
 
 	@$(MKDIR) $(DESTDIR)$(libdir)
 
@@ -254,6 +256,26 @@ install: \
 	@$(INSTALL_PROGRAM) \
 		$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ \
 		$(DESTDIR)$(bindir)
+
+
+install-devel:
+
+	@mkdir -p $(DESTDIR)$(includedir)/pw3270
+	@mkdir -p $(DESTDIR)$(libdir)/pkgconfig
+
+	# Install includes
+	@$(INSTALL_DATA) \
+		$(BASEDIR)/src/include/pw3270/*.h \
+		$(DESTDIR)$(includedir)/pw3270
+
+	@$(INSTALL_DATA) \
+		$(BASEDIR)/src/include/pw3270.h \
+		$(DESTDIR)$(includedir)
+
+	# Install PKG-CONFIG files
+	@$(INSTALL_DATA) \
+		$(BASEDIR)/sdk/*.pc \
+		$(DESTDIR)$(libdir)/pkgconfig
 
 $(SRCDIR): \
 	clean \

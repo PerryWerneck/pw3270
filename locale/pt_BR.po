@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-09 15:19-0200\n"
+"POT-Creation-Date: 2018-11-12 09:35-0200\n"
 "PO-Revision-Date: 2018-10-22 14:38-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
@@ -423,6 +423,10 @@ msgstr "Não foi possível conectar a %s"
 msgid "Can't connect to %s:%s"
 msgstr "Não foi possível conectar a %s:%s"
 
+#: main.c:70
+msgid "Can't connect to DBUS server"
+msgstr "Não foi possível conectar ao servidor DBUS"
+
 #: selection.c:466
 #, c-format
 msgid "Can't convert line %d from %s to %s"
@@ -436,6 +440,10 @@ msgstr "Recortar não permitido em seleção retangular"
 #, c-format
 msgid "Can't determine value for environment variable \"%s\" "
 msgstr "Não consigo determinar o valor da variável de ambiente \"%s\" "
+
+#: main.c:115
+msgid "Can't get DBUS object name"
+msgstr "Não foi possível obter o nome do objeto DBUS"
 
 #: src/lib3270/ft.c:413
 msgid "Can't get file size"
@@ -670,6 +678,10 @@ msgstr "Configurar host"
 #: src/lib3270/toggles.c:188 00default.xml:114
 msgid "Connect on startup"
 msgstr "Conectar ao iniciar"
+
+#: gobject.c:205
+msgid "Connecting to host"
+msgstr "Conectando ao servidor"
 
 #: src/lib3270/connect.c:215 src/lib3270/connect.c:311
 #: src/lib3270/connect.c:320 src/lib3270/connect.c:382
@@ -1956,6 +1968,11 @@ msgstr "Iniciar transferência de arquivo"
 msgid "Starting"
 msgstr "Iniciando"
 
+#: gobject.c:193
+#, c-format
+msgid "State %04d can't accept requests"
+msgstr "Não é possível receber requisições no estado %04d"
+
 #: security.c:237
 msgid "Subject issuer mismatch"
 msgstr "Divergência na identidade do emissor"
@@ -2469,6 +2486,11 @@ msgstr "Valor de cor inválido ou inesperado: \"%s\""
 msgid "Unexpected or unknown security status"
 msgstr "Estado de segurança inesperado ou desconhecido."
 
+#: gobject.c:208
+#, c-format
+msgid "Unexpected state %04d"
+msgstr "Estado inesperado %04d"
+
 #: actions.c:391
 #, c-format
 msgid "Unexpected target \"%s\""
@@ -2875,12 +2897,6 @@ msgstr "translator-credits"
 #~ "32768. Valores maiores trazem maior performance, porem, nem todos os "
 #~ "hosts podem suportá-los."
 
-#~ msgid "Can't connect to DBUS server"
-#~ msgstr "Não foi possível conectar ao servidor DBUS"
-
-#~ msgid "Can't get DBUS object name"
-#~ msgstr "Não foi possível obter o nome do objeto DBUS"
-
 #~ msgid "Can't start download."
 #~ msgstr "Não foi possível iniciar o download."
 
@@ -2916,9 +2932,6 @@ msgstr "translator-credits"
 
 #~ msgid "Complete"
 #~ msgstr "Completo"
-
-#~ msgid "Connecting to host"
-#~ msgstr "Conectando ao servidor"
 
 #~ msgid "Copiar tudo"
 #~ msgstr "Copiar tudo"
@@ -3248,9 +3261,6 @@ msgstr "translator-credits"
 #~ msgid "Start upload."
 #~ msgstr "Iniciar envio."
 
-#~ msgid "State %04d can't accept requests"
-#~ msgstr "Não é possível receber requisições no estado %04d"
-
 #~ msgid "Status"
 #~ msgstr "Situação"
 
@@ -3284,9 +3294,6 @@ msgstr "translator-credits"
 
 #~ msgid "Unexpected element <%s>"
 #~ msgstr "Elemento <%s> inesperado"
-
-#~ msgid "Unexpected state %04d"
-#~ msgstr "Estado inesperado %04d"
 
 #~ msgid ""
 #~ "Unknown host:\n"

@@ -312,8 +312,8 @@ rm %{buildroot}/%{_datadir}/pw3270/ui/*rexx*.xml
 %{_libdir}/libpw3270.so
 %{_libdir}/pkgconfig/pw3270.pc
 
-%{_libdir}/libpw3270cpp.a
-%{_includedir}/pw3270cpp.h
+#%{_libdir}/libpw3270cpp.a
+#%{_includedir}/pw3270cpp.h
 
 %if 0%{?_dbus}
 %files plugin-dbus
