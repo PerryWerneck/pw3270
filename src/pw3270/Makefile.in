@@ -76,12 +76,13 @@ MSGCAT=@MSGCAT@
 CONVERT=@CONVERT@
 WINDRES=@WINDRES@
 
-CFLAGS=@CFLAGS@ @LIB3270_CFLAGS@ \
-			-Wno-deprecated-declarations \
-			@LIBSSL_CFLAGS@ @GTK_CFLAGS@ \
-			-I$(BASEDIR)/src/include/pw3270 \
-			-DLIBDIR=\"$(libdir)\" \
-			-DDATAROOTDIR=\"$(datarootdir)\"
+CFLAGS=@CFLAGS@ \
+	@LIB3270_CFLAGS@ \
+	@PW3270_CFLAGS@ \
+	-Wno-deprecated-declarations \
+	@LIBSSL_CFLAGS@ @GTK_CFLAGS@ \
+	-DLIBDIR=\"$(libdir)\" \
+	-DDATAROOTDIR=\"$(datarootdir)\"
 
 LIBS=@LIBS@ @LIBSSL_LIBS@ @GTK_LIBS@ @LIB3270_LIBS@
 LDFLAGS=@LDFLAGS@
@@ -91,8 +92,9 @@ APP_LDFLAGS=@APP_LDFLAGS@
 
 DEPENDS=\
 	$(BASEDIR)/src/include/*.h \
-	$(BASEDIR)/src/include/lib3270/*.h \
+	@LIB3270_INCLUDEPATH@/*.h \
 	$(BASEDIR)/src/include/pw3270/*.h \
+	$(BASEDIR)/src/include/v3270/*.h \
 	*.h \
 	Makefile
 
@@ -102,10 +104,10 @@ $(OBJDBG)/%.o: \
 
 	@echo $< ...
 	@$(MKDIR) `dirname $@`
-	@$(CC) $(CFLAGS) \
-				@DBG_CFLAGS@ \
-				-DBUILD_DATE=`date +"0x%Y%m%d"`\
-				-o $@ -c $<
+	$(CC) $(CFLAGS) \
+		@DBG_CFLAGS@ \
+		-DBUILD_DATE=`date +"0x%Y%m%d"`\
+		-o $@ -c $<
 
 %.ico: \
 	$(BASEDIR)/branding/%.svg
@@ -261,6 +263,7 @@ install: \
 install-devel:
 
 	@mkdir -p $(DESTDIR)$(includedir)/pw3270
+	@mkdir -p $(DESTDIR)$(includedir)/v3270
 	@mkdir -p $(DESTDIR)$(libdir)/pkgconfig
 
 	# Install includes
@@ -269,7 +272,19 @@ install-devel:
 		$(DESTDIR)$(includedir)/pw3270
 
 	@$(INSTALL_DATA) \
+		$(BASEDIR)/src/include/v3270/*.h \
+		$(DESTDIR)$(includedir)/v3270
+
+	@$(INSTALL_DATA) \
 		$(BASEDIR)/src/include/pw3270.h \
+		$(DESTDIR)$(includedir)
+
+	@$(INSTALL_DATA) \
+		$(BASEDIR)/src/include/v3270.h \
+		$(DESTDIR)$(includedir)
+
+	@$(INSTALL_DATA) \
+		$(BASEDIR)/src/include/v3270ft.h \
 		$(DESTDIR)$(includedir)
 
 	# Install PKG-CONFIG files

@@ -59,12 +59,20 @@ MSGCAT=@MSGCAT@
 INSTALL=@INSTALL@
 INSTALL_DATA=@INSTALL_DATA@
 
-CFLAGS=@CFLAGS@ @LIB3270_CFLAGS@ -Wno-deprecated-declarations @GTK_CFLAGS@ -I$(BASEDIR)/src/include/pw3270
+CFLAGS=@CFLAGS@ \
+	@LIB3270_CFLAGS@ \
+	@PW3270_CFLAGS@ \
+	-Wno-deprecated-declarations \
+	@GTK_CFLAGS@
+
 LIBS=@LIBS@ @GTK_LIBS@ @LIB3270_LIBS@
 
 #---[ Rules ]----------------------------------------------------------------------------
 
-DEPENDS=$(BASEDIR)/src/include/*.h $(BASEDIR)/src/include/lib3270/*.h $(BASEDIR)/src/include/pw3270/*.h *.h Makefile
+DEPENDS= \
+	$(BASEDIR)/src/include/*.h \
+	@LIB3270_INCLUDEPATH@/*.h \
+	$(BASEDIR)/src/include/v3270/*.h
 
 $(OBJDBG)/%.o: \
 	%.c \

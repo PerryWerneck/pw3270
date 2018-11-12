@@ -251,12 +251,14 @@ cleanDebug:
 	@rm -fr $(OBJDBG)
 	@rm -fr $(BINDBG)
 	@$(MAKE) -C modules/lib3270 $@
+	@$(MAKE) -C src/pw3270 $@
 
 cleanRelease:
 
 	@rm -fr $(OBJRLS)
 	@rm -fr $(BINRLS)
 	@$(MAKE) -C modules/lib3270 $@
+	@$(MAKE) -C src/pw3270 $@
 
 
 
