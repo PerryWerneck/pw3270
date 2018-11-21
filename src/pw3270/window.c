@@ -139,27 +139,7 @@
 	return 0;
  }
 
- static int popup_handler(H3270 *session, void *terminal, LIB3270_NOTIFY type, const char *title, const char *msg, const char *fmt, va_list args)
- {
- 	GtkWidget *widget = NULL;
-
- 	if(session && terminal && GTK_IS_V3270(terminal))
-		widget = GTK_WIDGET(terminal);
-
- 	if(fmt)
-	{
-		gchar *text = g_strdup_vprintf(fmt,args);
-		v3270_popup_message(GTK_WIDGET(widget),type,title,msg,text);
-		g_free(text);
-	}
-	else
-	{
-		v3270_popup_message(GTK_WIDGET(widget),type,title,msg,NULL);
-	}
-	return 0;
- }
-
- static void pw3270_class_init(pw3270Class *klass)
+  static void pw3270_class_init(pw3270Class *klass)
  {
 #if GTK_CHECK_VERSION(3,0,0)
 	GtkWidgetClass	* widget_class	= GTK_WIDGET_CLASS(klass);
@@ -172,7 +152,6 @@
 #endif // GTK3
 
 	configuration_init();
-	lib3270_set_popup_handler(popup_handler);
 
  }
 

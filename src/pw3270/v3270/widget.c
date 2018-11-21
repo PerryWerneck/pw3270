@@ -927,6 +927,28 @@ static void release_activity_timer(v3270 *widget)
 	widget->activity.timer = NULL;
 }
 
+static int popup_handler(H3270 *session, LIB3270_NOTIFY type, const char *title, const char *msg, const char *fmt, va_list args)
+ {
+ 	GtkWidget *terminal = (GtkWidget *) lib3270_get_user_data(session);
+
+ 	if(terminal && GTK_IS_V3270(terminal)) {
+
+		if(fmt)
+		{
+			gchar *text = g_strdup_vprintf(fmt,args);
+			v3270_popup_message(GTK_WIDGET(terminal),type,title,msg,text);
+			g_free(text);
+		}
+		else
+		{
+			v3270_popup_message(GTK_WIDGET(terminal),type,title,msg,NULL);
+		}
+
+ 	}
+
+	return 0;
+ }
+
 static void v3270_init(v3270 *widget)
 {
 	struct lib3270_session_callbacks *cbk;
@@ -934,16 +956,7 @@ static void v3270_init(v3270 *widget)
 	widget->host = lib3270_session_new("");
 
 	lib3270_set_user_data(widget->host,widget);
-
-	/*
-	trace("%s host->sz=%d expected=%d revision=%s expected=%s",__FUNCTION__,widget->host->sz,(int) sizeof(H3270),lib3270_get_revision(),PACKAGE_REVISION);
-
-	if(widget->host->sz != sizeof(H3270))
-	{
-		g_error( _( "Unexpected signature in H3270 object, possible version mismatch in lib3270") );
-		return;
-	}
-	*/
+	lib3270_set_popup_handler(widget->host, popup_handler);
 
 	cbk = lib3270_get_session_callbacks(widget->host,sizeof(struct lib3270_session_callbacks));
 	if(!cbk)

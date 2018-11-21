@@ -274,6 +274,7 @@ static void trace_window_destroy(GtkWidget *widget, H3270 *hSession)
 	trace_window = NULL;
 }
 
+/*
 static void g_trace(H3270 *hSession, const char *fmt, va_list args)
 {
 	gchar *ptr = g_strdup_vprintf(fmt,args);
@@ -334,6 +335,7 @@ static void g_trace(H3270 *hSession, const char *fmt, va_list args)
 
 	g_free(ptr);
 }
+*/
 
 static gboolean startup(GtkWidget *toplevel)
 {
@@ -491,7 +493,7 @@ int main(int argc, char *argv[])
 		g_log_set_default_handler(g_logfile,NULL);
 	}
 
-	lib3270_set_trace_handler(g_trace);
+//	lib3270_set_trace_handler(g_trace);
 
 	// Check GTK Version
 	{
