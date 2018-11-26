@@ -90,7 +90,7 @@ $(BINDBG)/@DLLPREFIX@3270@DLLEXT@: \
 	@$(MAKE) -C modules/lib3270 Debug
 
 	@$(MKDIR) $(BINDBG)
-	@cp ./modules/lib3270/.bin/lib3270/Debug/* $(BINDBG)
+	@cp ./modules/lib3270/.bin/Debug/* $(BINDBG)
 
 $(BINDBG)/%@EXEEXT@: \
 	$(BINDBG)/@DLLPREFIX@3270@DLLEXT@ \
@@ -115,7 +115,7 @@ $(BINRLS)/@DLLPREFIX@3270@DLLEXT@: \
 	@$(MKDIR) `dirname $@`
 	@$(MAKE) -C modules/lib3270 Release
 
-	@cp ./modules/lib3270/.bin/lib3270/Release/* $(BINRLS)
+	@cp ./modules/lib3270/.bin/Release/* $(BINRLS)
 
 $(BINRLS)/%@EXEEXT@: \
 	$(BINRLS)/@DLLPREFIX@3270@DLLEXT@ \
@@ -245,6 +245,7 @@ clean: \
 	cleanRelease
 
 	@rm -fr $(POTDIR)
+	@rm -fr $(BINDIR)92
 
 cleanDebug:
 
