@@ -301,6 +301,7 @@ rm %{buildroot}/%{_datadir}/pw3270/ui/*rexx*.xml
 %{_includedir}/lib3270.h
 %{_libdir}/pkgconfig/lib3270.pc
 %{_libdir}/lib3270.so
+%{_libdir}/lib3270.a
 %{_datadir}/pw3270/locale
 
 %files devel
