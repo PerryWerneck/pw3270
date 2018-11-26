@@ -9,7 +9,7 @@ msgstr ""
 "#-#-#-#-#  pw3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-12 10:46-0200\n"
+"POT-Creation-Date: 2018-11-26 11:49-0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "#-#-#-#-#  lib3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-12 10:46-0200\n"
+"POT-Creation-Date: 2018-11-26 11:49-0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,7 +42,7 @@ msgstr ""
 "#-#-#-#-#  dbus3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-12 10:46-0200\n"
+"POT-Creation-Date: 2018-11-26 11:49-0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -51,20 +51,18 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: window.c:329
+#: window.c:308
 #, c-format
 msgid " and <b>%s</b> for %s."
 msgstr ""
 
-#: src/lib3270/telnet.c:1059 src/lib3270/ssl.c:300 src/lib3270/ssl.c:374
-#: src/lib3270/connect.c:103 src/lib3270/connect.c:119
-#: src/lib3270/connect.c:121 src/lib3270/connect.c:588
-#: src/lib3270/connect.c:605
+#: telnet.c:1059 ssl.c:303 ssl.c:377 connect.c:103 connect.c:119 connect.c:121
+#: connect.c:588 connect.c:605
 #, c-format
 msgid "%s"
 msgstr ""
 
-#: window.c:281
+#: window.c:260
 #, c-format
 msgid "%s - Disconnected"
 msgstr ""
@@ -94,42 +92,42 @@ msgstr ""
 msgid "%s requires GTK version %d.%d.%d"
 msgstr ""
 
-#: src/lib3270/kybd.c:2659
+#: kybd.c:2659
 #, c-format
 msgid "%s: Bell not supported"
 msgstr ""
 
-#: src/lib3270/kybd.c:2818
+#: kybd.c:2818
 #, c-format
 msgid "%s: Missing hex digits after \\x"
 msgstr ""
 
-#: src/lib3270/kybd.c:2758
+#: kybd.c:2758
 #, c-format
 msgid "%s: Unknown character after \\p"
 msgstr ""
 
-#: src/lib3270/kybd.c:2794
+#: kybd.c:2794
 #, c-format
 msgid "%s: Unknown character after \\pa"
 msgstr ""
 
-#: src/lib3270/kybd.c:2772
+#: kybd.c:2772
 #, c-format
 msgid "%s: Unknown character after \\pf"
 msgstr ""
 
-#: src/lib3270/kybd.c:2710
+#: kybd.c:2710
 #, c-format
 msgid "%s: Vertical tab not supported"
 msgstr ""
 
-#: window.c:324
+#: window.c:303
 #, c-format
 msgid "%s<b>%s</b> for %s"
 msgstr ""
 
-#: main.c:402
+#: main.c:404
 msgid "- 3270 Emulator for Gtk"
 msgstr ""
 
@@ -137,8 +135,7 @@ msgstr ""
 msgid "16 colors"
 msgstr ""
 
-#: src/lib3270/screen.c:694 src/lib3270/screen.c:724 src/lib3270/screen.c:738
-#: src/lib3270/screen.c:868
+#: screen.c:687 screen.c:717 screen.c:731 screen.c:852
 msgid "3270 Error"
 msgstr ""
 
@@ -146,7 +143,7 @@ msgstr ""
 msgid "3270 File transfer"
 msgstr ""
 
-#: src/lib3270/screen.c:709
+#: screen.c:702
 msgid "3270 Warning"
 msgstr ""
 
@@ -212,7 +209,7 @@ msgstr ""
 msgid "<b>SSL state is undefined</b>Unexpected SSL status %ld"
 msgstr ""
 
-#: main.c:422
+#: main.c:424
 msgid ""
 "<b>Valid options:</b>\n"
 "\n"
@@ -236,7 +233,7 @@ msgstr ""
 msgid "A_ppend to file"
 msgstr ""
 
-#: src/lib3270/ft.c:101
+#: ft.c:101
 msgid "Abort sent; awaiting response"
 msgstr ""
 
@@ -244,7 +241,7 @@ msgstr ""
 msgid "Aborting transfer"
 msgstr ""
 
-#: src/lib3270/ft.c:659
+#: ft.c:659
 msgid "Aborting..."
 msgstr ""
 
@@ -252,11 +249,11 @@ msgstr ""
 msgid "About security"
 msgstr ""
 
-#: src/lib3270/ft.c:99
+#: ft.c:99
 msgid "Ack received, data flowing"
 msgstr ""
 
-#: src/lib3270/paste.c:301
+#: paste.c:301
 msgid "Action failed"
 msgstr ""
 
@@ -268,7 +265,7 @@ msgstr ""
 msgid "Address or name of the host to connect."
 msgstr ""
 
-#: src/lib3270/toggles.c:200 00default.xml:129
+#: toggles.c:200 00default.xml:129
 msgid "Alert sound"
 msgstr ""
 
@@ -298,7 +295,7 @@ msgstr ""
 msgid "Appends the source file to the destination file."
 msgstr ""
 
-#: main.c:376 main.c:378
+#: main.c:378 main.c:380
 msgid "Application name"
 msgstr ""
 
@@ -319,22 +316,22 @@ msgstr ""
 msgid "Authority and subject key identifier mismatch"
 msgstr ""
 
-#: src/lib3270/toggles.c:213
+#: toggles.c:213
 msgid "Auto resize on altscreen"
 msgstr ""
 
-#: src/lib3270/toggles.c:152 00default.xml:124
+#: toggles.c:152 00default.xml:124
 msgid "Auto-Reconnect"
 msgstr ""
 
-#: src/lib3270/toggles.c:111
+#: toggles.c:111
 msgid ""
 "Automatically convert trailing blanks in a field to NULLs in order to insert "
 "a character, and will automatically convert leading NULLs to blanks so that "
 "input data is not squeezed to the left"
 msgstr ""
 
-#: src/lib3270/toggles.c:153
+#: toggles.c:153
 msgid "Automatically reconnect to the host if it ever disconnects"
 msgstr ""
 
@@ -342,7 +339,7 @@ msgstr ""
 msgid "Avblock"
 msgstr ""
 
-#: src/lib3270/ft.c:100
+#: ft.c:100
 msgid "Awaiting chance to send an abort"
 msgstr ""
 
@@ -350,11 +347,11 @@ msgstr ""
 msgid "Background"
 msgstr ""
 
-#: src/lib3270/connect.c:178
+#: connect.c:178
 msgid "Bad winsock version"
 msgstr ""
 
-#: src/lib3270/toggles.c:201
+#: toggles.c:201
 msgid "Beep on errors"
 msgstr ""
 
@@ -362,11 +359,11 @@ msgstr ""
 msgid "Black"
 msgstr ""
 
-#: src/lib3270/toggles.c:110 00default.xml:122
+#: toggles.c:110 00default.xml:122
 msgid "Blank Fill"
 msgstr ""
 
-#: src/lib3270/toggles.c:80 00default.xml:115
+#: toggles.c:80 00default.xml:115
 msgid "Blinking Cursor"
 msgstr ""
 
@@ -378,7 +375,7 @@ msgstr ""
 msgid "Blue"
 msgstr ""
 
-#: src/lib3270/toggles.c:170 00default.xml:125
+#: toggles.c:170 00default.xml:125
 msgid "Bold"
 msgstr ""
 
@@ -390,7 +387,7 @@ msgstr ""
 msgid "Break"
 msgstr ""
 
-#: src/lib3270/telnet.c:2025
+#: telnet.c:2026
 msgid "Broken pipe"
 msgstr ""
 
@@ -418,8 +415,7 @@ msgstr ""
 msgid "C_onnect"
 msgstr ""
 
-#: src/lib3270/toggles.c:317 src/lib3270/connect.c:378
-#: src/lib3270/connect.c:473
+#: toggles.c:317 connect.c:378 connect.c:473
 #, c-format
 msgid "Can't %s network keep-alive"
 msgstr ""
@@ -429,12 +425,12 @@ msgstr ""
 msgid "Can't accept unnamed %s"
 msgstr ""
 
-#: src/lib3270/connect.c:111 src/lib3270/connect.c:409
+#: connect.c:111 connect.c:409
 #, c-format
 msgid "Can't connect to %s"
 msgstr ""
 
-#: src/lib3270/connect.c:290 src/lib3270/connect.c:443
+#: connect.c:290 connect.c:443
 #, c-format
 msgid "Can't connect to %s:%s"
 msgstr ""
@@ -448,11 +444,11 @@ msgstr ""
 msgid "Can't convert line %d from %s to %s"
 msgstr ""
 
-#: src/lib3270/selection.c:656
+#: selection.c:656
 msgid "Can't cut rectangular regions"
 msgstr ""
 
-#: src/lib3270/connect.c:217
+#: connect.c:217
 #, c-format
 msgid "Can't determine value for environment variable \"%s\" "
 msgstr ""
@@ -461,7 +457,7 @@ msgstr ""
 msgid "Can't get DBUS object name"
 msgstr ""
 
-#: src/lib3270/ft.c:413
+#: ft.c:413
 msgid "Can't get file size"
 msgstr ""
 
@@ -481,10 +477,6 @@ msgstr ""
 #: plugin.c:93
 #, c-format
 msgid "Can't load plugin %s"
-msgstr ""
-
-#: main.c:298
-msgid "Can't open file"
 msgstr ""
 
 #: charset.c:470
@@ -513,7 +505,7 @@ msgstr ""
 msgid "Can't parse unnamed element"
 msgstr ""
 
-#: window.c:312
+#: window.c:291
 #, c-format
 msgid "Can't recognize \"%s\" as a valid host type"
 msgstr ""
@@ -548,11 +540,6 @@ msgid ""
 "%s"
 msgstr ""
 
-#: main.c:296
-#, c-format
-msgid "Can't save trace data to file %s"
-msgstr ""
-
 #: v3270ftprogress.c:811
 msgid "Can't set callback table"
 msgstr ""
@@ -565,11 +552,11 @@ msgstr ""
 msgid "Can't set lib3270 I/O handlers"
 msgstr ""
 
-#: src/lib3270/connect.c:604
+#: connect.c:604
 msgid "Can't set socket to blocking mode."
 msgstr ""
 
-#: src/lib3270/connect.c:604
+#: connect.c:604
 msgid "Can't set socket to non blocking mode"
 msgstr ""
 
@@ -577,11 +564,11 @@ msgstr ""
 msgid "Can't start file transfer session"
 msgstr ""
 
-#: src/lib3270/ft.c:203
+#: ft.c:203
 msgid "Can't start file transfer."
 msgstr ""
 
-#: src/lib3270/connect.c:179
+#: connect.c:179
 #, c-format
 msgid "Can't use winsock version %d.%d"
 msgstr ""
@@ -594,26 +581,26 @@ msgstr ""
 msgid "Cancel transfer operation."
 msgstr ""
 
-#: src/lib3270/ft.c:157
+#: ft.c:157
 msgid "Cancelled by user"
 msgstr ""
 
-#: src/lib3270/telnet.c:1453
+#: telnet.c:1454
 msgid "Cannot connect to specified LU"
 msgstr ""
 
-#: src/lib3270/ssl.c:373
+#: ssl.c:376
 msgid "Cant create a new SSL structure for current connection."
 msgstr ""
 
-#: src/lib3270/ssl.c:293
+#: ssl.c:296
 #, c-format
 msgid ""
 "Cant set default locations for trusted CA certificates to\n"
 "%s"
 msgstr ""
 
-#: src/lib3270/ssl.c:92
+#: ssl.c:92
 msgid ""
 "Cant set the file descriptor for the input/output facility for the TLS/SSL "
 "(encrypted) side of ssl."
@@ -679,7 +666,7 @@ msgstr ""
 msgid "Configure host"
 msgstr ""
 
-#: src/lib3270/toggles.c:188 00default.xml:114
+#: toggles.c:188 00default.xml:114
 msgid "Connect on startup"
 msgstr ""
 
@@ -687,20 +674,17 @@ msgstr ""
 msgid "Connecting to host"
 msgstr ""
 
-#: src/lib3270/connect.c:215 src/lib3270/connect.c:311
-#: src/lib3270/connect.c:320 src/lib3270/connect.c:382
-#: src/lib3270/connect.c:397 src/lib3270/connect.c:413
-#: src/lib3270/connect.c:427 src/lib3270/connect.c:447
-#: src/lib3270/connect.c:461 src/lib3270/connect.c:477
-#: src/lib3270/connect.c:573
+#: connect.c:215 connect.c:311 connect.c:320 connect.c:382 connect.c:397
+#: connect.c:413 connect.c:427 connect.c:447 connect.c:461 connect.c:477
+#: connect.c:573
 msgid "Connection error"
 msgstr ""
 
-#: src/lib3270/connect.c:116
+#: connect.c:116
 msgid "Connection failed"
 msgstr ""
 
-#: src/lib3270/telnet.c:2029
+#: telnet.c:2030
 msgid "Connection reset by peer"
 msgstr ""
 
@@ -728,7 +712,7 @@ msgstr ""
 msgid "Creates a file with variable-length records."
 msgstr ""
 
-#: colors.c:519 src/lib3270/toggles.c:140 00default.xml:121
+#: colors.c:519 toggles.c:140 00default.xml:121
 msgid "Cross hair cursor"
 msgstr ""
 
@@ -777,7 +761,7 @@ msgstr ""
 msgid "Dark Turquoise"
 msgstr ""
 
-#: src/lib3270/ft_cut.c:156 src/lib3270/ft_cut.c:165
+#: ft_cut.c:156 ft_cut.c:165
 msgid "Data conversion error"
 msgstr ""
 
@@ -797,11 +781,11 @@ msgstr ""
 msgid "Delete field"
 msgstr ""
 
-#: src/lib3270/telnet.c:1700
+#: telnet.c:1701
 msgid "Device type rejected"
 msgstr ""
 
-#: src/lib3270/ft.c:261
+#: ft.c:261
 msgid "Disconnected from host."
 msgstr ""
 
@@ -809,11 +793,11 @@ msgstr ""
 msgid "Display current charset"
 msgstr ""
 
-#: src/lib3270/toggles.c:93
+#: toggles.c:93
 msgid "Display the cursor location in the OIA (the status line)"
 msgstr ""
 
-#: src/lib3270/telnet.c:1250
+#: telnet.c:1250
 msgid "EOR received when not in 3270 mode, ignored."
 msgstr ""
 
@@ -821,11 +805,11 @@ msgstr ""
 msgid "ETA:"
 msgstr ""
 
-#: src/lib3270/toggles.c:225
+#: toggles.c:225
 msgid "Enable network in/out trace"
 msgstr ""
 
-#: src/lib3270/toggles.c:219
+#: toggles.c:219
 msgid "Enable network keep-alive with SO_KEEPALIVE"
 msgstr ""
 
@@ -853,16 +837,16 @@ msgstr ""
 msgid "Erase to end of line"
 msgstr ""
 
-#: print.c:247 widget.c:200 src/lib3270/util.c:985
+#: print.c:247 widget.c:200 util.c:985
 msgid "Error"
 msgstr ""
 
-#: src/lib3270/ft_dft.c:457 src/lib3270/ft_cut.c:422
+#: ft_dft.c:457 ft_cut.c:422
 #, c-format
 msgid "Error \"%s\" reading from local file (rc=%d)"
 msgstr ""
 
-#: src/lib3270/ft_dft.c:335 src/lib3270/ft_cut.c:530
+#: ft_dft.c:335 ft_cut.c:530
 #, c-format
 msgid "Error \"%s\" writing to local file (rc=%d)"
 msgstr ""
@@ -892,7 +876,7 @@ msgstr ""
 msgid "Field colors"
 msgstr ""
 
-#: src/lib3270/ft.c:266
+#: ft.c:266
 msgid "File transfer is already active in this session."
 msgstr ""
 
@@ -932,7 +916,7 @@ msgstr ""
 msgid "Format error in certificate's notBefore field"
 msgstr ""
 
-#: src/lib3270/toggles.c:146 00default.xml:118
+#: toggles.c:146 00default.xml:118
 msgid "Full Screen"
 msgstr ""
 
@@ -940,7 +924,7 @@ msgstr ""
 msgid "Function bar"
 msgstr ""
 
-#: main.c:102 main.c:512
+#: main.c:102 main.c:514
 msgid "GTK Version mismatch"
 msgstr ""
 
@@ -960,35 +944,35 @@ msgstr ""
 msgid "Help"
 msgstr ""
 
-#: src/lib3270/ft.c:668
+#: ft.c:668
 msgid "Host disconnected, transfer cancelled"
 msgstr ""
 
-#: src/lib3270/telnet.c:1758
+#: telnet.c:1759
 msgid "Host illegally added function(s)"
 msgstr ""
 
-#: src/lib3270/telnet.c:1683
+#: telnet.c:1684
 msgid "Host rejected device type or request type"
 msgstr ""
 
-#: src/lib3270/telnet.c:1696
+#: telnet.c:1697
 msgid "Host rejected resource(s)"
 msgstr ""
 
-#: main.c:384
+#: main.c:386
 msgid "Host system type"
 msgstr ""
 
-#: main.c:382
+#: main.c:384
 msgid "Host to connect"
 msgstr ""
 
-#: src/lib3270/options.c:49
+#: options.c:49
 msgid "IBM AS/400"
 msgstr ""
 
-#: src/lib3270/options.c:43
+#: options.c:43
 msgid "IBM S/390"
 msgstr ""
 
@@ -996,11 +980,11 @@ msgstr ""
 msgid "Identity not verified"
 msgstr ""
 
-#: src/lib3270/toggles.c:147
+#: toggles.c:147
 msgid "If set, asks to place the toplevel window in the fullscreen state"
 msgstr ""
 
-#: src/lib3270/toggles.c:129
+#: toggles.c:129
 msgid ""
 "If set, puts restrictions on how pasted text is placed on the screen. The "
 "position of the cursor at the time the paste operation is begun is used as a "
@@ -1009,28 +993,28 @@ msgid ""
 "that use the left side of the screen for control information"
 msgstr ""
 
-#: src/lib3270/toggles.c:81
+#: toggles.c:81
 msgid "If set, the cursor blinks"
 msgstr ""
 
-#: src/lib3270/toggles.c:75
+#: toggles.c:75
 msgid "If set, the terminal operates in uppercase-only mode"
 msgstr ""
 
-#: src/lib3270/toggles.c:135
+#: toggles.c:135
 msgid ""
 "If set, the terminal will always select rectangular areas of the screen. "
 "Otherwise, it selects continuous regions of the screen"
 msgstr ""
 
-#: src/lib3270/toggles.c:141
+#: toggles.c:141
 msgid ""
 "If set, the terminal will display a crosshair over the cursor: lines "
 "extending the full width and height of the screen, centered over the cursor "
 "position. This makes locating the cursor on the screen much easier"
 msgstr ""
 
-#: src/lib3270/toggles.c:87
+#: toggles.c:87
 msgid ""
 "If set, the time taken by the host to process an AID is displayed on the "
 "status line"
@@ -1044,7 +1028,7 @@ msgstr ""
 msgid "Ignore the fail and remove the file from queue."
 msgstr ""
 
-#: src/lib3270/ft_cut.c:507
+#: ft_cut.c:507
 msgid "Illegal frame length"
 msgstr ""
 
@@ -1068,7 +1052,7 @@ msgstr ""
 msgid "Invalid CA certificate"
 msgstr ""
 
-#: widget.c:951
+#: widget.c:964
 msgid "Invalid callback table, possible version mismatch in lib3270"
 msgstr ""
 
@@ -1080,7 +1064,7 @@ msgstr ""
 msgid "Invalid character value"
 msgstr ""
 
-#: src/lib3270/selection.c:656
+#: selection.c:656
 msgid "Invalid cut action"
 msgstr ""
 
@@ -1092,7 +1076,7 @@ msgstr ""
 msgid "Java"
 msgstr ""
 
-#: src/lib3270/toggles.c:176 00default.xml:127
+#: toggles.c:176 00default.xml:127
 msgid "Keep selected"
 msgstr ""
 
@@ -1100,7 +1084,7 @@ msgstr ""
 msgid "Key usage does not include certificate signing"
 msgstr ""
 
-#: src/lib3270/paste.c:303
+#: paste.c:303
 msgid "Keyboard is locked"
 msgstr ""
 
@@ -1120,11 +1104,11 @@ msgstr ""
 msgid "Local:"
 msgstr ""
 
-#: main.c:397
+#: main.c:399
 msgid "Log to file"
 msgstr ""
 
-#: main.c:390
+#: main.c:392
 msgid "Minutes for auto-disconnect"
 msgstr ""
 
@@ -1132,12 +1116,12 @@ msgstr ""
 msgid "Misc colors"
 msgstr ""
 
-#: window.c:433
+#: window.c:412
 #, c-format
 msgid "Model %d (%s)"
 msgstr ""
 
-#: src/lib3270/toggles.c:74 00default.xml:116
+#: toggles.c:74 00default.xml:116
 msgid "Monocase"
 msgstr ""
 
@@ -1153,16 +1137,15 @@ msgstr ""
 msgid "Mustard"
 msgstr ""
 
-#: src/lib3270/telnet.c:347 src/lib3270/iocalls.c:376 src/lib3270/iocalls.c:483
-#: src/lib3270/connect.c:98
+#: telnet.c:347 iocalls.c:378 iocalls.c:485 connect.c:98
 msgid "Network error"
 msgstr ""
 
-#: src/lib3270/toggles.c:218 00default.xml:131
+#: toggles.c:218 00default.xml:131
 msgid "Network keep alive"
 msgstr ""
 
-#: src/lib3270/connect.c:166 src/lib3270/connect.c:177
+#: connect.c:166 connect.c:177
 msgid "Network startup error"
 msgstr ""
 
@@ -1180,7 +1163,7 @@ msgid ""
 "certificate and it is not self signed."
 msgstr ""
 
-#: src/lib3270/ft.c:98
+#: ft.c:98
 msgid "No transfer in progress"
 msgstr ""
 
@@ -1192,11 +1175,11 @@ msgstr ""
 msgid "Normal/Unprotected"
 msgstr ""
 
-#: src/lib3270/selection.c:656
+#: selection.c:656
 msgid "Not available"
 msgstr ""
 
-#: src/lib3270/ft.c:675
+#: ft.c:675
 msgid "Not in 3270 mode, transfer cancelled"
 msgstr ""
 
@@ -1236,11 +1219,11 @@ msgstr ""
 msgid "Orange"
 msgstr ""
 
-#: src/lib3270/options.c:55
+#: options.c:55
 msgid "Other (TSO)"
 msgstr ""
 
-#: src/lib3270/options.c:61
+#: options.c:61
 msgid "Other (VM/CMS)"
 msgstr ""
 
@@ -1360,7 +1343,7 @@ msgstr ""
 msgid "PF9"
 msgstr ""
 
-#: main.c:420
+#: main.c:422
 msgid "Parse error"
 msgstr ""
 
@@ -1381,7 +1364,7 @@ msgstr ""
 msgid "Paste text file"
 msgstr ""
 
-#: src/lib3270/toggles.c:128 00default.xml:120
+#: toggles.c:128 00default.xml:120
 msgid "Paste with left margin"
 msgstr ""
 
@@ -1389,7 +1372,7 @@ msgstr ""
 msgid "Path and name of the local file"
 msgstr ""
 
-#: main.c:391
+#: main.c:393
 msgid "Path for plugin files"
 msgstr ""
 
@@ -1397,7 +1380,7 @@ msgstr ""
 msgid "Path length constraint exceeded"
 msgstr ""
 
-#: main.c:379
+#: main.c:381
 msgid "Path to application data files"
 msgstr ""
 
@@ -1471,79 +1454,79 @@ msgstr ""
 msgid "Quit"
 msgstr ""
 
-#: src/lib3270/rpq.c:233
+#: rpq.c:233
 #, c-format
 msgid "RPQ %s term omitted due to insufficient space"
 msgstr ""
 
-#: src/lib3270/rpq.c:343
+#: rpq.c:343
 #, c-format
 msgid "RPQ %s term override ignored"
 msgstr ""
 
-#: src/lib3270/rpq.c:632 src/lib3270/rpq.c:702
+#: rpq.c:632 rpq.c:702
 #, c-format
 msgid "RPQ ADDRESS term has unrecognized family %u"
 msgstr ""
 
-#: src/lib3270/rpq.c:640 src/lib3270/rpq.c:669 src/lib3270/rpq.c:709
+#: rpq.c:640 rpq.c:669 rpq.c:709
 msgid "RPQ ADDRESS term incomplete due to space limit"
 msgstr ""
 
-#: src/lib3270/rpq.c:226
+#: rpq.c:226
 msgid "RPQ Error"
 msgstr ""
 
-#: src/lib3270/rpq.c:411 src/lib3270/rpq.c:420
+#: rpq.c:411 rpq.c:420
 msgid "RPQ TIMEZONE term is invalid - use +/-hhmm"
 msgstr ""
 
-#: src/lib3270/rpq.c:509
+#: rpq.c:509
 msgid "RPQ USER term has non-hex character"
 msgstr ""
 
-#: src/lib3270/rpq.c:534
+#: rpq.c:534
 msgid "RPQ USER term has odd number of hex digits"
 msgstr ""
 
-#: src/lib3270/rpq.c:515
+#: rpq.c:515
 #, c-format
 msgid "RPQ USER term truncated after %d bytes"
 msgstr ""
 
-#: src/lib3270/rpq.c:559
+#: rpq.c:559
 #, c-format
 msgid "RPQ USER term truncated after %d characters"
 msgstr ""
 
-#: src/lib3270/rpq.c:355
+#: rpq.c:355
 #, c-format
 msgid "RPQ term \"%s\" is unrecognized"
 msgstr ""
 
-#: src/lib3270/rpq.c:228
+#: rpq.c:228
 #, c-format
 msgid "RPQ term %d is unknown"
 msgstr ""
 
-#: src/lib3270/rpq.c:455
+#: rpq.c:455
 msgid "RPQ timezone exceeds 12 hour UTC offset"
 msgstr ""
 
-#: src/lib3270/rpq.c:440
+#: rpq.c:440
 msgid "RPQ: Unable to determine workstation UTC time"
 msgstr ""
 
-#: src/lib3270/rpq.c:433
+#: rpq.c:433
 msgid "RPQ: Unable to determine workstation local time"
 msgstr ""
 
-#: src/lib3270/rpq.c:645
+#: rpq.c:645
 #, c-format
 msgid "RPQ: can't resolve '%s': %s"
 msgstr ""
 
-#: src/lib3270/rpq.c:658
+#: rpq.c:658
 msgid "RPQ: gethostbyname error"
 msgstr ""
 
@@ -1583,7 +1566,7 @@ msgstr ""
 msgid "Remap Failed"
 msgstr ""
 
-#: main.c:388
+#: main.c:390
 msgid "Remap charset from xml file"
 msgstr ""
 
@@ -1605,7 +1588,7 @@ msgstr ""
 msgid "Remove selection"
 msgstr ""
 
-#: src/lib3270/ft.c:203
+#: ft.c:203
 msgid "Request failed"
 msgstr ""
 
@@ -1617,7 +1600,7 @@ msgstr ""
 msgid "Reset"
 msgstr ""
 
-#: src/lib3270/toggles.c:212 00default.xml:119
+#: toggles.c:212 00default.xml:119
 msgid "Resize on alternate screen"
 msgstr ""
 
@@ -1635,31 +1618,31 @@ msgid ""
 "one option can be used."
 msgstr ""
 
-#: src/lib3270/ssl.c:119
+#: ssl.c:119
 msgid "SSL Connect failed"
 msgstr ""
 
-#: src/lib3270/telnet.c:1037
+#: telnet.c:1037
 msgid "SSL Error"
 msgstr ""
 
-#: src/lib3270/telnet.c:1037
+#: telnet.c:1037
 msgid "SSL Read error"
 msgstr ""
 
-#: src/lib3270/ssl.c:147 src/lib3270/ssl.c:163 src/lib3270/connect.c:348
+#: ssl.c:149 ssl.c:165 connect.c:348
 msgid "SSL error"
 msgstr ""
 
-#: src/lib3270/ssl.c:91
+#: ssl.c:91
 msgid "SSL negotiation failed"
 msgstr ""
 
-#: src/lib3270/ssl.c:260
+#: ssl.c:263
 msgid "SSL_CTX_new() has failed"
 msgstr ""
 
-#: src/lib3270/telnet.c:2015
+#: telnet.c:2016
 #, c-format
 msgid ""
 "SSL_write:\n"
@@ -1728,8 +1711,7 @@ msgstr ""
 msgid "Secure connection was successful."
 msgstr ""
 
-#: src/lib3270/ssl.c:90 src/lib3270/ssl.c:118 src/lib3270/ssl.c:259
-#: src/lib3270/ssl.c:298 src/lib3270/ssl.c:372
+#: ssl.c:90 ssl.c:118 ssl.c:262 ssl.c:301 ssl.c:375
 msgid "Security error"
 msgstr ""
 
@@ -1745,7 +1727,7 @@ msgstr ""
 msgid "Select all"
 msgstr ""
 
-#: src/lib3270/toggles.c:134 00default.xml:123
+#: toggles.c:134 00default.xml:123
 msgid "Select by rectangles"
 msgstr ""
 
@@ -1777,7 +1759,7 @@ msgstr ""
 msgid "Select previous file"
 msgstr ""
 
-#: src/lib3270/iocalls.c:377 src/lib3270/iocalls.c:484
+#: iocalls.c:379 iocalls.c:486
 msgid "Select() failed when processing for events."
 msgstr ""
 
@@ -1801,7 +1783,7 @@ msgstr ""
 msgid "Send file"
 msgstr ""
 
-#: main.c:394
+#: main.c:396
 msgid "Send messages to syslog"
 msgstr ""
 
@@ -1817,31 +1799,31 @@ msgstr ""
 msgid "Sending file"
 msgstr ""
 
-#: main.c:381
+#: main.c:383
 msgid "Session name"
 msgstr ""
 
-#: main.c:387
+#: main.c:389
 msgid "Set host charset"
 msgstr ""
 
-#: src/lib3270/toggles.c:158
+#: toggles.c:158
 msgid "Set insert mode"
 msgstr ""
 
-#: main.c:383
+#: main.c:385
 msgid "Set reported colors (8/16)"
 msgstr ""
 
-#: main.c:386
+#: main.c:388
 msgid "Set toggles OFF"
 msgstr ""
 
-#: main.c:385
+#: main.c:387
 msgid "Set toggles ON"
 msgstr ""
 
-#: main.c:396
+#: main.c:398
 msgid "Set trace filename"
 msgstr ""
 
@@ -1849,11 +1831,11 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: src/lib3270/toggles.c:206
+#: toggles.c:206
 msgid "Show Field attribute"
 msgstr ""
 
-#: src/lib3270/toggles.c:182 00default.xml:126
+#: toggles.c:182 00default.xml:126
 msgid "Show Underline"
 msgstr ""
 
@@ -1861,7 +1843,7 @@ msgstr ""
 msgid "Show test pattern"
 msgstr ""
 
-#: src/lib3270/toggles.c:86
+#: toggles.c:86
 msgid "Show timer when processing"
 msgstr ""
 
@@ -1873,19 +1855,19 @@ msgstr ""
 msgid "Skip this transfer, keep the file on queue."
 msgstr ""
 
-#: src/lib3270/toggles.c:164 00default.xml:128
+#: toggles.c:164 00default.xml:128
 msgid "Smart paste"
 msgstr ""
 
-#: src/lib3270/connect.c:586 src/lib3270/connect.c:603
+#: connect.c:586 connect.c:603
 msgid "Socket error"
 msgstr ""
 
-#: src/lib3270/telnet.c:1063
+#: telnet.c:1063
 msgid "Socket read error"
 msgstr ""
 
-#: src/lib3270/telnet.c:2036
+#: telnet.c:2037
 msgid "Socket write error"
 msgstr ""
 
@@ -1939,7 +1921,7 @@ msgstr ""
 msgid "System _type:"
 msgstr ""
 
-#: src/lib3270/telnet.c:1524
+#: telnet.c:1525
 msgid "TLS negotiation failure"
 msgstr ""
 
@@ -1985,12 +1967,12 @@ msgid ""
 "expected value. Unused."
 msgstr ""
 
-#: src/lib3270/ssl.c:149
+#: ssl.c:151
 msgid ""
 "The Certificate revocation list (CRL) of a certificate could not be found."
 msgstr ""
 
-#: src/lib3270/ssl.c:164
+#: ssl.c:166
 msgid "The SSL certificate for this host is not trusted."
 msgstr ""
 
@@ -2104,12 +2086,12 @@ msgid ""
 "normally means the list of trusted certificates is not complete."
 msgstr ""
 
-#: window.c:331
+#: window.c:310
 #, c-format
 msgid "The known types are %s"
 msgstr ""
 
-#: main.c:389
+#: main.c:391
 msgid "The model of 3270 display to be emulated"
 msgstr ""
 
@@ -2128,7 +2110,7 @@ msgid ""
 "The public key in the certificate SubjectPublicKeyInfo could not be read."
 msgstr ""
 
-#: src/lib3270/ft.c:272
+#: ft.c:272
 msgid "The remote file name is invalid."
 msgstr ""
 
@@ -2140,7 +2122,7 @@ msgstr ""
 msgid "The root CA is not marked as trusted for the specified purpose."
 msgstr ""
 
-#: src/lib3270/ssl.c:165
+#: ssl.c:167
 msgid ""
 "The security certificate presented by this host was not issued by a trusted "
 "certificate authority."
@@ -2184,12 +2166,12 @@ msgid ""
 "Franklin St, Fifth Floor, Boston, MA 02111-1307 USA"
 msgstr ""
 
-#: main.c:508
+#: main.c:510
 #, c-format
 msgid "This program requires GTK version %d.%d.%d"
 msgstr ""
 
-#: src/lib3270/connect.c:350
+#: connect.c:350
 #, c-format
 msgid ""
 "This version of %s was built without support for secure sockets layer (SSL)."
@@ -2215,19 +2197,19 @@ msgstr ""
 msgid "Trace"
 msgstr ""
 
-#: src/lib3270/toggles.c:98 98trace.xml:36
+#: toggles.c:98 98trace.xml:36
 msgid "Trace Data Stream"
 msgstr ""
 
-#: src/lib3270/toggles.c:122
+#: toggles.c:122
 msgid "Trace interface events"
 msgstr ""
 
-#: src/lib3270/toggles.c:224 98trace.xml:38
+#: toggles.c:224 98trace.xml:38
 msgid "Trace network data flow"
 msgstr ""
 
-#: src/lib3270/toggles.c:116 98trace.xml:37
+#: toggles.c:116 98trace.xml:37
 msgid "Trace screen contents"
 msgstr ""
 
@@ -2235,7 +2217,7 @@ msgstr ""
 msgid "Trace user interface events"
 msgstr ""
 
-#: src/lib3270/toggles.c:92 00default.xml:117
+#: toggles.c:92 00default.xml:117
 msgid "Track Cursor"
 msgstr ""
 
@@ -2243,20 +2225,19 @@ msgstr ""
 msgid "Tracks"
 msgstr ""
 
-#: src/lib3270/ft_cut.c:370
+#: ft_cut.c:370
 msgid "Transfer cancelled by host"
 msgstr ""
 
-#: src/lib3270/ft_dft.c:233 src/lib3270/ft_dft.c:376 src/lib3270/ft_cut.c:399
-#: src/lib3270/ft_cut.c:497
+#: ft_dft.c:233 ft_dft.c:376 ft_cut.c:399 ft_cut.c:497
 msgid "Transfer cancelled by user"
 msgstr ""
 
-#: src/lib3270/ft.c:562
+#: ft.c:562
 msgid "Transfer complete"
 msgstr ""
 
-#: v3270ftprogress.c:759 src/lib3270/ft.c:567
+#: v3270ftprogress.c:759 ft.c:567
 msgid "Transfer failed"
 msgstr ""
 
@@ -2268,7 +2249,7 @@ msgstr ""
 msgid "Transfer speed"
 msgstr ""
 
-#: src/lib3270/ft_cut.c:463
+#: ft_cut.c:463
 msgid "Transmission error"
 msgstr ""
 
@@ -2284,11 +2265,11 @@ msgstr ""
 msgid "UTF-8"
 msgstr ""
 
-#: src/lib3270/ft_dft.c:173
+#: ft_dft.c:173
 msgid "Uknown DFT Open type from host"
 msgstr ""
 
-#: src/lib3270/connect.c:349
+#: connect.c:349
 msgid "Unable to connect to secure hosts"
 msgstr ""
 
@@ -2304,7 +2285,7 @@ msgstr ""
 msgid "Unable to decrypt certificate's signature"
 msgstr ""
 
-#: src/lib3270/connect.c:216
+#: connect.c:216
 msgid "Unable to find selected hostname."
 msgstr ""
 
@@ -2312,11 +2293,11 @@ msgstr ""
 msgid "Unable to get certificate CRL"
 msgstr ""
 
-#: src/lib3270/ssl.c:148
+#: ssl.c:150
 msgid "Unable to get certificate CRL."
 msgstr ""
 
-#: src/lib3270/connect.c:99
+#: connect.c:99
 msgid "Unable to get connection state."
 msgstr ""
 
@@ -2328,11 +2309,11 @@ msgstr ""
 msgid "Unable to get local issuer certificate"
 msgstr ""
 
-#: src/lib3270/paste.c:302
+#: paste.c:302
 msgid "Unable to paste text"
 msgstr ""
 
-#: src/lib3270/ft.c:510
+#: ft.c:510
 msgid "Unable to send file-transfer request"
 msgstr ""
 
@@ -2358,7 +2339,7 @@ msgstr ""
 msgid "Unexpected action attribute in <%s>"
 msgstr ""
 
-#: src/lib3270/paste.c:303
+#: paste.c:303
 msgid "Unexpected error"
 msgstr ""
 
@@ -2396,31 +2377,31 @@ msgstr ""
 msgid "Unexpected target \"%s\""
 msgstr ""
 
-#: src/lib3270/kybd.c:307
+#: kybd.c:307
 #, c-format
 msgid "Unexpected type %d in typeahead queue"
 msgstr ""
 
-#: src/lib3270/ctlr.c:730
+#: ctlr.c:730
 #, c-format
 msgid "Unknown 3270 Data Stream command: 0x%X"
 msgstr ""
 
-#: src/lib3270/ft_cut.c:378
+#: ft_cut.c:378
 msgid "Unknown FT control code from host"
 msgstr ""
 
-#: src/lib3270/kybd.c:2408
+#: kybd.c:2408
 #, c-format
 msgid "Unknown PA key %d"
 msgstr ""
 
-#: src/lib3270/kybd.c:2423
+#: kybd.c:2423
 #, c-format
 msgid "Unknown PF key %d"
 msgstr ""
 
-#: src/lib3270/ft_cut.c:302
+#: ft_cut.c:302
 msgid "Unknown frame type from host"
 msgstr ""
 
@@ -2429,7 +2410,7 @@ msgstr ""
 msgid "Unknown popup type \"%s\""
 msgstr ""
 
-#: src/lib3270/rpq.c:227
+#: rpq.c:227
 msgid "Unsupported RPQ term"
 msgstr ""
 
@@ -2437,7 +2418,7 @@ msgstr ""
 msgid "Unsupported certificate purpose"
 msgstr ""
 
-#: src/lib3270/toggles.c:194 00default.xml:130
+#: toggles.c:194 00default.xml:130
 msgid "Use +/- for field navigation"
 msgstr ""
 
@@ -2445,7 +2426,7 @@ msgstr ""
 msgid "Use host default record format."
 msgstr ""
 
-#: src/lib3270/toggles.c:195
+#: toggles.c:195
 msgid "Use the keys +/- from keypad to select editable fields"
 msgstr ""
 
@@ -2458,15 +2439,15 @@ msgstr ""
 msgid "Version %s-%s"
 msgstr ""
 
-#: src/lib3270/connect.c:167
+#: connect.c:167
 msgid "WSAStartup failed"
 msgstr ""
 
-#: src/lib3270/ft.c:519
+#: ft.c:519
 msgid "Waiting for GET response"
 msgstr ""
 
-#: src/lib3270/ft.c:521
+#: ft.c:521
 msgid "Waiting for PUT response"
 msgstr ""
 
@@ -2486,7 +2467,7 @@ msgstr ""
 msgid "Windows Western languages (CP1252)"
 msgstr ""
 
-#: src/lib3270/util.c:163
+#: util.c:163
 #, c-format
 msgid "Windows error %d"
 msgstr ""
@@ -2693,29 +2674,27 @@ msgstr ""
 msgid "an action attribute"
 msgstr ""
 
-#: src/lib3270/session.c:271
+#: session.c:338
 msgid "bracket"
 msgstr ""
 
-#: src/lib3270/toggles.c:317 src/lib3270/connect.c:378
-#: src/lib3270/connect.c:473
+#: toggles.c:317 connect.c:378 connect.c:473
 msgid "disable"
 msgstr ""
 
-#: src/lib3270/toggles.c:317 src/lib3270/connect.c:378
-#: src/lib3270/connect.c:473
+#: toggles.c:317 connect.c:378 connect.c:473
 msgid "enable"
 msgstr ""
 
-#: src/lib3270/connect.c:587
+#: connect.c:587
 msgid "fcntl() error when getting socket state."
 msgstr ""
 
-#: src/lib3270/connect.c:398 src/lib3270/connect.c:574
+#: connect.c:398 connect.c:574
 msgid "ioctlsocket(FIONBIO) failed."
 msgstr ""
 
-#: src/lib3270/connect.c:428 src/lib3270/connect.c:462
+#: connect.c:428 connect.c:462
 msgid "setsockopt(SO_OOBINLINE) has failed"
 msgstr ""
 
