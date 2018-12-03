@@ -33,7 +33,6 @@
 	#include <ws2tcpip.h>
 #endif // WIN32
 
- #include <pw3270.h>
  #include <lib3270.h>
  #include <lib3270/session.h>
  #include <lib3270/log.h>
@@ -57,10 +56,10 @@ static void draw_cursor_position(cairo_t *cr, GdkRectangle *rect, v3270FontInfo 
 
 /*--[ Statics ]--------------------------------------------------------------------------------------*/
 
- #include "locked.xbm"
- #include "unlocked.xbm"
- #include "negotiated.xbm"
- #include "warning.xbm"
+ #include "xbm/locked.xbm"
+ #include "xbm/unlocked.xbm"
+ #include "xbm/negotiated.xbm"
+ #include "xbm/warning.xbm"
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 

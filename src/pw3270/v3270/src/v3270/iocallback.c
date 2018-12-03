@@ -39,9 +39,10 @@
 	#include <string.h>
 #endif /*]*/
 
+#include <lib3270.h>
+#include <v3270.h>
 #include <stdio.h>
 #include <glib.h>
-#include "../globals.h"
 
 static void				* static_AddSource(H3270 *session, int fd, LIB3270_IO_FLAG flag, void(*proc)(H3270 *, int, LIB3270_IO_FLAG, void *), void *userdata);
 static void	  			  static_RemoveSource(H3270 *session, void *id);

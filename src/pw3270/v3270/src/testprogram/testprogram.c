@@ -29,8 +29,8 @@
  */
 
  #include <v3270.h>
- #include <v3270ft.h>
- #include <v3270ftprogress.h>
+ #include <v3270/filetransfer.h>
+ #include <v3270/ftprogress.h>
  #include <stdlib.h>
 
  /*---[ Implement ]----------------------------------------------------------------------------------*/

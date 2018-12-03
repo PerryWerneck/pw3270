@@ -32,8 +32,8 @@
 
 	#define PRIVATE_H_INCLUDED 1
 
-	#include <v3270/v3270ft.h>
-	#include <v3270/v3270ftprogress.h>
+	#include <v3270/filetransfer.h>
+	#include <v3270/ftprogress.h>
 	#include <lib3270.h>
 	#include <lib3270/filetransfer.h>
 
