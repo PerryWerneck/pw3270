@@ -30,7 +30,6 @@
  *
  */
 
- #include <pw3270.h>
  #include <lib3270.h>
  #include <lib3270/actions.h>
  #include <lib3270/log.h>

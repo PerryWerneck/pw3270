@@ -34,7 +34,6 @@
 #endif // WIN32
 
  #include <gtk/gtk.h>
- #include <pw3270.h>
  #include <lib3270.h>
  #include <lib3270/session.h>
  #include <lib3270/actions.h>
@@ -407,7 +406,7 @@ static void v3270_class_init(v3270Class *klass)
 						G_SIGNAL_RUN_FIRST,
 						G_STRUCT_OFFSET (v3270Class, toggle_changed),
 						NULL, NULL,
-						v3270_VOID__VOID_ENUM_BOOL_POINTER,
+						v3270_VOID__VOID_ENUM_BOOLEAN_POINTER,
 						G_TYPE_NONE, 3, G_TYPE_UINT, G_TYPE_BOOLEAN, G_TYPE_STRING);
 
 	v3270_widget_signal[SIGNAL_MESSAGE_CHANGED] =
@@ -425,7 +424,7 @@ static void v3270_class_init(v3270Class *klass)
 						G_SIGNAL_RUN_LAST,
 						G_STRUCT_OFFSET (v3270Class, keypress),
 						NULL, NULL,
-						v3270_BOOL__VOID_UINT_ENUM,
+						v3270_BOOLEAN__VOID_UINT_ENUM,
 						G_TYPE_BOOLEAN, 2, G_TYPE_UINT, G_TYPE_UINT);
 
 	v3270_widget_signal[SIGNAL_CONNECTED] =
@@ -470,7 +469,7 @@ static void v3270_class_init(v3270Class *klass)
 						G_SIGNAL_RUN_FIRST,
 						0,
 						NULL, NULL,
-						v3270_VOID__VOID_BOOL,
+						v3270_VOID__VOID_BOOLEAN,
 						G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 
 	v3270_widget_signal[SIGNAL_POPUP] =
@@ -479,7 +478,7 @@ static void v3270_class_init(v3270Class *klass)
 						G_SIGNAL_RUN_LAST,
 						0,
 						NULL, NULL,
-						v3270_BOOL__VOID_BOOL_BOOL_POINTER,
+						v3270_BOOLEAN__VOID_BOOLEAN_BOOLEAN_POINTER,
 						G_TYPE_BOOLEAN, 3, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN, G_TYPE_POINTER);
 
 	v3270_widget_signal[SIGNAL_PASTENEXT] =
@@ -488,7 +487,7 @@ static void v3270_class_init(v3270Class *klass)
 						G_SIGNAL_RUN_FIRST,
 						0,
 						NULL, NULL,
-						v3270_VOID__VOID_BOOL,
+						v3270_VOID__VOID_BOOLEAN,
 						G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 
 	v3270_widget_signal[SIGNAL_CLIPBOARD] =
@@ -497,7 +496,7 @@ static void v3270_class_init(v3270Class *klass)
 						G_SIGNAL_RUN_FIRST,
 						0,
 						NULL, NULL,
-						v3270_VOID__VOID_BOOL,
+						v3270_VOID__VOID_BOOLEAN,
 						G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 
 	v3270_widget_signal[SIGNAL_CHANGED] =
@@ -524,7 +523,7 @@ static void v3270_class_init(v3270Class *klass)
 						G_SIGNAL_RUN_LAST,
 						0,
 						NULL, NULL,
-						v3270_BOOL__VOID_BOOL_UINT_POINTER,
+						v3270_BOOLEAN__VOID_BOOLEAN_UINT_POINTER,
 						G_TYPE_BOOLEAN, 3, G_TYPE_BOOLEAN, G_TYPE_UINT, G_TYPE_POINTER);
 
 
