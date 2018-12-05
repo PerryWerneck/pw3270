@@ -90,9 +90,6 @@ $(BINDBG)/@DLLPREFIX@@LIB3270_NAME@@DLLEXT@: \
 	@$(MKDIR) `dirname $@`
 	@$(MAKE) -C modules/lib3270 Debug
 
-	@$(MKDIR) $(BINDBG)
-	@cp ./modules/lib3270/.bin/Debug/* $(BINDBG)
-
 $(BINDBG)/@DLLPREFIX@v@LIB3270_NAME@@DLLEXT@: \
 	modules/libv3270/* \
 	modules/libv3270/src/v3270/* \
@@ -101,9 +98,6 @@ $(BINDBG)/@DLLPREFIX@v@LIB3270_NAME@@DLLEXT@: \
 
 	@$(MKDIR) `dirname $@`
 	@$(MAKE) -C modules/libv3270 Debug
-
-	@$(MKDIR) $(BINDBG)
-	@cp ./modules/libv3270/.bin/Debug/* $(BINDBG)
 
 $(BINDBG)/%@EXEEXT@: \
 	$(BINDBG)/@DLLPREFIX@@LIB3270_NAME@@DLLEXT@ \

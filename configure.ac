@@ -38,8 +38,6 @@ AC_INIT([pw3270], [5.2], [perry.werneck@gmail.com])
 
 dnl Place auxilliary scripts here.
 AC_CONFIG_AUX_DIR([scripts])
-AC_CONFIG_SUBDIRS([modules/lib3270])
-AC_CONFIG_SUBDIRS([modules/libv3270])
 
 dnl Compute the canonical host-system type
 AC_CANONICAL_HOST
@@ -417,6 +415,19 @@ AC_SUBST(PW3270_LIBS,-l$PACKAGE_TARNAME)
 
 AC_DEFINE(LIB3270_NAME,$app_cv_libname)
 AC_SUBST(LIB3270_NAME,$app_cv_libname)
+
+AX_SUBDIRS_CONFIGURE(
+	[modules/lib3270],
+	[--with-work-dir=$ac_pwd],
+	[--with-libname=$app_cv_libname]
+)
+
+AX_SUBDIRS_CONFIGURE(
+	[modules/libv3270],
+	[LIB3270_CFLAGS=-I$ac_pwd/modules/lib3270/src/include],
+	[LIB3270_LIBS=-l$app_cv_libname],
+	[--with-work-dir=$ac_pwd]
+)
 
 dnl ---------------------------------------------------------------------------
 dnl Check for headers
