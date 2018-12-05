@@ -31,7 +31,7 @@ LIB_SOURCES=window.c actions.c fonts.c dialog.c hostdialog.c print.c colors.c \
 
 APP_SOURCES=main.c @APP_RESOURCES@
 
-MODULES=v3270 uiparser v3270ft common
+MODULES=uiparser common
 
 #---[ Configuration values ]-------------------------------------------------------------
 
@@ -76,15 +76,23 @@ MSGCAT=@MSGCAT@
 CONVERT=@CONVERT@
 WINDRES=@WINDRES@
 
-CFLAGS=@CFLAGS@ \
+CFLAGS= \
+	@CFLAGS@ \
 	@LIB3270_CFLAGS@ \
 	@PW3270_CFLAGS@ \
 	-Wno-deprecated-declarations \
-	@LIBSSL_CFLAGS@ @GTK_CFLAGS@ \
+	@LIBSSL_CFLAGS@ \
+	@GTK_CFLAGS@ \
 	-DLIBDIR=\"$(libdir)\" \
 	-DDATAROOTDIR=\"$(datarootdir)\"
 
-LIBS=@LIBS@ @LIBSSL_LIBS@ @GTK_LIBS@ @LIB3270_LIBS@
+LIBS= \
+	@LIBS@ \
+	@LIBSSL_LIBS@ \
+	@GTK_LIBS@ \
+	@LIB3270_LIBS@ \
+	@LIBV3270_LIBS@
+
 LDFLAGS=@LDFLAGS@
 APP_LDFLAGS=@APP_LDFLAGS@
 
@@ -93,8 +101,9 @@ APP_LDFLAGS=@APP_LDFLAGS@
 DEPENDS=\
 	$(BASEDIR)/src/include/*.h \
 	@LIB3270_INCLUDEPATH@/*.h \
-	$(BASEDIR)/src/include/pw3270/*.h \
-	$(BASEDIR)/src/include/v3270/*.h \
+	@LIB3270_INCLUDEPATH@/lib3270/*.h \
+	@LIBV3270_INCLUDEPATH@/*.h \
+	@LIB3270_INCLUDEPATH@/v3270/*.h \
 	*.h \
 	Makefile
 
@@ -339,8 +348,6 @@ cleanDebug:
 			$(BINDBG)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@ \
 			$(BINDBG)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@
 
-	@make -C v3270 cleanDebug
-	@make -C v3270ft cleanDebug
 	@make -C uiparser cleanDebug
 	@make -C common cleanDebug
 
@@ -351,8 +358,6 @@ cleanRelease:
 			$(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@ \
 			$(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@
 
-	@make -C v3270 cleanRelease
-	@make -C v3270ft cleanRelease
 	@make -C uiparser cleanRelease
 	@make -C common cleanRelease
 

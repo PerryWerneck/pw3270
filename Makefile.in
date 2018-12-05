@@ -81,10 +81,11 @@ Release: \
 
 #---[ Debug Rules ]----------------------------------------------------------------------
 
-$(BINDBG)/@DLLPREFIX@3270@DLLEXT@: \
+$(BINDBG)/@DLLPREFIX@@LIB3270_NAME@@DLLEXT@: \
 	modules/lib3270/* \
 	modules/lib3270/src/lib3270/* \
-	modules/lib3270/src/include/*
+	modules/lib3270/src/include/* \
+	modules/lib3270/src/include/lib3270/*
 
 	@$(MKDIR) `dirname $@`
 	@$(MAKE) -C modules/lib3270 Debug
@@ -92,8 +93,21 @@ $(BINDBG)/@DLLPREFIX@3270@DLLEXT@: \
 	@$(MKDIR) $(BINDBG)
 	@cp ./modules/lib3270/.bin/Debug/* $(BINDBG)
 
+$(BINDBG)/@DLLPREFIX@v@LIB3270_NAME@@DLLEXT@: \
+	modules/libv3270/* \
+	modules/libv3270/src/v3270/* \
+	modules/libv3270/src/include/* \
+	modules/libv3270/src/include/v3270/* \
+
+	@$(MKDIR) `dirname $@`
+	@$(MAKE) -C modules/libv3270 Debug
+
+	@$(MKDIR) $(BINDBG)
+	@cp ./modules/libv3270/.bin/Debug/* $(BINDBG)
+
 $(BINDBG)/%@EXEEXT@: \
-	$(BINDBG)/@DLLPREFIX@3270@DLLEXT@ \
+	$(BINDBG)/@DLLPREFIX@@LIB3270_NAME@@DLLEXT@ \
+	$(BINDBG)/@DLLPREFIX@v@LIB3270_NAME@@DLLEXT@ \
 	src/% \
 	src/%/*
 
@@ -140,6 +154,7 @@ $(DESTDIR)/$(libdir)/pw3270-plugins/%@DLLEXT@: \
 install: \
 	locale/$(PACKAGE_TARNAME).pot \
 	install-lib3270 \
+	install-libv3270 \
 	install-pw3270 \
 	install-branding \
 	install-ui \
@@ -252,6 +267,7 @@ cleanDebug:
 	@rm -fr $(OBJDBG)
 	@rm -fr $(BINDBG)
 	@$(MAKE) -C modules/lib3270 $@
+	@$(MAKE) -C modules/libv3270 $@
 	@$(MAKE) -C src/pw3270 $@
 
 cleanRelease:
@@ -259,6 +275,7 @@ cleanRelease:
 	@rm -fr $(OBJRLS)
 	@rm -fr $(BINRLS)
 	@$(MAKE) -C modules/lib3270 $@
+	@$(MAKE) -C modules/libv3270 $@
 	@$(MAKE) -C src/pw3270 $@
 
 
