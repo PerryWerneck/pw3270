@@ -79,6 +79,7 @@ WINDRES=@WINDRES@
 CFLAGS= \
 	@CFLAGS@ \
 	@LIB3270_CFLAGS@ \
+	@LIBV3270_CFLAGS@ \
 	@PW3270_CFLAGS@ \
 	-Wno-deprecated-declarations \
 	@LIBSSL_CFLAGS@ \
@@ -109,7 +110,7 @@ $(OBJDBG)/%.o: \
 
 	@echo $< ...
 	@$(MKDIR) `dirname $@`
-	$(CC) $(CFLAGS) \
+	@$(CC) $(CFLAGS) \
 		@DBG_CFLAGS@ \
 		-DBUILD_DATE=`date +"0x%Y%m%d"`\
 		-o $@ -c $<
