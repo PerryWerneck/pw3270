@@ -25,10 +25,13 @@ Building for Linux
 
 
 
-Cross-compiling for Windows
+Building for Windows
 ===========================
 
-1. First install the MinGW Repositories to your SuSE version from:
+Cross-compiling on SuSE Linux (or WSL)
+--------------------------------------
+
+1. First add the MinGW Repositories for your SuSE version from:
 
 	* 32 bits: https://build.opensuse.org/project/show/windows:mingw:win32
 	* 64 bits: https://build.opensuse.org/project/show/windows:mingw:win64
