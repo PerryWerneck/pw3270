@@ -217,8 +217,7 @@ $(POTDIR)/%.pot: \
  
 	@echo $(notdir $@) ...
 	@mkdir -p `dirname $@`
-	@$(MAKE) -C modules/$(basename $(notdir $@)) locale
-	@cp modules/$(basename $(notdir $@))/$(basename $(notdir $@)).pot $@
+	@$(MAKE) -C modules/$(basename $(notdir $@)) $@
 
 $(POTDIR)/%.pot: \
 	./%/*
@@ -249,6 +248,7 @@ locale: \
 locale/$(PACKAGE_TARNAME).pot: \
 	$(POTDIR)/pw3270.pot \
 	$(POTDIR)/lib3270.pot \
+	$(POTDIR)/libv3270.pot \
 	$(POTDIR)/ui.pot \
 	$(foreach PLG, $(PLUGINS), $(POTDIR)/plugins/$(PLG).pot)
 
