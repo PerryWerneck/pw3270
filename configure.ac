@@ -416,18 +416,8 @@ AC_SUBST(PW3270_LIBS,-l$PACKAGE_TARNAME)
 AC_DEFINE(LIB3270_NAME,$app_cv_libname)
 AC_SUBST(LIB3270_NAME,$app_cv_libname)
 
-AX_SUBDIRS_CONFIGURE(
-	[modules/lib3270],
-	[--with-work-dir=$ac_pwd],
-	[--with-libname=$app_cv_libname]
-)
-
-AX_SUBDIRS_CONFIGURE(
-	[modules/libv3270],
-	[LIB3270_CFLAGS=-I$ac_pwd/modules/lib3270/src/include],
-	[LIB3270_LIBS=-l$app_cv_libname],
-	[--with-work-dir=$ac_pwd]
-)
+AX_SUBDIRS_CONFIGURE([modules/lib3270],[[--with-work-dir=$ac_pwd],[--with-libname=$app_cv_libname]])
+AX_SUBDIRS_CONFIGURE([modules/libv3270],[[LIB3270_CFLAGS=-I$ac_pwd/modules/lib3270/src/include],[LIB3270_LIBS=-l$app_cv_libname],[--with-work-dir=$ac_pwd],[--with-libname=$app_cv_libname]])
 
 dnl ---------------------------------------------------------------------------
 dnl Check for headers
