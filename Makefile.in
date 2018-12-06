@@ -133,16 +133,9 @@ $(BINRLS)/@DLLPREFIX@v@LIB3270_NAME@@DLLEXT@: \
 	@$(MKDIR) `dirname $@`
 	@$(MAKE) -C modules/libv3270 $@
 
-$(BINRLS)/@DLLPREFIX@3270@DLLEXT@: \
-	modules/lib3270/* \
-	modules/lib3270/src/lib3270/* \
-	modules/lib3270/src/include/*
-
-	@$(MKDIR) `dirname $@`
-	@$(MAKE) -C modules/lib3270 $@
-
 $(BINRLS)/%@EXEEXT@: \
-	$(BINRLS)/@DLLPREFIX@3270@DLLEXT@ \
+	$(BINRLS)/@DLLPREFIX@@LIB3270_NAME@@DLLEXT@ \
+	$(BINRLS)/@DLLPREFIX@v@LIB3270_NAME@@DLLEXT@ \
         src/% \
         src/%/*
 
