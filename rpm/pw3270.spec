@@ -136,6 +136,7 @@ BuildRequires:  sed
 BuildRequires:	optipng
 BuildRequires:	fdupes
 BuildRequires:	ImageMagick
+BuildRequires:	autoconf-archive
 
 %if 0%{?_help2man}
 BuildRequires:	help2man
@@ -161,13 +162,25 @@ GTK-based IBM 3270 terminal emulator with many advanced features. It can be used
 
 This package contains the tn3270 protocol library for %{name}.
 
+%package -n lib3270++%{_libvrs}
+Summary:        3270 Communication library for %{name}
+Group:          System/Libraries
+Provides:	lib3270 = %{version}
+
+Conflicts:      otherproviders(lib3270++%{_libvrs})
+
+%description -n lib3270++%{_libvrs}
+GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
+
+This package contains the tn3270 protocol library for %{name}.
+
 %package -n libv3270-%{_libvrs}
 Summary:        3270 Communication library for %{name}
 Group:          System/Libraries
 Provides:	lib3270 = %{version}
 
-Provides:       lib3270_%{MAJOR_VERSION}_%{MINOR_VERSION}
-Conflicts:      otherproviders(lib3270_%{MAJOR_VERSION}_%{MINOR_VERSION})
+Provides:       lib3270_%{_libvrs}
+Conflicts:      otherproviders(lib3270_%{_libvrs})
 
 %description -n libv3270-%{_libvrs}
 GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
@@ -180,9 +193,13 @@ This package contains the tn3270 protocol library for %{name}.
 Summary:        Devel for 3270 Communication library for %{name}
 Group:          Development/Libraries/C and C++
 Requires:       lib3270-%{_libvrs} = %{version}
+Requires:       lib3270++%{_libvrs} = %{version}
 
-Provides:       lib3270-devel = %{version}
-Conflicts:      otherproviders(lib3270-devel)
+Provides:       lib3270-%{_libvrs}-devel
+Conflicts:      otherproviders(lib3270-%{_libvrs}-devel)
+
+Provides:       lib3270++%{_libvrs}-devel
+Conflicts:      otherproviders(lib3270++%{_libvrs}-devel)
 
 %description -n lib3270-devel
 GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
@@ -302,15 +319,24 @@ rm %{buildroot}/%{_datadir}/pw3270/ui/*rexx*.xml
 
 %dir %{_libdir}/pw3270-plugins
 
+%defattr(-,root,root)
+%{_libdir}/libpw3270.so.%{MAJOR_VERSION}.%{MINOR_VERSION}
+%{_libdir}/libpw3270.so.%{MAJOR_VERSION}
+
 %files -n lib3270-%{_libvrs}
 %defattr(-,root,root)
 %{_libdir}/lib3270.so.%{MAJOR_VERSION}.%{MINOR_VERSION}
 %{_libdir}/lib3270.so.%{MAJOR_VERSION}
 
-%files -n libpw3270-%{_libvrs}
+%files -n lib3270++%{_libvrs}
 %defattr(-,root,root)
-%{_libdir}/libpw3270.so.%{MAJOR_VERSION}.%{MINOR_VERSION}
-%{_libdir}/libpw3270.so.%{MAJOR_VERSION}
+%{_libdir}/lib3270++.so.%{MAJOR_VERSION}.%{MINOR_VERSION}
+%{_libdir}/lib3270++.so.%{MAJOR_VERSION}
+
+%files -n libv3270-%{_libvrs}
+%defattr(-,root,root)
+%{_libdir}/libv3270.so.%{MAJOR_VERSION}.%{MINOR_VERSION}
+%{_libdir}/libv3270.so.%{MAJOR_VERSION}
 
 %files -n lib3270-devel
 %defattr(-,root,root)
@@ -321,22 +347,29 @@ rm %{buildroot}/%{_datadir}/pw3270/ui/*rexx*.xml
 %{_libdir}/lib3270.a
 %{_datadir}/pw3270/locale
 
+%{_libdir}/lib3270++.a
+%{_libdir}/lib3270++.so
+%{_includedir}/lib3270++.h
+%{_libdir}/pkgconfig/lib3270++.pc
+
 %files devel
 %defattr(-,root,root)
 
-%{_includedir}/pw3270
 %{_includedir}/pw3270.h
-
-%{_includedir}/v3270
 %{_includedir}/v3270.h
+
+%{_includedir}/pw3270
+%{_includedir}/libv3270
+
+%{_libdir}/libv3270.a
+%{_libdir}/libv3270.so
+%{_libdir}/libpw3270.so
+
+%{_libdir}/pkgconfig/pw3270.pc
+%{_libdir}/pkgconfig/libv3270.pc
 
 %{_datadir}/pw3270/ui/98trace.xml
 %{_datadir}/pw3270/ui/99debug.xml
-%{_libdir}/libpw3270.so
-%{_libdir}/pkgconfig/pw3270.pc
-
-#%{_libdir}/libpw3270cpp.a
-#%{_includedir}/pw3270cpp.h
 
 %if 0%{?_dbus}
 %files plugin-dbus
@@ -348,8 +381,10 @@ rm %{buildroot}/%{_datadir}/pw3270/ui/*rexx*.xml
 
 %post   -n lib3270-%{_libvrs} -p /sbin/ldconfig
 %postun -n lib3270-%{_libvrs} -p /sbin/ldconfig
-%post   -n libpw3270-%{_libvrs} -p /sbin/ldconfig
-%postun -n libpw3270-%{_libvrs} -p /sbin/ldconfig
+%post   -n libv3270-%{_libvrs} -p /sbin/ldconfig
+%postun -n libv3270-%{_libvrs} -p /sbin/ldconfig
+%post   -n lib3270++%{_libvrs} -p /sbin/ldconfig
+%postun -n lib3270++%{_libvrs} -p /sbin/ldconfig
 
 %changelog
 
