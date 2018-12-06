@@ -345,7 +345,6 @@ rm %{buildroot}/%{_datadir}/pw3270/ui/*rexx*.xml
 %{_libdir}/pkgconfig/lib3270.pc
 %{_libdir}/lib3270.so
 %{_libdir}/lib3270.a
-%{_datadir}/pw3270/locale
 
 %{_libdir}/lib3270++.a
 %{_libdir}/lib3270++.so
@@ -355,18 +354,20 @@ rm %{buildroot}/%{_datadir}/pw3270/ui/*rexx*.xml
 %files devel
 %defattr(-,root,root)
 
+%{_datadir}/pw3270/locale
+
 %{_includedir}/pw3270.h
 %{_includedir}/v3270.h
 
 %{_includedir}/pw3270
-%{_includedir}/libv3270
+%{_includedir}/v3270
 
 %{_libdir}/libv3270.a
 %{_libdir}/libv3270.so
 %{_libdir}/libpw3270.so
 
 %{_libdir}/pkgconfig/pw3270.pc
-%{_libdir}/pkgconfig/libv3270.pc
+%{_libdir}/pkgconfig/v3270.pc
 
 %{_datadir}/pw3270/ui/98trace.xml
 %{_datadir}/pw3270/ui/99debug.xml
