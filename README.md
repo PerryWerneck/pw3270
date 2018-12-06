@@ -29,7 +29,7 @@ Building for Windows
 ===========================
 
 Cross-compiling on SuSE Linux (Native or WSL)
---------------------------------------------
+---------------------------------------------
 
 1. First add the MinGW Repositories for your SuSE version from:
 
