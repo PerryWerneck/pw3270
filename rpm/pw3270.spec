@@ -151,21 +151,28 @@ Based on the original x3270 code, pw3270 was originally created for Banco do Bra
 %package -n lib3270-%{_libvrs}
 Summary:        3270 Communication library for %{name}
 Group:          System/Libraries
-Provides:		lib3270 = %{version}
+Provides:	lib3270 = %{version}
+
+Provides:       lib3270_%{MAJOR_VERSION}_%{MINOR_VERSION}
+Conflicts:      otherproviders(lib3270_%{MAJOR_VERSION}_%{MINOR_VERSION})
 
 %description -n lib3270-%{_libvrs}
 GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
 
 This package contains the tn3270 protocol library for %{name}.
 
-%package -n libpw3270-%{_libvrs}
-Summary:        3270 terminal emulation library
+%package -n libv3270-%{_libvrs}
+Summary:        3270 Communication library for %{name}
 Group:          System/Libraries
+Provides:	lib3270 = %{version}
 
-%description -n libpw3270-%{_libvrs}
+Provides:       lib3270_%{MAJOR_VERSION}_%{MINOR_VERSION}
+Conflicts:      otherproviders(lib3270_%{MAJOR_VERSION}_%{MINOR_VERSION})
+
+%description -n libv3270-%{_libvrs}
 GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
 
-This package contains the terminal emulator library.
+This package contains the tn3270 protocol library for %{name}.
 
 #--[ Devel ]----------------------------------------------------------------------------------------------------------
 
@@ -173,6 +180,9 @@ This package contains the terminal emulator library.
 Summary:        Devel for 3270 Communication library for %{name}
 Group:          Development/Libraries/C and C++
 Requires:       lib3270-%{_libvrs} = %{version}
+
+Provides:       lib3270-devel = %{version}
+Conflicts:      otherproviders(lib3270-devel)
 
 %description -n lib3270-devel
 GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
@@ -183,8 +193,13 @@ This package contains the development files for tn3270 protocol library for %{na
 Summary:        Files required for development of %{name} plugins
 Group:          Development/Libraries/C and C++
 Requires:       pkgconfig(lib3270) = %{version}
-Requires:		pkgconfig(gtk+-3.0)
-Requires:       libpw3270-%{_libvrs} = %{version}
+
+Requires:	pkgconfig(gtk+-3.0)
+Requires:	lib3270-devel = %{version}
+
+Provides:	libv3270-devel = %{version}
+Conflicts:      otherproviders(libv3270-devel)
+
 
 %description -n %{name}-devel
 GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
@@ -217,8 +232,10 @@ aclocal
 autoconf
 
 NOCONFIGURE=1 ./modules/lib3270/autogen.sh
+NOCONFIGURE=1 ./modules/libv3270/autogen.sh
 
-%configure --with-release=%{release}
+%configure \
+	--with-release=%{release}
 
 %build
 make clean

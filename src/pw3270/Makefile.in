@@ -268,9 +268,8 @@ install: \
 
 install-devel:
 
-	@mkdir -p $(DESTDIR)$(includedir)/pw3270
-	@mkdir -p $(DESTDIR)$(includedir)/v3270
 	@mkdir -p $(DESTDIR)$(libdir)/pkgconfig
+	@mkdir -p $(DESTDIR)$(includedir)/pw3270
 
 	# Install includes
 	@$(INSTALL_DATA) \
@@ -278,15 +277,7 @@ install-devel:
 		$(DESTDIR)$(includedir)/pw3270
 
 	@$(INSTALL_DATA) \
-		$(BASEDIR)/src/include/v3270/*.h \
-		$(DESTDIR)$(includedir)/v3270
-
-	@$(INSTALL_DATA) \
 		$(BASEDIR)/src/include/pw3270.h \
-		$(DESTDIR)$(includedir)
-
-	@$(INSTALL_DATA) \
-		$(BASEDIR)/src/include/v3270.h \
 		$(DESTDIR)$(includedir)
 
 	# Install PKG-CONFIG files
