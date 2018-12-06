@@ -88,7 +88,7 @@ $(BINDBG)/@DLLPREFIX@@LIB3270_NAME@@DLLEXT@: \
 	modules/lib3270/src/include/lib3270/*
 
 	@$(MKDIR) `dirname $@`
-	@$(MAKE) -C modules/lib3270 Debug
+	@$(MAKE) -C modules/lib3270 $@
 
 $(BINDBG)/@DLLPREFIX@v@LIB3270_NAME@@DLLEXT@: \
 	modules/libv3270/* \
@@ -97,7 +97,7 @@ $(BINDBG)/@DLLPREFIX@v@LIB3270_NAME@@DLLEXT@: \
 	modules/libv3270/src/include/v3270/* \
 
 	@$(MKDIR) `dirname $@`
-	@$(MAKE) -C modules/libv3270 Debug
+	@$(MAKE) -C modules/libv3270 $@
 
 $(BINDBG)/%@EXEEXT@: \
 	$(BINDBG)/@DLLPREFIX@@LIB3270_NAME@@DLLEXT@ \
@@ -115,15 +115,31 @@ $(BINDBG)/plugins/%@DLLEXT@: \
 
 #---[ Release Rules ]--------------------------------------------------------------------
 
+$(BINRLS)/@DLLPREFIX@@LIB3270_NAME@@DLLEXT@: \
+	modules/lib3270/* \
+	modules/lib3270/src/lib3270/* \
+	modules/lib3270/src/include/* \
+	modules/lib3270/src/include/lib3270/*
+
+	@$(MKDIR) `dirname $@`
+	@$(MAKE) -C modules/lib3270 $@
+
+$(BINRLS)/@DLLPREFIX@v@LIB3270_NAME@@DLLEXT@: \
+	modules/libv3270/* \
+	modules/libv3270/src/v3270/* \
+	modules/libv3270/src/include/* \
+	modules/libv3270/src/include/v3270/* \
+
+	@$(MKDIR) `dirname $@`
+	@$(MAKE) -C modules/libv3270 $@
+
 $(BINRLS)/@DLLPREFIX@3270@DLLEXT@: \
 	modules/lib3270/* \
 	modules/lib3270/src/lib3270/* \
 	modules/lib3270/src/include/*
 
 	@$(MKDIR) `dirname $@`
-	@$(MAKE) -C modules/lib3270 Release
-
-	@cp ./modules/lib3270/.bin/Release/* $(BINRLS)
+	@$(MAKE) -C modules/lib3270 $@
 
 $(BINRLS)/%@EXEEXT@: \
 	$(BINRLS)/@DLLPREFIX@3270@DLLEXT@ \
