@@ -29,6 +29,8 @@
  *
  */
 
+#include <config.h>
+
 #include <glib.h>
 #include <glib/gstdio.h>
 #include "globals.h"
@@ -352,7 +354,7 @@ static gboolean startup(GtkWidget *toplevel)
 
 int main(int argc, char *argv[])
 {
-	static const gchar	* session_name	= PACKAGE_NAME;
+	static const gchar	* session_name	= NULL;
 	static const gchar	* host			= NULL;
 	int 				  rc 			= 0;
 
@@ -380,7 +382,7 @@ int main(int argc, char *argv[])
 			{ "appname",		'a', 0, G_OPTION_ARG_STRING,	&appname,			N_( "Application name" ),							PACKAGE_NAME	},
 			{ "datadir",		'd', 0, G_OPTION_ARG_CALLBACK,	datadir,			N_( "Path to application data files" ),				NULL         	},
 #endif // WIN32
-			{ "session",		's', 0, G_OPTION_ARG_STRING,	&session_name,		N_( "Session name" ),								PACKAGE_NAME	},
+			{ "session",		's', 0, G_OPTION_ARG_STRING,	&session_name,		N_( "Session name" ),								NULL			},
 			{ "host",			'h', 0, G_OPTION_ARG_STRING,	&host,				N_( "Host to connect"),								NULL			},
 			{ "colors",			'c', 0, G_OPTION_ARG_CALLBACK,	optcolors,			N_( "Set reported colors (8/16)" ),					"16"			},
             { "systype",		't', 0, G_OPTION_ARG_STRING,	&systype,			N_( "Host system type" ),							"S390"			},
@@ -546,7 +548,15 @@ int main(int argc, char *argv[])
 
 		pw3270_load_plugins(pluginpath);
 		toplevel = pw3270_new(host,systype,syscolors);
-		pw3270_set_session_name(toplevel,session_name);
+
+		if(session_name)
+		{
+			pw3270_set_session_name(toplevel,session_name);
+		}
+		else
+		{
+            pw3270_set_session_name(toplevel,g_get_application_name());
+		}
 
 		if(toggleset)
 		{
