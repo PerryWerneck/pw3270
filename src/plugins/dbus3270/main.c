@@ -20,12 +20,14 @@
  *
  * Este programa está nomeado como main.c e possui - linhas de código.
  *
+ * Referências:
+ *
+ * https://github.com/fbuihuu/samples-dbus/blob/master/dbus-server.c
+ *
  * Contatos:
  *
  * perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
  * erico.mendonca@gmail.com	(Erico Mascarenhas Mendonça)
- * licinio@bb.com.br		(Licínio Luis Branco)
- * kraucer@bb.com.br		(Kraucer Fernandes Mazuco)
  *
  */
 
