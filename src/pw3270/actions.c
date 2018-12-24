@@ -255,6 +255,7 @@ G_GNUC_INTERNAL void transfer_action(GtkAction *action, GtkWidget *widget)
 
 static void connect_standard_action(GtkAction *action, GtkWidget *widget, const gchar *name)
 {
+	/*
 	#undef DECLARE_LIB3270_ACTION
 	#undef DECLARE_LIB3270_CLEAR_SELECTION_ACTION
 	#undef DECLARE_LIB3270_KEY_ACTION
@@ -275,6 +276,7 @@ static void connect_standard_action(GtkAction *action, GtkWidget *widget, const 
 	{
 		#include <lib3270/action_table.h>
 	};
+	*/
 
 	static const struct _gtk_action
 	{
@@ -304,6 +306,19 @@ static void connect_standard_action(GtkAction *action, GtkWidget *widget, const 
 	int f;
 
 	// Search for lib3270 predefined actions
+	const LIB3270_ACTION_ENTRY * lib3270_actions = lib3270_get_action_table();
+
+	for(f=0; lib3270_actions[f].name; f++)
+	{
+		if(!g_ascii_strcasecmp(name,lib3270_actions[f].name))
+		{
+			g_object_set_data(G_OBJECT(action),"lib3270_call",lib3270_actions[f].call);
+			g_signal_connect(action,"activate",G_CALLBACK(do_lib3270_action),widget);
+			return;
+		}
+	}
+
+	/*
 	for(f=0;f<G_N_ELEMENTS(lib3270_entry);f++)
 	{
 		if(!g_ascii_strcasecmp(name,lib3270_entry[f].name))
@@ -313,6 +328,7 @@ static void connect_standard_action(GtkAction *action, GtkWidget *widget, const 
 			return;
 		}
 	}
+	*/
 
 	// Search for application actions
 	for(f=0;f<G_N_ELEMENTS(gtk_action);f++)

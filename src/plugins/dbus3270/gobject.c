@@ -118,12 +118,8 @@ void pw3270_dbus_set_ur_l(PW3270Dbus *object, const gchar *uri, DBusGMethodInvoc
 
 void pw3270_dbus_get_ur_l(PW3270Dbus *object, DBusGMethodInvocation *context)
 {
-	char buffer[1024];
-
 	trace("%s object=%p context=%p",__FUNCTION__,object,context);
-
-	lib3270_get_url(pw3270_dbus_get_session_handle(PW3270_DBUS(object)),buffer,sizeof(buffer));
-	dbus_g_method_return(context,buffer);
+	dbus_g_method_return(context,lib3270_get_url(pw3270_dbus_get_session_handle(PW3270_DBUS(object))));
 }
 
 
