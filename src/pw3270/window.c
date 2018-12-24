@@ -210,10 +210,10 @@
  	v3270_connect(GTK_PW3270(widget)->terminal);
  }
 
- const gchar * pw3270_set_url(GtkWidget *widget, const gchar *uri)
+ void pw3270_set_url(GtkWidget *widget, const gchar *uri)
  {
  	g_return_val_if_fail(GTK_IS_PW3270(widget),"");
- 	return v3270_set_url(GTK_PW3270(widget)->terminal,uri);
+ 	v3270_set_url(GTK_PW3270(widget)->terminal,uri);
  }
 
  const gchar * pw3270_get_hostname(GtkWidget *widget)
