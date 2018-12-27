@@ -76,7 +76,7 @@ JNIEXPORT jbyteArray JNICALL Java_br_com_bb_pw3270_lib3270_getText(JNIEnv *env, 
 
 //	trace("%s starts",__FUNCTION__);
 
-	char *text = lib3270_get_text(PW3270_SESSION,0,-1,'\n');
+	char *text = lib3270_get_string_at_address(PW3270_SESSION,0,-1,'\n');
 
 	if(text)
 	{

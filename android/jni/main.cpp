@@ -78,7 +78,7 @@ static void changed(H3270 *session, int offset, int len)
 	trace("%s: offset=%d len=%d",__FUNCTION__,offset,len);
 
 	{
-		char *text = lib3270_get_text(PW3270_SESSION,0,-1,'\n');
+		char *text = lib3270_get_string_at_address(PW3270_SESSION,0,-1,'\n');
 		if(text)
 		{
 			char *strtok_r(char *str, const char *delim, char **saveptr);

@@ -70,7 +70,7 @@
 	else
 	{
 		/* Host is ready, get screen contents */
-		char *text = lib3270_get_text(hSession,0,-1);
+		char *text = lib3270_get_string_at_address(hSession,0,-1);
 
 		printf("\nScreen contents:\n%s\n",text);
 

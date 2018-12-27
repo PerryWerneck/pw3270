@@ -206,7 +206,7 @@
 				{ (void **) & _pfkey,					"lib3270_pfkey"						},
 				{ (void **) & _pakey,					"lib3270_pakey"						},
 				{ (void **) & _wait_for_ready,			"lib3270_wait_for_ready"			},
-				{ (void **) & _get_text,				"lib3270_get_text"					},
+				{ (void **) & _get_text,				"lib3270_get_string_at_address"		},
 				{ (void **) & _get_text_at,				"lib3270_get_text_at"				},
 				{ (void **) & _cmp_text_at,				"lib3270_cmp_text_at"				},
 				{ (void **) & _set_text_at,				"lib3270_set_string_at"				},

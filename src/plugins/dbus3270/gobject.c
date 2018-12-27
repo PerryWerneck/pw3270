@@ -226,7 +226,7 @@ void pw3270_dbus_get_screen_contents(PW3270Dbus *object, DBusGMethodInvocation *
 	if(pw3270_dbus_check_valid_state(object,context))
 		return;
 
-	text = lib3270_get_text(hSession,0,-1,'\n');
+	text = lib3270_get_string_at_address(hSession,0,-1,'\n');
 
 	utftext = g_convert_with_fallback(text,-1,"UTF-8",lib3270_get_display_charset(hSession),"?",NULL,NULL,NULL);
 

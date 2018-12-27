@@ -305,7 +305,7 @@
 		break;
 
 	case HLLAPI_PACKET_GET_TEXT_AT_OFFSET:
-		send_text(source,lib3270_get_text(	lib3270_get_default_session_handle(),
+		send_text(source,lib3270_get_string_at_address(	lib3270_get_default_session_handle(),
 											((struct hllapi_packet_query_offset *) source->buffer)->addr,
 											((struct hllapi_packet_query_offset *) source->buffer)->len,
 											((struct hllapi_packet_query_offset *) source->buffer)->lf));
