@@ -49,3 +49,4 @@ makeruntime.sh
 scripts
 locale
 *.xz
+src/include/lib3270
