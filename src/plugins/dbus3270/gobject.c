@@ -291,7 +291,7 @@ void pw3270_dbus_get_text_at(PW3270Dbus *object, int row, int col, int len, char
 	if(pw3270_dbus_check_valid_state(object,context))
 		return;
 
-	text = lib3270_get_text_at(hSession, row, col, len, lf);
+	text = lib3270_get_string_at(hSession, row, col, len, lf);
 	if(!text)
 	{
 		GError *error = pw3270_dbus_get_error_from_errno(errno);
@@ -323,7 +323,7 @@ void pw3270_dbus_get_text_at(PW3270Dbus *object, int row, int col, int len, char
 		len = lib3270_get_length(hSession);
 	}
 
-	text = lib3270_get_text(hSession,offset,len,lf);
+	text = lib3270_get_string_at_address(hSession,offset,len,lf);
 	if(!text)
 	{
 		GError *error = pw3270_dbus_get_error_from_errno(errno);

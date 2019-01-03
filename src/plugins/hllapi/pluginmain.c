@@ -297,7 +297,7 @@
 		break;
 
 	case HLLAPI_PACKET_GET_TEXT_AT:
-		send_text(source,lib3270_get_text_at(	lib3270_get_default_session_handle(),
+		send_text(source,lib3270_get_string_at(	lib3270_get_default_session_handle(),
 											((struct hllapi_packet_at *) source->buffer)->row,
 											((struct hllapi_packet_at *) source->buffer)->col,
 											((struct hllapi_packet_at *) source->buffer)->len,
