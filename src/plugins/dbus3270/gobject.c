@@ -96,8 +96,8 @@ void pw3270_dbus_connect(PW3270Dbus *object, const gchar *uri, DBusGMethodInvoca
 
 	if(uri && *uri)
 	{
-		const char * host = lib3270_set_url(hSession,uri);
-		g_message("Connecting to \"%s\" by remote request",host);
+		lib3270_set_url(hSession,uri);
+		g_message("Connecting to \"%s\" by remote request",lib3270_get_url(hSession));
 	}
 	else
 	{
@@ -113,7 +113,7 @@ void pw3270_dbus_set_ur_l(PW3270Dbus *object, const gchar *uri, DBusGMethodInvoc
 
 	g_message("Changing host to \"%s\" by remote request",uri);
 
-	dbus_g_method_return(context,lib3270_set_url(pw3270_dbus_get_session_handle(PW3270_DBUS(object)),uri) == NULL);
+	dbus_g_method_return(context,lib3270_set_url(pw3270_dbus_get_session_handle(PW3270_DBUS(object)),uri) != 0);
 }
 
 void pw3270_dbus_get_ur_l(PW3270Dbus *object, DBusGMethodInvocation *context)

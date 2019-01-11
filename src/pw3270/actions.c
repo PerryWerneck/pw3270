@@ -40,7 +40,7 @@
  #include <lib3270/actions.h>
  #include <lib3270/selection.h>
  #include <lib3270/trace.h>
- #include <lib3270/macros.h>
+// #include <lib3270/macros.h>
  #include <lib3270/log.h>
  #include <stdlib.h>
 
@@ -915,7 +915,6 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 
 static void action_text_script(GtkAction *action, GtkWidget *widget)
 {
-	v3270_run_script(widget,g_object_get_data(G_OBJECT(action),"script_text"));
 }
 
 void ui_connect_text_script(GtkWidget *widget, GtkAction *action, const gchar *script_text, GError **error)

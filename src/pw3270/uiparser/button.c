@@ -72,7 +72,6 @@
 
  static void button_script(GtkButton *button, GtkWidget *widget)
  {
-	v3270_run_script(widget,g_object_get_data(G_OBJECT(button),"script_text"));
  }
 
  void keypad_button_start(GMarkupParseContext *context, const gchar **names,const gchar **values, GError **error, struct keypad *keypad)

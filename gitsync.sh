@@ -19,6 +19,8 @@
 
 # git fetch lib3270
 
+git push
+
 git fetch origin
 git checkout master
 git merge origin/master
