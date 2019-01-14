@@ -1,9 +1,0 @@
-
-Section "GTK @GTK_MODVERSION@ Runtime" SecGTK
-
-	setOutPath $INSTDIR
-	file /r "..\.bin\gtkruntime\*.*"
-
-SectionEnd
-
-
