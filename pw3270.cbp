@@ -68,7 +68,6 @@
 		<Unit filename="src/classlib/class.mak.in" />
 		<Unit filename="src/classlib/private.h" />
 		<Unit filename="src/include/config.h.in" />
-		<Unit filename="src/include/lib3270.h" />
 		<Unit filename="src/include/lib3270/X11keysym.h" />
 		<Unit filename="src/include/lib3270/action_table.h" />
 		<Unit filename="src/include/lib3270/actions.h" />
@@ -88,10 +87,6 @@
 		<Unit filename="src/include/pw3270/ipcpackets.h" />
 		<Unit filename="src/include/pw3270/plugin.h" />
 		<Unit filename="src/include/pw3270/trace.h" />
-		<Unit filename="src/include/pw3270/v3270.h">
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
 		<Unit filename="src/include/pw3270cpp.h" />
 		<Unit filename="src/include/rules.mak.in" />
 		<Unit filename="src/java/Makefile.in">
@@ -128,149 +123,38 @@
 		</Unit>
 		<Unit filename="src/lib3270/3270ds.h" />
 		<Unit filename="src/lib3270/Makefile.in" />
-		<Unit filename="src/lib3270/actions.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/lib3270/ansi.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/lib3270/ansic.h" />
 		<Unit filename="src/lib3270/api.h" />
 		<Unit filename="src/lib3270/arpa_telnet.h" />
-		<Unit filename="src/lib3270/bounds.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/lib3270/cg.h" />
-		<Unit filename="src/lib3270/charset.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/lib3270/connect.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/lib3270/ctlr.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/lib3270/ctlrc.h" />
-		<Unit filename="src/lib3270/ft.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/lib3270/ft_cut.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/lib3270/ft_cut_ds.h" />
 		<Unit filename="src/lib3270/ft_cutc.h" />
-		<Unit filename="src/lib3270/ft_dft.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/lib3270/ft_dft_ds.h" />
 		<Unit filename="src/lib3270/ft_dftc.h" />
 		<Unit filename="src/lib3270/ftc.h" />
-		<Unit filename="src/lib3270/glue.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/lib3270/gluec.h" />
-		<Unit filename="src/lib3270/host.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/lib3270/hostc.h" />
-		<Unit filename="src/lib3270/html.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/lib3270/iocalls.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/lib3270/kybd.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/lib3270/kybdc.h" />
 		<Unit filename="src/lib3270/localdefs.h" />
-		<Unit filename="src/lib3270/log.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/lib3270/macros.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/lib3270/mkfb.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/lib3270/options.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/lib3270/paste.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/lib3270/popupsc.h" />
 		<Unit filename="src/lib3270/private.h" />
-		<Unit filename="src/lib3270/proxy.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/lib3270/proxyc.h" />
-		<Unit filename="src/lib3270/resolver.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/lib3270/resolverc.h" />
-		<Unit filename="src/lib3270/resources.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/lib3270/resources.h" />
-		<Unit filename="src/lib3270/rpq.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/lib3270/screen.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/lib3270/screen.h" />
 		<Unit filename="src/lib3270/screenc.h" />
-		<Unit filename="src/lib3270/see.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/lib3270/seec.h" />
-		<Unit filename="src/lib3270/selection.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/lib3270/session.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/lib3270/sf.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/lib3270/sf.h" />
 		<Unit filename="src/lib3270/shlobj_missing.h" />
 		<Unit filename="src/lib3270/sources.mak" />
-		<Unit filename="src/lib3270/ssl.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/lib3270/state.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/lib3270/statusc.h" />
-		<Unit filename="src/lib3270/tables.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/lib3270/telnet.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/lib3270/telnetc.h" />
-		<Unit filename="src/lib3270/testprogram.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/lib3270/tn3270e.h" />
 		<Unit filename="src/lib3270/toggle.h" />
-		<Unit filename="src/lib3270/toggles.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/lib3270/togglesc.h" />
-		<Unit filename="src/lib3270/trace_ds.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/lib3270/trace_dsc.h" />
-		<Unit filename="src/lib3270/utf8.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/lib3270/utf8c.h" />
-		<Unit filename="src/lib3270/util.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/lib3270/utilc.h" />
 		<Unit filename="src/lib3270/w3miscc.h" />
 		<Unit filename="src/lib3270/widec.h" />
@@ -455,52 +339,11 @@
 		<Unit filename="src/pw3270/uiparser/toolitem.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/pw3270/v3270/accessible.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/pw3270/v3270/accessible.h" />
-		<Unit filename="src/pw3270/v3270/charset.c">
-			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="src/pw3270/v3270/draw.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/pw3270/v3270/genmarshal" />
-		<Unit filename="src/pw3270/v3270/hostselect.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/pw3270/v3270/hostselect.h" />
-		<Unit filename="src/pw3270/v3270/iocallback.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pw3270/v3270/keyboard.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pw3270/v3270/macros.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pw3270/v3270/mouse.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pw3270/v3270/oia.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/pw3270/v3270/private.h" />
-		<Unit filename="src/pw3270/v3270/properties.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pw3270/v3270/security.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pw3270/v3270/selection.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/pw3270/v3270/sources.mak" />
-		<Unit filename="src/pw3270/v3270/widget.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/pw3270/v3270ft/Makefile.in" />
 		<Unit filename="src/pw3270/v3270ft/filelist.c">
 			<Option compilerVar="CC" />

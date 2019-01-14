@@ -42,8 +42,6 @@
 #include <v3270.h>
 #include <pw3270/plugin.h>
 #include "v3270/accessible.h"
-#include <lib3270/trace.h>
-#include <pw3270/trace.h>
 #include <stdlib.h>
 
 #if defined( HAVE_SYSLOG )
@@ -55,18 +53,18 @@
 /*--[ Statics ]--------------------------------------------------------------------------------------*/
 
  static GtkWidget		* toplevel		= NULL;
- static GtkWidget 		* trace_window	= NULL;
  static unsigned int	  syscolors		= 16;
  static unsigned int	  timer			= 0;
  static const gchar		* systype		= NULL;
  static const gchar		* toggleset		= NULL;
  static const gchar		* togglereset	= NULL;
  static const gchar     * logfile       = NULL;
- static const gchar		* tracefile		= NULL;
  static const gchar		* charset		= NULL;
  static const gchar		* remap			= NULL;
  static const gchar		* model			= NULL;
  static const gchar		* pluginpath	= NULL;
+
+ const gchar			* tracefile		= NULL;
 
 #ifdef HAVE_GTKMAC
  GtkOSXApplication		* osxapp		= NULL;
@@ -266,79 +264,6 @@ static void g_logfile(const gchar *log_domain,GLogLevelFlags log_level,const gch
     }
 }
 
-static void trace_window_destroy(GtkWidget *widget, H3270 *hSession)
-{
-	trace("%s",__FUNCTION__);
-	lib3270_set_toggle(hSession,LIB3270_TOGGLE_DS_TRACE,0);
-	lib3270_set_toggle(hSession,LIB3270_TOGGLE_SCREEN_TRACE,0);
-	lib3270_set_toggle(hSession,LIB3270_TOGGLE_EVENT_TRACE,0);
-	lib3270_set_toggle(hSession,LIB3270_TOGGLE_NETWORK_TRACE,0);
-	trace_window = NULL;
-}
-
-/*
-static void g_trace(H3270 *hSession, const char *fmt, va_list args)
-{
-	gchar *ptr = g_strdup_vprintf(fmt,args);
-
-    if(tracefile)
-	{
-		// Has trace file, use it
-		int err;
-
-		FILE *out = fopen(tracefile,"a");
-		err = errno;
-
-		if(!out)
-		{
-			// Error opening trace file, notify user and disable it
-			GtkWidget *popup = gtk_message_dialog_new_with_markup(
-												GTK_WINDOW(pw3270_get_toplevel()),
-												GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
-												GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,
-												_( "Can't save trace data to file %s" ),tracefile);
-
-			gtk_window_set_title(GTK_WINDOW(popup),_("Can't open file"));
-
-			gtk_message_dialog_format_secondary_markup(GTK_MESSAGE_DIALOG(popup),"%s",strerror(err));
-
-			gtk_dialog_run(GTK_DIALOG(popup));
-			gtk_widget_destroy(popup);
-
-			tracefile = NULL;
-		}
-		else
-		{
-			fprintf(out,"%s",ptr);
-			fclose(out);
-		}
-	}
-	else
-	{
-		// No trace file, open standard window
-		gchar * utftext = g_convert_with_fallback(ptr,-1,"UTF-8",lib3270_get_display_charset(hSession),"?",NULL,NULL,NULL);
-
-		if(!trace_window)
-		{
-			trace_window = pw3270_trace_new();
-			pw3270_trace_set_destroy_on_close(trace_window,TRUE);
-			g_signal_connect(trace_window, "destroy", G_CALLBACK(trace_window_destroy), hSession);
-			gtk_window_set_default_size(GTK_WINDOW(trace_window),590,430);
-
-#if GTK_CHECK_VERSION(3,4,0)
-			gtk_window_set_attached_to(GTK_WINDOW(trace_window),toplevel);
-#endif // GTK_CHECK_VERSION(3,4,0)
-
-			gtk_widget_show(trace_window);
-		}
-		pw3270_trace_printf(trace_window,"%s",utftext);
-		g_free(utftext);
-	}
-
-	g_free(ptr);
-}
-*/
-
 static gboolean startup(GtkWidget *toplevel)
 {
 	gtk_window_present(GTK_WINDOW(toplevel));
@@ -495,8 +420,6 @@ int main(int argc, char *argv[])
 		g_log_set_default_handler(g_logfile,NULL);
 	}
 
-//	lib3270_set_trace_handler(g_trace);
-
 	// Check GTK Version
 	{
 		const gchar	*msg = gtk_check_version(GTK_MAJOR_VERSION, GTK_MINOR_VERSION, GTK_MICRO_VERSION);
@@ -608,9 +531,6 @@ int main(int argc, char *argv[])
 		g_idle_add((GSourceFunc) startup, toplevel);
 
 		gtk_main();
-
-		if(trace_window)
-			gtk_widget_destroy(trace_window);
 
 		pw3270_stop_plugins(toplevel);
 		pw3270_unload_plugins();

@@ -33,6 +33,8 @@
 #include "uiparser/parser.h"
 #include <lib3270/popup.h>
 #include <lib3270/actions.h>
+#include <lib3270/trace.h>
+#include <v3270/trace.h>
 
 /*--[ Widget definition ]----------------------------------------------------------------------------*/
 
@@ -155,10 +157,128 @@
 
  }
 
+ /*
+ static void g_trace(H3270 *hSession, const char *fmt, va_list args)
+ {
+	gchar *ptr = g_strdup_vprintf(fmt,args);
+
+    if(tracefile)
+	{
+		// Has trace file, use it
+		int err;
+
+		FILE *out = fopen(tracefile,"a");
+		err = errno;
+
+		if(!out)
+		{
+			// Error opening trace file, notify user and disable it
+			GtkWidget *popup = gtk_message_dialog_new_with_markup(
+												GTK_WINDOW(pw3270_get_toplevel()),
+												GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
+												GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,
+												_( "Can't save trace data to file %s" ),tracefile);
+
+			gtk_window_set_title(GTK_WINDOW(popup),_("Can't open file"));
+
+			gtk_message_dialog_format_secondary_markup(GTK_MESSAGE_DIALOG(popup),"%s",strerror(err));
+
+			gtk_dialog_run(GTK_DIALOG(popup));
+			gtk_widget_destroy(popup);
+
+			tracefile = NULL;
+		}
+		else
+		{
+			fprintf(out,"%s",ptr);
+			fclose(out);
+		}
+	}
+	else
+	{
+		// No trace file, open standard window
+		gchar * utftext = g_convert_with_fallback(ptr,-1,"UTF-8",lib3270_get_display_charset(hSession),"?",NULL,NULL,NULL);
+
+		if(!trace_window)
+		{
+			trace_window = v3270_trace_new_from_session(hSession);
+			v3270_trace_set_destroy_on_close(trace_window,TRUE);
+			g_signal_connect(trace_window, "destroy", G_CALLBACK(trace_window_destroy), hSession);
+			gtk_window_set_default_size(GTK_WINDOW(trace_window),590,430);
+			gtk_widget_show(trace_window);
+		}
+		v3270_trace_printf(trace_window,"%s",utftext);
+		g_free(utftext);
+	}
+
+	g_free(ptr);
+ }
+ */
+
+ static void trace_file(G_GNUC_UNUSED H3270 *hSession, void * userdata, const char *fmt, va_list args)
+ {
+	int err;
+
+	FILE *out = fopen(tracefile,"a");
+	err = errno;
+
+	if(!out)
+	{
+		// Error opening trace file, notify user and disable it
+		GtkWidget *popup = gtk_message_dialog_new_with_markup(
+											GTK_WINDOW(userdata),
+											GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
+											GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,
+											_( "Can't save trace data to file %s" ),tracefile);
+
+		gtk_window_set_title(GTK_WINDOW(popup),_("Can't open file"));
+
+		gtk_message_dialog_format_secondary_markup(GTK_MESSAGE_DIALOG(popup),"%s",strerror(err));
+
+		gtk_dialog_run(GTK_DIALOG(popup));
+		gtk_widget_destroy(popup);
+
+		tracefile = NULL;
+	}
+	else
+	{
+		vfprintf(out,fmt,args);
+		fclose(out);
+	}
+
+ }
+
+ static void trace_window_destroy(GtkWidget *widget, H3270 *hSession)
+ {
+	trace("%s",__FUNCTION__);
+	lib3270_set_toggle(hSession,LIB3270_TOGGLE_DS_TRACE,0);
+	lib3270_set_toggle(hSession,LIB3270_TOGGLE_SCREEN_TRACE,0);
+	lib3270_set_toggle(hSession,LIB3270_TOGGLE_EVENT_TRACE,0);
+	lib3270_set_toggle(hSession,LIB3270_TOGGLE_NETWORK_TRACE,0);
+ }
+
+
+ static void trace_window(G_GNUC_UNUSED H3270 *hSession, G_GNUC_UNUSED void * userdata, const char *fmt, va_list args)
+ {
+	GtkWidget * widget = v3270_trace_new_from_session(hSession);
+	v3270_trace_set_destroy_on_close(widget,TRUE);
+	g_signal_connect(widget, "destroy", G_CALLBACK(trace_window_destroy), hSession);
+	gtk_widget_show(widget);
+ }
+
  GtkWidget * pw3270_new(const gchar *host, const gchar *systype, unsigned short colors)
  {
  	GtkWidget	* widget	= g_object_new(GTK_TYPE_PW3270, NULL);
  	gboolean	  connct	= FALSE;
+
+	if(tracefile)
+	{
+		lib3270_set_trace_handler(pw3270_get_session(widget),trace_file,(void *) widget);
+	}
+	else
+	{
+		lib3270_set_trace_handler(pw3270_get_session(widget),trace_window,(void *) widget);
+	}
 
 	if(host)
 	{
@@ -212,7 +332,7 @@
 
  void pw3270_set_url(GtkWidget *widget, const gchar *uri)
  {
- 	g_return_val_if_fail(GTK_IS_PW3270(widget),"");
+ 	g_return_if_fail(GTK_IS_PW3270(widget));
  	v3270_set_url(GTK_PW3270(widget)->terminal,uri);
  }
 
