@@ -104,7 +104,7 @@ void pw3270_dbus_connect(PW3270Dbus *object, const gchar *uri, DBusGMethodInvoca
 		g_message("%s","Connecting by remote request");
 	}
 
-	dbus_g_method_return(context,lib3270_connect(hSession,0));
+	dbus_g_method_return(context,lib3270_reconnect(hSession,0));
 }
 
 void pw3270_dbus_set_ur_l(PW3270Dbus *object, const gchar *uri, DBusGMethodInvocation *context)

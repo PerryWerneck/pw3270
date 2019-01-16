@@ -41,7 +41,7 @@
 
 	ptr = get_string_from_config("host","systype","s390");
 	if(*ptr)
-		lib3270_set_host_type(hSession,ptr);
+		lib3270_set_host_type_by_name(hSession,ptr);
 	g_free(ptr);
 
 	v3270_select_host(widget);

@@ -327,7 +327,7 @@
  void pw3270_connect(GtkWidget *widget)
  {
  	g_return_if_fail(GTK_IS_PW3270(widget));
- 	v3270_connect(GTK_PW3270(widget)->terminal);
+ 	v3270_reconnect(GTK_PW3270(widget)->terminal);
  }
 
  void pw3270_set_url(GtkWidget *widget, const gchar *uri)
@@ -398,7 +398,7 @@
 
  	g_return_if_fail(GTK_IS_PW3270(widget));
 
-	int rc = v3270_set_host_type(GTK_PW3270(widget)->terminal,name);
+	int rc = v3270_set_host_type_by_name(GTK_PW3270(widget)->terminal,name);
 
 	if(!rc) {
 		return;
@@ -414,18 +414,18 @@
 
 	// Obtenho as opções válidas.
 	char text[4096];
-	const LIB3270_OPTION_ENTRY *host_type = lib3270_get_option_list();
+	const LIB3270_HOST_TYPE_ENTRY * host_types = lib3270_get_option_list();
 
 	*text = 0;
-	for(f=1;host_type[f].name;f++)
+	for(f=1;host_types[f].name;f++)
 	{
 		sz = strlen(text);
-		snprintf(text+sz,4095-sz,_( "%s<b>%s</b> for %s"), *text ? ", " : "",host_type[f].name,gettext(host_type[f].description));
+		snprintf(text+sz,4095-sz,_( "%s<b>%s</b> for %s"), *text ? ", " : "",host_types[f].name,gettext(host_types[f].description));
 
 	}
 
 	sz = strlen(text);
-	snprintf(text+sz,4095-sz,_( " and <b>%s</b> for %s."),host_type[0].name,gettext(host_type[0].description));
+	snprintf(text+sz,4095-sz,_( " and <b>%s</b> for %s."),host_types[0].name,gettext(host_types[0].description));
 
 	gtk_message_dialog_format_secondary_markup(GTK_MESSAGE_DIALOG(popup),_( "The known types are %s" ),text);
 

@@ -83,7 +83,7 @@ static void connect_action(GtkAction *action, GtkWidget *widget)
 		v3270_set_url(widget,host);
 
 	if(systype)
-		v3270_set_host_type(widget,systype);
+		v3270_set_host_type_by_name(widget,systype);
 
 	if(colortype)
 		v3270_set_session_color_type(widget,atoi(colortype));
@@ -91,7 +91,7 @@ static void connect_action(GtkAction *action, GtkWidget *widget)
 	host = v3270_get_hostname(widget);
 	if(host && *host)
 	{
-		v3270_connect(widget);
+		v3270_reconnect(widget);
 		return;
 	}
 
