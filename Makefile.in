@@ -69,13 +69,13 @@ HELP2MAN=@HELP2MAN@
 #---[ Release Targets ]------------------------------------------------------------------
 
 all: \
-	$(BINRLS)/@DLLPREFIX@3270@DLLEXT@ \
+	$(foreach MODULE, $(MODULES), $(BINRLS)/@DLLPREFIX@$(MODULE)@DLLEXT@) \
 	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ \
 	$(foreach PLG, $(PLUGINS), $(BINRLS)/plugins/$(PLG)@DLLEXT@) \
 	locale/$(PACKAGE_TARNAME).pot
 
 Release: \
-	$(BINRLS)/@DLLPREFIX@3270@DLLEXT@ \
+	$(foreach MODULE, $(MODULES), $(BINRLS)/@DLLPREFIX@$(MODULE)@DLLEXT@) \
 	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ \
 	$(foreach PLG, $(PLUGINS), $(BINRLS)/plugins/$(PLG)@DLLEXT@)
 
@@ -115,27 +115,26 @@ $(BINDBG)/plugins/%@DLLEXT@: \
 
 #---[ Release Rules ]--------------------------------------------------------------------
 
-$(BINRLS)/@DLLPREFIX@@LIB3270_NAME@@DLLEXT@: \
-	modules/lib3270/* \
-	modules/lib3270/src/lib3270/* \
-	modules/lib3270/src/include/* \
-	modules/lib3270/src/include/lib3270/*
+#$(BINRLS)/@DLLPREFIX@@LIB3270_NAME@@DLLEXT@: \
+#	modules/lib3270/* \
+#	modules/lib3270/src/lib3270/* \
+#	modules/lib3270/src/include/* \
+#	modules/lib3270/src/include/lib3270/*
+#
+#	@$(MKDIR) `dirname $@`
+#	@$(MAKE) -C modules/lib3270 $@
 
-	@$(MKDIR) `dirname $@`
-	@$(MAKE) -C modules/lib3270 $@
-
-$(BINRLS)/@DLLPREFIX@v@LIB3270_NAME@@DLLEXT@: \
-	modules/libv3270/* \
-	modules/libv3270/src/v3270/* \
-	modules/libv3270/src/include/* \
-	modules/libv3270/src/include/v3270/* \
-
-	@$(MKDIR) `dirname $@`
-	@$(MAKE) -C modules/libv3270 $@
+#$(BINRLS)/@DLLPREFIX@v@LIB3270_NAME@@DLLEXT@: \
+#	modules/libv3270/* \
+#	modules/libv3270/src/v3270/* \
+#	modules/libv3270/src/include/* \
+#	modules/libv3270/src/include/v3270/* \
+#
+#	@$(MKDIR) `dirname $@`
+#	@$(MAKE) -C modules/libv3270 $@
 
 $(BINRLS)/%@EXEEXT@: \
-	$(BINRLS)/@DLLPREFIX@@LIB3270_NAME@@DLLEXT@ \
-	$(BINRLS)/@DLLPREFIX@v@LIB3270_NAME@@DLLEXT@ \
+	$(foreach MODULE, $(MODULES), $(BINDBG)/@DLLPREFIX@$(MODULE)@DLLEXT@) \
         src/% \
         src/%/*
 
@@ -155,9 +154,8 @@ $(DESTDIR)/$(libdir)/pw3270-plugins/%@DLLEXT@: \
 #---[ Install Rules ]--------------------------------------------------------------------
 
 install: \
+	$(foreach MODULE, $(MODULES), install-$(MODULE)) \
 	locale/$(PACKAGE_TARNAME).pot \
-	install-lib3270 \
-	install-libv3270 \
 	install-pw3270 \
 	install-branding \
 	install-ui \
@@ -213,11 +211,21 @@ $(POTDIR)/%.pot: \
 
 $(POTDIR)/%.pot: \
 	./modules/%/* \
-	./modules/%/src/*
+	./modules/%/src/* \
+	./modules/%/Makefile
  
 	@echo $(notdir $@) ...
 	@mkdir -p `dirname $@`
 	@$(MAKE) -C modules/$(basename $(notdir $@)) $@
+
+$(POTDIR)/%.pot: \
+	./modules/%/%.pot
+ 
+	@echo $(notdir $@) ...
+	@mkdir -p `dirname $@`
+
+	@echo cp $^ $@
+	@false
 
 $(POTDIR)/%.pot: \
 	./%/*
