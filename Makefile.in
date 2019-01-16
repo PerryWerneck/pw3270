@@ -32,6 +32,7 @@ PACKAGE_LEVEL=@PACKAGE_LEVEL@
 PACKAGE_TARNAME=@PACKAGE_TARNAME@
 PACKAGE_DESCRIPTION=@PACKAGE_DESCRIPTION@
 PLUGINS=@PLUGINS@
+# MODULES=3270
 
 #---[ Paths ]------------------------------------------------------------------
 
@@ -81,27 +82,26 @@ Release: \
 
 #---[ Debug Rules ]----------------------------------------------------------------------
 
-$(BINDBG)/@DLLPREFIX@@LIB3270_NAME@@DLLEXT@: \
-	modules/lib3270/* \
-	modules/lib3270/src/lib3270/* \
-	modules/lib3270/src/include/* \
-	modules/lib3270/src/include/lib3270/*
+#$(BINDBG)/@DLLPREFIX@@LIB3270_NAME@@DLLEXT@: \
+#	modules/lib3270/* \
+#	modules/lib3270/src/lib3270/* \
+#	modules/lib3270/src/include/* \
+#	modules/lib3270/src/include/lib3270/*
+#
+#	@$(MKDIR) `dirname $@`
+#	@$(MAKE) -C modules/lib3270 $@
 
-	@$(MKDIR) `dirname $@`
-	@$(MAKE) -C modules/lib3270 $@
-
-$(BINDBG)/@DLLPREFIX@v@LIB3270_NAME@@DLLEXT@: \
-	modules/libv3270/* \
-	modules/libv3270/src/v3270/* \
-	modules/libv3270/src/include/* \
-	modules/libv3270/src/include/v3270/* \
-
-	@$(MKDIR) `dirname $@`
-	@$(MAKE) -C modules/libv3270 $@
+#$(BINDBG)/@DLLPREFIX@v@LIB3270_NAME@@DLLEXT@: \
+#	modules/libv3270/* \
+#	modules/libv3270/src/v3270/* \
+#	modules/libv3270/src/include/* \
+#	modules/libv3270/src/include/v3270/* \
+#
+#	@$(MKDIR) `dirname $@`
+#	@$(MAKE) -C modules/libv3270 $@
 
 $(BINDBG)/%@EXEEXT@: \
-	$(BINDBG)/@DLLPREFIX@@LIB3270_NAME@@DLLEXT@ \
-	$(BINDBG)/@DLLPREFIX@v@LIB3270_NAME@@DLLEXT@ \
+	$(foreach MODULE, $(MODULES), $(BINDBG)/@DLLPREFIX@$(MODULE)@DLLEXT@) \
 	src/% \
 	src/%/*
 
@@ -230,12 +230,10 @@ $(POTDIR)/%.pot: \
 #---[ Debug Targets ]--------------------------------------------------------------------
 
 Debug: \
-	$(BINDBG)/@DLLPREFIX@3270@DLLEXT@ \
 	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@ \
 	$(foreach PLG, $(PLUGINS), $(BINDBG)/plugins/$(PLG)@DLLEXT@)
 
 run: \
-	$(BINDBG)/@DLLPREFIX@3270@DLLEXT@ \
 	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@
 
 	@LD_LIBRARY_PATH=$(BINDBG) $(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@
@@ -269,16 +267,12 @@ cleanDebug:
 
 	@rm -fr $(OBJDBG)
 	@rm -fr $(BINDBG)
-	@$(MAKE) -C modules/lib3270 $@
-	@$(MAKE) -C modules/libv3270 $@
 	@$(MAKE) -C src/pw3270 $@
 
 cleanRelease:
 
 	@rm -fr $(OBJRLS)
 	@rm -fr $(BINRLS)
-	@$(MAKE) -C modules/lib3270 $@
-	@$(MAKE) -C modules/libv3270 $@
 	@$(MAKE) -C src/pw3270 $@
 
 
