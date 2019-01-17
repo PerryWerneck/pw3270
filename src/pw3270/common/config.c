@@ -636,7 +636,7 @@ gchar * filename_from_va(const gchar *first_element, va_list args)
 
 	trace("Can't find \"%s\"",suffix);
 
-	return g_build_filename(".",suffix);
+	return g_build_filename(".",suffix,NULL);
 }
 
 #ifdef HAVE_WIN_REGISTRY

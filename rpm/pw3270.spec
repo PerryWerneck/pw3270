@@ -38,7 +38,7 @@ License:        GPL-2.0
 Group:          System/X11/Terminals
 Url:            https://portal.softwarepublico.gov.br/social/pw3270/
 
-Source:         pw3270-%{version}.tar.bz2
+Source:         pw3270-%{version}.tar.xz
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
