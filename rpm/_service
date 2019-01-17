@@ -3,25 +3,25 @@
 	<!-- https://github.com/openSUSE/obs-service-tar_scm/blob/master/tar_scm.py -->
 	<service name="tar_scm">
 		<param name="sslverify">disable</param>
-		<!-- param name="versionformat">%ct</param -->
-        <param name="version">5.1</param>
+		<param name="changesgenerate">enable</param>
+		<param name="versionformat">%ct</param>
 		<param name="url">http://softwarepublico.gov.br/gitlab/pw3270/principal.git</param>
 		<param name="scm">git</param>
 		<param name="filename">pw3270</param>
 	</service>
 
 	<!-- https://github.com/openSUSE/obs-service-extract_file -->
-	<service name="extract_file">
+	<!-- service name="extract_file">
 		<param name="archive">*.tar</param>
 		<param name="files">*/rpm/pw3270.spec</param>
-		<param name="outfilename">pw3270-unstable.spec</param>
-	</service>
+		<param name="outfilename">pw3270.spec</param>
+	</service -->
 
-	<service name="extract_file">
+	<!-- service name="extract_file">
 		<param name="archive">*.tar</param>
 		<param name="files">*/debian/pw3270.dsc</param>
-		<param name="outfilename">pw3270-unstable.dsc</param>
-	</service>
+		<param name="outfilename">pw3270.dsc</param>
+	</service -->
 
 	<service name="extract_file">
 		<param name="archive">*.tar</param>
@@ -55,7 +55,7 @@
 
 	<service name="recompress">
 		<param name="file">*.tar</param>
-		<param name="compression">bz2</param>
+		<param name="compression">xz</param>
 	</service>
 
 	<service name="set_version" />
