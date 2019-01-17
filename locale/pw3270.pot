@@ -5,15 +5,15 @@
 #
 #: properties.c:66 properties.c:73 properties.c:80 properties.c:101
 #: properties.c:108 properties.c:115 properties.c:122 properties.c:136
-#: properties.c:143 properties.c:348 properties.c:355 properties.c:362
-#: properties.c:369 properties.c:376 properties.c:383
+#: properties.c:143 properties.c:347 properties.c:354 properties.c:361
+#: properties.c:368 properties.c:375 properties.c:382
 #, fuzzy
 msgid ""
 msgstr ""
 "#-#-#-#-#  pw3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-16 17:05-0200\n"
+"POT-Creation-Date: 2019-01-17 15:13-0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "#-#-#-#-#  lib3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-16 17:05-0200\n"
+"POT-Creation-Date: 2019-01-17 15:55+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,7 +35,7 @@ msgstr ""
 "#-#-#-#-#  libv3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-16 17:05-0200\n"
+"POT-Creation-Date: 2019-01-17 15:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -57,7 +57,7 @@ msgstr ""
 "#-#-#-#-#  dbus3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-16 17:05-0200\n"
+"POT-Creation-Date: 2019-01-17 15:13-0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -426,7 +426,7 @@ msgstr ""
 msgid "C_onnect"
 msgstr ""
 
-#: toggles.c:333 linux/connect.c:314
+#: toggles.c:333 linux/connect.c:317
 #, c-format
 msgid "Can't %s network keep-alive"
 msgstr ""
@@ -477,6 +477,10 @@ msgstr ""
 
 #: ft.c:415
 msgid "Can't get file size"
+msgstr ""
+
+#: local/session.cc:124 local/session.cc:142
+msgid "Can't get screen contents"
 msgstr ""
 
 #: ssl/linux/getcrl.c:208
@@ -713,7 +717,7 @@ msgstr ""
 msgid "Connecting to host"
 msgstr ""
 
-#: iocalls.c:539 linux/connect.c:273 linux/connect.c:302 linux/connect.c:318
+#: iocalls.c:539 linux/connect.c:273 linux/connect.c:303 linux/connect.c:321
 msgid "Connection error"
 msgstr ""
 
@@ -906,6 +910,10 @@ msgstr ""
 #: ft_dft.c:335 ft_cut.c:530
 #, c-format
 msgid "Error \"%s\" writing to local file (rc=%d)"
+msgstr ""
+
+#: local/events.cc:59
+msgid "Error in vasprintf"
 msgstr ""
 
 #: dialog.c:404
@@ -1125,7 +1133,7 @@ msgstr ""
 msgid "Invalid argument format"
 msgstr ""
 
-#: src/v3270/widget.c:940
+#: local/session.cc:69 src/v3270/widget.c:940
 msgid "Invalid callback table, possible version mismatch in lib3270"
 msgstr ""
 
@@ -1143,6 +1151,10 @@ msgstr ""
 
 #: src/v3270/charset.c:319
 msgid "Invalid remap scope"
+msgstr ""
+
+#: local/events.cc:88 local/events.cc:141
+msgid "Invalid session handler"
 msgstr ""
 
 #: properties.c:164
@@ -1318,6 +1330,10 @@ msgstr ""
 
 #: src/v3270/security.c:170
 msgid "Out of memory"
+msgstr ""
+
+#: local/events.cc:71
+msgid "Out of memory in vasprintf"
 msgstr ""
 
 #: 80javasamples.xml:39
@@ -1719,8 +1735,8 @@ msgstr ""
 msgid "SSL Read error"
 msgstr ""
 
-#: ssl/negotiate.c:181 ssl/negotiate.c:190 ssl/negotiate.c:197
-#: ssl/negotiate.c:212
+#: ssl/negotiate.c:181 ssl/negotiate.c:190 ssl/negotiate.c:199
+#: ssl/negotiate.c:215
 msgid "SSL error"
 msgstr ""
 
@@ -2047,7 +2063,7 @@ msgid ""
 "been reached."
 msgstr ""
 
-#: ssl/negotiate.c:198 src/v3270/security.c:136
+#: ssl/negotiate.c:200 src/v3270/security.c:136
 msgid "The CRL has expired."
 msgstr ""
 
@@ -2074,7 +2090,7 @@ msgid ""
 "expected value. Unused."
 msgstr ""
 
-#: ssl/negotiate.c:199
+#: ssl/negotiate.c:201
 msgid "The Certificate revocation list (CRL) has expired."
 msgstr ""
 
@@ -2087,7 +2103,7 @@ msgid ""
 "The Certificate revocation list (CRL) of a certificate could not be found."
 msgstr ""
 
-#: ssl/negotiate.c:213
+#: ssl/negotiate.c:216
 msgid "The SSL certificate for this host is not trusted."
 msgstr ""
 
@@ -2257,7 +2273,7 @@ msgstr ""
 msgid "The root CA is not marked as trusted for the specified purpose."
 msgstr ""
 
-#: ssl/negotiate.c:214
+#: ssl/negotiate.c:217
 msgid ""
 "The security certificate presented by this host was not issued by a trusted "
 "certificate authority."
@@ -2394,7 +2410,7 @@ msgstr ""
 msgid "Turquoise"
 msgstr ""
 
-#: properties.c:404
+#: properties.c:403
 msgid "URL for the CRL file"
 msgstr ""
 
@@ -2803,11 +2819,19 @@ msgstr ""
 msgid "bracket"
 msgstr ""
 
-#: toggles.c:333 linux/connect.c:314
+#: local/events.cc:163
+msgid "connected"
+msgstr ""
+
+#: toggles.c:333 linux/connect.c:317
 msgid "disable"
 msgstr ""
 
-#: toggles.c:333 linux/connect.c:314
+#: local/events.cc:163
+msgid "disconnected"
+msgstr ""
+
+#: toggles.c:333 linux/connect.c:317
 msgid "enable"
 msgstr ""
 
@@ -2819,15 +2843,15 @@ msgstr ""
 msgid "ioctlsocket(FIONBIO) failed."
 msgstr ""
 
-#: properties.c:397
+#: properties.c:396
 msgid "lib3270 revision"
 msgstr ""
 
-#: properties.c:390
+#: properties.c:389
 msgid "lib3270 version"
 msgstr ""
 
-#: linux/connect.c:303
+#: linux/connect.c:304
 msgid "setsockopt(SO_OOBINLINE) has failed"
 msgstr ""
 

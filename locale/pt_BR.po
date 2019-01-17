@@ -1,16 +1,16 @@
 #
-# Perry Werneck <perry.werneck@gmail.com>, 2012, 2013, 2014, 2016, 2017, 2018.
+# Perry Werneck <perry.werneck@gmail.com>, 2012, 2013, 2014, 2016, 2017, 2018, 2019.
 #
 #: properties.c:66 properties.c:73 properties.c:80 properties.c:101
 #: properties.c:108 properties.c:115 properties.c:122 properties.c:136
-#: properties.c:143 properties.c:348 properties.c:355 properties.c:362
-#: properties.c:369 properties.c:376 properties.c:383
+#: properties.c:143 properties.c:347 properties.c:354 properties.c:361
+#: properties.c:368 properties.c:375 properties.c:382
 msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-16 17:05-0200\n"
-"PO-Revision-Date: 2018-10-22 14:38-0300\n"
+"POT-Creation-Date: 2019-01-17 15:13-0200\n"
+"PO-Revision-Date: 2019-01-17 15:24-0200\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
 "Language: pt_BR\n"
@@ -20,7 +20,7 @@ msgstr ""
 "X-Poedit-Language: Portuguese\n"
 "X-Poedit-Country: BRAZIL\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Gtranslator 2.91.7\n"
 
 #: window.c:428
@@ -399,7 +399,7 @@ msgstr "Tema de c_ores:"
 msgid "C_onnect"
 msgstr "_Conectar"
 
-#: toggles.c:333 linux/connect.c:314
+#: toggles.c:333 linux/connect.c:317
 #, c-format
 msgid "Can't %s network keep-alive"
 msgstr "Não foi possível %s opção \"keep-alive\""
@@ -410,9 +410,8 @@ msgid "Can't accept unnamed %s"
 msgstr "Não posso aceitar elemento %s sem nome"
 
 #: ssl/linux/getcrl.c:230
-#, fuzzy
 msgid "Can't bind to LDAP server"
-msgstr "Não foi possível conectar ao servidor DBUS"
+msgstr "Não foi possível conectar ao servidor LDAP"
 
 #: linux/connect.c:89
 #, c-format
@@ -453,6 +452,11 @@ msgstr "um atributo \"action\""
 #: ft.c:415
 msgid "Can't get file size"
 msgstr "Não foi possível obter o tamanho do arquivo"
+
+#: local/session.cc:124 local/session.cc:142
+#, fuzzy
+msgid "Can't get screen contents"
+msgstr "Trace do conteúdo da tela"
 
 #: ssl/linux/getcrl.c:208
 #, fuzzy
@@ -559,18 +563,16 @@ msgid "Can't save trace data to file %s"
 msgstr "Não foi possível salvar trace no arquivo %s"
 
 #: ssl/linux/getcrl.c:255
-#, fuzzy
 msgid "Can't search LDAP server"
-msgstr "Não foi possível conectar ao servidor DBUS"
+msgstr "Não foi possível conectar ao servidor LDAP"
 
 #: ssl/linux/getcrl.c:192
 msgid "Can't set LDAP query"
-msgstr ""
+msgstr "Não posso definir consulta LDAP"
 
 #: ssl/linux/getcrl.c:219
-#, fuzzy
 msgid "Can't set LDAP version"
-msgstr "Não é possível usar a Winsock versão %d.%d"
+msgstr "Não é possível setar a versão LDAP"
 
 #: src/v3270ft/v3270ftprogress.c:811
 msgid "Can't set callback table"
@@ -581,7 +583,6 @@ msgid "Can't set host charset"
 msgstr "Não foi possível definir o charset do host"
 
 #: src/v3270/iocallback.c:190
-#, fuzzy
 msgid "Can't set lib3270 I/O controller"
 msgstr "Não foi possível registrar manipuladores de I/O 3270"
 
@@ -703,7 +704,7 @@ msgstr "Conectar ao iniciar"
 msgid "Connecting to host"
 msgstr "Conectando ao servidor"
 
-#: iocalls.c:539 linux/connect.c:273 linux/connect.c:302 linux/connect.c:318
+#: iocalls.c:539 linux/connect.c:273 linux/connect.c:303 linux/connect.c:321
 msgid "Connection error"
 msgstr "Erro de conexão"
 
@@ -716,9 +717,8 @@ msgid "Connection reset by peer"
 msgstr "Conexão foi cancelada pelo servidor"
 
 #: properties.c:246
-#, fuzzy
 msgid "Connection state"
-msgstr "Conectar ao iniciar"
+msgstr "Estado da conexão"
 
 #: 00default.xml:58
 msgid "Copy"
@@ -760,11 +760,11 @@ msgstr "Arquivo atual"
 
 #: properties.c:225
 msgid "Current screen width in columns"
-msgstr ""
+msgstr "Largura atua da tela em colunas"
 
 #: properties.c:232
 msgid "Current screen width in rows"
-msgstr ""
+msgstr "Altura atual da tela em linhas"
 
 #: src/v3270ft/v3270ftprogress.c:75
 msgid "Current transfer position"
@@ -776,7 +776,7 @@ msgstr "Atual:"
 
 #: properties.c:204
 msgid "Cursor address"
-msgstr ""
+msgstr "Endereço do cursor"
 
 #: colors.c:380
 msgid "Custom colors"
@@ -803,7 +803,6 @@ msgid "Dark Green"
 msgstr "Verde Escuro"
 
 #: colors.c:507
-#, fuzzy
 msgid "Dark Turquoise"
 msgstr "Turquesa Escuro"
 
@@ -905,6 +904,10 @@ msgstr "Erro \"%s\" lendo arquivo local (rc=%d)"
 msgid "Error \"%s\" writing to local file (rc=%d)"
 msgstr "Erro \"%s\" gravando arquivo local (rc=%d)"
 
+#: local/events.cc:59
+msgid "Error in vasprintf"
+msgstr "Erro na chamada vasprintf"
+
 #: dialog.c:404
 #, c-format
 msgid "Error loading %s"
@@ -976,9 +979,8 @@ msgid "Format error in certificate's notBefore field"
 msgstr "Erro de formato no campo \"notBefore\" do certificado"
 
 #: properties.c:171
-#, fuzzy
 msgid "Formatted screen"
-msgstr "Salvar tela"
+msgstr "Tela formatada"
 
 #: toggles.c:147 00default.xml:118
 msgid "Full Screen"
@@ -1005,9 +1007,8 @@ msgid "Green"
 msgstr "Verde"
 
 #: properties.c:157
-#, fuzzy
 msgid "Has selected area"
-msgstr "Salvar seleção"
+msgstr "Tem área selecionada"
 
 #: 00default.xml:140
 msgid "Help"
@@ -1123,7 +1124,7 @@ msgstr "Inserir um novo arquivo na fila de transferência"
 
 #: ssl/linux/getcrl.c:193
 msgid "Insuficient arguments"
-msgstr ""
+msgstr "Argumentos insuficientes"
 
 #: colors.c:514
 msgid "Intensified/Protected"
@@ -1138,11 +1139,10 @@ msgid "Invalid CA certificate"
 msgstr "Certificado CA inválido"
 
 #: ssl/linux/getcrl.c:164
-#, fuzzy
 msgid "Invalid argument format"
-msgstr "Ação recortar inválida"
+msgstr "O formato do argumento é inválido"
 
-#: src/v3270/widget.c:940
+#: local/session.cc:69 src/v3270/widget.c:940
 msgid "Invalid callback table, possible version mismatch in lib3270"
 msgstr ""
 "Tabela de callbacks inválida, possível divergência de versão na lib3270"
@@ -1163,13 +1163,17 @@ msgstr "Ação recortar inválida"
 msgid "Invalid remap scope"
 msgstr "Escopo de mapeamento inválido"
 
+#: local/events.cc:88 local/events.cc:141
+msgid "Invalid session handler"
+msgstr "Identificador de sessão é inválido"
+
 #: properties.c:164
 msgid "Is starting (no first screen)?"
-msgstr ""
+msgstr "Está iniciando (não recebeu a primeira tela)?"
 
 #: properties.c:150
 msgid "Is terminal in the INITIAL_E state?"
-msgstr ""
+msgstr "O terminal está no estad INITIAL_E?"
 
 #: 80javasamples.xml:38
 msgid "Java"
@@ -1193,7 +1197,7 @@ msgstr "Barra lateral"
 
 #: properties.c:253
 msgid "Latest program message"
-msgstr ""
+msgstr "Última mensagem de programa"
 
 #: src/v3270ft/v3270ft.c:194
 msgid "Load"
@@ -1270,11 +1274,11 @@ msgstr "Nenhuma transferência em andamento"
 
 #: properties.c:94
 msgid "Non zero if the host is AS400."
-msgstr ""
+msgstr "Diferente de zero se o host é AS400"
 
 #: properties.c:87
 msgid "Non zero if the host is TSO."
-msgstr ""
+msgstr "Diferente de zero se o host é TSO"
 
 #: colors.c:513
 msgid "Normal/Protected"
@@ -1339,6 +1343,10 @@ msgstr "Outro (VM/CMS)"
 #: src/v3270/security.c:170
 msgid "Out of memory"
 msgstr "Memória insuficiente"
+
+#: local/events.cc:71
+msgid "Out of memory in vasprintf"
+msgstr "Memória insuficiente em vasprintf"
 
 #: 80javasamples.xml:39
 msgid "Output test"
@@ -1746,8 +1754,8 @@ msgstr "Erro SSL"
 msgid "SSL Read error"
 msgstr "Erro de leitura SSL"
 
-#: ssl/negotiate.c:181 ssl/negotiate.c:190 ssl/negotiate.c:197
-#: ssl/negotiate.c:212
+#: ssl/negotiate.c:181 ssl/negotiate.c:190 ssl/negotiate.c:199
+#: ssl/negotiate.c:215
 msgid "SSL error"
 msgstr "Erro SSL"
 
@@ -1806,7 +1814,7 @@ msgstr "Guarda fila de transferência num arquivo XML externo"
 
 #: properties.c:239
 msgid "Screen buffer length in bytes"
-msgstr ""
+msgstr "Tamanho do buffer de tela em bytes"
 
 #: 00default.xml:111
 msgid "Screen size"
@@ -1818,11 +1826,11 @@ msgstr "Scripts"
 
 #: ssl/linux/getcrl.c:267
 msgid "Search did not produce any attributes."
-msgstr ""
+msgstr "Pesquisa não produziu nenhum atributo"
 
 #: ssl/linux/getcrl.c:278
 msgid "Search did not produce any values."
-msgstr ""
+msgstr "Pesquisa não produziu nenhum valor"
 
 #: src/v3270ft/tables.c:183
 msgid ""
@@ -2058,7 +2066,7 @@ msgstr "Não é possível receber requisições no estado %04d"
 
 #: properties.c:129
 msgid "State is 3270, TN3270e or SSCP"
-msgstr ""
+msgstr "Estado do terminal é 3270, TN3270e or SSCP"
 
 #: src/v3270/security.c:247
 msgid "Subject issuer mismatch"
@@ -2090,7 +2098,7 @@ msgstr ""
 "has been reached, or the maximum number of data blocks per file (16060) has "
 "been reached."
 
-#: ssl/negotiate.c:198 src/v3270/security.c:136
+#: ssl/negotiate.c:200 src/v3270/security.c:136
 msgid "The CRL has expired."
 msgstr "A lista de certificados revogados expirou."
 
@@ -2120,19 +2128,13 @@ msgstr ""
 "signature value could not be determined rather than it not matching the "
 "expected value. Unused."
 
-#: ssl/negotiate.c:199
-#, fuzzy
+#: ssl/negotiate.c:201
 msgid "The Certificate revocation list (CRL) has expired."
-msgstr ""
-"A lista de revogação de certificados (CRL) de um certificado não pôde ser "
-"encontrada."
+msgstr "A lista de revogação de certificados (CRL) está expirada."
 
 #: ssl/negotiate.c:192
-#, fuzzy
 msgid "The Certificate revocation list (CRL) is not yet valid."
-msgstr ""
-"A lista de revogação de certificados (CRL) de um certificado não pôde ser "
-"encontrada."
+msgstr "A lista de revogação de certificados (CRL) ainda não é válida."
 
 #: ssl/negotiate.c:183
 msgid ""
@@ -2141,18 +2143,17 @@ msgstr ""
 "A lista de revogação de certificados (CRL) de um certificado não pôde ser "
 "encontrada."
 
-#: ssl/negotiate.c:213
+#: ssl/negotiate.c:216
 msgid "The SSL certificate for this host is not trusted."
 msgstr "O certificado SSL deste servidor não é confiável"
 
 #: ssl/linux/getcrl.c:107
 msgid "The URL for the CRL is undefined or empty"
-msgstr ""
+msgstr "A URL para o CRL não está definida ou vazia"
 
 #: ssl/linux/getcrl.c:303
-#, fuzzy
 msgid "The URL scheme is unknown"
-msgstr "Termo RPM %d não foi reconhecido"
+msgstr "O tipo de URL é desconhecido"
 
 #: src/v3270/security.c:220
 msgid "The basicConstraints pathlength parameter has been exceeded."
@@ -2206,7 +2207,7 @@ msgstr ""
 
 #: properties.c:218
 msgid "The color type"
-msgstr ""
+msgstr "O tipo de cor"
 
 #: src/v3270/security.c:343
 msgid "The connection is insecure"
@@ -2259,6 +2260,8 @@ msgstr ""
 #: properties.c:260
 msgid "The delay between the host unlocking the keyboard and the actual unlock"
 msgstr ""
+"Intervalo de tempo entre o desbloqueio de teclado pelo host e o desbloqueio "
+"real"
 
 #: dialog.c:243
 msgid "The file already exists. Replace it?"
@@ -2306,7 +2309,7 @@ msgstr "Os tipos conhecidos são %s"
 
 #: properties.c:211
 msgid "The model number"
-msgstr ""
+msgstr "Nº do modelo"
 
 #: main.c:318
 msgid "The model of 3270 display to be emulated"
@@ -2345,7 +2348,7 @@ msgstr ""
 "O Certificado raiz não está marcado como confiável para os fins "
 "especificados."
 
-#: ssl/negotiate.c:214
+#: ssl/negotiate.c:217
 msgid ""
 "The security certificate presented by this host was not issued by a trusted "
 "certificate authority."
@@ -2435,9 +2438,8 @@ msgid "Trace Data Stream"
 msgstr "Trace Data Stream"
 
 #: toggles.c:231
-#, fuzzy
 msgid "Trace SSL negotiation"
-msgstr "Negociação SSL falhou"
+msgstr "Trace da negociação SSL"
 
 #: toggles.c:123
 msgid "Trace interface events"
@@ -2499,9 +2501,9 @@ msgstr "Tente de novo com o mesmo arquivo."
 msgid "Turquoise"
 msgstr "Turquesa"
 
-#: properties.c:404
+#: properties.c:403
 msgid "URL for the CRL file"
-msgstr ""
+msgstr "URL para o arquivo CRL"
 
 #: dialog.c:64
 msgid "UTF-8"
@@ -2589,9 +2591,8 @@ msgid "Unexpected or invalid %s attribute: \"%s\""
 msgstr "Atributo %s inesperado ou inválido: \"%s\""
 
 #: ssl/linux/getcrl.c:302
-#, fuzzy
 msgid "Unexpected or invalid CRL URL"
-msgstr "Valor de cor inválido ou inesperado: \"%s\""
+msgstr "URL do CRL é inesperada ou inválida"
 
 #: actions.c:486
 #, c-format
@@ -2928,11 +2929,19 @@ msgstr "um atributo \"action\""
 msgid "bracket"
 msgstr "bracket"
 
-#: toggles.c:333 linux/connect.c:314
+#: local/events.cc:163
+msgid "connected"
+msgstr "Conectado"
+
+#: toggles.c:333 linux/connect.c:317
 msgid "disable"
 msgstr "desabilitar"
 
-#: toggles.c:333 linux/connect.c:314
+#: local/events.cc:163
+msgid "disconnected"
+msgstr "Desconectado"
+
+#: toggles.c:333 linux/connect.c:317
 msgid "enable"
 msgstr "habilitar"
 
@@ -2944,15 +2953,15 @@ msgstr "erro fcntl() ao obter estado do socket."
 msgid "ioctlsocket(FIONBIO) failed."
 msgstr "ioctlsocket(FIONBIO) failed."
 
-#: properties.c:397
+#: properties.c:396
 msgid "lib3270 revision"
-msgstr ""
+msgstr "Revisão da lib3270"
 
-#: properties.c:390
+#: properties.c:389
 msgid "lib3270 version"
-msgstr ""
+msgstr "Versão da lib3270"
 
-#: linux/connect.c:303
+#: linux/connect.c:304
 msgid "setsockopt(SO_OOBINLINE) has failed"
 msgstr "setsockopt(SO_OOBINLINE) has failed"
 

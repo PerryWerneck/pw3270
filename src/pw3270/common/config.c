@@ -562,131 +562,81 @@ gchar * build_data_filename(const gchar *first_element, ...)
 
 gchar * filename_from_va(const gchar *first_element, va_list args)
 {
-	static const gchar	* datadir	= NULL;
-	const gchar *		  appname[]	= { g_get_application_name(), PACKAGE_NAME };
-	GString			 	* result	= NULL;
-	const gchar			* element;
+	const gchar * appname[]	= { g_get_application_name(), PACKAGE_NAME };
+	size_t p,f;
 
-	if(datadir)
-		result = g_string_new(datadir);
-
-#if defined( HAVE_WIN_REGISTRY )
-
-	if(!result)
-	{
-		// No predefined datadir, search registry
-		int p;
-
-		for(p=0;p<G_N_ELEMENTS(appname) && !result;p++)
-		{
-			gchar	* path	= g_strconcat("Software\\",appname[p],NULL);
-			HKEY	  hKey	= 0;
-			LONG	  rc 	= 0;
-
-			// Note: This could be needed: http://support.microsoft.com/kb/556009
-			// http://msdn.microsoft.com/en-us/library/windows/desktop/aa384129(v=vs.85).aspx
-
-			rc = RegOpenKeyEx(HKEY_LOCAL_MACHINE,path,0,KEY_QUERY_VALUE,&hKey);
-			SetLastError(rc);
-
-			if(rc == ERROR_SUCCESS)
-			{
-				char			data[4096];
-				unsigned long	datalen	= sizeof(data);		// data field length(in), data returned length(out)
-				unsigned long	datatype;					// #defined in winnt.h (predefined types 0-11)
-
-				rc = RegQueryValueExA(hKey,"datadir",NULL,&datatype,(LPBYTE) data,&datalen);
-				if(rc == ERROR_SUCCESS)
-				{
-					result = g_string_new(g_strchomp(data));
-				}
-				else
-				{
-					gchar *msg = g_win32_error_message(rc);
-#ifndef DEBUG
-					g_message("Error \"%s\" when getting application datadir from registry",msg);
-#endif // !DEBUG
-					g_free(msg);
-				}
-				RegCloseKey(hKey);
-			}
-			else
-			{
-				gchar *msg = g_win32_error_message(rc);
-#ifndef DEBUG
-				g_message("Error \"%s\" when opening datadir key from registry",msg);
-#endif // !DEBUG
-				g_free(msg);
-			}
-
-			g_free(path);
-		}
-	}
-#endif // HAVE_WIN_REGISTRY
-
-	if(!result)
-	{
-		// Search for application folder on system data dirs
-		const gchar * const * dir = g_get_system_data_dirs();
-		int p;
-
-		for(p=0;p<G_N_ELEMENTS(appname) && !datadir;p++)
-		{
-			int f;
-
-			for(f=0;dir[f] && !datadir;f++)
-			{
-				gchar *name = g_build_filename(dir[f],appname[p],NULL);
-//				trace("Searching for %s: %s",name,g_file_test(name,G_FILE_TEST_IS_DIR) ? "Ok" : "Not found");
-				if(g_file_test(name,G_FILE_TEST_IS_DIR))
-					result = g_string_new(datadir = name);
-				else
-					g_free(name);
-			}
-		}
-
-	}
-
-#ifdef DEBUG
-	if(!result)
-	{
-		int f;
-		gchar *dir = g_get_current_dir();
-
-		for(f=0;f<2 && dir;f++)
-		{
-			gchar *ptr = dir;
-			dir = g_path_get_dirname(ptr);
-			g_free(ptr);
-		}
-
-		if(dir)
-		{
-			gchar *name = g_build_filename(dir,"ui",NULL);
-			if(g_file_test(name,G_FILE_TEST_IS_DIR))
-				result = g_string_new(dir);
-			g_free(name);
-			g_free(dir);
-		}
-
-	}
-#endif // DEBUG
-
-	if(!result)
-	{
-		gchar *dir = g_get_current_dir();
-		result = g_string_new(dir);
-		g_free(dir);
-		g_warning("Unable to find application datadir, using %s",result->str);
-	}
-
+	// Make base path
+	const gchar *element;
+	GString	* result = g_string_new("");
 	for(element = first_element;element;element = va_arg(args, gchar *))
     {
     	g_string_append_c(result,G_DIR_SEPARATOR);
     	g_string_append(result,element);
     }
 
-	return g_string_free(result, FALSE);
+	g_autofree gchar * suffix = g_string_free(result, FALSE);
+
+#if defined( HAVE_WIN_REGISTRY )
+	for(p=0;p<G_N_ELEMENTS(appname) && !result;p++)
+	{
+		g_autofree gchar * path	= g_strconcat("Software\\",appname[p],NULL);
+
+		HKEY	  hKey	= 0;
+		LONG	  rc 	= 0;
+
+		// Note: This could be needed: http://support.microsoft.com/kb/556009
+		// http://msdn.microsoft.com/en-us/library/windows/desktop/aa384129(v=vs.85).aspx
+
+		rc = RegOpenKeyEx(HKEY_LOCAL_MACHINE,path,0,KEY_QUERY_VALUE,&hKey);
+		SetLastError(rc);
+
+		if(rc == ERROR_SUCCESS)
+		{
+			char			data[4096];
+			unsigned long	datalen	= sizeof(data);		// data field length(in), data returned length(out)
+			unsigned long	datatype;					// #defined in winnt.h (predefined types 0-11)
+
+			rc = RegQueryValueExA(hKey,"datadir",NULL,&datatype,(LPBYTE) data,&datalen);
+			if(rc == ERROR_SUCCESS)
+			{
+				gchar * path = g_build_filename(data,appname[p],suffix,NULL);
+				trace("searching \"%s\"",path);
+				if(g_file_test(path,G_FILE_TEST_EXISTS))
+					return path;
+				g_free(path);
+			}
+			RegCloseKey(hKey);
+		}
+
+	}
+#endif // HAVE_WIN_REGISTRY
+
+	// Check system data dirs
+	const gchar * const * system_data_dirs = g_get_system_data_dirs();
+	for(p=0;p<G_N_ELEMENTS(appname);p++)
+	{
+		for(f=0;system_data_dirs[f];f++)
+		{
+			gchar * path = g_build_filename(system_data_dirs[f],appname[p],suffix,NULL);
+			trace("searching \"%s\"",path);
+			if(g_file_test(path,G_FILE_TEST_EXISTS))
+				return path;
+			g_free(path);
+		}
+
+	}
+
+	// Check current dir
+	g_autofree gchar *dir = g_get_current_dir();
+	gchar * path = g_build_filename(dir,suffix,NULL);
+	trace("searching \"%s\"",path);
+	if(g_file_test(path,G_FILE_TEST_EXISTS))
+		return path;
+	g_free(path);
+
+	trace("Can't find \"%s\"",suffix);
+
+	return g_build_filename(".",suffix);
 }
 
 #ifdef HAVE_WIN_REGISTRY

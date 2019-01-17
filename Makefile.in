@@ -210,6 +210,13 @@ $(POTDIR)/%.pot: \
 	@$(MAKE) -C src/$(basename $(notdir $@)) $@
 
 $(POTDIR)/%.pot: \
+	/usr/share/pw3270/pot/%.pot
+ 
+	@echo $(notdir $@) ...
+	@mkdir -p `dirname $@`
+	@cp "$^" $@
+
+$(POTDIR)/%.pot: \
 	./modules/%/* \
 	./modules/%/src/* \
 	./modules/%/Makefile

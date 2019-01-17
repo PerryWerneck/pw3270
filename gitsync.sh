@@ -7,7 +7,9 @@
 # https://www.opentechguides.com/how-to/article/git/177/git-sync-repos.html
 #
 # git remote add bitbucket https://bitbucket.org/pw3270/pw3270-application.git
+# git remote add github	https://github.com/PerryWerneck/pw3270.git
 #
+
 # git remote add github https://github.com/PerryWerneck/pw3270.git
 # git push github --all
 #
