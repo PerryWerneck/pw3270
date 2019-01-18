@@ -255,29 +255,6 @@ G_GNUC_INTERNAL void transfer_action(GtkAction *action, GtkWidget *widget)
 
 static void connect_standard_action(GtkAction *action, GtkWidget *widget, const gchar *name)
 {
-	/*
-	#undef DECLARE_LIB3270_ACTION
-	#undef DECLARE_LIB3270_CLEAR_SELECTION_ACTION
-	#undef DECLARE_LIB3270_KEY_ACTION
-	#undef DECLARE_LIB3270_CURSOR_ACTION
-	#undef DECLARE_LIB3270_FKEY_ACTION
-
-	#define DECLARE_LIB3270_ACTION( name )						{ #name, lib3270_ ## name			},
-	#define DECLARE_LIB3270_CLEAR_SELECTION_ACTION( name )		{ #name, lib3270_ ## name			},
-	#define DECLARE_LIB3270_KEY_ACTION( name )					{ #name, lib3270_ ## name			},
-	#define DECLARE_LIB3270_CURSOR_ACTION( name )				{ #name, lib3270_cursor_ ## name	},
-	#define DECLARE_LIB3270_FKEY_ACTION( name )					// name
-
-	static const struct _lib3270_action
-	{
-		const gchar * name;
-		int			  (*call)(H3270 *h);
-	} lib3270_entry[] =
-	{
-		#include <lib3270/action_table.h>
-	};
-	*/
-
 	static const struct _gtk_action
 	{
 		const gchar * name;

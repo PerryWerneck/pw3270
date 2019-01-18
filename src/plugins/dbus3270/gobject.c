@@ -526,7 +526,7 @@ void pw3270_dbus_set_script(PW3270Dbus *object, const gchar *text, int mode, DBu
 		return;
 	}
 
-	dbus_g_method_return(context,v3270_set_script(widget,*text,mode != 0));
+	dbus_g_method_return(context,v3270_set_script(widget,mode == 0 ? 0 : 'S'));
 }
 
 void pw3270_dbus_show_popup(PW3270Dbus *object, int id, const gchar *title, const gchar *msg, const gchar *text, DBusGMethodInvocation *context)

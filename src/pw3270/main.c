@@ -62,7 +62,6 @@
  static const gchar		* charset		= NULL;
  static const gchar		* remap			= NULL;
  static const gchar		* model			= NULL;
- static const gchar		* pluginpath	= NULL;
 
  const gchar			* tracefile		= NULL;
 
@@ -279,9 +278,10 @@ static gboolean startup(GtkWidget *toplevel)
 
 int main(int argc, char *argv[])
 {
-	static const gchar	* session_name	= NULL;
-	static const gchar	* host			= NULL;
-	int 				  rc 			= 0;
+	const gchar		* pluginpath	= NULL;
+	const gchar		* session_name	= NULL;
+	const gchar		* host			= lib3270_get_default_host(NULL);
+	int 			  rc 			= 0;
 
     trace("%s",__FUNCTION__);
 
@@ -299,31 +299,31 @@ int main(int argc, char *argv[])
 
 	// Process command-line options
 	{
-		static const GOptionEntry app_options[] =
+		const GOptionEntry app_options[] =
 		{
 #if ! defined( WIN32 )
-			{ "appname",		'a', 0, G_OPTION_ARG_CALLBACK,	appname,			N_( "Application name" ),							PACKAGE_NAME	},
+			{ "appname",		'a', 0, G_OPTION_ARG_CALLBACK,	appname,			N_( "Application name" ),							PACKAGE_NAME					},
 #else
-			{ "appname",		'a', 0, G_OPTION_ARG_STRING,	&appname,			N_( "Application name" ),							PACKAGE_NAME	},
-			{ "datadir",		'd', 0, G_OPTION_ARG_CALLBACK,	datadir,			N_( "Path to application data files" ),				NULL         	},
+			{ "appname",		'a', 0, G_OPTION_ARG_STRING,	&appname,			N_( "Application name" ),							PACKAGE_NAME					},
+			{ "datadir",		'd', 0, G_OPTION_ARG_CALLBACK,	datadir,			N_( "Path to application data files" ),				NULL         					},
 #endif // WIN32
-			{ "session",		's', 0, G_OPTION_ARG_STRING,	&session_name,		N_( "Session name" ),								NULL			},
-			{ "host",			'h', 0, G_OPTION_ARG_STRING,	&host,				N_( "Host to connect"),								NULL			},
-			{ "colors",			'c', 0, G_OPTION_ARG_CALLBACK,	optcolors,			N_( "Set reported colors (8/16)" ),					"16"			},
-            { "systype",		't', 0, G_OPTION_ARG_STRING,	&systype,			N_( "Host system type" ),							"S390"			},
-			{ "toggleset",		'S', 0, G_OPTION_ARG_STRING,	&toggleset,			N_( "Set toggles ON" ),								NULL			},
-			{ "togglereset",	'R', 0, G_OPTION_ARG_STRING,	&togglereset,		N_( "Set toggles OFF" ),							NULL			},
-			{ "charset",	    'C', 0, G_OPTION_ARG_STRING,	&charset,		    N_( "Set host charset" ),							NULL			},
-			{ "remap",		    'm', 0, G_OPTION_ARG_FILENAME,	&remap,			    N_( "Remap charset from xml file" ),				NULL			},
-			{ "model",		    'M', 0, G_OPTION_ARG_STRING,	&model,			    N_( "The model of 3270 display to be emulated" ),	NULL			},
-			{ "autodisconnect",	'D', 0, G_OPTION_ARG_INT,		&timer,			    N_( "Minutes for auto-disconnect" ),				0				},
-			{ "pluginpath",		'P', 0, G_OPTION_ARG_STRING,	&pluginpath,	    N_( "Path for plugin files" ),						NULL			},
+			{ "session",		's', 0, G_OPTION_ARG_STRING,	&session_name,		N_( "Session name" ),								NULL							},
+			{ "host",			'h', 0, G_OPTION_ARG_STRING,	&host,				N_( "Host to connect"),								host							},
+			{ "colors",			'c', 0, G_OPTION_ARG_CALLBACK,	optcolors,			N_( "Set reported colors (8/16)" ),					"16"							},
+            { "systype",		't', 0, G_OPTION_ARG_STRING,	&systype,			N_( "Host system type" ),							"S390"							},
+			{ "toggleset",		'S', 0, G_OPTION_ARG_STRING,	&toggleset,			N_( "Set toggles ON" ),								NULL							},
+			{ "togglereset",	'R', 0, G_OPTION_ARG_STRING,	&togglereset,		N_( "Set toggles OFF" ),							NULL							},
+			{ "charset",	    'C', 0, G_OPTION_ARG_STRING,	&charset,		    N_( "Set host charset" ),							NULL							},
+			{ "remap",		    'm', 0, G_OPTION_ARG_FILENAME,	&remap,			    N_( "Remap charset from xml file" ),				NULL							},
+			{ "model",		    'M', 0, G_OPTION_ARG_STRING,	&model,			    N_( "The model of 3270 display to be emulated" ),	NULL							},
+			{ "autodisconnect",	'D', 0, G_OPTION_ARG_INT,		&timer,			    N_( "Minutes for auto-disconnect" ),				0								},
+			{ "pluginpath",		'P', 0, G_OPTION_ARG_STRING,	&pluginpath,	    N_( "Path for plugin files" ),						NULL							},
 
 #if defined( HAVE_SYSLOG )
-			{ "syslog",			'l', 0, G_OPTION_ARG_NONE,		&log_to_syslog,		N_( "Send messages to syslog" ),					NULL			},
+			{ "syslog",			'l', 0, G_OPTION_ARG_NONE,		&log_to_syslog,		N_( "Send messages to syslog" ),					NULL							},
 #endif
-			{ "tracefile",		'T', 0, G_OPTION_ARG_FILENAME,	&tracefile,			N_( "Set trace filename" ),							NULL			},
-			{ "log",		    'L', 0, G_OPTION_ARG_FILENAME,	&logfile,		    N_( "Log to file" ),								NULL        	},
+			{ "tracefile",		'T', 0, G_OPTION_ARG_FILENAME,	&tracefile,			N_( "Set trace filename" ),							NULL							},
+			{ "log",		    'L', 0, G_OPTION_ARG_FILENAME,	&logfile,		    N_( "Log to file" ),								NULL        					},
 
 			{ NULL }
 		};
