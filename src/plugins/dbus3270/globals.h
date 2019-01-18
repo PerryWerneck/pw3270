@@ -41,6 +41,12 @@
 	#include <lib3270/log.h>
 	#include <glib.h>
 
+	//
+	// Disabling warning on unused-function defined in dbus-glib-bindings.h
+	// warning: 'org_freedesktop_DBus_reload_config' defined but not used [-Wunused-function] ...
+	//
+	#pragma GCC diagnostic ignored "-Wunused-function"
+
 	#include <dbus/dbus-glib.h>
 	#include <dbus/dbus-glib-bindings.h>
 	#include <dbus/dbus-glib-lowlevel.h>
