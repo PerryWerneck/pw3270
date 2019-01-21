@@ -229,6 +229,9 @@
 
 		if(g_file_test(filename,G_FILE_TEST_IS_REGULAR))
 			return filename;
+
+		g_message("Can't find default config (%s)",filename);
+
 		g_free(filename);
 
 	}
@@ -263,6 +266,7 @@
 	//
 	// Can't find, use user config dir
 	//
+	g_message("No config, defaulting to %s/%s",g_get_user_config_dir(),name);
  	return g_build_filename(g_get_user_config_dir(),name,NULL);
 
  }
