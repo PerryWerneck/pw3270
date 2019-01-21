@@ -39,6 +39,7 @@ exec_prefix=@exec_prefix@
 bindir=@bindir@
 sbindir=@sbindir@
 libdir=@libdir@
+datarootdir=@datarootdir@
 
 BASEDIR=@BASEDIR@
 SRCDIR=$(BASEDIR)/.src/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/src/pw3270/$(MODULE_NAME)
@@ -63,6 +64,7 @@ CFLAGS= \
 	@LIBV3270_CFLAGS@ \
 	@PW3270_CFLAGS@ \
 	-Wno-deprecated-declarations \
+	-DDATAROOTDIR=\"$(datarootdir)\" \
 	@GTK_CFLAGS@ 
 
 LIBS= \

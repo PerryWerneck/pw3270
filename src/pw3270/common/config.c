@@ -223,7 +223,7 @@
 	// Search the application DATADIR
 	//
 	{
-		gchar *filename = g_build_filename(G_STRINGIFY(DATADIR),name,NULL);
+		gchar *filename = g_build_filename(DATAROOTDIR,PACKAGE_NAME,name,NULL);
 
 		trace("Checking for %s",filename);
 
@@ -640,6 +640,17 @@ gchar * filename_from_va(const gchar *first_element, va_list args)
 
 	}
 #endif // HAVE_WIN_REGISTRY
+
+#ifdef _WIN32
+	for(p=0;p<G_N_ELEMENTS(appname) && !result;p++)
+	{
+		gchar * path = g_build_filename(g_win32_get_package_installation_directory_of_module(NULL),appname[p],suffix,NULL);
+		trace("searching \"%s\"",path);
+		if(g_file_test(path,G_FILE_TEST_EXISTS))
+			return path;
+		g_free(path);
+	}
+#endif // _WIN32
 
 	// Check system data dirs
 	const gchar * const * system_data_dirs = g_get_system_data_dirs();
