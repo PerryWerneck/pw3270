@@ -67,7 +67,10 @@ static void do_lib3270_action(GtkAction *action, GtkWidget *widget)
 
 	trace_action(action,widget);
 
-	call(v3270_get_session(widget));
+	if(call(v3270_get_session(widget)))
+	{
+		g_message("Action \"%s\" failed: %s",gtk_action_get_name(action),strerror(errno));
+	}
 }
 
 static void connect_action(GtkAction *action, GtkWidget *widget)
@@ -77,7 +80,22 @@ static void connect_action(GtkAction *action, GtkWidget *widget)
 	const gchar		* colortype	= (const gchar *) g_object_get_data(G_OBJECT(action),"colors");
 //	unsigned short	  colors;
 
-	trace_action(action,widget);
+//	trace_action(action,widget);
+
+	lib3270_trace_event(
+		v3270_get_session(widget),
+		"Action %s activated on widget %p\nurl=%s\nsystype=%s\ncolortype=%s\n",
+			gtk_action_get_name(action),
+			widget,
+			(host ? host : "-"),
+			(systype ? systype : "-"),
+			(colortype ? colortype : "-")
+	);
+
+	/*
+	lib3270_trace_event(
+				v3270_get_session(widget),"Action %s activated on widget %p\n",gtk_action_get_name(a),w);
+	*/
 
 	if(host)
 		v3270_set_url(widget,host);
@@ -88,14 +106,26 @@ static void connect_action(GtkAction *action, GtkWidget *widget)
 	if(colortype)
 		v3270_set_session_color_type(widget,atoi(colortype));
 
-	host = v3270_get_hostname(widget);
+	host = lib3270_get_url(v3270_get_session(widget));
+
+	trace("host=%s",host);
+
 	if(host && *host)
 	{
-		v3270_reconnect(widget);
+		if(v3270_reconnect(widget))
+		{
+			lib3270_trace_event(
+					v3270_get_session(widget),
+					"Recconect has failed: %s",
+					strerror(errno)
+			);
+		}
 		return;
 	}
 
+	lib3270_trace_event(v3270_get_session(widget),"No default host, opening dialog");
 	hostname_action(action,widget);
+
 }
 
 static void disconnect_action(GtkAction *action, GtkWidget *widget)
