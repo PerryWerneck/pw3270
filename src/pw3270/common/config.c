@@ -29,7 +29,13 @@
  *
  */
 
+ #define ENABLE_NLS
+ #define GETTEXT_PACKAGE PACKAGE_NAME
+
+ #include <libintl.h>
+ #include <glib/gi18n.h>
  #include <gtk/gtk.h>
+
  #include "common.h"
  #include <stdarg.h>
  #include <glib/gstdio.h>
@@ -58,7 +64,6 @@
 #else
 
 	static GKeyFile		* program_config = NULL;
- 	static const gchar	* mask = "%s" G_DIR_SEPARATOR_S "%s.conf";
 
 #endif // HAVE_WIN_REGISTRY
 
@@ -192,51 +197,69 @@
  		g_get_user_config_dir,
  		g_get_user_data_dir,
  		g_get_home_dir,
-
 	};
- 	gchar *filename;
- 	int f;
 
-	const gchar * const *sysconfig;
+	size_t f;
+	g_autofree gchar * name = g_strconcat(g_get_application_name(),".conf",NULL);
 
-#ifdef DEBUG
-	filename = g_strdup_printf(mask,".",g_get_application_name());
-	trace("Checking for %s",filename);
-	if(g_file_test(filename,G_FILE_TEST_IS_REGULAR))
-		return filename;
-	g_free(filename);
-#endif
+	//
+	// First search the user data
+	//
 
  	for(f=0;f<G_N_ELEMENTS(dir);f++)
 	{
-		filename = g_strdup_printf(mask,dir[f](),g_get_application_name());
+		gchar *filename = g_build_filename(dir[f](),name,NULL);
+
 		trace("Checking for %s",filename);
+
 		if(g_file_test(filename,G_FILE_TEST_IS_REGULAR))
 			return filename;
 		g_free(filename);
+
 	}
 
-	sysconfig = g_get_system_config_dirs();
+#ifdef DATADIR
+	//
+	// Search the application DATADIR
+	//
+	{
+		gchar *filename = g_build_filename(G_STRINGIFY(DATADIR),name,NULL);
+
+		trace("Checking for %s",filename);
+
+		if(g_file_test(filename,G_FILE_TEST_IS_REGULAR))
+			return filename;
+		g_free(filename);
+
+	}
+#endif // DATADIR
+
+	//
+	// Search the system folders
+	//
+
+	const gchar * const * sysconfig = g_get_system_config_dirs();
  	for(f=0;sysconfig[f];f++)
 	{
-		filename = g_strdup_printf(mask,sysconfig[f],g_get_application_name());
+		gchar *filename = g_build_filename(sysconfig[f],name,NULL);
 		trace("Checking for %s",filename);
 		if(g_file_test(filename,G_FILE_TEST_IS_REGULAR))
 			return filename;
 		g_free(filename);
 	}
 
-	sysconfig = g_get_system_data_dirs();
- 	for(f=0;sysconfig[f];f++)
+	const gchar * const * sysdata = g_get_system_data_dirs();
+ 	for(f=0;sysdata[f];f++)
 	{
-		filename = g_strdup_printf("%s" G_DIR_SEPARATOR_S PACKAGE_NAME G_DIR_SEPARATOR_S "%s.conf",sysconfig[f],g_get_application_name());
+		gchar *filename = g_build_filename(sysdata[f],name,NULL);
 		trace("Checking for %s",filename);
 		if(g_file_test(filename,G_FILE_TEST_IS_REGULAR))
 			return filename;
 		g_free(filename);
 	}
 
- 	return g_strdup_printf(mask,g_get_user_config_dir(),g_get_application_name());
+ 	return g_build_filename(g_get_user_config_dir(),name);
+
  }
 #endif  //  #ifdef HAVE_WIN_REGISTRY
 
@@ -389,6 +412,7 @@ void configuration_init(void)
 
 	if(filename)
 	{
+		g_message(_("Loading %s"),filename);
 		g_key_file_load_from_file(program_config,filename,G_KEY_FILE_NONE,NULL);
 		g_free(filename);
 	}
@@ -530,18 +554,15 @@ void configuration_deinit(void)
 
 	if(text)
 	{
-		gchar *filename = g_strdup_printf(mask,g_get_user_config_dir(),g_get_application_name());
+		g_autofree gchar * name = g_strconcat(g_get_application_name(),".conf",NULL);
+		g_autofree gchar * filename = g_build_filename(g_get_user_config_dir(),name,NULL);
 
 		trace("Saving configuration in \"%s\"",filename);
 
 		g_mkdir_with_parents(g_get_user_config_dir(),S_IRUSR|S_IWUSR);
-
 		g_file_set_contents(filename,text,-1,NULL);
 
-		g_free(filename);
-		g_free(text);
 	}
-
 
 	g_key_file_free(program_config);
 	program_config = NULL;
