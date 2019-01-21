@@ -286,9 +286,6 @@
 		<Unit filename="src/pw3270/tools.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/pw3270/trace.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/pw3270/uiparser/Makefile.in" />
 		<Unit filename="src/pw3270/uiparser/accelerator.c">
 			<Option compilerVar="CC" />

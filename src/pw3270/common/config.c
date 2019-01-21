@@ -235,9 +235,8 @@
 #endif // DATADIR
 
 	//
-	// Search the system folders
+	// Search the system config folders
 	//
-
 	const gchar * const * sysconfig = g_get_system_config_dirs();
  	for(f=0;sysconfig[f];f++)
 	{
@@ -248,6 +247,9 @@
 		g_free(filename);
 	}
 
+	//
+	// Search the system data folders
+	//
 	const gchar * const * sysdata = g_get_system_data_dirs();
  	for(f=0;sysdata[f];f++)
 	{
@@ -258,7 +260,10 @@
 		g_free(filename);
 	}
 
- 	return g_build_filename(g_get_user_config_dir(),name);
+	//
+	// Can't find, use user config dir
+	//
+ 	return g_build_filename(g_get_user_config_dir(),name,NULL);
 
  }
 #endif  //  #ifdef HAVE_WIN_REGISTRY
