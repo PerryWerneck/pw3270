@@ -652,7 +652,7 @@
 
  static void print_all(GtkWidget *widget, GtkWidget *window)
  {
-	pw3270_print(widget, NULL, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, PW3270_SRC_ALL);
+	pw3270_print(widget, NULL, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, LIB3270_PRINT_ALL);
  }
 
  static void toggle_changed(GtkWidget *widget, LIB3270_TOGGLE id, gboolean toggled, const gchar *name, GtkWindow *toplevel)

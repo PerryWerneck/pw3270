@@ -91,17 +91,7 @@
 
  LIB3270_EXPORT void 		  pw3270_set_action_state(GtkAction *action, gboolean on);
 
-
- typedef enum pw3270_src
- {
- 	PW3270_SRC_ALL,			/**< Screen contents */
- 	PW3270_SRC_SELECTED,	/**< Selected region */
-	PW3270_SRC_COPY,		/**< Copy buffer */
-
- 	PW3270_SRC_USER
- } PW3270_SRC;
-
- LIB3270_EXPORT int 		  pw3270_print(GtkWidget *widget, GObject *action, GtkPrintOperationAction oper, PW3270_SRC src);
+ LIB3270_EXPORT int 		  pw3270_print(GtkWidget *widget, GObject *action, GtkPrintOperationAction oper, LIB3270_PRINT_MODE src);
 
 #ifdef HAVE_GTKMAC
 	#include <gtk-mac-bundle.h>

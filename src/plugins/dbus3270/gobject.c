@@ -559,7 +559,7 @@ void pw3270_dbus_erase_eof(PW3270Dbus *object, DBusGMethodInvocation *context)
 
 void pw3270_dbus_print(PW3270Dbus *object, DBusGMethodInvocation *context)
 {
-	dbus_g_method_return(context,lib3270_print(pw3270_dbus_get_session_handle(object)));
+	dbus_g_method_return(context,lib3270_print_all(pw3270_dbus_get_session_handle(object)));
 }
 
 void pw3270_dbus_set_unlock_delay(PW3270Dbus *object, int value, DBusGMethodInvocation *context)
