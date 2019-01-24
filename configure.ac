@@ -497,10 +497,16 @@ AC_SUBST(LIBSSL_CFLAGS)
 AC_SEARCH_LIBS([dlopen], [dl], AC_DEFINE(HAVE_LIBDL), AC_MSG_NOTICE([libdl not present.]))
 
 dnl ---------------------------------------------------------------------------
+dnl Directory config
+dnl ---------------------------------------------------------------------------
+
+AC_ARG_WITH([build-dir], [AS_HELP_STRING([--with-build-dir], [Setup build path])], [ app_cv_buildir="$withval" ],[ app_cv_buildir="$ac_pwd" ])
+AC_SUBST(BASEDIR,$app_cv_buildir)
+
+dnl ---------------------------------------------------------------------------
 dnl Output config
 dnl ---------------------------------------------------------------------------
 
-AC_SUBST(BASEDIR,$ac_pwd)
 AC_SUBST(PLUGINS)
 
 dnl ---------------------------------------------------------------------------

@@ -25,8 +25,6 @@
 # erico.mendonca@gmail.com      (Erico Mascarenhas de Mendonça)
 #
 
-myDIR=$(dirname $(readlink -f $0))
-
 prefix="@prefix@"
 PKG_CONFIG="@PKG_CONFIG@"
 GTK_VERSION="gtk+-@GTK_VERSION@"
@@ -34,7 +32,7 @@ GTK_VERSION="gtk+-@GTK_VERSION@"
 GTK_PREFIX=$($PKG_CONFIG --variable=prefix ${GTK_VERSION})
 GDK_LOADERS=$(${PKG_CONFIG} --variable=gdk_pixbuf_binarydir gdk-pixbuf-2.0 | sed -e "s@${prefix}@@g")
 
-TARGET="$(dirname ${myDIR})/.bin/runtime"
+TARGET="@BASEDIR@/.bin/runtime"
 
 # Change to bin path
 mkdir -p ${TARGET}
@@ -48,8 +46,8 @@ copy_dll() {
 		SOURCES=$(mktemp)
 		REQUIRES=$(mktemp)
 
-		find "$(dirname ${myDIR})/.bin/Release/" -iname "*.dll" >	${SOURCES}
-		find "$(dirname ${myDIR})/.bin/Release/" -iname "*.exe" >>	${SOURCES}
+		find "@BASEDIR@/.bin/Release/" -iname "*.dll" >	${SOURCES}
+		find "@BASEDIR@/.bin/Release/" -iname "*.exe" >>	${SOURCES}
 		find "${TARGET}" -iname *.dll >> ${SOURCES}
 
 		while read FILENAME
@@ -120,7 +118,7 @@ copy_dll() {
 		do
 			if [ ! -e "${TARGET}/${FILENAME}" ]; then
 
-				COUNT=$(find "$(dirname ${myDIR})/.bin/Release/" -iname ${FILENAME} | wc --lines)
+				COUNT=$(find "@BASEDIR@/.bin/Release/" -iname ${FILENAME} | wc --lines)
 				if [ "${COUNT}" == "0" ]; then
 
 					echo ${FILENAME}
