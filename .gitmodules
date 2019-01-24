@@ -1,6 +1,3 @@
-[submodule "modules/lib3270"]
-	path = modules/lib3270
-	url = https://github.com/PerryWerneck/lib3270.git
 [submodule "modules/libv3270"]
 	path = modules/libv3270
 	url = http://softwarepublico.gov.br/gitlab/pw3270/libv3270.git
