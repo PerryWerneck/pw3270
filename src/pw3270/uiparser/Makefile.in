@@ -46,7 +46,7 @@ BASEDIR=@BASEDIR@
 SRCDIR=$(BASEDIR)/.src/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/src/pw3270/$(MODULE_NAME)
 POTDIR=$(BASEDIR)/.pot/$(PACKAGE_TARNAME)/$(MODULE_NAME)
 
-OBJDIR=.obj
+OBJDIR=$(BASEDIR)/.obj/application/uiparser
 OBJDBG=$(OBJDIR)/Debug
 OBJRLS=$(OBJDIR)/Release
 
@@ -76,7 +76,7 @@ LIBS= \
 #---[ Rules ]----------------------------------------------------------------------------
 
 DEPENDS= \
-	$(BASEDIR)/src/include/*.h
+	../../include/*.h
 
 $(OBJDBG)/%.o: \
 	%.c \

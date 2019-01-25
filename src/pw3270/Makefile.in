@@ -64,7 +64,7 @@ BASEDIR=@BASEDIR@
 SRCDIR=$(BASEDIR)/.src/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/src/pw3270
 POTDIR=$(BASEDIR)/.pot/$(PACKAGE_TARNAME)
 
-OBJDIR=.obj
+OBJDIR=$(BASEDIR)/.obj/application
 OBJDBG=$(OBJDIR)/Debug
 OBJRLS=$(OBJDIR)/Release
 
@@ -112,7 +112,7 @@ APP_LDFLAGS=@APP_LDFLAGS@
 #---[ Rules ]----------------------------------------------------------------------------
 
 DEPENDS=\
-	$(BASEDIR)/src/include/*.h \
+	../include/*.h \
 	*.h \
 	Makefile
 
