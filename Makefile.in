@@ -75,9 +75,12 @@ all: \
 	locale/$(PACKAGE_TARNAME).pot
 
 Release: \
+	application \
+	$(foreach PLG, $(PLUGINS), $(BINRLS)/plugins/$(PLG)@DLLEXT@)
+
+application: \
 	$(foreach MODULE, $(MODULES), $(BINRLS)/@DLLPREFIX@$(MODULE)@DLLEXT@) \
 	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ \
-	$(foreach PLG, $(PLUGINS), $(BINRLS)/plugins/$(PLG)@DLLEXT@)
 
 
 #---[ Debug Rules ]----------------------------------------------------------------------
