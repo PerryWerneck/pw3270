@@ -25,6 +25,9 @@
 # erico.mendonca@gmail.com      (Erico Mascarenhas de Mendonça)
 #
 
+# Disable i18n
+export LANG=C
+
 prefix="@prefix@"
 PKG_CONFIG="@PKG_CONFIG@"
 GTK_VERSION="gtk+-@GTK_VERSION@"
