@@ -85,7 +85,7 @@ else
 fi
 
 case "$host" in
-	*-mingw32)
+	*-mingw32|*-pc-msys)
 
 		EXEEXT=".exe"
 		DLLPREFIX=""
@@ -105,6 +105,8 @@ case "$host" in
 		dnl https://stackoverflow.com/questions/13768515/how-to-do-static-linking-of-libwinpthread-1-dll-in-mingw
 		STATIC_LDFLAGS="-static-libstdc++ -static-libgcc -static"
 		DLL_LDFLAGS="-shared -Wl,--add-stdcall-alias"
+
+		AC_DEFINE(ENABLE_WINDOWS_REGISTRY)
 
 		AC_CONFIG_FILES(win/makeruntime.sh)
 		AC_CONFIG_FILES(win/copydeps.sh)
@@ -239,7 +241,7 @@ AC_CHECK_HEADER(libintl.h, [
 	AC_DEFINE(HAVE_LIBINTL, 1)
 
 	case "$host" in
-	*-mingw32)
+	*-mingw32|*-pc-msys)
 		INTL_LIBS="-lintl"
 		;;
 
@@ -376,7 +378,7 @@ AC_ARG_ENABLE([pic],
 	esac
 
 dnl	case "$host" in
-dnl		*-mingw32)
+dnl		*-mingw32|*-pc-msys)
 dnl			app_cv_pic="no"
 dnl			;;
 dnl
@@ -449,7 +451,7 @@ AC_ARG_WITH([inet-ntop], [AS_HELP_STRING([--with-inet-ntop], [Assume that inet_n
 if test "$app_cv_inet_ntop" == "auto"; then
 
 	case "$host" in
-	*-mingw32)
+	*-mingw32|*-pc-msys)
 		app_cv_inet_ntop="yes"
 		;;
 

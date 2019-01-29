@@ -272,7 +272,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
 
 		trace("Saving settings PrintSettings=%p page_setup=%p",settings,pgsetup);
 
-#ifdef HAVE_WIN_REGISTRY
+#ifdef ENABLE_WINDOWS_REGISTRY
 		HKEY registry;
 
 		if(get_registry_handle("print",&registry,KEY_SET_VALUE))
@@ -625,7 +625,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
 
 	// Load page and print settings
 	{
-#ifdef HAVE_WIN_REGISTRY
+#ifdef ENABLE_WINDOWS_REGISTRY
 
 		HKEY registry;
 

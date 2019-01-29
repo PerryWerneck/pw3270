@@ -87,14 +87,14 @@
 
  void		  restore_window_from_config(const gchar *group, const gchar *key, GtkWidget *hwnd);
 
-#ifdef HAVE_WIN_REGISTRY
+#ifdef ENABLE_WINDOWS_REGISTRY
  gboolean	  get_registry_handle(const gchar *group, HKEY *hKey, REGSAM samDesired);
  void		  registry_foreach(HKEY parent, const gchar *name,void (*cbk)(const gchar *key, const gchar *val, gpointer *user_data), gpointer *user_data);
  void 		  registry_set_double(HKEY hKey, const gchar *key, gdouble value);
  gboolean	  registry_get_double(HKEY hKey, const gchar *key, gdouble *value);
 #else
  GKeyFile	* get_application_keyfile(void);
-#endif // HAVE_WIN_REGISTRY
+#endif // ENABLE_WINDOWS_REGISTRY
 
 
 #endif

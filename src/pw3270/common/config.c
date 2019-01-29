@@ -43,7 +43,6 @@
 #ifdef WIN32
 
 	#include <windows.h>
-	// #define HAVE_WIN_REGISTRY 1
 
 	#ifndef KEY_WOW64_64KEY
 		#define KEY_WOW64_64KEY 0x0100
@@ -57,7 +56,7 @@
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
-#ifdef HAVE_WIN_REGISTRY
+#ifdef ENABLE_WINDOWS_REGISTRY
 
  	static const gchar	* registry_path = "SOFTWARE";
 
@@ -65,11 +64,11 @@
 
 	static GKeyFile		* program_config = NULL;
 
-#endif // HAVE_WIN_REGISTRY
+#endif // ENABLE_WINDOWS_REGISTRY
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
-#ifdef HAVE_WIN_REGISTRY
+#ifdef ENABLE_WINDOWS_REGISTRY
 
  enum REG_KEY
  {
@@ -270,11 +269,11 @@
  	return g_build_filename(g_get_user_config_dir(),name,NULL);
 
  }
-#endif  //  #ifdef HAVE_WIN_REGISTRY
+#endif  //  #ifdef ENABLE_WINDOWS_REGISTRY
 
  gboolean get_boolean_from_config(const gchar *group, const gchar *key, gboolean def)
  {
-#ifdef HAVE_WIN_REGISTRY
+#ifdef ENABLE_WINDOWS_REGISTRY
 	gboolean	ret 		= def;
 	HKEY 		hKey;
 
@@ -308,14 +307,14 @@
 		else
 			return val;
 	}
-#endif // HAVE_WIN_REGISTRY
+#endif // ENABLE_WINDOWS_REGISTRY
 
 	return def;
  }
 
  gint get_integer_from_config(const gchar *group, const gchar *key, gint def)
  {
-#ifdef HAVE_WIN_REGISTRY
+#ifdef ENABLE_WINDOWS_REGISTRY
 
 	HKEY key_handle;
 
@@ -351,7 +350,7 @@
 		else
 			return val;
 	}
-#endif // HAVE_WIN_REGISTRY
+#endif // ENABLE_WINDOWS_REGISTRY
 
 	return def;
  }
@@ -359,7 +358,7 @@
 
  gchar * get_string_from_config(const gchar *group, const gchar *key, const gchar *def)
  {
-#ifdef HAVE_WIN_REGISTRY
+#ifdef ENABLE_WINDOWS_REGISTRY
 
 	HKEY key_handle;
 	unsigned long	  datalen 	= 4096;
@@ -406,12 +405,12 @@
 
 	return NULL;
 
-#endif // HAVE_WIN_REGISTRY
+#endif // ENABLE_WINDOWS_REGISTRY
  }
 
 void configuration_init(void)
 {
-#ifndef HAVE_WIN_REGISTRY
+#ifndef ENABLE_WINDOWS_REGISTRY
 	gchar *filename = search_for_ini();
 
 	if(program_config)
@@ -426,14 +425,14 @@ void configuration_init(void)
 		g_free(filename);
 	}
 
-#endif // HAVE_WIN_REGISTRY
+#endif // ENABLE_WINDOWS_REGISTRY
 }
 
 static void set_string(const gchar *group, const gchar *key, const gchar *fmt, va_list args)
 {
 	gchar * value = g_strdup_vprintf(fmt,args);
 
-#ifdef HAVE_WIN_REGISTRY
+#ifdef ENABLE_WINDOWS_REGISTRY
 
 	gchar * path = g_strdup_printf("%s\\%s\\%s",registry_path,g_get_application_name(),group);
  	HKEY	hKey;
@@ -466,7 +465,7 @@ void set_string_to_config(const gchar *group, const gchar *key, const gchar *fmt
 
 void set_boolean_to_config(const gchar *group, const gchar *key, gboolean val)
 {
-#ifdef HAVE_WIN_REGISTRY
+#ifdef ENABLE_WINDOWS_REGISTRY
 
  	HKEY	hKey;
  	DWORD	disp;
@@ -502,13 +501,13 @@ void set_boolean_to_config(const gchar *group, const gchar *key, gboolean val)
 	if(program_config)
 		g_key_file_set_boolean(program_config,group,key,val);
 
-#endif // HAVE_WIN_REGISTRY
+#endif // ENABLE_WINDOWS_REGISTRY
 
 }
 
 void set_integer_to_config(const gchar *group, const gchar *key, gint val)
 {
-#ifdef HAVE_WIN_REGISTRY
+#ifdef ENABLE_WINDOWS_REGISTRY
 
  	HKEY	hKey;
  	DWORD	disp;
@@ -544,13 +543,13 @@ void set_integer_to_config(const gchar *group, const gchar *key, gint val)
 	if(program_config)
 		g_key_file_set_integer(program_config,group,key,val);
 
-#endif // HAVE_WIN_REGISTRY
+#endif // ENABLE_WINDOWS_REGISTRY
 
 }
 
 void configuration_deinit(void)
 {
-#ifdef HAVE_WIN_REGISTRY
+#ifdef ENABLE_WINDOWS_REGISTRY
 
 #else
 
@@ -576,7 +575,7 @@ void configuration_deinit(void)
 	g_key_file_free(program_config);
 	program_config = NULL;
 
-#endif // HAVE_WIN_REGISTRY
+#endif // ENABLE_WINDOWS_REGISTRY
 }
 
 gchar * build_data_filename(const gchar *first_element, ...)
@@ -606,7 +605,7 @@ gchar * filename_from_va(const gchar *first_element, va_list args)
 
 	g_autofree gchar * suffix = g_string_free(result, FALSE);
 
-#if defined( HAVE_WIN_REGISTRY )
+#if defined( ENABLE_WINDOWS_REGISTRY )
 	for(p=0;p<G_N_ELEMENTS(appname) && !result;p++)
 	{
 		g_autofree gchar * path	= g_strconcat("Software\\",appname[p],NULL);
@@ -639,7 +638,7 @@ gchar * filename_from_va(const gchar *first_element, va_list args)
 		}
 
 	}
-#endif // HAVE_WIN_REGISTRY
+#endif // ENABLE_WINDOWS_REGISTRY
 
 #ifdef _WIN32
 	for(p=0;p<G_N_ELEMENTS(appname) && !result;p++)
@@ -680,7 +679,7 @@ gchar * filename_from_va(const gchar *first_element, va_list args)
 	return g_build_filename(".",suffix,NULL);
 }
 
-#ifdef HAVE_WIN_REGISTRY
+#ifdef ENABLE_WINDOWS_REGISTRY
 gboolean get_registry_handle(const gchar *group, HKEY *hKey, REGSAM samDesired)
 {
 	gboolean	  ret;
@@ -703,7 +702,7 @@ GKeyFile * get_application_keyfile(void)
 		configuration_init();
 	return program_config;
 }
-#endif // HAVE_WIN_REGISTRY
+#endif // ENABLE_WINDOWS_REGISTRY
 
  static const struct _WindowState
  {
@@ -719,7 +718,7 @@ GKeyFile * get_application_keyfile(void)
 
 void save_window_state_to_config(const gchar *group, const gchar *key, GdkWindowState CurrentState)
 {
-#if defined( HAVE_WIN_REGISTRY )
+#if defined( ENABLE_WINDOWS_REGISTRY )
 
         gchar * path = g_strdup_printf("%s\\%s\\%s\\%s",registry_path,g_get_application_name(),group,key);
 
@@ -751,12 +750,12 @@ void save_window_state_to_config(const gchar *group, const gchar *key, GdkWindow
 
 		g_free(id);
 
-#endif // HAVE_WIN_REGISTRY
+#endif // ENABLE_WINDOWS_REGISTRY
 }
 
 void save_window_size_to_config(const gchar *group, const gchar *key, GtkWidget *hwnd)
 {
-#if defined( HAVE_WIN_REGISTRY )
+#if defined( ENABLE_WINDOWS_REGISTRY )
 
         gchar * path = g_strdup_printf("%s\\%s\\%s\\%s",registry_path,g_get_application_name(),group,key);
 
@@ -786,10 +785,10 @@ void save_window_size_to_config(const gchar *group, const gchar *key, GtkWidget 
 
 		g_free(id);
 
-#endif // HAVE_WIN_REGISTRY
+#endif // ENABLE_WINDOWS_REGISTRY
 }
 
-#if defined( HAVE_WIN_REGISTRY )
+#if defined( ENABLE_WINDOWS_REGISTRY )
 static void restore_window_from_regkey(GtkWidget *hwnd, HKEY hKey, const gchar *path)
 {
 	int 			f;
@@ -835,11 +834,11 @@ static void restore_window_from_regkey(GtkWidget *hwnd, HKEY hKey, const gchar *
 
 
 }
-#endif // HAVE_WIN_REGISTRY
+#endif // ENABLE_WINDOWS_REGISTRY
 
 void restore_window_from_config(const gchar *group, const gchar *key, GtkWidget *hwnd)
 {
-#if defined( HAVE_WIN_REGISTRY )
+#if defined( ENABLE_WINDOWS_REGISTRY )
 
 	gchar * path = g_strdup_printf("%s\\%s\\%s\\%s",registry_path,g_get_application_name(),group,key);
 	HKEY    hKey;
@@ -885,7 +884,7 @@ void restore_window_from_config(const gchar *group, const gchar *key, GtkWidget 
 
 	g_free(id);
 
-#endif // HAVE_WIN_REGISTRY
+#endif // ENABLE_WINDOWS_REGISTRY
 
 }
 
