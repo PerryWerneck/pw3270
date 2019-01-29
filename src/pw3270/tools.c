@@ -136,6 +136,8 @@ LIB3270_EXPORT gboolean pw3270_set_toggle_by_name(GtkWidget *widget, const gchar
 	H3270 			* hSession	= pw3270_get_session(widget);
 	LIB3270_TOGGLE	  id		= lib3270_get_toggle_id(name);
 
+	trace("%s(%s) id=%u",__FUNCTION__,name,id);
+
 	if(!hSession || id == (LIB3270_TOGGLE) -1)
 		return FALSE;
 

@@ -257,13 +257,36 @@
 	lib3270_set_toggle(hSession,LIB3270_TOGGLE_NETWORK_TRACE,0);
  }
 
+ struct trace_data
+ {
+	H3270	* hSession;
+	gchar	* text;
+ };
+
+ static gboolean bg_trace_window(struct trace_data *data)
+ {
+	GtkWidget * widget = v3270_trace_new_from_session(data->hSession,data->text);
+
+	v3270_trace_set_destroy_on_close(widget,TRUE);
+
+	g_signal_connect(widget, "destroy", G_CALLBACK(trace_window_destroy), data->hSession);
+
+	gtk_widget_show_all(widget);
+
+	g_free(data->text);
+
+	return FALSE;
+ }
 
  static void trace_window(G_GNUC_UNUSED H3270 *hSession, G_GNUC_UNUSED void * userdata, const char *fmt, va_list args)
  {
-	GtkWidget * widget = v3270_trace_new_from_session(hSession);
-	v3270_trace_set_destroy_on_close(widget,TRUE);
-	g_signal_connect(widget, "destroy", G_CALLBACK(trace_window_destroy), hSession);
-	gtk_widget_show(widget);
+	struct trace_data * data = g_new0(struct trace_data,1);
+
+	data->hSession = hSession;
+	data->text = g_strdup_vprintf(fmt,args);
+
+	g_idle_add_full(G_PRIORITY_DEFAULT_IDLE,(GSourceFunc) bg_trace_window, data, g_free);
+
  }
 
  GtkWidget * pw3270_new(const gchar *host, const gchar *systype, unsigned short colors)
@@ -292,7 +315,7 @@
 		if(*ptr)
 		{
 			pw3270_set_url(widget,ptr);
-			connct = pw3270_get_toggle(widget,LIB3270_TOGGLE_CONNECT_ON_STARTUP) ? TRUE : FALSE;
+//			connct = pw3270_get_toggle(widget,LIB3270_TOGGLE_CONNECT_ON_STARTUP) ? TRUE : FALSE;
 		}
 		g_free(ptr);
 	}
@@ -318,8 +341,10 @@
 
 	v3270_set_scaled_fonts(GTK_PW3270(widget)->terminal,get_boolean_from_config("terminal","sfonts",FALSE));
 
+	/*
 	if(connct)
 		pw3270_connect(widget);
+	*/
 
  	return widget;
  }

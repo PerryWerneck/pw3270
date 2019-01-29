@@ -56,11 +56,6 @@
 		<Unit filename="android/Makefile" />
 		<Unit filename="android/jni/Android.mk" />
 		<Unit filename="android/jni/globals.h" />
-		<Unit filename="android/jni/main.cpp" />
-		<Unit filename="android/jni/misc.cpp" />
-		<Unit filename="android/jni/text.cpp" />
-		<Unit filename="android/src/br/com/bb/pw3270/PW3270Activity.java" />
-		<Unit filename="android/src/br/com/bb/pw3270/lib3270.java" />
 		<Unit filename="autogen.sh" />
 		<Unit filename="configure.ac" />
 		<Unit filename="man/man1/pw3270.1" />
@@ -98,26 +93,6 @@
 			<Option target="Release" />
 		</Unit>
 		<Unit filename="src/java/private.h">
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="src/java/sample/bbsample.java">
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="src/java/sample/efglobe.java">
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="src/java/sample/popup.java">
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="src/java/terminal.java">
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="src/java/testprogram.java">
 			<Option target="Debug" />
 			<Option target="Release" />
 		</Unit>
@@ -170,20 +145,13 @@
 		<Unit filename="src/libpw3270cpp/session.cc" />
 		<Unit filename="src/libpw3270cpp/testprogram.cc" />
 		<Unit filename="src/loffice/Makefile.in" />
-		<Unit filename="src/loffice/connect.cc" />
 		<Unit filename="src/loffice/description.txt" />
 		<Unit filename="src/loffice/description.xml" />
 		<Unit filename="src/loffice/description.xml.in" />
-		<Unit filename="src/loffice/get.cc" />
 		<Unit filename="src/loffice/globals.hpp" />
-		<Unit filename="src/loffice/info.cc" />
-		<Unit filename="src/loffice/init.cc" />
 		<Unit filename="src/loffice/manifest.xml" />
 		<Unit filename="src/loffice/manifest.xml.in" />
 		<Unit filename="src/loffice/pw3270.idl" />
-		<Unit filename="src/loffice/service.cc" />
-		<Unit filename="src/loffice/set.cc" />
-		<Unit filename="src/loffice/testprogram.cc" />
 		<Unit filename="src/oxt/Makefile.in" />
 		<Unit filename="src/oxt/description.txt" />
 		<Unit filename="src/oxt/description.xml.in" />
@@ -191,14 +159,9 @@
 		<Unit filename="src/oxt/manifest.xml.in" />
 		<Unit filename="src/oxt/pw3270.idl" />
 		<Unit filename="src/php/Makefile.in" />
-		<Unit filename="src/php/get.cc" />
-		<Unit filename="src/php/init.cc" />
-		<Unit filename="src/php/main.cc" />
-		<Unit filename="src/php/misc.cc" />
 		<Unit filename="src/php/php.ini" />
 		<Unit filename="src/php/php3270.h" />
 		<Unit filename="src/php/sample.php" />
-		<Unit filename="src/php/set.cc" />
 		<Unit filename="src/plugins/dbus3270/Makefile.in" />
 		<Unit filename="src/plugins/dbus3270/daemon.c">
 			<Option compilerVar="CC" />
@@ -342,41 +305,8 @@
 		<Unit filename="src/pw3270/v3270/private.h" />
 		<Unit filename="src/pw3270/v3270/sources.mak" />
 		<Unit filename="src/pw3270/v3270ft/Makefile.in" />
-		<Unit filename="src/pw3270/v3270ft/filelist.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/pw3270/v3270ft/genmarshal" />
-		<Unit filename="src/pw3270/v3270ft/get.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pw3270/v3270ft/load.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pw3270/v3270ft/misc.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/pw3270/v3270ft/private.h" />
-		<Unit filename="src/pw3270/v3270ft/save.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pw3270/v3270ft/select.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pw3270/v3270ft/set.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pw3270/v3270ft/tables.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pw3270/v3270ft/transfer.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pw3270/v3270ft/v3270ft.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pw3270/v3270ft/v3270ftprogress.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/pw3270/window.c">
 			<Option compilerVar="CC" />
 		</Unit>

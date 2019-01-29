@@ -37,6 +37,7 @@
 				<menuitem action='toggle' id='screentrace'	label='Trace screen contents' />
 				<menuitem action='toggle' id='nettrace' 	label='Trace network data flow' />
 				<menuitem action='toggle' id='eventtrace'	label='Trace user interface events' />
+				<menuitem action='toggle' id='ssltrace'		label='Trace SSL negotiation' />
 			</menu>
 			<menuitem action='toggle' id='fieldattr' label='Field Delimiters' />
 		</menu>
