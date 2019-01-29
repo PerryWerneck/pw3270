@@ -69,10 +69,6 @@
  GtkOSXApplication		* osxapp		= NULL;
 #endif // HAVE_GTKMAC
 
-#if defined( WIN32 )
- static const gchar		* appname		= PACKAGE_NAME;
-#endif // WIN32
-
 #if defined( HAVE_SYSLOG )
  static gboolean	  	  log_to_syslog	= FALSE;
 #endif // HAVE_SYSLOG
@@ -140,49 +136,6 @@ static void toplevel_setup(GtkWindow *window)
 	g_free(filename);
 	g_free(name);
 }
-
-#if ! defined( WIN32 )
-
-static gboolean appname(const gchar *option_name, const gchar *value, gpointer data, GError **error)
-{
-	g_set_application_name(value);
-	return TRUE;
-}
-
-#else
-
-static gboolean datadir(const gchar *option_name, const gchar *value, gpointer data, GError **error)
-{
-		gchar	* path = g_strconcat("SOFTWARE\\",appname,NULL);
-		HKEY	  hKey;
-		DWORD	  disp;
-		int		  rc;
-
-		rc = RegCreateKeyEx(HKEY_LOCAL_MACHINE,path,0,NULL,REG_OPTION_NON_VOLATILE,KEY_SET_VALUE,NULL,&hKey,&disp);
-		SetLastError(rc);
-
-		trace("%s=\"%s\" create=%d",path,value,rc);
-
-		if(rc == ERROR_SUCCESS)
-		{
-			trace("%s: Value set",__FUNCTION__);
-			RegSetValueEx(hKey,"datadir",0,REG_SZ,(const BYTE *) value,strlen(value)+1);
-			RegCloseKey(hKey);
-		}
-        else
-        {
-			gchar *msg = g_win32_error_message(rc);
-			trace("%s failed: %s",__FUNCTION__,msg);
-			*error = g_error_new(ERROR_DOMAIN,EINVAL, "%s", msg);
-			g_free(msg);
-        }
-
-		g_free(path);
-
-		return rc == ERROR_SUCCESS;
-}
-
-#endif // !win32
 
 static gboolean optcolors(const gchar *option_name, const gchar *value, gpointer data, GError **error)
 {
@@ -301,12 +254,6 @@ int main(int argc, char *argv[])
 	{
 		const GOptionEntry app_options[] =
 		{
-#if ! defined( WIN32 )
-			{ "appname",		'a', 0, G_OPTION_ARG_CALLBACK,	appname,			N_( "Application name" ),							PACKAGE_NAME					},
-#else
-			{ "appname",		'a', 0, G_OPTION_ARG_STRING,	&appname,			N_( "Application name" ),							PACKAGE_NAME					},
-			{ "datadir",		'd', 0, G_OPTION_ARG_CALLBACK,	datadir,			N_( "Path to application data files" ),				NULL         					},
-#endif // WIN32
 			{ "session",		's', 0, G_OPTION_ARG_STRING,	&session_name,		N_( "Session name" ),								PACKAGE_NAME					},
 			{ "host",			'h', 0, G_OPTION_ARG_STRING,	&host,				N_( "Host to connect"),								host							},
 			{ "colors",			'c', 0, G_OPTION_ARG_CALLBACK,	optcolors,			N_( "Set reported colors (8/16)" ),					"16"							},
@@ -451,10 +398,6 @@ int main(int argc, char *argv[])
 
 	}
 
-#if defined(WIN32)
-	g_set_application_name(appname);
-#endif // WIN32
-
 	// Just in case!
 	g_mkdir_with_parents(g_get_tmp_dir(),0777);
 
@@ -472,14 +415,17 @@ int main(int argc, char *argv[])
 		pw3270_load_plugins(pluginpath);
 		toplevel = pw3270_new(host,systype,syscolors);
 
-		if(session_name)
-		{
-			pw3270_set_session_name(toplevel,session_name);
-		}
-		else
-		{
-            pw3270_set_session_name(toplevel,g_get_application_name());
-		}
+
+		if(!session_name)
+			session_name = g_get_application_name();
+
+		pw3270_set_session_name(toplevel,session_name);
+
+#if defined(_WIN32) && defined(ENABLE_WINDOWS_REGISTRY)
+		pw3270_set_string(toplevel,"app","version",PACKAGE_VERSION);
+		pw3270_set_string(toplevel,"app","release",G_STRINGIFY(PACKAGE_RELEASE));
+		pw3270_set_string(toplevel,"app","sessionName",session_name);
+#endif // _WIN32 && ENABLE_WINDOWS_REGISTRY
 
 		if(toggleset)
 		{
@@ -488,7 +434,6 @@ int main(int argc, char *argv[])
 
 			for(f=0;str[f];f++)
 				pw3270_set_toggle_by_name(toplevel,str[f],TRUE);
-
 
 			g_strfreev(str);
 		}
@@ -518,15 +463,6 @@ int main(int argc, char *argv[])
 			lib3270_set_model(pw3270_get_session(toplevel),model);
 
 		v3270_set_auto_disconnect(pw3270_get_terminal_widget(toplevel),timer);
-
-		/*
-		pw3270_start_plugins(toplevel);
-		gtk_window_present(GTK_WINDOW(toplevel));
-
-#ifdef HAVE_GTKMAC
-		gtk_osxapplication_ready(osxapp);
-#endif // HAVE_GTKMAC
-		*/
 
 		g_idle_add((GSourceFunc) startup, toplevel);
 
