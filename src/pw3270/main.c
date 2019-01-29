@@ -232,7 +232,12 @@ static gboolean startup(GtkWidget *toplevel)
 int main(int argc, char *argv[])
 {
 	const gchar		* pluginpath	= NULL;
+#ifdef DEFAULT_SESSION_NAME
+	const gchar		* session_name	= G_STRINGIFY(DEFAULT_SESSION_NAME);
+#else
 	const gchar		* session_name	= NULL;
+#endif // DEFAULT_SESSION_NAME
+
 	const gchar		* host			= lib3270_get_default_host(NULL);
 	int 			  rc 			= 0;
 
@@ -254,17 +259,22 @@ int main(int argc, char *argv[])
 	{
 		const GOptionEntry app_options[] =
 		{
-			{ "session",		's', 0, G_OPTION_ARG_STRING,	&session_name,		N_( "Session name" ),								PACKAGE_NAME					},
-			{ "host",			'h', 0, G_OPTION_ARG_STRING,	&host,				N_( "Host to connect"),								host							},
-			{ "colors",			'c', 0, G_OPTION_ARG_CALLBACK,	optcolors,			N_( "Set reported colors (8/16)" ),					"16"							},
-            { "systype",		't', 0, G_OPTION_ARG_STRING,	&systype,			N_( "Host system type" ),							"S390"							},
-			{ "toggleset",		'S', 0, G_OPTION_ARG_STRING,	&toggleset,			N_( "Set toggles ON" ),								NULL							},
-			{ "togglereset",	'R', 0, G_OPTION_ARG_STRING,	&togglereset,		N_( "Set toggles OFF" ),							NULL							},
-			{ "charset",	    'C', 0, G_OPTION_ARG_STRING,	&charset,		    N_( "Set host charset" ),							NULL							},
-			{ "remap",		    'm', 0, G_OPTION_ARG_FILENAME,	&remap,			    N_( "Remap charset from xml file" ),				NULL							},
-			{ "model",		    'M', 0, G_OPTION_ARG_STRING,	&model,			    N_( "The model of 3270 display to be emulated" ),	NULL							},
-			{ "autodisconnect",	'D', 0, G_OPTION_ARG_INT,		&timer,			    N_( "Minutes for auto-disconnect" ),				0								},
-			{ "pluginpath",		'P', 0, G_OPTION_ARG_STRING,	&pluginpath,	    N_( "Path for plugin files" ),						NULL							},
+#ifdef DEFAULT_SESSION_NAME
+			{ "session",		's', 0, G_OPTION_ARG_STRING,	&session_name,		N_( "Session name" ),								G_STRINGIFY(DEFAULT_SESSION_NAME)	},
+#else
+			{ "session",		's', 0, G_OPTION_ARG_STRING,	&session_name,		N_( "Session name" ),								PACKAGE_NAME						},
+#endif // DEFAULT_SESSION_NAME
+
+			{ "host",			'h', 0, G_OPTION_ARG_STRING,	&host,				N_( "Host to connect"),								host								},
+			{ "colors",			'c', 0, G_OPTION_ARG_CALLBACK,	optcolors,			N_( "Set reported colors (8/16)" ),					"16"								},
+            { "systype",		't', 0, G_OPTION_ARG_STRING,	&systype,			N_( "Host system type" ),							"S390"								},
+			{ "toggleset",		'S', 0, G_OPTION_ARG_STRING,	&toggleset,			N_( "Set toggles ON" ),								NULL								},
+			{ "togglereset",	'R', 0, G_OPTION_ARG_STRING,	&togglereset,		N_( "Set toggles OFF" ),							NULL								},
+			{ "charset",	    'C', 0, G_OPTION_ARG_STRING,	&charset,		    N_( "Set host charset" ),							NULL								},
+			{ "remap",		    'm', 0, G_OPTION_ARG_FILENAME,	&remap,			    N_( "Remap charset from xml file" ),				NULL								},
+			{ "model",		    'M', 0, G_OPTION_ARG_STRING,	&model,			    N_( "The model of 3270 display to be emulated" ),	NULL								},
+			{ "autodisconnect",	'D', 0, G_OPTION_ARG_INT,		&timer,			    N_( "Minutes for auto-disconnect" ),				0									},
+			{ "pluginpath",		'P', 0, G_OPTION_ARG_STRING,	&pluginpath,	    N_( "Path for plugin files" ),						NULL								},
 
 #if defined( HAVE_SYSLOG )
 			{ "syslog",			'l', 0, G_OPTION_ARG_NONE,		&log_to_syslog,		N_( "Send messages to syslog" ),					NULL							},
@@ -401,6 +411,14 @@ int main(int argc, char *argv[])
 	// Just in case!
 	g_mkdir_with_parents(g_get_tmp_dir(),0777);
 
+
+	if(!session_name)
+		session_name = PACKAGE_NAME;
+
+#ifdef _WIN32
+	g_set_application_name(session_name);
+#endif // _WIN32
+
 	rc = initialize();
 	if(!rc)
 	{
@@ -414,11 +432,6 @@ int main(int argc, char *argv[])
 
 		pw3270_load_plugins(pluginpath);
 		toplevel = pw3270_new(host,systype,syscolors);
-
-
-		if(!session_name)
-			session_name = g_get_application_name();
-
 		pw3270_set_session_name(toplevel,session_name);
 
 #if defined(_WIN32) && defined(ENABLE_WINDOWS_REGISTRY)

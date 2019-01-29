@@ -190,6 +190,7 @@ AC_SUBST(PACKAGE_MAJOR_VERSION,$app_vrs_major)
 AC_SUBST(PACKAGE_MINOR_VERSION,$app_vrs_minor)
 
 AC_ARG_WITH([release], [AS_HELP_STRING([--with-release], [Set release])], [ app_cv_release="$withval" ],[ app_cv_release="`date +%y`.`date +%m`.`date +%d`" ])
+AC_ARG_WITH([session-name], [AS_HELP_STRING([--with-session-name], [Set default session name])], [ AC_DEFINE_UNQUOTED(DEFAULT_SESSION_NAME, $withval) ],[ AC_MSG_NOTICE([No default session name.]) ])
 
 app_rls_major=$(echo $app_cv_release.0.0 | cut -d. -f1)
 app_rls_minor=$(echo $app_cv_release.0.0 | cut -d. -f2)
