@@ -232,6 +232,7 @@ static gboolean startup(GtkWidget *toplevel)
 int main(int argc, char *argv[])
 {
 	const gchar		* pluginpath	= NULL;
+
 #ifdef DEFAULT_SESSION_NAME
 	const gchar		* session_name	= G_STRINGIFY(DEFAULT_SESSION_NAME);
 #else
@@ -252,8 +253,43 @@ int main(int argc, char *argv[])
 	setlocale( LC_ALL, "" );
 #endif
 
-	bind_textdomain_codeset(PACKAGE_NAME, "UTF-8");
-	textdomain(PACKAGE_NAME);
+	// Get DATADIR
+#if defined( _WIN32 )
+	{
+		g_autofree gchar * appdir = g_win32_get_package_installation_directory_of_module(NULL);
+		g_autofree gchar * locdir = g_build_filename(appdir,"locale",NULL);
+
+		trace("appdir=\"%s\"",appdir);
+		trace("locdir=\"%s\"",locdir);
+
+		g_chdir(appdir);
+
+		bind_textdomain_codeset(PACKAGE_NAME, "UTF-8");
+		textdomain(PACKAGE_NAME);
+
+		bindtextdomain( PACKAGE_NAME, locdir );
+
+	}
+#elif defined(HAVE_GTKMAC)
+	{
+		GtkMacBundle * macbundle = gtk_mac_bundle_get_default();
+
+		g_chdir(gtk_mac_bundle_get_datadir(macbundle));
+
+		bind_textdomain_codeset(PACKAGE_NAME, "UTF-8");
+		textdomain(PACKAGE_NAME);
+
+		bindtextdomain(PACKAGE_NAME,gtk_mac_bundle_get_localedir(macbundle));
+
+		osxapp = GTK_OSX_APPLICATION(g_object_new(GTK_TYPE_OSX_APPLICATION,NULL));
+
+	}
+#else
+	{
+		bind_textdomain_codeset(PACKAGE_NAME, "UTF-8");
+		textdomain(PACKAGE_NAME);
+	}
+#endif
 
 	// Process command-line options
 	{
@@ -324,44 +360,6 @@ int main(int argc, char *argv[])
 
 	// Init GTK
 	gtk_init(&argc, &argv);
-
-	// Get DATADIR
-#if defined( WIN32 )
-	{
-		gchar * appdir = g_win32_get_package_installation_directory_of_module(NULL);
-		gchar * locdir = g_build_filename(appdir,"locale",NULL);
-
-		g_chdir(appdir);
-		bindtextdomain( PACKAGE_NAME, locdir );
-
-		g_free(locdir);
-		g_free(appdir);
-
-	}
-#elif defined(HAVE_GTKMAC)
-	{
-		GtkMacBundle * macbundle = gtk_mac_bundle_get_default();
-
-		g_chdir(gtk_mac_bundle_get_datadir(macbundle));
-		bindtextdomain(PACKAGE_NAME,gtk_mac_bundle_get_localedir(macbundle));
-
-		osxapp = GTK_OSX_APPLICATION(g_object_new(GTK_TYPE_OSX_APPLICATION,NULL));
-
-	}
-#elif defined( DATAROOTDIR )
-	{
-		gchar * appdir = g_build_filename(DATAROOTDIR,PACKAGE_NAME,NULL);
-		gchar * locdir = g_build_filename(DATAROOTDIR,"locale",NULL);
-
-		g_chdir(appdir);
-		bindtextdomain( PACKAGE_NAME, locdir);
-
-		g_free(locdir);
-		g_free(appdir);
-
-	}
-#endif // DATAROOTDIR
-
 
 #if defined( HAVE_SYSLOG )
 	if(log_to_syslog)
