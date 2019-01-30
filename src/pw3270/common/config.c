@@ -89,7 +89,7 @@
 		{
 			if(RegQueryValueExA(*hKey,key,NULL,NULL,NULL,NULL) == ERROR_SUCCESS)
 			{
-				trace("Key[%s\%s] found at id %d",path,key,f);
+				trace("Key\"%s\\%s\" found at id %d",path,key,f);
 				g_free(path);
 				return f;
 			}
@@ -97,7 +97,7 @@
 		}
 	}
 
-	trace("Key[%s\%s] not found",path,key,f);
+	trace("Key \"%s\\%s\""" not found",path,key,f);
 	g_free(path);
 
 	return -1;

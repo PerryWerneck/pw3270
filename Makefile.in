@@ -251,6 +251,15 @@ Debug: \
 	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@ \
 	$(foreach PLG, $(PLUGINS), $(BINDBG)/plugins/$(PLG)@DLLEXT@)
 
+publish-debug: \
+	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@
+
+	@rm -f ~/public-html/debug-$(PACKAGE_TARNAME)-@host_cpu@.zip
+	@zip \
+		-9 -D \
+		~/public_html/debug-$(PACKAGE_TARNAME)-@host_cpu@.zip \
+		$(BINDBG)/*
+
 run: \
 	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@
 

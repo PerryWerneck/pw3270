@@ -263,7 +263,7 @@ static GtkWidget * trace_window = NULL;
 		if(*ptr)
 		{
 			pw3270_set_url(widget,ptr);
-//			connct = pw3270_get_toggle(widget,LIB3270_TOGGLE_CONNECT_ON_STARTUP) ? TRUE : FALSE;
+			connct = pw3270_get_toggle(widget,LIB3270_TOGGLE_CONNECT_ON_STARTUP) ? TRUE : FALSE;
 		}
 		g_free(ptr);
 	}
@@ -289,10 +289,8 @@ static GtkWidget * trace_window = NULL;
 
 	v3270_set_scaled_fonts(GTK_PW3270(widget)->terminal,get_boolean_from_config("terminal","sfonts",FALSE));
 
-	/*
 	if(connct)
 		pw3270_connect(widget);
-	*/
 
  	return widget;
  }
@@ -769,7 +767,8 @@ static GtkWidget * trace_window = NULL;
 	// Connect widget signals
 	g_signal_connect(widget->terminal,"field_clicked",G_CALLBACK(field_clicked),widget);
 	g_signal_connect(widget->terminal,"toggle_changed",G_CALLBACK(toggle_changed),widget);
-	g_signal_connect(widget->terminal,"print",G_CALLBACK(print_all),widget);
+
+	//g_signal_connect(widget->terminal,"print",G_CALLBACK(print_all),widget);
 
 	// Connect window signals
 	g_signal_connect(widget,"window_state_event",G_CALLBACK(window_state_event),widget->terminal);

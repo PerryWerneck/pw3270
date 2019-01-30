@@ -109,17 +109,16 @@ static int initialize(void)
 
 static void toplevel_setup(GtkWindow *window)
 {
- 	gchar * name		= g_strdup_printf("%s.png",g_get_application_name());
-	gchar * filename 	= pw3270_build_filename(GTK_WIDGET(window),name,NULL);
- 	gchar * role		= g_strdup_printf("%s_top",g_get_application_name());
+ 	g_autofree gchar * name	= g_strdup_printf("%s.png",g_get_application_name());
+ 	g_autofree gchar * role	= g_strdup_printf("%s_top",g_get_application_name());
 
 	gtk_window_set_type_hint(window,GDK_WINDOW_TYPE_HINT_NORMAL);
 	gtk_window_set_position(window,GTK_WIN_POS_CENTER);
 	gtk_window_set_role(window,role);
 
-	g_free(role);
-
+#ifndef _WIN32
 	// Set default icon
+	g_autofree gchar * filename = pw3270_build_filename(GTK_WIDGET(window),name,NULL);
 	if(g_file_test(filename,G_FILE_TEST_EXISTS))
 	{
 		GError * error = NULL;
@@ -132,9 +131,8 @@ static void toplevel_setup(GtkWindow *window)
 			g_error_free(error);
 		}
 	}
+#endif // _WIN32
 
-	g_free(filename);
-	g_free(name);
 }
 
 static gboolean optcolors(const gchar *option_name, const gchar *value, gpointer data, GError **error)
@@ -218,6 +216,8 @@ static void g_logfile(const gchar *log_domain,GLogLevelFlags log_level,const gch
 
 static gboolean startup(GtkWidget *toplevel)
 {
+	trace("%s",__FUNCTION__);
+
 	gtk_window_present(GTK_WINDOW(toplevel));
 
 #ifdef HAVE_GTKMAC
@@ -411,13 +411,12 @@ int main(int argc, char *argv[])
 	// Just in case!
 	g_mkdir_with_parents(g_get_tmp_dir(),0777);
 
+#ifdef _WIN32
+	g_set_application_name(PACKAGE_NAME);
+#endif // _WIN32
 
 	if(!session_name)
 		session_name = PACKAGE_NAME;
-
-#ifdef _WIN32
-	g_set_application_name(session_name);
-#endif // _WIN32
 
 	rc = initialize();
 	if(!rc)
