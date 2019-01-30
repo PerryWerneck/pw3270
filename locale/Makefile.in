@@ -52,8 +52,8 @@ INSTALL_DATA=@INSTALL_DATA@
 	$(PACKAGE_NAME).pot
 
 	@echo $(basename $@) ...
-	@touch $@
 	@$(MSGMERGE) --update --sort-output $@ $(PACKAGE_NAME).pot
+	@touch $@
 
 $(BINDIR)/%/LC_MESSAGES/$(PACKAGE_NAME).mo: \
 	%.po
