@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-01-17 15:13-0200\n"
-"PO-Revision-Date: 2019-01-17 15:24-0200\n"
+"PO-Revision-Date: 2019-01-30 14:54-0200\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
 "Language: pt_BR\n"
@@ -428,7 +428,7 @@ msgid "Can't connect to DBUS server"
 msgstr "Não foi possível conectar ao servidor DBUS"
 
 #: src/v3270/selection.c:463
-#, fuzzy, c-format
+#, c-format
 msgid "Can't convert line %lu from %s to %s"
 msgstr "Não foi possível converter a linha %d de %s para %s"
 
@@ -438,30 +438,27 @@ msgstr "Recortar não permitido em seleção retangular"
 
 #: ssl/linux/getcrl.c:290
 msgid "Can't get CRL from LDAP Search"
-msgstr ""
+msgstr "Não obtive CRL na pesquisa LDAP"
 
 #: main.c:117
 msgid "Can't get DBUS object name"
 msgstr "Não foi possível obter o nome do objeto DBUS"
 
 #: ssl/linux/getcrl.c:266 ssl/linux/getcrl.c:277
-#, fuzzy
 msgid "Can't get LDAP attribute"
-msgstr "um atributo \"action\""
+msgstr "Não foi possível obter o atributo LDAP"
 
 #: ft.c:415
 msgid "Can't get file size"
 msgstr "Não foi possível obter o tamanho do arquivo"
 
 #: local/session.cc:124 local/session.cc:142
-#, fuzzy
 msgid "Can't get screen contents"
-msgstr "Trace do conteúdo da tela"
+msgstr "Não foi possível obter o conteúdo da tela"
 
 #: ssl/linux/getcrl.c:208
-#, fuzzy
 msgid "Can't initialize LDAP"
-msgstr "Não foi possível obter o tamanho do arquivo"
+msgstr "Erro ao inicializar LDAP"
 
 #: parsefile.c:328 src/v3270ft/load.c:270
 #, c-format
@@ -482,9 +479,8 @@ msgid "Can't load plugin %s"
 msgstr "Não foi possível carregar plugin %s"
 
 #: ssl/linux/getcrl.c:106 ssl/linux/getcrl.c:122
-#, fuzzy
 msgid "Can't open CRL File"
-msgstr "Não foi possível abrir arquivo"
+msgstr "Não foi possível abrir arquivo CRL"
 
 #: window.c:234
 msgid "Can't open file"
@@ -626,7 +622,7 @@ msgstr ""
 
 #: ssl/ctx_init.c:97
 msgid "Cant initialize the SSL context."
-msgstr ""
+msgstr "Erro ao inicializar contexto de segurança"
 
 #: ssl/negotiate.c:133
 msgid ""
@@ -852,7 +848,7 @@ msgstr "ETA:"
 
 #: toggles.c:232
 msgid "Enable SSL messages trace"
-msgstr ""
+msgstr "Habilitar trace SSL"
 
 #: toggles.c:226
 msgid "Enable network in/out trace"

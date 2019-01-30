@@ -3,17 +3,16 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: properties.c:66 properties.c:73 properties.c:80 properties.c:101
-#: properties.c:108 properties.c:115 properties.c:122 properties.c:136
-#: properties.c:143 properties.c:347 properties.c:354 properties.c:361
-#: properties.c:368 properties.c:375 properties.c:382
+#: properties.c:69 properties.c:76 properties.c:83 properties.c:104
+#: properties.c:111 properties.c:118 properties.c:125 properties.c:139
+#: properties.c:146
 #, fuzzy
 msgid ""
 msgstr ""
 "#-#-#-#-#  pw3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-17 15:13-0200\n"
+"POT-Creation-Date: 2019-01-30 14:50-0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,7 +23,7 @@ msgstr ""
 "#-#-#-#-#  lib3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-17 15:55+0000\n"
+"POT-Creation-Date: 2019-01-30 15:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,7 +34,7 @@ msgstr ""
 "#-#-#-#-#  libv3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-17 15:56+0000\n"
+"POT-Creation-Date: 2019-01-30 15:58+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -57,7 +56,7 @@ msgstr ""
 "#-#-#-#-#  dbus3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-17 15:13-0200\n"
+"POT-Creation-Date: 2019-01-30 14:50-0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -66,83 +65,83 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: window.c:428
+#: window.c:399
 #, c-format
 msgid " and <b>%s</b> for %s."
 msgstr ""
 
-#: telnet.c:1069 iocalls.c:555 iocalls.c:572 linux/connect.c:82
-#: linux/connect.c:97
+#: telnet.c:688 iocalls.c:563 iocalls.c:580 linux/connect.c:83
+#: linux/connect.c:99
 #, c-format
 msgid "%s"
 msgstr ""
 
-#: window.c:380
+#: window.c:351
 #, c-format
 msgid "%s - Disconnected"
 msgstr ""
 
-#: actions.c:789 actions.c:801
+#: actions.c:803 actions.c:815
 #, c-format
 msgid "%s action needs a valid id attribute"
 msgstr ""
 
-#: actions.c:637 actions.c:766 actions.c:778
+#: actions.c:651 actions.c:780 actions.c:792
 #, c-format
 msgid "%s action needs a valid toggle name"
 msgstr ""
 
-#: actions.c:813
+#: actions.c:827
 #, c-format
 msgid "%s action needs a valid value"
 msgstr ""
 
-#: actions.c:523
+#: actions.c:537
 #, c-format
 msgid "%s action needs src attribute"
 msgstr ""
 
-#: main.c:98
+#: main.c:93
 #, c-format
 msgid "%s requires GTK version %d.%d.%d"
 msgstr ""
 
-#: kybd.c:2608
+#: kybd.c:2437
 #, c-format
 msgid "%s: Bell not supported"
 msgstr ""
 
-#: kybd.c:2767
+#: kybd.c:2596
 #, c-format
 msgid "%s: Missing hex digits after \\x"
 msgstr ""
 
-#: kybd.c:2707
+#: kybd.c:2536
 #, c-format
 msgid "%s: Unknown character after \\p"
 msgstr ""
 
-#: kybd.c:2743
+#: kybd.c:2572
 #, c-format
 msgid "%s: Unknown character after \\pa"
 msgstr ""
 
-#: kybd.c:2721
+#: kybd.c:2550
 #, c-format
 msgid "%s: Unknown character after \\pf"
 msgstr ""
 
-#: kybd.c:2659
+#: kybd.c:2488
 #, c-format
 msgid "%s: Vertical tab not supported"
 msgstr ""
 
-#: window.c:423
+#: window.c:394
 #, c-format
 msgid "%s<b>%s</b> for %s"
 msgstr ""
 
-#: main.c:331
+#: main.c:324
 msgid "- 3270 Emulator for Gtk"
 msgstr ""
 
@@ -150,7 +149,7 @@ msgstr ""
 msgid "16 colors"
 msgstr ""
 
-#: screen.c:763 screen.c:800 screen.c:818 screen.c:943
+#: screen.c:766 screen.c:803 screen.c:821 screen.c:946
 msgid "3270 Error"
 msgstr ""
 
@@ -158,11 +157,11 @@ msgstr ""
 msgid "3270 File transfer"
 msgstr ""
 
-#: screen.c:781
+#: screen.c:784
 msgid "3270 Warning"
 msgstr ""
 
-#: src/v3270/accessible.c:84
+#: src/v3270/accessible.c:100
 msgid "3270 screen"
 msgstr ""
 
@@ -201,30 +200,30 @@ msgstr ""
 msgid "<b>%s</b>\n"
 msgstr ""
 
-#: src/v3270/widget.c:244
+#: src/v3270/widget.c:198
 msgid ""
 "<b>Identity not verified</b>\n"
 "Disconnected from host"
 msgstr ""
 
-#: src/v3270/widget.c:251 src/v3270/security.c:382
+#: src/v3270/widget.c:205
 msgid ""
 "<b>Identity not verified</b>\n"
 "The connection is insecure"
 msgstr ""
 
-#: src/v3270/widget.c:258
+#: src/v3270/widget.c:212
 msgid ""
 "<b>Identity verified</b>\n"
 "The connection is secure"
 msgstr ""
 
-#: src/v3270/widget.c:275
+#: src/v3270/widget.c:229
 #, c-format
 msgid "<b>SSL state is undefined</b>Unexpected SSL status %ld"
 msgstr ""
 
-#: main.c:351
+#: main.c:344
 msgid ""
 "<b>Valid options:</b>\n"
 "\n"
@@ -238,7 +237,7 @@ msgstr ""
 msgid "<separator> should be inside a <menu> or <toolbar>"
 msgstr ""
 
-#: src/v3270/security.c:213
+#: ssl/state.c:286 src/v3270/security.c:213
 msgid ""
 "A CA certificate is invalid. Either it is not a CA or its extensions are not "
 "consistent with the supplied purpose."
@@ -260,7 +259,7 @@ msgstr ""
 msgid "Aborting..."
 msgstr ""
 
-#: src/v3270/security.c:423
+#: src/dialogs/security.c:189
 msgid "About security"
 msgstr ""
 
@@ -276,7 +275,7 @@ msgstr ""
 msgid "Add to copy"
 msgstr ""
 
-#: src/dialogs/hostselect.c:162
+#: src/dialogs/hostselect.c:156
 msgid "Address or name of the host to connect."
 msgstr ""
 
@@ -298,7 +297,7 @@ msgid ""
 "being transferred, or an unidentified system error."
 msgstr ""
 
-#: src/v3270/security.c:171
+#: ssl/state.c:231 src/v3270/security.c:171
 msgid "An error occurred trying to allocate memory. This should never happen."
 msgstr ""
 
@@ -310,24 +309,20 @@ msgstr ""
 msgid "Appends the source file to the destination file."
 msgstr ""
 
-#: main.c:305 main.c:307
-msgid "Application name"
-msgstr ""
-
 #: 10keypad.xml:85
 msgid "Attn"
 msgstr ""
 
-#: actions.c:498
+#: actions.c:512
 #, c-format
 msgid "Attribute \"%s\" is invalid or undefined"
 msgstr ""
 
-#: src/v3270/security.c:261
+#: ssl/state.c:341 src/v3270/security.c:261
 msgid "Authority and issuer serial number mismatch"
 msgstr ""
 
-#: src/v3270/security.c:254
+#: ssl/state.c:333 src/v3270/security.c:254
 msgid "Authority and subject key identifier mismatch"
 msgstr ""
 
@@ -398,7 +393,7 @@ msgstr ""
 msgid "Break"
 msgstr ""
 
-#: telnet.c:2036
+#: telnet.c:1655
 msgid "Broken pipe"
 msgstr ""
 
@@ -410,7 +405,7 @@ msgstr ""
 msgid "CRL is not yet valid"
 msgstr ""
 
-#: src/v3270/security.c:107
+#: ssl/state.c:154 src/v3270/security.c:107
 msgid "CRL signature failure"
 msgstr ""
 
@@ -418,15 +413,15 @@ msgstr ""
 msgid "C_haracter Coding:"
 msgstr ""
 
-#: print.c:421
+#: print.c:421 src/v3270/print.c:113
 msgid "C_olor scheme:"
 msgstr ""
 
-#: src/dialogs/hostselect.c:392
+#: src/dialogs/hostselect.c:384
 msgid "C_onnect"
 msgstr ""
 
-#: toggles.c:333 linux/connect.c:317
+#: toggles.c:333 linux/connect.c:278
 #, c-format
 msgid "Can't %s network keep-alive"
 msgstr ""
@@ -436,16 +431,16 @@ msgstr ""
 msgid "Can't accept unnamed %s"
 msgstr ""
 
-#: ssl/linux/getcrl.c:230
+#: ssl/linux/getcrl.c:321
 msgid "Can't bind to LDAP server"
 msgstr ""
 
-#: linux/connect.c:89
+#: linux/connect.c:91
 #, c-format
 msgid "Can't connect to %s"
 msgstr ""
 
-#: linux/connect.c:269
+#: linux/connect.c:225
 #, c-format
 msgid "Can't connect to %s:%s"
 msgstr ""
@@ -463,7 +458,7 @@ msgstr ""
 msgid "Can't cut rectangular regions"
 msgstr ""
 
-#: ssl/linux/getcrl.c:290
+#: ssl/linux/getcrl.c:391
 msgid "Can't get CRL from LDAP Search"
 msgstr ""
 
@@ -471,7 +466,7 @@ msgstr ""
 msgid "Can't get DBUS object name"
 msgstr ""
 
-#: ssl/linux/getcrl.c:266 ssl/linux/getcrl.c:277
+#: ssl/linux/getcrl.c:357 ssl/linux/getcrl.c:368
 msgid "Can't get LDAP attribute"
 msgstr ""
 
@@ -483,7 +478,7 @@ msgstr ""
 msgid "Can't get screen contents"
 msgstr ""
 
-#: ssl/linux/getcrl.c:208
+#: ssl/linux/getcrl.c:299
 msgid "Can't initialize LDAP"
 msgstr ""
 
@@ -505,11 +500,11 @@ msgstr ""
 msgid "Can't load plugin %s"
 msgstr ""
 
-#: ssl/linux/getcrl.c:106 ssl/linux/getcrl.c:122
+#: ssl/linux/getcrl.c:226 ssl/linux/getcrl.c:244
 msgid "Can't open CRL File"
 msgstr ""
 
-#: window.c:234
+#: window.c:178
 msgid "Can't open file"
 msgstr ""
 
@@ -539,12 +534,17 @@ msgstr ""
 msgid "Can't parse unnamed element"
 msgstr ""
 
-#: window.c:411
+#: ssl/ctx_init.c:110
+#, c-format
+msgid "Can't read SSL certificates from \"%s\""
+msgstr ""
+
+#: window.c:382
 #, c-format
 msgid "Can't recognize \"%s\" as a valid host type"
 msgstr ""
 
-#: src/v3270ft/save.c:116 src/trace/trace.c:215
+#: src/v3270ft/save.c:116 src/trace/trace.c:206
 #, c-format
 msgid "Can't save %s"
 msgstr ""
@@ -556,7 +556,7 @@ msgid ""
 "%s"
 msgstr ""
 
-#: dialog.c:219 src/trace/trace.c:217
+#: dialog.c:219 src/trace/trace.c:208
 msgid "Can't save file"
 msgstr ""
 
@@ -574,20 +574,16 @@ msgid ""
 "%s"
 msgstr ""
 
-#: window.c:232
+#: window.c:176
 #, c-format
 msgid "Can't save trace data to file %s"
 msgstr ""
 
-#: ssl/linux/getcrl.c:255
+#: ssl/linux/getcrl.c:346
 msgid "Can't search LDAP server"
 msgstr ""
 
-#: ssl/linux/getcrl.c:192
-msgid "Can't set LDAP query"
-msgstr ""
-
-#: ssl/linux/getcrl.c:219
+#: ssl/linux/getcrl.c:310
 msgid "Can't set LDAP version"
 msgstr ""
 
@@ -595,19 +591,19 @@ msgstr ""
 msgid "Can't set callback table"
 msgstr ""
 
-#: tools.c:306
+#: tools.c:308
 msgid "Can't set host charset"
 msgstr ""
 
-#: src/v3270/iocallback.c:190
+#: src/v3270/iocallback.c:198
 msgid "Can't set lib3270 I/O controller"
 msgstr ""
 
-#: iocalls.c:571
+#: iocalls.c:579
 msgid "Can't set socket to blocking mode."
 msgstr ""
 
-#: iocalls.c:571
+#: iocalls.c:579
 msgid "Can't set socket to non blocking mode"
 msgstr ""
 
@@ -617,6 +613,10 @@ msgstr ""
 
 #: ft.c:205
 msgid "Can't start file transfer."
+msgstr ""
+
+#: ssl/negotiate.c:222
+msgid "Can't verify."
 msgstr ""
 
 #: src/v3270ft/v3270ftprogress.c:471 src/v3270ft/transfer.c:89
@@ -631,53 +631,53 @@ msgstr ""
 msgid "Cancelled by user"
 msgstr ""
 
-#: telnet.c:1464
+#: telnet.c:1083
 msgid "Cannot connect to specified LU"
 msgstr ""
 
-#: ssl/negotiate.c:103
+#: ssl/negotiate.c:101
 msgid "Cant create a new SSL structure for current connection."
 msgstr ""
 
-#: ssl/ctx_init.c:97
+#: ssl/ctx_init.c:89
 msgid "Cant initialize the SSL context."
 msgstr ""
 
-#: ssl/negotiate.c:133
+#: ssl/negotiate.c:131
 msgid ""
 "Cant set the file descriptor for the input/output facility for the TLS/SSL "
 "(encrypted) side of ssl."
 msgstr ""
 
-#: src/v3270/security.c:121
+#: ssl/state.c:170 src/v3270/security.c:121
 msgid "Certificate has expired"
 msgstr ""
 
-#: src/v3270/security.c:114
+#: ssl/state.c:162 src/v3270/security.c:114
 msgid "Certificate is not yet valid"
 msgstr ""
 
-#: src/v3270/security.c:233
+#: ssl/state.c:309 src/v3270/security.c:233
 msgid "Certificate not trusted"
 msgstr ""
 
-#: src/v3270/security.c:240
+#: ssl/state.c:317 src/v3270/security.c:240
 msgid "Certificate rejected"
 msgstr ""
 
-#: src/v3270/security.c:205
+#: ssl/state.c:277 src/v3270/security.c:205
 msgid "Certificate revoked"
 msgstr ""
 
-#: src/v3270/security.c:100
+#: ssl/state.c:146 src/v3270/security.c:100
 msgid "Certificate signature failure"
 msgstr ""
 
-#: tools.c:310 src/v3270/selection.c:465
+#: tools.c:312 src/v3270/selection.c:465
 msgid "Charset error"
 msgstr ""
 
-#: src/dialogs/hostselect.c:167
+#: src/dialogs/hostselect.c:161
 msgid "Check for SSL secure connection."
 msgstr ""
 
@@ -701,11 +701,11 @@ msgstr ""
 msgid "Colors"
 msgstr ""
 
-#: src/trace/trace.c:394
+#: src/trace/trace.c:372
 msgid "Command:"
 msgstr ""
 
-#: src/dialogs/hostselect.c:388 00default.xml:89
+#: src/dialogs/hostselect.c:380 00default.xml:89
 msgid "Configure host"
 msgstr ""
 
@@ -717,19 +717,19 @@ msgstr ""
 msgid "Connecting to host"
 msgstr ""
 
-#: iocalls.c:539 linux/connect.c:273 linux/connect.c:303 linux/connect.c:321
+#: iocalls.c:547 linux/connect.c:229 linux/connect.c:264 linux/connect.c:282
 msgid "Connection error"
 msgstr ""
 
-#: linux/connect.c:95
+#: linux/connect.c:97
 msgid "Connection failed"
 msgstr ""
 
-#: telnet.c:2040
+#: telnet.c:1659
 msgid "Connection reset by peer"
 msgstr ""
 
-#: properties.c:246
+#: properties.c:249
 msgid "Connection state"
 msgstr ""
 
@@ -770,11 +770,11 @@ msgstr ""
 msgid "Current file"
 msgstr ""
 
-#: properties.c:225
+#: properties.c:228
 msgid "Current screen width in columns"
 msgstr ""
 
-#: properties.c:232
+#: properties.c:235
 msgid "Current screen width in rows"
 msgstr ""
 
@@ -786,7 +786,7 @@ msgstr ""
 msgid "Current:"
 msgstr ""
 
-#: properties.c:204
+#: properties.c:207
 msgid "Cursor address"
 msgstr ""
 
@@ -834,16 +834,28 @@ msgstr ""
 msgid "Default"
 msgstr ""
 
+#: properties.c:425
+msgid "Default host URL"
+msgstr ""
+
 #: 00default.xml:78
 msgid "Delete field"
 msgstr ""
 
-#: telnet.c:1711
+#: properties.c:439
+msgid "Description of the current security state"
+msgstr ""
+
+#: telnet.c:1330
 msgid "Device type rejected"
 msgstr ""
 
 #: ft.c:263
 msgid "Disconnected from host."
+msgstr ""
+
+#: properties.c:397
+msgid "Display charset"
 msgstr ""
 
 #: 99debug.xml:40
@@ -854,7 +866,7 @@ msgstr ""
 msgid "Display the cursor location in the OIA (the status line)"
 msgstr ""
 
-#: telnet.c:1260
+#: telnet.c:879
 msgid "EOR received when not in 3270 mode, ignored."
 msgstr ""
 
@@ -898,7 +910,7 @@ msgstr ""
 msgid "Erase to end of line"
 msgstr ""
 
-#: print.c:247 util.c:589 src/v3270/widget.c:207
+#: print.c:247 util.c:589 src/v3270/widget.c:161
 msgid "Error"
 msgstr ""
 
@@ -921,6 +933,10 @@ msgstr ""
 msgid "Error loading %s"
 msgstr ""
 
+#: ssl/linux/getcrl.c:449 ssl/linux/getcrl.c:464
+msgid "Error loading CRL"
+msgstr ""
+
 #: src/v3270ft/v3270ftprogress.c:85
 msgid "Estimated transfer arrival"
 msgstr ""
@@ -933,7 +949,7 @@ msgstr ""
 msgid "External Rexx script"
 msgstr ""
 
-#: 98trace.xml:41
+#: 98trace.xml:42
 msgid "Field Delimiters"
 msgstr ""
 
@@ -965,23 +981,23 @@ msgid ""
 "records in the PC file."
 msgstr ""
 
-#: src/v3270/security.c:156
+#: ssl/state.c:214 src/v3270/security.c:156
 msgid "Format error in CRL's lastUpdate field"
 msgstr ""
 
-#: src/v3270/security.c:163
+#: ssl/state.c:222 src/v3270/security.c:163
 msgid "Format error in CRL's nextUpdate field"
 msgstr ""
 
-#: src/v3270/security.c:149
+#: ssl/state.c:206 src/v3270/security.c:149
 msgid "Format error in certificate's notAfter field"
 msgstr ""
 
-#: src/v3270/security.c:142
+#: ssl/state.c:198 src/v3270/security.c:142
 msgid "Format error in certificate's notBefore field"
 msgstr ""
 
-#: properties.c:171
+#: properties.c:174
 msgid "Formatted screen"
 msgstr ""
 
@@ -993,12 +1009,20 @@ msgstr ""
 msgid "Function bar"
 msgstr ""
 
-#: main.c:102 main.c:439
+#: main.c:97 main.c:394
 msgid "GTK Version mismatch"
 msgstr ""
 
 #: src/v3270ft/v3270ft.c:373
 msgid "Get transfer queue from an external XML file"
+msgstr ""
+
+#: ssl/linux/getcrl.c:503
+msgid "Got an invalid CRL from LDAP server"
+msgstr ""
+
+#: ssl/linux/getcrl.c:481 ssl/linux/getcrl.c:490 ssl/linux/getcrl.c:520
+msgid "Got an invalid CRL from server"
 msgstr ""
 
 #: colors.c:509
@@ -1009,7 +1033,7 @@ msgstr ""
 msgid "Green"
 msgstr ""
 
-#: properties.c:157
+#: properties.c:160
 msgid "Has selected area"
 msgstr ""
 
@@ -1017,28 +1041,36 @@ msgstr ""
 msgid "Help"
 msgstr ""
 
+#: properties.c:390
+msgid "Host charset"
+msgstr ""
+
 #: ft.c:670
 msgid "Host disconnected, transfer cancelled"
 msgstr ""
 
-#: telnet.c:1769
+#: telnet.c:1388
 msgid "Host illegally added function(s)"
 msgstr ""
 
-#: telnet.c:1694
+#: telnet.c:1313
 msgid "Host rejected device type or request type"
 msgstr ""
 
-#: telnet.c:1707
+#: telnet.c:1326
 msgid "Host rejected resource(s)"
 msgstr ""
 
-#: main.c:313
+#: main.c:306
 msgid "Host system type"
 msgstr ""
 
-#: main.c:311
+#: main.c:304
 msgid "Host to connect"
+msgstr ""
+
+#: properties.c:383
+msgid "Host type name"
 msgstr ""
 
 #: options.c:49
@@ -1049,7 +1081,7 @@ msgstr ""
 msgid "IBM S/390"
 msgstr ""
 
-#: src/v3270/widget.c:266
+#: src/v3270/widget.c:220
 msgid "Identity not verified"
 msgstr ""
 
@@ -1113,10 +1145,6 @@ msgstr ""
 msgid "Insert new file in the transfer queue"
 msgstr ""
 
-#: ssl/linux/getcrl.c:193
-msgid "Insuficient arguments"
-msgstr ""
-
 #: colors.c:514
 msgid "Intensified/Protected"
 msgstr ""
@@ -1125,15 +1153,11 @@ msgstr ""
 msgid "Intensified/Unprotected"
 msgstr ""
 
-#: src/v3270/security.c:212
+#: ssl/state.c:285 src/v3270/security.c:212
 msgid "Invalid CA certificate"
 msgstr ""
 
-#: ssl/linux/getcrl.c:164
-msgid "Invalid argument format"
-msgstr ""
-
-#: local/session.cc:69 src/v3270/widget.c:940
+#: local/session.cc:69 src/v3270/callbacks.c:405
 msgid "Invalid callback table, possible version mismatch in lib3270"
 msgstr ""
 
@@ -1157,11 +1181,15 @@ msgstr ""
 msgid "Invalid session handler"
 msgstr ""
 
-#: properties.c:164
+#: src/dialogs/security.c:170
+msgid "Invalid state"
+msgstr ""
+
+#: properties.c:167
 msgid "Is starting (no first screen)?"
 msgstr ""
 
-#: properties.c:150
+#: properties.c:153
 msgid "Is terminal in the INITIAL_E state?"
 msgstr ""
 
@@ -1173,7 +1201,7 @@ msgstr ""
 msgid "Keep selected"
 msgstr ""
 
-#: src/v3270/security.c:268
+#: ssl/state.c:349 src/v3270/security.c:268
 msgid "Key usage does not include certificate signing"
 msgstr ""
 
@@ -1185,7 +1213,7 @@ msgstr ""
 msgid "Lateral keypad"
 msgstr ""
 
-#: properties.c:253
+#: properties.c:256
 msgid "Latest program message"
 msgstr ""
 
@@ -1197,15 +1225,20 @@ msgstr ""
 msgid "Load queue from file"
 msgstr ""
 
+#: config.c:423
+#, c-format
+msgid "Loading %s"
+msgstr ""
+
 #: src/v3270ft/v3270ftprogress.c:59
 msgid "Local:"
 msgstr ""
 
-#: main.c:326
+#: main.c:319
 msgid "Log to file"
 msgstr ""
 
-#: main.c:319
+#: main.c:312
 msgid "Minutes for auto-disconnect"
 msgstr ""
 
@@ -1213,9 +1246,13 @@ msgstr ""
 msgid "Misc colors"
 msgstr ""
 
-#: window.c:532
+#: window.c:503
 #, c-format
 msgid "Model %d (%s)"
+msgstr ""
+
+#: properties.c:376
+msgid "Model name"
 msgstr ""
 
 #: toggles.c:75 00default.xml:116
@@ -1226,7 +1263,7 @@ msgstr ""
 msgid "Monochrome"
 msgstr ""
 
-#: actions.c:654
+#: actions.c:668
 msgid "Move action needs target & direction attributes"
 msgstr ""
 
@@ -1234,7 +1271,7 @@ msgstr ""
 msgid "Mustard"
 msgstr ""
 
-#: telnet.c:354 linux/event_dispatcher.c:144 linux/connect.c:80
+#: telnet.c:354 linux/event_dispatcher.c:144 linux/connect.c:81
 msgid "Network error"
 msgstr ""
 
@@ -1246,11 +1283,19 @@ msgstr ""
 msgid "Next field"
 msgstr ""
 
+#: ssl/linux/getcrl.c:267
+msgid "No DN of the entry at which to start the search on the URL"
+msgstr ""
+
+#: ssl/linux/getcrl.c:279
+msgid "No LDAP attribute on the URL"
+msgstr ""
+
 #: src/v3270ft/v3270ftprogress.c:467
 msgid "No active transfer"
 msgstr ""
 
-#: src/v3270/security.c:199
+#: ssl/state.c:270 src/v3270/security.c:199
 msgid ""
 "No signatures could be verified because the chain contains only one "
 "certificate and it is not self signed."
@@ -1260,11 +1305,11 @@ msgstr ""
 msgid "No transfer in progress"
 msgstr ""
 
-#: properties.c:94
+#: properties.c:97
 msgid "Non zero if the host is AS400."
 msgstr ""
 
-#: properties.c:87
+#: properties.c:90
 msgid "Non zero if the host is TSO."
 msgstr ""
 
@@ -1312,7 +1357,7 @@ msgstr ""
 msgid "Operation has failed"
 msgstr ""
 
-#: print.c:613
+#: print.c:613 src/v3270/print.c:199
 msgid "Options"
 msgstr ""
 
@@ -1328,7 +1373,7 @@ msgstr ""
 msgid "Other (VM/CMS)"
 msgstr ""
 
-#: src/v3270/security.c:170
+#: ssl/state.c:230 src/v3270/security.c:170
 msgid "Out of memory"
 msgstr ""
 
@@ -1448,7 +1493,7 @@ msgstr ""
 msgid "PF9"
 msgstr ""
 
-#: main.c:349
+#: main.c:342
 msgid "Parse error"
 msgstr ""
 
@@ -1477,16 +1522,16 @@ msgstr ""
 msgid "Path and name of the local file"
 msgstr ""
 
-#: main.c:320
+#: main.c:313
 msgid "Path for plugin files"
 msgstr ""
 
-#: src/v3270/security.c:219
+#: ssl/state.c:293 src/v3270/security.c:219
 msgid "Path length constraint exceeded"
 msgstr ""
 
-#: main.c:308
-msgid "Path to application data files"
+#: src/dialogs/security.c:122 src/dialogs/security.c:141
+msgid "Peer certificate"
 msgstr ""
 
 #: colors.c:497
@@ -1497,7 +1542,7 @@ msgstr ""
 msgid "Popup test"
 msgstr ""
 
-#: src/dialogs/hostselect.c:163
+#: src/dialogs/hostselect.c:157
 msgid "Port or service name (empty for \"telnet\")."
 msgstr ""
 
@@ -1539,7 +1584,7 @@ msgstr ""
 msgid "Print selection box"
 msgstr ""
 
-#: print.c:915 00default.xml:105
+#: print.c:914 00default.xml:105
 msgid "Print settings"
 msgstr ""
 
@@ -1671,7 +1716,7 @@ msgstr ""
 msgid "Remap Failed"
 msgstr ""
 
-#: main.c:317
+#: main.c:310
 msgid "Remap charset from xml file"
 msgstr ""
 
@@ -1717,34 +1762,38 @@ msgstr ""
 msgid "Return"
 msgstr ""
 
+#: src/dialogs/security.c:128
+msgid "Revocation list"
+msgstr ""
+
 #: src/v3270ft/v3270ftprogress.c:225
 msgid ""
 "SPACE can be specified in units of TRACKS, CYLINDERS, or AVBLOCK, and only "
 "one option can be used."
 msgstr ""
 
-#: ssl/negotiate.c:155
+#: ssl/negotiate.c:153
 msgid "SSL Connect failed"
 msgstr ""
 
-#: telnet.c:1047
+#: telnet.c:666
 msgid "SSL Error"
 msgstr ""
 
-#: telnet.c:1047
+#: telnet.c:666
 msgid "SSL Read error"
 msgstr ""
 
-#: ssl/negotiate.c:181 ssl/negotiate.c:190 ssl/negotiate.c:199
-#: ssl/negotiate.c:215
+#: ssl/negotiate.c:174 ssl/negotiate.c:183 ssl/negotiate.c:192
+#: ssl/negotiate.c:208 ssl/negotiate.c:221
 msgid "SSL error"
 msgstr ""
 
-#: ssl/negotiate.c:132
+#: ssl/negotiate.c:130
 msgid "SSL negotiation failed"
 msgstr ""
 
-#: telnet.c:2026
+#: telnet.c:1645
 #, c-format
 msgid ""
 "SSL_write:\n"
@@ -1783,7 +1832,7 @@ msgstr ""
 msgid "Save selection to file"
 msgstr ""
 
-#: src/trace/trace.c:184
+#: src/trace/trace.c:175
 msgid "Save trace file"
 msgstr ""
 
@@ -1791,7 +1840,7 @@ msgstr ""
 msgid "Save transfer queue to an external XML file"
 msgstr ""
 
-#: properties.c:239
+#: properties.c:242
 msgid "Screen buffer length in bytes"
 msgstr ""
 
@@ -1803,11 +1852,11 @@ msgstr ""
 msgid "Scripts"
 msgstr ""
 
-#: ssl/linux/getcrl.c:267
+#: ssl/linux/getcrl.c:358
 msgid "Search did not produce any attributes."
 msgstr ""
 
-#: ssl/linux/getcrl.c:278
+#: ssl/linux/getcrl.c:369
 msgid "Search did not produce any values."
 msgstr ""
 
@@ -1821,16 +1870,18 @@ msgstr ""
 msgid "Secondary space:"
 msgstr ""
 
-#: src/v3270/security.c:58
+#: ssl/state.c:98 src/v3270/security.c:58
 msgid "Secure connection was successful."
 msgstr ""
 
-#: ssl/negotiate.c:102 ssl/negotiate.c:131 ssl/negotiate.c:154
-#: ssl/ctx_init.c:96 ssl/linux/getcrl.c:105 ssl/linux/getcrl.c:121
-#: ssl/linux/getcrl.c:163 ssl/linux/getcrl.c:191 ssl/linux/getcrl.c:207
-#: ssl/linux/getcrl.c:218 ssl/linux/getcrl.c:229 ssl/linux/getcrl.c:254
-#: ssl/linux/getcrl.c:265 ssl/linux/getcrl.c:276 ssl/linux/getcrl.c:289
-#: ssl/linux/getcrl.c:301
+#: ssl/negotiate.c:100 ssl/negotiate.c:129 ssl/negotiate.c:152
+#: ssl/ctx_init.c:88 ssl/ctx_init.c:115 ssl/linux/getcrl.c:225
+#: ssl/linux/getcrl.c:243 ssl/linux/getcrl.c:266 ssl/linux/getcrl.c:278
+#: ssl/linux/getcrl.c:298 ssl/linux/getcrl.c:309 ssl/linux/getcrl.c:320
+#: ssl/linux/getcrl.c:345 ssl/linux/getcrl.c:356 ssl/linux/getcrl.c:367
+#: ssl/linux/getcrl.c:390 ssl/linux/getcrl.c:440 ssl/linux/getcrl.c:463
+#: ssl/linux/getcrl.c:480 ssl/linux/getcrl.c:489 ssl/linux/getcrl.c:502
+#: ssl/linux/getcrl.c:519 ssl/linux/getcrl.c:533
 msgid "Security error"
 msgstr ""
 
@@ -1890,11 +1941,11 @@ msgstr ""
 msgid "Selection foreground"
 msgstr ""
 
-#: src/v3270/security.c:177
+#: ssl/state.c:238 src/v3270/security.c:177
 msgid "Self signed certificate"
 msgstr ""
 
-#: src/v3270/security.c:184
+#: ssl/state.c:252 src/v3270/security.c:184
 msgid "Self signed certificate in certificate chain"
 msgstr ""
 
@@ -1902,7 +1953,7 @@ msgstr ""
 msgid "Send file"
 msgstr ""
 
-#: main.c:323
+#: main.c:316
 msgid "Send messages to syslog"
 msgstr ""
 
@@ -1918,11 +1969,11 @@ msgstr ""
 msgid "Sending file"
 msgstr ""
 
-#: main.c:310
+#: main.c:299 main.c:301
 msgid "Session name"
 msgstr ""
 
-#: main.c:316
+#: main.c:309
 msgid "Set host charset"
 msgstr ""
 
@@ -1930,19 +1981,19 @@ msgstr ""
 msgid "Set insert mode"
 msgstr ""
 
-#: main.c:312
+#: main.c:305
 msgid "Set reported colors (8/16)"
 msgstr ""
 
-#: main.c:315
+#: main.c:308
 msgid "Set toggles OFF"
 msgstr ""
 
-#: main.c:314
+#: main.c:307
 msgid "Set toggles ON"
 msgstr ""
 
-#: main.c:325
+#: main.c:318
 msgid "Set trace filename"
 msgstr ""
 
@@ -1978,15 +2029,15 @@ msgstr ""
 msgid "Smart paste"
 msgstr ""
 
-#: iocalls.c:553 iocalls.c:570
+#: iocalls.c:561 iocalls.c:578
 msgid "Socket error"
 msgstr ""
 
-#: telnet.c:1073
+#: telnet.c:692
 msgid "Socket read error"
 msgstr ""
 
-#: telnet.c:2047
+#: telnet.c:1666
 msgid "Socket write error"
 msgstr ""
 
@@ -2032,11 +2083,11 @@ msgstr ""
 msgid "State %04d can't accept requests"
 msgstr ""
 
-#: properties.c:129
+#: properties.c:132
 msgid "State is 3270, TN3270e or SSCP"
 msgstr ""
 
-#: src/v3270/security.c:247
+#: ssl/state.c:325 src/v3270/security.c:247
 msgid "Subject issuer mismatch"
 msgstr ""
 
@@ -2044,7 +2095,7 @@ msgstr ""
 msgid "System _type:"
 msgstr ""
 
-#: telnet.c:1535
+#: telnet.c:1154
 msgid "TLS negotiation failure"
 msgstr ""
 
@@ -2063,19 +2114,19 @@ msgid ""
 "been reached."
 msgstr ""
 
-#: ssl/negotiate.c:200 src/v3270/security.c:136
+#: ssl/state.c:190 ssl/negotiate.c:193 src/v3270/security.c:136
 msgid "The CRL has expired."
 msgstr ""
 
-#: ssl/negotiate.c:191 src/v3270/security.c:129
+#: ssl/state.c:178 ssl/negotiate.c:184 src/v3270/security.c:129
 msgid "The CRL is not yet valid."
 msgstr ""
 
-#: src/v3270/security.c:157
+#: ssl/state.c:215 src/v3270/security.c:157
 msgid "The CRL lastUpdate field contains an invalid time."
 msgstr ""
 
-#: src/v3270/security.c:164
+#: ssl/state.c:223 src/v3270/security.c:164
 msgid "The CRL nextUpdate field contains an invalid time."
 msgstr ""
 
@@ -2083,92 +2134,96 @@ msgstr ""
 msgid "The CRL of a certificate could not be found."
 msgstr ""
 
-#: src/v3270/security.c:87
+#: ssl/state.c:131 src/v3270/security.c:87
 msgid ""
 "The CRL signature could not be decrypted: this means that the actual "
 "signature value could not be determined rather than it not matching the "
 "expected value. Unused."
 msgstr ""
 
-#: ssl/negotiate.c:201
+#: ssl/state.c:191 ssl/negotiate.c:194
 msgid "The Certificate revocation list (CRL) has expired."
 msgstr ""
 
-#: ssl/negotiate.c:192
+#: ssl/state.c:179 ssl/negotiate.c:185
 msgid "The Certificate revocation list (CRL) is not yet valid."
 msgstr ""
 
-#: ssl/negotiate.c:183
+#: ssl/state.c:115 ssl/negotiate.c:176
 msgid ""
 "The Certificate revocation list (CRL) of a certificate could not be found."
 msgstr ""
 
-#: ssl/negotiate.c:216
+#: ssl/state.c:247 ssl/negotiate.c:209
 msgid "The SSL certificate for this host is not trusted."
 msgstr ""
 
-#: ssl/linux/getcrl.c:107
+#: ssl/linux/getcrl.c:268 ssl/linux/getcrl.c:280
+msgid "The URL argument should be in the format ldap://[HOST]/[DN]?attribute"
+msgstr ""
+
+#: ssl/linux/getcrl.c:227
 msgid "The URL for the CRL is undefined or empty"
 msgstr ""
 
-#: ssl/linux/getcrl.c:303
+#: ssl/linux/getcrl.c:535
 msgid "The URL scheme is unknown"
 msgstr ""
 
-#: src/v3270/security.c:220
+#: ssl/state.c:294 src/v3270/security.c:220
 msgid "The basicConstraints pathlength parameter has been exceeded."
 msgstr ""
 
-#: src/v3270/security.c:185
+#: ssl/state.c:253 src/v3270/security.c:185
 msgid ""
 "The certificate chain could be built up using the untrusted certificates but "
 "the root could not be found locally."
 msgstr ""
 
-#: src/v3270/security.c:206
+#: ssl/state.c:278 src/v3270/security.c:206
 msgid "The certificate has been revoked."
 msgstr ""
 
-#: src/v3270/security.c:122
+#: ssl/state.c:171 src/v3270/security.c:122
 msgid ""
 "The certificate has expired: that is the notAfter date is before the current "
 "time."
 msgstr ""
 
-#: src/v3270/security.c:115
+#: ssl/state.c:163 src/v3270/security.c:115
 msgid ""
 "The certificate is not yet valid: the notBefore date is after the current "
 "time."
 msgstr ""
 
-#: src/v3270/security.c:150
+#: ssl/state.c:207 src/v3270/security.c:150
 msgid "The certificate notAfter field contains an invalid time."
 msgstr ""
 
-#: src/v3270/security.c:143
+#: ssl/state.c:199 src/v3270/security.c:143
 msgid "The certificate notBefore field contains an invalid time."
 msgstr ""
 
-#: src/v3270/security.c:80
+#: ssl/state.c:123 src/v3270/security.c:80
 msgid ""
 "The certificate signature could not be decrypted. This means that the actual "
 "signature value could not be determined rather than it not matching the "
 "expected value, this is only meaningful for RSA keys."
 msgstr ""
 
-#: properties.c:218
+#: properties.c:221
 msgid "The color type"
 msgstr ""
 
-#: src/v3270/security.c:343
+#: ssl/state.c:377 ssl/state.c:405 ssl/state.c:432 src/v3270/security.c:343
 msgid "The connection is insecure"
 msgstr ""
 
-#: src/v3270/security.c:59
+#: ssl/state.c:99 src/v3270/security.c:59
 msgid "The connection is secure and the host identity was confirmed."
 msgstr ""
 
-#: src/v3270/security.c:262
+#: ssl/state.c:342 src/v3270/security.c:262
 msgid ""
 "The current candidate issuer certificate was rejected because its issuer "
 "name and serial number was present and did not match the authority key "
@@ -2176,27 +2231,27 @@ msgid ""
 "issuer_checks option is set."
 msgstr ""
 
-#: src/v3270/security.c:269
+#: ssl/state.c:350 src/v3270/security.c:269
 msgid ""
 "The current candidate issuer certificate was rejected because its keyUsage "
 "extension does not permit certificate signing."
 msgstr ""
 
-#: src/v3270/security.c:255
+#: ssl/state.c:334 src/v3270/security.c:255
 msgid ""
 "The current candidate issuer certificate was rejected because its subject "
 "key identifier was present and did not match the authority key identifier "
 "current certificate. Only displayed when the -issuer_checks option is set."
 msgstr ""
 
-#: src/v3270/security.c:248
+#: ssl/state.c:326 src/v3270/security.c:248
 msgid ""
 "The current candidate issuer certificate was rejected because its subject "
 "name did not match the issuer name of the current certificate. Only "
 "displayed when the -issuer_checks option is set."
 msgstr ""
 
-#: properties.c:260
+#: properties.c:263
 msgid "The delay between the host unlocking the keyboard and the actual unlock"
 msgstr ""
 
@@ -2221,42 +2276,46 @@ msgid ""
 "operation."
 msgstr ""
 
-#: src/v3270/security.c:192
+#: ssl/state.c:262 src/v3270/security.c:192
 msgid ""
 "The issuer certificate could not be found: this occurs if the issuer "
 "certificate of an untrusted certificate cannot be found."
 msgstr ""
 
-#: src/v3270/security.c:66
+#: ssl/state.c:107 src/v3270/security.c:66
 msgid ""
 "The issuer certificate of a looked up certificate could not be found. This "
 "normally means the list of trusted certificates is not complete."
 msgstr ""
 
-#: window.c:430
+#: window.c:401
 #, c-format
 msgid "The known types are %s"
 msgstr ""
 
-#: properties.c:211
+#: properties.c:214
 msgid "The model number"
 msgstr ""
 
-#: main.c:318
+#: main.c:311
 msgid "The model of 3270 display to be emulated"
+msgstr ""
+
+#: properties.c:362
+msgid "The name of the active LU"
 msgstr ""
 
 #: src/v3270ft/v3270ftprogress.c:65
 msgid "The name of the file in the host"
 msgstr ""
 
-#: src/v3270/security.c:178
+#: ssl/state.c:239 src/v3270/security.c:178
 msgid ""
 "The passed certificate is self signed and the same certificate cannot be "
 "found in the list of trusted certificates."
 msgstr ""
 
-#: src/v3270/security.c:94
+#: ssl/state.c:139 src/v3270/security.c:94
 msgid ""
 "The public key in the certificate SubjectPublicKeyInfo could not be read."
 msgstr ""
@@ -2265,25 +2324,30 @@ msgstr ""
 msgid "The remote file name is invalid."
 msgstr ""
 
-#: src/v3270/security.c:241
+#: ssl/state.c:318 src/v3270/security.c:241
 msgid "The root CA is marked to reject the specified purpose."
 msgstr ""
 
-#: src/v3270/security.c:234
+#: ssl/state.c:310 src/v3270/security.c:234
 msgid "The root CA is not marked as trusted for the specified purpose."
 msgstr ""
 
-#: ssl/negotiate.c:217
+#: ssl/state.c:248 ssl/negotiate.c:210
 msgid ""
 "The security certificate presented by this host was not issued by a trusted "
 "certificate authority."
 msgstr ""
 
-#: src/v3270/security.c:101 src/v3270/security.c:108
+#: properties.c:432
+msgid "The security state"
+msgstr ""
+
+#: ssl/state.c:147 ssl/state.c:155 src/v3270/security.c:101
+#: src/v3270/security.c:108
 msgid "The signature of the certificate is invalid."
 msgstr ""
 
-#: src/v3270/security.c:227
+#: ssl/state.c:302 src/v3270/security.c:227
 msgid "The supplied certificate cannot be used for the specified purpose."
 msgstr ""
 
@@ -2291,9 +2355,13 @@ msgstr ""
 msgid "There is not enough space available for data on the host."
 msgstr ""
 
-#: tools.c:309
+#: tools.c:311
 #, c-format
 msgid "There's no available settings for charset \"%s\""
+msgstr ""
+
+#: src/dialogs/security.c:177
+msgid "There's no security information in the session"
 msgstr ""
 
 #: src/v3270ft/v3270ftprogress.c:255
@@ -2317,7 +2385,7 @@ msgid ""
 "Franklin St, Fifth Floor, Boston, MA 02111-1307 USA"
 msgstr ""
 
-#: main.c:435
+#: main.c:390
 #, c-format
 msgid "This program requires GTK version %d.%d.%d"
 msgstr ""
@@ -2346,7 +2414,7 @@ msgstr ""
 msgid "Trace Data Stream"
 msgstr ""
 
-#: toggles.c:231
+#: toggles.c:231 98trace.xml:40
 msgid "Trace SSL negotiation"
 msgstr ""
 
@@ -2410,8 +2478,12 @@ msgstr ""
 msgid "Turquoise"
 msgstr ""
 
-#: properties.c:403
-msgid "URL for the CRL file"
+#: properties.c:418
+msgid "URL for the certificate revocation list"
+msgstr ""
+
+#: properties.c:369
+msgid "URL of the current host"
 msgstr ""
 
 #: dialog.c:64
@@ -2422,15 +2494,15 @@ msgstr ""
 msgid "Uknown DFT Open type from host"
 msgstr ""
 
-#: src/v3270/security.c:93
+#: ssl/state.c:138 src/v3270/security.c:93
 msgid "Unable to decode issuer public key"
 msgstr ""
 
-#: src/v3270/security.c:86
+#: ssl/state.c:130 src/v3270/security.c:86
 msgid "Unable to decrypt CRL's signature"
 msgstr ""
 
-#: src/v3270/security.c:79
+#: ssl/state.c:122 src/v3270/security.c:79
 msgid "Unable to decrypt certificate's signature"
 msgstr ""
 
@@ -2438,19 +2510,19 @@ msgstr ""
 msgid "Unable to get certificate CRL"
 msgstr ""
 
-#: ssl/negotiate.c:182
+#: ssl/state.c:114 ssl/negotiate.c:175
 msgid "Unable to get certificate CRL."
 msgstr ""
 
-#: linux/connect.c:81
+#: linux/connect.c:82
 msgid "Unable to get connection state."
 msgstr ""
 
-#: src/v3270/security.c:65
+#: ssl/state.c:106 src/v3270/security.c:65
 msgid "Unable to get issuer certificate"
 msgstr ""
 
-#: src/v3270/security.c:191
+#: ssl/state.c:261 src/v3270/security.c:191
 msgid "Unable to get local issuer certificate"
 msgstr ""
 
@@ -2462,21 +2534,12 @@ msgstr ""
 msgid "Unable to send file-transfer request"
 msgstr ""
 
-#: src/v3270/security.c:198
+#: ssl/state.c:269 src/v3270/security.c:198
 msgid "Unable to verify the first certificate"
 msgstr ""
 
 #: src/v3270ft/tables.c:92
 msgid "Undefined"
-msgstr ""
-
-#: src/v3270/security.c:389
-msgid "Unexpected SSL error"
-msgstr ""
-
-#: src/v3270/security.c:418
-#, c-format
-msgid "Unexpected SSL error <b>%ld</b>"
 msgstr ""
 
 #: menubar.c:48 toolbar.c:65 popup.c:51
@@ -2493,26 +2556,30 @@ msgstr ""
 msgid "Unexpected group \"%s\""
 msgstr ""
 
-#: actions.c:512 actions.c:532
+#: actions.c:526 actions.c:546
 #, c-format
 msgid "Unexpected or invalid %s attribute: \"%s\""
 msgstr ""
 
-#: ssl/linux/getcrl.c:302
+#: ssl/linux/getcrl.c:534
 msgid "Unexpected or invalid CRL URL"
 msgstr ""
 
-#: actions.c:486
+#: ssl/negotiate.c:223
+msgid "Unexpected or invalid TLS/SSL verify result"
+msgstr ""
+
+#: actions.c:500
 #, c-format
 msgid "Unexpected or invalid attribute value \"%s\""
 msgstr ""
 
-#: main.c:203
+#: main.c:153
 #, c-format
 msgid "Unexpected or invalid color value \"%s\""
 msgstr ""
 
-#: src/v3270/security.c:354
+#: ssl/state.c:408 src/v3270/security.c:354
 msgid "Unexpected or unknown security status"
 msgstr ""
 
@@ -2521,12 +2588,12 @@ msgstr ""
 msgid "Unexpected state %04d"
 msgstr ""
 
-#: actions.c:407
+#: actions.c:416
 #, c-format
 msgid "Unexpected target \"%s\""
 msgstr ""
 
-#: kybd.c:302
+#: kybd.c:287
 #, c-format
 msgid "Unexpected type %d in typeahead queue"
 msgstr ""
@@ -2540,12 +2607,12 @@ msgstr ""
 msgid "Unknown FT control code from host"
 msgstr ""
 
-#: kybd.c:2371
+#: kybd.c:2200
 #, c-format
 msgid "Unknown PA key %d"
 msgstr ""
 
-#: kybd.c:2386
+#: kybd.c:2215
 #, c-format
 msgid "Unknown PF key %d"
 msgstr ""
@@ -2563,7 +2630,7 @@ msgstr ""
 msgid "Unsupported RPQ term"
 msgstr ""
 
-#: src/v3270/security.c:226
+#: ssl/state.c:301 src/v3270/security.c:226
 msgid "Unsupported certificate purpose"
 msgstr ""
 
@@ -2612,47 +2679,47 @@ msgstr ""
 msgid "Windows Western languages (CP1252)"
 msgstr ""
 
-#: src/v3270/oia.c:430 src/v3270/oia.c:454 src/v3270/oia.c:458
+#: src/v3270/oia.c:431 src/v3270/oia.c:455 src/v3270/oia.c:459
 msgid "X"
 msgstr ""
 
-#: src/v3270/oia.c:434
+#: src/v3270/oia.c:435
 msgid "X -f"
 msgstr ""
 
-#: src/v3270/oia.c:466
+#: src/v3270/oia.c:467
 msgid "X Connecting"
 msgstr ""
 
-#: src/v3270/oia.c:450
+#: src/v3270/oia.c:451
 msgid "X Inhibit"
 msgstr ""
 
-#: src/v3270/oia.c:426
+#: src/v3270/oia.c:427
 msgid "X Not Connected"
 msgstr ""
 
-#: src/v3270/oia.c:442
+#: src/v3270/oia.c:443
 msgid "X Numeric"
 msgstr ""
 
-#: src/v3270/oia.c:446
+#: src/v3270/oia.c:447
 msgid "X Overflow"
 msgstr ""
 
-#: src/v3270/oia.c:438
+#: src/v3270/oia.c:439
 msgid "X Protected"
 msgstr ""
 
-#: src/v3270/oia.c:462
+#: src/v3270/oia.c:463
 msgid "X Resolving"
 msgstr ""
 
-#: src/v3270/oia.c:414
+#: src/v3270/oia.c:415
 msgid "X System"
 msgstr ""
 
-#: src/v3270/oia.c:418
+#: src/v3270/oia.c:419
 msgid "X Wait"
 msgstr ""
 
@@ -2721,9 +2788,13 @@ msgstr ""
 msgid "You specified an option that is invalid."
 msgstr ""
 
-#: src/v3270ft/select.c:87 src/v3270ft/select.c:177
-#: src/dialogs/hostselect.c:391
+#: src/v3270ft/select.c:88 src/v3270ft/select.c:178
+#: src/dialogs/hostselect.c:383
 msgid "_Cancel"
+msgstr ""
+
+#: src/dialogs/security.c:192
+msgid "_Close"
 msgstr ""
 
 #: src/dialogs/hostselect.c:56
@@ -2746,15 +2817,15 @@ msgstr ""
 msgid "_File"
 msgstr ""
 
-#: print.c:421
+#: print.c:421 src/v3270/print.c:112
 msgid "_Font:"
 msgstr ""
 
-#: src/dialogs/hostselect.c:172
+#: src/dialogs/hostselect.c:164
 msgid "_Host options"
 msgstr ""
 
-#: src/dialogs/hostselect.c:147
+#: src/dialogs/hostselect.c:141
 msgid "_Host:"
 msgstr ""
 
@@ -2778,11 +2849,11 @@ msgstr ""
 msgid "_Remote file:"
 msgstr ""
 
-#: src/dialogs/hostselect.c:166
+#: src/dialogs/hostselect.c:160
 msgid "_Secure connection."
 msgstr ""
 
-#: src/dialogs/hostselect.c:148
+#: src/dialogs/hostselect.c:142
 msgid "_Service:"
 msgstr ""
 
@@ -2815,7 +2886,7 @@ msgstr ""
 msgid "an action attribute"
 msgstr ""
 
-#: session.c:367
+#: session.c:386
 msgid "bracket"
 msgstr ""
 
@@ -2823,7 +2894,7 @@ msgstr ""
 msgid "connected"
 msgstr ""
 
-#: toggles.c:333 linux/connect.c:317
+#: toggles.c:333 linux/connect.c:278
 msgid "disable"
 msgstr ""
 
@@ -2831,27 +2902,27 @@ msgstr ""
 msgid "disconnected"
 msgstr ""
 
-#: toggles.c:333 linux/connect.c:317
+#: toggles.c:333 linux/connect.c:278
 msgid "enable"
 msgstr ""
 
-#: iocalls.c:554
+#: iocalls.c:562
 msgid "fcntl() error when getting socket state."
 msgstr ""
 
-#: iocalls.c:540
+#: iocalls.c:548
 msgid "ioctlsocket(FIONBIO) failed."
 msgstr ""
 
-#: properties.c:396
+#: properties.c:411
 msgid "lib3270 revision"
 msgstr ""
 
-#: properties.c:389
+#: properties.c:404
 msgid "lib3270 version"
 msgstr ""
 
-#: linux/connect.c:304
+#: linux/connect.c:265
 msgid "setsockopt(SO_OOBINLINE) has failed"
 msgstr ""
 
