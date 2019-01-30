@@ -31,6 +31,10 @@
 
 #include <config.h>
 
+#if defined( _WIN32 )
+	#include <windows.h>
+#endif // _WIN32
+
 #include <glib.h>
 #include <glib/gstdio.h>
 #include "globals.h"
@@ -45,7 +49,7 @@
 #include <stdlib.h>
 
 #if defined( HAVE_SYSLOG )
- #include <syslog.h>
+	#include <syslog.h>
 #endif // HAVE_SYSLOG
 
 #define ERROR_DOMAIN g_quark_from_static_string(PACKAGE_NAME)
@@ -253,21 +257,58 @@ int main(int argc, char *argv[])
 	setlocale( LC_ALL, "" );
 #endif
 
-	// Get DATADIR
+	// OS
 #if defined( _WIN32 )
 	{
 		g_autofree gchar * appdir = g_win32_get_package_installation_directory_of_module(NULL);
 		g_autofree gchar * locdir = g_build_filename(appdir,"locale",NULL);
+
+		g_set_application_name(PACKAGE_NAME);
 
 		trace("appdir=\"%s\"",appdir);
 		trace("locdir=\"%s\"",locdir);
 
 		g_chdir(appdir);
 
+		bindtextdomain( PACKAGE_NAME, locdir );
 		bind_textdomain_codeset(PACKAGE_NAME, "UTF-8");
 		textdomain(PACKAGE_NAME);
 
-		bindtextdomain( PACKAGE_NAME, locdir );
+#if defined(ENABLE_WINDOWS_REGISTRY)
+		HKEY hMainKey;
+
+		if(RegOpenKeyEx(HKEY_CURRENT_USER,PACKAGE_NAME,0,KEY_WRITE,&hMainKey) == ERROR_SUCCESS)
+		{
+			HKEY hKey;
+
+			if(RegOpenKeyEx(HKEY_CURRENT_USER,"application",0,KEY_WRITE,&hKey) == ERROR_SUCCESS)
+			{
+				const struct _versions
+				{
+					const char * name;
+					const char * value;
+				}
+				versions[] =
+				{
+					{ "version",	PACKAGE_VERSION					},
+					{ "release",	G_STRINGIFY(PACKAGE_RELEASE)	},
+					{ "path",		appdir							},
+				};
+
+				size_t ix;
+
+				for(ix = 0; ix < G_N_ELEMENTS(versions); ix++)
+				{
+					RegSetValueEx(hKey,versions[ix].name,0,REG_SZ,(const BYTE *) versions[ix].value,strlen(versions[ix].value)+1);
+				}
+
+				RegCloseKey(hKey);
+
+			}
+			RegCloseKey(hMainKey);
+		}
+
+#endif // ENABLE_WINDOWS_REGISTRY
 
 	}
 #elif defined(HAVE_GTKMAC)
@@ -409,10 +450,6 @@ int main(int argc, char *argv[])
 	// Just in case!
 	g_mkdir_with_parents(g_get_tmp_dir(),0777);
 
-#ifdef _WIN32
-	g_set_application_name(PACKAGE_NAME);
-#endif // _WIN32
-
 	if(!session_name)
 		session_name = PACKAGE_NAME;
 
@@ -431,11 +468,9 @@ int main(int argc, char *argv[])
 		toplevel = pw3270_new(host,systype,syscolors);
 		pw3270_set_session_name(toplevel,session_name);
 
-#if defined(_WIN32) && defined(ENABLE_WINDOWS_REGISTRY)
-		pw3270_set_string(toplevel,"app","version",PACKAGE_VERSION);
-		pw3270_set_string(toplevel,"app","release",G_STRINGIFY(PACKAGE_RELEASE));
-		pw3270_set_string(toplevel,"app","sessionName",session_name);
-#endif // _WIN32 && ENABLE_WINDOWS_REGISTRY
+#ifdef _WIN32
+		pw3270_set_string(toplevel,"application","session",session_name);
+#endif // _WIN32
 
 		if(toggleset)
 		{
