@@ -229,7 +229,14 @@ $(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@: \
 	$(BINRLS)/$(LIBNAME) \
 	$(foreach SRC, $(basename $(APP_SOURCES)), $(OBJRLS)/$(SRC).o)
 
-	@$(LD) $(APP_LDFLAGS) -o $@ $^ -L$(BINRLS) $(LIBS) -l@PACKAGE_TARNAME@
+	@$(LD) \
+		$(LDFLAGS) \
+		$(APP_LDFLAGS) \
+		-o $@ \
+		$^ \
+		-L$(BINRLS) \
+		$(LIBS) \
+		-l@PACKAGE_TARNAME@
 
 $(BINRLS)/$(LIBNAME): \
 	$(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@
@@ -251,7 +258,12 @@ $(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@: \
 
 	@echo $(basename $@) ...
 	@$(MKDIR) `dirname $@`
-	@$(LD) -shared -Wl,-soname,$(@F) $(LDFLAGS) -L$(BINRLS) -o $@ $^ $(LIBS)
+	@$(LD) \
+		-shared -Wl,-soname,$(@F) \
+		$(LDFLAGS) \
+		-o $@ \
+		$^ \
+		$(LIBS)
 
 install: \
 	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ \
@@ -314,7 +326,14 @@ $(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@: \
 	$(BINDBG)/$(LIBNAME) \
 	$(foreach SRC, $(basename $(APP_SOURCES)), $(OBJDBG)/$(SRC).o)
 
-	@$(LD) -Wl,--rpath,$(BINDBG) -o $@ $^ -L$(BINDBG) $(LIBS) -l@PACKAGE_TARNAME@
+	@$(LD) \
+		$(LDFLAGS) \
+		-Wl,--rpath,$(BINDBG) \
+		-o $@ \
+		$^ \
+		-L$(BINDBG) \
+		$(LIBS) \
+		-l@PACKAGE_TARNAME@
 
 $(BINDBG)/$(LIBNAME): \
 	$(BINDBG)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@
@@ -336,7 +355,13 @@ $(BINDBG)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@: \
 
 	@echo $(basename $@) ...
 	@$(MKDIR) `dirname $@`
-	@$(LD) -shared -Wl,-soname,$(@F) $(LDFLAGS) -L$(BINDBG) -o $@ $^ $(LIBS)
+	@$(LD) \
+		-shared -Wl,-soname,$(@F) \
+		$(LDFLAGS) \
+		-L$(BINDBG) \
+		-o $@ \
+		$^ \
+		$(LIBS)
 
 
 #---[ Clean Targets]---------------------------------------------------------------------

@@ -113,7 +113,7 @@ case "$host" in
 		AC_CONFIG_FILES(win/$PACKAGE_TARNAME.nsi)
 		AC_CONFIG_FILES(src/pw3270/resources.rc)
 
-		PLUGINS="$PLUGINS hllapi"
+dnl		PLUGINS="$PLUGINS hllapi"
 
 		if test "$host_cpu" = "x86_64"; then
 			app_cv_programfiles="PROGRAMFILES64"
