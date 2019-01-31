@@ -29,9 +29,9 @@
  *
  */
 
-#ifndef LIB3270_CONFIG_INCLUDED
+#ifndef PW3270_CONFIG_INCLUDED
 
-	#define LIB3270_CONFIG_INCLUDED 1
+	#define PW3270_CONFIG_INCLUDED 1
 
 	#undef PACKAGE_NAME
 	#undef PACKAGE_VERSION
@@ -50,34 +50,9 @@
 	#undef HAVE_ICONV
 	#undef ICONV_CONST
 
-	#undef SSL_ALLOW_SELF_SIGNED_CERT
-	#undef SSL_ENABLE_CRL_CHECK
-
 	#undef ENABLE_WINDOWS_REGISTRY
-
 	#undef HAVE_GNOME
-
 	#undef HAVE_GTKMAC
 
-	/* Optional parts. */
-	#undef X3270_DBCS
-	#undef X3270_SCRIPT
+#endif /* PW3270_CONFIG_INCLUDED */
 
-	#define X3270_TN3270E
-	#define X3270_ANSI
-	#define X3270_APL
-
-#ifndef ANDROID
-	#undef HAVE_LIBSSL
-	#define X3270_FT
-#endif // !ANDROID
-
-	#define X3270_TRACE
-
-	#undef HAVE_PRINTER
-
-	#undef HAVE_MALLOC_H
-	#undef HAVE_OOREXXAPI_H
-	#undef HAVE_STRTOK_R
-
-#endif /* LIB3270_CONFIG_INCLUDED */
