@@ -236,10 +236,7 @@ static gboolean startup(GtkWidget *toplevel)
 int main(int argc, char *argv[])
 {
 	const gchar		* pluginpath	= NULL;
-
-#ifdef _WIN32
-	const char		* app_name		= PACKAGE_NAME;
-#endif // _WIN32
+	const char		* app_name		= NULL;
 
 #ifdef DEFAULT_SESSION_NAME
 	const gchar		* session_name	= G_STRINGIFY(DEFAULT_SESSION_NAME);
@@ -343,7 +340,6 @@ int main(int argc, char *argv[])
 	}
 #else
 	{
-		#error aqui
 		bind_textdomain_codeset(PACKAGE_NAME, "UTF-8");
 		textdomain(PACKAGE_NAME);
 	}
@@ -370,9 +366,7 @@ int main(int argc, char *argv[])
 			{ "autodisconnect",		'D', 0, G_OPTION_ARG_INT,		&timer,			    N_( "Minutes for auto-disconnect" ),				0									},
 			{ "pluginpath",			'P', 0, G_OPTION_ARG_STRING,	&pluginpath,	    N_( "Path for plugin files" ),						NULL								},
 
-#ifdef _WIN32
-			{ "application-name",	'A', 0, G_OPTION_ARG_STRING,	&app_name,			N_( "Application name" ),							PACKAGE_NAME						},
-#endif // _WIN32
+			{ "application-name",	'A', 0, G_OPTION_ARG_STRING,	&app_name,			N_( "Application name" ),							NULL								},
 
 #if defined( HAVE_SYSLOG )
 			{ "syslog",				'l', 0, G_OPTION_ARG_NONE,		&log_to_syslog,		N_( "Send messages to syslog" ),					NULL								},
@@ -420,8 +414,15 @@ int main(int argc, char *argv[])
 		}
 	}
 
+	if(app_name)
+	{
+		g_set_application_name(app_name);
+	}
 #ifdef _WIN32
-	g_set_application_name(app_name);
+	else
+	{
+		g_set_application_name(PACKAGE_NAME);
+	}
 #endif // _WIN32
 
 	// Init GTK
@@ -445,7 +446,7 @@ int main(int argc, char *argv[])
 
 		g_message("Windows Application directory is \"%s\"",appdir);
 		g_message("Application name is \"%s\"", g_get_application_name());
-		g_message("Session name is \"%s\"", session_name);
+		g_message("Session name is \"%s\"", session_name ? session_name : "undefined");
 
 #if defined(ENABLE_WINDOWS_REGISTRY)
 		g_message("Registry path is \"HKCU\\%s\"",PACKAGE_NAME);

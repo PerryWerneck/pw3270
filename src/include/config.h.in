@@ -50,9 +50,7 @@
 	#undef HAVE_ICONV
 	#undef ICONV_CONST
 
-	#ifdef _WIN32
-		#define ENABLE_WINDOWS_REGISTRY 1
-	#endif // _WIN32
+	#undef ENABLE_WINDOWS_REGISTRY
 
 	#undef HAVE_GNOME
 	#undef HAVE_GTKMAC
