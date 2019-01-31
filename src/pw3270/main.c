@@ -276,12 +276,14 @@ int main(int argc, char *argv[])
 
 #if defined(ENABLE_WINDOWS_REGISTRY)
 		HKEY hMainKey;
-
-		if(RegOpenKeyEx(HKEY_CURRENT_USER,PACKAGE_NAME,0,KEY_WRITE,&hMainKey) == ERROR_SUCCESS)
+		DWORD	disp;
+		LSTATUS winRegError = RegCreateKeyEx(HKEY_CURRENT_USER,"SOFTWARE\\" PACKAGE_NAME,0,NULL,REG_OPTION_NON_VOLATILE,KEY_SET_VALUE,NULL,&hMainKey,&disp);
+		if(winRegError == ERROR_SUCCESS)
 		{
 			HKEY hKey;
 
-			if(RegOpenKeyEx(HKEY_CURRENT_USER,"application",0,KEY_WRITE,&hKey) == ERROR_SUCCESS)
+			winRegError = RegCreateKeyEx(HKEY_CURRENT_USER,"SOFTWARE\\" PACKAGE_NAME "\\application",0,NULL,REG_OPTION_NON_VOLATILE,KEY_SET_VALUE,NULL,&hKey,&disp);
+			if(winRegError == ERROR_SUCCESS)
 			{
 				const struct _versions
 				{
@@ -305,8 +307,20 @@ int main(int argc, char *argv[])
 				RegCloseKey(hKey);
 
 			}
+#ifdef DEBUG
+			else
+			{
+				g_error("Can't open HKCU\\SOFTWARE\\" PACKAGE_NAME ": %s", lib3270_win32_strerror(winRegError));
+			}
+#endif
 			RegCloseKey(hMainKey);
 		}
+#ifdef DEBUG
+		else
+		{
+			g_error("Can't open HKCU\\SOFTWARE\\" PACKAGE_NAME "\\application: %s",lib3270_win32_strerror(winRegError));
+		}
+#endif
 
 #endif // ENABLE_WINDOWS_REGISTRY
 
@@ -414,6 +428,21 @@ int main(int argc, char *argv[])
 #endif // HAVE_SYSLOG
 	{
 		g_log_set_default_handler(g_logfile,NULL);
+
+#ifdef _WIN32
+		g_autofree gchar * appdir = g_win32_get_package_installation_directory_of_module(NULL);
+
+		g_message("Windows Application directory is \"%s\"",appdir);
+		g_message("Application name is \"%s\"", g_get_application_name());
+		g_message("Session name is \"%s\"", session_name);
+
+#if defined(ENABLE_WINDOWS_REGISTRY)
+		g_message("Registry path is \"HKCU\\%s\"",PACKAGE_NAME);
+#endif  // ENABLE_WINDOWS_REGISTRY
+
+#endif // _WIN32
+
+
 	}
 
 	// Check GTK Version
