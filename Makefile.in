@@ -154,6 +154,20 @@ $(DESTDIR)/$(libdir)/pw3270-plugins/%@DLLEXT@: \
 
 	@$(MAKE) -C src/plugins/$(basename $(notdir $@)) install
 
+publish-release: \
+	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@
+
+	@rm -f ~/public-html/release-$(PACKAGE_TARNAME)-@host_cpu@.zip
+	@zip \
+		-9 -D \
+		~/public_html/release-$(PACKAGE_TARNAME)-@host_cpu@.zip \
+		$(BINRLS)/*
+
+run: \
+	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@
+
+	@LD_LIBRARY_PATH=$(BINDBG) $(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@
+
 #---[ Install Rules ]--------------------------------------------------------------------
 
 install: \
