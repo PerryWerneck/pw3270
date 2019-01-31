@@ -45,7 +45,7 @@
 
  #endif // HAVE_DBUS
 
- #if defined(WIN32)
+ #if defined(_WIN32)
 	#include <windows.h>
 	#include <pw3270/ipcpackets.h>
 	#include <process.h>
@@ -72,7 +72,7 @@
 	#define HLLAPI_PACKET_ASC2EBC				"asc2ebc"
 	#define HLLAPI_PACKET_EBC2ASC				"ebc2asc"
 	#define HLLAPI_PACKET_SET_UNLOCK_DELAY		"setUnlockDelay"
- #endif // WIN32
+ #endif // _WIN32
 
  #include <pw3270cpp.h>
  #include <lib3270/log.h>
@@ -93,7 +93,7 @@
  	{
 	private:
 
-#if defined(WIN32)
+#if defined(_WIN32)
 
 		HANDLE			  hPipe;
 
@@ -477,7 +477,7 @@
 		}
 #endif // HAVE_DBUS
 
-#if defined(WIN32)
+#if defined(_WIN32)
 
 		static string getRegistryKey(const char *name) throw (std::exception)
 		{
@@ -509,7 +509,7 @@
 
 		remote(const char *session) throw (std::exception)
 		{
-#if defined(WIN32)
+#if defined(_WIN32)
 			static DWORD			  dwMode = PIPE_READMODE_MESSAGE;
 			char	 				  buffer[4096];
 			char					* str;
@@ -756,7 +756,7 @@
 
 		virtual ~remote()
 		{
-#if defined(WIN32)
+#if defined(_WIN32)
 
 			if(hPipe != INVALID_HANDLE_VALUE)
 				CloseHandle(hPipe);
@@ -832,7 +832,7 @@
 				url = "";
 			}
 
-#if defined(WIN32)
+#if defined(_WIN32)
 
 			size_t						  cbSize	= sizeof(struct hllapi_packet_query) + strlen(url) + 1;
 			struct hllapi_packet_query	* pkt		= (struct hllapi_packet_query *) malloc(cbSize);
@@ -884,7 +884,7 @@
 		{
 			int rc;
 
-#if defined(WIN32)
+#if defined(_WIN32)
 
 			size_t						  cbSize	= sizeof(struct hllapi_packet_text)+strlen(uri);
 			struct hllapi_packet_text	* pkt		= (struct hllapi_packet_text *) malloc(cbSize);
@@ -910,7 +910,7 @@
 
 		string get_url()
 		{
-#if defined(WIN32)
+#if defined(_WIN32)
 
 			struct hllapi_packet_query query	= { HLLAPI_PACKET_GET_HOST };
 			return query_string(&query,sizeof(query),1024);
@@ -926,7 +926,7 @@
 
 		int wait_for_ready(int seconds)
 		{
-#if defined(WIN32)
+#if defined(_WIN32)
 
 			time_t end = time(0)+seconds;
 
@@ -982,7 +982,7 @@
 
 		int wait(int seconds)
 		{
-#if defined(WIN32)
+#if defined(_WIN32)
 
 			time_t end = time(0)+seconds;
 
@@ -1018,7 +1018,7 @@
 
 		int iterate(bool wait)
 		{
-#if defined(WIN32)
+#if defined(_WIN32)
 			if(wait)
 				Sleep(250);
 			return 0;
@@ -1033,7 +1033,7 @@
 
 		string get_text_at(int row, int col, size_t sz, bool lf)
 		{
-#if defined(WIN32)
+#if defined(_WIN32)
 
 			struct hllapi_packet_query_at query	= { HLLAPI_PACKET_GET_TEXT_AT, (unsigned short) row, (unsigned short) col, (unsigned short) sz, lf ? '\n' : 0 };
 
@@ -1065,7 +1065,7 @@
 
 		int set_text_at(int row, int col, const char *str)
 		{
-#if defined(WIN32)
+#if defined(_WIN32)
 
 			struct hllapi_packet_text_at 	* query;
 			struct hllapi_packet_result	  	  response;
@@ -1102,7 +1102,7 @@
 		{
 			debug("%s(%d,%d,\"%s\")",__FUNCTION__,row,col,text);
 
-#if defined(WIN32)
+#if defined(_WIN32)
 
 			struct hllapi_packet_text_at 	* query;
 			size_t							  cbSize		= sizeof(struct hllapi_packet_text_at)+strlen(text);
@@ -1141,7 +1141,7 @@
 				if(!cmp_text_at(row,col,key,false))
 					return 0;
 
-#ifdef WIN32
+#ifdef _WIN32
 				Sleep(500);
 #else
 				usleep(500);
@@ -1153,7 +1153,7 @@
 
 		string get_text(int baddr, size_t len, bool lf)
 		{
-#if defined(WIN32)
+#if defined(_WIN32)
 
 			struct hllapi_packet_query_offset query = { HLLAPI_PACKET_GET_TEXT_AT_OFFSET, (unsigned short) baddr, (unsigned short) len, lf ? '\n' : 0 };
 			return query_string(&query,sizeof(query),len);
@@ -1181,7 +1181,7 @@
 
 		int set_cursor_position(int row, int col)
 		{
-#if defined(WIN32)
+#if defined(_WIN32)
 
 			struct hllapi_packet_cursor query = { HLLAPI_PACKET_SET_CURSOR_POSITION, (unsigned short) row, (unsigned short) col };
 
@@ -1201,7 +1201,7 @@
 
 		int set_cursor_addr(int addr)
 		{
-#if defined(WIN32)
+#if defined(_WIN32)
 
 			struct hllapi_packet_addr query = { HLLAPI_PACKET_SET_CURSOR, (unsigned short) addr };
 
@@ -1242,7 +1242,7 @@
 
 		int pfkey(int key)
 		{
-#if defined(WIN32)
+#if defined(_WIN32)
 
 			struct hllapi_packet_keycode query = { HLLAPI_PACKET_PFKEY, (unsigned short) key };
 
@@ -1264,7 +1264,7 @@
 
 		int pakey(int key)
 		{
-#if defined(WIN32)
+#if defined(_WIN32)
 
 			struct hllapi_packet_keycode query = { HLLAPI_PACKET_PAKEY, (unsigned short) key };
 
@@ -1291,7 +1291,7 @@
 
 		int set_toggle(LIB3270_TOGGLE ix, bool value)
 		{
-#if defined(WIN32)
+#if defined(_WIN32)
 
 			struct hllapi_packet_set query = { HLLAPI_PACKET_SET_TOGGLE, (unsigned short) ix, (unsigned short) value };
 
@@ -1313,7 +1313,7 @@
 
 		int emulate_input(const char *str)
 		{
-#if defined(WIN32)
+#if defined(_WIN32)
 
 			size_t                                len           = strlen(str);
 			struct hllapi_packet_emulate_input 	* query;
@@ -1341,7 +1341,7 @@
 		int action(const char *str)
 		{
 
-#if defined(WIN32)
+#if defined(_WIN32)
 
 			size_t						  len           = strlen(str);
 			struct hllapi_packet_text 	* query;
@@ -1367,7 +1367,7 @@
 
 		int get_field_start(int baddr)
 		{
-#if defined(WIN32)
+#if defined(_WIN32)
 
 			struct hllapi_packet_addr query = { HLLAPI_PACKET_FIELD_START, (unsigned short) baddr };
 
@@ -1389,7 +1389,7 @@
 
 		int get_field_len(int baddr)
 		{
-#if defined(WIN32)
+#if defined(_WIN32)
 
 			struct hllapi_packet_addr query = { HLLAPI_PACKET_FIELD_LEN, (unsigned short) baddr };
 
@@ -1410,7 +1410,7 @@
 
 		int get_next_unprotected(int baddr)
 		{
-#if defined(WIN32)
+#if defined(_WIN32)
 
 			struct hllapi_packet_addr query = { HLLAPI_PACKET_NEXT_UNPROTECTED, (unsigned short) baddr };
 
@@ -1439,7 +1439,7 @@
 
 		int get_is_protected(int baddr)
 		{
-#if defined(WIN32)
+#if defined(_WIN32)
 
 			struct hllapi_packet_addr query = { HLLAPI_PACKET_IS_PROTECTED, (unsigned short) baddr };
 
@@ -1468,7 +1468,7 @@
 
 		int get_is_protected_at(int row,int col)
 		{
-#if defined(WIN32)
+#if defined(_WIN32)
 
 			struct hllapi_packet_query_at query	= { HLLAPI_PACKET_IS_PROTECTED_AT, (unsigned short) row, (unsigned short) col, 0 };
 
@@ -1499,7 +1499,7 @@
 
 		int set_host_charset(const char *charset)
 		{
-#if defined(WIN32)
+#if defined(_WIN32)
 
 			size_t							  len		= strlen(charset);
 			struct hllapi_packet_set_text 	* query;
@@ -1523,7 +1523,7 @@
 
 		string get_host_charset(void)
 		{
-#if defined(WIN32)
+#if defined(_WIN32)
 
 			struct hllapi_packet_query query = { HLLAPI_PACKET_GET_HOST_CHARSET };
 			return query_string(&query,sizeof(query),100);

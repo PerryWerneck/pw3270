@@ -27,7 +27,7 @@
  *
  */
 
-#if defined WIN32
+#ifdef _WIN32
 
 	// http://msdn.microsoft.com/en-us/library/windows/desktop/ms684179(v=vs.85).aspx
 	#ifndef LOAD_LIBRARY_SEARCH_DEFAULT_DIRS

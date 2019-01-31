@@ -173,7 +173,7 @@
 	name = ui_get_attribute("platform",names,values);
 	if(name)
 	{
-#if defined(WIN32)
+#if defined(_WIN32)
 		static const gchar *platname = "windows";
 #elif defined(linux)
 		static const gchar *platname = "linux";

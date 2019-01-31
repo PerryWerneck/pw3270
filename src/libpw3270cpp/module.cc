@@ -27,7 +27,7 @@
  *
  */
 
-#if defined WIN32
+#ifdef _WIN32
 
 	// http://msdn.microsoft.com/en-us/library/windows/desktop/ms684179(v=vs.85).aspx
 	#ifndef LOAD_LIBRARY_SEARCH_DEFAULT_DIRS
@@ -54,7 +54,7 @@
 namespace PW3270_NAMESPACE
 {
 
-#ifdef WIN32
+#ifdef _WIN32
 	int module::get_datadir(LPSTR datadir)
 	{
 		HKEY 			hKey	= 0;
@@ -72,13 +72,13 @@ namespace PW3270_NAMESPACE
 
 		return *datadir;
 	}
-#endif // WIN32
+#endif // _WIN32
 
 	module::module(const char *name, const char *version) throw (std::exception)
 	{
 		string dllname = name;
 
-#ifdef WIN32
+#ifdef _WIN32
 
 		dllname += ".dll";
 		if(version)
@@ -176,18 +176,18 @@ namespace PW3270_NAMESPACE
 		if(!hModule)
 			throw exception("Can't load lib3270: %s",dllname.c_str());
 
-#endif // WIN32
+#endif // _WIN32
 
 
 	}
 
 	module::~module()
 	{
-#ifdef WIN32
+#ifdef _WIN32
 		FreeLibrary(hModule);
 #else
 		dlclose(hModule);
-#endif // WIN32
+#endif // _WIN32
 	}
 
 
@@ -195,7 +195,7 @@ namespace PW3270_NAMESPACE
 	{
 		void *symbol;
 
-#ifdef WIN32
+#ifdef _WIN32
 
 		symbol = (void *) GetProcAddress(hModule,name);
 
@@ -208,7 +208,7 @@ namespace PW3270_NAMESPACE
 		if(!symbol)
 			throw exception("Can't load symbol %s dlerror was \"%s\"",name,dlerror());
 
-#endif // WIN32
+#endif // _WIN32
 
 		return symbol;
 	}

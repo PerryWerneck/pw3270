@@ -30,7 +30,7 @@
  #include "globals.h"
  #include <lib3270/charset.h>
 
-#if defined WIN32
+#ifdef _WIN32
 	BOOL WINAPI DllMain(HANDLE hinst, DWORD dwcallpurpose, LPVOID lpvResvd);
 
 	static int libpw3270_loaded(void);
@@ -43,7 +43,7 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
-#if defined WIN32
+#ifdef _WIN32
 
 BOOL WINAPI DllMain(HANDLE hinst, DWORD dwcallpurpose, LPVOID lpvResvd)
 {
@@ -63,7 +63,7 @@ BOOL WINAPI DllMain(HANDLE hinst, DWORD dwcallpurpose, LPVOID lpvResvd)
     return TRUE;
 }
 
-#endif // WIN32
+#endif // _WIN32
 
 int libpw3270_loaded(void)
 {

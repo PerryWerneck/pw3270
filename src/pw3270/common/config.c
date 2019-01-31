@@ -29,6 +29,12 @@
  *
  */
 
+#ifdef _WIN32
+	#include <windows.h>
+#endif // _WIN32
+
+ #include <config.h>
+
  #define ENABLE_NLS
  #define GETTEXT_PACKAGE PACKAGE_NAME
 
@@ -40,7 +46,7 @@
  #include <stdarg.h>
  #include <glib/gstdio.h>
 
-#ifdef WIN32
+#ifdef _WIN32
 
 	#include <windows.h>
 
@@ -52,7 +58,7 @@
 		#define KEY_WOW64_32KEY	0x0200
 	#endif // KEY_WOW64_64KEY
 
-#endif // WIN32
+#endif // _WIN32
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
@@ -189,6 +195,7 @@
 
 
 #else
+
  static gchar * search_for_ini(void)
  {
  	static const gchar * (*dir[])(void) =

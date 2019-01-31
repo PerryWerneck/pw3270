@@ -31,11 +31,11 @@
 
  #define PW3270_CLASS_H_INCLUDED 1
 
- #ifdef WIN32
+ #ifdef _WIN32
 	#define SYSTEM_CHARSET "CP1252"
  #else
 	#define SYSTEM_CHARSET "UTF-8"
- #endif // WIN32
+ #endif // _WIN32
 
  #include <exception>
  #include <errno.h>
@@ -92,11 +92,11 @@
 			exception(int syserror = errno);
 			exception(const char *fmt, ...);
 
-#ifdef WIN32
+#ifdef _WIN32
 			exception(DWORD error, const char *fmt, ...);
 #else
 			exception(int error, const char *fmt, ...);
-#endif // WIN32
+#endif // _WIN32
 
 			virtual const char * what() const throw();
 
@@ -108,13 +108,13 @@
 	class module
 	{
 	private:
-#ifdef WIN32
+#ifdef _WIN32
 		HMODULE		  hModule;
 		int			  get_datadir(LPSTR datadir);
 #else
 		void		* hModule;
 
-#endif // WIN32
+#endif // _WIN32
 
 	public:
 		module(const char *name, const char *version = NULL) throw (std::exception);
@@ -136,9 +136,9 @@
 
 		// Factory methods and settings
 		static session	* start(const char *name = 0);
-		static session	* create(const char *name = 0) throw (std::exception);
-		static session	* create_local(H3270 *hSession) throw (std::exception);
-		static session	* create_local() throw (std::exception);
+		static session	* create(const char *name = 0);
+		static session	* create_local(H3270 *hSession);
+		static session	* create_local();
 
 		static session	* get_default(void);
 		static bool		  has_default(void);
@@ -173,12 +173,12 @@
 		virtual void			  set_unlock_delay(unsigned short ms)				= 0;
 
 		// charset
-#ifdef WIN32
+#ifdef _WIN32
 		void			  		  set_display_charset(const char *remote = 0, const char *local = "CP1252");
 		static string			  win32_strerror(int e);
 #else
 		void			  		  set_display_charset(const char *remote = 0, const char *local = "UTF-8");
-#endif // WIN32
+#endif // _WIN32
 
 		virtual int				  set_host_charset(const char *charset)				= 0;
 		virtual string			  get_host_charset(void)							= 0;

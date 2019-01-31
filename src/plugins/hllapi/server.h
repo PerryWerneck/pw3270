@@ -48,6 +48,6 @@
  G_GNUC_INTERNAL void popup_lasterror(const gchar *fmt, ...);
  G_GNUC_INTERNAL void set_active(gboolean on);
 
-#endif // WIN32
+#endif // _WIN32
 
 

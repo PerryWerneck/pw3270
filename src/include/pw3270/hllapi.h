@@ -107,7 +107,7 @@ extern "C" {
 
  #define HLLAPI_STATUS_WAITING	HLLAPI_STATUS_TIMEOUT
 
- #if defined(WIN32)
+ #if defined(_WIN32)
 
 	#include <windows.h>
 
@@ -145,7 +145,7 @@ extern "C" {
 
 	#define HLLAPI_API_CALL		__attribute__((visibility("default"))) extern DWORD
 
- #endif // WIN32
+ #endif // _WIN32
 
 	HLLAPI_API_CALL hllapi(const LPWORD func, LPSTR str, LPWORD length, LPWORD rc);
 

@@ -33,7 +33,7 @@
  #include "globals.h"
  #include <v3270.h>
 
- #if defined WIN32
+ #ifdef _WIN32
 	#include <gdk/gdkwin32.h>
 
  	struct file {
@@ -45,7 +45,7 @@
 	};
 
 
- #endif // WIN32
+ #endif // _WIN32
 
  #if defined(HAVE_LIBSSL)
 	#include <openssl/ssl.h>
@@ -579,7 +579,7 @@
 	g_free(info);
  }
 
-#ifdef WIN32
+#ifdef _WIN32
 static gpointer select_file(struct file *fl) {
 
 
@@ -722,7 +722,7 @@ static gpointer select_file(struct file *fl) {
     }
 
     gtk_widget_destroy(dialog);
-#endif // WIN32
+#endif // _WIN32
 
 	if(filename && *filename)
 		set_string_to_config("files",name,"%s",filename);

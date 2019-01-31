@@ -70,7 +70,7 @@ static gboolean			IO_closure(gpointer data);
 	HANDLE	source;
 #else
 	int		source;
-#endif // WIN32
+#endif // _WIN32
 	void	(*fn)(H3270 *session);
 	H3270 	*session;
  } IO_Source;
@@ -94,11 +94,11 @@ static gboolean			IO_closure(gpointer data);
 
 /*---[ Implement ]-----------------------------------------------------------------------------------------*/
 
-#ifdef WIN32
+#ifdef _WIN32
 static void * AddSource(HANDLE source, H3270 *session, gushort events, void (*fn)(H3270 *session))
 #else
 static void * AddSource(int source, H3270 *session, gushort events, void (*fn)(H3270 *session))
-#endif // WIN32
+#endif // _WIN32
 {
 	IO_Source *src = (IO_Source *) g_source_new(&IOSources,sizeof(IO_Source));
 
@@ -114,11 +114,11 @@ static void * AddSource(int source, H3270 *session, gushort events, void (*fn)(H
 	return src;
 }
 
-#ifdef WIN32
+#ifdef _WIN32
 static void * static_AddInput(HANDLE source, H3270 *session, void (*fn)(H3270 *session))
 #else
 static void * static_AddInput(int source, H3270 *session, void (*fn)(H3270 *session))
-#endif // WIN32
+#endif // _WIN32
 {
 	return AddSource(source,session,G_IO_IN|G_IO_HUP|G_IO_ERR,fn);
 }
@@ -129,7 +129,7 @@ static void static_RemoveSource(void *id)
 		g_source_destroy((GSource *) id);
 }
 
-#if defined(WIN32)
+#if defined(_WIN32)
 static void * static_AddExcept(HANDLE source, H3270 *session, void (*fn)(H3270 *session))
 {
 	return 0;
@@ -139,7 +139,7 @@ static void * static_AddExcept(int source, H3270 *session, void (*fn)(H3270 *ses
 {
 	return AddSource(source,session,G_IO_HUP|G_IO_ERR,fn);
 }
-#endif // WIN32
+#endif // _WIN32
 
 static gboolean do_timer(TIMER *t)
 {

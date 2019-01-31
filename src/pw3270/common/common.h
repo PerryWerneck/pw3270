@@ -29,72 +29,60 @@
 
 #ifndef COMMON_H_INCLUDED
 
- #define COMMON_H_INCLUDED 1
+	#include <config.h>
 
- // "PW" Standards
- #include <gtk/gtk.h>
- #include <errno.h>
- #include <config.h>
-
- #ifdef WIN32
-
+#ifdef _WIN32
 	#include <windows.h>
-
-	#ifndef KEY_WOW64_64KEY
-		#define KEY_WOW64_64KEY 0x0100
-	#endif // KEY_WOW64_64KEY
-
-	#ifndef KEY_WOW64_32KEY
-		#define KEY_WOW64_32KEY	0x0200
-	#endif // KEY_WOW64_64KEY
-
- #endif // WIN32
-
- #define ENABLE_NLS
-
- #ifndef GETTEXT_PACKAGE
-	#define GETTEXT_PACKAGE PACKAGE_NAME
- #endif
-
- #include <libintl.h>
- #include <glib/gi18n.h>
- #include <gtk/gtk.h>
-
- #if defined( DEBUG )
-	#define trace(x, ...)	fprintf(stderr,"%s(%d):\t" x "\n",__FILE__,__LINE__, __VA_ARGS__); fflush(stderr);
- #else
-	#define trace(x, ...)	/* */
- #endif
-
- // Configuration
- void		  configuration_init(void);
- void		  configuration_deinit(void);
-
- gchar		* get_string_from_config(const gchar *group, const gchar *key, const gchar *def);
- gboolean	  get_boolean_from_config(const gchar *group, const gchar *key, gboolean def);
- gint 		  get_integer_from_config(const gchar *group, const gchar *key, gint def);
-
- void		  set_string_to_config(const gchar *group, const gchar *key, const gchar *fmt, ...);
- void		  set_boolean_to_config(const gchar *group, const gchar *key, gboolean val);
- void		  set_integer_to_config(const gchar *group, const gchar *key, gint val);
-
- gchar 		* build_data_filename(const gchar *first_element, ...);
- gchar		* filename_from_va(const gchar *first_element, va_list args);
+#endif // _WIN32
 
 
- void 		  save_window_state_to_config(const gchar *group, const gchar *key, GdkWindowState CurrentState);
- void		  save_window_size_to_config(const gchar *group, const gchar *key, GtkWidget *hwnd);
+	#define COMMON_H_INCLUDED 1
 
- void		  restore_window_from_config(const gchar *group, const gchar *key, GtkWidget *hwnd);
+	#include <gtk/gtk.h>
+	#include <errno.h>
 
-#ifdef ENABLE_WINDOWS_REGISTRY
- gboolean	  get_registry_handle(const gchar *group, HKEY *hKey, REGSAM samDesired);
- void		  registry_foreach(HKEY parent, const gchar *name,void (*cbk)(const gchar *key, const gchar *val, gpointer *user_data), gpointer *user_data);
- void 		  registry_set_double(HKEY hKey, const gchar *key, gdouble value);
- gboolean	  registry_get_double(HKEY hKey, const gchar *key, gdouble *value);
-#else
- GKeyFile	* get_application_keyfile(void);
-#endif // ENABLE_WINDOWS_REGISTRY
+	#ifndef GETTEXT_PACKAGE
+		#define GETTEXT_PACKAGE PACKAGE_NAME
+	#endif
+
+	#include <libintl.h>
+	#include <glib/gi18n.h>
+	#include <gtk/gtk.h>
+
+	#if defined( DEBUG )
+		#define trace(x, ...)	fprintf(stderr,"%s(%d):\t" x "\n",__FILE__,__LINE__, __VA_ARGS__); fflush(stderr);
+	#else
+		#define trace(x, ...)	/* */
+	#endif
+
+	// Configuration
+	void		  configuration_init(void);
+	void		  configuration_deinit(void);
+
+	gchar		* get_string_from_config(const gchar *group, const gchar *key, const gchar *def);
+	gboolean	  get_boolean_from_config(const gchar *group, const gchar *key, gboolean def);
+	gint 		  get_integer_from_config(const gchar *group, const gchar *key, gint def);
+
+	void		  set_string_to_config(const gchar *group, const gchar *key, const gchar *fmt, ...);
+	void		  set_boolean_to_config(const gchar *group, const gchar *key, gboolean val);
+	void		  set_integer_to_config(const gchar *group, const gchar *key, gint val);
+
+	gchar 		* build_data_filename(const gchar *first_element, ...);
+	gchar		* filename_from_va(const gchar *first_element, va_list args);
+
+	void 		  save_window_state_to_config(const gchar *group, const gchar *key, GdkWindowState CurrentState);
+	void		  save_window_size_to_config(const gchar *group, const gchar *key, GtkWidget *hwnd);
+
+	void		  restore_window_from_config(const gchar *group, const gchar *key, GtkWidget *hwnd);
+
+	#ifdef ENABLE_WINDOWS_REGISTRY
+		gboolean	  get_registry_handle(const gchar *group, HKEY *hKey, REGSAM samDesired);
+		void		  registry_foreach(HKEY parent, const gchar *name,void (*cbk)(const gchar *key, const gchar *val, gpointer *user_data), gpointer *user_data);
+		void 		  registry_set_double(HKEY hKey, const gchar *key, gdouble value);
+		gboolean	  registry_get_double(HKEY hKey, const gchar *key, gdouble *value);
+	#else
+		GKeyFile	* get_application_keyfile(void);
+	#endif // ENABLE_WINDOWS_REGISTRY
 
 
 #endif

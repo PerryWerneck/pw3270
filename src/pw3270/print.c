@@ -199,7 +199,7 @@
 	}
  }
 
-#ifdef WIN32
+#ifdef _WIN32
 
 #define save_string(h,k,v) save_settings(k,v,h)
 #define save_double(h,k,v) registry_set_double(h,k,v)
@@ -233,7 +233,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
   return retval;
 }
 
-#endif // WIN32
+#endif // _WIN32
 
  static void show_print_error(GtkWidget *widget, GError *err)
  {
@@ -555,7 +555,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
 
  }
 
-#ifdef WIN32
+#ifdef _WIN32
  void update_settings(const gchar *key, const gchar *val, gpointer *settings)
  {
  	trace("%s: %s=\"%s\"",__FUNCTION__,key,val);
@@ -586,7 +586,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
     }
  }
 
-#endif // WIN32
+#endif // _WIN32
 
  static GtkPrintOperation * begin_print_operation(GObject *obj, GtkWidget *widget, PRINT_INFO **info)
  {
@@ -621,7 +621,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
 	g_signal_connect(print,"custom-widget-apply",G_CALLBACK(custom_widget_apply), *info);
 #else
 	load_settings(*info);
-#endif // WIN32
+#endif // _WIN32
 
 	// Load page and print settings
 	{

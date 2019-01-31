@@ -51,7 +51,7 @@
 		va_end(arg_ptr);
 	}
 
-#ifdef WIN32
+#ifdef _WIN32
 	exception::exception(DWORD error, const char *fmt, ...)
 	{
 		LPVOID 		  lpMsgBuf = 0;
@@ -90,7 +90,7 @@
 		snprintf(this->msg+szPrefix,4095-szPrefix,": %s (rc=%d)",strerror(error),(int) error);
 
 	}
-#endif // WIN32
+#endif // _WIN32
 
 	const char * exception::what() const throw()
 	{

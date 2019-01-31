@@ -44,9 +44,9 @@
 
  typedef struct _remotequery
  {
-#ifdef WIN32
+#ifdef _WIN32
 	HANDLE			  hPipe;	/**< Pipe handle (for response) */
-#endif // WIN32
+#endif // _WIN32
 
 	H3270 			* hSession;	/**< 3270 Session */
  	int				  cmd;		/**< Command */
@@ -68,14 +68,14 @@
 // int run_hllapi(unsigned long function, char *string, unsigned short length, unsigned short rc);
 
 
-#ifdef WIN32
+#ifdef _WIN32
 
 	#define PIPE_BUFFER_LENGTH 8192
 
 	void init_source_pipe(HANDLE hPipe);
 	void popup_lasterror(const gchar *fmt, ...);
 
-#endif // WIN32
+#endif // _WIN32
 
 
 

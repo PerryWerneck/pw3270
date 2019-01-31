@@ -45,9 +45,9 @@
  	const gchar	* name;
  	GError		* err	= NULL;
  	GList		* lst	= NULL;
-#ifdef WIN32
+#ifdef _WIN32
 	UINT 		  errorMode;
-#endif // WIN32
+#endif // _WIN32
 
 
 	trace("Loading plugins from %s",path);
@@ -63,11 +63,11 @@
 		return;
 	}
 
-#ifdef WIN32
+#ifdef _WIN32
 	// http://msdn.microsoft.com/en-us/library/windows/desktop/ms680621(v=vs.85).aspx
 	errorMode = SetErrorMode(1);
 	SetErrorMode(errorMode);
-#endif // WIN32
+#endif // _WIN32
 
 	name = g_dir_read_name(dir);
 	while(name)
@@ -133,9 +133,9 @@
 		name = g_dir_read_name(dir);
 	}
 
-#ifdef WIN32
+#ifdef _WIN32
 	SetErrorMode(errorMode);
-#endif // WIN32
+#endif // _WIN32
 
 	g_dir_close(dir);
 

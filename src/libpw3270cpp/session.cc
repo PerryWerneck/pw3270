@@ -344,7 +344,7 @@
 
 	string session::get_clipboard(void)
 	{
-#if defined(WIN32)
+#if defined(_WIN32)
 
 		if (! OpenClipboard(0))
 		{
@@ -378,12 +378,12 @@
 		errno = EINVAL;
 		return NULL;
 
-#endif // WIN32
+#endif // _WIN32
 	}
 
 	int session::set_clipboard(const char *text)
 	{
-#if defined(WIN32)
+#if defined(_WIN32)
 		if (! OpenClipboard(0))
 		{
 			throw exception(GetLastError(),"%s","Can´t open system clipboard");
@@ -412,7 +412,7 @@
 
 		return EINVAL;
 
-#endif // WIN32
+#endif // _WIN32
 	}
 
 
@@ -649,7 +649,7 @@
 		return rc;
 	}
 
-#ifdef WIN32
+#ifdef _WIN32
 	string	session::win32_strerror(int e)
 	{
 		static char buffer[4096];
@@ -672,7 +672,7 @@
 
 		return string(buffer);
 	}
-#endif // WIN32
+#endif // _WIN32
 
 	int session::erase(int mode) {
 
