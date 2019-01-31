@@ -6,20 +6,11 @@
 #
 # https://www.opentechguides.com/how-to/article/git/177/git-sync-repos.html
 #
-# git remote add bitbucket https://bitbucket.org/pw3270/pw3270-application.git
-# git remote add github	https://github.com/PerryWerneck/pw3270.git
+# Setup:
 #
-
-# git remote add github https://github.com/PerryWerneck/pw3270.git
-# git push github --all
+# git remote add github https://github.com/PerryWerneck/lib3270.git
 #
-# SUBTREES: 
 #
-# https://www.atlassian.com/blog/git/alternatives-to-git-submodule-git-subtree
-# 
-#
-
-# git fetch lib3270
 
 git push
 
@@ -27,7 +18,9 @@ git fetch origin
 git checkout master
 git merge origin/master
 
-git push github
-git push bitbucket
-
+for repo in $(git remote -v | grep -v origin | grep "(push)" | awk '{print $1}')
+do
+	echo "Updating ${repo} ..."
+	git push ${repo}
+done
 
