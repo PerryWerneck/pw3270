@@ -161,7 +161,7 @@ install: \
 
 	@echo $@ ...
 	@$(MKDIR) $(DESTDIR)$(libdir)/$(PACKAGE_TARNAME)-plugins
-	@$(INSTALL_PROGRAM) $(BINRLS)/$(MODULE_NAME)@DLLEXT@ $(DESTDIR)$(libdir)/$(PACKAGE_TARNAME)-plugins/$(MODULE_NAME)@DLLEXT@
+	@$(INSTALL_PROGRAM) $(BINRLS)/plugins/$(MODULE_NAME)@DLLEXT@ $(DESTDIR)$(libdir)/$(PACKAGE_TARNAME)-plugins/$(MODULE_NAME)@DLLEXT@
 
 	@$(MKDIR) $(DESTDIR)$(libdir)
 	@$(INSTALL_PROGRAM) $(BINRLS)/$(LIBNAME) $(DESTDIR)$(libdir)
