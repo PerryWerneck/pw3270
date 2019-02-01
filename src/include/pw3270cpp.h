@@ -117,7 +117,7 @@
 #endif // _WIN32
 
 	public:
-		module(const char *name, const char *version = NULL) throw (std::exception);
+		module(const char *name, const char *version = NULL);
 		~module();
 
 		void * get_symbol(const char *name);
@@ -291,7 +291,7 @@
 
 		static session	* (*factory)(const char *name);
 
-		static session	* create_remote(const char *name) throw (std::exception);
+		static session	* create_remote(const char *name);
 
 #ifdef HAVE_ICONV
 		iconv_t			  conv2Local;

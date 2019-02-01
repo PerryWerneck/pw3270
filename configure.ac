@@ -113,7 +113,7 @@ case "$host" in
 		AC_CONFIG_FILES(win/$PACKAGE_TARNAME.nsi)
 		AC_CONFIG_FILES(src/pw3270/resources.rc)
 
-dnl		PLUGINS="$PLUGINS hllapi"
+		PLUGINS="$PLUGINS hllapi"
 
 		if test "$host_cpu" = "x86_64"; then
 			app_cv_programfiles="PROGRAMFILES64"
@@ -519,6 +519,7 @@ dnl ---------------------------------------------------------------------------
 AC_CONFIG_FILES(src/pw3270/Makefile)
 AC_CONFIG_FILES(src/pw3270/uiparser/Makefile)
 AC_CONFIG_FILES(src/pw3270/common/Makefile)
+
 AC_CONFIG_FILES(src/libpw3270cpp/Makefile)
 
 AC_CONFIG_FILES(ui/Makefile)

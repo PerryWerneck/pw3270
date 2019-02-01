@@ -268,7 +268,7 @@
 		}
 
 	public:
-		client(const char *session) throw (std::exception)
+		client(const char *session)
 		{
 			DBusError err;
 
@@ -613,7 +613,7 @@
 
 	};
 
-	session	* create_service_client(const char *session) throw (std::exception)
+	session	* create_service_client(const char *session)
 	{
 		return new client(session);
 	}

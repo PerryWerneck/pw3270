@@ -40,7 +40,7 @@
 #endif // _WIN32
 
  #include <pw3270/plugin.h>
- #include <pw3270/v3270.h>
+ #include <v3270.h>
  #include <pw3270/ipcpackets.h>
  #include <lib3270/actions.h>
  #include <lib3270/charset.h>
@@ -205,10 +205,7 @@
  }
 
  static void get_host(pipe_source *source) {
-	char buffer[1024];
-	memset(buffer,0,sizeof(buffer));
-	lib3270_get_url(lib3270_get_default_session_handle(),buffer,sizeof(buffer));
-	send_text(source,buffer);
+	send_text(source,strdup(lib3270_get_url(lib3270_get_default_session_handle())));
  }
 
  static void process_input(pipe_source *source, DWORD cbRead)
@@ -220,7 +217,7 @@
 	switch(query->packet_id)
 	{
 	case HLLAPI_PACKET_CONNECT:
-		send_result(source,lib3270_connect(	lib3270_get_default_session_handle(),
+		send_result(source,lib3270_reconnect(	lib3270_get_default_session_handle(),
 											((struct hllapi_packet_connect *) source->buffer)->wait));
 		break;
 
@@ -229,8 +226,8 @@
 		break;
 
 	case HLLAPI_PACKET_SET_HOST:
-		send_result(source,lib3270_set_url( lib3270_get_default_session_handle(),
-											((struct hllapi_packet_text *) source->buffer)->text) != NULL);
+		send_result(source,lib3270_set_url(lib3270_get_default_session_handle(),
+											((struct hllapi_packet_text *) source->buffer)->text));
 		break;
 
 	case HLLAPI_PACKET_GET_HOST:
@@ -254,7 +251,7 @@
 		break;
 
 	case HLLAPI_PACKET_PRINT:
-		send_result(source,lib3270_print(lib3270_get_default_session_handle()));
+		send_result(source,lib3270_print_all(lib3270_get_default_session_handle()));
 		break;
 
 	case HLLAPI_PACKET_ERASE:
@@ -672,5 +669,5 @@
  G_GNUC_INTERNAL void set_active(gboolean on)
  {
  	trace("%s(%s)",__FUNCTION__,on ? "Active" : "Inactive");
-	v3270_set_script(v3270_get_default_widget(),'H',on);
+	// v3270_set_script(v3270_get_default_widget(),'H');
  }

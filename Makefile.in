@@ -71,6 +71,7 @@ HELP2MAN=@HELP2MAN@
 all: \
 	$(foreach MODULE, $(MODULES), $(BINRLS)/@DLLPREFIX@$(MODULE)@DLLEXT@) \
 	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ \
+	$(BINRLS)/libpw3270cpp.a \
 	$(foreach PLG, $(PLUGINS), $(BINRLS)/plugins/$(PLG)@DLLEXT@) \
 	locale/$(PACKAGE_TARNAME).pot
 
@@ -82,26 +83,12 @@ application: \
 	$(foreach MODULE, $(MODULES), $(BINRLS)/@DLLPREFIX@$(MODULE)@DLLEXT@) \
 	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ \
 
+$(BINRLS)/libpw3270cpp.a: \
+	src/libpw3270cpp/*
+
+	@$(MAKE) -C src/libpw3270cpp Release
 
 #---[ Debug Rules ]----------------------------------------------------------------------
-
-#$(BINDBG)/@DLLPREFIX@@LIB3270_NAME@@DLLEXT@: \
-#	modules/lib3270/* \
-#	modules/lib3270/src/lib3270/* \
-#	modules/lib3270/src/include/* \
-#	modules/lib3270/src/include/lib3270/*
-#
-#	@$(MKDIR) `dirname $@`
-#	@$(MAKE) -C modules/lib3270 $@
-
-#$(BINDBG)/@DLLPREFIX@v@LIB3270_NAME@@DLLEXT@: \
-#	modules/libv3270/* \
-#	modules/libv3270/src/v3270/* \
-#	modules/libv3270/src/include/* \
-#	modules/libv3270/src/include/v3270/* \
-#
-#	@$(MKDIR) `dirname $@`
-#	@$(MAKE) -C modules/libv3270 $@
 
 $(BINDBG)/%@EXEEXT@: \
 	$(foreach MODULE, $(MODULES), $(BINDBG)/@DLLPREFIX@$(MODULE)@DLLEXT@) \
@@ -112,29 +99,12 @@ $(BINDBG)/%@EXEEXT@: \
 
 $(BINDBG)/plugins/%@DLLEXT@: \
 	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@ \
+	$(BINDBG)/libpw3270cpp.a \
 	src/plugins/%/*
 
 	@$(MAKE) -C src/plugins/$(basename $(notdir $@)) $@
 
 #---[ Release Rules ]--------------------------------------------------------------------
-
-#$(BINRLS)/@DLLPREFIX@@LIB3270_NAME@@DLLEXT@: \
-#	modules/lib3270/* \
-#	modules/lib3270/src/lib3270/* \
-#	modules/lib3270/src/include/* \
-#	modules/lib3270/src/include/lib3270/*
-#
-#	@$(MKDIR) `dirname $@`
-#	@$(MAKE) -C modules/lib3270 $@
-
-#$(BINRLS)/@DLLPREFIX@v@LIB3270_NAME@@DLLEXT@: \
-#	modules/libv3270/* \
-#	modules/libv3270/src/v3270/* \
-#	modules/libv3270/src/include/* \
-#	modules/libv3270/src/include/v3270/* \
-#
-#	@$(MKDIR) `dirname $@`
-#	@$(MAKE) -C modules/libv3270 $@
 
 $(BINRLS)/%@EXEEXT@: \
 	$(foreach MODULE, $(MODULES), $(BINDBG)/@DLLPREFIX@$(MODULE)@DLLEXT@) \
@@ -145,6 +115,7 @@ $(BINRLS)/%@EXEEXT@: \
 
 $(BINRLS)/plugins/%@DLLEXT@: \
 	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ \
+	$(BINRLS)/libpw3270cpp.a \
 	src/plugins/%/*
  
 	@$(MAKE) -C src/plugins/$(basename $(notdir $@)) $@
@@ -162,11 +133,6 @@ publish-release: \
 		-9 -D \
 		~/public_html/release-$(PACKAGE_TARNAME)-@host_cpu@.zip \
 		$(BINRLS)/*
-
-run: \
-	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@
-
-	@LD_LIBRARY_PATH=$(BINDBG) $(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@
 
 #---[ Install Rules ]--------------------------------------------------------------------
 
@@ -273,6 +239,11 @@ publish-debug: \
 		-9 -D \
 		~/public_html/debug-$(PACKAGE_TARNAME)-@host_cpu@.zip \
 		$(BINDBG)/*
+
+$(BINDBG)/libpw3270cpp.a: \
+	src/libpw3270cpp/*
+
+	@$(MAKE) -C src/libpw3270cpp Debug
 
 run: \
 	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@

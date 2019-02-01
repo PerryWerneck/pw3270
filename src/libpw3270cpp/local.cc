@@ -262,7 +262,7 @@
 
 	public:
 
-		local() throw(std::exception) : module("lib3270",PACKAGE_VERSION)
+		local() : module("lib3270",PACKAGE_VERSION)
 		{
 		}
 
@@ -545,7 +545,7 @@
 
  	};
 
-	session	* session::create_local(void) throw (std::exception)
+	session	* session::create_local(void)
 	{
 		class obj : public local {
 		public:
@@ -590,7 +590,7 @@
 		return new obj();
 	}
 
-	session	* session::create_local(H3270 *hSession) throw (std::exception)
+	session	* session::create_local(H3270 *hSession)
 	{
 		class obj : public local {
 		public:

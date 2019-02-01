@@ -66,11 +66,26 @@ INSTALL_DATA=@INSTALL_DATA@
 INSTALL_PROGRAM=@INSTALL_PROGRAM@
 LN_S=@LN_S@
 
-CFLAGS=@CFLAGS@ @GTK_CFLAGS@ -I$(BASEDIR)/src/include
+CFLAGS=\
+	@CFLAGS@ \
+	@LIBV3270_CFLAGS@ \
+	@GTK_CFLAGS@ \
+	-I$(BASEDIR)/src/include
 
 LIBS=@LIBS@ 
-API_LIBS=$(LIBS) -lpw3270cpp @LIBICONV@
-PLUGIN_LIBS=$(LIBS) @GTK_LIBS@ @GLIB_LIBS@ @LIB3270_LIBS@ @PW3270_LIBS@
+
+API_LIBS=\
+	$(LIBS) \
+	-lpw3270cpp \
+	@LIBICONV@
+
+PLUGIN_LIBS=\
+	$(LIBS) \
+	@GTK_LIBS@ \
+	@GLIB_LIBS@ \
+	@LIB3270_LIBS@ \
+	@LIBV3270_LIBS@ \
+	@PW3270_LIBS@
 
 #---[ Rules ]----------------------------------------------------------------------------
 
@@ -83,9 +98,9 @@ $(OBJDBG)/%.o: \
 	@echo $< ...
 	@$(MKDIR) `dirname $@`
 	@$(CC) $(CFLAGS) \
-				@DBG_CFLAGS@ \
-				-DBUILD_DATE=`date +"0x%Y%m%d"`\
-				-o $@ -c $<
+		@DBG_CFLAGS@ \
+		-DBUILD_DATE=`date +"0x%Y%m%d"`\
+		-o $@ -c $<
 
 $(OBJDBG)/%.o: \
 	%.cc \
@@ -94,9 +109,9 @@ $(OBJDBG)/%.o: \
 	@echo $< ...
 	@$(MKDIR) `dirname $@`
 	@$(CXX) $(CFLAGS) \
-				@DBG_CFLAGS@ \
-				-DBUILD_DATE=`date +"0x%Y%m%d"`\
-				-o $@ -c $<
+		@DBG_CFLAGS@ \
+		-DBUILD_DATE=`date +"0x%Y%m%d"`\
+		-o $@ -c $<
 
 $(OBJRLS)/%.o: \
 	%.c \
@@ -105,9 +120,9 @@ $(OBJRLS)/%.o: \
 	@echo $< ...
 	@$(MKDIR) `dirname $@`
 	@$(CC) $(CFLAGS) \
-				@RLS_CFLAGS@ \
-				-DBUILD_DATE=`date +"0x%Y%m%d"` \
-				-o $@ -c $<
+		@RLS_CFLAGS@ \
+		-DBUILD_DATE=`date +"0x%Y%m%d"` \
+		-o $@ -c $<
 
 $(OBJRLS)/%.o: \
 	%.cc \
@@ -116,9 +131,9 @@ $(OBJRLS)/%.o: \
 	@echo $< ...
 	@$(MKDIR) `dirname $@`
 	@$(CXX) $(CFLAGS) \
-				@RLS_CFLAGS@ \
-				-DBUILD_DATE=`date +"0x%Y%m%d"` \
-				-o $@ -c $<
+		@RLS_CFLAGS@ \
+		-DBUILD_DATE=`date +"0x%Y%m%d"` \
+		-o $@ -c $<
 
 $(POTDIR)/%.pot: %.c
 

@@ -507,7 +507,7 @@
 
 #endif // defined
 
-		remote(const char *session) throw (std::exception)
+		remote(const char *session)
 		{
 #if defined(_WIN32)
 			static DWORD			  dwMode = PIPE_READMODE_MESSAGE;
@@ -1654,7 +1654,7 @@
 
  	};
 
-	session	* session::create_remote(const char *session) throw (std::exception)
+	session	* session::create_remote(const char *session)
 	{
 		debug("create(%s)",session);
 

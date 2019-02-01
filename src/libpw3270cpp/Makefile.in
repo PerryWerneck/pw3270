@@ -59,12 +59,26 @@ VALGRIND=@VALGRIND@
 INSTALL_DATA=@INSTALL_DATA@
 INSTALL_PROGRAM=@INSTALL_PROGRAM@
 
-CFLAGS=@CFLAGS@ @LIB3270_CFLAGS@ @DBUS_CFLAGS@ -Wno-deprecated-declarations @GTK_CFLAGS@ -I$(BASEDIR)/src/include/pw3270
-LIBS=@LIBS@ @DBUS_LIBS@ @LIBICONV@
+CFLAGS= \
+	@CFLAGS@ \
+	-Wno-deprecated-declarations \
+	-I$(BASEDIR)/src/include \
+	@LIB3270_CFLAGS@ \
+	@DBUS_CFLAGS@ \
+	@GTK_CFLAGS@
+
+LIBS= \
+	@LIBS@ \
+	@DBUS_LIBS@ \
+	@LIBICONV@
 
 #---[ Rules ]----------------------------------------------------------------------------
 
-DEPENDS=$(BASEDIR)/src/include/*.h $(BASEDIR)/src/include/lib3270/*.h $(BASEDIR)/src/include/pw3270/*.h *.h Makefile
+DEPENDS=\
+	$(BASEDIR)/src/include/*.h \
+	$(BASEDIR)/src/include/pw3270/*.h \
+	*.h \
+	Makefile
 
 $(OBJDBG)/%.o: \
 	%.cc \
@@ -72,10 +86,11 @@ $(OBJDBG)/%.o: \
 
 	@echo $< ...
 	@$(MKDIR) `dirname $@`
-	@$(CC) $(CFLAGS) \
-				@DBG_CFLAGS@ \
-				-DBUILD_DATE=`date +"%Y%m%d"`\
-				-o $@ -c $<
+	@$(CC) \
+		$(CFLAGS) \
+		@DBG_CFLAGS@ \
+		-DBUILD_DATE=`date +"%Y%m%d"`\
+		-o $@ -c $<
 
 $(OBJRLS)/%.o: \
 	%.cc \
@@ -84,9 +99,9 @@ $(OBJRLS)/%.o: \
 	@echo $< ...
 	@$(MKDIR) `dirname $@`
 	@$(CC) $(CFLAGS) \
-				@RLS_CFLAGS@ \
-				-DBUILD_DATE=`date +"%Y%m%d"` \
-				-o $@ -c $<
+		@RLS_CFLAGS@ \
+		-DBUILD_DATE=`date +"%Y%m%d"` \
+		-o $@ -c $<
 
 $(POTDIR)/%.pot: %.c
 

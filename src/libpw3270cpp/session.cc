@@ -164,7 +164,7 @@
 	}
 
 	// Factory methods and settings
-	session	* session::create(const char *name) throw (std::exception)
+	session	* session::create(const char *name)
 	{
 		session	*rc = nullptr;
 

@@ -111,7 +111,7 @@
 	 namespace PW3270_NAMESPACE
 	 {
 
-		session	* create_service_client(const char *session) throw (std::exception);
+		session	* create_service_client(const char *session);
 
 	 }
 

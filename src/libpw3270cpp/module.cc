@@ -74,7 +74,7 @@ namespace PW3270_NAMESPACE
 	}
 #endif // _WIN32
 
-	module::module(const char *name, const char *version) throw (std::exception)
+	module::module(const char *name, const char *version)
 	{
 		string dllname = name;
 
