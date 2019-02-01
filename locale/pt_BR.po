@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-01 15:32-0200\n"
-"PO-Revision-Date: 2019-01-30 15:08-0200\n"
+"PO-Revision-Date: 2019-02-01 15:41-0200\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
 "Language: pt_BR\n"
@@ -1181,18 +1181,16 @@ msgid "Invalid state"
 msgstr "Estado inválido"
 
 #: properties.c:83
-#, fuzzy
 msgid "Is connection secure"
-msgstr "A conexão não é segura"
+msgstr "A conexão é segura ?"
 
 #: properties.c:167
 msgid "Is starting (no first screen)?"
 msgstr "Está iniciando (não recebeu a primeira tela)?"
 
 #: properties.c:76
-#, fuzzy
 msgid "Is terminal connected"
-msgstr "%s - Desconectado"
+msgstr "O terminal está conectado"
 
 #: properties.c:153
 msgid "Is terminal in the INITIAL_E state?"
@@ -1200,7 +1198,7 @@ msgstr "O terminal está no estad INITIAL_E?"
 
 #: properties.c:69
 msgid "Is terminal ready"
-msgstr ""
+msgstr "O terminal está pronto"
 
 #: 80javasamples.xml:38
 msgid "Java"
