@@ -87,6 +87,9 @@ PLUGIN_LIBS=\
 	@LIBV3270_LIBS@ \
 	@PW3270_LIBS@
 
+LDFLAGS=\
+	@LDFLAGS@
+
 #---[ Rules ]----------------------------------------------------------------------------
 
 DEPENDS=*.h Makefile
@@ -197,6 +200,7 @@ $(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@: \
 	@echo $@ ...
 	@$(MKDIR) `dirname $@`
 	@$(LD) \
+		$(LDFLAGS) \
 		@DLL_LDFLAGS@ \
 		-Wl,-soname,`basename $@` \
 		-L$(BASEDIR)/.bin/Release \
@@ -211,6 +215,7 @@ $(BINRLS)/plugins/$(MODULE_NAME)@DLLEXT@: \
 	@echo $@ ...
 	@$(MKDIR) `dirname $@`
 	@$(LD) \
+		$(LDFLAGS) \
 		@DLL_LDFLAGS@ \
 		-Wl,-soname,$(MODULE_NAME)d \
 		-L$(BASEDIR)/.bin/Release \
@@ -267,6 +272,7 @@ $(BINDBG)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@: \
 	@$(LD) \
 		-shared \
 		-Wl,-soname,`basename $@` \
+		$(LDFLAGS) \
 		-L$(BASEDIR)/.bin/Debug \
 		-o $@ $^ \
 		$(API_LIBS)
@@ -280,6 +286,7 @@ $(BINDBG)/plugins/$(MODULE_NAME)@DLLEXT@: \
 	@$(LD) \
 		-shared \
 		-Wl,-soname,$(MODULE_NAME)d,--rpath,$(BASEDIR)/.bin/Debug \
+		$(LDFLAGS) \
 		-L$(BASEDIR)/.bin/Debug \
 		-o $@ $(foreach SRC, $(basename $(PLUGIN_SOURCES)), $(OBJDBG)/$(SRC).o) \
 		$(PLUGIN_LIBS)
