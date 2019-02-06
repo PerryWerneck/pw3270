@@ -186,7 +186,7 @@ msgstr "<b>Estado do SSL é indefinido</b>Estado SSL inesperado %ld"
 #: src/dialogs/print/print.c:112
 msgid "<b>Text options</b>"
 msgstr ""
-"<b>Opções de texto</b>\n"
+"<b>Opções de texto</b>"
 "\n"
 
 #: main.c:400
