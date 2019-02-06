@@ -175,7 +175,7 @@ AC_PATH_TOOL([DBUSBINDINGTOOL],[dbus-binding-tool],[no])
 PKG_CHECK_EXISTS
 
 dnl ---------------------------------------------------------------------------
-dnl Version info
+dnl Version & customization
 dnl ---------------------------------------------------------------------------
 
 AC_SUBST(PACKAGE_DESCRIPTION,"3270 Emulator for gtk")
@@ -202,6 +202,11 @@ AC_DEFINE_UNQUOTED(PACKAGE_MINOR_RELEASE, $app_rls_minor)
 AC_SUBST(PACKAGE_RELEASE,$app_cv_release)
 AC_SUBST(PACKAGE_MAJOR_RELEASE,$app_rls_major)
 AC_SUBST(PACKAGE_MINOR_RELEASE,$app_rls_minor)
+
+AC_ARG_WITH([source-locales], [AS_HELP_STRING([--with-source-locales], [Set path for lib3270 locale sources])], [ app_cv_source_locales="$withval" ],[ app_cv_source_locales="/usr/share/pw3270/pot" ])
+
+AC_DEFINE_UNQUOTED(LIBRARY_POT_FILES, $app_cv_source_locales)
+AC_SUBST(LIBRARY_POT_FILES,$app_cv_source_locales)
 
 dnl ---------------------------------------------------------------------------
 dnl Check for D-Bus

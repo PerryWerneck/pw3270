@@ -193,7 +193,7 @@ $(POTDIR)/%.pot: \
 	@$(MAKE) -C src/$(basename $(notdir $@)) $@
 
 $(POTDIR)/%.pot: \
-	/usr/share/pw3270/pot/%.pot
+	@LIBRARY_POT_FILES@/%.pot
  
 	@echo $(notdir $@) ...
 	@mkdir -p `dirname $@`
