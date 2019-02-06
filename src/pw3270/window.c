@@ -237,6 +237,12 @@ static GtkWidget * trace_window = NULL;
 
  }
 
+ static gboolean bg_auto_connect(GtkWidget *widget)
+ {
+	pw3270_connect(widget);
+	return FALSE;
+ }
+
  GtkWidget * pw3270_new(const gchar *host, const gchar *systype, unsigned short colors)
  {
  	GtkWidget	* widget	= g_object_new(GTK_TYPE_PW3270, NULL);
@@ -255,16 +261,11 @@ static GtkWidget * trace_window = NULL;
 	{
 		set_string_to_config("host","uri","%s",host);
 		pw3270_set_url(widget,host);
-		connct = TRUE;
 	}
 	else
 	{
 		gchar *ptr = get_string_from_config("host","uri","");
-		if(*ptr)
-		{
-			pw3270_set_url(widget,ptr);
-			connct = pw3270_get_toggle(widget,LIB3270_TOGGLE_CONNECT_ON_STARTUP) ? TRUE : FALSE;
-		}
+		pw3270_set_url(widget,ptr);
 		g_free(ptr);
 	}
 
@@ -289,8 +290,8 @@ static GtkWidget * trace_window = NULL;
 
 	v3270_set_scaled_fonts(GTK_PW3270(widget)->terminal,get_boolean_from_config("terminal","sfonts",FALSE));
 
-	if(connct)
-		pw3270_connect(widget);
+	if(pw3270_get_toggle(widget,LIB3270_TOGGLE_CONNECT_ON_STARTUP))
+		g_idle_add((GSourceFunc) bg_auto_connect, widget);
 
  	return widget;
  }
