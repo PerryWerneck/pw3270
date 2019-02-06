@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-01 15:32-0200\n"
-"PO-Revision-Date: 2019-02-01 15:41-0200\n"
+"POT-Creation-Date: 2019-02-06 11:10-0200\n"
+"PO-Revision-Date: 2019-02-06 11:14-0200\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
 "Language: pt_BR\n"
@@ -99,11 +99,11 @@ msgstr "%s<b>%s</b> para %s"
 msgid "- 3270 Emulator for Gtk"
 msgstr "- Emulador 3270 para GTK"
 
-#: src/dialogs/hostselect.c:43
+#: src/dialogs/hostselect.c:41
 msgid "16 colors"
 msgstr "16 cores"
 
-#: screen.c:782 screen.c:819 screen.c:837 screen.c:962
+#: screen.c:809 screen.c:846 screen.c:864 screen.c:989
 msgid "3270 Error"
 msgstr "Erro 3270"
 
@@ -111,7 +111,7 @@ msgstr "Erro 3270"
 msgid "3270 File transfer"
 msgstr "Transferência de arquivos 3270"
 
-#: screen.c:800
+#: screen.c:827
 msgid "3270 Warning"
 msgstr "Alerta 3270"
 
@@ -124,7 +124,7 @@ msgstr "Tela 3270"
 msgid "3270 terminal emulator for GTK %d.%d"
 msgstr "Emulador 3270 para GTK+ %d.%d"
 
-#: src/dialogs/hostselect.c:44
+#: src/dialogs/hostselect.c:42
 msgid "8 colors"
 msgstr "8 cores"
 
@@ -183,6 +183,12 @@ msgstr ""
 msgid "<b>SSL state is undefined</b>Unexpected SSL status %ld"
 msgstr "<b>Estado do SSL é indefinido</b>Estado SSL inesperado %ld"
 
+#: src/dialogs/print/print.c:112
+msgid "<b>Text options</b>"
+msgstr ""
+"<b>Opções de texto</b>\n"
+"\n"
+
 #: main.c:400
 msgid ""
 "<b>Valid options:</b>\n"
@@ -239,7 +245,7 @@ msgstr "Ação falhou"
 msgid "Add to copy"
 msgstr "Adicionar à cópia"
 
-#: src/dialogs/hostselect.c:156
+#: src/dialogs/hostselect.c:140
 msgid "Address or name of the host to connect."
 msgstr "Endereço ou nome do host a conectar."
 
@@ -327,7 +333,7 @@ msgstr "Avblock"
 msgid "Awaiting chance to send an abort"
 msgstr "Aguardando para enviar pedido de cancelamento"
 
-#: colors.c:494
+#: colors.c:494 src/dialogs/colors.c:290
 msgid "Background"
 msgstr "Fundo"
 
@@ -335,7 +341,7 @@ msgstr "Fundo"
 msgid "Beep on errors"
 msgstr "Emitir som nos erros"
 
-#: colors.c:502
+#: colors.c:502 src/dialogs/colors.c:298
 msgid "Black"
 msgstr "Preto"
 
@@ -351,7 +357,7 @@ msgstr "Cursor piscante"
 msgid "Block size:"
 msgstr "Comprimento do bloco:"
 
-#: colors.c:495
+#: colors.c:495 src/dialogs/colors.c:291
 msgid "Blue"
 msgstr "Azul"
 
@@ -387,11 +393,11 @@ msgstr "Erro na assinatura CRL"
 msgid "C_haracter Coding:"
 msgstr "C_odificação de caracteres:"
 
-#: print.c:421 src/v3270/print.c:113
+#: print.c:421 src/dialogs/print/print.c:88
 msgid "C_olor scheme:"
 msgstr "Tema de c_ores:"
 
-#: src/dialogs/hostselect.c:384
+#: src/dialogs/hostselect.c:316
 msgid "C_onnect"
 msgstr "_Conectar"
 
@@ -419,6 +425,10 @@ msgstr "Não foi possível conectar a %s"
 msgid "Can't connect to %s:%s"
 msgstr "Não foi possível conectar a %s:%s"
 
+#: main.c:72
+msgid "Can't connect to DBUS server"
+msgstr "Não foi possível conectar ao servidor DBUS"
+
 #: src/v3270/selection.c:463
 #, c-format
 msgid "Can't convert line %lu from %s to %s"
@@ -431,6 +441,10 @@ msgstr "Recortar não permitido em seleção retangular"
 #: ssl/linux/getcrl.c:391
 msgid "Can't get CRL from LDAP Search"
 msgstr "Não obtive CRL na pesquisa LDAP"
+
+#: main.c:117
+msgid "Can't get DBUS object name"
+msgstr "Não foi possível obter o nome do objeto DBUS"
 
 #: ssl/linux/getcrl.c:357 ssl/linux/getcrl.c:368
 msgid "Can't get LDAP attribute"
@@ -499,6 +513,10 @@ msgstr "Erro ao analisar valor de caractere"
 #: parsefile.c:102 parsefile.c:128
 msgid "Can't parse unnamed element"
 msgstr "Incapaz de processar elemento sem nome"
+
+#: src/v3270/callbacks.c:345
+msgid "Can't print"
+msgstr "Não é possível imprimir"
 
 #: ssl/ctx_init.c:110
 #, c-format
@@ -592,6 +610,7 @@ msgid "Can't verify."
 msgstr "Não foi possível verificar"
 
 #: src/v3270ft/v3270ftprogress.c:471 src/v3270ft/transfer.c:89
+#: src/trace/trace.c:178
 msgid "Cancel"
 msgstr "_Cancelar"
 
@@ -653,7 +672,7 @@ msgstr "Falha na assinatura do certificado"
 msgid "Charset error"
 msgstr "Erro de codificação de caracteres"
 
-#: src/dialogs/hostselect.c:161
+#: src/dialogs/hostselect.c:164
 msgid "Check for SSL secure connection."
 msgstr "Marcar para ativar a conexão segura via SSL."
 
@@ -677,17 +696,21 @@ msgstr "Configuração de cores"
 msgid "Colors"
 msgstr "Cores"
 
-#: src/trace/trace.c:372
+#: src/trace/trace.c:360
 msgid "Command:"
 msgstr "Command:"
 
-#: src/dialogs/hostselect.c:380 00default.xml:89
+#: src/dialogs/hostselect.c:316 00default.xml:89
 msgid "Configure host"
 msgstr "Configurar host"
 
 #: toggles.c:189 00default.xml:114
 msgid "Connect on startup"
 msgstr "Conectar ao iniciar"
+
+#: gobject.c:201
+msgid "Connecting to host"
+msgstr "Conectando ao servidor"
 
 #: iocalls.c:547 linux/connect.c:183 linux/connect.c:215 linux/connect.c:233
 msgid "Connection error"
@@ -730,7 +753,7 @@ msgstr ""
 msgid "Creates a file with variable-length records."
 msgstr "Cria arquivo com registros de tamanho variável."
 
-#: colors.c:519 toggles.c:141 00default.xml:121
+#: colors.c:519 toggles.c:141 src/dialogs/colors.c:315 00default.xml:121
 msgid "Cross hair cursor"
 msgstr "Cursor mira"
 
@@ -779,15 +802,15 @@ msgstr "Cilindros"
 msgid "DFT B_uffer size:"
 msgstr "Tamanho do b_uffer DFT:"
 
-#: colors.c:503
+#: colors.c:503 src/dialogs/colors.c:299
 msgid "Dark Blue"
 msgstr "Azul Escuro"
 
-#: colors.c:506
+#: colors.c:506 src/dialogs/colors.c:302
 msgid "Dark Green"
 msgstr "Verde Escuro"
 
-#: colors.c:507
+#: colors.c:507 src/dialogs/colors.c:303
 msgid "Dark Turquoise"
 msgstr "Turquesa Escuro"
 
@@ -930,7 +953,7 @@ msgstr "Script rexx externo"
 msgid "Field Delimiters"
 msgstr "Delimitadores de campo"
 
-#: colors.c:488
+#: colors.c:488 src/dialogs/colors.c:284
 msgid "Field colors"
 msgstr "Cor dos campos"
 
@@ -1007,11 +1030,11 @@ msgstr "Obtive um certificado inválido do servidor LDAP"
 msgid "Got an invalid CRL from server"
 msgstr "Obtive um CRL inválido do servidor"
 
-#: colors.c:509
+#: colors.c:509 src/dialogs/colors.c:305
 msgid "Gray"
 msgstr "Cinza"
 
-#: colors.c:498
+#: colors.c:498 src/dialogs/colors.c:294
 msgid "Green"
 msgstr "Verde"
 
@@ -1139,11 +1162,11 @@ msgstr "Método de entrada"
 msgid "Insert new file in the transfer queue"
 msgstr "Inserir um novo arquivo na fila de transferência"
 
-#: colors.c:514
+#: colors.c:514 src/dialogs/colors.c:310
 msgid "Intensified/Protected"
 msgstr "Intensificado/Protegido"
 
-#: colors.c:512
+#: colors.c:512 src/dialogs/colors.c:308
 msgid "Intensified/Unprotected"
 msgstr "Intensificado/Desprotegido"
 
@@ -1151,7 +1174,7 @@ msgstr "Intensificado/Desprotegido"
 msgid "Invalid CA certificate"
 msgstr "Certificado CA inválido"
 
-#: local/session.cc:69 src/v3270/callbacks.c:405
+#: local/session.cc:69 src/v3270/callbacks.c:429
 msgid "Invalid callback table, possible version mismatch in lib3270"
 msgstr ""
 "Tabela de callbacks inválida, possível divergência de versão na lib3270"
@@ -1249,7 +1272,7 @@ msgstr "Enviar log para arquivo"
 msgid "Minutes for auto-disconnect"
 msgstr "Minutos para desconexão automática"
 
-#: colors.c:489
+#: colors.c:489 src/dialogs/colors.c:285
 msgid "Misc colors"
 msgstr "Cores diversas"
 
@@ -1266,7 +1289,7 @@ msgstr "Nome do modelo"
 msgid "Monocase"
 msgstr "Só Maiúsculas"
 
-#: src/dialogs/hostselect.c:45
+#: src/dialogs/hostselect.c:43
 msgid "Monochrome"
 msgstr "Monocromático"
 
@@ -1274,7 +1297,7 @@ msgstr "Monocromático"
 msgid "Move action needs target & direction attributes"
 msgstr "Ação \"move\" precisa dos atributos \"target\" e \"direction\""
 
-#: colors.c:508
+#: colors.c:508 src/dialogs/colors.c:304
 msgid "Mustard"
 msgstr "Mostarda"
 
@@ -1322,11 +1345,11 @@ msgstr "Diferente de zero se o host é AS400"
 msgid "Non zero if the host is TSO."
 msgstr "Diferente de zero se o host é TSO"
 
-#: colors.c:513
+#: colors.c:513 src/dialogs/colors.c:309
 msgid "Normal/Protected"
 msgstr "Normal/Protegido"
 
-#: colors.c:511
+#: colors.c:511 src/dialogs/colors.c:307
 msgid "Normal/Unprotected"
 msgstr "Normal/Desprotegido"
 
@@ -1338,39 +1361,39 @@ msgstr "Não disponível"
 msgid "Not in 3270 mode, transfer cancelled"
 msgstr "Não está no modo 3270, transferência cancelada"
 
-#: colors.c:526
+#: colors.c:526 src/dialogs/colors.c:322
 msgid "OIA Warning"
 msgstr "Alerta na OIA"
 
-#: colors.c:522
+#: colors.c:522 src/dialogs/colors.c:318
 msgid "OIA background"
 msgstr "Fundo da OIA"
 
-#: colors.c:523
+#: colors.c:523 src/dialogs/colors.c:319
 msgid "OIA foreground"
 msgstr "Frente da OIA"
 
-#: colors.c:524
+#: colors.c:524 src/dialogs/colors.c:320
 msgid "OIA separator"
 msgstr "Separador da OIA"
 
-#: colors.c:527
+#: colors.c:527 src/dialogs/colors.c:323
 msgid "OIA status invalid"
 msgstr "Estado inválido na OIA"
 
-#: colors.c:525
+#: colors.c:525 src/dialogs/colors.c:321
 msgid "OIA status ok"
 msgstr "Estado normal na OIA"
 
-#: src/v3270ft/save.c:118 src/v3270ft/load.c:272
+#: src/v3270/callbacks.c:343 src/v3270ft/save.c:118 src/v3270ft/load.c:272
 msgid "Operation has failed"
 msgstr "Operação falhou"
 
-#: print.c:613 src/v3270/print.c:199
+#: print.c:613 src/dialogs/print/print.c:204
 msgid "Options"
 msgstr "Opções"
 
-#: colors.c:504
+#: colors.c:504 src/dialogs/colors.c:300
 msgid "Orange"
 msgstr "Laranja"
 
@@ -1543,7 +1566,7 @@ msgstr "Path length constraint exceeded"
 msgid "Peer certificate"
 msgstr "Certificado apresentado"
 
-#: colors.c:497
+#: colors.c:497 src/dialogs/colors.c:293
 msgid "Pink"
 msgstr "Rosa"
 
@@ -1551,9 +1574,13 @@ msgstr "Rosa"
 msgid "Popup test"
 msgstr "Popup test"
 
-#: src/dialogs/hostselect.c:157
+#: src/dialogs/hostselect.c:141
 msgid "Port or service name (empty for \"telnet\")."
 msgstr "Nº da porta ou nome do serviço (em branco para \"telnet\")."
+
+#: src/dialogs/colors.c:257
+msgid "Predefined color schemes"
+msgstr "Esquemas de cor pré-definidos"
 
 #: src/v3270ft/set.c:176
 msgid "Preparing"
@@ -1591,7 +1618,7 @@ msgstr "Operação de impressão falhou"
 msgid "Print selected"
 msgstr "Imprimir seleção"
 
-#: print.c:507
+#: print.c:507 src/dialogs/print/print.c:104
 msgid "Print selection box"
 msgstr "Imprimir marca de seleção"
 
@@ -1607,7 +1634,7 @@ msgstr "Progresso"
 msgid "Protection test"
 msgstr "Protection test"
 
-#: colors.c:505
+#: colors.c:505 src/dialogs/colors.c:301
 msgid "Purple"
 msgstr "Púrpura"
 
@@ -1715,7 +1742,7 @@ msgstr "Comprimento de registro:"
 msgid "Record format"
 msgstr "Formato de registro"
 
-#: colors.c:496
+#: colors.c:496 src/dialogs/colors.c:292
 msgid "Red"
 msgstr "Vermelho"
 
@@ -1818,7 +1845,7 @@ msgstr ""
 "SSL_write:\n"
 "%s"
 
-#: src/v3270ft/v3270ft.c:213
+#: src/v3270ft/v3270ft.c:213 src/trace/trace.c:179
 msgid "Save"
 msgstr "Salvar"
 
@@ -1953,11 +1980,11 @@ msgstr "Selecionar arquivo anterior"
 msgid "Select() failed when processing for events."
 msgstr "Select() falhou ao processar eventos."
 
-#: colors.c:516
+#: colors.c:516 src/dialogs/colors.c:312
 msgid "Selection background"
 msgstr "Fundo da seleção"
 
-#: colors.c:517
+#: colors.c:517 src/dialogs/colors.c:313
 msgid "Selection foreground"
 msgstr "Frente da seleção"
 
@@ -2107,6 +2134,11 @@ msgstr "Iniciar transferência de arquivo"
 msgid "Starting"
 msgstr "Iniciando"
 
+#: gobject.c:189
+#, c-format
+msgid "State %04d can't accept requests"
+msgstr "Não é possível receber requisições no estado %04d"
+
 #: properties.c:132
 msgid "State is 3270, TN3270e or SSCP"
 msgstr "Estado do terminal é 3270, TN3270e or SSCP"
@@ -2115,15 +2147,15 @@ msgstr "Estado do terminal é 3270, TN3270e or SSCP"
 msgid "Subject issuer mismatch"
 msgstr "Divergência na identidade do emissor"
 
-#: src/dialogs/hostselect.c:56
-msgid "System _type:"
-msgstr "Tipo de servidor:"
+#: src/dialogs/hostselect.c:54
+msgid "System _type"
+msgstr "_Tipo de servidor"
 
 #: telnet.c:1154
 msgid "TLS negotiation failure"
 msgstr "Negociação TLS falhou"
 
-#: colors.c:487
+#: colors.c:487 src/dialogs/colors.c:206 src/dialogs/colors.c:283
 msgid "Terminal colors"
 msgstr "Cores do terminal"
 
@@ -2557,7 +2589,7 @@ msgstr "Erro de transmissão"
 msgid "Try again with the same file."
 msgstr "Tente de novo com o mesmo arquivo."
 
-#: colors.c:499
+#: colors.c:499 src/dialogs/colors.c:295
 msgid "Turquoise"
 msgstr "Turquesa"
 
@@ -2667,6 +2699,11 @@ msgstr "Valor de cor inválido ou inesperado: \"%s\""
 msgid "Unexpected or unknown security status"
 msgstr "Estado de segurança inesperado ou desconhecido."
 
+#: gobject.c:204
+#, c-format
+msgid "Unexpected state %04d"
+msgstr "Estado inesperado %04d"
+
 #: actions.c:416
 #, c-format
 msgid "Unexpected target \"%s\""
@@ -2746,7 +2783,7 @@ msgstr "Aguardando resposta do pedido de upload"
 msgid "Western Europe (ISO 8859-1)"
 msgstr "Europa ocidental (ISO 8859-1)"
 
-#: colors.c:501
+#: colors.c:501 src/dialogs/colors.c:297
 msgid "White"
 msgstr "Branco"
 
@@ -2806,7 +2843,7 @@ msgstr "X Aguarde"
 msgid "XML file"
 msgstr "Arquivo XML"
 
-#: colors.c:500
+#: colors.c:500 src/dialogs/colors.c:296
 msgid "Yellow"
 msgstr "Amarelo"
 
@@ -2886,7 +2923,7 @@ msgid "You specified an option that is invalid."
 msgstr "Você especificou uma opção inválida."
 
 #: src/v3270ft/select.c:88 src/v3270ft/select.c:178
-#: src/dialogs/hostselect.c:383
+#: src/dialogs/commondialog.c:82 src/dialogs/commondialog.c:89
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -2894,9 +2931,13 @@ msgstr "_Cancelar"
 msgid "_Close"
 msgstr "_Close"
 
-#: src/dialogs/hostselect.c:56
-msgid "_Color table:"
-msgstr "Tabela de cores:"
+#: src/trace/trace.c:332
+msgid "_Close window"
+msgstr "_Fechar janela"
+
+#: src/dialogs/hostselect.c:54
+msgid "_Color table"
+msgstr "_Tabela de cores"
 
 #: 00default.xml:99
 msgid "_Connect"
@@ -2910,21 +2951,17 @@ msgstr "_Desconectar"
 msgid "_Edit"
 msgstr "_Editar"
 
-#: 80rexx.xml:34 80javasamples.xml:34 00default.xml:34
+#: src/trace/trace.c:338 80rexx.xml:34 80javasamples.xml:34 00default.xml:34
 msgid "_File"
 msgstr "_Arquivo"
 
-#: print.c:421 src/v3270/print.c:112
+#: print.c:421 src/dialogs/print/print.c:87
 msgid "_Font:"
 msgstr "_Fonte:"
 
-#: src/dialogs/hostselect.c:164
-msgid "_Host options"
-msgstr "Opções do _Servidor"
-
-#: src/dialogs/hostselect.c:141
-msgid "_Host:"
-msgstr "Nome do _Host:"
+#: src/dialogs/hostselect.c:129
+msgid "_Host"
+msgstr "_Servidor"
 
 #: src/v3270ft/v3270ft.c:335
 msgid "_Local file:"
@@ -2946,13 +2983,17 @@ msgstr "_Opções"
 msgid "_Remote file:"
 msgstr "Arquivo _remoto:"
 
-#: src/dialogs/hostselect.c:160
+#: src/trace/trace.c:331
+msgid "_Save trace to file"
+msgstr "_Salvar arquivo de trace"
+
+#: src/dialogs/hostselect.c:163
 msgid "_Secure connection."
 msgstr "Conexão _Segura."
 
-#: src/dialogs/hostselect.c:142
-msgid "_Service:"
-msgstr "_Serviço:"
+#: src/dialogs/hostselect.c:130
+msgid "_Service"
+msgstr "_Serviço"
 
 #: src/v3270ft/tables.c:43
 msgid "_Text file"
@@ -3086,14 +3127,8 @@ msgstr "translator-credits"
 #~ "32768. Valores maiores trazem maior performance, porem, nem todos os "
 #~ "hosts podem suportá-los."
 
-#~ msgid "Can't connect to DBUS server"
-#~ msgstr "Não foi possível conectar ao servidor DBUS"
-
 #~ msgid "Can't determine value for environment variable \"%s\" "
 #~ msgstr "Não consigo determinar o valor da variável de ambiente \"%s\" "
-
-#~ msgid "Can't get DBUS object name"
-#~ msgstr "Não foi possível obter o nome do objeto DBUS"
 
 #~ msgid "Can't set LDAP query"
 #~ msgstr "Não posso definir consulta LDAP"
@@ -3140,9 +3175,6 @@ msgstr "translator-credits"
 
 #~ msgid "Complete"
 #~ msgstr "Completo"
-
-#~ msgid "Connecting to host"
-#~ msgstr "Conectando ao servidor"
 
 #~ msgid "Copiar tudo"
 #~ msgstr "Copiar tudo"
@@ -3487,9 +3519,6 @@ msgstr "translator-credits"
 #~ msgid "Start upload."
 #~ msgstr "Iniciar envio."
 
-#~ msgid "State %04d can't accept requests"
-#~ msgstr "Não é possível receber requisições no estado %04d"
-
 #~ msgid "Status"
 #~ msgstr "Situação"
 
@@ -3545,9 +3574,6 @@ msgstr "translator-credits"
 #~ msgid "Unexpected element <%s>"
 #~ msgstr "Elemento <%s> inesperado"
 
-#~ msgid "Unexpected state %04d"
-#~ msgstr "Estado inesperado %04d"
-
 #~ msgid ""
 #~ "Unknown host:\n"
 #~ "%s"
@@ -3594,6 +3620,9 @@ msgstr "translator-credits"
 
 #~ msgid "_Browse"
 #~ msgstr "_Procurar"
+
+#~ msgid "_Host options"
+#~ msgstr "Opções do _Servidor"
 
 #~ msgid "_Port:"
 #~ msgstr "_Porta:"

@@ -9,7 +9,7 @@ msgstr ""
 "#-#-#-#-#  pw3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-01 15:56-0200\n"
+"POT-Creation-Date: 2019-02-06 11:10-0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "#-#-#-#-#  lib3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-01 13:26+0000\n"
+"POT-Creation-Date: 2019-02-06 10:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,7 +31,7 @@ msgstr ""
 "#-#-#-#-#  libv3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-01 13:29+0000\n"
+"POT-Creation-Date: 2019-02-06 12:06+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -43,6 +43,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-01-18 17:12-0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  dbus3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-02-06 11:10-0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -131,11 +142,11 @@ msgstr ""
 msgid "- 3270 Emulator for Gtk"
 msgstr ""
 
-#: src/dialogs/hostselect.c:43
+#: src/dialogs/hostselect.c:41
 msgid "16 colors"
 msgstr ""
 
-#: screen.c:782 screen.c:819 screen.c:837 screen.c:962
+#: screen.c:809 screen.c:846 screen.c:864 screen.c:989
 msgid "3270 Error"
 msgstr ""
 
@@ -143,7 +154,7 @@ msgstr ""
 msgid "3270 File transfer"
 msgstr ""
 
-#: screen.c:800
+#: screen.c:827
 msgid "3270 Warning"
 msgstr ""
 
@@ -156,7 +167,7 @@ msgstr ""
 msgid "3270 terminal emulator for GTK %d.%d"
 msgstr ""
 
-#: src/dialogs/hostselect.c:44
+#: src/dialogs/hostselect.c:42
 msgid "8 colors"
 msgstr ""
 
@@ -207,6 +218,10 @@ msgstr ""
 #: src/v3270/widget.c:229
 #, c-format
 msgid "<b>SSL state is undefined</b>Unexpected SSL status %ld"
+msgstr ""
+
+#: src/dialogs/print/print.c:112
+msgid "<b>Text options</b>"
 msgstr ""
 
 #: main.c:400
@@ -261,7 +276,7 @@ msgstr ""
 msgid "Add to copy"
 msgstr ""
 
-#: src/dialogs/hostselect.c:156
+#: src/dialogs/hostselect.c:140
 msgid "Address or name of the host to connect."
 msgstr ""
 
@@ -343,7 +358,7 @@ msgstr ""
 msgid "Awaiting chance to send an abort"
 msgstr ""
 
-#: colors.c:494
+#: colors.c:494 src/dialogs/colors.c:290
 msgid "Background"
 msgstr ""
 
@@ -351,7 +366,7 @@ msgstr ""
 msgid "Beep on errors"
 msgstr ""
 
-#: colors.c:502
+#: colors.c:502 src/dialogs/colors.c:298
 msgid "Black"
 msgstr ""
 
@@ -367,7 +382,7 @@ msgstr ""
 msgid "Block size:"
 msgstr ""
 
-#: colors.c:495
+#: colors.c:495 src/dialogs/colors.c:291
 msgid "Blue"
 msgstr ""
 
@@ -403,11 +418,11 @@ msgstr ""
 msgid "C_haracter Coding:"
 msgstr ""
 
-#: print.c:421 src/v3270/print.c:113
+#: print.c:421 src/dialogs/print/print.c:88
 msgid "C_olor scheme:"
 msgstr ""
 
-#: src/dialogs/hostselect.c:384
+#: src/dialogs/hostselect.c:316
 msgid "C_onnect"
 msgstr ""
 
@@ -435,6 +450,10 @@ msgstr ""
 msgid "Can't connect to %s:%s"
 msgstr ""
 
+#: main.c:72
+msgid "Can't connect to DBUS server"
+msgstr ""
+
 #: src/v3270/selection.c:463
 #, c-format
 msgid "Can't convert line %lu from %s to %s"
@@ -446,6 +465,10 @@ msgstr ""
 
 #: ssl/linux/getcrl.c:391
 msgid "Can't get CRL from LDAP Search"
+msgstr ""
+
+#: main.c:117
+msgid "Can't get DBUS object name"
 msgstr ""
 
 #: ssl/linux/getcrl.c:357 ssl/linux/getcrl.c:368
@@ -514,6 +537,10 @@ msgstr ""
 
 #: parsefile.c:102 parsefile.c:128
 msgid "Can't parse unnamed element"
+msgstr ""
+
+#: src/v3270/callbacks.c:345
+msgid "Can't print"
 msgstr ""
 
 #: ssl/ctx_init.c:110
@@ -602,6 +629,7 @@ msgid "Can't verify."
 msgstr ""
 
 #: src/v3270ft/v3270ftprogress.c:471 src/v3270ft/transfer.c:89
+#: src/trace/trace.c:178
 msgid "Cancel"
 msgstr ""
 
@@ -659,7 +687,7 @@ msgstr ""
 msgid "Charset error"
 msgstr ""
 
-#: src/dialogs/hostselect.c:161
+#: src/dialogs/hostselect.c:164
 msgid "Check for SSL secure connection."
 msgstr ""
 
@@ -683,16 +711,20 @@ msgstr ""
 msgid "Colors"
 msgstr ""
 
-#: src/trace/trace.c:372
+#: src/trace/trace.c:360
 msgid "Command:"
 msgstr ""
 
-#: src/dialogs/hostselect.c:380 00default.xml:89
+#: src/dialogs/hostselect.c:316 00default.xml:89
 msgid "Configure host"
 msgstr ""
 
 #: toggles.c:189 00default.xml:114
 msgid "Connect on startup"
+msgstr ""
+
+#: gobject.c:201
+msgid "Connecting to host"
 msgstr ""
 
 #: iocalls.c:547 linux/connect.c:183 linux/connect.c:215 linux/connect.c:233
@@ -735,7 +767,7 @@ msgstr ""
 msgid "Creates a file with variable-length records."
 msgstr ""
 
-#: colors.c:519 toggles.c:141 00default.xml:121
+#: colors.c:519 toggles.c:141 src/dialogs/colors.c:315 00default.xml:121
 msgid "Cross hair cursor"
 msgstr ""
 
@@ -784,15 +816,15 @@ msgstr ""
 msgid "DFT B_uffer size:"
 msgstr ""
 
-#: colors.c:503
+#: colors.c:503 src/dialogs/colors.c:299
 msgid "Dark Blue"
 msgstr ""
 
-#: colors.c:506
+#: colors.c:506 src/dialogs/colors.c:302
 msgid "Dark Green"
 msgstr ""
 
-#: colors.c:507
+#: colors.c:507 src/dialogs/colors.c:303
 msgid "Dark Turquoise"
 msgstr ""
 
@@ -931,7 +963,7 @@ msgstr ""
 msgid "Field Delimiters"
 msgstr ""
 
-#: colors.c:488
+#: colors.c:488 src/dialogs/colors.c:284
 msgid "Field colors"
 msgstr ""
 
@@ -1003,11 +1035,11 @@ msgstr ""
 msgid "Got an invalid CRL from server"
 msgstr ""
 
-#: colors.c:509
+#: colors.c:509 src/dialogs/colors.c:305
 msgid "Gray"
 msgstr ""
 
-#: colors.c:498
+#: colors.c:498 src/dialogs/colors.c:294
 msgid "Green"
 msgstr ""
 
@@ -1123,11 +1155,11 @@ msgstr ""
 msgid "Insert new file in the transfer queue"
 msgstr ""
 
-#: colors.c:514
+#: colors.c:514 src/dialogs/colors.c:310
 msgid "Intensified/Protected"
 msgstr ""
 
-#: colors.c:512
+#: colors.c:512 src/dialogs/colors.c:308
 msgid "Intensified/Unprotected"
 msgstr ""
 
@@ -1135,7 +1167,7 @@ msgstr ""
 msgid "Invalid CA certificate"
 msgstr ""
 
-#: local/session.cc:69 src/v3270/callbacks.c:405
+#: local/session.cc:69 src/v3270/callbacks.c:429
 msgid "Invalid callback table, possible version mismatch in lib3270"
 msgstr ""
 
@@ -1232,7 +1264,7 @@ msgstr ""
 msgid "Minutes for auto-disconnect"
 msgstr ""
 
-#: colors.c:489
+#: colors.c:489 src/dialogs/colors.c:285
 msgid "Misc colors"
 msgstr ""
 
@@ -1249,7 +1281,7 @@ msgstr ""
 msgid "Monocase"
 msgstr ""
 
-#: src/dialogs/hostselect.c:45
+#: src/dialogs/hostselect.c:43
 msgid "Monochrome"
 msgstr ""
 
@@ -1257,7 +1289,7 @@ msgstr ""
 msgid "Move action needs target & direction attributes"
 msgstr ""
 
-#: colors.c:508
+#: colors.c:508 src/dialogs/colors.c:304
 msgid "Mustard"
 msgstr ""
 
@@ -1303,11 +1335,11 @@ msgstr ""
 msgid "Non zero if the host is TSO."
 msgstr ""
 
-#: colors.c:513
+#: colors.c:513 src/dialogs/colors.c:309
 msgid "Normal/Protected"
 msgstr ""
 
-#: colors.c:511
+#: colors.c:511 src/dialogs/colors.c:307
 msgid "Normal/Unprotected"
 msgstr ""
 
@@ -1319,39 +1351,39 @@ msgstr ""
 msgid "Not in 3270 mode, transfer cancelled"
 msgstr ""
 
-#: colors.c:526
+#: colors.c:526 src/dialogs/colors.c:322
 msgid "OIA Warning"
 msgstr ""
 
-#: colors.c:522
+#: colors.c:522 src/dialogs/colors.c:318
 msgid "OIA background"
 msgstr ""
 
-#: colors.c:523
+#: colors.c:523 src/dialogs/colors.c:319
 msgid "OIA foreground"
 msgstr ""
 
-#: colors.c:524
+#: colors.c:524 src/dialogs/colors.c:320
 msgid "OIA separator"
 msgstr ""
 
-#: colors.c:527
+#: colors.c:527 src/dialogs/colors.c:323
 msgid "OIA status invalid"
 msgstr ""
 
-#: colors.c:525
+#: colors.c:525 src/dialogs/colors.c:321
 msgid "OIA status ok"
 msgstr ""
 
-#: src/v3270ft/save.c:118 src/v3270ft/load.c:272
+#: src/v3270/callbacks.c:343 src/v3270ft/save.c:118 src/v3270ft/load.c:272
 msgid "Operation has failed"
 msgstr ""
 
-#: print.c:613 src/v3270/print.c:199
+#: print.c:613 src/dialogs/print/print.c:204
 msgid "Options"
 msgstr ""
 
-#: colors.c:504
+#: colors.c:504 src/dialogs/colors.c:300
 msgid "Orange"
 msgstr ""
 
@@ -1524,7 +1556,7 @@ msgstr ""
 msgid "Peer certificate"
 msgstr ""
 
-#: colors.c:497
+#: colors.c:497 src/dialogs/colors.c:293
 msgid "Pink"
 msgstr ""
 
@@ -1532,8 +1564,12 @@ msgstr ""
 msgid "Popup test"
 msgstr ""
 
-#: src/dialogs/hostselect.c:157
+#: src/dialogs/hostselect.c:141
 msgid "Port or service name (empty for \"telnet\")."
+msgstr ""
+
+#: src/dialogs/colors.c:257
+msgid "Predefined color schemes"
 msgstr ""
 
 #: src/v3270ft/set.c:176
@@ -1570,7 +1606,7 @@ msgstr ""
 msgid "Print selected"
 msgstr ""
 
-#: print.c:507
+#: print.c:507 src/dialogs/print/print.c:104
 msgid "Print selection box"
 msgstr ""
 
@@ -1586,7 +1622,7 @@ msgstr ""
 msgid "Protection test"
 msgstr ""
 
-#: colors.c:505
+#: colors.c:505 src/dialogs/colors.c:301
 msgid "Purple"
 msgstr ""
 
@@ -1694,7 +1730,7 @@ msgstr ""
 msgid "Record format"
 msgstr ""
 
-#: colors.c:496
+#: colors.c:496 src/dialogs/colors.c:292
 msgid "Red"
 msgstr ""
 
@@ -1790,7 +1826,7 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/v3270ft/v3270ft.c:213
+#: src/v3270ft/v3270ft.c:213 src/trace/trace.c:179
 msgid "Save"
 msgstr ""
 
@@ -1923,11 +1959,11 @@ msgstr ""
 msgid "Select() failed when processing for events."
 msgstr ""
 
-#: colors.c:516
+#: colors.c:516 src/dialogs/colors.c:312
 msgid "Selection background"
 msgstr ""
 
-#: colors.c:517
+#: colors.c:517 src/dialogs/colors.c:313
 msgid "Selection foreground"
 msgstr ""
 
@@ -2068,6 +2104,11 @@ msgstr ""
 msgid "Starting"
 msgstr ""
 
+#: gobject.c:189
+#, c-format
+msgid "State %04d can't accept requests"
+msgstr ""
+
 #: properties.c:132
 msgid "State is 3270, TN3270e or SSCP"
 msgstr ""
@@ -2076,15 +2117,15 @@ msgstr ""
 msgid "Subject issuer mismatch"
 msgstr ""
 
-#: src/dialogs/hostselect.c:56
-msgid "System _type:"
+#: src/dialogs/hostselect.c:54
+msgid "System _type"
 msgstr ""
 
 #: telnet.c:1154
 msgid "TLS negotiation failure"
 msgstr ""
 
-#: colors.c:487
+#: colors.c:487 src/dialogs/colors.c:206 src/dialogs/colors.c:283
 msgid "Terminal colors"
 msgstr ""
 
@@ -2459,7 +2500,7 @@ msgstr ""
 msgid "Try again with the same file."
 msgstr ""
 
-#: colors.c:499
+#: colors.c:499 src/dialogs/colors.c:295
 msgid "Turquoise"
 msgstr ""
 
@@ -2568,6 +2609,11 @@ msgstr ""
 msgid "Unexpected or unknown security status"
 msgstr ""
 
+#: gobject.c:204
+#, c-format
+msgid "Unexpected state %04d"
+msgstr ""
+
 #: actions.c:416
 #, c-format
 msgid "Unexpected target \"%s\""
@@ -2647,7 +2693,7 @@ msgstr ""
 msgid "Western Europe (ISO 8859-1)"
 msgstr ""
 
-#: colors.c:501
+#: colors.c:501 src/dialogs/colors.c:297
 msgid "White"
 msgstr ""
 
@@ -2707,7 +2753,7 @@ msgstr ""
 msgid "XML file"
 msgstr ""
 
-#: colors.c:500
+#: colors.c:500 src/dialogs/colors.c:296
 msgid "Yellow"
 msgstr ""
 
@@ -2769,7 +2815,7 @@ msgid "You specified an option that is invalid."
 msgstr ""
 
 #: src/v3270ft/select.c:88 src/v3270ft/select.c:178
-#: src/dialogs/hostselect.c:383
+#: src/dialogs/commondialog.c:82 src/dialogs/commondialog.c:89
 msgid "_Cancel"
 msgstr ""
 
@@ -2777,8 +2823,12 @@ msgstr ""
 msgid "_Close"
 msgstr ""
 
-#: src/dialogs/hostselect.c:56
-msgid "_Color table:"
+#: src/trace/trace.c:332
+msgid "_Close window"
+msgstr ""
+
+#: src/dialogs/hostselect.c:54
+msgid "_Color table"
 msgstr ""
 
 #: 00default.xml:99
@@ -2793,20 +2843,16 @@ msgstr ""
 msgid "_Edit"
 msgstr ""
 
-#: 80rexx.xml:34 80javasamples.xml:34 00default.xml:34
+#: src/trace/trace.c:338 80rexx.xml:34 80javasamples.xml:34 00default.xml:34
 msgid "_File"
 msgstr ""
 
-#: print.c:421 src/v3270/print.c:112
+#: print.c:421 src/dialogs/print/print.c:87
 msgid "_Font:"
 msgstr ""
 
-#: src/dialogs/hostselect.c:164
-msgid "_Host options"
-msgstr ""
-
-#: src/dialogs/hostselect.c:141
-msgid "_Host:"
+#: src/dialogs/hostselect.c:129
+msgid "_Host"
 msgstr ""
 
 #: src/v3270ft/v3270ft.c:335
@@ -2829,12 +2875,16 @@ msgstr ""
 msgid "_Remote file:"
 msgstr ""
 
-#: src/dialogs/hostselect.c:160
+#: src/trace/trace.c:331
+msgid "_Save trace to file"
+msgstr ""
+
+#: src/dialogs/hostselect.c:163
 msgid "_Secure connection."
 msgstr ""
 
-#: src/dialogs/hostselect.c:142
-msgid "_Service:"
+#: src/dialogs/hostselect.c:130
+msgid "_Service"
 msgstr ""
 
 #: src/v3270ft/tables.c:43
