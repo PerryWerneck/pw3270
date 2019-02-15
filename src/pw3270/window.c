@@ -210,16 +210,27 @@ static GtkWidget * trace_window = NULL;
 	gchar	* text;
  };
 
+ static gboolean trace_window_delete_event(GtkWidget *widget, GdkEvent  *event, gpointer user_data)
+ {
+	return FALSE;
+ }
+
  static gboolean bg_trace_window(struct trace_data *data)
  {
  	if(!trace_window)
-		trace_window = v3270_trace_new_from_session(data->hSession,data->text);
+	{
+		trace_window = v3270_trace_window_new(lib3270_get_user_data(data->hSession),data->text);
 
-	v3270_trace_set_destroy_on_close(trace_window,TRUE);
+		if(trace_window)
+		{
+			g_signal_connect(trace_window, "destroy", G_CALLBACK(trace_window_destroy), data->hSession);
+			g_signal_connect(trace_window, "delete-event", G_CALLBACK(trace_window_delete_event), data->hSession);
+		}
 
-	g_signal_connect(trace_window, "destroy", G_CALLBACK(trace_window_destroy), data->hSession);
+	}
 
-	gtk_widget_show_all(trace_window);
+	if(trace_window)
+		gtk_widget_show_all(trace_window);
 
 	g_free(data->text);
 
