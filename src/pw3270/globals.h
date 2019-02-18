@@ -80,6 +80,9 @@
  G_GNUC_INTERNAL void download_action(GtkAction *action, GtkWidget *widget);
  G_GNUC_INTERNAL void upload_action(GtkAction *action, GtkWidget *widget);
  G_GNUC_INTERNAL void print_settings_action(GtkAction *action, GtkWidget *widget);
+ G_GNUC_INTERNAL gboolean handle_keypress(GtkWidget *terminal, guint keyval, GdkModifierType state, GtkWidget *window);
+
+
 
 
 

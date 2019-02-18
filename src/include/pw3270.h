@@ -93,6 +93,9 @@
 
  LIB3270_EXPORT int 		  pw3270_print(GtkWidget *widget, GObject *action, GtkPrintOperationAction oper, LIB3270_PRINT_MODE src);
 
+ LIB3270_EXPORT gboolean	  pw3270_set_keyboard_action(GtkWidget *widget, const gchar *key_name, GtkAction *action);
+
+
 #ifdef HAVE_GTKMAC
 	#include <gtk-mac-bundle.h>
 	LIB3270_EXPORT GtkMacBundle	* pw3270_get_bundle(void);

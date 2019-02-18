@@ -31,6 +31,7 @@
 
  #include "private.h"
  #include <v3270.h>
+ #include <pw3270.h>
 
  #ifdef HAVE_GTKMAC
 	#include <gtkmacintegration/gtk-mac-menu.h>
@@ -146,7 +147,7 @@ static void action_group_setup(gpointer key, GtkAction *action, struct action_in
 		const gchar	* key_name = g_object_get_data(G_OBJECT(action),"accel_attr");
 		GSList		* child = gtk_action_get_proxies(action);
 
-		if(key_name && !v3270_set_keyboard_action(info->widget,key_name,action))
+		if(key_name && !pw3270_set_keyboard_action(info->widget,key_name,action))
 		{
 			gtk_action_group_add_action_with_accel(info->group[group_id],action,key_name);
 			gtk_action_connect_accelerator(action);

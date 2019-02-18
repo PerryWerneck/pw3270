@@ -36,13 +36,25 @@
  #include <v3270/filetransfer.h>
 
  #include <pw3270/plugin.h>
- // #include "filetransfer.h"
  #include <lib3270/actions.h>
  #include <lib3270/selection.h>
  #include <lib3270/trace.h>
-// #include <lib3270/macros.h>
  #include <lib3270/log.h>
  #include <stdlib.h>
+
+ #if GTK_CHECK_VERSION(3,0,0)
+	#include <gdk/gdkkeysyms-compat.h>
+ #else
+	#include <gdk/gdkkeysyms.h>
+ #endif
+
+ #ifndef GDK_ALT_MASK
+	#define GDK_ALT_MASK GDK_MOD1_MASK
+ #endif
+
+ #ifndef GDK_NUMLOCK_MASK
+	#define GDK_NUMLOCK_MASK GDK_MOD2_MASK
+ #endif
 
  #ifdef DEBUG
 	#include <lib3270/html.h>
@@ -57,6 +69,46 @@
  #else
 	#define trace_action(a,w) /* */
  #endif // X3270_TRACE
+
+/*--[ Keyboard Actions ]-----------------------------------------------------------------------------*/
+
+ static struct _keyboard_actions
+ {
+	guint			  keyval;
+	GdkModifierType	  state;
+	GtkAction		* action;
+ } keyboard_actions[] =
+ {
+	{ GDK_Left,				0,					NULL	},
+	{ GDK_Up,				0,					NULL	},
+	{ GDK_Right,			0,					NULL	},
+	{ GDK_Down,				0,					NULL	},
+	{ GDK_Tab,				0,					NULL	},
+	{ GDK_ISO_Left_Tab,		GDK_SHIFT_MASK,		NULL	},
+	{ GDK_KP_Left,			0,					NULL	},
+	{ GDK_KP_Up,			0,					NULL	},
+	{ GDK_KP_Right,			0,					NULL	},
+	{ GDK_KP_Down,			0,					NULL	},
+
+	{ GDK_KP_Add,			GDK_NUMLOCK_MASK,	NULL	},
+	{ GDK_KP_Subtract,		GDK_NUMLOCK_MASK,	NULL	},
+
+	{ GDK_3270_PrintScreen,	0,					NULL	},
+	{ GDK_P,				GDK_CONTROL_MASK,	NULL	},
+
+	{ GDK_Sys_Req,			0,					NULL	},
+
+	{ GDK_Print,			GDK_CONTROL_MASK,	NULL	},
+	{ GDK_Print,			GDK_SHIFT_MASK,		NULL	},
+	{ GDK_Control_R,		0,					NULL	},
+	{ GDK_Control_L,		0,					NULL	},
+
+
+#ifdef WIN32
+	{ GDK_Pause,			0,					NULL	},
+
+#endif
+};
 
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
@@ -953,3 +1005,47 @@ void ui_set_scroll_actions(GtkWidget *widget, GtkAction *action[UI_ATTR_DIRECTIO
 	}
 
 }
+
+gboolean pw3270_set_keyboard_action(GtkWidget *widget, const gchar *key_name, GtkAction *action)
+{
+	guint			keyval;
+	GdkModifierType	state;
+	int				f;
+
+	g_return_val_if_fail(GTK_IS_V3270(widget),FALSE);
+
+	debug("keyboard_action.%s=%p",key_name,action);
+
+	gtk_accelerator_parse(key_name,&keyval,&state);
+
+	for(f=0; f < (int) G_N_ELEMENTS(keyboard_actions);f++)
+	{
+		if(keyboard_actions[f].keyval == keyval && keyboard_actions[f].state == state)
+		{
+			keyboard_actions[f].action = action;
+			return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+
+gboolean handle_keypress(GtkWidget *terminal, guint keyval, GdkModifierType state, GtkWidget *window)
+{
+	size_t f;
+
+	debug("pw3270::%s keyval=%u state=%u",__FUNCTION__,(unsigned int) keyval, (unsigned int) state);
+
+	for(f=0; f < (int) G_N_ELEMENTS(keyboard_actions);f++)
+	{
+		if(keyboard_actions[f].keyval == keyval && keyboard_actions[f].state == state && keyboard_actions[f].action)
+		{
+			debug("Activating action %s",gtk_action_get_name(keyboard_actions[f].action));
+			gtk_action_activate(keyboard_actions[f].action);
+			return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+

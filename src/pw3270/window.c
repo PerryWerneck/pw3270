@@ -773,6 +773,7 @@ static GtkWidget * trace_window = NULL;
 		g_signal_connect(widget->terminal,"selecting",G_CALLBACK(selecting),group);
 		g_signal_connect(widget->terminal,"popup",G_CALLBACK(popup_menu),popup);
 		g_signal_connect(widget->terminal,"has_text",G_CALLBACK(has_text),group);
+		g_signal_connect(widget->terminal,"keypress",G_CALLBACK(handle_keypress),NULL);
 
 	}
 
