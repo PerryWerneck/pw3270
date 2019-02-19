@@ -77,15 +77,14 @@
 			<button action='erase' target='all' label="Clear" width='3' />
 			<button action='kybdreset' label="Reset" width='3' />
 		</row>
-		<row height='2'>
-			<button action='EraseEOF' label="Erase\nEOF" width='3' height='2'/>
-			<button action='EraseInput' label="Erase\nInput" width='3' height='2'/>
+		<row>
+			<button action='EraseEOF' label="Erase\nEOF" width='3' />
+			<button action='EraseInput' label="Erase\nInput" width='3'/>
 		</row>
 		<row>
 			<button action='Attn' label="Attn" width='3' />
 			<button action='Break' label="Break" width='3' />
 		</row>
-
 		<row>
 			<button action='Enter' icon="ok" width='6'/>
 		</row>
