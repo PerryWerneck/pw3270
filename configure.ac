@@ -68,7 +68,6 @@ dnl ---------------------------------------------------------------------------
 
 DBG_CFLAGS="-g -fstack-check -DDEBUG=1"
 RLS_CFLAGS="-DNDEBUG=1"
-PLUGINS=""
 APP_RESOURCES=""
 APP_LDFLAGS=""
 DLL_LDFLAGS="-shared"
@@ -112,8 +111,6 @@ case "$host" in
 		AC_CONFIG_FILES(win/copydeps.sh)
 		AC_CONFIG_FILES(win/$PACKAGE_TARNAME.nsi)
 		AC_CONFIG_FILES(src/pw3270/resources.rc)
-
-		PLUGINS="$PLUGINS hllapi"
 
 		if test "$host_cpu" = "x86_64"; then
 			app_cv_programfiles="PROGRAMFILES64"
@@ -207,25 +204,6 @@ AC_ARG_WITH([source-locales], [AS_HELP_STRING([--with-source-locales], [Set path
 
 AC_DEFINE_UNQUOTED(LIBRARY_POT_FILES, $app_cv_source_locales)
 AC_SUBST(LIBRARY_POT_FILES,$app_cv_source_locales)
-
-dnl ---------------------------------------------------------------------------
-dnl Check for D-Bus
-dnl ---------------------------------------------------------------------------
-
-PKG_CHECK_MODULES( [DBUS], [dbus-1], app_cv_libdbus=yes, AC_MSG_NOTICE([ No DBUS support.]) )
-AC_SUBST(DBUS_LIBS)
-AC_SUBST(DBUS_CFLAGS)
-
-PKG_CHECK_MODULES( [GDBUS], [dbus-glib-1], app_cv_dbus=yes, AC_MSG_NOTICE([No GDBUS support.])  )
-AC_SUBST(GDBUS_LIBS)
-AC_SUBST(GDBUS_CFLAGS)
-
-if test "$app_cv_dbus" == "yes"; then
-
-	AC_DEFINE(HAVE_DBUS)
-	PLUGINS="$PLUGINS dbus3270"
-
-fi
 
 dnl ---------------------------------------------------------------------------
 dnl Check for libintl
@@ -515,8 +493,6 @@ dnl ---------------------------------------------------------------------------
 dnl Output config
 dnl ---------------------------------------------------------------------------
 
-AC_SUBST(PLUGINS)
-
 dnl ---------------------------------------------------------------------------
 dnl Configure which files to generate.
 dnl ---------------------------------------------------------------------------
@@ -531,9 +507,6 @@ AC_CONFIG_FILES(ui/Makefile)
 AC_CONFIG_FILES(charsets/Makefile)
 AC_CONFIG_FILES(branding/Makefile)
 AC_CONFIG_FILES(locale/Makefile)
-
-AC_CONFIG_FILES(src/plugins/hllapi/Makefile)
-AC_CONFIG_FILES(src/plugins/dbus3270/Makefile)
 
 AC_CONFIG_FILES(sdk/pw3270.pc)
 AC_CONFIG_FILES(sdk/Makefile)

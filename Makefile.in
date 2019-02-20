@@ -31,8 +31,6 @@ PACKAGE_VERSION=@PACKAGE_VERSION@
 PACKAGE_LEVEL=@PACKAGE_LEVEL@
 PACKAGE_TARNAME=@PACKAGE_TARNAME@
 PACKAGE_DESCRIPTION=@PACKAGE_DESCRIPTION@
-PLUGINS=@PLUGINS@
-# MODULES=3270
 
 #---[ Paths ]------------------------------------------------------------------
 
@@ -72,12 +70,10 @@ all: \
 	$(foreach MODULE, $(MODULES), $(BINRLS)/@DLLPREFIX@$(MODULE)@DLLEXT@) \
 	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ \
 	$(BINRLS)/libpw3270cpp.a \
-	$(foreach PLG, $(PLUGINS), $(BINRLS)/plugins/$(PLG)@DLLEXT@) \
 	locale/$(PACKAGE_TARNAME).pot
 
 Release: \
-	application \
-	$(foreach PLG, $(PLUGINS), $(BINRLS)/plugins/$(PLG)@DLLEXT@)
+	application
 
 application: \
 	$(foreach MODULE, $(MODULES), $(BINRLS)/@DLLPREFIX@$(MODULE)@DLLEXT@) \
@@ -97,13 +93,6 @@ $(BINDBG)/%@EXEEXT@: \
 
 	@make -C src/$(notdir $(basename $@)) $@
 
-$(BINDBG)/plugins/%@DLLEXT@: \
-	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@ \
-	$(BINDBG)/libpw3270cpp.a \
-	src/plugins/%/*
-
-	@$(MAKE) -C src/plugins/$(basename $(notdir $@)) $@
-
 #---[ Release Rules ]--------------------------------------------------------------------
 
 $(BINRLS)/%@EXEEXT@: \
@@ -112,18 +101,6 @@ $(BINRLS)/%@EXEEXT@: \
         src/%/*
 
 	@$(MAKE) -C src/$(notdir $(basename $@)) $@
-
-$(BINRLS)/plugins/%@DLLEXT@: \
-	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ \
-	$(BINRLS)/libpw3270cpp.a \
-	src/plugins/%/*
- 
-	@$(MAKE) -C src/plugins/$(basename $(notdir $@)) $@
-
-$(DESTDIR)/$(libdir)/pw3270-plugins/%@DLLEXT@: \
-	src/plugins/%/*
-
-	@$(MAKE) -C src/plugins/$(basename $(notdir $@)) install
 
 publish-release: \
 	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@
@@ -143,8 +120,7 @@ install: \
 	install-branding \
 	install-ui \
 	install-charsets \
-	install-locale \
-	install-plugins
+	install-locale
 
 	@$(INSTALL_DATA) conf/colors.conf $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)
 
@@ -155,9 +131,6 @@ ifneq ($(HELP2MAN),no)
 		--version-string="$(PACKAGE_TARNAME) - $(PACKAGE_DESCRIPTION) Vrs. $(PACKAGE_VERSION)" \
 		$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ | gzip --best --stdout - > $(DESTDIR)/$(mandir)/man1/$(PACKAGE_NAME).1.gz
 endif
-
-install-plugins: \
-	$(foreach PLG, $(PLUGINS), $(DESTDIR)/$(libdir)/pw3270-plugins/$(PLG)@DLLEXT@)
 
 install-%: \
 	modules/%/Makefile
@@ -176,13 +149,6 @@ install-%: \
 
 
 #---[ Misc Rules ]-----------------------------------------------------------------------
-
-$(POTDIR)/plugins/%.pot: \
-	./src/plugins/%/*
- 
-	@echo $(notdir $@) ...
-	@mkdir -p `dirname $@`
-	@$(MAKE) -C src/plugins/$(basename $(notdir $@)) $@
 
 $(POTDIR)/%.pot: \
 	$(DEPENDS) \
@@ -228,8 +194,7 @@ $(POTDIR)/%.pot: \
 #---[ Debug Targets ]--------------------------------------------------------------------
 
 Debug: \
-	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@ \
-	$(foreach PLG, $(PLUGINS), $(BINDBG)/plugins/$(PLG)@DLLEXT@)
+	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@
 
 publish-debug: \
 	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@
@@ -259,8 +224,7 @@ locale/$(PACKAGE_TARNAME).pot: \
 	$(POTDIR)/pw3270.pot \
 	$(POTDIR)/lib3270.pot \
 	$(POTDIR)/libv3270.pot \
-	$(POTDIR)/ui.pot \
-	$(foreach PLG, $(PLUGINS), $(POTDIR)/plugins/$(PLG).pot)
+	$(POTDIR)/ui.pot
 
 	@rm -f $@
 	@mkdir -p `dirname $@`
