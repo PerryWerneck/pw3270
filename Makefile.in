@@ -73,7 +73,8 @@ all: \
 	locale/$(PACKAGE_TARNAME).pot
 
 Release: \
-	application
+	application \
+	$(BINRLS)/libpw3270cpp.a
 
 application: \
 	$(foreach MODULE, $(MODULES), $(BINRLS)/@DLLPREFIX@$(MODULE)@DLLEXT@) \
@@ -194,7 +195,8 @@ $(POTDIR)/%.pot: \
 #---[ Debug Targets ]--------------------------------------------------------------------
 
 Debug: \
-	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@
+	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@ \
+	$(BINDBG)/libpw3270cpp.a
 
 publish-debug: \
 	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@

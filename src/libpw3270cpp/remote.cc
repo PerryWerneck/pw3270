@@ -36,7 +36,6 @@
 	#include <string.h>
 	#include <malloc.h>
 	#include <sys/types.h>
-	#include <unistd.h>
 	#include <limits.h>
 
 	#ifndef DBUS_TIMEOUT_INFINITE
@@ -50,6 +49,8 @@
 	#include <pw3270/ipcpackets.h>
 	#include <process.h>
  #else
+	#include <unistd.h>
+
 	#define HLLAPI_PACKET_IS_CONNECTED			"isConnected"
 	#define HLLAPI_PACKET_GET_CSTATE			"getConnectionState"
 	#define HLLAPI_PACKET_GET_PROGRAM_MESSAGE	"getProgramMessage"
