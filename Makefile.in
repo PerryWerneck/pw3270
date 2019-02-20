@@ -135,6 +135,8 @@ endif
 
 	@$(MAKE) -C src/libpw3270cpp DESTDIR=$(DESTDIR) install
 
+	@$(MKDIR) $(DESTDIR)$(libdir)/pw3270-plugins
+
 
 install-%: \
 	modules/%/Makefile
