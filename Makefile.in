@@ -133,6 +133,9 @@ ifneq ($(HELP2MAN),no)
 		$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ | gzip --best --stdout - > $(DESTDIR)/$(mandir)/man1/$(PACKAGE_NAME).1.gz
 endif
 
+	@$(MAKE) -C src/libpw3270cpp DESTDIR=$(DESTDIR) install
+
+
 install-%: \
 	modules/%/Makefile
 
