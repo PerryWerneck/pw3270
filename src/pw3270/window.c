@@ -448,9 +448,14 @@ static GtkWidget * trace_window = NULL;
  LIB3270_EXPORT GtkWidget * pw3270_get_terminal_widget(GtkWidget *widget)
  {
  	if(!widget)
-		widget = pw3270_get_toplevel();
+	{
+		// No widget, get the default one
+		return v3270_get_default_widget();
+	}
+
  	g_return_val_if_fail(GTK_IS_PW3270(widget),NULL);
  	return GTK_PW3270(widget)->terminal;
+
  }
 
  static void setup_input_method(GtkWidget *widget, GtkWidget *obj)
