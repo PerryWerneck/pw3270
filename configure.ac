@@ -95,7 +95,7 @@ case "$host" in
 		DBG_CFLAGS="-DDEBUG=1"
 		RLS_CFLAGS="-DNDEBUG=1"
 
-		CFLAGS="$CFLAGS -D_WIN32_WINNT=0x0600"
+		CFLAGS="$CFLAGS -pthread -D_WIN32_WINNT=0x0600"
 		LIBS="$LIBS -lws2_32 -lwtsapi32 -lcomdlg32"
 
 		app_win32_revision=$(date +%y.%m.%d.%H)

@@ -39,6 +39,8 @@ exec_prefix=@exec_prefix@
 bindir=@bindir@
 sbindir=@sbindir@
 libdir=@libdir@
+includedir=@includedir@
+
 
 BASEDIR=@BASEDIR@
 SRCDIR=$(BASEDIR)/.src/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/src/$(MODULE_NAME)
@@ -128,6 +130,9 @@ Release: \
 
 install: \
 	$(DESTDIR)$(libdir)/$(MODULE_NAME).a
+
+	@$(MKDIR) $(DESTDIR)/$(includedir)/pw3270
+	@$(INSTALL_DATA) ../include/pw3270cpp.h $(DESTDIR)/$(includedir)/pw3270
 
 $(DESTDIR)$(libdir)/$(MODULE_NAME).a: \
 	$(BASEDIR)/.bin/Release/$(MODULE_NAME).a
