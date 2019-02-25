@@ -33,14 +33,7 @@
 	#include <windows.h>
 #endif // _WIN32
 
- #include <config.h>
-
- #define ENABLE_NLS
- #define GETTEXT_PACKAGE PACKAGE_NAME
-
- #include <libintl.h>
- #include <glib/gi18n.h>
- #include <gtk/gtk.h>
+ #include "../pw3270/private.h"
 
  #include "common.h"
  #include <stdarg.h>

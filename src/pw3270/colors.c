@@ -28,7 +28,7 @@
  */
 
  #include <gtk/gtk.h>
- #include "globals.h"
+ #include "private.h"
  #include <lib3270/trace.h>
 
  #define V3270_COLOR_BASE V3270_COLOR_GRAY+1

@@ -29,7 +29,7 @@
  *
  */
 
-#include <config.h>
+#include "private.h"
 
 #ifdef _WIN32
 	#include <windows.h>
@@ -37,7 +37,6 @@
 
 #include <glib.h>
 #include <glib/gstdio.h>
-#include "globals.h"
 
 #ifdef HAVE_GTKMAC
  #include <gtkosxapplication.h>

@@ -29,7 +29,7 @@
  *
  */
 
-#include "globals.h"
+#include "private.h"
 #include "uiparser/parser.h"
 #include <lib3270/popup.h>
 #include <lib3270/actions.h>

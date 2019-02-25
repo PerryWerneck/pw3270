@@ -30,7 +30,7 @@
  */
 
  #include <config.h>
- #include "globals.h"
+ #include "private.h"
  #include <v3270.h>
 
  #ifdef _WIN32

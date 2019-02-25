@@ -28,6 +28,9 @@
  */
 
  #include <config.h>
+
+#ifndef PRIVATE_H_INCLUDED
+
  #define ENABLE_NLS
  #define GETTEXT_PACKAGE PACKAGE_NAME
 
@@ -37,6 +40,15 @@
 
  #include <pw3270.h>
  #include <v3270.h>
+
+ #if ! GLIB_CHECK_VERSION(2,44,0)
+
+	G_GNUC_INTERNAL void pw3270_autoptr_cleanup_generic_gfree(void *p);
+
+	#define g_autofree __attribute__((cleanup(pw3270_autoptr_cleanup_generic_gfree)))
+
+ #endif // ! GLIB(2,44,0)
+
 
  // Special actions
  enum
@@ -62,7 +74,6 @@
  G_GNUC_INTERNAL void			  setup_font_list(GtkWidget *widget, GtkWidget *obj);
  G_GNUC_INTERNAL void			  load_color_schemes(GtkWidget *widget, gchar *active);
  G_GNUC_INTERNAL GtkWidget		* color_scheme_new(const GdkRGBA *current);
-// G_GNUC_INTERNAL LIB3270_OPTION	  pw3270_options_by_hosttype(const gchar *systype);
  G_GNUC_INTERNAL void			  run_security_dialog(GtkWidget *widget);
 
  // actions
@@ -82,6 +93,8 @@
  G_GNUC_INTERNAL void print_settings_action(GtkAction *action, GtkWidget *widget);
  G_GNUC_INTERNAL gboolean handle_keypress(GtkWidget *terminal, guint keyval, GdkModifierType state, GtkWidget *window);
 
+
+#endif // PRIVATE_H_INCLUDED
 
 
 

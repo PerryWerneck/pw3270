@@ -27,7 +27,7 @@
  *
  */
 
- #include "globals.h"
+ #include "private.h"
  #include <lib3270/charset.h>
 
 #ifdef _WIN32
@@ -336,3 +336,13 @@ LIB3270_EXPORT void pw3270_set_action_state(GtkAction *action, gboolean on)
 
  }
 
+ #if ! GLIB_CHECK_VERSION(2,44,0)
+
+	// Reference: https://github.com/ImageMagick/glib/blob/master/glib/glib-autocleanups.h
+	void pw3270_autoptr_cleanup_generic_gfree(void *p)
+	{
+		void **pp = (void**)p;
+		g_free (*pp);
+	}
+
+ #endif // ! GLIB(2,44,0)

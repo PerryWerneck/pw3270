@@ -29,7 +29,7 @@
  *
  */
 
- #include "globals.h"
+ #include "private.h"
  #include <v3270.h>
  #include <lib3270/selection.h>
  #include <lib3270/trace.h>

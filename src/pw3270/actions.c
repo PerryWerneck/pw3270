@@ -29,7 +29,7 @@
  *
  */
 
- #include "globals.h"
+ #include "private.h"
  #include "uiparser/parser.h"
 
  #include <v3270.h>

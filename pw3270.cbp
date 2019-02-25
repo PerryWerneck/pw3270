@@ -207,7 +207,6 @@
 		<Unit filename="src/pw3270/fonts.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/pw3270/globals.h" />
 		<Unit filename="src/pw3270/hostdialog.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -222,6 +221,7 @@
 		<Unit filename="src/pw3270/print.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/pw3270/private.h" />
 		<Unit filename="src/pw3270/resources.rc">
 			<Option compilerVar="WINDRES" />
 		</Unit>
@@ -278,14 +278,10 @@
 		<Unit filename="src/pw3270/uiparser/toolitem.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/pw3270/v3270/accessible.h" />
 		<Unit filename="src/pw3270/v3270/genmarshal" />
-		<Unit filename="src/pw3270/v3270/hostselect.h" />
-		<Unit filename="src/pw3270/v3270/private.h" />
 		<Unit filename="src/pw3270/v3270/sources.mak" />
 		<Unit filename="src/pw3270/v3270ft/Makefile.in" />
 		<Unit filename="src/pw3270/v3270ft/genmarshal" />
-		<Unit filename="src/pw3270/v3270ft/private.h" />
 		<Unit filename="src/pw3270/window.c">
 			<Option compilerVar="CC" />
 		</Unit>
