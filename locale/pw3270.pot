@@ -9,7 +9,7 @@ msgstr ""
 "#-#-#-#-#  pw3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-25 17:37-0300\n"
+"POT-Creation-Date: 2019-02-25 20:07-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "#-#-#-#-#  lib3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-22 14:46+0000\n"
+"POT-Creation-Date: 2019-02-25 21:25+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,7 +31,7 @@ msgstr ""
 "#-#-#-#-#  libv3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-22 14:48+0000\n"
+"POT-Creation-Date: 2019-02-25 21:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -87,7 +87,7 @@ msgstr ""
 msgid "%s action needs src attribute"
 msgstr ""
 
-#: main.c:97
+#: main.c:96
 #, c-format
 msgid "%s requires GTK version %d.%d.%d"
 msgstr ""
@@ -127,7 +127,7 @@ msgstr ""
 msgid "%s<b>%s</b> for %s"
 msgstr ""
 
-#: main.c:380
+#: main.c:379
 msgid "- 3270 Emulator for Gtk"
 msgstr ""
 
@@ -198,7 +198,7 @@ msgstr ""
 msgid "<b>Text options</b>"
 msgstr ""
 
-#: main.c:400
+#: main.c:399
 msgid ""
 "<b>Valid options:</b>\n"
 "\n"
@@ -284,7 +284,7 @@ msgstr ""
 msgid "Appends the source file to the destination file."
 msgstr ""
 
-#: main.c:369
+#: main.c:368
 msgid "Application name"
 msgstr ""
 
@@ -1033,7 +1033,7 @@ msgstr ""
 msgid "Function bar"
 msgstr ""
 
-#: main.c:101 main.c:476
+#: main.c:100 main.c:475
 msgid "GTK Version mismatch"
 msgstr ""
 
@@ -1093,11 +1093,11 @@ msgstr ""
 msgid "Host rejected resource(s)"
 msgstr ""
 
-#: main.c:360
+#: main.c:359
 msgid "Host system type"
 msgstr ""
 
-#: main.c:358
+#: main.c:357
 msgid "Host to connect"
 msgstr ""
 
@@ -1293,7 +1293,7 @@ msgstr ""
 msgid "Load queue from file"
 msgstr ""
 
-#: config.c:430
+#: config.c:423
 #, c-format
 msgid "Loading %s"
 msgstr ""
@@ -1306,11 +1306,11 @@ msgstr ""
 msgid "Local:"
 msgstr ""
 
-#: main.c:375
+#: main.c:374
 msgid "Log to file"
 msgstr ""
 
-#: main.c:366
+#: main.c:365
 msgid "Minutes for auto-disconnect"
 msgstr ""
 
@@ -1574,7 +1574,7 @@ msgstr ""
 msgid "PF9"
 msgstr ""
 
-#: main.c:398
+#: main.c:397
 msgid "Parse error"
 msgstr ""
 
@@ -1603,7 +1603,7 @@ msgstr ""
 msgid "Path and name of the local file"
 msgstr ""
 
-#: main.c:367
+#: main.c:366
 msgid "Path for plugin files"
 msgstr ""
 
@@ -1805,7 +1805,7 @@ msgstr ""
 msgid "Remap Failed"
 msgstr ""
 
-#: main.c:364
+#: main.c:363
 msgid "Remap charset from xml file"
 msgstr ""
 
@@ -2063,7 +2063,7 @@ msgstr ""
 msgid "Send file"
 msgstr ""
 
-#: main.c:372
+#: main.c:371
 msgid "Send messages to syslog"
 msgstr ""
 
@@ -2079,11 +2079,11 @@ msgstr ""
 msgid "Sending file"
 msgstr ""
 
-#: main.c:353 main.c:355
+#: main.c:352 main.c:354
 msgid "Session name"
 msgstr ""
 
-#: main.c:363
+#: main.c:362
 msgid "Set host charset"
 msgstr ""
 
@@ -2091,19 +2091,19 @@ msgstr ""
 msgid "Set insert mode"
 msgstr ""
 
-#: main.c:359
+#: main.c:358
 msgid "Set reported colors (8/16)"
 msgstr ""
 
-#: main.c:362
+#: main.c:361
 msgid "Set toggles OFF"
 msgstr ""
 
-#: main.c:361
+#: main.c:360
 msgid "Set toggles ON"
 msgstr ""
 
-#: main.c:374
+#: main.c:373
 msgid "Set trace filename"
 msgstr ""
 
@@ -2421,7 +2421,7 @@ msgstr ""
 msgid "The model number"
 msgstr ""
 
-#: main.c:365
+#: main.c:364
 msgid "The model of 3270 display to be emulated"
 msgstr ""
 
@@ -2508,7 +2508,7 @@ msgid ""
 "Franklin St, Fifth Floor, Boston, MA 02111-1307 USA"
 msgstr ""
 
-#: main.c:472
+#: main.c:471
 #, c-format
 msgid "This program requires GTK version %d.%d.%d"
 msgstr ""
@@ -2703,7 +2703,7 @@ msgstr ""
 msgid "Unexpected or invalid attribute value \"%s\""
 msgstr ""
 
-#: main.c:157
+#: main.c:156
 #, c-format
 msgid "Unexpected or invalid color value \"%s\""
 msgstr ""

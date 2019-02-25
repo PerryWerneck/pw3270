@@ -266,8 +266,7 @@ $(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@: \
 		$(LIBS)
 
 install: \
-	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ \
-	install-devel
+	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@
 
 	@$(MKDIR) $(DESTDIR)$(libdir)
 
@@ -280,26 +279,6 @@ install: \
 	@$(INSTALL_PROGRAM) \
 		$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ \
 		$(DESTDIR)$(bindir)
-
-
-install-devel:
-
-	@mkdir -p $(DESTDIR)$(libdir)/pkgconfig
-	@mkdir -p $(DESTDIR)$(includedir)/pw3270
-
-	# Install includes
-	@$(INSTALL_DATA) \
-		$(BASEDIR)/src/include/pw3270/*.h \
-		$(DESTDIR)$(includedir)/pw3270
-
-	@$(INSTALL_DATA) \
-		$(BASEDIR)/src/include/pw3270.h \
-		$(DESTDIR)$(includedir)
-
-	# Install PKG-CONFIG files
-	@$(INSTALL_DATA) \
-		$(BASEDIR)/sdk/*.pc \
-		$(DESTDIR)$(libdir)/pkgconfig
 
 $(SRCDIR): \
 	clean \

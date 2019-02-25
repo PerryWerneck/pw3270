@@ -83,8 +83,14 @@ install: \
 				$(LIBNAME).@PACKAGE_MAJOR_VERSION@ \
 				$(DESTDIR)$(libdir)/$(LIBNAME)
 
-	@$(MKDIR) $(DESTDIR)$(libdir)/pkgconfig
-	@$(INSTALL_DATA) pw3270.pc $(DESTDIR)$(libdir)/pkgconfig/$(PACKAGE_TARNAME).pc
+	# Install PKG-CONFIG files
+
+	@mkdir -p $(DESTDIR)$(libdir)/pkgconfig
+
+	@$(INSTALL_DATA) \
+		$(BASEDIR)/sdk/*.pc \
+		$(DESTDIR)$(libdir)/pkgconfig
+
 
 $(SRCDIR)/sdk: \
 	$(foreach SRC, $(notdir $(wildcard $(BASEDIR)/src/include/lib3270/*.h)), $(SRCDIR)/src/include/lib3270/$(SRC)) \
@@ -96,7 +102,9 @@ $(SRCDIR)/sdk: \
 	@$(MKDIR) $@
 	@$(INSTALL_DATA) *.in $@
 
-	@$(INSTALL_DATA) $(BASEDIR)/src/include/*.in $(SRCDIR)/src/include
+	@$(INSTALL_DATA) \
+		$(BASEDIR)/src/include/*.in \
+		$(SRCDIR)/src/include
 
 
 

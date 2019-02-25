@@ -115,8 +115,20 @@ publish-release: \
 #---[ Install Rules ]--------------------------------------------------------------------
 
 install: \
+	install-application \
+	install-devel
+
+install-devel: \
 	$(foreach MODULE, $(MODULES), install-$(MODULE)) \
 	locale/$(PACKAGE_TARNAME).pot \
+	install-sdk
+
+	@$(MAKE) \
+		-C src/libpw3270cpp \
+		DESTDIR=$(DESTDIR) \
+		install
+
+install-application: \
 	install-pw3270 \
 	install-branding \
 	install-ui \
@@ -133,10 +145,7 @@ ifneq ($(HELP2MAN),no)
 		$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ | gzip --best --stdout - > $(DESTDIR)/$(mandir)/man1/$(PACKAGE_NAME).1.gz
 endif
 
-	@$(MAKE) -C src/libpw3270cpp DESTDIR=$(DESTDIR) install
-
 	@$(MKDIR) $(DESTDIR)$(libdir)/pw3270-plugins
-
 
 install-%: \
 	modules/%/Makefile

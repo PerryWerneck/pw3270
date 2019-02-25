@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-25 17:29-0300\n"
+"POT-Creation-Date: 2019-02-25 19:57-0300\n"
 "PO-Revision-Date: 2019-02-06 11:14-0200\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
@@ -55,7 +55,7 @@ msgstr "Ação %s precisa de um valor válido"
 msgid "%s action needs src attribute"
 msgstr "Ação %s precisa do atributo src"
 
-#: main.c:97
+#: main.c:96
 #, c-format
 msgid "%s requires GTK version %d.%d.%d"
 msgstr "%s requer GTK versão %d.%d.%d"
@@ -95,7 +95,7 @@ msgstr "%s: Tabulação vertical não é suportada"
 msgid "%s<b>%s</b> for %s"
 msgstr "%s<b>%s</b> para %s"
 
-#: main.c:380
+#: main.c:379
 msgid "- 3270 Emulator for Gtk"
 msgstr "- Emulador 3270 para GTK"
 
@@ -168,7 +168,7 @@ msgstr ""
 msgid "<b>Text options</b>"
 msgstr "<b>Opções de texto</b>"
 
-#: main.c:400
+#: main.c:399
 msgid ""
 "<b>Valid options:</b>\n"
 "\n"
@@ -261,7 +261,7 @@ msgstr "Um parametro de ENVIO/RECEBIMENTO inválido foi enviado para o host."
 msgid "Appends the source file to the destination file."
 msgstr "Adiciona conteúdo do arquivo origem ao final do arquivo destino."
 
-#: main.c:369
+#: main.c:368
 msgid "Application name"
 msgstr "Nome da aplicação"
 
@@ -1046,7 +1046,7 @@ msgstr ""
 msgid "Function bar"
 msgstr "Barra de funções"
 
-#: main.c:101 main.c:476
+#: main.c:100 main.c:475
 msgid "GTK Version mismatch"
 msgstr "Divergência de versão GTK"
 
@@ -1107,11 +1107,11 @@ msgstr "Servidor rejeitou o tipo de dispositivo ou requisição"
 msgid "Host rejected resource(s)"
 msgstr "Servidor rejeitou recurso(s)"
 
-#: main.c:360
+#: main.c:359
 msgid "Host system type"
 msgstr "Tipo do sistema no servidor"
 
-#: main.c:358
+#: main.c:357
 msgid "Host to connect"
 msgstr "Servidor a conectar"
 
@@ -1323,7 +1323,7 @@ msgstr "Load"
 msgid "Load queue from file"
 msgstr "Ler a fila de um arquivo"
 
-#: config.c:430
+#: config.c:423
 #, c-format
 msgid "Loading %s"
 msgstr "Carregando %s"
@@ -1337,11 +1337,11 @@ msgstr "Arquivo _local:"
 msgid "Local:"
 msgstr "Local:"
 
-#: main.c:375
+#: main.c:374
 msgid "Log to file"
 msgstr "Enviar log para arquivo"
 
-#: main.c:366
+#: main.c:365
 msgid "Minutes for auto-disconnect"
 msgstr "Minutos para desconexão automática"
 
@@ -1608,7 +1608,7 @@ msgstr "PF8"
 msgid "PF9"
 msgstr "PF9"
 
-#: main.c:398
+#: main.c:397
 msgid "Parse error"
 msgstr "Erro de interpretação"
 
@@ -1637,7 +1637,7 @@ msgstr "Colar com margem esquerda"
 msgid "Path and name of the local file"
 msgstr "Caminho e nome do arquivo local"
 
-#: main.c:367
+#: main.c:366
 msgid "Path for plugin files"
 msgstr "Caminho para os arquivos de plugin"
 
@@ -1841,7 +1841,7 @@ msgstr "Recarregar conteúdo do buffer"
 msgid "Remap Failed"
 msgstr "Remapeamento falhou"
 
-#: main.c:364
+#: main.c:363
 msgid "Remap charset from xml file"
 msgstr "Remapear caracteres por um arquivo xml"
 
@@ -2113,7 +2113,7 @@ msgstr "Certificado auto assinado na cadeia de certificados"
 msgid "Send file"
 msgstr "Enviar arquivo"
 
-#: main.c:372
+#: main.c:371
 msgid "Send messages to syslog"
 msgstr "Enviar mensagens para o log do sistema"
 
@@ -2129,11 +2129,11 @@ msgstr "Enviar/Receber"
 msgid "Sending file"
 msgstr "Enviando arquivo"
 
-#: main.c:353 main.c:355
+#: main.c:352 main.c:354
 msgid "Session name"
 msgstr "Nome da sessão"
 
-#: main.c:363
+#: main.c:362
 msgid "Set host charset"
 msgstr "Define página de código do host"
 
@@ -2141,19 +2141,19 @@ msgstr "Define página de código do host"
 msgid "Set insert mode"
 msgstr "Set insert mode"
 
-#: main.c:359
+#: main.c:358
 msgid "Set reported colors (8/16)"
 msgstr "Define número de cores informadas (8/16)"
 
-#: main.c:362
+#: main.c:361
 msgid "Set toggles OFF"
 msgstr "Desativa toggles"
 
-#: main.c:361
+#: main.c:360
 msgid "Set toggles ON"
 msgstr "Ativa toggles"
 
-#: main.c:374
+#: main.c:373
 msgid "Set trace filename"
 msgstr "Define o nome do arquivo de trace"
 
@@ -2523,7 +2523,7 @@ msgstr "Os tipos conhecidos são %s"
 msgid "The model number"
 msgstr "Nº do modelo"
 
-#: main.c:365
+#: main.c:364
 msgid "The model of 3270 display to be emulated"
 msgstr "Modelo de tela 3270 a ser emulada"
 
@@ -2632,7 +2632,7 @@ msgstr ""
 "programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple "
 "Place, Suite 330, Boston, MA, 02111-1307, USA"
 
-#: main.c:472
+#: main.c:471
 #, c-format
 msgid "This program requires GTK version %d.%d.%d"
 msgstr "Este programa precisa do GTK versão %d.%d.%d"
@@ -2830,7 +2830,7 @@ msgstr "O resultado da verificação TLS/SSL foi inesperado"
 msgid "Unexpected or invalid attribute value \"%s\""
 msgstr "Valor de attributo inesperado ou inválido: \"%s\""
 
-#: main.c:157
+#: main.c:156
 #, c-format
 msgid "Unexpected or invalid color value \"%s\""
 msgstr "Valor de cor inválido ou inesperado: \"%s\""
