@@ -363,26 +363,21 @@ pack()
 		exit -1
 	fi
 
-	echo "------------------------------------------------------"
-	echo makensis -DWITHGTK pw3270.nsi
-
-	/bin/bash
-
 	makensis -DWITHGTK pw3270.nsi
 	if [ "$?" != "0" ]; then
 		cleanup
 		exit -1
 	fi
 
-	cp -v ./win/*.exe ${PROJECTDIR}
+	cp -v *.exe ${PROJECTDIR}
 	if [ "$?" != "0" ]; then
 		cleanup
 		exit -1
 	fi
 
-	if [ -d ~/public_html ]; then
+	if [ -d ~/public_html/win/pw3270 ]; then
 		mkdir -p ~/public_html/win/pw3270/${1}
-		cp -v ./win/*.exe ~/public_html/win/pw3270/${1}
+		cp -v *.exe ~/public_html/win/pw3270/${1}
 		if [ "$?" != "0" ]; then
 			cleanup
 			exit -1
@@ -390,7 +385,7 @@ pack()
 	fi
 
 #	if [ ! -z ${WIN_PACKAGE_SERVER} ]; then
-#		scp ./win/*.exe ${WIN_PACKAGE_SERVER}/pw3270
+#		scp *.exe ${WIN_PACKAGE_SERVER}/pw3270
 #		if [ "$?" != "0" ]; then
 #			cleanup
 #			exit -1
@@ -499,7 +494,7 @@ fi
 # Create installers 
 #
 pack x86_32
-#pack x86_64
+pack x86_64
 
 cleanup
 
