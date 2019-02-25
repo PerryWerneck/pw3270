@@ -1,33 +1,99 @@
 #!/bin/bash
-myDIR=$(dirname $(readlink -f $0))
 
-cleanup() 
-{
-    #
-    # Apaga diretorio temporário caso o script seja interrompido
-    #
-	cd ${myDIR}
-	rm -fr ${TEMPDIR}
-	exit -1
-}
+PROJECTDIR=$(dirname $(dirname $(readlink -f ${0})))
+WORKDIR=$(mktemp -d)
 
-failed()
-{
-	echo -e "\e]2;Failed!\a"
-	echo $1
-	cleanup	
-}
-
+if [ -e /etc/os-release ]; then
+	. /etc/os-release
+fi
 
 #
-# Gera pacote windows
+# Limpa diretório temporário
 #
-# $1 = Arquitetura (x86_32/x86_64)
+cleanup()
+{
+	rm -fr ${WORKDIR}
+}
+
+#
+# Monta projeto no diretório corrente.
 #
 build()
 {
-	cd $(dirname $myDIR)
-	echo -e "\e]2;${1}\a"
+	make clean
+
+	make all
+	if [ "$?" != "0" ]; then
+		cleanup
+		exit -1
+	fi
+
+	cp -rv .bin/Release/* ${WORKDIR}/build/bin
+	if [ "$?" != "0" ]; then
+		cleanup
+		exit -1
+	fi
+
+	make DESTDIR=${WORKDIR}/build install
+	if [ "$?" != "0" ]; then
+		cleanup
+		exit -1
+	fi
+
+}
+
+build_plugin()
+{
+
+	echo -e "\e]2;${2}-${1}\a"
+
+	cd ${WORKDIR}/sources/pw3270-plugin-${2}
+	if [ "$?" != "0" ]; then
+		cleanup
+		exit -1
+	fi
+
+	export cache=${WORKDIR}/cache/pw3270-plugin-${2}.cache
+
+	./configure \
+		CFLAGS=${CFLAGS} \
+		LDFLAGS=${LDFLAGS} \
+		LIB3270_CFLAGS="${LIB3270_CFLAGS}" \
+		LIB3270_LIBS="${LIB3270_LIBS}" \
+		LIBV3270_CFLAGS="${LIBV3270_CFLAGS}" \
+		LIBV3270_LIBS="${LIBV3270_LIBS}" \
+		--host=${host} \
+		--prefix=${prefix} \
+		--libdir=${prefix}/lib
+
+	if [ "$?" != "0" ]; then
+		cleanup
+		exit -1
+	fi
+
+	make all
+	if [ "$?" != "0" ]; then
+		cleanup
+		exit -1
+	fi
+
+	cp -rv .bin/Release/* ${WORKDIR}/build/bin
+	if [ "$?" != "0" ]; then
+		cleanup
+		exit -1
+	fi
+
+}
+
+#
+# Monta binários
+#
+# $1 = Arquitetura (x86_32/x86_64)
+#
+pack()
+{
+
+	echo -e "\e]2;pw3270-${1}\a"
 
 	case ${1} in
 	x86_32)
@@ -35,6 +101,8 @@ build()
 		host_cpu=i686
 		prefix=/usr/i686-w64-mingw32/sys-root/mingw
 		tools=i686-w64-mingw32
+		pkg_config=/usr/bin/i686-w64-mingw32-pkg-config
+		mingw_name=mingw32
 		;;
 
 	x86_64)
@@ -42,6 +110,8 @@ build()
 		host_cpu=x86_64
 		prefix=/usr/x86_64-w64-mingw32/sys-root/mingw
 		tools=x86_64-w64-mingw32
+		pkg_config=/usr/bin/x86_64-w64-mingw32-pkg-config
+		mingw_name=mingw64
 		;;
 
 	*)
@@ -49,266 +119,390 @@ build()
 
 	esac
 
+#	sudo zypper \
+#		--non-interactive \
+#		in \
+#		${mingw_name}-libcurl-devel \
+#		${mingw_name}-curl \
+#		${mingw_name}-libopenssl-devel \
+#		${mingw_name}-libintl-devel \
+#		${mingw_name}-atk-devel \
+#		${mingw_name}-pango-devel \
+#		${mingw_name}-win_iconv-devel \
+#		${mingw_name}-pixman-devel \
+#		${mingw_name}-glib2-devel \
+#		${mingw_name}-cairo-devel \
+#		${mingw_name}-freetype-devel \
+#		${mingw_name}-winpthreads-devel \
+#		${mingw_name}-gtk3-devel \
+#		${mingw_name}-cross-gcc-c++ \
+#		${mingw_name}-cross-pkg-config \
+#		${mingw_name}-cross-cpp \
+#		${mingw_name}-cross-binutils \
+#		${mingw_name}-cross-nsis
+
+	if [ "$?" != "0" ]; then
+		cleanup
+		exit -1
+	fi
+
 	export HOST_CC=/usr/bin/gcc
-	export cache=${1}.cache
+
+	rm -fr ${WORKDIR}/cache
+	mkdir -p ${WORKDIR}/cache
+
+	rm -fr ${WORKDIR}/build
+	mkdir -p ${WORKDIR}/build/src/include
+	mkdir -p ${WORKDIR}/build/.bin/Release
+
+	#
+	# Setup Target dir
+	#
+	mkdir -p ${WORKDIR}/build/bin
+
+	export CFLAGS=-I${WORKDIR}/build/${prefix}/include -DWIN32 -D_WIN32
+	export LDFLAGS=-L${WORKDIR}/build/bin
+	export PKG_CONFIG_PATH=${WORKDIR}/build/${prefix}/lib/pkgconfig
+
+	#
+	# Build lib3270
+	#
+	echo -e "\e]2;lib3270-${1}\a"
+
+	cd ${WORKDIR}/sources/lib3270
+	export cache=${WORKDIR}/cache/lib3270.cache
 
 	./configure \
-		--with-inet-ntop \
+		--host=${host} \
+		--prefix=${prefix} \
+		--libdir=${prefix}/lib \
+		--enable-self-signed-cert-check \
+		--enable-ssl-crl-check \
+		--enable-crl-expiration-check \
+		--disable-ldap \
+		--enable-curl \
+	 	--with-default-crl-url="ldap://pkildap.bb.com.br:389/CN=CRL1,CN=AC%20Banco%20do%20Brasil%20-%20EI%20v1,OU=ICP-BB,O=Banco%20do%20Brasil%20S.A.,C=BR?certificaterevocationlist" \
+		--with-default-host="tn3270s://3270.df.bb:9023"
+
+	if [ "$?" != "0" ]; then
+		cleanup
+		exit -1
+	fi
+
+	build
+
+	export LIB3270_CFLAGS="-DLIB3270_NAME=3270"
+	export LIB3270_LIBS="-l3270"
+
+	#
+	# Build libv3270
+	#
+	echo -e "\e]2;libv3270-${1}\a"
+
+	cd ${WORKDIR}/sources/libv3270
+	export cache=${WORKDIR}/cache/libv3270.cache
+
+	./configure \
+		CFLAGS=${CFLAGS} \
+		LDFLAGS=${LDFLAGS} \
+		LIB3270_CFLAGS="${LIB3270_CFLAGS}" \
+		LIB3270_LIBS="${LIB3270_LIBS}" \
 		--host=${host} \
 		--prefix=${prefix} \
 		--libdir=${prefix}/lib
 
 	if [ "$?" != "0" ]; then
-		failed "Erro ao configurar"
+		cleanup
+		exit -1
 	fi
 
-	. ./versions
-	echo -e "\e]2;${PACKAGE_NAME} - ${1}\a"
- 
-	make clean
-	rm -f *.exe
+	build
 
-	make all
+	export LIBV3270_CFLAGS="-DLIBV3270_MODE=3270"
+	export LIBV3270_LIBS="-lv3270"
+
+	#
+	# Build main application
+	#
+	echo -e "\e]2;pw3270-${1}\a"
+
+	cd ${WORKDIR}/sources/pw3270
+	export cache=${WORKDIR}/cache/application.cache
+
+	./configure \
+		CFLAGS=${CFLAGS} \
+		LDFLAGS=${LDFLAGS} \
+		LIB3270_CFLAGS="${LIB3270_CFLAGS}" \
+		LIB3270_LIBS="${LIB3270_LIBS}" \
+		LIBV3270_CFLAGS="${LIBV3270_CFLAGS}" \
+		LIBV3270_LIBS="${LIBV3270_LIBS}" \
+		--host=${host} \
+		--prefix=${prefix} \
+		--libdir=${prefix}/lib \
+		--with-source-locales=${WORKDIR}/locale
+
 	if [ "$?" != "0" ]; then
-		failed "Erro ao compilar fontes"
+		cleanup
+		exit -1
 	fi
 
-	rm -f ./win/*.exe
+	mkdir -p ${WORKDIR}/locale
 
-	if [ -e branding/${PACKAGE_TARNAME}.svg ]; then
-		rm -f win/${PACKAGE_TARNAME}.ico
-		convert -density 384 -background transparent branding/${PACKAGE_TARNAME}.svg -define icon:auto-resize -colors 256 win/${PACKAGE_TARNAME}.ico
+	cp ${WORKDIR}/sources/lib3270/.pot/*.pot ${WORKDIR}/locale
+	if [ "$?" != "0" ]; then
+		cleanup
+		exit -1
 	fi
 
-	mkdir -p ${DESTDIR}/${PACKAGE_NAME}/${1}
-
-	if [ "${RUNTIME}" == "1" ]; then
-
-		makensis ./win/${PACKAGE}.nsi
-		if [ "$?" != "0" ]; then
-			failed "Erro ao gerar instalador sem gtk"
-		fi
-	
-		mv -f ./win/${PACKAGE}-${PACKAGE_VERSION}-requires-gtk-${GTK_MODVERSION}-${host_cpu}.exe \
-				${DESTDIR}/${PACKAGE_NAME}/${1}
-
-		if [ "$?" != "0" ]; then
-			failed "Erro ao copiar instalador sem gtk para ${1}"
-		fi
-
+	cp ${WORKDIR}/sources/libv3270/.pot/*.pot ${WORKDIR}/locale
+	if [ "$?" != "0" ]; then
+		cleanup
+		exit -1
 	fi
 
-	if [ "${COMPLETE}" == "1" ]; then
+	build
 
-		chmod +x ./win/makeruntime.sh
-		./win/makeruntime.sh
+	#
+	# Build plugins
+	#
+	build_plugin ${1} hllapi
 
-		makensis -DWITHGTK ./win/${PACKAGE}.nsi
+	#
+	# Install data & icons
+	#
+	echo -e "\e]2;pw3270-icons-${1}\a"
+
+	cd ${WORKDIR}/sources/pw3270
+
+	make -C ${WORKDIR}/sources/pw3270 locale
+	if [ "$?" != "0" ]; then
+		cleanup
+		exit -1
+	fi
+
+	cp -rv .bin/locale ${WORKDIR}/build
+	if [ "$?" != "0" ]; then
+		cleanup
+		exit -1
+	fi
+
+	mkdir -p ${WORKDIR}/build/win
+
+	mkdir -p ${WORKDIR}/sources/pw3270/.bin/Release
+	cp -rv ${WORKDIR}/build/bin/* ${WORKDIR}/sources/pw3270/.bin/Release
+
+	chmod +x ${WORKDIR}/sources/pw3270/win/makeruntime.sh
+	${WORKDIR}/sources/pw3270/win/makeruntime.sh
+	if [ "$?" != "0" ]; then
+		cleanup
+		exit -1
+	fi
+
+	mkdir -p ${WORKDIR}/build/bin
+	cp -rv ${WORKDIR}/sources/pw3270/.bin/runtime ${WORKDIR}/build/bin
+	if [ "$?" != "0" ]; then
+		cleanup
+		exit -1
+	fi
+
+	#
+	# Copy branding
+	#
+	cp ${WORKDIR}/branding/*.ico ${WORKDIR}/build
+	if [ "$?" != "0" ]; then
+		cleanup
+		exit -1
+	fi
+
+	cp ${WORKDIR}/branding/*.png ${WORKDIR}/build
+	if [ "$?" != "0" ]; then
+		cleanup
+		exit -1
+	fi
+
+	cp ${WORKDIR}/branding/AUTHORS ${WORKDIR}/build
+	if [ "$?" != "0" ]; then
+		cleanup
+		exit -1
+	fi
+
+	cp ${WORKDIR}/branding/LICENSE ${WORKDIR}/build
+	if [ "$?" != "0" ]; then
+		cleanup
+		exit -1
+	fi
+
+	cp -rv ${WORKDIR}/branding/ui ${WORKDIR}/build
+	if [ "$?" != "0" ]; then
+		cleanup
+		exit -1
+	fi
+
+	#
+	# Create installation package
+	#
+	echo -e "\e]2;pw3270-package-${1}\a"
+
+	cd ${WORKDIR}/build
+
+	cp ${WORKDIR}/sources/pw3270/win/pw3270.nsi ./pw3270.nsi
+	if [ "$?" != "0" ]; then
+		cleanup
+		exit -1
+	fi
+
+	echo "------------------------------------------------------"
+	echo makensis -DWITHGTK pw3270.nsi
+
+	/bin/bash
+
+	makensis -DWITHGTK pw3270.nsi
+	if [ "$?" != "0" ]; then
+		cleanup
+		exit -1
+	fi
+
+	cp -v ./win/*.exe ${PROJECTDIR}
+	if [ "$?" != "0" ]; then
+		cleanup
+		exit -1
+	fi
+
+	if [ -d ~/public_html ]; then
+		mkdir -p ~/public_html/win/pw3270/${1}
+		cp -v ./win/*.exe ~/public_html/win/pw3270/${1}
 		if [ "$?" != "0" ]; then
-			failed "Erro ao gerar instalador com runtime"
-		fi
-
-		mv -f	./win/${PACKAGE}-${PACKAGE_VERSION}-gtk-${GTK_MODVERSION}-${host_cpu}.exe \
-				${DESTDIR}/${PACKAGE_NAME}/${1}
-
-		if [ "$?" != "0" ]; then
-			failed "Erro ao copiar instalador completo para ${1}"
-		fi
-
-		ln -sf	${1}/${PACKAGE}-${PACKAGE_VERSION}-gtk-${GTK_MODVERSION}-${host_cpu}.exe \
-				${DESTDIR}/${PACKAGE_NAME}/${PACKAGE}-latest-${host_cpu}.exe
-
-		if [ "$?" != "0" ]; then
-			failed "Erro ao criar link para ${1}"
+			cleanup
+			exit -1
 		fi
 	fi
 
-	make clean
-	rm -fr .bin
+#	if [ ! -z ${WIN_PACKAGE_SERVER} ]; then
+#		scp ./win/*.exe ${WIN_PACKAGE_SERVER}/pw3270
+#		if [ "$?" != "0" ]; then
+#			cleanup
+#			exit -1
+#		fi
+#	fi
 
 }
 
-TEMPDIR=$(mktemp -d)
-ARCHS="x86_32 x86_64"
-WINREPO=""
-DESTDIR=${HOME}/public_html/win
-RUNTIME=0
-COMPLETE=1
-
-if [ -e ~/.config/pw3270-win.conf ]; then
-	. ~/.config/pw3270-win.conf
-fi
-
-rm -f	${myDIR}/*.exe \
-		${myDIR}/*.zip
-
-trap cleanup INT 
-
-until [ -z "$1" ]
-do
-	if [ ${1:0:2} = '--' ]; then
-		tmp=${1:2}
-		parameter=${tmp%%=*}
-		parameter=$(echo $parameter | tr "[:lower:]" "[:upper:]")
-
-		case $parameter in
-
-		32)
-			ARCHS="x86_32"
-			;;
-
-		64)
-			ARCHS="x86_64"
-			;;
-
-		FULL)
-			COMPLETE=1
-			RUNTIME=1
-			;;
-
-		RT)
-			COMPLETE=0
-			RUNTIME=1
-			;;
-
-		OUT)
-			DESTDIR=$value
-			;;
-
-		REPO)
-			WINREPO=$value
-			;;
-
-		ARCH)
-			value=${tmp##*=}
-			ARCHS=$value
-			;;
-
-		*)
-			value=${tmp##*=}
-			eval $parameter=$value
-		esac
-
-	fi
-
-	shift
-done
-
-# Configura
-aclocal
-if [ "$?" != "0" ]; then
-	exit -1
-fi
-
-autoconf
-if [ "$?" != "0" ]; then
-	exit -1
-fi
-
-# Gera pacotes
-for i in ${ARCHS}; do
-	build "${i}"
-done
-
-#if [ "${RUNTIME}" == "1" ]; then
 #
-#	echo -e "\e]2;Baixando runtime\a"
+# Get sources from GIT
 #
-#	mkdir -p ${TEMPDIR}/runtime
-#	cd ${TEMPDIR}/runtime
-#
-#	#
-#	# Puxo scripts de construção do GTK direto da sourceforge.
-#	#
-#	git clone http://git.code.sf.net/p/gtk3win/code .
-#	if [ "$?" != "0" ]; then
-#		echo "Erro ao baixar fontes do runtime"
-#		exit -1
-#	fi
-#
-#	for i in ${ARCHS}; do
-#
-#		echo -e "\e]2;gtk-runtime-${i}\a"
-#
-#		case ${i} in
-#		x86_32)
-#			host_cpu=i686
-#			./win32.sh
-#			if [ "$?" != "0" ]; then
-#				exit -1
-#			fi
-#			;;
-#
-#		x86_64)
-#			host_cpu=x86_64
-#			./win64.sh
-#			if [ "$?" != "0" ]; then
-#				exit -1
-#			fi
-#			;;
-#
-#		*)
-#			echo "Arquitetura desconhecida ${i}"
-#			exit -1
-#
-#		esac
-#
-#		chmod +x ./win/makeruntime.sh
-#
-#		./win/makeruntime.sh
-#		if [ "$?" != "0" ]; then
-#			exit -1
-#		fi
-#
-#		# Copia o pacote gerado
-#		FILENAME=$(find . -maxdepth 1 -name "gtk-runtime-*-${host_cpu}.exe" | head --lines 1)
-#
-#		mkdir -p ${DESTDIR}/${host_cpu}
-#
-#		mv gtk-runtime-*-${host_cpu}.exe ${DESTDIR}/${host_cpu}
-#		if [ "$?" != "0" ]; then
-#			failed "Erro ao copiar instalador"
-#		fi
-#
-#		ln -sf $(basename ${FILENAME}) "${DESTDIR}/${host_cpu}/gtk-runtime-latest-${host_cpu}.exe"
-#		if [ "$?" != "0" ]; then
-#			failed "Erro ao criar o link simbólico"
-#		fi
-#
-#	done
-#
-#fi
+mkdir -p ${WORKDIR}/sources
 
-cd $(dirname $myDIR)
-rm -fr ${TEMPDIR}
+for src in lib3270 libv3270 pw3270 pw3270-plugin-hllapi; do
 
-# Gera pacotes para envio ao SPB
-rm -f ${DESTDIR}/${PACKAGE}-latest.zip
+	echo "Baixando ${src}..."
+	echo -e "\e]2;Downloading ${src}\a"
 
-zip -9 -r -j \
-		${DESTDIR}/${PACKAGE}-latest.zip \
-		$(readlink -f ${DESTDIR}/${PACKAGE_NAME}/${PACKAGE}-latest-i686.exe) \
-		$(readlink -f ${DESTDIR}/${PACKAGE_NAME}/${PACKAGE}-latest-x86_64.exe) 
-
-echo -e "\e]2;Success!\a"
-
-# Copia para repositório
-if [ "${WINREPO}" != "" ]; then
-
-	echo "Copiando arquivos para ${WINREPO}..."
-
-	scp $(readlink -f ${DESTDIR}/${PACKAGE_NAME}/${PACKAGE}-latest-i686.exe) ${WINREPO}/x86_32
+	git clone https://github.com/PerryWerneck/${src}.git ${WORKDIR}/sources/${src}
 	if [ "$?" != "0" ]; then
-		echo "Erro ao copiar versão de 32 bits para o repositório"
+		cleanup
 		exit -1
 	fi
 
-	scp $(readlink -f ${DESTDIR}/${PACKAGE_NAME}/${PACKAGE}-latest-x86_64.exe) ${WINREPO}/x86_64
+	cd ${WORKDIR}/sources/${src}
+
+	NOCONFIGURE=1 ./autogen.sh
 	if [ "$?" != "0" ]; then
-		echo "Erro ao copiar versão de 64 bits para o repositório"
+		cleanup
 		exit -1
 	fi
 
+
+done
+
+#
+# Setup branding
+#
+echo -e "\e]2;Branding\a"
+
+mkdir -p ${WORKDIR}/branding
+
+BRANDING_SOURCES=${WORKDIR}/sources/pw3270/branding
+
+cp -rv ${BRANDING_SOURCES}/* ${WORKDIR}/branding
+if [ "$?" != "0" ]; then
+	cleanup
+	exit -1
 fi
+
+convert -density 384 -background transparent ${BRANDING_SOURCES}/pw3270.svg -define icon:auto-resize -colors 256 ${WORKDIR}/branding/pw3270.ico
+if [ "$?" != "0" ]; then
+	cleanup
+	exit -1
+fi
+
+convert -background transparent ${BRANDING_SOURCES}/pw3270.svg ${WORKDIR}/branding/pw3270.png
+if [ "$?" != "0" ]; then
+	cleanup
+	exit -1
+fi
+
+optipng -o7 ${WORKDIR}/branding/pw3270.png
+if [ "$?" != "0" ]; then
+	cleanup
+	exit -1
+fi
+
+convert -background transparent ${BRANDING_SOURCES}/pw3270-logo.svg ${WORKDIR}/branding/pw3270-logo.png
+if [ "$?" != "0" ]; then
+	cleanup
+	exit -1
+fi
+
+optipng -o7 ${WORKDIR}/branding/pw3270-logo.png
+if [ "$?" != "0" ]; then
+	cleanup
+	exit -1
+fi
+
+cp ${WORKDIR}/sources/pw3270/AUTHORS ${WORKDIR}/branding
+if [ "$?" != "0" ]; then
+	cleanup
+	exit -1
+fi
+
+cp ${WORKDIR}/sources/pw3270/LICENSE ${WORKDIR}/branding
+if [ "$?" != "0" ]; then
+	cleanup
+	exit -1
+fi
+
+cp ${WORKDIR}/sources/pw3270/conf/colors.conf ${WORKDIR}/branding
+if [ "$?" != "0" ]; then
+	cleanup
+	exit -1
+fi
+
+cp -rv ${WORKDIR}/sources/pw3270/ui ${WORKDIR}/branding
+if [ "$?" != "0" ]; then
+	cleanup
+	exit -1
+fi
+
+#
+# Create installers 
+#
+pack x86_32
+#pack x86_64
+
+cleanup
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
