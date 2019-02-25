@@ -24,6 +24,7 @@
 # erico.mendonca@gmail.com	(Erico Mascarenhas de Mendonça)
 #
 
+LIBNAME=@DLLPREFIX@@PACKAGE_TARNAME@@DLLEXT@
 
 #---[ Configuration values ]-------------------------------------------------------------
 
@@ -42,6 +43,7 @@ PACKAGE_TARNAME=@PACKAGE_TARNAME@
 MKDIR=@MKDIR_P@
 INSTALL=@INSTALL@
 INSTALL_DATA=@INSTALL_DATA@
+LN_S=@LN_S@
 
 #---[ Rules ]----------------------------------------------------------------------------
 
@@ -67,18 +69,19 @@ $(SRCDIR)/src/include/%.h: \
 #---[ Targets ]--------------------------------------------------------------------------
 
 install: \
-	install-lib3270 \
-	install-pw3270
-
-install-lib3270: \
-	$(foreach SRC, $(notdir $(wildcard $(BASEDIR)/src/include/lib3270/*.h)), $(DESTDIR)$(includedir)/lib3270/$(SRC)) \
-	$(DESTDIR)$(libdir)/pkgconfig/lib3270.pc \
-	$(DESTDIR)$(includedir)/lib3270.h \
-
-install-pw3270: \
 	$(foreach SRC, $(notdir $(wildcard $(BASEDIR)/src/include/pw3270/*.h)), $(DESTDIR)$(includedir)/pw3270/$(SRC)) \
 	$(DESTDIR)$(includedir)/pw3270.h \
-	$(DESTDIR)$(includedir)/pw3270cpp.h \
+	$(DESTDIR)$(includedir)/pw3270cpp.h
+
+	@$(MKDIR) $(DESTDIR)$(libdir)
+
+	@$(LN_S) -f \
+				$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@ \
+				$(DESTDIR)$(libdir)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@
+
+	@$(LN_S) -f \
+				$(LIBNAME).@PACKAGE_MAJOR_VERSION@ \
+				$(DESTDIR)$(libdir)/$(LIBNAME)
 
 	@$(MKDIR) $(DESTDIR)$(libdir)/pkgconfig
 	@$(INSTALL_DATA) pw3270.pc $(DESTDIR)$(libdir)/pkgconfig/$(PACKAGE_TARNAME).pc
