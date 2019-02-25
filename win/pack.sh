@@ -338,6 +338,18 @@ pack()
 		exit -1
 	fi
 
+	cp -rv ${WORKDIR}/branding/*.conf ${WORKDIR}/build
+	if [ "$?" != "0" ]; then
+		cleanup
+		exit -1
+	fi
+
+	cp -rv ${WORKDIR}/sources/pw3270/charsets/*.xml ${WORKDIR}/build
+	if [ "$?" != "0" ]; then
+		cleanup
+		exit -1
+	fi
+
 	#
 	# Create installation package
 	#
