@@ -223,7 +223,7 @@ static void ft_update(H3270 *hSession, unsigned long current, unsigned long leng
 	v3270_ft_progress_update(GTK_WIDGET(widget), current, length, kbytes_sec);
 }
 
-gint v3270_transfer_file(GtkWidget *widget, LIB3270_FT_OPTION options, const gchar *local, const gchar *remote, int lrecl, int blksize, int primspace, int secspace, int dft)
+gint pw3270_transfer_file(GtkWidget *widget, LIB3270_FT_OPTION options, const gchar *local, const gchar *remote, int lrecl, int blksize, int primspace, int secspace, int dft)
 {
 	g_return_val_if_fail(GTK_IS_V3270(widget),0);
 
@@ -244,7 +244,6 @@ gint v3270_transfer_file(GtkWidget *widget, LIB3270_FT_OPTION options, const gch
 	GtkWidget	* progress	= v3270_ft_progress_new();
 
 	lib3270_ft_set_user_data(hSession,progress);
-
 
 	struct lib3270_ft_callbacks *cbk = lib3270_get_ft_callbacks(hSession,sizeof(struct lib3270_ft_callbacks));
 
@@ -314,7 +313,7 @@ void download_action(GtkAction *action, GtkWidget *widget)
 		ft_dialog_save(dialog,name);
 		gtk_widget_hide(dialog);
 
-		v3270_transfer_file(	widget,
+		pw3270_transfer_file(	widget,
 								v3270_ft_dialog_get_options(dialog),
 								v3270_ft_dialog_get_local_filename(dialog),
 								v3270_ft_dialog_get_host_filename(dialog),
@@ -358,7 +357,7 @@ void upload_action(GtkAction *action, GtkWidget *widget)
 		ft_dialog_save(dialog,name);
 		gtk_widget_hide(dialog);
 
-		v3270_transfer_file(	widget,
+		pw3270_transfer_file(	widget,
 								v3270_ft_dialog_get_options(dialog),
 								v3270_ft_dialog_get_local_filename(dialog),
 								v3270_ft_dialog_get_host_filename(dialog),

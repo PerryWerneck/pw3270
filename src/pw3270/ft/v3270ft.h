@@ -97,6 +97,9 @@
  LIB3270_EXPORT	void				  v3270_ft_progress_set_filenames(GtkWidget *widget, const gchar *from, const gchar *to);
  LIB3270_EXPORT void				  v3270_ft_progress_complete(GtkWidget *widget,unsigned long length,double kbytes_sec);
 
+ // File transfer
+ LIB3270_EXPORT gint				  pw3270_transfer_file(GtkWidget *widget, LIB3270_FT_OPTION options, const gchar *local, const gchar *remote, int lrecl, int blksize, int primspace, int secspace, int dft);
+
 
  G_END_DECLS
 
