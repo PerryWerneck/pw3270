@@ -48,7 +48,7 @@ OPTIPNG=@OPTIPNG@
 $(BINDIR)/%.png: \
 	%.svg
 
-	@echo $< ...
+	@echo $@ ...
 	@$(MKDIR) `dirname $@`
 	@$(CONVERT) -background transparent $< $@
 	@$(OPTIPNG) -o7 $@
@@ -56,7 +56,7 @@ $(BINDIR)/%.png: \
 $(BINDIR)/%.ico: \
 	%.svg
 
-	@echo $< ...
+	@echo $@ ...
 	@$(MKDIR) `dirname $@`
 	@$(CONVERT) -density 384 -background transparent $< -define icon:auto-resize -colors 256 $@
 
@@ -67,13 +67,14 @@ $(SRCDIR):
 $(BINDIR)/%.png: \
 	%.png
 
-	@echo $< ...
+	@echo $@ ...
 	@$(MKDIR) `dirname $@`
 	@$(OPTIPNG) -out $@ -o7 $<
 
 $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/%.png: \
 	$(BINDIR)/%.png
 
+	@echo $@ ...
 	@$(MKDIR) `dirname $@`
 	@$(INSTALL_DATA) $< $@
 
