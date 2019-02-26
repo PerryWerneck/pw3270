@@ -1,0 +1,38 @@
+# Maintainer: Perry Werneck <perry.werneck@gmail.com>
+
+pkgname=pw3270
+
+pkgver=5.2
+pkgrel=1
+pkgdesc="IBM 3270 Terminal emulator for GTK"
+url="https://portal.softwarepublico.gov.br/social/pw3270/"
+arch=(i686 x86_64)
+license=(GPL)
+depends=()
+makedepends=(autoconf automake make openssl lib3270 gtk3 libv3270 python3 dbus dbus-glib imagemagick optipng)
+checkdepends=()
+
+#groups=(gnome)
+
+source=($pkgname-$pkgver.tar.xz)
+sha256sums=('SKIP')
+
+provides=($pkgname)
+conflicts=($pkgname)
+
+prepare() {
+  cd $pkgname-$pkgver
+  NOCONFIGURE=1 ./autogen.sh
+  ./configure --prefix=/usr
+}
+
+build() {
+  cd $pkgname-$pkgver
+  make all
+}
+
+package() {
+  cd $pkgname-$pkgver
+  DESTDIR="$pkgdir" make install
+}
+

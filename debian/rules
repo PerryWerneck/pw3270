@@ -52,27 +52,14 @@ install: build
 	# Build package
 	make all
 
-	# Install main library
-	make DESTDIR=$(PWD)/debian/lib3270 install-lib
-
 	# Install pw3270's GUI
-	make DESTDIR=$(PWD)/debian/$(PACKAGE_NAME) install-app
+	make DESTDIR=$(PWD)/debian/$(PACKAGE_NAME) install-application
 
 	# Install $(PACKAGE_NAME)-sdk
-	make DESTDIR=$(PWD)/debian/$(PACKAGE_NAME)-dev -C sdk install-$(PACKAGE_NAME)
-	make DESTDIR=$(PWD)/debian/$(PACKAGE_NAME)-dev -C src/libpw3270cpp install
-
-	mkdir -p $(PWD)/debian/lib3270-dev/lib3270
-	install --mode=644 src/include/lib3270.h $(PWD)/debian/lib3270-dev
-	install --mode=644 src/include/lib3270/*.h $(PWD)/debian/lib3270-dev/lib3270
-
-	# Install DBUS plugin
-	make DESTDIR=$(PWD)/debian/$(PACKAGE_NAME)-plugin-dbus -C src/plugins/dbus3270/ install
+	make DESTDIR=$(PWD)/debian/$(PACKAGE_NAME)-dev install-devel
 
 	# Get file lists
-	find $(PWD)/debian/lib3270 -type f | sed -e "s@^$(PWD)/debian/lib3270/@/@g" > $(PWD)/debian/lib3270.install
 	find $(PWD)/debian/$(PACKAGE_NAME) -type f | sed -e "s@^$(PWD)/debian/$(PACKAGE_NAME)/@/@g" > $(PWD)/debian/$(PACKAGE_NAME).install
-	find $(PWD)/debian/$(PACKAGE_NAME)-plugin-dbus -type f | sed -e "s@^$(PWD)/debian/$(PACKAGE_NAME)-plugin-dbus/@/@g" > $(PWD)/debian/$(PACKAGE_NAME)-plugin-dbus.install
 	find $(PWD)/debian/$(PACKAGE_NAME)-dev -type f | sed -e "s@^$(PWD)/debian/$(PACKAGE_NAME)-dev/@/@g" > $(PWD)/debian/$(PACKAGE_NAME)-dev.install
 	# --- end custom part for installing
 

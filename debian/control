@@ -14,15 +14,9 @@ Description: IBM 3270 Terminal emulator for gtk
 Package: pw3270-dev
 Architecture: any
 Section: libdevel
-Depends: ${misc:Depends}, libdbus-1-dev, lib3270-dev (= ${binary:Version}), pw3270 (= ${binary:Version})
+Depends: ${misc:Depends}, libdbus-1-dev, libv3270-dev (= ${binary:Version}), pw3270 (= ${binary:Version})
 Description: lib3270 development files.
  This package contains the files needed for development of pw3270 extensions and plugins
-
-Package: pw3270-plugin-dbus
-Architecture: any
-Depends: ${misc:Depends}, pw3270 (= ${binary:Version}), libdbus-1-3
-Description: DBUS plugin for pw3270.
- This package contains the plugin allowing scripting of a pw3270 session using dbus calls.
 
 Package: pw3270-dbg
 Architecture: any
