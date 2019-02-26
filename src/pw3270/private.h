@@ -43,9 +43,9 @@
 
  #if ! GLIB_CHECK_VERSION(2,44,0)
 
-	G_GNUC_INTERNAL void pw3270_autoptr_cleanup_generic_gfree(void *p);
-
 	#define g_autofree __attribute__((cleanup(pw3270_autoptr_cleanup_generic_gfree)))
+
+	LIB3270_EXPORT void pw3270_autoptr_cleanup_generic_gfree(void *p);
 
  #endif // ! GLIB(2,44,0)
 
