@@ -105,6 +105,7 @@ BuildRequires:  pkgconfig(gtk+-3.0)
 BuildRequires:	pkgconfig(lib3270)
 BuildRequires:	pkgconfig(libv3270)
 BuildRequires:  librsvg2-tools
+BuildRequires:	autoconf-archive
 
 %endif
 
@@ -127,6 +128,11 @@ BuildRequires:	pkgconfig(lib3270)
 BuildRequires:	pkgconfig(libv3270)
 BuildRequires:  rsvg-view
 
+# https://en.opensuse.org/openSUSE:Build_Service_cross_distribution_howto
+%if 0%{suse_version} > 120100
+BuildRequires:	autoconf-archive
+%endif
+
 %endif
 
 #---------------------------------------------------------------------------------------------------------------------
@@ -145,7 +151,6 @@ BuildRequires:  sed
 BuildRequires:	optipng
 BuildRequires:	fdupes
 BuildRequires:	ImageMagick
-BuildRequires:	autoconf-archive
 
 %if 0%{?_help2man}
 BuildRequires:	help2man
@@ -172,18 +177,21 @@ GTK-based IBM 3270 terminal emulator with many advanced features. It can be used
 
 This package contains the default configuration and branding for %{name}.
 
-#--[ Plugins ]--------------------------------------------------------------------------------------------------------
+#--[ Devel ]----------------------------------------------------------------------------------------------------------
 
-%if 0%{?_dbus}
-%package plugin-dbus
-Summary:        D-Bus object for %{name}
-Group:          System/X11/Terminals
+%package devel
+Summary:        Files required for development of %{name} plugins
+Group:          Development/Libraries/C and C++
+
+Requires:       pkgconfig(lib3270)
+Requires:       pkgconfig(libv3270)
+Requires:		pkgconfig(gtk+-3.0)
 Requires:       %{name} = %{version}
-Requires:       dbus-1
 
-%description plugin-dbus
-Plugin exporting a DBUS object from every %{name} open session.
-%endif
+%description -n %{name}-devel
+GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
+
+This package contains the development files for %{name}.
 
 #---[ Build & Install ]-----------------------------------------------------------------------------------------------
 
@@ -191,11 +199,7 @@ Plugin exporting a DBUS object from every %{name} open session.
 
 %setup -q -n pw3270-%{version}
 
-mkdir -p scripts
-automake --add-missing 2> /dev/null | true
-
-aclocal
-autoconf
+NOCONFIGURE=1 ./autogen.sh
 
 %configure \
 	--with-release=%{release}
@@ -231,11 +235,6 @@ desktop-file-install	--mode 644 \
 			--add-category TerminalEmulator \
 			pw3270.desktop
 
-# Java now lives in another package
-rm %{buildroot}/%{_datadir}/pw3270/ui/*java*.xml
-
-# ooRexx now lives in another package
-rm %{buildroot}/%{_datadir}/pw3270/ui/*rexx*.xml
 %fdupes %{buildroot}/%{_prefix}
 
 #---[ Files ]---------------------------------------------------------------------------------------------------------
@@ -257,7 +256,6 @@ rm %{buildroot}/%{_datadir}/pw3270/ui/*rexx*.xml
 %{_datadir}/pw3270/charsets/bracket.xml
 
 %{_libdir}/libpw3270.so.%{MAJOR_VERSION}.%{MINOR_VERSION}
-%{_libdir}/libpw3270.so.%{MAJOR_VERSION}
 
 %files branding
 %defattr(-,root,root)
@@ -270,11 +268,21 @@ rm %{buildroot}/%{_datadir}/pw3270/ui/*rexx*.xml
 %{_datadir}/pw3270/pw3270.png
 %{_datadir}/pw3270/pw3270-logo.png
 
-%if 0%{?_dbus}
-%files plugin-dbus
-%defattr(-,root,root)
-%{_libdir}/pw3270-plugins/dbus3270.so
-%endif
+%files devel
+
+%{_includedir}/pw3270.h
+%{_includedir}/pw3270cpp.h
+%{_includedir}/pw3270
+
+%{_libdir}/libpw3270.so
+%{_libdir}/libpw3270.so.%{MAJOR_VERSION}
+
+%{_libdir}/libpw3270cpp.a
+%{_libdir}/pkgconfig/pw3270.pc
+%{_datadir}/pw3270/locale
+
+%{_datadir}/pw3270/ui/98trace.xml
+%{_datadir}/pw3270/ui/99debug.xml
 
 #---[ Scripts ]-------------------------------------------------------------------------------------------------------
 

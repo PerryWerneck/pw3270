@@ -23,11 +23,18 @@ build-stamp:
 	dh_testdir
 
 	# Add here commands to compile the package.
+    
 	aclocal
 	autoconf
+    
+	mkdir -p scripts
+	automake --add-missing 2> /dev/null | true
+    
 	./configure --prefix=/usr
+
 	rm -f debian/*.install
 	make Release
+
 	# --- end custom part for compiling
 
 	touch build-stamp
