@@ -9,7 +9,7 @@ msgstr ""
 "#-#-#-#-#  pw3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-25 20:07-0300\n"
+"POT-Creation-Date: 2019-02-27 14:34-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "#-#-#-#-#  lib3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-25 21:25+0000\n"
+"POT-Creation-Date: 2019-02-27 14:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,7 +31,7 @@ msgstr ""
 "#-#-#-#-#  libv3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-25 21:45+0000\n"
+"POT-Creation-Date: 2019-02-27 14:21+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -230,7 +230,7 @@ msgstr ""
 msgid "Aborting..."
 msgstr ""
 
-#: src/dialogs/security.c:195
+#: src/dialogs/security.c:200
 msgid "About security"
 msgstr ""
 
@@ -535,8 +535,8 @@ msgstr ""
 msgid "Can't recognize \"%s\" as a valid host type"
 msgstr ""
 
-#: src/filetransfer/save.c:116 src/filetransfer/activitylist.c:353
-#: src/trace/widget.c:493
+#: src/filetransfer/save.c:116 src/filetransfer/activitylist.c:356
+#: src/trace/widget.c:493 src/dialogs/transfer.c:96
 #, c-format
 msgid "Can't save %s"
 msgstr ""
@@ -579,7 +579,7 @@ msgstr ""
 msgid "Can't set LDAP version"
 msgstr ""
 
-#: src/filetransfer/worker.c:595 src/filetransfer/v3270ftprogress.c:772
+#: src/filetransfer/worker.c:611 src/filetransfer/v3270ftprogress.c:772
 msgid "Can't set callback table"
 msgstr ""
 
@@ -599,7 +599,7 @@ msgstr ""
 msgid "Can't set socket to non blocking mode"
 msgstr ""
 
-#: src/filetransfer/worker.c:581 src/filetransfer/v3270ftprogress.c:759
+#: src/filetransfer/worker.c:592 src/filetransfer/v3270ftprogress.c:759
 msgid "Can't start file transfer session"
 msgstr ""
 
@@ -949,14 +949,6 @@ msgstr ""
 msgid "Estimated transfer arrival"
 msgstr ""
 
-#: 80javasamples.xml:38
-msgid "Exception test"
-msgstr ""
-
-#: 80rexx.xml:38
-msgid "External Rexx script"
-msgstr ""
-
 #: 98trace.xml:42
 msgid "Field Delimiters"
 msgstr ""
@@ -1237,7 +1229,7 @@ msgstr ""
 msgid "Invalid session handler"
 msgstr ""
 
-#: src/dialogs/security.c:176
+#: src/dialogs/security.c:181
 msgid "Invalid state"
 msgstr ""
 
@@ -1259,10 +1251,6 @@ msgstr ""
 
 #: properties.c:69
 msgid "Is terminal ready"
-msgstr ""
-
-#: 80javasamples.xml:38
-msgid "Java"
 msgstr ""
 
 #: toggles.c:177 00default.xml:127
@@ -1373,11 +1361,11 @@ msgid ""
 "certificate and it is not self signed."
 msgstr ""
 
-#: src/filetransfer/worker.c:269
+#: src/filetransfer/worker.c:280
 msgid "No transfer"
 msgstr ""
 
-#: ft.c:100
+#: ft.c:100 src/filetransfer/worker.c:602
 msgid "No transfer in progress"
 msgstr ""
 
@@ -1434,7 +1422,8 @@ msgid "Only one of TRACKS, CYLINDERS, AVBLOCK allowed: file transfer canceled"
 msgstr ""
 
 #: src/terminal/callbacks.c:341 src/filetransfer/save.c:118
-#: src/filetransfer/load.c:272 src/filetransfer/activitylist.c:356
+#: src/filetransfer/load.c:272 src/filetransfer/activitylist.c:359
+#: src/dialogs/transfer.c:99
 msgid "Operation has failed"
 msgstr ""
 
@@ -1460,10 +1449,6 @@ msgstr ""
 
 #: local/events.cc:71
 msgid "Out of memory in vasprintf"
-msgstr ""
-
-#: 80javasamples.xml:39
-msgid "Output test"
 msgstr ""
 
 #: 10keypad.xml:68
@@ -1611,7 +1596,7 @@ msgstr ""
 msgid "Path length constraint exceeded"
 msgstr ""
 
-#: src/dialogs/security.c:128 src/dialogs/security.c:147
+#: src/dialogs/security.c:133 src/dialogs/security.c:152
 msgid "Peer certificate"
 msgstr ""
 
@@ -1621,10 +1606,6 @@ msgstr ""
 
 #: colors.c:497 src/dialogs/colors.c:293
 msgid "Pink"
-msgstr ""
-
-#: 80javasamples.xml:40
-msgid "Popup test"
 msgstr ""
 
 #: src/dialogs/hostselect.c:140
@@ -1679,10 +1660,6 @@ msgstr ""
 
 #: src/filetransfer/v3270ftprogress.c:406
 msgid "Progress"
-msgstr ""
-
-#: 80javasamples.xml:41
-msgid "Protection test"
 msgstr ""
 
 #: colors.c:505 src/dialogs/colors.c:301
@@ -1781,7 +1758,7 @@ msgstr ""
 msgid "Receive text file"
 msgstr ""
 
-#: src/filetransfer/v3270ftprogress.c:738
+#: src/filetransfer/v3270ftprogress.c:738 src/dialogs/transfer.c:137
 msgid "Receiving file"
 msgstr ""
 
@@ -1859,7 +1836,7 @@ msgstr ""
 msgid "Return"
 msgstr ""
 
-#: src/dialogs/security.c:134
+#: src/dialogs/security.c:139
 msgid "Revocation list"
 msgstr ""
 
@@ -1897,8 +1874,8 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/filetransfer/v3270ft.c:217 src/filetransfer/activitylist.c:376
-#: src/trace/widget.c:519
+#: src/filetransfer/v3270ft.c:217 src/filetransfer/activitylist.c:379
+#: src/trace/widget.c:519 src/dialogs/transfer.c:72
 msgid "Save"
 msgstr ""
 
@@ -1914,7 +1891,7 @@ msgstr ""
 msgid "Save copy to file"
 msgstr ""
 
-#: src/filetransfer/v3270ft.c:216 src/filetransfer/activitylist.c:375
+#: src/filetransfer/v3270ft.c:216 src/filetransfer/activitylist.c:378
 msgid "Save queue to file"
 msgstr ""
 
@@ -1938,6 +1915,14 @@ msgstr ""
 msgid "Save trace to file"
 msgstr ""
 
+#: src/dialogs/transfer.c:71
+msgid "Save transfer activity to file"
+msgstr ""
+
+#: src/dialogs/transfer.c:202
+msgid "Save transfer information to file"
+msgstr ""
+
 #: src/dialogs/settingsdialog.c:346
 msgid "Save transfer queue"
 msgstr ""
@@ -1958,7 +1943,7 @@ msgstr ""
 msgid "Screen size"
 msgstr ""
 
-#: 80rexx.xml:38 00default.xml:86
+#: 00default.xml:86
 msgid "Scripts"
 msgstr ""
 
@@ -2075,7 +2060,7 @@ msgstr ""
 msgid "Send/Receive"
 msgstr ""
 
-#: src/filetransfer/v3270ftprogress.c:738
+#: src/filetransfer/v3270ftprogress.c:738 src/dialogs/transfer.c:137
 msgid "Sending file"
 msgstr ""
 
@@ -2196,7 +2181,7 @@ msgstr ""
 msgid "Starting"
 msgstr ""
 
-#: src/filetransfer/worker.c:303
+#: src/filetransfer/worker.c:314 src/dialogs/transfer.c:155
 msgid "Starting transfer"
 msgstr ""
 
@@ -2291,7 +2276,7 @@ msgstr ""
 msgid "The basicConstraints pathlength parameter has been exceeded."
 msgstr ""
 
-#: src/filetransfer/worker.c:607
+#: src/filetransfer/worker.c:623
 msgid ""
 "The callback table for file transfer was rejected, possible version mismatch "
 "on lib3270"
@@ -2483,7 +2468,7 @@ msgstr ""
 msgid "There's no available settings for charset \"%s\""
 msgstr ""
 
-#: src/dialogs/security.c:183
+#: src/dialogs/security.c:188
 msgid "There's no security information in the session"
 msgstr ""
 
@@ -2577,12 +2562,12 @@ msgstr ""
 msgid "Transfer complete"
 msgstr ""
 
-#: ft.c:585 src/filetransfer/worker.c:558
+#: ft.c:585 src/filetransfer/worker.c:569
 #: src/filetransfer/v3270ftprogress.c:720
 msgid "Transfer failed"
 msgstr ""
 
-#: src/filetransfer/worker.c:544
+#: src/filetransfer/worker.c:555
 msgid "Transfer operation has timed out"
 msgstr ""
 
@@ -2848,7 +2833,8 @@ msgid "X Wait"
 msgstr ""
 
 #: src/filetransfer/v3270ft.c:200 src/filetransfer/v3270ft.c:220
-#: src/filetransfer/activitylist.c:278 src/filetransfer/activitylist.c:379
+#: src/filetransfer/activitylist.c:278 src/filetransfer/activitylist.c:382
+#: src/dialogs/transfer.c:75
 msgid "XML file"
 msgstr ""
 
@@ -2928,7 +2914,8 @@ msgstr ""
 msgid "_Cancel"
 msgstr ""
 
-#: src/trace/widget.c:449 src/dialogs/security.c:198
+#: src/trace/widget.c:449 src/dialogs/transfer.c:174 src/dialogs/transfer.c:194
+#: src/dialogs/security.c:203
 msgid "_Close"
 msgstr ""
 
@@ -2944,11 +2931,11 @@ msgstr ""
 msgid "_Disconnect"
 msgstr ""
 
-#: 99debug.xml:35 80rexx.xml:35 80javasamples.xml:35 00default.xml:58
+#: 99debug.xml:35 00default.xml:58
 msgid "_Edit"
 msgstr ""
 
-#: src/trace/widget.c:441 80rexx.xml:34 80javasamples.xml:34 00default.xml:34
+#: src/trace/widget.c:441 00default.xml:34
 msgid "_File"
 msgstr ""
 
@@ -2996,7 +2983,7 @@ msgstr ""
 msgid "_Text file"
 msgstr ""
 
-#: 80rexx.xml:36 80javasamples.xml:36 00default.xml:84
+#: 00default.xml:84
 msgid "_View"
 msgstr ""
 

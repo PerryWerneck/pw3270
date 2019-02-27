@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-25 19:57-0300\n"
-"PO-Revision-Date: 2019-02-06 11:14-0200\n"
+"POT-Creation-Date: 2019-02-27 14:34-0300\n"
+"PO-Revision-Date: 2019-02-27 14:48-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
 "Language: pt_BR\n"
@@ -204,7 +204,7 @@ msgstr "Cancelamento enviado; aguardando resposta"
 msgid "Aborting..."
 msgstr "Cancelando..."
 
-#: src/dialogs/security.c:195
+#: src/dialogs/security.c:200
 msgid "About security"
 msgstr "Sobre a segurança"
 
@@ -218,7 +218,7 @@ msgstr "Ação falhou"
 
 #: src/dialogs/settingsdialog.c:197 src/dialogs/settingsdialog.c:233
 msgid "Activity already on the queue"
-msgstr ""
+msgstr "Atividade já está na fila"
 
 #: 00default.xml:61
 msgid "Add to copy"
@@ -313,9 +313,8 @@ msgid "Awaiting chance to send an abort"
 msgstr "Aguardando para enviar pedido de cancelamento"
 
 #: src/dialogs/settingsdialog.c:408 src/dialogs/settingsdialog.c:427
-#, fuzzy
 msgid "B_egin transfer"
-msgstr "Cancelando transferência"
+msgstr "Iniciar transferência"
 
 #: colors.c:494 src/dialogs/colors.c:290
 msgid "Background"
@@ -362,24 +361,20 @@ msgid "Broken pipe"
 msgstr "Conexão interrompida"
 
 #: ftmessages.c:215
-#, fuzzy
 msgid "CMS disk is full: file transfer canceled"
-msgstr "Não está no modo 3270, transferência cancelada"
+msgstr "Disco CMS está lotado, transferência cancelada"
 
 #: ftmessages.c:208
-#, fuzzy
 msgid "CMS disk is not accessed: file transfer canceled"
-msgstr "Servidor desconectou, transferência cancelada"
+msgstr "Disco CMS não está acessível, transferência cancelada"
 
 #: ftmessages.c:201
-#, fuzzy
 msgid "CMS disk is read-only: file transfer canceled"
-msgstr "Servidor desconectou, transferência cancelada"
+msgstr "Disco CMS apenas para leitura, transferência cancelada"
 
 #: ftmessages.c:194
-#, fuzzy
 msgid "CMS file not found: file transfer canceled"
-msgstr "Não está no modo 3270, transferência cancelada"
+msgstr "Arquivo CMS não encontrado, transferência cancelada"
 
 #: ssl/state.c:154
 msgid "CRL signature failure"
@@ -408,9 +403,8 @@ msgid "Can't accept unnamed %s"
 msgstr "Não posso aceitar elemento %s sem nome"
 
 #: src/dialogs/settingsdialog.c:241
-#, fuzzy
 msgid "Can't add activity"
-msgstr "Não foi possível carregar arquivo"
+msgstr "Não é possível adicionar atividade"
 
 #: ssl/linux/getcrl.c:321
 msgid "Can't bind to LDAP server"
@@ -521,8 +515,8 @@ msgstr "Não foi possível ler certificados SSL de %s"
 msgid "Can't recognize \"%s\" as a valid host type"
 msgstr "Não reconheço \"%s\" como um tipo de host válido"
 
-#: src/filetransfer/save.c:116 src/filetransfer/activitylist.c:353
-#: src/trace/widget.c:493
+#: src/filetransfer/save.c:116 src/filetransfer/activitylist.c:356
+#: src/trace/widget.c:493 src/dialogs/transfer.c:96
 #, c-format
 msgid "Can't save %s"
 msgstr "Não foi possível salvar arquivo %s"
@@ -571,7 +565,7 @@ msgstr "Não foi possível conectar ao servidor LDAP"
 msgid "Can't set LDAP version"
 msgstr "Não é possível setar a versão LDAP"
 
-#: src/filetransfer/worker.c:595 src/filetransfer/v3270ftprogress.c:772
+#: src/filetransfer/worker.c:611 src/filetransfer/v3270ftprogress.c:772
 msgid "Can't set callback table"
 msgstr "Não foi possível setar a tabela de retornos"
 
@@ -591,7 +585,7 @@ msgstr "Não foi possível mudar o socket para o modo blocante."
 msgid "Can't set socket to non blocking mode"
 msgstr "Não foi possível setar o socket para o modo não blocante."
 
-#: src/filetransfer/worker.c:581 src/filetransfer/v3270ftprogress.c:759
+#: src/filetransfer/worker.c:592 src/filetransfer/v3270ftprogress.c:759
 msgid "Can't start file transfer session"
 msgstr "Não foi possível iniciar transferência de arquivo"
 
@@ -690,13 +684,12 @@ msgid "Colors"
 msgstr "Cores"
 
 #: ftmessages.c:73
-#, fuzzy
 msgid "Command incomplete: file transfer canceled"
-msgstr "Servidor desconectou, transferência cancelada"
+msgstr "Comando incompleto, transferência cancelada"
 
 #: src/trace/widget.c:286
 msgid "Command to execute"
-msgstr ""
+msgstr "Comando a executar"
 
 #: 00default.xml:89
 msgid "Configure host"
@@ -919,9 +912,8 @@ msgid "Error \"%s\" writing to local file (rc=%d)"
 msgstr "Erro \"%s\" gravando arquivo local (rc=%d)"
 
 #: ftmessages.c:45
-#, fuzzy
 msgid "Error in file transfer: file transfer canceled"
-msgstr "Não está no modo 3270, transferência cancelada"
+msgstr "Erro na transferência do arquivo, transferência cancelada"
 
 #: local/events.cc:59
 msgid "Error in vasprintf"
@@ -937,30 +929,20 @@ msgid "Error loading CRL"
 msgstr "Erro lendo CRL"
 
 #: ftmessages.c:87
-#, fuzzy
 msgid "Error reading file from host: file transfer canceled"
-msgstr "Erro \"%s\" lendo arquivo local (rc=%d)"
+msgstr "Erro ao ler arquivo do host: Transferência cancelada"
 
 #: ftmessages.c:145
 msgid "Error while reading or writing to host disk: file transfer canceled"
-msgstr ""
+msgstr "Erro ao ler ou gravar no host: Transferência cancelada"
 
 #: ftmessages.c:80
-#, fuzzy
 msgid "Error writing file to host: file transfer canceled"
-msgstr "Não está no modo 3270, transferência cancelada"
+msgstr "Erro ao gravar arquivo no host, transferência cancelada"
 
 #: src/filetransfer/tables.c:224
 msgid "Estimated transfer arrival"
 msgstr "Tempo estimado para a transferência"
-
-#: 80javasamples.xml:38
-msgid "Exception test"
-msgstr "Exception test"
-
-#: 80rexx.xml:38
-msgid "External Rexx script"
-msgstr "Script rexx externo"
 
 #: 98trace.xml:42
 msgid "Field Delimiters"
@@ -971,22 +953,20 @@ msgid "Field colors"
 msgstr "Cor dos campos"
 
 #: ftmessages.c:52
-#, fuzzy
 msgid "File transfer complete"
 msgstr "Transferência completa"
 
 #: ftmessages.c:59
 msgid "File transfer complete with records segmented"
-msgstr ""
+msgstr "Transferência completa com registros segmentados"
 
 #: ft.c:271
 msgid "File transfer is already active in this session."
 msgstr "Transferência de arquivos já está ativa nesta sessão."
 
 #: src/dialogs/settingsdialog.c:358
-#, fuzzy
 msgid "Files to transfer"
-msgstr "Total de bytes a transferir"
+msgstr "Arquivos a transferir"
 
 #: src/filetransfer/tables.c:80
 msgid "Fixed"
@@ -1034,13 +1014,12 @@ msgid "Full Screen"
 msgstr "Tela cheia"
 
 #: src/filetransfer/activity.c:135
-#, fuzzy
 msgid "Full path of local file"
-msgstr "Selecionar arquivo local"
+msgstr "Caminho completo do arquivo local"
 
 #: src/filetransfer/activity.c:142
 msgid "Full path of remote file"
-msgstr ""
+msgstr "Caminho completo do arquivo remoto"
 
 #: 10functions.xml:35
 msgid "Function bar"
@@ -1055,9 +1034,8 @@ msgid "Get transfer queue from an external XML file"
 msgstr "Obtém a fila de transferência de um arquivo XML externo"
 
 #: src/dialogs/settingsdialog.c:343
-#, fuzzy
 msgid "Get transfer queue from file"
-msgstr "Obtém a fila de transferência de um arquivo XML externo"
+msgstr "Obtêm a fila de arquivos a transferir de um arquivo"
 
 #: ssl/linux/getcrl.c:503
 msgid "Got an invalid CRL from LDAP server"
@@ -1097,7 +1075,7 @@ msgstr "Host illegally added function(s)"
 
 #: ftmessages.c:222
 msgid "Host program error code xxxxxxxxxx: file transfer canceled"
-msgstr ""
+msgstr "Erro código xxxxxxxxxx no aplicativo do host: Transferência cancelada"
 
 #: telnet.c:1313
 msgid "Host rejected device type or request type"
@@ -1192,14 +1170,12 @@ msgid "Illegal frame length"
 msgstr "Comprimento de frame inválido"
 
 #: ftmessages.c:138
-#, fuzzy
 msgid "Incorrect option specified: file transfer canceled"
-msgstr "Servidor desconectou, transferência cancelada"
+msgstr "Opção incorreta, transferência cancelada"
 
 #: ftmessages.c:101
-#, fuzzy
 msgid "Incorrect request code: file transfer canceled"
-msgstr "Servidor desconectou, transferência cancelada"
+msgstr "Código de requisição incorreto, transferência cancelada"
 
 #: 00default.xml:135
 msgid "Input method"
@@ -1240,24 +1216,23 @@ msgstr "Ação recortar inválida"
 
 #: ftmessages.c:166
 msgid "Invalid option xxxxxxxx with APPEND: file transfer canceled"
-msgstr ""
+msgstr "Opção xxxxxxxx não e valida com APPEND: Transferência cancelada"
 
 #: ftmessages.c:180
 msgid "Invalid option xxxxxxxx with PDS: file transfer canceled"
-msgstr ""
+msgstr "Opção xxxxxxxx inválida com PDS: Transferência cancelada"
 
 #: ftmessages.c:159
 msgid "Invalid option xxxxxxxx with RECEIVE: file transfer canceled"
-msgstr ""
+msgstr "Opção xxxxxxxx inválida com RECEIVE: Transferência cancelada"
 
 #: ftmessages.c:173
 msgid "Invalid option xxxxxxxx without SPACE: file transfer canceled"
-msgstr ""
+msgstr "Opção xxxxxxxx inválida sem SPACE: Transferência cancelada"
 
 #: ftmessages.c:152
-#, fuzzy
 msgid "Invalid option xxxxxxxx: file transfer canceled"
-msgstr "Não está no modo 3270, transferência cancelada"
+msgstr "Opção xxxxxxxx inválida: Transferência cancelada"
 
 #: src/terminal/charset.c:319
 msgid "Invalid remap scope"
@@ -1267,7 +1242,7 @@ msgstr "Escopo de mapeamento inválido"
 msgid "Invalid session handler"
 msgstr "Identificador de sessão é inválido"
 
-#: src/dialogs/security.c:176
+#: src/dialogs/security.c:181
 msgid "Invalid state"
 msgstr "Estado inválido"
 
@@ -1290,10 +1265,6 @@ msgstr "O terminal está no estad INITIAL_E?"
 #: properties.c:69
 msgid "Is terminal ready"
 msgstr "O terminal está pronto"
-
-#: 80javasamples.xml:38
-msgid "Java"
-msgstr "Java"
 
 #: toggles.c:177 00default.xml:127
 msgid "Keep selected"
@@ -1329,9 +1300,8 @@ msgid "Loading %s"
 msgstr "Carregando %s"
 
 #: src/filetransfer/activitylist.c:154
-#, fuzzy
 msgid "Local file"
-msgstr "Arquivo _local:"
+msgstr "Arquivo local:"
 
 #: src/filetransfer/tables.c:219
 msgid "Local:"
@@ -1406,12 +1376,11 @@ msgstr ""
 "Nenhuma assinatura pode ser verificada, porque a cadeia contém apenas um "
 "certificado e não é auto assinado."
 
-#: src/filetransfer/worker.c:269
-#, fuzzy
+#: src/filetransfer/worker.c:280
 msgid "No transfer"
-msgstr "Nenhuma transferência ativa"
+msgstr "Nenhuma transferência"
 
-#: ft.c:100
+#: ft.c:100 src/filetransfer/worker.c:602
 msgid "No transfer in progress"
 msgstr "Nenhuma transferência em andamento"
 
@@ -1466,9 +1435,12 @@ msgstr "Estado normal na OIA"
 #: ftmessages.c:187
 msgid "Only one of TRACKS, CYLINDERS, AVBLOCK allowed: file transfer canceled"
 msgstr ""
+"Permitida apenas uma opção dentre TRACKS, CYLINDERS, AVBLOCK: Transferência "
+"cancelada"
 
 #: src/terminal/callbacks.c:341 src/filetransfer/save.c:118
-#: src/filetransfer/load.c:272 src/filetransfer/activitylist.c:356
+#: src/filetransfer/load.c:272 src/filetransfer/activitylist.c:359
+#: src/dialogs/transfer.c:99
 msgid "Operation has failed"
 msgstr "Operação falhou"
 
@@ -1495,10 +1467,6 @@ msgstr "Memória insuficiente"
 #: local/events.cc:71
 msgid "Out of memory in vasprintf"
 msgstr "Memória insuficiente em vasprintf"
-
-#: 80javasamples.xml:39
-msgid "Output test"
-msgstr "Output test"
 
 #: 10keypad.xml:68
 msgid "PA1"
@@ -1645,21 +1613,17 @@ msgstr "Caminho para os arquivos de plugin"
 msgid "Path length constraint exceeded"
 msgstr "Path length constraint exceeded"
 
-#: src/dialogs/security.c:128 src/dialogs/security.c:147
+#: src/dialogs/security.c:133 src/dialogs/security.c:152
 msgid "Peer certificate"
 msgstr "Certificado apresentado"
 
 #: ftmessages.c:66
 msgid "Personal computer filespec incorrect: file transfer canceled"
-msgstr ""
+msgstr "Especificação de arquivo PC incorreta: Transferência cancelada"
 
 #: colors.c:497 src/dialogs/colors.c:293
 msgid "Pink"
 msgstr "Rosa"
-
-#: 80javasamples.xml:40
-msgid "Popup test"
-msgstr "Popup test"
 
 #: src/dialogs/hostselect.c:140
 msgid "Port or service name (empty for \"telnet\")."
@@ -1716,10 +1680,6 @@ msgstr "Configurações de impressão"
 #: src/filetransfer/v3270ftprogress.c:406
 msgid "Progress"
 msgstr "Progresso"
-
-#: 80javasamples.xml:41
-msgid "Protection test"
-msgstr "Protection test"
 
 #: colors.c:505 src/dialogs/colors.c:301
 msgid "Purple"
@@ -1817,7 +1777,7 @@ msgstr "Receber arquivo"
 msgid "Receive text file"
 msgstr "Receber arquivo texto"
 
-#: src/filetransfer/v3270ftprogress.c:738
+#: src/filetransfer/v3270ftprogress.c:738 src/dialogs/transfer.c:137
 msgid "Receiving file"
 msgstr "Recebendo arquivo"
 
@@ -1855,9 +1815,8 @@ msgstr ""
 "servidor."
 
 #: src/filetransfer/activitylist.c:163
-#, fuzzy
 msgid "Remote file"
-msgstr "Arquivo _remoto:"
+msgstr "Arquivo remoto:"
 
 #: src/filetransfer/tables.c:220
 msgid "Remote:"
@@ -1877,7 +1836,7 @@ msgstr "Requisição falhou"
 
 #: ftmessages.c:94
 msgid "Required host storage unavailable: file transfer canceled"
-msgstr ""
+msgstr "Armazenamento necessário indisponível: Transferência cancelada"
 
 #: 00default.xml:73
 msgid "Reselect"
@@ -1899,7 +1858,7 @@ msgstr "Repetir"
 msgid "Return"
 msgstr "Return"
 
-#: src/dialogs/security.c:134
+#: src/dialogs/security.c:139
 msgid "Revocation list"
 msgstr "Lista de revogados"
 
@@ -1941,15 +1900,14 @@ msgstr ""
 "SSL_write:\n"
 "%s"
 
-#: src/filetransfer/v3270ft.c:217 src/filetransfer/activitylist.c:376
-#: src/trace/widget.c:519
+#: src/filetransfer/v3270ft.c:217 src/filetransfer/activitylist.c:379
+#: src/trace/widget.c:519 src/dialogs/transfer.c:72
 msgid "Save"
 msgstr "Salvar"
 
 #: src/trace/widget.c:448
-#, fuzzy
 msgid "Save _As"
-msgstr "Salvar"
+msgstr "Salvar _Como"
 
 #: 00default.xml:44
 msgid "Save copy"
@@ -1959,7 +1917,7 @@ msgstr "Salvar cópia"
 msgid "Save copy to file"
 msgstr "Salvar cópia para arquivo"
 
-#: src/filetransfer/v3270ft.c:216 src/filetransfer/activitylist.c:375
+#: src/filetransfer/v3270ft.c:216 src/filetransfer/activitylist.c:378
 msgid "Save queue to file"
 msgstr "Salvar a fila para um arquivo"
 
@@ -1980,23 +1938,28 @@ msgid "Save selection to file"
 msgstr "Salvar seleção para arquivo"
 
 #: src/trace/widget.c:518
-#, fuzzy
 msgid "Save trace to file"
-msgstr "_Salvar arquivo de trace"
+msgstr "Salvar trace para arquivo"
+
+#: src/dialogs/transfer.c:71
+msgid "Save transfer activity to file"
+msgstr "Salvar atividade de transferência para arquivo"
+
+#: src/dialogs/transfer.c:202
+msgid "Save transfer information to file"
+msgstr "Salvar informações da transferência para arquivo"
 
 #: src/dialogs/settingsdialog.c:346
-#, fuzzy
 msgid "Save transfer queue"
-msgstr "Nenhuma transferência ativa"
+msgstr "Salvar fila de transferências"
 
 #: src/filetransfer/v3270ft.c:386
 msgid "Save transfer queue to an external XML file"
 msgstr "Guarda fila de transferência num arquivo XML externo"
 
 #: src/dialogs/settingsdialog.c:350
-#, fuzzy
 msgid "Save transfer queue to file"
-msgstr "Salvar a fila para um arquivo"
+msgstr "Salvar fila de transferências para arquivo"
 
 #: properties.c:242
 msgid "Screen buffer length in bytes"
@@ -2006,7 +1969,7 @@ msgstr "Tamanho do buffer de tela em bytes"
 msgid "Screen size"
 msgstr "Tamanho da tela"
 
-#: 80rexx.xml:38 00default.xml:86
+#: 00default.xml:86
 msgid "Scripts"
 msgstr "Scripts"
 
@@ -2125,7 +2088,7 @@ msgstr "Enviar arquivo texto"
 msgid "Send/Receive"
 msgstr "Enviar/Receber"
 
-#: src/filetransfer/v3270ftprogress.c:738
+#: src/filetransfer/v3270ftprogress.c:738 src/dialogs/transfer.c:137
 msgid "Sending file"
 msgstr "Enviando arquivo"
 
@@ -2162,9 +2125,8 @@ msgid "Settings"
 msgstr "Configurações"
 
 #: src/dialogs/hostselect.c:313
-#, fuzzy
 msgid "Setup host"
-msgstr "Selecione servidor"
+msgstr "Configurar host"
 
 #: toggles.c:207
 msgid "Show Field attribute"
@@ -2249,18 +2211,16 @@ msgid "Start file transfer"
 msgstr "Iniciar transferência de arquivo"
 
 #: src/dialogs/settingsdialog.c:432
-#, fuzzy
 msgid "Start transfer"
-msgstr "Iniciar transferência de arquivo"
+msgstr "Iniciar transferência"
 
 #: src/filetransfer/v3270ftprogress.c:789
 msgid "Starting"
 msgstr "Iniciando"
 
-#: src/filetransfer/worker.c:303
-#, fuzzy
+#: src/filetransfer/worker.c:314 src/dialogs/transfer.c:155
 msgid "Starting transfer"
-msgstr "Iniciar transferência de arquivo"
+msgstr "Iniciando transferência"
 
 #: properties.c:132
 msgid "State is 3270, TN3270e or SSCP"
@@ -2283,9 +2243,8 @@ msgid "Terminal colors"
 msgstr "Cores do terminal"
 
 #: src/trace/widget.c:522
-#, fuzzy
 msgid "Text file"
-msgstr "Arquivos de texto"
+msgstr "Arquivo texto"
 
 #: src/filetransfer/v3270ft.c:309 src/filetransfer/settings.c:212
 msgid "Text files"
@@ -2362,13 +2321,13 @@ msgstr "O tipo de URL é desconhecido"
 msgid "The basicConstraints pathlength parameter has been exceeded."
 msgstr "The basicConstraints pathlength parameter has been exceeded."
 
-#: src/filetransfer/worker.c:607
-#, fuzzy
+#: src/filetransfer/worker.c:623
 msgid ""
 "The callback table for file transfer was rejected, possible version mismatch "
 "on lib3270"
 msgstr ""
-"Tabela de callbacks inválida, possível divergência de versão na lib3270"
+"Tabela de callbacks para transferência de arquivos inválida, possível "
+"divergência de versão na lib3270"
 
 #: ssl/state.c:253
 msgid ""
@@ -2595,7 +2554,7 @@ msgstr "Não existe espaço suficiente no host para os dados."
 msgid "There's no available settings for charset \"%s\""
 msgstr "Não encontrei configuração para a tabela de caracteres \"%s\""
 
-#: src/dialogs/security.c:183
+#: src/dialogs/security.c:188
 msgid "There's no security information in the session"
 msgstr "Não existe informação de segurança na sessão"
 
@@ -2701,15 +2660,14 @@ msgstr "Transferência cancelada pelo usuário"
 msgid "Transfer complete"
 msgstr "Transferência completa"
 
-#: ft.c:585 src/filetransfer/worker.c:558
+#: ft.c:585 src/filetransfer/worker.c:569
 #: src/filetransfer/v3270ftprogress.c:720
 msgid "Transfer failed"
 msgstr "Transferência falhou"
 
-#: src/filetransfer/worker.c:544
-#, fuzzy
+#: src/filetransfer/worker.c:555
 msgid "Transfer operation has timed out"
-msgstr "Opções de transferência"
+msgstr "Operação de transferência esgotou o tempo de espera"
 
 #: src/filetransfer/v3270ft.c:344 src/filetransfer/settings.c:432
 msgid "Transfer options"
@@ -2717,9 +2675,8 @@ msgstr "Opções de transferência"
 
 #: src/dialogs/settingsdialog.c:376 src/dialogs/settingsdialog.c:395
 #: src/dialogs/settingsdialog.c:414
-#, fuzzy
 msgid "Transfer queue"
-msgstr "Velocidade de transferência"
+msgstr "Fila de transferências"
 
 #: src/filetransfer/tables.c:223
 msgid "Transfer speed"
@@ -2975,7 +2932,8 @@ msgid "X Wait"
 msgstr "X Aguarde"
 
 #: src/filetransfer/v3270ft.c:200 src/filetransfer/v3270ft.c:220
-#: src/filetransfer/activitylist.c:278 src/filetransfer/activitylist.c:379
+#: src/filetransfer/activitylist.c:278 src/filetransfer/activitylist.c:382
+#: src/dialogs/transfer.c:75
 msgid "XML file"
 msgstr "Arquivo XML"
 
@@ -2985,7 +2943,7 @@ msgstr "Amarelo"
 
 #: src/dialogs/settingsdialog.c:238
 msgid "You can't add more than one acitivity with the same files."
-msgstr ""
+msgstr "Você não pode adicionar mais de uma operação com os mesmos arquivos"
 
 #: ftmessages.c:74 src/filetransfer/v3270ftprogress.c:88
 msgid ""
@@ -3064,7 +3022,7 @@ msgstr "Você especificou uma opção inválida."
 
 #: src/filetransfer/tables.c:49
 msgid "_ASCII text"
-msgstr ""
+msgstr "Texto _ASCII"
 
 #: src/dialogs/settingsdialog.c:407 src/dialogs/settingsdialog.c:426
 #: src/dialogs/select.c:49 src/dialogs/select.c:93
@@ -3073,7 +3031,8 @@ msgstr ""
 msgid "_Cancel"
 msgstr "_Cancelar"
 
-#: src/trace/widget.c:449 src/dialogs/security.c:198
+#: src/trace/widget.c:449 src/dialogs/transfer.c:174 src/dialogs/transfer.c:194
+#: src/dialogs/security.c:203
 msgid "_Close"
 msgstr "_Close"
 
@@ -3089,11 +3048,11 @@ msgstr "_Conectar"
 msgid "_Disconnect"
 msgstr "_Desconectar"
 
-#: 99debug.xml:35 80rexx.xml:35 80javasamples.xml:35 00default.xml:58
+#: 99debug.xml:35 00default.xml:58
 msgid "_Edit"
 msgstr "_Editar"
 
-#: src/trace/widget.c:441 80rexx.xml:34 80javasamples.xml:34 00default.xml:34
+#: src/trace/widget.c:441 00default.xml:34
 msgid "_File"
 msgstr "_Arquivo"
 
@@ -3126,9 +3085,8 @@ msgid "_Remote file:"
 msgstr "Arquivo _remoto:"
 
 #: src/trace/widget.c:447
-#, fuzzy
 msgid "_Save"
-msgstr "Salvar"
+msgstr "_Salvar"
 
 #: src/dialogs/hostselect.c:162
 msgid "_Secure connection."
@@ -3142,7 +3100,7 @@ msgstr "_Serviço"
 msgid "_Text file"
 msgstr "Arquivo _texto"
 
-#: 80rexx.xml:36 80javasamples.xml:36 00default.xml:84
+#: 00default.xml:84
 msgid "_View"
 msgstr "_Exibir"
 
@@ -3394,8 +3352,14 @@ msgstr "translator-credits"
 #~ msgid "Event Trace"
 #~ msgstr "Trace de eventos"
 
+#~ msgid "Exception test"
+#~ msgstr "Exception test"
+
 #~ msgid "External Java Application"
 #~ msgstr "External Java Application"
+
+#~ msgid "External Rexx script"
+#~ msgstr "Script rexx externo"
 
 #~ msgid "Extra CGCSGID(s), ignoring"
 #~ msgstr "Extra CGCSGID(s), ignoring"
@@ -3477,6 +3441,9 @@ msgstr "translator-credits"
 #~ msgid "Invalid proxy type '%.*s'"
 #~ msgstr "Tipo de proxy invalido '%.*s'"
 
+#~ msgid "Java"
+#~ msgstr "Java"
+
 #~ msgid "LRECL:"
 #~ msgstr "LRECL:"
 
@@ -3507,6 +3474,9 @@ msgstr "translator-credits"
 #~ msgid "Option '%c:' is not supported"
 #~ msgstr "Opção não suportada: '%c:'"
 
+#~ msgid "Output test"
+#~ msgstr "Output test"
+
 #~ msgid "Passthru Proxy: send error"
 #~ msgstr "Passthru Proxy: Erro ao enviar"
 
@@ -3515,6 +3485,12 @@ msgstr "translator-credits"
 
 #~ msgid "Path to application data files"
 #~ msgstr "Caminho para os arquivos de dados da aplicação"
+
+#~ msgid "Popup test"
+#~ msgstr "Popup test"
+
+#~ msgid "Protection test"
+#~ msgstr "Protection test"
 
 #~ msgid "Proxy server (type:host[:port])"
 #~ msgstr "Servidor proxy (tipo:nome[:port])"
