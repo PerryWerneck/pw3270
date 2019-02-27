@@ -79,6 +79,7 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
+/*
 static void v3270FTProgress_class_init(v3270FTProgressClass *klass)
 {
 #if GTK_CHECK_VERSION(3,0,0)
@@ -325,3 +326,4 @@ void v3270_ft_progress_set_filenames(GtkWidget *widget, const gchar *from, const
 	gtk_label_set_text(GTK_V3270FTProcess(widget)->text[TEXT_FROM],from);
 	gtk_label_set_text(GTK_V3270FTProcess(widget)->text[TEXT_TO],to);
 }
+*/

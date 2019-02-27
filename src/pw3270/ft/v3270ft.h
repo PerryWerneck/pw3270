@@ -91,14 +91,16 @@
  LIB3270_EXPORT gint 				  v3270_ft_dialog_get_primary_space(GtkWidget *widget);
  LIB3270_EXPORT gint 				  v3270_ft_dialog_get_secondary_space(GtkWidget *widget);
 
+ /*
  LIB3270_EXPORT GtkWidget			* v3270_ft_progress_new(void);
  LIB3270_EXPORT void				  v3270_ft_progress_update(GtkWidget *widget, unsigned long current, unsigned long total, double kbytes_sec);
  LIB3270_EXPORT void				  v3270_ft_progress_set_message(GtkWidget *widget, const gchar *msg);
  LIB3270_EXPORT	void				  v3270_ft_progress_set_filenames(GtkWidget *widget, const gchar *from, const gchar *to);
  LIB3270_EXPORT void				  v3270_ft_progress_complete(GtkWidget *widget,unsigned long length,double kbytes_sec);
+ */
 
  // File transfer
- LIB3270_EXPORT gint				  pw3270_transfer_file(GtkWidget *widget, LIB3270_FT_OPTION options, const gchar *local, const gchar *remote, int lrecl, int blksize, int primspace, int secspace, int dft);
+ // LIB3270_EXPORT gint				  pw3270_transfer_file(GtkWidget *widget, LIB3270_FT_OPTION options, const gchar *local, const gchar *remote, int lrecl, int blksize, int primspace, int secspace, int dft);
 
 
  G_END_DECLS

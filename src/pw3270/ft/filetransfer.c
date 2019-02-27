@@ -223,6 +223,7 @@ static void ft_update(H3270 *hSession, unsigned long current, unsigned long leng
 	v3270_ft_progress_update(GTK_WIDGET(widget), current, length, kbytes_sec);
 }
 
+/*
 gint pw3270_transfer_file(GtkWidget *widget, LIB3270_FT_OPTION options, const gchar *local, const gchar *remote, int lrecl, int blksize, int primspace, int secspace, int dft)
 {
 	g_return_val_if_fail(GTK_IS_V3270(widget),0);
@@ -282,6 +283,7 @@ gint pw3270_transfer_file(GtkWidget *widget, LIB3270_FT_OPTION options, const gc
 	return rc;
 
 }
+*/
 
 void download_action(GtkAction *action, GtkWidget *widget)
 {
@@ -313,15 +315,18 @@ void download_action(GtkAction *action, GtkWidget *widget)
 		ft_dialog_save(dialog,name);
 		gtk_widget_hide(dialog);
 
-		pw3270_transfer_file(	widget,
-								v3270_ft_dialog_get_options(dialog),
-								v3270_ft_dialog_get_local_filename(dialog),
-								v3270_ft_dialog_get_host_filename(dialog),
-								v3270_ft_dialog_get_record_length(dialog),
-								v3270_ft_dialog_get_block_size(dialog),
-								v3270_ft_dialog_get_primary_space(dialog),
-								v3270_ft_dialog_get_secondary_space(dialog),
-								v3270_ft_dialog_get_dft_buffer_size(dialog));
+		v3270_transfer_file(
+			widget,
+			v3270_ft_dialog_get_options(dialog),
+			v3270_ft_dialog_get_local_filename(dialog),
+			v3270_ft_dialog_get_host_filename(dialog),
+			v3270_ft_dialog_get_record_length(dialog),
+			v3270_ft_dialog_get_block_size(dialog),
+			v3270_ft_dialog_get_primary_space(dialog),
+			v3270_ft_dialog_get_secondary_space(dialog),
+			v3270_ft_dialog_get_dft_buffer_size(dialog)
+		);
+
     }
 
     gtk_widget_destroy(dialog);
@@ -347,7 +352,7 @@ void upload_action(GtkAction *action, GtkWidget *widget)
 		return;
 	}
 
-	GtkWidget *dialog 	= v3270_ft_dialog_new(widget,LIB3270_FT_OPTION_SEND|get_options_from_config(name));
+	GtkWidget *dialog = v3270_ft_dialog_new(widget,LIB3270_FT_OPTION_SEND|get_options_from_config(name));
 
 	v3270_ft_dialog_set_tso(dialog,lib3270_is_tso(v3270_get_session(widget)));
 	ft_dialog_load(dialog,name);
@@ -357,15 +362,17 @@ void upload_action(GtkAction *action, GtkWidget *widget)
 		ft_dialog_save(dialog,name);
 		gtk_widget_hide(dialog);
 
-		pw3270_transfer_file(	widget,
-								v3270_ft_dialog_get_options(dialog),
-								v3270_ft_dialog_get_local_filename(dialog),
-								v3270_ft_dialog_get_host_filename(dialog),
-								v3270_ft_dialog_get_record_length(dialog),
-								v3270_ft_dialog_get_block_size(dialog),
-								v3270_ft_dialog_get_primary_space(dialog),
-								v3270_ft_dialog_get_secondary_space(dialog),
-								v3270_ft_dialog_get_dft_buffer_size(dialog));
+		v3270_transfer_file(
+			widget,
+			v3270_ft_dialog_get_options(dialog),
+			v3270_ft_dialog_get_local_filename(dialog),
+			v3270_ft_dialog_get_host_filename(dialog),
+			v3270_ft_dialog_get_record_length(dialog),
+			v3270_ft_dialog_get_block_size(dialog),
+			v3270_ft_dialog_get_primary_space(dialog),
+			v3270_ft_dialog_get_secondary_space(dialog),
+			v3270_ft_dialog_get_dft_buffer_size(dialog)
+		);
     }
 
     gtk_widget_destroy(dialog);
