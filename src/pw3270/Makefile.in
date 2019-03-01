@@ -35,7 +35,7 @@ LIB_SOURCES=\
 	print.c \
 	colors.c \
 	tools.c \
-	plugin.c 
+	plugin.c
 
 APP_SOURCES=\
 	main.c \
@@ -146,7 +146,7 @@ $(OBJDBG)/%.o: \
 $(BASEDIR)/.obj/Debug/%.a: \
 	./%/* \
 	$(DEPENDS)
- 
+
 	@$(MAKE) -C $(basename $(notdir $@)) $@
 
 $(OBJRLS)/%.o: \
@@ -172,7 +172,7 @@ $(OBJRLS)/%.o: \
 $(BASEDIR)/.obj/Release/%.a: \
 	./%/* \
 	$(DEPENDS)
- 
+
 	@$(MAKE) -C $(basename $(notdir $@)) $@
 
 $(POTDIR)/%.pot: \
@@ -198,7 +198,7 @@ $(POTDIR)/%.pot: \
 
 $(POTDIR)/%.pot: \
 	./%/*
- 
+
 	@$(MAKE) -C $(basename $(notdir $@)) $@
 
 $(SRCDIR)/%: \
@@ -243,14 +243,14 @@ $(BINRLS)/$(LIBNAME): \
 
 	@echo $(basename $@) ...
 	@$(MKDIR) `dirname $@`
-	@$(LN_S) -f $(LIBNAME).@PACKAGE_MAJOR_VERSION@ $@
+	@$(LN_S) $^ $@
 
 $(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@: \
 	$(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@
 
 	@echo $(basename $@) ...
 	@$(MKDIR) `dirname $@`
-	@$(LN_S) -f $(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@ $@
+	@$(LN_S) $^ $@
 
 $(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@: \
 	$(foreach SRC, $(basename $(LIB_SOURCES)), $(OBJRLS)/$(SRC).o) \
@@ -311,14 +311,14 @@ $(BINDBG)/$(LIBNAME): \
 
 	@echo $(basename $@) ...
 	@$(MKDIR) `dirname $@`
-	@$(LN_S) -f $(LIBNAME).@PACKAGE_MAJOR_VERSION@ $@
+	@$(LN_S) $^ $@
 
 $(BINDBG)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@: \
 	$(BINDBG)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@
 
 	@echo $(basename $@) ...
 	@$(MKDIR) `dirname $@`
-	@$(LN_S) -f $(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@ $@
+	@$(LN_S) $^ $@
 
 $(BINDBG)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@: \
 	$(foreach SRC, $(basename $(LIB_SOURCES)), $(OBJDBG)/$(SRC).o) \
