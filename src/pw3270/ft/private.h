@@ -86,7 +86,7 @@
 		int dummy;
 	};
 
-	G_GNUC_INTERNAL void browse_file(GtkButton *button,v3270FTD *parent);
+//	G_GNUC_INTERNAL void browse_file(GtkButton *button,v3270FTD *parent);
 
 
 #endif // PRIVATE_H_INCLUDED

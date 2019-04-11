@@ -35,6 +35,7 @@
 
 /*---[ Implement ]----------------------------------------------------------------------------------*/
 
+/*
 #ifdef WIN32
 
 struct file
@@ -154,3 +155,4 @@ void browse_file(GtkButton *button,v3270FTD *parent)
 
 }
 #endif // WIN32
+*/

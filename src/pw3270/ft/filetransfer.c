@@ -77,6 +77,7 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
+/*
 static LIB3270_FT_OPTION get_options_from_config(const gchar *group)
 {
 	int					  f;
@@ -223,68 +224,6 @@ static void ft_update(H3270 *hSession, unsigned long current, unsigned long leng
 	v3270_ft_progress_update(GTK_WIDGET(widget), current, length, kbytes_sec);
 }
 
-/*
-gint pw3270_transfer_file(GtkWidget *widget, LIB3270_FT_OPTION options, const gchar *local, const gchar *remote, int lrecl, int blksize, int primspace, int secspace, int dft)
-{
-	g_return_val_if_fail(GTK_IS_V3270(widget),0);
-
-	H3270		* hSession	= v3270_get_session(widget);
-	H3270FT		* ft		= lib3270_ft_new(hSession,options,local,remote,lrecl,blksize,primspace,secspace,dft,NULL);
-
-	if(!ft)
-		return -1;
-
-	GtkWidget	* dialog	= gtk_dialog_new_with_buttons(
-											(options & LIB3270_FT_OPTION_RECEIVE) ? _( "Receiving file" ) : _( "Sending file" ),
-											GTK_WINDOW(gtk_widget_get_toplevel(widget)),
-											GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
-											_( "_Close" ), GTK_RESPONSE_CANCEL,NULL );
-
-
-	// Create FT progress dialog
-	GtkWidget	* progress	= v3270_ft_progress_new();
-
-	lib3270_ft_set_user_data(hSession,progress);
-
-	struct lib3270_ft_callbacks *cbk = lib3270_get_ft_callbacks(hSession,sizeof(struct lib3270_ft_callbacks));
-
-	cbk->complete 		= ft_complete;
-	cbk->failed 		= ft_complete;
-	cbk->update			= ft_update;
-//	cbk->running		= ft_running;
-//	cbk->aborting		= ft_aborting;
-//	cbk->state_changed	= ft_state_changed;
-	cbk->message		= ft_message;
-
-	if(options & LIB3270_FT_OPTION_RECEIVE) {
-
-		// Recebendo arquivo
-		v3270_ft_progress_set_filenames(progress,remote,local);
-
-	} else {
-
-		// Enviando arquivo
-		v3270_ft_progress_set_filenames(progress,local,remote);
-
-	}
-
-	v3270_ft_progress_set_message(progress,_("Starting transfer"));
-
-	gtk_widget_show_all(progress);
-	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),GTK_WIDGET(progress),FALSE,TRUE,2);
-
-	gtk_widget_show_all(dialog);
-	lib3270_ft_start(v3270_get_session(widget));
-	int rc = gtk_dialog_run(GTK_DIALOG(dialog));
-	lib3270_ft_destroy(v3270_get_session(widget));
-
-	gtk_widget_destroy(dialog);
-
-	return rc;
-
-}
-*/
-
 void download_action(GtkAction *action, GtkWidget *widget)
 {
 	const gchar *name = g_object_get_data(G_OBJECT(action),"configuration");
@@ -379,4 +318,4 @@ void upload_action(GtkAction *action, GtkWidget *widget)
 
 }
 
-
+*/

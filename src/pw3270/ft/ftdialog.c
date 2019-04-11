@@ -55,6 +55,7 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
+/*
 static void v3270FTD_class_init(v3270FTDClass *klass)
 {
 //	GtkDialogClass	* widget_class	= GTK_DIALOG_CLASS(klass);
@@ -829,3 +830,4 @@ LIB3270_EXPORT gint v3270_ft_dialog_get_secondary_space(GtkWidget *widget)
 		return gtk_spin_button_get_value_as_int(GTK_V3270FTD(widget)->value[VALUE_SECSPACE]);
 	return 0;
 }
+*/
