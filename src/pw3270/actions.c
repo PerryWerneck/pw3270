@@ -303,9 +303,7 @@ static void copy_as_html_action(GtkAction *action, GtkWidget *widget)
 
 G_GNUC_INTERNAL void transfer_action(GtkAction *action, GtkWidget *widget)
 {
-	GtkWidget * dialog = v3270ft_new();
-
-	gtk_window_set_transient_for(GTK_WINDOW(dialog),GTK_WINDOW(gtk_widget_get_toplevel(widget)));
+	GtkWidget * dialog = v3270ft_new(gtk_widget_get_toplevel(widget));
 
 	do {
 
