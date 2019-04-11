@@ -191,6 +191,30 @@ copy_loaders() {
 
 }
 
+copy_schemes() {
+
+	mkdir -p "${TARGET}/share/glib-2.0/schemas"
+
+	cp -rv \
+		"${prefix}/share/glib-2.0/schemas/org.gtk.Settings.FileChooser.gschema.xml" \
+		"${TARGET}/share/glib-2.0/schemas"
+
+	if [ "$?" != "0" ]; then
+		exit -1
+	fi
+
+	cp -rv \
+		"${prefix}/share/glib-2.0/schemas/gschema.dtd" \
+		"${TARGET}/share/glib-2.0/schemas"
+
+	if [ "$?" != "0" ]; then
+		exit -1
+	fi
+
+
+}
+
+
 copy_theme() {
 
 	mkdir -p "${TARGET}/etc"
@@ -233,6 +257,7 @@ copy_theme() {
 copy_dll
 copy_locale
 copy_loaders
+copy_schemes
 copy_theme "Adwaita"
 
 # Otimiza todos os pngs
