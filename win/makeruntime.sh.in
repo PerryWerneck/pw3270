@@ -211,7 +211,12 @@ copy_schemes() {
 		exit -1
 	fi
 
+	glib-compile-schemas \
+		"${TARGET}/share/glib-2.0/schemas"
 
+	if [ "$?" != "0" ]; then
+		exit -1
+	fi
 }
 
 
