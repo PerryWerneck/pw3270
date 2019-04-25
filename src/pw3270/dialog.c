@@ -275,14 +275,6 @@
 	}
 	else
 	{
-#ifdef _WIN32
-		gchar *name = pw3270_file_chooser(GTK_FILE_CHOOSER_ACTION_SAVE, "save_contents",  gettext(user_title ? user_title : title), filename);
-		if(name)
-		{
-			save_text(toplevel,name,text,NULL,errmsg);
-			g_free(name);
-		}
-#else
 		GtkWidget	* dialog;
 		gchar		* ptr;
 		gchar 		* encattr		= NULL;
@@ -323,7 +315,6 @@
 
 		trace("Removing dialog %p",dialog);
 		gtk_widget_destroy(dialog);
-#endif // _WIN32
 	}
 
 	return 0;
@@ -423,37 +414,14 @@
 
  void paste_file_action(GtkAction *action, GtkWidget *widget)
  {
- 	const gchar * name		= g_object_get_data(G_OBJECT(action),"filename");
- 	const gchar * charset	= g_object_get_data(G_OBJECT(action),"charset");
-
-	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
-
- 	if(name) {
-
-		// Tem nome pre-definido, colca direto
-		paste_filename(widget,name,charset);
-		return;
-
- 	}
-
-
- 	gchar * filename = pw3270_file_chooser(	GTK_FILE_CHOOSER_ACTION_OPEN,
-											"paste",
-											g_object_get_data(G_OBJECT(action),"title"),
-											name
-										);
-
-	if(filename) {
-		paste_filename(widget,filename,charset);
-		g_free(filename);
-	}
-
- 	/*
  	const gchar * user_title	= g_object_get_data(G_OBJECT(action),"title");
  	const gchar * filename		= g_object_get_data(G_OBJECT(action),"filename");
- 	gchar 		* encattr		= NULL;g_get_charset(&encoding)
+ 	gchar 		* encattr		= NULL;
 	GtkWidget	* dialog;
 	gchar		* ptr;
+	const gchar * encoding 		= NULL;
+
+ 	g_get_charset(&encoding);
 
 	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
 
@@ -497,7 +465,6 @@
 
 	if(encattr)
 		g_free(encattr);
-	*/
  }
 
  G_GNUC_INTERNAL void about_dialog_action(GtkAction *action, GtkWidget *widget)
@@ -579,153 +546,3 @@
 	g_free(info);
  }
 
-#ifdef _WIN32
-static gpointer select_file(struct file *fl) {
-
-
-	switch(fl->action) {
-	case GTK_FILE_CHOOSER_ACTION_SAVE:	// Receber arquivo
-										// https://msdn.microsoft.com/en-us/library/windows/desktop/ms646839(v=vs.85).aspx
-										// https://msdn.microsoft.com/en-us/library/windows/desktop/ms646829(v=vs.85).aspx#open_file
-		fl->ofn.Flags = OFN_OVERWRITEPROMPT | OFN_CREATEPROMPT | OFN_HIDEREADONLY;
-		fl->ok = GetSaveFileName(&fl->ofn);
-		break;
-
-	case GTK_FILE_CHOOSER_ACTION_OPEN:	// Enviar arquivo
-										// https://msdn.microsoft.com/en-us/library/windows/desktop/ms646928(v=vs.85).aspx
-		fl->ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
-		fl->ok = GetOpenFileName(&fl->ofn);
-		break;
-	}
-
-	fl->enabled = FALSE;
-
-	return 0;
-}
-#endif // _WIN32
-
- LIB3270_EXPORT gchar * pw3270_file_chooser(GtkFileChooserAction action, const gchar *name,  const gchar *title, const gchar *file)
- {
-    gchar       * filename      = NULL;
-
-#if defined(_WIN32)
-
-	GThread 	* thd;
-	struct file	  fl;
-	GtkWidget	* dialog	= pw3270_get_toplevel();
-	GdkWindow	* win		= gtk_widget_get_window(GTK_WIDGET(dialog));
-
-	gtk_widget_set_sensitive(GTK_WIDGET(dialog),FALSE);
-
-	memset(&fl,0,sizeof(fl));
-	fl.ofn.lStructSize		= sizeof(fl.ofn);
-	fl.action				= action;
-	fl.ofn.hwndOwner		= GDK_WINDOW_HWND(win);
-	fl.ofn.lpstrFile		= fl.szName;
-	fl.ofn.lpstrTitle		= title;
-
-	// Set lpstrFile[0] to '\0' so that GetOpenFileName does not
-	// use the contents of szFile to initialize itself.
-	fl.ofn.lpstrFile[0] 	= '\0';
-	fl.ofn.nMaxFile 		= sizeof(fl.szName);
-
-	fl.ofn.lpstrInitialDir	= NULL;
-	fl.ofn.nMaxFileTitle	= 0;
-
-	// Guarda o valor atual
-    if(file && *file)
-    {
-		strncpy(fl.szName,file,fl.ofn.nMaxFile);
-    }
-    else
-    {
-        gchar *ptr = get_string_from_config("files",name,"");
-        if(*ptr)
-			strncpy(fl.szName,ptr,fl.ofn.nMaxFile);
-        else
-			fl.ofn.lpstrInitialDir = g_get_user_special_dir(G_USER_DIRECTORY_DOCUMENTS);
-        g_free(ptr);
-    }
-
-	thd = g_thread_new("GetFileName",(GThreadFunc) select_file, &fl);
-
-	fl.enabled = TRUE;
-	while(fl.enabled) {
-		g_main_context_iteration(NULL,TRUE);
-	}
-
-	g_thread_unref(thd);
-
-	if(fl.ok) {
-		filename = g_strdup(fl.szName);
-	}
-
-	gtk_widget_set_sensitive(GTK_WIDGET(dialog),TRUE);
-
-#else
-    static const struct _btn
-    {
-            const gchar          * button;
-            GtkFileChooserAction   action;
-    } btn[] =
-    {
-        { GTK_STOCK_OPEN,     GTK_FILE_CHOOSER_ACTION_OPEN            },
-        { GTK_STOCK_SAVE,     GTK_FILE_CHOOSER_ACTION_SAVE            },
-        { GTK_STOCK_OK,       GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER   },
-        { GTK_STOCK_OK,       GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER   }
-    };
-
-    GtkWidget	* dialog;
-    gchar		* ptr;
-    const gchar * button        = GTK_STOCK_OK;
-    int           f;
-
-    for(f=0;f<G_N_ELEMENTS(btn);f++)
-    {
-        if(action == btn[f].action)
-        {
-            button = btn[f].button;
-            break;
-        }
-    }
-
-    dialog = gtk_file_chooser_dialog_new( 	title,
-                                            GTK_WINDOW(pw3270_get_toplevel()),
-                                            action,
-                                            GTK_STOCK_CANCEL,	GTK_RESPONSE_CANCEL,
-                                            button,		        GTK_RESPONSE_ACCEPT,
-                                            NULL );
-
-    if(action == GTK_FILE_CHOOSER_ACTION_SAVE)
-    {
-        gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(dialog), TRUE);
-        g_signal_connect(GTK_FILE_CHOOSER(dialog), "confirm-overwrite", G_CALLBACK(confirm_overwrite), G_OBJECT(dialog));
-    }
-
-    if(file && *file)
-    {
-        gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog),file);
-    }
-    else
-    {
-        ptr = get_string_from_config("files",name,"");
-        if(*ptr)
-            gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog),ptr);
-        else
-            gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),g_get_user_special_dir(G_USER_DIRECTORY_DOCUMENTS));
-        g_free(ptr);
-    }
-
-    if(gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
-    {
-        filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
-    }
-
-    gtk_widget_destroy(dialog);
-#endif // _WIN32
-
-	if(filename && *filename)
-		set_string_to_config("files",name,"%s",filename);
-
-    return filename;
- }

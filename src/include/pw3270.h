@@ -84,8 +84,6 @@
 
  LIB3270_EXPORT gchar       * pw3270_get_datadir(const gchar *first_element, ...);
 
- LIB3270_EXPORT gchar       * pw3270_file_chooser(GtkFileChooserAction action, const gchar *name,  const gchar *title, const gchar *file);
-
  LIB3270_EXPORT	void		  pw3270_set_host_charset(GtkWidget *widget, const gchar *name);
  LIB3270_EXPORT	void		  pw3270_remap_from_xml(GtkWidget *widget, const gchar *name);
 
