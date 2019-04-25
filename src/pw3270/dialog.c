@@ -71,7 +71,6 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
-#ifndef _WIN32
  static void charset_changed(GtkComboBox *widget,gchar **encoding)
  {
  	gchar *new_encoding = NULL;
@@ -185,7 +184,6 @@
 	gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(widget),box);
 
  }
-#endif // _WIN32
 
  static void save_text(GtkWindow *toplevel,const gchar *filename, const gchar *text, const gchar *encoding, const gchar *errmsg)
  {
