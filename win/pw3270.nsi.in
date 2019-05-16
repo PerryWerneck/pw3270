@@ -25,10 +25,14 @@ InstallDirRegKey HKLM "Software\@PACKAGE@" "InstallLocation"
 RequestExecutionLevel admin
 
 # Properties
-VIProductVersion "@PACKAGE_VERSION@.@PACKAGE_MAJOR_RELEASE@.@PACKAGE_MINOR_RELEASE@"
-VIAddVersionKey "ProductName" "@PACKAGE@"
-VIAddVersionKey "FileDescription" "@PACKAGE_DESCRIPTION@"
+VIProductVersion "@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.@PACKAGE_MAJOR_RELEASE@.0"
+VIFileVersion "@WIN32_VERSION@"
+
+VIAddVersionKey "ProductVersion" "@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.@PACKAGE_MAJOR_RELEASE@.0"
 VIAddVersionKey "FileVersion" "@WIN32_VERSION@"
+
+VIAddVersionKey "ProductName" "sisbb"
+VIAddVersionKey "FileDescription" "@PACKAGE_DESCRIPTION@"
 VIAddVersionKey "LegalCopyright" "GPL-2.0"
 
 # Interface
