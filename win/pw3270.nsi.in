@@ -28,7 +28,7 @@ RequestExecutionLevel admin
 VIProductVersion "@PACKAGE_VERSION@.@PACKAGE_MAJOR_RELEASE@.@PACKAGE_MINOR_RELEASE@"
 VIAddVersionKey "ProductName" "@PACKAGE@"
 VIAddVersionKey "FileDescription" "@PACKAGE_DESCRIPTION@"
-VIAddVersionKey "FileVersion" "@PACKAGE_VERSION@"
+VIAddVersionKey "FileVersion" "@WIN32_VERSION@"
 VIAddVersionKey "LegalCopyright" "GPL-2.0"
 
 # Interface
