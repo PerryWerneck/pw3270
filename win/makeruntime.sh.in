@@ -225,13 +225,14 @@ copy_theme() {
 	mkdir -p "${TARGET}/etc"
 	cp -rv "${prefix}/etc/gtk-3.0" "${TARGET}/etc"
 
-	rm -f $TARGET_PATH/etc/gtk-3.0/settings.ini
-	echo "[Settings]" >> $TARGET_PATH/etc/gtk-3.0/settings.ini
-	echo "gtk-theme-name = MS-Windows" >> $TARGET_PATH/etc/gtk-3.0/settings.ini
-	echo "gtk-icon-theme-name = ${1}" >> $TARGET_PATH/etc/gtk-3.0/settings.ini
-	echo "gtk-fallback-icon-theme = ${1}" >> $TARGET_PATH/etc/gtk-3.0/settings.ini
-	echo "gtk-font-name = Sans 10" >> $TARGET_PATH/etc/gtk-3.0/settings.ini
-	echo "gtk-button-images = 1" >> $TARGET_PATH/etc/gtk-3.0/settings.ini
+	rm -f ${TARGET}/etc/gtk-3.0/settings.ini
+	mkdir -p ${TARGET}/etc/gtk-3.0
+	echo "[Settings]" >> ${TARGET}/etc/gtk-3.0/settings.ini
+	echo "gtk-theme-name = MS-Windows" >> ${TARGET}/etc/gtk-3.0/settings.ini
+	echo "gtk-icon-theme-name = ${1}" >> ${TARGET}/etc/gtk-3.0/settings.ini
+	echo "gtk-fallback-icon-theme = ${1}" >> ${TARGET}/etc/gtk-3.0/settings.ini
+	echo "gtk-font-name = Sans 10" >> ${TARGET}/etc/gtk-3.0/settings.ini
+	echo "gtk-button-images = 1" >> ${TARGET}/etc/gtk-3.0/settings.ini
 
 	mkdir -p ${TARGET}/share/icons
 	if [ "$?" != 0 ]; then
