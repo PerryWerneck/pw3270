@@ -431,7 +431,10 @@
 			val = (int) getpid();
 			while(val > 0)
 			{
+				#pragma GCC diagnostic push
+				#pragma GCC diagnostic ignored "-Wnarrowing"
 				char str[] = { 'a'+(val % 25), 0 };
+				#pragma GCC diagnostic pop
 				name.append(str);
 				val /= 25;
 			}

@@ -243,6 +243,7 @@ $(BINRLS)/$(LIBNAME): \
 
 	@echo $(basename $@) ...
 	@$(MKDIR) `dirname $@`
+	@rm -f $@
 	@$(LN_S) $^ $@
 
 $(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@: \
@@ -250,6 +251,7 @@ $(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@: \
 
 	@echo $(basename $@) ...
 	@$(MKDIR) `dirname $@`
+	@rm -f $@
 	@$(LN_S) $^ $@
 
 $(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@: \
@@ -311,6 +313,7 @@ $(BINDBG)/$(LIBNAME): \
 
 	@echo $(basename $@) ...
 	@$(MKDIR) `dirname $@`
+	@rm -f $@
 	@$(LN_S) $^ $@
 
 $(BINDBG)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@: \
@@ -318,6 +321,7 @@ $(BINDBG)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@: \
 
 	@echo $(basename $@) ...
 	@$(MKDIR) `dirname $@`
+	@rm -f $@
 	@$(LN_S) $^ $@
 
 $(BINDBG)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@: \

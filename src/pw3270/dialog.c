@@ -487,10 +487,14 @@
 		"Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02111-1307 "
 		"USA" );
 
-	GtkAboutDialog  * dialog 	= GTK_ABOUT_DIALOG(gtk_about_dialog_new());
-	gchar			* text 		= g_strdup_printf("%s-logo.png",g_get_application_name());
-	gchar			* filename	= build_data_filename(text,NULL);
-	gchar			* info;
+	GtkAboutDialog		* dialog 	= GTK_ABOUT_DIALOG(gtk_about_dialog_new());
+	g_autofree gchar	* text 		= g_strdup_printf("%s-logo.png",g_get_application_name());
+	g_autofree gchar	* filename	= build_data_filename(text,NULL);
+	g_autofree gchar	* info;
+
+	if(widget) {
+		gtk_window_set_transient_for(GTK_WINDOW(dialog),GTK_WINDOW(gtk_widget_get_toplevel(widget)));
+	}
 
 	trace("[%s]",filename);
 	if(g_file_test(filename,G_FILE_TEST_EXISTS))
@@ -510,9 +514,6 @@
 			g_error_free(error);
 		}
 	}
-
-	g_free(filename);
-	g_free(text);
 
 #ifdef PACKAGE_RELEASE
 	text = g_strdup_printf(_("Version %s-%s"),PACKAGE_VERSION,G_STRINGIFY(PACKAGE_RELEASE));
@@ -541,6 +542,5 @@
 	gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(GTK_WIDGET(dialog));
 
-	g_free(info);
  }
 
