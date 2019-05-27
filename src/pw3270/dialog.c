@@ -467,11 +467,14 @@
 
  G_GNUC_INTERNAL void about_dialog_action(GtkAction *action, GtkWidget *widget)
  {
- 	static const gchar *authors[]	= {	"Perry Werneck <perry.werneck@gmail.com>",
-										"Paul Mattes <Paul.Mattes@usa.net>",
-										"Georgia Tech Research Corporation (GTRC)",
-										"and others",
-										NULL };
+ 	static const gchar *authors[]	=
+ 	{
+ 		"Perry Werneck <perry.werneck@gmail.com>",
+		"Paul Mattes <Paul.Mattes@usa.net>",
+		"Georgia Tech Research Corporation (GTRC)",
+		"and others",
+		NULL
+	};
 
 	static const gchar *license		=
 	N_( "This program is free software; you can redistribute it and/or "
@@ -490,13 +493,20 @@
 	GtkAboutDialog		* dialog 	= GTK_ABOUT_DIALOG(gtk_about_dialog_new());
 	g_autofree gchar	* text 		= g_strdup_printf("%s-logo.png",g_get_application_name());
 	g_autofree gchar	* filename	= build_data_filename(text,NULL);
-	g_autofree gchar	* info;
+	g_autofree gchar	* info		= g_strdup_printf(_( "3270 terminal emulator for GTK %d.%d" ),GTK_MAJOR_VERSION,GTK_MINOR_VERSION);
+
+	g_autofree gchar	* version	=
+#ifdef PACKAGE_RELEASE
+		g_strdup_printf(_("Version %s-%s"),PACKAGE_VERSION,G_STRINGIFY(PACKAGE_RELEASE));
+#else
+		g_strdup_printf(_("Version %s-%s"),PACKAGE_VERSION,G_STRINGIFY(BUILD_DATE));
+#endif // PACKAGE_REVISION
+
 
 	if(widget) {
 		gtk_window_set_transient_for(GTK_WINDOW(dialog),GTK_WINDOW(gtk_widget_get_toplevel(widget)));
 	}
 
-	trace("[%s]",filename);
 	if(g_file_test(filename,G_FILE_TEST_EXISTS))
 	{
 		GError 		* error	= NULL;
@@ -513,28 +523,20 @@
 			g_warning("Can't load %s: %s",filename,error->message);
 			g_error_free(error);
 		}
+
+	} else {
+
+		g_message("Can't load %s: %s",filename,strerror(ENOENT));
+
 	}
 
-	g_autofree gchar * version =
-#ifdef PACKAGE_RELEASE
-		g_strdup_printf(_("Version %s-%s"),PACKAGE_VERSION,G_STRINGIFY(PACKAGE_RELEASE));
-#else
-		g_strdup_printf(_("Version %s-%s"),PACKAGE_VERSION,G_STRINGIFY(BUILD_DATE));
-#endif // PACKAGE_REVISION
-
 	gtk_about_dialog_set_version(dialog,version);
-
 	gtk_about_dialog_set_copyright(dialog, "Copyright © 2008 Banco do Brasil S.A." );
-
-	info = g_strdup_printf(_( "3270 terminal emulator for GTK %d.%d" ),GTK_MAJOR_VERSION,GTK_MINOR_VERSION);
 	gtk_about_dialog_set_comments(dialog, info );
-
 	gtk_about_dialog_set_license(dialog, gettext( license ) );
 	gtk_about_dialog_set_wrap_license(dialog,TRUE);
-
-	gtk_about_dialog_set_website(dialog,_("https://portal.softwarepublico.gov.br/social/pw3270/"));
+	gtk_about_dialog_set_website(dialog,"https://portal.softwarepublico.gov.br/social/pw3270/");
 	gtk_about_dialog_set_website_label(dialog,_( "Brazilian Public Software Portal" ));
-
 	gtk_about_dialog_set_authors(dialog,authors);
 	gtk_about_dialog_set_translator_credits(dialog,_("translator-credits"));
 
