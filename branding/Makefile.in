@@ -78,8 +78,16 @@ $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/%.png: \
 	@$(MKDIR) `dirname $@`
 	@$(INSTALL_DATA) $< $@
 
+$(DESTDIR)$(datarootdir)/pixmaps/%.png: \
+	$(BINDIR)/%.png
+
+	@echo $@ ...
+	@$(MKDIR) `dirname $@`
+	@$(INSTALL_DATA) $< $@
+
 install: \
 	$(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/$(PACKAGE_NAME).png \
+	$(DESTDIR)$(datarootdir)/pixmaps/$(PACKAGE_NAME).png \
 	$(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/$(PACKAGE_NAME)-logo.png
 
 
