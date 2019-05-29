@@ -566,13 +566,14 @@ void configuration_deinit(void)
 		g_autofree gchar * filename = g_build_filename(g_get_user_config_dir(),name,NULL);
 
 		g_mkdir_with_parents(g_get_user_config_dir(),S_IRUSR|S_IWUSR);
+
+		g_message( _("Saving %s"), filename);
+
 		g_file_set_contents(filename,text,-1,&error);
 
 		if(error) {
 			g_message( _( "Can't save \"%s\": %s" ), filename, error->message);
 			g_error_free(error);
-		} else {
-			g_message( _("Configuration saved to %s"), filename);
 		}
 
 	}
