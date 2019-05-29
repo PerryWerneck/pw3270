@@ -59,6 +59,7 @@ AC_PROG_LN_S
 AC_PATH_TOOL([AR], [ar], [ar])
 AC_PATH_TOOL([GENMARSHAL], [glib-genmarshal], [glib-genmarshal])
 AC_PATH_TOOL([HELP2MAN], [help2man], [no])
+AC_PATH_TOOL([DESKTOP_INSTALL],[desktop-file-install],[no])
 
 AC_LANG([C])
 
@@ -175,7 +176,7 @@ dnl ---------------------------------------------------------------------------
 dnl Version & customization
 dnl ---------------------------------------------------------------------------
 
-AC_SUBST(PACKAGE_DESCRIPTION,"3270 Emulator for gtk")
+AC_SUBST(PACKAGE_DESCRIPTION,"IBM 3270 Terminal emulator")
 
 app_vrs_major=$(echo $VERSION | cut -d. -f1)
 app_vrs_minor=$(echo $VERSION | cut -d. -f2)
@@ -521,8 +522,10 @@ AC_CONFIG_FILES(src/libpw3270cpp/Makefile)
 
 AC_CONFIG_FILES(ui/Makefile)
 AC_CONFIG_FILES(charsets/Makefile)
-AC_CONFIG_FILES(branding/Makefile)
 AC_CONFIG_FILES(locale/Makefile)
+
+AC_CONFIG_FILES(branding/Makefile)
+AC_CONFIG_FILES(branding/launcher.desktop)
 
 AC_CONFIG_FILES(sdk/pw3270.pc)
 AC_CONFIG_FILES(sdk/Makefile)

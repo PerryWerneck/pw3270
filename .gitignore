@@ -52,3 +52,4 @@ scripts
 locale
 *.xz
 src/include/lib3270
+*.desktop

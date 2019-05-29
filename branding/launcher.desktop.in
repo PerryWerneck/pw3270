@@ -1,0 +1,14 @@
+[Desktop Entry]
+X-SuSE-translate=true
+GenericName=@PACKAGE_NAME@
+Name=3270 Terminal
+Comment=@PACKAGE_DESCRIPTION@
+Exec=@PACKAGE_TARNAME@
+Icon=@PACKAGE_NAME@
+Terminal=false
+Type=Application
+StartupNotify=true
+
+# https://specifications.freedesktop.org/menu-spec/menu-spec-1.0.html
+Categories=System;TerminalEmulator;
+

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-27 14:34-0300\n"
+"POT-Creation-Date: 2019-05-29 11:37-0300\n"
 "PO-Revision-Date: 2019-02-27 14:48-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
@@ -35,22 +35,22 @@ msgstr "%s"
 msgid "%s - Disconnected"
 msgstr "%s - Desconectado"
 
-#: actions.c:855 actions.c:867
+#: actions.c:853 actions.c:865
 #, c-format
 msgid "%s action needs a valid id attribute"
 msgstr "Ação %s exige um atributo ID válido"
 
-#: actions.c:703 actions.c:832 actions.c:844
+#: actions.c:701 actions.c:830 actions.c:842
 #, c-format
 msgid "%s action needs a valid toggle name"
 msgstr "Ação %s exige um nome de toggle válido"
 
-#: actions.c:879
+#: actions.c:877
 #, c-format
 msgid "%s action needs a valid value"
 msgstr "Ação %s precisa de um valor válido"
 
-#: actions.c:589
+#: actions.c:587
 #, c-format
 msgid "%s action needs src attribute"
 msgstr "Ação %s precisa do atributo src"
@@ -60,32 +60,32 @@ msgstr "Ação %s precisa do atributo src"
 msgid "%s requires GTK version %d.%d.%d"
 msgstr "%s requer GTK versão %d.%d.%d"
 
-#: kybd.c:2437
+#: kybd.c:2441
 #, c-format
 msgid "%s: Bell not supported"
 msgstr "%s: Alerta sonoro não suportado"
 
-#: kybd.c:2596
+#: kybd.c:2600
 #, c-format
 msgid "%s: Missing hex digits after \\x"
 msgstr "%s: Faltando dígitos hexadecimais após \\x"
 
-#: kybd.c:2536
+#: kybd.c:2540
 #, c-format
 msgid "%s: Unknown character after \\p"
 msgstr "%s: Caractere desconhecido depois de \\p"
 
-#: kybd.c:2572
+#: kybd.c:2576
 #, c-format
 msgid "%s: Unknown character after \\pa"
 msgstr "%s: Caractere desconhecido depois de \\pa"
 
-#: kybd.c:2550
+#: kybd.c:2554
 #, c-format
 msgid "%s: Unknown character after \\pf"
 msgstr "%s: Caractere desconhecido depois de \\pf"
 
-#: kybd.c:2488
+#: kybd.c:2492
 #, c-format
 msgid "%s: Vertical tab not supported"
 msgstr "%s: Tabulação vertical não é suportada"
@@ -107,9 +107,9 @@ msgstr "16 cores"
 msgid "3270 Error"
 msgstr "Erro 3270"
 
-#: src/filetransfer/v3270ftprogress.c:385 src/filetransfer/v3270ft.c:359
-#: src/dialogs/settingsdialog.c:281 src/dialogs/settingsdialog.c:283
-#: src/dialogs/settingsdialog.c:285
+#: src/filetransfer/v3270ftprogress.c:385 src/filetransfer/v3270ft.c:360
+#: src/dialogs/settingsdialog.c:284 src/dialogs/settingsdialog.c:286
+#: src/dialogs/settingsdialog.c:288
 msgid "3270 File transfer"
 msgstr "Transferência de arquivos 3270"
 
@@ -121,7 +121,7 @@ msgstr "Alerta 3270"
 msgid "3270 screen"
 msgstr "Tela 3270"
 
-#: dialog.c:563
+#: dialog.c:496
 #, c-format
 msgid "3270 terminal emulator for GTK %d.%d"
 msgstr "Emulador 3270 para GTK+ %d.%d"
@@ -216,7 +216,7 @@ msgstr "Confirmação recebida, transferindo dados"
 msgid "Action failed"
 msgstr "Ação falhou"
 
-#: src/dialogs/settingsdialog.c:197 src/dialogs/settingsdialog.c:233
+#: src/dialogs/settingsdialog.c:200 src/dialogs/settingsdialog.c:236
 msgid "Activity already on the queue"
 msgstr "Atividade já está na fila"
 
@@ -232,7 +232,7 @@ msgstr "Endereço ou nome do host a conectar."
 msgid "Alert sound"
 msgstr "Aviso sonoro"
 
-#: src/filetransfer/v3270ft.c:308 src/filetransfer/settings.c:211
+#: src/filetransfer/v3270ft.c:310 src/filetransfer/settings.c:212
 msgid "All files"
 msgstr "Todos os arquivos"
 
@@ -269,7 +269,7 @@ msgstr "Nome da aplicação"
 msgid "Attn"
 msgstr "Attn"
 
-#: actions.c:564
+#: actions.c:562
 #, c-format
 msgid "Attribute \"%s\" is invalid or undefined"
 msgstr "Atributo \"%s\" é invalido ou indefinido"
@@ -312,7 +312,7 @@ msgstr "Avblock"
 msgid "Awaiting chance to send an abort"
 msgstr "Aguardando para enviar pedido de cancelamento"
 
-#: src/dialogs/settingsdialog.c:408 src/dialogs/settingsdialog.c:427
+#: src/dialogs/settingsdialog.c:411 src/dialogs/settingsdialog.c:430
 msgid "B_egin transfer"
 msgstr "Iniciar transferência"
 
@@ -336,8 +336,9 @@ msgstr "Completar com espaços"
 msgid "Blinking Cursor"
 msgstr "Cursor piscante"
 
-#: src/filetransfer/tables.c:174
-msgid "Block size:"
+#: src/filetransfer/tables.c:166
+#, fuzzy
+msgid "Block size"
 msgstr "Comprimento do bloco:"
 
 #: colors.c:495 src/dialogs/colors.c:291
@@ -348,7 +349,7 @@ msgstr "Azul"
 msgid "Bold"
 msgstr "Negrito"
 
-#: dialog.c:570
+#: dialog.c:539
 msgid "Brazilian Public Software Portal"
 msgstr "Portal do Software Público Brasileiro"
 
@@ -380,7 +381,7 @@ msgstr "Arquivo CMS não encontrado, transferência cancelada"
 msgid "CRL signature failure"
 msgstr "Erro na assinatura CRL"
 
-#: dialog.c:122
+#: dialog.c:121
 msgid "C_haracter Coding:"
 msgstr "C_odificação de caracteres:"
 
@@ -402,7 +403,7 @@ msgstr "Não foi possível %s opção \"keep-alive\""
 msgid "Can't accept unnamed %s"
 msgstr "Não posso aceitar elemento %s sem nome"
 
-#: src/dialogs/settingsdialog.c:241
+#: src/dialogs/settingsdialog.c:244
 msgid "Can't add activity"
 msgstr "Não é possível adicionar atividade"
 
@@ -454,7 +455,7 @@ msgstr "Erro ao inicializar LDAP"
 msgid "Can't load %s"
 msgstr "Não foi possível carregar %s"
 
-#: dialog.c:406
+#: dialog.c:395
 msgid "Can't load file"
 msgstr "Não foi possível carregar arquivo"
 
@@ -505,7 +506,7 @@ msgstr "Incapaz de processar elemento sem nome"
 msgid "Can't print"
 msgstr "Não é possível imprimir"
 
-#: ssl/ctx_init.c:110
+#: ssl/ctx_init.c:224
 #, c-format
 msgid "Can't read SSL certificates from \"%s\""
 msgstr "Não foi possível ler certificados SSL de %s"
@@ -515,13 +516,13 @@ msgstr "Não foi possível ler certificados SSL de %s"
 msgid "Can't recognize \"%s\" as a valid host type"
 msgstr "Não reconheço \"%s\" como um tipo de host válido"
 
-#: src/filetransfer/save.c:116 src/filetransfer/activitylist.c:356
+#: src/filetransfer/save.c:116 src/filetransfer/activitylist.c:437
 #: src/trace/widget.c:493 src/dialogs/transfer.c:96
 #, c-format
 msgid "Can't save %s"
 msgstr "Não foi possível salvar arquivo %s"
 
-#: dialog.c:382
+#: dialog.c:371
 #, c-format
 msgid ""
 "Can't save copy to file\n"
@@ -530,11 +531,11 @@ msgstr ""
 "Não foi possível salvar cópia para o arquivo\n"
 "%s"
 
-#: dialog.c:219 src/trace/widget.c:497
+#: dialog.c:217 src/trace/widget.c:497
 msgid "Can't save file"
 msgstr "Não foi possível salvar arquivo"
 
-#: dialog.c:347
+#: dialog.c:336
 #, c-format
 msgid ""
 "Can't save screen to file\n"
@@ -543,7 +544,7 @@ msgstr ""
 "Não foi possível salvar a tela no arquivo\n"
 "%s"
 
-#: dialog.c:365
+#: dialog.c:354
 #, c-format
 msgid ""
 "Can't save selection to file\n"
@@ -593,7 +594,7 @@ msgstr "Não foi possível iniciar transferência de arquivo"
 msgid "Can't start file transfer."
 msgstr "Não foi possível iniciar transferência de arquivo."
 
-#: ssl/negotiate.c:222
+#: ssl/negotiate.c:223
 msgid "Can't verify."
 msgstr "Não foi possível verificar"
 
@@ -613,17 +614,17 @@ msgstr "Cancelado pelo usuário"
 msgid "Cannot connect to specified LU"
 msgstr "Não foi possível conectar na LU pedida"
 
-#: ssl/negotiate.c:101
+#: ssl/negotiate.c:102
 msgid "Cant create a new SSL structure for current connection."
 msgstr ""
 "Não foi possível criar uma nova estrutura de controle SSL para a conexão "
 "atual."
 
-#: ssl/ctx_init.c:89
+#: ssl/ctx_init.c:203
 msgid "Cant initialize the SSL context."
 msgstr "Erro ao inicializar contexto de segurança"
 
-#: ssl/negotiate.c:131
+#: ssl/negotiate.c:132
 msgid ""
 "Cant set the file descriptor for the input/output facility for the TLS/SSL "
 "(encrypted) side of ssl."
@@ -744,7 +745,7 @@ msgstr "Cria arquivo com registros de tamanho variável."
 msgid "Cross hair cursor"
 msgstr "Cursor mira"
 
-#: dialog.c:139
+#: dialog.c:138
 #, c-format
 msgid "Current (%s)"
 msgstr "Atual (%s)"
@@ -786,7 +787,8 @@ msgid "Cylinders"
 msgstr "Cilindros"
 
 #: src/filetransfer/tables.c:194
-msgid "DFT B_uffer size:"
+#, fuzzy
+msgid "DFT B_uffer size"
 msgstr "Tamanho do b_uffer DFT:"
 
 #: colors.c:503 src/dialogs/colors.c:299
@@ -919,7 +921,7 @@ msgstr "Erro na transferência do arquivo, transferência cancelada"
 msgid "Error in vasprintf"
 msgstr "Erro na chamada vasprintf"
 
-#: dialog.c:404
+#: dialog.c:393
 #, c-format
 msgid "Error loading %s"
 msgstr "Erro lendo %s"
@@ -964,7 +966,7 @@ msgstr "Transferência completa com registros segmentados"
 msgid "File transfer is already active in this session."
 msgstr "Transferência de arquivos já está ativa nesta sessão."
 
-#: src/dialogs/settingsdialog.c:358
+#: src/dialogs/settingsdialog.c:361
 msgid "Files to transfer"
 msgstr "Arquivos a transferir"
 
@@ -1029,11 +1031,11 @@ msgstr "Barra de funções"
 msgid "GTK Version mismatch"
 msgstr "Divergência de versão GTK"
 
-#: src/filetransfer/v3270ft.c:378
+#: src/filetransfer/v3270ft.c:379
 msgid "Get transfer queue from an external XML file"
 msgstr "Obtém a fila de transferência de um arquivo XML externo"
 
-#: src/dialogs/settingsdialog.c:343
+#: src/dialogs/settingsdialog.c:346
 msgid "Get transfer queue from file"
 msgstr "Obtêm a fila de arquivos a transferir de um arquivo"
 
@@ -1181,7 +1183,7 @@ msgstr "Código de requisição incorreto, transferência cancelada"
 msgid "Input method"
 msgstr "Método de entrada"
 
-#: src/filetransfer/v3270ft.c:394
+#: src/filetransfer/v3270ft.c:395
 msgid "Insert new file in the transfer queue"
 msgstr "Inserir um novo arquivo na fila de transferência"
 
@@ -1286,11 +1288,11 @@ msgstr "Barra lateral"
 msgid "Latest program message"
 msgstr "Última mensagem de programa"
 
-#: src/filetransfer/v3270ft.c:198 src/filetransfer/activitylist.c:276
+#: src/filetransfer/v3270ft.c:198 src/filetransfer/activitylist.c:383
 msgid "Load"
 msgstr "Load"
 
-#: src/filetransfer/v3270ft.c:197 src/filetransfer/activitylist.c:275
+#: src/filetransfer/v3270ft.c:197 src/filetransfer/activitylist.c:382
 msgid "Load queue from file"
 msgstr "Ler a fila de um arquivo"
 
@@ -1299,7 +1301,7 @@ msgstr "Ler a fila de um arquivo"
 msgid "Loading %s"
 msgstr "Carregando %s"
 
-#: src/filetransfer/activitylist.c:154
+#: src/filetransfer/activitylist.c:251
 msgid "Local file"
 msgstr "Arquivo local:"
 
@@ -1336,7 +1338,7 @@ msgstr "Só Maiúsculas"
 msgid "Monochrome"
 msgstr "Monocromático"
 
-#: actions.c:720
+#: actions.c:718
 msgid "Move action needs target & direction attributes"
 msgstr "Ação \"move\" precisa dos atributos \"target\" e \"direction\""
 
@@ -1439,7 +1441,7 @@ msgstr ""
 "cancelada"
 
 #: src/terminal/callbacks.c:341 src/filetransfer/save.c:118
-#: src/filetransfer/load.c:272 src/filetransfer/activitylist.c:359
+#: src/filetransfer/load.c:272 src/filetransfer/activitylist.c:440
 #: src/dialogs/transfer.c:99
 msgid "Operation has failed"
 msgstr "Operação falhou"
@@ -1597,6 +1599,10 @@ msgstr "Colar próximo"
 msgid "Paste text file"
 msgstr "Colar arquivo texto"
 
+#: dialog.c:433
+msgid "Paste text file contents"
+msgstr "Colar conteúdo de arquivo texto"
+
 #: toggles.c:129 00default.xml:120
 msgid "Paste with left margin"
 msgstr "Colar com margem esquerda"
@@ -1641,7 +1647,7 @@ msgstr "Preparando"
 msgid "Previous field"
 msgstr "Campo anterior"
 
-#: src/filetransfer/tables.c:167
+#: src/filetransfer/tables.c:179
 msgid ""
 "Primary allocation for a file created on a TSO host.\n"
 "The units are given by the space allocation units option."
@@ -1649,8 +1655,9 @@ msgstr ""
 "Primary allocation for a file created on a TSO host.\n"
 "The units are given by the space allocation units option."
 
-#: src/filetransfer/tables.c:166
-msgid "Primary space:"
+#: src/filetransfer/tables.c:178
+#, fuzzy
+msgid "Primary space"
 msgstr "Primary space:"
 
 #: 00default.xml:47
@@ -1694,17 +1701,17 @@ msgstr "Sair"
 msgid "RPQ %s term omitted due to insufficient space"
 msgstr "Termo RPQ %s omitido por falta de espaço"
 
-#: rpq.c:344
+#: rpq.c:346
 #, c-format
 msgid "RPQ %s term override ignored"
 msgstr "RPQ %s term override ignored"
 
-#: rpq.c:633 rpq.c:703
+#: rpq.c:637 rpq.c:707
 #, c-format
 msgid "RPQ ADDRESS term has unrecognized family %u"
 msgstr "Família %u não reconhecida no termo RPQ ADDRESS"
 
-#: rpq.c:641 rpq.c:670 rpq.c:710
+#: rpq.c:645 rpq.c:674 rpq.c:714
 msgid "RPQ ADDRESS term incomplete due to space limit"
 msgstr "Termo RPQ ADDRESS incompleto devido ao limite de espaço"
 
@@ -1712,29 +1719,29 @@ msgstr "Termo RPQ ADDRESS incompleto devido ao limite de espaço"
 msgid "RPQ Error"
 msgstr "Erro RPQ"
 
-#: rpq.c:412 rpq.c:421
+#: rpq.c:414 rpq.c:423
 msgid "RPQ TIMEZONE term is invalid - use +/-hhmm"
 msgstr "Termo RPQ TIMEZONE é invalido - usar +/-hhmm"
 
-#: rpq.c:510
+#: rpq.c:514
 msgid "RPQ USER term has non-hex character"
 msgstr "Termo RPQ USER tem caractere não hexadecimal"
 
-#: rpq.c:535
+#: rpq.c:539
 msgid "RPQ USER term has odd number of hex digits"
 msgstr "RPQ USER term has odd number of hex digits"
 
-#: rpq.c:516
+#: rpq.c:520
 #, c-format
 msgid "RPQ USER term truncated after %d bytes"
 msgstr "Termo RPQ USER truncado depois de %d bytes"
 
-#: rpq.c:560
+#: rpq.c:564
 #, c-format
 msgid "RPQ USER term truncated after %d characters"
 msgstr "Termo RPQ USER truncado depois de %d caracteres"
 
-#: rpq.c:356
+#: rpq.c:358
 #, c-format
 msgid "RPQ term \"%s\" is unrecognized"
 msgstr "Termo RPQ desconhecido: \"%s\" "
@@ -1744,24 +1751,24 @@ msgstr "Termo RPQ desconhecido: \"%s\" "
 msgid "RPQ term %d is unknown"
 msgstr "Termo RPM %d não foi reconhecido"
 
-#: rpq.c:456
+#: rpq.c:458
 msgid "RPQ timezone exceeds 12 hour UTC offset"
 msgstr "RPQ timezone excede as 12 horas de deslocamento da UTC"
 
-#: rpq.c:441
+#: rpq.c:443
 msgid "RPQ: Unable to determine workstation UTC time"
 msgstr "RPQ: Incapaz de determinar a hora UTC da estação de trabalho"
 
-#: rpq.c:434
+#: rpq.c:436
 msgid "RPQ: Unable to determine workstation local time"
 msgstr "RPQ: Incapaz de determinar a hora local da estação de trabalho"
 
-#: rpq.c:646
+#: rpq.c:650
 #, c-format
 msgid "RPQ: can't resolve '%s': %s"
 msgstr "RPQ: Não foi possível resolver '%s': %s"
 
-#: rpq.c:659
+#: rpq.c:663
 msgid "RPQ: gethostbyname error"
 msgstr "RPQ: Erro em gethostbyname"
 
@@ -1782,10 +1789,11 @@ msgid "Receiving file"
 msgstr "Recebendo arquivo"
 
 #: src/filetransfer/tables.c:157
-msgid "Record Length:"
+#, fuzzy
+msgid "Record Length"
 msgstr "Comprimento de registro:"
 
-#: src/filetransfer/v3270ft.c:345 src/filetransfer/settings.c:458
+#: src/filetransfer/v3270ft.c:347 src/filetransfer/settings.c:522
 msgid "Record format"
 msgstr "Formato de registro"
 
@@ -1814,7 +1822,7 @@ msgstr ""
 "codificação ASCII da estação de trabalho e a página de código EBCDIC do "
 "servidor."
 
-#: src/filetransfer/activitylist.c:163
+#: src/filetransfer/activitylist.c:260
 msgid "Remote file"
 msgstr "Arquivo remoto:"
 
@@ -1822,7 +1830,7 @@ msgstr "Arquivo remoto:"
 msgid "Remote:"
 msgstr "Remoto:"
 
-#: src/filetransfer/v3270ft.c:402
+#: src/filetransfer/v3270ft.c:403
 msgid "Remove selected file from the transfer queue"
 msgstr "Remove arquivo selecionado da fila de transferência"
 
@@ -1870,7 +1878,7 @@ msgstr ""
 "SPACE can be specified in units of TRACKS, CYLINDERS, or AVBLOCK, and only "
 "one option can be used."
 
-#: ssl/negotiate.c:153
+#: ssl/negotiate.c:154
 msgid "SSL Connect failed"
 msgstr "Conexão SSL falhou"
 
@@ -1882,12 +1890,12 @@ msgstr "Erro SSL"
 msgid "SSL Read error"
 msgstr "Erro de leitura SSL"
 
-#: ssl/negotiate.c:174 ssl/negotiate.c:183 ssl/negotiate.c:192
-#: ssl/negotiate.c:208 ssl/negotiate.c:221
+#: ssl/negotiate.c:175 ssl/negotiate.c:184 ssl/negotiate.c:193
+#: ssl/negotiate.c:209 ssl/negotiate.c:222
 msgid "SSL error"
 msgstr "Erro SSL"
 
-#: ssl/negotiate.c:130
+#: ssl/negotiate.c:131
 msgid "SSL negotiation failed"
 msgstr "Negociação SSL falhou"
 
@@ -1900,7 +1908,7 @@ msgstr ""
 "SSL_write:\n"
 "%s"
 
-#: src/filetransfer/v3270ft.c:217 src/filetransfer/activitylist.c:379
+#: src/filetransfer/v3270ft.c:217 src/filetransfer/activitylist.c:460
 #: src/trace/widget.c:519 src/dialogs/transfer.c:72
 msgid "Save"
 msgstr "Salvar"
@@ -1913,11 +1921,11 @@ msgstr "Salvar _Como"
 msgid "Save copy"
 msgstr "Salvar cópia"
 
-#: dialog.c:381
+#: dialog.c:370
 msgid "Save copy to file"
 msgstr "Salvar cópia para arquivo"
 
-#: src/filetransfer/v3270ft.c:216 src/filetransfer/activitylist.c:378
+#: src/filetransfer/v3270ft.c:216 src/filetransfer/activitylist.c:459
 msgid "Save queue to file"
 msgstr "Salvar a fila para um arquivo"
 
@@ -1925,7 +1933,7 @@ msgstr "Salvar a fila para um arquivo"
 msgid "Save screen"
 msgstr "Salvar tela"
 
-#: dialog.c:346
+#: dialog.c:335
 msgid "Save screen to file"
 msgstr "Salvar tela para arquivo"
 
@@ -1933,7 +1941,7 @@ msgstr "Salvar tela para arquivo"
 msgid "Save selected"
 msgstr "Salvar seleção"
 
-#: dialog.c:364
+#: dialog.c:353
 msgid "Save selection to file"
 msgstr "Salvar seleção para arquivo"
 
@@ -1949,15 +1957,15 @@ msgstr "Salvar atividade de transferência para arquivo"
 msgid "Save transfer information to file"
 msgstr "Salvar informações da transferência para arquivo"
 
-#: src/dialogs/settingsdialog.c:346
+#: src/dialogs/settingsdialog.c:349
 msgid "Save transfer queue"
 msgstr "Salvar fila de transferências"
 
-#: src/filetransfer/v3270ft.c:386
+#: src/filetransfer/v3270ft.c:387
 msgid "Save transfer queue to an external XML file"
 msgstr "Guarda fila de transferência num arquivo XML externo"
 
-#: src/dialogs/settingsdialog.c:350
+#: src/dialogs/settingsdialog.c:353
 msgid "Save transfer queue to file"
 msgstr "Salvar fila de transferências para arquivo"
 
@@ -1990,15 +1998,16 @@ msgstr ""
 "The units are given by the space allocation units option."
 
 #: src/filetransfer/tables.c:186
-msgid "Secondary space:"
+#, fuzzy
+msgid "Secondary space"
 msgstr "Secondary space:"
 
 #: ssl/state.c:98
 msgid "Secure connection was successful."
 msgstr "Conexão segura efetuada com sucesso."
 
-#: ssl/negotiate.c:100 ssl/negotiate.c:129 ssl/negotiate.c:152
-#: ssl/ctx_init.c:88 ssl/ctx_init.c:115 ssl/linux/getcrl.c:225
+#: ssl/negotiate.c:101 ssl/negotiate.c:130 ssl/negotiate.c:153
+#: ssl/ctx_init.c:202 ssl/ctx_init.c:229 ssl/linux/getcrl.c:225
 #: ssl/linux/getcrl.c:243 ssl/linux/getcrl.c:266 ssl/linux/getcrl.c:278
 #: ssl/linux/getcrl.c:298 ssl/linux/getcrl.c:309 ssl/linux/getcrl.c:320
 #: ssl/linux/getcrl.c:345 ssl/linux/getcrl.c:356 ssl/linux/getcrl.c:367
@@ -2008,7 +2017,7 @@ msgstr "Conexão segura efetuada com sucesso."
 msgid "Security error"
 msgstr "Erro de segurança"
 
-#: src/filetransfer/v3270ft.c:305 src/filetransfer/settings.c:208
+#: src/filetransfer/v3270ft.c:307 src/filetransfer/settings.c:209
 msgid "Select"
 msgstr "Selecionar"
 
@@ -2024,11 +2033,11 @@ msgstr "Selecionar tudo"
 msgid "Select by rectangles"
 msgstr "Seleção retangular"
 
-#: src/filetransfer/v3270ft.c:575 src/filetransfer/settings.c:407
+#: src/filetransfer/v3270ft.c:577 src/filetransfer/settings.c:470
 msgid "Select file"
 msgstr "Selecionar arquivo"
 
-#: src/filetransfer/v3270ft.c:443 src/filetransfer/v3270ft.c:452
+#: src/filetransfer/v3270ft.c:444 src/filetransfer/v3270ft.c:453
 msgid "Select first file"
 msgstr "Selecionar primeiro arquivo"
 
@@ -2036,19 +2045,19 @@ msgstr "Selecionar primeiro arquivo"
 msgid "Select font"
 msgstr "Selecione fonte"
 
-#: src/filetransfer/v3270ft.c:419 src/filetransfer/v3270ft.c:476
+#: src/filetransfer/v3270ft.c:420 src/filetransfer/v3270ft.c:477
 msgid "Select last file"
 msgstr "Selecionar último arquivo"
 
-#: src/filetransfer/v3270ft.c:304 src/filetransfer/settings.c:207
+#: src/filetransfer/v3270ft.c:306 src/filetransfer/settings.c:208
 msgid "Select local file"
 msgstr "Selecionar arquivo local"
 
-#: src/filetransfer/v3270ft.c:427 src/filetransfer/v3270ft.c:468
+#: src/filetransfer/v3270ft.c:428 src/filetransfer/v3270ft.c:469
 msgid "Select next file"
 msgstr "Selecionar próximo arquivo"
 
-#: src/filetransfer/v3270ft.c:435 src/filetransfer/v3270ft.c:460
+#: src/filetransfer/v3270ft.c:436 src/filetransfer/v3270ft.c:461
 msgid "Select previous file"
 msgstr "Selecionar arquivo anterior"
 
@@ -2168,11 +2177,11 @@ msgstr "Erro ao ler dados da rede"
 msgid "Socket write error"
 msgstr "Erro ao enviar dados para a rede"
 
-#: src/filetransfer/v3270ft.c:346 src/filetransfer/settings.c:483
+#: src/filetransfer/v3270ft.c:348 src/filetransfer/settings.c:548
 msgid "Space allocation units"
 msgstr "Unidades de alocação de espaço"
 
-#: src/filetransfer/tables.c:175
+#: src/filetransfer/tables.c:167
 msgid ""
 "Specifies the block size (n) for a new data set. For data sets containing "
 "fixed length records, the block size must be a multiple of the record "
@@ -2202,15 +2211,25 @@ msgstr ""
 "largura fixa ou o comprimento máximo de registros para um dataset contendo "
 "registro de tamanho variável."
 
+#: src/filetransfer/settings.c:523
+msgid "Specifies the record format of the data set."
+msgstr "Controla o formato de registro do data set."
+
+#: src/filetransfer/settings.c:549
+msgid ""
+"Specifies the units for the TSO host primary and secondary space options."
+msgstr ""
+"Define a unidade para os campos que definem o espaço primário e secundário."
+
 #: src/filetransfer/tables.c:223
 msgid "Speed:"
 msgstr "Velocidade:"
 
-#: src/filetransfer/v3270ft.c:410
+#: src/filetransfer/v3270ft.c:411
 msgid "Start file transfer"
 msgstr "Iniciar transferência de arquivo"
 
-#: src/dialogs/settingsdialog.c:432
+#: src/dialogs/settingsdialog.c:435
 msgid "Start transfer"
 msgstr "Iniciar transferência"
 
@@ -2246,7 +2265,7 @@ msgstr "Cores do terminal"
 msgid "Text file"
 msgstr "Arquivo texto"
 
-#: src/filetransfer/v3270ft.c:309 src/filetransfer/settings.c:212
+#: src/filetransfer/v3270ft.c:311 src/filetransfer/settings.c:213
 msgid "Text files"
 msgstr "Arquivos de texto"
 
@@ -2260,11 +2279,11 @@ msgstr ""
 "has been reached, or the maximum number of data blocks per file (16060) has "
 "been reached."
 
-#: ssl/state.c:190 ssl/negotiate.c:193
+#: ssl/state.c:190 ssl/negotiate.c:194
 msgid "The CRL has expired."
 msgstr "A lista de certificados revogados expirou."
 
-#: ssl/state.c:178 ssl/negotiate.c:184
+#: ssl/state.c:178 ssl/negotiate.c:185
 msgid "The CRL is not yet valid."
 msgstr "A lista de certificados revogados ainda não é válida."
 
@@ -2286,22 +2305,22 @@ msgstr ""
 "signature value could not be determined rather than it not matching the "
 "expected value. Unused."
 
-#: ssl/state.c:191 ssl/negotiate.c:194
+#: ssl/state.c:191 ssl/negotiate.c:195
 msgid "The Certificate revocation list (CRL) has expired."
 msgstr "A lista de revogação de certificados (CRL) está expirada."
 
-#: ssl/state.c:179 ssl/negotiate.c:185
+#: ssl/state.c:179 ssl/negotiate.c:186
 msgid "The Certificate revocation list (CRL) is not yet valid."
 msgstr "A lista de revogação de certificados (CRL) ainda não é válida."
 
-#: ssl/state.c:115 ssl/negotiate.c:176
+#: ssl/state.c:115 ssl/negotiate.c:177
 msgid ""
 "The Certificate revocation list (CRL) of a certificate could not be found."
 msgstr ""
 "A lista de revogação de certificados (CRL) de um certificado não pôde ser "
 "encontrada."
 
-#: ssl/state.c:247 ssl/negotiate.c:209
+#: ssl/state.c:247 ssl/negotiate.c:210
 msgid "The SSL certificate for this host is not trusted."
 msgstr "O certificado SSL deste servidor não é confiável"
 
@@ -2433,7 +2452,7 @@ msgstr ""
 "Intervalo de tempo entre o desbloqueio de teclado pelo host e o desbloqueio "
 "real"
 
-#: dialog.c:243
+#: dialog.c:241
 msgid "The file already exists. Replace it?"
 msgstr "O arquivo já existe, substituir?"
 
@@ -2523,7 +2542,7 @@ msgstr ""
 "O Certificado raiz não está marcado como confiável para os fins "
 "especificados."
 
-#: ssl/state.c:248 ssl/negotiate.c:210
+#: ssl/state.c:248 ssl/negotiate.c:211
 msgid ""
 "The security certificate presented by this host was not issued by a trusted "
 "certificate authority."
@@ -2562,7 +2581,7 @@ msgstr "Não existe informação de segurança na sessão"
 msgid "This is a host program error."
 msgstr "Este é um erro no programa do host."
 
-#: dialog.c:512
+#: dialog.c:480
 msgid ""
 "This program is free software; you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -2669,12 +2688,12 @@ msgstr "Transferência falhou"
 msgid "Transfer operation has timed out"
 msgstr "Operação de transferência esgotou o tempo de espera"
 
-#: src/filetransfer/v3270ft.c:344 src/filetransfer/settings.c:432
+#: src/filetransfer/v3270ft.c:346 src/filetransfer/settings.c:495
 msgid "Transfer options"
 msgstr "Opções de transferência"
 
-#: src/dialogs/settingsdialog.c:376 src/dialogs/settingsdialog.c:395
-#: src/dialogs/settingsdialog.c:414
+#: src/dialogs/settingsdialog.c:379 src/dialogs/settingsdialog.c:398
+#: src/dialogs/settingsdialog.c:417
 msgid "Transfer queue"
 msgstr "Fila de transferências"
 
@@ -2723,7 +2742,7 @@ msgstr ""
 msgid "Unable to decrypt certificate's signature"
 msgstr "Incapaz de decifrar a assinatura do certificado"
 
-#: ssl/state.c:114 ssl/negotiate.c:175
+#: ssl/state.c:114 ssl/negotiate.c:176
 msgid "Unable to get certificate CRL."
 msgstr "Incapaz de obter o CRL de um certificado."
 
@@ -2769,7 +2788,7 @@ msgstr "Erro inesperado"
 msgid "Unexpected group \"%s\""
 msgstr "Grupo inesperado \"%s\""
 
-#: actions.c:578 actions.c:598
+#: actions.c:576 actions.c:596
 #, c-format
 msgid "Unexpected or invalid %s attribute: \"%s\""
 msgstr "Atributo %s inesperado ou inválido: \"%s\""
@@ -2778,11 +2797,11 @@ msgstr "Atributo %s inesperado ou inválido: \"%s\""
 msgid "Unexpected or invalid CRL URL"
 msgstr "URL do CRL é inesperada ou inválida"
 
-#: ssl/negotiate.c:223
+#: ssl/negotiate.c:224
 msgid "Unexpected or invalid TLS/SSL verify result"
 msgstr "O resultado da verificação TLS/SSL foi inesperado"
 
-#: actions.c:552
+#: actions.c:550
 #, c-format
 msgid "Unexpected or invalid attribute value \"%s\""
 msgstr "Valor de attributo inesperado ou inválido: \"%s\""
@@ -2796,12 +2815,12 @@ msgstr "Valor de cor inválido ou inesperado: \"%s\""
 msgid "Unexpected or unknown security status"
 msgstr "Estado de segurança inesperado ou desconhecido."
 
-#: actions.c:468
+#: actions.c:466
 #, c-format
 msgid "Unexpected target \"%s\""
 msgstr "Alvo inesperado \"%s\""
 
-#: kybd.c:287
+#: kybd.c:290
 #, c-format
 msgid "Unexpected type %d in typeahead queue"
 msgstr "Tipo inesperado %d na fila de teclado"
@@ -2815,12 +2834,12 @@ msgstr "Unknown 3270 Data Stream command: 0x%X"
 msgid "Unknown FT control code from host"
 msgstr "Servidor enviou código de controle FT desconhecido"
 
-#: kybd.c:2200
+#: kybd.c:2204
 #, c-format
 msgid "Unknown PA key %d"
 msgstr "PA %d desconhecida"
 
-#: kybd.c:2215
+#: kybd.c:2219
 #, c-format
 msgid "Unknown PF key %d"
 msgstr "PF %d desconhecida"
@@ -2858,7 +2877,7 @@ msgstr "Use the keys +/- from keypad to select editable fields"
 msgid "Variable"
 msgstr "Variável"
 
-#: dialog.c:553 dialog.c:555
+#: dialog.c:500 dialog.c:502
 #, c-format
 msgid "Version %s-%s"
 msgstr "Versão %s-%s"
@@ -2932,7 +2951,7 @@ msgid "X Wait"
 msgstr "X Aguarde"
 
 #: src/filetransfer/v3270ft.c:200 src/filetransfer/v3270ft.c:220
-#: src/filetransfer/activitylist.c:278 src/filetransfer/activitylist.c:382
+#: src/filetransfer/activitylist.c:385 src/filetransfer/activitylist.c:463
 #: src/dialogs/transfer.c:75
 msgid "XML file"
 msgstr "Arquivo XML"
@@ -2941,7 +2960,7 @@ msgstr "Arquivo XML"
 msgid "Yellow"
 msgstr "Amarelo"
 
-#: src/dialogs/settingsdialog.c:238
+#: src/dialogs/settingsdialog.c:241
 msgid "You can't add more than one acitivity with the same files."
 msgstr "Você não pode adicionar mais de uma operação com os mesmos arquivos"
 
@@ -3024,10 +3043,10 @@ msgstr "Você especificou uma opção inválida."
 msgid "_ASCII text"
 msgstr "Texto _ASCII"
 
-#: src/dialogs/settingsdialog.c:407 src/dialogs/settingsdialog.c:426
-#: src/dialogs/select.c:49 src/dialogs/select.c:93
+#: src/dialogs/settingsdialog.c:410 src/dialogs/settingsdialog.c:429
 #: src/dialogs/commondialog.c:94 src/dialogs/commondialog.c:108
-#: src/dialogs/commondialog.c:125
+#: src/dialogs/commondialog.c:125 src/dialogs/linux/select.c:49
+#: src/dialogs/linux/select.c:93
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -3064,24 +3083,27 @@ msgstr "_Fonte:"
 msgid "_Host"
 msgstr "_Servidor"
 
-#: src/filetransfer/v3270ft.c:339
-msgid "_Local file:"
+#: src/filetransfer/v3270ft.c:341
+#, fuzzy
+msgid "_Local file"
 msgstr "Arquivo _local:"
 
 #: 00default.xml:89
 msgid "_Network"
 msgstr "_Rede"
 
-#: src/filetransfer/v3270ft.c:338
-msgid "_Operation:"
+#: src/filetransfer/v3270ft.c:340
+#, fuzzy
+msgid "_Operation"
 msgstr "_Operação:"
 
 #: 00default.xml:114
 msgid "_Options"
 msgstr "_Opções"
 
-#: src/filetransfer/v3270ft.c:340
-msgid "_Remote file:"
+#: src/filetransfer/v3270ft.c:342
+#, fuzzy
+msgid "_Remote file"
 msgstr "Arquivo _remoto:"
 
 #: src/trace/widget.c:447
@@ -3165,7 +3187,7 @@ msgstr "Versão da lib3270"
 msgid "setsockopt(SO_OOBINLINE) has failed"
 msgstr "setsockopt(SO_OOBINLINE) has failed"
 
-#: dialog.c:573
+#: dialog.c:541
 msgid "translator-credits"
 msgstr "translator-credits"
 
@@ -3480,9 +3502,6 @@ msgstr "translator-credits"
 #~ msgid "Passthru Proxy: send error"
 #~ msgstr "Passthru Proxy: Erro ao enviar"
 
-#~ msgid "Paste text file contents"
-#~ msgstr "Colar conteúdo de arquivo texto"
-
 #~ msgid "Path to application data files"
 #~ msgstr "Caminho para os arquivos de dados da aplicação"
 
@@ -3652,9 +3671,6 @@ msgstr "translator-credits"
 #~ "Define o tamanho do bloco para arquivos criados no host (Apenas hosts "
 #~ "TSO)."
 
-#~ msgid "Specifies the record format of the data set."
-#~ msgstr "Controla o formato de registro do data set."
-
 #~ msgid ""
 #~ "Specifies the record length (or maximum record length) for files created "
 #~ "on the host."
@@ -3666,12 +3682,6 @@ msgstr "translator-credits"
 #~ "Specifies the terminal name to be transmitted over the telnet connection."
 #~ msgstr ""
 #~ "Define o nome do terminal a ser transmitido através da conexão telnet."
-
-#~ msgid ""
-#~ "Specifies the units for the TSO host primary and secondary space options."
-#~ msgstr ""
-#~ "Define a unidade para os campos que definem o espaço primário e "
-#~ "secundário."
 
 #~ msgid "Start download."
 #~ msgstr "Iniciar recebimento."

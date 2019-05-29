@@ -42,6 +42,7 @@ INSTALL_DATA=@INSTALL_DATA@
 INSTALL_PROGRAM=@INSTALL_PROGRAM@
 CONVERT=@CONVERT@
 OPTIPNG=@OPTIPNG@
+DESKTOP_INSTALL=@DESKTOP_INSTALL@
 
 #---[ Rules ]----------------------------------------------------------------------------
 
@@ -90,5 +91,14 @@ install: \
 	$(DESTDIR)$(datarootdir)/pixmaps/$(PACKAGE_NAME).png \
 	$(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/$(PACKAGE_NAME)-logo.png
 
+	@$(INSTALL_DATA) \
+		launcher.desktop \
+		$(PACKAGE_NAME).desktop
+
+	$(DESKTOP_INSTALL) \
+		--mode 644 \
+		--delete-original \
+		--dir $(DESTDIR)$(datarootdir)/applications \
+		$(PACKAGE_NAME).desktop
 
 
