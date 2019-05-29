@@ -131,6 +131,7 @@ BuildRequires:  rsvg-view
 # https://en.opensuse.org/openSUSE:Build_Service_cross_distribution_howto
 %if 0%{suse_version} > 120100
 BuildRequires:	autoconf-archive
+BuildRequires:  update-desktop-files
 %endif
 
 %endif
@@ -215,26 +216,6 @@ make all -j1
 
 %find_lang pw3270 langfiles
 
-cat > pw3270.desktop << EOF
-[Desktop Entry]
-X-SuSE-translate=true
-GenericName=pw3270
-Name=3270 Terminal
-Comment=IBM 3270 Terminal emulator
-Exec=pw3270
-Icon=%{_datadir}/pw3270/pw3270.png
-Terminal=false
-Type=Application
-StartupNotify=true
-EOF
-chmod 644 pw3270.desktop
-
-desktop-file-install	--mode 644 \
-			--dir %{buildroot}/%{_datadir}/applications \
-			--add-category System \
-			--add-category TerminalEmulator \
-			pw3270.desktop
-
 %fdupes %{buildroot}/%{_prefix}
 
 #---[ Files ]---------------------------------------------------------------------------------------------------------
@@ -267,6 +248,7 @@ desktop-file-install	--mode 644 \
 %{_datadir}/pw3270/colors.conf
 %{_datadir}/pw3270/pw3270.png
 %{_datadir}/pw3270/pw3270-logo.png
+%{_datadir}/pixmaps/pw3270.png
 
 %files devel
 
