@@ -9,7 +9,7 @@ msgstr ""
 "#-#-#-#-#  pw3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-29 11:37-0300\n"
+"POT-Creation-Date: 2019-05-29 17:05-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -127,7 +127,7 @@ msgstr ""
 msgid "%s<b>%s</b> for %s"
 msgstr ""
 
-#: main.c:379
+#: main.c:387
 msgid "- 3270 Emulator for Gtk"
 msgstr ""
 
@@ -198,7 +198,7 @@ msgstr ""
 msgid "<b>Text options</b>"
 msgstr ""
 
-#: main.c:399
+#: main.c:407
 msgid ""
 "<b>Valid options:</b>\n"
 "\n"
@@ -284,7 +284,7 @@ msgstr ""
 msgid "Appends the source file to the destination file."
 msgstr ""
 
-#: main.c:368
+#: main.c:373 main.c:375
 msgid "Application name"
 msgstr ""
 
@@ -533,6 +533,11 @@ msgstr ""
 #: window.c:394
 #, c-format
 msgid "Can't recognize \"%s\" as a valid host type"
+msgstr ""
+
+#: config.c:575
+#, c-format
+msgid "Can't save \"%s\": %s"
 msgstr ""
 
 #: src/filetransfer/save.c:116 src/filetransfer/activitylist.c:437
@@ -1025,7 +1030,7 @@ msgstr ""
 msgid "Function bar"
 msgstr ""
 
-#: main.c:100 main.c:475
+#: main.c:100 main.c:484
 msgid "GTK Version mismatch"
 msgstr ""
 
@@ -1085,11 +1090,11 @@ msgstr ""
 msgid "Host rejected resource(s)"
 msgstr ""
 
-#: main.c:359
+#: main.c:363
 msgid "Host system type"
 msgstr ""
 
-#: main.c:357
+#: main.c:361
 msgid "Host to connect"
 msgstr ""
 
@@ -1294,11 +1299,11 @@ msgstr ""
 msgid "Local:"
 msgstr ""
 
-#: main.c:374
+#: main.c:382
 msgid "Log to file"
 msgstr ""
 
-#: main.c:365
+#: main.c:369
 msgid "Minutes for auto-disconnect"
 msgstr ""
 
@@ -1559,7 +1564,7 @@ msgstr ""
 msgid "PF9"
 msgstr ""
 
-#: main.c:397
+#: main.c:405
 msgid "Parse error"
 msgstr ""
 
@@ -1592,7 +1597,7 @@ msgstr ""
 msgid "Path and name of the local file"
 msgstr ""
 
-#: main.c:366
+#: main.c:370
 msgid "Path for plugin files"
 msgstr ""
 
@@ -1786,7 +1791,7 @@ msgstr ""
 msgid "Remap Failed"
 msgstr ""
 
-#: main.c:363
+#: main.c:367
 msgid "Remap charset from xml file"
 msgstr ""
 
@@ -1939,6 +1944,11 @@ msgstr ""
 msgid "Save transfer queue to file"
 msgstr ""
 
+#: config.c:570
+#, c-format
+msgid "Saving %s"
+msgstr ""
+
 #: properties.c:242
 msgid "Screen buffer length in bytes"
 msgstr ""
@@ -2052,7 +2062,7 @@ msgstr ""
 msgid "Send file"
 msgstr ""
 
-#: main.c:371
+#: main.c:379
 msgid "Send messages to syslog"
 msgstr ""
 
@@ -2068,11 +2078,11 @@ msgstr ""
 msgid "Sending file"
 msgstr ""
 
-#: main.c:352 main.c:354
+#: main.c:356 main.c:358
 msgid "Session name"
 msgstr ""
 
-#: main.c:362
+#: main.c:366
 msgid "Set host charset"
 msgstr ""
 
@@ -2080,19 +2090,19 @@ msgstr ""
 msgid "Set insert mode"
 msgstr ""
 
-#: main.c:358
+#: main.c:362
 msgid "Set reported colors (8/16)"
 msgstr ""
 
-#: main.c:361
+#: main.c:365
 msgid "Set toggles OFF"
 msgstr ""
 
-#: main.c:360
+#: main.c:364
 msgid "Set toggles ON"
 msgstr ""
 
-#: main.c:373
+#: main.c:381
 msgid "Set trace filename"
 msgstr ""
 
@@ -2419,7 +2429,7 @@ msgstr ""
 msgid "The model number"
 msgstr ""
 
-#: main.c:364
+#: main.c:368
 msgid "The model of 3270 display to be emulated"
 msgstr ""
 
@@ -2506,7 +2516,7 @@ msgid ""
 "Franklin St, Fifth Floor, Boston, MA 02111-1307 USA"
 msgstr ""
 
-#: main.c:471
+#: main.c:480
 #, c-format
 msgid "This program requires GTK version %d.%d.%d"
 msgstr ""

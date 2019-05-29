@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-29 11:37-0300\n"
-"PO-Revision-Date: 2019-02-27 14:48-0300\n"
+"POT-Creation-Date: 2019-05-29 17:05-0300\n"
+"PO-Revision-Date: 2019-05-29 17:08-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
 "Language: pt_BR\n"
@@ -95,7 +95,7 @@ msgstr "%s: Tabulação vertical não é suportada"
 msgid "%s<b>%s</b> for %s"
 msgstr "%s<b>%s</b> para %s"
 
-#: main.c:379
+#: main.c:387
 msgid "- 3270 Emulator for Gtk"
 msgstr "- Emulador 3270 para GTK"
 
@@ -168,7 +168,7 @@ msgstr ""
 msgid "<b>Text options</b>"
 msgstr "<b>Opções de texto</b>"
 
-#: main.c:399
+#: main.c:407
 msgid ""
 "<b>Valid options:</b>\n"
 "\n"
@@ -261,7 +261,7 @@ msgstr "Um parametro de ENVIO/RECEBIMENTO inválido foi enviado para o host."
 msgid "Appends the source file to the destination file."
 msgstr "Adiciona conteúdo do arquivo origem ao final do arquivo destino."
 
-#: main.c:368
+#: main.c:373 main.c:375
 msgid "Application name"
 msgstr "Nome da aplicação"
 
@@ -337,9 +337,8 @@ msgid "Blinking Cursor"
 msgstr "Cursor piscante"
 
 #: src/filetransfer/tables.c:166
-#, fuzzy
 msgid "Block size"
-msgstr "Comprimento do bloco:"
+msgstr "Tamanho do bloco:"
 
 #: colors.c:495 src/dialogs/colors.c:291
 msgid "Blue"
@@ -515,6 +514,11 @@ msgstr "Não foi possível ler certificados SSL de %s"
 #, c-format
 msgid "Can't recognize \"%s\" as a valid host type"
 msgstr "Não reconheço \"%s\" como um tipo de host válido"
+
+#: config.c:575
+#, c-format
+msgid "Can't save \"%s\": %s"
+msgstr "Não foi possível salvar %s: %s"
 
 #: src/filetransfer/save.c:116 src/filetransfer/activitylist.c:437
 #: src/trace/widget.c:493 src/dialogs/transfer.c:96
@@ -787,7 +791,6 @@ msgid "Cylinders"
 msgstr "Cilindros"
 
 #: src/filetransfer/tables.c:194
-#, fuzzy
 msgid "DFT B_uffer size"
 msgstr "Tamanho do b_uffer DFT:"
 
@@ -1027,7 +1030,7 @@ msgstr "Caminho completo do arquivo remoto"
 msgid "Function bar"
 msgstr "Barra de funções"
 
-#: main.c:100 main.c:475
+#: main.c:100 main.c:484
 msgid "GTK Version mismatch"
 msgstr "Divergência de versão GTK"
 
@@ -1087,11 +1090,11 @@ msgstr "Servidor rejeitou o tipo de dispositivo ou requisição"
 msgid "Host rejected resource(s)"
 msgstr "Servidor rejeitou recurso(s)"
 
-#: main.c:359
+#: main.c:363
 msgid "Host system type"
 msgstr "Tipo do sistema no servidor"
 
-#: main.c:357
+#: main.c:361
 msgid "Host to connect"
 msgstr "Servidor a conectar"
 
@@ -1309,11 +1312,11 @@ msgstr "Arquivo local:"
 msgid "Local:"
 msgstr "Local:"
 
-#: main.c:374
+#: main.c:382
 msgid "Log to file"
 msgstr "Enviar log para arquivo"
 
-#: main.c:365
+#: main.c:369
 msgid "Minutes for auto-disconnect"
 msgstr "Minutos para desconexão automática"
 
@@ -1578,7 +1581,7 @@ msgstr "PF8"
 msgid "PF9"
 msgstr "PF9"
 
-#: main.c:397
+#: main.c:405
 msgid "Parse error"
 msgstr "Erro de interpretação"
 
@@ -1611,7 +1614,7 @@ msgstr "Colar com margem esquerda"
 msgid "Path and name of the local file"
 msgstr "Caminho e nome do arquivo local"
 
-#: main.c:366
+#: main.c:370
 msgid "Path for plugin files"
 msgstr "Caminho para os arquivos de plugin"
 
@@ -1789,7 +1792,6 @@ msgid "Receiving file"
 msgstr "Recebendo arquivo"
 
 #: src/filetransfer/tables.c:157
-#, fuzzy
 msgid "Record Length"
 msgstr "Comprimento de registro:"
 
@@ -1809,7 +1811,7 @@ msgstr "Recarregar conteúdo do buffer"
 msgid "Remap Failed"
 msgstr "Remapeamento falhou"
 
-#: main.c:363
+#: main.c:367
 msgid "Remap charset from xml file"
 msgstr "Remapear caracteres por um arquivo xml"
 
@@ -1969,6 +1971,11 @@ msgstr "Guarda fila de transferência num arquivo XML externo"
 msgid "Save transfer queue to file"
 msgstr "Salvar fila de transferências para arquivo"
 
+#: config.c:570
+#, c-format
+msgid "Saving %s"
+msgstr "Gravando %s"
+
 #: properties.c:242
 msgid "Screen buffer length in bytes"
 msgstr "Tamanho do buffer de tela em bytes"
@@ -2085,7 +2092,7 @@ msgstr "Certificado auto assinado na cadeia de certificados"
 msgid "Send file"
 msgstr "Enviar arquivo"
 
-#: main.c:371
+#: main.c:379
 msgid "Send messages to syslog"
 msgstr "Enviar mensagens para o log do sistema"
 
@@ -2101,11 +2108,11 @@ msgstr "Enviar/Receber"
 msgid "Sending file"
 msgstr "Enviando arquivo"
 
-#: main.c:352 main.c:354
+#: main.c:356 main.c:358
 msgid "Session name"
 msgstr "Nome da sessão"
 
-#: main.c:362
+#: main.c:366
 msgid "Set host charset"
 msgstr "Define página de código do host"
 
@@ -2113,19 +2120,19 @@ msgstr "Define página de código do host"
 msgid "Set insert mode"
 msgstr "Set insert mode"
 
-#: main.c:358
+#: main.c:362
 msgid "Set reported colors (8/16)"
 msgstr "Define número de cores informadas (8/16)"
 
-#: main.c:361
+#: main.c:365
 msgid "Set toggles OFF"
 msgstr "Desativa toggles"
 
-#: main.c:360
+#: main.c:364
 msgid "Set toggles ON"
 msgstr "Ativa toggles"
 
-#: main.c:373
+#: main.c:381
 msgid "Set trace filename"
 msgstr "Define o nome do arquivo de trace"
 
@@ -2501,7 +2508,7 @@ msgstr "Os tipos conhecidos são %s"
 msgid "The model number"
 msgstr "Nº do modelo"
 
-#: main.c:364
+#: main.c:368
 msgid "The model of 3270 display to be emulated"
 msgstr "Modelo de tela 3270 a ser emulada"
 
@@ -2610,7 +2617,7 @@ msgstr ""
 "programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple "
 "Place, Suite 330, Boston, MA, 02111-1307, USA"
 
-#: main.c:471
+#: main.c:480
 #, c-format
 msgid "This program requires GTK version %d.%d.%d"
 msgstr "Este programa precisa do GTK versão %d.%d.%d"
@@ -3084,7 +3091,6 @@ msgid "_Host"
 msgstr "_Servidor"
 
 #: src/filetransfer/v3270ft.c:341
-#, fuzzy
 msgid "_Local file"
 msgstr "Arquivo _local:"
 
@@ -3093,7 +3099,6 @@ msgid "_Network"
 msgstr "_Rede"
 
 #: src/filetransfer/v3270ft.c:340
-#, fuzzy
 msgid "_Operation"
 msgstr "_Operação:"
 
@@ -3102,7 +3107,6 @@ msgid "_Options"
 msgstr "_Opções"
 
 #: src/filetransfer/v3270ft.c:342
-#, fuzzy
 msgid "_Remote file"
 msgstr "Arquivo _remoto:"
 
