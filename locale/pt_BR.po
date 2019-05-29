@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-29 17:05-0300\n"
-"PO-Revision-Date: 2019-05-29 17:08-0300\n"
+"POT-Creation-Date: 2019-05-29 17:12-0300\n"
+"PO-Revision-Date: 2019-05-29 17:12-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
 "Language: pt_BR\n"
@@ -264,6 +264,11 @@ msgstr "Adiciona conteúdo do arquivo origem ao final do arquivo destino."
 #: main.c:373 main.c:375
 msgid "Application name"
 msgstr "Nome da aplicação"
+
+#: main.c:427
+#, c-format
+msgid "Application name set to \"%s\""
+msgstr "Nome da aplicação definido para \"%s\""
 
 #: 10keypad.xml:85
 msgid "Attn"

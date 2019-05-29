@@ -424,7 +424,7 @@ int main(int argc, char *argv[])
 	if(app_name)
 	{
 		g_set_application_name(app_name);
-		g_message("Application name set to \"%s\"",app_name);
+		g_message( _( "Application name set to \"%s\"" ), app_name);
 	}
 #ifdef _WIN32
 	else
