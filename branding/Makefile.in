@@ -88,7 +88,7 @@ $(DESTDIR)$(datarootdir)/pixmaps/%.png: \
 
 install: \
 	$(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/$(PACKAGE_NAME).png \
-	$(DESTDIR)$(datarootdir)/pixmaps/$(PACKAGE_NAME).png \
+	$(DESTDIR)$(datarootdir)/pixmaps/$(PACKAGE_TARNAME).png \
 	$(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/$(PACKAGE_NAME)-logo.png
 
 	@$(INSTALL_DATA) \
