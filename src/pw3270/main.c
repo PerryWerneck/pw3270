@@ -235,7 +235,11 @@ static gboolean startup(GtkWidget *toplevel)
 int main(int argc, char *argv[])
 {
 	const gchar		* pluginpath	= NULL;
+#ifdef APPLICATION_NAME
+	const char		* app_name		= G_STRINGIFY(APPLICATION_NAME);
+#else
 	const char		* app_name		= NULL;
+#endif // APPLICATION_NAME
 
 #ifdef DEFAULT_SESSION_NAME
 	const gchar		* session_name	= G_STRINGIFY(DEFAULT_SESSION_NAME);
@@ -365,7 +369,11 @@ int main(int argc, char *argv[])
 			{ "autodisconnect",		'D', 0, G_OPTION_ARG_INT,		&timer,			    N_( "Minutes for auto-disconnect" ),				0									},
 			{ "pluginpath",			'P', 0, G_OPTION_ARG_STRING,	&pluginpath,	    N_( "Path for plugin files" ),						NULL								},
 
+#ifdef APPLICATION_NAME
+			{ "application-name",	'A', 0, G_OPTION_ARG_STRING,	&app_name,			N_( "Application name" ),							G_STRINGIFY(APPLICATION_NAME)		},
+#else
 			{ "application-name",	'A', 0, G_OPTION_ARG_STRING,	&app_name,			N_( "Application name" ),							NULL								},
+#endif // APPLICATION_NAME
 
 #if defined( HAVE_SYSLOG )
 			{ "syslog",				'l', 0, G_OPTION_ARG_NONE,		&log_to_syslog,		N_( "Send messages to syslog" ),					NULL								},
@@ -416,6 +424,7 @@ int main(int argc, char *argv[])
 	if(app_name)
 	{
 		g_set_application_name(app_name);
+		g_message("Application name set to \"%s\"",app_name);
 	}
 #ifdef _WIN32
 	else
