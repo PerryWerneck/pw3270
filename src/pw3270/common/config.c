@@ -549,9 +549,7 @@ void set_integer_to_config(const gchar *group, const gchar *key, gint val)
 
 void configuration_deinit(void)
 {
-#ifdef ENABLE_WINDOWS_REGISTRY
-
-#else
+#if !defined(ENABLE_WINDOWS_REGISTRY)
 
 	gchar *text;
 
@@ -562,13 +560,20 @@ void configuration_deinit(void)
 
 	if(text)
 	{
+		GError * error = NULL;
+
 		g_autofree gchar * name = g_strconcat(g_get_application_name(),".conf",NULL);
 		g_autofree gchar * filename = g_build_filename(g_get_user_config_dir(),name,NULL);
 
-		trace("Saving configuration in \"%s\"",filename);
-
 		g_mkdir_with_parents(g_get_user_config_dir(),S_IRUSR|S_IWUSR);
-		g_file_set_contents(filename,text,-1,NULL);
+		g_file_set_contents(filename,text,-1,&error);
+
+		if(error) {
+			g_message( _( "Can't save \"%s\": %s" ), filename, error->message);
+			g_error_free(error);
+		} else {
+			g_message( _("Configuration saved to %s"), filename);
+		}
 
 	}
 

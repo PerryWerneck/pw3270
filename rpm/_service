@@ -12,6 +12,8 @@
 		<param name="url">https://github.com/PerryWerneck/pw3270.git</param>
       
         <param name="changesgenerate">enable</param>
+        <param name="changesauthor">perry.werneck@gmail.com</param>
+      
 		<param name="versionformat">@PARENT_TAG@</param>
 		<param name="scm">git</param>
 	</service>
