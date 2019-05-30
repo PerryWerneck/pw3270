@@ -38,6 +38,10 @@
 #include <glib.h>
 #include <glib/gstdio.h>
 
+#ifdef G_OS_UNIX
+	#include <glib-unix.h>
+#endif // G_OS_UNIX
+
 #ifdef HAVE_GTKMAC
  #include <gtkosxapplication.h>
 #endif // HAVE_GTKMAC
@@ -559,6 +563,11 @@ int main(int argc, char *argv[])
 		v3270_set_auto_disconnect(pw3270_get_terminal_widget(toplevel),timer);
 
 		g_idle_add((GSourceFunc) startup, toplevel);
+
+		#ifdef G_OS_UNIX
+			// Termination
+			g_unix_signal_add(SIGTERM, (GSourceFunc) gtk_main_quit, NULL);
+		#endif // G_OS_UNIX
 
 		gtk_main();
 
