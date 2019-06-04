@@ -52,14 +52,10 @@ Requires:		%{name}-branding >= 5.2
 # https://en.opensuse.org/openSUSE:Build_Service_cross_distribution_howto#Detect_a_distribution_flavor_for_special_code
 #
 
-%define _distro		linux
-
-
 #--[ Red HAT ]--------------------------------------------------------------------------------------------------------
 
 %if 0%{?rhel_version}
 
-%define _distro rhel%{rhel_version}
 %define _help2man  	0
 
 BuildRequires:  dbus-devel
@@ -67,8 +63,8 @@ BuildRequires:  dbus-glib-devel
 BuildRequires:  openssl-devel
 BuildRequires:  gtk3-devel
 BuildRequires:  librsvg2-tools
-BuildRequires:	lib3270-5_2-devel
-BuildRequires:	libv3270-5_2-devel
+BuildRequires:	lib3270-devel
+BuildRequires:	libv3270-devel
 
 %endif
 
@@ -76,7 +72,6 @@ BuildRequires:	libv3270-5_2-devel
 
 %if 0%{?centos_version}
 
-%define _distro centos%{centos_version}
 %define _help2man  	0
 
 BuildRequires:  dbus-devel
@@ -84,10 +79,10 @@ BuildRequires:  dbus-glib-devel
 BuildRequires:  openssl-devel
 BuildRequires:  gtk3-devel
 BuildRequires:  librsvg2-tools
-BuildRequires:	lib3270-5_2-devel
-BuildRequires:	libv3270-5_2-devel
+BuildRequires:	lib3270-devel
+BuildRequires:	libv3270-devel
 
-# Genmarshal do CENTOS não tem dependência do python!
+# CENTOS Genmarshal doesn't depends on python!
 BuildRequires:	python
 
 %endif
@@ -95,8 +90,6 @@ BuildRequires:	python
 #--[ Fedora ]---------------------------------------------------------------------------------------------------------
 
 %if 0%{?fedora}
-
-%define _distro fedora%{fedora}
 
 BuildRequires:  pkgconfig(dbus-1)
 BuildRequires:  pkgconfig(dbus-glib-1)
@@ -112,13 +105,6 @@ BuildRequires:	autoconf-archive
 #--[ SuSE ]-----------------------------------------------------------------------------------------------------------
 
 %if 0%{?suse_version}
-
-# https://en.opensuse.org/openSUSE:Packaging_Conventions_RPM_Macros#.25sles_version
-%if 0%{?is_opensuse}
-	%define _distro opensuse%{suse_version}
-%else
-	%define _distro suse%{suse_version}
-%endif
 
 BuildRequires:  pkgconfig(openssl)
 BuildRequires:  pkgconfig(dbus-1)
@@ -162,6 +148,17 @@ GTK-based IBM 3270 terminal emulator with many advanced features. It can be used
 
 Based on the original x3270 code, pw3270 was originally created for Banco do Brasil, and is now used worldwide.
 
+#--[ Application library ]--------------------------------------------------------------------------------------------
+
+%package -n libpw3270-%{_libvrs}
+Summary:        3270 terminal emulation library
+Group:          System/Libraries
+
+%description -n libpw3270-%{_libvrs}
+GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
+
+This package contains the plugin support library.
+
 #--[ Configuration & Branding ]---------------------------------------------------------------------------------------
 
 %package branding
@@ -188,6 +185,7 @@ Requires:       pkgconfig(lib3270)
 Requires:       pkgconfig(libv3270)
 Requires:		pkgconfig(gtk+-3.0)
 Requires:       %{name} = %{version}
+Requires:		libpw3270-%{_libvrs}
 
 %description -n %{name}-devel
 GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
@@ -236,7 +234,10 @@ make all -j1
 %{_bindir}/pw3270
 %{_datadir}/pw3270/charsets/bracket.xml
 
+%files -n libpw3270-%{_libvrs}
+%defattr(-,root,root)
 %{_libdir}/libpw3270.so.%{MAJOR_VERSION}.%{MINOR_VERSION}
+%{_libdir}/libpw3270.so.%{MAJOR_VERSION}
 
 %files branding
 %defattr(-,root,root)
@@ -257,7 +258,6 @@ make all -j1
 %{_includedir}/pw3270
 
 %{_libdir}/libpw3270.so
-%{_libdir}/libpw3270.so.%{MAJOR_VERSION}
 
 %{_libdir}/libpw3270cpp.a
 %{_libdir}/pkgconfig/pw3270.pc
@@ -267,6 +267,9 @@ make all -j1
 %{_datadir}/pw3270/ui/99debug.xml
 
 #---[ Scripts ]-------------------------------------------------------------------------------------------------------
+
+%post   -n libpw3270-%{_libvrs} -p /sbin/ldconfig
+%postun -n libpw3270-%{_libvrs} -p /sbin/ldconfig
 
 %changelog
 
