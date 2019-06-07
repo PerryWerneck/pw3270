@@ -443,37 +443,6 @@
 			// And last, the project info
 			name.append(intf);
 
-			/*
-			size_t	  bytes = strlen(buffer);
-			char 	* ptr	= buffer;
-			int 	  val;
-
-			sz -= 2;
-
-			// First uses the object ID
-			val = this->sequence;
-			while(bytes < sz && val > 0)
-			{
-				*(ptr++) = 'a'+(val % 25);
-				val /= 25;
-				bytes++;
-			}
-			*(ptr++) = '.';
-
-			// Then the PID
-			val = (int) getpid();
-			while(bytes < sz && val > 0)
-			{
-				*(ptr++) = 'a'+(val % 25);
-				val /= 25;
-				bytes++;
-			}
-			*(ptr++) = '.';
-
-			// And last, the project info
-			strncpy(ptr,intf,sz);
-
-			*/
 			trace("Busname=\"%s\" sequence=%d this=%p",name.c_str(),sequence,this);
 
 			return name.c_str();
@@ -665,6 +634,11 @@
 				strncat(dest,".",sz);
 				strncat(dest,ptr,sz);
 
+				// Path and interface always use the same name.
+				path = strdup("/br/com/bb/pw3270");
+				intf = strdup("br.com.bb.pw3270");
+
+				/*
 				// Build path
 				sz		= strlen(str)+strlen(prefix_path);
 				path	= (char *) malloc(sz+1);
@@ -676,6 +650,7 @@
 				intf	= (char *) malloc(sz+1);
 				strncpy(intf,prefix_dest,sz);
 				strncat(intf,str,sz);
+				*/
 
 			}
 			else
