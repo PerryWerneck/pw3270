@@ -367,11 +367,15 @@ static GtkWidget * trace_window = NULL;
 	g_free(title);
  }
 
+ static void session_changed(GtkWidget *widget, GtkWidget *window)
+ {
+	update_window_title(window);
+ }
+
  LIB3270_EXPORT void pw3270_set_session_name(GtkWidget *widget, const gchar *name)
  {
  	g_return_if_fail(GTK_IS_PW3270(widget));
 	v3270_set_session_name(GTK_PW3270(widget)->terminal,name);
-	update_window_title(widget);
  }
 
  LIB3270_EXPORT void pw3270_set_host_type(GtkWidget *widget, const gchar *name)
@@ -785,6 +789,7 @@ static GtkWidget * trace_window = NULL;
 	// Connect widget signals
 	g_signal_connect(widget->terminal,"field_clicked",G_CALLBACK(field_clicked),widget);
 	g_signal_connect(widget->terminal,"toggle_changed",G_CALLBACK(toggle_changed),widget);
+	g_signal_connect(widget->terminal,"session_changed",G_CALLBACK(session_changed),widget);
 
 	//g_signal_connect(widget->terminal,"print",G_CALLBACK(print_all),widget);
 

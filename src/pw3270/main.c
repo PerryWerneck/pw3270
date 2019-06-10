@@ -433,6 +433,7 @@ int main(int argc, char *argv[])
 #ifdef _WIN32
 	else
 	{
+		g_message( _( "Application name set to \"%s\"" ), PACKAGE_NAME);
 		g_set_application_name(PACKAGE_NAME);
 	}
 #endif // _WIN32
