@@ -403,8 +403,6 @@ dnl ---------------------------------------------------------------------------
 dnl Lib3270 flags
 dnl ---------------------------------------------------------------------------
 
-dnl AC_ARG_WITH([libname], [AS_HELP_STRING([--with-libname], [Setup library name])], [ app_cv_libname="$withval" ],[ app_cv_libname="3270" ])
-
 PKG_CHECK_MODULES( [LIB3270], [lib3270], app_cv_3270="yes", app_cv_3270="no" )
 
 if test "$app_cv_3270" == "yes"; then
@@ -433,8 +431,10 @@ dnl AX_SUBDIRS_CONFIGURE([modules/libv3270],[[LIB3270_CFLAGS=-I$ac_pwd/modules/l
 dnl AC_SUBST(LIBV3270_INCLUDEPATH,$ac_pwd/modules/libv3270/src/include)
 fi
 
-dnl AC_DEFINE(LIB3270_NAME,$app_cv_libname)
-dnl AC_SUBST(LIB3270_NAME,$app_cv_libname)
+AC_ARG_WITH([libname], [AS_HELP_STRING([--with-libname], [Setup library name])], [ app_cv_libname="$withval" ],[ app_cv_libname=`$PKG_CONFIG --variable=library_name lib3270` ])
+
+AC_DEFINE_UNQUOTED(LIB3270_NAME,$app_cv_libname)
+AC_SUBST(LIB3270_NAME,$app_cv_libname)
 
 AC_SUBST(PW3270_CFLAGS,-I$ac_pwd/src/include)
 AC_SUBST(PW3270_LIBS,-l$PACKAGE_TARNAME)

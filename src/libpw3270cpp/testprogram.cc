@@ -43,8 +43,8 @@
  	{
 		string	 s;
 	//	session	*session = session::start("service://?");
-	//	session	*session = session::start("");
-	 	session	*session = session::start("pw3270:A");
+		session	*session = session::start("");
+	// 	session	*session = session::start("pw3270:A");
 
 		string name = session->get_session_name();
 

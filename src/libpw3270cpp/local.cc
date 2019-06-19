@@ -50,6 +50,7 @@
 
 #include <lib3270/log.h>
 #include <lib3270/popup.h>
+#include <lib3270/trace.h>
 #include <string.h>
 #include <stdio.h>
 
@@ -71,7 +72,7 @@
 	#endif // HAVE_SYSLOG
 	}
 
-	static void tracehandler(H3270 *session, const char *fmt, va_list args)
+	static void tracehandler(H3270 *session, void *dunno, const char *fmt, va_list args)
 	{
 	#ifdef HAVE_SYSLOG
 
@@ -179,7 +180,7 @@
 		void load_methods() {
 
 			void	(*set_log_handler)(void (*loghandler)(H3270 *, const char *, int, const char *, va_list));
-			void 	(*set_trace_handler)( void (*handler)(H3270 *session, const char *fmt, va_list args) );
+			void 	(*set_trace_handler)(H3270 *hSession, LIB3270_TRACE_HANDLER handler, void *userdata);
 
 			struct _call
 			{
@@ -207,9 +208,11 @@
 				{ (void **) & _pakey,					"lib3270_pakey"						},
 				{ (void **) & _wait_for_ready,			"lib3270_wait_for_ready"			},
 				{ (void **) & _get_text,				"lib3270_get_string_at_address"		},
-				{ (void **) & _get_text_at,				"lib3270_get_text_at"				},
+
+				{ (void **) & _get_text_at,				"lib3270_get_string_at"				},
 				{ (void **) & _cmp_text_at,				"lib3270_cmp_text_at"				},
 				{ (void **) & _set_text_at,				"lib3270_set_string_at"				},
+
 				{ (void **) & _is_ready,				"lib3270_is_ready"					},
 				{ (void **) & _set_cursor_position,		"lib3270_set_cursor_position"		},
 				{ (void **) & _set_toggle,				"lib3270_set_toggle"				},
@@ -254,7 +257,7 @@
 
 			// Get Session handle, setup base callbacks
 			set_log_handler(loghandler);
-			set_trace_handler(tracehandler);
+			set_trace_handler(this->hSession, tracehandler, NULL);
 
 			set_display_charset();
 
@@ -262,7 +265,7 @@
 
 	public:
 
-		local() : module("lib3270",PACKAGE_VERSION)
+		local() : module(LIB3270_STRINGIZE_VALUE_OF(LIB3270_NAME),PACKAGE_VERSION)
 		{
 		}
 

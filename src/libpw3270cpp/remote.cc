@@ -611,120 +611,123 @@
 			char		* ptr;
 			string		  busName;
 
+
+			this->path = nullptr;
+			this->intf = nullptr;
 			this->sequence = (++sq) + time(0);
 
-			trace("%s str=%p sequence=%d",__FUNCTION__,str,sequence);
+			try {
 
-			for(ptr=str;*ptr;ptr++)
-				*ptr = tolower(*ptr);
+				trace("%s str=%p sequence=%d",__FUNCTION__,str,sequence);
 
-			ptr = strchr(str,':');
+				for(ptr=str;*ptr;ptr++)
+					*ptr = tolower(*ptr);
 
-			if(ptr)
-			{
-				size_t 		  sz;
+				ptr = strchr(str,':');
 
-				*(ptr++) = 0;
+				if(ptr)
+				{
+					size_t 		  sz;
 
-				// Build destination
-				sz		= strlen(ptr)+strlen(str)+strlen(prefix_dest)+2;
-				dest	= (char *) malloc(sz+1);
-				strncpy(dest,prefix_dest,sz);
-				strncat(dest,str,sz);
-				strncat(dest,".",sz);
-				strncat(dest,ptr,sz);
+					*(ptr++) = 0;
 
-				// Path and interface always use the same name.
-				path = strdup("/br/com/bb/pw3270");
-				intf = strdup("br.com.bb.pw3270");
+					// Build destination
+					sz		= strlen(ptr)+strlen(str)+strlen(prefix_dest)+2;
+					dest	= (char *) malloc(sz+1);
+					strncpy(dest,prefix_dest,sz);
+					strncat(dest,str,sz);
+					strncat(dest,".",sz);
+					strncat(dest,ptr,sz);
 
-				/*
-				// Build path
-				sz		= strlen(str)+strlen(prefix_path);
-				path	= (char *) malloc(sz+1);
-				strncpy(path,prefix_path,sz);
-				strncat(path,str,sz);
+					// Path and interface always use the same name.
+					path = strdup("/br/com/bb/pw3270");
+					intf = strdup("br.com.bb.pw3270");
 
-				// Build intf
-				sz		= strlen(str)+strlen(prefix_dest)+1;
-				intf	= (char *) malloc(sz+1);
-				strncpy(intf,prefix_dest,sz);
-				strncat(intf,str,sz);
-				*/
+				}
+				else
+				{
+					size_t sz;
+
+					// Build destination
+					sz		= strlen(str)+strlen(prefix_dest)+2;
+					dest	= (char *) malloc(sz+1);
+					strncpy(dest,prefix_dest,sz);
+					strncat(dest,str,sz);
+
+					// Build path
+					sz		= strlen(str)+strlen(prefix_path);
+					path	= (char *) malloc(sz+1);
+					strncpy(path,prefix_path,sz);
+					strncat(path,str,sz);
+
+					// Build intf
+					sz		= strlen(str)+strlen(prefix_dest)+1;
+					intf	= (char *) malloc(sz+1);
+					strncpy(intf,prefix_dest,sz);
+					strncat(intf,str,sz);
+
+				}
+
+				trace("DBUS:\nDestination:\t[%s]\nPath:\t\t[%s]\nInterface:\t[%s]",dest,path,intf);
+
+				free(str);
+
+				dbus_error_init(&err);
+
+				conn = dbus_bus_get(DBUS_BUS_SESSION, &err);
+				trace("dbus_bus_get conn=%p",conn);
+
+				if (dbus_error_is_set(&err))
+				{
+					exception e = exception("DBUS Connection Error (%s)", err.message);
+					dbus_error_free(&err);
+					throw e;
+					return;
+				}
+
+				if(!conn)
+				{
+					throw exception("%s", "DBUS Connection failed");
+					return;
+				}
+
+
+				rc = dbus_bus_request_name(conn, makeBusName(busName), DBUS_NAME_FLAG_REPLACE_EXISTING , &err);
+				trace("dbus_bus_request_name(%s) rc=%d",busName.c_str(),rc);
+
+				if (dbus_error_is_set(&err))
+				{
+					exception e = exception("Name Error (%s)", err.message);
+					dbus_error_free(&err);
+					throw e;
+					return;
+				}
+
+				if(rc != DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER)
+				{
+					trace("%s: DBUS request for name %s failed",__FUNCTION__, busName.c_str());
+					throw exception("DBUS request for \"%s\" failed",session);
+				}
+
+				trace("%s: Using DBUS name %s",__FUNCTION__,busName.c_str());
+
+				const char * id   = "r";
+				static const dbus_int32_t flag = 1;
+				query_intval("setScript", DBUS_TYPE_STRING, &id, DBUS_TYPE_INT32, &flag, DBUS_TYPE_INVALID);
+
+			} catch(...) {
+
+				if(path) {
+					free(path);
+					path = nullptr;
+				}
+
+				if(intf) {
+					free(intf);
+					intf = nullptr;
+				}
 
 			}
-			else
-			{
-				size_t sz;
-
-				// Build destination
-				sz		= strlen(str)+strlen(prefix_dest)+2;
-				dest	= (char *) malloc(sz+1);
-				strncpy(dest,prefix_dest,sz);
-				strncat(dest,str,sz);
-
-				// Build path
-				sz		= strlen(str)+strlen(prefix_path);
-				path	= (char *) malloc(sz+1);
-				strncpy(path,prefix_path,sz);
-				strncat(path,str,sz);
-
-				// Build intf
-				sz		= strlen(str)+strlen(prefix_dest)+1;
-				intf	= (char *) malloc(sz+1);
-				strncpy(intf,prefix_dest,sz);
-				strncat(intf,str,sz);
-
-			}
-
-			trace("DBUS:\nDestination:\t[%s]\nPath:\t\t[%s]\nInterface:\t[%s]",dest,path,intf);
-
-			free(str);
-
-			dbus_error_init(&err);
-
-			conn = dbus_bus_get(DBUS_BUS_SESSION, &err);
-			trace("dbus_bus_get conn=%p",conn);
-
-			if (dbus_error_is_set(&err))
-			{
-				exception e = exception("DBUS Connection Error (%s)", err.message);
-				dbus_error_free(&err);
-				throw e;
-				return;
-			}
-
-			if(!conn)
-			{
-				throw exception("%s", "DBUS Connection failed");
-				return;
-			}
-
-
-			rc = dbus_bus_request_name(conn, makeBusName(busName), DBUS_NAME_FLAG_REPLACE_EXISTING , &err);
-			trace("dbus_bus_request_name(%s) rc=%d",busName.c_str(),rc);
-
-			if (dbus_error_is_set(&err))
-			{
-				exception e = exception("Name Error (%s)", err.message);
-				dbus_error_free(&err);
-				throw e;
-				return;
-			}
-
-			if(rc != DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER)
-			{
-				trace("%s: DBUS request for name %s failed",__FUNCTION__, busName.c_str());
-				throw exception("DBUS request for \"%s\" failed",session);
-				return;
-			}
-
-			trace("%s: Using DBUS name %s",__FUNCTION__,busName.c_str());
-
-			const char * id   = "r";
-			static const dbus_int32_t flag = 1;
-			query_intval("setScript", DBUS_TYPE_STRING, &id, DBUS_TYPE_INT32, &flag, DBUS_TYPE_INVALID);
-
 
 #else
 

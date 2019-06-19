@@ -65,6 +65,7 @@ CFLAGS= \
 	@CFLAGS@ \
 	-Wno-deprecated-declarations \
 	-I$(BASEDIR)/src/include \
+	-DLIB3270_NAME="lib@LIB3270_NAME@" \
 	@LIB3270_CFLAGS@ \
 	@DBUS_CFLAGS@ \
 	@GTK_CFLAGS@

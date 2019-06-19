@@ -172,6 +172,7 @@ namespace PW3270_NAMESPACE
 
 		dlerror();
 
+		trace("Loading %s",dllname.c_str());
 		hModule = dlopen(dllname.c_str(), RTLD_NOW);
 		if(!hModule)
 			throw exception("Can't load lib3270: %s",dllname.c_str());

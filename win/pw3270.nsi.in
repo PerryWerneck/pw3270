@@ -140,10 +140,9 @@ SubSection "@PACKAGE@" SecMain
 
 			${DisableX64FSRedirection}
 			CreateDirectory "$INSTDIR\plugins"
-			file "/oname=$INSTDIR\plugins\ipc3270c.dll"	"bin\ipc3270c.dll"
 
-			${EnableX64FSRedirection}
-			file "/oname=$SYSDIR\libhllapi.dll"			"bin\libhllapi.dll"
+			file "/oname=$INSTDIR\plugins\ipc3270c.dll"	"bin\ipc3270c.dll"
+			file "/oname=$SYSDIR\libhllapi.dll"		"bin\libhllapi.dll"
 
 		sectionEnd
 
