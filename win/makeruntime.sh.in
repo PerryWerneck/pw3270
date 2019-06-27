@@ -108,6 +108,7 @@ copy_dll() {
 			ws2_32
 			wsock32
 			winspool.drv
+			ntdll
 		"
 
 		# Excluo DLLs do sistema
