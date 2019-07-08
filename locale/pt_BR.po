@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-29 17:12-0300\n"
-"PO-Revision-Date: 2019-05-29 17:12-0300\n"
+"POT-Creation-Date: 2019-07-08 14:15-0300\n"
+"PO-Revision-Date: 2019-07-08 14:18-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
 "Language: pt_BR\n"
@@ -19,13 +19,13 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Gtranslator 2.91.7\n"
 
-#: window.c:411
+#: window.c:415
 #, c-format
 msgid " and <b>%s</b> for %s."
 msgstr " e <b>%s</b> para %s."
 
-#: telnet.c:688 iocalls.c:563 iocalls.c:580 linux/connect.c:81
-#: linux/connect.c:97
+#: telnet.c:688 iocalls.c:563 iocalls.c:580 linux/connect.c:80
+#: linux/connect.c:96
 #, c-format
 msgid "%s"
 msgstr "%s"
@@ -55,7 +55,7 @@ msgstr "Ação %s precisa de um valor válido"
 msgid "%s action needs src attribute"
 msgstr "Ação %s precisa do atributo src"
 
-#: main.c:96
+#: main.c:100
 #, c-format
 msgid "%s requires GTK version %d.%d.%d"
 msgstr "%s requer GTK versão %d.%d.%d"
@@ -90,12 +90,12 @@ msgstr "%s: Caractere desconhecido depois de \\pf"
 msgid "%s: Vertical tab not supported"
 msgstr "%s: Tabulação vertical não é suportada"
 
-#: window.c:406
+#: window.c:410
 #, c-format
 msgid "%s<b>%s</b> for %s"
 msgstr "%s<b>%s</b> para %s"
 
-#: main.c:387
+#: main.c:391
 msgid "- 3270 Emulator for Gtk"
 msgstr "- Emulador 3270 para GTK"
 
@@ -103,7 +103,7 @@ msgstr "- Emulador 3270 para GTK"
 msgid "16 colors"
 msgstr "16 cores"
 
-#: screen.c:809 screen.c:846 screen.c:864 screen.c:989
+#: screen.c:814 screen.c:851 screen.c:869 screen.c:994
 msgid "3270 Error"
 msgstr "Erro 3270"
 
@@ -113,7 +113,7 @@ msgstr "Erro 3270"
 msgid "3270 File transfer"
 msgstr "Transferência de arquivos 3270"
 
-#: screen.c:827
+#: screen.c:832
 msgid "3270 Warning"
 msgstr "Alerta 3270"
 
@@ -168,7 +168,7 @@ msgstr ""
 msgid "<b>Text options</b>"
 msgstr "<b>Opções de texto</b>"
 
-#: main.c:407
+#: main.c:411
 msgid ""
 "<b>Valid options:</b>\n"
 "\n"
@@ -261,11 +261,11 @@ msgstr "Um parametro de ENVIO/RECEBIMENTO inválido foi enviado para o host."
 msgid "Appends the source file to the destination file."
 msgstr "Adiciona conteúdo do arquivo origem ao final do arquivo destino."
 
-#: main.c:373 main.c:375
+#: main.c:377 main.c:379
 msgid "Application name"
 msgstr "Nome da aplicação"
 
-#: main.c:427
+#: main.c:431 main.c:436
 #, c-format
 msgid "Application name set to \"%s\""
 msgstr "Nome da aplicação definido para \"%s\""
@@ -397,7 +397,7 @@ msgstr "Tema de c_ores:"
 msgid "C_onnect"
 msgstr "_Conectar"
 
-#: toggles.c:333 linux/connect.c:229
+#: toggles.c:333 linux/connect.c:228
 #, c-format
 msgid "Can't %s network keep-alive"
 msgstr "Não foi possível %s opção \"keep-alive\""
@@ -411,34 +411,30 @@ msgstr "Não posso aceitar elemento %s sem nome"
 msgid "Can't add activity"
 msgstr "Não é possível adicionar atividade"
 
-#: ssl/linux/getcrl.c:321
+#: ssl/linux/getcrl.c:342
 msgid "Can't bind to LDAP server"
 msgstr "Não foi possível conectar ao servidor LDAP"
 
-#: linux/connect.c:89
+#: linux/connect.c:88
 #, c-format
 msgid "Can't connect to %s"
 msgstr "Não foi possível conectar a %s"
 
-#: linux/connect.c:179
+#: linux/connect.c:178
 #, c-format
 msgid "Can't connect to %s:%s"
 msgstr "Não foi possível conectar a %s:%s"
 
-#: src/terminal/selection.c:463
+#: src/terminal/selection.c:472
 #, c-format
 msgid "Can't convert line %lu from %s to %s"
 msgstr "Não foi possível converter a linha %lu de %s para %s"
 
-#: selection.c:654
-msgid "Can't cut rectangular regions"
-msgstr "Recortar não permitido em seleção retangular"
+#: ssl/linux/getcrl.c:412
+msgid "Can't decode CRL got from LDAP Search"
+msgstr "Não foi possível decodificar o CRL obtido pela pesquisa LDAP"
 
-#: ssl/linux/getcrl.c:391
-msgid "Can't get CRL from LDAP Search"
-msgstr "Não obtive CRL na pesquisa LDAP"
-
-#: ssl/linux/getcrl.c:357 ssl/linux/getcrl.c:368
+#: ssl/linux/getcrl.c:378 ssl/linux/getcrl.c:389
 msgid "Can't get LDAP attribute"
 msgstr "Não foi possível obter o atributo LDAP"
 
@@ -450,7 +446,7 @@ msgstr "Não foi possível obter o tamanho do arquivo"
 msgid "Can't get screen contents"
 msgstr "Não foi possível obter o conteúdo da tela"
 
-#: ssl/linux/getcrl.c:299
+#: ssl/linux/getcrl.c:320
 msgid "Can't initialize LDAP"
 msgstr "Erro ao inicializar LDAP"
 
@@ -472,7 +468,7 @@ msgstr "Não foi possível carregar plugin"
 msgid "Can't load plugin %s"
 msgstr "Não foi possível carregar plugin %s"
 
-#: ssl/linux/getcrl.c:226 ssl/linux/getcrl.c:244
+#: ssl/linux/getcrl.c:247 ssl/linux/getcrl.c:265
 msgid "Can't open CRL File"
 msgstr "Não foi possível abrir arquivo CRL"
 
@@ -506,7 +502,7 @@ msgstr "Erro ao analisar valor de caractere"
 msgid "Can't parse unnamed element"
 msgstr "Incapaz de processar elemento sem nome"
 
-#: src/terminal/callbacks.c:343
+#: src/terminal/callbacks.c:345
 msgid "Can't print"
 msgstr "Não é possível imprimir"
 
@@ -515,7 +511,7 @@ msgstr "Não é possível imprimir"
 msgid "Can't read SSL certificates from \"%s\""
 msgstr "Não foi possível ler certificados SSL de %s"
 
-#: window.c:394
+#: window.c:398
 #, c-format
 msgid "Can't recognize \"%s\" as a valid host type"
 msgstr "Não reconheço \"%s\" como um tipo de host válido"
@@ -567,11 +563,11 @@ msgstr ""
 msgid "Can't save trace data to file %s"
 msgstr "Não foi possível salvar trace no arquivo %s"
 
-#: ssl/linux/getcrl.c:346
+#: ssl/linux/getcrl.c:367
 msgid "Can't search LDAP server"
 msgstr "Não foi possível conectar ao servidor LDAP"
 
-#: ssl/linux/getcrl.c:310
+#: ssl/linux/getcrl.c:331
 msgid "Can't set LDAP version"
 msgstr "Não é possível setar a versão LDAP"
 
@@ -665,7 +661,7 @@ msgstr "Certificado revogado"
 msgid "Certificate signature failure"
 msgstr "Falha na assinatura do certificado"
 
-#: tools.c:312 src/terminal/selection.c:465
+#: tools.c:312 src/terminal/selection.c:474
 msgid "Charset error"
 msgstr "Erro de codificação de caracteres"
 
@@ -709,11 +705,11 @@ msgstr "Configurar host"
 msgid "Connect on startup"
 msgstr "Conectar ao iniciar"
 
-#: iocalls.c:547 linux/connect.c:183 linux/connect.c:215 linux/connect.c:233
+#: iocalls.c:547 linux/connect.c:182 linux/connect.c:214 linux/connect.c:232
 msgid "Connection error"
 msgstr "Erro de conexão"
 
-#: linux/connect.c:95
+#: linux/connect.c:94
 msgid "Connection failed"
 msgstr "Conexão falhou"
 
@@ -934,7 +930,7 @@ msgstr "Erro na chamada vasprintf"
 msgid "Error loading %s"
 msgstr "Erro lendo %s"
 
-#: ssl/linux/getcrl.c:449 ssl/linux/getcrl.c:464
+#: ssl/linux/getcrl.c:471 ssl/linux/getcrl.c:486
 msgid "Error loading CRL"
 msgstr "Erro lendo CRL"
 
@@ -1035,7 +1031,7 @@ msgstr "Caminho completo do arquivo remoto"
 msgid "Function bar"
 msgstr "Barra de funções"
 
-#: main.c:100 main.c:484
+#: main.c:104 main.c:489
 msgid "GTK Version mismatch"
 msgstr "Divergência de versão GTK"
 
@@ -1047,11 +1043,11 @@ msgstr "Obtém a fila de transferência de um arquivo XML externo"
 msgid "Get transfer queue from file"
 msgstr "Obtêm a fila de arquivos a transferir de um arquivo"
 
-#: ssl/linux/getcrl.c:503
+#: ssl/linux/getcrl.c:528
 msgid "Got an invalid CRL from LDAP server"
 msgstr "Obtive um certificado inválido do servidor LDAP"
 
-#: ssl/linux/getcrl.c:481 ssl/linux/getcrl.c:490 ssl/linux/getcrl.c:520
+#: ssl/linux/getcrl.c:506 ssl/linux/getcrl.c:515 ssl/linux/getcrl.c:545
 msgid "Got an invalid CRL from server"
 msgstr "Obtive um CRL inválido do servidor"
 
@@ -1095,11 +1091,11 @@ msgstr "Servidor rejeitou o tipo de dispositivo ou requisição"
 msgid "Host rejected resource(s)"
 msgstr "Servidor rejeitou recurso(s)"
 
-#: main.c:363
+#: main.c:367
 msgid "Host system type"
 msgstr "Tipo do sistema no servidor"
 
-#: main.c:361
+#: main.c:365
 msgid "Host to connect"
 msgstr "Servidor a conectar"
 
@@ -1207,7 +1203,7 @@ msgstr "Intensificado/Desprotegido"
 msgid "Invalid CA certificate"
 msgstr "Certificado CA inválido"
 
-#: local/session.cc:69 src/terminal/callbacks.c:427
+#: local/session.cc:69 src/terminal/callbacks.c:429
 msgid "Invalid callback table, possible version mismatch in lib3270"
 msgstr ""
 "Tabela de callbacks inválida, possível divergência de versão na lib3270"
@@ -1219,10 +1215,6 @@ msgstr "Valor cgcsgid é inválido"
 #: src/terminal/charset.c:299
 msgid "Invalid character value"
 msgstr "Valor de caractere inválido"
-
-#: selection.c:654
-msgid "Invalid cut action"
-msgstr "Ação recortar inválida"
 
 #: ftmessages.c:166
 msgid "Invalid option xxxxxxxx with APPEND: file transfer canceled"
@@ -1317,11 +1309,11 @@ msgstr "Arquivo local:"
 msgid "Local:"
 msgstr "Local:"
 
-#: main.c:382
+#: main.c:386
 msgid "Log to file"
 msgstr "Enviar log para arquivo"
 
-#: main.c:369
+#: main.c:373
 msgid "Minutes for auto-disconnect"
 msgstr "Minutos para desconexão automática"
 
@@ -1329,7 +1321,7 @@ msgstr "Minutos para desconexão automática"
 msgid "Misc colors"
 msgstr "Cores diversas"
 
-#: window.c:520
+#: window.c:524
 #, c-format
 msgid "Model %d (%s)"
 msgstr "Modelo %d (%s)"
@@ -1354,7 +1346,7 @@ msgstr "Ação \"move\" precisa dos atributos \"target\" e \"direction\""
 msgid "Mustard"
 msgstr "Mostarda"
 
-#: telnet.c:354 linux/event_dispatcher.c:144 linux/connect.c:79
+#: telnet.c:354 linux/event_dispatcher.c:144 linux/connect.c:78
 msgid "Network error"
 msgstr "Erro de rede"
 
@@ -1366,11 +1358,11 @@ msgstr "Network keep alive"
 msgid "Next field"
 msgstr "Próximo campo"
 
-#: ssl/linux/getcrl.c:267
+#: ssl/linux/getcrl.c:288
 msgid "No DN of the entry at which to start the search on the URL"
 msgstr "URL de pesquisa não contem o DN a pesquisar"
 
-#: ssl/linux/getcrl.c:279
+#: ssl/linux/getcrl.c:300
 msgid "No LDAP attribute on the URL"
 msgstr "URL de pesquisa não definiu o atributo LDAP"
 
@@ -1410,10 +1402,6 @@ msgstr "Normal/Protegido"
 msgid "Normal/Unprotected"
 msgstr "Normal/Desprotegido"
 
-#: selection.c:654
-msgid "Not available"
-msgstr "Não disponível"
-
 #: ft.c:692
 msgid "Not in 3270 mode, transfer cancelled"
 msgstr "Não está no modo 3270, transferência cancelada"
@@ -1448,7 +1436,7 @@ msgstr ""
 "Permitida apenas uma opção dentre TRACKS, CYLINDERS, AVBLOCK: Transferência "
 "cancelada"
 
-#: src/terminal/callbacks.c:341 src/filetransfer/save.c:118
+#: src/terminal/callbacks.c:343 src/filetransfer/save.c:118
 #: src/filetransfer/load.c:272 src/filetransfer/activitylist.c:440
 #: src/dialogs/transfer.c:99
 msgid "Operation has failed"
@@ -1586,7 +1574,7 @@ msgstr "PF8"
 msgid "PF9"
 msgstr "PF9"
 
-#: main.c:405
+#: main.c:409
 msgid "Parse error"
 msgstr "Erro de interpretação"
 
@@ -1619,7 +1607,7 @@ msgstr "Colar com margem esquerda"
 msgid "Path and name of the local file"
 msgstr "Caminho e nome do arquivo local"
 
-#: main.c:370
+#: main.c:374
 msgid "Path for plugin files"
 msgstr "Caminho para os arquivos de plugin"
 
@@ -1816,7 +1804,7 @@ msgstr "Recarregar conteúdo do buffer"
 msgid "Remap Failed"
 msgstr "Remapeamento falhou"
 
-#: main.c:367
+#: main.c:371
 msgid "Remap charset from xml file"
 msgstr "Remapear caracteres por um arquivo xml"
 
@@ -1993,11 +1981,11 @@ msgstr "Tamanho da tela"
 msgid "Scripts"
 msgstr "Scripts"
 
-#: ssl/linux/getcrl.c:358
+#: ssl/linux/getcrl.c:379
 msgid "Search did not produce any attributes."
 msgstr "Pesquisa não produziu nenhum atributo"
 
-#: ssl/linux/getcrl.c:369
+#: ssl/linux/getcrl.c:390
 msgid "Search did not produce any values."
 msgstr "Pesquisa não produziu nenhum valor"
 
@@ -2019,13 +2007,13 @@ msgid "Secure connection was successful."
 msgstr "Conexão segura efetuada com sucesso."
 
 #: ssl/negotiate.c:101 ssl/negotiate.c:130 ssl/negotiate.c:153
-#: ssl/ctx_init.c:202 ssl/ctx_init.c:229 ssl/linux/getcrl.c:225
-#: ssl/linux/getcrl.c:243 ssl/linux/getcrl.c:266 ssl/linux/getcrl.c:278
-#: ssl/linux/getcrl.c:298 ssl/linux/getcrl.c:309 ssl/linux/getcrl.c:320
-#: ssl/linux/getcrl.c:345 ssl/linux/getcrl.c:356 ssl/linux/getcrl.c:367
-#: ssl/linux/getcrl.c:390 ssl/linux/getcrl.c:440 ssl/linux/getcrl.c:463
-#: ssl/linux/getcrl.c:480 ssl/linux/getcrl.c:489 ssl/linux/getcrl.c:502
-#: ssl/linux/getcrl.c:519 ssl/linux/getcrl.c:533
+#: ssl/ctx_init.c:202 ssl/ctx_init.c:229 ssl/linux/getcrl.c:246
+#: ssl/linux/getcrl.c:264 ssl/linux/getcrl.c:287 ssl/linux/getcrl.c:299
+#: ssl/linux/getcrl.c:319 ssl/linux/getcrl.c:330 ssl/linux/getcrl.c:341
+#: ssl/linux/getcrl.c:366 ssl/linux/getcrl.c:377 ssl/linux/getcrl.c:388
+#: ssl/linux/getcrl.c:411 ssl/linux/getcrl.c:462 ssl/linux/getcrl.c:485
+#: ssl/linux/getcrl.c:505 ssl/linux/getcrl.c:514 ssl/linux/getcrl.c:527
+#: ssl/linux/getcrl.c:544 ssl/linux/getcrl.c:558
 msgid "Security error"
 msgstr "Erro de segurança"
 
@@ -2097,7 +2085,7 @@ msgstr "Certificado auto assinado na cadeia de certificados"
 msgid "Send file"
 msgstr "Enviar arquivo"
 
-#: main.c:379
+#: main.c:383
 msgid "Send messages to syslog"
 msgstr "Enviar mensagens para o log do sistema"
 
@@ -2113,11 +2101,11 @@ msgstr "Enviar/Receber"
 msgid "Sending file"
 msgstr "Enviando arquivo"
 
-#: main.c:356 main.c:358
+#: main.c:360 main.c:362
 msgid "Session name"
 msgstr "Nome da sessão"
 
-#: main.c:366
+#: main.c:370
 msgid "Set host charset"
 msgstr "Define página de código do host"
 
@@ -2125,19 +2113,19 @@ msgstr "Define página de código do host"
 msgid "Set insert mode"
 msgstr "Set insert mode"
 
-#: main.c:362
+#: main.c:366
 msgid "Set reported colors (8/16)"
 msgstr "Define número de cores informadas (8/16)"
 
-#: main.c:365
+#: main.c:369
 msgid "Set toggles OFF"
 msgstr "Desativa toggles"
 
-#: main.c:364
+#: main.c:368
 msgid "Set toggles ON"
 msgstr "Ativa toggles"
 
-#: main.c:381
+#: main.c:385
 msgid "Set trace filename"
 msgstr "Define o nome do arquivo de trace"
 
@@ -2336,15 +2324,15 @@ msgstr ""
 msgid "The SSL certificate for this host is not trusted."
 msgstr "O certificado SSL deste servidor não é confiável"
 
-#: ssl/linux/getcrl.c:268 ssl/linux/getcrl.c:280
+#: ssl/linux/getcrl.c:289 ssl/linux/getcrl.c:301
 msgid "The URL argument should be in the format ldap://[HOST]/[DN]?attribute"
 msgstr "A URL deve ser no formato ldap://[HOST]/[DN]?attribute"
 
-#: ssl/linux/getcrl.c:227
+#: ssl/linux/getcrl.c:248
 msgid "The URL for the CRL is undefined or empty"
 msgstr "A URL para o CRL não está definida ou vazia"
 
-#: ssl/linux/getcrl.c:535
+#: ssl/linux/getcrl.c:560
 msgid "The URL scheme is unknown"
 msgstr "O tipo de URL é desconhecido"
 
@@ -2504,7 +2492,7 @@ msgstr ""
 "The issuer certificate of a looked up certificate could not be found. This "
 "normally means the list of trusted certificates is not complete."
 
-#: window.c:413
+#: window.c:417
 #, c-format
 msgid "The known types are %s"
 msgstr "Os tipos conhecidos são %s"
@@ -2513,7 +2501,7 @@ msgstr "Os tipos conhecidos são %s"
 msgid "The model number"
 msgstr "Nº do modelo"
 
-#: main.c:368
+#: main.c:372
 msgid "The model of 3270 display to be emulated"
 msgstr "Modelo de tela 3270 a ser emulada"
 
@@ -2622,7 +2610,7 @@ msgstr ""
 "programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple "
 "Place, Suite 330, Boston, MA, 02111-1307, USA"
 
-#: main.c:480
+#: main.c:485
 #, c-format
 msgid "This program requires GTK version %d.%d.%d"
 msgstr "Este programa precisa do GTK versão %d.%d.%d"
@@ -2758,7 +2746,7 @@ msgstr "Incapaz de decifrar a assinatura do certificado"
 msgid "Unable to get certificate CRL."
 msgstr "Incapaz de obter o CRL de um certificado."
 
-#: linux/connect.c:80
+#: linux/connect.c:79
 msgid "Unable to get connection state."
 msgstr "Não foi possível obter o estado da conexão."
 
@@ -2805,7 +2793,7 @@ msgstr "Grupo inesperado \"%s\""
 msgid "Unexpected or invalid %s attribute: \"%s\""
 msgstr "Atributo %s inesperado ou inválido: \"%s\""
 
-#: ssl/linux/getcrl.c:534
+#: ssl/linux/getcrl.c:559
 msgid "Unexpected or invalid CRL URL"
 msgstr "URL do CRL é inesperada ou inválida"
 
@@ -2818,7 +2806,7 @@ msgstr "O resultado da verificação TLS/SSL foi inesperado"
 msgid "Unexpected or invalid attribute value \"%s\""
 msgstr "Valor de attributo inesperado ou inválido: \"%s\""
 
-#: main.c:156
+#: main.c:160
 #, c-format
 msgid "Unexpected or invalid color value \"%s\""
 msgstr "Valor de cor inválido ou inesperado: \"%s\""
@@ -3164,7 +3152,7 @@ msgstr "bracket"
 msgid "connected"
 msgstr "Conectado"
 
-#: toggles.c:333 linux/connect.c:229
+#: toggles.c:333 linux/connect.c:228
 msgid "disable"
 msgstr "desabilitar"
 
@@ -3172,7 +3160,7 @@ msgstr "desabilitar"
 msgid "disconnected"
 msgstr "Desconectado"
 
-#: toggles.c:333 linux/connect.c:229
+#: toggles.c:333 linux/connect.c:228
 msgid "enable"
 msgstr "habilitar"
 
@@ -3192,7 +3180,7 @@ msgstr "Revisão da lib3270"
 msgid "lib3270 version"
 msgstr "Versão da lib3270"
 
-#: linux/connect.c:216
+#: linux/connect.c:215
 msgid "setsockopt(SO_OOBINLINE) has failed"
 msgstr "setsockopt(SO_OOBINLINE) has failed"
 
@@ -3284,6 +3272,9 @@ msgstr "translator-credits"
 
 #~ msgid "Can't connect to DBUS server"
 #~ msgstr "Não foi possível conectar ao servidor DBUS"
+
+#~ msgid "Can't cut rectangular regions"
+#~ msgstr "Recortar não permitido em seleção retangular"
 
 #~ msgid "Can't determine value for environment variable \"%s\" "
 #~ msgstr "Não consigo determinar o valor da variável de ambiente \"%s\" "
@@ -3463,6 +3454,9 @@ msgstr "translator-credits"
 #~ msgid "Invalid charset entry '%s' (#%d)"
 #~ msgstr "Invalid charset entry '%s' (#%d)"
 
+#~ msgid "Invalid cut action"
+#~ msgstr "Ação recortar inválida"
+
 #~ msgid "Invalid proxy hostname syntax"
 #~ msgstr "Erro de sintaxe no nome do proxy"
 
@@ -3501,6 +3495,9 @@ msgstr "translator-credits"
 
 #~ msgid "Network startup error"
 #~ msgstr "Erro ao iniciar a rede"
+
+#~ msgid "Not available"
+#~ msgstr "Não disponível"
 
 #~ msgid "Option '%c:' is not supported"
 #~ msgstr "Opção não suportada: '%c:'"
