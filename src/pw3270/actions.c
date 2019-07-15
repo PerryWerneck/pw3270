@@ -228,7 +228,7 @@ static void do_copy(GtkAction *action, GtkWidget *widget, gboolean cut)
 	}
 
 	trace_action(action,widget);
-	v3270_copy(widget,mode,cut);
+	v3270_copy_selection(widget,mode,cut);
 }
 
 static void copy_action(GtkAction *action, GtkWidget *widget)
@@ -244,7 +244,7 @@ static void cut_action(GtkAction *action, GtkWidget *widget)
 static void append_action(GtkAction *action, GtkWidget *widget)
 {
 	trace_action(action,widget);
-	v3270_copy_append(widget);
+	v3270_append_selection(widget,FALSE);
 }
 
 static void paste_clipboard_action(GtkAction *action, GtkWidget *widget)

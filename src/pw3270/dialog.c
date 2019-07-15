@@ -404,7 +404,7 @@
 
 	if(text)
 	{
-		v3270_paste_string(widget,text,encoding);
+		v3270_paste_text(widget,text,encoding);
 		g_free(text);
 	}
 
