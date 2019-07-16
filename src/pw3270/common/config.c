@@ -551,12 +551,10 @@ void configuration_deinit(void)
 {
 #if !defined(ENABLE_WINDOWS_REGISTRY)
 
-	gchar *text;
-
 	if(!program_config)
 		return;
 
-	text = g_key_file_to_data(program_config,NULL,NULL);
+	g_autofree gchar * text = g_key_file_to_data(program_config,NULL,NULL);
 
 	if(text)
 	{

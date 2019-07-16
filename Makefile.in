@@ -63,6 +63,7 @@ INSTALL=@INSTALL@
 INSTALL_DATA=@INSTALL_DATA@
 INSTALL_PROGRAM=@INSTALL_PROGRAM@
 HELP2MAN=@HELP2MAN@
+VALGRIND=@VALGRIND@
 
 #---[ Release Targets ]------------------------------------------------------------------
 
@@ -230,6 +231,22 @@ run: \
 	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@
 
 	@LD_LIBRARY_PATH=$(BINDBG) $(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@
+
+mem-check: \
+	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@
+
+ifeq ($(VALGRIND),no)
+
+	@LD_LIBRARY_PATH=$(BINDBG) \
+		$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@
+
+else
+	@touch valgrind.suppression
+
+	@LD_LIBRARY_PATH=$(BINDBG) \
+		$(VALGRIND) --leak-check=full --track-origins=yes --gen-suppressions=all --suppressions=valgrind.suppression \
+			$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@
+endif
 
 #---[ Misc Targets ]---------------------------------------------------------------------
 

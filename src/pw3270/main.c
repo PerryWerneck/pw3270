@@ -393,7 +393,6 @@ int main(int argc, char *argv[])
 		GOptionGroup 	* group			= g_option_group_new( PACKAGE_NAME, NULL, NULL, NULL, NULL);
 
 		g_option_context_set_main_group(context, group);
-
 		g_option_context_add_main_entries(context, app_options, NULL);
 
 		if(!g_option_context_parse( context, &argc, &argv, &error ))
@@ -423,6 +422,8 @@ int main(int argc, char *argv[])
 
 			return -1;
 		}
+
+		g_option_context_free(context);
 	}
 
 	if(app_name)
