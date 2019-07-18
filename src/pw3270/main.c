@@ -519,13 +519,14 @@ int main(int argc, char *argv[])
 			gtk_settings_set_string_property(settings,"gtk-menu-bar-accel","Menu","");
 		}
 
-		pw3270_load_plugins(pluginpath);
 		toplevel = pw3270_new(host,systype,syscolors);
 		pw3270_set_session_name(toplevel,session_name);
 
 #ifdef _WIN32
 		pw3270_set_string(toplevel,"application","session",session_name);
 #endif // _WIN32
+
+		pw3270_load_plugins(pluginpath);
 
 		if(toggleset)
 		{
