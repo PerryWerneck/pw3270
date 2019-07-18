@@ -375,9 +375,6 @@ static GtkWidget * trace_window = NULL;
  LIB3270_EXPORT void pw3270_set_session_name(GtkWidget *widget, const gchar *name)
  {
  	g_return_if_fail(GTK_IS_PW3270(widget));
-
- 	g_message("************** %s",name);
-
 	v3270_set_session_name(GTK_PW3270(widget)->terminal,name);
  }
 
