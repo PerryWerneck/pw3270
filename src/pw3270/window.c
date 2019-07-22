@@ -715,11 +715,16 @@ static GtkWidget * trace_window = NULL;
 		if(str)
 			g_free(str);
 	}
+
 	{
 		char str[2];
 		str[0] = get_integer_from_config("terminal","model",2)+'0';
 		str[1] = 0;
-		lib3270_set_model(v3270_get_session(widget->terminal),str);
+		lib3270_set_model(host,str);
+
+		unsigned int unlock_delay = (unsigned int) get_integer_from_config("terminal","unlock_delay",(int) lib3270_get_unlock_delay(host));
+		lib3270_set_unlock_delay(host,unlock_delay);
+
 	}
 
 	for(f=0;f<LIB3270_TOGGLE_COUNT;f++)
