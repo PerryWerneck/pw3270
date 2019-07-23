@@ -50,10 +50,6 @@
 #include <stdlib.h>
 #include <lib3270/log.h>
 
-#if defined( HAVE_SYSLOG )
-	#include <syslog.h>
-#endif // HAVE_SYSLOG
-
 #define ERROR_DOMAIN g_quark_from_static_string(PACKAGE_NAME)
 
 /*--[ Statics ]--------------------------------------------------------------------------------------*/
@@ -73,12 +69,6 @@
 #ifdef HAVE_GTKMAC
  GtkOSXApplication		* osxapp		= NULL;
 #endif // HAVE_GTKMAC
-
-/*
-#if defined( HAVE_SYSLOG )
- static gboolean	  	  log_to_syslog	= FALSE;
-#endif // HAVE_SYSLOG
-*/
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
@@ -159,54 +149,6 @@ static gboolean optcolors(const gchar *option_name, const gchar *value, gpointer
 	return FALSE;
 }
 
-/*
-#if defined( HAVE_SYSLOG )
-static void g_log_to_syslog(const gchar *log_domain,GLogLevelFlags log_level,const gchar *message,gpointer user_data)
-{
- 	static const struct _logtype
- 	{
- 		GLogLevelFlags	  log_level;
- 		int 			  priority;
- 		const gchar		* msg;
- 	} logtype[] =
- 	{
-		{ G_LOG_FLAG_RECURSION,	LOG_INFO,		"recursion"			},
-		{ G_LOG_FLAG_FATAL,		LOG_ERR,		"fatal error"		},
-
-		// GLib log levels
-		{ G_LOG_LEVEL_ERROR,	LOG_ERR,		"error"				},
-		{ G_LOG_LEVEL_CRITICAL,	LOG_ERR,		"critical error"	},
-		{ G_LOG_LEVEL_WARNING,	LOG_ERR,		"warning"			},
-		{ G_LOG_LEVEL_MESSAGE,	LOG_ERR,		"message"			},
-		{ G_LOG_LEVEL_INFO,		LOG_INFO,		"info"				},
-		{ G_LOG_LEVEL_DEBUG,	LOG_DEBUG,		"debug"				},
- 	};
-
-	int f;
-
-	for(f=0;f<G_N_ELEMENTS(logtype);f++)
-	{
-		if(logtype[f].log_level == log_level)
-		{
-			gchar *ptr;
-			gchar *text = g_strdup_printf("%s: %s %s",logtype[f].msg,log_domain ? log_domain : "",message);
-			for(ptr = text;*ptr;ptr++)
-			{
-				if(*ptr < ' ')
-					*ptr = ' ';
-			}
-
-			syslog(logtype[f].priority,"%s",text);
-			g_free(text);
-			return;
-		}
-	}
-
-	syslog(LOG_INFO,"%s %s",log_domain ? log_domain : "", message);
-}
-#endif // HAVE_SYSLOG
-*/
-
 static void g_log_to_lib3270(const gchar *log_domain,GLogLevelFlags log_level,const gchar *message,gpointer user_data)
 {
 	lib3270_write_log(NULL,log_domain,"%s",message);
@@ -255,6 +197,9 @@ int main(int argc, char *argv[])
 #ifdef LC_ALL
 	setlocale( LC_ALL, "" );
 #endif
+
+	// Log to syslog (if available)
+	lib3270_set_syslog(1);
 
 	// OS
 #if defined( _WIN32 )
@@ -370,15 +315,7 @@ int main(int argc, char *argv[])
 			{ "application-name",	'A', 0, G_OPTION_ARG_STRING,	&app_name,			N_( "Application name" ),							NULL								},
 #endif // APPLICATION_NAME
 
-/*
-#if defined( HAVE_SYSLOG )
-			{ "syslog",				'l', 0, G_OPTION_ARG_NONE,		&log_to_syslog,		N_( "Send messages to syslog" ),					NULL								},
-#endif
-*/
 			{ "tracefile",			'T', 0, G_OPTION_ARG_FILENAME,	&tracefile,			N_( "Set trace filename" ),							NULL								},
-/*
-			{ "log",		    	'L', 0, G_OPTION_ARG_FILENAME,	&logfile,		    N_( "Log to file" ),								NULL        						},
-*/
 			{ NULL }
 		};
 
