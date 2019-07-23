@@ -24,8 +24,6 @@
  *
  * perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
  * erico.mendonca@gmail.com	(Erico Mascarenhas Mendonça)
- * licinio@bb.com.br		(Licínio Luis Branco)
- * kraucer@bb.com.br		(Kraucer Fernandes Mazuco)
  *
  */
 
@@ -50,6 +48,7 @@
 #include <pw3270/plugin.h>
 #include "v3270/accessible.h"
 #include <stdlib.h>
+#include <lib3270/log.h>
 
 #if defined( HAVE_SYSLOG )
 	#include <syslog.h>
@@ -65,7 +64,6 @@
  static const gchar		* systype		= NULL;
  static const gchar		* toggleset		= NULL;
  static const gchar		* togglereset	= NULL;
- static const gchar     * logfile       = NULL;
  static const gchar		* charset		= NULL;
  static const gchar		* remap			= NULL;
  static const gchar		* model			= NULL;
@@ -76,11 +74,11 @@
  GtkOSXApplication		* osxapp		= NULL;
 #endif // HAVE_GTKMAC
 
+/*
 #if defined( HAVE_SYSLOG )
  static gboolean	  	  log_to_syslog	= FALSE;
 #endif // HAVE_SYSLOG
-
-
+*/
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
@@ -161,8 +159,9 @@ static gboolean optcolors(const gchar *option_name, const gchar *value, gpointer
 	return FALSE;
 }
 
+/*
 #if defined( HAVE_SYSLOG )
-static void g_syslog(const gchar *log_domain,GLogLevelFlags log_level,const gchar *message,gpointer user_data)
+static void g_log_to_syslog(const gchar *log_domain,GLogLevelFlags log_level,const gchar *message,gpointer user_data)
 {
  	static const struct _logtype
  	{
@@ -174,7 +173,7 @@ static void g_syslog(const gchar *log_domain,GLogLevelFlags log_level,const gcha
 		{ G_LOG_FLAG_RECURSION,	LOG_INFO,		"recursion"			},
 		{ G_LOG_FLAG_FATAL,		LOG_ERR,		"fatal error"		},
 
-		/* GLib log levels */
+		// GLib log levels
 		{ G_LOG_LEVEL_ERROR,	LOG_ERR,		"error"				},
 		{ G_LOG_LEVEL_CRITICAL,	LOG_ERR,		"critical error"	},
 		{ G_LOG_LEVEL_WARNING,	LOG_ERR,		"warning"			},
@@ -206,19 +205,11 @@ static void g_syslog(const gchar *log_domain,GLogLevelFlags log_level,const gcha
 	syslog(LOG_INFO,"%s %s",log_domain ? log_domain : "", message);
 }
 #endif // HAVE_SYSLOG
+*/
 
-static void g_logfile(const gchar *log_domain,GLogLevelFlags log_level,const gchar *message,gpointer user_data)
+static void g_log_to_lib3270(const gchar *log_domain,GLogLevelFlags log_level,const gchar *message,gpointer user_data)
 {
-    FILE *out = fopen(logfile,"a");
-    if(out)
-    {
-        time_t  ltime;
-        char    wrk[40];
-        time(&ltime);
-        strftime(wrk, 39, "%d/%m/%Y %H:%M:%S", localtime(&ltime));
-        fprintf(out,"%s\t%s\n",wrk,message);
-        fclose(out);
-    }
+	lib3270_write_log(NULL,log_domain,"%s",message);
 }
 
 static gboolean startup(GtkWidget *toplevel)
@@ -379,12 +370,15 @@ int main(int argc, char *argv[])
 			{ "application-name",	'A', 0, G_OPTION_ARG_STRING,	&app_name,			N_( "Application name" ),							NULL								},
 #endif // APPLICATION_NAME
 
+/*
 #if defined( HAVE_SYSLOG )
 			{ "syslog",				'l', 0, G_OPTION_ARG_NONE,		&log_to_syslog,		N_( "Send messages to syslog" ),					NULL								},
 #endif
+*/
 			{ "tracefile",			'T', 0, G_OPTION_ARG_FILENAME,	&tracefile,			N_( "Set trace filename" ),							NULL								},
+/*
 			{ "log",		    	'L', 0, G_OPTION_ARG_FILENAME,	&logfile,		    N_( "Log to file" ),								NULL        						},
-
+*/
 			{ NULL }
 		};
 
@@ -442,23 +436,26 @@ int main(int argc, char *argv[])
 	// Init GTK
 	gtk_init(&argc, &argv);
 
+	g_log_set_default_handler(g_log_to_lib3270,NULL);
+
+/*
 #if defined( HAVE_SYSLOG )
 	if(log_to_syslog)
 	{
 		openlog(g_get_prgname(), LOG_NDELAY, LOG_USER);
-		g_log_set_default_handler(g_syslog,NULL);
 	}
-	else if(logfile)
-#else
-	if(logfile)
 #endif // HAVE_SYSLOG
-	{
-		g_log_set_default_handler(g_logfile,NULL);
+*/
+
 
 #ifdef _WIN32
+	{
 		g_autofree gchar * appdir = g_win32_get_package_installation_directory_of_module(NULL);
 
 		g_message("Windows Application directory is \"%s\"",appdir);
+
+		g_chdir(appdir);
+
 		g_message("Application name is \"%s\"", g_get_application_name());
 		g_message("Session name is \"%s\"", session_name ? session_name : "undefined");
 
@@ -466,10 +463,8 @@ int main(int argc, char *argv[])
 		g_message("Registry path is \"HKCU\\%s\"",PACKAGE_NAME);
 #endif  // ENABLE_WINDOWS_REGISTRY
 
-#endif // _WIN32
-
-
 	}
+#endif // _WIN32
 
 	// Check GTK Version
 	{
