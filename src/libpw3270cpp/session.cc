@@ -27,6 +27,7 @@
  *
  */
 
+ #include <config.h>
  #include <stdarg.h>
  #include <stdio.h>
  #include <string.h>
@@ -250,9 +251,7 @@
 
 #else
 
-		#error aqui
 		throw exception("%s",strerror(ENOSUP));
-
 
 #endif
 
