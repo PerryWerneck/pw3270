@@ -89,7 +89,7 @@
 
  LIB3270_EXPORT void 		  pw3270_set_action_state(GtkAction *action, gboolean on);
 
- LIB3270_EXPORT int 		  pw3270_print(GtkWidget *widget, GObject *action, GtkPrintOperationAction oper, LIB3270_PRINT_MODE src);
+ LIB3270_EXPORT int 		  pw3270_print(GtkWidget *widget, GObject *action, GtkPrintOperationAction oper, LIB3270_CONTENT_OPTION src);
 
  LIB3270_EXPORT gboolean	  pw3270_set_keyboard_action(GtkWidget *widget, const gchar *key_name, GtkAction *action);
 

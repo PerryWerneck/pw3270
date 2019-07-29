@@ -50,7 +50,7 @@
  {
 	GdkRGBA					  color[V3270_COLOR_COUNT];
 	int 					  show_selection : 1;
-	LIB3270_PRINT_MODE		  src;
+	LIB3270_CONTENT_OPTION	  src;
 
 	GtkWidget				* widget;
 	H3270					* session;
@@ -185,7 +185,7 @@
 			unsigned char	c;
 			unsigned short	attr;
 
-			if(!lib3270_get_element(info->session,baddr++,&c,&attr) && (info->src == LIB3270_PRINT_ALL || (attr & LIB3270_ATTR_SELECTED)))
+			if(!lib3270_get_element(info->session,baddr++,&c,&attr) && (info->src == LIB3270_CONTENT_ALL || (attr & LIB3270_ATTR_SELECTED)))
 			{
 				if(!info->show_selection)
 					attr &= ~LIB3270_ATTR_SELECTED;
@@ -506,7 +506,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
 	// Selection checkbox
 	widget = gtk_check_button_new_with_label( _("Print selection box") );
 
-	if(info->src == LIB3270_PRINT_ALL)
+	if(info->src == LIB3270_CONTENT_ALL)
 	{
 		info->show_selection = get_boolean_from_config("print","selection",FALSE);
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),info->show_selection);
@@ -798,12 +798,12 @@ static gchar * enum_to_string(GType type, guint enum_value)
 
  void print_all_action(GtkAction *action, GtkWidget *widget)
  {
-	pw3270_print(widget,G_OBJECT(action),GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, LIB3270_PRINT_ALL);
+	pw3270_print(widget,G_OBJECT(action),GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, LIB3270_CONTENT_ALL);
  }
 
  void print_selected_action(GtkAction *action, GtkWidget *widget)
  {
-	pw3270_print(widget,G_OBJECT(action),GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, LIB3270_PRINT_SELECTED);
+	pw3270_print(widget,G_OBJECT(action),GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, LIB3270_CONTENT_SELECTED);
  }
 
  static void draw_text(GtkPrintOperation *prt, GtkPrintContext *context, gint pg, PRINT_INFO *info)
@@ -833,10 +833,10 @@ static gchar * enum_to_string(GType type, guint enum_value)
 
  void print_copy_action(GtkAction *action, GtkWidget *widget)
  {
-	pw3270_print(widget,G_OBJECT(action),GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, LIB3270_PRINT_COPY);
+	pw3270_print(widget,G_OBJECT(action),GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, LIB3270_CONTENT_COPY);
  }
 
- LIB3270_EXPORT int pw3270_print(GtkWidget *widget, GObject *action, GtkPrintOperationAction oper, LIB3270_PRINT_MODE src)
+ LIB3270_EXPORT int pw3270_print(GtkWidget *widget, GObject *action, GtkPrintOperationAction oper, LIB3270_CONTENT_OPTION src)
  {
  	PRINT_INFO			* info 		= NULL;
  	GtkPrintOperation 	* print;
@@ -862,12 +862,12 @@ static gchar * enum_to_string(GType type, guint enum_value)
 
 	switch(src)
 	{
-	case LIB3270_PRINT_ALL:
-	case LIB3270_PRINT_SELECTED:
+	case LIB3270_CONTENT_ALL:
+	case LIB3270_CONTENT_SELECTED:
 		g_signal_connect(print,"draw_page",G_CALLBACK(draw_screen),info);
 		break;
 
-	case LIB3270_PRINT_COPY:
+	case LIB3270_CONTENT_COPY:
 
 		text = v3270_get_copy(widget);
 

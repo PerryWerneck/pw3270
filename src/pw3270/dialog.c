@@ -185,193 +185,19 @@
 
  }
 
- static void save_text(GtkWindow *toplevel,const gchar *filename, const gchar *text, const gchar *encoding, const gchar *errmsg)
- {
-	GError * error = NULL;
-
-	if(encoding && g_ascii_strcasecmp(encoding,"UTF-8"))
-	{
-		// Convert to target charset and save
-		gsize	  bytes_written;
-		gchar	* converted = g_convert_with_fallback(text,-1,encoding,"UTF-8",NULL,NULL,&bytes_written,&error);
-
-		if(!error)
-			g_file_set_contents(filename,converted,-1,&error);
-
-		g_free(converted);
-	}
-	else
-	{
-		// Same charset, save file
-		g_file_set_contents(filename,text,-1,&error);
-	}
-
-	if(error)
-	{
-		GtkWidget *popup = gtk_message_dialog_new_with_markup(
-											toplevel,
-											GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
-											GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,
-											gettext(errmsg),filename);
-
-		gtk_window_set_title(GTK_WINDOW(popup),_("Can't save file"));
-
-		gtk_message_dialog_format_secondary_markup(GTK_MESSAGE_DIALOG(popup),"%s",error->message);
-		g_error_free(error);
-
-		gtk_dialog_run(GTK_DIALOG(popup));
-		gtk_widget_destroy(popup);
-
-	}
-
- }
-
- static GtkFileChooserConfirmation confirm_overwrite(GtkFileChooser *chooser, GObject *action)
- {
-	const gchar					* attr		= g_object_get_data(action,"overwrite");
-	GtkFileChooserConfirmation	  ret 		= GTK_FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME;
-	GtkWidget					* dialog;
-
-	if(attr && !g_ascii_strcasecmp(attr,"yes"))
-		return ret;
-
-	dialog = gtk_message_dialog_new_with_markup(	GTK_WINDOW(chooser),
-													GTK_DIALOG_DESTROY_WITH_PARENT,
-													GTK_MESSAGE_QUESTION,GTK_BUTTONS_OK_CANCEL,
-													"%s",_("The file already exists. Replace it?"));
-
-
-	if(gtk_dialog_run(GTK_DIALOG(dialog)) != GTK_RESPONSE_OK)
-		ret = GTK_FILE_CHOOSER_CONFIRMATION_SELECT_AGAIN;
-
-	gtk_widget_destroy(dialog);
-
-	return ret;
-
- }
-
- static int save_dialog(GtkAction *action, GtkWidget *widget, const gchar *title, const gchar *errmsg, const gchar *text)
- {
- 	GtkWindow	* toplevel		= GTK_WINDOW(gtk_widget_get_toplevel(widget));
- 	const gchar * user_title	= g_object_get_data(G_OBJECT(action),"title");
- 	const gchar * filename		= g_object_get_data(G_OBJECT(action),"filename");
-
- 	/*
- 	const gchar * extension		= g_object_get_data(G_OBJECT(action),"extension");
-
-	if(!extension)
-		extension = "txt";
-	*/
-
-	if(!text)
-		return 0;
-
-
-	if(filename)
-	{
-		save_text(toplevel,filename,text,g_object_get_data(G_OBJECT(action),"encoding"),errmsg);
-	}
-	else
-	{
-		GtkWidget	* dialog;
-		gchar		* ptr;
-		gchar 		* encattr		= NULL;
-
-		dialog = gtk_file_chooser_dialog_new( 	gettext(user_title ? user_title : title),
-												toplevel,
-												GTK_FILE_CHOOSER_ACTION_SAVE,
-												GTK_STOCK_CANCEL,	GTK_RESPONSE_CANCEL,
-												GTK_STOCK_SAVE,		GTK_RESPONSE_ACCEPT,
-												NULL );
-
-		gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(dialog), TRUE);
-		g_signal_connect(GTK_FILE_CHOOSER(dialog), "confirm-overwrite", G_CALLBACK(confirm_overwrite), G_OBJECT(action));
-
-		add_option_menus(dialog, action, &encattr);
-
-		ptr = get_string_from_config("save",gtk_action_get_name(action),"");
-		if(*ptr)
-			gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog),ptr);
-		else
-			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),g_get_user_special_dir(G_USER_DIRECTORY_DOCUMENTS));
-		g_free(ptr);
-
-		if(gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
-		{
-			ptr = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
-			if(ptr)
-			{
-				trace("Saving \"%s\"",ptr);
-				set_string_to_config("save",gtk_action_get_name(action),"%s",ptr);
-				save_text(toplevel,ptr,text,encattr,errmsg);
-				g_free(ptr);
-			}
-		}
-
-		if(encattr)
-			g_free(encattr);
-
-		trace("Removing dialog %p",dialog);
-		gtk_widget_destroy(dialog);
-	}
-
-	return 0;
- }
-
  void save_all_action(GtkAction *action, GtkWidget *widget)
  {
- 	gchar *text = v3270_get_text(widget,0,-1);
-
-	trace("Action %s activated on widget %p text=%p",gtk_action_get_name(action),widget,text);
-
-	if(!text)
-	{
-		g_warning("%s","Buffer contents was NULL");
-		return;
-	}
-
-	save_dialog(	action,
-					widget,
-					N_( "Save screen to file" ),
-					N_( "Can't save screen to file\n%s" ),
-					text);
-
-	g_free(text);
-
+	v3270_save_all(widget,g_object_get_data(G_OBJECT(action),"filename"),NULL);
  }
 
  void save_selected_action(GtkAction *action, GtkWidget *widget)
  {
-    gchar *text = v3270_get_selected(widget,FALSE);
-
-	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
-
-    if(text)
-    {
-        save_dialog(	action,
-                        widget,
-                        N_( "Save selection to file" ),
-                        N_( "Can't save selection to file\n%s" ),
-                        text);
-        g_free(text);
-    }
+	v3270_save_selected(widget,g_object_get_data(G_OBJECT(action),"filename"),NULL);
  }
 
  void save_copy_action(GtkAction *action, GtkWidget *widget)
  {
-    gchar *text = v3270_get_copy(widget);
-
-	trace("Action %s activated on widget %p",gtk_action_get_name(action),widget);
-
-    if(text)
-    {
-        save_dialog(	action,
-                        widget,
-                        N_( "Save copy to file" ),
-                        N_( "Can't save copy to file\n%s" ),
-                        text);
-        g_free(text);
-    }
+	v3270_save_copy(widget,g_object_get_data(G_OBJECT(action),"filename"),NULL);
  }
 
  static void paste_filename(GtkWidget *widget, const gchar *filename, const gchar *encoding)
