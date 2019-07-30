@@ -920,6 +920,19 @@ void print_settings_action(GtkAction *action, GtkWidget *terminal)
 
 	memset(&info,0,sizeof(info));
 
+	gtk_window_set_deletable(GTK_WINDOW(dialog),FALSE);
+
+	// https://developer.gnome.org/hig/stable/visual-layout.html.en
+	gtk_container_set_border_width(
+		GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
+		18
+	);
+
+	gtk_box_set_spacing(
+		GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
+		18
+	);
+
 	widget = GTK_WIDGET(create_custom_widget(NULL,&info));
 
 	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),GTK_WIDGET(widget),TRUE,TRUE,2);
