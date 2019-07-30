@@ -253,6 +253,8 @@ endif
 locale: \
 	locale/$(PACKAGE_TARNAME).pot
 
+	$(MAKE) -C locale all
+
 locale/$(PACKAGE_TARNAME).pot: \
 	$(POTDIR)/pw3270.pot \
 	$(POTDIR)/lib3270.pot \
