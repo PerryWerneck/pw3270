@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-07-30 10:50-0300\n"
-"PO-Revision-Date: 2019-07-30 10:58-0300\n"
+"PO-Revision-Date: 2019-07-30 11:08-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
 "Language: pt_BR\n"
@@ -1929,7 +1929,6 @@ msgid "Save _As"
 msgstr "Salvar _Como"
 
 #: src/dialogs/save/save.c:342
-#, fuzzy
 msgid "Save copied data"
 msgstr "Salvar cópia"
 
