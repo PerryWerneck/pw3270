@@ -76,6 +76,9 @@
  G_GNUC_INTERNAL GtkWidget		* color_scheme_new(const GdkRGBA *current);
  G_GNUC_INTERNAL void			  run_security_dialog(GtkWidget *widget);
 
+ // Tools
+ G_GNUC_INTERNAL void setup_print_dialog(GtkPrintOperation * operation);
+
  // actions
  G_GNUC_INTERNAL void paste_file_action(GtkAction *action, GtkWidget *widget);
  G_GNUC_INTERNAL void hostname_action(GtkAction *action, GtkWidget *widget);

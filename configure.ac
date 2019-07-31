@@ -87,6 +87,7 @@ fi
 case "$host" in
 	*-mingw32|*-pc-msys)
 
+		app_cv_osname="windows"
 		EXEEXT=".exe"
 		DLLPREFIX=""
 		DLLEXT=".dll"
@@ -111,7 +112,7 @@ case "$host" in
 		AC_CONFIG_FILES(win/makeruntime.sh)
 		AC_CONFIG_FILES(win/copydeps.sh)
 		AC_CONFIG_FILES(win/$PACKAGE_TARNAME.nsi)
-		AC_CONFIG_FILES(src/pw3270/resources.rc)
+		AC_CONFIG_FILES(src/pw3270/windows/resources.rc)
 
 		if test "$host_cpu" = "x86_64"; then
 			app_cv_programfiles="PROGRAMFILES64"
@@ -138,6 +139,7 @@ case "$host" in
 		;;
 
  	*)
+		app_cv_osname="linux"
 		EXEEXT=""
 		DLLPREFIX="lib"
 		DLLEXT=".so"
@@ -150,6 +152,7 @@ case "$host" in
 
 esac
 
+AC_SUBST(OSNAME,$app_cv_osname)
 AC_SUBST(DBG_CFLAGS)
 AC_SUBST(RLS_CFLAGS)
 AC_SUBST(EXEEXT)

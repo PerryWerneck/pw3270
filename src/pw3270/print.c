@@ -38,150 +38,7 @@
  #define FONT_CONFIG 	"font-family"
  #define DEFAULT_FONT	"Courier New"
 
-/*--[ Structs ]--------------------------------------------------------------------------------------*/
-
- typedef struct _print_info
- {
-	GdkRGBA					  color[V3270_COLOR_COUNT];
-	int 					  show_selection : 1;
-	LIB3270_CONTENT_OPTION	  src;
-
-	GtkWidget				* widget;
-	H3270					* session;
-
-	int						  baddr;
-	int						  rows;
-	int						  cols;				/**< Max line width */
-	int						  pages;
-	int						  lpp;				/**< Lines per page */
-
-	v3270FontInfo			  font;
-
-	double					  left;
-	double					  width;			/**< Report width */
-	double					  height;			/**< Report height (all pages) */
-
-	gchar					**text;
-
- } PRINT_INFO;
-
-
 /*--[ Implement ]------------------------------------------------------------------------------------*/
-
- static void begin_print(GtkPrintOperation *prt, GtkPrintContext *context, PRINT_INFO *info)
- {
-   	cairo_font_extents_t    extents;
-
- 	cairo_t * cr	= gtk_print_context_get_cairo_context(context);
- 	gchar	* font	= get_string_from_config("print",FONT_CONFIG,DEFAULT_FONT);
-
-	trace("%s: operation=%p context=%p font=\"%s\"",__FUNCTION__,prt,context,font);
-
-	// Setup font
-	if(*font)
-	{
-		PangoFontDescription * descr = pango_font_description_from_string(font);
-		if(descr)
-		{
-			cairo_select_font_face(cr,	pango_font_description_get_family(descr),
-										CAIRO_FONT_SLANT_NORMAL,
-										pango_font_description_get_weight(descr) == PANGO_WEIGHT_BOLD ? CAIRO_FONT_WEIGHT_BOLD : CAIRO_FONT_WEIGHT_NORMAL);
-
-            {
-                double                  width    = gtk_print_context_get_width(context);
-                double                  cols     = (double) info->cols;
-                double                  current  = width / cols;
-                double                  valid    = current;
-
-                do
-                {
-                    valid   = current;
-                    current = valid +1.0;
-                    cairo_set_font_size(cr,current);
-                    cairo_font_extents(cr,&extents);
-                }
-                while(  (cols * extents.max_x_advance) < width );
-
-				trace("Font size: %d",(int) valid);
-				cairo_set_font_size(cr,valid);
-
-			}
-
-			pango_font_description_free(descr);
-		}
-	}
-	g_free(font);
-
-	info->font.scaled = cairo_get_scaled_font(cr);
-	cairo_scaled_font_reference(info->font.scaled);
-	cairo_scaled_font_extents(info->font.scaled,&extents);
-
-	info->font.height		= extents.height;
-	info->font.descent		= extents.descent;
-	info->font.width		= extents.max_x_advance;
-
-	info->width  			= ((double) info->cols) * extents.max_x_advance;
-	info->height 			= ((double) info->rows) * (extents.height + extents.descent);
-
-	// Center image
-	info->left = (gtk_print_context_get_width(context)-info->width)/2;
-	if(info->left < 2)
-		info->left = 2;
-
-	// Setup page size
-	info->lpp	= (gtk_print_context_get_height(context) / (extents.height + extents.descent));
-	info->pages = (info->rows / info->lpp)+1;
-
-	trace("%d lines per page, %d pages to print",info->lpp,info->pages);
-
-	gtk_print_operation_set_n_pages(prt,info->pages);
- }
-
- static void draw_screen(GtkPrintOperation *prt, GtkPrintContext *context, gint pg, PRINT_INFO *info)
- {
- 	int				  row;
- 	int				  col;
-	cairo_t			* cr 	= gtk_print_context_get_cairo_context(context);
-	int		  		  baddr	= info->baddr;
-	GdkRectangle	  rect;
-
-	cairo_set_scaled_font(cr,info->font.scaled);
-
-	memset(&rect,0,sizeof(rect));
-	rect.y 		= 2;
-	rect.height	= (info->font.height + info->font.descent);
-	rect.width	= info->font.width;
-
-	// Clear page
-	gdk_cairo_set_source_rgba(cr,info->color+V3270_COLOR_BACKGROUND);
-	cairo_rectangle(cr, info->left-2, 0, (rect.width*info->cols)+4, (rect.height*info->rows)+4);
-	cairo_fill(cr);
-	cairo_stroke(cr);
-
-	rect.width++;
-	rect.height++;
-
-	for(row = 0; row < info->rows; row++)
-	{
-		rect.x = info->left;
-		for(col = 0; col < info->cols; col++)
-		{
-			unsigned char	c;
-			unsigned short	attr;
-
-			if(!lib3270_get_element(info->session,baddr++,&c,&attr) && (info->src == LIB3270_CONTENT_ALL || (attr & LIB3270_ATTR_SELECTED)))
-			{
-				if(!info->show_selection)
-					attr &= ~LIB3270_ATTR_SELECTED;
-				v3270_draw_element(cr,c,attr,info->session,&info->font,&rect,info->color);
-			}
-
-			rect.x += (rect.width-1);
-		}
-		rect.y += (rect.height-1);
-
-	}
- }
 
 #ifdef _WIN32
 
@@ -236,6 +93,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
 	gtk_widget_destroy(dialog);
 }
 
+ /*
  static void done(GtkPrintOperation *prt, GtkPrintOperationResult result, PRINT_INFO *info)
  {
 	if(result == GTK_PRINT_OPERATION_RESULT_ERROR)
@@ -327,77 +185,8 @@ static gchar * enum_to_string(GType type, guint enum_value)
 
 	}
 
-	if(info->font.scaled)
-		cairo_scaled_font_destroy(info->font.scaled);
-
-	if(info->text)
-		g_strfreev(info->text);
-
-	if(info->font.family)
-		g_free(info->font.family);
-
-	g_free(info);
  }
-
- static void toggle_show_selection(GtkToggleButton *togglebutton,PRINT_INFO *info)
- {
- 	gboolean active = gtk_toggle_button_get_active(togglebutton);
- 	info->show_selection = active ? 1 : 0;
- 	set_boolean_to_config("print","selection",active);
- }
-
-  static GtkWidget * create_custom_widget(GtkPrintOperation *prt, PRINT_INFO *info)
- {
- 	GtkWidget * widget		= gtk_frame_new("");
- 	GtkWidget * settings	= V3270_print_settings_new(info->widget);
-
- 	// Load values from configuration
-	g_autofree gchar * font_family	= get_string_from_config("print",FONT_CONFIG,DEFAULT_FONT);
-	if(font_family && *font_family)
-		v3270_print_settings_set_font_family(settings,font_family);
-
-	g_autofree gchar * color_scheme	= get_string_from_config("print","colors","");
-	if(color_scheme && *color_scheme)
-		v3270_print_settings_set_color_scheme(settings,color_scheme);
-
- 	// Create frame
-	GtkWidget *label = gtk_label_new(NULL);
-	gtk_label_set_markup(GTK_LABEL(label),_("<b>Text options</b>"));
-	gtk_frame_set_label_widget(GTK_FRAME(widget),label);
-
- 	gtk_container_set_border_width(GTK_CONTAINER(widget),12);
-
-	// The print dialog doesn't follow the guidelines from https://developer.gnome.org/hig/stable/visual-layout.html.en )-:
-	gtk_frame_set_shadow_type(GTK_FRAME(widget),GTK_SHADOW_NONE);
-
- 	gtk_container_set_border_width(GTK_CONTAINER(settings),6);
- 	g_object_set(G_OBJECT(settings),"margin-start",8,NULL);
-
-	gtk_container_add(GTK_CONTAINER(widget),settings);
-
-	gtk_widget_show_all(widget);
-
-    return widget;
- }
-
- static void custom_widget_apply(GtkPrintOperation *prt, GtkWidget *widget, PRINT_INFO *info)
- {
- 	GtkWidget * settings = gtk_bin_get_child(GTK_BIN(widget));
-
-	info->show_selection = v3270_print_settings_get_show_selection(settings) ? 1 : 0;
-
-	// Setup font family
-	if(info->font.family)
-		g_free(info->font.family);
-	info->font.family = v3270_print_settings_get_font_family(settings);
-	set_string_to_config("print",FONT_CONFIG,info->font.family);
-
-	// Setup print settings
-	v3270_print_settings_get_rgba(settings, info->color, V3270_COLOR_COUNT);
-	g_autofree gchar * colors = v3270_print_settings_get_color_scheme(settings);
-	set_string_to_config("print","colors","%s",colors);
-
- }
+ */
 
 #ifdef _WIN32
  void update_settings(const gchar *key, const gchar *val, gpointer *settings)
@@ -432,6 +221,12 @@ static gchar * enum_to_string(GType type, guint enum_value)
 
 #endif // _WIN32
 
+#if GTK_CHECK_VERSION(3,0,0) && !defined(WIN32)
+/*
+*/
+#endif // !WIN32
+
+/*
  static GtkPrintOperation * begin_print_operation(GObject *obj, GtkWidget *widget, PRINT_INFO **info)
  {
  	GtkPrintOperation	* print 	= gtk_print_operation_new();
@@ -467,16 +262,13 @@ static gchar * enum_to_string(GType type, guint enum_value)
 	{
 		g_autofree gchar *color_scheme = get_string_from_config("print","colors","");
 
-		trace("info->color=%p",info->color);
-		trace("colorlist=%p",ptr);
-
 		if(color_scheme && *color_scheme)
-			v3270_set_color_table(info->color,color_scheme);
+			v3270_set_color_table((*info)->color,color_scheme);
 		else
-			v3270_set_mono_color_table(info->color,"black","white");
+			v3270_set_mono_color_table((*info)->color,"black","white");
 
 	 }
-#endif // _WIN32
+#endif // !_WIN32
 
 	// Load page and print settings
 	{
@@ -650,6 +442,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
 	trace("%s ends",__FUNCTION__);
  	return print;
  }
+ */
 
  void print_all_action(GtkAction *action, GtkWidget *widget)
  {
@@ -661,36 +454,66 @@ static gchar * enum_to_string(GType type, guint enum_value)
 	pw3270_print(widget,G_OBJECT(action),GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, LIB3270_CONTENT_SELECTED);
  }
 
- static void draw_text(GtkPrintOperation *prt, GtkPrintContext *context, gint pg, PRINT_INFO *info)
- {
-	cairo_t			* cr 	= gtk_print_context_get_cairo_context(context);
-	GdkRectangle	  rect;
-	int			  	  row	= pg*info->lpp;
-	int			  	  l;
-
-	cairo_set_scaled_font(cr,info->font.scaled);
-
-	memset(&rect,0,sizeof(rect));
-	rect.y          = 2;
-	rect.height     = (info->font.height + info->font.descent)+1;
-	rect.width      = info->font.width+1;
-
-	for(l=0;l<info->lpp && row < info->rows;l++)
-	{
-		cairo_move_to(cr,2,rect.y+rect.height);
-		cairo_show_text(cr, info->text[row]);
-		cairo_stroke(cr);
-		row++;
-		rect.y += (rect.height-1);
-	}
-
- }
-
- void print_copy_action(GtkAction *action, GtkWidget *widget)
+  void print_copy_action(GtkAction *action, GtkWidget *widget)
  {
 	pw3270_print(widget,G_OBJECT(action),GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, LIB3270_CONTENT_COPY);
  }
 
+ LIB3270_EXPORT int pw3270_print(GtkWidget *widget, GObject *action, GtkPrintOperationAction oper, LIB3270_CONTENT_OPTION src)
+ {
+ 	int rc = 0;
+
+	g_return_val_if_fail(GTK_IS_V3270(widget),EINVAL);
+
+	if(action)
+		lib3270_trace_event(v3270_get_session(widget),"Action %s activated on widget %p\n",gtk_action_get_name(GTK_ACTION(action)),widget);
+
+	//
+	// Create and setup dialog
+	//
+ 	GtkPrintOperation * operation = v3270_print_operation_new(widget,src);
+
+	gtk_print_operation_set_allow_async(operation,get_boolean_from_config("print","allow_async",TRUE));
+
+	setup_print_dialog(operation);
+
+	//
+	// Run print dialog
+	//
+	GError *err = NULL;
+	gtk_print_operation_run(
+			operation,
+			GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,
+			GTK_WINDOW(gtk_widget_get_toplevel(widget)),
+			&err
+	);
+
+	if(err)
+	{
+		GtkWidget *popup = gtk_message_dialog_new_with_markup(
+			GTK_WINDOW(gtk_widget_get_toplevel(widget)),
+			GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
+			GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,
+			_("Can't print")
+		);
+
+		gtk_window_set_title(GTK_WINDOW(popup),_("Operation has failed"));
+
+		gtk_message_dialog_format_secondary_markup(GTK_MESSAGE_DIALOG(popup),"%s",err->message);
+
+		gtk_dialog_run(GTK_DIALOG(popup));
+		gtk_widget_destroy(popup);
+
+		g_error_free(err);
+
+		rc = -1;
+	}
+
+	return rc;
+
+ }
+
+ 	/*
  LIB3270_EXPORT int pw3270_print(GtkWidget *widget, GObject *action, GtkPrintOperationAction oper, LIB3270_CONTENT_OPTION src)
  {
  	PRINT_INFO			* info 		= NULL;
@@ -760,11 +583,11 @@ static gchar * enum_to_string(GType type, guint enum_value)
 
 	return 0;
  }
+	*/
 
 void print_settings_action(GtkAction *action, GtkWidget *terminal)
 {
  	const gchar * title  = g_object_get_data(G_OBJECT(action),"title");
- 	PRINT_INFO	  info;
  	GtkWidget	* widget;
 	GtkWidget	* dialog = gtk_dialog_new_with_buttons (	gettext(title ? title : N_( "Print settings") ),
 															GTK_WINDOW(gtk_widget_get_toplevel(terminal)),
@@ -772,8 +595,6 @@ void print_settings_action(GtkAction *action, GtkWidget *terminal)
 															GTK_STOCK_OK,		GTK_RESPONSE_ACCEPT,
 															GTK_STOCK_CANCEL,	GTK_RESPONSE_REJECT,
 															NULL );
-
-	memset(&info,0,sizeof(info));
 
 	gtk_window_set_deletable(GTK_WINDOW(dialog),FALSE);
 
@@ -788,14 +609,33 @@ void print_settings_action(GtkAction *action, GtkWidget *terminal)
 		18
 	);
 
-	widget = GTK_WIDGET(create_custom_widget(NULL,&info));
+	// Create settings widget & load values from configuration.
+ 	GtkWidget * settings = V3270_print_settings_new(terminal);
 
-	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),GTK_WIDGET(widget),TRUE,TRUE,2);
+ 	// Load settings.
+ 	{
+		g_autofree gchar * font_family	= get_string_from_config("print",FONT_CONFIG,DEFAULT_FONT);
+		if(font_family && *font_family)
+			v3270_print_settings_set_font_family(settings,font_family);
+
+		g_autofree gchar * color_scheme	= get_string_from_config("print","colors","");
+		if(color_scheme && *color_scheme)
+			v3270_print_settings_set_color_scheme(settings,color_scheme);
+ 	}
+
+	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),settings,TRUE,TRUE,2);
 
 	if(gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
 	{
 		// Accepted, save settings
-		custom_widget_apply(NULL,widget,&info);
+
+		// Save font family
+		g_autofree gchar * font_family = v3270_print_settings_get_font_family(settings);
+		set_string_to_config("print",FONT_CONFIG,font_family);
+
+		// Save colors
+		g_autofree gchar * colors = v3270_print_settings_get_color_scheme(settings);
+		set_string_to_config("print","colors","%s",colors);
 	}
 
 	gtk_widget_destroy(dialog);

@@ -35,7 +35,10 @@ LIB_SOURCES=\
 	print.c \
 	colors.c \
 	tools.c \
-	plugin.c
+	plugin.c \
+	$(wildcard @OSNAME@/*.c) \
+	$(wildcard @OSNAME@/*.rc)
+
 
 APP_SOURCES=\
 	main.c \
