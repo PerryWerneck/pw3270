@@ -31,18 +31,12 @@
 
  #include "private.h"
  #include <v3270.h>
+ #include <v3270/print.h>
  #include <lib3270/selection.h>
  #include <lib3270/trace.h>
 
- #define AUTO_FONT_SIZE 1
-
-#ifdef AUTO_FONT_SIZE
-	#define FONT_CONFIG 	"font-family"
-	#define DEFAULT_FONT	"Courier New"
-#else
-	#define FONT_CONFIG 	"font"
-	#define DEFAULT_FONT	"Courier New 10"
-#endif // AUTO_FONT_SIZE
+ #define FONT_CONFIG 	"font-family"
+ #define DEFAULT_FONT	"Courier New"
 
 /*--[ Structs ]--------------------------------------------------------------------------------------*/
 
@@ -62,10 +56,6 @@
 	int						  lpp;				/**< Lines per page */
 
 	v3270FontInfo			  font;
-
-//	cairo_font_extents_t	  extents;
-//	cairo_scaled_font_t		* font_scaled;
-//	gchar					* font;				/**< Font name */
 
 	double					  left;
 	double					  width;			/**< Report width */
@@ -97,14 +87,9 @@
 										CAIRO_FONT_SLANT_NORMAL,
 										pango_font_description_get_weight(descr) == PANGO_WEIGHT_BOLD ? CAIRO_FONT_WEIGHT_BOLD : CAIRO_FONT_WEIGHT_NORMAL);
 
-#ifdef AUTO_FONT_SIZE
             {
                 double                  width    = gtk_print_context_get_width(context);
-#if GTK_CHECK_VERSION(3,0,0)
                 double                  cols     = (double) info->cols;
-#else
-                double                  cols     = (double) (info->cols+5);
-#endif // GTK(3,0,0)
                 double                  current  = width / cols;
                 double                  valid    = current;
 
@@ -121,7 +106,6 @@
 				cairo_set_font_size(cr,valid);
 
 			}
-#endif // AUTO_FONT_SIZE
 
 			pango_font_description_free(descr);
 		}
@@ -355,44 +339,6 @@ static gchar * enum_to_string(GType type, guint enum_value)
 	g_free(info);
  }
 
-#ifndef AUTO_FONT_SIZE
-
-#if GTK_CHECK_VERSION(3,2,0)
- static gboolean filter_monospaced(const PangoFontFamily *family,const PangoFontFace *face,gpointer data)
- {
-	return pango_font_family_is_monospace((PangoFontFamily *) family);
- }
-#endif // GTK(3,2,0)
-
- static void font_set(GtkFontButton *widget, PRINT_INFO *info)
- {
-	trace("%s font=%p",__FUNCTION__,info->font);
- 	if(info->font)
-		g_free(info->font);
-	info->font = g_strdup(gtk_font_button_get_font_name(widget));
- }
-
-#else
-
- static void font_name_changed(GtkComboBox *combo, PRINT_INFO *info)
- {
-	GValue		  value	= { 0, };
-	GtkTreeIter	  iter;
-
-	if(!gtk_combo_box_get_active_iter(combo,&iter))
-		return;
-
-	gtk_tree_model_get_value(gtk_combo_box_get_model(combo),&iter,0,&value);
-
-	if(info->font.family)
-		g_free(info->font.family);
-
-	info->font.family = g_value_dup_string(&value);
-
- }
-
-#endif // !AUTO_FONT_SIZE
-
  static void toggle_show_selection(GtkToggleButton *togglebutton,PRINT_INFO *info)
  {
  	gboolean active = gtk_toggle_button_get_active(togglebutton);
@@ -400,158 +346,56 @@ static gchar * enum_to_string(GType type, guint enum_value)
  	set_boolean_to_config("print","selection",active);
  }
 
- static void load_settings(PRINT_INFO *info)
+  static GtkWidget * create_custom_widget(GtkPrintOperation *prt, PRINT_INFO *info)
  {
-	gchar *ptr = get_string_from_config("print","colors","");
+ 	GtkWidget * widget		= gtk_frame_new("");
+ 	GtkWidget * settings	= V3270_print_settings_new(info->widget);
 
-	trace("info->color=%p",info->color);
-	trace("colorlist=%p",ptr);
+ 	// Load values from configuration
+	g_autofree gchar * font_family	= get_string_from_config("print",FONT_CONFIG,DEFAULT_FONT);
+	if(font_family && *font_family)
+		v3270_print_settings_set_font_family(settings,font_family);
 
-	if(*ptr)
-		v3270_set_color_table(info->color,ptr);
-	else
-		v3270_set_mono_color_table(info->color,"black","white");
+	g_autofree gchar * color_scheme	= get_string_from_config("print","colors","");
+	if(color_scheme && *color_scheme)
+		v3270_print_settings_set_color_scheme(settings,color_scheme);
 
-	g_free(ptr);
- }
+ 	// Create frame
+	GtkWidget *label = gtk_label_new(NULL);
+	gtk_label_set_markup(GTK_LABEL(label),_("<b>Text options</b>"));
+	gtk_frame_set_label_widget(GTK_FRAME(widget),label);
 
- static GObject * create_custom_widget(GtkPrintOperation *prt, PRINT_INFO *info)
- {
-	GtkWidget			* container = gtk_table_new(3,2,FALSE);
- 	static const gchar	* text[]	= { N_( "_Font:" ), N_( "C_olor scheme:" ) };
-	GtkWidget			* label[G_N_ELEMENTS(text)];
-	GtkWidget			* widget;
-	int					  f;
+ 	gtk_container_set_border_width(GTK_CONTAINER(widget),12);
 
-	trace("%s starts",__FUNCTION__);
+	// The print dialog doesn't follow the guidelines from https://developer.gnome.org/hig/stable/visual-layout.html.en )-:
+	gtk_frame_set_shadow_type(GTK_FRAME(widget),GTK_SHADOW_NONE);
 
-	for(f=0;f<G_N_ELEMENTS(label);f++)
-	{
-		label[f] = gtk_label_new_with_mnemonic(gettext(text[f]));
-		gtk_misc_set_alignment(GTK_MISC(label[f]),0,0.5);
-		gtk_table_attach(GTK_TABLE(container),label[f],0,1,f,f+1,GTK_FILL,GTK_FILL,0,0);
-	}
+ 	gtk_container_set_border_width(GTK_CONTAINER(settings),6);
+ 	g_object_set(G_OBJECT(settings),"margin-start",8,NULL);
 
-	if(info->font.family)
-		g_free(info->font.family);
+	gtk_container_add(GTK_CONTAINER(widget),settings);
 
-	info->font.family = get_string_from_config("print",FONT_CONFIG,DEFAULT_FONT);
-	if(!*info->font.family)
-	{
-		g_free(info->font.family);
-		info->font.family = g_strdup(DEFAULT_FONT);
-	}
+	gtk_widget_show_all(widget);
 
-	// Font selection button
-#ifdef AUTO_FONT_SIZE
-	{
-		GtkTreeModel	* model		= (GtkTreeModel *) gtk_list_store_new(1,G_TYPE_STRING);
-		GtkCellRenderer * renderer	= gtk_cell_renderer_text_new();
-		PangoFontFamily **families;
-		gint 			  n_families, i;
-		GtkTreeIter		  iter;
-
-		widget	= gtk_combo_box_new_with_model(model);
-
-		gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(widget), renderer, TRUE);
-		gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(widget), renderer, "text", 0, NULL);
-
-		g_signal_connect(G_OBJECT(widget),"changed",G_CALLBACK(font_name_changed),info);
-
-		pango_context_list_families(gtk_widget_get_pango_context(container),&families, &n_families);
-
-		for(i=0; i<n_families; i++)
-		{
-			if(pango_font_family_is_monospace(families[i]))
-			{
-				const gchar *name = pango_font_family_get_name (families[i]);
-				gtk_list_store_append((GtkListStore *) model,&iter);
-				gtk_list_store_set((GtkListStore *) model, &iter,0, name, -1);
-
-				if(!g_ascii_strcasecmp(name,info->font.family))
-					gtk_combo_box_set_active_iter(GTK_COMBO_BOX(widget),&iter);
-			}
-		}
-
-		g_free(families);
-	}
-#else
-	{
-		trace("Font=%s",info->font);
-		widget = gtk_font_button_new_with_font(info->font);
-		gtk_font_button_set_show_size((GtkFontButton *) widget,TRUE);
-		gtk_font_button_set_use_font((GtkFontButton *) widget,TRUE);
-		gtk_label_set_mnemonic_widget(GTK_LABEL(label[0]),widget);
-		g_free(info->font);
-
-#if GTK_CHECK_VERSION(3,2,0)
-		gtk_font_chooser_set_filter_func((GtkFontChooser *) widget,filter_monospaced,NULL,NULL);
-#endif // GTK(3,2,0)
-
-		g_signal_connect(G_OBJECT(widget),"font-set",G_CALLBACK(font_set),info);
-
-	}
-#endif
-
-	gtk_table_attach(GTK_TABLE(container),widget,1,2,0,1,GTK_EXPAND|GTK_FILL,GTK_FILL,5,0);
-
-	load_settings(info);
-
-	widget = color_scheme_new(info->color);
-	gtk_label_set_mnemonic_widget(GTK_LABEL(label[1]),widget);
-
-	g_object_set_data(G_OBJECT(container),"combo",widget);
-	gtk_table_attach(GTK_TABLE(container),widget,1,2,1,2,GTK_EXPAND|GTK_FILL,GTK_FILL,5,0);
-
-	// Selection checkbox
-	widget = gtk_check_button_new_with_label( _("Print selection box") );
-
-	if(info->src == LIB3270_CONTENT_ALL)
-	{
-		info->show_selection = get_boolean_from_config("print","selection",FALSE);
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),info->show_selection);
-		g_signal_connect(G_OBJECT(widget),"toggled",G_CALLBACK(toggle_show_selection),info);
-	}
-	else
-	{
-		gtk_widget_set_sensitive(widget,FALSE);
-	}
-
-	gtk_table_attach(GTK_TABLE(container),widget,1,2,2,3,GTK_EXPAND|GTK_FILL,GTK_FILL,5,0);
-
-	// Show and return
-	gtk_widget_show_all(container);
-
-	trace("%s ends container=%p",__FUNCTION__,container);
- 	return G_OBJECT(container);
+    return widget;
  }
 
  static void custom_widget_apply(GtkPrintOperation *prt, GtkWidget *widget, PRINT_INFO *info)
  {
- 	GtkWidget	* combo = g_object_get_data(G_OBJECT(widget),"combo");
- 	GdkRGBA 	* clr	= g_object_get_data(G_OBJECT(combo),"selected");
+ 	GtkWidget * settings = gtk_bin_get_child(GTK_BIN(widget));
 
-	trace("%s starts combo=%p clr=%p widget=%p",__FUNCTION__,combo,clr,widget);
+	info->show_selection = v3270_print_settings_get_show_selection(settings) ? 1 : 0;
 
+	// Setup font family
 	if(info->font.family)
-		set_string_to_config("print",FONT_CONFIG,info->font.family);
+		g_free(info->font.family);
+	info->font.family = v3270_print_settings_get_font_family(settings);
+	set_string_to_config("print",FONT_CONFIG,info->font.family);
 
-	if(clr)
-	{
-		int f;
-		GString *str = g_string_new("");
-		for(f=0;f<V3270_COLOR_COUNT;f++)
-		{
-			info->color[f] = clr[f];
-			if(f)
-				g_string_append_c(str,';');
-			g_string_append_printf(str,"%s",gdk_rgba_to_string(clr+f));
-		}
-		set_string_to_config("print","colors","%s",str->str);
-		g_string_free(str,TRUE);
-	}
-
-	trace("%s ends",__FUNCTION__);
+	// Setup print settings
+	v3270_print_settings_get_rgba(settings, info->color, V3270_COLOR_COUNT);
+	g_autofree gchar * colors = v3270_print_settings_get_color_scheme(settings);
+	set_string_to_config("print","colors","%s",colors);
 
  }
 
@@ -620,7 +464,18 @@ static gchar * enum_to_string(GType type, guint enum_value)
 	g_signal_connect(print,"create-custom-widget",G_CALLBACK(create_custom_widget),	*info);
 	g_signal_connect(print,"custom-widget-apply",G_CALLBACK(custom_widget_apply), *info);
 #else
-	load_settings(*info);
+	{
+		g_autofree gchar *color_scheme = get_string_from_config("print","colors","");
+
+		trace("info->color=%p",info->color);
+		trace("colorlist=%p",ptr);
+
+		if(color_scheme && *color_scheme)
+			v3270_set_color_table(info->color,color_scheme);
+		else
+			v3270_set_mono_color_table(info->color,"black","white");
+
+	 }
 #endif // _WIN32
 
 	// Load page and print settings
