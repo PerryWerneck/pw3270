@@ -87,8 +87,8 @@
 
  }
 
-void setup_print_dialog(GtkPrintOperation * operation)
-{
+ void setup_print_dialog(GtkPrintOperation * operation)
+ {
 	GtkPrintSettings 	* settings	= gtk_print_settings_new();
 	GtkPageSetup 		* setup 	= gtk_page_setup_new();
     GtkPaperSize        * papersize = NULL;
@@ -138,5 +138,5 @@ void setup_print_dialog(GtkPrintOperation * operation)
 	gtk_page_setup_set_paper_size_and_default_margins(setup,papersize);
 	gtk_print_operation_set_default_page_setup(operation,setup);
 
-}
+ }
 
