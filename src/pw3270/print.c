@@ -30,6 +30,7 @@
  #include "private.h"
  #include <v3270.h>
  #include <v3270/print.h>
+ #include <v3270/dialogs.h>
  #include <lib3270/selection.h>
  #include <lib3270/trace.h>
 
@@ -38,22 +39,24 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
+/*
  static void show_print_error(GtkWidget *widget, GError *err)
  {
+	g_warning("Print operation has failed: %s",err->message);
+
 	GtkWidget *dialog = gtk_message_dialog_new_with_markup(	GTK_WINDOW(gtk_widget_get_toplevel(widget)),
 															GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
 															GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,
-															"%s",_( "Print operation failed" ));
+															"%s",_( "Unable to complete print job" ));
 
-	g_warning("%s",err->message);
-
-	gtk_window_set_title(GTK_WINDOW(dialog),_("Error"));
+	gtk_window_set_title(GTK_WINDOW(dialog),_("Operation has failed"));
 
 	gtk_message_dialog_format_secondary_markup(GTK_MESSAGE_DIALOG(dialog),"%s",err->message);
 
 	gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
 }
+*/
 
  /*
  static void done(GtkPrintOperation *prt, GtkPrintOperationResult result, PRINT_INFO *info)
@@ -197,22 +200,14 @@
 
 	if(err)
 	{
-		GtkWidget *popup = gtk_message_dialog_new_with_markup(
-			GTK_WINDOW(gtk_widget_get_toplevel(widget)),
-			GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
-			GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,
-			_("Can't print")
+		v3270_error_popup(
+			widget,
+			_("Operation has failed"),
+			_( "Unable to complete print job" ),
+			err->message
 		);
 
-		gtk_window_set_title(GTK_WINDOW(popup),_("Operation has failed"));
-
-		gtk_message_dialog_format_secondary_markup(GTK_MESSAGE_DIALOG(popup),"%s",err->message);
-
-		gtk_dialog_run(GTK_DIALOG(popup));
-		gtk_widget_destroy(popup);
-
 		g_error_free(err);
-
 		rc = -1;
 	}
 	else
@@ -220,7 +215,23 @@
 		switch(result)
 		{
 		case GTK_PRINT_OPERATION_RESULT_ERROR:	// An error has occurred.
-			g_message("Print operation has failed");
+			{
+				// Get error code
+				GError * err = NULL;
+
+				gtk_print_operation_get_error(operation,&err);
+
+				v3270_error_popup(
+					widget,
+					_("Operation has failed"),
+					_( "Unable to complete print job" ),
+					err->message
+				);
+
+				g_error_free(err);
+				rc = -1;
+
+			}
 			break;
 
 		case GTK_PRINT_OPERATION_RESULT_APPLY:	// The print settings should be stored.
