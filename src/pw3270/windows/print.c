@@ -100,7 +100,7 @@ static gchar * enum_to_string(GType type, guint enum_value)
     }
  }
 
- void setup_print_dialog(GtkPrintOperation * operation)
+ void load_print_operation_settings(GtkPrintOperation * operation)
  {
 	GtkPrintSettings 	* settings	= gtk_print_settings_new();
 	GtkPageSetup 		* setup 	= gtk_page_setup_new();
@@ -222,3 +222,8 @@ static gchar * enum_to_string(GType type, guint enum_value)
 
  }
 
+ void save_print_operation_settings(GtkPrintOperation * operation)
+ {
+
+
+ }

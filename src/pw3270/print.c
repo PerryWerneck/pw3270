@@ -24,8 +24,6 @@
  *
  * perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
  * erico.mendonca@gmail.com	(Erico Mascarenhas Mendonça)
- * licinio@bb.com.br		(Licínio Luis Branco)
- * kraucer@bb.com.br		(Kraucer Fernandes Mazuco)
  *
  */
 
@@ -183,18 +181,19 @@
 
 	gtk_print_operation_set_allow_async(operation,get_boolean_from_config("print","allow_async",TRUE));
 
-	setup_print_dialog(operation);
+	load_print_operation_settings(operation);
 
 	//
 	// Run print dialog
 	//
 	GError *err = NULL;
-	gtk_print_operation_run(
+	GtkPrintOperationResult result =
+		gtk_print_operation_run(
 			operation,
 			GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,
 			GTK_WINDOW(gtk_widget_get_toplevel(widget)),
 			&err
-	);
+		);
 
 	if(err)
 	{
@@ -216,6 +215,33 @@
 
 		rc = -1;
 	}
+	else
+	{
+		switch(result)
+		{
+		case GTK_PRINT_OPERATION_RESULT_ERROR:	// An error has occurred.
+			g_message("Print operation has failed");
+			break;
+
+		case GTK_PRINT_OPERATION_RESULT_APPLY:	// The print settings should be stored.
+			save_print_operation_settings(operation);
+			break;
+
+		case GTK_PRINT_OPERATION_RESULT_CANCEL:	// The print operation has been canceled, the print settings should not be stored.
+			g_message("Print operation was cancelled");
+			break;
+
+		case GTK_PRINT_OPERATION_RESULT_IN_PROGRESS:	// The print operation is not complete yet. This value will only be returned when running asynchronously.
+			g_message("Print operation is in progress");
+			break;
+
+		default:
+			g_warning("Unexpected print operation result: %d",(int) result);
+
+		}
+	}
+
+	g_object_unref(operation);
 
 	return rc;
 

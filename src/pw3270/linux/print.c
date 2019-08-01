@@ -37,6 +37,7 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
+/*
  static GtkWidget * create_custom_widget(GtkPrintOperation *prt, gpointer G_GNUC_UNUSED(dunno))
  {
  	GtkWidget * widget		= gtk_frame_new("");
@@ -70,31 +71,24 @@
 
     return widget;
  }
+*/
 
+/*
  static void custom_widget_apply(GtkPrintOperation *prt, GtkWidget *widget, gpointer G_GNUC_UNUSED(dunno))
  {
  	GtkWidget * settings = gtk_bin_get_child(GTK_BIN(widget));
-
  	v3270_print_operation_apply_settings(prt,settings);
-
-	// Store font family
-	g_autofree gchar * font_family = v3270_print_settings_get_font_family(settings);
-	set_string_to_config("print",FONT_CONFIG,font_family);
-
-	// Store save color settings
-	g_autofree gchar * colors = v3270_print_settings_get_color_scheme(settings);
-	set_string_to_config("print","colors","%s",colors);
-
  }
+*/
 
- void setup_print_dialog(GtkPrintOperation * operation)
+ void load_print_operation_settings(GtkPrintOperation * operation)
  {
 	GtkPrintSettings 	* settings	= gtk_print_settings_new();
 	GtkPageSetup 		* setup 	= gtk_page_setup_new();
     GtkPaperSize        * papersize = NULL;
 
-	g_signal_connect(operation,"create-custom-widget",G_CALLBACK(create_custom_widget),NULL);
-	g_signal_connect(operation,"custom-widget-apply",G_CALLBACK(custom_widget_apply), NULL);
+//	g_signal_connect(operation,"create-custom-widget",G_CALLBACK(create_custom_widget),NULL);
+//	g_signal_connect(operation,"custom-widget-apply",G_CALLBACK(custom_widget_apply), NULL);
 
 	// Load page and print settings
 	GKeyFile	* conf	= get_application_keyfile();
@@ -138,5 +132,36 @@
 	gtk_page_setup_set_paper_size_and_default_margins(setup,papersize);
 	gtk_print_operation_set_default_page_setup(operation,setup);
 
+ 	// Load font and colors
+	g_autofree gchar * font_family	= get_string_from_config("print",FONT_CONFIG,DEFAULT_FONT);
+	if(font_family && *font_family)
+		v3270_print_operation_set_font_family(operation,font_family);
+
+	g_autofree gchar * color_scheme	= get_string_from_config("print","colors","");
+	if(color_scheme && *color_scheme)
+		v3270_print_operation_set_color_scheme(operation,color_scheme);
+
  }
 
+ void save_print_operation_settings(GtkPrintOperation * operation)
+ {
+	GtkPrintSettings	* settings	= gtk_print_operation_get_print_settings(operation);
+	GtkPageSetup		* pgsetup	= gtk_print_operation_get_default_page_setup(operation);
+	GtkPaperSize        * papersize = gtk_page_setup_get_paper_size(pgsetup);
+
+	g_message("Saving print settings");
+
+	GKeyFile * conf = get_application_keyfile();
+	gtk_print_settings_to_key_file(settings,conf,"print_settings");
+	gtk_page_setup_to_key_file(pgsetup,conf,"page_setup");
+	gtk_paper_size_to_key_file(papersize,conf,"paper_size");
+
+	// Store font family
+	g_autofree gchar * font_family = v3270_print_operation_get_font_family(operation);
+	set_string_to_config("print",FONT_CONFIG,font_family);
+
+	// Store save color settings
+	g_autofree gchar * colors = v3270_print_operation_get_color_scheme(operation);
+	set_string_to_config("print","colors","%s",colors);
+
+ }

@@ -77,7 +77,8 @@
  G_GNUC_INTERNAL void			  run_security_dialog(GtkWidget *widget);
 
  // Tools
- G_GNUC_INTERNAL void setup_print_dialog(GtkPrintOperation * operation);
+ G_GNUC_INTERNAL void load_print_operation_settings(GtkPrintOperation * operation);
+ G_GNUC_INTERNAL void save_print_operation_settings(GtkPrintOperation * operation);
 
  // actions
  G_GNUC_INTERNAL void paste_file_action(GtkAction *action, GtkWidget *widget);
