@@ -224,6 +224,76 @@ static gchar * enum_to_string(GType type, guint enum_value)
 
  void save_print_operation_settings(GtkPrintOperation * operation)
  {
+	// Save settings
+	GtkPrintSettings	* settings	= gtk_print_operation_get_print_settings(operation);
+	GtkPageSetup		* pgsetup	= gtk_print_operation_get_default_page_setup(operation);
+	GtkPaperSize        * papersize = gtk_page_setup_get_paper_size(pgsetup);
+
+	trace("Saving settings PrintSettings=%p page_setup=%p",settings,pgsetup);
+
+#ifdef ENABLE_WINDOWS_REGISTRY
+	HKEY registry;
+
+	if(get_registry_handle("print",&registry,KEY_SET_VALUE))
+	{
+		HKEY	hKey;
+		DWORD	disp;
+
+		if(RegCreateKeyEx(registry,"settings",0,NULL,REG_OPTION_NON_VOLATILE,KEY_SET_VALUE,NULL,&hKey,&disp) == ERROR_SUCCESS)
+		{
+			gtk_print_settings_foreach(	settings,(GtkPrintSettingsFunc) save_settings, hKey );
+			RegCloseKey(hKey);
+		}
+
+		if(RegCreateKeyEx(registry,"page",0,NULL,REG_OPTION_NON_VOLATILE,KEY_SET_VALUE,NULL,&hKey,&disp) == ERROR_SUCCESS)
+		{
+			gchar			* orientation	= enum_to_string(GTK_TYPE_PAGE_ORIENTATION,gtk_page_setup_get_orientation(pgsetup));
+
+			// From http://git.gnome.org/browse/gtk+/tree/gtk/gtkpagesetup.c
+			save_double(hKey, "MarginTop",		gtk_page_setup_get_top_margin(pgsetup, GTK_UNIT_MM));
+			save_double(hKey, "MarginBottom",	gtk_page_setup_get_bottom_margin(pgsetup, GTK_UNIT_MM));
+			save_double(hKey, "MarginLeft",		gtk_page_setup_get_left_margin(pgsetup, GTK_UNIT_MM));
+			save_double(hKey, "MarginRight",	gtk_page_setup_get_right_margin(pgsetup, GTK_UNIT_MM));
+			save_string(hKey, "Orientation", 	orientation);
+
+			g_free (orientation);
+
+			RegCloseKey(hKey);
+		}
+
+		if(papersize && RegCreateKeyEx(registry,"paper",0,NULL,REG_OPTION_NON_VOLATILE,KEY_SET_VALUE,NULL,&hKey,&disp) == ERROR_SUCCESS)
+		{
+			// From http://git.gnome.org/browse/gtk+/tree/gtk/gtkpapersize.c
+			static const struct _papersettings
+			{
+				const gchar * name;
+				const gchar * (*get)(GtkPaperSize *);
+			} papersettings[] =
+			{
+				{ "PPDName",     gtk_paper_size_get_ppd_name        },
+				{ "Name",        gtk_paper_size_get_name            },
+				{ "DisplayName", gtk_paper_size_get_display_name    }
+			};
+
+			int f;
+
+			for(f=0;f<G_N_ELEMENTS(papersettings);f++)
+			{
+				const gchar *ptr = papersettings[f].get(papersize);
+				if(ptr)
+					save_string(hKey,papersettings[f].name,ptr);
+			}
+
+			save_double(hKey, "Width", gtk_paper_size_get_width (papersize, GTK_UNIT_MM));
+			save_double(hKey, "Height", gtk_paper_size_get_height (papersize, GTK_UNIT_MM));
+
+			RegCloseKey(hKey);
+		}
+
+
+		RegCloseKey(registry);
+	}
+#endif // ENABLE_WINDOWS_REGISTRY
 
 
  }
