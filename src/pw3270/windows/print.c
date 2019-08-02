@@ -216,9 +216,9 @@ static gchar * enum_to_string(GType type, guint enum_value)
 	}
 #endif // ENABLE_WINDOWS_REGISTRY
 
-	gtk_print_operation_set_print_settings(print,settings);
+	gtk_print_operation_set_print_settings(operation,settings);
 	gtk_page_setup_set_paper_size_and_default_margins(setup,papersize);
-	gtk_print_operation_set_default_page_setup(print,setup);
+	gtk_print_operation_set_default_page_setup(operation,setup);
 
  }
 
