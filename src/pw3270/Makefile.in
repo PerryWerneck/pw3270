@@ -42,7 +42,7 @@ LIB_SOURCES=\
 
 APP_SOURCES=\
 	main.c \
-	@APP_RESOURCES@
+	$(wildcard @OSNAME@/*.rc)
 
 MODULES=\
 	uiparser \
@@ -130,16 +130,16 @@ $(OBJDBG)/%.o: \
 		-DBUILD_DATE=`date +"0x%Y%m%d"`\
 		-o $@ -c $<
 
-%.ico: \
+@OSNAME@/%.ico: \
 	$(BASEDIR)/branding/%.svg
 
 	@echo $< ...
 	@$(MKDIR) `dirname $@`
 	@$(CONVERT) -density 384 -background transparent $< -define icon:auto-resize -colors 256 $@
 
-$(OBJDBG)/%.o: \
-	%.rc \
-	@PACKAGE_TARNAME@.ico \
+$(OBJDBG)/@OSNAME@/%.o: \
+	@OSNAME@/%.rc \
+	@OSNAME@/@PACKAGE_TARNAME@.ico \
 	$(DEPENDS)
 
 	@echo $< ...
@@ -163,9 +163,9 @@ $(OBJRLS)/%.o: \
 				-DBUILD_DATE=`date +"0x%Y%m%d"` \
 				-o $@ -c $<
 
-$(OBJRLS)/%.o: \
-	%.rc \
-	@PACKAGE_TARNAME@.ico \
+$(OBJRLS)/@OSNAME@/%.o: \
+	@OSNAME@/%.rc \
+	@OSNAME@/@PACKAGE_TARNAME@.ico \
 	$(DEPENDS)
 
 	@echo $< ...

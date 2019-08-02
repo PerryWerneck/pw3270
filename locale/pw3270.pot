@@ -9,7 +9,7 @@ msgstr ""
 "#-#-#-#-#  pw3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-30 10:50-0300\n"
+"POT-Creation-Date: 2019-08-02 14:04-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "#-#-#-#-#  lib3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-29 18:49+0000\n"
+"POT-Creation-Date: 2019-08-02 16:10+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,7 +31,7 @@ msgstr ""
 "#-#-#-#-#  libv3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-30 14:02+0000\n"
+"POT-Creation-Date: 2019-08-02 16:12+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -62,7 +62,7 @@ msgstr ""
 msgid "%s"
 msgstr ""
 
-#: src/core/connect.c:160
+#: src/core/connect.c:173
 #, c-format
 msgid "%s (SSL error %d)"
 msgstr ""
@@ -97,32 +97,32 @@ msgstr ""
 msgid "%s requires GTK version %d.%d.%d"
 msgstr ""
 
-#: src/core/kybd.c:2444
+#: src/core/keyboard/kybd.c:1906
 #, c-format
 msgid "%s: Bell not supported"
 msgstr ""
 
-#: src/core/kybd.c:2603
+#: src/core/keyboard/kybd.c:2065
 #, c-format
 msgid "%s: Missing hex digits after \\x"
 msgstr ""
 
-#: src/core/kybd.c:2543
+#: src/core/keyboard/kybd.c:2005
 #, c-format
 msgid "%s: Unknown character after \\p"
 msgstr ""
 
-#: src/core/kybd.c:2579
+#: src/core/keyboard/kybd.c:2041
 #, c-format
 msgid "%s: Unknown character after \\pa"
 msgstr ""
 
-#: src/core/kybd.c:2557
+#: src/core/keyboard/kybd.c:2019
 #, c-format
 msgid "%s: Unknown character after \\pf"
 msgstr ""
 
-#: src/core/kybd.c:2495
+#: src/core/keyboard/kybd.c:1957
 #, c-format
 msgid "%s: Vertical tab not supported"
 msgstr ""
@@ -136,7 +136,7 @@ msgstr ""
 msgid "- 3270 Emulator for Gtk"
 msgstr ""
 
-#: src/dialogs/hostselect.c:41
+#: src/dialogs/hostselect.c:42
 msgid "16 colors"
 msgstr ""
 
@@ -164,7 +164,7 @@ msgstr ""
 msgid "3270 terminal emulator for GTK %d.%d"
 msgstr ""
 
-#: src/dialogs/hostselect.c:42
+#: src/dialogs/hostselect.c:43
 msgid "8 colors"
 msgstr ""
 
@@ -194,13 +194,13 @@ msgstr ""
 msgid "<b>%s</b>\n"
 msgstr ""
 
-#: src/terminal/widget.c:198
+#: src/terminal/widget.c:154
 msgid ""
 "<b>Identity not verified</b>\n"
 "Disconnected from host"
 msgstr ""
 
-#: src/dialogs/print/print.c:112
+#: src/dialogs/print/print.c:108
 msgid "<b>Text options</b>"
 msgstr ""
 
@@ -228,11 +228,11 @@ msgstr ""
 msgid "A_ppend to file"
 msgstr ""
 
-#: src/core/ft.c:104
+#: src/core/ft/ft.c:104
 msgid "Abort sent; awaiting response"
 msgstr ""
 
-#: src/core/ft.c:677
+#: src/core/ft/ft.c:677
 msgid "Aborting..."
 msgstr ""
 
@@ -240,7 +240,7 @@ msgstr ""
 msgid "About security"
 msgstr ""
 
-#: src/core/ft.c:102
+#: src/core/ft/ft.c:102
 msgid "Ack received, data flowing"
 msgstr ""
 
@@ -256,7 +256,7 @@ msgstr ""
 msgid "Add to copy"
 msgstr ""
 
-#: src/dialogs/hostselect.c:139
+#: src/dialogs/hostselect.c:140
 msgid "Address or name of the host to connect."
 msgstr ""
 
@@ -265,15 +265,15 @@ msgid "Alert sound"
 msgstr ""
 
 #: src/filetransfer/v3270ft.c:310 src/filetransfer/settings.c:212
-#: src/dialogs/save/save.c:129
+#: src/dialogs/save/save.c:117
 msgid "All files"
 msgstr ""
 
-#: src/core/ftmessages.c:67 src/filetransfer/v3270ftprogress.c:82
+#: src/core/ft/ftmessages.c:67 src/filetransfer/v3270ftprogress.c:82
 msgid "An error exists in the PC's file name."
 msgstr ""
 
-#: src/core/ftmessages.c:46 src/filetransfer/v3270ftprogress.c:64
+#: src/core/ft/ftmessages.c:46 src/filetransfer/v3270ftprogress.c:64
 msgid ""
 "An error occurred in the file transfer, which may be an error in the data "
 "being transferred, or an unidentified system error."
@@ -283,7 +283,7 @@ msgstr ""
 msgid "An error occurred trying to allocate memory. This should never happen."
 msgstr ""
 
-#: src/core/ftmessages.c:102 src/filetransfer/v3270ftprogress.c:112
+#: src/core/ft/ftmessages.c:102 src/filetransfer/v3270ftprogress.c:112
 msgid "An invalid SEND or RECEIVE parameter was sent to the host."
 msgstr ""
 
@@ -340,7 +340,7 @@ msgstr ""
 msgid "Avblock"
 msgstr ""
 
-#: src/core/ft.c:103
+#: src/core/ft/ft.c:103
 msgid "Awaiting chance to send an abort"
 msgstr ""
 
@@ -348,7 +348,7 @@ msgstr ""
 msgid "B_egin transfer"
 msgstr ""
 
-#: colors.c:494 src/dialogs/colors.c:290
+#: colors.c:494 src/dialogs/colors.c:291
 msgid "Background"
 msgstr ""
 
@@ -356,7 +356,7 @@ msgstr ""
 msgid "Beep on errors"
 msgstr ""
 
-#: colors.c:502 src/dialogs/colors.c:298
+#: colors.c:502 src/dialogs/colors.c:299
 msgid "Black"
 msgstr ""
 
@@ -372,7 +372,7 @@ msgstr ""
 msgid "Block size"
 msgstr ""
 
-#: colors.c:495 src/dialogs/colors.c:291
+#: colors.c:495 src/dialogs/colors.c:292
 msgid "Blue"
 msgstr ""
 
@@ -392,19 +392,19 @@ msgstr ""
 msgid "Broken pipe"
 msgstr ""
 
-#: src/core/ftmessages.c:215
+#: src/core/ft/ftmessages.c:215
 msgid "CMS disk is full: file transfer canceled"
 msgstr ""
 
-#: src/core/ftmessages.c:208
+#: src/core/ft/ftmessages.c:208
 msgid "CMS disk is not accessed: file transfer canceled"
 msgstr ""
 
-#: src/core/ftmessages.c:201
+#: src/core/ft/ftmessages.c:201
 msgid "CMS disk is read-only: file transfer canceled"
 msgstr ""
 
-#: src/core/ftmessages.c:194
+#: src/core/ft/ftmessages.c:194
 msgid "CMS file not found: file transfer canceled"
 msgstr ""
 
@@ -412,7 +412,7 @@ msgstr ""
 msgid "CRL signature failure"
 msgstr ""
 
-#: src/dialogs/save/save.c:230
+#: src/dialogs/save/save.c:215
 msgid "C_haracter Coding"
 msgstr ""
 
@@ -420,11 +420,11 @@ msgstr ""
 msgid "C_haracter Coding:"
 msgstr ""
 
-#: print.c:421 src/dialogs/print/print.c:88
+#: src/dialogs/print/settings.c:78
 msgid "C_olor scheme:"
 msgstr ""
 
-#: src/dialogs/hostselect.c:313
+#: src/dialogs/hostselect.c:314
 msgid "C_onnect"
 msgstr ""
 
@@ -442,7 +442,7 @@ msgstr ""
 msgid "Can't add activity"
 msgstr ""
 
-#: src/ssl/linux/getcrl.c:354
+#: src/ssl/linux/ldap.c:146
 msgid "Can't bind to LDAP server"
 msgstr ""
 
@@ -461,25 +461,32 @@ msgstr ""
 msgid "Can't convert line %lu from %s to %s"
 msgstr ""
 
-#: src/ssl/linux/getcrl.c:280 src/ssl/linux/getcrl.c:426
-#: src/ssl/linux/getcrl.c:523
+#: src/ssl/linux/getcrl.c:87
 msgid "Can't decode CRL"
 msgstr ""
 
-#: src/ssl/linux/getcrl.c:576
-msgid "Can't decode CRL got from LDAP server"
+#: src/ssl/linux/ldap.c:218 src/ssl/linux/curl.c:271
+msgid "Can't decode certificate revocation list"
 msgstr ""
 
-#: src/ssl/linux/getcrl.c:390 src/ssl/linux/getcrl.c:402
+#: src/ssl/linux/curl.c:312
+msgid "Can't decode certificate revocation list got from LDAP server"
+msgstr ""
+
+#: src/ssl/linux/ldap.c:182 src/ssl/linux/ldap.c:194
 msgid "Can't get LDAP attribute"
 msgstr ""
 
-#: src/core/ft.c:432
+#: src/core/ft/ft.c:432
 msgid "Can't get file size"
 msgstr ""
 
-#: src/ssl/linux/getcrl.c:332
+#: src/ssl/linux/ldap.c:124
 msgid "Can't initialize LDAP"
+msgstr ""
+
+#: src/ssl/linux/curl.c:196
+msgid "Can't initialize curl operation"
 msgstr ""
 
 #: parsefile.c:328 src/filetransfer/load.c:270
@@ -500,7 +507,7 @@ msgstr ""
 msgid "Can't load plugin %s"
 msgstr ""
 
-#: src/ssl/linux/getcrl.c:249 src/ssl/linux/getcrl.c:268
+#: src/ssl/linux/getcrl.c:56 src/ssl/linux/getcrl.c:75
 msgid "Can't open CRL File"
 msgstr ""
 
@@ -538,7 +545,7 @@ msgstr ""
 msgid "Can't paste"
 msgstr ""
 
-#: src/core/session.c:198 src/terminal/callbacks.c:345
+#: src/core/session.c:198
 msgid "Can't print"
 msgstr ""
 
@@ -562,7 +569,7 @@ msgid "Can't save \"%s\": %s"
 msgstr ""
 
 #: src/filetransfer/save.c:116 src/filetransfer/activitylist.c:437
-#: src/trace/widget.c:495 src/dialogs/transfer.c:96 src/dialogs/save/save.c:495
+#: src/trace/widget.c:495 src/dialogs/transfer.c:96 src/dialogs/save/save.c:454
 #, c-format
 msgid "Can't save %s"
 msgstr ""
@@ -576,12 +583,12 @@ msgstr ""
 msgid "Can't save trace data to file %s"
 msgstr ""
 
-#: src/ssl/linux/getcrl.c:379
+#: src/ssl/linux/ldap.c:171
 msgid "Can't search LDAP server"
 msgstr ""
 
-#: src/ssl/linux/getcrl.c:343
-msgid "Can't set LDAP version"
+#: src/ssl/linux/ldap.c:135
+msgid "Can't set LDAP protocol version"
 msgstr ""
 
 #: src/filetransfer/worker.c:611 src/filetransfer/v3270ftprogress.c:772
@@ -608,7 +615,7 @@ msgstr ""
 msgid "Can't start file transfer session"
 msgstr ""
 
-#: src/core/ft.c:209
+#: src/core/ft/ft.c:209
 msgid "Can't start file transfer."
 msgstr ""
 
@@ -616,8 +623,8 @@ msgstr ""
 msgid "Can't verify."
 msgstr ""
 
-#: src/terminal/callbacks.c:467 src/filetransfer/v3270ftprogress.c:432
-#: src/filetransfer/transfer.c:89 src/dialogs/save/save.c:150
+#: src/terminal/callbacks.c:442 src/filetransfer/v3270ftprogress.c:432
+#: src/filetransfer/transfer.c:89 src/dialogs/save/save.c:138
 msgid "Cancel"
 msgstr ""
 
@@ -625,7 +632,7 @@ msgstr ""
 msgid "Cancel transfer operation."
 msgstr ""
 
-#: src/core/ft.c:161
+#: src/core/ft/ft.c:161
 msgid "Cancelled by user"
 msgstr ""
 
@@ -675,7 +682,7 @@ msgstr ""
 msgid "Charset error"
 msgstr ""
 
-#: src/dialogs/hostselect.c:163
+#: src/dialogs/hostselect.c:164
 msgid "Check for SSL secure connection."
 msgstr ""
 
@@ -687,11 +694,11 @@ msgstr ""
 msgid "Clear"
 msgstr ""
 
-#: src/dialogs/save/save.c:308
+#: src/dialogs/save/save.c:267
 msgid "Click to cancel operation"
 msgstr ""
 
-#: src/dialogs/save/save.c:313
+#: src/dialogs/save/save.c:272
 msgid "Click to save file"
 msgstr ""
 
@@ -715,7 +722,7 @@ msgstr ""
 msgid "Comma-separated values (CSV)"
 msgstr ""
 
-#: src/core/ftmessages.c:73
+#: src/core/ft/ftmessages.c:73
 msgid "Command incomplete: file transfer canceled"
 msgstr ""
 
@@ -748,7 +755,7 @@ msgstr ""
 msgid "Connection state"
 msgstr ""
 
-#: src/terminal/callbacks.c:468
+#: src/terminal/callbacks.c:443
 msgid "Continue"
 msgstr ""
 
@@ -776,12 +783,12 @@ msgstr ""
 msgid "Creates a file with variable-length records."
 msgstr ""
 
-#: colors.c:519 src/core/toggles.c:142 src/dialogs/colors.c:315
+#: colors.c:519 src/core/toggles.c:142 src/dialogs/colors.c:316
 #: 00default.xml:121
 msgid "Cross hair cursor"
 msgstr ""
 
-#: dialog.c:138 src/dialogs/save/save.c:239
+#: dialog.c:138 src/dialogs/tools.c:148
 #, c-format
 msgid "Current (%s)"
 msgstr ""
@@ -826,19 +833,19 @@ msgstr ""
 msgid "DFT B_uffer size"
 msgstr ""
 
-#: colors.c:503 src/dialogs/colors.c:299
+#: colors.c:503 src/dialogs/colors.c:300
 msgid "Dark Blue"
 msgstr ""
 
-#: colors.c:506 src/dialogs/colors.c:302
+#: colors.c:506 src/dialogs/colors.c:303
 msgid "Dark Green"
 msgstr ""
 
-#: colors.c:507 src/dialogs/colors.c:303
+#: colors.c:507 src/dialogs/colors.c:304
 msgid "Dark Turquoise"
 msgstr ""
 
-#: src/core/ft_cut.c:157 src/core/ft_cut.c:166
+#: src/core/ft/ft_cut.c:157 src/core/ft/ft_cut.c:166
 msgid "Data conversion error"
 msgstr ""
 
@@ -870,7 +877,7 @@ msgstr ""
 msgid "Device type rejected"
 msgstr ""
 
-#: src/core/ft.c:267
+#: src/core/ft/ft.c:267
 msgid "Disconnected from host."
 msgstr ""
 
@@ -930,21 +937,22 @@ msgstr ""
 msgid "Erase to end of line"
 msgstr ""
 
-#: print.c:247 src/core/util.c:590 src/terminal/widget.c:159
+#: src/core/util.c:590 src/dialogs/popups.c:56 src/dialogs/popups.c:91
+#: src/dialogs/print/print.c:61
 msgid "Error"
 msgstr ""
 
-#: src/core/ft_dft.c:452 src/core/ft_cut.c:423
+#: src/core/ft/ft_dft.c:454 src/core/ft/ft_cut.c:423
 #, c-format
 msgid "Error \"%s\" reading from local file (rc=%d)"
 msgstr ""
 
-#: src/core/ft_dft.c:330 src/core/ft_cut.c:528
+#: src/core/ft/ft_dft.c:332 src/core/ft/ft_cut.c:528
 #, c-format
 msgid "Error \"%s\" writing to local file (rc=%d)"
 msgstr ""
 
-#: src/core/ftmessages.c:45
+#: src/core/ft/ftmessages.c:45
 msgid "Error in file transfer: file transfer canceled"
 msgstr ""
 
@@ -953,19 +961,19 @@ msgstr ""
 msgid "Error loading %s"
 msgstr ""
 
-#: src/ssl/linux/getcrl.c:485 src/ssl/linux/getcrl.c:501
-msgid "Error loading CRL"
+#: src/ssl/linux/curl.c:195 src/ssl/linux/curl.c:233 src/ssl/linux/curl.c:249
+msgid "Error loading certificate revocation list"
 msgstr ""
 
-#: src/core/ftmessages.c:87
+#: src/core/ft/ftmessages.c:87
 msgid "Error reading file from host: file transfer canceled"
 msgstr ""
 
-#: src/core/ftmessages.c:145
+#: src/core/ft/ftmessages.c:145
 msgid "Error while reading or writing to host disk: file transfer canceled"
 msgstr ""
 
-#: src/core/ftmessages.c:80
+#: src/core/ft/ftmessages.c:80
 msgid "Error writing file to host: file transfer canceled"
 msgstr ""
 
@@ -977,23 +985,23 @@ msgstr ""
 msgid "Field Delimiters"
 msgstr ""
 
-#: colors.c:488 src/dialogs/colors.c:284
+#: colors.c:488 src/dialogs/colors.c:285
 msgid "Field colors"
 msgstr ""
 
-#: src/dialogs/save/save.c:270
+#: src/dialogs/save/save.c:229
 msgid "File _Format"
 msgstr ""
 
-#: src/core/ftmessages.c:52
+#: src/core/ft/ftmessages.c:52
 msgid "File transfer complete"
 msgstr ""
 
-#: src/core/ftmessages.c:59
+#: src/core/ft/ftmessages.c:59
 msgid "File transfer complete with records segmented"
 msgstr ""
 
-#: src/core/ft.c:272
+#: src/core/ft/ft.c:272
 msgid "File transfer is already active in this session."
 msgstr ""
 
@@ -1069,19 +1077,19 @@ msgstr ""
 msgid "Get transfer queue from file"
 msgstr ""
 
-#: src/ssl/linux/getcrl.c:546
-msgid "Got a bad formatted CRL from LDAP server"
+#: src/ssl/linux/curl.c:294
+msgid "Got a bad formatted certificate revocation list from LDAP server"
 msgstr ""
 
-#: src/ssl/linux/getcrl.c:532
-msgid "Got an invalid CRL from server"
+#: src/ssl/linux/curl.c:280
+msgid "Got an invalid certificate revocation list from server"
 msgstr ""
 
-#: colors.c:509 src/dialogs/colors.c:305
+#: colors.c:509 src/dialogs/colors.c:306
 msgid "Gray"
 msgstr ""
 
-#: colors.c:498 src/dialogs/colors.c:294
+#: colors.c:498 src/dialogs/colors.c:295
 msgid "Green"
 msgstr ""
 
@@ -1097,7 +1105,7 @@ msgstr ""
 msgid "Host charset"
 msgstr ""
 
-#: src/core/ft.c:686
+#: src/core/ft/ft.c:686
 msgid "Host disconnected, transfer cancelled"
 msgstr ""
 
@@ -1105,7 +1113,7 @@ msgstr ""
 msgid "Host illegally added function(s)"
 msgstr ""
 
-#: src/core/ftmessages.c:222
+#: src/core/ft/ftmessages.c:222
 msgid "Host program error code xxxxxxxxxx: file transfer canceled"
 msgstr ""
 
@@ -1189,15 +1197,15 @@ msgstr ""
 msgid "Ignore the fail and remove the file from queue."
 msgstr ""
 
-#: src/core/ft_cut.c:505
+#: src/core/ft/ft_cut.c:505
 msgid "Illegal frame length"
 msgstr ""
 
-#: src/core/ftmessages.c:138
+#: src/core/ft/ftmessages.c:138
 msgid "Incorrect option specified: file transfer canceled"
 msgstr ""
 
-#: src/core/ftmessages.c:101
+#: src/core/ft/ftmessages.c:101
 msgid "Incorrect request code: file transfer canceled"
 msgstr ""
 
@@ -1209,11 +1217,11 @@ msgstr ""
 msgid "Insert new file in the transfer queue"
 msgstr ""
 
-#: colors.c:514 src/dialogs/colors.c:310
+#: colors.c:514 src/dialogs/colors.c:311
 msgid "Intensified/Protected"
 msgstr ""
 
-#: colors.c:512 src/dialogs/colors.c:308
+#: colors.c:512 src/dialogs/colors.c:309
 msgid "Intensified/Unprotected"
 msgstr ""
 
@@ -1221,7 +1229,7 @@ msgstr ""
 msgid "Invalid CA certificate"
 msgstr ""
 
-#: src/terminal/callbacks.c:495
+#: src/terminal/callbacks.c:470
 msgid "Invalid callback table, possible version mismatch in lib3270"
 msgstr ""
 
@@ -1233,23 +1241,23 @@ msgstr ""
 msgid "Invalid character value"
 msgstr ""
 
-#: src/core/ftmessages.c:166
+#: src/core/ft/ftmessages.c:166
 msgid "Invalid option xxxxxxxx with APPEND: file transfer canceled"
 msgstr ""
 
-#: src/core/ftmessages.c:180
+#: src/core/ft/ftmessages.c:180
 msgid "Invalid option xxxxxxxx with PDS: file transfer canceled"
 msgstr ""
 
-#: src/core/ftmessages.c:159
+#: src/core/ft/ftmessages.c:159
 msgid "Invalid option xxxxxxxx with RECEIVE: file transfer canceled"
 msgstr ""
 
-#: src/core/ftmessages.c:173
+#: src/core/ft/ftmessages.c:173
 msgid "Invalid option xxxxxxxx without SPACE: file transfer canceled"
 msgstr ""
 
-#: src/core/ftmessages.c:152
+#: src/core/ft/ftmessages.c:152
 msgid "Invalid option xxxxxxxx: file transfer canceled"
 msgstr ""
 
@@ -1326,7 +1334,7 @@ msgstr ""
 msgid "Minutes for auto-disconnect"
 msgstr ""
 
-#: colors.c:489 src/dialogs/colors.c:285
+#: colors.c:489 src/dialogs/colors.c:286
 msgid "Misc colors"
 msgstr ""
 
@@ -1343,7 +1351,7 @@ msgstr ""
 msgid "Monocase"
 msgstr ""
 
-#: src/dialogs/hostselect.c:43
+#: src/dialogs/hostselect.c:44
 msgid "Monochrome"
 msgstr ""
 
@@ -1351,7 +1359,7 @@ msgstr ""
 msgid "Move action needs target & direction attributes"
 msgstr ""
 
-#: colors.c:508 src/dialogs/colors.c:304
+#: colors.c:508 src/dialogs/colors.c:305
 msgid "Mustard"
 msgstr ""
 
@@ -1368,11 +1376,11 @@ msgstr ""
 msgid "Next field"
 msgstr ""
 
-#: src/ssl/linux/getcrl.c:300
+#: src/ssl/linux/ldap.c:90
 msgid "No DN of the entry at which to start the search on the URL"
 msgstr ""
 
-#: src/ssl/linux/getcrl.c:312
+#: src/ssl/linux/ldap.c:103
 msgid "No LDAP attribute on the URL"
 msgstr ""
 
@@ -1390,7 +1398,7 @@ msgstr ""
 msgid "No transfer"
 msgstr ""
 
-#: src/core/ft.c:101 src/filetransfer/worker.c:602
+#: src/core/ft/ft.c:101 src/filetransfer/worker.c:602
 msgid "No transfer in progress"
 msgstr ""
 
@@ -1402,15 +1410,15 @@ msgstr ""
 msgid "Non zero if the host is TSO."
 msgstr ""
 
-#: colors.c:513 src/dialogs/colors.c:309
+#: colors.c:513 src/dialogs/colors.c:310
 msgid "Normal/Protected"
 msgstr ""
 
-#: colors.c:511 src/dialogs/colors.c:307
+#: colors.c:511 src/dialogs/colors.c:308
 msgid "Normal/Unprotected"
 msgstr ""
 
-#: src/core/ft.c:693
+#: src/core/ft/ft.c:693
 msgid "Not in 3270 mode, transfer cancelled"
 msgstr ""
 
@@ -1418,46 +1426,46 @@ msgstr ""
 msgid "Not the same terminal type"
 msgstr ""
 
-#: colors.c:526 src/dialogs/colors.c:322
+#: colors.c:526 src/dialogs/colors.c:323
 msgid "OIA Warning"
 msgstr ""
 
-#: colors.c:522 src/dialogs/colors.c:318
+#: colors.c:522 src/dialogs/colors.c:319
 msgid "OIA background"
 msgstr ""
 
-#: colors.c:523 src/dialogs/colors.c:319
+#: colors.c:523 src/dialogs/colors.c:320
 msgid "OIA foreground"
 msgstr ""
 
-#: colors.c:524 src/dialogs/colors.c:320
+#: colors.c:524 src/dialogs/colors.c:321
 msgid "OIA separator"
 msgstr ""
 
-#: colors.c:527 src/dialogs/colors.c:323
+#: colors.c:527 src/dialogs/colors.c:324
 msgid "OIA status invalid"
 msgstr ""
 
-#: colors.c:525 src/dialogs/colors.c:321
+#: colors.c:525 src/dialogs/colors.c:322
 msgid "OIA status ok"
 msgstr ""
 
-#: src/core/ftmessages.c:187
+#: src/core/ft/ftmessages.c:187
 msgid "Only one of TRACKS, CYLINDERS, AVBLOCK allowed: file transfer canceled"
 msgstr ""
 
-#: src/terminal/callbacks.c:343 src/filetransfer/save.c:118
+#: print.c:205 print.c:226 src/filetransfer/save.c:118
 #: src/filetransfer/load.c:272 src/filetransfer/activitylist.c:440
-#: src/dialogs/transfer.c:99 src/dialogs/save/save.c:498
+#: src/dialogs/transfer.c:99 src/dialogs/save/save.c:457
 #: src/dialogs/save/convenience.c:65 src/dialogs/save/convenience.c:94
 msgid "Operation has failed"
 msgstr ""
 
-#: print.c:613 src/dialogs/print/print.c:206
+#: src/dialogs/print/print.c:167
 msgid "Options"
 msgstr ""
 
-#: colors.c:504 src/dialogs/colors.c:300
+#: colors.c:504 src/dialogs/colors.c:301
 msgid "Orange"
 msgstr ""
 
@@ -1626,11 +1634,11 @@ msgstr ""
 msgid "Peer certificate"
 msgstr ""
 
-#: src/core/ftmessages.c:66
+#: src/core/ft/ftmessages.c:66
 msgid "Personal computer filespec incorrect: file transfer canceled"
 msgstr ""
 
-#: colors.c:497 src/dialogs/colors.c:293
+#: colors.c:497 src/dialogs/colors.c:294
 msgid "Pink"
 msgstr ""
 
@@ -1638,11 +1646,11 @@ msgstr ""
 msgid "Plain text"
 msgstr ""
 
-#: src/dialogs/hostselect.c:140
+#: src/dialogs/hostselect.c:141
 msgid "Port or service name (empty for \"telnet\")."
 msgstr ""
 
-#: src/dialogs/colors.c:257
+#: src/dialogs/colors.c:258
 msgid "Predefined color schemes"
 msgstr ""
 
@@ -1672,19 +1680,23 @@ msgstr ""
 msgid "Print copy"
 msgstr ""
 
-#: print.c:243
+#: src/dialogs/print/print.c:56
 msgid "Print operation failed"
+msgstr ""
+
+#: src/dialogs/print/convenience.c:82
+msgid "Print operation has failed"
 msgstr ""
 
 #: 00default.xml:48
 msgid "Print selected"
 msgstr ""
 
-#: print.c:507 src/dialogs/print/print.c:104
+#: src/dialogs/print/settings.c:84
 msgid "Print selection box"
 msgstr ""
 
-#: print.c:914 00default.xml:105
+#: print.c:265 00default.xml:105
 msgid "Print settings"
 msgstr ""
 
@@ -1692,7 +1704,7 @@ msgstr ""
 msgid "Progress"
 msgstr ""
 
-#: colors.c:505 src/dialogs/colors.c:301
+#: colors.c:505 src/dialogs/colors.c:302
 msgid "Purple"
 msgstr ""
 
@@ -1800,7 +1812,7 @@ msgstr ""
 msgid "Record format"
 msgstr ""
 
-#: colors.c:496 src/dialogs/colors.c:292
+#: colors.c:496 src/dialogs/colors.c:293
 msgid "Red"
 msgstr ""
 
@@ -1838,11 +1850,11 @@ msgstr ""
 msgid "Remove selection"
 msgstr ""
 
-#: src/core/ft.c:209
+#: src/core/ft/ft.c:209
 msgid "Request failed"
 msgstr ""
 
-#: src/core/ftmessages.c:94
+#: src/core/ft/ftmessages.c:94
 msgid "Required host storage unavailable: file transfer canceled"
 msgstr ""
 
@@ -1870,7 +1882,7 @@ msgstr ""
 msgid "Revocation list"
 msgstr ""
 
-#: src/core/ftmessages.c:188 src/filetransfer/v3270ftprogress.c:186
+#: src/core/ft/ftmessages.c:188 src/filetransfer/v3270ftprogress.c:186
 msgid ""
 "SPACE can be specified in units of TRACKS, CYLINDERS, or AVBLOCK, and only "
 "one option can be used."
@@ -1908,11 +1920,7 @@ msgstr ""
 msgid "Save _As"
 msgstr ""
 
-#: src/dialogs/save/save.c:342
-msgid "Save copied data"
-msgstr ""
-
-#: 00default.xml:44
+#: src/dialogs/save/save.c:301 00default.xml:44
 msgid "Save copy"
 msgstr ""
 
@@ -1928,11 +1936,11 @@ msgstr ""
 msgid "Save selected"
 msgstr ""
 
-#: src/dialogs/save/save.c:341
+#: src/dialogs/save/save.c:300
 msgid "Save selected area"
 msgstr ""
 
-#: src/dialogs/save/save.c:340
+#: src/dialogs/save/save.c:299
 msgid "Save terminal contents"
 msgstr ""
 
@@ -1977,11 +1985,11 @@ msgstr ""
 msgid "Scripts"
 msgstr ""
 
-#: src/ssl/linux/getcrl.c:391
+#: src/ssl/linux/ldap.c:183
 msgid "Search did not produce any attributes."
 msgstr ""
 
-#: src/ssl/linux/getcrl.c:403
+#: src/ssl/linux/ldap.c:195
 msgid "Search did not produce any values."
 msgstr ""
 
@@ -2001,16 +2009,14 @@ msgstr ""
 
 #: src/ssl/negotiate.c:104 src/ssl/negotiate.c:133 src/ssl/negotiate.c:156
 #: src/ssl/negotiate.c:176 src/ssl/negotiate.c:199 src/ssl/negotiate.c:218
-#: src/ssl/ctx_init.c:124 src/ssl/ctx_init.c:151 src/ssl/linux/getcrl.c:248
-#: src/ssl/linux/getcrl.c:267 src/ssl/linux/getcrl.c:279
-#: src/ssl/linux/getcrl.c:299 src/ssl/linux/getcrl.c:311
-#: src/ssl/linux/getcrl.c:331 src/ssl/linux/getcrl.c:342
-#: src/ssl/linux/getcrl.c:353 src/ssl/linux/getcrl.c:378
-#: src/ssl/linux/getcrl.c:389 src/ssl/linux/getcrl.c:401
-#: src/ssl/linux/getcrl.c:425 src/ssl/linux/getcrl.c:476
-#: src/ssl/linux/getcrl.c:500 src/ssl/linux/getcrl.c:522
-#: src/ssl/linux/getcrl.c:531 src/ssl/linux/getcrl.c:545
-#: src/ssl/linux/getcrl.c:575 src/ssl/linux/getcrl.c:590
+#: src/ssl/ctx_init.c:124 src/ssl/ctx_init.c:151 src/ssl/linux/ldap.c:89
+#: src/ssl/linux/ldap.c:102 src/ssl/linux/ldap.c:123 src/ssl/linux/ldap.c:134
+#: src/ssl/linux/ldap.c:145 src/ssl/linux/ldap.c:170 src/ssl/linux/ldap.c:181
+#: src/ssl/linux/ldap.c:193 src/ssl/linux/ldap.c:217 src/ssl/linux/getcrl.c:55
+#: src/ssl/linux/getcrl.c:74 src/ssl/linux/getcrl.c:86
+#: src/ssl/linux/getcrl.c:112 src/ssl/linux/curl.c:194 src/ssl/linux/curl.c:224
+#: src/ssl/linux/curl.c:248 src/ssl/linux/curl.c:270 src/ssl/linux/curl.c:279
+#: src/ssl/linux/curl.c:293 src/ssl/linux/curl.c:311
 msgid "Security error"
 msgstr ""
 
@@ -2019,7 +2025,7 @@ msgid "Security warning"
 msgstr ""
 
 #: src/filetransfer/v3270ft.c:307 src/filetransfer/settings.c:209
-#: src/dialogs/save/save.c:126 src/dialogs/save/save.c:151
+#: src/dialogs/save/save.c:114 src/dialogs/save/save.c:139
 msgid "Select"
 msgstr ""
 
@@ -2035,12 +2041,12 @@ msgstr ""
 msgid "Select by rectangles"
 msgstr ""
 
-#: src/dialogs/save/save.c:125 src/dialogs/save/save.c:147
+#: src/dialogs/save/save.c:113 src/dialogs/save/save.c:135
 msgid "Select destination file"
 msgstr ""
 
 #: src/filetransfer/v3270ft.c:577 src/filetransfer/settings.c:470
-#: src/dialogs/save/save.c:216
+#: src/dialogs/save/save.c:204
 msgid "Select file"
 msgstr ""
 
@@ -2072,11 +2078,11 @@ msgstr ""
 msgid "Select() failed when processing for events."
 msgstr ""
 
-#: colors.c:516 src/dialogs/colors.c:312
+#: colors.c:516 src/dialogs/colors.c:313
 msgid "Selection background"
 msgstr ""
 
-#: colors.c:517 src/dialogs/colors.c:313
+#: colors.c:517 src/dialogs/colors.c:314
 msgid "Selection foreground"
 msgstr ""
 
@@ -2136,7 +2142,7 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: src/dialogs/hostselect.c:313
+#: src/dialogs/hostselect.c:314
 msgid "Setup host"
 msgstr ""
 
@@ -2242,7 +2248,7 @@ msgstr ""
 msgid "Subject issuer mismatch"
 msgstr ""
 
-#: src/dialogs/hostselect.c:54
+#: src/dialogs/hostselect.c:55
 msgid "System _type"
 msgstr ""
 
@@ -2254,7 +2260,7 @@ msgstr ""
 msgid "TN3270 Session name"
 msgstr ""
 
-#: colors.c:487 src/dialogs/colors.c:206 src/dialogs/colors.c:283
+#: colors.c:487 src/dialogs/colors.c:207 src/dialogs/colors.c:284
 msgid "Terminal colors"
 msgstr ""
 
@@ -2266,7 +2272,7 @@ msgstr ""
 msgid "Text files"
 msgstr ""
 
-#: src/core/ftmessages.c:216 src/filetransfer/v3270ftprogress.c:210
+#: src/core/ft/ftmessages.c:216 src/filetransfer/v3270ftprogress.c:210
 msgid ""
 "The CMS disk is full, or the maximum number of files on the minidisk (3400) "
 "has been reached, or the maximum number of data blocks per file (16060) has "
@@ -2313,15 +2319,15 @@ msgstr ""
 msgid "The SSL certificate for this host is not trusted."
 msgstr ""
 
-#: src/ssl/linux/getcrl.c:301 src/ssl/linux/getcrl.c:313
+#: src/ssl/linux/ldap.c:91 src/ssl/linux/ldap.c:104
 msgid "The URL argument should be in the format ldap://[HOST]/[DN]?attribute"
 msgstr ""
 
-#: src/ssl/linux/getcrl.c:250
+#: src/ssl/linux/getcrl.c:57
 msgid "The URL for the CRL is undefined or empty"
 msgstr ""
 
-#: src/ssl/linux/getcrl.c:592
+#: src/ssl/linux/getcrl.c:114
 msgid "The URL scheme is unknown"
 msgstr ""
 
@@ -2416,28 +2422,28 @@ msgstr ""
 msgid "The delay between the host unlocking the keyboard and the actual unlock"
 msgstr ""
 
-#: src/terminal/callbacks.c:462
+#: src/terminal/callbacks.c:437
 #, c-format
 msgid "The error code was %d"
 msgstr ""
 
-#: src/dialogs/save/save.c:455
+#: src/dialogs/save/save.c:414
 #, c-format
 msgid "The file \"%s\" already exists. Replace it?"
 msgstr ""
 
-#: src/core/ftmessages.c:60 src/filetransfer/v3270ftprogress.c:76
+#: src/core/ft/ftmessages.c:60 src/filetransfer/v3270ftprogress.c:76
 msgid ""
 "The file transfer operation has been completed, and any record greater than "
 "the logical record length (LRECL) of the file being appended has been "
 "divided and becomes multiple records."
 msgstr ""
 
-#: src/core/ftmessages.c:53 src/filetransfer/v3270ftprogress.c:70
+#: src/core/ft/ftmessages.c:53 src/filetransfer/v3270ftprogress.c:70
 msgid "The file transfer operation has been successfully completed."
 msgstr ""
 
-#: src/core/ftmessages.c:81 src/core/ftmessages.c:88
+#: src/core/ft/ftmessages.c:81 src/core/ft/ftmessages.c:88
 #: src/filetransfer/v3270ftprogress.c:94 src/filetransfer/v3270ftprogress.c:100
 msgid ""
 "The host program has detected an error in the file data during a RECEIVE "
@@ -2488,7 +2494,7 @@ msgid ""
 "The public key in the certificate SubjectPublicKeyInfo could not be read."
 msgstr ""
 
-#: src/core/ft.c:278
+#: src/core/ft/ft.c:278
 msgid "The remote file name is invalid."
 msgstr ""
 
@@ -2518,7 +2524,7 @@ msgstr ""
 msgid "The supplied certificate cannot be used for the specified purpose."
 msgstr ""
 
-#: src/core/ftmessages.c:146 src/filetransfer/v3270ftprogress.c:150
+#: src/core/ft/ftmessages.c:146 src/filetransfer/v3270ftprogress.c:150
 msgid "There is not enough space available for data on the host."
 msgstr ""
 
@@ -2531,7 +2537,7 @@ msgstr ""
 msgid "There's no security information in the session"
 msgstr ""
 
-#: src/core/ftmessages.c:223 src/filetransfer/v3270ftprogress.c:216
+#: src/core/ft/ftmessages.c:223 src/filetransfer/v3270ftprogress.c:216
 msgid "This is a host program error."
 msgstr ""
 
@@ -2609,20 +2615,20 @@ msgstr ""
 msgid "Tracks"
 msgstr ""
 
-#: src/core/ft_cut.c:371
+#: src/core/ft/ft_cut.c:371
 msgid "Transfer cancelled by host"
 msgstr ""
 
-#: src/core/ft_dft.c:228 src/core/ft_dft.c:371 src/core/ft_cut.c:400
-#: src/core/ft_cut.c:495
+#: src/core/ft/ft_dft.c:230 src/core/ft/ft_dft.c:373 src/core/ft/ft_cut.c:400
+#: src/core/ft/ft_cut.c:495
 msgid "Transfer cancelled by user"
 msgstr ""
 
-#: src/core/ft.c:581
+#: src/core/ft/ft.c:581
 msgid "Transfer complete"
 msgstr ""
 
-#: src/core/ft.c:586 src/filetransfer/worker.c:569
+#: src/core/ft/ft.c:586 src/filetransfer/worker.c:569
 #: src/filetransfer/v3270ftprogress.c:720
 msgid "Transfer failed"
 msgstr ""
@@ -2644,7 +2650,7 @@ msgstr ""
 msgid "Transfer speed"
 msgstr ""
 
-#: src/core/ft_cut.c:464
+#: src/core/ft/ft_cut.c:464
 msgid "Transmission error"
 msgstr ""
 
@@ -2652,7 +2658,7 @@ msgstr ""
 msgid "Try again with the same file."
 msgstr ""
 
-#: colors.c:499 src/dialogs/colors.c:295
+#: colors.c:499 src/dialogs/colors.c:296
 msgid "Turquoise"
 msgstr ""
 
@@ -2664,12 +2670,16 @@ msgstr ""
 msgid "URL of the current host"
 msgstr ""
 
-#: dialog.c:64 src/dialogs/save/save.c:71
+#: dialog.c:64 src/dialogs/tools.c:137
 msgid "UTF-8"
 msgstr ""
 
-#: src/core/ft_dft.c:168
+#: src/core/ft/ft_dft.c:170
 msgid "Uknown DFT Open type from host"
+msgstr ""
+
+#: print.c:206 print.c:227
+msgid "Unable to complete print job"
 msgstr ""
 
 #: src/ssl/state.c:132
@@ -2716,7 +2726,7 @@ msgstr ""
 msgid "Unable to save"
 msgstr ""
 
-#: src/core/ft.c:529
+#: src/core/ft/ft.c:529
 msgid "Unable to send file-transfer request"
 msgstr ""
 
@@ -2737,7 +2747,7 @@ msgstr ""
 msgid "Unexpected error"
 msgstr ""
 
-#: src/dialogs/save/save.c:440
+#: src/dialogs/save/save.c:399
 #, c-format
 msgid "Unexpected format %d"
 msgstr ""
@@ -2747,7 +2757,7 @@ msgstr ""
 msgid "Unexpected group \"%s\""
 msgstr ""
 
-#: src/dialogs/save/save.c:410
+#: src/dialogs/save/save.c:369
 #, c-format
 msgid "Unexpected mode %d"
 msgstr ""
@@ -2757,7 +2767,7 @@ msgstr ""
 msgid "Unexpected or invalid %s attribute: \"%s\""
 msgstr ""
 
-#: src/ssl/linux/getcrl.c:591
+#: src/ssl/linux/getcrl.c:113
 msgid "Unexpected or invalid CRL URL"
 msgstr ""
 
@@ -2784,7 +2794,7 @@ msgstr ""
 msgid "Unexpected target \"%s\""
 msgstr ""
 
-#: src/core/kybd.c:290
+#: src/core/keyboard/kybd.c:278
 #, c-format
 msgid "Unexpected type %d in typeahead queue"
 msgstr ""
@@ -2794,21 +2804,21 @@ msgstr ""
 msgid "Unknown 3270 Data Stream command: 0x%X"
 msgstr ""
 
-#: src/core/ft_cut.c:379
+#: src/core/ft/ft_cut.c:379
 msgid "Unknown FT control code from host"
 msgstr ""
 
-#: src/core/kybd.c:2207
+#: src/core/keyboard/kybd.c:1669
 #, c-format
 msgid "Unknown PA key %d"
 msgstr ""
 
-#: src/core/kybd.c:2222
+#: src/core/keyboard/kybd.c:1684
 #, c-format
 msgid "Unknown PF key %d"
 msgstr ""
 
-#: src/core/ft_cut.c:303
+#: src/core/ft/ft_cut.c:303
 msgid "Unknown frame type from host"
 msgstr ""
 
@@ -2825,7 +2835,7 @@ msgstr ""
 msgid "Unsupported certificate purpose"
 msgstr ""
 
-#: src/dialogs/save/save.c:163
+#: src/dialogs/save/save.c:151
 msgid "Untitled document"
 msgstr ""
 
@@ -2850,19 +2860,19 @@ msgstr ""
 msgid "Version %s-%s"
 msgstr ""
 
-#: src/core/ft.c:538
+#: src/core/ft/ft.c:538
 msgid "Waiting for GET response"
 msgstr ""
 
-#: src/core/ft.c:540
+#: src/core/ft/ft.c:540
 msgid "Waiting for PUT response"
 msgstr ""
 
-#: dialog.c:65 src/dialogs/save/save.c:72
+#: dialog.c:65 src/dialogs/tools.c:138
 msgid "Western Europe (ISO 8859-1)"
 msgstr ""
 
-#: colors.c:501 src/dialogs/colors.c:297
+#: colors.c:501 src/dialogs/colors.c:298
 msgid "White"
 msgstr ""
 
@@ -2870,8 +2880,13 @@ msgstr ""
 msgid "Window"
 msgstr ""
 
-#: dialog.c:66 src/dialogs/save/save.c:73
+#: dialog.c:66 src/dialogs/tools.c:139
 msgid "Windows Western languages (CP1252)"
+msgstr ""
+
+#: src/core/connect.c:162
+#, c-format
+msgid "Windows error was \"%s\" (%u)"
 msgstr ""
 
 #: src/terminal/oia.c:432 src/terminal/oia.c:456 src/terminal/oia.c:460
@@ -2924,7 +2939,7 @@ msgstr ""
 msgid "XML file"
 msgstr ""
 
-#: colors.c:500 src/dialogs/colors.c:296
+#: colors.c:500 src/dialogs/colors.c:297
 msgid "Yellow"
 msgstr ""
 
@@ -2932,60 +2947,60 @@ msgstr ""
 msgid "You can't add more than one acitivity with the same files."
 msgstr ""
 
-#: src/core/ftmessages.c:74 src/filetransfer/v3270ftprogress.c:88
+#: src/core/ft/ftmessages.c:74 src/filetransfer/v3270ftprogress.c:88
 msgid ""
 "You did not enter the required parameters after a SEND or RECEIVE command."
 msgstr ""
 
-#: src/core/ftmessages.c:195 src/filetransfer/v3270ftprogress.c:192
+#: src/core/ft/ftmessages.c:195 src/filetransfer/v3270ftprogress.c:192
 msgid "You did not specify an existing CMS file for RECEIVE."
 msgstr ""
 
-#: src/core/ftmessages.c:95 src/filetransfer/v3270ftprogress.c:106
+#: src/core/ft/ftmessages.c:95 src/filetransfer/v3270ftprogress.c:106
 msgid ""
 "You need 30 KB of main storage (not disk space) on the host for the file "
 "transfer, in addition to the host requirement."
 msgstr ""
 
-#: src/core/ftmessages.c:174 src/filetransfer/v3270ftprogress.c:174
+#: src/core/ft/ftmessages.c:174 src/filetransfer/v3270ftprogress.c:174
 msgid ""
 "You selected an option that can only be used if SPACE is also specified."
 msgstr ""
 
-#: src/core/ftmessages.c:153 src/filetransfer/v3270ftprogress.c:156
+#: src/core/ft/ftmessages.c:153 src/filetransfer/v3270ftprogress.c:156
 msgid ""
 "You selected an option that is either not recognized, is specified as a "
 "positional keyword, or has an associated value that is incorrect."
 msgstr ""
 
-#: src/core/ftmessages.c:181 src/filetransfer/v3270ftprogress.c:180
+#: src/core/ft/ftmessages.c:181 src/filetransfer/v3270ftprogress.c:180
 msgid ""
 "You selected an option that is invalid with a host-partitioned data set."
 msgstr ""
 
-#: src/core/ftmessages.c:167 src/filetransfer/v3270ftprogress.c:168
+#: src/core/ft/ftmessages.c:167 src/filetransfer/v3270ftprogress.c:168
 msgid ""
 "You selected an option that is not valid with APPEND, but otherwise may be "
 "used."
 msgstr ""
 
-#: src/core/ftmessages.c:160 src/filetransfer/v3270ftprogress.c:162
+#: src/core/ft/ftmessages.c:160 src/filetransfer/v3270ftprogress.c:162
 msgid ""
 "You selected an option that is not valid with RECEIVE, but can be used with "
 "SEND."
 msgstr ""
 
-#: src/core/ftmessages.c:202 src/filetransfer/v3270ftprogress.c:198
+#: src/core/ft/ftmessages.c:202 src/filetransfer/v3270ftprogress.c:198
 msgid ""
 "You specified a CMS file mode for the SEND key that does not allow write "
 "access."
 msgstr ""
 
-#: src/core/ftmessages.c:209 src/filetransfer/v3270ftprogress.c:204
+#: src/core/ft/ftmessages.c:209 src/filetransfer/v3270ftprogress.c:204
 msgid "You specified a CMS file mode that is not in the CMS search order."
 msgstr ""
 
-#: src/core/ftmessages.c:139 src/filetransfer/v3270ftprogress.c:144
+#: src/core/ft/ftmessages.c:139 src/filetransfer/v3270ftprogress.c:144
 msgid "You specified an option that is invalid."
 msgstr ""
 
@@ -2997,8 +3012,8 @@ msgstr ""
 #: src/dialogs/settingsdialog.c:410 src/dialogs/settingsdialog.c:429
 #: src/dialogs/commondialog.c:94 src/dialogs/commondialog.c:108
 #: src/dialogs/commondialog.c:125 src/dialogs/linux/select.c:49
-#: src/dialogs/linux/select.c:93 src/dialogs/save/save.c:307
-#: src/dialogs/save/save.c:326
+#: src/dialogs/linux/select.c:93 src/dialogs/save/save.c:266
+#: src/dialogs/save/save.c:285
 msgid "_Cancel"
 msgstr ""
 
@@ -3007,7 +3022,7 @@ msgstr ""
 msgid "_Close"
 msgstr ""
 
-#: src/dialogs/hostselect.c:54
+#: src/dialogs/hostselect.c:55
 msgid "_Color table"
 msgstr ""
 
@@ -3027,15 +3042,15 @@ msgstr ""
 msgid "_File"
 msgstr ""
 
-#: src/dialogs/save/save.c:203
+#: src/dialogs/save/save.c:191
 msgid "_Filename"
 msgstr ""
 
-#: print.c:421 src/dialogs/print/print.c:87
+#: src/dialogs/print/settings.c:77
 msgid "_Font:"
 msgstr ""
 
-#: src/dialogs/hostselect.c:128
+#: src/dialogs/hostselect.c:129
 msgid "_Host"
 msgstr ""
 
@@ -3063,16 +3078,16 @@ msgstr ""
 msgid "_Remote file"
 msgstr ""
 
-#: src/trace/widget.c:449 src/dialogs/save/save.c:312
-#: src/dialogs/save/save.c:327
+#: src/trace/widget.c:449 src/dialogs/save/save.c:271
+#: src/dialogs/save/save.c:286
 msgid "_Save"
 msgstr ""
 
-#: src/dialogs/hostselect.c:162
+#: src/dialogs/hostselect.c:163
 msgid "_Secure connection."
 msgstr ""
 
-#: src/dialogs/hostselect.c:129
+#: src/dialogs/hostselect.c:130
 msgid "_Service"
 msgstr ""
 
