@@ -29,6 +29,7 @@
 
  #include "private.h"
  #include <lib3270/charset.h>
+ #include <lib3270/toggle.h>
 
 #ifdef _WIN32
 	BOOL WINAPI DllMain(HANDLE hinst, DWORD dwcallpurpose, LPVOID lpvResvd);

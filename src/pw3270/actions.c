@@ -40,6 +40,7 @@
  #include <lib3270/selection.h>
  #include <lib3270/trace.h>
  #include <lib3270/log.h>
+ #include <lib3270/toggle.h>
  #include <stdlib.h>
 
  #if GTK_CHECK_VERSION(3,0,0)

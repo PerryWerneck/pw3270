@@ -34,6 +34,7 @@
 #include <lib3270/popup.h>
 #include <lib3270/actions.h>
 #include <lib3270/trace.h>
+#include <lib3270/toggle.h>
 #include <v3270/trace.h>
 
 /*--[ Widget definition ]----------------------------------------------------------------------------*/
