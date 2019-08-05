@@ -106,6 +106,18 @@ static gchar * enum_to_string(GType type, guint enum_value)
 	GtkPageSetup 		* setup 	= gtk_page_setup_new();
     GtkPaperSize        * papersize = NULL;
 
+ 	// Load settings.
+ 	{
+		g_autofree gchar * font_family	= get_string_from_config("print",FONT_CONFIG,DEFAULT_FONT);
+		if(font_family && *font_family)
+			v3270_print_operation_set_font_family(operation,font_family);
+
+		g_autofree gchar * color_scheme	= get_string_from_config("print","colors","");
+		if(color_scheme && *color_scheme)
+			v3270_print_operation_set_color_scheme(operation,color_scheme);
+ 	}
+
+
 #ifdef ENABLE_WINDOWS_REGISTRY
 
 	HKEY registry;
