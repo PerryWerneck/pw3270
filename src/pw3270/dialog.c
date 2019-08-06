@@ -32,7 +32,9 @@
  #include <config.h>
  #include "private.h"
  #include <v3270.h>
+ #include <v3270/dialogs.h>
 
+ /*
  #ifdef _WIN32
 	#include <gdk/gdkwin32.h>
 
@@ -46,14 +48,18 @@
 
 
  #endif // _WIN32
+ */
 
+ /*
  #if defined(HAVE_LIBSSL)
 	#include <openssl/ssl.h>
 	#include <openssl/err.h>
  #endif
+ */
 
 /*--[ Globals ]--------------------------------------------------------------------------------------*/
 
+/*
  static const struct _charset
  {
 	const gchar *name;
@@ -67,10 +73,11 @@
 
 	{ NULL, NULL }
  };
-
+*/
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
+/*
  static void charset_changed(GtkComboBox *widget,gchar **encoding)
  {
  	gchar *new_encoding = NULL;
@@ -101,6 +108,9 @@
 
 	*encoding = new_encoding;
  }
+*/
+
+ /*
  static void add_option_menus(GtkWidget *widget, GtkAction *action, gchar **encoding)
  {
 #if GTK_CHECK_VERSION(3,0,0)
@@ -184,6 +194,7 @@
 	gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(widget),box);
 
  }
+ */
 
  void save_all_action(GtkAction *action, GtkWidget *widget)
  {
@@ -200,6 +211,7 @@
 	v3270_save_copy(widget,g_object_get_data(G_OBJECT(action),"filename"),NULL);
  }
 
+ /*
  static void paste_filename(GtkWidget *widget, const gchar *filename, const gchar *encoding)
  {
 	GError *error = NULL;
@@ -235,9 +247,22 @@
 	}
 
  }
-
+ */
  void paste_file_action(GtkAction *action, GtkWidget *widget)
  {
+ 	const gchar * user_title = g_object_get_data(G_OBJECT(action),"title");
+
+ 	GtkWidget * dialog = v3270_load_dialog_new(widget,g_object_get_data(G_OBJECT(action),"filename"));
+
+ 	if(user_title)
+		gtk_window_set_title(GTK_WINDOW(dialog),user_title);
+
+	gtk_widget_show_all(dialog);
+	v3270_load_dialog_run(dialog);
+
+	gtk_widget_destroy(dialog);
+
+ 	/*
  	const gchar * user_title	= g_object_get_data(G_OBJECT(action),"title");
  	const gchar * filename		= g_object_get_data(G_OBJECT(action),"filename");
  	gchar 		* encattr		= NULL;
@@ -289,6 +314,7 @@
 
 	if(encattr)
 		g_free(encattr);
+	*/
  }
 
  G_GNUC_INTERNAL void about_dialog_action(GtkAction *action, GtkWidget *widget)
@@ -366,9 +392,14 @@
 	gtk_about_dialog_set_authors(dialog,authors);
 	gtk_about_dialog_set_translator_credits(dialog,_("translator-credits"));
 
+	g_signal_connect(dialog,"close",G_CALLBACK(gtk_widget_destroy),NULL);
+	g_signal_connect(dialog,"response",G_CALLBACK(gtk_widget_destroy),NULL);
 	gtk_widget_show_all(GTK_WIDGET(dialog));
+
+	/*
 	gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(GTK_WIDGET(dialog));
+	*/
 
  }
 

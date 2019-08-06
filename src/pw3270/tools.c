@@ -312,8 +312,14 @@ LIB3270_EXPORT void pw3270_set_host_charset(GtkWidget *widget, const gchar *name
 	gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),_( "There's no available settings for charset \"%s\"" ),name);
 	gtk_window_set_title(GTK_WINDOW(dialog),_( "Charset error" ));
 
+	g_signal_connect(dialog,"close",G_CALLBACK(gtk_widget_destroy),NULL);
+	g_signal_connect(dialog,"response",G_CALLBACK(gtk_widget_destroy),NULL);
+	gtk_widget_show_all(dialog);
+
+	/*
 	gtk_dialog_run(GTK_DIALOG (dialog));
 	gtk_widget_destroy(dialog);
+	*/
 
 }
 

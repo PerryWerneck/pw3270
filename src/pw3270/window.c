@@ -417,10 +417,15 @@ static GtkWidget * trace_window = NULL;
 
 	gtk_message_dialog_format_secondary_markup(GTK_MESSAGE_DIALOG(popup),_( "The known types are %s" ),text);
 
+
+	g_signal_connect(popup,"close",G_CALLBACK(gtk_widget_destroy),NULL);
+	g_signal_connect(popup,"response",G_CALLBACK(gtk_widget_destroy),NULL);
+	gtk_widget_show_all(popup);
+
+	/*
 	gtk_dialog_run(GTK_DIALOG(popup));
-
 	gtk_widget_destroy(popup);
-
+	*/
 
  }
 
