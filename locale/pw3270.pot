@@ -9,7 +9,7 @@ msgstr ""
 "#-#-#-#-#  pw3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-05 16:48-0300\n"
+"POT-Creation-Date: 2019-08-06 14:43-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "#-#-#-#-#  lib3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-05 17:31+0000\n"
+"POT-Creation-Date: 2019-08-06 16:48+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,7 +31,7 @@ msgstr ""
 "#-#-#-#-#  libv3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-05 19:40+0000\n"
+"POT-Creation-Date: 2019-08-06 16:50+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -62,7 +62,7 @@ msgstr ""
 msgid "%s"
 msgstr ""
 
-#: src/core/connect.c:174
+#: src/core/connect.c:170
 #, c-format
 msgid "%s (SSL error %d)"
 msgstr ""
@@ -159,7 +159,7 @@ msgstr ""
 msgid "3270 screen"
 msgstr ""
 
-#: dialog.c:322
+#: dialog.c:348
 #, c-format
 msgid "3270 terminal emulator for GTK %d.%d"
 msgstr ""
@@ -200,7 +200,7 @@ msgid ""
 "Disconnected from host"
 msgstr ""
 
-#: src/dialogs/print/print.c:108
+#: src/dialogs/print/print.c:100
 msgid "<b>Text options</b>"
 msgstr ""
 
@@ -265,7 +265,7 @@ msgid "Alert sound"
 msgstr ""
 
 #: src/filetransfer/v3270ft.c:310 src/filetransfer/settings.c:212
-#: src/dialogs/save/save.c:117
+#: src/dialogs/load.c:96 src/dialogs/save/save.c:117
 msgid "All files"
 msgstr ""
 
@@ -388,7 +388,7 @@ msgstr ""
 msgid "Bold"
 msgstr ""
 
-#: dialog.c:365
+#: dialog.c:391
 msgid "Brazilian Public Software Portal"
 msgstr ""
 
@@ -420,12 +420,8 @@ msgstr ""
 msgid "CRL signature failure"
 msgstr ""
 
-#: src/dialogs/save/save.c:215
+#: src/dialogs/load.c:180 src/dialogs/save/save.c:215
 msgid "C_haracter Coding"
-msgstr ""
-
-#: dialog.c:121
-msgid "C_haracter Coding:"
 msgstr ""
 
 #: src/dialogs/print/settings.c:78
@@ -464,11 +460,6 @@ msgstr ""
 msgid "Can't connect to %s:%s"
 msgstr ""
 
-#: src/selection/text.c:150
-#, c-format
-msgid "Can't convert line %lu from %s to %s"
-msgstr ""
-
 #: src/ssl/linux/getcrl.c:87
 msgid "Can't decode CRL"
 msgstr ""
@@ -497,13 +488,13 @@ msgstr ""
 msgid "Can't initialize curl operation"
 msgstr ""
 
-#: parsefile.c:328 src/filetransfer/load.c:270
-#, c-format
-msgid "Can't load %s"
+#: src/core/session.c:223
+msgid "Can't load"
 msgstr ""
 
-#: dialog.c:221
-msgid "Can't load file"
+#: parsefile.c:328 src/filetransfer/load.c:271
+#, c-format
+msgid "Can't load %s"
 msgstr ""
 
 #: plugin.c:95
@@ -513,6 +504,11 @@ msgstr ""
 #: plugin.c:93
 #, c-format
 msgid "Can't load plugin %s"
+msgstr ""
+
+#: src/dialogs/load.c:323
+#, c-format
+msgid "Can't open %s"
 msgstr ""
 
 #: src/ssl/linux/getcrl.c:56 src/ssl/linux/getcrl.c:75
@@ -537,11 +533,11 @@ msgstr ""
 msgid "Can't parse UI description files in %s"
 msgstr ""
 
-#: src/terminal/charset.c:364
+#: src/terminal/charset.c:365
 msgid "Can't parse cgcsgid value"
 msgstr ""
 
-#: src/terminal/charset.c:284
+#: src/terminal/charset.c:285
 msgid "Can't parse character value"
 msgstr ""
 
@@ -551,6 +547,10 @@ msgstr ""
 
 #: src/selection/linux/paste.c:78 src/selection/linux/paste.c:118
 msgid "Can't paste"
+msgstr ""
+
+#: src/selection/text.c:200
+msgid "Can't paste text"
 msgstr ""
 
 #: src/core/session.c:209
@@ -567,7 +567,7 @@ msgstr ""
 msgid "Can't recognize \"%s\" as a valid host type"
 msgstr ""
 
-#: src/core/session.c:217
+#: src/core/session.c:216
 msgid "Can't save"
 msgstr ""
 
@@ -576,14 +576,10 @@ msgstr ""
 msgid "Can't save \"%s\": %s"
 msgstr ""
 
-#: src/filetransfer/save.c:116 src/filetransfer/activitylist.c:437
-#: src/trace/trace.c:452 src/dialogs/transfer.c:96 src/dialogs/save/save.c:454
+#: src/filetransfer/save.c:116 src/filetransfer/activitylist.c:438
+#: src/trace/trace.c:451 src/dialogs/transfer.c:97 src/dialogs/save/save.c:454
 #, c-format
 msgid "Can't save %s"
-msgstr ""
-
-#: src/trace/trace.c:456
-msgid "Can't save file"
 msgstr ""
 
 #: window.c:177
@@ -631,8 +627,9 @@ msgstr ""
 msgid "Can't verify."
 msgstr ""
 
-#: src/terminal/callbacks.c:442 src/filetransfer/v3270ftprogress.c:432
-#: src/filetransfer/transfer.c:89 src/dialogs/save/save.c:138
+#: src/terminal/callbacks.c:457 src/filetransfer/v3270ftprogress.c:432
+#: src/filetransfer/transfer.c:89 src/dialogs/load.c:113
+#: src/dialogs/save/save.c:138
 msgid "Cancel"
 msgstr ""
 
@@ -686,7 +683,7 @@ msgstr ""
 msgid "Certificate signature failure"
 msgstr ""
 
-#: tools.c:313 src/selection/text.c:152
+#: tools.c:313
 msgid "Charset error"
 msgstr ""
 
@@ -702,8 +699,12 @@ msgstr ""
 msgid "Clear"
 msgstr ""
 
-#: src/dialogs/save/save.c:267
+#: src/dialogs/load.c:205 src/dialogs/save/save.c:267
 msgid "Click to cancel operation"
+msgstr ""
+
+#: src/dialogs/load.c:210
+msgid "Click to load file"
 msgstr ""
 
 #: src/dialogs/save/save.c:272
@@ -734,7 +735,7 @@ msgstr ""
 msgid "Command incomplete: file transfer canceled"
 msgstr ""
 
-#: src/trace/trace.c:303
+#: src/trace/trace.c:304
 msgid "Command to execute"
 msgstr ""
 
@@ -763,7 +764,7 @@ msgstr ""
 msgid "Connection state"
 msgstr ""
 
-#: src/terminal/callbacks.c:443
+#: src/terminal/callbacks.c:458
 msgid "Continue"
 msgstr ""
 
@@ -796,7 +797,7 @@ msgstr ""
 msgid "Cross hair cursor"
 msgstr ""
 
-#: dialog.c:138 src/dialogs/tools.c:148
+#: src/dialogs/tools.c:148
 #, c-format
 msgid "Current (%s)"
 msgstr ""
@@ -950,7 +951,6 @@ msgid "Erase to end of line"
 msgstr ""
 
 #: src/core/util.c:590 src/dialogs/popups.c:56 src/dialogs/popups.c:91
-#: src/dialogs/print/print.c:61
 msgid "Error"
 msgstr ""
 
@@ -966,11 +966,6 @@ msgstr ""
 
 #: src/core/ft/ftmessages.c:45
 msgid "Error in file transfer: file transfer canceled"
-msgstr ""
-
-#: dialog.c:219
-#, c-format
-msgid "Error loading %s"
 msgstr ""
 
 #: src/ssl/linux/curl.c:196 src/ssl/linux/curl.c:234 src/ssl/linux/curl.c:250
@@ -1255,15 +1250,15 @@ msgstr ""
 msgid "Invalid CA certificate"
 msgstr ""
 
-#: src/terminal/callbacks.c:470
+#: src/terminal/callbacks.c:485
 msgid "Invalid callback table, possible version mismatch in lib3270"
 msgstr ""
 
-#: src/terminal/charset.c:359
+#: src/terminal/charset.c:360
 msgid "Invalid cgcsgid value"
 msgstr ""
 
-#: src/terminal/charset.c:299
+#: src/terminal/charset.c:300
 msgid "Invalid character value"
 msgstr ""
 
@@ -1287,7 +1282,7 @@ msgstr ""
 msgid "Invalid option xxxxxxxx: file transfer canceled"
 msgstr ""
 
-#: src/terminal/charset.c:319
+#: src/terminal/charset.c:320
 msgid "Invalid remap scope"
 msgstr ""
 
@@ -1335,11 +1330,11 @@ msgstr ""
 msgid "Latest program message"
 msgstr ""
 
-#: src/filetransfer/v3270ft.c:198 src/filetransfer/activitylist.c:383
+#: src/filetransfer/v3270ft.c:198 src/filetransfer/activitylist.c:384
 msgid "Load"
 msgstr ""
 
-#: src/filetransfer/v3270ft.c:197 src/filetransfer/activitylist.c:382
+#: src/filetransfer/v3270ft.c:197 src/filetransfer/activitylist.c:383
 msgid "Load queue from file"
 msgstr ""
 
@@ -1348,7 +1343,7 @@ msgstr ""
 msgid "Loading %s"
 msgstr ""
 
-#: src/filetransfer/activitylist.c:251
+#: src/filetransfer/activitylist.c:252
 msgid "Local file"
 msgstr ""
 
@@ -1364,7 +1359,7 @@ msgstr ""
 msgid "Misc colors"
 msgstr ""
 
-#: window.c:525
+#: window.c:530
 #, c-format
 msgid "Model %d (%s)"
 msgstr ""
@@ -1484,14 +1479,20 @@ msgstr ""
 msgid "Only one of TRACKS, CYLINDERS, AVBLOCK allowed: file transfer canceled"
 msgstr ""
 
-#: print.c:91 print.c:112 src/filetransfer/save.c:118
-#: src/filetransfer/load.c:272 src/filetransfer/activitylist.c:440
-#: src/dialogs/transfer.c:99 src/dialogs/save/save.c:457
-#: src/dialogs/save/convenience.c:65 src/dialogs/save/convenience.c:94
+#: src/dialogs/load.c:93 src/dialogs/load.c:114
+msgid "Open"
+msgstr ""
+
+#: src/dialogs/popups.c:123
+msgid "Operation failed"
+msgstr ""
+
+#: print.c:91 print.c:112 src/dialogs/save/convenience.c:65
+#: src/dialogs/save/convenience.c:93
 msgid "Operation has failed"
 msgstr ""
 
-#: src/dialogs/print/print.c:167
+#: src/dialogs/print/print.c:159
 msgid "Options"
 msgstr ""
 
@@ -1632,16 +1633,16 @@ msgstr ""
 msgid "Paste"
 msgstr ""
 
+#: src/dialogs/load.c:248
+msgid "Paste from file"
+msgstr ""
+
 #: 00default.xml:64
 msgid "Paste next"
 msgstr ""
 
 #: 00default.xml:67
 msgid "Paste text file"
-msgstr ""
-
-#: dialog.c:259
-msgid "Paste text file contents"
 msgstr ""
 
 #: src/core/toggles.c:136 src/core/toggles.c:137 00default.xml:120
@@ -1710,7 +1711,7 @@ msgstr ""
 msgid "Print copy"
 msgstr ""
 
-#: src/dialogs/print/print.c:56
+#: src/dialogs/print/print.c:57
 msgid "Print operation failed"
 msgstr ""
 
@@ -1830,7 +1831,7 @@ msgstr ""
 msgid "Receive text file"
 msgstr ""
 
-#: src/filetransfer/v3270ftprogress.c:738 src/dialogs/transfer.c:137
+#: src/filetransfer/v3270ftprogress.c:738 src/dialogs/transfer.c:132
 msgid "Receiving file"
 msgstr ""
 
@@ -1850,7 +1851,7 @@ msgstr ""
 msgid "Reload buffer contents"
 msgstr ""
 
-#: src/terminal/charset.c:468
+#: src/terminal/charset.c:463
 msgid "Remap Failed"
 msgstr ""
 
@@ -1864,7 +1865,7 @@ msgid ""
 "character set and encoding and the host's EBCDIC code page."
 msgstr ""
 
-#: src/filetransfer/activitylist.c:260
+#: src/filetransfer/activitylist.c:261
 msgid "Remote file"
 msgstr ""
 
@@ -1945,8 +1946,8 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/filetransfer/v3270ft.c:217 src/filetransfer/activitylist.c:460
-#: src/trace/trace.c:478 src/dialogs/transfer.c:72
+#: src/filetransfer/v3270ft.c:217 src/filetransfer/activitylist.c:455
+#: src/trace/trace.c:470 src/dialogs/transfer.c:73
 msgid "Save"
 msgstr ""
 
@@ -1958,7 +1959,7 @@ msgstr ""
 msgid "Save copy"
 msgstr ""
 
-#: src/filetransfer/v3270ft.c:216 src/filetransfer/activitylist.c:459
+#: src/filetransfer/v3270ft.c:216 src/filetransfer/activitylist.c:454
 msgid "Save queue to file"
 msgstr ""
 
@@ -1978,15 +1979,15 @@ msgstr ""
 msgid "Save terminal contents"
 msgstr ""
 
-#: src/trace/trace.c:477
+#: src/trace/trace.c:469
 msgid "Save trace to file"
 msgstr ""
 
-#: src/dialogs/transfer.c:71
+#: src/dialogs/transfer.c:72
 msgid "Save transfer activity to file"
 msgstr ""
 
-#: src/dialogs/transfer.c:202
+#: src/dialogs/transfer.c:197
 msgid "Save transfer information to file"
 msgstr ""
 
@@ -2084,6 +2085,7 @@ msgid "Select destination file"
 msgstr ""
 
 #: src/filetransfer/v3270ft.c:577 src/filetransfer/settings.c:470
+#: src/dialogs/load.c:92 src/dialogs/load.c:110 src/dialogs/load.c:170
 #: src/dialogs/save/save.c:204
 msgid "Select file"
 msgstr ""
@@ -2144,7 +2146,7 @@ msgstr ""
 msgid "Send/Receive"
 msgstr ""
 
-#: src/filetransfer/v3270ftprogress.c:738 src/dialogs/transfer.c:137
+#: src/filetransfer/v3270ftprogress.c:738 src/dialogs/transfer.c:132
 msgid "Sending file"
 msgstr ""
 
@@ -2282,7 +2284,7 @@ msgstr ""
 msgid "Starting"
 msgstr ""
 
-#: src/filetransfer/worker.c:314 src/dialogs/transfer.c:155
+#: src/filetransfer/worker.c:314 src/dialogs/transfer.c:150
 msgid "Starting transfer"
 msgstr ""
 
@@ -2310,7 +2312,7 @@ msgstr ""
 msgid "Terminal colors"
 msgstr ""
 
-#: src/trace/trace.c:481
+#: src/trace/trace.c:473
 msgid "Text file"
 msgstr ""
 
@@ -2468,7 +2470,7 @@ msgstr ""
 msgid "The delay between the host unlocking the keyboard and the actual unlock"
 msgstr ""
 
-#: src/terminal/callbacks.c:437
+#: src/terminal/callbacks.c:452
 #, c-format
 msgid "The error code was %d"
 msgstr ""
@@ -2587,7 +2589,7 @@ msgstr ""
 msgid "This is a host program error."
 msgstr ""
 
-#: dialog.c:306
+#: dialog.c:332
 msgid ""
 "This program is free software; you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -2609,7 +2611,7 @@ msgstr ""
 msgid "This program requires GTK version %d.%d.%d"
 msgstr ""
 
-#: src/terminal/charset.c:374
+#: src/terminal/charset.c:375
 msgid "Too many remaps"
 msgstr ""
 
@@ -2716,7 +2718,7 @@ msgstr ""
 msgid "URL of the current host"
 msgstr ""
 
-#: dialog.c:64 src/dialogs/tools.c:137
+#: src/dialogs/tools.c:137
 msgid "UTF-8"
 msgstr ""
 
@@ -2756,6 +2758,10 @@ msgstr ""
 msgid "Unable to get local issuer certificate"
 msgstr ""
 
+#: src/core/session.c:223
+msgid "Unable to load from file"
+msgstr ""
+
 #: src/selection/linux/paste.c:114
 msgid "Unable to paste formatted data"
 msgstr ""
@@ -2768,7 +2774,7 @@ msgstr ""
 msgid "Unable to print"
 msgstr ""
 
-#: src/core/session.c:217
+#: src/core/session.c:216
 msgid "Unable to save"
 msgstr ""
 
@@ -2909,7 +2915,7 @@ msgstr ""
 msgid "Variable"
 msgstr ""
 
-#: dialog.c:326 dialog.c:328
+#: dialog.c:352 dialog.c:354
 #, c-format
 msgid "Version %s-%s"
 msgstr ""
@@ -2922,7 +2928,7 @@ msgstr ""
 msgid "Waiting for PUT response"
 msgstr ""
 
-#: dialog.c:65 src/dialogs/tools.c:138
+#: src/dialogs/tools.c:138
 msgid "Western Europe (ISO 8859-1)"
 msgstr ""
 
@@ -2934,11 +2940,11 @@ msgstr ""
 msgid "Window"
 msgstr ""
 
-#: dialog.c:66 src/dialogs/tools.c:139
+#: src/dialogs/tools.c:139
 msgid "Windows Western languages (CP1252)"
 msgstr ""
 
-#: src/core/connect.c:163
+#: src/core/connect.c:161
 #, c-format
 msgid "Windows error was \"%s\" (%u)"
 msgstr ""
@@ -2992,8 +2998,8 @@ msgid "X Wait"
 msgstr ""
 
 #: src/filetransfer/v3270ft.c:200 src/filetransfer/v3270ft.c:220
-#: src/filetransfer/activitylist.c:385 src/filetransfer/activitylist.c:463
-#: src/dialogs/transfer.c:75
+#: src/filetransfer/activitylist.c:386 src/filetransfer/activitylist.c:458
+#: src/dialogs/transfer.c:76
 msgid "XML file"
 msgstr ""
 
@@ -3068,15 +3074,15 @@ msgstr ""
 
 #: src/selection/linux/paste.c:82 src/selection/linux/paste.c:122
 #: src/dialogs/settingsdialog.c:410 src/dialogs/settingsdialog.c:429
-#: src/dialogs/commondialog.c:94 src/dialogs/commondialog.c:108
-#: src/dialogs/commondialog.c:125 src/dialogs/linux/select.c:49
-#: src/dialogs/linux/select.c:93 src/dialogs/save/save.c:266
-#: src/dialogs/save/save.c:285
+#: src/dialogs/load.c:204 src/dialogs/load.c:223 src/dialogs/commondialog.c:94
+#: src/dialogs/commondialog.c:108 src/dialogs/commondialog.c:125
+#: src/dialogs/linux/select.c:49 src/dialogs/linux/select.c:93
+#: src/dialogs/save/save.c:266 src/dialogs/save/save.c:285
 msgid "_Cancel"
 msgstr ""
 
-#: src/trace/tracewindow.c:125 src/dialogs/transfer.c:174
-#: src/dialogs/transfer.c:194 src/dialogs/security.c:203
+#: src/trace/tracewindow.c:125 src/dialogs/transfer.c:169
+#: src/dialogs/transfer.c:189 src/dialogs/security.c:203
 msgid "_Close"
 msgstr ""
 
@@ -3100,7 +3106,7 @@ msgstr ""
 msgid "_File"
 msgstr ""
 
-#: src/dialogs/save/save.c:191
+#: src/dialogs/load.c:162 src/dialogs/save/save.c:191
 msgid "_Filename"
 msgstr ""
 
@@ -3110,6 +3116,10 @@ msgstr ""
 
 #: src/dialogs/hostselect.c:129
 msgid "_Host"
+msgstr ""
+
+#: src/dialogs/load.c:209 src/dialogs/load.c:224
+msgid "_Load"
 msgstr ""
 
 #: src/filetransfer/v3270ft.c:341
@@ -3178,7 +3188,7 @@ msgstr ""
 msgid "an action attribute"
 msgstr ""
 
-#: src/core/session.c:420
+#: src/core/session.c:425
 msgid "bracket"
 msgstr ""
 
@@ -3210,6 +3220,6 @@ msgstr ""
 msgid "setsockopt(SO_OOBINLINE) has failed"
 msgstr ""
 
-#: dialog.c:367
+#: dialog.c:393
 msgid "translator-credits"
 msgstr ""
