@@ -24,7 +24,7 @@
 # erico.mendonca@gmail.com	(Erico Mascarenhas de Mendonça)
 #
 
-LIBNAME=@DLLPREFIX@@PACKAGE_TARNAME@@DLLEXT@
+LIBNAME=@DLLPREFIX@@PACKAGE_TARNAME@@LIBEXT@
 
 LIB_SOURCES=\
 	window.c \
@@ -229,8 +229,8 @@ $(BASEDIR)/.pot/pw3270.pot: \
 	@$(MSGCAT) --sort-output $^ > $@
 
 $(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@: \
-	$(BINRLS)/$(LIBNAME) \
-	$(foreach SRC, $(basename $(APP_SOURCES)), $(OBJRLS)/$(SRC).o)
+	$(foreach SRC, $(basename $(APP_SOURCES)), $(OBJRLS)/$(SRC).o) \
+	$(BINRLS)/$(LIBNAME)
 
 	@$(LD) \
 		$(LDFLAGS) \
@@ -238,26 +238,9 @@ $(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@: \
 		-o $@ \
 		$^ \
 		-L$(BINRLS) \
-		$(LIBS) \
-		-l@PACKAGE_TARNAME@
+		$(LIBS)
 
 $(BINRLS)/$(LIBNAME): \
-	$(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@
-
-	@echo $(basename $@) ...
-	@$(MKDIR) `dirname $@`
-	@rm -f $@
-	@$(LN_S) $^ $@
-
-$(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@: \
-	$(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@
-
-	@echo $(basename $@) ...
-	@$(MKDIR) `dirname $@`
-	@rm -f $@
-	@$(LN_S) $^ $@
-
-$(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@: \
 	$(foreach SRC, $(basename $(LIB_SOURCES)), $(OBJRLS)/$(SRC).o) \
 	$(foreach MOD, $(MODULES), $(BASEDIR)/.obj/Release/$(MOD).a)
 
@@ -276,8 +259,17 @@ install: \
 	@$(MKDIR) $(DESTDIR)$(libdir)
 
 	@$(INSTALL_PROGRAM) \
-				$(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@ \
-				$(DESTDIR)$(libdir)
+		$(BINRLS)/$(LIBNAME) \
+		$(DESTDIR)$(libdir)/@DLLPREFIX@@PACKAGE_TARNAME@@DLLEXT@.@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@
+
+
+	@$(LN_S) \
+		@DLLPREFIX@@PACKAGE_TARNAME@@DLLEXT@.@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@ \
+		$(DESTDIR)$(libdir)/@DLLPREFIX@@PACKAGE_TARNAME@@DLLEXT@.@PACKAGE_MAJOR_VERSION@
+
+	@$(LN_S) \
+		@DLLPREFIX@@PACKAGE_TARNAME@@DLLEXT@.@PACKAGE_MAJOR_VERSION@ \
+		$(DESTDIR)$(libdir)/@DLLPREFIX@@PACKAGE_TARNAME@@DLLEXT@
 
 	@$(MKDIR) $(DESTDIR)$(bindir)
 
@@ -299,8 +291,8 @@ Debug: \
 	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@
 
 $(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@: \
-	$(BINDBG)/$(LIBNAME) \
-	$(foreach SRC, $(basename $(APP_SOURCES)), $(OBJDBG)/$(SRC).o)
+	$(foreach SRC, $(basename $(APP_SOURCES)), $(OBJDBG)/$(SRC).o) \
+	$(BINDBG)/$(LIBNAME)
 
 	@$(LD) \
 		$(LDFLAGS) \
@@ -308,26 +300,9 @@ $(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@: \
 		-o $@ \
 		$^ \
 		-L$(BINDBG) \
-		$(LIBS) \
-		-l@PACKAGE_TARNAME@
+		$(LIBS)
 
 $(BINDBG)/$(LIBNAME): \
-	$(BINDBG)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@
-
-	@echo $(basename $@) ...
-	@$(MKDIR) `dirname $@`
-	@rm -f $@
-	@$(LN_S) $^ $@
-
-$(BINDBG)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@: \
-	$(BINDBG)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@
-
-	@echo $(basename $@) ...
-	@$(MKDIR) `dirname $@`
-	@rm -f $@
-	@$(LN_S) $^ $@
-
-$(BINDBG)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@: \
 	$(foreach SRC, $(basename $(LIB_SOURCES)), $(OBJDBG)/$(SRC).o) \
 	$(foreach MOD, $(MODULES), $(BASEDIR)/.obj/Debug/$(MOD).a)
 
@@ -347,9 +322,8 @@ $(BINDBG)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@: \
 cleanDebug:
 
 	@rm -fr	$(OBJDBG) \
-			$(BINDBG)/$(LIBNAME) \
-			$(BINDBG)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@ \
-			$(BINDBG)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@
+		$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@ \
+		$(BINDBG)/$(LIBNAME)
 
 	@make -C uiparser cleanDebug
 	@make -C common cleanDebug
@@ -357,9 +331,8 @@ cleanDebug:
 cleanRelease:
 
 	@rm -fr	$(OBJRLS) \
-			$(BINRLS)/$(LIBNAME) \
-			$(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@ \
-			$(BINRLS)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@
+		$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ \
+		$(BINRLS)/$(LIBNAME)
 
 	@make -C uiparser cleanRelease
 	@make -C common cleanRelease

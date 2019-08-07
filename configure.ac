@@ -194,7 +194,6 @@ AC_ARG_WITH([release], [AS_HELP_STRING([--with-release], [Set release])], [ app_
 AC_ARG_WITH([session-name], [AS_HELP_STRING([--with-session-name], [Set default session name])], [ AC_DEFINE_UNQUOTED(DEFAULT_SESSION_NAME, $withval) ],[ AC_MSG_NOTICE([No default session name.]) ])
 AC_ARG_WITH([application-name], [AS_HELP_STRING([--with-application-name], [Set application name])], [ AC_DEFINE_UNQUOTED(APPLICATION_NAME, $withval) ],[ AC_MSG_NOTICE([No default application name.]) ])
 
-
 app_rls_major=$(echo $app_cv_release.0.0 | cut -d. -f1)
 app_rls_minor=$(echo $app_cv_release.0.0 | cut -d. -f2)
 
@@ -210,6 +209,20 @@ AC_ARG_WITH([source-locales], [AS_HELP_STRING([--with-source-locales], [Set path
 
 AC_DEFINE_UNQUOTED(LIBRARY_POT_FILES, $app_cv_source_locales)
 AC_SUBST(LIBRARY_POT_FILES,$app_cv_source_locales)
+
+case "$host" in
+	*-mingw32|*-pc-msys)
+		AC_SUBST(LIBEXT,.dll)
+		;;
+
+ 	s390x-*)
+		AC_SUBST(LIBEXT,.so)
+		;;
+
+ 	*)
+		AC_SUBST(LIBEXT,.so.$app_vrs_major.$app_vrs_minor)
+
+esac
 
 dnl ---------------------------------------------------------------------------
 dnl Check for libintl

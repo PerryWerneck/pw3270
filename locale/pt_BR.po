@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-06 14:43-0300\n"
+"POT-Creation-Date: 2019-08-07 16:02-0300\n"
 "PO-Revision-Date: 2019-08-06 14:45-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
@@ -558,8 +558,8 @@ msgstr "Não é possível salvar"
 msgid "Can't save \"%s\": %s"
 msgstr "Não foi possível salvar %s: %s"
 
-#: src/filetransfer/save.c:116 src/filetransfer/activitylist.c:438
-#: src/trace/trace.c:451 src/dialogs/transfer.c:97 src/dialogs/save/save.c:454
+#: src/filetransfer/save.c:117 src/filetransfer/activitylist.c:438
+#: src/trace/trace.c:473 src/dialogs/transfer.c:97 src/dialogs/save/save.c:454
 #, c-format
 msgid "Can't save %s"
 msgstr "Não foi possível salvar arquivo %s"
@@ -1972,7 +1972,7 @@ msgstr ""
 "%s"
 
 #: src/filetransfer/v3270ft.c:217 src/filetransfer/activitylist.c:455
-#: src/trace/trace.c:470 src/dialogs/transfer.c:73
+#: src/trace/trace.c:492 src/dialogs/transfer.c:73
 msgid "Save"
 msgstr "Salvar"
 
@@ -2004,7 +2004,7 @@ msgstr "Salvar área selecionada"
 msgid "Save terminal contents"
 msgstr "Salvar conteúdo da tela"
 
-#: src/trace/trace.c:469
+#: src/trace/trace.c:491
 msgid "Save trace to file"
 msgstr "Salvar trace para arquivo"
 
@@ -2349,7 +2349,7 @@ msgstr "Nome da sessão TN3270"
 msgid "Terminal colors"
 msgstr "Cores do terminal"
 
-#: src/trace/trace.c:473
+#: src/trace/trace.c:495
 msgid "Text file"
 msgstr "Arquivo texto"
 
