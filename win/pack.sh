@@ -410,7 +410,7 @@ do
 
 		CLEAR)
 			if [ -d ~/public_html/win/pw3270 ]; then
-				rm -fr ~/public_html/win/pw3270{x86_32,x86_64}
+				rm -fr ~/public_html/win/pw3270/{x86_32,x86_64}
 			fi
 			;;
 
@@ -426,8 +426,8 @@ do
 			fi
 
 
-			if [ -d ~/public_html/win/sisbb ]; then
-				echo "  --clear	Remove directories ~/public_html/win/pw3270{x86_32,x86_64}"
+			if [ -d ~/public_html/win/pw3270 ]; then
+				echo "  --clear	Remove directories ~/public_html/win/pw3270/{x86_32,x86_64}"
 			fi
 
 			echo ""
