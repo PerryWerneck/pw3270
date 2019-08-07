@@ -33,7 +33,8 @@ Cross-compiling on SuSE Linux (Native or WSL)
 
 1. First add the MinGW Repositories for your SuSE version from:
 
-	* https://build.opensuse.org/project/show/home:PerryWerneck:pw3270 
+	* https://build.opensuse.org/project/show/windows:mingw:win32
+	* https://build.opensuse.org/project/show/windows:mingw:win64
 
 2. Get pw3270 sources from git
 

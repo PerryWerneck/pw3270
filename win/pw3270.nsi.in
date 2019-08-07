@@ -73,8 +73,8 @@ SubSection "@PACKAGE@" SecMain
 		# Binary files
 		file "/oname=$INSTDIR\@PACKAGE@.exe"				"bin\@PACKAGE@.exe"
 		file "/oname=$INSTDIR\@PACKAGE@.ico"				"@PACKAGE@.ico"
-		file "/oname=$INSTDIR\lib3270.dll.@PACKAGE_VERSION@"		"bin\lib3270.dll.@PACKAGE_VERSION@"
-		file "/oname=$INSTDIR\@PACKAGE@.dll.@PACKAGE_VERSION@"		"bin\@PACKAGE@.dll.@PACKAGE_VERSION@"
+		file "/oname=$INSTDIR\lib3270.dll"				"bin\lib3270.dll"
+		file "/oname=$INSTDIR\@PACKAGE@.dll"				"bin\@PACKAGE@.dll"
 
 		# Configuration files
 		file "/oname=$INSTDIR\@PACKAGE@-logo.png"			"@PACKAGE@-logo.png"

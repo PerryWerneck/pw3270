@@ -2,6 +2,7 @@
 
 PROJECTDIR=$(dirname $(dirname $(readlink -f ${0})))
 WORKDIR=$(mktemp -d)
+PUBLISH=0
 
 if [ -e /etc/os-release ]; then
 	. /etc/os-release
@@ -175,14 +176,7 @@ pack()
 	./configure \
 		--host=${host} \
 		--prefix=${prefix} \
-		--libdir=${prefix}/lib \
-		--enable-self-signed-cert-check \
-		--enable-ssl-crl-check \
-		--enable-crl-expiration-check \
-		--disable-ldap \
-		--enable-curl \
-	 	--with-default-crl-url="ldap://pkildap.bb.com.br:389/CN=CRL1,CN=AC%20Banco%20do%20Brasil%20-%20EI%20v1,OU=ICP-BB,O=Banco%20do%20Brasil%20S.A.,C=BR?certificaterevocationlist" \
-		--with-default-host="tn3270s://3270.df.bb:9023"
+		--libdir=${prefix}/lib
 
 	if [ "$?" != "0" ]; then
 		cleanup
@@ -384,15 +378,71 @@ pack()
 		fi
 	fi
 
-#	if [ ! -z ${WIN_PACKAGE_SERVER} ]; then
-#		scp *.exe ${WIN_PACKAGE_SERVER}/pw3270
-#		if [ "$?" != "0" ]; then
-#			cleanup
-#			exit -1
-#		fi
-#	fi
+	if [ "${PUBLISH}" == "1" ] && [ ! -z ${WIN_PACKAGE_SERVER} ]; then
+		scp *.exe ${WIN_PACKAGE_SERVER}/pw3270
+		if [ "$?" != "0" ]; then
+			cleanup
+			exit -1
+		fi
+	fi
 
 }
+
+#
+# Setup options
+#
+until [ -z "$1" ]
+do
+        if [ ${1:0:2} = '--' ]; then
+                tmp=${1:2}
+                parameter=${tmp%%=*}
+                parameter=$(echo $parameter | tr "[:lower:]" "[:upper:]")
+                value=${tmp##*=}
+
+                case "$parameter" in
+		NOPUBLISH)
+			PUBLISH=0
+			;;
+
+		PUBLISH)
+			PUBLISH=1
+			;;
+
+		CLEAR)
+			if [ -d ~/public_html/win/pw3270 ]; then
+				rm -fr ~/public_html/win/pw3270{x86_32,x86_64}
+			fi
+			;;
+
+		HELP)
+			echo "${0} [OPTIONS]"
+			echo ""
+			echo "Options:"
+			echo ""
+
+			if [ ! -z ${WIN_PACKAGE_SERVER} ]; then
+				echo "  --nopublish	Don't send packages to ${WIN_PACKAGE_SERVER}/pw3270"
+				echo "  --publish	Send packages to ${WIN_PACKAGE_SERVER}/pw3270"
+			fi
+
+
+			if [ -d ~/public_html/win/sisbb ]; then
+				echo "  --clear	Remove directories ~/public_html/win/pw3270{x86_32,x86_64}"
+			fi
+
+			echo ""
+			exit 0
+			
+			;;
+		
+		esac
+	fi
+
+	shift
+
+done
+
+
 
 #
 # Get sources from GIT
