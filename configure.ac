@@ -100,8 +100,11 @@ case "$host" in
 		CFLAGS="$CFLAGS -pthread -D_WIN32_WINNT=0x0600"
 		LIBS="$LIBS -lws2_32 -lwtsapi32 -lcomdlg32"
 
-		app_win32_revision=$(date +%y.%m.%d.%H)
+		app_win32_revision=$(date +%-y.%-m.%-d.%-H)
 		AC_SUBST(WIN32_VERSION,$app_win32_revision)
+
+		app_win32_file_version=$(date +%-y,%-m,%-d,%-H)
+		AC_SUBST(WIN32_FILE_VERSION,$app_win32_file_version)
 
 		dnl https://stackoverflow.com/questions/13768515/how-to-do-static-linking-of-libwinpthread-1-dll-in-mingw
 		STATIC_LDFLAGS="-static-libstdc++ -static-libgcc -static"
@@ -190,7 +193,7 @@ AC_DEFINE_UNQUOTED(PACKAGE_MINOR_VERSION, $app_vrs_minor)
 AC_SUBST(PACKAGE_MAJOR_VERSION,$app_vrs_major)
 AC_SUBST(PACKAGE_MINOR_VERSION,$app_vrs_minor)
 
-AC_ARG_WITH([release], [AS_HELP_STRING([--with-release], [Set release])], [ app_cv_release="$withval" ],[ app_cv_release="`date +%y`.`date +%m`.`date +%d`" ])
+AC_ARG_WITH([release], [AS_HELP_STRING([--with-release], [Set release])], [ app_cv_release="$withval" ],[ app_cv_release="`date +%-y`.`date +%-m`.`date +%-d`" ])
 AC_ARG_WITH([session-name], [AS_HELP_STRING([--with-session-name], [Set default session name])], [ AC_DEFINE_UNQUOTED(DEFAULT_SESSION_NAME, $withval) ],[ AC_MSG_NOTICE([No default session name.]) ])
 AC_ARG_WITH([application-name], [AS_HELP_STRING([--with-application-name], [Set application name])], [ AC_DEFINE_UNQUOTED(APPLICATION_NAME, $withval) ],[ AC_MSG_NOTICE([No default application name.]) ])
 
