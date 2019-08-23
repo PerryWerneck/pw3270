@@ -35,6 +35,7 @@
 #include <lib3270/actions.h>
 #include <lib3270/trace.h>
 #include <lib3270/toggle.h>
+#include <lib3270/properties.h>
 #include <v3270/trace.h>
 
 /*--[ Widget definition ]----------------------------------------------------------------------------*/
@@ -97,6 +98,8 @@
 														};
 
 static GtkWidget * trace_window = NULL;
+
+ const gchar			* oversize		= NULL;
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
@@ -377,6 +380,12 @@ static GtkWidget * trace_window = NULL;
  {
  	g_return_if_fail(GTK_IS_PW3270(widget));
 	v3270_set_session_name(GTK_PW3270(widget)->terminal,name);
+ }
+
+ LIB3270_EXPORT void pw3270_set_oversize(GtkWidget *widget, const gchar *oversize)
+ {
+ 	g_return_if_fail(GTK_IS_PW3270(widget));
+	lib3270_set_oversize(pw3270_get_session(widget),oversize);
  }
 
  LIB3270_EXPORT void pw3270_set_host_type(GtkWidget *widget, const gchar *name)

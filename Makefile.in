@@ -210,8 +210,7 @@ $(POTDIR)/%.pot: \
 #---[ Debug Targets ]--------------------------------------------------------------------
 
 Debug: \
-	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@ \
-	$(BINDBG)/libpw3270cpp.a
+	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@
 
 publish-debug: \
 	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@

@@ -68,6 +68,7 @@
 
  LIB3270_EXPORT const gchar	* pw3270_get_session_name(GtkWidget *widget);
  LIB3270_EXPORT void		  pw3270_set_session_name(GtkWidget *widget, const gchar *name);
+ LIB3270_EXPORT void		  pw3270_set_oversize(GtkWidget *widget, const gchar *oversize);
  LIB3270_EXPORT void		  pw3270_set_host_type(GtkWidget *widget, const gchar *name);
  LIB3270_EXPORT int			  pw3270_set_session_color_type(GtkWidget *widget, unsigned short color_type);
 

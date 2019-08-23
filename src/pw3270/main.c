@@ -63,7 +63,7 @@
  static const gchar		* charset		= NULL;
  static const gchar		* remap			= NULL;
  static const gchar		* model			= NULL;
-
+ static const gchar		* oversize		= NULL;
  const gchar			* tracefile		= NULL;
 
 #ifdef HAVE_GTKMAC
@@ -306,6 +306,7 @@ int main(int argc, char *argv[])
 			{ "charset",	    	'C', 0, G_OPTION_ARG_STRING,	&charset,		    N_( "Set host charset" ),							NULL								},
 			{ "remap",		    	'm', 0, G_OPTION_ARG_FILENAME,	&remap,			    N_( "Remap charset from xml file" ),				NULL								},
 			{ "model",		    	'M', 0, G_OPTION_ARG_STRING,	&model,			    N_( "The model of 3270 display to be emulated" ),	NULL								},
+			{ "oversize",	    	'O', 0, G_OPTION_ARG_STRING,	&oversize,		    N_( "Makes the screen larger than the default for the chosen model number." ),	NULL	},
 			{ "autodisconnect",		'D', 0, G_OPTION_ARG_INT,		&timer,			    N_( "Minutes for auto-disconnect" ),				0									},
 			{ "pluginpath",			'P', 0, G_OPTION_ARG_STRING,	&pluginpath,	    N_( "Path for plugin files" ),						NULL								},
 
@@ -374,15 +375,6 @@ int main(int argc, char *argv[])
 	gtk_init(&argc, &argv);
 
 	g_log_set_default_handler(g_log_to_lib3270,NULL);
-
-/*
-#if defined( HAVE_SYSLOG )
-	if(log_to_syslog)
-	{
-		openlog(g_get_prgname(), LOG_NDELAY, LOG_USER);
-	}
-#endif // HAVE_SYSLOG
-*/
 
 
 #ifdef _WIN32
@@ -453,6 +445,9 @@ int main(int argc, char *argv[])
 
 		toplevel = pw3270_new(host,systype,syscolors);
 		pw3270_set_session_name(toplevel,session_name);
+
+		if(oversize)
+			pw3270_set_oversize(toplevel,oversize);
 
 #ifdef _WIN32
 		pw3270_set_string(toplevel,"application","session",session_name);
