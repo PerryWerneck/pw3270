@@ -1,11 +1,24 @@
 #!/bin/bash
 
+PROJECT_NAME="pw3270"
+LIBRARY_NAME="lib3270"
+CORE_LIBRARIES="lib3270 libv3270"
+PACKAGE_PLUGINS="ipc"
+PACKAGE_LANGUAGE_BINDINGS="hllapi"
+TARGET_ARCHS="x86_32"
+GIT_URL="https://github.com/PerryWerneck"
+
 PROJECTDIR=$(dirname $(dirname $(readlink -f ${0})))
 WORKDIR=$(mktemp -d)
 PUBLISH=0
+GET_PREREQS=0
 
 if [ -e /etc/os-release ]; then
 	. /etc/os-release
+fi
+
+if [ -e ~/.config/pw3270.build.conf ]; then
+	. ~/.config/pw3270.build.conf
 fi
 
 #
@@ -16,380 +29,232 @@ cleanup()
 	rm -fr ${WORKDIR}
 }
 
-#
-# Monta projeto no diretório corrente.
-#
-build()
+failed()
 {
-	make clean
-
-	make all
-	if [ "$?" != "0" ]; then
-		cleanup
-		exit -1
-	fi
-
-	cp -rv .bin/Release/* ${WORKDIR}/build/bin
-	if [ "$?" != "0" ]; then
-		cleanup
-		exit -1
-	fi
-
-	make DESTDIR=${WORKDIR}/build install
-	if [ "$?" != "0" ]; then
-		cleanup
-		exit -1
-	fi
-
+	echo "$@"
+	cleanup
+	exit -1
 }
 
-build_plugin()
+#
+# Get pre requisites from spec
+#
+getBuildRequires()
 {
-
-	echo -e "\e]2;${2}-${1}\a"
-
-	cd ${WORKDIR}/sources/pw3270-plugin-${2}
-	if [ "$?" != "0" ]; then
-		cleanup
-		exit -1
-	fi
-
-	export cache=${WORKDIR}/cache/pw3270-plugin-${2}.cache
-
-	./configure \
-		CFLAGS=${CFLAGS} \
-		LDFLAGS=${LDFLAGS} \
-		LIB3270_CFLAGS="${LIB3270_CFLAGS}" \
-		LIB3270_LIBS="${LIB3270_LIBS}" \
-		LIBV3270_CFLAGS="${LIBV3270_CFLAGS}" \
-		LIBV3270_LIBS="${LIBV3270_LIBS}" \
-		--host=${host} \
-		--prefix=${prefix} \
-		--libdir=${prefix}/lib
-
-	if [ "$?" != "0" ]; then
-		cleanup
-		exit -1
-	fi
-
-	make all
-	if [ "$?" != "0" ]; then
-		cleanup
-		exit -1
-	fi
-
-	cp -rv .bin/Release/* ${WORKDIR}/build/bin
-	if [ "$?" != "0" ]; then
-		cleanup
-		exit -1
-	fi
+	for required in $(grep -i buildrequires "${1}" | grep -v "%" | cut -d: -f2-)
+	do
+		echo "Installing ${required}"
+		sudo zypper --non-interactive --quiet in "${required}"
+	done
 
 }
 
 #
-# Monta binários
+# Get Sources from GIT
 #
-# $1 = Arquitetura (x86_32/x86_64)
-#
-pack()
+getSource()
 {
+	echo -e "\e]2;Getting sources for ${1}\a"
+	echo "Getting sources for ${1}"
 
-	echo -e "\e]2;pw3270-${1}\a"
+	mkdir -p ${WORKDIR}/sources
 
-	case ${1} in
-	x86_32)
-		host=i686-w64-mingw32
-		host_cpu=i686
-		prefix=/usr/i686-w64-mingw32/sys-root/mingw
-		tools=i686-w64-mingw32
-		pkg_config=/usr/bin/i686-w64-mingw32-pkg-config
-		mingw_name=mingw32
-		;;
+	git clone ${GIT_URL}/${1}.git ${WORKDIR}/sources/${1}
+	if [ "$?" != "0" ]; then
+		faile "Can't get sources for ${1}"
+	fi
 
-	x86_64)
-		host=x86_64-w64-mingw32
-		host_cpu=x86_64
-		prefix=/usr/x86_64-w64-mingw32/sys-root/mingw
-		tools=x86_64-w64-mingw32
-		pkg_config=/usr/bin/x86_64-w64-mingw32-pkg-config
-		mingw_name=mingw64
-		;;
+	if [ "${GET_PREREQS}" != "0" ]; then
+		for ARCH in ${ARCHS}
+		do
 
-	*)
-		failed "Arquitetura desconhecida: ${1}"
+			if [ -d ${WORKDIR}/sources/${1}/win/${ARCH} ]; then
 
-	esac
+				for spec in $(find ${WORKDIR}/sources/${1}/win/${ARCH} -name "*.spec")
+				do
+					getBuildRequires "${spec}"
+				done
 
-#	sudo zypper \
-#		--non-interactive \
-#		in \
-#		${mingw_name}-libcurl-devel \
-#		${mingw_name}-curl \
-#		${mingw_name}-libopenssl-devel \
-#		${mingw_name}-libintl-devel \
-#		${mingw_name}-atk-devel \
-#		${mingw_name}-pango-devel \
-#		${mingw_name}-win_iconv-devel \
-#		${mingw_name}-pixman-devel \
-#		${mingw_name}-glib2-devel \
-#		${mingw_name}-cairo-devel \
-#		${mingw_name}-freetype-devel \
-#		${mingw_name}-winpthreads-devel \
-#		${mingw_name}-gtk3-devel \
-#		${mingw_name}-cross-gcc-c++ \
-#		${mingw_name}-cross-pkg-config \
-#		${mingw_name}-cross-cpp \
-#		${mingw_name}-cross-binutils \
-#		${mingw_name}-cross-nsis
+			fi
 
+
+		done
+	fi
+
+	cd ${WORKDIR}/sources/${1}
+
+	NOCONFIGURE=1 ./autogen.sh
 	if [ "$?" != "0" ]; then
 		cleanup
 		exit -1
 	fi
 
-	export HOST_CC=/usr/bin/gcc
 
-	rm -fr ${WORKDIR}/cache
-	mkdir -p ${WORKDIR}/cache
+}
 
-	rm -fr ${WORKDIR}/build
-	mkdir -p ${WORKDIR}/build/src/include
-	mkdir -p ${WORKDIR}/build/.bin/Release
+#
+# Build library
+#
+buildLibrary()
+{
+	for ARCH in ${ARCHS}
+	do
 
-	#
-	# Setup Target dir
-	#
-	mkdir -p ${WORKDIR}/build/bin
+		echo -e "\e]2;Building ${1} for ${ARCH}\a"
+		echo "Building ${1} for ${ARCH}"
 
-	export CFLAGS=-I${WORKDIR}/build/${prefix}/include -DWIN32 -D_WIN32
-	export LDFLAGS=-L${WORKDIR}/build/bin
-	export PKG_CONFIG_PATH=${WORKDIR}/build/${prefix}/lib/pkgconfig
+		case ${ARCH} in
+		x86_32)
+			host=i686-w64-mingw32
+			host_cpu=i686
+			prefix=/usr/i686-w64-mingw32/sys-root/mingw
+			tools=i686-w64-mingw32
+			pkg_config=/usr/bin/i686-w64-mingw32-pkg-config
+			;;
 
-	#
-	# Build lib3270
-	#
-	echo -e "\e]2;lib3270-${1}\a"
+		x86_64)
+			host=x86_64-w64-mingw32
+			host_cpu=x86_64
+			prefix=/usr/x86_64-w64-mingw32/sys-root/mingw
+			tools=x86_64-w64-mingw32
+			pkg_config=/usr/bin/x86_64-w64-mingw32-pkg-config
+			;;
 
-	cd ${WORKDIR}/sources/lib3270
-	export cache=${WORKDIR}/cache/lib3270.cache
+		*)
+			failed "Arquitetura desconhecida: ${1}"
 
-	./configure \
-		--host=${host} \
-		--prefix=${prefix} \
-		--libdir=${prefix}/lib
+		esac
 
-	if [ "$?" != "0" ]; then
-		cleanup
-		exit -1
-	fi
+		export HOST_CC=/usr/bin/gcc
 
-	build
+		mkdir -p ${WORKDIR}/build/${ARCH}
+		mkdir -p ${WORKDIR}/cache/${ARCH}
+		mkdir -p ${WORKDIR}/build/${ARCH}/bin
+		mkdir -p ${WORKDIR}/build/${ARCH}/lib
+		mkdir -p ${WORKDIR}/build/${ARCH}/locale
+		mkdir -p ${WORKDIR}/build/${ARCH}/include
+		mkdir -p ${WORKDIR}/build/${ARCH}/sysconfig
+		mkdir -p ${WORKDIR}/build/${ARCH}/data
 
-	export LIB3270_CFLAGS="-DLIB3270_NAME=3270"
-	export LIB3270_LIBS="-l3270"
+		export PKG_CONFIG_PATH=${WORKDIR}/build/${ARCH}/lib/pkgconfig
+		export cache=${WORKDIR}/cache/${ARCH}/${1}.cache
 
-	#
-	# Build libv3270
-	#
-	echo -e "\e]2;libv3270-${1}\a"
+		cd ${WORKDIR}/sources/${1}
 
-	cd ${WORKDIR}/sources/libv3270
-	export cache=${WORKDIR}/cache/libv3270.cache
+		./configure \
+			CFLAGS="-I${WORKDIR}/build/${ARCH}/include" \
+			LDFLAGS="-L${WORKDIR}/build/${ARCH}/lib" \
+			--host=${host} \
+			--prefix=${prefix} \
+			--bindir=${WORKDIR}/build/${ARCH}/bin \
+			--libdir=${WORKDIR}/build/${ARCH}/lib \
+			--localedir=${WORKDIR}/build/${ARCH}/locale \
+			--includedir=${WORKDIR}/build/${ARCH}/include \
+			--sysconfdir=${WORKDIR}/build/${ARCH}/sysconfig \
+			--datadir=${WORKDIR}/build/${ARCH}/data \
+			--datarootdir=${WORKDIR}/build/${ARCH}/data
 
-	./configure \
-		CFLAGS=${CFLAGS} \
-		LDFLAGS=${LDFLAGS} \
-		LIB3270_CFLAGS="${LIB3270_CFLAGS}" \
-		LIB3270_LIBS="${LIB3270_LIBS}" \
-		--host=${host} \
-		--prefix=${prefix} \
-		--libdir=${prefix}/lib
-
-	if [ "$?" != "0" ]; then
-		cleanup
-		exit -1
-	fi
-
-	build
-
-	export LIBV3270_CFLAGS="-DLIBV3270_MODE=3270"
-	export LIBV3270_LIBS="-lv3270"
-
-	#
-	# Build main application
-	#
-	echo -e "\e]2;pw3270-${1}\a"
-
-	cd ${WORKDIR}/sources/pw3270
-	export cache=${WORKDIR}/cache/application.cache
-
-	./configure \
-		CFLAGS=${CFLAGS} \
-		LDFLAGS=${LDFLAGS} \
-		LIB3270_CFLAGS="${LIB3270_CFLAGS}" \
-		LIB3270_LIBS="${LIB3270_LIBS}" \
-		LIBV3270_CFLAGS="${LIBV3270_CFLAGS}" \
-		LIBV3270_LIBS="${LIBV3270_LIBS}" \
-		--host=${host} \
-		--prefix=${prefix} \
-		--libdir=${prefix}/lib \
-		--with-source-locales=${WORKDIR}/locale
-
-	if [ "$?" != "0" ]; then
-		cleanup
-		exit -1
-	fi
-
-	mkdir -p ${WORKDIR}/locale
-
-	cp ${WORKDIR}/sources/lib3270/.pot/*.pot ${WORKDIR}/locale
-	if [ "$?" != "0" ]; then
-		cleanup
-		exit -1
-	fi
-
-	cp ${WORKDIR}/sources/libv3270/.pot/*.pot ${WORKDIR}/locale
-	if [ "$?" != "0" ]; then
-		cleanup
-		exit -1
-	fi
-
-	build
-
-	#
-	# Build plugins
-	#
-	build_plugin ${1} hllapi
-
-	#
-	# Install data & icons
-	#
-	echo -e "\e]2;pw3270-icons-${1}\a"
-
-	cd ${WORKDIR}/sources/pw3270
-
-	make -C ${WORKDIR}/sources/pw3270 locale
-	if [ "$?" != "0" ]; then
-		cleanup
-		exit -1
-	fi
-
-	cp -rv .bin/locale ${WORKDIR}/build
-	if [ "$?" != "0" ]; then
-		cleanup
-		exit -1
-	fi
-
-	mkdir -p ${WORKDIR}/build/win
-
-	mkdir -p ${WORKDIR}/sources/pw3270/.bin/Release
-	cp -rv ${WORKDIR}/build/bin/* ${WORKDIR}/sources/pw3270/.bin/Release
-
-	chmod +x ${WORKDIR}/sources/pw3270/win/makeruntime.sh
-	${WORKDIR}/sources/pw3270/win/makeruntime.sh
-	if [ "$?" != "0" ]; then
-		cleanup
-		exit -1
-	fi
-
-	mkdir -p ${WORKDIR}/build/bin
-	cp -rv ${WORKDIR}/sources/pw3270/.bin/runtime ${WORKDIR}/build/bin
-	if [ "$?" != "0" ]; then
-		cleanup
-		exit -1
-	fi
-
-	#
-	# Copy branding
-	#
-	cp ${WORKDIR}/branding/*.ico ${WORKDIR}/build
-	if [ "$?" != "0" ]; then
-		cleanup
-		exit -1
-	fi
-
-	cp ${WORKDIR}/branding/*.png ${WORKDIR}/build
-	if [ "$?" != "0" ]; then
-		cleanup
-		exit -1
-	fi
-
-	cp ${WORKDIR}/branding/AUTHORS ${WORKDIR}/build
-	if [ "$?" != "0" ]; then
-		cleanup
-		exit -1
-	fi
-
-	cp ${WORKDIR}/branding/LICENSE ${WORKDIR}/build
-	if [ "$?" != "0" ]; then
-		cleanup
-		exit -1
-	fi
-
-	cp -rv ${WORKDIR}/branding/ui ${WORKDIR}/build
-	if [ "$?" != "0" ]; then
-		cleanup
-		exit -1
-	fi
-
-	cp -rv ${WORKDIR}/branding/*.conf ${WORKDIR}/build
-	if [ "$?" != "0" ]; then
-		cleanup
-		exit -1
-	fi
-
-	cp -rv ${WORKDIR}/sources/pw3270/charsets/*.xml ${WORKDIR}/build
-	if [ "$?" != "0" ]; then
-		cleanup
-		exit -1
-	fi
-
-	#
-	# Create installation package
-	#
-	echo -e "\e]2;pw3270-package-${1}\a"
-
-	cd ${WORKDIR}/build
-
-	cp ${WORKDIR}/sources/pw3270/win/pw3270.nsi ./pw3270.nsi
-	if [ "$?" != "0" ]; then
-		cleanup
-		exit -1
-	fi
-
-	makensis -DWITHGTK pw3270.nsi
-	if [ "$?" != "0" ]; then
-		cleanup
-		exit -1
-	fi
-
-	cp -v *.exe ${PROJECTDIR}
-	if [ "$?" != "0" ]; then
-		cleanup
-		exit -1
-	fi
-
-	if [ -d ~/public_html/win/pw3270 ]; then
-		mkdir -p ~/public_html/win/pw3270/${1}
-		cp -v *.exe ~/public_html/win/pw3270/${1}
 		if [ "$?" != "0" ]; then
-			cleanup
-			exit -1
+			failed "Can't configure ${1}"
 		fi
-	fi
 
-	if [ "${PUBLISH}" == "1" ] && [ ! -z ${WIN_PACKAGE_SERVER} ]; then
-		scp *.exe ${WIN_PACKAGE_SERVER}/pw3270
+		make all
 		if [ "$?" != "0" ]; then
-			cleanup
-			exit -1
+			failed "Can't buid ${1}"
 		fi
-	fi
+
+		make install
+		if [ "$?" != "0" ]; then
+			failed "Can't install ${1}"
+		fi
+
+	done
 
 }
 
 #
-# Setup options
+# Build main application
+#
+buildApplication()
+{
+	for ARCH in ${ARCHS}
+	do
+
+		echo -e "\e]2;Building ${1} for ${ARCH}\a"
+		echo "Building ${1} for ${ARCH}"
+
+		case ${ARCH} in
+		x86_32)
+			host=i686-w64-mingw32
+			host_cpu=i686
+			prefix=/usr/i686-w64-mingw32/sys-root/mingw
+			tools=i686-w64-mingw32
+			pkg_config=/usr/bin/i686-w64-mingw32-pkg-config
+			;;
+
+		x86_64)
+			host=x86_64-w64-mingw32
+			host_cpu=x86_64
+			prefix=/usr/x86_64-w64-mingw32/sys-root/mingw
+			tools=x86_64-w64-mingw32
+			pkg_config=/usr/bin/x86_64-w64-mingw32-pkg-config
+			;;
+
+		*)
+			failed "Arquitetura desconhecida: ${1}"
+
+		esac
+
+		export HOST_CC=/usr/bin/gcc
+
+		mkdir -p ${WORKDIR}/build/${ARCH}
+		mkdir -p ${WORKDIR}/cache/${ARCH}
+		mkdir -p ${WORKDIR}/build/${ARCH}/bin
+		mkdir -p ${WORKDIR}/build/${ARCH}/lib
+		mkdir -p ${WORKDIR}/build/${ARCH}/locale
+		mkdir -p ${WORKDIR}/build/${ARCH}/include
+		mkdir -p ${WORKDIR}/build/${ARCH}/sysconfig
+		mkdir -p ${WORKDIR}/build/${ARCH}/data
+
+		export PKG_CONFIG_PATH=${WORKDIR}/build/${ARCH}/lib/pkgconfig
+		export cache=${WORKDIR}/cache/${ARCH}/${1}.cache
+
+		cd ${WORKDIR}/sources/${1}
+
+		./configure \
+			CFLAGS="-I${WORKDIR}/build/${ARCH}/include" \
+			LDFLAGS="-L${WORKDIR}/build/${ARCH}/lib" \
+			--host=${host} \
+			--prefix=${prefix} \
+			--bindir=${WORKDIR}/build/${ARCH}/bin \
+			--libdir=${WORKDIR}/build/${ARCH}/lib \
+			--localedir=${WORKDIR}/build/${ARCH}/locale \
+			--includedir=${WORKDIR}/build/${ARCH}/include \
+			--sysconfdir=${WORKDIR}/build/${ARCH}/sysconfig \
+			--datadir=${WORKDIR}/build/${ARCH}/data \
+			--datarootdir=${WORKDIR}/build/${ARCH}/data
+
+		if [ "$?" != "0" ]; then
+			failed "Can't configure ${1}"
+		fi
+
+		make all
+		if [ "$?" != "0" ]; then
+			failed "Can't buid ${1}"
+		fi
+
+		make install
+		if [ "$?" != "0" ]; then
+			failed "Can't install ${1}"
+		fi
+
+	done
+
+
+}
+
+#
+# Check command line parameters
 #
 until [ -z "$1" ]
 do
@@ -409,25 +274,25 @@ do
 			;;
 
 		CLEAR)
-			if [ -d ~/public_html/win/pw3270 ]; then
-				rm -fr ~/public_html/win/pw3270/{x86_32,x86_64}
+			if [ -d ~/public_html/win/${PROJECT_NAME} ]; then
+				rm -fr ~/public_html/win/${PROJECT_NAME}/{x86_32,x86_64}
 			fi
-			;;
 
+			;;
 		HELP)
-			echo "${0} [OPTIONS]"
+			echo "${0} [options]"
 			echo ""
 			echo "Options:"
 			echo ""
 
 			if [ ! -z ${WIN_PACKAGE_SERVER} ]; then
-				echo "  --nopublish	Don't send packages to ${WIN_PACKAGE_SERVER}/pw3270"
-				echo "  --publish	Send packages to ${WIN_PACKAGE_SERVER}/pw3270"
+				echo "  --nopublish	Don't publish binaries in ${WIN_PACKAGE_SERVER}"
+				echo "  --publish	Publish binaries in ${WIN_PACKAGE_SERVER}"
 			fi
 
 
-			if [ -d ~/public_html/win/pw3270 ]; then
-				echo "  --clear	Remove directories ~/public_html/win/pw3270/{x86_32,x86_64}"
+			if [ -d ~/public_html/win/${PROJECT_NAME} ]; then
+				echo "  --clear	Remove ~/public_html/win/${PROJECT_NAME}/{x86_32,x86_64}"
 			fi
 
 			echo ""
@@ -442,123 +307,50 @@ do
 
 done
 
-
-
 #
-# Get sources from GIT
+# Download sources
 #
-mkdir -p ${WORKDIR}/sources
+for src in ${CORE_LIBRARIES}
+do
+	getSource ${src}
+done
 
-for src in lib3270 libv3270 pw3270 pw3270-plugin-hllapi; do
+getSource pw3270
 
-	echo "Baixando ${src}..."
-	echo -e "\e]2;Downloading ${src}\a"
+for src in ${PACKAGE_PLUGINS}
+do
+	getSource pw3270-plugin-${src}
+done
 
-	git clone https://github.com/PerryWerneck/${src}.git ${WORKDIR}/sources/${src}
-	if [ "$?" != "0" ]; then
-		cleanup
-		exit -1
-	fi
-
-	cd ${WORKDIR}/sources/${src}
-
-	NOCONFIGURE=1 ./autogen.sh
-	if [ "$?" != "0" ]; then
-		cleanup
-		exit -1
-	fi
-
-
+for src in ${PACKAGE_LANGUAGE_BINDINGS}
+do
+	getSource lib3270-${src}-bindings
 done
 
 #
-# Setup branding
+# Build packages
 #
-echo -e "\e]2;Branding\a"
+for src in ${CORE_LIBRARIES}
+do
+	buildLibrary ${src}
+done
 
-mkdir -p ${WORKDIR}/branding
+buildApplication pw3270
 
-BRANDING_SOURCES=${WORKDIR}/sources/pw3270/branding
+for src in ${PACKAGE_PLUGINS}
+do
+	buildLibrary pw3270-plugin-${src}
+done
 
-cp -rv ${BRANDING_SOURCES}/* ${WORKDIR}/branding
-if [ "$?" != "0" ]; then
-	cleanup
-	exit -1
-fi
+for src in ${PACKAGE_LANGUAGE_BINDINGS}
+do
+	buildLibrary lib3270-${src}-bindings
+done
 
-convert -density 384 -background transparent ${BRANDING_SOURCES}/pw3270.svg -define icon:auto-resize -colors 256 ${WORKDIR}/branding/pw3270.ico
-if [ "$?" != "0" ]; then
-	cleanup
-	exit -1
-fi
-
-convert -background transparent ${BRANDING_SOURCES}/pw3270.svg ${WORKDIR}/branding/pw3270.png
-if [ "$?" != "0" ]; then
-	cleanup
-	exit -1
-fi
-
-optipng -o7 ${WORKDIR}/branding/pw3270.png
-if [ "$?" != "0" ]; then
-	cleanup
-	exit -1
-fi
-
-convert -background transparent ${BRANDING_SOURCES}/pw3270-logo.svg ${WORKDIR}/branding/pw3270-logo.png
-if [ "$?" != "0" ]; then
-	cleanup
-	exit -1
-fi
-
-optipng -o7 ${WORKDIR}/branding/pw3270-logo.png
-if [ "$?" != "0" ]; then
-	cleanup
-	exit -1
-fi
-
-cp ${WORKDIR}/sources/pw3270/AUTHORS ${WORKDIR}/branding
-if [ "$?" != "0" ]; then
-	cleanup
-	exit -1
-fi
-
-cp ${WORKDIR}/sources/pw3270/LICENSE ${WORKDIR}/branding
-if [ "$?" != "0" ]; then
-	cleanup
-	exit -1
-fi
-
-cp ${WORKDIR}/sources/pw3270/conf/colors.conf ${WORKDIR}/branding
-if [ "$?" != "0" ]; then
-	cleanup
-	exit -1
-fi
-
-cp -rv ${WORKDIR}/sources/pw3270/ui ${WORKDIR}/branding
-if [ "$?" != "0" ]; then
-	cleanup
-	exit -1
-fi
-
-#
-# Create installers 
-#
-pack x86_32
-pack x86_64
+cd ${WORKDIR}/build
+/bin/bash
 
 cleanup
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
