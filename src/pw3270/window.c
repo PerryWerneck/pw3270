@@ -323,10 +323,10 @@ static GtkWidget * trace_window = NULL;
  	v3270_set_url(GTK_PW3270(widget)->terminal,uri);
  }
 
- const gchar * pw3270_get_hostname(GtkWidget *widget)
+ const gchar * pw3270_get_url(GtkWidget *widget)
  {
  	g_return_val_if_fail(GTK_IS_PW3270(widget),"");
- 	return v3270_get_hostname(GTK_PW3270(widget)->terminal);
+ 	return v3270_get_url(GTK_PW3270(widget)->terminal);
  }
 
  gboolean pw3270_get_toggle(GtkWidget *widget, LIB3270_TOGGLE ix)
@@ -350,25 +350,47 @@ static GtkWidget * trace_window = NULL;
 
  static void update_window_title(GtkWidget *window)
  {
-	gchar			* title;
-	GtkWidget		* widget = GTK_PW3270(window)->terminal;
+	GtkWidget			* widget	= GTK_PW3270(window)->terminal;
+	const gchar			* url		= v3270_get_url(widget);
+	g_autofree gchar	* title		= NULL;
 
-	if(v3270_is_connected(widget))
+	if(url)
 	{
-		const gchar *host = v3270_get_hostname(widget);
+		g_autofree gchar * base = g_strdup(url);
+		gchar *hostname = strstr(base,"://");
+		if(hostname)
+		{
+			gchar *ptr;
 
-		if(host && *host)
-			title = g_strdup_printf("%s - %s",v3270_get_session_name(widget),host);
+			hostname += 3;
+
+			ptr = strchr(hostname,':');
+			if(ptr)
+				*ptr = 0;
+
+			ptr = strchr(hostname,'?');
+			if(ptr)
+				*ptr = 0;
+
+		}
+
+		if(hostname && *hostname)
+			title = g_strdup_printf("%s - %s",v3270_get_session_name(widget),hostname);
 		else
 			title = g_strdup_printf("%s",v3270_get_session_name(widget));
+
+	}
+	else if(v3270_is_connected(widget))
+	{
+		title = g_strdup_printf("%s - disconnected",v3270_get_session_name(widget));
 	}
 	else
 	{
-		title = g_strdup_printf(_( "%s - Disconnected" ),v3270_get_session_name(widget));
+		title = g_strdup(v3270_get_session_name(widget));
 	}
 
 	gtk_window_set_title(GTK_WINDOW(window),title);
-	g_free(title);
+
  }
 
  static void session_changed(GtkWidget *widget, GtkWidget *window)
@@ -466,15 +488,8 @@ static GtkWidget * trace_window = NULL;
 
  LIB3270_EXPORT GtkWidget * pw3270_get_terminal_widget(GtkWidget *widget)
  {
- 	if(!widget)
-	{
-		// No widget, get the default one
-		return v3270_get_default_widget();
-	}
-
- 	g_return_val_if_fail(GTK_IS_PW3270(widget),NULL);
+  	g_return_val_if_fail(GTK_IS_PW3270(widget),NULL);
  	return GTK_PW3270(widget)->terminal;
-
  }
 
  static void setup_input_method(GtkWidget *widget, GtkWidget *obj)
