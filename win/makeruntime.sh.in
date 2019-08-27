@@ -36,6 +36,7 @@ GTK_PREFIX=$($PKG_CONFIG --variable=prefix ${GTK_VERSION})
 GDK_LOADERS=$(${PKG_CONFIG} --variable=gdk_pixbuf_binarydir gdk-pixbuf-2.0 | sed -e "s@${prefix}@@g")
 
 TARGET="@BASEDIR@/.bin/runtime"
+BINDIR="@BASEDIR@/.bin/Release/"
 
 # Change to bin path
 mkdir -p ${TARGET}
@@ -49,8 +50,8 @@ copy_dll() {
 		SOURCES=$(mktemp)
 		REQUIRES=$(mktemp)
 
-		find "@BASEDIR@/.bin/Release/" -iname "*.dll" >	${SOURCES}
-		find "@BASEDIR@/.bin/Release/" -iname "*.exe" >>	${SOURCES}
+		find "${BINDIR}" -iname "*.dll" >	${SOURCES}
+		find "${BINDIR}" -iname "*.exe" >>	${SOURCES}
 		find "${TARGET}" -iname *.dll >> ${SOURCES}
 
 		while read FILENAME
@@ -122,7 +123,7 @@ copy_dll() {
 		do
 			if [ ! -e "${TARGET}/${FILENAME}" ]; then
 
-				COUNT=$(find "@BASEDIR@/.bin/Release/" -iname ${FILENAME} | wc --lines)
+				COUNT=$(find "${BINDIR}" -iname ${FILENAME} | wc --lines)
 				if [ "${COUNT}" == "0" ]; then
 
 					echo ${FILENAME}
@@ -136,6 +137,17 @@ copy_dll() {
 						if [ "$?" != "0" ]; then
 							exit -1
 						fi
+
+					elif [ -e ${prefix}/lib/${FILENAME} ]; then
+
+						echo "Copiando $(basename ${FILENAME})..."
+
+						AGAIN=1
+						cp -v "${prefix}/lib/${FILENAME}" "${TARGET}/${FILENAME}"
+						if [ "$?" != "0" ]; then
+							exit -1
+						fi
+
 					else 
 
 						echo "Can't find ${FILENAME}"
@@ -261,6 +273,48 @@ copy_theme() {
 
 }
 
+#
+# Check command line parameters
+#
+until [ -z "$1" ]
+do
+        if [ ${1:0:2} = '--' ]; then
+                tmp=${1:2}
+                parameter=${tmp%%=*}
+                parameter=$(echo $parameter | tr "[:lower:]" "[:upper:]")
+                value=${tmp##*=}
+
+                case "$parameter" in
+		PATH)
+			TARGET=$value
+			;;
+
+		BINDIR)
+			BINDIR=$value
+			;;
+
+		HELP)
+			echo "${0} [options]"
+			echo ""
+			echo "Options:"
+			echo ""
+			echo "	--path		Set runtime instalation path (default is $TARGET)"
+			echo "	--bindir	Set binaries source path (default is $BINDIR)"
+			echo ""
+			exit 0
+			
+			;;
+		
+		esac
+	fi
+
+	shift
+
+done
+
+#
+# Make runtime
+#
 copy_dll
 copy_locale
 copy_loaders
