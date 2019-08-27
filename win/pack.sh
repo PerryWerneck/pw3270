@@ -147,12 +147,13 @@ buildLibrary()
 			--host=${host} \
 			--prefix=${prefix} \
 			--bindir=${WORKDIR}/build/${ARCH}/bin \
-			--libdir=${WORKDIR}/build/${ARCH}/lib \
+			--libdir=${WORKDIR}/build/${ARCH}/bin \
 			--localedir=${WORKDIR}/build/${ARCH}/locale \
 			--includedir=${WORKDIR}/build/${ARCH}/include \
 			--sysconfdir=${WORKDIR}/build/${ARCH}/sysconfig \
 			--datadir=${WORKDIR}/build/${ARCH}/data \
 			--datarootdir=${WORKDIR}/build/${ARCH}/data
+
 
 		if [ "$?" != "0" ]; then
 			failed "Can't configure ${1}"
@@ -249,10 +250,48 @@ buildApplication()
 
 		if [ -e ./win/${1}.nsi ]; then
 			cp "./win/${1}.nsi" "${WORKDIR}/build/${ARCH}"
+			if [ "$?" != "0" ]; then
+				failed "Can't copy ${1}.nsi"
+			fi
+		fi
+
+		if [ -e ./win/makeruntime.sh ]; then
+			cp "./win/makeruntime.sh" "${WORKDIR}/build/${ARCH}/${1}-makeruntime.sh"
+			if [ "$?" != "0" ]; then
+				failed "Can't copy ${1}.makeruntime.sh"
+			fi
 		fi
 
 	done
 
+}
+
+#
+# Make runtime
+#
+makeRuntime() {
+
+	for ARCH in ${ARCHS}
+	do
+
+		echo -e "\e]2;Building runtime for ${ARCH}\a"
+		echo "Building runtime for ${ARCH}"
+
+		rm -fr ${WORKDIR}/build/${ARCH}/runtime
+		mkdir -p ${WORKDIR}/build/${ARCH}/runtime
+
+		for SCRIPT in ${WORKDIR}/build/${ARCH}/*-makeruntime.sh
+		do
+			chmod +x ${SCRIPT}
+
+			cd ${WORKDIR}/build/${ARCH}
+			${SCRIPT} --path="${WORKDIR}/build/${ARCH}/runtime"  --bindir="${WORKDIR}/build/${ARCH}/bin"
+			if [ "$?" != "0" ]; then
+				failed "Error on ${SCRIPT}"
+			fi
+		done
+
+	done
 
 }
 
@@ -289,8 +328,8 @@ do
 			echo ""
 
 			if [ ! -z ${WIN_PACKAGE_SERVER} ]; then
-				echo "  --nopublish	Don't publish binaries in ${WIN_PACKAGE_SERVER}"
-				echo "  --publish	Publish binaries in ${WIN_PACKAGE_SERVER}"
+				echo "  --nopublish	Don't publish binaries in ${WIN_PACKAGE_SERVER}/${PROJECT_NAME}"
+				echo "  --publish	Publish binaries in ${WIN_PACKAGE_SERVER}/${PROJECT_NAME}"
 			fi
 
 
@@ -350,8 +389,10 @@ do
 	buildLibrary lib3270-${src}-bindings
 done
 
-cd ${WORKDIR}/build
-/bin/bash
+#
+# Create runtime
+#
+makeRuntime
 
 cleanup
 
