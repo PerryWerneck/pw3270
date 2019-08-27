@@ -210,7 +210,6 @@ buildApplication()
 		mkdir -p ${WORKDIR}/build/${ARCH}
 		mkdir -p ${WORKDIR}/cache/${ARCH}
 		mkdir -p ${WORKDIR}/build/${ARCH}/bin
-		mkdir -p ${WORKDIR}/build/${ARCH}/lib
 		mkdir -p ${WORKDIR}/build/${ARCH}/locale
 		mkdir -p ${WORKDIR}/build/${ARCH}/include
 		mkdir -p ${WORKDIR}/build/${ARCH}/sysconfig
@@ -227,7 +226,7 @@ buildApplication()
 			--host=${host} \
 			--prefix=${prefix} \
 			--bindir=${WORKDIR}/build/${ARCH}/bin \
-			--libdir=${WORKDIR}/build/${ARCH}/lib \
+			--libdir=${WORKDIR}/build/${ARCH}/bin \
 			--localedir=${WORKDIR}/build/${ARCH}/locale \
 			--includedir=${WORKDIR}/build/${ARCH}/include \
 			--sysconfdir=${WORKDIR}/build/${ARCH}/sysconfig \
@@ -246,6 +245,10 @@ buildApplication()
 		make install
 		if [ "$?" != "0" ]; then
 			failed "Can't install ${1}"
+		fi
+
+		if [ -e ./win/${1}.nsi ]; then
+			cp "./win/${1}.nsi" "${WORKDIR}/build/${ARCH}"
 		fi
 
 	done
