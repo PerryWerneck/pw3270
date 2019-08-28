@@ -65,7 +65,7 @@ getSource()
 	fi
 
 	if [ "${GET_PREREQS}" != "0" ]; then
-		for ARCH in ${ARCHS}
+		for ARCH in ${TARGET_ARCHS}
 		do
 
 			if [ -d ${WORKDIR}/sources/${1}/win/${ARCH} ]; then
@@ -97,7 +97,9 @@ getSource()
 #
 buildLibrary()
 {
-	for ARCH in ${ARCHS}
+	echo "Building library ${1}"
+
+	for ARCH in ${TARGET_ARCHS}
 	do
 
 		echo -e "\e]2;Building ${1} for ${ARCH}\a"
@@ -129,12 +131,8 @@ buildLibrary()
 
 		mkdir -p ${WORKDIR}/build/${ARCH}
 		mkdir -p ${WORKDIR}/cache/${ARCH}
-		mkdir -p ${WORKDIR}/build/${ARCH}/bin
-		mkdir -p ${WORKDIR}/build/${ARCH}/lib
 		mkdir -p ${WORKDIR}/build/${ARCH}/locale
 		mkdir -p ${WORKDIR}/build/${ARCH}/include
-		mkdir -p ${WORKDIR}/build/${ARCH}/sysconfig
-		mkdir -p ${WORKDIR}/build/${ARCH}/data
 
 		export PKG_CONFIG_PATH=${WORKDIR}/build/${ARCH}/lib/pkgconfig
 		export cache=${WORKDIR}/cache/${ARCH}/${1}.cache
@@ -143,17 +141,16 @@ buildLibrary()
 
 		./configure \
 			CFLAGS="-I${WORKDIR}/build/${ARCH}/include" \
-			LDFLAGS="-L${WORKDIR}/build/${ARCH}/lib" \
+			LDFLAGS="-L${WORKDIR}/build/${ARCH}" \
 			--host=${host} \
 			--prefix=${prefix} \
-			--bindir=${WORKDIR}/build/${ARCH}/bin \
-			--libdir=${WORKDIR}/build/${ARCH}/bin \
+			--bindir=${WORKDIR}/build/${ARCH} \
+			--libdir=${WORKDIR}/build/${ARCH} \
 			--localedir=${WORKDIR}/build/${ARCH}/locale \
 			--includedir=${WORKDIR}/build/${ARCH}/include \
-			--sysconfdir=${WORKDIR}/build/${ARCH}/sysconfig \
-			--datadir=${WORKDIR}/build/${ARCH}/data \
-			--datarootdir=${WORKDIR}/build/${ARCH}/data
-
+			--sysconfdir=${WORKDIR}/build/${ARCH} \
+			--datadir=${WORKDIR}/build/${ARCH} \
+			--datarootdir=${WORKDIR}/build/${ARCH}
 
 		if [ "$?" != "0" ]; then
 			failed "Can't configure ${1}"
@@ -178,7 +175,7 @@ buildLibrary()
 #
 buildApplication()
 {
-	for ARCH in ${ARCHS}
+	for ARCH in ${TARGET_ARCHS}
 	do
 
 		echo -e "\e]2;Building ${1} for ${ARCH}\a"
@@ -210,11 +207,8 @@ buildApplication()
 
 		mkdir -p ${WORKDIR}/build/${ARCH}
 		mkdir -p ${WORKDIR}/cache/${ARCH}
-		mkdir -p ${WORKDIR}/build/${ARCH}/bin
 		mkdir -p ${WORKDIR}/build/${ARCH}/locale
 		mkdir -p ${WORKDIR}/build/${ARCH}/include
-		mkdir -p ${WORKDIR}/build/${ARCH}/sysconfig
-		mkdir -p ${WORKDIR}/build/${ARCH}/data
 
 		export PKG_CONFIG_PATH=${WORKDIR}/build/${ARCH}/lib/pkgconfig
 		export cache=${WORKDIR}/cache/${ARCH}/${1}.cache
@@ -223,16 +217,16 @@ buildApplication()
 
 		./configure \
 			CFLAGS="-I${WORKDIR}/build/${ARCH}/include" \
-			LDFLAGS="-L${WORKDIR}/build/${ARCH}/lib" \
+			LDFLAGS="-L${WORKDIR}/build/${ARCH}" \
 			--host=${host} \
 			--prefix=${prefix} \
-			--bindir=${WORKDIR}/build/${ARCH}/bin \
-			--libdir=${WORKDIR}/build/${ARCH}/bin \
+			--bindir=${WORKDIR}/build/${ARCH} \
+			--libdir=${WORKDIR}/build/${ARCH} \
 			--localedir=${WORKDIR}/build/${ARCH}/locale \
 			--includedir=${WORKDIR}/build/${ARCH}/include \
-			--sysconfdir=${WORKDIR}/build/${ARCH}/sysconfig \
-			--datadir=${WORKDIR}/build/${ARCH}/data \
-			--datarootdir=${WORKDIR}/build/${ARCH}/data
+			--sysconfdir=${WORKDIR}/build/${ARCH} \
+			--datadir=${WORKDIR}/build/${ARCH} \
+			--datarootdir=${WORKDIR}/build/${ARCH}
 
 		if [ "$?" != "0" ]; then
 			failed "Can't configure ${1}"
@@ -262,6 +256,29 @@ buildApplication()
 			fi
 		fi
 
+		if [ -e branding/${1}.svg ]; then
+			convert -density 384 -background transparent branding/${1}.svg -define icon:auto-resize -colors 256 ${WORKDIR}/build/${ARCH}/${1}.ico
+			if [ "$?" != "0" ]; then
+				cleanup
+				exit -1
+			fi
+		fi
+
+		for doc in LICENSE LICENCA README.md AUTHORS
+		do
+
+			if [ -e ${doc} ]; then
+				cp ${doc} ${WORKDIR}/build/${ARCH}
+
+				if [ "$?" != "0" ]; then
+					cleanup
+					exit -1
+				fi
+
+			fi
+
+		done
+
 	done
 
 }
@@ -269,9 +286,10 @@ buildApplication()
 #
 # Make runtime
 #
-makeRuntime() {
+makeRuntime() 
+{
 
-	for ARCH in ${ARCHS}
+	for ARCH in ${TARGET_ARCHS}
 	do
 
 		echo -e "\e]2;Building runtime for ${ARCH}\a"
@@ -285,11 +303,31 @@ makeRuntime() {
 			chmod +x ${SCRIPT}
 
 			cd ${WORKDIR}/build/${ARCH}
-			${SCRIPT} --path="${WORKDIR}/build/${ARCH}/runtime"  --bindir="${WORKDIR}/build/${ARCH}/bin"
+			${SCRIPT} --output-dir="${WORKDIR}/build/${ARCH}/runtime"  --bindir="${WORKDIR}/build/${ARCH}"
 			if [ "$?" != "0" ]; then
 				failed "Error on ${SCRIPT}"
 			fi
 		done
+
+	done
+
+}
+
+#
+# Make packages
+#
+makeInstaller()
+{
+
+	for ARCH in ${TARGET_ARCHS}
+	do
+
+		echo -e "\e]2;Creating installer for ${ARCH}\a"
+		echo "Creating installer for ${ARCH}"
+
+		cd ${WORKDIR}/build/${ARCH}
+		/bin/bash
+
 
 	done
 
@@ -393,6 +431,7 @@ done
 # Create runtime
 #
 makeRuntime
+makeInstaller
 
 cleanup
 

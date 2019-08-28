@@ -71,10 +71,11 @@ SubSection "@PACKAGE@" SecMain
 		createShortCut "$DESKTOP\@PACKAGE@.lnk" "$INSTDIR\@PACKAGE@.exe"
 
 		# Binary files
-		file "/oname=$INSTDIR\@PACKAGE@.exe"				"bin\@PACKAGE@.exe"
+		file "/oname=$INSTDIR\@PACKAGE@.exe"				"@PACKAGE@.exe"
 		file "/oname=$INSTDIR\@PACKAGE@.ico"				"@PACKAGE@.ico"
-		file "/oname=$INSTDIR\lib3270.dll"				"bin\lib3270.dll"
-		file "/oname=$INSTDIR\@PACKAGE@.dll"				"bin\@PACKAGE@.dll"
+		file "/oname=$INSTDIR\lib3270.dll"				"lib3270.dll"
+		file "/oname=$INSTDIR\libv3270.dll"				"libv3270.dll"
+		file "/oname=$INSTDIR\@PACKAGE@.dll"				"@PACKAGE@.dll"
 
 		# Configuration files
 		file "/oname=$INSTDIR\@PACKAGE@-logo.png"			"@PACKAGE@-logo.png"
@@ -95,7 +96,7 @@ SubSection "@PACKAGE@" SecMain
 
 		# Charset definition files
 		CreateDirectory "$INSTDIR\charsets"
-		file "/oname=$INSTDIR\charsets\bracket.xml" 	"bracket.xml"
+		file "/oname=$INSTDIR\charsets\bracket.xml" 	"charsets\bracket.xml"
 
 		# Locale files
 		CreateDirectory "$INSTDIR\locale\pt_BR\LC_MESSAGES"
@@ -134,18 +135,29 @@ SubSection "@PACKAGE@" SecMain
 
 	SubSection "Plugins" SecPLugin
 
-		Section /o "HLLAPI" HLLAPIPlugin
+		Section /o "Remote control" IPCPlugin
 
 			setOutPath $INSTDIR
 
 			${DisableX64FSRedirection}
 			CreateDirectory "$INSTDIR\plugins"
 
-			file "/oname=$INSTDIR\plugins\ipc3270c.dll"	"bin\ipc3270c.dll"
-			file "/oname=$SYSDIR\libhllapi.dll"		"bin\libhllapi.dll"
+			file "/oname=$INSTDIR\plugins\ipc3270c.dll"	"pw3270-plugins\ipcserver.dll"
 
 		sectionEnd
 
+	SubSectionEnd
+
+	SubSection "Language bindins" Languages
+
+		Section /o "HLLAPI" HLLAPIPlugin
+
+			setOutPath $INSTDIR
+
+			${DisableX64FSRedirection}
+			file "/oname=$SYSDIR\libhllapi.dll"		"libhllapi.dll"
+
+		sectionEnd
 
 	SubSectionEnd
 
@@ -175,7 +187,7 @@ SubSectionEnd
 Section /o "GTK+ Runtime" SecGTK
 
 	setOutPath $INSTDIR
-	file /r "bin\runtime\*.*"
+	file /r "runtime\*.*"
 
 SectionEnd
 !endif
@@ -221,7 +233,7 @@ SectionEnd
 
 Function .onInit
 
-	#---[ Verifica opção de instalação HLLAPI ]----------------------------------------------------------
+	#---[ Check HLLAPI Command line option ]-------------------------------------------------------------
 
 	Push $0
 
@@ -240,6 +252,10 @@ Function .onInit
 		SectionGetFlags ${HLLAPIPlugin} $0
 		IntOp $0 $0 | ${SF_SELECTED}
 		SectionSetFlags ${HLLAPIPlugin} $0
+
+		SectionGetFlags ${IPCPlugin} $0
+		IntOp $0 $0 | ${SF_SELECTED}
+		SectionSetFlags ${IPCPlugin} $0
 
 	${EndIf}
 
