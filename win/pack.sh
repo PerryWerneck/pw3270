@@ -5,7 +5,7 @@ LIBRARY_NAME="lib3270"
 CORE_LIBRARIES="lib3270 libv3270"
 PACKAGE_PLUGINS="ipc"
 PACKAGE_LANGUAGE_BINDINGS="hllapi"
-TARGET_ARCHS="x86_32 x82_64"
+TARGET_ARCHS="x86_32 x86_64"
 GIT_URL="https://github.com/PerryWerneck"
 
 PROJECTDIR=$(dirname $(dirname $(readlink -f ${0})))
@@ -123,7 +123,7 @@ buildLibrary()
 			;;
 
 		*)
-			failed "Arquitetura desconhecida: ${1}"
+			failed "Arquitetura desconhecida: ${ARCH}"
 
 		esac
 
@@ -207,7 +207,7 @@ buildApplication()
 			;;
 
 		*)
-			failed "Arquitetura desconhecida: ${1}"
+			failed "Arquitetura desconhecida: ${ARCH}"
 
 		esac
 
