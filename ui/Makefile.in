@@ -32,6 +32,7 @@ SOURCES=xml2pot.c
 prefix=@prefix@
 exec_prefix=@exec_prefix@
 datarootdir=@datarootdir@
+APPDATADIR=@APPDATADIR@
 
 PACKAGE_NAME=@PACKAGE_NAME@
 PACKAGE_VERSION=@PACKAGE_VERSION@
@@ -103,8 +104,8 @@ Release: \
 
 install:
 
-	@$(MKDIR) $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/ui
-	@$(INSTALL_DATA) *.xml $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/ui
+	@$(MKDIR) $(DESTDIR)$(APPDATADIR)/ui
+	@$(INSTALL_DATA) *.xml $(DESTDIR)$(APPDATADIR)/ui
 
 $(SRCDIR): \
 	clean

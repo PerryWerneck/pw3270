@@ -1,6 +1,7 @@
 !include "MUI2.nsh"
 !include "x64.nsh"
 !include "FileFunc.nsh"
+!include "LogicLib.nsh"
 
 Name "@PACKAGE@"
 Caption "@PACKAGE@ - @PACKAGE_DESCRIPTION@"

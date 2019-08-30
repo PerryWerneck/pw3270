@@ -31,6 +31,7 @@ PACKAGE_TARNAME=@PACKAGE_TARNAME@
 prefix=@prefix@
 exec_prefix=@exec_prefix@
 datarootdir=@datarootdir@
+APPDATADIR=@APPDATADIR@
 
 BASEDIR=@BASEDIR@
 SRCDIR=$(BASEDIR)/.src/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/branding
@@ -72,7 +73,7 @@ $(BINDIR)/%.png: \
 	@$(MKDIR) `dirname $@`
 	@$(OPTIPNG) -out $@ -o7 $<
 
-$(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/%.png: \
+$(DESTDIR)$(APPDATADIR)/%.png: \
 	$(BINDIR)/%.png
 
 	@echo $@ ...
@@ -87,9 +88,9 @@ $(DESTDIR)$(datarootdir)/pixmaps/%.png: \
 	@$(INSTALL_DATA) $< $@
 
 install: \
-	$(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/$(PACKAGE_NAME).png \
+	$(DESTDIR)$(APPDATADIR)/$(PACKAGE_NAME).png \
 	$(DESTDIR)$(datarootdir)/pixmaps/$(PACKAGE_TARNAME).png \
-	$(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/$(PACKAGE_NAME)-logo.png
+	$(DESTDIR)$(APPDATADIR)/$(PACKAGE_NAME)-logo.png
 
 	@$(INSTALL_DATA) \
 		launcher.desktop \

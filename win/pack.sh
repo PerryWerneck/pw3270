@@ -226,7 +226,8 @@ buildApplication()
 			--includedir=${WORKDIR}/build/${ARCH}/include \
 			--sysconfdir=${WORKDIR}/build/${ARCH} \
 			--datadir=${WORKDIR}/build/${ARCH} \
-			--datarootdir=${WORKDIR}/build/${ARCH}
+			--datarootdir=${WORKDIR}/build/${ARCH} \
+			--with-application-datadir=${WORKDIR}/build/${ARCH}
 
 		if [ "$?" != "0" ]; then
 			failed "Can't configure ${1}"

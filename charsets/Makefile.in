@@ -29,6 +29,7 @@
 prefix=@prefix@
 exec_prefix=@exec_prefix@
 datarootdir=@datarootdir@
+APPDATADIR=@APPDATADIR@
 
 PACKAGE_NAME=@PACKAGE_NAME@
 PACKAGE_VERSION=@PACKAGE_VERSION@
@@ -62,8 +63,8 @@ LIBS=`pkg-config --libs gtk+-3.0`
 
 install:
 
-	@$(MKDIR) $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/charsets
-	@$(INSTALL_DATA) *.xml $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)/charsets
+	@$(MKDIR) $(DESTDIR)$(APPDATADIR)/charsets
+	@$(INSTALL_DATA) *.xml $(DESTDIR)$(APPDATADIR)/charsets
 
 $(SRCDIR): \
 	clean

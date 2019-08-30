@@ -127,6 +127,7 @@ case "$host" in
 
 		AC_SUBST(PROGRAMFILES,$app_cv_programfiles)
 		AC_SUBST(WINARCH,$app_cv_winarch)
+		AC_SUBST(LIBEXT,.dll)
 		;;
 
 	*-apple-*)
@@ -139,6 +140,8 @@ case "$host" in
 		CFLAGS="$CFLAGS -Wall -Werror"
 
 		LIBS="-pthread $LIBS"
+
+		AC_SUBST(LIBEXT,.so.$app_vrs_major.$app_vrs_minor)
 		;;
 
  	*)
@@ -152,6 +155,8 @@ case "$host" in
 
 		# LIBS="-Wl,--no-allow-shlib-undefined,--as-needed,--no-undefined -pthread $LIBS"
 		LIBS="-pthread $LIBS"
+
+		AC_SUBST(LIBEXT,.so.$app_vrs_major.$app_vrs_minor)
 
 esac
 
@@ -213,19 +218,10 @@ AC_ARG_WITH([source-locales], [AS_HELP_STRING([--with-source-locales], [Set path
 AC_DEFINE_UNQUOTED(LIBRARY_POT_FILES, $app_cv_source_locales)
 AC_SUBST(LIBRARY_POT_FILES,$app_cv_source_locales)
 
-case "$host" in
-	*-mingw32|*-pc-msys)
-		AC_SUBST(LIBEXT,.dll)
-		;;
+AC_ARG_WITH([application-datadir], [AS_HELP_STRING([--with-application-datadir], [Set path for configuration file])], [ app_cv_source_appdatadir="$withval" ],[ app_cv_source_appdatadir="\$(datarootdir)/\$(PACKAGE_NAME)" ])
 
- 	s390x-*)
-		AC_SUBST(LIBEXT,.so)
-		;;
-
- 	*)
-		AC_SUBST(LIBEXT,.so.$app_vrs_major.$app_vrs_minor)
-
-esac
+AC_DEFINE_UNQUOTED(APPDATADIR, $app_cv_source_appdatadir)
+AC_SUBST(APPDATADIR,$app_cv_source_appdatadir)
 
 dnl ---------------------------------------------------------------------------
 dnl Check for libintl

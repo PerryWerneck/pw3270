@@ -44,6 +44,7 @@ localedir=${datarootdir}/locale
 docdir=@docdir@
 sysconfdir=@sysconfdir@
 mandir=@mandir@
+APPDATADIR=@APPDATADIR@
 
 BASEDIR=@BASEDIR@
 
@@ -136,7 +137,8 @@ install-application: \
 	install-charsets \
 	install-locale
 
-	@$(INSTALL_DATA) conf/colors.conf $(DESTDIR)$(datarootdir)/$(PACKAGE_NAME)
+	@$(MKDIR) $(DESTDIR)$(APPDATADIR)
+	@$(INSTALL_DATA) conf/colors.conf $(DESTDIR)$(APPDATADIR)
 
 ifneq ($(HELP2MAN),no)
 	@$(MKDIR) $(DESTDIR)/$(mandir)/man1
