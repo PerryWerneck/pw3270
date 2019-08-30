@@ -75,6 +75,49 @@ DLL_LDFLAGS="-shared"
 STATIC_LDFLAGS=""
 
 dnl ---------------------------------------------------------------------------
+dnl Version & customization
+dnl ---------------------------------------------------------------------------
+
+AC_SUBST(PACKAGE_DESCRIPTION,"IBM 3270 Terminal emulator")
+
+app_vrs_major=$(echo $VERSION | cut -d. -f1)
+app_vrs_minor=$(echo $VERSION | cut -d. -f2)
+
+AC_DEFINE_UNQUOTED(PACKAGE_MAJOR_VERSION, $app_vrs_major)
+AC_DEFINE_UNQUOTED(PACKAGE_MINOR_VERSION, $app_vrs_minor)
+
+AC_SUBST(PACKAGE_MAJOR_VERSION,$app_vrs_major)
+AC_SUBST(PACKAGE_MINOR_VERSION,$app_vrs_minor)
+
+AC_ARG_WITH([release], [AS_HELP_STRING([--with-release], [Set release])], [ app_cv_release="$withval" ],[ app_cv_release="`date +%-y`.`date +%-m`.`date +%-d`" ])
+AC_ARG_WITH([session-name], [AS_HELP_STRING([--with-session-name], [Set default session name])], [ AC_DEFINE_UNQUOTED(DEFAULT_SESSION_NAME, $withval) ],[ AC_MSG_NOTICE([No default session name.]) ])
+AC_ARG_WITH([application-name], [AS_HELP_STRING([--with-application-name], [Set application name])], [ AC_DEFINE_UNQUOTED(APPLICATION_NAME, $withval) ],[ AC_MSG_NOTICE([No default application name.]) ])
+
+app_rls_major=$(echo $app_cv_release.0.0 | cut -d. -f1)
+app_rls_minor=$(echo $app_cv_release.0.0 | cut -d. -f2)
+
+AC_DEFINE_UNQUOTED(PACKAGE_RELEASE, $app_cv_release)
+AC_DEFINE_UNQUOTED(PACKAGE_MAJOR_RELEASE, $app_rls_major)
+AC_DEFINE_UNQUOTED(PACKAGE_MINOR_RELEASE, $app_rls_minor)
+
+AC_SUBST(PACKAGE_RELEASE,$app_cv_release)
+AC_SUBST(PACKAGE_MAJOR_RELEASE,$app_rls_major)
+AC_SUBST(PACKAGE_MINOR_RELEASE,$app_rls_minor)
+
+AC_ARG_WITH([source-locales], [AS_HELP_STRING([--with-source-locales], [Set path for lib3270 locale sources])], [ app_cv_source_locales="$withval" ],[ app_cv_source_locales="/usr/share/pw3270/pot" ])
+
+AC_DEFINE_UNQUOTED(LIBRARY_POT_FILES, $app_cv_source_locales)
+AC_SUBST(LIBRARY_POT_FILES,$app_cv_source_locales)
+
+AC_ARG_WITH([application-datadir], [AS_HELP_STRING([--with-application-datadir], [Set path for configuration file])], [ app_cv_source_appdatadir="$withval" ],[ app_cv_source_appdatadir="\$(datarootdir)/\$(PACKAGE_NAME)" ])
+
+AC_DEFINE_UNQUOTED(APPDATADIR, $app_cv_source_appdatadir)
+AC_SUBST(APPDATADIR,$app_cv_source_appdatadir)
+
+AC_DEFINE_UNQUOTED(APPDATADIR, $app_cv_source_appdatadir)
+AC_SUBST(APPDATADIR,$app_cv_source_appdatadir)
+
+dnl ---------------------------------------------------------------------------
 dnl Check for OS specifics
 dnl ---------------------------------------------------------------------------
 
@@ -182,46 +225,6 @@ AC_PATH_TOOL([WINDRES], [windres], [no])
 AC_PATH_TOOL([DBUSBINDINGTOOL],[dbus-binding-tool],[no])
 
 PKG_CHECK_EXISTS
-
-dnl ---------------------------------------------------------------------------
-dnl Version & customization
-dnl ---------------------------------------------------------------------------
-
-AC_SUBST(PACKAGE_DESCRIPTION,"IBM 3270 Terminal emulator")
-
-app_vrs_major=$(echo $VERSION | cut -d. -f1)
-app_vrs_minor=$(echo $VERSION | cut -d. -f2)
-
-AC_DEFINE_UNQUOTED(PACKAGE_MAJOR_VERSION, $app_vrs_major)
-AC_DEFINE_UNQUOTED(PACKAGE_MINOR_VERSION, $app_vrs_minor)
-
-AC_SUBST(PACKAGE_MAJOR_VERSION,$app_vrs_major)
-AC_SUBST(PACKAGE_MINOR_VERSION,$app_vrs_minor)
-
-AC_ARG_WITH([release], [AS_HELP_STRING([--with-release], [Set release])], [ app_cv_release="$withval" ],[ app_cv_release="`date +%-y`.`date +%-m`.`date +%-d`" ])
-AC_ARG_WITH([session-name], [AS_HELP_STRING([--with-session-name], [Set default session name])], [ AC_DEFINE_UNQUOTED(DEFAULT_SESSION_NAME, $withval) ],[ AC_MSG_NOTICE([No default session name.]) ])
-AC_ARG_WITH([application-name], [AS_HELP_STRING([--with-application-name], [Set application name])], [ AC_DEFINE_UNQUOTED(APPLICATION_NAME, $withval) ],[ AC_MSG_NOTICE([No default application name.]) ])
-
-app_rls_major=$(echo $app_cv_release.0.0 | cut -d. -f1)
-app_rls_minor=$(echo $app_cv_release.0.0 | cut -d. -f2)
-
-AC_DEFINE_UNQUOTED(PACKAGE_RELEASE, $app_cv_release)
-AC_DEFINE_UNQUOTED(PACKAGE_MAJOR_RELEASE, $app_rls_major)
-AC_DEFINE_UNQUOTED(PACKAGE_MINOR_RELEASE, $app_rls_minor)
-
-AC_SUBST(PACKAGE_RELEASE,$app_cv_release)
-AC_SUBST(PACKAGE_MAJOR_RELEASE,$app_rls_major)
-AC_SUBST(PACKAGE_MINOR_RELEASE,$app_rls_minor)
-
-AC_ARG_WITH([source-locales], [AS_HELP_STRING([--with-source-locales], [Set path for lib3270 locale sources])], [ app_cv_source_locales="$withval" ],[ app_cv_source_locales="/usr/share/pw3270/pot" ])
-
-AC_DEFINE_UNQUOTED(LIBRARY_POT_FILES, $app_cv_source_locales)
-AC_SUBST(LIBRARY_POT_FILES,$app_cv_source_locales)
-
-AC_ARG_WITH([application-datadir], [AS_HELP_STRING([--with-application-datadir], [Set path for configuration file])], [ app_cv_source_appdatadir="$withval" ],[ app_cv_source_appdatadir="\$(datarootdir)/\$(PACKAGE_NAME)" ])
-
-AC_DEFINE_UNQUOTED(APPDATADIR, $app_cv_source_appdatadir)
-AC_SUBST(APPDATADIR,$app_cv_source_appdatadir)
 
 dnl ---------------------------------------------------------------------------
 dnl Check for libintl
