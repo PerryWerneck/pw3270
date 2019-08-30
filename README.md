@@ -28,24 +28,18 @@ Building for Linux
 Building for Windows
 ===========================
 
-Cross-compiling on SuSE Linux (Native or WSL)
----------------------------------------------
+Cross-compiling on SuSE Linux (Native or WSL) - The easier way!
+---------------------------------------------------------------
 
 1. First add the MinGW Repositories for your SuSE version from:
 
 	* https://build.opensuse.org/project/show/windows:mingw:win32
 	* https://build.opensuse.org/project/show/windows:mingw:win64
 
-2. Get pw3270 sources from git
+2. Run the build script
 
-	* git clone http://softwarepublico.gov.br/gitlab/pw3270/principal.git ./pw3270
+	* get it from https://github.com/PerryWerneck/pw3270/blob/master/win/pack.sh
+	* Run it!
 
-3. Install cross compilers
-
-	* ./pw3270/win/install-cross.sh --all
-
-4. Build pw3270 windows installers
-
-	* cd pw3270/ && ./win/pack.sh
 
 
