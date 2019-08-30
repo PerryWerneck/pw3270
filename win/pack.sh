@@ -166,6 +166,14 @@ buildLibrary()
 			failed "Can't install ${1}"
 		fi
 
+		for NSI in $(find ./win -name '*.nsi')
+		do
+			cp "${NSI}" "${WORKDIR}/build/${ARCH}"
+			if [ "$?" != "0" ]; then
+				failed "Can't copy ${NSI}"
+			fi
+		done
+
 	done
 
 }
@@ -243,12 +251,14 @@ buildApplication()
 			failed "Can't install ${1}"
 		fi
 
-		if [ -e ./win/${1}.nsi ]; then
-			cp "./win/${1}.nsi" "${WORKDIR}/build/${ARCH}"
+
+		for NSI in $(find ./win -name '*.nsi')
+		do
+			cp "${NSI}" "${WORKDIR}/build/${ARCH}"
 			if [ "$?" != "0" ]; then
-				failed "Can't copy ${1}.nsi"
+				failed "Can't copy ${NSI}"
 			fi
-		fi
+		done
 
 		if [ -e ./win/makeruntime.sh ]; then
 			cp "./win/makeruntime.sh" "${WORKDIR}/build/${ARCH}/${1}-makeruntime.sh"
@@ -330,19 +340,47 @@ makeInstaller()
 	for ARCH in ${TARGET_ARCHS}
 	do
 
-		echo -e "\e]2;Creating installer for ${ARCH}\a"
-		echo "Creating installer for ${ARCH}"
+		echo -e "\e]2;Creating installers for ${ARCH}\a"
+		echo "Creating installers for ${ARCH}"
 
 		cd ${WORKDIR}/build/${ARCH}
 
-		echo makensis ${NSIS_ARGS} ./pw3270.nsi
-		/bin/bash
-
-
-		mv -f *.exe ${PROJECTDIR}
-		if [ "$?" != "0" ]; then
-			failed "Can't copy installer to ${PROJECTDIR}"
+		TARCH=${ARCH}
+		if [ "${TARCH}" == "x86_32" ]; then
+			TARCH="i686"
 		fi
+
+		for NSI in *.nsi
+		do
+			makensis ${NSIS_ARGS} ${NSI}
+			if [ "$?" != "0" ]; then
+				failed "Error building ${NSI}"
+			fi
+
+			echo "TARCH="[${TARCH}]" ARCH=[${ARCH}]"
+			ls -l *-[0-9]*-${TARCH}.exe
+
+			if [ -d ~/public_html ]; then
+				mkdir -p ~/public_html/win/${PROJECT_NAME}/${ARCH}
+				cp -v *-[0-9]*-${TARCH}.exe ~/public_html/win/${PROJECT_NAME}/${ARCH}
+				if [ "$?" != "0" ]; then
+					failed "Can't copy binary to ~/public_html/win/${PROJECT_NAME}/${ARCH}"
+				fi
+			fi
+			
+			if [ "${PUBLISH}" == "1" ] && [ ! -z ${WIN_PACKAGE_SERVER} ]; then
+				scp *-[0-9]*-${TARCH}.exe ${WIN_PACKAGE_SERVER}/${PROJECT_NAME}/${ARCH}
+				if [ "$?" != "0" ]; then
+					failed "Can't publish to ${WIN_PACKAGE_SERVER}/${PROJECT_NAME}/${ARCH}"
+				fi
+			fi
+
+			mv -f *-[0-9]*-${TARCH}.exe ${PROJECTDIR}
+			if [ "$?" != "0" ]; then
+				failed "Can't move installer to ${PROJECTDIR}"
+			fi
+
+		done
 
 	done
 
@@ -375,8 +413,8 @@ do
 
 			;;
 
-		CONFIG)
-			. ${value}
+		PATH)
+			PROJECTDIR=$(readlink -f ${value})
 			;;
 
 
@@ -407,6 +445,13 @@ do
 	shift
 
 done
+
+#
+# Load customizations
+#
+if [ -e ${PROJECTDIR}/pw3270.win32.build.conf ]; then
+	. ${PROJECTDIR}/pw3270.win32.build.conf
+fi
 
 #
 # Download sources
