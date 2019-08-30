@@ -5,7 +5,7 @@ LIBRARY_NAME="lib3270"
 CORE_LIBRARIES="lib3270 libv3270"
 PACKAGE_PLUGINS="ipc"
 PACKAGE_LANGUAGE_BINDINGS="hllapi"
-TARGET_ARCHS="x86_32"
+TARGET_ARCHS="x86_32 x82_64"
 GIT_URL="https://github.com/PerryWerneck"
 
 PROJECTDIR=$(dirname $(dirname $(readlink -f ${0})))
