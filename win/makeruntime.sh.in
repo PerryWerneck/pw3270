@@ -285,7 +285,7 @@ do
                 value=${tmp##*=}
 
                 case "$parameter" in
-		PATH)
+		OUTPUT-DIR)
 			TARGET=$value
 			;;
 
@@ -324,7 +324,5 @@ copy_theme "Adwaita"
 # Otimiza todos os pngs
 #echo "Optimizing..."
 #find ${TARGET} -iname *.png -exec optipng -o7 -quiet {} \; 2>&1 > /dev/null
-
-
 
 echo "Runtime ok"

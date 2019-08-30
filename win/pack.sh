@@ -304,7 +304,7 @@ makeRuntime()
 			chmod +x ${SCRIPT}
 
 			cd ${WORKDIR}/build/${ARCH}
-			${SCRIPT} --output-dir="${WORKDIR}/build/${ARCH}/runtime"  --bindir="${WORKDIR}/build/${ARCH}"
+			${SCRIPT} --output-dir="${WORKDIR}/build/${ARCH}/runtime" --bindir="${WORKDIR}/build/${ARCH}"
 			if [ "$?" != "0" ]; then
 				failed "Error on ${SCRIPT}"
 			fi
@@ -319,6 +319,13 @@ makeRuntime()
 #
 makeInstaller()
 {
+	NSIS_ARGS="-DWITHGTK"
+
+	for ARG in $(echo ${PACKAGE_PLUGINS} | tr "[:lower:]" "[:upper:]") $(echo ${PACKAGE_LANGUAGE_BINDINGS} | tr "[:lower:]" "[:upper:]")
+	do
+		NSIS_ARGS="${NSIS_ARGS} -DWITH${ARG}"
+	done
+
 
 	for ARCH in ${TARGET_ARCHS}
 	do
@@ -327,8 +334,15 @@ makeInstaller()
 		echo "Creating installer for ${ARCH}"
 
 		cd ${WORKDIR}/build/${ARCH}
+
+		echo makensis ${NSIS_ARGS} ./pw3270.nsi
 		/bin/bash
 
+
+		mv -f *.exe ${PROJECTDIR}
+		if [ "$?" != "0" ]; then
+			failed "Can't copy installer to ${PROJECTDIR}"
+		fi
 
 	done
 
@@ -360,6 +374,12 @@ do
 			fi
 
 			;;
+
+		CONFIG)
+			. ${value}
+			;;
+
+
 		HELP)
 			echo "${0} [options]"
 			echo ""
