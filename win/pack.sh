@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PROJECT_NAME="pw3270"
+PRODUCT_NAME="pw3270"
 LIBRARY_NAME="lib3270"
 CORE_LIBRARIES="lib3270 libv3270"
 PACKAGE_PLUGINS="ipc"
@@ -138,7 +138,7 @@ buildLibrary()
 		mkdir -p ${WORKDIR}/build/${ARCH}/locale
 		mkdir -p ${WORKDIR}/build/${ARCH}/include
 
-		export PKG_CONFIG_PATH=${WORKDIR}/build/${ARCH}/lib/pkgconfig
+		export PKG_CONFIG_PATH=${WORKDIR}/build/${ARCH}/pkgconfig
 		export cache=${WORKDIR}/cache/${ARCH}/${1}.cache
 
 		cd ${WORKDIR}/sources/${1}
@@ -168,6 +168,7 @@ buildLibrary()
 				--datarootdir=${WORKDIR}/build/${ARCH}
 		fi
 
+		/bin/bash
 
 		if [ "$?" != "0" ]; then
 			failed "Can't configure ${1}"
@@ -234,7 +235,7 @@ buildApplication()
 		mkdir -p ${WORKDIR}/build/${ARCH}/include
 
 		export HOST_CC=/usr/bin/gcc
-		export PKG_CONFIG_PATH=${WORKDIR}/build/${ARCH}/lib/pkgconfig
+		export PKG_CONFIG_PATH=${WORKDIR}/build/${ARCH}/pkgconfig
 		export cache=${WORKDIR}/cache/${ARCH}/${1}.cache
 
 		cd ${WORKDIR}/sources/${1}
@@ -391,17 +392,17 @@ makeInstaller()
 			ls -l *-[0-9]*-${TARCH}.exe
 
 			if [ -d ~/public_html ]; then
-				mkdir -p ~/public_html/win/${PROJECT_NAME}/${ARCH}
-				cp -v *-[0-9]*-${TARCH}.exe ~/public_html/win/${PROJECT_NAME}/${ARCH}
+				mkdir -p ~/public_html/win/${PRODUCT_NAME}/${ARCH}
+				cp -v *-[0-9]*-${TARCH}.exe ~/public_html/win/${PRODUCT_NAME}/${ARCH}
 				if [ "$?" != "0" ]; then
-					failed "Can't copy binary to ~/public_html/win/${PROJECT_NAME}/${ARCH}"
+					failed "Can't copy binary to ~/public_html/win/${PRODUCT_NAME}/${ARCH}"
 				fi
 			fi
 			
 			if [ "${PUBLISH}" == "1" ] && [ ! -z ${WIN_PACKAGE_SERVER} ]; then
-				scp *-[0-9]*-${TARCH}.exe ${WIN_PACKAGE_SERVER}/${PROJECT_NAME}/${ARCH}
+				scp *-[0-9]*-${TARCH}.exe ${WIN_PACKAGE_SERVER}/${PRODUCT_NAME}/${ARCH}
 				if [ "$?" != "0" ]; then
-					failed "Can't publish to ${WIN_PACKAGE_SERVER}/${PROJECT_NAME}/${ARCH}"
+					failed "Can't publish to ${WIN_PACKAGE_SERVER}/${PRODUCT_NAME}/${ARCH}"
 				fi
 			fi
 
@@ -436,9 +437,13 @@ do
 			PUBLISH=1
 			;;
 
+		PRODUCT)
+			PRODUCT_NAME=${value}
+			;;
+
 		CLEAR)
-			if [ -d ~/public_html/win/${PROJECT_NAME} ]; then
-				rm -fr ~/public_html/win/${PROJECT_NAME}/{x86_32,x86_64}
+			if [ -d ~/public_html/win/${PRODUCT_NAME} ]; then
+				rm -fr ~/public_html/win/${PRODUCT_NAME}/{x86_32,x86_64}
 			fi
 
 			;;
@@ -455,13 +460,13 @@ do
 			echo ""
 
 			if [ ! -z ${WIN_PACKAGE_SERVER} ]; then
-				echo "  --nopublish	Don't publish binaries in ${WIN_PACKAGE_SERVER}/${PROJECT_NAME}"
-				echo "  --publish	Publish binaries in ${WIN_PACKAGE_SERVER}/${PROJECT_NAME}"
+				echo "  --nopublish	Don't publish binaries in ${WIN_PACKAGE_SERVER}/${PRODUCT_NAME}"
+				echo "  --publish	Publish binaries in ${WIN_PACKAGE_SERVER}/${PRODUCT_NAME}"
 			fi
 
 
-			if [ -d ~/public_html/win/${PROJECT_NAME} ]; then
-				echo "  --clear	Remove ~/public_html/win/${PROJECT_NAME}/{x86_32,x86_64}"
+			if [ -d ~/public_html/win/${PRODUCT_NAME} ]; then
+				echo "  --clear	Remove ~/public_html/win/${PRODUCT_NAME}/{x86_32,x86_64}"
 			fi
 
 			echo ""
