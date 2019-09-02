@@ -5,7 +5,7 @@ LIBRARY_NAME="lib3270"
 CORE_LIBRARIES="lib3270 libv3270"
 PACKAGE_PLUGINS="ipc"
 PACKAGE_LANGUAGE_BINDINGS="hllapi"
-TARGET_ARCHS="x86_32 x86_64"
+TARGET_ARCHS="x86_64"
 GIT_URL="https://github.com/PerryWerneck"
 
 PROJECTDIR=$(dirname $(dirname $(readlink -f ${0})))
@@ -81,6 +81,8 @@ configure()
 		done
 	fi
 
+	echo -e "\e]2;Creating configuration\a"
+	echo "Creating configuration"
 	for DIR in $(find ${WORKDIR}/sources -maxdepth 1 -type d)
 	do
 		echo ${DIR}
@@ -159,6 +161,7 @@ buildLibrary()
 				LDFLAGS="-L${WORKDIR}/build/${ARCH}" \
 				--host=${host} \
 				--prefix=${prefix} \
+				--with-product-name="${PRODUCT_NAME}" \
 				--bindir=${WORKDIR}/build/${ARCH} \
 				--libdir=${WORKDIR}/build/${ARCH} \
 				--localedir=${WORKDIR}/build/${ARCH}/locale \
@@ -167,8 +170,6 @@ buildLibrary()
 				--datadir=${WORKDIR}/build/${ARCH} \
 				--datarootdir=${WORKDIR}/build/${ARCH}
 		fi
-
-		/bin/bash
 
 		if [ "$?" != "0" ]; then
 			failed "Can't configure ${1}"
@@ -362,11 +363,18 @@ makeInstaller()
 {
 	NSIS_ARGS="-DWITHGTK"
 
+	if [ ! -z ${PACKAGE_PLUGINS} ]; then
+		NSIS_ARGS="${NSIS_ARGS} -DWITHPLUGINS"
+	fi
+
+	if [ ! -z ${PACKAGE_LANGUAGE_BINDINGS} ]; then
+		NSIS_ARGS="${NSIS_ARGS} -DWITHLANGUAGE"
+	fi
+
 	for ARG in $(echo ${PACKAGE_PLUGINS} | tr "[:lower:]" "[:upper:]") $(echo ${PACKAGE_LANGUAGE_BINDINGS} | tr "[:lower:]" "[:upper:]")
 	do
 		NSIS_ARGS="${NSIS_ARGS} -DWITH${ARG}"
 	done
-
 
 	for ARCH in ${TARGET_ARCHS}
 	do

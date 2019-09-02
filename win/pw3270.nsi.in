@@ -134,8 +134,10 @@ SubSection "@PACKAGE@" SecMain
 
 	sectionEnd
 
+!ifdef WITHPLUGINS
 	SubSection "Plugins" SecPLugin
 
+!ifdef WITHIPC
 		Section /o "Remote control" IPCPlugin
 
 			setOutPath $INSTDIR
@@ -143,15 +145,19 @@ SubSection "@PACKAGE@" SecMain
 			${DisableX64FSRedirection}
 			CreateDirectory "$INSTDIR\plugins"
 
-			file "/oname=$INSTDIR\plugins\ipc3270c.dll"	"pw3270-plugins\ipcserver.dll"
+			file "/oname=$INSTDIR\plugins\ipcserver.dll"	"pw3270-plugins\ipcserver.dll"
 
 		sectionEnd
+!endif
 
 	SubSectionEnd
+!endif
 
+!ifdef WITHLANGUAGE
 	SubSection "Language bindins" Languages
 
-		Section /o "HLLAPI" HLLAPIPlugin
+!ifdef WITHHLLAPI
+		Section /o "HLLAPI" HLLAPIBinding
 
 			setOutPath $INSTDIR
 
@@ -159,8 +165,10 @@ SubSection "@PACKAGE@" SecMain
 			file "/oname=$SYSDIR\libhllapi.dll"		"libhllapi.dll"
 
 		sectionEnd
+!endif
 
 	SubSectionEnd
+!endif
 
 	SubSection "Menus, Keypads & Toolbars" SecMenu
 
@@ -236,6 +244,8 @@ Function .onInit
 
 	#---[ Check HLLAPI Command line option ]-------------------------------------------------------------
 
+!ifdef WITHHLLAPI
+
 	Push $0
 
 	${GetParameters} $R0
@@ -244,23 +254,27 @@ Function .onInit
 
 	${if} $0 == "NO"
 
-		SectionGetFlags ${HLLAPIPlugin} $0
+		SectionGetFlags ${HLLAPIBinding} $0
 		IntOp $0 $0 & ${SECTION_OFF}
-		SectionSetFlags ${HLLAPIPlugin} $0
+		SectionSetFlags ${HLLAPIBinding} $0
 
 	${else}
 
-		SectionGetFlags ${HLLAPIPlugin} $0
+		SectionGetFlags ${HLLAPIBinding} $0
 		IntOp $0 $0 | ${SF_SELECTED}
-		SectionSetFlags ${HLLAPIPlugin} $0
+		SectionSetFlags ${HLLAPIBinding} $0
 
+!ifdef WITHIPC
 		SectionGetFlags ${IPCPlugin} $0
 		IntOp $0 $0 | ${SF_SELECTED}
 		SectionSetFlags ${IPCPlugin} $0
+!endif
 
 	${EndIf}
 
 	Pop $0
+
+!endif
 
 !ifdef WITHGTK
 
