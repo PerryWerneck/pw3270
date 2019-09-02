@@ -421,38 +421,18 @@ dnl ---------------------------------------------------------------------------
 dnl Lib3270 flags
 dnl ---------------------------------------------------------------------------
 
-PKG_CHECK_MODULES( [LIB3270], [lib3270], app_cv_3270="yes", app_cv_3270="no" )
+PKG_CHECK_MODULES( [LIB3270], [lib3270], AC_DEFINE(HAVE_LIB3270), AC_MSG_ERROR([ No LIB3270 devel.]) )
+AC_SUBST(LIB3270_CFLAGS)
+AC_SUBST(LIB3270_LIBS)
 
-if test "$app_cv_3270" == "yes"; then
-	AC_DEFINE(HAVE_LIB3270)
-	AC_SUBST(LIB3270_CFLAGS)
-	AC_SUBST(LIB3270_LIBS)
-else
-	AC_MSG_ERROR([ No LIB3270 devel.])
-dnl AX_SUBDIRS_CONFIGURE([modules/lib3270],[[--with-work-dir=$ac_pwd],[--with-libname=$app_cv_libname]])
-dnl AC_SUBST(LIB3270_CFLAGS,-I$ac_pwd/modules/lib3270/src/include)
-dnl AC_SUBST(LIB3270_LIBS,-l$app_cv_libname)
-dnl AC_SUBST(LIB3270_INCLUDEPATH,$ac_pwd/modules/lib3270/src/include)
-fi
+PKG_CHECK_MODULES( [LIBV3270], [libv3270], AC_DEFINE(HAVE_LIBV3270), AC_MSG_ERROR([ No V3270 devel.]) )
+AC_SUBST(LIBV3270_CFLAGS)
+AC_SUBST(LIBV3270_LIBS)
 
-PKG_CHECK_MODULES( [LIBV3270], [libv3270], app_cv_v3270="yes", app_cv_v3270="no" )
+AC_ARG_WITH([application-name], [AS_HELP_STRING([--with-application-name], [Set application name])], [ app_cv_appname="$withval" ],[ app_cv_appname="pw3270" ])
 
-if test "$app_cv_v3270" == "yes"; then
-	AC_DEFINE(HAVE_LIBV3270)
-	AC_SUBST(LIBV3270_CFLAGS)
-	AC_SUBST(LIBV3270_LIBS)
-else
-	AC_MSG_ERROR([ No V3270 widget devel.])
-dnl AC_SUBST(LIBV3270_CFLAGS,-I$ac_pwd/modules/libv3270/src/include)
-dnl AC_SUBST(LIBV3270_LIBS,-lv$app_cv_libname)
-dnl AX_SUBDIRS_CONFIGURE([modules/libv3270],[[LIB3270_CFLAGS=-I$ac_pwd/modules/lib3270/src/include],[LIB3270_LIBS=-l$app_cv_libname],[--with-work-dir=$ac_pwd],[--with-libname=$app_cv_libname]])
-dnl AC_SUBST(LIBV3270_INCLUDEPATH,$ac_pwd/modules/libv3270/src/include)
-fi
-
-AC_ARG_WITH([libname], [AS_HELP_STRING([--with-libname], [Setup library name])], [ app_cv_libname="$withval" ],[ app_cv_libname=`$PKG_CONFIG --variable=library_name lib3270` ])
-
-AC_DEFINE_UNQUOTED(LIB3270_NAME,$app_cv_libname)
-AC_SUBST(LIB3270_NAME,$app_cv_libname)
+AC_DEFINE_UNQUOTED(APPLICATION_NAME,$app_cv_appname)
+AC_SUBST(APPLICATION_NAME,$app_cv_appname)
 
 AC_SUBST(PW3270_CFLAGS,-I$ac_pwd/src/include)
 AC_SUBST(PW3270_LIBS,-l$PACKAGE_TARNAME)

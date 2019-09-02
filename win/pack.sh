@@ -11,14 +11,10 @@ GIT_URL="https://github.com/PerryWerneck"
 PROJECTDIR=$(dirname $(dirname $(readlink -f ${0})))
 WORKDIR=$(mktemp -d)
 PUBLISH=0
-GET_PREREQS=0
+GET_PREREQS=1
 
 if [ -e /etc/os-release ]; then
 	. /etc/os-release
-fi
-
-if [ -e ~/.config/pw3270.build.conf ]; then
-	. ~/.config/pw3270.build.conf
 fi
 
 #
@@ -37,19 +33,6 @@ failed()
 }
 
 #
-# Get pre requisites from spec
-#
-getBuildRequires()
-{
-	for required in $(grep -i buildrequires "${1}" | grep -v "%" | cut -d: -f2-)
-	do
-		echo "Installing ${required}"
-		sudo zypper --non-interactive --quiet in "${required}"
-	done
-
-}
-
-#
 # Get Sources from GIT
 #
 getSource()
@@ -64,31 +47,52 @@ getSource()
 		faile "Can't get sources for ${1}"
 	fi
 
+	for ARCH in ${TARGET_ARCHS}
+	do
+
+		if [ -d ${WORKDIR}/sources/${1}/win/${ARCH} ]; then
+
+			for spec in $(find ${WORKDIR}/sources/${1}/win/${ARCH} -name "*.spec")
+			do
+				grep -i buildrequires "${spec}" | grep -v "%" | cut -d: -f2- | tr -d '[:blank:]' >> ${WORKDIR}/sources/pre-reqs
+			done
+		
+		fi
+
+	done
+
+}
+
+#
+# Configure
+#
+configure()
+{
+
 	if [ "${GET_PREREQS}" != "0" ]; then
-		for ARCH in ${TARGET_ARCHS}
+
+		echo -e "\e]2;Installing pre-reqs\a"
+		echo "Installing pre-reqs"
+
+		for PKG in $(cat ${WORKDIR}/sources/pre-reqs | sort --unique)
 		do
-
-			if [ -d ${WORKDIR}/sources/${1}/win/${ARCH} ]; then
-
-				for spec in $(find ${WORKDIR}/sources/${1}/win/${ARCH} -name "*.spec")
-				do
-					getBuildRequires "${spec}"
-				done
-
-			fi
-
-
+			echo "${PKG}..."
+			sudo zypper --non-interactive --quiet in "${PKG}"
 		done
 	fi
 
-	cd ${WORKDIR}/sources/${1}
+	for DIR in $(find ${WORKDIR}/sources -maxdepth 1 -type d)
+	do
+		echo ${DIR}
+		cd ${DIR}
 
-	NOCONFIGURE=1 ./autogen.sh
-	if [ "$?" != "0" ]; then
-		cleanup
-		exit -1
-	fi
-
+		if [ -x ./autogen.sh ]; then
+			NOCONFIGURE=1 ./autogen.sh
+			if [ "$?" != "0" ]; then
+				failed "Erro em autogen.sh"
+			fi
+		fi
+	done
 
 }
 
@@ -139,18 +143,31 @@ buildLibrary()
 
 		cd ${WORKDIR}/sources/${1}
 
-		./configure \
+		if [ -x ${PROJECTDIR}/win/configure.${1} ]; then
+
+			HOST="${host}" \
+			PREFIX="${prefix}" \
+			BUILDDIR="{WORKDIR}/build/${ARCH}}" \
 			CFLAGS="-I${WORKDIR}/build/${ARCH}/include" \
 			LDFLAGS="-L${WORKDIR}/build/${ARCH}" \
-			--host=${host} \
-			--prefix=${prefix} \
-			--bindir=${WORKDIR}/build/${ARCH} \
-			--libdir=${WORKDIR}/build/${ARCH} \
-			--localedir=${WORKDIR}/build/${ARCH}/locale \
-			--includedir=${WORKDIR}/build/${ARCH}/include \
-			--sysconfdir=${WORKDIR}/build/${ARCH} \
-			--datadir=${WORKDIR}/build/${ARCH} \
-			--datarootdir=${WORKDIR}/build/${ARCH}
+				${PROJECTDIR}/win/configure.${1}
+
+		else
+
+			./configure \
+				CFLAGS="-I${WORKDIR}/build/${ARCH}/include" \
+				LDFLAGS="-L${WORKDIR}/build/${ARCH}" \
+				--host=${host} \
+				--prefix=${prefix} \
+				--bindir=${WORKDIR}/build/${ARCH} \
+				--libdir=${WORKDIR}/build/${ARCH} \
+				--localedir=${WORKDIR}/build/${ARCH}/locale \
+				--includedir=${WORKDIR}/build/${ARCH}/include \
+				--sysconfdir=${WORKDIR}/build/${ARCH} \
+				--datadir=${WORKDIR}/build/${ARCH} \
+				--datarootdir=${WORKDIR}/build/${ARCH}
+		fi
+
 
 		if [ "$?" != "0" ]; then
 			failed "Can't configure ${1}"
@@ -211,31 +228,44 @@ buildApplication()
 
 		esac
 
-		export HOST_CC=/usr/bin/gcc
-
 		mkdir -p ${WORKDIR}/build/${ARCH}
 		mkdir -p ${WORKDIR}/cache/${ARCH}
 		mkdir -p ${WORKDIR}/build/${ARCH}/locale
 		mkdir -p ${WORKDIR}/build/${ARCH}/include
 
+		export HOST_CC=/usr/bin/gcc
 		export PKG_CONFIG_PATH=${WORKDIR}/build/${ARCH}/lib/pkgconfig
 		export cache=${WORKDIR}/cache/${ARCH}/${1}.cache
 
 		cd ${WORKDIR}/sources/${1}
 
-		./configure \
+		if [ -x ${PROJECTDIR}/win/configure.${1} ]; then
+
+			HOST="${host}" \
+			PREFIX="${prefix}" \
 			CFLAGS="-I${WORKDIR}/build/${ARCH}/include" \
 			LDFLAGS="-L${WORKDIR}/build/${ARCH}" \
-			--host=${host} \
-			--prefix=${prefix} \
-			--bindir=${WORKDIR}/build/${ARCH} \
-			--libdir=${WORKDIR}/build/${ARCH} \
-			--localedir=${WORKDIR}/build/${ARCH}/locale \
-			--includedir=${WORKDIR}/build/${ARCH}/include \
-			--sysconfdir=${WORKDIR}/build/${ARCH} \
-			--datadir=${WORKDIR}/build/${ARCH} \
-			--datarootdir=${WORKDIR}/build/${ARCH} \
-			--with-application-datadir=${WORKDIR}/build/${ARCH}
+			BUILDDIR="{WORKDIR}/build/${ARCH}}" \
+				${PROJECTDIR}/win/configure.${1}
+
+		else
+
+			./configure \
+				CFLAGS="-I${WORKDIR}/build/${ARCH}/include" \
+				LDFLAGS="-L${WORKDIR}/build/${ARCH}" \
+				--host=${host} \
+				--prefix=${prefix} \
+				--bindir=${WORKDIR}/build/${ARCH} \
+				--libdir=${WORKDIR}/build/${ARCH} \
+				--localedir=${WORKDIR}/build/${ARCH}/locale \
+				--includedir=${WORKDIR}/build/${ARCH}/include \
+				--sysconfdir=${WORKDIR}/build/${ARCH} \
+				--datadir=${WORKDIR}/build/${ARCH} \
+				--datarootdir=${WORKDIR}/build/${ARCH} \
+				--with-application-datadir=${WORKDIR}/build/${ARCH}
+
+		fi
+
 
 		if [ "$?" != "0" ]; then
 			failed "Can't configure ${1}"
@@ -449,8 +479,8 @@ done
 #
 # Load customizations
 #
-if [ -e ${PROJECTDIR}/pw3270.win32.build.conf ]; then
-	. ${PROJECTDIR}/pw3270.win32.build.conf
+if [ -e ${PROJECTDIR}/win/pack.conf ]; then
+	. ${PROJECTDIR}/win/pack.conf
 fi
 
 #
@@ -476,6 +506,8 @@ done
 #
 # Build packages
 #
+configure
+
 for src in ${CORE_LIBRARIES}
 do
 	buildLibrary ${src}
