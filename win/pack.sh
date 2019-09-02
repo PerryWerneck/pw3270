@@ -426,6 +426,36 @@ makeInstaller()
 }
 
 #
+# Add repos
+#
+addRepos() {
+
+	for ARCH in ${TARGET_ARCHS}
+	do
+		case ${ARCH} in
+		x86_32)
+			# https://download.opensuse.org/repositories/windows:/mingw:/win32/openSUSE_Leap_15.1/windows:mingw:win32.repo
+			REPO_ARCH="win32"
+			;;
+
+		x86_64)
+			# https://download.opensuse.org/repositories/windows:/mingw:/win64/openSUSE_Leap_15.1/windows:mingw:win64.repo
+			REPO_ARCH="win64"
+			;;
+
+		*)
+			failed "Arquitetura desconhecida: ${ARCH}"
+
+		esac
+
+
+		echo zypper ar "https://download.opensuse.org/repositories/windows:/mingw:/${REPO_ARCH}/$(echo ${PRETTY_NAME} | sed "s@ @_@g")" ${REPO_ARCH}
+
+	done
+
+}
+
+#
 # Check command line parameters
 #
 until [ -z "$1" ]
@@ -447,6 +477,11 @@ do
 
 		PRODUCT)
 			PRODUCT_NAME=${value}
+			;;
+
+		ADD-REPOS)
+			addRepos
+			exit 0
 			;;
 
 		CLEAR)
