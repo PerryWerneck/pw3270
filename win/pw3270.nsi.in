@@ -68,12 +68,12 @@ SubSection "@PACKAGE@" SecMain
 		setOutPath $INSTDIR
 		SetShellVarContext all
 
-		createShortCut "$SMPROGRAMS\@PACKAGE@.lnk" "$INSTDIR\@PACKAGE@.exe"
-		createShortCut "$DESKTOP\@PACKAGE@.lnk" "$INSTDIR\@PACKAGE@.exe"
+		createShortCut "$SMPROGRAMS\@APPLICATION_NAME@.lnk" "$INSTDIR\@APPLICATION_NAME@.exe"
+		createShortCut "$DESKTOP\@APPLICATION_NAME@.lnk" "$INSTDIR\@APPLICATION_NAME@.exe"
 
 		# Binary files
-		file "/oname=$INSTDIR\@PACKAGE@.exe"				"@PACKAGE@.exe"
-		file "/oname=$INSTDIR\@PACKAGE@.ico"				"@PACKAGE@.ico"
+		file "/oname=$INSTDIR\@APPLICATION_NAME@.exe"			"@PACKAGE@.exe"
+		file "/oname=$INSTDIR\@APPLICATION_NAME@.ico"			"@PACKAGE@.ico"
 		file "/oname=$INSTDIR\lib3270.dll"				"lib3270.dll"
 		file "/oname=$INSTDIR\libv3270.dll"				"libv3270.dll"
 		file "/oname=$INSTDIR\@PACKAGE@.dll"				"@PACKAGE@.dll"
@@ -114,9 +114,9 @@ SubSection "@PACKAGE@" SecMain
 		writeUninstaller $INSTDIR\uninstall.exe
 
 		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PACKAGE@" \
-			         "DisplayName" "@PACKAGE@ - @PACKAGE_DESCRIPTION@"
+			         "DisplayName" "@APPLICATION_NAME@ - @PACKAGE_DESCRIPTION@"
 		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PACKAGE@" \
-			         "DisplayIcon" "$INSTDIR\@PACKAGE@.ico"
+			         "DisplayIcon" "$INSTDIR\@APPLICATION_NAME@.ico"
 		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PACKAGE@" \
 			         "DisplayVersion" "@PACKAGE_VERSION@"
 

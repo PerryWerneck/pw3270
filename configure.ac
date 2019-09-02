@@ -91,7 +91,6 @@ AC_SUBST(PACKAGE_MINOR_VERSION,$app_vrs_minor)
 
 AC_ARG_WITH([release], [AS_HELP_STRING([--with-release], [Set release])], [ app_cv_release="$withval" ],[ app_cv_release="`date +%-y`.`date +%-m`.`date +%-d`" ])
 AC_ARG_WITH([session-name], [AS_HELP_STRING([--with-session-name], [Set default session name])], [ AC_DEFINE_UNQUOTED(DEFAULT_SESSION_NAME, $withval) ],[ AC_MSG_NOTICE([No default session name.]) ])
-AC_ARG_WITH([application-name], [AS_HELP_STRING([--with-application-name], [Set application name])], [ AC_DEFINE_UNQUOTED(APPLICATION_NAME, $withval) ],[ AC_MSG_NOTICE([No default application name.]) ])
 
 app_rls_major=$(echo $app_cv_release.0.0 | cut -d. -f1)
 app_rls_minor=$(echo $app_cv_release.0.0 | cut -d. -f2)
@@ -429,7 +428,7 @@ PKG_CHECK_MODULES( [LIBV3270], [libv3270], AC_DEFINE(HAVE_LIBV3270), AC_MSG_ERRO
 AC_SUBST(LIBV3270_CFLAGS)
 AC_SUBST(LIBV3270_LIBS)
 
-AC_ARG_WITH([application-name], [AS_HELP_STRING([--with-application-name], [Set application name])], [ app_cv_appname="$withval" ],[ app_cv_appname="pw3270" ])
+AC_ARG_WITH([application-name], [AS_HELP_STRING([--with-application-name], [Set application name])], [ app_cv_appname="$withval" ],[ app_cv_appname=`pkg-config --variable=product_name lib3270` ])
 
 AC_DEFINE_UNQUOTED(APPLICATION_NAME,$app_cv_appname)
 AC_SUBST(APPLICATION_NAME,$app_cv_appname)
