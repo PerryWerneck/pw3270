@@ -162,7 +162,23 @@ SubSection "@PACKAGE@" SecMain
 			setOutPath $INSTDIR
 
 			${DisableX64FSRedirection}
+			file "/oname=$SYSDIR\hllapi.dll"		"libhllapi.dll"
+
+			# Install with "lib" prefix for compatibility.
 			file "/oname=$SYSDIR\libhllapi.dll"		"libhllapi.dll"
+
+		sectionEnd
+!endif
+
+!ifdef WITHMONO
+		Section /o ".NET" DOTNET
+
+			${DisableX64FSRedirection}
+			CreateDirectory "$INSTDIR\dotnet"
+
+			file "/oname=$INSTDIR\dotnet\tn3270-sharp.dll"	"mono/lib/tn3270-sharp-5.2/tn3270-sharp.dll"
+			file "/oname=$INSTDIR\dotnet\pw3270-sharp.xml"	"mono/gapi-2.0/tn3270-sharp/tn3270-sharp.xml"
+			file "/oname=$SYSDIR\lib3270-mono.dll"		"lib3270-mono.dll"
 
 		sectionEnd
 !endif
@@ -234,13 +250,52 @@ Section "Uninstall"
 	DeleteRegKey HKLM "Software\@PACKAGE@"
 
 	# Delete System libraries
+!ifdef WITHHLLAPI
 	delete $SYSDIR\libhllapi.dll
+	delete $SYSDIR\hllapi.dll
+!endif
+
+!ifdef WITHMONO
+	delete $SYSDIR\lib3270-mono.dll
+!endif
 
 	RMDir /r "$INSTDIR"
 
 SectionEnd
 
 Function .onInit
+
+	#---[ Check DOTNET Command line option ]0-------------------------------------------------------------
+
+!ifdef WITHMONO
+	Push $0
+
+	${GetParameters} $R0
+	ClearErrors
+	${GetOptions} $R0 /DOTNET= $0
+
+	${if} $0 == "NO"
+
+		SectionGetFlags ${DOTNET} $0
+		IntOp $0 $0 & ${SECTION_OFF}
+		SectionSetFlags ${DOTNET} $0
+
+	${else}
+
+		SectionGetFlags ${DOTNET} $0
+		IntOp $0 $0 | ${SF_SELECTED}
+		SectionSetFlags ${DOTNET} $0
+
+!ifdef WITHIPC
+		SectionGetFlags ${IPCPlugin} $0
+		IntOp $0 $0 | ${SF_SELECTED}
+		SectionSetFlags ${IPCPlugin} $0
+!endif
+
+	${EndIf}
+
+	Pop $0
+!endif
 
 	#---[ Check HLLAPI Command line option ]-------------------------------------------------------------
 
@@ -276,9 +331,10 @@ Function .onInit
 
 !endif
 
-!ifdef WITHGTK
 
-	#---[ Verifica se precisa instalar GTK ]-------------------------------------------------------------
+	#---[ Check for GTK runtime ]------------------------------------------------------------------------
+
+!ifdef WITHGTK
 
 	SetRegView @WINARCH@
 

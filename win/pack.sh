@@ -4,7 +4,7 @@ PRODUCT_NAME="pw3270"
 LIBRARY_NAME="lib3270"
 CORE_LIBRARIES="lib3270 libv3270"
 PACKAGE_PLUGINS="ipc"
-PACKAGE_LANGUAGE_BINDINGS="hllapi"
+PACKAGE_LANGUAGE_BINDINGS="hllapi mono"
 TARGET_ARCHS="x86_64"
 GIT_URL="https://github.com/PerryWerneck"
 
@@ -133,8 +133,15 @@ buildLibrary()
 
 		esac
 
+		# Required for lib3270 build tools
 		export HOST_CC=/usr/bin/gcc
 
+		# Required for .NET bindings
+		export GACROOT=${WORKDIR}/build/${ARCH}/mono/gacroot
+		export GAPIROOT=${WORKDIR}/build/${ARCH}/mono/gapi-2.0
+		export MONOLIBPATH=${WORKDIR}/build/${ARCH}/mono/lib
+
+		# Create install dirs
 		mkdir -p ${WORKDIR}/build/${ARCH}
 		mkdir -p ${WORKDIR}/cache/${ARCH}
 		mkdir -p ${WORKDIR}/build/${ARCH}/locale
@@ -363,11 +370,11 @@ makeInstaller()
 {
 	NSIS_ARGS="-DWITHGTK"
 
-	if [ ! -z ${PACKAGE_PLUGINS} ]; then
+	if [ ! -z "${PACKAGE_PLUGINS}" ]; then
 		NSIS_ARGS="${NSIS_ARGS} -DWITHPLUGINS"
 	fi
 
-	if [ ! -z ${PACKAGE_LANGUAGE_BINDINGS} ]; then
+	if [ ! -z "${PACKAGE_LANGUAGE_BINDINGS}" ]; then
 		NSIS_ARGS="${NSIS_ARGS} -DWITHLANGUAGE"
 	fi
 
