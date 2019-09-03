@@ -5,7 +5,7 @@ LIBRARY_NAME="lib3270"
 CORE_LIBRARIES="lib3270 libv3270"
 PACKAGE_PLUGINS="ipc"
 PACKAGE_LANGUAGE_BINDINGS="hllapi mono"
-TARGET_ARCHS="x86_64"
+TARGET_ARCHS="x86_64 x86_32"
 GIT_URL="https://github.com/PerryWerneck"
 
 PROJECTDIR=$(dirname $(dirname $(readlink -f ${0})))
@@ -247,6 +247,17 @@ buildApplication()
 		export cache=${WORKDIR}/cache/${ARCH}/${1}.cache
 
 		cd ${WORKDIR}/sources/${1}
+
+		for NSI in $(find ./win -name '*.nsi.in')
+		do
+			SRCNAME="${PROJECTDIR}/win/$(basename ${NSI})"
+			if [ -e "${SRCNAME}" ]; then
+				cp "${SRCNAME}" "${NSI}"
+				if [ "$?" != "0" ]; then
+					failed "Can't copy ${SRCNAME}"
+				fi
+			fi
+		done
 
 		if [ -x ${PROJECTDIR}/win/configure.${1} ]; then
 
