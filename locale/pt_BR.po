@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-30 13:56-0300\n"
-"PO-Revision-Date: 2019-08-06 14:45-0300\n"
+"PO-Revision-Date: 2019-09-03 14:52-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
 "Language: pt_BR\n"
@@ -27,12 +27,12 @@ msgstr " e <b>%s</b> para %s."
 #: src/core/ctlr.c:192
 #, c-format
 msgid "%dx%d is negative or zero"
-msgstr ""
+msgstr "%dx%d é negativa ou zero"
 
 #: src/core/ctlr.c:206
 #, c-format
 msgid "%dx%d screen size is bigger than the maximum size"
-msgstr ""
+msgstr "Tela %dx%d é maior que o tamanho máximo"
 
 #: src/core/telnet.c:689 src/core/iocalls.c:543 src/core/iocalls.c:560
 #: src/core/linux/connect.c:84 src/core/linux/connect.c:100
@@ -986,7 +986,7 @@ msgstr "Tempo estimado para a transferência"
 
 #: src/core/toggles.c:129
 msgid "Events"
-msgstr ""
+msgstr "Eventos"
 
 #: 98trace.xml:42
 msgid "Field Delimiters"
@@ -1163,12 +1163,10 @@ msgid "IBM S/390"
 msgstr "IBM S/390"
 
 #: src/core/properties/signed.c:87
-#, fuzzy
 msgid "ID of the session security state"
-msgstr "Descrição do estado de segurança atual"
+msgstr "Identificação do estado de segurança da sessão"
 
 #: src/terminal/properties.c:315
-#, fuzzy
 msgid "IDLE minutes for automatic disconnection"
 msgstr "Minutos para desconexão automática"
 
@@ -1311,9 +1309,8 @@ msgstr "Opção xxxxxxxx inválida: Transferência cancelada"
 
 #: src/core/ctlr.c:190 src/core/ctlr.c:204 src/core/ctlr.c:219
 #: src/core/ctlr.c:233
-#, fuzzy
 msgid "Invalid oversize"
-msgstr "Estado inválido"
+msgstr "Valor inválido para 'oversize'"
 
 #: src/terminal/charset.c:320
 msgid "Invalid remap scope"
@@ -1356,9 +1353,8 @@ msgid "Keyboard is locked"
 msgstr "Teclado está bloqueado"
 
 #: src/core/properties/unsigned.c:84
-#, fuzzy
 msgid "Keyboard lock status"
-msgstr "Teclado está bloqueado"
+msgstr "Estado de bloqueio do teclado"
 
 #: 10keypad.xml:35
 msgid "Lateral keypad"
@@ -1391,14 +1387,11 @@ msgstr "Local:"
 
 #: src/core/properties/boolean.c:160
 msgid "Lock keyboard on operator error"
-msgstr ""
+msgstr "Bloqueia teclado em caso de erro do operador"
 
 #: main.c:309
-#, fuzzy
 msgid "Makes the screen larger than the default for the chosen model number."
-msgstr ""
-"Define que as dimensões da tela serão maiores do que o padrão para o modelo "
-"escolhido (COLSxROWS)."
+msgstr "Usa tamanho maior do que o padrão para o modelo escolhido."
 
 #: main.c:310
 msgid "Minutes for auto-disconnect"
@@ -2076,7 +2069,7 @@ msgstr "Tamanho do buffer de tela em bytes"
 
 #: src/core/properties/string.c:137
 msgid "Screen oversize if larger than the chosen model"
-msgstr ""
+msgstr "\"oversize\" maior que o modelo escolhido"
 
 #: 00default.xml:111
 msgid "Screen size"
@@ -2607,7 +2600,7 @@ msgstr "A transferência de arquivos terminou com sucesso."
 #: src/core/ctlr.c:235
 #, c-format
 msgid "The height %d is less than model %d rows (%d)"
-msgstr ""
+msgstr "A altura %d é menor que o número de linhas do modelo %d (%d)"
 
 #: src/core/ft/ftmessages.c:81 src/core/ft/ftmessages.c:88
 #: src/filetransfer/v3270ftprogress.c:94 src/filetransfer/v3270ftprogress.c:100
@@ -2655,20 +2648,19 @@ msgstr "Nome do arquivo no host"
 
 #: src/core/ctlr.c:234
 msgid "The oversize height is too small."
-msgstr ""
+msgstr "A altura definida para 'oversize' é muito pequena."
 
 #: src/core/ctlr.c:191
-#, fuzzy
 msgid "The oversize values are invalid."
-msgstr "O nome do arquivo remoto não é válido."
+msgstr "Os valores para 'oversize' não são válidos."
 
 #: src/core/ctlr.c:205
 msgid "The oversize values are too big."
-msgstr ""
+msgstr "Os valores do 'oversize' são muito grandes."
 
 #: src/core/ctlr.c:220
 msgid "The oversize width is too small."
-msgstr ""
+msgstr "A largura do 'oversize' é muito pequena."
 
 #: src/ssl/state.c:233
 msgid ""
@@ -2724,7 +2716,7 @@ msgstr ""
 #: src/core/ctlr.c:221
 #, c-format
 msgid "The width %d is less than model %d columns (%d)"
-msgstr ""
+msgstr "A largura %d é menor que a do modelo %d (%d)"
 
 #: src/core/ft/ftmessages.c:146 src/filetransfer/v3270ftprogress.c:150
 msgid "There is not enough space available for data on the host."
@@ -2806,9 +2798,8 @@ msgid "Trace SSL negotiation"
 msgstr "Trace da negociação SSL"
 
 #: src/core/toggles.c:130
-#, fuzzy
 msgid "Trace interface and application events"
-msgstr "Trace interface events"
+msgstr "Registra eventos da interface gráfica e aplicação"
 
 #: src/core/toggles.c:249 98trace.xml:38
 msgid "Trace network data flow"
