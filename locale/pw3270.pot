@@ -7,6 +7,106 @@
 msgid ""
 msgstr ""
 "#-#-#-#-#  pw3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"#-#-#-#-#  window.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-09-03 14:44-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  actions.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-09-04 14:18-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  dialog.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-09-03 14:44-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  print.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-09-03 14:44-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  colors.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-09-03 14:44-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  tools.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-09-03 14:44-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  plugin.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-09-03 14:44-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  main.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-09-03 14:44-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  uiparser.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-09-03 14:44-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  common.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-09-03 14:44-0300\n"
@@ -20,7 +120,7 @@ msgstr ""
 "#-#-#-#-#  lib3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-02 18:05+0000\n"
+"POT-Creation-Date: 2019-09-04 16:20+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,7 +131,7 @@ msgstr ""
 "#-#-#-#-#  libv3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-02 18:07+0000\n"
+"POT-Creation-Date: 2019-09-04 16:38+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -169,6 +269,10 @@ msgstr ""
 msgid "3270 terminal emulator for GTK %d.%d"
 msgstr ""
 
+#: src/core/actions/table.c:437
+msgid "3270-style backspace."
+msgstr ""
+
 #: src/dialogs/hostselect.c:44
 msgid "8 colors"
 msgstr ""
@@ -227,6 +331,10 @@ msgstr ""
 msgid ""
 "A CA certificate is invalid. Either it is not a CA or its extensions are not "
 "consistent with the supplied purpose."
+msgstr ""
+
+#: src/core/actions/table.c:447
+msgid "ATTN key, per RFC 2355.  Sends IP, regardless."
 msgstr ""
 
 #: src/filetransfer/tables.c:60
@@ -365,6 +473,10 @@ msgstr ""
 msgid "Background"
 msgstr ""
 
+#: src/core/actions/table.c:311
+msgid "Backspaces the cursor until it hits the front of a word."
+msgstr ""
+
 #: src/core/toggles.c:222
 msgid "Beep on errors"
 msgstr ""
@@ -433,7 +545,7 @@ msgstr ""
 msgid "C_olor scheme:"
 msgstr ""
 
-#: src/dialogs/hostselect.c:340
+#: src/dialogs/hostselect.c:347
 msgid "C_onnect"
 msgstr ""
 
@@ -524,7 +636,7 @@ msgstr ""
 msgid "Can't open file"
 msgstr ""
 
-#: src/terminal/charset.c:464
+#: src/terminal/charset.c:481
 #, c-format
 msgid "Can't parse %s"
 msgstr ""
@@ -538,11 +650,11 @@ msgstr ""
 msgid "Can't parse UI description files in %s"
 msgstr ""
 
-#: src/terminal/charset.c:365
+#: src/terminal/charset.c:382
 msgid "Can't parse cgcsgid value"
 msgstr ""
 
-#: src/terminal/charset.c:285
+#: src/terminal/charset.c:66
 msgid "Can't parse character value"
 msgstr ""
 
@@ -628,7 +740,7 @@ msgstr ""
 msgid "Can't start file transfer."
 msgstr ""
 
-#: src/ssl/negotiate.c:178
+#: src/ssl/negotiate.c:213
 msgid "Can't verify."
 msgstr ""
 
@@ -704,6 +816,10 @@ msgstr ""
 msgid "Clear"
 msgstr ""
 
+#: src/core/actions/table.c:396
+msgid "Clear AID key"
+msgstr ""
+
 #: src/dialogs/load.c:205 src/dialogs/save/save.c:267
 msgid "Click to cancel operation"
 msgstr ""
@@ -750,6 +866,10 @@ msgstr ""
 
 #: src/core/toggles.c:207 00default.xml:114
 msgid "Connect on startup"
+msgstr ""
+
+#: src/core/actions/table.c:84
+msgid "Connect to host."
 msgstr ""
 
 #: src/core/iocalls.c:527 src/core/linux/connect.c:186
@@ -831,6 +951,34 @@ msgstr ""
 msgid "Cursor address"
 msgstr ""
 
+#: src/core/actions/table.c:117
+msgid "Cursor down 1 position."
+msgstr ""
+
+#: src/core/actions/table.c:127
+msgid "Cursor left 1 position."
+msgstr ""
+
+#: src/core/actions/table.c:137
+msgid "Cursor right 1 position."
+msgstr ""
+
+#: src/core/actions/table.c:147
+msgid "Cursor to first field on next line or any lines after that."
+msgstr ""
+
+#: src/core/actions/table.c:167
+msgid "Cursor to next unprotected word."
+msgstr ""
+
+#: src/core/actions/table.c:157
+msgid "Cursor to previous word."
+msgstr ""
+
+#: src/core/actions/table.c:107
+msgid "Cursor up 1 position."
+msgstr ""
+
 #: colors.c:380
 msgid "Custom colors"
 msgstr ""
@@ -845,6 +993,10 @@ msgstr ""
 
 #: src/filetransfer/tables.c:194
 msgid "DFT B_uffer size"
+msgstr ""
+
+#: src/core/actions/table.c:417
+msgid "DUP key"
 msgstr ""
 
 #: colors.c:503 src/dialogs/colors.c:300
@@ -883,7 +1035,7 @@ msgstr ""
 msgid "Default host URL"
 msgstr ""
 
-#: 00default.xml:78
+#: src/core/actions/table.c:321 00default.xml:78
 msgid "Delete field"
 msgstr ""
 
@@ -893,6 +1045,10 @@ msgstr ""
 
 #: src/core/telnet.c:1331
 msgid "Device type rejected"
+msgstr ""
+
+#: src/core/actions/table.c:94
+msgid "Disconnect from host."
 msgstr ""
 
 #: src/core/ft/ft.c:267
@@ -941,6 +1097,14 @@ msgstr ""
 msgid ""
 "Erase\n"
 "Input"
+msgstr ""
+
+#: src/core/actions/table.c:342
+msgid "Erase End Of Field Key."
+msgstr ""
+
+#: src/core/actions/table.c:352
+msgid "Erase End Of Line Key."
 msgstr ""
 
 #: 00default.xml:77
@@ -995,6 +1159,10 @@ msgstr ""
 
 #: src/core/toggles.c:129
 msgid "Events"
+msgstr ""
+
+#: src/core/actions/table.c:427
+msgid "FM key"
 msgstr ""
 
 #: 98trace.xml:42
@@ -1219,6 +1387,12 @@ msgid ""
 "status line"
 msgstr ""
 
+#: src/core/actions/table.c:490
+msgid ""
+"If the terminal has selected area print tje selected area, if not, print all "
+"contents."
+msgstr ""
+
 #: src/filetransfer/transfer.c:80
 msgid "Ignore"
 msgstr ""
@@ -1267,12 +1441,8 @@ msgstr ""
 msgid "Invalid callback table, possible version mismatch in lib3270"
 msgstr ""
 
-#: src/terminal/charset.c:360
+#: src/terminal/charset.c:377
 msgid "Invalid cgcsgid value"
-msgstr ""
-
-#: src/terminal/charset.c:300
-msgid "Invalid character value"
 msgstr ""
 
 #: src/core/ft/ftmessages.c:166
@@ -1300,7 +1470,7 @@ msgstr ""
 msgid "Invalid oversize"
 msgstr ""
 
-#: src/terminal/charset.c:320
+#: src/terminal/charset.c:337
 msgid "Invalid remap scope"
 msgstr ""
 
@@ -1408,6 +1578,15 @@ msgstr ""
 
 #: actions.c:690
 msgid "Move action needs target & direction attributes"
+msgstr ""
+
+#: src/core/actions/table.c:267
+msgid ""
+"Move the cursor to the first blank after the last nonblank in the field."
+msgstr ""
+
+#: src/core/actions/table.c:277
+msgid "Move to first unprotected field on screen."
 msgstr ""
 
 #: colors.c:508 src/dialogs/colors.c:305
@@ -1663,6 +1842,10 @@ msgstr ""
 msgid "Paste"
 msgstr ""
 
+#: src/core/actions/table.c:210
+msgid "Paste file."
+msgstr ""
+
 #: src/dialogs/load.c:248
 msgid "Paste from file"
 msgstr ""
@@ -1741,6 +1924,10 @@ msgstr ""
 msgid "Print copy"
 msgstr ""
 
+#: src/core/actions/table.c:520
+msgid "Print copy (if available)"
+msgstr ""
+
 #: src/dialogs/print/print.c:57
 msgid "Print operation failed"
 msgstr ""
@@ -1749,8 +1936,16 @@ msgstr ""
 msgid "Print operation has failed"
 msgstr ""
 
+#: src/core/actions/table.c:500
+msgid "Print screen contents"
+msgstr ""
+
 #: 00default.xml:48
 msgid "Print selected"
+msgstr ""
+
+#: src/core/actions/table.c:510
+msgid "Print selected area."
 msgstr ""
 
 #: src/dialogs/print/settings.c:84
@@ -1881,7 +2076,7 @@ msgstr ""
 msgid "Reload buffer contents"
 msgstr ""
 
-#: src/terminal/charset.c:463
+#: src/terminal/charset.c:480
 msgid "Remap Failed"
 msgstr ""
 
@@ -1907,7 +2102,7 @@ msgstr ""
 msgid "Remove selected file from the transfer queue"
 msgstr ""
 
-#: 00default.xml:72
+#: src/core/actions/table.c:233 00default.xml:72
 msgid "Remove selection"
 msgstr ""
 
@@ -1919,7 +2114,7 @@ msgstr ""
 msgid "Required host storage unavailable: file transfer canceled"
 msgstr ""
 
-#: 00default.xml:73
+#: src/core/actions/table.c:243 00default.xml:73
 msgid "Reselect"
 msgstr ""
 
@@ -1997,12 +2192,20 @@ msgstr ""
 msgid "Save screen"
 msgstr ""
 
+#: src/core/actions/table.c:180
+msgid "Save screen."
+msgstr ""
+
 #: 00default.xml:43
 msgid "Save selected"
 msgstr ""
 
 #: src/dialogs/save/save.c:300
 msgid "Save selected area"
+msgstr ""
+
+#: src/core/actions/table.c:190
+msgid "Save selected area."
 msgstr ""
 
 #: src/dialogs/save/save.c:299
@@ -2081,7 +2284,7 @@ msgid "Secure connection was successful."
 msgstr ""
 
 #: src/ssl/negotiate.c:105 src/ssl/negotiate.c:134 src/ssl/negotiate.c:157
-#: src/ssl/negotiate.c:177 src/ssl/negotiate.c:200 src/ssl/negotiate.c:219
+#: src/ssl/negotiate.c:212 src/ssl/negotiate.c:235 src/ssl/negotiate.c:256
 #: src/ssl/ctx_init.c:124 src/ssl/ctx_init.c:154 src/ssl/linux/ldap.c:98
 #: src/ssl/linux/ldap.c:111 src/ssl/linux/ldap.c:132 src/ssl/linux/ldap.c:143
 #: src/ssl/linux/ldap.c:154 src/ssl/linux/ldap.c:179 src/ssl/linux/ldap.c:190
@@ -2093,7 +2296,7 @@ msgstr ""
 msgid "Security error"
 msgstr ""
 
-#: src/ssl/negotiate.c:223
+#: src/ssl/negotiate.c:260
 msgid "Security warning"
 msgstr ""
 
@@ -2102,7 +2305,7 @@ msgstr ""
 msgid "Select"
 msgstr ""
 
-#: 00default.xml:71
+#: src/core/actions/table.c:256 00default.xml:71
 msgid "Select Field"
 msgstr ""
 
@@ -2168,6 +2371,10 @@ msgstr ""
 msgid "Self signed certificate in certificate chain"
 msgstr ""
 
+#: src/core/actions/table.c:375
+msgid "Send an \"Enter\" action."
+msgstr ""
+
 #: src/filetransfer/tables.c:130
 msgid "Send file"
 msgstr ""
@@ -2216,7 +2423,7 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: src/dialogs/hostselect.c:340
+#: src/dialogs/hostselect.c:347
 msgid "Setup host"
 msgstr ""
 
@@ -2342,6 +2549,14 @@ msgstr ""
 msgid "TN3270 Session name"
 msgstr ""
 
+#: src/core/actions/table.c:297
+msgid "Tab backward to previous field."
+msgstr ""
+
+#: src/core/actions/table.c:287
+msgid "Tab forward to next field."
+msgstr ""
+
 #: colors.c:487 src/dialogs/colors.c:207 src/dialogs/colors.c:284
 msgid "Terminal colors"
 msgstr ""
@@ -2397,7 +2612,7 @@ msgid ""
 "The Certificate revocation list (CRL) of a certificate could not be found."
 msgstr ""
 
-#: src/ssl/state.c:241 src/ssl/negotiate.c:201
+#: src/ssl/state.c:241 src/ssl/negotiate.c:236
 msgid "The SSL certificate for this host is not trusted."
 msgstr ""
 
@@ -2609,7 +2824,7 @@ msgstr ""
 msgid "The root CA is not marked as trusted for the specified purpose."
 msgstr ""
 
-#: src/ssl/state.c:242 src/ssl/negotiate.c:202
+#: src/ssl/state.c:242 src/ssl/negotiate.c:237
 msgid ""
 "The security certificate presented by this host was not issued by a trusted "
 "certificate authority."
@@ -2671,7 +2886,7 @@ msgstr ""
 msgid "This program requires GTK version %d.%d.%d"
 msgstr ""
 
-#: src/terminal/charset.c:375
+#: src/terminal/charset.c:392
 msgid "Too many remaps"
 msgstr ""
 
@@ -2887,7 +3102,7 @@ msgstr ""
 msgid "Unexpected or invalid CRL URL"
 msgstr ""
 
-#: src/ssl/negotiate.c:179
+#: src/ssl/negotiate.c:214
 msgid "Unexpected or invalid TLS/SSL verify result"
 msgstr ""
 

@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-30 13:56-0300\n"
-"PO-Revision-Date: 2019-09-03 14:52-0300\n"
+"POT-Creation-Date: 2019-09-03 14:44-0300\n"
+"PO-Revision-Date: 2019-09-04 14:25-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
 "Language: pt_BR\n"
@@ -137,6 +137,10 @@ msgstr "Tela 3270"
 msgid "3270 terminal emulator for GTK %d.%d"
 msgstr "Emulador 3270 para GTK+ %d.%d"
 
+#: src/core/actions/table.c:437
+msgid "3270-style backspace."
+msgstr "Backspace no estilo 3270"
+
 #: src/dialogs/hostselect.c:44
 msgid "8 colors"
 msgstr "8 cores"
@@ -202,6 +206,10 @@ msgid ""
 msgstr ""
 "A CA certificate is invalid. Either it is not a CA or its extensions are not "
 "consistent with the supplied purpose."
+
+#: src/core/actions/table.c:447
+msgid "ATTN key, per RFC 2355.  Sends IP, regardless."
+msgstr ""
 
 #: src/filetransfer/tables.c:60
 msgid "A_ppend to file"
@@ -345,6 +353,10 @@ msgstr "Iniciar transferência"
 msgid "Background"
 msgstr "Fundo"
 
+#: src/core/actions/table.c:311
+msgid "Backspaces the cursor until it hits the front of a word."
+msgstr "Volta o cursor até que atinga o início de uma palavra."
+
 #: src/core/toggles.c:222
 msgid "Beep on errors"
 msgstr "Emitir som nos erros"
@@ -413,7 +425,7 @@ msgstr "C_odificação de caracteres"
 msgid "C_olor scheme:"
 msgstr "Tema de c_ores:"
 
-#: src/dialogs/hostselect.c:340
+#: src/dialogs/hostselect.c:347
 msgid "C_onnect"
 msgstr "_Conectar"
 
@@ -506,7 +518,7 @@ msgstr "Não foi possível abrir arquivo CRL"
 msgid "Can't open file"
 msgstr "Não foi possível abrir arquivo"
 
-#: src/terminal/charset.c:464
+#: src/terminal/charset.c:481
 #, c-format
 msgid "Can't parse %s"
 msgstr "Erro ao analisar %s"
@@ -520,11 +532,11 @@ msgstr "Não foi possível processar a UI"
 msgid "Can't parse UI description files in %s"
 msgstr "Incapaz de processar arquivos de descrição de UI em %s"
 
-#: src/terminal/charset.c:365
+#: src/terminal/charset.c:382
 msgid "Can't parse cgcsgid value"
 msgstr "Erro ao converter valor do cgcsid"
 
-#: src/terminal/charset.c:285
+#: src/terminal/charset.c:66
 msgid "Can't parse character value"
 msgstr "Erro ao analisar valor de caractere"
 
@@ -610,7 +622,7 @@ msgstr "Não foi possível iniciar transferência de arquivo"
 msgid "Can't start file transfer."
 msgstr "Não foi possível iniciar transferência de arquivo."
 
-#: src/ssl/negotiate.c:178
+#: src/ssl/negotiate.c:213
 msgid "Can't verify."
 msgstr "Não foi possível verificar"
 
@@ -690,6 +702,10 @@ msgstr "Marque se o arquivo contem apenas texto."
 msgid "Clear"
 msgstr "Limpar"
 
+#: src/core/actions/table.c:396
+msgid "Clear AID key"
+msgstr ""
+
 #: src/dialogs/load.c:205 src/dialogs/save/save.c:267
 msgid "Click to cancel operation"
 msgstr "Clique para cancelar operação"
@@ -737,6 +753,10 @@ msgstr "Configurar host"
 #: src/core/toggles.c:207 00default.xml:114
 msgid "Connect on startup"
 msgstr "Conectar ao iniciar"
+
+#: src/core/actions/table.c:84
+msgid "Connect to host."
+msgstr "Conectar ao servidor"
 
 #: src/core/iocalls.c:527 src/core/linux/connect.c:186
 #: src/core/linux/connect.c:218 src/core/linux/connect.c:236
@@ -818,6 +838,36 @@ msgstr "Atual:"
 msgid "Cursor address"
 msgstr "Endereço do cursor"
 
+#: src/core/actions/table.c:117
+msgid "Cursor down 1 position."
+msgstr "Move cursor uma posição para baixo."
+
+#: src/core/actions/table.c:127
+msgid "Cursor left 1 position."
+msgstr "Move o cursor 1 posição para a esquerda."
+
+#: src/core/actions/table.c:137
+msgid "Cursor right 1 position."
+msgstr "Move o cursor uma posição para a direita."
+
+#: src/core/actions/table.c:147
+msgid "Cursor to first field on next line or any lines after that."
+msgstr ""
+"Move o cursor para o primeiro campo da próxima linha ou qualquer linhas "
+"depois dela."
+
+#: src/core/actions/table.c:167
+msgid "Cursor to next unprotected word."
+msgstr "Move o cursor para a próxima palavra desprotegida."
+
+#: src/core/actions/table.c:157
+msgid "Cursor to previous word."
+msgstr "Move o cursor para a palavra anterior."
+
+#: src/core/actions/table.c:107
+msgid "Cursor up 1 position."
+msgstr "Cursor para cima 1 posição."
+
 #: colors.c:380
 msgid "Custom colors"
 msgstr "Cores personalizadas"
@@ -833,6 +883,10 @@ msgstr "Cilindros"
 #: src/filetransfer/tables.c:194
 msgid "DFT B_uffer size"
 msgstr "Tamanho do b_uffer DFT:"
+
+#: src/core/actions/table.c:417
+msgid "DUP key"
+msgstr "Tecla \"DUP\""
 
 #: colors.c:503 src/dialogs/colors.c:300
 msgid "Dark Blue"
@@ -870,7 +924,7 @@ msgstr "Padrão"
 msgid "Default host URL"
 msgstr "URL parão para acesso ao host"
 
-#: 00default.xml:78
+#: src/core/actions/table.c:321 00default.xml:78
 msgid "Delete field"
 msgstr "Apagar campo"
 
@@ -881,6 +935,10 @@ msgstr "Descrição do estado de segurança atual"
 #: src/core/telnet.c:1331
 msgid "Device type rejected"
 msgstr "Tipo de dispositivo rejeitado"
+
+#: src/core/actions/table.c:94
+msgid "Disconnect from host."
+msgstr "Desconecta do servidor."
 
 #: src/core/ft/ft.c:267
 msgid "Disconnected from host."
@@ -933,6 +991,14 @@ msgid ""
 msgstr ""
 "Apagar\n"
 "Campos"
+
+#: src/core/actions/table.c:342
+msgid "Erase End Of Field Key."
+msgstr "Apaga até o final do campo"
+
+#: src/core/actions/table.c:352
+msgid "Erase End Of Line Key."
+msgstr "Apaga até o final da linha"
 
 #: 00default.xml:77
 msgid "Erase input"
@@ -987,6 +1053,10 @@ msgstr "Tempo estimado para a transferência"
 #: src/core/toggles.c:129
 msgid "Events"
 msgstr "Eventos"
+
+#: src/core/actions/table.c:427
+msgid "FM key"
+msgstr "Tecla \"FM\""
 
 #: 98trace.xml:42
 msgid "Field Delimiters"
@@ -1230,6 +1300,13 @@ msgstr ""
 "If set, the time taken by the host to process an AID is displayed on the "
 "status line"
 
+#: src/core/actions/table.c:490
+msgid ""
+"If the terminal has selected area print tje selected area, if not, print all "
+"contents."
+msgstr ""
+"Se houver área selecionada imprime a seleção, senão, imprime toda a tela."
+
 #: src/filetransfer/transfer.c:80
 msgid "Ignore"
 msgstr "Ignore"
@@ -1279,13 +1356,9 @@ msgid "Invalid callback table, possible version mismatch in lib3270"
 msgstr ""
 "Tabela de callbacks inválida, possível divergência de versão na lib3270"
 
-#: src/terminal/charset.c:360
+#: src/terminal/charset.c:377
 msgid "Invalid cgcsgid value"
 msgstr "Valor cgcsgid é inválido"
-
-#: src/terminal/charset.c:300
-msgid "Invalid character value"
-msgstr "Valor de caractere inválido"
 
 #: src/core/ft/ftmessages.c:166
 msgid "Invalid option xxxxxxxx with APPEND: file transfer canceled"
@@ -1312,7 +1385,7 @@ msgstr "Opção xxxxxxxx inválida: Transferência cancelada"
 msgid "Invalid oversize"
 msgstr "Valor inválido para 'oversize'"
 
-#: src/terminal/charset.c:320
+#: src/terminal/charset.c:337
 msgid "Invalid remap scope"
 msgstr "Escopo de mapeamento inválido"
 
@@ -1421,6 +1494,16 @@ msgstr "Monocromático"
 #: actions.c:690
 msgid "Move action needs target & direction attributes"
 msgstr "Ação \"move\" precisa dos atributos \"target\" e \"direction\""
+
+#: src/core/actions/table.c:267
+msgid ""
+"Move the cursor to the first blank after the last nonblank in the field."
+msgstr ""
+"Move o cursor para o primeiro branco após o último não branco no campo."
+
+#: src/core/actions/table.c:277
+msgid "Move to first unprotected field on screen."
+msgstr "Move para o primeiro campo desprotegido."
 
 #: colors.c:508 src/dialogs/colors.c:305
 msgid "Mustard"
@@ -1679,6 +1762,10 @@ msgstr "Erro de interpretação em %s"
 msgid "Paste"
 msgstr "Colar"
 
+#: src/core/actions/table.c:210
+msgid "Paste file."
+msgstr "Colar conteúdo de um arquivo"
+
 #: src/dialogs/load.c:248
 msgid "Paste from file"
 msgstr "Colar de um arquivo"
@@ -1759,6 +1846,10 @@ msgstr "Imprimir"
 msgid "Print copy"
 msgstr "Imprimir cópia"
 
+#: src/core/actions/table.c:520
+msgid "Print copy (if available)"
+msgstr "Imprime conteúdo copiado (se disponível)"
+
 #: src/dialogs/print/print.c:57
 msgid "Print operation failed"
 msgstr "Operação de impressão falhou"
@@ -1767,9 +1858,17 @@ msgstr "Operação de impressão falhou"
 msgid "Print operation has failed"
 msgstr "Operação de impressão falhou"
 
+#: src/core/actions/table.c:500
+msgid "Print screen contents"
+msgstr "Imrpime o conteúdo da tela"
+
 #: 00default.xml:48
 msgid "Print selected"
 msgstr "Imprimir seleção"
+
+#: src/core/actions/table.c:510
+msgid "Print selected area."
+msgstr "Imprimir área selecionada"
 
 #: src/dialogs/print/settings.c:84
 msgid "Print selection box"
@@ -1899,7 +1998,7 @@ msgstr "Vermelho"
 msgid "Reload buffer contents"
 msgstr "Recarregar conteúdo do buffer"
 
-#: src/terminal/charset.c:463
+#: src/terminal/charset.c:480
 msgid "Remap Failed"
 msgstr "Remapeamento falhou"
 
@@ -1928,7 +2027,7 @@ msgstr "Remoto:"
 msgid "Remove selected file from the transfer queue"
 msgstr "Remove arquivo selecionado da fila de transferência"
 
-#: 00default.xml:72
+#: src/core/actions/table.c:233 00default.xml:72
 msgid "Remove selection"
 msgstr "Remover seleção"
 
@@ -1940,7 +2039,7 @@ msgstr "Requisição falhou"
 msgid "Required host storage unavailable: file transfer canceled"
 msgstr "Armazenamento necessário indisponível: Transferência cancelada"
 
-#: 00default.xml:73
+#: src/core/actions/table.c:243 00default.xml:73
 msgid "Reselect"
 msgstr "Reselecionar"
 
@@ -2022,12 +2121,20 @@ msgstr "Salvar a fila para um arquivo"
 msgid "Save screen"
 msgstr "Salvar tela"
 
+#: src/core/actions/table.c:180
+msgid "Save screen."
+msgstr "Salvar tela"
+
 #: 00default.xml:43
 msgid "Save selected"
 msgstr "Salvar seleção"
 
 #: src/dialogs/save/save.c:300
 msgid "Save selected area"
+msgstr "Salvar área selecionada"
+
+#: src/core/actions/table.c:190
+msgid "Save selected area."
 msgstr "Salvar área selecionada"
 
 #: src/dialogs/save/save.c:299
@@ -2108,7 +2215,7 @@ msgid "Secure connection was successful."
 msgstr "Conexão segura efetuada com sucesso."
 
 #: src/ssl/negotiate.c:105 src/ssl/negotiate.c:134 src/ssl/negotiate.c:157
-#: src/ssl/negotiate.c:177 src/ssl/negotiate.c:200 src/ssl/negotiate.c:219
+#: src/ssl/negotiate.c:212 src/ssl/negotiate.c:235 src/ssl/negotiate.c:256
 #: src/ssl/ctx_init.c:124 src/ssl/ctx_init.c:154 src/ssl/linux/ldap.c:98
 #: src/ssl/linux/ldap.c:111 src/ssl/linux/ldap.c:132 src/ssl/linux/ldap.c:143
 #: src/ssl/linux/ldap.c:154 src/ssl/linux/ldap.c:179 src/ssl/linux/ldap.c:190
@@ -2120,7 +2227,7 @@ msgstr "Conexão segura efetuada com sucesso."
 msgid "Security error"
 msgstr "Erro de segurança"
 
-#: src/ssl/negotiate.c:223
+#: src/ssl/negotiate.c:260
 msgid "Security warning"
 msgstr "Alerta de segurança"
 
@@ -2129,7 +2236,7 @@ msgstr "Alerta de segurança"
 msgid "Select"
 msgstr "Selecionar"
 
-#: 00default.xml:71
+#: src/core/actions/table.c:256 00default.xml:71
 msgid "Select Field"
 msgstr "Selecionar campo"
 
@@ -2195,6 +2302,10 @@ msgstr "Certificado auto assinado"
 msgid "Self signed certificate in certificate chain"
 msgstr "Certificado auto assinado na cadeia de certificados"
 
+#: src/core/actions/table.c:375
+msgid "Send an \"Enter\" action."
+msgstr "Envia um \"Enter\"."
+
 #: src/filetransfer/tables.c:130
 msgid "Send file"
 msgstr "Enviar arquivo"
@@ -2243,7 +2354,7 @@ msgstr "Define o nome do arquivo de trace"
 msgid "Settings"
 msgstr "Configurações"
 
-#: src/dialogs/hostselect.c:340
+#: src/dialogs/hostselect.c:347
 msgid "Setup host"
 msgstr "Configurar host"
 
@@ -2379,6 +2490,14 @@ msgstr "Negociação TLS falhou"
 msgid "TN3270 Session name"
 msgstr "Nome da sessão TN3270"
 
+#: src/core/actions/table.c:297
+msgid "Tab backward to previous field."
+msgstr "Salta para o campo anterior."
+
+#: src/core/actions/table.c:287
+msgid "Tab forward to next field."
+msgstr "Salta para o próximo campo."
+
 #: colors.c:487 src/dialogs/colors.c:207 src/dialogs/colors.c:284
 msgid "Terminal colors"
 msgstr "Cores do terminal"
@@ -2442,7 +2561,7 @@ msgstr ""
 "A lista de revogação de certificados (CRL) de um certificado não pôde ser "
 "encontrada."
 
-#: src/ssl/state.c:241 src/ssl/negotiate.c:201
+#: src/ssl/state.c:241 src/ssl/negotiate.c:236
 msgid "The SSL certificate for this host is not trusted."
 msgstr "O certificado SSL deste servidor não é confiável"
 
@@ -2691,7 +2810,7 @@ msgstr ""
 "O Certificado raiz não está marcado como confiável para os fins "
 "especificados."
 
-#: src/ssl/state.c:242 src/ssl/negotiate.c:202
+#: src/ssl/state.c:242 src/ssl/negotiate.c:237
 msgid ""
 "The security certificate presented by this host was not issued by a trusted "
 "certificate authority."
@@ -2769,7 +2888,7 @@ msgstr ""
 msgid "This program requires GTK version %d.%d.%d"
 msgstr "Este programa precisa do GTK versão %d.%d.%d"
 
-#: src/terminal/charset.c:375
+#: src/terminal/charset.c:392
 msgid "Too many remaps"
 msgstr "Muitos remapeamentos"
 
@@ -2986,7 +3105,7 @@ msgstr "Atributo %s inesperado ou inválido: \"%s\""
 msgid "Unexpected or invalid CRL URL"
 msgstr "URL do CRL é inesperada ou inválida"
 
-#: src/ssl/negotiate.c:179
+#: src/ssl/negotiate.c:214
 msgid "Unexpected or invalid TLS/SSL verify result"
 msgstr "O resultado da verificação TLS/SSL foi inesperado"
 
@@ -3583,9 +3702,6 @@ msgstr "translator-credits"
 #~ msgid "Complete"
 #~ msgstr "Completo"
 
-#~ msgid "Connecting to host"
-#~ msgstr "Conectando ao servidor"
-
 #~ msgid "Copiar tudo"
 #~ msgstr "Copiar tudo"
 
@@ -3717,6 +3833,9 @@ msgstr "translator-credits"
 
 #~ msgid "Invalid argument format"
 #~ msgstr "O formato do argumento é inválido"
+
+#~ msgid "Invalid character value"
+#~ msgstr "Valor de caractere inválido"
 
 #~ msgid "Invalid charset entry '%s' (#%d)"
 #~ msgstr "Invalid charset entry '%s' (#%d)"
