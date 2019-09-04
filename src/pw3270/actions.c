@@ -253,7 +253,7 @@ static void paste_clipboard_action(GtkAction *action, GtkWidget *widget)
 static void paste_next_action(GtkAction *action, GtkWidget *widget)
 {
 	trace_action(action,widget);
-	lib3270_pastenext(v3270_get_session(widget));
+	lib3270_paste_next(v3270_get_session(widget));
 }
 
 static void kp_subtract_action(GtkAction *action, GtkWidget *widget)
