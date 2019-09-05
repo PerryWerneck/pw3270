@@ -7,109 +7,9 @@
 msgid ""
 msgstr ""
 "#-#-#-#-#  pw3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"#-#-#-#-#  window.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-03 14:44-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  actions.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-04 14:18-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  dialog.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-03 14:44-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  print.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-03 14:44-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  colors.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-03 14:44-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  tools.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-03 14:44-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  plugin.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-03 14:44-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  main.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-03 14:44-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  uiparser.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-03 14:44-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  common.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-03 14:44-0300\n"
+"POT-Creation-Date: 2019-09-05 13:08-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -120,7 +20,7 @@ msgstr ""
 "#-#-#-#-#  lib3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-04 16:20+0000\n"
+"POT-Creation-Date: 2019-09-05 13:21+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -131,7 +31,7 @@ msgstr ""
 "#-#-#-#-#  libv3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-04 16:38+0000\n"
+"POT-Creation-Date: 2019-09-05 13:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -327,7 +227,7 @@ msgstr ""
 msgid "<separator> should be inside a <menu> or <toolbar>"
 msgstr ""
 
-#: src/ssl/state.c:280
+#: src/ssl/state.c:277
 msgid ""
 "A CA certificate is invalid. Either it is not a CA or its extensions are not "
 "consistent with the supplied purpose."
@@ -373,7 +273,7 @@ msgstr ""
 msgid "Address or name of the host to connect."
 msgstr ""
 
-#: src/core/toggles.c:221 00default.xml:129
+#: src/core/toggles/table.c:240 00default.xml:129
 msgid "Alert sound"
 msgstr ""
 
@@ -382,7 +282,7 @@ msgstr ""
 msgid "All files"
 msgstr ""
 
-#: src/core/toggles.c:234
+#: src/core/toggles/table.c:257
 msgid "Alternate screen"
 msgstr ""
 
@@ -426,34 +326,34 @@ msgstr ""
 msgid "Attribute \"%s\" is invalid or undefined"
 msgstr ""
 
-#: src/ssl/state.c:335
+#: src/ssl/state.c:332
 msgid "Authority and issuer serial number mismatch"
 msgstr ""
 
-#: src/ssl/state.c:327
+#: src/ssl/state.c:324
 msgid "Authority and subject key identifier mismatch"
 msgstr ""
 
-#: src/core/toggles.c:206
+#: src/core/toggles/table.c:221
 msgid "Auto connect"
 msgstr ""
 
-#: src/core/toggles.c:236
+#: src/core/toggles/table.c:259
 msgid "Auto resize on altscreen"
 msgstr ""
 
-#: src/core/toggles.c:164 src/core/toggles.c:165 00default.xml:124
+#: src/core/toggles/table.c:167 src/core/toggles/table.c:168 00default.xml:124
 msgid "Auto-Reconnect"
 msgstr ""
 
-#: src/core/toggles.c:117
+#: src/core/toggles/table.c:106
 msgid ""
 "Automatically convert trailing blanks in a field to NULLs in order to insert "
 "a character, and will automatically convert leading NULLs to blanks so that "
 "input data is not squeezed to the left"
 msgstr ""
 
-#: src/core/toggles.c:166
+#: src/core/toggles/table.c:169
 msgid "Automatically reconnect to the host if it ever disconnects"
 msgstr ""
 
@@ -477,7 +377,7 @@ msgstr ""
 msgid "Backspaces the cursor until it hits the front of a word."
 msgstr ""
 
-#: src/core/toggles.c:222
+#: src/core/toggles/table.c:241
 msgid "Beep on errors"
 msgstr ""
 
@@ -485,11 +385,11 @@ msgstr ""
 msgid "Black"
 msgstr ""
 
-#: src/core/toggles.c:115 src/core/toggles.c:116 00default.xml:122
+#: src/core/toggles/table.c:104 src/core/toggles/table.c:105 00default.xml:122
 msgid "Blank Fill"
 msgstr ""
 
-#: src/core/toggles.c:80 src/core/toggles.c:81 00default.xml:115
+#: src/core/toggles/table.c:59 src/core/toggles/table.c:60 00default.xml:115
 msgid "Blinking Cursor"
 msgstr ""
 
@@ -501,7 +401,7 @@ msgstr ""
 msgid "Blue"
 msgstr ""
 
-#: src/core/toggles.c:185 src/core/toggles.c:186 00default.xml:125
+#: src/core/toggles/table.c:194 src/core/toggles/table.c:195 00default.xml:125
 msgid "Bold"
 msgstr ""
 
@@ -549,7 +449,7 @@ msgstr ""
 msgid "C_onnect"
 msgstr ""
 
-#: src/core/toggles.c:365 src/core/linux/connect.c:232
+#: src/core/toggles/init.c:89 src/core/linux/connect.c:232
 #, c-format
 msgid "Can't %s network keep-alive"
 msgstr ""
@@ -784,15 +684,15 @@ msgstr ""
 msgid "Certificate is not yet valid"
 msgstr ""
 
-#: src/ssl/state.c:303
+#: src/ssl/state.c:300
 msgid "Certificate not trusted"
 msgstr ""
 
-#: src/ssl/state.c:311
+#: src/ssl/state.c:308
 msgid "Certificate rejected"
 msgstr ""
 
-#: src/ssl/state.c:271
+#: src/ssl/state.c:268
 msgid "Certificate revoked"
 msgstr ""
 
@@ -864,7 +764,7 @@ msgstr ""
 msgid "Configure host"
 msgstr ""
 
-#: src/core/toggles.c:207 00default.xml:114
+#: src/core/toggles/table.c:222 00default.xml:114
 msgid "Connect on startup"
 msgstr ""
 
@@ -917,7 +817,7 @@ msgstr ""
 msgid "Creates a file with variable-length records."
 msgstr ""
 
-#: colors.c:519 src/core/toggles.c:150 src/core/toggles.c:151
+#: colors.c:519 src/core/toggles/table.c:149 src/core/toggles/table.c:150
 #: src/dialogs/colors.c:316 00default.xml:121
 msgid "Cross hair cursor"
 msgstr ""
@@ -1011,7 +911,7 @@ msgstr ""
 msgid "Dark Turquoise"
 msgstr ""
 
-#: src/core/toggles.c:101
+#: src/core/toggles/table.c:86
 msgid "Data Stream"
 msgstr ""
 
@@ -1063,7 +963,7 @@ msgstr ""
 msgid "Display current charset"
 msgstr ""
 
-#: src/core/toggles.c:96
+#: src/core/toggles/table.c:79
 msgid "Display the cursor location in the OIA (the status line)"
 msgstr ""
 
@@ -1075,16 +975,16 @@ msgstr ""
 msgid "ETA:"
 msgstr ""
 
-#: src/core/toggles.c:250
+#: src/core/toggles/table.c:277
 msgid "Enable network in/out trace"
 msgstr ""
 
-#: src/core/toggles.c:243
+#: src/core/toggles/table.c:268
 msgid "Enable network keep-alive with SO_KEEPALIVE"
 msgstr ""
 
-#: src/core/toggles.c:257
-msgid "Enable security negotiation messages trace"
+#: src/core/toggles/table.c:286
+msgid "Enable security negotiation trace"
 msgstr ""
 
 #: 10keypad.xml:81
@@ -1157,7 +1057,7 @@ msgstr ""
 msgid "Estimated transfer arrival"
 msgstr ""
 
-#: src/core/toggles.c:129
+#: src/core/toggles/table.c:122
 msgid "Events"
 msgstr ""
 
@@ -1233,7 +1133,7 @@ msgstr ""
 msgid "Formatted screen"
 msgstr ""
 
-#: src/core/toggles.c:157 src/core/toggles.c:158 00default.xml:118
+#: src/core/toggles/table.c:158 src/core/toggles/table.c:159 00default.xml:118
 msgid "Full Screen"
 msgstr ""
 
@@ -1341,11 +1241,11 @@ msgstr ""
 msgid "IDLE minutes for automatic disconnection"
 msgstr ""
 
-#: src/core/toggles.c:159
+#: src/core/toggles/table.c:160
 msgid "If set, asks to place the toplevel window in the fullscreen state"
 msgstr ""
 
-#: src/core/toggles.c:138
+#: src/core/toggles/table.c:133
 msgid ""
 "If set, puts restrictions on how pasted text is placed on the screen. The "
 "position of the cursor at the time the paste operation is begun is used as a "
@@ -1354,34 +1254,34 @@ msgid ""
 "that use the left side of the screen for control information"
 msgstr ""
 
-#: src/core/toggles.c:110
+#: src/core/toggles/table.c:97
 msgid ""
 "If set, the NVT terminal emulator automatically assumes a NEWLINE character "
 "when it reaches the end of a line."
 msgstr ""
 
-#: src/core/toggles.c:82
+#: src/core/toggles/table.c:61
 msgid "If set, the cursor blinks"
 msgstr ""
 
-#: src/core/toggles.c:75
+#: src/core/toggles/table.c:52
 msgid "If set, the terminal operates in uppercase-only mode"
 msgstr ""
 
-#: src/core/toggles.c:145
+#: src/core/toggles/table.c:142
 msgid ""
 "If set, the terminal will always select rectangular areas of the screen. "
 "Otherwise, it selects continuous regions of the screen"
 msgstr ""
 
-#: src/core/toggles.c:152
+#: src/core/toggles/table.c:151
 msgid ""
 "If set, the terminal will display a crosshair over the cursor: lines "
 "extending the full width and height of the screen, centered over the cursor "
 "position. This makes locating the cursor on the screen much easier"
 msgstr ""
 
-#: src/core/toggles.c:89
+#: src/core/toggles/table.c:70
 msgid ""
 "If set, the time taken by the host to process an AID is displayed on the "
 "status line"
@@ -1417,7 +1317,7 @@ msgstr ""
 msgid "Input method"
 msgstr ""
 
-#: src/core/toggles.c:171
+#: src/core/toggles/table.c:176
 msgid "Insert"
 msgstr ""
 
@@ -1433,7 +1333,7 @@ msgstr ""
 msgid "Intensified/Unprotected"
 msgstr ""
 
-#: src/ssl/state.c:279
+#: src/ssl/state.c:276
 msgid "Invalid CA certificate"
 msgstr ""
 
@@ -1498,11 +1398,11 @@ msgstr ""
 msgid "Is terminal ready"
 msgstr ""
 
-#: src/core/toggles.c:192 src/core/toggles.c:193 00default.xml:127
+#: src/core/toggles/table.c:203 src/core/toggles/table.c:204 00default.xml:127
 msgid "Keep selected"
 msgstr ""
 
-#: src/ssl/state.c:343
+#: src/ssl/state.c:340
 msgid "Key usage does not include certificate signing"
 msgstr ""
 
@@ -1568,7 +1468,7 @@ msgstr ""
 msgid "Model name"
 msgstr ""
 
-#: src/core/toggles.c:73 00default.xml:116
+#: src/core/toggles/table.c:50 00default.xml:116
 msgid "Monocase"
 msgstr ""
 
@@ -1593,7 +1493,7 @@ msgstr ""
 msgid "Mustard"
 msgstr ""
 
-#: src/core/toggles.c:248
+#: src/core/toggles/table.c:275
 msgid "Network data"
 msgstr ""
 
@@ -1602,7 +1502,7 @@ msgstr ""
 msgid "Network error"
 msgstr ""
 
-#: src/core/toggles.c:241 src/core/toggles.c:242 00default.xml:131
+#: src/core/toggles/table.c:266 src/core/toggles/table.c:267 00default.xml:131
 msgid "Network keep alive"
 msgstr ""
 
@@ -1622,7 +1522,7 @@ msgstr ""
 msgid "No active transfer"
 msgstr ""
 
-#: src/ssl/state.c:264
+#: src/ssl/state.c:261
 msgid ""
 "No signatures could be verified because the chain contains only one "
 "certificate and it is not self signed."
@@ -1858,7 +1758,7 @@ msgstr ""
 msgid "Paste text file"
 msgstr ""
 
-#: src/core/toggles.c:136 src/core/toggles.c:137 00default.xml:120
+#: src/core/toggles/table.c:131 src/core/toggles/table.c:132 00default.xml:120
 msgid "Paste with left margin"
 msgstr ""
 
@@ -1870,7 +1770,7 @@ msgstr ""
 msgid "Path for plugin files"
 msgstr ""
 
-#: src/ssl/state.c:287
+#: src/ssl/state.c:284
 msgid "Path length constraint exceeded"
 msgstr ""
 
@@ -2122,7 +2022,7 @@ msgstr ""
 msgid "Reset"
 msgstr ""
 
-#: src/core/toggles.c:235 00default.xml:119
+#: src/core/toggles/table.c:258 00default.xml:119
 msgid "Resize on alternate screen"
 msgstr ""
 
@@ -2156,7 +2056,7 @@ msgstr ""
 msgid "SSL Read error"
 msgstr ""
 
-#: src/core/toggles.c:255
+#: src/core/toggles/table.c:284
 msgid "SSL negotiation"
 msgstr ""
 
@@ -2253,7 +2153,7 @@ msgstr ""
 msgid "Screen size"
 msgstr ""
 
-#: src/core/toggles.c:122
+#: src/core/toggles/table.c:113
 msgid "Screens"
 msgstr ""
 
@@ -2313,7 +2213,7 @@ msgstr ""
 msgid "Select all"
 msgstr ""
 
-#: src/core/toggles.c:143 src/core/toggles.c:144 00default.xml:123
+#: src/core/toggles/table.c:140 src/core/toggles/table.c:141 00default.xml:123
 msgid "Select by rectangles"
 msgstr ""
 
@@ -2367,7 +2267,7 @@ msgstr ""
 msgid "Self signed certificate"
 msgstr ""
 
-#: src/ssl/state.c:246
+#: src/ssl/state.c:244
 msgid "Self signed certificate in certificate chain"
 msgstr ""
 
@@ -2399,7 +2299,7 @@ msgstr ""
 msgid "Set host charset"
 msgstr ""
 
-#: src/core/toggles.c:172
+#: src/core/toggles/table.c:177
 msgid "Set insert mode"
 msgstr ""
 
@@ -2427,15 +2327,15 @@ msgstr ""
 msgid "Setup host"
 msgstr ""
 
-#: src/core/toggles.c:227
+#: src/core/toggles/table.c:248
 msgid "Show Field"
 msgstr ""
 
-#: src/core/toggles.c:228
-msgid "Show Field attribute"
+#: src/core/toggles/table.c:249
+msgid "Show Field attributes"
 msgstr ""
 
-#: src/core/toggles.c:200 00default.xml:126
+#: src/core/toggles/table.c:213 00default.xml:126
 msgid "Show Underline"
 msgstr ""
 
@@ -2443,7 +2343,7 @@ msgstr ""
 msgid "Show test pattern"
 msgstr ""
 
-#: src/core/toggles.c:87 src/core/toggles.c:88
+#: src/core/toggles/table.c:68 src/core/toggles/table.c:69
 msgid "Show timer when processing"
 msgstr ""
 
@@ -2455,7 +2355,7 @@ msgstr ""
 msgid "Skip this transfer, keep the file on queue."
 msgstr ""
 
-#: src/core/toggles.c:178 src/core/toggles.c:179 00default.xml:128
+#: src/core/toggles/table.c:185 src/core/toggles/table.c:186 00default.xml:128
 msgid "Smart paste"
 msgstr ""
 
@@ -2471,7 +2371,7 @@ msgstr ""
 msgid "Socket write error"
 msgstr ""
 
-#: src/core/toggles.c:220
+#: src/core/toggles/table.c:239
 msgid "Sound"
 msgstr ""
 
@@ -2533,7 +2433,7 @@ msgstr ""
 msgid "State is 3270, TN3270e or SSCP"
 msgstr ""
 
-#: src/ssl/state.c:319
+#: src/ssl/state.c:316
 msgid "Subject issuer mismatch"
 msgstr ""
 
@@ -2612,7 +2512,7 @@ msgid ""
 "The Certificate revocation list (CRL) of a certificate could not be found."
 msgstr ""
 
-#: src/ssl/state.c:241 src/ssl/negotiate.c:236
+#: src/ssl/negotiate.c:236
 msgid "The SSL certificate for this host is not trusted."
 msgstr ""
 
@@ -2628,7 +2528,7 @@ msgstr ""
 msgid "The URL scheme is unknown"
 msgstr ""
 
-#: src/ssl/state.c:288
+#: src/ssl/state.c:285
 msgid "The basicConstraints pathlength parameter has been exceeded."
 msgstr ""
 
@@ -2638,13 +2538,13 @@ msgid ""
 "on lib3270"
 msgstr ""
 
-#: src/ssl/state.c:247
+#: src/ssl/state.c:245
 msgid ""
 "The certificate chain could be built up using the untrusted certificates but "
 "the root could not be found locally."
 msgstr ""
 
-#: src/ssl/state.c:272
+#: src/ssl/state.c:269
 msgid "The certificate has been revoked."
 msgstr ""
 
@@ -2679,7 +2579,7 @@ msgstr ""
 msgid "The color type"
 msgstr ""
 
-#: src/ssl/state.c:375 src/ssl/state.c:403 src/ssl/state.c:430
+#: src/ssl/state.c:372 src/ssl/state.c:400 src/ssl/state.c:427
 msgid "The connection is insecure"
 msgstr ""
 
@@ -2687,7 +2587,7 @@ msgstr ""
 msgid "The connection is secure and the host identity was confirmed."
 msgstr ""
 
-#: src/ssl/state.c:336
+#: src/ssl/state.c:333
 msgid ""
 "The current candidate issuer certificate was rejected because its issuer "
 "name and serial number was present and did not match the authority key "
@@ -2695,20 +2595,20 @@ msgid ""
 "issuer_checks option is set."
 msgstr ""
 
-#: src/ssl/state.c:344
+#: src/ssl/state.c:341
 msgid ""
 "The current candidate issuer certificate was rejected because its keyUsage "
 "extension does not permit certificate signing."
 msgstr ""
 
-#: src/ssl/state.c:328
+#: src/ssl/state.c:325
 msgid ""
 "The current candidate issuer certificate was rejected because its subject "
 "key identifier was present and did not match the authority key identifier "
 "current certificate. Only displayed when the -issuer_checks option is set."
 msgstr ""
 
-#: src/ssl/state.c:320
+#: src/ssl/state.c:317
 msgid ""
 "The current candidate issuer certificate was rejected because its subject "
 "name did not match the issuer name of the current certificate. Only "
@@ -2752,7 +2652,7 @@ msgid ""
 "operation."
 msgstr ""
 
-#: src/ssl/state.c:256
+#: src/ssl/state.c:253
 msgid ""
 "The issuer certificate could not be found: this occurs if the issuer "
 "certificate of an untrusted certificate cannot be found."
@@ -2816,15 +2716,15 @@ msgstr ""
 msgid "The remote file name is invalid."
 msgstr ""
 
-#: src/ssl/state.c:312
+#: src/ssl/state.c:309
 msgid "The root CA is marked to reject the specified purpose."
 msgstr ""
 
-#: src/ssl/state.c:304
+#: src/ssl/state.c:301
 msgid "The root CA is not marked as trusted for the specified purpose."
 msgstr ""
 
-#: src/ssl/state.c:242 src/ssl/negotiate.c:237
+#: src/ssl/negotiate.c:237
 msgid ""
 "The security certificate presented by this host was not issued by a trusted "
 "certificate authority."
@@ -2838,7 +2738,7 @@ msgstr ""
 msgid "The signature of the certificate is invalid."
 msgstr ""
 
-#: src/ssl/state.c:296
+#: src/ssl/state.c:293
 msgid "The supplied certificate cannot be used for the specified purpose."
 msgstr ""
 
@@ -2906,23 +2806,23 @@ msgstr ""
 msgid "Trace"
 msgstr ""
 
-#: src/core/toggles.c:102 98trace.xml:36
+#: src/core/toggles/table.c:87 98trace.xml:36
 msgid "Trace Data Stream"
 msgstr ""
 
-#: src/core/toggles.c:256 98trace.xml:40
+#: src/core/toggles/table.c:285 98trace.xml:40
 msgid "Trace SSL negotiation"
 msgstr ""
 
-#: src/core/toggles.c:130
+#: src/core/toggles/table.c:123
 msgid "Trace interface and application events"
 msgstr ""
 
-#: src/core/toggles.c:249 98trace.xml:38
+#: src/core/toggles/table.c:276 98trace.xml:38
 msgid "Trace network data flow"
 msgstr ""
 
-#: src/core/toggles.c:123 98trace.xml:37
+#: src/core/toggles/table.c:114 98trace.xml:37
 msgid "Trace screen contents"
 msgstr ""
 
@@ -2930,7 +2830,7 @@ msgstr ""
 msgid "Trace user interface events"
 msgstr ""
 
-#: src/core/toggles.c:94 src/core/toggles.c:95 00default.xml:117
+#: src/core/toggles/table.c:77 src/core/toggles/table.c:78 00default.xml:117
 msgid "Track Cursor"
 msgstr ""
 
@@ -3029,7 +2929,7 @@ msgstr ""
 msgid "Unable to get issuer certificate"
 msgstr ""
 
-#: src/ssl/state.c:255
+#: src/ssl/state.c:252
 msgid "Unable to get local issuer certificate"
 msgstr ""
 
@@ -3057,7 +2957,7 @@ msgstr ""
 msgid "Unable to send file-transfer request"
 msgstr ""
 
-#: src/ssl/state.c:263
+#: src/ssl/state.c:260
 msgid "Unable to verify the first certificate"
 msgstr ""
 
@@ -3065,7 +2965,7 @@ msgstr ""
 msgid "Undefined"
 msgstr ""
 
-#: src/core/toggles.c:199
+#: src/core/toggles/table.c:212
 msgid "Underline"
 msgstr ""
 
@@ -3116,7 +3016,7 @@ msgstr ""
 msgid "Unexpected or invalid color value \"%s\""
 msgstr ""
 
-#: src/ssl/state.c:406
+#: src/ssl/state.c:403
 msgid "Unexpected or unknown security status"
 msgstr ""
 
@@ -3162,7 +3062,7 @@ msgstr ""
 msgid "Unsupported RPQ term"
 msgstr ""
 
-#: src/ssl/state.c:295
+#: src/ssl/state.c:292
 msgid "Unsupported certificate purpose"
 msgstr ""
 
@@ -3170,11 +3070,11 @@ msgstr ""
 msgid "Untitled document"
 msgstr ""
 
-#: src/core/toggles.c:74
+#: src/core/toggles/table.c:51
 msgid "Uppercase only"
 msgstr ""
 
-#: src/core/toggles.c:213 src/core/toggles.c:214 00default.xml:130
+#: src/core/toggles/table.c:230 src/core/toggles/table.c:231 00default.xml:130
 msgid "Use +/- for field navigation"
 msgstr ""
 
@@ -3182,7 +3082,7 @@ msgstr ""
 msgid "Use host default record format."
 msgstr ""
 
-#: src/core/toggles.c:215
+#: src/core/toggles/table.c:232
 msgid "Use the keys +/- from keypad to select editable fields"
 msgstr ""
 
@@ -3224,7 +3124,7 @@ msgstr ""
 msgid "Windows error was \"%s\" (%u)"
 msgstr ""
 
-#: src/core/toggles.c:108 src/core/toggles.c:109
+#: src/core/toggles/table.c:95 src/core/toggles/table.c:96
 msgid "Wrap around"
 msgstr ""
 
@@ -3467,11 +3367,11 @@ msgstr ""
 msgid "bracket"
 msgstr ""
 
-#: src/core/toggles.c:365 src/core/linux/connect.c:232
+#: src/core/toggles/init.c:89 src/core/linux/connect.c:232
 msgid "disable"
 msgstr ""
 
-#: src/core/toggles.c:365 src/core/linux/connect.c:232
+#: src/core/toggles/init.c:89 src/core/linux/connect.c:232
 msgid "enable"
 msgstr ""
 
