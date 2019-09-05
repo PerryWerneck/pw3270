@@ -35,16 +35,25 @@ failed()
 #
 # Get Sources from GIT
 #
-getSource()
+prepare()
 {
-	echo -e "\e]2;Getting sources for ${1}\a"
-	echo "Getting sources for ${1}"
+	echo -e "\e]2;Preparing ${1}\a"
+	echo "Preparing ${1}"
 
 	mkdir -p ${WORKDIR}/sources
 
-	git clone ${GIT_URL}/${1}.git ${WORKDIR}/sources/${1}
+	git clone --quiet ${GIT_URL}/${1}.git ${WORKDIR}/sources/${1}
 	if [ "$?" != "0" ]; then
-		faile "Can't get sources for ${1}"
+		failed "Can't get sources for ${1}"
+	fi
+
+	if [ -x ${PROJECTDIR}/win/prepare.${1} ]; then
+		pushd ${WORKDIR}/sources/${1}
+		${PROJECTDIR}/win/prepare.${1}
+		if [ "$?" != "0" ]; then
+			failed "Can't prepare ${1}"
+		fi
+		popd
 	fi
 
 	for ARCH in ${TARGET_ARCHS}
@@ -154,9 +163,9 @@ buildLibrary()
 
 		if [ -x ${PROJECTDIR}/win/configure.${1} ]; then
 
-			HOST="${host}" \
-			PREFIX="${prefix}" \
-			BUILDDIR="{WORKDIR}/build/${ARCH}}" \
+			host="${host}" \
+			prefix="${prefix}" \
+			BUILDDIR="${WORKDIR}/build/${ARCH}}" \
 			CFLAGS="-I${WORKDIR}/build/${ARCH}/include" \
 			LDFLAGS="-L${WORKDIR}/build/${ARCH}" \
 				${PROJECTDIR}/win/configure.${1}
@@ -509,7 +518,7 @@ do
 
 			;;
 
-		PATH)
+		PROJECT-DIR)
 			PROJECTDIR=$(readlink -f ${value})
 			;;
 
@@ -554,19 +563,19 @@ fi
 #
 for src in ${CORE_LIBRARIES}
 do
-	getSource ${src}
+	prepare ${src}
 done
 
-getSource pw3270
+prepare pw3270
 
 for src in ${PACKAGE_PLUGINS}
 do
-	getSource pw3270-plugin-${src}
+	prepare pw3270-plugin-${src}
 done
 
 for src in ${PACKAGE_LANGUAGE_BINDINGS}
 do
-	getSource lib3270-${src}-bindings
+	prepare lib3270-${src}-bindings
 done
 
 #
