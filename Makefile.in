@@ -146,7 +146,7 @@ ifneq ($(HELP2MAN),no)
 		$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ | gzip --best --stdout - > $(DESTDIR)/$(mandir)/man1/$(PACKAGE_NAME).1.gz
 endif
 
-	@$(MKDIR) $(DESTDIR)$(libdir)/pw3270-plugins
+	@$(MKDIR) $(DESTDIR)$(libdir)/@PRODUCT_NAME@-plugins
 
 install-%: \
 	modules/%/Makefile

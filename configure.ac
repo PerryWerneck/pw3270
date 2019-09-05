@@ -116,6 +116,10 @@ AC_SUBST(APPDATADIR,$app_cv_source_appdatadir)
 AC_DEFINE_UNQUOTED(APPDATADIR, $app_cv_source_appdatadir)
 AC_SUBST(APPDATADIR,$app_cv_source_appdatadir)
 
+AC_ARG_WITH([product-name], [AS_HELP_STRING([--with-product-name], [Set product name])], [ app_cv_product="$withval" ],[ app_cv_product=`pkg-config --variable=product_name lib3270` ])
+AC_DEFINE_UNQUOTED(PRODUCT_NAME, $app_cv_product)
+AC_SUBST(PRODUCT_NAME,$app_cv_product)
+
 dnl ---------------------------------------------------------------------------
 dnl Check for OS specifics
 dnl ---------------------------------------------------------------------------
