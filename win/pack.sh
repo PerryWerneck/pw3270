@@ -12,6 +12,7 @@ PROJECTDIR=$(dirname $(dirname $(readlink -f ${0})))
 WORKDIR=$(mktemp -d)
 PUBLISH=0
 GET_PREREQS=1
+CERTS_DIR=${WORKDIR}/certs
 
 if [ -e /etc/os-release ]; then
 	. /etc/os-release
@@ -390,22 +391,15 @@ makeInstaller()
 {
 	NSIS_ARGS="-DWITHGTK"
 
-	if [ -d ${WORKDIR}/certs ]; then
+	if [ -d ${CERTS_DIR} ]; then
+
 		NSIS_ARGS="${NSIS_ARGS} -DWITHCERTS"
 
-		export SSL_CERT_DIR=${WORKDIR}/build/${ARCH}/sslcerts
-
-		mkdir -p ${SSL_CERT_DIR}
-		cp -rv ${WORKDIR}/certs ${SSL_CERT_DIR}
+		mkdir -p ${WORKDIR}/build/${ARCH}/sslcerts
+		cp -rv ${CERTS_DIR} ${WORKDIR}/build/${ARCH}/sslcerts
 		if [ "$?" != "0" ]; then
 			failed "Can't copy certs"
 		fi
-
-		c_rehash
-		if [ "$?" != "0" ]; then
-			failed "Can't hash certs"
-		fi
-
 
 	fi
 
@@ -527,6 +521,10 @@ do
 
 		SOURCES-FROM)
 			GIT_URL=${value}
+			;;
+
+		CERTS-FROM)
+			CERTS_DIR=${value}
 			;;
 
 		ADD-REPOS)
