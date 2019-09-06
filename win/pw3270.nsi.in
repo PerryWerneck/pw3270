@@ -3,17 +3,17 @@
 !include "FileFunc.nsh"
 !include "LogicLib.nsh"
 
-Name "@APPLICATION_NAME@"
-Caption "@APPLICATION_NAME@ - @PACKAGE_DESCRIPTION@"
+Name "@PRODUCT_NAME@"
+Caption "@PRODUCT_NAME@ - @PACKAGE_DESCRIPTION@"
 !ifdef WITHGTK
-outfile "@APPLICATION_NAME@-@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.@PACKAGE_MAJOR_RELEASE@.@PACKAGE_MINOR_RELEASE@-gtk-@GTK_MODVERSION@-@host_cpu@.exe"
+outfile "@PRODUCT_NAME@-@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.@PACKAGE_MAJOR_RELEASE@.@PACKAGE_MINOR_RELEASE@-gtk-@GTK_MODVERSION@-@host_cpu@.exe"
 !else
-outfile "@APPLICATION_NAME@-@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.@PACKAGE_MAJOR_RELEASE@.@PACKAGE_MINOR_RELEASE@-requires-gtk-@GTK_MODVERSION@-@host_cpu@.exe"
+outfile "@PRODUCT_NAME@-@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.@PACKAGE_MAJOR_RELEASE@.@PACKAGE_MINOR_RELEASE@-requires-gtk-@GTK_MODVERSION@-@host_cpu@.exe"
 !endif
 
 XPStyle on
 
-installDir "$@PROGRAMFILES@\@APPLICATION_NAME@"
+installDir "$@PROGRAMFILES@\@PRODUCT_NAME@"
 
 #define the installer icon
 !define MUI_ICON "@PACKAGE@.ico"
@@ -32,7 +32,7 @@ VIFileVersion "@WIN32_VERSION@"
 VIAddVersionKey "ProductVersion" "@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.@PACKAGE_MAJOR_RELEASE@.0"
 VIAddVersionKey "FileVersion" "@WIN32_VERSION@"
 
-VIAddVersionKey "ProductName" "@APPLICATION_NAME@"
+VIAddVersionKey "ProductName" "@PRODUCT_NAME@"
 VIAddVersionKey "FileDescription" "@PACKAGE_DESCRIPTION@"
 VIAddVersionKey "LegalCopyright" "GPL-2.0"
 
@@ -68,12 +68,12 @@ SubSection "@PACKAGE@" SecMain
 		setOutPath $INSTDIR
 		SetShellVarContext all
 
-		createShortCut "$SMPROGRAMS\@APPLICATION_NAME@.lnk" "$INSTDIR\@APPLICATION_NAME@.exe"
-		createShortCut "$DESKTOP\@APPLICATION_NAME@.lnk" "$INSTDIR\@APPLICATION_NAME@.exe"
+		createShortCut "$SMPROGRAMS\@PRODUCT_NAME@.lnk" "$INSTDIR\@PRODUCT_NAME@.exe"
+		createShortCut "$DESKTOP\@PRODUCT_NAME@.lnk" "$INSTDIR\@PRODUCT_NAME@.exe"
 
 		# Binary files
-		file "/oname=$INSTDIR\@APPLICATION_NAME@.exe"			"@PACKAGE@.exe"
-		file "/oname=$INSTDIR\@APPLICATION_NAME@.ico"			"@PACKAGE@.ico"
+		file "/oname=$INSTDIR\@PRODUCT_NAME@.exe"			"@PACKAGE@.exe"
+		file "/oname=$INSTDIR\@PRODUCT_NAME@.ico"			"@PACKAGE@.ico"
 		file "/oname=$INSTDIR\lib3270.dll"				"lib3270.dll"
 		file "/oname=$INSTDIR\libv3270.dll"				"libv3270.dll"
 		file "/oname=$INSTDIR\@PACKAGE@.dll"				"@PACKAGE@.dll"
@@ -81,7 +81,7 @@ SubSection "@PACKAGE@" SecMain
 		# Configuration files
 		file "/oname=$INSTDIR\@PACKAGE@-logo.png"			"@PACKAGE@-logo.png"
 		file "/oname=$INSTDIR\@PACKAGE@.png"				"@PACKAGE@.png"
-		file "/oname=$INSTDIR\colors.conf"				"colors.conf"
+		file "/oname=$INSTDIR\colors.conf"				"@PRODUCT_NAME@\colors.conf"
 
 		# Documentation files
 		file "/oname=$INSTDIR\AUTHORS"					"AUTHORS"
@@ -114,9 +114,9 @@ SubSection "@PACKAGE@" SecMain
 		writeUninstaller $INSTDIR\uninstall.exe
 
 		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PACKAGE@" \
-			         "DisplayName" "@APPLICATION_NAME@ - @PACKAGE_DESCRIPTION@"
+			         "DisplayName" "@PRODUCT_NAME@ - @PACKAGE_DESCRIPTION@"
 		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PACKAGE@" \
-			         "DisplayIcon" "$INSTDIR\@APPLICATION_NAME@.ico"
+			         "DisplayIcon" "$INSTDIR\@PRODUCT_NAME@.ico"
 		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PACKAGE@" \
 			         "DisplayVersion" "@PACKAGE_VERSION@"
 
@@ -226,9 +226,9 @@ Section "Uninstall"
 	SetShellVarContext all
 
 	# now delete installed files
-	delete $INSTDIR\@APPLICATION_NAME@.exe
-	delete $SMPROGRAMS\@APPLICATION_NAME@.lnk
-	delete $DESKTOP\@APPLICATION_NAME@.lnk
+	delete $INSTDIR\@PRODUCT_NAME@.exe
+	delete $SMPROGRAMS\@PRODUCT_NAME@.lnk
+	delete $DESKTOP\@PRODUCT_NAME@.lnk
 
 	RMDir /r "$INSTDIR\locale"
 	RMDir /r "$INSTDIR\share"
