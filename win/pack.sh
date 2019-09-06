@@ -494,7 +494,7 @@ do
                 value=${tmp##*=}
 
                 case "$parameter" in
-		NOPUBLISH)
+		NO-NOPUBLISH)
 			PUBLISH=0
 			;;
 
@@ -502,7 +502,7 @@ do
 			PUBLISH=1
 			;;
 
-		PRODUCT)
+		PRODUCT-NAME)
 			PRODUCT_NAME=${value}
 			;;
 
@@ -518,7 +518,7 @@ do
 
 			;;
 
-		PROJECT-DIR)
+		PROJECT-PATH)
 			PROJECTDIR=$(readlink -f ${value})
 			;;
 
@@ -529,14 +529,17 @@ do
 			echo "Options:"
 			echo ""
 
+			echo "  --product-name	Set the product name (current is ${PRODUCT_NAME})"
+			echo "  --project-path	Set the path for the customization data"
+
 			if [ ! -z ${WIN_PACKAGE_SERVER} ]; then
-				echo "  --nopublish	Don't publish binaries in ${WIN_PACKAGE_SERVER}/${PRODUCT_NAME}"
-				echo "  --publish	Publish binaries in ${WIN_PACKAGE_SERVER}/${PRODUCT_NAME}"
+				echo "  --no-publish		Don't publish binaries in ${WIN_PACKAGE_SERVER}/${PRODUCT_NAME}"
+				echo "  --publish		Publish binaries in ${WIN_PACKAGE_SERVER}/${PRODUCT_NAME}"
 			fi
 
 
 			if [ -d ~/public_html/win/${PRODUCT_NAME} ]; then
-				echo "  --clear	Remove ~/public_html/win/${PRODUCT_NAME}/{x86_32,x86_64}"
+				echo "  --clear		Remove ~/public_html/win/${PRODUCT_NAME}/{x86_32,x86_64}"
 			fi
 
 			echo ""

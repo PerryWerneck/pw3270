@@ -31,6 +31,7 @@ PACKAGE_VERSION=@PACKAGE_VERSION@
 PACKAGE_LEVEL=@PACKAGE_LEVEL@
 PACKAGE_TARNAME=@PACKAGE_TARNAME@
 PACKAGE_DESCRIPTION=@PACKAGE_DESCRIPTION@
+PRODUCT_NAME=@PRODUCT_NAME@
 
 #---[ Paths ]------------------------------------------------------------------
 
@@ -45,7 +46,6 @@ docdir=@docdir@
 sysconfdir=@sysconfdir@
 mandir=@mandir@
 APPDATADIR=@APPDATADIR@
-datadir=$(datarootdir)/@PRODUCT_NAME@
 
 BASEDIR=@BASEDIR@
 
@@ -175,11 +175,11 @@ $(POTDIR)/%.pot: \
 	@$(MAKE) -C src/$(basename $(notdir $@)) $@
 
 $(POTDIR)/%.pot: \
-	@LIBRARY_POT_FILES@/%.pot
+	$(datarootdir)/$(PRODUCT_NAME)/pot/%.pot
  
 	@echo $(notdir $@) ...
 	@mkdir -p `dirname $@`
-	@cp "$^" $@
+	@cp "$^" "$@"
 
 $(POTDIR)/%.pot: \
 	./modules/%/* \

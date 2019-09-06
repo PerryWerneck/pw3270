@@ -105,9 +105,6 @@ AC_SUBST(PACKAGE_MINOR_RELEASE,$app_rls_minor)
 
 AC_ARG_WITH([source-locales], [AS_HELP_STRING([--with-source-locales], [Set path for lib3270 locale sources])], [ app_cv_source_locales="$withval" ],[ app_cv_source_locales="/usr/share/`pkg-config --variable=product_name lib3270`/pot" ])
 
-AC_DEFINE_UNQUOTED(LIBRARY_POT_FILES, $app_cv_source_locales)
-AC_SUBST(LIBRARY_POT_FILES,$app_cv_source_locales)
-
 AC_ARG_WITH([application-datadir], [AS_HELP_STRING([--with-application-datadir], [Set path for configuration file])], [ app_cv_source_appdatadir="$withval" ],[ app_cv_source_appdatadir="\$(datarootdir)/`pkg-config --variable=product_name lib3270`" ])
 
 AC_DEFINE_UNQUOTED(APPDATADIR, $app_cv_source_appdatadir)
