@@ -26,10 +26,10 @@ InstallDirRegKey HKLM "Software\@PACKAGE@" "InstallLocation"
 RequestExecutionLevel admin
 
 # Properties
-VIProductVersion "@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.@PACKAGE_MAJOR_RELEASE@.0"
+VIProductVersion "@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.@PACKAGE_MAJOR_RELEASE@.@PACKAGE_MINOR_RELEASE@"
 VIFileVersion "@WIN32_VERSION@"
 
-VIAddVersionKey "ProductVersion" "@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.@PACKAGE_MAJOR_RELEASE@.0"
+VIAddVersionKey "ProductVersion" "@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.@PACKAGE_MAJOR_RELEASE@.@PACKAGE_MINOR_RELEASE@"
 VIAddVersionKey "FileVersion" "@WIN32_VERSION@"
 
 VIAddVersionKey "ProductName" "@PRODUCT_NAME@"
@@ -118,7 +118,7 @@ SubSection "@PACKAGE@" SecMain
 		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PACKAGE@" \
 			         "DisplayIcon" "$INSTDIR\@PRODUCT_NAME@.ico"
 		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PACKAGE@" \
-			         "DisplayVersion" "@PACKAGE_VERSION@"
+			         "DisplayVersion" "@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.@PACKAGE_MAJOR_RELEASE@.@PACKAGE_MINOR_RELEASE@"
 
 		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PACKAGE@" \
 			         "UninstallString" "$INSTDIR\uninstall.exe"
@@ -135,9 +135,9 @@ SubSection "@PACKAGE@" SecMain
 	sectionEnd
 
 !ifdef WITHCERTS
-	Section "SSL Certs" SecCerts
+	Section "SSL Certificates" SSLCerts
 		setOutPath $INSTDIR\certs
-		file /r "certs\*.*"
+		file /r "sslcerts\*.*"
 	sectionEnd
 !endif
 
