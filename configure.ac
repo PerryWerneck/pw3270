@@ -103,16 +103,6 @@ AC_SUBST(PACKAGE_RELEASE,$app_cv_release)
 AC_SUBST(PACKAGE_MAJOR_RELEASE,$app_rls_major)
 AC_SUBST(PACKAGE_MINOR_RELEASE,$app_rls_minor)
 
-AC_ARG_WITH([source-locales], [AS_HELP_STRING([--with-source-locales], [Set path for lib3270 locale sources])], [ app_cv_source_locales="$withval" ],[ app_cv_source_locales="/usr/share/`pkg-config --variable=product_name lib3270`/pot" ])
-
-AC_ARG_WITH([application-datadir], [AS_HELP_STRING([--with-application-datadir], [Set path for configuration file])], [ app_cv_source_appdatadir="$withval" ],[ app_cv_source_appdatadir="\$(datarootdir)/`pkg-config --variable=product_name lib3270`" ])
-
-AC_DEFINE_UNQUOTED(APPDATADIR, $app_cv_source_appdatadir)
-AC_SUBST(APPDATADIR,$app_cv_source_appdatadir)
-
-AC_DEFINE_UNQUOTED(APPDATADIR, $app_cv_source_appdatadir)
-AC_SUBST(APPDATADIR,$app_cv_source_appdatadir)
-
 AC_ARG_WITH([product-name], [AS_HELP_STRING([--with-product-name], [Set product name])], [ app_cv_product="$withval" ],[ app_cv_product=`pkg-config --variable=product_name lib3270` ])
 AC_DEFINE_UNQUOTED(PRODUCT_NAME, $app_cv_product)
 AC_SUBST(PRODUCT_NAME,$app_cv_product)

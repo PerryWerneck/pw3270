@@ -32,11 +32,11 @@ SOURCES=xml2pot.c
 prefix=@prefix@
 exec_prefix=@exec_prefix@
 datarootdir=@datarootdir@
-APPDATADIR=@APPDATADIR@
 
 PACKAGE_NAME=@PACKAGE_NAME@
 PACKAGE_VERSION=@PACKAGE_VERSION@
 PACKAGE_TARNAME=@PACKAGE_TARNAME@
+PRODUCT_NAME=@PRODUCT_NAME@
 
 BASEDIR=@BASEDIR@
 POTDIR=$(BASEDIR)/.pot/ui
@@ -104,8 +104,8 @@ Release: \
 
 install:
 
-	@$(MKDIR) $(DESTDIR)$(APPDATADIR)/ui
-	@$(INSTALL_DATA) *.xml $(DESTDIR)$(APPDATADIR)/ui
+	@$(MKDIR) $(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/ui
+	@$(INSTALL_DATA) *.xml $(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/ui
 
 $(SRCDIR): \
 	clean

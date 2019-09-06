@@ -45,7 +45,6 @@ localedir=${datarootdir}/locale
 docdir=@docdir@
 sysconfdir=@sysconfdir@
 mandir=@mandir@
-APPDATADIR=@APPDATADIR@
 
 BASEDIR=@BASEDIR@
 
@@ -175,7 +174,7 @@ $(POTDIR)/%.pot: \
 	@$(MAKE) -C src/$(basename $(notdir $@)) $@
 
 $(POTDIR)/%.pot: \
-	$(APPDATADIR)/pot/%.pot
+	$(datarootdir)/$(PRODUCT_NAME)/pot/%.pot
  
 	@echo $(notdir $@) ...
 	@mkdir -p `dirname $@`

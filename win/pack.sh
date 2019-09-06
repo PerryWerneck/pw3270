@@ -302,6 +302,7 @@ buildApplication()
 
 		make all
 		if [ "$?" != "0" ]; then
+			/bin/bash
 			failed "Can't buid ${1}"
 		fi
 
@@ -389,6 +390,16 @@ makeRuntime()
 makeInstaller()
 {
 	NSIS_ARGS="-DWITHGTK"
+
+	if [ -d ${WORKDIR}/build/${ARCH}/certs ]; then
+		NSIS_ARGS="${NSIS_ARGS} -DWITHCERTS"
+
+		SSL_CERT_DIR=${WORKDIR}/build/${ARCH}/certs c_rehash
+		if [ "$?" != "0" ]; then
+			failed "Error on c_rehash"
+		fi
+
+	fi
 
 	if [ ! -z "${PACKAGE_PLUGINS}" ]; then
 		NSIS_ARGS="${NSIS_ARGS} -DWITHPLUGINS"
@@ -506,6 +517,10 @@ do
 			PRODUCT_NAME=${value}
 			;;
 
+		SOURCES-FROM)
+			GIT_URL=${value}
+			;;
+
 		ADD-REPOS)
 			addRepos
 			exit 0
@@ -516,6 +531,10 @@ do
 				rm -fr ~/public_html/win/${PRODUCT_NAME}/{x86_32,x86_64}
 			fi
 
+			;;
+
+		TARGET-ARCHS)
+			TARGET_ARCHS=${value}
 			;;
 
 		PROJECT-PATH)
@@ -531,6 +550,7 @@ do
 
 			echo "  --product-name	Set the product name (current is ${PRODUCT_NAME})"
 			echo "  --project-path	Set the path for the customization data"
+			echo "  --target-archs	Set the target architectures (current are ${TARGET_ARCHS})"
 
 			if [ ! -z ${WIN_PACKAGE_SERVER} ]; then
 				echo "  --no-publish		Don't publish binaries in ${WIN_PACKAGE_SERVER}/${PRODUCT_NAME}"
@@ -539,7 +559,7 @@ do
 
 
 			if [ -d ~/public_html/win/${PRODUCT_NAME} ]; then
-				echo "  --clear		Remove ~/public_html/win/${PRODUCT_NAME}/{x86_32,x86_64}"
+				echo "  --clear		Replace the contents of ~/public_html/win/${PRODUCT_NAME}/{x86_32,x86_64}"
 			fi
 
 			echo ""
