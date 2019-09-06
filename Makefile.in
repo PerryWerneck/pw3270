@@ -175,7 +175,7 @@ $(POTDIR)/%.pot: \
 	@$(MAKE) -C src/$(basename $(notdir $@)) $@
 
 $(POTDIR)/%.pot: \
-	$(datarootdir)/$(PRODUCT_NAME)/pot/%.pot
+	$(APPDATADIR)/pot/%.pot
  
 	@echo $(notdir $@) ...
 	@mkdir -p `dirname $@`
