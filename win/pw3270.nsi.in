@@ -79,8 +79,8 @@ SubSection "@PACKAGE@" SecMain
 		file "/oname=$INSTDIR\@PACKAGE@.dll"				"@PACKAGE@.dll"
 
 		# Configuration files
-		file "/oname=$INSTDIR\@PACKAGE@-logo.png"			"@PACKAGE@-logo.png"
-		file "/oname=$INSTDIR\@PACKAGE@.png"				"@PACKAGE@.png"
+		file "/oname=$INSTDIR\@PACKAGE@-logo.png"			"@PRODUCT_NAME@\@PACKAGE@-logo.png"
+		file "/oname=$INSTDIR\@PACKAGE@.png"				"@PRODUCT_NAME@\@PACKAGE@.png"
 		file "/oname=$INSTDIR\colors.conf"				"@PRODUCT_NAME@\colors.conf"
 
 		# Documentation files
@@ -93,11 +93,11 @@ SubSection "@PACKAGE@" SecMain
 
 		# UI definition files
 		CreateDirectory "$INSTDIR\ui"
-		file "/oname=$INSTDIR\ui\00default.xml" 	"ui\00default.xml"
+		file "/oname=$INSTDIR\ui\00default.xml" 	"@PRODUCT_NAME@\ui\00default.xml"
 
 		# Charset definition files
 		CreateDirectory "$INSTDIR\charsets"
-		file "/oname=$INSTDIR\charsets\bracket.xml" 	"charsets\bracket.xml"
+		file "/oname=$INSTDIR\charsets\bracket.xml" 	"@PRODUCT_NAME@\charsets\bracket.xml"
 
 		# Locale files
 		CreateDirectory "$INSTDIR\locale\pt_BR\LC_MESSAGES"
@@ -152,7 +152,7 @@ SubSection "@PACKAGE@" SecMain
 			${DisableX64FSRedirection}
 			CreateDirectory "$INSTDIR\plugins"
 
-			file "/oname=$INSTDIR\plugins\ipcserver.dll"	"pw3270-plugins\ipcserver.dll"
+			file "/oname=$INSTDIR\plugins\ipcserver.dll"	"@PRODUCT_NAME@-plugins\ipcserver.dll"
 
 		sectionEnd
 !endif
@@ -196,19 +196,19 @@ SubSection "@PACKAGE@" SecMain
 	SubSection "Menus, Keypads & Toolbars" SecMenu
 
 		Section "Keypad" KeypadMenu
-			file "/oname=$INSTDIR\ui\10keypad.xml" "ui\10keypad.xml"
+			file "/oname=$INSTDIR\ui\10keypad.xml" "@PRODUCT_NAME@\ui\10keypad.xml"
 		sectionEnd
 
 		Section "Functions" FunctionsMenu
-			file "/oname=$INSTDIR\ui\10functions.xml" "ui\10functions.xml"
+			file "/oname=$INSTDIR\ui\10functions.xml" "@PRODUCT_NAME@\ui\10functions.xml"
 		sectionEnd
 
 		Section /o "View trace Menu" TraceMenu
-			file "/oname=$INSTDIR\ui\98trace.xml" "ui\98trace.xml"
+			file "/oname=$INSTDIR\ui\98trace.xml" "@PRODUCT_NAME@\ui\98trace.xml"
 		sectionEnd
 
 		Section /o "Application debug" DBGMenu
-			file "/oname=$INSTDIR\ui\99debug.xml" "ui\99debug.xml"
+			file "/oname=$INSTDIR\ui\99debug.xml" "@PRODUCT_NAME@\ui\99debug.xml"
 		sectionEnd
 
 	SubSectionEnd

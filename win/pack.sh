@@ -433,6 +433,8 @@ makeInstaller()
 		do
 			makensis ${NSIS_ARGS} ${NSI}
 			if [ "$?" != "0" ]; then
+				echo makensis ${NSIS_ARGS} ${NSI}
+				/bin/bash
 				failed "Error building ${NSI}"
 			fi
 
