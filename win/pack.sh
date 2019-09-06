@@ -165,7 +165,7 @@ buildLibrary()
 
 			host="${host}" \
 			prefix="${prefix}" \
-			BUILDDIR="${WORKDIR}/build/${ARCH}}" \
+			BUILDDIR="${WORKDIR}/build/${ARCH}" \
 			CFLAGS="-I${WORKDIR}/build/${ARCH}/include" \
 			LDFLAGS="-L${WORKDIR}/build/${ARCH}" \
 				${PROJECTDIR}/win/configure.${1}
@@ -290,8 +290,7 @@ buildApplication()
 				--includedir=${WORKDIR}/build/${ARCH}/include \
 				--sysconfdir=${WORKDIR}/build/${ARCH} \
 				--datadir=${WORKDIR}/build/${ARCH} \
-				--datarootdir=${WORKDIR}/build/${ARCH} \
-				--with-application-datadir=${WORKDIR}/build/${ARCH}
+				--datarootdir=${WORKDIR}/build/${ARCH}
 
 		fi
 
@@ -391,13 +390,22 @@ makeInstaller()
 {
 	NSIS_ARGS="-DWITHGTK"
 
-	if [ -d ${WORKDIR}/build/${ARCH}/certs ]; then
+	if [ -d ${WORKDIR}/certs ]; then
 		NSIS_ARGS="${NSIS_ARGS} -DWITHCERTS"
 
-		SSL_CERT_DIR=${WORKDIR}/build/${ARCH}/certs c_rehash
+		export SSL_CERT_DIR=${WORKDIR}/build/${ARCH}/sslcerts
+
+		mkdir -p ${SSL_CERT_DIR}
+		cp -rv ${WORKDIR}/certs ${SSL_CERT_DIR}
 		if [ "$?" != "0" ]; then
-			failed "Error on c_rehash"
+			failed "Can't copy certs"
 		fi
+
+		c_rehash
+		if [ "$?" != "0" ]; then
+			failed "Can't hash certs"
+		fi
+
 
 	fi
 

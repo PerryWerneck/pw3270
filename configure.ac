@@ -107,6 +107,10 @@ AC_ARG_WITH([product-name], [AS_HELP_STRING([--with-product-name], [Set product 
 AC_DEFINE_UNQUOTED(PRODUCT_NAME, $app_cv_product)
 AC_SUBST(PRODUCT_NAME,$app_cv_product)
 
+AC_ARG_WITH([library-name], [AS_HELP_STRING([--with-library-name], [Set protocol library name])], [ app_cv_library="$withval" ],[ app_cv_library=`pkg-config --variable=library_name lib3270` ])
+AC_DEFINE_UNQUOTED(LIBRARY_NAME, $app_cv_library)
+AC_SUBST(LIBRARY_NAME,$app_cv_library)
+
 dnl ---------------------------------------------------------------------------
 dnl Check for OS specifics
 dnl ---------------------------------------------------------------------------

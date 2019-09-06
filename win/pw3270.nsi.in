@@ -74,7 +74,7 @@ SubSection "@PACKAGE@" SecMain
 		# Binary files
 		file "/oname=$INSTDIR\@PRODUCT_NAME@.exe"			"@PACKAGE@.exe"
 		file "/oname=$INSTDIR\@PRODUCT_NAME@.ico"			"@PACKAGE@.ico"
-		file "/oname=$INSTDIR\lib3270.dll"				"lib3270.dll"
+		file "/oname=$INSTDIR\@LIBRARY_NAME@.dll"			"@LIBRARY_NAME@.dll"
 		file "/oname=$INSTDIR\libv3270.dll"				"libv3270.dll"
 		file "/oname=$INSTDIR\@PACKAGE@.dll"				"@PACKAGE@.dll"
 
@@ -133,6 +133,13 @@ SubSection "@PACKAGE@" SecMain
 		WriteRegStr HKCU "Software\@PACKAGE@" "" $INSTDIR
 
 	sectionEnd
+
+!ifdef WITHCERTS
+	Section "SSL Certificates" SecCerts
+		setOutPath $INSTDIR\certs
+		file /r "certs\*.*"
+	sectionEnd
+!endif
 
 !ifdef WITHPLUGINS
 	SubSection "Plugins" SecPLugin
