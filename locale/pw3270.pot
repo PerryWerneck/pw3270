@@ -9,7 +9,7 @@ msgstr ""
 "#-#-#-#-#  pw3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-06 15:13-0300\n"
+"POT-Creation-Date: 2019-09-09 15:23-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "#-#-#-#-#  lib3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-05 19:36+0000\n"
+"POT-Creation-Date: 2019-09-09 17:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,7 +31,7 @@ msgstr ""
 "#-#-#-#-#  libv3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-05 19:38+0000\n"
+"POT-Creation-Date: 2019-09-09 17:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -141,7 +141,7 @@ msgstr ""
 msgid "- 3270 Emulator for Gtk"
 msgstr ""
 
-#: src/dialogs/hostselect.c:43
+#: src/dialogs/hostselect.c:44
 msgid "16 colors"
 msgstr ""
 
@@ -151,8 +151,9 @@ msgid "3270 Error"
 msgstr ""
 
 #: src/filetransfer/v3270ftprogress.c:385 src/filetransfer/v3270ft.c:360
-#: src/dialogs/settingsdialog.c:284 src/dialogs/settingsdialog.c:286
-#: src/dialogs/settingsdialog.c:288
+#: src/dialogs/print/settingsdialog.c:284
+#: src/dialogs/print/settingsdialog.c:286
+#: src/dialogs/print/settingsdialog.c:288
 msgid "3270 File transfer"
 msgstr ""
 
@@ -173,7 +174,7 @@ msgstr ""
 msgid "3270-style backspace."
 msgstr ""
 
-#: src/dialogs/hostselect.c:44
+#: src/dialogs/hostselect.c:45
 msgid "8 colors"
 msgstr ""
 
@@ -261,7 +262,8 @@ msgstr ""
 msgid "Action failed"
 msgstr ""
 
-#: src/dialogs/settingsdialog.c:200 src/dialogs/settingsdialog.c:236
+#: src/dialogs/print/settingsdialog.c:200
+#: src/dialogs/print/settingsdialog.c:236
 msgid "Activity already on the queue"
 msgstr ""
 
@@ -269,7 +271,7 @@ msgstr ""
 msgid "Add to copy"
 msgstr ""
 
-#: src/dialogs/hostselect.c:141
+#: src/dialogs/hostselect.c:263
 msgid "Address or name of the host to connect."
 msgstr ""
 
@@ -365,11 +367,12 @@ msgstr ""
 msgid "Awaiting chance to send an abort"
 msgstr ""
 
-#: src/dialogs/settingsdialog.c:411 src/dialogs/settingsdialog.c:430
+#: src/dialogs/print/settingsdialog.c:411
+#: src/dialogs/print/settingsdialog.c:430
 msgid "B_egin transfer"
 msgstr ""
 
-#: colors.c:494 src/dialogs/colors.c:291
+#: colors.c:494 src/dialogs/colors.c:149
 msgid "Background"
 msgstr ""
 
@@ -381,7 +384,7 @@ msgstr ""
 msgid "Beep on errors"
 msgstr ""
 
-#: colors.c:502 src/dialogs/colors.c:299
+#: colors.c:502 src/dialogs/colors.c:157
 msgid "Black"
 msgstr ""
 
@@ -397,7 +400,7 @@ msgstr ""
 msgid "Block size"
 msgstr ""
 
-#: colors.c:495 src/dialogs/colors.c:292
+#: colors.c:495 src/dialogs/colors.c:150
 msgid "Blue"
 msgstr ""
 
@@ -445,7 +448,7 @@ msgstr ""
 msgid "C_olor scheme:"
 msgstr ""
 
-#: src/dialogs/hostselect.c:347
+#: src/dialogs/hostselect.c:361
 msgid "C_onnect"
 msgstr ""
 
@@ -459,7 +462,7 @@ msgstr ""
 msgid "Can't accept unnamed %s"
 msgstr ""
 
-#: src/dialogs/settingsdialog.c:244
+#: src/dialogs/print/settingsdialog.c:244
 msgid "Can't add activity"
 msgstr ""
 
@@ -536,7 +539,7 @@ msgstr ""
 msgid "Can't open file"
 msgstr ""
 
-#: src/terminal/charset.c:481
+#: src/terminal/charset.c:292
 #, c-format
 msgid "Can't parse %s"
 msgstr ""
@@ -550,11 +553,11 @@ msgstr ""
 msgid "Can't parse UI description files in %s"
 msgstr ""
 
-#: src/terminal/charset.c:382
+#: src/terminal/charset.c:129
 msgid "Can't parse cgcsgid value"
 msgstr ""
 
-#: src/terminal/charset.c:66
+#: src/terminal/charset.c:65
 msgid "Can't parse character value"
 msgstr ""
 
@@ -616,7 +619,7 @@ msgstr ""
 msgid "Can't set callback table"
 msgstr ""
 
-#: tools.c:309
+#: tools.c:306
 msgid "Can't set host charset"
 msgstr ""
 
@@ -700,11 +703,11 @@ msgstr ""
 msgid "Certificate signature failure"
 msgstr ""
 
-#: tools.c:313
+#: tools.c:310
 msgid "Charset error"
 msgstr ""
 
-#: src/dialogs/hostselect.c:165
+#: src/dialogs/hostselect.c:285
 msgid "Check for SSL secure connection."
 msgstr ""
 
@@ -732,7 +735,7 @@ msgstr ""
 msgid "Click to save file"
 msgstr ""
 
-#: src/terminal/properties.c:330
+#: src/terminal/properties/init.c:128
 msgid "Clipboard name"
 msgstr ""
 
@@ -740,7 +743,7 @@ msgstr ""
 msgid "Color scheme:"
 msgstr ""
 
-#: colors.c:532
+#: colors.c:532 src/dialogs/colors.c:367
 msgid "Color setup"
 msgstr ""
 
@@ -818,7 +821,7 @@ msgid "Creates a file with variable-length records."
 msgstr ""
 
 #: colors.c:519 src/core/toggles/table.c:149 src/core/toggles/table.c:150
-#: src/dialogs/colors.c:316 00default.xml:121
+#: src/dialogs/colors.c:174 00default.xml:121
 msgid "Cross hair cursor"
 msgstr ""
 
@@ -899,15 +902,15 @@ msgstr ""
 msgid "DUP key"
 msgstr ""
 
-#: colors.c:503 src/dialogs/colors.c:300
+#: colors.c:503 src/dialogs/colors.c:158
 msgid "Dark Blue"
 msgstr ""
 
-#: colors.c:506 src/dialogs/colors.c:303
+#: colors.c:506 src/dialogs/colors.c:161
 msgid "Dark Green"
 msgstr ""
 
-#: colors.c:507 src/dialogs/colors.c:304
+#: colors.c:507 src/dialogs/colors.c:162
 msgid "Dark Turquoise"
 msgstr ""
 
@@ -1069,7 +1072,7 @@ msgstr ""
 msgid "Field Delimiters"
 msgstr ""
 
-#: colors.c:488 src/dialogs/colors.c:285
+#: colors.c:488 src/dialogs/colors.c:143
 msgid "Field colors"
 msgstr ""
 
@@ -1089,7 +1092,7 @@ msgstr ""
 msgid "File transfer is already active in this session."
 msgstr ""
 
-#: src/dialogs/settingsdialog.c:361
+#: src/dialogs/print/settingsdialog.c:361
 msgid "Files to transfer"
 msgstr ""
 
@@ -1109,7 +1112,7 @@ msgid ""
 "records in the PC file."
 msgstr ""
 
-#: src/terminal/properties.c:285
+#: src/terminal/properties/init.c:83
 msgid "Font family for terminal contents"
 msgstr ""
 
@@ -1157,7 +1160,7 @@ msgstr ""
 msgid "Get transfer queue from an external XML file"
 msgstr ""
 
-#: src/dialogs/settingsdialog.c:346
+#: src/dialogs/print/settingsdialog.c:346
 msgid "Get transfer queue from file"
 msgstr ""
 
@@ -1169,11 +1172,11 @@ msgstr ""
 msgid "Got an invalid certificate revocation list from server"
 msgstr ""
 
-#: colors.c:509 src/dialogs/colors.c:306
+#: colors.c:509 src/dialogs/colors.c:164
 msgid "Gray"
 msgstr ""
 
-#: colors.c:498 src/dialogs/colors.c:295
+#: colors.c:498 src/dialogs/colors.c:153
 msgid "Green"
 msgstr ""
 
@@ -1237,7 +1240,7 @@ msgstr ""
 msgid "ID of the session security state"
 msgstr ""
 
-#: src/terminal/properties.c:315
+#: src/terminal/properties/init.c:113
 msgid "IDLE minutes for automatic disconnection"
 msgstr ""
 
@@ -1325,11 +1328,11 @@ msgstr ""
 msgid "Insert new file in the transfer queue"
 msgstr ""
 
-#: colors.c:514 src/dialogs/colors.c:311
+#: colors.c:514 src/dialogs/colors.c:169
 msgid "Intensified/Protected"
 msgstr ""
 
-#: colors.c:512 src/dialogs/colors.c:309
+#: colors.c:512 src/dialogs/colors.c:167
 msgid "Intensified/Unprotected"
 msgstr ""
 
@@ -1341,7 +1344,7 @@ msgstr ""
 msgid "Invalid callback table, possible version mismatch in lib3270"
 msgstr ""
 
-#: src/terminal/charset.c:377
+#: src/terminal/charset.c:124
 msgid "Invalid cgcsgid value"
 msgstr ""
 
@@ -1370,7 +1373,7 @@ msgstr ""
 msgid "Invalid oversize"
 msgstr ""
 
-#: src/terminal/charset.c:337
+#: src/terminal/charset.c:84
 msgid "Invalid remap scope"
 msgstr ""
 
@@ -1455,7 +1458,7 @@ msgstr ""
 msgid "Minutes for auto-disconnect"
 msgstr ""
 
-#: colors.c:489 src/dialogs/colors.c:286
+#: colors.c:489 src/dialogs/colors.c:144
 msgid "Misc colors"
 msgstr ""
 
@@ -1472,7 +1475,7 @@ msgstr ""
 msgid "Monocase"
 msgstr ""
 
-#: src/dialogs/hostselect.c:45
+#: src/dialogs/hostselect.c:46
 msgid "Monochrome"
 msgstr ""
 
@@ -1489,7 +1492,7 @@ msgstr ""
 msgid "Move to first unprotected field on screen."
 msgstr ""
 
-#: colors.c:508 src/dialogs/colors.c:305
+#: colors.c:508 src/dialogs/colors.c:163
 msgid "Mustard"
 msgstr ""
 
@@ -1544,11 +1547,11 @@ msgstr ""
 msgid "Non zero if the host is TSO."
 msgstr ""
 
-#: colors.c:513 src/dialogs/colors.c:310
+#: colors.c:513 src/dialogs/colors.c:168
 msgid "Normal/Protected"
 msgstr ""
 
-#: colors.c:511 src/dialogs/colors.c:308
+#: colors.c:511 src/dialogs/colors.c:166
 msgid "Normal/Unprotected"
 msgstr ""
 
@@ -1560,27 +1563,27 @@ msgstr ""
 msgid "Not the same terminal type"
 msgstr ""
 
-#: colors.c:526 src/dialogs/colors.c:323
+#: colors.c:526 src/dialogs/colors.c:181
 msgid "OIA Warning"
 msgstr ""
 
-#: colors.c:522 src/dialogs/colors.c:319
+#: colors.c:522 src/dialogs/colors.c:177
 msgid "OIA background"
 msgstr ""
 
-#: colors.c:523 src/dialogs/colors.c:320
+#: colors.c:523 src/dialogs/colors.c:178
 msgid "OIA foreground"
 msgstr ""
 
-#: colors.c:524 src/dialogs/colors.c:321
+#: colors.c:524 src/dialogs/colors.c:179
 msgid "OIA separator"
 msgstr ""
 
-#: colors.c:527 src/dialogs/colors.c:324
+#: colors.c:527 src/dialogs/colors.c:182
 msgid "OIA status invalid"
 msgstr ""
 
-#: colors.c:525 src/dialogs/colors.c:322
+#: colors.c:525 src/dialogs/colors.c:180
 msgid "OIA status ok"
 msgstr ""
 
@@ -1605,7 +1608,7 @@ msgstr ""
 msgid "Options"
 msgstr ""
 
-#: colors.c:504 src/dialogs/colors.c:301
+#: colors.c:504 src/dialogs/colors.c:159
 msgid "Orange"
 msgstr ""
 
@@ -1782,7 +1785,7 @@ msgstr ""
 msgid "Personal computer filespec incorrect: file transfer canceled"
 msgstr ""
 
-#: colors.c:497 src/dialogs/colors.c:294
+#: colors.c:497 src/dialogs/colors.c:152
 msgid "Pink"
 msgstr ""
 
@@ -1790,11 +1793,11 @@ msgstr ""
 msgid "Plain text"
 msgstr ""
 
-#: src/dialogs/hostselect.c:142
+#: src/dialogs/hostselect.c:264
 msgid "Port or service name (empty for \"telnet\")."
 msgstr ""
 
-#: src/dialogs/colors.c:258
+#: src/dialogs/colors.c:346
 msgid "Predefined color schemes"
 msgstr ""
 
@@ -1860,7 +1863,7 @@ msgstr ""
 msgid "Progress"
 msgstr ""
 
-#: colors.c:505 src/dialogs/colors.c:302
+#: colors.c:505 src/dialogs/colors.c:160
 msgid "Purple"
 msgstr ""
 
@@ -1968,7 +1971,7 @@ msgstr ""
 msgid "Record format"
 msgstr ""
 
-#: colors.c:496 src/dialogs/colors.c:293
+#: colors.c:496 src/dialogs/colors.c:151
 msgid "Red"
 msgstr ""
 
@@ -1976,7 +1979,7 @@ msgstr ""
 msgid "Reload buffer contents"
 msgstr ""
 
-#: src/terminal/charset.c:480
+#: src/terminal/charset.c:291
 msgid "Remap Failed"
 msgstr ""
 
@@ -2124,7 +2127,7 @@ msgstr ""
 msgid "Save transfer information to file"
 msgstr ""
 
-#: src/dialogs/settingsdialog.c:349
+#: src/dialogs/print/settingsdialog.c:349
 msgid "Save transfer queue"
 msgstr ""
 
@@ -2132,7 +2135,7 @@ msgstr ""
 msgid "Save transfer queue to an external XML file"
 msgstr ""
 
-#: src/dialogs/settingsdialog.c:353
+#: src/dialogs/print/settingsdialog.c:353
 msgid "Save transfer queue to file"
 msgstr ""
 
@@ -2255,11 +2258,11 @@ msgstr ""
 msgid "Select() failed when processing for events."
 msgstr ""
 
-#: colors.c:516 src/dialogs/colors.c:313
+#: colors.c:516 src/dialogs/colors.c:171
 msgid "Selection background"
 msgstr ""
 
-#: colors.c:517 src/dialogs/colors.c:314
+#: colors.c:517 src/dialogs/colors.c:172
 msgid "Selection foreground"
 msgstr ""
 
@@ -2323,7 +2326,7 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: src/dialogs/hostselect.c:347
+#: src/dialogs/hostselect.c:361
 msgid "Setup host"
 msgstr ""
 
@@ -2417,7 +2420,7 @@ msgstr ""
 msgid "Start file transfer"
 msgstr ""
 
-#: src/dialogs/settingsdialog.c:435
+#: src/dialogs/print/settingsdialog.c:435
 msgid "Start transfer"
 msgstr ""
 
@@ -2437,7 +2440,7 @@ msgstr ""
 msgid "Subject issuer mismatch"
 msgstr ""
 
-#: src/dialogs/hostselect.c:56
+#: src/dialogs/hostselect.c:57
 msgid "System _type"
 msgstr ""
 
@@ -2445,7 +2448,7 @@ msgstr ""
 msgid "TLS negotiation failure"
 msgstr ""
 
-#: src/terminal/properties.c:300
+#: src/terminal/properties/init.c:98
 msgid "TN3270 Session name"
 msgstr ""
 
@@ -2457,7 +2460,7 @@ msgstr ""
 msgid "Tab forward to next field."
 msgstr ""
 
-#: colors.c:487 src/dialogs/colors.c:207 src/dialogs/colors.c:284
+#: colors.c:487 src/dialogs/colors.c:142 src/dialogs/colors.c:295
 msgid "Terminal colors"
 msgstr ""
 
@@ -2751,7 +2754,7 @@ msgstr ""
 msgid "There is not enough space available for data on the host."
 msgstr ""
 
-#: tools.c:312
+#: tools.c:309
 #, c-format
 msgid "There's no available settings for charset \"%s\""
 msgstr ""
@@ -2786,7 +2789,7 @@ msgstr ""
 msgid "This program requires GTK version %d.%d.%d"
 msgstr ""
 
-#: src/terminal/charset.c:392
+#: src/terminal/charset.c:139
 msgid "Too many remaps"
 msgstr ""
 
@@ -2864,8 +2867,9 @@ msgstr ""
 msgid "Transfer options"
 msgstr ""
 
-#: src/dialogs/settingsdialog.c:379 src/dialogs/settingsdialog.c:398
-#: src/dialogs/settingsdialog.c:417
+#: src/dialogs/print/settingsdialog.c:379
+#: src/dialogs/print/settingsdialog.c:398
+#: src/dialogs/print/settingsdialog.c:417
 msgid "Transfer queue"
 msgstr ""
 
@@ -2881,7 +2885,7 @@ msgstr ""
 msgid "Try again with the same file."
 msgstr ""
 
-#: colors.c:499 src/dialogs/colors.c:296
+#: colors.c:499 src/dialogs/colors.c:154
 msgid "Turquoise"
 msgstr ""
 
@@ -3107,7 +3111,7 @@ msgstr ""
 msgid "Western Europe (ISO 8859-1)"
 msgstr ""
 
-#: colors.c:501 src/dialogs/colors.c:298
+#: colors.c:501 src/dialogs/colors.c:156
 msgid "White"
 msgstr ""
 
@@ -3178,11 +3182,15 @@ msgstr ""
 msgid "XML file"
 msgstr ""
 
-#: colors.c:500 src/dialogs/colors.c:297
+#: src/terminal/properties/init.c:143
+msgid "XML file with remap table"
+msgstr ""
+
+#: colors.c:500 src/dialogs/colors.c:155
 msgid "Yellow"
 msgstr ""
 
-#: src/dialogs/settingsdialog.c:241
+#: src/dialogs/print/settingsdialog.c:241
 msgid "You can't add more than one acitivity with the same files."
 msgstr ""
 
@@ -3248,11 +3256,12 @@ msgid "_ASCII text"
 msgstr ""
 
 #: src/selection/linux/paste.c:82 src/selection/linux/paste.c:122
-#: src/dialogs/settingsdialog.c:410 src/dialogs/settingsdialog.c:429
-#: src/dialogs/load.c:204 src/dialogs/load.c:223 src/dialogs/commondialog.c:94
-#: src/dialogs/commondialog.c:108 src/dialogs/commondialog.c:125
+#: src/dialogs/load.c:204 src/dialogs/load.c:223 src/dialogs/commondialog.c:108
+#: src/dialogs/commondialog.c:117 src/dialogs/commondialog.c:134
 #: src/dialogs/linux/select.c:49 src/dialogs/linux/select.c:93
-#: src/dialogs/save/save.c:266 src/dialogs/save/save.c:285
+#: src/dialogs/print/settingsdialog.c:410
+#: src/dialogs/print/settingsdialog.c:429 src/dialogs/save/save.c:266
+#: src/dialogs/save/save.c:285
 msgid "_Cancel"
 msgstr ""
 
@@ -3261,7 +3270,7 @@ msgstr ""
 msgid "_Close"
 msgstr ""
 
-#: src/dialogs/hostselect.c:56
+#: src/dialogs/hostselect.c:57
 msgid "_Color table"
 msgstr ""
 
@@ -3289,7 +3298,7 @@ msgstr ""
 msgid "_Font:"
 msgstr ""
 
-#: src/dialogs/hostselect.c:130
+#: src/dialogs/hostselect.c:252
 msgid "_Host"
 msgstr ""
 
@@ -3321,16 +3330,16 @@ msgstr ""
 msgid "_Remote file"
 msgstr ""
 
-#: src/trace/tracewindow.c:123 src/dialogs/save/save.c:271
-#: src/dialogs/save/save.c:286
+#: src/trace/tracewindow.c:123 src/dialogs/colors.c:367
+#: src/dialogs/save/save.c:271 src/dialogs/save/save.c:286
 msgid "_Save"
 msgstr ""
 
-#: src/dialogs/hostselect.c:164
+#: src/dialogs/hostselect.c:284
 msgid "_Secure connection."
 msgstr ""
 
-#: src/dialogs/hostselect.c:131
+#: src/dialogs/hostselect.c:253
 msgid "_Service"
 msgstr ""
 

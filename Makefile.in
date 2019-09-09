@@ -134,7 +134,6 @@ install-application: \
 	install-pw3270 \
 	install-branding \
 	install-ui \
-	install-charsets \
 	install-locale
 
 ifneq ($(HELP2MAN),no)
