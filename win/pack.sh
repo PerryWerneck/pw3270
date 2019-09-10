@@ -302,7 +302,6 @@ buildApplication()
 
 		make all
 		if [ "$?" != "0" ]; then
-			/bin/bash
 			failed "Can't buid ${1}"
 		fi
 
@@ -434,7 +433,6 @@ makeInstaller()
 			makensis ${NSIS_ARGS} ${NSI}
 			if [ "$?" != "0" ]; then
 				echo makensis ${NSIS_ARGS} ${NSI}
-				/bin/bash
 				failed "Error building ${NSI}"
 			fi
 
@@ -559,7 +557,7 @@ do
 			echo "  --product-name	Set the product name (current is ${PRODUCT_NAME})"
 			echo "  --project-path	Set the path for the customization data"
 			echo "  --target-archs	Set the target architectures (current are ${TARGET_ARCHS})"
-			echo "	--sources-from	Base URL of the git server with the sources (current is ${GIT_URL})"
+			echo "  --sources-from	Base URL of the git server with the sources (current is ${GIT_URL})"
 
 			if [ ! -z ${WIN_PACKAGE_SERVER} ]; then
 				echo "  --no-publish		Don't publish binaries in ${WIN_PACKAGE_SERVER}/${PRODUCT_NAME}"
