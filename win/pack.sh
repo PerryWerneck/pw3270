@@ -559,12 +559,12 @@ do
 			echo "  --product-name	Set the product name (current is ${PRODUCT_NAME})"
 			echo "  --project-path	Set the path for the customization data"
 			echo "  --target-archs	Set the target architectures (current are ${TARGET_ARCHS})"
+			echo "	--sources-from	Base URL of the git server with the sources (current is ${GIT_URL})"
 
 			if [ ! -z ${WIN_PACKAGE_SERVER} ]; then
 				echo "  --no-publish		Don't publish binaries in ${WIN_PACKAGE_SERVER}/${PRODUCT_NAME}"
 				echo "  --publish		Publish binaries in ${WIN_PACKAGE_SERVER}/${PRODUCT_NAME}"
 			fi
-
 
 			if [ -d ~/public_html/win/${PRODUCT_NAME} ]; then
 				echo "  --clear		Replace the contents of ~/public_html/win/${PRODUCT_NAME}/{x86_32,x86_64}"

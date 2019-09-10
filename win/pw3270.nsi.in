@@ -97,7 +97,7 @@ SubSection "@PACKAGE@" SecMain
 
 		# Charset definition files
 		CreateDirectory "$INSTDIR\charsets"
-		file "/oname=$INSTDIR\charsets\bracket.xml" 	"@PRODUCT_NAME@\charsets\bracket.xml"
+		file "/oname=$INSTDIR\remap\bracket.xml" 	"@PRODUCT_NAME@\remap\bracket.xml"
 
 		# Locale files
 		CreateDirectory "$INSTDIR\locale\pt_BR\LC_MESSAGES"
