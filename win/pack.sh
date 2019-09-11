@@ -434,8 +434,6 @@ makeInstaller()
 			if [ "$?" != "0" ]; then
 				echo makensis ${NSIS_ARGS} ${NSI}
 				failed "Error building ${NSI}"
-				cd ${WORKDIR}/build/${ARCH}
-				/bin/bash
 			fi
 
 			echo "TARCH="[${TARCH}]" ARCH=[${ARCH}]"
