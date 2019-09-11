@@ -79,8 +79,8 @@ SubSection "@PACKAGE@" SecMain
 		file "/oname=$INSTDIR\@PACKAGE@.dll"				"@PACKAGE@.dll"
 
 		# Configuration files
-		file "/oname=$INSTDIR\@PACKAGE@-logo.png"			"@PRODUCT_NAME@\@PACKAGE@-logo.png"
-		file "/oname=$INSTDIR\@PACKAGE@.png"				"@PRODUCT_NAME@\@PACKAGE@.png"
+		file "/oname=$INSTDIR\@PRODUCT_NAME@-logo.png"			"@PRODUCT_NAME@\@PRODUCT_NAME@-logo.png"
+		file "/oname=$INSTDIR\@PRODUCT_NAME@.png"			"@PRODUCT_NAME@\@PRODUCT_NAME@.png"
 		file "/oname=$INSTDIR\colors.conf"				"@PRODUCT_NAME@\colors.conf"
 
 		# Documentation files
@@ -96,7 +96,7 @@ SubSection "@PACKAGE@" SecMain
 		file "/oname=$INSTDIR\ui\00default.xml" 	"@PRODUCT_NAME@\ui\00default.xml"
 
 		# Charset definition files
-		CreateDirectory "$INSTDIR\charsets"
+		CreateDirectory "$INSTDIR\remap"
 		file "/oname=$INSTDIR\remap\bracket.xml" 	"@PRODUCT_NAME@\remap\bracket.xml"
 
 		# Locale files

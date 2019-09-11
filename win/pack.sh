@@ -395,7 +395,7 @@ makeInstaller()
 		NSIS_ARGS="${NSIS_ARGS} -DWITHCERTS"
 
 		mkdir -p ${WORKDIR}/build/${ARCH}/sslcerts
-		cp -rv ${CERTS_DIR} ${WORKDIR}/build/${ARCH}/sslcerts
+		cp -rv ${CERTS_DIR}/* ${WORKDIR}/build/${ARCH}/sslcerts
 		if [ "$?" != "0" ]; then
 			failed "Can't copy certs"
 		fi
@@ -434,6 +434,8 @@ makeInstaller()
 			if [ "$?" != "0" ]; then
 				echo makensis ${NSIS_ARGS} ${NSI}
 				failed "Error building ${NSI}"
+				cd ${WORKDIR}/build/${ARCH}
+				/bin/bash
 			fi
 
 			echo "TARCH="[${TARCH}]" ARCH=[${ARCH}]"
