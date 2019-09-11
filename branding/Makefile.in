@@ -55,8 +55,23 @@ $(BINDIR)/%.png: \
 	@$(CONVERT) -background transparent $< $@
 	@$(OPTIPNG) -o7 $@
 
+$(BINDIR)/%.png: \
+	$(PACKAGE_TARNAME).svg
+
+	@echo $@ ...
+	@$(MKDIR) `dirname $@`
+	@$(CONVERT) -background transparent $< $@
+	@$(OPTIPNG) -o7 $@
+
 $(BINDIR)/%.ico: \
 	%.svg
+
+	@echo $@ ...
+	@$(MKDIR) `dirname $@`
+	@$(CONVERT) -density 384 -background transparent $< -define icon:auto-resize -colors 256 $@
+
+$(BINDIR)/%.ico: \
+	$(PACKAGE_TARNAME).svg
 
 	@echo $@ ...
 	@$(MKDIR) `dirname $@`
@@ -88,9 +103,9 @@ $(DESTDIR)$(datarootdir)/pixmaps/%.png: \
 	@$(INSTALL_DATA) $< $@
 
 install: \
-	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PACKAGE_NAME).png \
+	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME).png \
 	$(DESTDIR)$(datarootdir)/pixmaps/$(PRODUCT_NAME).png \
-	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PACKAGE_NAME)-logo.png
+	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME)-logo.png
 
 	@$(INSTALL_DATA) \
 		launcher.desktop \
