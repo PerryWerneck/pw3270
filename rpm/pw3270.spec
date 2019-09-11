@@ -30,19 +30,19 @@
 
 #---[ Packaging ]-----------------------------------------------------------------------------------------------------
 
-Name:           pw3270
-Version:        5.2
-Release:        0
-Summary:        IBM 3270 Terminal emulator for GTK
-License:        GPL-2.0
-Group:          System/X11/Terminals
-Url:            https://portal.softwarepublico.gov.br/social/pw3270/
+Name:			pw3270
+Version:		5.2
+Release:		0
+Summary:		IBM 3270 Terminal emulator for GTK
+License:		GPL-2.0
+Group:			System/X11/Terminals
+Url:			https://portal.softwarepublico.gov.br/social/pw3270/
 
-Source:         pw3270-%{version}.tar.xz
+Source:			pw3270-%{version}.tar.xz
 
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+BuildRoot:		%{_tmppath}/%{name}-%{version}-build
 
-Requires:       shared-mime-info
+Requires:		shared-mime-info
 Requires:		%{name}-branding >= 5.2
 
 #--[ Setup by distribution ]------------------------------------------------------------------------------------------
@@ -56,13 +56,13 @@ Requires:		%{name}-branding >= 5.2
 
 %if 0%{?rhel_version}
 
-%define _help2man  	0
+%define _help2man 0
 
-BuildRequires:  dbus-devel
-BuildRequires:  dbus-glib-devel
-BuildRequires:  openssl-devel
-BuildRequires:  gtk3-devel
-BuildRequires:  librsvg2-tools
+BuildRequires:	dbus-devel
+BuildRequires:	dbus-glib-devel
+BuildRequires:	openssl-devel
+BuildRequires:	gtk3-devel
+BuildRequires:	librsvg2-tools
 BuildRequires:	lib3270-devel
 BuildRequires:	libv3270-devel
 
@@ -74,11 +74,11 @@ BuildRequires:	libv3270-devel
 
 %define _help2man  	0
 
-BuildRequires:  dbus-devel
-BuildRequires:  dbus-glib-devel
-BuildRequires:  openssl-devel
-BuildRequires:  gtk3-devel
-BuildRequires:  librsvg2-tools
+BuildRequires:	dbus-devel
+BuildRequires:	dbus-glib-devel
+BuildRequires:	openssl-devel
+BuildRequires:	gtk3-devel
+BuildRequires:	librsvg2-tools
 BuildRequires:	lib3270-devel
 BuildRequires:	libv3270-devel
 
@@ -91,13 +91,13 @@ BuildRequires:	python
 
 %if 0%{?fedora}
 
-BuildRequires:  pkgconfig(dbus-1)
-BuildRequires:  pkgconfig(dbus-glib-1)
-BuildRequires:  pkgconfig(openssl)
-BuildRequires:  pkgconfig(gtk+-3.0)
+BuildRequires:	pkgconfig(dbus-1)
+BuildRequires:	pkgconfig(dbus-glib-1)
+BuildRequires:	pkgconfig(openssl)
+BuildRequires:	pkgconfig(gtk+-3.0)
 BuildRequires:	pkgconfig(lib3270)
 BuildRequires:	pkgconfig(libv3270)
-BuildRequires:  librsvg2-tools
+BuildRequires:	librsvg2-tools
 BuildRequires:	autoconf-archive
 
 %endif
@@ -106,35 +106,35 @@ BuildRequires:	autoconf-archive
 
 %if 0%{?suse_version}
 
-BuildRequires:  pkgconfig(openssl)
-BuildRequires:  pkgconfig(dbus-1)
-BuildRequires:  pkgconfig(dbus-glib-1)
-BuildRequires:  pkgconfig(gtk+-3.0)
+BuildRequires:	pkgconfig(openssl)
+BuildRequires:	pkgconfig(dbus-1)
+BuildRequires:	pkgconfig(dbus-glib-1)
+BuildRequires:	pkgconfig(gtk+-3.0)
 BuildRequires:	pkgconfig(lib3270)
 BuildRequires:	pkgconfig(libv3270)
-BuildRequires:  rsvg-view
+BuildRequires:	rsvg-view
 
 # https://en.opensuse.org/openSUSE:Build_Service_cross_distribution_howto
 %if 0%{suse_version} > 120100
 BuildRequires:	autoconf-archive
-BuildRequires:  update-desktop-files
+BuildRequires:	update-desktop-files
 %endif
 
 %endif
 
 #---------------------------------------------------------------------------------------------------------------------
 
-BuildRequires:  autoconf >= 2.61
-BuildRequires:  automake
-BuildRequires:  binutils
-BuildRequires:  coreutils
-BuildRequires:  desktop-file-utils
-BuildRequires:  findutils
-BuildRequires:  gcc-c++
-BuildRequires:  gettext-devel
-BuildRequires:  m4
-BuildRequires:  pkgconfig
-BuildRequires:  sed
+BuildRequires:	autoconf >= 2.61
+BuildRequires:	automake
+BuildRequires:	binutils
+BuildRequires:	coreutils
+BuildRequires:	desktop-file-utils
+BuildRequires:	findutils
+BuildRequires:	gcc-c++
+BuildRequires:	gettext-devel
+BuildRequires:	m4
+BuildRequires:	pkgconfig
+BuildRequires:	sed
 BuildRequires:	optipng
 BuildRequires:	fdupes
 BuildRequires:	ImageMagick
@@ -151,8 +151,8 @@ Based on the original x3270 code, pw3270 was originally created for Banco do Bra
 #--[ Application library ]--------------------------------------------------------------------------------------------
 
 %package -n libpw3270-%{_libvrs}
-Summary:        3270 terminal emulation library
-Group:          System/Libraries
+Summary:	PW3270 API for plugins
+Group:		System/Libraries
 
 %description -n libpw3270-%{_libvrs}
 GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
@@ -162,12 +162,12 @@ This package contains the plugin support library.
 #--[ Configuration & Branding ]---------------------------------------------------------------------------------------
 
 %package branding
-Summary:   Configuration and branding for %{name}
-Group:     System/X11/Terminals
-Requires:  %{name} = %{version}
+Summary:	Configuration and branding for %{name}
+Group:		System/X11/Terminals
+Requires:	%{name} = %{version}
 
 Provides:	%{name}-config = %{version}
-Conflicts:  otherproviders(%{name}-config)
+Conflicts:	otherproviders(%{name}-config)
 
 
 %description branding
@@ -178,14 +178,14 @@ This package contains the default configuration and branding for %{name}.
 #--[ Devel ]----------------------------------------------------------------------------------------------------------
 
 %package devel
-Summary:        Files required for development of %{name} plugins
-Group:          Development/Libraries/C and C++
+Summary:	Files required for development of %{name} plugins
+Group:		Development/Libraries/C and C++
 
-Requires:       pkgconfig(lib3270)
-Requires:       pkgconfig(libv3270)
-Requires:		pkgconfig(gtk+-3.0)
-Requires:       %{name} = %{version}
-Requires:		libpw3270-%{_libvrs}
+Requires:	pkgconfig(lib3270)
+Requires:	pkgconfig(libv3270)
+Requires:	pkgconfig(gtk+-3.0)
+Requires:	%{name} = %{version}
+Requires:	libpw3270-%{_libvrs}
 
 %description -n %{name}-devel
 GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
@@ -212,6 +212,9 @@ make all -j1
 %install
 %make_install
 
+# Remove static library
+rm -f %{buildroot}/%{_libdir}/*.a
+
 %find_lang pw3270 langfiles
 
 %fdupes %{buildroot}/%{_prefix}
@@ -228,11 +231,9 @@ make all -j1
 # Main application
 %dir %{_datadir}/pw3270
 %dir %{_datadir}/pw3270/ui
-%dir %{_datadir}/pw3270/charsets
 %dir %{_libdir}/pw3270-plugins
 
 %{_bindir}/pw3270
-%{_datadir}/pw3270/charsets/bracket.xml
 
 %files -n libpw3270-%{_libvrs}
 %defattr(-,root,root)
@@ -246,7 +247,6 @@ make all -j1
 %{_datadir}/pw3270/ui/00default.xml
 %{_datadir}/pw3270/ui/10functions.xml
 %{_datadir}/pw3270/ui/10keypad.xml
-%{_datadir}/pw3270/colors.conf
 %{_datadir}/pw3270/pw3270.png
 %{_datadir}/pw3270/pw3270-logo.png
 %{_datadir}/pixmaps/pw3270.png
@@ -259,7 +259,6 @@ make all -j1
 
 %{_libdir}/libpw3270.so
 
-%{_libdir}/libpw3270cpp.a
 %{_libdir}/pkgconfig/pw3270.pc
 %{_datadir}/pw3270/locale
 

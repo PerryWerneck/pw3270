@@ -1,10 +1,10 @@
 [Desktop Entry]
 X-SuSE-translate=true
-GenericName=@PACKAGE_NAME@
+GenericName=@PRODUCT_NAME@
 Name=3270 Terminal
 Comment=@PACKAGE_DESCRIPTION@
-Exec=@PACKAGE_TARNAME@
-Icon=@PACKAGE_TARNAME@
+Exec=@PRODUCT_NAME@
+Icon=@PRODUCT_NAME@
 Terminal=false
 Type=Application
 StartupNotify=true

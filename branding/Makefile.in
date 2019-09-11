@@ -89,17 +89,17 @@ $(DESTDIR)$(datarootdir)/pixmaps/%.png: \
 
 install: \
 	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PACKAGE_NAME).png \
-	$(DESTDIR)$(datarootdir)/pixmaps/$(PACKAGE_TARNAME).png \
+	$(DESTDIR)$(datarootdir)/pixmaps/$(PRODUCT_NAME).png \
 	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PACKAGE_NAME)-logo.png
 
 	@$(INSTALL_DATA) \
 		launcher.desktop \
-		$(PACKAGE_NAME).desktop
+		$(PRODUCT_NAME).desktop
 
 	$(DESKTOP_INSTALL) \
 		--mode 644 \
 		--delete-original \
 		--dir $(DESTDIR)$(datarootdir)/applications \
-		$(PACKAGE_NAME).desktop
+		$(PRODUCT_NAME).desktop
 
 
