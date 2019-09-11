@@ -78,7 +78,9 @@ dnl ---------------------------------------------------------------------------
 dnl Version & customization
 dnl ---------------------------------------------------------------------------
 
-AC_SUBST(PACKAGE_DESCRIPTION,"IBM 3270 Terminal emulator")
+AC_ARG_WITH([description], [AS_HELP_STRING([--with-description], [Application description])], [ app_cv_description="$withval" ],[ app_cv_description="IBM 3270 Terminal emulator" ])
+AC_DEFINE_UNQUOTED(PACKAGE_DESCRIPTION,"$app_cv_description")
+AC_SUBST(PACKAGE_DESCRIPTION,"$app_cv_description")
 
 app_vrs_major=$(echo $VERSION | cut -d. -f1)
 app_vrs_minor=$(echo $VERSION | cut -d. -f2)
