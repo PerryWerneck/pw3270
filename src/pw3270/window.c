@@ -769,16 +769,18 @@ static GtkWidget * trace_window = NULL;
 
 	// Load UI
 	{
-		gchar *path = pw3270_build_filename(GTK_WIDGET(widget),"ui",NULL);
+#ifdef DEBUG
+		const char *path = "ui";
+#else
+		lib3270_autoptr(char) path = lib3270_build_data_filename("ui",NULL);
+#endif // DEBUG
 
 		if(ui_parse_xml_folder(GTK_WINDOW(widget),path,groupname,popupname,widget->terminal,widget_setup))
 		{
-			g_free(path);
 			gtk_widget_set_sensitive(widget->terminal,FALSE);
 			return;
 		}
 
-		g_free(path);
 	}
 
 
