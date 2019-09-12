@@ -62,7 +62,6 @@
 
  LIB3270_EXPORT GtkWidget	* pw3270_get_toplevel(void);
 
- LIB3270_EXPORT gchar		* pw3270_build_filename(GtkWidget *widget, const gchar *first_element, ...);
  LIB3270_EXPORT void		  pw3270_save_window_size(GtkWidget *widget, const gchar *name);
  LIB3270_EXPORT void		  pw3270_restore_window(GtkWidget *widget, const gchar *name);
 

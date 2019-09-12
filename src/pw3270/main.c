@@ -45,6 +45,7 @@
 #endif // HAVE_GTKMAC
 
 #include <v3270.h>
+#include <lib3270.h>
 #include <pw3270/plugin.h>
 #include "v3270/accessible.h"
 #include <stdlib.h>
@@ -104,7 +105,6 @@ static int initialize(void)
 
 static void toplevel_setup(GtkWindow *window)
 {
- 	g_autofree gchar * name	= g_strdup_printf("%s.png",g_get_application_name());
  	g_autofree gchar * role	= g_strdup_printf("%s_top",g_get_application_name());
 
 	gtk_window_set_type_hint(window,GDK_WINDOW_TYPE_HINT_NORMAL);
@@ -112,20 +112,65 @@ static void toplevel_setup(GtkWindow *window)
 	gtk_window_set_role(window,role);
 
 #ifndef _WIN32
-	// Set default icon
-	g_autofree gchar * filename = pw3270_build_filename(GTK_WIDGET(window),name,NULL);
-	if(g_file_test(filename,G_FILE_TEST_EXISTS))
+
+	size_t ix;
+
+	static const gchar * icons[] =
 	{
-		GError * error = NULL;
+		G_STRINGIFY(PRODUCT_NAME) ".svg",
+		G_STRINGIFY(PRODUCT_NAME) ".png",
 
-		trace("Loading default icon from %s",filename);
+		G_STRINGIFY(PACKAGE_NAME) ".svg",
+		G_STRINGIFY(PACKAGE_NAME) ".png"
+	};
 
-		if(!gtk_window_set_default_icon_from_file(filename,&error))
+	for(ix = 0; ix < G_N_ELEMENTS(icons); ix++)
+	{
+		g_autofree gchar * filename = g_strconcat("/usr/share/pixmaps/",icons[ix],NULL);
+
+		if(g_file_test(filename,G_FILE_TEST_EXISTS))
 		{
-			g_warning("Error %s loading default icon from %s",error->message,filename);
-			g_error_free(error);
+			GError * error = NULL;
+
+			trace("Loading default icon from %s",filename);
+
+			if(!gtk_window_set_default_icon_from_file(filename,&error))
+			{
+				g_warning("Error %s loading icon from %s",error->message,filename);
+				g_error_free(error);
+			}
+
+			return;
+
 		}
+
 	}
+
+	for(ix = 0; ix < G_N_ELEMENTS(icons); ix++)
+	{
+		lib3270_autoptr(char) filename = lib3270_build_data_filename(icons[ix], NULL);
+
+		if(g_file_test(filename,G_FILE_TEST_EXISTS))
+		{
+			GError * error = NULL;
+
+			trace("Loading default icon from %s",filename);
+
+			if(!gtk_window_set_default_icon_from_file(filename,&error))
+			{
+				g_warning("Error %s loading icon from %s",error->message,filename);
+				g_error_free(error);
+			}
+
+			return;
+
+		}
+
+	}
+
+	// https://specifications.freedesktop.org/icon-naming-spec/icon-naming-spec-latest.html
+	gtk_window_set_default_icon_name("utilities-terminal");
+
 #endif // _WIN32
 
 }
@@ -171,7 +216,6 @@ static gboolean startup(GtkWidget *toplevel)
 
 int main(int argc, char *argv[])
 {
-	const gchar		* pluginpath	= NULL;
 #ifdef APPLICATION_NAME
 	const char		* app_name		= G_STRINGIFY(APPLICATION_NAME);
 #else
@@ -219,12 +263,12 @@ int main(int argc, char *argv[])
 #if defined(ENABLE_WINDOWS_REGISTRY)
 		HKEY hMainKey;
 		DWORD	disp;
-		LSTATUS winRegError = RegCreateKeyEx(HKEY_CURRENT_USER,"SOFTWARE\\" PACKAGE_NAME,0,NULL,REG_OPTION_NON_VOLATILE,KEY_SET_VALUE,NULL,&hMainKey,&disp);
+		LSTATUS winRegError = RegCreateKeyEx(HKEY_CURRENT_USER,"SOFTWARE\\" G_STRINGIFY(PRODUCT_NAME),0,NULL,REG_OPTION_NON_VOLATILE,KEY_SET_VALUE,NULL,&hMainKey,&disp);
 		if(winRegError == ERROR_SUCCESS)
 		{
 			HKEY hKey;
 
-			winRegError = RegCreateKeyEx(HKEY_CURRENT_USER,"SOFTWARE\\" PACKAGE_NAME "\\application",0,NULL,REG_OPTION_NON_VOLATILE,KEY_SET_VALUE,NULL,&hKey,&disp);
+			winRegError = RegCreateKeyEx(HKEY_CURRENT_USER,"SOFTWARE\\" G_STRINGIFY(PRODUCT_NAME) "\\application",0,NULL,REG_OPTION_NON_VOLATILE,KEY_SET_VALUE,NULL,&hKey,&disp);
 			if(winRegError == ERROR_SUCCESS)
 			{
 				const struct _versions
@@ -252,7 +296,7 @@ int main(int argc, char *argv[])
 #ifdef DEBUG
 			else
 			{
-				g_error("Can't open HKCU\\SOFTWARE\\" PACKAGE_NAME ": %s", lib3270_win32_strerror(winRegError));
+				g_error("Can't open HKCU\\SOFTWARE\\" G_STRINGIFY(PRODUCT_NAME) ": %s", lib3270_win32_strerror(winRegError));
 			}
 #endif
 			RegCloseKey(hMainKey);
@@ -260,7 +304,7 @@ int main(int argc, char *argv[])
 #ifdef DEBUG
 		else
 		{
-			g_error("Can't open HKCU\\SOFTWARE\\" PACKAGE_NAME "\\application: %s",lib3270_win32_strerror(winRegError));
+			g_error("Can't open HKCU\\SOFTWARE\\" G_STRINGIFY(PRODUCT_NAME) "\\application: %s",lib3270_win32_strerror(winRegError));
 		}
 #endif
 
@@ -308,7 +352,6 @@ int main(int argc, char *argv[])
 			{ "model",		    	'M', 0, G_OPTION_ARG_STRING,	&model,			    N_( "The model of 3270 display to be emulated" ),	NULL								},
 			{ "oversize",	    	'O', 0, G_OPTION_ARG_STRING,	&oversize,		    N_( "Makes the screen larger than the default for the chosen model number." ),	NULL	},
 			{ "autodisconnect",		'D', 0, G_OPTION_ARG_INT,		&timer,			    N_( "Minutes for auto-disconnect" ),				0									},
-			{ "pluginpath",			'P', 0, G_OPTION_ARG_STRING,	&pluginpath,	    N_( "Path for plugin files" ),						NULL								},
 
 #ifdef APPLICATION_NAME
 			{ "application-name",	'A', 0, G_OPTION_ARG_STRING,	&app_name,			N_( "Application name" ),							G_STRINGIFY(APPLICATION_NAME)		},
@@ -453,7 +496,7 @@ int main(int argc, char *argv[])
 		pw3270_set_string(toplevel,"application","session",session_name);
 #endif // _WIN32
 
-		pw3270_load_plugins(pluginpath);
+		pw3270_load_plugins();
 
 		if(toggleset)
 		{

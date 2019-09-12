@@ -39,21 +39,27 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
- static void load(const gchar *path)
+ LIB3270_EXPORT void pw3270_load_plugins(void)
  {
+#ifdef _WIN32
+	UINT 		  errorMode;
+ 	lib3270_autoptr(char)	path = lib3270_build_data_filename("plugins")
+#else
+ 	const gchar * path = LIBDIR G_DIR_SEPARATOR_S G_STRINGIFY(PRODUCT_NAME) "-plugins";
+#endif // _WIN32
+
 	GDir		* dir;
  	const gchar	* name;
  	GError		* err	= NULL;
  	GList		* lst	= NULL;
-#ifdef _WIN32
-	UINT 		  errorMode;
-#endif // _WIN32
-
 
 	trace("Loading plugins from %s",path);
 
 	if(!g_file_test(path,G_FILE_TEST_IS_DIR))
+	{
+		g_warning("Can't load plugins from %s",path);
 		return;
+	}
 
 	dir = g_dir_open(path,0,&err);
 	if(!dir)
@@ -159,6 +165,7 @@
 
  }
 
+ /*
  LIB3270_EXPORT void pw3270_load_plugins(const gchar *p)
  {
  	if(p)
@@ -221,6 +228,7 @@
 
 #endif
  }
+ */
 
  LIB3270_EXPORT void pw3270_start_plugins(GtkWidget *widget)
  {
