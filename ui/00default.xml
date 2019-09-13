@@ -236,6 +236,10 @@
 
 	<accelerator action='dup' key='<Shift>KP_Multiply' group='online' />
 
+	<accelerator action='zoom' mode='in' key='<ctrl>KP_Add' group='online' />
+	<accelerator action='zoom' mode='out' key='<ctrl>KP_Subtract' group='online' />
+	<accelerator action='zoom' mode='fit' key='<ctrl>0' group='online' />
+
 	<!-- accelerator action='fieldend' key='End' group='online' / -->
 	<!-- accelerator name="newline" action='newline' key='Control_R' group='online' / -->
 

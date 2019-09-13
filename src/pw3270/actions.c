@@ -499,6 +499,24 @@ static void action_select_last(GtkAction *action, GtkWidget *widget)
 	lib3270_reselect(v3270_get_session(widget));
 }
 
+static void action_zoom_in(GtkAction *action, GtkWidget *widget)
+{
+	trace("Action zoom_in activated on widget %p\n",widget);
+	v3270_zoom_in(widget);
+}
+
+static void action_zoom_out(GtkAction *action, GtkWidget *widget)
+{
+	trace("Action zoom_out activated on widget %p\n",widget);
+	v3270_zoom_out(widget);
+}
+
+static void action_zoom_fit(GtkAction *action, GtkWidget *widget)
+{
+	trace("Action zoom_fit activated on widget %p\n",widget);
+	v3270_zoom_best(widget);
+}
+
 static void action_string(GtkAction *action, GtkWidget *widget)
 {
 	gchar *text = g_object_get_data(G_OBJECT(action),"value");
@@ -851,6 +869,21 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 		}
 		attr = ui_get_attribute("name",names,values);
 		nm = g_strdup(attr ? attr : name);
+	}
+	else if(!g_ascii_strcasecmp(name,"zoom"))
+	{
+		static const gchar * src[] = 	{	"in", "out", "fit", NULL };
+
+		static const GCallback cbk[] =	{	G_CALLBACK(action_zoom_in),
+											G_CALLBACK(action_zoom_out),
+											G_CALLBACK(action_zoom_fit)
+										};
+		callback	= cbk;
+		action_type	= ACTION_TYPE_TABLE;
+		id = get_attribute_id(name,"mode",&nm,src,names,values,error);
+		if(id < 0)
+			return NULL;
+
 	}
 	else
 	{
