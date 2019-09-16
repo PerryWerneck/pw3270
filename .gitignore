@@ -50,6 +50,7 @@ resources.rc
 makeruntime.sh
 scripts
 locale
+certs
 *.xz
 src/include/lib3270
 *.desktop

@@ -775,6 +775,9 @@ static GtkWidget * trace_window = NULL;
 		lib3270_autoptr(char) path = lib3270_build_data_filename("ui",NULL);
 #endif // DEBUG
 
+		trace("Loading UI from \"%s\"",path);
+		trace("Current dir is \"%s\"",g_get_current_dir());
+
 		if(ui_parse_xml_folder(GTK_WINDOW(widget),path,groupname,popupname,widget->terminal,widget_setup))
 		{
 			gtk_widget_set_sensitive(widget->terminal,FALSE);

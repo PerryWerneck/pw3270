@@ -254,7 +254,7 @@ int main(int argc, char *argv[])
 		trace("appdir=\"%s\"",appdir);
 		trace("locdir=\"%s\"",locdir);
 
-		g_chdir(appdir);
+//		g_chdir(appdir);
 
 		bindtextdomain( PACKAGE_NAME, locdir );
 		bind_textdomain_codeset(PACKAGE_NAME, "UTF-8");
@@ -426,7 +426,7 @@ int main(int argc, char *argv[])
 
 		g_message("Windows Application directory is \"%s\"",appdir);
 
-		g_chdir(appdir);
+//		g_chdir(appdir);
 
 		g_message("Application name is \"%s\"", g_get_application_name());
 		g_message("Session name is \"%s\"", session_name ? session_name : "undefined");
@@ -476,6 +476,7 @@ int main(int argc, char *argv[])
 		session_name = PACKAGE_NAME;
 
 	rc = initialize();
+
 	if(!rc)
 	{
 		GtkSettings *settings = gtk_settings_get_default();
@@ -487,6 +488,7 @@ int main(int argc, char *argv[])
 		}
 
 		toplevel = pw3270_new(host,systype,syscolors);
+
 		pw3270_set_session_name(toplevel,session_name);
 
 		if(oversize)

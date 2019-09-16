@@ -43,7 +43,7 @@
  {
 #ifdef _WIN32
 	UINT 		  errorMode;
- 	lib3270_autoptr(char)	path = lib3270_build_data_filename("plugins")
+ 	lib3270_autoptr(char)	path = lib3270_build_data_filename("plugins",NULL);
 #else
  	const gchar * path = LIBDIR G_DIR_SEPARATOR_S G_STRINGIFY(PRODUCT_NAME) "-plugins";
 #endif // _WIN32
