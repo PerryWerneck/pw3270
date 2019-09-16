@@ -297,11 +297,11 @@ buildApplication()
 
 		if [ -x ${PROJECTDIR}/win/configure.${1} ]; then
 
-			HOST="${host}" \
-			PREFIX="${prefix}" \
+			host="${host}" \
+			prefix="${prefix}" \
+			BUILDDIR="${WORKDIR}/build/${ARCH}" \
 			CFLAGS="-I${WORKDIR}/build/${ARCH}/include" \
 			LDFLAGS="-L${WORKDIR}/build/${ARCH}" \
-			BUILDDIR="{WORKDIR}/build/${ARCH}}" \
 				${PROJECTDIR}/win/configure.${1}
 
 		else
