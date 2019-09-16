@@ -21,7 +21,7 @@ installDir "$@PROGRAMFILES@\@PRODUCT_NAME@"
 icon "@PACKAGE@.ico"
 
 # Get installation folder from registry if available
-InstallDirRegKey HKLM "Software\@PACKAGE@" "InstallLocation"
+InstallDirRegKey HKLM "Software\@PRODUCT_NAME@" "InstallLocation"
 
 RequestExecutionLevel admin
 
@@ -29,12 +29,13 @@ RequestExecutionLevel admin
 VIProductVersion "@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.@PACKAGE_MAJOR_RELEASE@.@PACKAGE_MINOR_RELEASE@"
 VIFileVersion "@WIN32_VERSION@"
 
-VIAddVersionKey "ProductVersion" "@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.@PACKAGE_MAJOR_RELEASE@.@PACKAGE_MINOR_RELEASE@"
-VIAddVersionKey "FileVersion" "@WIN32_VERSION@"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductVersion" "@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.@PACKAGE_MAJOR_RELEASE@.@PACKAGE_MINOR_RELEASE@"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "FileVersion" "@WIN32_VERSION@"
 
-VIAddVersionKey "ProductName" "@PRODUCT_NAME@"
-VIAddVersionKey "FileDescription" "@PACKAGE_DESCRIPTION@"
-VIAddVersionKey "LegalCopyright" "GPL-2.0"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductName" "@PRODUCT_NAME@"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "FileDescription" "@PACKAGE_DESCRIPTION@"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalCopyright" "(C) 2017 Banco do Brasil S/A. All Rights Reserved"
+# VIAddVersionKey /LANG=${LANG_ENGLISH} "PrivateBuild" ""
 
 # Interface
 
@@ -57,7 +58,7 @@ VIAddVersionKey "LegalCopyright" "GPL-2.0"
 !include Sections.nsh
 
 # default section
-SubSection "@PACKAGE@" SecMain
+SubSection "@PRODUCT_NAME@" SecMain
 
 	Section "Core" SecCore
 
@@ -103,34 +104,26 @@ SubSection "@PACKAGE@" SecMain
 		CreateDirectory "$INSTDIR\locale\pt_BR\LC_MESSAGES"
 		file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\@PACKAGE@.mo" "locale\pt_BR\LC_MESSAGES\@PACKAGE@.mo"
 
-		# Save DataDir
-		SetRegView @WINARCH@
-		WriteRegStr HKLM "Software\@PACKAGE@" "datadir" "$INSTDIR"
-		WriteRegStr HKLM "Software\@PACKAGE@" "appName" "$INSTDIR\@PACKAGE@.exe"
-
 		# define uninstaller name
 		SetRegView 32
 
 		writeUninstaller $INSTDIR\uninstall.exe
 
-		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PACKAGE@" \
+		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PRODUCT_NAME@" \
 			         "DisplayName" "@PRODUCT_NAME@ - @PACKAGE_DESCRIPTION@"
-		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PACKAGE@" \
+		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PRODUCT_NAME@" \
 			         "DisplayIcon" "$INSTDIR\@PRODUCT_NAME@.ico"
-		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PACKAGE@" \
+		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PRODUCT_NAME@" \
 			         "DisplayVersion" "@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.@PACKAGE_MAJOR_RELEASE@.@PACKAGE_MINOR_RELEASE@"
 
-		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PACKAGE@" \
+		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PRODUCT_NAME@" \
 			         "UninstallString" "$INSTDIR\uninstall.exe"
-		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PACKAGE@" \
+		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PRODUCT_NAME@" \
 			         "InstallLocation" "$INSTDIR"
-		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PACKAGE@" \
+		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PRODUCT_NAME@" \
 			         "NoModify" "1"
-		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PACKAGE@" \
+		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PRODUCT_NAME@" \
 			         "NoRepair" "1"
-
-		# Save instalation dir
-		WriteRegStr HKCU "Software\@PACKAGE@" "" $INSTDIR
 
 	sectionEnd
 
@@ -249,11 +242,11 @@ Section "Uninstall"
 
 	# Remove registry
 	SetRegView 32
-	DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PACKAGE@"
-	DeleteRegKey HKLM "Software\@PACKAGE@"
+	DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PRODUCT_NAME@"
+	DeleteRegKey HKLM "Software\@PRODUCT_NAME@"
 	
 	SetRegView @WINARCH@
-	DeleteRegKey HKLM "Software\@PACKAGE@"
+	DeleteRegKey HKLM "Software\@PRODUCT_NAME@"
 
 	# Delete System libraries
 !ifdef WITHHLLAPI
