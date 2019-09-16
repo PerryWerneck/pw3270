@@ -29,13 +29,14 @@ RequestExecutionLevel admin
 VIProductVersion "@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.@PACKAGE_MAJOR_RELEASE@.@PACKAGE_MINOR_RELEASE@"
 VIFileVersion "@WIN32_VERSION@"
 
-VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductVersion" "@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.@PACKAGE_MAJOR_RELEASE@.@PACKAGE_MINOR_RELEASE@"
-VIAddVersionKey /LANG=${LANG_ENGLISH} "FileVersion" "@WIN32_VERSION@"
+# Reference: https://nsis.sourceforge.io/Reference/VIAddVersionKey
+VIAddVersionKey "ProductVersion" "@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.@PACKAGE_MAJOR_RELEASE@.@PACKAGE_MINOR_RELEASE@"
+VIAddVersionKey "FileVersion" "@WIN32_VERSION@"
 
-VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductName" "@PRODUCT_NAME@"
-VIAddVersionKey /LANG=${LANG_ENGLISH} "FileDescription" "@PACKAGE_DESCRIPTION@"
-VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalCopyright" "(C) 2017 Banco do Brasil S/A. All Rights Reserved"
-# VIAddVersionKey /LANG=${LANG_ENGLISH} "PrivateBuild" ""
+VIAddVersionKey "ProductName" "@PRODUCT_NAME@"
+VIAddVersionKey "FileDescription" "@PACKAGE_DESCRIPTION@"
+VIAddVersionKey "LegalCopyright" "(C) 2017 Banco do Brasil S/A. All Rights Reserved"
+# VIAddVersionKey "PrivateBuild" ""
 
 # Interface
 
