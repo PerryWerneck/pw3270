@@ -328,35 +328,6 @@ if test $app_cv_fvisibility_ok = yes; then
 fi
 
 dnl ---------------------------------------------------------------------------
-dnl SSL Security options
-dnl ---------------------------------------------------------------------------
-
-AC_ARG_ENABLE([self-signed-certs],
-	[AS_HELP_STRING([--disable-self-signed-certs], [disable SSL connection when host presents a self signed certificate])],
-[
-	app_cv_self_signed_certs="$enableval"
-],[
-	app_cv_self_signed_certs="yes"
-])
-
-AC_ARG_WITH([ssl-crl-check],
-	[AS_HELP_STRING([--with-ssl-crl-check], [enable validation of the certificate revogation list in TN3270S connections])],
-[
-	app_cv_enable_crl_check="$withval"
-],[
-	app_cv_enable_crl_check="no"
-])
-
-if test "$app_cv_self_signed_certs" == "yes"; then
-	AC_DEFINE(SSL_ALLOW_SELF_SIGNED_CERT)
-fi
-
-if test "$app_cv_enable_crl_check" == "yes"; then
-	AC_DEFINE(SSL_ENABLE_CRL_CHECK)
-fi
-
-
-dnl ---------------------------------------------------------------------------
 dnl Check for pic
 dnl ---------------------------------------------------------------------------
 AC_ARG_ENABLE([pic],
