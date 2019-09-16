@@ -420,12 +420,6 @@ makeInstaller()
 
 		NSIS_ARGS="${NSIS_ARGS} -DWITHCERTS"
 
-		mkdir -p ${WORKDIR}/build/${ARCH}/sslcerts
-		cp -rv ${CERTS_DIR}/* ${WORKDIR}/build/${ARCH}/sslcerts
-		if [ "$?" != "0" ]; then
-			failed "Can't copy certs"
-		fi
-
 	fi
 
 	if [ ! -z "${PACKAGE_PLUGINS}" ]; then
@@ -447,6 +441,16 @@ makeInstaller()
 		echo -e "\e]2;Creating installers for ${ARCH}\a"
 		echo "Creating installers for ${ARCH}"
 
+		if [ -d ${CERTS_DIR} ]; then
+
+			mkdir -p ${WORKDIR}/build/${ARCH}/sslcerts
+			cp -rv ${CERTS_DIR}/* ${WORKDIR}/build/${ARCH}/sslcerts
+			if [ "$?" != "0" ]; then
+				failed "Can't copy certs"
+			fi
+
+		fi
+
 		cd ${WORKDIR}/build/${ARCH}
 
 		TARCH=${ARCH}
@@ -459,11 +463,8 @@ makeInstaller()
 			makensis ${NSIS_ARGS} ${NSI}
 			if [ "$?" != "0" ]; then
 				echo makensis ${NSIS_ARGS} ${NSI}
-				failed "Error building ${NSI}"
+				failed "Error building ${ARCH} ${NSI}"
 			fi
-
-			echo "TARCH="[${TARCH}]" ARCH=[${ARCH}]"
-			ls -l *-[0-9]*-${TARCH}.exe
 
 			if [ -d ~/public_html ]; then
 				mkdir -p ~/public_html/win/${PRODUCT_NAME}/${ARCH}
