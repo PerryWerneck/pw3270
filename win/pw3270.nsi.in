@@ -126,6 +126,12 @@ SubSection "@PRODUCT_NAME@" SecMain
 		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PRODUCT_NAME@" \
 			         "NoRepair" "1"
 
+		# Customized options
+		SetRegView @WINARCH@
+
+		# Required for IPC Library.
+		WriteRegStr 	HKLM	"Software\@PRODUCT_NAME@"			"InstallLocation"	"$INSTDIR"
+
 	sectionEnd
 
 !ifdef WITHCERTS
