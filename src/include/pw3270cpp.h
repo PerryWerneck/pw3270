@@ -42,6 +42,7 @@
  #include <lib3270.h>
  #include <lib3270/popup.h>
  #include <lib3270/filetransfer.h>
+ #include <lib3270/toggle.h>
 
  #ifdef HAVE_ICONV
 	#include <iconv.h>

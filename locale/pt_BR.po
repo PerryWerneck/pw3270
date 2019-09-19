@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-11 11:26-0300\n"
-"PO-Revision-Date: 2019-09-11 18:43-0300\n"
+"POT-Creation-Date: 2019-09-19 15:54-0300\n"
+"PO-Revision-Date: 2019-09-19 15:54-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
 "Language: pt_BR\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Gtranslator 2.91.7\n"
 
-#: window.c:447
+#: window.c:448
 #, c-format
 msgid " and <b>%s</b> for %s."
 msgstr " e <b>%s</b> para %s."
@@ -45,27 +45,27 @@ msgstr "%s"
 msgid "%s (SSL error %d)"
 msgstr "%s (erro SSL %d)"
 
-#: actions.c:825 actions.c:837
+#: actions.c:844 actions.c:856
 #, c-format
 msgid "%s action needs a valid id attribute"
 msgstr "Ação %s exige um atributo ID válido"
 
-#: actions.c:673 actions.c:802 actions.c:814
+#: actions.c:692 actions.c:821 actions.c:833
 #, c-format
 msgid "%s action needs a valid toggle name"
 msgstr "Ação %s exige um nome de toggle válido"
 
-#: actions.c:849
+#: actions.c:868
 #, c-format
 msgid "%s action needs a valid value"
 msgstr "Ação %s precisa de um valor válido"
 
-#: actions.c:559
+#: actions.c:578
 #, c-format
 msgid "%s action needs src attribute"
 msgstr "Ação %s precisa do atributo src"
 
-#: main.c:88
+#: main.c:89
 #, c-format
 msgid "%s requires GTK version %d.%d.%d"
 msgstr "%s requer GTK versão %d.%d.%d"
@@ -100,12 +100,12 @@ msgstr "%s: Caractere desconhecido depois de \\pf"
 msgid "%s: Vertical tab not supported"
 msgstr "%s: Tabulação vertical não é suportada"
 
-#: window.c:442
+#: window.c:443
 #, c-format
 msgid "%s<b>%s</b> for %s"
 msgstr "%s<b>%s</b> para %s"
 
-#: main.c:323
+#: main.c:366
 msgid "- 3270 Emulator for Gtk"
 msgstr "- Emulador 3270 para GTK"
 
@@ -118,7 +118,7 @@ msgstr "16 cores"
 msgid "3270 Error"
 msgstr "Erro 3270"
 
-#: src/filetransfer/v3270ftprogress.c:385 src/filetransfer/v3270ft.c:360
+#: src/filetransfer/v3270ftprogress.c:385 src/filetransfer/v3270ft.c:353
 #: src/dialogs/print/settingsdialog.c:284
 #: src/dialogs/print/settingsdialog.c:286
 #: src/dialogs/print/settingsdialog.c:288
@@ -133,7 +133,7 @@ msgstr "Alerta 3270"
 msgid "3270 screen"
 msgstr "Tela 3270"
 
-#: dialog.c:348
+#: dialog.c:98
 #, c-format
 msgid "3270 terminal emulator for GTK %d.%d"
 msgstr "Emulador 3270 para GTK+ %d.%d"
@@ -167,12 +167,12 @@ msgstr "<%s> precisa do atributo %s"
 msgid "<%s> should be on toplevel"
 msgstr "<%s> deve estar no primeiro nível"
 
-#: plugin.c:99
+#: plugin.c:105
 #, c-format
 msgid "<b>%s</b>\n"
 msgstr "<b>%s</b>\n"
 
-#: src/terminal/widget.c:155
+#: src/terminal/widget.c:136
 msgid ""
 "<b>Identity not verified</b>\n"
 "Disconnected from host"
@@ -184,7 +184,7 @@ msgstr ""
 msgid "<b>Text options</b>"
 msgstr "<b>Opções de texto</b>"
 
-#: main.c:342
+#: main.c:385
 msgid ""
 "<b>Valid options:</b>\n"
 "\n"
@@ -249,16 +249,15 @@ msgstr "Adicionar à cópia"
 msgid "Address or name of the host to connect."
 msgstr "Endereço ou nome do host a conectar."
 
-#: src/core/toggles/table.c:240 00default.xml:129
+#: src/core/toggles/table.c:263 00default.xml:129
 msgid "Alert sound"
 msgstr "Aviso sonoro"
 
-#: src/filetransfer/v3270ft.c:310 src/filetransfer/settings.c:212
-#: src/dialogs/load.c:96 src/dialogs/save/save.c:117
+#: src/dialogs/load.c:96
 msgid "All files"
 msgstr "Todos os arquivos"
 
-#: src/core/toggles/table.c:257
+#: src/core/toggles/table.c:282
 msgid "Alternate screen"
 msgstr "Tela alternativa"
 
@@ -287,11 +286,11 @@ msgstr "Um parametro de ENVIO/RECEBIMENTO inválido foi enviado para o host."
 msgid "Appends the source file to the destination file."
 msgstr "Adiciona conteúdo do arquivo origem ao final do arquivo destino."
 
-#: main.c:314 main.c:316
+#: main.c:357 main.c:359
 msgid "Application name"
 msgstr "Nome da aplicação"
 
-#: main.c:364 main.c:369
+#: main.c:407 main.c:412
 #, c-format
 msgid "Application name set to \"%s\""
 msgstr "Nome da aplicação definido para \"%s\""
@@ -300,7 +299,7 @@ msgstr "Nome da aplicação definido para \"%s\""
 msgid "Attn"
 msgstr "Attn"
 
-#: actions.c:534
+#: actions.c:553
 #, c-format
 msgid "Attribute \"%s\" is invalid or undefined"
 msgstr "Atributo \"%s\" é invalido ou indefinido"
@@ -313,19 +312,19 @@ msgstr "Divergência nos números de série da autoridade e emissor "
 msgid "Authority and subject key identifier mismatch"
 msgstr "Authority and subject key identifier mismatch"
 
-#: src/core/toggles/table.c:221
+#: src/core/toggles/table.c:242
 msgid "Auto connect"
 msgstr "Conexão automática"
 
-#: src/core/toggles/table.c:259
+#: src/core/toggles/table.c:284
 msgid "Auto resize on altscreen"
 msgstr "Mudar automaticamente o tamanho do terminal em tela alternativa"
 
-#: src/core/toggles/table.c:167 src/core/toggles/table.c:168 00default.xml:124
+#: src/core/toggles/table.c:182 src/core/toggles/table.c:183 00default.xml:124
 msgid "Auto-Reconnect"
 msgstr "Reconectar automaticamente"
 
-#: src/core/toggles/table.c:106
+#: src/core/toggles/table.c:114
 msgid ""
 "Automatically convert trailing blanks in a field to NULLs in order to insert "
 "a character, and will automatically convert leading NULLs to blanks so that "
@@ -335,7 +334,7 @@ msgstr ""
 "a character, and will automatically convert leading NULLs to blanks so that "
 "input data is not squeezed to the left"
 
-#: src/core/toggles/table.c:169
+#: src/core/toggles/table.c:184
 msgid "Automatically reconnect to the host if it ever disconnects"
 msgstr "Reconecta automaticamente caso o servidor desconecte"
 
@@ -360,7 +359,7 @@ msgstr "Fundo"
 msgid "Backspaces the cursor until it hits the front of a word."
 msgstr "Volta o cursor até que atinga o início de uma palavra."
 
-#: src/core/toggles/table.c:241
+#: src/core/toggles/table.c:264
 msgid "Beep on errors"
 msgstr "Emitir som nos erros"
 
@@ -368,11 +367,11 @@ msgstr "Emitir som nos erros"
 msgid "Black"
 msgstr "Preto"
 
-#: src/core/toggles/table.c:104 src/core/toggles/table.c:105 00default.xml:122
+#: src/core/toggles/table.c:112 src/core/toggles/table.c:113 00default.xml:122
 msgid "Blank Fill"
 msgstr "Completar com espaços"
 
-#: src/core/toggles/table.c:59 src/core/toggles/table.c:60 00default.xml:115
+#: src/core/toggles/table.c:62 src/core/toggles/table.c:63 00default.xml:115
 msgid "Blinking Cursor"
 msgstr "Cursor piscante"
 
@@ -384,11 +383,11 @@ msgstr "Tamanho do bloco:"
 msgid "Blue"
 msgstr "Azul"
 
-#: src/core/toggles/table.c:194 src/core/toggles/table.c:195 00default.xml:125
+#: src/core/toggles/table.c:212 src/core/toggles/table.c:213 00default.xml:125
 msgid "Bold"
 msgstr "Negrito"
 
-#: dialog.c:391
+#: dialog.c:141
 msgid "Brazilian Public Software Portal"
 msgstr "Portal do Software Público Brasileiro"
 
@@ -420,7 +419,7 @@ msgstr "Arquivo CMS não encontrado, transferência cancelada"
 msgid "CRL signature failure"
 msgstr "Erro na assinatura CRL"
 
-#: src/dialogs/load.c:180 src/dialogs/save/save.c:215
+#: src/dialogs/load.c:180 src/dialogs/save/save.c:213
 msgid "C_haracter Coding"
 msgstr "C_odificação de caracteres"
 
@@ -499,11 +498,11 @@ msgstr "Não foi possível carregar"
 msgid "Can't load %s"
 msgstr "Não foi possível carregar %s"
 
-#: plugin.c:95
+#: plugin.c:101
 msgid "Can't load plugin"
 msgstr "Não foi possível carregar plugin"
 
-#: plugin.c:93
+#: plugin.c:99
 #, c-format
 msgid "Can't load plugin %s"
 msgstr "Não foi possível carregar plugin %s"
@@ -517,7 +516,7 @@ msgstr "Não foi possível abrir %s"
 msgid "Can't open CRL File"
 msgstr "Não foi possível abrir arquivo CRL"
 
-#: window.c:182
+#: window.c:183
 msgid "Can't open file"
 msgstr "Não foi possível abrir arquivo"
 
@@ -559,12 +558,7 @@ msgstr "Não é possível colar texto"
 msgid "Can't print"
 msgstr "Não é possível imprimir"
 
-#: src/ssl/ctx_init.c:149
-#, c-format
-msgid "Can't read SSL certificates from \"%s\""
-msgstr "Não foi possível ler certificados SSL de %s"
-
-#: window.c:430
+#: window.c:431
 #, c-format
 msgid "Can't recognize \"%s\" as a valid host type"
 msgstr "Não reconheço \"%s\" como um tipo de host válido"
@@ -578,13 +572,13 @@ msgstr "Não é possível salvar"
 msgid "Can't save \"%s\": %s"
 msgstr "Não foi possível salvar %s: %s"
 
-#: src/filetransfer/save.c:117 src/filetransfer/activitylist.c:438
-#: src/trace/trace.c:479 src/dialogs/transfer.c:97 src/dialogs/save/save.c:454
+#: src/filetransfer/save.c:117 src/filetransfer/activitylist.c:436
+#: src/trace/trace.c:479 src/dialogs/transfer.c:95 src/dialogs/save/save.c:452
 #, c-format
 msgid "Can't save %s"
 msgstr "Não foi possível salvar arquivo %s"
 
-#: window.c:180
+#: window.c:181
 #, c-format
 msgid "Can't save trace data to file %s"
 msgstr "Não foi possível salvar trace no arquivo %s"
@@ -601,7 +595,7 @@ msgstr "Não é possível setar a versão do protocolo LDAP"
 msgid "Can't set callback table"
 msgstr "Não foi possível setar a tabela de retornos"
 
-#: tools.c:306
+#: tools.c:307
 msgid "Can't set host charset"
 msgstr "Não foi possível definir o charset do host"
 
@@ -629,9 +623,9 @@ msgstr "Não foi possível iniciar transferência de arquivo."
 msgid "Can't verify."
 msgstr "Não foi possível verificar"
 
-#: src/terminal/callbacks.c:455 src/filetransfer/v3270ftprogress.c:432
+#: src/terminal/callbacks.c:458 src/filetransfer/v3270ftprogress.c:432
 #: src/filetransfer/transfer.c:89 src/dialogs/load.c:113
-#: src/dialogs/save/save.c:138
+#: src/dialogs/save/save.c:136
 msgid "Cancel"
 msgstr "_Cancelar"
 
@@ -653,7 +647,7 @@ msgstr ""
 "Não foi possível criar uma nova estrutura de controle SSL para a conexão "
 "atual."
 
-#: src/ssl/ctx_init.c:125
+#: src/ssl/linux/init.c:90
 msgid "Cant initialize the SSL context."
 msgstr "Erro ao inicializar contexto de segurança"
 
@@ -689,7 +683,7 @@ msgstr "Certificado revogado"
 msgid "Certificate signature failure"
 msgstr "Falha na assinatura do certificado"
 
-#: tools.c:310
+#: tools.c:311
 msgid "Charset error"
 msgstr "Erro de codificação de caracteres"
 
@@ -709,7 +703,7 @@ msgstr "Limpar"
 msgid "Clear AID key"
 msgstr "Clear AID"
 
-#: src/dialogs/load.c:205 src/dialogs/save/save.c:267
+#: src/dialogs/load.c:205 src/dialogs/save/save.c:265
 msgid "Click to cancel operation"
 msgstr "Clique para cancelar operação"
 
@@ -717,7 +711,7 @@ msgstr "Clique para cancelar operação"
 msgid "Click to load file"
 msgstr "Clique para carregar arquivo"
 
-#: src/dialogs/save/save.c:272
+#: src/dialogs/save/save.c:270
 msgid "Click to save file"
 msgstr "Clique para salvar arquivo"
 
@@ -753,7 +747,7 @@ msgstr "Comando a executar"
 msgid "Configure host"
 msgstr "Configurar host"
 
-#: src/core/toggles/table.c:222 00default.xml:114
+#: src/core/toggles/table.c:243 00default.xml:114
 msgid "Connect on startup"
 msgstr "Conectar ao iniciar"
 
@@ -778,7 +772,7 @@ msgstr "Conexão foi cancelada pelo servidor"
 msgid "Connection state"
 msgstr "Estado da conexão"
 
-#: src/terminal/callbacks.c:456
+#: src/terminal/callbacks.c:459
 msgid "Continue"
 msgstr "Continuar"
 
@@ -807,7 +801,7 @@ msgstr ""
 msgid "Creates a file with variable-length records."
 msgstr "Cria arquivo com registros de tamanho variável."
 
-#: colors.c:519 src/core/toggles/table.c:149 src/core/toggles/table.c:150
+#: colors.c:519 src/core/toggles/table.c:162 src/core/toggles/table.c:163
 #: src/dialogs/colors.c:174 00default.xml:121
 msgid "Cross hair cursor"
 msgstr "Cursor mira"
@@ -903,7 +897,7 @@ msgstr "Verde Escuro"
 msgid "Dark Turquoise"
 msgstr "Turquesa Escuro"
 
-#: src/core/toggles/table.c:86
+#: src/core/toggles/table.c:92
 msgid "Data Stream"
 msgstr "Fluxo de dados"
 
@@ -955,7 +949,7 @@ msgstr "Tabela de caracteres para a tela"
 msgid "Display current charset"
 msgstr "Mostrar a tabela de caracteres ativa"
 
-#: src/core/toggles/table.c:79
+#: src/core/toggles/table.c:84
 msgid "Display the cursor location in the OIA (the status line)"
 msgstr "Mostra posição do cursor na lista de informações ao operador"
 
@@ -967,15 +961,15 @@ msgstr "EOR recebido fora do modo 3270, ignorado."
 msgid "ETA:"
 msgstr "ETA:"
 
-#: src/core/toggles/table.c:277
+#: src/core/toggles/table.c:304
 msgid "Enable network in/out trace"
 msgstr "Habilitar trace de entrada/saída de rede"
 
-#: src/core/toggles/table.c:268
+#: src/core/toggles/table.c:294
 msgid "Enable network keep-alive with SO_KEEPALIVE"
 msgstr "Enable network keep-alive with SO_KEEPALIVE"
 
-#: src/core/toggles/table.c:286
+#: src/core/toggles/table.c:314
 msgid "Enable security negotiation trace"
 msgstr "Habilita trace da negociação de segurança"
 
@@ -1053,7 +1047,7 @@ msgstr "Erro ao gravar arquivo no host, transferência cancelada"
 msgid "Estimated transfer arrival"
 msgstr "Tempo estimado para a transferência"
 
-#: src/core/toggles/table.c:122
+#: src/core/toggles/table.c:132
 msgid "Events"
 msgstr "Eventos"
 
@@ -1069,7 +1063,7 @@ msgstr "Delimitadores de campo"
 msgid "Field colors"
 msgstr "Cor dos campos"
 
-#: src/dialogs/save/save.c:229
+#: src/dialogs/save/save.c:227
 msgid "File _Format"
 msgstr "_Formato do arquivo"
 
@@ -1134,7 +1128,7 @@ msgstr "Erro de formato no campo \"notBefore\" do certificado"
 msgid "Formatted screen"
 msgstr "Tela formatada"
 
-#: src/core/toggles/table.c:158 src/core/toggles/table.c:159 00default.xml:118
+#: src/core/toggles/table.c:172 src/core/toggles/table.c:173 00default.xml:118
 msgid "Full Screen"
 msgstr "Tela cheia"
 
@@ -1150,11 +1144,11 @@ msgstr "Caminho completo do arquivo remoto"
 msgid "Function bar"
 msgstr "Barra de funções"
 
-#: main.c:92 main.c:414
+#: main.c:93 main.c:457
 msgid "GTK Version mismatch"
 msgstr "Divergência de versão GTK"
 
-#: src/filetransfer/v3270ft.c:379
+#: src/filetransfer/v3270ft.c:372
 msgid "Get transfer queue from an external XML file"
 msgstr "Obtém a fila de transferência de um arquivo XML externo"
 
@@ -1211,11 +1205,11 @@ msgstr "Servidor rejeitou o tipo de dispositivo ou requisição"
 msgid "Host rejected resource(s)"
 msgstr "Servidor rejeitou recurso(s)"
 
-#: main.c:303
+#: main.c:347
 msgid "Host system type"
 msgstr "Tipo do sistema no servidor"
 
-#: main.c:301
+#: main.c:345
 msgid "Host to connect"
 msgstr "Servidor a conectar"
 
@@ -1243,11 +1237,11 @@ msgstr "Identificação do estado de segurança da sessão"
 msgid "IDLE minutes for automatic disconnection"
 msgstr "Minutos para desconexão automática"
 
-#: src/core/toggles/table.c:160
+#: src/core/toggles/table.c:174
 msgid "If set, asks to place the toplevel window in the fullscreen state"
 msgstr "If set, asks to place the toplevel window in the fullscreen state"
 
-#: src/core/toggles/table.c:133
+#: src/core/toggles/table.c:144
 msgid ""
 "If set, puts restrictions on how pasted text is placed on the screen. The "
 "position of the cursor at the time the paste operation is begun is used as a "
@@ -1261,7 +1255,7 @@ msgstr ""
 "that position. This option is useful for pasting into certain IBM editors "
 "that use the left side of the screen for control information"
 
-#: src/core/toggles/table.c:97
+#: src/core/toggles/table.c:104
 msgid ""
 "If set, the NVT terminal emulator automatically assumes a NEWLINE character "
 "when it reaches the end of a line."
@@ -1269,15 +1263,15 @@ msgstr ""
 "Se ativo o emulador de terminal assume automaticamente uma quebra de linha "
 "quando chega ao final de uma linha"
 
-#: src/core/toggles/table.c:61
+#: src/core/toggles/table.c:64
 msgid "If set, the cursor blinks"
 msgstr "Se ativo o cursor pisca"
 
-#: src/core/toggles/table.c:52
+#: src/core/toggles/table.c:53
 msgid "If set, the terminal operates in uppercase-only mode"
 msgstr "Se ativo o terminal opera apenas com caracteres maiúsculos"
 
-#: src/core/toggles/table.c:142
+#: src/core/toggles/table.c:154
 msgid ""
 "If set, the terminal will always select rectangular areas of the screen. "
 "Otherwise, it selects continuous regions of the screen"
@@ -1285,7 +1279,7 @@ msgstr ""
 "Se ativo o terminal sempre selecionará áreas retangulares, se inativo "
 "selecionará áreas contínuas da tela"
 
-#: src/core/toggles/table.c:151
+#: src/core/toggles/table.c:164
 msgid ""
 "If set, the terminal will display a crosshair over the cursor: lines "
 "extending the full width and height of the screen, centered over the cursor "
@@ -1295,7 +1289,7 @@ msgstr ""
 "extending the full width and height of the screen, centered over the cursor "
 "position. This makes locating the cursor on the screen much easier"
 
-#: src/core/toggles/table.c:70
+#: src/core/toggles/table.c:74
 msgid ""
 "If set, the time taken by the host to process an AID is displayed on the "
 "status line"
@@ -1304,9 +1298,7 @@ msgstr ""
 "status line"
 
 #: src/core/actions/table.c:490
-msgid ""
-"If the terminal has selected area print tje selected area, if not, print all "
-"contents."
+msgid "If the terminal has selected area print it, if not, print all contents."
 msgstr ""
 "Se houver área selecionada imprime a seleção, senão, imprime toda a tela."
 
@@ -1334,11 +1326,11 @@ msgstr "Código de requisição incorreto, transferência cancelada"
 msgid "Input method"
 msgstr "Método de entrada"
 
-#: src/core/toggles/table.c:176
+#: src/core/toggles/table.c:192
 msgid "Insert"
 msgstr "Inserção"
 
-#: src/filetransfer/v3270ft.c:395
+#: src/filetransfer/v3270ft.c:388
 msgid "Insert new file in the transfer queue"
 msgstr "Inserir um novo arquivo na fila de transferência"
 
@@ -1354,7 +1346,7 @@ msgstr "Intensificado/Desprotegido"
 msgid "Invalid CA certificate"
 msgstr "Certificado CA inválido"
 
-#: src/terminal/callbacks.c:483
+#: src/terminal/callbacks.c:486
 msgid "Invalid callback table, possible version mismatch in lib3270"
 msgstr ""
 "Tabela de callbacks inválida, possível divergência de versão na lib3270"
@@ -1416,7 +1408,7 @@ msgstr "O terminal está no estad INITIAL_E?"
 msgid "Is terminal ready"
 msgstr "O terminal está pronto"
 
-#: src/core/toggles/table.c:203 src/core/toggles/table.c:204 00default.xml:127
+#: src/core/toggles/table.c:222 src/core/toggles/table.c:223 00default.xml:127
 msgid "Keep selected"
 msgstr "Manter selecionado"
 
@@ -1465,7 +1457,7 @@ msgstr "Local:"
 msgid "Lock keyboard on operator error"
 msgstr "Bloqueia teclado em caso de erro do operador"
 
-#: main.c:309
+#: main.c:353
 msgid "Makes the screen larger than the default for the chosen model number."
 msgstr "Usa tamanho maior do que o padrão para o modelo escolhido."
 
@@ -1477,7 +1469,7 @@ msgstr "Altura máxima da tela em linhas"
 msgid "Maximum screen width in columns"
 msgstr "Largura maxima da tela em colunas"
 
-#: main.c:310
+#: main.c:354
 msgid "Minutes for auto-disconnect"
 msgstr "Minutos para desconexão automática"
 
@@ -1485,7 +1477,7 @@ msgstr "Minutos para desconexão automática"
 msgid "Misc colors"
 msgstr "Cores diversas"
 
-#: window.c:554
+#: window.c:555
 #, c-format
 msgid "Model %d (%s)"
 msgstr "Modelo %d (%s)"
@@ -1494,7 +1486,7 @@ msgstr "Modelo %d (%s)"
 msgid "Model name"
 msgstr "Nome do modelo"
 
-#: src/core/toggles/table.c:50 00default.xml:116
+#: src/core/toggles/table.c:51 00default.xml:116
 msgid "Monocase"
 msgstr "Só Maiúsculas"
 
@@ -1502,7 +1494,7 @@ msgstr "Só Maiúsculas"
 msgid "Monochrome"
 msgstr "Monocromático"
 
-#: actions.c:690
+#: actions.c:709
 msgid "Move action needs target & direction attributes"
 msgstr "Ação \"move\" precisa dos atributos \"target\" e \"direction\""
 
@@ -1520,7 +1512,7 @@ msgstr "Move para o primeiro campo desprotegido."
 msgid "Mustard"
 msgstr "Mostarda"
 
-#: src/core/toggles/table.c:275
+#: src/core/toggles/table.c:302
 msgid "Network data"
 msgstr "Tráfego de rede"
 
@@ -1529,7 +1521,7 @@ msgstr "Tráfego de rede"
 msgid "Network error"
 msgstr "Erro de rede"
 
-#: src/core/toggles/table.c:266 src/core/toggles/table.c:267 00default.xml:131
+#: src/core/toggles/table.c:292 src/core/toggles/table.c:293 00default.xml:131
 msgid "Network keep alive"
 msgstr "Network keep alive"
 
@@ -1760,7 +1752,7 @@ msgstr "PF8"
 msgid "PF9"
 msgstr "PF9"
 
-#: main.c:340
+#: main.c:383
 msgid "Parse error"
 msgstr "Erro de interpretação"
 
@@ -1789,17 +1781,13 @@ msgstr "Colar próximo"
 msgid "Paste text file"
 msgstr "Colar arquivo texto"
 
-#: src/core/toggles/table.c:131 src/core/toggles/table.c:132 00default.xml:120
+#: src/core/toggles/table.c:142 src/core/toggles/table.c:143 00default.xml:120
 msgid "Paste with left margin"
 msgstr "Colar com margem esquerda"
 
 #: src/filetransfer/tables.c:219
 msgid "Path and name of the local file"
 msgstr "Caminho e nome do arquivo local"
-
-#: main.c:311
-msgid "Path for plugin files"
-msgstr "Caminho para os arquivos de plugin"
 
 #: src/ssl/state.c:284
 msgid "Path length constraint exceeded"
@@ -1989,7 +1977,7 @@ msgstr "Receber arquivo"
 msgid "Receive text file"
 msgstr "Receber arquivo texto"
 
-#: src/filetransfer/v3270ftprogress.c:738 src/dialogs/transfer.c:132
+#: src/filetransfer/v3270ftprogress.c:738 src/dialogs/transfer.c:130
 msgid "Receiving file"
 msgstr "Recebendo arquivo"
 
@@ -1997,7 +1985,7 @@ msgstr "Recebendo arquivo"
 msgid "Record Length"
 msgstr "Comprimento de registro:"
 
-#: src/filetransfer/v3270ft.c:347 src/filetransfer/settings.c:522
+#: src/filetransfer/v3270ft.c:340 src/filetransfer/settings.c:519
 msgid "Record format"
 msgstr "Formato de registro"
 
@@ -2013,7 +2001,7 @@ msgstr "Recarregar conteúdo do buffer"
 msgid "Remap Failed"
 msgstr "Remapeamento falhou"
 
-#: main.c:307
+#: main.c:351
 msgid "Remap charset from xml file"
 msgstr "Remapear caracteres por um arquivo xml"
 
@@ -2034,7 +2022,7 @@ msgstr "Arquivo remoto:"
 msgid "Remote:"
 msgstr "Remoto:"
 
-#: src/filetransfer/v3270ft.c:403
+#: src/filetransfer/v3270ft.c:396
 msgid "Remove selected file from the transfer queue"
 msgstr "Remove arquivo selecionado da fila de transferência"
 
@@ -2058,7 +2046,7 @@ msgstr "Reselecionar"
 msgid "Reset"
 msgstr "Reset"
 
-#: src/core/toggles/table.c:258 00default.xml:119
+#: src/core/toggles/table.c:283 00default.xml:119
 msgid "Resize on alternate screen"
 msgstr "Mudar tamanho do terminal em tela alternativa"
 
@@ -2094,7 +2082,7 @@ msgstr "Erro SSL"
 msgid "SSL Read error"
 msgstr "Erro de leitura SSL"
 
-#: src/core/toggles/table.c:284
+#: src/core/toggles/table.c:312
 msgid "SSL negotiation"
 msgstr "Negociação SSL"
 
@@ -2111,7 +2099,7 @@ msgstr ""
 "SSL_write:\n"
 "%s"
 
-#: src/filetransfer/v3270ft.c:217 src/filetransfer/activitylist.c:455
+#: src/filetransfer/v3270ft.c:215 src/filetransfer/activitylist.c:453
 #: src/trace/trace.c:498 src/dialogs/transfer.c:73
 msgid "Save"
 msgstr "Salvar"
@@ -2120,11 +2108,11 @@ msgstr "Salvar"
 msgid "Save _As"
 msgstr "Salvar _Como"
 
-#: src/dialogs/save/save.c:301 00default.xml:44
+#: src/dialogs/save/save.c:299 00default.xml:44
 msgid "Save copy"
 msgstr "Salvar cópia"
 
-#: src/filetransfer/v3270ft.c:216 src/filetransfer/activitylist.c:454
+#: src/filetransfer/v3270ft.c:214 src/filetransfer/activitylist.c:452
 msgid "Save queue to file"
 msgstr "Salvar a fila para um arquivo"
 
@@ -2140,7 +2128,7 @@ msgstr "Salvar tela"
 msgid "Save selected"
 msgstr "Salvar seleção"
 
-#: src/dialogs/save/save.c:300
+#: src/dialogs/save/save.c:298
 msgid "Save selected area"
 msgstr "Salvar área selecionada"
 
@@ -2148,7 +2136,7 @@ msgstr "Salvar área selecionada"
 msgid "Save selected area."
 msgstr "Salvar área selecionada"
 
-#: src/dialogs/save/save.c:299
+#: src/dialogs/save/save.c:297
 msgid "Save terminal contents"
 msgstr "Salvar conteúdo da tela"
 
@@ -2160,7 +2148,7 @@ msgstr "Salvar trace para arquivo"
 msgid "Save transfer activity to file"
 msgstr "Salvar atividade de transferência para arquivo"
 
-#: src/dialogs/transfer.c:197
+#: src/dialogs/transfer.c:195
 msgid "Save transfer information to file"
 msgstr "Salvar informações da transferência para arquivo"
 
@@ -2168,7 +2156,7 @@ msgstr "Salvar informações da transferência para arquivo"
 msgid "Save transfer queue"
 msgstr "Salvar fila de transferências"
 
-#: src/filetransfer/v3270ft.c:387
+#: src/filetransfer/v3270ft.c:380
 msgid "Save transfer queue to an external XML file"
 msgstr "Guarda fila de transferência num arquivo XML externo"
 
@@ -2193,7 +2181,7 @@ msgstr "\"oversize\" maior que o modelo escolhido"
 msgid "Screen size"
 msgstr "Tamanho da tela"
 
-#: src/core/toggles/table.c:113
+#: src/core/toggles/table.c:122
 msgid "Screens"
 msgstr "Telas"
 
@@ -2227,14 +2215,14 @@ msgstr "Conexão segura efetuada com sucesso."
 
 #: src/ssl/negotiate.c:105 src/ssl/negotiate.c:134 src/ssl/negotiate.c:157
 #: src/ssl/negotiate.c:212 src/ssl/negotiate.c:235 src/ssl/negotiate.c:256
-#: src/ssl/ctx_init.c:124 src/ssl/ctx_init.c:154 src/ssl/linux/ldap.c:98
-#: src/ssl/linux/ldap.c:111 src/ssl/linux/ldap.c:132 src/ssl/linux/ldap.c:143
-#: src/ssl/linux/ldap.c:154 src/ssl/linux/ldap.c:179 src/ssl/linux/ldap.c:190
-#: src/ssl/linux/ldap.c:202 src/ssl/linux/ldap.c:226 src/ssl/linux/getcrl.c:55
-#: src/ssl/linux/getcrl.c:74 src/ssl/linux/getcrl.c:86
-#: src/ssl/linux/getcrl.c:112 src/ssl/linux/curl.c:195 src/ssl/linux/curl.c:225
-#: src/ssl/linux/curl.c:249 src/ssl/linux/curl.c:271 src/ssl/linux/curl.c:280
-#: src/ssl/linux/curl.c:294 src/ssl/linux/curl.c:312
+#: src/ssl/linux/ldap.c:98 src/ssl/linux/ldap.c:111 src/ssl/linux/ldap.c:132
+#: src/ssl/linux/ldap.c:143 src/ssl/linux/ldap.c:154 src/ssl/linux/ldap.c:179
+#: src/ssl/linux/ldap.c:190 src/ssl/linux/ldap.c:202 src/ssl/linux/ldap.c:226
+#: src/ssl/linux/init.c:89 src/ssl/linux/getcrl.c:55 src/ssl/linux/getcrl.c:74
+#: src/ssl/linux/getcrl.c:86 src/ssl/linux/getcrl.c:112
+#: src/ssl/linux/curl.c:195 src/ssl/linux/curl.c:225 src/ssl/linux/curl.c:249
+#: src/ssl/linux/curl.c:271 src/ssl/linux/curl.c:280 src/ssl/linux/curl.c:294
+#: src/ssl/linux/curl.c:312
 msgid "Security error"
 msgstr "Erro de segurança"
 
@@ -2242,8 +2230,8 @@ msgstr "Erro de segurança"
 msgid "Security warning"
 msgstr "Alerta de segurança"
 
-#: src/filetransfer/v3270ft.c:307 src/filetransfer/settings.c:209
-#: src/dialogs/save/save.c:114 src/dialogs/save/save.c:139
+#: src/filetransfer/v3270ft.c:303 src/filetransfer/settings.c:209
+#: src/dialogs/save/save.c:114 src/dialogs/save/save.c:137
 msgid "Select"
 msgstr "Selecionar"
 
@@ -2255,21 +2243,21 @@ msgstr "Selecionar campo"
 msgid "Select all"
 msgstr "Selecionar tudo"
 
-#: src/core/toggles/table.c:140 src/core/toggles/table.c:141 00default.xml:123
+#: src/core/toggles/table.c:152 src/core/toggles/table.c:153 00default.xml:123
 msgid "Select by rectangles"
 msgstr "Seleção retangular"
 
-#: src/dialogs/save/save.c:113 src/dialogs/save/save.c:135
+#: src/dialogs/save/save.c:113 src/dialogs/save/save.c:133
 msgid "Select destination file"
 msgstr "Selecionar arquivo destino"
 
-#: src/filetransfer/v3270ft.c:577 src/filetransfer/settings.c:470
+#: src/filetransfer/v3270ft.c:570 src/filetransfer/settings.c:467
 #: src/dialogs/load.c:92 src/dialogs/load.c:110 src/dialogs/load.c:170
-#: src/dialogs/save/save.c:204
+#: src/dialogs/save/save.c:202
 msgid "Select file"
 msgstr "Selecionar arquivo"
 
-#: src/filetransfer/v3270ft.c:444 src/filetransfer/v3270ft.c:453
+#: src/filetransfer/v3270ft.c:437 src/filetransfer/v3270ft.c:446
 msgid "Select first file"
 msgstr "Selecionar primeiro arquivo"
 
@@ -2277,19 +2265,19 @@ msgstr "Selecionar primeiro arquivo"
 msgid "Select font"
 msgstr "Selecione fonte"
 
-#: src/filetransfer/v3270ft.c:420 src/filetransfer/v3270ft.c:477
+#: src/filetransfer/v3270ft.c:413 src/filetransfer/v3270ft.c:470
 msgid "Select last file"
 msgstr "Selecionar último arquivo"
 
-#: src/filetransfer/v3270ft.c:306 src/filetransfer/settings.c:208
+#: src/filetransfer/v3270ft.c:302 src/filetransfer/settings.c:208
 msgid "Select local file"
 msgstr "Selecionar arquivo local"
 
-#: src/filetransfer/v3270ft.c:428 src/filetransfer/v3270ft.c:469
+#: src/filetransfer/v3270ft.c:421 src/filetransfer/v3270ft.c:462
 msgid "Select next file"
 msgstr "Selecionar próximo arquivo"
 
-#: src/filetransfer/v3270ft.c:436 src/filetransfer/v3270ft.c:461
+#: src/filetransfer/v3270ft.c:429 src/filetransfer/v3270ft.c:454
 msgid "Select previous file"
 msgstr "Selecionar arquivo anterior"
 
@@ -2329,35 +2317,35 @@ msgstr "Enviar arquivo texto"
 msgid "Send/Receive"
 msgstr "Enviar/Receber"
 
-#: src/filetransfer/v3270ftprogress.c:738 src/dialogs/transfer.c:132
+#: src/filetransfer/v3270ftprogress.c:738 src/dialogs/transfer.c:130
 msgid "Sending file"
 msgstr "Enviando arquivo"
 
-#: main.c:296 main.c:298
+#: main.c:340 main.c:342
 msgid "Session name"
 msgstr "Nome da sessão"
 
-#: main.c:306
+#: main.c:350
 msgid "Set host charset"
 msgstr "Define página de código do host"
 
-#: src/core/toggles/table.c:177
+#: src/core/toggles/table.c:193
 msgid "Set insert mode"
 msgstr "Set insert mode"
 
-#: main.c:302
+#: main.c:346
 msgid "Set reported colors (8/16)"
 msgstr "Define número de cores informadas (8/16)"
 
-#: main.c:305
+#: main.c:349
 msgid "Set toggles OFF"
 msgstr "Desativa toggles"
 
-#: main.c:304
+#: main.c:348
 msgid "Set toggles ON"
 msgstr "Ativa toggles"
 
-#: main.c:319
+#: main.c:362
 msgid "Set trace filename"
 msgstr "Define o nome do arquivo de trace"
 
@@ -2369,15 +2357,15 @@ msgstr "Configurações"
 msgid "Setup host"
 msgstr "Configurar host"
 
-#: src/core/toggles/table.c:248
+#: src/core/toggles/table.c:272
 msgid "Show Field"
 msgstr "Mostra campos"
 
-#: src/core/toggles/table.c:249
+#: src/core/toggles/table.c:273
 msgid "Show Field attributes"
 msgstr "Mostra atributos de campo"
 
-#: src/core/toggles/table.c:213 00default.xml:126
+#: src/core/toggles/table.c:233 00default.xml:126
 msgid "Show Underline"
 msgstr "Mostrar sublinhado"
 
@@ -2385,7 +2373,7 @@ msgstr "Mostrar sublinhado"
 msgid "Show test pattern"
 msgstr "Mostrar padrão de teste"
 
-#: src/core/toggles/table.c:68 src/core/toggles/table.c:69
+#: src/core/toggles/table.c:72 src/core/toggles/table.c:73
 msgid "Show timer when processing"
 msgstr "Show timer when processing"
 
@@ -2397,7 +2385,7 @@ msgstr "Skip"
 msgid "Skip this transfer, keep the file on queue."
 msgstr "Skip this transfer, keep the file on queue."
 
-#: src/core/toggles/table.c:185 src/core/toggles/table.c:186 00default.xml:128
+#: src/core/toggles/table.c:202 src/core/toggles/table.c:203 00default.xml:128
 msgid "Smart paste"
 msgstr "Colar inteligente"
 
@@ -2413,11 +2401,11 @@ msgstr "Erro ao ler dados da rede"
 msgid "Socket write error"
 msgstr "Erro ao enviar dados para a rede"
 
-#: src/core/toggles/table.c:239
+#: src/core/toggles/table.c:262
 msgid "Sound"
 msgstr "Som"
 
-#: src/filetransfer/v3270ft.c:348 src/filetransfer/settings.c:548
+#: src/filetransfer/v3270ft.c:341 src/filetransfer/settings.c:545
 msgid "Space allocation units"
 msgstr "Unidades de alocação de espaço"
 
@@ -2451,11 +2439,11 @@ msgstr ""
 "largura fixa ou o comprimento máximo de registros para um dataset contendo "
 "registro de tamanho variável."
 
-#: src/filetransfer/settings.c:523
+#: src/filetransfer/settings.c:520
 msgid "Specifies the record format of the data set."
 msgstr "Controla o formato de registro do data set."
 
-#: src/filetransfer/settings.c:549
+#: src/filetransfer/settings.c:546
 msgid ""
 "Specifies the units for the TSO host primary and secondary space options."
 msgstr ""
@@ -2465,7 +2453,7 @@ msgstr ""
 msgid "Speed:"
 msgstr "Velocidade:"
 
-#: src/filetransfer/v3270ft.c:411
+#: src/filetransfer/v3270ft.c:404
 msgid "Start file transfer"
 msgstr "Iniciar transferência de arquivo"
 
@@ -2477,7 +2465,7 @@ msgstr "Iniciar transferência"
 msgid "Starting"
 msgstr "Iniciando"
 
-#: src/filetransfer/worker.c:314 src/dialogs/transfer.c:150
+#: src/filetransfer/worker.c:314 src/dialogs/transfer.c:148
 msgid "Starting transfer"
 msgstr "Iniciando transferência"
 
@@ -2520,14 +2508,6 @@ msgstr "Nome do terminal"
 #: src/core/properties/string.c:91
 msgid "Terminal type"
 msgstr "Tipo do terminal"
-
-#: src/trace/trace.c:501
-msgid "Text file"
-msgstr "Arquivo texto"
-
-#: src/filetransfer/v3270ft.c:311 src/filetransfer/settings.c:213
-msgid "Text files"
-msgstr "Arquivos de texto"
 
 #: src/core/ft/ftmessages.c:216 src/filetransfer/v3270ftprogress.c:210
 msgid ""
@@ -2712,12 +2692,12 @@ msgstr ""
 "Intervalo de tempo entre o desbloqueio de teclado pelo host e o desbloqueio "
 "real"
 
-#: src/terminal/callbacks.c:450
+#: src/terminal/callbacks.c:453
 #, c-format
 msgid "The error code was %d"
 msgstr "O código de erro foi %d"
 
-#: src/dialogs/save/save.c:414
+#: src/dialogs/save/save.c:412
 #, c-format
 msgid "The file \"%s\" already exists. Replace it?"
 msgstr "O arquivo \"%s\" já existe, substituir?"
@@ -2763,7 +2743,7 @@ msgstr ""
 "The issuer certificate of a looked up certificate could not be found. This "
 "normally means the list of trusted certificates is not complete."
 
-#: window.c:449
+#: window.c:450
 #, c-format
 msgid "The known types are %s"
 msgstr "Os tipos conhecidos são %s"
@@ -2772,7 +2752,7 @@ msgstr "Os tipos conhecidos são %s"
 msgid "The model number"
 msgstr "Nº do modelo"
 
-#: main.c:308
+#: main.c:352
 msgid "The model of 3270 display to be emulated"
 msgstr "Modelo de tela 3270 a ser emulada"
 
@@ -2860,7 +2840,7 @@ msgstr "A largura %d é menor que a do modelo %d (%d)"
 msgid "There is not enough space available for data on the host."
 msgstr "Não existe espaço suficiente no host para os dados."
 
-#: tools.c:309
+#: tools.c:310
 #, c-format
 msgid "There's no available settings for charset \"%s\""
 msgstr "Não encontrei configuração para a tabela de caracteres \"%s\""
@@ -2873,7 +2853,7 @@ msgstr "Não existe informação de segurança na sessão"
 msgid "This is a host program error."
 msgstr "Este é um erro no programa do host."
 
-#: dialog.c:332
+#: dialog.c:83
 msgid ""
 "This program is free software; you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -2902,7 +2882,7 @@ msgstr ""
 "programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple "
 "Place, Suite 330, Boston, MA, 02111-1307, USA"
 
-#: main.c:410
+#: main.c:453
 #, c-format
 msgid "This program requires GTK version %d.%d.%d"
 msgstr "Este programa precisa do GTK versão %d.%d.%d"
@@ -2927,23 +2907,23 @@ msgstr "Total:"
 msgid "Trace"
 msgstr "Trace"
 
-#: src/core/toggles/table.c:87 98trace.xml:36
+#: src/core/toggles/table.c:93 98trace.xml:36
 msgid "Trace Data Stream"
 msgstr "Trace Data Stream"
 
-#: src/core/toggles/table.c:285 98trace.xml:40
+#: src/core/toggles/table.c:313 98trace.xml:40
 msgid "Trace SSL negotiation"
 msgstr "Trace da negociação SSL"
 
-#: src/core/toggles/table.c:123
+#: src/core/toggles/table.c:133
 msgid "Trace interface and application events"
 msgstr "Registra eventos da interface gráfica e aplicação"
 
-#: src/core/toggles/table.c:276 98trace.xml:38
+#: src/core/toggles/table.c:303 98trace.xml:38
 msgid "Trace network data flow"
 msgstr "Trace network data flow"
 
-#: src/core/toggles/table.c:114 98trace.xml:37
+#: src/core/toggles/table.c:123 98trace.xml:37
 msgid "Trace screen contents"
 msgstr "Trace do conteúdo da tela"
 
@@ -2951,7 +2931,7 @@ msgstr "Trace do conteúdo da tela"
 msgid "Trace user interface events"
 msgstr "Trace user interface events"
 
-#: src/core/toggles/table.c:77 src/core/toggles/table.c:78 00default.xml:117
+#: src/core/toggles/table.c:82 src/core/toggles/table.c:83 00default.xml:117
 msgid "Track Cursor"
 msgstr "Mostrar posição do cursor"
 
@@ -2981,7 +2961,7 @@ msgstr "Transferência falhou"
 msgid "Transfer operation has timed out"
 msgstr "Operação de transferência esgotou o tempo de espera"
 
-#: src/filetransfer/v3270ft.c:346 src/filetransfer/settings.c:495
+#: src/filetransfer/v3270ft.c:339 src/filetransfer/settings.c:492
 msgid "Transfer options"
 msgstr "Opções de transferência"
 
@@ -3088,7 +3068,7 @@ msgstr "Não foi possível verificar o primeiro certificado"
 msgid "Undefined"
 msgstr "Indefinido"
 
-#: src/core/toggles/table.c:212
+#: src/core/toggles/table.c:232
 msgid "Underline"
 msgstr "Sublinhados"
 
@@ -3101,7 +3081,7 @@ msgstr "Atributo inesperado \"action\" em <%s>"
 msgid "Unexpected error"
 msgstr "Erro inesperado"
 
-#: src/dialogs/save/save.c:399
+#: src/dialogs/save/save.c:397
 #, c-format
 msgid "Unexpected format %d"
 msgstr "Formato inesperado %d"
@@ -3111,12 +3091,12 @@ msgstr "Formato inesperado %d"
 msgid "Unexpected group \"%s\""
 msgstr "Grupo inesperado \"%s\""
 
-#: src/dialogs/save/save.c:369
+#: src/dialogs/save/save.c:367
 #, c-format
 msgid "Unexpected mode %d"
 msgstr "Modo inesperado %d"
 
-#: actions.c:548 actions.c:568
+#: actions.c:567 actions.c:587
 #, c-format
 msgid "Unexpected or invalid %s attribute: \"%s\""
 msgstr "Atributo %s inesperado ou inválido: \"%s\""
@@ -3129,12 +3109,12 @@ msgstr "URL do CRL é inesperada ou inválida"
 msgid "Unexpected or invalid TLS/SSL verify result"
 msgstr "O resultado da verificação TLS/SSL foi inesperado"
 
-#: actions.c:522
+#: actions.c:541
 #, c-format
 msgid "Unexpected or invalid attribute value \"%s\""
 msgstr "Valor de attributo inesperado ou inválido: \"%s\""
 
-#: main.c:148
+#: main.c:193
 #, c-format
 msgid "Unexpected or invalid color value \"%s\""
 msgstr "Valor de cor inválido ou inesperado: \"%s\""
@@ -3143,7 +3123,7 @@ msgstr "Valor de cor inválido ou inesperado: \"%s\""
 msgid "Unexpected or unknown security status"
 msgstr "Estado de segurança inesperado ou desconhecido."
 
-#: actions.c:438
+#: actions.c:439
 #, c-format
 msgid "Unexpected target \"%s\""
 msgstr "Alvo inesperado \"%s\""
@@ -3189,15 +3169,15 @@ msgstr "Unsupported RPQ term"
 msgid "Unsupported certificate purpose"
 msgstr "Finalidade do certificado não é suportada"
 
-#: src/dialogs/save/save.c:151
+#: src/dialogs/save/save.c:149
 msgid "Untitled document"
 msgstr "Documento sem título"
 
-#: src/core/toggles/table.c:51
+#: src/core/toggles/table.c:52
 msgid "Uppercase only"
 msgstr "Apenas maiúsculas"
 
-#: src/core/toggles/table.c:230 src/core/toggles/table.c:231 00default.xml:130
+#: src/core/toggles/table.c:252 src/core/toggles/table.c:253 00default.xml:130
 msgid "Use +/- for field navigation"
 msgstr "Usar teclas +/- para navegar por campos"
 
@@ -3205,7 +3185,7 @@ msgstr "Usar teclas +/- para navegar por campos"
 msgid "Use host default record format."
 msgstr "Utilizar o formato de registro padrão do servidor."
 
-#: src/core/toggles/table.c:232
+#: src/core/toggles/table.c:254
 msgid "Use the keys +/- from keypad to select editable fields"
 msgstr "Use the keys +/- from keypad to select editable fields"
 
@@ -3213,7 +3193,7 @@ msgstr "Use the keys +/- from keypad to select editable fields"
 msgid "Variable"
 msgstr "Variável"
 
-#: dialog.c:352 dialog.c:354
+#: dialog.c:102 dialog.c:104
 #, c-format
 msgid "Version %s-%s"
 msgstr "Versão %s-%s"
@@ -3247,59 +3227,54 @@ msgstr "Windows ocidental (CP1252)"
 msgid "Windows error was \"%s\" (%u)"
 msgstr "Erro windows foi \"%s\" (%u)"
 
-#: src/core/toggles/table.c:95 src/core/toggles/table.c:96
+#: src/core/toggles/table.c:102 src/core/toggles/table.c:103
 msgid "Wrap around"
 msgstr "Wrap around"
 
-#: src/terminal/oia.c:431 src/terminal/oia.c:455 src/terminal/oia.c:459
+#: src/terminal/drawing/oia.c:430 src/terminal/drawing/oia.c:454
+#: src/terminal/drawing/oia.c:458
 msgid "X"
 msgstr "X"
 
-#: src/terminal/oia.c:435
+#: src/terminal/drawing/oia.c:434
 msgid "X -f"
 msgstr "X -f"
 
-#: src/terminal/oia.c:467
+#: src/terminal/drawing/oia.c:466
 msgid "X Connecting"
 msgstr "X Conectando"
 
-#: src/terminal/oia.c:451
+#: src/terminal/drawing/oia.c:450
 msgid "X Inhibit"
 msgstr "X Inibido"
 
-#: src/terminal/oia.c:427
+#: src/terminal/drawing/oia.c:426
 msgid "X Not Connected"
 msgstr "X Desconectado"
 
-#: src/terminal/oia.c:443
+#: src/terminal/drawing/oia.c:442
 msgid "X Numeric"
 msgstr "X Numérico"
 
-#: src/terminal/oia.c:447
+#: src/terminal/drawing/oia.c:446
 msgid "X Overflow"
 msgstr "X Estouro"
 
-#: src/terminal/oia.c:439
+#: src/terminal/drawing/oia.c:438
 msgid "X Protected"
 msgstr "X Protegido"
 
-#: src/terminal/oia.c:463
+#: src/terminal/drawing/oia.c:462
 msgid "X Resolving"
 msgstr "X Resolvendo"
 
-#: src/terminal/oia.c:415
+#: src/terminal/drawing/oia.c:414
 msgid "X System"
 msgstr "X Sistema"
 
-#: src/terminal/oia.c:419
+#: src/terminal/drawing/oia.c:418
 msgid "X Wait"
 msgstr "X Aguarde"
-
-#: src/filetransfer/v3270ft.c:200 src/filetransfer/v3270ft.c:220
-#: src/filetransfer/activitylist.c:386 src/filetransfer/activitylist.c:458
-#: src/dialogs/transfer.c:76
-msgid "XML file"
-msgstr "Arquivo XML"
 
 #: src/terminal/properties/init.c:143
 msgid "XML file with remap table"
@@ -3395,15 +3370,15 @@ msgstr "Texto _ASCII"
 #: src/selection/linux/paste.c:83 src/selection/linux/paste.c:123
 #: src/dialogs/load.c:204 src/dialogs/load.c:223 src/dialogs/commondialog.c:108
 #: src/dialogs/commondialog.c:117 src/dialogs/commondialog.c:134
-#: src/dialogs/linux/select.c:49 src/dialogs/linux/select.c:93
+#: src/dialogs/linux/select.c:51 src/dialogs/linux/select.c:77
 #: src/dialogs/print/settingsdialog.c:410
-#: src/dialogs/print/settingsdialog.c:429 src/dialogs/save/save.c:266
-#: src/dialogs/save/save.c:285
+#: src/dialogs/print/settingsdialog.c:429 src/dialogs/save/save.c:264
+#: src/dialogs/save/save.c:283
 msgid "_Cancel"
 msgstr "_Cancelar"
 
-#: src/trace/tracewindow.c:125 src/dialogs/transfer.c:169
-#: src/dialogs/transfer.c:189 src/dialogs/security.c:203
+#: src/trace/tracewindow.c:125 src/dialogs/transfer.c:167
+#: src/dialogs/transfer.c:187 src/dialogs/security.c:203
 msgid "_Close"
 msgstr "_Close"
 
@@ -3427,7 +3402,7 @@ msgstr "_Editar"
 msgid "_File"
 msgstr "_Arquivo"
 
-#: src/dialogs/load.c:162 src/dialogs/save/save.c:191
+#: src/dialogs/load.c:162 src/dialogs/save/save.c:189
 msgid "_Filename"
 msgstr "Nome do_Arquivo"
 
@@ -3443,7 +3418,7 @@ msgstr "_Servidor"
 msgid "_Load"
 msgstr "_Carregar"
 
-#: src/filetransfer/v3270ft.c:341
+#: src/filetransfer/v3270ft.c:334
 msgid "_Local file"
 msgstr "Arquivo _local:"
 
@@ -3451,7 +3426,7 @@ msgstr "Arquivo _local:"
 msgid "_Network"
 msgstr "_Rede"
 
-#: src/filetransfer/v3270ft.c:340
+#: src/filetransfer/v3270ft.c:333
 msgid "_Operation"
 msgstr "_Operação:"
 
@@ -3463,12 +3438,12 @@ msgstr "_Opções"
 msgid "_Paste as text"
 msgstr "_Colar como texto"
 
-#: src/filetransfer/v3270ft.c:342
+#: src/filetransfer/v3270ft.c:335
 msgid "_Remote file"
 msgstr "Arquivo _remoto:"
 
 #: src/trace/tracewindow.c:123 src/dialogs/colors.c:367
-#: src/dialogs/save/save.c:271 src/dialogs/save/save.c:286
+#: src/dialogs/save/save.c:269 src/dialogs/save/save.c:284
 msgid "_Save"
 msgstr "_Salvar"
 
@@ -3541,7 +3516,7 @@ msgstr "Versão da lib3270"
 msgid "setsockopt(SO_OOBINLINE) has failed"
 msgstr "setsockopt(SO_OOBINLINE) has failed"
 
-#: dialog.c:393
+#: dialog.c:143
 msgid "translator-credits"
 msgstr "translator-credits"
 
@@ -3653,6 +3628,9 @@ msgstr "translator-credits"
 
 #~ msgid "Can't load file"
 #~ msgstr "Não foi possível carregar arquivo"
+
+#~ msgid "Can't read SSL certificates from \"%s\""
+#~ msgstr "Não foi possível ler certificados SSL de %s"
 
 #~ msgid ""
 #~ "Can't save copy to file\n"
@@ -3925,6 +3903,9 @@ msgstr "translator-credits"
 #~ msgid "Paste text file contents"
 #~ msgstr "Colar conteúdo de arquivo texto"
 
+#~ msgid "Path for plugin files"
+#~ msgstr "Caminho para os arquivos de plugin"
+
 #~ msgid "Path to application data files"
 #~ msgstr "Caminho para os arquivos de dados da aplicação"
 
@@ -4144,6 +4125,12 @@ msgstr "translator-credits"
 #~ msgid "Text before '['"
 #~ msgstr "Texto antes de '['"
 
+#~ msgid "Text file"
+#~ msgstr "Arquivo texto"
+
+#~ msgid "Text files"
+#~ msgstr "Arquivos de texto"
+
 #~ msgid "The CRL of a certificate could not be found."
 #~ msgstr "O CRL do certificado não foi encontrado."
 
@@ -4218,6 +4205,9 @@ msgstr "translator-credits"
 
 #~ msgid "Where to save the received file."
 #~ msgstr "Onde salvar o arquivo recebido."
+
+#~ msgid "XML file"
+#~ msgstr "Arquivo XML"
 
 #~ msgid "_Append"
 #~ msgstr "_Acrescentar"
