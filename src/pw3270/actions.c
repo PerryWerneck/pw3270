@@ -33,6 +33,7 @@
  #include "uiparser/parser.h"
 
  #include <v3270.h>
+ #include <v3270/toggle.h>
  #include <v3270/filetransfer.h>
 
  #include <pw3270/plugin.h>

@@ -33,6 +33,7 @@
 
  #include <gtk/gtk.h>
  #include <lib3270.h>
+ #include <lib3270/toggle.h>
 
  #define PW3270_H_INCLUDED 1
 

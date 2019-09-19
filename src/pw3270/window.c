@@ -37,6 +37,7 @@
 #include <lib3270/toggle.h>
 #include <lib3270/properties.h>
 #include <v3270/trace.h>
+#include <v3270/toggle.h>
 
 /*--[ Widget definition ]----------------------------------------------------------------------------*/
 
