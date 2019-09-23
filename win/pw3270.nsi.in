@@ -79,6 +79,8 @@ SubSection "@PRODUCT_NAME@" SecMain
 		file "/oname=$INSTDIR\lib@LIBRARY_NAME@.dll"			"lib@LIBRARY_NAME@.dll"
 		file "/oname=$INSTDIR\libv3270.dll"				"libv3270.dll"
 		file "/oname=$INSTDIR\@PACKAGE@.dll"				"@PACKAGE@.dll"
+		file "/oname=$SYSDIR\libipc3270.dll"				"libipc3270.dll"
+
 
 		# Configuration files
 		file "/oname=$INSTDIR\@PRODUCT_NAME@-logo.png"			"@PRODUCT_NAME@\@PRODUCT_NAME@-logo.png"
@@ -256,6 +258,8 @@ Section "Uninstall"
 	DeleteRegKey HKLM "Software\@PRODUCT_NAME@"
 
 	# Delete System libraries
+	delete $SYSDIR\libipc3270.dll
+
 !ifdef WITHHLLAPI
 	delete $SYSDIR\libhllapi.dll
 	delete $SYSDIR\hllapi.dll

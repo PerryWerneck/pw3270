@@ -169,14 +169,6 @@ buildLibrary()
 
 		esac
 
-		# Required for lib3270 build tools
-		export HOST_CC=/usr/bin/gcc
-
-		# Required for .NET bindings
-		export GACROOT=${WORKDIR}/build/${ARCH}/mono/gacroot
-		export GAPIROOT=${WORKDIR}/build/${ARCH}/mono/gapi-2.0
-		export MONOLIBPATH=${WORKDIR}/build/${ARCH}/mono/lib
-
 		# Create install dirs
 		mkdir -p ${WORKDIR}/build/${ARCH}
 		mkdir -p ${WORKDIR}/cache/${ARCH}
@@ -194,6 +186,7 @@ buildLibrary()
 			prefix="${prefix}" \
 			BUILDDIR="${WORKDIR}/build/${ARCH}" \
 			CFLAGS="-I${WORKDIR}/build/${ARCH}/include" \
+			CXXFLAGS="-I${WORKDIR}/build/${ARCH}/include" \
 			LDFLAGS="-L${WORKDIR}/build/${ARCH}" \
 				${PROJECTDIR}/win/configure.${1}
 
@@ -201,6 +194,7 @@ buildLibrary()
 
 			./configure \
 				CFLAGS="-I${WORKDIR}/build/${ARCH}/include" \
+				CXXFLAGS="-I${WORKDIR}/build/${ARCH}/include" \
 				LDFLAGS="-L${WORKDIR}/build/${ARCH}" \
 				--host=${host} \
 				--prefix=${prefix} \
@@ -228,13 +222,108 @@ buildLibrary()
 			failed "Can't install ${1}"
 		fi
 
-		for NSI in $(find ./win -name '*.nsi')
-		do
-			cp "${NSI}" "${WORKDIR}/build/${ARCH}"
-			if [ "$?" != "0" ]; then
-				failed "Can't copy ${NSI}"
-			fi
-		done
+	done
+
+}
+
+#
+# Build language binding
+# 
+buildLanguageBinding() 
+{
+
+	echo "Building language binding ${1}"
+
+	for ARCH in ${TARGET_ARCHS}
+	do
+
+		echo -e "\e]2;Building ${1} for ${ARCH}\a"
+		echo "Building ${1} for ${ARCH}"
+
+		case ${ARCH} in
+		x86_32)
+			host=i686-w64-mingw32
+			host_cpu=i686
+			prefix=/usr/i686-w64-mingw32/sys-root/mingw
+			tools=i686-w64-mingw32
+			pkg_config=/usr/bin/i686-w64-mingw32-pkg-config
+			;;
+
+		x86_64)
+			host=x86_64-w64-mingw32
+			host_cpu=x86_64
+			prefix=/usr/x86_64-w64-mingw32/sys-root/mingw
+			tools=x86_64-w64-mingw32
+			pkg_config=/usr/bin/x86_64-w64-mingw32-pkg-config
+			;;
+
+		*)
+			failed "Arquitetura desconhecida: ${ARCH}"
+
+		esac
+
+		# Required for lib3270 build tools
+		export HOST_CC=/usr/bin/gcc
+
+		# Required for .NET bindings
+		export GACROOT=${WORKDIR}/build/${ARCH}/mono/gacroot
+		export GAPIROOT=${WORKDIR}/build/${ARCH}/mono/gapi-2.0
+		export MONOLIBPATH=${WORKDIR}/build/${ARCH}/mono/lib
+
+		# Create install dirs
+		mkdir -p ${WORKDIR}/build/${ARCH}
+		mkdir -p ${WORKDIR}/cache/${ARCH}
+		mkdir -p ${WORKDIR}/build/${ARCH}/locale
+		mkdir -p ${WORKDIR}/build/${ARCH}/include
+
+		export PKG_CONFIG_PATH=${WORKDIR}/build/${ARCH}/pkgconfig
+		export cache=${WORKDIR}/cache/${ARCH}/${1}.cache
+
+		cd ${WORKDIR}/sources/${1}
+
+		if [ -x ${PROJECTDIR}/win/configure.${1} ]; then
+
+			host="${host}" \
+			prefix="${prefix}" \
+			BUILDDIR="${WORKDIR}/build/${ARCH}" \
+			CFLAGS="-I${WORKDIR}/build/${ARCH}/include" \
+			CXXFLAGS="-I${WORKDIR}/build/${ARCH}/include" \
+			LDFLAGS="-static-libgcc -static-libstdc++ -L${WORKDIR}/build/${ARCH}" \
+				${PROJECTDIR}/win/configure.${1}
+
+		else
+
+			./configure \
+				CFLAGS="-I${WORKDIR}/build/${ARCH}/include" \
+				CXXFLAGS="-I${WORKDIR}/build/${ARCH}/include" \
+				LDFLAGS="-static-libgcc -static-libstdc++ -L${WORKDIR}/build/${ARCH}" \
+				--host=${host} \
+				--prefix=${prefix} \
+				--with-product-name="${PRODUCT_NAME}" \
+				--bindir=${WORKDIR}/build/${ARCH} \
+				--libdir=${WORKDIR}/build/${ARCH} \
+				--localedir=${WORKDIR}/build/${ARCH}/locale \
+				--includedir=${WORKDIR}/build/${ARCH}/include \
+				--sysconfdir=${WORKDIR}/build/${ARCH} \
+				--datadir=${WORKDIR}/build/${ARCH} \
+				--datarootdir=${WORKDIR}/build/${ARCH} \
+				--without-static-ipc3270
+
+		fi
+
+		if [ "$?" != "0" ]; then
+			failed "Can't configure ${1}"
+		fi
+
+		make all
+		if [ "$?" != "0" ]; then
+			failed "Can't buid ${1}"
+		fi
+
+		make install
+		if [ "$?" != "0" ]; then
+			failed "Can't install ${1}"
+		fi
 
 	done
 
@@ -570,6 +659,10 @@ do
 			TARGET_ARCHS=${value}
 			;;
 
+		NO-PRE-REQS)
+			GET_PREREQS=0
+			;;
+
 		PROJECT-PATH)
 			PROJECTDIR=$(readlink -f ${value})
 			;;
@@ -653,7 +746,7 @@ done
 
 for src in ${PACKAGE_LANGUAGE_BINDINGS}
 do
-	buildLibrary lib3270-${src}-bindings
+	buildLanguageBinding lib3270-${src}-bindings
 done
 
 #
