@@ -28,8 +28,8 @@
 
 PRODUCT_NAME="pw3270"
 LIBRARY_NAME="lib3270"
-CORE_LIBRARIES="lib3270 libv3270"
-PACKAGE_PLUGINS="ipc"
+CORE_LIBRARIES="lib3270 libv3270 libipc3270"
+PACKAGE_PLUGINS=""
 PACKAGE_LANGUAGE_BINDINGS="hllapi mono"
 TARGET_ARCHS="x86_64 x86_32"
 GIT_URL="https://github.com/PerryWerneck"
@@ -503,16 +503,10 @@ makeRuntime()
 #
 makeInstaller()
 {
-	NSIS_ARGS="-DWITHGTK"
+	NSIS_ARGS="-DWITHGTK -DWITHIPC -DWITHPLUGINS"
 
 	if [ -d ${CERTS_DIR} ]; then
-
 		NSIS_ARGS="${NSIS_ARGS} -DWITHCERTS"
-
-	fi
-
-	if [ ! -z "${PACKAGE_PLUGINS}" ]; then
-		NSIS_ARGS="${NSIS_ARGS} -DWITHPLUGINS"
 	fi
 
 	if [ ! -z "${PACKAGE_LANGUAGE_BINDINGS}" ]; then
