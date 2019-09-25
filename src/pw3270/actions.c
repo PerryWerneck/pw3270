@@ -336,13 +336,13 @@ static void connect_standard_action(GtkAction *action, GtkWidget *widget, const 
 	int f;
 
 	// Search for lib3270 predefined actions
-	const LIB3270_ACTION_ENTRY * lib3270_actions = lib3270_get_action_table();
+	const LIB3270_ACTION * lib3270_actions = lib3270_get_actions();
 
 	for(f=0; lib3270_actions[f].name; f++)
 	{
 		if(!g_ascii_strcasecmp(name,lib3270_actions[f].name))
 		{
-			g_object_set_data(G_OBJECT(action),"lib3270_call",lib3270_actions[f].call);
+			g_object_set_data(G_OBJECT(action),"lib3270_call",lib3270_actions[f].activate);
 			g_signal_connect(action,"activate",G_CALLBACK(do_lib3270_action),widget);
 			return;
 		}
