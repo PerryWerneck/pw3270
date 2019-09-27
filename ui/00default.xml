@@ -121,7 +121,7 @@
 				<menuitem action='toggle' id='CrossHair' key='<alt>x' label='Cross hair cursor' />
 				<menuitem action='toggle' id='BlankFill' label='Blank Fill' />
 				<menuitem action='toggle' id='RectSelect'  label='Select by rectangles' />
-				<menuitem action='toggle' id='Reconnect' label='Auto-Reconnect'  />
+				<menuitem action='toggle' id='AutoReconnect' label='Auto-Reconnect'  />
 				<menuitem action='toggle' id='Bold' label='Bold'  />
 				<menuitem action='toggle' id='Underline' label='Show Underline'  />
 				<menuitem action='toggle' id='KeepSelected' label='Keep selected' />
