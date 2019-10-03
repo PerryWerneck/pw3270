@@ -157,10 +157,10 @@ SubSection "@PRODUCT_NAME@" SecMain
 
 	SubSectionEnd
 
-!ifdef WITHLANGUAGE
-	SubSection "Language bindins" Languages
+!ifdef WITHEXTRAS
+	SubSection "Extra modules" Languages
 
-!ifdef WITHHLLAPI
+!ifdef WITHLIBHLLAPI
 		Section /o "HLLAPI" HLLAPIBinding
 
 			setOutPath $INSTDIR
@@ -174,7 +174,7 @@ SubSection "@PRODUCT_NAME@" SecMain
 		sectionEnd
 !endif
 
-!ifdef WITHMONO
+!ifdef WITHMONO-TN3270
 		Section /o ".NET" DOTNET
 
 			${DisableX64FSRedirection}

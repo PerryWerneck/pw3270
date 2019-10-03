@@ -30,7 +30,7 @@ PRODUCT_NAME="pw3270"
 LIBRARY_NAME="lib3270"
 CORE_LIBRARIES="lib3270 libv3270 libipc3270"
 PACKAGE_PLUGINS=""
-PACKAGE_LANGUAGE_BINDINGS="hllapi mono"
+PACKAGE_EXTRAS="libhllapi mono-tn3270"
 TARGET_ARCHS="x86_64 x86_32"
 GIT_URL="https://github.com/PerryWerneck"
 
@@ -229,10 +229,10 @@ buildLibrary()
 #
 # Build language binding
 # 
-buildLanguageBinding() 
+buildExtraPackage() 
 {
 
-	echo "Building language binding ${1}"
+	echo "Building ${1}"
 
 	for ARCH in ${TARGET_ARCHS}
 	do
@@ -509,11 +509,11 @@ makeInstaller()
 		NSIS_ARGS="${NSIS_ARGS} -DWITHCERTS"
 	fi
 
-	if [ ! -z "${PACKAGE_LANGUAGE_BINDINGS}" ]; then
-		NSIS_ARGS="${NSIS_ARGS} -DWITHLANGUAGE"
+	if [ ! -z "${PACKAGE_EXTRAS}" ]; then
+		NSIS_ARGS="${NSIS_ARGS} -DWITHEXTRAS"
 	fi
 
-	for ARG in $(echo ${PACKAGE_PLUGINS} | tr "[:lower:]" "[:upper:]") $(echo ${PACKAGE_LANGUAGE_BINDINGS} | tr "[:lower:]" "[:upper:]")
+	for ARG in $(echo ${PACKAGE_PLUGINS} | tr "[:lower:]" "[:upper:]") $(echo ${PACKAGE_EXTRAS} | tr "[:lower:]" "[:upper:]")
 	do
 		NSIS_ARGS="${NSIS_ARGS} -DWITH${ARG}"
 	done
@@ -716,9 +716,9 @@ do
 	prepare pw3270-plugin-${src}
 done
 
-for src in ${PACKAGE_LANGUAGE_BINDINGS}
+for src in ${PACKAGE_EXTRAS}
 do
-	prepare lib3270-${src}-bindings
+	prepare ${src}
 done
 
 #
@@ -738,9 +738,9 @@ do
 	buildLibrary pw3270-plugin-${src}
 done
 
-for src in ${PACKAGE_LANGUAGE_BINDINGS}
+for src in ${PACKAGE_EXTRAS}
 do
-	buildLanguageBinding lib3270-${src}-bindings
+	buildExtraPackage ${src}
 done
 
 #
