@@ -180,9 +180,9 @@ SubSection "@PRODUCT_NAME@" SecMain
 			${DisableX64FSRedirection}
 			CreateDirectory "$INSTDIR\dotnet"
 
-			file "/oname=$INSTDIR\dotnet\tn3270-sharp.dll"	"mono/lib/tn3270-sharp-5.2/tn3270-sharp.dll"
-			file "/oname=$INSTDIR\dotnet\pw3270-sharp.xml"	"mono/gapi-2.0/tn3270-sharp/tn3270-sharp.xml"
-			file "/oname=$SYSDIR\lib3270-mono.dll"		"lib3270-mono.dll"
+			file "/oname=$INSTDIR\dotnet\tn3270.dll"	"mono/lib/tn3270-5.2/tn3270.dll"
+			file "/oname=$INSTDIR\dotnet\tn3270.xml"	"mono/gapi-2.0/tn3270/tn3270.xml"
+			file "/oname=$SYSDIR\mono-tn3270.dll"		"mono-tn3270.dll"
 
 		sectionEnd
 !endif
@@ -261,7 +261,7 @@ Section "Uninstall"
 !endif
 
 !ifdef WITHMONO
-	delete $SYSDIR\lib3270-mono.dll
+	delete $SYSDIR\mono-tn3270.dll
 !endif
 
 	RMDir /r "$INSTDIR"

@@ -37,8 +37,9 @@ GIT_URL="https://github.com/PerryWerneck"
 PROJECTDIR=$(dirname $(dirname $(readlink -f ${0})))
 WORKDIR=$(mktemp -d)
 PUBLISH=0
-GET_PREREQS=1
+GET_PREREQS=0
 CERTS_DIR=${WORKDIR}/certs
+PAUSE_ON_ERROR=0
 
 if [ -e /etc/os-release ]; then
 	. /etc/os-release
@@ -56,6 +57,12 @@ failed()
 {
 	echo "$@"
 	cleanup
+
+	if [ "${PAUSE_ON_ERROR}" != "0" ]; then
+		echo "Type exit to end build script"
+		/bin/bash
+	fi
+
 	exit -1
 }
 
@@ -657,11 +664,17 @@ do
 			GET_PREREQS=0
 			;;
 
+		PRE-REQS)
+			GET_PREREQS=1
+			;;
+
 		PROJECT-PATH)
 			PROJECTDIR=$(readlink -f ${value})
 			;;
 
-
+		SHELL-ON-ERROR)
+			PAUSE_ON_ERROR=1
+			;;
 		HELP)
 			echo "${0} [options]"
 			echo ""
@@ -672,6 +685,9 @@ do
 			echo "  --project-path	Set the path for the customization data"
 			echo "  --target-archs	Set the target architectures (current are ${TARGET_ARCHS})"
 			echo "  --sources-from	Base URL of the git server with the sources (current is ${GIT_URL})"
+			echo "  --no-pre-reqs		Don't try to install required packages"
+			echo "  --pre-reqs		Install required packages"
+			echo "  --shell-on-error	Open a shell when the build process failed"
 
 			if [ ! -z ${WIN_PACKAGE_SERVER} ]; then
 				echo "  --no-publish		Don't publish binaries in ${WIN_PACKAGE_SERVER}/${PRODUCT_NAME}"
