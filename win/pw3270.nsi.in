@@ -210,7 +210,15 @@ SubSection "@PRODUCT_NAME@" SecMain
 
 	SubSectionEnd
 
+
 SubSectionEnd
+
+Section  "Development Kit" SDK
+
+	setOutPath $INSTDIR/sdk
+	file /r "include\*.*"
+
+SectionEnd
 
 !ifdef WITHGTK
 Section /o "GTK+ Runtime" SecGTK

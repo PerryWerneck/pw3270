@@ -56,12 +56,13 @@ cleanup()
 failed()
 {
 	echo "$@"
-	cleanup
 
 	if [ "${PAUSE_ON_ERROR}" != "0" ]; then
 		echo "Type exit to end build script"
 		/bin/bash
 	fi
+
+	cleanup
 
 	exit -1
 }
