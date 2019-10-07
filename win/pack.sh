@@ -30,7 +30,7 @@ PRODUCT_NAME="pw3270"
 LIBRARY_NAME="lib3270"
 CORE_LIBRARIES="lib3270 libv3270 libipc3270"
 PACKAGE_PLUGINS=""
-PACKAGE_EXTRAS="libhllapi mono-tn3270"
+PACKAGE_EXTRAS="libhllapi"
 TARGET_ARCHS="x86_64 x86_32"
 GIT_URL="https://github.com/PerryWerneck"
 
@@ -655,6 +655,10 @@ do
 				rm -fr ~/public_html/win/${PRODUCT_NAME}/{x86_32,x86_64}
 			fi
 
+			;;
+
+		EXTRA-PACKAGES)
+			PACKAGE_EXTRAS=$(echo ${value} | sed "s@,@ @g")
 			;;
 
 		TARGET-ARCHS)
