@@ -213,10 +213,25 @@ SubSection "@PRODUCT_NAME@" SecMain
 
 SubSectionEnd
 
-Section  "Development Kit" SDK
+Section "Software Development Kit" SDK
 
 	setOutPath $INSTDIR/sdk
 	file /r "include\*.*"
+
+	file "/oname=$INSTDIR\sdk\def\lib3270.def"		"@PRODUCT_NAME@\def\lib3270.def"
+	file "/oname=$INSTDIR\sdk\lib\lib3270.lib"		"lib3270.lib"
+	file "/oname=$INSTDIR\sdk\lib\lib3270.dll.a"		"lib3270.dll.a"
+	file "/oname=$INSTDIR\sdk\lib\lib3270.delayed.a"	"lib3270.delayed.a"
+	file "/oname=$INSTDIR\sdk\lib\lib3270.static.a"		"lib3270.static.a"
+
+	file "/oname=$INSTDIR\sdk\def\libv3270.def"		"@PRODUCT_NAME@\def\libv3270.def"
+	file "/oname=$INSTDIR\sdk\lib\libv3270.lib"		"libv3270.lib"
+	file "/oname=$INSTDIR\sdk\lib\libv3270.dll.a"		"libv3270.dll.a"
+
+	file "/oname=$INSTDIR\sdk\def\libipc3270.def"		"@PRODUCT_NAME@\def\libipc3270.def"
+	file "/oname=$INSTDIR\sdk\lib\libipc3270.lib"		"libipc3270.lib"
+	file "/oname=$INSTDIR\sdk\lib\libipc3270.dll.a"		"libipc3270.dll.a"
+	file "/oname=$INSTDIR\sdk\lib\libipc3270.static.a"	"libipc3270.static.a"
 
 SectionEnd
 
