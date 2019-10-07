@@ -163,15 +163,13 @@ SubSection "@PRODUCT_NAME@" SecMain
 !ifdef WITHLIBHLLAPI
 		Section /o "HLLAPI" HLLAPIBinding
 
-			setOutPath $INSTDIR
-
 			${DisableX64FSRedirection}
 			file "/oname=$SYSDIR\hllapi.dll"		"libhllapi.dll"
 
 			# Install with "lib" prefix for compatibility.
 			file "/oname=$SYSDIR\libhllapi.dll"		"libhllapi.dll"
 
-		sectionEnd
+		SectionEnd
 !endif
 
 !ifdef WITHMONO-TN3270
@@ -184,7 +182,7 @@ SubSection "@PRODUCT_NAME@" SecMain
 			file "/oname=$INSTDIR\dotnet\tn3270.xml"	"mono/gapi-2.0/tn3270/tn3270.xml"
 			file "/oname=$SYSDIR\mono-tn3270.dll"		"mono-tn3270.dll"
 
-		sectionEnd
+		SectionEnd
 !endif
 
 	SubSectionEnd
@@ -194,46 +192,52 @@ SubSection "@PRODUCT_NAME@" SecMain
 
 		Section "Keypad" KeypadMenu
 			file "/oname=$INSTDIR\ui\10keypad.xml" "@PRODUCT_NAME@\ui\10keypad.xml"
-		sectionEnd
+		SectionEnd
 
 		Section "Functions" FunctionsMenu
 			file "/oname=$INSTDIR\ui\10functions.xml" "@PRODUCT_NAME@\ui\10functions.xml"
-		sectionEnd
+		SectionEnd
 
 		Section /o "View trace Menu" TraceMenu
 			file "/oname=$INSTDIR\ui\98trace.xml" "@PRODUCT_NAME@\ui\98trace.xml"
-		sectionEnd
+		SectionEnd
 
 		Section /o "Application debug" DBGMenu
 			file "/oname=$INSTDIR\ui\99debug.xml" "@PRODUCT_NAME@\ui\99debug.xml"
-		sectionEnd
+		SectionEnd
 
 	SubSectionEnd
 
+!ifdef WITHSDK
+	Section /o "Software Development Kit" SDK
+
+		setOutPath $INSTDIR\sdk\include
+		file /r "include\*.*"
+
+		CreateDirectory "$INSTDIR\sdk"
+		CreateDirectory "$INSTDIR\sdk\def"
+		CreateDirectory "$INSTDIR\sdk\lib"
+
+		file "/oname=$INSTDIR\sdk\def\lib3270.def"		"@PRODUCT_NAME@\def\lib3270.def"
+		file "/oname=$INSTDIR\sdk\lib\lib3270.lib"		"lib@LIBRARY_NAME@.lib"
+		file "/oname=$INSTDIR\sdk\lib\lib3270.dll.a"		"lib@LIBRARY_NAME@.dll.a"
+		file "/oname=$INSTDIR\sdk\lib\lib3270.delayed.a"	"lib@LIBRARY_NAME@.delayed.a"
+		file "/oname=$INSTDIR\sdk\lib\lib3270.static.a"		"lib@LIBRARY_NAME@.static.a"
+
+		file "/oname=$INSTDIR\sdk\def\libv3270.def"		"@PRODUCT_NAME@\def\libv3270.def"
+		file "/oname=$INSTDIR\sdk\lib\libv3270.lib"		"libv3270.lib"
+		file "/oname=$INSTDIR\sdk\lib\libv3270.dll.a"		"libv3270.dll.a"
+
+		file "/oname=$INSTDIR\sdk\def\libipc3270.def"		"@PRODUCT_NAME@\def\libipc3270.def"
+		file "/oname=$INSTDIR\sdk\lib\libipc3270.lib"		"libipc3270.lib"
+		file "/oname=$INSTDIR\sdk\lib\libipc3270.dll.a"		"libipc3270.dll.a"
+		file "/oname=$INSTDIR\sdk\lib\libipc3270.static.a"	"libipc3270.static.a"
+
+	SectionEnd
+!endif
 
 SubSectionEnd
 
-Section "Software Development Kit" SDK
-
-	setOutPath $INSTDIR/sdk
-	file /r "include\*.*"
-
-	file "/oname=$INSTDIR\sdk\def\lib3270.def"		"@PRODUCT_NAME@\def\lib3270.def"
-	file "/oname=$INSTDIR\sdk\lib\lib3270.lib"		"lib3270.lib"
-	file "/oname=$INSTDIR\sdk\lib\lib3270.dll.a"		"lib3270.dll.a"
-	file "/oname=$INSTDIR\sdk\lib\lib3270.delayed.a"	"lib3270.delayed.a"
-	file "/oname=$INSTDIR\sdk\lib\lib3270.static.a"		"lib3270.static.a"
-
-	file "/oname=$INSTDIR\sdk\def\libv3270.def"		"@PRODUCT_NAME@\def\libv3270.def"
-	file "/oname=$INSTDIR\sdk\lib\libv3270.lib"		"libv3270.lib"
-	file "/oname=$INSTDIR\sdk\lib\libv3270.dll.a"		"libv3270.dll.a"
-
-	file "/oname=$INSTDIR\sdk\def\libipc3270.def"		"@PRODUCT_NAME@\def\libipc3270.def"
-	file "/oname=$INSTDIR\sdk\lib\libipc3270.lib"		"libipc3270.lib"
-	file "/oname=$INSTDIR\sdk\lib\libipc3270.dll.a"		"libipc3270.dll.a"
-	file "/oname=$INSTDIR\sdk\lib\libipc3270.static.a"	"libipc3270.static.a"
-
-SectionEnd
 
 !ifdef WITHGTK
 Section /o "GTK+ Runtime" SecGTK
