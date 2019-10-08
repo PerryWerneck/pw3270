@@ -118,11 +118,11 @@ configure()
 		echo -e "\e]2;Installing pre-reqs\a"
 		echo "Installing pre-reqs"
 
-		for PKG in $(cat ${WORKDIR}/sources/pre-reqs | sort --unique)
-		do
-			echo "${PKG}..."
-			sudo zypper --non-interactive --quiet in "${PKG}"
-		done
+		cat ${WORKDIR}/sources/pre-reqs \
+			| grep -v 3270 \
+			| sort --unique \
+			| xargs sudo zypper --non-interactive --quiet in
+
 	fi
 
 	echo -e "\e]2;Creating configuration\a"

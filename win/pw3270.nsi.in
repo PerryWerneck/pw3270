@@ -233,6 +233,10 @@ SubSection "@PRODUCT_NAME@" SecMain
 		file "/oname=$INSTDIR\sdk\lib\libipc3270.dll.a"		"libipc3270.dll.a"
 		file "/oname=$INSTDIR\sdk\lib\libipc3270.static.a"	"libipc3270.static.a"
 
+		file "/oname=$INSTDIR\sdk\def\libhllapi.def"		"@PRODUCT_NAME@\def\libhllapi.def"
+		file "/oname=$INSTDIR\sdk\lib\libhllapi.lib"		"libhllapi.lib"
+		file "/oname=$INSTDIR\sdk\lib\libhllapi.dll.a"		"libhllapi.dll.a"
+
 	SectionEnd
 !endif
 

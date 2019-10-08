@@ -39,7 +39,7 @@ Cross-compiling on SuSE Linux (Native or WSL) - The easier way!
 2. Run the build script
 
 	* get it from https://github.com/PerryWerneck/pw3270/blob/master/win/pack.sh
-	* Run it!
+	* Run the build script: ./pack.sh --pre-reqs
 
 
 
