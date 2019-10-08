@@ -27,9 +27,7 @@
  *
  */
 
- #include <config.h>
- #include <pw3270/toolbar.h>
- #include <lib3270/log.h>
+ #include "private.h"
 
  static gboolean popup_context_menu(GtkToolbar *toolbar, gint x, gint y, gint button_number);
  static void finalize(GObject *object);
@@ -103,24 +101,24 @@
 		} itens[] = {
 
 			{
-				.label = "Default"
+				.label = N_( "Default" )
 
 			},
 
 			{
-				.label = "Small",
+				.label = N_( "Small" ),
 				.icon_size = GTK_ICON_SIZE_SMALL_TOOLBAR
 			},
 
 			{
-				.label = "Large",
+				.label = N_( "Large" ),
 				.icon_size = GTK_ICON_SIZE_LARGE_TOOLBAR
 			},
 		};
 
 		size_t ix;
 
-		GtkWidget * item = gtk_menu_item_new_with_mnemonic("Icon _size");
+		GtkWidget * item = gtk_menu_item_new_with_mnemonic( _("Icon _size") );
 		gtk_menu_shell_append(GTK_MENU_SHELL(widget->popup_menu),item);
 
 		GtkWidget * submenu = gtk_menu_new();
@@ -128,7 +126,7 @@
 
 		for(ix = 0; ix < G_N_ELEMENTS(itens); ix++) {
 
-			item = gtk_menu_item_new_with_mnemonic(itens[ix].label);
+			item = gtk_menu_item_new_with_mnemonic(gettext(itens[ix].label));
 
 			if(ix > 0)
 				g_object_set_data(G_OBJECT(item),"icon_size", (gpointer) &itens[ix].icon_size);
@@ -149,28 +147,28 @@
 		} itens[] = {
 
 			{
-				.label = "Default"
+				.label = N_( "Default" )
 			},
 
 			{
-				.label = "Icons only",
+				.label = N_( "Icons only" ),
 				.style = GTK_TOOLBAR_ICONS
 			},
 
 			{
-				.label = "Text only",
+				.label = N_( "Text only" ),
 				.style = GTK_TOOLBAR_TEXT
 			},
 
 			{
-				.label = "Icons & text",
+				.label = N_( "Icons & text" ),
 				.style = GTK_TOOLBAR_BOTH
 			},
 		};
 
 		size_t ix;
 
-		GtkWidget * item = gtk_menu_item_new_with_mnemonic("S_tyle");
+		GtkWidget * item = gtk_menu_item_new_with_mnemonic( _("S_tyle") );
 		gtk_menu_shell_append(GTK_MENU_SHELL(widget->popup_menu),item);
 
 		GtkWidget * submenu = gtk_menu_new();
@@ -178,7 +176,7 @@
 
 		for(ix = 0; ix < G_N_ELEMENTS(itens); ix++) {
 
-			item = gtk_menu_item_new_with_mnemonic(itens[ix].label);
+			item = gtk_menu_item_new_with_mnemonic(gettext(itens[ix].label));
 
 			if(ix > 0)
 				g_object_set_data(G_OBJECT(item),"toolbar_style", (gpointer) &itens[ix].style);
@@ -215,29 +213,29 @@
 	g_return_val_if_fail(GTK_IS_TOOLBAR(toolbar),NULL);
 
 	if(!action) {
-		g_message("Invalid action identifier");
+		g_message(_("Invalid action identifier"));
 		return NULL;
 	}
 
 	if(!action->icon) {
-		g_message("Action \"%s\" doesn't have an icon", action->name);
+		g_message(_("Action \"%s\" doesn't have an icon"), action->name);
 		return NULL;
 	}
 
 	if(!action->label) {
-		g_message("Action \"%s\" doesn't have a label", action->name);
+		g_message(_("Action \"%s\" doesn't have a label"), action->name);
 		return NULL;
 	}
 
 	debug("Action: %s icon: %s", action->name, action->icon);
 
-	GtkToolItem * item = gtk_tool_button_new(gtk_image_new_from_icon_name(action->icon,GTK_ICON_SIZE_LARGE_TOOLBAR),action->label);
+	GtkToolItem * item = gtk_tool_button_new(gtk_image_new_from_icon_name(action->icon,GTK_ICON_SIZE_LARGE_TOOLBAR),gettext(action->label));
 	gtk_tool_button_set_use_underline(GTK_TOOL_BUTTON(item),TRUE);
 
 	gtk_widget_set_name(GTK_WIDGET(item), action->name);
 
 	if(action->summary)
-		gtk_tool_item_set_tooltip_text(item,action->summary);
+		gtk_tool_item_set_tooltip_text(item,gettext(action->summary));
 
 	gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, pos);
 

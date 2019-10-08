@@ -42,6 +42,7 @@
 		<Unit filename="core.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="private.h" />
 		<Unit filename="testprogram/testprogram.c">
 			<Option compilerVar="CC" />
 		</Unit>
