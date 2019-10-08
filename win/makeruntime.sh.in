@@ -33,7 +33,7 @@ PKG_CONFIG="@PKG_CONFIG@"
 GTK_VERSION="gtk+-@GTK_VERSION@"
 
 GTK_PREFIX=$($PKG_CONFIG --variable=prefix ${GTK_VERSION})
-GDK_LOADERS=$(${PKG_CONFIG} --variable=gdk_pixbuf_binarydir gdk-pixbuf-2.0 | sed -e "s@${prefix}@@g")
+# GDK_LOADERS=$(${PKG_CONFIG} --variable=gdk_pixbuf_binarydir gdk-pixbuf-2.0 | sed -e "s@${prefix}@@g")
 
 TARGET="@BASEDIR@/.bin/runtime"
 BINDIR="@BASEDIR@/.bin/Release/"
@@ -194,15 +194,15 @@ copy_locale() {
 
 }
 
-copy_loaders() {
-
-	mkdir -p "${TARGET}/${GDK_LOADERS}"
-	cp -rv "${prefix}/${GDK_LOADERS}/loaders" "${TARGET}/${GDK_LOADERS}"
-	if [ "$?" != "0" ]; then
-		exit -1
-	fi
-
-}
+#copy_loaders() {
+#
+#	mkdir -p "${TARGET}/${GDK_LOADERS}"
+#	cp -rv "${prefix}/${GDK_LOADERS}/loaders" "${TARGET}/${GDK_LOADERS}"
+#	if [ "$?" != "0" ]; then
+#		exit -1
+#	fi
+#
+#}
 
 copy_schemes() {
 
@@ -317,7 +317,7 @@ done
 #
 copy_dll
 copy_locale
-copy_loaders
+# copy_loaders
 copy_schemes
 copy_theme "Adwaita"
 
