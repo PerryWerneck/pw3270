@@ -39,19 +39,24 @@
 
 	#include <libintl.h>
 	#include <glib/gi18n.h>
+	#include <gtk/gtk.h>
 
 	#include <pw3270/actions.h>
 	#include <lib3270/log.h>
 
 	struct _pw3270Action {
-		GObject       parent;
+		GObject parent;
+
+		GtkWidget	* window;
+		const gchar * name;
 
 	};
 
 	struct _pw3270ActionClass {
+		GObjectClass parent_class;
 
-		GObject parent_class;
-
+		gboolean	(*get_enabled)(GAction *action, GtkWidget *window);
+		void 		(*activate)(GAction *action, GtkWidget *window);
 
 	};
 

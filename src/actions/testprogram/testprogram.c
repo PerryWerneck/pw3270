@@ -30,14 +30,29 @@
 
  #include <config.h>
  #include <pw3270/actions.h>
+ #include <pw3270/window.h>
+ #include <lib3270.h>
  #include <lib3270/log.h>
 
  /*---[ Implement ]----------------------------------------------------------------------------------*/
 
+ GtkWidget * pw3270_window_get_terminal_widget(GtkWidget G_GNUC_UNUSED(*window)) {
+ 	return NULL;
+ }
+
+ H3270 * pw3270_window_get_session_handle(GtkWidget G_GNUC_UNUSED(*window)) {
+ 	return NULL;
+ }
+
  int main (int argc, char **argv) {
 
+	GAction * action = pw3270_action_get_from_lib3270(lib3270_action_get_by_name("testpattern"));
 
-  return 0;
+	g_message("Action name is \"%s\"",g_action_get_name(action));
+	g_message("Action is %s",g_action_get_enabled(action) ? "enabled" : "disabled");
+
+	g_object_unref(action);
+	return 0;
 
  }
 

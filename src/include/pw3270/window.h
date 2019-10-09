@@ -37,6 +37,7 @@
 	#define PW3270_WINDOW_H_INCLUDED
 
 	#include <gtk/gtk.h>
+	#include <lib3270.h>
 
 	G_BEGIN_DECLS
 
@@ -62,6 +63,11 @@
 	/// @brief Create a new terminal tab.
 	GtkWidget 	* pw3270_terminal_new(GtkWidget *window);
 
+	/// @brief Get the active terminal widget.
+	GtkWidget	* pw3270_window_get_terminal_widget(GtkWidget *window);
+
+	/// @brief Get the active session handle.
+	H3270		* pw3270_window_get_session_handle(GtkWidget *window);
 
 	G_END_DECLS
 
