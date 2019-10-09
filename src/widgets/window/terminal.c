@@ -27,38 +27,24 @@
  *
  */
 
-#ifndef PRIVATE_H_INCLUDED
+ #include "private.h"
 
-	#define PRIVATE_H_INCLUDED
+ static gboolean on_terminal_focus(GtkWidget *terminal, GdkEvent *event, pw3270ApplicationWindow * window) {
 
-	#include <config.h>
+	debug("Focus on terminal %p", terminal);
+	window->terminal = terminal;
 
-	#ifndef GETTEXT_PACKAGE
-		#define GETTEXT_PACKAGE PACKAGE_NAME
-	#endif
+ 	return FALSE;
+ }
 
-	#include <libintl.h>
-	#include <glib/gi18n.h>
-	#include <gtk/gtk.h>
+ GtkWidget * pw3270_terminal_new(GtkWidget *window) {
 
-	#include <pw3270/window.h>
-	#include <v3270.h>
-	#include <lib3270.h>
-	#include <lib3270/log.h>
+ 	GtkWidget * terminal = v3270_new();
+	g_signal_connect(G_OBJECT(terminal), "focus-in-event", G_CALLBACK(on_terminal_focus), window);
 
-	struct _pw3270ApplicationWindow {
+	gtk_notebook_append_page(PW3270_APPLICATION_WINDOW(window)->notebook,terminal,NULL);
 
-		GtkApplicationWindow parent;
+	return terminal;
 
-		GtkWidget   * terminal;
-		GtkNotebook * notebook;
+ }
 
-	};
-
-	struct _pw3270ApplicationWindowClass {
-
-		GtkApplicationWindowClass parent_class;
-
-	};
-
-#endif // PRIVATE_H_INCLUDED

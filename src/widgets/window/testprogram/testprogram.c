@@ -1,7 +1,8 @@
 /*
  * "Software pw3270, desenvolvido com base nos códigos fontes do WC3270  e X3270
  * (Paul Mattes Paul.Mattes@usa.net), de emulação de terminal 3270 para acesso a
- * aplicativos mainframe. Registro no INPI sob o nome G3270.
+ * aplicativos mainframe. Registro no INPI sob o nome G3270. Registro no INPI sob
+ * o nome G3270.
  *
  * Copyright (C) <2008> <Banco do Brasil S.A.>
  *
@@ -18,7 +19,7 @@
  * programa; se não, escreva para a Free Software Foundation, Inc., 51 Franklin
  * St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * Este programa está nomeado como - e possui - linhas de código.
+ * Este programa está nomeado como testprogram.c e possui - linhas de código.
  *
  * Contatos:
  *
@@ -27,38 +28,41 @@
  *
  */
 
-#ifndef PRIVATE_H_INCLUDED
+ #include <config.h>
+ #include <pw3270/toolbar.h>
+ #include <v3270.h>
+ #include <v3270/trace.h>
+ #include <lib3270/log.h>
 
-	#define PRIVATE_H_INCLUDED
+ /*---[ Implement ]----------------------------------------------------------------------------------*/
 
-	#include <config.h>
+ static void activate(GtkApplication* app, G_GNUC_UNUSED gpointer user_data) {
 
-	#ifndef GETTEXT_PACKAGE
-		#define GETTEXT_PACKAGE PACKAGE_NAME
-	#endif
+	GtkWidget * window = pw3270_application_window_new(app);
 
-	#include <libintl.h>
-	#include <glib/gi18n.h>
-	#include <gtk/gtk.h>
+	// Setup and show main window
+	gtk_window_set_position(GTK_WINDOW(window),GTK_WIN_POS_CENTER);
+	gtk_window_set_default_size (GTK_WINDOW (window), 800, 500);
+	gtk_widget_show_all(window);
 
-	#include <pw3270/window.h>
-	#include <v3270.h>
-	#include <lib3270.h>
-	#include <lib3270/log.h>
+}
 
-	struct _pw3270ApplicationWindow {
+int main (int argc, char **argv) {
 
-		GtkApplicationWindow parent;
+  GtkApplication *app;
+  int status;
 
-		GtkWidget   * terminal;
-		GtkNotebook * notebook;
+  app = gtk_application_new ("br.com.bb.pw3270",G_APPLICATION_FLAGS_NONE);
 
-	};
+  g_signal_connect (app, "activate", G_CALLBACK(activate), NULL);
 
-	struct _pw3270ApplicationWindowClass {
+  status = g_application_run (G_APPLICATION (app), argc, argv);
+  g_object_unref (app);
 
-		GtkApplicationWindowClass parent_class;
+  g_message("rc=%d",status);
 
-	};
+  return 0;
 
-#endif // PRIVATE_H_INCLUDED
+}
+
+

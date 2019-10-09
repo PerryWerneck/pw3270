@@ -13,6 +13,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
+					<Add option="-DDEBUG=1" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -22,6 +23,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add option="-DNDEBUG=1" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -30,9 +32,23 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
+			<Add option="`pkg-config --cflags gtk+-3.0 libv3270`" />
+			<Add directory="../../include" />
 		</Compiler>
+		<Linker>
+			<Add option="`pkg-config --libs gtk+-3.0 libv3270`" />
+		</Linker>
 		<Unit filename="../../include/pw3270/window.h" />
+		<Unit filename="core.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="private.h" />
+		<Unit filename="terminal.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="testprogram/testprogram.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Extensions>
 			<code_completion />
 			<envvars />

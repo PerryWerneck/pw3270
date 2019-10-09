@@ -27,38 +27,32 @@
  *
  */
 
-#ifndef PRIVATE_H_INCLUDED
+ #include "private.h"
 
-	#define PRIVATE_H_INCLUDED
+ G_DEFINE_TYPE(pw3270ApplicationWindow, pw3270ApplicationWindow, GTK_TYPE_APPLICATION_WINDOW);
 
-	#include <config.h>
+ static void pw3270ApplicationWindow_class_init(pw3270ApplicationWindowClass *klass) {
 
-	#ifndef GETTEXT_PACKAGE
-		#define GETTEXT_PACKAGE PACKAGE_NAME
-	#endif
+ }
 
-	#include <libintl.h>
-	#include <glib/gi18n.h>
-	#include <gtk/gtk.h>
+ static void pw3270ApplicationWindow_init(pw3270ApplicationWindow *widget) {
 
-	#include <pw3270/window.h>
-	#include <v3270.h>
-	#include <lib3270.h>
-	#include <lib3270/log.h>
+	widget->notebook = GTK_NOTEBOOK(gtk_notebook_new());
 
-	struct _pw3270ApplicationWindow {
+	gtk_notebook_set_show_tabs(widget->notebook,FALSE);
+	gtk_notebook_set_show_border(widget->notebook, FALSE);
 
-		GtkApplicationWindow parent;
+	widget->terminal = pw3270_terminal_new(GTK_WIDGET(widget));
 
-		GtkWidget   * terminal;
-		GtkNotebook * notebook;
+	gtk_container_add(GTK_CONTAINER(widget),GTK_WIDGET(widget->notebook));
+	gtk_widget_show_all(GTK_WIDGET(widget));
 
-	};
+ }
 
-	struct _pw3270ApplicationWindowClass {
+ GtkWidget * pw3270_application_window_new(GtkApplication * application) {
 
-		GtkApplicationWindowClass parent_class;
+	g_return_val_if_fail(GTK_IS_APPLICATION(application), NULL);
+	return g_object_new(PW3270_TYPE_APPLICATION_WINDOW, "application", application, NULL);
 
-	};
+ }
 
-#endif // PRIVATE_H_INCLUDED

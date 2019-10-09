@@ -40,18 +40,30 @@
 
 	G_BEGIN_DECLS
 
-	#define PW3270_TYPE_APPLICATION_WINDOW				(pw3270ApplicationWindow_get_type())
-	#define PW3270_APPLICATION_WINDOW(obj)				(G_TYPE_CHECK_INSTANCE_CAST ((obj), PW3270_TYPE_APPLICATION_WINDOW, pw3270ApplicationWindow))
-	#define PW3270_APPLICATION_WINDOW_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), PW3270_TYPE_APPLICATION_WINDOW, pw3270ApplicationWindowClass))
-	#define PW3270_IS_APPLICATION_WINDOW(obj)			(G_TYPE_CHECK_INSTANCE_TYPE ((obj), PW3270_TYPE_APPLICATION_WINDOW))
-	#define PW3270_IS_APPLICATION_WINDOW_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), PW3270_TYPE_APPLICATION_WINDOW))
-	#define PW3270_APPLICATION_WINDOW_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), PW3270_TYPE_APPLICATION_WINDOW, pw3270ApplicationWindowClass))
+	#define PW3270_TYPE_APPLICATION_WINDOW				(pw3270ApplicationWindow_get_type ())
+	#define PW3270_APPLICATION_WINDOW(inst)				(G_TYPE_CHECK_INSTANCE_CAST ((inst), \
+														PW3270_TYPE_APPLICATION_WINDOW, pw3270ApplicationWindow))
+	#define PW3270_APPLICATION_WINDOW_CLASS(class)		(G_TYPE_CHECK_CLASS_CAST ((class),   \
+														PW3270_TYPE_APPLICATION_WINDOW, pw3270ApplicationWindowClass))
+	#define PW3270_IS_APPLICATION_WINDOW(inst)			(G_TYPE_CHECK_INSTANCE_TYPE ((inst), \
+														PW3270_TYPE_APPLICATION_WINDOW))
+	#define PW3270_IS_APPLICATION_WINDOW_CLASS(class)	(G_TYPE_CHECK_CLASS_TYPE ((class),   \
+														PW3270_TYPE_APPLICATION_WINDOW))
+	#define PW3270_APPLICATION_WINDOW_GET_CLASS(inst)	(G_TYPE_INSTANCE_GET_CLASS ((inst),  \
+														GTK_TYPE_APPLICATION_WINDOW, pw3270ApplicationWindowClass))
 
-	typedef struct _pw3270ApplicationWindow				pw3270ApplicationWindow;
-	typedef struct _pw3270ApplicationWindowClass		pw3270ApplicationWindowClass;
 
-	GtkWidget * pw3270_application_window_new(GtkApplication * app);
+	typedef struct _pw3270ApplicationWindowClass   pw3270ApplicationWindowClass;
+	typedef struct _pw3270ApplicationWindow        pw3270ApplicationWindow;
+
+	GType		  pw3270ApplicationWindow_get_type();
+	GtkWidget	* pw3270_application_window_new(GtkApplication * app);
+
+	/// @brief Create a new terminal tab.
+	GtkWidget 	* pw3270_terminal_new(GtkWidget *window);
+
 
 	G_END_DECLS
+
 
 #endif // PW3270_WINDOW_H_INCLUDED
