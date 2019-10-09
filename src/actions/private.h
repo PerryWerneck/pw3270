@@ -43,4 +43,16 @@
 	#include <pw3270/actions.h>
 	#include <lib3270/log.h>
 
+	struct _pw3270Action {
+		GObject       parent;
+
+	};
+
+	struct _pw3270ActionClass {
+
+		GObject parent_class;
+
+
+	};
+
 #endif // PRIVATE_H_INCLUDED

@@ -27,31 +27,23 @@
  *
  */
 
-/**
- * @brief Declares the pw3270 Action objects.
- *
- */
+ #include "private.h"
 
-#ifndef PW3270_ACTIONS_H_INCLUDED
+ static void pw3270_action_iface_init(GActionInterface *iface);
+ static void pw3270_action_class_init(pw3270ActionClass *klass);
+ static void pw3270_action_init(pw3270Action *action);
 
-	#define PW3270_ACTIONS_H_INCLUDED
+ G_DEFINE_TYPE_WITH_CODE(pw3270Action, pw3270_action, G_TYPE_OBJECT, G_IMPLEMENT_INTERFACE(G_TYPE_ACTION, pw3270_action_iface_init))
 
-	#include <gio/gio.h>
-	#include <lib3270.h>
-	#include <lib3270/actions.h>
+ void pw3270_action_iface_init(GActionInterface *iface) {
 
-	G_BEGIN_DECLS
+ }
 
-	#define PW3270_TYPE_ACTION				(pw3270_action_get_type ())
+ void pw3270_action_class_init(pw3270ActionClass *klass) {
 
-//	#define PW3270_ACTION(inst)				(G_TYPE_CHECK_INSTANCE_CAST ((inst), PW3270_TYPE_ACTION, pw3270Action))
-//	#define PW3270_IS_ACTION(inst)			(G_TYPE_CHECK_INSTANCE_TYPE ((inst), PW3270_TYPE_ACTION))
+ }
 
-	typedef struct _pw3270Action			pw3270Action;
-	typedef struct _pw3270ActionClass		pw3270ActionClass;
+ void pw3270_action_init(pw3270Action *action) {
 
-	GType pw3270_action_get_type(void) G_GNUC_CONST;
+ }
 
-	G_END_DECLS
-
-#endif // PW3270_ACTIONS_H_INCLUDED

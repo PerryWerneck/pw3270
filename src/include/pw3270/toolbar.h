@@ -42,7 +42,7 @@
 
 	G_BEGIN_DECLS
 
-	#define PW3270_TYPE_TOOLBAR				(pw3270ToolBar_get_type ())
+	#define PW3270_TYPE_TOOLBAR				(pw3270ToolBar_get_type())
 	#define PW3270_TOOLBAR(obj)				(G_TYPE_CHECK_INSTANCE_CAST ((obj), PW3270_TYPE_TOOLBAR, pw3270ToolBar))
 	#define PW3270_TOOLBAR_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), PW3270_TYPE_TOOLBAR, pw3270ToolBarClass))
 	#define PW3270_IS_TOOLBAR(obj)			(G_TYPE_CHECK_INSTANCE_TYPE ((obj), PW3270_TYPE_TOOLBAR))

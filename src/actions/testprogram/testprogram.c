@@ -1,7 +1,8 @@
 /*
  * "Software pw3270, desenvolvido com base nos códigos fontes do WC3270  e X3270
  * (Paul Mattes Paul.Mattes@usa.net), de emulação de terminal 3270 para acesso a
- * aplicativos mainframe. Registro no INPI sob o nome G3270.
+ * aplicativos mainframe. Registro no INPI sob o nome G3270. Registro no INPI sob
+ * o nome G3270.
  *
  * Copyright (C) <2008> <Banco do Brasil S.A.>
  *
@@ -18,7 +19,7 @@
  * programa; se não, escreva para a Free Software Foundation, Inc., 51 Franklin
  * St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * Este programa está nomeado como - e possui - linhas de código.
+ * Este programa está nomeado como testprogram.c e possui - linhas de código.
  *
  * Contatos:
  *
@@ -27,31 +28,18 @@
  *
  */
 
-/**
- * @brief Declares the pw3270 Action objects.
- *
- */
+ #include <config.h>
+ #include <pw3270/actions.h>
+ #include <lib3270/log.h>
 
-#ifndef PW3270_ACTIONS_H_INCLUDED
+ /*---[ Implement ]----------------------------------------------------------------------------------*/
 
-	#define PW3270_ACTIONS_H_INCLUDED
+ int main (int argc, char **argv) {
 
-	#include <gio/gio.h>
-	#include <lib3270.h>
-	#include <lib3270/actions.h>
 
-	G_BEGIN_DECLS
+  return 0;
 
-	#define PW3270_TYPE_ACTION				(pw3270_action_get_type ())
+ }
 
-//	#define PW3270_ACTION(inst)				(G_TYPE_CHECK_INSTANCE_CAST ((inst), PW3270_TYPE_ACTION, pw3270Action))
-//	#define PW3270_IS_ACTION(inst)			(G_TYPE_CHECK_INSTANCE_TYPE ((inst), PW3270_TYPE_ACTION))
 
-	typedef struct _pw3270Action			pw3270Action;
-	typedef struct _pw3270ActionClass		pw3270ActionClass;
 
-	GType pw3270_action_get_type(void) G_GNUC_CONST;
-
-	G_END_DECLS
-
-#endif // PW3270_ACTIONS_H_INCLUDED
