@@ -47,14 +47,12 @@
  typedef struct _Lib3270Action {
  	pw3270Action parent;
 
-	const LIB3270_ACTION * definition;
-
+	const LIB3270_ACTION 	* definition;
 
  } Lib3270Action;
 
  static void Lib3270Action_class_init(Lib3270ActionClass *klass);
  static void Lib3270Action_init(Lib3270Action *action);
-
 
  G_DEFINE_TYPE(Lib3270Action, Lib3270Action, PW3270_TYPE_ACTION);
 
@@ -84,23 +82,23 @@
 	action->get_enabled 	= action_enabled;
 	action->activate		= action_activate;
 
-
  }
 
  void Lib3270Action_init(Lib3270Action *action) {
  }
 
- GAction * pw3270_action_get_from_lib3270(const LIB3270_ACTION * definition) {
+ GAction * pw3270_action_new_from_lib3270(const LIB3270_ACTION * definition, GtkWidget *window) {
 
- 	Lib3270Action * action = (Lib3270Action *) g_object_new(PW3270_TYPE_LIB3270_ACTION, NULL);
-	action->definition = definition;
+ 	Lib3270Action	* action		= (Lib3270Action *) g_object_new(PW3270_TYPE_LIB3270_ACTION, NULL);
+	pw3270Action	* abstract		= PW3270_ACTION(action);
 
-	{
-		pw3270Action * abstract = PW3270_ACTION(action);
+	action->definition	= definition;
+	abstract->window	= window;
 
-		abstract->name = definition->name;
+	if(abstract->name)
+		g_free(abstract->name);
 
-	}
+	abstract->name = g_strconcat("win.",definition->name,NULL);
 
  	return G_ACTION(action);
  }

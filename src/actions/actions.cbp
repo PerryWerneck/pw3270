@@ -50,6 +50,9 @@
 		<Unit filename="testprogram/testprogram.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="window.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Extensions>
 			<code_completion />
 			<envvars />

@@ -34,11 +34,15 @@
  static void pw3270Action_init(pw3270Action *action);
  static void pw3270_action_get_property(GObject *object, guint prop_id, GValue *value, GParamSpec *pspec);
  static void pw3270_action_set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec);
+ static void pw3270_action_set_state(GAction *action, GVariant *value);
+
+ static void finalize(GObject *object);
 
  static	const GVariantType	* pw3270_action_get_state_type(GAction *action);
  static	GVariant			* pw3270_action_get_state_property(GAction *action);
- static	GVariantType		* pw3270_action_get_parameter_type(GAction *action);
-
+ static	const GVariantType	* pw3270_action_get_parameter_type(GAction *action);
+ static GVariant			* pw3270_action_get_state_hint(GAction *action);
+ static void				  pw3270_action_change_state(GAction *action, GVariant *value);
 
  enum {
 	PROP_NONE,
@@ -53,12 +57,12 @@
 
  void pw3270_action_iface_init(GActionInterface *iface) {
 	iface->get_name = pw3270_action_get_name;
-//	iface->get_parameter_type = pw3270_action_get_parameter_type;
+	iface->get_parameter_type = pw3270_action_get_parameter_type;
 	iface->get_state_type = pw3270_action_get_state_type;
-//	iface->get_state_hint = pw3270_action_get_state_hint;
+	iface->get_state_hint = pw3270_action_get_state_hint;
 	iface->get_enabled = pw3270_action_get_enabled;
 	iface->get_state = pw3270_action_get_state_property;
-//	iface->change_state = pw3270_action_change_state;
+	iface->change_state = pw3270_action_change_state;
 	iface->activate = pw3270_action_activate;
  }
 
@@ -70,8 +74,9 @@
 
 	GObjectClass *object_class = G_OBJECT_CLASS(klass);
 
-	object_class->set_property = pw3270_action_set_property;
-	object_class->get_property = pw3270_action_get_property;
+ 	object_class->finalize		= finalize;
+	object_class->set_property	= pw3270_action_set_property;
+	object_class->get_property	= pw3270_action_get_property;
 
 	klass->get_enabled = return_false;
 
@@ -124,14 +129,37 @@
 
  void pw3270Action_init(pw3270Action *action) {
 
-	action->name	= "unnamed";
+	action->name	= NULL;
 	action->window	= NULL;
+	action->state	= NULL;
 
  }
+
+ void finalize(GObject *object) {
+
+	pw3270Action * action = PW3270_ACTION(object);
+
+	if(action->name) {
+
+		debug("Finalizing action \"%s\"",action->name);
+		g_free(action->name);
+		action->name = NULL;
+
+	}
+
+	if(action->parameter_type)
+		g_variant_type_free(action->parameter_type);
+
+	G_OBJECT_CLASS(pw3270Action_parent_class)->finalize(object);
+
+ }
+
 
  void pw3270_action_get_property(GObject *object, guint prop_id, GValue *value, GParamSpec *pspec) {
 
 	GAction *action = G_ACTION(object);
+
+	debug("%s(%d)",__FUNCTION__,prop_id);
 
 	switch (prop_id) {
     case PROP_NAME:
@@ -161,22 +189,57 @@
  }
 
  void pw3270_action_set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec) {
+
+	debug("%s(%d)",__FUNCTION__,prop_id);
+
+	GAction *action = G_ACTION(object);
+
+	switch (prop_id)
+	{
+	case PROP_NAME:
+		pw3270_action_set_name(action, g_value_get_string(value));
+		break;
+
+	case PROP_PARAMETER_TYPE:
+//		action->parameter_type = g_value_dup_boxed (value);
+		break;
+
+	case PROP_ENABLED:
+//		action->enabled = g_value_get_boolean (value);
+		break;
+
+	case PROP_STATE:
+		pw3270_action_set_state(action, g_value_get_variant(value));
+		break;
+
+	default:
+		g_assert_not_reached ();
+	}
+
  }
 
  const gchar * pw3270_action_get_name(GAction *action) {
  	return PW3270_ACTION(action)->name;
  }
 
- const GVariantType	* pw3270_action_get_state_type(GAction *action) {
- 	return NULL;
+ void pw3270_action_set_name(GAction *object, const gchar *name) {
+
+ 	pw3270Action * action = PW3270_ACTION(object);
+
+ 	debug("%s %s -> %s", __FUNCTION__, action->name, name);
+
+ 	if(action->name)
+		g_free(action->name);
+
+	if(name)
+		action->name = g_strdup(name);
+	else
+		action->name = NULL;
+
  }
 
  GVariant * pw3270_action_get_state_property(GAction *action) {
- 	return g_variant_new_int16(0);
- }
-
- GVariantType * pw3270_action_get_parameter_type(GAction *action) {
- 	return NULL;
+ 	return PW3270_ACTION(action)->state;
  }
 
  gboolean pw3270_action_get_enabled(GAction *action) {
@@ -194,4 +257,34 @@
  	if(window)
 		PW3270_ACTION_GET_CLASS(action)->activate(action,window);
 
+ }
+
+ const GVariantType * pw3270_action_get_parameter_type(GAction *action) {
+	debug("%s",__FUNCTION__);
+ 	return NULL;
+ }
+
+ const GVariantType * pw3270_action_get_state_type(GAction *object) {
+
+ 	pw3270Action * action = PW3270_ACTION(object);
+
+	if(action->state != NULL)
+		return g_variant_get_type(action->state);
+	else
+		return NULL;
+
+ }
+
+ GVariant * pw3270_action_get_state_hint(GAction *action) {
+	debug("%s",__FUNCTION__);
+	return NULL;
+ }
+
+ void pw3270_action_change_state(GAction *action, GVariant *value) {
+	debug("%s",__FUNCTION__);
+	pw3270_action_set_state (action, value);
+ }
+
+ void pw3270_action_set_state(GAction *action, GVariant *value) {
+	debug("%s",__FUNCTION__);
  }

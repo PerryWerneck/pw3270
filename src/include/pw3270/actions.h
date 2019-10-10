@@ -54,10 +54,16 @@
 
 	GType pw3270Action_get_type(void) G_GNUC_CONST;
 
-	GAction				* pw3270_action_get_from_lib3270(const LIB3270_ACTION * definition);
+	GAction				* pw3270_action_new_from_lib3270(const LIB3270_ACTION * definition, GtkWidget *window);
+
 	const gchar			* pw3270_action_get_name(GAction *action);
+	void				  pw3270_action_set_name(GAction *action, const gchar *name);
+
 	gboolean			  pw3270_action_get_enabled(GAction *action);
 	void				  pw3270_action_activate(GAction *action, GVariant *parameter);
+
+	/// @brief Add lib3270 actions to an application window.
+	void				  pw3270_window_add_actions(GtkWidget * appwindow);
 
 	G_END_DECLS
 
