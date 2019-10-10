@@ -36,12 +36,12 @@
 
  /*---[ Implement ]----------------------------------------------------------------------------------*/
 
- GtkWidget * pw3270_window_get_terminal_widget(GtkWidget G_GNUC_UNUSED(*window)) {
- 	return NULL;
+ GtkWidget * pw3270_window_get_terminal_widget(GtkWidget *window) {
+ 	return g_object_get_data(G_OBJECT(window), "v3270_terminal");
  }
 
- H3270 * pw3270_window_get_session_handle(GtkWidget G_GNUC_UNUSED(*window)) {
- 	return NULL;
+ H3270 * pw3270_window_get_session_handle(GtkWidget *window) {
+ 	return v3270_get_session(pw3270_window_get_terminal_widget(window));
  }
 
  static gboolean handle_command(GtkWidget *trace, const gchar *cmd, const gchar *args, GtkWidget *window) {
@@ -70,6 +70,8 @@
 	GtkWidget	* vBox		= gtk_box_new(GTK_ORIENTATION_VERTICAL,2);
 	GtkWidget	* notebook	= gtk_notebook_new();
 	GtkWidget	* toolbar	= gtk_toolbar_new();
+
+	g_object_set_data(G_OBJECT(window),"v3270_terminal",terminal);
 
 	pw3270_window_add_actions(window);
 

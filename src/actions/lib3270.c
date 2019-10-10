@@ -70,8 +70,12 @@
 
 	H3270 * hSession = pw3270_window_get_session_handle(window);
 
+	debug("Activating action %s on hSession %p", pw3270_action_get_name(action), hSession);
+
 	if(hSession)
 		PW3270_LIB3270_ACTION(action)->definition->activate(hSession);
+	else
+		g_message("Action \"%s\" requires a lib3270 session", pw3270_action_get_name(action));
 
  }
 
