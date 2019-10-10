@@ -44,6 +44,25 @@
  	return NULL;
  }
 
+ static gboolean handle_command(GtkWidget *trace, const gchar *cmd, const gchar *args, GtkWidget *window) {
+
+	if(!g_ascii_strcasecmp(cmd,"activate")) {
+
+		GAction * action = g_action_map_lookup_action(G_ACTION_MAP(window),args);
+
+		if(!action) {
+			g_message("Invalid action name: \"%s\"",args);
+		} else {
+			g_message("Activating action \"%s\"",args);
+			g_action_activate(action,NULL);
+		}
+
+		return TRUE;
+	}
+
+	return FALSE;
+ }
+
  static void activate(GtkApplication* app, G_GNUC_UNUSED gpointer user_data) {
 
 	GtkWidget	* window	= gtk_application_window_new(app);
@@ -70,7 +89,10 @@
 	}
 
 	// Create trace window
-	gtk_notebook_append_page(GTK_NOTEBOOK(notebook),v3270_trace_new(terminal),gtk_label_new("Trace"));
+	GtkWidget * trace = v3270_trace_new(terminal);
+	gtk_notebook_append_page(GTK_NOTEBOOK(notebook),trace,gtk_label_new("Trace"));
+
+	g_signal_connect(trace,"command",G_CALLBACK(handle_command),window);
 
 	// Setup and show main window
 	gtk_window_set_position(GTK_WINDOW(window),GTK_WIN_POS_CENTER);
