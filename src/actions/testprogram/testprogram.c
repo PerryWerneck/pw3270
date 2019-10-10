@@ -52,9 +52,11 @@
 
 		if(!action) {
 			g_message("Invalid action name: \"%s\"",args);
-		} else {
+		} else if(g_action_get_enabled(action)) {
 			g_message("Activating action \"%s\"",args);
 			g_action_activate(action,NULL);
+		} else {
+			g_message("Action \"%s\" is disabled",args);
 		}
 
 		return TRUE;
