@@ -394,7 +394,7 @@ static void connect_standard_action(GtkAction *action, GtkWidget *widget, const 
 
 static void lib3270_toggle_action(GtkToggleAction *action,GtkWidget *widget)
 {
-	LIB3270_TOGGLE toggle = (LIB3270_TOGGLE) GPOINTER_TO_INT(g_object_get_data(G_OBJECT(action),"toggle_id"));
+	LIB3270_TOGGLE_ID toggle = (LIB3270_TOGGLE_ID) GPOINTER_TO_INT(g_object_get_data(G_OBJECT(action),"toggle_id"));
 
 	trace("Action %s toggled on widget %p (id=%d)\n",gtk_action_get_name(GTK_ACTION(action)),widget,(int) toggle);
 
@@ -471,7 +471,7 @@ static void action_pakey(GtkAction *action, GtkWidget *widget)
 
 static void action_set_toggle(GtkAction *action, GtkWidget *widget)
 {
-	LIB3270_TOGGLE id = (LIB3270_TOGGLE) GPOINTER_TO_INT(g_object_get_data(G_OBJECT(action),"toggle_id"));
+	LIB3270_TOGGLE_ID id = (LIB3270_TOGGLE_ID) GPOINTER_TO_INT(g_object_get_data(G_OBJECT(action),"toggle_id"));
 
 	trace("Action %s activated on widget %p toggle=%d\n",gtk_action_get_name(action),widget,id);
 
@@ -481,7 +481,7 @@ static void action_set_toggle(GtkAction *action, GtkWidget *widget)
 
 static void action_reset_toggle(GtkAction *action, GtkWidget *widget)
 {
-	LIB3270_TOGGLE id = (LIB3270_TOGGLE) GPOINTER_TO_INT(g_object_get_data(G_OBJECT(action),"toggle_id"));
+	LIB3270_TOGGLE_ID id = (LIB3270_TOGGLE_ID) GPOINTER_TO_INT(g_object_get_data(G_OBJECT(action),"toggle_id"));
 
 	trace("Action %s activated on widget %p toggle=%d\n",gtk_action_get_name(action),widget,id);
 

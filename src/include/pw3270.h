@@ -56,7 +56,7 @@
  LIB3270_EXPORT const gchar	* pw3270_get_url(GtkWidget *widget);
  LIB3270_EXPORT void		  pw3270_connect(GtkWidget *widget);
 
- LIB3270_EXPORT gboolean 	  pw3270_get_toggle(GtkWidget *widget, LIB3270_TOGGLE ix);
+ LIB3270_EXPORT gboolean 	  pw3270_get_toggle(GtkWidget *widget, LIB3270_TOGGLE_ID ix);
  LIB3270_EXPORT gboolean	  pw3270_set_toggle_by_name(GtkWidget *widget, const gchar *name, gboolean flag);
  LIB3270_EXPORT	H3270		* pw3270_get_session(GtkWidget *widget);
  LIB3270_EXPORT	GtkWidget	* pw3270_get_terminal_widget(GtkWidget *widget);

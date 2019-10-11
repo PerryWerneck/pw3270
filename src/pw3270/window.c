@@ -330,7 +330,7 @@ static GtkWidget * trace_window = NULL;
  	return v3270_get_url(GTK_PW3270(widget)->terminal);
  }
 
- gboolean pw3270_get_toggle(GtkWidget *widget, LIB3270_TOGGLE ix)
+ gboolean pw3270_get_toggle(GtkWidget *widget, LIB3270_TOGGLE_ID ix)
  {
  	g_return_val_if_fail(GTK_IS_PW3270(widget),FALSE);
  	return v3270_get_toggle(GTK_PW3270(widget)->terminal,ix);
@@ -678,7 +678,7 @@ static GtkWidget * trace_window = NULL;
 	pw3270_print(widget, NULL, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, LIB3270_CONTENT_ALL);
  }
 
- static void toggle_changed(GtkWidget *widget, LIB3270_TOGGLE id, gboolean toggled, const gchar *name, GtkWindow *toplevel)
+ static void toggle_changed(GtkWidget *widget, LIB3270_TOGGLE_ID id, gboolean toggled, const gchar *name, GtkWindow *toplevel)
  {
 	GtkAction **list = (GtkAction **) g_object_get_data(G_OBJECT(widget),"toggle_actions");
  	gchar *nm = g_ascii_strdown(name,-1);
