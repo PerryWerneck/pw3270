@@ -144,7 +144,7 @@
 		int 				(*_set_text_at)(H3270 *h, int row, int col, const unsigned char *str);
 		int 				(*_is_ready)(H3270 *h);
 		int 				(*_set_cursor_position)(H3270 *h, int row, int col);
-		int 				(*_set_toggle)(H3270 *h, LIB3270_TOGGLE ix, int value);
+		int 				(*_set_toggle)(H3270 *h, LIB3270_TOGGLE_ID ix, int value);
 		int             	(*_get_field_start)(H3270 *h, int baddr);
 		int             	(*_get_field_len)(H3270 *h, int baddr);
 		int             	(*_set_cursor_addr)(H3270 *h, int addr);
@@ -429,7 +429,7 @@
 			return EINVAL;
 		}
 
-		int set_toggle(LIB3270_TOGGLE ix, bool value)
+		int set_toggle(LIB3270_TOGGLE_ID ix, bool value)
 		{
 			return _set_toggle(hSession, ix, (int) value);
 		}

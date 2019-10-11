@@ -1271,7 +1271,7 @@
 			return query_intval(HLLAPI_PACKET_QUIT);
 		}
 
-		int set_toggle(LIB3270_TOGGLE ix, bool value)
+		int set_toggle(LIB3270_TOGGLE_ID ix, bool value)
 		{
 #if defined(_WIN32)
 

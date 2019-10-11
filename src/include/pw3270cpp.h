@@ -223,7 +223,7 @@
 		virtual int               get_cursor_addr(void)                             = 0;
 
 		// Toggle management
-		virtual int 			  set_toggle(LIB3270_TOGGLE ix, bool value)			= 0;
+		virtual int 			  set_toggle(LIB3270_TOGGLE_ID ix, bool value)		= 0;
 
 		// Keyboard actions
 		virtual int				  enter(void)										= 0;

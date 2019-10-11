@@ -515,7 +515,7 @@
 			return getInteger("getCursorAddr", DBUS_TYPE_STRING, &this->id, DBUS_TYPE_INVALID);
 		}
 
-		virtual int set_toggle(LIB3270_TOGGLE ix, bool value)
+		virtual int set_toggle(LIB3270_TOGGLE_ID ix, bool value)
 		{
 			dbus_int32_t i = (dbus_int32_t) ix;
 			dbus_int32_t v = (dbus_int32_t) value;
