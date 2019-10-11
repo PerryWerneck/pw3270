@@ -55,6 +55,7 @@
 	GType pw3270Action_get_type(void) G_GNUC_CONST;
 
 	GAction				* pw3270_action_new_from_lib3270(const LIB3270_ACTION * definition, GtkWidget *window);
+	GAction				* pw3270_toggle_action_new_from_lib3270(const LIB3270_TOGGLE_ENTRY * definition, GtkWidget *window);
 
 	const gchar			* pw3270_action_get_name(GAction *action);
 	void				  pw3270_action_set_name(GAction *action, const gchar *name);

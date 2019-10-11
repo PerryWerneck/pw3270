@@ -32,7 +32,7 @@
   *
   */
 
- #include "private.h"
+ #include "../private.h"
  #include <pw3270/window.h>
 
  #define PW3270_TYPE_LIB3270_ACTION		(Lib3270Action_get_type())

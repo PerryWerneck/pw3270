@@ -43,7 +43,10 @@
 		<Unit filename="abstract.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="lib3270.c">
+		<Unit filename="lib3270/action.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="lib3270/toggle.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="private.h" />
