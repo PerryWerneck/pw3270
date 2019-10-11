@@ -118,6 +118,8 @@ configure()
 		echo -e "\e]2;Installing pre-reqs\a"
 		echo "Installing pre-reqs"
 
+		echo "mingw32-cross-nsis" >> ${WORKDIR}/sources/pre-reqs 
+
 		cat ${WORKDIR}/sources/pre-reqs \
 			| grep -v 3270 \
 			| sort --unique \
