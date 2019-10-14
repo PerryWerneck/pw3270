@@ -128,8 +128,6 @@
 			NULL,
 			G_PARAM_READWRITE | G_PARAM_CONSTRUCT |
 			G_PARAM_STATIC_STRINGS));
-
-
  }
 
  void pw3270Action_init(pw3270Action *action) {
@@ -144,19 +142,27 @@
 
 	pw3270Action * action = PW3270_ACTION(object);
 
-	if(action->terminal)
-		pw3270_action_set_terminal_widget(G_ACTION(object),NULL);
+	debug("Finalizing action %p (%s)",object,action->name);
 
-	if(action->name) {
-
-		debug("Finalizing action \"%s\"",action->name);
-		g_free(action->name);
-		action->name = NULL;
-
+	if(action->state) {
+		g_variant_unref(action->state);
+		action->state = NULL;
 	}
 
-	if(action->parameter_type)
+	if(action->terminal) {
+		pw3270_action_set_terminal_widget(G_ACTION(object),NULL);
+		action->terminal = NULL;
+	}
+
+	if(action->name) {
+		g_free(action->name);
+		action->name = NULL;
+	}
+
+	if(action->parameter_type) {
 		g_variant_type_free(action->parameter_type);
+		action->parameter_type = NULL;
+	}
 
 	G_OBJECT_CLASS(pw3270Action_parent_class)->finalize(object);
 
@@ -246,8 +252,9 @@
 
  }
 
- GVariant * pw3270_action_get_state_property(GAction *action) {
- 	return PW3270_ACTION(action)->state;
+ GVariant * pw3270_action_get_state_property(GAction *object) {
+ 	pw3270Action *action = PW3270_ACTION(object);
+	return action->state ? g_variant_ref(action->state) : NULL;
  }
 
  const GVariantType * pw3270_action_get_parameter_type(GAction *action) {
@@ -259,10 +266,10 @@
 
  	pw3270Action * action = PW3270_ACTION(object);
 
-	if(action->state != NULL)
+	if(action->state)
 		return g_variant_get_type(action->state);
-	else
-		return NULL;
+
+	return NULL;
 
  }
 
@@ -272,15 +279,13 @@
  }
 
  void pw3270_action_change_state(GAction *object, GVariant *value) {
-
-	/*
-	pw3270Action * action = PW3270_ACTION(object);
-
-	if (g_signal_has_handler_pending(object, pw3270_action_signals[SIGNAL_CHANGE_STATE], 0, TRUE))
-		g_signal_emit(action, pw3270_action_signals[SIGNAL_CHANGE_STATE], 0, value);
-	*/
-
 	pw3270_action_set_state(object, value);
+ }
+
+ void pw3270_action_change_state_boolean(GAction *action, gboolean state) {
+
+ 	g_return_if_fail(PW3270_IS_ACTION(action));
+	pw3270_action_set_state(action,g_variant_new_boolean(state));
 
  }
 
@@ -300,6 +305,7 @@
 			action->state = g_variant_ref(value);
 
 			g_object_notify(G_OBJECT(object), "state");
+
 		}
 
 		g_variant_unref(value);
@@ -323,10 +329,6 @@
 		action->terminal = widget;
  	}
 
- }
-
- void pw3270_action_change_state_boolean(GAction *action, gboolean state) {
-	pw3270_action_change_state(action,g_variant_new_boolean(state));
  }
 
  gboolean pw3270_action_get_enabled(GAction *object) {
@@ -358,7 +360,7 @@
  }
 
  gboolean get_enabled(GAction *object, GtkWidget *terminal) {
-	debug("%s",__FUNCTION__);
+	debug("%s(%s)",__FUNCTION__,pw3270_action_get_name(object));
  	return TRUE;
  }
 

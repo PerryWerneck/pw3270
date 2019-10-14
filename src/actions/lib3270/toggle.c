@@ -59,6 +59,7 @@
  G_DEFINE_TYPE(Lib3270ToggleAction, Lib3270ToggleAction, PW3270_TYPE_ACTION);
 
  static void change_state(H3270 *hSession, LIB3270_TOGGLE_ID id, char state, void * action) {
+ 	debug("%s: %s",__FUNCTION__,state ? "ON" : "OFF");
 	pw3270_action_change_state_boolean((GAction *) action, state == 0 ? FALSE : TRUE);
  }
 
@@ -71,7 +72,7 @@
 	}
 
 	if(to) {
-		action->listener = lib3270_register_toggle_listener(v3270_get_session(from),action->definition->id,change_state,object);
+		action->listener = lib3270_register_toggle_listener(v3270_get_session(to),action->definition->id,change_state,object);
 		pw3270_action_change_state_boolean(object,lib3270_get_toggle(v3270_get_session(to),action->definition->id));
 	}
 
@@ -80,7 +81,21 @@
  }
 
  static void activate(GAction *action, GVariant *parameter, GtkWidget *terminal) {
-	lib3270_toggle(v3270_get_session(terminal),PW3270_LIB3270_TOGGLE_ACTION(action)->definition->id);
+
+ 	debug("Activating \"%s\"",pw3270_action_get_name(action));
+
+ 	if(parameter && g_variant_is_of_type(parameter,G_VARIANT_TYPE_BOOLEAN)) {
+
+		lib3270_set_toggle(v3270_get_session(terminal),PW3270_LIB3270_TOGGLE_ACTION(action)->definition->id,g_variant_get_boolean(parameter));
+		debug("Toggle set to %s",lib3270_get_toggle(v3270_get_session(terminal),PW3270_LIB3270_TOGGLE_ACTION(action)->definition->id) ? "ON" : "OFF");
+
+ 	} else {
+
+		lib3270_toggle(v3270_get_session(terminal),PW3270_LIB3270_TOGGLE_ACTION(action)->definition->id);
+		debug("Toggle is %s",lib3270_get_toggle(v3270_get_session(terminal),PW3270_LIB3270_TOGGLE_ACTION(action)->definition->id) ? "ON" : "OFF");
+
+ 	}
+
  }
 
  void Lib3270ToggleAction_class_init(Lib3270ToggleActionClass *klass) {

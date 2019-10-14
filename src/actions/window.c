@@ -53,10 +53,19 @@
 	debug("--> \"%s\"",pw3270_action_get_name(action));
 	*/
 
+	/*
+	GAction *action = pw3270_toggle_action_new_from_lib3270(lib3270_get_toggles() + LIB3270_TOGGLE_INSERT);
+	pw3270_action_set_terminal_widget(action,terminal);
+
+	debug("--> \"%s\"",pw3270_action_get_name(action));
+
+	g_action_map_add_action(map,action);
+
+	debug("--> \"%s\"",pw3270_action_get_name(action));
+	*/
 
 	// Map lib3270 actions
 	const LIB3270_ACTION * actions = lib3270_get_actions();
-
 	for(ix = 0; actions[ix].name; ix++) {
 
 		GAction *action = pw3270_action_new_from_lib3270(&actions[ix]);
@@ -66,6 +75,14 @@
 	}
 
 	// Map toggles
+	const LIB3270_TOGGLE * toggles = lib3270_get_toggles();
+	for(ix = 0; toggles[ix].name; ix++) {
+
+		GAction *action = pw3270_toggle_action_new_from_lib3270(&toggles[ix]);
+		pw3270_action_set_terminal_widget(action,terminal);
+		g_action_map_add_action(map,action);
+
+	}
 
 	debug("%s ends",__FUNCTION__);
  }

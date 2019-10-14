@@ -32,7 +32,9 @@
  #include <v3270.h>
  #include <v3270/trace.h>
  #include <lib3270/log.h>
+ #include <lib3270/toggle.h>
  #include <pw3270/actions.h>
+ #include "../private.h"
 
  /*---[ Implement ]----------------------------------------------------------------------------------*/
 
