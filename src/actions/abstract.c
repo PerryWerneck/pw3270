@@ -28,6 +28,7 @@
  */
 
  #include "private.h"
+ #include <v3270.h>
 
  static void pw3270_action_iface_init(GActionInterface *iface);
  static void pw3270Action_class_init(pw3270ActionClass *klass);
@@ -35,6 +36,12 @@
  static void pw3270_action_get_property(GObject *object, guint prop_id, GValue *value, GParamSpec *pspec);
  static void pw3270_action_set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec);
  static void pw3270_action_set_state(GAction *action, GVariant *value);
+ static gboolean pw3270_action_get_enabled(GAction *action);
+ static void pw3270_action_activate(GAction *action, GVariant *parameter);
+
+ static gboolean get_enabled(GAction *action, GtkWidget *terminal);
+ static void activate(GAction *action, GVariant *parameter, GtkWidget *terminal);
+ static void change_widget(GAction *action, GtkWidget *from, GtkWidget *to);
 
  static void finalize(GObject *object);
 
@@ -66,19 +73,17 @@
 	iface->activate = pw3270_action_activate;
  }
 
- static gboolean return_false(GAction G_GNUC_UNUSED(*action), GtkWidget G_GNUC_UNUSED(*window)) {
- 	return FALSE;
- }
-
  void pw3270Action_class_init(pw3270ActionClass *klass) {
 
 	GObjectClass *object_class = G_OBJECT_CLASS(klass);
 
+	klass->change_widget		= change_widget;
+	klass->get_enabled			= get_enabled;
+	klass->activate				= activate;
+
  	object_class->finalize		= finalize;
 	object_class->set_property	= pw3270_action_set_property;
 	object_class->get_property	= pw3270_action_get_property;
-
-	klass->get_enabled = return_false;
 
 	// Install properties
 	g_object_class_install_property(object_class, PROP_NAME,
@@ -129,15 +134,18 @@
 
  void pw3270Action_init(pw3270Action *action) {
 
-	action->name	= NULL;
-	action->window	= NULL;
-	action->state	= NULL;
+	action->name		= NULL;
+	action->terminal	= NULL;
+	action->state		= NULL;
 
  }
 
  void finalize(GObject *object) {
 
 	pw3270Action * action = PW3270_ACTION(object);
+
+	if(action->terminal)
+		pw3270_action_set_terminal_widget(G_ACTION(object),NULL);
 
 	if(action->name) {
 
@@ -242,23 +250,6 @@
  	return PW3270_ACTION(action)->state;
  }
 
- gboolean pw3270_action_get_enabled(GAction *action) {
- 	GtkWidget *window =  PW3270_ACTION(action)->window;
-
- 	if(window)
-		return PW3270_ACTION_GET_CLASS(action)->get_enabled(action,window);
-
-	return FALSE;
- }
-
- void pw3270_action_activate(GAction *action, GVariant *parameter) {
- 	GtkWidget *window = PW3270_ACTION(action)->window;
-
- 	if(window)
-		PW3270_ACTION_GET_CLASS(action)->activate(action,window);
-
- }
-
  const GVariantType * pw3270_action_get_parameter_type(GAction *action) {
 	debug("%s",__FUNCTION__);
  	return NULL;
@@ -280,11 +271,97 @@
 	return NULL;
  }
 
- void pw3270_action_change_state(GAction *action, GVariant *value) {
-	debug("%s",__FUNCTION__);
-	pw3270_action_set_state (action, value);
+ void pw3270_action_change_state(GAction *object, GVariant *value) {
+
+	/*
+	pw3270Action * action = PW3270_ACTION(object);
+
+	if (g_signal_has_handler_pending(object, pw3270_action_signals[SIGNAL_CHANGE_STATE], 0, TRUE))
+		g_signal_emit(action, pw3270_action_signals[SIGNAL_CHANGE_STATE], 0, value);
+	*/
+
+	pw3270_action_set_state(object, value);
+
  }
 
- void pw3270_action_set_state(GAction *action, GVariant *value) {
+ void pw3270_action_set_state(GAction *object, GVariant *value) {
+
+	if(value) {
+
+		pw3270Action * action = PW3270_ACTION(object);
+
+		g_variant_ref_sink(value);
+
+		if (!action->state || !g_variant_equal(action->state, value)) {
+
+			if(action->state)
+				g_variant_unref(action->state);
+
+			action->state = g_variant_ref(value);
+
+			g_object_notify(G_OBJECT(object), "state");
+		}
+
+		g_variant_unref(value);
+
+	}
+
+ }
+
+ static void change_widget(GAction *action, GtkWidget G_GNUC_UNUSED(*from), GtkWidget *to) {
+	PW3270_ACTION(action)->terminal = to;
+ }
+
+ void pw3270_action_set_terminal_widget(GAction *object, GtkWidget *widget) {
+
+	g_return_if_fail(PW3270_IS_ACTION(object) && GTK_IS_V3270(widget));
+
+ 	pw3270Action * action = PW3270_ACTION(object);
+
+ 	if(action->terminal != widget) {
+		PW3270_ACTION_GET_CLASS(object)->change_widget(object,action->terminal,widget);
+		action->terminal = widget;
+ 	}
+
+ }
+
+ void pw3270_action_change_state_boolean(GAction *action, gboolean state) {
+	pw3270_action_change_state(action,g_variant_new_boolean(state));
+ }
+
+ gboolean pw3270_action_get_enabled(GAction *object) {
+
+ 	pw3270Action * action = PW3270_ACTION(object);
+
+ 	debug("%s: terminal=%p",__FUNCTION__,action->terminal);
+
+ 	if(action && action->terminal) {
+
+		return PW3270_ACTION_GET_CLASS(object)->get_enabled(object,action->terminal);
+
+ 	}
+
+	return FALSE;
+
+ }
+
+ void pw3270_action_activate(GAction *object, GVariant *parameter) {
+
+ 	pw3270Action * action = PW3270_ACTION(object);
+
+ 	debug("%s: terminal=%p",__FUNCTION__,action->terminal);
+
+ 	if(action && action->terminal) {
+		return PW3270_ACTION_GET_CLASS(object)->activate(object,parameter,action->terminal);
+ 	}
+
+ }
+
+ gboolean get_enabled(GAction *object, GtkWidget *terminal) {
 	debug("%s",__FUNCTION__);
+ 	return TRUE;
+ }
+
+ void activate(GAction *action, GVariant G_GNUC_UNUSED(*parameter), GtkWidget G_GNUC_UNUSED(*terminal)) {
+	g_message("Action %s can't be activated",pw3270_action_get_name(action));
  }

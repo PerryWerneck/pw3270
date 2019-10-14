@@ -37,11 +37,13 @@
 
  void pw3270_window_add_actions(GtkWidget * appwindow) {
 
-	GActionMap *map = G_ACTION_MAP(appwindow);
+	GActionMap 	* map = G_ACTION_MAP(appwindow);
+	GtkWidget	* terminal = pw3270_window_get_terminal_widget(appwindow);
 
 	// g_action_map_add_action(map,pw3270_action_new_from_lib3270(lib3270_action_get_by_name("testpattern"), appwindow));
 
-	GAction *action = pw3270_action_new_from_lib3270(lib3270_action_get_by_name("testpattern"), appwindow);
+	GAction *action = pw3270_action_new_from_lib3270(lib3270_action_get_by_name("testpattern"));
+	pw3270_action_set_terminal_widget(action,terminal);
 
 	debug("--> \"%s\"",pw3270_action_get_name(action));
 

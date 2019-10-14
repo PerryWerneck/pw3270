@@ -40,9 +40,11 @@
  	return g_object_get_data(G_OBJECT(window), "v3270_terminal");
  }
 
+ /*
  H3270 * pw3270_window_get_session_handle(GtkWidget *window) {
  	return v3270_get_session(pw3270_window_get_terminal_widget(window));
  }
+ */
 
  static gboolean handle_command(GtkWidget *trace, const gchar *cmd, const gchar *args, GtkWidget *window) {
 

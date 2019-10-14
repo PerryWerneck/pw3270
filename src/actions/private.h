@@ -42,6 +42,10 @@
 	#include <gtk/gtk.h>
 
 	#include <pw3270/actions.h>
+
+	#include <lib3270/actions.h>
+	#include <lib3270/toggle.h>
+
 	#include <lib3270/log.h>
 
 	struct _pw3270Action {
@@ -49,7 +53,7 @@
 
 		GVariantType	* parameter_type;
 		GVariant     	* state;
-		GtkWidget		* window;
+		GtkWidget		* terminal;
 		gchar 			* name;
 
 	};
@@ -57,9 +61,16 @@
 	struct _pw3270ActionClass {
 		GObjectClass parent_class;
 
-		gboolean	(*get_enabled)(GAction *action, GtkWidget *window);
-		void 		(*activate)(GAction *action, GtkWidget *window);
+		void (*change_widget)(GAction *action, GtkWidget *from, GtkWidget *to);
+		gboolean (*get_enabled)(GAction *action, GtkWidget *terminal);
+		void (*activate)(GAction *action, GVariant *parameter, GtkWidget *terminal);
 
 	};
+
+	G_GNUC_INTERNAL GAction * pw3270_action_new_from_lib3270(const LIB3270_ACTION * definition);
+	G_GNUC_INTERNAL GAction	* pw3270_toggle_action_new_from_lib3270(const LIB3270_TOGGLE * definition);
+
+	G_GNUC_INTERNAL void pw3270_action_change_state_boolean(GAction *action, gboolean state);
+
 
 #endif // PRIVATE_H_INCLUDED

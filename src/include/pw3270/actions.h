@@ -38,7 +38,6 @@
 
 	#include <gio/gio.h>
 	#include <lib3270.h>
-	#include <lib3270/actions.h>
 
 	G_BEGIN_DECLS
 
@@ -54,14 +53,14 @@
 
 	GType pw3270Action_get_type(void) G_GNUC_CONST;
 
-	GAction				* pw3270_action_new_from_lib3270(const LIB3270_ACTION * definition, GtkWidget *window);
-	GAction				* pw3270_toggle_action_new_from_lib3270(const LIB3270_TOGGLE_ENTRY * definition, GtkWidget *window);
-
 	const gchar			* pw3270_action_get_name(GAction *action);
 	void				  pw3270_action_set_name(GAction *action, const gchar *name);
 
-	gboolean			  pw3270_action_get_enabled(GAction *action);
-	void				  pw3270_action_activate(GAction *action, GVariant *parameter);
+	/// @brief Associate action with the terminal widget.
+	void				  pw3270_action_set_terminal_widget(GAction *action, GtkWidget *terminal);
+
+	/// @brief Get lib3270 session handle.
+	H3270				* pw3270_action_get_session(GAction *action);
 
 	/// @brief Add lib3270 actions to an application window.
 	void				  pw3270_window_add_actions(GtkWidget * appwindow);

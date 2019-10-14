@@ -33,7 +33,7 @@
   */
 
  #include "../private.h"
- #include <pw3270/window.h>
+ #include <v3270.h>
 
  #define PW3270_TYPE_LIB3270_ACTION		(Lib3270Action_get_type())
  #define PW3270_LIB3270_ACTION(inst)	(G_TYPE_CHECK_INSTANCE_CAST ((inst), PW3270_TYPE_LIB3270_ACTION, Lib3270Action))
@@ -56,48 +56,33 @@
 
  G_DEFINE_TYPE(Lib3270Action, Lib3270Action, PW3270_TYPE_ACTION);
 
- static gboolean action_enabled(GAction *action, GtkWidget *window) {
-
-	H3270 * hSession = pw3270_window_get_session_handle(window);
-
-	if(hSession)
-		return PW3270_LIB3270_ACTION(action)->definition->activatable(hSession) > 0 ? TRUE : FALSE;
-
- 	return FALSE;
+ static gboolean get_enabled(GAction *action, GtkWidget *terminal) {
+	return PW3270_LIB3270_ACTION(action)->definition->activatable(v3270_get_session(terminal)) > 0 ? TRUE : FALSE;
  }
 
- static void action_activate(GAction *action, GtkWidget *window) {
-
-	H3270 * hSession = pw3270_window_get_session_handle(window);
-
-	debug("Activating action %s on hSession %p", pw3270_action_get_name(action), hSession);
-
-	if(hSession)
-		PW3270_LIB3270_ACTION(action)->definition->activate(hSession);
-	else
-		g_message("Action \"%s\" requires a lib3270 session", pw3270_action_get_name(action));
-
+ static void activate(GAction *action, GVariant *parameter, GtkWidget *terminal) {
+	PW3270_LIB3270_ACTION(action)->definition->activate(v3270_get_session(terminal));
  }
 
  void Lib3270Action_class_init(Lib3270ActionClass *klass) {
 
- 	pw3270ActionClass * action = PW3270_ACTION_CLASS(klass);
+	pw3270ActionClass * action = PW3270_ACTION_CLASS(klass);
 
-	action->get_enabled 	= action_enabled;
-	action->activate		= action_activate;
+	action->activate = activate;
+	action->get_enabled = get_enabled;
 
  }
 
  void Lib3270Action_init(Lib3270Action *action) {
  }
 
- GAction * pw3270_action_new_from_lib3270(const LIB3270_ACTION * definition, GtkWidget *window) {
+ GAction * pw3270_action_new_from_lib3270(const LIB3270_ACTION * definition) {
 
  	Lib3270Action	* action		= (Lib3270Action *) g_object_new(PW3270_TYPE_LIB3270_ACTION, NULL);
-	pw3270Action	* abstract		= PW3270_ACTION(action);
-
 	action->definition	= definition;
-	abstract->window	= window;
+
+	// Setup the default name.
+	pw3270Action * abstract	= PW3270_ACTION(action);
 
 	if(abstract->name)
 		g_free(abstract->name);

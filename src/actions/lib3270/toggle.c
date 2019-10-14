@@ -34,9 +34,10 @@
 
  #include "../private.h"
  #include <pw3270/window.h>
+ #include <v3270.h>
 
  #define PW3270_TYPE_LIB3270_TOGGLE_ACTION		(Lib3270ToggleAction_get_type())
- #define PW3270_LIB3270_TOGGLE_ACTION(inst)	(G_TYPE_CHECK_INSTANCE_CAST ((inst), PW3270_TYPE_LIB3270_TOGGLE_ACTION, Lib3270Action))
+ #define PW3270_LIB3270_TOGGLE_ACTION(inst)	(G_TYPE_CHECK_INSTANCE_CAST ((inst), PW3270_TYPE_LIB3270_TOGGLE_ACTION, Lib3270ToggleAction))
  #define PW3270_IS_LIB3270_TOGGLE_ACTION(inst)	(G_TYPE_CHECK_INSTANCE_TYPE ((inst), PW3270_TYPE_LIB3270_TOGGLE_ACTION))
 
  typedef struct _Lib3270ToggleActionClass {
@@ -47,45 +48,54 @@
  typedef struct _Lib3270ToggleAction {
  	pw3270Action parent;
 
-	const LIB3270_TOGGLE_ENTRY 	* definition;
+	const LIB3270_TOGGLE * definition;
+	const void * listener;
 
  } Lib3270ToggleAction;
 
- static void Lib3270ToggleAction_class_init(Lib3270ActionClass *klass);
- static void Lib3270ToggleAction_init(Lib3270Action *action);
+ static void Lib3270ToggleAction_class_init(Lib3270ToggleActionClass *klass);
+ static void Lib3270ToggleAction_init(Lib3270ToggleAction *action);
 
  G_DEFINE_TYPE(Lib3270ToggleAction, Lib3270ToggleAction, PW3270_TYPE_ACTION);
 
- static gboolean action_enabled(GAction *action, GtkWidget *window) {
-
-
- 	return FALSE;
+ static void change_state(H3270 *hSession, LIB3270_TOGGLE_ID id, char state, void * action) {
+	pw3270_action_change_state_boolean(PW3270_ACTION(action), state == 0 ? FALSE : TRUE);
  }
 
- static void action_activate(GAction *action, GtkWidget *window) {
+ static void change_widget(GAction *object, GtkWidget *from, GtkWidget *to) {
 
+	Lib3270ToggleAction * action = PW3270_LIB3270_TOGGLE_ACTION(object);
+
+	if(action->listener) {
+		lib3270_unregister_toggle_listener(v3270_get_session(from),action->definition->id,object);
+	}
+
+	if(to) {
+		action->listener = lib3270_register_toggle_listener(v3270_get_session(from),action->definition->id,change_state,object);
+		pw3270_action_change_state_boolean(object,lib3270_get_toggle(v3270_get_session(to),action->definition->id));
+	}
+
+	PW3270_ACTION_CLASS(Lib3270ToggleAction_parent_class)->change_widget(object,from,to);
 
  }
 
- void Lib3270Action_class_init(Lib3270ActionClass *klass) {
+ void Lib3270ToggleAction_class_init(Lib3270ToggleActionClass *klass) {
+ }
 
- 	pw3270ActionClass * action = PW3270_TOGGLE_ACTION_CLASS(klass);
+ void Lib3270ToggleAction_init(Lib3270ToggleAction *action) {
 
-	action->get_enabled 	= action_enabled;
-	action->activate		= action_activate;
+ 	action->definition	= NULL;
+ 	action->listener	= NULL;
 
  }
 
- void Lib3270Action_init(Lib3270Action *action) {
- }
+ GAction * pw3270_toggle_action_new_from_lib3270(const LIB3270_TOGGLE * definition) {
 
- GAction * pw3270_toggle_action_new_from_lib3270(const LIB3270_TOGGLE_ENTRY * definition, GtkWidget *window) {
+ 	Lib3270ToggleAction	* action = (Lib3270ToggleAction *) g_object_new(PW3270_TYPE_LIB3270_TOGGLE_ACTION, NULL);
+	action->definition = definition;
 
- 	Lib3270Action	* action		= (Lib3270Action *) g_object_new(PW3270_TYPE_LIB3270_TOGGLE_ACTION, NULL);
-	pw3270Action	* abstract		= PW3270_ACTION(action);
-
-	action->definition	= definition;
-	abstract->window	= window;
+	// Setup the default name.
+	pw3270Action * abstract	= PW3270_ACTION(action);
 
 	if(abstract->name)
 		g_free(abstract->name);
@@ -93,6 +103,7 @@
 	abstract->name = g_strconcat("win.",definition->name,NULL);
 
  	return G_ACTION(action);
+
  }
 
 
