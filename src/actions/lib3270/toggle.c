@@ -59,7 +59,7 @@
  G_DEFINE_TYPE(Lib3270ToggleAction, Lib3270ToggleAction, PW3270_TYPE_ACTION);
 
  static void change_state(H3270 *hSession, LIB3270_TOGGLE_ID id, char state, void * action) {
-	pw3270_action_change_state_boolean(PW3270_ACTION(action), state == 0 ? FALSE : TRUE);
+	pw3270_action_change_state_boolean((GAction *) action, state == 0 ? FALSE : TRUE);
  }
 
  static void change_widget(GAction *object, GtkWidget *from, GtkWidget *to) {
@@ -79,7 +79,16 @@
 
  }
 
+ static void activate(GAction *action, GVariant *parameter, GtkWidget *terminal) {
+	lib3270_toggle(v3270_get_session(terminal),PW3270_LIB3270_TOGGLE_ACTION(action)->definition->id);
+ }
+
  void Lib3270ToggleAction_class_init(Lib3270ToggleActionClass *klass) {
+
+	pw3270ActionClass * action = PW3270_ACTION_CLASS(klass);
+	action->activate = activate;
+	action->change_widget = change_widget;
+
  }
 
  void Lib3270ToggleAction_init(Lib3270ToggleAction *action) {

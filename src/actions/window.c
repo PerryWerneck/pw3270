@@ -34,14 +34,15 @@
 
  #include "private.h"
  #include <lib3270/actions.h>
+ #include <pw3270/window.h>
 
  void pw3270_window_add_actions(GtkWidget * appwindow) {
 
 	GActionMap 	* map = G_ACTION_MAP(appwindow);
 	GtkWidget	* terminal = pw3270_window_get_terminal_widget(appwindow);
+	size_t ix;
 
-	// g_action_map_add_action(map,pw3270_action_new_from_lib3270(lib3270_action_get_by_name("testpattern"), appwindow));
-
+	/*
 	GAction *action = pw3270_action_new_from_lib3270(lib3270_action_get_by_name("testpattern"));
 	pw3270_action_set_terminal_widget(action,terminal);
 
@@ -50,22 +51,21 @@
 	g_action_map_add_action(map,action);
 
 	debug("--> \"%s\"",pw3270_action_get_name(action));
+	*/
 
-	/*
-	size_t ix;
 
 	// Map lib3270 actions
 	const LIB3270_ACTION * actions = lib3270_get_actions();
 
 	for(ix = 0; actions[ix].name; ix++) {
 
-		// g_autofree gchar * name = g_strconcat("win.", actions[ix].name, NULL);
-        debug("Creating action %s", actions[ix].name);
-		g_action_map_add_action(map,pw3270_action_new_from_lib3270(&actions[ix],appwindow));
+		GAction *action = pw3270_action_new_from_lib3270(&actions[ix]);
+		pw3270_action_set_terminal_widget(action,terminal);
+		g_action_map_add_action(map,action);
 
 	}
-	*/
 
+	// Map toggles
 
 	debug("%s ends",__FUNCTION__);
  }

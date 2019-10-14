@@ -198,7 +198,7 @@
 
  void pw3270_action_set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec) {
 
-	debug("%s(%d)",__FUNCTION__,prop_id);
+//	debug("%s(%d)",__FUNCTION__,prop_id);
 
 	GAction *action = G_ACTION(object);
 
@@ -234,7 +234,7 @@
 
  	pw3270Action * action = PW3270_ACTION(object);
 
- 	debug("%s %s -> %s", __FUNCTION__, action->name, name);
+// 	debug("%s %s -> %s", __FUNCTION__, action->name, name);
 
  	if(action->name)
 		g_free(action->name);
@@ -251,7 +251,7 @@
  }
 
  const GVariantType * pw3270_action_get_parameter_type(GAction *action) {
-	debug("%s",__FUNCTION__);
+//	debug("%s",__FUNCTION__);
  	return NULL;
  }
 
@@ -333,7 +333,7 @@
 
  	pw3270Action * action = PW3270_ACTION(object);
 
- 	debug("%s: terminal=%p",__FUNCTION__,action->terminal);
+// 	debug("%s: terminal=%p",__FUNCTION__,action->terminal);
 
  	if(action && action->terminal) {
 
