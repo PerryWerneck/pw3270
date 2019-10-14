@@ -28,21 +28,32 @@
  */
 
  #include "private.h"
+ #include <pw3270/actions.h>
 
  static gboolean on_terminal_focus(GtkWidget *terminal, GdkEvent *event, pw3270ApplicationWindow * window) {
 
 	debug("Focus on terminal %p", terminal);
+
 	window->terminal = terminal;
 
  	return FALSE;
  }
 
- GtkWidget * pw3270_terminal_new(GtkWidget *window) {
+ static void session_changed(GtkWidget *terminal, GtkWidget *label) {
+	gtk_label_set_text(GTK_LABEL(label),v3270_get_session_name(terminal));
+ }
 
+ GtkWidget * pw3270_terminal_new(GtkWidget *widget) {
+
+	pw3270ApplicationWindow * window = PW3270_APPLICATION_WINDOW(widget);
  	GtkWidget * terminal = v3270_new();
-	g_signal_connect(G_OBJECT(terminal), "focus-in-event", G_CALLBACK(on_terminal_focus), window);
+ 	GtkWidget * label = gtk_label_new(v3270_get_session_name(terminal));
 
-	gtk_notebook_append_page(PW3270_APPLICATION_WINDOW(window)->notebook,terminal,NULL);
+	g_signal_connect(G_OBJECT(terminal), "focus-in-event", G_CALLBACK(on_terminal_focus), widget);
+	g_signal_connect(G_OBJECT(terminal), "session_changed", G_CALLBACK(session_changed),label);
+
+	gtk_notebook_append_page(GTK_NOTEBOOK(window->notebook),terminal,label);
+	gtk_notebook_set_show_tabs(GTK_NOTEBOOK(window->notebook),gtk_notebook_get_n_pages(GTK_NOTEBOOK(window->notebook)) > 1);
 
 	return terminal;
 

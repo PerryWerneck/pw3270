@@ -29,7 +29,7 @@
  */
 
  #include <config.h>
- #include <pw3270/toolbar.h>
+ #include <pw3270/window.h>
  #include <v3270.h>
  #include <v3270/trace.h>
  #include <lib3270/log.h>
@@ -39,6 +39,10 @@
  static void activate(GtkApplication* app, G_GNUC_UNUSED gpointer user_data) {
 
 	GtkWidget * window = pw3270_application_window_new(app);
+
+	// Create terminal widget
+	pw3270_terminal_new(window);
+	pw3270_terminal_new(window);
 
 	// Setup and show main window
 	gtk_window_set_position(GTK_WINDOW(window),GTK_WIN_POS_CENTER);
