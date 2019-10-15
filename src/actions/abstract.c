@@ -60,6 +60,13 @@
 	PROP_STATE
  };
 
+ enum {
+  SIGNAL_CHANGE_STATE,
+  NR_SIGNALS
+ };
+
+ static guint action_signals[NR_SIGNALS];
+
  G_DEFINE_TYPE_WITH_CODE(pw3270Action, pw3270Action, G_TYPE_OBJECT, G_IMPLEMENT_INTERFACE(G_TYPE_ACTION, pw3270_action_iface_init))
 
  void pw3270_action_iface_init(GActionInterface *iface) {
@@ -128,6 +135,18 @@
 			NULL,
 			G_PARAM_READWRITE | G_PARAM_CONSTRUCT |
 			G_PARAM_STATIC_STRINGS));
+
+	// Install signals
+	action_signals[SIGNAL_CHANGE_STATE] =
+		g_signal_new(
+			I_("change-state"),
+			G_TYPE_SIMPLE_ACTION,
+			G_SIGNAL_RUN_LAST | G_SIGNAL_MUST_COLLECT,
+			0, NULL, NULL,
+			NULL,
+			G_TYPE_NONE, 1,
+			G_TYPE_VARIANT
+		);
  }
 
  void pw3270Action_init(pw3270Action *action) {
@@ -304,6 +323,10 @@
 
 			action->state = g_variant_ref(value);
 
+			if (g_signal_has_handler_pending(object, action_signals[SIGNAL_CHANGE_STATE], 0, TRUE)) {
+				g_signal_emit(object, action_signals[SIGNAL_CHANGE_STATE], 0, value);
+			}
+
 			g_object_notify(G_OBJECT(object), "state");
 
 		}
@@ -313,6 +336,14 @@
 	}
 
  }
+
+ void pw3270_action_set_enabled(GAction *object, gboolean state) {
+
+//	pw3270Action * action = PW3270_ACTION(object);
+
+	g_object_notify(G_OBJECT(object), "enabled");
+ }
+
 
  static void change_widget(GAction *action, GtkWidget G_GNUC_UNUSED(*from), GtkWidget *to) {
 	PW3270_ACTION(action)->terminal = to;
@@ -354,7 +385,7 @@
  	debug("%s: terminal=%p",__FUNCTION__,action->terminal);
 
  	if(action && action->terminal) {
-		return PW3270_ACTION_GET_CLASS(object)->activate(object,parameter,action->terminal);
+		PW3270_ACTION_GET_CLASS(object)->activate(object,parameter,action->terminal);
  	}
 
  }

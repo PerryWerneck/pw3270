@@ -53,11 +53,17 @@
 
  static void Lib3270Action_class_init(Lib3270ActionClass *klass);
  static void Lib3270Action_init(Lib3270Action *action);
+ static void change_widget(GAction *object, GtkWidget *from, GtkWidget *to);
 
  G_DEFINE_TYPE(Lib3270Action, Lib3270Action, PW3270_TYPE_ACTION);
 
  static gboolean get_enabled(GAction *action, GtkWidget *terminal) {
-	return PW3270_LIB3270_ACTION(action)->definition->activatable(v3270_get_session(terminal)) > 0 ? TRUE : FALSE;
+
+ 	if(terminal)
+		return PW3270_LIB3270_ACTION(action)->definition->activatable(v3270_get_session(terminal)) > 0 ? TRUE : FALSE;
+
+	return FALSE;
+
  }
 
  static void activate(GAction *action, GVariant *parameter, GtkWidget *terminal) {
@@ -70,6 +76,7 @@
 
 	action->activate = activate;
 	action->get_enabled = get_enabled;
+	action->change_widget = change_widget;
 
  }
 
@@ -92,4 +99,14 @@
  	return G_ACTION(action);
  }
 
+ void change_widget(GAction *object, GtkWidget *from, GtkWidget *to) {
+
+	PW3270_ACTION_CLASS(Lib3270Action_parent_class)->change_widget(object,from,to);
+
+	// Does the "enabled" state has changed? If yes notify customers.
+	gboolean enabled = get_enabled(object,to);
+	if(get_enabled(object,from) != enabled)
+		pw3270_action_set_enabled(object,enabled);
+
+ }
 

@@ -48,6 +48,9 @@
 
 	#include <lib3270/log.h>
 
+	/* not really I18N-related, but also a string marker macro */
+	#define I_(string) g_intern_static_string (string)
+
 	struct _pw3270Action {
 		GObject parent;
 
@@ -71,6 +74,7 @@
 	G_GNUC_INTERNAL GAction	* pw3270_toggle_action_new_from_lib3270(const LIB3270_TOGGLE * definition);
 
 	G_GNUC_INTERNAL void pw3270_action_change_state_boolean(GAction *action, gboolean state);
+	G_GNUC_INTERNAL void pw3270_action_set_enabled(GAction *action, gboolean state);
 
 
 #endif // PRIVATE_H_INCLUDED
