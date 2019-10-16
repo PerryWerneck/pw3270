@@ -218,7 +218,7 @@ SubSection "@PRODUCT_NAME@" SecMain
 		CreateDirectory "$INSTDIR\sdk\def"
 		CreateDirectory "$INSTDIR\sdk\lib"
 
-		file "/oname=$INSTDIR\sdk\def\lib@LIBRARY_NAME@.def"	"@PRODUCT_NAME@\def\lib@LIBRARY_NAME@.def"
+		file "/oname=$INSTDIR\sdk\def\lib@LIBRARY_NAME@.def"		"@PRODUCT_NAME@\def\lib@LIBRARY_NAME@.def"
 		file "/oname=$INSTDIR\sdk\lib\lib3270.dll.a"		"lib@LIBRARY_NAME@.dll.a"
 		file "/oname=$INSTDIR\sdk\lib\lib3270.delayed.a"	"lib@LIBRARY_NAME@.delayed.a"
 		file "/oname=$INSTDIR\sdk\lib\lib3270.static.a"		"lib@LIBRARY_NAME@.static.a"
