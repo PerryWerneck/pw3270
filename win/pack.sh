@@ -197,6 +197,9 @@ buildLibrary()
 		export cache=${WORKDIR}/cache/${ARCH}/${1}.cache
 
 		cd ${WORKDIR}/sources/${1}
+		if [ "$?" != "0" ]; then
+			failed "Can't change to ${WORKDIR}/sources/${1}"
+		fi
 
 		if [ -x ${PROJECTDIR}/win/configure.${1} ]; then
 
@@ -298,6 +301,9 @@ buildExtraPackage()
 		export cache=${WORKDIR}/cache/${ARCH}/${1}.cache
 
 		cd ${WORKDIR}/sources/${1}
+		if [ "$?" != "0" ]; then
+			failed "Can't change to ${WORKDIR}/sources/${1}"
+		fi
 
 		if [ -x ${PROJECTDIR}/win/configure.${1} ]; then
 

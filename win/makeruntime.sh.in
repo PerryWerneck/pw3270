@@ -110,6 +110,7 @@ copy_dll() {
 			wsock32
 			winspool.drv
 			ntdll
+			winhttp
 		"
 
 		# Excluo DLLs do sistema
