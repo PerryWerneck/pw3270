@@ -77,7 +77,15 @@ prepare()
 
 	mkdir -p ${WORKDIR}/sources
 
-	git clone --quiet ${GIT_URL}/${1}.git ${WORKDIR}/sources/${1}
+	TEMPVAR=${1}_branch
+	BRANCH=${!TEMPVAR}
+
+	if [ -z ${BRANCH} ]; then
+		git clone --quiet ${GIT_URL}/${1}.git ${WORKDIR}/sources/${1}
+	else
+		git clone --quiet --branch "${BRANCH}" ${GIT_URL}/${1}.git ${WORKDIR}/sources/${1}
+	fi
+
 	if [ "$?" != "0" ]; then
 		failed "Can't get sources for ${1}"
 	fi
