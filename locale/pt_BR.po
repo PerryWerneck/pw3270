@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-17 13:56-0300\n"
-"PO-Revision-Date: 2019-09-19 15:54-0300\n"
+"PO-Revision-Date: 2019-10-17 14:00-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
 "Language: pt_BR\n"
@@ -748,13 +748,12 @@ msgid "Connect on startup"
 msgstr "Conectar ao iniciar"
 
 #: 00default.xml:152
-#, fuzzy
 msgid "Connect to host"
 msgstr "Conectar ao servidor"
 
 #: src/core/actions/table.c:84
 msgid "Connect to host."
-msgstr "Conectar ao servidor"
+msgstr "Conectar ao servidor."
 
 #: src/core/iocalls.c:538 src/core/linux/connect.c:188
 #: src/core/linux/connect.c:220 src/core/linux/connect.c:238
@@ -791,7 +790,7 @@ msgstr "Copiar como tabela"
 
 #: 00default.xml:147
 msgid "Copy selected area to clipboard"
-msgstr ""
+msgstr "Copia seleção para a área de transferência"
 
 #: src/filetransfer/tables.c:81
 msgid "Creates a file with fixed-length records."
@@ -939,9 +938,8 @@ msgid "Device type rejected"
 msgstr "Tipo de dispositivo rejeitado"
 
 #: 00default.xml:153
-#, fuzzy
 msgid "Disconnect from host"
-msgstr "Desconecta do servidor."
+msgstr "Desconecta do servidor"
 
 #: src/core/actions/table.c:96
 msgid "Disconnect from host."
@@ -1012,9 +1010,8 @@ msgid "Erase input"
 msgstr "Apagar campos"
 
 #: 00default.xml:149
-#, fuzzy
 msgid "Erase screen contents"
-msgstr "Trace do conteúdo da tela"
+msgstr "Apaga conteúdo da tela"
 
 #: 00default.xml:79
 msgid "Erase to end of field"
@@ -1173,11 +1170,11 @@ msgstr "Obtêm a fila de arquivos a transferir de um arquivo"
 
 #: 00default.xml:157
 msgid "Go back to window mode"
-msgstr ""
+msgstr "Volta para o modo de janela"
 
 #: 00default.xml:156
 msgid "Go to fullscreen mode"
-msgstr ""
+msgstr "Vai para o modo tela cheia"
 
 #: src/ssl/linux/curl.c:295
 msgid "Got a bad formatted certificate revocation list from LDAP server"
@@ -1793,9 +1790,8 @@ msgid "Paste file."
 msgstr "Colar conteúdo de um arquivo"
 
 #: 00default.xml:148
-#, fuzzy
 msgid "Paste from clipboard"
-msgstr "Colar de um arquivo"
+msgstr "Colar conteúdo da área de transferência"
 
 #: src/dialogs/load.c:246
 msgid "Paste from file"
@@ -1919,7 +1915,7 @@ msgstr "Sair"
 
 #: 00default.xml:161
 msgid "Quit pw3270"
-msgstr ""
+msgstr "Encerra aplicação"
 
 #: src/core/rpq.c:236
 #, c-format
@@ -2284,9 +2280,8 @@ msgid "Select destination file"
 msgstr "Selecionar arquivo destino"
 
 #: src/core/actions/table.c:287
-#, fuzzy
 msgid "Select field"
-msgstr "Selecionar campo"
+msgstr "Seleciona campo"
 
 #: src/filetransfer/v3270ft.c:570 src/filetransfer/settings.c:467
 #: src/dialogs/load.c:92 src/dialogs/load.c:108 src/dialogs/load.c:168
@@ -2319,9 +2314,8 @@ msgid "Select previous file"
 msgstr "Selecionar arquivo anterior"
 
 #: 00default.xml:158
-#, fuzzy
 msgid "Select terminal colors"
-msgstr "Cores do terminal"
+msgstr "Configura cores do terminal"
 
 #: src/core/linux/event_dispatcher.c:144
 msgid "Select() failed when processing for events."
@@ -2356,18 +2350,16 @@ msgid "Send text file"
 msgstr "Enviar arquivo texto"
 
 #: src/core/actions/table.c:566
-#, fuzzy
 msgid "Send to print"
-msgstr "Incapaz de imprimir"
+msgstr "Envia para impressão"
 
 #: 00default.xml:52
 msgid "Send/Receive"
 msgstr "Enviar/Receber"
 
 #: 00default.xml:159
-#, fuzzy
 msgid "Send/Receive files"
-msgstr "Receber arquivo"
+msgstr "Enviar/Receber arquivos"
 
 #: src/filetransfer/v3270ftprogress.c:738 src/dialogs/transfer.c:130
 msgid "Sending file"
@@ -3566,7 +3558,7 @@ msgstr "Versão da lib3270"
 
 #: src/core/properties/boolean.c:167
 msgid "numeric lock"
-msgstr ""
+msgstr "Bloqueio numérico"
 
 #: src/core/linux/connect.c:221
 msgid "setsockopt(SO_OOBINLINE) has failed"
