@@ -82,7 +82,6 @@ prepare()
 	if [ "${NAME_CHECK}" == "0" ]; then
 		TEMPVAR=${1}_branch
 		BRANCH=${!TEMPVAR}
-		echo "${TEMPVAR}: ${BRANCH}"
 	else
 		BRANCH=""
 	fi
