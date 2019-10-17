@@ -30,7 +30,7 @@ PRODUCT_NAME="pw3270"
 LIBRARY_NAME="lib3270"
 CORE_LIBRARIES="lib3270 libv3270 libipc3270"
 PACKAGE_PLUGINS=""
-PACKAGE_EXTRAS="libhllapi"
+PACKAGE_EXTRAS="libhllapi tn3270-mono"
 TARGET_ARCHS="x86_64 x86_32"
 GIT_URL="https://github.com/PerryWerneck"
 
@@ -78,11 +78,13 @@ prepare()
 	mkdir -p ${WORKDIR}/sources
 
 	TEMPVAR=${1}_branch
-	BRANCH=${!TEMPVAR}
+	BRANCH=${!TEMPVAR} 2> /dev/null
 
 	if [ -z ${BRANCH} ]; then
 		git clone --quiet ${GIT_URL}/${1}.git ${WORKDIR}/sources/${1}
 	else
+		echo "Preparing ${1} ${BRANCH}"
+		echo -e "\e]2;Preparing ${1} ${BRANCH}\a"
 		git clone --quiet --branch "${BRANCH}" ${GIT_URL}/${1}.git ${WORKDIR}/sources/${1}
 	fi
 

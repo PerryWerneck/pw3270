@@ -254,8 +254,8 @@ locale: \
 
 locale/$(PACKAGE_TARNAME).pot: \
 	$(POTDIR)/pw3270.pot \
-	/usr/share/@PRODUCT_NAME@/pot/lib3270.pot \
-	/usr/share/@PRODUCT_NAME@/pot/libv3270.pot \
+	$(datarootdir)/$(PRODUCT_NAME)/pot/lib3270.pot \
+	$(datarootdir)/$(PRODUCT_NAME)/pot/libv3270.pot \
 	$(POTDIR)/ui.pot
 
 	@rm -f $@
