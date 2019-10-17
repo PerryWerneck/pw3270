@@ -28,6 +28,13 @@
  */
 
  #include <config.h>
+
+ #ifdef WIN32
+	#include <windows.h>
+ #else
+	#include <unistd.h>
+ #endif // WIN32
+
  #include <stdarg.h>
  #include <stdio.h>
  #include <string.h>
@@ -35,9 +42,6 @@
 
  #include "private.h"
 
-#ifndef WIN32
- #include <unistd.h>
-#endif // !WIN32
 
 #ifdef HAVE_SYSLOG
 	#include <syslog.h>

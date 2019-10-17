@@ -27,6 +27,14 @@
  *
  */
 
+ #include <config.h>
+
+ #ifdef WIN32
+	#include <windows.h>
+ #else
+	#include <unistd.h>
+ #endif // WIN32
+
  #include <stdarg.h>
  #include <stdio.h>
  #include <string.h>
