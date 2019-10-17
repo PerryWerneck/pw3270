@@ -1859,7 +1859,7 @@ msgstr "Operação de impressão falhou"
 
 #: src/core/actions/table.c:500
 msgid "Print screen contents"
-msgstr "Imrpime o conteúdo da tela"
+msgstr "Imprime o conteúdo da tela"
 
 #: 00default.xml:48
 msgid "Print selected"
