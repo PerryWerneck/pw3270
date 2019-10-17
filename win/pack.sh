@@ -30,7 +30,7 @@ PRODUCT_NAME="pw3270"
 LIBRARY_NAME="lib3270"
 CORE_LIBRARIES="lib3270 libv3270 libipc3270"
 PACKAGE_PLUGINS=""
-PACKAGE_EXTRAS="libhllapi tn3270-mono"
+PACKAGE_EXTRAS="libhllapi mono-tn3270"
 TARGET_ARCHS="x86_64 x86_32"
 GIT_URL="https://github.com/PerryWerneck"
 
@@ -77,18 +77,29 @@ prepare()
 
 	mkdir -p ${WORKDIR}/sources
 
-	TEMPVAR=${1}_branch
-	BRANCH=${!TEMPVAR} 2> /dev/null
+	NAME_CHECK=$(echo "${1}" | grep -c "-")
+
+	if [ "${NAME_CHECK}" == "0" ]; then
+		TEMPVAR=${1}_branch
+		BRANCH=${!TEMPVAR}
+		echo "${TEMPVAR}: ${BRANCH}"
+	else
+		BRANCH=""
+	fi
 
 	if [ -z ${BRANCH} ]; then
-		git clone --quiet ${GIT_URL}/${1}.git ${WORKDIR}/sources/${1}
+		git clone ${GIT_URL}/${1}.git --quiet ${WORKDIR}/sources/${1}
 	else
 		echo "Preparing ${1} ${BRANCH}"
 		echo -e "\e]2;Preparing ${1} ${BRANCH}\a"
-		git clone --quiet --branch "${BRANCH}" ${GIT_URL}/${1}.git ${WORKDIR}/sources/${1}
+		git clone --branch "${BRANCH}" --quiet ${GIT_URL}/${1}.git ${WORKDIR}/sources/${1}
 	fi
 
 	if [ "$?" != "0" ]; then
+		failed "Can't get sources for ${1}"
+	fi
+
+	if [ ! -e "${WORKDIR}/sources/${1}" ]; then
 		failed "Can't get sources for ${1}"
 	fi
 
