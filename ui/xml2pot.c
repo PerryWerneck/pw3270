@@ -57,7 +57,7 @@
 
  	for(f=0;names[f];f++)
  	{
- 		if(!strcmp(names[f],"label") && values[f])
+ 		if(values[f] && !(strcasecmp(names[f],"label") && strcasecmp(names[f],"tooltip")))
  		{
  			struct record *rec = g_hash_table_lookup(hash,values[f]);
 

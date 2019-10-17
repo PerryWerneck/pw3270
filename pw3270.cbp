@@ -247,6 +247,9 @@
 		<Unit filename="ui/80rexx.xml" />
 		<Unit filename="ui/98trace.xml" />
 		<Unit filename="ui/99debug.xml" />
+		<Unit filename="ui/xml2pot.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="updateChangeLog.sh" />
 		<Extensions>
 			<code_completion />

@@ -204,6 +204,12 @@ $(POTDIR)/%.pot: \
 
 	@$(MAKE) -C $(basename $(notdir $@)) $@
 
+
+$(POTDIR)/%.pot: \
+	/usr/share/@PRODUCT_NAME@/pot/%.pot
+
+	@cp "$<" "$@"
+
 $(SRCDIR)/%: \
 	%/Makefile
 
