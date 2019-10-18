@@ -30,20 +30,40 @@
  #include "private.h"
  #include <pw3270/actions.h>
 
+ static void session_changed(GtkWidget *terminal, GtkWidget *label) {
+
+	gtk_label_set_text(GTK_LABEL(label),v3270_get_session_name(terminal));
+
+	// Do I have to change the window title?
+	GtkWidget * toplevel = gtk_widget_get_toplevel(terminal);
+	if(PW3270_IS_APPLICATION_WINDOW(toplevel)) {
+
+		pw3270ApplicationWindow * window = PW3270_APPLICATION_WINDOW(toplevel);
+
+		if(window->terminal == terminal) {
+			g_autofree gchar * title = v3270_get_session_title(terminal);
+			gtk_window_set_title(GTK_WINDOW(window), title);
+		}
+
+	}
+
+ }
+
  static gboolean on_terminal_focus(GtkWidget *terminal, GdkEvent *event, pw3270ApplicationWindow * window) {
 
-	debug("Focus on terminal %p", terminal);
-
+	// Store the active terminal widget.
 	window->terminal = terminal;
+
+	// Change window title
+	g_autofree gchar * title = v3270_get_session_title(terminal);
+	gtk_window_set_title(GTK_WINDOW(window), title);
 
  	return FALSE;
  }
 
- static void session_changed(GtkWidget *terminal, GtkWidget *label) {
-	gtk_label_set_text(GTK_LABEL(label),v3270_get_session_name(terminal));
- }
-
  GtkWidget * pw3270_terminal_new(GtkWidget *widget) {
+
+	g_return_val_if_fail(PW3270_IS_APPLICATION_WINDOW(widget),NULL);
 
 	pw3270ApplicationWindow * window = PW3270_APPLICATION_WINDOW(widget);
  	GtkWidget * terminal = v3270_new();
