@@ -111,14 +111,6 @@
 			G_PARAM_CONSTRUCT_ONLY |
 			G_PARAM_STATIC_STRINGS));
 
-	g_object_class_install_property (object_class, PROP_ENABLED,
-		g_param_spec_boolean ("enabled",
-			N_("Enabled"),
-			N_("If the action can be activated"),
-			TRUE,
-			G_PARAM_READWRITE |
-			G_PARAM_STATIC_STRINGS));
-
 	g_object_class_install_property (object_class, PROP_STATE_TYPE,
 		g_param_spec_boxed ("state-type",
 			N_("State Type"),
@@ -127,14 +119,31 @@
 			G_PARAM_READABLE |
 			G_PARAM_STATIC_STRINGS));
 
-	g_object_class_install_property (object_class, PROP_STATE,
-		g_param_spec_variant ("state",
+	// Enabled property
+	klass->properties.enabled =
+			g_param_spec_boolean(
+				"enabled",
+				N_("Enabled"),
+				N_("If the action can be activated"),
+				TRUE,
+				G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
+			);
+
+	g_object_class_install_property(object_class, PROP_ENABLED, klass->properties.enabled);
+
+	// State property
+	klass->properties.state =
+		g_param_spec_variant(
+			"state",
 			N_("State"),
 			N_("The state the action is in"),
 			G_VARIANT_TYPE_ANY,
 			NULL,
 			G_PARAM_READWRITE | G_PARAM_CONSTRUCT |
-			G_PARAM_STATIC_STRINGS));
+			G_PARAM_STATIC_STRINGS
+		);
+
+	g_object_class_install_property (object_class, PROP_STATE, klass->properties.state);
 
 	// Install signals
 	action_signals[SIGNAL_CHANGE_STATE] =
@@ -327,7 +336,7 @@
 				g_signal_emit(object, action_signals[SIGNAL_CHANGE_STATE], 0, value);
 			}
 
-			g_object_notify(G_OBJECT(object), "state");
+			g_object_notify_by_pspec(G_OBJECT(object), PW3270_ACTION_GET_CLASS(object)->properties.state);
 
 		}
 
@@ -338,10 +347,7 @@
  }
 
  void pw3270_action_set_enabled(GAction *object, gboolean state) {
-
-//	pw3270Action * action = PW3270_ACTION(object);
-
-	g_object_notify(G_OBJECT(object), "enabled");
+	g_object_notify_by_pspec(G_OBJECT(object), PW3270_ACTION_GET_CLASS(object)->properties.enabled);
  }
 
 

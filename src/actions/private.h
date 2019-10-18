@@ -64,6 +64,11 @@
 	struct _pw3270ActionClass {
 		GObjectClass parent_class;
 
+		struct {
+			GParamSpec * state;
+			GParamSpec * enabled;
+		} properties;
+
 		void (*change_widget)(GAction *action, GtkWidget *from, GtkWidget *to);
 		gboolean (*get_enabled)(GAction *action, GtkWidget *terminal);
 		void (*activate)(GAction *action, GVariant *parameter, GtkWidget *terminal);
