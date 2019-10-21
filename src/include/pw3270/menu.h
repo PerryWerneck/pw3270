@@ -28,13 +28,13 @@
  */
 
 /**
- * @brief Declares the pw3270 Top Menu widget.
+ * @brief Declares the pw3270 Menu widgets.
  *
  */
 
-#ifndef PW3270_TOP_MENU_H_INCLUDED
+#ifndef PW3270_MENU_H_INCLUDED
 
-	#define PW3270_TOP_MENU_H_INCLUDED
+	#define PW3270_MENU_H_INCLUDED
 
 	#include <gtk/gtk.h>
 
@@ -43,4 +43,4 @@
 
 	G_END_DECLS
 
-#endif // PW3270_TOP_MENU_H_INCLUDED
+#endif // PW3270_MENU_H_INCLUDED
