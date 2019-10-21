@@ -30,6 +30,7 @@
 
  #include <config.h>
  #include <pw3270/window.h>
+ #include <pw3270/toolbar.h>
  #include <v3270.h>
  #include <v3270/trace.h>
  #include <lib3270/log.h>
@@ -49,6 +50,39 @@
 	gtk_window_set_default_size (GTK_WINDOW (window), 800, 500);
 	gtk_widget_show_all(window);
 
+}
+
+GtkWidget * pw3270_toolbar_new(void) {
+
+	static const struct _item {
+		const gchar *icon;
+		const gchar *label;
+	} itens[] = {
+
+		{
+			"gtk-connect",
+			"_Connect"
+		},
+
+		{
+			"gtk-disconnect",
+			"_Disconnect"
+		}
+
+	};
+
+	GtkWidget * toolbar = gtk_toolbar_new();
+	size_t item;
+
+	for(item = 0; item < G_N_ELEMENTS(itens); item++) {
+
+		GtkToolItem * button = gtk_tool_button_new(gtk_image_new_from_icon_name(itens[item].icon,GTK_ICON_SIZE_LARGE_TOOLBAR),itens[item].label);
+		gtk_tool_button_set_use_underline(GTK_TOOL_BUTTON(button),TRUE);
+		gtk_toolbar_insert(GTK_TOOLBAR(toolbar), button, -1);
+
+	}
+
+	return toolbar;
 }
 
 int main (int argc, char **argv) {

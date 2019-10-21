@@ -27,39 +27,20 @@
  *
  */
 
-#ifndef PRIVATE_H_INCLUDED
+/**
+ * @brief Declares the pw3270 Top Menu widget.
+ *
+ */
 
-	#define PRIVATE_H_INCLUDED
+#ifndef PW3270_TOP_MENU_H_INCLUDED
 
-	#include <config.h>
+	#define PW3270_TOP_MENU_H_INCLUDED
 
-	#ifndef GETTEXT_PACKAGE
-		#define GETTEXT_PACKAGE PACKAGE_NAME
-	#endif
-
-	#include <libintl.h>
-	#include <glib/gi18n.h>
 	#include <gtk/gtk.h>
 
-	#include <pw3270/window.h>
-	#include <v3270.h>
-	#include <lib3270.h>
-	#include <lib3270/log.h>
+	G_BEGIN_DECLS
 
-	struct _pw3270ApplicationWindow {
 
-		GtkApplicationWindow parent;
+	G_END_DECLS
 
-		GtkWidget   * terminal;
-		GtkNotebook * notebook;
-		GtkToolbar	* toolbar;
-
-	};
-
-	struct _pw3270ApplicationWindowClass {
-
-		GtkApplicationWindowClass parent_class;
-
-	};
-
-#endif // PRIVATE_H_INCLUDED
+#endif // PW3270_TOP_MENU_H_INCLUDED

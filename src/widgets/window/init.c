@@ -28,6 +28,7 @@
  */
 
  #include "private.h"
+ #include <pw3270/toolbar.h>
 
  G_DEFINE_TYPE(pw3270ApplicationWindow, pw3270ApplicationWindow, GTK_TYPE_APPLICATION_WINDOW);
 
@@ -37,14 +38,19 @@
 
  static void pw3270ApplicationWindow_init(pw3270ApplicationWindow *widget) {
 
+	GtkBox * vBox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL,0));
+
 	widget->notebook = GTK_NOTEBOOK(gtk_notebook_new());
+	widget->terminal = pw3270_terminal_new(GTK_WIDGET(widget));
+	widget->toolbar  = GTK_TOOLBAR(pw3270_toolbar_new());
 
 	gtk_notebook_set_show_tabs(widget->notebook,FALSE);
 	gtk_notebook_set_show_border(widget->notebook, FALSE);
 
-	widget->terminal = pw3270_terminal_new(GTK_WIDGET(widget));
+	gtk_box_pack_start(vBox,GTK_WIDGET(widget->toolbar),FALSE,TRUE,0);
+	gtk_box_pack_start(vBox,GTK_WIDGET(widget->notebook),TRUE,TRUE,0);
 
-	gtk_container_add(GTK_CONTAINER(widget),GTK_WIDGET(widget->notebook));
+	gtk_container_add(GTK_CONTAINER(widget),GTK_WIDGET(vBox));
 	gtk_widget_show_all(GTK_WIDGET(widget));
 
  }

@@ -39,6 +39,7 @@
 			<Add option="`pkg-config --libs gtk+-3.0 libv3270`" />
 		</Linker>
 		<Unit filename="../../include/pw3270/actions.h" />
+		<Unit filename="../../include/pw3270/toolbar.h" />
 		<Unit filename="../../include/pw3270/window.h" />
 		<Unit filename="init.c">
 			<Option compilerVar="CC" />
