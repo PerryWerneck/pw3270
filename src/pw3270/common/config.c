@@ -222,9 +222,9 @@
 	// Search the application DATADIR
 	//
 	{
-		gchar *filename = g_build_filename(DATAROOTDIR,PACKAGE_NAME,name,NULL);
+		gchar *filename = g_build_filename(DATAROOTDIR,G_STRINGIFY(PRODUCT_NAME),name,NULL);
 
-		trace("Checking for %s",filename);
+		trace("Checking for default config \"%s\"",filename);
 
 		if(g_file_test(filename,G_FILE_TEST_IS_REGULAR))
 			return filename;
@@ -255,11 +255,24 @@
 	const gchar * const * sysdata = g_get_system_data_dirs();
  	for(f=0;sysdata[f];f++)
 	{
-		gchar *filename = g_build_filename(sysdata[f],name,NULL);
-		trace("Checking for %s",filename);
+		gchar *filename;
+
+		// Check for product dir
+		filename = g_build_filename(sysdata[f],G_STRINGIFY(PRODUCT_NAME),name,NULL);
+		trace("Checking for system data \"%s\"",filename);
 		if(g_file_test(filename,G_FILE_TEST_IS_REGULAR))
 			return filename;
 		g_free(filename);
+
+		// Check for file
+		filename = g_build_filename(sysdata[f],name,NULL);
+		trace("Checking for system data \"%s\"",filename);
+		if(g_file_test(filename,G_FILE_TEST_IS_REGULAR))
+			return filename;
+		g_free(filename);
+
+
+
 	}
 
 	//
