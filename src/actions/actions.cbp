@@ -46,6 +46,12 @@
 		<Unit filename="lib3270/action.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="lib3270/pakey.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="lib3270/pfkey.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="lib3270/toggle.c">
 			<Option compilerVar="CC" />
 		</Unit>

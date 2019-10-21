@@ -80,6 +80,11 @@
 	iface->activate = pw3270_action_activate;
  }
 
+ static const GVariantType * get_parameter_type(GAction G_GNUC_UNUSED(*action))
+ {
+	return NULL;
+ }
+
  void pw3270Action_class_init(pw3270ActionClass *klass) {
 
 	GObjectClass *object_class = G_OBJECT_CLASS(klass);
@@ -87,6 +92,7 @@
 	klass->change_widget		= change_widget;
 	klass->get_enabled			= get_enabled;
 	klass->activate				= activate;
+	klass->get_parameter_type	= get_parameter_type;
 
  	object_class->finalize		= finalize;
 	object_class->set_property	= pw3270_action_set_property;
@@ -286,8 +292,7 @@
  }
 
  const GVariantType * pw3270_action_get_parameter_type(GAction *action) {
-//	debug("%s",__FUNCTION__);
- 	return NULL;
+ 	return PW3270_ACTION_GET_CLASS(action)->get_parameter_type(action);
  }
 
  const GVariantType * pw3270_action_get_state_type(GAction *object) {

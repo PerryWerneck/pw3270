@@ -84,5 +84,8 @@
 
 	}
 
+	g_action_map_add_action(map,pw3270_action_new_pfkey());
+	g_action_map_add_action(map,pw3270_action_new_pakey());
+
 	debug("%s ends",__FUNCTION__);
  }

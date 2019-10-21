@@ -72,11 +72,14 @@
 		void (*change_widget)(GAction *action, GtkWidget *from, GtkWidget *to);
 		gboolean (*get_enabled)(GAction *action, GtkWidget *terminal);
 		void (*activate)(GAction *action, GVariant *parameter, GtkWidget *terminal);
+		const GVariantType * (*get_parameter_type)(GAction *action);
 
 	};
 
 	G_GNUC_INTERNAL GAction * pw3270_action_new_from_lib3270(const LIB3270_ACTION * definition);
 	G_GNUC_INTERNAL GAction	* pw3270_toggle_action_new_from_lib3270(const LIB3270_TOGGLE * definition);
+	G_GNUC_INTERNAL GAction * pw3270_action_new_pfkey(void);
+	G_GNUC_INTERNAL GAction * pw3270_action_new_pakey(void);
 
 	G_GNUC_INTERNAL void pw3270_action_change_state_boolean(GAction *action, gboolean state);
 	G_GNUC_INTERNAL void pw3270_action_set_enabled(GAction *action, gboolean state);
