@@ -570,6 +570,14 @@ makeInstaller()
 
 		fi
 
+		if [ -d ${PROJECTDIR}/ui ]; then
+			mkdir -p ${WORKDIR}/build/${ARCH}/ui
+			cp -rv ${PROJECTDIR}/ui/* ${WORKDIR}/build/${ARCH}/${PRODUCT_NAME}/ui
+			if [ "$?" != "0" ]; then
+				failed "Can't copy customized UI"
+			fi
+		fi
+
 		cd ${WORKDIR}/build/${ARCH}
 
 		TARCH=${ARCH}
@@ -579,6 +587,7 @@ makeInstaller()
 
 		for NSI in *.nsi
 		do
+
 			makensis ${NSIS_ARGS} ${NSI}
 			if [ "$?" != "0" ]; then
 				echo makensis ${NSIS_ARGS} ${NSI}
