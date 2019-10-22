@@ -53,9 +53,11 @@
  static void Lib3270PaAction_init(Lib3270PaAction *action);
  static void change_widget(GAction *object, GtkWidget *from, GtkWidget *to);
 
- G_DEFINE_TYPE(Lib3270PaAction, Lib3270PaAction, PW3270_TYPE_PAKEY_ACTION);
+ G_DEFINE_TYPE(Lib3270PaAction, Lib3270PaAction, PW3270_TYPE_ACTION);
 
  static gboolean get_enabled(GAction *action, GtkWidget *terminal) {
+
+	debug("%s(%s)",__FUNCTION__,pw3270_action_get_name(action));
 
  	if(terminal)
 		return lib3270_is_connected(v3270_get_session(terminal)) > 0 ? TRUE: FALSE;

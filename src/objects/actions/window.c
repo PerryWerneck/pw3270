@@ -65,27 +65,41 @@
 	*/
 
 	// Map lib3270 actions
-	const LIB3270_ACTION * actions = lib3270_get_actions();
-	for(ix = 0; actions[ix].name; ix++) {
+	{
+		const LIB3270_ACTION * actions = lib3270_get_actions();
+		for(ix = 0; actions[ix].name; ix++) {
 
-		GAction *action = pw3270_action_new_from_lib3270(&actions[ix]);
-		pw3270_action_set_terminal_widget(action,terminal);
-		g_action_map_add_action(map,action);
+			GAction *action = pw3270_action_new_from_lib3270(&actions[ix]);
+			pw3270_action_set_terminal_widget(action,terminal);
+			g_action_map_add_action(map,action);
 
+		}
 	}
 
 	// Map toggles
-	const LIB3270_TOGGLE * toggles = lib3270_get_toggles();
-	for(ix = 0; toggles[ix].name; ix++) {
+	{
+		const LIB3270_TOGGLE * toggles = lib3270_get_toggles();
+		for(ix = 0; toggles[ix].name; ix++) {
 
-		GAction *action = pw3270_toggle_action_new_from_lib3270(&toggles[ix]);
-		pw3270_action_set_terminal_widget(action,terminal);
-		g_action_map_add_action(map,action);
+			GAction *action = pw3270_toggle_action_new_from_lib3270(&toggles[ix]);
+			pw3270_action_set_terminal_widget(action,terminal);
+			g_action_map_add_action(map,action);
 
+		}
 	}
 
-	g_action_map_add_action(map,pw3270_action_new_pfkey());
-	g_action_map_add_action(map,pw3270_action_new_pakey());
+	// Map special actions
+	{
+		GAction * actions[] = {
+			pw3270_action_new_pfkey(),
+			pw3270_action_new_pakey()
+		};
+
+		for(ix = 0; ix < G_N_ELEMENTS(actions); ix++) {
+			pw3270_action_set_terminal_widget(actions[ix],terminal);
+			g_action_map_add_action(map,actions[ix]);
+		}
+	}
 
 	debug("%s ends",__FUNCTION__);
  }

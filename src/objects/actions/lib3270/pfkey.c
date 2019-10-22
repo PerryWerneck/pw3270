@@ -53,9 +53,11 @@
  static void Lib3270PfAction_init(Lib3270PfAction *action);
  static void change_widget(GAction *object, GtkWidget *from, GtkWidget *to);
 
- G_DEFINE_TYPE(Lib3270PfAction, Lib3270PfAction, PW3270_TYPE_PFKEY_ACTION);
+ G_DEFINE_TYPE(Lib3270PfAction, Lib3270PfAction, PW3270_TYPE_ACTION);
 
  static gboolean get_enabled(GAction *action, GtkWidget *terminal) {
+
+	debug("%s(%s)",__FUNCTION__,pw3270_action_get_name(action));
 
  	if(terminal)
 		return lib3270_is_connected(v3270_get_session(terminal)) > 0 ? TRUE: FALSE;
@@ -124,6 +126,7 @@
 	abstract->name = g_strdup("win.pfkey");
 
  	return G_ACTION(action);
+
  }
 
  void change_widget(GAction *object, GtkWidget *from, GtkWidget *to) {

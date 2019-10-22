@@ -377,12 +377,12 @@
 
  	pw3270Action * action = PW3270_ACTION(object);
 
+//	debug("%s(%s) action=%p terminal=%p",__FUNCTION__,pw3270_action_get_name(object),action,action->terminal);
+
 // 	debug("%s: terminal=%p",__FUNCTION__,action->terminal);
 
  	if(action && action->terminal) {
-
 		return PW3270_ACTION_GET_CLASS(object)->get_enabled(object,action->terminal);
-
  	}
 
 	return FALSE;

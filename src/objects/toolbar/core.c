@@ -101,7 +101,7 @@
 		} itens[] = {
 
 			{
-				.label = N_( "Default" )
+				.label = N_( "System default" )
 
 			},
 
@@ -147,7 +147,7 @@
 		} itens[] = {
 
 			{
-				.label = N_( "Default" )
+				.label = N_( "System default" )
 			},
 
 			{
