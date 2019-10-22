@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="PW3270 Menu Objects" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output=".bin/Debug/PW3270 Menu Objects" prefix_auto="1" extension_auto="1" />
+				<Option object_output=".obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-DDEBUG=1" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output=".bin/Release/PW3270 Menu Objects" prefix_auto="1" extension_auto="1" />
+				<Option object_output=".obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-DNDEBUG=1" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="`pkg-config --cflags gtk+-3.0`" />
+			<Add directory="../../include" />
+		</Compiler>
+		<Linker>
+			<Add option="`pkg-config --cflags libs`" />
+		</Linker>
+		<Unit filename="../../include/pw3270/actions.h" />
+		<Unit filename="../../include/pw3270/menu.h" />
+		<Unit filename="model.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

@@ -27,31 +27,32 @@
  *
  */
 
-/**
- * @brief Declares the pw3270 Menu Objects.
- *
- */
+ #include <pw3270/menu.h>
 
-#ifndef PW3270_MENU_H_INCLUDED
+ struct _pw3270MenuModel {
+	GMenuModel parent;
 
-	#define PW3270_MENU_H_INCLUDED
+ };
 
-	#include <gtk/gtk.h>
+ struct _pw3270MenuModelClass {
+	GMenuModelClass parent_class;
 
-	G_BEGIN_DECLS
+ };
 
-	#define PW3270_TYPE_MENU_MODEL				(pw3270MenuModel_get_type())
-	#define PW3270_MENU_MODEL(inst)				(G_TYPE_CHECK_INSTANCE_CAST ((inst), PW3270_TYPE_MENU_MODEL, pw3270MenuModel))
-	#define PW3270_MENU_MODEL_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), PW3270_TYPE_MENU_MODEL, pw3270MenuModelClass))
-	#define PW3270_IS_MENU_MODEL(inst)			(G_TYPE_CHECK_INSTANCE_TYPE ((inst), PW3270_TYPE_MENU_MODEL))
-	#define PW3270_IS_MENU_MODEL_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), PW3270_TYPE_MENU_MODEL))
-	#define PW3270_MENU_MODEL_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), PW3270_TYPE_MENU_MODEL, pw3270MenuModelClass))
 
-	typedef struct _pw3270MenuModel				pw3270MenuModel;
-	typedef struct _pw3270MenuModelClass		pw3270MenuModelClass;
+ void pw3270MenuModel_class_init(pw3270MenuModel *klass) {
 
-	GMenuModel * pw3270_menu_model_new(void);
+ }
 
-	G_END_DECLS
+ void pw3270MenuModel_init(pw3270MenuModel *model) {
 
-#endif // PW3270_MENU_H_INCLUDED
+ }
+
+ GMenuModel * pw3270_menu_model_new(void) {
+
+ 	pw3270MenuModel * model = (pw3270MenuModel *) g_object_new(PW3270_TYPE_MENU_MODEL, NULL);
+
+
+
+ 	return G_MENU_MODEL(model);
+ }
