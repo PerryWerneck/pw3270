@@ -85,6 +85,72 @@ GtkWidget * pw3270_toolbar_new(void) {
 	return toolbar;
 }
 
+static void preferences_activated(GSimpleAction * action, GtkApplication *application) {
+
+	debug("%s",__FUNCTION__);
+
+}
+
+static void quit_activated(GSimpleAction * action, GVariant *parameter, gpointer application) {
+
+	debug("%s",__FUNCTION__);
+
+}
+
+void startup(GtkApplication *application, gpointer user_data) {
+
+	static GActionEntry app_entries[] = {
+		{
+			"app.about",
+			quit_activated,
+			NULL,
+			NULL,
+			NULL
+		},
+		{
+			"app.help",
+			quit_activated,
+			NULL,
+			NULL,
+			NULL
+		},
+		{
+			"app.preferences",
+			preferences_activated,
+			NULL,
+			NULL,
+			NULL
+		},
+		{
+			"app.quit",
+			quit_activated,
+			NULL,
+			NULL,
+			NULL
+		}
+	};
+
+	g_action_map_add_action_entries(
+		G_ACTION_MAP(application),
+		app_entries,
+		G_N_ELEMENTS(app_entries),
+		application
+	);
+
+	GtkBuilder * builder = gtk_builder_new_from_file("application.ui");
+
+	debug("Builder: %p",builder);
+
+	GMenuModel * app_menu = G_MENU_MODEL(gtk_builder_get_object(builder, "app-menu"));
+	debug("app-menu: %p", app_menu);
+	gtk_application_set_app_menu(application, app_menu);
+
+
+	// gtk_application_set_menubar(application, G_MENU_MODEL(gtk_builder_get_object(builder, "app-menubar")));
+
+	g_object_unref(builder);
+}
+
 int main (int argc, char **argv) {
 
   GtkApplication *app;
@@ -93,6 +159,7 @@ int main (int argc, char **argv) {
   app = gtk_application_new ("br.com.bb.pw3270",G_APPLICATION_FLAGS_NONE);
 
   g_signal_connect (app, "activate", G_CALLBACK(activate), NULL);
+  g_signal_connect (app, "startup", G_CALLBACK(startup), NULL);
 
   status = g_application_run (G_APPLICATION (app), argc, argv);
   g_object_unref (app);
