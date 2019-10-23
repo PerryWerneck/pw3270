@@ -34,6 +34,20 @@
 
  static void pw3270ApplicationWindow_class_init(pw3270ApplicationWindowClass *klass) {
 
+	/*
+	window_props[PROP_UI_STYLE] =
+      g_param_spec_uint (
+			"ui_style",  	// P_()
+			"ui_style",		// P_()
+			_( "The application interface style" ),
+			PW3270_UI_STYLE_CLASSICAL,
+			PW3270_UI_STYLE_GNOME,
+			PW3270_UI_STYLE_GNOME,
+			G_PARAM_READABLE
+		);
+	*/
+
+
  }
 
  static void pw3270ApplicationWindow_init(pw3270ApplicationWindow *widget) {
@@ -58,7 +72,11 @@
  GtkWidget * pw3270_application_window_new(GtkApplication * application) {
 
 	g_return_val_if_fail(GTK_IS_APPLICATION(application), NULL);
-	return g_object_new(PW3270_TYPE_APPLICATION_WINDOW, "application", application, NULL);
+	return g_object_new(
+				PW3270_TYPE_APPLICATION_WINDOW,
+				"application", application,
+				NULL);
+
 
  }
 

@@ -53,7 +53,6 @@
 	#define PW3270_APPLICATION_WINDOW_GET_CLASS(inst)	(G_TYPE_INSTANCE_GET_CLASS ((inst),  \
 														GTK_TYPE_APPLICATION_WINDOW, pw3270ApplicationWindowClass))
 
-
 	typedef struct _pw3270ApplicationWindowClass   pw3270ApplicationWindowClass;
 	typedef struct _pw3270ApplicationWindow        pw3270ApplicationWindow;
 

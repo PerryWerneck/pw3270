@@ -29,32 +29,13 @@
  */
 
  #include <config.h>
- #include <pw3270/window.h>
+ #include <pw3270/application.h>
  #include <pw3270/toolbar.h>
  #include <v3270.h>
  #include <v3270/trace.h>
  #include <lib3270/log.h>
 
  /*---[ Implement ]----------------------------------------------------------------------------------*/
-
- static void activate(GtkApplication* app, G_GNUC_UNUSED gpointer user_data) {
-
-	GtkWidget * window = pw3270_application_window_new(app);
-
-	gtk_application_window_set_show_menubar(GTK_APPLICATION_WINDOW(window),TRUE);
-
-	// Create terminal widget
-	pw3270_terminal_new(window);
-	pw3270_terminal_new(window);
-
-	// Setup and show main window
-	gtk_window_set_position(GTK_WINDOW(window),GTK_WIN_POS_CENTER);
-	gtk_window_set_default_size (GTK_WINDOW (window), 800, 500);
-
-	// gtk_widget_show_all(window);
-	gtk_window_present(GTK_WINDOW(window));
-
-}
 
 GtkWidget * pw3270_toolbar_new(void) {
 
@@ -89,86 +70,16 @@ GtkWidget * pw3270_toolbar_new(void) {
 	return toolbar;
 }
 
-static void preferences_activated(GSimpleAction * action, GVariant *parameter, gpointer application) {
-
-	debug("%s",__FUNCTION__);
-
-}
-
-static void quit_activated(GSimpleAction * action, GVariant *parameter, gpointer application) {
-
-	debug("%s",__FUNCTION__);
-
-}
-
-void startup(GtkApplication *app) {
-
-	static GActionEntry app_entries[] = {
-		{
-			"app.about",
-			quit_activated,
-			NULL,
-			NULL,
-			NULL
-		},
-		{
-			"app.help",
-			quit_activated,
-			NULL,
-			NULL,
-			NULL
-		},
-		{
-			"app.preferences",
-			preferences_activated,
-			NULL,
-			NULL,
-			NULL
-		},
-		{
-			"app.quit",
-			quit_activated,
-			NULL,
-			NULL,
-			NULL
-		}
-	};
-
-	g_action_map_add_action_entries(
-		G_ACTION_MAP(app),
-		app_entries,
-		G_N_ELEMENTS(app_entries),
-		app
-	);
-
-	GtkBuilder * builder = gtk_builder_new_from_file("application.xml");
-
-	debug("Builder: %p",builder);
-
-	gtk_application_set_app_menu(GTK_APPLICATION (app), G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
-	gtk_application_set_menubar(GTK_APPLICATION (app), G_MENU_MODEL (gtk_builder_get_object (builder, "menubar")));
-
-	g_object_unref(builder);
-
-}
-
-
 int main (int argc, char **argv) {
 
   GtkApplication *app;
   int status;
 
-  app = gtk_application_new("br.com.bb.pw3270",G_APPLICATION_HANDLES_OPEN);
-
-  g_signal_connect (app, "activate", G_CALLBACK(activate), NULL);
-  g_signal_connect (app, "startup", G_CALLBACK(startup), NULL);
-
+  app = pw3270_application_new("br.com.bb.pw3270",G_APPLICATION_HANDLES_OPEN);
   status = g_application_run (G_APPLICATION (app), argc, argv);
   g_object_unref (app);
 
-  g_message("rc=%d",status);
-
-  return 0;
+  return status;
 
 }
 
