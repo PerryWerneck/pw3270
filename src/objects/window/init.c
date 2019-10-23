@@ -50,8 +50,8 @@
 	gtk_box_pack_start(vBox,GTK_WIDGET(widget->toolbar),FALSE,TRUE,0);
 	gtk_box_pack_start(vBox,GTK_WIDGET(widget->notebook),TRUE,TRUE,0);
 
+	gtk_widget_show_all(GTK_WIDGET(vBox));
 	gtk_container_add(GTK_CONTAINER(widget),GTK_WIDGET(vBox));
-	gtk_widget_show_all(GTK_WIDGET(widget));
 
  }
 

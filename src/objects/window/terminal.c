@@ -72,6 +72,9 @@
 	g_signal_connect(G_OBJECT(terminal), "focus-in-event", G_CALLBACK(on_terminal_focus), widget);
 	g_signal_connect(G_OBJECT(terminal), "session_changed", G_CALLBACK(session_changed),label);
 
+	gtk_widget_show_all(terminal);
+	gtk_widget_show_all(label);
+
 	gtk_notebook_append_page(GTK_NOTEBOOK(window->notebook),terminal,label);
 	gtk_notebook_set_show_tabs(GTK_NOTEBOOK(window->notebook),gtk_notebook_get_n_pages(GTK_NOTEBOOK(window->notebook)) > 1);
 

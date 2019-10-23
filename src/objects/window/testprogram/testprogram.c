@@ -41,6 +41,8 @@
 
 	GtkWidget * window = pw3270_application_window_new(app);
 
+	gtk_application_window_set_show_menubar(GTK_APPLICATION_WINDOW(window),TRUE);
+
 	// Create terminal widget
 	pw3270_terminal_new(window);
 	pw3270_terminal_new(window);
@@ -48,7 +50,9 @@
 	// Setup and show main window
 	gtk_window_set_position(GTK_WINDOW(window),GTK_WIN_POS_CENTER);
 	gtk_window_set_default_size (GTK_WINDOW (window), 800, 500);
-	gtk_widget_show_all(window);
+
+	// gtk_widget_show_all(window);
+	gtk_window_present(GTK_WINDOW(window));
 
 }
 
@@ -85,7 +89,7 @@ GtkWidget * pw3270_toolbar_new(void) {
 	return toolbar;
 }
 
-static void preferences_activated(GSimpleAction * action, GtkApplication *application) {
+static void preferences_activated(GSimpleAction * action, GVariant *parameter, gpointer application) {
 
 	debug("%s",__FUNCTION__);
 
@@ -97,7 +101,7 @@ static void quit_activated(GSimpleAction * action, GVariant *parameter, gpointer
 
 }
 
-void startup(GtkApplication *application, gpointer user_data) {
+void startup(GtkApplication *app) {
 
 	static GActionEntry app_entries[] = {
 		{
@@ -131,32 +135,30 @@ void startup(GtkApplication *application, gpointer user_data) {
 	};
 
 	g_action_map_add_action_entries(
-		G_ACTION_MAP(application),
+		G_ACTION_MAP(app),
 		app_entries,
 		G_N_ELEMENTS(app_entries),
-		application
+		app
 	);
 
-	GtkBuilder * builder = gtk_builder_new_from_file("application.ui");
+	GtkBuilder * builder = gtk_builder_new_from_file("application.xml");
 
 	debug("Builder: %p",builder);
 
-	GMenuModel * app_menu = G_MENU_MODEL(gtk_builder_get_object(builder, "app-menu"));
-	debug("app-menu: %p", app_menu);
-	gtk_application_set_app_menu(application, app_menu);
-
-
-	// gtk_application_set_menubar(application, G_MENU_MODEL(gtk_builder_get_object(builder, "app-menubar")));
+	gtk_application_set_app_menu(GTK_APPLICATION (app), G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
+	gtk_application_set_menubar(GTK_APPLICATION (app), G_MENU_MODEL (gtk_builder_get_object (builder, "menubar")));
 
 	g_object_unref(builder);
+
 }
+
 
 int main (int argc, char **argv) {
 
   GtkApplication *app;
   int status;
 
-  app = gtk_application_new ("br.com.bb.pw3270",G_APPLICATION_FLAGS_NONE);
+  app = gtk_application_new("br.com.bb.pw3270",G_APPLICATION_HANDLES_OPEN);
 
   g_signal_connect (app, "activate", G_CALLBACK(activate), NULL);
   g_signal_connect (app, "startup", G_CALLBACK(startup), NULL);
