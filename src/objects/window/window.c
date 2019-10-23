@@ -29,6 +29,7 @@
 
  #include "private.h"
  #include <pw3270/toolbar.h>
+ #include <pw3270/application.h>
 
  G_DEFINE_TYPE(pw3270ApplicationWindow, pw3270ApplicationWindow, GTK_TYPE_APPLICATION_WINDOW);
 
@@ -60,6 +61,7 @@
 
 	gtk_notebook_set_show_tabs(widget->notebook,FALSE);
 	gtk_notebook_set_show_border(widget->notebook, FALSE);
+	gtk_notebook_set_group_name(widget->notebook,PACKAGE_NAME ":Terminals");
 
 	gtk_box_pack_start(vBox,GTK_WIDGET(widget->toolbar),FALSE,TRUE,0);
 	gtk_box_pack_start(vBox,GTK_WIDGET(widget->notebook),TRUE,TRUE,0);
@@ -71,12 +73,67 @@
 
  GtkWidget * pw3270_application_window_new(GtkApplication * application) {
 
-	g_return_val_if_fail(GTK_IS_APPLICATION(application), NULL);
-	return g_object_new(
-				PW3270_TYPE_APPLICATION_WINDOW,
-				"application", application,
-				NULL);
+	const gchar * title = _( "IBM 3270 Terminal emulator" );
 
+	g_return_val_if_fail(GTK_IS_APPLICATION(application), NULL);
+	pw3270ApplicationWindow * window =
+		g_object_new(
+			PW3270_TYPE_APPLICATION_WINDOW,
+			"application", application,
+			NULL);
+
+	if(PW3270_IS_APPLICATION(gtk_window_get_application(GTK_WINDOW(window)))) {
+
+		GtkBuilder * builder = gtk_builder_new_from_file("ui/window.xml");
+
+		switch(pw3270_application_get_ui_type(G_APPLICATION(application))) {
+		case PW3270_UI_STYLE_CLASSICAL:
+			{
+				gtk_window_set_title(GTK_WINDOW(window), title);
+
+			}
+			break;
+
+		case PW3270_UI_STYLE_GNOME:
+			{
+				// Create header bar
+				GtkHeaderBar * header = GTK_HEADER_BAR(gtk_header_bar_new());
+				gtk_window_set_titlebar(GTK_WINDOW(window), GTK_WIDGET(header));
+				gtk_header_bar_set_show_close_button(header,TRUE);
+
+				gtk_header_bar_set_title(header,title);
+				gtk_header_bar_set_subtitle(header,_("Disconnected from host"));
+
+				// Create gear button
+				// https://wiki.gnome.org/Initiatives/GnomeGoals/GearIcons
+				GtkWidget *	gear_menu = gtk_menu_button_new();
+				gtk_button_set_image(GTK_BUTTON(gear_menu),gtk_image_new_from_icon_name("open-menu-symbolic",GTK_ICON_SIZE_MENU));
+
+				gtk_menu_button_set_menu_model(GTK_MENU_BUTTON(gear_menu), G_MENU_MODEL(gtk_builder_get_object (builder, "gear-menu")));
+
+				gtk_header_bar_pack_end(header, gear_menu);
+
+				// Create "new tab" bar
+				GtkWidget * new_tab_button = gtk_button_new_from_icon_name("tab-new-symbolic",GTK_ICON_SIZE_MENU);
+				gtk_actionable_set_action_name(GTK_ACTIONABLE(new_tab_button),"app.new_tab");
+
+				gtk_header_bar_pack_start(header, new_tab_button);
+
+				// Show the new header
+				gtk_widget_show_all(GTK_WIDGET(header));
+			}
+			break;
+
+		default:
+			g_warning("Unexpected UI");
+
+		}
+
+		g_object_unref(builder);
+
+	}
+
+	return GTK_WIDGET(window);
 
  }
 

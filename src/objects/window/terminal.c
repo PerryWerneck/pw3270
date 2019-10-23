@@ -75,8 +75,11 @@
 	gtk_widget_show_all(terminal);
 	gtk_widget_show_all(label);
 
-	gtk_notebook_append_page(GTK_NOTEBOOK(window->notebook),terminal,label);
-	gtk_notebook_set_show_tabs(GTK_NOTEBOOK(window->notebook),gtk_notebook_get_n_pages(GTK_NOTEBOOK(window->notebook)) > 1);
+	gtk_notebook_append_page(window->notebook,terminal,label);
+	gtk_notebook_set_show_tabs(window->notebook,gtk_notebook_get_n_pages(GTK_NOTEBOOK(window->notebook)) > 1);
+
+	gtk_notebook_set_tab_detachable(window->notebook,terminal,TRUE);
+	gtk_notebook_set_tab_reorderable(window->notebook,terminal,TRUE);
 
 	return terminal;
 

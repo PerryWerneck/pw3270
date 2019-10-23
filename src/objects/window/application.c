@@ -101,13 +101,31 @@
 			NULL,
 			NULL
 		},
+
 		{
 			"app.quit",
 			action_activated,
 			NULL,
 			NULL,
 			NULL
+		},
+
+		{
+			"app.new_tab",
+			action_activated,
+			NULL,
+			NULL,
+			NULL
+		},
+
+		{
+			"app.new_window",
+			action_activated,
+			NULL,
+			NULL,
+			NULL
 		}
+
 	};
 
 	g_action_map_add_action_entries(
