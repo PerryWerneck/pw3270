@@ -35,20 +35,6 @@
 
  static void pw3270ApplicationWindow_class_init(pw3270ApplicationWindowClass *klass) {
 
-	/*
-	window_props[PROP_UI_STYLE] =
-      g_param_spec_uint (
-			"ui_style",  	// P_()
-			"ui_style",		// P_()
-			_( "The application interface style" ),
-			PW3270_UI_STYLE_CLASSICAL,
-			PW3270_UI_STYLE_GNOME,
-			PW3270_UI_STYLE_GNOME,
-			G_PARAM_READABLE
-		);
-	*/
-
-
  }
 
  static void pw3270ApplicationWindow_init(pw3270ApplicationWindow *widget) {
@@ -141,7 +127,7 @@
 
 				// Create "new tab" bar
 				GtkWidget * new_tab_button = pw3270_setup_image_button(gtk_button_new(),"tab-new-symbolic");
-				gtk_actionable_set_action_name(GTK_ACTIONABLE(new_tab_button),"app.new_tab");
+				gtk_actionable_set_action_name(GTK_ACTIONABLE(new_tab_button),"app.new.tab");
 				gtk_header_bar_pack_start(header, new_tab_button);
 
 				// Show the new header

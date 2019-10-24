@@ -34,12 +34,24 @@
  #include "private.h"
  #include <pw3270/application.h>
 
+ enum {
+	PROP_ZERO,
+	PROP_UI_TYPE,
+
+	NUM_PROPERTIES
+ };
+
+ static GParamSpec * props[NUM_PROPERTIES];
+
  struct _pw3270ApplicationClass {
  	GtkApplicationClass parent_class;
  };
 
  struct _pw3270Application {
  	GtkApplication parent;
+
+ 	PW3270_UI_TYPE	ui_type;
+
  };
 
  static void 		  startup(GApplication * application);
@@ -48,18 +60,71 @@
 
  G_DEFINE_TYPE(pw3270Application, pw3270Application, GTK_TYPE_APPLICATION);
 
+ static void get_property(GObject *object, guint prop_id, GValue *value, GParamSpec *pspec) {
+
+	switch (prop_id) {
+	case PROP_UI_TYPE:
+		g_value_set_uint(value,pw3270_application_get_ui_type(G_APPLICATION(object)));
+		break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+ }
+
+ static void set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec) {
+
+	switch (prop_id) {
+	case PROP_UI_TYPE:
+		pw3270_application_set_ui_type(G_APPLICATION(object),g_value_get_uint(value));
+		break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+ }
+
  static void pw3270Application_class_init(pw3270ApplicationClass *klass) {
 
 	GApplicationClass *application_class = G_APPLICATION_CLASS(klass);
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+
+	object_class->get_property = get_property;
+	object_class->set_property = set_property;
 
 	application_class->startup = startup;
 	application_class->activate = activate;
 	application_class->open = open;
 
+	props[PROP_UI_TYPE] =
+		g_param_spec_uint(
+			"ui_type",
+			_("UI Type"),
+			_("The code of the User interface type"),
+			PW3270_UI_STYLE_CLASSICAL,
+			PW3270_UI_STYLE_GNOME,
+#ifdef _WIN32
+			PW3270_UI_STYLE_CLASSICAL,
+#else
+			PW3270_UI_STYLE_GNOME,
+#endif // _WIN32
+			G_PARAM_READABLE|G_PARAM_WRITABLE
+		);
+
+
+	g_object_class_install_properties(object_class, NUM_PROPERTIES, props);
+
  }
 
  static void pw3270Application_init(pw3270Application *app) {
 
+#ifdef _WIN32
+	app->ui_type = PW3270_UI_STYLE_CLASSICAL;
+#else
+	app->ui_type = PW3270_UI_STYLE_GNOME;
+#endif // _WIN32
 
  }
 
@@ -176,6 +241,27 @@
 
 	if(last != -1)
 		pw3270_window_set_current_page(GTK_WIDGET(window),last);
+
+ }
+
+ void pw3270_application_set_ui_type(GApplication *app, PW3270_UI_TYPE type) {
+
+ 	g_return_if_fail(PW3270_IS_APPLICATION(app));
+
+	pw3270Application * application = PW3270_APPLICATION(app);
+
+	if(application->ui_type == type)
+		return;
+
+	application->ui_type = type;
+	g_object_notify_by_pspec(G_OBJECT(app), props[PROP_UI_TYPE]);
+
+ }
+
+ PW3270_UI_TYPE pw3270_application_get_ui_type(GApplication *app) {
+
+ 	g_return_val_if_fail(PW3270_IS_APPLICATION(app),PW3270_UI_STYLE_CLASSICAL);
+    return PW3270_APPLICATION(app)->ui_type;
 
  }
 
