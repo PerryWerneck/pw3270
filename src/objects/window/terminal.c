@@ -96,7 +96,6 @@
 
 	GtkNotebook * notebook = GTK_NOTEBOOK(gtk_widget_get_parent(terminal));
 	gtk_notebook_remove_page(notebook,gtk_notebook_page_num(notebook, terminal));
-	gtk_notebook_set_show_tabs(notebook,gtk_notebook_get_n_pages(notebook) > 1);
 
  }
 
@@ -124,7 +123,6 @@
 	gtk_widget_show_all(tab);
 
 	gint page = gtk_notebook_append_page(window->notebook,terminal,tab);
-	gtk_notebook_set_show_tabs(window->notebook,gtk_notebook_get_n_pages(window->notebook) > 1);
 
 	gtk_notebook_set_tab_detachable(window->notebook,terminal,TRUE);
 	gtk_notebook_set_tab_reorderable(window->notebook,terminal,TRUE);

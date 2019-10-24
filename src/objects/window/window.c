@@ -37,16 +37,24 @@
 
  }
 
+ void on_page_changed(GtkNotebook *notebook, GtkWidget *child, guint page_num, gpointer user_data) {
+ 	gtk_notebook_set_show_tabs(notebook,gtk_notebook_get_n_pages(notebook) > 1);
+ }
+
  static void pw3270ApplicationWindow_init(pw3270ApplicationWindow *widget) {
 
 	GtkBox * vBox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL,0));
 
 	widget->notebook = GTK_NOTEBOOK(gtk_notebook_new());
-	widget->toolbar  = GTK_TOOLBAR(pw3270_toolbar_new());
-
+	gtk_notebook_set_scrollable(widget->notebook,TRUE);
 	gtk_notebook_set_show_tabs(widget->notebook,FALSE);
 	gtk_notebook_set_show_border(widget->notebook, FALSE);
 	gtk_notebook_set_group_name(widget->notebook,PACKAGE_NAME ":Terminals");
+	g_signal_connect(G_OBJECT(widget->notebook), "page-added", G_CALLBACK(on_page_changed), widget);
+	g_signal_connect(G_OBJECT(widget->notebook), "page-removed", G_CALLBACK(on_page_changed), widget);
+
+	widget->toolbar  = GTK_TOOLBAR(pw3270_toolbar_new());
+
 
 	gtk_box_pack_start(vBox,GTK_WIDGET(widget->toolbar),FALSE,TRUE,0);
 	gtk_box_pack_start(vBox,GTK_WIDGET(widget->notebook),TRUE,TRUE,0);
