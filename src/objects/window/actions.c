@@ -25,45 +25,42 @@
  * perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
  * erico.mendonca@gmail.com	(Erico Mascarenhas Mendonça)
  *
+ * References:
+ *
+ * https://fossies.org/linux/gtk+/examples/plugman.c
+ *
  */
 
-#ifndef PRIVATE_H_INCLUDED
+ #include "private.h"
+ #include <pw3270/application.h>
 
-	#define PRIVATE_H_INCLUDED
+ void pw3270_application_quit_activated(GSimpleAction * action, GVariant *parameter, gpointer application) {
 
-	#include <config.h>
+	g_print("Exiting application\n");
 
-	#ifndef GETTEXT_PACKAGE
-		#define GETTEXT_PACKAGE PACKAGE_NAME
-	#endif
+	GList *list = gtk_application_get_windows(GTK_APPLICATION(application));
 
-	#include <libintl.h>
-	#include <glib/gi18n.h>
-	#include <gtk/gtk.h>
+	while(list) {
 
-	#include <pw3270/window.h>
-	#include <v3270.h>
-	#include <lib3270.h>
-	#include <lib3270/log.h>
+		GtkWidget * window = GTK_WIDGET(list->data);
+		list = list->next;
 
-	struct _pw3270ApplicationWindow {
+		gtk_widget_destroy(window);
 
-		GtkApplicationWindow parent;
+	}
 
-		GtkNotebook * notebook;
-		GtkToolbar	* toolbar;
+ }
 
-	};
+ void pw3270_application_new_tab_activated(GSimpleAction * action, GVariant *parameter, gpointer application) {
 
-	struct _pw3270ApplicationWindowClass {
+ 	debug("%s",__FUNCTION__);
+ 	pw3270_terminal_new(GTK_WIDGET(gtk_application_get_active_window(GTK_APPLICATION(application))));
 
-		GtkApplicationWindowClass parent_class;
+ }
 
-	};
+ void pw3270_application_new_window_activated(GSimpleAction * action, GVariant *parameter, gpointer application) {
 
-	// Actions
-    G_GNUC_INTERNAL void pw3270_application_quit_activated(GSimpleAction * action, GVariant *parameter, gpointer application);
-    G_GNUC_INTERNAL void pw3270_application_new_tab_activated(GSimpleAction * action, GVariant *parameter, gpointer application);
-    G_GNUC_INTERNAL void pw3270_application_new_window_activated(GSimpleAction * action, GVariant *parameter, gpointer application);
+ 	debug("%s",__FUNCTION__);
+ 	g_application_activate(application);
 
-#endif // PRIVATE_H_INCLUDED
+ }

@@ -8,6 +8,10 @@
         <attribute name="action">app.about</attribute>
       </item>
       <item>
+        <attribute name="label" translatable="yes">New Window</attribute>
+        <attribute name="action">app.new_window</attribute>
+      </item>
+      <item>
         <attribute name="label" translatable="yes">Preferences</attribute>
         <attribute name="action">app.help</attribute>
       </item>

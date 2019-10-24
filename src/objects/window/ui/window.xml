@@ -12,7 +12,7 @@
         <attribute name="action">app.help</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">Quit</attribute>
+        <attribute name="label" translatable="yes">Quit PW3270</attribute>
         <attribute name="action">app.quit</attribute>
       </item>
     </section>

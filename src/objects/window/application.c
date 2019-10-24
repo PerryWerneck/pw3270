@@ -88,42 +88,27 @@
 	//
 	static GActionEntry app_entries[] = {
 		{
-			"app.about",
-			action_activated,
-			NULL,
-			NULL,
-			NULL
+			.name = "about",
+			.activate = action_activated,
 		},
 		{
-			"app.preferences",
-			action_activated,
-			NULL,
-			NULL,
-			NULL
+			.name = "preferences",
+			.activate = action_activated,
 		},
 
 		{
-			"app.quit",
-			action_activated,
-			NULL,
-			NULL,
-			NULL
+			.name = "quit",
+			.activate = pw3270_application_quit_activated,
 		},
 
 		{
-			"app.new_tab",
-			action_activated,
-			NULL,
-			NULL,
-			NULL
+			.name = "new_tab",
+			.activate = pw3270_application_new_tab_activated,
 		},
 
 		{
-			"app.new_window",
-			action_activated,
-			NULL,
-			NULL,
-			NULL
+			.name = "new_window",
+			.activate = pw3270_application_new_window_activated,
 		}
 
 	};

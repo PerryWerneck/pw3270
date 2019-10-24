@@ -42,6 +42,9 @@
 		<Unit filename="../../include/pw3270/application.h" />
 		<Unit filename="../../include/pw3270/toolbar.h" />
 		<Unit filename="../../include/pw3270/window.h" />
+		<Unit filename="actions.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="application.c">
 			<Option compilerVar="CC" />
 		</Unit>
