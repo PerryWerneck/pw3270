@@ -226,8 +226,7 @@ Debug: \
 	$(BINDBG)/$(PACKAGE_NAME)@EXEEXT@
 
 $(BINDBG)/$(PACKAGE_NAME)@EXEEXT@: \
-	$(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC).o) \
-	gschemas.compiled
+	$(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC).o)
 
 	@$(MKDIR) $(@D)
 	@echo $< ...
@@ -238,7 +237,8 @@ $(BINDBG)/$(PACKAGE_NAME)@EXEEXT@: \
 		$(LIBS)
  
 run: \
-	$(BINDBG)/$(PACKAGE_NAME)@EXEEXT@
+	$(BINDBG)/$(PACKAGE_NAME)@EXEEXT@ \
+	gschemas.compiled
 
 	@LD_LIBRARY_PATH=$(BINDBG) \
 		$(BINDBG)/$(PACKAGE_NAME)@EXEEXT@

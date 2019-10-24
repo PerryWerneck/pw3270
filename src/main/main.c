@@ -48,12 +48,29 @@ int main (int argc, char **argv) {
 #ifdef DEBUG
 	{
 		GError * error = NULL;
-		GSettingsSchemaSource * source = g_settings_schema_source_new_from_directory(".",NULL,TRUE,&error);
+		GSettingsSchemaSource * source = 
+			g_settings_schema_source_new_from_directory(
+				".",
+				NULL,
+				TRUE,
+				&error
+			);
 
-		if(!source && error) {
-			g_error(error->message);
-		}
+		g_assert_no_error(error);
 
+		GSettingsSchema * schema =
+			g_settings_schema_source_lookup(
+				source,
+                "br.com.bb.pw3270",
+                TRUE);
+
+		g_settings_schema_source_unref(source);
+
+		GSettings * settings = g_settings_new_full(schema, NULL, "/br/com/bb/pw3270/application/");
+
+		debug("ui-style=%u",g_settings_get_uint(settings,"ui-style"));
+
+		g_object_unref(settings);
 	}
 #endif // DEBUG
 

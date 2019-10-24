@@ -1,14 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+
+-->
+
 <schemalist>
 
-	<schema id="br.com.bb.pw3270"  gettext-domain="pw3270">
+  <schema path="/br/com/bb/pw3270/application/" id="br.com.bb.pw3270">
 
-		<key type="b" name="enable-something">
-			<default>false</default>
-			<summary>Enable something</summary>
-			<description>Enables something important in the application</description>
-		</key>
+    <key name="ui-style" type="u">
+      <default>1</default>
+      <summary>UI Style</summary>
+      <description>The ID of the current user interface style</description>
+    </key>
 
-	</schema>
+  </schema>
 
 </schemalist>
-
