@@ -36,7 +36,7 @@
 
  enum {
 	PROP_ZERO,
-	PROP_UI_TYPE,
+	PROP_UI_STYLE,
 
 	NUM_PROPERTIES
  };
@@ -50,7 +50,7 @@
  struct _pw3270Application {
  	GtkApplication parent;
 
- 	PW3270_UI_TYPE	ui_type;
+ 	PW3270_UI_STYLE	ui_style;
 
  };
 
@@ -63,8 +63,8 @@
  static void get_property(GObject *object, guint prop_id, GValue *value, GParamSpec *pspec) {
 
 	switch (prop_id) {
-	case PROP_UI_TYPE:
-		g_value_set_uint(value,pw3270_application_get_ui_type(G_APPLICATION(object)));
+	case PROP_UI_STYLE:
+		g_value_set_uint(value,pw3270_application_get_ui_style(G_APPLICATION(object)));
 		break;
 
     default:
@@ -76,8 +76,8 @@
  static void set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec) {
 
 	switch (prop_id) {
-	case PROP_UI_TYPE:
-		pw3270_application_set_ui_type(G_APPLICATION(object),g_value_get_uint(value));
+	case PROP_UI_STYLE:
+		pw3270_application_set_ui_style(G_APPLICATION(object),g_value_get_uint(value));
 		break;
 
     default:
@@ -98,9 +98,9 @@
 	application_class->activate = activate;
 	application_class->open = open;
 
-	props[PROP_UI_TYPE] =
+	props[PROP_UI_STYLE] =
 		g_param_spec_uint(
-			"ui_type",
+			"ui-style",
 			_("UI Type"),
 			_("The code of the User interface type"),
 			PW3270_UI_STYLE_CLASSICAL,
@@ -121,10 +121,52 @@
  static void pw3270Application_init(pw3270Application *app) {
 
 #ifdef _WIN32
-	app->ui_type = PW3270_UI_STYLE_CLASSICAL;
+	app->ui_style = PW3270_UI_STYLE_CLASSICAL;
 #else
-	app->ui_type = PW3270_UI_STYLE_GNOME;
+	app->ui_style = PW3270_UI_STYLE_GNOME;
 #endif // _WIN32
+
+	// Bind properties
+	GSettings * settings = NULL;
+
+#ifdef DEBUG
+	{
+		GError * error = NULL;
+		GSettingsSchemaSource * source = 
+			g_settings_schema_source_new_from_directory(
+				".",
+				NULL,
+				TRUE,
+				&error
+			);
+
+		g_assert_no_error(error);
+
+		GSettingsSchema * schema =
+			g_settings_schema_source_lookup(
+				source,
+                "br.com.bb.pw3270",
+                TRUE);
+
+		g_settings_schema_source_unref(source);
+
+		settings = g_settings_new_full(schema, NULL, "/br/com/bb/pw3270/application/");
+
+	}
+#else
+
+	#error TODO!
+
+#endif // DEBUG
+
+	if(settings) {
+
+		g_settings_bind(settings, "ui-style", app, "ui-style", G_SETTINGS_BIND_DEFAULT);
+
+
+		g_object_unref(settings);
+
+	}
 
  }
 
@@ -200,7 +242,7 @@
 	GtkBuilder * builder = gtk_builder_new_from_file("ui/application.xml");
 	gtk_application_set_app_menu(GTK_APPLICATION (application), G_MENU_MODEL(gtk_builder_get_object (builder, "app-menu")));
 
-	if(pw3270_application_get_ui_type(application) == PW3270_UI_STYLE_CLASSICAL)
+	if(pw3270_application_get_ui_style(application) == PW3270_UI_STYLE_CLASSICAL)
 		gtk_application_set_menubar(GTK_APPLICATION (application), G_MENU_MODEL(gtk_builder_get_object (builder, "menubar")));
 
 	g_object_unref(builder);
@@ -244,24 +286,24 @@
 
  }
 
- void pw3270_application_set_ui_type(GApplication *app, PW3270_UI_TYPE type) {
+ void pw3270_application_set_ui_style(GApplication *app, PW3270_UI_STYLE type) {
 
  	g_return_if_fail(PW3270_IS_APPLICATION(app));
 
 	pw3270Application * application = PW3270_APPLICATION(app);
 
-	if(application->ui_type == type)
+	if(application->ui_style == type)
 		return;
 
-	application->ui_type = type;
-	g_object_notify_by_pspec(G_OBJECT(app), props[PROP_UI_TYPE]);
+	application->ui_style = type;
+	g_object_notify_by_pspec(G_OBJECT(app), props[PROP_UI_STYLE]);
 
  }
 
- PW3270_UI_TYPE pw3270_application_get_ui_type(GApplication *app) {
+ PW3270_UI_STYLE pw3270_application_get_ui_style(GApplication *app) {
 
  	g_return_val_if_fail(PW3270_IS_APPLICATION(app),PW3270_UI_STYLE_CLASSICAL);
-    return PW3270_APPLICATION(app)->ui_type;
+    return PW3270_APPLICATION(app)->ui_style;
 
  }
 

@@ -108,7 +108,7 @@
 
 		GtkBuilder * builder = gtk_builder_new_from_file("ui/window.xml");
 
-		switch(pw3270_application_get_ui_type(G_APPLICATION(application))) {
+		switch(pw3270_application_get_ui_style(G_APPLICATION(application))) {
 		case PW3270_UI_STYLE_CLASSICAL:
 			{
 				gtk_window_set_title(GTK_WINDOW(window), title);

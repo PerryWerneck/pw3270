@@ -52,10 +52,10 @@
 	#define PW3270_APPLICATION_GET_CLASS(inst)	(G_TYPE_INSTANCE_GET_CLASS ((inst),  \
 												GTK_TYPE_APPLICATION, pw3270ApplicationClass))
 
-	typedef enum _pw3270_ui_type {
+	typedef enum _pw3270_ui_style {
 		PW3270_UI_STYLE_CLASSICAL,		///< @brief Interface "classica", com menu e toolbar.
 		PW3270_UI_STYLE_GNOME,			///< @brief Interface padrão gnome.
-	} PW3270_UI_TYPE;
+	} PW3270_UI_STYLE;
 
 
 	typedef struct _pw3270ApplicationClass   pw3270ApplicationClass;
@@ -64,8 +64,8 @@
 	GType			  pw3270Application_get_type();
 	GtkApplication	* pw3270_application_new(const gchar *application_id, GApplicationFlags flags);
 
-	void			  pw3270_application_set_ui_type(GApplication *app, PW3270_UI_TYPE type);
-	PW3270_UI_TYPE	  pw3270_application_get_ui_type(GApplication *app);
+	void			  pw3270_application_set_ui_style(GApplication *app, PW3270_UI_STYLE type);
+	PW3270_UI_STYLE	  pw3270_application_get_ui_style(GApplication *app);
 
 	G_END_DECLS
 

@@ -194,6 +194,7 @@ dnl ---------------------------------------------------------------------------
 AC_SUBST(INSTALL_PACKAGES)
 
 AC_CONFIG_FILES(Makefile)
+AC_CONFIG_FILES(schemas/application.gschema.xml)
 
 dnl ---------------------------------------------------------------------------
 dnl Output the generated config.status script.
