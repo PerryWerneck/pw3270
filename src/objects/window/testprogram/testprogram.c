@@ -63,6 +63,11 @@ GtkWidget * pw3270_toolbar_new(void) {
 
 		GtkToolItem * button = gtk_tool_button_new(gtk_image_new_from_icon_name(itens[item].icon,GTK_ICON_SIZE_LARGE_TOOLBAR),itens[item].label);
 		gtk_tool_button_set_use_underline(GTK_TOOL_BUTTON(button),TRUE);
+
+		gtk_widget_set_can_focus(GTK_WIDGET(button),FALSE);
+		gtk_widget_set_can_default(GTK_WIDGET(button),FALSE);
+		gtk_widget_set_focus_on_click(GTK_WIDGET(button),FALSE);
+
 		gtk_toolbar_insert(GTK_TOOLBAR(toolbar), button, -1);
 
 	}

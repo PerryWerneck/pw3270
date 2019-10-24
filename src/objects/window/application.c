@@ -42,9 +42,9 @@
  	GtkApplication parent;
  };
 
- static void startup(GApplication * application);
- static void activate(GApplication * application);
- static void open(GApplication * application, GFile **files, gint n_files, const gchar *hint);
+ static void 		  startup(GApplication * application);
+ static void 		  activate(GApplication * application);
+ static void 		  open(GApplication * application, GFile **files, gint n_files, const gchar *hint);
 
  G_DEFINE_TYPE(pw3270Application, pw3270Application, GTK_TYPE_APPLICATION);
 
@@ -152,26 +152,39 @@
 
 	GtkWidget * window = pw3270_application_window_new(GTK_APPLICATION(application));
 
-	gtk_application_window_set_show_menubar(GTK_APPLICATION_WINDOW(window),TRUE);
-
 	// Create terminal widget
 	pw3270_terminal_new(window);
-	pw3270_terminal_new(window);
 
-	// Setup and show main window
-	gtk_window_set_position(GTK_WINDOW(window),GTK_WIN_POS_CENTER);
-	gtk_window_set_default_size (GTK_WINDOW (window), 800, 500);
-
-	// gtk_widget_show_all(window);
+	// Present the new window
 	gtk_window_present(GTK_WINDOW(window));
+	pw3270_window_set_current_page(window,0);
 
  }
 
  void open(GApplication *application, GFile **files, gint n_files, const gchar *hint) {
+
+	GtkWindow * window = gtk_application_get_active_window(GTK_APPLICATION(application));
+
+	debug("%s was called with %d files (active_window=%p)", __FUNCTION__, n_files, window);
+
+	if(!window)
+		window = GTK_WINDOW(pw3270_application_window_new(GTK_APPLICATION(application)));
+
+	// Add tabs to the window
+	gint file;
+	gint last = -1;
+
+	for(file = 0; file < n_files; file++) {
+		last = pw3270_window_append_page(GTK_WIDGET(window), files[file]);
+	}
+
+	gtk_window_present(window);
+
+	if(last != -1)
+		pw3270_window_set_current_page(GTK_WIDGET(window),last);
 
  }
 
  PW3270_UI_TYPE pw3270_application_get_ui_type(GApplication *app) {
  	return PW3270_UI_STYLE_GNOME;
  }
-

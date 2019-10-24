@@ -29,6 +29,7 @@
 
  #include "private.h"
  #include <pw3270/actions.h>
+ #include <lib3270/toggle.h>
 
  static void session_changed(GtkWidget *terminal, GtkWidget *label) {
 
@@ -40,7 +41,7 @@
 
 		pw3270ApplicationWindow * window = PW3270_APPLICATION_WINDOW(toplevel);
 
-		if(window->terminal == terminal) {
+		if(gtk_widget_has_default(terminal)) {
 			g_autofree gchar * title = v3270_get_session_title(terminal);
 			gtk_window_set_title(GTK_WINDOW(window), title);
 		}
@@ -49,16 +50,75 @@
 
  }
 
- static gboolean on_terminal_focus(GtkWidget *terminal, GdkEvent *event, pw3270ApplicationWindow * window) {
+ static gboolean on_terminal_focus(GtkWidget *terminal, GdkEvent *event, GtkWindow * window) {
 
-	// Store the active terminal widget.
-	window->terminal = terminal;
+ 	// Store the active terminal widget.
+	gtk_widget_grab_default(terminal);
+	debug("Terminal %p is now default",terminal);
 
 	// Change window title
 	g_autofree gchar * title = v3270_get_session_title(terminal);
-	gtk_window_set_title(GTK_WINDOW(window), title);
+	gtk_window_set_title(window, title);
+
+	pw3270_window_set_subtitle(GTK_WIDGET(window), v3270_is_connected(terminal) ? _("Connected to host") : _("Disconnected from host"));
 
  	return FALSE;
+ }
+
+ static gboolean bg_auto_connect(GtkWidget *terminal) {
+ 	v3270_reconnect(terminal);
+	return FALSE;
+ }
+
+ static void disconnected(GtkWidget *terminal, GtkWindow * window) {
+
+ 	debug("%s",__FUNCTION__);
+
+ 	if(terminal != gtk_window_get_default_widget(window))
+		return;
+
+	pw3270_window_set_subtitle(GTK_WIDGET(window), _("Disconnected from host"));
+
+ }
+
+ static void connected(GtkWidget *terminal, const gchar *host, GtkWindow * window) {
+
+ 	debug("%s(%s)",__FUNCTION__,host);
+
+ 	if(terminal != gtk_window_get_default_widget(window))
+		return;
+
+	pw3270_window_set_subtitle(GTK_WIDGET(window), _("Connected to host"));
+
+ }
+
+ static gint append_terminal_page(pw3270ApplicationWindow * window, GtkWidget * terminal) {
+
+ 	GtkWidget * label = gtk_label_new(v3270_get_session_name(terminal));
+
+	g_signal_connect(G_OBJECT(terminal), "focus-in-event", G_CALLBACK(on_terminal_focus), window);
+	g_signal_connect(G_OBJECT(terminal), "session_changed", G_CALLBACK(session_changed),label);
+	g_signal_connect(G_OBJECT(terminal),"disconnected",G_CALLBACK(disconnected),window);
+	g_signal_connect(G_OBJECT(terminal),"connected",G_CALLBACK(connected),window);
+
+	gtk_widget_show_all(terminal);
+	gtk_widget_show_all(label);
+
+	gint page = gtk_notebook_append_page(window->notebook,terminal,label);
+	gtk_notebook_set_show_tabs(window->notebook,gtk_notebook_get_n_pages(window->notebook) > 1);
+
+	gtk_notebook_set_tab_detachable(window->notebook,terminal,TRUE);
+	gtk_notebook_set_tab_reorderable(window->notebook,terminal,TRUE);
+
+	// Setup session.
+
+	H3270 * hSession = v3270_get_session(terminal);
+
+	if(lib3270_get_toggle(hSession,LIB3270_TOGGLE_CONNECT_ON_STARTUP))
+		g_idle_add((GSourceFunc) bg_auto_connect, terminal);
+
+	return page;
+
  }
 
  GtkWidget * pw3270_terminal_new(GtkWidget *widget) {
@@ -67,21 +127,42 @@
 
 	pw3270ApplicationWindow * window = PW3270_APPLICATION_WINDOW(widget);
  	GtkWidget * terminal = v3270_new();
- 	GtkWidget * label = gtk_label_new(v3270_get_session_name(terminal));
 
-	g_signal_connect(G_OBJECT(terminal), "focus-in-event", G_CALLBACK(on_terminal_focus), widget);
-	g_signal_connect(G_OBJECT(terminal), "session_changed", G_CALLBACK(session_changed),label);
-
-	gtk_widget_show_all(terminal);
-	gtk_widget_show_all(label);
-
-	gtk_notebook_append_page(window->notebook,terminal,label);
-	gtk_notebook_set_show_tabs(window->notebook,gtk_notebook_get_n_pages(GTK_NOTEBOOK(window->notebook)) > 1);
-
-	gtk_notebook_set_tab_detachable(window->notebook,terminal,TRUE);
-	gtk_notebook_set_tab_reorderable(window->notebook,terminal,TRUE);
+ 	append_terminal_page(window,terminal);
 
 	return terminal;
 
  }
+
+ gint pw3270_window_append_page(GtkWidget *widget, GFile * file) {
+
+	g_return_val_if_fail(PW3270_IS_APPLICATION_WINDOW(widget),-1);
+
+	pw3270ApplicationWindow * window = PW3270_APPLICATION_WINDOW(widget);
+ 	GtkWidget * terminal = v3270_new();
+
+	// Identify argument.
+	g_autofree gchar * scheme = g_file_get_uri_scheme(file);
+
+	if(!(g_ascii_strcasecmp(scheme,"tn3270") && g_ascii_strcasecmp(scheme,"tn3270s"))) {
+
+		// Is a 3270 URL.
+		g_autofree gchar * uri = g_file_get_uri(file);
+		size_t sz = strlen(uri);
+
+		if(sz > 0 && uri[sz-1] == '/')
+			uri[sz-1] = 0;
+
+		v3270_set_url(terminal,uri);
+
+	} else {
+
+		g_message("Unexpected URI scheme: \"%s\"",scheme);
+
+	}
+
+ 	return append_terminal_page(window, terminal);
+
+ }
+
 

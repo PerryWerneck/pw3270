@@ -56,7 +56,6 @@
 	GtkBox * vBox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL,0));
 
 	widget->notebook = GTK_NOTEBOOK(gtk_notebook_new());
-	widget->terminal = pw3270_terminal_new(GTK_WIDGET(widget));
 	widget->toolbar  = GTK_TOOLBAR(pw3270_toolbar_new());
 
 	gtk_notebook_set_show_tabs(widget->notebook,FALSE);
@@ -102,7 +101,8 @@
 				gtk_header_bar_set_show_close_button(header,TRUE);
 
 				gtk_header_bar_set_title(header,title);
-				gtk_header_bar_set_subtitle(header,_("Disconnected from host"));
+				// gtk_header_bar_set_subtitle(header,_("Disconnected from host"));
+				gtk_header_bar_set_has_subtitle(header,TRUE);
 
 				// Create gear button
 				// https://wiki.gnome.org/Initiatives/GnomeGoals/GearIcons
@@ -133,7 +133,37 @@
 
 	}
 
+	// Setup and show main window
+	gtk_application_window_set_show_menubar(GTK_APPLICATION_WINDOW(window),TRUE);
+
+	gtk_window_set_position(GTK_WINDOW(window),GTK_WIN_POS_CENTER);
+	gtk_window_set_default_size (GTK_WINDOW (window), 800, 500);
+
 	return GTK_WIDGET(window);
 
  }
 
+ void pw3270_window_set_current_page(GtkWidget *window, gint page_num) {
+
+	g_return_if_fail(PW3270_IS_APPLICATION_WINDOW(window));
+
+	GtkNotebook * notebook = PW3270_APPLICATION_WINDOW(window)->notebook;
+
+	debug("Selecting tab %d", page_num);
+
+	gtk_notebook_set_current_page(notebook, page_num);
+	gtk_widget_grab_focus(gtk_notebook_get_nth_page(notebook, page_num));
+
+ }
+
+ void pw3270_window_set_subtitle(GtkWidget *window, const gchar *subtitle) {
+
+	g_return_if_fail(PW3270_IS_APPLICATION_WINDOW(window));
+
+ 	GtkWidget * title_bar = gtk_window_get_titlebar(GTK_WINDOW(window));
+
+ 	if(title_bar && GTK_IS_HEADER_BAR(title_bar) && gtk_header_bar_get_has_subtitle(GTK_HEADER_BAR(title_bar))) {
+		gtk_header_bar_set_subtitle(GTK_HEADER_BAR(title_bar), subtitle);
+	}
+
+ }

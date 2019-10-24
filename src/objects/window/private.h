@@ -50,7 +50,6 @@
 
 		GtkApplicationWindow parent;
 
-		GtkWidget   * terminal;
 		GtkNotebook * notebook;
 		GtkToolbar	* toolbar;
 
