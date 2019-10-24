@@ -3,17 +3,41 @@
   <requires lib="gtk+" version="3.0"/>
   <menu id="gear-menu">
     <section>
-      <item>
-        <attribute name="label" translatable="yes">About PW3270</attribute>
-        <attribute name="action">app.about</attribute>
-      </item>
+
+      <submenu>
+        <attribute name="label" translatable="yes">New</attribute>
+        <item>
+          <attribute name="label" translatable="yes">Tab</attribute>
+          <attribute name="action">app.new_tab</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Application Window</attribute>
+          <attribute name="action">app.new_window</attribute>
+        </item>
+      </submenu>
+
+      <submenu>
+        <attribute name="label" translatable="yes">Open</attribute>
+        <item>
+          <attribute name="label" translatable="yes">File</attribute>
+          <attribute name="action">app.open</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">New tab</attribute>
+          <attribute name="action">app.new_tab</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">New window</attribute>
+          <attribute name="action">app.new_window</attribute>
+        </item>
+      </submenu>
+
+    </section>
+
+    <section>
       <item>
         <attribute name="label" translatable="yes">Preferences</attribute>
-        <attribute name="action">app.help</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Quit PW3270</attribute>
-        <attribute name="action">app.quit</attribute>
+        <attribute name="action">win.preferences</attribute>
       </item>
     </section>
   </menu>

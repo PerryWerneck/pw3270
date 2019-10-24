@@ -68,6 +68,25 @@
 	gtk_widget_show_all(GTK_WIDGET(vBox));
 	gtk_container_add(GTK_CONTAINER(widget),GTK_WIDGET(vBox));
 
+	//
+	// Setup Window actions.
+	//
+	static GActionEntry actions[] = {
+
+		{
+			.name = "preferences",
+			.activate = pw3270_application_generic_activated,
+		},
+
+	};
+
+	g_action_map_add_action_entries(
+		G_ACTION_MAP(widget),
+		actions,
+		G_N_ELEMENTS(actions),
+		widget
+	);
+
  }
 
  GtkWidget * pw3270_application_window_new(GtkApplication * application) {

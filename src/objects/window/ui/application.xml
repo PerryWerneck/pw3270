@@ -21,8 +21,8 @@
       </item>
     </section>
   </menu>
-  <menu id='menubar'>
 
+  <menu id='menubar'>
     <submenu>
       <attribute name='label' translatable='yes'>_Edit</attribute>
       <section>

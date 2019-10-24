@@ -34,6 +34,13 @@
  #include "private.h"
  #include <pw3270/application.h>
 
+ void pw3270_application_generic_activated(GSimpleAction * action, GVariant *parameter, gpointer application) {
+
+	debug("%s",__FUNCTION__);
+
+ }
+
+
  void pw3270_application_quit_activated(GSimpleAction * action, GVariant *parameter, gpointer application) {
 
 	g_print("Exiting application\n");

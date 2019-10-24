@@ -73,12 +73,6 @@
 
  }
 
- static void action_activated(GSimpleAction * action, GVariant *parameter, gpointer application) {
-
-	debug("%s",__FUNCTION__);
-
- }
-
  void startup(GApplication *application) {
 
 	G_APPLICATION_CLASS(pw3270Application_parent_class)->startup(application);
@@ -86,14 +80,14 @@
 	//
 	// Setup application default actions.
 	//
-	static GActionEntry app_entries[] = {
+	static GActionEntry actions[] = {
 		{
 			.name = "about",
-			.activate = action_activated,
+			.activate = pw3270_application_generic_activated,
 		},
 		{
 			.name = "preferences",
-			.activate = action_activated,
+			.activate = pw3270_application_generic_activated,
 		},
 
 		{
@@ -115,8 +109,8 @@
 
 	g_action_map_add_action_entries(
 		G_ACTION_MAP(application),
-		app_entries,
-		G_N_ELEMENTS(app_entries),
+		actions,
+		G_N_ELEMENTS(actions),
 		application
 	);
 
