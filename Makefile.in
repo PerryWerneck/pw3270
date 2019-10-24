@@ -128,6 +128,13 @@ $(OBJDBG)/%.o: \
 	@$(MKDIR) $(@D)
 	@$(WINDRES) $< -O coff -o $@
 
+gschemas.compiled: \
+	schemas/*.gschema.xml
+
+	@glib-compile-schemas \
+		--targetdir=$(@D) \
+		$(BASEDIR)/schemas	
+
 #---[ Release Rules ]--------------------------------------------------------------------
 
 $(OBJRLS)/%.o: \
@@ -219,7 +226,8 @@ Debug: \
 	$(BINDBG)/$(PACKAGE_NAME)@EXEEXT@
 
 $(BINDBG)/$(PACKAGE_NAME)@EXEEXT@: \
-	$(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC).o)
+	$(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC).o) \
+	gschemas.compiled
 
 	@$(MKDIR) $(@D)
 	@echo $< ...
@@ -267,6 +275,7 @@ cleanDebug:
 
 	@rm -fr $(OBJDBG)
 	@rm -fr $(BINDBG)
+	@rm -f gschemas.compiled
 
 cleanRelease:
 

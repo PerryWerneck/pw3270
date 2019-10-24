@@ -35,19 +35,33 @@
 
  #include "private.h"
  #include <pw3270/application.h>
+ #include <lib3270.h>
+ #include <lib3270/log.h>
 
 /*---[ Implement ]----------------------------------------------------------------------------------*/
 
 int main (int argc, char **argv) {
 
-  GtkApplication *app;
-  int status;
+	GtkApplication *app;
+	int status;
 
-  app = pw3270_application_new("br.com.bb." G_STRINGIFY(PRODUCT_NAME),G_APPLICATION_HANDLES_OPEN);
-  status = g_application_run(G_APPLICATION (app), argc, argv);
-  g_object_unref (app);
+#ifdef DEBUG
+	{
+		GError * error = NULL;
+		GSettingsSchemaSource * source = g_settings_schema_source_new_from_directory(".",NULL,TRUE,&error);
 
-  return status;
+		if(!source && error) {
+			g_error(error->message);
+		}
+
+	}
+#endif // DEBUG
+
+	app = pw3270_application_new("br.com.bb." G_STRINGIFY(PRODUCT_NAME),G_APPLICATION_HANDLES_OPEN);
+	status = g_application_run(G_APPLICATION (app), argc, argv);
+	g_object_unref (app);
+
+	return status;
 
 }
 

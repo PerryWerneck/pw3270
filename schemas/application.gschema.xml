@@ -1,0 +1,14 @@
+<schemalist>
+
+	<schema id="br.com.bb.pw3270"  gettext-domain="pw3270">
+
+		<key type="b" name="enable-something">
+			<default>false</default>
+			<summary>Enable something</summary>
+			<description>Enables something important in the application</description>
+		</key>
+
+	</schema>
+
+</schemalist>
+
