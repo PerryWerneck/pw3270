@@ -145,12 +145,12 @@
 		GSettingsSchema * schema =
 			g_settings_schema_source_lookup(
 				source,
-                "br.com.bb.pw3270",
+                "br.com.bb." G_STRINGIFY(PRODUCT_NAME),
                 TRUE);
 
 		g_settings_schema_source_unref(source);
 
-		settings = g_settings_new_full(schema, NULL, "/br/com/bb/pw3270/application/");
+		settings = g_settings_new_full(schema, NULL, "/br/com/bb/" G_STRINGIFY(PRODUCT_NAME) "/application/");
 
 	}
 #else
