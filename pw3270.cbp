@@ -14,7 +14,6 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Option use_console_runner="0" />
-				<Option parameters="--remap=./charsets/bracket.xml" />
 				<Compiler>
 					<Add option="-g" />
 					<Add option="-DDEBUG=1" />
@@ -43,6 +42,7 @@
 		</Linker>
 		<Unit filename="Makefile.in" />
 		<Unit filename="configure.ac" />
+		<Unit filename="src/include/pw3270.h" />
 		<Unit filename="src/include/pw3270/actions.h" />
 		<Unit filename="src/include/pw3270/application.h" />
 		<Unit filename="src/include/pw3270/toolbar.h" />
@@ -70,10 +70,10 @@
 		<Unit filename="src/objects/actions/window.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/objects/toolbar/core.c">
+		<Unit filename="src/objects/toolbar/private.h" />
+		<Unit filename="src/objects/toolbar/toolbar.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/objects/toolbar/private.h" />
 		<Unit filename="src/objects/window/actions.c">
 			<Option compilerVar="CC" />
 		</Unit>
