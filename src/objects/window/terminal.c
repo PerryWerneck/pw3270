@@ -92,19 +92,38 @@
 
  }
 
+ static void on_close_tab(GtkButton *button, GtkWidget *terminal) {
+
+	GtkNotebook * notebook = GTK_NOTEBOOK(gtk_widget_get_parent(terminal));
+	gtk_notebook_remove_page(notebook,gtk_notebook_page_num(notebook, terminal));
+	gtk_notebook_set_show_tabs(notebook,gtk_notebook_get_n_pages(notebook) > 1);
+
+ }
+
  static gint append_terminal_page(pw3270ApplicationWindow * window, GtkWidget * terminal) {
 
- 	GtkWidget * label = gtk_label_new(v3270_get_session_name(terminal));
+ 	GtkWidget * label	= gtk_label_new(v3270_get_session_name(terminal));
+ 	GtkWidget * tab		= gtk_box_new(GTK_ORIENTATION_HORIZONTAL,2);
+ 	GtkWidget * button	= gtk_button_new_from_icon_name("window-close-symbolic",GTK_ICON_SIZE_MENU);
+
+ 	gtk_button_set_relief(GTK_BUTTON(button),GTK_RELIEF_NONE);
+
+ 	debug("notebook: %p", window->notebook);
 
 	g_signal_connect(G_OBJECT(terminal), "focus-in-event", G_CALLBACK(on_terminal_focus), window);
 	g_signal_connect(G_OBJECT(terminal), "session_changed", G_CALLBACK(session_changed),label);
-	g_signal_connect(G_OBJECT(terminal),"disconnected",G_CALLBACK(disconnected),window);
-	g_signal_connect(G_OBJECT(terminal),"connected",G_CALLBACK(connected),window);
+	g_signal_connect(G_OBJECT(terminal), "disconnected", G_CALLBACK(disconnected),window);
+	g_signal_connect(G_OBJECT(terminal), "connected", G_CALLBACK(connected),window);
+
+	g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(on_close_tab), terminal);
+
+ 	gtk_box_pack_start(GTK_BOX(tab),label,FALSE,FALSE,0);
+ 	gtk_box_pack_end(GTK_BOX(tab),button,FALSE,FALSE,0);
 
 	gtk_widget_show_all(terminal);
-	gtk_widget_show_all(label);
+	gtk_widget_show_all(tab);
 
-	gint page = gtk_notebook_append_page(window->notebook,terminal,label);
+	gint page = gtk_notebook_append_page(window->notebook,terminal,tab);
 	gtk_notebook_set_show_tabs(window->notebook,gtk_notebook_get_n_pages(window->notebook) > 1);
 
 	gtk_notebook_set_tab_detachable(window->notebook,terminal,TRUE);
