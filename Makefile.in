@@ -24,243 +24,234 @@
 # erico.mendonca@gmail.com	(Erico Mascarenhas de Mendonça)
 #
 
-#---[ Configuration values ]---------------------------------------------------
+#---[ Configuration ]--------------------------------------------------------------------
 
 PACKAGE_NAME=@PACKAGE_NAME@
-PACKAGE_VERSION=@PACKAGE_VERSION@
-PACKAGE_LEVEL=@PACKAGE_LEVEL@
-PACKAGE_TARNAME=@PACKAGE_TARNAME@
-PACKAGE_DESCRIPTION=@PACKAGE_DESCRIPTION@
 PRODUCT_NAME=@PRODUCT_NAME@
+INSTALL_PACKAGES=@INSTALL_PACKAGES@
 
-#---[ Paths ]------------------------------------------------------------------
+SOURCES= \
+	$(wildcard src/objects/actions/*.c) \
+	$(wildcard src/objects/actions/lib3270/*.c) \
+	$(wildcard src/objects/window/*.c) \
+	$(wildcard src/objects/terminal/*.c) \
+	$(wildcard src/objects/toolbar/*.c) \
+	$(wildcard src/main/*.c) \
+	$(wildcard src/main/@OSNAME@/*.c) \
+	$(wildcard src/main/@OSNAME@/*.rc)
+
+#---[ Tools ]----------------------------------------------------------------------------
+
+CC=@CC@
+LD=@CC@
+LN_S=@LN_S@
+MKDIR=@MKDIR_P@
+INSTALL=@INSTALL@
+INSTALL_DATA=@INSTALL_DATA@
+INSTALL_PROGRAM=@INSTALL_PROGRAM@
+XGETTEXT=@XGETTEXT@
+MSGCAT=@MSGCAT@
+WINDRES=@WINDRES@
+AR=@AR@
+VALGRIND=@VALGRIND@
+
+#---[ Paths ]----------------------------------------------------------------------------
 
 prefix=@prefix@
 exec_prefix=@exec_prefix@
 bindir=@bindir@
 sbindir=@sbindir@
 libdir=@libdir@
+includedir=@includedir@
 datarootdir=@datarootdir@
-localedir=${datarootdir}/locale
+localedir=@localedir@
 docdir=@docdir@
 sysconfdir=@sysconfdir@
-mandir=@mandir@
 
 BASEDIR=@BASEDIR@
 
 POTDIR=$(BASEDIR)/.pot
+
+OBJDIR=$(BASEDIR)/.obj/$(PACKAGE_NAME)
+OBJDBG=$(OBJDIR)/Debug
+OBJRLS=$(OBJDIR)/Release
+
 BINDIR=$(BASEDIR)/.bin
 BINDBG=$(BINDIR)/Debug
 BINRLS=$(BINDIR)/Release
 
-#---[ Tools ]------------------------------------------------------------------
+#---[ Rules ]----------------------------------------------------------------------------
 
-CC=@CC@
-LD=@CC@
-LN_S=@LN_S@
-MKDIR=@MKDIR_P@
-MSGCAT=@MSGCAT@
-INSTALL=@INSTALL@
-INSTALL_DATA=@INSTALL_DATA@
-INSTALL_PROGRAM=@INSTALL_PROGRAM@
-HELP2MAN=@HELP2MAN@
-VALGRIND=@VALGRIND@
+DEPENDS= \
+	Makefile \
+	src/include/*.h \
+	src/objects/toolbar/private.h \
+	src/objects/window/private.h \
+	src/objects/actions/private.h \
+	src/main/private.h
+
+CFLAGS= \
+	@CFLAGS@ \
+	-g \
+	-Isrc/include \
+	-DBUILD_DATE=`date +%Y%m%d` \
+	@LIBV3270_CFLAGS@ \
+	@GTK_CFLAGS@
+
+LIBS= \
+	@LIBS@ \
+	@GTK_LIBS@ \
+	@LIBV3270_LIBS@
+
+LDFLAGS= \
+	@LDFLAGS@
+
+#---[ Debug Rules ]----------------------------------------------------------------------
+
+$(OBJDBG)/%.o: \
+	%.c \
+	$(DEPENDS)
+
+	@echo $< ...
+	@$(MKDIR) $(@D)
+
+	@$(CC) \
+		$(CFLAGS) \
+		-Wall -Wextra -fstack-check \
+		-DDEBUG=1 \
+		-o $@ -c $<
+
+$(OBJDBG)/%.o: \
+	%.rc
+
+	@echo $< ...
+	@$(MKDIR) $(@D)
+	@$(WINDRES) $< -O coff -o $@
+
+#---[ Release Rules ]--------------------------------------------------------------------
+
+$(OBJRLS)/%.o: \
+	%.c \
+	$(DEPENDS)
+
+	@echo $< ...
+	@$(MKDIR) $(dir $@)
+	@$(CC) \
+		$(CFLAGS) \
+		-DNDEBUG=1 \
+		-o $@ -c $<
+
+$(OBJRLS)/%.o: \
+	%.rc
+
+	@echo $< ...
+	@$(MKDIR) $(@D)
+	@$(WINDRES) $< -O coff -o $@
+
+#---[ Misc Rules ]-----------------------------------------------------------------------
+
+$(POTDIR)/$(PACKAGE_NAME)/%.pot: \
+	%.c
+
+	@echo $(notdir $@) ...
+	@$(MKDIR) $(@D)
+	@$(XGETTEXT) \
+		--language=C \
+		--keyword=_ \
+		--keyword=N_ \
+		--keyword=MSG_:2 \
+		--output=$@ \
+		$<
+	@touch $@
+
+$(POTDIR)/$(PACKAGE_NAME)/%.pot: \
+	%.rc
+
+	@echo $< ...
+	@$(MKDIR) $(dir $@)
+	@touch $@
+
 
 #---[ Release Targets ]------------------------------------------------------------------
 
 all: \
-	$(foreach MODULE, $(MODULES), $(BINRLS)/@DLLPREFIX@$(MODULE)@DLLEXT@) \
-	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ \
-	$(BINRLS)/libpw3270cpp.a \
-	locale/$(PACKAGE_TARNAME).pot
+	$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@ \
+	$(POTDIR)/$(PACKAGE_NAME).pot
 
 Release: \
-	application \
-	$(BINRLS)/libpw3270cpp.a
+	$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@ \
+	$(BINRLS)/static/$(PACKAGE_NAME).a
 
-application: \
-	$(foreach MODULE, $(MODULES), $(BINRLS)/@DLLPREFIX@$(MODULE)@DLLEXT@) \
-	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ \
+$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@: \
+	$(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SRC).o)
 
-$(BINRLS)/libpw3270cpp.a: \
-	src/libpw3270cpp/*
+	@$(MKDIR) $(@D)
+	@echo $< ...
+	@$(LD) \
+		-o $@ \
+		$(LDFLAGS) \
+		$^ \
+		$(LIBS)
 
-	@$(MAKE) -C src/libpw3270cpp Release
 
-#---[ Debug Rules ]----------------------------------------------------------------------
-
-$(BINDBG)/%@EXEEXT@: \
-	$(foreach MODULE, $(MODULES), $(BINDBG)/@DLLPREFIX@$(MODULE)@DLLEXT@) \
-	src/% \
-	src/%/*
-
-	@make -C src/$(notdir $(basename $@)) $@
-
-#---[ Release Rules ]--------------------------------------------------------------------
-
-$(BINRLS)/%@EXEEXT@: \
-	$(foreach MODULE, $(MODULES), $(BINDBG)/@DLLPREFIX@$(MODULE)@DLLEXT@) \
-        src/% \
-        src/%/*
-
-	@$(MAKE) -C src/$(notdir $(basename $@)) $@
-
-publish-release: \
-	$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@
-
-	@rm -f ~/public-html/release-$(PACKAGE_TARNAME)-@host_cpu@.zip
-	@zip \
-		-9 -D \
-		~/public_html/release-$(PACKAGE_TARNAME)-@host_cpu@.zip \
-		$(BINRLS)/*
-
-#---[ Install Rules ]--------------------------------------------------------------------
+#---[ Install Targets ]------------------------------------------------------------------
 
 install: \
-	install-application \
-	install-devel
-
-install-devel: \
-	$(foreach MODULE, $(MODULES), install-$(MODULE)) \
-	locale/$(PACKAGE_TARNAME).pot \
-	install-sdk
-
-	@$(MAKE) \
-		-C src/libpw3270cpp \
-		DESTDIR=$(DESTDIR) \
-		install
-
-install-application: \
-	install-pw3270 \
-	install-branding \
-	install-ui \
-	install-locale
-
-ifneq ($(HELP2MAN),no)
-	@$(MKDIR) $(DESTDIR)/$(mandir)/man1
-	@LD_LIBRARY_PATH=$(BINRLS) \
-		$(HELP2MAN) \
-		--version-string="$(PACKAGE_TARNAME) - $(PACKAGE_DESCRIPTION) Vrs. $(PACKAGE_VERSION)" \
-		$(BINRLS)/$(PACKAGE_TARNAME)@EXEEXT@ | gzip --best --stdout - > $(DESTDIR)/$(mandir)/man1/$(PACKAGE_NAME).1.gz
-endif
-
-	@$(MKDIR) $(DESTDIR)$(libdir)/@PRODUCT_NAME@-plugins
-
-install-%: \
-	modules/%/Makefile
-
-	@$(MAKE) -C `dirname $<` DESTDIR=$(DESTDIR) install
-
-install-%: \
-	src/%/Makefile
-
-	@$(MAKE) -C `dirname $<` DESTDIR=$(DESTDIR) install
-
-install-%: \
-	%/Makefile
-
-	@$(MAKE) -C `dirname $<` DESTDIR=$(DESTDIR) install
+	$(foreach PKG, $(INSTALL_PACKAGES), install-$(PKG))
 
 
-#---[ Misc Rules ]-----------------------------------------------------------------------
+#---[ Misc Targets ]---------------------------------------------------------------------
 
-$(POTDIR)/%.pot: \
-	$(DEPENDS) \
-	./src/%/*
- 
-	@echo $(notdir $@) ...
-	@mkdir -p `dirname $@`
-	@$(MAKE) -C src/$(basename $(notdir $@)) $@
+$(POTDIR)/$(PACKAGE_NAME).pot: \
+	$(foreach SRC, $(basename $(SOURCES)), $(POTDIR)/$(PACKAGE_NAME)/$(SRC).pot)
 
-$(POTDIR)/%.pot: \
-	$(datarootdir)/$(PRODUCT_NAME)/pot/%.pot
- 
-	@echo $(notdir $@) ...
-	@mkdir -p `dirname $@`
-	@cp "$^" "$@"
+	@rm -f $@
+	@$(MKDIR) $(@D)
+	@$(MSGCAT) --sort-output $^ > $@
 
-$(POTDIR)/%.pot: \
-	./modules/%/* \
-	./modules/%/src/* \
-	./modules/%/Makefile
- 
-	@echo $(notdir $@) ...
-	@mkdir -p `dirname $@`
-	@$(MAKE) -C modules/$(basename $(notdir $@)) $@
-
-$(POTDIR)/%.pot: \
-	./modules/%/%.pot
- 
-	@echo $(notdir $@) ...
-	@mkdir -p `dirname $@`
-
-	@echo cp $^ $@
-	@false
-
-$(POTDIR)/%.pot: \
-	./%/*
- 
-	@echo $(notdir $@) ...
-	@mkdir -p `dirname $@`
-	@$(MAKE) -C $(basename $(notdir $@)) $@
+locale: \
+	$(POTDIR)/$(PACKAGE_NAME).pot
 
 
 #---[ Debug Targets ]--------------------------------------------------------------------
 
 Debug: \
-	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@
+	$(BINDBG)/$(PACKAGE_NAME)@EXEEXT@
 
-publish-debug: \
-	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@
+$(BINDBG)/$(PACKAGE_NAME)@EXEEXT@: \
+	$(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC).o)
 
-	@rm -f ~/public-html/debug-$(PACKAGE_TARNAME)-@host_cpu@.zip
-	@zip \
-		-9 -D \
-		~/public_html/debug-$(PACKAGE_TARNAME)-@host_cpu@.zip \
-		$(BINDBG)/*
-
-$(BINDBG)/libpw3270cpp.a: \
-	src/libpw3270cpp/*
-
-	@$(MAKE) -C src/libpw3270cpp Debug
-
+	@$(MKDIR) $(@D)
+	@echo $< ...
+	@$(LD) \
+		-o $@ \
+		$^ \
+		$(LDFLAGS) \
+		$(LIBS)
+ 
 run: \
-	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@
+	$(BINDBG)/$(PACKAGE_NAME)@EXEEXT@
 
-	@LD_LIBRARY_PATH=$(BINDBG) $(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@
+	@LD_LIBRARY_PATH=$(BINDBG) \
+		$(BINDBG)/$(PACKAGE_NAME)@EXEEXT@
 
 mem-check: \
-	$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@
+	$(BINDBG)/$(PACKAGE_NAME)@EXEEXT@
 
 ifeq ($(VALGRIND),no)
 
 	@LD_LIBRARY_PATH=$(BINDBG) \
-		$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@
+		$(BINDBG)/$(PACKAGE_NAME)@EXEEXT@
 
 else
 	@touch valgrind.suppression
 
 	@LD_LIBRARY_PATH=$(BINDBG) \
 		$(VALGRIND) --leak-check=full --track-origins=yes --gen-suppressions=all --suppressions=valgrind.suppression \
-			$(BINDBG)/$(PACKAGE_TARNAME)@EXEEXT@
+			$(BINDBG)/$(PACKAGE_NAME)@EXEEXT@
 endif
 
-#---[ Misc Targets ]---------------------------------------------------------------------
 
-locale: \
-	locale/$(PACKAGE_TARNAME).pot
-
-	$(MAKE) -C locale all
-
-locale/$(PACKAGE_TARNAME).pot: \
-	$(POTDIR)/pw3270.pot \
-	$(POTDIR)/lib3270.pot \
-	$(POTDIR)/libv3270.pot \
-	$(POTDIR)/ui.pot
-
-	@rm -f $@
-	@mkdir -p `dirname $@`
-	@$(MSGCAT) --sort-output $^ > $@
 
 #---[ Clean Targets ]--------------------------------------------------------------------
 
@@ -268,21 +259,23 @@ clean: \
 	cleanDebug \
 	cleanRelease
 
-	@rm -fr $(POTDIR)
-	@rm -fr $(BINDIR)92
+	@rm -fr $(BASEDIR)/.tmp/$(PACKAGE_NAME)
+	@rm -fr $(POTDIR)/$(PACKAGE_NAME)
+	@rm -fr src/include/marshal
 
 cleanDebug:
 
 	@rm -fr $(OBJDBG)
 	@rm -fr $(BINDBG)
-	@$(MAKE) -C src/pw3270 $@
 
 cleanRelease:
 
 	@rm -fr $(OBJRLS)
 	@rm -fr $(BINRLS)
-	@$(MAKE) -C src/pw3270 $@
+	@rm -fr $(POTDIR)
 
-
+clean: \
+	cleanDebug \
+	cleanRelease
 
 

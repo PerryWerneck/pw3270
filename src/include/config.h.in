@@ -24,40 +24,17 @@
  *
  * perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
  * erico.mendonca@gmail.com	(Erico Mascarenhas de Mendonça)
- * licinio@bb.com.br		(Licínio Luis Branco)
- * kraucer@bb.com.br		(Kraucer Fernandes Mazuco)
  *
  */
 
-#ifndef PW3270_CONFIG_INCLUDED
+#ifndef PW3270_CONFIG_H_INCLUDED
 
-	#define PW3270_CONFIG_INCLUDED 1
+	#define PW3270_CONFIG_H_INCLUDED 1
 
 	#undef PACKAGE_NAME
 	#undef PACKAGE_VERSION
 	#undef PACKAGE_RELEASE
 	#undef PRODUCT_NAME
-	#undef PACKAGE_DESCRIPTION
 
-	#undef DEFAULT_SESSION_NAME
-	#undef APPLICATION_NAME
-
-	#undef HAVE_GNUC_VISIBILITY
-	#undef HAVE_LIBM
-	#undef HAVE_LIBINTL
-	#undef HAVE_GETADDRINFO
-	#undef HAVE_SYSLOG
-	#undef HAVE_DBUS
-	#undef HAVE_VASPRINTF
-	#undef HAVE_INET_NTOP
-
-	#undef HAVE_ICONV
-	#undef ICONV_CONST
-
-	#undef ENABLE_WINDOWS_REGISTRY
-
-	#undef HAVE_GNOME
-	#undef HAVE_GTKMAC
-
-#endif /* PW3270_CONFIG_INCLUDED */
+#endif /* PW3270_CONFIG_H_INCLUDED */
 

@@ -42,212 +42,54 @@
 			<Add option="`pkg-config gtk+-3.0 lib3270 --libs`" />
 		</Linker>
 		<Unit filename="Makefile.in" />
-		<Unit filename="android/Makefile" />
-		<Unit filename="android/jni/Android.mk" />
-		<Unit filename="android/jni/globals.h" />
-		<Unit filename="autogen.sh" />
 		<Unit filename="configure.ac" />
-		<Unit filename="man/man1/pw3270.1" />
-		<Unit filename="src/classlib/Makefile.in" />
-		<Unit filename="src/classlib/class.mak.in" />
-		<Unit filename="src/include/config.h.in" />
-		<Unit filename="src/include/plugin.mak.in" />
-		<Unit filename="src/include/pw3270.h" />
-		<Unit filename="src/include/pw3270/hllapi.h" />
-		<Unit filename="src/include/pw3270/ipcpackets.h" />
-		<Unit filename="src/include/pw3270/plugin.h" />
-		<Unit filename="src/include/pw3270cpp.h" />
-		<Unit filename="src/include/rules.mak.in" />
-		<Unit filename="src/java/Makefile.in" />
-		<Unit filename="src/lib3270/Makefile.in" />
-		<Unit filename="src/lib3270/sources.mak" />
-		<Unit filename="src/libpw3270cpp/exception.cc" />
-		<Unit filename="src/libpw3270cpp/local.cc" />
-		<Unit filename="src/libpw3270cpp/module.cc" />
-		<Unit filename="src/libpw3270cpp/private.h" />
-		<Unit filename="src/libpw3270cpp/remote.cc" />
-		<Unit filename="src/libpw3270cpp/service.cc" />
-		<Unit filename="src/libpw3270cpp/session.cc" />
-		<Unit filename="src/libpw3270cpp/testprogram.cc" />
-		<Unit filename="src/loffice/Makefile.in" />
-		<Unit filename="src/loffice/description.txt" />
-		<Unit filename="src/loffice/description.xml" />
-		<Unit filename="src/loffice/description.xml.in" />
-		<Unit filename="src/loffice/manifest.xml" />
-		<Unit filename="src/loffice/manifest.xml.in" />
-		<Unit filename="src/loffice/pw3270.idl" />
-		<Unit filename="src/oxt/Makefile.in" />
-		<Unit filename="src/oxt/description.txt" />
-		<Unit filename="src/oxt/description.xml.in" />
-		<Unit filename="src/oxt/manifest.xml.in" />
-		<Unit filename="src/oxt/pw3270.idl" />
-		<Unit filename="src/php/Makefile.in" />
-		<Unit filename="src/php/php.ini" />
-		<Unit filename="src/php/sample.php" />
-		<Unit filename="src/plugins/dbus3270/Makefile.in" />
-		<Unit filename="src/plugins/dbus3270/daemon.c">
+		<Unit filename="src/include/pw3270/actions.h" />
+		<Unit filename="src/include/pw3270/application.h" />
+		<Unit filename="src/include/pw3270/toolbar.h" />
+		<Unit filename="src/include/pw3270/window.h" />
+		<Unit filename="src/main/main.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/plugins/dbus3270/gobject.c">
+		<Unit filename="src/main/private.h" />
+		<Unit filename="src/objects/actions/abstract.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/plugins/dbus3270/iocallback.c">
+		<Unit filename="src/objects/actions/lib3270/action.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/plugins/dbus3270/main.c">
+		<Unit filename="src/objects/actions/lib3270/pakey.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/plugins/dbus3270/misc.c">
+		<Unit filename="src/objects/actions/lib3270/pfkey.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/plugins/dbus3270/pw3270dbus.xml" />
-		<Unit filename="src/plugins/dbus3270/test.sh" />
-		<Unit filename="src/plugins/hllapi/Makefile.in" />
-		<Unit filename="src/plugins/hllapi/calls.cc" />
-		<Unit filename="src/plugins/hllapi/hllapi.c">
+		<Unit filename="src/objects/actions/lib3270/toggle.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/plugins/hllapi/pluginmain.c">
+		<Unit filename="src/objects/actions/private.h" />
+		<Unit filename="src/objects/actions/window.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/plugins/hllapi/testprogram.c">
+		<Unit filename="src/objects/toolbar/core.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/plugins/rx3270/Makefile.in" />
-		<Unit filename="src/plugins/rx3270/pluginmain.cc" />
-		<Unit filename="src/plugins/rx3270/rexx_methods.cc" />
-		<Unit filename="src/plugins/rx3270/rx3270.cc" />
-		<Unit filename="src/plugins/rx3270/rx3270.cls" />
-		<Unit filename="src/plugins/rx3270/rxapimain.cc" />
-		<Unit filename="src/plugins/rx3270/sample/charset.rex" />
-		<Unit filename="src/plugins/rx3270/sample/clipboard.rex" />
-		<Unit filename="src/plugins/rx3270/sample/object.rex" />
-		<Unit filename="src/plugins/rx3270/sample/remote.rex" />
-		<Unit filename="src/plugins/rx3270/typed_routines.cc" />
-		<Unit filename="src/pw3270/Makefile.in" />
-		<Unit filename="src/pw3270/actions.c">
+		<Unit filename="src/objects/toolbar/private.h" />
+		<Unit filename="src/objects/window/actions.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/pw3270/charset.c">
+		<Unit filename="src/objects/window/application.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/pw3270/colors.c">
+		<Unit filename="src/objects/window/private.h" />
+		<Unit filename="src/objects/window/terminal.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/pw3270/common/common.h" />
-		<Unit filename="src/pw3270/common/config.c">
+		<Unit filename="src/objects/window/tools.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/pw3270/common/sources.mak" />
-		<Unit filename="src/pw3270/dialog.c">
+		<Unit filename="src/objects/window/window.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/pw3270/filetransfer.h" />
-		<Unit filename="src/pw3270/fonts.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pw3270/ft/private.h" />
-		<Unit filename="src/pw3270/ft/v3270ft.h" />
-		<Unit filename="src/pw3270/hostdialog.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pw3270/include/v3270.h" />
-		<Unit filename="src/pw3270/include/v3270ft.h" />
-		<Unit filename="src/pw3270/linux/print.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pw3270/main.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pw3270/plugin.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pw3270/print.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pw3270/private.h" />
-		<Unit filename="src/pw3270/resources.rc">
-			<Option compilerVar="WINDRES" />
-		</Unit>
-		<Unit filename="src/pw3270/tools.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pw3270/uiparser/Makefile.in" />
-		<Unit filename="src/pw3270/uiparser/accelerator.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pw3270/uiparser/action.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pw3270/uiparser/button.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pw3270/uiparser/keypad.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pw3270/uiparser/keypad.h" />
-		<Unit filename="src/pw3270/uiparser/menu.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pw3270/uiparser/menubar.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pw3270/uiparser/menuitem.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pw3270/uiparser/parsefile.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pw3270/uiparser/parser.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pw3270/uiparser/parser.h" />
-		<Unit filename="src/pw3270/uiparser/popup.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pw3270/uiparser/private.h" />
-		<Unit filename="src/pw3270/uiparser/script.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pw3270/uiparser/scroll.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pw3270/uiparser/separator.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pw3270/uiparser/sources.mak" />
-		<Unit filename="src/pw3270/uiparser/testprogram.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pw3270/uiparser/toolbar.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pw3270/uiparser/toolitem.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pw3270/v3270/genmarshal" />
-		<Unit filename="src/pw3270/v3270/sources.mak" />
-		<Unit filename="src/pw3270/v3270ft/Makefile.in" />
-		<Unit filename="src/pw3270/v3270ft/genmarshal" />
-		<Unit filename="src/pw3270/window.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pw3270/windows/print.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pw3270/windows/resources.rc.in" />
-		<Unit filename="src/sample/Makefile.in" />
-		<Unit filename="src/sample/connect.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/tools/Makefile.in" />
-		<Unit filename="ui/00default.xml" />
-		<Unit filename="ui/10functions.xml" />
-		<Unit filename="ui/10keypad.xml" />
-		<Unit filename="ui/80rexx.xml" />
-		<Unit filename="ui/98trace.xml" />
-		<Unit filename="ui/99debug.xml" />
-		<Unit filename="updateChangeLog.sh" />
 		<Extensions>
 			<code_completion />
 			<debugger />

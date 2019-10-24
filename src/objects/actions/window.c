@@ -38,31 +38,8 @@
 
  void pw3270_window_add_actions(GtkWidget * appwindow) {
 
-	GActionMap 	* map = G_ACTION_MAP(appwindow);
-	GtkWidget	* terminal = pw3270_window_get_terminal_widget(appwindow);
+	GActionMap * map = G_ACTION_MAP(appwindow);
 	size_t ix;
-
-	/*
-	GAction *action = pw3270_action_new_from_lib3270(lib3270_action_get_by_name("testpattern"));
-	pw3270_action_set_terminal_widget(action,terminal);
-
-	debug("--> \"%s\"",pw3270_action_get_name(action));
-
-	g_action_map_add_action(map,action);
-
-	debug("--> \"%s\"",pw3270_action_get_name(action));
-	*/
-
-	/*
-	GAction *action = pw3270_toggle_action_new_from_lib3270(lib3270_get_toggles() + LIB3270_TOGGLE_INSERT);
-	pw3270_action_set_terminal_widget(action,terminal);
-
-	debug("--> \"%s\"",pw3270_action_get_name(action));
-
-	g_action_map_add_action(map,action);
-
-	debug("--> \"%s\"",pw3270_action_get_name(action));
-	*/
 
 	// Map lib3270 actions
 	{
@@ -70,7 +47,6 @@
 		for(ix = 0; actions[ix].name; ix++) {
 
 			GAction *action = pw3270_action_new_from_lib3270(&actions[ix]);
-			pw3270_action_set_terminal_widget(action,terminal);
 			g_action_map_add_action(map,action);
 
 		}
@@ -82,7 +58,6 @@
 		for(ix = 0; toggles[ix].name; ix++) {
 
 			GAction *action = pw3270_toggle_action_new_from_lib3270(&toggles[ix]);
-			pw3270_action_set_terminal_widget(action,terminal);
 			g_action_map_add_action(map,action);
 
 		}
@@ -96,7 +71,6 @@
 		};
 
 		for(ix = 0; ix < G_N_ELEMENTS(actions); ix++) {
-			pw3270_action_set_terminal_widget(actions[ix],terminal);
 			g_action_map_add_action(map,actions[ix]);
 		}
 	}
