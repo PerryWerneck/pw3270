@@ -88,4 +88,8 @@ int main (int argc, char **argv) {
 
 }
 
+PW3270_UI_TYPE pw3270_application_get_ui_type(GApplication *app) {
+ 	return PW3270_UI_STYLE_GNOME;
+}
+
 

@@ -9,11 +9,7 @@
       </item>
       <item>
         <attribute name="label" translatable="yes">New Window</attribute>
-        <attribute name="action">app.new_window</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Preferences</attribute>
-        <attribute name="action">app.help</attribute>
+        <attribute name="action">app.new.window</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Quit</attribute>
@@ -24,21 +20,46 @@
 
   <menu id='menubar'>
     <submenu>
+      <attribute name='label' translatable='yes'>_Session</attribute>
+
+      <item>
+        <attribute name="label" translatable="yes">Open</attribute>
+        <attribute name="action">win.open</attribute>
+      </item>
+
+      <item>
+        <attribute name="label" translatable="yes">Close</attribute>
+        <attribute name="action">win.close</attribute>
+      </item>
+
+      <item>
+        <attribute name="label" translatable="yes">Open in new window</attribute>
+        <attribute name="action">app.open.window</attribute>
+      </item>
+
+      <item>
+        <attribute name="label" translatable="yes">Open in new tab</attribute>
+        <attribute name="action">app.open.tab</attribute>
+      </item>
+
+    </submenu>
+
+    <submenu>
       <attribute name='label' translatable='yes'>_Edit</attribute>
       <section>
         <item>
           <attribute name='label' translatable='yes'>_Copy</attribute>
-          <attribute name='action'>app.quit</attribute>
+          <attribute name='action'>app.default</attribute>
         </item>
         <item>
           <attribute name='label' translatable='yes'>_Paste</attribute>
-          <attribute name='action'>app.quit</attribute>
+          <attribute name='action'>app.default</attribute>
         </item>
       </section>
       <section>
         <item>
           <attribute name='label' translatable='yes'>Plugins</attribute>
-          <attribute name='action'>app.quit</attribute>
+          <attribute name='action'>app.default</attribute>
         </item>
       </section>
     </submenu>

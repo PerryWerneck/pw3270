@@ -55,6 +55,9 @@
 		<Unit filename="testprogram/testprogram.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="tools.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="window.c">
 			<Option compilerVar="CC" />
 		</Unit>

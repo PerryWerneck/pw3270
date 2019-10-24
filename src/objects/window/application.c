@@ -85,6 +85,7 @@
 			.name = "about",
 			.activate = pw3270_application_generic_activated,
 		},
+
 		{
 			.name = "preferences",
 			.activate = pw3270_application_generic_activated,
@@ -96,15 +97,29 @@
 		},
 
 		{
-			.name = "new_tab",
+			.name = "new.tab",
 			.activate = pw3270_application_new_tab_activated,
 		},
 
 		{
-			.name = "new_window",
+			.name = "new.window",
 			.activate = pw3270_application_new_window_activated,
-		}
+		},
 
+		{
+			.name = "open",
+			.activate = pw3270_application_generic_activated,
+		},
+
+		{
+			.name = "open.tab",
+			.activate = pw3270_application_generic_activated,
+		},
+
+		{
+			.name = "open.window",
+			.activate = pw3270_application_generic_activated,
+		},
 	};
 
 	g_action_map_add_action_entries(
@@ -164,6 +179,3 @@
 
  }
 
- PW3270_UI_TYPE pw3270_application_get_ui_type(GApplication *app) {
- 	return PW3270_UI_STYLE_GNOME;
- }

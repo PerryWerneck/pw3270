@@ -8,11 +8,11 @@
         <attribute name="label" translatable="yes">New</attribute>
         <item>
           <attribute name="label" translatable="yes">Tab</attribute>
-          <attribute name="action">app.new_tab</attribute>
+          <attribute name="action">app.new.tab</attribute>
         </item>
         <item>
           <attribute name="label" translatable="yes">Application Window</attribute>
-          <attribute name="action">app.new_window</attribute>
+          <attribute name="action">app.new.window</attribute>
         </item>
       </submenu>
 
@@ -24,11 +24,11 @@
         </item>
         <item>
           <attribute name="label" translatable="yes">New tab</attribute>
-          <attribute name="action">app.new_tab</attribute>
+          <attribute name="action">app.new.tab</attribute>
         </item>
         <item>
           <attribute name="label" translatable="yes">New window</attribute>
-          <attribute name="action">app.new_window</attribute>
+          <attribute name="action">app.new.window</attribute>
         </item>
       </submenu>
 

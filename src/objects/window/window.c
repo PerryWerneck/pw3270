@@ -74,6 +74,16 @@
 	static GActionEntry actions[] = {
 
 		{
+			.name = "open",
+			.activate = pw3270_application_generic_activated,
+		},
+
+		{
+			.name = "close",
+			.activate = pw3270_application_generic_activated,
+		},
+
+		{
 			.name = "preferences",
 			.activate = pw3270_application_generic_activated,
 		},
@@ -125,17 +135,13 @@
 
 				// Create gear button
 				// https://wiki.gnome.org/Initiatives/GnomeGoals/GearIcons
-				GtkWidget *	gear_menu = gtk_menu_button_new();
-				gtk_button_set_image(GTK_BUTTON(gear_menu),gtk_image_new_from_icon_name("open-menu-symbolic",GTK_ICON_SIZE_MENU));
-
+				GtkWidget *	gear_menu = pw3270_setup_image_button(gtk_menu_button_new(),"open-menu-symbolic");
 				gtk_menu_button_set_menu_model(GTK_MENU_BUTTON(gear_menu), G_MENU_MODEL(gtk_builder_get_object (builder, "gear-menu")));
-
 				gtk_header_bar_pack_end(header, gear_menu);
 
 				// Create "new tab" bar
-				GtkWidget * new_tab_button = gtk_button_new_from_icon_name("tab-new-symbolic",GTK_ICON_SIZE_MENU);
+				GtkWidget * new_tab_button = pw3270_setup_image_button(gtk_button_new(),"tab-new-symbolic");
 				gtk_actionable_set_action_name(GTK_ACTIONABLE(new_tab_button),"app.new_tab");
-
 				gtk_header_bar_pack_start(header, new_tab_button);
 
 				// Show the new header
