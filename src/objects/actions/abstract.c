@@ -355,10 +355,9 @@
 
  }
 
- void pw3270_action_set_enabled(GAction *object, gboolean G_GNUC_UNUSED(state)) {
+ void pw3270_action_notify_enabled(GAction *object) {
 	g_object_notify_by_pspec(G_OBJECT(object), PW3270_ACTION_GET_CLASS(object)->properties.enabled);
  }
-
 
  static void change_widget(GAction *action, GtkWidget G_GNUC_UNUSED(*from), GtkWidget *to) {
 	PW3270_ACTION(action)->terminal = to;
@@ -440,3 +439,6 @@
 	return NULL;
  }
 
+ H3270 * pw3270_action_get_session(GAction *action) {
+ 	return v3270_get_session(PW3270_ACTION(action)->terminal);
+ }

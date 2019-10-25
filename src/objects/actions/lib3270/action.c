@@ -48,6 +48,7 @@
  	pw3270Action parent;
 
 	const LIB3270_ACTION 	* definition;
+	const void				* listener;
 
  } Lib3270Action;
 
@@ -82,6 +83,18 @@
 	return PW3270_LIB3270_ACTION(action)->definition->summary;
  }
 
+ static void dispose(GObject *object) {
+
+	Lib3270Action *action = PW3270_LIB3270_ACTION(object);
+
+	if(action->listener) {
+		lib3270_unregister_action_group_listener(pw3270_action_get_session(G_ACTION(object)),action->definition->group,action->listener);
+		action->listener = NULL;
+	}
+
+	G_OBJECT_CLASS(Lib3270Action_parent_class)->dispose(object);
+ }
+
  void Lib3270Action_class_init(Lib3270ActionClass *klass) {
 
 	pw3270ActionClass * action = PW3270_ACTION_CLASS(klass);
@@ -93,6 +106,8 @@
 	action->get_label = get_label;
 	action->get_tooltip = get_tooltip;
 
+	G_OBJECT_CLASS(klass)->dispose = dispose;
+
  }
 
  void Lib3270Action_init(Lib3270Action G_GNUC_UNUSED(*action)) {
@@ -101,7 +116,10 @@
  GAction * pw3270_action_new_from_lib3270(const LIB3270_ACTION * definition) {
 
  	Lib3270Action	* action		= (Lib3270Action *) g_object_new(PW3270_TYPE_LIB3270_ACTION, NULL);
+
+	// Setup hooks.
 	action->definition	= definition;
+	action->listener	= NULL;
 
 	// Setup the default name.
 	pw3270Action * abstract	= PW3270_ACTION(action);
@@ -114,14 +132,31 @@
  	return G_ACTION(action);
  }
 
+ static void event_listener(H3270 G_GNUC_UNUSED(*hSession), void *object) {
+ 	pw3270_action_notify_enabled(G_ACTION(object));
+ }
+
  void change_widget(GAction *object, GtkWidget *from, GtkWidget *to) {
 
+	// Remove old listener
+	Lib3270Action * action = PW3270_LIB3270_ACTION(object);
+	if(action->listener) {
+		lib3270_unregister_action_group_listener(pw3270_action_get_session(object),action->definition->group,action->listener);
+		action->listener = NULL;
+	}
+
+	// Change widget
 	PW3270_ACTION_CLASS(Lib3270Action_parent_class)->change_widget(object,from,to);
+
+	// Setup new listener
+	if(action->definition->group && to) {
+		action->listener = lib3270_register_action_group_listener(pw3270_action_get_session(object),action->definition->group,event_listener,object);
+	}
 
 	// Does the "enabled" state has changed? If yes notify customers.
 	gboolean enabled = get_enabled(object,to);
 	if(get_enabled(object,from) != enabled)
-		pw3270_action_set_enabled(object,enabled);
+		pw3270_action_notify_enabled(object);
 
  }
 

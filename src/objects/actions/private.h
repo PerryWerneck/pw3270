@@ -85,7 +85,7 @@
 	G_GNUC_INTERNAL GAction * pw3270_action_new_pakey(void);
 
 	G_GNUC_INTERNAL void pw3270_action_change_state_boolean(GAction *action, gboolean state);
-	G_GNUC_INTERNAL void pw3270_action_set_enabled(GAction *action, gboolean state);
+	G_GNUC_INTERNAL void pw3270_action_notify_enabled(GAction *action);
 
 
 #endif // PRIVATE_H_INCLUDED

@@ -141,6 +141,7 @@
 	gtk_tool_button_set_use_underline(GTK_TOOL_BUTTON(item),TRUE);
 	gtk_toolbar_insert(GTK_TOOLBAR(toolbar), GTK_TOOL_ITEM(item), pos);
 	gtk_widget_show_all(GTK_WIDGET(item));
+	gtk_widget_set_sensitive(GTK_WIDGET(item),g_action_get_enabled(action));
 
 	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(clicked),action);
 	g_signal_connect(G_OBJECT(action),"notify",G_CALLBACK(notify),item);

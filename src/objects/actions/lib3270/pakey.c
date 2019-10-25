@@ -135,7 +135,7 @@
 	// Does the "enabled" state has changed? If yes notify customers.
 	gboolean enabled = get_enabled(object,to);
 	if(get_enabled(object,from) != enabled)
-		pw3270_action_set_enabled(object,enabled);
+		pw3270_action_notify_enabled(object);
 
  }
 
