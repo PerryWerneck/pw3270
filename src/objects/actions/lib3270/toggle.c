@@ -58,7 +58,7 @@
 
  G_DEFINE_TYPE(Lib3270ToggleAction, Lib3270ToggleAction, PW3270_TYPE_ACTION);
 
- static void change_state(H3270 *hSession, LIB3270_TOGGLE_ID id, char state, void * action) {
+ static void change_state(H3270 G_GNUC_UNUSED(*hSession), LIB3270_TOGGLE_ID id, char state, void * action) {
  	debug("%s: %s",__FUNCTION__,state ? "ON" : "OFF");
 	pw3270_action_change_state_boolean((GAction *) action, state == 0 ? FALSE : TRUE);
  }

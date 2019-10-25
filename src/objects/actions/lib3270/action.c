@@ -75,11 +75,11 @@
 	return PW3270_LIB3270_ACTION(action)->definition->icon;
  }
 
- const gchar * get_label(GAction *action) {
+ static const gchar * get_label(GAction *action) {
 	return PW3270_LIB3270_ACTION(action)->definition->label;
  }
 
- const gchar * get_tooltip(GAction *action) {
+ static const gchar * get_tooltip(GAction *action) {
 	return PW3270_LIB3270_ACTION(action)->definition->summary;
  }
 

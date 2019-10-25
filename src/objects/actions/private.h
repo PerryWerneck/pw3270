@@ -79,6 +79,25 @@
 
 	};
 
+	typedef struct _SimpleActionClass {
+		pw3270ActionClass parent_class;
+
+	} SimpleActionClass;
+
+	typedef struct _SimpleAction {
+
+		pw3270Action parent;
+
+		LIB3270_ACTION_GROUP	  group;		///< @brief LIB3270 Group id.
+		const void				* listener;		///< @brief Event listener.
+		const gchar				* icon_name;	///< @brief The action icon name.
+		const gchar				* label;		///< @brief The action label.
+		const gchar				* tooltip;		///< @brief The action tooltip.
+
+		void (*activate)(GtkWidget *terminal);
+
+	} SimpleAction;
+
 	G_GNUC_INTERNAL GAction * pw3270_action_new_from_lib3270(const LIB3270_ACTION * definition);
 	G_GNUC_INTERNAL GAction	* pw3270_toggle_action_new_from_lib3270(const LIB3270_TOGGLE * definition);
 	G_GNUC_INTERNAL GAction * pw3270_action_new_pfkey(void);
@@ -87,5 +106,10 @@
 	G_GNUC_INTERNAL void pw3270_action_change_state_boolean(GAction *action, gboolean state);
 	G_GNUC_INTERNAL void pw3270_action_notify_enabled(GAction *action);
 
+	// Internal actions
+	G_GNUC_INTERNAL SimpleAction	* pw3270_simple_action_new();
+	G_GNUC_INTERNAL SimpleAction	* pw3270_simple_action_from_name(const gchar *name);
+
+	G_GNUC_INTERNAL GAction			* pw3270_connect_action_new(void);
 
 #endif // PRIVATE_H_INCLUDED
