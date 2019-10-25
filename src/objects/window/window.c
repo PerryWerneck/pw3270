@@ -68,44 +68,28 @@
 	//
 	pw3270_window_add_actions(GTK_WIDGET(widget));
 
-	{
-		static const gchar *actions[] = {
-			"win.select_all",
-			"win.copy",
-			"win.paste",
-			"win.reconnect",
-			"win.disconnect",
-			"win.print",
-			"app.quit"
-		};
-
-		size_t ix;
-
-		for(ix = 0; ix < G_N_ELEMENTS(actions); ix++) {
-			pw3270_toolbar_insert_action(GTK_WIDGET(widget->toolbar), g_action_map_lookup_action(G_ACTION_MAP(widget), actions[ix]), -1);
-		}
-
-	}
-
-
-
 	//
 	// Setup Window actions.
 	//
 	static GActionEntry actions[] = {
 
 		{
-			.name = "open",
+			.name = "win.open",
 			.activate = pw3270_application_generic_activated,
 		},
 
 		{
-			.name = "close",
+			.name = "win.close",
 			.activate = pw3270_application_generic_activated,
 		},
 
 		{
-			.name = "preferences",
+			.name = "win.connect",
+			.activate = pw3270_application_generic_activated,
+		},
+
+		{
+			.name = "win.preferences",
 			.activate = pw3270_application_generic_activated,
 		},
 
@@ -117,6 +101,31 @@
 		G_N_ELEMENTS(actions),
 		widget
 	);
+
+	//
+	// Setup toolbar
+	//
+	{
+		static const gchar *actions[] = {
+			"win.select_all",
+			"win.copy",
+			"win.paste",
+			"separator",
+			"win.connect",
+			"win.disconnect",
+			"separator",
+			"win.print",
+			"win.close"
+		};
+
+		size_t ix;
+
+		for(ix = 0; ix < G_N_ELEMENTS(actions); ix++) {
+			pw3270_toolbar_insert_action_by_name(GTK_WIDGET(widget->toolbar),actions[ix],-1);
+		}
+
+	}
+
 
  }
 

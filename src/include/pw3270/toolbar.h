@@ -58,6 +58,8 @@
 
 	GtkWidget * pw3270_toolbar_insert_lib3270_action(GtkWidget *toolbar, const LIB3270_ACTION *action, gint pos);
 	GtkWidget * pw3270_toolbar_insert_action(GtkWidget *toolbar, GAction *action, gint pos);
+	GtkWidget * pw3270_toolbar_insert_action_by_name(GtkWidget *toolbar, const gchar *name, gint pos);
+
 
 	G_END_DECLS
 
