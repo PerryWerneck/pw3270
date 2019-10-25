@@ -33,4 +33,8 @@
 
 	#include <pw3270.h>
 
+	#include <lib3270.h>
+	#include <lib3270/log.h>
+
+
 #endif // PRIVATE_H_INCLUDED

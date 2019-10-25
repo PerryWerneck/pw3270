@@ -45,39 +45,8 @@ int main (int argc, char **argv) {
 	GtkApplication *app;
 	int status;
 
-/*
-#ifdef DEBUG
-	{
-		GError * error = NULL;
-		GSettingsSchemaSource * source = 
-			g_settings_schema_source_new_from_directory(
-				".",
-				NULL,
-				TRUE,
-				&error
-			);
-
-		g_assert_no_error(error);
-
-		GSettingsSchema * schema =
-			g_settings_schema_source_lookup(
-				source,
-                "br.com.bb.pw3270",
-                TRUE);
-
-		g_settings_schema_source_unref(source);
-
-		GSettings * settings = g_settings_new_full(schema, NULL, "/br/com/bb/pw3270/application/");
-
-		debug("ui-style=%u",g_settings_get_uint(settings,"ui-style"));
-
-		g_object_unref(settings);
-	}
-#endif // DEBUG
-*/
-
-//	app = pw3270_application_new("br.com.bb." G_STRINGIFY(PRODUCT_NAME),G_APPLICATION_HANDLES_OPEN);
-	app = pw3270_application_new("br.com.bb.pw3270",G_APPLICATION_HANDLES_OPEN);
+	g_set_application_name(G_STRINGIFY(PRODUCT_NAME));
+	app = pw3270_application_new("br.com.bb." G_STRINGIFY(PRODUCT_NAME),G_APPLICATION_HANDLES_OPEN);
 
 	status = g_application_run(G_APPLICATION (app), argc, argv);
 	g_object_unref (app);

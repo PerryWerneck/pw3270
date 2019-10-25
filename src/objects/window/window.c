@@ -28,16 +28,18 @@
  */
 
  #include "private.h"
+ #include <pw3270.h>
  #include <pw3270/toolbar.h>
  #include <pw3270/application.h>
+ #include <pw3270/actions.h>
 
  G_DEFINE_TYPE(pw3270ApplicationWindow, pw3270ApplicationWindow, GTK_TYPE_APPLICATION_WINDOW);
 
- static void pw3270ApplicationWindow_class_init(pw3270ApplicationWindowClass *klass) {
+ static void pw3270ApplicationWindow_class_init(pw3270ApplicationWindowClass G_GNUC_UNUSED(*klass)) {
 
  }
 
- void on_page_changed(GtkNotebook *notebook, GtkWidget *child, guint page_num, gpointer user_data) {
+ void on_page_changed(GtkNotebook *notebook, GtkWidget G_GNUC_UNUSED(*child), guint G_GNUC_UNUSED(page_num), gpointer G_GNUC_UNUSED(user_data)) {
  	gtk_notebook_set_show_tabs(notebook,gtk_notebook_get_n_pages(notebook) > 1);
  }
 
@@ -61,6 +63,11 @@
 
 	gtk_widget_show_all(GTK_WIDGET(vBox));
 	gtk_container_add(GTK_CONTAINER(widget),GTK_WIDGET(vBox));
+
+	//
+	// Setup tn3270 actions.
+	//
+	pw3270_window_add_actions(GTK_WIDGET(widget));
 
 	//
 	// Setup Window actions.
@@ -97,6 +104,8 @@
 
 	const gchar * title = _( "IBM 3270 Terminal emulator" );
 
+	g_autoptr(GSettings) settings = pw3270_get_settings();
+
 	g_return_val_if_fail(GTK_IS_APPLICATION(application), NULL);
 	pw3270ApplicationWindow * window =
 		g_object_new(
@@ -124,8 +133,10 @@
 				gtk_header_bar_set_show_close_button(header,TRUE);
 
 				gtk_header_bar_set_title(header,title);
-				// gtk_header_bar_set_subtitle(header,_("Disconnected from host"));
-				gtk_header_bar_set_has_subtitle(header,TRUE);
+				if(settings)
+					g_settings_bind(settings, "has-subtitle", header, "has-subtitle", G_SETTINGS_BIND_DEFAULT);
+				else
+					gtk_header_bar_set_has_subtitle(header,TRUE);
 
 				// Create gear button
 				// https://wiki.gnome.org/Initiatives/GnomeGoals/GearIcons

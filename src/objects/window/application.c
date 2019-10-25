@@ -127,45 +127,10 @@
 #endif // _WIN32
 
 	// Bind properties
-	GSettings * settings = NULL;
-
-#ifdef DEBUG
-	{
-		GError * error = NULL;
-		GSettingsSchemaSource * source = 
-			g_settings_schema_source_new_from_directory(
-				".",
-				NULL,
-				TRUE,
-				&error
-			);
-
-		g_assert_no_error(error);
-
-		GSettingsSchema * schema =
-			g_settings_schema_source_lookup(
-				source,
-                "br.com.bb." G_STRINGIFY(PRODUCT_NAME),
-                TRUE);
-
-		g_settings_schema_source_unref(source);
-
-		settings = g_settings_new_full(schema, NULL, "/br/com/bb/" G_STRINGIFY(PRODUCT_NAME) "/application/");
-
-	}
-#else
-
-	#error TODO!
-
-#endif // DEBUG
+	g_autoptr(GSettings) settings = pw3270_get_settings();
 
 	if(settings) {
-
 		g_settings_bind(settings, "ui-style", app, "ui-style", G_SETTINGS_BIND_DEFAULT);
-
-
-		g_object_unref(settings);
-
 	}
 
  }

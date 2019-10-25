@@ -50,7 +50,11 @@
 
  }
 
- static gboolean on_terminal_focus(GtkWidget *terminal, GdkEvent *event, GtkWindow * window) {
+ static gboolean on_terminal_focus(GtkWidget *terminal, GdkEvent G_GNUC_UNUSED(*event), GtkWindow * window) {
+
+	if(gtk_window_get_default_widget(window) == terminal) {
+		return FALSE;
+	}
 
  	// Store the active terminal widget.
 	gtk_widget_grab_default(terminal);
@@ -61,6 +65,22 @@
 	gtk_window_set_title(window, title);
 
 	pw3270_window_set_subtitle(GTK_WIDGET(window), v3270_is_connected(terminal) ? _("Connected to host") : _("Disconnected from host"));
+
+	// Update actions
+	size_t ix;
+	gchar ** actions = g_action_group_list_actions(G_ACTION_GROUP(window));
+
+	for(ix = 0; actions[ix]; ix++) {
+
+		GAction * action = g_action_map_lookup_action(G_ACTION_MAP(window), actions[ix]);
+
+		if(action && PW3270_IS_ACTION(action)) {
+			pw3270_action_set_terminal_widget(action,terminal);
+		}
+
+	}
+
+	g_strfreev(actions);
 
  	return FALSE;
  }
@@ -92,7 +112,7 @@
 
  }
 
- static void on_close_tab(GtkButton *button, GtkWidget *terminal) {
+ static void on_close_tab(GtkButton G_GNUC_UNUSED(*button), GtkWidget *terminal) {
 
 	GtkNotebook * notebook = GTK_NOTEBOOK(gtk_widget_get_parent(terminal));
 	gtk_notebook_remove_page(notebook,gtk_notebook_page_num(notebook, terminal));

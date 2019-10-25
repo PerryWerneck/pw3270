@@ -89,6 +89,8 @@
 
 	GObjectClass *object_class = G_OBJECT_CLASS(klass);
 
+	debug("%s",__FUNCTION__);
+
 	klass->change_widget		= change_widget;
 	klass->get_enabled			= get_enabled;
 	klass->activate				= activate;
@@ -154,8 +156,8 @@
 	// Install signals
 	action_signals[SIGNAL_CHANGE_STATE] =
 		g_signal_new(
-			I_("change-state"),
-			G_TYPE_SIMPLE_ACTION,
+			I_("change_state"),
+			G_TYPE_ACTION,
 			G_SIGNAL_RUN_LAST | G_SIGNAL_MUST_COLLECT,
 			0, NULL, NULL,
 			NULL,
@@ -202,8 +204,7 @@
 
  }
 
-
- void pw3270_action_get_property(GObject *object, guint prop_id, GValue *value, GParamSpec *pspec) {
+ void pw3270_action_get_property(GObject *object, guint prop_id, GValue *value, GParamSpec G_GNUC_UNUSED(*pspec)) {
 
 	GAction *action = G_ACTION(object);
 
@@ -236,7 +237,7 @@
 
  }
 
- void pw3270_action_set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec) {
+ void pw3270_action_set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec G_GNUC_UNUSED(*pspec)) {
 
 //	debug("%s(%d)",__FUNCTION__,prop_id);
 
@@ -306,8 +307,7 @@
 
  }
 
- GVariant * pw3270_action_get_state_hint(GAction *action) {
-	debug("%s",__FUNCTION__);
+ GVariant * pw3270_action_get_state_hint(GAction G_GNUC_UNUSED(*action)) {
 	return NULL;
  }
 
@@ -351,7 +351,7 @@
 
  }
 
- void pw3270_action_set_enabled(GAction *object, gboolean state) {
+ void pw3270_action_set_enabled(GAction *object, gboolean G_GNUC_UNUSED(state)) {
 	g_object_notify_by_pspec(G_OBJECT(object), PW3270_ACTION_GET_CLASS(object)->properties.enabled);
  }
 
@@ -401,8 +401,8 @@
 
  }
 
- gboolean get_enabled(GAction *object, GtkWidget *terminal) {
-	debug("%s(%s)",__FUNCTION__,pw3270_action_get_name(object));
+ gboolean get_enabled(GAction G_GNUC_UNUSED(*object), GtkWidget G_GNUC_UNUSED(*terminal)) {
+//	debug("%s(%s)",__FUNCTION__,pw3270_action_get_name(object));
  	return TRUE;
  }
 

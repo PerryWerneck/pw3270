@@ -55,9 +55,9 @@
 
  G_DEFINE_TYPE(Lib3270PaAction, Lib3270PaAction, PW3270_TYPE_ACTION);
 
- static gboolean get_enabled(GAction *action, GtkWidget *terminal) {
+ static gboolean get_enabled(GAction G_GNUC_UNUSED(*action), GtkWidget *terminal) {
 
-	debug("%s(%s)",__FUNCTION__,pw3270_action_get_name(action));
+//	debug("%s(%s)",__FUNCTION__,pw3270_action_get_name(action));
 
  	if(terminal)
 		return lib3270_is_connected(v3270_get_session(terminal)) > 0 ? TRUE: FALSE;
@@ -94,7 +94,7 @@
 
  }
 
- static const GVariantType * get_parameter_type(GAction *action)
+ static const GVariantType * get_parameter_type(GAction G_GNUC_UNUSED(*action))
  {
 	return G_VARIANT_TYPE_UINT16;
  }
@@ -110,7 +110,7 @@
 
  }
 
- void Lib3270PaAction_init(Lib3270PaAction *action) {
+ void Lib3270PaAction_init(Lib3270PaAction G_GNUC_UNUSED(*action)) {
  }
 
  GAction * pw3270_action_new_pakey(void) {
