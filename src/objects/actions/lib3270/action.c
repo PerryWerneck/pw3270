@@ -66,8 +66,20 @@
 
  }
 
- static void activate(GAction *action, GVariant *parameter, GtkWidget *terminal) {
+ static void activate(GAction *action, GVariant G_GNUC_UNUSED(*parameter), GtkWidget *terminal) {
 	PW3270_LIB3270_ACTION(action)->definition->activate(v3270_get_session(terminal));
+ }
+
+ static const gchar * get_icon_name(GAction *action) {
+	return PW3270_LIB3270_ACTION(action)->definition->icon;
+ }
+
+ const gchar * get_label(GAction *action) {
+	return PW3270_LIB3270_ACTION(action)->definition->label;
+ }
+
+ const gchar * get_tooltip(GAction *action) {
+	return PW3270_LIB3270_ACTION(action)->definition->summary;
  }
 
  void Lib3270Action_class_init(Lib3270ActionClass *klass) {
@@ -77,10 +89,13 @@
 	action->activate = activate;
 	action->get_enabled = get_enabled;
 	action->change_widget = change_widget;
+	action->get_icon_name = get_icon_name;
+	action->get_label = get_label;
+	action->get_tooltip = get_tooltip;
 
  }
 
- void Lib3270Action_init(Lib3270Action *action) {
+ void Lib3270Action_init(Lib3270Action G_GNUC_UNUSED(*action)) {
  }
 
  GAction * pw3270_action_new_from_lib3270(const LIB3270_ACTION * definition) {

@@ -52,8 +52,12 @@
 	typedef struct _pw3270ToolBar			pw3270ToolBar;
 	typedef struct _pw3270ToolBarClass		pw3270ToolBarClass;
 
+	GType pw3270ToolBar_get_type(void) G_GNUC_CONST;
+
 	GtkWidget * pw3270_toolbar_new(void);
+
 	GtkWidget * pw3270_toolbar_insert_lib3270_action(GtkWidget *toolbar, const LIB3270_ACTION *action, gint pos);
+	GtkWidget * pw3270_toolbar_insert_action(GtkWidget *toolbar, GAction *action, gint pos);
 
 	G_END_DECLS
 

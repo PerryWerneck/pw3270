@@ -42,6 +42,7 @@
  static gboolean get_enabled(GAction *action, GtkWidget *terminal);
  static void activate(GAction *action, GVariant *parameter, GtkWidget *terminal);
  static void change_widget(GAction *action, GtkWidget *from, GtkWidget *to);
+ static const gchar *get_null(GAction *action);
 
  static void finalize(GObject *object);
 
@@ -95,6 +96,9 @@
 	klass->get_enabled			= get_enabled;
 	klass->activate				= activate;
 	klass->get_parameter_type	= get_parameter_type;
+	klass->get_icon_name		= get_null;
+	klass->get_label			= get_null;
+	klass->get_tooltip			= get_null;
 
  	object_class->finalize		= finalize;
 	object_class->set_property	= pw3270_action_set_property;
@@ -409,3 +413,30 @@
  void activate(GAction *action, GVariant G_GNUC_UNUSED(*parameter), GtkWidget G_GNUC_UNUSED(*terminal)) {
 	g_message("Action %s can't be activated",pw3270_action_get_name(action));
  }
+
+ const gchar * get_null(GAction G_GNUC_UNUSED(*action)) {
+	return NULL;
+ }
+
+ const gchar * pw3270_action_get_icon_name(GAction *action) {
+	return PW3270_ACTION_GET_CLASS(action)->get_icon_name(action);
+ }
+
+ const gchar * pw3270_action_get_label(GAction *action) {
+	const gchar * label = PW3270_ACTION_GET_CLASS(action)->get_label(action);
+
+	if(label)
+		return gettext(label);
+
+	return NULL;
+ }
+
+ const gchar * pw3270_action_get_tooltip(GAction *action) {
+	const gchar * tooltip = PW3270_ACTION_GET_CLASS(action)->get_tooltip(action);
+
+	if(tooltip)
+		return gettext(tooltip);
+
+	return NULL;
+ }
+

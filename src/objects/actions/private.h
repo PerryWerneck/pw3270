@@ -73,6 +73,9 @@
 		gboolean (*get_enabled)(GAction *action, GtkWidget *terminal);
 		void (*activate)(GAction *action, GVariant *parameter, GtkWidget *terminal);
 		const GVariantType * (*get_parameter_type)(GAction *action);
+		const gchar * (*get_icon_name)(GAction *action);
+		const gchar	* (*get_label)(GAction *action);
+		const gchar	* (*get_tooltip)(GAction *action);
 
 	};
 

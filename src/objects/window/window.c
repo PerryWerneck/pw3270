@@ -57,7 +57,6 @@
 
 	widget->toolbar  = GTK_TOOLBAR(pw3270_toolbar_new());
 
-
 	gtk_box_pack_start(vBox,GTK_WIDGET(widget->toolbar),FALSE,TRUE,0);
 	gtk_box_pack_start(vBox,GTK_WIDGET(widget->notebook),TRUE,TRUE,0);
 
@@ -68,6 +67,10 @@
 	// Setup tn3270 actions.
 	//
 	pw3270_window_add_actions(GTK_WIDGET(widget));
+
+	pw3270_toolbar_insert_action(GTK_WIDGET(widget->toolbar), g_action_map_lookup_action(G_ACTION_MAP(widget), "win.reconnect"), -1);
+
+	//gtk_widget_show_all(GTK_WIDGET(widget->toolbar));
 
 	//
 	// Setup Window actions.

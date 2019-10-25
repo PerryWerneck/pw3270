@@ -56,6 +56,15 @@
 	const gchar			* pw3270_action_get_name(GAction *action);
 	void				  pw3270_action_set_name(GAction *action, const gchar *name);
 
+	/// @brief Get the action icon name.
+	const gchar 		* pw3270_action_get_icon_name(GAction *action);
+
+	/// @brief Get the action label.
+	const gchar			* pw3270_action_get_label(GAction *action);
+
+	/// @brief Get the action tooltip.
+	const gchar			* pw3270_action_get_tooltip(GAction *action);
+
 	/// @brief Associate action with the terminal widget.
 	void				  pw3270_action_set_terminal_widget(GAction *action, GtkWidget *terminal);
 
