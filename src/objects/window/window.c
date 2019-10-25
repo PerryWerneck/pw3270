@@ -68,9 +68,26 @@
 	//
 	pw3270_window_add_actions(GTK_WIDGET(widget));
 
-	pw3270_toolbar_insert_action(GTK_WIDGET(widget->toolbar), g_action_map_lookup_action(G_ACTION_MAP(widget), "win.reconnect"), -1);
+	{
+		static const gchar *actions[] = {
+			"win.select_all",
+			"win.copy",
+			"win.paste",
+			"win.reconnect",
+			"win.disconnect",
+			"win.print",
+			"app.quit"
+		};
 
-	//gtk_widget_show_all(GTK_WIDGET(widget->toolbar));
+		size_t ix;
+
+		for(ix = 0; ix < G_N_ELEMENTS(actions); ix++) {
+			pw3270_toolbar_insert_action(GTK_WIDGET(widget->toolbar), g_action_map_lookup_action(G_ACTION_MAP(widget), actions[ix]), -1);
+		}
+
+	}
+
+
 
 	//
 	// Setup Window actions.

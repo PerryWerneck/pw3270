@@ -72,6 +72,8 @@
 
 	for(ix = 0; actions[ix]; ix++) {
 
+//		debug("%s",actions[ix]);
+
 		GAction * action = g_action_map_lookup_action(G_ACTION_MAP(window), actions[ix]);
 
 		if(action && PW3270_IS_ACTION(action)) {
