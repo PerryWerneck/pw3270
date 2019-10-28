@@ -131,10 +131,10 @@
 #endif // _WIN32
 
 	// Get settings
-	g_autofree gchar * path = g_strconcat("/apps/" PACKAGE_NAME "/", g_get_application_name(),"/",NULL);
-	debug("path=%s",path);
-
 	{
+		g_autofree gchar * path = g_strconcat("/apps/" PACKAGE_NAME "/", g_get_application_name(),"/",NULL);
+		debug("path=%s",path);
+
 #ifdef DEBUG
 		GError * error = NULL;
 		GSettingsSchemaSource * source =
