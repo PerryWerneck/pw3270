@@ -47,60 +47,251 @@
   </menu>
 
   <menu id='menubar'>
+
     <submenu>
-      <attribute name='label' translatable='yes'>_Session</attribute>
 
-      <item>
-        <attribute name="label" translatable="yes">Open</attribute>
-        <attribute name="action">win.open</attribute>
-      </item>
+      <attribute name='label' translatable='yes'>_File</attribute>
 
-      <item>
-        <attribute name="label" translatable="yes">Close</attribute>
-        <attribute name="action">win.close</attribute>
-      </item>
+      <section>
 
-      <item>
-        <attribute name="label" translatable="yes">Open in new window</attribute>
-        <attribute name="action">app.open.window</attribute>
-      </item>
+        <item>
+          <attribute name="label" translatable="yes">Save screen</attribute>
+          <attribute name="action">win.save_screen</attribute>
+        </item>
 
-      <item>
-        <attribute name="label" translatable="yes">Open in new tab</attribute>
-        <attribute name="action">app.open.tab</attribute>
-      </item>
+        <item>
+          <attribute name="label" translatable="yes">Save selected</attribute>
+          <attribute name="action">win.save_selected</attribute>
+        </item>
+
+        <item>
+          <attribute name="label" translatable="yes">Save copy</attribute>
+          <attribute name="action">win.save_copy</attribute>
+        </item>
+
+      </section>
+
+      <section>
+
+        <item>
+          <attribute name="label" translatable="yes">Print</attribute>
+          <attribute name="action">win.print</attribute>
+        </item>
+
+        <item>
+          <attribute name="label" translatable="yes">Print selected</attribute>
+          <attribute name="action">win.print_selected</attribute>
+        </item>
+
+        <item>
+          <attribute name="label" translatable="yes">Print copy</attribute>
+          <attribute name="action">win.print_copy</attribute>
+        </item>
+
+			</section>
+
+      <section>
+
+        <item>
+          <attribute name="label" translatable="yes">Send/Receive files</attribute>
+          <attribute name="action">win.file_transfer</attribute>
+        </item>
+
+        <item>
+          <attribute name="label" translatable="yes">Quit application</attribute>
+          <attribute name="action">app.quit</attribute>
+        </item>
+
+      </section>
 
     </submenu>
 
     <submenu>
+
       <attribute name='label' translatable='yes'>_Edit</attribute>
+
       <section>
+
         <item>
-          <attribute name='label' translatable='yes'>_Copy</attribute>
-          <attribute name='action'>app.default</attribute>
+          <attribute name="label" translatable="yes">Copy</attribute>
+          <attribute name="action">win.copy</attribute>
         </item>
+
         <item>
-          <attribute name='label' translatable='yes'>_Paste</attribute>
-          <attribute name='action'>app.default</attribute>
+          <attribute name="label" translatable="yes">Copy as table</attribute>
+          <attribute name="action">win.copy_as_table</attribute>
         </item>
+
+        <item>
+          <attribute name="label" translatable="yes">Append to copy</attribute>
+          <attribute name="action">win.append_to_copy</attribute>
+        </item>
+
+        <item>
+          <attribute name="label" translatable="yes">Cut</attribute>
+          <attribute name="action">win.cut</attribute>
+        </item>
+
+        <item>
+          <attribute name="label" translatable="yes">Paste from clipboard</attribute>
+          <attribute name="action">win.paste</attribute>
+        </item>
+
+        <item>
+          <attribute name="label" translatable="yes">Paste next</attribute>
+          <attribute name="action">win.paste_next</attribute>
+        </item>
+
+        <item>
+          <attribute name="label" translatable="yes">Paste text file</attribute>
+          <attribute name="action">win.pastefile</attribute>
+        </item>
+
       </section>
+
       <section>
+
         <item>
-          <attribute name='label' translatable='yes'>Plugins</attribute>
-          <attribute name='action'>app.default</attribute>
+          <attribute name="label" translatable="yes">Select all</attribute>
+          <attribute name="action">win.select_all</attribute>
         </item>
+
+        <item>
+          <attribute name="label" translatable="yes">Select Field</attribute>
+          <attribute name="action">win.select_field</attribute>
+        </item>
+
+        <item>
+          <attribute name="label" translatable="yes">Remove selection</attribute>
+          <attribute name="action">win.unselect</attribute>
+        </item>
+
+        <item>
+          <attribute name="label" translatable="yes">Reselect</attribute>
+          <attribute name="action">win.reselect</attribute>
+        </item>
+
       </section>
+
+      <section>
+
+        <item>
+          <attribute name="label" translatable="yes">Clear</attribute>
+          <attribute name="action">win.clear</attribute>
+        </item>
+
+        <item>
+          <attribute name="label" translatable="yes">Erase input</attribute>
+          <attribute name="action">win.erase_input</attribute>
+        </item>
+
+        <item>
+          <attribute name="label" translatable="yes">Delete Field</attribute>
+          <attribute name="action">win.delete_field</attribute>
+        </item>
+
+        <item>
+          <attribute name="label" translatable="yes">Erase to end of field</attribute>
+          <attribute name="action">win.erase_eof</attribute>
+        </item>
+
+        <item>
+          <attribute name="label" translatable="yes">Erase to end of line</attribute>
+          <attribute name="action">win.erase_eol</attribute>
+        </item>
+
+      </section>
+
     </submenu>
 
     <submenu>
-      <attribute name='label' translatable='yes'>_View</attribute>
-      <section>
+
+      <attribute name='label' translatable='yes'>_Network</attribute>
+
         <item>
-          <attribute name='label' translatable='yes'>_Fullscreen</attribute>
-          <attribute name='action'>app.quit</attribute>
+          <attribute name="label" translatable="yes">Configure host</attribute>
+          <attribute name="action">win.setup_host</attribute>
         </item>
-      </section>
+
+        <item>
+          <attribute name="label" translatable="yes">_Connect</attribute>
+          <attribute name="action">win.connect</attribute>
+        </item>
+
+        <item>
+          <attribute name="label" translatable="yes">_Disconnect</attribute>
+          <attribute name="action">win.disconnect</attribute>
+        </item>
+
     </submenu>
+
+    <submenu>
+
+      <attribute name='label' translatable='yes'>Settings</attribute>
+
+        <item>
+          <attribute name="label" translatable="yes">Colors</attribute>
+          <attribute name="action">win.coloers</attribute>
+        </item>
+
+        <item>
+          <attribute name="label" translatable="yes">Select font</attribute>
+          <attribute name="action">win.select_font</attribute>
+        </item>
+
+        <item>
+          <attribute name="label" translatable="yes">Screen sizes</attribute>
+          <attribute name="action">win.screen_sizes</attribute>
+        </item>
+
+    </submenu>
+
+    <!--
+
+		<menu name='SettingsMenu' label='Settings'>
+
+			<menu name='OptionsMenu' label='_Options' >
+				<menuitem action='toggle' id='AutoConnect' label='Connect on startup' />
+				<menuitem action='toggle' id='CursorBlink' label='Blinking Cursor' />
+				<menuitem action='toggle' id='Monocase' label='Monocase' />
+				<menuitem action='toggle' id='CursorPos'  label='Track Cursor' />
+				<menuitem action='toggle' id='FullScreen' key='<alt>Home' label='Full Screen' />
+				<menuitem action='toggle' id='AltScreen' label='Resize on alternate screen' />
+				<menuitem action='toggle' id='MarginedPaste'  label='Paste with left margin' />
+				<menuitem action='toggle' id='CrossHair' key='<alt>x' label='Cross hair cursor' />
+				<menuitem action='toggle' id='BlankFill' label='Blank Fill' />
+				<menuitem action='toggle' id='RectSelect'  label='Select by rectangles' />
+				<menuitem action='toggle' id='AutoReconnect' label='Auto-Reconnect'  />
+				<menuitem action='toggle' id='Bold' label='Bold'  />
+				<menuitem action='toggle' id='Underline' label='Show Underline'  />
+				<menuitem action='toggle' id='KeepSelected' label='Keep selected' />
+				<menuitem action='toggle' id='SmartPaste' label='Smart paste' />
+				<menuitem action='toggle' id='Beep' label='Alert sound' />
+				<menuitem action='toggle' id='KPAlternative' label='Use +/- for field navigation' />
+				<menuitem action='toggle' id='keepalive' label='Network keep alive' />
+			</menu>
+
+			<menuitem name='InputMethod' label='Input method' />
+
+		</menu>
+
+		<menu name='HelpMenu' label='Help' >
+			<menuitem action='about' icon='about' sysmenu='about' />
+		</menu>
+
+    -->
+
+    <submenu>
+
+      <attribute name='label' translatable='yes'>Help</attribute>
+
+      <item>
+        <attribute name="label" translatable="yes">About PW3270</attribute>
+        <attribute name="action">app.about</attribute>
+      </item>
+
+    </submenu>
+
 
   </menu>
 </interface>
