@@ -50,6 +50,20 @@
 
     <submenu>
 
+        <attribute name='label' translatable='yes'>_Edit</attribute>
+
+        <item>
+          <attribute name="label" translatable="yes">Copy</attribute>
+          <attribute name="action">win.copy</attribute>
+
+        </item>
+
+    </submenu>
+
+    <!--
+
+    <submenu>
+
       <attribute name='label' translatable='yes'>_File</attribute>
 
       <section>
@@ -245,6 +259,7 @@
         </item>
 
     </submenu>
+    -->
 
     <!--
 

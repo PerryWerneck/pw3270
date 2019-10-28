@@ -131,6 +131,9 @@
 #endif // _WIN32
 
 	// Get settings
+	g_autofree gchar * path = g_strconcat("/apps/" PACKAGE_NAME "/", g_get_application_name(),"/",NULL);
+	debug("path=%s",path);
+
 	{
 #ifdef DEBUG
 		GError * error = NULL;
@@ -152,14 +155,11 @@
 
 		g_settings_schema_source_unref(source);
 
-		g_autofree gchar * path = g_strconcat("/apps/" PACKAGE_NAME "/", g_get_application_name(),"/",NULL);
-
-		debug("path=%s",path);
 		app->settings = g_settings_new_full(schema, NULL, path);
 
 #else
 
-		#error TODO!
+		app->settings = g_settings_new_with_path("br.com.bb." PACKAGE_NAME, path);
 
 #endif // DEBUG
 
@@ -257,7 +257,9 @@
 	// Setup application menus
 	//
 	GtkBuilder * builder = gtk_builder_new_from_file("ui/application.xml");
-	gtk_application_set_app_menu(GTK_APPLICATION (application), G_MENU_MODEL(gtk_builder_get_object (builder, "app-menu")));
+
+	if(gtk_application_prefers_app_menu(GTK_APPLICATION(application)))
+		gtk_application_set_app_menu(GTK_APPLICATION (application), G_MENU_MODEL(gtk_builder_get_object (builder, "app-menu")));
 
 	if(pw3270_application_get_ui_style(application) == PW3270_UI_STYLE_CLASSICAL)
 		gtk_application_set_menubar(GTK_APPLICATION (application), G_MENU_MODEL(gtk_builder_get_object (builder, "menubar")));
@@ -270,12 +272,19 @@
 
 	GtkWidget * window = pw3270_application_window_new(GTK_APPLICATION(application));
 
+	debug("%s","************************************************");
+	debug("Action win.copy is %p",g_action_map_lookup_action(G_ACTION_MAP(window),"win.copy"));
+	debug("Action app.copy is %p",g_action_map_lookup_action(G_ACTION_MAP(window),"app.copy"));
+	debug("Action win.copy is %p",g_action_map_lookup_action(G_ACTION_MAP(application),"win.copy"));
+	debug("Action copy is %p",g_action_map_lookup_action(G_ACTION_MAP(application),"copy"));
+	debug("%s","************************************************");
+
 	// Create terminal widget
 	pw3270_terminal_new(window);
+	pw3270_window_set_current_page(window,0);
 
 	// Present the new window
 	gtk_window_present(GTK_WINDOW(window));
-	pw3270_window_set_current_page(window,0);
 
  }
 

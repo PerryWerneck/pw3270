@@ -148,6 +148,11 @@
 	}
 
 
+	debug("%s","************************************************");
+	debug("Action win.copy is %p",g_action_map_lookup_action(G_ACTION_MAP(widget),"win.copy"));
+	debug("%s","************************************************");
+
+
  }
 
  GtkWidget * pw3270_application_window_new(GtkApplication * application) {

@@ -45,6 +45,7 @@
 
 	g_print("Exiting application\n");
 
+	/*
 	GList *list = gtk_application_get_windows(GTK_APPLICATION(application));
 
 	while(list) {
@@ -55,6 +56,9 @@
 		gtk_widget_destroy(window);
 
 	}
+	*/
+
+	g_application_quit(G_APPLICATION(application));
 
  }
 

@@ -139,7 +139,7 @@
  }
 
  static gboolean bg_notify_enabled(GAction *action) {
- 	debug("Action %s was notified (%s)",g_action_get_name(action),g_action_get_enabled(action) ? "Enabled" : "Disabled");
+// 	debug("Action %s was notified (%s)",g_action_get_name(action),g_action_get_enabled(action) ? "Enabled" : "Disabled");
  	pw3270_action_notify_enabled(action);
 	return FALSE;
  }
