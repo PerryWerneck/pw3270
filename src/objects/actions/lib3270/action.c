@@ -110,13 +110,13 @@
  }
 
  void Lib3270Action_init(Lib3270Action *action) {
- 	debug("%s",__FUNCTION__);
+// 	debug("%s",__FUNCTION__);
 	PW3270_ACTION(action)->activate = activate;
  }
 
  GAction * pw3270_action_new_from_lib3270(const LIB3270_ACTION * definition) {
 
- 	Lib3270Action	* action		= (Lib3270Action *) g_object_new(PW3270_TYPE_LIB3270_ACTION, NULL);
+ 	Lib3270Action * action = (Lib3270Action *) g_object_new(PW3270_TYPE_LIB3270_ACTION, NULL);
 
 	// Setup hooks.
 	action->definition	= definition;

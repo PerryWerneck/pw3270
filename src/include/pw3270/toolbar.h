@@ -60,6 +60,8 @@
 	GtkWidget * pw3270_toolbar_insert_action(GtkWidget *toolbar, GAction *action, gint pos);
 	GtkWidget * pw3270_toolbar_insert_action_by_name(GtkWidget *toolbar, const gchar *name, gint pos);
 
+	void pw3270_toolbar_toolbar_set_style(GtkToolbar *toolbar, GtkToolbarStyle style);
+	void pw3270_toolbar_set_icon_size(GtkToolbar *toolbar, GtkIconSize icon_size);
 
 	G_END_DECLS
 

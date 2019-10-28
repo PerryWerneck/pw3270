@@ -28,9 +28,61 @@
  */
 
  #include "private.h"
+ #include <pw3270/application.h>
+
+ #define GTK_TOOLBAR_DEFAULT_STYLE ((GtkToolbarStyle) -1)
 
  static gboolean popup_context_menu(GtkToolbar *toolbar, gint x, gint y, gint button_number);
  static void finalize(GObject *object);
+
+ static const struct icon_size {
+	const gchar			* label;
+	GtkIconSize			  icon_size;
+ } icon_sizes[] = {
+
+	{
+		.label = N_( "System default" ),
+		.icon_size = GTK_ICON_SIZE_INVALID
+
+	},
+
+	{
+		.label = N_( "Small" ),
+		.icon_size = GTK_ICON_SIZE_SMALL_TOOLBAR
+	},
+
+	{
+		.label = N_( "Large" ),
+		.icon_size = GTK_ICON_SIZE_LARGE_TOOLBAR
+	},
+ };
+
+ static const struct toolbar_style {
+	const gchar * label;
+	GtkToolbarStyle style;
+ } styles[] = {
+
+	{
+		.label = N_( "System default" ),
+		.style = GTK_TOOLBAR_DEFAULT_STYLE
+	},
+
+	{
+		.label = N_( "Icons only" ),
+		.style = GTK_TOOLBAR_ICONS
+	},
+
+	{
+		.label = N_( "Text only" ),
+		.style = GTK_TOOLBAR_TEXT
+	},
+
+	{
+		.label = N_( "Icons & text" ),
+		.style = GTK_TOOLBAR_BOTH
+	},
+};
+
 
 
  struct _pw3270ToolBar {
@@ -60,7 +112,7 @@
 
  }
 
- static void detacher(GtkWidget *attach_widget, GtkMenu *menu) {
+ static void detacher(GtkWidget *attach_widget, GtkMenu G_GNUC_UNUSED(*menu)) {
 
  	pw3270ToolBar * toolbar = PW3270_TOOLBAR(attach_widget);
  	toolbar->popup_menu = NULL;
@@ -69,23 +121,18 @@
 
  static void set_icon_size(GtkMenuItem *menuitem, GtkWidget *toolbar) {
 
-	GtkIconSize * icon_size = g_object_get_data(G_OBJECT(menuitem),"icon_size");
+	const struct icon_size * size = g_object_get_data(G_OBJECT(menuitem),"icon_size");
 
-	if(icon_size)
-		gtk_toolbar_set_icon_size(GTK_TOOLBAR(toolbar),*icon_size);
-	else
-		gtk_toolbar_unset_icon_size(GTK_TOOLBAR(toolbar));
+	debug("%s(%d,%s)",__FUNCTION__,(int) size->icon_size, size->label);
+	pw3270_toolbar_set_icon_size(GTK_TOOLBAR(toolbar), size->icon_size);
 
  }
 
  static void set_style(GtkMenuItem *menuitem, GtkWidget *toolbar) {
+	struct toolbar_style * style = g_object_get_data(G_OBJECT(menuitem),"toolbar_style");
 
-	GtkToolbarStyle * style = g_object_get_data(G_OBJECT(menuitem),"toolbar_style");
-
-	if(style)
-		gtk_toolbar_set_style(GTK_TOOLBAR(toolbar),*style);
-	else
-		gtk_toolbar_unset_style(GTK_TOOLBAR(toolbar));
+	debug("%s(%d,%s)",__FUNCTION__,(int) style->style, style->label);
+ 	pw3270_toolbar_toolbar_set_style(GTK_TOOLBAR(toolbar), style->style);
 
  }
 
@@ -95,27 +142,6 @@
 
 	// Size options
 	{
-		static const struct {
-			const gchar			* label;
-			GtkIconSize			  icon_size;
-		} itens[] = {
-
-			{
-				.label = N_( "System default" )
-
-			},
-
-			{
-				.label = N_( "Small" ),
-				.icon_size = GTK_ICON_SIZE_SMALL_TOOLBAR
-			},
-
-			{
-				.label = N_( "Large" ),
-				.icon_size = GTK_ICON_SIZE_LARGE_TOOLBAR
-			},
-		};
-
 		size_t ix;
 
 		GtkWidget * item = gtk_menu_item_new_with_mnemonic( _("Icon _size") );
@@ -124,13 +150,11 @@
 		GtkWidget * submenu = gtk_menu_new();
 		gtk_menu_item_set_submenu(GTK_MENU_ITEM(item),submenu);
 
-		for(ix = 0; ix < G_N_ELEMENTS(itens); ix++) {
+		for(ix = 0; ix < G_N_ELEMENTS(icon_sizes); ix++) {
 
-			item = gtk_menu_item_new_with_mnemonic(gettext(itens[ix].label));
+			item = gtk_menu_item_new_with_mnemonic(gettext(icon_sizes[ix].label));
 
-			if(ix > 0)
-				g_object_set_data(G_OBJECT(item),"icon_size", (gpointer) &itens[ix].icon_size);
-
+			g_object_set_data(G_OBJECT(item),"icon_size", (gpointer) &icon_sizes[ix]);
 			g_signal_connect(item, "activate", G_CALLBACK(set_icon_size), widget);
 
 			gtk_menu_shell_append(GTK_MENU_SHELL(submenu),item);
@@ -141,31 +165,6 @@
 
 	// Style option
 	{
-		static const struct {
-			const gchar * label;
-			GtkToolbarStyle style;
-		} itens[] = {
-
-			{
-				.label = N_( "System default" )
-			},
-
-			{
-				.label = N_( "Icons only" ),
-				.style = GTK_TOOLBAR_ICONS
-			},
-
-			{
-				.label = N_( "Text only" ),
-				.style = GTK_TOOLBAR_TEXT
-			},
-
-			{
-				.label = N_( "Icons & text" ),
-				.style = GTK_TOOLBAR_BOTH
-			},
-		};
-
 		size_t ix;
 
 		GtkWidget * item = gtk_menu_item_new_with_mnemonic( _("S_tyle") );
@@ -174,13 +173,11 @@
 		GtkWidget * submenu = gtk_menu_new();
 		gtk_menu_item_set_submenu(GTK_MENU_ITEM(item),submenu);
 
-		for(ix = 0; ix < G_N_ELEMENTS(itens); ix++) {
+		for(ix = 0; ix < G_N_ELEMENTS(styles); ix++) {
 
-			item = gtk_menu_item_new_with_mnemonic(gettext(itens[ix].label));
+			item = gtk_menu_item_new_with_mnemonic(gettext(styles[ix].label));
 
-			if(ix > 0)
-				g_object_set_data(G_OBJECT(item),"toolbar_style", (gpointer) &itens[ix].style);
-
+			g_object_set_data(G_OBJECT(item),"toolbar_style", (gpointer) &styles[ix]);
 			g_signal_connect(item, "activate", G_CALLBACK(set_style), widget);
 
 			gtk_menu_shell_append(GTK_MENU_SHELL(submenu),item);
@@ -192,6 +189,14 @@
 	// gtk_container_set_border_width(GTK_CONTAINER(widget->popup_menu),6);
 	gtk_widget_show_all(widget->popup_menu);
 	gtk_menu_attach_to_widget(GTK_MENU(widget->popup_menu),GTK_WIDGET(widget),detacher);
+
+	// Bind settings
+	GSettings *settings = pw3270_application_get_settings(g_application_get_default());
+
+	if(settings) {
+		pw3270_toolbar_toolbar_set_style(GTK_TOOLBAR(widget),g_settings_get_int(settings,"toolbar-style"));
+		pw3270_toolbar_set_icon_size(GTK_TOOLBAR(widget),g_settings_get_int(settings,"toolbar-icon-size"));
+	}
 
  }
 
@@ -242,7 +247,7 @@
 	return GTK_WIDGET(item);
  }
 
- gboolean popup_context_menu(GtkToolbar *widget, gint x, gint y, gint button_number) {
+ gboolean popup_context_menu(GtkToolbar *widget, gint G_GNUC_UNUSED(x), gint G_GNUC_UNUSED(y), gint button_number) {
 
  	pw3270ToolBar * toolbar = PW3270_TOOLBAR(widget);
 
@@ -252,8 +257,32 @@
 		gtk_menu_popup_at_pointer(GTK_MENU(toolbar->popup_menu),NULL);
 	}
 
-
 	return TRUE;
 
  }
 
+ void pw3270_toolbar_toolbar_set_style(GtkToolbar *toolbar, GtkToolbarStyle style) {
+
+	debug("%s(%d)",__FUNCTION__,(int) style);
+
+	if(style == GTK_TOOLBAR_DEFAULT_STYLE)
+		gtk_toolbar_unset_style(GTK_TOOLBAR(toolbar));
+	else
+		gtk_toolbar_set_style(GTK_TOOLBAR(toolbar),style);
+
+	pw3270_settings_set_int("toolbar-style",(int) style);
+
+ }
+
+ void pw3270_toolbar_set_icon_size(GtkToolbar *toolbar, GtkIconSize icon_size) {
+
+	debug("%s(%d)",__FUNCTION__,(int) icon_size);
+
+	if(icon_size == GTK_ICON_SIZE_INVALID)
+		gtk_toolbar_unset_icon_size(GTK_TOOLBAR(toolbar));
+	else
+		gtk_toolbar_set_icon_size(GTK_TOOLBAR(toolbar),icon_size);
+
+	pw3270_settings_set_int("toolbar-icon-size", (gint) icon_size);
+
+ }
