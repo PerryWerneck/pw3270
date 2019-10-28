@@ -102,15 +102,14 @@
 	//
 	{
 		static const gchar *actions[] = {
-			"win.select_all",
 			"win.copy",
 			"win.paste",
+			"win.select_all",
 			"separator",
 			"win.connect",
 			"win.disconnect",
 			"separator",
-			"win.print",
-			"win.close"
+			"win.print"
 		};
 
 		size_t ix;

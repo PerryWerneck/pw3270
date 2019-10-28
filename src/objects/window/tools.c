@@ -28,6 +28,7 @@
  */
 
  #include "private.h"
+ #include <pw3270/application.h>
 
  GtkWidget * pw3270_setup_image_button(GtkWidget *button, const gchar *image_name) {
 
