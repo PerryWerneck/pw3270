@@ -48,9 +48,11 @@
 		debug("%s - %s",icon_name,pw3270_action_get_label(action));
 
 		GtkToolItem * item = gtk_tool_button_new(
-									gtk_image_new_from_icon_name(icon_name,GTK_ICON_SIZE_LARGE_TOOLBAR),
+									NULL,
 									pw3270_action_get_label(action)
 								);
+
+		gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(item),icon_name);
 
 		const gchar * tooltip = pw3270_action_get_tooltip(action);
 		if(tooltip)
