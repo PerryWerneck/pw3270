@@ -91,6 +91,7 @@
 	// Internal actions
 	G_GNUC_INTERNAL GAction			* pw3270_connect_action_new(void);
 	G_GNUC_INTERNAL GAction			* pw3270_copy_action_new(void);
+	G_GNUC_INTERNAL GAction			* pw3270_cut_action_new(void);
 	G_GNUC_INTERNAL GAction			* pw3270_paste_action_new(void);
 
 #endif // PRIVATE_H_INCLUDED

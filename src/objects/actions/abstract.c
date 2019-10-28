@@ -365,7 +365,11 @@
 
  void pw3270_action_set_terminal_widget(GAction *object, GtkWidget *widget) {
 
-	g_return_if_fail(PW3270_IS_ACTION(object) && GTK_IS_V3270(widget));
+	g_return_if_fail(PW3270_IS_ACTION(object));
+
+	if(widget) {
+		 g_return_if_fail(GTK_IS_V3270(widget));
+	}
 
  	pw3270Action * action = PW3270_ACTION(object);
 
@@ -379,10 +383,6 @@
  gboolean pw3270_action_get_enabled(GAction *object) {
 
  	pw3270Action * action = PW3270_ACTION(object);
-
-//	debug("%s(%s) action=%p terminal=%p",__FUNCTION__,pw3270_action_get_name(object),action,action->terminal);
-
-// 	debug("%s: terminal=%p",__FUNCTION__,action->terminal);
 
  	if(action && action->terminal) {
 		return PW3270_ACTION_GET_CLASS(object)->get_enabled(object,action->terminal);

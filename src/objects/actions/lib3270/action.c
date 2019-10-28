@@ -60,8 +60,13 @@
 
  static gboolean get_enabled(GAction *action, GtkWidget *terminal) {
 
- 	if(terminal)
-		return PW3270_LIB3270_ACTION(action)->definition->activatable(v3270_get_session(terminal)) > 0 ? TRUE : FALSE;
+ 	if(terminal) {
+
+		H3270 * hSession = v3270_get_session(terminal);
+		if(hSession)
+			return PW3270_LIB3270_ACTION(action)->definition->activatable(hSession) > 0 ? TRUE : FALSE;
+
+ 	}
 
 	return FALSE;
 
@@ -134,6 +139,7 @@
  }
 
  static gboolean bg_notify_enabled(GAction *action) {
+ 	debug("Action %s was notified (%s)",g_action_get_name(action),g_action_get_enabled(action) ? "Enabled" : "Disabled");
  	pw3270_action_notify_enabled(action);
 	return FALSE;
  }

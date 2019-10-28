@@ -68,7 +68,7 @@
 		.summary = N_( "Copy selected area to clipboard." ),
 		.activate = NULL,
 
-		.group = LIB3270_ACTION_GROUP_SELECTED,
+		.group = LIB3270_ACTION_GROUP_SELECTION,
 		.activatable = lib3270_has_selection
 
 	};
@@ -93,7 +93,7 @@
 		.summary = N_( "Cut selected area." ),
 		.activate = NULL,
 
-		.group = LIB3270_ACTION_GROUP_SELECTED,
+		.group = LIB3270_ACTION_GROUP_SELECTION,
 		.activatable = lib3270_has_selection
 
 	};

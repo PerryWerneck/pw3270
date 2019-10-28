@@ -35,7 +35,34 @@
 
  G_DEFINE_TYPE(pw3270ApplicationWindow, pw3270ApplicationWindow, GTK_TYPE_APPLICATION_WINDOW);
 
- static void pw3270ApplicationWindow_class_init(pw3270ApplicationWindowClass G_GNUC_UNUSED(*klass)) {
+ static void destroy(GtkWidget *widget) {
+
+	debug("%s(%p)",__FUNCTION__,widget);
+
+	// Update actions
+	size_t ix;
+	gchar ** actions = g_action_group_list_actions(G_ACTION_GROUP(widget));
+
+	for(ix = 0; actions[ix]; ix++) {
+		GAction * action = g_action_map_lookup_action(G_ACTION_MAP(widget), actions[ix]);
+
+		if(action && PW3270_IS_ACTION(action)) {
+			pw3270_action_set_terminal_widget(action,NULL);
+		}
+
+	}
+
+	g_strfreev(actions);
+
+	GTK_WIDGET_CLASS(pw3270ApplicationWindow_parent_class)->destroy(widget);
+
+ }
+
+ static void pw3270ApplicationWindow_class_init(pw3270ApplicationWindowClass *klass) {
+
+	GtkWidgetClass * widget = GTK_WIDGET_CLASS(klass);
+	widget->destroy = destroy;
+
 
  }
 

@@ -87,6 +87,34 @@
  	return FALSE;
  }
 
+ static void on_terminal_destroy(GtkWidget *terminal, GtkWindow * window) {
+
+	if(gtk_window_get_default_widget(window) != terminal) {
+		return;
+	}
+
+	gtk_window_set_default(window,NULL);
+	pw3270_window_set_subtitle(GTK_WIDGET(window), _("Disconnected from host"));
+
+	// Update actions
+	size_t ix;
+	gchar ** actions = g_action_group_list_actions(G_ACTION_GROUP(window));
+
+	for(ix = 0; actions[ix]; ix++) {
+
+		GAction * action = g_action_map_lookup_action(G_ACTION_MAP(window), actions[ix]);
+
+		if(action && PW3270_IS_ACTION(action)) {
+			pw3270_action_set_terminal_widget(action,NULL);
+		}
+
+	}
+
+	g_strfreev(actions);
+
+ }
+
+
  static gboolean bg_auto_connect(GtkWidget *terminal) {
  	v3270_reconnect(terminal);
 	return FALSE;
@@ -135,6 +163,7 @@
 	g_signal_connect(G_OBJECT(terminal), "session_changed", G_CALLBACK(session_changed),label);
 	g_signal_connect(G_OBJECT(terminal), "disconnected", G_CALLBACK(disconnected),window);
 	g_signal_connect(G_OBJECT(terminal), "connected", G_CALLBACK(connected),window);
+	g_signal_connect(G_OBJECT(terminal), "destroy", G_CALLBACK(on_terminal_destroy),window);
 
 	g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(on_close_tab), terminal);
 
