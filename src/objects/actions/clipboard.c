@@ -118,8 +118,8 @@
 		.summary = N_( "Paste data from clipboard." ),
 		.activate = NULL,
 
-		.group = LIB3270_ACTION_GROUP_ONLINE,
-		.activatable = lib3270_is_connected
+		.group = LIB3270_ACTION_GROUP_LOCK_STATE,
+		.activatable = lib3270_is_unlocked
 
 	};
 
