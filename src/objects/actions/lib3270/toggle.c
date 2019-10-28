@@ -101,7 +101,6 @@
  void Lib3270ToggleAction_class_init(Lib3270ToggleActionClass *klass) {
 
 	pw3270ActionClass * action = PW3270_ACTION_CLASS(klass);
-	action->activate = activate;
 	action->change_widget = change_widget;
 
  }
@@ -110,6 +109,8 @@
 
  	action->definition	= NULL;
  	action->listener	= NULL;
+
+	PW3270_ACTION(action)->activate	= activate;
 
  }
 

@@ -34,40 +34,7 @@
   */
 
  #include "private.h"
+ #include <pw3270/application.h>
 
 /*---[ Implement ]----------------------------------------------------------------------------------*/
 
- GSettings * pw3270_get_settings() {
-
-#ifdef DEBUG
-	GError * error = NULL;
-	GSettingsSchemaSource * source =
-		g_settings_schema_source_new_from_directory(
-			".",
-			NULL,
-			TRUE,
-			&error
-		);
-
-	g_assert_no_error(error);
-
-	GSettingsSchema * schema =
-		g_settings_schema_source_lookup(
-			source,
-			"br.com.bb." PACKAGE_NAME,
-			TRUE);
-
-	g_settings_schema_source_unref(source);
-
-	g_autofree gchar * path = g_strconcat("/apps/" PACKAGE_NAME "/", g_get_application_name(),"/",NULL);
-
-	debug("path=%s",path);
-	return g_settings_new_full(schema, NULL, path);
-
-#else
-
-	#error TODO!
-
-#endif // DEBUG
-
- }

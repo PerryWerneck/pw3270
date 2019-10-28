@@ -103,14 +103,14 @@
 
 	pw3270ActionClass * action = PW3270_ACTION_CLASS(klass);
 
-	action->activate = activate;
 	action->get_enabled = get_enabled;
 	action->change_widget = change_widget;
 	action->get_parameter_type = get_parameter_type;
 
  }
 
- void Lib3270PaAction_init(Lib3270PaAction G_GNUC_UNUSED(*action)) {
+ void Lib3270PaAction_init(Lib3270PaAction *action) {
+	PW3270_ACTION(action)->activate = activate;
  }
 
  GAction * pw3270_action_new_pakey(void) {

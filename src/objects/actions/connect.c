@@ -34,15 +34,20 @@
 
  #include "private.h"
 
+ static void activate(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkWidget *terminal) {
 
- static void activate(GtkWidget *terminal) {
-
-	debug("%s: Connect", __FUNCTION__);
+	debug("%s",__FUNCTION__);
+    gtk_widget_activate(terminal);
 
  }
 
  GAction * pw3270_connect_action_new(void) {
-	SimpleAction * action = pw3270_simple_action_from_name("reconnect");
-	action->activate = activate;
-	return G_ACTION(action);
+
+	GAction * action = pw3270_action_new_from_lib3270(lib3270_action_get_by_name("reconnect"));
+
+	PW3270_ACTION(action)->activate = activate;
+	pw3270_action_set_name(G_ACTION(action),"win.connect");
+
+	return action;
+
  }

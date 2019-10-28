@@ -84,11 +84,6 @@
 		},
 
 		{
-			.name = "win.connect",
-			.activate = pw3270_application_generic_activated,
-		},
-
-		{
 			.name = "win.preferences",
 			.activate = pw3270_application_generic_activated,
 		},
@@ -133,7 +128,7 @@
 
 	const gchar * title = _( "IBM 3270 Terminal emulator" );
 
-	g_autoptr(GSettings) settings = pw3270_get_settings();
+	g_autoptr(GSettings) settings = pw3270_application_get_settings(G_APPLICATION(application));
 
 	g_return_val_if_fail(GTK_IS_APPLICATION(application), NULL);
 	pw3270ApplicationWindow * window =

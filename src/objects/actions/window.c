@@ -67,7 +67,8 @@
 	{
 		GAction * actions[] = {
 			pw3270_action_new_pfkey(),
-			pw3270_action_new_pakey()
+			pw3270_action_new_pakey(),
+			pw3270_connect_action_new()
 		};
 
 		for(ix = 0; ix < G_N_ELEMENTS(actions); ix++) {

@@ -94,7 +94,6 @@
 
 	klass->change_widget		= change_widget;
 	klass->get_enabled			= get_enabled;
-	klass->activate				= activate;
 	klass->get_parameter_type	= get_parameter_type;
 	klass->get_icon_name		= get_null;
 	klass->get_label			= get_null;
@@ -175,6 +174,7 @@
 	action->name		= NULL;
 	action->terminal	= NULL;
 	action->state		= NULL;
+	action->activate	= activate;
 
  }
 
@@ -399,7 +399,7 @@
  	debug("%s: terminal=%p",__FUNCTION__,action->terminal);
 
  	if(action && action->terminal) {
-		PW3270_ACTION_GET_CLASS(object)->activate(object,parameter,action->terminal);
+		action->activate(object,parameter,action->terminal);
  	}
 
  }

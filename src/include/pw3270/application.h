@@ -64,6 +64,8 @@
 	GType			  pw3270Application_get_type();
 	GtkApplication	* pw3270_application_new(const gchar *application_id, GApplicationFlags flags);
 
+	GSettings		* pw3270_application_get_settings(GApplication *app);
+
 	void			  pw3270_application_set_ui_style(GApplication *app, PW3270_UI_STYLE type);
 	PW3270_UI_STYLE	  pw3270_application_get_ui_style(GApplication *app);
 

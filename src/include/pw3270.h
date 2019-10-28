@@ -46,9 +46,12 @@
 	#include <glib/gi18n.h>
 	#include <gtk/gtk.h>
 
+	G_BEGIN_DECLS
+
 	/* not really I18N-related, but also a string marker macro */
 	#define I_(string) g_intern_static_string (string)
 
-	G_GNUC_INTERNAL GSettings * pw3270_get_settings(void);
+
+	G_END_DECLS
 
 #endif // PW3270_H_INCLUDED

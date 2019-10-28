@@ -59,6 +59,8 @@
 		GtkWidget		* terminal;
 		gchar 			* name;
 
+		void (*activate)(GAction *action, GVariant *parameter, GtkWidget *terminal);
+
 	};
 
 	struct _pw3270ActionClass {
@@ -71,32 +73,12 @@
 
 		void (*change_widget)(GAction *action, GtkWidget *from, GtkWidget *to);
 		gboolean (*get_enabled)(GAction *action, GtkWidget *terminal);
-		void (*activate)(GAction *action, GVariant *parameter, GtkWidget *terminal);
 		const GVariantType * (*get_parameter_type)(GAction *action);
 		const gchar * (*get_icon_name)(GAction *action);
 		const gchar	* (*get_label)(GAction *action);
 		const gchar	* (*get_tooltip)(GAction *action);
 
 	};
-
-	typedef struct _SimpleActionClass {
-		pw3270ActionClass parent_class;
-
-	} SimpleActionClass;
-
-	typedef struct _SimpleAction {
-
-		pw3270Action parent;
-
-		LIB3270_ACTION_GROUP	  group;		///< @brief LIB3270 Group id.
-		const void				* listener;		///< @brief Event listener.
-		const gchar				* icon_name;	///< @brief The action icon name.
-		const gchar				* label;		///< @brief The action label.
-		const gchar				* tooltip;		///< @brief The action tooltip.
-
-		void (*activate)(GtkWidget *terminal);
-
-	} SimpleAction;
 
 	G_GNUC_INTERNAL GAction * pw3270_action_new_from_lib3270(const LIB3270_ACTION * definition);
 	G_GNUC_INTERNAL GAction	* pw3270_toggle_action_new_from_lib3270(const LIB3270_TOGGLE * definition);
@@ -107,9 +89,6 @@
 	G_GNUC_INTERNAL void pw3270_action_notify_enabled(GAction *action);
 
 	// Internal actions
-	G_GNUC_INTERNAL SimpleAction	* pw3270_simple_action_new();
-	G_GNUC_INTERNAL SimpleAction	* pw3270_simple_action_from_name(const gchar *name);
-
 	G_GNUC_INTERNAL GAction			* pw3270_connect_action_new(void);
 
 #endif // PRIVATE_H_INCLUDED

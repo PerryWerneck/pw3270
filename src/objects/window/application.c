@@ -50,13 +50,16 @@
  struct _pw3270Application {
  	GtkApplication parent;
 
+ 	GSettings * settings;
+
  	PW3270_UI_STYLE	ui_style;
 
  };
 
- static void 		  startup(GApplication * application);
- static void 		  activate(GApplication * application);
- static void 		  open(GApplication * application, GFile **files, gint n_files, const gchar *hint);
+ static void 		startup(GApplication * application);
+ static void 		activate(GApplication * application);
+ static void 		open(GApplication * application, GFile **files, gint n_files, const gchar *hint);
+ static void		finalize(GObject *object);
 
  G_DEFINE_TYPE(pw3270Application, pw3270Application, GTK_TYPE_APPLICATION);
 
@@ -93,6 +96,7 @@
 
 	object_class->get_property = get_property;
 	object_class->set_property = set_property;
+ 	object_class->finalize = finalize;
 
 	application_class->startup = startup;
 	application_class->activate = activate;
@@ -126,12 +130,60 @@
 	app->ui_style = PW3270_UI_STYLE_GNOME;
 #endif // _WIN32
 
-	// Bind properties
-	g_autoptr(GSettings) settings = pw3270_get_settings();
+	// Get settings
+	{
+#ifdef DEBUG
+		GError * error = NULL;
+		GSettingsSchemaSource * source =
+			g_settings_schema_source_new_from_directory(
+				".",
+				NULL,
+				TRUE,
+				&error
+			);
 
-	if(settings) {
-		g_settings_bind(settings, "ui-style", app, "ui-style", G_SETTINGS_BIND_DEFAULT);
+		g_assert_no_error(error);
+
+		GSettingsSchema * schema =
+			g_settings_schema_source_lookup(
+				source,
+				"br.com.bb." PACKAGE_NAME,
+				TRUE);
+
+		g_settings_schema_source_unref(source);
+
+		g_autofree gchar * path = g_strconcat("/apps/" PACKAGE_NAME "/", g_get_application_name(),"/",NULL);
+
+		debug("path=%s",path);
+		app->settings = g_settings_new_full(schema, NULL, path);
+
+#else
+
+		#error TODO!
+
+#endif // DEBUG
+
 	}
+
+	// Bind properties
+	if(app->settings) {
+		g_object_ref_sink(G_OBJECT(app->settings));
+		g_settings_bind(app->settings, "ui-style", app, "ui-style", G_SETTINGS_BIND_DEFAULT);
+	}
+
+ }
+
+ static void finalize(GObject *object) {
+
+ 	pw3270Application * application = PW3270_APPLICATION(object);
+
+ 	if(application->settings) {
+		g_object_unref(application->settings);
+		application->settings = NULL;
+ 	}
+
+
+ 	G_OBJECT_CLASS(pw3270Application_parent_class)->finalize(object);
 
  }
 
@@ -272,3 +324,9 @@
 
  }
 
+ GSettings * pw3270_application_get_settings(GApplication *app) {
+
+	g_return_val_if_fail(PW3270_IS_APPLICATION(app),NULL);
+	return PW3270_APPLICATION(app)->settings;
+
+ }

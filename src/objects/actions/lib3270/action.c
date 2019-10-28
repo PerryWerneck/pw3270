@@ -99,7 +99,6 @@
 
 	pw3270ActionClass * action = PW3270_ACTION_CLASS(klass);
 
-	action->activate = activate;
 	action->get_enabled = get_enabled;
 	action->change_widget = change_widget;
 	action->get_icon_name = get_icon_name;
@@ -110,7 +109,9 @@
 
  }
 
- void Lib3270Action_init(Lib3270Action G_GNUC_UNUSED(*action)) {
+ void Lib3270Action_init(Lib3270Action *action) {
+ 	debug("%s",__FUNCTION__);
+	PW3270_ACTION(action)->activate = activate;
  }
 
  GAction * pw3270_action_new_from_lib3270(const LIB3270_ACTION * definition) {
@@ -132,8 +133,13 @@
  	return G_ACTION(action);
  }
 
+ static gboolean bg_notify_enabled(GAction *action) {
+ 	pw3270_action_notify_enabled(action);
+	return FALSE;
+ }
+
  static void event_listener(H3270 G_GNUC_UNUSED(*hSession), void *object) {
- 	pw3270_action_notify_enabled(G_ACTION(object));
+	g_idle_add((GSourceFunc) bg_notify_enabled, G_ACTION(object));
  }
 
  void change_widget(GAction *object, GtkWidget *from, GtkWidget *to) {
