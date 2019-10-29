@@ -37,9 +37,7 @@
 	v3270_settings_on_dialog_response(dialog,response_id,settings);
 
 	if(response_id == GTK_RESPONSE_APPLY) {
-#ifndef DEBUG
-		#error TO DO!
-#endif // DEBUG
+		v3270_reconnect(v3270_settings_get_terminal_widget(settings));
 	}
 
 	gtk_widget_destroy(GTK_WIDGET(dialog));
