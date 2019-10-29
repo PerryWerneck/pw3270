@@ -34,6 +34,7 @@ SOURCES= \
 	$(wildcard src/objects/actions/*.c) \
 	$(wildcard src/objects/actions/lib3270/*.c) \
 	$(wildcard src/objects/window/*.c) \
+	$(wildcard src/objects/window/actions/*.c) \
 	$(wildcard src/objects/terminal/*.c) \
 	$(wildcard src/objects/toolbar/*.c) \
 	$(wildcard src/main/*.c) \

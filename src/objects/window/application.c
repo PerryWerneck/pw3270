@@ -207,7 +207,7 @@
 	static GActionEntry actions[] = {
 		{
 			.name = "about",
-			.activate = pw3270_application_generic_activated,
+			.activate = pw3270_application_about_activated,
 		},
 
 		{

@@ -69,5 +69,6 @@
     G_GNUC_INTERNAL void pw3270_application_quit_activated(GSimpleAction * action, GVariant *parameter, gpointer application);
     G_GNUC_INTERNAL void pw3270_application_new_tab_activated(GSimpleAction * action, GVariant *parameter, gpointer application);
     G_GNUC_INTERNAL void pw3270_application_new_window_activated(GSimpleAction * action, GVariant *parameter, gpointer application);
+    G_GNUC_INTERNAL void pw3270_application_about_activated(GSimpleAction * action, GVariant *parameter, gpointer application);
 
 #endif // PRIVATE_H_INCLUDED

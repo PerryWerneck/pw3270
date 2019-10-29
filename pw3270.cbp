@@ -89,7 +89,10 @@
 		<Unit filename="src/objects/toolbar/toolbutton.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/objects/window/actions.c">
+		<Unit filename="src/objects/window/actions/about.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/objects/window/actions/window.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/objects/window/application.c">

@@ -249,3 +249,10 @@
 	}
 
  }
+
+ void pw3270_application_generic_activated(GSimpleAction * action, GVariant *parameter, gpointer application) {
+
+	debug("%s",__FUNCTION__);
+
+ }
+
