@@ -115,6 +115,12 @@
 			.activate = pw3270_window_preferences_activated,
 		},
 
+		{
+			.name = "set.host",
+			.activate = pw3270_window_set_host_activated,
+		},
+
+
 	};
 
 	g_action_map_add_action_entries(

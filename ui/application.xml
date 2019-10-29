@@ -144,7 +144,7 @@
 
         <item>
           <attribute name="label" translatable="yes">Paste text file</attribute>
-          <attribute name="action">win.pastefile</attribute>
+          <attribute name="action">win.paste_file</attribute>
         </item>
 
       </section>
@@ -210,7 +210,7 @@
 
         <item>
           <attribute name="label" translatable="yes">Configure host</attribute>
-          <attribute name="action">win.setup_host</attribute>
+          <attribute name="action">win.set.host</attribute>
         </item>
 
         <item>
@@ -231,17 +231,17 @@
 
         <item>
           <attribute name="label" translatable="yes">Colors</attribute>
-          <attribute name="action">win.coloers</attribute>
+          <attribute name="action">win.edit.colors</attribute>
         </item>
 
         <item>
           <attribute name="label" translatable="yes">Select font</attribute>
-          <attribute name="action">win.select_font</attribute>
+          <attribute name="action">win.select.font</attribute>
         </item>
 
         <item>
           <attribute name="label" translatable="yes">Screen sizes</attribute>
-          <attribute name="action">win.screen_sizes</attribute>
+          <attribute name="action">win.screen.sizes</attribute>
         </item>
 
     </submenu>

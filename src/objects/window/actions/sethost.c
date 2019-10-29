@@ -27,48 +27,54 @@
  *
  */
 
-#ifndef PRIVATE_H_INCLUDED
+ #include "../private.h"
+ #include <pw3270/window.h>
+ #include <v3270/settings.h>
+ #include <v3270/dialogs.h>
 
-	#define PRIVATE_H_INCLUDED
+ static void on_response(GtkDialog *dialog, gint response_id, GtkWidget *settings) {
 
-	#include <config.h>
+	v3270_settings_on_dialog_response(dialog,response_id,settings);
 
-	#ifndef GETTEXT_PACKAGE
-		#define GETTEXT_PACKAGE PACKAGE_NAME
-	#endif
+	if(response_id == GTK_RESPONSE_APPLY) {
+#ifndef DEBUG
+		#error TO DO!
+#endif // DEBUG
+	}
 
-	#include <libintl.h>
-	#include <glib/gi18n.h>
-	#include <gtk/gtk.h>
+	gtk_widget_destroy(GTK_WIDGET(dialog));
 
-	#include <pw3270/window.h>
-	#include <v3270.h>
-	#include <lib3270.h>
-	#include <lib3270/log.h>
+ }
 
-	struct _pw3270ApplicationWindow {
+ void pw3270_window_set_host_activated(GSimpleAction G_GNUC_UNUSED(* action), GVariant G_GNUC_UNUSED(*parameter), gpointer window) {
 
-		GtkApplicationWindow parent;
+	debug("%s",__FUNCTION__);
 
-		GtkNotebook * notebook;
-		GtkToolbar	* toolbar;
+	if(!PW3270_IS_APPLICATION_WINDOW(window))
+		return;
 
-	};
+	GtkWidget * terminal = gtk_window_get_default_widget(GTK_WINDOW(window));
+	if(!GTK_IS_V3270(terminal))
+		return;
 
-	struct _pw3270ApplicationWindowClass {
+	GtkWidget * settings = v3270_host_select_new();
+	GtkWidget * dialog =
+		v3270_settings_dialog_new(
+			terminal,
+			settings
+		);
 
-		GtkApplicationWindowClass parent_class;
+	if(dialog) {
 
-	};
+		v3270_dialog_setup(dialog,_("Setup host"),_("C_onnect"));
 
-	// Internal methods
-	G_GNUC_INTERNAL GtkWidget * pw3270_setup_image_button(GtkWidget *button, const gchar *image_name);
+		gtk_window_set_default_size(GTK_WINDOW(dialog), 700, 150);
 
-	// Actions
-    G_GNUC_INTERNAL void pw3270_window_open_activated(GSimpleAction * action, GVariant *parameter, gpointer application);
-    G_GNUC_INTERNAL void pw3270_window_close_activated(GSimpleAction * action, GVariant *parameter, gpointer application);
-    G_GNUC_INTERNAL void pw3270_window_preferences_activated(GSimpleAction * action, GVariant *parameter, gpointer application);
-	G_GNUC_INTERNAL void pw3270_window_set_host_activated(GSimpleAction G_GNUC_UNUSED(* action), GVariant G_GNUC_UNUSED(*parameter), gpointer application);
+		g_signal_connect(dialog,"close",G_CALLBACK(gtk_widget_destroy),NULL);
+		g_signal_connect(dialog,"response",G_CALLBACK(on_response),settings);
 
+		gtk_widget_show_all(dialog);
+	}
 
-#endif // PRIVATE_H_INCLUDED
+ }
+
