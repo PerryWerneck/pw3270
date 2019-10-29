@@ -95,6 +95,20 @@
 	//
 	pw3270_window_add_actions(GTK_WIDGET(widget));
 
+	// Map special actions
+	{
+		size_t ix;
+
+		GAction * actions[] = {
+			pw3270_set_host_action_new()
+		};
+
+		for(ix = 0; ix < G_N_ELEMENTS(actions); ix++) {
+			g_action_map_add_action(G_ACTION_MAP(widget),actions[ix]);
+		}
+
+	}
+
 	//
 	// Setup Window actions.
 	//
@@ -114,12 +128,6 @@
 			.name = "preferences",
 			.activate = pw3270_window_preferences_activated,
 		},
-
-		{
-			.name = "set.host",
-			.activate = pw3270_window_set_host_activated,
-		},
-
 
 	};
 

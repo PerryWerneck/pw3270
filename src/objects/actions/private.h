@@ -51,42 +51,13 @@
 	/* not really I18N-related, but also a string marker macro */
 	#define I_(string) g_intern_static_string (string)
 
-	struct _pw3270Action {
-		GObject parent;
-
-		const gchar		* name;
-		GVariantType	* parameter_type;
-		GVariant     	* state;
-		GtkWidget		* terminal;
-
-		void (*activate)(GAction *action, GVariant *parameter, GtkWidget *terminal);
-
-	};
-
-	struct _pw3270ActionClass {
-		GObjectClass parent_class;
-
-		struct {
-			GParamSpec * state;
-			GParamSpec * enabled;
-		} properties;
-
-		void (*change_widget)(GAction *action, GtkWidget *from, GtkWidget *to);
-		gboolean (*get_enabled)(GAction *action, GtkWidget *terminal);
-		const GVariantType * (*get_parameter_type)(GAction *action);
-		const gchar * (*get_icon_name)(GAction *action);
-		const gchar	* (*get_label)(GAction *action);
-		const gchar	* (*get_tooltip)(GAction *action);
-
-	};
-
-	G_GNUC_INTERNAL GAction * pw3270_action_new_from_lib3270(const LIB3270_ACTION * definition);
 	G_GNUC_INTERNAL GAction	* pw3270_toggle_action_new_from_lib3270(const LIB3270_TOGGLE * definition);
 	G_GNUC_INTERNAL GAction * pw3270_action_new_pfkey(void);
 	G_GNUC_INTERNAL GAction * pw3270_action_new_pakey(void);
 
 	G_GNUC_INTERNAL void pw3270_action_change_state_boolean(GAction *action, gboolean state);
 	G_GNUC_INTERNAL void pw3270_action_notify_enabled(GAction *action);
+	G_GNUC_INTERNAL void pw3270_action_set_name(GAction *object, const gchar *name);
 
 	// Internal actions
 	G_GNUC_INTERNAL GAction			* pw3270_connect_action_new(void);

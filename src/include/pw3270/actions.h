@@ -38,6 +38,7 @@
 
 	#include <gio/gio.h>
 	#include <lib3270.h>
+	#include <lib3270/actions.h>
 
 	G_BEGIN_DECLS
 
@@ -48,13 +49,45 @@
 	#define PW3270_IS_ACTION_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), PW3270_TYPE_ACTION))
 	#define PW3270_ACTION_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), PW3270_TYPE_ACTION, pw3270ActionClass))
 
-	typedef struct _pw3270Action			pw3270Action;
-	typedef struct _pw3270ActionClass		pw3270ActionClass;
+	typedef struct _pw3270Action {
+
+		GObject parent;
+
+		const gchar		* name;				/// @brief Action name (const string).
+		GVariantType	* parameter_type;	/// @brief Parameter type.
+		GVariant     	* state;			/// @brief Action state.
+		GtkWidget		* terminal;			/// @brief The active terminal widget.
+
+		/// @brief Activation method.
+		void (*activate)(GAction *action, GVariant *parameter, GtkWidget *terminal);
+
+	} pw3270Action;
+
+	typedef struct _pw3270ActionClass {
+
+		GObjectClass parent_class;
+
+		struct {
+			GParamSpec * state;
+			GParamSpec * enabled;
+		} properties;
+
+		void (*change_widget)(GAction *action, GtkWidget *from, GtkWidget *to);
+		gboolean (*get_enabled)(GAction *action, GtkWidget *terminal);
+		const GVariantType * (*get_parameter_type)(GAction *action);
+		const gchar * (*get_icon_name)(GAction *action);
+		const gchar	* (*get_label)(GAction *action);
+		const gchar	* (*get_tooltip)(GAction *action);
+
+	} pw3270ActionClass;
 
 	GType pw3270Action_get_type(void) G_GNUC_CONST;
 
+	/// @brief New action from LIB3270's control data.
+	GAction * pw3270_action_new_from_lib3270(const LIB3270_ACTION * definition);
+
+	/// @brief Get action name.
 	const gchar			* pw3270_action_get_name(GAction *action);
-	void				  pw3270_action_set_name(GAction *action, const gchar *name);
 
 	/// @brief Get the action icon name.
 	const gchar 		* pw3270_action_get_icon_name(GAction *action);

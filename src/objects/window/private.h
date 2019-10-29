@@ -65,10 +65,11 @@
 	G_GNUC_INTERNAL GtkWidget * pw3270_setup_image_button(GtkWidget *button, const gchar *image_name);
 
 	// Actions
+	GAction * pw3270_set_host_action_new(void);
+
     G_GNUC_INTERNAL void pw3270_window_open_activated(GSimpleAction * action, GVariant *parameter, gpointer application);
     G_GNUC_INTERNAL void pw3270_window_close_activated(GSimpleAction * action, GVariant *parameter, gpointer application);
     G_GNUC_INTERNAL void pw3270_window_preferences_activated(GSimpleAction * action, GVariant *parameter, gpointer application);
-	G_GNUC_INTERNAL void pw3270_window_set_host_activated(GSimpleAction G_GNUC_UNUSED(* action), GVariant G_GNUC_UNUSED(*parameter), gpointer application);
 
 
 #endif // PRIVATE_H_INCLUDED
