@@ -54,12 +54,12 @@
 	struct _pw3270Action {
 		GObject parent;
 
+		const gchar		* name;
 		GVariantType	* parameter_type;
 		GVariant     	* state;
 		GtkWidget		* terminal;
 
 		void (*activate)(GAction *action, GVariant *parameter, GtkWidget *terminal);
-		const gchar * (*get_name)(GAction *action);
 
 	};
 

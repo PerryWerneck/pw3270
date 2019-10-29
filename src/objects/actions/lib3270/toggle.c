@@ -58,8 +58,12 @@
 
  G_DEFINE_TYPE(Lib3270ToggleAction, Lib3270ToggleAction, PW3270_TYPE_ACTION);
 
- static void change_state(H3270 G_GNUC_UNUSED(*hSession), LIB3270_TOGGLE_ID id, char state, void * action) {
- 	debug("%s: %s",__FUNCTION__,state ? "ON" : "OFF");
+ static void change_state(H3270 G_GNUC_UNUSED(*hSession), LIB3270_TOGGLE_ID G_GNUC_UNUSED(id), char state, void * action) {
+ 	debug("%s: State on action %s is %s",
+				__FUNCTION__,
+				g_action_get_name(G_ACTION(action)),
+				state ? "ON" : "OFF"
+			);
 	pw3270_action_change_state_boolean((GAction *) action, state == 0 ? FALSE : TRUE);
  }
 
@@ -105,35 +109,22 @@
 
  }
 
- static const gchar * get_name(GAction *action) {
- 	return PW3270_LIB3270_TOGGLE_ACTION(action)->definition->name;
- }
+ void Lib3270ToggleAction_init(Lib3270ToggleAction *action) {
 
- void Lib3270ToggleAction_init(Lib3270ToggleAction *toggle) {
+ 	action->definition	= NULL;
+ 	action->listener	= NULL;
 
- 	toggle->definition	= NULL;
- 	toggle->listener	= NULL;
-
- 	pw3270Action * action = PW3270_ACTION(toggle);
-	action->activate = activate;
-	action->get_name = get_name;
+	action->parent.activate = activate;
+	action->parent.name = "toggle";
 
  }
 
  GAction * pw3270_toggle_action_new_from_lib3270(const LIB3270_TOGGLE * definition) {
 
  	Lib3270ToggleAction	* action = (Lib3270ToggleAction *) g_object_new(PW3270_TYPE_LIB3270_TOGGLE_ACTION, NULL);
+
 	action->definition = definition;
-
-	// Setup the default name.
-	pw3270Action * abstract	= PW3270_ACTION(action);
-
-	/*
-	if(abstract->name)
-		g_free(abstract->name);
-
-	abstract->name = g_strconcat("win.",definition->name,NULL);
-	*/
+	action->parent.name = definition->name;
 
  	return G_ACTION(action);
 

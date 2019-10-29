@@ -109,15 +109,11 @@
 
  }
 
- static const gchar * get_name(GAction G_GNUC_UNUSED(*action)) {
- 	return "pakey";
- }
-
  void Lib3270PaAction_init(Lib3270PaAction *object) {
  	pw3270Action * action = PW3270_ACTION(object);
 
 	action->activate = activate;
-	action->get_name = get_name;
+	action->name = "pakey";
  }
 
 

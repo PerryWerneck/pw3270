@@ -108,15 +108,11 @@
 
  }
 
- static const gchar * get_name(GAction *action) {
- 	return "pakey";
- }
+ void Lib3270PfAction_init(Lib3270PfAction *action) {
 
- void Lib3270PfAction_init(Lib3270PfAction *object) {
- 	pw3270Action * action = PW3270_ACTION(object);
+	action->parent.activate = activate;
+	action->parent.name = "pfkey";
 
-	action->activate = activate;
-	action->get_name = get_name;
  }
 
  GAction * pw3270_action_new_pfkey(void) {

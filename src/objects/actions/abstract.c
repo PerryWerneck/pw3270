@@ -251,7 +251,7 @@
 	switch (prop_id)
 	{
 	case PROP_NAME:
-//		pw3270_action_set_name(action, g_value_get_string(value));
+		pw3270_action_set_name(action, g_value_get_string(value));
 		break;
 
 	case PROP_PARAMETER_TYPE:
@@ -273,24 +273,13 @@
  }
 
  const gchar * pw3270_action_get_name(GAction *action) {
- 	return PW3270_ACTION(action)->get_name(action);
+ 	return PW3270_ACTION(action)->name;
  }
 
  void pw3270_action_set_name(GAction *object, const gchar *name) {
 
-/*
- 	pw3270Action * action = PW3270_ACTION(object);
-
-// 	debug("%s %s -> %s", __FUNCTION__, action->name, name);
-
- 	if(action->name)
-		g_free(action->name);
-
-	if(name)
-		action->name = g_strdup(name);
-	else
-		action->name = NULL;
-*/
+ 	if(name)
+		g_warning("Invalid call to %s on action %s with value \"%s\"",__FUNCTION__,g_action_get_name(object),name);
 
  }
 

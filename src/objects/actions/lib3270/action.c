@@ -114,15 +114,10 @@
 
  }
 
- static const gchar * get_name(GAction *action) {
- 	return PW3270_LIB3270_ACTION(action)->definition->name;
- }
+ void Lib3270Action_init(Lib3270Action *action) {
 
- void Lib3270Action_init(Lib3270Action *object) {
- 	pw3270Action * action = PW3270_ACTION(object);
-
-	action->activate = activate;
-	action->get_name = get_name;
+	action->parent.activate = activate;
+	action->parent.name = "tn3270";
 
  }
 
@@ -133,6 +128,7 @@
 	// Setup hooks.
 	action->definition	= definition;
 	action->listener	= NULL;
+	action->parent.name	= definition->name;
 
  	return G_ACTION(action);
  }

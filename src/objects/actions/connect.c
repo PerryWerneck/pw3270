@@ -41,18 +41,13 @@
 
  }
 
- static const gchar * get_name(GAction G_GNUC_UNUSED(*action)) {
- 	return "connect";
- }
-
  GAction * pw3270_connect_action_new(void) {
 
-	GAction * object = pw3270_action_new_from_lib3270(lib3270_action_get_by_name("reconnect"));
+	pw3270Action * action = PW3270_ACTION(pw3270_action_new_from_lib3270(lib3270_action_get_by_name("reconnect")));
 
-	pw3270Action * action = PW3270_ACTION(object);
 	action->activate = activate;
-	action->get_name = get_name;
+	action->name = "connect";
 
-	return object;
+	return G_ACTION(action);
 
  }

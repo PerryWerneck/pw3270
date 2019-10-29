@@ -43,15 +43,6 @@
 
 	// Map lib3270 actions
 	{
-		GAction * action = pw3270_action_new_from_lib3270(lib3270_action_get_by_name("disconnect"));
-
-		pw3270_action_set_name(G_ACTION(action),"disconnect");
-
-		g_action_map_add_action(map,action);
-
-	}
-
-	{
 		const LIB3270_ACTION * actions = lib3270_get_actions();
 		for(ix = 0; actions[ix].name; ix++) {
 
