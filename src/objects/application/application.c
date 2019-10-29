@@ -63,7 +63,7 @@
 
  G_DEFINE_TYPE(pw3270Application, pw3270Application, GTK_TYPE_APPLICATION);
 
- static void get_property(GObject *object, guint prop_id, GValue *value, GParamSpec *pspec) {
+ static void get_property(GObject *object, guint prop_id, GValue *value, GParamSpec G_GNUC_UNUSED(*pspec)) {
 
 	switch (prop_id) {
 	case PROP_UI_STYLE:
@@ -76,7 +76,7 @@
 
  }
 
- static void set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec) {
+ static void set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec G_GNUC_UNUSED(*pspec)) {
 
 	switch (prop_id) {
 	case PROP_UI_STYLE:
@@ -192,7 +192,7 @@
 	return g_object_new(
 				PW3270_TYPE_APPLICATION,
 				"application-id", application_id,
-				"flags", G_APPLICATION_HANDLES_OPEN,
+				"flags", flags,
 				NULL);
 
  }
@@ -212,7 +212,7 @@
 
 		{
 			.name = "preferences",
-			.activate = pw3270_application_generic_activated,
+			.activate = pw3270_application_preferences_activated,
 		},
 
 		{
@@ -272,13 +272,6 @@
 
 	GtkWidget * window = pw3270_application_window_new(GTK_APPLICATION(application));
 
-	debug("%s","************************************************");
-	debug("Action win.copy is %p",g_action_map_lookup_action(G_ACTION_MAP(window),"win.copy"));
-	debug("Action app.copy is %p",g_action_map_lookup_action(G_ACTION_MAP(window),"app.copy"));
-	debug("Action win.copy is %p",g_action_map_lookup_action(G_ACTION_MAP(application),"win.copy"));
-	debug("Action copy is %p",g_action_map_lookup_action(G_ACTION_MAP(application),"copy"));
-	debug("%s","************************************************");
-
 	// Create terminal widget
 	pw3270_terminal_new(window);
 	pw3270_window_set_current_page(window,0);
@@ -288,7 +281,7 @@
 
  }
 
- void open(GApplication *application, GFile **files, gint n_files, const gchar *hint) {
+ void open(GApplication *application, GFile **files, gint n_files, const gchar G_GNUC_UNUSED(*hint)) {
 
 	GtkWindow * window = gtk_application_get_active_window(GTK_APPLICATION(application));
 

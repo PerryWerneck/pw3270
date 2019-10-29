@@ -79,6 +79,19 @@
 		<Unit filename="src/objects/actions/window.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/objects/application/actions/about.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/objects/application/actions/preferences.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/objects/application/actions/window.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/objects/application/application.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/objects/application/private.h" />
 		<Unit filename="src/objects/toolbar/actions.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -89,13 +102,13 @@
 		<Unit filename="src/objects/toolbar/toolbutton.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/objects/window/actions/about.c">
+		<Unit filename="src/objects/window/actions/close.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/objects/window/actions/window.c">
+		<Unit filename="src/objects/window/actions/open.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/objects/window/application.c">
+		<Unit filename="src/objects/window/actions/preferences.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/objects/window/private.h" />

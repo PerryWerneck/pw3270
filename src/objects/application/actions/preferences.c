@@ -27,46 +27,12 @@
  *
  */
 
-#ifndef PRIVATE_H_INCLUDED
+ #include "../private.h"
+ #include <pw3270/application.h>
 
-	#define PRIVATE_H_INCLUDED
+ void pw3270_application_preferences_activated(GSimpleAction G_GNUC_UNUSED(* action), GVariant G_GNUC_UNUSED(*parameter), gpointer application) {
 
-	#include <config.h>
+	debug("%s",__FUNCTION__);
 
-	#ifndef GETTEXT_PACKAGE
-		#define GETTEXT_PACKAGE PACKAGE_NAME
-	#endif
+ }
 
-	#include <libintl.h>
-	#include <glib/gi18n.h>
-	#include <gtk/gtk.h>
-
-	#include <pw3270/window.h>
-	#include <v3270.h>
-	#include <lib3270.h>
-	#include <lib3270/log.h>
-
-	struct _pw3270ApplicationWindow {
-
-		GtkApplicationWindow parent;
-
-		GtkNotebook * notebook;
-		GtkToolbar	* toolbar;
-
-	};
-
-	struct _pw3270ApplicationWindowClass {
-
-		GtkApplicationWindowClass parent_class;
-
-	};
-
-	// Internal methods
-	G_GNUC_INTERNAL GtkWidget * pw3270_setup_image_button(GtkWidget *button, const gchar *image_name);
-
-	// Actions
-    G_GNUC_INTERNAL void pw3270_window_open_activated(GSimpleAction * action, GVariant *parameter, gpointer application);
-    G_GNUC_INTERNAL void pw3270_window_close_activated(GSimpleAction * action, GVariant *parameter, gpointer application);
-    G_GNUC_INTERNAL void pw3270_window_preferences_activated(GSimpleAction * action, GVariant *parameter, gpointer application);
-
-#endif // PRIVATE_H_INCLUDED

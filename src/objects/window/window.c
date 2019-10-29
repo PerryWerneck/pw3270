@@ -102,17 +102,17 @@
 
 		{
 			.name = "open",
-			.activate = pw3270_application_generic_activated,
+			.activate = pw3270_window_open_activated,
 		},
 
 		{
 			.name = "close",
-			.activate = pw3270_application_generic_activated,
+			.activate = pw3270_window_close_activated,
 		},
 
 		{
 			.name = "preferences",
-			.activate = pw3270_application_generic_activated,
+			.activate = pw3270_window_preferences_activated,
 		},
 
 	};

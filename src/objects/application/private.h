@@ -46,27 +46,12 @@
 	#include <lib3270.h>
 	#include <lib3270/log.h>
 
-	struct _pw3270ApplicationWindow {
-
-		GtkApplicationWindow parent;
-
-		GtkNotebook * notebook;
-		GtkToolbar	* toolbar;
-
-	};
-
-	struct _pw3270ApplicationWindowClass {
-
-		GtkApplicationWindowClass parent_class;
-
-	};
-
-	// Internal methods
-	G_GNUC_INTERNAL GtkWidget * pw3270_setup_image_button(GtkWidget *button, const gchar *image_name);
-
 	// Actions
-    G_GNUC_INTERNAL void pw3270_window_open_activated(GSimpleAction * action, GVariant *parameter, gpointer application);
-    G_GNUC_INTERNAL void pw3270_window_close_activated(GSimpleAction * action, GVariant *parameter, gpointer application);
-    G_GNUC_INTERNAL void pw3270_window_preferences_activated(GSimpleAction * action, GVariant *parameter, gpointer application);
+    G_GNUC_INTERNAL void pw3270_application_generic_activated(GSimpleAction * action, GVariant *parameter, gpointer application);
+    G_GNUC_INTERNAL void pw3270_application_quit_activated(GSimpleAction * action, GVariant *parameter, gpointer application);
+    G_GNUC_INTERNAL void pw3270_application_new_tab_activated(GSimpleAction * action, GVariant *parameter, gpointer application);
+    G_GNUC_INTERNAL void pw3270_application_new_window_activated(GSimpleAction * action, GVariant *parameter, gpointer application);
+    G_GNUC_INTERNAL void pw3270_application_about_activated(GSimpleAction * action, GVariant *parameter, gpointer application);
+    G_GNUC_INTERNAL void pw3270_application_preferences_activated(GSimpleAction * action, GVariant *parameter, gpointer application);
 
 #endif // PRIVATE_H_INCLUDED

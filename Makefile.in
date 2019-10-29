@@ -33,6 +33,8 @@ INSTALL_PACKAGES=@INSTALL_PACKAGES@
 SOURCES= \
 	$(wildcard src/objects/actions/*.c) \
 	$(wildcard src/objects/actions/lib3270/*.c) \
+	$(wildcard src/objects/application/*.c) \
+	$(wildcard src/objects/application/actions/*.c) \
 	$(wildcard src/objects/window/*.c) \
 	$(wildcard src/objects/window/actions/*.c) \
 	$(wildcard src/objects/terminal/*.c) \
