@@ -171,7 +171,6 @@
 
  void pw3270Action_init(pw3270Action *action) {
 
-	action->name		= NULL;
 	action->terminal	= NULL;
 	action->state		= NULL;
 	action->activate	= activate;
@@ -182,7 +181,7 @@
 
 	pw3270Action * action = PW3270_ACTION(object);
 
-	debug("Finalizing action %p (%s)",object,action->name);
+//	debug("Finalizing action %p (%s)",object,action->name);
 
 	if(action->state) {
 		g_variant_unref(action->state);
@@ -194,10 +193,12 @@
 		action->terminal = NULL;
 	}
 
+	/*
 	if(action->name) {
 		g_free(action->name);
 		action->name = NULL;
 	}
+	*/
 
 	if(action->parameter_type) {
 		g_variant_type_free(action->parameter_type);
@@ -250,7 +251,7 @@
 	switch (prop_id)
 	{
 	case PROP_NAME:
-		pw3270_action_set_name(action, g_value_get_string(value));
+//		pw3270_action_set_name(action, g_value_get_string(value));
 		break;
 
 	case PROP_PARAMETER_TYPE:
@@ -272,11 +273,12 @@
  }
 
  const gchar * pw3270_action_get_name(GAction *action) {
- 	return PW3270_ACTION(action)->name;
+ 	return PW3270_ACTION(action)->get_name(action);
  }
 
  void pw3270_action_set_name(GAction *object, const gchar *name) {
 
+/*
  	pw3270Action * action = PW3270_ACTION(object);
 
 // 	debug("%s %s -> %s", __FUNCTION__, action->name, name);
@@ -288,6 +290,7 @@
 		action->name = g_strdup(name);
 	else
 		action->name = NULL;
+*/
 
  }
 
@@ -356,12 +359,6 @@
  }
 
  void pw3270_action_notify_enabled(GAction *object) {
-
- 	debug("%s(%s) = %s",
-		__FUNCTION__,
-		g_action_get_name(G_ACTION(object)),
-		(g_action_get_enabled(G_ACTION(object)) ? "Enabled" : "Disabled")
-	);
 
 	// g_object_notify_by_pspec(G_OBJECT(object), PW3270_ACTION_GET_CLASS(object)->properties.enabled);
 	g_object_notify(G_OBJECT (object), "enabled");

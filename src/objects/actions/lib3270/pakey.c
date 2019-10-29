@@ -109,23 +109,20 @@
 
  }
 
- void Lib3270PaAction_init(Lib3270PaAction *action) {
-	PW3270_ACTION(action)->activate = activate;
+ static const gchar * get_name(GAction G_GNUC_UNUSED(*action)) {
+ 	return "pakey";
  }
 
+ void Lib3270PaAction_init(Lib3270PaAction *object) {
+ 	pw3270Action * action = PW3270_ACTION(object);
+
+	action->activate = activate;
+	action->get_name = get_name;
+ }
+
+
  GAction * pw3270_action_new_pakey(void) {
-
- 	Lib3270PaAction	* action = (Lib3270PaAction *) g_object_new(PW3270_TYPE_PAKEY_ACTION, NULL);
-
-	// Setup the default name.
-	pw3270Action * abstract	= PW3270_ACTION(action);
-
-	if(abstract->name)
-		g_free(abstract->name);
-
-	abstract->name = g_strdup("pakey");
-
- 	return G_ACTION(action);
+	return G_ACTION(g_object_new(PW3270_TYPE_PAKEY_ACTION, NULL));
  }
 
  void change_widget(GAction *object, GtkWidget *from, GtkWidget *to) {

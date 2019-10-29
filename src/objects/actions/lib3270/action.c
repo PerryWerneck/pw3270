@@ -114,9 +114,16 @@
 
  }
 
- void Lib3270Action_init(Lib3270Action *action) {
-// 	debug("%s",__FUNCTION__);
-	PW3270_ACTION(action)->activate = activate;
+ static const gchar * get_name(GAction *action) {
+ 	return PW3270_LIB3270_ACTION(action)->definition->name;
+ }
+
+ void Lib3270Action_init(Lib3270Action *object) {
+ 	pw3270Action * action = PW3270_ACTION(object);
+
+	action->activate = activate;
+	action->get_name = get_name;
+
  }
 
  GAction * pw3270_action_new_from_lib3270(const LIB3270_ACTION * definition) {
@@ -126,14 +133,6 @@
 	// Setup hooks.
 	action->definition	= definition;
 	action->listener	= NULL;
-
-	// Setup the default name.
-	pw3270Action * abstract	= PW3270_ACTION(action);
-
-	if(abstract->name)
-		g_free(abstract->name);
-
-	abstract->name = g_strdup(definition->name);
 
  	return G_ACTION(action);
  }

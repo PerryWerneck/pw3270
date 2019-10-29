@@ -105,12 +105,18 @@
 
  }
 
- void Lib3270ToggleAction_init(Lib3270ToggleAction *action) {
+ static const gchar * get_name(GAction *action) {
+ 	return PW3270_LIB3270_TOGGLE_ACTION(action)->definition->name;
+ }
 
- 	action->definition	= NULL;
- 	action->listener	= NULL;
+ void Lib3270ToggleAction_init(Lib3270ToggleAction *toggle) {
 
-	PW3270_ACTION(action)->activate	= activate;
+ 	toggle->definition	= NULL;
+ 	toggle->listener	= NULL;
+
+ 	pw3270Action * action = PW3270_ACTION(toggle);
+	action->activate = activate;
+	action->get_name = get_name;
 
  }
 
@@ -122,10 +128,12 @@
 	// Setup the default name.
 	pw3270Action * abstract	= PW3270_ACTION(action);
 
+	/*
 	if(abstract->name)
 		g_free(abstract->name);
 
 	abstract->name = g_strconcat("win.",definition->name,NULL);
+	*/
 
  	return G_ACTION(action);
 
