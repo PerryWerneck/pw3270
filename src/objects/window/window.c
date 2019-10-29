@@ -101,17 +101,17 @@
 	static GActionEntry actions[] = {
 
 		{
-			.name = "win.open",
+			.name = "open",
 			.activate = pw3270_application_generic_activated,
 		},
 
 		{
-			.name = "win.close",
+			.name = "close",
 			.activate = pw3270_application_generic_activated,
 		},
 
 		{
-			.name = "win.preferences",
+			.name = "preferences",
 			.activate = pw3270_application_generic_activated,
 		},
 
@@ -129,6 +129,7 @@
 	//
 	{
 		static const gchar *actions[] = {
+
 			"win.copy",
 			"win.paste",
 			"win.select_all",
@@ -136,22 +137,18 @@
 			"win.connect",
 			"win.disconnect",
 			"separator",
+			"win.preferences",
 			"win.print"
+
 		};
 
 		size_t ix;
 
 		for(ix = 0; ix < G_N_ELEMENTS(actions); ix++) {
-			pw3270_toolbar_insert_action_by_name(GTK_WIDGET(widget->toolbar),actions[ix],-1);
+			pw3270_toolbar_insert_action(GTK_WIDGET(widget->toolbar),actions[ix],-1);
 		}
 
 	}
-
-
-	debug("%s","************************************************");
-	debug("Action win.copy is %p",g_action_map_lookup_action(G_ACTION_MAP(widget),"win.copy"));
-	debug("%s","************************************************");
-
 
  }
 

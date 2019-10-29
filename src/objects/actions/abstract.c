@@ -356,7 +356,16 @@
  }
 
  void pw3270_action_notify_enabled(GAction *object) {
-	g_object_notify_by_pspec(G_OBJECT(object), PW3270_ACTION_GET_CLASS(object)->properties.enabled);
+
+ 	debug("%s(%s) = %s",
+		__FUNCTION__,
+		g_action_get_name(G_ACTION(object)),
+		(g_action_get_enabled(G_ACTION(object)) ? "Enabled" : "Disabled")
+	);
+
+	// g_object_notify_by_pspec(G_OBJECT(object), PW3270_ACTION_GET_CLASS(object)->properties.enabled);
+	g_object_notify(G_OBJECT (object), "enabled");
+
  }
 
  static void change_widget(GAction *action, GtkWidget G_GNUC_UNUSED(*from), GtkWidget *to) {
@@ -382,13 +391,15 @@
 
  gboolean pw3270_action_get_enabled(GAction *object) {
 
+	gboolean enabled = FALSE;
+
  	pw3270Action * action = PW3270_ACTION(object);
 
  	if(action && action->terminal) {
-		return PW3270_ACTION_GET_CLASS(object)->get_enabled(object,action->terminal);
+		enabled = PW3270_ACTION_GET_CLASS(object)->get_enabled(object,action->terminal);
  	}
 
-	return FALSE;
+	return enabled;
 
  }
 

@@ -44,4 +44,7 @@
 	#include <pw3270/toolbar.h>
 	#include <lib3270/log.h>
 
+	G_GNUC_INTERNAL GtkWidget * pw3270_tool_button_new(GAction *action);
+	G_GNUC_INTERNAL GtkWidget * pw3270_tool_button_new_from_action_name(const gchar * action_name);
+
 #endif // PRIVATE_H_INCLUDED

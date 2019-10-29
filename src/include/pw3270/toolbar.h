@@ -57,8 +57,7 @@
 	GtkWidget * pw3270_toolbar_new(void);
 
 	GtkWidget * pw3270_toolbar_insert_lib3270_action(GtkWidget *toolbar, const LIB3270_ACTION *action, gint pos);
-	GtkWidget * pw3270_toolbar_insert_action(GtkWidget *toolbar, GAction *action, gint pos);
-	GtkWidget * pw3270_toolbar_insert_action_by_name(GtkWidget *toolbar, const gchar *name, gint pos);
+	GtkWidget * pw3270_toolbar_insert_action(GtkWidget *toolbar, const gchar *name, gint pos);
 
 	void pw3270_toolbar_toolbar_set_style(GtkToolbar *toolbar, GtkToolbarStyle style);
 //	GtkToolbarStyle pw3270_toolbar_toolbar_get_style(GtkToolbar *toolbar);

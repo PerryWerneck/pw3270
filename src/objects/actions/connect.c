@@ -46,7 +46,7 @@
 	GAction * action = pw3270_action_new_from_lib3270(lib3270_action_get_by_name("reconnect"));
 
 	PW3270_ACTION(action)->activate = activate;
-	pw3270_action_set_name(G_ACTION(action),"win.connect");
+	pw3270_action_set_name(G_ACTION(action),"connect");
 
 	return action;
 

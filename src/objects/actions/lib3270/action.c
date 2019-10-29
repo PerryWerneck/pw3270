@@ -133,7 +133,7 @@
 	if(abstract->name)
 		g_free(abstract->name);
 
-	abstract->name = g_strconcat("win.",definition->name,NULL);
+	abstract->name = g_strdup(definition->name);
 
  	return G_ACTION(action);
  }

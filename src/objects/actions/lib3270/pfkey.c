@@ -122,7 +122,7 @@
 	if(abstract->name)
 		g_free(abstract->name);
 
-	abstract->name = g_strdup("win.pfkey");
+	abstract->name = g_strdup("pfkey");
 
  	return G_ACTION(action);
 

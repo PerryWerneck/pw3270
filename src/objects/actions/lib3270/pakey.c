@@ -123,7 +123,7 @@
 	if(abstract->name)
 		g_free(abstract->name);
 
-	abstract->name = g_strdup("win.pakey");
+	abstract->name = g_strdup("pakey");
 
  	return G_ACTION(action);
  }
