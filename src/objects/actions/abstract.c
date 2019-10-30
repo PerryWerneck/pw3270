@@ -401,9 +401,9 @@
 
  }
 
- gboolean get_enabled(GAction G_GNUC_UNUSED(*object), GtkWidget G_GNUC_UNUSED(*terminal)) {
-//	debug("%s(%s)",__FUNCTION__,pw3270_action_get_name(object));
- 	return TRUE;
+ gboolean get_enabled(GAction G_GNUC_UNUSED(*object), GtkWidget *terminal) {
+	debug("Action %s is %s",pw3270_action_get_name(object),terminal == NULL ? "disabled" : "enabled");
+ 	return terminal != NULL;
  }
 
  void activate(GAction *action, GVariant G_GNUC_UNUSED(*parameter), GtkWidget G_GNUC_UNUSED(*terminal)) {
@@ -438,4 +438,8 @@
 
  H3270 * pw3270_action_get_session(GAction *action) {
  	return v3270_get_session(PW3270_ACTION(action)->terminal);
+ }
+
+ GAction * pw3270_action_new() {
+	return G_ACTION(g_object_new(PW3270_TYPE_ACTION, NULL));
  }

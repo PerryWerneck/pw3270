@@ -27,50 +27,36 @@
  *
  */
 
-#ifndef PRIVATE_H_INCLUDED
+ #include "../private.h"
+ #include <pw3270/window.h>
+ #include <pw3270/actions.h>
+ #include <v3270/settings.h>
+ #include <v3270/dialogs.h>
+ #include <v3270/colorscheme.h>
 
-	#define PRIVATE_H_INCLUDED
+ static void activate(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkWidget *terminal);
 
-	#include <config.h>
+ GAction * pw3270_set_color_action_new(void) {
 
-	#ifndef GETTEXT_PACKAGE
-		#define GETTEXT_PACKAGE PACKAGE_NAME
-	#endif
+	pw3270Action * action = PW3270_ACTION(pw3270_action_new());
 
-	#include <libintl.h>
-	#include <glib/gi18n.h>
-	#include <gtk/gtk.h>
+	action->activate = activate;
+	action->name = "setcolors";
 
-	#include <pw3270/window.h>
-	#include <v3270.h>
-	#include <lib3270.h>
-	#include <lib3270/log.h>
+	return G_ACTION(action);
 
-	struct _pw3270ApplicationWindow {
+ }
 
-		GtkApplicationWindow parent;
+ void activate(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkWidget *terminal) {
 
-		GtkNotebook * notebook;
-		GtkToolbar	* toolbar;
+	g_return_if_fail(GTK_IS_V3270(terminal));
 
-	};
+	GtkWidget * dialog = v3270_settings_dialog_new(terminal, v3270_color_selection_new());
 
-	struct _pw3270ApplicationWindowClass {
+	v3270_dialog_setup(dialog,_("Color setup"),_("_Save"));
 
-		GtkApplicationWindowClass parent_class;
+	g_signal_connect(dialog,"close",G_CALLBACK(gtk_widget_destroy),NULL);
+	g_signal_connect(dialog,"response",G_CALLBACK(gtk_widget_destroy),NULL);
 
-	};
+ }
 
-	// Internal methods
-	G_GNUC_INTERNAL GtkWidget * pw3270_setup_image_button(GtkWidget *button, const gchar *image_name);
-
-	// Actions
-	GAction * pw3270_set_host_action_new(void);
-	GAction * pw3270_set_color_action_new(void);
-	GAction * pw3270_session_preferences_action_new(void);
-
-    G_GNUC_INTERNAL void pw3270_window_open_activated(GSimpleAction * action, GVariant *parameter, gpointer application);
-    G_GNUC_INTERNAL void pw3270_window_close_activated(GSimpleAction * action, GVariant *parameter, gpointer application);
-
-
-#endif // PRIVATE_H_INCLUDED

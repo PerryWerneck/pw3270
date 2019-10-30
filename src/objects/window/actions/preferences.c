@@ -28,10 +28,25 @@
  */
 
  #include "../private.h"
+ #include <pw3270/window.h>
+ #include <pw3270/actions.h>
+ #include <v3270/settings.h>
 
- void pw3270_window_preferences_activated(GSimpleAction G_GNUC_UNUSED(* action), GVariant G_GNUC_UNUSED(*parameter), gpointer application) {
+ static void activate(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkWidget *terminal);
 
-	debug("%s",__FUNCTION__);
+ GAction * pw3270_session_preferences_action_new(void) {
+
+	pw3270Action * action = PW3270_ACTION(pw3270_action_new());
+
+	action->activate = activate;
+	action->name = "preferences";
+
+	return G_ACTION(action);
+
+ }
+
+ void activate(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkWidget *terminal) {
+
 
  }
 

@@ -231,7 +231,7 @@
 
         <item>
           <attribute name="label" translatable="yes">Colors</attribute>
-          <attribute name="action">win.edit.colors</attribute>
+          <attribute name="action">win.set.colors</attribute>
         </item>
 
         <item>
@@ -244,42 +244,103 @@
           <attribute name="action">win.screen.sizes</attribute>
         </item>
 
+        <submenu>
+
+          <attribute name='label' translatable='yes'>Options</attribute>
+
+          <item>
+            <attribute name="label" translatable="yes">Connect on startup</attribute>
+            <attribute name="action">win.autoconnect</attribute>
+          </item>
+
+          <item>
+            <attribute name="label" translatable="yes">Blinking Cursor</attribute>
+            <attribute name="action">win.cursorblink</attribute>
+          </item>
+
+          <item>
+            <attribute name="label" translatable="yes">Monocase</attribute>
+            <attribute name="action">win.monocase</attribute>
+          </item>
+
+          <item>
+            <attribute name="label" translatable="yes">Track Cursor</attribute>
+            <attribute name="action">win.cursorpos</attribute>
+          </item>
+
+          <item>
+            <attribute name="label" translatable="yes">Full Screen</attribute>
+            <attribute name="action">win.fullscreen</attribute>
+          </item>
+
+          <item>
+            <attribute name="label" translatable="yes">Resize on alternate screen</attribute>
+            <attribute name="action">win.altscreen</attribute>
+          </item>
+
+          <item>
+            <attribute name="label" translatable="yes">Paste with left margin</attribute>
+            <attribute name="action">win.marginedpaste</attribute>
+          </item>
+
+          <item>
+            <attribute name="label" translatable="yes">Cross hair cursor</attribute>
+            <attribute name="action">win.crosshair</attribute>
+          </item>
+
+          <item>
+            <attribute name="label" translatable="yes">Blank Fill</attribute>
+            <attribute name="action">win.blankfill</attribute>
+          </item>
+
+          <item>
+            <attribute name="label" translatable="yes">Select by rectangles</attribute>
+            <attribute name="action">win.rectselect</attribute>
+          </item>
+
+          <item>
+            <attribute name="label" translatable="yes">Auto-Reconnect</attribute>
+            <attribute name="action">win.autoreconnect</attribute>
+          </item>
+
+          <item>
+            <attribute name="label" translatable="yes">Bold</attribute>
+            <attribute name="action">win.bold</attribute>
+          </item>
+
+          <item>
+            <attribute name="label" translatable="yes">Show Underline</attribute>
+            <attribute name="action">win.underline</attribute>
+          </item>
+
+          <item>
+            <attribute name="label" translatable="yes">Keep selected</attribute>
+            <attribute name="action">win.keepselected</attribute>
+          </item>
+
+          <item>
+            <attribute name="label" translatable="yes">Smart paste</attribute>
+            <attribute name="action">win.smartpaste</attribute>
+          </item>
+
+          <item>
+            <attribute name="label" translatable="yes">Alert sound</attribute>
+            <attribute name="action">win.beep</attribute>
+          </item>
+
+          <item>
+            <attribute name="label" translatable="yes">Use +/- for field navigation</attribute>
+            <attribute name="action">win.kpalternative</attribute>
+          </item>
+
+          <item>
+            <attribute name="label" translatable="yes">Network keep alive</attribute>
+            <attribute name="action">win.keepalive</attribute>
+          </item>
+
+        </submenu>
+
     </submenu>
-
-    <!--
-
-		<menu name='SettingsMenu' label='Settings'>
-
-			<menu name='OptionsMenu' label='_Options' >
-				<menuitem action='toggle' id='AutoConnect' label='Connect on startup' />
-				<menuitem action='toggle' id='CursorBlink' label='Blinking Cursor' />
-				<menuitem action='toggle' id='Monocase' label='Monocase' />
-				<menuitem action='toggle' id='CursorPos'  label='Track Cursor' />
-				<menuitem action='toggle' id='FullScreen' key='<alt>Home' label='Full Screen' />
-				<menuitem action='toggle' id='AltScreen' label='Resize on alternate screen' />
-				<menuitem action='toggle' id='MarginedPaste'  label='Paste with left margin' />
-				<menuitem action='toggle' id='CrossHair' key='<alt>x' label='Cross hair cursor' />
-				<menuitem action='toggle' id='BlankFill' label='Blank Fill' />
-				<menuitem action='toggle' id='RectSelect'  label='Select by rectangles' />
-				<menuitem action='toggle' id='AutoReconnect' label='Auto-Reconnect'  />
-				<menuitem action='toggle' id='Bold' label='Bold'  />
-				<menuitem action='toggle' id='Underline' label='Show Underline'  />
-				<menuitem action='toggle' id='KeepSelected' label='Keep selected' />
-				<menuitem action='toggle' id='SmartPaste' label='Smart paste' />
-				<menuitem action='toggle' id='Beep' label='Alert sound' />
-				<menuitem action='toggle' id='KPAlternative' label='Use +/- for field navigation' />
-				<menuitem action='toggle' id='keepalive' label='Network keep alive' />
-			</menu>
-
-			<menuitem name='InputMethod' label='Input method' />
-
-		</menu>
-
-		<menu name='HelpMenu' label='Help' >
-			<menuitem action='about' icon='about' sysmenu='about' />
-		</menu>
-
-    -->
 
     <submenu>
 

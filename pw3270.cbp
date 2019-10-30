@@ -111,6 +111,9 @@
 		<Unit filename="src/objects/window/actions/preferences.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/objects/window/actions/setcolors.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/objects/window/actions/sethost.c">
 			<Option compilerVar="CC" />
 		</Unit>
