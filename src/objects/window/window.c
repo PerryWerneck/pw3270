@@ -102,7 +102,8 @@
 		GAction * actions[] = {
 			pw3270_set_host_action_new(),
 			pw3270_set_color_action_new(),
-			pw3270_session_preferences_action_new()
+			pw3270_session_preferences_action_new(),
+			pw3270_file_transfer_action_new()
 		};
 
 		for(ix = 0; ix < G_N_ELEMENTS(actions); ix++) {

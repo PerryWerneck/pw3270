@@ -63,14 +63,6 @@
 		.tooltip = N_("Quit application")
 	},
 
-	{
-		.name = "file.transfer",
-		.icon_name = "drive-harddisk",
-		.label = N_("Send/Receive"),
-		.tooltip = N_("Send/Receive files")
-	}
-
-
  };
 
  static const struct Button * get_button_info(const gchar *name) {

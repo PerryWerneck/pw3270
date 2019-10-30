@@ -94,7 +94,7 @@
 
         <item>
           <attribute name="label" translatable="yes">Send/Receive files</attribute>
-          <attribute name="action">win.file_transfer</attribute>
+          <attribute name="action">win.file.transfer</attribute>
         </item>
 
         <item>

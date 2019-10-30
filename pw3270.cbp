@@ -108,6 +108,9 @@
 		<Unit filename="src/objects/window/actions/close.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/objects/window/actions/filetransfer.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/objects/window/actions/open.c">
 			<Option compilerVar="CC" />
 		</Unit>

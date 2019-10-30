@@ -68,6 +68,7 @@
 	GAction * pw3270_set_host_action_new(void);
 	GAction * pw3270_set_color_action_new(void);
 	GAction * pw3270_session_preferences_action_new(void);
+	GAction * pw3270_file_transfer_action_new(void);
 
     G_GNUC_INTERNAL void pw3270_window_open_activated(GSimpleAction * action, GVariant *parameter, gpointer application);
     G_GNUC_INTERNAL void pw3270_window_close_activated(GSimpleAction * action, GVariant *parameter, gpointer application);
