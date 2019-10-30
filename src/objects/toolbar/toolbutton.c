@@ -54,7 +54,22 @@
 		.name = "preferences",
 		.icon_name = "preferences-other",
 		.label = N_("Preferences"),
+	},
+
+	{
+		.name = "quit",
+		.icon_name = "gtk-quit",
+		.label = N_("Quit"),
+		.tooltip = N_("Quit application")
+	},
+
+	{
+		.name = "file.transfer",
+		.icon_name = "drive-harddisk",
+		.label = N_("Send/Receive"),
+		.tooltip = N_("Send/Receive files")
 	}
+
 
  };
 
@@ -133,7 +148,7 @@
 
 		const gchar * icon_name = pw3270_action_get_icon_name(action);
 		if(!icon_name) {
-			g_message("Action doesn't have an icon");
+			g_message("Action \"%s\" doesn't have an icon",g_action_get_name(action));
 			return NULL;
 		}
 

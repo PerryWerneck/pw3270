@@ -162,7 +162,7 @@
         </item>
 
         <item>
-          <attribute name="label" translatable="yes">Remove selection</attribute>
+          <attribute name="label" translatable="yes">Unselect</attribute>
           <attribute name="action">win.unselect</attribute>
         </item>
 

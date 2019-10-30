@@ -105,10 +105,6 @@
 			pw3270_session_preferences_action_new()
 		};
 
-		debug("****************************** %s",__FUNCTION__);
-		debug("color is %s",g_action_get_enabled(actions[1]) ? "enabled" : "disabled");
-		debug("****************************** %s",__FUNCTION__);
-
 		for(ix = 0; ix < G_N_ELEMENTS(actions); ix++) {
 			debug("Inserting %s",g_action_get_name(actions[ix]));
 			g_action_map_add_action(G_ACTION_MAP(widget),actions[ix]);
@@ -155,7 +151,9 @@
 			"separator",
 			"win.set.colors",
 			"win.preferences",
-			"win.print"
+			"win.file.transfer",
+			"win.print",
+			"app.quit"
 
 		};
 

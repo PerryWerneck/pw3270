@@ -388,7 +388,7 @@
 
  	if(action && action->terminal) {
 		enabled = PW3270_ACTION_GET_CLASS(object)->get_enabled(object,action->terminal);
-		debug("Action %s is %s",g_action_get_name(object),enabled ? "enabled" : "disabled");
+//		debug("Action %s is %s",g_action_get_name(object),enabled ? "enabled" : "disabled");
  	}
 
 	return enabled;
@@ -420,8 +420,6 @@
  }
 
  const gchar * pw3270_action_get_icon_name(GAction *action) {
- 	debug("***********%s(%p)=%p",__FUNCTION__,action,PW3270_ACTION_GET_CLASS(action)->get_icon_name);
- 	debug("*************** %s",g_action_get_name(action));
 	return PW3270_ACTION_GET_CLASS(action)->get_icon_name(action);
  }
 

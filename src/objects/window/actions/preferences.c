@@ -36,20 +36,21 @@
 
  GAction * pw3270_session_preferences_action_new(void) {
 
-	pw3270Action * action = PW3270_ACTION(pw3270_action_new());
+	pw3270SimpleAction * action = pw3270_simple_action_new();
 
-	action->activate = activate;
-	action->name = "preferences";
-
-	debug("action=%p",__FUNCTION__);
-	debug("\n\n%s\n\n",pw3270_action_get_icon_name(G_ACTION(action)));
+	action->parent.activate = activate;
+	action->parent.name = "preferences";
+	action->icon_name = "preferences-other";
+	action->label = N_("Session properties");
 
 	return G_ACTION(action);
+
 
  }
 
  void activate(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkWidget *terminal) {
 
+	debug("%s","Activating session properties dialog");
 
  }
 
