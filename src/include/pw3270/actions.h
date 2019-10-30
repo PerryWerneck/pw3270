@@ -132,6 +132,12 @@
 		const gchar	* label;
 		const gchar	* tooltip;
 
+		// Lib3270 Action group
+		struct {
+			LIB3270_ACTION_GROUP id;
+			const void * listener;
+		} group;
+
 		/// @brief Activation method.
 		void (*activate)(GAction *action, GVariant *parameter, GtkWidget *terminal);
 

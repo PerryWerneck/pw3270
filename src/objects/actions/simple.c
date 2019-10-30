@@ -33,20 +33,25 @@
   */
 
  #include "private.h"
+ #include <v3270.h>
 
  static void pw3270SimpleAction_class_init(pw3270SimpleActionClass *klass);
  static void pw3270SimpleAction_init(pw3270SimpleAction *action);
+ static void change_widget(GAction *object, GtkWidget *from, GtkWidget *to);
 
  G_DEFINE_TYPE(pw3270SimpleAction, pw3270SimpleAction, PW3270_TYPE_ACTION);
 
- static void activate(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkWidget *terminal) {
-
+ static void activate(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkWidget G_GNUC_UNUSED(*terminal)) {
 	debug("%s",__FUNCTION__);
-
  }
 
  static gboolean get_enabled(GAction *action, GtkWidget *terminal) {
- 	return TRUE;
+
+ 	if(terminal) {
+		return lib3270_action_group_get_activatable(v3270_get_session(terminal),PW3270_SIMPLE_ACTION(action)->group.id);
+ 	}
+
+ 	return FALSE;
  }
 
  static const gchar * get_icon_name(GAction *action) {
@@ -61,14 +66,27 @@
 	return PW3270_SIMPLE_ACTION(action)->tooltip;
  }
 
+ static void dispose(GObject *object) {
+
+	pw3270SimpleAction *action = PW3270_SIMPLE_ACTION(object);
+
+	if(action->group.listener) {
+		lib3270_unregister_action_group_listener(pw3270_action_get_session(G_ACTION(object)),action->group.id,action->group.listener);
+		action->group.listener = NULL;
+	}
+
+	G_OBJECT_CLASS(pw3270SimpleAction_parent_class)->dispose(object);
+ }
+
  static void pw3270SimpleAction_class_init(pw3270SimpleActionClass *klass) {
 
  	klass->parent_class.get_icon_name	= get_icon_name;
  	klass->parent_class.get_label 		= get_label;
  	klass->parent_class.get_tooltip		= get_tooltip;
  	klass->parent_class.get_enabled		= get_enabled;
+	klass->parent_class.change_widget	= change_widget;
 
- 	debug("%s:%p",__FUNCTION__,klass->parent_class.get_icon_name);
+	G_OBJECT_CLASS(klass)->dispose = dispose;
 
  }
 
@@ -77,6 +95,9 @@
 	action->icon_name = NULL;
 	action->label = N_( "No label" );
 	action->tooltip = NULL;
+
+	action->group.id = LIB3270_ACTION_GROUP_NONE;
+	action->group.listener = NULL;
 
  }
 
@@ -105,5 +126,41 @@
 
  pw3270SimpleAction * pw3270_simple_action_new() {
  	return (pw3270SimpleAction *) g_object_new(PW3270_TYPE_SIMPLE_ACTION, NULL);
+ }
+
+ static gboolean bg_notify_enabled(GAction *action) {
+ 	pw3270_action_notify_enabled(action);
+	return FALSE;
+ }
+
+ static void event_listener(H3270 G_GNUC_UNUSED(*hSession), void *object) {
+	g_idle_add((GSourceFunc) bg_notify_enabled, G_ACTION(object));
+ }
+
+ void change_widget(GAction *object, GtkWidget *from, GtkWidget *to) {
+
+	// Remove old listener
+	pw3270SimpleAction * action = PW3270_SIMPLE_ACTION(object);
+
+	if(action->group.listener) {
+		lib3270_unregister_action_group_listener(pw3270_action_get_session(object),action->group.id,action->group.listener);
+		action->group.listener = NULL;
+	}
+
+	// Get the current "enabled" state
+	gboolean enabled = g_action_get_enabled(object);
+
+	// Change widget
+	PW3270_ACTION_CLASS(pw3270SimpleAction_parent_class)->change_widget(object,from,to);
+
+	// Setup new listener
+	if(action->group.id != LIB3270_ACTION_GROUP_NONE && to) {
+		action->group.listener = lib3270_register_action_group_listener(pw3270_action_get_session(object),action->group.id,event_listener,object);
+	}
+
+	// Does the "enabled" state has changed? If yes notify customers.
+	if(g_action_get_enabled(object) != enabled)
+		pw3270_action_notify_enabled(object);
+
  }
 
