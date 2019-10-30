@@ -42,6 +42,9 @@
 
 	G_BEGIN_DECLS
 
+	//
+	// Abstract action
+	//
 	#define PW3270_TYPE_ACTION				(pw3270Action_get_type())
 	#define PW3270_ACTION(inst)				(G_TYPE_CHECK_INSTANCE_CAST ((inst), PW3270_TYPE_ACTION, pw3270Action))
 	#define PW3270_ACTION_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), PW3270_TYPE_ACTION, pw3270ActionClass))
@@ -109,6 +112,47 @@
 
 	/// @brief Add lib3270 actions to an application window.
 	void				  pw3270_window_add_actions(GtkWidget * appwindow);
+
+	//
+	// "Simple" action
+	//
+	#define PW3270_TYPE_SIMPLE_ACTION				(pw3270SimpleAction_get_type())
+	#define PW3270_SIMPLE_ACTION(inst)				(G_TYPE_CHECK_INSTANCE_CAST ((inst), PW3270_TYPE_SIMPLE_ACTION, pw3270SimpleAction))
+	#define PW3270_SIMPLE_ACTION_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), PW3270_TYPE_SIMPLE_ACTION, pw3270SimpleActionClass))
+	#define PW3270_IS_SIMPLE_ACTION(inst)			(G_TYPE_CHECK_INSTANCE_TYPE ((inst), PW3270_TYPE_SIMPLE_ACTION))
+	#define PW3270_IS_SIMPLE_ACTION_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), PW3270_TYPE_SIMPLE_ACTION))
+	#define PW3270_SIMPLE_ACTION_GET_CLASS(obj)		(G_TYPE_INSTANCE_GET_CLASS ((obj), PW3270_TYPE_SIMPLE_ACTION, pw3270SimpleActionClass))
+
+	typedef struct _pw3270SimpleAction {
+
+		pw3270Action parent;
+
+		// Fixed data
+		const gchar * icon_name;
+		const gchar	* label;
+		const gchar	* tooltip;
+
+		/// @brief Activation method.
+		void (*activate)(GAction *action, GVariant *parameter, GtkWidget *terminal);
+
+	} pw3270SimpleAction;
+
+	typedef struct _pw3270SimpleActionClass {
+
+		pw3270ActionClass parent_class;
+
+	} pw3270SimpleActionClass;
+
+	GType pw3270SimpleAction_get_type(void) G_GNUC_CONST;
+
+	/// @brief Create an empty simple action.
+	pw3270SimpleAction * pw3270_simple_action_new();
+
+	/// @brief New simple action from LIB3270's control data.
+	pw3270SimpleAction * pw3270_simple_action_new_from_lib3270(const LIB3270_ACTION * definition, const gchar *name);
+
+	/// @brief New simple action from LIB3270's action name.
+	pw3270SimpleAction * pw3270_simple_action_new_from_name(const gchar *source_name, const gchar *name);
 
 	G_END_DECLS
 

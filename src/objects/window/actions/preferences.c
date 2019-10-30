@@ -41,6 +41,9 @@
 	action->activate = activate;
 	action->name = "preferences";
 
+	debug("action=%p",__FUNCTION__);
+	debug("\n\n%s\n\n",pw3270_action_get_icon_name(G_ACTION(action)));
+
 	return G_ACTION(action);
 
  }

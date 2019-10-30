@@ -354,8 +354,13 @@
 
  }
 
- static void change_widget(GAction *action, GtkWidget G_GNUC_UNUSED(*from), GtkWidget *to) {
-	PW3270_ACTION(action)->terminal = to;
+ static void change_widget(GAction *action, GtkWidget *from, GtkWidget *to) {
+
+ 	if(from != to) {
+		PW3270_ACTION(action)->terminal = to;
+		pw3270_action_notify_enabled(action);
+ 	}
+
  }
 
  void pw3270_action_set_terminal_widget(GAction *object, GtkWidget *widget) {
@@ -383,6 +388,7 @@
 
  	if(action && action->terminal) {
 		enabled = PW3270_ACTION_GET_CLASS(object)->get_enabled(object,action->terminal);
+		debug("Action %s is %s",g_action_get_name(object),enabled ? "enabled" : "disabled");
  	}
 
 	return enabled;
@@ -402,7 +408,6 @@
  }
 
  gboolean get_enabled(GAction G_GNUC_UNUSED(*object), GtkWidget *terminal) {
-	debug("Action %s is %s",pw3270_action_get_name(object),terminal == NULL ? "disabled" : "enabled");
  	return terminal != NULL;
  }
 
@@ -415,6 +420,8 @@
  }
 
  const gchar * pw3270_action_get_icon_name(GAction *action) {
+ 	debug("***********%s(%p)=%p",__FUNCTION__,action,PW3270_ACTION_GET_CLASS(action)->get_icon_name);
+ 	debug("*************** %s",g_action_get_name(action));
 	return PW3270_ACTION_GET_CLASS(action)->get_icon_name(action);
  }
 

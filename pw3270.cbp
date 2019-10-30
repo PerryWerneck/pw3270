@@ -76,6 +76,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/objects/actions/private.h" />
+		<Unit filename="src/objects/actions/simple.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/objects/actions/window.c">
 			<Option compilerVar="CC" />
 		</Unit>

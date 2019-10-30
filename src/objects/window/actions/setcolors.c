@@ -38,10 +38,12 @@
 
  GAction * pw3270_set_color_action_new(void) {
 
-	pw3270Action * action = PW3270_ACTION(pw3270_action_new());
+	pw3270SimpleAction * action = pw3270_simple_action_new();
 
-	action->activate = activate;
-	action->name = "setcolors";
+	action->parent.activate = activate;
+	action->parent.name = "set.colors";
+	action->icon_name = "gtk-select-color";
+	action->label = N_("Colors");
 
 	return G_ACTION(action);
 
@@ -57,6 +59,8 @@
 
 	g_signal_connect(dialog,"close",G_CALLBACK(gtk_widget_destroy),NULL);
 	g_signal_connect(dialog,"response",G_CALLBACK(gtk_widget_destroy),NULL);
+
+	gtk_widget_show_all(dialog);
 
  }
 

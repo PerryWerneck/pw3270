@@ -153,6 +153,7 @@
 			"win.connect",
 			"win.disconnect",
 			"separator",
+			"win.set.colors",
 			"win.preferences",
 			"win.print"
 
