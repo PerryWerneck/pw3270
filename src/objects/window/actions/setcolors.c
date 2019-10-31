@@ -34,13 +34,12 @@
  #include <v3270/dialogs.h>
  #include <v3270/colorscheme.h>
 
- static void activate(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkWidget *terminal);
+ static GtkWidget * factory(GtkWidget *terminal);
 
  GAction * pw3270_set_color_action_new(void) {
 
-	pw3270SimpleAction * action = pw3270_simple_action_new();
+	pw3270SimpleAction * action = pw3270_dialog_action_new(factory);
 
-	action->parent.activate = activate;
 	action->parent.name = "set.colors";
 	action->icon_name = "gtk-select-color";
 	action->label = N_("Colors");
@@ -49,18 +48,13 @@
 
  }
 
- void activate(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkWidget *terminal) {
-
-	g_return_if_fail(GTK_IS_V3270(terminal));
+ GtkWidget * factory(GtkWidget *terminal) {
 
 	GtkWidget * dialog = v3270_settings_dialog_new(terminal, v3270_color_selection_new());
-
 	v3270_dialog_setup(dialog,_("Color setup"),_("_Save"));
-
-	g_signal_connect(dialog,"close",G_CALLBACK(gtk_widget_destroy),NULL);
 	g_signal_connect(dialog,"response",G_CALLBACK(gtk_widget_destroy),NULL);
 
-	gtk_widget_show_all(dialog);
+	return dialog;
 
  }
 
