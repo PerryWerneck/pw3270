@@ -35,7 +35,7 @@
  #include <pw3270/application.h>
 
 
- void pw3270_application_quit_activated(GSimpleAction * action, GVariant *parameter, gpointer application) {
+ void pw3270_application_quit_activated(GSimpleAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), gpointer G_GNUC_UNUSED(application)) {
 
 	g_print("Exiting application\n");
 

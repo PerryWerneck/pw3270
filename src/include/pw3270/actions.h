@@ -56,13 +56,20 @@
 
 		GObject parent;
 
-		const gchar		* name;				/// @brief Action name (const string).
-		GVariantType	* parameter_type;	/// @brief Parameter type.
-		GVariant     	* state;			/// @brief Action state.
-		GtkWidget		* terminal;			/// @brief The active terminal widget.
+		const gchar			* name;			///> @brief Action name (const string).
+		GtkWidget			* terminal;		///> @brief The active terminal widget.
+
+		struct {
+			const GVariantType	* state;		///> @brief State type type.
+			const GVariantType	* parameter;	///> @brief Parameter type.
+		} types;
 
 		/// @brief Activation method.
 		void (*activate)(GAction *action, GVariant *parameter, GtkWidget *terminal);
+
+		/// @brief Get State method.
+		GVariant * (*get_state_property)(GAction *action, GtkWidget *terminal);
+
 
 	} pw3270Action;
 
@@ -77,7 +84,7 @@
 
 		void (*change_widget)(GAction *action, GtkWidget *from, GtkWidget *to);
 		gboolean (*get_enabled)(GAction *action, GtkWidget *terminal);
-		const GVariantType * (*get_parameter_type)(GAction *action);
+
 		const gchar * (*get_icon_name)(GAction *action);
 		const gchar	* (*get_label)(GAction *action);
 		const gchar	* (*get_tooltip)(GAction *action);

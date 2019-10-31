@@ -46,9 +46,12 @@
 
  static void finalize(GObject *object);
 
- static	const GVariantType	* pw3270_action_get_state_type(GAction *action);
- static	GVariant			* pw3270_action_get_state_property(GAction *action);
- static	const GVariantType	* pw3270_action_get_parameter_type(GAction *action);
+ static	const GVariantType	* get_state_type(GAction *action);
+ static	GVariant			* get_state_property(GAction *action);
+
+ static	GVariant 			* internal_get_state_property(GAction *action, GtkWidget *terminal);
+
+ static	const GVariantType	* get_parameter_type(GAction *action);
  static GVariant			* pw3270_action_get_state_hint(GAction *action);
  static void				  pw3270_action_change_state(GAction *action, GVariant *value);
 
@@ -72,18 +75,13 @@
 
  void pw3270_action_iface_init(GActionInterface *iface) {
 	iface->get_name = pw3270_action_get_name;
-	iface->get_parameter_type = pw3270_action_get_parameter_type;
-	iface->get_state_type = pw3270_action_get_state_type;
+	iface->get_parameter_type = get_parameter_type;
+	iface->get_state_type = get_state_type;
 	iface->get_state_hint = pw3270_action_get_state_hint;
 	iface->get_enabled = pw3270_action_get_enabled;
-	iface->get_state = pw3270_action_get_state_property;
+	iface->get_state = get_state_property;
 	iface->change_state = pw3270_action_change_state;
 	iface->activate = pw3270_action_activate;
- }
-
- static const GVariantType * get_parameter_type(GAction G_GNUC_UNUSED(*action))
- {
-	return NULL;
  }
 
  void pw3270Action_class_init(pw3270ActionClass *klass) {
@@ -94,7 +92,6 @@
 
 	klass->change_widget		= change_widget;
 	klass->get_enabled			= get_enabled;
-	klass->get_parameter_type	= get_parameter_type;
 	klass->get_icon_name		= get_null;
 	klass->get_label			= get_null;
 	klass->get_tooltip			= get_null;
@@ -171,9 +168,11 @@
 
  void pw3270Action_init(pw3270Action *action) {
 
-	action->terminal	= NULL;
-	action->state		= NULL;
-	action->activate	= activate;
+	action->terminal			= NULL;
+	action->types.parameter		= NULL;
+
+	action->activate			= activate;
+	action->get_state_property	= internal_get_state_property;
 
  }
 
@@ -181,28 +180,9 @@
 
 	pw3270Action * action = PW3270_ACTION(object);
 
-//	debug("Finalizing action %p (%s)",object,action->name);
-
-	if(action->state) {
-		g_variant_unref(action->state);
-		action->state = NULL;
-	}
-
 	if(action->terminal) {
 		pw3270_action_set_terminal_widget(G_ACTION(object),NULL);
 		action->terminal = NULL;
-	}
-
-	/*
-	if(action->name) {
-		g_free(action->name);
-		action->name = NULL;
-	}
-	*/
-
-	if(action->parameter_type) {
-		g_variant_type_free(action->parameter_type);
-		action->parameter_type = NULL;
 	}
 
 	G_OBJECT_CLASS(pw3270Action_parent_class)->finalize(object);
@@ -221,7 +201,7 @@
 		break;
 
 	case PROP_PARAMETER_TYPE:
-		g_value_set_boxed(value, pw3270_action_get_parameter_type(action));
+		g_value_set_boxed(value, get_parameter_type(action));
 		break;
 
 	case PROP_ENABLED:
@@ -229,11 +209,11 @@
 		break;
 
 	case PROP_STATE_TYPE:
-		g_value_set_boxed(value, pw3270_action_get_state_type(action));
+		g_value_set_boxed(value, get_state_type(action));
 		break;
 
 	case PROP_STATE:
-		g_value_take_variant(value, pw3270_action_get_state_property(action));
+		g_value_take_variant(value, get_state_property(action));
 		break;
 
 	default:
@@ -283,24 +263,38 @@
 
  }
 
- GVariant * pw3270_action_get_state_property(GAction *object) {
- 	pw3270Action *action = PW3270_ACTION(object);
-	return action->state ? g_variant_ref(action->state) : NULL;
- }
+ GVariant * internal_get_state_property(GAction *object, GtkWidget G_GNUC_UNUSED(*terminal)) {
 
- const GVariantType * pw3270_action_get_parameter_type(GAction *action) {
- 	return PW3270_ACTION_GET_CLASS(action)->get_parameter_type(action);
- }
+	pw3270Action * action = PW3270_ACTION(object);
 
- const GVariantType * pw3270_action_get_state_type(GAction *object) {
-
- 	pw3270Action * action = PW3270_ACTION(object);
-
-	if(action->state)
-		return g_variant_get_type(action->state);
+	if(action->types.state == G_VARIANT_TYPE_BOOLEAN)
+		return g_variant_new_boolean(TRUE);
 
 	return NULL;
+ }
 
+ GVariant * get_state_property(GAction *object) {
+
+	pw3270Action * action = PW3270_ACTION(object);
+	GVariant * state;
+
+	if(action->terminal)
+		state = action->get_state_property(object,action->terminal);
+	else
+		state = internal_get_state_property(object,NULL);
+
+ 	if(state)
+		g_variant_ref(state);
+
+	return state;
+ }
+
+ const GVariantType * get_parameter_type(GAction *action) {
+ 	return PW3270_ACTION(action)->types.parameter;
+ }
+
+ const GVariantType * get_state_type(GAction *object) {
+	return PW3270_ACTION(object)->types.state;
  }
 
  GVariant * pw3270_action_get_state_hint(GAction G_GNUC_UNUSED(*action)) {
@@ -320,6 +314,7 @@
 
  void pw3270_action_set_state(GAction *object, GVariant *value) {
 
+	/*
 	if(value) {
 
 		pw3270Action * action = PW3270_ACTION(object);
@@ -344,6 +339,7 @@
 		g_variant_unref(value);
 
 	}
+	*/
 
  }
 

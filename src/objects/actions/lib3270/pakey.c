@@ -94,18 +94,10 @@
 
  }
 
- static const GVariantType * get_parameter_type(GAction G_GNUC_UNUSED(*action))
- {
-	return G_VARIANT_TYPE_UINT16;
- }
-
  void Lib3270PaAction_class_init(Lib3270PaActionClass *klass) {
 
-	pw3270ActionClass * action = PW3270_ACTION_CLASS(klass);
-
-	action->get_enabled = get_enabled;
-	action->change_widget = change_widget;
-	action->get_parameter_type = get_parameter_type;
+	klass->parent_class.get_enabled = get_enabled;
+	klass->parent_class.change_widget = change_widget;
 
  }
 

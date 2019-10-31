@@ -148,6 +148,7 @@
         </item>
 
       </section>
+      
 
       <section>
 
@@ -201,6 +202,12 @@
         </item>
 
       </section>
+
+    </submenu>
+
+    <submenu id="view-menu-placeholder">
+
+      <attribute name='label' translatable='yes'>_View</attribute>
 
     </submenu>
 

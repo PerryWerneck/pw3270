@@ -104,8 +104,18 @@
 
  void Lib3270ToggleAction_class_init(Lib3270ToggleActionClass *klass) {
 
-	pw3270ActionClass * action = PW3270_ACTION_CLASS(klass);
-	action->change_widget = change_widget;
+	klass->parent_class.change_widget = change_widget;
+
+ }
+
+ static GVariant * get_state_property(GAction *action, GtkWidget *terminal) {
+
+ 	return g_variant_new_boolean(
+				lib3270_get_toggle(
+					v3270_get_session(terminal),
+					PW3270_LIB3270_TOGGLE_ACTION(action)->definition->id
+				)
+			);
 
  }
 
@@ -114,8 +124,12 @@
  	action->definition	= NULL;
  	action->listener	= NULL;
 
-	action->parent.activate = activate;
-	action->parent.name = "toggle";
+	action->parent.name					= "toggle";
+
+	action->parent.get_state_property	=  get_state_property;
+	action->parent.activate				= activate;
+
+	action->parent.types.state			= G_VARIANT_TYPE_BOOLEAN;
 
  }
 

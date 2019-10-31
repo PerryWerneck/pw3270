@@ -88,6 +88,7 @@ BINRLS=$(BINDIR)/Release
 DEPENDS= \
 	Makefile \
 	src/include/*.h \
+	src/include/pw3270/*.h \
 	src/objects/toolbar/private.h \
 	src/objects/window/private.h \
 	src/objects/actions/private.h \
