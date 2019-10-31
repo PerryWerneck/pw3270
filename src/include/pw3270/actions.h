@@ -160,6 +160,22 @@
 	/// @brief New simple action from LIB3270's action name.
 	pw3270SimpleAction * pw3270_simple_action_new_from_name(const gchar *source_name, const gchar *name);
 
+
+	//
+	// Dialog action
+	//
+	#define PW3270_TYPE_DIALOG_ACTION				(pw3270DialogAction_get_type())
+	#define PW3270_DIALOG_ACTION(inst)				(G_TYPE_CHECK_INSTANCE_CAST ((inst), PW3270_TYPE_DIALOG_ACTION, pw3270DialogAction))
+	#define PW3270_DIALOG_ACTION_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), PW3270_TYPE_DIALOG_ACTION, pw3270DialogActionClass))
+	#define PW3270_IS_DIALOG_ACTION(inst)			(G_TYPE_CHECK_INSTANCE_TYPE ((inst), PW3270_TYPE_DIALOG_ACTION))
+	#define PW3270_IS_DIALOG_ACTION_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), PW3270_TYPE_DIALOG_ACTION))
+	#define PW3270_DIALOG_ACTION_GET_CLASS(obj)		(G_TYPE_INSTANCE_GET_CLASS ((obj), PW3270_TYPE_DIALOG_ACTION, pw3270DialogActionClass))
+
+	typedef struct _pw3270DialogAction  pw3270DialogAction;
+	typedef struct _pw3270DialogActionClass pw3270DialogActionClass;
+
+	pw3270SimpleAction * pw3270_dialog_action_new(GtkWidget * (*factory)(GtkWidget *));
+
 	G_END_DECLS
 
 #endif // PW3270_ACTIONS_H_INCLUDED
