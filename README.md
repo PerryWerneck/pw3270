@@ -45,6 +45,6 @@ sudo zypper ref
 2. Run the build script
 
 ```
-wget https://github.com/PerryWerneck/pw3270/blob/master/win/pack.sh pack.sh
+wget https://github.com/PerryWerneck/pw3270/blob/master/win/pack.sh
 ./pack.sh --pre-reqs
 ```
