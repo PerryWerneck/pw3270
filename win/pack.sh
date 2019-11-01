@@ -30,7 +30,7 @@ PRODUCT_NAME="pw3270"
 LIBRARY_NAME="lib3270"
 CORE_LIBRARIES="lib3270 libv3270 libipc3270"
 PACKAGE_PLUGINS=""
-PACKAGE_EXTRAS="libhllapi mono-tn3270"
+PACKAGE_EXTRAS="libhllapi"
 TARGET_ARCHS="x86_64 x86_32"
 GIT_URL="https://github.com/PerryWerneck"
 
@@ -77,28 +77,16 @@ prepare()
 
 	mkdir -p ${WORKDIR}/sources
 
-	NAME_CHECK=$(echo "${1}" | grep -c "-")
-
-	if [ "${NAME_CHECK}" == "0" ]; then
-		TEMPVAR=${1}_branch
-		BRANCH=${!TEMPVAR}
-	else
-		BRANCH=""
-	fi
+	TEMPVAR=${1}_branch
+	BRANCH=${!TEMPVAR}
 
 	if [ -z ${BRANCH} ]; then
-		git clone ${GIT_URL}/${1}.git --quiet ${WORKDIR}/sources/${1}
+		git clone --quiet ${GIT_URL}/${1}.git ${WORKDIR}/sources/${1}
 	else
-		echo "Preparing ${1} ${BRANCH}"
-		echo -e "\e]2;Preparing ${1} ${BRANCH}\a"
-		git clone --branch "${BRANCH}" --quiet ${GIT_URL}/${1}.git ${WORKDIR}/sources/${1}
+		git clone --quiet --branch "${BRANCH}" ${GIT_URL}/${1}.git ${WORKDIR}/sources/${1}
 	fi
 
 	if [ "$?" != "0" ]; then
-		failed "Can't get sources for ${1}"
-	fi
-
-	if [ ! -e "${WORKDIR}/sources/${1}" ]; then
 		failed "Can't get sources for ${1}"
 	fi
 
@@ -209,9 +197,6 @@ buildLibrary()
 		export cache=${WORKDIR}/cache/${ARCH}/${1}.cache
 
 		cd ${WORKDIR}/sources/${1}
-		if [ "$?" != "0" ]; then
-			failed "Can't change to ${WORKDIR}/sources/${1}"
-		fi
 
 		if [ -x ${PROJECTDIR}/win/configure.${1} ]; then
 
@@ -313,9 +298,6 @@ buildExtraPackage()
 		export cache=${WORKDIR}/cache/${ARCH}/${1}.cache
 
 		cd ${WORKDIR}/sources/${1}
-		if [ "$?" != "0" ]; then
-			failed "Can't change to ${WORKDIR}/sources/${1}"
-		fi
 
 		if [ -x ${PROJECTDIR}/win/configure.${1} ]; then
 
@@ -571,10 +553,11 @@ makeInstaller()
 		fi
 
 		if [ -d ${PROJECTDIR}/ui ]; then
-			mkdir -p ${WORKDIR}/build/${ARCH}/ui
+			mkdir -p ${WORKDIR}/build/${ARCH}/${PRODUCT_NAME}/ui
 			cp -rv ${PROJECTDIR}/ui/* ${WORKDIR}/build/${ARCH}/${PRODUCT_NAME}/ui
+
 			if [ "$?" != "0" ]; then
-				failed "Can't copy customized UI"
+				failed "Can't copy UI files"
 			fi
 		fi
 
@@ -587,7 +570,6 @@ makeInstaller()
 
 		for NSI in *.nsi
 		do
-
 			makensis ${NSIS_ARGS} ${NSI}
 			if [ "$?" != "0" ]; then
 				echo makensis ${NSIS_ARGS} ${NSI}
