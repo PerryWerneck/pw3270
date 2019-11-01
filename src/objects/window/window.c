@@ -145,7 +145,7 @@
 
 			"win.copy",
 			"win.paste",
-			"win.select_all",
+			"win.select-all",
 			"separator",
 			"win.connect",
 			"win.disconnect",

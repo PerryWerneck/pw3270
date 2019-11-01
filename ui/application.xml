@@ -154,12 +154,12 @@
 
         <item>
           <attribute name="label" translatable="yes">Select all</attribute>
-          <attribute name="action">win.select_all</attribute>
+          <attribute name="action">win.select-all</attribute>
         </item>
 
         <item>
           <attribute name="label" translatable="yes">Select Field</attribute>
-          <attribute name="action">win.select_field</attribute>
+          <attribute name="action">win.select-field</attribute>
         </item>
 
         <item>
@@ -241,10 +241,30 @@
           <attribute name="action">win.set.colors</attribute>
         </item>
 
-        <item>
+        <submenu>
+          <attribute name="label" translatable="yes">Screen size</attribute>
+            <item>
+              <attribute name="label" translatable="yes">Model 2 - 80x24</attribute>
+              <attribute name="action">win.set-model</attribute>
+            </item>
+            <item>
+              <attribute name="label" translatable="yes">Model 3 - 80x32</attribute>
+              <attribute name="action">win.set-model</attribute>
+            </item>
+            <item>
+              <attribute name="label" translatable="yes">Model 4 - 80x43</attribute>
+              <attribute name="action">win.set-model</attribute>
+            </item>
+            <item>
+              <attribute name="label" translatable="yes">Model 5 - 132x27</attribute>
+              <attribute name="action">win.set-model</attribute>
+            </item>
+
+        </submenu>
+
+        <submenu id='font-select-placeholder'>
           <attribute name="label" translatable="yes">Select font</attribute>
-          <attribute name="action">win.select.font</attribute>
-        </item>
+        </submenu>
 
         <item>
           <attribute name="label" translatable="yes">Screen sizes</attribute>

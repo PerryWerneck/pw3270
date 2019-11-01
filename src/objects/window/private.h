@@ -73,5 +73,4 @@
     G_GNUC_INTERNAL void pw3270_window_open_activated(GSimpleAction * action, GVariant *parameter, gpointer application);
     G_GNUC_INTERNAL void pw3270_window_close_activated(GSimpleAction * action, GVariant *parameter, gpointer application);
 
-
 #endif // PRIVATE_H_INCLUDED
