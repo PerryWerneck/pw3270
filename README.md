@@ -31,8 +31,7 @@ sudo zypper in pw3270
 
 ## Building for Windows
 
-Cross-compiling on SuSE Linux (Native or WSL) - The easier way!
----------------------------------------------------------------
+### Cross-compiling on SuSE Linux (Native or WSL) - The easier way!
 
 1. Add the MinGW Repositories
 
