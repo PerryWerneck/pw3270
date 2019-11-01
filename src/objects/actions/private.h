@@ -55,9 +55,10 @@
 	G_GNUC_INTERNAL GAction * pw3270_action_new_pfkey(void);
 	G_GNUC_INTERNAL GAction * pw3270_action_new_pakey(void);
 
-	G_GNUC_INTERNAL void pw3270_action_change_state_boolean(GAction *action, gboolean state);
-	G_GNUC_INTERNAL void pw3270_action_notify_enabled(GAction *action);
 	G_GNUC_INTERNAL void pw3270_action_set_name(GAction *object, const gchar *name);
+
+	G_GNUC_INTERNAL void pw3270_action_notify_enabled(GAction *action);
+	G_GNUC_INTERNAL void pw3270_action_notify_state(GAction *object);
 
 	// Internal actions
 	G_GNUC_INTERNAL GAction			* pw3270_connect_action_new(void);

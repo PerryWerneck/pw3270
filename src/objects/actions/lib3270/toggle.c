@@ -58,29 +58,33 @@
 
  G_DEFINE_TYPE(Lib3270ToggleAction, Lib3270ToggleAction, PW3270_TYPE_ACTION);
 
+ static gboolean bg_notify_state(GAction *action) {
+ 	pw3270_action_notify_state(action);
+	return FALSE;
+ }
+
  static void change_state(H3270 G_GNUC_UNUSED(*hSession), LIB3270_TOGGLE_ID G_GNUC_UNUSED(id), char state, void * action) {
  	debug("%s: State on action %s is %s",
 				__FUNCTION__,
 				g_action_get_name(G_ACTION(action)),
 				state ? "ON" : "OFF"
 			);
-	pw3270_action_change_state_boolean((GAction *) action, state == 0 ? FALSE : TRUE);
+	g_idle_add((GSourceFunc) bg_notify_state, G_ACTION(action));
  }
 
  static void change_widget(GAction *object, GtkWidget *from, GtkWidget *to) {
 
 	Lib3270ToggleAction * action = PW3270_LIB3270_TOGGLE_ACTION(object);
 
-	if(action->listener) {
+	if(action->listener)
 		lib3270_unregister_toggle_listener(v3270_get_session(from),action->definition->id,object);
-	}
 
-	if(to) {
+	if(to)
 		action->listener = lib3270_register_toggle_listener(v3270_get_session(to),action->definition->id,change_state,object);
-		pw3270_action_change_state_boolean(object,lib3270_get_toggle(v3270_get_session(to),action->definition->id));
-	}
 
 	PW3270_ACTION_CLASS(Lib3270ToggleAction_parent_class)->change_widget(object,from,to);
+
+	bg_notify_state(G_ACTION(object));
 
  }
 
