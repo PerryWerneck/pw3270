@@ -34,15 +34,17 @@ sudo zypper in pw3270
 Cross-compiling on SuSE Linux (Native or WSL) - The easier way!
 ---------------------------------------------------------------
 
-1. First add the MinGW Repositories for your SuSE version from:
+1. Add the MinGW Repositories
 
-	* https://build.opensuse.org/project/show/windows:mingw:win32
-	* https://build.opensuse.org/project/show/windows:mingw:win64
+```
+sudo zypper ar obs://windows:mingw:win32 mingw32
+sudo zypper ar obs://windows:mingw:win64 mingw64
+sudo zypper ref
+```
 
 2. Run the build script
 
-	* get it from https://github.com/PerryWerneck/pw3270/blob/master/win/pack.sh
-	* Run the build script: ./pack.sh --pre-reqs
-
-
-
+```
+wget https://github.com/PerryWerneck/pw3270/blob/master/win/pack.sh pack.sh
+./pack.sh --pre-reqs
+```
