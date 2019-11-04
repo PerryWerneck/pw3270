@@ -405,11 +405,10 @@ static void lib3270_toggle_action(GtkToggleAction *action,GtkWidget *widget)
 	{
 		gdk_window_set_debug_updates(gtk_toggle_action_get_active(action));
 	}
-	else if(toggle = TOGGLE_DYNAMIC_SPACING)
+	else if(toggle == TOGGLE_DYNAMIC_SPACING)
 	{
 		v3270_set_dynamic_font_spacing(widget,gtk_toggle_action_get_active(action));
 		set_boolean_to_config("toggle","dspacing",gtk_toggle_action_get_active(action));
-
 	}
 	else if(toggle < LIB3270_TOGGLE_COUNT)
 	{
