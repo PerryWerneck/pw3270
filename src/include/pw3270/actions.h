@@ -183,6 +183,34 @@
 
 	pw3270SimpleAction * pw3270_dialog_action_new(GtkWidget * (*factory)(GtkWidget *));
 
+	//
+	// V3270 Property Action
+	//
+	#define V3270_TYPE_PROPERTY_ACTION				(v3270PropertyAction_get_type())
+	#define V3270_PROPERTY_ACTION(inst)				(G_TYPE_CHECK_INSTANCE_CAST ((inst), V3270_TYPE_PROPERTY_ACTION, v3270PropertyAction))
+	#define V3270_PROPERTY_ACTION_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), V3270_TYPE_PROPERTY_ACTION, v3270PropertyActionClass))
+	#define V3270_IS_PROPERTY_ACTION(inst)			(G_TYPE_CHECK_INSTANCE_TYPE ((inst), V3270_TYPE_PROPERTY_ACTION))
+	#define V3270_IS_PROPERTY_ACTION_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), V3270_TYPE_PROPERTY_ACTION))
+	#define V3270_PROPERTY_ACTION_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), V3270_TYPE_PROPERTY_ACTION, v3270PropertyActionClass))
+
+	typedef struct _v3270PropertyAction {
+
+		pw3270Action parent;
+
+		GParamSpec *pspec;
+
+	} v3270PropertyAction;
+
+	typedef struct _v3270PropertyActionClass {
+
+		pw3270ActionClass parent_class;
+
+	} v3270PropertyActionClass;
+
+	GType v3270PropertyAction_get_type(void) G_GNUC_CONST;
+
+	v3270PropertyAction * v3270_property_action_new(GtkWidget *widget, const gchar *property_name);
+
 	G_END_DECLS
 
 #endif // PW3270_ACTIONS_H_INCLUDED
