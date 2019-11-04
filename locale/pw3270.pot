@@ -9,7 +9,7 @@ msgstr ""
 "#-#-#-#-#  pw3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-04 13:47-0300\n"
+"POT-Creation-Date: 2019-11-04 14:30-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,7 +31,7 @@ msgstr ""
 "#-#-#-#-#  libv3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-04 16:24+0000\n"
+"POT-Creation-Date: 2019-11-04 16:53+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -51,7 +51,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: window.c:449
+#: window.c:450
 #, c-format
 msgid " and <b>%s</b> for %s."
 msgstr ""
@@ -77,22 +77,22 @@ msgstr ""
 msgid "%s (SSL error %d)"
 msgstr ""
 
-#: actions.c:867 actions.c:879
+#: actions.c:869 actions.c:881
 #, c-format
 msgid "%s action needs a valid id attribute"
 msgstr ""
 
-#: actions.c:719 actions.c:844 actions.c:856
+#: actions.c:721 actions.c:846 actions.c:858
 #, c-format
 msgid "%s action needs a valid toggle name"
 msgstr ""
 
-#: actions.c:891
+#: actions.c:893
 #, c-format
 msgid "%s action needs a valid value"
 msgstr ""
 
-#: actions.c:597
+#: actions.c:599
 #, c-format
 msgid "%s action needs src attribute"
 msgstr ""
@@ -132,7 +132,7 @@ msgstr ""
 msgid "%s: Vertical tab not supported"
 msgstr ""
 
-#: window.c:444
+#: window.c:445
 #, c-format
 msgid "%s<b>%s</b> for %s"
 msgstr ""
@@ -318,7 +318,7 @@ msgstr ""
 msgid "Attn"
 msgstr ""
 
-#: actions.c:572
+#: actions.c:574
 #, c-format
 msgid "Attribute \"%s\" is invalid or undefined"
 msgstr ""
@@ -572,7 +572,7 @@ msgstr ""
 msgid "Can't print"
 msgstr ""
 
-#: window.c:432
+#: window.c:433
 #, c-format
 msgid "Can't recognize \"%s\" as a valid host type"
 msgstr ""
@@ -1482,7 +1482,7 @@ msgstr ""
 msgid "Misc colors"
 msgstr ""
 
-#: window.c:556
+#: window.c:557
 #, c-format
 msgid "Model %d (%s)"
 msgstr ""
@@ -1499,7 +1499,7 @@ msgstr ""
 msgid "Monochrome"
 msgstr ""
 
-#: actions.c:732
+#: actions.c:734
 msgid "Move action needs target & direction attributes"
 msgstr ""
 
@@ -2722,7 +2722,7 @@ msgid ""
 "normally means the list of trusted certificates is not complete."
 msgstr ""
 
-#: window.c:451
+#: window.c:452
 #, c-format
 msgid "The known types are %s"
 msgstr ""
@@ -3052,7 +3052,7 @@ msgstr ""
 msgid "Unexpected mode %d"
 msgstr ""
 
-#: actions.c:586 actions.c:606
+#: actions.c:588 actions.c:608
 #, c-format
 msgid "Unexpected or invalid %s attribute: \"%s\""
 msgstr ""
@@ -3065,7 +3065,7 @@ msgstr ""
 msgid "Unexpected or invalid TLS/SSL verify result"
 msgstr ""
 
-#: actions.c:560
+#: actions.c:562
 #, c-format
 msgid "Unexpected or invalid attribute value \"%s\""
 msgstr ""
@@ -3079,7 +3079,7 @@ msgstr ""
 msgid "Unexpected or unknown security status"
 msgstr ""
 
-#: actions.c:458
+#: actions.c:460
 #, c-format
 msgid "Unexpected target \"%s\""
 msgstr ""
