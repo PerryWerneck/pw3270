@@ -59,8 +59,9 @@
  #endif
 
  #define ERROR_DOMAIN g_quark_from_static_string(PACKAGE_NAME)
- #define TOGGLE_GDKDEBUG LIB3270_TOGGLE_COUNT+1
 
+ #define TOGGLE_GDKDEBUG 			LIB3270_TOGGLE_COUNT+1
+ #define TOGGLE_DYNAMIC_SPACING		LIB3270_TOGGLE_COUNT+2
 
  #if defined(X3270_TRACE)
 	#define trace_action(a,w) lib3270_trace_event(v3270_get_session(w),"Action %s activated on widget %p\n",gtk_action_get_name(a),w);
@@ -401,9 +402,17 @@ static void lib3270_toggle_action(GtkToggleAction *action,GtkWidget *widget)
 	lib3270_trace_event(v3270_get_session(widget),"Action %s toggled on widget %p (id=%d)\n",gtk_action_get_name(GTK_ACTION(action)),widget,(int) toggle);
 
 	if(toggle == TOGGLE_GDKDEBUG)
+	{
 		gdk_window_set_debug_updates(gtk_toggle_action_get_active(action));
+	}
+	else if(toggle = TOGGLE_DYNAMIC_SPACING)
+	{
+		v3270_set_dynamic_font_spacing(widget,gtk_toggle_action_get_active(action));
+	}
 	else if(toggle < LIB3270_TOGGLE_COUNT)
+	{
 		lib3270_set_toggle(v3270_get_session(widget),toggle,gtk_toggle_action_get_active(action));
+	}
 }
 
 static void selection_move_action(GtkAction *action, GtkWidget *widget)
@@ -694,7 +703,15 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 		if(!attr)
 			attr = ui_get_attribute("toggle",names,values);
 
-		if(g_ascii_strcasecmp(attr,"gdkdebug"))
+		if(!g_ascii_strcasecmp(attr,"gdkdebug"))
+		{
+			id = TOGGLE_GDKDEBUG;
+		}
+		else if(!g_ascii_strcasecmp(attr,"dspacing"))
+		{
+			id = TOGGLE_DYNAMIC_SPACING;
+		}
+		else
 		{
 			id = lib3270_get_toggle_id(attr);
 			if(id < 0)
@@ -702,10 +719,6 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 				*error = g_error_new(ERROR_DOMAIN,EINVAL,_("%s action needs a valid toggle name" ), name);
 				return NULL;
 			}
-		}
-		else
-		{
-			id = TOGGLE_GDKDEBUG;
 		}
 		nm 	= g_strconcat(name,attr,NULL);
 	}

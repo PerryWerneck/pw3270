@@ -305,6 +305,7 @@ static GtkWidget * trace_window = NULL;
 	pw3270_set_session_color_type(widget,colors);
 
 	v3270_set_scaled_fonts(GTK_PW3270(widget)->terminal,get_boolean_from_config("terminal","sfonts",FALSE));
+	v3270_set_dynamic_font_spacing(GTK_PW3270(widget)->terminal,get_boolean_from_config("terminal","dspacing",FALSE));
 
 	if(pw3270_get_toggle(widget,LIB3270_TOGGLE_CONNECT_ON_STARTUP))
 		g_idle_add((GSourceFunc) bg_auto_connect, widget);
