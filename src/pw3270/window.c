@@ -264,6 +264,8 @@ static GtkWidget * trace_window = NULL;
  	GtkWidget	* widget	= g_object_new(GTK_TYPE_PW3270, NULL);
  	gboolean	  connct	= FALSE;
 
+	v3270_set_dynamic_font_spacing(GTK_PW3270(widget)->terminal,get_boolean_from_config("toggle","dspacing",FALSE));
+
 	if(tracefile)
 	{
 		lib3270_set_trace_handler(pw3270_get_session(widget),trace_on_file,(void *) widget);
@@ -305,7 +307,6 @@ static GtkWidget * trace_window = NULL;
 	pw3270_set_session_color_type(widget,colors);
 
 	v3270_set_scaled_fonts(GTK_PW3270(widget)->terminal,get_boolean_from_config("terminal","sfonts",FALSE));
-	v3270_set_dynamic_font_spacing(GTK_PW3270(widget)->terminal,get_boolean_from_config("terminal","dspacing",FALSE));
 
 	if(pw3270_get_toggle(widget,LIB3270_TOGGLE_CONNECT_ON_STARTUP))
 		g_idle_add((GSourceFunc) bg_auto_connect, widget);
@@ -683,6 +684,7 @@ static GtkWidget * trace_window = NULL;
  {
 	GtkAction **list = (GtkAction **) g_object_get_data(G_OBJECT(widget),"toggle_actions");
  	gchar *nm = g_ascii_strdown(name,-1);
+
 	set_boolean_to_config("toggle",nm,toggled);
 	g_free(nm);
 

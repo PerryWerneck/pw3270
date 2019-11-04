@@ -408,6 +408,8 @@ static void lib3270_toggle_action(GtkToggleAction *action,GtkWidget *widget)
 	else if(toggle = TOGGLE_DYNAMIC_SPACING)
 	{
 		v3270_set_dynamic_font_spacing(widget,gtk_toggle_action_get_active(action));
+		set_boolean_to_config("toggle","dspacing",gtk_toggle_action_get_active(action));
+
 	}
 	else if(toggle < LIB3270_TOGGLE_COUNT)
 	{
@@ -939,9 +941,17 @@ GtkAction * ui_get_action(GtkWidget *widget, const gchar *name, GHashTable *hash
 			if(tooltip && *tooltip)
 				gtk_action_set_tooltip(GTK_ACTION(action),tooltip);
 			toggle_action[id] = action;
+
+			gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action),(lib3270_get_toggle(v3270_get_session(widget),id) != 0));
 		}
+		else if(id == TOGGLE_DYNAMIC_SPACING)
+		{
+			gboolean active = get_boolean_from_config("toggle","dspacing",FALSE);
+			v3270_set_dynamic_font_spacing(widget,active);
+			gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action),active);
+		}
+
 		g_object_set_data(G_OBJECT(action),"toggle_id",GINT_TO_POINTER(id));
-		gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action),(lib3270_get_toggle(v3270_get_session(widget),id) != 0));
 		g_signal_connect(action,"toggled",G_CALLBACK(lib3270_toggle_action),widget);
 		break;
 
