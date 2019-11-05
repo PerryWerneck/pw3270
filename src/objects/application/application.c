@@ -33,6 +33,7 @@
 
  #include "private.h"
  #include <pw3270/application.h>
+ #include <pw3270/actions.h>
 
  enum {
 	PROP_ZERO,
@@ -272,11 +273,18 @@
 
 	GtkWidget * window = pw3270_application_window_new(GTK_APPLICATION(application));
 
-	// Create terminal widget
-	pw3270_terminal_new(window);
-	pw3270_window_set_current_page(window,0);
+	// Create terminal widget & associated widget
+	GtkWidget * terminal = pw3270_terminal_new(window);
+
+	GAction * action = G_ACTION(v3270_property_action_new(terminal,"model_number"));
+
+	if(action) {
+		debug("Adding window action \"%s\"",g_action_get_name(action));
+		g_action_map_add_action(G_ACTION_MAP(window),action);
+	}
 
 	// Present the new window
+	pw3270_window_set_current_page(window,0);
 	gtk_window_present(GTK_WINDOW(window));
 
  }

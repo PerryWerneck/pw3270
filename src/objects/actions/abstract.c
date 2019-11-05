@@ -63,12 +63,16 @@
 	PROP_STATE
  };
 
+ /*
  enum {
   SIGNAL_CHANGE_STATE,
   NR_SIGNALS
  };
 
  static guint action_signals[NR_SIGNALS];
+
+ */
+
 
  G_DEFINE_TYPE_WITH_CODE(pw3270Action, pw3270Action, G_TYPE_OBJECT, G_IMPLEMENT_INTERFACE(G_TYPE_ACTION, pw3270_action_iface_init))
 
@@ -123,8 +127,7 @@
 			N_("State Type"),
 			N_("The type of the state kept by the action"),
 			G_TYPE_VARIANT_TYPE,
-			G_PARAM_READABLE |
-			G_PARAM_STATIC_STRINGS));
+			G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
 	// Enabled property
 	klass->properties.enabled =
@@ -146,12 +149,12 @@
 			N_("The state the action is in"),
 			G_VARIANT_TYPE_ANY,
 			NULL,
-			G_PARAM_READWRITE | G_PARAM_CONSTRUCT |
-			G_PARAM_STATIC_STRINGS
+			G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS
 		);
 
 	g_object_class_install_property (object_class, PROP_STATE, klass->properties.state);
 
+	/*
 	// Install signals
 	action_signals[SIGNAL_CHANGE_STATE] =
 		g_signal_new(
@@ -163,6 +166,7 @@
 			G_TYPE_NONE, 1,
 			G_TYPE_VARIANT
 		);
+	*/
  }
 
  void pw3270Action_init(pw3270Action *action) {
@@ -304,19 +308,37 @@
  	debug("%s",__FUNCTION__)
  }
 
- void pw3270_action_notify_enabled(GAction *object) {
-	g_object_notify(G_OBJECT (object), "enabled");
+ static gboolean bg_notify_enabled(GObject *action) {
+	g_object_notify(action, "enabled");
+	return FALSE;
  }
 
- void pw3270_action_notify_state(GAction *object) {
-	g_object_notify(G_OBJECT (object), "state");
+ void pw3270_action_notify_enabled(GAction *action) {
+	g_idle_add((GSourceFunc) bg_notify_enabled, G_OBJECT(action));
+ }
+
+ static gboolean bg_notify_state(GObject *action) {
+	g_object_notify(action, "state");
+	return FALSE;
+ }
+
+ void pw3270_action_notify_state(GAction *action) {
+	g_idle_add((GSourceFunc) bg_notify_state, G_OBJECT(action));
  }
 
  static void change_widget(GAction *action, GtkWidget *from, GtkWidget *to) {
 
  	if(from != to) {
-		PW3270_ACTION(action)->terminal = to;
+
+		pw3270Action *pAction = PW3270_ACTION(action);
+
+		pAction->terminal = to;
+
 		pw3270_action_notify_enabled(action);
+
+		if(pAction->types.state)
+			pw3270_action_notify_state(action);
+
  	}
 
  }

@@ -58,18 +58,8 @@
 
  G_DEFINE_TYPE(Lib3270ToggleAction, Lib3270ToggleAction, PW3270_TYPE_ACTION);
 
- static gboolean bg_notify_state(GAction *action) {
- 	pw3270_action_notify_state(action);
-	return FALSE;
- }
-
- static void change_state(H3270 G_GNUC_UNUSED(*hSession), LIB3270_TOGGLE_ID G_GNUC_UNUSED(id), char state, void * action) {
- 	debug("%s: State on action %s is %s",
-				__FUNCTION__,
-				g_action_get_name(G_ACTION(action)),
-				state ? "ON" : "OFF"
-			);
-	g_idle_add((GSourceFunc) bg_notify_state, G_ACTION(action));
+ static void change_state(H3270 G_GNUC_UNUSED(*hSession), LIB3270_TOGGLE_ID G_GNUC_UNUSED(id), char G_GNUC_UNUSED(state), void G_GNUC_UNUSED(*action)) {
+ 	pw3270_action_notify_state(G_ACTION(action));
  }
 
  static void change_widget(GAction *object, GtkWidget *from, GtkWidget *to) {
@@ -83,8 +73,6 @@
 		action->listener = lib3270_register_toggle_listener(v3270_get_session(to),action->definition->id,change_state,object);
 
 	PW3270_ACTION_CLASS(Lib3270ToggleAction_parent_class)->change_widget(object,from,to);
-
-	bg_notify_state(G_ACTION(object));
 
  }
 
@@ -130,7 +118,7 @@
 
 	action->parent.name					= "toggle";
 
-	action->parent.get_state_property	=  get_state_property;
+	action->parent.get_state_property	= get_state_property;
 	action->parent.activate				= activate;
 
 	action->parent.types.state			= G_VARIANT_TYPE_BOOLEAN;

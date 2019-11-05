@@ -133,14 +133,8 @@
  	return G_ACTION(action);
  }
 
- static gboolean bg_notify_enabled(GAction *action) {
-// 	debug("Action %s was notified (%s)",g_action_get_name(action),g_action_get_enabled(action) ? "Enabled" : "Disabled");
- 	pw3270_action_notify_enabled(action);
-	return FALSE;
- }
-
  static void event_listener(H3270 G_GNUC_UNUSED(*hSession), void *object) {
-	g_idle_add((GSourceFunc) bg_notify_enabled, G_ACTION(object));
+ 	pw3270_action_notify_enabled(G_ACTION(object));
  }
 
  void change_widget(GAction *object, GtkWidget *from, GtkWidget *to) {
@@ -159,11 +153,6 @@
 	if(action->definition->group && to) {
 		action->listener = lib3270_register_action_group_listener(pw3270_action_get_session(object),action->definition->group,event_listener,object);
 	}
-
-	// Does the "enabled" state has changed? If yes notify customers.
-	gboolean enabled = get_enabled(object,to);
-	if(get_enabled(object,from) != enabled)
-		pw3270_action_notify_enabled(object);
 
  }
 

@@ -51,7 +51,6 @@
 
  static void Lib3270PfAction_class_init(Lib3270PfActionClass *klass);
  static void Lib3270PfAction_init(Lib3270PfAction *action);
- static void change_widget(GAction *object, GtkWidget *from, GtkWidget *to);
 
  G_DEFINE_TYPE(Lib3270PfAction, Lib3270PfAction, PW3270_TYPE_ACTION);
 
@@ -97,17 +96,6 @@
  void Lib3270PfAction_class_init(Lib3270PfActionClass *klass) {
 
 	klass->parent_class.get_enabled = get_enabled;
-	klass->parent_class.change_widget = change_widget;
-
- /*
-	pw3270ActionClass * action = PW3270_ACTION_CLASS(klass);
-
-	action->get_enabled = get_enabled;
-	action->change_widget = change_widget;
-
-	action->
-	action->get_parameter_type = get_parameter_type;
-*/
 
  }
 
@@ -122,14 +110,4 @@
  	return G_ACTION(g_object_new(PW3270_TYPE_PFKEY_ACTION, NULL));
  }
 
- void change_widget(GAction *object, GtkWidget *from, GtkWidget *to) {
-
-	PW3270_ACTION_CLASS(Lib3270PfAction_parent_class)->change_widget(object,from,to);
-
-	// Does the "enabled" state has changed? If yes notify customers.
-	gboolean enabled = get_enabled(object,to);
-	if(get_enabled(object,from) != enabled)
-		pw3270_action_notify_enabled(object);
-
- }
 

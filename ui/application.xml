@@ -245,19 +245,20 @@
           <attribute name="label" translatable="yes">Screen size</attribute>
             <item>
               <attribute name="label" translatable="yes">Model 2 - 80x24</attribute>
-              <attribute name="action">win.set-model</attribute>
+              <attribute name="action">win.model-number</attribute>
+              <attribute name="state">2</attribute>
             </item>
             <item>
               <attribute name="label" translatable="yes">Model 3 - 80x32</attribute>
-              <attribute name="action">win.set-model</attribute>
+              <attribute name="action">win.model-number</attribute>
             </item>
             <item>
               <attribute name="label" translatable="yes">Model 4 - 80x43</attribute>
-              <attribute name="action">win.set-model</attribute>
+              <attribute name="action">win.model-number</attribute>
             </item>
             <item>
               <attribute name="label" translatable="yes">Model 5 - 132x27</attribute>
-              <attribute name="action">win.set-model</attribute>
+              <attribute name="action">win.model-number</attribute>
             </item>
 
         </submenu>
@@ -265,11 +266,6 @@
         <submenu id='font-select-placeholder'>
           <attribute name="label" translatable="yes">Select font</attribute>
         </submenu>
-
-        <item>
-          <attribute name="label" translatable="yes">Screen sizes</attribute>
-          <attribute name="action">win.screen.sizes</attribute>
-        </item>
 
         <submenu>
 
