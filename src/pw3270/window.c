@@ -413,6 +413,12 @@ static GtkWidget * trace_window = NULL;
 	lib3270_set_oversize(pw3270_get_session(widget),oversize);
  }
 
+ LIB3270_EXPORT const gchar * pw3270_get_oversize(GtkWidget *widget)
+ {
+ 	g_return_val_if_fail(GTK_IS_PW3270(widget),"");
+ 	return (const gchar *) lib3270_get_oversize(pw3270_get_session(widget));
+ }
+
  LIB3270_EXPORT void pw3270_set_host_type(GtkWidget *widget, const gchar *name)
  {
  	size_t f;
@@ -526,7 +532,7 @@ static GtkWidget * trace_window = NULL;
  	int f;
 
  	trace("Widget %p changed to %s (id=%d)",widget,name,id);
-	set_integer_to_config("terminal","model",id);
+	set_integer_to_config("terminal","model_number",id);
  	set_string_to_config("terminal","model_name","%s",name);
 
 	id -= 2;
@@ -752,7 +758,7 @@ static GtkWidget * trace_window = NULL;
 
 	{
 		char str[2];
-		str[0] = get_integer_from_config("terminal","model",2)+'0';
+		str[0] = get_integer_from_config("terminal","model_number",2)+'0';
 		str[1] = 0;
 		lib3270_set_model(host,str);
 

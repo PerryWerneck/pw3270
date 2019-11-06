@@ -492,7 +492,15 @@ int main(int argc, char *argv[])
 		pw3270_set_session_name(toplevel,session_name);
 
 		if(oversize)
+		{
 			pw3270_set_oversize(toplevel,oversize);
+		}
+		else
+		{
+			g_autofree gchar * ovsz = pw3270_get_string(toplevel,"terminal","oversize","");
+			if(ovsz && *ovsz)
+				pw3270_set_oversize(toplevel,oversize);
+		}
 
 #ifdef _WIN32
 		pw3270_set_string(toplevel,"application","session",session_name);

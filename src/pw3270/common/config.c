@@ -470,10 +470,33 @@ static void set_string(const gchar *group, const gchar *key, const gchar *fmt, v
 
 void set_string_to_config(const gchar *group, const gchar *key, const gchar *fmt, ...)
 {
- 	va_list args;
-	va_start(args, fmt);
-	set_string(group,key,fmt,args);
-	va_end(args);
+	if(fmt)
+	{
+		va_list args;
+		va_start(args, fmt);
+		set_string(group,key,fmt,args);
+		va_end(args);
+	}
+	else if(g_key_file_has_key(program_config,group,key,NULL))
+	{
+#ifdef ENABLE_WINDOWS_REGISTRY
+
+		gchar * path = g_strdup_printf("%s\\%s\\%s",registry_path,g_get_application_name(),group);
+		HKEY	hKey;
+		DWORD	disp;
+
+		if(RegOpenKeyEx(HKEY_CURRENT_USER, path, 0, KEY_ALL_ACCESS, &hKey) == ERROR_SUCCESS)
+		{
+			RegDeleteKey(hKey,key);
+			RegCloseKey(hKey);
+		}
+
+		g_free(path);
+
+#else
+		g_key_file_remove_key(program_config,group,key,NULL);
+#endif
+	}
 }
 
 void set_boolean_to_config(const gchar *group, const gchar *key, gboolean val)
