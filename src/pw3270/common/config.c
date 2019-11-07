@@ -477,9 +477,9 @@ void set_string_to_config(const gchar *group, const gchar *key, const gchar *fmt
 		set_string(group,key,fmt,args);
 		va_end(args);
 	}
-	else if(g_key_file_has_key(program_config,group,key,NULL))
-	{
 #ifdef ENABLE_WINDOWS_REGISTRY
+	else
+	{
 
 		gchar * path = g_strdup_printf("%s\\%s\\%s",registry_path,g_get_application_name(),group);
 		HKEY	hKey;
@@ -493,10 +493,13 @@ void set_string_to_config(const gchar *group, const gchar *key, const gchar *fmt
 
 		g_free(path);
 
-#else
-		g_key_file_remove_key(program_config,group,key,NULL);
-#endif
 	}
+#else
+	else if(g_key_file_has_key(program_config,group,key,NULL))
+	{
+		g_key_file_remove_key(program_config,group,key,NULL);
+	}
+#endif
 }
 
 void set_boolean_to_config(const gchar *group, const gchar *key, gboolean val)
