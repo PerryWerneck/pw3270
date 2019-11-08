@@ -50,11 +50,7 @@
 
  GtkWidget * factory(GtkWidget *terminal) {
 
-	GtkWidget * dialog = v3270_settings_dialog_new(terminal, v3270_color_selection_new());
-	v3270_dialog_setup(dialog,_("Color setup"),_("_Save"));
-	g_signal_connect(dialog,"response",G_CALLBACK(gtk_widget_destroy),NULL);
-
-	return dialog;
+	return v3270_settings_get_edit_dialog(v3270_color_selection_new(),terminal,FALSE);
 
  }
 
