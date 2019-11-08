@@ -61,7 +61,7 @@
  static const gchar		* systype		= NULL;
  static const gchar		* toggleset		= NULL;
  static const gchar		* togglereset	= NULL;
- static const gchar		* charset		= NULL;
+ static const gchar		* charset		= "bracket";
  static const gchar		* remap			= NULL;
  static const gchar		* model			= NULL;
  static const gchar		* oversize		= NULL;
@@ -347,7 +347,7 @@ int main(int argc, char *argv[])
             { "systype",			't', 0, G_OPTION_ARG_STRING,	&systype,			N_( "Host system type" ),							"S390"								},
 			{ "toggleset",			'S', 0, G_OPTION_ARG_STRING,	&toggleset,			N_( "Set toggles ON" ),								NULL								},
 			{ "togglereset",		'R', 0, G_OPTION_ARG_STRING,	&togglereset,		N_( "Set toggles OFF" ),							NULL								},
-			{ "charset",	    	'C', 0, G_OPTION_ARG_STRING,	&charset,		    N_( "Set host charset" ),							NULL								},
+			{ "charset",	    	'C', 0, G_OPTION_ARG_STRING,	&charset,		    N_( "Set host charset" ),							"bracket"							},
 			{ "remap",		    	'm', 0, G_OPTION_ARG_FILENAME,	&remap,			    N_( "Remap charset from xml file" ),				NULL								},
 			{ "model",		    	'M', 0, G_OPTION_ARG_STRING,	&model,			    N_( "The model of 3270 display to be emulated" ),	NULL								},
 			{ "oversize",	    	'O', 0, G_OPTION_ARG_STRING,	&oversize,		    N_( "Makes the screen larger than the default for the chosen model number." ),	NULL	},

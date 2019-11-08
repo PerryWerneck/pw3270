@@ -314,11 +314,6 @@ LIB3270_EXPORT void pw3270_set_host_charset(GtkWidget *widget, const gchar *name
 	g_signal_connect(dialog,"response",G_CALLBACK(gtk_widget_destroy),NULL);
 	gtk_widget_show_all(dialog);
 
-	/*
-	gtk_dialog_run(GTK_DIALOG (dialog));
-	gtk_widget_destroy(dialog);
-	*/
-
 }
 
 LIB3270_EXPORT void pw3270_set_action_state(GtkAction *action, gboolean on)
