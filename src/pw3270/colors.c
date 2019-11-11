@@ -30,9 +30,10 @@
  #include <gtk/gtk.h>
  #include "private.h"
  #include <lib3270/trace.h>
+ #include <v3270/settings.h>
+ #include <v3270/colorscheme.h>
 
- #define V3270_COLOR_BASE V3270_COLOR_GRAY+1
-
+ //#define V3270_COLOR_BASE V3270_COLOR_GRAY+1
 
  //#if defined(DEBUG) && GTK_CHECK_VERSION(3,4,0)
  //   #define USE_GTK_COLOR_CHOOSER 1
@@ -40,6 +41,7 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
+/*
 static void store_color_scheme(GtkWidget *widget)
 {
 	int f;
@@ -283,14 +285,14 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkRGBA *clr)
  	return TRUE;
  }
 
-/**
- * Create a color scheme dropdown button
- *
- * @param clr	Pointer to current color table
- *
- * @return Combobox widget with colors.conf loaded and set
- *
- */
+ ///
+ /// @brief Create a color scheme dropdown button
+ ///
+ /// @param clr	Pointer to current color table
+ ///
+ /// @return Combobox widget with colors.conf loaded and set
+ ///
+ ///
  GtkWidget * color_scheme_new(const GdkRGBA *current)
  {
 	gchar			* filename	= build_data_filename("colors.conf",NULL);
@@ -669,4 +671,51 @@ static void load_color_scheme(GKeyFile *conf, const gchar *group, GdkRGBA *clr)
 
  }
 
+*/
 
+ void editcolors_action(GtkAction *action, GtkWidget *terminal)
+ {
+	int f;
+	GString *str;
+
+	g_return_if_fail(GTK_IS_V3270(terminal));
+
+	GtkWidget * dialog = v3270_settings_dialog_new();
+	GtkWidget * settings = v3270_color_selection_new();
+
+	gtk_window_set_title(GTK_WINDOW(dialog), v3270_settings_get_title(settings));
+	gtk_container_add(GTK_CONTAINER(dialog), settings);
+
+	gtk_window_set_transient_for(GTK_WINDOW(dialog),GTK_WINDOW(gtk_widget_get_toplevel(terminal)));
+	gtk_window_set_modal(GTK_WINDOW(dialog),TRUE);
+
+	v3270_settings_dialog_set_terminal_widget(dialog, terminal);
+
+	gtk_widget_show_all(dialog);
+
+	switch(gtk_dialog_run(GTK_DIALOG(dialog)))
+	{
+	case GTK_RESPONSE_APPLY:
+
+		v3270_settings_dialog_apply(dialog);
+
+		str = g_string_new("");
+		for(f=0;f<V3270_COLOR_COUNT;f++)
+		{
+			if(f)
+				g_string_append_c(str,';');
+			g_string_append_printf(str,"%s",gdk_rgba_to_string(v3270_get_color(terminal,f)));
+		}
+		set_string_to_config("terminal","colors","%s",str->str);
+		g_string_free(str,TRUE);
+
+		break;
+
+	case GTK_RESPONSE_CANCEL:
+		v3270_settings_dialog_revert(dialog);
+		break;
+	}
+
+	gtk_widget_destroy(dialog);
+
+ }

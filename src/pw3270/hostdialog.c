@@ -50,6 +50,7 @@
 	set_integer_to_config("terminal","model_number",lib3270_get_model_number(hSession));
  	set_string_to_config("terminal","model_name","%s",lib3270_get_model_name(hSession));
  	set_string_to_config("terminal","host_charset",lib3270_get_host_charset(hSession));
+ 	set_string_to_config("terminal","remap_file",v3270_get_remap_filename(widget));
 
  }
 
