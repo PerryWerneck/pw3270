@@ -20,7 +20,7 @@ msgstr ""
 "#-#-#-#-#  lib3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-11 16:50+0000\n"
+"POT-Creation-Date: 2019-11-12 17:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,7 +31,7 @@ msgstr ""
 "#-#-#-#-#  libv3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-11 16:53+0000\n"
+"POT-Creation-Date: 2019-11-12 18:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -66,7 +66,7 @@ msgstr ""
 msgid "%dx%d screen size is bigger than the maximum size"
 msgstr ""
 
-#: src/core/telnet.c:698 src/core/iocalls.c:554 src/core/iocalls.c:571
+#: src/core/telnet.c:711 src/core/iocalls.c:554 src/core/iocalls.c:571
 #: src/core/linux/connect.c:84 src/core/linux/connect.c:100
 #, c-format
 msgid "%s"
@@ -141,7 +141,7 @@ msgstr ""
 msgid "- 3270 Emulator for Gtk"
 msgstr ""
 
-#: src/dialogs/hostselect.c:117
+#: src/dialogs/hostselect.c:141
 msgid "16 colors"
 msgstr ""
 
@@ -174,7 +174,7 @@ msgstr ""
 msgid "3270-style backspace."
 msgstr ""
 
-#: src/dialogs/hostselect.c:116
+#: src/dialogs/hostselect.c:140
 msgid "8 colors"
 msgstr ""
 
@@ -271,7 +271,7 @@ msgstr ""
 msgid "Add to copy"
 msgstr ""
 
-#: src/dialogs/hostselect.c:169
+#: src/dialogs/hostselect.c:193
 msgid "Address or name of the host to connect."
 msgstr ""
 
@@ -331,16 +331,16 @@ msgstr ""
 msgid "Authority and subject key identifier mismatch"
 msgstr ""
 
-#: src/core/toggles/table.c:242
-msgid "Auto connect"
-msgstr ""
-
 #: src/core/toggles/table.c:284
 msgid "Auto resize on altscreen"
 msgstr ""
 
 #: src/core/toggles/table.c:182 src/core/toggles/table.c:183 00default.xml:124
 msgid "Auto-Reconnect"
+msgstr ""
+
+#: src/core/toggles/table.c:243
+msgid "Automatically connect to host on startup"
 msgstr ""
 
 #: src/core/toggles/table.c:114
@@ -416,7 +416,7 @@ msgstr ""
 msgid "Break"
 msgstr ""
 
-#: src/core/telnet.c:1670
+#: src/core/telnet.c:1687
 msgid "Broken pipe"
 msgstr ""
 
@@ -504,7 +504,7 @@ msgstr ""
 msgid "Can't initialize curl operation"
 msgstr ""
 
-#: src/core/session.c:200
+#: src/core/session.c:208
 msgid "Can't load"
 msgstr ""
 
@@ -569,7 +569,7 @@ msgstr ""
 msgid "Can't paste text"
 msgstr ""
 
-#: src/core/session.c:186
+#: src/core/session.c:194
 msgid "Can't print"
 msgstr ""
 
@@ -578,7 +578,7 @@ msgstr ""
 msgid "Can't recognize \"%s\" as a valid host type"
 msgstr ""
 
-#: src/core/session.c:193
+#: src/core/session.c:201
 msgid "Can't save"
 msgstr ""
 
@@ -638,9 +638,9 @@ msgstr ""
 msgid "Can't verify."
 msgstr ""
 
-#: src/terminal/callbacks.c:401 src/filetransfer/v3270ftprogress.c:433
+#: src/terminal/callbacks.c:407 src/filetransfer/v3270ftprogress.c:433
 #: src/filetransfer/transfer.c:89 src/dialogs/load.c:111
-#: src/dialogs/hostselect.c:303 src/dialogs/save/save.c:136
+#: src/dialogs/hostselect.c:341 src/dialogs/save/save.c:136
 msgid "Cancel"
 msgstr ""
 
@@ -652,7 +652,7 @@ msgstr ""
 msgid "Cancelled by user"
 msgstr ""
 
-#: src/core/telnet.c:1093
+#: src/core/telnet.c:1108
 msgid "Cannot connect to specified LU"
 msgstr ""
 
@@ -698,7 +698,7 @@ msgstr ""
 msgid "Charset error"
 msgstr ""
 
-#: src/dialogs/hostselect.c:424
+#: src/dialogs/hostselect.c:467
 msgid "Check for SSL secure connection."
 msgstr ""
 
@@ -746,6 +746,14 @@ msgstr ""
 msgid "Colors"
 msgstr ""
 
+#: src/terminal/properties/init.c:173
+msgid "Comma separated list of LU names"
+msgstr ""
+
+#: src/dialogs/hostselect.c:241
+msgid "Comma separated list of LU names."
+msgstr ""
+
 #: src/dialogs/save/save.c:55
 msgid "Comma-separated values (CSV)"
 msgstr ""
@@ -762,7 +770,7 @@ msgstr ""
 msgid "Configure host"
 msgstr ""
 
-#: src/core/toggles/table.c:243 00default.xml:114
+#: src/core/toggles/table.c:242 00default.xml:114
 msgid "Connect on startup"
 msgstr ""
 
@@ -774,7 +782,7 @@ msgstr ""
 msgid "Connect to host."
 msgstr ""
 
-#: src/dialogs/hostselect.c:352
+#: src/dialogs/hostselect.c:390
 msgid "Connection"
 msgstr ""
 
@@ -787,7 +795,7 @@ msgstr ""
 msgid "Connection failed"
 msgstr ""
 
-#: src/core/telnet.c:1674
+#: src/core/telnet.c:1691
 msgid "Connection reset by peer"
 msgstr ""
 
@@ -795,7 +803,7 @@ msgstr ""
 msgid "Connection state"
 msgstr ""
 
-#: src/terminal/callbacks.c:402
+#: src/terminal/callbacks.c:408
 msgid "Continue"
 msgstr ""
 
@@ -889,7 +897,7 @@ msgstr ""
 msgid "Cursor up 1 position."
 msgstr ""
 
-#: src/dialogs/hostselect.c:204
+#: src/dialogs/hostselect.c:228
 msgid "Custom Remap"
 msgstr ""
 
@@ -945,7 +953,7 @@ msgstr ""
 msgid "Default"
 msgstr ""
 
-#: src/core/properties/string.c:147
+#: src/core/properties/string.c:148
 msgid "Default host URL"
 msgstr ""
 
@@ -953,11 +961,11 @@ msgstr ""
 msgid "Delete field"
 msgstr ""
 
-#: src/core/properties/string.c:161
+#: src/core/properties/string.c:162
 msgid "Description of the current security state"
 msgstr ""
 
-#: src/core/telnet.c:1345
+#: src/core/telnet.c:1362
 msgid "Device type rejected"
 msgstr ""
 
@@ -973,7 +981,7 @@ msgstr ""
 msgid "Disconnected from host."
 msgstr ""
 
-#: src/core/properties/string.c:112
+#: src/core/properties/string.c:113
 msgid "Display charset"
 msgstr ""
 
@@ -989,7 +997,7 @@ msgstr ""
 msgid "Dynamic spacing"
 msgstr ""
 
-#: src/core/telnet.c:889
+#: src/core/telnet.c:904
 msgid "EOR received when not in 3270 mode, ignored."
 msgstr ""
 
@@ -997,7 +1005,7 @@ msgstr ""
 msgid "ETA:"
 msgstr ""
 
-#: src/dialogs/hostselect.c:363
+#: src/dialogs/hostselect.c:401
 msgid "Emulation"
 msgstr ""
 
@@ -1223,11 +1231,11 @@ msgstr ""
 msgid "Help"
 msgstr ""
 
-#: src/dialogs/hostselect.c:507
+#: src/dialogs/hostselect.c:576
 msgid "Host"
 msgstr ""
 
-#: src/core/properties/string.c:105
+#: src/core/properties/string.c:106
 msgid "Host charset"
 msgstr ""
 
@@ -1235,7 +1243,7 @@ msgstr ""
 msgid "Host disconnected, transfer cancelled"
 msgstr ""
 
-#: src/core/telnet.c:1403
+#: src/core/telnet.c:1420
 msgid "Host illegally added function(s)"
 msgstr ""
 
@@ -1243,15 +1251,15 @@ msgstr ""
 msgid "Host program error code xxxxxxxxxx: file transfer canceled"
 msgstr ""
 
-#: src/dialogs/hostselect.c:506
+#: src/dialogs/hostselect.c:575
 msgid "Host properties"
 msgstr ""
 
-#: src/core/telnet.c:1328
+#: src/core/telnet.c:1345
 msgid "Host rejected device type or request type"
 msgstr ""
 
-#: src/core/telnet.c:1341
+#: src/core/telnet.c:1358
 msgid "Host rejected resource(s)"
 msgstr ""
 
@@ -1263,7 +1271,7 @@ msgstr ""
 msgid "Host to connect"
 msgstr ""
 
-#: src/core/properties/string.c:84
+#: src/core/properties/string.c:85
 msgid "Host type name"
 msgstr ""
 
@@ -1271,11 +1279,11 @@ msgstr ""
 msgid "HyperText Markup Language (HTML)"
 msgstr ""
 
-#: src/core/options.c:49 src/dialogs/hostselect.c:87
+#: src/core/options.c:49 src/dialogs/hostselect.c:111
 msgid "IBM AS/400"
 msgstr ""
 
-#: src/core/options.c:43 src/dialogs/hostselect.c:86
+#: src/core/options.c:43 src/dialogs/hostselect.c:110
 msgid "IBM S/390"
 msgstr ""
 
@@ -1381,7 +1389,7 @@ msgstr ""
 msgid "Invalid CA certificate"
 msgstr ""
 
-#: src/terminal/callbacks.c:429
+#: src/terminal/callbacks.c:435
 msgid "Invalid callback table, possible version mismatch in lib3270"
 msgstr ""
 
@@ -1458,6 +1466,10 @@ msgstr ""
 msgid "Keyboard lock status"
 msgstr ""
 
+#: src/dialogs/hostselect.c:240
+msgid "L_U Names"
+msgstr ""
+
 #: 10keypad.xml:35
 msgid "Lateral keypad"
 msgstr ""
@@ -1491,7 +1503,7 @@ msgstr ""
 msgid "Lock keyboard on operator error"
 msgstr ""
 
-#: main.c:353 src/dialogs/hostselect.c:193
+#: main.c:353 src/dialogs/hostselect.c:217
 msgid "Makes the screen larger than the default for the chosen model number."
 msgstr ""
 
@@ -1516,23 +1528,23 @@ msgstr ""
 msgid "Model %d (%s)"
 msgstr ""
 
-#: src/dialogs/hostselect.c:144
+#: src/dialogs/hostselect.c:168
 msgid "Model 2 - 80x24"
 msgstr ""
 
-#: src/dialogs/hostselect.c:145
+#: src/dialogs/hostselect.c:169
 msgid "Model 3 - 80x32"
 msgstr ""
 
-#: src/dialogs/hostselect.c:146
+#: src/dialogs/hostselect.c:170
 msgid "Model 4 - 80x43"
 msgstr ""
 
-#: src/dialogs/hostselect.c:147
+#: src/dialogs/hostselect.c:171
 msgid "Model 5 - 132x27"
 msgstr ""
 
-#: src/core/properties/string.c:77
+#: src/core/properties/string.c:78
 msgid "Model name"
 msgstr ""
 
@@ -1540,7 +1552,7 @@ msgstr ""
 msgid "Monocase"
 msgstr ""
 
-#: src/dialogs/hostselect.c:115
+#: src/dialogs/hostselect.c:139
 msgid "Monochrome"
 msgstr ""
 
@@ -1590,7 +1602,7 @@ msgstr ""
 msgid "No active transfer"
 msgstr ""
 
-#: src/terminal/properties/get.c:160
+#: src/terminal/properties/get.c:164
 msgid "No host defined"
 msgstr ""
 
@@ -1681,11 +1693,11 @@ msgstr ""
 msgid "Orange"
 msgstr ""
 
-#: src/core/options.c:55 src/dialogs/hostselect.c:88
+#: src/core/options.c:55 src/dialogs/hostselect.c:112
 msgid "Other (TSO)"
 msgstr ""
 
-#: src/core/options.c:61 src/dialogs/hostselect.c:89
+#: src/core/options.c:61 src/dialogs/hostselect.c:113
 msgid "Other (VM/CMS)"
 msgstr ""
 
@@ -1693,7 +1705,7 @@ msgstr ""
 msgid "Out of memory"
 msgstr ""
 
-#: src/dialogs/hostselect.c:192
+#: src/dialogs/hostselect.c:216
 msgid "Oversize"
 msgstr ""
 
@@ -1850,7 +1862,7 @@ msgstr ""
 msgid "Path length constraint exceeded"
 msgstr ""
 
-#: src/dialogs/hostselect.c:205
+#: src/dialogs/hostselect.c:229
 msgid "Path to XML file with custom charset mapping."
 msgstr ""
 
@@ -1870,7 +1882,7 @@ msgstr ""
 msgid "Plain text"
 msgstr ""
 
-#: src/dialogs/hostselect.c:181
+#: src/dialogs/hostselect.c:205
 msgid "Port or service name (empty for \"telnet\")."
 msgstr ""
 
@@ -1878,7 +1890,7 @@ msgstr ""
 msgid "Predefined color theme"
 msgstr ""
 
-#: src/core/properties/string.c:140
+#: src/core/properties/string.c:141
 msgid "Prefered protocol for CRL"
 msgstr ""
 
@@ -2136,11 +2148,11 @@ msgstr ""
 msgid "SSL Connect failed"
 msgstr ""
 
-#: src/core/telnet.c:676
+#: src/core/telnet.c:689
 msgid "SSL Error"
 msgstr ""
 
-#: src/core/telnet.c:676
+#: src/core/telnet.c:689
 msgid "SSL Read error"
 msgstr ""
 
@@ -2152,7 +2164,7 @@ msgstr ""
 msgid "SSL negotiation failed"
 msgstr ""
 
-#: src/core/telnet.c:1660
+#: src/core/telnet.c:1677
 #, c-format
 msgid ""
 "SSL_write:\n"
@@ -2233,7 +2245,7 @@ msgstr ""
 msgid "Screen buffer length in bytes"
 msgstr ""
 
-#: src/core/properties/string.c:168
+#: src/core/properties/string.c:169
 msgid "Screen oversize if larger than the chosen model"
 msgstr ""
 
@@ -2288,7 +2300,7 @@ msgid "Security warning"
 msgstr ""
 
 #: src/filetransfer/v3270ft.c:303 src/filetransfer/settings.c:209
-#: src/dialogs/hostselect.c:304 src/dialogs/save/save.c:114
+#: src/dialogs/hostselect.c:342 src/dialogs/save/save.c:114
 #: src/dialogs/save/save.c:137
 msgid "Select"
 msgstr ""
@@ -2305,11 +2317,11 @@ msgstr ""
 msgid "Select by rectangles"
 msgstr ""
 
-#: src/dialogs/hostselect.c:386
+#: src/dialogs/hostselect.c:424
 msgid "Select charset remap file"
 msgstr ""
 
-#: src/dialogs/hostselect.c:300
+#: src/dialogs/hostselect.c:338
 msgid "Select custom charset mapping"
 msgstr ""
 
@@ -2471,11 +2483,11 @@ msgstr ""
 msgid "Socket error"
 msgstr ""
 
-#: src/core/telnet.c:702
+#: src/core/telnet.c:715
 msgid "Socket read error"
 msgstr ""
 
-#: src/core/telnet.c:1681
+#: src/core/telnet.c:1698
 msgid "Socket write error"
 msgstr ""
 
@@ -2549,19 +2561,19 @@ msgstr ""
 msgid "Subject issuer mismatch"
 msgstr ""
 
-#: src/dialogs/hostselect.c:72
+#: src/dialogs/hostselect.c:96
 msgid "System _type"
 msgstr ""
 
-#: src/dialogs/hostselect.c:114
+#: src/dialogs/hostselect.c:138
 msgid "System default"
 msgstr ""
 
-#: src/core/telnet.c:1164
+#: src/core/telnet.c:1181
 msgid "TLS negotiation failure"
 msgstr ""
 
-#: src/dialogs/hostselect.c:313
+#: src/dialogs/hostselect.c:351
 msgid "TN3270 Custom charset"
 msgstr ""
 
@@ -2586,11 +2598,11 @@ msgstr ""
 msgid "Terminal font"
 msgstr ""
 
-#: src/core/properties/string.c:98
+#: src/core/properties/string.c:99
 msgid "Terminal name"
 msgstr ""
 
-#: src/core/properties/string.c:91
+#: src/core/properties/string.c:92
 msgid "Terminal type"
 msgstr ""
 
@@ -2637,7 +2649,7 @@ msgid ""
 "The Certificate revocation list (CRL) of a certificate could not be found."
 msgstr ""
 
-#: src/dialogs/hostselect.c:490
+#: src/dialogs/hostselect.c:559
 msgid "The EBCDIC host character set. "
 msgstr ""
 
@@ -2748,7 +2760,7 @@ msgstr ""
 msgid "The delay between the host unlocking the keyboard and the actual unlock"
 msgstr ""
 
-#: src/terminal/callbacks.c:396
+#: src/terminal/callbacks.c:402
 #, c-format
 msgid "The error code was %d"
 msgstr ""
@@ -2806,12 +2818,12 @@ msgstr ""
 msgid "The model number"
 msgstr ""
 
-#: main.c:352 src/dialogs/hostselect.c:129
+#: main.c:352 src/dialogs/hostselect.c:153
 msgid "The model of 3270 display to be emulated"
 msgstr ""
 
-#: src/core/properties/string.c:63
-msgid "The name of the active LU"
+#: src/core/properties/string.c:64
+msgid "The name of the LU associated with the session"
 msgstr ""
 
 #: src/filetransfer/tables.c:220
@@ -2863,7 +2875,7 @@ msgid ""
 "certificate authority."
 msgstr ""
 
-#: src/core/properties/string.c:154
+#: src/core/properties/string.c:155
 msgid "The security state"
 msgstr ""
 
@@ -3019,11 +3031,11 @@ msgstr ""
 msgid "Turquoise"
 msgstr ""
 
-#: src/core/properties/string.c:133
+#: src/core/properties/string.c:134
 msgid "URL for the certificate revocation list"
 msgstr ""
 
-#: src/core/properties/string.c:70
+#: src/core/properties/string.c:71
 msgid "URL of the current host"
 msgstr ""
 
@@ -3067,7 +3079,7 @@ msgstr ""
 msgid "Unable to get local issuer certificate"
 msgstr ""
 
-#: src/core/session.c:200
+#: src/core/session.c:208
 msgid "Unable to load from file"
 msgstr ""
 
@@ -3079,11 +3091,11 @@ msgstr ""
 msgid "Unable to paste text"
 msgstr ""
 
-#: src/core/session.c:186
+#: src/core/session.c:194
 msgid "Unable to print"
 msgstr ""
 
-#: src/core/session.c:193
+#: src/core/session.c:201
 msgid "Unable to save"
 msgstr ""
 
@@ -3392,7 +3404,7 @@ msgstr ""
 msgid "_Cancel"
 msgstr ""
 
-#: src/dialogs/hostselect.c:489
+#: src/dialogs/hostselect.c:558
 msgid "_Charset"
 msgstr ""
 
@@ -3401,7 +3413,7 @@ msgstr ""
 msgid "_Close"
 msgstr ""
 
-#: src/dialogs/hostselect.c:100
+#: src/dialogs/hostselect.c:124
 msgid "_Color table"
 msgstr ""
 
@@ -3429,7 +3441,7 @@ msgstr ""
 msgid "_Font:"
 msgstr ""
 
-#: src/dialogs/hostselect.c:168
+#: src/dialogs/hostselect.c:192
 msgid "_Host"
 msgstr ""
 
@@ -3441,7 +3453,7 @@ msgstr ""
 msgid "_Local file"
 msgstr ""
 
-#: src/dialogs/hostselect.c:128
+#: src/dialogs/hostselect.c:152
 msgid "_Model"
 msgstr ""
 
@@ -3470,11 +3482,11 @@ msgstr ""
 msgid "_Save"
 msgstr ""
 
-#: src/dialogs/hostselect.c:423
+#: src/dialogs/hostselect.c:466
 msgid "_Secure connection."
 msgstr ""
 
-#: src/dialogs/hostselect.c:180
+#: src/dialogs/hostselect.c:204
 msgid "_Service"
 msgstr ""
 
@@ -3507,7 +3519,7 @@ msgstr ""
 msgid "an action attribute"
 msgstr ""
 
-#: src/core/session.c:408
+#: src/core/session.c:416
 msgid "bracket"
 msgstr ""
 
@@ -3527,11 +3539,11 @@ msgstr ""
 msgid "ioctlsocket(FIONBIO) failed."
 msgstr ""
 
-#: src/core/properties/string.c:126
+#: src/core/properties/string.c:127
 msgid "lib3270 revision"
 msgstr ""
 
-#: src/core/properties/string.c:119
+#: src/core/properties/string.c:120
 msgid "lib3270 version"
 msgstr ""
 
