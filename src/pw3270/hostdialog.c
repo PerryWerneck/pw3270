@@ -52,5 +52,10 @@
  	set_string_to_config("terminal","host_charset",lib3270_get_host_charset(hSession));
  	set_string_to_config("terminal","remap_file",v3270_get_remap_filename(widget));
 
+ 	{
+ 		g_autofree gchar * lunames = v3270_get_lunames(widget);
+		set_string_to_config("terminal","lu_names",lunames);
+ 	}
+
  }
 
