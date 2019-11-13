@@ -242,23 +242,30 @@
         </item>
 
         <submenu>
+        
           <attribute name="label" translatable="yes">Screen size</attribute>
+
+            <!-- https://developer.gnome.org/gnome-devel-demos/stable/menubar.vala.html.en -->
+
             <item>
               <attribute name="label" translatable="yes">Model 2 - 80x24</attribute>
               <attribute name="action">win.model-number</attribute>
-              <attribute name="state">2</attribute>
+              <attribute name="target">2</attribute>
             </item>
             <item>
               <attribute name="label" translatable="yes">Model 3 - 80x32</attribute>
               <attribute name="action">win.model-number</attribute>
+              <attribute name="target">3</attribute>
             </item>
             <item>
               <attribute name="label" translatable="yes">Model 4 - 80x43</attribute>
               <attribute name="action">win.model-number</attribute>
+              <attribute name="target">4</attribute>
             </item>
             <item>
               <attribute name="label" translatable="yes">Model 5 - 132x27</attribute>
               <attribute name="action">win.model-number</attribute>
+              <attribute name="target">5</attribute>
             </item>
 
         </submenu>

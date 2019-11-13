@@ -37,18 +37,19 @@
   */
 
  #include "../private.h"
+ #include <stdlib.h>
  #include <pw3270/window.h>
  #include <v3270.h>
 
  static void v3270PropertyAction_class_init(v3270PropertyActionClass *klass);
  static void v3270PropertyAction_init(v3270PropertyAction *action);
  static GVariant * get_state(GAction *action, GtkWidget *terminal);
-
+ static void change_widget(GAction *object, GtkWidget *from, GtkWidget *to);
 
  G_DEFINE_TYPE(v3270PropertyAction, v3270PropertyAction, PW3270_TYPE_ACTION);
 
  void v3270PropertyAction_class_init(v3270PropertyActionClass *klass) {
-
+	klass->parent_class.change_widget = change_widget;
  }
 
  static void v3270PropertyAction_init(v3270PropertyAction *action) {
@@ -57,33 +58,31 @@
 
  }
 
- GVariant * get_state(GAction *action, GtkWidget *terminal) {
+ GVariant * get_state(GAction *object, GtkWidget *terminal) {
 
-	if(!terminal)
-		return NULL;
+	v3270PropertyAction * action = V3270_PROPERTY_ACTION(object);
 
-	debug("%s",__FUNCTION__);
-
-	v3270PropertyAction * paction = V3270_PROPERTY_ACTION(action);
-
+	GVariant * result = NULL;
 	GValue value = G_VALUE_INIT;
-	GVariant *result = NULL;
 
-	g_value_init(&value, paction->pspec->value_type);
-	g_object_get_property(G_OBJECT(terminal), paction->pspec->name, &value);
+	g_value_init(&value, action->pspec->value_type);
+	g_object_get_property(G_OBJECT(terminal), action->pspec->name, &value);
 
-	switch(paction->pspec->value_type) {
+	switch(action->pspec->value_type) {
+	case G_TYPE_UINT:
+		result = g_variant_new_take_string(g_strdup_printf("%d",g_value_get_uint(&value)));
+		break;
+
+	case G_TYPE_STRING:
+		result = g_variant_new_string(g_value_get_string(&value));
+		break;
+	/*
 	case G_TYPE_BOOLEAN:
 		result = g_variant_new_boolean(g_value_get_boolean(&value));
 		break;
 
 	case G_TYPE_INT:
 		result = g_variant_new_int32(g_value_get_int(&value));
-		break;
-
-	case G_TYPE_UINT:
-		result = g_variant_new_uint32(g_value_get_uint(&value));
-		debug("state of %s is %u",g_action_get_name(action),g_value_get_uint(&value));
 		break;
 
 	case G_TYPE_DOUBLE:
@@ -94,25 +93,80 @@
 		result = g_variant_new_double(g_value_get_float(&value));
 		break;
 
-	case G_TYPE_STRING:
-		result = g_variant_new_string(g_value_get_string(&value));
-		break;
-
+	*/
+	default:
+		g_warning("Unexpected value type getting state for action \"%s\"",g_action_get_name(object));
 	}
 
 	g_value_unset (&value);
+
+#ifdef DEBUG
+	if(result)
+	{
+		debug("Action %s set to \"%s\"",g_action_get_name(object),g_variant_get_string(result,NULL));
+	}
+	else
+	{
+		debug("Action %s set to \"%s\"",g_action_get_name(object),"NULL");
+	}
+#endif // DEBUG
 
 	return result;
 
  }
 
- static void activate(GAction *action, GVariant *parameter, GtkWidget *terminal) {
+ static void activate(GAction *object, GVariant *parameter, GtkWidget *terminal) {
 
-	debug("%s(%s,%p,%p)",__FUNCTION__,g_action_get_name(action),parameter,terminal);
+	debug("%s(%s,%s,%p)",__FUNCTION__,g_action_get_name(object),g_variant_get_string(parameter,NULL),terminal);
+
+	v3270PropertyAction * action = V3270_PROPERTY_ACTION(object);
+
+	GValue value = G_VALUE_INIT;
+	g_value_init(&value, action->pspec->value_type);
+
+	switch(action->pspec->value_type)
+	{
+	case G_TYPE_UINT:
+		g_value_set_uint(&value,atoi(g_variant_get_string(parameter,NULL)));
+		break;
+
+	/*
+	case G_TYPE_BOOLEAN:
+		break;
+
+	case G_TYPE_INT:
+		break;
+
+	case G_TYPE_DOUBLE:
+		break;
+
+	case G_TYPE_FLOAT:
+		break;
+
+	case G_TYPE_STRING:
+		break;
+	*/
+
+	default:
+		g_warning("Can't activate action \"%s\"",g_action_get_name(object));
+		g_value_unset(&value);
+		return;
+	}
+
+	g_object_set_property(G_OBJECT(terminal),action->pspec->name,&value);
+
+	g_value_unset(&value);
 
  }
 
- v3270PropertyAction * v3270_property_action_new(GtkWidget *widget, const gchar *property_name) {
+ static void on_notify(GtkWidget G_GNUC_UNUSED(*terminal), GParamSpec G_GNUC_UNUSED(*pspec), GAction *action) {
+
+ 	debug("%s: State of action %s has changed",__FUNCTION__, g_action_get_name(G_ACTION(action)));
+ 	pw3270_action_notify_state(action);
+
+ }
+
+ GAction * v3270_property_action_new(GtkWidget *widget, const gchar *property_name) {
 
 	GParamSpec *pspec = g_object_class_find_property(G_OBJECT_GET_CLASS(widget), property_name);
 
@@ -127,52 +181,45 @@
 		return NULL;
     }
 
-    // Get state type
-    const GVariantType	* type;
-
-	switch(pspec->value_type) {
-	case G_TYPE_BOOLEAN:
-		type = G_VARIANT_TYPE_BOOLEAN;
-		debug("%s: Type of \"%s\" is %s",__FUNCTION__,property_name,"boolean");
-		break;
-
-	case G_TYPE_INT:
-		type = G_VARIANT_TYPE_INT32;
-		debug("%s: Type of \"%s\" is %s",__FUNCTION__,property_name,"int32");
-		break;
-
-	case G_TYPE_UINT:
-		type = G_VARIANT_TYPE_UINT32;
-		debug("%s: Type of \"%s\" is %s",__FUNCTION__,property_name,"uint32");
-		break;
-
-	case G_TYPE_DOUBLE:
-	case G_TYPE_FLOAT:
-		type = G_VARIANT_TYPE_DOUBLE;
-		break;
-
-	case G_TYPE_STRING:
-		type = G_VARIANT_TYPE_STRING;
-		break;
-
-	default:
-		g_warning(
-			"Unable to create action for property '%s::%s' of type '%s'",
-					g_type_name(pspec->owner_type),
-					pspec->name,
-					g_type_name(pspec->value_type)
-			);
-		return NULL;
-    }
-
  	v3270PropertyAction * action = (v3270PropertyAction *) g_object_new(V3270_TYPE_PROPERTY_ACTION, NULL);
 
  	action->parent.name				= pspec->name;
-	action->parent.types.state		= type;
-	action->parent.types.parameter	= type;
+	action->parent.types.state		= G_VARIANT_TYPE_STRING;
+	action->parent.types.parameter	= G_VARIANT_TYPE_STRING;
 	action->parent.activate			= activate;
  	action->pspec					= pspec;
 
  	pw3270_action_set_terminal_widget(G_ACTION(action), widget);
- 	return action;
+
+	return G_ACTION(action);
  }
+
+ void change_widget(GAction *object, GtkWidget *from, GtkWidget *to) {
+
+	v3270PropertyAction * action = V3270_PROPERTY_ACTION(object);
+	g_autofree gchar * signal_name = g_strconcat("notify::", action->pspec->name,NULL);
+
+	if(from) {
+		gulong handler = g_signal_handler_find(
+												from,
+												G_SIGNAL_MATCH_FUNC|G_SIGNAL_MATCH_DATA,
+												0,
+												0,
+												NULL,
+												G_CALLBACK(on_notify),
+												action
+										);
+
+		if(handler)
+			g_signal_handler_disconnect(from, handler);
+
+	}
+
+	PW3270_ACTION_CLASS(v3270PropertyAction_parent_class)->change_widget(object,from,to);
+
+	if(to) {
+		g_signal_connect(G_OBJECT(to),signal_name,G_CALLBACK(on_notify),action);
+	}
+
+ }
+

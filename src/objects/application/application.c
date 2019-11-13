@@ -245,6 +245,15 @@
 			.name = "open.window",
 			.activate = pw3270_application_generic_activated,
 		},
+
+		/*
+		{
+			.name = "model-number",
+			.activate = model_cb,
+			.parameter_type = "s"
+		}
+		*/
+
 	};
 
 	g_action_map_add_action_entries(
@@ -276,12 +285,35 @@
 	// Create terminal widget & associated widget
 	GtkWidget * terminal = pw3270_terminal_new(window);
 
+	/*
 	GAction * action = G_ACTION(v3270_property_action_new(terminal,"model_number"));
-
 	if(action) {
 		debug("Adding window action \"%s\"",g_action_get_name(action));
 		g_action_map_add_action(G_ACTION_MAP(window),action);
 	}
+	*/
+
+	// https://developer.gnome.org/gnome-devel-demos/stable/menubar.vala.html.en
+
+	/*
+	static const GActionEntry actions[] = {
+
+		{
+			.name = "model-number",
+			.activate = model_cb,
+			.parameter_type = "s",
+			.state = "2"
+		}
+
+	};
+
+	g_action_map_add_action_entries(G_ACTION_MAP(window),actions,G_N_ELEMENTS(actions),NULL);
+	*/
+
+	g_action_map_add_action(
+		G_ACTION_MAP(window),
+		v3270_property_action_new(terminal,"model-number")
+	);
 
 	// Present the new window
 	pw3270_window_set_current_page(window,0);

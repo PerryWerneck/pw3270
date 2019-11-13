@@ -70,6 +70,8 @@
 		/// @brief Get State method.
 		GVariant * (*get_state_property)(GAction *action, GtkWidget *terminal);
 
+		/// @brief Get state hint.
+		GVariant * (*get_state_hint)(GAction *action, GtkWidget *terminal);
 
 	} pw3270Action;
 
@@ -209,7 +211,7 @@
 
 	GType v3270PropertyAction_get_type(void) G_GNUC_CONST;
 
-	v3270PropertyAction * v3270_property_action_new(GtkWidget *widget, const gchar *property_name);
+	GAction * v3270_property_action_new(GtkWidget *widget, const gchar *property_name);
 
 	G_END_DECLS
 

@@ -49,6 +49,7 @@
  static	GVariant 			* internal_get_state_property(GAction *action, GtkWidget *terminal);
  static gboolean			  internal_get_enabled(GAction *action, GtkWidget *terminal);
  static void 				  internal_activate(GAction *action, GVariant *parameter, GtkWidget *terminal);
+ static GVariant			* internal_get_state_hint(GAction *action, GtkWidget *terminal);
 
  static	const GVariantType	* get_parameter_type(GAction *action);
  static GVariant			* get_state_hint(GAction *action);
@@ -176,6 +177,7 @@
 
 	action->activate			= internal_activate;
 	action->get_state_property	= internal_get_state_property;
+	action->get_state_hint		= internal_get_state_hint;
 
  }
 
@@ -266,6 +268,10 @@
 
  }
 
+ GVariant * internal_get_state_hint(GAction G_GNUC_UNUSED(*action), GtkWidget G_GNUC_UNUSED(*terminal)) {
+ 	return NULL;
+ }
+
  GVariant * internal_get_state_property(GAction *object, GtkWidget G_GNUC_UNUSED(*terminal)) {
 
 	pw3270Action * action = PW3270_ACTION(object);
@@ -300,11 +306,12 @@
 	return PW3270_ACTION(object)->types.state;
  }
 
- GVariant * get_state_hint(GAction G_GNUC_UNUSED(*action)) {
-	return NULL;
+ GVariant * get_state_hint(GAction *object) {
+ 	pw3270Action *action = PW3270_ACTION(object);
+	return action->get_state_hint(object,action->terminal);
  }
 
- void change_state(GAction *object, GVariant *value) {
+ void change_state(GAction G_GNUC_UNUSED(*object), GVariant G_GNUC_UNUSED(*value)) {
  	debug("%s",__FUNCTION__)
  }
 
