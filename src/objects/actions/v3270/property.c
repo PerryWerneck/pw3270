@@ -76,6 +76,7 @@
 
 	case G_TYPE_STRING:
 		result = g_variant_new_string(g_value_get_string(&value));
+		debug("Action %s is on state \"%s\"",g_action_get_name(object),g_value_get_string(&value));
 		break;
 
 	case G_TYPE_BOOLEAN:
@@ -139,6 +140,10 @@
 
 		break;
 
+	case G_TYPE_STRING:
+		g_value_set_string(&value,g_variant_get_string(parameter,NULL));
+		break;
+
 	/*
 	case G_TYPE_INT:
 		break;
@@ -149,8 +154,6 @@
 	case G_TYPE_FLOAT:
 		break;
 
-	case G_TYPE_STRING:
-		break;
 	*/
 
 	default:

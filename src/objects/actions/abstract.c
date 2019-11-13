@@ -333,18 +333,18 @@
 	g_idle_add((GSourceFunc) bg_notify_state, G_OBJECT(action));
  }
 
- static void change_widget(GAction *action, GtkWidget *from, GtkWidget *to) {
+ static void change_widget(GAction *object, GtkWidget *from, GtkWidget *to) {
 
  	if(from != to) {
 
-		pw3270Action *pAction = PW3270_ACTION(action);
+		pw3270Action *action = PW3270_ACTION(object);
 
-		pAction->terminal = to;
+		action->terminal = to;
 
-		pw3270_action_notify_enabled(action);
+		pw3270_action_notify_enabled(object);
 
-		if(pAction->types.state)
-			pw3270_action_notify_state(action);
+		if(action->types.state)
+			pw3270_action_notify_state(object);
 
  	}
 
