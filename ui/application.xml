@@ -245,8 +245,6 @@
         
           <attribute name="label" translatable="yes">Screen size</attribute>
 
-            <!-- https://developer.gnome.org/gnome-devel-demos/stable/menubar.vala.html.en -->
-
             <item>
               <attribute name="label" translatable="yes">Model 2 - 80x24</attribute>
               <attribute name="action">win.model-number</attribute>

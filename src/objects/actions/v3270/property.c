@@ -40,21 +40,22 @@
  #include <stdlib.h>
  #include <pw3270/window.h>
  #include <v3270.h>
+ #include <lib3270/properties.h>
 
  static void v3270PropertyAction_class_init(v3270PropertyActionClass *klass);
  static void v3270PropertyAction_init(v3270PropertyAction *action);
  static GVariant * get_state(GAction *action, GtkWidget *terminal);
  static void change_widget(GAction *object, GtkWidget *from, GtkWidget *to);
 
- G_DEFINE_TYPE(v3270PropertyAction, v3270PropertyAction, PW3270_TYPE_ACTION);
+ G_DEFINE_TYPE(v3270PropertyAction, v3270PropertyAction, PW3270_TYPE_SIMPLE_ACTION);
 
  void v3270PropertyAction_class_init(v3270PropertyActionClass *klass) {
-	klass->parent_class.change_widget = change_widget;
+	klass->parent_class.parent_class.change_widget = change_widget;
  }
 
  static void v3270PropertyAction_init(v3270PropertyAction *action) {
 
- 	action->parent.get_state_property = get_state;
+ 	action->parent.parent.get_state_property = get_state;
 
  }
 
@@ -76,10 +77,11 @@
 	case G_TYPE_STRING:
 		result = g_variant_new_string(g_value_get_string(&value));
 		break;
-	/*
+
 	case G_TYPE_BOOLEAN:
 		result = g_variant_new_boolean(g_value_get_boolean(&value));
 		break;
+	/*
 
 	case G_TYPE_INT:
 		result = g_variant_new_int32(g_value_get_int(&value));
@@ -100,17 +102,6 @@
 
 	g_value_unset (&value);
 
-#ifdef DEBUG
-	if(result)
-	{
-		debug("Action %s set to \"%s\"",g_action_get_name(object),g_variant_get_string(result,NULL));
-	}
-	else
-	{
-		debug("Action %s set to \"%s\"",g_action_get_name(object),"NULL");
-	}
-#endif // DEBUG
-
 	return result;
 
  }
@@ -128,12 +119,27 @@
 	{
 	case G_TYPE_UINT:
 		g_value_set_uint(&value,atoi(g_variant_get_string(parameter,NULL)));
+
+		break;
+
+	case G_TYPE_BOOLEAN:
+
+		if(parameter) {
+
+			if(g_variant_is_of_type(parameter,G_VARIANT_TYPE_BOOLEAN))
+				g_value_set_boolean(&value,g_variant_get_boolean(parameter));
+			else
+				g_value_set_boolean(&value,atoi(g_variant_get_string(parameter,NULL)) != 0);
+
+		} else {
+
+			debug("%s: TODO: Toggle property",__FUNCTION__);
+
+		}
+
 		break;
 
 	/*
-	case G_TYPE_BOOLEAN:
-		break;
-
 	case G_TYPE_INT:
 		break;
 
@@ -170,6 +176,20 @@
 
 	GParamSpec *pspec = g_object_class_find_property(G_OBJECT_GET_CLASS(widget), property_name);
 
+	if(!pspec) {
+
+		g_warning(
+			"Can't find property '%s::%s'",
+			G_OBJECT_TYPE_NAME(G_OBJECT(widget)),
+			property_name
+		);
+
+		return NULL;
+
+	}
+
+	debug("%s: pspec(%s)=%p",__FUNCTION__,property_name,pspec);
+
  	if(~pspec->flags & G_PARAM_READABLE || ~pspec->flags & G_PARAM_WRITABLE || pspec->flags & G_PARAM_CONSTRUCT_ONLY) {
 
 		g_warning(
@@ -183,11 +203,20 @@
 
  	v3270PropertyAction * action = (v3270PropertyAction *) g_object_new(V3270_TYPE_PROPERTY_ACTION, NULL);
 
- 	action->parent.name				= pspec->name;
-	action->parent.types.state		= G_VARIANT_TYPE_STRING;
-	action->parent.types.parameter	= G_VARIANT_TYPE_STRING;
-	action->parent.activate			= activate;
- 	action->pspec					= pspec;
+	pw3270_simple_action_set_lib3270_property(PW3270_SIMPLE_ACTION(action), lib3270_property_get_by_name(pspec->name));
+
+ 	action->parent.parent.name = g_param_spec_get_name(pspec);
+	action->parent.tooltip = g_param_spec_get_blurb(pspec);
+
+	if(pspec->value_type == G_TYPE_BOOLEAN) {
+		action->parent.parent.types.state = G_VARIANT_TYPE_BOOLEAN;
+	} else {
+		action->parent.parent.types.state = G_VARIANT_TYPE_STRING;
+		action->parent.parent.types.parameter = G_VARIANT_TYPE_STRING;
+	}
+
+	action->parent.parent.activate			= activate;
+ 	action->pspec							= pspec;
 
  	pw3270_action_set_terminal_widget(G_ACTION(action), widget);
 

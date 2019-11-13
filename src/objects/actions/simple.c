@@ -101,6 +101,16 @@
 
  }
 
+ void pw3270_simple_action_set_lib3270_property(pw3270SimpleAction *action, const LIB3270_PROPERTY * property) {
+
+	if(property) {
+		action->parent.name	= property->name;
+		action->tooltip 	= property->summary ? property->summary : property->description;
+		action->group.id	= property->group;
+	}
+
+ }
+
  pw3270SimpleAction * pw3270_simple_action_new_from_lib3270(const LIB3270_ACTION * definition, const gchar *name) {
 
 	if(!definition)
@@ -110,10 +120,11 @@
 
  	pw3270SimpleAction * action = (pw3270SimpleAction *) g_object_new(PW3270_TYPE_SIMPLE_ACTION, NULL);
 
+ 	pw3270_simple_action_set_lib3270_property(action, (const LIB3270_PROPERTY *) definition);
+
  	action->parent.name = name ? name : definition->name;
 	action->icon_name = definition->icon;
 	action->label = definition->label;
-	action->tooltip = definition->summary;
 	action->activate = activate;
 
 	return action;

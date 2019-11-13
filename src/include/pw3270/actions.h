@@ -169,6 +169,8 @@
 	/// @brief New simple action from LIB3270's action name.
 	pw3270SimpleAction * pw3270_simple_action_new_from_name(const gchar *source_name, const gchar *name);
 
+	/// @brief Update simple action from LIB3270's property description.
+	void pw3270_simple_action_set_lib3270_property(pw3270SimpleAction *action, const LIB3270_PROPERTY * property);
 
 	//
 	// Dialog action
@@ -197,7 +199,7 @@
 
 	typedef struct _v3270PropertyAction {
 
-		pw3270Action parent;
+		pw3270SimpleAction parent;
 
 		GParamSpec *pspec;
 
@@ -205,7 +207,7 @@
 
 	typedef struct _v3270PropertyActionClass {
 
-		pw3270ActionClass parent_class;
+		pw3270SimpleActionClass parent_class;
 
 	} v3270PropertyActionClass;
 

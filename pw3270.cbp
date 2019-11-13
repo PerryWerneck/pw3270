@@ -50,6 +50,9 @@
 		<Unit filename="src/main/main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/main/placeholders.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/main/private.h" />
 		<Unit filename="src/main/tools.c">
 			<Option compilerVar="CC" />

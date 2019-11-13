@@ -52,6 +52,9 @@
 	#define I_(string) g_intern_static_string (string)
 
 
+	void pw3270_load_placeholders(GtkBuilder * builder);
+
+
 	G_END_DECLS
 
 #endif // PW3270_H_INCLUDED
