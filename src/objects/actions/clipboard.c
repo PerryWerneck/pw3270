@@ -49,10 +49,15 @@
 
  }
 
-  static void activate_paste(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkWidget *terminal) {
+  static void activate_paste(GAction G_GNUC_UNUSED(*action), GVariant *parameter, GtkWidget *terminal) {
 
-	debug("%s",__FUNCTION__);
-	v3270_paste(terminal);
+	debug("%s %p",__FUNCTION__,parameter);
+
+	if(!parameter) {
+		v3270_paste(terminal);
+	} else {
+		v3270_paste_from_url(terminal,g_variant_get_string(parameter,NULL));
+	}
 
  }
 
@@ -123,10 +128,11 @@
 
 	};
 
-	GAction * action = pw3270_action_new_from_lib3270(&action_descriptor);
+	pw3270Action * action = PW3270_ACTION(pw3270_action_new_from_lib3270(&action_descriptor));
 
-	PW3270_ACTION(action)->activate = activate_paste;
+	action->types.parameter = G_VARIANT_TYPE_STRING;
+	action->activate = activate_paste;
 
-	return action;
+	return G_ACTION(action);
 
  }

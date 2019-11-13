@@ -135,20 +135,22 @@
         <item>
           <attribute name="label" translatable="yes">Paste from clipboard</attribute>
           <attribute name="action">win.paste</attribute>
+          <attribute name="target">clipboard://</attribute>
         </item>
 
         <item>
           <attribute name="label" translatable="yes">Paste next</attribute>
-          <attribute name="action">win.paste_next</attribute>
+          <attribute name="action">win.paste</attribute>
+          <attribute name="target">next://</attribute>
         </item>
 
         <item>
-          <attribute name="label" translatable="yes">Paste text file</attribute>
-          <attribute name="action">win.paste_file</attribute>
+          <attribute name="label" translatable="yes">Paste from text file</attribute>
+          <attribute name="action">win.paste</attribute>
+          <attribute name="target">file://</attribute>
         </item>
 
       </section>
-      
 
       <section>
 
