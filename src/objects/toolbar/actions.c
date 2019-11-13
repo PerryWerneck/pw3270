@@ -60,8 +60,8 @@
 
 	if(window) {
 
-		GAction *action = g_action_map_lookup_action(G_ACTION_MAP(window), name);
 		GtkToolItem * item = NULL;
+		GAction *action = g_action_map_lookup_action(G_ACTION_MAP(window), name);
 
 		if(!action) {
 			const gchar *ptr = strchr(name,'.');
@@ -79,7 +79,14 @@
 		}
 
 		if(item) {
-			gtk_actionable_set_action_name(GTK_ACTIONABLE(item),name);
+
+			if(action && g_action_get_parameter_type(action) == G_VARIANT_TYPE_STRING) {
+				g_autofree gchar * detailed = g_strconcat(name,"::",NULL);
+				gtk_actionable_set_detailed_action_name(GTK_ACTIONABLE(item),detailed);
+			} else {
+				gtk_actionable_set_action_name(GTK_ACTIONABLE(item),name);
+			}
+
 			gtk_toolbar_insert(GTK_TOOLBAR(toolbar),item,pos);
 			return GTK_WIDGET(item);
 		}

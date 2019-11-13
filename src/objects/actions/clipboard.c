@@ -51,11 +51,12 @@
 
   static void activate_paste(GAction G_GNUC_UNUSED(*action), GVariant *parameter, GtkWidget *terminal) {
 
-	debug("%s %p",__FUNCTION__,parameter);
 
 	if(!parameter) {
-		v3270_paste(terminal);
+		debug("%s %p",__FUNCTION__,"NULL");
+		v3270_paste_from_url(terminal,NULL);
 	} else {
+		debug("%s \"%s\"",__FUNCTION__,g_variant_get_string(parameter,NULL));
 		v3270_paste_from_url(terminal,g_variant_get_string(parameter,NULL));
 	}
 
@@ -63,6 +64,7 @@
 
  GAction * pw3270_copy_action_new(void) {
 
+	/*
 	static const LIB3270_ACTION action_descriptor = {
 		.name = "copy",
 		.type = LIB3270_ACTION_TYPE_SELECTION,
@@ -82,12 +84,28 @@
 
 	PW3270_ACTION(action)->activate = activate_copy;
 
+
 	return action;
+
+
+	*/
+
+	pw3270SimpleAction * action = pw3270_simple_action_new();
+
+	action->parent.activate = activate_copy;
+	action->group.id = LIB3270_ACTION_GROUP_SELECTION;
+	action->parent.name = "file.transfer";
+	action->icon_name = "edit-copy";
+	action->label =  N_( "_Copy" );
+	action->tooltip = N_( "Copy selected area to clipboard." );
+
+	return G_ACTION(action);
 
  }
 
  GAction * pw3270_cut_action_new(void) {
 
+	/*
 	static const LIB3270_ACTION action_descriptor = {
 		.name = "cut",
 		.type = LIB3270_ACTION_TYPE_SELECTION,
@@ -108,11 +126,24 @@
 	PW3270_ACTION(action)->activate = activate_cut;
 
 	return action;
+	*/
+
+	pw3270SimpleAction * action = pw3270_simple_action_new();
+
+	action->parent.activate = activate_cut;
+	action->group.id = LIB3270_ACTION_GROUP_SELECTION;
+	action->parent.name = "file.transfer";
+	action->icon_name = "edit-cut";
+	action->label =  N_( "C_ut" );
+	action->tooltip = N_( "Cut selected area." );
+
+	return G_ACTION(action);
 
  }
 
  GAction * pw3270_paste_action_new(void) {
 
+	/*
 	static const LIB3270_ACTION action_descriptor = {
 		.name = "paste",
 		.type = LIB3270_ACTION_TYPE_SELECTION,
@@ -132,6 +163,20 @@
 
 	action->types.parameter = G_VARIANT_TYPE_STRING;
 	action->activate = activate_paste;
+
+	return G_ACTION(action);
+	*/
+
+	pw3270SimpleAction * action = pw3270_simple_action_new();
+
+	action->parent.activate = activate_paste;
+	action->parent.types.parameter = G_VARIANT_TYPE_STRING;
+
+	action->group.id = LIB3270_ACTION_GROUP_LOCK_STATE;
+	action->parent.name = "paste";
+	action->icon_name = "edit-paste";
+	action->label =  N_( "_Paste" );
+	action->tooltip = N_( "Paste text from clipboard." );
 
 	return G_ACTION(action);
 

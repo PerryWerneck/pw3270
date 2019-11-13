@@ -170,8 +170,6 @@
 
  GtkWidget * pw3270_application_window_new(GtkApplication * application) {
 
-	size_t ix;
-
 	const gchar * title = _( "IBM 3270 Terminal emulator" );
 
 	g_autoptr(GSettings) settings = pw3270_application_get_settings(G_APPLICATION(application));
