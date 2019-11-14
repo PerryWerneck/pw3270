@@ -109,8 +109,6 @@
 
  static void activate(GAction *object, GVariant *parameter, GtkWidget *terminal) {
 
-	debug("%s(%s,%s,%p)",__FUNCTION__,g_action_get_name(object),g_variant_get_string(parameter,NULL),terminal);
-
 	v3270PropertyAction * action = V3270_PROPERTY_ACTION(object);
 
 	GValue value = G_VALUE_INIT;
@@ -119,13 +117,15 @@
 	switch(action->pspec->value_type)
 	{
 	case G_TYPE_UINT:
+		debug("%s(%s,%s,%p)",__FUNCTION__,g_action_get_name(object),g_variant_get_string(parameter,NULL),terminal);
 		g_value_set_uint(&value,atoi(g_variant_get_string(parameter,NULL)));
-
 		break;
 
 	case G_TYPE_BOOLEAN:
 
 		if(parameter) {
+
+			debug("%s(%s,%s,%p)",__FUNCTION__,g_action_get_name(object),g_variant_get_string(parameter,NULL),terminal);
 
 			if(g_variant_is_of_type(parameter,G_VARIANT_TYPE_BOOLEAN))
 				g_value_set_boolean(&value,g_variant_get_boolean(parameter));
@@ -134,7 +134,8 @@
 
 		} else {
 
-			debug("%s: TODO: Toggle property",__FUNCTION__);
+			g_object_get_property(G_OBJECT(terminal), action->pspec->name, &value);
+			g_value_set_boolean(&value,!g_value_get_boolean(&value));
 
 		}
 

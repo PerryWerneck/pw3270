@@ -378,6 +378,11 @@
             <attribute name="action">win.keepalive</attribute>
           </item>
 
+          <item>
+            <attribute name="label" translatable="yes">Dynamic font spacing</attribute>
+            <attribute name="action">win.dynamic-font-spacing</attribute>
+          </item>
+
         </submenu>
 
     </submenu>
