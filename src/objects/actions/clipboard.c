@@ -35,17 +35,55 @@
  #include "private.h"
  #include <v3270.h>
 
- static void activate_copy(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkWidget *terminal) {
+ static V3270_COPY_MODE get_copy_mode_from_parameter(GVariant *parameter) {
+
+	static const struct {
+		const gchar		* name;
+		V3270_COPY_MODE	  value;
+	} targets[] = {
+		{ "auto",			V3270_COPY_DEFAULT		},
+		{ "system",			V3270_COPY_DEFAULT		},
+		{ "default",		V3270_COPY_DEFAULT		},
+		{ "system default",	V3270_COPY_DEFAULT		},
+		{ "formatted",		V3270_COPY_FORMATTED	},
+		{ "text",			V3270_COPY_TEXT 		},
+		{ "table",			V3270_COPY_TABLE		},
+		{ "append",			V3270_COPY_APPEND		}
+
+	};
+
+	if(parameter) {
+
+		const gchar * target = g_variant_get_string(parameter,NULL);
+
+		if(target && *target) {
+
+			size_t ix;
+			for(ix = 0; ix < G_N_ELEMENTS(targets); ix++) {
+
+				if(!g_ascii_strcasecmp(target,targets[ix].name))
+					return targets[ix].value;
+
+			}
+
+		}
+
+	}
+
+	return V3270_COPY_DEFAULT;
+ }
+
+ static void activate_copy(GAction G_GNUC_UNUSED(*action), GVariant *parameter, GtkWidget *terminal) {
 
 	debug("%s",__FUNCTION__);
-	v3270_copy_selection(terminal,V3270_SELECT_TEXT,FALSE);
+	v3270_clipboard_set(terminal,get_copy_mode_from_parameter(parameter),FALSE);
 
  }
 
  static void activate_cut(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkWidget *terminal) {
 
 	debug("%s",__FUNCTION__);
-	v3270_copy_selection(terminal,V3270_SELECT_TEXT,TRUE);
+	v3270_clipboard_set(terminal,get_copy_mode_from_parameter(parameter),TRUE);
 
  }
 
@@ -54,47 +92,23 @@
 
 	if(!parameter) {
 		debug("%s %p",__FUNCTION__,"NULL");
-		v3270_paste_from_url(terminal,NULL);
+		v3270_clipboard_get_from_url(terminal,NULL);
 	} else {
 		debug("%s \"%s\"",__FUNCTION__,g_variant_get_string(parameter,NULL));
-		v3270_paste_from_url(terminal,g_variant_get_string(parameter,NULL));
+		v3270_clipboard_get_from_url(terminal,g_variant_get_string(parameter,NULL));
 	}
 
  }
 
  GAction * pw3270_copy_action_new(void) {
 
-	/*
-	static const LIB3270_ACTION action_descriptor = {
-		.name = "copy",
-		.type = LIB3270_ACTION_TYPE_SELECTION,
-
-		.key = "<ctrl>c",
-		.icon = "edit-copy",
-		.label = N_( "_Copy" ),
-		.summary = N_( "Copy selected area to clipboard." ),
-		.activate = NULL,
-
-		.group = LIB3270_ACTION_GROUP_SELECTION,
-		.activatable = lib3270_has_selection
-
-	};
-
-	GAction * action = pw3270_action_new_from_lib3270(&action_descriptor);
-
-	PW3270_ACTION(action)->activate = activate_copy;
-
-
-	return action;
-
-
-	*/
-
 	pw3270SimpleAction * action = pw3270_simple_action_new();
 
 	action->parent.activate = activate_copy;
+	action->parent.types.parameter = G_VARIANT_TYPE_STRING;
+
 	action->group.id = LIB3270_ACTION_GROUP_SELECTION;
-	action->parent.name = "file.transfer";
+	action->parent.name = "copy";
 	action->icon_name = "edit-copy";
 	action->label =  N_( "_Copy" );
 	action->tooltip = N_( "Copy selected area to clipboard." );
@@ -105,34 +119,13 @@
 
  GAction * pw3270_cut_action_new(void) {
 
-	/*
-	static const LIB3270_ACTION action_descriptor = {
-		.name = "cut",
-		.type = LIB3270_ACTION_TYPE_SELECTION,
-
-		.key = "<ctrl>x",
-		.icon = "edit-cut",
-		.label = N_( "_Cut" ),
-		.summary = N_( "Cut selected area." ),
-		.activate = NULL,
-
-		.group = LIB3270_ACTION_GROUP_SELECTION,
-		.activatable = lib3270_has_selection
-
-	};
-
-	GAction * action = pw3270_action_new_from_lib3270(&action_descriptor);
-
-	PW3270_ACTION(action)->activate = activate_cut;
-
-	return action;
-	*/
-
 	pw3270SimpleAction * action = pw3270_simple_action_new();
 
 	action->parent.activate = activate_cut;
+	action->parent.types.parameter = G_VARIANT_TYPE_STRING;
+
 	action->group.id = LIB3270_ACTION_GROUP_SELECTION;
-	action->parent.name = "file.transfer";
+	action->parent.name = "cut";
 	action->icon_name = "edit-cut";
 	action->label =  N_( "C_ut" );
 	action->tooltip = N_( "Cut selected area." );
@@ -143,29 +136,6 @@
 
  GAction * pw3270_paste_action_new(void) {
 
-	/*
-	static const LIB3270_ACTION action_descriptor = {
-		.name = "paste",
-		.type = LIB3270_ACTION_TYPE_SELECTION,
-
-		.key = "<ctrl>v",
-		.icon = "edit-paste",
-		.label = N_( "_Paste" ),
-		.summary = N_( "Paste data from clipboard." ),
-		.activate = NULL,
-
-		.group = LIB3270_ACTION_GROUP_LOCK_STATE,
-		.activatable = lib3270_is_unlocked
-
-	};
-
-	pw3270Action * action = PW3270_ACTION(pw3270_action_new_from_lib3270(&action_descriptor));
-
-	action->types.parameter = G_VARIANT_TYPE_STRING;
-	action->activate = activate_paste;
-
-	return G_ACTION(action);
-	*/
 
 	pw3270SimpleAction * action = pw3270_simple_action_new();
 
