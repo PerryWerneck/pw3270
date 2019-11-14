@@ -199,19 +199,19 @@ static void reload_action(GtkAction *action, GtkWidget *widget)
 
 static void do_copy(GtkAction *action, GtkWidget *widget, gboolean cut)
 {
-	V3270_SELECT_FORMAT	  mode = V3270_SELECT_TEXT;
-	const gchar 		* str = (const gchar *) g_object_get_data(G_OBJECT(action),"format");
+	V3270_COPY_MODE	  mode = V3270_COPY_TEXT;
+	const gchar 	* str = (const gchar *) g_object_get_data(G_OBJECT(action),"format");
 
 	if(str)
 	{
 		static const struct _format
 		{
-			V3270_SELECT_FORMAT	  mode;
+			V3270_COPY_MODE		  mode;
 			const gchar			* name;
 		} format[] =
 		{
-			{ V3270_SELECT_TEXT,	"text"		},
-			{ V3270_SELECT_TABLE,	"table"		},
+			{ V3270_COPY_TEXT,	"text"		},
+			{ V3270_COPY_TABLE,	"table"		},
 		};
 
 		int f;
