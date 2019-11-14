@@ -286,7 +286,8 @@
 	static const gchar * properties[] = {
 		"model-number",
 		"font-family",
-		"dynamic-font-spacing"
+		"dynamic-font-spacing",
+		"trace",
 	};
 
 	for(ix = 0; ix < G_N_ELEMENTS(properties); ix++) {

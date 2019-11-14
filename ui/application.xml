@@ -221,6 +221,11 @@
 
       <attribute name='label' translatable='yes'>_View</attribute>
 
+        <item>
+          <attribute name="label" translatable="yes">Trace</attribute>
+          <attribute name="action">win.trace</attribute>
+        </item>
+
     </submenu>
 
     <submenu>
