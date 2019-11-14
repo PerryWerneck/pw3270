@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-08 16:53-0300\n"
-"PO-Revision-Date: 2019-11-12 16:01-0300\n"
+"POT-Creation-Date: 2019-11-14 13:47-0300\n"
+"PO-Revision-Date: 2019-11-14 13:49-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
 "Language: pt_BR\n"
@@ -109,7 +109,7 @@ msgstr "%s<b>%s</b> para %s"
 msgid "- 3270 Emulator for Gtk"
 msgstr "- Emulador 3270 para GTK"
 
-#: src/dialogs/hostselect.c:141
+#: src/dialogs/hostselect.c:146
 msgid "16 colors"
 msgstr "16 cores"
 
@@ -142,7 +142,7 @@ msgstr "Emulador 3270 para GTK+ %d.%d"
 msgid "3270-style backspace."
 msgstr "Backspace no estilo 3270"
 
-#: src/dialogs/hostselect.c:140
+#: src/dialogs/hostselect.c:145
 msgid "8 colors"
 msgstr "8 cores"
 
@@ -232,7 +232,7 @@ msgstr "Sobre a segurança"
 msgid "Ack received, data flowing"
 msgstr "Confirmação recebida, transferindo dados"
 
-#: src/core/paste.c:397
+#: src/core/paste.c:398
 msgid "Action failed"
 msgstr "Ação falhou"
 
@@ -245,7 +245,7 @@ msgstr "Atividade já está na fila"
 msgid "Add to copy"
 msgstr "Adicionar à cópia"
 
-#: src/dialogs/hostselect.c:193
+#: src/dialogs/hostselect.c:198
 msgid "Address or name of the host to connect."
 msgstr "Endereço ou nome do host a conectar."
 
@@ -351,7 +351,7 @@ msgstr "Aguardando para enviar pedido de cancelamento"
 msgid "B_egin transfer"
 msgstr "Iniciar transferência"
 
-#: colors.c:494 src/dialogs/colors.c:154
+#: src/dialogs/colors.c:154
 msgid "Background"
 msgstr "Fundo"
 
@@ -363,7 +363,7 @@ msgstr "Volta o cursor até que atinga o início de uma palavra."
 msgid "Beep on errors"
 msgstr "Emitir som nos erros"
 
-#: colors.c:502 src/dialogs/colors.c:162
+#: src/dialogs/colors.c:162
 msgid "Black"
 msgstr "Preto"
 
@@ -379,7 +379,7 @@ msgstr "Cursor piscante"
 msgid "Block size"
 msgstr "Tamanho do bloco:"
 
-#: colors.c:495 src/dialogs/colors.c:155
+#: src/dialogs/colors.c:155
 msgid "Blue"
 msgstr "Azul"
 
@@ -543,7 +543,7 @@ msgstr "Erro ao analisar valor de caractere"
 msgid "Can't parse unnamed element"
 msgstr "Incapaz de processar elemento sem nome"
 
-#: src/selection/linux/paste.c:79 src/selection/linux/paste.c:119
+#: src/selection/linux/paste.c:80 src/selection/linux/paste.c:120
 msgid "Can't paste"
 msgstr "Não é possivel colar"
 
@@ -570,7 +570,7 @@ msgid "Can't save \"%s\": %s"
 msgstr "Não foi possível salvar %s: %s"
 
 #: src/filetransfer/save.c:117 src/filetransfer/activitylist.c:436
-#: src/trace/trace.c:451 src/dialogs/transfer.c:95 src/dialogs/save/save.c:458
+#: src/trace/trace.c:441 src/dialogs/transfer.c:95 src/dialogs/save/save.c:458
 #, c-format
 msgid "Can't save %s"
 msgstr "Não foi possível salvar arquivo %s"
@@ -622,7 +622,7 @@ msgstr "Não foi possível verificar"
 
 #: src/terminal/callbacks.c:407 src/filetransfer/v3270ftprogress.c:433
 #: src/filetransfer/transfer.c:89 src/dialogs/load.c:111
-#: src/dialogs/hostselect.c:341 src/dialogs/save/save.c:136
+#: src/dialogs/hostselect.c:346 src/dialogs/save/save.c:136
 msgid "Cancel"
 msgstr "_Cancelar"
 
@@ -684,7 +684,7 @@ msgstr "Falha na assinatura do certificado"
 msgid "Charset error"
 msgstr "Erro de codificação de caracteres"
 
-#: src/dialogs/hostselect.c:467
+#: src/dialogs/hostselect.c:472
 msgid "Check for SSL secure connection."
 msgstr "Marcar para ativar a conexão segura via SSL."
 
@@ -712,7 +712,7 @@ msgstr "Clique para carregar arquivo"
 msgid "Click to save file"
 msgstr "Clique para salvar arquivo"
 
-#: src/terminal/properties/init.c:129
+#: src/terminal/properties/init.c:127
 msgid "Clipboard name"
 msgstr "Nome da área de transferência"
 
@@ -720,23 +720,15 @@ msgstr "Nome da área de transferência"
 msgid "Color _theme"
 msgstr "_Tema de cores:"
 
-#: colors.c:631
-msgid "Color scheme:"
-msgstr "Tema de cores:"
-
-#: colors.c:532
-msgid "Color setup"
-msgstr "Configuração de cores"
-
 #: src/dialogs/colors.c:374 00default.xml:104
 msgid "Colors"
 msgstr "Cores"
 
-#: src/terminal/properties/init.c:173
+#: src/terminal/properties/init.c:171
 msgid "Comma separated list of LU names"
 msgstr "Lista de nomes de LU separada por virgulas"
 
-#: src/dialogs/hostselect.c:241
+#: src/dialogs/hostselect.c:246
 msgid "Comma separated list of LU names."
 msgstr "Lista de nomes de LU separada por virgulas."
 
@@ -748,7 +740,7 @@ msgstr "Arquivo separado por vírgulas (CSV)"
 msgid "Command incomplete: file transfer canceled"
 msgstr "Comando incompleto, transferência cancelada"
 
-#: src/trace/trace.c:276
+#: src/trace/trace.c:335
 msgid "Command to execute"
 msgstr "Comando a executar"
 
@@ -768,7 +760,7 @@ msgstr "Conectar ao servidor"
 msgid "Connect to host."
 msgstr "Conectar ao servidor."
 
-#: src/dialogs/hostselect.c:390
+#: src/dialogs/hostselect.c:395
 msgid "Connection"
 msgstr "Conexão"
 
@@ -822,7 +814,7 @@ msgstr ""
 msgid "Creates a file with variable-length records."
 msgstr "Cria arquivo com registros de tamanho variável."
 
-#: colors.c:519 src/core/toggles/table.c:162 src/core/toggles/table.c:163
+#: src/core/toggles/table.c:162 src/core/toggles/table.c:163
 #: src/dialogs/colors.c:179 00default.xml:121
 msgid "Cross hair cursor"
 msgstr "Cursor mira"
@@ -836,11 +828,11 @@ msgstr "Atual (%s)"
 msgid "Current file"
 msgstr "Arquivo atual"
 
-#: src/core/properties/unsigned.c:95
+#: src/core/properties/unsigned.c:100
 msgid "Current screen height in rows"
 msgstr "Altura atual da tela em linhas"
 
-#: src/core/properties/unsigned.c:88
+#: src/core/properties/unsigned.c:93
 msgid "Current screen width in columns"
 msgstr "Largura atua da tela em colunas"
 
@@ -852,7 +844,7 @@ msgstr "Posição atual da transferência"
 msgid "Current:"
 msgstr "Atual:"
 
-#: src/core/properties/unsigned.c:81
+#: src/core/properties/unsigned.c:86
 msgid "Cursor address"
 msgstr "Endereço do cursor"
 
@@ -886,13 +878,9 @@ msgstr "Move o cursor para a palavra anterior."
 msgid "Cursor up 1 position."
 msgstr "Cursor para cima 1 posição."
 
-#: src/dialogs/hostselect.c:228
+#: src/dialogs/hostselect.c:233
 msgid "Custom Remap"
 msgstr "Mapeamento personalizado"
-
-#: colors.c:380
-msgid "Custom colors"
-msgstr "Cores personalizadas"
 
 #: 00default.xml:62
 msgid "Cut"
@@ -910,15 +898,15 @@ msgstr "Tamanho do b_uffer DFT:"
 msgid "DUP key"
 msgstr "Tecla \"DUP\""
 
-#: colors.c:503 src/dialogs/colors.c:163
+#: src/dialogs/colors.c:163
 msgid "Dark Blue"
 msgstr "Azul Escuro"
 
-#: colors.c:506 src/dialogs/colors.c:166
+#: src/dialogs/colors.c:166
 msgid "Dark Green"
 msgstr "Verde Escuro"
 
-#: colors.c:507 src/dialogs/colors.c:167
+#: src/dialogs/colors.c:167
 msgid "Dark Turquoise"
 msgstr "Turquesa Escuro"
 
@@ -942,7 +930,7 @@ msgstr "Mostrar atualizações de janela"
 msgid "Default"
 msgstr "Padrão"
 
-#: src/core/properties/string.c:148
+#: src/core/properties/string.c:155
 msgid "Default host URL"
 msgstr "URL parão para acesso ao host"
 
@@ -950,7 +938,7 @@ msgstr "URL parão para acesso ao host"
 msgid "Delete field"
 msgstr "Apagar campo"
 
-#: src/core/properties/string.c:162
+#: src/core/properties/string.c:169
 msgid "Description of the current security state"
 msgstr "Descrição do estado de segurança atual"
 
@@ -970,7 +958,7 @@ msgstr "Desconecta do servidor."
 msgid "Disconnected from host."
 msgstr "Desconectado do servidor."
 
-#: src/core/properties/string.c:113
+#: src/core/properties/string.c:118
 msgid "Display charset"
 msgstr "Tabela de caracteres para a tela"
 
@@ -994,7 +982,7 @@ msgstr "EOR recebido fora do modo 3270, ignorado."
 msgid "ETA:"
 msgstr "ETA:"
 
-#: src/dialogs/hostselect.c:401
+#: src/dialogs/hostselect.c:406
 msgid "Emulation"
 msgstr "Emulação"
 
@@ -1100,7 +1088,7 @@ msgstr "Tecla \"FM\""
 msgid "Field Delimiters"
 msgstr "Delimitadores de campo"
 
-#: colors.c:488 src/dialogs/colors.c:148
+#: src/dialogs/colors.c:148
 msgid "Field colors"
 msgstr "Cor dos campos"
 
@@ -1149,7 +1137,7 @@ msgstr ""
 msgid "Font"
 msgstr "Fonte"
 
-#: src/terminal/properties/init.c:84
+#: src/terminal/properties/init.c:82
 msgid "Font family for terminal contents"
 msgstr "Familia da fonte usada no terminal"
 
@@ -1169,7 +1157,7 @@ msgstr "Erro de formato no campo \"notAfter\" do certificado"
 msgid "Format error in certificate's notBefore field"
 msgstr "Erro de formato no campo \"notBefore\" do certificado"
 
-#: src/core/properties/boolean.c:153
+#: src/core/properties/boolean.c:160
 msgid "Formatted screen"
 msgstr "Tela formatada"
 
@@ -1214,15 +1202,15 @@ msgid "Got a bad formatted certificate revocation list from LDAP server"
 msgstr ""
 "Obtive lista de certificados revogados com formato inválido do servidor LDAP"
 
-#: colors.c:509 src/dialogs/colors.c:169
+#: src/dialogs/colors.c:169
 msgid "Gray"
 msgstr "Cinza"
 
-#: colors.c:498 src/dialogs/colors.c:158
+#: src/dialogs/colors.c:158
 msgid "Green"
 msgstr "Verde"
 
-#: src/core/properties/boolean.c:139
+#: src/core/properties/boolean.c:146
 msgid "Has selected area"
 msgstr "Tem área selecionada"
 
@@ -1230,11 +1218,11 @@ msgstr "Tem área selecionada"
 msgid "Help"
 msgstr "Ajuda"
 
-#: src/dialogs/hostselect.c:576
+#: src/dialogs/hostselect.c:581
 msgid "Host"
 msgstr "Servidor"
 
-#: src/core/properties/string.c:106
+#: src/core/properties/string.c:111
 msgid "Host charset"
 msgstr "Página de código do host"
 
@@ -1250,7 +1238,7 @@ msgstr "Host illegally added function(s)"
 msgid "Host program error code xxxxxxxxxx: file transfer canceled"
 msgstr "Erro código xxxxxxxxxx no aplicativo do host: Transferência cancelada"
 
-#: src/dialogs/hostselect.c:575
+#: src/dialogs/hostselect.c:580
 msgid "Host properties"
 msgstr "Propriedades do servidor"
 
@@ -1270,7 +1258,7 @@ msgstr "Tipo do sistema no servidor"
 msgid "Host to connect"
 msgstr "Servidor a conectar"
 
-#: src/core/properties/string.c:85
+#: src/core/properties/string.c:89
 msgid "Host type name"
 msgstr "Nome do tipo de host"
 
@@ -1278,11 +1266,11 @@ msgstr "Nome do tipo de host"
 msgid "HyperText Markup Language (HTML)"
 msgstr "Documento HTML"
 
-#: src/core/options.c:49 src/dialogs/hostselect.c:111
+#: src/core/options.c:49 src/dialogs/hostselect.c:116
 msgid "IBM AS/400"
 msgstr "IBM AS/400"
 
-#: src/core/options.c:43 src/dialogs/hostselect.c:110
+#: src/core/options.c:43 src/dialogs/hostselect.c:115
 msgid "IBM S/390"
 msgstr "IBM S/390"
 
@@ -1290,7 +1278,7 @@ msgstr "IBM S/390"
 msgid "ID of the session security state"
 msgstr "Identificação do estado de segurança da sessão"
 
-#: src/terminal/properties/init.c:114
+#: src/terminal/properties/init.c:112
 msgid "IDLE minutes for automatic disconnection"
 msgstr "Minutos para desconexão automática"
 
@@ -1391,11 +1379,11 @@ msgstr "Inserção"
 msgid "Insert new file in the transfer queue"
 msgstr "Inserir um novo arquivo na fila de transferência"
 
-#: colors.c:514 src/dialogs/colors.c:174
+#: src/dialogs/colors.c:174
 msgid "Intensified/Protected"
 msgstr "Intensificado/Protegido"
 
-#: colors.c:512 src/dialogs/colors.c:172
+#: src/dialogs/colors.c:172
 msgid "Intensified/Unprotected"
 msgstr "Intensificado/Desprotegido"
 
@@ -1445,23 +1433,23 @@ msgstr "Escopo de mapeamento inválido"
 msgid "Invalid state"
 msgstr "Estado inválido"
 
-#: src/core/properties/boolean.c:62
+#: src/core/properties/boolean.c:67
 msgid "Is connection secure"
 msgstr "A conexão é segura ?"
 
-#: src/core/properties/boolean.c:146
+#: src/core/properties/boolean.c:153
 msgid "Is starting (no first screen)?"
 msgstr "Está iniciando (não recebeu a primeira tela)?"
 
-#: src/core/properties/boolean.c:55
+#: src/core/properties/boolean.c:60
 msgid "Is terminal connected"
 msgstr "O terminal está conectado"
 
-#: src/core/properties/boolean.c:132
+#: src/core/properties/boolean.c:139
 msgid "Is terminal in the INITIAL_E state?"
 msgstr "O terminal está no estad INITIAL_E?"
 
-#: src/core/properties/boolean.c:48
+#: src/core/properties/boolean.c:53
 msgid "Is terminal ready"
 msgstr "O terminal está pronto"
 
@@ -1473,15 +1461,15 @@ msgstr "Manter selecionado"
 msgid "Key usage does not include certificate signing"
 msgstr "Uso da chave não permite assinatura de certificados"
 
-#: src/core/paste.c:399
+#: src/core/paste.c:400
 msgid "Keyboard is locked"
 msgstr "Teclado está bloqueado"
 
-#: src/core/properties/unsigned.c:130
+#: src/core/properties/unsigned.c:135
 msgid "Keyboard lock status"
 msgstr "Estado de bloqueio do teclado"
 
-#: src/dialogs/hostselect.c:240
+#: src/dialogs/hostselect.c:245
 msgid "L_U Names"
 msgstr "Nomes de L_U"
 
@@ -1514,19 +1502,19 @@ msgstr "Arquivo local:"
 msgid "Local:"
 msgstr "Local:"
 
-#: src/core/properties/boolean.c:160
+#: src/core/properties/boolean.c:167
 msgid "Lock keyboard on operator error"
 msgstr "Bloqueia teclado em caso de erro do operador"
 
-#: main.c:353 src/dialogs/hostselect.c:217
+#: main.c:353 src/dialogs/hostselect.c:222
 msgid "Makes the screen larger than the default for the chosen model number."
 msgstr "Usa tamanho maior do que o padrão para o modelo escolhido."
 
-#: src/core/properties/unsigned.c:109
+#: src/core/properties/unsigned.c:114
 msgid "Maximum screen height in rows"
 msgstr "Altura máxima da tela em linhas"
 
-#: src/core/properties/unsigned.c:102
+#: src/core/properties/unsigned.c:107
 msgid "Maximum screen width in columns"
 msgstr "Largura maxima da tela em colunas"
 
@@ -1534,7 +1522,7 @@ msgstr "Largura maxima da tela em colunas"
 msgid "Minutes for auto-disconnect"
 msgstr "Minutos para desconexão automática"
 
-#: colors.c:489 src/dialogs/colors.c:149
+#: src/dialogs/colors.c:149
 msgid "Misc colors"
 msgstr "Cores diversas"
 
@@ -1543,23 +1531,23 @@ msgstr "Cores diversas"
 msgid "Model %d (%s)"
 msgstr "Modelo %d (%s)"
 
-#: src/dialogs/hostselect.c:168
+#: src/dialogs/hostselect.c:173
 msgid "Model 2 - 80x24"
 msgstr "Modelo 2 - 80x24"
 
-#: src/dialogs/hostselect.c:169
+#: src/dialogs/hostselect.c:174
 msgid "Model 3 - 80x32"
 msgstr "Modelo 3 - 80x32"
 
-#: src/dialogs/hostselect.c:170
+#: src/dialogs/hostselect.c:175
 msgid "Model 4 - 80x43"
 msgstr "Modelo 4 - 80x43"
 
-#: src/dialogs/hostselect.c:171
+#: src/dialogs/hostselect.c:176
 msgid "Model 5 - 132x27"
 msgstr "Modelo 5 - 132x27"
 
-#: src/core/properties/string.c:78
+#: src/core/properties/string.c:81
 msgid "Model name"
 msgstr "Nome do modelo"
 
@@ -1567,7 +1555,7 @@ msgstr "Nome do modelo"
 msgid "Monocase"
 msgstr "Só Maiúsculas"
 
-#: src/dialogs/hostselect.c:139
+#: src/dialogs/hostselect.c:144
 msgid "Monochrome"
 msgstr "Monocromático"
 
@@ -1585,7 +1573,7 @@ msgstr ""
 msgid "Move to first unprotected field on screen."
 msgstr "Move para o primeiro campo desprotegido."
 
-#: colors.c:508 src/dialogs/colors.c:168
+#: src/dialogs/colors.c:168
 msgid "Mustard"
 msgstr "Mostarda"
 
@@ -1600,7 +1588,7 @@ msgstr "Erro de rede"
 
 #: src/core/toggles/table.c:292 src/core/toggles/table.c:293 00default.xml:132
 msgid "Network keep alive"
-msgstr "Network keep alive"
+msgstr "Manter conexão ativa"
 
 #: 00default.xml:189
 msgid "Next field"
@@ -1638,19 +1626,19 @@ msgstr "Nenhuma transferência"
 msgid "No transfer in progress"
 msgstr "Nenhuma transferência em andamento"
 
-#: src/core/properties/boolean.c:76
+#: src/core/properties/boolean.c:83
 msgid "Non zero if the host is AS400."
 msgstr "Diferente de zero se o host é AS400"
 
-#: src/core/properties/boolean.c:69
+#: src/core/properties/boolean.c:75
 msgid "Non zero if the host is TSO."
 msgstr "Diferente de zero se o host é TSO"
 
-#: colors.c:513 src/dialogs/colors.c:173
+#: src/dialogs/colors.c:173
 msgid "Normal/Protected"
 msgstr "Normal/Protegido"
 
-#: colors.c:511 src/dialogs/colors.c:171
+#: src/dialogs/colors.c:171
 msgid "Normal/Unprotected"
 msgstr "Normal/Desprotegido"
 
@@ -1658,31 +1646,31 @@ msgstr "Normal/Desprotegido"
 msgid "Not in 3270 mode, transfer cancelled"
 msgstr "Não está no modo 3270, transferência cancelada"
 
-#: src/selection/linux/paste.c:75
+#: src/selection/linux/paste.c:76
 msgid "Not the same terminal type"
 msgstr "O tipo de terminal é diferente"
 
-#: colors.c:526 src/dialogs/colors.c:186
+#: src/dialogs/colors.c:186
 msgid "OIA Warning"
 msgstr "Alerta na OIA"
 
-#: colors.c:522 src/dialogs/colors.c:182
+#: src/dialogs/colors.c:182
 msgid "OIA background"
 msgstr "Fundo da OIA"
 
-#: colors.c:523 src/dialogs/colors.c:183
+#: src/dialogs/colors.c:183
 msgid "OIA foreground"
 msgstr "Frente da OIA"
 
-#: colors.c:524 src/dialogs/colors.c:184
+#: src/dialogs/colors.c:184
 msgid "OIA separator"
 msgstr "Separador da OIA"
 
-#: colors.c:527 src/dialogs/colors.c:187
+#: src/dialogs/colors.c:187
 msgid "OIA status invalid"
 msgstr "Estado inválido na OIA"
 
-#: colors.c:525 src/dialogs/colors.c:185
+#: src/dialogs/colors.c:185
 msgid "OIA status ok"
 msgstr "Estado normal na OIA"
 
@@ -1709,15 +1697,15 @@ msgstr "Operação falhou"
 msgid "Options"
 msgstr "Opções"
 
-#: colors.c:504 src/dialogs/colors.c:164
+#: src/dialogs/colors.c:164
 msgid "Orange"
 msgstr "Laranja"
 
-#: src/core/options.c:55 src/dialogs/hostselect.c:112
+#: src/core/options.c:55 src/dialogs/hostselect.c:117
 msgid "Other (TSO)"
 msgstr "Outro (TSO)"
 
-#: src/core/options.c:61 src/dialogs/hostselect.c:113
+#: src/core/options.c:61 src/dialogs/hostselect.c:118
 msgid "Other (VM/CMS)"
 msgstr "Outro (VM/CMS)"
 
@@ -1725,7 +1713,7 @@ msgstr "Outro (VM/CMS)"
 msgid "Out of memory"
 msgstr "Memória insuficiente"
 
-#: src/dialogs/hostselect.c:216
+#: src/dialogs/hostselect.c:221
 msgid "Oversize"
 msgstr "Oversize"
 
@@ -1882,7 +1870,7 @@ msgstr "Caminho e nome do arquivo local"
 msgid "Path length constraint exceeded"
 msgstr "Path length constraint exceeded"
 
-#: src/dialogs/hostselect.c:229
+#: src/dialogs/hostselect.c:234
 msgid "Path to XML file with custom charset mapping."
 msgstr ""
 "Caminho do arquivo XML contendo o mapeamento de caracteres personalizado."
@@ -1895,7 +1883,7 @@ msgstr "Certificado apresentado"
 msgid "Personal computer filespec incorrect: file transfer canceled"
 msgstr "Especificação de arquivo PC incorreta: Transferência cancelada"
 
-#: colors.c:497 src/dialogs/colors.c:157
+#: src/dialogs/colors.c:157
 msgid "Pink"
 msgstr "Rosa"
 
@@ -1903,7 +1891,7 @@ msgstr "Rosa"
 msgid "Plain text"
 msgstr "Texto puro"
 
-#: src/dialogs/hostselect.c:205
+#: src/dialogs/hostselect.c:210
 msgid "Port or service name (empty for \"telnet\")."
 msgstr "Nº da porta ou nome do serviço (em branco para \"telnet\")."
 
@@ -1911,7 +1899,7 @@ msgstr "Nº da porta ou nome do serviço (em branco para \"telnet\")."
 msgid "Predefined color theme"
 msgstr "Esquema de cor pré-definido"
 
-#: src/core/properties/string.c:141
+#: src/core/properties/string.c:148
 msgid "Prefered protocol for CRL"
 msgstr "Protocolo prefereido para download da CRL"
 
@@ -1979,7 +1967,7 @@ msgstr "Configurações de impressão"
 msgid "Progress"
 msgstr "Progresso"
 
-#: colors.c:505 src/dialogs/colors.c:165
+#: src/dialogs/colors.c:165
 msgid "Purple"
 msgstr "Púrpura"
 
@@ -2091,7 +2079,7 @@ msgstr "Comprimento de registro:"
 msgid "Record format"
 msgstr "Formato de registro"
 
-#: colors.c:496 src/dialogs/colors.c:156
+#: src/dialogs/colors.c:156
 msgid "Red"
 msgstr "Vermelho"
 
@@ -2202,7 +2190,7 @@ msgstr ""
 "%s"
 
 #: src/filetransfer/v3270ft.c:215 src/filetransfer/activitylist.c:453
-#: src/trace/trace.c:470 src/dialogs/transfer.c:73
+#: src/trace/trace.c:460 src/dialogs/transfer.c:73
 msgid "Save"
 msgstr "Salvar"
 
@@ -2242,7 +2230,7 @@ msgstr "Salvar área selecionada"
 msgid "Save terminal contents"
 msgstr "Salvar conteúdo da tela"
 
-#: src/trace/trace.c:469
+#: src/trace/trace.c:459
 msgid "Save trace to file"
 msgstr "Salvar trace para arquivo"
 
@@ -2271,11 +2259,11 @@ msgstr "Salvar fila de transferências para arquivo"
 msgid "Saving %s"
 msgstr "Gravando %s"
 
-#: src/core/properties/unsigned.c:116
+#: src/core/properties/unsigned.c:121
 msgid "Screen buffer length in bytes"
 msgstr "Tamanho do buffer de tela em bytes"
 
-#: src/core/properties/string.c:169
+#: src/core/properties/string.c:177
 msgid "Screen oversize if larger than the chosen model"
 msgstr "\"oversize\" maior que o modelo escolhido"
 
@@ -2332,7 +2320,7 @@ msgid "Security warning"
 msgstr "Alerta de segurança"
 
 #: src/filetransfer/v3270ft.c:303 src/filetransfer/settings.c:209
-#: src/dialogs/hostselect.c:342 src/dialogs/save/save.c:114
+#: src/dialogs/hostselect.c:347 src/dialogs/save/save.c:114
 #: src/dialogs/save/save.c:137
 msgid "Select"
 msgstr "Selecionar"
@@ -2349,11 +2337,11 @@ msgstr "Selecionar tudo"
 msgid "Select by rectangles"
 msgstr "Seleção retangular"
 
-#: src/dialogs/hostselect.c:424
+#: src/dialogs/hostselect.c:429
 msgid "Select charset remap file"
 msgstr "Selecionar mapa de caracteres"
 
-#: src/dialogs/hostselect.c:338
+#: src/dialogs/hostselect.c:343
 msgid "Select custom charset mapping"
 msgstr "Selecione mapeamento de caracteres personalizado"
 
@@ -2403,11 +2391,11 @@ msgstr "Configura cores do terminal"
 msgid "Select() failed when processing for events."
 msgstr "Select() falhou ao processar eventos."
 
-#: colors.c:516 src/dialogs/colors.c:176
+#: src/dialogs/colors.c:176
 msgid "Selection background"
 msgstr "Fundo da seleção"
 
-#: colors.c:517 src/dialogs/colors.c:177
+#: src/dialogs/colors.c:177
 msgid "Selection foreground"
 msgstr "Frente da seleção"
 
@@ -2591,11 +2579,11 @@ msgstr "Iniciando"
 msgid "Starting transfer"
 msgstr "Iniciando transferência"
 
-#: src/core/properties/boolean.c:111
+#: src/core/properties/boolean.c:118
 msgid "State is 3270, TN3270e or SSCP"
 msgstr "Estado do terminal é 3270, TN3270e or SSCP"
 
-#: src/terminal/properties/init.c:159
+#: src/terminal/properties/init.c:157
 msgid "State of the dynamic font spacing"
 msgstr "Estado do espaçamento dinâmico"
 
@@ -2603,11 +2591,11 @@ msgstr "Estado do espaçamento dinâmico"
 msgid "Subject issuer mismatch"
 msgstr "Divergência na identidade do emissor"
 
-#: src/dialogs/hostselect.c:96
+#: src/dialogs/hostselect.c:101
 msgid "System _type"
 msgstr "_Tipo de servidor"
 
-#: src/dialogs/hostselect.c:138
+#: src/dialogs/hostselect.c:143
 msgid "System default"
 msgstr "Padrão do sistema"
 
@@ -2615,11 +2603,11 @@ msgstr "Padrão do sistema"
 msgid "TLS negotiation failure"
 msgstr "Negociação TLS falhou"
 
-#: src/dialogs/hostselect.c:351
+#: src/dialogs/hostselect.c:356
 msgid "TN3270 Custom charset"
 msgstr "Tabela de caracteres personalizada"
 
-#: src/terminal/properties/init.c:99
+#: src/terminal/properties/init.c:97
 msgid "TN3270 Session name"
 msgstr "Nome da sessão TN3270"
 
@@ -2631,8 +2619,7 @@ msgstr "Salta para o campo anterior."
 msgid "Tab forward to next field."
 msgstr "Salta para o próximo campo."
 
-#: colors.c:487 src/dialogs/colors.c:147 src/dialogs/colors.c:299
-#: src/dialogs/colors.c:373
+#: src/dialogs/colors.c:147 src/dialogs/colors.c:299 src/dialogs/colors.c:373
 msgid "Terminal colors"
 msgstr "Cores do terminal"
 
@@ -2640,11 +2627,16 @@ msgstr "Cores do terminal"
 msgid "Terminal font"
 msgstr "Fonte do terminal"
 
-#: src/core/properties/string.c:99
+#: src/core/properties/unsigned.c:74
+#, fuzzy
+msgid "Terminal model"
+msgstr "Nome do terminal"
+
+#: src/core/properties/string.c:103
 msgid "Terminal name"
 msgstr "Nome do terminal"
 
-#: src/core/properties/string.c:92
+#: src/core/properties/string.c:96
 msgid "Terminal type"
 msgstr "Tipo do terminal"
 
@@ -2699,7 +2691,7 @@ msgstr ""
 "A lista de revogação de certificados (CRL) de um certificado não pôde ser "
 "encontrada."
 
-#: src/dialogs/hostselect.c:559
+#: src/dialogs/hostselect.c:564
 msgid "The EBCDIC host character set. "
 msgstr "Tabela de caracteres EBCDIC do servidor."
 
@@ -2777,7 +2769,7 @@ msgstr ""
 "signature value could not be determined rather than it not matching the "
 "expected value, this is only meaningful for RSA keys."
 
-#: src/core/properties/unsigned.c:64
+#: src/core/properties/unsigned.c:65
 msgid "The color type"
 msgstr "O tipo de cor"
 
@@ -2829,7 +2821,7 @@ msgstr ""
 "name did not match the issuer name of the current certificate. Only "
 "displayed when the -issuer_checks option is set."
 
-#: src/core/properties/unsigned.c:123
+#: src/core/properties/unsigned.c:128
 msgid "The delay between the host unlocking the keyboard and the actual unlock"
 msgstr ""
 "Intervalo de tempo entre o desbloqueio de teclado pelo host e o desbloqueio "
@@ -2896,11 +2888,11 @@ msgstr ""
 msgid "The known types are %s"
 msgstr "Os tipos conhecidos são %s"
 
-#: src/core/properties/unsigned.c:71
+#: src/core/properties/unsigned.c:75
 msgid "The model number"
 msgstr "Nº do modelo"
 
-#: main.c:352 src/dialogs/hostselect.c:153
+#: main.c:352 src/dialogs/hostselect.c:158
 msgid "The model of 3270 display to be emulated"
 msgstr "Modelo de tela 3270 a ser emulada"
 
@@ -2965,7 +2957,7 @@ msgstr ""
 "O certificado de segurança apresentado pelo servidor não foi assinado por "
 "uma autoridade certificadora confiável."
 
-#: src/core/properties/string.c:155
+#: src/core/properties/string.c:162
 msgid "The security state"
 msgstr "O estado da segurança"
 
@@ -3131,15 +3123,15 @@ msgstr "Erro de transmissão"
 msgid "Try again with the same file."
 msgstr "Tente de novo com o mesmo arquivo."
 
-#: colors.c:499 src/dialogs/colors.c:159
+#: src/dialogs/colors.c:159
 msgid "Turquoise"
 msgstr "Turquesa"
 
-#: src/core/properties/string.c:134
+#: src/core/properties/string.c:140
 msgid "URL for the certificate revocation list"
 msgstr "URL para a lista de certificados revogados"
 
-#: src/core/properties/string.c:71
+#: src/core/properties/string.c:73
 msgid "URL of the current host"
 msgstr "URL do host atual"
 
@@ -3188,11 +3180,11 @@ msgstr "Unable to get local issuer certificate"
 msgid "Unable to load from file"
 msgstr "Não foi possível ler do arquivo"
 
-#: src/selection/linux/paste.c:115
+#: src/selection/linux/paste.c:116
 msgid "Unable to paste formatted data"
 msgstr "Incapaz de colar texto formatado"
 
-#: src/core/paste.c:398
+#: src/core/paste.c:399
 msgid "Unable to paste text"
 msgstr "Incapaz de colar texto"
 
@@ -3225,7 +3217,7 @@ msgstr "Sublinhados"
 msgid "Unexpected action attribute in <%s>"
 msgstr "Atributo inesperado \"action\" em <%s>"
 
-#: src/core/paste.c:399
+#: src/core/paste.c:400
 msgid "Unexpected error"
 msgstr "Erro inesperado"
 
@@ -3358,7 +3350,7 @@ msgstr "Aguardando resposta do pedido de upload"
 msgid "Western Europe (ISO 8859-1)"
 msgstr "Europa ocidental (ISO 8859-1)"
 
-#: colors.c:501 src/dialogs/colors.c:161
+#: src/dialogs/colors.c:161
 msgid "White"
 msgstr "Branco"
 
@@ -3424,11 +3416,11 @@ msgstr "X Sistema"
 msgid "X Wait"
 msgstr "X Aguarde"
 
-#: src/terminal/properties/init.c:144
+#: src/terminal/properties/init.c:142
 msgid "XML file with remap table"
 msgstr "Arquivo XML com a tabela para remapeamento de caracteres"
 
-#: colors.c:500 src/dialogs/colors.c:160
+#: src/dialogs/colors.c:160
 msgid "Yellow"
 msgstr "Amarelo"
 
@@ -3519,7 +3511,7 @@ msgstr "Texto _ASCII"
 msgid "_Apply"
 msgstr "_Aplicar"
 
-#: src/selection/linux/paste.c:83 src/selection/linux/paste.c:123
+#: src/selection/linux/paste.c:84 src/selection/linux/paste.c:124
 #: src/dialogs/load.c:202 src/dialogs/load.c:221 src/dialogs/linux/select.c:51
 #: src/dialogs/linux/select.c:77 src/dialogs/print/settingsdialog.c:410
 #: src/dialogs/print/settingsdialog.c:429 src/dialogs/save/save.c:264
@@ -3527,7 +3519,7 @@ msgstr "_Aplicar"
 msgid "_Cancel"
 msgstr "_Cancelar"
 
-#: src/dialogs/hostselect.c:558
+#: src/dialogs/hostselect.c:563
 msgid "_Charset"
 msgstr "_Charset"
 
@@ -3536,7 +3528,7 @@ msgstr "_Charset"
 msgid "_Close"
 msgstr "_Fechar"
 
-#: src/dialogs/hostselect.c:124
+#: src/dialogs/hostselect.c:129
 msgid "_Color table"
 msgstr "_Tabela de cores"
 
@@ -3564,7 +3556,7 @@ msgstr "Nome do_Arquivo"
 msgid "_Font:"
 msgstr "_Fonte:"
 
-#: src/dialogs/hostselect.c:192
+#: src/dialogs/hostselect.c:197
 msgid "_Host"
 msgstr "_Servidor"
 
@@ -3576,7 +3568,7 @@ msgstr "_Carregar"
 msgid "_Local file"
 msgstr "Arquivo _local:"
 
-#: src/dialogs/hostselect.c:152
+#: src/dialogs/hostselect.c:157
 msgid "_Model"
 msgstr "_Modelo"
 
@@ -3592,7 +3584,7 @@ msgstr "_Operação:"
 msgid "_Options"
 msgstr "_Opções"
 
-#: src/selection/linux/paste.c:84 src/selection/linux/paste.c:124
+#: src/selection/linux/paste.c:85 src/selection/linux/paste.c:125
 msgid "_Paste as text"
 msgstr "_Colar como texto"
 
@@ -3605,11 +3597,11 @@ msgstr "Arquivo _remoto:"
 msgid "_Save"
 msgstr "_Salvar"
 
-#: src/dialogs/hostselect.c:466
+#: src/dialogs/hostselect.c:471
 msgid "_Secure connection."
 msgstr "Conexão _Segura."
 
-#: src/dialogs/hostselect.c:204
+#: src/dialogs/hostselect.c:209
 msgid "_Service"
 msgstr "_Serviço"
 
@@ -3662,15 +3654,15 @@ msgstr "erro fcntl() ao obter estado do socket."
 msgid "ioctlsocket(FIONBIO) failed."
 msgstr "ioctlsocket(FIONBIO) failed."
 
-#: src/core/properties/string.c:127
+#: src/core/properties/string.c:132
 msgid "lib3270 revision"
 msgstr "Revisão da lib3270"
 
-#: src/core/properties/string.c:120
+#: src/core/properties/string.c:125
 msgid "lib3270 version"
 msgstr "Versão da lib3270"
 
-#: src/core/properties/boolean.c:167
+#: src/core/properties/boolean.c:174
 msgid "numeric lock"
 msgstr "Bloqueio numérico"
 
@@ -3870,6 +3862,12 @@ msgstr "translator-credits"
 #~ msgid "Check for text files."
 #~ msgstr "Marque se o arquivo for texto."
 
+#~ msgid "Color scheme:"
+#~ msgstr "Tema de cores:"
+
+#~ msgid "Color setup"
+#~ msgstr "Configuração de cores"
+
 #~ msgid "Command:"
 #~ msgstr "Command:"
 
@@ -3882,6 +3880,9 @@ msgstr "translator-credits"
 #, fuzzy
 #~ msgid "Cross hair Cursor"
 #~ msgstr "Cursor mira"
+
+#~ msgid "Custom colors"
+#~ msgstr "Cores personalizadas"
 
 #~ msgid "DS Trace"
 #~ msgstr "DS Trace"
