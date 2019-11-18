@@ -77,10 +77,6 @@ install: \
 
 	@$(LN_S) -f \
 				$(LIBNAME).@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@ \
-				$(DESTDIR)$(libdir)/$(LIBNAME).@PACKAGE_MAJOR_VERSION@
-
-	@$(LN_S) -f \
-				$(LIBNAME).@PACKAGE_MAJOR_VERSION@ \
 				$(DESTDIR)$(libdir)/$(LIBNAME)
 
 	# Install PKG-CONFIG files

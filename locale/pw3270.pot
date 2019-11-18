@@ -9,7 +9,7 @@ msgstr ""
 "#-#-#-#-#  pw3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-14 13:47-0300\n"
+"POT-Creation-Date: 2019-11-18 12:30-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,7 +31,7 @@ msgstr ""
 "#-#-#-#-#  libv3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-14 16:38+0000\n"
+"POT-Creation-Date: 2019-11-14 19:22+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -588,7 +588,7 @@ msgid "Can't save \"%s\": %s"
 msgstr ""
 
 #: src/filetransfer/save.c:117 src/filetransfer/activitylist.c:436
-#: src/trace/trace.c:441 src/dialogs/transfer.c:95 src/dialogs/save/save.c:458
+#: src/trace/trace.c:458 src/dialogs/transfer.c:95 src/dialogs/save/save.c:458
 #, c-format
 msgid "Can't save %s"
 msgstr ""
@@ -754,7 +754,7 @@ msgstr ""
 msgid "Command incomplete: file transfer canceled"
 msgstr ""
 
-#: src/trace/trace.c:335
+#: src/trace/trace.c:346
 msgid "Command to execute"
 msgstr ""
 
@@ -1590,7 +1590,7 @@ msgstr ""
 msgid "No active transfer"
 msgstr ""
 
-#: src/terminal/properties/get.c:164
+#: src/terminal/properties/get.c:168
 msgid "No host defined"
 msgstr ""
 
@@ -2160,7 +2160,7 @@ msgid ""
 msgstr ""
 
 #: src/filetransfer/v3270ft.c:215 src/filetransfer/activitylist.c:453
-#: src/trace/trace.c:460 src/dialogs/transfer.c:73
+#: src/trace/trace.c:477 src/dialogs/transfer.c:73
 msgid "Save"
 msgstr ""
 
@@ -2200,7 +2200,7 @@ msgstr ""
 msgid "Save terminal contents"
 msgstr ""
 
-#: src/trace/trace.c:459
+#: src/trace/trace.c:476
 msgid "Save trace to file"
 msgstr ""
 
@@ -2938,7 +2938,7 @@ msgstr ""
 msgid "Total:"
 msgstr ""
 
-#: 98trace.xml:36
+#: src/trace/property.c:95 98trace.xml:36
 msgid "Trace"
 msgstr ""
 
@@ -2964,6 +2964,10 @@ msgstr ""
 
 #: 98trace.xml:39
 msgid "Trace user interface events"
+msgstr ""
+
+#: src/terminal/properties/init.c:186
+msgid "Trace window"
 msgstr ""
 
 #: src/core/toggles/table.c:82 src/core/toggles/table.c:83 00default.xml:117
