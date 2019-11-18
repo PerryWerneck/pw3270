@@ -30,20 +30,43 @@
 <interface>
   <requires lib="gtk+" version="3.0"/>
   <menu id="app-menu">
-    <section>
-      <item>
-        <attribute name="label" translatable="yes">About PW3270</attribute>
-        <attribute name="action">app.about</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">New Window</attribute>
-        <attribute name="action">app.new.window</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Quit</attribute>
-        <attribute name="action">app.quit</attribute>
-      </item>
-    </section>
+  
+    <item>
+      <attribute name="label" translatable="yes">About PW3270</attribute>
+      <attribute name="action">app.about</attribute>
+    </item>
+
+    <item>
+      <attribute name="label" translatable="yes">New Window</attribute>
+      <attribute name="action">app.new.window</attribute>
+    </item>
+
+    <submenu>
+
+      <attribute name='label' translatable='yes'>_View</attribute>
+
+        <item>
+          <attribute name="label" translatable="yes">Trace</attribute>
+          <attribute name="action">win.trace</attribute>
+        </item>
+
+        <item>
+          <attribute name="label" translatable="yes">Toolbar</attribute>
+          <attribute name="action">win.toolbar</attribute>
+        </item>
+
+        <item>
+          <attribute name="label" translatable="yes">Menu</attribute>
+          <attribute name="action">win.menubar</attribute>
+        </item>
+
+    </submenu>
+
+    <item>
+      <attribute name="label" translatable="yes">Quit</attribute>
+      <attribute name="action">app.quit</attribute>
+    </item>
+    
   </menu>
 
   <menu id='menubar'>
