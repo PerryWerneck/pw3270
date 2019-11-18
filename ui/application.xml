@@ -226,6 +226,11 @@
           <attribute name="action">win.trace</attribute>
         </item>
 
+        <item>
+          <attribute name="label" translatable="yes">Toolbar</attribute>
+          <attribute name="action">win.toolbar</attribute>
+        </item>
+
     </submenu>
 
     <submenu>

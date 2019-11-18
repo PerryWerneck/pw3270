@@ -83,7 +83,6 @@
 	g_signal_connect(G_OBJECT(widget->notebook), "page-removed", G_CALLBACK(on_page_changed), widget);
 
 	widget->toolbar  = GTK_TOOLBAR(pw3270_toolbar_new());
-
 	gtk_box_pack_start(vBox,GTK_WIDGET(widget->toolbar),FALSE,TRUE,0);
 	gtk_box_pack_start(vBox,GTK_WIDGET(widget->notebook),TRUE,TRUE,0);
 
@@ -163,6 +162,11 @@
 		for(ix = 0; ix < G_N_ELEMENTS(actions); ix++) {
 			pw3270_toolbar_insert_action(GTK_WIDGET(widget->toolbar),actions[ix],-1);
 		}
+
+		g_action_map_add_action(
+			G_ACTION_MAP(widget),
+			G_ACTION(g_property_action_new("toolbar", widget->toolbar, "visible"))
+		);
 
 	}
 
