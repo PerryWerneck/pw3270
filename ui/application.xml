@@ -231,6 +231,11 @@
           <attribute name="action">win.toolbar</attribute>
         </item>
 
+        <item>
+          <attribute name="label" translatable="yes">Menu</attribute>
+          <attribute name="action">win.menubar</attribute>
+        </item>
+
     </submenu>
 
     <submenu>

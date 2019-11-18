@@ -168,6 +168,11 @@
 			G_ACTION(g_property_action_new("toolbar", widget->toolbar, "visible"))
 		);
 
+		g_action_map_add_action(
+			G_ACTION_MAP(widget),
+			G_ACTION(g_property_action_new("menubar", widget, "show-menubar"))
+		);
+
 	}
 
  }
@@ -235,7 +240,23 @@
 	}
 
 	// Setup and show main window
-	gtk_application_window_set_show_menubar(GTK_APPLICATION_WINDOW(window),TRUE);
+	//gtk_application_window_set_show_menubar(GTK_APPLICATION_WINDOW(window),TRUE);
+
+	g_settings_bind(
+		settings,
+		"menubar-visible",
+		window,
+		"show-menubar",
+		G_SETTINGS_BIND_DEFAULT
+	);
+
+	g_settings_bind(
+		settings,
+		"toolbar-visible",
+		window->toolbar,
+		"visible",
+		G_SETTINGS_BIND_DEFAULT
+	);
 
 	gtk_window_set_position(GTK_WINDOW(window),GTK_WIN_POS_CENTER);
 	gtk_window_set_default_size (GTK_WINDOW (window), 800, 500);
