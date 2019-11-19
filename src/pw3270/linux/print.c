@@ -37,76 +37,44 @@
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
-/*
- static GtkWidget * create_custom_widget(GtkPrintOperation *prt, gpointer G_GNUC_UNUSED(dunno))
- {
- 	GtkWidget * widget		= gtk_frame_new("");
- 	GtkWidget * settings	= V3270_print_settings_new(v3270_print_operation_get_terminal(prt));
-
- 	// Load values from configuration
-	g_autofree gchar * font_family	= get_string_from_config("print",FONT_CONFIG,DEFAULT_FONT);
-	if(font_family && *font_family)
-		v3270_print_settings_set_font_family(settings,font_family);
-
-	g_autofree gchar * color_scheme	= get_string_from_config("print","colors","");
-	if(color_scheme && *color_scheme)
-		v3270_print_settings_set_color_scheme(settings,color_scheme);
-
- 	// Create frame
-	GtkWidget *label = gtk_label_new(NULL);
-	gtk_label_set_markup(GTK_LABEL(label),_("<b>Text options</b>"));
-	gtk_frame_set_label_widget(GTK_FRAME(widget),label);
-
- 	gtk_container_set_border_width(GTK_CONTAINER(widget),12);
-
-	// The print dialog doesn't follow the guidelines from https://developer.gnome.org/hig/stable/visual-layout.html.en )-:
-	gtk_frame_set_shadow_type(GTK_FRAME(widget),GTK_SHADOW_NONE);
-
- 	gtk_container_set_border_width(GTK_CONTAINER(settings),6);
- 	g_object_set(G_OBJECT(settings),"margin-start",8,NULL);
-
-	gtk_container_add(GTK_CONTAINER(widget),settings);
-
-	gtk_widget_show_all(widget);
-
-    return widget;
- }
-*/
-
-/*
- static void custom_widget_apply(GtkPrintOperation *prt, GtkWidget *widget, gpointer G_GNUC_UNUSED(dunno))
- {
- 	GtkWidget * settings = gtk_bin_get_child(GTK_BIN(widget));
- 	v3270_print_operation_apply_settings(prt,settings);
- }
-*/
-
  void load_print_operation_settings(GtkPrintOperation * operation)
  {
 	GtkPrintSettings 	* settings	= gtk_print_settings_new();
 	GtkPageSetup 		* setup 	= gtk_page_setup_new();
     GtkPaperSize        * papersize = NULL;
 
-//	g_signal_connect(operation,"create-custom-widget",G_CALLBACK(create_custom_widget),NULL);
-//	g_signal_connect(operation,"custom-widget-apply",G_CALLBACK(custom_widget_apply), NULL);
+    trace("%s(%p)",__FUNCTION__,operation);
+	g_message("Loading print settings");
 
 	// Load page and print settings
 	GKeyFile	* conf	= get_application_keyfile();
 	GError		* err	= NULL;
 
-	if(!gtk_print_settings_load_key_file(settings,conf,"print_settings",&err))
+	if(g_key_file_has_group(conf,"print_settings") && !gtk_print_settings_load_key_file(settings,conf,"print_settings",&err))
 	{
 		g_warning("Error getting print settings: %s",err->message);
 		g_error_free(err);
 		err = NULL;
 	}
+#ifdef DEBUG
+	else
+	{
+		trace("%p using default print settings",operation);
+	}
+#endif // DEBUG
 
-	if(!gtk_page_setup_load_key_file(setup,conf,"page_setup",&err))
+	if(g_key_file_has_group(conf,"page_setup") && !gtk_page_setup_load_key_file(setup,conf,"page_setup",&err))
 	{
 		g_warning("Error getting page setup: %s",err->message);
 		g_error_free(err);
 		err = NULL;
 	}
+#ifdef DEBUG
+	else
+	{
+		trace("%p using default page setup",operation);
+	}
+#endif // DEBUG
 
 	if(g_key_file_has_group(conf,"paper_size"))
 	{
@@ -149,6 +117,7 @@
 	GtkPageSetup		* pgsetup	= gtk_print_operation_get_default_page_setup(operation);
 	GtkPaperSize        * papersize = gtk_page_setup_get_paper_size(pgsetup);
 
+    trace("%s(%p)",__FUNCTION__,operation);
 	g_message("Saving print settings");
 
 	GKeyFile * conf = get_application_keyfile();

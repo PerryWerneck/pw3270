@@ -70,6 +70,8 @@
 
 	gtk_print_operation_set_allow_async(operation,get_boolean_from_config("print","allow_async",TRUE));
 
+	trace("Allow async is %s",get_boolean_from_config("print","allow_async",TRUE) ? "TRUE" : "FALSE");
+
 	load_print_operation_settings(operation);
 
 	//
@@ -98,6 +100,8 @@
 	}
 	else
 	{
+		trace("Print operation result was %u",(unsigned int) result);
+
 		switch(result)
 		{
 		case GTK_PRINT_OPERATION_RESULT_ERROR:	// An error has occurred.
@@ -121,18 +125,22 @@
 			break;
 
 		case GTK_PRINT_OPERATION_RESULT_APPLY:	// The print settings should be stored.
+			trace("%s","GTK_PRINT_OPERATION_RESULT_APPLY");
 			save_print_operation_settings(operation);
 			break;
 
 		case GTK_PRINT_OPERATION_RESULT_CANCEL:	// The print operation has been canceled, the print settings should not be stored.
+			trace("%s","GTK_PRINT_OPERATION_RESULT_CANCEL");
 			g_message("Print operation was cancelled");
 			break;
 
 		case GTK_PRINT_OPERATION_RESULT_IN_PROGRESS:	// The print operation is not complete yet. This value will only be returned when running asynchronously.
+			trace("%s","GTK_PRINT_OPERATION_RESULT_IN_PROGRESS");
 			g_message("Print operation is in progress");
 			break;
 
 		default:
+			trace("%s","Unexpected");
 			g_warning("Unexpected print operation result: %d",(int) result);
 
 		}
