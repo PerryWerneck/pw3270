@@ -67,13 +67,10 @@
 	// Create and setup dialog
 	//
  	GtkPrintOperation * operation = v3270_print_operation_new(widget,src);
-
  	{
  		// Setup async mode
- 		gboolean async = get_boolean_from_config("print","allow_async",FALSE);
-
+ 		gboolean async = get_boolean_from_config("terminal","allow_async_print",FALSE);
 		gtk_print_operation_set_allow_async(operation,async);
-		g_message("Allow async is %s",async ? "TRUE" : "FALSE");
  	}
 
 	load_print_operation_settings(operation);
