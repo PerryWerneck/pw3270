@@ -126,7 +126,8 @@
 
  	{
  		// Setup async mode
- 		gboolean async = get_boolean_from_config("terminal","allow_async_print",TRUE);
+ 		gboolean async = get_boolean_from_config("print","allow_async",TRUE);
+ 		debug("Allow async is %s",async ? "enabled" : "disabled");
 		gtk_print_operation_set_allow_async(operation,async);
  	}
 

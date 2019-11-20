@@ -31,6 +31,7 @@
  #include <v3270.h>
  #include <v3270/print.h>
  #include <lib3270/selection.h>
+ #include <lib3270/log.h>
 
  #define FONT_CONFIG 	"font-family"
  #define DEFAULT_FONT	"Courier New"
@@ -50,11 +51,15 @@
 	GKeyFile	* conf	= get_application_keyfile();
 	GError		* err	= NULL;
 
-	if(g_key_file_has_group(conf,"print_settings") && !gtk_print_settings_load_key_file(settings,conf,"print_settings",&err))
+	debug("print_settings=%s",g_key_file_has_group(conf,"print_settings") ? "TRUE" : "FALSE");
+	if(g_key_file_has_group(conf,"print_settings"))
 	{
-		g_warning("Error getting print settings: %s",err->message);
-		g_error_free(err);
-		err = NULL;
+		if(!gtk_print_settings_load_key_file(settings,conf,"print_settings",&err))
+		{
+			g_warning("Error getting print settings: %s",err->message);
+			g_error_free(err);
+			err = NULL;
+		}
 	}
 #ifdef DEBUG
 	else
@@ -63,11 +68,14 @@
 	}
 #endif // DEBUG
 
-	if(g_key_file_has_group(conf,"page_setup") && !gtk_page_setup_load_key_file(setup,conf,"page_setup",&err))
+	if(g_key_file_has_group(conf,"page_setup"))
 	{
-		g_warning("Error getting page setup: %s",err->message);
-		g_error_free(err);
-		err = NULL;
+		if(!gtk_page_setup_load_key_file(setup,conf,"page_setup",&err))
+		{
+			g_warning("Error getting page setup: %s",err->message);
+			g_error_free(err);
+			err = NULL;
+		}
 	}
 #ifdef DEBUG
 	else
