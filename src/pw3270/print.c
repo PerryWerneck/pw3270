@@ -33,6 +33,7 @@
  #include <v3270/dialogs.h>
  #include <lib3270/selection.h>
  #include <lib3270/trace.h>
+ #include <lib3270/log.h>
 
  #define FONT_CONFIG 	"font-family"
  #define DEFAULT_FONT	"Courier New"
@@ -54,6 +55,54 @@
 	pw3270_print(widget,G_OBJECT(action),GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, LIB3270_CONTENT_COPY);
  }
 
+ static void done(GtkPrintOperation *operation, GtkPrintOperationResult result, GtkWidget *terminal)
+ {
+	debug("%s(%u)",__FUNCTION__,(unsigned int) result);
+
+	switch(result)
+	{
+	case GTK_PRINT_OPERATION_RESULT_ERROR:	// An error has occurred.
+		{
+			// Get error code
+			GError * err = NULL;
+
+			gtk_print_operation_get_error(operation,&err);
+
+			v3270_error_popup(
+				terminal,
+				_("Operation has failed"),
+				_( "Unable to complete print job" ),
+				err->message
+			);
+
+			g_error_free(err);
+
+		}
+		break;
+
+	case GTK_PRINT_OPERATION_RESULT_APPLY:	// The print settings should be stored.
+		trace("%s","GTK_PRINT_OPERATION_RESULT_APPLY");
+		save_print_operation_settings(operation);
+		break;
+
+	case GTK_PRINT_OPERATION_RESULT_CANCEL:	// The print operation has been canceled, the print settings should not be stored.
+		trace("%s","GTK_PRINT_OPERATION_RESULT_CANCEL");
+		g_message("Print operation was cancelled");
+		break;
+
+	case GTK_PRINT_OPERATION_RESULT_IN_PROGRESS:	// The print operation is not complete yet. This value will only be returned when running asynchronously.
+		trace("%s","GTK_PRINT_OPERATION_RESULT_IN_PROGRESS");
+		g_message("Print operation is in progress");
+		break;
+
+	default:
+		trace("%s","Unexpected");
+		g_warning("Unexpected print operation result: %d",(int) result);
+
+	}
+
+ }
+
  LIB3270_EXPORT int pw3270_print(GtkWidget *widget, GObject *action, GtkPrintOperationAction oper, LIB3270_CONTENT_OPTION src)
  {
  	int rc = 0;
@@ -67,9 +116,17 @@
 	// Create and setup dialog
 	//
  	GtkPrintOperation * operation = v3270_print_operation_new(widget,src);
+ 	if(!operation)
+	{
+		g_message("Can't create print operation");
+		return -1;
+	}
+
+	g_signal_connect(operation,"done",G_CALLBACK(done),widget);
+
  	{
  		// Setup async mode
- 		gboolean async = get_boolean_from_config("terminal","allow_async_print",FALSE);
+ 		gboolean async = get_boolean_from_config("terminal","allow_async_print",TRUE);
 		gtk_print_operation_set_allow_async(operation,async);
  	}
 
@@ -98,53 +155,6 @@
 
 		g_error_free(err);
 		rc = -1;
-	}
-	else
-	{
-		trace("Print operation result was %u",(unsigned int) result);
-
-		switch(result)
-		{
-		case GTK_PRINT_OPERATION_RESULT_ERROR:	// An error has occurred.
-			{
-				// Get error code
-				GError * err = NULL;
-
-				gtk_print_operation_get_error(operation,&err);
-
-				v3270_error_popup(
-					widget,
-					_("Operation has failed"),
-					_( "Unable to complete print job" ),
-					err->message
-				);
-
-				g_error_free(err);
-				rc = -1;
-
-			}
-			break;
-
-		case GTK_PRINT_OPERATION_RESULT_APPLY:	// The print settings should be stored.
-			trace("%s","GTK_PRINT_OPERATION_RESULT_APPLY");
-			save_print_operation_settings(operation);
-			break;
-
-		case GTK_PRINT_OPERATION_RESULT_CANCEL:	// The print operation has been canceled, the print settings should not be stored.
-			trace("%s","GTK_PRINT_OPERATION_RESULT_CANCEL");
-			g_message("Print operation was cancelled");
-			break;
-
-		case GTK_PRINT_OPERATION_RESULT_IN_PROGRESS:	// The print operation is not complete yet. This value will only be returned when running asynchronously.
-			trace("%s","GTK_PRINT_OPERATION_RESULT_IN_PROGRESS");
-			g_message("Print operation is in progress");
-			break;
-
-		default:
-			trace("%s","Unexpected");
-			g_warning("Unexpected print operation result: %d",(int) result);
-
-		}
 	}
 
 	g_object_unref(operation);
