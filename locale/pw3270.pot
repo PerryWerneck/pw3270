@@ -9,7 +9,7 @@ msgstr ""
 "#-#-#-#-#  pw3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-18 12:30-0300\n"
+"POT-Creation-Date: 2019-11-22 14:15-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "#-#-#-#-#  lib3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-13 18:31+0000\n"
+"POT-Creation-Date: 2019-11-21 19:12+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,7 +31,7 @@ msgstr ""
 "#-#-#-#-#  libv3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-14 19:22+0000\n"
+"POT-Creation-Date: 2019-11-22 16:58+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -146,7 +146,7 @@ msgid "16 colors"
 msgstr ""
 
 #: src/core/screen.c:772 src/core/screen.c:809 src/core/screen.c:827
-#: src/core/screen.c:953
+#: src/core/screen.c:972
 msgid "3270 Error"
 msgstr ""
 
@@ -210,7 +210,7 @@ msgid ""
 "Disconnected from host"
 msgstr ""
 
-#: src/dialogs/print/print.c:107
+#: src/dialogs/print/print.c:150
 msgid "<b>Text options</b>"
 msgstr ""
 
@@ -250,7 +250,7 @@ msgstr ""
 msgid "Aborting..."
 msgstr ""
 
-#: src/dialogs/security.c:200
+#: src/dialogs/security.c:236
 msgid "About security"
 msgstr ""
 
@@ -488,6 +488,11 @@ msgstr ""
 msgid "Can't decode certificate revocation list got from LDAP server"
 msgstr ""
 
+#: src/terminal/font/properties.c:40
+#, c-format
+msgid "Can't find a valid font with the name \"%s\""
+msgstr ""
+
 #: src/ssl/linux/ldap.c:193 src/ssl/linux/ldap.c:205
 msgid "Can't get LDAP attribute"
 msgstr ""
@@ -561,11 +566,11 @@ msgstr ""
 msgid "Can't parse unnamed element"
 msgstr ""
 
-#: src/selection/linux/paste.c:80 src/selection/linux/paste.c:120
+#: src/selection/linux/paste.c:80 src/selection/linux/paste.c:115
 msgid "Can't paste"
 msgstr ""
 
-#: src/selection/text.c:205
+#: src/selection/text.c:187
 msgid "Can't paste text"
 msgstr ""
 
@@ -588,7 +593,7 @@ msgid "Can't save \"%s\": %s"
 msgstr ""
 
 #: src/filetransfer/save.c:117 src/filetransfer/activitylist.c:436
-#: src/trace/trace.c:458 src/dialogs/transfer.c:95 src/dialogs/save/save.c:458
+#: src/trace/trace.c:458 src/dialogs/transfer.c:95 src/dialogs/save/save.c:454
 #, c-format
 msgid "Can't save %s"
 msgstr ""
@@ -981,6 +986,10 @@ msgstr ""
 msgid "Display the cursor location in the OIA (the status line)"
 msgstr ""
 
+#: src/dialogs/popups.c:157
+msgid "Don't ask again"
+msgstr ""
+
 #: 00default.xml:129
 msgid "Dynamic spacing"
 msgstr ""
@@ -1045,7 +1054,7 @@ msgstr ""
 msgid "Erase to end of line"
 msgstr ""
 
-#: src/core/util.c:592 src/dialogs/popups.c:56 src/dialogs/popups.c:91
+#: src/core/util.c:592 src/dialogs/popups.c:57 src/dialogs/popups.c:92
 msgid "Error"
 msgstr ""
 
@@ -1065,6 +1074,10 @@ msgstr ""
 
 #: src/core/ft/ftmessages.c:45
 msgid "Error in file transfer: file transfer canceled"
+msgstr ""
+
+#: src/dialogs/print/print.c:72
+msgid "Error on print operation"
 msgstr ""
 
 #: src/core/ft/ftmessages.c:87
@@ -1137,6 +1150,16 @@ msgstr ""
 
 #: src/dialogs/font/chooser.c:329
 msgid "Font"
+msgstr ""
+
+#: src/terminal/font/properties.c:39
+#, c-format
+msgid "Font \"%s\" is not monospace"
+msgstr ""
+
+#: src/terminal/font/properties.c:38
+#, c-format
+msgid "Font \"%s\" is valid"
 msgstr ""
 
 #: src/terminal/properties/init.c:82
@@ -1590,7 +1613,7 @@ msgstr ""
 msgid "No active transfer"
 msgstr ""
 
-#: src/terminal/properties/get.c:168
+#: src/terminal/properties/get.c:169
 msgid "No host defined"
 msgstr ""
 
@@ -1614,6 +1637,10 @@ msgstr ""
 
 #: src/core/properties/boolean.c:75
 msgid "Non zero if the host is TSO."
+msgstr ""
+
+#: src/selection/linux/paste.c:117
+msgid "None of the screens in the clipboard match with the current one."
 msgstr ""
 
 #: src/dialogs/colors.c:173
@@ -1664,16 +1691,16 @@ msgstr ""
 msgid "Open"
 msgstr ""
 
-#: src/dialogs/popups.c:123
+#: src/dialogs/popups.c:124
 msgid "Operation failed"
 msgstr ""
 
-#: print.c:91 print.c:112 src/dialogs/save/convenience.c:65
+#: print.c:73 print.c:152 src/dialogs/save/convenience.c:65
 #: src/dialogs/save/convenience.c:93
 msgid "Operation has failed"
 msgstr ""
 
-#: src/dialogs/print/print.c:166
+#: src/dialogs/print/print.c:209
 msgid "Options"
 msgstr ""
 
@@ -1916,7 +1943,7 @@ msgstr ""
 msgid "Print operation failed"
 msgstr ""
 
-#: src/dialogs/print/convenience.c:82
+#: src/dialogs/print/convenience.c:102
 msgid "Print operation has failed"
 msgstr ""
 
@@ -1936,7 +1963,7 @@ msgstr ""
 msgid "Print selection box"
 msgstr ""
 
-#: print.c:151 00default.xml:105
+#: print.c:171 00default.xml:105
 msgid "Print settings"
 msgstr ""
 
@@ -2756,7 +2783,7 @@ msgstr ""
 msgid "The error code was %d"
 msgstr ""
 
-#: src/dialogs/save/save.c:412
+#: src/dialogs/save/save.c:408
 #, c-format
 msgid "The file \"%s\" already exists. Replace it?"
 msgstr ""
@@ -2841,6 +2868,20 @@ msgstr ""
 msgid ""
 "The passed certificate is self signed and the same certificate cannot be "
 "found in the list of trusted certificates."
+msgstr ""
+
+#: src/dialogs/print/print.c:82
+msgid ""
+"The print operation has been canceled, the print settings should not be "
+"stored."
+msgstr ""
+
+#: src/dialogs/print/print.c:87
+msgid "The print operation is running"
+msgstr ""
+
+#: src/dialogs/print/print.c:77
+msgid "The print settings should be stored."
 msgstr ""
 
 #: src/ssl/state.c:133
@@ -3042,7 +3083,7 @@ msgstr ""
 msgid "Uknown DFT Open type from host"
 msgstr ""
 
-#: print.c:92 print.c:113
+#: print.c:74 print.c:153
 msgid "Unable to complete print job"
 msgstr ""
 
@@ -3079,7 +3120,7 @@ msgid "Unable to load from file"
 msgstr ""
 
 #: src/selection/linux/paste.c:116
-msgid "Unable to paste formatted data"
+msgid "Unable to paste formatted data."
 msgstr ""
 
 #: src/core/paste.c:399
@@ -3119,7 +3160,7 @@ msgstr ""
 msgid "Unexpected error"
 msgstr ""
 
-#: src/dialogs/save/save.c:397
+#: src/dialogs/save/save.c:393
 #, c-format
 msgid "Unexpected format %d"
 msgstr ""
@@ -3129,7 +3170,7 @@ msgstr ""
 msgid "Unexpected group \"%s\""
 msgstr ""
 
-#: src/dialogs/save/save.c:367
+#: src/dialogs/save/save.c:363
 #, c-format
 msgid "Unexpected mode %d"
 msgstr ""
@@ -3159,6 +3200,11 @@ msgstr ""
 
 #: src/ssl/state.c:403
 msgid "Unexpected or unknown security status"
+msgstr ""
+
+#: src/dialogs/print/print.c:92
+#, c-format
+msgid "Unexpected status %d in print operation"
 msgstr ""
 
 #: actions.c:459
@@ -3391,7 +3437,7 @@ msgstr ""
 msgid "_Apply"
 msgstr ""
 
-#: src/selection/linux/paste.c:84 src/selection/linux/paste.c:124
+#: src/selection/linux/paste.c:84 src/selection/linux/paste.c:118
 #: src/dialogs/load.c:202 src/dialogs/load.c:221 src/dialogs/linux/select.c:51
 #: src/dialogs/linux/select.c:77 src/dialogs/print/settingsdialog.c:410
 #: src/dialogs/print/settingsdialog.c:429 src/dialogs/save/save.c:264
@@ -3404,7 +3450,7 @@ msgid "_Charset"
 msgstr ""
 
 #: src/trace/tracewindow.c:125 src/dialogs/transfer.c:167
-#: src/dialogs/transfer.c:187 src/dialogs/security.c:203
+#: src/dialogs/transfer.c:187 src/dialogs/security.c:231
 msgid "_Close"
 msgstr ""
 
@@ -3464,7 +3510,7 @@ msgstr ""
 msgid "_Options"
 msgstr ""
 
-#: src/selection/linux/paste.c:85 src/selection/linux/paste.c:125
+#: src/selection/linux/paste.c:85 src/selection/linux/paste.c:119
 msgid "_Paste as text"
 msgstr ""
 
