@@ -7,6 +7,95 @@
 msgid ""
 msgstr ""
 "#-#-#-#-#  pw3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"#-#-#-#-#  window.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-11-25 15:14-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  actions.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-11-22 14:15-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  dialog.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-11-22 14:15-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  print.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-11-22 14:15-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  tools.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-11-22 14:15-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  plugin.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-11-22 14:15-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  main.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-11-22 14:15-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  uiparser.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-11-22 14:15-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  common.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-11-22 14:15-0300\n"
@@ -31,7 +120,7 @@ msgstr ""
 "#-#-#-#-#  libv3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-22 16:58+0000\n"
+"POT-Creation-Date: 2019-11-25 18:01+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -51,7 +140,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: window.c:456
+#: window.c:470
 #, c-format
 msgid " and <b>%s</b> for %s."
 msgstr ""
@@ -132,7 +221,7 @@ msgstr ""
 msgid "%s: Vertical tab not supported"
 msgstr ""
 
-#: window.c:451
+#: window.c:465
 #, c-format
 msgid "%s<b>%s</b> for %s"
 msgstr ""
@@ -141,7 +230,7 @@ msgstr ""
 msgid "- 3270 Emulator for Gtk"
 msgstr ""
 
-#: src/dialogs/hostselect.c:146
+#: src/dialogs/hostselect.c:147
 msgid "16 colors"
 msgstr ""
 
@@ -174,7 +263,7 @@ msgstr ""
 msgid "3270-style backspace."
 msgstr ""
 
-#: src/dialogs/hostselect.c:145
+#: src/dialogs/hostselect.c:146
 msgid "8 colors"
 msgstr ""
 
@@ -271,7 +360,7 @@ msgstr ""
 msgid "Add to copy"
 msgstr ""
 
-#: src/dialogs/hostselect.c:198
+#: src/dialogs/hostselect.c:199
 msgid "Address or name of the host to connect."
 msgstr ""
 
@@ -329,6 +418,10 @@ msgstr ""
 
 #: src/ssl/state.c:324
 msgid "Authority and subject key identifier mismatch"
+msgstr ""
+
+#: src/dialogs/hostselect.c:487
+msgid "Auto _disconnect"
 msgstr ""
 
 #: src/core/toggles/table.c:284
@@ -536,7 +629,7 @@ msgstr ""
 msgid "Can't open CRL File"
 msgstr ""
 
-#: window.c:183
+#: window.c:185
 msgid "Can't open file"
 msgstr ""
 
@@ -578,7 +671,7 @@ msgstr ""
 msgid "Can't print"
 msgstr ""
 
-#: window.c:439
+#: window.c:453
 #, c-format
 msgid "Can't recognize \"%s\" as a valid host type"
 msgstr ""
@@ -598,7 +691,7 @@ msgstr ""
 msgid "Can't save %s"
 msgstr ""
 
-#: window.c:181
+#: window.c:183
 #, c-format
 msgid "Can't save trace data to file %s"
 msgstr ""
@@ -645,7 +738,7 @@ msgstr ""
 
 #: src/terminal/callbacks.c:407 src/filetransfer/v3270ftprogress.c:433
 #: src/filetransfer/transfer.c:89 src/dialogs/load.c:111
-#: src/dialogs/hostselect.c:346 src/dialogs/save/save.c:136
+#: src/dialogs/hostselect.c:347 src/dialogs/save/save.c:136
 msgid "Cancel"
 msgstr ""
 
@@ -703,7 +796,7 @@ msgstr ""
 msgid "Charset error"
 msgstr ""
 
-#: src/dialogs/hostselect.c:472
+#: src/dialogs/hostselect.c:505
 msgid "Check for SSL secure connection."
 msgstr ""
 
@@ -731,7 +824,7 @@ msgstr ""
 msgid "Click to save file"
 msgstr ""
 
-#: src/terminal/properties/init.c:127
+#: src/terminal/properties/init.c:136
 msgid "Clipboard name"
 msgstr ""
 
@@ -743,11 +836,11 @@ msgstr ""
 msgid "Colors"
 msgstr ""
 
-#: src/terminal/properties/init.c:171
+#: src/terminal/properties/init.c:184
 msgid "Comma separated list of LU names"
 msgstr ""
 
-#: src/dialogs/hostselect.c:246
+#: src/dialogs/hostselect.c:247
 msgid "Comma separated list of LU names."
 msgstr ""
 
@@ -779,7 +872,7 @@ msgstr ""
 msgid "Connect to host."
 msgstr ""
 
-#: src/dialogs/hostselect.c:395
+#: src/dialogs/hostselect.c:411
 msgid "Connection"
 msgstr ""
 
@@ -894,7 +987,7 @@ msgstr ""
 msgid "Cursor up 1 position."
 msgstr ""
 
-#: src/dialogs/hostselect.c:233
+#: src/dialogs/hostselect.c:234
 msgid "Custom Remap"
 msgstr ""
 
@@ -1002,7 +1095,7 @@ msgstr ""
 msgid "ETA:"
 msgstr ""
 
-#: src/dialogs/hostselect.c:406
+#: src/dialogs/hostselect.c:422
 msgid "Emulation"
 msgstr ""
 
@@ -1162,7 +1255,7 @@ msgstr ""
 msgid "Font \"%s\" is valid"
 msgstr ""
 
-#: src/terminal/properties/init.c:82
+#: src/terminal/properties/init.c:88
 msgid "Font family for terminal contents"
 msgstr ""
 
@@ -1242,7 +1335,7 @@ msgstr ""
 msgid "Help"
 msgstr ""
 
-#: src/dialogs/hostselect.c:581
+#: src/dialogs/hostselect.c:614
 msgid "Host"
 msgstr ""
 
@@ -1262,7 +1355,7 @@ msgstr ""
 msgid "Host program error code xxxxxxxxxx: file transfer canceled"
 msgstr ""
 
-#: src/dialogs/hostselect.c:580
+#: src/dialogs/hostselect.c:613
 msgid "Host properties"
 msgstr ""
 
@@ -1290,11 +1383,11 @@ msgstr ""
 msgid "HyperText Markup Language (HTML)"
 msgstr ""
 
-#: src/core/options.c:49 src/dialogs/hostselect.c:116
+#: src/core/options.c:49 src/dialogs/hostselect.c:117
 msgid "IBM AS/400"
 msgstr ""
 
-#: src/core/options.c:43 src/dialogs/hostselect.c:115
+#: src/core/options.c:43 src/dialogs/hostselect.c:116
 msgid "IBM S/390"
 msgstr ""
 
@@ -1302,7 +1395,7 @@ msgstr ""
 msgid "ID of the session security state"
 msgstr ""
 
-#: src/terminal/properties/init.c:112
+#: src/terminal/properties/init.c:119 src/dialogs/hostselect.c:492
 msgid "IDLE minutes for automatic disconnection"
 msgstr ""
 
@@ -1477,7 +1570,7 @@ msgstr ""
 msgid "Keyboard lock status"
 msgstr ""
 
-#: src/dialogs/hostselect.c:245
+#: src/dialogs/hostselect.c:246
 msgid "L_U Names"
 msgstr ""
 
@@ -1514,7 +1607,7 @@ msgstr ""
 msgid "Lock keyboard on operator error"
 msgstr ""
 
-#: main.c:353 src/dialogs/hostselect.c:222
+#: main.c:353 src/dialogs/hostselect.c:223
 msgid "Makes the screen larger than the default for the chosen model number."
 msgstr ""
 
@@ -1534,24 +1627,24 @@ msgstr ""
 msgid "Misc colors"
 msgstr ""
 
-#: window.c:563
+#: window.c:577
 #, c-format
 msgid "Model %d (%s)"
 msgstr ""
 
-#: src/dialogs/hostselect.c:173
+#: src/dialogs/hostselect.c:174
 msgid "Model 2 - 80x24"
 msgstr ""
 
-#: src/dialogs/hostselect.c:174
+#: src/dialogs/hostselect.c:175
 msgid "Model 3 - 80x32"
 msgstr ""
 
-#: src/dialogs/hostselect.c:175
+#: src/dialogs/hostselect.c:176
 msgid "Model 4 - 80x43"
 msgstr ""
 
-#: src/dialogs/hostselect.c:176
+#: src/dialogs/hostselect.c:177
 msgid "Model 5 - 132x27"
 msgstr ""
 
@@ -1563,7 +1656,7 @@ msgstr ""
 msgid "Monocase"
 msgstr ""
 
-#: src/dialogs/hostselect.c:144
+#: src/dialogs/hostselect.c:145
 msgid "Monochrome"
 msgstr ""
 
@@ -1613,7 +1706,7 @@ msgstr ""
 msgid "No active transfer"
 msgstr ""
 
-#: src/terminal/properties/get.c:169
+#: src/terminal/properties/get.c:173
 msgid "No host defined"
 msgstr ""
 
@@ -1708,11 +1801,11 @@ msgstr ""
 msgid "Orange"
 msgstr ""
 
-#: src/core/options.c:55 src/dialogs/hostselect.c:117
+#: src/core/options.c:55 src/dialogs/hostselect.c:118
 msgid "Other (TSO)"
 msgstr ""
 
-#: src/core/options.c:61 src/dialogs/hostselect.c:118
+#: src/core/options.c:61 src/dialogs/hostselect.c:119
 msgid "Other (VM/CMS)"
 msgstr ""
 
@@ -1720,7 +1813,7 @@ msgstr ""
 msgid "Out of memory"
 msgstr ""
 
-#: src/dialogs/hostselect.c:221
+#: src/dialogs/hostselect.c:222
 msgid "Oversize"
 msgstr ""
 
@@ -1877,7 +1970,7 @@ msgstr ""
 msgid "Path length constraint exceeded"
 msgstr ""
 
-#: src/dialogs/hostselect.c:234
+#: src/dialogs/hostselect.c:235
 msgid "Path to XML file with custom charset mapping."
 msgstr ""
 
@@ -1897,7 +1990,7 @@ msgstr ""
 msgid "Plain text"
 msgstr ""
 
-#: src/dialogs/hostselect.c:210
+#: src/dialogs/hostselect.c:211
 msgid "Port or service name (empty for \"telnet\")."
 msgstr ""
 
@@ -2315,7 +2408,7 @@ msgid "Security warning"
 msgstr ""
 
 #: src/filetransfer/v3270ft.c:303 src/filetransfer/settings.c:209
-#: src/dialogs/hostselect.c:347 src/dialogs/save/save.c:114
+#: src/dialogs/hostselect.c:348 src/dialogs/save/save.c:114
 #: src/dialogs/save/save.c:137
 msgid "Select"
 msgstr ""
@@ -2332,11 +2425,11 @@ msgstr ""
 msgid "Select by rectangles"
 msgstr ""
 
-#: src/dialogs/hostselect.c:429
+#: src/dialogs/hostselect.c:445
 msgid "Select charset remap file"
 msgstr ""
 
-#: src/dialogs/hostselect.c:343
+#: src/dialogs/hostselect.c:344
 msgid "Select custom charset mapping"
 msgstr ""
 
@@ -2568,7 +2661,7 @@ msgstr ""
 msgid "State is 3270, TN3270e or SSCP"
 msgstr ""
 
-#: src/terminal/properties/init.c:157
+#: src/terminal/properties/init.c:168
 msgid "State of the dynamic font spacing"
 msgstr ""
 
@@ -2576,11 +2669,11 @@ msgstr ""
 msgid "Subject issuer mismatch"
 msgstr ""
 
-#: src/dialogs/hostselect.c:101
+#: src/dialogs/hostselect.c:102
 msgid "System _type"
 msgstr ""
 
-#: src/dialogs/hostselect.c:143
+#: src/dialogs/hostselect.c:144
 msgid "System default"
 msgstr ""
 
@@ -2588,11 +2681,11 @@ msgstr ""
 msgid "TLS negotiation failure"
 msgstr ""
 
-#: src/dialogs/hostselect.c:356
+#: src/dialogs/hostselect.c:357
 msgid "TN3270 Custom charset"
 msgstr ""
 
-#: src/terminal/properties/init.c:97
+#: src/terminal/properties/init.c:103
 msgid "TN3270 Session name"
 msgstr ""
 
@@ -2667,7 +2760,7 @@ msgid ""
 "The Certificate revocation list (CRL) of a certificate could not be found."
 msgstr ""
 
-#: src/dialogs/hostselect.c:564
+#: src/dialogs/hostselect.c:597
 msgid "The EBCDIC host character set. "
 msgstr ""
 
@@ -2827,7 +2920,7 @@ msgid ""
 "normally means the list of trusted certificates is not complete."
 msgstr ""
 
-#: window.c:458
+#: window.c:472
 #, c-format
 msgid "The known types are %s"
 msgstr ""
@@ -2836,7 +2929,7 @@ msgstr ""
 msgid "The model number"
 msgstr ""
 
-#: main.c:352 src/dialogs/hostselect.c:158
+#: main.c:352 src/dialogs/hostselect.c:159
 msgid "The model of 3270 display to be emulated"
 msgstr ""
 
@@ -3007,7 +3100,7 @@ msgstr ""
 msgid "Trace user interface events"
 msgstr ""
 
-#: src/terminal/properties/init.c:186
+#: src/terminal/properties/init.c:199
 msgid "Trace window"
 msgstr ""
 
@@ -3360,7 +3453,7 @@ msgstr ""
 msgid "X Wait"
 msgstr ""
 
-#: src/terminal/properties/init.c:142
+#: src/terminal/properties/init.c:152
 msgid "XML file with remap table"
 msgstr ""
 
@@ -3445,7 +3538,7 @@ msgstr ""
 msgid "_Cancel"
 msgstr ""
 
-#: src/dialogs/hostselect.c:563
+#: src/dialogs/hostselect.c:596
 msgid "_Charset"
 msgstr ""
 
@@ -3454,7 +3547,7 @@ msgstr ""
 msgid "_Close"
 msgstr ""
 
-#: src/dialogs/hostselect.c:129
+#: src/dialogs/hostselect.c:130
 msgid "_Color table"
 msgstr ""
 
@@ -3482,7 +3575,7 @@ msgstr ""
 msgid "_Font:"
 msgstr ""
 
-#: src/dialogs/hostselect.c:197
+#: src/dialogs/hostselect.c:198
 msgid "_Host"
 msgstr ""
 
@@ -3494,7 +3587,7 @@ msgstr ""
 msgid "_Local file"
 msgstr ""
 
-#: src/dialogs/hostselect.c:157
+#: src/dialogs/hostselect.c:158
 msgid "_Model"
 msgstr ""
 
@@ -3523,11 +3616,11 @@ msgstr ""
 msgid "_Save"
 msgstr ""
 
-#: src/dialogs/hostselect.c:471
+#: src/dialogs/hostselect.c:504
 msgid "_Secure connection."
 msgstr ""
 
-#: src/dialogs/hostselect.c:209
+#: src/dialogs/hostselect.c:210
 msgid "_Service"
 msgstr ""
 
