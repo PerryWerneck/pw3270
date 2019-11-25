@@ -46,6 +46,10 @@
 
 	v3270_select_host(widget);
 
+	/*
+
+	No needed! The dialog fires a "save-settings" signal.
+
 	set_string_to_config("terminal","oversize",pw3270_get_oversize(gtk_widget_get_toplevel(widget)));
 	set_integer_to_config("terminal","model_number",lib3270_get_model_number(hSession));
  	set_string_to_config("terminal","model_name","%s",lib3270_get_model_name(hSession));
@@ -56,6 +60,7 @@
  		g_autofree gchar * lunames = v3270_get_lunames(widget);
 		set_string_to_config("terminal","lu_names",lunames);
  	}
+ 	*/
 
  }
 
