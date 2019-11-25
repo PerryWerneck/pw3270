@@ -726,8 +726,13 @@ gchar * filename_from_va(const gchar *first_element, va_list args)
 gboolean get_registry_handle(const gchar *group, HKEY *hKey, REGSAM samDesired)
 {
 	gboolean	  ret;
-	gchar		* path = g_strdup_printf("%s\\%s\\%s",registry_path,g_get_application_name(),group);
+	gchar		* path;
  	DWORD		  disp;
+
+ 	if(group)
+		path = g_strdup_printf("%s\\%s\\%s",registry_path,g_get_application_name(),group);
+	else
+		path = g_strdup_printf("%s\\%s",registry_path,g_get_application_name());
 
 	if(RegCreateKeyEx(HKEY_CURRENT_USER,path,0,NULL,REG_OPTION_NON_VOLATILE,samDesired,NULL,hKey,&disp) == ERROR_SUCCESS)
 		ret = TRUE;

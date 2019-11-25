@@ -409,8 +409,18 @@ static GtkWidget * trace_window = NULL;
 
 #ifdef ENABLE_WINDOWS_REGISTRY
 
+	HKEY hKey;
+
+	if(get_registry_handle(NULL, &hKey, KEY_SET_VALUE))
+	{
+		v3270_to_registry(widget, hKey, "terminal");
+		RegCloseKey(hKey);
+	}
+
 #else
+
 	v3270_to_key_file(widget, get_application_keyfile(), "terminal");
+
 #endif // _WIN32
 
  }
