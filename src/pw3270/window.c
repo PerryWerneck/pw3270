@@ -34,10 +34,12 @@
 #include <lib3270/popup.h>
 #include <lib3270/actions.h>
 #include <lib3270/trace.h>
+#include <lib3270/log.h>
 #include <lib3270/toggle.h>
 #include <lib3270/properties.h>
 #include <v3270/trace.h>
 #include <v3270/toggle.h>
+#include <v3270/settings.h>
 
 /*--[ Widget definition ]----------------------------------------------------------------------------*/
 
@@ -399,6 +401,18 @@ static GtkWidget * trace_window = NULL;
  static void session_changed(GtkWidget *widget, GtkWidget *window)
  {
 	update_window_title(window);
+ }
+
+ static void save_terminal_settings(GtkWidget *widget, GtkWidget *window)
+ {
+ 	debug("%s",__FUNCTION__);
+
+#ifdef ENABLE_WINDOWS_REGISTRY
+
+#else
+	v3270_to_key_file(widget, get_application_keyfile(), "terminal");
+#endif // _WIN32
+
  }
 
  LIB3270_EXPORT void pw3270_set_session_name(GtkWidget *widget, const gchar *name)
@@ -840,6 +854,7 @@ static GtkWidget * trace_window = NULL;
 	g_signal_connect(widget->terminal,"field_clicked",G_CALLBACK(field_clicked),widget);
 	g_signal_connect(widget->terminal,"toggle_changed",G_CALLBACK(toggle_changed),widget);
 	g_signal_connect(widget->terminal,"session_changed",G_CALLBACK(session_changed),widget);
+	g_signal_connect(widget->terminal,"save_settings",G_CALLBACK(save_terminal_settings),widget);
 
 	//g_signal_connect(widget->terminal,"print",G_CALLBACK(print_all),widget);
 
