@@ -239,6 +239,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/pw3270/windows/resources.rc.in" />
+		<Unit filename="src/pw3270/windows/settings.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/sample/Makefile.in" />
 		<Unit filename="src/sample/connect.c">
 			<Option compilerVar="CC" />
