@@ -156,6 +156,9 @@
 		<Unit filename="src/pw3270/linux/print.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/pw3270/linux/settings.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/pw3270/main.c">
 			<Option compilerVar="CC" />
 		</Unit>

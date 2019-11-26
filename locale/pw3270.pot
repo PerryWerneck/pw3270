@@ -7,98 +7,9 @@
 msgid ""
 msgstr ""
 "#-#-#-#-#  pw3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"#-#-#-#-#  window.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-25 15:14-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  actions.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-22 14:15-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  dialog.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-22 14:15-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  print.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-22 14:15-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  tools.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-22 14:15-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  plugin.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-22 14:15-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  main.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-22 14:15-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  uiparser.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-22 14:15-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  common.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-22 14:15-0300\n"
+"POT-Creation-Date: 2019-11-26 10:16-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -109,7 +20,7 @@ msgstr ""
 "#-#-#-#-#  lib3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-21 19:12+0000\n"
+"POT-Creation-Date: 2019-11-26 13:05+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -120,7 +31,7 @@ msgstr ""
 "#-#-#-#-#  libv3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-25 18:01+0000\n"
+"POT-Creation-Date: 2019-11-26 13:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -140,7 +51,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: window.c:470
+#: window.c:480
 #, c-format
 msgid " and <b>%s</b> for %s."
 msgstr ""
@@ -156,7 +67,6 @@ msgid "%dx%d screen size is bigger than the maximum size"
 msgstr ""
 
 #: src/core/telnet.c:711 src/core/iocalls.c:554 src/core/iocalls.c:571
-#: src/core/linux/connect.c:84 src/core/linux/connect.c:100
 #, c-format
 msgid "%s"
 msgstr ""
@@ -164,6 +74,11 @@ msgstr ""
 #: src/ssl/notify.c:117
 #, c-format
 msgid "%s (SSL error %d)"
+msgstr ""
+
+#: src/core/windows/connect.c:94
+#, c-format
+msgid "%s (rc=%d)"
 msgstr ""
 
 #: actions.c:868 actions.c:880
@@ -221,7 +136,7 @@ msgstr ""
 msgid "%s: Vertical tab not supported"
 msgstr ""
 
-#: window.c:465
+#: window.c:475
 #, c-format
 msgid "%s<b>%s</b> for %s"
 msgstr ""
@@ -472,6 +387,10 @@ msgstr ""
 msgid "Backspaces the cursor until it hits the front of a word."
 msgstr ""
 
+#: src/core/windows/connect.c:145
+msgid "Bad winsock version"
+msgstr ""
+
 #: src/core/toggles/table.c:264
 msgid "Beep on errors"
 msgstr ""
@@ -541,7 +460,7 @@ msgstr ""
 msgid "C_olor scheme:"
 msgstr ""
 
-#: src/core/toggles/init.c:89 src/core/linux/connect.c:234
+#: src/core/toggles/init.c:89 src/core/windows/connect.c:332
 #, c-format
 msgid "Can't %s network keep-alive"
 msgstr ""
@@ -555,30 +474,34 @@ msgstr ""
 msgid "Can't add activity"
 msgstr ""
 
-#: src/ssl/linux/ldap.c:157
+#: src/ssl/windows/ldap.c:181
 msgid "Can't bind to LDAP server"
 msgstr ""
 
-#: src/core/linux/connect.c:92
+#: src/core/windows/connect.c:87 src/core/windows/connect.c:227
 #, c-format
 msgid "Can't connect to %s"
 msgstr ""
 
-#: src/core/linux/connect.c:184
-#, c-format
-msgid "Can't connect to %s:%s"
+#: src/core/windows/http.c:108
+msgid "Can't connect to HTTP server."
 msgstr ""
 
-#: src/ssl/linux/getcrl.c:85
+#: src/core/windows/http.c:120
+msgid "Can't create HTTP request."
+msgstr ""
+
+#: src/ssl/windows/getcrl.c:87
 msgid "Can't decode CRL"
 msgstr ""
 
-#: src/ssl/linux/url.c:116 src/ssl/linux/ldap.c:229
+#: src/ssl/windows/ldap.c:259 src/ssl/windows/http.c:69
+#: src/ssl/windows/curl.c:264
 msgid "Can't decode certificate revocation list"
 msgstr ""
 
-#: src/ssl/linux/url.c:99
-msgid "Can't decode certificate revocation list got from LDAP server"
+#: src/ssl/windows/curl.c:370
+msgid "Can't decode certificate revocation list got from LDAP Search"
 msgstr ""
 
 #: src/terminal/font/properties.c:40
@@ -586,7 +509,11 @@ msgstr ""
 msgid "Can't find a valid font with the name \"%s\""
 msgstr ""
 
-#: src/ssl/linux/ldap.c:193 src/ssl/linux/ldap.c:205
+#: src/ssl/windows/curl.c:334
+msgid "Can't find certificate revocation list in LDAP response"
+msgstr ""
+
+#: src/ssl/windows/ldap.c:223 src/ssl/windows/ldap.c:235
 msgid "Can't get LDAP attribute"
 msgstr ""
 
@@ -594,16 +521,21 @@ msgstr ""
 msgid "Can't get file size"
 msgstr ""
 
-#: src/ssl/linux/ldap.c:135
+#: src/ssl/windows/ldap.c:152
 msgid "Can't initialize LDAP"
 msgstr ""
 
-#: src/core/linux/curl.c:181
+#: src/ssl/windows/curl.c:190
 msgid "Can't initialize curl operation"
 msgstr ""
 
 #: src/core/session.c:208
 msgid "Can't load"
+msgstr ""
+
+#: src/ssl/windows/init.c:152
+#, c-format
+msgid "Can't load \"%s\": %s"
 msgstr ""
 
 #: parsefile.c:328 src/filetransfer/load.c:271
@@ -620,13 +552,27 @@ msgstr ""
 msgid "Can't load plugin %s"
 msgstr ""
 
+#: src/ssl/windows/init.c:115
+#, c-format
+msgid "Can't open \"%s\" (The Windows error code was %ld)"
+msgstr ""
+
+#: src/ssl/windows/init.c:128
+#, c-format
+msgid "Can't open \"%s\": %s"
+msgstr ""
+
 #: src/dialogs/load.c:321
 #, c-format
 msgid "Can't open %s"
 msgstr ""
 
-#: src/ssl/linux/getcrl.c:56 src/ssl/linux/getcrl.c:73
+#: src/ssl/windows/getcrl.c:58 src/ssl/windows/getcrl.c:75
 msgid "Can't open CRL File"
+msgstr ""
+
+#: src/core/windows/http.c:96
+msgid "Can't open HTTP session"
 msgstr ""
 
 #: window.c:185
@@ -659,7 +605,7 @@ msgstr ""
 msgid "Can't parse unnamed element"
 msgstr ""
 
-#: src/selection/linux/paste.c:80 src/selection/linux/paste.c:115
+#: src/selection/windows/paste.c:79 src/selection/windows/paste.c:119
 msgid "Can't paste"
 msgstr ""
 
@@ -671,7 +617,16 @@ msgstr ""
 msgid "Can't print"
 msgstr ""
 
-#: window.c:453
+#: src/ssl/windows/init.c:141
+#, c-format
+msgid "Can't read \"%s\": %s"
+msgstr ""
+
+#: src/core/windows/http.c:175
+msgid "Can't read HTTP response size."
+msgstr ""
+
+#: window.c:463
 #, c-format
 msgid "Can't recognize \"%s\" as a valid host type"
 msgstr ""
@@ -696,11 +651,15 @@ msgstr ""
 msgid "Can't save trace data to file %s"
 msgstr ""
 
-#: src/ssl/linux/ldap.c:182
+#: src/ssl/windows/ldap.c:211
 msgid "Can't search LDAP server"
 msgstr ""
 
-#: src/ssl/linux/ldap.c:146
+#: src/core/windows/http.c:134
+msgid "Can't send HTTP request."
+msgstr ""
+
+#: src/ssl/windows/ldap.c:166
 msgid "Can't set LDAP protocol version"
 msgstr ""
 
@@ -732,6 +691,11 @@ msgstr ""
 msgid "Can't start file transfer."
 msgstr ""
 
+#: src/core/windows/connect.c:146
+#, c-format
+msgid "Can't use winsock version %d.%d"
+msgstr ""
+
 #: src/ssl/negotiate.c:286 src/ssl/crl.c:163
 msgid "Can't verify."
 msgstr ""
@@ -758,8 +722,20 @@ msgstr ""
 msgid "Cant create a new SSL structure for current connection."
 msgstr ""
 
-#: src/ssl/linux/init.c:90
+#: src/ssl/windows/init.c:92
 msgid "Cant initialize the SSL context."
+msgstr ""
+
+#: src/ssl/windows/init.c:150
+msgid "Cant load custom certificate file."
+msgstr ""
+
+#: src/ssl/windows/init.c:113
+msgid "Cant open custom certificate directory."
+msgstr ""
+
+#: src/ssl/windows/init.c:139
+msgid "Cant read custom certificate file."
 msgstr ""
 
 #: src/ssl/negotiate.c:159
@@ -824,7 +800,7 @@ msgstr ""
 msgid "Click to save file"
 msgstr ""
 
-#: src/terminal/properties/init.c:136
+#: src/terminal/properties/init.c:138
 msgid "Clipboard name"
 msgstr ""
 
@@ -836,7 +812,7 @@ msgstr ""
 msgid "Colors"
 msgstr ""
 
-#: src/terminal/properties/init.c:184
+#: src/terminal/properties/init.c:186
 msgid "Comma separated list of LU names"
 msgstr ""
 
@@ -876,12 +852,13 @@ msgstr ""
 msgid "Connection"
 msgstr ""
 
-#: src/core/iocalls.c:538 src/core/linux/connect.c:188
-#: src/core/linux/connect.c:220 src/core/linux/connect.c:238
+#: src/core/iocalls.c:538 src/core/windows/connect.c:288
+#: src/core/windows/connect.c:300 src/core/windows/connect.c:336
+#: src/core/windows/connect.c:352
 msgid "Connection error"
 msgstr ""
 
-#: src/core/linux/connect.c:98
+#: src/core/windows/connect.c:92
 msgid "Connection failed"
 msgstr ""
 
@@ -939,11 +916,11 @@ msgstr ""
 msgid "Current file"
 msgstr ""
 
-#: src/core/properties/unsigned.c:100
+#: src/core/properties/unsigned.c:122
 msgid "Current screen height in rows"
 msgstr ""
 
-#: src/core/properties/unsigned.c:93
+#: src/core/properties/unsigned.c:115
 msgid "Current screen width in columns"
 msgstr ""
 
@@ -955,7 +932,7 @@ msgstr ""
 msgid "Current:"
 msgstr ""
 
-#: src/core/properties/unsigned.c:86
+#: src/core/properties/unsigned.c:108
 msgid "Cursor address"
 msgstr ""
 
@@ -1039,7 +1016,7 @@ msgstr ""
 msgid "Default"
 msgstr ""
 
-#: src/core/properties/string.c:155
+#: src/core/properties/string.c:159
 msgid "Default host URL"
 msgstr ""
 
@@ -1047,7 +1024,7 @@ msgstr ""
 msgid "Delete field"
 msgstr ""
 
-#: src/core/properties/string.c:169
+#: src/core/properties/string.c:173
 msgid "Description of the current security state"
 msgstr ""
 
@@ -1067,7 +1044,7 @@ msgstr ""
 msgid "Disconnected from host."
 msgstr ""
 
-#: src/core/properties/string.c:118
+#: src/core/properties/string.c:122
 msgid "Display charset"
 msgstr ""
 
@@ -1093,6 +1070,10 @@ msgstr ""
 
 #: src/filetransfer/tables.c:224
 msgid "ETA:"
+msgstr ""
+
+#: src/core/windows/http.c:159
+msgid "Empty response from HTTP server."
 msgstr ""
 
 #: src/dialogs/hostselect.c:422
@@ -1161,12 +1142,13 @@ msgstr ""
 msgid "Error \"%s\" writing to local file (rc=%d)"
 msgstr ""
 
-#: src/ssl/linux/url.c:66
-msgid "Error getting certificate revocation list"
-msgstr ""
-
 #: src/core/ft/ftmessages.c:45
 msgid "Error in file transfer: file transfer canceled"
+msgstr ""
+
+#: src/ssl/windows/curl.c:189 src/ssl/windows/curl.c:227
+#: src/ssl/windows/curl.c:243
+msgid "Error loading certificate revocation list"
 msgstr ""
 
 #: src/dialogs/print/print.c:72
@@ -1175,6 +1157,10 @@ msgstr ""
 
 #: src/core/ft/ftmessages.c:87
 msgid "Error reading file from host: file transfer canceled"
+msgstr ""
+
+#: src/core/windows/http.c:146
+msgid "Error receiving HTTP response."
 msgstr ""
 
 #: src/core/ft/ftmessages.c:145
@@ -1255,7 +1241,7 @@ msgstr ""
 msgid "Font \"%s\" is valid"
 msgstr ""
 
-#: src/terminal/properties/init.c:88
+#: src/terminal/properties/init.c:90
 msgid "Font family for terminal contents"
 msgstr ""
 
@@ -1315,8 +1301,8 @@ msgstr ""
 msgid "Go to fullscreen mode"
 msgstr ""
 
-#: src/ssl/linux/url.c:81
-msgid "Got a bad formatted certificate revocation list from LDAP server"
+#: src/ssl/windows/curl.c:273
+msgid "Got an invalid certificate revocation list from server"
 msgstr ""
 
 #: src/dialogs/colors.c:169
@@ -1339,7 +1325,7 @@ msgstr ""
 msgid "Host"
 msgstr ""
 
-#: src/core/properties/string.c:111
+#: src/core/properties/string.c:115
 msgid "Host charset"
 msgstr ""
 
@@ -1375,8 +1361,12 @@ msgstr ""
 msgid "Host to connect"
 msgstr ""
 
-#: src/core/properties/string.c:89
+#: src/core/properties/string.c:92
 msgid "Host type name"
+msgstr ""
+
+#: src/core/properties/unsigned.c:87
+msgid "Host type number"
 msgstr ""
 
 #: src/dialogs/save/save.c:59
@@ -1395,7 +1385,7 @@ msgstr ""
 msgid "ID of the session security state"
 msgstr ""
 
-#: src/terminal/properties/init.c:119 src/dialogs/hostselect.c:492
+#: src/terminal/properties/init.c:121 src/dialogs/hostselect.c:492
 msgid "IDLE minutes for automatic disconnection"
 msgstr ""
 
@@ -1566,7 +1556,7 @@ msgstr ""
 msgid "Keyboard is locked"
 msgstr ""
 
-#: src/core/properties/unsigned.c:135
+#: src/core/properties/unsigned.c:162
 msgid "Keyboard lock status"
 msgstr ""
 
@@ -1611,11 +1601,11 @@ msgstr ""
 msgid "Makes the screen larger than the default for the chosen model number."
 msgstr ""
 
-#: src/core/properties/unsigned.c:114
+#: src/core/properties/unsigned.c:136
 msgid "Maximum screen height in rows"
 msgstr ""
 
-#: src/core/properties/unsigned.c:107
+#: src/core/properties/unsigned.c:129
 msgid "Maximum screen width in columns"
 msgstr ""
 
@@ -1627,7 +1617,7 @@ msgstr ""
 msgid "Misc colors"
 msgstr ""
 
-#: window.c:577
+#: window.c:587
 #, c-format
 msgid "Model %d (%s)"
 msgstr ""
@@ -1648,7 +1638,7 @@ msgstr ""
 msgid "Model 5 - 132x27"
 msgstr ""
 
-#: src/core/properties/string.c:81
+#: src/core/properties/string.c:84
 msgid "Model name"
 msgstr ""
 
@@ -1681,8 +1671,8 @@ msgstr ""
 msgid "Network data"
 msgstr ""
 
-#: src/core/telnet.c:359 src/core/linux/event_dispatcher.c:143
-#: src/core/linux/connect.c:82
+#: src/core/telnet.c:359 src/core/windows/event_dispatcher.c:149
+#: src/core/windows/connect.c:78
 msgid "Network error"
 msgstr ""
 
@@ -1690,15 +1680,19 @@ msgstr ""
 msgid "Network keep alive"
 msgstr ""
 
+#: src/core/windows/connect.c:133 src/core/windows/connect.c:144
+msgid "Network startup error"
+msgstr ""
+
 #: 00default.xml:189
 msgid "Next field"
 msgstr ""
 
-#: src/ssl/linux/ldap.c:101
+#: src/ssl/windows/ldap.c:109
 msgid "No DN of the entry at which to start the search on the URL"
 msgstr ""
 
-#: src/ssl/linux/ldap.c:114
+#: src/ssl/windows/ldap.c:123
 msgid "No LDAP attribute on the URL"
 msgstr ""
 
@@ -1706,7 +1700,11 @@ msgstr ""
 msgid "No active transfer"
 msgstr ""
 
-#: src/terminal/properties/get.c:173
+#: src/ssl/windows/curl.c:301
+msgid "No attribute in LDAP search URL"
+msgstr ""
+
+#: src/terminal/properties/get.c:189
 msgid "No host defined"
 msgstr ""
 
@@ -1732,10 +1730,6 @@ msgstr ""
 msgid "Non zero if the host is TSO."
 msgstr ""
 
-#: src/selection/linux/paste.c:117
-msgid "None of the screens in the clipboard match with the current one."
-msgstr ""
-
 #: src/dialogs/colors.c:173
 msgid "Normal/Protected"
 msgstr ""
@@ -1748,7 +1742,7 @@ msgstr ""
 msgid "Not in 3270 mode, transfer cancelled"
 msgstr ""
 
-#: src/selection/linux/paste.c:76
+#: src/selection/windows/paste.c:75
 msgid "Not the same terminal type"
 msgstr ""
 
@@ -1998,8 +1992,8 @@ msgstr ""
 msgid "Predefined color theme"
 msgstr ""
 
-#: src/core/properties/string.c:148
-msgid "Prefered protocol for CRL"
+#: src/core/properties/string.c:152
+msgid "Preferred protocol for CRL download"
 msgstr ""
 
 #: src/filetransfer/set.c:176
@@ -2349,11 +2343,11 @@ msgstr ""
 msgid "Saving %s"
 msgstr ""
 
-#: src/core/properties/unsigned.c:121
+#: src/core/properties/unsigned.c:143
 msgid "Screen buffer length in bytes"
 msgstr ""
 
-#: src/core/properties/string.c:177
+#: src/core/properties/string.c:181
 msgid "Screen oversize if larger than the chosen model"
 msgstr ""
 
@@ -2369,11 +2363,11 @@ msgstr ""
 msgid "Scripts"
 msgstr ""
 
-#: src/ssl/linux/ldap.c:194
+#: src/ssl/windows/ldap.c:224
 msgid "Search did not produce any attributes."
 msgstr ""
 
-#: src/ssl/linux/ldap.c:206
+#: src/ssl/windows/ldap.c:236
 msgid "Search did not produce any values."
 msgstr ""
 
@@ -2393,13 +2387,20 @@ msgstr ""
 
 #: src/ssl/negotiate.c:107 src/ssl/negotiate.c:157 src/ssl/negotiate.c:191
 #: src/ssl/negotiate.c:285 src/ssl/negotiate.c:307 src/ssl/negotiate.c:328
-#: src/ssl/crl.c:162 src/ssl/linux/url.c:65 src/ssl/linux/url.c:80
-#: src/ssl/linux/url.c:98 src/ssl/linux/url.c:115 src/ssl/linux/ldap.c:100
-#: src/ssl/linux/ldap.c:113 src/ssl/linux/ldap.c:134 src/ssl/linux/ldap.c:145
-#: src/ssl/linux/ldap.c:156 src/ssl/linux/ldap.c:181 src/ssl/linux/ldap.c:192
-#: src/ssl/linux/ldap.c:204 src/ssl/linux/ldap.c:228 src/ssl/linux/init.c:89
-#: src/ssl/linux/getcrl.c:55 src/ssl/linux/getcrl.c:72
-#: src/ssl/linux/getcrl.c:84 src/ssl/linux/getcrl.c:110
+#: src/ssl/crl.c:162 src/ssl/windows/ldap.c:108 src/ssl/windows/ldap.c:122
+#: src/ssl/windows/ldap.c:151 src/ssl/windows/ldap.c:165
+#: src/ssl/windows/ldap.c:180 src/ssl/windows/ldap.c:210
+#: src/ssl/windows/ldap.c:222 src/ssl/windows/ldap.c:234
+#: src/ssl/windows/ldap.c:258 src/ssl/windows/init.c:91
+#: src/ssl/windows/init.c:112 src/ssl/windows/init.c:138
+#: src/ssl/windows/init.c:149 src/ssl/windows/http.c:57
+#: src/ssl/windows/http.c:68 src/ssl/windows/getcrl.c:57
+#: src/ssl/windows/getcrl.c:74 src/ssl/windows/getcrl.c:86
+#: src/ssl/windows/getcrl.c:116 src/ssl/windows/curl.c:188
+#: src/ssl/windows/curl.c:218 src/ssl/windows/curl.c:242
+#: src/ssl/windows/curl.c:263 src/ssl/windows/curl.c:272
+#: src/ssl/windows/curl.c:300 src/ssl/windows/curl.c:333
+#: src/ssl/windows/curl.c:369
 msgid "Security error"
 msgstr ""
 
@@ -2475,7 +2476,7 @@ msgstr ""
 msgid "Select terminal colors"
 msgstr ""
 
-#: src/core/linux/event_dispatcher.c:144
+#: src/core/windows/event_dispatcher.c:150
 msgid "Select() failed when processing for events."
 msgstr ""
 
@@ -2661,7 +2662,7 @@ msgstr ""
 msgid "State is 3270, TN3270e or SSCP"
 msgstr ""
 
-#: src/terminal/properties/init.c:168
+#: src/terminal/properties/init.c:170
 msgid "State of the dynamic font spacing"
 msgstr ""
 
@@ -2685,7 +2686,7 @@ msgstr ""
 msgid "TN3270 Custom charset"
 msgstr ""
 
-#: src/terminal/properties/init.c:103
+#: src/terminal/properties/init.c:105
 msgid "TN3270 Session name"
 msgstr ""
 
@@ -2705,15 +2706,15 @@ msgstr ""
 msgid "Terminal font"
 msgstr ""
 
-#: src/core/properties/unsigned.c:74
+#: src/core/properties/unsigned.c:96
 msgid "Terminal model"
 msgstr ""
 
-#: src/core/properties/string.c:103
+#: src/core/properties/string.c:106
 msgid "Terminal name"
 msgstr ""
 
-#: src/core/properties/string.c:96
+#: src/core/properties/string.c:99
 msgid "Terminal type"
 msgstr ""
 
@@ -2768,15 +2769,15 @@ msgstr ""
 msgid "The SSL certificate for this host is not trusted."
 msgstr ""
 
-#: src/ssl/linux/ldap.c:102 src/ssl/linux/ldap.c:115
+#: src/ssl/windows/ldap.c:110 src/ssl/windows/ldap.c:124
 msgid "The URL argument should be in the format ldap://[HOST]/[DN]?attribute"
 msgstr ""
 
-#: src/ssl/linux/getcrl.c:57
+#: src/ssl/windows/getcrl.c:59
 msgid "The URL for the CRL is undefined or empty"
 msgstr ""
 
-#: src/ssl/linux/getcrl.c:112
+#: src/ssl/windows/getcrl.c:118
 msgid "The URL scheme is unknown"
 msgstr ""
 
@@ -2827,7 +2828,7 @@ msgid ""
 "expected value, this is only meaningful for RSA keys."
 msgstr ""
 
-#: src/core/properties/unsigned.c:65
+#: src/core/properties/unsigned.c:78
 msgid "The color type"
 msgstr ""
 
@@ -2867,7 +2868,7 @@ msgid ""
 "displayed when the -issuer_checks option is set."
 msgstr ""
 
-#: src/core/properties/unsigned.c:128
+#: src/core/properties/unsigned.c:155
 msgid "The delay between the host unlocking the keyboard and the actual unlock"
 msgstr ""
 
@@ -2920,12 +2921,12 @@ msgid ""
 "normally means the list of trusted certificates is not complete."
 msgstr ""
 
-#: window.c:472
+#: window.c:482
 #, c-format
 msgid "The known types are %s"
 msgstr ""
 
-#: src/core/properties/unsigned.c:75
+#: src/core/properties/unsigned.c:97
 msgid "The model number"
 msgstr ""
 
@@ -3000,7 +3001,7 @@ msgid ""
 "certificate authority."
 msgstr ""
 
-#: src/core/properties/string.c:162
+#: src/core/properties/string.c:166
 msgid "The security state"
 msgstr ""
 
@@ -3010,6 +3011,10 @@ msgstr ""
 
 #: src/ssl/state.c:293
 msgid "The supplied certificate cannot be used for the specified purpose."
+msgstr ""
+
+#: src/terminal/properties/init.c:216
+msgid "The terminal colors"
 msgstr ""
 
 #: src/core/ctlr.c:216
@@ -3100,7 +3105,7 @@ msgstr ""
 msgid "Trace user interface events"
 msgstr ""
 
-#: src/terminal/properties/init.c:199
+#: src/terminal/properties/init.c:201
 msgid "Trace window"
 msgstr ""
 
@@ -3160,11 +3165,11 @@ msgstr ""
 msgid "Turquoise"
 msgstr ""
 
-#: src/core/properties/string.c:140
+#: src/core/properties/string.c:144
 msgid "URL for the certificate revocation list"
 msgstr ""
 
-#: src/core/properties/string.c:73
+#: src/core/properties/string.c:76
 msgid "URL of the current host"
 msgstr ""
 
@@ -3196,7 +3201,7 @@ msgstr ""
 msgid "Unable to get certificate CRL."
 msgstr ""
 
-#: src/core/linux/connect.c:83
+#: src/core/windows/connect.c:79
 msgid "Unable to get connection state."
 msgstr ""
 
@@ -3212,8 +3217,8 @@ msgstr ""
 msgid "Unable to load from file"
 msgstr ""
 
-#: src/selection/linux/paste.c:116
-msgid "Unable to paste formatted data."
+#: src/selection/windows/paste.c:115
+msgid "Unable to paste formatted data"
 msgstr ""
 
 #: src/core/paste.c:399
@@ -3273,7 +3278,7 @@ msgstr ""
 msgid "Unexpected or invalid %s attribute: \"%s\""
 msgstr ""
 
-#: src/ssl/linux/getcrl.c:111
+#: src/ssl/windows/getcrl.c:117
 msgid "Unexpected or invalid CRL URL"
 msgstr ""
 
@@ -3346,7 +3351,7 @@ msgstr ""
 msgid "Unsupported certificate purpose"
 msgstr ""
 
-#: src/dialogs/save/save.c:149
+#: src/dialogs/windows/select.c:169 src/dialogs/save/save.c:149
 msgid "Untitled document"
 msgstr ""
 
@@ -3375,6 +3380,10 @@ msgstr ""
 msgid "Version %s-%s"
 msgstr ""
 
+#: src/core/windows/connect.c:134
+msgid "WSAStartup failed"
+msgstr ""
+
 #: src/core/ft/ft.c:538
 msgid "Waiting for GET response"
 msgstr ""
@@ -3397,6 +3406,11 @@ msgstr ""
 
 #: src/dialogs/tools.c:139
 msgid "Windows Western languages (CP1252)"
+msgstr ""
+
+#: src/core/windows/util.c:131 src/core/windows/util.c:180
+#, c-format
+msgid "Windows error %d"
 msgstr ""
 
 #: src/ssl/notify.c:108
@@ -3453,7 +3467,7 @@ msgstr ""
 msgid "X Wait"
 msgstr ""
 
-#: src/terminal/properties/init.c:152
+#: src/terminal/properties/init.c:154
 msgid "XML file with remap table"
 msgstr ""
 
@@ -3530,9 +3544,9 @@ msgstr ""
 msgid "_Apply"
 msgstr ""
 
-#: src/selection/linux/paste.c:84 src/selection/linux/paste.c:118
-#: src/dialogs/load.c:202 src/dialogs/load.c:221 src/dialogs/linux/select.c:51
-#: src/dialogs/linux/select.c:77 src/dialogs/print/settingsdialog.c:410
+#: src/selection/windows/paste.c:83 src/selection/windows/paste.c:123
+#: src/dialogs/load.c:202 src/dialogs/load.c:221
+#: src/dialogs/windows/select.c:158 src/dialogs/print/settingsdialog.c:410
 #: src/dialogs/print/settingsdialog.c:429 src/dialogs/save/save.c:264
 #: src/dialogs/save/save.c:283 src/dialogs/settings/dialog.c:182
 msgid "_Cancel"
@@ -3603,7 +3617,7 @@ msgstr ""
 msgid "_Options"
 msgstr ""
 
-#: src/selection/linux/paste.c:85 src/selection/linux/paste.c:119
+#: src/selection/windows/paste.c:84 src/selection/windows/paste.c:124
 msgid "_Paste as text"
 msgstr ""
 
@@ -3653,15 +3667,11 @@ msgstr ""
 msgid "an action attribute"
 msgstr ""
 
-#: src/core/session.c:416
-msgid "bracket"
-msgstr ""
-
-#: src/core/toggles/init.c:89 src/core/linux/connect.c:234
+#: src/core/toggles/init.c:89 src/core/windows/connect.c:332
 msgid "disable"
 msgstr ""
 
-#: src/core/toggles/init.c:89 src/core/linux/connect.c:234
+#: src/core/toggles/init.c:89 src/core/windows/connect.c:332
 msgid "enable"
 msgstr ""
 
@@ -3673,11 +3683,11 @@ msgstr ""
 msgid "ioctlsocket(FIONBIO) failed."
 msgstr ""
 
-#: src/core/properties/string.c:132
+#: src/core/properties/string.c:136
 msgid "lib3270 revision"
 msgstr ""
 
-#: src/core/properties/string.c:125
+#: src/core/properties/string.c:129
 msgid "lib3270 version"
 msgstr ""
 
@@ -3685,7 +3695,7 @@ msgstr ""
 msgid "numeric lock"
 msgstr ""
 
-#: src/core/linux/connect.c:221
+#: src/core/windows/connect.c:353
 msgid "setsockopt(SO_OOBINLINE) has failed"
 msgstr ""
 

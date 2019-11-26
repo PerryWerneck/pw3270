@@ -97,6 +97,10 @@
  G_GNUC_INTERNAL void print_settings_action(GtkAction *action, GtkWidget *widget);
  G_GNUC_INTERNAL gboolean handle_keypress(GtkWidget *terminal, guint keyval, GdkModifierType state, GtkWidget *window);
 
+ // Settings
+
+ /// @brief Load terminal settings from system and session files.
+ G_GNUC_INTERNAL void load_terminal_settings(GtkWidget *widget);
 
 #endif // PRIVATE_H_INCLUDED
 

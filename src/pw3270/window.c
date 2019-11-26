@@ -40,6 +40,7 @@
 #include <v3270/trace.h>
 #include <v3270/toggle.h>
 #include <v3270/settings.h>
+#include "common/common.h"
 
 /*--[ Widget definition ]----------------------------------------------------------------------------*/
 
@@ -751,6 +752,7 @@ static GtkWidget * trace_window = NULL;
  		{ NULL,				NULL				}
  	};
 
+ 	/*
  	static const struct _widget_config
  	{
  		const gchar *key;
@@ -760,6 +762,7 @@ static GtkWidget * trace_window = NULL;
  		{ "colors", 		v3270_set_colors		},
  		{ "font-family",	v3270_set_font_family	}
  	};
+ 	*/
 
 	int f;
 	GtkAction	**action = g_new0(GtkAction *,ACTION_COUNT);
@@ -771,32 +774,8 @@ static GtkWidget * trace_window = NULL;
 	widget->terminal = v3270_new();
 	host = v3270_get_session(widget->terminal);
 
-	for(f=0;f<G_N_ELEMENTS(widget_config);f++)
-	{
-		gchar *str = get_string_from_config("terminal",widget_config[f].key,NULL);
-//		trace("str=%p strlen=%d",str,strlen(str));
-		widget_config[f].set(widget->terminal,str);
-		if(str)
-			g_free(str);
-	}
-
-	{
-		char str[2];
-		str[0] = get_integer_from_config("terminal","model_number",2)+'0';
-		str[1] = 0;
-		lib3270_set_model(host,str);
-
-		unsigned int unlock_delay = (unsigned int) get_integer_from_config("terminal","unlock_delay",(int) lib3270_get_unlock_delay(host));
-		lib3270_set_unlock_delay(host,unlock_delay);
-
-	}
-
-	for(f=0;f<LIB3270_TOGGLE_COUNT;f++)
-	{
-		gchar *nm = g_ascii_strdown(lib3270_get_toggle_name(f),-1);
-		lib3270_set_toggle(host,f,get_boolean_from_config("toggle",nm,lib3270_get_toggle(host,f)));
-		g_free(nm);
-	}
+	// Load terminal settings before connecting the signals.
+	load_terminal_settings(widget->terminal);
 
 	g_object_set_data_full(G_OBJECT(widget->terminal),"toggle_actions",g_new0(GtkAction *,LIB3270_TOGGLE_COUNT),g_free);
 	g_object_set_data_full(G_OBJECT(widget->terminal),"named_actions",(gpointer) action, (GDestroyNotify) g_free);
