@@ -45,20 +45,20 @@
 
       <attribute name='label' translatable='yes'>_View</attribute>
 
-        <item>
-          <attribute name="label" translatable="yes">Trace</attribute>
-          <attribute name="action">win.trace</attribute>
-        </item>
+      <item>
+        <attribute name="label" translatable="yes">Trace</attribute>
+        <attribute name="action">win.trace</attribute>
+      </item>
 
-        <item>
-          <attribute name="label" translatable="yes">Toolbar</attribute>
-          <attribute name="action">win.toolbar</attribute>
-        </item>
+      <item>
+        <attribute name="label" translatable="yes">Toolbar</attribute>
+        <attribute name="action">win.toolbar</attribute>
+      </item>
 
-        <item>
-          <attribute name="label" translatable="yes">Menu</attribute>
-          <attribute name="action">win.menubar</attribute>
-        </item>
+      <item>
+        <attribute name="label" translatable="yes">Menu</attribute>
+        <attribute name="action">win.menubar</attribute>
+      </item>
 
     </submenu>
 
@@ -257,6 +257,11 @@
         <item>
           <attribute name="label" translatable="yes">Menu</attribute>
           <attribute name="action">win.menubar</attribute>
+        </item>
+
+        <item>
+            <attribute name="label" translatable="yes">Field attributes</attribute>
+            <attribute name="action">win.fieldattr</attribute>
         </item>
 
     </submenu>
