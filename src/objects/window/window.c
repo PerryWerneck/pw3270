@@ -261,6 +261,8 @@
 	gtk_window_set_position(GTK_WINDOW(window),GTK_WIN_POS_CENTER);
 	gtk_window_set_default_size (GTK_WINDOW (window), 800, 500);
 
+	// gtk_window_set_interactive_debugging(TRUE);
+
 	return GTK_WIDGET(window);
 
  }
