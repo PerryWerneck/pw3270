@@ -2,6 +2,7 @@
 !include "x64.nsh"
 !include "FileFunc.nsh"
 !include "LogicLib.nsh"
+!include "winmessages.nsh"
 
 Name "@PRODUCT_NAME@"
 Caption "@PRODUCT_NAME@ - @PACKAGE_DESCRIPTION@"
@@ -218,10 +219,12 @@ SubSection "@PRODUCT_NAME@" SecMain
 		CreateDirectory "$INSTDIR\sdk\def"
 		CreateDirectory "$INSTDIR\sdk\lib"
 
-		file "/oname=$INSTDIR\sdk\def\lib@LIBRARY_NAME@.def"		"@PRODUCT_NAME@\def\lib@LIBRARY_NAME@.def"
+		file "/oname=$INSTDIR\sdk\def\lib@LIBRARY_NAME@.def"	"@PRODUCT_NAME@\def\lib@LIBRARY_NAME@.def"
 		file "/oname=$INSTDIR\sdk\lib\lib3270.dll.a"		"lib@LIBRARY_NAME@.dll.a"
 		file "/oname=$INSTDIR\sdk\lib\lib3270.delayed.a"	"lib@LIBRARY_NAME@.delayed.a"
 		file "/oname=$INSTDIR\sdk\lib\lib3270.static.a"		"lib@LIBRARY_NAME@.static.a"
+
+		file "/oname=$INSTDIR\sdk\lib3270.mak"			"@PRODUCT_NAME@\def\lib3270.mak"
 
 		file "/oname=$INSTDIR\sdk\def\libv3270.def"		"@PRODUCT_NAME@\def\libv3270.def"
 		file "/oname=$INSTDIR\sdk\lib\libv3270.dll.a"		"libv3270.dll.a"
@@ -232,6 +235,8 @@ SubSection "@PRODUCT_NAME@" SecMain
 
 		file "/oname=$INSTDIR\sdk\def\libhllapi.def"		"@PRODUCT_NAME@\def\libhllapi.def"
 		file "/oname=$INSTDIR\sdk\lib\libhllapi.dll.a"		"libhllapi.dll.a"
+
+		WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PW3270_SDK_PATH" "$INSTDIR\sdk"
 
 	SectionEnd
 !endif
