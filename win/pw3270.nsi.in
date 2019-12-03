@@ -236,7 +236,9 @@ SubSection "@PRODUCT_NAME@" SecMain
 		file "/oname=$INSTDIR\sdk\def\libhllapi.def"		"@PRODUCT_NAME@\def\libhllapi.def"
 		file "/oname=$INSTDIR\sdk\lib\libhllapi.dll.a"		"libhllapi.dll.a"
 
+		SetRegView @WINARCH@
 		WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PW3270_SDK_PATH" "$INSTDIR\sdk"
+		SendMessage ${HWND_BROADCAST} ${WM_WININICHANGE} 0 "STR:Environment" /TIMEOUT=5000
 
 	SectionEnd
 !endif
@@ -273,6 +275,7 @@ Section "Uninstall"
 	RMDir /r "$INSTDIR\sdk"
 	RMDir /r "$INSTDIR\gtk2-runtime"
 
+
 	# Delete all files
 	delete "$INSTDIR\*.dll"
 
@@ -283,6 +286,8 @@ Section "Uninstall"
 	
 	SetRegView @WINARCH@
 	DeleteRegKey HKLM "Software\@PRODUCT_NAME@"
+	DeleteRegValue HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PW3270_SDK_PATH"
+	SendMessage ${HWND_BROADCAST} ${WM_WININICHANGE} 0 "STR:Environment" /TIMEOUT=5000
 
 	# Delete System libraries
 	delete $SYSDIR\libipc3270.dll
