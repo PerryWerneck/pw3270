@@ -100,7 +100,7 @@
 
  }
 
- GAction * pw3270_copy_action_new(void) {
+ GAction * pw3270_action_copy_new(void) {
 
 	pw3270SimpleAction * action = pw3270_simple_action_new();
 
@@ -117,7 +117,7 @@
 
  }
 
- GAction * pw3270_cut_action_new(void) {
+ GAction * pw3270_action_cut_new(void) {
 
 	pw3270SimpleAction * action = pw3270_simple_action_new();
 
@@ -134,7 +134,7 @@
 
  }
 
- GAction * pw3270_paste_action_new(void) {
+ GAction * pw3270_action_paste_new(void) {
 
 
 	pw3270SimpleAction * action = pw3270_simple_action_new();

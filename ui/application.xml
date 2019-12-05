@@ -324,7 +324,7 @@
         </submenu>
 
         <submenu id='font-select-placeholder'>
-          <attribute name="label" translatable="yes">Select font</attribute>
+          <attribute name="label" translatable="yes">Terminal font</attribute>
         </submenu>
 
         <submenu>

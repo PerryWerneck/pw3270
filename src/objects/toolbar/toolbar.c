@@ -34,6 +34,7 @@
 
  static gboolean popup_context_menu(GtkToolbar *toolbar, gint x, gint y, gint button_number);
  static void finalize(GObject *object);
+ static void pw3270_toolbar_toolbar_set_style(GtkToolbar *toolbar, GtkToolbarStyle style);
 
  static const struct icon_size {
 	const gchar			* label;

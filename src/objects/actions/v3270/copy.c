@@ -28,25 +28,33 @@
  */
 
  /**
-  * @brief Implement PW3270 "connect" action.
+  * @brief Implement PW3270 save actions.
   *
   */
 
- #include "private.h"
+ #include "../private.h"
+ #include <v3270.h>
 
- static void activate(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkWidget *terminal) {
 
-	debug("%s",__FUNCTION__);
-    gtk_widget_activate(terminal);
+  GAction * pw3270_action_print_copy_new(void) {
+
+	pw3270SimpleAction * action = pw3270_simple_action_new();
+
+	action->group.id = LIB3270_ACTION_GROUP_ONLINE;
+	action->parent.name = "print_copy";
+	action->label =  N_( "Print copy" );
+
+	return G_ACTION(action);
 
  }
 
- GAction * pw3270_action_connect_new(void) {
+ GAction * pw3270_action_save_copy_new(void) {
 
-	pw3270Action * action = PW3270_ACTION(pw3270_action_new_from_lib3270(lib3270_action_get_by_name("reconnect")));
+	pw3270SimpleAction * action = pw3270_simple_action_new();
 
-	action->activate = activate;
-	action->name = "connect";
+	action->group.id = LIB3270_ACTION_GROUP_ONLINE;
+	action->parent.name = "save_copy";
+	action->label =  N_( "Save copy" );
 
 	return G_ACTION(action);
 

@@ -68,10 +68,20 @@
 		GAction * actions[] = {
 			pw3270_action_new_pfkey(),
 			pw3270_action_new_pakey(),
-			pw3270_connect_action_new(),
-			pw3270_copy_action_new(),
-			pw3270_cut_action_new(),
-			pw3270_paste_action_new()
+			pw3270_action_connect_new(),
+			pw3270_action_copy_new(),
+			pw3270_action_cut_new(),
+			pw3270_action_paste_new(),
+			pw3270_action_save_new(),
+
+			pw3270_action_save_screen_new(),
+			pw3270_action_save_selected_new(),
+			pw3270_action_save_copy_new(),
+
+			pw3270_action_print_screen_new(),
+			pw3270_action_print_selected_new(),
+			pw3270_action_print_copy_new()
+
 		};
 
 		for(ix = 0; ix < G_N_ELEMENTS(actions); ix++) {

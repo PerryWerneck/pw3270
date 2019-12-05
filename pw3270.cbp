@@ -81,8 +81,17 @@
 		<Unit filename="src/objects/actions/lib3270/toggle.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/objects/actions/print.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/objects/actions/private.h" />
+		<Unit filename="src/objects/actions/save.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/objects/actions/simple.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/objects/actions/v3270/copy.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/objects/actions/v3270/property.c">
@@ -142,6 +151,8 @@
 		<Unit filename="src/objects/window/window.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="ui/application.xml" />
+		<Unit filename="ui/window.xml" />
 		<Extensions>
 			<code_completion />
 			<debugger />
