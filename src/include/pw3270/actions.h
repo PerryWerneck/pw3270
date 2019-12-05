@@ -215,6 +215,34 @@
 
 	GAction * v3270_property_action_new(GtkWidget *widget, const gchar *property_name);
 
+	//
+	// V3270 Copy action
+	//
+	#define V3270_TYPE_COPY_ACTION				(v3270CopyAction_get_type())
+	#define V3270_COPY_ACTION(inst)				(G_TYPE_CHECK_INSTANCE_CAST ((inst), V3270_TYPE_COPY_ACTION, v3270CopyAction))
+	#define V3270_COPY_ACTION_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), V3270_TYPE_COPY_ACTION, v3270CopyActionClass))
+	#define V3270_IS_COPY_ACTION(inst)			(G_TYPE_CHECK_INSTANCE_TYPE ((inst), V3270_TYPE_COPY_ACTION))
+	#define V3270_IS_COPY_ACTION_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), V3270_TYPE_COPY_ACTION))
+	#define V3270_COPY_ACTION_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), V3270_TYPE_COPY_ACTION, v3270CopyActionClass))
+
+	typedef struct _v3270CopyAction {
+
+		pw3270SimpleAction parent;
+
+		GParamSpec *pspec;
+
+	} v3270CopyAction;
+
+	typedef struct _v3270CopyActionClass {
+
+		pw3270SimpleActionClass parent_class;
+
+	} v3270CopyActionClass;
+
+	GType v3270CopyAction_get_type(void) G_GNUC_CONST;
+
+	GAction * v3270_copy_action_new(GtkWidget *widget);
+
 	G_END_DECLS
 
 #endif // PW3270_ACTIONS_H_INCLUDED

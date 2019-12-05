@@ -76,11 +76,9 @@
 
 			pw3270_action_save_screen_new(),
 			pw3270_action_save_selected_new(),
-			pw3270_action_save_copy_new(),
 
 			pw3270_action_print_screen_new(),
 			pw3270_action_print_selected_new(),
-			pw3270_action_print_copy_new()
 
 		};
 

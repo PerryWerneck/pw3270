@@ -28,17 +28,81 @@
  */
 
  /**
-  * @brief Implement PW3270 save actions.
+  * @brief Implement PW3270 copy actions.
   *
   */
 
  #include "../private.h"
  #include <v3270.h>
 
+ static void v3270CopyAction_class_init(v3270CopyActionClass *klass);
+ static void v3270CopyAction_init(v3270CopyAction *action);
+ static GVariant * get_state(GAction *action, GtkWidget *terminal);
+ static void change_widget(GAction *object, GtkWidget *from, GtkWidget *to);
 
-  GAction * pw3270_action_print_copy_new(void) {
+ G_DEFINE_TYPE(v3270CopyAction, v3270CopyAction, PW3270_TYPE_SIMPLE_ACTION);
 
-	pw3270SimpleAction * action = pw3270_simple_action_new();
+ void v3270CopyAction_class_init(v3270CopyActionClass *klass) {
+	klass->parent_class.parent_class.change_widget = change_widget;
+ }
+
+ static void v3270CopyAction_init(v3270CopyAction *action) {
+
+ 	action->parent.parent.get_state_property = get_state;
+
+ }
+
+ GVariant * get_state(GAction *object, GtkWidget *terminal) {
+
+
+	return NULL;
+
+ }
+
+ static void activate(GAction *object, GVariant *parameter, GtkWidget *terminal) {
+
+
+ }
+
+ static void on_notify(GtkWidget G_GNUC_UNUSED(*terminal), GParamSpec G_GNUC_UNUSED(*pspec), GAction *action) {
+
+ 	debug("%s: State of action %s has changed",__FUNCTION__, g_action_get_name(G_ACTION(action)));
+ 	pw3270_action_notify_state(action);
+
+ }
+
+ void change_widget(GAction *object, GtkWidget *from, GtkWidget *to) {
+
+	v3270CopyAction * action = V3270_COPY_ACTION(object);
+
+	if(from) {
+		gulong handler = g_signal_handler_find(
+												"has-text",
+												G_SIGNAL_MATCH_FUNC|G_SIGNAL_MATCH_DATA,
+												0,
+												0,
+												NULL,
+												G_CALLBACK(on_notify),
+												action
+										);
+
+		if(handler)
+			g_signal_handler_disconnect(from, handler);
+
+	}
+
+	PW3270_ACTION_CLASS(v3270CopyAction_parent_class)->change_widget(object,from,to);
+
+	if(to) {
+		g_signal_connect(G_OBJECT(to),"has-text",G_CALLBACK(on_notify),action);
+	}
+
+ }
+
+
+ GAction * pw3270_action_print_copy_new(GtkWidget *widget) {
+
+	pw3270SimpleAction * action = (pw3270SimpleAction *) g_object_new(V3270_TYPE_COPY_ACTION, NULL);;
 
 	action->group.id = LIB3270_ACTION_GROUP_ONLINE;
 	action->parent.name = "print_copy";
@@ -48,9 +112,9 @@
 
  }
 
- GAction * pw3270_action_save_copy_new(void) {
+ GAction * pw3270_action_save_copy_new(GtkWidget *widget) {
 
-	pw3270SimpleAction * action = pw3270_simple_action_new();
+	pw3270SimpleAction * action = (pw3270SimpleAction *) g_object_new(V3270_TYPE_COPY_ACTION, NULL);;
 
 	action->group.id = LIB3270_ACTION_GROUP_ONLINE;
 	action->parent.name = "save_copy";

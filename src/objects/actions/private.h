@@ -69,11 +69,11 @@
 	G_GNUC_INTERNAL GAction			* pw3270_action_save_new(void);
 	G_GNUC_INTERNAL GAction			* pw3270_action_save_screen_new(void);
 	G_GNUC_INTERNAL GAction			* pw3270_action_save_selected_new(void);
-	G_GNUC_INTERNAL GAction			* pw3270_action_save_copy_new(void);
+	G_GNUC_INTERNAL GAction			* pw3270_action_save_copy_new(GtkWidget *widget);
 
 	G_GNUC_INTERNAL GAction			* pw3270_action_print_new(void);
 	G_GNUC_INTERNAL GAction			* pw3270_action_print_screen_new(void);
 	G_GNUC_INTERNAL GAction			* pw3270_action_print_selected_new(void);
-	G_GNUC_INTERNAL GAction			* pw3270_action_print_copy_new(void);
+	G_GNUC_INTERNAL GAction			* pw3270_action_print_copy_new(GtkWidget *widget);
 
 #endif // PRIVATE_H_INCLUDED

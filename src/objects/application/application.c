@@ -299,6 +299,17 @@
 
 	}
 
+	// Create copy actions.
+	g_action_map_add_action(
+		G_ACTION_MAP(window),
+		pw3270_action_save_copy_new(terminal)
+	);
+
+	g_action_map_add_action(
+		G_ACTION_MAP(window),
+		pw3270_action_print_copy_new(terminal)
+	);
+
 	// Present the new window
 	pw3270_window_set_current_page(window,0);
 	gtk_window_present(GTK_WINDOW(window));
