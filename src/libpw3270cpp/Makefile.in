@@ -61,6 +61,13 @@ VALGRIND=@VALGRIND@
 INSTALL_DATA=@INSTALL_DATA@
 INSTALL_PROGRAM=@INSTALL_PROGRAM@
 
+DATE_FMT = +%Y%m%d
+ifdef SOURCE_DATE_EPOCH
+    BUILD_DATE ?= $(shell date -u -d "@$(SOURCE_DATE_EPOCH)" "$(DATE_FMT)" 2>/dev/null || date -u -r "$(SOURCE_DATE_EPOCH)" "$(DATE_FMT)" 2>/dev/null || date -u "$(DATE_FMT)")
+else
+    BUILD_DATE ?= $(shell date "$(DATE_FMT)")
+endif
+
 CFLAGS= \
 	@CFLAGS@ \
 	-Wno-deprecated-declarations \
@@ -102,7 +109,7 @@ $(OBJRLS)/%.o: \
 	@$(MKDIR) `dirname $@`
 	@$(CC) $(CFLAGS) \
 		@RLS_CFLAGS@ \
-		-DBUILD_DATE=`date +"%Y%m%d"` \
+		-DBUILD_DATE=$(BUILD_DATE) \
 		-o $@ -c $<
 
 $(POTDIR)/%.pot: %.c
