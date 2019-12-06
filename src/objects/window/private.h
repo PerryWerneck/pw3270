@@ -46,12 +46,24 @@
 	#include <lib3270.h>
 	#include <lib3270/log.h>
 
+	enum pw3270ApplicationWindowPopup {
+		PW3270_APP_WINDOW_POPUP_OVER_SELECTED_AREA,
+		PW3270_APP_WINDOW_POPUP_OVER_UNSELECTED_AREA,
+		PW3270_APP_WINDOW_POPUP_WHEN_OFFLINE,
+
+		PW3270_APP_WINDOW_POPUP_COUNT
+	};
+
+	#define PW3270_APP_WINDOW_POPUP_DEFAULT PW3270_APP_WINDOW_POPUP_OVER_UNSELECTED_AREA
+
 	struct _pw3270ApplicationWindow {
 
 		GtkApplicationWindow parent;
 
 		GtkNotebook * notebook;
 		GtkToolbar	* toolbar;
+
+		GtkWidget	* popups[PW3270_APP_WINDOW_POPUP_COUNT];
 
 	};
 

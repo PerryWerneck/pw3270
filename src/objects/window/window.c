@@ -37,10 +37,13 @@
 
  static void destroy(GtkWidget *widget) {
 
+	size_t ix;
+	pw3270ApplicationWindow * window = PW3270_APPLICATION_WINDOW(widget);
+
+
 	debug("%s(%p)",__FUNCTION__,widget);
 
 	// Update actions
-	size_t ix;
 	gchar ** actions = g_action_group_list_actions(G_ACTION_GROUP(widget));
 
 	for(ix = 0; actions[ix]; ix++) {
@@ -53,6 +56,15 @@
 	}
 
 	g_strfreev(actions);
+
+	// Destroy popups
+	for(ix = 0; ix < G_N_ELEMENTS(window->popups); ix++) {
+		if(window->popups[ix]) {
+			gtk_widget_destroy(window->popups[ix]);
+			window->popups[ix] = NULL;
+		}
+	}
+
 
 	GTK_WIDGET_CLASS(pw3270ApplicationWindow_parent_class)->destroy(widget);
 
@@ -179,6 +191,7 @@
 
  GtkWidget * pw3270_application_window_new(GtkApplication * application) {
 
+	size_t ix;
 	const gchar * title = _( "IBM 3270 Terminal emulator" );
 
 	g_autoptr(GSettings) settings = pw3270_application_get_settings(G_APPLICATION(application));
@@ -235,6 +248,24 @@
 			g_warning("Unexpected UI");
 
 		}
+
+		// Load popup menus.
+		const gchar * popup_menus[G_N_ELEMENTS(window->popups)] = {
+			"popup-over-selected-area",
+			"popup-over-unselected-area",
+			"popup-when-offline"
+		};
+
+		for(ix = 0; ix < G_N_ELEMENTS(popup_menus); ix++) {
+
+			GObject * model = gtk_builder_get_object(builder, popup_menus[ix]);
+			if(model) {
+				window->popups[ix] = gtk_menu_new_from_model(G_MENU_MODEL(model));
+				gtk_menu_attach_to_widget(GTK_MENU(window->popups[ix]),GTK_WIDGET(window),NULL);
+			}
+
+		}
+
 		g_object_unref(builder);
 
 	}

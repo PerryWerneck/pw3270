@@ -149,6 +149,28 @@
 
  }
 
+ static gboolean on_popup_menu(GtkWidget *widget, gboolean selected, gboolean online, GdkEvent *event, pw3270ApplicationWindow * window) {
+
+	GtkWidget * popup = window->popups[PW3270_APP_WINDOW_POPUP_OVER_UNSELECTED_AREA];
+
+	if(!online && window->popups[PW3270_APP_WINDOW_POPUP_WHEN_OFFLINE])
+		popup = window->popups[PW3270_APP_WINDOW_POPUP_WHEN_OFFLINE];
+	else if(selected && window->popups[PW3270_APP_WINDOW_POPUP_OVER_SELECTED_AREA])
+		popup = window->popups[PW3270_APP_WINDOW_POPUP_OVER_SELECTED_AREA];
+	else
+		popup = window->popups[PW3270_APP_WINDOW_POPUP_DEFAULT];
+
+	if(!popup)
+		return FALSE;
+
+	gtk_widget_show_all(popup);
+	gtk_menu_set_screen(GTK_MENU(popup), gtk_widget_get_screen(widget));
+	gtk_menu_popup_at_pointer(GTK_MENU(popup), event);
+
+	return TRUE;
+
+ }
+
  static gint append_terminal_page(pw3270ApplicationWindow * window, GtkWidget * terminal) {
 
  	GtkWidget * label	= gtk_label_new(v3270_get_session_name(terminal));
@@ -164,6 +186,7 @@
 	g_signal_connect(G_OBJECT(terminal), "disconnected", G_CALLBACK(disconnected),window);
 	g_signal_connect(G_OBJECT(terminal), "connected", G_CALLBACK(connected),window);
 	g_signal_connect(G_OBJECT(terminal), "destroy", G_CALLBACK(on_terminal_destroy),window);
+	g_signal_connect(G_OBJECT(terminal), "popup", G_CALLBACK(on_popup_menu), window);
 
 	g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(on_close_tab), terminal);
 
