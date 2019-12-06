@@ -261,11 +261,8 @@
  	return PW3270_ACTION(action)->name;
  }
 
- void pw3270_action_set_name(GAction *object, const gchar *name) {
-
- 	if(name)
-		g_warning("Invalid call to %s on action %s with value \"%s\"",__FUNCTION__,g_action_get_name(object),name);
-
+ void pw3270_action_set_name(GAction *action, const gchar *name) {
+	PW3270_ACTION(action)->name = g_intern_string(name);
  }
 
  GVariant * internal_get_state_hint(GAction G_GNUC_UNUSED(*action), GtkWidget G_GNUC_UNUSED(*terminal)) {

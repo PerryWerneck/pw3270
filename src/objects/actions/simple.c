@@ -131,6 +131,7 @@
 
  }
 
+
  pw3270SimpleAction * pw3270_simple_action_new_from_name(const gchar *source_name, const gchar *name) {
 	return pw3270_simple_action_new_from_lib3270(lib3270_action_get_by_name(source_name),name);
  }

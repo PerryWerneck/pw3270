@@ -299,16 +299,39 @@
 
 	}
 
-	// Create copy actions.
-	g_action_map_add_action(
-		G_ACTION_MAP(window),
-		pw3270_action_save_copy_new(terminal)
-	);
+	// Create conditional actions.
+	static const struct {
+		const gchar * label;
+		const gchar * tooltip;
+		const gchar * action_name;
+		const gchar * property_name;
+	} conditional_actions[] = {
+		{
+			.label = N_("Save copy"),
+			.action_name = "save_copy",
+			.property_name = "has_copy"
+		},
+		{
+			.label = N_("Print copy"),
+			.action_name = "print_copy",
+			.property_name = "has_copy"
+		}
+	};
 
-	g_action_map_add_action(
-		G_ACTION_MAP(window),
-		pw3270_action_print_copy_new(terminal)
-	);
+	for(ix = 0; ix < G_N_ELEMENTS(conditional_actions); ix++) {
+
+		pw3270SimpleAction * action = PW3270_SIMPLE_ACTION(v3270_conditional_action_new(terminal,conditional_actions[ix].property_name));
+
+		action->parent.name	= conditional_actions[ix].action_name;
+		action->label =  conditional_actions[ix].label;
+		action->tooltip = conditional_actions[ix].tooltip;
+
+		g_action_map_add_action(
+			G_ACTION_MAP(window),
+			G_ACTION(action)
+		);
+
+	}
 
 	// Present the new window
 	pw3270_window_set_current_page(window,0);

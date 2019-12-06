@@ -91,7 +91,7 @@
 		<Unit filename="src/objects/actions/simple.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/objects/actions/v3270/copy.c">
+		<Unit filename="src/objects/actions/v3270/conditional.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/objects/actions/v3270/property.c">

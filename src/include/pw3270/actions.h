@@ -104,6 +104,9 @@
 	/// @brief Get action name.
 	const gchar			* pw3270_action_get_name(GAction *action);
 
+	/// @brief Set action name.
+	void pw3270_action_set_name(GAction *action, const gchar *name);
+
 	/// @brief Get the action icon name.
 	const gchar 		* pw3270_action_get_icon_name(GAction *action);
 
@@ -216,32 +219,32 @@
 	GAction * v3270_property_action_new(GtkWidget *widget, const gchar *property_name);
 
 	//
-	// V3270 Copy action
+	// V3270 action who can be enable based on property
 	//
-	#define V3270_TYPE_COPY_ACTION				(v3270CopyAction_get_type())
-	#define V3270_COPY_ACTION(inst)				(G_TYPE_CHECK_INSTANCE_CAST ((inst), V3270_TYPE_COPY_ACTION, v3270CopyAction))
-	#define V3270_COPY_ACTION_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), V3270_TYPE_COPY_ACTION, v3270CopyActionClass))
-	#define V3270_IS_COPY_ACTION(inst)			(G_TYPE_CHECK_INSTANCE_TYPE ((inst), V3270_TYPE_COPY_ACTION))
-	#define V3270_IS_COPY_ACTION_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), V3270_TYPE_COPY_ACTION))
-	#define V3270_COPY_ACTION_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), V3270_TYPE_COPY_ACTION, v3270CopyActionClass))
+	#define V3270_TYPE_CONDITIONAL_ACTION				(v3270ConditionalAction_get_type())
+	#define V3270_CONDITIONAL_ACTION(inst)				(G_TYPE_CHECK_INSTANCE_CAST ((inst), V3270_TYPE_CONDITIONAL_ACTION, v3270ConditionalAction))
+	#define V3270_CONDITIONAL_ACTION_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), V3270_TYPE_CONDITIONAL_ACTION, v3270ConditionalActionClass))
+	#define V3270_IS_CONDITIONAL_ACTION(inst)			(G_TYPE_CHECK_INSTANCE_TYPE ((inst), V3270_TYPE_CONDITIONAL_ACTION))
+	#define V3270_IS_CONDITIONAL_ACTION_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), V3270_TYPE_CONDITIONAL_ACTION))
+	#define V3270_CONDITIONAL_ACTION_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), V3270_TYPE_CONDITIONAL_ACTION, v3270ConditionalActionClass))
 
-	typedef struct _v3270CopyAction {
+	typedef struct _v3270ConditionalAction {
 
 		pw3270SimpleAction parent;
 
 		GParamSpec *pspec;
 
-	} v3270CopyAction;
+	} v3270ConditionalAction;
 
 	typedef struct _v3270CopyActionClass {
 
 		pw3270SimpleActionClass parent_class;
 
-	} v3270CopyActionClass;
+	} v3270ConditionalActionClass;
 
-	GType v3270CopyAction_get_type(void) G_GNUC_CONST;
+	GType v3270ConditionalAction_get_type(void) G_GNUC_CONST;
 
-	GAction * v3270_copy_action_new(GtkWidget *widget);
+	GAction * v3270_conditional_action_new(GtkWidget *widget, const gchar *property_name);
 
 	G_END_DECLS
 
