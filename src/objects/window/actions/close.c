@@ -29,9 +29,10 @@
 
  #include "../private.h"
 
- void pw3270_window_close_activated(GSimpleAction G_GNUC_UNUSED(* action), GVariant G_GNUC_UNUSED(*parameter), gpointer application) {
+ void pw3270_window_close_activated(GSimpleAction G_GNUC_UNUSED(* action), GVariant G_GNUC_UNUSED(*parameter), gpointer window) {
 
-	debug("%s",__FUNCTION__);
+	debug("%s(%p)",__FUNCTION__,window);
+	gtk_window_close(GTK_WINDOW(window));
 
  }
 

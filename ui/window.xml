@@ -185,6 +185,11 @@
       <attribute name="action">win.disconnect</attribute>
     </item>
 
+    <item>
+      <attribute name="label" translatable="yes">Close window</attribute>
+      <attribute name="action">win.close</attribute>
+    </item>
+
   </menu>
 
   <menu id="popup-over-unselected-area">
@@ -296,6 +301,11 @@
       <attribute name="action">win.disconnect</attribute>
     </item>
 
+    <item>
+      <attribute name="label" translatable="yes">Close window</attribute>
+      <attribute name="action">win.close</attribute>
+    </item>
+
   </menu>
 
   <menu id="popup-when-offline">
@@ -332,8 +342,8 @@
     </submenu>
 
     <item>
-      <attribute name="label" translatable="yes">Quit application</attribute>
-      <attribute name="action">app.quit</attribute>
+      <attribute name="label" translatable="yes">Close window</attribute>
+      <attribute name="action">win.close</attribute>
     </item>
 
   </menu>
