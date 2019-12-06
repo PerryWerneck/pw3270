@@ -305,16 +305,19 @@
 		const gchar * tooltip;
 		const gchar * action_name;
 		const gchar * property_name;
+		void (*activate)(GAction *action, GVariant *parameter, GtkWidget *terminal);
 	} conditional_actions[] = {
 		{
 			.label = N_("Save copy"),
 			.action_name = "save_copy",
-			.property_name = "has_copy"
+			.property_name = "has_copy",
+			.activate = pw3270_application_save_copy_activated
 		},
 		{
 			.label = N_("Print copy"),
 			.action_name = "print_copy",
-			.property_name = "has_copy"
+			.property_name = "has_copy",
+			.activate = pw3270_application_print_copy_activated
 		}
 	};
 
@@ -325,6 +328,7 @@
 		action->parent.name	= conditional_actions[ix].action_name;
 		action->label =  conditional_actions[ix].label;
 		action->tooltip = conditional_actions[ix].tooltip;
+		PW3270_ACTION(action)->activate = conditional_actions[ix].activate;
 
 		g_action_map_add_action(
 			G_ACTION_MAP(window),

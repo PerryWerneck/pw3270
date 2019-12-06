@@ -396,6 +396,7 @@
  }
 
  void internal_activate(GAction *action, GVariant G_GNUC_UNUSED(*parameter), GtkWidget G_GNUC_UNUSED(*terminal)) {
+ 	debug("%s",__FUNCTION__);
 	g_message("Action %s can't be activated",pw3270_action_get_name(action));
  }
 

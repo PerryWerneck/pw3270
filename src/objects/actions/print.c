@@ -34,23 +34,22 @@
 
  #include "private.h"
  #include <v3270.h>
+ #include <pw3270/application.h>
 
  static void activate_print_screen(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkWidget *terminal) {
-
 	debug("%s",__FUNCTION__);
-
+	v3270_print_all(terminal,NULL);
  }
 
  static void activate_print_selected(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkWidget *terminal) {
-
 	debug("%s",__FUNCTION__);
-
+	v3270_print_selected(terminal,NULL);
  }
 
- static void activate_print_copy(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkWidget *terminal) {
+ void pw3270_application_print_copy_activated(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkWidget *terminal) {
 
 	debug("%s",__FUNCTION__);
-
+	v3270_print_copy(terminal,NULL);
  }
 
  static void activate_print(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkWidget *terminal) {

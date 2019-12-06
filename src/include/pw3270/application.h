@@ -71,6 +71,11 @@
 
 	gboolean		  pw3270_settings_set_int(const gchar *key, gint value);
 
+
+	// Actions
+	void pw3270_application_print_copy_activated(GAction *action, GVariant *parameter, GtkWidget *terminal);
+	void pw3270_application_save_copy_activated(GAction *action, GVariant *parameter, GtkWidget *terminal);
+
 	G_END_DECLS
 
 

@@ -47,6 +47,7 @@
 	return G_ACTION(action);
  }
 
+ /*
  static void on_response(GtkWidget *dialog, gint response_id, GtkWidget *settings) {
 
 	if(response_id == GTK_RESPONSE_APPLY) {
@@ -65,6 +66,7 @@
 	gtk_widget_destroy(GTK_WIDGET(dialog));
 
  }
+ */
 
  GtkWidget * factory(GtkWidget *terminal) {
 
