@@ -264,8 +264,7 @@
 	if(gtk_application_prefers_app_menu(GTK_APPLICATION(application)))
 		gtk_application_set_app_menu(GTK_APPLICATION (application), G_MENU_MODEL(gtk_builder_get_object (builder, "app-menu")));
 
-	if(pw3270_application_get_ui_style(application) == PW3270_UI_STYLE_CLASSICAL)
-		gtk_application_set_menubar(GTK_APPLICATION (application), G_MENU_MODEL(gtk_builder_get_object (builder, "menubar")));
+    gtk_application_set_menubar(GTK_APPLICATION (application), G_MENU_MODEL(gtk_builder_get_object (builder, "menubar")));
 
 	pw3270_load_placeholders(builder);
 

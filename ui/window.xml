@@ -28,324 +28,304 @@
 
 -->
 <interface>
-  <requires lib="gtk+" version="3.0"/>
-  <menu id="gear-menu">
-    <section>
-
-      <submenu>
-        <attribute name="label" translatable="yes">New</attribute>
-        <item>
-          <attribute name="label" translatable="yes">Tab</attribute>
-          <attribute name="action">app.new.tab</attribute>
-        </item>
-        <item>
-          <attribute name="label" translatable="yes">Application Window</attribute>
-          <attribute name="action">app.new.window</attribute>
-        </item>
-      </submenu>
-
-      <submenu>
-        <attribute name="label" translatable="yes">Open</attribute>
-        <item>
-          <attribute name="label" translatable="yes">File</attribute>
-          <attribute name="action">app.open</attribute>
-        </item>
-        <item>
-          <attribute name="label" translatable="yes">New tab</attribute>
-          <attribute name="action">app.new.tab</attribute>
-        </item>
-        <item>
-          <attribute name="label" translatable="yes">New window</attribute>
-          <attribute name="action">app.new.window</attribute>
-        </item>
-      </submenu>
-
-    </section>
-
-    <section>
-      <item>
-        <attribute name="label" translatable="yes">Preferences</attribute>
-        <attribute name="action">win.preferences</attribute>
-      </item>
-    </section>
-  </menu>
-
-  <menu id="popup-over-selected-area">
-
-    <submenu>
-
-      <attribute name='label' translatable='yes'>_Edit</attribute>
-
-      <section>
-
-        <item>
-          <attribute name="label" translatable="yes">Copy</attribute>
-          <attribute name="action">win.copy</attribute>
-          <attribute name="target">auto</attribute>
-        </item>
-
-        <item>
-          <attribute name="label" translatable="yes">Copy as text</attribute>
-          <attribute name="action">win.copy</attribute>
-          <attribute name="target">text</attribute>
-        </item>
-
-        <item>
-          <attribute name="label" translatable="yes">Copy as table</attribute>
-          <attribute name="action">win.copy</attribute>
-          <attribute name="target">table</attribute>
-        </item>
-
-        <item>
-          <attribute name="label" translatable="yes">Append to copy</attribute>
-          <attribute name="action">win.copy</attribute>
-          <attribute name="target">append</attribute>
-        </item>
-
-        <item>
-          <attribute name="label" translatable="yes">Cut</attribute>
-          <attribute name="action">win.cut</attribute>
-          <attribute name="target">auto</attribute>
-        </item>
-
-      </section>
-      <section>
-
-        <item>
-          <attribute name="label" translatable="yes">Save selected</attribute>
-          <attribute name="action">win.save_selected</attribute>
-        </item>
-
-        <item>
-          <attribute name="label" translatable="yes">Print selected</attribute>
-          <attribute name="action">win.print_selected</attribute>
-        </item>
-
-        <item>
-          <attribute name="label" translatable="yes">Unselect</attribute>
-          <attribute name="action">win.unselect</attribute>
-        </item>
-
-      </section>
-
-      <section>
 
-        <item>
-          <attribute name="label" translatable="yes">Clear</attribute>
-          <attribute name="action">win.clear</attribute>
-        </item>
+	<requires lib="gtk+" version="3.0"/>
+	<menu id="gear-menu">
+		<section>
+
+			<item>
+				<attribute name="label" translatable="yes">New tab</attribute>
+				<attribute name="action">app.new.tab</attribute>
+			</item>
+			<item>
+				<attribute name="label" translatable="yes">New Window</attribute>
+				<attribute name="action">app.new.window</attribute>
+			</item>
+		</section>
+
+		<item>
+			<attribute name="label" translatable="yes">Preferences</attribute>
+			<attribute name="action">win.preferences</attribute>
+		</item>
+
+	</menu>
+
+	<menu id="popup-over-selected-area">
+
+		<submenu>
+			<attribute name='label' translatable='yes'>_Edit</attribute>
+
+			<section>
+
+				<item>
+					<attribute name="label" translatable="yes">Copy</attribute>
+					<attribute name="action">win.copy</attribute>
+					<attribute name="target">auto</attribute>
+				</item>
+
+				<item>
+					<attribute name="label" translatable="yes">Copy as text</attribute>
+					<attribute name="action">win.copy</attribute>
+					<attribute name="target">text</attribute>
+				</item>
+
+				<item>
+					<attribute name="label" translatable="yes">Copy as table</attribute>
+					<attribute name="action">win.copy</attribute>
+					<attribute name="target">table</attribute>
+				</item>
 
-        <item>
-          <attribute name="label" translatable="yes">Erase input</attribute>
-          <attribute name="action">win.erase_input</attribute>
-        </item>
+				<item>
+					<attribute name="label" translatable="yes">Append to copy</attribute>
+					<attribute name="action">win.copy</attribute>
+					<attribute name="target">append</attribute>
+				</item>
 
-        <item>
-          <attribute name="label" translatable="yes">Delete Field</attribute>
-          <attribute name="action">win.delete_field</attribute>
-        </item>
+				<item>
+					<attribute name="label" translatable="yes">Cut</attribute>
+					<attribute name="action">win.cut</attribute>
+					<attribute name="target">auto</attribute>
+				</item>
 
-        <item>
-          <attribute name="label" translatable="yes">Erase to end of field</attribute>
-          <attribute name="action">win.erase_eof</attribute>
-        </item>
+			</section>
 
-        <item>
-          <attribute name="label" translatable="yes">Erase to end of line</attribute>
-          <attribute name="action">win.erase_eol</attribute>
-        </item>
+			<section>
 
-      </section>
+				<item>
+					<attribute name="label" translatable="yes">Save selected</attribute>
+					<attribute name="action">win.save_selected</attribute>
+				</item>
 
-    </submenu>
+				<item>
+					<attribute name="label" translatable="yes">Print selected</attribute>
+					<attribute name="action">win.print_selected</attribute>
+				</item>
 
-    <submenu>
+				<item>
+					<attribute name="label" translatable="yes">Unselect</attribute>
+					<attribute name="action">win.unselect</attribute>
+				</item>
 
-      <attribute name='label' translatable='yes'>Options</attribute>
+				</section>
 
-        <item>
-          <attribute name="label" translatable="yes">Show toolbar</attribute>
-          <attribute name="action">win.toolbar</attribute>
-        </item>
+				<section>
 
-        <item>
-          <attribute name="label" translatable="yes">Show menu</attribute>
-          <attribute name="action">win.menubar</attribute>
-        </item>
+				<item>
+					<attribute name="label" translatable="yes">Clear</attribute>
+					<attribute name="action">win.clear</attribute>
+				</item>
 
-        <item>
-          <attribute name="label" translatable="yes">Full screen</attribute>
-          <attribute name="action">win.fullscreen</attribute>
-        </item>
+				<item>
+					<attribute name="label" translatable="yes">Erase input</attribute>
+					<attribute name="action">win.erase_input</attribute>
+				</item>
 
-    </submenu>
+				<item>
+					<attribute name="label" translatable="yes">Delete Field</attribute>
+					<attribute name="action">win.delete_field</attribute>
+				</item>
 
-    <item>
-      <attribute name="label" translatable="yes">Disconnect</attribute>
-      <attribute name="action">win.disconnect</attribute>
-    </item>
+				<item>
+					<attribute name="label" translatable="yes">Erase to end of field</attribute>
+					<attribute name="action">win.erase_eof</attribute>
+				</item>
 
-    <item>
-      <attribute name="label" translatable="yes">Close window</attribute>
-      <attribute name="action">win.close</attribute>
-    </item>
+				<item>
+					<attribute name="label" translatable="yes">Erase to end of line</attribute>
+					<attribute name="action">win.erase_eol</attribute>
+				</item>
 
-  </menu>
+			</section>
 
-  <menu id="popup-over-unselected-area">
+		</submenu>
 
-    <submenu>
+		<submenu>
 
-      <attribute name='label' translatable='yes'>_Edit</attribute>
+			<attribute name='label' translatable='yes'>Options</attribute>
 
-      <section>
+			<item>
+				<attribute name="label" translatable="yes">Show toolbar</attribute>
+				<attribute name="action">win.toolbar</attribute>
+			</item>
 
-        <item>
-          <attribute name="label" translatable="yes">Paste from clipboard</attribute>
-          <attribute name="action">win.paste</attribute>
-          <attribute name="target">clipboard://</attribute>
-        </item>
+			<item>
+				<attribute name="label" translatable="yes">Show menu</attribute>
+				<attribute name="action">win.menubar</attribute>
+			</item>
 
-        <item>
-          <attribute name="label" translatable="yes">Paste next</attribute>
-          <attribute name="action">win.paste</attribute>
-          <attribute name="target">next://</attribute>
-        </item>
+			<item>
+				<attribute name="label" translatable="yes">Full screen</attribute>
+				<attribute name="action">win.fullscreen</attribute>
+			</item>
 
-        <item>
-          <attribute name="label" translatable="yes">Paste from text file</attribute>
-          <attribute name="action">win.paste</attribute>
-          <attribute name="target">file://</attribute>
-        </item>
+		</submenu>
 
-      </section>
+		<item>
+			<attribute name="label" translatable="yes">Disconnect</attribute>
+			<attribute name="action">win.disconnect</attribute>
+		</item>
 
-      <section>
+		<item>
+			<attribute name="label" translatable="yes">Close window</attribute>
+			<attribute name="action">win.close</attribute>
+		</item>
 
-        <item>
-          <attribute name="label" translatable="yes">Select all</attribute>
-          <attribute name="action">win.select-all</attribute>
-        </item>
+	</menu>
 
-        <item>
-          <attribute name="label" translatable="yes">Select Field</attribute>
-          <attribute name="action">win.select-field</attribute>
-        </item>
+	<menu id="popup-over-unselected-area">
 
-        <item>
-          <attribute name="label" translatable="yes">Reselect</attribute>
-          <attribute name="action">win.reselect</attribute>
-        </item>
+	<submenu>
 
-      </section>
+		<attribute name='label' translatable='yes'>_Edit</attribute>
 
-      <section>
+		<section>
 
-        <item>
-          <attribute name="label" translatable="yes">Clear</attribute>
-          <attribute name="action">win.clear</attribute>
-        </item>
+		<item>
+			<attribute name="label" translatable="yes">Paste from clipboard</attribute>
+			<attribute name="action">win.paste</attribute>
+			<attribute name="target">clipboard://</attribute>
+		</item>
 
-        <item>
-          <attribute name="label" translatable="yes">Erase input</attribute>
-          <attribute name="action">win.erase_input</attribute>
-        </item>
+		<item>
+			<attribute name="label" translatable="yes">Paste next</attribute>
+			<attribute name="action">win.paste</attribute>
+			<attribute name="target">next://</attribute>
+		</item>
 
-        <item>
-          <attribute name="label" translatable="yes">Delete Field</attribute>
-          <attribute name="action">win.delete_field</attribute>
-        </item>
+		<item>
+			<attribute name="label" translatable="yes">Paste from text file</attribute>
+			<attribute name="action">win.paste</attribute>
+			<attribute name="target">file://</attribute>
+		</item>
 
-        <item>
-          <attribute name="label" translatable="yes">Erase to end of field</attribute>
-          <attribute name="action">win.erase_eof</attribute>
-        </item>
+		</section>
 
-        <item>
-          <attribute name="label" translatable="yes">Erase to end of line</attribute>
-          <attribute name="action">win.erase_eol</attribute>
-        </item>
+		<section>
 
-      </section>
+			<item>
+				<attribute name="label" translatable="yes">Select all</attribute>
+				<attribute name="action">win.select-all</attribute>
+			</item>
 
-    </submenu>
+			<item>
+				<attribute name="label" translatable="yes">Select Field</attribute>
+				<attribute name="action">win.select-field</attribute>
+			</item>
 
-    <item>
-      <attribute name="label" translatable="yes">Send/Receive files</attribute>
-      <attribute name="action">win.file.transfer</attribute>
-    </item>
+			<item>
+				<attribute name="label" translatable="yes">Reselect</attribute>
+				<attribute name="action">win.reselect</attribute>
+			</item>
 
-    <submenu>
+		</section>
 
-      <attribute name='label' translatable='yes'>Options</attribute>
+		<section>
 
-        <item>
-          <attribute name="label" translatable="yes">Show toolbar</attribute>
-          <attribute name="action">win.toolbar</attribute>
-        </item>
+			<item>
+				<attribute name="label" translatable="yes">Clear</attribute>
+				<attribute name="action">win.clear</attribute>
+			</item>
 
-        <item>
-          <attribute name="label" translatable="yes">Show menu</attribute>
-          <attribute name="action">win.menubar</attribute>
-        </item>
+			<item>
+				<attribute name="label" translatable="yes">Erase input</attribute>
+				<attribute name="action">win.erase_input</attribute>
+			</item>
 
-        <item>
-          <attribute name="label" translatable="yes">Full screen</attribute>
-          <attribute name="action">win.fullscreen</attribute>
-        </item>
+			<item>
+				<attribute name="label" translatable="yes">Delete Field</attribute>
+				<attribute name="action">win.delete_field</attribute>
+			</item>
 
-    </submenu>
+			<item>
+				<attribute name="label" translatable="yes">Erase to end of field</attribute>
+				<attribute name="action">win.erase_eof</attribute>
+			</item>
 
-    <item>
-      <attribute name="label" translatable="yes">Disconnect</attribute>
-      <attribute name="action">win.disconnect</attribute>
-    </item>
+			<item>
+				<attribute name="label" translatable="yes">Erase to end of line</attribute>
+				<attribute name="action">win.erase_eol</attribute>
+			</item>
 
-    <item>
-      <attribute name="label" translatable="yes">Close window</attribute>
-      <attribute name="action">win.close</attribute>
-    </item>
+		</section>
 
-  </menu>
+	</submenu>
 
-  <menu id="popup-when-offline">
+	<item>
+		<attribute name="label" translatable="yes">Send/Receive files</attribute>
+		<attribute name="action">win.file.transfer</attribute>
+	</item>
 
-    <item>
-      <attribute name="label" translatable="yes">_Connect</attribute>
-      <attribute name="action">win.connect</attribute>
-    </item>
+	<submenu>
 
-    <item>
-      <attribute name="label" translatable="yes">Configure host</attribute>
-      <attribute name="action">win.set.host</attribute>
-    </item>
+		<attribute name='label' translatable='yes'>Options</attribute>
 
-    <submenu>
+		<item>
+			<attribute name="label" translatable="yes">Show toolbar</attribute>
+			<attribute name="action">win.toolbar</attribute>
+		</item>
 
-      <attribute name='label' translatable='yes'>Options</attribute>
+		<item>
+			<attribute name="label" translatable="yes">Show menu</attribute>
+			<attribute name="action">win.menubar</attribute>
+		</item>
 
-        <item>
-          <attribute name="label" translatable="yes">Show toolbar</attribute>
-          <attribute name="action">win.toolbar</attribute>
-        </item>
+		<item>
+			<attribute name="label" translatable="yes">Full screen</attribute>
+			<attribute name="action">win.fullscreen</attribute>
+		</item>
 
-        <item>
-          <attribute name="label" translatable="yes">Show menu</attribute>
-          <attribute name="action">win.menubar</attribute>
-        </item>
+	</submenu>
 
-        <item>
-          <attribute name="label" translatable="yes">Full screen</attribute>
-          <attribute name="action">win.fullscreen</attribute>
-        </item>
+	<item>
+		<attribute name="label" translatable="yes">Disconnect</attribute>
+		<attribute name="action">win.disconnect</attribute>
+	</item>
 
-    </submenu>
+	<item>
+		<attribute name="label" translatable="yes">Close window</attribute>
+		<attribute name="action">win.close</attribute>
+	</item>
 
-    <item>
-      <attribute name="label" translatable="yes">Close window</attribute>
-      <attribute name="action">win.close</attribute>
-    </item>
+	</menu>
 
-  </menu>
+	<menu id="popup-when-offline">
+
+		<item>
+			<attribute name="label" translatable="yes">_Connect</attribute>
+			<attribute name="action">win.connect</attribute>
+		</item>
+
+		<item>
+			<attribute name="label" translatable="yes">Host properties</attribute>
+			<attribute name="action">win.set.host</attribute>
+		</item>
+
+		<submenu>
+
+			<attribute name='label' translatable='yes'>Options</attribute>
+
+			<item>
+				<attribute name="label" translatable="yes">Show toolbar</attribute>
+				<attribute name="action">win.toolbar</attribute>
+			</item>
+
+			<item>
+				<attribute name="label" translatable="yes">Show menu</attribute>
+				<attribute name="action">win.menubar</attribute>
+			</item>
+
+			<item>
+				<attribute name="label" translatable="yes">Full screen</attribute>
+				<attribute name="action">win.fullscreen</attribute>
+			</item>
+
+		</submenu>
+
+		<item>
+			<attribute name="label" translatable="yes">Close window</attribute>
+			<attribute name="action">win.close</attribute>
+		</item>
+
+	</menu>
 
 </interface>
