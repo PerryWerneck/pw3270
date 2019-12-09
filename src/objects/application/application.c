@@ -308,13 +308,13 @@
 	} conditional_actions[] = {
 		{
 			.label = N_("Save copy"),
-			.action_name = "save_copy",
+			.action_name = "save.copy",
 			.property_name = "has_copy",
 			.activate = pw3270_application_save_copy_activated
 		},
 		{
 			.label = N_("Print copy"),
-			.action_name = "print_copy",
+			.action_name = "print.copy",
 			.property_name = "has_copy",
 			.activate = pw3270_application_print_copy_activated
 		}

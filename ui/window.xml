@@ -98,12 +98,12 @@
 
 				<item>
 					<attribute name="label" translatable="yes">Save selected</attribute>
-					<attribute name="action">win.save_selected</attribute>
+					<attribute name="action">win.save.selected</attribute>
 				</item>
 
 				<item>
 					<attribute name="label" translatable="yes">Print selected</attribute>
-					<attribute name="action">win.print_selected</attribute>
+					<attribute name="action">win.print.selected</attribute>
 				</item>
 
 				<item>
@@ -148,20 +148,43 @@
 
 			<attribute name='label' translatable='yes'>Options</attribute>
 
-			<item>
-				<attribute name="label" translatable="yes">Show toolbar</attribute>
-				<attribute name="action">win.toolbar</attribute>
-			</item>
+			<section>
 
-			<item>
-				<attribute name="label" translatable="yes">Show menu</attribute>
-				<attribute name="action">win.menubar</attribute>
-			</item>
+				<item>
+					<attribute name="label" translatable="yes">Select by rectangles</attribute>
+					<attribute name="action">win.rectselect</attribute>
+				</item>
 
-			<item>
-				<attribute name="label" translatable="yes">Full screen</attribute>
-				<attribute name="action">win.fullscreen</attribute>
-			</item>
+				<item>
+					<attribute name="label" translatable="yes">Paste with left margin</attribute>
+					<attribute name="action">win.marginedpaste</attribute>
+				</item>
+
+				<item>
+					<attribute name="label" translatable="yes">Blank Fill</attribute>
+					<attribute name="action">win.blankfill</attribute>
+				</item>
+
+			</section>
+
+			<section>
+
+				<item>
+					<attribute name="label" translatable="yes">Show toolbar</attribute>
+					<attribute name="action">win.toolbar</attribute>
+				</item>
+
+				<item>
+					<attribute name="label" translatable="yes">Show menu</attribute>
+					<attribute name="action">win.menubar</attribute>
+				</item>
+
+				<item>
+					<attribute name="label" translatable="yes">Full screen</attribute>
+					<attribute name="action">win.fullscreen</attribute>
+				</item>
+
+			</section>
 
 		</submenu>
 
@@ -256,6 +279,16 @@
 	</submenu>
 
 	<item>
+		<attribute name="label" translatable="yes">Save screen</attribute>
+		<attribute name="action">win.save.screen</attribute>
+	</item>
+
+	<item>
+		<attribute name="label" translatable="yes">Print screen</attribute>
+		<attribute name="action">win.print.screen</attribute>
+	</item>
+
+	<item>
 		<attribute name="label" translatable="yes">Send/Receive files</attribute>
 		<attribute name="action">win.file.transfer</attribute>
 	</item>
@@ -264,20 +297,43 @@
 
 		<attribute name='label' translatable='yes'>Options</attribute>
 
-		<item>
-			<attribute name="label" translatable="yes">Show toolbar</attribute>
-			<attribute name="action">win.toolbar</attribute>
-		</item>
+		<section>
 
-		<item>
-			<attribute name="label" translatable="yes">Show menu</attribute>
-			<attribute name="action">win.menubar</attribute>
-		</item>
+				<item>
+					<attribute name="label" translatable="yes">Select by rectangles</attribute>
+					<attribute name="action">win.rectselect</attribute>
+				</item>
 
-		<item>
-			<attribute name="label" translatable="yes">Full screen</attribute>
-			<attribute name="action">win.fullscreen</attribute>
-		</item>
+				<item>
+					<attribute name="label" translatable="yes">Paste with left margin</attribute>
+					<attribute name="action">win.marginedpaste</attribute>
+				</item>
+
+				<item>
+					<attribute name="label" translatable="yes">Blank Fill</attribute>
+					<attribute name="action">win.blankfill</attribute>
+				</item>
+
+		</section>
+
+		<section>
+
+			<item>
+				<attribute name="label" translatable="yes">Show toolbar</attribute>
+				<attribute name="action">win.toolbar</attribute>
+			</item>
+
+			<item>
+				<attribute name="label" translatable="yes">Show menu</attribute>
+				<attribute name="action">win.menubar</attribute>
+			</item>
+
+			<item>
+				<attribute name="label" translatable="yes">Full screen</attribute>
+				<attribute name="action">win.fullscreen</attribute>
+			</item>
+
+		</section>
 
 	</submenu>
 

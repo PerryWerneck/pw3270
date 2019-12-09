@@ -81,7 +81,7 @@
 	action->parent.activate = activate_print_screen;
 
 	action->group.id = LIB3270_ACTION_GROUP_ONLINE;
-	action->parent.name = "print_screen";
+	action->parent.name = "print.screen";
 	action->label =  N_( "Print screen" );
 
 	return G_ACTION(action);
@@ -95,7 +95,7 @@
 	action->parent.activate = activate_print_selected;
 
 	action->group.id = LIB3270_ACTION_GROUP_SELECTION;
-	action->parent.name = "print_selected";
+	action->parent.name = "print.selected";
 	action->label =  N_( "Print selected" );
 
 	return G_ACTION(action);

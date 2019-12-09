@@ -84,17 +84,17 @@
 
 				<item>
 					<attribute name="label" translatable="yes">Save screen</attribute>
-					<attribute name="action">win.save_screen</attribute>
+					<attribute name="action">win.save.screen</attribute>
 				</item>
 
 				<item>
 					<attribute name="label" translatable="yes">Save selected</attribute>
-					<attribute name="action">win.save_selected</attribute>
+					<attribute name="action">win.save.selected</attribute>
 				</item>
 
 				<item>
 					<attribute name="label" translatable="yes">Save copy</attribute>
-					<attribute name="action">win.save_copy</attribute>
+					<attribute name="action">win.save.copy</attribute>
 				</item>
 
 			</section>
@@ -102,18 +102,18 @@
 			<section>
 
 				<item>
-					<attribute name="label" translatable="yes">Print</attribute>
-					<attribute name="action">win.print</attribute>
+					<attribute name="label" translatable="yes">Print Screen</attribute>
+					<attribute name="action">win.print.screen</attribute>
 				</item>
 
 				<item>
 					<attribute name="label" translatable="yes">Print selected</attribute>
-					<attribute name="action">win.print_selected</attribute>
+					<attribute name="action">win.print.selected</attribute>
 				</item>
 
 				<item>
 					<attribute name="label" translatable="yes">Print copy</attribute>
-					<attribute name="action">win.print_copy</attribute>
+					<attribute name="action">win.print.copy</attribute>
 				</item>
 
 			</section>
@@ -362,6 +362,11 @@
 				</item>
 
 				<item>
+					<attribute name="label" translatable="yes">Cross hair cursor</attribute>
+					<attribute name="action">win.crosshair</attribute>
+				</item>
+
+				<item>
 					<attribute name="label" translatable="yes">Resize on alternate screen</attribute>
 					<attribute name="action">win.altscreen</attribute>
 				</item>
@@ -369,11 +374,6 @@
 				<item>
 					<attribute name="label" translatable="yes">Paste with left margin</attribute>
 					<attribute name="action">win.marginedpaste</attribute>
-				</item>
-
-				<item>
-					<attribute name="label" translatable="yes">Cross hair cursor</attribute>
-					<attribute name="action">win.crosshair</attribute>
 				</item>
 
 				<item>

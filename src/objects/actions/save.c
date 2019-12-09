@@ -80,7 +80,7 @@
 	action->parent.activate = activate_save_screen;
 
 	action->group.id = LIB3270_ACTION_GROUP_ONLINE;
-	action->parent.name = "save_screen";
+	action->parent.name = "save.screen";
 	action->label =  N_( "Save screen" );
 
 	return G_ACTION(action);
@@ -94,7 +94,7 @@
 	action->parent.activate = activate_save_selected;
 
 	action->group.id = LIB3270_ACTION_GROUP_SELECTION;
-	action->parent.name = "save_selected";
+	action->parent.name = "save.selected";
 	action->label =  N_( "Save selected" );
 
 	return G_ACTION(action);
