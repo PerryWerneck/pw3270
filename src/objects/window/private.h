@@ -77,10 +77,11 @@
 	G_GNUC_INTERNAL GtkWidget * pw3270_setup_image_button(GtkWidget *button, const gchar *image_name);
 
 	// Actions
-	GAction * pw3270_set_host_action_new(void);
+	GAction * pw3270_action_host_properties_new(void);
 	GAction * pw3270_set_color_action_new(void);
-	GAction * pw3270_session_preferences_action_new(void);
 	GAction * pw3270_file_transfer_action_new(void);
+
+	GAction * pw3270_action_session_properties_new(void);
 
 	// Terminal actions.
 	GAction * pw3270_model_number_action_new(GtkWidget *terminal);

@@ -44,6 +44,11 @@
 		</section>
 
 		<item>
+			<attribute name="label" translatable="yes">Session properties</attribute>
+			<attribute name="action">win.session.properties</attribute>
+		</item>
+
+		<item>
 			<attribute name="label" translatable="yes">Preferences</attribute>
 			<attribute name="action">win.preferences</attribute>
 		</item>
@@ -296,8 +301,8 @@
 		</item>
 
 		<item>
-			<attribute name="label" translatable="yes">Host properties</attribute>
-			<attribute name="action">win.set.host</attribute>
+			<attribute name="label" translatable="yes">Session properties</attribute>
+			<attribute name="action">win.session.properties</attribute>
 		</item>
 
 		<submenu>

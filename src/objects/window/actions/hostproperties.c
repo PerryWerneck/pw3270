@@ -31,26 +31,41 @@
  #include <pw3270/window.h>
  #include <pw3270/actions.h>
  #include <v3270/settings.h>
+ #include <v3270/dialogs.h>
 
- static void activate(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkWidget *terminal);
+ static GtkWidget * factory(GtkWidget *terminal);
 
- GAction * pw3270_session_preferences_action_new(void) {
+ GAction * pw3270_action_host_properties_new(void) {
 
-	pw3270SimpleAction * action = pw3270_simple_action_new();
+	pw3270SimpleAction * action = pw3270_dialog_action_new(factory);
 
-	action->parent.activate = activate;
-	action->parent.name = "preferences";
-	action->icon_name = "preferences-other";
-	action->label = N_("Session properties");
+	action->parent.name = "host.properties";
+	action->group.id = LIB3270_ACTION_GROUP_OFFLINE;
+	action->icon_name = "network-server";
+	action->label = N_("Host properties");
 
 	return G_ACTION(action);
-
-
  }
 
- void activate(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkWidget *terminal) {
+ GtkWidget * factory(GtkWidget *terminal) {
 
-	debug("%s","Activating session properties dialog");
+ 	GtkWidget 		* dialog = v3270_settings_dialog_new();
+ 	V3270Settings	* settings = GTK_V3270_SETTINGS(v3270_host_select_new());
+
+ 	if(settings->title)
+		gtk_window_set_title(GTK_WINDOW(dialog), settings->title);
+
+	gtk_container_add(GTK_CONTAINER(dialog), GTK_WIDGET(settings));
+
+	gtk_window_set_transient_for(GTK_WINDOW(dialog),GTK_WINDOW(gtk_widget_get_toplevel(terminal)));
+	gtk_window_set_modal(GTK_WINDOW(dialog),TRUE);
+
+	v3270_settings_dialog_set_terminal_widget(dialog, terminal);
+
+	g_signal_connect(dialog,"close",G_CALLBACK(gtk_widget_destroy),NULL);
+	g_signal_connect(dialog,"response",G_CALLBACK(v3270_setttings_dialog_response),settings);
+
+	return dialog;
 
  }
 

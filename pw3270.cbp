@@ -129,16 +129,16 @@
 		<Unit filename="src/objects/window/actions/filetransfer.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/objects/window/actions/hostproperties.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/objects/window/actions/open.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/objects/window/actions/preferences.c">
+		<Unit filename="src/objects/window/actions/sessionproperties.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/objects/window/actions/setcolors.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/objects/window/actions/sethost.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/objects/window/private.h" />

@@ -111,9 +111,9 @@
 		size_t ix;
 
 		GAction * actions[] = {
-			pw3270_set_host_action_new(),
+			pw3270_action_host_properties_new(),
 			pw3270_set_color_action_new(),
-			pw3270_session_preferences_action_new(),
+			pw3270_action_session_properties_new(),
 			pw3270_file_transfer_action_new()
 		};
 
@@ -162,7 +162,7 @@
 			"win.disconnect",
 			"separator",
 			"win.set.colors",
-			"win.preferences",
+			"win.session.properties",
 			"win.file.transfer",
 			"win.print",
 			"app.quit"
