@@ -79,6 +79,8 @@ case "$host" in
 		AC_SUBST(WIN32_FILE_VERSION,$app_win32_file_version)
 
 		AC_CONFIG_FILES(src/main/windows/resources.rc)
+		AC_CONFIG_FILES(schemas/windows/application.gschema.xml)
+
 		;;
 
  	*)
@@ -90,6 +92,8 @@ case "$host" in
 		INSTALL_PACKAGES="linux-lib ${INSTALL_PACKAGES}"
 
 		app_cv_static='no'
+		AC_CONFIG_FILES(schemas/linux/application.gschema.xml)
+
 
 esac
 
@@ -194,7 +198,6 @@ dnl ---------------------------------------------------------------------------
 AC_SUBST(INSTALL_PACKAGES)
 
 AC_CONFIG_FILES(Makefile)
-AC_CONFIG_FILES(schemas/application.gschema.xml)
 
 dnl ---------------------------------------------------------------------------
 dnl Output the generated config.status script.

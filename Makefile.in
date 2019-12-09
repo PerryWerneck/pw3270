@@ -134,11 +134,11 @@ $(OBJDBG)/%.o: \
 	@$(WINDRES) $< -O coff -o $@
 
 gschemas.compiled: \
-	schemas/*.gschema.xml
+	schemas/@OSNAME@/*.gschema.xml
 
 	@glib-compile-schemas \
 		--targetdir=$(@D) \
-		$(BASEDIR)/schemas	
+		$(BASEDIR)/schemas/@OSNAME@	
 
 #---[ Release Rules ]--------------------------------------------------------------------
 

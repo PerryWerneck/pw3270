@@ -42,6 +42,7 @@
 		</Linker>
 		<Unit filename="Makefile.in" />
 		<Unit filename="configure.ac" />
+		<Unit filename="schemas/linux/application.gschema.xml.in" />
 		<Unit filename="src/include/pw3270.h" />
 		<Unit filename="src/include/pw3270/actions.h" />
 		<Unit filename="src/include/pw3270/application.h" />

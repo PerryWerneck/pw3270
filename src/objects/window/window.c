@@ -185,8 +185,6 @@
 
 	g_autoptr(GSettings) settings = pw3270_application_get_settings(G_APPLICATION(application));
 
-	debug("*************** settings=%p",settings);
-
 	g_return_val_if_fail(GTK_IS_APPLICATION(application), NULL);
 	pw3270ApplicationWindow * window =
 		g_object_new(
@@ -262,8 +260,6 @@
 	}
 
 	// Setup and show main window
-	//gtk_application_window_set_show_menubar(GTK_APPLICATION_WINDOW(window),TRUE);
-
 	g_settings_bind(
 		settings,
 		"menubar-visible",

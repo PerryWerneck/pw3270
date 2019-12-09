@@ -400,6 +400,8 @@
 
  	g_strfreev(actions);
 
+	g_object_notify(G_OBJECT(toolbar), "action-names");
+
  }
 
  gchar * pw3270_toolbar_get_actions(GtkWidget *toolbar) {
