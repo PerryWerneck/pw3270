@@ -35,6 +35,8 @@
  static gboolean popup_context_menu(GtkToolbar *toolbar, gint x, gint y, gint button_number);
  static void finalize(GObject *object);
  static void pw3270_toolbar_toolbar_set_style(GtkToolbar *toolbar, GtkToolbarStyle style);
+ static void get_property(GObject *object, guint prop_id, GValue *value, GParamSpec *pspec);
+ static void set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec);
 
  static const struct icon_size {
 	const gchar			* label;
@@ -82,8 +84,12 @@
 		.label = N_( "Icons & text" ),
 		.style = GTK_TOOLBAR_BOTH
 	},
-};
+ };
 
+ enum {
+	PROP_NONE,
+	PROP_ACTION_NAMES,
+ };
 
 
  struct _pw3270ToolBar {
@@ -109,13 +115,56 @@
 
  static void pw3270ToolBar_class_init(pw3270ToolBarClass *klass) {
 
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
  	GtkToolbarClass * toolbar = GTK_TOOLBAR_CLASS(klass);
 
  	toolbar->popup_context_menu = popup_context_menu;
 
  	G_OBJECT_CLASS(klass)->finalize = finalize;
 
+	object_class->set_property	= set_property;
+	object_class->get_property	= get_property;
+
+	g_object_class_install_property(
+		object_class,
+		PROP_ACTION_NAMES,
+		g_param_spec_string ("action-names",
+			N_("Action Names"),
+			N_("The name of the actions in the toolbar"),
+			NULL,
+			G_PARAM_READABLE|G_PARAM_WRITABLE)
+	);
+
+
  }
+
+  void get_property(GObject *object, guint prop_id, GValue *value, GParamSpec G_GNUC_UNUSED(*pspec)) {
+
+	switch (prop_id) {
+    case PROP_ACTION_NAMES:
+    	g_value_take_string(value,pw3270_toolbar_get_actions(GTK_WIDGET(object)));
+		break;
+
+	default:
+		g_assert_not_reached ();
+	}
+
+ }
+
+ void set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec G_GNUC_UNUSED(*pspec)) {
+
+	switch (prop_id)
+	{
+    case PROP_ACTION_NAMES:
+		pw3270_toolbar_set_actions(GTK_WIDGET(object), g_value_get_string(value));
+		break;
+
+	default:
+		g_assert_not_reached ();
+	}
+
+ }
+
 
  static void detacher(GtkWidget *attach_widget, GtkMenu G_GNUC_UNUSED(*menu)) {
 
@@ -296,17 +345,6 @@
 	}
 
  }
-
- /*
- static void update_child(GtkToolButton *item, GtkWidget *toolbar) {
-
-	if(!GTK_IS_TOOL_BUTTON(item))
-		return;
-
-	debug("[%s]", gtk_tool_button_get_icon_name(item));
-
- }
- */
 
  void pw3270_toolbar_set_icon_size(GtkToolbar *toolbar, GtkIconSize icon_size) {
 

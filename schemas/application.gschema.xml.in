@@ -68,6 +68,12 @@
       <description></description>
     </key>
 
+    <key name="toolbar-action-names" type="s">
+      <default>'win.copy,win.paste,win.select-all,separator,win.connect,win.disconnect,separator,win.session.properties,win.file.transfer,win.print,app.quit'</default>
+      <summary>The toolbar action list</summary>
+      <description></description>
+    </key>
+
   </schema>
 
 </schemalist>

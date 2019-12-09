@@ -154,10 +154,12 @@
 
 	{
 
+		/*
 		pw3270_toolbar_set_actions(
 			GTK_WIDGET(widget->toolbar),
 			"win.copy,win.paste,win.select-all,separator,win.connect,win.disconnect,separator,win.session.properties,win.file.transfer,win.print,app.quit"
 		);
+		*/
 
 		g_action_map_add_action(
 			G_ACTION_MAP(widget),
@@ -169,8 +171,8 @@
 			G_ACTION(g_property_action_new("menubar", widget, "show-menubar"))
 		);
 
-		g_autofree gchar * action_names = pw3270_toolbar_get_actions(GTK_WIDGET(widget->toolbar));
-		debug("[%s]",action_names);
+		//g_autofree gchar * action_names = pw3270_toolbar_get_actions(GTK_WIDGET(widget->toolbar));
+		//debug("[%s]",action_names);
 
 	}
 
@@ -182,6 +184,8 @@
 	const gchar * title = _( "IBM 3270 Terminal emulator" );
 
 	g_autoptr(GSettings) settings = pw3270_application_get_settings(G_APPLICATION(application));
+
+	debug("*************** settings=%p",settings);
 
 	g_return_val_if_fail(GTK_IS_APPLICATION(application), NULL);
 	pw3270ApplicationWindow * window =
@@ -273,6 +277,14 @@
 		"toolbar-visible",
 		window->toolbar,
 		"visible",
+		G_SETTINGS_BIND_DEFAULT
+	);
+
+	g_settings_bind(
+		settings,
+		"toolbar-action-names",
+		window->toolbar,
+		"action-names",
 		G_SETTINGS_BIND_DEFAULT
 	);
 

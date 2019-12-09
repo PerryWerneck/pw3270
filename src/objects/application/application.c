@@ -155,15 +155,19 @@
 				"br.com.bb." PACKAGE_NAME,
 				TRUE);
 
-		g_settings_schema_source_unref(source);
+		debug("schema %s=%p","br.com.bb." PACKAGE_NAME,schema);
 
 		app->settings = g_settings_new_full(schema, NULL, path);
+
+		g_settings_schema_source_unref(source);
 
 #else
 
 		app->settings = g_settings_new_with_path("br.com.bb." PACKAGE_NAME, path);
 
 #endif // DEBUG
+
+		debug("app->settings=%p",app->settings);
 
 	}
 
