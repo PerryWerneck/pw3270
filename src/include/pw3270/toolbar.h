@@ -59,6 +59,8 @@
 	GtkWidget * pw3270_toolbar_insert_lib3270_action(GtkWidget *toolbar, const LIB3270_ACTION *action, gint pos);
 	GtkWidget * pw3270_toolbar_insert_action(GtkWidget *toolbar, const gchar *name, gint pos);
 
+	void pw3270_toolbar_set_actions(GtkWidget *toolbar, const gchar *action_names);
+
 	void pw3270_toolbar_set_style(GtkToolbar *toolbar, GtkToolbarStyle style);
 	void pw3270_toolbar_set_icon_size(GtkToolbar *toolbar, GtkIconSize icon_size);
 

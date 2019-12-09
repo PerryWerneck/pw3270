@@ -336,3 +336,56 @@
 	// gtk_container_foreach(GTK_CONTAINER(toolbar),(GtkCallback) update_child, toolbar);
 
  }
+
+ void pw3270_toolbar_clear(GtkWidget *toolbar) {
+
+ 	GList * children = gtk_container_get_children(GTK_CONTAINER(toolbar));
+ 	GList * item;
+
+ 	for(item = children;item;item = g_list_next(item)) {
+		gtk_container_remove(GTK_CONTAINER(toolbar),GTK_WIDGET(item->data));
+ 	}
+
+ 	g_list_free(children);
+ }
+
+ void pw3270_toolbar_set_actions(GtkWidget *toolbar, const gchar *action_names) {
+
+ 	gchar ** actions = g_strsplit(action_names,",",-1);
+ 	size_t ix;
+
+ 	pw3270_toolbar_clear(toolbar);
+
+	for(ix = 0; actions[ix]; ix++) {
+		pw3270_toolbar_insert_action(toolbar,actions[ix],-1);
+	}
+
+ 	g_strfreev(actions);
+
+ }
+
+ gchar * pw3270_toolbar_get_actions(GtkWidget *toolbar) {
+
+	GString * str = g_string_new("");
+
+ 	GList * children = gtk_container_get_children(GTK_CONTAINER(toolbar));
+ 	GList * item;
+
+ 	for(item = children;item;item = g_list_next(item)) {
+
+		if(*str->str)
+			g_string_append(str,",");
+
+		if(GTK_IS_SEPARATOR_TOOL_ITEM(item->data)) {
+			g_string_append(str,"separator");
+		} else if(GTK_IS_TOOL_BUTTON(item->data)) {
+			g_string_append(str,gtk_actionable_get_action_name(GTK_ACTIONABLE(item->data)));
+		}
+
+ 	}
+
+ 	g_list_free(children);
+
+
+	return g_string_free(str,FALSE);
+ }

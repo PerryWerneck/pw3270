@@ -151,29 +151,13 @@
 	//
 	// Setup toolbar
 	//
+
 	{
-		static const gchar *actions[] = {
 
-			"win.copy",
-			"win.paste",
-			"win.select-all",
-			"separator",
-			"win.connect",
-			"win.disconnect",
-			"separator",
-			"win.set.colors",
-			"win.session.properties",
-			"win.file.transfer",
-			"win.print",
-			"app.quit"
-
-		};
-
-		size_t ix;
-
-		for(ix = 0; ix < G_N_ELEMENTS(actions); ix++) {
-			pw3270_toolbar_insert_action(GTK_WIDGET(widget->toolbar),actions[ix],-1);
-		}
+		pw3270_toolbar_set_actions(
+			GTK_WIDGET(widget->toolbar),
+			"win.copy,win.paste,win.select-all,separator,win.connect,win.disconnect,separator,win.session.properties,win.file.transfer,win.print,app.quit"
+		);
 
 		g_action_map_add_action(
 			G_ACTION_MAP(widget),
@@ -184,6 +168,9 @@
 			G_ACTION_MAP(widget),
 			G_ACTION(g_property_action_new("menubar", widget, "show-menubar"))
 		);
+
+		g_autofree gchar * action_names = pw3270_toolbar_get_actions(GTK_WIDGET(widget->toolbar));
+		debug("[%s]",action_names);
 
 	}
 
