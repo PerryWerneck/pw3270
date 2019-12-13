@@ -40,7 +40,6 @@
 	size_t ix;
 	pw3270ApplicationWindow * window = PW3270_APPLICATION_WINDOW(widget);
 
-
 	debug("%s(%p)",__FUNCTION__,widget);
 
 	// Update actions
@@ -64,7 +63,6 @@
 			window->popups[ix] = NULL;
 		}
 	}
-
 
 	GTK_WIDGET_CLASS(pw3270ApplicationWindow_parent_class)->destroy(widget);
 
@@ -217,19 +215,39 @@
 				else
 					gtk_header_bar_set_has_subtitle(header,TRUE);
 
-				// Create gear button
-				// https://wiki.gnome.org/Initiatives/GnomeGoals/GearIcons
-				GtkWidget *	gear_menu = pw3270_setup_image_button(gtk_menu_button_new(),"open-menu-symbolic");
-				gtk_menu_button_set_menu_model(GTK_MENU_BUTTON(gear_menu), G_MENU_MODEL(gtk_builder_get_object (builder, "gear-menu")));
-				gtk_header_bar_pack_end(header, gear_menu);
+				// Show the new header
+				gtk_widget_show_all(GTK_WIDGET(header));
 
+				// Create header's action buttons
+				// https://wiki.gnome.org/Initiatives/GnomeGoals/GearIcons
+
+				static const gchar * end_actions[] = {
+					"menu.open-menu",
+				};
+
+				for(ix = 0; ix < G_N_ELEMENTS(end_actions); ix++) {
+					gtk_header_bar_pack_end(header, pw3270_header_button_new_from_builder(GTK_WIDGET(window),builder,end_actions[ix]));
+				}
+
+
+				static const gchar * start_actions[] = {
+					"win.disconnect",
+					"win.reconnect"
+				};
+
+				for(ix = 0; ix < G_N_ELEMENTS(start_actions); ix++) {
+					gtk_header_bar_pack_start(header, pw3270_header_button_new_from_builder(GTK_WIDGET(window),builder,start_actions[ix]));
+				}
+
+
+				/*
 				// Create "new tab" bar
 				GtkWidget * new_tab_button = pw3270_setup_image_button(gtk_button_new(),"tab-new-symbolic");
 				gtk_actionable_set_action_name(GTK_ACTIONABLE(new_tab_button),"app.new.tab");
 				gtk_header_bar_pack_start(header, new_tab_button);
+				gtk_widget_show(new_tab_button);
+				*/
 
-				// Show the new header
-				gtk_widget_show_all(GTK_WIDGET(header));
 			}
 			break;
 

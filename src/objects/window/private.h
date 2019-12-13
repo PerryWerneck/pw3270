@@ -89,4 +89,7 @@
     G_GNUC_INTERNAL void pw3270_window_open_activated(GSimpleAction * action, GVariant *parameter, gpointer window);
     G_GNUC_INTERNAL void pw3270_window_close_activated(GSimpleAction * action, GVariant *parameter, gpointer window);
 
+	// Window widgets & tools.
+	G_GNUC_INTERNAL GtkWidget * pw3270_header_button_new_from_builder(GtkWidget *widget, GtkBuilder * builder, const gchar *action_name);
+
 #endif // PRIVATE_H_INCLUDED

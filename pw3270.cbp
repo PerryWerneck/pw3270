@@ -142,6 +142,9 @@
 		<Unit filename="src/objects/window/actions/setcolors.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/objects/window/header.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/objects/window/private.h" />
 		<Unit filename="src/objects/window/terminal.c">
 			<Option compilerVar="CC" />
