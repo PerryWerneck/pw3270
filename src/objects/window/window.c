@@ -232,7 +232,9 @@
 
 				static const gchar * start_actions[] = {
 					"win.disconnect",
-					"win.reconnect"
+					"win.reconnect",
+					"win.file.transfer",
+					"win.print"
 				};
 
 				for(ix = 0; ix < G_N_ELEMENTS(start_actions); ix++) {
