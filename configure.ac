@@ -115,6 +115,12 @@ AC_PATH_TOOL([ZIP],[zip],[no])
 AC_PATH_TOOL([DLLTOOL],[dlltool],[no])
 AC_PATH_TOOL([WINDRES], [windres], [no])
 
+AC_PATH_TOOL([XGETTEXT], [xgettext], [no])
+AC_PATH_TOOL([MSGCAT], [msgcat], [no])
+AC_PATH_TOOL([MSGINIT], [msginit], [no])
+AC_PATH_TOOL([MSGMERGE], [msgmerge], [no])
+AC_PATH_TOOL([MSGFMT], [msgfmt], [no])
+
 PKG_CHECK_EXISTS
 
 dnl ---------------------------------------------------------------------------
