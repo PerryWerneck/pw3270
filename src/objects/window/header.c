@@ -77,12 +77,9 @@
 
 		// It's a window action.
 		GAction * action = g_action_map_lookup_action(G_ACTION_MAP(widget),action_name+4);
-		const gchar * icon_name = pw3270_action_get_icon_name(action);
-        if(action && icon_name) {
-			button = pw3270_setup_image_button(gtk_menu_button_new(),icon_name);
-			gtk_actionable_set_action_name(GTK_ACTIONABLE(button),action_name);
-			gtk_widget_set_visible(button,g_action_get_enabled(action));
-        }
+
+		if(action)
+			button = pw3270_action_button_new(action,action_name);
 
 	}
 

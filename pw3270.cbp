@@ -61,6 +61,9 @@
 		<Unit filename="src/objects/actions/abstract.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/objects/actions/button.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/objects/actions/clipboard.c">
 			<Option compilerVar="CC" />
 		</Unit>

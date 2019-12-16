@@ -116,6 +116,9 @@
 	/// @brief Get the action tooltip.
 	const gchar			* pw3270_action_get_tooltip(GAction *action);
 
+	/// @brief Create a button associated with the action.
+	GtkWidget			* pw3270_action_button_new(GAction *action, const gchar *action_name);
+
 	/// @brief Associate action with the terminal widget.
 	void				  pw3270_action_set_terminal_widget(GAction *action, GtkWidget *terminal);
 
