@@ -184,6 +184,11 @@ $(POTDIR)/$(PACKAGE_NAME)/%.pot: \
 	@touch $@
 
 
+install-%: \
+	%/Makefile
+
+	@$(MAKE) -C `dirname $<` DESTDIR=$(DESTDIR) install
+
 #---[ Release Targets ]------------------------------------------------------------------
 
 all: \
@@ -211,6 +216,17 @@ $(BINRLS)/$(PACKAGE_NAME)@EXEEXT@: \
 install: \
 	$(foreach PKG, $(INSTALL_PACKAGES), install-$(PKG))
 
+install-application: \
+	$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@
+
+	@$(MKDIR) \
+		$(DESTDIR)/$(bindir)
+
+	@$(INSTALL_PROGRAM) \
+		$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@ \
+		$(DESTDIR)/$(bindir)/$(PRODUCT_NAME)@EXEEXT@
+
+install-lang:
 
 #---[ Misc Targets ]---------------------------------------------------------------------
 
@@ -220,10 +236,6 @@ $(POTDIR)/$(PACKAGE_NAME).pot: \
 	@rm -f $@
 	@$(MKDIR) $(@D)
 	@$(MSGCAT) --sort-output $^ > $@
-
-locale: \
-	$(POTDIR)/$(PACKAGE_NAME).pot
-
 
 #---[ Debug Targets ]--------------------------------------------------------------------
 

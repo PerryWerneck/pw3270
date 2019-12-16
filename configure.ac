@@ -60,7 +60,7 @@ dnl ---------------------------------------------------------------------------
 dnl Check for OS specifics
 dnl ---------------------------------------------------------------------------
 
-INSTALL_PACKAGES=""
+INSTALL_PACKAGES="application locale schemas"
 
 case "$host" in
 	*-mingw32|*-pc-msys)
@@ -70,7 +70,7 @@ case "$host" in
 		LDFLAGS="$LDFLAGS -pthread"
 		LIBS="$LIBS -lws2_32 -lwtsapi32 -lcomdlg32"
 
-		INSTALL_PACKAGES="windows-lib ${INSTALL_PACKAGES}"
+dnl		INSTALL_PACKAGES="windows-lib ${INSTALL_PACKAGES}"
 
 		app_win32_revision=$(date +%-y.%-m.%-d.%-H)
 		AC_SUBST(WIN32_VERSION,$app_win32_revision)
@@ -89,7 +89,7 @@ case "$host" in
 		CFLAGS="$CFLAGS -pthread"
 		LDFLAGS="$LDFLAGS -pthread"
 
-		INSTALL_PACKAGES="linux-lib ${INSTALL_PACKAGES}"
+dnl		INSTALL_PACKAGES="linux-lib ${INSTALL_PACKAGES}"
 
 		app_cv_static='no'
 		AC_CONFIG_FILES(schemas/linux/application.gschema.xml)
@@ -162,6 +162,8 @@ dnl ---------------------------------------------------------------------------
 dnl Check for GTK
 dnl ---------------------------------------------------------------------------
 
+GLIB_GSETTINGS
+
 PKG_CHECK_MODULES( [GTK], [gtk+-3.0 glib-2.0 gmodule-2.0], AC_DEFINE(HAVE_GTK), AC_MSG_ERROR([GTK not present.]))
 
 AC_SUBST(GTK_LIBS)
@@ -198,6 +200,7 @@ dnl ---------------------------------------------------------------------------
 AC_SUBST(INSTALL_PACKAGES)
 
 AC_CONFIG_FILES(Makefile)
+AC_CONFIG_FILES(schemas/Makefile)
 
 dnl ---------------------------------------------------------------------------
 dnl Output the generated config.status script.
