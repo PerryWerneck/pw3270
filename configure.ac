@@ -60,7 +60,7 @@ dnl ---------------------------------------------------------------------------
 dnl Check for OS specifics
 dnl ---------------------------------------------------------------------------
 
-INSTALL_PACKAGES="application locale schemas"
+INSTALL_PACKAGES="application locale schemas branding"
 
 case "$host" in
 	*-mingw32|*-pc-msys)
@@ -120,6 +120,8 @@ AC_PATH_TOOL([MSGCAT], [msgcat], [no])
 AC_PATH_TOOL([MSGINIT], [msginit], [no])
 AC_PATH_TOOL([MSGMERGE], [msgmerge], [no])
 AC_PATH_TOOL([MSGFMT], [msgfmt], [no])
+
+AC_PATH_TOOL([DESKTOP_INSTALL],[desktop-file-install],[no])
 
 PKG_CHECK_EXISTS
 
@@ -208,6 +210,9 @@ AC_SUBST(INSTALL_PACKAGES)
 AC_CONFIG_FILES(Makefile)
 AC_CONFIG_FILES(schemas/Makefile)
 AC_CONFIG_FILES(locale/Makefile)
+
+AC_CONFIG_FILES(branding/Makefile)
+AC_CONFIG_FILES(branding/launcher.desktop)
 
 dnl ---------------------------------------------------------------------------
 dnl Output the generated config.status script.

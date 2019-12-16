@@ -111,7 +111,7 @@ install: \
 		launcher.desktop \
 		$(PRODUCT_NAME).desktop
 
-	$(DESKTOP_INSTALL) \
+	@$(DESKTOP_INSTALL) \
 		--mode 644 \
 		--delete-original \
 		--dir $(DESTDIR)$(datarootdir)/applications \
