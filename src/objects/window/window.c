@@ -192,7 +192,15 @@
 
 	if(PW3270_IS_APPLICATION(gtk_window_get_application(GTK_WINDOW(window)))) {
 
-		GtkBuilder * builder = gtk_builder_new_from_file("ui/window.xml");
+		GtkBuilder * builder;
+#ifdef DEBUG
+		builder = gtk_builder_new_from_file("ui/window.xml");
+#else
+		{
+			lib3270_autoptr(char) build_file = lib3270_build_data_filename("ui","window.xml",NULL);
+			builder = gtk_builder_new_from_file(build_file);
+		}
+#endif // DEBUG
 
 		switch(pw3270_application_get_ui_style(G_APPLICATION(application))) {
 		case PW3270_UI_STYLE_CLASSICAL:

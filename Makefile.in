@@ -196,8 +196,7 @@ all: \
 	$(POTDIR)/$(PACKAGE_NAME).pot
 
 Release: \
-	$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@ \
-	$(BINRLS)/static/$(PACKAGE_NAME).a
+	$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@
 
 $(BINRLS)/$(PACKAGE_NAME)@EXEEXT@: \
 	$(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SRC).o)

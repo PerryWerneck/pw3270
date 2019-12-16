@@ -263,7 +263,15 @@
 	//
 	// Setup application menus
 	//
-	GtkBuilder * builder = gtk_builder_new_from_file("ui/application.xml");
+	GtkBuilder * builder;
+#ifdef DEBUG
+	builder = gtk_builder_new_from_file("ui/application.xml");
+#else
+	{
+		lib3270_autoptr(char) build_file = lib3270_build_data_filename("ui","application.xml",NULL);
+		builder = gtk_builder_new_from_file(build_file);
+	}
+#endif // DEBUG
 
 	if(gtk_application_prefers_app_menu(GTK_APPLICATION(application)))
 		gtk_application_set_app_menu(GTK_APPLICATION (application), G_MENU_MODEL(gtk_builder_get_object (builder, "app-menu")));
