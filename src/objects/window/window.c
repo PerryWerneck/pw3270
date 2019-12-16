@@ -220,7 +220,29 @@
 
 				// Create header's action buttons
 				// https://wiki.gnome.org/Initiatives/GnomeGoals/GearIcons
+				{
+					g_autofree gchar * left = g_settings_get_string(settings, "header-start-action-names");
+					g_autofree gchar * right = g_settings_get_string(settings, "header-end-action-names");
 
+					gchar ** elements;
+
+					// First the left side actions.
+					elements = g_strsplit(left,",",-1);
+					for(ix=0;elements[ix];ix++) {
+						gtk_header_bar_pack_start(header, pw3270_header_button_new_from_builder(GTK_WIDGET(window),builder,elements[ix]));
+					}
+					g_strfreev(elements);
+
+					// And then, the right side actions;
+					elements = g_strsplit(right,",",-1);
+					for(ix=0;elements[ix];ix++) {
+						gtk_header_bar_pack_end(header, pw3270_header_button_new_from_builder(GTK_WIDGET(window),builder,elements[ix]));
+					}
+					g_strfreev(elements);
+
+				}
+
+				/*
 				static const gchar * end_actions[] = {
 					"menu.open-menu",
 				};
@@ -240,6 +262,7 @@
 				for(ix = 0; ix < G_N_ELEMENTS(start_actions); ix++) {
 					gtk_header_bar_pack_start(header, pw3270_header_button_new_from_builder(GTK_WIDGET(window),builder,start_actions[ix]));
 				}
+				*/
 
 
 				/*

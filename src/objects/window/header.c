@@ -41,22 +41,6 @@
 
  }
 
- /*
- static gboolean bg_deactivate_button(GtkWidget *button) {
- 	debug("******************** %s %p",__FUNCTION__,button)
-	return FALSE;
- }
-
- static void on_state_flags_changed(GtkWidget *button, GtkStateFlags flags, gpointer user_data) {
-
- 	debug("%s(%p,%d)",__FUNCTION__,button,flags & GTK_STATE_FLAG_ACTIVE);
-
-	if(flags & GTK_STATE_FLAG_ACTIVE)
-		g_idle_add((GSourceFunc) bg_deactivate_button, button);
-
- }
- */
-
  GtkWidget * pw3270_header_button_new_from_builder(GtkWidget *widget, GtkBuilder * builder, const gchar *action_name) {
 
 	GtkWidget * button = NULL;
@@ -86,7 +70,6 @@
 	if(button) {
 
 		g_signal_connect(button, "notify::sensitive", G_CALLBACK(on_sensitive), widget);
-		// g_signal_connect(button,"state-flags-changed",G_CALLBACK(on_state_flags_changed), widget);
 		gtk_widget_set_focus_on_click(button,FALSE);
 		gtk_widget_set_can_focus(button,FALSE);
 		gtk_widget_set_can_default(button,FALSE);

@@ -50,12 +50,6 @@
 		image = gtk_image_new_from_icon_name(symbolic_name,GTK_ICON_SIZE_BUTTON);
 	}
 
-
-	// If fails, use the regular icon.
-	if(!image) {
-		debug("***************** %s",icon_name);
-	}
-
 	if(!image) {
 		g_warning("Can't create button for icon \"%s\"",icon_name);
 		return NULL;

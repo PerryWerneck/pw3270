@@ -74,6 +74,18 @@
       <description></description>
     </key>
 
+    <key name="header-start-action-names" type="s">
+      <default>'win.disconnect,win.reconnect,win.file.transfer,win.print'</default>
+      <summary>The actions in the first block of the header bar</summary>
+      <description></description>
+    </key>
+
+    <key name="header-end-action-names" type="s">
+      <default>'menu.open-menu'</default>
+      <summary>The actions in the last block of the header bar</summary>
+      <description></description>
+    </key>
+
   </schema>
 
 </schemalist>
