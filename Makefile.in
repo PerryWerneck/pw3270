@@ -226,7 +226,16 @@ install-application: \
 		$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@ \
 		$(DESTDIR)/$(bindir)/$(PRODUCT_NAME)@EXEEXT@
 
-install-lang:
+
+	@$(MKDIR) \
+		$(DESTDIR)/$(libdir)/$(PRODUCT_NAME)-plugins
+
+	@$(MKDIR) \
+		$(DESTDIR)/$(datarootdir)/$(PRODUCT_NAME)/ui
+
+	@$(INSTALL_DATA) \
+		ui/*.xml \
+		$(DESTDIR)/$(datarootdir)/$(PRODUCT_NAME)/ui
 
 #---[ Misc Targets ]---------------------------------------------------------------------
 
