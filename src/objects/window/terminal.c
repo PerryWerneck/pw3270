@@ -232,7 +232,7 @@
         v3270_to_key_file(terminal,key_file,"terminal");
         v3270_accelerator_map_to_key_file(terminal, key_file, "accelerators");
 
-        g_key_file_save_to_file(key_file,"terminal.conf",&error);
+        g_key_file_save_to_file(key_file,filename,&error);
 
         if(error) {
 
