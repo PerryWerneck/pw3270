@@ -207,6 +207,7 @@ AC_SUBST(INSTALL_PACKAGES)
 
 AC_CONFIG_FILES(Makefile)
 AC_CONFIG_FILES(schemas/Makefile)
+AC_CONFIG_FILES(locale/Makefile)
 
 dnl ---------------------------------------------------------------------------
 dnl Output the generated config.status script.
