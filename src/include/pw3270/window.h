@@ -60,7 +60,7 @@
 	GtkWidget	* pw3270_application_window_new(GtkApplication * app);
 
 	/// @brief Create a new terminal tab.
-	GtkWidget 	* pw3270_terminal_new(GtkWidget *window);
+	GtkWidget 	* pw3270_terminal_new(GtkWidget *window, const gchar *session_file);
 
 	/// @brief Get the active terminal widget.
 	GtkWidget	* pw3270_window_get_terminal_widget(GtkWidget *window);

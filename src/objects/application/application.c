@@ -283,7 +283,7 @@
 	GtkWidget * window = pw3270_application_window_new(GTK_APPLICATION(application));
 
 	// Create terminal widget & associated widget
-	GtkWidget * terminal = pw3270_terminal_new(window);
+	GtkWidget * terminal = pw3270_terminal_new(window, NULL);
 
 	// Create property actions
 	static const gchar * properties[] = {

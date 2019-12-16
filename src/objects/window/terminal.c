@@ -30,6 +30,8 @@
  #include "private.h"
  #include <pw3270/actions.h>
  #include <lib3270/toggle.h>
+ #include <v3270/settings.h>
+ #include <v3270/actions.h>
 
  static void session_changed(GtkWidget *terminal, GtkWidget *label) {
 
@@ -212,14 +214,113 @@
 
  }
 
- GtkWidget * pw3270_terminal_new(GtkWidget *widget) {
+ static void save_settings(GtkWidget *terminal, const gchar *filename) {
+
+        GError *error = NULL;
+		GKeyFile * key_file = g_key_file_new();
+
+		g_key_file_load_from_file(key_file,filename,G_KEY_FILE_NONE,&error);
+
+		if(error) {
+
+			g_warning("Can't load \"%s\": %s",filename,error->message);
+			g_error_free(error);
+			return;
+
+		}
+
+        v3270_to_key_file(terminal,key_file,"terminal");
+        v3270_accelerator_map_to_key_file(terminal, key_file, "accelerators");
+
+        g_key_file_save_to_file(key_file,"terminal.conf",&error);
+
+        if(error) {
+
+			g_warning("Can't save \"%s\": %s",filename,error->message);
+			g_error_free(error);
+
+        } else {
+
+			g_message("Session properties save to %s",filename);
+        }
+
+        g_key_file_free(key_file);
+
+
+ }
+
+
+ GtkWidget * pw3270_terminal_new(GtkWidget *widget, const gchar *session_file) {
 
 	g_return_val_if_fail(PW3270_IS_APPLICATION_WINDOW(widget),NULL);
 
 	pw3270ApplicationWindow * window = PW3270_APPLICATION_WINDOW(widget);
  	GtkWidget * terminal = v3270_new();
 
+ 	gchar * filename;
+
+ 	if(session_file) {
+
+		// Use the supplied session file
+		filename = g_strdup(session_file);
+
+ 	} else {
+
+		// No session file, use the default one.
+		filename = g_build_filename(g_get_user_config_dir(),G_STRINGIFY(PRODUCT_NAME) ".conf",NULL);
+
+ 	}
+
+ 	// Setup session file;
+ 	GError *error = NULL;
+	g_object_set_data_full(G_OBJECT(terminal),"session-file-name",filename,g_free);
+
+	GKeyFile * key_file = g_key_file_new();
+
+	if(g_file_test(filename,G_FILE_TEST_IS_REGULAR)) {
+
+		// Found session file, open it.
+        if(!g_key_file_load_from_file(key_file,filename,G_KEY_FILE_NONE,&error)) {
+			g_warning("Can't load \"%s\"",filename);
+        } else {
+			g_message("Loading session properties from %s",filename);
+        }
+
+	} else {
+
+		// No session file, load the defaults (if available).
+		lib3270_autoptr(char) default_settings = lib3270_build_data_filename("defaults.conf",NULL);
+		if(g_file_test(default_settings,G_FILE_TEST_IS_REGULAR)) {
+			if(!g_key_file_load_from_file(key_file,default_settings,G_KEY_FILE_NONE,&error)) {
+				g_warning("Can't load \"%s\"",default_settings);
+			} else {
+				g_message("Loading session properties from %s",default_settings);
+			}
+		} else {
+			g_warning("Can't find default settings file \"%s\"",default_settings);
+		}
+
+	}
+
+	if(error) {
+
+		g_warning(error->message);
+		g_error_free(error);
+		error = NULL;
+
+	} else {
+
+		v3270_load_key_file(terminal,key_file,NULL);
+		v3270_accelerator_map_load_key_file(terminal,key_file,NULL);
+
+	}
+
+	g_key_file_free(key_file);
+
  	append_terminal_page(window,terminal);
+
+ 	// Setup signals.
+ 	g_signal_connect(G_OBJECT(terminal),"save-settings",G_CALLBACK(save_settings),filename);
 
 	return terminal;
 
