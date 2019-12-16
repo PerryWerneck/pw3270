@@ -221,26 +221,41 @@
 				// Create header's action buttons
 				// https://wiki.gnome.org/Initiatives/GnomeGoals/GearIcons
 				{
+					g_autofree gchar * header_actions = g_settings_get_string(settings, "header-action-names");
+					gchar ** header_blocks = g_strsplit(header_actions,":",-1);
+
+					if(g_strv_length(header_blocks) >= 2) {
+
+						gchar ** elements;
+
+						// First the left side actions.
+						elements = g_strsplit(header_blocks[0],",",-1);
+						for(ix=0;elements[ix];ix++) {
+							gtk_header_bar_pack_start(header, pw3270_header_button_new_from_builder(GTK_WIDGET(window),builder,elements[ix]));
+						}
+						g_strfreev(elements);
+
+						// And then, the right side actions;
+						elements = g_strsplit(header_blocks[1],",",-1);
+						for(ix=0;elements[ix];ix++) {
+							gtk_header_bar_pack_end(header, pw3270_header_button_new_from_builder(GTK_WIDGET(window),builder,elements[ix]));
+						}
+						g_strfreev(elements);
+
+					}
+
+					g_strfreev(header_blocks);
+
+				}
+
+				/*
+				{
 					g_autofree gchar * left = g_settings_get_string(settings, "header-start-action-names");
 					g_autofree gchar * right = g_settings_get_string(settings, "header-end-action-names");
 
-					gchar ** elements;
-
-					// First the left side actions.
-					elements = g_strsplit(left,",",-1);
-					for(ix=0;elements[ix];ix++) {
-						gtk_header_bar_pack_start(header, pw3270_header_button_new_from_builder(GTK_WIDGET(window),builder,elements[ix]));
-					}
-					g_strfreev(elements);
-
-					// And then, the right side actions;
-					elements = g_strsplit(right,",",-1);
-					for(ix=0;elements[ix];ix++) {
-						gtk_header_bar_pack_end(header, pw3270_header_button_new_from_builder(GTK_WIDGET(window),builder,elements[ix]));
-					}
-					g_strfreev(elements);
 
 				}
+				*/
 
 				/*
 				static const gchar * end_actions[] = {
