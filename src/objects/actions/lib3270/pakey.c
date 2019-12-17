@@ -100,14 +100,15 @@
  }
 
  void Lib3270PaAction_init(Lib3270PaAction *object) {
- 	pw3270Action * action = PW3270_ACTION(object);
-
-	action->activate = activate;
-	action->name = "pakey";
  }
 
 
  GAction * pw3270_action_new_pakey(void) {
-	return G_ACTION(g_object_new(PW3270_TYPE_PAKEY_ACTION, NULL));
+ 	pw3270Action * action = PW3270_ACTION(g_object_new(PW3270_TYPE_PAKEY_ACTION, NULL));
+
+	action->activate = activate;
+	action->name = "pakey";
+
+ 	return G_ACTION(action);
  }
 

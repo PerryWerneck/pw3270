@@ -265,7 +265,7 @@ run: \
 	$(BINDBG)/$(PACKAGE_NAME)@EXEEXT@ \
 	gschemas.compiled
 
-	@LD_LIBRARY_PATH=$(BINDBG) \
+	@G_DEBUG=fatal-warnings \
 		$(BINDBG)/$(PACKAGE_NAME)@EXEEXT@
 
 mem-check: \

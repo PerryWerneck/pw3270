@@ -56,7 +56,7 @@
 
  }
 
- void pw3270_application_new_tab_activated(GSimpleAction G_GNUC_UNUSED(* action), GVariant G_GNUC_UNUSED(*parameter), gpointer application) {
+ void pw3270_application_new_tab_activated(GSimpleAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), gpointer application) {
 
  	debug("%s",__FUNCTION__);
  	pw3270_terminal_new(GTK_WIDGET(gtk_application_get_active_window(GTK_APPLICATION(application))), NULL);

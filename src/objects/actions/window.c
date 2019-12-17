@@ -83,6 +83,7 @@
 		};
 
 		for(ix = 0; ix < G_N_ELEMENTS(actions); ix++) {
+			debug("Creating action %u (%s)", (unsigned int) ix, g_action_get_name(actions[ix]));
 			g_action_map_add_action(map,actions[ix]);
 		}
 	}

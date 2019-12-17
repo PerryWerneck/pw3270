@@ -100,14 +100,16 @@
  }
 
  void Lib3270PfAction_init(Lib3270PfAction *action) {
-
-	action->parent.activate = activate;
-	action->parent.name = "pfkey";
-
  }
 
  GAction * pw3270_action_new_pfkey(void) {
- 	return G_ACTION(g_object_new(PW3270_TYPE_PFKEY_ACTION, NULL));
+
+ 	pw3270Action * action = PW3270_ACTION(g_object_new(PW3270_TYPE_PFKEY_ACTION, NULL));
+
+	action->activate = activate;
+	action->name = "pfkey";
+
+ 	return G_ACTION(action);
  }
 
 

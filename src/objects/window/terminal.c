@@ -33,6 +33,13 @@
  #include <v3270/settings.h>
  #include <v3270/actions.h>
 
+ struct SessionDescriptor
+ {
+ 	gboolean	  changed;		///< @brief Save file?
+	GKeyFile	* key_file;
+	gchar		  filename[1];
+ };
+
  static void session_changed(GtkWidget *terminal, GtkWidget *label) {
 
 	gtk_label_set_text(GTK_LABEL(label),v3270_get_session_name(terminal));
@@ -89,7 +96,36 @@
  	return FALSE;
  }
 
+ static void check_for_session_changed(GtkWidget *terminal) {
+
+	struct SessionDescriptor * session = (struct SessionDescriptor *) g_object_get_data(G_OBJECT(terminal),"session-descriptor");
+
+	if(session->changed) {
+
+		session->changed = FALSE;
+
+        GError * error = NULL;
+        g_key_file_save_to_file(session->key_file,session->filename,&error);
+
+        if(error) {
+
+			g_warning("Can't save \"%s\": %s",session->filename,error->message);
+			g_error_free(error);
+
+        } else {
+
+			g_message("Session was saved to %s",session->filename);
+
+        }
+
+	}
+
+ }
+
+
  static void on_terminal_destroy(GtkWidget *terminal, GtkWindow * window) {
+
+	check_for_session_changed(terminal);
 
 	if(gtk_window_get_default_widget(window) != terminal) {
 		return;
@@ -114,12 +150,6 @@
 
 	g_strfreev(actions);
 
- }
-
-
- static gboolean bg_auto_connect(GtkWidget *terminal) {
- 	v3270_reconnect(terminal);
-	return FALSE;
  }
 
  static void disconnected(GtkWidget *terminal, GtkWindow * window) {
@@ -205,85 +235,84 @@
 
 	// Setup session.
 
-	H3270 * hSession = v3270_get_session(terminal);
-
-	if(lib3270_get_toggle(hSession,LIB3270_TOGGLE_CONNECT_ON_STARTUP))
-		g_idle_add((GSourceFunc) bg_auto_connect, terminal);
+//	H3270 * hSession = v3270_get_session(terminal);
 
 	return page;
 
  }
 
- static void save_settings(GtkWidget *terminal, const gchar *filename) {
+ static void save_settings(GtkWidget *terminal, struct SessionDescriptor * session) {
 
-        GError *error = NULL;
-		GKeyFile * key_file = g_key_file_new();
+	debug("************************************* %s",__FUNCTION__);
+	v3270_to_key_file(terminal,session->key_file,"terminal");
+	v3270_accelerator_map_to_key_file(terminal, session->key_file, "accelerators");
 
-		g_key_file_load_from_file(key_file,filename,G_KEY_FILE_NONE,&error);
-
-		if(error) {
-
-			g_warning("Can't load \"%s\": %s",filename,error->message);
-			g_error_free(error);
-			return;
-
-		}
-
-        v3270_to_key_file(terminal,key_file,"terminal");
-        v3270_accelerator_map_to_key_file(terminal, key_file, "accelerators");
-
-        g_key_file_save_to_file(key_file,filename,&error);
-
-        if(error) {
-
-			g_warning("Can't save \"%s\": %s",filename,error->message);
-			g_error_free(error);
-
-        } else {
-
-			g_message("Session properties save to %s",filename);
-        }
-
-        g_key_file_free(key_file);
-
+	session->changed = TRUE;
 
  }
 
+ static void toggle_changed(G_GNUC_UNUSED v3270 *widget, G_GNUC_UNUSED LIB3270_TOGGLE_ID toggle_id, gboolean toggle_state, const gchar *toggle_name, struct SessionDescriptor * session) {
+	debug("%s(%s)=%s",__FUNCTION__,toggle_name,toggle_state ? "ON" : "OFF");
+	g_key_file_set_boolean(session->key_file,"terminal",toggle_name,toggle_state);
+	session->changed = TRUE;
+ }
+
+ static void close_settings(struct SessionDescriptor * session) {
+
+ 	if(session->key_file) {
+
+		if(session->changed) {
+			g_message("Saving file %s",session->filename);
+	        g_key_file_save_to_file(session->key_file,session->filename,NULL);
+		} else {
+			g_message("Closing file %s",session->filename);
+		}
+
+		g_key_file_free(session->key_file);
+		session->key_file = NULL;
+ 	}
+
+ 	g_free(session);
+ }
 
  GtkWidget * pw3270_terminal_new(GtkWidget *widget, const gchar *session_file) {
+
+	struct SessionDescriptor * descriptor;
 
 	g_return_val_if_fail(PW3270_IS_APPLICATION_WINDOW(widget),NULL);
 
 	pw3270ApplicationWindow * window = PW3270_APPLICATION_WINDOW(widget);
  	GtkWidget * terminal = v3270_new();
 
- 	gchar * filename;
-
  	if(session_file) {
 
 		// Use the supplied session file
-		filename = g_strdup(session_file);
+		descriptor = g_malloc0(sizeof(struct SessionDescriptor) + strlen(session_file));
+		strcpy(descriptor->filename,session_file);
 
  	} else {
 
 		// No session file, use the default one.
-		filename = g_build_filename(g_get_user_config_dir(),G_STRINGIFY(PRODUCT_NAME) ".conf",NULL);
+		g_autofree gchar * filename = g_build_filename(g_get_user_config_dir(),G_STRINGIFY(PRODUCT_NAME) ".conf",NULL);
+
+		descriptor = g_malloc0(sizeof(struct SessionDescriptor) + strlen(filename));
+		strcpy(descriptor->filename,filename);
 
  	}
 
  	// Setup session file;
  	GError *error = NULL;
-	g_object_set_data_full(G_OBJECT(terminal),"session-file-name",filename,g_free);
+	g_object_set_data_full(G_OBJECT(terminal),"session-descriptor",descriptor,(GDestroyNotify) close_settings);
 
-	GKeyFile * key_file = g_key_file_new();
+	descriptor->key_file = g_key_file_new();
 
-	if(g_file_test(filename,G_FILE_TEST_IS_REGULAR)) {
+	if(g_file_test(descriptor->filename,G_FILE_TEST_IS_REGULAR)) {
 
 		// Found session file, open it.
-        if(!g_key_file_load_from_file(key_file,filename,G_KEY_FILE_NONE,&error)) {
-			g_warning("Can't load \"%s\"",filename);
+        if(!g_key_file_load_from_file(descriptor->key_file,descriptor->filename,G_KEY_FILE_NONE,&error)) {
+			g_warning("Can't load \"%s\"",descriptor->filename);
         } else {
-			g_message("Loading session properties from %s",filename);
+			g_message("Loading session properties from %s",descriptor->filename);
         }
 
 	} else {
@@ -291,7 +320,7 @@
 		// No session file, load the defaults (if available).
 		lib3270_autoptr(char) default_settings = lib3270_build_data_filename("defaults.conf",NULL);
 		if(g_file_test(default_settings,G_FILE_TEST_IS_REGULAR)) {
-			if(!g_key_file_load_from_file(key_file,default_settings,G_KEY_FILE_NONE,&error)) {
+			if(!g_key_file_load_from_file(descriptor->key_file,default_settings,G_KEY_FILE_NONE,&error)) {
 				g_warning("Can't load \"%s\"",default_settings);
 			} else {
 				g_message("Loading session properties from %s",default_settings);
@@ -310,17 +339,16 @@
 
 	} else {
 
-		v3270_load_key_file(terminal,key_file,NULL);
-		v3270_accelerator_map_load_key_file(terminal,key_file,NULL);
+		v3270_load_key_file(terminal,descriptor->key_file,NULL);
+		v3270_accelerator_map_load_key_file(terminal,descriptor->key_file,NULL);
 
 	}
-
-	g_key_file_free(key_file);
 
  	append_terminal_page(window,terminal);
 
  	// Setup signals.
- 	g_signal_connect(G_OBJECT(terminal),"save-settings",G_CALLBACK(save_settings),filename);
+ 	g_signal_connect(G_OBJECT(terminal),"save-settings",G_CALLBACK(save_settings),descriptor);
+ 	g_signal_connect(G_OBJECT(terminal),"toggle_changed",G_CALLBACK(toggle_changed),descriptor);
 
 	return terminal;
 
