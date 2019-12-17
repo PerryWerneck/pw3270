@@ -243,11 +243,12 @@
 
  static void save_settings(GtkWidget *terminal, struct SessionDescriptor * session) {
 
-	debug("************************************* %s",__FUNCTION__);
+	session->changed = FALSE;
+
 	v3270_to_key_file(terminal,session->key_file,"terminal");
 	v3270_accelerator_map_to_key_file(terminal, session->key_file, "accelerators");
 
-	session->changed = TRUE;
+	g_key_file_save_to_file(session->key_file,session->filename,NULL);
 
  }
 
@@ -263,7 +264,8 @@
 
 		if(session->changed) {
 			g_message("Saving file %s",session->filename);
-	        g_key_file_save_to_file(session->key_file,session->filename,NULL);
+			g_key_file_save_to_file(session->key_file,session->filename,NULL);
+			session->changed = FALSE;
 		} else {
 			g_message("Closing file %s",session->filename);
 		}
@@ -358,15 +360,25 @@
 
 	g_return_val_if_fail(PW3270_IS_APPLICATION_WINDOW(widget),-1);
 
-	pw3270ApplicationWindow * window = PW3270_APPLICATION_WINDOW(widget);
- 	GtkWidget * terminal = v3270_new();
+	g_autofree gchar *path = g_file_get_path(file);
+	debug("Path: \"%s\"",path);
 
-	// Identify argument.
+	if(path) {
+
+		// It's a session file
+		pw3270_terminal_new(widget, path);
+		return 0;
+
+	}
+
 	g_autofree gchar * scheme = g_file_get_uri_scheme(file);
 
 	if(!(g_ascii_strcasecmp(scheme,"tn3270") && g_ascii_strcasecmp(scheme,"tn3270s"))) {
 
-		// Is a 3270 URL.
+		// It's a TN3270 URL.
+
+		GtkWidget * terminal = v3270_new();
+
 		g_autofree gchar * uri = g_file_get_uri(file);
 		size_t sz = strlen(uri);
 
@@ -374,14 +386,19 @@
 			uri[sz-1] = 0;
 
 		v3270_set_url(terminal,uri);
-
-	} else {
-
-		g_message("Unexpected URI scheme: \"%s\"",scheme);
+		append_terminal_page(PW3270_APPLICATION_WINDOW(widget), terminal);
+		return 0;
 
 	}
 
- 	return append_terminal_page(window, terminal);
+	// Create a default window.
+	{
+		GtkWidget * terminal = v3270_new();
+		g_warning("Unexpected session URL, creating a default window");
+		append_terminal_page(PW3270_APPLICATION_WINDOW(widget), terminal);
+	}
+
+	return -1;
 
  }
 
