@@ -38,4 +38,28 @@
 
 /*---[ Implement ]----------------------------------------------------------------------------------*/
 
+ GtkBuilder * pw3270_application_get_builder(const gchar *name) {
+
+#ifdef DEBUG
+	g_autofree gchar * filename = g_build_filename("ui",name,NULL);
+#else
+	lib3270_autoptr(char) filename = lib3270_build_data_filename("ui",name,NULL);
+#endif // DEBUG
+
+	return gtk_builder_new_from_file(filename);
+ }
+
+ void gtk_container_remove_all(GtkContainer *container) {
+
+ 	GList * children = gtk_container_get_children(container);
+ 	GList * item;
+
+ 	for(item = children;item;item = g_list_next(item)) {
+		gtk_container_remove(container,GTK_WIDGET(item->data));
+ 	}
+
+ 	g_list_free(children);
+
+ }
+
 

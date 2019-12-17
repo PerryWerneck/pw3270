@@ -33,7 +33,15 @@
  #include <pw3270/application.h>
  #include <pw3270/actions.h>
 
+ static void get_property(GObject *object, guint prop_id, GValue *value, GParamSpec *pspec);
+ static void set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec);
+
  G_DEFINE_TYPE(pw3270ApplicationWindow, pw3270ApplicationWindow, GTK_TYPE_APPLICATION_WINDOW);
+
+ enum {
+	PROP_NONE,
+	PROP_ACTION_NAMES,
+ };
 
  static void destroy(GtkWidget *widget) {
 
@@ -70,9 +78,39 @@
 
  static void pw3270ApplicationWindow_class_init(pw3270ApplicationWindowClass *klass) {
 
-	GtkWidgetClass * widget = GTK_WIDGET_CLASS(klass);
-	widget->destroy = destroy;
+	GTK_WIDGET_CLASS(klass)->destroy = destroy;
 
+ 	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+
+	object_class->set_property	= set_property;
+	object_class->get_property	= get_property;
+
+	g_object_class_install_property(
+		object_class,
+		PROP_ACTION_NAMES,
+		g_param_spec_string ("action-names",
+			N_("Action Names"),
+			N_("The name of the actions in the header bar"),
+			NULL,
+			G_PARAM_WRITABLE|G_PARAM_READABLE)
+	);
+
+
+ }
+
+ void set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec G_GNUC_UNUSED(*pspec)) {
+
+	if(prop_id == PROP_ACTION_NAMES) {
+		pw3270_window_set_header_action_names(GTK_WIDGET(object), g_value_get_string(value));
+	}
+
+ }
+
+ void get_property(GObject *object, guint prop_id, GValue *value, GParamSpec *pspec) {
+
+ 	if(prop_id == PROP_ACTION_NAMES) {
+    	g_value_take_string(value,pw3270_window_get_action_names(GTK_WIDGET(object)));
+	}
 
  }
 
@@ -178,8 +216,11 @@
 
  GtkWidget * pw3270_application_window_new(GtkApplication * application) {
 
+	gchar *title = _( "IBM 3270 Terminal emulator" );
+
+	g_return_val_if_fail(PW3270_IS_APPLICATION(application),NULL);
+
 	size_t ix;
-	const gchar * title = _( "IBM 3270 Terminal emulator" );
 
 	g_autoptr(GSettings) settings = pw3270_application_get_settings(G_APPLICATION(application));
 
@@ -190,138 +231,69 @@
 			"application", application,
 			NULL);
 
-	if(PW3270_IS_APPLICATION(gtk_window_get_application(GTK_WINDOW(window)))) {
+	//
+	// Get builder
+	//
+	g_autoptr(GtkBuilder) builder = pw3270_application_get_builder("window.xml");
 
-		GtkBuilder * builder;
+	// Load popup menus.
+	const gchar * popup_menus[G_N_ELEMENTS(window->popups)] = {
+		"popup-over-selected-area",
+		"popup-over-unselected-area",
+		"popup-when-offline"
+	};
+
+	for(ix = 0; ix < G_N_ELEMENTS(popup_menus); ix++) {
+
+		GObject * model = gtk_builder_get_object(builder, popup_menus[ix]);
+		if(model) {
+			window->popups[ix] = gtk_menu_new_from_model(G_MENU_MODEL(model));
+			gtk_menu_attach_to_widget(GTK_MENU(window->popups[ix]),GTK_WIDGET(window),NULL);
+		}
+
+	}
+
+	if(pw3270_application_get_ui_style(G_APPLICATION(application)) == PW3270_UI_STYLE_GNOME) {
+
+		// Create header bar
+
+		GtkHeaderBar * header = GTK_HEADER_BAR(gtk_header_bar_new());
+		gtk_window_set_titlebar(GTK_WINDOW(window), GTK_WIDGET(header));
+		gtk_header_bar_set_show_close_button(header,TRUE);
+
+		gtk_header_bar_set_title(header,title);
+		g_settings_bind(
+			settings,
+			"has-subtitle",
+			header,
+			"has-subtitle",
+			G_SETTINGS_BIND_DEFAULT
+		);
+
+		// Show the new header
+		gtk_widget_show_all(GTK_WIDGET(header));
+
+		// g_autofree gchar * header_actions = g_settings_get_string(settings, "header-action-names");
+		// pw3270_window_set_header_action_names(GTK_WIDGET(window), header_actions);
+
+		g_settings_bind(
+			settings,
+			"header-action-names",
+			window,
+			"action-names",
+			G_SETTINGS_BIND_DEFAULT
+		);
+
 #ifdef DEBUG
-		builder = gtk_builder_new_from_file("ui/window.xml");
-#else
 		{
-			lib3270_autoptr(char) build_file = lib3270_build_data_filename("ui","window.xml",NULL);
-			builder = gtk_builder_new_from_file(build_file);
+			g_autofree gchar * an = pw3270_window_get_action_names(window);
+
 		}
 #endif // DEBUG
 
-		switch(pw3270_application_get_ui_style(G_APPLICATION(application))) {
-		case PW3270_UI_STYLE_CLASSICAL:
-			{
-				gtk_window_set_title(GTK_WINDOW(window), title);
+	} else {
 
-			}
-			break;
-
-		case PW3270_UI_STYLE_GNOME:
-			{
-				// Create header bar
-				GtkHeaderBar * header = GTK_HEADER_BAR(gtk_header_bar_new());
-				gtk_window_set_titlebar(GTK_WINDOW(window), GTK_WIDGET(header));
-				gtk_header_bar_set_show_close_button(header,TRUE);
-
-				gtk_header_bar_set_title(header,title);
-				if(settings)
-					g_settings_bind(settings, "has-subtitle", header, "has-subtitle", G_SETTINGS_BIND_DEFAULT);
-				else
-					gtk_header_bar_set_has_subtitle(header,TRUE);
-
-				// Show the new header
-				gtk_widget_show_all(GTK_WIDGET(header));
-
-				// Create header's action buttons
-				// https://wiki.gnome.org/Initiatives/GnomeGoals/GearIcons
-				{
-					g_autofree gchar * header_actions = g_settings_get_string(settings, "header-action-names");
-					gchar ** header_blocks = g_strsplit(header_actions,":",-1);
-
-					if(g_strv_length(header_blocks) >= 2) {
-
-						gchar ** elements;
-
-						// First the left side actions.
-						elements = g_strsplit(header_blocks[0],",",-1);
-						for(ix=0;elements[ix];ix++) {
-							gtk_header_bar_pack_start(header, pw3270_header_button_new_from_builder(GTK_WIDGET(window),builder,elements[ix]));
-						}
-						g_strfreev(elements);
-
-						// And then, the right side actions;
-						elements = g_strsplit(header_blocks[1],",",-1);
-						for(ix=0;elements[ix];ix++) {
-							gtk_header_bar_pack_end(header, pw3270_header_button_new_from_builder(GTK_WIDGET(window),builder,elements[ix]));
-						}
-						g_strfreev(elements);
-
-					}
-
-					g_strfreev(header_blocks);
-
-				}
-
-				/*
-				{
-					g_autofree gchar * left = g_settings_get_string(settings, "header-start-action-names");
-					g_autofree gchar * right = g_settings_get_string(settings, "header-end-action-names");
-
-
-				}
-				*/
-
-				/*
-				static const gchar * end_actions[] = {
-					"menu.open-menu",
-				};
-
-				for(ix = 0; ix < G_N_ELEMENTS(end_actions); ix++) {
-					gtk_header_bar_pack_end(header, pw3270_header_button_new_from_builder(GTK_WIDGET(window),builder,end_actions[ix]));
-				}
-
-
-				static const gchar * start_actions[] = {
-					"win.disconnect",
-					"win.reconnect",
-					"win.file.transfer",
-					"win.print"
-				};
-
-				for(ix = 0; ix < G_N_ELEMENTS(start_actions); ix++) {
-					gtk_header_bar_pack_start(header, pw3270_header_button_new_from_builder(GTK_WIDGET(window),builder,start_actions[ix]));
-				}
-				*/
-
-
-				/*
-				// Create "new tab" bar
-				GtkWidget * new_tab_button = pw3270_setup_image_button(gtk_button_new(),"tab-new-symbolic");
-				gtk_actionable_set_action_name(GTK_ACTIONABLE(new_tab_button),"app.new.tab");
-				gtk_header_bar_pack_start(header, new_tab_button);
-				gtk_widget_show(new_tab_button);
-				*/
-
-			}
-			break;
-
-		default:
-			g_warning("Unexpected UI");
-
-		}
-
-		// Load popup menus.
-		const gchar * popup_menus[G_N_ELEMENTS(window->popups)] = {
-			"popup-over-selected-area",
-			"popup-over-unselected-area",
-			"popup-when-offline"
-		};
-
-		for(ix = 0; ix < G_N_ELEMENTS(popup_menus); ix++) {
-
-			GObject * model = gtk_builder_get_object(builder, popup_menus[ix]);
-			if(model) {
-				window->popups[ix] = gtk_menu_new_from_model(G_MENU_MODEL(model));
-				gtk_menu_attach_to_widget(GTK_MENU(window->popups[ix]),GTK_WIDGET(window),NULL);
-			}
-
-		}
-
-		g_object_unref(builder);
+		gtk_window_set_title(GTK_WINDOW(window), title);
 
 	}
 

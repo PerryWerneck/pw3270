@@ -77,14 +77,18 @@
 	G_GNUC_INTERNAL GtkWidget * pw3270_setup_image_button(GtkWidget *button, const gchar *image_name);
 
 	// Actions
-	GAction * pw3270_action_host_properties_new(void);
-	GAction * pw3270_set_color_action_new(void);
-	GAction * pw3270_file_transfer_action_new(void);
+	G_GNUC_INTERNAL GAction * pw3270_action_host_properties_new(void);
+	G_GNUC_INTERNAL GAction * pw3270_set_color_action_new(void);
+	G_GNUC_INTERNAL GAction * pw3270_file_transfer_action_new(void);
 
 	GAction * pw3270_action_session_properties_new(void);
 
+	// Header bar
+	G_GNUC_INTERNAL void	  pw3270_window_set_header_action_names(GtkWidget *window, const gchar *action_names);
+	G_GNUC_INTERNAL	gchar	* pw3270_window_get_action_names(GtkWidget *window);
+
 	// Terminal actions.
-	GAction * pw3270_model_number_action_new(GtkWidget *terminal);
+	G_GNUC_INTERNAL GAction * pw3270_model_number_action_new(GtkWidget *terminal);
 
     G_GNUC_INTERNAL void pw3270_window_open_activated(GSimpleAction * action, GVariant *parameter, gpointer window);
     G_GNUC_INTERNAL void pw3270_window_close_activated(GSimpleAction * action, GVariant *parameter, gpointer window);

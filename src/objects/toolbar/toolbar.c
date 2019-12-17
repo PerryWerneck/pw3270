@@ -91,7 +91,6 @@
 	PROP_ACTION_NAMES,
  };
 
-
  struct _pw3270ToolBar {
  	GtkToolbar parent;
 
@@ -375,24 +374,12 @@
 
  }
 
- void pw3270_toolbar_clear(GtkWidget *toolbar) {
-
- 	GList * children = gtk_container_get_children(GTK_CONTAINER(toolbar));
- 	GList * item;
-
- 	for(item = children;item;item = g_list_next(item)) {
-		gtk_container_remove(GTK_CONTAINER(toolbar),GTK_WIDGET(item->data));
- 	}
-
- 	g_list_free(children);
- }
-
  void pw3270_toolbar_set_actions(GtkWidget *toolbar, const gchar *action_names) {
 
  	gchar ** actions = g_strsplit(action_names,",",-1);
  	size_t ix;
 
- 	pw3270_toolbar_clear(toolbar);
+ 	gtk_container_remove_all(GTK_CONTAINER(toolbar));
 
 	for(ix = 0; actions[ix]; ix++) {
 		pw3270_toolbar_insert_action(toolbar,actions[ix],-1);
@@ -425,7 +412,6 @@
  	}
 
  	g_list_free(children);
-
 
 	return g_string_free(str,FALSE);
  }
