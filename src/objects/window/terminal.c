@@ -32,6 +32,7 @@
  #include <lib3270/toggle.h>
  #include <v3270/settings.h>
  #include <v3270/actions.h>
+ #include <v3270/print.h>
 
  struct SessionDescriptor
  {
@@ -252,10 +253,31 @@
 
  }
 
- static void toggle_changed(G_GNUC_UNUSED v3270 *widget, G_GNUC_UNUSED LIB3270_TOGGLE_ID toggle_id, gboolean toggle_state, const gchar *toggle_name, struct SessionDescriptor * session) {
+ static void toggle_changed(G_GNUC_UNUSED GtkWidget *widget, G_GNUC_UNUSED LIB3270_TOGGLE_ID toggle_id, gboolean toggle_state, const gchar *toggle_name, struct SessionDescriptor * session) {
 	debug("%s(%s)=%s",__FUNCTION__,toggle_name,toggle_state ? "ON" : "OFF");
 	g_key_file_set_boolean(session->key_file,"terminal",toggle_name,toggle_state);
 	session->changed = TRUE;
+ }
+
+ static void print_done(G_GNUC_UNUSED GtkWidget *widget, GtkPrintOperation *operation, GtkPrintOperationResult result, struct SessionDescriptor * session) {
+ 	debug("%s(%u)",__FUNCTION__,(unsigned int) result);
+
+ 	if(result != GTK_PRINT_OPERATION_RESULT_APPLY)
+		return;
+
+	debug("%s: Saving print settings",__FUNCTION__);
+
+	v3270_print_operation_to_key_file(operation,session->key_file);
+
+	g_key_file_save_to_file(session->key_file,session->filename,NULL);
+	session->changed = FALSE;
+ }
+
+ static void print_setup(G_GNUC_UNUSED GtkWidget *widget, GtkPrintOperation *operation, struct SessionDescriptor * session) {
+
+ 	debug("%s(%p)",__FUNCTION__,operation);
+	v3270_print_operation_load_key_file(operation,session->key_file);
+
  }
 
  static void close_settings(struct SessionDescriptor * session) {
@@ -351,6 +373,8 @@
  	// Setup signals.
  	g_signal_connect(G_OBJECT(terminal),"save-settings",G_CALLBACK(save_settings),descriptor);
  	g_signal_connect(G_OBJECT(terminal),"toggle_changed",G_CALLBACK(toggle_changed),descriptor);
+ 	g_signal_connect(G_OBJECT(terminal),"print-done",G_CALLBACK(print_done),descriptor);
+ 	g_signal_connect(G_OBJECT(terminal),"print-setup",G_CALLBACK(print_setup),descriptor);
 
 	return terminal;
 
