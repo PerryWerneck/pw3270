@@ -54,6 +54,14 @@
 
 	void pw3270_load_placeholders(GtkBuilder * builder);
 
+	// Application settings widget
+	typedef struct _Pw3270SettingWidget Pw3270SettingsWidget;
+
+	struct _Pw3270SettingWidget {
+		GtkWidget * widget;
+		void (*apply)(Pw3270SettingsWidget *, GtkApplication *, GSettings *);
+		void (*revert)(Pw3270SettingsWidget *, GtkApplication *, GSettings *);
+	};
 
 	G_END_DECLS
 
