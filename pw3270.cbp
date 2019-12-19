@@ -46,6 +46,7 @@
 		<Unit filename="src/include/pw3270.h" />
 		<Unit filename="src/include/pw3270/actions.h" />
 		<Unit filename="src/include/pw3270/application.h" />
+		<Unit filename="src/include/pw3270/settings.h" />
 		<Unit filename="src/include/pw3270/toolbar.h" />
 		<Unit filename="src/include/pw3270/window.h" />
 		<Unit filename="src/main/main.c">
@@ -121,6 +122,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/objects/toolbar/private.h" />
+		<Unit filename="src/objects/toolbar/settings.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/objects/toolbar/toolbar.c">
 			<Option compilerVar="CC" />
 		</Unit>

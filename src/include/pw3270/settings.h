@@ -28,43 +28,21 @@
  */
 
 /**
- * @brief Declares the pw3270 Action objects.
+ * @brief Declares the pw3270 Application Settings widget.
  *
  */
 
-#ifndef PW3270_H_INCLUDED
+#ifndef PW3270_SETTINGS_H_INCLUDED
 
-	#define PW3270_H_INCLUDED
+	#define PW3270_SETTINGS_H_INCLUDED
 
-	#include <config.h>
-
-	#ifndef GETTEXT_PACKAGE
-		#define GETTEXT_PACKAGE PACKAGE_NAME
-	#endif
-
-	#include <libintl.h>
-	#include <glib/gi18n.h>
 	#include <gtk/gtk.h>
+	#include <pw3270.h>
 
 	G_BEGIN_DECLS
 
-	/* not really I18N-related, but also a string marker macro */
-	#define I_(string) g_intern_static_string (string)
-
-
-	void pw3270_load_placeholders(GtkBuilder * builder);
-
-	// Application settings widget
-	typedef struct _Pw3270SettingsPage Pw3270SettingsPage;
-
-	struct _Pw3270SettingsPage {
-		GtkWidget	* widget;		///< @brief Settings widget.
-		const gchar	* label;		///< @brief Page lagel.
-		const gchar * title;		///< @brief Page title.
-		void (*load)(Pw3270SettingsPage *, GtkApplication *, GSettings *);
-		void (*apply)(Pw3270SettingsPage *, GtkApplication *, GSettings *);
-	};
+	Pw3270SettingsPage * pw3270_toolbar_settings_new();
 
 	G_END_DECLS
 
-#endif // PW3270_H_INCLUDED
+#endif // PW3270_SETTINGS_H_INCLUDED
