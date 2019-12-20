@@ -37,6 +37,12 @@
  #include <pw3270/actions.h>
  #include <lib3270/log.h>
 
+ enum {
+	COLUMN_PIXBUF,
+	COLUMN_LABEL,
+	COLUMN_ACTION_NAME
+ };
+
  struct ListElement {
  	GAction		* action;
  	GtkImage	* image;
@@ -48,7 +54,7 @@
 
  GtkWidget * pw3270_action_view_new() {
 
-	GtkWidget * view = GTK_WIDGET(gtk_tree_view_new_with_model(GTK_TREE_MODEL(gtk_list_store_new(1,G_TYPE_OBJECT))));
+	GtkWidget * view = GTK_WIDGET(gtk_tree_view_new_with_model(GTK_TREE_MODEL(gtk_list_store_new(3,G_TYPE_OBJECT,G_TYPE_STRING,G_TYPE_STRING))));
 
 	gtk_widget_set_hexpand(view,TRUE);
 	gtk_widget_set_vexpand(view,TRUE);
@@ -56,13 +62,23 @@
 
 	// Create Renderers
 	GtkCellRenderer * text_renderer = gtk_cell_renderer_text_new();
+	GtkCellRenderer * pixbuf_renderer = gtk_cell_renderer_pixbuf_new();
+
+	gtk_tree_view_insert_column_with_attributes(
+		GTK_TREE_VIEW(view),
+		-1,
+		_("Icon"),
+		pixbuf_renderer,
+			"pixbuf",COLUMN_PIXBUF,
+			NULL
+	);
 
 	gtk_tree_view_insert_column_with_attributes(
 		GTK_TREE_VIEW(view),
 		-1,
 		_("Label"),
 		text_renderer,
-			"text",0,
+			"text",COLUMN_LABEL,
 			NULL
 	);
 
