@@ -492,3 +492,58 @@
  GAction * pw3270_action_new() {
 	return G_ACTION(g_object_new(PW3270_TYPE_ACTION, NULL));
  }
+
+ static GdkPixbuf * pixbuf_from_icon_name(GValue *value, GtkIconSize icon_size) {
+
+	const gchar * icon_name = g_value_get_string(value);
+
+	if(!icon_name)
+		return NULL;
+
+	return gtk_icon_theme_load_icon(
+					gtk_icon_theme_get_default(),
+					icon_name,
+					icon_size,
+					GTK_ICON_LOOKUP_GENERIC_FALLBACK,
+					NULL
+			);
+
+ }
+
+ GdkPixbuf * g_action_get_pixbuf(GAction *action, GtkIconSize icon_size) {
+
+	struct Properties {
+		const gchar * name;
+		GType value_type;
+		GdkPixbuf * (*translate)(GValue *value, GtkIconSize icon_size);
+	} properties[] = {
+		{
+			.name = "icon-name",
+			.value_type = G_TYPE_STRING,
+			.translate = pixbuf_from_icon_name
+		}
+	};
+
+	size_t ix;
+	GdkPixbuf * pixbuf = NULL;
+
+	for(ix = 0; ix < G_N_ELEMENTS(properties) && !pixbuf; ix++) {
+
+		GParamSpec *spec = g_object_class_find_property(G_OBJECT_GET_CLASS(action),properties[ix].name);
+		if(spec && spec->value_type == properties[ix].value_type && (spec->flags & G_PARAM_READABLE) != 0) {
+
+			GValue value = G_VALUE_INIT;
+			g_value_init(&value, properties[ix].value_type);
+
+			g_object_get_property(G_OBJECT(action),properties[ix].name,&value);
+
+			pixbuf = properties[ix].translate(&value,icon_size);
+
+			g_value_unset(&value);
+
+		}
+
+	}
+
+	return pixbuf;
+ }

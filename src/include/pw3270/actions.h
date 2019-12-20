@@ -264,6 +264,11 @@
 
 	Pw3270ActionList	* pw3270_action_list_move_action(Pw3270ActionList *action_list, const gchar *action_name, GtkWidget *view);
 
+	//
+	// Tools
+	//
+	GdkPixbuf			* g_action_get_pixbuf(GAction *action, GtkIconSize icon_size);
+
 	G_END_DECLS
 
 #endif // PW3270_ACTIONS_H_INCLUDED

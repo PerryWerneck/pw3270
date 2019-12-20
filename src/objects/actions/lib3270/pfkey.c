@@ -99,7 +99,7 @@
 
  }
 
- void Lib3270PfAction_init(Lib3270PfAction *action) {
+ void Lib3270PfAction_init(Lib3270PfAction G_GNUC_UNUSED(*action)) {
  }
 
  GAction * pw3270_action_new_pfkey(void) {

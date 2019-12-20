@@ -45,7 +45,7 @@
 
  struct ListElement {
  	GAction		* action;
- 	GtkImage	* image;
+ 	GdkPixbuf	* pixbuf;
  	gchar		  name[1];
  };
 
@@ -88,6 +88,7 @@
  Pw3270ActionList * pw3270_action_list_move_action(Pw3270ActionList *action_list, const gchar *action_name, GtkWidget *view) {
 
 	GSList * item = (GSList *) action_list;
+	GtkListStore * store = GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(view)));
 
 	while(item) {
 
@@ -118,6 +119,15 @@
 
 			debug("label=\"%s\"",g_value_get_string(&properties[0].value));
 
+			GtkTreeIter iter;
+			gtk_list_store_append(store, &iter);
+			gtk_list_store_set(
+				store,
+				&iter,
+				COLUMN_PIXBUF,	element->pixbuf,
+				COLUMN_LABEL, 	g_value_get_string(&properties[0].value),
+				-1
+			);
 
 			for(ix = 0; ix < G_N_ELEMENTS(properties); ix++) {
 				g_value_unset(&properties[ix].value);
@@ -162,16 +172,9 @@
 		return list;
 
 	const gchar *name = g_action_get_name(action);
-//	debug("%s=%p",name,action);
 
-	GValue value = G_VALUE_INIT;
-	g_value_init(&value, GTK_TYPE_IMAGE);
-
-	g_object_get_property(G_OBJECT(action),"toolbar-icon",&value);
-	GObject * image = g_value_get_object(&value);
-	g_value_unset (&value);
-
-	if(!image)
+	GdkPixbuf * pixbuf = g_action_get_pixbuf(action, GTK_ICON_SIZE_MENU);
+	if(!pixbuf)
 		return list;
 
 	struct ListElement * element = (struct ListElement *) g_malloc0(sizeof(struct ListElement) + strlen(type) + strlen(name));
@@ -181,8 +184,8 @@
 
 	element->action = action;
 
-	element->image = GTK_IMAGE(image);
-	g_object_ref_sink(G_OBJECT(element->image));
+	element->pixbuf = pixbuf;
+	g_object_ref_sink(G_OBJECT(element->pixbuf));
 
 	return g_slist_prepend(list,element);
 
@@ -222,9 +225,9 @@
 
  void list_element_free(struct ListElement *element) {
 
- 	if(element->image) {
-		g_object_unref(element->image);
-		element->image = NULL;
+ 	if(element->pixbuf) {
+		g_object_unref(element->pixbuf);
+		element->pixbuf = NULL;
  	}
 
  	g_free(element);
