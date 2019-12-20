@@ -37,6 +37,7 @@
 	#define PW3270_ACTIONS_H_INCLUDED
 
 	#include <gio/gio.h>
+	#include <gtk/gtk.h>
 	#include <lib3270.h>
 	#include <lib3270/actions.h>
 
@@ -109,6 +110,9 @@
 
 	/// @brief Get the action icon name.
 	const gchar 		* pw3270_action_get_icon_name(GAction *action);
+
+	/// @brief Get the action image icon.
+	GtkImage			* pw3270_action_get_image(GAction *action, GtkIconSize icon_size);
 
 	/// @brief Get the action label.
 	const gchar			* pw3270_action_get_label(GAction *action);
@@ -248,6 +252,15 @@
 	GType v3270ConditionalAction_get_type(void) G_GNUC_CONST;
 
 	GAction * v3270_conditional_action_new(GtkWidget *widget, const gchar *property_name);
+
+	//
+	// Action view
+	//
+	typedef GSList Pw3270ActionList;
+
+	GtkWidget 			* pw3270_action_view_new();
+	Pw3270ActionList	* pw3270_action_list_new(GtkApplication *application);
+	void				  pw3270_action_list_free(Pw3270ActionList *action_list);
 
 	G_END_DECLS
 

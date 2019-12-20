@@ -29,6 +29,7 @@
 
  #include "private.h"
  #include <pw3270/settings.h>
+ #include <pw3270/actions.h>
 
  typedef struct _ToolbarSettingsPage {
 	Pw3270SettingsPage parent;
@@ -39,21 +40,19 @@
 
  static void load(Pw3270SettingsPage *pg, GtkApplication *application, GSettings *settings) {
  	debug("%s",__FUNCTION__);
+
+ 	// Populate views
+	Pw3270ActionList * actions = pw3270_action_list_new(application);
+
+
+
+	pw3270_action_list_free(actions);
+
+
  }
 
  static void apply(Pw3270SettingsPage *pg, GtkApplication *application, GSettings *settings) {
  	debug("%s",__FUNCTION__);
- }
-
- GtkWidget * pw3270_action_store_new() {
-
-	GtkWidget * view = GTK_WIDGET(gtk_tree_view_new_with_model(GTK_TREE_MODEL(gtk_list_store_new(2,G_TYPE_OBJECT,G_TYPE_STRING))));
-
-	gtk_widget_set_hexpand(view,TRUE);
-	gtk_widget_set_vexpand(view,TRUE);
-	gtk_tree_view_set_fixed_height_mode(GTK_TREE_VIEW(view),FALSE);
-
-	return view;
  }
 
  Pw3270SettingsPage * pw3270_toolbar_settings_new() {
@@ -78,7 +77,7 @@
 
 	for(ix = 0; ix < G_N_ELEMENTS(page->views); ix++) {
 
-		page->views[ix] = pw3270_action_store_new();
+		page->views[ix] = pw3270_action_view_new();
 
 		gtk_grid_attach(
 			GTK_GRID(page->parent.widget),

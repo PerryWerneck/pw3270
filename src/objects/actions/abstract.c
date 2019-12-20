@@ -61,7 +61,11 @@
 	PROP_PARAMETER_TYPE,
 	PROP_ENABLED,
 	PROP_STATE_TYPE,
-	PROP_STATE
+	PROP_STATE,
+	PROP_TOOLBAR_ICON,
+	PROP_ICON_NAME,
+	PROP_LABEL,
+	PROP_TOOLTIP
  };
 
  /*
@@ -106,29 +110,58 @@
 
 	// Install properties
 	g_object_class_install_property(object_class, PROP_NAME,
-		g_param_spec_string ("name",
+		g_param_spec_string (
+			"name",
 			N_("Action Name"),
 			N_("The name used to invoke the action"),
 			NULL,
-			G_PARAM_READWRITE |
-			G_PARAM_CONSTRUCT_ONLY |
-			G_PARAM_STATIC_STRINGS));
+			G_PARAM_STATIC_NAME| G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
+	g_object_class_install_property(object_class, PROP_ICON_NAME,
+		g_param_spec_string (
+			"icon-name",
+			N_("Icon Name"),
+			N_("The name of the icon associated with the action"),
+			NULL,
+			G_PARAM_STATIC_NAME| G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+	g_object_class_install_property(object_class, PROP_TOOLBAR_ICON,
+			g_param_spec_object (
+				"toolbar-icon",
+				N_("Icon pixbuf"),
+				N_("A image widget with the action icon"),
+				GTK_TYPE_IMAGE,
+				G_PARAM_STATIC_NAME| G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
+
+	g_object_class_install_property(object_class, PROP_LABEL,
+		g_param_spec_string (
+			"label",
+			N_("The action label"),
+			N_("The label for the action"),
+			NULL,
+			G_PARAM_STATIC_NAME| G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+	g_object_class_install_property(object_class, PROP_TOOLTIP,
+		g_param_spec_string (
+			"tooltip",
+			N_("The action tooltip"),
+			N_("The tooltip for the action"),
+			NULL,
+			G_PARAM_STATIC_NAME| G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
 	g_object_class_install_property (object_class, PROP_PARAMETER_TYPE,
 		g_param_spec_boxed ("parameter-type",
 			N_("Parameter Type"),
 			N_("The type of GVariant passed to activate()"),
 			G_TYPE_VARIANT_TYPE,
-			G_PARAM_READWRITE |
-			G_PARAM_CONSTRUCT_ONLY |
-			G_PARAM_STATIC_STRINGS));
+			G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
 	g_object_class_install_property (object_class, PROP_STATE_TYPE,
 		g_param_spec_boxed ("state-type",
 			N_("State Type"),
 			N_("The type of the state kept by the action"),
 			G_TYPE_VARIANT_TYPE,
-			G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+			G_PARAM_STATIC_NAME| G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
 	// Enabled property
 	klass->properties.enabled =
@@ -137,7 +170,7 @@
 				N_("Enabled"),
 				N_("If the action can be activated"),
 				TRUE,
-				G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
+				G_PARAM_STATIC_NAME| G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
 			);
 
 	g_object_class_install_property(object_class, PROP_ENABLED, klass->properties.enabled);
@@ -150,7 +183,7 @@
 			N_("The state the action is in"),
 			G_VARIANT_TYPE_ANY,
 			NULL,
-			G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS
+			G_PARAM_STATIC_NAME| G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS
 		);
 
 	g_object_class_install_property (object_class, PROP_STATE, klass->properties.state);
@@ -198,11 +231,27 @@
 
 	GAction *action = G_ACTION(object);
 
-	debug("%s(%d)",__FUNCTION__,prop_id);
+//	debug("%s(%d)",__FUNCTION__,prop_id);
 
 	switch (prop_id) {
     case PROP_NAME:
 		g_value_set_string(value, pw3270_action_get_name(action));
+		break;
+
+	case PROP_ICON_NAME:
+		g_value_set_string(value, pw3270_action_get_icon_name(action));
+		break;
+
+	case PROP_TOOLBAR_ICON:
+		g_value_set_object(value, pw3270_action_get_image(action,GTK_ICON_SIZE_LARGE_TOOLBAR));
+		break;
+
+	case PROP_LABEL:
+		g_value_set_string(value, pw3270_action_get_label(action));
+		break;
+
+	case PROP_TOOLTIP:
+		g_value_set_string(value, pw3270_action_get_tooltip(action));
 		break;
 
 	case PROP_PARAMETER_TYPE:
@@ -407,6 +456,16 @@
  const gchar * pw3270_action_get_icon_name(GAction *action) {
 	return PW3270_ACTION_GET_CLASS(action)->get_icon_name(action);
  }
+
+ GtkImage * pw3270_action_get_image(GAction *action, GtkIconSize icon_size) {
+
+	const gchar * icon_name = pw3270_action_get_icon_name(action);
+	if(!icon_name)
+		return NULL;
+
+	return GTK_IMAGE(gtk_image_new_from_icon_name(icon_name,icon_size));
+ }
+
 
  const gchar * pw3270_action_get_label(GAction *action) {
 	const gchar * label = PW3270_ACTION_GET_CLASS(action)->get_label(action);

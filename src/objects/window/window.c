@@ -284,13 +284,6 @@
 			G_SETTINGS_BIND_DEFAULT
 		);
 
-#ifdef DEBUG
-		{
-			g_autofree gchar * an = pw3270_window_get_action_names(window);
-
-		}
-#endif // DEBUG
-
 	} else {
 
 		gtk_window_set_title(GTK_WINDOW(window), title);
