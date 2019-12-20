@@ -59,6 +59,8 @@
 	gtk_widget_set_hexpand(view,TRUE);
 	gtk_widget_set_vexpand(view,TRUE);
 	gtk_tree_view_set_fixed_height_mode(GTK_TREE_VIEW(view),FALSE);
+	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(view),FALSE);
+	gtk_tree_view_set_reorderable(GTK_TREE_VIEW(view),TRUE);
 
 	// Create Renderers
 	GtkCellRenderer * text_renderer = gtk_cell_renderer_text_new();
