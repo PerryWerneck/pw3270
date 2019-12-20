@@ -261,6 +261,7 @@
 	GtkWidget 			* pw3270_action_view_new();
 	Pw3270ActionList	* pw3270_action_list_new(GtkApplication *application);
 	void				  pw3270_action_list_free(Pw3270ActionList *action_list);
+	void				  pw3270_action_view_set_actions(GtkWidget *view, Pw3270ActionList *list);
 
 	Pw3270ActionList	* pw3270_action_list_move_action(Pw3270ActionList *action_list, const gchar *action_name, GtkWidget *view);
 

@@ -65,6 +65,10 @@
 	}
 
 	g_strfreev(actions);
+
+	// Load available actions.
+	pw3270_action_view_set_actions(((ToolbarSettingsPage *) pg)->views[1], action_list);
+
 	pw3270_action_list_free(action_list);
 
 
@@ -115,6 +119,8 @@
 		);
 
 	}
+
+	gtk_tree_view_set_reorderable(GTK_TREE_VIEW(page->views[0]),TRUE);
 
 	// Create buttons
 	static const gchar * icon_names[G_N_ELEMENTS(page->buttons)] = {

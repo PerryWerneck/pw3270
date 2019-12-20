@@ -51,7 +51,6 @@
 
  static void list_element_free(struct ListElement *element);
 
-
  GtkWidget * pw3270_action_view_new() {
 
 	GtkWidget * view = GTK_WIDGET(gtk_tree_view_new_with_model(GTK_TREE_MODEL(gtk_list_store_new(3,G_TYPE_OBJECT,G_TYPE_STRING,G_TYPE_STRING))));
@@ -60,7 +59,6 @@
 	gtk_widget_set_vexpand(view,TRUE);
 	gtk_tree_view_set_fixed_height_mode(GTK_TREE_VIEW(view),FALSE);
 	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(view),FALSE);
-	gtk_tree_view_set_reorderable(GTK_TREE_VIEW(view),TRUE);
 
 	// Create Renderers
 	GtkCellRenderer * text_renderer = gtk_cell_renderer_text_new();
@@ -87,6 +85,61 @@
 	return view;
  }
 
+ static void pw3270_action_view_append_element(GtkListStore * store, struct ListElement * element) {
+
+	size_t ix;
+
+	struct Properties {
+		const gchar * name;
+		GType g_type;
+		GValue value;
+	} properties[] = {
+		{
+			.name = "label",
+			.g_type = G_TYPE_STRING,
+			.value = G_VALUE_INIT
+		}
+	};
+
+	for(ix = 0; ix < G_N_ELEMENTS(properties); ix++) {
+
+		g_value_init(&properties[ix].value, properties[ix].g_type);
+		g_object_get_property(G_OBJECT(element->action), properties[ix].name, &properties[ix].value);
+
+	}
+
+	// Remove "_"
+	g_autofree gchar * label = g_strdup(g_value_get_string(&properties[0].value));
+
+	if(label) {
+
+		gchar *from, *to;
+
+		for(from=to=label;*from;from++) {
+			if(*from != '_') {
+				*(to++) = *from;
+			}
+		}
+		*to = 0;
+
+	}
+
+	GtkTreeIter iter;
+	gtk_list_store_append(store, &iter);
+	gtk_list_store_set(
+		store,
+		&iter,
+		COLUMN_PIXBUF,	element->pixbuf,
+		COLUMN_LABEL, 	(label ? label : g_action_get_name(element->action)),
+		-1
+	);
+
+	for(ix = 0; ix < G_N_ELEMENTS(properties); ix++) {
+		g_value_unset(&properties[ix].value);
+	}
+
+ }
+
  Pw3270ActionList * pw3270_action_list_move_action(Pw3270ActionList *action_list, const gchar *action_name, GtkWidget *view) {
 
 	GSList * item = (GSList *) action_list;
@@ -98,43 +151,7 @@
 
 		if(!g_ascii_strcasecmp(action_name,element->name)) {
 
-			size_t ix;
-
-			struct Properties {
-				const gchar * name;
-				GType g_type;
-				GValue value;
-			} properties[] = {
-				{
-					.name = "label",
-					.g_type = G_TYPE_STRING,
-					.value = G_VALUE_INIT
-				}
-			};
-
-			for(ix = 0; ix < G_N_ELEMENTS(properties); ix++) {
-
-				g_value_init(&properties[ix].value, properties[ix].g_type);
-				g_object_get_property(G_OBJECT(element->action), properties[ix].name, &properties[ix].value);
-
-			}
-
-			debug("label=\"%s\"",g_value_get_string(&properties[0].value));
-
-			GtkTreeIter iter;
-			gtk_list_store_append(store, &iter);
-			gtk_list_store_set(
-				store,
-				&iter,
-				COLUMN_PIXBUF,	element->pixbuf,
-				COLUMN_LABEL, 	g_value_get_string(&properties[0].value),
-				-1
-			);
-
-			for(ix = 0; ix < G_N_ELEMENTS(properties); ix++) {
-				g_value_unset(&properties[ix].value);
-			}
-
+			pw3270_action_view_append_element(store, element);
 			list_element_free(element);
 			return (Pw3270ActionList *) g_slist_remove_link(action_list,item);
 		}
@@ -147,19 +164,18 @@
 
  }
 
- /*
- void pw3270_action_view_append_application_action(GtkWidget *widget, GAction *action) {
+ void pw3270_action_view_set_actions(GtkWidget *view, Pw3270ActionList *list) {
 
-	g_return_if_fail(PW3270_IS_ACTION(action));
+	GSList *item;
+	GtkListStore * store = GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(view)));
 
-	GtkListStore * store = GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(widget)));
-	GtkTreeIter iter;
+	for(item = (GSList *) list; item; item = g_slist_next(item)) {
 
-	gtk_list_store_append(store, &iter);
-	gtk_list_store_set(store, &iter, 0, action);
+		pw3270_action_view_append_element(store, (struct ListElement *) item->data);
+
+	}
 
  }
- */
 
  static GSList * append_action(GSList * list, const gchar *type, GAction *action) {
 
