@@ -43,6 +43,9 @@
  	gchar		  name[1];
  };
 
+ static void list_element_free(struct ListElement *element);
+
+
  GtkWidget * pw3270_action_view_new() {
 
 	GtkWidget * view = GTK_WIDGET(gtk_tree_view_new_with_model(GTK_TREE_MODEL(gtk_list_store_new(1,G_TYPE_OBJECT))));
@@ -66,6 +69,56 @@
 	return view;
  }
 
+ Pw3270ActionList * pw3270_action_list_move_action(Pw3270ActionList *action_list, const gchar *action_name, GtkWidget *view) {
+
+	GSList * item = (GSList *) action_list;
+
+	while(item) {
+
+		struct ListElement * element = (struct ListElement *) item->data;
+
+		if(!g_ascii_strcasecmp(action_name,element->name)) {
+
+			size_t ix;
+
+			struct Properties {
+				const gchar * name;
+				GType g_type;
+				GValue value;
+			} properties[] = {
+				{
+					.name = "label",
+					.g_type = G_TYPE_STRING,
+					.value = G_VALUE_INIT
+				}
+			};
+
+			for(ix = 0; ix < G_N_ELEMENTS(properties); ix++) {
+
+				g_value_init(&properties[ix].value, properties[ix].g_type);
+				g_object_get_property(G_OBJECT(element->action), properties[ix].name, &properties[ix].value);
+
+			}
+
+			debug("label=\"%s\"",g_value_get_string(&properties[0].value));
+
+
+			for(ix = 0; ix < G_N_ELEMENTS(properties); ix++) {
+				g_value_unset(&properties[ix].value);
+			}
+
+			list_element_free(element);
+			return (Pw3270ActionList *) g_slist_remove_link(action_list,item);
+		}
+
+		item = g_slist_next(item);
+
+	}
+
+	return action_list;
+
+ }
+
  /*
  void pw3270_action_view_append_application_action(GtkWidget *widget, GAction *action) {
 
@@ -85,8 +138,10 @@
 	if(!action)
 		return list;
 
-	GParamSpec *spec = g_object_class_find_property(G_OBJECT_GET_CLASS(action),"toolbar-icon");
+	if(!g_object_class_find_property(G_OBJECT_GET_CLASS(action),"label"))
+		return list;
 
+	GParamSpec *spec = g_object_class_find_property(G_OBJECT_GET_CLASS(action),"toolbar-icon");
 	if(!spec)
 		return list;
 
@@ -149,7 +204,7 @@
  	return (Pw3270ActionList *) list;
  }
 
- static void free_element(struct ListElement *element) {
+ void list_element_free(struct ListElement *element) {
 
  	if(element->image) {
 		g_object_unref(element->image);
@@ -161,6 +216,6 @@
  }
 
  void pw3270_action_list_free(Pw3270ActionList *action_list) {
-	g_slist_free_full((GSList *) action_list, (GDestroyNotify) free_element);
+	g_slist_free_full((GSList *) action_list, (GDestroyNotify) list_element_free);
  }
 

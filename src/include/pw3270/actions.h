@@ -262,6 +262,8 @@
 	Pw3270ActionList	* pw3270_action_list_new(GtkApplication *application);
 	void				  pw3270_action_list_free(Pw3270ActionList *action_list);
 
+	Pw3270ActionList	* pw3270_action_list_move_action(Pw3270ActionList *action_list, const gchar *action_name, GtkWidget *view);
+
 	G_END_DECLS
 
 #endif // PW3270_ACTIONS_H_INCLUDED

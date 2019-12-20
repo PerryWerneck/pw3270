@@ -39,14 +39,33 @@
  } ToolbarSettingsPage;
 
  static void load(Pw3270SettingsPage *pg, GtkApplication *application, GSettings *settings) {
+
+ 	size_t ix;
+
  	debug("%s",__FUNCTION__);
 
  	// Populate views
-	Pw3270ActionList * actions = pw3270_action_list_new(application);
+	Pw3270ActionList * action_list = pw3270_action_list_new(application);
+
+    // Load current values.
+    g_autofree gchar * action_names = g_settings_get_string(settings,"toolbar-action-names");
+
+ 	gchar ** actions = g_strsplit(action_names,",",-1);
+
+	for(ix = 0; actions[ix]; ix++) {
+
+		if(g_ascii_strcasecmp(actions[ix],"separator")) {
+
+			// It's an action
+			action_list = pw3270_action_list_move_action(action_list,actions[ix],((ToolbarSettingsPage *) pg)->views[0]);
+
+		}
 
 
+	}
 
-	pw3270_action_list_free(actions);
+	g_strfreev(actions);
+	pw3270_action_list_free(action_list);
 
 
  }
