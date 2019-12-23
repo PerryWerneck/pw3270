@@ -40,7 +40,8 @@
  enum {
 	COLUMN_PIXBUF,
 	COLUMN_LABEL,
-	COLUMN_ACTION_NAME
+	COLUMN_ACTION_NAME,
+	COLUMN_FLAGS
  };
 
  struct ListElement {
@@ -70,7 +71,7 @@
 
  GtkWidget * pw3270_action_view_new() {
 
-	GtkTreeModel * model = GTK_TREE_MODEL(gtk_list_store_new(3,G_TYPE_OBJECT,G_TYPE_STRING,G_TYPE_STRING));
+	GtkTreeModel * model = GTK_TREE_MODEL(gtk_list_store_new(4,G_TYPE_OBJECT,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_INT));
 	GtkWidget * view = GTK_WIDGET(gtk_tree_view_new_with_model(model));
 
 	gtk_widget_set_hexpand(view,TRUE);
@@ -151,6 +152,7 @@
 		&iter,
 		COLUMN_PIXBUF,	element->pixbuf,
 		COLUMN_LABEL, 	(label ? label : g_action_get_name(element->action)),
+		COLUMN_FLAGS,	3,
 		-1
 	);
 
@@ -307,18 +309,57 @@
 		GtkTreePath * path = gtk_tree_row_reference_get_path(rows[ix]);
 
 		if(path) {
-           GtkTreeIter iter;
+			GtkTreeIter	iter;
 
-			// Add on target widget.
+			if (gtk_tree_model_get_iter(GTK_TREE_MODEL(fromModel), &iter, path)) {
+
+				GValue vFlags = G_VALUE_INIT;
+				gtk_tree_model_get_value(fromModel,&iter,COLUMN_FLAGS,&vFlags);
+				gint flags = g_value_get_int(&vFlags);
+				g_value_unset(&vFlags);
+
+				if(flags & 1) {
+
+					// Add on target widget.
+					GValue pixbuf = G_VALUE_INIT;
+					GValue label  = G_VALUE_INIT;
+					GValue action_name = G_VALUE_INIT;
+
+					gtk_tree_model_get_value(fromModel,&iter,COLUMN_PIXBUF,&pixbuf);
+					gtk_tree_model_get_value(fromModel,&iter,COLUMN_LABEL,&label);
+					gtk_tree_model_get_value(fromModel,&iter,COLUMN_ACTION_NAME,&action_name);
+
+					GtkListStore * store = GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(to)));
+
+					GtkTreeIter ins;
+					gtk_list_store_append(store, &ins);
+					gtk_list_store_set(
+						store,
+						&ins,
+						COLUMN_PIXBUF,		g_value_get_object(&pixbuf),
+						COLUMN_LABEL, 		g_value_get_string(&label),
+						COLUMN_ACTION_NAME,	g_value_get_string(&action_name),
+						COLUMN_FLAGS,		(flags == 3 ? 3 : 2),
+						-1
+					);
+
+					g_value_unset(&pixbuf);
+					g_value_unset(&label);
+					g_value_unset(&action_name);
+
+				}
+
+				if(flags & 2) {
+
+					// Remove from source widget.
+					gtk_list_store_remove(GTK_LIST_STORE(fromModel), &iter);
+
+				}
 
 
-			// Remove from source widget.
-           if (gtk_tree_model_get_iter(GTK_TREE_MODEL(fromModel), &iter, path)) {
-				gtk_list_store_remove(GTK_LIST_STORE(fromModel), &iter);
-           }
+			}
 
         }
-
 
 	}
 
