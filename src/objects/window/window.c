@@ -151,7 +151,7 @@
 			pw3270_set_color_action_new(),
 			pw3270_action_session_properties_new(),
 			pw3270_file_transfer_action_new(),
-			pw3270_action_window_close_new()
+			pw3270_action_window_close_new(),
 		};
 
 		for(ix = 0; ix < G_N_ELEMENTS(actions); ix++) {
@@ -161,31 +161,6 @@
 
 	}
 
-	/*
-	//
-	// Setup Window actions.
-	//
-	static GActionEntry actions[] = {
-
-		{
-			.name = "open",
-			.activate = pw3270_window_open_activated,
-		},
-
-		{
-			.name = "close",
-			.activate = pw3270_window_close_activated,
-		},
-
-	};
-
-	g_action_map_add_action_entries(
-		G_ACTION_MAP(widget),
-		actions,
-		G_N_ELEMENTS(actions),
-		widget
-	);
-	*/
 
 	//
 	// Setup toolbar
