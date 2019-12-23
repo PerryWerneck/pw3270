@@ -51,9 +51,27 @@
 
  static void list_element_free(struct ListElement *element);
 
+ static gint view_sort(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b, gpointer G_GNUC_UNUSED(user_data)) {
+
+	gint rc = 0;
+	GValue value[] = { G_VALUE_INIT, G_VALUE_INIT };
+
+	gtk_tree_model_get_value(model, a, COLUMN_LABEL, &value[0]);
+	gtk_tree_model_get_value(model, b, COLUMN_LABEL, &value[1]);
+
+	rc = g_ascii_strcasecmp(g_value_get_string(&value[0]),g_value_get_string(&value[1]));
+
+	g_value_unset(&value[0]);
+	g_value_unset(&value[1]);
+
+	return rc;
+
+ }
+
  GtkWidget * pw3270_action_view_new() {
 
-	GtkWidget * view = GTK_WIDGET(gtk_tree_view_new_with_model(GTK_TREE_MODEL(gtk_list_store_new(3,G_TYPE_OBJECT,G_TYPE_STRING,G_TYPE_STRING))));
+	GtkTreeModel * model = GTK_TREE_MODEL(gtk_list_store_new(3,G_TYPE_OBJECT,G_TYPE_STRING,G_TYPE_STRING));
+	GtkWidget * view = GTK_WIDGET(gtk_tree_view_new_with_model(model));
 
 	gtk_widget_set_hexpand(view,TRUE);
 	gtk_widget_set_vexpand(view,TRUE);
@@ -81,6 +99,8 @@
 			"text",COLUMN_LABEL,
 			NULL
 	);
+
+	gtk_tree_sortable_set_default_sort_func(GTK_TREE_SORTABLE(model),view_sort,NULL,NULL);
 
 	return view;
  }

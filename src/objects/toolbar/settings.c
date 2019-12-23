@@ -121,6 +121,7 @@
 	}
 
 	gtk_tree_view_set_reorderable(GTK_TREE_VIEW(page->views[0]),TRUE);
+	gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(gtk_tree_view_get_model(GTK_TREE_VIEW(page->views[1]))), GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID, GTK_SORT_ASCENDING);
 
 	// Create buttons
 	static const gchar * icon_names[G_N_ELEMENTS(page->buttons)] = {
@@ -128,7 +129,7 @@
 		"go-previous"
 	};
 
-	GtkWidget * box = gtk_vbutton_box_new();
+	GtkWidget * box = gtk_button_box_new(GTK_ORIENTATION_VERTICAL);
 	gtk_widget_set_hexpand(box,FALSE);
 	gtk_widget_set_vexpand(box,FALSE);
 
