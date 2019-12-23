@@ -150,7 +150,8 @@
 			pw3270_action_host_properties_new(),
 			pw3270_set_color_action_new(),
 			pw3270_action_session_properties_new(),
-			pw3270_file_transfer_action_new()
+			pw3270_file_transfer_action_new(),
+			pw3270_action_window_close_new()
 		};
 
 		for(ix = 0; ix < G_N_ELEMENTS(actions); ix++) {
@@ -160,6 +161,7 @@
 
 	}
 
+	/*
 	//
 	// Setup Window actions.
 	//
@@ -183,19 +185,13 @@
 		G_N_ELEMENTS(actions),
 		widget
 	);
+	*/
 
 	//
 	// Setup toolbar
 	//
 
 	{
-
-		/*
-		pw3270_toolbar_set_actions(
-			GTK_WIDGET(widget->toolbar),
-			"win.copy,win.paste,win.select-all,separator,win.connect,win.disconnect,separator,win.session.properties,win.file.transfer,win.print,app.quit"
-		);
-		*/
 
 		g_action_map_add_action(
 			G_ACTION_MAP(widget),
