@@ -78,9 +78,24 @@
  	debug("%s",__FUNCTION__);
  }
 
+ static void selection_changed(GtkTreeSelection *selection, GtkWidget *button) {
+	gtk_widget_set_sensitive(button,gtk_tree_selection_count_selected_rows(selection) > 0);
+ }
+
+ void toolbar_insert(GtkButton G_GNUC_UNUSED(*button), ToolbarSettingsPage *settings) {
+ 	debug("%s(%p)",__FUNCTION__,settings);
+ 	pw3270_action_view_move_selected(settings->views[1],settings->views[0]);
+ }
+
+ void toolbar_remove(GtkButton G_GNUC_UNUSED(*button), ToolbarSettingsPage *settings) {
+ 	debug("%s(%p)",__FUNCTION__,settings);
+ 	pw3270_action_view_move_selected(settings->views[0],settings->views[1]);
+ }
+
  Pw3270SettingsPage * pw3270_toolbar_settings_new() {
 
 	size_t ix;
+	GtkTreeSelection * selection;
 
 	ToolbarSettingsPage * page = g_new0(ToolbarSettingsPage,1);
 
@@ -101,6 +116,9 @@
 	for(ix = 0; ix < G_N_ELEMENTS(page->views); ix++) {
 
 		page->views[ix] = pw3270_action_view_new();
+
+		selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(page->views[ix]));
+		gtk_tree_selection_set_mode(selection, GTK_SELECTION_MULTIPLE);
 
 		gtk_grid_attach(
 			GTK_GRID(page->parent.widget),
@@ -140,17 +158,37 @@
 		gtk_button_set_relief(GTK_BUTTON(page->buttons[ix]),GTK_RELIEF_NONE);
 		gtk_widget_set_sensitive(page->buttons[ix],FALSE);
 
+		g_signal_connect(
+			gtk_tree_view_get_selection(GTK_TREE_VIEW(page->views[ix])),
+			"changed",
+			G_CALLBACK(selection_changed),
+			page->buttons[ix]
+		);
+
 	}
 
 	gtk_box_pack_start(GTK_BOX(box),page->buttons[0],FALSE,FALSE,0);
 	gtk_box_pack_end(GTK_BOX(box),page->buttons[1],FALSE,FALSE,0);
+
+	g_signal_connect(
+		page->buttons[0],
+		"clicked",
+		G_CALLBACK(toolbar_remove),
+		page
+	);
+
+	g_signal_connect(
+		page->buttons[1],
+		"clicked",
+		G_CALLBACK(toolbar_insert),
+		page
+	);
 
 	gtk_grid_attach(
 		GTK_GRID(page->parent.widget),
 		box,
 		2,2,1,1
 	);
-
 
 	return (Pw3270SettingsPage *) page;
  }

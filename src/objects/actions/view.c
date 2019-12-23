@@ -276,3 +276,51 @@
 	g_slist_free_full((GSList *) action_list, (GDestroyNotify) list_element_free);
  }
 
+ void pw3270_action_view_move_selected(GtkWidget *from, GtkWidget *to) {
+
+	size_t ix;
+
+	//
+	// Get list of selected references.
+	//
+	GtkTreeModel * fromModel = gtk_tree_view_get_model(GTK_TREE_VIEW(from));
+	GList * list = gtk_tree_selection_get_selected_rows(
+							gtk_tree_view_get_selection(GTK_TREE_VIEW(from)),
+							&fromModel);
+
+	guint rowCount = g_list_length(list);
+
+	g_autofree GtkTreeRowReference ** rows = g_new0(GtkTreeRowReference *,rowCount);
+	GList * item = list;
+	for(ix=0;ix < rowCount && item; ix++) {
+		rows[ix] = gtk_tree_row_reference_new(fromModel,(GtkTreePath *) item->data);
+		item = g_list_next(item);
+	}
+
+	g_list_free_full(list, (GDestroyNotify) gtk_tree_path_free);
+
+	//
+	// Move references
+	//
+	for(ix = 0; ix < rowCount && rows[ix]; ix++) {
+
+		GtkTreePath * path = gtk_tree_row_reference_get_path(rows[ix]);
+
+		if(path) {
+           GtkTreeIter iter;
+
+			// Add on target widget.
+
+
+			// Remove from source widget.
+           if (gtk_tree_model_get_iter(GTK_TREE_MODEL(fromModel), &iter, path)) {
+				gtk_list_store_remove(GTK_LIST_STORE(fromModel), &iter);
+           }
+
+        }
+
+
+	}
+
+
+ }
