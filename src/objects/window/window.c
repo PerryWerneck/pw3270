@@ -178,9 +178,6 @@
 			G_ACTION(g_property_action_new("menubar", widget, "show-menubar"))
 		);
 
-		//g_autofree gchar * action_names = pw3270_toolbar_get_actions(GTK_WIDGET(widget->toolbar));
-		//debug("[%s]",action_names);
-
 	}
 
  }
