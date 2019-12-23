@@ -59,8 +59,12 @@
 			// It's an action
 			action_list = pw3270_action_list_move_action(action_list,actions[ix],((ToolbarSettingsPage *) pg)->views[0]);
 
-		}
+		} else {
 
+			// It's a separator
+			pw3270_action_view_append(((ToolbarSettingsPage *) pg)->views[0], _( "Separator"), NULL, "separator", 2);
+
+		}
 
 	}
 
@@ -68,6 +72,7 @@
 
 	// Load available actions.
 	pw3270_action_view_set_actions(((ToolbarSettingsPage *) pg)->views[1], action_list);
+	pw3270_action_view_append(((ToolbarSettingsPage *) pg)->views[1], _( "Separator"), NULL, "separator", 1);
 
 	pw3270_action_list_free(action_list);
 

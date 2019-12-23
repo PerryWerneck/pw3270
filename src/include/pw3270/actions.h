@@ -263,6 +263,7 @@
 	void				  pw3270_action_list_free(Pw3270ActionList *action_list);
 	void				  pw3270_action_view_set_actions(GtkWidget *view, Pw3270ActionList *list);
 	void				  pw3270_action_view_move_selected(GtkWidget *from, GtkWidget *to);
+	void				  pw3270_action_view_append(GtkWidget *widget, const gchar *label, GdkPixbuf *pixbuf, const gchar *action_name, gint flags);
 
 	Pw3270ActionList	* pw3270_action_list_move_action(Pw3270ActionList *action_list, const gchar *action_name, GtkWidget *view);
 

@@ -146,7 +146,7 @@
 
  		for(item = children;item;item = g_list_next(item)) {
 
-			if(GPOINTER_TO_INT(g_object_get_data(G_OBJECT(item->data),"header-position-id") != id))
+			if(GPOINTER_TO_INT(g_object_get_data(G_OBJECT(item->data),"header-position-id")) != id)
 				continue;
 
 			if(sep)

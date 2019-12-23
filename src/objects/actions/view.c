@@ -106,6 +106,25 @@
 	return view;
  }
 
+ void pw3270_action_view_append(GtkWidget *widget, const gchar *label, GdkPixbuf *pixbuf, const gchar *action_name, gint flags) {
+
+	GtkListStore * store = GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(widget)));
+
+	GtkTreeIter iter;
+	gtk_list_store_append(store, &iter);
+	gtk_list_store_set(
+		store,
+		&iter,
+		COLUMN_PIXBUF,			pixbuf,
+		COLUMN_LABEL, 			label,
+		COLUMN_ACTION_NAME,		action_name,
+		COLUMN_FLAGS,			flags,
+		-1
+	);
+
+
+ }
+
  static void pw3270_action_view_append_element(GtkListStore * store, struct ListElement * element) {
 
 	size_t ix;
