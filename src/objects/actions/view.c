@@ -171,6 +171,7 @@
 		&iter,
 		COLUMN_PIXBUF,	element->pixbuf,
 		COLUMN_LABEL, 	(label ? label : g_action_get_name(element->action)),
+		COLUMN_ACTION_NAME,	element->name,
 		COLUMN_FLAGS,	3,
 		-1
 	);
@@ -382,5 +383,31 @@
 
 	}
 
-
  }
+
+ gboolean get_action_name(GtkTreeModel *model, GtkTreePath G_GNUC_UNUSED(*path), GtkTreeIter *iter, GString *str) {
+
+	GValue value = G_VALUE_INIT;
+	gtk_tree_model_get_value(model,iter,COLUMN_ACTION_NAME,&value);
+
+	if(*str->str)
+		g_string_append(str,",");
+
+	g_string_append(str,g_value_get_string(&value));
+
+	g_value_unset(&value);
+	return FALSE;
+ }
+
+ gchar * pw3270_action_view_get_action_names(GtkWidget *widget) {
+
+ 	GString *str = g_string_new("");
+
+ 	gtk_tree_model_foreach(
+		gtk_tree_view_get_model(GTK_TREE_VIEW(widget)),
+		(GtkTreeModelForeachFunc) get_action_name,
+		str );
+
+	return g_string_free(str,FALSE);
+ }
+

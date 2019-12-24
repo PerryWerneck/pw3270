@@ -79,8 +79,15 @@
 
  }
 
- static void apply(Pw3270SettingsPage *pg, GtkApplication *application, GSettings *settings) {
+ static void apply(Pw3270SettingsPage *pg, GtkApplication G_GNUC_UNUSED(*application), GSettings *settings) {
+
  	debug("%s",__FUNCTION__);
+
+ 	g_autofree gchar * action_names = pw3270_action_view_get_action_names(((ToolbarSettingsPage *) pg)->views[0]);
+	g_settings_set_string(settings,"toolbar-action-names",action_names);
+
+ 	debug("[%s]",action_names);
+
  }
 
  static void selection_changed(GtkTreeSelection *selection, GtkWidget *button) {
@@ -107,7 +114,7 @@
 	page->parent.load = load;
 	page->parent.apply = apply;
 	page->parent.label = _("Toolbar");
-	page->parent.title = _("Setup toolbar action elements");
+	page->parent.title = _("Setup toolbar");
 
 	page->parent.widget = gtk_grid_new();
 	gtk_grid_set_row_homogeneous(GTK_GRID(page->parent.widget),FALSE);
@@ -120,6 +127,9 @@
 
 	for(ix = 0; ix < G_N_ELEMENTS(page->views); ix++) {
 
+		GtkWidget * label = gtk_label_new(gettext(labels[ix]));
+		gtk_label_set_xalign(GTK_LABEL(label),0);
+
 		page->views[ix] = pw3270_action_view_new();
 
 		selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(page->views[ix]));
@@ -127,7 +137,7 @@
 
 		gtk_grid_attach(
 			GTK_GRID(page->parent.widget),
-			gtk_label_new(gettext(labels[ix])),
+			label,
 			ix * 3,0,2,1
 		);
 

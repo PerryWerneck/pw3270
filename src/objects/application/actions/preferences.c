@@ -40,7 +40,7 @@
  	GSList			* pages;
  } Pw3270SettingsDialog;
 
- static void on_destroy(GtkWidget *dialog, Pw3270SettingsDialog *settings) {
+ static void on_destroy(GtkWidget G_GNUC_UNUSED(*dialog), Pw3270SettingsDialog *settings) {
  	settings->dialog = NULL;
 	g_slist_free_full(settings->pages,g_free);
 	g_free(settings);
@@ -66,7 +66,7 @@
 	gtk_widget_destroy(GTK_WIDGET(dialog));
  }
 
- static void on_page_added(GtkNotebook *notebook, GtkWidget *widget, guint page_num, Pw3270SettingsDialog * settings) {
+ static void on_page_added(GtkNotebook G_GNUC_UNUSED(*notebook), GtkWidget *widget, guint G_GNUC_UNUSED(page_num), Pw3270SettingsDialog G_GNUC_UNUSED(*settings)) {
 
 	// https://developer.gnome.org/hig/stable/visual-layout.html.en
 
@@ -83,6 +83,9 @@
 
  static void on_switch_page(GtkNotebook G_GNUC_UNUSED(*notebook), GtkWidget *widget, guint G_GNUC_UNUSED(page_num), Pw3270SettingsDialog * settings)
  {
+
+ 	debug("%s: %p",__FUNCTION__,settings->dialog);
+
 	if(!settings->dialog)
 		return;
 
@@ -92,7 +95,7 @@
 		GSList * page;
 		for(page = settings->pages;page;page = page->next) {
 			Pw3270SettingsPage * pg = (Pw3270SettingsPage *) page->data;
-			if(pg->widget == pg) {
+			if(pg->widget == widget) {
 				if(pg->title)
 					gtk_header_bar_set_subtitle(GTK_HEADER_BAR(header_bar),pg->title);
 				return;

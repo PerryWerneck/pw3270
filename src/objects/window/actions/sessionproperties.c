@@ -60,7 +60,7 @@
 	// Add settings pages.
 	GtkWidget * elements[] = {
 		v3270_host_settings_new(),
-		v3270_color_selection_new(),
+		v3270_color_settings_new(),
 		v3270_font_settings_new(),
 		v3270_accelerator_settings_new()
 	};

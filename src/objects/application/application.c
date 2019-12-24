@@ -315,6 +315,7 @@
 		const gchar * label;
 		const gchar * tooltip;
 		const gchar * action_name;
+		const gchar * icon_name;
 		const gchar * property_name;
 		void (*activate)(GAction *action, GVariant *parameter, GtkWidget *terminal);
 	} conditional_actions[] = {
@@ -337,8 +338,9 @@
 		pw3270SimpleAction * action = PW3270_SIMPLE_ACTION(v3270_conditional_action_new(terminal,conditional_actions[ix].property_name));
 
 		action->parent.name	= conditional_actions[ix].action_name;
-		action->label =  conditional_actions[ix].label;
+		action->label = conditional_actions[ix].label;
 		action->tooltip = conditional_actions[ix].tooltip;
+		action->icon_name = conditional_actions[ix].icon_name;
 		PW3270_ACTION(action)->activate = conditional_actions[ix].activate;
 
 		g_action_map_add_action(

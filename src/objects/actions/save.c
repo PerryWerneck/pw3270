@@ -66,6 +66,7 @@
 
 	action->group.id = LIB3270_ACTION_GROUP_ONLINE;
 	action->parent.name = "save";
+	action->icon_name = "document-save";
 	action->label =  N_( "_Save" );
 	action->tooltip = N_( "Save terminal contents." );
 
@@ -81,6 +82,7 @@
 
 	action->group.id = LIB3270_ACTION_GROUP_ONLINE;
 	action->parent.name = "save.screen";
+	action->icon_name = "document-save";
 	action->label =  N_( "Save screen" );
 
 	return G_ACTION(action);
@@ -95,6 +97,7 @@
 
 	action->group.id = LIB3270_ACTION_GROUP_SELECTION;
 	action->parent.name = "save.selected";
+	action->icon_name = "document-save";
 	action->label =  N_( "Save selected" );
 
 	return G_ACTION(action);

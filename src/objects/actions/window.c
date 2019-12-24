@@ -72,10 +72,10 @@
 			pw3270_action_copy_new(),
 			pw3270_action_cut_new(),
 			pw3270_action_paste_new(),
-			pw3270_action_save_new(),
 
-			pw3270_action_save_screen_new(),
-			pw3270_action_save_selected_new(),
+//			pw3270_action_save_new(),
+//			pw3270_action_save_screen_new(),
+//			pw3270_action_save_selected_new(),
 
 			pw3270_action_print_screen_new(),
 			pw3270_action_print_selected_new(),
