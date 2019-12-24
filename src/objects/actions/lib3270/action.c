@@ -77,6 +77,7 @@
  }
 
  static const gchar * get_icon_name(GAction *action) {
+ 	debug("%s(%s)=\"%s\"",__FUNCTION__,g_action_get_name(action),PW3270_LIB3270_ACTION(action)->definition->icon);
 	return PW3270_LIB3270_ACTION(action)->definition->icon;
  }
 

@@ -36,7 +36,7 @@
  #include <v3270.h>
  #include <pw3270/application.h>
 
- static void activate_print_screen(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkWidget *terminal) {
+ static void activate_print_all(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkWidget *terminal) {
 	debug("%s",__FUNCTION__);
 	v3270_print_all(terminal,NULL);
  }
@@ -46,15 +46,16 @@
 	v3270_print_selected(terminal,NULL);
  }
 
+ static void activate_print(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkWidget *terminal) {
+
+	debug("%s",__FUNCTION__);
+
+ }
+
  void pw3270_application_print_copy_activated(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkWidget *terminal) {
 
 	debug("%s",__FUNCTION__);
 	v3270_print_copy(terminal,NULL);
- }
-
- static void activate_print(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkWidget *terminal) {
-
-	debug("%s",__FUNCTION__);
 
  }
 
@@ -63,25 +64,27 @@
 	pw3270SimpleAction * action = pw3270_simple_action_new();
 
 	action->parent.activate = activate_print;
-	action->parent.types.parameter = G_VARIANT_TYPE_STRING;
+//	action->parent.types.parameter = G_VARIANT_TYPE_STRING;
 
 	action->group.id = LIB3270_ACTION_GROUP_ONLINE;
 	action->parent.name = "print";
-	action->label =  N_( "Print" );
-	action->tooltip = N_( "Print terminal contents." );
+	action->label = N_( "Print" );
+	action->icon_name = "printer";
+	action->tooltip = N_( "Print terminal contents or selected area." );
 
 	return G_ACTION(action);
 
  }
 
- GAction * pw3270_action_print_screen_new(void) {
+ GAction * pw3270_action_print_all_new(void) {
 
 	pw3270SimpleAction * action = pw3270_simple_action_new();
 
-	action->parent.activate = activate_print_screen;
+	action->parent.activate = activate_print_all;
 
 	action->group.id = LIB3270_ACTION_GROUP_ONLINE;
 	action->parent.name = "print.screen";
+	action->icon_name = "printer";
 	action->label =  N_( "Print screen" );
 
 	return G_ACTION(action);
@@ -96,6 +99,7 @@
 
 	action->group.id = LIB3270_ACTION_GROUP_SELECTION;
 	action->parent.name = "print.selected";
+	action->icon_name = "printer";
 	action->label =  N_( "Print selected" );
 
 	return G_ACTION(action);

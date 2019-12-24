@@ -77,13 +77,14 @@
 //			pw3270_action_save_screen_new(),
 //			pw3270_action_save_selected_new(),
 
-			pw3270_action_print_screen_new(),
+			pw3270_action_print_new(),
+			pw3270_action_print_all_new(),
 			pw3270_action_print_selected_new(),
 
 		};
 
 		for(ix = 0; ix < G_N_ELEMENTS(actions); ix++) {
-			debug("Creating action %u (%s)", (unsigned int) ix, g_action_get_name(actions[ix]));
+			debug("Creating action %u (names=%s ptype=%s)", (unsigned int) ix, g_action_get_name(actions[ix]), (const char *) g_action_get_parameter_type(actions[ix]));
 			g_action_map_add_action(map,actions[ix]);
 		}
 	}

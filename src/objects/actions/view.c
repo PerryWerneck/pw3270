@@ -224,18 +224,18 @@
 	if(!action)
 		return list;
 
-	if(!g_object_class_find_property(G_OBJECT_GET_CLASS(action),"label"))
+	if(!g_object_class_find_property(G_OBJECT_GET_CLASS(action),"label")) {
+		debug("Action \"%s\": Doesn't have a label",g_action_get_name(action));
 		return list;
-
-	GParamSpec *spec = g_object_class_find_property(G_OBJECT_GET_CLASS(action),"toolbar-icon");
-	if(!spec)
-		return list;
-
-	const gchar *name = g_action_get_name(action);
+	}
 
 	GdkPixbuf * pixbuf = g_action_get_pixbuf(action, GTK_ICON_SIZE_MENU);
-	if(!pixbuf)
+	if(!pixbuf) {
+		debug("Action \"%s\": Doesn't have a pixbuf",g_action_get_name(action));
 		return list;
+	}
+
+	const gchar *name = g_action_get_name(action);
 
 	struct ListElement * element = (struct ListElement *) g_malloc0(sizeof(struct ListElement) + strlen(type) + strlen(name));
 

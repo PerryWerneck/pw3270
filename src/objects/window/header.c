@@ -58,8 +58,10 @@
 			elements = g_strsplit(header_blocks[0],",",-1);
 			for(ix=0;elements[ix];ix++) {
 				button = pw3270_header_button_new_from_builder(GTK_WIDGET(window),builder,elements[ix]);
-				g_object_set_data(G_OBJECT(button),"header-position-id",GINT_TO_POINTER(0));
-				gtk_header_bar_pack_start(GTK_HEADER_BAR(header), button);
+				if(button) {
+					g_object_set_data(G_OBJECT(button),"header-position-id",GINT_TO_POINTER(0));
+					gtk_header_bar_pack_start(GTK_HEADER_BAR(header), button);
+				}
 			}
 			g_strfreev(elements);
 
@@ -67,8 +69,10 @@
 			elements = g_strsplit(header_blocks[1],",",-1);
 			for(ix=0;elements[ix];ix++) {
 				button = pw3270_header_button_new_from_builder(GTK_WIDGET(window),builder,elements[ix]);
-				g_object_set_data(G_OBJECT(button),"header-position-id",GINT_TO_POINTER(1));
-				gtk_header_bar_pack_end(GTK_HEADER_BAR(header), button);
+				if(button) {
+					g_object_set_data(G_OBJECT(button),"header-position-id",GINT_TO_POINTER(1));
+					gtk_header_bar_pack_end(GTK_HEADER_BAR(header), button);
+				}
 			}
 			g_strfreev(elements);
 
@@ -121,6 +125,10 @@
 		gtk_widget_set_can_focus(button,FALSE);
 		gtk_widget_set_can_default(button,FALSE);
 		gtk_widget_set_name(button,action_name);
+
+	} else {
+
+		g_warning("Can't create button for action \"%s\"",action_name);
 
 	}
 

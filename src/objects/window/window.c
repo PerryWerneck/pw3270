@@ -148,10 +148,13 @@
 
 		GAction * actions[] = {
 			pw3270_action_host_properties_new(),
-			pw3270_set_color_action_new(),
 			pw3270_action_session_properties_new(),
+			pw3270_set_color_action_new(),
+
 			pw3270_file_transfer_action_new(),
+
 			pw3270_action_window_close_new(),
+
 		};
 
 		for(ix = 0; ix < G_N_ELEMENTS(actions); ix++) {

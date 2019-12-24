@@ -328,6 +328,7 @@
 		{
 			.label = N_("Print copy"),
 			.action_name = "print.copy",
+			.icon_name = "printer",
 			.property_name = "has_copy",
 			.activate = pw3270_application_print_copy_activated
 		}
