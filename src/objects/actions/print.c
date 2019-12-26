@@ -36,6 +36,7 @@
  #include <v3270.h>
  #include <pw3270/application.h>
 
+ /*
  static void activate_print_all(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkWidget *terminal) {
 	debug("%s",__FUNCTION__);
 	v3270_print_all(terminal,NULL);
@@ -105,4 +106,5 @@
 	return G_ACTION(action);
 
  }
+ */
 

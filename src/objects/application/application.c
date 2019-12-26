@@ -310,6 +310,7 @@
 
 	}
 
+	/*
 	// Create conditional actions.
 	static const struct {
 		const gchar * label;
@@ -350,6 +351,7 @@
 		);
 
 	}
+	*/
 
 	// Present the new window
 	pw3270_window_set_current_page(window,0);

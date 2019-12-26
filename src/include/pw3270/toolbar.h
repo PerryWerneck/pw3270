@@ -56,7 +56,7 @@
 
 	GtkWidget * pw3270_toolbar_new(void);
 
-	GtkWidget * pw3270_toolbar_insert_lib3270_action(GtkWidget *toolbar, const LIB3270_ACTION *action, gint pos);
+//	GtkWidget * pw3270_toolbar_insert_lib3270_action(GtkWidget *toolbar, const LIB3270_ACTION *action, gint pos);
 	GtkWidget * pw3270_toolbar_insert_action(GtkWidget *toolbar, const gchar *name, gint pos);
 
 	void pw3270_toolbar_set_actions(GtkWidget *toolbar, const gchar *action_names);

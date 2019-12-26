@@ -34,6 +34,7 @@
 
  #include "private.h"
  #include <lib3270/actions.h>
+ #include <v3270/actions.h>
  #include <pw3270/window.h>
 
  void pw3270_window_add_actions(GtkWidget * appwindow) {
@@ -63,23 +64,34 @@
 		}
 	}
 
+	// Map V3270 actions
+	{
+		const V3270_ACTION * actions = v3270_get_actions();
+
+		for(ix = 0; actions[ix].name; ix++) {
+			GAction * action = v3270_action_new(&actions[ix]);
+			g_action_map_add_action(map,action);
+		}
+
+	}
+
 	// Map special actions
 	{
 		GAction * actions[] = {
 			pw3270_action_new_pfkey(),
 			pw3270_action_new_pakey(),
-			pw3270_action_connect_new(),
-			pw3270_action_copy_new(),
-			pw3270_action_cut_new(),
-			pw3270_action_paste_new(),
+//			pw3270_action_connect_new(),
+//			pw3270_action_copy_new(),
+//			pw3270_action_cut_new(),
+//			pw3270_action_paste_new(),
 
 //			pw3270_action_save_new(),
 //			pw3270_action_save_screen_new(),
 //			pw3270_action_save_selected_new(),
 
-			pw3270_action_print_new(),
-			pw3270_action_print_all_new(),
-			pw3270_action_print_selected_new(),
+//			pw3270_action_print_new(),
+//			pw3270_action_print_all_new(),
+//			pw3270_action_print_selected_new(),
 
 		};
 

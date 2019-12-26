@@ -70,15 +70,22 @@
 				action = g_action_map_lookup_action(G_ACTION_MAP(window), ptr+1);
 		}
 
+		debug("%s(%s)=%p",__FUNCTION__,name,action);
+
 		if(action) {
 			debug("Creating button \"%s\" from action \"%s\"",name,g_action_get_name(G_ACTION(action)));
-			item = GTK_TOOL_ITEM(pw3270_tool_button_new(action));
-		} else {
+			item = gtk_tool_button_new_from_action(action,GTK_ICON_SIZE_LARGE_TOOLBAR);
+		}
+		/*
+		 else {
 			debug("Creating button \"%s\" from action name",name);
 			item = GTK_TOOL_ITEM(pw3270_tool_button_new_from_action_name(name));
 		}
+		*/
 
 		if(item) {
+
+			gtk_widget_show_all(GTK_WIDGET(item));
 
 			if(action && g_action_get_parameter_type(action) == G_VARIANT_TYPE_STRING) {
 				g_autofree gchar * detailed = g_strconcat(name,"::",NULL);
@@ -89,6 +96,11 @@
 
 			gtk_toolbar_insert(GTK_TOOLBAR(toolbar),item,pos);
 			return GTK_WIDGET(item);
+
+		} else {
+
+			g_warning("Can't create toolbar item for action \"%s\"",name);
+
 		}
 
 	}

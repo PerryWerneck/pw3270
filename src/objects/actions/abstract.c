@@ -362,6 +362,7 @@
  }
 
  static gboolean bg_notify_enabled(GObject *action) {
+ //	debug("%s(%s,%s)",__FUNCTION__,g_action_get_name(G_ACTION(action)),(g_action_get_enabled(G_ACTION(action)) ? "enabled" : "disabled"));
 	g_object_notify(action, "enabled");
 	return FALSE;
  }
@@ -493,7 +494,7 @@
 	return G_ACTION(g_object_new(PW3270_TYPE_ACTION, NULL));
  }
 
- static GdkPixbuf * pixbuf_from_icon_name(GValue *value, GtkIconSize icon_size) {
+ static GdkPixbuf * pixbuf_from_icon_name(GValue *value, gint width, gint G_GNUC_UNUSED(height), GtkIconLookupFlags flags) {
 
 	const gchar * icon_name = g_value_get_string(value);
 
@@ -503,19 +504,48 @@
 	return gtk_icon_theme_load_icon(
 					gtk_icon_theme_get_default(),
 					icon_name,
-					icon_size,
-					GTK_ICON_LOOKUP_GENERIC_FALLBACK,
+					width,
+					flags, // GTK_ICON_LOOKUP_GENERIC_FALLBACK,
 					NULL
 			);
 
  }
 
- GdkPixbuf * g_action_get_pixbuf(GAction *action, GtkIconSize icon_size) {
+ gchar * g_action_get_text(GAction *action, const gchar * property_name) {
+	gchar *rc = NULL;
+
+	GValue value = G_VALUE_INIT;
+	g_value_init(&value, G_TYPE_STRING);
+	g_object_get_property(G_OBJECT(action),property_name,&value);
+
+	const gchar * text = g_value_get_string(&value);
+	if(text)
+		rc = g_strdup(text);
+
+	g_value_unset(&value);
+
+ 	return rc;
+
+ }
+
+ gchar * g_action_get_tooltip(GAction *action) {
+	return g_action_get_text(action, "tooltip");
+ }
+
+ gchar * g_action_get_label(GAction *action) {
+	return g_action_get_text(action, "label");
+ }
+
+ gchar * g_action_get_icon_name(GAction *action) {
+	return g_action_get_text(action, "icon-name");
+ }
+
+ GdkPixbuf * g_action_get_pixbuf(GAction *action, GtkIconSize icon_size, GtkIconLookupFlags flags) {
 
 	struct Properties {
 		const gchar * name;
 		GType value_type;
-		GdkPixbuf * (*translate)(GValue *value, GtkIconSize icon_size);
+		GdkPixbuf * (*translate)(GValue *value, gint width, gint height, GtkIconLookupFlags flags);
 	} properties[] = {
 		{
 			.name = "icon-name",
@@ -526,6 +556,9 @@
 
 	size_t ix;
 	GdkPixbuf * pixbuf = NULL;
+	gint width, height;
+
+	gtk_icon_size_lookup(icon_size,&width,&height);
 
 	for(ix = 0; ix < G_N_ELEMENTS(properties) && !pixbuf; ix++) {
 
@@ -537,7 +570,7 @@
 
 			g_object_get_property(G_OBJECT(action),properties[ix].name,&value);
 
-			pixbuf = properties[ix].translate(&value,icon_size);
+			pixbuf = properties[ix].translate(&value,width,height,flags);
 
 			g_value_unset(&value);
 

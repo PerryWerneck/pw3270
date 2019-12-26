@@ -66,6 +66,7 @@
 	G_GNUC_INTERNAL GAction			* pw3270_action_cut_new(void);
 	G_GNUC_INTERNAL GAction			* pw3270_action_paste_new(void);
 
+	/*
 	G_GNUC_INTERNAL GAction			* pw3270_action_save_new(void);
 	G_GNUC_INTERNAL GAction			* pw3270_action_save_screen_new(void);
 	G_GNUC_INTERNAL GAction			* pw3270_action_save_selected_new(void);
@@ -73,5 +74,6 @@
 	G_GNUC_INTERNAL GAction			* pw3270_action_print_new(void);
 	G_GNUC_INTERNAL GAction			* pw3270_action_print_all_new(void);
 	G_GNUC_INTERNAL GAction			* pw3270_action_print_selected_new(void);
+	*/
 
 #endif // PRIVATE_H_INCLUDED

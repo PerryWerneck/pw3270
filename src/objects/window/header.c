@@ -84,7 +84,7 @@
 
  }
 
- static void on_sensitive(GtkWidget *button, GParamSpec *spec, GtkWidget *widget) {
+ static void on_sensitive(GtkWidget G_GNUC_UNUSED(*button), GParamSpec G_GNUC_UNUSED(*spec), GtkWidget *widget) {
 
 	gboolean sensitive;
 	g_object_get(button, "sensitive", &sensitive, NULL);
@@ -100,7 +100,10 @@
 
 		// It's a menu
 		g_autofree gchar * icon_name = g_strconcat(action_name+5,"-symbolic",NULL);
-		button = pw3270_setup_image_button(gtk_menu_button_new(),icon_name);
+
+		button = gtk_menu_button_new();
+		gtk_button_set_image(GTK_BUTTON(button),gtk_image_new_from_icon_name(icon_name,GTK_ICON_SIZE_MENU));
+
 		gtk_menu_button_set_menu_model(GTK_MENU_BUTTON(button), G_MENU_MODEL(gtk_builder_get_object(builder, action_name+5)));
 		gtk_widget_set_visible(button,TRUE);
 
@@ -113,8 +116,19 @@
 		// It's a window action.
 		GAction * action = g_action_map_lookup_action(G_ACTION_MAP(widget),action_name+4);
 
-		if(action)
-			button = pw3270_action_button_new(action,action_name);
+		if(action) {
+
+			button = gtk_button_new_from_action(action,GTK_ICON_SIZE_BUTTON);
+
+			gtk_actionable_set_action_name(GTK_ACTIONABLE(button),action_name);
+			gtk_widget_set_visible(button,g_action_get_enabled(action));
+
+
+		} else {
+
+			g_warning("Can't find action \"%s\"",action_name+4);
+
+		}
 
 	}
 

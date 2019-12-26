@@ -50,7 +50,7 @@
  GtkWidget * factory(GtkWidget *terminal) {
 
  	GtkWidget 		* dialog = v3270_settings_dialog_new();
- 	V3270Settings	* settings = GTK_V3270_SETTINGS(v3270_host_select_new());
+ 	V3270Settings	* settings = GTK_V3270_SETTINGS(v3270_host_settings_new());
 
  	if(settings->title)
 		gtk_window_set_title(GTK_WINDOW(dialog), settings->title);

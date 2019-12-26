@@ -142,6 +142,8 @@
 	//
 	pw3270_window_add_actions(GTK_WIDGET(widget));
 
+	g_action_map_add_v3270_actions(G_ACTION_MAP(widget));
+
 	// Map special actions
 	{
 		size_t ix;

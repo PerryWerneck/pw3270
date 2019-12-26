@@ -73,9 +73,6 @@
 
 	};
 
-	// Internal methods
-	G_GNUC_INTERNAL GtkWidget * pw3270_setup_image_button(GtkWidget *button, const gchar *image_name);
-
 	// Actions
 	G_GNUC_INTERNAL GAction * pw3270_action_host_properties_new(void);
 	G_GNUC_INTERNAL GAction * pw3270_set_color_action_new(void);

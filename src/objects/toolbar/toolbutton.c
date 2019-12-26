@@ -30,6 +30,7 @@
  #include "private.h"
  #include <pw3270/actions.h>
 
+ /*
  static const struct Button {
 	const gchar * name;
 	const gchar * icon_name;
@@ -162,4 +163,5 @@
 	return pw3270_tool_button_new_from_action_name(action_name);
 
  }
+ */
 

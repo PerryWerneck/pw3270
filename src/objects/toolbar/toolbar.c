@@ -270,6 +270,7 @@
 	return g_object_new(PW3270_TYPE_TOOLBAR, NULL);
  }
 
+ /*
  GtkWidget * pw3270_toolbar_insert_lib3270_action(GtkWidget *toolbar, const LIB3270_ACTION *action, gint pos) {
 
 	g_return_val_if_fail(GTK_IS_TOOLBAR(toolbar),NULL);
@@ -303,6 +304,7 @@
 
 	return GTK_WIDGET(item);
  }
+ */
 
  gboolean popup_context_menu(GtkToolbar *widget, gint G_GNUC_UNUSED(x), gint G_GNUC_UNUSED(y), gint button_number) {
 

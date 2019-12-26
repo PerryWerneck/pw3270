@@ -40,6 +40,7 @@
 	#include <gtk/gtk.h>
 	#include <lib3270.h>
 	#include <lib3270/actions.h>
+	#include <v3270/actions.h>
 
 	G_BEGIN_DECLS
 
@@ -121,7 +122,7 @@
 	const gchar			* pw3270_action_get_tooltip(GAction *action);
 
 	/// @brief Create a button associated with the action.
-	GtkWidget			* pw3270_action_button_new(GAction *action, const gchar *action_name);
+	//GtkWidget			* pw3270_action_button_new(GAction *action, const gchar *action_name);
 
 	/// @brief Associate action with the terminal widget.
 	void				  pw3270_action_set_terminal_widget(GAction *action, GtkWidget *terminal);
@@ -252,6 +253,7 @@
 	GType v3270ConditionalAction_get_type(void) G_GNUC_CONST;
 
 	GAction * v3270_conditional_action_new(GtkWidget *widget, const gchar *property_name);
+	GAction * v3270_action_new(const V3270_ACTION *action_data);
 
 	//
 	// Action view
@@ -271,7 +273,14 @@
 	//
 	// Tools
 	//
-	GdkPixbuf			* g_action_get_pixbuf(GAction *action, GtkIconSize icon_size);
+	gchar				* g_action_get_icon_name(GAction *action);
+	gchar 				* g_action_get_tooltip(GAction *action);
+	gchar				* g_action_get_label(GAction *action);
+
+	GdkPixbuf			* g_action_get_pixbuf(GAction *action, GtkIconSize icon_size, GtkIconLookupFlags flags);
+
+	GtkWidget 			* gtk_button_new_from_action(GAction *action, GtkIconSize icon_size);
+	GtkToolItem			* gtk_tool_button_new_from_action(GAction *action, GtkIconSize icon_size);
 
 	G_END_DECLS
 
