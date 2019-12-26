@@ -35,10 +35,11 @@
  #include "../private.h"
  #include <pw3270/window.h>
  #include <v3270.h>
+ #include <v3270/actions.h>
 
- #define PW3270_TYPE_LIB3270_TOGGLE_ACTION		(Lib3270ToggleAction_get_type())
- #define PW3270_LIB3270_TOGGLE_ACTION(inst)	(G_TYPE_CHECK_INSTANCE_CAST ((inst), PW3270_TYPE_LIB3270_TOGGLE_ACTION, Lib3270ToggleAction))
- #define PW3270_IS_LIB3270_TOGGLE_ACTION(inst)	(G_TYPE_CHECK_INSTANCE_TYPE ((inst), PW3270_TYPE_LIB3270_TOGGLE_ACTION))
+ #define LIB3270_TYPE_TOGGLE_ACTION		(Lib3270ToggleAction_get_type())
+ #define LIB3270_TOGGLE_ACTION(inst)	(G_TYPE_CHECK_INSTANCE_CAST ((inst), LIB3270_TYPE_TOGGLE_ACTION, Lib3270ToggleAction))
+ #define LIB3270_IS_TOGGLE_ACTION(inst)	(G_TYPE_CHECK_INSTANCE_TYPE ((inst), LIB3270_TYPE_TOGGLE_ACTION))
 
  typedef struct _Lib3270ToggleActionClass {
  	pw3270ActionClass parent_class;
@@ -64,7 +65,7 @@
 
  static void change_widget(GAction *object, GtkWidget *from, GtkWidget *to) {
 
-	Lib3270ToggleAction * action = PW3270_LIB3270_TOGGLE_ACTION(object);
+	Lib3270ToggleAction * action = LIB3270_TOGGLE_ACTION(object);
 
 	if(action->listener)
 		lib3270_unregister_toggle_listener(v3270_get_session(from),action->definition->id,object);
@@ -82,13 +83,13 @@
 
  	if(parameter && g_variant_is_of_type(parameter,G_VARIANT_TYPE_BOOLEAN)) {
 
-		lib3270_set_toggle(v3270_get_session(terminal),PW3270_LIB3270_TOGGLE_ACTION(action)->definition->id,g_variant_get_boolean(parameter));
-		debug("Toggle set to %s",lib3270_get_toggle(v3270_get_session(terminal),PW3270_LIB3270_TOGGLE_ACTION(action)->definition->id) ? "ON" : "OFF");
+		lib3270_set_toggle(v3270_get_session(terminal),LIB3270_TOGGLE_ACTION(action)->definition->id,g_variant_get_boolean(parameter));
+		debug("Toggle set to %s",lib3270_get_toggle(v3270_get_session(terminal),LIB3270_TOGGLE_ACTION(action)->definition->id) ? "ON" : "OFF");
 
  	} else {
 
-		lib3270_toggle(v3270_get_session(terminal),PW3270_LIB3270_TOGGLE_ACTION(action)->definition->id);
-		debug("Toggle is %s",lib3270_get_toggle(v3270_get_session(terminal),PW3270_LIB3270_TOGGLE_ACTION(action)->definition->id) ? "ON" : "OFF");
+		lib3270_toggle(v3270_get_session(terminal),LIB3270_TOGGLE_ACTION(action)->definition->id);
+		debug("Toggle is %s",lib3270_get_toggle(v3270_get_session(terminal),LIB3270_TOGGLE_ACTION(action)->definition->id) ? "ON" : "OFF");
 
  	}
 
@@ -105,7 +106,7 @@
  	return g_variant_new_boolean(
 				lib3270_get_toggle(
 					v3270_get_session(terminal),
-					PW3270_LIB3270_TOGGLE_ACTION(action)->definition->id
+					LIB3270_TOGGLE_ACTION(action)->definition->id
 				)
 			);
 
@@ -127,7 +128,7 @@
 
  GAction * g_action_new_from_toggle(const LIB3270_TOGGLE * definition) {
 
- 	Lib3270ToggleAction	* action = (Lib3270ToggleAction *) g_object_new(PW3270_TYPE_LIB3270_TOGGLE_ACTION, NULL);
+ 	Lib3270ToggleAction	* action = (Lib3270ToggleAction *) g_object_new(LIB3270_TYPE_TOGGLE_ACTION, NULL);
 
 	action->definition = definition;
 	action->parent.name = definition->name;
