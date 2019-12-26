@@ -125,7 +125,7 @@
 
  }
 
- GAction * pw3270_toggle_action_new_from_lib3270(const LIB3270_TOGGLE * definition) {
+ GAction * g_action_new_from_toggle(const LIB3270_TOGGLE * definition) {
 
  	Lib3270ToggleAction	* action = (Lib3270ToggleAction *) g_object_new(PW3270_TYPE_LIB3270_TOGGLE_ACTION, NULL);
 

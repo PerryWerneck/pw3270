@@ -60,12 +60,13 @@
 		const LIB3270_TOGGLE * toggles = lib3270_get_toggles();
 		for(ix = 0; toggles[ix].name; ix++) {
 
-			GAction *action = pw3270_toggle_action_new_from_lib3270(&toggles[ix]);
+			GAction *action = g_action_new_from_toggle(&toggles[ix]);
 			g_action_map_add_action(map,action);
 
 		}
 	}
 
+	/*
 	// Map V3270 actions
 	{
 		const V3270_ACTION * actions = v3270_get_actions();
@@ -76,6 +77,7 @@
 		}
 
 	}
+	*/
 
 	// Map special actions
 	{

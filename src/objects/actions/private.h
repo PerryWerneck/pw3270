@@ -51,7 +51,7 @@
 	/* not really I18N-related, but also a string marker macro */
 	#define I_(string) g_intern_static_string (string)
 
-	G_GNUC_INTERNAL GAction	* pw3270_toggle_action_new_from_lib3270(const LIB3270_TOGGLE * definition);
+	G_GNUC_INTERNAL GAction	* g_action_new_from_toggle(const LIB3270_TOGGLE * definition);
 	G_GNUC_INTERNAL GAction * pw3270_action_new_pfkey(void);
 	G_GNUC_INTERNAL GAction * pw3270_action_new_pakey(void);
 

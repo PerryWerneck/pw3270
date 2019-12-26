@@ -74,9 +74,6 @@
 		<Unit filename="src/objects/actions/dialog.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/objects/actions/lib3270/action.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/objects/actions/lib3270/pakey.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -94,9 +91,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/objects/actions/simple.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/objects/actions/v3270/action.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/objects/actions/v3270/conditional.c">
