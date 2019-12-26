@@ -300,6 +300,24 @@
 		<section>
 
 				<item>
+					<attribute name="label" translatable="yes">Cross hair cursor</attribute>
+					<attribute name="action">win.crosshair</attribute>
+				</item>
+
+				<item>
+					<attribute name="label" translatable="yes">Resize on alternate screen</attribute>
+					<attribute name="action">win.altscreen</attribute>
+				</item>
+
+				<item>
+					<attribute name="label" translatable="yes">Alert sound</attribute>
+					<attribute name="action">win.beep</attribute>
+				</item>
+		</section>
+
+		<section>
+
+				<item>
 					<attribute name="label" translatable="yes">Select by rectangles</attribute>
 					<attribute name="action">win.rectselect</attribute>
 				</item>
