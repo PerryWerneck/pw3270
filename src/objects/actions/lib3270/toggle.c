@@ -42,12 +42,12 @@
  #define LIB3270_IS_TOGGLE_ACTION(inst)	(G_TYPE_CHECK_INSTANCE_TYPE ((inst), LIB3270_TYPE_TOGGLE_ACTION))
 
  typedef struct _Lib3270ToggleActionClass {
- 	pw3270ActionClass parent_class;
+ 	V3270ActionClass parent_class;
 
  } Lib3270ToggleActionClass;
 
  typedef struct _Lib3270ToggleAction {
- 	pw3270Action parent;
+ 	V3270Action parent;
 
 	const LIB3270_TOGGLE * definition;
 	const void * listener;
@@ -57,10 +57,10 @@
  static void Lib3270ToggleAction_class_init(Lib3270ToggleActionClass *klass);
  static void Lib3270ToggleAction_init(Lib3270ToggleAction *action);
 
- G_DEFINE_TYPE(Lib3270ToggleAction, Lib3270ToggleAction, PW3270_TYPE_ACTION);
+ G_DEFINE_TYPE(Lib3270ToggleAction, Lib3270ToggleAction, V3270_TYPE_ACTION);
 
  static void change_state(H3270 G_GNUC_UNUSED(*hSession), LIB3270_TOGGLE_ID G_GNUC_UNUSED(id), char G_GNUC_UNUSED(state), void G_GNUC_UNUSED(*action)) {
- 	pw3270_action_notify_state(G_ACTION(action));
+ 	v3270_action_notify_state(G_ACTION(action));
  }
 
  static void change_widget(GAction *object, GtkWidget *from, GtkWidget *to) {
@@ -73,7 +73,7 @@
 	if(to)
 		action->listener = lib3270_register_toggle_listener(v3270_get_session(to),action->definition->id,change_state,object);
 
-	PW3270_ACTION_CLASS(Lib3270ToggleAction_parent_class)->change_widget(object,from,to);
+	V3270_ACTION_CLASS(Lib3270ToggleAction_parent_class)->change_widget(object,from,to);
 
  }
 
@@ -103,6 +103,8 @@
 
  static GVariant * get_state_property(GAction *action, GtkWidget *terminal) {
 
+	debug("%s(%s)",__FUNCTION__,g_action_get_name(action));
+
  	return g_variant_new_boolean(
 				lib3270_get_toggle(
 					v3270_get_session(terminal),
@@ -117,7 +119,7 @@
  	action->definition	= NULL;
  	action->listener	= NULL;
 
-	action->parent.name					= "toggle";
+//	action->parent.name					= "toggle";
 
 	action->parent.get_state_property	= get_state_property;
 	action->parent.activate				= activate;
@@ -130,8 +132,9 @@
 
  	Lib3270ToggleAction	* action = (Lib3270ToggleAction *) g_object_new(LIB3270_TYPE_TOGGLE_ACTION, NULL);
 
+ 	action->parent.info = (const LIB3270_PROPERTY *) definition;
+
 	action->definition = definition;
-	action->parent.name = definition->name;
 
  	return G_ACTION(action);
 
