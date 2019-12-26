@@ -42,16 +42,18 @@
 	GActionMap * map = G_ACTION_MAP(appwindow);
 	size_t ix;
 
+	/*
 	// Map lib3270 actions
 	{
 		const LIB3270_ACTION * actions = lib3270_get_actions();
 		for(ix = 0; actions[ix].name; ix++) {
 
-			GAction *action = pw3270_action_new_from_lib3270(&actions[ix]);
+			GAction *action = g_action_new_from_lib3270(&actions[ix]);
 			g_action_map_add_action(map,action);
 
 		}
 	}
+	*/
 
 	// Map toggles
 	{

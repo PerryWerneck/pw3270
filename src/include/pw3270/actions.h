@@ -97,11 +97,11 @@
 
 	GType pw3270Action_get_type(void) G_GNUC_CONST;
 
-	/// @brief New generica acion.
+	/// @brief New generic action.
 	GAction * pw3270_action_new();
 
 	/// @brief New action from LIB3270's control data.
-	GAction * pw3270_action_new_from_lib3270(const LIB3270_ACTION * definition);
+	GAction * g_action_new_from_lib3270(const LIB3270_ACTION * definition);
 
 	/// @brief Get action name.
 	const gchar			* pw3270_action_get_name(GAction *action);

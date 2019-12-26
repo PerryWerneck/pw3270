@@ -61,7 +61,7 @@
 	G_GNUC_INTERNAL void pw3270_action_notify_state(GAction *object);
 
 	// Internal actions
-	G_GNUC_INTERNAL GAction			* pw3270_action_connect_new(void);
+//	G_GNUC_INTERNAL GAction			* pw3270_action_connect_new(void);
 	G_GNUC_INTERNAL GAction			* pw3270_action_copy_new(void);
 	G_GNUC_INTERNAL GAction			* pw3270_action_cut_new(void);
 	G_GNUC_INTERNAL GAction			* pw3270_action_paste_new(void);
