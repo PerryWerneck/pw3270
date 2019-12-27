@@ -51,8 +51,8 @@
 	/* not really I18N-related, but also a string marker macro */
 	#define I_(string) g_intern_static_string (string)
 
-	G_GNUC_INTERNAL GAction * pw3270_action_new_pfkey(void);
-	G_GNUC_INTERNAL GAction * pw3270_action_new_pakey(void);
+	G_GNUC_INTERNAL GAction * v3270_pfkey_action_new(void);
+	G_GNUC_INTERNAL GAction * v3270_pakey_action_new(void);
 
 	G_GNUC_INTERNAL void pw3270_action_set_name(GAction *object, const gchar *name);
 

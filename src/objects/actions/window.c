@@ -84,8 +84,8 @@
 	// Map special actions
 	{
 		GAction * actions[] = {
-			pw3270_action_new_pfkey(),
-			pw3270_action_new_pakey(),
+			v3270_pfkey_action_new(),
+			v3270_pakey_action_new(),
 //			pw3270_action_connect_new(),
 //			pw3270_action_copy_new(),
 //			pw3270_action_cut_new(),

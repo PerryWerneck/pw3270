@@ -34,36 +34,25 @@
 
  #include "../private.h"
  #include <v3270.h>
+ #include <v3270/actions.h>
 
- #define PW3270_TYPE_PAKEY_ACTION				(Lib3270PaAction_get_type())
- #define PW3270_LIB3270_PAKEY_ACTION(inst)		(G_TYPE_CHECK_INSTANCE_CAST ((inst), PW3270_TYPE_PAKEY_ACTION, Lib3270PaAction))
- #define PW3270_IS_LIB3270_PAKEY_ACTION(inst)	(G_TYPE_CHECK_INSTANCE_TYPE ((inst), PW3270_TYPE_PAKEY_ACTION))
+ #define LIB3270_TYPE_PA_ACTION		(Lib3270PaAction_get_type())
+ #define LIB3270_PA_ACTION(inst)	(G_TYPE_CHECK_INSTANCE_CAST ((inst), LIB3270_TYPE_PA_ACTION, Lib3270PaAction))
+ #define LIB3270_IS_PA_ACTION(inst)	(G_TYPE_CHECK_INSTANCE_TYPE ((inst), LIB3270_TYPE_PA_ACTION))
 
  typedef struct _Lib3270PaActionClass {
- 	pw3270ActionClass parent_class;
+ 	V3270ActionClass parent_class;
 
  } Lib3270PaActionClass;
 
  typedef struct _Lib3270PaAction {
- 	pw3270Action parent;
-
+ 	V3270Action parent;
  } Lib3270PaAction;
 
  static void Lib3270PaAction_class_init(Lib3270PaActionClass *klass);
  static void Lib3270PaAction_init(Lib3270PaAction *action);
 
- G_DEFINE_TYPE(Lib3270PaAction, Lib3270PaAction, PW3270_TYPE_ACTION);
-
- static gboolean get_enabled(GAction G_GNUC_UNUSED(*action), GtkWidget *terminal) {
-
-//	debug("%s(%s)",__FUNCTION__,pw3270_action_get_name(action));
-
- 	if(terminal)
-		return lib3270_is_connected(v3270_get_session(terminal)) > 0 ? TRUE: FALSE;
-
-	return FALSE;
-
- }
+ G_DEFINE_TYPE(Lib3270PaAction, Lib3270PaAction, V3270_TYPE_ACTION);
 
  static void activate(GAction *action, GVariant *parameter, GtkWidget *terminal) {
 
@@ -93,22 +82,22 @@
 
  }
 
- void Lib3270PaAction_class_init(Lib3270PaActionClass *klass) {
+ void Lib3270PaAction_class_init(Lib3270PaActionClass G_GNUC_UNUSED(*klass)) {
+ }
 
-	klass->parent_class.get_enabled = get_enabled;
+ void Lib3270PaAction_init(Lib3270PaAction *action) {
+
+	static const LIB3270_PROPERTY info = {
+		.name = "pakey",
+		.group = LIB3270_ACTION_GROUP_ONLINE
+	};
+
+	action->parent.activate = activate;
+	action->parent.info		= &info;
 
  }
 
- void Lib3270PaAction_init(Lib3270PaAction G_GNUC_UNUSED(*object)) {
- }
-
-
- GAction * pw3270_action_new_pakey(void) {
- 	pw3270Action * action = PW3270_ACTION(g_object_new(PW3270_TYPE_PAKEY_ACTION, NULL));
-
-	action->activate = activate;
-	action->name = "pakey";
-
- 	return G_ACTION(action);
+ GAction * v3270_pakey_action_new(void) {
+ 	return G_ACTION(g_object_new(LIB3270_TYPE_PA_ACTION, NULL));
  }
 

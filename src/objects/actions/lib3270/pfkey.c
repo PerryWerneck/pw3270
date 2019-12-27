@@ -28,42 +28,31 @@
  */
 
  /**
-  * @brief Implement GAction "wrapper" for lib3270's PFs.
+  * @brief Implement GAction "wrapper" for lib3270's PAs.
   *
   */
 
  #include "../private.h"
  #include <v3270.h>
+ #include <v3270/actions.h>
 
- #define PW3270_TYPE_PFKEY_ACTION				(Lib3270PfAction_get_type())
- #define PW3270_LIB3270_PFKEY_ACTION(inst)		(G_TYPE_CHECK_INSTANCE_CAST ((inst), PW3270_TYPE_PFKEY_ACTION, Lib3270PfAction))
- #define PW3270_IS_LIB3270_PFKEY_ACTION(inst)	(G_TYPE_CHECK_INSTANCE_TYPE ((inst), PW3270_TYPE_PFKEY_ACTION))
+ #define LIB3270_TYPE_PF_ACTION		(Lib3270PfAction_get_type())
+ #define LIB3270_PF_ACTION(inst)	(G_TYPE_CHECK_INSTANCE_CAST ((inst), LIB3270_TYPE_PF_ACTION, Lib3270PfAction))
+ #define LIB3270_IS_PF_ACTION(inst)	(G_TYPE_CHECK_INSTANCE_TYPE ((inst), LIB3270_TYPE_PF_ACTION))
 
  typedef struct _Lib3270PfActionClass {
- 	pw3270ActionClass parent_class;
+ 	V3270ActionClass parent_class;
 
  } Lib3270PfActionClass;
 
  typedef struct _Lib3270PfAction {
- 	pw3270Action parent;
-
+ 	V3270Action parent;
  } Lib3270PfAction;
 
  static void Lib3270PfAction_class_init(Lib3270PfActionClass *klass);
  static void Lib3270PfAction_init(Lib3270PfAction *action);
 
- G_DEFINE_TYPE(Lib3270PfAction, Lib3270PfAction, PW3270_TYPE_ACTION);
-
- static gboolean get_enabled(GAction G_GNUC_UNUSED(*action), GtkWidget *terminal) {
-
-//	debug("%s(%s)",__FUNCTION__,pw3270_action_get_name(action));
-
- 	if(terminal)
-		return lib3270_is_connected(v3270_get_session(terminal)) > 0 ? TRUE: FALSE;
-
-	return FALSE;
-
- }
+ G_DEFINE_TYPE(Lib3270PfAction, Lib3270PfAction, V3270_TYPE_ACTION);
 
  static void activate(GAction *action, GVariant *parameter, GtkWidget *terminal) {
 
@@ -93,23 +82,22 @@
 
  }
 
- void Lib3270PfAction_class_init(Lib3270PfActionClass *klass) {
+ void Lib3270PfAction_class_init(Lib3270PfActionClass G_GNUC_UNUSED(*klass)) {
+ }
 
-	klass->parent_class.get_enabled = get_enabled;
+ void Lib3270PfAction_init(Lib3270PfAction *action) {
+
+	static const LIB3270_PROPERTY info = {
+		.name = "pfkey",
+		.group = LIB3270_ACTION_GROUP_ONLINE
+	};
+
+	action->parent.activate = activate;
+	action->parent.info		= &info;
 
  }
 
- void Lib3270PfAction_init(Lib3270PfAction G_GNUC_UNUSED(*action)) {
+ GAction * v3270_pfkey_action_new(void) {
+ 	return G_ACTION(g_object_new(LIB3270_TYPE_PF_ACTION, NULL));
  }
-
- GAction * pw3270_action_new_pfkey(void) {
-
- 	pw3270Action * action = PW3270_ACTION(g_object_new(PW3270_TYPE_PFKEY_ACTION, NULL));
-
-	action->activate = activate;
-	action->name = "pfkey";
-
- 	return G_ACTION(action);
- }
-
 
