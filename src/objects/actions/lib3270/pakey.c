@@ -99,7 +99,7 @@
 
  }
 
- void Lib3270PaAction_init(Lib3270PaAction *object) {
+ void Lib3270PaAction_init(Lib3270PaAction G_GNUC_UNUSED(*object)) {
  }
 
 

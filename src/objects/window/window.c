@@ -144,6 +144,7 @@
 
 	g_action_map_add_v3270_actions(G_ACTION_MAP(widget));
 	g_action_map_add_lib3270_actions(G_ACTION_MAP(widget));
+	g_action_map_add_lib3270_toggles(G_ACTION_MAP(widget));
 
 	// Map special actions
 	{
@@ -184,31 +185,6 @@
 		);
 
 	}
-
-#ifdef DEBUG
-
-	{
-		GAction *actions[] = {
-			g_action_map_lookup_action(G_ACTION_MAP(widget),"crosshair"),
-			g_action_map_lookup_action(G_ACTION_MAP(widget),"toolbar")
-		};
-
-		size_t ix;
-
-		for(ix = 0; ix < G_N_ELEMENTS(actions);ix++) {
-
-			debug("\n\nAction %u = %p",(unsigned int) ix, actions[ix]);
-
-			debug("Action: %s",g_action_get_name(actions[ix]));
-			debug("\tState-type:\t\t%s",g_action_get_state_type(actions[ix]));
-			debug("\tState value:\t%p",g_action_get_state(actions[ix]));
-			debug("\tParameter-type:\t%s",g_action_get_parameter_type(actions[ix]));
-
-		}
-
-	}
-
-#endif // DEBUG
 
  }
 

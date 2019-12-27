@@ -55,6 +55,7 @@
 	}
 	*/
 
+	/*
 	// Map toggles
 	{
 		const LIB3270_TOGGLE * toggles = lib3270_get_toggles();
@@ -65,6 +66,7 @@
 
 		}
 	}
+	*/
 
 	/*
 	// Map V3270 actions
