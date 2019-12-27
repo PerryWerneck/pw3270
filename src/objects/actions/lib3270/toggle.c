@@ -41,17 +41,15 @@
  #define LIB3270_TOGGLE_ACTION(inst)	(G_TYPE_CHECK_INSTANCE_CAST ((inst), LIB3270_TYPE_TOGGLE_ACTION, Lib3270ToggleAction))
  #define LIB3270_IS_TOGGLE_ACTION(inst)	(G_TYPE_CHECK_INSTANCE_TYPE ((inst), LIB3270_TYPE_TOGGLE_ACTION))
 
+ #define GET_DESCRIPTOR(obj)  ((const LIB3270_TOGGLE *) ((V3270Action *) obj)->info)
+
  typedef struct _Lib3270ToggleActionClass {
  	V3270ActionClass parent_class;
-
  } Lib3270ToggleActionClass;
 
  typedef struct _Lib3270ToggleAction {
  	V3270Action parent;
-
-	const LIB3270_TOGGLE * definition;
 	const void * listener;
-
  } Lib3270ToggleAction;
 
  static void Lib3270ToggleAction_class_init(Lib3270ToggleActionClass *klass);
@@ -68,10 +66,10 @@
 	Lib3270ToggleAction * action = LIB3270_TOGGLE_ACTION(object);
 
 	if(action->listener)
-		lib3270_unregister_toggle_listener(v3270_get_session(from),action->definition->id,object);
+		lib3270_unregister_toggle_listener(v3270_get_session(from),GET_DESCRIPTOR(object)->id,object);
 
 	if(to)
-		action->listener = lib3270_register_toggle_listener(v3270_get_session(to),action->definition->id,change_state,object);
+		action->listener = lib3270_register_toggle_listener(v3270_get_session(to),GET_DESCRIPTOR(object)->id,change_state,object);
 
 	V3270_ACTION_CLASS(Lib3270ToggleAction_parent_class)->change_widget(object,from,to);
 
@@ -79,53 +77,45 @@
 
  static void activate(GAction *action, GVariant *parameter, GtkWidget *terminal) {
 
- 	debug("Activating \"%s\"",pw3270_action_get_name(action));
+ 	debug("Activating \"%s\"",g_action_get_name(action));
 
  	if(parameter && g_variant_is_of_type(parameter,G_VARIANT_TYPE_BOOLEAN)) {
 
-		lib3270_set_toggle(v3270_get_session(terminal),LIB3270_TOGGLE_ACTION(action)->definition->id,g_variant_get_boolean(parameter));
-		debug("Toggle set to %s",lib3270_get_toggle(v3270_get_session(terminal),LIB3270_TOGGLE_ACTION(action)->definition->id) ? "ON" : "OFF");
+		lib3270_set_toggle(v3270_get_session(terminal),GET_DESCRIPTOR(action)->id,g_variant_get_boolean(parameter));
+		debug("Toggle set to %s",lib3270_get_toggle(v3270_get_session(terminal),GET_DESCRIPTOR(action)->id) ? "ON" : "OFF");
 
  	} else {
 
-		lib3270_toggle(v3270_get_session(terminal),LIB3270_TOGGLE_ACTION(action)->definition->id);
-		debug("Toggle is %s",lib3270_get_toggle(v3270_get_session(terminal),LIB3270_TOGGLE_ACTION(action)->definition->id) ? "ON" : "OFF");
+		lib3270_toggle(v3270_get_session(terminal),GET_DESCRIPTOR(action)->id);
+		debug("Toggle is %s",lib3270_get_toggle(v3270_get_session(terminal),GET_DESCRIPTOR(action)->id) ? "ON" : "OFF");
 
  	}
 
  }
 
- void Lib3270ToggleAction_class_init(Lib3270ToggleActionClass *klass) {
-
-	klass->parent_class.change_widget = change_widget;
-
- }
-
- static GVariant * get_state_property(GAction *action, GtkWidget *terminal) {
+ static GVariant * get_state(GAction *action, GtkWidget *terminal) {
 
 	debug("%s(%s)",__FUNCTION__,g_action_get_name(action));
 
  	return g_variant_new_boolean(
 				lib3270_get_toggle(
 					v3270_get_session(terminal),
-					LIB3270_TOGGLE_ACTION(action)->definition->id
+					GET_DESCRIPTOR(action)->id
 				)
 			);
 
  }
 
+ void Lib3270ToggleAction_class_init(Lib3270ToggleActionClass *klass) {
+
+	klass->parent_class.change_widget	= change_widget;
+	klass->parent_class.state.type		= G_VARIANT_TYPE_BOOLEAN;
+	klass->parent_class.get_state		= get_state;
+
+ }
+
  void Lib3270ToggleAction_init(Lib3270ToggleAction *action) {
-
- 	action->definition	= NULL;
- 	action->listener	= NULL;
-
-//	action->parent.name					= "toggle";
-
-	action->parent.get_state_property	= get_state_property;
-	action->parent.activate				= activate;
-
-	action->parent.types.state			= G_VARIANT_TYPE_BOOLEAN;
-
+	action->parent.activate	= activate;
  }
 
  GAction * g_action_new_from_toggle(const LIB3270_TOGGLE * definition) {
@@ -133,8 +123,6 @@
  	Lib3270ToggleAction	* action = (Lib3270ToggleAction *) g_object_new(LIB3270_TYPE_TOGGLE_ACTION, NULL);
 
  	action->parent.info = (const LIB3270_PROPERTY *) definition;
-
-	action->definition = definition;
 
  	return G_ACTION(action);
 

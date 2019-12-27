@@ -185,7 +185,6 @@
 
 	}
 
-/*
 #ifdef DEBUG
 
 	{
@@ -202,6 +201,7 @@
 
 			debug("Action: %s",g_action_get_name(actions[ix]));
 			debug("\tState-type:\t\t%s",g_action_get_state_type(actions[ix]));
+			debug("\tState value:\t%p",g_action_get_state(actions[ix]));
 			debug("\tParameter-type:\t%s",g_action_get_parameter_type(actions[ix]));
 
 		}
@@ -209,7 +209,6 @@
 	}
 
 #endif // DEBUG
-*/
 
  }
 
