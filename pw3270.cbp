@@ -80,9 +80,6 @@
 		<Unit filename="src/objects/actions/lib3270/pfkey.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/objects/actions/lib3270/toggle.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/objects/actions/print.c">
 			<Option compilerVar="CC" />
 		</Unit>

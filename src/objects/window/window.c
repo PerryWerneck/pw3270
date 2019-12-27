@@ -140,11 +140,12 @@
 	//
 	// Setup tn3270 actions.
 	//
-	pw3270_window_add_actions(GTK_WIDGET(widget));
-
 	g_action_map_add_v3270_actions(G_ACTION_MAP(widget));
 	g_action_map_add_lib3270_actions(G_ACTION_MAP(widget));
 	g_action_map_add_lib3270_toggles(G_ACTION_MAP(widget));
+
+	g_action_map_add_action(G_ACTION_MAP(widget),v3270_pfkey_action_new());
+	g_action_map_add_action(G_ACTION_MAP(widget),v3270_pakey_action_new());
 
 	// Map special actions
 	{

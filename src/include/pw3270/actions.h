@@ -130,9 +130,6 @@
 	/// @brief Get lib3270 session handle.
 	H3270				* pw3270_action_get_session(GAction *action);
 
-	/// @brief Add lib3270 actions to an application window.
-	void				  pw3270_window_add_actions(GtkWidget * appwindow);
-
 	//
 	// "Simple" action
 	//

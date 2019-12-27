@@ -28,7 +28,7 @@
  */
 
  /**
-  * @brief Implement GAction "wrapper" for lib3270's PAs.
+  * @brief Implement GAction "wrapper" for lib3270's PFs.
   *
   */
 

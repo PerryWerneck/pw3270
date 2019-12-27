@@ -37,12 +37,12 @@
  #include <v3270/actions.h>
  #include <pw3270/window.h>
 
+/*
  void pw3270_window_add_actions(GtkWidget * appwindow) {
 
 	GActionMap * map = G_ACTION_MAP(appwindow);
 	size_t ix;
 
-	/*
 	// Map lib3270 actions
 	{
 		const LIB3270_ACTION * actions = lib3270_get_actions();
@@ -53,9 +53,7 @@
 
 		}
 	}
-	*/
 
-	/*
 	// Map toggles
 	{
 		const LIB3270_TOGGLE * toggles = lib3270_get_toggles();
@@ -66,9 +64,7 @@
 
 		}
 	}
-	*/
 
-	/*
 	// Map V3270 actions
 	{
 		const V3270_ACTION * actions = v3270_get_actions();
@@ -79,7 +75,6 @@
 		}
 
 	}
-	*/
 
 	// Map special actions
 	{
@@ -110,3 +105,4 @@
 	debug("%s ends",__FUNCTION__);
 
  }
+*/
