@@ -74,12 +74,6 @@
 		<Unit filename="src/objects/actions/dialog.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/objects/actions/lib3270/pakey.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/objects/actions/lib3270/pfkey.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/objects/actions/print.c">
 			<Option compilerVar="CC" />
 		</Unit>
