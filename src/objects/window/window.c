@@ -54,10 +54,16 @@
 	gchar ** actions = g_action_group_list_actions(G_ACTION_GROUP(widget));
 
 	for(ix = 0; actions[ix]; ix++) {
+
 		GAction * action = g_action_map_lookup_action(G_ACTION_MAP(widget), actions[ix]);
 
-		if(action && PW3270_IS_ACTION(action)) {
+		if(!action)
+			continue;
+
+		if(PW3270_IS_ACTION(action)) {
 			pw3270_action_set_terminal_widget(action,NULL);
+		} else if(V3270_IS_ACTION(action)) {
+			v3270_action_set_terminal_widget(action,NULL);
 		}
 
 	}
