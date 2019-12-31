@@ -56,7 +56,5 @@
 	G_GNUC_INTERNAL void pw3270_action_notify_enabled(GAction *action);
 	G_GNUC_INTERNAL void pw3270_action_notify_state(GAction *object);
 
-	// Internal actions
-	G_GNUC_INTERNAL GAction			* pw3270_action_connect_new(void);
 
 #endif // PRIVATE_H_INCLUDED

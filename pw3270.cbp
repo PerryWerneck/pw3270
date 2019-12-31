@@ -68,9 +68,6 @@
 		<Unit filename="src/objects/actions/clipboard.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/objects/actions/connect.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/objects/actions/dialog.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -123,6 +120,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/objects/window/actions/close.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/objects/window/actions/connect.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/objects/window/actions/filetransfer.c">

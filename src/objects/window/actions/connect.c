@@ -32,7 +32,9 @@
   *
   */
 
- #include "private.h"
+ #include <pw3270.h>
+ #include <pw3270/actions.h>
+ #include "../private.h"
 
  static void activate(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkWidget *terminal) {
 

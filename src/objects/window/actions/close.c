@@ -27,6 +27,7 @@
  *
  */
 
+ #include "../private.h"
  #include <pw3270.h>
  #include <pw3270/actions.h>
  #include <lib3270.h>
