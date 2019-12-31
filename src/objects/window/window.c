@@ -166,6 +166,8 @@
 
 			pw3270_action_window_close_new(),
 
+			pw3270_action_connect_new(),
+
 		};
 
 		for(ix = 0; ix < G_N_ELEMENTS(actions); ix++) {

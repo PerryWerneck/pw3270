@@ -50,7 +50,7 @@
 
  GtkWidget * factory(GtkWidget *terminal) {
 
-	return v3270_settings_get_edit_dialog(v3270_color_selection_new(),terminal,FALSE);
+	return v3270_settings_get_edit_dialog(v3270_color_settings_new(),terminal,FALSE);
 
  }
 

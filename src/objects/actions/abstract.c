@@ -494,23 +494,6 @@
 	return G_ACTION(g_object_new(PW3270_TYPE_ACTION, NULL));
  }
 
- static GdkPixbuf * pixbuf_from_icon_name(GValue *value, gint width, gint G_GNUC_UNUSED(height), GtkIconLookupFlags flags) {
-
-	const gchar * icon_name = g_value_get_string(value);
-
-	if(!icon_name)
-		return NULL;
-
-	return gtk_icon_theme_load_icon(
-					gtk_icon_theme_get_default(),
-					icon_name,
-					width,
-					flags, // GTK_ICON_LOOKUP_GENERIC_FALLBACK,
-					NULL
-			);
-
- }
-
  gchar * g_action_get_text(GAction *action, const gchar * property_name) {
 	gchar *rc = NULL;
 
@@ -538,6 +521,23 @@
 
  gchar * g_action_get_icon_name(GAction *action) {
 	return g_action_get_text(action, "icon-name");
+ }
+
+ static GdkPixbuf * pixbuf_from_icon_name(GValue *value, gint width, gint G_GNUC_UNUSED(height), GtkIconLookupFlags flags) {
+
+	const gchar * icon_name = g_value_get_string(value);
+
+	if(!icon_name)
+		return NULL;
+
+	return gtk_icon_theme_load_icon(
+					gtk_icon_theme_get_default(),
+					icon_name,
+					width,
+					flags, // GTK_ICON_LOOKUP_GENERIC_FALLBACK,
+					NULL
+			);
+
  }
 
  GdkPixbuf * g_action_get_pixbuf(GAction *action, GtkIconSize icon_size, GtkIconLookupFlags flags) {

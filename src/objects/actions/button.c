@@ -88,8 +88,6 @@
 		return item;
 	}
 
-
-	/// FIXME: Get size from icon_size
 	GdkPixbuf * pixbuf = g_action_get_pixbuf(action, icon_size, GTK_ICON_LOOKUP_GENERIC_FALLBACK);
 
 	if(pixbuf) {
@@ -107,49 +105,7 @@
 		return item;
 	}
 
-
 	return NULL;
 
  }
-
-
- /*
- /// @brief Create a button associated with the action.
- GtkWidget * pw3270_action_button_new(GAction *action, const gchar *action_name) {
-
-	g_return_val_if_fail(PW3270_IS_ACTION(action),NULL);
-
-	const gchar * icon_name = pw3270_action_get_icon_name(action);
-
-	GtkWidget *image;
-	if(g_str_has_prefix(icon_name,"gtk-")) {
-		image = gtk_image_new_from_icon_name(icon_name,GTK_ICON_SIZE_BUTTON);
-	} else {
-		g_autofree gchar * symbolic_name = g_strconcat(icon_name,"-symbolic",NULL);
-		image = gtk_image_new_from_icon_name(symbolic_name,GTK_ICON_SIZE_BUTTON);
-	}
-
-	if(!image) {
-		g_warning("Can't create button for icon \"%s\"",icon_name);
-		return NULL;
-	}
-
-	GtkWidget * button = gtk_button_new();
-	gtk_button_set_image(GTK_BUTTON(button), image);
-
-	gtk_actionable_set_action_name(GTK_ACTIONABLE(button),action_name ? action_name : g_action_get_name(action));
-	gtk_widget_set_visible(button,g_action_get_enabled(action));
-
-	gtk_widget_set_can_focus(button,FALSE);
-	gtk_widget_set_can_default(button,FALSE);
-	gtk_widget_set_focus_on_click(button,FALSE);
-
-	const gchar * tooltip = pw3270_action_get_tooltip(action);
-	if(tooltip)
-		gtk_widget_set_tooltip_markup(button,tooltip);
-
-	return button;
-
- }
- */
 
