@@ -84,17 +84,17 @@
 
 				<item>
 					<attribute name="label" translatable="yes">Save screen</attribute>
-					<attribute name="action">win.save.screen</attribute>
+					<attribute name="action">win.save-all</attribute>
 				</item>
 
 				<item>
 					<attribute name="label" translatable="yes">Save selected</attribute>
-					<attribute name="action">win.save.selected</attribute>
+					<attribute name="action">win.save-selected</attribute>
 				</item>
 
 				<item>
 					<attribute name="label" translatable="yes">Save copy</attribute>
-					<attribute name="action">win.save.copy</attribute>
+					<attribute name="action">win.save-copy</attribute>
 				</item>
 
 			</section>
@@ -103,17 +103,17 @@
 
 				<item>
 					<attribute name="label" translatable="yes">Print Screen</attribute>
-					<attribute name="action">win.print.screen</attribute>
+					<attribute name="action">win.print-all</attribute>
 				</item>
 
 				<item>
 					<attribute name="label" translatable="yes">Print selected</attribute>
-					<attribute name="action">win.print.selected</attribute>
+					<attribute name="action">win.print-selected</attribute>
 				</item>
 
 				<item>
 					<attribute name="label" translatable="yes">Print copy</attribute>
-					<attribute name="action">win.print.copy</attribute>
+					<attribute name="action">win.print-copy</attribute>
 				</item>
 
 			</section>
