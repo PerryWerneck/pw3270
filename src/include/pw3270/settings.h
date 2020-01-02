@@ -43,6 +43,8 @@
 
 	Pw3270SettingsPage * pw3270_toolbar_settings_new();
 
+	GtkWidget * pw3270_frame_new(GtkWidget * child, const gchar *title);
+
 	G_END_DECLS
 
 #endif // PW3270_SETTINGS_H_INCLUDED

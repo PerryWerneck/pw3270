@@ -35,6 +35,7 @@
 
  #include "private.h"
  #include <pw3270/application.h>
+ #include <pw3270/settings.h>
 
 /*---[ Implement ]----------------------------------------------------------------------------------*/
 
@@ -62,4 +63,22 @@
 
  }
 
+ GtkWidget * pw3270_frame_new(GtkWidget * child, const gchar *title) {
+
+	GtkFrame			* frame		= GTK_FRAME(gtk_frame_new(""));
+	g_autofree gchar	* markup	= g_strdup_printf("<b>%s</b>",title);
+	GtkWidget			* label		= gtk_label_new(NULL);
+
+	gtk_frame_set_shadow_type(GTK_FRAME(frame),GTK_SHADOW_NONE);
+	gtk_label_set_markup(GTK_LABEL(label),markup);
+	gtk_frame_set_label_widget(GTK_FRAME(frame),label);
+ 	gtk_container_set_border_width(GTK_CONTAINER(child),12);
+
+	gtk_container_add(GTK_CONTAINER(frame),GTK_WIDGET(child));
+
+	g_object_set(G_OBJECT(frame),"margin-top",6,NULL);
+
+	return GTK_WIDGET(frame);
+
+ }
 

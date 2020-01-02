@@ -31,16 +31,36 @@
  #include <pw3270/settings.h>
  #include <pw3270/actions.h>
 
+ static const struct _comboboxes {
+ 	const gchar * name;
+ 	const gchar * label;
+ } comboboxes[] = {
+
+	{
+		.name = "toolbar-icon-size",
+		.label = N_("Icon Size"),
+	},
+
+	{
+		.name = "toolbar-style",
+		.label = N_("Style")
+	}
+
+ };
+
  typedef struct _ToolbarSettingsPage {
 	Pw3270SettingsPage parent;
 	GtkWidget * views[2];
 	GtkWidget * buttons[2];
+	GtkTreeModel * models[2];
+	GtkWidget * combos[G_N_ELEMENTS(comboboxes)];
 
  } ToolbarSettingsPage;
 
  static void load(Pw3270SettingsPage *pg, GtkApplication *application, GSettings *settings) {
 
  	size_t ix;
+	ToolbarSettingsPage * page = (ToolbarSettingsPage *) pg;
 
  	debug("%s",__FUNCTION__);
 
@@ -57,12 +77,12 @@
 		if(g_ascii_strcasecmp(actions[ix],"separator")) {
 
 			// It's an action
-			action_list = pw3270_action_list_move_action(action_list,actions[ix],((ToolbarSettingsPage *) pg)->views[0]);
+			action_list = pw3270_action_list_move_action(action_list,actions[ix],page->views[0]);
 
 		} else {
 
 			// It's a separator
-			pw3270_action_view_append(((ToolbarSettingsPage *) pg)->views[0], _( "Separator"), NULL, "separator", 2);
+			pw3270_action_view_append(page->views[0], _( "Separator"), NULL, "separator", 2);
 
 		}
 
@@ -71,23 +91,53 @@
 	g_strfreev(actions);
 
 	// Load available actions.
-	pw3270_action_view_set_actions(((ToolbarSettingsPage *) pg)->views[1], action_list);
-	pw3270_action_view_append(((ToolbarSettingsPage *) pg)->views[1], _( "Separator"), NULL, "separator", 1);
+	pw3270_action_view_set_actions(page->views[1], action_list);
+	pw3270_action_view_append(page->views[1], _( "Separator"), NULL, "separator", 1);
 
 	pw3270_action_list_free(action_list);
 
+	GtkTreeIter	iter;
+
+	for(ix = 0; ix < G_N_ELEMENTS(page->combos); ix++) {
+
+		pw3270_model_get_iter_from_value(
+			gtk_combo_box_get_model(GTK_COMBO_BOX(page->combos[ix])),
+			&iter,
+			(guint) g_settings_get_int(settings,comboboxes[ix].name)
+		);
+
+		gtk_combo_box_set_active_iter(GTK_COMBO_BOX(page->combos[ix]),&iter);
+
+	}
 
  }
 
  static void apply(Pw3270SettingsPage *pg, GtkApplication G_GNUC_UNUSED(*application), GSettings *settings) {
 
+	size_t ix;
+	ToolbarSettingsPage * page = (ToolbarSettingsPage *) pg;
+
  	debug("%s",__FUNCTION__);
 
- 	g_autofree gchar * action_names = pw3270_action_view_get_action_names(((ToolbarSettingsPage *) pg)->views[0]);
+ 	g_autofree gchar * action_names = pw3270_action_view_get_action_names(page->views[0]);
 	g_settings_set_string(settings,"toolbar-action-names",action_names);
 
  	debug("[%s]",action_names);
 
+	GtkTreeIter	iter;
+	for(ix = 0; ix < G_N_ELEMENTS(page->combos); ix++) {
+
+		if(gtk_combo_box_get_active_iter(GTK_COMBO_BOX(page->combos[ix]),&iter)) {
+
+			g_settings_set_int(
+					settings,
+					comboboxes[ix].name,
+					(gint) pw3270_model_get_value_from_iter(gtk_combo_box_get_model(GTK_COMBO_BOX(page->combos[ix])),&iter)
+			);
+
+		}
+
+	}
  }
 
  static void selection_changed(GtkTreeSelection *selection, GtkWidget *button) {
@@ -107,7 +157,6 @@
  Pw3270SettingsPage * pw3270_toolbar_settings_new() {
 
 	size_t ix;
-	GtkTreeSelection * selection;
 
 	ToolbarSettingsPage * page = g_new0(ToolbarSettingsPage,1);
 
@@ -116,94 +165,155 @@
 	page->parent.label = _("Toolbar");
 	page->parent.title = _("Setup toolbar");
 
-	page->parent.widget = gtk_grid_new();
-	gtk_grid_set_row_homogeneous(GTK_GRID(page->parent.widget),FALSE);
+	page->parent.widget = gtk_box_new(GTK_ORIENTATION_VERTICAL,0);
 
+
+	//
 	// Create views
-	static const gchar *labels[G_N_ELEMENTS(page->views)] = {
-		N_("Selected"),
-		N_("Available")
-	};
+	//
+	{
+		GtkTreeSelection * selection;
 
-	for(ix = 0; ix < G_N_ELEMENTS(page->views); ix++) {
+		GtkGrid * grid = GTK_GRID(gtk_grid_new());
+		gtk_grid_set_row_homogeneous(grid,FALSE);
 
-		GtkWidget * label = gtk_label_new(gettext(labels[ix]));
-		gtk_label_set_xalign(GTK_LABEL(label),0);
+		gtk_box_pack_start(
+				GTK_BOX(page->parent.widget),
+				pw3270_frame_new(GTK_WIDGET(grid), _("Actions")),
+				TRUE,
+				TRUE,
+				0
+			);
 
-		page->views[ix] = pw3270_action_view_new();
+		static const gchar *labels[G_N_ELEMENTS(page->views)] = {
+			N_("Selected"),
+			N_("Available")
+		};
 
-		selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(page->views[ix]));
-		gtk_tree_selection_set_mode(selection, GTK_SELECTION_MULTIPLE);
+		for(ix = 0; ix < G_N_ELEMENTS(page->views); ix++) {
 
-		gtk_grid_attach(
-			GTK_GRID(page->parent.widget),
-			label,
-			ix * 3,0,2,1
-		);
+			GtkWidget * label = gtk_label_new(gettext(labels[ix]));
+			gtk_label_set_xalign(GTK_LABEL(label),0);
 
-		GtkWidget * box = gtk_scrolled_window_new(NULL,NULL);
-		gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(box),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
-		gtk_container_add(GTK_CONTAINER(box),page->views[ix]);
+			page->views[ix] = pw3270_action_view_new();
 
-		gtk_grid_attach(
-			GTK_GRID(page->parent.widget),
-			box,
-			ix * 3,1,2,4
-		);
+			selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(page->views[ix]));
+			gtk_tree_selection_set_mode(selection, GTK_SELECTION_MULTIPLE);
 
-	}
+			gtk_grid_attach(
+				grid,
+				label,
+				ix * 3,0,2,1
+			);
 
-	gtk_tree_view_set_reorderable(GTK_TREE_VIEW(page->views[0]),TRUE);
-	gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(gtk_tree_view_get_model(GTK_TREE_VIEW(page->views[1]))), GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID, GTK_SORT_ASCENDING);
+			GtkWidget * box = gtk_scrolled_window_new(NULL,NULL);
+			gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(box),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
+			gtk_container_add(GTK_CONTAINER(box),page->views[ix]);
 
-	// Create buttons
-	static const gchar * icon_names[G_N_ELEMENTS(page->buttons)] = {
-		"go-next",
-		"go-previous"
-	};
+			gtk_grid_attach(
+				grid,
+				box,
+				ix * 3,1,2,4
+			);
 
-	GtkWidget * box = gtk_button_box_new(GTK_ORIENTATION_VERTICAL);
-	gtk_widget_set_hexpand(box,FALSE);
-	gtk_widget_set_vexpand(box,FALSE);
+		}
 
-	for(ix = 0; ix < G_N_ELEMENTS(icon_names); ix++) {
-		page->buttons[ix] = gtk_button_new_from_icon_name(icon_names[ix],GTK_ICON_SIZE_DND);
+		gtk_tree_view_set_reorderable(GTK_TREE_VIEW(page->views[0]),TRUE);
+		gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(gtk_tree_view_get_model(GTK_TREE_VIEW(page->views[1]))), GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID, GTK_SORT_ASCENDING);
 
-		gtk_widget_set_focus_on_click(page->buttons[ix],FALSE);
-		gtk_button_set_relief(GTK_BUTTON(page->buttons[ix]),GTK_RELIEF_NONE);
-		gtk_widget_set_sensitive(page->buttons[ix],FALSE);
+		// Create buttons
+		static const gchar * icon_names[G_N_ELEMENTS(page->buttons)] = {
+			"go-next",
+			"go-previous"
+		};
+
+		GtkWidget * box = gtk_button_box_new(GTK_ORIENTATION_VERTICAL);
+		gtk_widget_set_hexpand(box,FALSE);
+		gtk_widget_set_vexpand(box,FALSE);
+
+		for(ix = 0; ix < G_N_ELEMENTS(icon_names); ix++) {
+			page->buttons[ix] = gtk_button_new_from_icon_name(icon_names[ix],GTK_ICON_SIZE_DND);
+
+			gtk_widget_set_focus_on_click(page->buttons[ix],FALSE);
+			gtk_button_set_relief(GTK_BUTTON(page->buttons[ix]),GTK_RELIEF_NONE);
+			gtk_widget_set_sensitive(page->buttons[ix],FALSE);
+
+			g_signal_connect(
+				gtk_tree_view_get_selection(GTK_TREE_VIEW(page->views[ix])),
+				"changed",
+				G_CALLBACK(selection_changed),
+				page->buttons[ix]
+			);
+
+		}
+
+		gtk_box_pack_start(GTK_BOX(box),page->buttons[0],FALSE,FALSE,0);
+		gtk_box_pack_end(GTK_BOX(box),page->buttons[1],FALSE,FALSE,0);
 
 		g_signal_connect(
-			gtk_tree_view_get_selection(GTK_TREE_VIEW(page->views[ix])),
-			"changed",
-			G_CALLBACK(selection_changed),
-			page->buttons[ix]
+			page->buttons[0],
+			"clicked",
+			G_CALLBACK(toolbar_remove),
+			page
+		);
+
+		g_signal_connect(
+			page->buttons[1],
+			"clicked",
+			G_CALLBACK(toolbar_insert),
+			page
+		);
+
+		gtk_grid_attach(
+			grid,
+			box,
+			2,2,1,1
 		);
 
 	}
 
-	gtk_box_pack_start(GTK_BOX(box),page->buttons[0],FALSE,FALSE,0);
-	gtk_box_pack_end(GTK_BOX(box),page->buttons[1],FALSE,FALSE,0);
+	//
+	// Create style & icon size settings.
+	//
+	{
+		GtkGrid * grid = GTK_GRID(gtk_grid_new());
 
-	g_signal_connect(
-		page->buttons[0],
-		"clicked",
-		G_CALLBACK(toolbar_remove),
-		page
-	);
+		gtk_box_pack_start(
+				GTK_BOX(page->parent.widget),
+				pw3270_frame_new(GTK_WIDGET(grid), _("Options")),
+				TRUE,
+				TRUE,
+				0
+			);
 
-	g_signal_connect(
-		page->buttons[1],
-		"clicked",
-		G_CALLBACK(toolbar_insert),
-		page
-	);
+		// https://developer.gnome.org/hig/stable/visual-layout.html.en
+		gtk_grid_set_row_spacing(grid,6);
+		gtk_grid_set_column_spacing(grid,12);
+		gtk_widget_set_hexpand(GTK_WIDGET(grid),TRUE);
 
-	gtk_grid_attach(
-		GTK_GRID(page->parent.widget),
-		box,
-		2,2,1,1
-	);
+		page->models[0] = pw3270_toolbar_icon_size_model_new();
+		page->models[1] = pw3270_toolbar_style_model_new();
+
+		GtkCellRenderer * renderer	= gtk_cell_renderer_text_new();
+
+		for(ix = 0; ix < G_N_ELEMENTS(page->models); ix++) {
+
+			GtkWidget * label = gtk_label_new(gettext(comboboxes[ix].label));
+			gtk_label_set_xalign(GTK_LABEL(label),1);
+
+			gtk_grid_attach(grid,label,(ix*3),0,1,1);
+
+			page->combos[ix] = gtk_combo_box_new_with_model(page->models[ix]);
+			gtk_widget_set_hexpand(page->combos[ix],TRUE);
+
+			gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(page->combos[ix]), renderer, TRUE);
+			gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(page->combos[ix]), renderer, "text", 0, NULL);
+
+			gtk_grid_attach(grid,page->combos[ix],(ix*3)+1,0,2,1);
+
+		}
+
+	}
 
 	return (Pw3270SettingsPage *) page;
  }

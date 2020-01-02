@@ -50,4 +50,8 @@
 	G_GNUC_INTERNAL GtkTreeModel	* pw3270_toolbar_style_model_new();
 	G_GNUC_INTERNAL GtkTreeModel	* pw3270_toolbar_icon_size_model_new();
 
+	G_GNUC_INTERNAL void			  pw3270_model_get_iter_from_value(GtkTreeModel * model, GtkTreeIter *iter, guint value);
+	G_GNUC_INTERNAL guint			  pw3270_model_get_value_from_iter(GtkTreeModel * model, GtkTreeIter *iter);
+
+
 #endif // PRIVATE_H_INCLUDED

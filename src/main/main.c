@@ -38,8 +38,33 @@
  #include <lib3270.h>
  #include <lib3270/log.h>
  #include <locale.h>
+ #ifdef G_OS_UNIX
+	#include <glib-unix.h>
+ #endif // G_OS_UNIX
 
 /*---[ Implement ]----------------------------------------------------------------------------------*/
+
+static gboolean	quit_signal(GtkApplication *app) {
+
+	debug("%s",__FUNCTION__);
+	g_message("Terminating by signal");
+
+	/*
+	GList *list = gtk_application_get_windows(GTK_APPLICATION(application));
+
+	while(list) {
+
+		GtkWidget * window = GTK_WIDGET(list->data);
+		list = list->next;
+
+		gtk_widget_destroy(window);
+
+	}
+	*/
+
+	g_application_quit(G_APPLICATION(app));
+	return FALSE;
+}
 
 int main (int argc, char **argv) {
 
@@ -66,6 +91,11 @@ int main (int argc, char **argv) {
 
 	g_set_application_name(G_STRINGIFY(PRODUCT_NAME));
 	app = pw3270_application_new("br.com.bb." G_STRINGIFY(PRODUCT_NAME),G_APPLICATION_HANDLES_OPEN);
+
+#ifdef G_OS_UNIX
+	// Termination
+	g_unix_signal_add(SIGTERM, (GSourceFunc) quit_signal, app);
+#endif // G_OS_UNIX
 
 	status = g_application_run(G_APPLICATION (app), argc, argv);
 	g_object_unref (app);

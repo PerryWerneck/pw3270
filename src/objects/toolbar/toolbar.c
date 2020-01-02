@@ -420,3 +420,33 @@
 
 	return GTK_TREE_MODEL(model);
  }
+
+ void pw3270_model_get_iter_from_value(GtkTreeModel * model, GtkTreeIter *iter, guint value) {
+
+	if(gtk_tree_model_get_iter_first(model,iter)) {
+
+		do {
+
+			GValue gVal = { 0, };
+			gtk_tree_model_get_value(model,iter,1,&gVal);
+			guint iVal = g_value_get_uint(&gVal);
+			g_value_unset(&gVal);
+
+			if(iVal == value) {
+				return;
+			}
+
+		} while(gtk_tree_model_iter_next(model,iter));
+
+	}
+
+ }
+
+ guint pw3270_model_get_value_from_iter(GtkTreeModel * model, GtkTreeIter *iter) {
+	GValue gVal = { 0, };
+	gtk_tree_model_get_value(model,iter,1,&gVal);
+	guint iVal = g_value_get_uint(&gVal);
+	g_value_unset(&gVal);
+	return iVal;
+}
+
