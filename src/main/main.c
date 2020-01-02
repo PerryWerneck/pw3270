@@ -37,6 +37,7 @@
  #include <pw3270/application.h>
  #include <lib3270.h>
  #include <lib3270/log.h>
+ #include <locale.h>
 
 /*---[ Implement ]----------------------------------------------------------------------------------*/
 
@@ -44,6 +45,24 @@ int main (int argc, char **argv) {
 
 	GtkApplication *app;
 	int status;
+
+	// Setup locale
+#ifdef LC_ALL
+	setlocale( LC_ALL, "" );
+#endif
+
+#ifdef _WIN32
+	{
+		g_autofree gchar * appdir = g_win32_get_package_installation_directory_of_module(NULL);
+		g_autofree gchar * locdir = g_build_filename(appdir,"locale",NULL);
+		bindtextdomain( PACKAGE_NAME, locdir );
+	}
+#endif // _WIN32
+
+	bind_textdomain_codeset(PACKAGE_NAME, "UTF-8");
+	textdomain(PACKAGE_NAME);
+
+	// Setup and start application.
 
 	g_set_application_name(G_STRINGIFY(PRODUCT_NAME));
 	app = pw3270_application_new("br.com.bb." G_STRINGIFY(PRODUCT_NAME),G_APPLICATION_HANDLES_OPEN);

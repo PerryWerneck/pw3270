@@ -38,7 +38,7 @@
  static void get_property(GObject *object, guint prop_id, GValue *value, GParamSpec *pspec);
  static void set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec);
 
- static const struct icon_size {
+ const struct icon_size {
 	const gchar			* label;
 	GtkIconSize			  icon_size;
  } icon_sizes[] = {
@@ -60,7 +60,7 @@
 	},
  };
 
- static const struct toolbar_style {
+ static const struct style {
 	const gchar * label;
 	GtkToolbarStyle style;
  } styles[] = {
@@ -184,7 +184,7 @@
  static void set_style(GtkCheckMenuItem *menuitem, GtkWidget *toolbar) {
 
 	if(gtk_check_menu_item_get_active(menuitem)) {
-		struct toolbar_style * style = g_object_get_data(G_OBJECT(menuitem),"toolbar_style");
+		struct style * style = g_object_get_data(G_OBJECT(menuitem),"toolbar_style");
 		pw3270_toolbar_toolbar_set_style(GTK_TOOLBAR(toolbar), style->style);
 	}
 
@@ -269,42 +269,6 @@
  GtkWidget * pw3270_toolbar_new(void) {
 	return g_object_new(PW3270_TYPE_TOOLBAR, NULL);
  }
-
- /*
- GtkWidget * pw3270_toolbar_insert_lib3270_action(GtkWidget *toolbar, const LIB3270_ACTION *action, gint pos) {
-
-	g_return_val_if_fail(GTK_IS_TOOLBAR(toolbar),NULL);
-
-	if(!action) {
-		g_message(_("Invalid action identifier"));
-		return NULL;
-	}
-
-	if(!action->icon) {
-		g_message(_("Action \"%s\" doesn't have an icon"), action->name);
-		return NULL;
-	}
-
-	if(!action->label) {
-		g_message(_("Action \"%s\" doesn't have a label"), action->name);
-		return NULL;
-	}
-
-	debug("Action: %s icon: %s", action->name, action->icon);
-
-	GtkToolItem * item = gtk_tool_button_new(gtk_image_new_from_icon_name(action->icon,GTK_ICON_SIZE_LARGE_TOOLBAR),gettext(action->label));
-	gtk_tool_button_set_use_underline(GTK_TOOL_BUTTON(item),TRUE);
-
-	gtk_widget_set_name(GTK_WIDGET(item), action->name);
-
-	if(action->summary)
-		gtk_tool_item_set_tooltip_text(item,gettext(action->summary));
-
-	gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, pos);
-
-	return GTK_WIDGET(item);
- }
- */
 
  gboolean popup_context_menu(GtkToolbar *widget, gint G_GNUC_UNUSED(x), gint G_GNUC_UNUSED(y), gint button_number) {
 
@@ -416,4 +380,43 @@
  	g_list_free(children);
 
 	return g_string_free(str,FALSE);
+ }
+
+ GtkTreeModel * pw3270_toolbar_style_model_new() {
+
+ 	size_t ix;
+	GtkTreeIter	  iter;
+	GtkListStore * model = gtk_list_store_new(2, G_TYPE_STRING,G_TYPE_UINT);
+
+	for(ix = 0; ix < G_N_ELEMENTS(icon_sizes); ix++) {
+		gtk_list_store_append(model,&iter);
+		gtk_list_store_set(	model,
+							&iter,
+							0, gettext(styles[ix].label),
+							1, (guint) styles[ix].style,
+							-1);
+
+	}
+
+	return GTK_TREE_MODEL(model);
+
+ }
+
+ GtkTreeModel * pw3270_toolbar_icon_size_model_new() {
+
+	size_t ix;
+	GtkTreeIter	  iter;
+	GtkListStore * model = gtk_list_store_new(2, G_TYPE_STRING,G_TYPE_UINT);
+
+	for(ix = 0; ix < G_N_ELEMENTS(icon_sizes); ix++) {
+		gtk_list_store_append(model,&iter);
+		gtk_list_store_set(	model,
+							&iter,
+							0, gettext(icon_sizes[ix].label),
+							1, (guint) icon_sizes[ix].icon_size,
+							-1);
+
+	}
+
+	return GTK_TREE_MODEL(model);
  }

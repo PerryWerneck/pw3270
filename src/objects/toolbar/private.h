@@ -44,7 +44,10 @@
 	#include <pw3270/toolbar.h>
 	#include <lib3270/log.h>
 
-	G_GNUC_INTERNAL GtkWidget * pw3270_tool_button_new(GAction *action);
-	G_GNUC_INTERNAL GtkWidget * pw3270_tool_button_new_from_action_name(const gchar * action_name);
+	G_GNUC_INTERNAL GtkWidget 		* pw3270_tool_button_new(GAction *action);
+	G_GNUC_INTERNAL GtkWidget 		* pw3270_tool_button_new_from_action_name(const gchar * action_name);
+
+	G_GNUC_INTERNAL GtkTreeModel	* pw3270_toolbar_style_model_new();
+	G_GNUC_INTERNAL GtkTreeModel	* pw3270_toolbar_icon_size_model_new();
 
 #endif // PRIVATE_H_INCLUDED
