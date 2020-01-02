@@ -237,18 +237,18 @@
 		},
 
 		{
-			.name = "open",
-			.activate = pw3270_application_generic_activated,
+			.name = "open.session",
+			.activate = pw3270_application_open_activated,
 		},
 
 		{
-			.name = "open.tab",
-			.activate = pw3270_application_generic_activated,
+			.name = "open.session.tab",
+			.activate = pw3270_application_open_tab_activated,
 		},
 
 		{
-			.name = "open.window",
-			.activate = pw3270_application_generic_activated,
+			.name = "open.session.window",
+			.activate = pw3270_application_open_window_activated,
 		},
 
 	};

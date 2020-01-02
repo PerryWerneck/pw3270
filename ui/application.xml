@@ -36,10 +36,21 @@
 			<attribute name="action">app.about</attribute>
 		</item>
 
-		<item>
-			<attribute name="label" translatable="yes">New Window</attribute>
-			<attribute name="action">app.new.window</attribute>
-		</item>
+		<submenu>
+
+			<attribute name='label' translatable='yes'>Open</attribute>
+
+			<item>
+				<attribute name="label" translatable="yes">New Window</attribute>
+				<attribute name="action">app.open.session.window</attribute>
+			</item>
+
+			<item>
+				<attribute name="label" translatable="yes">New Tab</attribute>
+				<attribute name="action">app.open.session.tab</attribute>
+			</item>
+
+		</submenu>
 
 		<submenu>
 

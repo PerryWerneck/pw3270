@@ -96,6 +96,9 @@
 		<Unit filename="src/objects/application/actions/about.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/objects/application/actions/open.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/objects/application/actions/preferences.c">
 			<Option compilerVar="CC" />
 		</Unit>
