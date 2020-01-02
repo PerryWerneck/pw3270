@@ -38,15 +38,15 @@
 
 		<submenu>
 
-			<attribute name='label' translatable='yes'>Open</attribute>
+			<attribute name='label' translatable='yes'>Session</attribute>
 
 			<item>
-				<attribute name="label" translatable="yes">New Window</attribute>
+				<attribute name="label" translatable="yes">Open in New Window</attribute>
 				<attribute name="action">app.open.session.window</attribute>
 			</item>
 
 			<item>
-				<attribute name="label" translatable="yes">New Tab</attribute>
+				<attribute name="label" translatable="yes">Open in New Tab</attribute>
 				<attribute name="action">app.open.session.tab</attribute>
 			</item>
 
@@ -54,27 +54,28 @@
 
 		<submenu>
 
-			<attribute name='label' translatable='yes'>Options</attribute>
+			<attribute name='label' translatable='yes'>View</attribute>
 
 			<item>
-				<attribute name="label" translatable="yes">Show toolbar</attribute>
+				<attribute name="label" translatable="yes">Main Toolbar</attribute>
 				<attribute name="action">win.toolbar</attribute>
 			</item>
 
 			<item>
-				<attribute name="label" translatable="yes">Show menu</attribute>
+				<attribute name="label" translatable="yes">Main Menu</attribute>
 				<attribute name="action">win.menubar</attribute>
 			</item>
 
 			<item>
-				<attribute name="label" translatable="yes">Show trace</attribute>
+				<attribute name="label" translatable="yes">Session Trace</attribute>
 				<attribute name="action">win.trace</attribute>
 			</item>
 
 		</submenu>
 
+
 		<item>
-			<attribute name="label" translatable="yes">Preferences</attribute>
+			<attribute name="label" translatable="yes">Application preferences</attribute>
 			<attribute name="action">app.preferences</attribute>
 		</item>
 

@@ -36,20 +36,84 @@
  #include <v3270.h>
  #include <pw3270/application.h>
 
+ static void set_file_filters(GtkFileChooser *chooser) {
+
+	static const struct Filter {
+		const gchar * name;
+		const gchar * pattern;
+	} filters[] = {
+		{
+			.name = N_("TN3270 Session Files"),
+			.pattern = "*.3270"
+		},
+		{
+			.name = N_("All files"),
+			.pattern = "*.*"
+		}
+	};
+
+	size_t ix;
+
+	for(ix = 0; ix < G_N_ELEMENTS(filters); ix++) {
+		GtkFileFilter *filter = gtk_file_filter_new();
+		gtk_file_filter_add_pattern (filter, filters[ix].pattern);
+		gtk_file_filter_set_name(filter, filters[ix].name);
+		gtk_file_chooser_add_filter(chooser,filter);
+	}
+
+ }
+
+ static gchar * get_session_file_name(GtkApplication *application, const gchar *title) {
+
+	gchar * filename = NULL;
+
+	GtkWidget *	dialog =
+		gtk_file_chooser_dialog_new(
+				title,
+				gtk_application_get_active_window(application),
+				GTK_FILE_CHOOSER_ACTION_OPEN,
+				_("Open Session"), GTK_RESPONSE_OK,
+				_("Cancel"),GTK_RESPONSE_CANCEL,
+				NULL
+		);
+
+	set_file_filters(GTK_FILE_CHOOSER(dialog));
+
+	gtk_widget_show_all(dialog);
+	if(gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK) {
+		filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+	}
+
+	gtk_widget_destroy(dialog);
+
+	return filename;
+ }
+
  void pw3270_application_open_activated(GSimpleAction * action, GVariant *parameter, gpointer application) {
 
  	debug("%s",__FUNCTION__);
+ 	g_simple_action_set_enabled(action,FALSE);
 
+ 	g_simple_action_set_enabled(action,TRUE);
  }
 
   void pw3270_application_open_tab_activated(GSimpleAction * action, GVariant *parameter, gpointer application) {
 
  	debug("%s",__FUNCTION__);
+ 	g_simple_action_set_enabled(action,FALSE);
+ 	g_autofree gchar * session_file_name = get_session_file_name(GTK_APPLICATION(application),_("Open session in new tab"));
 
+
+ 	g_simple_action_set_enabled(action,TRUE);
  }
 
  void pw3270_application_open_window_activated(GSimpleAction * action, GVariant *parameter, gpointer application) {
 
  	debug("%s",__FUNCTION__);
+ 	g_simple_action_set_enabled(action,FALSE);
+ 	g_autofree gchar * session_file_name = get_session_file_name(GTK_APPLICATION(application),_("Open session in new window"));
 
+
+ 	g_simple_action_set_enabled(action,TRUE);
  }
+
