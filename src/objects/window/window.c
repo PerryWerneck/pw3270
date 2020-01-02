@@ -298,6 +298,22 @@
 		G_SETTINGS_BIND_DEFAULT
 	);
 
+	g_settings_bind(
+		settings,
+		"toolbar-style",
+		window->toolbar,
+		"style",
+		G_SETTINGS_BIND_DEFAULT
+	);
+
+	g_settings_bind(
+		settings,
+		"toolbar-icon-size",
+		window->toolbar,
+		"icon-size",
+		G_SETTINGS_BIND_DEFAULT
+	);
+
 	gtk_window_set_position(GTK_WINDOW(window),GTK_WIN_POS_CENTER);
 	gtk_window_set_default_size (GTK_WINDOW (window), 800, 500);
 

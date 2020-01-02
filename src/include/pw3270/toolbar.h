@@ -66,6 +66,9 @@
 	void pw3270_toolbar_set_style(GtkToolbar *toolbar, GtkToolbarStyle style);
 	void pw3270_toolbar_set_icon_size(GtkToolbar *toolbar, GtkIconSize icon_size);
 
+	GtkToolbarStyle pw3270_toolbar_get_style(GtkToolbar *toolbar);
+	GtkIconSize pw3270_toolbar_get_icon_size(GtkToolbar *toolbar);
+
 	G_END_DECLS
 
 #endif // PW3270_TOOLBAR_H_INCLUDED

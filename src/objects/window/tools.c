@@ -44,6 +44,7 @@
  }
 */
 
+/*
  gboolean pw3270_settings_set_int(const gchar *key, gint value) {
 
 	GSettings * settings = pw3270_application_get_settings(g_application_get_default());
@@ -51,4 +52,4 @@
 		return g_settings_set_int(settings,key,value);
 	return FALSE;
  }
-
+*/
