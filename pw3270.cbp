@@ -134,9 +134,6 @@
 		<Unit filename="src/objects/window/actions/hostproperties.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/objects/window/actions/print.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/objects/window/actions/sessionproperties.c">
 			<Option compilerVar="CC" />
 		</Unit>

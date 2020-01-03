@@ -311,6 +311,18 @@
  	g_free(session);
  }
 
+ const gchar * v3270_get_session_filename(GtkWidget *widget) {
+
+ 	g_return_val_if_fail(GTK_IS_V3270(widget),NULL);
+
+	const struct SessionDescriptor * descriptor = (const struct SessionDescriptor *) g_object_get_data(G_OBJECT(widget),"session-descriptor");
+
+	if(descriptor)
+		return descriptor->filename;
+
+	return NULL;
+ }
+
  GtkWidget * pw3270_terminal_new(GtkWidget *widget, const gchar *session_file) {
 
 	struct SessionDescriptor * descriptor;

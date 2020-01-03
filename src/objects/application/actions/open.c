@@ -34,34 +34,8 @@
 
  #include "../private.h"
  #include <v3270.h>
+ #include <pw3270.h>
  #include <pw3270/application.h>
-
- static void set_file_filters(GtkFileChooser *chooser) {
-
-	static const struct Filter {
-		const gchar * name;
-		const gchar * pattern;
-	} filters[] = {
-		{
-			.name = N_("TN3270 Session Files"),
-			.pattern = "*.3270"
-		},
-		{
-			.name = N_("All files"),
-			.pattern = "*.*"
-		}
-	};
-
-	size_t ix;
-
-	for(ix = 0; ix < G_N_ELEMENTS(filters); ix++) {
-		GtkFileFilter *filter = gtk_file_filter_new();
-		gtk_file_filter_add_pattern (filter, filters[ix].pattern);
-		gtk_file_filter_set_name(filter, filters[ix].name);
-		gtk_file_chooser_add_filter(chooser,filter);
-	}
-
- }
 
  static gchar * get_session_file_name(GtkApplication *application, const gchar *title) {
 
@@ -77,7 +51,7 @@
 				NULL
 		);
 
-	set_file_filters(GTK_FILE_CHOOSER(dialog));
+	gtk_file_chooser_set_pw3270_filters(GTK_FILE_CHOOSER(dialog));
 
 	gtk_widget_show_all(dialog);
 	if(gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK) {

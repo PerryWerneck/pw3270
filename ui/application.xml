@@ -31,10 +31,16 @@
 	<requires lib="gtk+" version="3.0"/>
 	<menu id="app-menu">
 
-		<item>
-			<attribute name="label" translatable="yes">About PW3270</attribute>
-			<attribute name="action">app.about</attribute>
-		</item>
+		<submenu id="help-menu-placeholder">
+
+			<attribute name='label' translatable='yes'>Help</attribute>
+
+			<item>
+				<attribute name="label" translatable="yes">About PW3270</attribute>
+				<attribute name="action">app.about</attribute>
+			</item>
+
+		</submenu>
 
 		<submenu>
 
@@ -92,43 +98,84 @@
 
 			<attribute name='label' translatable='yes'>_File</attribute>
 
-			<section>
+			<submenu>
+
+				<attribute name='label' translatable='yes'>_New</attribute>
 
 				<item>
-					<attribute name="label" translatable="yes">Save screen</attribute>
+					<attribute name="label" translatable="yes">Window with default session</attribute>
+					<attribute name="action">app.new.window</attribute>
+				</item>
+
+				<item>
+					<attribute name="label" translatable="yes">Tab with default session</attribute>
+					<attribute name="action">app.new.tab</attribute>
+				</item>
+
+			</submenu>
+
+			<submenu>
+
+				<attribute name='label' translatable='yes'>_Open</attribute>
+
+				<item>
+					<attribute name="label" translatable="yes">Session in new window</attribute>
+					<attribute name="action">app.open.session.window</attribute>
+				</item>
+
+				<item>
+					<attribute name="label" translatable="yes">Session in New Tab</attribute>
+					<attribute name="action">app.open.session.tab</attribute>
+				</item>
+
+			</submenu>
+
+			<submenu>
+
+				<attribute name='label' translatable='yes'>Save</attribute>
+
+				<item>
+					<attribute name="label" translatable="yes">Session properties</attribute>
+					<attribute name="action">win.save.session.as</attribute>
+				</item>
+
+				<item>
+					<attribute name="label" translatable="yes">Current screen</attribute>
 					<attribute name="action">win.save-all</attribute>
 				</item>
 
 				<item>
-					<attribute name="label" translatable="yes">Save selected</attribute>
+					<attribute name="label" translatable="yes">Selected area</attribute>
 					<attribute name="action">win.save-selected</attribute>
 				</item>
 
 				<item>
-					<attribute name="label" translatable="yes">Save copy</attribute>
+					<attribute name="label" translatable="yes">Clipboard contents</attribute>
 					<attribute name="action">win.save-copy</attribute>
 				</item>
 
-			</section>
+			</submenu>
 
-			<section>
+			<submenu>
+
+				<attribute name='label' translatable='yes'>Print</attribute>
 
 				<item>
-					<attribute name="label" translatable="yes">Print Screen</attribute>
+					<attribute name="label" translatable="yes">Current Screen</attribute>
 					<attribute name="action">win.print-all</attribute>
 				</item>
 
 				<item>
-					<attribute name="label" translatable="yes">Print selected</attribute>
+					<attribute name="label" translatable="yes">Selected area</attribute>
 					<attribute name="action">win.print-selected</attribute>
 				</item>
 
 				<item>
-					<attribute name="label" translatable="yes">Print copy</attribute>
+					<attribute name="label" translatable="yes">Clipboard contents</attribute>
 					<attribute name="action">win.print-copy</attribute>
 				</item>
 
-			</section>
+			</submenu>
 
 			<section>
 
@@ -137,10 +184,31 @@
 					<attribute name="action">win.file.transfer</attribute>
 				</item>
 
+				<submenu>
+
+					<attribute name='label' translatable='yes'>Preferences</attribute>
+
+					<item>
+						<attribute name="label" translatable="yes">Application</attribute>
+						<attribute name="action">app.preferences</attribute>
+					</item>
+
+					<item>
+						<attribute name="label" translatable="yes">Current session</attribute>
+						<attribute name="action">win.session.properties</attribute>
+					</item>
+
+				</submenu>
+
 				<item>
+					<attribute name="label" translatable="yes">Close window</attribute>
+					<attribute name="action">win.close</attribute>
+				</item>
+
+				<!-- item>
 					<attribute name="label" translatable="yes">Quit application</attribute>
 					<attribute name="action">app.quit</attribute>
-				</item>
+				</item -->
 
 			</section>
 
@@ -447,7 +515,7 @@
 
 		</submenu>
 
-		<submenu>
+		<submenu id="help-menu-placeholder">
 
 			<attribute name='label' translatable='yes'>Help</attribute>
 

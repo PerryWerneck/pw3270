@@ -65,6 +65,13 @@
 		void (*apply)(Pw3270SettingsPage *, GtkApplication *, GSettings *);
 	};
 
+	void gtk_file_chooser_set_pw3270_filters(GtkFileChooser *chooser);
+
+	const gchar	* v3270_get_session_filename(GtkWidget *widget);
+	void		  v3270_set_session_filename(GtkWidget *widget, const gchar *filename);
+
+
+
 	G_END_DECLS
 
 #endif // PW3270_H_INCLUDED

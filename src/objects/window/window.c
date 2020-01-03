@@ -162,6 +162,8 @@
 			pw3270_action_session_properties_new(),
 			pw3270_set_color_action_new(),
 
+			pw3270_action_save_session_as_new(),
+
 			pw3270_file_transfer_action_new(),
 
 			pw3270_action_window_close_new(),

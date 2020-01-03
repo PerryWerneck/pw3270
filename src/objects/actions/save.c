@@ -34,5 +34,65 @@
 
  #include "private.h"
  #include <v3270.h>
+ #include <pw3270.h>
  #include <pw3270/application.h>
 
+ static gchar * get_session_file_name(GtkWidget *terminal, const gchar *title) {
+
+	gchar * filename = NULL;
+
+	GtkWidget *	dialog =
+		gtk_file_chooser_dialog_new(
+				title,
+				GTK_WINDOW(gtk_widget_get_toplevel(terminal)),
+				GTK_FILE_CHOOSER_ACTION_SAVE,
+				_("Save"), GTK_RESPONSE_OK,
+				_("Cancel"),GTK_RESPONSE_CANCEL,
+				NULL
+		);
+
+	gtk_window_set_modal(GTK_WINDOW(dialog),TRUE);
+	gtk_file_chooser_set_pw3270_filters(GTK_FILE_CHOOSER(dialog));
+
+	if(terminal) {
+		const gchar * current_file = v3270_get_session_filename(terminal);
+		if(current_file)
+			gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog),current_file);
+	}
+
+	gtk_widget_show_all(dialog);
+	if(gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK) {
+		filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+	}
+
+	gtk_widget_destroy(dialog);
+
+	return filename;
+ }
+
+ static void activate(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkWidget *terminal) {
+
+	debug("%s",__FUNCTION__);
+
+	g_autofree gchar * filename = get_session_file_name(terminal, _("Save session properties"));
+
+	if(!filename)
+		return;
+
+
+
+ }
+
+ GAction * pw3270_action_save_session_as_new(void) {
+
+	pw3270SimpleAction * action = pw3270_simple_action_new();
+
+	action->parent.name = "save.session.as";
+	action->parent.activate = activate;
+	action->label = N_("Save As");
+	action->icon_name = "document-save-as";
+	action->tooltip = N_("Save session properties to file");
+
+	return G_ACTION(action);
+
+ }
