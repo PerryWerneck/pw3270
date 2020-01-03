@@ -323,6 +323,60 @@
 	return NULL;
  }
 
+ void v3270_set_session_filename(GtkWidget *terminal, const gchar *filename) {
+
+ 	struct SessionDescriptor * old_session = (struct SessionDescriptor *) g_object_get_data(G_OBJECT(terminal),"session-descriptor");
+	struct SessionDescriptor * new_session = (struct SessionDescriptor *) g_malloc0(sizeof(struct SessionDescriptor) + strlen(filename));
+
+	if(old_session) {
+		memcpy(new_session,old_session,sizeof(struct SessionDescriptor));
+	}
+
+	strcpy(new_session->filename,filename);
+	new_session->key_file = g_key_file_new();
+
+	v3270_to_key_file(terminal,new_session->key_file,NULL);
+	v3270_accelerator_map_to_key_file(terminal,new_session->key_file,NULL);
+
+	GError *error = NULL;
+	g_key_file_save_to_file(new_session->key_file,new_session->filename,&error);
+
+	if(error) {
+
+		g_message("Can't save file \"%s\": %s",new_session->filename,error->message);
+
+		GtkWidget * dialog = gtk_message_dialog_new_with_markup(
+								GTK_WINDOW(gtk_widget_get_toplevel(terminal)),
+								GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
+								GTK_MESSAGE_ERROR,
+								GTK_BUTTONS_CANCEL,
+								_("Can't save file \"%s\""),new_session->filename
+							);
+
+		gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),"%s",error->message);
+
+		gtk_window_set_title(GTK_WINDOW(dialog),_("Can't save session file"));
+
+		gtk_widget_show_all(dialog);
+
+		g_signal_connect(dialog,"close",G_CALLBACK(gtk_widget_destroy),NULL);
+		g_signal_connect(dialog,"response",G_CALLBACK(gtk_widget_destroy),NULL);
+
+		g_error_free(error);
+		g_key_file_free(new_session->key_file);
+		g_free(new_session);
+
+	} else {
+
+		new_session->changed = FALSE;
+		g_object_set_data_full(G_OBJECT(terminal),"session-descriptor",new_session,(GDestroyNotify) close_settings);
+
+	}
+
+
+ }
+
+
  GtkWidget * pw3270_terminal_new(GtkWidget *widget, const gchar *session_file) {
 
 	struct SessionDescriptor * descriptor;

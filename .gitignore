@@ -57,3 +57,4 @@ src/include/lib3270
 vgcore.*
 gschemas.compiled
 *.gschema.xml
+*.3270
