@@ -223,49 +223,41 @@
 				<item>
 					<attribute name="label" translatable="yes">Copy</attribute>
 					<attribute name="action">win.copy</attribute>
-					<attribute name="target">auto</attribute>
 				</item>
 
 				<item>
 					<attribute name="label" translatable="yes">Copy as text</attribute>
-					<attribute name="action">win.copy</attribute>
-					<attribute name="target">text</attribute>
+					<attribute name="action">win.copy-text</attribute>
 				</item>
 
 				<item>
 					<attribute name="label" translatable="yes">Copy as table</attribute>
-					<attribute name="action">win.copy</attribute>
-					<attribute name="target">table</attribute>
+					<attribute name="action">win.copy-table</attribute>
 				</item>
 
 				<item>
 					<attribute name="label" translatable="yes">Append to copy</attribute>
-					<attribute name="action">win.copy</attribute>
-					<attribute name="target">append</attribute>
+					<attribute name="action">win.copy-append</attribute>
 				</item>
 
 				<item>
 					<attribute name="label" translatable="yes">Cut</attribute>
 					<attribute name="action">win.cut</attribute>
-					<attribute name="target">auto</attribute>
 				</item>
 
 				<item>
 					<attribute name="label" translatable="yes">Paste from clipboard</attribute>
 					<attribute name="action">win.paste</attribute>
-					<attribute name="target">clipboard://</attribute>
 				</item>
 
 				<item>
 					<attribute name="label" translatable="yes">Paste next</attribute>
-					<attribute name="action">win.paste</attribute>
-					<attribute name="target">next://</attribute>
+					<attribute name="action">win.paste-next</attribute>
 				</item>
 
 				<item>
 					<attribute name="label" translatable="yes">Paste from text file</attribute>
-					<attribute name="action">win.paste</attribute>
-					<attribute name="target">file://</attribute>
+					<attribute name="action">win.paste-file</attribute>
 				</item>
 
 			</section>

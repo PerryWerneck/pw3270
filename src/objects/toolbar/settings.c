@@ -281,7 +281,7 @@
 		gtk_box_pack_start(
 				GTK_BOX(page->parent.widget),
 				pw3270_frame_new(GTK_WIDGET(grid), _("Options")),
-				TRUE,
+				FALSE,
 				TRUE,
 				0
 			);
