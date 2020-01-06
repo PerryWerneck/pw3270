@@ -45,7 +45,7 @@
 	pw3270SimpleAction parent;
 
 	GtkWidget * dialog;
-	GtkWidget * (*factory)(GtkWidget *);
+	GtkWidget * (*factory)(pw3270SimpleAction *, GtkWidget *);
 
  };
 
@@ -82,7 +82,7 @@
 
  }
 
- pw3270SimpleAction * pw3270_dialog_action_new(GtkWidget * (*factory)(GtkWidget *)) {
+ pw3270SimpleAction * pw3270_dialog_action_new(GtkWidget * (*factory)(pw3270SimpleAction *, GtkWidget *)) {
 
   	pw3270DialogAction * action = (pw3270DialogAction *) g_object_new(PW3270_TYPE_DIALOG_ACTION, NULL);
   	action->factory = factory;
@@ -109,7 +109,7 @@
 	if(action->dialog || !action->factory)
 		return;
 
-	action->dialog = action->factory(terminal);
+	action->dialog = action->factory((pw3270SimpleAction *) object, terminal);
 	pw3270_action_notify_enabled(G_ACTION(action));
 
 	if(action->dialog) {

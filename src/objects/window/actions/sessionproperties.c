@@ -34,7 +34,7 @@
  #include <v3270/dialogs.h>
  #include <v3270/colorscheme.h>
 
- static GtkWidget * factory(GtkWidget *terminal);
+ static GtkWidget * factory(pw3270SimpleAction *action, GtkWidget *terminal);
 
  GAction * pw3270_action_session_properties_new(void) {
 
@@ -42,20 +42,20 @@
 
 	action->parent.name = "session.properties";
 	action->icon_name = "preferences-other";
-	action->label = N_("Session properties");
+	action->label = _("Session properties");
 
 	return G_ACTION(action);
 
 
  }
 
- GtkWidget * factory(GtkWidget *terminal) {
+ GtkWidget * factory(pw3270SimpleAction *action, GtkWidget *terminal) {
 
  	size_t ix;
 
  	GtkWidget * dialog = v3270_settings_dialog_new();
 
-	gtk_window_set_title(GTK_WINDOW(dialog), _("Session properties"));
+	gtk_window_set_title(GTK_WINDOW(dialog), action->label);
 
 	// Add settings pages.
 	GtkWidget * elements[] = {

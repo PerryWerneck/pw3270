@@ -38,7 +38,7 @@
  #include <pw3270/application.h>
 
 
- static GtkWidget * factory(GtkWidget *terminal);
+ static GtkWidget * factory(pw3270SimpleAction *action, GtkWidget *terminal);
  static void response(GtkWidget *dialog, gint response_id, GtkWidget *terminal);
 
  GAction * pw3270_action_save_session_as_new(void) {
@@ -46,19 +46,19 @@
 	pw3270SimpleAction * action = pw3270_dialog_action_new(factory);
 
 	action->parent.name = "save.session.as";
-	action->label = N_("Save As");
+	action->label = _("Save As");
 	action->icon_name = "document-save-as";
-	action->tooltip = N_("Save session properties to file");
+	action->tooltip = _("Save session properties");
 
 	return G_ACTION(action);
 
  }
 
- GtkWidget * factory(GtkWidget *terminal) {
+ GtkWidget * factory(pw3270SimpleAction *action, GtkWidget *terminal) {
 
 	GtkWidget *	dialog =
 		gtk_file_chooser_dialog_new(
-				_("Save session properties"),
+				action->tooltip,
 				GTK_WINDOW(gtk_widget_get_toplevel(terminal)),
 				GTK_FILE_CHOOSER_ACTION_SAVE,
 				_("Save"), GTK_RESPONSE_OK,

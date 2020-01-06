@@ -34,7 +34,7 @@
  #include <v3270/dialogs.h>
  #include <v3270/colorscheme.h>
 
- static GtkWidget * factory(GtkWidget *terminal);
+ static GtkWidget * factory(pw3270SimpleAction *action, GtkWidget *terminal);
 
  GAction * pw3270_set_color_action_new(void) {
 
@@ -48,7 +48,7 @@
 
  }
 
- GtkWidget * factory(GtkWidget *terminal) {
+ GtkWidget * factory(pw3270SimpleAction G_GNUC_UNUSED(*action), GtkWidget *terminal) {
 
 	return v3270_settings_get_edit_dialog(v3270_color_settings_new(),terminal,FALSE);
 

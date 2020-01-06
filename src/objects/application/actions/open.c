@@ -63,7 +63,7 @@
 	return filename;
  }
 
- void pw3270_application_open_activated(GSimpleAction * action, GVariant *parameter, gpointer application) {
+ void pw3270_application_open_activated(GSimpleAction * action, GVariant G_GNUC_UNUSED(*parameter), gpointer G_GNUC_UNUSED(application)) {
 
  	debug("%s",__FUNCTION__);
  	g_simple_action_set_enabled(action,FALSE);
@@ -71,22 +71,28 @@
  	g_simple_action_set_enabled(action,TRUE);
  }
 
-  void pw3270_application_open_tab_activated(GSimpleAction * action, GVariant *parameter, gpointer application) {
+  void pw3270_application_open_tab_activated(GSimpleAction * action, GVariant G_GNUC_UNUSED(*parameter), gpointer application) {
 
  	debug("%s",__FUNCTION__);
  	g_simple_action_set_enabled(action,FALSE);
  	g_autofree gchar * session_file_name = get_session_file_name(GTK_APPLICATION(application),_("Open session in new tab"));
 
+ 	if(session_file_name) {
+		pw3270_terminal_new(GTK_WIDGET(gtk_application_get_active_window(GTK_APPLICATION(application))), session_file_name);
+ 	}
 
  	g_simple_action_set_enabled(action,TRUE);
  }
 
- void pw3270_application_open_window_activated(GSimpleAction * action, GVariant *parameter, gpointer application) {
+ void pw3270_application_open_window_activated(GSimpleAction * action, GVariant G_GNUC_UNUSED(*parameter), gpointer application) {
 
  	debug("%s",__FUNCTION__);
  	g_simple_action_set_enabled(action,FALSE);
  	g_autofree gchar * session_file_name = get_session_file_name(GTK_APPLICATION(application),_("Open session in new window"));
 
+ 	if(session_file_name) {
+//		pw3270_terminal_new(pw3270_application_window_new(GTK_APPLICATION(application)), session_file_name);
+ 	}
 
  	g_simple_action_set_enabled(action,TRUE);
  }

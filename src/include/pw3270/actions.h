@@ -193,7 +193,7 @@
 	typedef struct _pw3270DialogAction  pw3270DialogAction;
 	typedef struct _pw3270DialogActionClass pw3270DialogActionClass;
 
-	pw3270SimpleAction * pw3270_dialog_action_new(GtkWidget * (*factory)(GtkWidget *));
+	pw3270SimpleAction * pw3270_dialog_action_new(GtkWidget * (*factory)(pw3270SimpleAction *action, GtkWidget *));
 
 	//
 	// V3270 Property Action
