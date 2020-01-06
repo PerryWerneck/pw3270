@@ -199,7 +199,7 @@
 
  }
 
- GtkWidget * pw3270_application_window_new(GtkApplication * application) {
+ GtkWidget * pw3270_application_window_new(GtkApplication * application, const gchar *session_file) {
 
 	gchar *title = _( "IBM 3270 Terminal emulator" );
 
@@ -316,8 +316,31 @@
 		G_SETTINGS_BIND_DEFAULT
 	);
 
+
+	// Setup default position and size
 	gtk_window_set_position(GTK_WINDOW(window),GTK_WIN_POS_CENTER);
 	gtk_window_set_default_size (GTK_WINDOW (window), 800, 500);
+
+	// Create terminal widget
+	GtkWidget * terminal = pw3270_application_window_new_tab(window, session_file);
+
+	// Create property actions
+	static const gchar * properties[] = {
+		"model-number",
+		"font-family",
+		"dynamic-font-spacing",
+		"trace",
+	};
+
+	for(ix = 0; ix < G_N_ELEMENTS(properties); ix++) {
+
+		g_action_map_add_action(
+			G_ACTION_MAP(window),
+			v3270_property_action_new(terminal,properties[ix])
+		);
+
+	}
+
 
 	// gtk_window_set_interactive_debugging(TRUE);
 

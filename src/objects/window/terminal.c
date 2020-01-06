@@ -377,7 +377,7 @@
  }
 
 
- GtkWidget * pw3270_terminal_new(GtkWidget *widget, const gchar *session_file) {
+ GtkWidget * pw3270_application_window_new_tab(GtkWidget *widget, const gchar *session_file) {
 
 	struct SessionDescriptor * descriptor;
 
@@ -468,7 +468,7 @@
 	if(path) {
 
 		// It's a session file
-		pw3270_terminal_new(widget, path);
+		pw3270_application_window_new_tab(widget, path);
 		return 0;
 
 	}

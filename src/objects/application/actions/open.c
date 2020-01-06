@@ -78,7 +78,7 @@
  	g_autofree gchar * session_file_name = get_session_file_name(GTK_APPLICATION(application),_("Open session in new tab"));
 
  	if(session_file_name) {
-		pw3270_terminal_new(GTK_WIDGET(gtk_application_get_active_window(GTK_APPLICATION(application))), session_file_name);
+		pw3270_application_window_new_tab(GTK_WIDGET(gtk_application_get_active_window(GTK_APPLICATION(application))), session_file_name);
  	}
 
  	g_simple_action_set_enabled(action,TRUE);
@@ -91,7 +91,9 @@
  	g_autofree gchar * session_file_name = get_session_file_name(GTK_APPLICATION(application),_("Open session in new window"));
 
  	if(session_file_name) {
-//		pw3270_terminal_new(pw3270_application_window_new(GTK_APPLICATION(application)), session_file_name);
+		GtkWidget *window = pw3270_application_window_new(GTK_APPLICATION(application), session_file_name);
+		pw3270_window_set_current_page(window,0);
+		gtk_window_present(GTK_WINDOW(window));
  	}
 
  	g_simple_action_set_enabled(action,TRUE);

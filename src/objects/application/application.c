@@ -286,29 +286,7 @@
 
  void activate(GApplication *application) {
 
-	size_t ix;
-
-	GtkWidget * window = pw3270_application_window_new(GTK_APPLICATION(application));
-
-	// Create terminal widget & associated widget
-	GtkWidget * terminal = pw3270_terminal_new(window, NULL);
-
-	// Create property actions
-	static const gchar * properties[] = {
-		"model-number",
-		"font-family",
-		"dynamic-font-spacing",
-		"trace",
-	};
-
-	for(ix = 0; ix < G_N_ELEMENTS(properties); ix++) {
-
-		g_action_map_add_action(
-			G_ACTION_MAP(window),
-			v3270_property_action_new(terminal,properties[ix])
-		);
-
-	}
+	GtkWidget * window = pw3270_application_window_new(GTK_APPLICATION(application),NULL);
 
 	// Present the new window
 	pw3270_window_set_current_page(window,0);
@@ -318,6 +296,11 @@
 
  void open(GApplication *application, GFile **files, gint n_files, const gchar G_GNUC_UNUSED(*hint)) {
 
+#ifndef DEBUG
+	#error Implementar
+#endif // DEBUG
+
+	/*
 	GtkWindow * window = gtk_application_get_active_window(GTK_APPLICATION(application));
 
 	debug("%s was called with %d files (active_window=%p)", __FUNCTION__, n_files, window);
@@ -337,6 +320,8 @@
 
 	if(last != -1)
 		pw3270_window_set_current_page(GTK_WIDGET(window),last);
+
+	*/
 
  }
 
