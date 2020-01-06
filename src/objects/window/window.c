@@ -112,7 +112,7 @@
 
  }
 
- void get_property(GObject *object, guint prop_id, GValue *value, GParamSpec *pspec) {
+ void get_property(GObject *object, guint prop_id, GValue *value, GParamSpec G_GNUC_UNUSED(*pspec)) {
 
  	if(prop_id == PROP_ACTION_NAMES) {
     	g_value_take_string(value,pw3270_window_get_action_names(GTK_WIDGET(object)));
@@ -150,9 +150,6 @@
 	g_action_map_add_lib3270_actions(G_ACTION_MAP(widget));
 	g_action_map_add_lib3270_toggles(G_ACTION_MAP(widget));
 
-	g_action_map_add_action(G_ACTION_MAP(widget),v3270_pfkey_action_new());
-	g_action_map_add_action(G_ACTION_MAP(widget),v3270_pakey_action_new());
-
 	// Map special actions
 	{
 		size_t ix;
@@ -170,11 +167,19 @@
 
 			pw3270_action_connect_new(),
 
+			v3270_pfkey_action_new(),
+			v3270_pakey_action_new(),
+
 		};
 
 		for(ix = 0; ix < G_N_ELEMENTS(actions); ix++) {
-			debug("Inserting %s",g_action_get_name(actions[ix]));
-			g_action_map_add_action(G_ACTION_MAP(widget),actions[ix]);
+
+			if(!g_action_get_name(actions[ix])) {
+				g_warning("Window special action %u is unnamed",(unsigned int) ix);
+			} else {
+				g_action_map_add_action(G_ACTION_MAP(widget),actions[ix]);
+			}
+
 		}
 
 	}
@@ -322,7 +327,7 @@
 	gtk_window_set_default_size (GTK_WINDOW (window), 800, 500);
 
 	// Create terminal widget
-	GtkWidget * terminal = pw3270_application_window_new_tab(window, session_file);
+	GtkWidget * terminal = pw3270_application_window_new_tab(GTK_WIDGET(window), session_file);
 
 	// Create property actions
 	static const gchar * properties[] = {
@@ -334,16 +339,16 @@
 
 	for(ix = 0; ix < G_N_ELEMENTS(properties); ix++) {
 
-		g_action_map_add_action(
-			G_ACTION_MAP(window),
-			v3270_property_action_new(terminal,properties[ix])
-		);
+		GAction * action = v3270_property_action_new(terminal,properties[ix]);
 
+		if(!g_action_get_name(action)) {
+			g_warning("Window property action %s is unnamed",properties[ix]);
+		} else {
+			g_action_map_add_action(G_ACTION_MAP(window),action);
+		}
 	}
 
-
 	// gtk_window_set_interactive_debugging(TRUE);
-
 
 	return GTK_WIDGET(window);
 
@@ -374,9 +379,7 @@
 
  }
 
- void pw3270_application_generic_activated(GSimpleAction * action, GVariant *parameter, gpointer application) {
-
-	debug("%s",__FUNCTION__);
-
+ void pw3270_application_generic_activated(GSimpleAction * action, GVariant G_GNUC_UNUSED(*parameter), gpointer G_GNUC_UNUSED(application)) {
+	g_message("Generic action %s was activated",g_action_get_name(G_ACTION(action)));
  }
 
