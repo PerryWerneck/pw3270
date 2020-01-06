@@ -184,7 +184,7 @@
 					<attribute name="action">win.file.transfer</attribute>
 				</item>
 
-				<submenu>
+				<!-- submenu>
 
 					<attribute name='label' translatable='yes'>Preferences</attribute>
 
@@ -198,7 +198,7 @@
 						<attribute name="action">win.session.properties</attribute>
 					</item>
 
-				</submenu>
+				</submenu -->
 
 				<item>
 					<attribute name="label" translatable="yes">Close window</attribute>
@@ -355,10 +355,10 @@
 
 			<attribute name='label' translatable='yes'>_Network</attribute>
 
-			<item>
+			<!-- item>
 				<attribute name="label" translatable="yes">Host properties</attribute>
-				<attribute name="action">win.set.host</attribute>
-			</item>
+				<attribute name="action">win.host.properties</attribute>
+			</item -->
 
 			<item>
 				<attribute name="label" translatable="yes">_Connect</attribute>
@@ -376,9 +376,19 @@
 
 			<attribute name='label' translatable='yes'>Settings</attribute>
 
-			<item>
+			<!-- item>
 				<attribute name="label" translatable="yes">Colors</attribute>
 				<attribute name="action">win.set.colors</attribute>
+			</item -->
+
+			<item>
+				<attribute name="label" translatable="yes">Application</attribute>
+				<attribute name="action">app.preferences</attribute>
+			</item>
+
+			<item>
+				<attribute name="label" translatable="yes">Current session</attribute>
+				<attribute name="action">win.session.properties</attribute>
 			</item>
 
 			<submenu>

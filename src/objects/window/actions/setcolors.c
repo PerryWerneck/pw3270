@@ -42,7 +42,8 @@
 
 	action->parent.name = "set.colors";
 	action->icon_name = "gtk-select-color";
-	action->label = N_("Colors");
+	action->label = _("Colors");
+	action->tooltip = _("Change terminal colors");
 
 	return G_ACTION(action);
 
