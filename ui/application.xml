@@ -295,22 +295,22 @@
 
 				<item>
 					<attribute name="label" translatable="yes">Erase input</attribute>
-					<attribute name="action">win.erase_input</attribute>
+					<attribute name="action">win.erase-input</attribute>
 				</item>
 
 				<item>
 					<attribute name="label" translatable="yes">Delete Field</attribute>
-					<attribute name="action">win.delete_field</attribute>
+					<attribute name="action">win.delete-field</attribute>
 				</item>
 
 				<item>
 					<attribute name="label" translatable="yes">Erase to end of field</attribute>
-					<attribute name="action">win.erase_eof</attribute>
+					<attribute name="action">win.erase-eof</attribute>
 				</item>
 
 				<item>
 					<attribute name="label" translatable="yes">Erase to end of line</attribute>
-					<attribute name="action">win.erase_eol</attribute>
+					<attribute name="action">win.erase-eol</attribute>
 				</item>
 
 			</section>
