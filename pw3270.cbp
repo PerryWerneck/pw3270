@@ -122,9 +122,6 @@
 		<Unit filename="src/objects/toolbar/toolbar.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/objects/toolbar/toolbutton.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/objects/window/actions/close.c">
 			<Option compilerVar="CC" />
 		</Unit>

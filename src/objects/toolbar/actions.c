@@ -76,12 +76,6 @@
 			debug("Creating button \"%s\" from action \"%s\"",name,g_action_get_name(G_ACTION(action)));
 			item = gtk_tool_button_new_from_action(action,GTK_ICON_SIZE_LARGE_TOOLBAR);
 		}
-		/*
-		 else {
-			debug("Creating button \"%s\" from action name",name);
-			item = GTK_TOOL_ITEM(pw3270_tool_button_new_from_action_name(name));
-		}
-		*/
 
 		if(item) {
 

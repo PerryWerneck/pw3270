@@ -69,12 +69,13 @@
 
 	g_autofree gchar * tooltip = g_action_get_tooltip(action);
 	g_autofree gchar * label = g_action_get_label(action);
-	debug("%s(%s).label=%s",__FUNCTION__,g_action_get_name(action),label);
+//	debug("%s(%s).label=%s",__FUNCTION__,g_action_get_name(action),label);
 	if(!label)
 		return NULL;
 
 	g_autofree gchar * icon_name = g_action_get_icon_name(action);
-	debug("%s(%s).icon_name=%s",__FUNCTION__,g_action_get_name(action),icon_name);
+//	debug("%s(%s).icon_name=%s",__FUNCTION__,g_action_get_name(action),icon_name);
+
 	if(icon_name) {
 
 		// Has icon name
@@ -104,6 +105,8 @@
 
 		return item;
 	}
+
+	g_warning("Can't create button for action \"%s\"",g_action_get_name(action));
 
 	return NULL;
 

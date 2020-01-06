@@ -291,22 +291,9 @@
 	gtk_widget_show_all(widget->popup.menu);
 	gtk_menu_attach_to_widget(GTK_MENU(widget->popup.menu),GTK_WIDGET(widget),detacher);
 
-	/*
-	// Bind settings
-	GSettings *settings = pw3270_application_get_settings(g_application_get_default());
-
-	if(settings) {
-//		pw3270_toolbar_set_style(GTK_TOOLBAR(widget),g_settings_get_int(settings,"toolbar-style"));
-//		pw3270_toolbar_set_icon_size(GTK_TOOLBAR(widget),g_settings_get_int(settings,"toolbar-icon-size"));
-	}
-	*/
-
  }
 
  static void finalize(GObject *object) {
-
-// 	pw3270ToolBar * toolbar = PW3270_TOOLBAR(object);
-
 
 	G_OBJECT_CLASS(pw3270ToolBar_parent_class)->finalize(object);
 
@@ -388,7 +375,6 @@
 	}
 
 	// Store value
-//	pw3270_settings_set_int("toolbar-icon-size", (gint) icon_size);
 	g_object_notify(G_OBJECT(toolbar), "icon-size");
 
  }
