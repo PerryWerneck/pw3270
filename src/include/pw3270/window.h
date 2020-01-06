@@ -62,9 +62,6 @@
 	/// @brief Create a new terminal tab.
 	GtkWidget 	* pw3270_application_window_new_tab(GtkWidget *window, const gchar *session_file);
 
-	/// @brief Get the active terminal widget.
-	GtkWidget	* pw3270_window_get_terminal_widget(GtkWidget *window);
-
 	/// @brief Get the active session handle.
 	H3270		* pw3270_window_get_session_handle(GtkWidget *window);
 

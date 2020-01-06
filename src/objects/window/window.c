@@ -344,6 +344,7 @@
 
 	// gtk_window_set_interactive_debugging(TRUE);
 
+
 	return GTK_WIDGET(window);
 
  }

@@ -31,33 +31,45 @@
 
  void pw3270_application_open(GApplication *application, GFile **files, gint n_files, const gchar G_GNUC_UNUSED(*hint)) {
 
-	GtkWindow * window = gtk_application_get_active_window(GTK_APPLICATION(application));
+	GtkWidget * window = GTK_WIDGET(gtk_application_get_active_window(GTK_APPLICATION(application)));
 
 	gint file;
-	gint last = -1;
 
 	for(file = 0; file < n_files; file++) {
 
+		g_autofree gchar *path = g_file_get_path(files[file]);
+		GtkWidget * terminal = NULL;
+
+		if(!window) {
+			window = pw3270_application_window_new(GTK_APPLICATION(application), path);
+			terminal = gtk_window_get_default_widget(GTK_WINDOW(window));
+		} else {
+			terminal = pw3270_application_window_new_tab(window,path);
+		}
+
+		if(!path) {
+
+			// It's not a session file descriptor, is it an URL?
+			g_autofree gchar * scheme = g_file_get_uri_scheme(files[file]);
+
+			if(!(g_ascii_strcasecmp(scheme,"tn3270") && g_ascii_strcasecmp(scheme,"tn3270s"))) {
+
+				g_autofree gchar * uri = g_file_get_uri(files[file]);
+				size_t sz = strlen(uri);
+
+				if(sz > 0 && uri[sz-1] == '/')
+					uri[sz-1] = 0;
+
+				v3270_set_url(terminal,uri);
+
+			}
+
+		}
 
 	}
 
-	/*
+	if(window)
+		gtk_window_present(GTK_WINDOW(window));
 
-	debug("%s was called with %d files (active_window=%p)", __FUNCTION__, n_files, window);
-
-	if(!window)
-		window = GTK_WINDOW(pw3270_application_window_new(GTK_APPLICATION(application)));
-
-	// Add tabs to the window
-		last = pw3270_window_append_page(GTK_WIDGET(window), files[file]);
-	}
-
-
-	if(last != -1)
-		pw3270_window_set_current_page(GTK_WIDGET(window),last);
-
-	*/
-
-	gtk_window_present(window);
  }
 
