@@ -41,7 +41,7 @@
 	gchar		  filename[1];
  };
 
- static void destroy(GtkWidget *terminal, struct SessionDescriptor * session) {
+ static void destroy(GtkWidget G_GNUC_UNUSED(*terminal), struct SessionDescriptor * session) {
 
 	if(session->changed) {
 
