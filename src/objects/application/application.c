@@ -60,7 +60,6 @@
 
  static void 		startup(GApplication * application);
  static void 		activate(GApplication * application);
- static void 		open(GApplication * application, GFile **files, gint n_files, const gchar *hint);
  static void		finalize(GObject *object);
 
  G_DEFINE_TYPE(pw3270Application, pw3270Application, GTK_TYPE_APPLICATION);
@@ -102,7 +101,7 @@
 
 	application_class->startup = startup;
 	application_class->activate = activate;
-	application_class->open = open;
+	application_class->open = pw3270_application_open;
 
 	props[PROP_UI_STYLE] =
 		g_param_spec_uint(
@@ -291,37 +290,6 @@
 	// Present the new window
 	pw3270_window_set_current_page(window,0);
 	gtk_window_present(GTK_WINDOW(window));
-
- }
-
- void open(GApplication *application, GFile **files, gint n_files, const gchar G_GNUC_UNUSED(*hint)) {
-
-#ifndef DEBUG
-	#error Implementar
-#endif // DEBUG
-
-	/*
-	GtkWindow * window = gtk_application_get_active_window(GTK_APPLICATION(application));
-
-	debug("%s was called with %d files (active_window=%p)", __FUNCTION__, n_files, window);
-
-	if(!window)
-		window = GTK_WINDOW(pw3270_application_window_new(GTK_APPLICATION(application)));
-
-	// Add tabs to the window
-	gint file;
-	gint last = -1;
-
-	for(file = 0; file < n_files; file++) {
-		last = pw3270_window_append_page(GTK_WIDGET(window), files[file]);
-	}
-
-	gtk_window_present(window);
-
-	if(last != -1)
-		pw3270_window_set_current_page(GTK_WIDGET(window),last);
-
-	*/
 
  }
 

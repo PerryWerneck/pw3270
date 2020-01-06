@@ -71,9 +71,6 @@
 	/// @brief Switches to the page number page_num.
 	void		  pw3270_window_set_current_page(GtkWidget *window, gint page_num);
 
-	/// @brief Appends a new terminal to window.
-	gint		  pw3270_window_append_page(GtkWidget *window, GFile *file);
-
 	/// @brief Set window sub-title (If enabled).
 	void		  pw3270_window_set_subtitle(GtkWidget *window, const gchar *subtitle);
 

@@ -108,6 +108,9 @@
 		<Unit filename="src/objects/application/application.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/objects/application/open.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/objects/application/private.h" />
 		<Unit filename="src/objects/toolbar/actions.c">
 			<Option compilerVar="CC" />
@@ -141,6 +144,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/objects/window/header.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/objects/window/page.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/objects/window/private.h" />

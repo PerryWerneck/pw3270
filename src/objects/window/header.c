@@ -84,7 +84,7 @@
 
  }
 
- static void on_sensitive(GtkWidget G_GNUC_UNUSED(*button), GParamSpec G_GNUC_UNUSED(*spec), GtkWidget *widget) {
+ static void on_sensitive(GtkWidget G_GNUC_UNUSED(*button), GParamSpec G_GNUC_UNUSED(*spec), GtkWidget G_GNUC_UNUSED(*widget)) {
 
 	gboolean sensitive;
 	g_object_get(button, "sensitive", &sensitive, NULL);

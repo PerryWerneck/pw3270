@@ -41,71 +41,7 @@
 	gchar		  filename[1];
  };
 
- static void session_changed(GtkWidget *terminal, GtkWidget *label) {
-
-	gtk_label_set_text(GTK_LABEL(label),v3270_get_session_name(terminal));
-
-	// Do I have to change the window title?
-	GtkWidget * toplevel = gtk_widget_get_toplevel(terminal);
-	if(PW3270_IS_APPLICATION_WINDOW(toplevel)) {
-
-		pw3270ApplicationWindow * window = PW3270_APPLICATION_WINDOW(toplevel);
-
-		if(gtk_widget_has_default(terminal)) {
-			g_autofree gchar * title = v3270_get_session_title(terminal);
-			gtk_window_set_title(GTK_WINDOW(window), title);
-		}
-
-	}
-
- }
-
- static gboolean on_terminal_focus(GtkWidget *terminal, GdkEvent G_GNUC_UNUSED(*event), GtkWindow * window) {
-
-	if(gtk_window_get_default_widget(window) == terminal) {
-		return FALSE;
-	}
-
- 	// Store the active terminal widget.
-	gtk_widget_grab_default(terminal);
-	debug("Terminal %p is now default",terminal);
-
-	// Change window title
-	g_autofree gchar * title = v3270_get_session_title(terminal);
-	gtk_window_set_title(window, title);
-
-	pw3270_window_set_subtitle(GTK_WIDGET(window), v3270_is_connected(terminal) ? _("Connected to host") : _("Disconnected from host"));
-
-	// Update actions
-	size_t ix;
-	gchar ** actions = g_action_group_list_actions(G_ACTION_GROUP(window));
-
-	for(ix = 0; actions[ix]; ix++) {
-
-//		debug("%s",actions[ix]);
-
-		GAction * action = g_action_map_lookup_action(G_ACTION_MAP(window), actions[ix]);
-
-		if(action) {
-
-			if(V3270_IS_ACTION(action)) {
-				v3270_action_set_terminal_widget(action,terminal);
-			} else if(PW3270_IS_ACTION(action)) {
-				pw3270_action_set_terminal_widget(action,terminal);
-			}
-
-		}
-
-	}
-
-	g_strfreev(actions);
-
- 	return FALSE;
- }
-
- static void check_for_session_changed(GtkWidget *terminal) {
-
-	struct SessionDescriptor * session = (struct SessionDescriptor *) g_object_get_data(G_OBJECT(terminal),"session-descriptor");
+ static void destroy(GtkWidget *terminal, struct SessionDescriptor * session) {
 
 	if(session->changed) {
 
@@ -126,131 +62,6 @@
         }
 
 	}
-
- }
-
-
- static void on_terminal_destroy(GtkWidget *terminal, GtkWindow * window) {
-
-	check_for_session_changed(terminal);
-
-	if(gtk_window_get_default_widget(window) != terminal) {
-		return;
-	}
-
-	gtk_window_set_default(window,NULL);
-	pw3270_window_set_subtitle(GTK_WIDGET(window), _("Disconnected from host"));
-
-	// Update actions
-	size_t ix;
-	gchar ** actions = g_action_group_list_actions(G_ACTION_GROUP(window));
-
-	for(ix = 0; actions[ix]; ix++) {
-
-		GAction * action = g_action_map_lookup_action(G_ACTION_MAP(window), actions[ix]);
-
-		if(action) {
-
-			if(PW3270_IS_ACTION(action)) {
-				pw3270_action_set_terminal_widget(action,NULL);
-			} else if(V3270_IS_ACTION(action)) {
-				v3270_action_set_terminal_widget(action,NULL);
-			}
-
-		}
-
-	}
-
-	g_strfreev(actions);
-
- }
-
- static void disconnected(GtkWidget *terminal, GtkWindow * window) {
-
- 	debug("%s",__FUNCTION__);
-
- 	if(terminal != gtk_window_get_default_widget(window))
-		return;
-
-	pw3270_window_set_subtitle(GTK_WIDGET(window), _("Disconnected from host"));
-
- }
-
- static void connected(GtkWidget *terminal, const gchar *host, GtkWindow * window) {
-
- 	debug("%s(%s)",__FUNCTION__,host);
-
- 	if(terminal != gtk_window_get_default_widget(window))
-		return;
-
-	pw3270_window_set_subtitle(GTK_WIDGET(window), _("Connected to host"));
-
- }
-
- static void on_close_tab(GtkButton G_GNUC_UNUSED(*button), GtkWidget *terminal) {
-
-	GtkNotebook * notebook = GTK_NOTEBOOK(gtk_widget_get_parent(terminal));
-	gtk_notebook_remove_page(notebook,gtk_notebook_page_num(notebook, terminal));
-
- }
-
- static gboolean on_popup_menu(GtkWidget *widget, gboolean selected, gboolean online, GdkEvent *event, pw3270ApplicationWindow * window) {
-
-	GtkWidget * popup = window->popups[PW3270_APP_WINDOW_POPUP_OVER_UNSELECTED_AREA];
-
-	if(!online && window->popups[PW3270_APP_WINDOW_POPUP_WHEN_OFFLINE])
-		popup = window->popups[PW3270_APP_WINDOW_POPUP_WHEN_OFFLINE];
-	else if(selected && window->popups[PW3270_APP_WINDOW_POPUP_OVER_SELECTED_AREA])
-		popup = window->popups[PW3270_APP_WINDOW_POPUP_OVER_SELECTED_AREA];
-	else
-		popup = window->popups[PW3270_APP_WINDOW_POPUP_DEFAULT];
-
-	if(!popup)
-		return FALSE;
-
-	gtk_widget_show_all(popup);
-	gtk_menu_set_screen(GTK_MENU(popup), gtk_widget_get_screen(widget));
-	gtk_menu_popup_at_pointer(GTK_MENU(popup), event);
-
-	return TRUE;
-
- }
-
- static gint append_terminal_page(pw3270ApplicationWindow * window, GtkWidget * terminal) {
-
- 	GtkWidget * label	= gtk_label_new(v3270_get_session_name(terminal));
- 	GtkWidget * tab		= gtk_box_new(GTK_ORIENTATION_HORIZONTAL,2);
- 	GtkWidget * button	= gtk_button_new_from_icon_name("window-close-symbolic",GTK_ICON_SIZE_MENU);
-
- 	gtk_button_set_relief(GTK_BUTTON(button),GTK_RELIEF_NONE);
-
- 	debug("notebook: %p", window->notebook);
-
-	g_signal_connect(G_OBJECT(terminal), "focus-in-event", G_CALLBACK(on_terminal_focus), window);
-	g_signal_connect(G_OBJECT(terminal), "session_changed", G_CALLBACK(session_changed),label);
-	g_signal_connect(G_OBJECT(terminal), "disconnected", G_CALLBACK(disconnected),window);
-	g_signal_connect(G_OBJECT(terminal), "connected", G_CALLBACK(connected),window);
-	g_signal_connect(G_OBJECT(terminal), "destroy", G_CALLBACK(on_terminal_destroy),window);
-	g_signal_connect(G_OBJECT(terminal), "popup", G_CALLBACK(on_popup_menu), window);
-
-	g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(on_close_tab), terminal);
-
- 	gtk_box_pack_start(GTK_BOX(tab),label,FALSE,FALSE,0);
- 	gtk_box_pack_end(GTK_BOX(tab),button,FALSE,FALSE,0);
-
-	gtk_widget_show_all(terminal);
-	gtk_widget_show_all(tab);
-
-	gint page = gtk_notebook_append_page(window->notebook,terminal,tab);
-
-	gtk_notebook_set_tab_detachable(window->notebook,terminal,TRUE);
-	gtk_notebook_set_tab_reorderable(window->notebook,terminal,TRUE);
-
-	// Setup session.
-
-//	H3270 * hSession = v3270_get_session(terminal);
-
-	return page;
 
  }
 
@@ -376,15 +187,11 @@
 
  }
 
+ GtkWidget * pw3270_terminal_new(const gchar *session_file) {
 
- GtkWidget * pw3270_application_window_new_tab(GtkWidget *widget, const gchar *session_file) {
-
-	struct SessionDescriptor * descriptor;
-
-	g_return_val_if_fail(PW3270_IS_APPLICATION_WINDOW(widget),NULL);
-
-	pw3270ApplicationWindow * window = PW3270_APPLICATION_WINDOW(widget);
  	GtkWidget * terminal = v3270_new();
+
+ 	struct SessionDescriptor * descriptor = NULL;
 
  	if(session_file) {
 
@@ -446,62 +253,30 @@
 
 	}
 
- 	append_terminal_page(window,terminal);
-
  	// Setup signals.
  	g_signal_connect(G_OBJECT(terminal),"save-settings",G_CALLBACK(save_settings),descriptor);
  	g_signal_connect(G_OBJECT(terminal),"toggle_changed",G_CALLBACK(toggle_changed),descriptor);
  	g_signal_connect(G_OBJECT(terminal),"print-done",G_CALLBACK(print_done),descriptor);
  	g_signal_connect(G_OBJECT(terminal),"print-setup",G_CALLBACK(print_setup),descriptor);
+	g_signal_connect(G_OBJECT(terminal),"destroy", G_CALLBACK(destroy),descriptor);
+
+	return terminal;
+ }
+
+ GtkWidget * pw3270_application_window_new_tab(GtkWidget *widget, const gchar *session_file) {
+
+	struct SessionDescriptor * descriptor;
+
+	g_return_val_if_fail(PW3270_IS_APPLICATION_WINDOW(widget),NULL);
+
+	GtkWidget * window = PW3270_APPLICATION_WINDOW(widget);
+	GtkWidget * terminal = pw3270_terminal_new(session_file);
+
+	pw3270_window_set_current_page(window,pw3270_application_window_append_page(window,terminal));
 
 	return terminal;
 
  }
 
- gint pw3270_window_append_page(GtkWidget *widget, GFile * file) {
-
-	g_return_val_if_fail(PW3270_IS_APPLICATION_WINDOW(widget),-1);
-
-	g_autofree gchar *path = g_file_get_path(file);
-	debug("Path: \"%s\"",path);
-
-	if(path) {
-
-		// It's a session file
-		pw3270_application_window_new_tab(widget, path);
-		return 0;
-
-	}
-
-	g_autofree gchar * scheme = g_file_get_uri_scheme(file);
-
-	if(!(g_ascii_strcasecmp(scheme,"tn3270") && g_ascii_strcasecmp(scheme,"tn3270s"))) {
-
-		// It's a TN3270 URL.
-
-		GtkWidget * terminal = v3270_new();
-
-		g_autofree gchar * uri = g_file_get_uri(file);
-		size_t sz = strlen(uri);
-
-		if(sz > 0 && uri[sz-1] == '/')
-			uri[sz-1] = 0;
-
-		v3270_set_url(terminal,uri);
-		append_terminal_page(PW3270_APPLICATION_WINDOW(widget), terminal);
-		return 0;
-
-	}
-
-	// Create a default window.
-	{
-		GtkWidget * terminal = v3270_new();
-		g_warning("Unexpected session URL, creating a default window");
-		append_terminal_page(PW3270_APPLICATION_WINDOW(widget), terminal);
-	}
-
-	return -1;
-
- }
 
 
