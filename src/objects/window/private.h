@@ -60,6 +60,7 @@
 
 		GtkApplicationWindow parent;
 
+		GtkWidget	* terminal;	///< @brief The active terminal.
 		GtkNotebook * notebook;
 		GtkToolbar	* toolbar;
 

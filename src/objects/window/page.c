@@ -88,7 +88,7 @@
 
 //----------------------------------------------------------------------------------------------------------------------------------
 
- static gboolean on_terminal_focus(GtkWidget *terminal, GdkEvent G_GNUC_UNUSED(*event), GtkWindow * window);
+ static gboolean on_terminal_focus(GtkWidget *terminal, GdkEvent G_GNUC_UNUSED(*event), GtkWidget * window);
  static void session_changed(GtkWidget *terminal, GtkWidget *label);
  static void disconnected(GtkWidget *terminal, GtkWindow * window);
  static void connected(GtkWidget *terminal, const gchar *host, GtkWindow * window);
@@ -147,8 +147,11 @@
 
  }
 
- static gboolean on_terminal_focus(GtkWidget *terminal, GdkEvent G_GNUC_UNUSED(*event), GtkWindow * window) {
+ static gboolean on_terminal_focus(GtkWidget *terminal, GdkEvent G_GNUC_UNUSED(*event), GtkWidget * window) {
 
+	pw3270_application_window_set_active_terminal(window,terminal);
+
+	/*
 	if(gtk_window_get_default_widget(window) == terminal) {
 		return FALSE;
 	}
@@ -186,6 +189,7 @@
 	}
 
 	g_strfreev(actions);
+	*/
 
  	return FALSE;
  }
@@ -233,14 +237,16 @@
 
  static void destroy(GtkWidget *terminal, GtkWindow * window) {
 
-	if(gtk_window_get_default_widget(window) != terminal) {
-		debug("Terminal %p was destroyed (Default one is %p)",__FUNCTION__,gtk_window_get_default_widget(window));
+	if(pw3270_application_window_get_active_terminal(GTK_WIDGET(window)) != terminal) {
+		debug("Terminal %p was destroyed (Default one is %p)",__FUNCTION__,pw3270_application_window_get_active_terminal(GTK_WIDGET(window)));
 		return;
 	}
 
 	debug("Default terminal %p was destroyed",__FUNCTION__);
 
-	gtk_window_set_default(window,NULL);
+	pw3270_application_window_set_active_terminal(GTK_WIDGET(window),NULL);
+
+	/*
 	pw3270_window_set_subtitle(GTK_WIDGET(window), _("Disconnected from host"));
 
 	// Update actions
@@ -264,6 +270,7 @@
 	}
 
 	g_strfreev(actions);
+	*/
 
  }
 

@@ -59,6 +59,12 @@
 	GType		  pw3270ApplicationWindow_get_type();
 	GtkWidget	* pw3270_application_window_new(GtkApplication * app, const gchar *session_file);
 
+	/// @brief Set the active terminal widget.
+	void		  pw3270_application_window_set_active_terminal(GtkWidget *window, GtkWidget *terminal);
+
+	/// @brief Get the active terminal widget.
+	GtkWidget	* pw3270_application_window_get_active_terminal(GtkWidget *window);
+
 	/// @brief Create a new terminal tab.
 	GtkWidget 	* pw3270_application_window_new_tab(GtkWidget *window, const gchar *session_file);
 

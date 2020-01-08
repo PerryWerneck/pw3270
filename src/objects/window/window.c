@@ -50,6 +50,9 @@
 
 	debug("%s(%p)",__FUNCTION__,widget);
 
+	pw3270_application_window_set_active_terminal(widget,NULL);
+
+	/*
 	// Update actions
 	gchar ** actions = g_action_group_list_actions(G_ACTION_GROUP(widget));
 
@@ -67,8 +70,9 @@
 		}
 
 	}
-
 	g_strfreev(actions);
+	*/
+
 
 	// Destroy popups
 	for(ix = 0; ix < G_N_ELEMENTS(window->popups); ix++) {
@@ -383,3 +387,60 @@
 	g_message("Generic action %s was activated",g_action_get_name(G_ACTION(action)));
  }
 
+ GtkWidget * pw3270_application_window_get_active_terminal(GtkWidget *widget) {
+ 	return PW3270_APPLICATION_WINDOW(widget)->terminal;
+ }
+
+ void pw3270_application_window_set_active_terminal(GtkWidget *widget, GtkWidget *terminal) {
+
+ 	pw3270ApplicationWindow * window = PW3270_APPLICATION_WINDOW(widget);
+
+ 	if(window->terminal == terminal)
+		return;
+
+	if(terminal && GTK_IS_V3270(terminal)) {
+
+		window->terminal = terminal;
+
+		// Store the active terminal widget.
+		gtk_widget_grab_default(terminal);
+		debug("Terminal %p is now default",terminal);
+
+		// Change window title
+		g_autofree gchar * title = v3270_get_session_title(terminal);
+		gtk_window_set_title(GTK_WINDOW(window), title);
+
+		pw3270_window_set_subtitle(window, v3270_is_connected(terminal) ? _("Connected to host") : _("Disconnected from host"));
+
+	} else {
+
+		terminal = NULL;
+		pw3270_window_set_subtitle(window, _("Disconnected from host"));
+
+	}
+
+	// Update actions
+	size_t ix;
+	gchar ** actions = g_action_group_list_actions(G_ACTION_GROUP(window));
+
+	for(ix = 0; actions[ix]; ix++) {
+
+//		debug("%s",actions[ix]);
+
+		GAction * action = g_action_map_lookup_action(G_ACTION_MAP(window), actions[ix]);
+
+		if(action) {
+
+			if(V3270_IS_ACTION(action)) {
+				v3270_action_set_terminal_widget(action,terminal);
+			} else if(PW3270_IS_ACTION(action)) {
+				pw3270_action_set_terminal_widget(action,terminal);
+			}
+
+		}
+
+	}
+
+	g_strfreev(actions);
+
+ }
