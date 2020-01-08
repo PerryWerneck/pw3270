@@ -35,6 +35,7 @@
  #include <v3270/print.h>
 
 //---[ Gtk Label with customized popup-menu ]---------------------------------------------------------------------------------------
+
  typedef struct _pw3270TabLabel {
 
  	GtkLabel parent;
@@ -50,10 +51,28 @@
  G_DEFINE_TYPE(pw3270TabLabel, pw3270TabLabel, GTK_TYPE_LABEL);
 
 
- static gboolean tab_label_button_press(GtkWidget *widget, GdkEventButton *event) {
+ static void popup_menu_detach(GtkWidget G_GNUC_UNUSED(*label), GtkMenu *menu) {
 
-	debug("%s(%u)",__FUNCTION__,event->button);
+ 	debug("%s",__FUNCTION__)
 
+ 	gtk_widget_destroy(GTK_WIDGET(menu));
+
+ }
+
+ static gboolean tab_label_button_press(GtkWidget *label, GdkEventButton *event) {
+
+	if (event->button == 3 && event->type == GDK_BUTTON_PRESS) {
+
+		GtkWidget * menu = gtk_menu_new();
+
+		debug("menu=%p",menu);
+
+		gtk_menu_attach_to_widget(GTK_MENU(menu), GTK_WIDGET(label), popup_menu_detach);
+		g_signal_emit_by_name(GTK_LABEL(label),"populate-popup",menu);
+		gtk_menu_popup_at_widget(GTK_MENU(menu),label,GDK_GRAVITY_SOUTH_WEST,GDK_GRAVITY_NORTH_WEST,(GdkEvent *) event);
+
+		return TRUE;
+	}
 
 	return FALSE;
  }
