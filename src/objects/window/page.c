@@ -34,6 +34,42 @@
  #include <v3270/actions.h>
  #include <v3270/print.h>
 
+//---[ Gtk Label with customized popup-menu ]---------------------------------------------------------------------------------------
+ typedef struct _pw3270TabLabel {
+
+ 	GtkLabel parent;
+
+ } pw3270TabLabel;
+
+ typedef struct _pw3270TabLabelClass {
+
+ 	GtkLabelClass parent_class;
+
+ } pw3270TabLabelClass;
+
+ G_DEFINE_TYPE(pw3270TabLabel, pw3270TabLabel, GTK_TYPE_LABEL);
+
+
+ static gboolean tab_label_button_press(GtkWidget *widget, GdkEventButton *event) {
+
+	debug("%s(%u)",__FUNCTION__,event->button);
+
+
+	return FALSE;
+ }
+
+ static void pw3270TabLabel_class_init(pw3270TabLabelClass *klass) {
+
+	GTK_WIDGET_CLASS(klass)->button_press_event = tab_label_button_press;
+
+ }
+
+ static void pw3270TabLabel_init(pw3270TabLabel *widget) {
+
+ }
+
+//----------------------------------------------------------------------------------------------------------------------------------
+
  static gboolean on_terminal_focus(GtkWidget *terminal, GdkEvent G_GNUC_UNUSED(*event), GtkWindow * window);
  static void session_changed(GtkWidget *terminal, GtkWidget *label);
  static void disconnected(GtkWidget *terminal, GtkWindow * window);
@@ -44,7 +80,17 @@
 
  gint pw3270_application_window_append_page(pw3270ApplicationWindow * window, GtkWidget * terminal) {
 
- 	GtkWidget * label	= gtk_label_new(v3270_get_session_name(terminal));
+ 	GtkWidget * label	=
+		GTK_WIDGET(
+			g_object_new(
+			pw3270TabLabel_get_type(),
+			"label", v3270_get_session_name(terminal),
+			"selectable", TRUE,
+			NULL)
+		);
+
+ 	// gtk_label_new(v3270_get_session_name(terminal));
+
  	GtkWidget * tab		= gtk_box_new(GTK_ORIENTATION_HORIZONTAL,2);
  	GtkWidget * button	= gtk_button_new_from_icon_name("window-close-symbolic",GTK_ICON_SIZE_MENU);
 
