@@ -50,19 +50,32 @@
 
  G_DEFINE_TYPE(pw3270TabLabel, pw3270TabLabel, GTK_TYPE_LABEL);
 
-
  static void popup_menu_detach(GtkWidget G_GNUC_UNUSED(*label), GtkMenu *menu) {
 
- 	debug("%s",__FUNCTION__)
- 	gtk_widget_destroy(GTK_WIDGET(menu));
+ 	debug("%s(%p)",__FUNCTION__,menu);
 
  }
+
+ static void popup_menu_deactivated(GtkMenu *menu, GtkWidget G_GNUC_UNUSED(*label)) {
+ 	gtk_menu_detach(menu);
+ }
+
+#ifdef DEBUG
+ static void menu_destroy(GtkWidget *menu) {
+ 	debug("%s(%p)",__FUNCTION__,menu);
+ }
+#endif // DEBUG
 
  static gboolean tab_label_button_press(GtkWidget *label, GdkEventButton *event) {
 
 	if (event->button == 3 && event->type == GDK_BUTTON_PRESS) {
 
 		GtkWidget * menu = gtk_menu_new();
+
+#ifdef DEBUG
+		g_signal_connect(menu,"destroy",G_CALLBACK(menu_destroy),NULL);
+#endif // DEBUG
+		g_signal_connect(menu,"deactivate",G_CALLBACK(popup_menu_deactivated),label);
 
 		debug("menu=%p",menu);
 
@@ -149,6 +162,7 @@
 
  static gboolean on_terminal_focus(GtkWidget *terminal, GdkEvent G_GNUC_UNUSED(*event), GtkWidget * window) {
 
+	gtk_widget_grab_default(terminal);
 	pw3270_application_window_set_active_terminal(window,terminal);
 
 	/*
@@ -246,42 +260,15 @@
 
 	pw3270_application_window_set_active_terminal(GTK_WIDGET(window),NULL);
 
-	/*
-	pw3270_window_set_subtitle(GTK_WIDGET(window), _("Disconnected from host"));
-
-	// Update actions
-	size_t ix;
-	gchar ** actions = g_action_group_list_actions(G_ACTION_GROUP(window));
-
-	for(ix = 0; actions[ix]; ix++) {
-
-		GAction * action = g_action_map_lookup_action(G_ACTION_MAP(window), actions[ix]);
-
-		if(action) {
-
-			if(PW3270_IS_ACTION(action)) {
-				pw3270_action_set_terminal_widget(action,NULL);
-			} else if(V3270_IS_ACTION(action)) {
-				v3270_action_set_terminal_widget(action,NULL);
-			}
-
-		}
-
-	}
-
-	g_strfreev(actions);
-	*/
-
  }
 
   static void close_page(GtkButton G_GNUC_UNUSED(*button), GtkWidget *terminal) {
 
-	g_object_ref(terminal);
+ 	debug("%s",__FUNCTION__);
 
 	GtkNotebook * notebook = GTK_NOTEBOOK(gtk_widget_get_parent(terminal));
 	gtk_notebook_remove_page(notebook,gtk_notebook_page_num(notebook, terminal));
 
-	g_object_unref(terminal);
 
  }
 
