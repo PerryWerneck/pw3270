@@ -224,16 +224,6 @@
 					<attribute name="action">win.rectselect</attribute>
 				</item>
 
-				<item>
-					<attribute name="label" translatable="yes">Paste with left margin</attribute>
-					<attribute name="action">win.marginedpaste</attribute>
-				</item>
-
-				<item>
-					<attribute name="label" translatable="yes">Blank Fill</attribute>
-					<attribute name="action">win.blankfill</attribute>
-				</item>
-
 			</section>
 
 			<section>
@@ -379,13 +369,28 @@
 					<attribute name="label" translatable="yes">Alert sound</attribute>
 					<attribute name="action">win.beep</attribute>
 				</item>
+
+		</section>
+
+				<item>
+					<attribute name="label" translatable="yes">Monocase</attribute>
+					<attribute name="action">win.monocase</attribute>
+				</item>
+
+				<item>
+					<attribute name="label" translatable="yes">Dynamic font spacing</attribute>
+					<attribute name="action">win.dynamic-font-spacing</attribute>
+				</item>
+				
+		<section>
+
 		</section>
 
 		<section>
 
 				<item>
-					<attribute name="label" translatable="yes">Select by rectangles</attribute>
-					<attribute name="action">win.rectselect</attribute>
+					<attribute name="label" translatable="yes">Smart paste</attribute>
+					<attribute name="action">win.smartpaste</attribute>
 				</item>
 
 				<item>
@@ -447,7 +452,39 @@
 
 		<submenu>
 
+			<attribute name="label" translatable="yes">Screen size</attribute>
+
+			<item>
+				<attribute name="label" translatable="yes">Model 2 - 80x24</attribute>
+				<attribute name="action">win.model-number</attribute>
+				<attribute name="target">2</attribute>
+			</item>
+			<item>
+				<attribute name="label" translatable="yes">Model 3 - 80x32</attribute>
+				<attribute name="action">win.model-number</attribute>
+				<attribute name="target">3</attribute>
+			</item>
+			<item>
+				<attribute name="label" translatable="yes">Model 4 - 80x43</attribute>
+				<attribute name="action">win.model-number</attribute>
+				<attribute name="target">4</attribute>
+			</item>
+			<item>
+				<attribute name="label" translatable="yes">Model 5 - 132x27</attribute>
+				<attribute name="action">win.model-number</attribute>
+				<attribute name="target">5</attribute>
+			</item>
+
+		</submenu>
+
+		<submenu>
+
 			<attribute name='label' translatable='yes'>Options</attribute>
+
+			<item>
+				<attribute name="label" translatable="yes">Dynamic font spacing</attribute>
+				<attribute name="action">win.dynamic-font-spacing</attribute>
+			</item>
 
 			<item>
 				<attribute name="label" translatable="yes">Show toolbar</attribute>
