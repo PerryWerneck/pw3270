@@ -128,29 +128,10 @@
 	debug("%s",__FUNCTION__);
 
 	// Create dialog.
-	gboolean use_header;
-	g_object_get(gtk_settings_get_default(), "gtk-dialogs-use-header", &use_header, NULL);
-
-	GtkWidget * dialog =
-		GTK_WIDGET(g_object_new(
-			GTK_TYPE_DIALOG,
-			"use-header-bar", (use_header ? 1 : 0),
-			NULL
-		));
-
-	gtk_window_set_title(GTK_WINDOW(dialog),_("Application preferences"));
-	gtk_window_set_deletable(GTK_WINDOW(dialog),FALSE);
-    gtk_window_set_destroy_with_parent(GTK_WINDOW(dialog), TRUE);
-
-    gtk_window_set_transient_for(GTK_WINDOW(dialog),gtk_application_get_active_window(GTK_APPLICATION(application)));
-    gtk_window_set_destroy_with_parent(GTK_WINDOW(dialog),TRUE);
-
-	gtk_dialog_add_buttons(
-		GTK_DIALOG(dialog),
-		_("_Cancel"), GTK_RESPONSE_CANCEL,
-		_("_Apply"), GTK_RESPONSE_APPLY,
-		NULL
-	);
+	GtkWidget * dialog = pw3270_settings_dialog_new(
+								_("Application preferences"),
+								gtk_application_get_active_window(GTK_APPLICATION(application))
+							);
 
 	// Create setttings data.
 	Pw3270SettingsDialog * settings = g_new0(Pw3270SettingsDialog,1);
@@ -159,7 +140,6 @@
 	settings->application = G_APPLICATION(application);
 
 	g_simple_action_set_enabled(action,FALSE);
-	gtk_window_set_deletable(GTK_WINDOW(dialog),FALSE);
 
 	// Create settings notebook.
 
@@ -177,7 +157,6 @@
 	// Connection signals.
 	g_signal_connect(dialog,"destroy",G_CALLBACK(on_destroy),settings);
 	g_signal_connect(dialog,"response",G_CALLBACK(on_response),settings);
-	g_signal_connect(dialog,"close",G_CALLBACK(gtk_widget_destroy),NULL);
 
 	// Load pages.
 	Pw3270SettingsPage * pages[] = {
@@ -199,7 +178,6 @@
 
 	// Show dialog.
 	gtk_widget_show_all(dialog);
-	gtk_window_set_deletable(GTK_WINDOW(dialog),FALSE);
 
  }
 

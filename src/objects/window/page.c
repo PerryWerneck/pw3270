@@ -33,6 +33,7 @@
  #include <v3270/settings.h>
  #include <v3270/actions.h>
  #include <v3270/print.h>
+ #include <pw3270.h>
 
 //---[ Gtk Label with customized popup-menu ]---------------------------------------------------------------------------------------
 
@@ -110,7 +111,7 @@
  static gboolean on_popup_menu(GtkWidget *widget, gboolean selected, gboolean online, GdkEvent *event, pw3270ApplicationWindow * window);
  static void label_populate_popup(GtkLabel *label, GtkMenu *menu, GtkWidget *terminal);
 
- gint pw3270_application_window_append_page(pw3270ApplicationWindow * window, GtkWidget * terminal) {
+ gint pw3270_application_window_append_page(GtkWidget * window, GtkWidget * terminal) {
 
  	GtkWidget * label	=
 		GTK_WIDGET(
@@ -123,12 +124,11 @@
 
  	// gtk_label_new(v3270_get_session_name(terminal));
 
- 	GtkWidget * tab		= gtk_box_new(GTK_ORIENTATION_HORIZONTAL,2);
- 	GtkWidget * button	= gtk_button_new_from_icon_name("window-close-symbolic",GTK_ICON_SIZE_MENU);
+ 	GtkWidget * tab			= gtk_box_new(GTK_ORIENTATION_HORIZONTAL,2);
+ 	GtkWidget * button		= gtk_button_new_from_icon_name("window-close-symbolic",GTK_ICON_SIZE_MENU);
+ 	GtkNotebook	* notebook	= PW3270_APPLICATION_WINDOW(window)->notebook;
 
  	gtk_button_set_relief(GTK_BUTTON(button),GTK_RELIEF_NONE);
-
- 	debug("notebook: %p", window->notebook);
 
 	g_signal_connect(G_OBJECT(label), "populate-popup", G_CALLBACK(label_populate_popup), terminal);
 
@@ -147,14 +147,10 @@
 	gtk_widget_show_all(terminal);
 	gtk_widget_show_all(tab);
 
-	gint page = gtk_notebook_append_page(window->notebook,terminal,tab);
+	gint page = gtk_notebook_append_page(notebook,terminal,tab);
 
-	gtk_notebook_set_tab_detachable(window->notebook,terminal,TRUE);
-	gtk_notebook_set_tab_reorderable(window->notebook,terminal,TRUE);
-
-	// Setup session.
-
-//	H3270 * hSession = v3270_get_session(terminal);
+	gtk_notebook_set_tab_detachable(notebook,terminal,TRUE);
+	gtk_notebook_set_tab_reorderable(notebook,terminal,TRUE);
 
 	return page;
 
@@ -164,47 +160,6 @@
 
 	gtk_widget_grab_default(terminal);
 	pw3270_application_window_set_active_terminal(window,terminal);
-
-	/*
-	if(gtk_window_get_default_widget(window) == terminal) {
-		return FALSE;
-	}
-
- 	// Store the active terminal widget.
-	gtk_widget_grab_default(terminal);
-	debug("Terminal %p is now default",terminal);
-
-	// Change window title
-	g_autofree gchar * title = v3270_get_session_title(terminal);
-	gtk_window_set_title(window, title);
-
-	pw3270_window_set_subtitle(GTK_WIDGET(window), v3270_is_connected(terminal) ? _("Connected to host") : _("Disconnected from host"));
-
-	// Update actions
-	size_t ix;
-	gchar ** actions = g_action_group_list_actions(G_ACTION_GROUP(window));
-
-	for(ix = 0; actions[ix]; ix++) {
-
-//		debug("%s",actions[ix]);
-
-		GAction * action = g_action_map_lookup_action(G_ACTION_MAP(window), actions[ix]);
-
-		if(action) {
-
-			if(V3270_IS_ACTION(action)) {
-				v3270_action_set_terminal_widget(action,terminal);
-			} else if(PW3270_IS_ACTION(action)) {
-				pw3270_action_set_terminal_widget(action,terminal);
-			}
-
-		}
-
-	}
-
-	g_strfreev(actions);
-	*/
-
  	return FALSE;
  }
 
@@ -273,7 +228,61 @@
  }
 
  static void rename_session(GtkWidget G_GNUC_UNUSED(*widget), GtkWidget *terminal) {
+
  	debug("%s",__FUNCTION__);
+
+	GtkWidget * dialog = pw3270_settings_dialog_new(
+								_("Rename session"),
+								GTK_WINDOW(gtk_widget_get_toplevel(terminal))
+							);
+
+	// https://developer.gnome.org/hig/stable/visual-layout.html.en
+	GtkWidget * content = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
+	gtk_container_set_border_width(GTK_CONTAINER(content),18);
+
+	GtkWidget * box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL,12);
+	gtk_box_pack_start(GTK_BOX(content),box,TRUE,TRUE,0);
+
+
+	// Create label.
+	GtkWidget *label = gtk_label_new(_("Session name"));
+	gtk_label_set_xalign(GTK_LABEL(label),1);
+	gtk_box_pack_start(GTK_BOX(box),label,FALSE,TRUE,0);
+
+	// Create entry
+	GtkWidget * entry = gtk_entry_new();
+	gtk_entry_set_max_length(GTK_ENTRY(entry),10);
+	gtk_entry_set_activates_default(GTK_ENTRY(entry),TRUE);
+	gtk_entry_set_width_chars(GTK_ENTRY(entry),12);
+	gtk_entry_set_placeholder_text(GTK_ENTRY(entry),G_STRINGIFY(PRODUCT_NAME));
+	gtk_entry_set_input_purpose(GTK_ENTRY(entry),GTK_INPUT_PURPOSE_ALPHA);
+
+	{
+		g_autofree gchar * session_name = g_strdup(v3270_get_session_name(terminal));
+
+		gchar *ptr = strrchr(session_name,':');
+		if(ptr)
+			*ptr = 0;
+
+		gtk_entry_set_text(GTK_ENTRY(entry),session_name);
+
+	}
+
+	gtk_box_pack_start(GTK_BOX(box),entry,FALSE,TRUE,0);
+
+	gtk_widget_show_all(dialog);
+
+	if(gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_APPLY) {
+
+		v3270_set_session_name(terminal, gtk_entry_get_text(GTK_ENTRY(entry)));
+
+
+		g_signal_emit_by_name(terminal,"save-settings");
+	}
+
+	gtk_widget_destroy(dialog);
+
+
  }
 
  static gboolean on_popup_menu(GtkWidget *widget, gboolean selected, gboolean online, GdkEvent *event, pw3270ApplicationWindow * window) {
@@ -298,7 +307,7 @@
 
  }
 
- static void label_populate_popup(GtkLabel *label, GtkMenu *menu, GtkWidget *terminal) {
+ static void label_populate_popup(GtkLabel G_GNUC_UNUSED(*label), GtkMenu *menu, GtkWidget *terminal) {
 
 	static const struct Item {
 		const gchar * label;

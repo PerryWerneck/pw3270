@@ -147,6 +147,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/objects/window/private.h" />
+		<Unit filename="src/objects/window/rename.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/objects/window/terminal.c">
 			<Option compilerVar="CC" />
 		</Unit>

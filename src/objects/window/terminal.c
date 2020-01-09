@@ -69,6 +69,8 @@
 
 	session->changed = FALSE;
 
+	debug("%s(%p,%p)",__FUNCTION__,terminal,session);
+
 	v3270_to_key_file(terminal,session->key_file,"terminal");
 	v3270_accelerator_map_to_key_file(terminal, session->key_file, "accelerators");
 

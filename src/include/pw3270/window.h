@@ -59,6 +59,8 @@
 	GType		  pw3270ApplicationWindow_get_type();
 	GtkWidget	* pw3270_application_window_new(GtkApplication * app, const gchar *session_file);
 
+	gint		  pw3270_application_window_append_page(GtkWidget *window, GtkWidget *terminal);
+
 	/// @brief Set the active terminal widget.
 	void		  pw3270_application_window_set_active_terminal(GtkWidget *window, GtkWidget *terminal);
 

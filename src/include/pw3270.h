@@ -70,7 +70,7 @@
 	const gchar	* v3270_get_session_filename(GtkWidget *widget);
 	void		  v3270_set_session_filename(GtkWidget *widget, const gchar *filename);
 
-
+	GtkWidget	* pw3270_settings_dialog_new(const gchar *title, GtkWindow *parent);
 
 	G_END_DECLS
 

@@ -52,28 +52,6 @@
 
 	pw3270_application_window_set_active_terminal(widget,NULL);
 
-	/*
-	// Update actions
-	gchar ** actions = g_action_group_list_actions(G_ACTION_GROUP(widget));
-
-	for(ix = 0; actions[ix]; ix++) {
-
-		GAction * action = g_action_map_lookup_action(G_ACTION_MAP(widget), actions[ix]);
-
-		if(!action)
-			continue;
-
-		if(PW3270_IS_ACTION(action)) {
-			pw3270_action_set_terminal_widget(action,NULL);
-		} else if(V3270_IS_ACTION(action)) {
-			v3270_action_set_terminal_widget(action,NULL);
-		}
-
-	}
-	g_strfreev(actions);
-	*/
-
-
 	// Destroy popups
 	for(ix = 0; ix < G_N_ELEMENTS(window->popups); ix++) {
 		if(window->popups[ix]) {
@@ -410,12 +388,12 @@
 		g_autofree gchar * title = v3270_get_session_title(terminal);
 		gtk_window_set_title(GTK_WINDOW(window), title);
 
-		pw3270_window_set_subtitle(window, v3270_is_connected(terminal) ? _("Connected to host") : _("Disconnected from host"));
+		pw3270_window_set_subtitle(GTK_WIDGET(window), v3270_is_connected(terminal) ? _("Connected to host") : _("Disconnected from host"));
 
 	} else {
 
 		terminal = NULL;
-		pw3270_window_set_subtitle(window, _("Disconnected from host"));
+		pw3270_window_set_subtitle(GTK_WIDGET(window), _("Disconnected from host"));
 
 	}
 

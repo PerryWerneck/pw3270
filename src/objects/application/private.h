@@ -47,7 +47,6 @@
 	#include <lib3270/log.h>
 
 	G_GNUC_INTERNAL void		  pw3270_application_open(GApplication * application, GFile **files, gint n_files, const gchar *hint);
-	G_GNUC_INTERNAL gint		  pw3270_application_window_append_page(GtkWidget *window, GtkWidget *terminal);
 	G_GNUC_INTERNAL GtkWidget	* pw3270_terminal_new(const gchar *session_file);
 
 	// Actions
