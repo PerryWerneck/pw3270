@@ -312,11 +312,13 @@
 	static const struct Item {
 		const gchar * label;
 		GCallback	  callback;
+		gboolean (*check_permission)(GtkWidget *widget)
 	} items[] = {
 
 		{
 			.label = N_("_Rename session"),
-			.callback = G_CALLBACK(rename_session)
+			.callback = G_CALLBACK(rename_session),
+			.check_permission = v3270_allow_custom_settings
 		},
 
 		{
@@ -332,6 +334,10 @@
 
 	for(ix = 0; ix < G_N_ELEMENTS(items); ix++) {
 		GtkWidget *item = gtk_menu_item_new_with_mnemonic(gettext(items[ix].label));
+
+		if(items[ix].check_permission)
+			gtk_widget_set_sensitive(item,items[ix].check_permission(terminal));
+
 		g_signal_connect(G_OBJECT(item),"activate",items[ix].callback,terminal);
 		gtk_widget_show_all(item);
 		gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);

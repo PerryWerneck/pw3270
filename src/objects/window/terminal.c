@@ -28,6 +28,13 @@
  */
 
  #include "private.h"
+
+ #include <glib.h>
+ #include <glib/gstdio.h>
+ #include <fcntl.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
+
  #include <pw3270/actions.h>
  #include <lib3270/toggle.h>
  #include <v3270/settings.h>
@@ -267,18 +274,36 @@
 
  GtkWidget * pw3270_application_window_new_tab(GtkWidget *widget, const gchar *session_file) {
 
-	struct SessionDescriptor * descriptor;
-
 	g_return_val_if_fail(PW3270_IS_APPLICATION_WINDOW(widget),NULL);
 
-	GtkWidget * window = PW3270_APPLICATION_WINDOW(widget);
 	GtkWidget * terminal = pw3270_terminal_new(session_file);
 
-	pw3270_window_set_current_page(window,pw3270_application_window_append_page(window,terminal));
+	pw3270_window_set_current_page(widget,pw3270_application_window_append_page(widget,terminal));
 
 	return terminal;
 
  }
 
+ gboolean v3270_allow_custom_settings(GtkWidget *widget) {
+
+	const struct SessionDescriptor * descriptor = (const struct SessionDescriptor *) g_object_get_data(G_OBJECT(widget),"session-descriptor");
+
+	if(!(descriptor && *descriptor->filename))
+		return FALSE;
+
+	if(g_access(descriptor->filename,W_OK))
+		return FALSE;
+
+#ifdef _WIN32
+
+	return TRUE;
+
+#else
+
+	return !g_str_has_prefix(descriptor->filename,g_get_user_config_dir());
+
+#endif // _WIN32
+
+ }
 
 
