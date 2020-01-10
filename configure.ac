@@ -86,7 +86,7 @@ dnl		INSTALL_PACKAGES="windows-lib ${INSTALL_PACKAGES}"
  	*)
 		app_cv_osname="linux"
 
-		CFLAGS="$CFLAGS -pthread"
+		CFLAGS="$CFLAGS -pthread -DLIBDIR=\$(libdir)"
 		LDFLAGS="$LDFLAGS -pthread"
 
 dnl		INSTALL_PACKAGES="linux-lib ${INSTALL_PACKAGES}"

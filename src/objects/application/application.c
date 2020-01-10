@@ -54,6 +54,8 @@
 
  	GSettings * settings;
 
+ 	GSList * plugins;		///< @brief Handlers of the loaded plugins.
+
  	PW3270_UI_STYLE	ui_style;
 
  };
@@ -176,11 +178,77 @@
 		g_settings_bind(app->settings, "ui-style", app, "ui-style", G_SETTINGS_BIND_DEFAULT);
 	}
 
+	// Get plugins.
+	{
+#ifdef _WIN32
+        UINT errorMode;
+        lib3270_autoptr(char) path = lib3270_build_data_filename("plugins",NULL);
+#else
+        const gchar * path = G_STRINGIFY(LIBDIR) G_DIR_SEPARATOR_S G_STRINGIFY(PRODUCT_NAME) "-plugins";
+#endif // _WIN32
+
+		if(g_file_test(path,G_FILE_TEST_IS_DIR)) {
+
+			g_message("Loading plugins from %s",path);
+
+			GError	* err   = NULL;
+			GDir	* dir 	= g_dir_open(path,0,&err);
+
+			if(dir) {
+
+				const gchar *name;
+				while((name = g_dir_read_name(dir)) != NULL) {
+
+					g_autofree gchar *filename = g_build_filename(path,name,NULL);
+
+					if(g_str_has_suffix(filename,G_MODULE_SUFFIX)) {
+
+						g_message("Loading %s",filename);
+
+						GModule *handle = g_module_open(filename,G_MODULE_BIND_LOCAL);
+
+						if(handle) {
+
+							app->plugins = g_slist_append(app->plugins,handle);
+
+						} else {
+
+							g_warning("Can't load %s: %s",filename,g_module_error());
+
+						}
+
+					}
+
+
+
+				}
+
+				g_dir_close(dir);
+			}
+
+			if(err) {
+
+				g_warning("Can't load plugins from %s: %s",path,err->message);
+				g_error_free(err);
+
+			}
+
+
+		}
+
+	}
+
  }
+
 
  static void finalize(GObject *object) {
 
  	pw3270Application * application = PW3270_APPLICATION(object);
+
+ 	if(application->plugins) {
+		g_slist_free_full(application->plugins,(GDestroyNotify) g_module_close);
+		application->plugins = NULL;
+ 	}
 
  	if(application->settings) {
 		g_object_unref(application->settings);
@@ -318,5 +386,12 @@
 
 	g_return_val_if_fail(PW3270_IS_APPLICATION(app),NULL);
 	return PW3270_APPLICATION(app)->settings;
+
+ }
+
+ void pw3270_application_plugin_foreach(GApplication *app, GFunc func, gpointer user_data) {
+
+ 	g_return_if_fail(PW3270_IS_APPLICATION(app));
+	g_slist_foreach(PW3270_APPLICATION(app)->plugins, func, user_data);
 
  }
