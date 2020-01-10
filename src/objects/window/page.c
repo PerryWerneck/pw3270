@@ -29,6 +29,7 @@
 
  #include "private.h"
  #include <pw3270/actions.h>
+ #include <pw3270/application.h>
  #include <lib3270/toggle.h>
  #include <v3270/settings.h>
  #include <v3270/actions.h>
@@ -111,6 +112,7 @@
  static gboolean terminal_popup(GtkWidget *widget, gboolean selected, gboolean online, GdkEvent *event, pw3270ApplicationWindow * window);
  static gboolean oia_popup(GtkWidget *widget, guint field, GdkEvent *event, pw3270ApplicationWindow * window);
  static void label_populate_popup(GtkLabel *label, GtkMenu *menu, GtkWidget *terminal);
+ static void plugin_start(GModule *module, GtkWidget *terminal);
 
  gint pw3270_application_window_append_page(GtkWidget * window, GtkWidget * terminal) {
 
@@ -154,6 +156,9 @@
 
 	gtk_notebook_set_tab_detachable(notebook,terminal,TRUE);
 	gtk_notebook_set_tab_reorderable(notebook,terminal,TRUE);
+
+	// Initialize plugins
+	pw3270_application_plugin_foreach(G_APPLICATION(gtk_window_get_application(GTK_WINDOW(window))), (GFunc) plugin_start, terminal);
 
 	return page;
 
@@ -214,7 +219,7 @@
 		return;
 	}
 
-	debug("Default terminal %p was destroyed",__FUNCTION__);
+	debug("Default terminal %p was destroyed (toplevel=%p)",__FUNCTION__,gtk_widget_get_toplevel(terminal));
 
 	pw3270_application_window_set_active_terminal(GTK_WIDGET(window),NULL);
 
@@ -363,3 +368,17 @@
 	}
 
  }
+
+
+ void plugin_start(GModule *module, GtkWidget *terminal) {
+
+	/*
+	int (*start)(GtkWidget *);
+
+	if(g_module_symbol(module, "pw3270_plugin_insert_terminal", (gpointer *) &start)) {
+		start(terminal);
+	}
+	*/
+
+ }
+
