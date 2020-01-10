@@ -438,6 +438,25 @@
 
 	</menu>
 
+	<menu id="popup-over-oia">
+
+		<item>
+			<attribute name="label" translatable="yes">Insert</attribute>
+			<attribute name="action">win.insert</attribute>
+		</item>
+
+		<item>
+			<attribute name="label" translatable="yes">Track Cursor</attribute>
+			<attribute name="action">win.cursorpos</attribute>
+		</item>
+
+		<item>
+			<attribute name="label" translatable="yes">Alert sound</attribute>
+			<attribute name="action">win.beep</attribute>
+		</item>
+
+	</menu>
+
 	<menu id="popup-when-offline">
 
 		<item>

@@ -209,10 +209,11 @@
 	g_autoptr(GtkBuilder) builder = pw3270_application_get_builder("window.xml");
 
 	// Load popup menus.
-	const gchar * popup_menus[G_N_ELEMENTS(window->popups)] = {
-		"popup-over-selected-area",
-		"popup-over-unselected-area",
-		"popup-when-offline"
+	const gchar * popup_menus[PW3270_APP_WINDOW_POPUP_COUNT] = {
+		"popup-over-selected-area",		// PW3270_APP_WINDOW_POPUP_OVER_SELECTED_AREA
+		"popup-over-unselected-area",	// PW3270_APP_WINDOW_POPUP_OVER_UNSELECTED_AREA
+		"popup-over-oia",				// PW3270_APP_WINDOW_POPUP_OVER_OIA
+		"popup-when-offline"			// PW3270_APP_WINDOW_POPUP_WHEN_OFFLINE
 	};
 
 	for(ix = 0; ix < G_N_ELEMENTS(popup_menus); ix++) {

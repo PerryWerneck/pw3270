@@ -108,7 +108,8 @@
  static void connected(GtkWidget *terminal, const gchar *host, GtkWindow * window);
  static void destroy(GtkWidget *terminal, GtkWindow * window);
  static void close_page(GtkButton *button, GtkWidget *terminal);
- static gboolean on_popup_menu(GtkWidget *widget, gboolean selected, gboolean online, GdkEvent *event, pw3270ApplicationWindow * window);
+ static gboolean terminal_popup(GtkWidget *widget, gboolean selected, gboolean online, GdkEvent *event, pw3270ApplicationWindow * window);
+ static gboolean oia_popup(GtkWidget *widget, guint field, GdkEvent *event, pw3270ApplicationWindow * window);
  static void label_populate_popup(GtkLabel *label, GtkMenu *menu, GtkWidget *terminal);
 
  gint pw3270_application_window_append_page(GtkWidget * window, GtkWidget * terminal) {
@@ -136,8 +137,10 @@
 	g_signal_connect(G_OBJECT(terminal), "session_changed", G_CALLBACK(session_changed),label);
 	g_signal_connect(G_OBJECT(terminal), "disconnected", G_CALLBACK(disconnected),window);
 	g_signal_connect(G_OBJECT(terminal), "connected", G_CALLBACK(connected),window);
-	g_signal_connect(G_OBJECT(terminal), "popup", G_CALLBACK(on_popup_menu), window);
 	g_signal_connect(G_OBJECT(terminal), "destroy", G_CALLBACK(destroy),window);
+
+	g_signal_connect(G_OBJECT(terminal), "popup", G_CALLBACK(terminal_popup), window);
+	g_signal_connect(G_OBJECT(terminal), "oia-popup", G_CALLBACK(oia_popup), window);
 
 	g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(close_page), terminal);
 
@@ -285,7 +288,7 @@
 
  }
 
- static gboolean on_popup_menu(GtkWidget *widget, gboolean selected, gboolean online, GdkEvent *event, pw3270ApplicationWindow * window) {
+ static gboolean terminal_popup(GtkWidget *widget, gboolean selected, gboolean online, GdkEvent *event, pw3270ApplicationWindow * window) {
 
 	GtkWidget * popup = window->popups[PW3270_APP_WINDOW_POPUP_OVER_UNSELECTED_AREA];
 
@@ -307,12 +310,28 @@
 
  }
 
+ static gboolean oia_popup(GtkWidget *widget, guint field, GdkEvent *event, pw3270ApplicationWindow * window) {
+
+	debug("%s(%u)",__FUNCTION__,field);
+
+	GtkWidget *popup = window->popups[PW3270_APP_WINDOW_POPUP_OVER_OIA];
+
+	if(!popup)
+		return FALSE;
+
+	gtk_widget_show_all(popup);
+	gtk_menu_set_screen(GTK_MENU(popup), gtk_widget_get_screen(widget));
+	gtk_menu_popup_at_pointer(GTK_MENU(popup), event);
+
+	return TRUE;
+ }
+
  static void label_populate_popup(GtkLabel G_GNUC_UNUSED(*label), GtkMenu *menu, GtkWidget *terminal) {
 
 	static const struct Item {
 		const gchar * label;
 		GCallback	  callback;
-		gboolean (*check_permission)(GtkWidget *widget)
+		gboolean (*check_permission)(GtkWidget *widget);
 	} items[] = {
 
 		{
