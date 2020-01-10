@@ -66,8 +66,11 @@
 		if(!action) {
 			const gchar *ptr = strchr(name,'.');
 
-			if(ptr)
+			if(ptr) {
 				action = g_action_map_lookup_action(G_ACTION_MAP(window), ptr+1);
+				debug("action(%s)=%p",ptr+1,action);
+			}
+
 		}
 
 		debug("%s(%s)=%p",__FUNCTION__,name,action);
