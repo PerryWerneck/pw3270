@@ -102,10 +102,6 @@
 
  }
 
- void on_page_changed(GtkNotebook *notebook, GtkWidget G_GNUC_UNUSED(*child), guint G_GNUC_UNUSED(page_num), gpointer G_GNUC_UNUSED(user_data)) {
- 	gtk_notebook_set_show_tabs(notebook,gtk_notebook_get_n_pages(notebook) > 1);
- }
-
  static void pw3270ApplicationWindow_init(pw3270ApplicationWindow *widget) {
 
 	GtkBox * vBox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL,0));
@@ -115,8 +111,6 @@
 	gtk_notebook_set_show_tabs(widget->notebook,FALSE);
 	gtk_notebook_set_show_border(widget->notebook, FALSE);
 	gtk_notebook_set_group_name(widget->notebook,PACKAGE_NAME ":Terminals");
-	g_signal_connect(G_OBJECT(widget->notebook), "page-added", G_CALLBACK(on_page_changed), widget);
-	g_signal_connect(G_OBJECT(widget->notebook), "page-removed", G_CALLBACK(on_page_changed), widget);
 
 	widget->toolbar  = GTK_TOOLBAR(pw3270_toolbar_new());
 	gtk_box_pack_start(vBox,GTK_WIDGET(widget->toolbar),FALSE,TRUE,0);
@@ -186,6 +180,42 @@
 
  }
 
+ static void page_added(GtkNotebook *notebook, GtkWidget *child, guint G_GNUC_UNUSED(page_num), GtkApplication * application) {
+
+	debug("%s(%p)",__FUNCTION__,child);
+
+ 	gtk_notebook_set_show_tabs(notebook,gtk_notebook_get_n_pages(notebook) > 1);
+
+ 	// Call plugins
+  	int (*call)(GtkWidget *);
+
+  	GSList * item;
+  	for(item = pw3270_application_get_plugins(G_APPLICATION(application)); item; item = g_slist_next(item)) {
+		if(g_module_symbol((GModule *) item->data, "pw3270_plugin_page_added", (gpointer *) &call)) {
+			call(child);
+       }
+  	}
+
+ }
+
+ static void page_removed(GtkNotebook *notebook, GtkWidget *child, guint G_GNUC_UNUSED(page_num), GtkApplication * application) {
+
+	debug("%s(%p)",__FUNCTION__,child);
+
+ 	gtk_notebook_set_show_tabs(notebook,gtk_notebook_get_n_pages(notebook) > 1);
+
+ 	// Call plugins
+  	int (*call)(GtkWidget *);
+
+  	GSList * item;
+  	for(item = pw3270_application_get_plugins(G_APPLICATION(application)); item; item = g_slist_next(item)) {
+		if(g_module_symbol((GModule *) item->data, "pw3270_plugin_page_removed", (gpointer *) &call)) {
+			call(child);
+       }
+  	}
+
+ }
+
  GtkWidget * pw3270_application_window_new(GtkApplication * application, const gchar *session_file) {
 
 	gchar *title = _( "IBM 3270 Terminal emulator" );
@@ -202,6 +232,9 @@
 			PW3270_TYPE_APPLICATION_WINDOW,
 			"application", application,
 			NULL);
+
+	g_signal_connect(G_OBJECT(window->notebook), "page-added", G_CALLBACK(page_added), application);
+	g_signal_connect(G_OBJECT(window->notebook), "page-removed", G_CALLBACK(page_removed), application);
 
 	//
 	// Get builder

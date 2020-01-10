@@ -92,18 +92,63 @@
 
  }
 
+ static void window_added(GtkApplication *application, GtkWindow *window) {
+
+  	GTK_APPLICATION_CLASS(pw3270Application_parent_class)->window_added(application,window);
+
+  	void (*call)(GtkWindow *window);
+
+  	GSList * item;
+  	for(item = PW3270_APPLICATION(application)->plugins; item; item = g_slist_next(item)) {
+		if(g_module_symbol((GModule *) item->data, "pw3270_plugin_window_added", (gpointer *) &call)) {
+               call(window);
+       }
+  	}
+
+ }
+
+ static void window_removed(GtkApplication *application, GtkWindow *window) {
+
+ 	debug("%s(%p)",__FUNCTION__,window);
+
+  	void (*call)(GtkWindow *window);
+
+  	GSList * item;
+  	for(item = PW3270_APPLICATION(application)->plugins; item; item = g_slist_next(item)) {
+		if(g_module_symbol((GModule *) item->data, "pw3270_plugin_window_removed", (gpointer *) &call)) {
+               call(window);
+       }
+  	}
+
+
+   	GTK_APPLICATION_CLASS(pw3270Application_parent_class)->window_removed(application,window);
+
+ }
+
  static void pw3270Application_class_init(pw3270ApplicationClass *klass) {
 
-	GApplicationClass *application_class = G_APPLICATION_CLASS(klass);
 	GObjectClass *object_class = G_OBJECT_CLASS(klass);
 
 	object_class->get_property = get_property;
 	object_class->set_property = set_property;
- 	object_class->finalize = finalize;
+	object_class->finalize = finalize;
 
-	application_class->startup = startup;
-	application_class->activate = activate;
-	application_class->open = pw3270_application_open;
+	{
+		GtkApplicationClass *application_class = GTK_APPLICATION_CLASS(klass);
+
+		application_class->window_added = window_added;
+		application_class->window_removed = window_removed;
+
+	}
+
+	{
+		GApplicationClass * application_class = G_APPLICATION_CLASS(klass);
+
+		application_class->startup = startup;
+		application_class->activate = activate;
+		application_class->open = pw3270_application_open;
+
+	}
 
 	props[PROP_UI_STYLE] =
 		g_param_spec_uint(
@@ -389,9 +434,18 @@
 
  }
 
+ GSList * pw3270_application_get_plugins(GApplication *app) {
+
+	g_return_val_if_fail(PW3270_IS_APPLICATION(app),NULL);
+	return PW3270_APPLICATION(app)->plugins;
+
+ }
+
+ /*
  void pw3270_application_plugin_foreach(GApplication *app, GFunc func, gpointer user_data) {
 
  	g_return_if_fail(PW3270_IS_APPLICATION(app));
 	g_slist_foreach(PW3270_APPLICATION(app)->plugins, func, user_data);
 
  }
+ */

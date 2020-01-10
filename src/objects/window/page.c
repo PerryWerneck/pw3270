@@ -112,11 +112,12 @@
  static gboolean terminal_popup(GtkWidget *widget, gboolean selected, gboolean online, GdkEvent *event, pw3270ApplicationWindow * window);
  static gboolean oia_popup(GtkWidget *widget, guint field, GdkEvent *event, pw3270ApplicationWindow * window);
  static void label_populate_popup(GtkLabel *label, GtkMenu *menu, GtkWidget *terminal);
- static void plugin_start(GModule *module, GtkWidget *terminal);
+ static void label_disconnect(GtkWidget *label, GtkWidget *terminal);
 
  gint pw3270_application_window_append_page(GtkWidget * window, GtkWidget * terminal) {
 
- 	GtkWidget * label	=
+	// Setup label
+ 	GtkWidget * label =
 		GTK_WIDGET(
 			g_object_new(
 			pw3270TabLabel_get_type(),
@@ -125,7 +126,10 @@
 			NULL)
 		);
 
- 	// gtk_label_new(v3270_get_session_name(terminal));
+	g_signal_connect(G_OBJECT(terminal), "session_changed", G_CALLBACK(session_changed),label);
+	g_signal_connect(G_OBJECT(label), "destroy", G_CALLBACK(label_disconnect),terminal);
+
+	// Setup tab
 
  	GtkWidget * tab			= gtk_box_new(GTK_ORIENTATION_HORIZONTAL,2);
  	GtkWidget * button		= gtk_button_new_from_icon_name("window-close-symbolic",GTK_ICON_SIZE_MENU);
@@ -136,7 +140,6 @@
 	g_signal_connect(G_OBJECT(label), "populate-popup", G_CALLBACK(label_populate_popup), terminal);
 
 	g_signal_connect(G_OBJECT(terminal), "focus-in-event", G_CALLBACK(on_terminal_focus), window);
-	g_signal_connect(G_OBJECT(terminal), "session_changed", G_CALLBACK(session_changed),label);
 	g_signal_connect(G_OBJECT(terminal), "disconnected", G_CALLBACK(disconnected),window);
 	g_signal_connect(G_OBJECT(terminal), "connected", G_CALLBACK(connected),window);
 	g_signal_connect(G_OBJECT(terminal), "destroy", G_CALLBACK(destroy),window);
@@ -145,6 +148,7 @@
 	g_signal_connect(G_OBJECT(terminal), "oia-popup", G_CALLBACK(oia_popup), window);
 
 	g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(close_page), terminal);
+
 
  	gtk_box_pack_start(GTK_BOX(tab),label,FALSE,FALSE,0);
  	gtk_box_pack_end(GTK_BOX(tab),button,FALSE,FALSE,0);
@@ -156,9 +160,6 @@
 
 	gtk_notebook_set_tab_detachable(notebook,terminal,TRUE);
 	gtk_notebook_set_tab_reorderable(notebook,terminal,TRUE);
-
-	// Initialize plugins
-	pw3270_application_plugin_foreach(G_APPLICATION(gtk_window_get_application(GTK_WINDOW(window))), (GFunc) plugin_start, terminal);
 
 	return page;
 
@@ -369,16 +370,9 @@
 
  }
 
-
- void plugin_start(GModule *module, GtkWidget *terminal) {
-
-	/*
-	int (*start)(GtkWidget *);
-
-	if(g_module_symbol(module, "pw3270_plugin_insert_terminal", (gpointer *) &start)) {
-		start(terminal);
-	}
-	*/
-
+ static void label_disconnect(GtkWidget *label, GtkWidget *terminal) {
+ 	debug("%s(%p)",__FUNCTION__,label);
+ 	g_signal_handlers_disconnect_by_data(G_OBJECT(terminal),label);
  }
+
 

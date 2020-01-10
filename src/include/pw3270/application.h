@@ -69,7 +69,9 @@
 	void			  pw3270_application_set_ui_style(GApplication *app, PW3270_UI_STYLE type);
 	PW3270_UI_STYLE	  pw3270_application_get_ui_style(GApplication *app);
 
+	// Plugins
 	void			  pw3270_application_plugin_foreach(GApplication *app, GFunc func, gpointer user_data);
+	GSList			* pw3270_application_get_plugins(GApplication *app);
 
 	// Tools
 	GtkBuilder		* pw3270_application_get_builder(const gchar *name);
