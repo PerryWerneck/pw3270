@@ -572,7 +572,7 @@
 
 #else
 
-	GSettings * settings = g_settings_new_with_path("br.com.bb." PACKAGE_NAME, path);
+	GSettings * settings = g_settings_new_with_path("br.com.bb." PACKAGE_NAME ".window", path);
 
 #endif // DEBUG
 
