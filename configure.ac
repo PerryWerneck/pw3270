@@ -97,6 +97,8 @@ dnl		INSTALL_PACKAGES="linux-lib ${INSTALL_PACKAGES}"
 
 esac
 
+AC_CONFIG_FILES(schemas/common/window.gschema.xml)
+
 AC_SUBST(OSNAME,$app_cv_osname)
 AC_SUBST(LIBS)
 AC_SUBST(LOGDIR)

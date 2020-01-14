@@ -35,6 +35,7 @@
 
  static void get_property(GObject *object, guint prop_id, GValue *value, GParamSpec *pspec);
  static void set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec);
+ static GSettings *pw3270_application_window_settings_new(void);
 
  G_DEFINE_TYPE(pw3270ApplicationWindow, pw3270ApplicationWindow, GTK_TYPE_APPLICATION_WINDOW);
 
@@ -60,29 +61,105 @@
 		}
 	}
 
+	{
+		g_autoptr(GSettings) settings = pw3270_application_window_settings_new();
+
+		g_settings_set_int(settings, "width", window->state.width);
+		g_settings_set_int(settings, "height", window->state.height);
+		g_settings_set_boolean(settings, "is-maximized", window->state.is_maximized);
+		g_settings_set_boolean(settings, "is-fullscreen", window->state.is_fullscreen);
+	}
+
 	GTK_WIDGET_CLASS(pw3270ApplicationWindow_parent_class)->destroy(widget);
 
  }
 
+ static void size_allocate(GtkWidget *widget, GtkAllocation *allocation) {
+
+ 	// https://developer.gnome.org/SaveWindowState/
+	GTK_WIDGET_CLASS(pw3270ApplicationWindow_parent_class)->size_allocate(widget, allocation);
+
+	pw3270ApplicationWindow * window = PW3270_APPLICATION_WINDOW(widget);
+
+	if(!(window->state.is_maximized || window->state.is_fullscreen)) {
+		gtk_window_get_size(GTK_WINDOW (widget), &window->state.width, &window->state.height);
+	}
+
+ }
+
+ static gboolean window_state_event(GtkWidget *widget, GdkEventWindowState *event) {
+
+  	// https://developer.gnome.org/SaveWindowState/
+  	gboolean res = GDK_EVENT_PROPAGATE;
+
+  	if(GTK_WIDGET_CLASS(pw3270ApplicationWindow_parent_class)->window_state_event != NULL) {
+		res = GTK_WIDGET_CLASS(pw3270ApplicationWindow_parent_class)->window_state_event(widget, event);
+  	}
+
+  	{
+  		pw3270ApplicationWindow * window = PW3270_APPLICATION_WINDOW(widget);
+
+		window->state.is_maximized = (event->new_window_state & GDK_WINDOW_STATE_MAXIMIZED) == 0 ? 0 : 1;
+		window->state.is_fullscreen = (event->new_window_state & GDK_WINDOW_STATE_FULLSCREEN) == 0 ? 0 : 1;
+  	}
+
+	return res;
+ }
+
+ static void constructed(GObject *object) {
+
+	// https://developer.gnome.org/SaveWindowState/
+
+ 	pw3270ApplicationWindow * window = PW3270_APPLICATION_WINDOW(object);
+
+	g_autoptr(GSettings) settings = pw3270_application_window_settings_new();
+	if(settings) {
+
+		// https://developer.gnome.org/SaveWindowState/
+		window->state.width = g_settings_get_int (settings, "width");
+		window->state.height = g_settings_get_int (settings, "height");
+		window->state.is_maximized = g_settings_get_boolean (settings, "is-maximized") ? 1 : 0;
+		window->state.is_fullscreen = g_settings_get_boolean (settings, "is-fullscreen") ? 1 : 0;
+
+	}
+
+	gtk_window_set_default_size(GTK_WINDOW (object), window->state.width, window->state.height);
+
+	if(window->state.is_maximized)
+		gtk_window_maximize(GTK_WINDOW(object));
+
+	if(window->state.is_fullscreen)
+		gtk_window_fullscreen(GTK_WINDOW (object));
+
+	G_OBJECT_CLASS (pw3270ApplicationWindow_parent_class)->constructed (object);
+ }
+
  static void pw3270ApplicationWindow_class_init(pw3270ApplicationWindowClass *klass) {
 
-	GTK_WIDGET_CLASS(klass)->destroy = destroy;
+	{
+		GtkWidgetClass *widget = GTK_WIDGET_CLASS(klass);
+		widget->destroy = destroy;
+		widget->window_state_event = window_state_event;
+		widget->size_allocate = size_allocate;
+	}
 
- 	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	{
+		GObjectClass *object_class = G_OBJECT_CLASS(klass);
 
-	object_class->set_property	= set_property;
-	object_class->get_property	= get_property;
+		object_class->set_property	= set_property;
+		object_class->get_property	= get_property;
+		object_class->constructed = constructed;
 
-	g_object_class_install_property(
-		object_class,
-		PROP_ACTION_NAMES,
-		g_param_spec_string ("action-names",
-			N_("Action Names"),
-			N_("The name of the actions in the header bar"),
-			NULL,
-			G_PARAM_WRITABLE|G_PARAM_READABLE)
-	);
-
+		g_object_class_install_property(
+			object_class,
+			PROP_ACTION_NAMES,
+			g_param_spec_string ("action-names",
+				N_("Action Names"),
+				N_("The name of the actions in the header bar"),
+				NULL,
+				G_PARAM_WRITABLE|G_PARAM_READABLE)
+		);
+	}
 
  }
 
@@ -104,6 +181,13 @@
 
  static void pw3270ApplicationWindow_init(pw3270ApplicationWindow *widget) {
 
+	// Setup defaults
+	widget->state.width = 800;
+	widget->state.height = 500;
+	widget->state.is_maximized = 0;
+	widget->state.is_fullscreen = 0;
+
+	// Create contents
 	GtkBox * vBox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL,0));
 
 	widget->notebook = GTK_NOTEBOOK(gtk_notebook_new());
@@ -224,8 +308,6 @@
 
 	size_t ix;
 
-	g_autoptr(GSettings) settings = pw3270_application_get_settings(G_APPLICATION(application));
-
 	g_return_val_if_fail(GTK_IS_APPLICATION(application), NULL);
 	pw3270ApplicationWindow * window =
 		g_object_new(
@@ -259,88 +341,88 @@
 
 	}
 
-	if(pw3270_application_get_ui_style(G_APPLICATION(application)) == PW3270_UI_STYLE_GNOME) {
+	// Setup and show main window
+	{
+		g_autoptr(GSettings) settings = pw3270_application_window_settings_new();
 
-		// Create header bar
+		if(pw3270_application_get_ui_style(G_APPLICATION(application)) == PW3270_UI_STYLE_GNOME) {
 
-		GtkHeaderBar * header = GTK_HEADER_BAR(gtk_header_bar_new());
-		gtk_window_set_titlebar(GTK_WINDOW(window), GTK_WIDGET(header));
-		gtk_header_bar_set_show_close_button(header,TRUE);
+			// Create header bar
 
-		gtk_header_bar_set_title(header,title);
+			GtkHeaderBar * header = GTK_HEADER_BAR(gtk_header_bar_new());
+			gtk_window_set_titlebar(GTK_WINDOW(window), GTK_WIDGET(header));
+			gtk_header_bar_set_show_close_button(header,TRUE);
+
+			gtk_header_bar_set_title(header,title);
+			g_settings_bind(
+				settings,
+				"has-subtitle",
+				header,
+				"has-subtitle",
+				G_SETTINGS_BIND_DEFAULT
+			);
+
+			// Show the new header
+			gtk_widget_show_all(GTK_WIDGET(header));
+
+			g_settings_bind(
+				settings,
+				"header-action-names",
+				window,
+				"action-names",
+				G_SETTINGS_BIND_DEFAULT
+			);
+
+		} else {
+
+			gtk_window_set_title(GTK_WINDOW(window), title);
+
+		}
+
 		g_settings_bind(
 			settings,
-			"has-subtitle",
-			header,
-			"has-subtitle",
+			"menubar-visible",
+			window,
+			"show-menubar",
 			G_SETTINGS_BIND_DEFAULT
 		);
 
-		// Show the new header
-		gtk_widget_show_all(GTK_WIDGET(header));
-
-		// g_autofree gchar * header_actions = g_settings_get_string(settings, "header-action-names");
-		// pw3270_window_set_header_action_names(GTK_WIDGET(window), header_actions);
+		g_settings_bind(
+			settings,
+			"toolbar-visible",
+			window->toolbar,
+			"visible",
+			G_SETTINGS_BIND_DEFAULT
+		);
 
 		g_settings_bind(
 			settings,
-			"header-action-names",
-			window,
+			"toolbar-action-names",
+			window->toolbar,
 			"action-names",
 			G_SETTINGS_BIND_DEFAULT
 		);
 
-	} else {
+		g_settings_bind(
+			settings,
+			"toolbar-style",
+			window->toolbar,
+			"style",
+			G_SETTINGS_BIND_DEFAULT
+		);
 
-		gtk_window_set_title(GTK_WINDOW(window), title);
+		g_settings_bind(
+			settings,
+			"toolbar-icon-size",
+			window->toolbar,
+			"icon-size",
+			G_SETTINGS_BIND_DEFAULT
+		);
 
 	}
 
-	// Setup and show main window
-	g_settings_bind(
-		settings,
-		"menubar-visible",
-		window,
-		"show-menubar",
-		G_SETTINGS_BIND_DEFAULT
-	);
-
-	g_settings_bind(
-		settings,
-		"toolbar-visible",
-		window->toolbar,
-		"visible",
-		G_SETTINGS_BIND_DEFAULT
-	);
-
-	g_settings_bind(
-		settings,
-		"toolbar-action-names",
-		window->toolbar,
-		"action-names",
-		G_SETTINGS_BIND_DEFAULT
-	);
-
-	g_settings_bind(
-		settings,
-		"toolbar-style",
-		window->toolbar,
-		"style",
-		G_SETTINGS_BIND_DEFAULT
-	);
-
-	g_settings_bind(
-		settings,
-		"toolbar-icon-size",
-		window->toolbar,
-		"icon-size",
-		G_SETTINGS_BIND_DEFAULT
-	);
-
-
 	// Setup default position and size
 	gtk_window_set_position(GTK_WINDOW(window),GTK_WIN_POS_CENTER);
-	gtk_window_set_default_size (GTK_WINDOW (window), 800, 500);
 
 	// Create terminal widget
 	GtkWidget * terminal = pw3270_application_window_new_tab(GTK_WIDGET(window), session_file);
@@ -456,3 +538,45 @@
 	g_strfreev(actions);
 
  }
+
+ GSettings *pw3270_application_window_settings_new() {
+
+ 	// Get settings
+	g_autofree gchar * path = g_strconcat("/apps/" PACKAGE_NAME "/", g_get_application_name(), "/window/",NULL);
+	debug("path=%s",path);
+
+#ifdef DEBUG
+
+	GError * error = NULL;
+	GSettingsSchemaSource * source =
+		g_settings_schema_source_new_from_directory(
+			".",
+			NULL,
+			TRUE,
+			&error
+		);
+
+	g_assert_no_error(error);
+
+	GSettingsSchema * schema =
+		g_settings_schema_source_lookup(
+			source,
+			"br.com.bb." PACKAGE_NAME ".window",
+			TRUE);
+
+	debug("schema %s=%p path=%s","br.com.bb." PACKAGE_NAME ".window",schema,path);
+
+	GSettings * settings = g_settings_new_full(schema, NULL, path);
+
+	g_settings_schema_source_unref(source);
+
+#else
+
+	GSettings * settings = g_settings_new_with_path("br.com.bb." PACKAGE_NAME, path);
+
+#endif // DEBUG
+
+	return settings;
+
+ }
+

@@ -44,6 +44,10 @@ SOURCES= \
 	$(wildcard src/main/@OSNAME@/*.c) \
 	$(wildcard src/main/@OSNAME@/*.rc)
 
+SCHEMAS= \
+	$(wildcard schemas/@OSNAME@/*.gschema.xml) \
+	$(wildcard schemas/common/*.gschema.xml)
+
 #---[ Tools ]----------------------------------------------------------------------------
 
 CC=@CC@
@@ -75,6 +79,7 @@ sysconfdir=@sysconfdir@
 BASEDIR=@BASEDIR@
 
 POTDIR=$(BASEDIR)/.pot
+POTDIR=$(BASEDIR)/.schemas
 
 OBJDIR=$(BASEDIR)/.obj/$(PACKAGE_NAME)
 OBJDBG=$(OBJDIR)/Debug
@@ -134,11 +139,11 @@ $(OBJDBG)/%.o: \
 	@$(WINDRES) $< -O coff -o $@
 
 gschemas.compiled: \
-	schemas/@OSNAME@/*.gschema.xml
+	$(foreach SCHEMA, $(notdir $(SCHEMAS)), $(OBJDIR)/schemas/$(SCHEMA))
 
 	@glib-compile-schemas \
 		--targetdir=$(@D) \
-		$(BASEDIR)/schemas/@OSNAME@	
+		$(OBJDIR)/schemas
 
 #---[ Release Rules ]--------------------------------------------------------------------
 
@@ -183,6 +188,18 @@ $(POTDIR)/$(PACKAGE_NAME)/%.pot: \
 	@$(MKDIR) $(dir $@)
 	@touch $@
 
+
+$(OBJDIR)/schemas/%.xml:\
+	schemas/@OSNAME@/%.xml
+
+	@$(MKDIR) $(@D)
+	@cp "$^" "$@"
+
+$(OBJDIR)/schemas/%.xml:\
+	schemas/common/%.xml
+
+	@$(MKDIR) $(@D)
+	@cp "$^" "$@"
 
 install-%: \
 	%/Makefile
@@ -299,12 +316,14 @@ clean: \
 cleanDebug:
 
 	@rm -fr $(OBJDBG)
+	@rm -fr $(OBJDIR)/schemas
 	@rm -fr $(BINDBG)
 	@rm -f gschemas.compiled
 
 cleanRelease:
 
 	@rm -fr $(OBJRLS)
+	@rm -fr $(OBJDIR)/schemas
 	@rm -fr $(BINRLS)
 	@rm -fr $(POTDIR)
 

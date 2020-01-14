@@ -65,6 +65,13 @@
 		GtkNotebook * notebook;
 		GtkToolbar	* toolbar;
 
+		struct {
+			int width;				///< @brief Window width.
+			int height;				///< @brief Window height.
+			int is_maximized : 1;	///< @brief Non zero if window is maximized.
+			int is_fullscreen : 1;	///< @brief Non zero if window is fullscreen.
+		} state;
+
 		GtkWidget	* popups[PW3270_APP_WINDOW_POPUP_COUNT];
 
 	};
