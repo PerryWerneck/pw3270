@@ -57,7 +57,7 @@
     </key>
 
     <key name="has-subtitle" type="b">
-      <default>true</default>
+      <default>false</default>
       <summary>Enable top window subtitle</summary>
       <description>If TRUE, reserve space for a subtitle, even if none is currently set.</description>
     </key>
