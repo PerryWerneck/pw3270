@@ -6,10 +6,10 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"#-#-#-#-#  pw3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"#-#-#-#-#  view.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-19 15:54-0300\n"
+"POT-Creation-Date: 2020-01-14 17:12-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,10 +17,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  lib3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"#-#-#-#-#  simple.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-19 18:21+0000\n"
+"POT-Creation-Date: 2020-01-14 17:12-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,10 +28,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  libv3270.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"#-#-#-#-#  save.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-19 18:24+0000\n"
+"POT-Creation-Date: 2020-01-14 17:12-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,10 +39,208 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  ui.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"#-#-#-#-#  abstract.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-18 17:12-0200\n"
+"POT-Creation-Date: 2020-01-14 17:12-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  application.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-01-14 17:12-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  preferences.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-01-14 17:12-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  open.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-01-14 17:12-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  about.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-01-14 17:12-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  window.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-01-14 17:12-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  terminal.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-01-14 17:12-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  page.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-01-14 17:12-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  setcolors.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-01-14 17:12-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  sessionproperties.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-01-14 17:12-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  hostproperties.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-01-14 17:12-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  filetransfer.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-01-14 17:12-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  connect.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-01-14 17:12-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  close.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-01-14 17:12-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  toolbar.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-01-14 17:12-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  settings.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-01-14 17:12-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  tools.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-01-14 17:12-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  window.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-01-14 17:23-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  application.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-01-14 17:23-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -51,2719 +249,588 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: window.c:448
-#, c-format
-msgid " and <b>%s</b> for %s."
-msgstr ""
-
-#: src/core/ctlr.c:190
-#, c-format
-msgid "%dx%d is negative or zero"
-msgstr ""
-
-#: src/core/ctlr.c:204
-#, c-format
-msgid "%dx%d screen size is bigger than the maximum size"
-msgstr ""
-
-#: src/core/telnet.c:691 src/core/iocalls.c:543 src/core/iocalls.c:560
-#: src/core/linux/connect.c:84 src/core/linux/connect.c:100
-#, c-format
-msgid "%s"
-msgstr ""
-
-#: src/core/connect.c:170
-#, c-format
-msgid "%s (SSL error %d)"
-msgstr ""
-
-#: actions.c:844 actions.c:856
-#, c-format
-msgid "%s action needs a valid id attribute"
-msgstr ""
-
-#: actions.c:692 actions.c:821 actions.c:833
-#, c-format
-msgid "%s action needs a valid toggle name"
-msgstr ""
-
-#: actions.c:868
-#, c-format
-msgid "%s action needs a valid value"
-msgstr ""
-
-#: actions.c:578
-#, c-format
-msgid "%s action needs src attribute"
-msgstr ""
-
-#: main.c:89
-#, c-format
-msgid "%s requires GTK version %d.%d.%d"
-msgstr ""
-
-#: src/core/keyboard/kybd.c:1916
-#, c-format
-msgid "%s: Bell not supported"
-msgstr ""
-
-#: src/core/keyboard/kybd.c:2075
-#, c-format
-msgid "%s: Missing hex digits after \\x"
-msgstr ""
-
-#: src/core/keyboard/kybd.c:2015
-#, c-format
-msgid "%s: Unknown character after \\p"
-msgstr ""
-
-#: src/core/keyboard/kybd.c:2051
-#, c-format
-msgid "%s: Unknown character after \\pa"
-msgstr ""
-
-#: src/core/keyboard/kybd.c:2029
-#, c-format
-msgid "%s: Unknown character after \\pf"
-msgstr ""
-
-#: src/core/keyboard/kybd.c:1967
-#, c-format
-msgid "%s: Vertical tab not supported"
-msgstr ""
-
-#: window.c:443
-#, c-format
-msgid "%s<b>%s</b> for %s"
-msgstr ""
-
-#: main.c:366
-msgid "- 3270 Emulator for Gtk"
-msgstr ""
-
-#: src/dialogs/hostselect.c:44
-msgid "16 colors"
-msgstr ""
-
-#: src/core/screen.c:772 src/core/screen.c:809 src/core/screen.c:827
-#: src/core/screen.c:952
-msgid "3270 Error"
-msgstr ""
-
-#: src/filetransfer/v3270ftprogress.c:385 src/filetransfer/v3270ft.c:353
-#: src/dialogs/print/settingsdialog.c:284
-#: src/dialogs/print/settingsdialog.c:286
-#: src/dialogs/print/settingsdialog.c:288
-msgid "3270 File transfer"
-msgstr ""
-
-#: src/core/screen.c:790
-msgid "3270 Warning"
-msgstr ""
-
-#: src/terminal/accessible.c:101
-msgid "3270 screen"
-msgstr ""
-
-#: dialog.c:98
+#: src/objects/application/actions/about.c:110
 #, c-format
 msgid "3270 terminal emulator for GTK %d.%d"
 msgstr ""
 
-#: src/core/actions/table.c:437
-msgid "3270-style backspace."
+#: src/objects/actions/abstract.c:132
+msgid "A image widget with the action icon"
 msgstr ""
 
-#: src/dialogs/hostselect.c:45
-msgid "8 colors"
+#: ui/application.xml:39 ui/application.xml:525
+msgid "About PW3270"
 msgstr ""
 
-#: menu.c:43 menuitem.c:87 separator.c:93 toolitem.c:42 script.c:83
-#, c-format
-msgid "<%s> is invalid at this context"
+#: src/objects/actions/abstract.c:115
+msgid "Action Name"
 msgstr ""
 
-#: accelerator.c:47 menu.c:57 popup.c:61 scroll.c:49 scroll.c:55
-#, c-format
-msgid "<%s> requires %s"
+#: src/objects/window/window.c:156 src/objects/toolbar/toolbar.c:134
+msgid "Action Names"
 msgstr ""
 
-#: menuitem.c:101
-#, c-format
-msgid "<%s> requires a %s attribute"
+#: src/objects/toolbar/settings.c:185
+msgid "Actions"
 msgstr ""
 
-#: accelerator.c:41 menubar.c:42 toolbar.c:59 popup.c:45 scroll.c:43
-#: keypad.c:178
-#, c-format
-msgid "<%s> should be on toplevel"
-msgstr ""
-
-#: plugin.c:105
-#, c-format
-msgid "<b>%s</b>\n"
-msgstr ""
-
-#: src/terminal/widget.c:136
-msgid ""
-"<b>Identity not verified</b>\n"
-"Disconnected from host"
-msgstr ""
-
-#: src/dialogs/print/print.c:100
-msgid "<b>Text options</b>"
-msgstr ""
-
-#: main.c:385
-msgid ""
-"<b>Valid options:</b>\n"
-"\n"
-msgstr ""
-
-#: menuitem.c:70
-msgid "<menuitem> should be inside a <menu>"
-msgstr ""
-
-#: separator.c:53
-msgid "<separator> should be inside a <menu> or <toolbar>"
-msgstr ""
-
-#: src/ssl/state.c:277
-msgid ""
-"A CA certificate is invalid. Either it is not a CA or its extensions are not "
-"consistent with the supplied purpose."
-msgstr ""
-
-#: src/core/actions/table.c:447
-msgid "ATTN key, per RFC 2355.  Sends IP, regardless."
-msgstr ""
-
-#: src/filetransfer/tables.c:60
-msgid "A_ppend to file"
-msgstr ""
-
-#: src/core/ft/ft.c:104
-msgid "Abort sent; awaiting response"
-msgstr ""
-
-#: src/core/ft/ft.c:677
-msgid "Aborting..."
-msgstr ""
-
-#: src/dialogs/security.c:200
-msgid "About security"
-msgstr ""
-
-#: src/core/ft/ft.c:102
-msgid "Ack received, data flowing"
-msgstr ""
-
-#: src/core/paste.c:344
-msgid "Action failed"
-msgstr ""
-
-#: src/dialogs/print/settingsdialog.c:200
-#: src/dialogs/print/settingsdialog.c:236
-msgid "Activity already on the queue"
-msgstr ""
-
-#: 00default.xml:61
-msgid "Add to copy"
-msgstr ""
-
-#: src/dialogs/hostselect.c:263
-msgid "Address or name of the host to connect."
-msgstr ""
-
-#: src/core/toggles/table.c:263 00default.xml:129
+#: ui/window.xml:369 ui/window.xml:454 ui/application.xml:497
 msgid "Alert sound"
 msgstr ""
 
-#: src/dialogs/load.c:96
+#: src/main/tools.c:97
 msgid "All files"
 msgstr ""
 
-#: src/core/toggles/table.c:282
-msgid "Alternate screen"
+#: ui/window.xml:155 ui/application.xml:239
+msgid "Append to copy"
 msgstr ""
 
-#: src/core/ft/ftmessages.c:67 src/filetransfer/v3270ftprogress.c:82
-msgid "An error exists in the PC's file name."
+#: ui/window.xml:119 ui/application.xml:377
+msgid "Application"
 msgstr ""
 
-#: src/core/ft/ftmessages.c:46 src/filetransfer/v3270ftprogress.c:64
-msgid ""
-"An error occurred in the file transfer, which may be an error in the data "
-"being transferred, or an unidentified system error."
+#: src/objects/application/actions/preferences.c:132 ui/application.xml:84
+msgid "Application preferences"
 msgstr ""
 
-#: src/ssl/state.c:225
-msgid "An error occurred trying to allocate memory. This should never happen."
-msgstr ""
-
-#: src/core/ft/ftmessages.c:102 src/filetransfer/v3270ftprogress.c:112
-msgid "An invalid SEND or RECEIVE parameter was sent to the host."
-msgstr ""
-
-#: src/filetransfer/tables.c:61
-msgid "Appends the source file to the destination file."
-msgstr ""
-
-#: main.c:357 main.c:359
-msgid "Application name"
-msgstr ""
-
-#: main.c:407 main.c:412
-#, c-format
-msgid "Application name set to \"%s\""
-msgstr ""
-
-#: 10keypad.xml:85
-msgid "Attn"
-msgstr ""
-
-#: actions.c:553
-#, c-format
-msgid "Attribute \"%s\" is invalid or undefined"
-msgstr ""
-
-#: src/ssl/state.c:332
-msgid "Authority and issuer serial number mismatch"
-msgstr ""
-
-#: src/ssl/state.c:324
-msgid "Authority and subject key identifier mismatch"
-msgstr ""
-
-#: src/core/toggles/table.c:242
-msgid "Auto connect"
-msgstr ""
-
-#: src/core/toggles/table.c:284
-msgid "Auto resize on altscreen"
-msgstr ""
-
-#: src/core/toggles/table.c:182 src/core/toggles/table.c:183 00default.xml:124
+#: ui/application.xml:472
 msgid "Auto-Reconnect"
 msgstr ""
 
-#: src/core/toggles/table.c:114
-msgid ""
-"Automatically convert trailing blanks in a field to NULLs in order to insert "
-"a character, and will automatically convert leading NULLs to blanks so that "
-"input data is not squeezed to the left"
+#: src/objects/toolbar/settings.c:193
+msgid "Available"
 msgstr ""
 
-#: src/core/toggles/table.c:184
-msgid "Automatically reconnect to the host if it ever disconnects"
-msgstr ""
-
-#: src/filetransfer/tables.c:118
-msgid "Avblock"
-msgstr ""
-
-#: src/core/ft/ft.c:103
-msgid "Awaiting chance to send an abort"
-msgstr ""
-
-#: src/dialogs/print/settingsdialog.c:411
-#: src/dialogs/print/settingsdialog.c:430
-msgid "B_egin transfer"
-msgstr ""
-
-#: colors.c:494 src/dialogs/colors.c:149
-msgid "Background"
-msgstr ""
-
-#: src/core/actions/table.c:311
-msgid "Backspaces the cursor until it hits the front of a word."
-msgstr ""
-
-#: src/core/toggles/table.c:264
-msgid "Beep on errors"
-msgstr ""
-
-#: colors.c:502 src/dialogs/colors.c:157
-msgid "Black"
-msgstr ""
-
-#: src/core/toggles/table.c:112 src/core/toggles/table.c:113 00default.xml:122
+#: ui/window.xml:402 ui/application.xml:462
 msgid "Blank Fill"
 msgstr ""
 
-#: src/core/toggles/table.c:62 src/core/toggles/table.c:63 00default.xml:115
+#: ui/application.xml:427
 msgid "Blinking Cursor"
 msgstr ""
 
-#: src/filetransfer/tables.c:166
-msgid "Block size"
-msgstr ""
-
-#: colors.c:495 src/dialogs/colors.c:150
-msgid "Blue"
-msgstr ""
-
-#: src/core/toggles/table.c:212 src/core/toggles/table.c:213 00default.xml:125
+#: ui/application.xml:477
 msgid "Bold"
 msgstr ""
 
-#: dialog.c:141
+#: src/objects/application/actions/about.c:118
 msgid "Brazilian Public Software Portal"
 msgstr ""
 
-#: 10keypad.xml:86
-msgid "Break"
-msgstr ""
-
-#: src/core/telnet.c:1663
-msgid "Broken pipe"
-msgstr ""
-
-#: src/core/ft/ftmessages.c:215
-msgid "CMS disk is full: file transfer canceled"
-msgstr ""
-
-#: src/core/ft/ftmessages.c:208
-msgid "CMS disk is not accessed: file transfer canceled"
-msgstr ""
-
-#: src/core/ft/ftmessages.c:201
-msgid "CMS disk is read-only: file transfer canceled"
-msgstr ""
-
-#: src/core/ft/ftmessages.c:194
-msgid "CMS file not found: file transfer canceled"
-msgstr ""
-
-#: src/ssl/state.c:148
-msgid "CRL signature failure"
-msgstr ""
-
-#: src/dialogs/load.c:180 src/dialogs/save/save.c:213
-msgid "C_haracter Coding"
-msgstr ""
-
-#: src/dialogs/print/settings.c:78
-msgid "C_olor scheme:"
-msgstr ""
-
-#: src/dialogs/hostselect.c:361
-msgid "C_onnect"
-msgstr ""
-
-#: src/core/toggles/init.c:89 src/core/linux/connect.c:234
+#: src/objects/window/terminal.c:173
 #, c-format
-msgid "Can't %s network keep-alive"
+msgid "Can't save file \"%s\""
 msgstr ""
 
-#: parsefile.c:225
-#, c-format
-msgid "Can't accept unnamed %s"
+#: src/objects/window/terminal.c:178
+msgid "Can't save session file"
 msgstr ""
 
-#: src/dialogs/print/settingsdialog.c:244
-msgid "Can't add activity"
-msgstr ""
-
-#: src/ssl/linux/ldap.c:155
-msgid "Can't bind to LDAP server"
-msgstr ""
-
-#: src/core/linux/connect.c:92
-#, c-format
-msgid "Can't connect to %s"
-msgstr ""
-
-#: src/core/linux/connect.c:184
-#, c-format
-msgid "Can't connect to %s:%s"
-msgstr ""
-
-#: src/ssl/linux/getcrl.c:87
-msgid "Can't decode CRL"
-msgstr ""
-
-#: src/ssl/linux/ldap.c:227 src/ssl/linux/curl.c:272
-msgid "Can't decode certificate revocation list"
-msgstr ""
-
-#: src/ssl/linux/curl.c:313
-msgid "Can't decode certificate revocation list got from LDAP server"
-msgstr ""
-
-#: src/ssl/linux/ldap.c:191 src/ssl/linux/ldap.c:203
-msgid "Can't get LDAP attribute"
-msgstr ""
-
-#: src/core/ft/ft.c:432
-msgid "Can't get file size"
-msgstr ""
-
-#: src/ssl/linux/ldap.c:133
-msgid "Can't initialize LDAP"
-msgstr ""
-
-#: src/ssl/linux/curl.c:197
-msgid "Can't initialize curl operation"
-msgstr ""
-
-#: src/core/session.c:223
-msgid "Can't load"
-msgstr ""
-
-#: parsefile.c:328 src/filetransfer/load.c:271
-#, c-format
-msgid "Can't load %s"
-msgstr ""
-
-#: plugin.c:101
-msgid "Can't load plugin"
-msgstr ""
-
-#: plugin.c:99
-#, c-format
-msgid "Can't load plugin %s"
-msgstr ""
-
-#: src/dialogs/load.c:323
-#, c-format
-msgid "Can't open %s"
-msgstr ""
-
-#: src/ssl/linux/getcrl.c:56 src/ssl/linux/getcrl.c:75
-msgid "Can't open CRL File"
-msgstr ""
-
-#: window.c:183
-msgid "Can't open file"
-msgstr ""
-
-#: src/terminal/charset.c:318
-#, c-format
-msgid "Can't parse %s"
-msgstr ""
-
-#: parser.c:352 parsefile.c:332 parsefile.c:360
-msgid "Can't parse UI"
-msgstr ""
-
-#: parser.c:350
-#, c-format
-msgid "Can't parse UI description files in %s"
-msgstr ""
-
-#: src/terminal/charset.c:133
-msgid "Can't parse cgcsgid value"
-msgstr ""
-
-#: src/terminal/charset.c:69
-msgid "Can't parse character value"
-msgstr ""
-
-#: parsefile.c:102 parsefile.c:128
-msgid "Can't parse unnamed element"
-msgstr ""
-
-#: src/selection/linux/paste.c:79 src/selection/linux/paste.c:119
-msgid "Can't paste"
-msgstr ""
-
-#: src/selection/text.c:205
-msgid "Can't paste text"
-msgstr ""
-
-#: src/core/session.c:209
-msgid "Can't print"
-msgstr ""
-
-#: window.c:431
-#, c-format
-msgid "Can't recognize \"%s\" as a valid host type"
-msgstr ""
-
-#: src/core/session.c:216
-msgid "Can't save"
-msgstr ""
-
-#: config.c:573
-#, c-format
-msgid "Can't save \"%s\": %s"
-msgstr ""
-
-#: src/filetransfer/save.c:117 src/filetransfer/activitylist.c:436
-#: src/trace/trace.c:479 src/dialogs/transfer.c:95 src/dialogs/save/save.c:452
-#, c-format
-msgid "Can't save %s"
-msgstr ""
-
-#: window.c:181
-#, c-format
-msgid "Can't save trace data to file %s"
-msgstr ""
-
-#: src/ssl/linux/ldap.c:180
-msgid "Can't search LDAP server"
-msgstr ""
-
-#: src/ssl/linux/ldap.c:144
-msgid "Can't set LDAP protocol version"
-msgstr ""
-
-#: src/filetransfer/worker.c:611 src/filetransfer/v3270ftprogress.c:772
-msgid "Can't set callback table"
-msgstr ""
-
-#: tools.c:307
-msgid "Can't set host charset"
-msgstr ""
-
-#: src/terminal/iocallback.c:199
-msgid "Can't set lib3270 I/O controller"
-msgstr ""
-
-#: src/core/iocalls.c:559
-msgid "Can't set socket to blocking mode."
-msgstr ""
-
-#: src/core/iocalls.c:559
-msgid "Can't set socket to non blocking mode"
-msgstr ""
-
-#: src/filetransfer/worker.c:592 src/filetransfer/v3270ftprogress.c:759
-msgid "Can't start file transfer session"
-msgstr ""
-
-#: src/core/ft/ft.c:209
-msgid "Can't start file transfer."
-msgstr ""
-
-#: src/ssl/negotiate.c:213
-msgid "Can't verify."
-msgstr ""
-
-#: src/terminal/callbacks.c:458 src/filetransfer/v3270ftprogress.c:432
-#: src/filetransfer/transfer.c:89 src/dialogs/load.c:113
-#: src/dialogs/save/save.c:136
+#: src/objects/actions/save.c:65 src/objects/application/actions/open.c:50
 msgid "Cancel"
 msgstr ""
 
-#: src/filetransfer/transfer.c:90
-msgid "Cancel transfer operation."
+#: src/objects/window/actions/setcolors.c:46
+msgid "Change terminal colors"
 msgstr ""
 
-#: src/core/ft/ft.c:161
-msgid "Cancelled by user"
-msgstr ""
-
-#: src/core/telnet.c:1086
-msgid "Cannot connect to specified LU"
-msgstr ""
-
-#: src/ssl/negotiate.c:106
-msgid "Cant create a new SSL structure for current connection."
-msgstr ""
-
-#: src/ssl/linux/init.c:90
-msgid "Cant initialize the SSL context."
-msgstr ""
-
-#: src/ssl/negotiate.c:136
-msgid ""
-"Cant set the file descriptor for the input/output facility for the TLS/SSL "
-"(encrypted) side of ssl."
-msgstr ""
-
-#: src/ssl/state.c:164
-msgid "Certificate has expired"
-msgstr ""
-
-#: src/ssl/state.c:156
-msgid "Certificate is not yet valid"
-msgstr ""
-
-#: src/ssl/state.c:300
-msgid "Certificate not trusted"
-msgstr ""
-
-#: src/ssl/state.c:308
-msgid "Certificate rejected"
-msgstr ""
-
-#: src/ssl/state.c:268
-msgid "Certificate revoked"
-msgstr ""
-
-#: src/ssl/state.c:140
-msgid "Certificate signature failure"
-msgstr ""
-
-#: tools.c:311
-msgid "Charset error"
-msgstr ""
-
-#: src/dialogs/hostselect.c:285
-msgid "Check for SSL secure connection."
-msgstr ""
-
-#: src/filetransfer/tables.c:44
-msgid "Check this if the file consists of character data only."
-msgstr ""
-
-#: 10keypad.xml:77 00default.xml:76
+#: ui/window.xml:188 ui/window.xml:309 ui/application.xml:292
 msgid "Clear"
 msgstr ""
 
-#: src/core/actions/table.c:396
-msgid "Clear AID key"
+#: ui/window.xml:87 ui/window.xml:108 ui/application.xml:153
+#: ui/application.xml:174
+msgid "Clipboard contents"
 msgstr ""
 
-#: src/dialogs/load.c:205 src/dialogs/save/save.c:265
-msgid "Click to cancel operation"
+#: src/objects/window/actions/close.c:61
+msgid "Close the window"
 msgstr ""
 
-#: src/dialogs/load.c:210
-msgid "Click to load file"
+#: src/objects/window/actions/close.c:60 ui/window.xml:256 ui/window.xml:435
+#: ui/window.xml:526 ui/application.xml:204
+msgid "Close window"
 msgstr ""
 
-#: src/dialogs/save/save.c:270
-msgid "Click to save file"
-msgstr ""
-
-#: src/terminal/properties/init.c:128
-msgid "Clipboard name"
-msgstr ""
-
-#: colors.c:631
-msgid "Color scheme:"
-msgstr ""
-
-#: colors.c:532 src/dialogs/colors.c:367
-msgid "Color setup"
-msgstr ""
-
-#: 00default.xml:104
+#: src/objects/window/actions/setcolors.c:45
 msgid "Colors"
 msgstr ""
 
-#: src/dialogs/save/save.c:55
-msgid "Comma-separated values (CSV)"
+#: src/objects/window/actions/connect.c:50
+msgid "Connect"
 msgstr ""
 
-#: src/core/ft/ftmessages.c:73
-msgid "Command incomplete: file transfer canceled"
-msgstr ""
-
-#: src/trace/trace.c:304
-msgid "Command to execute"
-msgstr ""
-
-#: 00default.xml:89
-msgid "Configure host"
-msgstr ""
-
-#: src/core/toggles/table.c:243 00default.xml:114
+#: ui/application.xml:422
 msgid "Connect on startup"
 msgstr ""
 
-#: src/core/actions/table.c:84
-msgid "Connect to host."
+#: src/objects/window/actions/connect.c:51
+msgid "Connect to host"
 msgstr ""
 
-#: src/core/iocalls.c:527 src/core/linux/connect.c:188
-#: src/core/linux/connect.c:220 src/core/linux/connect.c:238
-msgid "Connection error"
+#: src/objects/window/window.c:506 src/objects/window/page.c:212
+msgid "Connected to host"
 msgstr ""
 
-#: src/core/linux/connect.c:98
-msgid "Connection failed"
-msgstr ""
-
-#: src/core/telnet.c:1667
-msgid "Connection reset by peer"
-msgstr ""
-
-#: src/core/properties/signed.c:73
-msgid "Connection state"
-msgstr ""
-
-#: src/terminal/callbacks.c:459
-msgid "Continue"
-msgstr ""
-
-#: 00default.xml:58
+#: ui/window.xml:140 ui/application.xml:224
 msgid "Copy"
 msgstr ""
 
-#: 99debug.xml:35
-msgid "Copy as HTML"
-msgstr ""
-
-#: 00default.xml:59
+#: ui/window.xml:150 ui/application.xml:234
 msgid "Copy as table"
 msgstr ""
 
-#: src/filetransfer/tables.c:81
-msgid "Creates a file with fixed-length records."
+#: ui/window.xml:145 ui/application.xml:229
+msgid "Copy as text"
 msgstr ""
 
-#: src/filetransfer/tables.c:93
-msgid "Creates a file with undefined-length records (TSO hosts only)."
-msgstr ""
-
-#: src/filetransfer/tables.c:87
-msgid "Creates a file with variable-length records."
-msgstr ""
-
-#: colors.c:519 src/core/toggles/table.c:162 src/core/toggles/table.c:163
-#: src/dialogs/colors.c:174 00default.xml:121
+#: ui/window.xml:359 ui/application.xml:447
 msgid "Cross hair cursor"
 msgstr ""
 
-#: src/dialogs/tools.c:148
-#, c-format
-msgid "Current (%s)"
+#: ui/window.xml:98 ui/application.xml:164
+msgid "Current Screen"
 msgstr ""
 
-#: src/filetransfer/v3270ftprogress.c:389
-msgid "Current file"
+#: ui/window.xml:77 ui/application.xml:143
+msgid "Current screen"
 msgstr ""
 
-#: src/core/properties/unsigned.c:63
-msgid "Current screen height in rows"
+#: ui/window.xml:124 ui/application.xml:382
+msgid "Current session"
 msgstr ""
 
-#: src/core/properties/unsigned.c:56
-msgid "Current screen width in columns"
-msgstr ""
-
-#: src/filetransfer/tables.c:222
-msgid "Current transfer position"
-msgstr ""
-
-#: src/filetransfer/tables.c:222
-msgid "Current:"
-msgstr ""
-
-#: src/core/properties/unsigned.c:49
-msgid "Cursor address"
-msgstr ""
-
-#: src/core/actions/table.c:117
-msgid "Cursor down 1 position."
-msgstr ""
-
-#: src/core/actions/table.c:127
-msgid "Cursor left 1 position."
-msgstr ""
-
-#: src/core/actions/table.c:137
-msgid "Cursor right 1 position."
-msgstr ""
-
-#: src/core/actions/table.c:147
-msgid "Cursor to first field on next line or any lines after that."
-msgstr ""
-
-#: src/core/actions/table.c:167
-msgid "Cursor to next unprotected word."
-msgstr ""
-
-#: src/core/actions/table.c:157
-msgid "Cursor to previous word."
-msgstr ""
-
-#: src/core/actions/table.c:107
-msgid "Cursor up 1 position."
-msgstr ""
-
-#: colors.c:380
-msgid "Custom colors"
-msgstr ""
-
-#: 00default.xml:62
+#: ui/window.xml:160 ui/application.xml:244
 msgid "Cut"
 msgstr ""
 
-#: src/filetransfer/tables.c:112
-msgid "Cylinders"
+#: ui/window.xml:198 ui/window.xml:319 ui/application.xml:302
+msgid "Delete Field"
 msgstr ""
 
-#: src/filetransfer/tables.c:194
-msgid "DFT B_uffer size"
+#: ui/window.xml:251 ui/window.xml:430
+msgid "Disconnect"
 msgstr ""
 
-#: src/core/actions/table.c:417
-msgid "DUP key"
+#: src/objects/window/window.c:506 src/objects/window/window.c:511
+#: src/objects/window/page.c:201
+msgid "Disconnected from host"
 msgstr ""
 
-#: colors.c:503 src/dialogs/colors.c:158
-msgid "Dark Blue"
+#: ui/window.xml:381 ui/window.xml:504 ui/application.xml:512
+msgid "Dynamic font spacing"
 msgstr ""
 
-#: colors.c:506 src/dialogs/colors.c:161
-msgid "Dark Green"
+#: src/objects/actions/abstract.c:170
+msgid "Enabled"
 msgstr ""
 
-#: colors.c:507 src/dialogs/colors.c:162
-msgid "Dark Turquoise"
-msgstr ""
-
-#: src/core/toggles/table.c:92
-msgid "Data Stream"
-msgstr ""
-
-#: src/core/ft/ft_cut.c:157 src/core/ft/ft_cut.c:166
-msgid "Data conversion error"
-msgstr ""
-
-#: 99debug.xml:39
-msgid "Debug"
-msgstr ""
-
-#: 99debug.xml:42
-msgid "Debug window updates"
-msgstr ""
-
-#: src/filetransfer/tables.c:74 src/filetransfer/tables.c:100
-msgid "Default"
-msgstr ""
-
-#: src/core/properties/string.c:140
-msgid "Default host URL"
-msgstr ""
-
-#: src/core/actions/table.c:321 00default.xml:78
-msgid "Delete field"
-msgstr ""
-
-#: src/core/properties/string.c:154
-msgid "Description of the current security state"
-msgstr ""
-
-#: src/core/telnet.c:1338
-msgid "Device type rejected"
-msgstr ""
-
-#: src/core/actions/table.c:94
-msgid "Disconnect from host."
-msgstr ""
-
-#: src/core/ft/ft.c:267
-msgid "Disconnected from host."
-msgstr ""
-
-#: src/core/properties/string.c:112
-msgid "Display charset"
-msgstr ""
-
-#: 99debug.xml:40
-msgid "Display current charset"
-msgstr ""
-
-#: src/core/toggles/table.c:84
-msgid "Display the cursor location in the OIA (the status line)"
-msgstr ""
-
-#: src/core/telnet.c:882
-msgid "EOR received when not in 3270 mode, ignored."
-msgstr ""
-
-#: src/filetransfer/tables.c:224
-msgid "ETA:"
-msgstr ""
-
-#: src/core/toggles/table.c:304
-msgid "Enable network in/out trace"
-msgstr ""
-
-#: src/core/toggles/table.c:294
-msgid "Enable network keep-alive with SO_KEEPALIVE"
-msgstr ""
-
-#: src/core/toggles/table.c:314
-msgid "Enable security negotiation trace"
-msgstr ""
-
-#: 10keypad.xml:81
-msgid ""
-"Erase\n"
-"EOF"
-msgstr ""
-
-#: 10keypad.xml:82
-msgid ""
-"Erase\n"
-"Input"
-msgstr ""
-
-#: src/core/actions/table.c:342
-msgid "Erase End Of Field Key."
-msgstr ""
-
-#: src/core/actions/table.c:352
-msgid "Erase End Of Line Key."
-msgstr ""
-
-#: 00default.xml:77
+#: ui/window.xml:193 ui/window.xml:314 ui/application.xml:297
 msgid "Erase input"
 msgstr ""
 
-#: 00default.xml:79
+#: ui/window.xml:203 ui/window.xml:324 ui/application.xml:307
 msgid "Erase to end of field"
 msgstr ""
 
-#: 00default.xml:80
+#: ui/window.xml:208 ui/window.xml:329 ui/application.xml:312
 msgid "Erase to end of line"
 msgstr ""
 
-#: src/core/util.c:590 src/dialogs/popups.c:56 src/dialogs/popups.c:91
-msgid "Error"
+#: ui/application.xml:340
+msgid "Field attributes"
 msgstr ""
 
-#: src/core/ft/ft_dft.c:454 src/core/ft/ft_cut.c:423
-#, c-format
-msgid "Error \"%s\" reading from local file (rc=%d)"
-msgstr ""
-
-#: src/core/ft/ft_dft.c:332 src/core/ft/ft_cut.c:528
-#, c-format
-msgid "Error \"%s\" writing to local file (rc=%d)"
-msgstr ""
-
-#: src/core/ft/ftmessages.c:45
-msgid "Error in file transfer: file transfer canceled"
-msgstr ""
-
-#: src/ssl/linux/curl.c:196 src/ssl/linux/curl.c:234 src/ssl/linux/curl.c:250
-msgid "Error loading certificate revocation list"
-msgstr ""
-
-#: src/core/ft/ftmessages.c:87
-msgid "Error reading file from host: file transfer canceled"
-msgstr ""
-
-#: src/core/ft/ftmessages.c:145
-msgid "Error while reading or writing to host disk: file transfer canceled"
-msgstr ""
-
-#: src/core/ft/ftmessages.c:80
-msgid "Error writing file to host: file transfer canceled"
-msgstr ""
-
-#: src/filetransfer/tables.c:224
-msgid "Estimated transfer arrival"
-msgstr ""
-
-#: src/core/toggles/table.c:132
-msgid "Events"
-msgstr ""
-
-#: src/core/actions/table.c:427
-msgid "FM key"
-msgstr ""
-
-#: 98trace.xml:42
-msgid "Field Delimiters"
-msgstr ""
-
-#: colors.c:488 src/dialogs/colors.c:143
-msgid "Field colors"
-msgstr ""
-
-#: src/dialogs/save/save.c:227
-msgid "File _Format"
-msgstr ""
-
-#: src/core/ft/ftmessages.c:52
-msgid "File transfer complete"
-msgstr ""
-
-#: src/core/ft/ftmessages.c:59
-msgid "File transfer complete with records segmented"
-msgstr ""
-
-#: src/core/ft/ft.c:272
-msgid "File transfer is already active in this session."
-msgstr ""
-
-#: src/dialogs/print/settingsdialog.c:361
-msgid "Files to transfer"
-msgstr ""
-
-#: src/filetransfer/tables.c:80
-msgid "Fixed"
-msgstr ""
-
-#: src/filetransfer/tables.c:51
-msgid ""
-"Following the convention for ASCII text files, CR/LF pairs are used to "
-"terminate records in the PC file, and a CTRL-Z (x'1A') marks the end of file."
-msgstr ""
-
-#: src/filetransfer/tables.c:53
-msgid ""
-"Following the convention for ASCII text files, LF is used to terminate "
-"records in the PC file."
-msgstr ""
-
-#: src/terminal/properties/init.c:83
-msgid "Font family for terminal contents"
-msgstr ""
-
-#: src/ssl/state.c:208
-msgid "Format error in CRL's lastUpdate field"
-msgstr ""
-
-#: src/ssl/state.c:216
-msgid "Format error in CRL's nextUpdate field"
-msgstr ""
-
-#: src/ssl/state.c:200
-msgid "Format error in certificate's notAfter field"
-msgstr ""
-
-#: src/ssl/state.c:192
-msgid "Format error in certificate's notBefore field"
-msgstr ""
-
-#: src/core/properties/boolean.c:153
-msgid "Formatted screen"
-msgstr ""
-
-#: src/core/toggles/table.c:172 src/core/toggles/table.c:173 00default.xml:118
+#: ui/application.xml:442
 msgid "Full Screen"
 msgstr ""
 
-#: src/filetransfer/activity.c:135
-msgid "Full path of local file"
+#: ui/window.xml:242 ui/window.xml:421 ui/window.xml:519
+msgid "Full screen"
 msgstr ""
 
-#: src/filetransfer/activity.c:142
-msgid "Full path of remote file"
-msgstr ""
-
-#: 10functions.xml:35
-msgid "Function bar"
-msgstr ""
-
-#: main.c:93 main.c:457
-msgid "GTK Version mismatch"
-msgstr ""
-
-#: src/filetransfer/v3270ft.c:372
-msgid "Get transfer queue from an external XML file"
-msgstr ""
-
-#: src/dialogs/print/settingsdialog.c:346
-msgid "Get transfer queue from file"
-msgstr ""
-
-#: src/ssl/linux/curl.c:295
-msgid "Got a bad formatted certificate revocation list from LDAP server"
-msgstr ""
-
-#: src/ssl/linux/curl.c:281
-msgid "Got an invalid certificate revocation list from server"
-msgstr ""
-
-#: colors.c:509 src/dialogs/colors.c:164
-msgid "Gray"
-msgstr ""
-
-#: colors.c:498 src/dialogs/colors.c:153
-msgid "Green"
-msgstr ""
-
-#: src/core/properties/boolean.c:139
-msgid "Has selected area"
-msgstr ""
-
-#: 00default.xml:140
+#: ui/application.xml:36 ui/application.xml:522
 msgid "Help"
 msgstr ""
 
-#: src/core/properties/string.c:105
-msgid "Host charset"
+#: src/objects/window/actions/hostproperties.c:45
+msgid "Host properties"
 msgstr ""
 
-#: src/core/ft/ft.c:686
-msgid "Host disconnected, transfer cancelled"
+#: src/objects/window/window.c:304
+msgid "IBM 3270 Terminal emulator"
 msgstr ""
 
-#: src/core/telnet.c:1396
-msgid "Host illegally added function(s)"
+#: src/objects/actions/view.c:89
+msgid "Icon"
 msgstr ""
 
-#: src/core/ft/ftmessages.c:222
-msgid "Host program error code xxxxxxxxxx: file transfer canceled"
+#: src/objects/actions/abstract.c:123
+msgid "Icon Name"
 msgstr ""
 
-#: src/core/telnet.c:1321
-msgid "Host rejected device type or request type"
+#: src/objects/toolbar/settings.c:42
+msgid "Icon Size"
 msgstr ""
 
-#: src/core/telnet.c:1334
-msgid "Host rejected resource(s)"
+#: src/objects/toolbar/toolbar.c:245
+msgid "Icon _size"
 msgstr ""
 
-#: main.c:347
-msgid "Host system type"
+#: src/objects/actions/abstract.c:131
+msgid "Icon pixbuf"
 msgstr ""
 
-#: main.c:345
-msgid "Host to connect"
+#: src/objects/toolbar/toolbar.c:83
+msgid "Icons & text"
 msgstr ""
 
-#: src/core/properties/string.c:84
-msgid "Host type name"
+#: src/objects/toolbar/toolbar.c:73
+msgid "Icons only"
 msgstr ""
 
-#: src/dialogs/save/save.c:59
-msgid "HyperText Markup Language (HTML)"
+#: src/objects/actions/abstract.c:171
+msgid "If the action can be activated"
 msgstr ""
 
-#: src/core/options.c:49
-msgid "IBM AS/400"
-msgstr ""
-
-#: src/core/options.c:43
-msgid "IBM S/390"
-msgstr ""
-
-#: src/core/properties/signed.c:87
-msgid "ID of the session security state"
-msgstr ""
-
-#: src/terminal/properties/init.c:113
-msgid "IDLE minutes for automatic disconnection"
-msgstr ""
-
-#: src/core/toggles/table.c:174
-msgid "If set, asks to place the toplevel window in the fullscreen state"
-msgstr ""
-
-#: src/core/toggles/table.c:144
-msgid ""
-"If set, puts restrictions on how pasted text is placed on the screen. The "
-"position of the cursor at the time the paste operation is begun is used as a "
-"left margin. No pasted text will fill any area of the screen to the left of "
-"that position. This option is useful for pasting into certain IBM editors "
-"that use the left side of the screen for control information"
-msgstr ""
-
-#: src/core/toggles/table.c:104
-msgid ""
-"If set, the NVT terminal emulator automatically assumes a NEWLINE character "
-"when it reaches the end of a line."
-msgstr ""
-
-#: src/core/toggles/table.c:64
-msgid "If set, the cursor blinks"
-msgstr ""
-
-#: src/core/toggles/table.c:53
-msgid "If set, the terminal operates in uppercase-only mode"
-msgstr ""
-
-#: src/core/toggles/table.c:154
-msgid ""
-"If set, the terminal will always select rectangular areas of the screen. "
-"Otherwise, it selects continuous regions of the screen"
-msgstr ""
-
-#: src/core/toggles/table.c:164
-msgid ""
-"If set, the terminal will display a crosshair over the cursor: lines "
-"extending the full width and height of the screen, centered over the cursor "
-"position. This makes locating the cursor on the screen much easier"
-msgstr ""
-
-#: src/core/toggles/table.c:74
-msgid ""
-"If set, the time taken by the host to process an AID is displayed on the "
-"status line"
-msgstr ""
-
-#: src/core/actions/table.c:490
-msgid "If the terminal has selected area print it, if not, print all contents."
-msgstr ""
-
-#: src/filetransfer/transfer.c:80
-msgid "Ignore"
-msgstr ""
-
-#: src/filetransfer/transfer.c:81
-msgid "Ignore the fail and remove the file from queue."
-msgstr ""
-
-#: src/core/ft/ft_cut.c:505
-msgid "Illegal frame length"
-msgstr ""
-
-#: src/core/ft/ftmessages.c:138
-msgid "Incorrect option specified: file transfer canceled"
-msgstr ""
-
-#: src/core/ft/ftmessages.c:101
-msgid "Incorrect request code: file transfer canceled"
-msgstr ""
-
-#: 00default.xml:135
-msgid "Input method"
-msgstr ""
-
-#: src/core/toggles/table.c:192
+#: ui/window.xml:444
 msgid "Insert"
 msgstr ""
 
-#: src/filetransfer/v3270ft.c:388
-msgid "Insert new file in the transfer queue"
-msgstr ""
-
-#: colors.c:514 src/dialogs/colors.c:169
-msgid "Intensified/Protected"
-msgstr ""
-
-#: colors.c:512 src/dialogs/colors.c:167
-msgid "Intensified/Unprotected"
-msgstr ""
-
-#: src/ssl/state.c:276
-msgid "Invalid CA certificate"
-msgstr ""
-
-#: src/terminal/callbacks.c:486
-msgid "Invalid callback table, possible version mismatch in lib3270"
-msgstr ""
-
-#: src/terminal/charset.c:128
-msgid "Invalid cgcsgid value"
-msgstr ""
-
-#: src/core/ft/ftmessages.c:166
-msgid "Invalid option xxxxxxxx with APPEND: file transfer canceled"
-msgstr ""
-
-#: src/core/ft/ftmessages.c:180
-msgid "Invalid option xxxxxxxx with PDS: file transfer canceled"
-msgstr ""
-
-#: src/core/ft/ftmessages.c:159
-msgid "Invalid option xxxxxxxx with RECEIVE: file transfer canceled"
-msgstr ""
-
-#: src/core/ft/ftmessages.c:173
-msgid "Invalid option xxxxxxxx without SPACE: file transfer canceled"
-msgstr ""
-
-#: src/core/ft/ftmessages.c:152
-msgid "Invalid option xxxxxxxx: file transfer canceled"
-msgstr ""
-
-#: src/core/ctlr.c:188 src/core/ctlr.c:202 src/core/ctlr.c:217
-#: src/core/ctlr.c:231
-msgid "Invalid oversize"
-msgstr ""
-
-#: src/terminal/charset.c:88
-msgid "Invalid remap scope"
-msgstr ""
-
-#: src/dialogs/security.c:181
-msgid "Invalid state"
-msgstr ""
-
-#: src/core/properties/boolean.c:62
-msgid "Is connection secure"
-msgstr ""
-
-#: src/core/properties/boolean.c:146
-msgid "Is starting (no first screen)?"
-msgstr ""
-
-#: src/core/properties/boolean.c:55
-msgid "Is terminal connected"
-msgstr ""
-
-#: src/core/properties/boolean.c:132
-msgid "Is terminal in the INITIAL_E state?"
-msgstr ""
-
-#: src/core/properties/boolean.c:48
-msgid "Is terminal ready"
-msgstr ""
-
-#: src/core/toggles/table.c:222 src/core/toggles/table.c:223 00default.xml:127
+#: ui/application.xml:487
 msgid "Keep selected"
 msgstr ""
 
-#: src/ssl/state.c:340
-msgid "Key usage does not include certificate signing"
+#: src/objects/actions/view.c:98
+msgid "Label"
 msgstr ""
 
-#: src/core/paste.c:346
-msgid "Keyboard is locked"
+#: src/objects/toolbar/toolbar.c:57
+msgid "Large"
 msgstr ""
 
-#: src/core/properties/unsigned.c:98
-msgid "Keyboard lock status"
+#: ui/application.xml:71
+msgid "Main Menu"
 msgstr ""
 
-#: 10keypad.xml:35
-msgid "Lateral keypad"
+#: ui/application.xml:66
+msgid "Main Toolbar"
 msgstr ""
 
-#: src/core/properties/signed.c:80
-msgid "Latest program message"
+#: ui/application.xml:335
+msgid "Menu"
 msgstr ""
 
-#: src/filetransfer/v3270ft.c:198 src/filetransfer/activitylist.c:384
-msgid "Load"
+#: ui/window.xml:477 ui/application.xml:391
+msgid "Model 2 - 80x24"
 msgstr ""
 
-#: src/filetransfer/v3270ft.c:197 src/filetransfer/activitylist.c:383
-msgid "Load queue from file"
+#: ui/window.xml:482 ui/application.xml:396
+msgid "Model 3 - 80x32"
 msgstr ""
 
-#: config.c:423
-#, c-format
-msgid "Loading %s"
+#: ui/window.xml:487 ui/application.xml:401
+msgid "Model 4 - 80x43"
 msgstr ""
 
-#: src/filetransfer/activitylist.c:252
-msgid "Local file"
+#: ui/window.xml:492 ui/application.xml:406
+msgid "Model 5 - 132x27"
 msgstr ""
 
-#: src/filetransfer/tables.c:219
-msgid "Local:"
-msgstr ""
-
-#: src/core/properties/boolean.c:160
-msgid "Lock keyboard on operator error"
-msgstr ""
-
-#: main.c:353
-msgid "Makes the screen larger than the default for the chosen model number."
-msgstr ""
-
-#: src/core/properties/unsigned.c:77
-msgid "Maximum screen height in rows"
-msgstr ""
-
-#: src/core/properties/unsigned.c:70
-msgid "Maximum screen width in columns"
-msgstr ""
-
-#: main.c:354
-msgid "Minutes for auto-disconnect"
-msgstr ""
-
-#: colors.c:489 src/dialogs/colors.c:144
-msgid "Misc colors"
-msgstr ""
-
-#: window.c:555
-#, c-format
-msgid "Model %d (%s)"
-msgstr ""
-
-#: src/core/properties/string.c:77
-msgid "Model name"
-msgstr ""
-
-#: src/core/toggles/table.c:51 00default.xml:116
+#: ui/window.xml:376 ui/application.xml:432
 msgid "Monocase"
 msgstr ""
 
-#: src/dialogs/hostselect.c:46
-msgid "Monochrome"
-msgstr ""
-
-#: actions.c:709
-msgid "Move action needs target & direction attributes"
-msgstr ""
-
-#: src/core/actions/table.c:267
-msgid ""
-"Move the cursor to the first blank after the last nonblank in the field."
-msgstr ""
-
-#: src/core/actions/table.c:277
-msgid "Move to first unprotected field on screen."
-msgstr ""
-
-#: colors.c:508 src/dialogs/colors.c:163
-msgid "Mustard"
-msgstr ""
-
-#: src/core/toggles/table.c:302
-msgid "Network data"
-msgstr ""
-
-#: src/core/telnet.c:355 src/core/linux/event_dispatcher.c:143
-#: src/core/linux/connect.c:82
-msgid "Network error"
-msgstr ""
-
-#: src/core/toggles/table.c:292 src/core/toggles/table.c:293 00default.xml:131
+#: ui/application.xml:507
 msgid "Network keep alive"
 msgstr ""
 
-#: 00default.xml:188
-msgid "Next field"
+#: src/objects/actions/simple.c:96
+msgid "No label"
 msgstr ""
 
-#: src/ssl/linux/ldap.c:99
-msgid "No DN of the entry at which to start the search on the URL"
+#: src/objects/application/actions/open.c:49
+msgid "Open Session"
 msgstr ""
 
-#: src/ssl/linux/ldap.c:112
-msgid "No LDAP attribute on the URL"
+#: ui/application.xml:55
+msgid "Open in New Tab"
 msgstr ""
 
-#: src/filetransfer/v3270ftprogress.c:428
-msgid "No active transfer"
+#: ui/application.xml:50
+msgid "Open in New Window"
 msgstr ""
 
-#: src/ssl/state.c:261
-msgid ""
-"No signatures could be verified because the chain contains only one "
-"certificate and it is not self signed."
+#: src/objects/application/actions/open.c:78
+msgid "Open session in new tab"
 msgstr ""
 
-#: src/filetransfer/worker.c:280
-msgid "No transfer"
+#: src/objects/application/actions/open.c:91
+msgid "Open session in new window"
 msgstr ""
 
-#: src/core/ft/ft.c:101 src/filetransfer/worker.c:602
-msgid "No transfer in progress"
-msgstr ""
-
-#: src/core/properties/boolean.c:76
-msgid "Non zero if the host is AS400."
-msgstr ""
-
-#: src/core/properties/boolean.c:69
-msgid "Non zero if the host is TSO."
-msgstr ""
-
-#: colors.c:513 src/dialogs/colors.c:168
-msgid "Normal/Protected"
-msgstr ""
-
-#: colors.c:511 src/dialogs/colors.c:166
-msgid "Normal/Unprotected"
-msgstr ""
-
-#: src/core/ft/ft.c:693
-msgid "Not in 3270 mode, transfer cancelled"
-msgstr ""
-
-#: src/selection/linux/paste.c:75
-msgid "Not the same terminal type"
-msgstr ""
-
-#: colors.c:526 src/dialogs/colors.c:181
-msgid "OIA Warning"
-msgstr ""
-
-#: colors.c:522 src/dialogs/colors.c:177
-msgid "OIA background"
-msgstr ""
-
-#: colors.c:523 src/dialogs/colors.c:178
-msgid "OIA foreground"
-msgstr ""
-
-#: colors.c:524 src/dialogs/colors.c:179
-msgid "OIA separator"
-msgstr ""
-
-#: colors.c:527 src/dialogs/colors.c:182
-msgid "OIA status invalid"
-msgstr ""
-
-#: colors.c:525 src/dialogs/colors.c:180
-msgid "OIA status ok"
-msgstr ""
-
-#: src/core/ft/ftmessages.c:187
-msgid "Only one of TRACKS, CYLINDERS, AVBLOCK allowed: file transfer canceled"
-msgstr ""
-
-#: src/dialogs/load.c:93 src/dialogs/load.c:114
-msgid "Open"
-msgstr ""
-
-#: src/dialogs/popups.c:123
-msgid "Operation failed"
-msgstr ""
-
-#: print.c:91 print.c:112 src/dialogs/save/convenience.c:65
-#: src/dialogs/save/convenience.c:93
-msgid "Operation has failed"
-msgstr ""
-
-#: src/dialogs/print/print.c:159
+#: src/objects/toolbar/settings.c:286 ui/window.xml:218 ui/window.xml:354
+#: ui/window.xml:501 ui/application.xml:419
 msgid "Options"
 msgstr ""
 
-#: colors.c:504 src/dialogs/colors.c:159
-msgid "Orange"
+#: src/objects/actions/abstract.c:154
+msgid "Parameter Type"
 msgstr ""
 
-#: src/core/options.c:55
-msgid "Other (TSO)"
+#: ui/window.xml:271 ui/application.xml:249
+msgid "Paste from clipboard"
 msgstr ""
 
-#: src/core/options.c:61
-msgid "Other (VM/CMS)"
+#: ui/window.xml:281 ui/application.xml:259
+msgid "Paste from text file"
 msgstr ""
 
-#: src/ssl/state.c:224
-msgid "Out of memory"
-msgstr ""
-
-#: 10keypad.xml:68
-msgid "PA1"
-msgstr ""
-
-#: 10keypad.xml:69
-msgid "PA2"
-msgstr ""
-
-#: 10keypad.xml:70
-msgid "PA3"
-msgstr ""
-
-#: 10keypad.xml:37 10functions.xml:36
-msgid "PF1"
-msgstr ""
-
-#: 10keypad.xml:52 10functions.xml:45
-msgid "PF10"
-msgstr ""
-
-#: 10keypad.xml:53 10functions.xml:46
-msgid "PF11"
-msgstr ""
-
-#: 10keypad.xml:54 10functions.xml:47
-msgid "PF12"
-msgstr ""
-
-#: 10functions.xml:50
-msgid "PF13"
-msgstr ""
-
-#: 10functions.xml:51
-msgid "PF14"
-msgstr ""
-
-#: 10functions.xml:52
-msgid "PF15"
-msgstr ""
-
-#: 10functions.xml:53
-msgid "PF16"
-msgstr ""
-
-#: 10functions.xml:54
-msgid "PF17"
-msgstr ""
-
-#: 10functions.xml:55
-msgid "PF18"
-msgstr ""
-
-#: 10functions.xml:56
-msgid "PF19"
-msgstr ""
-
-#: 10keypad.xml:38 10functions.xml:37
-msgid "PF2"
-msgstr ""
-
-#: 10functions.xml:57
-msgid "PF20"
-msgstr ""
-
-#: 10functions.xml:58
-msgid "PF21"
-msgstr ""
-
-#: 10functions.xml:59
-msgid "PF22"
-msgstr ""
-
-#: 10functions.xml:60
-msgid "PF23"
-msgstr ""
-
-#: 10functions.xml:61
-msgid "PF24"
-msgstr ""
-
-#: 10keypad.xml:39 10functions.xml:38
-msgid "PF3"
-msgstr ""
-
-#: 10keypad.xml:42 10functions.xml:39
-msgid "PF4"
-msgstr ""
-
-#: 10keypad.xml:43 10functions.xml:40
-msgid "PF5"
-msgstr ""
-
-#: 10keypad.xml:44 10functions.xml:41
-msgid "PF6"
-msgstr ""
-
-#: 10keypad.xml:47 10functions.xml:42
-msgid "PF7"
-msgstr ""
-
-#: 10keypad.xml:48 10functions.xml:43
-msgid "PF8"
-msgstr ""
-
-#: 10keypad.xml:49 10functions.xml:44
-msgid "PF9"
-msgstr ""
-
-#: main.c:383
-msgid "Parse error"
-msgstr ""
-
-#: parsefile.c:356
-#, c-format
-msgid "Parse error in %s"
-msgstr ""
-
-#: 00default.xml:63
-msgid "Paste"
-msgstr ""
-
-#: src/core/actions/table.c:210
-msgid "Paste file."
-msgstr ""
-
-#: src/dialogs/load.c:248
-msgid "Paste from file"
-msgstr ""
-
-#: 00default.xml:64
+#: ui/window.xml:276 ui/application.xml:254
 msgid "Paste next"
 msgstr ""
 
-#: 00default.xml:67
-msgid "Paste text file"
-msgstr ""
-
-#: src/core/toggles/table.c:142 src/core/toggles/table.c:143 00default.xml:120
+#: ui/window.xml:397 ui/application.xml:457
 msgid "Paste with left margin"
 msgstr ""
 
-#: src/filetransfer/tables.c:219
-msgid "Path and name of the local file"
+#: ui/window.xml:116
+msgid "Preferences"
 msgstr ""
 
-#: src/ssl/state.c:284
-msgid "Path length constraint exceeded"
-msgstr ""
-
-#: src/dialogs/security.c:133 src/dialogs/security.c:152
-msgid "Peer certificate"
-msgstr ""
-
-#: src/core/ft/ftmessages.c:66
-msgid "Personal computer filespec incorrect: file transfer canceled"
-msgstr ""
-
-#: colors.c:497 src/dialogs/colors.c:152
-msgid "Pink"
-msgstr ""
-
-#: src/dialogs/save/save.c:51
-msgid "Plain text"
-msgstr ""
-
-#: src/dialogs/hostselect.c:264
-msgid "Port or service name (empty for \"telnet\")."
-msgstr ""
-
-#: src/dialogs/colors.c:346
-msgid "Predefined color schemes"
-msgstr ""
-
-#: src/filetransfer/set.c:176
-msgid "Preparing"
-msgstr ""
-
-#: 00default.xml:187
-msgid "Previous field"
-msgstr ""
-
-#: src/filetransfer/tables.c:179
-msgid ""
-"Primary allocation for a file created on a TSO host.\n"
-"The units are given by the space allocation units option."
-msgstr ""
-
-#: src/filetransfer/tables.c:178
-msgid "Primary space"
-msgstr ""
-
-#: 00default.xml:47
+#: ui/window.xml:95 ui/application.xml:161
 msgid "Print"
 msgstr ""
 
-#: 00default.xml:49
-msgid "Print copy"
+#: ui/window.xml:343
+msgid "Print screen"
 msgstr ""
 
-#: src/core/actions/table.c:520
-msgid "Print copy (if available)"
-msgstr ""
-
-#: src/dialogs/print/print.c:57
-msgid "Print operation failed"
-msgstr ""
-
-#: src/dialogs/print/convenience.c:82
-msgid "Print operation has failed"
-msgstr ""
-
-#: src/core/actions/table.c:500
-msgid "Print screen contents"
-msgstr ""
-
-#: 00default.xml:48
+#: ui/window.xml:174
 msgid "Print selected"
 msgstr ""
 
-#: src/core/actions/table.c:510
-msgid "Print selected area."
-msgstr ""
-
-#: src/dialogs/print/settings.c:84
-msgid "Print selection box"
-msgstr ""
-
-#: print.c:151 00default.xml:105
-msgid "Print settings"
-msgstr ""
-
-#: src/filetransfer/v3270ftprogress.c:406
-msgid "Progress"
-msgstr ""
-
-#: colors.c:505 src/dialogs/colors.c:160
-msgid "Purple"
-msgstr ""
-
-#: 00default.xml:53
+#: ui/application.xml:89
 msgid "Quit"
 msgstr ""
 
-#: src/core/rpq.c:236
-#, c-format
-msgid "RPQ %s term omitted due to insufficient space"
+#: src/objects/window/page.c:244
+msgid "Rename session"
 msgstr ""
 
-#: src/core/rpq.c:348
-#, c-format
-msgid "RPQ %s term override ignored"
-msgstr ""
-
-#: src/core/rpq.c:639 src/core/rpq.c:709
-#, c-format
-msgid "RPQ ADDRESS term has unrecognized family %u"
-msgstr ""
-
-#: src/core/rpq.c:647 src/core/rpq.c:676 src/core/rpq.c:716
-msgid "RPQ ADDRESS term incomplete due to space limit"
-msgstr ""
-
-#: src/core/rpq.c:229
-msgid "RPQ Error"
-msgstr ""
-
-#: src/core/rpq.c:416 src/core/rpq.c:425
-msgid "RPQ TIMEZONE term is invalid - use +/-hhmm"
-msgstr ""
-
-#: src/core/rpq.c:516
-msgid "RPQ USER term has non-hex character"
-msgstr ""
-
-#: src/core/rpq.c:541
-msgid "RPQ USER term has odd number of hex digits"
-msgstr ""
-
-#: src/core/rpq.c:522
-#, c-format
-msgid "RPQ USER term truncated after %d bytes"
-msgstr ""
-
-#: src/core/rpq.c:566
-#, c-format
-msgid "RPQ USER term truncated after %d characters"
-msgstr ""
-
-#: src/core/rpq.c:360
-#, c-format
-msgid "RPQ term \"%s\" is unrecognized"
-msgstr ""
-
-#: src/core/rpq.c:231
-#, c-format
-msgid "RPQ term %d is unknown"
-msgstr ""
-
-#: src/core/rpq.c:460
-msgid "RPQ timezone exceeds 12 hour UTC offset"
-msgstr ""
-
-#: src/core/rpq.c:445
-msgid "RPQ: Unable to determine workstation UTC time"
-msgstr ""
-
-#: src/core/rpq.c:438
-msgid "RPQ: Unable to determine workstation local time"
-msgstr ""
-
-#: src/core/rpq.c:652
-#, c-format
-msgid "RPQ: can't resolve '%s': %s"
-msgstr ""
-
-#: src/core/rpq.c:665
-msgid "RPQ: gethostbyname error"
-msgstr ""
-
-#: src/filetransfer/tables.c:66
-msgid "Re_map ASCII Characters."
-msgstr ""
-
-#: src/filetransfer/tables.c:136
-msgid "Receive file"
-msgstr ""
-
-#: src/filetransfer/tables.c:148
-msgid "Receive text file"
-msgstr ""
-
-#: src/filetransfer/v3270ftprogress.c:738 src/dialogs/transfer.c:130
-msgid "Receiving file"
-msgstr ""
-
-#: src/filetransfer/tables.c:157
-msgid "Record Length"
-msgstr ""
-
-#: src/filetransfer/v3270ft.c:340 src/filetransfer/settings.c:519
-msgid "Record format"
-msgstr ""
-
-#: colors.c:496 src/dialogs/colors.c:151
-msgid "Red"
-msgstr ""
-
-#: 99debug.xml:41
-msgid "Reload buffer contents"
-msgstr ""
-
-#: src/terminal/charset.c:317
-msgid "Remap Failed"
-msgstr ""
-
-#: main.c:351
-msgid "Remap charset from xml file"
-msgstr ""
-
-#: src/filetransfer/tables.c:67
-msgid ""
-"Remap the text to ensure maximum compatibility between the workstation's "
-"character set and encoding and the host's EBCDIC code page."
-msgstr ""
-
-#: src/filetransfer/activitylist.c:261
-msgid "Remote file"
-msgstr ""
-
-#: src/filetransfer/tables.c:220
-msgid "Remote:"
-msgstr ""
-
-#: src/filetransfer/v3270ft.c:396
-msgid "Remove selected file from the transfer queue"
-msgstr ""
-
-#: src/core/actions/table.c:233 00default.xml:72
-msgid "Remove selection"
-msgstr ""
-
-#: src/core/ft/ft.c:209
-msgid "Request failed"
-msgstr ""
-
-#: src/core/ft/ftmessages.c:94
-msgid "Required host storage unavailable: file transfer canceled"
-msgstr ""
-
-#: src/core/actions/table.c:243 00default.xml:73
+#: ui/window.xml:300 ui/application.xml:283
 msgid "Reselect"
 msgstr ""
 
-#: 10keypad.xml:78
-msgid "Reset"
-msgstr ""
-
-#: src/core/toggles/table.c:283 00default.xml:119
+#: ui/window.xml:364 ui/application.xml:452
 msgid "Resize on alternate screen"
 msgstr ""
 
-#: src/filetransfer/transfer.c:83
-msgid "Retry"
+#: src/objects/toolbar/toolbar.c:269
+msgid "S_tyle"
 msgstr ""
 
-#: 00default.xml:189
-msgid "Return"
-msgstr ""
-
-#: src/dialogs/security.c:139
-msgid "Revocation list"
-msgstr ""
-
-#: src/core/ft/ftmessages.c:188 src/filetransfer/v3270ftprogress.c:186
-msgid ""
-"SPACE can be specified in units of TRACKS, CYLINDERS, or AVBLOCK, and only "
-"one option can be used."
-msgstr ""
-
-#: src/ssl/negotiate.c:158
-msgid "SSL Connect failed"
-msgstr ""
-
-#: src/core/telnet.c:669
-msgid "SSL Error"
-msgstr ""
-
-#: src/core/telnet.c:669
-msgid "SSL Read error"
-msgstr ""
-
-#: src/core/toggles/table.c:312
-msgid "SSL negotiation"
-msgstr ""
-
-#: src/ssl/negotiate.c:135
-msgid "SSL negotiation failed"
-msgstr ""
-
-#: src/core/telnet.c:1653
-#, c-format
-msgid ""
-"SSL_write:\n"
-"%s"
-msgstr ""
-
-#: src/filetransfer/v3270ft.c:215 src/filetransfer/activitylist.c:453
-#: src/trace/trace.c:498 src/dialogs/transfer.c:73
+#: src/objects/actions/save.c:64 ui/window.xml:69 ui/application.xml:135
 msgid "Save"
 msgstr ""
 
-#: src/trace/tracewindow.c:124
-msgid "Save _As"
+#: src/objects/actions/save.c:49
+msgid "Save As"
 msgstr ""
 
-#: src/dialogs/save/save.c:299 00default.xml:44
-msgid "Save copy"
-msgstr ""
-
-#: src/filetransfer/v3270ft.c:214 src/filetransfer/activitylist.c:452
-msgid "Save queue to file"
-msgstr ""
-
-#: 00default.xml:42
+#: ui/window.xml:338
 msgid "Save screen"
 msgstr ""
 
-#: src/core/actions/table.c:180
-msgid "Save screen."
-msgstr ""
-
-#: 00default.xml:43
+#: ui/window.xml:169
 msgid "Save selected"
 msgstr ""
 
-#: src/dialogs/save/save.c:298
-msgid "Save selected area"
+#: src/objects/actions/save.c:51
+msgid "Save session properties"
 msgstr ""
 
-#: src/core/actions/table.c:190
-msgid "Save selected area."
-msgstr ""
-
-#: src/dialogs/save/save.c:297
-msgid "Save terminal contents"
-msgstr ""
-
-#: src/trace/trace.c:497
-msgid "Save trace to file"
-msgstr ""
-
-#: src/dialogs/transfer.c:72
-msgid "Save transfer activity to file"
-msgstr ""
-
-#: src/dialogs/transfer.c:195
-msgid "Save transfer information to file"
-msgstr ""
-
-#: src/dialogs/print/settingsdialog.c:349
-msgid "Save transfer queue"
-msgstr ""
-
-#: src/filetransfer/v3270ft.c:380
-msgid "Save transfer queue to an external XML file"
-msgstr ""
-
-#: src/dialogs/print/settingsdialog.c:353
-msgid "Save transfer queue to file"
-msgstr ""
-
-#: config.c:568
-#, c-format
-msgid "Saving %s"
-msgstr ""
-
-#: src/core/properties/unsigned.c:84
-msgid "Screen buffer length in bytes"
-msgstr ""
-
-#: src/core/properties/string.c:161
-msgid "Screen oversize if larger than the chosen model"
-msgstr ""
-
-#: 00default.xml:111
+#: ui/window.xml:474 ui/application.xml:388
 msgid "Screen size"
 msgstr ""
 
-#: src/core/toggles/table.c:122
-msgid "Screens"
-msgstr ""
-
-#: 00default.xml:86
-msgid "Scripts"
-msgstr ""
-
-#: src/ssl/linux/ldap.c:192
-msgid "Search did not produce any attributes."
-msgstr ""
-
-#: src/ssl/linux/ldap.c:204
-msgid "Search did not produce any values."
-msgstr ""
-
-#: src/filetransfer/tables.c:187
-msgid ""
-"Secondary allocation for a file created on a TSO host.\n"
-"The units are given by the space allocation units option."
-msgstr ""
-
-#: src/filetransfer/tables.c:186
-msgid "Secondary space"
-msgstr ""
-
-#: src/ssl/state.c:92
-msgid "Secure connection was successful."
-msgstr ""
-
-#: src/ssl/negotiate.c:105 src/ssl/negotiate.c:134 src/ssl/negotiate.c:157
-#: src/ssl/negotiate.c:212 src/ssl/negotiate.c:235 src/ssl/negotiate.c:256
-#: src/ssl/linux/ldap.c:98 src/ssl/linux/ldap.c:111 src/ssl/linux/ldap.c:132
-#: src/ssl/linux/ldap.c:143 src/ssl/linux/ldap.c:154 src/ssl/linux/ldap.c:179
-#: src/ssl/linux/ldap.c:190 src/ssl/linux/ldap.c:202 src/ssl/linux/ldap.c:226
-#: src/ssl/linux/init.c:89 src/ssl/linux/getcrl.c:55 src/ssl/linux/getcrl.c:74
-#: src/ssl/linux/getcrl.c:86 src/ssl/linux/getcrl.c:112
-#: src/ssl/linux/curl.c:195 src/ssl/linux/curl.c:225 src/ssl/linux/curl.c:249
-#: src/ssl/linux/curl.c:271 src/ssl/linux/curl.c:280 src/ssl/linux/curl.c:294
-#: src/ssl/linux/curl.c:312
-msgid "Security error"
-msgstr ""
-
-#: src/ssl/negotiate.c:260
-msgid "Security warning"
-msgstr ""
-
-#: src/filetransfer/v3270ft.c:303 src/filetransfer/settings.c:209
-#: src/dialogs/save/save.c:114 src/dialogs/save/save.c:137
-msgid "Select"
-msgstr ""
-
-#: src/core/actions/table.c:256 00default.xml:71
+#: ui/window.xml:295 ui/application.xml:273
 msgid "Select Field"
 msgstr ""
 
-#: 00default.xml:70
+#: ui/window.xml:290 ui/application.xml:268
 msgid "Select all"
 msgstr ""
 
-#: src/core/toggles/table.c:152 src/core/toggles/table.c:153 00default.xml:123
+#: ui/window.xml:223 ui/application.xml:467
 msgid "Select by rectangles"
 msgstr ""
 
-#: src/dialogs/save/save.c:113 src/dialogs/save/save.c:133
-msgid "Select destination file"
+#: src/objects/toolbar/settings.c:192
+msgid "Selected"
 msgstr ""
 
-#: src/filetransfer/v3270ft.c:570 src/filetransfer/settings.c:467
-#: src/dialogs/load.c:92 src/dialogs/load.c:110 src/dialogs/load.c:170
-#: src/dialogs/save/save.c:202
-msgid "Select file"
+#: ui/window.xml:82 ui/window.xml:103 ui/application.xml:148
+#: ui/application.xml:169
+msgid "Selected area"
 msgstr ""
 
-#: src/filetransfer/v3270ft.c:437 src/filetransfer/v3270ft.c:446
-msgid "Select first file"
-msgstr ""
-
-#: 00default.xml:108
-msgid "Select font"
-msgstr ""
-
-#: src/filetransfer/v3270ft.c:413 src/filetransfer/v3270ft.c:470
-msgid "Select last file"
-msgstr ""
-
-#: src/filetransfer/v3270ft.c:302 src/filetransfer/settings.c:208
-msgid "Select local file"
-msgstr ""
-
-#: src/filetransfer/v3270ft.c:421 src/filetransfer/v3270ft.c:462
-msgid "Select next file"
-msgstr ""
-
-#: src/filetransfer/v3270ft.c:429 src/filetransfer/v3270ft.c:454
-msgid "Select previous file"
-msgstr ""
-
-#: src/core/linux/event_dispatcher.c:144
-msgid "Select() failed when processing for events."
-msgstr ""
-
-#: colors.c:516 src/dialogs/colors.c:171
-msgid "Selection background"
-msgstr ""
-
-#: colors.c:517 src/dialogs/colors.c:172
-msgid "Selection foreground"
-msgstr ""
-
-#: src/ssl/state.c:232
-msgid "Self signed certificate"
-msgstr ""
-
-#: src/ssl/state.c:244
-msgid "Self signed certificate in certificate chain"
-msgstr ""
-
-#: src/core/actions/table.c:375
-msgid "Send an \"Enter\" action."
-msgstr ""
-
-#: src/filetransfer/tables.c:130
-msgid "Send file"
-msgstr ""
-
-#: src/filetransfer/tables.c:142
-msgid "Send text file"
-msgstr ""
-
-#: 00default.xml:52
+#: src/objects/window/actions/filetransfer.c:45
 msgid "Send/Receive"
 msgstr ""
 
-#: src/filetransfer/v3270ftprogress.c:738 src/dialogs/transfer.c:130
-msgid "Sending file"
+#: src/objects/window/actions/filetransfer.c:46 ui/window.xml:348
+#: ui/application.xml:183
+msgid "Send/Receive files"
 msgstr ""
 
-#: main.c:340 main.c:342
+#: src/objects/toolbar/settings.c:87 src/objects/toolbar/settings.c:97
+msgid "Separator"
+msgstr ""
+
+#: ui/application.xml:47
+msgid "Session"
+msgstr ""
+
+#: ui/application.xml:76
+msgid "Session Trace"
+msgstr ""
+
+#: ui/window.xml:61 ui/application.xml:127
+msgid "Session in New Tab"
+msgstr ""
+
+#: ui/window.xml:56 ui/application.xml:122
+msgid "Session in new window"
+msgstr ""
+
+#: src/objects/window/page.c:257
 msgid "Session name"
 msgstr ""
 
-#: main.c:350
-msgid "Set host charset"
+#: src/objects/window/actions/sessionproperties.c:45 ui/window.xml:72
+#: ui/window.xml:468 ui/application.xml:138
+msgid "Session properties"
 msgstr ""
 
-#: src/core/toggles/table.c:193
-msgid "Set insert mode"
-msgstr ""
-
-#: main.c:346
-msgid "Set reported colors (8/16)"
-msgstr ""
-
-#: main.c:349
-msgid "Set toggles OFF"
-msgstr ""
-
-#: main.c:348
-msgid "Set toggles ON"
-msgstr ""
-
-#: main.c:362
-msgid "Set trace filename"
-msgstr ""
-
-#: 00default.xml:104
+#: ui/application.xml:369
 msgid "Settings"
 msgstr ""
 
-#: src/dialogs/hostselect.c:361
-msgid "Setup host"
+#: src/objects/toolbar/settings.c:169
+msgid "Setup toolbar"
 msgstr ""
 
-#: src/core/toggles/table.c:272
-msgid "Show Field"
-msgstr ""
-
-#: src/core/toggles/table.c:273
-msgid "Show Field attributes"
-msgstr ""
-
-#: src/core/toggles/table.c:233 00default.xml:126
+#: ui/application.xml:482
 msgid "Show Underline"
 msgstr ""
 
-#: 99debug.xml:39
-msgid "Show test pattern"
+#: ui/window.xml:237 ui/window.xml:416 ui/window.xml:514
+msgid "Show menu"
 msgstr ""
 
-#: src/core/toggles/table.c:72 src/core/toggles/table.c:73
-msgid "Show timer when processing"
+#: ui/window.xml:232 ui/window.xml:411 ui/window.xml:509
+msgid "Show toolbar"
 msgstr ""
 
-#: src/filetransfer/transfer.c:86
-msgid "Skip"
+#: src/objects/toolbar/toolbar.c:52
+msgid "Small"
 msgstr ""
 
-#: src/filetransfer/transfer.c:87
-msgid "Skip this transfer, keep the file on queue."
-msgstr ""
-
-#: src/core/toggles/table.c:202 src/core/toggles/table.c:203 00default.xml:128
+#: ui/window.xml:392 ui/application.xml:492
 msgid "Smart paste"
 msgstr ""
 
-#: src/core/iocalls.c:541 src/core/iocalls.c:558
-msgid "Socket error"
+#: src/objects/actions/abstract.c:182
+msgid "State"
 msgstr ""
 
-#: src/core/telnet.c:695
-msgid "Socket read error"
+#: src/objects/actions/abstract.c:161
+msgid "State Type"
 msgstr ""
 
-#: src/core/telnet.c:1674
-msgid "Socket write error"
+#: src/objects/toolbar/settings.c:47
+msgid "Style"
 msgstr ""
 
-#: src/core/toggles/table.c:262
-msgid "Sound"
+#: src/objects/toolbar/toolbar.c:46 src/objects/toolbar/toolbar.c:68
+msgid "System default"
 msgstr ""
 
-#: src/filetransfer/v3270ft.c:341 src/filetransfer/settings.c:545
-msgid "Space allocation units"
+#: src/main/tools.c:93
+msgid "TN3270 Session Files"
 msgstr ""
 
-#: src/filetransfer/tables.c:167
-msgid ""
-"Specifies the block size (n) for a new data set. For data sets containing "
-"fixed length records, the block size must be a multiple of the record "
-"length. For data sets containing variable length records, the block size "
-"must be greater than or equal to the record length plus four bytes. The "
-"block size must not exceed the track length of the device on which the data "
-"set resides."
+#: ui/window.xml:45 ui/application.xml:111
+msgid "Tab with default session"
 msgstr ""
 
-#: src/filetransfer/tables.c:195
-msgid "Specifies the default buffer size for DFT IND$FILE file transfers."
+#: ui/application.xml:414
+msgid "Terminal font"
 msgstr ""
 
-#: src/filetransfer/tables.c:158
-msgid ""
-"Specifies the logical record length (n) for a data set consisting of fixed "
-"length records or the maximum logical record length for a data set "
-"consisting of variable length records."
+#: src/objects/toolbar/toolbar.c:78
+msgid "Text only"
 msgstr ""
 
-#: src/filetransfer/settings.c:520
-msgid "Specifies the record format of the data set."
+#: src/objects/actions/abstract.c:139
+msgid "The action label"
 msgstr ""
 
-#: src/filetransfer/settings.c:546
-msgid ""
-"Specifies the units for the TSO host primary and secondary space options."
+#: src/objects/actions/abstract.c:147
+msgid "The action tooltip"
 msgstr ""
 
-#: src/filetransfer/tables.c:223
-msgid "Speed:"
+#: src/objects/application/application.c:157
+msgid "The code of the User interface type"
 msgstr ""
 
-#: src/filetransfer/v3270ft.c:404
-msgid "Start file transfer"
+#: src/objects/actions/abstract.c:140
+msgid "The label for the action"
 msgstr ""
 
-#: src/dialogs/print/settingsdialog.c:435
-msgid "Start transfer"
+#: src/objects/window/window.c:157
+msgid "The name of the actions in the header bar"
 msgstr ""
 
-#: src/filetransfer/v3270ftprogress.c:789
-msgid "Starting"
+#: src/objects/toolbar/toolbar.c:135
+msgid "The name of the actions in the toolbar"
 msgstr ""
 
-#: src/filetransfer/worker.c:314 src/dialogs/transfer.c:148
-msgid "Starting transfer"
+#: src/objects/actions/abstract.c:124
+msgid "The name of the icon associated with the action"
 msgstr ""
 
-#: src/core/properties/boolean.c:111
-msgid "State is 3270, TN3270e or SSCP"
+#: src/objects/actions/abstract.c:116
+msgid "The name used to invoke the action"
 msgstr ""
 
-#: src/ssl/state.c:316
-msgid "Subject issuer mismatch"
+#: src/objects/actions/abstract.c:183
+msgid "The state the action is in"
 msgstr ""
 
-#: src/dialogs/hostselect.c:57
-msgid "System _type"
+#: src/objects/toolbar/toolbar.c:146
+msgid "The toolbar icon size"
 msgstr ""
 
-#: src/core/telnet.c:1157
-msgid "TLS negotiation failure"
+#: src/objects/toolbar/toolbar.c:159
+msgid "The toolbar style"
 msgstr ""
 
-#: src/terminal/properties/init.c:98
-msgid "TN3270 Session name"
+#: src/objects/actions/abstract.c:148
+msgid "The tooltip for the action"
 msgstr ""
 
-#: src/core/actions/table.c:297
-msgid "Tab backward to previous field."
+#: src/objects/actions/abstract.c:155
+msgid "The type of GVariant passed to activate()"
 msgstr ""
 
-#: src/core/actions/table.c:287
-msgid "Tab forward to next field."
+#: src/objects/actions/abstract.c:162
+msgid "The type of the state kept by the action"
 msgstr ""
 
-#: colors.c:487 src/dialogs/colors.c:142 src/dialogs/colors.c:295
-msgid "Terminal colors"
-msgstr ""
-
-#: src/core/properties/string.c:98
-msgid "Terminal name"
-msgstr ""
-
-#: src/core/properties/string.c:91
-msgid "Terminal type"
-msgstr ""
-
-#: src/core/ft/ftmessages.c:216 src/filetransfer/v3270ftprogress.c:210
-msgid ""
-"The CMS disk is full, or the maximum number of files on the minidisk (3400) "
-"has been reached, or the maximum number of data blocks per file (16060) has "
-"been reached."
-msgstr ""
-
-#: src/ssl/state.c:184
-msgid "The CRL has expired."
-msgstr ""
-
-#: src/ssl/state.c:172
-msgid "The CRL is not yet valid."
-msgstr ""
-
-#: src/ssl/state.c:209
-msgid "The CRL lastUpdate field contains an invalid time."
-msgstr ""
-
-#: src/ssl/state.c:217
-msgid "The CRL nextUpdate field contains an invalid time."
-msgstr ""
-
-#: src/ssl/state.c:125
-msgid ""
-"The CRL signature could not be decrypted: this means that the actual "
-"signature value could not be determined rather than it not matching the "
-"expected value. Unused."
-msgstr ""
-
-#: src/ssl/state.c:185
-msgid "The Certificate revocation list (CRL) has expired."
-msgstr ""
-
-#: src/ssl/state.c:173
-msgid "The Certificate revocation list (CRL) is not yet valid."
-msgstr ""
-
-#: src/ssl/state.c:109
-msgid ""
-"The Certificate revocation list (CRL) of a certificate could not be found."
-msgstr ""
-
-#: src/ssl/negotiate.c:236
-msgid "The SSL certificate for this host is not trusted."
-msgstr ""
-
-#: src/ssl/linux/ldap.c:100 src/ssl/linux/ldap.c:113
-msgid "The URL argument should be in the format ldap://[HOST]/[DN]?attribute"
-msgstr ""
-
-#: src/ssl/linux/getcrl.c:57
-msgid "The URL for the CRL is undefined or empty"
-msgstr ""
-
-#: src/ssl/linux/getcrl.c:114
-msgid "The URL scheme is unknown"
-msgstr ""
-
-#: src/ssl/state.c:285
-msgid "The basicConstraints pathlength parameter has been exceeded."
-msgstr ""
-
-#: src/filetransfer/worker.c:623
-msgid ""
-"The callback table for file transfer was rejected, possible version mismatch "
-"on lib3270"
-msgstr ""
-
-#: src/ssl/state.c:245
-msgid ""
-"The certificate chain could be built up using the untrusted certificates but "
-"the root could not be found locally."
-msgstr ""
-
-#: src/ssl/state.c:269
-msgid "The certificate has been revoked."
-msgstr ""
-
-#: src/ssl/state.c:165
-msgid ""
-"The certificate has expired: that is the notAfter date is before the current "
-"time."
-msgstr ""
-
-#: src/ssl/state.c:157
-msgid ""
-"The certificate is not yet valid: the notBefore date is after the current "
-"time."
-msgstr ""
-
-#: src/ssl/state.c:201
-msgid "The certificate notAfter field contains an invalid time."
-msgstr ""
-
-#: src/ssl/state.c:193
-msgid "The certificate notBefore field contains an invalid time."
-msgstr ""
-
-#: src/ssl/state.c:117
-msgid ""
-"The certificate signature could not be decrypted. This means that the actual "
-"signature value could not be determined rather than it not matching the "
-"expected value, this is only meaningful for RSA keys."
-msgstr ""
-
-#: src/core/properties/signed.c:66
-msgid "The color type"
-msgstr ""
-
-#: src/ssl/state.c:372 src/ssl/state.c:400 src/ssl/state.c:427
-msgid "The connection is insecure"
-msgstr ""
-
-#: src/ssl/state.c:93
-msgid "The connection is secure and the host identity was confirmed."
-msgstr ""
-
-#: src/ssl/state.c:333
-msgid ""
-"The current candidate issuer certificate was rejected because its issuer "
-"name and serial number was present and did not match the authority key "
-"identifier of the current certificate. Only displayed when the -"
-"issuer_checks option is set."
-msgstr ""
-
-#: src/ssl/state.c:341
-msgid ""
-"The current candidate issuer certificate was rejected because its keyUsage "
-"extension does not permit certificate signing."
-msgstr ""
-
-#: src/ssl/state.c:325
-msgid ""
-"The current candidate issuer certificate was rejected because its subject "
-"key identifier was present and did not match the authority key identifier "
-"current certificate. Only displayed when the -issuer_checks option is set."
-msgstr ""
-
-#: src/ssl/state.c:317
-msgid ""
-"The current candidate issuer certificate was rejected because its subject "
-"name did not match the issuer name of the current certificate. Only "
-"displayed when the -issuer_checks option is set."
-msgstr ""
-
-#: src/core/properties/unsigned.c:91
-msgid "The delay between the host unlocking the keyboard and the actual unlock"
-msgstr ""
-
-#: src/terminal/callbacks.c:453
-#, c-format
-msgid "The error code was %d"
-msgstr ""
-
-#: src/dialogs/save/save.c:412
-#, c-format
-msgid "The file \"%s\" already exists. Replace it?"
-msgstr ""
-
-#: src/core/ft/ftmessages.c:60 src/filetransfer/v3270ftprogress.c:76
-msgid ""
-"The file transfer operation has been completed, and any record greater than "
-"the logical record length (LRECL) of the file being appended has been "
-"divided and becomes multiple records."
-msgstr ""
-
-#: src/core/ft/ftmessages.c:53 src/filetransfer/v3270ftprogress.c:70
-msgid "The file transfer operation has been successfully completed."
-msgstr ""
-
-#: src/core/ctlr.c:233
-#, c-format
-msgid "The height %d is less than model %d rows (%d)"
-msgstr ""
-
-#: src/core/ft/ftmessages.c:81 src/core/ft/ftmessages.c:88
-#: src/filetransfer/v3270ftprogress.c:94 src/filetransfer/v3270ftprogress.c:100
-msgid ""
-"The host program has detected an error in the file data during a RECEIVE "
-"operation."
-msgstr ""
-
-#: src/ssl/state.c:253
-msgid ""
-"The issuer certificate could not be found: this occurs if the issuer "
-"certificate of an untrusted certificate cannot be found."
-msgstr ""
-
-#: src/ssl/state.c:101
-msgid ""
-"The issuer certificate of a looked up certificate could not be found. This "
-"normally means the list of trusted certificates is not complete."
-msgstr ""
-
-#: window.c:450
-#, c-format
-msgid "The known types are %s"
-msgstr ""
-
-#: src/core/properties/signed.c:59
-msgid "The model number"
-msgstr ""
-
-#: main.c:352
-msgid "The model of 3270 display to be emulated"
-msgstr ""
-
-#: src/core/properties/string.c:63
-msgid "The name of the active LU"
-msgstr ""
-
-#: src/filetransfer/tables.c:220
-msgid "The name of the file in the host"
-msgstr ""
-
-#: src/core/ctlr.c:232
-msgid "The oversize height is too small."
-msgstr ""
-
-#: src/core/ctlr.c:189
-msgid "The oversize values are invalid."
-msgstr ""
-
-#: src/core/ctlr.c:203
-msgid "The oversize values are too big."
-msgstr ""
-
-#: src/core/ctlr.c:218
-msgid "The oversize width is too small."
-msgstr ""
-
-#: src/ssl/state.c:233
-msgid ""
-"The passed certificate is self signed and the same certificate cannot be "
-"found in the list of trusted certificates."
-msgstr ""
-
-#: src/ssl/state.c:133
-msgid ""
-"The public key in the certificate SubjectPublicKeyInfo could not be read."
-msgstr ""
-
-#: src/core/ft/ft.c:278
-msgid "The remote file name is invalid."
-msgstr ""
-
-#: src/ssl/state.c:309
-msgid "The root CA is marked to reject the specified purpose."
-msgstr ""
-
-#: src/ssl/state.c:301
-msgid "The root CA is not marked as trusted for the specified purpose."
-msgstr ""
-
-#: src/ssl/negotiate.c:237
-msgid ""
-"The security certificate presented by this host was not issued by a trusted "
-"certificate authority."
-msgstr ""
-
-#: src/core/properties/string.c:147
-msgid "The security state"
-msgstr ""
-
-#: src/ssl/state.c:141 src/ssl/state.c:149
-msgid "The signature of the certificate is invalid."
-msgstr ""
-
-#: src/ssl/state.c:293
-msgid "The supplied certificate cannot be used for the specified purpose."
-msgstr ""
-
-#: src/core/ctlr.c:219
-#, c-format
-msgid "The width %d is less than model %d columns (%d)"
-msgstr ""
-
-#: src/core/ft/ftmessages.c:146 src/filetransfer/v3270ftprogress.c:150
-msgid "There is not enough space available for data on the host."
-msgstr ""
-
-#: tools.c:310
-#, c-format
-msgid "There's no available settings for charset \"%s\""
-msgstr ""
-
-#: src/dialogs/security.c:188
-msgid "There's no security information in the session"
-msgstr ""
-
-#: src/core/ft/ftmessages.c:223 src/filetransfer/v3270ftprogress.c:216
-msgid "This is a host program error."
-msgstr ""
-
-#: dialog.c:83
+#: src/objects/application/actions/about.c:45
 msgid ""
 "This program is free software; you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -2780,621 +847,92 @@ msgid ""
 "Franklin St, Fifth Floor, Boston, MA 02111-1307 USA"
 msgstr ""
 
-#: main.c:453
-#, c-format
-msgid "This program requires GTK version %d.%d.%d"
-msgstr ""
-
-#: src/terminal/charset.c:143
-msgid "Too many remaps"
-msgstr ""
-
-#: 00default.xml:146
+#: src/objects/toolbar/settings.c:168 ui/application.xml:330
 msgid "Toolbar"
 msgstr ""
 
-#: src/filetransfer/tables.c:221
-msgid "Total bytes to transfer"
-msgstr ""
-
-#: src/filetransfer/tables.c:221
-msgid "Total:"
-msgstr ""
-
-#: 98trace.xml:36
+#: ui/application.xml:325
 msgid "Trace"
 msgstr ""
 
-#: src/core/toggles/table.c:93 98trace.xml:36
-msgid "Trace Data Stream"
-msgstr ""
-
-#: src/core/toggles/table.c:313 98trace.xml:40
-msgid "Trace SSL negotiation"
-msgstr ""
-
-#: src/core/toggles/table.c:133
-msgid "Trace interface and application events"
-msgstr ""
-
-#: src/core/toggles/table.c:303 98trace.xml:38
-msgid "Trace network data flow"
-msgstr ""
-
-#: src/core/toggles/table.c:123 98trace.xml:37
-msgid "Trace screen contents"
-msgstr ""
-
-#: 98trace.xml:39
-msgid "Trace user interface events"
-msgstr ""
-
-#: src/core/toggles/table.c:82 src/core/toggles/table.c:83 00default.xml:117
+#: ui/window.xml:449 ui/application.xml:437
 msgid "Track Cursor"
 msgstr ""
 
-#: src/filetransfer/tables.c:106
-msgid "Tracks"
+#: src/objects/application/application.c:156
+msgid "UI Type"
 msgstr ""
 
-#: src/core/ft/ft_cut.c:371
-msgid "Transfer cancelled by host"
+#: ui/window.xml:179 ui/application.xml:278
+msgid "Unselect"
 msgstr ""
 
-#: src/core/ft/ft_dft.c:230 src/core/ft/ft_dft.c:373 src/core/ft/ft_cut.c:400
-#: src/core/ft/ft_cut.c:495
-msgid "Transfer cancelled by user"
-msgstr ""
-
-#: src/core/ft/ft.c:581
-msgid "Transfer complete"
-msgstr ""
-
-#: src/core/ft/ft.c:586 src/filetransfer/worker.c:569
-#: src/filetransfer/v3270ftprogress.c:720
-msgid "Transfer failed"
-msgstr ""
-
-#: src/filetransfer/worker.c:555
-msgid "Transfer operation has timed out"
-msgstr ""
-
-#: src/filetransfer/v3270ft.c:339 src/filetransfer/settings.c:492
-msgid "Transfer options"
-msgstr ""
-
-#: src/dialogs/print/settingsdialog.c:379
-#: src/dialogs/print/settingsdialog.c:398
-#: src/dialogs/print/settingsdialog.c:417
-msgid "Transfer queue"
-msgstr ""
-
-#: src/filetransfer/tables.c:223
-msgid "Transfer speed"
-msgstr ""
-
-#: src/core/ft/ft_cut.c:464
-msgid "Transmission error"
-msgstr ""
-
-#: src/filetransfer/transfer.c:84
-msgid "Try again with the same file."
-msgstr ""
-
-#: colors.c:499 src/dialogs/colors.c:154
-msgid "Turquoise"
-msgstr ""
-
-#: src/core/properties/string.c:133
-msgid "URL for the certificate revocation list"
-msgstr ""
-
-#: src/core/properties/string.c:70
-msgid "URL of the current host"
-msgstr ""
-
-#: src/dialogs/tools.c:137
-msgid "UTF-8"
-msgstr ""
-
-#: src/core/ft/ft_dft.c:170
-msgid "Uknown DFT Open type from host"
-msgstr ""
-
-#: print.c:92 print.c:113
-msgid "Unable to complete print job"
-msgstr ""
-
-#: src/ssl/state.c:132
-msgid "Unable to decode issuer public key"
-msgstr ""
-
-#: src/ssl/state.c:124
-msgid "Unable to decrypt CRL's signature"
-msgstr ""
-
-#: src/ssl/state.c:116
-msgid "Unable to decrypt certificate's signature"
-msgstr ""
-
-#: src/ssl/state.c:108
-msgid "Unable to get certificate CRL."
-msgstr ""
-
-#: src/core/linux/connect.c:83
-msgid "Unable to get connection state."
-msgstr ""
-
-#: src/ssl/state.c:100
-msgid "Unable to get issuer certificate"
-msgstr ""
-
-#: src/ssl/state.c:252
-msgid "Unable to get local issuer certificate"
-msgstr ""
-
-#: src/core/session.c:223
-msgid "Unable to load from file"
-msgstr ""
-
-#: src/selection/linux/paste.c:115
-msgid "Unable to paste formatted data"
-msgstr ""
-
-#: src/core/paste.c:345
-msgid "Unable to paste text"
-msgstr ""
-
-#: src/core/session.c:209
-msgid "Unable to print"
-msgstr ""
-
-#: src/core/session.c:216
-msgid "Unable to save"
-msgstr ""
-
-#: src/core/ft/ft.c:529
-msgid "Unable to send file-transfer request"
-msgstr ""
-
-#: src/ssl/state.c:260
-msgid "Unable to verify the first certificate"
-msgstr ""
-
-#: src/filetransfer/tables.c:92
-msgid "Undefined"
-msgstr ""
-
-#: src/core/toggles/table.c:232
-msgid "Underline"
-msgstr ""
-
-#: menubar.c:48 toolbar.c:65 popup.c:51
-#, c-format
-msgid "Unexpected action attribute in <%s>"
-msgstr ""
-
-#: src/core/paste.c:346
-msgid "Unexpected error"
-msgstr ""
-
-#: src/dialogs/save/save.c:397
-#, c-format
-msgid "Unexpected format %d"
-msgstr ""
-
-#: action.c:77
-#, c-format
-msgid "Unexpected group \"%s\""
-msgstr ""
-
-#: src/dialogs/save/save.c:367
-#, c-format
-msgid "Unexpected mode %d"
-msgstr ""
-
-#: actions.c:567 actions.c:587
-#, c-format
-msgid "Unexpected or invalid %s attribute: \"%s\""
-msgstr ""
-
-#: src/ssl/linux/getcrl.c:113
-msgid "Unexpected or invalid CRL URL"
-msgstr ""
-
-#: src/ssl/negotiate.c:214
-msgid "Unexpected or invalid TLS/SSL verify result"
-msgstr ""
-
-#: actions.c:541
-#, c-format
-msgid "Unexpected or invalid attribute value \"%s\""
-msgstr ""
-
-#: main.c:193
-#, c-format
-msgid "Unexpected or invalid color value \"%s\""
-msgstr ""
-
-#: src/ssl/state.c:403
-msgid "Unexpected or unknown security status"
-msgstr ""
-
-#: actions.c:439
-#, c-format
-msgid "Unexpected target \"%s\""
-msgstr ""
-
-#: src/core/keyboard/kybd.c:279
-#, c-format
-msgid "Unexpected type %d in typeahead queue"
-msgstr ""
-
-#: src/core/ctlr.c:674
-#, c-format
-msgid "Unknown 3270 Data Stream command: 0x%X"
-msgstr ""
-
-#: src/core/ft/ft_cut.c:379
-msgid "Unknown FT control code from host"
-msgstr ""
-
-#: src/core/keyboard/kybd.c:1679
-#, c-format
-msgid "Unknown PA key %d"
-msgstr ""
-
-#: src/core/keyboard/kybd.c:1694
-#, c-format
-msgid "Unknown PF key %d"
-msgstr ""
-
-#: src/core/ft/ft_cut.c:303
-msgid "Unknown frame type from host"
-msgstr ""
-
-#: popup.c:76
-#, c-format
-msgid "Unknown popup type \"%s\""
-msgstr ""
-
-#: src/core/rpq.c:230
-msgid "Unsupported RPQ term"
-msgstr ""
-
-#: src/ssl/state.c:292
-msgid "Unsupported certificate purpose"
-msgstr ""
-
-#: src/dialogs/save/save.c:149
-msgid "Untitled document"
-msgstr ""
-
-#: src/core/toggles/table.c:52
-msgid "Uppercase only"
-msgstr ""
-
-#: src/core/toggles/table.c:252 src/core/toggles/table.c:253 00default.xml:130
+#: ui/application.xml:502
 msgid "Use +/- for field navigation"
 msgstr ""
 
-#: src/filetransfer/tables.c:75
-msgid "Use host default record format."
-msgstr ""
-
-#: src/core/toggles/table.c:254
-msgid "Use the keys +/- from keypad to select editable fields"
-msgstr ""
-
-#: src/filetransfer/tables.c:86
-msgid "Variable"
-msgstr ""
-
-#: dialog.c:102 dialog.c:104
+#: src/objects/application/actions/about.c:100
+#: src/objects/application/actions/about.c:102
 #, c-format
 msgid "Version %s-%s"
 msgstr ""
 
-#: src/core/ft/ft.c:538
-msgid "Waiting for GET response"
+#: ui/application.xml:63
+msgid "View"
 msgstr ""
 
-#: src/core/ft/ft.c:540
-msgid "Waiting for PUT response"
+#: ui/window.xml:40 ui/application.xml:106
+msgid "Window with default session"
 msgstr ""
 
-#: src/dialogs/tools.c:138
-msgid "Western Europe (ISO 8859-1)"
+#: src/main/tools.c:135
+msgid "_Apply"
 msgstr ""
 
-#: colors.c:501 src/dialogs/colors.c:156
-msgid "White"
-msgstr ""
-
-#: 00default.xml:157
-msgid "Window"
-msgstr ""
-
-#: src/dialogs/tools.c:139
-msgid "Windows Western languages (CP1252)"
-msgstr ""
-
-#: src/core/connect.c:161
-#, c-format
-msgid "Windows error was \"%s\" (%u)"
-msgstr ""
-
-#: src/core/toggles/table.c:102 src/core/toggles/table.c:103
-msgid "Wrap around"
-msgstr ""
-
-#: src/terminal/drawing/oia.c:430 src/terminal/drawing/oia.c:454
-#: src/terminal/drawing/oia.c:458
-msgid "X"
-msgstr ""
-
-#: src/terminal/drawing/oia.c:434
-msgid "X -f"
-msgstr ""
-
-#: src/terminal/drawing/oia.c:466
-msgid "X Connecting"
-msgstr ""
-
-#: src/terminal/drawing/oia.c:450
-msgid "X Inhibit"
-msgstr ""
-
-#: src/terminal/drawing/oia.c:426
-msgid "X Not Connected"
-msgstr ""
-
-#: src/terminal/drawing/oia.c:442
-msgid "X Numeric"
-msgstr ""
-
-#: src/terminal/drawing/oia.c:446
-msgid "X Overflow"
-msgstr ""
-
-#: src/terminal/drawing/oia.c:438
-msgid "X Protected"
-msgstr ""
-
-#: src/terminal/drawing/oia.c:462
-msgid "X Resolving"
-msgstr ""
-
-#: src/terminal/drawing/oia.c:414
-msgid "X System"
-msgstr ""
-
-#: src/terminal/drawing/oia.c:418
-msgid "X Wait"
-msgstr ""
-
-#: src/terminal/properties/init.c:143
-msgid "XML file with remap table"
-msgstr ""
-
-#: colors.c:500 src/dialogs/colors.c:155
-msgid "Yellow"
-msgstr ""
-
-#: src/dialogs/print/settingsdialog.c:241
-msgid "You can't add more than one acitivity with the same files."
-msgstr ""
-
-#: src/core/ft/ftmessages.c:74 src/filetransfer/v3270ftprogress.c:88
-msgid ""
-"You did not enter the required parameters after a SEND or RECEIVE command."
-msgstr ""
-
-#: src/core/ft/ftmessages.c:195 src/filetransfer/v3270ftprogress.c:192
-msgid "You did not specify an existing CMS file for RECEIVE."
-msgstr ""
-
-#: src/core/ft/ftmessages.c:95 src/filetransfer/v3270ftprogress.c:106
-msgid ""
-"You need 30 KB of main storage (not disk space) on the host for the file "
-"transfer, in addition to the host requirement."
-msgstr ""
-
-#: src/core/ft/ftmessages.c:174 src/filetransfer/v3270ftprogress.c:174
-msgid ""
-"You selected an option that can only be used if SPACE is also specified."
-msgstr ""
-
-#: src/core/ft/ftmessages.c:153 src/filetransfer/v3270ftprogress.c:156
-msgid ""
-"You selected an option that is either not recognized, is specified as a "
-"positional keyword, or has an associated value that is incorrect."
-msgstr ""
-
-#: src/core/ft/ftmessages.c:181 src/filetransfer/v3270ftprogress.c:180
-msgid ""
-"You selected an option that is invalid with a host-partitioned data set."
-msgstr ""
-
-#: src/core/ft/ftmessages.c:167 src/filetransfer/v3270ftprogress.c:168
-msgid ""
-"You selected an option that is not valid with APPEND, but otherwise may be "
-"used."
-msgstr ""
-
-#: src/core/ft/ftmessages.c:160 src/filetransfer/v3270ftprogress.c:162
-msgid ""
-"You selected an option that is not valid with RECEIVE, but can be used with "
-"SEND."
-msgstr ""
-
-#: src/core/ft/ftmessages.c:202 src/filetransfer/v3270ftprogress.c:198
-msgid ""
-"You specified a CMS file mode for the SEND key that does not allow write "
-"access."
-msgstr ""
-
-#: src/core/ft/ftmessages.c:209 src/filetransfer/v3270ftprogress.c:204
-msgid "You specified a CMS file mode that is not in the CMS search order."
-msgstr ""
-
-#: src/core/ft/ftmessages.c:139 src/filetransfer/v3270ftprogress.c:144
-msgid "You specified an option that is invalid."
-msgstr ""
-
-#: src/filetransfer/tables.c:49
-msgid "_ASCII text"
-msgstr ""
-
-#: src/selection/linux/paste.c:83 src/selection/linux/paste.c:123
-#: src/dialogs/load.c:204 src/dialogs/load.c:223 src/dialogs/commondialog.c:108
-#: src/dialogs/commondialog.c:117 src/dialogs/commondialog.c:134
-#: src/dialogs/linux/select.c:51 src/dialogs/linux/select.c:77
-#: src/dialogs/print/settingsdialog.c:410
-#: src/dialogs/print/settingsdialog.c:429 src/dialogs/save/save.c:264
-#: src/dialogs/save/save.c:283
+#: src/main/tools.c:134
 msgid "_Cancel"
 msgstr ""
 
-#: src/trace/tracewindow.c:125 src/dialogs/transfer.c:167
-#: src/dialogs/transfer.c:187 src/dialogs/security.c:203
-msgid "_Close"
+#: src/objects/window/page.c:350
+msgid "_Close session"
 msgstr ""
 
-#: src/dialogs/hostselect.c:57
-msgid "_Color table"
-msgstr ""
-
-#: 00default.xml:99
+#: ui/window.xml:463 ui/application.xml:356
 msgid "_Connect"
 msgstr ""
 
-#: 00default.xml:100
+#: ui/application.xml:361
 msgid "_Disconnect"
 msgstr ""
 
-#: 99debug.xml:35 00default.xml:58
+#: ui/window.xml:135 ui/window.xml:266 ui/application.xml:219
 msgid "_Edit"
 msgstr ""
 
-#: src/trace/tracewindow.c:117 00default.xml:34
+#: ui/application.xml:99
 msgid "_File"
 msgstr ""
 
-#: src/dialogs/load.c:162 src/dialogs/save/save.c:189
-msgid "_Filename"
-msgstr ""
-
-#: src/dialogs/print/settings.c:77
-msgid "_Font:"
-msgstr ""
-
-#: src/dialogs/hostselect.c:252
-msgid "_Host"
-msgstr ""
-
-#: src/dialogs/load.c:209 src/dialogs/load.c:224
-msgid "_Load"
-msgstr ""
-
-#: src/filetransfer/v3270ft.c:334
-msgid "_Local file"
-msgstr ""
-
-#: 00default.xml:89
+#: ui/application.xml:348
 msgid "_Network"
 msgstr ""
 
-#: src/filetransfer/v3270ft.c:333
-msgid "_Operation"
+#: ui/window.xml:37 ui/application.xml:103
+msgid "_New"
 msgstr ""
 
-#: 00default.xml:114
-msgid "_Options"
+#: ui/window.xml:53 ui/application.xml:119
+msgid "_Open"
 msgstr ""
 
-#: src/selection/linux/paste.c:84 src/selection/linux/paste.c:124
-msgid "_Paste as text"
+#: src/objects/window/page.c:344
+msgid "_Rename session"
 msgstr ""
 
-#: src/filetransfer/v3270ft.c:335
-msgid "_Remote file"
-msgstr ""
-
-#: src/trace/tracewindow.c:123 src/dialogs/colors.c:367
-#: src/dialogs/save/save.c:269 src/dialogs/save/save.c:284
-msgid "_Save"
-msgstr ""
-
-#: src/dialogs/hostselect.c:284
-msgid "_Secure connection."
-msgstr ""
-
-#: src/dialogs/hostselect.c:253
-msgid "_Service"
-msgstr ""
-
-#: src/filetransfer/tables.c:43
-msgid "_Text file"
-msgstr ""
-
-#: 00default.xml:84
+#: ui/application.xml:322
 msgid "_View"
 msgstr ""
 
-#: scroll.c:55
-msgid "a direction attribute"
-msgstr ""
-
-#: menu.c:57
-msgid "a label attribute"
-msgstr ""
-
-#: popup.c:61
-msgid "a type or group attribute"
-msgstr ""
-
-#: script.c:75 keypad.c:184
-#, c-format
-msgid "action attribute is invalid for <%s>"
-msgstr ""
-
-#: accelerator.c:47 scroll.c:49
-msgid "an action attribute"
-msgstr ""
-
-#: src/core/session.c:425
-msgid "bracket"
-msgstr ""
-
-#: src/core/toggles/init.c:89 src/core/linux/connect.c:234
-msgid "disable"
-msgstr ""
-
-#: src/core/toggles/init.c:89 src/core/linux/connect.c:234
-msgid "enable"
-msgstr ""
-
-#: src/core/iocalls.c:542
-msgid "fcntl() error when getting socket state."
-msgstr ""
-
-#: src/core/iocalls.c:528
-msgid "ioctlsocket(FIONBIO) failed."
-msgstr ""
-
-#: src/core/properties/string.c:126
-msgid "lib3270 revision"
-msgstr ""
-
-#: src/core/properties/string.c:119
-msgid "lib3270 version"
-msgstr ""
-
-#: src/core/linux/connect.c:221
-msgid "setsockopt(SO_OOBINLINE) has failed"
-msgstr ""
-
-#: dialog.c:143
+#: src/objects/application/actions/about.c:120
 msgid "translator-credits"
 msgstr ""

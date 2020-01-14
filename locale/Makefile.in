@@ -78,9 +78,9 @@ all: \
 install: \
 	$(foreach SRC, $(basename $(wildcard *.po)), $(DESTDIR)/$(localedir)/$(SRC)/LC_MESSAGES/$(PACKAGE_NAME).mo)
 
-	@$(MKDIR) $(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/locale
-	@$(INSTALL_DATA) *.po $(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/locale
-	@$(INSTALL_DATA) $(PACKAGE_NAME).pot $(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/locale
-	@$(INSTALL_DATA) Makefile $(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/locale
+#	@$(MKDIR) $(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/locale
+#	@$(INSTALL_DATA) *.po $(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/locale
+#	@$(INSTALL_DATA) $(PACKAGE_NAME).pot $(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/locale
+#	@$(INSTALL_DATA) Makefile $(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/locale
 
 

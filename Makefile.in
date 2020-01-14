@@ -79,7 +79,6 @@ sysconfdir=@sysconfdir@
 BASEDIR=@BASEDIR@
 
 POTDIR=$(BASEDIR)/.pot
-POTDIR=$(BASEDIR)/.schemas
 
 OBJDIR=$(BASEDIR)/.obj/$(PACKAGE_NAME)
 OBJDBG=$(OBJDIR)/Debug
@@ -182,6 +181,17 @@ $(POTDIR)/$(PACKAGE_NAME)/%.pot: \
 	@touch $@
 
 $(POTDIR)/$(PACKAGE_NAME)/%.pot: \
+	%.xml
+
+	@echo $(notdir $@) ...
+	@$(MKDIR) $(@D)
+	@$(XGETTEXT) \
+		--language=glade \
+		--output=$@ \
+		$<
+	@touch $@
+
+$(POTDIR)/$(PACKAGE_NAME)/src/%.pot: \
 	%.rc
 
 	@echo $< ...
@@ -210,7 +220,7 @@ install-%: \
 
 all: \
 	$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@ \
-	$(POTDIR)/$(PACKAGE_NAME).pot
+	locale/$(PACKAGE_NAME).pot
 
 Release: \
 	$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@
@@ -255,8 +265,9 @@ install-application: \
 
 #---[ Misc Targets ]---------------------------------------------------------------------
 
-$(POTDIR)/$(PACKAGE_NAME).pot: \
-	$(foreach SRC, $(basename $(SOURCES)), $(POTDIR)/$(PACKAGE_NAME)/$(SRC).pot)
+locale/$(PACKAGE_NAME).pot: \
+	$(foreach SRC, $(basename $(SOURCES)), $(POTDIR)/$(PACKAGE_NAME)/$(SRC).pot) \
+	$(foreach SRC, $(basename $(wildcard ui/*.xml)), $(POTDIR)/$(PACKAGE_NAME)/$(SRC).pot)
 
 	@rm -f $@
 	@$(MKDIR) $(@D)
