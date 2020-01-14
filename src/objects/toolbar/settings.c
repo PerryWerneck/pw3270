@@ -30,6 +30,7 @@
  #include "private.h"
  #include <pw3270/settings.h>
  #include <pw3270/actions.h>
+ #include <pw3270/window.h>
 
  static const struct _comboboxes {
  	const gchar * name;
@@ -57,10 +58,11 @@
 
  } ToolbarSettingsPage;
 
- static void load(Pw3270SettingsPage *pg, GtkApplication *application, GSettings *settings) {
+ static void load(Pw3270SettingsPage *pg, GtkApplication *application) {
 
  	size_t ix;
 	ToolbarSettingsPage * page = (ToolbarSettingsPage *) pg;
+	g_autoptr(GSettings) settings = pw3270_application_window_settings_new();
 
  	debug("%s",__FUNCTION__);
 
@@ -112,10 +114,11 @@
 
  }
 
- static void apply(Pw3270SettingsPage *pg, GtkApplication G_GNUC_UNUSED(*application), GSettings *settings) {
+ static void apply(Pw3270SettingsPage *pg, GtkApplication G_GNUC_UNUSED(*application)) {
 
 	size_t ix;
 	ToolbarSettingsPage * page = (ToolbarSettingsPage *) pg;
+	g_autoptr(GSettings) settings = pw3270_application_window_settings_new();
 
  	debug("%s",__FUNCTION__);
 

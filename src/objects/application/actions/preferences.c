@@ -57,7 +57,7 @@
 		for(page = settings->pages;page;page = page->next) {
 			Pw3270SettingsPage * widget = (Pw3270SettingsPage *) page->data;
 			if(widget->apply) {
-				widget->apply(widget,GTK_APPLICATION(settings->application),pw3270_application_get_settings(settings->application));
+				widget->apply(widget,GTK_APPLICATION(settings->application));
 			}
 		}
 
@@ -172,7 +172,7 @@
 	for(page = settings->pages;page;page = page->next) {
 		Pw3270SettingsPage * widget = (Pw3270SettingsPage *) page->data;
 		if(widget->load) {
-			widget->load(widget,GTK_APPLICATION(settings->application),pw3270_application_get_settings(settings->application));
+			widget->load(widget,GTK_APPLICATION(settings->application));
 		}
 	}
 

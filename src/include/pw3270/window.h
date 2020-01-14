@@ -79,6 +79,9 @@
 	/// @brief Set window sub-title (If enabled).
 	void		  pw3270_window_set_subtitle(GtkWidget *window, const gchar *subtitle);
 
+	/// @brief Get window settings.
+	GSettings	* pw3270_application_window_settings_new(void);
+
 	G_END_DECLS
 
 

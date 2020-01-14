@@ -61,8 +61,8 @@
 		GtkWidget	* widget;		///< @brief Settings widget.
 		const gchar	* label;		///< @brief Page lagel.
 		const gchar * title;		///< @brief Page title.
-		void (*load)(Pw3270SettingsPage *, GtkApplication *, GSettings *);
-		void (*apply)(Pw3270SettingsPage *, GtkApplication *, GSettings *);
+		void (*load)(Pw3270SettingsPage *, GtkApplication *);
+		void (*apply)(Pw3270SettingsPage *, GtkApplication *);
 	};
 
 	void gtk_file_chooser_set_pw3270_filters(GtkFileChooser *chooser);
