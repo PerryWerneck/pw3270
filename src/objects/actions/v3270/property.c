@@ -42,21 +42,49 @@
  #include <v3270.h>
  #include <lib3270/properties.h>
 
- static void v3270PropertyAction_class_init(v3270PropertyActionClass *klass);
- static void v3270PropertyAction_init(v3270PropertyAction *action);
- static GVariant * get_state(GAction *action, GtkWidget *terminal);
- static void change_widget(GAction *object, GtkWidget *from, GtkWidget *to);
+ //
+ // V3270 Property Action
+ //
+ #define V3270_TYPE_PROPERTY_ACTION				(v3270PropertyAction_get_type())
+ #define V3270_PROPERTY_ACTION(inst)			(G_TYPE_CHECK_INSTANCE_CAST ((inst), V3270_TYPE_PROPERTY_ACTION, v3270PropertyAction))
+ #define V3270_PROPERTY_ACTION_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), V3270_TYPE_PROPERTY_ACTION, v3270PropertyActionClass))
+ #define V3270_IS_PROPERTY_ACTION(inst)			(G_TYPE_CHECK_INSTANCE_TYPE ((inst), V3270_TYPE_PROPERTY_ACTION))
+ #define V3270_IS_PROPERTY_ACTION_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), V3270_TYPE_PROPERTY_ACTION))
+ #define V3270_PROPERTY_ACTION_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), V3270_TYPE_PROPERTY_ACTION, v3270PropertyActionClass))
 
- G_DEFINE_TYPE(v3270PropertyAction, v3270PropertyAction, PW3270_TYPE_SIMPLE_ACTION);
+ typedef struct _v3270PropertyAction {
+
+	V3270SimpleAction parent;
+
+	GParamSpec *pspec;
+
+ } v3270PropertyAction;
+
+ typedef struct _v3270PropertyActionClass {
+
+	V3270SimpleActionClass parent_class;
+
+ } v3270PropertyActionClass;
+
+// static void v3270PropertyAction_class_init(v3270PropertyActionClass *klass);
+// static void v3270PropertyAction_init(v3270PropertyAction *action);
+
+ static GVariant				* get_state(GAction *action, GtkWidget *terminal);
+ static const GVariantType      * get_state_type(GAction *object);
+ static const GVariantType      * get_parameter_type(GAction *object);
+
+ static void					  change_widget(GAction *object, GtkWidget *from, GtkWidget *to);
+
+ G_DEFINE_TYPE(v3270PropertyAction, v3270PropertyAction, V3270_TYPE_SIMPLE_ACTION);
 
  void v3270PropertyAction_class_init(v3270PropertyActionClass *klass) {
 	klass->parent_class.parent_class.change_widget = change_widget;
+	klass->parent_class.parent_class.get_parameter_type = get_parameter_type;
+	klass->parent_class.parent_class.get_state = get_state;
+	klass->parent_class.parent_class.get_state_type = get_state_type;
  }
 
- static void v3270PropertyAction_init(v3270PropertyAction *action) {
-
- 	action->parent.parent.get_state_property = get_state;
-
+ static void v3270PropertyAction_init(v3270PropertyAction G_GNUC_UNUSED(*action)) {
  }
 
  GVariant * get_state(GAction *object, GtkWidget *terminal) {
@@ -207,24 +235,46 @@
 
  	v3270PropertyAction * action = (v3270PropertyAction *) g_object_new(V3270_TYPE_PROPERTY_ACTION, NULL);
 
-	pw3270_simple_action_set_lib3270_property(PW3270_SIMPLE_ACTION(action), lib3270_property_get_by_name(pspec->name));
+ 	action->parent.name = g_param_spec_get_name(pspec);
 
- 	action->parent.parent.name = g_param_spec_get_name(pspec);
-	action->parent.tooltip = g_param_spec_get_blurb(pspec);
-
-	if(pspec->value_type == G_TYPE_BOOLEAN) {
-		action->parent.parent.types.state = G_VARIANT_TYPE_BOOLEAN;
-	} else {
-		action->parent.parent.types.state = G_VARIANT_TYPE_STRING;
-		action->parent.parent.types.parameter = G_VARIANT_TYPE_STRING;
+	const LIB3270_PROPERTY * lProperty = lib3270_property_get_by_name(pspec->name);
+	if(lProperty) {
+		action->parent.label	= lib3270_property_get_label(lProperty);
+		action->parent.tooltip 	= lib3270_property_get_summary(lProperty);
+//		action->group.id		= lProperty->group;
 	}
+
+ 	if(!action->parent.tooltip)
+		action->parent.tooltip = g_param_spec_get_blurb(pspec);
 
 	action->parent.parent.activate			= activate;
  	action->pspec							= pspec;
 
- 	pw3270_action_set_terminal_widget(G_ACTION(action), widget);
+ 	v3270_action_set_terminal_widget(G_ACTION(action), widget);
 
 	return G_ACTION(action);
+ }
+
+ const GVariantType * get_state_type(GAction *object) {
+
+	v3270PropertyAction * action = V3270_PROPERTY_ACTION(object);
+
+	if(action->pspec->value_type == G_TYPE_BOOLEAN)
+		return G_VARIANT_TYPE_BOOLEAN;
+
+	return G_VARIANT_TYPE_STRING;
+
+ }
+
+ const GVariantType * get_parameter_type(GAction *object) {
+
+	v3270PropertyAction * action = V3270_PROPERTY_ACTION(object);
+
+	if(action->pspec->value_type == G_TYPE_BOOLEAN)
+		return G_VARIANT_TYPE_BOOLEAN;
+
+	return G_VARIANT_TYPE_STRING;
+
  }
 
  void change_widget(GAction *object, GtkWidget *from, GtkWidget *to) {
@@ -248,7 +298,7 @@
 
 	}
 
-	PW3270_ACTION_CLASS(v3270PropertyAction_parent_class)->change_widget(object,from,to);
+	V3270_ACTION_CLASS(v3270PropertyAction_parent_class)->change_widget(object,from,to);
 
 	if(to) {
 		g_signal_connect(G_OBJECT(to),signal_name,G_CALLBACK(on_notify),action);
