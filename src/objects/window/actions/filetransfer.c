@@ -36,14 +36,14 @@
 
  GAction * pw3270_file_transfer_action_new(void) {
 
-	pw3270SimpleAction * action = pw3270_simple_action_new();
+	V3270SimpleAction * action = v3270_simple_action_new();
 
 	action->parent.activate = activate;
 	action->group.id = LIB3270_ACTION_GROUP_ONLINE;
-	action->parent.name = "file.transfer";
+	action->name = "file.transfer";
 	action->icon_name = "drive-harddisk";
-	action->label =  N_("Send/Receive");
-	action->tooltip = N_("Send/Receive files");
+	action->label =  _("Send/Receive");
+	action->tooltip = _("Send/Receive files");
 
 	return G_ACTION(action);
 

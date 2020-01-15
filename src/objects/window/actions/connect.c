@@ -47,7 +47,7 @@
 
 	pw3270SimpleAction * action = pw3270_simple_action_new_from_lib3270(lib3270_action_get_by_name("reconnect"),"connect");
 	action->parent.activate = activate;
-	action->label = N_("Connect");
+	action->label = _("Connect");
 	action->tooltip = N_("Connect to host");
 
 	return G_ACTION(action);

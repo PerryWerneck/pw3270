@@ -52,16 +52,15 @@
 
  GAction * pw3270_action_window_close_new(void) {
 
-	pw3270SimpleAction * action = pw3270_simple_action_new();
+	V3270SimpleAction * action = v3270_simple_action_new();
 
 	action->parent.activate = activate;
-	action->parent.name = "close";
+	action->name = "close";
 	action->icon_name = "window-close";
-	action->label =  N_("Close window");
-	action->tooltip = N_("Close the window");
+	action->label =  _("Close window");
+	action->tooltip = _("Close the window");
 
 	return G_ACTION(action);
-
 
  }
 
