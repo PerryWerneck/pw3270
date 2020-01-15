@@ -44,6 +44,7 @@
 
 /*---[ Implement ]----------------------------------------------------------------------------------*/
 
+#ifdef G_OS_UNIX
 static gboolean	quit_signal(GtkApplication *app) {
 
 	debug("%s",__FUNCTION__);
@@ -65,6 +66,7 @@ static gboolean	quit_signal(GtkApplication *app) {
 	g_application_quit(G_APPLICATION(app));
 	return FALSE;
 }
+#endif // G_OS_UNIX
 
 int main (int argc, char **argv) {
 

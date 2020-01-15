@@ -62,6 +62,7 @@ MSGCAT=@MSGCAT@
 WINDRES=@WINDRES@
 AR=@AR@
 VALGRIND=@VALGRIND@
+CONVERT=@CONVERT@
 
 #---[ Paths ]----------------------------------------------------------------------------
 
@@ -191,11 +192,11 @@ $(POTDIR)/$(PACKAGE_NAME)/%.pot: \
 		$<
 	@touch $@
 
-$(POTDIR)/$(PACKAGE_NAME)/src/%.pot: \
+$(POTDIR)/$(PACKAGE_NAME)/%.pot: \
 	%.rc
 
 	@echo $< ...
-	@$(MKDIR) $(dir $@)
+	@$(MKDIR) $(@D)
 	@touch $@
 
 
@@ -216,13 +217,29 @@ install-%: \
 
 	@$(MAKE) -C `dirname $<` DESTDIR=$(DESTDIR) install
 
+%.ico: \
+	branding/%.svg
+
+	@echo $@ ...
+	@$(MKDIR) $(@D)
+	@$(CONVERT) \
+		-density 384 \
+		-background transparent \
+		$< \
+		-define icon:auto-resize \
+		-colors 256 \
+		$@
+
+
 #---[ Release Targets ]------------------------------------------------------------------
 
 all: \
+	@PACKAGE_TARNAME@.ico \
 	$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@ \
 	locale/$(PACKAGE_NAME).pot
 
 Release: \
+	@PACKAGE_TARNAME@.ico \
 	$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@
 
 $(BINRLS)/$(PACKAGE_NAME)@EXEEXT@: \
@@ -276,6 +293,7 @@ locale/$(PACKAGE_NAME).pot: \
 #---[ Debug Targets ]--------------------------------------------------------------------
 
 Debug: \
+	@PACKAGE_TARNAME@.ico \
 	$(BINDBG)/$(PACKAGE_NAME)@EXEEXT@
 
 $(BINDBG)/$(PACKAGE_NAME)@EXEEXT@: \
@@ -323,6 +341,7 @@ clean: \
 	@rm -fr $(BASEDIR)/.tmp/$(PACKAGE_NAME)
 	@rm -fr $(POTDIR)/$(PACKAGE_NAME)
 	@rm -fr src/include/marshal
+	@rm -f @PACKAGE_TARNAME@.ico
 
 cleanDebug:
 

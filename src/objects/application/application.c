@@ -226,7 +226,6 @@
 	// Get plugins.
 	{
 #ifdef _WIN32
-        UINT errorMode;
         lib3270_autoptr(char) path = lib3270_build_data_filename("plugins",NULL);
 #else
         const gchar * path = G_STRINGIFY(LIBDIR) G_DIR_SEPARATOR_S G_STRINGIFY(PRODUCT_NAME) "-plugins";
@@ -291,7 +290,10 @@
  	pw3270Application * application = PW3270_APPLICATION(object);
 
  	if(application->plugins) {
+ 		#pragma GCC diagnostic push
+		#pragma GCC diagnostic ignored "-Wcast-function-type"
 		g_slist_free_full(application->plugins,(GDestroyNotify) g_module_close);
+ 		#pragma GCC diagnostic pop
 		application->plugins = NULL;
  	}
 
