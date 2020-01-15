@@ -100,9 +100,6 @@
 	/// @brief New generic action.
 	GAction * pw3270_action_new();
 
-	/// @brief New action from LIB3270's control data.
-	GAction * g_action_new_from_lib3270(const LIB3270_ACTION * definition);
-
 	/// @brief Get action name.
 	const gchar			* pw3270_action_get_name(GAction *action);
 
@@ -179,57 +176,6 @@
 
 	/// @brief Update simple action from LIB3270's property description.
 	void pw3270_simple_action_set_lib3270_property(pw3270SimpleAction *action, const LIB3270_PROPERTY * property);
-
-	/*
-	//
-	// Dialog action
-	//
-	#define PW3270_TYPE_DIALOG_ACTION				(pw3270DialogAction_get_type())
-	#define PW3270_DIALOG_ACTION(inst)				(G_TYPE_CHECK_INSTANCE_CAST ((inst), PW3270_TYPE_DIALOG_ACTION, pw3270DialogAction))
-	#define PW3270_DIALOG_ACTION_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), PW3270_TYPE_DIALOG_ACTION, pw3270DialogActionClass))
-	#define PW3270_IS_DIALOG_ACTION(inst)			(G_TYPE_CHECK_INSTANCE_TYPE ((inst), PW3270_TYPE_DIALOG_ACTION))
-	#define PW3270_IS_DIALOG_ACTION_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), PW3270_TYPE_DIALOG_ACTION))
-	#define PW3270_DIALOG_ACTION_GET_CLASS(obj)		(G_TYPE_INSTANCE_GET_CLASS ((obj), PW3270_TYPE_DIALOG_ACTION, pw3270DialogActionClass))
-
-	typedef struct _pw3270DialogAction  pw3270DialogAction;
-	typedef struct _pw3270DialogActionClass pw3270DialogActionClass;
-
-	pw3270SimpleAction * pw3270_dialog_action_new(GtkWidget * (*factory)(pw3270SimpleAction *action, GtkWidget *));
-	*/
-
-	//
-	// V3270 Property Action
-	//
-	GAction * v3270_property_action_new(GtkWidget *widget, const gchar *property_name);
-
-	//
-	// V3270 action who can be enable based on property
-	//
-	#define V3270_TYPE_CONDITIONAL_ACTION				(v3270ConditionalAction_get_type())
-	#define V3270_CONDITIONAL_ACTION(inst)				(G_TYPE_CHECK_INSTANCE_CAST ((inst), V3270_TYPE_CONDITIONAL_ACTION, v3270ConditionalAction))
-	#define V3270_CONDITIONAL_ACTION_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), V3270_TYPE_CONDITIONAL_ACTION, v3270ConditionalActionClass))
-	#define V3270_IS_CONDITIONAL_ACTION(inst)			(G_TYPE_CHECK_INSTANCE_TYPE ((inst), V3270_TYPE_CONDITIONAL_ACTION))
-	#define V3270_IS_CONDITIONAL_ACTION_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), V3270_TYPE_CONDITIONAL_ACTION))
-	#define V3270_CONDITIONAL_ACTION_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), V3270_TYPE_CONDITIONAL_ACTION, v3270ConditionalActionClass))
-
-	typedef struct _v3270ConditionalAction {
-
-		pw3270SimpleAction parent;
-
-		GParamSpec *pspec;
-
-	} v3270ConditionalAction;
-
-	typedef struct _v3270CopyActionClass {
-
-		pw3270SimpleActionClass parent_class;
-
-	} v3270ConditionalActionClass;
-
-	GType v3270ConditionalAction_get_type(void) G_GNUC_CONST;
-
-	GAction * v3270_conditional_action_new(GtkWidget *widget, const gchar *property_name);
-	GAction * v3270_action_new(const V3270_ACTION *action_data);
 
 	//
 	// Action view

@@ -436,7 +436,7 @@
 
 	for(ix = 0; ix < G_N_ELEMENTS(properties); ix++) {
 
-		GAction * action = v3270_property_action_new(terminal,properties[ix]);
+		GAction * action = G_ACTION(v3270_property_action_new(terminal,properties[ix]));
 
 		if(!g_action_get_name(action)) {
 			g_warning("Window property action %s is unnamed",properties[ix]);
