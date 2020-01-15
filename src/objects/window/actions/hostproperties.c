@@ -33,13 +33,13 @@
  #include <v3270/settings.h>
  #include <v3270/dialogs.h>
 
- static GtkWidget * factory(pw3270SimpleAction *action, GtkWidget *terminal);
+ static GtkWidget * factory(V3270SimpleAction *action, GtkWidget *terminal);
 
  GAction * pw3270_action_host_properties_new(void) {
 
-	pw3270SimpleAction * action = pw3270_dialog_action_new(factory);
+	V3270SimpleAction * action = v3270_dialog_action_new(factory);
 
-	action->parent.name = "host.properties";
+	action->name = "host.properties";
 	action->group.id = LIB3270_ACTION_GROUP_OFFLINE;
 	action->icon_name = "network-server";
 	action->label = N_("Host properties");
@@ -47,7 +47,7 @@
 	return G_ACTION(action);
  }
 
- GtkWidget * factory(pw3270SimpleAction G_GNUC_UNUSED(*action), GtkWidget *terminal) {
+ GtkWidget * factory(V3270SimpleAction G_GNUC_UNUSED(*action), GtkWidget *terminal) {
 
  	GtkWidget 		* dialog = v3270_settings_dialog_new();
  	V3270Settings	* settings = GTK_V3270_SETTINGS(v3270_host_settings_new());
@@ -62,9 +62,9 @@
 
 	v3270_settings_dialog_set_terminal_widget(dialog, terminal);
 
-	g_signal_connect(dialog,"close",G_CALLBACK(gtk_widget_destroy),NULL);
 	g_signal_connect(dialog,"response",G_CALLBACK(v3270_setttings_dialog_response),settings);
 
+	gtk_widget_show_all(dialog);
 	return dialog;
 
  }

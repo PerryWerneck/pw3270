@@ -291,7 +291,9 @@
 
  	if(application->plugins) {
  		#pragma GCC diagnostic push
+#ifdef _WIN32
 		#pragma GCC diagnostic ignored "-Wcast-function-type"
+#endif // _WIN32
 		g_slist_free_full(application->plugins,(GDestroyNotify) g_module_close);
  		#pragma GCC diagnostic pop
 		application->plugins = NULL;

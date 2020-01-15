@@ -180,6 +180,7 @@
 	/// @brief Update simple action from LIB3270's property description.
 	void pw3270_simple_action_set_lib3270_property(pw3270SimpleAction *action, const LIB3270_PROPERTY * property);
 
+	/*
 	//
 	// Dialog action
 	//
@@ -194,6 +195,7 @@
 	typedef struct _pw3270DialogActionClass pw3270DialogActionClass;
 
 	pw3270SimpleAction * pw3270_dialog_action_new(GtkWidget * (*factory)(pw3270SimpleAction *action, GtkWidget *));
+	*/
 
 	//
 	// V3270 Property Action

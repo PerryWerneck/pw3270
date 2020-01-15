@@ -34,13 +34,13 @@
  #include <v3270/dialogs.h>
  #include <v3270/colorscheme.h>
 
- static GtkWidget * factory(pw3270SimpleAction *action, GtkWidget *terminal);
+ static GtkWidget * factory(V3270SimpleAction *action, GtkWidget *terminal);
 
  GAction * pw3270_set_color_action_new(void) {
 
-	pw3270SimpleAction * action = pw3270_dialog_action_new(factory);
+	V3270SimpleAction * action = v3270_dialog_action_new(factory);
 
-	action->parent.name = "set.colors";
+	action->name = "set.colors";
 	action->icon_name = "gtk-select-color";
 	action->label = _("Colors");
 	action->tooltip = _("Change terminal colors");
@@ -49,9 +49,10 @@
 
  }
 
- GtkWidget * factory(pw3270SimpleAction G_GNUC_UNUSED(*action), GtkWidget *terminal) {
+ GtkWidget * factory(V3270SimpleAction G_GNUC_UNUSED(*action), GtkWidget *terminal) {
 
-	return v3270_settings_get_edit_dialog(v3270_color_settings_new(),terminal,FALSE);
-
+	GtkWidget *dialog = v3270_settings_get_edit_dialog(v3270_color_settings_new(),terminal,FALSE);
+	gtk_widget_show_all(dialog);
+	return dialog;
  }
 

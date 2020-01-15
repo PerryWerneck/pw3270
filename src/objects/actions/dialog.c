@@ -32,6 +32,7 @@
   *
   */
 
+  /*
  #include "private.h"
  #include <v3270.h>
  #include <v3270/settings.h>
@@ -122,3 +123,4 @@
 
  }
 
+*/

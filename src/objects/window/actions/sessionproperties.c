@@ -34,22 +34,20 @@
  #include <v3270/dialogs.h>
  #include <v3270/colorscheme.h>
 
- static GtkWidget * factory(pw3270SimpleAction *action, GtkWidget *terminal);
+ static GtkWidget * factory(V3270SimpleAction *action, GtkWidget *terminal);
 
  GAction * pw3270_action_session_properties_new(void) {
 
-	pw3270SimpleAction * action = pw3270_dialog_action_new(factory);
+	V3270SimpleAction * action = v3270_dialog_action_new(factory);
 
-	action->parent.name = "session.properties";
+	action->name = "session.properties";
 	action->icon_name = "preferences-other";
 	action->label = _("Session properties");
 
 	return G_ACTION(action);
-
-
  }
 
- GtkWidget * factory(pw3270SimpleAction *action, GtkWidget *terminal) {
+ GtkWidget * factory(V3270SimpleAction *action, GtkWidget *terminal) {
 
  	size_t ix;
 
@@ -69,12 +67,6 @@
 		gtk_container_add(GTK_CONTAINER(dialog), elements[ix]);
 	}
 
-	/*
- 	gtk_container_add(GTK_CONTAINER(dialog), v3270_host_select_new());
-	gtk_container_add(GTK_CONTAINER(dialog), v3270_color_selection_new());
-	gtk_container_add(GTK_CONTAINER(dialog), v3270_font_chooser_widget_new());
-	*/
-
  	// Setup dialog box
 	gtk_window_set_transient_for(GTK_WINDOW(dialog),GTK_WINDOW(gtk_widget_get_toplevel(terminal)));
 	gtk_window_set_modal(GTK_WINDOW(dialog),TRUE);
@@ -84,6 +76,7 @@
 	g_signal_connect(dialog,"close",G_CALLBACK(gtk_widget_destroy),NULL);
 	g_signal_connect(dialog,"response",G_CALLBACK(v3270_setttings_dialog_response),terminal);
 
+	gtk_widget_show_all(dialog);
 	return dialog;
 
  }
