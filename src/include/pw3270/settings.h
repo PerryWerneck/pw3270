@@ -48,6 +48,8 @@
  #define GTK_IS_PW3270_SETTINGS_CLASS(klass)		(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PW3270_SETTINGS))
  #define GTK_PW3270_SETTINGS_GET_CLASS(obj)			(G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_PW3270_SETTINGS, PW3270SettingsClass))
 
+ GType PW3270Settings_get_type(void);
+
  typedef struct _PW3270SettingsPrivate PW3270SettingsPrivate;
 
  typedef struct _PW3270Settings {

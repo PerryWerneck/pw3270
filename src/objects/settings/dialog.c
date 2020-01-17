@@ -46,7 +46,7 @@
 
  static void add(GtkContainer *container, GtkWidget *widget);
  static void page_changed(GtkNotebook *notebook, GtkWidget *child, guint page_num, PW3270SettingsDialog *dialog);
- static void switch_page(GtkNotebook *notebook, GtkWidget *settings, guint page_num, PW3270SettingsDialog *dialog);
+ static void switch_page(GtkNotebook *notebook, PW3270Settings *page, guint page_num, PW3270SettingsDialog *dialog);
  static void dialog_close(GtkDialog *dialog);
  static void response(GtkDialog *dialog, gint response_id);
 
@@ -120,9 +120,44 @@ void dialog_close(GtkDialog *dialog) {
 	gtk_widget_destroy(GTK_WIDGET(dialog));
 }
 
+static void apply(GtkWidget *widget, GtkWidget G_GNUC_UNUSED(*dialog)) {
+
+	if(GTK_IS_PW3270_SETTINGS(widget)) {
+		GTK_PW3270_SETTINGS(widget)->apply(widget,GTK_PW3270_SETTINGS(widget)->settings);
+	}
+
+}
+
+static void revert(GtkWidget *widget, GtkWidget G_GNUC_UNUSED(*dialog)) {
+
+	if(GTK_IS_PW3270_SETTINGS(widget)) {
+		GTK_PW3270_SETTINGS(widget)->revert(widget,GTK_PW3270_SETTINGS(widget)->settings);
+	}
+
+}
+
 void response(GtkDialog *dialog, gint response_id) {
 
 	debug("%s(%d)",__FUNCTION__,response_id);
+
+	switch(response_id) {
+	case GTK_RESPONSE_APPLY:
+		gtk_container_foreach(
+			GTK_CONTAINER(GTK_PW3270_SETTINGS_DIALOG(dialog)->tabs),
+			(GtkCallback) apply,
+			dialog
+		);
+		break;
+
+	case GTK_RESPONSE_CANCEL:
+		gtk_container_foreach(
+			GTK_CONTAINER(GTK_PW3270_SETTINGS_DIALOG(dialog)->tabs),
+			(GtkCallback) revert,
+			dialog
+		);
+		break;
+
+	}
 
 	gtk_widget_destroy(GTK_WIDGET(dialog));
 }
@@ -130,6 +165,15 @@ void response(GtkDialog *dialog, gint response_id) {
 void add(GtkContainer *container, GtkWidget *widget) {
 
 	GtkWidget * label = NULL;
+
+	// https://developer.gnome.org/hig/stable/visual-layout.html.en
+	gtk_container_set_border_width(GTK_CONTAINER(widget),18);
+
+	if(GTK_IS_PW3270_SETTINGS(widget)) {
+		PW3270Settings * settings = GTK_PW3270_SETTINGS(widget);
+		label = gtk_label_new(settings->label);
+		settings->load(widget,settings->settings);
+	}
 
 	gtk_notebook_append_page(
 		GTK_PW3270_SETTINGS_DIALOG(container)->tabs,
@@ -143,18 +187,13 @@ void page_changed(GtkNotebook *notebook, GtkWidget G_GNUC_UNUSED(*child), guint 
  	gtk_notebook_set_show_tabs(notebook,gtk_notebook_get_n_pages(notebook) > 1);
 }
 
-void switch_page(GtkNotebook G_GNUC_UNUSED(*notebook), GtkWidget *settings, guint G_GNUC_UNUSED(page_num), PW3270SettingsDialog *dialog) {
+void switch_page(GtkNotebook G_GNUC_UNUSED(*notebook), PW3270Settings *page, guint G_GNUC_UNUSED(page_num), PW3270SettingsDialog *dialog) {
 
-	/*
-	debug("title: %s",settings->title);
-	debug("label: %s",settings->label);
+	GtkWidget * header_bar = gtk_dialog_get_header_bar(GTK_DIALOG(dialog));
 
-	if(dialog->has_subtitle) {
-		GtkWidget * header_bar = gtk_dialog_get_header_bar(GTK_DIALOG(dialog));
-		if(header_bar) {
-			gtk_header_bar_set_subtitle(GTK_HEADER_BAR(header_bar),settings->title);
-		}
+	if(header_bar) {
+		gtk_header_bar_set_subtitle(GTK_HEADER_BAR(header_bar),page->title);
 	}
-	*/
+
 }
 
