@@ -34,10 +34,13 @@
  #include <pw3270/settings.h>
  #include <pw3270/toolbar.h>
 
- static GtkWidget * factory(PW3270Action G_GNUC_UNUSED(*action), GtkApplication G_GNUC_UNUSED(*application)) {
+
+//	gtk_window_set_title(GTK_WINDOW(dialog),action->label);
+
+ static GtkWidget * factory(PW3270Action * action, GtkApplication G_GNUC_UNUSED(*application)) {
 
 	size_t ix;
-	GtkWidget * dialog = pw3270_settings_dialog_new();
+	GtkWidget * dialog = pw3270_settings_dialog_new(G_ACTION(action));
 
 	GtkWidget * pages[] = {
 		pw3270_toolbar_settings_new()

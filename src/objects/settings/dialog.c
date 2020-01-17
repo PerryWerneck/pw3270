@@ -29,6 +29,7 @@
 
  #include <pw3270.h>
  #include <pw3270/settings.h>
+ #include <pw3270/actions.h>
  #include <lib3270.h>
  #include <lib3270/log.h>
 
@@ -93,7 +94,7 @@ static void PW3270SettingsDialog_init(PW3270SettingsDialog *dialog)
 
 }
 
-GtkWidget * pw3270_settings_dialog_new() {
+GtkWidget * pw3270_settings_dialog_new(GAction *action) {
 #if GTK_CHECK_VERSION(3,12,0)
 
 	gboolean use_header;
@@ -111,6 +112,14 @@ GtkWidget * pw3270_settings_dialog_new() {
 	GtkWidget * dialog = GTK_WIDGET(g_object_new(GTK_TYPE_PW3270_SETTINGS_DIALOG, NULL));
 
 #endif	// GTK 3.12
+
+	if(action) {
+
+        if(PW3270_IS_ACTION(action)) {
+			gtk_window_set_title(GTK_WINDOW(dialog),PW3270_ACTION(action)->label);
+        }
+
+	}
 
  	return dialog;
 
@@ -187,13 +196,22 @@ void page_changed(GtkNotebook *notebook, GtkWidget G_GNUC_UNUSED(*child), guint 
  	gtk_notebook_set_show_tabs(notebook,gtk_notebook_get_n_pages(notebook) > 1);
 }
 
-void switch_page(GtkNotebook G_GNUC_UNUSED(*notebook), PW3270Settings *page, guint G_GNUC_UNUSED(page_num), PW3270SettingsDialog *dialog) {
+void switch_page(GtkNotebook *notebook, PW3270Settings *page, guint G_GNUC_UNUSED(page_num), PW3270SettingsDialog *dialog) {
 
-	GtkWidget * header_bar = gtk_dialog_get_header_bar(GTK_DIALOG(dialog));
+	if(gtk_notebook_get_n_pages(notebook) > 1) {
 
-	if(header_bar) {
-		gtk_header_bar_set_subtitle(GTK_HEADER_BAR(header_bar),page->title);
+		GtkWidget * header_bar = gtk_dialog_get_header_bar(GTK_DIALOG(dialog));
+
+		if(header_bar) {
+			gtk_header_bar_set_subtitle(GTK_HEADER_BAR(header_bar),page->title);
+		}
+
+	} else if(page->title) {
+
+		gtk_window_set_title(GTK_WINDOW(dialog),page->title);
+
 	}
+
 
 }
 
