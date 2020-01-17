@@ -321,16 +321,15 @@
 
  void startup(GApplication *application) {
 
+ 	size_t ix;
+
 	G_APPLICATION_CLASS(pw3270Application_parent_class)->startup(application);
 
+	/*
 	//
 	// Setup application default actions.
 	//
 	static GActionEntry actions[] = {
-		{
-			.name = "about",
-			.activate = pw3270_application_about_activated,
-		},
 
 		{
 			.name = "preferences",
@@ -375,6 +374,15 @@
 		G_N_ELEMENTS(actions),
 		application
 	);
+	*/
+
+	GAction * actions[] = {
+		pw3270_about_action_new()
+	};
+
+	for(ix = 0; ix < G_N_ELEMENTS(actions); ix++) {
+		g_action_map_add_action(G_ACTION_MAP(application),actions[ix]);
+	}
 
 	//
 	// Setup application menus

@@ -28,9 +28,10 @@
  */
 
  #include "../private.h"
+ #include <pw3270/actions.h>
  #include <pw3270/application.h>
 
- void pw3270_application_about_activated(GSimpleAction G_GNUC_UNUSED(* action), GVariant G_GNUC_UNUSED(*parameter), gpointer application) {
+ static GtkWidget * factory(PW3270Action G_GNUC_UNUSED(*action), GtkApplication G_GNUC_UNUSED(*application)) {
 
  	static const gchar *authors[]	=
  	{
@@ -119,10 +120,22 @@
 	gtk_about_dialog_set_authors(dialog,authors);
 	gtk_about_dialog_set_translator_credits(dialog,_("translator-credits"));
 
-	g_signal_connect(dialog,"close",G_CALLBACK(gtk_widget_destroy),NULL);
+	gtk_window_set_modal(GTK_WINDOW(dialog),TRUE);
+
 	g_signal_connect(dialog,"response",G_CALLBACK(gtk_widget_destroy),NULL);
 	gtk_widget_show_all(GTK_WIDGET(dialog));
 
+	return GTK_WIDGET(dialog);
 
  }
 
+ GAction * pw3270_about_action_new() {
+
+ 	PW3270Action * action = pw3270_dialog_action_new(factory);
+
+ 	action->name = "about";
+ 	action->label = _("About pw3270");
+ 	action->icon_name = "help-about";
+
+	return G_ACTION(action);
+ }

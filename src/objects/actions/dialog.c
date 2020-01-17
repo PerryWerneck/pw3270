@@ -32,95 +32,100 @@
   *
   */
 
-  /*
  #include "private.h"
- #include <v3270.h>
- #include <v3270/settings.h>
+ #include <pw3270/actions.h>
 
- static void pw3270DialogAction_class_init(pw3270DialogActionClass *klass);
- static void pw3270DialogAction_init(pw3270DialogAction *action);
- static void activate(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkWidget *terminal);
+ typedef struct _PW3270DialogAction {
 
- struct _pw3270DialogAction {
-
-	pw3270SimpleAction parent;
+	PW3270Action parent;
 
 	GtkWidget * dialog;
-	GtkWidget * (*factory)(pw3270SimpleAction *, GtkWidget *);
+	GtkWidget * (*factory)(PW3270Action *, GtkApplication *);
 
- };
+ } PW3270DialogAction;
 
- struct _pw3270DialogActionClass {
+ typedef struct _PW3270DialogActionClass {
 
-	pw3270SimpleActionClass parent_class;
+	PW3270ActionClass parent_class;
 
- };
+ } PW3270DialogActionClass;
 
- G_DEFINE_TYPE(pw3270DialogAction, pw3270DialogAction, PW3270_TYPE_SIMPLE_ACTION);
+ #define PW3270_TYPE_DIALOG_ACTION				(PW3270DialogAction_get_type())
+ #define PW3270_DIALOG_ACTION(inst)				(G_TYPE_CHECK_INSTANCE_CAST ((inst), PW3270_TYPE_DIALOG_ACTION, PW3270DialogAction))
+ #define PW3270_DIALOG_ACTION_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), PW3270_TYPE_DIALOG_ACTION, PW3270DialogActionClass))
+ #define PW3270_IS_DIALOG_ACTION(inst)			(G_TYPE_CHECK_INSTANCE_TYPE ((inst), PW3270_TYPE_DIALOG_ACTION))
+ #define PW3270_IS_DIALOG_ACTION_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), PW3270_TYPE_DIALOG_ACTION))
+ #define PW3270_DIALOG_ACTION_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), PW3270_TYPE_DIALOG_ACTION, PW3270DialogActionClass))
 
- static gboolean get_enabled(GAction *action, GtkWidget *terminal) {
+ static void		  PW3270DialogAction_class_init(PW3270DialogActionClass *klass);
+ static void		  PW3270DialogAction_init(PW3270DialogAction *action);
+ static void		  activate(GAction *action, GVariant *parameter, GtkApplication *application);
+ static GtkWidget	* factory(PW3270Action *action, GtkApplication *application);
+ static gboolean	  get_enabled(GAction *action);
 
- 	if((PW3270_DIALOG_ACTION(action)->dialog)) {
+ G_DEFINE_TYPE(PW3270DialogAction, PW3270DialogAction, PW3270_TYPE_ACTION);
+
+ PW3270Action * pw3270_dialog_action_new(GtkWidget * (*factory)(PW3270Action *, GtkApplication *application)) {
+ 	 PW3270DialogAction *action = PW3270_DIALOG_ACTION(g_object_new(PW3270_TYPE_DIALOG_ACTION, NULL));
+ 	 action->parent.activate = activate;
+ 	 action->factory = factory;
+ 	 return PW3270_ACTION(action);
+ }
+
+ void PW3270DialogAction_class_init(PW3270DialogActionClass *klass) {
+ 	klass->parent_class.get_enabled = get_enabled;
+ }
+
+ void PW3270DialogAction_init(PW3270DialogAction *action) {
+ 	action->factory = factory;
+ }
+
+ GtkWidget * factory(PW3270Action *action, GtkApplication G_GNUC_UNUSED(*application)) {
+ 	g_warning("No widget factory for action \"%s\"",g_action_get_name(G_ACTION(action)));
+ 	return NULL;
+ }
+
+ gboolean get_enabled(GAction *action) {
+
+	if((PW3270_DIALOG_ACTION(action)->dialog)) {
 		return FALSE;
- 	}
+	}
 
- 	if(terminal) {
-		return lib3270_action_group_get_activatable(v3270_get_session(terminal),PW3270_SIMPLE_ACTION(action)->group.id);
- 	}
-
- 	return FALSE;
+	return PW3270_ACTION_CLASS(PW3270DialogAction_parent_class)->get_enabled(action);
 
  }
 
- static void pw3270DialogAction_class_init(pw3270DialogActionClass *klass) {
- 	klass->parent_class.parent_class.get_enabled = get_enabled;
- }
+static void on_destroy(GtkWidget *dialog, PW3270DialogAction *action) {
 
- static void pw3270DialogAction_init(pw3270DialogAction *action) {
-
- 	action->dialog = NULL;
-	action->parent.parent.activate = activate;
-
- }
-
- pw3270SimpleAction * pw3270_dialog_action_new(GtkWidget * (*factory)(pw3270SimpleAction *, GtkWidget *)) {
-
-  	pw3270DialogAction * action = (pw3270DialogAction *) g_object_new(PW3270_TYPE_DIALOG_ACTION, NULL);
-  	action->factory = factory;
-  	return PW3270_SIMPLE_ACTION(action);
-
- }
-
- static void on_destroy(GtkWidget *dialog, pw3270DialogAction *action) {
-
- 	if(action->dialog == dialog) {
+	if(action->dialog == dialog) {
 		action->dialog = NULL;
 		pw3270_action_notify_enabled(G_ACTION(action));
- 	}
-
- }
-
- void activate(GAction *object, GVariant G_GNUC_UNUSED(*parameter), GtkWidget *terminal) {
-
-	if(!GTK_IS_V3270(terminal))
-		return;
-
-	pw3270DialogAction * action = PW3270_DIALOG_ACTION(object);
-
-	if(action->dialog || !action->factory)
-		return;
-
-	action->dialog = action->factory((pw3270SimpleAction *) object, terminal);
-	pw3270_action_notify_enabled(G_ACTION(action));
-
-	if(action->dialog) {
-
-		g_signal_connect(action->dialog,"destroy",G_CALLBACK(on_destroy),action);
-		g_signal_connect(action->dialog,"close",G_CALLBACK(gtk_widget_destroy),NULL);
-		gtk_widget_show_all(GTK_WIDGET(action->dialog));
-
 	}
 
  }
 
-*/
+ void activate(GAction *object, GVariant G_GNUC_UNUSED(*parameter), GtkApplication *application) {
+
+	PW3270DialogAction * action = PW3270_DIALOG_ACTION(object);
+
+	if(action->dialog)
+		return;
+
+	action->dialog = action->factory(PW3270_ACTION(action), application);
+
+	if(action->dialog) {
+
+		GtkWindow * window = gtk_application_get_active_window(application);
+		if(window) {
+			gtk_window_set_attached_to(GTK_WINDOW(action->dialog), GTK_WIDGET(window));
+			gtk_window_set_transient_for(GTK_WINDOW(action->dialog),window);
+		}
+
+		pw3270_action_notify_enabled(G_ACTION(action));
+		g_signal_connect(action->dialog,"destroy",G_CALLBACK(on_destroy),action);
+		g_signal_connect(action->dialog,"close",G_CALLBACK(gtk_widget_destroy),NULL);
+		gtk_widget_show(GTK_WIDGET(action->dialog));
+
+	}
+
+ }

@@ -44,142 +44,46 @@
 
 	G_BEGIN_DECLS
 
-	/*
 	//
 	// Abstract action
 	//
-	#define PW3270_TYPE_ACTION				(pw3270Action_get_type())
-	#define PW3270_ACTION(inst)				(G_TYPE_CHECK_INSTANCE_CAST ((inst), PW3270_TYPE_ACTION, pw3270Action))
-	#define PW3270_ACTION_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), PW3270_TYPE_ACTION, pw3270ActionClass))
+	#define PW3270_TYPE_ACTION				(PW3270Action_get_type())
+	#define PW3270_ACTION(inst)				(G_TYPE_CHECK_INSTANCE_CAST ((inst), PW3270_TYPE_ACTION, PW3270Action))
+	#define PW3270_ACTION_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), PW3270_TYPE_ACTION, PW3270ActionClass))
 	#define PW3270_IS_ACTION(inst)			(G_TYPE_CHECK_INSTANCE_TYPE ((inst), PW3270_TYPE_ACTION))
 	#define PW3270_IS_ACTION_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), PW3270_TYPE_ACTION))
-	#define PW3270_ACTION_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), PW3270_TYPE_ACTION, pw3270ActionClass))
+	#define PW3270_ACTION_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), PW3270_TYPE_ACTION, PW3270ActionClass))
 
-	typedef struct _pw3270Action {
+	typedef struct _PW3270Action {
 
 		GObject parent;
 
-		const gchar			* name;			///> @brief Action name (const string).
-		GtkWidget			* terminal;		///> @brief The active terminal widget.
-
-		struct {
-			const GVariantType	* state;		///> @brief State type type.
-			const GVariantType	* parameter;	///> @brief Parameter type.
-		} types;
+		const gchar * name;
+		const gchar * icon_name;
+		const gchar	* label;
+		const gchar	* tooltip;
 
 		/// @brief Activation method.
-		void (*activate)(GAction *action, GVariant *parameter, GtkWidget *terminal);
+		void (*activate)(GAction *action, GVariant *parameter, GtkApplication *application);
 
-		/// @brief Get State method.
-		GVariant * (*get_state_property)(GAction *action, GtkWidget *terminal);
+	} PW3270Action;
 
-		/// @brief Get state hint.
-		GVariant * (*get_state_hint)(GAction *action, GtkWidget *terminal);
-
-	} pw3270Action;
-
-	typedef struct _pw3270ActionClass {
+	typedef struct _PW3270ActionClass {
 
 		GObjectClass parent_class;
+
+		gboolean (*get_enabled)(GAction *action);
 
 		struct {
 			GParamSpec * state;
 			GParamSpec * enabled;
 		} properties;
 
-		void (*change_widget)(GAction *action, GtkWidget *from, GtkWidget *to);
-		gboolean (*get_enabled)(GAction *action, GtkWidget *terminal);
+	} PW3270ActionClass;
 
-		const gchar * (*get_icon_name)(GAction *action);
-		const gchar	* (*get_label)(GAction *action);
-		const gchar	* (*get_tooltip)(GAction *action);
-
-	} pw3270ActionClass;
-
-	GType pw3270Action_get_type(void) G_GNUC_CONST;
-
-	/// @brief New generic action.
-	GAction * pw3270_action_new();
-
-	/// @brief Get action name.
-	const gchar			* pw3270_action_get_name(GAction *action);
-
-	/// @brief Set action name.
-	void pw3270_action_set_name(GAction *action, const gchar *name);
-
-	/// @brief Get the action icon name.
-	const gchar 		* pw3270_action_get_icon_name(GAction *action);
-
-	/// @brief Get the action image icon.
-	GtkImage			* pw3270_action_get_image(GAction *action, GtkIconSize icon_size);
-
-	/// @brief Get the action label.
-	const gchar			* pw3270_action_get_label(GAction *action);
-
-	/// @brief Get the action tooltip.
-	const gchar			* pw3270_action_get_tooltip(GAction *action);
-
-	/// @brief Create a button associated with the action.
-	//GtkWidget			* pw3270_action_button_new(GAction *action, const gchar *action_name);
-
-	/// @brief Associate action with the terminal widget.
-	void				  pw3270_action_set_terminal_widget(GAction *action, GtkWidget *terminal);
-
-	/// @brief Get lib3270 session handle.
-	H3270				* pw3270_action_get_session(GAction *action);
-	*/
-
-	/*
-	//
-	// "Simple" action
-	//
-	#define PW3270_TYPE_SIMPLE_ACTION				(pw3270SimpleAction_get_type())
-	#define PW3270_SIMPLE_ACTION(inst)				(G_TYPE_CHECK_INSTANCE_CAST ((inst), PW3270_TYPE_SIMPLE_ACTION, pw3270SimpleAction))
-	#define PW3270_SIMPLE_ACTION_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), PW3270_TYPE_SIMPLE_ACTION, pw3270SimpleActionClass))
-	#define PW3270_IS_SIMPLE_ACTION(inst)			(G_TYPE_CHECK_INSTANCE_TYPE ((inst), PW3270_TYPE_SIMPLE_ACTION))
-	#define PW3270_IS_SIMPLE_ACTION_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), PW3270_TYPE_SIMPLE_ACTION))
-	#define PW3270_SIMPLE_ACTION_GET_CLASS(obj)		(G_TYPE_INSTANCE_GET_CLASS ((obj), PW3270_TYPE_SIMPLE_ACTION, pw3270SimpleActionClass))
-
-	typedef struct _pw3270SimpleAction {
-
-		pw3270Action parent;
-
-		// Fixed data
-		const gchar * icon_name;
-		const gchar	* label;
-		const gchar	* tooltip;
-
-		// Lib3270 Action group
-		struct {
-			LIB3270_ACTION_GROUP id;
-			const void * listener;
-		} group;
-
-		/// @brief Activation method.
-		void (*activate)(GAction *action, GVariant *parameter, GtkWidget *terminal);
-
-	} pw3270SimpleAction;
-
-	typedef struct _pw3270SimpleActionClass {
-
-		pw3270ActionClass parent_class;
-
-	} pw3270SimpleActionClass;
-
-	GType pw3270SimpleAction_get_type(void) G_GNUC_CONST;
-
-	/// @brief Create an empty simple action.
-	pw3270SimpleAction * pw3270_simple_action_new();
-
-	/// @brief New simple action from LIB3270's control data.
-	pw3270SimpleAction * pw3270_simple_action_new_from_lib3270(const LIB3270_ACTION * definition, const gchar *name);
-
-	/// @brief New simple action from LIB3270's action name.
-	pw3270SimpleAction * pw3270_simple_action_new_from_name(const gchar *source_name, const gchar *name);
-
-	/// @brief Update simple action from LIB3270's property description.
-	void pw3270_simple_action_set_lib3270_property(pw3270SimpleAction *action, const LIB3270_PROPERTY * property);
-	*/
+	GType			  PW3270Action_get_type(void) G_GNUC_CONST;
+	PW3270Action	* pw3270action_new();
+	PW3270Action	* pw3270_dialog_action_new(GtkWidget * (*factory)(PW3270Action *action, GtkApplication *application));
 
 	//
 	// Action view
