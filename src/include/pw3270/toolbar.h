@@ -55,6 +55,7 @@
 	GType pw3270ToolBar_get_type(void) G_GNUC_CONST;
 
 	GtkWidget * pw3270_toolbar_new(void);
+	GtkWidget * pw3270_toolbar_settings_new(void);
 
 //	GtkWidget * pw3270_toolbar_insert_lib3270_action(GtkWidget *toolbar, const LIB3270_ACTION *action, gint pos);
 	GtkWidget * pw3270_toolbar_insert_action(GtkWidget *toolbar, const gchar *name, gint pos);

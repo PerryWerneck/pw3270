@@ -52,7 +52,8 @@
 	#define I_(string) g_intern_static_string (string)
 
 
-	void pw3270_load_placeholders(GtkBuilder * builder);
+	void		  pw3270_load_placeholders(GtkBuilder * builder);
+	GtkWidget	* pw3270_frame_new(GtkWidget * child, const gchar *title);
 
 	// Application settings widget
 	typedef struct _Pw3270SettingsPage Pw3270SettingsPage;
@@ -72,8 +73,6 @@
 
 	/// @brief Check if the terminal has a customized session file.
 	gboolean	  v3270_allow_custom_settings(GtkWidget *widget);
-
-	GtkWidget	* pw3270_settings_dialog_new(const gchar *title, GtkWindow *parent);
 
 	G_END_DECLS
 

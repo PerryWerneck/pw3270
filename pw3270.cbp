@@ -109,6 +109,12 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/objects/application/private.h" />
+		<Unit filename="src/objects/settings/dialog.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/objects/settings/widget.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/objects/toolbar/actions.c">
 			<Option compilerVar="CC" />
 		</Unit>

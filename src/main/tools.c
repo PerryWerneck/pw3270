@@ -110,6 +110,7 @@
 
  }
 
+ /*
  GtkWidget * pw3270_settings_dialog_new(const gchar *title, GtkWindow *parent) {
 
 	gboolean use_header;
@@ -139,5 +140,6 @@
  	return dialog;
 
  }
+ */
 
 

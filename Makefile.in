@@ -38,6 +38,7 @@ SOURCES= \
 	$(wildcard src/objects/window/actions/*.c) \
 	$(wildcard src/objects/terminal/*.c) \
 	$(wildcard src/objects/toolbar/*.c) \
+	$(wildcard src/objects/settings/*.c) \
 	$(wildcard src/main/*.c) \
 	$(wildcard src/main/@OSNAME@/*.c) \
 	$(wildcard src/main/@OSNAME@/*.rc)

@@ -116,15 +116,17 @@ static void on_destroy(GtkWidget *dialog, PW3270DialogAction *action) {
 	if(action->dialog) {
 
 		GtkWindow * window = gtk_application_get_active_window(application);
+		pw3270_action_notify_enabled(G_ACTION(action));
+
 		if(window) {
+			gtk_window_set_destroy_with_parent(GTK_WINDOW(action->dialog), TRUE);
+			gtk_window_set_modal(GTK_WINDOW(action->dialog), TRUE);
 			gtk_window_set_attached_to(GTK_WINDOW(action->dialog), GTK_WIDGET(window));
 			gtk_window_set_transient_for(GTK_WINDOW(action->dialog),window);
+			g_signal_connect(action->dialog,"destroy",G_CALLBACK(on_destroy),action);
+			g_signal_connect(action->dialog,"close",G_CALLBACK(gtk_widget_destroy),NULL);
+			gtk_widget_show(GTK_WIDGET(action->dialog));
 		}
-
-		pw3270_action_notify_enabled(G_ACTION(action));
-		g_signal_connect(action->dialog,"destroy",G_CALLBACK(on_destroy),action);
-		g_signal_connect(action->dialog,"close",G_CALLBACK(gtk_widget_destroy),NULL);
-		gtk_widget_show(GTK_WIDGET(action->dialog));
 
 	}
 

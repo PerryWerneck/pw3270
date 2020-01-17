@@ -240,6 +240,7 @@
 
  	debug("%s",__FUNCTION__);
 
+ 	/*
 	GtkWidget * dialog = pw3270_settings_dialog_new(
 								_("Rename session"),
 								GTK_WINDOW(gtk_widget_get_toplevel(terminal))
@@ -290,7 +291,7 @@
 	}
 
 	gtk_widget_destroy(dialog);
-
+	*/
 
  }
 

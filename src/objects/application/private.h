@@ -51,6 +51,7 @@
 
 	// Actions
     G_GNUC_INTERNAL GAction * pw3270_about_action_new();
+	G_GNUC_INTERNAL GAction * pw3270_preferences_action_new();
 
     G_GNUC_INTERNAL void pw3270_application_generic_activated(GSimpleAction * action, GVariant *parameter, gpointer application);
     G_GNUC_INTERNAL void pw3270_application_quit_activated(GSimpleAction * action, GVariant *parameter, gpointer application);

@@ -30,8 +30,40 @@
  #include "../private.h"
  #include <pw3270.h>
  #include <pw3270/application.h>
+ #include <pw3270/actions.h>
  #include <pw3270/settings.h>
+ #include <pw3270/toolbar.h>
 
+ static GtkWidget * factory(PW3270Action G_GNUC_UNUSED(*action), GtkApplication G_GNUC_UNUSED(*application)) {
+
+	size_t ix;
+	GtkWidget * dialog = pw3270_settings_dialog_new();
+
+	GtkWidget * pages[] = {
+		pw3270_toolbar_settings_new()
+	};
+
+	for(ix = 0; ix < G_N_ELEMENTS(pages); ix++) {
+		gtk_container_add(GTK_CONTAINER(dialog),pages[ix]);
+	}
+
+	gtk_widget_show_all(dialog);
+	return dialog;
+
+ }
+
+ GAction * pw3270_preferences_action_new() {
+
+ 	PW3270Action * action = pw3270_dialog_action_new(factory);
+
+ 	action->name = "preferences";
+ 	action->label = _("Application preferences");
+ 	action->icon_name = "preferences-system";
+
+	return G_ACTION(action);
+ }
+
+ /*
  typedef struct _Pw3270SettingsDialog {
  	GApplication	* application;
  	GSimpleAction	* action;
@@ -181,3 +213,4 @@
 
  }
 
+*/

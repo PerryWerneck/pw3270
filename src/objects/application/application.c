@@ -377,7 +377,8 @@
 	*/
 
 	GAction * actions[] = {
-		pw3270_about_action_new()
+		pw3270_about_action_new(),
+		pw3270_preferences_action_new()
 	};
 
 	for(ix = 0; ix < G_N_ELEMENTS(actions); ix++) {
