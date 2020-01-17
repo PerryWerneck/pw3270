@@ -113,7 +113,7 @@
 	PW3270Action * action = pw3270_dialog_action_new(open_window_factory);
 
  	action->name = "open.session.window";
-	action->label = _( "Open in window" );
+	action->label = _( "Open in new window" );
 	action->tooltip = _( "Open session in New window" );
 	action->icon_name = "window-new";
 
@@ -125,7 +125,7 @@
 	PW3270Action * action = pw3270_dialog_action_new(open_tab_factory);
 
  	action->name = "open.session.tab";
-	action->label = _( "Open in tab" );
+	action->label = _( "Open in new tab" );
 	action->tooltip = _( "Open session in New Tab" );
 	action->icon_name = "tab-new";
 

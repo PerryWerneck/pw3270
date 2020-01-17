@@ -235,7 +235,12 @@ install-%: \
 all: \
 	@PACKAGE_TARNAME@.ico \
 	$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@ \
+	locale
+
+locale: \
 	locale/$(PACKAGE_NAME).pot
+
+	@$(MAKE) -C locale all
 
 Release: \
 	@PACKAGE_TARNAME@.ico \

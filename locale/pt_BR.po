@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-14 17:12-0300\n"
-"PO-Revision-Date: 2020-01-14 17:29-0300\n"
+"POT-Creation-Date: 2020-01-17 17:15-0300\n"
+"PO-Revision-Date: 2020-01-17 17:19-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
 "Language: pt_BR\n"
@@ -19,20 +19,17 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Gtranslator 2.91.7\n"
 
-#: src/objects/application/actions/about.c:110
+#: src/objects/application/actions/about.c:111
 #, c-format
 msgid "3270 terminal emulator for GTK %d.%d"
 msgstr "Emulador 3270 para GTK+ %d.%d"
 
-#: src/objects/actions/abstract.c:132
-msgid "A image widget with the action icon"
-msgstr "A image widget with the action icon"
-
-#: ui/application.xml:39 ui/application.xml:525
+#: src/objects/application/actions/about.c:137 ui/application.xml:39
+#: ui/application.xml:525
 msgid "About PW3270"
 msgstr "Sobre o PW3270"
 
-#: src/objects/actions/abstract.c:115
+#: src/objects/actions/abstract.c:93
 msgid "Action Name"
 msgstr "Nome da ação"
 
@@ -40,7 +37,7 @@ msgstr "Nome da ação"
 msgid "Action Names"
 msgstr "Nome das ações"
 
-#: src/objects/toolbar/settings.c:185
+#: src/objects/toolbar/settings.c:107
 msgid "Actions"
 msgstr "Ações"
 
@@ -60,7 +57,7 @@ msgstr "Adicionar à cópia"
 msgid "Application"
 msgstr "Aplicação"
 
-#: src/objects/application/actions/preferences.c:132 ui/application.xml:84
+#: src/objects/application/actions/preferences.c:63 ui/application.xml:84
 msgid "Application preferences"
 msgstr "Preferências da aplicação"
 
@@ -68,7 +65,7 @@ msgstr "Preferências da aplicação"
 msgid "Auto-Reconnect"
 msgstr "Reconectar automaticamente"
 
-#: src/objects/toolbar/settings.c:193
+#: src/objects/toolbar/settings.c:113
 msgid "Available"
 msgstr "Disponível"
 
@@ -84,7 +81,7 @@ msgstr "Cursor piscante"
 msgid "Bold"
 msgstr "Negrito"
 
-#: src/objects/application/actions/about.c:118
+#: src/objects/application/actions/about.c:119
 msgid "Brazilian Public Software Portal"
 msgstr "Portal do Software Público Brasileiro"
 
@@ -97,7 +94,7 @@ msgstr "Não foi possível salvar arquivo \"%s\""
 msgid "Can't save session file"
 msgstr "Não foi possível salvar arquivo de sessão"
 
-#: src/objects/actions/save.c:65 src/objects/application/actions/open.c:50
+#: src/objects/actions/save.c:65 src/objects/application/actions/open.c:49
 msgid "Cancel"
 msgstr "_Cancelar"
 
@@ -114,6 +111,10 @@ msgstr "Limpar"
 msgid "Clipboard contents"
 msgstr "Conteúdo da área de transferência"
 
+#: src/objects/application/actions/window.c:65
+msgid "Close all windows and exit application"
+msgstr "Fecha todas as janelas e encerra a aplicação"
+
 #: src/objects/window/actions/close.c:61
 msgid "Close the window"
 msgstr "Fechar a janela"
@@ -127,7 +128,7 @@ msgstr "Fechar janela"
 msgid "Colors"
 msgstr "Cores"
 
-#: src/objects/window/actions/connect.c:50
+#: src/objects/window/actions/connect.c:59
 msgid "Connect"
 msgstr "Conectar"
 
@@ -135,7 +136,7 @@ msgstr "Conectar"
 msgid "Connect on startup"
 msgstr "Conectar ao iniciar"
 
-#: src/objects/window/actions/connect.c:51
+#: src/objects/window/actions/connect.c:60
 msgid "Connect to host"
 msgstr "Conectar ao servidor"
 
@@ -192,7 +193,7 @@ msgstr "Desconectado do servidor"
 msgid "Dynamic font spacing"
 msgstr "Espaçamento dinâmico"
 
-#: src/objects/actions/abstract.c:170
+#: src/objects/actions/abstract.c:140
 msgid "Enabled"
 msgstr "habilitado"
 
@@ -236,21 +237,17 @@ msgstr "Emulador 3270"
 msgid "Icon"
 msgstr "Ícone"
 
-#: src/objects/actions/abstract.c:123
+#: src/objects/actions/abstract.c:101
 msgid "Icon Name"
 msgstr "Nome do ícone"
 
-#: src/objects/toolbar/settings.c:42
+#: src/objects/toolbar/settings.c:49
 msgid "Icon Size"
 msgstr "Tamanho do ícone"
 
 #: src/objects/toolbar/toolbar.c:245
 msgid "Icon _size"
 msgstr "_Tamanho do ícone"
-
-#: src/objects/actions/abstract.c:131
-msgid "Icon pixbuf"
-msgstr "Imagem do ícone"
 
 #: src/objects/toolbar/toolbar.c:83
 msgid "Icons & text"
@@ -260,7 +257,7 @@ msgstr "Ícones e texto"
 msgid "Icons only"
 msgstr "Apenas ícones"
 
-#: src/objects/actions/abstract.c:171
+#: src/objects/actions/abstract.c:141
 msgid "If the action can be activated"
 msgstr "Se a ação pode ser ativada"
 
@@ -316,11 +313,23 @@ msgstr "Só Maiúsculas"
 msgid "Network keep alive"
 msgstr "Network keep alive"
 
-#: src/objects/actions/simple.c:96
-msgid "No label"
-msgstr "Sem etiqueta"
+#: src/objects/application/actions/window.c:84
+msgid "New tab"
+msgstr "Nova aba"
 
-#: src/objects/application/actions/open.c:49
+#: src/objects/application/actions/window.c:85
+msgid "New tab with default session"
+msgstr "Nova aba com a sessão padrão"
+
+#: src/objects/application/actions/window.c:104
+msgid "New window"
+msgstr "Nova janela"
+
+#: src/objects/application/actions/window.c:105
+msgid "New window with default session"
+msgstr "Nova janela com sessão padrão"
+
+#: src/objects/application/actions/open.c:48
 msgid "Open Session"
 msgstr "Abrir sessão"
 
@@ -332,20 +341,28 @@ msgstr "Abrir em nova aba"
 msgid "Open in New Window"
 msgstr "Abrir em nova janela"
 
-#: src/objects/application/actions/open.c:78
-msgid "Open session in new tab"
+#: src/objects/application/actions/open.c:128
+msgid "Open in new tab"
+msgstr "Abrir em nova aba"
+
+#: src/objects/application/actions/open.c:116
+msgid "Open in new window"
+msgstr "Abrir em nova janela"
+
+#: src/objects/application/actions/open.c:129
+msgid "Open session in New Tab"
 msgstr "Abrir sessão em nova aba"
 
-#: src/objects/application/actions/open.c:91
-msgid "Open session in new window"
+#: src/objects/application/actions/open.c:117
+msgid "Open session in New window"
 msgstr "Abrir sessão em nova janela"
 
-#: src/objects/toolbar/settings.c:286 ui/window.xml:218 ui/window.xml:354
+#: src/objects/toolbar/settings.c:206 ui/window.xml:218 ui/window.xml:354
 #: ui/window.xml:501 ui/application.xml:419
 msgid "Options"
 msgstr "Opções"
 
-#: src/objects/actions/abstract.c:154
+#: src/objects/actions/abstract.c:124
 msgid "Parameter Type"
 msgstr "Tipo de parâmetro"
 
@@ -381,13 +398,9 @@ msgstr "Imrpimir o conteúdo da tela"
 msgid "Print selected"
 msgstr "Imprimir seleção"
 
-#: ui/application.xml:89
+#: src/objects/application/actions/window.c:64 ui/application.xml:89
 msgid "Quit"
 msgstr "Sair"
-
-#: src/objects/window/page.c:244
-msgid "Rename session"
-msgstr "Renomear sessão"
 
 #: ui/window.xml:300 ui/application.xml:283
 msgid "Reselect"
@@ -437,7 +450,7 @@ msgstr "Selecionar tudo"
 msgid "Select by rectangles"
 msgstr "Seleção retangular"
 
-#: src/objects/toolbar/settings.c:192
+#: src/objects/toolbar/settings.c:112
 msgid "Selected"
 msgstr "Selecionado"
 
@@ -455,7 +468,7 @@ msgstr "Enviar/Receber"
 msgid "Send/Receive files"
 msgstr "Enviar/Receber arquivos"
 
-#: src/objects/toolbar/settings.c:87 src/objects/toolbar/settings.c:97
+#: src/objects/toolbar/settings.c:265 src/objects/toolbar/settings.c:275
 msgid "Separator"
 msgstr "Separador"
 
@@ -475,10 +488,6 @@ msgstr "Sessão em nova aba"
 msgid "Session in new window"
 msgstr "Sessão em nova janela"
 
-#: src/objects/window/page.c:257
-msgid "Session name"
-msgstr "Nome da sessão"
-
 #: src/objects/window/actions/sessionproperties.c:45 ui/window.xml:72
 #: ui/window.xml:468 ui/application.xml:138
 msgid "Session properties"
@@ -488,7 +497,7 @@ msgstr "Propriedades da sessão"
 msgid "Settings"
 msgstr "Configurações"
 
-#: src/objects/toolbar/settings.c:169
+#: src/objects/toolbar/settings.c:89
 msgid "Setup toolbar"
 msgstr "Configurar barra de ferramentas"
 
@@ -512,15 +521,15 @@ msgstr "Pequeno"
 msgid "Smart paste"
 msgstr "Colar inteligente"
 
-#: src/objects/actions/abstract.c:182
+#: src/objects/actions/abstract.c:152
 msgid "State"
 msgstr "Estado"
 
-#: src/objects/actions/abstract.c:161
+#: src/objects/actions/abstract.c:131
 msgid "State Type"
 msgstr "Tipo do estado"
 
-#: src/objects/toolbar/settings.c:47
+#: src/objects/toolbar/settings.c:54
 msgid "Style"
 msgstr "Estilo"
 
@@ -544,11 +553,11 @@ msgstr "Fonte do terminal"
 msgid "Text only"
 msgstr "Apenas texto"
 
-#: src/objects/actions/abstract.c:139
+#: src/objects/actions/abstract.c:109
 msgid "The action label"
 msgstr "A etiqueta da ação"
 
-#: src/objects/actions/abstract.c:147
+#: src/objects/actions/abstract.c:117
 msgid "The action tooltip"
 msgstr "A dica da ação"
 
@@ -556,7 +565,7 @@ msgstr "A dica da ação"
 msgid "The code of the User interface type"
 msgstr "Código identificando o tipo de interface do usuário"
 
-#: src/objects/actions/abstract.c:140
+#: src/objects/actions/abstract.c:110
 msgid "The label for the action"
 msgstr "A etiqueta da ação"
 
@@ -568,15 +577,15 @@ msgstr "O nome das ações na barra de título"
 msgid "The name of the actions in the toolbar"
 msgstr "O nome das ações na barra de ferramentas"
 
-#: src/objects/actions/abstract.c:124
+#: src/objects/actions/abstract.c:102
 msgid "The name of the icon associated with the action"
 msgstr "Nome do ícone associado com a ação"
 
-#: src/objects/actions/abstract.c:116
+#: src/objects/actions/abstract.c:94
 msgid "The name used to invoke the action"
 msgstr "O nome usado para ativar a ação"
 
-#: src/objects/actions/abstract.c:183
+#: src/objects/actions/abstract.c:153
 msgid "The state the action is in"
 msgstr "O estado em que a ação está"
 
@@ -588,19 +597,19 @@ msgstr "Tamanho dos ícones na barra de ferramentas"
 msgid "The toolbar style"
 msgstr "Estilo da barra de ferramentas"
 
-#: src/objects/actions/abstract.c:148
+#: src/objects/actions/abstract.c:118
 msgid "The tooltip for the action"
 msgstr "A dica da ação"
 
-#: src/objects/actions/abstract.c:155
+#: src/objects/actions/abstract.c:125
 msgid "The type of GVariant passed to activate()"
 msgstr "The type of GVariant passed to activate()"
 
-#: src/objects/actions/abstract.c:162
+#: src/objects/actions/abstract.c:132
 msgid "The type of the state kept by the action"
 msgstr "O tipo do estado mantido pela ação"
 
-#: src/objects/application/actions/about.c:45
+#: src/objects/application/actions/about.c:46
 msgid ""
 "This program is free software; you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -629,7 +638,7 @@ msgstr ""
 "programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple "
 "Place, Suite 330, Boston, MA, 02111-1307, USA"
 
-#: src/objects/toolbar/settings.c:168 ui/application.xml:330
+#: src/objects/toolbar/settings.c:88 ui/application.xml:330
 msgid "Toolbar"
 msgstr "Barra de ferramentas"
 
@@ -653,8 +662,8 @@ msgstr "Remover seleção"
 msgid "Use +/- for field navigation"
 msgstr "Usar teclas +/- para navegar por campos"
 
-#: src/objects/application/actions/about.c:100
-#: src/objects/application/actions/about.c:102
+#: src/objects/application/actions/about.c:101
+#: src/objects/application/actions/about.c:103
 #, c-format
 msgid "Version %s-%s"
 msgstr "Versão %s-%s"
@@ -667,15 +676,15 @@ msgstr "Exibir"
 msgid "Window with default session"
 msgstr "Janela com sessão padrão"
 
-#: src/main/tools.c:135
+#: src/objects/settings/dialog.c:79
 msgid "_Apply"
 msgstr "_Aplicar"
 
-#: src/main/tools.c:134
+#: src/objects/settings/dialog.c:78
 msgid "_Cancel"
 msgstr "_Cancelar"
 
-#: src/objects/window/page.c:350
+#: src/objects/window/page.c:351
 msgid "_Close session"
 msgstr "_Fechar sessão"
 
@@ -707,7 +716,7 @@ msgstr "_Nova"
 msgid "_Open"
 msgstr "_Abrir"
 
-#: src/objects/window/page.c:344
+#: src/objects/window/page.c:345
 msgid "_Rename session"
 msgstr "Renomear sessão"
 
@@ -715,7 +724,7 @@ msgstr "Renomear sessão"
 msgid "_View"
 msgstr "_Exibir"
 
-#: src/objects/application/actions/about.c:120
+#: src/objects/application/actions/about.c:121
 msgid "translator-credits"
 msgstr "translator-credits"
 
@@ -892,6 +901,9 @@ msgstr "translator-credits"
 #~ "A CA certificate is invalid. Either it is not a CA or its extensions are "
 #~ "not consistent with the supplied purpose."
 
+#~ msgid "A image widget with the action icon"
+#~ msgstr "A image widget with the action icon"
+
 #~ msgid "ATTN key, per RFC 2355.  Sends IP, regardless."
 #~ msgstr "ATTN"
 
@@ -903,6 +915,10 @@ msgstr "translator-credits"
 
 #~ msgid "Aborting..."
 #~ msgstr "Cancelando..."
+
+#, fuzzy
+#~ msgid "About pw3270"
+#~ msgstr "Sobre o PW3270"
 
 #~ msgid "About security"
 #~ msgstr "Sobre a segurança"
@@ -1805,6 +1821,9 @@ msgstr "translator-credits"
 #~ msgid "IDLE minutes for automatic disconnection"
 #~ msgstr "Minutos para desconexão automática"
 
+#~ msgid "Icon pixbuf"
+#~ msgstr "Imagem do ícone"
+
 #~ msgid "Identity not verified"
 #~ msgstr "Identidade não verificada"
 
@@ -2101,6 +2120,9 @@ msgstr "translator-credits"
 #~ msgid "No active transfer"
 #~ msgstr "Nenhuma transferência ativa"
 
+#~ msgid "No label"
+#~ msgstr "Sem etiqueta"
+
 #~ msgid ""
 #~ "No signatures could be verified because the chain contains only one "
 #~ "certificate and it is not self signed."
@@ -2152,6 +2174,13 @@ msgstr "translator-credits"
 #~ msgstr ""
 #~ "Permitida apenas uma opção dentre TRACKS, CYLINDERS, AVBLOCK: "
 #~ "Transferência cancelada"
+
+#~ msgid "Open in tab"
+#~ msgstr "Abrir em nova aba"
+
+#, fuzzy
+#~ msgid "Open in window"
+#~ msgstr "Abrir em nova janela"
 
 #~ msgid "Operation failed"
 #~ msgstr "Operação falhou"
@@ -2364,6 +2393,10 @@ msgstr "translator-credits"
 #~ msgid "Purple"
 #~ msgstr "Púrpura"
 
+#, fuzzy
+#~ msgid "Quit application"
+#~ msgstr "Aplicação"
+
 #~ msgid "RPQ %s term omitted due to insufficient space"
 #~ msgstr "Termo RPQ %s omitido por falta de espaço"
 
@@ -2475,6 +2508,9 @@ msgstr "translator-credits"
 #~ msgstr ""
 #~ "Remove as quebras de linha padrão do arquivo local antes de enviar para o "
 #~ "host."
+
+#~ msgid "Rename session"
+#~ msgstr "Renomear sessão"
 
 #~ msgid "Request failed"
 #~ msgstr "Requisição falhou"
@@ -2776,6 +2812,9 @@ msgstr "translator-credits"
 
 #~ msgid "Sending file"
 #~ msgstr "Enviando arquivo"
+
+#~ msgid "Session name"
+#~ msgstr "Nome da sessão"
 
 #~ msgid "Set host charset"
 #~ msgstr "Define página de código do host"

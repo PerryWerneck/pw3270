@@ -134,7 +134,7 @@
  	PW3270Action * action = pw3270_dialog_action_new(factory);
 
  	action->name = "about";
- 	action->label = _("About pw3270");
+ 	action->label = _("About PW3270");
  	action->icon_name = "help-about";
 
 	return G_ACTION(action);

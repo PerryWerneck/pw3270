@@ -62,7 +62,7 @@
 
 	action->name = "quit";
 	action->label = _( "Quit" );
-	action->tooltip = _( "Quit application" );
+	action->tooltip = _( "Close all windows and exit application" );
 	action->icon_name = "gtk-quit";
 	action->activate = quit_activated;
 
