@@ -29,6 +29,7 @@
 
  #include "private.h"
  #include <pw3270/application.h>
+ #include <pw3270/settings.h>
 
  #define GTK_TOOLBAR_DEFAULT_STYLE ((GtkToolbarStyle) -1)
 
@@ -234,6 +235,22 @@
 
  }
 
+ static void open_properties(GtkMenuItem G_GNUC_UNUSED(*menuitem), GtkWidget *toolbar) {
+
+	GtkWidget * window = gtk_widget_get_toplevel(toolbar);
+	GtkWidget * dialog = pw3270_settings_dialog_new(NULL);
+
+	gtk_container_add(GTK_CONTAINER(dialog),pw3270_toolbar_settings_new());
+
+	gtk_window_set_destroy_with_parent(GTK_WINDOW(dialog), TRUE);
+	gtk_window_set_modal(GTK_WINDOW(dialog), TRUE);
+	gtk_window_set_attached_to(GTK_WINDOW(dialog), window);
+	gtk_window_set_transient_for(GTK_WINDOW(dialog),GTK_WINDOW(window));
+
+	gtk_widget_show_all(dialog);
+
+ }
+
  static void pw3270ToolBar_init(pw3270ToolBar *widget) {
 
 	widget->popup.menu = gtk_menu_new();
@@ -286,6 +303,12 @@
 
 	}
 
+	// Toolbar properties.
+	{
+		GtkWidget * item = gtk_menu_item_new_with_mnemonic( _("_Properties") );
+		gtk_menu_shell_append(GTK_MENU_SHELL(widget->popup.menu),item);
+		g_signal_connect(item, "activate", G_CALLBACK(open_properties), widget);
+	}
 
 	// gtk_container_set_border_width(GTK_CONTAINER(widget->popup_menu),6);
 	gtk_widget_show_all(widget->popup.menu);

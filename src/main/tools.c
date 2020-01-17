@@ -110,36 +110,4 @@
 
  }
 
- /*
- GtkWidget * pw3270_settings_dialog_new(const gchar *title, GtkWindow *parent) {
-
-	gboolean use_header;
-	g_object_get(gtk_settings_get_default(), "gtk-dialogs-use-header", &use_header, NULL);
-
-	GtkWidget * dialog =
-		GTK_WIDGET(g_object_new(
-			GTK_TYPE_DIALOG,
-			"use-header-bar", (use_header ? 1 : 0),
-			NULL
-		));
-
-	gtk_window_set_title(GTK_WINDOW(dialog),title);
-	gtk_window_set_deletable(GTK_WINDOW(dialog),FALSE);
-    gtk_window_set_destroy_with_parent(GTK_WINDOW(dialog), TRUE);
-    gtk_window_set_transient_for(GTK_WINDOW(dialog),parent);
-
- 	g_signal_connect(dialog,"close",G_CALLBACK(gtk_widget_destroy),NULL);
-
-	gtk_dialog_add_buttons(
-		GTK_DIALOG(dialog),
-		_("_Cancel"), GTK_RESPONSE_CANCEL,
-		_("_Apply"), GTK_RESPONSE_APPLY,
-		NULL
-	);
-
- 	return dialog;
-
- }
- */
-
 
