@@ -249,8 +249,8 @@
  //
  // Action methods.
  //
- GAction * pw3270_action_new() {
-	return G_ACTION(g_object_new(PW3270_TYPE_ACTION, NULL));
+ PW3270Action * pw3270_action_new() {
+	return PW3270_ACTION(g_object_new(PW3270_TYPE_ACTION, NULL));
  }
 
  GdkPixbuf * pw3270_action_get_pixbuf(GAction *action, GtkIconSize icon_size, GtkIconLookupFlags flags) {

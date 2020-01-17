@@ -82,7 +82,7 @@
 	} PW3270ActionClass;
 
 	GType			  PW3270Action_get_type(void) G_GNUC_CONST;
-	PW3270Action	* pw3270action_new();
+	PW3270Action	* pw3270_action_new();
 	PW3270Action	* pw3270_dialog_action_new(GtkWidget * (*factory)(PW3270Action *action, GtkApplication *application));
 
 	//

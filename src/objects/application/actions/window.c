@@ -33,9 +33,9 @@
 
  #include "../private.h"
  #include <pw3270/application.h>
+ #include <pw3270/actions.h>
 
-
- void pw3270_application_quit_activated(GSimpleAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), gpointer G_GNUC_UNUSED(application)) {
+ static void quit_activated(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkApplication *application) {
 
 	g_print("Exiting application\n");
 
@@ -56,16 +56,56 @@
 
  }
 
- void pw3270_application_new_tab_activated(GSimpleAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), gpointer application) {
+ GAction * pw3270_quit_action_new() {
+
+	PW3270Action * action = pw3270_action_new();
+
+	action->name = "quit";
+	action->label = _( "Quit" );
+	action->tooltip = _( "Quit application" );
+	action->icon_name = "gtk-quit";
+	action->activate = quit_activated;
+
+ 	return G_ACTION(action);
+ }
+
+ static void new_tab_activated(GAction *action, GVariant *parameter, GtkApplication *application) {
 
  	debug("%s",__FUNCTION__);
  	pw3270_application_window_new_tab(GTK_WIDGET(gtk_application_get_active_window(GTK_APPLICATION(application))), NULL);
 
  }
 
- void pw3270_application_new_window_activated(GSimpleAction G_GNUC_UNUSED(* action), GVariant G_GNUC_UNUSED(*parameter), gpointer application) {
+ GAction * pw3270_new_tab_action_new() {
+
+	PW3270Action * action = pw3270_action_new();
+
+	action->name = "new.tab";
+	action->label = _( "New tab" );
+	action->tooltip = _( "New tab with default session" );
+	action->icon_name = "tab-new";
+	action->activate = new_tab_activated;
+
+ 	return G_ACTION(action);
+ }
+
+ static void new_window_activated(GAction *action, GVariant *parameter, GtkApplication *application) {
 
  	debug("%s",__FUNCTION__);
  	g_application_activate(application);
 
  }
+
+ GAction * pw3270_new_window_action_new() {
+
+	PW3270Action * action = pw3270_action_new();
+
+	action->name = "new.window";
+	action->label = _( "New window" );
+	action->tooltip = _( "New window with default session" );
+	action->icon_name = "window-new";
+	action->activate = new_window_activated;
+
+ 	return G_ACTION(action);
+ }
+
