@@ -44,6 +44,7 @@
 
 	G_BEGIN_DECLS
 
+	/*
 	//
 	// Abstract action
 	//
@@ -126,7 +127,9 @@
 
 	/// @brief Get lib3270 session handle.
 	H3270				* pw3270_action_get_session(GAction *action);
+	*/
 
+	/*
 	//
 	// "Simple" action
 	//
@@ -176,6 +179,7 @@
 
 	/// @brief Update simple action from LIB3270's property description.
 	void pw3270_simple_action_set_lib3270_property(pw3270SimpleAction *action, const LIB3270_PROPERTY * property);
+	*/
 
 	//
 	// Action view

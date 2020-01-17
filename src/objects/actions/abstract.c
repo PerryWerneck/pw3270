@@ -30,6 +30,8 @@
  #include "private.h"
  #include <v3270.h>
 
+ /*
+
  static void pw3270_action_iface_init(GActionInterface *iface);
  static void pw3270Action_class_init(pw3270ActionClass *klass);
  static void pw3270Action_init(pw3270Action *action);
@@ -67,17 +69,6 @@
 	PROP_LABEL,
 	PROP_TOOLTIP
  };
-
- /*
- enum {
-  SIGNAL_CHANGE_STATE,
-  NR_SIGNALS
- };
-
- static guint action_signals[NR_SIGNALS];
-
- */
-
 
  G_DEFINE_TYPE_WITH_CODE(pw3270Action, pw3270Action, G_TYPE_OBJECT, G_IMPLEMENT_INTERFACE(G_TYPE_ACTION, pw3270_action_iface_init))
 
@@ -188,19 +179,6 @@
 
 	g_object_class_install_property (object_class, PROP_STATE, klass->properties.state);
 
-	/*
-	// Install signals
-	action_signals[SIGNAL_CHANGE_STATE] =
-		g_signal_new(
-			I_("change_state"),
-			G_TYPE_ACTION,
-			G_SIGNAL_RUN_LAST | G_SIGNAL_MUST_COLLECT,
-			0, NULL, NULL,
-			NULL,
-			G_TYPE_NONE, 1,
-			G_TYPE_VARIANT
-		);
-	*/
  }
 
  void pw3270Action_init(pw3270Action *action) {
@@ -580,3 +558,4 @@
 
 	return pixbuf;
  }
+*/

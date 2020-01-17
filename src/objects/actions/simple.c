@@ -35,6 +35,7 @@
  #include "private.h"
  #include <v3270.h>
 
+ /*
  static void pw3270SimpleAction_class_init(pw3270SimpleActionClass *klass);
  static void pw3270SimpleAction_init(pw3270SimpleAction *action);
  static void change_widget(GAction *object, GtkWidget *from, GtkWidget *to);
@@ -175,4 +176,4 @@
 		pw3270_action_notify_enabled(object);
 
  }
-
+ */

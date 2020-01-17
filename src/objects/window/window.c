@@ -522,14 +522,8 @@
 
 		GAction * action = g_action_map_lookup_action(G_ACTION_MAP(window), actions[ix]);
 
-		if(action) {
-
-			if(V3270_IS_ACTION(action)) {
-				v3270_action_set_terminal_widget(action,terminal);
-			} else if(PW3270_IS_ACTION(action)) {
-				pw3270_action_set_terminal_widget(action,terminal);
-			}
-
+		if(action && V3270_IS_ACTION(action)) {
+			v3270_action_set_terminal_widget(action,terminal);
 		}
 
 	}

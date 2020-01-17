@@ -34,6 +34,7 @@
 
  #include <pw3270.h>
  #include <pw3270/actions.h>
+ #include <lib3270/properties.h>
  #include "../private.h"
 
  static void activate(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkWidget *terminal) {
@@ -43,12 +44,20 @@
 
  }
 
-  GAction * pw3270_action_connect_new(void) {
+ GAction * pw3270_action_connect_new(void) {
 
-	pw3270SimpleAction * action = pw3270_simple_action_new_from_lib3270(lib3270_action_get_by_name("reconnect"),"connect");
+	V3270SimpleAction *action = v3270_simple_action_new();
+
+	const LIB3270_PROPERTY * property = (const LIB3270_PROPERTY *) lib3270_action_get_by_name("reconnect");
+	if(property) {
+		action->icon_name = property->icon;
+		action->group.id = property->group;
+	}
+
+	action->name = "connect";
 	action->parent.activate = activate;
 	action->label = _("Connect");
-	action->tooltip = N_("Connect to host");
+	action->tooltip = _("Connect to host");
 
 	return G_ACTION(action);
 
