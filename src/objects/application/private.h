@@ -56,10 +56,9 @@
 	G_GNUC_INTERNAL GAction * pw3270_new_window_action_new();
 	G_GNUC_INTERNAL GAction * pw3270_quit_action_new();
 
-    G_GNUC_INTERNAL void pw3270_application_generic_activated(GSimpleAction * action, GVariant *parameter, gpointer application);
+	G_GNUC_INTERNAL GAction * pw3270_open_window_action_new();
+	G_GNUC_INTERNAL GAction * pw3270_open_tab_action_new();
 
-    G_GNUC_INTERNAL void pw3270_application_open_activated(GSimpleAction * action, GVariant *parameter, gpointer application);
-    G_GNUC_INTERNAL void pw3270_application_open_tab_activated(GSimpleAction * action, GVariant *parameter, gpointer application);
-    G_GNUC_INTERNAL void pw3270_application_open_window_activated(GSimpleAction * action, GVariant *parameter, gpointer application);
+    G_GNUC_INTERNAL void pw3270_application_generic_activated(GSimpleAction * action, GVariant *parameter, gpointer application);
 
 #endif // PRIVATE_H_INCLUDED

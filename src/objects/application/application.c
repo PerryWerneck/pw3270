@@ -325,63 +325,14 @@
 
 	G_APPLICATION_CLASS(pw3270Application_parent_class)->startup(application);
 
-	/*
-	//
-	// Setup application default actions.
-	//
-	static GActionEntry actions[] = {
-
-		{
-			.name = "preferences",
-			.activate = pw3270_application_preferences_activated,
-		},
-
-		{
-			.name = "quit",
-			.activate = pw3270_application_quit_activated,
-		},
-
-		{
-			.name = "new.tab",
-			.activate = pw3270_application_new_tab_activated,
-		},
-
-		{
-			.name = "new.window",
-			.activate = pw3270_application_new_window_activated,
-		},
-
-		{
-			.name = "open.session",
-			.activate = pw3270_application_open_activated,
-		},
-
-		{
-			.name = "open.session.tab",
-			.activate = pw3270_application_open_tab_activated,
-		},
-
-		{
-			.name = "open.session.window",
-			.activate = pw3270_application_open_window_activated,
-		},
-
-	};
-
-	g_action_map_add_action_entries(
-		G_ACTION_MAP(application),
-		actions,
-		G_N_ELEMENTS(actions),
-		application
-	);
-	*/
-
 	GAction * actions[] = {
 		pw3270_about_action_new(),
 		pw3270_preferences_action_new(),
 		pw3270_new_tab_action_new(),
 		pw3270_new_window_action_new(),
-		pw3270_quit_action_new()
+		pw3270_quit_action_new(),
+		pw3270_open_window_action_new(),
+		pw3270_open_tab_action_new()
 	};
 
 	for(ix = 0; ix < G_N_ELEMENTS(actions); ix++) {
