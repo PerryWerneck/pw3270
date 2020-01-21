@@ -59,6 +59,4 @@
 	G_GNUC_INTERNAL GAction * pw3270_open_window_action_new();
 	G_GNUC_INTERNAL GAction * pw3270_open_tab_action_new();
 
-    G_GNUC_INTERNAL void pw3270_application_generic_activated(GSimpleAction * action, GVariant *parameter, gpointer application);
-
 #endif // PRIVATE_H_INCLUDED

@@ -58,14 +58,6 @@
 
 	GtkAboutDialog	* dialog = GTK_ABOUT_DIALOG(gtk_about_dialog_new());
 
-	// Associate with the window
-	{
-		GtkWindow * window = gtk_application_get_active_window(GTK_APPLICATION(application));
-		if(window) {
-			gtk_window_set_transient_for(GTK_WINDOW(dialog), window);
-		}
-	}
-
 	// Get application logo
 	{
 		lib3270_autoptr(char) logo = lib3270_build_data_filename(G_STRINGIFY(PRODUCT_NAME) "-logo.png",NULL);

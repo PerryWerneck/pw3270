@@ -478,10 +478,6 @@
 
  }
 
- void pw3270_application_generic_activated(GSimpleAction * action, GVariant G_GNUC_UNUSED(*parameter), gpointer G_GNUC_UNUSED(application)) {
-	g_message("Generic action %s was activated",g_action_get_name(G_ACTION(action)));
- }
-
  GtkWidget * pw3270_application_window_get_active_terminal(GtkWidget *widget) {
  	return PW3270_APPLICATION_WINDOW(widget)->terminal;
  }
