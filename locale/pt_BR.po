@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-17 17:15-0300\n"
-"PO-Revision-Date: 2020-01-17 17:19-0300\n"
+"POT-Creation-Date: 2020-01-21 16:16-0300\n"
+"PO-Revision-Date: 2020-01-21 16:16-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
 "Language: pt_BR\n"
@@ -19,12 +19,12 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Gtranslator 2.91.7\n"
 
-#: src/objects/application/actions/about.c:111
+#: src/objects/application/actions/about.c:103
 #, c-format
 msgid "3270 terminal emulator for GTK %d.%d"
 msgstr "Emulador 3270 para GTK+ %d.%d"
 
-#: src/objects/application/actions/about.c:137 ui/application.xml:39
+#: src/objects/application/actions/about.c:129 ui/application.xml:39
 #: ui/application.xml:525
 msgid "About PW3270"
 msgstr "Sobre o PW3270"
@@ -33,7 +33,7 @@ msgstr "Sobre o PW3270"
 msgid "Action Name"
 msgstr "Nome da ação"
 
-#: src/objects/window/window.c:156 src/objects/toolbar/toolbar.c:134
+#: src/objects/window/window.c:156 src/objects/toolbar/toolbar.c:135
 msgid "Action Names"
 msgstr "Nome das ações"
 
@@ -81,7 +81,7 @@ msgstr "Cursor piscante"
 msgid "Bold"
 msgstr "Negrito"
 
-#: src/objects/application/actions/about.c:119
+#: src/objects/application/actions/about.c:111
 msgid "Brazilian Public Software Portal"
 msgstr "Portal do Software Público Brasileiro"
 
@@ -140,7 +140,7 @@ msgstr "Conectar ao iniciar"
 msgid "Connect to host"
 msgstr "Conectar ao servidor"
 
-#: src/objects/window/window.c:506 src/objects/window/page.c:212
+#: src/objects/window/window.c:504 src/objects/window/page.c:212
 msgid "Connected to host"
 msgstr "Conectado no servidor"
 
@@ -184,7 +184,7 @@ msgstr "Apagar campo"
 msgid "Disconnect"
 msgstr "Desconectar"
 
-#: src/objects/window/window.c:506 src/objects/window/window.c:511
+#: src/objects/window/window.c:504 src/objects/window/window.c:509
 #: src/objects/window/page.c:201
 msgid "Disconnected from host"
 msgstr "Desconectado do servidor"
@@ -245,15 +245,15 @@ msgstr "Nome do ícone"
 msgid "Icon Size"
 msgstr "Tamanho do ícone"
 
-#: src/objects/toolbar/toolbar.c:245
+#: src/objects/toolbar/toolbar.c:262
 msgid "Icon _size"
 msgstr "_Tamanho do ícone"
 
-#: src/objects/toolbar/toolbar.c:83
+#: src/objects/toolbar/toolbar.c:84
 msgid "Icons & text"
 msgstr "Ícones e texto"
 
-#: src/objects/toolbar/toolbar.c:73
+#: src/objects/toolbar/toolbar.c:74
 msgid "Icons only"
 msgstr "Apenas ícones"
 
@@ -273,7 +273,7 @@ msgstr "Manter selecionado"
 msgid "Label"
 msgstr "Etiqueta"
 
-#: src/objects/toolbar/toolbar.c:57
+#: src/objects/toolbar/toolbar.c:58
 msgid "Large"
 msgstr "Grande"
 
@@ -410,7 +410,7 @@ msgstr "Reselecionar"
 msgid "Resize on alternate screen"
 msgstr "Mudar tamanho do terminal em tela alternativa"
 
-#: src/objects/toolbar/toolbar.c:269
+#: src/objects/toolbar/toolbar.c:286
 msgid "S_tyle"
 msgstr "E_stilo"
 
@@ -513,7 +513,7 @@ msgstr "Mostrar menu"
 msgid "Show toolbar"
 msgstr "Mostrar barra de ferramentas"
 
-#: src/objects/toolbar/toolbar.c:52
+#: src/objects/toolbar/toolbar.c:53
 msgid "Small"
 msgstr "Pequeno"
 
@@ -533,7 +533,7 @@ msgstr "Tipo do estado"
 msgid "Style"
 msgstr "Estilo"
 
-#: src/objects/toolbar/toolbar.c:46 src/objects/toolbar/toolbar.c:68
+#: src/objects/toolbar/toolbar.c:47 src/objects/toolbar/toolbar.c:69
 msgid "System default"
 msgstr "Padrão do sistema"
 
@@ -549,7 +549,7 @@ msgstr "Aba com a sessão padrão"
 msgid "Terminal font"
 msgstr "Fonte do terminal"
 
-#: src/objects/toolbar/toolbar.c:78
+#: src/objects/toolbar/toolbar.c:79
 msgid "Text only"
 msgstr "Apenas texto"
 
@@ -573,7 +573,7 @@ msgstr "A etiqueta da ação"
 msgid "The name of the actions in the header bar"
 msgstr "O nome das ações na barra de título"
 
-#: src/objects/toolbar/toolbar.c:135
+#: src/objects/toolbar/toolbar.c:136
 msgid "The name of the actions in the toolbar"
 msgstr "O nome das ações na barra de ferramentas"
 
@@ -589,11 +589,11 @@ msgstr "O nome usado para ativar a ação"
 msgid "The state the action is in"
 msgstr "O estado em que a ação está"
 
-#: src/objects/toolbar/toolbar.c:146
+#: src/objects/toolbar/toolbar.c:147
 msgid "The toolbar icon size"
 msgstr "Tamanho dos ícones na barra de ferramentas"
 
-#: src/objects/toolbar/toolbar.c:159
+#: src/objects/toolbar/toolbar.c:160
 msgid "The toolbar style"
 msgstr "Estilo da barra de ferramentas"
 
@@ -662,8 +662,8 @@ msgstr "Remover seleção"
 msgid "Use +/- for field navigation"
 msgstr "Usar teclas +/- para navegar por campos"
 
-#: src/objects/application/actions/about.c:101
-#: src/objects/application/actions/about.c:103
+#: src/objects/application/actions/about.c:93
+#: src/objects/application/actions/about.c:95
 #, c-format
 msgid "Version %s-%s"
 msgstr "Versão %s-%s"
@@ -716,6 +716,10 @@ msgstr "_Nova"
 msgid "_Open"
 msgstr "_Abrir"
 
+#: src/objects/toolbar/toolbar.c:308
+msgid "_Properties"
+msgstr "_Propriedades"
+
 #: src/objects/window/page.c:345
 msgid "_Rename session"
 msgstr "Renomear sessão"
@@ -724,7 +728,7 @@ msgstr "Renomear sessão"
 msgid "_View"
 msgstr "_Exibir"
 
-#: src/objects/application/actions/about.c:121
+#: src/objects/application/actions/about.c:113
 msgid "translator-credits"
 msgstr "translator-credits"
 
