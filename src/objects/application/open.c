@@ -38,13 +38,12 @@
 	for(file = 0; file < n_files; file++) {
 
 		g_autofree gchar *path = g_file_get_path(files[file]);
-		GtkWidget * terminal = NULL;
-
 		if(!window) {
+			debug("%s: Open in new window",__FUNCTION__);
 			window = pw3270_application_window_new(GTK_APPLICATION(application), path);
-			terminal = gtk_window_get_default_widget(GTK_WINDOW(window));
 		} else {
-			terminal = pw3270_application_window_new_tab(window,path);
+			debug("%s: Open in new tab",__FUNCTION__);
+			window = pw3270_application_window_new_tab(window,path);
 		}
 
 		if(!path) {
@@ -60,7 +59,7 @@
 				if(sz > 0 && uri[sz-1] == '/')
 					uri[sz-1] = 0;
 
-				v3270_set_url(terminal,uri);
+				v3270_set_url(pw3270_application_window_get_active_terminal(window),uri);
 
 			}
 

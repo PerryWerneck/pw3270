@@ -445,6 +445,8 @@
 		}
 	}
 
+	pw3270_application_window_set_active_terminal(GTK_WIDGET(window),terminal);
+
 	// gtk_window_set_interactive_debugging(TRUE);
 
 	return GTK_WIDGET(window);
