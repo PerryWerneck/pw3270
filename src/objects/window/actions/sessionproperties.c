@@ -60,7 +60,8 @@
 		v3270_host_settings_new(),
 		v3270_color_settings_new(),
 		v3270_font_settings_new(),
-		v3270_accelerator_settings_new()
+		v3270_accelerator_settings_new(),
+		v3270_clipboard_settings_new()
 	};
 
 	for(ix = 0; ix < G_N_ELEMENTS(elements); ix++) {
