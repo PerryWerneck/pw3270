@@ -81,6 +81,16 @@ dnl		INSTALL_PACKAGES="windows-lib ${INSTALL_PACKAGES}"
 		AC_CONFIG_FILES(src/main/windows/resources.rc)
 		AC_CONFIG_FILES(schemas/windows/application.gschema.xml)
 
+		if test "$host_cpu" = "x86_64"; then
+			app_cv_programfiles="PROGRAMFILES64"
+			app_cv_winarch="64"
+			app_cv_nsisredir="DisableX64FSRedirection"
+		else
+			app_cv_programfiles="PROGRAMFILES"
+			app_cv_winarch="32"
+			app_cv_nsisredir="EnableX64FSRedirection"
+		fi
+
 		;;
 
  	*)

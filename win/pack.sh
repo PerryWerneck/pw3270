@@ -443,6 +443,15 @@ buildApplication()
 			failed "Can't install ${1}"
 		fi
 
+		if [ -x ${PROJECTDIR}/win/install.${1} ]; then
+			pushd "${WORKDIR}/build/${ARCH}"
+			echo "Executando install.${1} em ${PWD}"
+			${PROJECTDIR}/win/install.${1}
+			if [ "$?" != "0" ]; then
+				failed "Can't install ${1}"
+			fi
+			popd
+		fi
 
 		for NSI in $(find ./win -name '*.nsi')
 		do
@@ -550,6 +559,15 @@ makeInstaller()
 				failed "Can't copy certs"
 			fi
 
+		fi
+
+		if [ -d ${PROJECTDIR}/ui ]; then
+			mkdir -p ${WORKDIR}/build/${ARCH}/${PRODUCT_NAME}/ui
+			cp -rv ${PROJECTDIR}/ui/* ${WORKDIR}/build/${ARCH}/${PRODUCT_NAME}/ui
+
+			if [ "$?" != "0" ]; then
+				failed "Can't copy UI files"
+			fi
 		fi
 
 		cd ${WORKDIR}/build/${ARCH}

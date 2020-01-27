@@ -1,7 +1,34 @@
+#
+# "Software pw3270, desenvolvido com base nos códigos fontes do WC3270  e X3270
+# (Paul Mattes Paul.Mattes@usa.net), de emulação de terminal 3270 para acesso a
+# aplicativos mainframe. Registro no INPI sob o nome G3270.
+#
+# Copyright (C) <2008> <Banco do Brasil S.A.>
+#
+# Este programa é software livre. Você pode redistribuí-lo e/ou modificá-lo sob
+# os termos da GPL v.2 - Licença Pública Geral  GNU,  conforme  publicado  pela
+# Free Software Foundation.
+#
+# Este programa é distribuído na expectativa de  ser  útil,  mas  SEM  QUALQUER
+# GARANTIA; sem mesmo a garantia implícita de COMERCIALIZAÇÃO ou  de  ADEQUAÇÃO
+# A QUALQUER PROPÓSITO EM PARTICULAR. Consulte a Licença Pública Geral GNU para
+# obter mais detalhes.
+#
+# Você deve ter recebido uma cópia da Licença Pública Geral GNU junto com este
+# programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple
+# Place, Suite 330, Boston, MA, 02111-1307, USA
+#
+# Contatos:
+#
+# perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
+# erico.mendonca@gmail.com	(Erico Mascarenhas de Mendonça)
+#
+
 !include "MUI2.nsh"
 !include "x64.nsh"
 !include "FileFunc.nsh"
 !include "LogicLib.nsh"
+!include "winmessages.nsh"
 
 Name "@PRODUCT_NAME@"
 Caption "@PRODUCT_NAME@ - @PACKAGE_DESCRIPTION@"
@@ -79,7 +106,6 @@ SubSection "@PRODUCT_NAME@" SecMain
 		file "/oname=$INSTDIR\lib@LIBRARY_NAME@.dll"			"lib@LIBRARY_NAME@.dll"
 		file "/oname=$INSTDIR\libv3270.dll"				"libv3270.dll"
 		file "/oname=$INSTDIR\@PACKAGE@.dll"				"@PACKAGE@.dll"
-		file "/oname=$SYSDIR\libipc3270.dll"				"libipc3270.dll"
 
 		# Configuration files
 		file "/oname=$INSTDIR\@PRODUCT_NAME@-logo.png"			"@PRODUCT_NAME@\@PRODUCT_NAME@-logo.png"
@@ -104,7 +130,10 @@ SubSection "@PRODUCT_NAME@" SecMain
 
 		# Locale files
 		CreateDirectory "$INSTDIR\locale\pt_BR\LC_MESSAGES"
-		file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\@PACKAGE@.mo" "locale\pt_BR\LC_MESSAGES\@PACKAGE@.mo"
+		file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\@PACKAGE@.mo"		"locale\pt_BR\LC_MESSAGES\@PACKAGE@.mo"
+		file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\lib@LIBRARY_NAME@.mo"	"locale\pt_BR\LC_MESSAGES\lib@LIBRARY_NAME@.mo"
+		file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\libv3270.mo"		"locale\pt_BR\LC_MESSAGES\libv3270.mo"
+		file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\libipc3270.mo"		"locale\pt_BR\LC_MESSAGES\libipc3270.mo"
 
 		# define uninstaller name
 		SetRegView 32
@@ -127,11 +156,14 @@ SubSection "@PRODUCT_NAME@" SecMain
 		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PRODUCT_NAME@" \
 			         "NoRepair" "1"
 
-		# Customized options
+		# Default settings
 		SetRegView @WINARCH@
 
 		# Required for IPC Library.
 		WriteRegStr 	HKLM	"Software\@PRODUCT_NAME@"			"InstallLocation"	"$INSTDIR"
+
+		# Customized options
+
 
 	sectionEnd
 
@@ -149,9 +181,12 @@ SubSection "@PRODUCT_NAME@" SecMain
 			setOutPath $INSTDIR
 
 			${DisableX64FSRedirection}
-			CreateDirectory "$INSTDIR\plugins"
 
+			CreateDirectory "$INSTDIR\plugins"
 			file "/oname=$INSTDIR\plugins\ipcserver.dll"	"@PRODUCT_NAME@-plugins\ipcserver.dll"
+
+			${@NSISREDIR@}
+			file "/oname=$SYSDIR\libipc3270.dll"		"libipc3270.dll"
 
 		sectionEnd
 
@@ -163,7 +198,9 @@ SubSection "@PRODUCT_NAME@" SecMain
 !ifdef WITHLIBHLLAPI
 		Section /o "HLLAPI" HLLAPIBinding
 
-			${DisableX64FSRedirection}
+			${@NSISREDIR@}
+
+			# Install HLLAPI connector
 			file "/oname=$SYSDIR\hllapi.dll"		"libhllapi.dll"
 
 			# Install with "lib" prefix for compatibility.
@@ -175,11 +212,13 @@ SubSection "@PRODUCT_NAME@" SecMain
 !ifdef WITHMONO-TN3270
 		Section /o ".NET" DOTNET
 
-			${DisableX64FSRedirection}
 			CreateDirectory "$INSTDIR\dotnet"
 
+			${DisableX64FSRedirection}
 			file "/oname=$INSTDIR\dotnet\tn3270.dll"	"mono/lib/tn3270-5.2/tn3270.dll"
 			file "/oname=$INSTDIR\dotnet\tn3270.xml"	"mono/gapi-2.0/tn3270/tn3270.xml"
+
+			${@NSISREDIR@}
 			file "/oname=$SYSDIR\mono-tn3270.dll"		"mono-tn3270.dll"
 
 		SectionEnd
@@ -218,10 +257,12 @@ SubSection "@PRODUCT_NAME@" SecMain
 		CreateDirectory "$INSTDIR\sdk\def"
 		CreateDirectory "$INSTDIR\sdk\lib"
 
-		file "/oname=$INSTDIR\sdk\def\lib@LIBRARY_NAME@.def"		"@PRODUCT_NAME@\def\lib@LIBRARY_NAME@.def"
+		file "/oname=$INSTDIR\sdk\def\lib@LIBRARY_NAME@.def"	"@PRODUCT_NAME@\def\lib@LIBRARY_NAME@.def"
 		file "/oname=$INSTDIR\sdk\lib\lib3270.dll.a"		"lib@LIBRARY_NAME@.dll.a"
 		file "/oname=$INSTDIR\sdk\lib\lib3270.delayed.a"	"lib@LIBRARY_NAME@.delayed.a"
 		file "/oname=$INSTDIR\sdk\lib\lib3270.static.a"		"lib@LIBRARY_NAME@.static.a"
+
+		file "/oname=$INSTDIR\sdk\lib3270.mak"			"@PRODUCT_NAME@\def\lib3270.mak"
 
 		file "/oname=$INSTDIR\sdk\def\libv3270.def"		"@PRODUCT_NAME@\def\libv3270.def"
 		file "/oname=$INSTDIR\sdk\lib\libv3270.dll.a"		"libv3270.dll.a"
@@ -232,6 +273,10 @@ SubSection "@PRODUCT_NAME@" SecMain
 
 		file "/oname=$INSTDIR\sdk\def\libhllapi.def"		"@PRODUCT_NAME@\def\libhllapi.def"
 		file "/oname=$INSTDIR\sdk\lib\libhllapi.dll.a"		"libhllapi.dll.a"
+
+		SetRegView @WINARCH@
+		WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PW3270_SDK_PATH" "$INSTDIR\sdk"
+		SendMessage ${HWND_BROADCAST} ${WM_WININICHANGE} 0 "STR:Environment" /TIMEOUT=5000
 
 	SectionEnd
 !endif
@@ -268,6 +313,7 @@ Section "Uninstall"
 	RMDir /r "$INSTDIR\sdk"
 	RMDir /r "$INSTDIR\gtk2-runtime"
 
+
 	# Delete all files
 	delete "$INSTDIR\*.dll"
 
@@ -278,16 +324,20 @@ Section "Uninstall"
 	
 	SetRegView @WINARCH@
 	DeleteRegKey HKLM "Software\@PRODUCT_NAME@"
+	DeleteRegValue HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PW3270_SDK_PATH"
+	SendMessage ${HWND_BROADCAST} ${WM_WININICHANGE} 0 "STR:Environment" /TIMEOUT=5000
 
 	# Delete System libraries
+	${@NSISREDIR@}
+
 	delete $SYSDIR\libipc3270.dll
 
-!ifdef WITHHLLAPI
+!ifdef WITHLIBHLLAPI
 	delete $SYSDIR\libhllapi.dll
 	delete $SYSDIR\hllapi.dll
 !endif
 
-!ifdef WITHMONO
+!ifdef WITHMONO-TN3270
 	delete $SYSDIR\mono-tn3270.dll
 !endif
 
@@ -299,7 +349,7 @@ Function .onInit
 
 	#---[ Check DOTNET Command line option ]0-------------------------------------------------------------
 
-!ifdef WITHMONO
+!ifdef WITHMONO-TN3270
 	Push $0
 
 	${GetParameters} $R0
@@ -329,7 +379,7 @@ Function .onInit
 
 	#---[ Check HLLAPI Command line option ]-------------------------------------------------------------
 
-!ifdef WITHHLLAPI
+!ifdef WITHLIBHLLAPI
 
 	Push $0
 
