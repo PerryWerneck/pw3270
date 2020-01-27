@@ -68,25 +68,38 @@
 
 			<attribute name='label' translatable='yes'>Save</attribute>
 
-			<item>
-				<attribute name="label" translatable="yes">Session properties</attribute>
-				<attribute name="action">win.save.session.as</attribute>
-			</item>
+			<section>
 
-			<item>
-				<attribute name="label" translatable="yes">Current screen</attribute>
-				<attribute name="action">win.save-all</attribute>
-			</item>
+				<item>
+					<attribute name="label" translatable="yes">Current screen</attribute>
+					<attribute name="action">win.save-all</attribute>
+				</item>
 
-			<item>
-				<attribute name="label" translatable="yes">Selected area</attribute>
-				<attribute name="action">win.save-selected</attribute>
-			</item>
+				<item>
+					<attribute name="label" translatable="yes">Selected area</attribute>
+					<attribute name="action">win.save-selected</attribute>
+				</item>
 
-			<item>
-				<attribute name="label" translatable="yes">Clipboard contents</attribute>
-				<attribute name="action">win.save-copy</attribute>
-			</item>
+				<item>
+					<attribute name="label" translatable="yes">Clipboard contents</attribute>
+					<attribute name="action">win.save-copy</attribute>
+				</item>
+
+			</section>
+
+			<section>
+
+				<item>
+					<attribute name="label" translatable="yes">Desktop icon</attribute>
+					<attribute name="action">win.save.launcher</attribute>
+				</item>
+
+				<item>
+					<attribute name="label" translatable="yes">Session properties</attribute>
+					<attribute name="action">win.save.session.as</attribute>
+				</item>
+
+			</section>
 
 		</submenu>
 

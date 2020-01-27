@@ -229,6 +229,8 @@
 			v3270_pfkey_action_new(),
 			v3270_pakey_action_new(),
 
+			pw3270_action_save_desktop_icon_new(),
+
 		};
 
 		for(ix = 0; ix < G_N_ELEMENTS(actions); ix++) {

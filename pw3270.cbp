@@ -109,6 +109,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/objects/application/private.h" />
+		<Unit filename="src/objects/linux/savedesktopicon.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/objects/settings/dialog.c">
 			<Option compilerVar="CC" />
 		</Unit>
