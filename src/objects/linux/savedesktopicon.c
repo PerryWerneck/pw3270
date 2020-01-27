@@ -102,8 +102,8 @@ X-Desktop-File-Install-Version=0.23
 	V3270SimpleAction * action = v3270_dialog_action_new(factory);
 
 	action->name = "save.launcher";
-	action->label = _("Save desktop launcher");
-	action->tooltip = _("Save desktop launcher");
+	action->label = _("Save desktop icon");
+	action->tooltip = _("Create a desktop icon for the current session");
 
 	return G_ACTION(action);
 

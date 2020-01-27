@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-01-27 17:20-0300\n"
-"PO-Revision-Date: 2020-01-27 17:25-0300\n"
+"PO-Revision-Date: 2020-01-27 17:47-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
 "Language: pt_BR\n"
@@ -159,6 +159,10 @@ msgstr "Copiar como tabela"
 #: ui/window.xml:158 ui/application.xml:242
 msgid "Copy as text"
 msgstr "Copiar como texto"
+
+#: src/objects/linux/savedesktopicon.c:106
+msgid "Create a desktop icon for the current session"
+msgstr "Criar ícone da área de trabalho para a sessão atual."
 
 #: ui/window.xml:372 ui/application.xml:460
 msgid "Cross hair cursor"
@@ -443,9 +447,8 @@ msgid "Save As"
 msgstr "Salvar Como"
 
 #: src/objects/linux/savedesktopicon.c:105
-#: src/objects/linux/savedesktopicon.c:106
-msgid "Save desktop launcher"
-msgstr "Salvar lançador para área de trabalho"
+msgid "Save desktop icon"
+msgstr "Salvar ícone da área de trabalho"
 
 #: ui/window.xml:351
 msgid "Save screen"
@@ -1328,11 +1331,6 @@ msgstr "translator-credits"
 
 #~ msgid "Cannot parse %s \"%s\", entry %d"
 #~ msgstr "Impossível interpretar %s \"%s\", entrada %d"
-
-#~ msgid "Cant create a new SSL structure for current connection."
-#~ msgstr ""
-#~ "Não foi possível criar uma nova estrutura de controle SSL para a conexão "
-#~ "atual."
 
 #~ msgid "Cant initialize the SSL context."
 #~ msgstr "Erro ao inicializar contexto de segurança"
@@ -2696,6 +2694,9 @@ msgstr "translator-credits"
 
 #~ msgid "Save copy to file"
 #~ msgstr "Salvar cópia para arquivo"
+
+#~ msgid "Save desktop launcher"
+#~ msgstr "Salvar lançador para área de trabalho"
 
 #~ msgid "Save queue to file"
 #~ msgstr "Salvar a fila para um arquivo"
