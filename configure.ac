@@ -32,7 +32,7 @@ AC_PREREQ(2.61)
 
 dnl Initialise automake with the package name, version and
 dnl bug-reporting address.
-AC_INIT([pw3270], [5.2], [perry.werneck@gmail.com])
+AC_INIT([pw3270], [5.3], [perry.werneck@gmail.com])
 
 dnl Place auxilliary scripts here.
 AC_CONFIG_AUX_DIR([scripts])
@@ -90,6 +90,10 @@ dnl		INSTALL_PACKAGES="windows-lib ${INSTALL_PACKAGES}"
 			app_cv_winarch="32"
 			app_cv_nsisredir="EnableX64FSRedirection"
 		fi
+
+		AC_SUBST(PROGRAMFILES,$app_cv_programfiles)
+		AC_SUBST(WINARCH,$app_cv_winarch)
+		AC_SUBST(NSISREDIR,$app_cv_nsisredir)
 
 		;;
 
