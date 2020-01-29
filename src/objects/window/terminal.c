@@ -244,7 +244,11 @@
 				g_message("Loading session properties from %s",default_settings);
 			}
 		} else {
+#ifdef DEBUG
+			g_message("Can't find default settings file \"%s\"",default_settings);
+#else
 			g_warning("Can't find default settings file \"%s\"",default_settings);
+#endif // DEBUG
 		}
 
 	}

@@ -229,9 +229,9 @@ X-Desktop-File-Install-Version=0.23
 		}
 
 		// Get session filename
+		/*
 		const gchar * session_file = v3270_get_session_filename(terminal);
 
-		/*
 		if(!session_file) {
 
 			// No session file, create one.
