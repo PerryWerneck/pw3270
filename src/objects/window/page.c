@@ -83,7 +83,12 @@
 
 		gtk_menu_attach_to_widget(GTK_MENU(menu), GTK_WIDGET(label), popup_menu_detach);
 		g_signal_emit_by_name(GTK_LABEL(label),"populate-popup",menu);
+
+#if GTK_CHECK_VERSION(3,22,0)
 		gtk_menu_popup_at_widget(GTK_MENU(menu),label,GDK_GRAVITY_SOUTH_WEST,GDK_GRAVITY_NORTH_WEST,(GdkEvent *) event);
+#else
+		gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, 0, 0);
+#endif
 
 		return TRUE;
 	}
@@ -315,7 +320,7 @@
 #if GTK_CHECK_VERSION(3,22,0)
 	gtk_menu_popup_at_pointer(GTK_MENU(popup), event);
 #else
-	gtk_menu_popup(GTK_MENU(popup), NULL, NULL, NULL, NULL, event->button, event->time);
+	gtk_menu_popup(GTK_MENU(popup), NULL, NULL, NULL, NULL, 0, 0);
 #endif
 
 	return TRUE;
@@ -337,7 +342,7 @@
 #if GTK_CHECK_VERSION(3,22,0)
 	gtk_menu_popup_at_pointer(GTK_MENU(popup), event);
 #else
-	gtk_menu_popup(GTK_MENU(popup), NULL, NULL, NULL, NULL, event->button, event->time);
+	gtk_menu_popup(GTK_MENU(popup), NULL, NULL, NULL, NULL, 0, 0);
 #endif
 
 	return TRUE;
