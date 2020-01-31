@@ -63,13 +63,13 @@
     </key>
 
     <key name="toolbar-visible" type="b">
-      <default>true</default>
+      <default>false</default>
       <summary>The toolbar visible state</summary>
       <description></description>
     </key>
 
     <key name="menubar-visible" type="b">
-      <default>true</default>
+      <default>false</default>
       <summary>The menubar visible state</summary>
       <description></description>
     </key>

@@ -79,7 +79,10 @@ dnl		INSTALL_PACKAGES="windows-lib ${INSTALL_PACKAGES}"
 		AC_SUBST(WIN32_FILE_VERSION,$app_win32_file_version)
 
 		AC_CONFIG_FILES(src/main/windows/resources.rc)
+
+		# Windows and linux doesn't use the same defaults.
 		AC_CONFIG_FILES(schemas/windows/application.gschema.xml)
+		AC_CONFIG_FILES(schemas/windows/window.gschema.xml)
 
 		if test "$host_cpu" = "x86_64"; then
 			app_cv_programfiles="PROGRAMFILES64"
@@ -106,12 +109,12 @@ dnl		INSTALL_PACKAGES="windows-lib ${INSTALL_PACKAGES}"
 dnl		INSTALL_PACKAGES="linux-lib ${INSTALL_PACKAGES}"
 
 		app_cv_static='no'
-		AC_CONFIG_FILES(schemas/linux/application.gschema.xml)
 
+		# Windows and linux doesn't use the same window defaults.
+		AC_CONFIG_FILES(schemas/linux/application.gschema.xml)
+		AC_CONFIG_FILES(schemas/linux/window.gschema.xml)
 
 esac
-
-AC_CONFIG_FILES(schemas/common/window.gschema.xml)
 
 AC_SUBST(OSNAME,$app_cv_osname)
 AC_SUBST(LIBS)
