@@ -58,7 +58,7 @@ install:
 		$(DESTDIR)/$(schemadir)/$(PRODUCT_NAME)-application.gschema.xml
 
 	@$(INSTALL_DATA) \
-		$(BASEDIR)/schemas/common/window.gschema.xml \
+		$(BASEDIR)/schemas/@OSNAME@/window.gschema.xml \
 		$(DESTDIR)/$(schemadir)/$(PRODUCT_NAME)-window.gschema.xml
 
 

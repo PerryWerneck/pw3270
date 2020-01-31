@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-27 17:20-0300\n"
+"POT-Creation-Date: 2020-01-31 15:09-0300\n"
 "PO-Revision-Date: 2020-01-27 17:47-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
@@ -144,7 +144,7 @@ msgstr "Conectar ao iniciar"
 msgid "Connect to host"
 msgstr "Conectar ao servidor"
 
-#: src/objects/window/window.c:506 src/objects/window/page.c:212
+#: src/objects/window/window.c:506 src/objects/window/page.c:217
 msgid "Connected to host"
 msgstr "Conectado no servidor"
 
@@ -197,7 +197,7 @@ msgid "Disconnect"
 msgstr "Desconectar"
 
 #: src/objects/window/window.c:506 src/objects/window/window.c:511
-#: src/objects/window/page.c:201
+#: src/objects/window/page.c:206
 msgid "Disconnected from host"
 msgstr "Desconectado do servidor"
 
@@ -712,7 +712,7 @@ msgstr "_Aplicar"
 msgid "_Cancel"
 msgstr "_Cancelar"
 
-#: src/objects/window/page.c:351
+#: src/objects/window/page.c:366
 msgid "_Close session"
 msgstr "_Fechar sessão"
 
@@ -748,7 +748,7 @@ msgstr "_Abrir"
 msgid "_Properties"
 msgstr "_Propriedades"
 
-#: src/objects/window/page.c:345
+#: src/objects/window/page.c:360
 msgid "_Rename session"
 msgstr "Renomear sessão"
 

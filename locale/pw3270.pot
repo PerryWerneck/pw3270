@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-30 17:02-0300\n"
+"POT-Creation-Date: 2020-01-31 15:09-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -142,7 +142,7 @@ msgstr ""
 msgid "Connect to host"
 msgstr ""
 
-#: src/objects/window/window.c:506 src/objects/window/page.c:212
+#: src/objects/window/window.c:506 src/objects/window/page.c:217
 msgid "Connected to host"
 msgstr ""
 
@@ -195,7 +195,7 @@ msgid "Disconnect"
 msgstr ""
 
 #: src/objects/window/window.c:506 src/objects/window/window.c:511
-#: src/objects/window/page.c:201
+#: src/objects/window/page.c:206
 msgid "Disconnected from host"
 msgstr ""
 
@@ -698,7 +698,7 @@ msgstr ""
 msgid "_Cancel"
 msgstr ""
 
-#: src/objects/window/page.c:351
+#: src/objects/window/page.c:366
 msgid "_Close session"
 msgstr ""
 
@@ -734,7 +734,7 @@ msgstr ""
 msgid "_Properties"
 msgstr ""
 
-#: src/objects/window/page.c:345
+#: src/objects/window/page.c:360
 msgid "_Rename session"
 msgstr ""
 
