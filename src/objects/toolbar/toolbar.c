@@ -333,7 +333,11 @@
 	debug("%s button_number=%d",__FUNCTION__,button_number);
 
 	if(toolbar->popup.menu) {
+#if GTK_CHECK_VERSION(3,22,0)
 		gtk_menu_popup_at_pointer(GTK_MENU(toolbar->popup.menu),NULL);
+#else
+		gtk_menu_popup(GTK_MENU(toolbar->popup.menu), NULL, NULL, NULL, NULL, 0, 0);
+#endif
 	}
 
 	return TRUE;

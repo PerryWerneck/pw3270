@@ -311,7 +311,12 @@
 
 	gtk_widget_show_all(popup);
 	gtk_menu_set_screen(GTK_MENU(popup), gtk_widget_get_screen(widget));
+
+#if GTK_CHECK_VERSION(3,22,0)
 	gtk_menu_popup_at_pointer(GTK_MENU(popup), event);
+#else
+	gtk_menu_popup(GTK_MENU(popup), NULL, NULL, NULL, NULL, event->button, event->time);
+#endif
 
 	return TRUE;
 
@@ -328,7 +333,12 @@
 
 	gtk_widget_show_all(popup);
 	gtk_menu_set_screen(GTK_MENU(popup), gtk_widget_get_screen(widget));
+
+#if GTK_CHECK_VERSION(3,22,0)
 	gtk_menu_popup_at_pointer(GTK_MENU(popup), event);
+#else
+	gtk_menu_popup(GTK_MENU(popup), NULL, NULL, NULL, NULL, event->button, event->time);
+#endif
 
 	return TRUE;
  }
