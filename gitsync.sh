@@ -17,13 +17,14 @@ git push
 git fetch origin
 git merge
 
+BRANCH=$(git symbolic-ref --short HEAD)
 REPOS=$(git remote -v | grep -v origin | grep "(push)" | awk '{print $1}')
 
 for repo in ${REPOS}
 do
-	echo "Getting updates from ${repo} ..."
-	git fetch ${repo}
-	git merge
+	echo "Getting updates to branch ${BRANCH} from ${repo} ..."
+	git fetch "${repo}" "${BRANCH}"
+#	git merge 2>&1 > /dev/null
 done
 
 for repo in ${REPOS}
