@@ -162,6 +162,9 @@
 		<Unit filename="src/objects/window/window.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/objects/windows/savedesktopicon.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="ui/application.xml" />
 		<Unit filename="ui/window.xml" />
 		<Extensions>
