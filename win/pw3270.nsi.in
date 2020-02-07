@@ -121,7 +121,8 @@ SubSection "@PRODUCT_NAME@" SecMain
 
 		# UI definition files
 		CreateDirectory "$INSTDIR\ui"
-		file "/oname=$INSTDIR\ui\00default.xml" 	"@PRODUCT_NAME@\ui\00default.xml"
+		file "/oname=$INSTDIR\ui\00default.xml" 	"@PRODUCT_NAME@\ui\application.xml"
+		file "/oname=$INSTDIR\ui\00default.xml" 	"@PRODUCT_NAME@\ui\window.xml"
 
 		# Charset definition files
 		CreateDirectory "$INSTDIR\remap"
@@ -132,7 +133,6 @@ SubSection "@PRODUCT_NAME@" SecMain
 		file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\@PACKAGE@.mo"		"locale\pt_BR\LC_MESSAGES\@PACKAGE@.mo"
 		file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\lib@LIBRARY_NAME@.mo"	"locale\pt_BR\LC_MESSAGES\lib@LIBRARY_NAME@.mo"
 		file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\libv3270.mo"		"locale\pt_BR\LC_MESSAGES\libv3270.mo"
-		file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\libipc3270.mo"		"locale\pt_BR\LC_MESSAGES\libipc3270.mo"
 
 		# define uninstaller name
 		SetRegView 32
@@ -182,10 +182,13 @@ SubSection "@PRODUCT_NAME@" SecMain
 			${DisableX64FSRedirection}
 
 			CreateDirectory "$INSTDIR\plugins"
-			file "/oname=$INSTDIR\plugins\ipcserver.dll"	"@PRODUCT_NAME@-plugins\ipcserver.dll"
+			file "/oname=$INSTDIR\plugins\ipcserver.dll"			"@PRODUCT_NAME@-plugins\ipcserver.dll"
+
+			CreateDirectory "$INSTDIR\locale\pt_BR\LC_MESSAGES"
+			file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\libipc3270.mo"	"locale\pt_BR\LC_MESSAGES\libipc3270.mo"
 
 			${@NSISREDIR@}
-			file "/oname=$SYSDIR\libipc3270.dll"		"libipc3270.dll"
+			file "/oname=$SYSDIR\libipc3270.dll"				"libipc3270.dll"
 
 		sectionEnd
 
@@ -225,26 +228,6 @@ SubSection "@PRODUCT_NAME@" SecMain
 
 	SubSectionEnd
 !endif
-
-	SubSection "Menus, Keypads & Toolbars" SecMenu
-
-		Section "Keypad" KeypadMenu
-			file "/oname=$INSTDIR\ui\10keypad.xml" "@PRODUCT_NAME@\ui\10keypad.xml"
-		SectionEnd
-
-		Section "Functions" FunctionsMenu
-			file "/oname=$INSTDIR\ui\10functions.xml" "@PRODUCT_NAME@\ui\10functions.xml"
-		SectionEnd
-
-		Section /o "View trace Menu" TraceMenu
-			file "/oname=$INSTDIR\ui\98trace.xml" "@PRODUCT_NAME@\ui\98trace.xml"
-		SectionEnd
-
-		Section /o "Application debug" DBGMenu
-			file "/oname=$INSTDIR\ui\99debug.xml" "@PRODUCT_NAME@\ui\99debug.xml"
-		SectionEnd
-
-	SubSectionEnd
 
 !ifdef WITHSDK
 	Section /o "Software Development Kit" SDK
