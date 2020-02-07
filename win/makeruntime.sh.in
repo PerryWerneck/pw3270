@@ -37,6 +37,7 @@ GTK_PREFIX=$($PKG_CONFIG --variable=prefix ${GTK_VERSION})
 
 TARGET="@BASEDIR@/.bin/runtime"
 BINDIR="@BASEDIR@/.bin/Release/"
+SCHEMADIR="@BASEDIR@/schemas/"
 
 # Change to bin path
 mkdir -p ${TARGET}
@@ -208,6 +209,14 @@ copy_locale() {
 copy_schemes() {
 
 	mkdir -p "${TARGET}/share/glib-2.0/schemas"
+
+	cp -v \
+		${SCHEMADIR}/windows/*.xml \
+		"${TARGET}/share/glib-2.0/schemas"
+
+	if [ "$?" != "0" ]; then
+		exit -1
+	fi
 
 	cp -rv \
 		"${prefix}/share/glib-2.0/schemas/org.gtk.Settings.FileChooser.gschema.xml" \

@@ -121,8 +121,8 @@ SubSection "@PRODUCT_NAME@" SecMain
 
 		# UI definition files
 		CreateDirectory "$INSTDIR\ui"
-		file "/oname=$INSTDIR\ui\00default.xml" 	"@PRODUCT_NAME@\ui\application.xml"
-		file "/oname=$INSTDIR\ui\00default.xml" 	"@PRODUCT_NAME@\ui\window.xml"
+		file "/oname=$INSTDIR\ui\application.xml" 	"@PRODUCT_NAME@\ui\application.xml"
+		file "/oname=$INSTDIR\ui\window.xml" 		"@PRODUCT_NAME@\ui\window.xml"
 
 		# Charset definition files
 		CreateDirectory "$INSTDIR\remap"

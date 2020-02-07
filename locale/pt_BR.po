@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-31 15:09-0300\n"
+"POT-Creation-Date: 2020-02-07 14:35-0300\n"
 "PO-Revision-Date: 2020-01-27 17:47-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
@@ -128,10 +128,6 @@ msgstr "Fechar janela"
 msgid "Colors"
 msgstr "Cores"
 
-#: src/objects/linux/savedesktopicon.c:93
-msgid "Comment"
-msgstr "Comentário"
-
 #: src/objects/window/actions/connect.c:59
 msgid "Connect"
 msgstr "Conectar"
@@ -160,7 +156,7 @@ msgstr "Copiar como tabela"
 msgid "Copy as text"
 msgstr "Copiar como texto"
 
-#: src/objects/linux/savedesktopicon.c:106
+#: src/objects/windows/savedesktopicon.c:79
 msgid "Create a desktop icon for the current session"
 msgstr "Criar ícone da área de trabalho para a sessão atual."
 
@@ -225,7 +221,7 @@ msgstr "Apagar até o final da linha"
 msgid "Field attributes"
 msgstr "Mostra atributos de campo"
 
-#: src/objects/linux/savedesktopicon.c:72
+#: src/objects/windows/savedesktopicon.c:62
 msgid "File name"
 msgstr "Nome do arquivo"
 
@@ -236,10 +232,6 @@ msgstr "Tela cheia"
 #: ui/window.xml:255 ui/window.xml:434 ui/window.xml:532
 msgid "Full screen"
 msgstr "Tela cheia"
-
-#: src/objects/linux/savedesktopicon.c:86
-msgid "Generic name"
-msgstr "Nome genérico"
 
 #: ui/application.xml:36 ui/application.xml:535
 msgid "Help"
@@ -297,7 +289,7 @@ msgstr "Etiqueta"
 msgid "Large"
 msgstr "Grande"
 
-#: src/objects/linux/savedesktopicon.c:79
+#: src/objects/windows/savedesktopicon.c:67
 msgid "Launcher name"
 msgstr "Nome do lançador"
 
@@ -446,7 +438,7 @@ msgstr "Salvar"
 msgid "Save As"
 msgstr "Salvar Como"
 
-#: src/objects/linux/savedesktopicon.c:105
+#: src/objects/windows/savedesktopicon.c:78
 msgid "Save desktop icon"
 msgstr "Salvar ícone da área de trabalho"
 
@@ -708,7 +700,7 @@ msgstr "Janela com sessão padrão"
 msgid "_Apply"
 msgstr "_Aplicar"
 
-#: src/objects/settings/dialog.c:78 src/objects/linux/savedesktopicon.c:132
+#: src/objects/settings/dialog.c:78 src/objects/windows/savedesktopicon.c:104
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -752,7 +744,7 @@ msgstr "_Propriedades"
 msgid "_Rename session"
 msgstr "Renomear sessão"
 
-#: src/objects/linux/savedesktopicon.c:133
+#: src/objects/windows/savedesktopicon.c:105
 msgid "_Save"
 msgstr "_Salvar"
 
@@ -1412,6 +1404,9 @@ msgstr "translator-credits"
 #~ msgid "Command to execute"
 #~ msgstr "Comando a executar"
 
+#~ msgid "Comment"
+#~ msgstr "Comentário"
+
 #~ msgid "Complete"
 #~ msgstr "Completo"
 
@@ -1748,6 +1743,9 @@ msgstr "translator-credits"
 
 #~ msgid "GTK Version mismatch"
 #~ msgstr "Divergência de versão GTK"
+
+#~ msgid "Generic name"
+#~ msgstr "Nome genérico"
 
 #~ msgid "Get transfer queue from an external XML file"
 #~ msgstr "Obtém a fila de transferência de um arquivo XML externo"
