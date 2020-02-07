@@ -84,6 +84,7 @@ dnl		INSTALL_PACKAGES="windows-lib ${INSTALL_PACKAGES}"
 		AC_CONFIG_FILES(schemas/windows/application.gschema.xml)
 		AC_CONFIG_FILES(schemas/windows/window.gschema.xml)
 		AC_CONFIG_FILES(win/makeruntime.sh)
+		AC_CONFIG_FILES(win/pw3270.nsi)
 
 		if test "$host_cpu" = "x86_64"; then
 			app_cv_programfiles="PROGRAMFILES64"
