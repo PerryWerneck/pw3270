@@ -83,7 +83,6 @@ dnl		INSTALL_PACKAGES="windows-lib ${INSTALL_PACKAGES}"
 		# Windows and linux doesn't use the same defaults.
 		AC_CONFIG_FILES(schemas/windows/application.gschema.xml)
 		AC_CONFIG_FILES(schemas/windows/window.gschema.xml)
-		AC_CONFIG_FILES(schemas/windows/window.gschema.xml)
 		AC_CONFIG_FILES(win/makeruntime.sh)
 
 		if test "$host_cpu" = "x86_64"; then
