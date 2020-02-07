@@ -38,6 +38,8 @@
  #include <lib3270.h>
  #include <lib3270/log.h>
  #include <locale.h>
+ #include <stdlib.h>
+
  #ifdef G_OS_UNIX
 	#include <glib-unix.h>
  #endif // G_OS_UNIX
@@ -83,6 +85,9 @@ int main (int argc, char **argv) {
 		g_autofree gchar * appdir = g_win32_get_package_installation_directory_of_module(NULL);
 		g_autofree gchar * locdir = g_build_filename(appdir,"locale",NULL);
 		bindtextdomain( PACKAGE_NAME, locdir );
+
+		// https://stackoverflow.com/questions/37035936/how-to-get-native-windows-decorations-on-gtk3-on-windows-7-and-msys2
+		putenv("GTK_CSD=0");
 	}
 #endif // _WIN32
 
