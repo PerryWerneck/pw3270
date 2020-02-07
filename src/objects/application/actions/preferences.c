@@ -37,10 +37,15 @@
 
 //	gtk_window_set_title(GTK_WINDOW(dialog),action->label);
 
- static GtkWidget * factory(PW3270Action * action, GtkApplication G_GNUC_UNUSED(*application)) {
+ static GtkWidget * factory(PW3270Action * action, GtkApplication *application) {
 
 	size_t ix;
+	GtkWindow * window = gtk_application_get_active_window(application);
 	GtkWidget * dialog = pw3270_settings_dialog_new(G_ACTION(action));
+
+	gtk_window_set_modal(GTK_WINDOW(dialog), TRUE);
+	gtk_window_set_attached_to(GTK_WINDOW(dialog), GTK_WIDGET(window));
+	gtk_window_set_transient_for(GTK_WINDOW(dialog),window);
 
 	GtkWidget * pages[] = {
 		pw3270_toolbar_settings_new()
@@ -51,6 +56,7 @@
 	}
 
 	gtk_widget_show_all(dialog);
+
 	return dialog;
 
  }
