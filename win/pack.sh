@@ -339,8 +339,7 @@ buildExtraPackage()
 				--includedir=${WORKDIR}/build/${ARCH}/include \
 				--sysconfdir=${WORKDIR}/build/${ARCH} \
 				--datadir=${WORKDIR}/build/${ARCH} \
-				--datarootdir=${WORKDIR}/build/${ARCH} \
-				--without-static-ipc3270
+				--datarootdir=${WORKDIR}/build/${ARCH}
 
 		fi
 
