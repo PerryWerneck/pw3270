@@ -67,13 +67,14 @@ failed()
 	exit -1
 }
 
+
 #
 # Get Sources from GIT
 #
-prepare()
+clone()
 {
-	echo -e "\e]2;Preparing ${1}\a"
-	echo "Preparing ${1}"
+	echo -e "\e]2;Cloning ${1}\a"
+	echo "Cloning ${1}"
 
 	mkdir -p ${WORKDIR}/sources
 
@@ -85,6 +86,13 @@ prepare()
 	else
 		git clone --quiet --branch "${BRANCH}" ${GIT_URL}/${1}.git ${WORKDIR}/sources/${1}
 	fi
+
+}
+
+prepare()
+{
+	echo -e "\e]2;Preparing ${1}\a"
+	echo "Preparing ${1}"
 
 	if [ "$?" != "0" ]; then
 		failed "Can't get sources for ${1}"
@@ -755,18 +763,22 @@ fi
 #
 for src in ${CORE_LIBRARIES}
 do
+	clone ${src}
 	prepare ${src}
 done
 
+clone ${src}
 prepare pw3270
 
 for src in ${PACKAGE_PLUGINS}
 do
+	clone pw3270-plugin-${src}
 	prepare pw3270-plugin-${src}
 done
 
 for src in ${PACKAGE_EXTRAS}
 do
+	clone ${src}
 	prepare ${src}
 done
 
