@@ -309,6 +309,8 @@ Section "Uninstall"
 	DeleteRegValue HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PW3270_SDK_PATH"
 	SendMessage ${HWND_BROADCAST} ${WM_WININICHANGE} 0 "STR:Environment" /TIMEOUT=5000
 
+	DeleteRegKey HKLM "Software\GSettings\apps\@PACKAGE_NAME@\@PRODUCT_NAME@"
+
 	# Delete System libraries
 	${@NSISREDIR@}
 

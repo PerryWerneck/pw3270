@@ -89,10 +89,10 @@
  	return G_ACTION(action);
  }
 
- static void new_window_activated(GAction *action, GVariant *parameter, GtkApplication *application) {
+ static void new_window_activated(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkApplication *application) {
 
  	debug("%s",__FUNCTION__);
- 	g_application_activate(application);
+ 	g_application_activate(G_APPLICATION(application));
 
  }
 
