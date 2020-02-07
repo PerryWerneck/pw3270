@@ -105,7 +105,6 @@ SubSection "@PRODUCT_NAME@" SecMain
 		file "/oname=$INSTDIR\@PRODUCT_NAME@.ico"			"@PACKAGE@.ico"
 		file "/oname=$INSTDIR\lib@LIBRARY_NAME@.dll"			"lib@LIBRARY_NAME@.dll"
 		file "/oname=$INSTDIR\libv3270.dll"				"libv3270.dll"
-		file "/oname=$INSTDIR\@PACKAGE@.dll"				"@PACKAGE@.dll"
 
 		# Configuration files
 		file "/oname=$INSTDIR\@PRODUCT_NAME@-logo.png"			"@PRODUCT_NAME@\@PRODUCT_NAME@-logo.png"
