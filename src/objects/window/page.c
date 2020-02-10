@@ -32,6 +32,7 @@
  #include <pw3270/application.h>
  #include <lib3270/toggle.h>
  #include <v3270/settings.h>
+ #include <v3270/dialogs.h>
  #include <v3270/actions.h>
  #include <v3270/print.h>
  #include <pw3270.h>
@@ -241,26 +242,37 @@
 
  }
 
+ static void on_rename_session_response(GtkDialog *dialog, gint response_id, GtkWidget *terminal) {
+
+	if(response_id == GTK_RESPONSE_APPLY) {
+
+		v3270_set_session_name(terminal, gtk_entry_get_text(GTK_ENTRY(g_object_get_data(G_OBJECT(dialog),"entry"))));
+		g_signal_emit_by_name(terminal,"save-settings");
+
+	}
+
+ 	gtk_widget_destroy(GTK_WIDGET(dialog));
+ }
+
  static void rename_session(GtkWidget G_GNUC_UNUSED(*widget), GtkWidget *terminal) {
 
  	debug("%s",__FUNCTION__);
 
- 	/*
-	GtkWidget * dialog = pw3270_settings_dialog_new(
-								_("Rename session"),
-								GTK_WINDOW(gtk_widget_get_toplevel(terminal))
+ 	GtkWidget * dialog = v3270_dialog_new_with_buttons(
+								_("Rename Session"),
+								terminal,
+								_("Apply"), GTK_RESPONSE_APPLY,
+								_("Cancel"), GTK_RESPONSE_CANCEL,
+								NULL
 							);
 
-	// https://developer.gnome.org/hig/stable/visual-layout.html.en
-	GtkWidget * content = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
-	gtk_container_set_border_width(GTK_CONTAINER(content),18);
+	g_signal_connect(G_OBJECT(dialog),"response",G_CALLBACK(on_rename_session_response),terminal);
 
-	GtkWidget * box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL,12);
-	gtk_box_pack_start(GTK_BOX(content),box,TRUE,TRUE,0);
+	// Create controls.
+	GtkWidget * box = v3270_dialog_set_content_area(dialog,gtk_box_new(GTK_ORIENTATION_HORIZONTAL,12));
 
-
-	// Create label.
-	GtkWidget *label = gtk_label_new(_("Session name"));
+	// Create label.rename
+	GtkWidget *label = gtk_label_new(_("New session name"));
 	gtk_label_set_xalign(GTK_LABEL(label),1);
 	gtk_box_pack_start(GTK_BOX(box),label,FALSE,TRUE,0);
 
@@ -271,6 +283,8 @@
 	gtk_entry_set_width_chars(GTK_ENTRY(entry),12);
 	gtk_entry_set_placeholder_text(GTK_ENTRY(entry),G_STRINGIFY(PRODUCT_NAME));
 	gtk_entry_set_input_purpose(GTK_ENTRY(entry),GTK_INPUT_PURPOSE_ALPHA);
+
+	g_object_set_data(G_OBJECT(dialog),"entry",entry);
 
 	{
 		g_autofree gchar * session_name = g_strdup(v3270_get_session_name(terminal));
@@ -285,14 +299,29 @@
 
 	gtk_box_pack_start(GTK_BOX(box),entry,FALSE,TRUE,0);
 
+
+	// Show dialog.
+	gtk_widget_show_all(dialog);
+
+
+
+ 	/*
+	GtkWidget * dialog = pw3270_settings_dialog_new(
+								_("Rename session"),
+								GTK_WINDOW(gtk_widget_get_toplevel(terminal))
+							);
+
+	// https://developer.gnome.org/hig/stable/visual-layout.html.en
+	gtk_container_set_border_width(GTK_CONTAINER(content),18);
+
+
 	gtk_widget_show_all(dialog);
 
 	if(gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_APPLY) {
 
 		v3270_set_session_name(terminal, gtk_entry_get_text(GTK_ENTRY(entry)));
-
-
 		g_signal_emit_by_name(terminal,"save-settings");
+
 	}
 
 	gtk_widget_destroy(dialog);

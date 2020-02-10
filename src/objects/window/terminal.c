@@ -290,6 +290,12 @@
 
  gboolean v3270_allow_custom_settings(GtkWidget *widget) {
 
+#if defined(DEBUG)
+
+	return TRUE;
+
+#else
+
 	const struct SessionDescriptor * descriptor = (const struct SessionDescriptor *) g_object_get_data(G_OBJECT(widget),"session-descriptor");
 
 	if(!(descriptor && *descriptor->filename))
@@ -299,14 +305,12 @@
 		return FALSE;
 
 #ifdef _WIN32
-
 	return TRUE;
-
 #else
-
 	return !g_str_has_prefix(descriptor->filename,g_get_user_config_dir());
-
 #endif // _WIN32
+
+#endif // DEBUG
 
  }
 
