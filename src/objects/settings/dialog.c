@@ -75,7 +75,7 @@ static void PW3270SettingsDialog_init(PW3270SettingsDialog *dialog)
 	//gtk_box_set_spacing(GTK_BOX(content_area),18);
 	//gtk_container_set_border_width(GTK_CONTAINER(content_area),18);
 
-	gtk_window_set_deletable(GTK_WINDOW(dialog),FALSE);
+//	gtk_window_set_deletable(GTK_WINDOW(dialog),FALSE);
     gtk_window_set_destroy_with_parent(GTK_WINDOW(dialog), TRUE);
 
 	gtk_dialog_add_buttons(
@@ -88,6 +88,11 @@ static void PW3270SettingsDialog_init(PW3270SettingsDialog *dialog)
 	// Create notebook for settings widgets
 	dialog->tabs = GTK_NOTEBOOK(gtk_notebook_new());
 
+#ifdef _WIN32
+	gtk_widget_set_margin_bottom(GTK_WIDGET(dialog->tabs),3);
+//	gtk_notebook_set_show_border(dialog->tabs, TRUE);
+#endif // _WIN32
+
 	gtk_notebook_set_scrollable(dialog->tabs,TRUE);
 	gtk_notebook_set_show_tabs(dialog->tabs,FALSE);
 	g_signal_connect(G_OBJECT(dialog->tabs), "page-added", G_CALLBACK(page_changed), dialog);
@@ -95,12 +100,20 @@ static void PW3270SettingsDialog_init(PW3270SettingsDialog *dialog)
 	g_signal_connect(G_OBJECT(dialog->tabs), "switch-page", G_CALLBACK(switch_page), dialog);
 	gtk_box_pack_start(GTK_BOX(content_area),GTK_WIDGET(dialog->tabs),TRUE,TRUE,0);
 
-	gtk_window_set_deletable(GTK_WINDOW(dialog),FALSE);
-
 }
 
 GtkWidget * pw3270_settings_dialog_new(GAction *action) {
-#if GTK_CHECK_VERSION(3,12,0)
+
+#ifdef _WIN32
+
+	GtkWidget * dialog =
+		GTK_WIDGET(g_object_new(
+			GTK_TYPE_PW3270_SETTINGS_DIALOG,
+			"use-header-bar", FALSE,
+			NULL
+		));
+
+#elif GTK_CHECK_VERSION(3,12,0)
 
 	gboolean use_header;
 	g_object_get(gtk_settings_get_default(), "gtk-dialogs-use-header", &use_header, NULL);
