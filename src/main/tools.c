@@ -64,6 +64,7 @@
 
  }
 
+ /*
  GtkWidget * pw3270_frame_new(GtkWidget * child, const gchar *title) {
 
 	GtkFrame			* frame		= GTK_FRAME(gtk_frame_new(""));
@@ -82,6 +83,7 @@
 	return GTK_WIDGET(frame);
 
  }
+ */
 
  void gtk_file_chooser_set_pw3270_filters(GtkFileChooser *chooser) {
 

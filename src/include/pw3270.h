@@ -53,7 +53,7 @@
 
 
 	void		  pw3270_load_placeholders(GtkBuilder * builder);
-	GtkWidget	* pw3270_frame_new(GtkWidget * child, const gchar *title);
+//	GtkWidget	* pw3270_frame_new(GtkWidget * child, const gchar *title);
 
 	// Application settings widget
 	typedef struct _Pw3270SettingsPage Pw3270SettingsPage;

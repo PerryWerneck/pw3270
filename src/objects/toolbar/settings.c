@@ -33,6 +33,7 @@
  #include <pw3270/toolbar.h>
  #include <pw3270/actions.h>
  #include <pw3270/window.h>
+ #include <v3270/dialogs.h>
 
  static void load(GtkWidget *widget, PW3270SettingsPrivate *settings);
  static void apply(GtkWidget *widget, PW3270SettingsPrivate *settings);
@@ -104,7 +105,7 @@
 
 		gtk_grid_attach(
 			GTK_GRID(settings),
-			pw3270_frame_new(GTK_WIDGET(grid), _("Actions")),
+			v3270_dialog_section_new(_("Itens"), _("Select the toolbar itens"), GTK_WIDGET(grid)),
 			0,0,4,3
 		);
 
@@ -203,7 +204,7 @@
 
 		gtk_grid_attach(
 			GTK_GRID(settings),
-			pw3270_frame_new(GTK_WIDGET(grid), _("Options")),
+			v3270_dialog_section_new(_("Layout"), _("Setup the toolbar layout"), GTK_WIDGET(grid)),
 			0,5,4,1
 		);
 
