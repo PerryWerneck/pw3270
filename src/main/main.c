@@ -71,7 +71,7 @@ static gboolean	quit_signal(GtkApplication *app) {
 #endif // G_OS_UNIX
 
 static void g_log_to_lib3270(const gchar *log_domain,GLogLevelFlags G_GNUC_UNUSED(log_level),const gchar *message,gpointer G_GNUC_UNUSED(user_data)) {
-	lib3270_write_log(NULL,log_domain,"%s",message);
+	lib3270_write_log(NULL,log_domain ? log_domain : G_STRINGIFY(PRODUCT_NAME),"%s",message);
 }
 
 int main (int argc, char **argv) {
