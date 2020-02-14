@@ -54,7 +54,7 @@
 
 	V3270SimpleAction * action = v3270_simple_action_new();
 
-	action->parent.activate = activate;
+	action->activate = activate;
 	action->name = "close";
 	action->icon_name = "window-close";
 	action->label =  _("Close window");

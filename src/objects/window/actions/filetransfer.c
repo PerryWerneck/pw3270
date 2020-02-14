@@ -38,7 +38,7 @@
 
 	V3270SimpleAction * action = v3270_simple_action_new();
 
-	action->parent.activate = activate;
+	action->activate = activate;
 	action->group.id = LIB3270_ACTION_GROUP_ONLINE;
 	action->name = "file.transfer";
 	action->icon_name = "drive-harddisk";

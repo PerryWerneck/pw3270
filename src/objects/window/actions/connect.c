@@ -55,7 +55,7 @@
 	}
 
 	action->name = "connect";
-	action->parent.activate = activate;
+	action->activate = activate;
 	action->label = _("Connect");
 	action->tooltip = _("Connect to host");
 

@@ -429,19 +429,34 @@
 	GtkWidget * terminal = pw3270_application_window_new_tab(GTK_WIDGET(window), session_file);
 
 	// Create property actions
-	static const gchar * properties[] = {
-		"model-number",
-		"font-family",
-		"dynamic-font-spacing",
-		"trace",
+	static const struct Property {
+		LIB3270_ACTION_GROUP group;
+		const gchar *name;
+	} properties[] = {
+		{
+			.name = "model-number",
+			.group = LIB3270_ACTION_GROUP_OFFLINE
+		},
+		{
+			.name = "font-family",
+			.group = LIB3270_ACTION_GROUP_NONE
+		},
+		{
+			.name = "dynamic-font-spacing",
+			.group = LIB3270_ACTION_GROUP_NONE
+		},
+		{
+			.name = "trace",
+			.group = LIB3270_ACTION_GROUP_NONE
+		},
 	};
 
 	for(ix = 0; ix < G_N_ELEMENTS(properties); ix++) {
 
-		GAction * action = G_ACTION(v3270_property_action_new(terminal,properties[ix]));
+		GAction * action = G_ACTION(v3270_property_action_new(terminal,properties[ix].name,properties[ix].group));
 
 		if(!g_action_get_name(action)) {
-			g_warning("Window property action %s is unnamed",properties[ix]);
+			g_warning("Window property action %s is unnamed",properties[ix].name);
 		} else {
 			g_action_map_add_action(G_ACTION_MAP(window),action);
 		}
@@ -486,6 +501,8 @@
 
  void pw3270_application_window_set_active_terminal(GtkWidget *widget, GtkWidget *terminal) {
 
+	size_t ix;
+
  	pw3270ApplicationWindow * window = PW3270_APPLICATION_WINDOW(widget);
 
  	if(window->terminal == terminal)
@@ -512,23 +529,42 @@
 
 	}
 
-	// Update actions
-	size_t ix;
-	gchar ** actions = g_action_group_list_actions(G_ACTION_GROUP(window));
+	// Update window actions
+	{
+		gchar ** actions = g_action_group_list_actions(G_ACTION_GROUP(window));
 
-	for(ix = 0; actions[ix]; ix++) {
+		for(ix = 0; actions[ix]; ix++) {
 
-//		debug("%s",actions[ix]);
+			GAction * action = g_action_map_lookup_action(G_ACTION_MAP(window), actions[ix]);
 
-		GAction * action = g_action_map_lookup_action(G_ACTION_MAP(window), actions[ix]);
+			if(action && V3270_IS_ACTION(action)) {
+				v3270_action_set_terminal_widget(action,terminal);
+			}
 
-		if(action && V3270_IS_ACTION(action)) {
-			v3270_action_set_terminal_widget(action,terminal);
 		}
 
+		g_strfreev(actions);
 	}
 
-	g_strfreev(actions);
+	// Update application actions
+	{
+		GtkApplication * application = GTK_APPLICATION(gtk_window_get_application(GTK_WINDOW(window)));
+
+		if(application) {
+
+			gchar ** actions = g_action_group_list_actions(G_ACTION_GROUP(application));
+
+			for(ix = 0; actions[ix]; ix++) {
+
+				GAction * action = g_action_map_lookup_action(G_ACTION_MAP(application), actions[ix]);
+				if(action && V3270_IS_ACTION(action)) {
+					v3270_action_set_terminal_widget(action,terminal);
+				}
+
+			}
+
+		}
+	}
 
  }
 
