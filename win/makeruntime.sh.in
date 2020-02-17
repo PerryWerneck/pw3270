@@ -249,10 +249,10 @@ copy_theme() {
 	cp -rv "${prefix}/etc/gtk-3.0" "${TARGET}/etc"
 
 	# https://stackoverflow.com/questions/37035936/how-to-get-native-windows-decorations-on-gtk3-on-windows-7-and-msys2
+	mkdir -p ${TARGET}/etc/gtk-3.0
 	rm -f ${TARGET}/etc/gtk-3.0/settings.ini
+	rm -f ${TARGET}/etc/gtk-3.0/gtkrc
 
-
-#	mkdir -p ${TARGET}/etc/gtk-3.0
 #	echo "[Settings]" >> ${TARGET}/etc/gtk-3.0/settings.ini
 #	echo "gtk-theme-name = win32" >> ${TARGET}/etc/gtk-3.0/settings.ini
 
