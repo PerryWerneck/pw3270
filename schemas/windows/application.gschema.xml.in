@@ -39,7 +39,7 @@
     </key>
 
     <key name="gtk-csd" type="i">
-      <default>-1</default>
+      <default>0</default>
       <summary>GTK CSD</summary>
       <description>Gtk Client side decorations</description>
     </key>

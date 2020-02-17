@@ -35,6 +35,7 @@
  #include <pw3270.h>
  #include <pw3270/application.h>
  #include <pw3270/actions.h>
+ #include <stdlib.h>
 
  enum {
 	PROP_ZERO,
@@ -207,18 +208,22 @@
 
 		g_settings_schema_source_unref(source);
 
-		// https://stackoverflow.com/questions/37035936/how-to-get-native-windows-decorations-on-gtk3-on-windows-7-and-msys2
-		int gtk_csd = g_settings_get_int(app->settings,"gtk-csd");
-		if(gtk_csd != -1) {
-			g_autofree gchar * env = g_strdup_printf("GTK_CSD=%d",gtk_csd);
-			putenv(env);
-		}
-
 #else
 
 		app->settings = g_settings_new_with_path("br.com.bb." PACKAGE_NAME, path);
 
 #endif // DEBUG
+
+#ifdef _WIN32
+		{
+			// https://stackoverflow.com/questions/37035936/how-to-get-native-windows-decorations-on-gtk3-on-windows-7-and-msys2
+			int gtk_csd = g_settings_get_int(app->settings,"gtk-csd");
+			if(gtk_csd != -1) {
+				g_autofree gchar * env = g_strdup_printf("GTK_CSD=%d",gtk_csd);
+				putenv(env);
+			}
+		}
+#endif // _WIN32
 
 		debug("app->settings=%p",app->settings);
 
