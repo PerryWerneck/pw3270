@@ -250,10 +250,11 @@ copy_theme() {
 
 	# https://stackoverflow.com/questions/37035936/how-to-get-native-windows-decorations-on-gtk3-on-windows-7-and-msys2
 	rm -f ${TARGET}/etc/gtk-3.0/settings.ini
-	mkdir -p ${TARGET}/etc/gtk-3.0
-	echo "[Settings]" >> ${TARGET}/etc/gtk-3.0/settings.ini
 
-	echo "gtk-theme-name = win32" >> ${TARGET}/etc/gtk-3.0/settings.ini
+
+#	mkdir -p ${TARGET}/etc/gtk-3.0
+#	echo "[Settings]" >> ${TARGET}/etc/gtk-3.0/settings.ini
+#	echo "gtk-theme-name = win32" >> ${TARGET}/etc/gtk-3.0/settings.ini
 
 #	echo "gtk-theme-name = MS-Windows" >> ${TARGET}/etc/gtk-3.0/settings.ini
 #	echo "gtk-icon-theme-name = ${1}" >> ${TARGET}/etc/gtk-3.0/settings.ini
