@@ -38,6 +38,12 @@
       <description>The ID of the current user interface style</description>
     </key>
 
+    <key name="gtk-csd" type="i">
+      <default>-1</default>
+      <summary>GTK CSD</summary>
+      <description>Gtk Client side decorations</description>
+    </key>
+
   </schema>
 
 </schemalist>
