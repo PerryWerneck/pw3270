@@ -9,15 +9,12 @@ See more details at https://softwarepublico.gov.br/social/pw3270/
 
 ## Installation
 
-### Distributions
+### Linux
 
-openSUSE [package](https://build.opensuse.org/project/show/home:PerryWerneck:pw3270):
+For the supported distributions get the install repositories and instructions from https://software.opensuse.org/download.html?project=home%3APerryWerneck%3Apw3270&package=pw3270
 
-```
-sudo zypper ar obs://home:PerryWerneck:pw3270 pw3270
-sudo zypper ref
-sudo zypper in pw3270
-```
+### Windows
+
 
 ## Requirements
 
