@@ -34,6 +34,7 @@ PACKAGE_EXTRAS="libhllapi"
 TARGET_ARCHS="x86_64 x86_32"
 GIT_URL="https://github.com/PerryWerneck"
 BUILD_UNSTABLE=0
+MAKE_ZIP=1
 
 PROJECTDIR=$(dirname $(dirname $(readlink -f ${0})))
 WORKDIR=$(mktemp -d)
@@ -591,18 +592,53 @@ makeInstaller()
 			TARCH="i686"
 		fi
 
+		if [ ${BUILD_UNSTABLE} == "1" ]; then
+			TARGET_PATH="/${PRODUCT_NAME}/unstable/${ARCH}"
+		else
+			TARGET_PATH="/${PRODUCT_NAME}/${ARCH}"
+		fi
+
+		if [ "${MAKE_ZIP}" == "1" ]; then
+
+			ZIPNAME="${WORKDIR}/build/${ARCH}/${PRODUCT_NAME}-${ARCH}.zip"
+
+			rm -f "${ZIPNAME}"
+			zip -9 "${ZIPNAME}" *.dll *.exe *.ico
+
+			pushd runtime
+			zip -9 -r "${ZIPNAME}" .
+
+			popd
+
+			if [ -d ~/public_html ]; then
+				mkdir -p ~/public_html/win/${TARGET_PATH}
+				cp -v "${ZIPNAME}" ~/public_html/win/${TARGET_PATH}
+				if [ "$?" != "0" ]; then
+					failed "Can't copy zip to ~/public_html/win/${TARGET_PATH}"
+				fi
+			fi
+
+			if [ "${PUBLISH}" == "1" ] && [ ! -z ${WIN_PACKAGE_SERVER} ]; then
+
+				scp "${ZIPNAME}" ${WIN_PACKAGE_SERVER}/${TARGET_PATH}
+				if [ "$?" != "0" ]; then
+					failed "Can't publish zip to ${WIN_PACKAGE_SERVER}/${TARGET_PATH}"
+				fi
+			fi
+
+			mv -f "${ZIPNAME}" ${PROJECTDIR}
+			if [ "$?" != "0" ]; then
+				failed "Can't move zip to ${PROJECTDIR}"
+			fi
+
+		fi
+
 		for NSI in *.nsi
 		do
 			makensis ${NSIS_ARGS} ${NSI}
 			if [ "$?" != "0" ]; then
 				echo makensis ${NSIS_ARGS} ${NSI}
 				failed "Error building ${ARCH} ${NSI}"
-			fi
-
-			if [ ${BUILD_UNSTABLE} == "1" ]; then
-				TARGET_PATH="/${PRODUCT_NAME}/unstable/${ARCH}"
-			else
-				TARGET_PATH="/${PRODUCT_NAME}/${ARCH}"
 			fi
 
 			if [ -d ~/public_html ]; then
@@ -737,6 +773,15 @@ do
 		SHELL-ON-ERROR)
 			PAUSE_ON_ERROR=1
 			;;
+
+		NO_ZIP)
+			MAKE_ZIP=0
+			;;
+
+		ZIP)
+			MAKE_ZIP=1
+			;;
+
 		HELP)
 			echo "${0} [options]"
 			echo ""
@@ -751,6 +796,12 @@ do
 			echo "  --pre-reqs		Install required packages"
 			echo "  --shell-on-error	Open a shell when the build process failed"
 			echo "  --unstable		Build unstable version"
+			
+			if [ "${MAKE_ZIP}" == "1" ]; then
+				echo "  --no-zip		Don't create zip file"
+			else
+				echo "  --zip			Create zip file"
+			fi
 
 			if [ ! -z ${WIN_PACKAGE_SERVER} ]; then
 				echo "  --no-publish		Don't publish binaries in ${WIN_PACKAGE_SERVER}/${PRODUCT_NAME}"
