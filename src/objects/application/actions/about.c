@@ -36,6 +36,9 @@
  	static const gchar *authors[]	=
  	{
  		"Perry Werneck <perry.werneck@gmail.com>",
+		#ifdef __APPLE__
+			"Andre Breves <andre.breves@gmail.com>",
+		#endif
 		"Paul Mattes <Paul.Mattes@usa.net>",
 		"Georgia Tech Research Corporation (GTRC)",
 		"and others",
