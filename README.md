@@ -44,3 +44,27 @@ sudo zypper ref
 wget https://github.com/PerryWerneck/pw3270/blob/master/win/pack.sh
 ./pack.sh --pre-reqs
 ```
+
+Building for macOS (using homebrew)
+===================================
+
+1. Build and install [libv3270](../../../libv3270)
+
+2. Install additional dependencies
+
+	```shell
+	$ brew install adwaita-icon-theme imagemagick
+	```
+
+3. Configure and build
+
+	```shell
+	$ ./autogen.sh
+	$ make all
+	````
+
+4. Create app bundle
+
+	```shell
+	$ cd macos
+	$ ./bundle
