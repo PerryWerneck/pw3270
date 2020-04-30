@@ -58,3 +58,4 @@ vgcore.*
 gschemas.compiled
 *.gschema.xml
 *.3270
+macos/**/*.app

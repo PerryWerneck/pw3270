@@ -1,0 +1,210 @@
+#!/usr/bin/env bash
+#@author  André Breves <andre.breves@gmail.com>
+set -Eeuo pipefail
+
+check_dependencies() {
+    local unavailable=()
+    for dependency in "${@:-$(</dev/stdin)}"; do
+        if [[ ! -x "$(command -v ${dependency})" ]]; then unavailable+=("${dependency}"); fi
+    done
+    if [[ ${#unavailable[@]} == 1 ]]; then
+        echo "Dependency '${unavailable[*]}' not found."
+        exit 1
+    elif [[ ${#unavailable[@]} -gt 1 ]]; then 
+        error "Dependencies '${unavailable[*]}' not found."
+        exit 1
+    fi
+}
+
+find_lib() {
+    # https://developer.apple.com/library/archive/documentation/DeveloperTools/Conceptual/DynamicLibraries/100-Articles/UsingDynamicLibraries.html
+    local libs_path="${HOME}/lib /usr/local/lib /usr/lib"
+    for lib in "${@:-$(</dev/stdin)}"; do
+        local found=""
+        if [[ -f "${lib}" ]]; then
+            found="$(greadlink -m "${lib}")"
+        else
+            for path in ${libs_path}; do
+                if [[ -f "${path}/${lib}" ]]; then
+                    found="$(greadlink -m "${path}/${lib}")"
+                    break
+                fi
+            done
+        fi
+        if [[ "${found}" != "" ]]; then
+            echo "${found}"
+        else
+            echo >&2 "Lib ${lib} not found"
+            exit 1
+        fi
+    done
+}
+
+bundle_cp() {
+    local system_libs='^(/System/.*|/usr/lib/.*)$'
+    
+    for source in "${@:-$(</dev/stdin)}"; do
+        source="$(greadlink -m "${source}")"
+
+        if [[ "${source}" =~ ${system_libs} ]]; then continue; fi
+        
+        if [[ ! -f "${source}" ]]; then
+            echo >&2 "File \"${source}\" not found"
+            exit 1
+        fi
+
+        local id=""
+        local target=""
+        local file_type
+        file_type="$(file -b "${source}")"
+        case "${file_type}" in
+            *executable*)
+                target="$(greadlink -m "${exe_path}/$(basename "${source}")")";;
+            *)
+                id="@rpath/$(basename "${source}")"
+                target="$(greadlink -m "${lib_path}/$(basename "${source}")")";;
+        esac
+
+        if [[ "${id}" != "" ]]; then echo "${id}"; fi
+        
+        if [[ -f "${target}" ]]; then continue; fi
+        
+        mkdir -p "$(dirname "${target}")"
+        cp "${source}" "${target}"
+        chmod u+w "${target}"
+        
+        if [[ "${id}" != "" ]]; then install_name_tool -id "${id}" "${target}"; fi
+        install_name_tool -add_rpath "@executable_path/../Frameworks" "${target}"
+        
+        for old_install_name in $(otool -L "${target}" | grep '^\t' | cut -c 2- | sed -n "s/\(.*\) (.*)/\1/p"); do
+            if [[ "${old_install_name}" == "${id}" ]]; then continue; fi
+            local lib="$(find_lib "${old_install_name}")"
+            local new_install_name="$(bundle_cp "${lib}")"
+            if [[ "${new_install_name}" != "" ]]; then 
+                install_name_tool -change "${old_install_name}" "${new_install_name}" "${target}"
+            fi
+        done
+        echo >&2 "${target}"
+    done
+}
+
+bundle_cache() {
+    local awaiting_file=1;
+    while IFS= read -r line; do
+        if (( awaiting_file )); then
+            if [[ ! "${line}" =~ ^"#" && "${line}" != "" ]]; then
+                line="${line##\ }"
+                line="${line#\"}"
+                line="${line%%\ }"
+                line="${line%\"}"
+                line="\"$(bundle_cp "${line}")\""
+                awaiting_file=0
+            fi
+        else
+            if [[ "${line}" == "" ]]; then
+                awaiting_file=1
+            fi
+        fi
+        printf '%s\n' "${line}"
+    done
+}
+
+# Check dependencies
+check_dependencies otool grep cut sed greadlink qlmanage sips iconutil
+
+# Creates temporary directory
+echo "Creating temporary directory"
+tmp="$(mktemp -d)"
+trap 'echo "Removing temporary directory \"${tmp}\""; rm -rf "${tmp}"' EXIT
+
+bundle="pw3270.app"
+bundle_path="${bundle}/Contents"
+exe_path="${bundle_path}/MacOS"
+lib_path="${bundle_path}/Frameworks"
+res_path="${bundle_path}/Resources"
+
+rm -fr "${bundle}"
+
+mkdir -p "${bundle_path}"
+cp "Info.plist" "${bundle_path}"
+
+mkdir -p "${res_path}"
+cp -r "../ui" "${res_path}"
+cp -r "$(brew --prefix)/share/pw3270/remap" "${res_path}"
+cp "$(brew --prefix)/share/pw3270/colors.conf" "${res_path}"
+
+# Bundle GLib schemas
+echo "Bundling GLib schemas"
+mkdir -p "${tmp}/schemas"
+cp "../schemas/linux/"*".xml" "${tmp}/schemas"
+cp "$(pkg-config gtk+-3.0 --variable=prefix)/share/glib-2.0/schemas/org.gtk.Settings."*".gschema.xml" "${tmp}/schemas"
+glib-compile-schemas --targetdir="${res_path}" "${tmp}/schemas"
+
+# Create the GTK settings file
+# https://developer.gnome.org/gtk3/stable/GtkSettings.html
+mkdir -p "${res_path}/gtk-3.0"
+cat > "${res_path}/gtk-3.0/settings.ini" << EOF
+[Settings]
+gtk-theme-name=Adwaita
+gtk-print-preview-command="open -b com.apple.Preview %f"
+EOF
+
+# Make icon bundle
+echo "Creating app icon bundle"
+iconset="${tmp}/pw3270.iconset"
+rm -fr "${iconset}"
+mkdir -p "${iconset}"
+icon_sizes=("16" "32" "64" "128" "256" "512" "1024")
+for ((i=1; i < ${#icon_sizes[*]}; i++)); do
+    size=${icon_sizes[$((i - 1))]}
+    convert -density "${size}"   -resize "${size}x"   -background transparent "../branding/pw3270.svg" "${iconset}/icon_${size}x${size}.png"
+    
+    size2x=${icon_sizes[${i}]}
+    convert -density "${size2x}" -resize "${size2x}x" -background transparent "../branding/pw3270.svg" "${iconset}/icon_${size}x${size}@2x.png"
+done
+iconutil -c icns -o "${res_path}/pw3270.icns" "${iconset}"
+
+
+# Copy icons
+mkdir -p "${res_path}/icons"
+cp -r "$(brew --prefix adwaita-icon-theme)/share/icons/" "${res_path}/icons"
+cp -r "$(brew --prefix hicolor-icon-theme)/share/icons/" "${res_path}/icons"
+mogrify -format png -path "${res_path}" -background transparent "../branding/*.svg"
+
+# Copy themes
+mkdir -p "${res_path}/themes"
+cp -a "$(brew --prefix gtk+3)/share/themes/Mac" "${res_path}/themes"
+
+# Copy mime database
+mkdir -p "${res_path}/mime"
+cp "$(pkg-config shared-mime-info --variable=prefix)/share/mime/mime.cache" "${res_path}/mime"
+
+# Copy executables
+mkdir -p "${exe_path}"
+bundle_cp "../.bin/Release/pw3270"
+cp "launcher.sh" "${exe_path}"
+
+# Bundle GdkPixbuf Image Loader Modules
+gdk-pixbuf-query-loaders | bundle_cache > "${res_path}/gdk-loaders.cache"
+
+# Bundle GTK+ Input Method Modules
+gtk_prefix="$(pkg-config gtk+-3.0 --variable prefix)"
+gtk-query-immodules-3.0 | bundle_cache \
+    | sed "s|${gtk_prefix}/share/locale|@executable_path/../Resources/locale|g" \
+    > "${res_path}/gtk.immodules"
+
+# Bundle print backends
+mkdir -p "${lib_path}/printbackends"
+for backend in "$(pkg-config gtk+-3.0 --variable=prefix)/lib/gtk-3.0/$(pkg-config gtk+-3.0 --variable=gtk_binary_version)/printbackends/"*.so; do
+    bundle_cp "${backend}"
+    # TODO: update bundle_cp to inform destiny dir
+    mv "${lib_path}/$(basename "${backend}")" "${lib_path}/printbackends"
+done
+
+# TODO: gerar o Info.plist com a versão do macOS $(sw_vers -productVersion)
+
+# Bundle locale
+mkdir -p "${res_path}/locale"
+cp -r "../.bin/locale/" "${res_path}/locale"
+cp "$(brew --prefix)/share/locale/pt_BR/LC_MESSAGES/lib3270.mo" "${res_path}/locale/pt_BR/LC_MESSAGES"
+cp "$(brew --prefix)/share/locale/pt_BR/LC_MESSAGES/libv3270.mo" "${res_path}/locale/pt_BR/LC_MESSAGES"
