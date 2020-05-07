@@ -33,7 +33,7 @@
   <schema id="br.com.bb.@PACKAGE_NAME@">
 
     <key name="ui-style" type="u">
-      <default>1</default>
+      <default>2</default>
       <summary>UI Style</summary>
       <description>The ID of the current user interface style</description>
     </key>

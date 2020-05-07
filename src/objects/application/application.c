@@ -157,11 +157,11 @@
 			_("UI Type"),
 			_("The code of the User interface type"),
 			PW3270_UI_STYLE_CLASSICAL,
-			PW3270_UI_STYLE_GNOME,
+			PW3270_UI_STYLE_AUTOMATIC,
 #ifdef _WIN32
 			PW3270_UI_STYLE_CLASSICAL,
 #else
-			PW3270_UI_STYLE_GNOME,
+			PW3270_UI_STYLE_AUTOMATIC,
 #endif // _WIN32
 			G_PARAM_READABLE|G_PARAM_WRITABLE
 		);
@@ -176,7 +176,7 @@
 #ifdef _WIN32
 	app->ui_style = PW3270_UI_STYLE_CLASSICAL;
 #else
-	app->ui_style = PW3270_UI_STYLE_GNOME;
+	app->ui_style = PW3270_UI_STYLE_AUTOMATIC;
 #endif // _WIN32
 
 	// Get settings

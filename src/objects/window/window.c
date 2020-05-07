@@ -346,7 +346,22 @@
 	{
 		g_autoptr(GSettings) settings = pw3270_application_window_settings_new();
 
-		if(pw3270_application_get_ui_style(G_APPLICATION(application)) == PW3270_UI_STYLE_GNOME) {
+		PW3270_UI_STYLE style = pw3270_application_get_ui_style(G_APPLICATION(application));
+
+		if(style == PW3270_UI_STYLE_AUTOMATIC) {
+
+			if(gtk_application_get_app_menu(application)) {
+				style = PW3270_UI_STYLE_GNOME;
+			} else {
+				style = PW3270_UI_STYLE_CLASSICAL;
+				g_settings_set_boolean(settings,"menubar-visible",TRUE);
+				g_settings_set_boolean(settings,"toolbar-visible",TRUE);
+			}
+
+			pw3270_application_set_ui_style(G_APPLICATION(application),style);
+		}
+
+		if(style == PW3270_UI_STYLE_GNOME) {
 
 			// Create header bar
 

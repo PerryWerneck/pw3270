@@ -55,6 +55,7 @@
 	typedef enum _pw3270_ui_style {
 		PW3270_UI_STYLE_CLASSICAL,		///< @brief Interface "classica", com menu e toolbar.
 		PW3270_UI_STYLE_GNOME,			///< @brief Interface padrão gnome.
+		PW3270_UI_STYLE_AUTOMATIC,		///< @brief Auto defined UI-Style
 	} PW3270_UI_STYLE;
 
 
