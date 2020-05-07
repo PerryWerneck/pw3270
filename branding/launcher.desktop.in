@@ -2,6 +2,7 @@
 X-SuSE-translate=true
 GenericName=@PRODUCT_NAME@
 Name=3270 Terminal
+Name[pt_BR]=Terminal 3270
 Comment=@PACKAGE_DESCRIPTION@
 Exec=@PRODUCT_NAME@
 Icon=@PRODUCT_NAME@
@@ -9,6 +10,20 @@ Terminal=false
 Type=Application
 StartupNotify=true
 
+Actions=gnomeui;classicalui
+
 # https://specifications.freedesktop.org/menu-spec/menu-spec-1.0.html
 Categories=System;TerminalEmulator;
+
+[Desktop Action gnomeui]
+Name=New window using modern user interface
+Name[pt_BR]=Nova janela usando a interface de usuário atualizada
+
+Exec=@PRODUCT_NAME@ --user-interface=gnome
+
+[Desktop Action classicalui]
+Name=New window using classical user interface
+Name[pt_BR]=Nova janela usando a interface de usuário clássica
+
+Exec=@PRODUCT_NAME@ --user-interface=classic
 

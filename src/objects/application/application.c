@@ -171,7 +171,57 @@
 
  }
 
+
+ static gboolean on_user_interface(const gchar G_GNUC_UNUSED(*option), const gchar *value, gpointer G_GNUC_UNUSED(dunno), GError **error) {
+
+	GApplication * app = g_application_get_default();
+
+	debug("********************* %p",app);
+
+	g_autoptr(GSettings) app_settings = pw3270_application_settings_new();
+	g_autoptr(GSettings) win_settings = pw3270_application_window_settings_new();
+
+	if(!g_ascii_strcasecmp(value,"gnome")) {
+
+		g_settings_set_uint(app_settings,"ui-style",PW3270_UI_STYLE_GNOME);
+		g_settings_set_boolean(win_settings,"toolbar-visible",TRUE);
+		g_settings_set_boolean(win_settings,"menubar-visible",FALSE);
+
+	} else if(!g_ascii_strcasecmp(value,"classic")) {
+
+		g_settings_set_uint(app_settings,"ui-style",PW3270_UI_STYLE_CLASSICAL);
+		g_settings_set_boolean(win_settings,"toolbar-visible",TRUE);
+		g_settings_set_boolean(win_settings,"menubar-visible",TRUE);
+
+	} else if(!g_ascii_strcasecmp(value,"default")) {
+
+		g_settings_set_uint(app_settings,"ui-style",PW3270_UI_STYLE_AUTOMATIC);
+
+	} else {
+
+		g_set_error(
+			error,
+			g_quark_from_static_string(G_STRINGIFY(PRODUCT_NAME)),
+			EINVAL,
+			_( "\"%s\" is not a valid user interface name" ), value
+		);
+
+	}
+
+	return TRUE;
+
+ }
+
  static void pw3270Application_init(pw3270Application *app) {
+
+	static GOptionEntry cmd_options[] = {
+
+		{ "user-interface", 'U', 0, G_OPTION_ARG_CALLBACK,	&on_user_interface, N_( "Set the user-interface type" ),  NULL },
+		{ NULL }
+
+	};
+
+	g_application_add_main_option_entries(G_APPLICATION(app), cmd_options);
 
 #ifdef _WIN32
 	app->ui_style = PW3270_UI_STYLE_CLASSICAL;
@@ -180,39 +230,11 @@
 #endif // _WIN32
 
 	// Get settings
-	{
-		g_autofree gchar * path = g_strconcat("/apps/" PACKAGE_NAME "/", g_get_application_name(),"/",NULL);
-		debug("path=%s",path);
+	app->settings = pw3270_application_settings_new();
 
-#ifdef DEBUG
-		GError * error = NULL;
-		GSettingsSchemaSource * source =
-			g_settings_schema_source_new_from_directory(
-				".",
-				NULL,
-				TRUE,
-				&error
-			);
-
-		g_assert_no_error(error);
-
-		GSettingsSchema * schema =
-			g_settings_schema_source_lookup(
-				source,
-				"br.com.bb." PACKAGE_NAME,
-				TRUE);
-
-		debug("schema %s=%p","br.com.bb." PACKAGE_NAME,schema);
-
-		app->settings = g_settings_new_full(schema, NULL, path);
-
-		g_settings_schema_source_unref(source);
-
-#else
-
-		app->settings = g_settings_new_with_path("br.com.bb." PACKAGE_NAME, path);
-
-#endif // DEBUG
+	// Bind properties
+	if(app->settings) {
+		g_object_ref_sink(G_OBJECT(app->settings));
 
 #ifdef _WIN32
 		{
@@ -225,13 +247,6 @@
 		}
 #endif // _WIN32
 
-		debug("app->settings=%p",app->settings);
-
-	}
-
-	// Bind properties
-	if(app->settings) {
-		g_object_ref_sink(G_OBJECT(app->settings));
 		g_settings_bind(app->settings, "ui-style", app, "ui-style", G_SETTINGS_BIND_DEFAULT);
 	}
 
@@ -419,6 +434,47 @@
 	return PW3270_APPLICATION(app)->plugins;
 
  }
+
+ GSettings * pw3270_application_settings_new() {
+
+	GSettings *settings = NULL;
+
+	g_autofree gchar * path = g_strconcat("/apps/" PACKAGE_NAME "/", g_get_application_name(),"/",NULL);
+	debug("path=%s",path);
+
+#ifdef DEBUG
+	GError * error = NULL;
+	GSettingsSchemaSource * source =
+		g_settings_schema_source_new_from_directory(
+			".",
+			NULL,
+			TRUE,
+			&error
+		);
+
+	g_assert_no_error(error);
+
+	GSettingsSchema * schema =
+		g_settings_schema_source_lookup(
+			source,
+			"br.com.bb." PACKAGE_NAME,
+			TRUE);
+
+	debug("schema %s=%p","br.com.bb." PACKAGE_NAME,schema);
+
+	settings = g_settings_new_full(schema, NULL, path);
+
+	g_settings_schema_source_unref(source);
+
+#else
+
+	settings = g_settings_new_with_path("br.com.bb." PACKAGE_NAME, path);
+
+#endif // DEBUG
+
+	return settings;
+ }
+
 
  /*
  void pw3270_application_plugin_foreach(GApplication *app, GFunc func, gpointer user_data) {

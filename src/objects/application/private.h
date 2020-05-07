@@ -48,6 +48,7 @@
 
 	G_GNUC_INTERNAL void		  pw3270_application_open(GApplication * application, GFile **files, gint n_files, const gchar *hint);
 	G_GNUC_INTERNAL GtkWidget	* pw3270_terminal_new(const gchar *session_file);
+	G_GNUC_INTERNAL GSettings	* pw3270_application_settings_new();
 
 	// Actions
     G_GNUC_INTERNAL GAction * pw3270_about_action_new();
