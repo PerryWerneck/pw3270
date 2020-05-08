@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-07 14:35-0300\n"
+"POT-Creation-Date: 2020-05-08 00:40-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,12 +17,17 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/objects/application/actions/about.c:103
+#: src/objects/application/application.c:206
+#, c-format
+msgid "\"%s\" is not a valid user interface name"
+msgstr ""
+
+#: src/objects/application/actions/about.c:106
 #, c-format
 msgid "3270 terminal emulator for GTK %d.%d"
 msgstr ""
 
-#: src/objects/application/actions/about.c:129 ui/application.xml:39
+#: src/objects/application/actions/about.c:132 ui/application.xml:39
 #: ui/application.xml:538
 msgid "About PW3270"
 msgstr ""
@@ -35,15 +40,11 @@ msgstr ""
 msgid "Action Names"
 msgstr ""
 
-#: src/objects/toolbar/settings.c:107
-msgid "Actions"
-msgstr ""
-
 #: ui/window.xml:382 ui/window.xml:467 ui/application.xml:510
 msgid "Alert sound"
 msgstr ""
 
-#: src/main/tools.c:97
+#: src/main/tools.c:99
 msgid "All files"
 msgstr ""
 
@@ -55,15 +56,19 @@ msgstr ""
 msgid "Application"
 msgstr ""
 
-#: src/objects/application/actions/preferences.c:63 ui/application.xml:84
+#: src/objects/application/actions/preferences.c:69 ui/application.xml:84
 msgid "Application preferences"
+msgstr ""
+
+#: src/objects/window/page.c:264
+msgid "Apply"
 msgstr ""
 
 #: ui/application.xml:485
 msgid "Auto-Reconnect"
 msgstr ""
 
-#: src/objects/toolbar/settings.c:113
+#: src/objects/toolbar/settings.c:114
 msgid "Available"
 msgstr ""
 
@@ -79,7 +84,7 @@ msgstr ""
 msgid "Bold"
 msgstr ""
 
-#: src/objects/application/actions/about.c:111
+#: src/objects/application/actions/about.c:114
 msgid "Brazilian Public Software Portal"
 msgstr ""
 
@@ -93,6 +98,7 @@ msgid "Can't save session file"
 msgstr ""
 
 #: src/objects/actions/save.c:65 src/objects/application/actions/open.c:49
+#: src/objects/window/page.c:265
 msgid "Cancel"
 msgstr ""
 
@@ -126,6 +132,10 @@ msgstr ""
 msgid "Colors"
 msgstr ""
 
+#: src/objects/linux/savedesktopicon.c:93
+msgid "Comment"
+msgstr ""
+
 #: src/objects/window/actions/connect.c:59
 msgid "Connect"
 msgstr ""
@@ -138,7 +148,7 @@ msgstr ""
 msgid "Connect to host"
 msgstr ""
 
-#: src/objects/window/window.c:506 src/objects/window/page.c:217
+#: src/objects/window/window.c:538 src/objects/window/page.c:218
 msgid "Connected to host"
 msgstr ""
 
@@ -154,7 +164,7 @@ msgstr ""
 msgid "Copy as text"
 msgstr ""
 
-#: src/objects/windows/savedesktopicon.c:79
+#: src/objects/linux/savedesktopicon.c:106
 msgid "Create a desktop icon for the current session"
 msgstr ""
 
@@ -190,8 +200,8 @@ msgstr ""
 msgid "Disconnect"
 msgstr ""
 
-#: src/objects/window/window.c:506 src/objects/window/window.c:511
-#: src/objects/window/page.c:206
+#: src/objects/window/window.c:538 src/objects/window/window.c:543
+#: src/objects/window/page.c:207
 msgid "Disconnected from host"
 msgstr ""
 
@@ -219,7 +229,7 @@ msgstr ""
 msgid "Field attributes"
 msgstr ""
 
-#: src/objects/windows/savedesktopicon.c:62
+#: src/objects/linux/savedesktopicon.c:72
 msgid "File name"
 msgstr ""
 
@@ -229,6 +239,10 @@ msgstr ""
 
 #: ui/window.xml:255 ui/window.xml:434 ui/window.xml:532
 msgid "Full screen"
+msgstr ""
+
+#: src/objects/linux/savedesktopicon.c:86
+msgid "Generic name"
 msgstr ""
 
 #: ui/application.xml:36 ui/application.xml:535
@@ -251,7 +265,7 @@ msgstr ""
 msgid "Icon Name"
 msgstr ""
 
-#: src/objects/toolbar/settings.c:49
+#: src/objects/toolbar/settings.c:50
 msgid "Icon Size"
 msgstr ""
 
@@ -275,6 +289,10 @@ msgstr ""
 msgid "Insert"
 msgstr ""
 
+#: src/objects/toolbar/settings.c:108
+msgid "Itens"
+msgstr ""
+
 #: ui/application.xml:500
 msgid "Keep selected"
 msgstr ""
@@ -287,8 +305,12 @@ msgstr ""
 msgid "Large"
 msgstr ""
 
-#: src/objects/windows/savedesktopicon.c:67
+#: src/objects/linux/savedesktopicon.c:79
 msgid "Launcher name"
+msgstr ""
+
+#: src/objects/toolbar/settings.c:207
+msgid "Layout"
 msgstr ""
 
 #: ui/application.xml:71
@@ -325,6 +347,10 @@ msgstr ""
 
 #: ui/application.xml:520
 msgid "Network keep alive"
+msgstr ""
+
+#: src/objects/window/page.c:275
+msgid "New session name"
 msgstr ""
 
 #: src/objects/application/actions/window.c:84
@@ -371,8 +397,7 @@ msgstr ""
 msgid "Open session in New window"
 msgstr ""
 
-#: src/objects/toolbar/settings.c:206 ui/window.xml:231 ui/window.xml:367
-#: ui/window.xml:514 ui/application.xml:432
+#: ui/window.xml:231 ui/window.xml:367 ui/window.xml:514 ui/application.xml:432
 msgid "Options"
 msgstr ""
 
@@ -416,6 +441,10 @@ msgstr ""
 msgid "Quit"
 msgstr ""
 
+#: src/objects/window/page.c:262
+msgid "Rename Session"
+msgstr ""
+
 #: ui/window.xml:313 ui/application.xml:296
 msgid "Reselect"
 msgstr ""
@@ -436,7 +465,7 @@ msgstr ""
 msgid "Save As"
 msgstr ""
 
-#: src/objects/windows/savedesktopicon.c:78
+#: src/objects/linux/savedesktopicon.c:105
 msgid "Save desktop icon"
 msgstr ""
 
@@ -468,7 +497,11 @@ msgstr ""
 msgid "Select by rectangles"
 msgstr ""
 
-#: src/objects/toolbar/settings.c:112
+#: src/objects/toolbar/settings.c:108
+msgid "Select the toolbar itens"
+msgstr ""
+
+#: src/objects/toolbar/settings.c:113
 msgid "Selected"
 msgstr ""
 
@@ -486,7 +519,7 @@ msgstr ""
 msgid "Send/Receive files"
 msgstr ""
 
-#: src/objects/toolbar/settings.c:265 src/objects/toolbar/settings.c:275
+#: src/objects/toolbar/settings.c:266 src/objects/toolbar/settings.c:276
 msgid "Separator"
 msgstr ""
 
@@ -511,11 +544,19 @@ msgstr ""
 msgid "Session properties"
 msgstr ""
 
+#: src/objects/application/application.c:219
+msgid "Set the user-interface type"
+msgstr ""
+
 #: ui/application.xml:382
 msgid "Settings"
 msgstr ""
 
-#: src/objects/toolbar/settings.c:89
+#: src/objects/toolbar/settings.c:207
+msgid "Setup the toolbar layout"
+msgstr ""
+
+#: src/objects/toolbar/settings.c:90
 msgid "Setup toolbar"
 msgstr ""
 
@@ -547,7 +588,7 @@ msgstr ""
 msgid "State Type"
 msgstr ""
 
-#: src/objects/toolbar/settings.c:54
+#: src/objects/toolbar/settings.c:55
 msgid "Style"
 msgstr ""
 
@@ -555,7 +596,7 @@ msgstr ""
 msgid "System default"
 msgstr ""
 
-#: src/main/tools.c:93
+#: src/main/tools.c:95
 msgid "TN3270 Session Files"
 msgstr ""
 
@@ -579,7 +620,7 @@ msgstr ""
 msgid "The action tooltip"
 msgstr ""
 
-#: src/objects/application/application.c:157
+#: src/objects/application/application.c:158
 msgid "The code of the User interface type"
 msgstr ""
 
@@ -627,7 +668,7 @@ msgstr ""
 msgid "The type of the state kept by the action"
 msgstr ""
 
-#: src/objects/application/actions/about.c:46
+#: src/objects/application/actions/about.c:49
 msgid ""
 "This program is free software; you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -644,7 +685,7 @@ msgid ""
 "Franklin St, Fifth Floor, Boston, MA 02111-1307 USA"
 msgstr ""
 
-#: src/objects/toolbar/settings.c:88 ui/application.xml:343
+#: src/objects/toolbar/settings.c:89 ui/application.xml:343
 msgid "Toolbar"
 msgstr ""
 
@@ -656,7 +697,7 @@ msgstr ""
 msgid "Track Cursor"
 msgstr ""
 
-#: src/objects/application/application.c:156
+#: src/objects/application/application.c:157
 msgid "UI Type"
 msgstr ""
 
@@ -668,8 +709,8 @@ msgstr ""
 msgid "Use +/- for field navigation"
 msgstr ""
 
-#: src/objects/application/actions/about.c:93
-#: src/objects/application/actions/about.c:95
+#: src/objects/application/actions/about.c:96
+#: src/objects/application/actions/about.c:98
 #, c-format
 msgid "Version %s-%s"
 msgstr ""
@@ -682,15 +723,15 @@ msgstr ""
 msgid "Window with default session"
 msgstr ""
 
-#: src/objects/settings/dialog.c:79
+#: src/objects/settings/dialog.c:84
 msgid "_Apply"
 msgstr ""
 
-#: src/objects/settings/dialog.c:78 src/objects/windows/savedesktopicon.c:104
+#: src/objects/settings/dialog.c:83 src/objects/linux/savedesktopicon.c:132
 msgid "_Cancel"
 msgstr ""
 
-#: src/objects/window/page.c:366
+#: src/objects/window/page.c:395
 msgid "_Close session"
 msgstr ""
 
@@ -726,11 +767,11 @@ msgstr ""
 msgid "_Properties"
 msgstr ""
 
-#: src/objects/window/page.c:360
+#: src/objects/window/page.c:389
 msgid "_Rename session"
 msgstr ""
 
-#: src/objects/windows/savedesktopicon.c:105
+#: src/objects/linux/savedesktopicon.c:133
 msgid "_Save"
 msgstr ""
 
@@ -738,6 +779,6 @@ msgstr ""
 msgid "_View"
 msgstr ""
 
-#: src/objects/application/actions/about.c:113
+#: src/objects/application/actions/about.c:116
 msgid "translator-credits"
 msgstr ""

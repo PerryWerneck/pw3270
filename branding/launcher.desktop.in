@@ -17,7 +17,7 @@ Categories=System;TerminalEmulator;
 
 [Desktop Action gnomeui]
 Name=New window using modern user interface
-Name[pt_BR]=Nova janela usando a interface de usuário atualizada
+Name[pt_BR]=Nova janela usando a interface de usuário moderna
 
 Exec=@PRODUCT_NAME@ --user-interface=gnome
 
