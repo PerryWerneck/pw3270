@@ -93,7 +93,7 @@
 	// Set version
 	{
 #ifdef PACKAGE_RELEASE
-		g_autofree gchar * version = g_strdup_printf(_("Version %s-%s"),PACKAGE_VERSION,G_STRINGIFY(PACKAGE_RELEASE));
+		g_autofree gchar * version = g_strdup_printf(_("Version %s-%s"),PACKAGE_VERSION,PACKAGE_RELEASE);
 #else
 		g_autofree gchar * version = g_strdup_printf(_("Version %s-%s"),PACKAGE_VERSION,G_STRINGIFY(BUILD_DATE));
 #endif // PACKAGE_REVISION

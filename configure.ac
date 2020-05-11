@@ -167,7 +167,7 @@ AC_ARG_WITH([release], [AS_HELP_STRING([--with-release], [Set release])], [ app_
 app_rls_major=$(echo $app_cv_release.0.0 | cut -d. -f1)
 app_rls_minor=$(echo $app_cv_release.0.0 | cut -d. -f2)
 
-AC_DEFINE_UNQUOTED(PACKAGE_RELEASE, $app_cv_release)
+AC_DEFINE_UNQUOTED(PACKAGE_RELEASE, "$app_cv_release")
 AC_DEFINE_UNQUOTED(PACKAGE_MAJOR_RELEASE, $app_rls_major)
 AC_DEFINE_UNQUOTED(PACKAGE_MINOR_RELEASE, $app_rls_minor)
 
