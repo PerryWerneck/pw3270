@@ -58,7 +58,7 @@
 
 		</submenu>
 
-		<submenu>
+		<submenu id="view-menu-placeholder">
 
 			<attribute name='label' translatable='yes'>View</attribute>
 

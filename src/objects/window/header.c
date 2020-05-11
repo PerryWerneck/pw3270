@@ -49,6 +49,24 @@
 
 		g_autoptr(GtkBuilder) builder = pw3270_application_get_builder("window.xml");
 
+		if(!gtk_application_prefers_app_menu(GTK_APPLICATION(g_application_get_default()))) {
+			g_autoptr(GtkBuilder) app_builder = pw3270_application_get_builder("application.xml");
+
+			g_menu_insert_submenu(
+				G_MENU(gtk_builder_get_object(builder,"open-menu")),
+				0,
+				_("Help"),
+				G_MENU_MODEL(gtk_builder_get_object(app_builder,"help-menu-placeholder"))
+			);
+
+			g_menu_append_submenu(
+				G_MENU(gtk_builder_get_object(builder,"preferences-menu")),
+				_("View"),
+				G_MENU_MODEL(gtk_builder_get_object(app_builder,"view-menu-placeholder"))
+			);
+
+		}
+
 		if(g_strv_length(header_blocks) >= 2) {
 
 			gchar ** elements;

@@ -124,7 +124,7 @@
 
 		</submenu>
 
-		<submenu>
+		<submenu id='preferences-menu'>
 
 			<attribute name='label' translatable='yes'>Preferences</attribute>
 
