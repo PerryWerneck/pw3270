@@ -34,6 +34,7 @@
  #include <fcntl.h>
  #include <sys/types.h>
  #include <sys/stat.h>
+ #include <stdlib.h>
 
  #include <pw3270/actions.h>
  #include <lib3270/toggle.h>
@@ -261,9 +262,29 @@
 
 	} else {
 
+		// Got key file, load it.
 		v3270_load_key_file(terminal,descriptor->key_file,NULL);
 		v3270_accelerator_map_load_key_file(terminal,descriptor->key_file,NULL);
 
+		if(g_key_file_has_group(descriptor->key_file,"environment")) {
+
+			// Has environment group, set values.
+			gchar **keys = g_key_file_get_keys(descriptor->key_file,"environment",NULL,NULL);
+
+			if(keys) {
+				size_t ix;
+				for(ix=0;keys[ix];ix++) {
+					g_autofree gchar * value = g_key_file_get_string(descriptor->key_file,"environment",keys[ix],NULL);
+					if(value) {
+						if(setenv(keys[ix],value,1)) {
+							g_warning("Can't set \"%s\" to \"%s\"",keys[ix],value);
+						}
+					}
+				}
+
+				g_strfreev(keys);
+			}
+		}
 	}
 
  	// Setup signals.

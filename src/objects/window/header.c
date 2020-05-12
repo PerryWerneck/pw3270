@@ -50,12 +50,14 @@
 		g_autoptr(GtkBuilder) builder = pw3270_application_get_builder("window.xml");
 
 		if(!gtk_application_prefers_app_menu(GTK_APPLICATION(g_application_get_default()))) {
+
+			// No application menu, add view and help sections to open menu.
+
 			g_autoptr(GtkBuilder) app_builder = pw3270_application_get_builder("application.xml");
 
-			g_menu_insert_submenu(
+			g_menu_append_section(
 				G_MENU(gtk_builder_get_object(builder,"open-menu")),
-				0,
-				_("Help"),
+				NULL,
 				G_MENU_MODEL(gtk_builder_get_object(app_builder,"help-menu-placeholder"))
 			);
 
