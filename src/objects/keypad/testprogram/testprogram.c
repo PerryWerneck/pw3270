@@ -33,7 +33,9 @@
   *
   */
 
+ #include <config.h>
  #include <lib3270/properties.h>
+ #include <pw3270/keypad.h>
  #include <v3270.h>
  #include <v3270/trace.h>
 

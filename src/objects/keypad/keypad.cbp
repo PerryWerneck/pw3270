@@ -33,10 +33,12 @@
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="`pkg-config --cflags libv3270 gtk+-3.0`" />
+			<Add directory="../../include" />
 		</Compiler>
 		<Linker>
 			<Add option="`pkg-config --libs libv3270 gtk+-3.0`" />
 		</Linker>
+		<Unit filename="../../include/pw3270/keypad.h" />
 		<Unit filename="testprogram/testprogram.c">
 			<Option compilerVar="CC" />
 		</Unit>
