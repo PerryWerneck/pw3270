@@ -33,59 +33,57 @@
 
  enum {
 	PROP_NONE,
-	PROP_NAME,
 	PROP_LABEL,
-	PROP_POSITION,
+	PROP_ACTION,
+	PROP_ICON_NAME,
+	PROP_ROW,
+	PROP_COL,
 	PROP_WIDTH,
 	PROP_HEIGHT,
- };
-
- static const char * positions[] = {
-	"up",
-	"down",
-	"left",
-	"right"
  };
 
  static void get_property(GObject *object, guint prop_id, GValue *value, GParamSpec *pspec);
  static void set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec);
 
- G_DEFINE_TYPE(KeypadModel, KeypadModel, G_TYPE_OBJECT)
+ G_DEFINE_TYPE(KeypadElement, KeypadElement, G_TYPE_OBJECT)
 
 /*---[ Implement ]----------------------------------------------------------------------------------*/
 
  static void finalize(GObject *object) {
 
-	KeypadModel * model = PW_KEYPAD_MODEL(object);
+	KeypadElement * element = PW_KEYPAD_ELEMENT(object);
 
-	if(model->name) {
-		g_free(model->name);
-		model->name = NULL;
+	if(element->icon_name) {
+		g_free(element->icon_name);
+		element->icon_name = NULL;
 	}
 
-	if(model->label) {
-		g_free(model->label);
-		model->label = NULL;
+	if(element->label) {
+		g_free(element->label);
+		element->label = NULL;
+	}
+
+	if(element->action) {
+		g_free(element->action);
+		element->action = NULL;
 	}
 
  }
 
- static void KeypadModel_class_init(KeypadModelClass *klass) {
+ static void KeypadElement_class_init(KeypadElementClass *klass) {
 
 	GObjectClass *object_class = G_OBJECT_CLASS(klass);
-
-	klass->domain = g_quark_from_static_string("keypad");
 
 	object_class->finalize          = finalize;
 	object_class->get_property      = get_property;
 	object_class->set_property      = set_property;
 
 	// Install properties
-	g_object_class_install_property(object_class, PROP_NAME,
+	g_object_class_install_property(object_class, PROP_ICON_NAME,
 		g_param_spec_string (
-			"name",
-			N_("Keypad Name"),
-			N_("The name used to identify the keypad"),
+			I_("icon-name"),
+			I_("icon-name"),
+			N_("The name of the icon"),
 			NULL,
 			G_PARAM_STATIC_STRINGS | G_PARAM_READABLE | G_PARAM_WRITABLE
 		)
@@ -93,19 +91,9 @@
 
 	g_object_class_install_property(object_class, PROP_LABEL,
 		g_param_spec_string (
-			"label",
-			N_("Keypad Label"),
+			I_("label"),
+			I_("label"),
 			N_("The Label of the keypad"),
-			NULL,
-			G_PARAM_STATIC_STRINGS | G_PARAM_READABLE | G_PARAM_WRITABLE
-		)
-	);
-
-	g_object_class_install_property(object_class, PROP_POSITION,
-		g_param_spec_string (
-			"position",
-			N_("Keypad position"),
-			N_("The position of the keypad"),
 			NULL,
 			G_PARAM_STATIC_STRINGS | G_PARAM_READABLE | G_PARAM_WRITABLE
 		)
@@ -113,9 +101,9 @@
 
 	g_object_class_install_property(object_class, PROP_WIDTH,
 		 g_param_spec_uint(
-					"width",
-					"width",
-					_("Keypad width in columns"),
+					I_("row"),
+					I_("width"),
+					_("Element row"),
 					1,
 					10,
 					3,
@@ -125,45 +113,78 @@
 
 	g_object_class_install_property(object_class, PROP_WIDTH,
 		 g_param_spec_uint(
-					"height",
-					"height",
-					_("Keypad height in rows"),
+					I_("col"),
+					I_("width"),
+					_("Element col"),
+					1,
+					10,
+					3,
+					G_PARAM_STATIC_STRINGS | G_PARAM_READABLE | G_PARAM_WRITABLE
+			)
+		);
+
+	g_object_class_install_property(object_class, PROP_WIDTH,
+		 g_param_spec_uint(
+					I_("width"),
+					I_("width"),
+					_("Element width in columns"),
+					1,
+					10,
+					3,
+					G_PARAM_STATIC_STRINGS | G_PARAM_READABLE | G_PARAM_WRITABLE
+			)
+		);
+
+	g_object_class_install_property(object_class, PROP_HEIGHT,
+		 g_param_spec_uint(
+					I_("height"),
+					I_("height"),
+					_("Element height in rows"),
 					0,
 					100,
 					0,
 					G_PARAM_STATIC_STRINGS | G_PARAM_READABLE | G_PARAM_WRITABLE
 			)
 		);
+
  }
 
- static void KeypadModel_init(KeypadModel *object) {
+ static void KeypadElement_init(KeypadElement *object) {
 
 
  }
 
  static void get_property(GObject *object, guint prop_id, GValue *value, GParamSpec *pspec) {
 
-	KeypadModel * model = PW_KEYPAD_MODEL(object);
+	KeypadElement * element = PW_KEYPAD_ELEMENT(object);
 
 	switch (prop_id) {
-	case PROP_NAME:
-		g_value_set_string(value, model->name);
-		break;
-
 	case PROP_LABEL:
-		g_value_set_string(value, model->label);
+		g_value_set_string(value, element->label);
 		break;
 
-	case PROP_POSITION:
-		g_value_set_static_string(value,keypad_model_get_position(object));
+	case PROP_ICON_NAME:
+		g_value_set_string(value, element->icon_name);
+		break;
+
+	case PROP_ACTION:
+		g_value_set_string(value, element->action);
+		break;
+
+	case PROP_ROW:
+		g_value_set_uint(value, element->row);
+		break;
+
+	case PROP_COL:
+		g_value_set_uint(value, element->col);
 		break;
 
 	case PROP_HEIGHT:
-		g_value_set_uint(value, model->height);
+		g_value_set_uint(value, element->height);
 		break;
 
 	case PROP_WIDTH:
-		g_value_set_uint(value, model->width);
+		g_value_set_uint(value, element->width);
 		break;
 
 	default:
@@ -174,35 +195,39 @@
 
  static void set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec) {
 
-	KeypadModel * model = PW_KEYPAD_MODEL(object);
+	KeypadElement * element = PW_KEYPAD_ELEMENT(object);
 
 	switch (prop_id) {
-	case PROP_NAME:
-
-		if(model->name) {
-			g_free(model->name);
-			model->name = g_value_dup_string(value);
-		}
-		break;
-
 	case PROP_LABEL:
 
-		if(model->label) {
-			g_free(model->label);
-			model->label = g_value_dup_string(value);
+		if(element->label) {
+			g_free(element->label);
+			element->label = g_value_dup_string(value);
 		}
 		break;
 
-	case PROP_POSITION:
-		keypad_model_set_position(object,g_value_get_string(value));
+	case PROP_ACTION:
+
+		if(element->action) {
+			g_free(element->action);
+			element->action = g_value_dup_string(value);
+		}
+		break;
+
+	case PROP_ROW:
+		element->row = (unsigned short) g_value_get_uint(value);
+		break;
+
+	case PROP_COL:
+		element->col = (unsigned short) g_value_get_uint(value);
 		break;
 
 	case PROP_HEIGHT:
-		model->height = (unsigned short) g_value_get_uint(value);
+		element->height = (unsigned short) g_value_get_uint(value);
 		break;
 
 	case PROP_WIDTH:
-		model->width = (unsigned short) g_value_get_uint(value);
+		element->width = (unsigned short) g_value_get_uint(value);
 		break;
 
 	default:
@@ -210,24 +235,31 @@
 	}
  }
 
- void keypad_model_set_position(GObject *model, const gchar *position) {
+ static void element_start(GMarkupParseContext *context, const gchar *element_name, const gchar **names,const gchar **values, GList *keypads, GError **error) {
 
- 	size_t ix;
- 	for(ix = 0; ix < G_N_ELEMENTS(positions); ix++) {
-		if(!g_ascii_strcasecmp(positions[ix],position)) {
-			PW_KEYPAD_MODEL(model)->position = (unsigned short) ix;
-			break;
-		}
- 	}
+	debug("%s(%s)",__FUNCTION__,element_name);
 
  }
 
- const gchar * keypad_model_get_position(GObject *model) {
+ static void element_end(GMarkupParseContext *context, const gchar *element_name, GList *keypads, GError **error) {
 
-	size_t ix = (size_t) PW_KEYPAD_MODEL(model)->position;
+	debug("%s(%s)",__FUNCTION__,element_name);
 
- 	if(ix < G_N_ELEMENTS(positions))
-		return positions[ix];
+ }
 
- 	return "undefined";
+ void keypad_model_element_parse_context(GObject *element, GMarkupParseContext *context) {
+
+   static const GMarkupParser parser = {
+		(void (*)(GMarkupParseContext *, const gchar *, const gchar **, const gchar **, gpointer, GError **))
+		element_start,
+
+	(void (*)(GMarkupParseContext *, const gchar *, gpointer, GError **))
+			element_end,
+			NULL,
+			NULL,
+			NULL
+	};
+
+	g_markup_parse_context_push(context, &parser, element);
+
  }

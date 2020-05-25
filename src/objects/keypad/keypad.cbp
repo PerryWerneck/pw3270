@@ -39,10 +39,13 @@
 			<Add option="`pkg-config --libs libv3270 gtk+-3.0`" />
 		</Linker>
 		<Unit filename="../../include/pw3270/keypad.h" />
-		<Unit filename="load.c">
+		<Unit filename="element.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="model.c">
+		<Unit filename="keypad.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="load.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="private.h" />

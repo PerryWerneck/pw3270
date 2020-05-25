@@ -28,12 +28,60 @@
  */
 
  #include "private.h"
+ #include <stdlib.h>
 
 /*---[ Implement ]----------------------------------------------------------------------------------*/
 
- GObject * pw3270_keypad_model_new_from_xml(const gchar *filename) {
+ static void element_start(GMarkupParseContext *context, const gchar *element_name, const gchar **names,const gchar **values, GList *keypads, GError **error) {
 
-	GObject	* object = g_object_new(PW_TYPE_KEYPAD_MODEL,NULL);
+	if(!g_ascii_strcasecmp(element_name,"keypad")) {
+
+		const gchar *name, *position, *width, *height;
+		GObject * keypad = g_object_new(PW_TYPE_KEYPAD_MODEL,NULL);
+
+		if(!g_markup_collect_attributes(
+                    element_name,names,values,error,
+                    G_MARKUP_COLLECT_STRING, "name", &name,
+                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "position", &position,
+                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "width", &width,
+                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "height", &height,
+                    G_MARKUP_COLLECT_INVALID
+                )) {
+
+            return;
+
+        }
+
+		keypad_model_set_position(keypad,position);
+
+		if(width) {
+			PW_KEYPAD_MODEL(keypad)->width = (unsigned short) atoi(width);
+		}
+
+		if(height) {
+			PW_KEYPAD_MODEL(keypad)->height = (unsigned short) atoi(height);
+		}
+
+		keypad_model_parse_context(keypad,context);
+
+	}
+
+	debug("%s(%s)",__FUNCTION__,element_name);
+
+ }
+
+ static void element_end(GMarkupParseContext *context, const gchar *element_name, GList *keypads, GError **error) {
+
+	debug("%s(%s)",__FUNCTION__,element_name);
+
+	if(!g_ascii_strcasecmp(element_name,"keypad")) {
+		g_markup_parse_context_pop(context);
+	}
+
+ }
+
+ GList * pw3270_keypad_model_new_from_xml(GList *keypads, const gchar *filename) {
+
 	GError	* error = NULL;
 	g_autofree gchar *text = NULL;
 
@@ -41,19 +89,31 @@
 
 		g_message("Loading keypad from %s",filename);
 
+        static const GMarkupParser parser = {
+			(void (*)(GMarkupParseContext *, const gchar *, const gchar **, const gchar **, gpointer, GError **))
+			element_start,
+
+		(void (*)(GMarkupParseContext *, const gchar *, gpointer, GError **))
+				element_end,
+				NULL,
+				NULL,
+				NULL
+        };
+
+		GMarkupParseContext * context = g_markup_parse_context_new(&parser,G_MARKUP_TREAT_CDATA_AS_TEXT,keypads,NULL);
+		g_markup_parse_context_parse(context,text,strlen(text),&error);
+		g_markup_parse_context_free(context);
 
 	}
 
 	if(error) {
 
-		// TODO: Popup with error message.
+		// TODO: Popup error message.
+		g_message("%s",error->message);
 		g_error_free(error);
 		error = NULL;
-		g_object_unref(object);
-		object = NULL;
-
 	}
 
-	return object;
+	return keypads;
 
  }

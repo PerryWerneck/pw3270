@@ -52,7 +52,7 @@
 
 	GType KeypadModel_get_type(void) G_GNUC_CONST;
 
-	GObject * pw3270_keypad_model_new_from_xml(const gchar *filename);
+	GList * pw3270_keypad_model_load_from_xml(GList *keypads, const gchar *filename);
 
 	G_END_DECLS
 

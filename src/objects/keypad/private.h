@@ -46,6 +46,38 @@
 
 	#include <pw3270/keypad.h>
 
+	G_BEGIN_DECLS
+
+	#define I_(string) g_intern_static_string (string)
+
+	#define PW_TYPE_KEYPAD_ELEMENT				(KeypadElement_get_type())
+	#define PW_KEYPAD_ELEMENT(obj)				(G_TYPE_CHECK_INSTANCE_CAST ((obj), PW_TYPE_KEYPAD_ELEMENT, KeypadElement))
+	#define PW_KEYPAD_ELEMENT_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), PW_TYPE_KEYPAD_ELEMENT, KeypadModelClass))
+	#define PW_IS_KEYPAD_ELEMENT(obj)			(G_TYPE_CHECK_INSTANCE_TYPE ((obj), PW_TYPE_KEYPAD_ELEMENT))
+	#define PW_IS_KEYPAD_ELEMENT_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), PW_TYPE_KEYPAD_ELEMENT))
+	#define PW_KEYPAD_ELEMENT_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), PW_TYPE_KEYPAD_ELEMENT, KeypadElementClass))
+
+	typedef struct _KeypadElement {
+		GObject parent;
+
+		unsigned short row;
+		unsigned short col;
+		unsigned short width;
+		unsigned short height;
+
+		gchar * icon_name;
+		gchar * label;
+		gchar * action;
+
+	} KeypadElement;
+
+	typedef struct _KeypadElementClass {
+		GObjectClass parent;
+
+	} KeypadElementClass;
+
+	GType KeypadElement_get_type(void) G_GNUC_CONST;
+
 	struct _KeypadModel {
 		GObject parent;
 
@@ -66,6 +98,12 @@
 	};
 
 	void keypad_model_set_position(GObject *model, const gchar *position);
+	void keypad_model_parse_context(GObject *model, GMarkupParseContext *context);
+
 	const gchar * keypad_model_get_position(GObject *mode);
+
+	void keypad_model_element_parse_context(GObject *element, GMarkupParseContext *context);
+
+	G_END_DECLS
 
 #endif // PRIVATE_H_INCLUDED
