@@ -27,33 +27,33 @@
  *
  */
 
-/**
- * @brief Declares the pw3270 Keypad objects.
- *
- */
+ #include "private.h"
 
-#ifndef PW3270_KEYPAD_H_INCLUDED
+/*---[ Implement ]----------------------------------------------------------------------------------*/
 
-	#define PW3270_KEYPAD_H_INCLUDED
+ GObject * pw3270_keypad_model_new_from_xml(const gchar *filename) {
 
-	#include <gtk/gtk.h>
+	GObject	* object = g_object_new(PW_TYPE_KEYPAD_MODEL,NULL);
+	GError	* error = NULL;
+	g_autofree gchar *text = NULL;
 
-	G_BEGIN_DECLS
+	if(g_file_get_contents(filename,&text,NULL,&error)) {
 
-	#define PW_TYPE_KEYPAD_MODEL			(KeypadModel_get_type())
-	#define PW_KEYPAD_MODEL(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), PW_TYPE_KEYPAD_MODEL, KeypadModel))
-	#define PW_KEYPAD_MODEL_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), PW_TYPE_KEYPAD_MODEL, KeypadModelClass))
-	#define PW_IS_KEYPAD_MODEL(obj)			(G_TYPE_CHECK_INSTANCE_TYPE ((obj), PW_TYPE_KEYPAD_MODEL))
-	#define PW_IS_KEYPAD_MODEL_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), PW_TYPE_KEYPAD_MODEL))
-	#define PW_KEYPAD_MODEL_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), PW_TYPE_KEYPAD_MODEL, KeypadModelClass))
+		g_message("Loading keypad from %s",filename);
 
-	typedef struct _KeypadModel			KeypadModel;
-	typedef struct _KeypadModelClass	KeypadModelClass;
 
-	GType KeypadModel_get_type(void) G_GNUC_CONST;
+	}
 
-	GObject * pw3270_keypad_model_new_from_xml(const gchar *filename);
+	if(error) {
 
-	G_END_DECLS
+		// TODO: Popup with error message.
+		g_error_free(error);
+		error = NULL;
+		g_object_unref(object);
+		object = NULL;
 
-#endif // PW3270_KEYPAD_H_INCLUDED
+	}
+
+	return object;
+
+ }

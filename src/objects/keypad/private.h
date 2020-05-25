@@ -27,33 +27,45 @@
  *
  */
 
-/**
- * @brief Declares the pw3270 Keypad objects.
- *
- */
+#ifndef PRIVATE_H_INCLUDED
 
-#ifndef PW3270_KEYPAD_H_INCLUDED
+	#define PRIVATE_H_INCLUDED
 
-	#define PW3270_KEYPAD_H_INCLUDED
+	#include <config.h>
 
+	#ifndef GETTEXT_PACKAGE
+		#define GETTEXT_PACKAGE PACKAGE_NAME
+	#endif
+
+	#include <libintl.h>
+	#include <glib/gi18n.h>
 	#include <gtk/gtk.h>
 
-	G_BEGIN_DECLS
+	#include <lib3270.h>
+	#include <lib3270/log.h>
 
-	#define PW_TYPE_KEYPAD_MODEL			(KeypadModel_get_type())
-	#define PW_KEYPAD_MODEL(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), PW_TYPE_KEYPAD_MODEL, KeypadModel))
-	#define PW_KEYPAD_MODEL_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), PW_TYPE_KEYPAD_MODEL, KeypadModelClass))
-	#define PW_IS_KEYPAD_MODEL(obj)			(G_TYPE_CHECK_INSTANCE_TYPE ((obj), PW_TYPE_KEYPAD_MODEL))
-	#define PW_IS_KEYPAD_MODEL_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), PW_TYPE_KEYPAD_MODEL))
-	#define PW_KEYPAD_MODEL_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), PW_TYPE_KEYPAD_MODEL, KeypadModelClass))
+	#include <pw3270/keypad.h>
 
-	typedef struct _KeypadModel			KeypadModel;
-	typedef struct _KeypadModelClass	KeypadModelClass;
+	struct _KeypadModel {
+		GObject parent;
 
-	GType KeypadModel_get_type(void) G_GNUC_CONST;
+		unsigned short width;
+		unsigned short height;
+		unsigned short position;
 
-	GObject * pw3270_keypad_model_new_from_xml(const gchar *filename);
+		gchar *name;
+		gchar *label;
 
-	G_END_DECLS
 
-#endif // PW3270_KEYPAD_H_INCLUDED
+	};
+
+	struct _KeypadModelClass {
+		GObjectClass parent;
+		GQuark domain;
+
+	};
+
+	void keypad_model_set_position(GObject *model, const gchar *position);
+	const gchar * keypad_model_get_position(GObject *mode);
+
+#endif // PRIVATE_H_INCLUDED

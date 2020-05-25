@@ -65,6 +65,9 @@
 
 	}
 
+	// Load keypad
+	GObject *keypad = pw3270_keypad_model_new_from_xml("keypad.xml");
+
 	// Create trace window
 	v3270_set_trace(terminal,TRUE);
 
