@@ -100,10 +100,9 @@
 				NULL
         };
 
-		GMarkupParseContext * context = g_markup_parse_context_new(&parser,G_MARKUP_TREAT_CDATA_AS_TEXT,keypads,NULL);
+ 		GMarkupParseContext * context = g_markup_parse_context_new(&parser,G_MARKUP_TREAT_CDATA_AS_TEXT,keypads,NULL);
 		g_markup_parse_context_parse(context,text,strlen(text),&error);
 		g_markup_parse_context_free(context);
-
 	}
 
 	if(error) {

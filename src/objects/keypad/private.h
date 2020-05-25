@@ -85,9 +85,15 @@
 		unsigned short height;
 		unsigned short position;
 
+		struct {
+			unsigned short row;
+			unsigned short col;
+		} current;
+
 		gchar *name;
 		gchar *label;
 
+		GList *elements;
 
 	};
 

@@ -59,6 +59,11 @@
 
 	KeypadModel * model = PW_KEYPAD_MODEL(object);
 
+	if(model->elements) {
+		g_list_free_full(model->elements,g_object_unref);
+		model->elements = NULL;
+	}
+
 	if(model->name) {
 		g_free(model->name);
 		model->name = NULL;
@@ -138,7 +143,6 @@
  }
 
  static void KeypadModel_init(KeypadModel *object) {
-
 
  }
 
@@ -235,14 +239,14 @@
  	return "undefined";
  }
 
- static void element_start(GMarkupParseContext *context, const gchar *element_name, const gchar **names,const gchar **values, KeypadModel *model, GError **error) {
+ static void element_start(GMarkupParseContext *context, const gchar *element_name, const gchar **names,const gchar **values, KeypadModel *keypad, GError **error) {
 
 	debug("%s(%s)",__FUNCTION__,element_name);
 
 	if(!g_ascii_strcasecmp(element_name,"button")) {
 
 		const gchar *row, *col, *width, *height;
-		GObject * element = g_object_new(PW_TYPE_KEYPAD_ELEMENT,NULL);
+		KeypadElement * element = PW_KEYPAD_ELEMENT(g_object_new(PW_TYPE_KEYPAD_ELEMENT,NULL));
 
 		if(!g_markup_collect_attributes(
                     element_name,names,values,error,
@@ -258,39 +262,59 @@
         }
 
 		if(row) {
-			PW_KEYPAD_ELEMENT(element)->width = (unsigned short) atoi(row);
+			element->row = (unsigned short) atoi(row);
+		} else {
+			element->row = keypad->current.row;
 		}
 
 		if(col) {
-			PW_KEYPAD_ELEMENT(element)->width = (unsigned short) atoi(col);
+			element->col = (unsigned short) atoi(col);
+		} else {
+			element->col = keypad->current.col;
 		}
 
 		if(width) {
-			PW_KEYPAD_ELEMENT(element)->width = (unsigned short) atoi(width);
+			element->width = (unsigned short) atoi(width);
+		} else {
+			element->width = 1;
 		}
 
 		if(height) {
-			PW_KEYPAD_MODEL(element)->height = (unsigned short) atoi(height);
+			element->height = (unsigned short) atoi(height);
+		} else {
+			element->height = 1;
 		}
 
-		keypad_model_element_parse_context(element,context);
+		keypad->elements = g_list_prepend(keypad->elements,element);
+		keypad_model_element_parse_context(G_OBJECT(element),context);
 
 	}
 
 
  }
 
- static void element_end(GMarkupParseContext *context, const gchar *element_name, GList *keypads, GError **error) {
+ static void element_end(GMarkupParseContext *context, const gchar *element_name, KeypadModel *keypad, GError **error) {
 
 	debug("%s(%s)",__FUNCTION__,element_name);
 
 	if(!g_ascii_strcasecmp(element_name,"button")) {
 		g_markup_parse_context_pop(context);
+
+		KeypadElement * element = PW_KEYPAD_ELEMENT(g_list_first(keypad->elements)->data);
+
+		keypad->current.row = element->row;
+		keypad->current.col = element->col + element->width;
+
+		if(keypad->width && keypad->current.col >= keypad->width) {
+			keypad->current.col = 0;
+			keypad->current.row++;
+		}
+
 	}
 
  }
 
- void keypad_model_parse_context(GObject *model, GMarkupParseContext *context) {
+ void keypad_model_parse_context(GObject *object, GMarkupParseContext *context) {
 
    static const GMarkupParser parser = {
 		(void (*)(GMarkupParseContext *, const gchar *, const gchar **, const gchar **, gpointer, GError **))
@@ -303,6 +327,10 @@
 			NULL
 	};
 
+	KeypadModel * model = PW_KEYPAD_MODEL(object);
+
+	model->elements = g_list_reverse(model->elements);
 	g_markup_parse_context_push(context, &parser, model);
+	model->elements = g_list_reverse(model->elements);
 
  }
