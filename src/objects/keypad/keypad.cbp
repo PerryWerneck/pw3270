@@ -55,6 +55,9 @@
 		<Unit filename="testprogram/testprogram.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="widget.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>

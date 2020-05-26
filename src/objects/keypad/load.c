@@ -32,7 +32,7 @@
 
 /*---[ Implement ]----------------------------------------------------------------------------------*/
 
- static void element_start(GMarkupParseContext *context, const gchar *element_name, const gchar **names,const gchar **values, GList *keypads, GError **error) {
+ static void element_start(GMarkupParseContext *context, const gchar *element_name, const gchar **names,const gchar **values, GList **keypads, GError **error) {
 
 	if(!g_ascii_strcasecmp(element_name,"keypad")) {
 
@@ -48,9 +48,12 @@
                     G_MARKUP_COLLECT_INVALID
                 )) {
 
+			g_object_unref(keypad);
             return;
 
         }
+
+        *keypads = g_list_append(*keypads,keypad);
 
 		keypad_model_set_position(keypad,position);
 
@@ -70,7 +73,7 @@
 
  }
 
- static void element_end(GMarkupParseContext *context, const gchar *element_name, GList *keypads, GError **error) {
+ static void element_end(GMarkupParseContext *context, const gchar *element_name, GList **keypads, GError **error) {
 
 	debug("%s(%s)",__FUNCTION__,element_name);
 
@@ -100,7 +103,7 @@
 				NULL
         };
 
- 		GMarkupParseContext * context = g_markup_parse_context_new(&parser,G_MARKUP_TREAT_CDATA_AS_TEXT,keypads,NULL);
+ 		GMarkupParseContext * context = g_markup_parse_context_new(&parser,G_MARKUP_TREAT_CDATA_AS_TEXT,&keypads,NULL);
 		g_markup_parse_context_parse(context,text,strlen(text),&error);
 		g_markup_parse_context_free(context);
 	}

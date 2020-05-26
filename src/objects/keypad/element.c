@@ -212,24 +212,24 @@
 
 		if(element->label) {
 			g_free(element->label);
-			element->label = g_value_dup_string(value);
 		}
+		element->label = g_value_dup_string(value);
 		break;
 
 	case PROP_ICON_NAME:
 
 		if(element->icon_name) {
 			g_free(element->icon_name);
-			element->icon_name = g_value_dup_string(value);
 		}
+		element->icon_name = g_value_dup_string(value);
 		break;
 
 	case PROP_ACTION:
 
 		if(element->action) {
 			g_free(element->action);
-			element->action = g_value_dup_string(value);
 		}
+		element->action = g_value_dup_string(value);
 		break;
 
 	case PROP_ROW:

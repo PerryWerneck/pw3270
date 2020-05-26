@@ -27,34 +27,40 @@
  *
  */
 
-/**
- * @brief Declares the pw3270 Keypad objects.
- *
- */
+ #include "private.h"
 
-#ifndef PW3270_KEYPAD_H_INCLUDED
+/*---[ Implement ]----------------------------------------------------------------------------------*/
 
-	#define PW3270_KEYPAD_H_INCLUDED
+ static void create_child(const KeypadElement *element, GtkGrid *grid) {
 
-	#include <gtk/gtk.h>
+ 	GtkWidget * button;
 
-	G_BEGIN_DECLS
+ 	if(element->icon_name) {
+		button = gtk_button_new_from_icon_name(element->icon_name,GTK_ICON_SIZE_SMALL_TOOLBAR);
+ 	} else if(element->label) {
+		button = gtk_button_new();
+		gtk_button_set_(element->label);
+ 	} else {
+		button = gtk_button_new();
+ 	}
 
-	#define PW_TYPE_KEYPAD_MODEL			(KeypadModel_get_type())
-	#define PW_KEYPAD_MODEL(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), PW_TYPE_KEYPAD_MODEL, KeypadModel))
-	#define PW_KEYPAD_MODEL_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), PW_TYPE_KEYPAD_MODEL, KeypadModelClass))
-	#define PW_IS_KEYPAD_MODEL(obj)			(G_TYPE_CHECK_INSTANCE_TYPE ((obj), PW_TYPE_KEYPAD_MODEL))
-	#define PW_IS_KEYPAD_MODEL_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), PW_TYPE_KEYPAD_MODEL))
-	#define PW_KEYPAD_MODEL_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), PW_TYPE_KEYPAD_MODEL, KeypadModelClass))
+ 	gtk_grid_attach(
+		grid,
+		button,
+		element->col,element->row,
+		element->width,element->height
+	);
 
-	typedef struct _KeypadModel			KeypadModel;
-	typedef struct _KeypadModelClass	KeypadModelClass;
+ }
 
-	GType KeypadModel_get_type(void) G_GNUC_CONST;
+ GtkWidget * pw3270_keypad_get_from_model(GObject *model) {
 
-	GList		* pw3270_keypad_model_new_from_xml(GList *keypads, const gchar *filename);
-	GtkWidget	* pw3270_keypad_get_from_model(GObject *model);
+	g_return_val_if_fail(PW_IS_KEYPAD_MODEL(model),NULL);
 
-	G_END_DECLS
+	GtkWidget * grid = gtk_grid_new();
+	gtk_grid_set_column_homogeneous(GTK_GRID(grid),TRUE);
 
-#endif // PW3270_KEYPAD_H_INCLUDED
+	g_list_foreach(PW_KEYPAD_MODEL(model)->elements,(GFunc) create_child, grid);
+
+	return grid;
+ }

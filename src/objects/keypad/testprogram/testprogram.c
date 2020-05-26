@@ -43,42 +43,29 @@
 
  static void activate(GtkApplication* app, G_GNUC_UNUSED gpointer user_data) {
 
-	GtkWidget	* window	= gtk_application_window_new(app);
-	GtkWidget	* terminal	= v3270_new();
-	GtkWidget	* vBox		= gtk_box_new(GTK_ORIENTATION_VERTICAL,2);
-	GtkWidget	* notebook	= gtk_notebook_new();
-
-	// Hack to speed up the tests.
-	lib3270_disable_crl_download(v3270_get_session(terminal));
-
-	gtk_box_pack_start(GTK_BOX(vBox),notebook,TRUE,TRUE,0);
-
-	// Create Terminal window
-	{
-		gtk_widget_set_can_default(terminal,TRUE);
-
-#if GTK_CHECK_VERSION(3,20,0)
-		gtk_widget_set_focus_on_click(terminal,TRUE);
-#endif // GTK 3,20,0
-
-		gtk_notebook_append_page(GTK_NOTEBOOK(notebook),terminal,gtk_label_new("Terminal"));
-
-	}
+	GtkWidget * window = gtk_application_window_new(app);
 
 	// Load keypad
 	GList *keypads = pw3270_keypad_model_new_from_xml(NULL,"keypad.xml");
 
-	// Create trace window
-	v3270_set_trace(terminal,TRUE);
+	if(!keypads) {
+		g_message("No keypad");
+		g_application_quit(G_APPLICATION(app));
+	}
+
+	// Create keypad widget
+	GObject * model = G_OBJECT(g_list_first(keypads)->data);
+	if(model) {
+		gtk_container_add(GTK_CONTAINER(window),pw3270_keypad_get_from_model(model));
+	}
 
 	// Setup and show main window
 	gtk_window_set_title(GTK_WINDOW(window),"PW3270 Keypad test");
-	gtk_window_set_position(GTK_WINDOW(window),GTK_WIN_POS_CENTER);
-	gtk_window_set_default_size (GTK_WINDOW (window), 800, 500);
-	gtk_container_add(GTK_CONTAINER(window),vBox);
+	// gtk_window_set_position(GTK_WINDOW(window),GTK_WIN_POS_CENTER);
+	// gtk_window_set_default_size (GTK_WINDOW (window), 800, 500);
 	gtk_widget_show_all(window);
 
-	gtk_widget_grab_focus(terminal);
+	g_list_free_full(keypads,g_object_unref);
 
 }
 
