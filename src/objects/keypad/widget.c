@@ -38,8 +38,8 @@
  	if(element->icon_name) {
 		button = gtk_button_new_from_icon_name(element->icon_name,GTK_ICON_SIZE_SMALL_TOOLBAR);
  	} else if(element->label) {
-		button = gtk_button_new();
-		gtk_button_set_(element->label);
+ 		g_autofree gchar * label = g_strcompress(element->label);
+		button = gtk_button_new_with_label(label);
  	} else {
 		button = gtk_button_new();
  	}
@@ -59,6 +59,7 @@
 
 	GtkWidget * grid = gtk_grid_new();
 	gtk_grid_set_column_homogeneous(GTK_GRID(grid),TRUE);
+	gtk_grid_set_row_homogeneous(GTK_GRID(grid),TRUE);
 
 	g_list_foreach(PW_KEYPAD_MODEL(model)->elements,(GFunc) create_child, grid);
 

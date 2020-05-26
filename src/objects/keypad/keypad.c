@@ -261,17 +261,23 @@
 
         }
 
+		if(col) {
+			element->col = (unsigned short) atoi(col);
+
+			if(element->col < keypad->current.col) {
+				keypad->current.row++;
+			}
+
+		} else {
+			element->col = keypad->current.col;
+		}
+
 		if(row) {
 			element->row = (unsigned short) atoi(row);
 		} else {
 			element->row = keypad->current.row;
 		}
 
-		if(col) {
-			element->col = (unsigned short) atoi(col);
-		} else {
-			element->col = keypad->current.col;
-		}
 
 		if(width) {
 			element->width = (unsigned short) atoi(width);
