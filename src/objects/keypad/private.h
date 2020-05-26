@@ -103,12 +103,15 @@
 
 	};
 
-	void keypad_model_set_position(GObject *model, const gchar *position);
-	void keypad_model_parse_context(GObject *model, GMarkupParseContext *context);
+	G_GNUC_INTERNAL void keypad_model_set_position(GObject *model, const gchar *position);
+	G_GNUC_INTERNAL void keypad_model_parse_context(GObject *model, GMarkupParseContext *context);
 
-	const gchar * keypad_model_get_position(GObject *mode);
+	G_GNUC_INTERNAL const gchar * keypad_model_get_position(GObject *mode);
 
-	void keypad_model_element_parse_context(GObject *element, GMarkupParseContext *context);
+	G_GNUC_INTERNAL void keypad_model_element_parse_context(GObject *element, GMarkupParseContext *context);
+
+	G_GNUC_INTERNAL void attribute_element_start(GMarkupParseContext *context,const gchar **names,const gchar **values, GObject *parent, GError **error);
+	G_GNUC_INTERNAL void attribute_element_end(GMarkupParseContext *context, GObject *parent, GError **error);
 
 	G_END_DECLS
 

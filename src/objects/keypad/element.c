@@ -89,6 +89,16 @@
 		)
 	);
 
+	g_object_class_install_property(object_class, PROP_ACTION,
+		g_param_spec_string (
+			I_("action"),
+			I_("action"),
+			N_("The name of associated action"),
+			NULL,
+			G_PARAM_STATIC_STRINGS | G_PARAM_READABLE | G_PARAM_WRITABLE
+		)
+	);
+
 	g_object_class_install_property(object_class, PROP_LABEL,
 		g_param_spec_string (
 			I_("label"),
@@ -206,6 +216,14 @@
 		}
 		break;
 
+	case PROP_ICON_NAME:
+
+		if(element->icon_name) {
+			g_free(element->icon_name);
+			element->icon_name = g_value_dup_string(value);
+		}
+		break;
+
 	case PROP_ACTION:
 
 		if(element->action) {
@@ -235,13 +253,23 @@
 	}
  }
 
- static void element_start(GMarkupParseContext *context, const gchar *element_name, const gchar **names,const gchar **values, GList *keypads, GError **error) {
+ static void element_start(GMarkupParseContext *context, const gchar *element_name, const gchar **names,const gchar **values, GObject *element, GError **error) {
+
+	if(!g_ascii_strcasecmp(element_name,"attribute")) {
+		attribute_element_start(context,names,values,element,error);
+		return;
+	}
 
 	debug("%s(%s)",__FUNCTION__,element_name);
 
  }
 
- static void element_end(GMarkupParseContext *context, const gchar *element_name, GList *keypads, GError **error) {
+ static void element_end(GMarkupParseContext *context, const gchar *element_name, GObject *element, GError **error) {
+
+	if(!g_ascii_strcasecmp(element_name,"attribute")) {
+		attribute_element_end(context,element,error);
+		return;
+	}
 
 	debug("%s(%s)",__FUNCTION__,element_name);
 
