@@ -94,6 +94,7 @@
 		gchar *label;
 
 		GList *elements;
+		GList *widgets;
 
 	};
 

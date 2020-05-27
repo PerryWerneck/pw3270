@@ -58,6 +58,13 @@
 
  }
 
+ static void destroy(GtkWidget *grid, KeypadModel * keypad) {
+
+	keypad->widgets = g_list_remove(keypad->widgets,grid);
+	g_object_unref(keypad);
+
+ }
+
  GtkWidget * pw3270_keypad_get_from_model(GObject *model) {
 
 	g_return_val_if_fail(PW_IS_KEYPAD_MODEL(model),NULL);
@@ -66,7 +73,13 @@
 	gtk_grid_set_column_homogeneous(GTK_GRID(grid),TRUE);
 	gtk_grid_set_row_homogeneous(GTK_GRID(grid),TRUE);
 
-	g_list_foreach(PW_KEYPAD_MODEL(model)->elements,(GFunc) create_child, grid);
+	KeypadModel * keypad = PW_KEYPAD_MODEL(model);
+
+	keypad->widgets = g_list_prepend(keypad->widgets,grid);
+	g_object_ref_sink(keypad);
+	g_signal_connect(G_OBJECT(grid),"destroy", G_CALLBACK(destroy),keypad);
+
+	g_list_foreach(keypad->elements,(GFunc) create_child, grid);
 
 	return grid;
  }
