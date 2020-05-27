@@ -40,11 +40,16 @@
  	} else if(element->label) {
  		g_autofree gchar * label = g_strcompress(element->label);
 		button = gtk_button_new_with_label(label);
- 	} else {
+	} else {
 		button = gtk_button_new();
  	}
 
- 	gtk_grid_attach(
+ 	gtk_button_set_relief(GTK_BUTTON(button),GTK_RELIEF_NORMAL);
+	gtk_widget_set_can_focus(button,FALSE);
+	gtk_widget_set_can_default(button,FALSE);
+	gtk_widget_set_focus_on_click(button,FALSE);
+
+  	gtk_grid_attach(
 		grid,
 		button,
 		element->col,element->row,
