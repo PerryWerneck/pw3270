@@ -55,6 +55,15 @@
 	GList		* pw3270_keypad_model_new_from_xml(GList *keypads, const gchar *filename);
 	GtkWidget	* pw3270_keypad_get_from_model(GObject *model);
 
+	typedef enum _keypad_position {
+        KEYPAD_POSITION_TOP,
+        KEYPAD_POSITION_LEFT,
+        KEYPAD_POSITION_BOTTOM,
+        KEYPAD_POSITION_RIGHT
+	} 	KEYPAD_POSITION;
+
+	KEYPAD_POSITION pw3270_keypad_get_position(GObject *model);
+
 	G_END_DECLS
 
 #endif // PW3270_KEYPAD_H_INCLUDED

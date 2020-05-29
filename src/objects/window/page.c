@@ -136,7 +136,6 @@
 	g_signal_connect(G_OBJECT(label), "destroy", G_CALLBACK(label_disconnect),terminal);
 
 	// Setup tab
-
  	GtkWidget * tab			= gtk_box_new(GTK_ORIENTATION_HORIZONTAL,2);
  	GtkWidget * button		= gtk_button_new_from_icon_name("window-close-symbolic",GTK_ICON_SIZE_MENU);
  	GtkNotebook	* notebook	= PW3270_APPLICATION_WINDOW(window)->notebook;
@@ -155,13 +154,13 @@
 
 	g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(close_page), terminal);
 
-
  	gtk_box_pack_start(GTK_BOX(tab),label,FALSE,FALSE,0);
  	gtk_box_pack_end(GTK_BOX(tab),button,FALSE,FALSE,0);
 
 	gtk_widget_show_all(terminal);
 	gtk_widget_show_all(tab);
 
+	// Add page
 	gint page = gtk_notebook_append_page(notebook,terminal,tab);
 
 	gtk_notebook_set_tab_detachable(notebook,terminal,TRUE);

@@ -42,9 +42,9 @@
  };
 
  static const char * positions[] = {
-	"up",
-	"down",
+	"top",
 	"left",
+	"bottom",
 	"right"
  };
 
@@ -144,9 +144,11 @@
 
  static void KeypadModel_init(KeypadModel *object) {
 
+	object->position = (unsigned short) KEYPAD_POSITION_BOTTOM;
+
  }
 
- static void get_property(GObject *object, guint prop_id, GValue *value, GParamSpec *pspec) {
+ static void get_property(GObject *object, guint prop_id, GValue *value, GParamSpec G_GNUC_UNUSED(*pspec)) {
 
 	KeypadModel * model = PW_KEYPAD_MODEL(object);
 
@@ -177,7 +179,7 @@
 
  }
 
- static void set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec) {
+ static void set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec G_GNUC_UNUSED(*pspec)) {
 
 	KeypadModel * model = PW_KEYPAD_MODEL(object);
 
@@ -299,7 +301,7 @@
 
  }
 
- static void element_end(GMarkupParseContext *context, const gchar *element_name, KeypadModel *keypad, GError **error) {
+ static void element_end(GMarkupParseContext *context, const gchar *element_name, KeypadModel *keypad, GError G_GNUC_UNUSED(**error)) {
 
 	debug("%s(%s)",__FUNCTION__,element_name);
 
@@ -340,3 +342,9 @@
 	model->elements = g_list_reverse(model->elements);
 
  }
+
+ KEYPAD_POSITION pw3270_keypad_get_position(GObject *model) {
+	g_return_val_if_fail(PW_IS_KEYPAD_MODEL(model), (KEYPAD_POSITION) -1);
+	return (KEYPAD_POSITION) PW_KEYPAD_MODEL(model)->position;
+ }
+

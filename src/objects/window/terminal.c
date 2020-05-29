@@ -201,6 +201,8 @@
 
  	GtkWidget * terminal = v3270_new();
 
+ 	gtk_widget_show_all(terminal);
+
  	struct SessionDescriptor * descriptor = NULL;
 
  	if(session_file) {
