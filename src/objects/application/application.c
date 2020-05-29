@@ -506,12 +506,7 @@
 	return settings;
  }
 
-
- /*
- void pw3270_application_plugin_foreach(GApplication *app, GFunc func, gpointer user_data) {
-
- 	g_return_if_fail(PW3270_IS_APPLICATION(app));
-	g_slist_foreach(PW3270_APPLICATION(app)->plugins, func, user_data);
-
+ GList * pw3270_application_get_keypad_models(GApplication *app) {
+ 	g_return_val_if_fail(PW3270_IS_APPLICATION(app),NULL);
+ 	return PW3270_APPLICATION(app)->keypads;
  }
- */
