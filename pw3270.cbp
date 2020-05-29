@@ -46,6 +46,7 @@
 		<Unit filename="src/include/pw3270.h" />
 		<Unit filename="src/include/pw3270/actions.h" />
 		<Unit filename="src/include/pw3270/application.h" />
+		<Unit filename="src/include/pw3270/keypad.h" />
 		<Unit filename="src/include/pw3270/settings.h" />
 		<Unit filename="src/include/pw3270/toolbar.h" />
 		<Unit filename="src/include/pw3270/window.h" />
@@ -109,6 +110,22 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/objects/application/private.h" />
+		<Unit filename="src/objects/keypad/attribute.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/objects/keypad/element.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/objects/keypad/keypad.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/objects/keypad/load.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/objects/keypad/private.h" />
+		<Unit filename="src/objects/keypad/widget.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/objects/linux/savedesktopicon.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -168,9 +185,6 @@
 		<Unit filename="ui/application.xml" />
 		<Unit filename="ui/window.xml" />
 		<Extensions>
-			<code_completion />
-			<debugger />
-			<envvars set="default" />
 			<DoxyBlocks>
 				<comment_style block="0" line="0" />
 				<doxyfile_project />
@@ -180,6 +194,7 @@
 				<doxyfile_dot />
 				<general />
 			</DoxyBlocks>
+			<envvars set="default" />
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>
