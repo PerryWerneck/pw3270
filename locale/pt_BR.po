@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-08 00:40-0300\n"
+"POT-Creation-Date: 2020-05-29 11:55-0300\n"
 "PO-Revision-Date: 2020-05-08 00:46-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
@@ -91,12 +91,12 @@ msgstr "Negrito"
 msgid "Brazilian Public Software Portal"
 msgstr "Portal do Software Público Brasileiro"
 
-#: src/objects/window/terminal.c:173
+#: src/objects/window/terminal.c:174
 #, c-format
 msgid "Can't save file \"%s\""
 msgstr "Não foi possível salvar arquivo \"%s\""
 
-#: src/objects/window/terminal.c:178
+#: src/objects/window/terminal.c:179
 msgid "Can't save session file"
 msgstr "Não foi possível salvar arquivo de sessão"
 
@@ -151,7 +151,7 @@ msgstr "Conectar ao iniciar"
 msgid "Connect to host"
 msgstr "Conectar ao servidor"
 
-#: src/objects/window/window.c:538 src/objects/window/page.c:218
+#: src/objects/window/window.c:555 src/objects/window/page.c:218
 msgid "Connected to host"
 msgstr "Conectado no servidor"
 
@@ -203,7 +203,7 @@ msgstr "Ícone da área de trabalho"
 msgid "Disconnect"
 msgstr "Desconectar"
 
-#: src/objects/window/window.c:538 src/objects/window/window.c:543
+#: src/objects/window/window.c:555 src/objects/window/window.c:560
 #: src/objects/window/page.c:207
 msgid "Disconnected from host"
 msgstr "Desconectado do servidor"
@@ -211,6 +211,24 @@ msgstr "Desconectado do servidor"
 #: ui/window.xml:394 ui/window.xml:517 ui/application.xml:525
 msgid "Dynamic font spacing"
 msgstr "Espaçamento dinâmico"
+
+#: src/objects/keypad/element.c:128
+msgid "Element col"
+msgstr ""
+
+#: src/objects/keypad/element.c:152
+#, fuzzy
+msgid "Element height in rows"
+msgstr "Altura atual da tela em linhas"
+
+#: src/objects/keypad/element.c:116
+msgid "Element row"
+msgstr ""
+
+#: src/objects/keypad/element.c:140
+#, fuzzy
+msgid "Element width in columns"
+msgstr "Largura atua da tela em colunas"
 
 #: src/objects/actions/abstract.c:140
 msgid "Enabled"
@@ -256,7 +274,7 @@ msgstr "Ajuda"
 msgid "Host properties"
 msgstr "Propriedades do Servidor"
 
-#: src/objects/window/window.c:306
+#: src/objects/window/window.c:323
 msgid "IBM 3270 Terminal emulator"
 msgstr "Emulador 3270"
 
@@ -292,6 +310,14 @@ msgstr "Se a ação pode ser ativada"
 msgid "Insert"
 msgstr "Inserção"
 
+#: src/objects/keypad/attribute.c:116
+msgid "Invalid or unknown property name"
+msgstr ""
+
+#: src/objects/keypad/attribute.c:79
+msgid "Invalid or unknown property type"
+msgstr ""
+
 #: src/objects/toolbar/settings.c:108
 msgid "Itens"
 msgstr "Itens"
@@ -299,6 +325,24 @@ msgstr "Itens"
 #: ui/application.xml:500
 msgid "Keep selected"
 msgstr "Manter selecionado"
+
+#: src/objects/keypad/keypad.c:103
+msgid "Keypad Label"
+msgstr ""
+
+#: src/objects/keypad/keypad.c:93
+msgid "Keypad Name"
+msgstr ""
+
+#: src/objects/keypad/keypad.c:136
+#, fuzzy
+msgid "Keypad height in rows"
+msgstr "Altura atual da tela em linhas"
+
+#: src/objects/keypad/keypad.c:124
+#, fuzzy
+msgid "Keypad width in columns"
+msgstr "Largura atua da tela em colunas"
 
 #: src/objects/actions/view.c:98
 msgid "Label"
@@ -455,6 +499,11 @@ msgstr "Reselecionar"
 #: ui/window.xml:377 ui/application.xml:465
 msgid "Resize on alternate screen"
 msgstr "Mudar tamanho do terminal em tela alternativa"
+
+#: keypad/00-right.xml:34
+#, fuzzy
+msgid "Right keypad"
+msgstr "Barra lateral"
 
 #: src/objects/toolbar/toolbar.c:286
 msgid "S_tyle"
@@ -615,6 +664,11 @@ msgstr "Fonte do terminal"
 msgid "Text only"
 msgstr "Apenas texto"
 
+#: src/objects/keypad/keypad.c:104 src/objects/keypad/element.c:106
+#, fuzzy
+msgid "The Label of the keypad"
+msgstr "A etiqueta da ação"
+
 #: src/objects/actions/abstract.c:109
 msgid "The action label"
 msgstr "A etiqueta da ação"
@@ -631,6 +685,11 @@ msgstr "Código identificando o tipo de interface do usuário"
 msgid "The label for the action"
 msgstr "A etiqueta da ação"
 
+#: src/objects/keypad/element.c:96
+#, fuzzy
+msgid "The name of associated action"
+msgstr "Nome do ícone associado com a ação"
+
 #: src/objects/window/window.c:157
 msgid "The name of the actions in the header bar"
 msgstr "O nome das ações na barra de título"
@@ -639,13 +698,27 @@ msgstr "O nome das ações na barra de título"
 msgid "The name of the actions in the toolbar"
 msgstr "O nome das ações na barra de ferramentas"
 
+#: src/objects/keypad/element.c:86
+#, fuzzy
+msgid "The name of the icon"
+msgstr "A etiqueta da ação"
+
 #: src/objects/actions/abstract.c:102
 msgid "The name of the icon associated with the action"
 msgstr "Nome do ícone associado com a ação"
 
+#: src/objects/keypad/keypad.c:94
+#, fuzzy
+msgid "The name used to identify the keypad"
+msgstr "O nome usado para ativar a ação"
+
 #: src/objects/actions/abstract.c:94
 msgid "The name used to invoke the action"
 msgstr "O nome usado para ativar a ação"
+
+#: src/objects/keypad/keypad.c:114
+msgid "The position of the keypad"
+msgstr ""
 
 #: src/objects/actions/abstract.c:153
 msgid "The state the action is in"
@@ -730,7 +803,7 @@ msgstr "Usar teclas +/- para navegar por campos"
 msgid "Version %s-%s"
 msgstr "Versão %s-%s"
 
-#: ui/application.xml:63
+#: src/objects/window/header.c:66 ui/application.xml:63
 msgid "View"
 msgstr "Exibir"
 
@@ -793,6 +866,11 @@ msgstr "_Salvar"
 #: ui/application.xml:335
 msgid "_View"
 msgstr "_Exibir"
+
+#: src/objects/keypad/keypad.c:102
+#, fuzzy
+msgid "label"
+msgstr "Etiqueta"
 
 #: src/objects/application/actions/about.c:116
 msgid "translator-credits"
@@ -1490,12 +1568,6 @@ msgstr "translator-credits"
 #~ msgid "Cross hair Cursor"
 #~ msgstr "Cursor mira"
 
-#~ msgid "Current screen height in rows"
-#~ msgstr "Altura atual da tela em linhas"
-
-#~ msgid "Current screen width in columns"
-#~ msgstr "Largura atua da tela em colunas"
-
 #~ msgid "Current:"
 #~ msgstr "Atual:"
 
@@ -2082,9 +2154,6 @@ msgstr "translator-credits"
 
 #~ msgid "LRECL:"
 #~ msgstr "LRECL:"
-
-#~ msgid "Lateral keypad"
-#~ msgstr "Barra lateral"
 
 #~ msgid "Latest program message"
 #~ msgstr "Última mensagem de programa"

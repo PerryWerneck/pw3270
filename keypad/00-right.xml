@@ -1,6 +1,7 @@
-<!-----------------------------------------------------------------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
 
- "Software pw3270, desenvolvido com base nos códigos fontes do WC3270  e X3270
+ Software pw3270, desenvolvido com base nos códigos fontes do WC3270  e X3270
  (Paul Mattes Paul.Mattes@usa.net), de emulação de terminal 3270 para acesso a
  aplicativos mainframe. Registro no INPI sob o nome G3270.
 
@@ -16,21 +17,21 @@
  obter mais detalhes.
 
  Você deve ter recebido uma cópia da Licença Pública Geral GNU junto com este
- programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple
- Place, Suite 330, Boston, MA, 02111-1307, USA
+ programa; se não, escreva para a Free Software Foundation, Inc., 51 Franklin
+ St, Fifth Floor, Boston, MA  02110-1301  USA
+
 
  Contatos:
 
  perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
  erico.mendonca@gmail.com	(Erico Mascarenhas Mendonça)
- 
------------------------------------------------------------------------------->
 
-<ui>
+-->
+<interface>
 
 	<keypad name="lateral_keypad" position="right" width='6'>
 
-		<attribute name='label' translatable='yes'>Lateral keypad</attribute>
+		<attribute name='label' translatable='yes'>Right keypad</attribute>
 
 		<button width='2'>
 			<attribute name="label" translatable="no">PF1</attribute>
@@ -92,7 +93,7 @@
 			<attribute name="action"></attribute>
 		</button>
 
-		<button column='2' width='2'>
+\		<button column='2' width='2'>
 			<attribute name="icon-name" translatable="no">gtk-go-up</attribute>
 			<attribute name="action"></attribute>
 		</button>
@@ -179,4 +180,4 @@
 
 	</keypad>
 
-</ui>
+</interface>

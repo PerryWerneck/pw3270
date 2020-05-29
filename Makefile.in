@@ -43,7 +43,8 @@ SOURCES= \
 	$(wildcard src/objects/@OSNAME@/*.c) \
 	$(wildcard src/main/*.c) \
 	$(wildcard src/main/@OSNAME@/*.c) \
-	$(wildcard src/main/@OSNAME@/*.rc)
+	$(wildcard src/main/@OSNAME@/*.rc) \
+	$(wildcard src/objects/keypad/*.c)
 
 SCHEMAS= \
 	$(wildcard schemas/@OSNAME@/*.gschema.xml) \
@@ -286,11 +287,19 @@ install-application: \
 		ui/*.xml \
 		$(DESTDIR)/$(datarootdir)/$(PRODUCT_NAME)/ui
 
+	@$(MKDIR) \
+		$(DESTDIR)/$(datarootdir)/$(PRODUCT_NAME)/keypad
+
+	@$(INSTALL_DATA) \
+		keypad/*.xml \
+		$(DESTDIR)/$(datarootdir)/$(PRODUCT_NAME)/keypad
+
 #---[ Misc Targets ]---------------------------------------------------------------------
 
 locale/$(PACKAGE_NAME).pot: \
 	$(foreach SRC, $(basename $(SOURCES)), $(POTDIR)/$(PACKAGE_NAME)/$(SRC).pot) \
-	$(foreach SRC, $(basename $(wildcard ui/*.xml)), $(POTDIR)/$(PACKAGE_NAME)/$(SRC).pot)
+	$(foreach SRC, $(basename $(wildcard ui/*.xml)), $(POTDIR)/$(PACKAGE_NAME)/$(SRC).pot) \
+	$(foreach SRC, $(basename $(wildcard keypad/*.xml)), $(POTDIR)/$(PACKAGE_NAME)/$(SRC).pot) 
 
 	@rm -f $@
 	@$(MKDIR) $(@D)
