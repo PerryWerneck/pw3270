@@ -32,6 +32,7 @@
  #include <pw3270/toolbar.h>
  #include <pw3270/application.h>
  #include <pw3270/actions.h>
+ #include <pw3270/keypad.h>
 
  static void get_property(GObject *object, guint prop_id, GValue *value, GParamSpec *pspec);
  static void set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec);
@@ -187,7 +188,7 @@
 	widget->state.is_fullscreen = 0;
 
 	// Create contents
-	GtkBox * vBox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL,0));
+	GtkBox * container = GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL,0));
 
 	widget->notebook = GTK_NOTEBOOK(gtk_notebook_new());
 	gtk_notebook_set_scrollable(widget->notebook,TRUE);
@@ -197,7 +198,6 @@
 
 	{
 		// Create new tab action widget
-		//GtkWidget * new_tab = gtk_image_new_from_icon_name("tab-new-symbolic",GTK_ICON_SIZE_LARGE_TOOLBAR);
 		GtkWidget * new_tab = gtk_button_new_from_icon_name("tab-new-symbolic",GTK_ICON_SIZE_LARGE_TOOLBAR);
 		gtk_button_set_relief(GTK_BUTTON(new_tab),GTK_RELIEF_NONE);
 		gtk_actionable_set_action_name(GTK_ACTIONABLE(new_tab),"app.new.tab");
@@ -213,11 +213,59 @@
 	}
 
 	widget->toolbar  = GTK_TOOLBAR(pw3270_toolbar_new());
-	gtk_box_pack_start(vBox,GTK_WIDGET(widget->toolbar),FALSE,TRUE,0);
-	gtk_box_pack_start(vBox,GTK_WIDGET(widget->notebook),TRUE,TRUE,0);
+	gtk_box_pack_start(container,GTK_WIDGET(widget->toolbar),FALSE,TRUE,0);
 
-	gtk_widget_show_all(GTK_WIDGET(vBox));
-	gtk_container_add(GTK_CONTAINER(widget),GTK_WIDGET(vBox));
+	//
+	// Do we have keypads?
+	//
+	GList * keypads = pw3270_application_get_keypad_models(g_application_get_default());
+	if(keypads) {
+
+		GtkBox * hBox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL,0));
+		GList * keypad;
+
+		// Add left keypads
+		for(keypad = keypads;keypad;keypad = g_list_next(keypad)) {
+
+			if(pw3270_keypad_get_position(G_OBJECT(keypad->data)) == KEYPAD_POSITION_LEFT) {
+				gtk_box_pack_start(
+					hBox,
+					pw3270_keypad_get_from_model(G_OBJECT(keypad->data)),
+					FALSE,FALSE,0
+				);
+			}
+		}
+
+		// Add center notebook
+		gtk_box_pack_start(hBox,GTK_WIDGET(widget->notebook),TRUE,TRUE,0);
+
+		// Add right keypads
+		for(keypad = keypads;keypad;keypad = g_list_next(keypad)) {
+
+			if(pw3270_keypad_get_position(G_OBJECT(keypad->data)) == KEYPAD_POSITION_RIGHT) {
+				gtk_box_pack_end(
+					hBox,
+					pw3270_keypad_get_from_model(G_OBJECT(keypad->data)),
+					FALSE,FALSE,0
+				);
+			}
+		}
+
+
+		// Add it to the container
+		gtk_widget_show(GTK_WIDGET(hBox));
+		gtk_box_pack_start(container,GTK_WIDGET(hBox),TRUE,TRUE,0);
+
+	} else {
+
+		gtk_box_pack_start(container,GTK_WIDGET(widget->notebook),TRUE,TRUE,0);
+
+	}
+
+	gtk_widget_show_all(GTK_WIDGET(widget->notebook));
+
+	gtk_widget_show(GTK_WIDGET(container));
+	gtk_container_add(GTK_CONTAINER(widget),GTK_WIDGET(container));
 
 	//
 	// Setup tn3270 actions.

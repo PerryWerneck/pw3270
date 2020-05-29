@@ -49,6 +49,8 @@
 	gtk_widget_set_can_default(button,FALSE);
 	gtk_widget_set_focus_on_click(button,FALSE);
 
+	gtk_widget_show_all(button);
+
   	gtk_grid_attach(
 		grid,
 		button,
@@ -80,6 +82,8 @@
 	g_signal_connect(G_OBJECT(grid),"destroy", G_CALLBACK(destroy),keypad);
 
 	g_list_foreach(keypad->elements,(GFunc) create_child, grid);
+
+	gtk_widget_show(grid); // FIX-ME
 
 	return grid;
  }
