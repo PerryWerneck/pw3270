@@ -95,27 +95,27 @@
 
 \		<button column='2' width='2'>
 			<attribute name="icon-name" translatable="no">gtk-go-up</attribute>
-			<attribute name="action"></attribute>
+			<attribute name="action">win.up</attribute>
 		</button>
 
 		<button column='0' width='2'>
 			<attribute name="icon-name" translatable="no">gtk-go-back</attribute>
-			<attribute name="action"></attribute>
+			<attribute name="action">win.left</attribute>
 		</button>
 
 		<button width='2'>
 			<attribute name="icon-name" translatable="no">gtk-goto-top</attribute>
-			<attribute name="action"></attribute>
+			<attribute name="action">win.first-field</attribute>
 		</button>
 
 		<button width='2'>
 			<attribute name="icon-name" translatable="no">gtk-go-forward</attribute>
-			<attribute name="action"></attribute>
+			<attribute name="action">win.right</attribute>
 		</button>
 
 		<button column='2' width='2'>
 			<attribute name="icon-name" translatable="no">gtk-go-down</attribute>
-			<attribute name="action"></attribute>
+			<attribute name="action">win.down</attribute>
 		</button>
 
 		<button width='2' column='0'>
@@ -134,48 +134,48 @@
 		</button>
 
 		<button width='3'>
-			<attribute name="icon-name" translatable="no">go-first</attribute>
-			<attribute name="action"></attribute>
+			<attribute name="icon-name">go-first</attribute>
+			<attribute name="action">win.previous-field</attribute>
 		</button>
 
 		<button width='3'>
-			<attribute name="icon-name" translatable="no">go-last</attribute>
-			<attribute name="action"></attribute>
+			<attribute name="icon-name">go-last</attribute>
+			<attribute name="action">win.next-field</attribute>
 		</button>
 
 		<button width='3'>
 			<attribute name="label" translatable="Yes">Clear</attribute>
-			<attribute name="action"></attribute>
+			<attribute name="action">win.clear</attribute>
 		</button>
 
 		<button width='3'>
 			<attribute name="label" translatable="Yes">Reset</attribute>
-			<attribute name="action"></attribute>
+			<attribute name="action">win.kybdreset</attribute>
 		</button>
 
 		<button width='3'>
 			<attribute name="label" translatable="Yes">Erase\nEOF</attribute>
-			<attribute name="action"></attribute>
+			<attribute name="action">win.erase-eof</attribute>
 		</button>
 		
 		<button width='3'>
 			<attribute name="label" translatable="Yes">Erase\nInput</attribute>
-			<attribute name="action"></attribute>
+			<attribute name="action">win.erase-input</attribute>
 		</button>
 
 		<button width='3'>
 			<attribute name="label" translatable="Yes">Attn</attribute>
-			<attribute name="action"></attribute>
+			<attribute name="action">win.attn</attribute>
 		</button>
 
 		<button width='3'>
 			<attribute name="label" translatable="Yes">Break</attribute>
-			<attribute name="action"></attribute>
+			<attribute name="action">win.break</attribute>
 		</button>
 
 		<button width='6'>
 			<attribute name="icon-name" translatable="no">gtk-ok</attribute>
-			<attribute name="action"></attribute>
+			<attribute name="action">win.enter</attribute>
 		</button>
 
 	</keypad>
