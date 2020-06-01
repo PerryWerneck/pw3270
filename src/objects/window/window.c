@@ -179,6 +179,15 @@
 
  }
 
+ static GtkWidget * setup_keypad(pw3270ApplicationWindow *window, GObject * model) {
+
+	GtkWidget * widget = pw3270_keypad_get_from_model(model);
+
+
+	return widget;
+
+ }
+
  static void pw3270ApplicationWindow_init(pw3270ApplicationWindow *widget) {
 
 	// Setup defaults
@@ -231,7 +240,7 @@
 			if(pw3270_keypad_get_position(G_OBJECT(keypad->data)) == KEYPAD_POSITION_TOP) {
 				gtk_box_pack_start(
 					vBox,
-					pw3270_keypad_get_from_model(G_OBJECT(keypad->data)),
+					setup_keypad(widget, G_OBJECT(keypad->data)),
 					FALSE,FALSE,0
 				);
 			}
@@ -244,7 +253,7 @@
 			if(pw3270_keypad_get_position(G_OBJECT(keypad->data)) == KEYPAD_POSITION_LEFT) {
 				gtk_box_pack_start(
 					hBox,
-					pw3270_keypad_get_from_model(G_OBJECT(keypad->data)),
+					setup_keypad(widget, G_OBJECT(keypad->data)),
 					FALSE,FALSE,0
 				);
 			}
@@ -260,7 +269,7 @@
 			if(pw3270_keypad_get_position(G_OBJECT(keypad->data)) == KEYPAD_POSITION_BOTTOM) {
 				gtk_box_pack_end(
 					vBox,
-					pw3270_keypad_get_from_model(G_OBJECT(keypad->data)),
+					setup_keypad(widget, G_OBJECT(keypad->data)),
 					FALSE,FALSE,0
 				);
 			}
@@ -273,7 +282,7 @@
 			if(pw3270_keypad_get_position(G_OBJECT(keypad->data)) == KEYPAD_POSITION_RIGHT) {
 				gtk_box_pack_end(
 					hBox,
-					pw3270_keypad_get_from_model(G_OBJECT(keypad->data)),
+					setup_keypad(widget, G_OBJECT(keypad->data)),
 					FALSE,FALSE,0
 				);
 			}
