@@ -202,8 +202,6 @@
 		gtk_button_set_relief(GTK_BUTTON(new_tab),GTK_RELIEF_NONE);
 		gtk_actionable_set_action_name(GTK_ACTIONABLE(new_tab),g_intern_static_string("app.new.tab"));
 
-		debug("*************[%s]",g_intern_static_string("app.new.tab"));
-
 		gtk_widget_set_margin_start(new_tab,6);
 		gtk_widget_set_margin_end(new_tab,6);
 		gtk_widget_set_margin_bottom(new_tab,0);
