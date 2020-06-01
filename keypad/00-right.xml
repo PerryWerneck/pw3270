@@ -35,62 +35,62 @@
 
 		<button width='2'>
 			<attribute name="label" translatable="no">PF1</attribute>
-			<attribute name="action"></attribute>
+			<attribute name="action">win.pfkey(1)</attribute>
 		</button>
 
 		<button width='2'>
 			<attribute name="label" translatable="no">PF2</attribute>
-			<attribute name="action"></attribute>
+			<attribute name="action">win.pfkey(2)</attribute>
 		</button>
 
 		<button width='2'>
 			<attribute name="label" translatable="no">PF3</attribute>
-			<attribute name="action"></attribute>
+			<attribute name="action">win.pfkey(3)</attribute>
 		</button>
 
 		<button width='2'>
 			<attribute name="label" translatable="no">PF4</attribute>
-			<attribute name="action"></attribute>
+			<attribute name="action">win.pfkey(4)</attribute>
 		</button>
 
 		<button width='2'>
 			<attribute name="label" translatable="no">PF5</attribute>
-			<attribute name="action"></attribute>
+			<attribute name="action">win.pfkey(5)</attribute>
 		</button>
 
 		<button width='2'>
 			<attribute name="label" translatable="no">PF6</attribute>
-			<attribute name="action"></attribute>
+			<attribute name="action">win.pfkey(6)</attribute>
 		</button>
 
 		<button width='2'>
 			<attribute name="label" translatable="no">PF7</attribute>
-			<attribute name="action"></attribute>
+			<attribute name="action">win.pfkey(7)</attribute>
 		</button>
 
 		<button width='2'>
 			<attribute name="label" translatable="no">PF8</attribute>
-			<attribute name="action"></attribute>
+			<attribute name="action">win.pfkey(8)</attribute>
 		</button>
 
 		<button width='2'>
 			<attribute name="label" translatable="no">PF9</attribute>
-			<attribute name="action"></attribute>
+			<attribute name="action">win.pfkey(9)</attribute>
 		</button>
 
 		<button width='2'>
 			<attribute name="label" translatable="no">PF10</attribute>
-			<attribute name="action"></attribute>
+			<attribute name="action">win.pfkey(10)</attribute>
 		</button>
 
 		<button width='2'>
 			<attribute name="label" translatable="no">PF11</attribute>
-			<attribute name="action"></attribute>
+			<attribute name="action">win.pfkey(11)</attribute>
 		</button>
 
 		<button width='2'>
 			<attribute name="label" translatable="no">PF12</attribute>
-			<attribute name="action"></attribute>
+			<attribute name="action">win.pfkey(12)</attribute>
 		</button>
 
 \		<button column='2' width='2'>
@@ -120,17 +120,17 @@
 
 		<button width='2' column='0'>
 			<attribute name="label" translatable="no">PA1</attribute>
-			<attribute name="action"></attribute>
+			<attribute name="action">win.pakey(1)</attribute>
 		</button>
 
 		<button width='2'>
 			<attribute name="label" translatable="no">PA2</attribute>
-			<attribute name="action"></attribute>
+			<attribute name="action">win.pakey(2)</attribute>
 		</button>
 
 		<button width='2'>
 			<attribute name="label" translatable="no">PA3</attribute>
-			<attribute name="action"></attribute>
+			<attribute name="action">win.pakey(3)</attribute>
 		</button>
 
 		<button width='3'>

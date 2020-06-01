@@ -45,7 +45,7 @@
  	}
 
  	if(element->action && *element->action) {
-		gtk_actionable_set_action_name(GTK_ACTIONABLE(button),g_intern_string(element->action));
+		gtk_actionable_set_detailed_action_name(GTK_ACTIONABLE(button),element->action);
  	}
 
  	gtk_button_set_relief(GTK_BUTTON(button),GTK_RELIEF_NORMAL);
