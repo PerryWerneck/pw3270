@@ -179,16 +179,27 @@
 
  }
 
+ static void keypad_hide(GtkWidget *keypad, GObject * model) {
+
+ }
+
+ static void keypad_show(GtkWidget *keypad, GObject * model) {
+
+ }
+
  static GtkWidget * setup_keypad(pw3270ApplicationWindow *window, GObject * model) {
 
 	GtkWidget * widget = pw3270_keypad_get_from_model(model);
 
-	V3270SimpleAction * action = v3270_property_action_new(widget,"visible",LIB3270_ACTION_GROUP_NONE);
+	g_signal_connect(widget,"hide",G_CALLBACK(keypad_hide),model);
+	g_signal_connect(widget,"show",G_CALLBACK(keypad_show),model);
 
-	action->name = pw3270_keypad_model_get_action_name(model);
-	debug("*********** name=%s",action->name);
-	action->label = pw3270_keypad_model_get_label(model);
-	debug("*********** label=%s",action->label);
+	GPropertyAction * action =
+			g_property_action_new(
+				pw3270_keypad_model_get_action_name(model),
+				widget,
+				"visible"
+			);
 
 	g_action_map_add_action(
 		G_ACTION_MAP(window),
