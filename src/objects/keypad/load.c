@@ -36,12 +36,13 @@
 
 	if(!g_ascii_strcasecmp(element_name,"keypad")) {
 
-		const gchar *name, *position, *width, *height;
+		const gchar *name, *label, *position, *width, *height;
 		GObject * keypad = g_object_new(PW_TYPE_KEYPAD_MODEL,NULL);
 
 		if(!g_markup_collect_attributes(
                     element_name,names,values,error,
                     G_MARKUP_COLLECT_STRING, "name", &name,
+                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "label", &label,
                     G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "position", &position,
                     G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "width", &width,
                     G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "height", &height,
@@ -56,6 +57,14 @@
         *keypads = g_list_append(*keypads,keypad);
 
 		keypad_model_set_position(keypad,position);
+
+		if(name) {
+			PW_KEYPAD_MODEL(keypad)->name = g_strdup(name);
+		}
+
+		if(label) {
+			PW_KEYPAD_MODEL(keypad)->label = g_strdup(label);
+		}
 
 		if(width) {
 			PW_KEYPAD_MODEL(keypad)->width = (unsigned short) atoi(width);

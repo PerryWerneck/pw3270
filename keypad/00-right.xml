@@ -29,7 +29,7 @@
 -->
 <interface>
 
-	<keypad name="lateral_keypad" position="right" width='6'>
+	<keypad name="keypad_right" position="right" width='6'>
 
 		<attribute name='label' translatable='yes'>Right keypad</attribute>
 
@@ -93,7 +93,7 @@
 			<attribute name="action">win.pfkey(12)</attribute>
 		</button>
 
-\		<button column='2' width='2'>
+		<button column='2' width='2'>
 			<attribute name="icon-name" translatable="no">gtk-go-up</attribute>
 			<attribute name="action">win.up</attribute>
 		</button>

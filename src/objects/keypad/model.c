@@ -188,16 +188,16 @@
 
 		if(model->name) {
 			g_free(model->name);
-			model->name = g_value_dup_string(value);
 		}
+		model->name = g_value_dup_string(value);
 		break;
 
 	case PROP_LABEL:
 
 		if(model->label) {
 			g_free(model->label);
-			model->label = g_value_dup_string(value);
 		}
+		model->label = g_value_dup_string(value);
 		break;
 
 	case PROP_POSITION:
@@ -296,8 +296,9 @@
 		keypad->elements = g_list_prepend(keypad->elements,element);
 		keypad_model_element_parse_context(G_OBJECT(element),context);
 
+	} else if(!g_ascii_strcasecmp(element_name,"attribute")) {
+		attribute_element_start(context,names,values,G_OBJECT(keypad),error);
 	}
-
 
  }
 
@@ -318,6 +319,8 @@
 			keypad->current.row++;
 		}
 
+	} else if(!g_ascii_strcasecmp(element_name,"attribute")) {
+		attribute_element_end(context,G_OBJECT(keypad),error);
 	}
 
  }
@@ -346,5 +349,15 @@
  KEYPAD_POSITION pw3270_keypad_get_position(GObject *model) {
 	g_return_val_if_fail(PW_IS_KEYPAD_MODEL(model), (KEYPAD_POSITION) -1);
 	return (KEYPAD_POSITION) PW_KEYPAD_MODEL(model)->position;
+ }
+
+ const gchar * pw3270_keypad_model_get_action_name(GObject *model) {
+	g_return_val_if_fail(PW_IS_KEYPAD_MODEL(model), NULL);
+	return PW_KEYPAD_MODEL(model)->name;
+ }
+
+ const gchar * pw3270_keypad_model_get_label(GObject *model) {
+	g_return_val_if_fail(PW_IS_KEYPAD_MODEL(model), NULL);
+	return PW_KEYPAD_MODEL(model)->label;
  }
 

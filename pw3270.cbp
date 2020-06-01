@@ -116,10 +116,10 @@
 		<Unit filename="src/objects/keypad/element.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/objects/keypad/keypad.c">
+		<Unit filename="src/objects/keypad/load.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/objects/keypad/load.c">
+		<Unit filename="src/objects/keypad/model.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/objects/keypad/private.h" />

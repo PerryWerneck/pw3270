@@ -29,7 +29,7 @@
 -->
 <interface>
 
-	<keypad name="bottom_keypad" position="bottom" width='12'>
+	<keypad name="function_bar" position="bottom" width='12'>
 
 		<attribute name='label' translatable='yes'>Function bar</attribute>
 
