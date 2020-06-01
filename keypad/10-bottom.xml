@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+ Software pw3270, desenvolvido com base nos códigos fontes do WC3270  e X3270
+ (Paul Mattes Paul.Mattes@usa.net), de emulação de terminal 3270 para acesso a
+ aplicativos mainframe. Registro no INPI sob o nome G3270.
+
+  Copyright (C) <2008> <Banco do Brasil S.A.>
+
+ Este programa é software livre. Você pode redistribuí-lo e/ou modificá-lo sob
+ os termos da GPL v.2 - Licença Pública Geral  GNU,  conforme  publicado  pela
+ Free Software Foundation.
+
+ Este programa é distribuído na expectativa de  ser  útil,  mas  SEM  QUALQUER
+ GARANTIA; sem mesmo a garantia implícita de COMERCIALIZAÇÃO ou  de  ADEQUAÇÃO
+ A QUALQUER PROPÓSITO EM PARTICULAR. Consulte a Licença Pública Geral GNU para
+ obter mais detalhes.
+
+ Você deve ter recebido uma cópia da Licença Pública Geral GNU junto com este
+ programa; se não, escreva para a Free Software Foundation, Inc., 51 Franklin
+ St, Fifth Floor, Boston, MA  02110-1301  USA
+
+
+ Contatos:
+
+ perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
+ erico.mendonca@gmail.com	(Erico Mascarenhas Mendonça)
+
+-->
+<interface>
+
+	<keypad name="bottom_keypad" position="bottom" width='12'>
+
+		<attribute name='label' translatable='yes'>Function bar</attribute>
+
+		<button>
+			<attribute name="label" translatable="no">PF1</attribute>
+			<attribute name="action">win.pfkey(1)</attribute>
+		</button>
+
+		<button>
+			<attribute name="label" translatable="no">PF2</attribute>
+			<attribute name="action">win.pfkey(2)</attribute>
+		</button>
+
+		<button>
+			<attribute name="label" translatable="no">PF3</attribute>
+			<attribute name="action">win.pfkey(3)</attribute>
+		</button>
+
+		<button>
+			<attribute name="label" translatable="no">PF4</attribute>
+			<attribute name="action">win.pfkey(4)</attribute>
+		</button>
+
+		<button>
+			<attribute name="label" translatable="no">PF5</attribute>
+			<attribute name="action">win.pfkey(5)</attribute>
+		</button>
+
+		<button>
+			<attribute name="label" translatable="no">PF6</attribute>
+			<attribute name="action">win.pfkey(6)</attribute>
+		</button>
+
+		<button>
+			<attribute name="label" translatable="no">PF7</attribute>
+			<attribute name="action">win.pfkey(7)</attribute>
+		</button>
+
+		<button>
+			<attribute name="label" translatable="no">PF8</attribute>
+			<attribute name="action">win.pfkey(8)</attribute>
+		</button>
+
+		<button>
+			<attribute name="label" translatable="no">PF9</attribute>
+			<attribute name="action">win.pfkey(9)</attribute>
+		</button>
+
+		<button>
+			<attribute name="label" translatable="no">PF10</attribute>
+			<attribute name="action">win.pfkey(10)</attribute>
+		</button>
+
+		<button>
+			<attribute name="label" translatable="no">PF11</attribute>
+			<attribute name="action">win.pfkey(11)</attribute>
+		</button>
+
+		<button>
+			<attribute name="label" translatable="no">PF12</attribute>
+			<attribute name="action">win.pfkey(12)</attribute>
+		</button>
+
+		<button>
+			<attribute name="label" translatable="no">PF13</attribute>
+			<attribute name="action">win.pfkey(13)</attribute>
+		</button>
+
+		<button>
+			<attribute name="label" translatable="no">PF14</attribute>
+			<attribute name="action">win.pfkey(14)</attribute>
+		</button>
+
+		<button>
+			<attribute name="label" translatable="no">PF15</attribute>
+			<attribute name="action">win.pfkey(15)</attribute>
+		</button>
+
+		<button>
+			<attribute name="label" translatable="no">PF16</attribute>
+			<attribute name="action">win.pfkey(16)</attribute>
+		</button>
+
+		<button>
+			<attribute name="label" translatable="no">PF17</attribute>
+			<attribute name="action">win.pfkey(17)</attribute>
+		</button>
+
+		<button>
+			<attribute name="label" translatable="no">PF18</attribute>
+			<attribute name="action">win.pfkey(18)</attribute>
+		</button>
+
+		<button>
+			<attribute name="label" translatable="no">PF19</attribute>
+			<attribute name="action">win.pfkey(19)</attribute>
+		</button>
+
+		<button>
+			<attribute name="label" translatable="no">PF20</attribute>
+			<attribute name="action">win.pfkey(20)</attribute>
+		</button>
+
+		<button>
+			<attribute name="label" translatable="no">PF21</attribute>
+			<attribute name="action">win.pfkey(21)</attribute>
+		</button>
+
+		<button>
+			<attribute name="label" translatable="no">PF22</attribute>
+			<attribute name="action">win.pfkey(22)</attribute>
+		</button>
+
+		<button>
+			<attribute name="label" translatable="no">PF23</attribute>
+			<attribute name="action">win.pfkey(23)</attribute>
+		</button>
+
+		<button>
+			<attribute name="label" translatable="no">PF24</attribute>
+			<attribute name="action">win.pfkey(24)</attribute>
+		</button>
+		
+	</keypad>
+
+</interface>

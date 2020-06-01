@@ -222,7 +222,21 @@
 	if(keypads) {
 
 		GtkBox * hBox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL,0));
+		GtkBox * vBox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL,0));
 		GList * keypad;
+
+		// Add top Keypads
+		for(keypad = keypads;keypad;keypad = g_list_next(keypad)) {
+
+			if(pw3270_keypad_get_position(G_OBJECT(keypad->data)) == KEYPAD_POSITION_TOP) {
+				gtk_box_pack_start(
+					vBox,
+					pw3270_keypad_get_from_model(G_OBJECT(keypad->data)),
+					FALSE,FALSE,0
+				);
+			}
+		}
+
 
 		// Add left keypads
 		for(keypad = keypads;keypad;keypad = g_list_next(keypad)) {
@@ -237,7 +251,21 @@
 		}
 
 		// Add center notebook
-		gtk_box_pack_start(hBox,GTK_WIDGET(widget->notebook),TRUE,TRUE,0);
+		gtk_box_pack_start(vBox,GTK_WIDGET(widget->notebook),TRUE,TRUE,0);
+		gtk_box_pack_start(hBox,GTK_WIDGET(vBox),TRUE,TRUE,0);
+
+		// Add bottom keypads
+		for(keypad = keypads;keypad;keypad = g_list_next(keypad)) {
+
+			if(pw3270_keypad_get_position(G_OBJECT(keypad->data)) == KEYPAD_POSITION_BOTTOM) {
+				gtk_box_pack_end(
+					vBox,
+					pw3270_keypad_get_from_model(G_OBJECT(keypad->data)),
+					FALSE,FALSE,0
+				);
+			}
+		}
+
 
 		// Add right keypads
 		for(keypad = keypads;keypad;keypad = g_list_next(keypad)) {
@@ -251,9 +279,9 @@
 			}
 		}
 
-
 		// Add it to the container
 		gtk_widget_show(GTK_WIDGET(hBox));
+		gtk_widget_show(GTK_WIDGET(vBox));
 		gtk_box_pack_start(container,GTK_WIDGET(hBox),TRUE,TRUE,0);
 
 	} else {
