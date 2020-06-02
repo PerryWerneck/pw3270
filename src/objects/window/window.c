@@ -194,9 +194,11 @@
 	g_signal_connect(widget,"hide",G_CALLBACK(keypad_hide),model);
 	g_signal_connect(widget,"show",G_CALLBACK(keypad_show),model);
 
+	g_autofree gchar * action_name = g_strconcat("keypad.",pw3270_keypad_model_get_name(model),NULL);
+
 	GPropertyAction * action =
 			g_property_action_new(
-				pw3270_keypad_model_get_action_name(model),
+				action_name,
 				widget,
 				"visible"
 			);
@@ -243,7 +245,7 @@
 		gtk_notebook_set_action_widget(widget->notebook,new_tab,GTK_PACK_START);
 	}
 
-	widget->toolbar  = GTK_TOOLBAR(pw3270_toolbar_new());
+	widget->toolbar = GTK_TOOLBAR(pw3270_toolbar_new());
 	gtk_box_pack_start(container,GTK_WIDGET(widget->toolbar),FALSE,TRUE,0);
 
 	//
@@ -447,6 +449,7 @@
 	// Get builder
 	//
 	g_autoptr(GtkBuilder) builder = pw3270_application_get_builder("window.xml");
+	pw3270_load_placeholders(G_APPLICATION(application), builder);
 
 	// Load popup menus.
 	const gchar * popup_menus[PW3270_APP_WINDOW_POPUP_COUNT] = {

@@ -54,7 +54,7 @@
 
 	GList		* pw3270_keypad_model_new_from_xml(GList *keypads, const gchar *filename);
 	GtkWidget	* pw3270_keypad_get_from_model(GObject *model);
-	const gchar	* pw3270_keypad_model_get_action_name(GObject *model);
+	const gchar	* pw3270_keypad_model_get_name(GObject *model);
 	const gchar * pw3270_keypad_model_get_label(GObject *model);
 
 	typedef enum _keypad_position {

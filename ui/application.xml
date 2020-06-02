@@ -79,7 +79,6 @@
 
 		</submenu>
 
-
 		<item>
 			<attribute name="label" translatable="yes">Application preferences</attribute>
 			<attribute name="action">app.preferences</attribute>

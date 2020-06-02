@@ -77,6 +77,7 @@
 
 	// Tools
 	GtkBuilder		* pw3270_application_get_builder(const gchar *name);
+
 	void			  gtk_container_remove_all(GtkContainer *container);
 
 	// Actions

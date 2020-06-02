@@ -52,7 +52,7 @@
 	#define I_(string) g_intern_static_string (string)
 
 
-	void		  pw3270_load_placeholders(GtkBuilder * builder);
+	void		  pw3270_load_placeholders(GApplication *application, GtkBuilder * builder);
 //	GtkWidget	* pw3270_frame_new(GtkWidget * child, const gchar *title);
 
 	// Application settings widget

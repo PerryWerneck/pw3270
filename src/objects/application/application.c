@@ -415,7 +415,7 @@
 
     gtk_application_set_menubar(GTK_APPLICATION (application), G_MENU_MODEL(gtk_builder_get_object (builder, "menubar")));
 
-	pw3270_load_placeholders(builder);
+	pw3270_load_placeholders(application, builder);
 
 	g_object_unref(builder);
 

@@ -35,14 +35,42 @@
 
  #include "private.h"
  #include <pw3270/application.h>
+ #include <pw3270/keypad.h>
  #include <lib3270.h>
  #include <lib3270/log.h>
 
 /*---[ Implement ]----------------------------------------------------------------------------------*/
 
- void pw3270_load_placeholders(GtkBuilder * builder) {
+ static GMenu * get_keypad_menu(GApplication *application) {
 
-	GObject * placeholder = gtk_builder_get_object(builder, "font-select-placeholder");
+	GList * keypads = pw3270_application_get_keypad_models(application);
+
+	if(!keypads)
+		return NULL;
+
+	GMenu * menu = g_menu_new();
+
+	// Create keypad items.
+	GList *item;
+	for(item = keypads;item;item = g_list_next(item)) {
+		GObject * model = G_OBJECT(item->data);
+		g_autofree gchar * action_name = g_strconcat("win.keypad.",pw3270_keypad_model_get_name(model),NULL);
+		g_menu_append(menu,pw3270_keypad_model_get_label(model),action_name);
+	}
+
+	return menu;
+
+ }
+
+ void pw3270_load_placeholders(GApplication *application, GtkBuilder * builder) {
+
+	GObject * placeholder;
+	size_t ix;
+
+	//
+	// Load fonts
+	//
+	placeholder = gtk_builder_get_object(builder, "font-select-placeholder");
 
 	if(placeholder && G_IS_MENU(placeholder)) {
 
@@ -52,7 +80,6 @@
 		PangoFontFamily **families;
 		pango_context_list_families(gdk_pango_context_get_for_screen(gdk_screen_get_default()),&families, &n_families);
 
-		size_t ix;
 		for(ix=0; ix < (size_t) n_families; ix++)
 		{
 			if(!pango_font_family_is_monospace(families[ix]))
@@ -66,5 +93,30 @@
 
 	}
 
+	//
+	// View options
+	//
+	GMenu * keypad_menu = get_keypad_menu(application);
+
+	if(keypad_menu) {
+
+		static const gchar * placeholders[] = {
+			"view-menu-placeholder",
+			"view-when-offline-placeholder",
+			"view-when-online-placeholder"
+		};
+
+		for(ix = 0; ix < G_N_ELEMENTS(placeholders); ix++) {
+
+			placeholder = gtk_builder_get_object(builder, placeholders[ix]);
+
+			if(placeholder) {
+				g_menu_append_item(G_MENU(placeholder), g_menu_item_new_submenu(_("Keypads"),G_MENU_MODEL(keypad_menu)));
+			}
+
+		}
+
+		g_object_unref(keypad_menu);
+	}
 
  }

@@ -351,7 +351,7 @@
 	return (KEYPAD_POSITION) PW_KEYPAD_MODEL(model)->position;
  }
 
- const gchar * pw3270_keypad_model_get_action_name(GObject *model) {
+ const gchar * pw3270_keypad_model_get_name(GObject *model) {
 	g_return_val_if_fail(PW_IS_KEYPAD_MODEL(model), NULL);
 	return PW_KEYPAD_MODEL(model)->name;
  }
