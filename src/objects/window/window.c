@@ -70,6 +70,11 @@
 		g_settings_set_boolean(settings, "is-fullscreen", window->state.is_fullscreen);
 	}
 
+	if(window->keypads) {
+		g_list_free(window->keypads);
+		window->keypads = NULL;
+	}
+
 	GTK_WIDGET_CLASS(pw3270ApplicationWindow_parent_class)->destroy(widget);
 
  }
@@ -191,10 +196,20 @@
 
 	GtkWidget * widget = pw3270_keypad_get_from_model(model);
 
+	if(!widget) {
+		return NULL;
+	}
+
+	window->keypads = g_list_prepend(window->keypads,widget);
+
+	const gchar * name = pw3270_keypad_model_get_name(model);
+
+	gtk_widget_set_name(widget,name);
+
 	g_signal_connect(widget,"hide",G_CALLBACK(keypad_hide),model);
 	g_signal_connect(widget,"show",G_CALLBACK(keypad_show),model);
 
-	g_autofree gchar * action_name = g_strconcat("keypad.",pw3270_keypad_model_get_name(model),NULL);
+	g_autofree gchar * action_name = g_strconcat("keypad.",name,NULL);
 
 	GPropertyAction * action =
 			g_property_action_new(
@@ -751,3 +766,9 @@
 
  }
 
+ GList * pw3270_application_window_get_keypads(GtkWidget *window) {
+
+	g_return_val_if_fail(PW3270_IS_APPLICATION_WINDOW(window),NULL);
+	return PW3270_APPLICATION_WINDOW(window)->keypads;
+
+ }

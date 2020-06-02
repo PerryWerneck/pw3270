@@ -110,7 +110,7 @@
 
 			placeholder = gtk_builder_get_object(builder, placeholders[ix]);
 
-			if(placeholder) {
+			if(placeholder && G_IS_MENU(placeholder)) {
 				g_menu_append_item(G_MENU(placeholder), g_menu_item_new_submenu(_("Keypads"),G_MENU_MODEL(keypad_menu)));
 			}
 
