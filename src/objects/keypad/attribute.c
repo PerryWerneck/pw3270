@@ -47,7 +47,7 @@
 
  static void parse_text(GMarkupParseContext *context, const gchar *text, gsize text_len, gpointer user_data, GError **error) {
 
- 	if( ((struct Attribute *) user_data)->translatable ) {
+ 	if(text && ((struct Attribute *) user_data)->translatable ) {
 		text = gettext(text);
  	}
 
@@ -109,11 +109,12 @@
 
 	data->spec = g_object_class_find_property(G_OBJECT_GET_CLASS(parent),name);
 	if(!data->spec) {
-		g_set_error_literal(
+		g_set_error(
 			error,
 			g_quark_from_static_string("keypad"),
 			ENOENT,
-			_( "Invalid or unknown property name" )
+			_( "Property \"%s\" is invalid for this object" ),
+			name
 		);
 		g_free(data);
 		return;

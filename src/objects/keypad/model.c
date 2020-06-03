@@ -99,7 +99,7 @@
 
 	g_object_class_install_property(object_class, PROP_LABEL,
 		g_param_spec_string (
-			_("label"),
+			I_("label"),
 			N_("Keypad Label"),
 			N_("The Label of the keypad"),
 			NULL,
@@ -358,6 +358,11 @@
 
  const gchar * pw3270_keypad_model_get_label(GObject *model) {
 	g_return_val_if_fail(PW_IS_KEYPAD_MODEL(model), NULL);
-	return PW_KEYPAD_MODEL(model)->label;
+
+	const gchar *label = PW_KEYPAD_MODEL(model)->label;
+	if(label)
+		return label;
+
+	return pw3270_keypad_model_get_name(model);
  }
 
