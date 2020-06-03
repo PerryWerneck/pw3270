@@ -65,6 +65,8 @@
 		GtkNotebook * notebook;
 		GtkToolbar	* toolbar;
 
+		GList		* keypads;		///< @brief Keypads.
+
 		struct {
 			int width;				///< @brief Window width.
 			int height;				///< @brief Window height.

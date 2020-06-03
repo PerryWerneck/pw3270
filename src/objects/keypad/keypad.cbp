@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="PW3270 Keypad module" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output=".bin/Debug/PW3270 Keypad module" prefix_auto="1" extension_auto="1" />
+				<Option object_output=".obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-DDEBUG=1" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output=".bin/Release/PW3270 Keypad module" prefix_auto="1" extension_auto="1" />
+				<Option object_output=".obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-DNDEBUG=1" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="`pkg-config --cflags libv3270 gtk+-3.0`" />
+			<Add directory="../../include" />
+		</Compiler>
+		<Linker>
+			<Add option="`pkg-config --libs libv3270 gtk+-3.0`" />
+		</Linker>
+		<Unit filename="../../include/pw3270/keypad.h" />
+		<Unit filename="attribute.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="element.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="keypad.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="load.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="private.h" />
+		<Unit filename="testprogram/testprogram.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="widget.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Extensions />
+	</Project>
+</CodeBlocks_project_file>

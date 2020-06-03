@@ -32,6 +32,8 @@
  #include <pw3270/toolbar.h>
  #include <pw3270/application.h>
  #include <pw3270/actions.h>
+ #include <pw3270/keypad.h>
+ #include <v3270/settings.h>
 
  static void get_property(GObject *object, guint prop_id, GValue *value, GParamSpec *pspec);
  static void set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec);
@@ -67,6 +69,11 @@
 		g_settings_set_int(settings, "height", window->state.height);
 		g_settings_set_boolean(settings, "is-maximized", window->state.is_maximized);
 		g_settings_set_boolean(settings, "is-fullscreen", window->state.is_fullscreen);
+	}
+
+	if(window->keypads) {
+		g_list_free(window->keypads);
+		window->keypads = NULL;
 	}
 
 	GTK_WIDGET_CLASS(pw3270ApplicationWindow_parent_class)->destroy(widget);
@@ -178,6 +185,70 @@
 
  }
 
+ static void save_keypad_state(GtkWidget *keypad, GtkWidget *window, gboolean visible) {
+
+ 	GtkWidget * terminal = pw3270_application_window_get_active_terminal(window);
+ 	if(!terminal)
+		return;
+
+	GKeyFile * keyfile = v3270_get_session_keyfile(terminal);
+	if(!terminal)
+		return;
+
+	g_key_file_set_boolean(
+		keyfile,
+		"keypads",
+		gtk_widget_get_name(keypad),
+		visible
+	);
+
+	v3270_emit_save_settings(terminal);
+
+ }
+
+ static void keypad_hide(GtkWidget *keypad, GtkWidget *window) {
+	save_keypad_state(keypad,window,FALSE);
+ }
+
+ static void keypad_show(GtkWidget *keypad, GtkWidget *window) {
+	save_keypad_state(keypad,window,TRUE);
+ }
+
+ static GtkWidget * setup_keypad(pw3270ApplicationWindow *window, GObject * model) {
+
+	GtkWidget * widget = pw3270_keypad_get_from_model(model);
+
+	if(!widget) {
+		return NULL;
+	}
+
+	window->keypads = g_list_prepend(window->keypads,widget);
+
+	const gchar * name = pw3270_keypad_model_get_name(model);
+
+	gtk_widget_set_name(widget,name);
+
+	g_signal_connect(widget,"hide",G_CALLBACK(keypad_hide),window);
+	g_signal_connect(widget,"show",G_CALLBACK(keypad_show),window);
+
+	g_autofree gchar * action_name = g_strconcat("keypad.",name,NULL);
+
+	GPropertyAction * action =
+			g_property_action_new(
+				action_name,
+				widget,
+				"visible"
+			);
+
+	g_action_map_add_action(
+		G_ACTION_MAP(window),
+		G_ACTION(action)
+	);
+
+	return widget;
+
+ }
+
  static void pw3270ApplicationWindow_init(pw3270ApplicationWindow *widget) {
 
 	// Setup defaults
@@ -187,7 +258,7 @@
 	widget->state.is_fullscreen = 0;
 
 	// Create contents
-	GtkBox * vBox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL,0));
+	GtkBox * container = GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL,0));
 
 	widget->notebook = GTK_NOTEBOOK(gtk_notebook_new());
 	gtk_notebook_set_scrollable(widget->notebook,TRUE);
@@ -197,10 +268,9 @@
 
 	{
 		// Create new tab action widget
-		//GtkWidget * new_tab = gtk_image_new_from_icon_name("tab-new-symbolic",GTK_ICON_SIZE_LARGE_TOOLBAR);
 		GtkWidget * new_tab = gtk_button_new_from_icon_name("tab-new-symbolic",GTK_ICON_SIZE_LARGE_TOOLBAR);
 		gtk_button_set_relief(GTK_BUTTON(new_tab),GTK_RELIEF_NONE);
-		gtk_actionable_set_action_name(GTK_ACTIONABLE(new_tab),"app.new.tab");
+		gtk_actionable_set_action_name(GTK_ACTIONABLE(new_tab),g_intern_static_string("app.new.tab"));
 
 		gtk_widget_set_margin_start(new_tab,6);
 		gtk_widget_set_margin_end(new_tab,6);
@@ -212,12 +282,88 @@
 		gtk_notebook_set_action_widget(widget->notebook,new_tab,GTK_PACK_START);
 	}
 
-	widget->toolbar  = GTK_TOOLBAR(pw3270_toolbar_new());
-	gtk_box_pack_start(vBox,GTK_WIDGET(widget->toolbar),FALSE,TRUE,0);
-	gtk_box_pack_start(vBox,GTK_WIDGET(widget->notebook),TRUE,TRUE,0);
+	widget->toolbar = GTK_TOOLBAR(pw3270_toolbar_new());
+	gtk_box_pack_start(container,GTK_WIDGET(widget->toolbar),FALSE,TRUE,0);
 
-	gtk_widget_show_all(GTK_WIDGET(vBox));
-	gtk_container_add(GTK_CONTAINER(widget),GTK_WIDGET(vBox));
+	//
+	// Do we have keypads?
+	//
+	GList * keypads = pw3270_application_get_keypad_models(g_application_get_default());
+	if(keypads) {
+
+		GtkBox * hBox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL,0));
+		GtkBox * vBox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL,0));
+		GList * keypad;
+
+		// Add top Keypads
+		for(keypad = keypads;keypad;keypad = g_list_next(keypad)) {
+
+			if(pw3270_keypad_get_position(G_OBJECT(keypad->data)) == KEYPAD_POSITION_TOP) {
+				gtk_box_pack_start(
+					vBox,
+					setup_keypad(widget, G_OBJECT(keypad->data)),
+					FALSE,FALSE,0
+				);
+			}
+		}
+
+
+		// Add left keypads
+		for(keypad = keypads;keypad;keypad = g_list_next(keypad)) {
+
+			if(pw3270_keypad_get_position(G_OBJECT(keypad->data)) == KEYPAD_POSITION_LEFT) {
+				gtk_box_pack_start(
+					hBox,
+					setup_keypad(widget, G_OBJECT(keypad->data)),
+					FALSE,FALSE,0
+				);
+			}
+		}
+
+		// Add center notebook
+		gtk_box_pack_start(vBox,GTK_WIDGET(widget->notebook),TRUE,TRUE,0);
+		gtk_box_pack_start(hBox,GTK_WIDGET(vBox),TRUE,TRUE,0);
+
+		// Add bottom keypads
+		for(keypad = keypads;keypad;keypad = g_list_next(keypad)) {
+
+			if(pw3270_keypad_get_position(G_OBJECT(keypad->data)) == KEYPAD_POSITION_BOTTOM) {
+				gtk_box_pack_end(
+					vBox,
+					setup_keypad(widget, G_OBJECT(keypad->data)),
+					FALSE,FALSE,0
+				);
+			}
+		}
+
+
+		// Add right keypads
+		for(keypad = keypads;keypad;keypad = g_list_next(keypad)) {
+
+			if(pw3270_keypad_get_position(G_OBJECT(keypad->data)) == KEYPAD_POSITION_RIGHT) {
+				gtk_box_pack_end(
+					hBox,
+					setup_keypad(widget, G_OBJECT(keypad->data)),
+					FALSE,FALSE,0
+				);
+			}
+		}
+
+		// Add it to the container
+		gtk_widget_show(GTK_WIDGET(hBox));
+		gtk_widget_show(GTK_WIDGET(vBox));
+		gtk_box_pack_start(container,GTK_WIDGET(hBox),TRUE,TRUE,0);
+
+	} else {
+
+		gtk_box_pack_start(container,GTK_WIDGET(widget->notebook),TRUE,TRUE,0);
+
+	}
+
+	gtk_widget_show_all(GTK_WIDGET(widget->notebook));
+
+	gtk_widget_show(GTK_WIDGET(container));
+	gtk_container_add(GTK_CONTAINER(widget),GTK_WIDGET(container));
 
 	//
 	// Setup tn3270 actions.
@@ -340,6 +486,7 @@
 	// Get builder
 	//
 	g_autoptr(GtkBuilder) builder = pw3270_application_get_builder("window.xml");
+	pw3270_load_placeholders(G_APPLICATION(application), builder);
 
 	// Load popup menus.
 	const gchar * popup_menus[PW3270_APP_WINDOW_POPUP_COUNT] = {
@@ -554,6 +701,28 @@
 
 		pw3270_window_set_subtitle(GTK_WIDGET(window), v3270_is_connected(terminal) ? _("Connected to host") : _("Disconnected from host"));
 
+		// Setup keypads
+		if(window->keypads) {
+
+			GKeyFile * keyfile = v3270_get_session_keyfile(terminal);
+
+			if(keyfile) {
+
+				GList * keypad;
+				for(keypad = window->keypads; keypad; keypad = g_list_next(keypad)) {
+
+					GtkWidget *kWidget = GTK_WIDGET(keypad->data);
+					if(g_key_file_get_boolean(keyfile,"keypads",gtk_widget_get_name(kWidget),NULL)) {
+						gtk_widget_show(kWidget);
+					} else {
+						gtk_widget_hide(kWidget);
+					}
+				}
+
+			}
+
+		}
+
 	} else {
 
 		terminal = NULL;
@@ -641,3 +810,9 @@
 
  }
 
+ GList * pw3270_application_window_get_keypads(GtkWidget *window) {
+
+	g_return_val_if_fail(PW3270_IS_APPLICATION_WINDOW(window),NULL);
+	return PW3270_APPLICATION_WINDOW(window)->keypads;
+
+ }

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+ Software pw3270, desenvolvido com base nos códigos fontes do WC3270  e X3270
+ (Paul Mattes Paul.Mattes@usa.net), de emulação de terminal 3270 para acesso a
+ aplicativos mainframe. Registro no INPI sob o nome G3270.
+
+  Copyright (C) <2008> <Banco do Brasil S.A.>
+
+ Este programa é software livre. Você pode redistribuí-lo e/ou modificá-lo sob
+ os termos da GPL v.2 - Licença Pública Geral  GNU,  conforme  publicado  pela
+ Free Software Foundation.
+
+ Este programa é distribuído na expectativa de  ser  útil,  mas  SEM  QUALQUER
+ GARANTIA; sem mesmo a garantia implícita de COMERCIALIZAÇÃO ou  de  ADEQUAÇÃO
+ A QUALQUER PROPÓSITO EM PARTICULAR. Consulte a Licença Pública Geral GNU para
+ obter mais detalhes.
+
+ Você deve ter recebido uma cópia da Licença Pública Geral GNU junto com este
+ programa; se não, escreva para a Free Software Foundation, Inc., 51 Franklin
+ St, Fifth Floor, Boston, MA  02110-1301  USA
+
+
+ Contatos:
+
+ perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
+ erico.mendonca@gmail.com	(Erico Mascarenhas Mendonça)
+
+-->
+<interface>
+
+	<keypad name="keypad_right" position="right" width='6'>
+
+		<attribute name='label' translatable='yes'>Right keypad</attribute>
+
+		<button width='2'>
+			<attribute name="label" translatable="no">PF1</attribute>
+			<attribute name="action">win.pfkey(1)</attribute>
+		</button>
+
+		<button width='2'>
+			<attribute name="label" translatable="no">PF2</attribute>
+			<attribute name="action">win.pfkey(2)</attribute>
+		</button>
+
+		<button width='2'>
+			<attribute name="label" translatable="no">PF3</attribute>
+			<attribute name="action">win.pfkey(3)</attribute>
+		</button>
+
+		<button width='2'>
+			<attribute name="label" translatable="no">PF4</attribute>
+			<attribute name="action">win.pfkey(4)</attribute>
+		</button>
+
+		<button width='2'>
+			<attribute name="label" translatable="no">PF5</attribute>
+			<attribute name="action">win.pfkey(5)</attribute>
+		</button>
+
+		<button width='2'>
+			<attribute name="label" translatable="no">PF6</attribute>
+			<attribute name="action">win.pfkey(6)</attribute>
+		</button>
+
+		<button width='2'>
+			<attribute name="label" translatable="no">PF7</attribute>
+			<attribute name="action">win.pfkey(7)</attribute>
+		</button>
+
+		<button width='2'>
+			<attribute name="label" translatable="no">PF8</attribute>
+			<attribute name="action">win.pfkey(8)</attribute>
+		</button>
+
+		<button width='2'>
+			<attribute name="label" translatable="no">PF9</attribute>
+			<attribute name="action">win.pfkey(9)</attribute>
+		</button>
+
+		<button width='2'>
+			<attribute name="label" translatable="no">PF10</attribute>
+			<attribute name="action">win.pfkey(10)</attribute>
+		</button>
+
+		<button width='2'>
+			<attribute name="label" translatable="no">PF11</attribute>
+			<attribute name="action">win.pfkey(11)</attribute>
+		</button>
+
+		<button width='2'>
+			<attribute name="label" translatable="no">PF12</attribute>
+			<attribute name="action">win.pfkey(12)</attribute>
+		</button>
+
+		<button column='2' width='2'>
+			<attribute name="icon-name" translatable="no">gtk-go-up</attribute>
+			<attribute name="action">win.up</attribute>
+		</button>
+
+		<button column='0' width='2'>
+			<attribute name="icon-name" translatable="no">gtk-go-back</attribute>
+			<attribute name="action">win.left</attribute>
+		</button>
+
+		<button width='2'>
+			<attribute name="icon-name" translatable="no">gtk-goto-top</attribute>
+			<attribute name="action">win.first-field</attribute>
+		</button>
+
+		<button width='2'>
+			<attribute name="icon-name" translatable="no">gtk-go-forward</attribute>
+			<attribute name="action">win.right</attribute>
+		</button>
+
+		<button column='2' width='2'>
+			<attribute name="icon-name" translatable="no">gtk-go-down</attribute>
+			<attribute name="action">win.down</attribute>
+		</button>
+
+		<button width='2' column='0'>
+			<attribute name="label" translatable="no">PA1</attribute>
+			<attribute name="action">win.pakey(1)</attribute>
+		</button>
+
+		<button width='2'>
+			<attribute name="label" translatable="no">PA2</attribute>
+			<attribute name="action">win.pakey(2)</attribute>
+		</button>
+
+		<button width='2'>
+			<attribute name="label" translatable="no">PA3</attribute>
+			<attribute name="action">win.pakey(3)</attribute>
+		</button>
+
+		<button width='3'>
+			<attribute name="icon-name">go-first</attribute>
+			<attribute name="action">win.previous-field</attribute>
+		</button>
+
+		<button width='3'>
+			<attribute name="icon-name">go-last</attribute>
+			<attribute name="action">win.next-field</attribute>
+		</button>
+
+		<button width='3'>
+			<attribute name="label" translatable="Yes">Clear</attribute>
+			<attribute name="action">win.clear</attribute>
+		</button>
+
+		<button width='3'>
+			<attribute name="label" translatable="Yes">Reset</attribute>
+			<attribute name="action">win.kybdreset</attribute>
+		</button>
+
+		<button width='3'>
+			<attribute name="label" translatable="Yes">Erase\nEOF</attribute>
+			<attribute name="action">win.erase-eof</attribute>
+		</button>
+		
+		<button width='3'>
+			<attribute name="label" translatable="Yes">Erase\nInput</attribute>
+			<attribute name="action">win.erase-input</attribute>
+		</button>
+
+		<button width='3'>
+			<attribute name="label" translatable="Yes">Attn</attribute>
+			<attribute name="action">win.attn</attribute>
+		</button>
+
+		<button width='3'>
+			<attribute name="label" translatable="Yes">Break</attribute>
+			<attribute name="action">win.break</attribute>
+		</button>
+
+		<button width='6'>
+			<attribute name="icon-name" translatable="no">gtk-ok</attribute>
+			<attribute name="action">win.enter</attribute>
+		</button>
+
+	</keypad>
+
+</interface>

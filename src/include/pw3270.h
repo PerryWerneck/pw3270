@@ -52,7 +52,7 @@
 	#define I_(string) g_intern_static_string (string)
 
 
-	void		  pw3270_load_placeholders(GtkBuilder * builder);
+	void		  pw3270_load_placeholders(GApplication *application, GtkBuilder * builder);
 //	GtkWidget	* pw3270_frame_new(GtkWidget * child, const gchar *title);
 
 	// Application settings widget
@@ -70,6 +70,7 @@
 
 	const gchar	* v3270_get_session_filename(GtkWidget *widget);
 	void		  v3270_set_session_filename(GtkWidget *widget, const gchar *filename);
+	GKeyFile	* v3270_get_session_keyfile(GtkWidget *widget);
 
 	/// @brief Check if the terminal has a customized session file.
 	gboolean	  v3270_allow_custom_settings(GtkWidget *widget);

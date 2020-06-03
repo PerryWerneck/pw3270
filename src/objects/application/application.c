@@ -35,6 +35,7 @@
  #include <pw3270.h>
  #include <pw3270/application.h>
  #include <pw3270/actions.h>
+ #include <pw3270/keypad.h>
  #include <stdlib.h>
 
  enum {
@@ -54,6 +55,7 @@
  	GtkApplication parent;
 
  	GSettings * settings;
+	GList * keypads;
 
  	GSList * plugins;		///< @brief Handlers of the loaded plugins.
 
@@ -331,6 +333,7 @@
 		application->settings = NULL;
  	}
 
+ 	g_list_free_full(application->keypads,g_object_unref);
 
  	G_OBJECT_CLASS(pw3270Application_parent_class)->finalize(object);
 
@@ -349,6 +352,8 @@
  void startup(GApplication *application) {
 
  	size_t ix;
+
+ 	pw3270Application * app = PW3270_APPLICATION(application);
 
 	G_APPLICATION_CLASS(pw3270Application_parent_class)->startup(application);
 
@@ -379,12 +384,38 @@
 	}
 #endif // DEBUG
 
+
+	//
+	// Load keypad models
+	//
+	{
+#ifdef DEBUG
+		const gchar * keypad_path = "keypad";
+#else
+		lib3270_autoptr(char) keypad_path = lib3270_build_data_filename("keypad",NULL);
+#endif // DEBUG
+
+		g_autoptr(GError) error = NULL;
+		g_autoptr(GDir) dir = g_dir_open(keypad_path,0,&error);
+
+		const gchar *name = g_dir_read_name(dir);
+		while(!error && name) {
+			g_autofree gchar * path = g_build_filename(keypad_path,name,NULL);
+			app->keypads = pw3270_keypad_model_new_from_xml(app->keypads,path);
+			name = g_dir_read_name(dir);
+		}
+
+		if(error) {
+			g_message("Can't read %s: %s",keypad_path,error->message);
+		}
+	}
+
 	if(gtk_application_prefers_app_menu(GTK_APPLICATION(application)))
 		gtk_application_set_app_menu(GTK_APPLICATION (application), G_MENU_MODEL(gtk_builder_get_object (builder, "app-menu")));
 
     gtk_application_set_menubar(GTK_APPLICATION (application), G_MENU_MODEL(gtk_builder_get_object (builder, "menubar")));
 
-	pw3270_load_placeholders(builder);
+	pw3270_load_placeholders(application, builder);
 
 	g_object_unref(builder);
 
@@ -475,12 +506,7 @@
 	return settings;
  }
 
-
- /*
- void pw3270_application_plugin_foreach(GApplication *app, GFunc func, gpointer user_data) {
-
- 	g_return_if_fail(PW3270_IS_APPLICATION(app));
-	g_slist_foreach(PW3270_APPLICATION(app)->plugins, func, user_data);
-
+ GList * pw3270_application_get_keypad_models(GApplication *app) {
+ 	g_return_val_if_fail(PW3270_IS_APPLICATION(app),NULL);
+ 	return PW3270_APPLICATION(app)->keypads;
  }
- */

@@ -66,6 +66,7 @@
 	GtkApplication	* pw3270_application_new(const gchar *application_id, GApplicationFlags flags);
 
 	GSettings		* pw3270_application_get_settings(GApplication *app);
+	GList			* pw3270_application_get_keypad_models(GApplication *app);
 
 	void			  pw3270_application_set_ui_style(GApplication *app, PW3270_UI_STYLE type);
 	PW3270_UI_STYLE	  pw3270_application_get_ui_style(GApplication *app);
@@ -76,6 +77,7 @@
 
 	// Tools
 	GtkBuilder		* pw3270_application_get_builder(const gchar *name);
+
 	void			  gtk_container_remove_all(GtkContainer *container);
 
 	// Actions

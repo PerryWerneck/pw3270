@@ -82,6 +82,9 @@
 	/// @brief Get window settings.
 	GSettings	* pw3270_application_window_settings_new(void);
 
+	/// @brief Get window keypads.
+	GList		* pw3270_application_window_get_keypads(GtkWidget *window);
+
 	G_END_DECLS
 
 
