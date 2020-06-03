@@ -701,6 +701,28 @@
 
 		pw3270_window_set_subtitle(GTK_WIDGET(window), v3270_is_connected(terminal) ? _("Connected to host") : _("Disconnected from host"));
 
+		// Setup keypads
+		if(window->keypads) {
+
+			GKeyFile * keyfile = v3270_get_session_keyfile(terminal);
+
+			if(keyfile) {
+
+				GList * keypad;
+				for(keypad = window->keypads; keypad; keypad = g_list_next(keypad)) {
+
+					GtkWidget *kWidget = GTK_WIDGET(keypad->data);
+					if(g_key_file_get_boolean(keyfile,"keypads",gtk_widget_get_name(kWidget),NULL)) {
+						gtk_widget_show(kWidget);
+					} else {
+						gtk_widget_hide(kWidget);
+					}
+				}
+
+			}
+
+		}
+
 	} else {
 
 		terminal = NULL;
