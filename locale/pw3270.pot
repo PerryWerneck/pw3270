@@ -6,318 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"#-#-#-#-#  view.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-29 11:55-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  save.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-29 11:55-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  abstract.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-29 11:55-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  application.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-29 11:55-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  window.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-29 11:55-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  preferences.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-29 11:55-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  open.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-29 11:55-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  about.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-29 11:55-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  window.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-29 11:55-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  terminal.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-29 11:55-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  page.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-29 11:55-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  header.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-29 11:55-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  setcolors.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-29 11:55-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  sessionproperties.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-29 11:55-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  hostproperties.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-29 11:55-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  filetransfer.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-29 11:55-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  connect.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-29 11:55-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  close.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-29 11:55-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  toolbar.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-29 11:55-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  settings.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-29 11:55-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  dialog.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-29 11:55-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  savedesktopicon.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-29 11:55-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  tools.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-29 11:55-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  keypad.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-29 11:55-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  element.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-29 11:55-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  attribute.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-29 11:55-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  window.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-29 11:55-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  application.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-29 11:55-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  00-right.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-29 11:59-0300\n"
+"POT-Creation-Date: 2020-06-03 15:16-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -326,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/objects/application/application.c:206
+#: src/objects/application/application.c:208
 #, c-format
 msgid "\"%s\" is not a valid user interface name"
 msgstr ""
@@ -337,7 +28,7 @@ msgid "3270 terminal emulator for GTK %d.%d"
 msgstr ""
 
 #: src/objects/application/actions/about.c:132 ui/application.xml:39
-#: ui/application.xml:538
+#: ui/application.xml:537
 msgid "About PW3270"
 msgstr ""
 
@@ -345,11 +36,11 @@ msgstr ""
 msgid "Action Name"
 msgstr ""
 
-#: src/objects/window/window.c:156 src/objects/toolbar/toolbar.c:135
+#: src/objects/window/window.c:163 src/objects/toolbar/toolbar.c:135
 msgid "Action Names"
 msgstr ""
 
-#: ui/window.xml:382 ui/window.xml:467 ui/application.xml:510
+#: ui/window.xml:367 ui/window.xml:477 ui/application.xml:509
 msgid "Alert sound"
 msgstr ""
 
@@ -357,23 +48,23 @@ msgstr ""
 msgid "All files"
 msgstr ""
 
-#: ui/window.xml:168 ui/application.xml:252
+#: ui/window.xml:168 ui/application.xml:251
 msgid "Append to copy"
 msgstr ""
 
-#: ui/window.xml:132 ui/application.xml:390
+#: ui/window.xml:132 ui/application.xml:389
 msgid "Application"
 msgstr ""
 
-#: src/objects/application/actions/preferences.c:69 ui/application.xml:84
+#: src/objects/application/actions/preferences.c:69 ui/application.xml:83
 msgid "Application preferences"
 msgstr ""
 
-#: src/objects/window/page.c:264
+#: src/objects/window/page.c:263
 msgid "Apply"
 msgstr ""
 
-#: ui/application.xml:485
+#: ui/application.xml:484
 msgid "Auto-Reconnect"
 msgstr ""
 
@@ -381,15 +72,15 @@ msgstr ""
 msgid "Available"
 msgstr ""
 
-#: ui/window.xml:415 ui/application.xml:475
+#: ui/window.xml:396 ui/application.xml:474
 msgid "Blank Fill"
 msgstr ""
 
-#: ui/application.xml:440
+#: ui/application.xml:439
 msgid "Blinking Cursor"
 msgstr ""
 
-#: ui/application.xml:490
+#: ui/application.xml:489
 msgid "Bold"
 msgstr ""
 
@@ -397,17 +88,17 @@ msgstr ""
 msgid "Brazilian Public Software Portal"
 msgstr ""
 
-#: src/objects/window/terminal.c:174
+#: src/objects/window/terminal.c:197
 #, c-format
 msgid "Can't save file \"%s\""
 msgstr ""
 
-#: src/objects/window/terminal.c:179
+#: src/objects/window/terminal.c:202
 msgid "Can't save session file"
 msgstr ""
 
 #: src/objects/actions/save.c:65 src/objects/application/actions/open.c:49
-#: src/objects/window/page.c:265
+#: src/objects/window/page.c:264
 msgid "Cancel"
 msgstr ""
 
@@ -415,12 +106,12 @@ msgstr ""
 msgid "Change terminal colors"
 msgstr ""
 
-#: ui/window.xml:201 ui/window.xml:322 ui/application.xml:305
+#: ui/window.xml:201 ui/window.xml:322 ui/application.xml:304
 msgid "Clear"
 msgstr ""
 
-#: ui/window.xml:84 ui/window.xml:121 ui/application.xml:150
-#: ui/application.xml:187
+#: ui/window.xml:84 ui/window.xml:121 ui/application.xml:149
+#: ui/application.xml:186
 msgid "Clipboard contents"
 msgstr ""
 
@@ -432,8 +123,8 @@ msgstr ""
 msgid "Close the window"
 msgstr ""
 
-#: src/objects/window/actions/close.c:60 ui/window.xml:269 ui/window.xml:448
-#: ui/window.xml:539 ui/application.xml:217
+#: src/objects/window/actions/close.c:60 ui/window.xml:269 ui/window.xml:456
+#: ui/window.xml:558 ui/application.xml:216
 msgid "Close window"
 msgstr ""
 
@@ -449,7 +140,7 @@ msgstr ""
 msgid "Connect"
 msgstr ""
 
-#: ui/application.xml:435
+#: ui/application.xml:434
 msgid "Connect on startup"
 msgstr ""
 
@@ -457,19 +148,19 @@ msgstr ""
 msgid "Connect to host"
 msgstr ""
 
-#: src/objects/window/window.c:555 src/objects/window/page.c:218
+#: src/objects/window/window.c:702 src/objects/window/page.c:217
 msgid "Connected to host"
 msgstr ""
 
-#: ui/window.xml:153 ui/application.xml:237
+#: ui/window.xml:153 ui/application.xml:236
 msgid "Copy"
 msgstr ""
 
-#: ui/window.xml:163 ui/application.xml:247
+#: ui/window.xml:163 ui/application.xml:246
 msgid "Copy as table"
 msgstr ""
 
-#: ui/window.xml:158 ui/application.xml:242
+#: ui/window.xml:158 ui/application.xml:241
 msgid "Copy as text"
 msgstr ""
 
@@ -477,44 +168,44 @@ msgstr ""
 msgid "Create a desktop icon for the current session"
 msgstr ""
 
-#: ui/window.xml:372 ui/application.xml:460
+#: ui/window.xml:357 ui/application.xml:459
 msgid "Cross hair cursor"
 msgstr ""
 
-#: ui/window.xml:111 ui/application.xml:177
+#: ui/window.xml:111 ui/application.xml:176
 msgid "Current Screen"
 msgstr ""
 
-#: ui/window.xml:74 ui/application.xml:140
+#: ui/window.xml:74 ui/application.xml:139
 msgid "Current screen"
 msgstr ""
 
-#: ui/window.xml:137 ui/application.xml:395
+#: ui/window.xml:137 ui/application.xml:394
 msgid "Current session"
 msgstr ""
 
-#: ui/window.xml:173 ui/application.xml:257
+#: ui/window.xml:173 ui/application.xml:256
 msgid "Cut"
 msgstr ""
 
-#: ui/window.xml:211 ui/window.xml:332 ui/application.xml:315
+#: ui/window.xml:211 ui/window.xml:332 ui/application.xml:314
 msgid "Delete Field"
 msgstr ""
 
-#: ui/window.xml:93 ui/application.xml:159
+#: ui/window.xml:93 ui/application.xml:158
 msgid "Desktop icon"
 msgstr ""
 
-#: ui/window.xml:264 ui/window.xml:443
+#: ui/window.xml:264 ui/window.xml:451
 msgid "Disconnect"
 msgstr ""
 
-#: src/objects/window/window.c:555 src/objects/window/window.c:560
-#: src/objects/window/page.c:207
+#: src/objects/window/window.c:702 src/objects/window/window.c:729
+#: src/objects/window/page.c:206
 msgid "Disconnected from host"
 msgstr ""
 
-#: ui/window.xml:394 ui/window.xml:517 ui/application.xml:525
+#: ui/window.xml:379 ui/window.xml:490 ui/application.xml:524
 msgid "Dynamic font spacing"
 msgstr ""
 
@@ -538,19 +229,19 @@ msgstr ""
 msgid "Enabled"
 msgstr ""
 
-#: ui/window.xml:206 ui/window.xml:327 ui/application.xml:310
+#: ui/window.xml:206 ui/window.xml:327 ui/application.xml:309
 msgid "Erase input"
 msgstr ""
 
-#: ui/window.xml:216 ui/window.xml:337 ui/application.xml:320
+#: ui/window.xml:216 ui/window.xml:337 ui/application.xml:319
 msgid "Erase to end of field"
 msgstr ""
 
-#: ui/window.xml:221 ui/window.xml:342 ui/application.xml:325
+#: ui/window.xml:221 ui/window.xml:342 ui/application.xml:324
 msgid "Erase to end of line"
 msgstr ""
 
-#: ui/application.xml:353
+#: ui/application.xml:352
 msgid "Field attributes"
 msgstr ""
 
@@ -558,19 +249,23 @@ msgstr ""
 msgid "File name"
 msgstr ""
 
-#: ui/application.xml:455
+#: ui/application.xml:454
 msgid "Full Screen"
 msgstr ""
 
-#: ui/window.xml:255 ui/window.xml:434 ui/window.xml:532
+#: ui/window.xml:255 ui/window.xml:405 ui/window.xml:495
 msgid "Full screen"
+msgstr ""
+
+#: keypad/10-bottom.xml:34
+msgid "Function bar"
 msgstr ""
 
 #: src/objects/linux/savedesktopicon.c:86
 msgid "Generic name"
 msgstr ""
 
-#: ui/application.xml:36 ui/application.xml:535
+#: ui/application.xml:36 ui/application.xml:534
 msgid "Help"
 msgstr ""
 
@@ -578,7 +273,7 @@ msgstr ""
 msgid "Host properties"
 msgstr ""
 
-#: src/objects/window/window.c:323
+#: src/objects/window/window.c:469
 msgid "IBM 3270 Terminal emulator"
 msgstr ""
 
@@ -610,7 +305,7 @@ msgstr ""
 msgid "If the action can be activated"
 msgstr ""
 
-#: ui/window.xml:457
+#: ui/window.xml:467
 msgid "Insert"
 msgstr ""
 
@@ -626,24 +321,28 @@ msgstr ""
 msgid "Itens"
 msgstr ""
 
-#: ui/application.xml:500
+#: ui/application.xml:499
 msgid "Keep selected"
 msgstr ""
 
-#: src/objects/keypad/keypad.c:103
+#: src/objects/keypad/model.c:103
 msgid "Keypad Label"
 msgstr ""
 
-#: src/objects/keypad/keypad.c:93
+#: src/objects/keypad/model.c:93
 msgid "Keypad Name"
 msgstr ""
 
-#: src/objects/keypad/keypad.c:136
+#: src/objects/keypad/model.c:136
 msgid "Keypad height in rows"
 msgstr ""
 
-#: src/objects/keypad/keypad.c:124
+#: src/objects/keypad/model.c:124
 msgid "Keypad width in columns"
+msgstr ""
+
+#: src/main/placeholders.c:114
+msgid "Keypads"
 msgstr ""
 
 #: src/objects/actions/view.c:98
@@ -670,35 +369,39 @@ msgstr ""
 msgid "Main Toolbar"
 msgstr ""
 
-#: ui/application.xml:348
+#: ui/window.xml:538
+msgid "Main menu"
+msgstr ""
+
+#: ui/application.xml:347
 msgid "Menu"
 msgstr ""
 
-#: ui/window.xml:490 ui/application.xml:404
+#: ui/window.xml:504 ui/application.xml:403
 msgid "Model 2 - 80x24"
 msgstr ""
 
-#: ui/window.xml:495 ui/application.xml:409
+#: ui/window.xml:509 ui/application.xml:408
 msgid "Model 3 - 80x32"
 msgstr ""
 
-#: ui/window.xml:500 ui/application.xml:414
+#: ui/window.xml:514 ui/application.xml:413
 msgid "Model 4 - 80x43"
 msgstr ""
 
-#: ui/window.xml:505 ui/application.xml:419
+#: ui/window.xml:519 ui/application.xml:418
 msgid "Model 5 - 132x27"
 msgstr ""
 
-#: ui/window.xml:389 ui/application.xml:445
+#: ui/window.xml:374 ui/application.xml:444
 msgid "Monocase"
 msgstr ""
 
-#: ui/application.xml:520
+#: ui/application.xml:519
 msgid "Network keep alive"
 msgstr ""
 
-#: src/objects/window/page.c:275
+#: src/objects/window/page.c:274
 msgid "New session name"
 msgstr ""
 
@@ -746,7 +449,7 @@ msgstr ""
 msgid "Open session in New window"
 msgstr ""
 
-#: ui/window.xml:231 ui/window.xml:367 ui/window.xml:514 ui/application.xml:432
+#: ui/window.xml:231 ui/window.xml:352 ui/window.xml:487 ui/application.xml:431
 msgid "Options"
 msgstr ""
 
@@ -754,19 +457,19 @@ msgstr ""
 msgid "Parameter Type"
 msgstr ""
 
-#: ui/window.xml:284 ui/application.xml:262
+#: ui/window.xml:284 ui/application.xml:261
 msgid "Paste from clipboard"
 msgstr ""
 
-#: ui/window.xml:294 ui/application.xml:272
+#: ui/window.xml:294 ui/application.xml:271
 msgid "Paste from text file"
 msgstr ""
 
-#: ui/window.xml:289 ui/application.xml:267
+#: ui/window.xml:289 ui/application.xml:266
 msgid "Paste next"
 msgstr ""
 
-#: ui/window.xml:410 ui/application.xml:470
+#: ui/window.xml:391 ui/application.xml:469
 msgid "Paste with left margin"
 msgstr ""
 
@@ -774,11 +477,11 @@ msgstr ""
 msgid "Preferences"
 msgstr ""
 
-#: ui/window.xml:108 ui/application.xml:174
+#: ui/window.xml:108 ui/application.xml:173
 msgid "Print"
 msgstr ""
 
-#: ui/window.xml:356
+#: ui/window.xml:437
 msgid "Print screen"
 msgstr ""
 
@@ -786,19 +489,19 @@ msgstr ""
 msgid "Print selected"
 msgstr ""
 
-#: src/objects/application/actions/window.c:64 ui/application.xml:89
+#: src/objects/application/actions/window.c:64 ui/application.xml:88
 msgid "Quit"
 msgstr ""
 
-#: src/objects/window/page.c:262
+#: src/objects/window/page.c:261
 msgid "Rename Session"
 msgstr ""
 
-#: ui/window.xml:313 ui/application.xml:296
+#: ui/window.xml:313 ui/application.xml:295
 msgid "Reselect"
 msgstr ""
 
-#: ui/window.xml:377 ui/application.xml:465
+#: ui/window.xml:362 ui/application.xml:464
 msgid "Resize on alternate screen"
 msgstr ""
 
@@ -810,7 +513,7 @@ msgstr ""
 msgid "S_tyle"
 msgstr ""
 
-#: src/objects/actions/save.c:64 ui/window.xml:69 ui/application.xml:135
+#: src/objects/actions/save.c:64 ui/window.xml:69 ui/application.xml:134
 msgid "Save"
 msgstr ""
 
@@ -822,7 +525,7 @@ msgstr ""
 msgid "Save desktop icon"
 msgstr ""
 
-#: ui/window.xml:351
+#: ui/window.xml:432
 msgid "Save screen"
 msgstr ""
 
@@ -834,19 +537,19 @@ msgstr ""
 msgid "Save session properties"
 msgstr ""
 
-#: ui/window.xml:487 ui/application.xml:401
+#: ui/window.xml:501 ui/application.xml:400
 msgid "Screen size"
 msgstr ""
 
-#: ui/window.xml:308 ui/application.xml:286
+#: ui/window.xml:308 ui/application.xml:285
 msgid "Select Field"
 msgstr ""
 
-#: ui/window.xml:303 ui/application.xml:281
+#: ui/window.xml:303 ui/application.xml:280
 msgid "Select all"
 msgstr ""
 
-#: ui/window.xml:236 ui/application.xml:480
+#: ui/window.xml:236 ui/application.xml:479
 msgid "Select by rectangles"
 msgstr ""
 
@@ -858,8 +561,8 @@ msgstr ""
 msgid "Selected"
 msgstr ""
 
-#: ui/window.xml:79 ui/window.xml:116 ui/application.xml:145
-#: ui/application.xml:182
+#: ui/window.xml:79 ui/window.xml:116 ui/application.xml:144
+#: ui/application.xml:181
 msgid "Selected area"
 msgstr ""
 
@@ -867,8 +570,8 @@ msgstr ""
 msgid "Send/Receive"
 msgstr ""
 
-#: src/objects/window/actions/filetransfer.c:46 ui/window.xml:361
-#: ui/application.xml:196
+#: src/objects/window/actions/filetransfer.c:46 ui/window.xml:442
+#: ui/application.xml:195
 msgid "Send/Receive files"
 msgstr ""
 
@@ -884,24 +587,24 @@ msgstr ""
 msgid "Session Trace"
 msgstr ""
 
-#: ui/window.xml:61 ui/application.xml:127
+#: ui/window.xml:61 ui/application.xml:126
 msgid "Session in New Tab"
 msgstr ""
 
-#: ui/window.xml:56 ui/application.xml:122
+#: ui/window.xml:56 ui/application.xml:121
 msgid "Session in new window"
 msgstr ""
 
 #: src/objects/window/actions/sessionproperties.c:45 ui/window.xml:98
-#: ui/window.xml:481 ui/application.xml:164
+#: ui/window.xml:552 ui/application.xml:163
 msgid "Session properties"
 msgstr ""
 
-#: src/objects/application/application.c:219
+#: src/objects/application/application.c:221
 msgid "Set the user-interface type"
 msgstr ""
 
-#: ui/application.xml:382
+#: ui/application.xml:381
 msgid "Settings"
 msgstr ""
 
@@ -913,15 +616,15 @@ msgstr ""
 msgid "Setup toolbar"
 msgstr ""
 
-#: ui/application.xml:495
+#: ui/application.xml:494
 msgid "Show Underline"
 msgstr ""
 
-#: ui/window.xml:250 ui/window.xml:429 ui/window.xml:527
+#: ui/window.xml:250
 msgid "Show menu"
 msgstr ""
 
-#: ui/window.xml:245 ui/window.xml:424 ui/window.xml:522
+#: ui/window.xml:245
 msgid "Show toolbar"
 msgstr ""
 
@@ -929,7 +632,7 @@ msgstr ""
 msgid "Small"
 msgstr ""
 
-#: ui/window.xml:405 ui/application.xml:505
+#: ui/window.xml:386 ui/application.xml:504
 msgid "Smart paste"
 msgstr ""
 
@@ -953,11 +656,11 @@ msgstr ""
 msgid "TN3270 Session Files"
 msgstr ""
 
-#: ui/window.xml:45 ui/application.xml:111
+#: ui/window.xml:45 ui/application.xml:110
 msgid "Tab with default session"
 msgstr ""
 
-#: ui/application.xml:427
+#: ui/application.xml:426
 msgid "Terminal font"
 msgstr ""
 
@@ -965,7 +668,7 @@ msgstr ""
 msgid "Text only"
 msgstr ""
 
-#: src/objects/keypad/keypad.c:104 src/objects/keypad/element.c:106
+#: src/objects/keypad/model.c:104 src/objects/keypad/element.c:106
 msgid "The Label of the keypad"
 msgstr ""
 
@@ -977,7 +680,7 @@ msgstr ""
 msgid "The action tooltip"
 msgstr ""
 
-#: src/objects/application/application.c:158
+#: src/objects/application/application.c:160
 msgid "The code of the User interface type"
 msgstr ""
 
@@ -989,7 +692,7 @@ msgstr ""
 msgid "The name of associated action"
 msgstr ""
 
-#: src/objects/window/window.c:157
+#: src/objects/window/window.c:164
 msgid "The name of the actions in the header bar"
 msgstr ""
 
@@ -1005,7 +708,7 @@ msgstr ""
 msgid "The name of the icon associated with the action"
 msgstr ""
 
-#: src/objects/keypad/keypad.c:94
+#: src/objects/keypad/model.c:94
 msgid "The name used to identify the keypad"
 msgstr ""
 
@@ -1013,7 +716,7 @@ msgstr ""
 msgid "The name used to invoke the action"
 msgstr ""
 
-#: src/objects/keypad/keypad.c:114
+#: src/objects/keypad/model.c:114
 msgid "The position of the keypad"
 msgstr ""
 
@@ -1058,27 +761,32 @@ msgid ""
 "Franklin St, Fifth Floor, Boston, MA 02111-1307 USA"
 msgstr ""
 
-#: src/objects/toolbar/settings.c:89 ui/application.xml:343
+#: src/objects/toolbar/settings.c:89 ui/window.xml:418 ui/window.xml:533
+#: ui/application.xml:342
 msgid "Toolbar"
 msgstr ""
 
-#: ui/application.xml:338
+#: ui/window.xml:423
+msgid "Top menu"
+msgstr ""
+
+#: ui/application.xml:337
 msgid "Trace"
 msgstr ""
 
-#: ui/window.xml:462 ui/application.xml:450
+#: ui/window.xml:472 ui/application.xml:449
 msgid "Track Cursor"
 msgstr ""
 
-#: src/objects/application/application.c:157
+#: src/objects/application/application.c:159
 msgid "UI Type"
 msgstr ""
 
-#: ui/window.xml:192 ui/application.xml:291
+#: ui/window.xml:192 ui/application.xml:290
 msgid "Unselect"
 msgstr ""
 
-#: ui/application.xml:515
+#: ui/application.xml:514
 msgid "Use +/- for field navigation"
 msgstr ""
 
@@ -1088,11 +796,12 @@ msgstr ""
 msgid "Version %s-%s"
 msgstr ""
 
-#: src/objects/window/header.c:66 ui/application.xml:63
+#: src/objects/window/header.c:66 ui/window.xml:415 ui/window.xml:530
+#: ui/application.xml:63
 msgid "View"
 msgstr ""
 
-#: ui/window.xml:40 ui/application.xml:106
+#: ui/window.xml:40 ui/application.xml:105
 msgid "Window with default session"
 msgstr ""
 
@@ -1104,35 +813,35 @@ msgstr ""
 msgid "_Cancel"
 msgstr ""
 
-#: src/objects/window/page.c:395
+#: src/objects/window/page.c:394
 msgid "_Close session"
 msgstr ""
 
-#: ui/window.xml:476 ui/application.xml:369
+#: ui/window.xml:547 ui/application.xml:368
 msgid "_Connect"
 msgstr ""
 
-#: ui/application.xml:374
+#: ui/application.xml:373
 msgid "_Disconnect"
 msgstr ""
 
-#: ui/window.xml:148 ui/window.xml:279 ui/application.xml:232
+#: ui/window.xml:148 ui/window.xml:279 ui/application.xml:231
 msgid "_Edit"
 msgstr ""
 
-#: ui/application.xml:99
+#: ui/application.xml:98
 msgid "_File"
 msgstr ""
 
-#: ui/application.xml:361
+#: ui/application.xml:360
 msgid "_Network"
 msgstr ""
 
-#: ui/window.xml:37 ui/application.xml:103
+#: ui/window.xml:37 ui/application.xml:102
 msgid "_New"
 msgstr ""
 
-#: ui/window.xml:53 ui/application.xml:119
+#: ui/window.xml:53 ui/application.xml:118
 msgid "_Open"
 msgstr ""
 
@@ -1140,7 +849,7 @@ msgstr ""
 msgid "_Properties"
 msgstr ""
 
-#: src/objects/window/page.c:389
+#: src/objects/window/page.c:388
 msgid "_Rename session"
 msgstr ""
 
@@ -1148,11 +857,11 @@ msgstr ""
 msgid "_Save"
 msgstr ""
 
-#: ui/application.xml:335
+#: ui/application.xml:334
 msgid "_View"
 msgstr ""
 
-#: src/objects/keypad/keypad.c:102
+#: src/objects/keypad/model.c:102
 msgid "label"
 msgstr ""
 
