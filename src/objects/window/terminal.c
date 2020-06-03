@@ -82,6 +82,7 @@
 	v3270_to_key_file(terminal,session->key_file,"terminal");
 	v3270_accelerator_map_to_key_file(terminal, session->key_file, "accelerators");
 
+	/*
 	GtkWidget * window = gtk_widget_get_toplevel(terminal);
 
 	if(PW3270_IS_APPLICATION_WINDOW(window) && pw3270_application_window_get_active_terminal(window) == terminal) {
@@ -102,6 +103,7 @@
 		}
 
 	}
+	*/
 
 	g_key_file_save_to_file(session->key_file,session->filename,NULL);
 
@@ -216,6 +218,18 @@
 	}
 
 
+ }
+
+ GKeyFile * v3270_get_session_keyfile(GtkWidget *widget) {
+
+ 	g_return_val_if_fail(GTK_IS_V3270(widget),NULL);
+
+	const struct SessionDescriptor * descriptor = (const struct SessionDescriptor *) g_object_get_data(G_OBJECT(widget),"session-descriptor");
+
+	if(descriptor)
+		return descriptor->key_file;
+
+	return NULL;
  }
 
  GtkWidget * pw3270_terminal_new(const gchar *session_file) {

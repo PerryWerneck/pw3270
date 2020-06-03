@@ -33,6 +33,7 @@
  #include <pw3270/application.h>
  #include <pw3270/actions.h>
  #include <pw3270/keypad.h>
+ #include <v3270/settings.h>
 
  static void get_property(GObject *object, guint prop_id, GValue *value, GParamSpec *pspec);
  static void set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec);
@@ -184,12 +185,33 @@
 
  }
 
- static void keypad_hide(GtkWidget *keypad, GObject * model) {
+ static void save_keypad_state(GtkWidget *keypad, GtkWidget *window, gboolean visible) {
+
+ 	GtkWidget * terminal = pw3270_application_window_get_active_terminal(window);
+ 	if(!terminal)
+		return;
+
+	GKeyFile * keyfile = v3270_get_session_keyfile(terminal);
+	if(!terminal)
+		return;
+
+	g_key_file_set_boolean(
+		keyfile,
+		"keypads",
+		gtk_widget_get_name(keypad),
+		visible
+	);
+
+	v3270_emit_save_settings(terminal);
 
  }
 
- static void keypad_show(GtkWidget *keypad, GObject * model) {
+ static void keypad_hide(GtkWidget *keypad, GtkWidget *window) {
+	save_keypad_state(keypad,window,FALSE);
+ }
 
+ static void keypad_show(GtkWidget *keypad, GtkWidget *window) {
+	save_keypad_state(keypad,window,TRUE);
  }
 
  static GtkWidget * setup_keypad(pw3270ApplicationWindow *window, GObject * model) {
@@ -206,8 +228,8 @@
 
 	gtk_widget_set_name(widget,name);
 
-	g_signal_connect(widget,"hide",G_CALLBACK(keypad_hide),model);
-	g_signal_connect(widget,"show",G_CALLBACK(keypad_show),model);
+	g_signal_connect(widget,"hide",G_CALLBACK(keypad_hide),window);
+	g_signal_connect(widget,"show",G_CALLBACK(keypad_show),window);
 
 	g_autofree gchar * action_name = g_strconcat("keypad.",name,NULL);
 
