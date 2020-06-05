@@ -29,7 +29,6 @@
 PACKAGE_NAME=@PACKAGE_NAME@
 PACKAGE_TARNAME=@PACKAGE_TARNAME@
 PRODUCT_NAME=@PRODUCT_NAME@
-INSTALL_PACKAGES=@INSTALL_PACKAGES@
 
 SOURCES= \
 	$(wildcard src/objects/actions/*.c) \
@@ -264,10 +263,14 @@ $(BINRLS)/$(PACKAGE_NAME)@EXEEXT@: \
 #---[ Install Targets ]------------------------------------------------------------------
 
 install: \
-	$(foreach PKG, $(INSTALL_PACKAGES), install-$(PKG))
+	install-application \
+	install-keypads
 
 install-application: \
-	$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@
+	$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@ \
+	install-locale \
+	install-schemas \
+	install-branding
 
 	@$(MKDIR) \
 		$(DESTDIR)/$(bindir)
@@ -286,6 +289,8 @@ install-application: \
 	@$(INSTALL_DATA) \
 		ui/*.xml \
 		$(DESTDIR)/$(datarootdir)/$(PRODUCT_NAME)/ui
+
+install-keypads:
 
 	@$(MKDIR) \
 		$(DESTDIR)/$(datarootdir)/$(PRODUCT_NAME)/keypad

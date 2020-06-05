@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-03 15:16-0300\n"
+"POT-Creation-Date: 2020-06-05 12:39-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -309,10 +309,6 @@ msgstr ""
 msgid "Insert"
 msgstr ""
 
-#: src/objects/keypad/attribute.c:116
-msgid "Invalid or unknown property name"
-msgstr ""
-
 #: src/objects/keypad/attribute.c:79
 msgid "Invalid or unknown property type"
 msgstr ""
@@ -487,6 +483,11 @@ msgstr ""
 
 #: ui/window.xml:187
 msgid "Print selected"
+msgstr ""
+
+#: src/objects/keypad/attribute.c:116
+#, c-format
+msgid "Property \"%s\" is invalid for this object"
 msgstr ""
 
 #: src/objects/application/actions/window.c:64 ui/application.xml:88
@@ -859,10 +860,6 @@ msgstr ""
 
 #: ui/application.xml:334
 msgid "_View"
-msgstr ""
-
-#: src/objects/keypad/model.c:102
-msgid "label"
 msgstr ""
 
 #: src/objects/application/actions/about.c:116

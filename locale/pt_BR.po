@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-03 15:16-0300\n"
+"POT-Creation-Date: 2020-06-05 12:34-0300\n"
 "PO-Revision-Date: 2020-06-03 15:21-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
@@ -312,10 +312,6 @@ msgstr "Se a ação pode ser ativada"
 msgid "Insert"
 msgstr "Inserção"
 
-#: src/objects/keypad/attribute.c:116
-msgid "Invalid or unknown property name"
-msgstr "Nome da propriedade é inválido ou desconhecido"
-
 #: src/objects/keypad/attribute.c:79
 msgid "Invalid or unknown property type"
 msgstr "Tipo da propriedade é inválido ou desconhecido"
@@ -491,6 +487,11 @@ msgstr "Imrpimir o conteúdo da tela"
 #: ui/window.xml:187
 msgid "Print selected"
 msgstr "Imprimir seleção"
+
+#: src/objects/keypad/attribute.c:116
+#, fuzzy, c-format
+msgid "Property \"%s\" is invalid for this object"
+msgstr "<%s> é inválido neste contexto"
 
 #: src/objects/application/actions/window.c:64 ui/application.xml:88
 msgid "Quit"
@@ -876,10 +877,6 @@ msgstr "_Salvar"
 msgid "_View"
 msgstr "_Exibir"
 
-#: src/objects/keypad/model.c:102
-msgid "label"
-msgstr "Etiqueta"
-
 #: src/objects/application/actions/about.c:116
 msgid "translator-credits"
 msgstr "translator-credits"
@@ -967,9 +964,6 @@ msgstr "translator-credits"
 
 #~ msgid "8 colors"
 #~ msgstr "8 cores"
-
-#~ msgid "<%s> is invalid at this context"
-#~ msgstr "<%s> é inválido neste contexto"
 
 #~ msgid "<%s> requires %s"
 #~ msgstr "<%s> exige %s"
@@ -2108,6 +2102,9 @@ msgstr "translator-credits"
 
 #~ msgid "Invalid option xxxxxxxx: file transfer canceled"
 #~ msgstr "Opção xxxxxxxx inválida: Transferência cancelada"
+
+#~ msgid "Invalid or unknown property name"
+#~ msgstr "Nome da propriedade é inválido ou desconhecido"
 
 #~ msgid "Invalid oversize"
 #~ msgstr "Valor inválido para 'oversize'"
@@ -3893,6 +3890,9 @@ msgstr "translator-credits"
 
 #~ msgid "ioctlsocket(FIONBIO) failed."
 #~ msgstr "ioctlsocket(FIONBIO) failed."
+
+#~ msgid "label"
+#~ msgstr "Etiqueta"
 
 #~ msgid "lib3270 revision"
 #~ msgstr "Revisão da lib3270"

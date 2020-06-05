@@ -60,8 +60,6 @@ dnl ---------------------------------------------------------------------------
 dnl Check for OS specifics
 dnl ---------------------------------------------------------------------------
 
-INSTALL_PACKAGES="application locale schemas branding"
-
 case "$host" in
 	*-mingw32|*-pc-msys)
 		app_cv_osname="windows"
@@ -69,8 +67,6 @@ case "$host" in
 		CFLAGS="$CFLAGS -pthread -D_WIN32_WINNT=0x0600"
 		LDFLAGS="$LDFLAGS -pthread"
 		LIBS="$LIBS -lws2_32 -lwtsapi32 -lcomdlg32"
-
-dnl		INSTALL_PACKAGES="windows-lib ${INSTALL_PACKAGES}"
 
 		app_win32_revision=$(date +%-y.%-m.%-d.%-H)
 		AC_SUBST(WIN32_VERSION,$app_win32_revision)
@@ -107,8 +103,6 @@ dnl		INSTALL_PACKAGES="windows-lib ${INSTALL_PACKAGES}"
 
 		CFLAGS="$CFLAGS -pthread -DLIBDIR=\$(libdir)"
 		LDFLAGS="$LDFLAGS -pthread"
-
-dnl		INSTALL_PACKAGES="linux-lib ${INSTALL_PACKAGES}"
 
 		app_cv_static='no'
 
@@ -233,8 +227,6 @@ AC_SUBST(BASEDIR,$app_cv_buildir)
 dnl ---------------------------------------------------------------------------
 dnl Configure which files to generate.
 dnl ---------------------------------------------------------------------------
-
-AC_SUBST(INSTALL_PACKAGES)
 
 AC_CONFIG_FILES(Makefile)
 AC_CONFIG_FILES(schemas/Makefile)
