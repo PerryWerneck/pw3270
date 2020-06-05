@@ -52,7 +52,7 @@ $(BINDIR)/%.png: \
 
 	@echo $@ ...
 	@$(MKDIR) `dirname $@`
-	@$(CONVERT) -background transparent $< $@
+	@$(CONVERT) -strip -background transparent $< $@
 	@$(OPTIPNG) -o7 $@
 
 $(BINDIR)/%.png: \
