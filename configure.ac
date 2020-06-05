@@ -205,19 +205,22 @@ AC_SUBST(GTK_CFLAGS)
 AC_SUBST(GTK_MODVERSION,`$PKG_CONFIG --modversion gtk+-3.0`)
 
 dnl ---------------------------------------------------------------------------
-dnl Check for pic
+dnl Check for pie
 dnl ---------------------------------------------------------------------------
-AC_ARG_ENABLE([pic],
-	[AS_HELP_STRING([--disable-pic], [disable support for PIC libraries (required to compile on 64bits)])],
+AC_ARG_ENABLE([pie],
+	[AS_HELP_STRING([--disable-pie], [disable support for position independent executable])],
 [
-	app_cv_pic="$enableval"
+	app_cv_pie="$enableval"
 ],[
-	app_cv_pic="yes"
+	app_cv_pie="yes"
 ])
 
-if test "$app_cv_pic" == "yes"; then
-	CFLAGS="$CFLAGS -fPIC"
-	LDFLAGS="$LDFLAGS -fPIC"
+if test "$app_cv_pie" == "yes"; then
+	CFLAGS="$CFLAGS -fpie"
+	LDFLAGS="$LDFLAGS -pie"
+	AC_MSG_NOTICE([Using position independent executable])
+else
+	AC_MSG_NOTICE([Not using position independent executable])
 fi
 
 dnl ---------------------------------------------------------------------------
