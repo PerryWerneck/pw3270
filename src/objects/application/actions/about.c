@@ -33,18 +33,7 @@
 
  static GtkWidget * factory(PW3270Action G_GNUC_UNUSED(*action), GtkApplication G_GNUC_UNUSED(*application)) {
 
- 	static const gchar *authors[]	=
- 	{
- 		"Perry Werneck <perry.werneck@gmail.com>",
-		#ifdef __APPLE__
-			"Andre Breves <andre.breves@gmail.com>",
-		#endif
-		"Paul Mattes <Paul.Mattes@usa.net>",
-		"Georgia Tech Research Corporation (GTRC)",
-		"and others",
-		NULL
-	};
-
+	/*
 	static const gchar *license		=
 	N_( "This program is free software; you can redistribute it and/or "
 		"modify it under the terms of the GNU General Public License as "
@@ -58,6 +47,7 @@
 		"along with this program; if not, write to the Free Software "
 		"Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02111-1307 "
 		"USA" );
+	*/
 
 	GtkAboutDialog	* dialog = GTK_ABOUT_DIALOG(gtk_about_dialog_new());
 
@@ -107,12 +97,51 @@
 		gtk_about_dialog_set_comments(dialog, comments);
 	}
 
+	// Set maintainers
+	{
+		static const gchar *maintainers[] = {
+			"Perry Werneck <perry.werneck@gmail.com>",
+			NULL
+		};
+
+		static const gchar *apple[] = {
+			"Andre Breves <andre.breves@gmail.com>",
+			NULL
+		};
+
+		static const gchar *references[]	=
+		{
+			"Paul Mattes <Paul.Mattes@usa.net>",
+			"Georgia Tech Research Corporation (GTRC)",
+			"and others",
+			NULL
+		};
+
+		static const gchar *contributors[] = {
+			"Erico Mendonça <erico.mendonca@suse.com>",
+			NULL
+		};
+
+		gtk_about_dialog_add_credit_section(dialog, _("Maintainers"),	maintainers);
+		gtk_about_dialog_add_credit_section(dialog, _("Apple version"), apple);
+		gtk_about_dialog_add_credit_section (dialog, _("Contributors"), contributors);
+
+
+		gtk_about_dialog_add_credit_section(dialog, _("Based on X3270 from"), references);
+
+	}
+
 	gtk_about_dialog_set_copyright(dialog, "Copyright © 2008 Banco do Brasil S.A." );
-	gtk_about_dialog_set_license(dialog, gettext( license ) );
-	gtk_about_dialog_set_wrap_license(dialog,TRUE);
+
+//	gtk_about_dialog_set_license(dialog, gettext( license ) );
+//	gtk_about_dialog_set_wrap_license(dialog,TRUE);
+
+	gtk_about_dialog_set_license_type(dialog,GTK_LICENSE_GPL_3_0);
+
 	gtk_about_dialog_set_website(dialog,"https://portal.softwarepublico.gov.br/social/pw3270/");
 	gtk_about_dialog_set_website_label(dialog,_( "Brazilian Public Software Portal" ));
-	gtk_about_dialog_set_authors(dialog,authors);
+
+//	gtk_about_dialog_set_authors(dialog,authors);
 	gtk_about_dialog_set_translator_credits(dialog,_("translator-credits"));
 
 	gtk_window_set_modal(GTK_WINDOW(dialog),TRUE);
