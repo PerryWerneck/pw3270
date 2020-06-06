@@ -53,7 +53,11 @@ $(BINDIR)/%.png: \
 	@echo $@ ...
 	@$(MKDIR) `dirname $@`
 	@$(CONVERT) -strip -background transparent $< $@
+ifeq ($(OPTIPNG),no)
+	@chmod 644 $@
+else
 	@$(OPTIPNG) -o7 $@
+endif
 
 $(BINDIR)/%.png: \
 	$(PACKAGE_TARNAME).svg
@@ -86,7 +90,11 @@ $(BINDIR)/%.png: \
 
 	@echo $@ ...
 	@$(MKDIR) `dirname $@`
+ifeq ($(OPTIPNG),no)
+	@$(INSTALL_DATA) $< $@
+else
 	@$(OPTIPNG) -out $@ -o7 $<
+endif
 
 $(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/%.png: \
 	$(BINDIR)/%.png
