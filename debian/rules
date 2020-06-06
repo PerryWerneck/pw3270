@@ -5,6 +5,10 @@
 # Uncomment this to turn on verbose mode.
 export DH_VERBOSE=1
 
+# see EXAMPLES in dpkg-buildflags(1) and read /usr/share/dpkg/*
+#DPKG_EXPORT_BUILDFLAGS = 1
+include /usr/share/dpkg/default.mk
+
 # This is the debhelper compatibility version to use.
 export DH_COMPAT=9
 
@@ -33,7 +37,7 @@ build-stamp:
 	./configure --prefix=/usr
 
 	rm -f debian/*.install
-	make Release
+	make all
 
 	# --- end custom part for compiling
 
@@ -59,16 +63,11 @@ install: build
 	# Build package
 	make all
 
-	# Install pw3270's GUI
+	# Install main application
 	make DESTDIR=$(PWD)/debian/$(PACKAGE_NAME) install-application
 
-	# Install $(PACKAGE_NAME)-sdk
-	make DESTDIR=$(PWD)/debian/$(PACKAGE_NAME)-dev install-devel
-
-	# Get file lists
-	find $(PWD)/debian/$(PACKAGE_NAME) -type f | sed -e "s@^$(PWD)/debian/$(PACKAGE_NAME)/@/@g" > $(PWD)/debian/$(PACKAGE_NAME).install
-	find $(PWD)/debian/$(PACKAGE_NAME)-dev -type f | sed -e "s@^$(PWD)/debian/$(PACKAGE_NAME)-dev/@/@g" > $(PWD)/debian/$(PACKAGE_NAME)-dev.install
-	# --- end custom part for installing
+	# Install option keypads
+	make DESTDIR=$(PWD)/debian/$(PACKAGE_NAME)-keypads install-keypads
 
 # Build architecture-independent files here.
 binary-indep: build install
@@ -93,7 +92,7 @@ binary-arch: build install
 #	dh_undocumented
 	dh_installchangelogs
 	dh_link
-	dh_strip --dbg-package=pw3270-dbg
+	dh_strip --dbg-package=pw3270-unstable-dbg
 	dh_compress
 	dh_fixperms
 	dh_makeshlibs
