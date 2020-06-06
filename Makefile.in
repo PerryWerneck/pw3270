@@ -290,6 +290,9 @@ install-application: \
 		ui/*.xml \
 		$(DESTDIR)/$(datarootdir)/$(PRODUCT_NAME)/ui
 
+	@$(MKDIR) \
+		$(DESTDIR)/$(datarootdir)/$(PRODUCT_NAME)/keypad
+
 install-keypads:
 
 	@$(MKDIR) \
