@@ -65,7 +65,11 @@ $(BINDIR)/%.png: \
 	@echo $@ ...
 	@$(MKDIR) `dirname $@`
 	@$(CONVERT) -strip -background transparent $< $@
+ifeq ($(OPTIPNG),no)
+	@chmod 644 $@
+else
 	@$(OPTIPNG) -o7 $@
+endif
 
 $(BINDIR)/%.ico: \
 	%.svg
