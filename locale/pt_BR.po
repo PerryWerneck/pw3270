@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-05 12:34-0300\n"
-"PO-Revision-Date: 2020-06-03 15:21-0300\n"
+"POT-Creation-Date: 2020-06-05 12:39-0300\n"
+"PO-Revision-Date: 2020-06-06 11:11-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
 "Language: pt_BR\n"
@@ -25,12 +25,12 @@ msgstr ""
 msgid "\"%s\" is not a valid user interface name"
 msgstr "\"%s\" não é um nome válido para interface de usuário"
 
-#: src/objects/application/actions/about.c:106
+#: src/objects/application/actions/about.c:96
 #, c-format
 msgid "3270 terminal emulator for GTK %d.%d"
 msgstr "Emulador 3270 para GTK+ %d.%d"
 
-#: src/objects/application/actions/about.c:132 ui/application.xml:39
+#: src/objects/application/actions/about.c:161 ui/application.xml:39
 #: ui/application.xml:537
 msgid "About PW3270"
 msgstr "Sobre o PW3270"
@@ -55,6 +55,10 @@ msgstr "Todos os arquivos"
 msgid "Append to copy"
 msgstr "Adicionar à cópia"
 
+#: src/objects/application/actions/about.c:126
+msgid "Apple version"
+msgstr "Versão Apple"
+
 #: ui/window.xml:132 ui/application.xml:389
 msgid "Application"
 msgstr "Aplicação"
@@ -75,6 +79,10 @@ msgstr "Reconectar automaticamente"
 msgid "Available"
 msgstr "Disponível"
 
+#: src/objects/application/actions/about.c:130
+msgid "Based on X3270 from"
+msgstr "Baseado no X3270 por"
+
 #: ui/window.xml:396 ui/application.xml:474
 msgid "Blank Fill"
 msgstr "Completar com espaços"
@@ -87,7 +95,7 @@ msgstr "Cursor piscante"
 msgid "Bold"
 msgstr "Negrito"
 
-#: src/objects/application/actions/about.c:114
+#: src/objects/application/actions/about.c:142
 msgid "Brazilian Public Software Portal"
 msgstr "Portal do Software Público Brasileiro"
 
@@ -154,6 +162,10 @@ msgstr "Conectar ao servidor"
 #: src/objects/window/window.c:702 src/objects/window/page.c:217
 msgid "Connected to host"
 msgstr "Conectado no servidor"
+
+#: src/objects/application/actions/about.c:127
+msgid "Contributors"
+msgstr "Contribuidores"
 
 #: ui/window.xml:153 ui/application.xml:236
 msgid "Copy"
@@ -372,6 +384,10 @@ msgstr "Barra de ferramentas"
 msgid "Main menu"
 msgstr "Menu principal"
 
+#: src/objects/application/actions/about.c:125
+msgid "Maintainers"
+msgstr "Mantenedores"
+
 #: ui/application.xml:347
 msgid "Menu"
 msgstr "Menu"
@@ -489,9 +505,9 @@ msgid "Print selected"
 msgstr "Imprimir seleção"
 
 #: src/objects/keypad/attribute.c:116
-#, fuzzy, c-format
+#, c-format
 msgid "Property \"%s\" is invalid for this object"
-msgstr "<%s> é inválido neste contexto"
+msgstr "Propriedade \"%s\" é inválida para este objeto"
 
 #: src/objects/application/actions/window.c:64 ui/application.xml:88
 msgid "Quit"
@@ -748,35 +764,6 @@ msgstr "The type of GVariant passed to activate()"
 msgid "The type of the state kept by the action"
 msgstr "O tipo do estado mantido pela ação"
 
-#: src/objects/application/actions/about.c:49
-msgid ""
-"This program is free software; you can redistribute it and/or modify it "
-"under the terms of the GNU General Public License as published by the Free "
-"Software Foundation; either version 2 of the License, or (at your option) "
-"any later version.\n"
-"\n"
-"This program is distributed in the hope that it will be useful, but WITHOUT "
-"ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or "
-"FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for "
-"more details.\n"
-"\n"
-"You should have received a copy of the GNU General Public License along with "
-"this program; if not, write to the Free Software Foundation, Inc., 51 "
-"Franklin St, Fifth Floor, Boston, MA 02111-1307 USA"
-msgstr ""
-"Este programa é software livre. Você pode redistribuí-lo e/ou modificá-lo "
-"sob os termos da GPL v.2 - Licença Pública Geral  GNU,  conforme  publicado  "
-"pela  Free Software Foundation.\n"
-"\n"
-"Este programa é distribuído na expectativa de  ser  útil,  mas  SEM  "
-"QUALQUER GARANTIA; sem mesmo a garantia implícita de COMERCIALIZAÇÃO ou  de  "
-"ADEQUAÇÃO A QUALQUER PROPÓSITO EM PARTICULAR. Consulte a Licença Pública "
-"Geral GNU para obter mais detalhes.\n"
-"\n"
-"Você deve ter recebido uma cópia da Licença Pública Geral GNU junto com este "
-"programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple "
-"Place, Suite 330, Boston, MA, 02111-1307, USA"
-
 #: src/objects/toolbar/settings.c:89 ui/window.xml:418 ui/window.xml:533
 #: ui/application.xml:342
 msgid "Toolbar"
@@ -806,8 +793,8 @@ msgstr "Remover seleção"
 msgid "Use +/- for field navigation"
 msgstr "Usar teclas +/- para navegar por campos"
 
-#: src/objects/application/actions/about.c:96
-#: src/objects/application/actions/about.c:98
+#: src/objects/application/actions/about.c:86
+#: src/objects/application/actions/about.c:88
 #, c-format
 msgid "Version %s-%s"
 msgstr "Versão %s-%s"
@@ -877,7 +864,7 @@ msgstr "_Salvar"
 msgid "_View"
 msgstr "_Exibir"
 
-#: src/objects/application/actions/about.c:116
+#: src/objects/application/actions/about.c:145
 msgid "translator-credits"
 msgstr "translator-credits"
 
@@ -1546,9 +1533,6 @@ msgstr "translator-credits"
 
 #~ msgid "Connection state"
 #~ msgstr "Estado da conexão"
-
-#~ msgid "Continue"
-#~ msgstr "Continuar"
 
 #~ msgid "Copiar tudo"
 #~ msgstr "Copiar tudo"
@@ -3384,6 +3368,34 @@ msgstr "translator-credits"
 #~ msgid "This is a host program error."
 #~ msgstr "Este é um erro no programa do host."
 
+#~ msgid ""
+#~ "This program is free software; you can redistribute it and/or modify it "
+#~ "under the terms of the GNU General Public License as published by the "
+#~ "Free Software Foundation; either version 2 of the License, or (at your "
+#~ "option) any later version.\n"
+#~ "\n"
+#~ "This program is distributed in the hope that it will be useful, but "
+#~ "WITHOUT ANY WARRANTY; without even the implied warranty of "
+#~ "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General "
+#~ "Public License for more details.\n"
+#~ "\n"
+#~ "You should have received a copy of the GNU General Public License along "
+#~ "with this program; if not, write to the Free Software Foundation, Inc., "
+#~ "51 Franklin St, Fifth Floor, Boston, MA 02111-1307 USA"
+#~ msgstr ""
+#~ "Este programa é software livre. Você pode redistribuí-lo e/ou modificá-lo "
+#~ "sob os termos da GPL v.2 - Licença Pública Geral  GNU,  conforme  "
+#~ "publicado  pela  Free Software Foundation.\n"
+#~ "\n"
+#~ "Este programa é distribuído na expectativa de  ser  útil,  mas  SEM  "
+#~ "QUALQUER GARANTIA; sem mesmo a garantia implícita de COMERCIALIZAÇÃO ou  "
+#~ "de  ADEQUAÇÃO A QUALQUER PROPÓSITO EM PARTICULAR. Consulte a Licença "
+#~ "Pública Geral GNU para obter mais detalhes.\n"
+#~ "\n"
+#~ "Você deve ter recebido uma cópia da Licença Pública Geral GNU junto com "
+#~ "este programa;  se  não, escreva para a Free Software Foundation, Inc., "
+#~ "59 Temple Place, Suite 330, Boston, MA, 02111-1307, USA"
+
 #~ msgid "This program requires GTK version %d.%d.%d"
 #~ msgstr "Este programa precisa do GTK versão %d.%d.%d"
 
@@ -3896,9 +3908,6 @@ msgstr "translator-credits"
 
 #~ msgid "lib3270 revision"
 #~ msgstr "Revisão da lib3270"
-
-#~ msgid "lib3270 version"
-#~ msgstr "Versão da lib3270"
 
 #~ msgid "setsockopt(%s)"
 #~ msgstr "setsockopt(%s)"
