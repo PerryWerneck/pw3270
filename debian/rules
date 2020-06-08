@@ -37,7 +37,7 @@ build-stamp:
 	./configure --prefix=/usr
 
 	rm -f debian/*.install
-	make all
+	make Release
 
 	# --- end custom part for compiling
 
@@ -69,6 +69,8 @@ install: build
 	# Install option keypads
 	make DESTDIR=$(PWD)/debian/$(PACKAGE_NAME)-keypads install-keypads
 
+	# --- end custom part for installing
+
 # Build architecture-independent files here.
 binary-indep: build install
 	# We have nothing to do by default.
@@ -92,7 +94,7 @@ binary-arch: build install
 #	dh_undocumented
 	dh_installchangelogs
 	dh_link
-	dh_strip --dbg-package=pw3270-unstable-dbg
+	dh_strip --dbg-package=pw3270-dbg
 	dh_compress
 	dh_fixperms
 	dh_makeshlibs

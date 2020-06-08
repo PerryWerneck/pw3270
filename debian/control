@@ -2,25 +2,24 @@ Source: pw3270
 Section: unknown
 Priority: optional
 Maintainer: Perry Werneck <perry.werneck@gmail.com>
-Build-Depends: debhelper (>= 7), autotools-dev, autoconf, libgtk-3-dev, gettext, libssl-dev, desktop-file-utils, libdbus-glib-1-dev, libssl-dev, imagemagick, librsvg2-bin, libv3270-dev
+Build-Depends: debhelper (>= 7), autotools-dev, autoconf, libgtk-3-dev, gettext, desktop-file-utils, imagemagick, librsvg2-bin, libv3270-dev
 
 Package: pw3270
 Architecture: any
-Depends: ${shlibs:Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}
 Description: IBM 3270 Terminal emulator for gtk
  IBM 3270 terminal emulator gtk. It can be used to communicate with
  any IBM host that supports 3270-style connections over TELNET.
 
-Package: pw3270-dev
+Package: pw3270-keypads
 Architecture: any
-Section: libdevel
-Depends: ${misc:Depends}, libdbus-1-dev, libv3270-dev, pw3270 (= ${binary:Version})
-Description: lib3270 development files.
- This package contains the files needed for development of pw3270 extensions and plugins
+Depends: pw3270 (= ${binary:Version})
+Description: Keypads for pw3270
+ This package provides optional keypads for pw3270 application. 
 
 Package: pw3270-dbg
 Architecture: any
-Depends: pw3270 (= ${binary:Version}), ${misc:Depends}
+Depends: pw3270 (= ${binary:Version})
 Description: Debugging symbols for pw3270/lib3270
  This package contains the debugging symbols for pw3270's internal libs.
 
