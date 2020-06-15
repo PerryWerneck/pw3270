@@ -1,14 +1,17 @@
 [Desktop Entry]
+Type=Application
 X-SuSE-translate=true
 GenericName=@PRODUCT_NAME@
 Name=3270 Terminal
 Name[pt_BR]=Terminal 3270
 Comment=@PACKAGE_DESCRIPTION@
-Exec=@PRODUCT_NAME@
+Exec=@PRODUCT_NAME@ %u
 Icon=@PRODUCT_NAME@
 Terminal=false
 Type=Application
 StartupNotify=true
+
+MimeType=x-scheme-handler/tn3270s;x-scheme-handler/tn3270;
 
 Actions=gnomeui;classicalui
 
