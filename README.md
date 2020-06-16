@@ -23,7 +23,7 @@ For the supported distributions get the install repositories and instructions fr
 
 ## Building for Linux
 
-	```shell
+	```
 	git clone https://github.com/PerryWerneck/pw3270.git
 	cd pw3270
 	./autogen.sh
