@@ -18,13 +18,18 @@ For the supported distributions get the install repositories and instructions fr
 
 ## Requirements
 
-### GTK+ 3.20 or later
-	https://www.gtk.org/
-
+	* GTK+ 3.20 or later (https://www.gtk.org/)
+	* libv3270 (../../../libv3270)
 
 ## Building for Linux
 
-
+	```
+	git clone https://github.com/PerryWerneck/pw3270.git
+	cd pw3270
+	./autogen.sh
+	make all
+	sudo make install
+	```
 
 ## Building for Windows
 
@@ -32,21 +37,20 @@ For the supported distributions get the install repositories and instructions fr
 
 1. Add the MinGW Repositories
 
-```
-sudo zypper ar obs://windows:mingw:win32 mingw32
-sudo zypper ar obs://windows:mingw:win64 mingw64
-sudo zypper ref
-```
+	```shell
+	sudo zypper ar obs://windows:mingw:win32 mingw32
+	sudo zypper ar obs://windows:mingw:win64 mingw64
+	sudo zypper ref
+	```
 
 2. Run the build script
 
-```
-wget https://github.com/PerryWerneck/pw3270/blob/master/win/pack.sh
-./pack.sh --pre-reqs
-```
+	```shell
+	wget https://github.com/PerryWerneck/pw3270/blob/master/win/pack.sh
+	./pack.sh --pre-reqs
+	```
 
-Building for macOS (using homebrew)
-===================================
+## Building for macOS (using homebrew)
 
 1. Build and install [libv3270](../../../libv3270)
 
@@ -68,3 +72,5 @@ Building for macOS (using homebrew)
 	```shell
 	$ cd macos
 	$ ./bundle
+	````
+
