@@ -34,8 +34,13 @@ Source:         pw3270-%{version}.tar.xz
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
-Requires:       shared-mime-info
-Requires:	%{name}-branding = %{version}
+Requires:		shared-mime-info
+Requires:		%{name}-branding = %{version}
+
+BuildRequires:		update-desktop-files
+
+%glib2_gsettings_schema_requires
+
 
 #--[ Setup by distribution ]------------------------------------------------------------------------------------------
 # 
@@ -120,6 +125,9 @@ Summary:        Default branding for %{name}
 Group:          System/X11/Terminals
 Requires:       %{name} = %{version}
 
+Requires(post):		desktop-file-utils
+Requires(postun):	desktop-file-utils
+
 %description branding
 GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
 
@@ -176,24 +184,24 @@ make all -j1
 %dir %{_libdir}/%{_product}-plugins
 
 %{_bindir}/%{_product}
-%{_datadir}/applications/*.desktop
-%{_datadir}/pixmaps/*.png
 
 %{_datadir}/glib-2.0/schemas/*.xml
 
 %files branding
 %{_datadir}/%{_product}/ui/*
 %{_datadir}/%{_product}/*.png
+%{_datadir}/applications/*.desktop
+%{_datadir}/pixmaps/*.png
 
 %files keypads
 %{_datadir}/%{_product}/keypad/*
 
 #---[ Scripts ]-------------------------------------------------------------------------------------------------------
 
-%post
-%glib2_gsettings_schema_post
+%post branding
+/usr/bin/update-desktop-database
 
-%postun
-%glib2_gsettings_schema_postun
+%postun branding
+/usr/bin/update-desktop-database
 
 %changelog

@@ -2,8 +2,8 @@
 
 pkgname=pw3270
 
-pkgver=5.2
-pkgrel=1
+pkgver=5.3
+pkgrel=0
 pkgdesc="IBM 3270 Terminal emulator for GTK"
 url="https://portal.softwarepublico.gov.br/social/pw3270/"
 arch=(i686 x86_64)
