@@ -118,6 +118,7 @@ SubSection "@PRODUCT_NAME@" SecMain
 		# Misc folders
 		CreateDirectory "$INSTDIR\certs"
 		CreateDirectory "$INSTDIR\plugins"
+		CreateDirectory "$INSTDIR\keypad"
 
 		# UI definition files
 		CreateDirectory "$INSTDIR\ui"
@@ -210,6 +211,13 @@ SubSection "@PRODUCT_NAME@" SecMain
 
 		SectionEnd
 !endif
+
+		Section "KEYPADS" Keypads
+
+			file "/oname=$INSTDIR\keypad\00-right.xml" 	"@PRODUCT_NAME@\keypad\00-right.xml"
+			file "/oname=$INSTDIR\keypad\10-bottom.xml" 	"@PRODUCT_NAME@\keypad\10-bottom.xml"
+
+		SectionEnd
 
 !ifdef WITHMONO-TN3270
 		Section /o ".NET" DOTNET
@@ -331,7 +339,34 @@ SectionEnd
 
 Function .onInit
 
-	#---[ Check DOTNET Command line option ]0-------------------------------------------------------------
+	#---[ Check SDK Command line option ]-----------------------------------------------------------------
+
+!ifdef WITHSDK
+
+	Push $0
+
+	${GetParameters} $R0
+	ClearErrors
+	${GetOptions} $R0 /SDK= $0
+
+	${if} $0 == "NO"
+
+		SectionGetFlags ${SDK} $0
+		IntOp $0 $0 & ${SECTION_OFF}
+		SectionSetFlags ${SDK} $0
+
+	${else}
+
+		SectionGetFlags ${SDK} $0
+		IntOp $0 $0 | ${SF_SELECTED}
+		SectionSetFlags ${SDK} $0
+
+	${EndIf}
+
+	Pop $0
+!endif
+
+	#---[ Check DOTNET Command line option ]--------------------------------------------------------------
 
 !ifdef WITHMONO-TN3270
 	Push $0
