@@ -87,16 +87,16 @@ clone()
 		BRANCH=${!TEMPVAR}
 	fi
 
+	echo "Cloning ${1} ${BRANCH}"
 	if [ -z ${BRANCH} ]; then
 		git clone --quiet ${GIT_URL}/${1}.git ${WORKDIR}/sources/${1}
 	else
 		echo -e "\e]2;Cloning ${1} ${BRANCH}\a"
-		echo "Cloning ${1} ${BRANCH}"
 		git clone --quiet --branch "${BRANCH}" ${GIT_URL}/${1}.git ${WORKDIR}/sources/${1}
 	fi
 
 	if [ "$?" != "0" ]; then
-		failed "Can't get sources for ${1}"
+		failed "Can't get ${BRANCH} sources for ${1}"
 	fi
 
 }

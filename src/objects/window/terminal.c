@@ -313,9 +313,14 @@
 				for(ix=0;keys[ix];ix++) {
 					g_autofree gchar * value = g_key_file_get_string(descriptor->key_file,"environment",keys[ix],NULL);
 					if(value) {
+#ifdef _WIN32
+						g_autofree gchar * env = g_strconcat(keys[ix],"=",value,NULL);
+						putenv(env);
+#else
 						if(setenv(keys[ix],value,1)) {
 							g_warning("Can't set \"%s\" to \"%s\"",keys[ix],value);
 						}
+#endif // _WIN32
 					}
 				}
 

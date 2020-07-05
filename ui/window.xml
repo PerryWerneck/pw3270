@@ -179,25 +179,6 @@
 			<section>
 
 				<item>
-					<attribute name="label" translatable="yes">Save selected</attribute>
-					<attribute name="action">win.save-selected</attribute>
-				</item>
-
-				<item>
-					<attribute name="label" translatable="yes">Print selected</attribute>
-					<attribute name="action">win.print-selected</attribute>
-				</item>
-
-				<item>
-					<attribute name="label" translatable="yes">Unselect</attribute>
-					<attribute name="action">win.unselect</attribute>
-				</item>
-
-				</section>
-
-				<section>
-
-				<item>
 					<attribute name="label" translatable="yes">Clear</attribute>
 					<attribute name="action">win.clear</attribute>
 				</item>
@@ -260,15 +241,36 @@
 
 		</submenu>
 
-		<item>
-			<attribute name="label" translatable="yes">Disconnect</attribute>
-			<attribute name="action">win.disconnect</attribute>
-		</item>
+		<section>
 
-		<item>
-			<attribute name="label" translatable="yes">Close window</attribute>
-			<attribute name="action">win.close</attribute>
-		</item>
+			<item>
+				<attribute name="label" translatable="yes">Save selected</attribute>
+				<attribute name="action">win.save-selected</attribute>
+			</item>
+
+			<item>
+				<attribute name="label" translatable="yes">Print selected</attribute>
+				<attribute name="action">win.print-selected</attribute>
+			</item>
+
+			<item>
+				<attribute name="label" translatable="yes">Unselect</attribute>
+				<attribute name="action">win.unselect</attribute>
+			</item>
+
+		</section>
+
+		<section>
+			<item>
+				<attribute name="label" translatable="yes">Disconnect</attribute>
+				<attribute name="action">win.disconnect</attribute>
+			</item>
+
+			<item>
+				<attribute name="label" translatable="yes">Close window</attribute>
+				<attribute name="action">win.close</attribute>
+			</item>
+		</section>
 
 	</menu>
 
