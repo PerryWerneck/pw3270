@@ -132,12 +132,11 @@ install-linux: \
 		--dir $(DESTDIR)$(datarootdir)/applications \
 		$(PRODUCT_NAME).desktop
 
-	@$(MKDIR) $(DESTDIR)/usr/share/mime/application
+	@$(MKDIR) $(DESTDIR)$(datarootdir)/mime/packages
 
 	@$(INSTALL_DATA) \
 		mime.xml \
-		$(DESTDIR)/usr/share/mime/application/x-$(PRODUCT_NAME).xml
-
+		$(DESTDIR)$(datarootdir)/mime/packages/$(PRODUCT_NAME).xml
 
 install-windows: \
 	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME).png \
