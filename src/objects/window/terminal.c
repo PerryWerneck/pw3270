@@ -249,7 +249,13 @@
  	} else {
 
 		// No session file, use the default one.
-		g_autofree gchar * filename = g_build_filename(g_get_user_config_dir(),G_STRINGIFY(PRODUCT_NAME) ".conf",NULL);
+		g_autofree gchar * compatible = g_build_filename(g_get_user_config_dir(),G_STRINGIFY(PRODUCT_NAME) ".conf",NULL);
+		g_autofree gchar * filename = g_build_filename(g_get_user_config_dir(),"default.3270",NULL);
+
+		if(g_file_test(compatible,G_FILE_TEST_IS_REGULAR))
+		{
+			g_rename(compatible,filename);
+		}
 
 		descriptor = g_malloc0(sizeof(struct SessionDescriptor) + strlen(filename));
 		strcpy(descriptor->filename,filename);
