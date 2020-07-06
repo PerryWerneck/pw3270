@@ -1,7 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
-<mime-type xmlns="http://www.freedesktop.org/standards/shared-mime-info" type="application/x-@PRODUCT_NAME@">
-  <comment>@PRODUCT_NAME@ Session Properties</comment>
-  <comment xml:lang="pt_BR">Configuração de sessão @PRODUCT_NAME@</comment>
-  <generic-icon name="@PRODUCT_NAME@"/>
-  <glob pattern="*.3270"/>
-</mime-type>
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+	<mime-type type="application/x-pw3270">
+		<sub-class-of type="application/xml"/>
+		<comment>@PRODUCT_NAME@ Session file</comment>
+		<comment xml:lang="pt_BR">Arquivo sessão para @PRODUCT_NAME@</comment>
+		<magic priority="80">
+		      <match value="@PRODUCT_NAME@settings" type="string" offset="0:50"/>
+		</magic>
+		<generic-icon name="@PRODUCT_NAME@"/>
+		<glob pattern="*.3270"/>
+	</mime-type>
+</mime-info>
