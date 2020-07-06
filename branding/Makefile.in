@@ -115,6 +115,9 @@ $(DESTDIR)$(datarootdir)/pixmaps/%.png: \
 	@$(INSTALL_DATA) $< $@
 
 install: \
+	install-@OSNAME@
+
+install-linux: \
 	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME).png \
 	$(DESTDIR)$(datarootdir)/pixmaps/$(PRODUCT_NAME).png \
 	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME)-logo.png
@@ -128,5 +131,16 @@ install: \
 		--delete-original \
 		--dir $(DESTDIR)$(datarootdir)/applications \
 		$(PRODUCT_NAME).desktop
+
+	@$(MKDIR) $(DESTDIR)/usr/share/mime/application
+
+	@$(INSTALL_DATA) \
+		mime.xml \
+		$(DESTDIR)/usr/share/mime/application/x-$(PRODUCT_NAME).xml
+
+
+install-windows: \
+	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME).png \
+	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME)-logo.png
 
 

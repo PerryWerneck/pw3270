@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mime-type xmlns="http://www.freedesktop.org/standards/shared-mime-info" type="application/x-@PRODUCT_NAME@">
+  <comment>@PRODUCT_NAME@ Session Properties</comment>
+  <comment xml:lang="pt_BR">Configuração de sessão @PRODUCT_NAME@</comment>
+  <generic-icon name="@PRODUCT_NAME@"/>
+  <glob pattern="*.3270"/>
+</mime-type>
