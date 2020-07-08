@@ -101,8 +101,8 @@ SubSection "@PRODUCT_NAME@" SecMain
 		createShortCut "$DESKTOP\@PRODUCT_NAME@.lnk" "$INSTDIR\@PRODUCT_NAME@.exe"
 
 		# Binary files
-		file "/oname=$INSTDIR\@PRODUCT_NAME@.exe"			"@PACKAGE@.exe"
-		file "/oname=$INSTDIR\@PRODUCT_NAME@.ico"			"@PACKAGE@.ico"
+		file "/oname=$INSTDIR\@PRODUCT_NAME@.exe"			"@PRODUCT_NAME@.exe"
+		file "/oname=$INSTDIR\@PRODUCT_NAME@.ico"			"@PRODUCT_NAME@.ico"
 		file "/oname=$INSTDIR\lib@LIBRARY_NAME@.dll"			"lib@LIBRARY_NAME@.dll"
 		file "/oname=$INSTDIR\libv3270.dll"				"libv3270.dll"
 

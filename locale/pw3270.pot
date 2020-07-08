@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-15 09:08-0300\n"
+"POT-Creation-Date: 2020-07-08 18:05-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,7 +40,7 @@ msgstr ""
 msgid "Action Names"
 msgstr ""
 
-#: ui/window.xml:367 ui/window.xml:477 ui/application.xml:509
+#: ui/window.xml:369 ui/window.xml:479 ui/application.xml:509
 msgid "Alert sound"
 msgstr ""
 
@@ -80,7 +80,7 @@ msgstr ""
 msgid "Based on X3270 from"
 msgstr ""
 
-#: ui/window.xml:396 ui/application.xml:474
+#: ui/window.xml:398 ui/application.xml:474
 msgid "Blank Fill"
 msgstr ""
 
@@ -114,7 +114,7 @@ msgstr ""
 msgid "Change terminal colors"
 msgstr ""
 
-#: ui/window.xml:201 ui/window.xml:322 ui/application.xml:304
+#: ui/window.xml:182 ui/window.xml:324 ui/application.xml:304
 msgid "Clear"
 msgstr ""
 
@@ -131,17 +131,13 @@ msgstr ""
 msgid "Close the window"
 msgstr ""
 
-#: src/objects/window/actions/close.c:60 ui/window.xml:269 ui/window.xml:456
-#: ui/window.xml:558 ui/application.xml:216
+#: src/objects/window/actions/close.c:60 ui/window.xml:270 ui/window.xml:458
+#: ui/window.xml:560 ui/application.xml:216
 msgid "Close window"
 msgstr ""
 
 #: src/objects/window/actions/setcolors.c:45
 msgid "Colors"
-msgstr ""
-
-#: src/objects/linux/savedesktopicon.c:93
-msgid "Comment"
 msgstr ""
 
 #: src/objects/window/actions/connect.c:59
@@ -176,11 +172,11 @@ msgstr ""
 msgid "Copy as text"
 msgstr ""
 
-#: src/objects/linux/savedesktopicon.c:106
+#: src/objects/windows/savedesktopicon.c:79
 msgid "Create a desktop icon for the current session"
 msgstr ""
 
-#: ui/window.xml:357 ui/application.xml:459
+#: ui/window.xml:359 ui/application.xml:459
 msgid "Cross hair cursor"
 msgstr ""
 
@@ -200,7 +196,7 @@ msgstr ""
 msgid "Cut"
 msgstr ""
 
-#: ui/window.xml:211 ui/window.xml:332 ui/application.xml:314
+#: ui/window.xml:192 ui/window.xml:334 ui/application.xml:314
 msgid "Delete Field"
 msgstr ""
 
@@ -208,7 +204,7 @@ msgstr ""
 msgid "Desktop icon"
 msgstr ""
 
-#: ui/window.xml:264 ui/window.xml:451
+#: ui/window.xml:265 ui/window.xml:453
 msgid "Disconnect"
 msgstr ""
 
@@ -217,7 +213,7 @@ msgstr ""
 msgid "Disconnected from host"
 msgstr ""
 
-#: ui/window.xml:379 ui/window.xml:490 ui/application.xml:524
+#: ui/window.xml:381 ui/window.xml:492 ui/application.xml:524
 msgid "Dynamic font spacing"
 msgstr ""
 
@@ -241,15 +237,15 @@ msgstr ""
 msgid "Enabled"
 msgstr ""
 
-#: ui/window.xml:206 ui/window.xml:327 ui/application.xml:309
+#: ui/window.xml:187 ui/window.xml:329 ui/application.xml:309
 msgid "Erase input"
 msgstr ""
 
-#: ui/window.xml:216 ui/window.xml:337 ui/application.xml:319
+#: ui/window.xml:197 ui/window.xml:339 ui/application.xml:319
 msgid "Erase to end of field"
 msgstr ""
 
-#: ui/window.xml:221 ui/window.xml:342 ui/application.xml:324
+#: ui/window.xml:202 ui/window.xml:344 ui/application.xml:324
 msgid "Erase to end of line"
 msgstr ""
 
@@ -257,7 +253,7 @@ msgstr ""
 msgid "Field attributes"
 msgstr ""
 
-#: src/objects/linux/savedesktopicon.c:72
+#: src/objects/windows/savedesktopicon.c:62
 msgid "File name"
 msgstr ""
 
@@ -265,16 +261,12 @@ msgstr ""
 msgid "Full Screen"
 msgstr ""
 
-#: ui/window.xml:255 ui/window.xml:405 ui/window.xml:495
+#: ui/window.xml:236 ui/window.xml:407 ui/window.xml:497
 msgid "Full screen"
 msgstr ""
 
 #: keypad/10-bottom.xml:34
 msgid "Function bar"
-msgstr ""
-
-#: src/objects/linux/savedesktopicon.c:86
-msgid "Generic name"
 msgstr ""
 
 #: ui/application.xml:36 ui/application.xml:534
@@ -317,7 +309,7 @@ msgstr ""
 msgid "If the action can be activated"
 msgstr ""
 
-#: ui/window.xml:467
+#: ui/window.xml:469
 msgid "Insert"
 msgstr ""
 
@@ -361,7 +353,7 @@ msgstr ""
 msgid "Large"
 msgstr ""
 
-#: src/objects/linux/savedesktopicon.c:79
+#: src/objects/windows/savedesktopicon.c:67
 msgid "Launcher name"
 msgstr ""
 
@@ -377,7 +369,7 @@ msgstr ""
 msgid "Main Toolbar"
 msgstr ""
 
-#: ui/window.xml:538
+#: ui/window.xml:540
 msgid "Main menu"
 msgstr ""
 
@@ -389,23 +381,23 @@ msgstr ""
 msgid "Menu"
 msgstr ""
 
-#: ui/window.xml:504 ui/application.xml:403
+#: ui/window.xml:506 ui/application.xml:403
 msgid "Model 2 - 80x24"
 msgstr ""
 
-#: ui/window.xml:509 ui/application.xml:408
+#: ui/window.xml:511 ui/application.xml:408
 msgid "Model 3 - 80x32"
 msgstr ""
 
-#: ui/window.xml:514 ui/application.xml:413
+#: ui/window.xml:516 ui/application.xml:413
 msgid "Model 4 - 80x43"
 msgstr ""
 
-#: ui/window.xml:519 ui/application.xml:418
+#: ui/window.xml:521 ui/application.xml:418
 msgid "Model 5 - 132x27"
 msgstr ""
 
-#: ui/window.xml:374 ui/application.xml:444
+#: ui/window.xml:376 ui/application.xml:444
 msgid "Monocase"
 msgstr ""
 
@@ -461,7 +453,7 @@ msgstr ""
 msgid "Open session in New window"
 msgstr ""
 
-#: ui/window.xml:231 ui/window.xml:352 ui/window.xml:487 ui/application.xml:431
+#: ui/window.xml:212 ui/window.xml:354 ui/window.xml:489 ui/application.xml:431
 msgid "Options"
 msgstr ""
 
@@ -469,19 +461,19 @@ msgstr ""
 msgid "Parameter Type"
 msgstr ""
 
-#: ui/window.xml:284 ui/application.xml:261
+#: ui/window.xml:286 ui/application.xml:261
 msgid "Paste from clipboard"
 msgstr ""
 
-#: ui/window.xml:294 ui/application.xml:271
+#: ui/window.xml:296 ui/application.xml:271
 msgid "Paste from text file"
 msgstr ""
 
-#: ui/window.xml:289 ui/application.xml:266
+#: ui/window.xml:291 ui/application.xml:266
 msgid "Paste next"
 msgstr ""
 
-#: ui/window.xml:391 ui/application.xml:469
+#: ui/window.xml:393 ui/application.xml:469
 msgid "Paste with left margin"
 msgstr ""
 
@@ -493,11 +485,11 @@ msgstr ""
 msgid "Print"
 msgstr ""
 
-#: ui/window.xml:437
+#: ui/window.xml:439
 msgid "Print screen"
 msgstr ""
 
-#: ui/window.xml:187
+#: ui/window.xml:252
 msgid "Print selected"
 msgstr ""
 
@@ -514,11 +506,11 @@ msgstr ""
 msgid "Rename Session"
 msgstr ""
 
-#: ui/window.xml:313 ui/application.xml:295
+#: ui/window.xml:315 ui/application.xml:295
 msgid "Reselect"
 msgstr ""
 
-#: ui/window.xml:362 ui/application.xml:464
+#: ui/window.xml:364 ui/application.xml:464
 msgid "Resize on alternate screen"
 msgstr ""
 
@@ -538,15 +530,15 @@ msgstr ""
 msgid "Save As"
 msgstr ""
 
-#: src/objects/linux/savedesktopicon.c:105
+#: src/objects/windows/savedesktopicon.c:78
 msgid "Save desktop icon"
 msgstr ""
 
-#: ui/window.xml:432
+#: ui/window.xml:434
 msgid "Save screen"
 msgstr ""
 
-#: ui/window.xml:182
+#: ui/window.xml:247
 msgid "Save selected"
 msgstr ""
 
@@ -554,19 +546,19 @@ msgstr ""
 msgid "Save session properties"
 msgstr ""
 
-#: ui/window.xml:501 ui/application.xml:400
+#: ui/window.xml:503 ui/application.xml:400
 msgid "Screen size"
 msgstr ""
 
-#: ui/window.xml:308 ui/application.xml:285
+#: ui/window.xml:310 ui/application.xml:285
 msgid "Select Field"
 msgstr ""
 
-#: ui/window.xml:303 ui/application.xml:280
+#: ui/window.xml:305 ui/application.xml:280
 msgid "Select all"
 msgstr ""
 
-#: ui/window.xml:236 ui/application.xml:479
+#: ui/window.xml:217 ui/application.xml:479
 msgid "Select by rectangles"
 msgstr ""
 
@@ -587,7 +579,7 @@ msgstr ""
 msgid "Send/Receive"
 msgstr ""
 
-#: src/objects/window/actions/filetransfer.c:46 ui/window.xml:442
+#: src/objects/window/actions/filetransfer.c:46 ui/window.xml:444
 #: ui/application.xml:195
 msgid "Send/Receive files"
 msgstr ""
@@ -613,7 +605,7 @@ msgid "Session in new window"
 msgstr ""
 
 #: src/objects/window/actions/sessionproperties.c:45 ui/window.xml:98
-#: ui/window.xml:552 ui/application.xml:163
+#: ui/window.xml:554 ui/application.xml:163
 msgid "Session properties"
 msgstr ""
 
@@ -637,11 +629,11 @@ msgstr ""
 msgid "Show Underline"
 msgstr ""
 
-#: ui/window.xml:250
+#: ui/window.xml:231
 msgid "Show menu"
 msgstr ""
 
-#: ui/window.xml:245
+#: ui/window.xml:226
 msgid "Show toolbar"
 msgstr ""
 
@@ -649,7 +641,7 @@ msgstr ""
 msgid "Small"
 msgstr ""
 
-#: ui/window.xml:386 ui/application.xml:504
+#: ui/window.xml:388 ui/application.xml:504
 msgid "Smart paste"
 msgstr ""
 
@@ -761,12 +753,12 @@ msgstr ""
 msgid "The type of the state kept by the action"
 msgstr ""
 
-#: src/objects/toolbar/settings.c:89 ui/window.xml:418 ui/window.xml:533
+#: src/objects/toolbar/settings.c:89 ui/window.xml:420 ui/window.xml:535
 #: ui/application.xml:342
 msgid "Toolbar"
 msgstr ""
 
-#: ui/window.xml:423
+#: ui/window.xml:425
 msgid "Top menu"
 msgstr ""
 
@@ -774,7 +766,7 @@ msgstr ""
 msgid "Trace"
 msgstr ""
 
-#: ui/window.xml:472 ui/application.xml:449
+#: ui/window.xml:474 ui/application.xml:449
 msgid "Track Cursor"
 msgstr ""
 
@@ -782,7 +774,7 @@ msgstr ""
 msgid "UI Type"
 msgstr ""
 
-#: ui/window.xml:192 ui/application.xml:290
+#: ui/window.xml:257 ui/application.xml:290
 msgid "Unselect"
 msgstr ""
 
@@ -796,7 +788,7 @@ msgstr ""
 msgid "Version %s-%s"
 msgstr ""
 
-#: src/objects/window/header.c:66 ui/window.xml:415 ui/window.xml:530
+#: src/objects/window/header.c:66 ui/window.xml:417 ui/window.xml:532
 #: ui/application.xml:63
 msgid "View"
 msgstr ""
@@ -809,7 +801,7 @@ msgstr ""
 msgid "_Apply"
 msgstr ""
 
-#: src/objects/settings/dialog.c:83 src/objects/linux/savedesktopicon.c:132
+#: src/objects/settings/dialog.c:83 src/objects/windows/savedesktopicon.c:104
 msgid "_Cancel"
 msgstr ""
 
@@ -817,7 +809,7 @@ msgstr ""
 msgid "_Close session"
 msgstr ""
 
-#: ui/window.xml:547 ui/application.xml:368
+#: ui/window.xml:549 ui/application.xml:368
 msgid "_Connect"
 msgstr ""
 
@@ -825,7 +817,7 @@ msgstr ""
 msgid "_Disconnect"
 msgstr ""
 
-#: ui/window.xml:148 ui/window.xml:279 ui/application.xml:231
+#: ui/window.xml:148 ui/window.xml:281 ui/application.xml:231
 msgid "_Edit"
 msgstr ""
 
@@ -853,7 +845,7 @@ msgstr ""
 msgid "_Rename session"
 msgstr ""
 
-#: src/objects/linux/savedesktopicon.c:133
+#: src/objects/windows/savedesktopicon.c:105
 msgid "_Save"
 msgstr ""
 
