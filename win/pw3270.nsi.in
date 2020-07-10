@@ -101,10 +101,10 @@ SubSection "@PRODUCT_NAME@" SecMain
 		createShortCut "$DESKTOP\@PRODUCT_NAME@.lnk" "$INSTDIR\@PRODUCT_NAME@.exe"
 
 		# Binary files
-		file "/oname=$INSTDIR\@PRODUCT_NAME@.exe"			"@PRODUCT_NAME@.exe"
-		file "/oname=$INSTDIR\@PRODUCT_NAME@.ico"			"@PRODUCT_NAME@.ico"
-		file "/oname=$INSTDIR\lib@LIBRARY_NAME@.dll"			"lib@LIBRARY_NAME@.dll"
-		file "/oname=$INSTDIR\libv3270.dll"				"libv3270.dll"
+		file "/oname=$INSTDIR\@PRODUCT_NAME@.exe"			"bin\@PRODUCT_NAME@.exe"
+		file "/oname=$INSTDIR\@PRODUCT_NAME@.ico"			"bin\@PRODUCT_NAME@.ico"
+		file "/oname=$INSTDIR\lib@LIBRARY_NAME@.dll"			"bin\lib@LIBRARY_NAME@.dll"
+		file "/oname=$INSTDIR\libv3270.dll"				"bin\libv3270.dll"
 
 		# Register file association
 
@@ -185,13 +185,13 @@ SubSection "@PRODUCT_NAME@" SecMain
 			${DisableX64FSRedirection}
 
 			CreateDirectory "$INSTDIR\plugins"
-			file "/oname=$INSTDIR\plugins\ipcserver.dll"			"@PRODUCT_NAME@-plugins\ipcserver.dll"
+			file "/oname=$INSTDIR\plugins\ipcserver.dll"			"lib\@PRODUCT_NAME@-plugins\ipcserver.dll"
 
 			CreateDirectory "$INSTDIR\locale\pt_BR\LC_MESSAGES"
-			file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\libipc3270.mo"	"locale\pt_BR\LC_MESSAGES\libipc3270.mo"
+			file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\libipc3270.mo"	"share\locale\pt_BR\LC_MESSAGES\libipc3270.mo"
 
 			${@NSISREDIR@}
-			file "/oname=$SYSDIR\libipc3270.dll"				"libipc3270.dll"
+			file "/oname=$SYSDIR\libipc3270.dll"				"bin\libipc3270.dll"
 
 		sectionEnd
 
@@ -206,18 +206,18 @@ SubSection "@PRODUCT_NAME@" SecMain
 			${@NSISREDIR@}
 
 			# Install HLLAPI connector
-			file "/oname=$SYSDIR\hllapi.dll"		"libhllapi.dll"
+			file "/oname=$SYSDIR\hllapi.dll"		"bin\libhllapi.dll"
 
 			# Install with "lib" prefix for compatibility.
-			file "/oname=$SYSDIR\libhllapi.dll"		"libhllapi.dll"
+			file "/oname=$SYSDIR\libhllapi.dll"		"bin\libhllapi.dll"
 
 		SectionEnd
 !endif
 
 		Section "KEYPADS" Keypads
 
-			file "/oname=$INSTDIR\keypad\00-right.xml" 	"@PRODUCT_NAME@\keypad\00-right.xml"
-			file "/oname=$INSTDIR\keypad\10-bottom.xml" 	"@PRODUCT_NAME@\keypad\10-bottom.xml"
+			file "/oname=$INSTDIR\keypad\00-right.xml" 	"share\@PRODUCT_NAME@\keypad\00-right.xml"
+			file "/oname=$INSTDIR\keypad\10-bottom.xml" 	"share\@PRODUCT_NAME@\keypad\10-bottom.xml"
 
 		SectionEnd
 
@@ -249,22 +249,20 @@ SubSection "@PRODUCT_NAME@" SecMain
 		CreateDirectory "$INSTDIR\sdk\def"
 		CreateDirectory "$INSTDIR\sdk\lib"
 
-		file "/oname=$INSTDIR\sdk\def\lib@LIBRARY_NAME@.def"	"@PRODUCT_NAME@\def\lib@LIBRARY_NAME@.def"
-		file "/oname=$INSTDIR\sdk\lib\lib3270.dll.a"		"lib@LIBRARY_NAME@.dll.a"
-		file "/oname=$INSTDIR\sdk\lib\lib3270.delayed.a"	"lib@LIBRARY_NAME@.delayed.a"
-		file "/oname=$INSTDIR\sdk\lib\lib3270.static.a"		"lib@LIBRARY_NAME@.static.a"
+		file "/oname=$INSTDIR\sdk\lib\lib3270.dll.a"		"lib\lib@LIBRARY_NAME@.dll.a"
+		file "/oname=$INSTDIR\sdk\lib\lib3270.delayed.a"	"lib\lib@LIBRARY_NAME@.delayed.a"
+		file "/oname=$INSTDIR\sdk\lib\lib3270.static.a"		"lib\lib@LIBRARY_NAME@.static.a"
+		file "/oname=$INSTDIR\sdk\lib\libv3270.dll.a"		"lib\libv3270.dll.a"
+		file "/oname=$INSTDIR\sdk\lib\libipc3270.dll.a"		"lib\libipc3270.dll.a"
+		file "/oname=$INSTDIR\sdk\lib\libipc3270.static.a"	"lib\libipc3270.static.a"
+		file "/oname=$INSTDIR\sdk\lib\libhllapi.dll.a"		"lib\libhllapi.dll.a"
 
-		file "/oname=$INSTDIR\sdk\lib3270.mak"			"@PRODUCT_NAME@\def\lib3270.mak"
+		file "/oname=$INSTDIR\sdk\lib3270.mak"			"share\@PRODUCT_NAME@\def\lib3270.mak"
 
-		file "/oname=$INSTDIR\sdk\def\libv3270.def"		"@PRODUCT_NAME@\def\libv3270.def"
-		file "/oname=$INSTDIR\sdk\lib\libv3270.dll.a"		"libv3270.dll.a"
-
-		file "/oname=$INSTDIR\sdk\def\libipc3270.def"		"@PRODUCT_NAME@\def\libipc3270.def"
-		file "/oname=$INSTDIR\sdk\lib\libipc3270.dll.a"		"libipc3270.dll.a"
-		file "/oname=$INSTDIR\sdk\lib\libipc3270.static.a"	"libipc3270.static.a"
-
-		file "/oname=$INSTDIR\sdk\def\libhllapi.def"		"@PRODUCT_NAME@\def\libhllapi.def"
-		file "/oname=$INSTDIR\sdk\lib\libhllapi.dll.a"		"libhllapi.dll.a"
+		file "/oname=$INSTDIR\sdk\def\lib@LIBRARY_NAME@.def"	"share\@PRODUCT_NAME@\def\lib@LIBRARY_NAME@.def"
+		file "/oname=$INSTDIR\sdk\def\libv3270.def"		"share\@PRODUCT_NAME@\def\libv3270.def"
+		file "/oname=$INSTDIR\sdk\def\libipc3270.def"		"share\@PRODUCT_NAME@\def\libipc3270.def"
+		file "/oname=$INSTDIR\sdk\def\libhllapi.def"		"share\@PRODUCT_NAME@\def\libhllapi.def"
 
 		SetRegView @WINARCH@
 		WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PW3270_SDK_PATH" "$INSTDIR\sdk"

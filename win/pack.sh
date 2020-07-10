@@ -47,6 +47,10 @@ if [ -e /etc/os-release ]; then
 	. /etc/os-release
 fi
 
+if [ -e ~/.config/user-dirs.dirs ]; then
+	. ~/.config/user-dirs.dirs
+fi
+
 #
 # Limpa diretório temporário
 #
@@ -209,7 +213,7 @@ buildLibrary()
 		mkdir -p ${WORKDIR}/build/${ARCH}/locale
 		mkdir -p ${WORKDIR}/build/${ARCH}/include
 
-		export PKG_CONFIG_PATH=${WORKDIR}/build/${ARCH}/pkgconfig
+		export PKG_CONFIG_PATH=${WORKDIR}/build/${ARCH}/lib/pkgconfig
 		export cache=${WORKDIR}/cache/${ARCH}/${1}.cache
 
 		cd ${WORKDIR}/sources/${1}
@@ -229,17 +233,16 @@ buildLibrary()
 			./configure \
 				CFLAGS="-I${WORKDIR}/build/${ARCH}/include" \
 				CXXFLAGS="-I${WORKDIR}/build/${ARCH}/include" \
-				LDFLAGS="-L${WORKDIR}/build/${ARCH}" \
+				LDFLAGS="-L${WORKDIR}/build/${ARCH}/lib" \
 				--host=${host} \
 				--prefix=${prefix} \
 				--with-product-name="${PRODUCT_NAME}" \
-				--bindir=${WORKDIR}/build/${ARCH} \
-				--libdir=${WORKDIR}/build/${ARCH} \
-				--localedir=${WORKDIR}/build/${ARCH}/locale \
+				--bindir=${WORKDIR}/build/${ARCH}/bin \
+				--libdir=${WORKDIR}/build/${ARCH}/lib \
 				--includedir=${WORKDIR}/build/${ARCH}/include \
-				--sysconfdir=${WORKDIR}/build/${ARCH} \
-				--datadir=${WORKDIR}/build/${ARCH} \
-				--datarootdir=${WORKDIR}/build/${ARCH}
+				--sysconfdir=${WORKDIR}/build/${ARCH}/etc \
+				--datadir=${WORKDIR}/build/${ARCH}/share \
+				--datarootdir=${WORKDIR}/build/${ARCH}/share
 		fi
 
 		if [ "$?" != "0" ]; then
@@ -310,7 +313,7 @@ buildExtraPackage()
 		mkdir -p ${WORKDIR}/build/${ARCH}/locale
 		mkdir -p ${WORKDIR}/build/${ARCH}/include
 
-		export PKG_CONFIG_PATH=${WORKDIR}/build/${ARCH}/pkgconfig
+		export PKG_CONFIG_PATH=${WORKDIR}/build/${ARCH}/lib/pkgconfig
 		export cache=${WORKDIR}/cache/${ARCH}/${1}.cache
 
 		cd ${WORKDIR}/sources/${1}
@@ -330,17 +333,16 @@ buildExtraPackage()
 			./configure \
 				CFLAGS="-I${WORKDIR}/build/${ARCH}/include" \
 				CXXFLAGS="-I${WORKDIR}/build/${ARCH}/include" \
-				LDFLAGS="-static-libgcc -static-libstdc++ -L${WORKDIR}/build/${ARCH}" \
+				LDFLAGS="-static-libgcc -static-libstdc++ -L${WORKDIR}/build/${ARCH}/lib" \
 				--host=${host} \
 				--prefix=${prefix} \
 				--with-product-name="${PRODUCT_NAME}" \
-				--bindir=${WORKDIR}/build/${ARCH} \
-				--libdir=${WORKDIR}/build/${ARCH} \
-				--localedir=${WORKDIR}/build/${ARCH}/locale \
+				--bindir=${WORKDIR}/build/${ARCH}/bin \
+				--libdir=${WORKDIR}/build/${ARCH}/lib \
 				--includedir=${WORKDIR}/build/${ARCH}/include \
-				--sysconfdir=${WORKDIR}/build/${ARCH} \
-				--datadir=${WORKDIR}/build/${ARCH} \
-				--datarootdir=${WORKDIR}/build/${ARCH}
+				--sysconfdir=${WORKDIR}/build/${ARCH}/etc \
+				--datadir=${WORKDIR}/build/${ARCH}/share \
+				--datarootdir=${WORKDIR}/build/${ARCH}/share
 
 		fi
 
@@ -401,7 +403,7 @@ buildApplication()
 		mkdir -p ${WORKDIR}/build/${ARCH}/include
 
 		export HOST_CC=/usr/bin/gcc
-		export PKG_CONFIG_PATH=${WORKDIR}/build/${ARCH}/pkgconfig
+		export PKG_CONFIG_PATH=${WORKDIR}/build/${ARCH}/lib/pkgconfig
 		export cache=${WORKDIR}/cache/${ARCH}/${1}.cache
 
 		cd ${WORKDIR}/sources/${1}
@@ -430,16 +432,15 @@ buildApplication()
 
 			./configure \
 				CFLAGS="-I${WORKDIR}/build/${ARCH}/include" \
-				LDFLAGS="-L${WORKDIR}/build/${ARCH}" \
+				LDFLAGS="-L${WORKDIR}/build/${ARCH}/lib" \
 				--host=${host} \
 				--prefix=${prefix} \
-				--bindir=${WORKDIR}/build/${ARCH} \
-				--libdir=${WORKDIR}/build/${ARCH} \
-				--localedir=${WORKDIR}/build/${ARCH}/locale \
+				--bindir=${WORKDIR}/build/${ARCH}/bin \
+				--libdir=${WORKDIR}/build/${ARCH}/lib \
 				--includedir=${WORKDIR}/build/${ARCH}/include \
-				--sysconfdir=${WORKDIR}/build/${ARCH} \
-				--datadir=${WORKDIR}/build/${ARCH} \
-				--datarootdir=${WORKDIR}/build/${ARCH}
+				--sysconfdir=${WORKDIR}/build/${ARCH}/etc \
+				--datadir=${WORKDIR}/build/${ARCH}/share \
+				--datarootdir=${WORKDIR}/build/${ARCH}/share
 
 		fi
 
@@ -541,6 +542,59 @@ makeRuntime()
 }
 
 #
+# Copy file
+#
+copy_install_file() {
+
+	FILENAME=${PROJECTDIR}/$(basename ${1})
+
+	rm -f "${FILENAME}"
+	cp -v "${1}" "${FILENAME}"
+	
+	if [ "$?" != "0" ]; then
+		failed "Can't copy ${1} to ${FILENAME}"
+	fi
+
+	if [ ${BUILD_UNSTABLE} == "1" ]; then
+		TARGET_PATH="/${PRODUCT_NAME}/unstable/${ARCH}"
+	else
+		TARGET_PATH="/${PRODUCT_NAME}/stable/${ARCH}"
+	fi
+
+	if [ -d ~/public_html ]; then
+		mkdir -p ~/public_html/win/${TARGET_PATH}
+		ln -f -v "${FILENAME}" ~/public_html/win/${TARGET_PATH}
+		if [ "$?" != "0" ]; then
+			failed "Can't link ${1} to ~/public_html/win/${TARGET_PATH}"
+		fi
+	fi
+
+	if [ ! -z "${XDG_PUBLICSHARE_DIR}" ] && [ -d "${XDG_PUBLICSHARE_DIR}" ]; then
+
+		mkdir -p "${XDG_PUBLICSHARE_DIR}/${TARGET_PATH}"	
+		if [ "$?" != "0" ]; then
+			failed "Can't create ${XDG_PUBLICSHARE_DIR}/${TARGET_PATH}"
+		fi
+
+		ln -f -v "${FILENAME}" ${XDG_PUBLICSHARE_DIR}/${TARGET_PATH}
+		if [ "$?" != "0" ]; then
+			failed "Can't link ${1} to ~/${XDG_PUBLICSHARE_DIR}/${TARGET_PATH}"
+		fi
+
+	fi
+
+	if [ "${PUBLISH}" == "1" ] && [ ! -z ${WIN_PACKAGE_SERVER} ]; then
+
+		scp "${FILENAME}" ${WIN_PACKAGE_SERVER}/${TARGET_PATH}
+		if [ "$?" != "0" ]; then
+			failed "Can't publish ${1} to ${WIN_PACKAGE_SERVER}/${TARGET_PATH}"
+		fi
+
+	fi
+
+}
+
+#
 # Make packages
 #
 makeInstaller()
@@ -592,12 +646,6 @@ makeInstaller()
 			TARCH="i686"
 		fi
 
-		if [ ${BUILD_UNSTABLE} == "1" ]; then
-			TARGET_PATH="/${PRODUCT_NAME}/unstable/${ARCH}"
-		else
-			TARGET_PATH="/${PRODUCT_NAME}/${ARCH}"
-		fi
-
 		if [ "${MAKE_ZIP}" == "1" ]; then
 
 			ZIPNAME="${WORKDIR}/build/${ARCH}/${PRODUCT_NAME}-${ARCH}.zip"
@@ -610,26 +658,7 @@ makeInstaller()
 
 			popd
 
-			if [ -d ~/public_html ]; then
-				mkdir -p ~/public_html/win/${TARGET_PATH}
-				cp -v "${ZIPNAME}" ~/public_html/win/${TARGET_PATH}
-				if [ "$?" != "0" ]; then
-					failed "Can't copy zip to ~/public_html/win/${TARGET_PATH}"
-				fi
-			fi
-
-			if [ "${PUBLISH}" == "1" ] && [ ! -z ${WIN_PACKAGE_SERVER} ]; then
-
-				scp "${ZIPNAME}" ${WIN_PACKAGE_SERVER}/${TARGET_PATH}
-				if [ "$?" != "0" ]; then
-					failed "Can't publish zip to ${WIN_PACKAGE_SERVER}/${TARGET_PATH}"
-				fi
-			fi
-
-			mv -f "${ZIPNAME}" ${PROJECTDIR}
-			if [ "$?" != "0" ]; then
-				failed "Can't move zip to ${PROJECTDIR}"
-			fi
+			copy_install_file "${ZIPNAME}"
 
 		fi
 
@@ -641,26 +670,10 @@ makeInstaller()
 				failed "Error building ${ARCH} ${NSI}"
 			fi
 
-			if [ -d ~/public_html ]; then
-				mkdir -p ~/public_html/win/${TARGET_PATH}
-				cp -v *-[0-9]*-${TARCH}.exe ~/public_html/win/${TARGET_PATH}
-				if [ "$?" != "0" ]; then
-					failed "Can't copy binary to ~/public_html/win/${TARGET_PATH}"
-				fi
-			fi
-			
-			if [ "${PUBLISH}" == "1" ] && [ ! -z ${WIN_PACKAGE_SERVER} ]; then
-
-				scp *-[0-9]*-${TARCH}.exe ${WIN_PACKAGE_SERVER}/${TARGET_PATH}
-				if [ "$?" != "0" ]; then
-					failed "Can't publish to ${WIN_PACKAGE_SERVER}/${TARGET_PATH}"
-				fi
-			fi
-
-			mv -f *-[0-9]*-${TARCH}.exe ${PROJECTDIR}
-			if [ "$?" != "0" ]; then
-				failed "Can't move installer to ${PROJECTDIR}"
-			fi
+			for FILE in *-[0-9]*-${TARCH}.exe
+			do
+				copy_install_file ${FILE}
+			done
 
 		done
 
