@@ -54,6 +54,13 @@ For the supported distributions get the install repositories and instructions fr
 
 1. Build and install [libv3270](../../../libv3270)
 
+2. Install required packages
+
+	```shell
+	$ pacman -S mingw-w64-x86_64-imagemagick mingw-w64-x86_64-optipng mingw-w64-x86_64-inkscape
+	```
+	Afther thist close and reopen mingw shell.
+
 2. Get pw3270 sources from git
 
 	```
