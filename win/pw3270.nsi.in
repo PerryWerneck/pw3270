@@ -109,9 +109,9 @@ SubSection "@PRODUCT_NAME@" SecMain
 		# Register file association
 
 		# Configuration files
-		file "/oname=$INSTDIR\@PRODUCT_NAME@-logo.png"			"@PRODUCT_NAME@\@PRODUCT_NAME@-logo.png"
-		file "/oname=$INSTDIR\@PRODUCT_NAME@.png"			"@PRODUCT_NAME@\@PRODUCT_NAME@.png"
-		file "/oname=$INSTDIR\colors.conf"				"@PRODUCT_NAME@\colors.conf"
+		file "/oname=$INSTDIR\@PRODUCT_NAME@-logo.png"			"share\@PRODUCT_NAME@\@PRODUCT_NAME@-logo.png"
+		file "/oname=$INSTDIR\@PRODUCT_NAME@.png"			"share\@PRODUCT_NAME@\@PRODUCT_NAME@.png"
+		file "/oname=$INSTDIR\colors.conf"				"share\@PRODUCT_NAME@\colors.conf"
 
 		# Documentation files
 		file "/oname=$INSTDIR\AUTHORS"					"AUTHORS"
@@ -124,18 +124,18 @@ SubSection "@PRODUCT_NAME@" SecMain
 
 		# UI definition files
 		CreateDirectory "$INSTDIR\ui"
-		file "/oname=$INSTDIR\ui\application.xml" 	"@PRODUCT_NAME@\ui\application.xml"
-		file "/oname=$INSTDIR\ui\window.xml" 		"@PRODUCT_NAME@\ui\window.xml"
+		file "/oname=$INSTDIR\ui\application.xml" 	"share\@PRODUCT_NAME@\ui\application.xml"
+		file "/oname=$INSTDIR\ui\window.xml" 		"share\@PRODUCT_NAME@\ui\window.xml"
 
 		# Charset definition files
 		CreateDirectory "$INSTDIR\remap"
-		file "/oname=$INSTDIR\remap\bracket.xml" 	"@PRODUCT_NAME@\remap\bracket.xml"
+		file "/oname=$INSTDIR\remap\bracket.xml" 	"share\@PRODUCT_NAME@\remap\bracket.xml"
 
 		# Locale files
 		CreateDirectory "$INSTDIR\locale\pt_BR\LC_MESSAGES"
-		file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\@PACKAGE@.mo"		"locale\pt_BR\LC_MESSAGES\@PACKAGE@.mo"
-		file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\lib@LIBRARY_NAME@.mo"	"locale\pt_BR\LC_MESSAGES\lib@LIBRARY_NAME@.mo"
-		file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\libv3270.mo"		"locale\pt_BR\LC_MESSAGES\libv3270.mo"
+		file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\@PACKAGE@.mo"		"share\locale\pt_BR\LC_MESSAGES\@PACKAGE@.mo"
+		file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\lib@LIBRARY_NAME@.mo"	"share\locale\pt_BR\LC_MESSAGES\lib@LIBRARY_NAME@.mo"
+		file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\libv3270.mo"		"share\locale\pt_BR\LC_MESSAGES\libv3270.mo"
 
 		# define uninstaller name
 		SetRegView 32
