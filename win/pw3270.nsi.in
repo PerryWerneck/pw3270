@@ -289,7 +289,6 @@ Section "Uninstall"
 	delete $INSTDIR\uninstaller.exe
 
 	# Remove association
-	${UnRegisterExtension} ".3270" "@PRODUCT_NAME@ Session file"
 
 	# Set SMPROGRAMS and DESKTOP path
 	SetShellVarContext all
