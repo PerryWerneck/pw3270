@@ -33,7 +33,7 @@ For the supported distributions get the install repositories and instructions fr
 
 ## Building for Windows
 
-### Cross-compiling on SuSE Linux (Native or WSL) - The easier way!
+### Cross-compiling on SuSE Linux (Native or WSL)
 
 1. Add the MinGW Repositories
 
@@ -49,6 +49,25 @@ For the supported distributions get the install repositories and instructions fr
 	wget https://github.com/PerryWerneck/pw3270/blob/master/win/pack.sh
 	./pack.sh --pre-reqs
 	```
+
+### Windows native with MSYS2
+
+1. Build and install [libv3270](../../../libv3270)
+
+2. Get pw3270 sources from git
+
+	```
+	$ git clone https://github.com/PerryWerneck/pw3270.git ./pw3270
+	```
+
+3. Build library using the mingw shell
+
+	```
+	$ cd pw3270
+	$ ./autogen.sh
+	$ make all
+	```
+
 
 ## Building for macOS (using homebrew)
 
