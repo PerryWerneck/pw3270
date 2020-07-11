@@ -641,6 +641,21 @@ makeInstaller()
 
 		cd ${WORKDIR}/build/${ARCH}
 
+		# Remove duplicates
+		fdupes -q -p -n -H -o name -r . | 
+		while read _file
+		do 
+			if test -z "$_target" ; then 
+				_target="$_file"; 
+			else 
+				if test -z "$_file" ; then 
+					_target=""; 
+					continue ; 
+				fi ; 
+				ln -f "$_target" "$_file"; 
+			fi ; 
+		done 
+
 		TARCH=${ARCH}
 		if [ "${TARCH}" == "x86_32" ]; then
 			TARCH="i686"
@@ -648,17 +663,17 @@ makeInstaller()
 
 		if [ "${MAKE_ZIP}" == "1" ]; then
 
-			ZIPNAME="${WORKDIR}/build/${ARCH}/${PRODUCT_NAME}-${ARCH}.zip"
-
+			ZIPNAME="${WORKDIR}/build/${ARCH}/${PRODUCT_NAME}-${ARCH}-bin.zip"
 			rm -f "${ZIPNAME}"
-			zip -9 "${ZIPNAME}" *.dll *.exe *.ico
+			zip -9 -j "${ZIPNAME}" bin/*
+			copy_install_file "${ZIPNAME}"
 
 			pushd runtime
-			zip -9 -r "${ZIPNAME}" .
-
-			popd
-
+			ZIPNAME="${WORKDIR}/build/${ARCH}/${PRODUCT_NAME}-${ARCH}-runtime.zip"
+			rm -f "${ZIPNAME}"
+			zip -9 -r "${ZIPNAME}" *
 			copy_install_file "${ZIPNAME}"
+			popd
 
 		fi
 
