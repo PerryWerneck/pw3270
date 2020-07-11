@@ -705,13 +705,11 @@ addRepos() {
 	do
 		case ${ARCH} in
 		x86_32)
-			# https://download.opensuse.org/repositories/windows:/mingw:/win32/openSUSE_Leap_15.1/windows:mingw:win32.repo
-			REPO_ARCH="win32"
+			sudo zypper ar obs://windows:mingw:win32 mingw32
 			;;
 
 		x86_64)
-			# https://download.opensuse.org/repositories/windows:/mingw:/win64/openSUSE_Leap_15.1/windows:mingw:win64.repo
-			REPO_ARCH="win64"
+			sudo zypper ar obs://windows:mingw:win64 mingw64
 			;;
 
 		*)
@@ -719,10 +717,10 @@ addRepos() {
 
 		esac
 
-
-		echo zypper ar "https://download.opensuse.org/repositories/windows:/mingw:/${REPO_ARCH}/$(echo ${PRETTY_NAME} | sed "s@ @_@g")" ${REPO_ARCH}
-
 	done
+
+	sudo zypper ar obs://home:PerryWerneck:pw3270 pw3270
+	sudo zypper ref
 
 }
 
