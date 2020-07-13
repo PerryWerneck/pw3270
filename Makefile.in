@@ -255,7 +255,7 @@ $(BINRLS)/$(PACKAGE_NAME)@EXEEXT@: \
 	@echo $< ...
 	@$(LD) \
 		-o $@ \
-		$(LDFLAGS) \
+		$(LDFLAGS) @RLS_LDFLAGS@ \
 		$^ \
 		$(LIBS)
 

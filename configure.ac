@@ -63,6 +63,7 @@ dnl ---------------------------------------------------------------------------
 case "$host" in
 	*-mingw32|*-pc-msys)
 		app_cv_osname="windows"
+		app_rls_ldflags="-mwindows"
 
 		CFLAGS="$CFLAGS -pthread -D_WIN32_WINNT=0x0600"
 		LDFLAGS="$LDFLAGS -pthread"
@@ -70,6 +71,7 @@ case "$host" in
 
 		app_win32_revision=$(date +%-y.%-m.%-d.%-H)
 		AC_SUBST(WIN32_VERSION,$app_win32_revision)
+
 
 		app_win32_file_version=$(date +%-y,%-m,%-d,%-H)
 		AC_SUBST(WIN32_FILE_VERSION,$app_win32_file_version)
@@ -100,6 +102,7 @@ case "$host" in
 
  	*)
 		app_cv_osname="linux"
+		app_rls_ldflags=""
 
 		CFLAGS="$CFLAGS -pthread -DLIBDIR=\$(libdir)"
 		LDFLAGS="$LDFLAGS -pthread"
@@ -113,6 +116,7 @@ case "$host" in
 esac
 
 AC_SUBST(OSNAME,$app_cv_osname)
+AC_SUBST(RLS_LDFLAGS,$app_rls_ldflags)
 AC_SUBST(LIBS)
 AC_SUBST(LOGDIR)
 AC_SUBST(DLLEXT)
