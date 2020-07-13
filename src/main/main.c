@@ -79,7 +79,9 @@ int main (int argc, char **argv) {
 
 	int status = -1;
 
+#ifdef _WIN32
 	debug("Process %s running on pid %u\n",argv[0],(unsigned int) GetCurrentProcessId());
+#endif // _WIN32
 
 	GtkApplication *app;
 
@@ -96,21 +98,18 @@ int main (int argc, char **argv) {
 	}
 #endif // _WIN32
 
-#ifndef DEBUG
 	g_log_set_default_handler(g_log_to_lib3270,NULL);
-#endif // !DEBUG
 
 	bind_textdomain_codeset(PACKAGE_NAME, "UTF-8");
 	textdomain(PACKAGE_NAME);
 
+	// Setup and start application.
+	g_set_application_name(G_STRINGIFY(PRODUCT_NAME));
+	app = pw3270_application_new("br.com.bb." G_STRINGIFY(PRODUCT_NAME),G_APPLICATION_HANDLES_OPEN);
+
 #ifdef G_OS_UNIX
 	g_unix_signal_add(SIGTERM, (GSourceFunc) quit_signal, app);
 #endif // G_OS_UNIX
-
-	// Setup and start application.
-
-	g_set_application_name(G_STRINGIFY(PRODUCT_NAME));
-	app = pw3270_application_new("br.com.bb." G_STRINGIFY(PRODUCT_NAME),G_APPLICATION_HANDLES_OPEN);
 
 	status = g_application_run(G_APPLICATION (app), argc, argv);
 	g_object_unref (app);
