@@ -206,7 +206,13 @@ AC_ARG_ENABLE([pie],
 [
 	app_cv_pie="$enableval"
 ],[
-	app_cv_pie="yes"
+
+	if test "$app_cv_osname" == "linux"; then
+		app_cv_pie="yes"
+	else
+		app_cv_pie="no"
+	fi
+	
 ])
 
 if test "$app_cv_pie" == "yes"; then
