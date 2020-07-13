@@ -161,6 +161,11 @@ SubSection "@PRODUCT_NAME@" SecMain
 		# Default settings
 		SetRegView @WINARCH@
 
+		# Setup log file
+		# https://docs.microsoft.com/en-us/windows/win32/eventlog/event-sources
+		WriteRegStr HKLM "SYSTEM\CurrentControlSet\Services\EventLog\@PRODUCT_NAME@" \
+				 "PackageVersion"	"@PACKAGE_VERSION@"
+
 		# Required for IPC Library.
 		WriteRegStr 	HKLM	"Software\@PRODUCT_NAME@"			"InstallLocation"	"$INSTDIR"
 
