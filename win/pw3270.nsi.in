@@ -170,7 +170,36 @@ SubSection "@PRODUCT_NAME@" SecMain
 		WriteRegStr 	HKLM	"Software\@PRODUCT_NAME@"			"InstallLocation"	"$INSTDIR"
 
 		# Customized options
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"autoconnect"		0x00000001
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"blankfill"             0x00000000
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"bold"                  0x00000000
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"keepselected"          0x00000001
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"marginedpaste"         0x00000001
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"rectselect"            0x00000000
 
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"monocase"              0x00000000
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"cursorblink"           0x00000001
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"showtiming"            0x00000001
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"cursorpos"             0x00000001
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"linewrap"              0x00000000
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"crosshair"             0x00000000
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"fullscreen"            0x00000000
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"autoreconnect"         0x00000001
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"insert"                0x00000000
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"smartpaste"            0x00000001
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"beep"                  0x00000001
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"fieldattr"             0x00000000
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"altscreen"             0x00000001
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"keepalive"             0x00000000
+
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"dstrace"               0x00000000
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"screentrace"           0x00000000
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"eventtrace"            0x00000000
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"nettrace"              0x00000000
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"ssltrace"              0x00000000
+
+		WriteRegStr 	HKLM	"Software\@PRODUCT_NAME@"			"font-family"		"Lucida Console"
+		WriteRegStr	HKLM	"Software\@PRODUCT_NAME@"			"colors"		"rgb(24,24,24);rgb(79,156,254);rgb(237,74,70);rgb(235,110,183);rgb(131,199,70);rgb(86,216,201);rgb(239,197,65);rgb(222,222,222);rgb(59,59,59);rgb(54,142,171);rgb(250,145,83);rgb(165,128,226);rgb(112,180,51);rgb(65,199,185);rgb(219,179,45);rgb(119,119,119);rgb(131,199,70);rgb(237,74,70);rgb(65,199,185);rgb(250,145,83);rgb(37,37,37);rgb(222,222,222);rgb(222,222,222);rgb(24,24,24);rgb(222,222,222);rgb(79,156,254);rgb(131,199,70);rgb(239,197,65);rgb(239,197,65)"
 
 	sectionEnd
 
@@ -322,6 +351,8 @@ Section "Uninstall"
 	SetRegView @WINARCH@
 	DeleteRegKey HKLM "Software\@PRODUCT_NAME@"
 	DeleteRegValue HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PW3270_SDK_PATH"
+	DeleteRegKey HKLM "SYSTEM\CurrentControlSet\Services\EventLog\@PRODUCT_NAME@"
+
 	SendMessage ${HWND_BROADCAST} ${WM_WININICHANGE} 0 "STR:Environment" /TIMEOUT=5000
 
 	DeleteRegKey HKLM "Software\GSettings\apps\@PACKAGE_NAME@\@PRODUCT_NAME@"
