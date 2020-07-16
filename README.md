@@ -15,6 +15,8 @@ For the supported distributions get the install repositories and instructions fr
 
 ### Windows
 
+ * [Dropbbox](https://www.dropbox.com/sh/2qy3s6b5s4o4bws/AAAubHE8SBG7r6CJSKPflKN0a?dl=0)
+ * [Google Drive](https://drive.google.com/drive/folders/1tmtKzGujLVvnIV_knWQXl_TBEC3_9ucL?usp=sharing)
 
 ## Requirements
 
