@@ -20,8 +20,8 @@ For the supported distributions get the install repositories and instructions fr
 
 ## Requirements
 
-	* GTK+ 3.20 or later (https://www.gtk.org/)
-	* libv3270 (../../../libv3270)
+ * GTK+ 3.20 or later (https://www.gtk.org/)
+ * libv3270 (../../../libv3270)
 
 ## Building for Linux
 
