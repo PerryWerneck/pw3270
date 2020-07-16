@@ -35,16 +35,17 @@ For the supported distributions get the install repositories and instructions fr
 1. Add the MinGW Repositories
 
 	```shell
-	sudo zypper ar obs://windows:mingw:win32 mingw32
-	sudo zypper ar obs://windows:mingw:win64 mingw64
-	sudo zypper ref
+	$ sudo zypper ar obs://windows:mingw:win32 mingw32
+	$ sudo zypper ar obs://windows:mingw:win64 mingw64
+	$ sudo zypper ar obs://home:PerryWerneck:pw3270 pw3270
+	$ sudo zypper ref
 	```
 
 2. Run the build script
 
 	```shell
-	wget https://github.com/PerryWerneck/pw3270/blob/master/win/pack.sh
-	./pack.sh --pre-reqs
+	$ wget https://github.com/PerryWerneck/pw3270/blob/master/win/pack.sh
+	$ ./pack.sh --pre-reqs
 	```
 
 ### Windows native with MSYS2
