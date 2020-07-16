@@ -830,8 +830,19 @@ do
 			fi
 
 			if [ ! -z ${WIN_PACKAGE_SERVER} ]; then
+
 				echo "  --no-publish		Don't publish binaries in ${WIN_PACKAGE_SERVER}/${PRODUCT_NAME}"
 				echo "  --publish		Publish binaries in ${WIN_PACKAGE_SERVER}/${PRODUCT_NAME}"
+
+			else
+
+				if [ -x ~/bin/sync.${PRODUCT_NAME} ]; then
+
+					echo "  --no-publish		Don't call ~/bin/sync.${PRODUCT_NAME}"
+					echo "  --publish		Call ~/bin/sync.${PRODUCT_NAME} when build finishes"
+
+				fi
+
 			fi
 
 			if [ -d ~/public_html/win/${PRODUCT_NAME} ]; then
@@ -911,6 +922,16 @@ done
 #
 makeRuntime
 makeInstaller
+
+if [ "${PUBLISH}" == "1" ] && [ -x ~/bin/sync.${PRODUCT_NAME} ]; then
+
+	echo "Calling sync script..."
+	~/bin/sync.${PRODUCT_NAME}
+	if [ "$?" != "0" ]; then
+		failed "Can't sync folders"
+	fi
+
+fi
 
 cleanup
 
