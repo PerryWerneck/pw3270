@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-08 18:05-0300\n"
+"POT-Creation-Date: 2020-07-27 18:43-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -140,6 +140,10 @@ msgstr ""
 msgid "Colors"
 msgstr ""
 
+#: src/objects/linux/savedesktopicon.c:93
+msgid "Comment"
+msgstr ""
+
 #: src/objects/window/actions/connect.c:59
 msgid "Connect"
 msgstr ""
@@ -172,7 +176,7 @@ msgstr ""
 msgid "Copy as text"
 msgstr ""
 
-#: src/objects/windows/savedesktopicon.c:79
+#: src/objects/linux/savedesktopicon.c:106
 msgid "Create a desktop icon for the current session"
 msgstr ""
 
@@ -253,7 +257,7 @@ msgstr ""
 msgid "Field attributes"
 msgstr ""
 
-#: src/objects/windows/savedesktopicon.c:62
+#: src/objects/linux/savedesktopicon.c:72
 msgid "File name"
 msgstr ""
 
@@ -267,6 +271,10 @@ msgstr ""
 
 #: keypad/10-bottom.xml:34
 msgid "Function bar"
+msgstr ""
+
+#: src/objects/linux/savedesktopicon.c:86
+msgid "Generic name"
 msgstr ""
 
 #: ui/application.xml:36 ui/application.xml:534
@@ -353,7 +361,7 @@ msgstr ""
 msgid "Large"
 msgstr ""
 
-#: src/objects/windows/savedesktopicon.c:67
+#: src/objects/linux/savedesktopicon.c:79
 msgid "Launcher name"
 msgstr ""
 
@@ -530,7 +538,7 @@ msgstr ""
 msgid "Save As"
 msgstr ""
 
-#: src/objects/windows/savedesktopicon.c:78
+#: src/objects/linux/savedesktopicon.c:105
 msgid "Save desktop icon"
 msgstr ""
 
@@ -801,7 +809,7 @@ msgstr ""
 msgid "_Apply"
 msgstr ""
 
-#: src/objects/settings/dialog.c:83 src/objects/windows/savedesktopicon.c:104
+#: src/objects/settings/dialog.c:83 src/objects/linux/savedesktopicon.c:132
 msgid "_Cancel"
 msgstr ""
 
@@ -845,7 +853,7 @@ msgstr ""
 msgid "_Rename session"
 msgstr ""
 
-#: src/objects/windows/savedesktopicon.c:105
+#: src/objects/linux/savedesktopicon.c:133
 msgid "_Save"
 msgstr ""
 
