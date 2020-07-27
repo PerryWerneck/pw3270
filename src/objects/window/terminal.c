@@ -243,7 +243,7 @@
         return GTK_RESPONSE_NONE;
  }
 
- static gboolean save_popup_response(v3270 G_GNUC_UNUSED(*widget), const gchar *popup_name, GtkResponseType response, struct SessionDescriptor * session) {
+ static gboolean save_popup_response(GtkWidget *widget, const gchar *popup_name, GtkResponseType response, struct SessionDescriptor * session) {
 		debug("%s(%s)",__FUNCTION__,popup_name);
 
 		if(!session->key_file)
