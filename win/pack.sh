@@ -34,7 +34,7 @@ PACKAGE_EXTRAS="libhllapi"
 TARGET_ARCHS="x86_64 x86_32"
 GIT_URL="https://github.com/PerryWerneck"
 BUILD_UNSTABLE=0
-MAKE_ZIP=1
+MAKE_ZIP=0
 
 PROJECTDIR=$(dirname $(dirname $(readlink -f ${0})))
 WORKDIR=$(mktemp -d)
