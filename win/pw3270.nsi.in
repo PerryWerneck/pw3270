@@ -43,9 +43,9 @@ XPStyle on
 installDir "$@PROGRAMFILES@\@PRODUCT_NAME@"
 
 #define the installer icon
-!define MUI_ICON "@PACKAGE@.ico"
-!define MUI_UNICON "@PACKAGE@.ico"
-icon "@PACKAGE@.ico"
+!define MUI_ICON "@PRODUCT_NAME@.ico"
+!define MUI_UNICON "@PRODUCT_NAME@.ico"
+icon "@PRODUCT_NAME@.ico"
 
 # Get installation folder from registry if available
 InstallDirRegKey HKLM "Software\@PRODUCT_NAME@" "InstallLocation"
