@@ -35,7 +35,6 @@ datarootdir=@datarootdir@
 bindir=@bindir@
 
 BASEDIR=@BASEDIR@
-SRCDIR=$(BASEDIR)/.src/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/branding
 BINDIR=$(BASEDIR)/.bin
 
 MKDIR=@MKDIR_P@
@@ -53,7 +52,13 @@ $(BINDIR)/%.png: \
 
 	@echo $@ ...
 	@$(MKDIR) `dirname $@`
-	@$(CONVERT) -strip -background transparent $< $@
+
+	@$(CONVERT) \
+		-strip \
+		-background transparent \
+		$< \
+		$@
+
 ifeq ($(OPTIPNG),no)
 	@chmod 644 $@
 else
@@ -61,11 +66,16 @@ else
 endif
 
 $(BINDIR)/%.png: \
-	$(PACKAGE_TARNAME).svg
+	$(PRODUCT_NAME).svg
 
 	@echo $@ ...
 	@$(MKDIR) `dirname $@`
-	@$(CONVERT) -strip -background transparent $< $@
+	@$(CONVERT) \
+		-strip \
+		-background transparent \
+		$< \
+		$@
+
 ifeq ($(OPTIPNG),no)
 	@chmod 644 $@
 else
@@ -73,15 +83,11 @@ else
 endif
 
 %.ico: \
-	$(PACKAGE_TARNAME).svg
+	$(PRODUCT_NAME).svg
 
 	@echo $@ ...
 	@$(MKDIR) `dirname $@`
 	@$(CONVERT) -density 384 -background transparent $< -define icon:auto-resize -colors 256 $@
-
-$(SRCDIR):
-	@$(MKDIR) $@
-	@$(INSTALL_DATA) $(PACKAGE_NAME).svg $(PACKAGE_NAME)-logo.svg *.in $@
 
 $(BINDIR)/%.png: \
 	%.png

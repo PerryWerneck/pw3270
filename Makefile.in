@@ -27,7 +27,6 @@
 #---[ Configuration ]--------------------------------------------------------------------
 
 PACKAGE_NAME=@PACKAGE_NAME@
-PACKAGE_TARNAME=@PACKAGE_TARNAME@
 PRODUCT_NAME=@PRODUCT_NAME@
 
 SOURCES= \
@@ -134,7 +133,7 @@ $(OBJDBG)/%.o: \
 
 $(OBJDBG)/%.o: \
 	%.rc \
-	$(PACKAGE_TARNAME).ico
+	$(PRODUCT_NAME).ico
 
 	@echo $< ...
 	@$(MKDIR) $(@D)
@@ -162,7 +161,7 @@ $(OBJRLS)/%.o: \
 
 $(OBJRLS)/%.o: \
 	%.rc \
-	$(PACKAGE_TARNAME).ico
+	$(PRODUCT_NAME).ico
 
 	@echo $< ...
 	@$(MKDIR) $(@D)
@@ -363,7 +362,7 @@ clean: \
 	@rm -fr $(BASEDIR)/.tmp/$(PACKAGE_NAME)
 	@rm -fr $(POTDIR)/$(PACKAGE_NAME)
 	@rm -fr src/include/marshal
-	@rm -f $(PACKAGE_TARNAME).ico
+	@rm -f $(PRODUCT_NAME).ico
 
 cleanDebug:
 
