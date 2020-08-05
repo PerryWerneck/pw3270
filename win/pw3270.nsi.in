@@ -212,7 +212,7 @@ SubSection "@PRODUCT_NAME@" SecMain
 
 	SubSection "Plugins" SecPLugin
 
-		Section /o "Remote control" IPCPlugin
+		Section "Remote control" IPCPlugin
 
 			setOutPath $INSTDIR
 
@@ -235,7 +235,7 @@ SubSection "@PRODUCT_NAME@" SecMain
 	SubSection "Extra modules" Languages
 
 !ifdef WITHLIBHLLAPI
-		Section /o "HLLAPI" HLLAPIBinding
+		Section "HLLAPI" HLLAPIBinding
 
 			${@NSISREDIR@}
 
@@ -309,7 +309,7 @@ SubSectionEnd
 
 
 !ifdef WITHGTK
-Section /o "GTK+ Runtime" SecGTK
+Section "GTK+ Runtime" SecGTK
 
 	setOutPath $INSTDIR
 	file /r "runtime\*.*"
@@ -387,16 +387,16 @@ Function .onInit
 	ClearErrors
 	${GetOptions} $R0 /SDK= $0
 
-	${if} $0 == "NO"
+	${if} $0 == "YES"
 
 		SectionGetFlags ${SDK} $0
-		IntOp $0 $0 & ${SECTION_OFF}
+		IntOp $0 $0 | ${SF_SELECTED}
 		SectionSetFlags ${SDK} $0
 
 	${else}
 
 		SectionGetFlags ${SDK} $0
-		IntOp $0 $0 | ${SF_SELECTED}
+		IntOp $0 $0 & ${SECTION_OFF}
 		SectionSetFlags ${SDK} $0
 
 	${EndIf}
@@ -413,13 +413,8 @@ Function .onInit
 	ClearErrors
 	${GetOptions} $R0 /DOTNET= $0
 
-	${if} $0 == "NO"
-
-		SectionGetFlags ${DOTNET} $0
-		IntOp $0 $0 & ${SECTION_OFF}
-		SectionSetFlags ${DOTNET} $0
-
-	${else}
+	# Default = NO
+	${if} $0 == "YES"
 
 		SectionGetFlags ${DOTNET} $0
 		IntOp $0 $0 | ${SF_SELECTED}
@@ -428,6 +423,12 @@ Function .onInit
 		SectionGetFlags ${IPCPlugin} $0
 		IntOp $0 $0 | ${SF_SELECTED}
 		SectionSetFlags ${IPCPlugin} $0
+
+	${else}
+
+		SectionGetFlags ${DOTNET} $0
+		IntOp $0 $0 & ${SECTION_OFF}
+		SectionSetFlags ${DOTNET} $0
 
 	${EndIf}
 
@@ -444,6 +445,7 @@ Function .onInit
 	ClearErrors
 	${GetOptions} $R0 /HLLAPI= $0
 
+	# Default = YES
 	${if} $0 == "NO"
 
 		SectionGetFlags ${HLLAPIBinding} $0
@@ -459,6 +461,7 @@ Function .onInit
 		SectionGetFlags ${IPCPlugin} $0
 		IntOp $0 $0 | ${SF_SELECTED}
 		SectionSetFlags ${IPCPlugin} $0
+
 
 	${EndIf}
 
