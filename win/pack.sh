@@ -485,7 +485,7 @@ buildApplication()
 		fi
 
 		if [ -e branding/${PRODUCT_NAME}.svg ]; then
-			convert -density 384 -background transparent branding/${1}.svg -define icon:auto-resize -colors 256 ${WORKDIR}/build/${ARCH}/${PRODUCT_NAME}.ico
+			convert -density 384 -background transparent branding/${PRODUCT_NAME}.svg -define icon:auto-resize -colors 256 ${WORKDIR}/build/${ARCH}/${PRODUCT_NAME}.ico
 			if [ "$?" != "0" ]; then
 				cleanup
 				exit -1
