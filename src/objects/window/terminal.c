@@ -250,7 +250,7 @@
 			return FALSE;
 
 		g_key_file_set_integer(session->key_file,"dialogs",popup_name,(gint) response);
-		v3270_emit_save_settings(widget);
+		v3270_emit_save_settings(widget,NULL);
 
         return TRUE;
  }
