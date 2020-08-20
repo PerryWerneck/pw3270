@@ -214,7 +214,7 @@
 
  }
 
- void set_property(GObject G_GNUC_UNUSED(*object), guint G_GNUC_UNUSED(prop_id), const GValue G_GNUC_UNUSED(*value), GParamSpec *pspec) {
+ void set_property(GObject G_GNUC_UNUSED(*object), guint G_GNUC_UNUSED(prop_id), const GValue G_GNUC_UNUSED(*value), GParamSpec G_GNUC_UNUSED(*pspec)) {
 // 	g_message("Action %s property %s is read-only",g_action_get_name(G_ACTION(object)),pspec->name);
  }
 

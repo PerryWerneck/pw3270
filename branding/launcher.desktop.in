@@ -10,7 +10,7 @@ Terminal=false
 Type=Application
 StartupNotify=true
 
-MimeType=x-scheme-handler/tn3270s;x-scheme-handler/tn3270;
+MimeType=x-scheme-handler/tn3270s;x-scheme-handler/tn3270;application/x-@PRODUCT_NAME@;
 
 Actions=gnomeui;classicalui
 

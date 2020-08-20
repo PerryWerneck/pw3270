@@ -232,6 +232,29 @@
 	return NULL;
  }
 
+ static GtkResponseType load_popup_response(v3270 G_GNUC_UNUSED(*widget), const gchar *popup_name, struct SessionDescriptor * session) {
+
+		if(!session->key_file)
+			return 0;
+
+		if(g_key_file_has_key(session->key_file,"dialogs",popup_name,NULL))
+			return (GtkResponseType) g_key_file_get_integer(session->key_file,"dialogs",popup_name,NULL);
+
+        return GTK_RESPONSE_NONE;
+ }
+
+ static gboolean save_popup_response(GtkWidget *widget, const gchar *popup_name, GtkResponseType response, struct SessionDescriptor * session) {
+		debug("%s(%s)",__FUNCTION__,popup_name);
+
+		if(!session->key_file)
+			return FALSE;
+
+		g_key_file_set_integer(session->key_file,"dialogs",popup_name,(gint) response);
+		v3270_emit_save_settings(widget,NULL);
+
+        return TRUE;
+ }
+
  GtkWidget * pw3270_terminal_new(const gchar *session_file) {
 
  	GtkWidget * terminal = v3270_new();
@@ -249,7 +272,13 @@
  	} else {
 
 		// No session file, use the default one.
-		g_autofree gchar * filename = g_build_filename(g_get_user_config_dir(),G_STRINGIFY(PRODUCT_NAME) ".conf",NULL);
+		g_autofree gchar * compatible = g_build_filename(g_get_user_config_dir(),G_STRINGIFY(PRODUCT_NAME) ".conf",NULL);
+		g_autofree gchar * filename = g_build_filename(g_get_user_config_dir(),"default.3270",NULL);
+
+		if(g_file_test(compatible,G_FILE_TEST_IS_REGULAR))
+		{
+			g_rename(compatible,filename);
+		}
 
 		descriptor = g_malloc0(sizeof(struct SessionDescriptor) + strlen(filename));
 		strcpy(descriptor->filename,filename);
@@ -335,6 +364,8 @@
  	g_signal_connect(G_OBJECT(terminal),"print-done",G_CALLBACK(print_done),descriptor);
  	g_signal_connect(G_OBJECT(terminal),"print-setup",G_CALLBACK(print_setup),descriptor);
 	g_signal_connect(G_OBJECT(terminal),"destroy", G_CALLBACK(destroy),descriptor);
+	g_signal_connect(G_OBJECT(terminal),"load-popup-response",G_CALLBACK(load_popup_response),descriptor);
+ 	g_signal_connect(G_OBJECT(terminal),"save-popup-response",G_CALLBACK(save_popup_response),descriptor);
 
 	return terminal;
  }

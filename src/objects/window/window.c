@@ -202,7 +202,7 @@
 		visible
 	);
 
-	v3270_emit_save_settings(terminal);
+	v3270_emit_save_settings(terminal,NULL);
 
  }
 

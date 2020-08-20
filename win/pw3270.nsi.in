@@ -43,9 +43,9 @@ XPStyle on
 installDir "$@PROGRAMFILES@\@PRODUCT_NAME@"
 
 #define the installer icon
-!define MUI_ICON "@PACKAGE@.ico"
-!define MUI_UNICON "@PACKAGE@.ico"
-icon "@PACKAGE@.ico"
+!define MUI_ICON "@PRODUCT_NAME@.ico"
+!define MUI_UNICON "@PRODUCT_NAME@.ico"
+icon "@PRODUCT_NAME@.ico"
 
 # Get installation folder from registry if available
 InstallDirRegKey HKLM "Software\@PRODUCT_NAME@" "InstallLocation"
@@ -101,15 +101,17 @@ SubSection "@PRODUCT_NAME@" SecMain
 		createShortCut "$DESKTOP\@PRODUCT_NAME@.lnk" "$INSTDIR\@PRODUCT_NAME@.exe"
 
 		# Binary files
-		file "/oname=$INSTDIR\@PRODUCT_NAME@.exe"			"@PACKAGE@.exe"
-		file "/oname=$INSTDIR\@PRODUCT_NAME@.ico"			"@PACKAGE@.ico"
-		file "/oname=$INSTDIR\lib@LIBRARY_NAME@.dll"			"lib@LIBRARY_NAME@.dll"
-		file "/oname=$INSTDIR\libv3270.dll"				"libv3270.dll"
+		file "/oname=$INSTDIR\@PRODUCT_NAME@.exe"			"bin\@PRODUCT_NAME@.exe"
+		file "/oname=$INSTDIR\@PRODUCT_NAME@.ico"			"bin\@PRODUCT_NAME@.ico"
+		file "/oname=$INSTDIR\lib@LIBRARY_NAME@.dll"			"bin\lib@LIBRARY_NAME@.dll"
+		file "/oname=$INSTDIR\libv3270.dll"				"bin\libv3270.dll"
+
+		# Register file association
 
 		# Configuration files
-		file "/oname=$INSTDIR\@PRODUCT_NAME@-logo.png"			"@PRODUCT_NAME@\@PRODUCT_NAME@-logo.png"
-		file "/oname=$INSTDIR\@PRODUCT_NAME@.png"			"@PRODUCT_NAME@\@PRODUCT_NAME@.png"
-		file "/oname=$INSTDIR\colors.conf"				"@PRODUCT_NAME@\colors.conf"
+		file "/oname=$INSTDIR\@PRODUCT_NAME@-logo.png"			"share\@PRODUCT_NAME@\@PRODUCT_NAME@-logo.png"
+		file "/oname=$INSTDIR\@PRODUCT_NAME@.png"			"share\@PRODUCT_NAME@\@PRODUCT_NAME@.png"
+		file "/oname=$INSTDIR\colors.conf"				"share\@PRODUCT_NAME@\colors.conf"
 
 		# Documentation files
 		file "/oname=$INSTDIR\AUTHORS"					"AUTHORS"
@@ -122,18 +124,18 @@ SubSection "@PRODUCT_NAME@" SecMain
 
 		# UI definition files
 		CreateDirectory "$INSTDIR\ui"
-		file "/oname=$INSTDIR\ui\application.xml" 	"@PRODUCT_NAME@\ui\application.xml"
-		file "/oname=$INSTDIR\ui\window.xml" 		"@PRODUCT_NAME@\ui\window.xml"
+		file "/oname=$INSTDIR\ui\application.xml" 	"share\@PRODUCT_NAME@\ui\application.xml"
+		file "/oname=$INSTDIR\ui\window.xml" 		"share\@PRODUCT_NAME@\ui\window.xml"
 
 		# Charset definition files
 		CreateDirectory "$INSTDIR\remap"
-		file "/oname=$INSTDIR\remap\bracket.xml" 	"@PRODUCT_NAME@\remap\bracket.xml"
+		file "/oname=$INSTDIR\remap\bracket.xml" 	"share\@PRODUCT_NAME@\remap\bracket.xml"
 
 		# Locale files
 		CreateDirectory "$INSTDIR\locale\pt_BR\LC_MESSAGES"
-		file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\@PACKAGE@.mo"		"locale\pt_BR\LC_MESSAGES\@PACKAGE@.mo"
-		file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\lib@LIBRARY_NAME@.mo"	"locale\pt_BR\LC_MESSAGES\lib@LIBRARY_NAME@.mo"
-		file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\libv3270.mo"		"locale\pt_BR\LC_MESSAGES\libv3270.mo"
+		file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\@PACKAGE@.mo"		"share\locale\pt_BR\LC_MESSAGES\@PACKAGE@.mo"
+		file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\lib@LIBRARY_NAME@.mo"	"share\locale\pt_BR\LC_MESSAGES\lib@LIBRARY_NAME@.mo"
+		file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\libv3270.mo"		"share\locale\pt_BR\LC_MESSAGES\libv3270.mo"
 
 		# define uninstaller name
 		SetRegView 32
@@ -159,11 +161,45 @@ SubSection "@PRODUCT_NAME@" SecMain
 		# Default settings
 		SetRegView @WINARCH@
 
+		# Setup log file
+		# https://docs.microsoft.com/en-us/windows/win32/eventlog/event-sources
+		WriteRegStr HKLM "SYSTEM\CurrentControlSet\Services\EventLog\@PRODUCT_NAME@" \
+				 "PackageVersion"	"@PACKAGE_VERSION@"
+
 		# Required for IPC Library.
 		WriteRegStr 	HKLM	"Software\@PRODUCT_NAME@"			"InstallLocation"	"$INSTDIR"
 
 		# Customized options
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"autoconnect"		0x00000001
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"blankfill"             0x00000000
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"bold"                  0x00000000
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"keepselected"          0x00000001
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"marginedpaste"         0x00000001
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"rectselect"            0x00000000
 
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"monocase"              0x00000000
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"cursorblink"           0x00000001
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"showtiming"            0x00000001
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"cursorpos"             0x00000001
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"linewrap"              0x00000000
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"crosshair"             0x00000000
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"fullscreen"            0x00000000
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"autoreconnect"         0x00000001
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"insert"                0x00000000
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"smartpaste"            0x00000001
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"beep"                  0x00000001
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"fieldattr"             0x00000000
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"altscreen"             0x00000001
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"keepalive"             0x00000000
+
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"dstrace"               0x00000000
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"screentrace"           0x00000000
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"eventtrace"            0x00000000
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"nettrace"              0x00000000
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"ssltrace"              0x00000000
+
+		WriteRegStr 	HKLM	"Software\@PRODUCT_NAME@"			"font-family"		"Lucida Console"
+		WriteRegStr	HKLM	"Software\@PRODUCT_NAME@"			"colors"		"rgb(24,24,24);rgb(79,156,254);rgb(237,74,70);rgb(235,110,183);rgb(131,199,70);rgb(86,216,201);rgb(239,197,65);rgb(222,222,222);rgb(59,59,59);rgb(54,142,171);rgb(250,145,83);rgb(165,128,226);rgb(112,180,51);rgb(65,199,185);rgb(219,179,45);rgb(119,119,119);rgb(131,199,70);rgb(237,74,70);rgb(65,199,185);rgb(250,145,83);rgb(37,37,37);rgb(222,222,222);rgb(222,222,222);rgb(24,24,24);rgb(222,222,222);rgb(79,156,254);rgb(131,199,70);rgb(239,197,65);rgb(239,197,65)"
 
 	sectionEnd
 
@@ -176,20 +212,20 @@ SubSection "@PRODUCT_NAME@" SecMain
 
 	SubSection "Plugins" SecPLugin
 
-		Section /o "Remote control" IPCPlugin
+		Section "Remote control" IPCPlugin
 
 			setOutPath $INSTDIR
 
 			${DisableX64FSRedirection}
 
 			CreateDirectory "$INSTDIR\plugins"
-			file "/oname=$INSTDIR\plugins\ipcserver.dll"			"@PRODUCT_NAME@-plugins\ipcserver.dll"
+			file "/oname=$INSTDIR\plugins\ipcserver.dll"			"lib\@PRODUCT_NAME@-plugins\ipcserver.dll"
 
 			CreateDirectory "$INSTDIR\locale\pt_BR\LC_MESSAGES"
-			file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\libipc3270.mo"	"locale\pt_BR\LC_MESSAGES\libipc3270.mo"
+			file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\libipc3270.mo"	"share\locale\pt_BR\LC_MESSAGES\libipc3270.mo"
 
 			${@NSISREDIR@}
-			file "/oname=$SYSDIR\libipc3270.dll"				"libipc3270.dll"
+			file "/oname=$SYSDIR\libipc3270.dll"				"bin\libipc3270.dll"
 
 		sectionEnd
 
@@ -199,23 +235,23 @@ SubSection "@PRODUCT_NAME@" SecMain
 	SubSection "Extra modules" Languages
 
 !ifdef WITHLIBHLLAPI
-		Section /o "HLLAPI" HLLAPIBinding
+		Section "HLLAPI" HLLAPIBinding
 
 			${@NSISREDIR@}
 
 			# Install HLLAPI connector
-			file "/oname=$SYSDIR\hllapi.dll"		"libhllapi.dll"
+			file "/oname=$SYSDIR\hllapi.dll"		"bin\libhllapi.dll"
 
 			# Install with "lib" prefix for compatibility.
-			file "/oname=$SYSDIR\libhllapi.dll"		"libhllapi.dll"
+			file "/oname=$SYSDIR\libhllapi.dll"		"bin\libhllapi.dll"
 
 		SectionEnd
 !endif
 
 		Section "KEYPADS" Keypads
 
-			file "/oname=$INSTDIR\keypad\00-right.xml" 	"@PRODUCT_NAME@\keypad\00-right.xml"
-			file "/oname=$INSTDIR\keypad\10-bottom.xml" 	"@PRODUCT_NAME@\keypad\10-bottom.xml"
+			file "/oname=$INSTDIR\keypad\00-right.xml" 	"share\@PRODUCT_NAME@\keypad\00-right.xml"
+			file "/oname=$INSTDIR\keypad\10-bottom.xml" 	"share\@PRODUCT_NAME@\keypad\10-bottom.xml"
 
 		SectionEnd
 
@@ -247,22 +283,20 @@ SubSection "@PRODUCT_NAME@" SecMain
 		CreateDirectory "$INSTDIR\sdk\def"
 		CreateDirectory "$INSTDIR\sdk\lib"
 
-		file "/oname=$INSTDIR\sdk\def\lib@LIBRARY_NAME@.def"	"@PRODUCT_NAME@\def\lib@LIBRARY_NAME@.def"
-		file "/oname=$INSTDIR\sdk\lib\lib3270.dll.a"		"lib@LIBRARY_NAME@.dll.a"
-		file "/oname=$INSTDIR\sdk\lib\lib3270.delayed.a"	"lib@LIBRARY_NAME@.delayed.a"
-		file "/oname=$INSTDIR\sdk\lib\lib3270.static.a"		"lib@LIBRARY_NAME@.static.a"
+		file "/oname=$INSTDIR\sdk\lib\lib3270.dll.a"		"lib\lib@LIBRARY_NAME@.dll.a"
+		file "/oname=$INSTDIR\sdk\lib\lib3270.delayed.a"	"lib\lib@LIBRARY_NAME@.delayed.a"
+		file "/oname=$INSTDIR\sdk\lib\lib3270.static.a"		"lib\lib@LIBRARY_NAME@.static.a"
+		file "/oname=$INSTDIR\sdk\lib\libv3270.dll.a"		"lib\libv3270.dll.a"
+		file "/oname=$INSTDIR\sdk\lib\libipc3270.dll.a"		"lib\libipc3270.dll.a"
+		file "/oname=$INSTDIR\sdk\lib\libipc3270.static.a"	"lib\libipc3270.static.a"
+		file "/oname=$INSTDIR\sdk\lib\libhllapi.dll.a"		"lib\libhllapi.dll.a"
 
-		file "/oname=$INSTDIR\sdk\lib3270.mak"			"@PRODUCT_NAME@\def\lib3270.mak"
+		file "/oname=$INSTDIR\sdk\lib3270.mak"			"share\@PRODUCT_NAME@\def\lib3270.mak"
 
-		file "/oname=$INSTDIR\sdk\def\libv3270.def"		"@PRODUCT_NAME@\def\libv3270.def"
-		file "/oname=$INSTDIR\sdk\lib\libv3270.dll.a"		"libv3270.dll.a"
-
-		file "/oname=$INSTDIR\sdk\def\libipc3270.def"		"@PRODUCT_NAME@\def\libipc3270.def"
-		file "/oname=$INSTDIR\sdk\lib\libipc3270.dll.a"		"libipc3270.dll.a"
-		file "/oname=$INSTDIR\sdk\lib\libipc3270.static.a"	"libipc3270.static.a"
-
-		file "/oname=$INSTDIR\sdk\def\libhllapi.def"		"@PRODUCT_NAME@\def\libhllapi.def"
-		file "/oname=$INSTDIR\sdk\lib\libhllapi.dll.a"		"libhllapi.dll.a"
+		file "/oname=$INSTDIR\sdk\def\lib@LIBRARY_NAME@.def"	"share\@PRODUCT_NAME@\def\lib@LIBRARY_NAME@.def"
+		file "/oname=$INSTDIR\sdk\def\libv3270.def"		"share\@PRODUCT_NAME@\def\libv3270.def"
+		file "/oname=$INSTDIR\sdk\def\libipc3270.def"		"share\@PRODUCT_NAME@\def\libipc3270.def"
+		file "/oname=$INSTDIR\sdk\def\libhllapi.def"		"share\@PRODUCT_NAME@\def\libhllapi.def"
 
 		SetRegView @WINARCH@
 		WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PW3270_SDK_PATH" "$INSTDIR\sdk"
@@ -275,7 +309,7 @@ SubSectionEnd
 
 
 !ifdef WITHGTK
-Section /o "GTK+ Runtime" SecGTK
+Section "GTK+ Runtime" SecGTK
 
 	setOutPath $INSTDIR
 	file /r "runtime\*.*"
@@ -287,6 +321,8 @@ Section "Uninstall"
 
 	# Always delete uninstaller first
 	delete $INSTDIR\uninstaller.exe
+
+	# Remove association
 
 	# Set SMPROGRAMS and DESKTOP path
 	SetShellVarContext all
@@ -315,6 +351,8 @@ Section "Uninstall"
 	SetRegView @WINARCH@
 	DeleteRegKey HKLM "Software\@PRODUCT_NAME@"
 	DeleteRegValue HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PW3270_SDK_PATH"
+	DeleteRegKey HKLM "SYSTEM\CurrentControlSet\Services\EventLog\@PRODUCT_NAME@"
+
 	SendMessage ${HWND_BROADCAST} ${WM_WININICHANGE} 0 "STR:Environment" /TIMEOUT=5000
 
 	DeleteRegKey HKLM "Software\GSettings\apps\@PACKAGE_NAME@\@PRODUCT_NAME@"
@@ -349,16 +387,16 @@ Function .onInit
 	ClearErrors
 	${GetOptions} $R0 /SDK= $0
 
-	${if} $0 == "NO"
+	${if} $0 == "YES"
 
 		SectionGetFlags ${SDK} $0
-		IntOp $0 $0 & ${SECTION_OFF}
+		IntOp $0 $0 | ${SF_SELECTED}
 		SectionSetFlags ${SDK} $0
 
 	${else}
 
 		SectionGetFlags ${SDK} $0
-		IntOp $0 $0 | ${SF_SELECTED}
+		IntOp $0 $0 & ${SECTION_OFF}
 		SectionSetFlags ${SDK} $0
 
 	${EndIf}
@@ -375,13 +413,8 @@ Function .onInit
 	ClearErrors
 	${GetOptions} $R0 /DOTNET= $0
 
-	${if} $0 == "NO"
-
-		SectionGetFlags ${DOTNET} $0
-		IntOp $0 $0 & ${SECTION_OFF}
-		SectionSetFlags ${DOTNET} $0
-
-	${else}
+	# Default = NO
+	${if} $0 == "YES"
 
 		SectionGetFlags ${DOTNET} $0
 		IntOp $0 $0 | ${SF_SELECTED}
@@ -390,6 +423,12 @@ Function .onInit
 		SectionGetFlags ${IPCPlugin} $0
 		IntOp $0 $0 | ${SF_SELECTED}
 		SectionSetFlags ${IPCPlugin} $0
+
+	${else}
+
+		SectionGetFlags ${DOTNET} $0
+		IntOp $0 $0 & ${SECTION_OFF}
+		SectionSetFlags ${DOTNET} $0
 
 	${EndIf}
 
@@ -406,6 +445,7 @@ Function .onInit
 	ClearErrors
 	${GetOptions} $R0 /HLLAPI= $0
 
+	# Default = YES
 	${if} $0 == "NO"
 
 		SectionGetFlags ${HLLAPIBinding} $0
@@ -421,6 +461,7 @@ Function .onInit
 		SectionGetFlags ${IPCPlugin} $0
 		IntOp $0 $0 | ${SF_SELECTED}
 		SectionSetFlags ${IPCPlugin} $0
+
 
 	${EndIf}
 
