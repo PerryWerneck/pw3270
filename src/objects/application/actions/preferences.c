@@ -55,6 +55,12 @@
 		gtk_container_add(GTK_CONTAINER(dialog),pages[ix]);
 	}
 
+	pw3270_application_plugin_call(
+		G_APPLICATION(application),
+		"pw3270_plugin_set_application_preferences",
+		dialog
+	);
+
 	gtk_widget_show_all(dialog);
 
 	return dialog;

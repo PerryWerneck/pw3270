@@ -466,6 +466,33 @@
 
  }
 
+ void pw3270_application_plugin_foreach(GApplication *app, GFunc func, gpointer user_data) {
+
+	g_return_if_fail(PW3270_IS_APPLICATION(app));
+
+   	GSList * item;
+ 	for(item = PW3270_APPLICATION(app)->plugins; item; item = g_slist_next(item)) {
+		func(item->data,user_data);
+  	}
+
+ }
+
+ void pw3270_application_plugin_call(GApplication *app, const gchar *method, gpointer user_data) {
+
+	g_return_if_fail(PW3270_IS_APPLICATION(app));
+
+ 	int (*call)(GtkWidget *);
+
+  	GSList * item;
+  	for(item = PW3270_APPLICATION(app)->plugins; item; item = g_slist_next(item)) {
+		if(g_module_symbol((GModule *) item->data, method, (gpointer *) &call)) {
+			call(user_data);
+       }
+  	}
+
+ }
+
+
  GSettings * pw3270_application_settings_new() {
 
 	GSettings *settings = NULL;
@@ -510,3 +537,4 @@
  	g_return_val_if_fail(PW3270_IS_APPLICATION(app),NULL);
  	return PW3270_APPLICATION(app)->keypads;
  }
+

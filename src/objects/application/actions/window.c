@@ -69,7 +69,7 @@
  	return G_ACTION(action);
  }
 
- static void new_tab_activated(GAction *action, GVariant *parameter, GtkApplication *application) {
+ static void new_tab_activated(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkApplication *application) {
 
  	debug("%s",__FUNCTION__);
  	pw3270_application_window_new_tab(GTK_WIDGET(gtk_application_get_active_window(GTK_APPLICATION(application))), NULL);

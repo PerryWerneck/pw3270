@@ -73,6 +73,10 @@
 
 	// Plugins
 	void			  pw3270_application_plugin_foreach(GApplication *app, GFunc func, gpointer user_data);
+
+	/// @brief Call plugin method.
+	void			  pw3270_application_plugin_call(GApplication *app, const gchar *method, gpointer user_data);
+
 	GSList			* pw3270_application_get_plugins(GApplication *app);
 
 	// Tools

@@ -33,22 +33,6 @@
 
  static GtkWidget * factory(PW3270Action G_GNUC_UNUSED(*action), GtkApplication G_GNUC_UNUSED(*application)) {
 
-	/*
-	static const gchar *license		=
-	N_( "This program is free software; you can redistribute it and/or "
-		"modify it under the terms of the GNU General Public License as "
- 		"published by the Free Software Foundation; either version 2 of the "
-		"License, or (at your option) any later version.\n\n"
-		"This program is distributed in the hope that it will be useful, "
-		"but WITHOUT ANY WARRANTY; without even the implied warranty of "
-		"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the "
-		"GNU General Public License for more details.\n\n"
-		"You should have received a copy of the GNU General Public License "
-		"along with this program; if not, write to the Free Software "
-		"Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02111-1307 "
-		"USA" );
-	*/
-
 	GtkAboutDialog	* dialog = GTK_ABOUT_DIALOG(gtk_about_dialog_new());
 
 	// Get application logo
@@ -126,7 +110,6 @@
 		gtk_about_dialog_add_credit_section(dialog, _("Apple version"), apple);
 		gtk_about_dialog_add_credit_section (dialog, _("Contributors"), contributors);
 
-
 		gtk_about_dialog_add_credit_section(dialog, _("Based on X3270 from"), references);
 
 	}
@@ -141,13 +124,19 @@
 	gtk_about_dialog_set_website(dialog,"https://portal.softwarepublico.gov.br/social/pw3270/");
 	gtk_about_dialog_set_website_label(dialog,_( "Brazilian Public Software Portal" ));
 
-//	gtk_about_dialog_set_authors(dialog,authors);
 	gtk_about_dialog_set_translator_credits(dialog,_("translator-credits"));
 
 	gtk_window_set_modal(GTK_WINDOW(dialog),TRUE);
 
 	g_signal_connect(dialog,"response",G_CALLBACK(gtk_widget_destroy),NULL);
 	gtk_widget_show_all(GTK_WIDGET(dialog));
+
+	// Call plugins
+	pw3270_application_plugin_call(
+		g_application_get_default(),
+		"pw3270_plugin_set_about_dialog",
+		dialog
+	);
 
 	return GTK_WIDGET(dialog);
 

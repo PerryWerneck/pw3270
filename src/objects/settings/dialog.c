@@ -71,11 +71,6 @@ static void PW3270SettingsDialog_init(PW3270SettingsDialog *dialog)
 	// Get use of header bar.
 	g_object_get(gtk_settings_get_default(), "gtk-dialogs-use-header", &dialog->has_subtitle, NULL);
 
-	// https://developer.gnome.org/hig/stable/visual-layout.html.en
-	//gtk_box_set_spacing(GTK_BOX(content_area),18);
-	//gtk_container_set_border_width(GTK_CONTAINER(content_area),18);
-
-//	gtk_window_set_deletable(GTK_WINDOW(dialog),FALSE);
     gtk_window_set_destroy_with_parent(GTK_WINDOW(dialog), TRUE);
 
 	gtk_dialog_add_buttons(
