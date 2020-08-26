@@ -133,7 +133,7 @@ SubSection "@PRODUCT_NAME@" SecMain
 
 		# Locale files
 		CreateDirectory "$INSTDIR\locale\pt_BR\LC_MESSAGES"
-		file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\@PACKAGE@.mo"		"share\locale\pt_BR\LC_MESSAGES\@PACKAGE@.mo"
+		file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\@PACKAGE_NAME@.mo"	"share\locale\pt_BR\LC_MESSAGES\@PACKAGE_NAME@.mo"
 		file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\lib@LIBRARY_NAME@.mo"	"share\locale\pt_BR\LC_MESSAGES\lib@LIBRARY_NAME@.mo"
 		file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\libv3270.mo"		"share\locale\pt_BR\LC_MESSAGES\libv3270.mo"
 

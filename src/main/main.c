@@ -94,6 +94,7 @@ int main (int argc, char **argv) {
 	{
 		g_autofree gchar * appdir = g_win32_get_package_installation_directory_of_module(NULL);
 		g_autofree gchar * locdir = g_build_filename(appdir,"locale",NULL);
+		debug("Locale from \"%s\"\n",locdir);
 		bindtextdomain( PACKAGE_NAME, locdir );
 	}
 #endif // _WIN32
