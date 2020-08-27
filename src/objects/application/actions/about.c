@@ -66,11 +66,15 @@
 
 	// Set version
 	{
+		g_autofree gchar * version = g_strdup_printf(
+											_("Version %s-%s"),
+											PACKAGE_VERSION,
 #ifdef PACKAGE_RELEASE
-		g_autofree gchar * version = g_strdup_printf(_("Version %s-%s"),PACKAGE_VERSION,PACKAGE_RELEASE);
+											PACKAGE_RELEASE
 #else
-		g_autofree gchar * version = g_strdup_printf(_("Version %s-%s"),PACKAGE_VERSION,G_STRINGIFY(BUILD_DATE));
-#endif // PACKAGE_REVISION
+											G_STRINGIFY(BUILD_DATE)
+#endif // PACKAGE_RELEASE
+										);
 
 		gtk_about_dialog_set_version(dialog,version);
 	}
@@ -134,8 +138,8 @@
 //	gtk_about_dialog_set_website(dialog,NC_("ProjectURL","https://portal.softwarepublico.gov.br/social/pw3270/"));
 //	gtk_about_dialog_set_website_label(dialog,NC_("ProjectURLLabel","Brazilian Public Software Portal" ));
 
-	gtk_about_dialog_set_website(dialog,NC_("PrjURL","https://github.com/PerryWerneck/pw3270"));
-	gtk_about_dialog_set_website_label(dialog,NC_("PrjLabel","https://github.com/PerryWerneck/pw3270" ));
+	gtk_about_dialog_set_website(dialog,_("https://github.com/PerryWerneck/pw3270"));
+	gtk_about_dialog_set_website_label(dialog,_("View this project on github"));
 
 	gtk_about_dialog_set_translator_credits(dialog,_("translator-credits"));
 

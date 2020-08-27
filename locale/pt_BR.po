@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-27 09:18-0300\n"
-"PO-Revision-Date: 2020-08-27 09:21-0300\n"
+"PO-Revision-Date: 2020-08-27 20:37-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
 "Language: pt_BR\n"
@@ -25,7 +25,7 @@ msgstr ""
 msgid "\"%s\" is not a valid user interface name"
 msgstr "\"%s\" não é um nome válido para interface de usuário"
 
-#: src/objects/application/actions/about.c:80
+#: src/objects/application/actions/about.c:84
 #, c-format
 msgid "3270 terminal emulator for GTK %d.%d"
 msgstr "Emulador 3270 para GTK+ %d.%d"
@@ -55,7 +55,7 @@ msgstr "Todos os arquivos"
 msgid "Append to copy"
 msgstr "Adicionar à cópia"
 
-#: src/objects/application/actions/about.c:110
+#: src/objects/application/actions/about.c:114
 msgid "Apple version"
 msgstr "Versão Apple"
 
@@ -79,7 +79,7 @@ msgstr "Reconectar automaticamente"
 msgid "Available"
 msgstr "Disponível"
 
-#: src/objects/application/actions/about.c:113
+#: src/objects/application/actions/about.c:117
 msgid "Based on X3270 from"
 msgstr "Baseado no X3270 por"
 
@@ -159,7 +159,7 @@ msgstr "Conectar ao servidor"
 msgid "Connected to host"
 msgstr "Conectado no servidor"
 
-#: src/objects/application/actions/about.c:111
+#: src/objects/application/actions/about.c:115
 msgid "Contributors"
 msgstr "Contribuidores"
 
@@ -352,7 +352,7 @@ msgstr "Largura do painel em colunas"
 msgid "Keypads"
 msgstr "Painéis"
 
-#: src/objects/application/actions/about.c:122
+#: src/objects/application/actions/about.c:123
 msgctxt "LicenseFileName"
 msgid "LICENSE"
 msgstr "LICENCA"
@@ -385,7 +385,7 @@ msgstr "Barra de ferramentas"
 msgid "Main menu"
 msgstr "Menu principal"
 
-#: src/objects/application/actions/about.c:109
+#: src/objects/application/actions/about.c:113
 msgid "Maintainers"
 msgstr "Mantenedores"
 
@@ -795,7 +795,6 @@ msgid "Use +/- for field navigation"
 msgstr "Usar teclas +/- para navegar por campos"
 
 #: src/objects/application/actions/about.c:70
-#: src/objects/application/actions/about.c:72
 #, c-format
 msgid "Version %s-%s"
 msgstr "Versão %s-%s"
@@ -804,6 +803,10 @@ msgstr "Versão %s-%s"
 #: ui/application.xml:63
 msgid "View"
 msgstr "Exibir"
+
+#: src/objects/application/actions/about.c:142
+msgid "View this project on github"
+msgstr "Portal do Software Público Brasileiro"
 
 #: ui/window.xml:40 ui/application.xml:105
 msgid "Window with default session"
@@ -866,14 +869,8 @@ msgid "_View"
 msgstr "_Exibir"
 
 #: src/objects/application/actions/about.c:141
-msgctxt "ProjectURL"
 msgid "https://github.com/PerryWerneck/pw3270"
 msgstr "https://portal.softwarepublico.gov.br/social/pw3270/"
-
-#: src/objects/application/actions/about.c:142
-msgctxt "ProjectURLLabel"
-msgid "https://github.com/PerryWerneck/pw3270"
-msgstr "Portal do Software Público Brasileiro"
 
 #: src/objects/application/actions/about.c:144
 msgid "translator-credits"
@@ -2476,6 +2473,10 @@ msgstr "translator-credits"
 #~ msgid "Port or service name (empty for \"telnet\")."
 #~ msgstr "Nº da porta ou nome do serviço (em branco para \"telnet\")."
 
+#~ msgctxt "PrjLabel"
+#~ msgid "Portal do Software Público Brasileiro"
+#~ msgstr "https://portal.softwarepublico.gov.br/social/pw3270/"
+
 #~ msgid "Predefined color schemes"
 #~ msgstr "Esquemas de cor pré-definidos"
 
@@ -3911,6 +3912,15 @@ msgstr "translator-credits"
 
 #~ msgid "fcntl() error when getting socket state."
 #~ msgstr "erro fcntl() ao obter estado do socket."
+
+#, fuzzy
+#~ msgctxt "PrjLabel"
+#~ msgid "https://github.com/PerryWerneck/pw3270"
+#~ msgstr "Portal do Software Público Brasileiro"
+
+#~ msgctxt "ProjectURLLabel"
+#~ msgid "https://github.com/PerryWerneck/pw3270"
+#~ msgstr "Portal do Software Público Brasileiro"
 
 #~ msgctxt "ProjectURL"
 #~ msgid "https://portal.softwarepublico.gov.br/social/pw3270/"

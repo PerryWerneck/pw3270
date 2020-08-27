@@ -86,7 +86,7 @@ msgstr ""
 "#-#-#-#-#  about.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-27 09:25-0300\n"
+"POT-Creation-Date: 2020-08-27 20:36-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -353,7 +353,7 @@ msgstr ""
 msgid "\"%s\" is not a valid user interface name"
 msgstr ""
 
-#: src/objects/application/actions/about.c:80
+#: src/objects/application/actions/about.c:84
 #, c-format
 msgid "3270 terminal emulator for GTK %d.%d"
 msgstr ""
@@ -383,7 +383,7 @@ msgstr ""
 msgid "Append to copy"
 msgstr ""
 
-#: src/objects/application/actions/about.c:110
+#: src/objects/application/actions/about.c:114
 msgid "Apple version"
 msgstr ""
 
@@ -407,7 +407,7 @@ msgstr ""
 msgid "Available"
 msgstr ""
 
-#: src/objects/application/actions/about.c:113
+#: src/objects/application/actions/about.c:117
 msgid "Based on X3270 from"
 msgstr ""
 
@@ -487,7 +487,7 @@ msgstr ""
 msgid "Connected to host"
 msgstr ""
 
-#: src/objects/application/actions/about.c:111
+#: src/objects/application/actions/about.c:115
 msgid "Contributors"
 msgstr ""
 
@@ -680,7 +680,7 @@ msgstr ""
 msgid "Keypads"
 msgstr ""
 
-#: src/objects/application/actions/about.c:122
+#: src/objects/application/actions/about.c:123
 msgctxt "LicenseFileName"
 msgid "LICENSE"
 msgstr ""
@@ -713,7 +713,7 @@ msgstr ""
 msgid "Main menu"
 msgstr ""
 
-#: src/objects/application/actions/about.c:109
+#: src/objects/application/actions/about.c:113
 msgid "Maintainers"
 msgstr ""
 
@@ -1123,7 +1123,6 @@ msgid "Use +/- for field navigation"
 msgstr ""
 
 #: src/objects/application/actions/about.c:70
-#: src/objects/application/actions/about.c:72
 #, c-format
 msgid "Version %s-%s"
 msgstr ""
@@ -1131,6 +1130,10 @@ msgstr ""
 #: src/objects/window/header.c:66 ui/window.xml:417 ui/window.xml:532
 #: ui/application.xml:63
 msgid "View"
+msgstr ""
+
+#: src/objects/application/actions/about.c:142
+msgid "View this project on github"
 msgstr ""
 
 #: ui/window.xml:40 ui/application.xml:105
@@ -1194,12 +1197,6 @@ msgid "_View"
 msgstr ""
 
 #: src/objects/application/actions/about.c:141
-msgctxt "ProjectURL"
-msgid "https://github.com/PerryWerneck/pw3270"
-msgstr ""
-
-#: src/objects/application/actions/about.c:142
-msgctxt "ProjectURLLabel"
 msgid "https://github.com/PerryWerneck/pw3270"
 msgstr ""
 
