@@ -116,13 +116,26 @@
 
 	gtk_about_dialog_set_copyright(dialog, "Copyright © 2008 Banco do Brasil S.A." );
 
-//	gtk_about_dialog_set_license(dialog, gettext( license ) );
-//	gtk_about_dialog_set_wrap_license(dialog,TRUE);
+	lib3270_autoptr(char) license = lib3270_build_data_filename(NC_("LicenseFileName","LICENSE"),NULL);
+
+	if(g_file_test(license, G_FILE_TEST_IS_REGULAR)) {
+
+		g_autofree gchar * text = NULL;
+
+		if(g_file_get_contents(license,&text,NULL,NULL)) {
+			gtk_about_dialog_set_license(dialog, text );
+			gtk_about_dialog_set_wrap_license(dialog,TRUE);
+		}
+
+	}
 
 	gtk_about_dialog_set_license_type(dialog,GTK_LICENSE_GPL_3_0);
 
-	gtk_about_dialog_set_website(dialog,"https://portal.softwarepublico.gov.br/social/pw3270/");
-	gtk_about_dialog_set_website_label(dialog,_( "Brazilian Public Software Portal" ));
+//	gtk_about_dialog_set_website(dialog,NC_("ProjectURL","https://portal.softwarepublico.gov.br/social/pw3270/"));
+//	gtk_about_dialog_set_website_label(dialog,NC_("ProjectURLLabel","Brazilian Public Software Portal" ));
+
+	gtk_about_dialog_set_website(dialog,NC_("PrjURL","https://github.com/PerryWerneck/pw3270"));
+	gtk_about_dialog_set_website_label(dialog,NC_("PrjLabel","https://github.com/PerryWerneck/pw3270" ));
 
 	gtk_about_dialog_set_translator_credits(dialog,_("translator-credits"));
 

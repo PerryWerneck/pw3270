@@ -179,6 +179,7 @@ $(POTDIR)/$(PACKAGE_NAME)/%.pot: \
 		--keyword=_ \
 		--keyword=N_ \
 		--keyword=MSG_:2 \
+		--keyword=NC_:1c,2 \
 		--output=$@ \
 		$<
 	@touch $@
