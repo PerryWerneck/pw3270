@@ -240,6 +240,17 @@
 		if(g_key_file_has_key(session->key_file,"dialogs",popup_name,NULL))
 			return (GtkResponseType) g_key_file_get_integer(session->key_file,"dialogs",popup_name,NULL);
 
+#ifdef _WIN32
+		{
+			// Windows - Check predefined responses on system registry.
+
+#ifndef DEBUG
+			#error parei aqui.
+#endif // DEBUG
+
+		}
+#endif // _WIN32
+
         return GTK_RESPONSE_NONE;
  }
 

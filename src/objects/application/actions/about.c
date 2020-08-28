@@ -81,7 +81,22 @@
 
 	// Set comments
 	{
-		g_autofree gchar * comments = g_strdup_printf(_( "3270 terminal emulator for GTK %d.%d" ),GTK_MAJOR_VERSION,GTK_MINOR_VERSION);
+		g_autofree gchar * comments =
+
+		g_strdup_printf(
+				_( "3270 terminal emulator for %s." ),
+#if defined(__MINGW64__)
+				_( "64 bits Windows" )
+#elif defined(__MINGW32__)
+				_( "32 bits Windows" )
+#elif defined(linux) && defined(__i386__)
+				_( "32 bits Linux" )
+#elif defined(linux) && defined(__x86_64__)
+				_( "64 bits Linux" )
+#else
+				"GTK"
+#endif
+				);
 		gtk_about_dialog_set_comments(dialog, comments);
 	}
 

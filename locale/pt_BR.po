@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-27 09:18-0300\n"
-"PO-Revision-Date: 2020-08-27 20:37-0300\n"
+"POT-Creation-Date: 2020-08-28 16:00-0300\n"
+"PO-Revision-Date: 2020-08-28 16:02-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
 "Language: pt_BR\n"
@@ -25,12 +25,28 @@ msgstr ""
 msgid "\"%s\" is not a valid user interface name"
 msgstr "\"%s\" não é um nome válido para interface de usuário"
 
-#: src/objects/application/actions/about.c:84
-#, c-format
-msgid "3270 terminal emulator for GTK %d.%d"
-msgstr "Emulador 3270 para GTK+ %d.%d"
+#: src/objects/application/actions/about.c:93
+msgid "32 bits Linux"
+msgstr "Linux 32 bits"
 
-#: src/objects/application/actions/about.c:167 ui/application.xml:39
+#: src/objects/application/actions/about.c:91
+msgid "32 bits Windows"
+msgstr "Windows 32 bits"
+
+#: src/objects/application/actions/about.c:87
+#, c-format
+msgid "3270 terminal emulator for %s."
+msgstr "Emulador 3270 para %s"
+
+#: src/objects/application/actions/about.c:95
+msgid "64 bits Linux"
+msgstr "Linux 64 bits"
+
+#: src/objects/application/actions/about.c:89
+msgid "64 bits Windows"
+msgstr "Windows 64 bits"
+
+#: src/objects/application/actions/about.c:182 ui/application.xml:39
 #: ui/application.xml:537
 msgid "About PW3270"
 msgstr "Sobre o PW3270"
@@ -55,7 +71,7 @@ msgstr "Todos os arquivos"
 msgid "Append to copy"
 msgstr "Adicionar à cópia"
 
-#: src/objects/application/actions/about.c:114
+#: src/objects/application/actions/about.c:129
 msgid "Apple version"
 msgstr "Versão Apple"
 
@@ -79,7 +95,7 @@ msgstr "Reconectar automaticamente"
 msgid "Available"
 msgstr "Disponível"
 
-#: src/objects/application/actions/about.c:117
+#: src/objects/application/actions/about.c:132
 msgid "Based on X3270 from"
 msgstr "Baseado no X3270 por"
 
@@ -159,7 +175,7 @@ msgstr "Conectar ao servidor"
 msgid "Connected to host"
 msgstr "Conectado no servidor"
 
-#: src/objects/application/actions/about.c:115
+#: src/objects/application/actions/about.c:130
 msgid "Contributors"
 msgstr "Contribuidores"
 
@@ -352,7 +368,7 @@ msgstr "Largura do painel em colunas"
 msgid "Keypads"
 msgstr "Painéis"
 
-#: src/objects/application/actions/about.c:123
+#: src/objects/application/actions/about.c:138
 msgctxt "LicenseFileName"
 msgid "LICENSE"
 msgstr "LICENCA"
@@ -385,7 +401,7 @@ msgstr "Barra de ferramentas"
 msgid "Main menu"
 msgstr "Menu principal"
 
-#: src/objects/application/actions/about.c:113
+#: src/objects/application/actions/about.c:128
 msgid "Maintainers"
 msgstr "Mantenedores"
 
@@ -804,7 +820,7 @@ msgstr "Versão %s-%s"
 msgid "View"
 msgstr "Exibir"
 
-#: src/objects/application/actions/about.c:142
+#: src/objects/application/actions/about.c:157
 msgid "View this project on github"
 msgstr "Portal do Software Público Brasileiro"
 
@@ -868,11 +884,11 @@ msgstr "_Salvar"
 msgid "_View"
 msgstr "_Exibir"
 
-#: src/objects/application/actions/about.c:141
+#: src/objects/application/actions/about.c:156
 msgid "https://github.com/PerryWerneck/pw3270"
 msgstr "https://portal.softwarepublico.gov.br/social/pw3270/"
 
-#: src/objects/application/actions/about.c:144
+#: src/objects/application/actions/about.c:159
 msgid "translator-credits"
 msgstr "translator-credits"
 
