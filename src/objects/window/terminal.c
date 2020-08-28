@@ -41,6 +41,7 @@
  #include <v3270/settings.h>
  #include <v3270/actions.h>
  #include <v3270/print.h>
+ #include <lib3270/os.h>
 
  struct SessionDescriptor
  {
@@ -234,24 +235,28 @@
 
  static GtkResponseType load_popup_response(v3270 G_GNUC_UNUSED(*widget), const gchar *popup_name, struct SessionDescriptor * session) {
 
-		if(!session->key_file)
-			return 0;
-
-		if(g_key_file_has_key(session->key_file,"dialogs",popup_name,NULL))
+		if(session->key_file && g_key_file_has_key(session->key_file,"dialogs",popup_name,NULL))
 			return (GtkResponseType) g_key_file_get_integer(session->key_file,"dialogs",popup_name,NULL);
 
 #ifdef _WIN32
 		{
 			// Windows - Check predefined responses on system registry.
+			lib3270_auto_cleanup(HKEY) hKey;
 
-#ifndef DEBUG
-			#error parei aqui.
-#endif // DEBUG
+			if(RegOpenKeyEx(HKEY_LOCAL_MACHINE,G_STRINGIFY(PRODUCT_NAME)"\\dialogs",0,KEY_READ,&hKey) == ERROR_SUCCESS) {
 
+				DWORD val = 0;
+				DWORD cbData = sizeof(DWORD);
+
+				if(RegQueryValueEx(hKey, popup_name, NULL, NULL, (LPBYTE) &val, &cbData) == ERROR_SUCCESS) {
+					return (GtkResponseType) val;
+				}
+
+			}
 		}
 #endif // _WIN32
 
-        return GTK_RESPONSE_NONE;
+        return session->key_file ? GTK_RESPONSE_NONE : 0;
  }
 
  static gboolean save_popup_response(GtkWidget *widget, const gchar *popup_name, GtkResponseType response, struct SessionDescriptor * session) {
