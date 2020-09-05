@@ -83,29 +83,6 @@
 	v3270_to_key_file(terminal,session->key_file,"terminal");
 	v3270_accelerator_map_to_key_file(terminal, session->key_file, "accelerators");
 
-	/*
-	GtkWidget * window = gtk_widget_get_toplevel(terminal);
-
-	if(PW3270_IS_APPLICATION_WINDOW(window) && pw3270_application_window_get_active_terminal(window) == terminal) {
-
-		debug("%s on active terminal, saving window settings",__FUNCTION__);
-		GList * keypad = pw3270_application_window_get_keypads(window);
-
-		while(keypad) {
-
-			g_key_file_set_boolean(
-				session->key_file,
-				"keypads",
-				gtk_widget_get_name(GTK_WIDGET(keypad->data)),
-				gtk_widget_get_visible(GTK_WIDGET(keypad->data))
-			);
-			keypad = g_list_next(keypad);
-
-		}
-
-	}
-	*/
-
 	g_key_file_save_to_file(session->key_file,session->filename,NULL);
 
  }

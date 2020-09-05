@@ -178,8 +178,6 @@
 
 	GApplication * app = g_application_get_default();
 
-	debug("********************* %p",app);
-
 	g_autoptr(GSettings) app_settings = pw3270_application_settings_new();
 	g_autoptr(GSettings) win_settings = pw3270_application_window_settings_new();
 
