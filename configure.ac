@@ -245,6 +245,7 @@ AC_CONFIG_FILES(locale/Makefile)
 AC_CONFIG_FILES(branding/Makefile)
 AC_CONFIG_FILES(branding/launcher.desktop)
 AC_CONFIG_FILES(branding/mime.xml)
+AC_CONFIG_FILES(branding/appdata.xml)
 
 dnl ---------------------------------------------------------------------------
 dnl Output the generated config.status script.

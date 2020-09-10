@@ -70,12 +70,12 @@
 	gtk_widget_set_sensitive(button,gtk_tree_selection_count_selected_rows(selection) > 0);
  }
 
- void toolbar_insert(GtkButton G_GNUC_UNUSED(*button), PW3270SettingsPrivate *settings) {
+ static void toolbar_insert(GtkButton G_GNUC_UNUSED(*button), PW3270SettingsPrivate *settings) {
  	debug("%s(%p)",__FUNCTION__,settings);
  	pw3270_action_view_move_selected(settings->views[1],settings->views[0]);
  }
 
- void toolbar_remove(GtkButton G_GNUC_UNUSED(*button), PW3270SettingsPrivate *settings) {
+ static void toolbar_remove(GtkButton G_GNUC_UNUSED(*button), PW3270SettingsPrivate *settings) {
  	debug("%s(%p)",__FUNCTION__,settings);
  	pw3270_action_view_move_selected(settings->views[0],settings->views[1]);
  }
@@ -322,48 +322,3 @@
 
  }
 
- /*
-
- typedef struct _ToolbarSettingsPage {
-	Pw3270SettingsPage parent;
-	GtkWidget * views[2];
-	GtkWidget * buttons[2];
-	GtkTreeModel * models[2];
-	GtkWidget * combos[G_N_ELEMENTS(comboboxes)];
-
- } ToolbarSettingsPage;
-
- static void load(Pw3270SettingsPage *pg, GtkApplication *application) {
-
- 	size_t ix;
-	ToolbarSettingsPage * page = (ToolbarSettingsPage *) pg;
-	g_autoptr(GSettings) settings = pw3270_application_window_settings_new();
-
- 	debug("%s",__FUNCTION__);
-
-
- }
-
- static void apply(Pw3270SettingsPage *pg, GtkApplication G_GNUC_UNUSED(*application)) {
-
- }
-
-
- Pw3270SettingsPage * pw3270_toolbar_settings_new() {
-
-	size_t ix;
-
-	ToolbarSettingsPage * page = g_new0(ToolbarSettingsPage,1);
-
-	page->parent.load = load;
-	page->parent.apply = apply;
-	page->parent.label = _("Toolbar");
-	page->parent.title = _("Setup toolbar");
-
-	page->parent.widget = gtk_box_new(GTK_ORIENTATION_VERTICAL,0);
-
-
-
-	return (Pw3270SettingsPage *) page;
- }
- */

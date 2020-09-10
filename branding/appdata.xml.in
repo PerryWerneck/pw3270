@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+	<id>@PRODUCT_NAME@</id>
+	<metadata_license>LGPL-3.0</metadata_license>
+	<project_license>LGPL-3.0</project_license>
+	<name>@PRODUCT_NAME@</name>
+	<summary>IBM 3270 Terminal emulator for GTK</summary>
+	<description>
+		<p>GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
+</p>
+	</description>
+	<launchable type="desktop-id">@PRODUCT_NAME@.desktop</launchable>
+	<url type="homepage">https://github.com/PerryWerneck/pw3270</url>
+	<screenshots>
+		<screenshot type="default">
+			<image>https://raw.githubusercontent.com/PerryWerneck/pw3270/master/branding/pw3270-logo.svg</image>
+		</screenshot>
+	</screenshots>
+	<provides>
+		<id>@PRODUCT_NAME@pw32.desktop</id>
+	</provides>
+</component>

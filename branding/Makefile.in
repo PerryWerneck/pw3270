@@ -138,6 +138,12 @@ install-linux: \
 		mime.xml \
 		$(DESTDIR)$(datarootdir)/mime/packages/$(PRODUCT_NAME).xml
 
+	@$(MKDIR) $(DESTDIR)$(datarootdir)/metainfo
+
+	@$(INSTALL_DATA) \
+		appdata.xml \
+		$(DESTDIR)$(datarootdir)/metainfo/$(PRODUCT_NAME).appdata.xml
+
 install-windows: \
 	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME).png \
 	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME)-logo.png \
