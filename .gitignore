@@ -57,6 +57,7 @@ src/include/lib3270
 vgcore.*
 gschemas.compiled
 *.gschema.xml
+appdata.xml
 *.3270
 macos/**/*.app
 mime.xml

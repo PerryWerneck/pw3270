@@ -44,6 +44,7 @@ INSTALL_PROGRAM=@INSTALL_PROGRAM@
 CONVERT=@CONVERT@
 OPTIPNG=@OPTIPNG@
 DESKTOP_INSTALL=@DESKTOP_INSTALL@
+SCOUR=@SCOUR@
 
 #---[ Rules ]----------------------------------------------------------------------------
 
@@ -107,6 +108,20 @@ $(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/%.png: \
 	@$(MKDIR) `dirname $@`
 	@$(INSTALL_DATA) $< $@
 
+$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/%.svg: \
+	%.svg
+
+	@echo $@ ...
+	@$(MKDIR) `dirname $@`
+
+ifeq ($(SCOUR),no)
+	@$(INSTALL_DATA) $< $@
+else
+	@$(SCOUR) -i $< -o $@
+endif
+
+	@chmod 644 $@
+
 $(DESTDIR)$(datarootdir)/pixmaps/%.png: \
 	$(BINDIR)/%.png
 
@@ -119,6 +134,7 @@ install: \
 
 install-linux: \
 	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME).png \
+	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME).svg \
 	$(DESTDIR)$(datarootdir)/pixmaps/$(PRODUCT_NAME).png \
 	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME)-logo.png
 
@@ -138,11 +154,11 @@ install-linux: \
 		mime.xml \
 		$(DESTDIR)$(datarootdir)/mime/packages/$(PRODUCT_NAME).xml
 
-	@$(MKDIR) $(DESTDIR)$(datarootdir)/metainfo
+	@$(MKDIR) $(DESTDIR)$(datarootdir)/appdata
 
 	@$(INSTALL_DATA) \
 		appdata.xml \
-		$(DESTDIR)$(datarootdir)/metainfo/$(PRODUCT_NAME).appdata.xml
+		$(DESTDIR)$(datarootdir)/appdata/$(PRODUCT_NAME).appdata.xml
 
 install-windows: \
 	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME).png \
