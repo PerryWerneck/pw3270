@@ -63,6 +63,7 @@ X-Desktop-File-Install-Version=0.23
 	const gchar * key;
 	const gchar * label;
 	const gchar * tooltip;
+	const gchar * default_value;
 	gint width;
 //	gint n_chars;
 
@@ -71,28 +72,27 @@ X-Desktop-File-Install-Version=0.23
 	{
 		.label = N_("File name"),
 		.width = 40,
-//		.n_chars = 40
 	},
 
 	{
 		.key = "Name",
 		.label = N_("Launcher name"),
+		.default_value = G_STRINGIFY(PRODUCT_NAME),
 		.width = 20,
-//		.n_chars = 128
 	},
 
 	{
 		.key = "GenericName",
 		.label = N_("Generic name"),
+		.default_value = G_STRINGIFY(PRODUCT_NAME),
 		.width = 20,
-//		.n_chars = 128
 	},
 
 	{
 		.key = "Comment",
 		.label = N_("Comment"),
+		.default_value = N_("IBM 3270 Terminal emulator"),
 		.width = 30,
-//		.n_chars = 128
 	}
 
  };
@@ -162,6 +162,10 @@ X-Desktop-File-Install-Version=0.23
 		inputs[ix] = gtk_entry_new();
 		debug("inputs[%u]=%p",(unsigned int) ix, inputs[ix]);
 
+		if(entries[ix].default_value) {
+			gtk_entry_set_text(GTK_ENTRY(inputs[ix]),gettext(entries[ix].default_value));
+		}
+
 		gtk_entry_set_width_chars(GTK_ENTRY(inputs[ix]),entries[ix].width);
 //		gtk_entry_set_max_width_chars(GTK_ENTRY(inputs[ix]),entries[ix].n_chars);
 		gtk_widget_set_hexpand(inputs[ix],FALSE);
@@ -175,11 +179,13 @@ X-Desktop-File-Install-Version=0.23
 
 	gtk_entry_set_text(GTK_ENTRY(inputs[0]),filename);
 
+	/*
 	gtk_entry_set_placeholder_text(GTK_ENTRY(inputs[1]),G_STRINGIFY(PRODUCT_NAME));
 	gtk_entry_set_text(GTK_ENTRY(inputs[1]),G_STRINGIFY(PRODUCT_NAME));
 
 	gtk_entry_set_placeholder_text(GTK_ENTRY(inputs[2]),G_STRINGIFY(PRODUCT_NAME));
 	gtk_entry_set_text(GTK_ENTRY(inputs[2]),G_STRINGIFY(PRODUCT_NAME));
+	*/
 
 	gtk_entry_set_placeholder_text(GTK_ENTRY(inputs[3]),v3270_get_url(terminal));
 	gtk_entry_set_text(GTK_ENTRY(inputs[3]),v3270_get_url(terminal));

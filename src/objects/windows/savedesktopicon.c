@@ -37,8 +37,14 @@
   *
   */
 
+// #include <stdafx.h>
  #include <winsock2.h>
  #include <windows.h>
+ #include <winnls.h>
+ #include <shobjidl.h>
+ #include <objbase.h>
+ #include <objidl.h>
+ #include <shlguid.h>
 
  #include <v3270.h>
  #include <pw3270.h>
@@ -59,12 +65,12 @@
  } entries[] = {
 
 	{
-		.label = N_("File name"),
+		.label = N_("Launcher name"),
 		.width = 40,
 	},
 
 	{
-		.label = N_("Launcher name"),
+		.label = N_("Description"),
 		.width = 20,
 	}
 
@@ -122,9 +128,6 @@
  	gtk_grid_set_row_spacing(GTK_GRID(grid),6);
  	gtk_grid_set_column_spacing(GTK_GRID(grid),12);
 
-	// https://developer.gnome.org/hig/stable/visual-layout.html.en
-	// gtk_box_set_spacing(GTK_BOX(content_area),18);
-
 	for(ix = 0; ix < G_N_ELEMENTS(entries); ix++) {
 
 		GtkWidget * label = gtk_label_new(gettext(entries[ix].label));
@@ -135,7 +138,6 @@
 		debug("inputs[%u]=%p",(unsigned int) ix, inputs[ix]);
 
 		gtk_entry_set_width_chars(GTK_ENTRY(inputs[ix]),entries[ix].width);
-//		gtk_entry_set_max_width_chars(GTK_ENTRY(inputs[ix]),entries[ix].n_chars);
 		gtk_widget_set_hexpand(inputs[ix],FALSE);
 		gtk_widget_set_vexpand(inputs[ix],FALSE);
 
@@ -143,24 +145,105 @@
 
 	}
 
-	/*
+	{
+		gchar * filename = g_strdup_printf(
+								"%s\\" G_STRINGIFY(PRODUCT_NAME) ".lnk",
+								g_get_user_special_dir(G_USER_DIRECTORY_DESKTOP)
+							);
 
-	gtk_entry_set_text(GTK_ENTRY(inputs[0]),filename);
+		size_t ix = 0;
 
-	gtk_entry_set_placeholder_text(GTK_ENTRY(inputs[1]),G_STRINGIFY(PRODUCT_NAME));
-	gtk_entry_set_text(GTK_ENTRY(inputs[1]),G_STRINGIFY(PRODUCT_NAME));
+		while(g_file_test(filename,G_FILE_TEST_EXISTS)) {
 
-	gtk_entry_set_placeholder_text(GTK_ENTRY(inputs[2]),G_STRINGIFY(PRODUCT_NAME));
-	gtk_entry_set_text(GTK_ENTRY(inputs[2]),G_STRINGIFY(PRODUCT_NAME));
+			g_free(filename);
+			filename = g_strdup_printf(
+								"%s\\" G_STRINGIFY(PRODUCT_NAME) "%u.lnk",
+								g_get_user_special_dir(G_USER_DIRECTORY_DESKTOP),
+								(unsigned int) ++ix
+							);
 
-	gtk_entry_set_placeholder_text(GTK_ENTRY(inputs[3]),v3270_get_url(terminal));
-	gtk_entry_set_text(GTK_ENTRY(inputs[3]),v3270_get_url(terminal));
-	gtk_entry_set_input_hints(GTK_ENTRY(inputs[3]),GTK_INPUT_HINT_SPELLCHECK);
+		}
 
-	*/
+		gtk_entry_set_text(GTK_ENTRY(inputs[0]),filename);
+		g_free(filename);
+	}
 
 	gtk_widget_show_all(GTK_WIDGET(grid));
 	return dialog;
+ }
+
+ static HRESULT CreateShortCut(LPSTR pszTargetfile, LPSTR pszTargetargs, LPSTR pszLinkfile, LPSTR pszDescription, int iShowmode, LPSTR pszCurdir, LPSTR pszIconfile, int iIconindex) {
+
+	// https://www.codeproject.com/Articles/11467/How-to-create-short-cuts-link-files
+	IShellLink*   pShellLink;            // IShellLink object pointer
+	IPersistFile* pPersistFile;          // IPersistFile object pointer
+	WORD          wszLinkfile[MAX_PATH]; // pszLinkfile as Unicode string
+	int           iWideCharsWritten;     // Number of wide characters written
+
+	HRESULT hRes =
+		CoCreateInstance(
+			&CLSID_ShellLink,			// predefined CLSID of the IShellLink object
+			NULL,						// pointer to parent interface if part of aggregate
+			CLSCTX_INPROC_SERVER,		// caller and called code are in same process
+			&IID_IShellLink,			// predefined interface of the IShellLink object
+			(void **) &pShellLink);		// Returns a pointer to the IShellLink object
+
+	if(!SUCCEEDED(hRes)) {
+		return hRes;
+	}
+
+	if(pszTargetfile && strlen(pszTargetfile)) {
+		hRes = pShellLink->lpVtbl->SetPath(pShellLink,pszTargetfile);
+	} else {
+		char filename[MAX_PATH+1];
+		memset(filename,0,MAX_PATH+1);
+		GetModuleFileName(NULL,filename,MAX_PATH);
+		hRes = pShellLink->lpVtbl->SetPath(pShellLink,filename);
+	}
+
+	if(pszTargetargs) {
+		hRes = pShellLink->lpVtbl->SetArguments(pShellLink,pszTargetargs);
+	} else {
+		hRes = pShellLink->lpVtbl->SetArguments(pShellLink,"");
+	}
+
+	if(pszDescription && strlen(pszDescription) > 0) {
+		hRes = pShellLink->lpVtbl->SetDescription(pShellLink,pszDescription);
+	} else {
+		hRes = pShellLink->lpVtbl->SetDescription(pShellLink,_("IBM 3270 Terminal emulator"));
+	}
+
+	if(iShowmode > 0) {
+		hRes = pShellLink->lpVtbl->SetShowCmd(pShellLink,iShowmode);
+	}
+
+	if(pszCurdir && strlen(pszCurdir) > 0) {
+		hRes = pShellLink->lpVtbl->SetWorkingDirectory(pShellLink,pszCurdir);
+	} else {
+		g_autofree gchar * appdir = g_win32_get_package_installation_directory_of_module(NULL);
+		hRes = pShellLink->lpVtbl->SetWorkingDirectory(pShellLink,appdir);
+	}
+
+	if(pszIconfile && strlen(pszIconfile) > 0 && iIconindex >= 0) {
+		hRes = pShellLink->lpVtbl->SetIconLocation(pShellLink, pszIconfile, iIconindex);
+	}
+
+	// Use the IPersistFile object to save the shell link
+	hRes = pShellLink->lpVtbl->QueryInterface(
+				pShellLink,					// existing IShellLink object
+				&IID_IPersistFile,			// pre-defined interface of the IPersistFile object
+				(void **) &pPersistFile);	// returns a pointer to the IPersistFile object
+
+
+	if(SUCCEEDED(hRes)){
+		iWideCharsWritten = MultiByteToWideChar(CP_ACP, 0, pszLinkfile, -1, wszLinkfile, MAX_PATH);
+		hRes = pPersistFile->lpVtbl->Save(pPersistFile,wszLinkfile, TRUE);
+		pPersistFile->lpVtbl->Release(pPersistFile);
+	}
+
+	pShellLink->lpVtbl->Release(pShellLink);
+
+	return hRes;
  }
 
  void response(GtkWidget *dialog, gint response_id, GtkWidget *terminal) {
@@ -168,6 +251,20 @@
 	debug("%s(%d)",__FUNCTION__,response_id);
 
 	if(response_id == GTK_RESPONSE_APPLY) {
+
+		// Save desktop icon
+		GtkWidget ** inputs = g_object_get_data(G_OBJECT(dialog),"inputs");
+
+		HRESULT hRes = CreateShortCut(
+							NULL, // LPSTR pszTargetfile,
+							v3270_get_session_filename(terminal), // LPSTR pszTargetargs,
+							gtk_entry_get_text(GTK_ENTRY(inputs[0])), // LPSTR pszLinkfile,
+							gtk_entry_get_text(GTK_ENTRY(inputs[1])), //LPSTR pszDescription,
+							0,
+							NULL,
+							NULL,
+							0
+						);
 
 	}
 

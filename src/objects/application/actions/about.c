@@ -135,7 +135,9 @@
 
 	gtk_about_dialog_set_copyright(dialog, "Copyright © 2008 Banco do Brasil S.A." );
 
-	lib3270_autoptr(char) license = lib3270_build_data_filename(NC_("LicenseFileName","LICENSE"),NULL);
+#ifdef _WIN32
+
+	lib3270_autoptr(char) license = lib3270_build_data_filename(_("LICENSE"),NULL);
 
 	if(g_file_test(license, G_FILE_TEST_IS_REGULAR)) {
 
@@ -146,9 +148,13 @@
 			gtk_about_dialog_set_wrap_license(dialog,TRUE);
 		}
 
+	} else {
+		gtk_about_dialog_set_license_type(dialog,GTK_LICENSE_GPL_3_0);
 	}
 
+#else
 	gtk_about_dialog_set_license_type(dialog,GTK_LICENSE_GPL_3_0);
+#endif // _WIN32
 
 //	gtk_about_dialog_set_website(dialog,NC_("ProjectURL","https://portal.softwarepublico.gov.br/social/pw3270/"));
 //	gtk_about_dialog_set_website_label(dialog,NC_("ProjectURLLabel","Brazilian Public Software Portal" ));
