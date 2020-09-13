@@ -858,9 +858,7 @@ do
 
 			fi
 
-			if [ -d ~/public_html/win/${PRODUCT_NAME} ]; then
-				echo "  --clear		Replace the contents of public folders"
-			fi
+			echo "  --clear		Replace the contents of public folders"
 
 			echo ""
 			exit 0
