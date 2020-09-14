@@ -67,7 +67,7 @@ case "$host" in
 
 		CFLAGS="$CFLAGS -pthread -D_WIN32_WINNT=0x0600"
 		LDFLAGS="$LDFLAGS -pthread"
-		LIBS="$LIBS -lws2_32 -lwtsapi32 -lcomdlg32"
+		LIBS="$LIBS -lws2_32 -lwtsapi32 -lcomdlg32 -lole32 -luuid"
 
 		app_win32_revision=$(date +%-y.%-m.%-d.%-H)
 		AC_SUBST(WIN32_VERSION,$app_win32_revision)
