@@ -34,9 +34,6 @@
  #include <pw3270/settings.h>
  #include <pw3270/toolbar.h>
 
-
-//	gtk_window_set_title(GTK_WINDOW(dialog),action->label);
-
  static GtkWidget * factory(PW3270Action * action, GtkApplication *application) {
 
 	size_t ix;
@@ -48,7 +45,8 @@
 	gtk_window_set_transient_for(GTK_WINDOW(dialog),window);
 
 	GtkWidget * pages[] = {
-		pw3270_toolbar_settings_new()
+		pw3270_toolbar_settings_new(),
+		pw3270_header_settings_new()
 	};
 
 	for(ix = 0; ix < G_N_ELEMENTS(pages); ix++) {

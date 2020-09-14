@@ -53,7 +53,6 @@
  	size_t ix;
 
  	GtkWidget * dialog = v3270_settings_dialog_new();
-
 	gtk_window_set_title(GTK_WINDOW(dialog), action->label);
 
 	// Add settings pages.

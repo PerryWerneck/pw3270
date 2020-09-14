@@ -219,12 +219,7 @@ void switch_page(GtkNotebook *notebook, PW3270Settings *page, guint G_GNUC_UNUSE
 			gtk_header_bar_set_subtitle(GTK_HEADER_BAR(header_bar),page->title);
 		}
 
-	} else if(page->title) {
-
-		gtk_window_set_title(GTK_WINDOW(dialog),page->title);
-
 	}
-
 
 }
 

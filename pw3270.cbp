@@ -166,6 +166,9 @@
 		<Unit filename="src/objects/window/actions/setcolors.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/objects/window/header-settings.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/objects/window/header.c">
 			<Option compilerVar="CC" />
 		</Unit>

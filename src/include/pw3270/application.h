@@ -88,6 +88,10 @@
 	void pw3270_application_print_copy_activated(GAction *action, GVariant *parameter, GtkWidget *terminal);
 	void pw3270_application_save_copy_activated(GAction *action, GVariant *parameter, GtkWidget *terminal);
 
+	// Settings
+	GtkWidget * pw3270_header_settings_new();
+
+
 	G_END_DECLS
 
 
