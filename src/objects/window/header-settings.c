@@ -93,6 +93,8 @@
 	// Create dialog grid
 	GtkGrid * grid = GTK_GRID(gtk_grid_new());
 	gtk_grid_set_row_homogeneous(grid,FALSE);
+	gtk_grid_set_row_spacing(GTK_GRID(grid),12);
+ 	gtk_grid_set_column_spacing(GTK_GRID(grid),6);
 
 	gtk_grid_attach(
 		GTK_GRID(settings),
@@ -223,12 +225,39 @@
 
  void load(GtkWidget *widget, PW3270SettingsPrivate *page) {
 
+	size_t view, action;
+	g_autoptr(GSettings) settings = pw3270_application_window_settings_new();
+
  	// Populate views
 	Pw3270ActionList * action_list = pw3270_action_list_new(GTK_APPLICATION(g_application_get_default()));
 
+    g_autofree gchar * action_names = g_settings_get_string(settings,"header-action-names");
+    gchar **views = g_strsplit(action_names,":",-1);
+
+    for(view = 0; view < 2; view++) {
+
+		if(!views[view])
+			break;
+
+		gchar ** actions = g_strsplit(views[view],",",-1);
+
+		for(action = 0; actions[action];action++) {
+			action_list = pw3270_action_list_move_action(action_list,actions[action],page->views[view]);
+		}
+
+		g_strfreev(actions);
+    }
+
+   	g_strfreev(views);
+
+	pw3270_action_view_set_actions(page->views[2], action_list);
+
+
+	/*
   	pw3270_action_view_set_actions(page->views[0], action_list);
  	pw3270_action_view_set_actions(page->views[1], action_list);
  	pw3270_action_view_set_actions(page->views[2], action_list);
+ 	*/
 
 	pw3270_action_list_free(action_list);
 
