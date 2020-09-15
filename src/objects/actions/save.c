@@ -34,6 +34,7 @@
 
  #include "private.h"
  #include <v3270.h>
+ #include <v3270/keyfile.h>
  #include <pw3270.h>
  #include <pw3270/application.h>
 
@@ -70,9 +71,10 @@
 	gtk_file_chooser_set_pw3270_filters(GTK_FILE_CHOOSER(dialog));
 
 	if(terminal) {
-		const gchar * current_file = v3270_get_session_filename(terminal);
-		if(current_file && g_file_test(current_file,G_FILE_TEST_IS_REGULAR) && !g_str_has_prefix(current_file,g_get_user_config_dir()))
+		const gchar * current_file = v3270_key_file_get_file_name(terminal);
+		if(current_file && g_file_test(current_file,G_FILE_TEST_IS_REGULAR) && !g_str_has_prefix(current_file,g_get_user_config_dir())) {
 			gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog),current_file);
+		}
 	}
 
 	g_signal_connect(dialog,"response",G_CALLBACK(response),terminal);
@@ -90,7 +92,31 @@
 	gtk_widget_destroy(dialog);
 
 	if(response_id == GTK_RESPONSE_OK) {
-		v3270_set_session_filename(terminal, filename);
+		GError * error = NULL;
+		v3270_key_file_open(terminal,filename,&error);
+
+		if(error) {
+
+			GtkWidget * dialog = gtk_message_dialog_new_with_markup(
+											GTK_WINDOW(gtk_widget_get_toplevel(terminal)),
+											GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
+											GTK_MESSAGE_ERROR,
+											GTK_BUTTONS_CANCEL,
+											_("Can't open \"%s\""),filename
+										);
+
+			gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),"%s",error->message);
+
+			gtk_window_set_title(GTK_WINDOW(dialog),_("Can't load session file"));
+
+			gtk_widget_show_all(dialog);
+
+			g_signal_connect(dialog,"close",G_CALLBACK(gtk_widget_destroy),NULL);
+			g_signal_connect(dialog,"response",G_CALLBACK(gtk_widget_destroy),NULL);
+
+			g_error_free(error);
+		}
+
 	}
 
  }

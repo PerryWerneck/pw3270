@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-28 16:00-0300\n"
-"PO-Revision-Date: 2020-08-28 16:02-0300\n"
+"POT-Creation-Date: 2020-09-15 14:25-0300\n"
+"PO-Revision-Date: 2020-09-15 14:26-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
 "Language: pt_BR\n"
@@ -20,7 +20,7 @@ msgstr ""
 "11) ? 2 : 3;\n"
 "X-Generator: Gtranslator 2.91.7\n"
 
-#: src/objects/application/application.c:208
+#: src/objects/application/application.c:206
 #, c-format
 msgid "\"%s\" is not a valid user interface name"
 msgstr "\"%s\" não é um nome válido para interface de usuário"
@@ -46,7 +46,7 @@ msgstr "Linux 64 bits"
 msgid "64 bits Windows"
 msgstr "Windows 64 bits"
 
-#: src/objects/application/actions/about.c:182 ui/application.xml:39
+#: src/objects/application/actions/about.c:188 ui/application.xml:39
 #: ui/application.xml:537
 msgid "About PW3270"
 msgstr "Sobre o PW3270"
@@ -55,7 +55,7 @@ msgstr "Sobre o PW3270"
 msgid "Action Name"
 msgstr "Nome da ação"
 
-#: src/objects/window/window.c:163 src/objects/toolbar/toolbar.c:135
+#: src/objects/window/window.c:164 src/objects/toolbar/toolbar.c:135
 msgid "Action Names"
 msgstr "Nome das ações"
 
@@ -83,7 +83,7 @@ msgstr "Aplicação"
 msgid "Application preferences"
 msgstr "Preferências da aplicação"
 
-#: src/objects/window/page.c:263
+#: src/objects/window/page.c:264
 msgid "Apply"
 msgstr "Aplicar"
 
@@ -111,17 +111,22 @@ msgstr "Cursor piscante"
 msgid "Bold"
 msgstr "Negrito"
 
-#: src/objects/window/terminal.c:197
+#: src/objects/actions/save.c:110 src/objects/window/terminal.c:171
+msgid "Can't load session file"
+msgstr "Não foi possível carregar arquivo de sessão"
+
+#: src/objects/actions/save.c:105
 #, c-format
-msgid "Can't save file \"%s\""
-msgstr "Não foi possível salvar arquivo \"%s\""
+msgid "Can't open \"%s\""
+msgstr "Não foi possível abrir %s"
 
-#: src/objects/window/terminal.c:202
-msgid "Can't save session file"
-msgstr "Não foi possível salvar arquivo de sessão"
+#: src/objects/window/terminal.c:166
+#, c-format
+msgid "Can't use \"%s\""
+msgstr "Não posso usar %s"
 
-#: src/objects/actions/save.c:65 src/objects/application/actions/open.c:49
-#: src/objects/window/page.c:264
+#: src/objects/actions/save.c:66 src/objects/application/actions/open.c:49
+#: src/objects/window/page.c:265
 msgid "Cancel"
 msgstr "_Cancelar"
 
@@ -155,10 +160,6 @@ msgstr "Fechar janela"
 msgid "Colors"
 msgstr "Cores"
 
-#: src/objects/linux/savedesktopicon.c:93
-msgid "Comment"
-msgstr "Comentário"
-
 #: src/objects/window/actions/connect.c:59
 msgid "Connect"
 msgstr "Conectar"
@@ -171,7 +172,7 @@ msgstr "Conectar ao iniciar"
 msgid "Connect to host"
 msgstr "Conectar ao servidor"
 
-#: src/objects/window/window.c:702 src/objects/window/page.c:217
+#: src/objects/window/window.c:703 src/objects/window/page.c:218
 msgid "Connected to host"
 msgstr "Conectado no servidor"
 
@@ -191,7 +192,7 @@ msgstr "Copiar como tabela"
 msgid "Copy as text"
 msgstr "Copiar como texto"
 
-#: src/objects/linux/savedesktopicon.c:106
+#: src/objects/windows/savedesktopicon.c:85
 msgid "Create a desktop icon for the current session"
 msgstr "Criar ícone da área de trabalho para a sessão atual."
 
@@ -219,6 +220,10 @@ msgstr "Recortar"
 msgid "Delete Field"
 msgstr "Apagar campo"
 
+#: src/objects/windows/savedesktopicon.c:73
+msgid "Description"
+msgstr "Descrição"
+
 #: ui/window.xml:93 ui/application.xml:158
 msgid "Desktop icon"
 msgstr "Ícone da área de trabalho"
@@ -227,8 +232,8 @@ msgstr "Ícone da área de trabalho"
 msgid "Disconnect"
 msgstr "Desconectar"
 
-#: src/objects/window/window.c:702 src/objects/window/window.c:729
-#: src/objects/window/page.c:206
+#: src/objects/window/window.c:703 src/objects/window/window.c:730
+#: src/objects/window/page.c:207
 msgid "Disconnected from host"
 msgstr "Desconectado do servidor"
 
@@ -272,10 +277,6 @@ msgstr "Apagar até o final da linha"
 msgid "Field attributes"
 msgstr "Mostra atributos de campo"
 
-#: src/objects/linux/savedesktopicon.c:72
-msgid "File name"
-msgstr "Nome do arquivo"
-
 #: ui/application.xml:454
 msgid "Full Screen"
 msgstr "Tela cheia"
@@ -288,10 +289,6 @@ msgstr "Tela cheia"
 msgid "Function bar"
 msgstr "Barra de funções"
 
-#: src/objects/linux/savedesktopicon.c:86
-msgid "Generic name"
-msgstr "Nome genérico"
-
 #: ui/application.xml:36 ui/application.xml:534
 msgid "Help"
 msgstr "Ajuda"
@@ -300,7 +297,7 @@ msgstr "Ajuda"
 msgid "Host properties"
 msgstr "Propriedades do Servidor"
 
-#: src/objects/window/window.c:469
+#: src/objects/window/window.c:470 src/objects/windows/savedesktopicon.c:213
 msgid "IBM 3270 Terminal emulator"
 msgstr "Emulador 3270"
 
@@ -368,8 +365,7 @@ msgstr "Largura do painel em colunas"
 msgid "Keypads"
 msgstr "Painéis"
 
-#: src/objects/application/actions/about.c:138
-msgctxt "LicenseFileName"
+#: src/objects/application/actions/about.c:140
 msgid "LICENSE"
 msgstr "LICENCA"
 
@@ -381,7 +377,7 @@ msgstr "Etiqueta"
 msgid "Large"
 msgstr "Grande"
 
-#: src/objects/linux/savedesktopicon.c:79
+#: src/objects/windows/savedesktopicon.c:68
 msgid "Launcher name"
 msgstr "Nome do lançador"
 
@@ -433,7 +429,7 @@ msgstr "Só Maiúsculas"
 msgid "Network keep alive"
 msgstr "Network keep alive"
 
-#: src/objects/window/page.c:274
+#: src/objects/window/page.c:275
 msgid "New session name"
 msgstr "Novo nome de sessão"
 
@@ -530,7 +526,7 @@ msgstr "Propriedade \"%s\" é inválida para este objeto"
 msgid "Quit"
 msgstr "Sair"
 
-#: src/objects/window/page.c:261
+#: src/objects/window/page.c:262
 msgid "Rename Session"
 msgstr "Renomear sessão"
 
@@ -550,15 +546,15 @@ msgstr "Painel direito"
 msgid "S_tyle"
 msgstr "E_stilo"
 
-#: src/objects/actions/save.c:64 ui/window.xml:69 ui/application.xml:134
+#: src/objects/actions/save.c:65 ui/window.xml:69 ui/application.xml:134
 msgid "Save"
 msgstr "Salvar"
 
-#: src/objects/actions/save.c:49
+#: src/objects/actions/save.c:50
 msgid "Save As"
 msgstr "Salvar Como"
 
-#: src/objects/linux/savedesktopicon.c:105
+#: src/objects/windows/savedesktopicon.c:84
 msgid "Save desktop icon"
 msgstr "Salvar ícone da área de trabalho"
 
@@ -570,7 +566,7 @@ msgstr "Salvar tela"
 msgid "Save selected"
 msgstr "Salvar seleção"
 
-#: src/objects/actions/save.c:51
+#: src/objects/actions/save.c:52
 msgid "Save session properties"
 msgstr "Salvar propriedades da sessão"
 
@@ -637,7 +633,7 @@ msgstr "Sessão em nova janela"
 msgid "Session properties"
 msgstr "Propriedades da sessão"
 
-#: src/objects/application/application.c:221
+#: src/objects/application/application.c:219
 msgid "Set the user-interface type"
 msgstr "Define o tipo de interface do usuário"
 
@@ -729,7 +725,7 @@ msgstr "A etiqueta da ação"
 msgid "The name of associated action"
 msgstr "Nome da ação associada"
 
-#: src/objects/window/window.c:164
+#: src/objects/window/window.c:165
 msgid "The name of the actions in the header bar"
 msgstr "O nome das ações na barra de título"
 
@@ -820,7 +816,7 @@ msgstr "Versão %s-%s"
 msgid "View"
 msgstr "Exibir"
 
-#: src/objects/application/actions/about.c:157
+#: src/objects/application/actions/about.c:163
 msgid "View this project on github"
 msgstr "Portal do Software Público Brasileiro"
 
@@ -832,11 +828,11 @@ msgstr "Janela com sessão padrão"
 msgid "_Apply"
 msgstr "_Aplicar"
 
-#: src/objects/settings/dialog.c:78 src/objects/linux/savedesktopicon.c:132
+#: src/objects/settings/dialog.c:78 src/objects/windows/savedesktopicon.c:110
 msgid "_Cancel"
 msgstr "_Cancelar"
 
-#: src/objects/window/page.c:394
+#: src/objects/window/page.c:395
 msgid "_Close session"
 msgstr "_Fechar sessão"
 
@@ -872,11 +868,11 @@ msgstr "_Abrir"
 msgid "_Properties"
 msgstr "_Propriedades"
 
-#: src/objects/window/page.c:388
+#: src/objects/window/page.c:389
 msgid "_Rename session"
 msgstr "Renomear sessão"
 
-#: src/objects/linux/savedesktopicon.c:133
+#: src/objects/windows/savedesktopicon.c:111
 msgid "_Save"
 msgstr "_Salvar"
 
@@ -884,11 +880,11 @@ msgstr "_Salvar"
 msgid "_View"
 msgstr "_Exibir"
 
-#: src/objects/application/actions/about.c:156
+#: src/objects/application/actions/about.c:162
 msgid "https://github.com/PerryWerneck/pw3270"
 msgstr "https://portal.softwarepublico.gov.br/social/pw3270/"
 
-#: src/objects/application/actions/about.c:159
+#: src/objects/application/actions/about.c:165
 msgid "translator-credits"
 msgstr "translator-credits"
 
@@ -1323,9 +1319,6 @@ msgstr "translator-credits"
 #~ msgid "Can't load plugin %s"
 #~ msgstr "Não foi possível carregar plugin %s"
 
-#~ msgid "Can't open %s"
-#~ msgstr "Não foi possível abrir %s"
-
 #~ msgid "Can't open CRL File"
 #~ msgstr "Não foi possível abrir arquivo CRL"
 
@@ -1371,15 +1364,15 @@ msgstr "translator-credits"
 #~ msgid "Can't save \"%s\": %s"
 #~ msgstr "Não foi possível salvar %s: %s"
 
-#~ msgid "Can't save %s"
-#~ msgstr "Não foi possível salvar arquivo %s"
-
 #~ msgid ""
 #~ "Can't save copy to file\n"
 #~ "%s"
 #~ msgstr ""
 #~ "Não foi possível salvar cópia para o arquivo\n"
 #~ "%s"
+
+#~ msgid "Can't save file \"%s\""
+#~ msgstr "Não foi possível salvar arquivo \"%s\""
 
 #~ msgid ""
 #~ "Can't save screen to file\n"
@@ -1543,6 +1536,9 @@ msgstr "translator-credits"
 
 #~ msgid "Command to execute"
 #~ msgstr "Comando a executar"
+
+#~ msgid "Comment"
+#~ msgstr "Comentário"
 
 #~ msgid "Complete"
 #~ msgstr "Completo"
@@ -1799,6 +1795,9 @@ msgstr "translator-credits"
 #~ msgid "File _Format"
 #~ msgstr "_Formato do arquivo"
 
+#~ msgid "File name"
+#~ msgstr "Nome do arquivo"
+
 #~ msgid "File transfer complete"
 #~ msgstr "Transferência completa"
 
@@ -1868,6 +1867,9 @@ msgstr "translator-credits"
 
 #~ msgid "GTK Version mismatch"
 #~ msgstr "Divergência de versão GTK"
+
+#~ msgid "Generic name"
+#~ msgstr "Nome genérico"
 
 #~ msgid "Get transfer queue from an external XML file"
 #~ msgstr "Obtém a fila de transferência de um arquivo XML externo"

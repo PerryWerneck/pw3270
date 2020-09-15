@@ -36,6 +36,7 @@
  #include <pw3270.h>
  #include <pw3270/application.h>
  #include <v3270/actions.h>
+ #include <v3270/keyfile.h>
  #include <lib3270.h>
  #include <lib3270/log.h>
 
@@ -278,7 +279,7 @@ X-Desktop-File-Install-Version=0.23
 			if(bytes >= 0)
 				buffer[bytes] = '\0';
 
-			g_autofree gchar * exec_line = g_strdup_printf("%s \"%s\"",buffer,v3270_get_session_filename(terminal));
+			g_autofree gchar * exec_line = g_strdup_printf("%s \"%s\"",buffer,v3270_key_file_get_file_name(terminal));
 			g_key_file_set_string(keyfile,"Desktop Entry","Exec",exec_line);
 
 		}

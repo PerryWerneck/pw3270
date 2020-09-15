@@ -256,10 +256,10 @@
 		GtkWidget ** inputs = g_object_get_data(G_OBJECT(dialog),"inputs");
 
 		HRESULT hRes = CreateShortCut(
-							NULL, // LPSTR pszTargetfile,
-							v3270_get_session_filename(terminal), // LPSTR pszTargetargs,
-							gtk_entry_get_text(GTK_ENTRY(inputs[0])), // LPSTR pszLinkfile,
-							gtk_entry_get_text(GTK_ENTRY(inputs[1])), //LPSTR pszDescription,
+							NULL,										// LPSTR pszTargetfile,
+							v3270_key_file_get_file_name(terminal),		// LPSTR pszTargetargs,
+							gtk_entry_get_text(GTK_ENTRY(inputs[0])),	// LPSTR pszLinkfile,
+							gtk_entry_get_text(GTK_ENTRY(inputs[1])),	//LPSTR pszDescription,
 							0,
 							NULL,
 							NULL,

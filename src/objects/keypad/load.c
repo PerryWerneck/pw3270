@@ -82,7 +82,7 @@
 
  }
 
- static void element_end(GMarkupParseContext *context, const gchar *element_name, GList **keypads, GError **error) {
+ static void element_end(GMarkupParseContext *context, const gchar *element_name, GList G_GNUC_UNUSED(**keypads), GError G_GNUC_UNUSED(**error)) {
 
 	debug("%s(%s)",__FUNCTION__,element_name);
 
