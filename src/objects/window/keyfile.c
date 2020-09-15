@@ -28,6 +28,11 @@
  */
 
  #include <config.h>
+ #include <glib.h>
+ #include <glib/gstdio.h>
+ #include <fcntl.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
  #include <lib3270.h>
  #include <lib3270/log.h>
  #include <v3270.h>
@@ -225,7 +230,7 @@ void v3270_key_file_close(GtkWidget *terminal) {
 
 #else
 
-	const struct SessionDescriptor * descriptor = v3270_get_session_descriptor(widget);
+	const V3270KeyFile * descriptor = v3270_get_session_descriptor(widget);
 
 	if(!(descriptor && *descriptor->filename))
 		return FALSE;
