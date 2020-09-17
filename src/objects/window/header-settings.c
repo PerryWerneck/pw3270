@@ -307,6 +307,16 @@
 
  }
 
- void apply(GtkWidget *widget, PW3270SettingsPrivate *settings) {
+ void apply(GtkWidget *widget, PW3270SettingsPrivate *page) {
+
+  	g_autofree gchar * left_names = pw3270_action_view_get_action_names(page->views[0]);
+ 	g_autofree gchar * right_names = pw3270_action_view_get_action_names(page->views[1]);
+ 	g_autofree gchar * action_names = g_strconcat(left_names,":",right_names,NULL);
+
+ 	debug("Header actions: [%s]",action_names);
+
+	g_autoptr(GSettings) settings = pw3270_application_window_settings_new();
+	g_settings_set_string(settings,"header-action-names",action_names);
+
  }
 
