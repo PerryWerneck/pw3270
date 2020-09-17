@@ -45,9 +45,10 @@
  };
 
  struct ListElement {
- 	GAction		* action;
+// 	GAction		* action;
  	GdkPixbuf	* pixbuf;
- 	gchar		  name[1];
+ 	gchar		* action_name;
+ 	gchar		* action_label;
  };
 
  static void list_element_free(struct ListElement *element);
@@ -138,58 +139,17 @@
 
  static void pw3270_action_view_append_element(GtkListStore * store, struct ListElement * element) {
 
-	size_t ix;
-
-	struct Properties {
-		const gchar * name;
-		GType g_type;
-		GValue value;
-	} properties[] = {
-		{
-			.name = "label",
-			.g_type = G_TYPE_STRING,
-			.value = G_VALUE_INIT
-		}
-	};
-
-	for(ix = 0; ix < G_N_ELEMENTS(properties); ix++) {
-
-		g_value_init(&properties[ix].value, properties[ix].g_type);
-		g_object_get_property(G_OBJECT(element->action), properties[ix].name, &properties[ix].value);
-
-	}
-
-	// Remove "_"
-	g_autofree gchar * label = g_strdup(g_value_get_string(&properties[0].value));
-
-	if(label) {
-
-		gchar *from, *to;
-
-		for(from=to=label;*from;from++) {
-			if(*from != '_') {
-				*(to++) = *from;
-			}
-		}
-		*to = 0;
-
-	}
-
 	GtkTreeIter iter;
 	gtk_list_store_append(store, &iter);
 	gtk_list_store_set(
 		store,
 		&iter,
 		COLUMN_PIXBUF,		element->pixbuf,
-		COLUMN_LABEL, 		(label ? label : g_action_get_name(element->action)),
-		COLUMN_ACTION_NAME,	element->name,
+		COLUMN_LABEL, 		element->action_label,
+		COLUMN_ACTION_NAME,	element->action_name,
 		COLUMN_FLAGS,		(gint) PW3270_ACTION_VIEW_ALLOW_MOVE,
 		-1
 	);
-
-	for(ix = 0; ix < G_N_ELEMENTS(properties); ix++) {
-		g_value_unset(&properties[ix].value);
-	}
 
  }
 
@@ -201,8 +161,7 @@
 	while(item) {
 
 		struct ListElement * element = (struct ListElement *) item->data;
-
-		if(!g_ascii_strcasecmp(action_name,element->name)) {
+		if(!g_ascii_strcasecmp(action_name,element->action_name)) {
 
 			pw3270_action_view_append_element(store, element);
 			list_element_free(element);
@@ -230,15 +189,10 @@
 
  }
 
- static GSList * append_action(GSList * list, const gchar *type, GAction *action) {
+ static GSList * append_action(GSList * list, const gchar *prefix, GAction *action) {
 
 	if(!action)
 		return list;
-
-	if(!g_object_class_find_property(G_OBJECT_GET_CLASS(action),"label")) {
-		debug("Action \"%s\": Doesn't have a label",g_action_get_name(action));
-		return list;
-	}
 
 	GdkPixbuf * pixbuf = g_action_get_pixbuf(action, GTK_ICON_SIZE_MENU, GTK_ICON_LOOKUP_GENERIC_FALLBACK);
 	if(!pixbuf) {
@@ -246,20 +200,27 @@
 		return list;
 	}
 
-	const gchar *name = g_action_get_name(action);
+	g_autofree gchar *action_name = g_strconcat(prefix,".",g_action_get_name(action),NULL);
 
-	struct ListElement * element = (struct ListElement *) g_malloc0(sizeof(struct ListElement) + strlen(type) + strlen(name));
+	GValue value = G_VALUE_INIT;
+	g_value_init(&value, G_TYPE_STRING);
+	g_object_get_property(G_OBJECT(action),"label",&value);
 
-	strcpy(element->name,type);
-	strcat(element->name,name);
+	const gchar * label = g_value_get_string(&value);
+	if(!(label && *label))
+		label = g_action_get_name(action);
 
-	element->action = action;
+	list = pw3270_action_list_append(
+				list,
+				label,
+				pixbuf,
+				action_name,
+				PW3270_ACTION_VIEW_ALLOW_MOVE
+			);
 
-	element->pixbuf = pixbuf;
-	g_object_ref_sink(G_OBJECT(element->pixbuf));
+	g_value_unset(&value);
 
-	return g_slist_prepend(list,element);
-
+	return list;
  }
 
  Pw3270ActionList * pw3270_action_list_new(GtkApplication *application) {
@@ -273,7 +234,7 @@
 
 	action_names = g_action_group_list_actions(G_ACTION_GROUP(application));
 	for(ix = 0; action_names[ix];ix++) {
-		list = append_action(list,"app.",g_action_map_lookup_action(G_ACTION_MAP(application),action_names[ix]));
+		list = append_action(list,"app",g_action_map_lookup_action(G_ACTION_MAP(application),action_names[ix]));
 	}
 	g_strfreev(action_names);
 
@@ -285,7 +246,7 @@
 		// Get window actions.
 		action_names = g_action_group_list_actions(G_ACTION_GROUP(window));
 		for(ix = 0; action_names[ix];ix++) {
-			list = append_action(list,"win.",g_action_map_lookup_action(G_ACTION_MAP(window),action_names[ix]));
+			list = append_action(list,"win",g_action_map_lookup_action(G_ACTION_MAP(window),action_names[ix]));
 		}
 		g_strfreev(action_names);
 
@@ -293,6 +254,32 @@
 
  	return (Pw3270ActionList *) list;
  }
+
+ Pw3270ActionList * pw3270_action_list_append(Pw3270ActionList *action_list, const gchar *label, GdkPixbuf *pixbuf, const gchar *action_name, const PW3270ActionViewFlag flags) {
+
+	struct ListElement * element = (struct ListElement *)
+										g_malloc0(
+											sizeof(struct ListElement)
+											+ strlen(action_name)
+											+ strlen(label)
+											+ 3
+										);
+
+	if(pixbuf) {
+		element->pixbuf = pixbuf;
+		g_object_ref_sink(G_OBJECT(element->pixbuf));
+	}
+
+	element->action_name = (char *) (element+1);
+	strcpy(element->action_name,action_name);
+
+	element->action_label = element->action_name + strlen(element->action_name) + 1;
+	strcpy(element->action_label,label);
+
+	return (Pw3270ActionList *) g_slist_prepend((GSList *) action_list, element);
+
+
+ };
 
  void list_element_free(struct ListElement *element) {
 

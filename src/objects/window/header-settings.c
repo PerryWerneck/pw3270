@@ -236,6 +236,52 @@
  	// Populate views
 	Pw3270ActionList * action_list = pw3270_action_list_new(GTK_APPLICATION(g_application_get_default()));
 
+	// Add standard menus
+	{
+		static const struct menu {
+			const gchar * action_name;
+			const gchar * label;
+			const gchar * icon_name;
+		} menus[] = {
+			{
+				.action_name = "menu.open-menu",
+				.label = N_("Application menu"),
+				.icon_name = "open-menu-symbolic"
+			}
+		};
+
+		size_t ix;
+
+		for(ix = 0; ix < G_N_ELEMENTS(menus); ix++) {
+
+			GError *error = NULL;
+
+			GdkPixbuf * pixbuf = gtk_icon_theme_load_icon(
+										gtk_icon_theme_get_default(),
+										menus[ix].icon_name,
+										GTK_ICON_SIZE_MENU,
+										GTK_ICON_LOOKUP_GENERIC_FALLBACK,
+										&error
+									);
+
+			if(error) {
+				g_warning(error->message);
+				g_error_free(error);
+				error = NULL;
+			}
+
+			action_list = pw3270_action_list_append(
+								action_list,
+								gettext(menus[ix].label),
+								pixbuf,
+								menus[ix].action_name,
+								PW3270_ACTION_VIEW_ALLOW_MOVE
+							);
+		}
+
+	}
+
+	// Load settings
     g_autofree gchar * action_names = g_settings_get_string(settings,"header-action-names");
     gchar **views = g_strsplit(action_names,":",-1);
 
@@ -247,37 +293,7 @@
 		gchar ** actions = g_strsplit(views[view],",",-1);
 
 		for(action = 0; actions[action];action++) {
-
-			if(g_str_has_prefix(actions[action],"menu.")) {
-
-				GError *error = NULL;
-				g_autofree gchar * icon_name = g_strconcat(actions[action]+5,"-symbolic",NULL);
-
-				GdkPixbuf * pixbuf = gtk_icon_theme_load_icon(
-											gtk_icon_theme_get_default(),
-											icon_name,
-											GTK_ICON_SIZE_MENU,
-											GTK_ICON_LOOKUP_GENERIC_FALLBACK,
-											&error
-										);
-
-				if(error) {
-					g_warning(error->message);
-					g_error_free(error);
-					error = NULL;
-				}
-
-				pw3270_action_view_append(
-					page->views[view],				// Widget
-					_( "System Menu" ), 			// label
-					pixbuf,							// Icon
-					actions[action], 				// Action name
-					PW3270_ACTION_VIEW_FLAG_FIXED	// Fixed item
-				);
-
-			} else {
-				action_list = pw3270_action_list_move_action(action_list,actions[action],page->views[view]);
-			}
+			action_list = pw3270_action_list_move_action(action_list,actions[action],page->views[view]);
 		}
 
 		g_strfreev(actions);
