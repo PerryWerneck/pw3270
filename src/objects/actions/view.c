@@ -125,6 +125,17 @@
 
  }
 
+ void pw3270_action_view_order_by_label(GtkWidget *view) {
+
+	gtk_tree_view_set_reorderable(GTK_TREE_VIEW(view),FALSE);
+
+	gtk_tree_sortable_set_sort_column_id(
+		GTK_TREE_SORTABLE(gtk_tree_view_get_model(GTK_TREE_VIEW(view))),
+		COLUMN_LABEL,
+		GTK_SORT_ASCENDING
+	);
+ }
+
  static void pw3270_action_view_append_element(GtkListStore * store, struct ListElement * element) {
 
 	size_t ix;

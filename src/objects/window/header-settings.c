@@ -159,7 +159,7 @@
 
 		gtk_tree_view_set_reorderable(GTK_TREE_VIEW(page->views[0]),TRUE);
 		gtk_tree_view_set_reorderable(GTK_TREE_VIEW(page->views[1]),TRUE);
-		gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(gtk_tree_view_get_model(GTK_TREE_VIEW(page->views[1]))), GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID, GTK_SORT_ASCENDING);
+		pw3270_action_view_order_by_label(page->views[2]);
 
 	}
 
@@ -286,13 +286,6 @@
    	g_strfreev(views);
 
 	pw3270_action_view_set_actions(page->views[2], action_list);
-
-
-	/*
-  	pw3270_action_view_set_actions(page->views[0], action_list);
- 	pw3270_action_view_set_actions(page->views[1], action_list);
- 	pw3270_action_view_set_actions(page->views[2], action_list);
- 	*/
 
 	pw3270_action_list_free(action_list);
 

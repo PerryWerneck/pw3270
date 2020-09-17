@@ -143,7 +143,7 @@
 		}
 
 		gtk_tree_view_set_reorderable(GTK_TREE_VIEW(page->views[0]),TRUE);
-		gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(gtk_tree_view_get_model(GTK_TREE_VIEW(page->views[1]))), GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID, GTK_SORT_ASCENDING);
+		pw3270_action_view_order_by_label(page->views[1]);
 
 		// Create buttons
 		GtkWidget * box = gtk_button_box_new(GTK_ORIENTATION_VERTICAL);
@@ -255,7 +255,7 @@
 
 	// Load available actions.
 	pw3270_action_view_set_actions(page->views[1], action_list);
-	pw3270_action_view_append(page->views[1], _( "Separator"), NULL, "separator", 1);
+	pw3270_action_view_append(page->views[1], _( "Separator"), NULL, "separator", PW3270_ACTION_VIEW_FLAG_ALLOW_ADD);
 
 	pw3270_action_list_free(action_list);
 

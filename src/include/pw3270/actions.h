@@ -102,6 +102,7 @@
 	Pw3270ActionList	* pw3270_action_list_new(GtkApplication *application);
 	void				  pw3270_action_list_free(Pw3270ActionList *action_list);
 	void				  pw3270_action_view_set_actions(GtkWidget *view, Pw3270ActionList *list);
+	void				  pw3270_action_view_order_by_label(GtkWidget *view);
 	void				  pw3270_action_view_move_selected(GtkWidget *from, GtkWidget *to);
 	void				  pw3270_action_view_append(GtkWidget *widget, const gchar *label, GdkPixbuf *pixbuf, const gchar *action_name, const PW3270ActionViewFlag flags);
 	gchar				* pw3270_action_view_get_action_names(GtkWidget *widget);
