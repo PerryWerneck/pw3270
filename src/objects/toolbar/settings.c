@@ -146,30 +146,12 @@
 		gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(gtk_tree_view_get_model(GTK_TREE_VIEW(page->views[1]))), GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID, GTK_SORT_ASCENDING);
 
 		// Create buttons
-		static const gchar * icon_names[G_N_ELEMENTS(page->buttons)] = {
-			"go-next",
-			"go-previous"
-		};
-
 		GtkWidget * box = gtk_button_box_new(GTK_ORIENTATION_VERTICAL);
 		gtk_widget_set_hexpand(box,FALSE);
 		gtk_widget_set_vexpand(box,FALSE);
 
-		for(ix = 0; ix < G_N_ELEMENTS(icon_names); ix++) {
-			page->buttons[ix] = gtk_button_new_from_icon_name(icon_names[ix],GTK_ICON_SIZE_DND);
-
-			gtk_widget_set_focus_on_click(page->buttons[ix],FALSE);
-			gtk_button_set_relief(GTK_BUTTON(page->buttons[ix]),GTK_RELIEF_NONE);
-			gtk_widget_set_sensitive(page->buttons[ix],FALSE);
-
-			g_signal_connect(
-				gtk_tree_view_get_selection(GTK_TREE_VIEW(page->views[ix])),
-				"changed",
-				G_CALLBACK(selection_changed),
-				page->buttons[ix]
-			);
-
-		}
+		page->buttons[0] = pw3270_action_view_extract_button_new(page->views[0],"go-next"),
+		page->buttons[1] = pw3270_action_view_extract_button_new(page->views[1],"go-previous"),
 
 		gtk_box_pack_start(GTK_BOX(box),page->buttons[0],FALSE,FALSE,0);
 		gtk_box_pack_end(GTK_BOX(box),page->buttons[1],FALSE,FALSE,0);

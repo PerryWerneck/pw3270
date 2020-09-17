@@ -72,6 +72,26 @@
 
  /*--[ Implement ]------------------------------------------------------------------------------------*/
 
+ static void remove_from_left(GtkButton G_GNUC_UNUSED(*button), PW3270SettingsPrivate *settings) {
+ 	debug("%s(%p)",__FUNCTION__,settings);
+ 	pw3270_action_view_move_selected(settings->views[0],settings->views[2]);
+ }
+
+ static void add_to_left(GtkButton G_GNUC_UNUSED(*button), PW3270SettingsPrivate *settings) {
+ 	debug("%s(%p)",__FUNCTION__,settings);
+ 	pw3270_action_view_move_selected(settings->views[2],settings->views[0]);
+ }
+
+ static void remove_from_right(GtkButton G_GNUC_UNUSED(*button), PW3270SettingsPrivate *settings) {
+ 	debug("%s(%p)",__FUNCTION__,settings);
+ 	pw3270_action_view_move_selected(settings->views[1],settings->views[2]);
+ }
+
+ static void add_to_right(GtkButton G_GNUC_UNUSED(*button), PW3270SettingsPrivate *settings) {
+ 	debug("%s(%p)",__FUNCTION__,settings);
+ 	pw3270_action_view_move_selected(settings->views[2],settings->views[1]);
+ }
+
  GtkWidget * pw3270_header_settings_new() {
 
  	size_t ix;
@@ -151,6 +171,35 @@
 			pw3270_action_view_extract_button_new(page->views[1],"go-next"),
 			pw3270_action_view_extract_button_new(page->views[2],"go-previous")
 		};
+
+		g_signal_connect(
+			buttons[0],
+			"clicked",
+			G_CALLBACK(remove_from_left),
+			page
+		);
+
+		g_signal_connect(
+			buttons[1],
+			"clicked",
+			G_CALLBACK(add_to_left),
+			page
+		);
+
+		g_signal_connect(
+			buttons[2],
+			"clicked",
+			G_CALLBACK(remove_from_right),
+			page
+		);
+
+		g_signal_connect(
+			buttons[3],
+			"clicked",
+			G_CALLBACK(add_to_right),
+			page
+		);
+
 
 		for(ix = 0; ix < 2; ix++) {
 			GtkWidget * box = gtk_button_box_new(GTK_ORIENTATION_VERTICAL);

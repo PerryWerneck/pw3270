@@ -411,8 +411,31 @@
 	return g_string_free(str,FALSE);
  }
 
+ static void check_4_sensitive(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gboolean *sensitive) {
+
+	GValue value = { 0, };
+	gtk_tree_model_get_value(model,iter,COLUMN_FLAGS,&value);
+
+	if(!(g_value_get_int(&value) & PW3270_ACTION_VIEW_FLAG_ALLOW_ADD))
+		*sensitive = FALSE;
+
+	g_value_unset(&value);
+
+ }
+
  static void selection_changed(GtkTreeSelection *selection, GtkWidget *button) {
-	gtk_widget_set_sensitive(button,gtk_tree_selection_count_selected_rows(selection) > 0);
+
+	if(!gtk_tree_selection_count_selected_rows(selection)) {
+		gtk_widget_set_sensitive(button,FALSE);
+		return;
+	}
+
+	gboolean sensitive = TRUE;
+
+	// Scan selected rows
+	gtk_tree_selection_selected_foreach(selection,(GtkTreeSelectionForeachFunc) check_4_sensitive,&sensitive);
+	gtk_widget_set_sensitive(button,sensitive);
+
  }
 
  GtkWidget * pw3270_action_view_extract_button_new(GtkWidget *widget, const gchar *icon_name) {
