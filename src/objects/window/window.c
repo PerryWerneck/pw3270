@@ -34,6 +34,7 @@
  #include <pw3270/actions.h>
  #include <pw3270/keypad.h>
  #include <v3270/settings.h>
+ #include <v3270/keyfile.h>
 
  static void get_property(GObject *object, guint prop_id, GValue *value, GParamSpec *pspec);
  static void set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec);
@@ -191,8 +192,8 @@
  	if(!terminal)
 		return;
 
-	GKeyFile * keyfile = v3270_get_session_keyfile(terminal);
-	if(!terminal)
+	GKeyFile * keyfile = v3270_key_file_get(terminal);
+	if(!keyfile)
 		return;
 
 	g_key_file_set_boolean(
@@ -704,7 +705,7 @@
 		// Setup keypads
 		if(window->keypads) {
 
-			GKeyFile * keyfile = v3270_get_session_keyfile(terminal);
+			GKeyFile * keyfile = v3270_key_file_get(terminal);
 
 			if(keyfile) {
 

@@ -28,45 +28,30 @@
  */
 
 /**
- * @brief Declares the pw3270 Action objects.
+ * @brief Declares the v3270 keyfile object.
  *
  */
 
-#ifndef PW3270_H_INCLUDED
+#ifndef V3270_KEYFILE_H_INCLUDED
 
-	#define PW3270_H_INCLUDED
+	#define V3270_KEYFILE_H_INCLUDED
 
-	#include <config.h>
-
-	#ifndef GETTEXT_PACKAGE
-		#define GETTEXT_PACKAGE PACKAGE_NAME
-	#endif
-
-	#include <libintl.h>
-	#include <glib/gi18n.h>
-	#include <gtk/gtk.h>
+	#include <glib.h>
 
 	G_BEGIN_DECLS
 
-	/* not really I18N-related, but also a string marker macro */
-	#define I_(string) g_intern_static_string (string)
+	typedef struct _V3270KeyFile V3270KeyFile;
 
+	V3270KeyFile	* v3270_key_file_open(GtkWidget *terminal, const gchar *name, GError **error);
+	void			  v3270_key_file_close(GtkWidget *terminal);
+	void			  v3270_key_file_save(GtkWidget *terminal);
+	const gchar		* v3270_key_file_get_file_name(GtkWidget *terminal);
 
-	void		  pw3270_load_placeholders(GApplication *application, GtkBuilder * builder);
-//	GtkWidget	* pw3270_frame_new(GtkWidget * child, const gchar *title);
+	GKeyFile		* v3270_key_file_get(GtkWidget *terminal);
 
-	// Application settings widget
-	typedef struct _Pw3270SettingsPage Pw3270SettingsPage;
+	gboolean		  v3270_key_file_can_write(GtkWidget *widget);
 
-	struct _Pw3270SettingsPage {
-		GtkWidget	* widget;		///< @brief Settings widget.
-		const gchar	* label;		///< @brief Page lagel.
-		const gchar * title;		///< @brief Page title.
-		void (*load)(Pw3270SettingsPage *, GtkApplication *);
-		void (*apply)(Pw3270SettingsPage *, GtkApplication *);
-	};
-
-	void gtk_file_chooser_set_pw3270_filters(GtkFileChooser *chooser);
+	void			  v3270_key_file_set_boolean(GtkWidget *terminal, const gchar *group_name, const gchar *key, gboolean value);
 
 	G_END_DECLS
 

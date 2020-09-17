@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-28 16:00-0300\n"
+"POT-Creation-Date: 2020-09-15 14:25-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/objects/application/application.c:208
+#: src/objects/application/application.c:206
 #, c-format
 msgid "\"%s\" is not a valid user interface name"
 msgstr ""
@@ -43,7 +43,7 @@ msgstr ""
 msgid "64 bits Windows"
 msgstr ""
 
-#: src/objects/application/actions/about.c:182 ui/application.xml:39
+#: src/objects/application/actions/about.c:188 ui/application.xml:39
 #: ui/application.xml:537
 msgid "About PW3270"
 msgstr ""
@@ -52,7 +52,7 @@ msgstr ""
 msgid "Action Name"
 msgstr ""
 
-#: src/objects/window/window.c:163 src/objects/toolbar/toolbar.c:135
+#: src/objects/window/window.c:164 src/objects/toolbar/toolbar.c:135
 msgid "Action Names"
 msgstr ""
 
@@ -80,7 +80,7 @@ msgstr ""
 msgid "Application preferences"
 msgstr ""
 
-#: src/objects/window/page.c:263
+#: src/objects/window/page.c:264
 msgid "Apply"
 msgstr ""
 
@@ -108,17 +108,22 @@ msgstr ""
 msgid "Bold"
 msgstr ""
 
-#: src/objects/window/terminal.c:197
+#: src/objects/actions/save.c:110 src/objects/window/terminal.c:171
+msgid "Can't load session file"
+msgstr ""
+
+#: src/objects/actions/save.c:105
 #, c-format
-msgid "Can't save file \"%s\""
+msgid "Can't open \"%s\""
 msgstr ""
 
-#: src/objects/window/terminal.c:202
-msgid "Can't save session file"
+#: src/objects/window/terminal.c:166
+#, c-format
+msgid "Can't use \"%s\""
 msgstr ""
 
-#: src/objects/actions/save.c:65 src/objects/application/actions/open.c:49
-#: src/objects/window/page.c:264
+#: src/objects/actions/save.c:66 src/objects/application/actions/open.c:49
+#: src/objects/window/page.c:265
 msgid "Cancel"
 msgstr ""
 
@@ -152,10 +157,6 @@ msgstr ""
 msgid "Colors"
 msgstr ""
 
-#: src/objects/linux/savedesktopicon.c:93
-msgid "Comment"
-msgstr ""
-
 #: src/objects/window/actions/connect.c:59
 msgid "Connect"
 msgstr ""
@@ -168,7 +169,7 @@ msgstr ""
 msgid "Connect to host"
 msgstr ""
 
-#: src/objects/window/window.c:702 src/objects/window/page.c:217
+#: src/objects/window/window.c:703 src/objects/window/page.c:218
 msgid "Connected to host"
 msgstr ""
 
@@ -188,7 +189,7 @@ msgstr ""
 msgid "Copy as text"
 msgstr ""
 
-#: src/objects/linux/savedesktopicon.c:106
+#: src/objects/windows/savedesktopicon.c:85
 msgid "Create a desktop icon for the current session"
 msgstr ""
 
@@ -216,6 +217,10 @@ msgstr ""
 msgid "Delete Field"
 msgstr ""
 
+#: src/objects/windows/savedesktopicon.c:73
+msgid "Description"
+msgstr ""
+
 #: ui/window.xml:93 ui/application.xml:158
 msgid "Desktop icon"
 msgstr ""
@@ -224,8 +229,8 @@ msgstr ""
 msgid "Disconnect"
 msgstr ""
 
-#: src/objects/window/window.c:702 src/objects/window/window.c:729
-#: src/objects/window/page.c:206
+#: src/objects/window/window.c:703 src/objects/window/window.c:730
+#: src/objects/window/page.c:207
 msgid "Disconnected from host"
 msgstr ""
 
@@ -269,10 +274,6 @@ msgstr ""
 msgid "Field attributes"
 msgstr ""
 
-#: src/objects/linux/savedesktopicon.c:72
-msgid "File name"
-msgstr ""
-
 #: ui/application.xml:454
 msgid "Full Screen"
 msgstr ""
@@ -285,10 +286,6 @@ msgstr ""
 msgid "Function bar"
 msgstr ""
 
-#: src/objects/linux/savedesktopicon.c:86
-msgid "Generic name"
-msgstr ""
-
 #: ui/application.xml:36 ui/application.xml:534
 msgid "Help"
 msgstr ""
@@ -297,7 +294,7 @@ msgstr ""
 msgid "Host properties"
 msgstr ""
 
-#: src/objects/window/window.c:469
+#: src/objects/window/window.c:470 src/objects/windows/savedesktopicon.c:213
 msgid "IBM 3270 Terminal emulator"
 msgstr ""
 
@@ -365,8 +362,7 @@ msgstr ""
 msgid "Keypads"
 msgstr ""
 
-#: src/objects/application/actions/about.c:138
-msgctxt "LicenseFileName"
+#: src/objects/application/actions/about.c:140
 msgid "LICENSE"
 msgstr ""
 
@@ -378,7 +374,7 @@ msgstr ""
 msgid "Large"
 msgstr ""
 
-#: src/objects/linux/savedesktopicon.c:79
+#: src/objects/windows/savedesktopicon.c:68
 msgid "Launcher name"
 msgstr ""
 
@@ -430,7 +426,7 @@ msgstr ""
 msgid "Network keep alive"
 msgstr ""
 
-#: src/objects/window/page.c:274
+#: src/objects/window/page.c:275
 msgid "New session name"
 msgstr ""
 
@@ -527,7 +523,7 @@ msgstr ""
 msgid "Quit"
 msgstr ""
 
-#: src/objects/window/page.c:261
+#: src/objects/window/page.c:262
 msgid "Rename Session"
 msgstr ""
 
@@ -547,15 +543,15 @@ msgstr ""
 msgid "S_tyle"
 msgstr ""
 
-#: src/objects/actions/save.c:64 ui/window.xml:69 ui/application.xml:134
+#: src/objects/actions/save.c:65 ui/window.xml:69 ui/application.xml:134
 msgid "Save"
 msgstr ""
 
-#: src/objects/actions/save.c:49
+#: src/objects/actions/save.c:50
 msgid "Save As"
 msgstr ""
 
-#: src/objects/linux/savedesktopicon.c:105
+#: src/objects/windows/savedesktopicon.c:84
 msgid "Save desktop icon"
 msgstr ""
 
@@ -567,7 +563,7 @@ msgstr ""
 msgid "Save selected"
 msgstr ""
 
-#: src/objects/actions/save.c:51
+#: src/objects/actions/save.c:52
 msgid "Save session properties"
 msgstr ""
 
@@ -634,7 +630,7 @@ msgstr ""
 msgid "Session properties"
 msgstr ""
 
-#: src/objects/application/application.c:221
+#: src/objects/application/application.c:219
 msgid "Set the user-interface type"
 msgstr ""
 
@@ -726,7 +722,7 @@ msgstr ""
 msgid "The name of associated action"
 msgstr ""
 
-#: src/objects/window/window.c:164
+#: src/objects/window/window.c:165
 msgid "The name of the actions in the header bar"
 msgstr ""
 
@@ -817,7 +813,7 @@ msgstr ""
 msgid "View"
 msgstr ""
 
-#: src/objects/application/actions/about.c:157
+#: src/objects/application/actions/about.c:163
 msgid "View this project on github"
 msgstr ""
 
@@ -829,11 +825,11 @@ msgstr ""
 msgid "_Apply"
 msgstr ""
 
-#: src/objects/settings/dialog.c:78 src/objects/linux/savedesktopicon.c:132
+#: src/objects/settings/dialog.c:78 src/objects/windows/savedesktopicon.c:110
 msgid "_Cancel"
 msgstr ""
 
-#: src/objects/window/page.c:394
+#: src/objects/window/page.c:395
 msgid "_Close session"
 msgstr ""
 
@@ -869,11 +865,11 @@ msgstr ""
 msgid "_Properties"
 msgstr ""
 
-#: src/objects/window/page.c:388
+#: src/objects/window/page.c:389
 msgid "_Rename session"
 msgstr ""
 
-#: src/objects/linux/savedesktopicon.c:133
+#: src/objects/windows/savedesktopicon.c:111
 msgid "_Save"
 msgstr ""
 
@@ -881,10 +877,10 @@ msgstr ""
 msgid "_View"
 msgstr ""
 
-#: src/objects/application/actions/about.c:156
+#: src/objects/application/actions/about.c:162
 msgid "https://github.com/PerryWerneck/pw3270"
 msgstr ""
 
-#: src/objects/application/actions/about.c:159
+#: src/objects/application/actions/about.c:165
 msgid "translator-credits"
 msgstr ""

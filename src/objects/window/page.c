@@ -35,6 +35,7 @@
  #include <v3270/dialogs.h>
  #include <v3270/actions.h>
  #include <v3270/print.h>
+ #include <v3270/keyfile.h>
  #include <pw3270.h>
 
 //---[ Gtk Label with customized popup-menu ]---------------------------------------------------------------------------------------
@@ -387,7 +388,7 @@
 		{
 			.label = N_("_Rename session"),
 			.callback = G_CALLBACK(rename_session),
-			.check_permission = v3270_allow_custom_settings
+			.check_permission = v3270_key_file_can_write
 		},
 
 		{
