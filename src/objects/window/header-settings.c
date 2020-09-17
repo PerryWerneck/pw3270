@@ -72,10 +72,6 @@
 
  /*--[ Implement ]------------------------------------------------------------------------------------*/
 
- static void selection_changed(GtkTreeSelection *selection, GtkWidget *button) {
-	gtk_widget_set_sensitive(button,gtk_tree_selection_count_selected_rows(selection) > 0);
- }
-
  GtkWidget * pw3270_header_settings_new() {
 
  	size_t ix;
@@ -149,52 +145,12 @@
 
 	// Create buttons
 	{
-		static const gchar * icon_names[] = {
-			"go-next",
-			"go-previous",
-			"go-next",
-			"go-previous"
+		GtkWidget *buttons[] = {
+			pw3270_action_view_extract_button_new(page->views[0],"go-next"),
+			pw3270_action_view_extract_button_new(page->views[2],"go-previous"),
+			pw3270_action_view_extract_button_new(page->views[1],"go-next"),
+			pw3270_action_view_extract_button_new(page->views[2],"go-previous")
 		};
-
-		GtkWidget *buttons[G_N_ELEMENTS(icon_names)];
-
-		for(ix = 0; ix < G_N_ELEMENTS(icon_names); ix++) {
-			buttons[ix] = gtk_button_new_from_icon_name(icon_names[ix],GTK_ICON_SIZE_DND);
-
-			gtk_widget_set_focus_on_click(buttons[ix],FALSE);
-			gtk_button_set_relief(GTK_BUTTON(buttons[ix]),GTK_RELIEF_NONE);
-			gtk_widget_set_sensitive(buttons[ix],FALSE);
-
-		}
-
-		g_signal_connect(
-			gtk_tree_view_get_selection(GTK_TREE_VIEW(page->views[0])),
-			"changed",
-			G_CALLBACK(selection_changed),
-			buttons[0]
-		);
-
-		g_signal_connect(
-			gtk_tree_view_get_selection(GTK_TREE_VIEW(page->views[1])),
-			"changed",
-			G_CALLBACK(selection_changed),
-			buttons[2]
-		);
-
-		g_signal_connect(
-			gtk_tree_view_get_selection(GTK_TREE_VIEW(page->views[2])),
-			"changed",
-			G_CALLBACK(selection_changed),
-			buttons[1]
-		);
-
-		g_signal_connect(
-			gtk_tree_view_get_selection(GTK_TREE_VIEW(page->views[2])),
-			"changed",
-			G_CALLBACK(selection_changed),
-			buttons[3]
-		);
-
 
 		for(ix = 0; ix < 2; ix++) {
 			GtkWidget * box = gtk_button_box_new(GTK_ORIENTATION_VERTICAL);
@@ -242,7 +198,37 @@
 		gchar ** actions = g_strsplit(views[view],",",-1);
 
 		for(action = 0; actions[action];action++) {
-			action_list = pw3270_action_list_move_action(action_list,actions[action],page->views[view]);
+
+			if(g_str_has_prefix(actions[action],"menu.")) {
+
+				GError *error = NULL;
+				g_autofree gchar * icon_name = g_strconcat(actions[action]+5,"-symbolic",NULL);
+
+				GdkPixbuf * pixbuf = gtk_icon_theme_load_icon(
+											gtk_icon_theme_get_default(),
+											icon_name,
+											GTK_ICON_SIZE_MENU,
+											GTK_ICON_LOOKUP_GENERIC_FALLBACK,
+											&error
+										);
+
+				if(error) {
+					g_warning(error->message);
+					g_error_free(error);
+					error = NULL;
+				}
+
+				pw3270_action_view_append(
+					page->views[view],				// Widget
+					_( "System Menu" ), 			// label
+					pixbuf,							// Icon
+					actions[action], 				// Action name
+					PW3270_ACTION_VIEW_FLAG_FIXED	// Fixed item
+				);
+
+			} else {
+				action_list = pw3270_action_list_move_action(action_list,actions[action],page->views[view]);
+			}
 		}
 
 		g_strfreev(actions);

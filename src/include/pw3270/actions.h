@@ -90,13 +90,22 @@
 	//
 	typedef GSList Pw3270ActionList;
 
+	typedef enum _pw3270ActionViewFlag {
+		PW3270_ACTION_VIEW_FLAG_FIXED 		= 0,	///< @brief No special options.
+		PW3270_ACTION_VIEW_FLAG_ALLOW_ADD	= 1,	///< @brief Allow add to target widget.
+		PW3270_ACTION_VIEW_ALLOW_REMOVE		= 2,	///< @brief Allow remove from source widget.
+		PW3270_ACTION_VIEW_ALLOW_MOVE		= 3		///< @brief Allow move from source to target.
+	} PW3270ActionViewFlag;
+
+
 	GtkWidget 			* pw3270_action_view_new();
 	Pw3270ActionList	* pw3270_action_list_new(GtkApplication *application);
 	void				  pw3270_action_list_free(Pw3270ActionList *action_list);
 	void				  pw3270_action_view_set_actions(GtkWidget *view, Pw3270ActionList *list);
 	void				  pw3270_action_view_move_selected(GtkWidget *from, GtkWidget *to);
-	void				  pw3270_action_view_append(GtkWidget *widget, const gchar *label, GdkPixbuf *pixbuf, const gchar *action_name, gint flags);
+	void				  pw3270_action_view_append(GtkWidget *widget, const gchar *label, GdkPixbuf *pixbuf, const gchar *action_name, const PW3270ActionViewFlag flags);
 	gchar				* pw3270_action_view_get_action_names(GtkWidget *widget);
+	GtkWidget			* pw3270_action_view_extract_button_new(GtkWidget *widget, const gchar *icon_name);
 
 	Pw3270ActionList	* pw3270_action_list_move_action(Pw3270ActionList *action_list, const gchar *action_name, GtkWidget *view);
 

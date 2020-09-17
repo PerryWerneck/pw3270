@@ -106,7 +106,7 @@
 	return view;
  }
 
- void pw3270_action_view_append(GtkWidget *widget, const gchar *label, GdkPixbuf *pixbuf, const gchar *action_name, gint flags) {
+ void pw3270_action_view_append(GtkWidget *widget, const gchar *label, GdkPixbuf *pixbuf, const gchar *action_name, PW3270ActionViewFlag flags) {
 
 	GtkListStore * store = GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(widget)));
 
@@ -118,7 +118,7 @@
 		COLUMN_PIXBUF,			pixbuf,
 		COLUMN_LABEL, 			label,
 		COLUMN_ACTION_NAME,		action_name,
-		COLUMN_FLAGS,			flags,
+		COLUMN_FLAGS,			(gint) flags,
 		-1
 	);
 
@@ -169,10 +169,10 @@
 	gtk_list_store_set(
 		store,
 		&iter,
-		COLUMN_PIXBUF,	element->pixbuf,
-		COLUMN_LABEL, 	(label ? label : g_action_get_name(element->action)),
+		COLUMN_PIXBUF,		element->pixbuf,
+		COLUMN_LABEL, 		(label ? label : g_action_get_name(element->action)),
 		COLUMN_ACTION_NAME,	element->name,
-		COLUMN_FLAGS,	3,
+		COLUMN_FLAGS,		(gint) PW3270_ACTION_VIEW_ALLOW_MOVE,
 		-1
 	);
 
@@ -338,7 +338,7 @@
 				gint flags = g_value_get_int(&vFlags);
 				g_value_unset(&vFlags);
 
-				if(flags & 1) {
+				if(flags & PW3270_ACTION_VIEW_FLAG_ALLOW_ADD) {
 
 					// Add on target widget.
 					GValue pixbuf = G_VALUE_INIT;
@@ -369,7 +369,7 @@
 
 				}
 
-				if(flags & 2) {
+				if(flags & PW3270_ACTION_VIEW_ALLOW_REMOVE) {
 
 					// Remove from source widget.
 					gtk_list_store_remove(GTK_LIST_STORE(fromModel), &iter);
@@ -411,3 +411,24 @@
 	return g_string_free(str,FALSE);
  }
 
+ static void selection_changed(GtkTreeSelection *selection, GtkWidget *button) {
+	gtk_widget_set_sensitive(button,gtk_tree_selection_count_selected_rows(selection) > 0);
+ }
+
+ GtkWidget * pw3270_action_view_extract_button_new(GtkWidget *widget, const gchar *icon_name) {
+
+	GtkWidget * button = gtk_button_new_from_icon_name(icon_name,GTK_ICON_SIZE_DND);
+
+	gtk_widget_set_focus_on_click(button,FALSE);
+	gtk_button_set_relief(GTK_BUTTON(button),GTK_RELIEF_NONE);
+	gtk_widget_set_sensitive(button,FALSE);
+
+	g_signal_connect(
+		gtk_tree_view_get_selection(GTK_TREE_VIEW(widget)),
+		"changed",
+		G_CALLBACK(selection_changed),
+		button
+	);
+
+	return button;
+ }

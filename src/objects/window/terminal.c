@@ -44,11 +44,11 @@
  #include <v3270/print.h>
  #include <lib3270/os.h>
 
- static void destroy(GtkWidget *terminal, gpointer GNUC_UNUSED(dunno)) {
+ static void destroy(GtkWidget *terminal, gpointer G_GNUC_UNUSED(dunno)) {
 	v3270_key_file_close(terminal);
  }
 
- static void toggle_changed(GtkWidget *widget, G_GNUC_UNUSED LIB3270_TOGGLE_ID toggle_id, gboolean toggle_state, const gchar *toggle_name, gpointer GNUC_UNUSED(dunno)) {
+ static void toggle_changed(GtkWidget *widget, LIB3270_TOGGLE_ID G_GNUC_UNUSED(toggle_id), gboolean toggle_state, const gchar *toggle_name, gpointer G_GNUC_UNUSED(dunno)) {
 	debug("%s(%s)=%s",__FUNCTION__,toggle_name,toggle_state ? "ON" : "OFF");
 	v3270_key_file_set_boolean(widget,"terminal",toggle_name,toggle_state);
  }
