@@ -142,6 +142,7 @@ AC_PATH_TOOL([MSGFMT], [msgfmt], [no])
 AC_PATH_TOOL([VALGRIND], [valgrind], [no])
 
 AC_PATH_TOOL([SCOUR], [scour], [no])
+AC_PATH_TOOL([APPSTREAMCLI],[appstreamcli], [no])
 
 AC_PATH_TOOL([DESKTOP_INSTALL],[desktop-file-install],[no])
 

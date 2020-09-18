@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop">
-	<id>@PRODUCT_NAME@</id>
+	<id>br.com.bb.pw3270</id>
 	<name>3270 Terminal</name>
 	<name xml:lang="pt_BR">Terminal 3270</name>
 	<summary>IBM 3270 Terminal emulator</summary>
@@ -15,7 +15,7 @@
 	</p>
 	</description>
 
-	<metadata_license>LGPL-3.0</metadata_license>
+	<metadata_license>CC0-1.0</metadata_license>
 	<project_license>LGPL-3.0</project_license>
 
 	<url type="bugtracker">https://github.com/PerryWerneck/pw3270/issues</url>

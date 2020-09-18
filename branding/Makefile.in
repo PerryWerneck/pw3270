@@ -45,6 +45,7 @@ CONVERT=@CONVERT@
 OPTIPNG=@OPTIPNG@
 DESKTOP_INSTALL=@DESKTOP_INSTALL@
 SCOUR=@SCOUR@
+APPSTREAMCLI=@APPSTREAMCLI@
 
 #---[ Rules ]----------------------------------------------------------------------------
 
@@ -128,6 +129,13 @@ $(DESTDIR)$(datarootdir)/pixmaps/%.png: \
 	@echo $@ ...
 	@$(MKDIR) `dirname $@`
 	@$(INSTALL_DATA) $< $@
+
+validate:
+
+ifneq ($(SCOUR),no)
+	@$(APPSTREAMCLI) validate appdata.xml
+endif
+
 
 install: \
 	install-@OSNAME@
