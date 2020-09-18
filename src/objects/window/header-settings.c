@@ -99,7 +99,7 @@
 	// Create page widget.
 	PW3270Settings 	* settings = pw3270_settings_new();
 	settings->label = _("Title bar");
-	settings->title = _("Setup title bar icons");
+	settings->title = _("Setup title bar");
 	settings->apply = apply;
 	settings->load = load;
 

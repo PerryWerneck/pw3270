@@ -82,7 +82,25 @@
 
     <key name="toolbar-icon-size" type="i">
       <default>0</default>
-      <summary>The size of the icons in a toolbar</summary>
+      <summary>The size of the toolbar icons</summary>
+      <description></description>
+    </key>
+
+    <key name="toolbar-icon-symbolic" type="b">
+      <default>false</default>
+      <summary>Use symbolic icons on toolbar</summary>
+      <description></description>
+    </key>
+
+    <key name="header-icon-symbolic" type="b">
+      <default>false</default>
+      <summary>Use symbolic icons on title bar</summary>
+      <description></description>
+    </key>
+
+    <key name="toolbar-position" type="i">
+      <default>0</default>
+      <summary>The toolbar position</summary>
       <description></description>
     </key>
 
@@ -94,7 +112,7 @@
 
     <key name="header-action-names" type="s">
       <default>'win.disconnect,win.reconnect,win.file.transfer,win.print:menu.open-menu'</default>
-      <summary>The actions in the header bar</summary>
+      <summary>The title bar action list</summary>
       <description></description>
     </key>
 

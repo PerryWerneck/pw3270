@@ -45,8 +45,7 @@
 	gtk_window_set_transient_for(GTK_WINDOW(dialog),window);
 
 	GtkWidget * pages[] = {
-		pw3270_toolbar_settings_new(),
-		pw3270_header_settings_new()
+		pw3270_toolbar_settings_new()
 	};
 
 	for(ix = 0; ix < G_N_ELEMENTS(pages); ix++) {
@@ -59,6 +58,9 @@
 		dialog
 	);
 
+	if(pw3270_application_get_ui_style(G_APPLICATION(application)) != PW3270_UI_STYLE_CLASSICAL){
+		gtk_container_add(GTK_CONTAINER(dialog),pw3270_header_settings_new());
+	}
 
 	gtk_widget_show_all(dialog);
 

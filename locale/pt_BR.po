@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-15 14:25-0300\n"
-"PO-Revision-Date: 2020-09-15 14:26-0300\n"
+"POT-Creation-Date: 2020-09-18 10:42-0300\n"
+"PO-Revision-Date: 2020-09-18 10:45-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
 "Language: pt_BR\n"
@@ -79,7 +79,11 @@ msgstr "Versão Apple"
 msgid "Application"
 msgstr "Aplicação"
 
-#: src/objects/application/actions/preferences.c:75 ui/application.xml:83
+#: src/objects/window/header-settings.c:248
+msgid "Application menu"
+msgstr "Menu da aplicação"
+
+#: src/objects/application/actions/preferences.c:74 ui/application.xml:83
 msgid "Application preferences"
 msgstr "Preferências da aplicação"
 
@@ -91,7 +95,7 @@ msgstr "Aplicar"
 msgid "Auto-Reconnect"
 msgstr "Reconectar automaticamente"
 
-#: src/objects/toolbar/settings.c:114
+#: src/objects/window/header-settings.c:66 src/objects/toolbar/settings.c:114
 msgid "Available"
 msgstr "Disponível"
 
@@ -160,6 +164,10 @@ msgstr "Fechar janela"
 msgid "Colors"
 msgstr "Cores"
 
+#: src/objects/linux/savedesktopicon.c:94
+msgid "Comment"
+msgstr "Comentário"
+
 #: src/objects/window/actions/connect.c:59
 msgid "Connect"
 msgstr "Conectar"
@@ -192,7 +200,7 @@ msgstr "Copiar como tabela"
 msgid "Copy as text"
 msgstr "Copiar como texto"
 
-#: src/objects/windows/savedesktopicon.c:85
+#: src/objects/linux/savedesktopicon.c:107
 msgid "Create a desktop icon for the current session"
 msgstr "Criar ícone da área de trabalho para a sessão atual."
 
@@ -219,10 +227,6 @@ msgstr "Recortar"
 #: ui/window.xml:192 ui/window.xml:334 ui/application.xml:314
 msgid "Delete Field"
 msgstr "Apagar campo"
-
-#: src/objects/windows/savedesktopicon.c:73
-msgid "Description"
-msgstr "Descrição"
 
 #: ui/window.xml:93 ui/application.xml:158
 msgid "Desktop icon"
@@ -277,6 +281,10 @@ msgstr "Apagar até o final da linha"
 msgid "Field attributes"
 msgstr "Mostra atributos de campo"
 
+#: src/objects/linux/savedesktopicon.c:74
+msgid "File name"
+msgstr "Nome do arquivo"
+
 #: ui/application.xml:454
 msgid "Full Screen"
 msgstr "Tela cheia"
@@ -289,6 +297,10 @@ msgstr "Tela cheia"
 msgid "Function bar"
 msgstr "Barra de funções"
 
+#: src/objects/linux/savedesktopicon.c:87
+msgid "Generic name"
+msgstr "Nome genérico"
+
 #: ui/application.xml:36 ui/application.xml:534
 msgid "Help"
 msgstr "Ajuda"
@@ -297,11 +309,11 @@ msgstr "Ajuda"
 msgid "Host properties"
 msgstr "Propriedades do Servidor"
 
-#: src/objects/window/window.c:470 src/objects/windows/savedesktopicon.c:213
+#: src/objects/window/window.c:470 src/objects/linux/savedesktopicon.c:95
 msgid "IBM 3270 Terminal emulator"
 msgstr "Emulador 3270"
 
-#: src/objects/actions/view.c:89
+#: src/objects/actions/view.c:90
 msgid "Icon"
 msgstr "Ícone"
 
@@ -337,7 +349,7 @@ msgstr "Inserção"
 msgid "Invalid or unknown property type"
 msgstr "Tipo da propriedade é inválido ou desconhecido"
 
-#: src/objects/toolbar/settings.c:108
+#: src/objects/window/header-settings.c:117 src/objects/toolbar/settings.c:108
 msgid "Itens"
 msgstr "Itens"
 
@@ -369,7 +381,7 @@ msgstr "Painéis"
 msgid "LICENSE"
 msgstr "LICENCA"
 
-#: src/objects/actions/view.c:98
+#: src/objects/actions/view.c:99
 msgid "Label"
 msgstr "Etiqueta"
 
@@ -377,13 +389,17 @@ msgstr "Etiqueta"
 msgid "Large"
 msgstr "Grande"
 
-#: src/objects/windows/savedesktopicon.c:68
+#: src/objects/linux/savedesktopicon.c:80
 msgid "Launcher name"
 msgstr "Nome do lançador"
 
-#: src/objects/toolbar/settings.c:207
+#: src/objects/toolbar/settings.c:189
 msgid "Layout"
 msgstr "Formato"
+
+#: src/objects/window/header-settings.c:54
+msgid "Left"
+msgstr "Esquerda"
 
 #: ui/application.xml:71
 msgid "Main Menu"
@@ -538,6 +554,10 @@ msgstr "Reselecionar"
 msgid "Resize on alternate screen"
 msgstr "Mudar tamanho do terminal em tela alternativa"
 
+#: src/objects/window/header-settings.c:60
+msgid "Right"
+msgstr "Direita"
+
 #: keypad/00-right.xml:34
 msgid "Right keypad"
 msgstr "Painel direito"
@@ -554,7 +574,7 @@ msgstr "Salvar"
 msgid "Save As"
 msgstr "Salvar Como"
 
-#: src/objects/windows/savedesktopicon.c:84
+#: src/objects/linux/savedesktopicon.c:106
 msgid "Save desktop icon"
 msgstr "Salvar ícone da área de trabalho"
 
@@ -586,6 +606,10 @@ msgstr "Selecionar tudo"
 msgid "Select by rectangles"
 msgstr "Seleção retangular"
 
+#: src/objects/window/header-settings.c:117
+msgid "Select the title bar itens"
+msgstr "Selecione itens da barra de título"
+
 #: src/objects/toolbar/settings.c:108
 msgid "Select the toolbar itens"
 msgstr "Selecione itens da barra de ferramentas"
@@ -608,7 +632,7 @@ msgstr "Enviar/Receber"
 msgid "Send/Receive files"
 msgstr "Enviar/Receber arquivos"
 
-#: src/objects/toolbar/settings.c:266 src/objects/toolbar/settings.c:276
+#: src/objects/toolbar/settings.c:248 src/objects/toolbar/settings.c:258
 msgid "Separator"
 msgstr "Separador"
 
@@ -641,9 +665,13 @@ msgstr "Define o tipo de interface do usuário"
 msgid "Settings"
 msgstr "Configurações"
 
-#: src/objects/toolbar/settings.c:207
+#: src/objects/toolbar/settings.c:189
 msgid "Setup the toolbar layout"
 msgstr "Configura formato da barra de ferramentas"
+
+#: src/objects/window/header-settings.c:102
+msgid "Setup title bar"
+msgstr "Configurar barra de título"
 
 #: src/objects/toolbar/settings.c:90
 msgid "Setup toolbar"
@@ -777,6 +805,10 @@ msgstr "The type of GVariant passed to activate()"
 msgid "The type of the state kept by the action"
 msgstr "O tipo do estado mantido pela ação"
 
+#: src/objects/window/header-settings.c:101
+msgid "Title bar"
+msgstr "Barra de título"
+
 #: src/objects/toolbar/settings.c:89 ui/window.xml:420 ui/window.xml:535
 #: ui/application.xml:342
 msgid "Toolbar"
@@ -828,11 +860,11 @@ msgstr "Janela com sessão padrão"
 msgid "_Apply"
 msgstr "_Aplicar"
 
-#: src/objects/settings/dialog.c:78 src/objects/windows/savedesktopicon.c:110
+#: src/objects/settings/dialog.c:78 src/objects/linux/savedesktopicon.c:133
 msgid "_Cancel"
 msgstr "_Cancelar"
 
-#: src/objects/window/page.c:395
+#: src/objects/window/page.c:371
 msgid "_Close session"
 msgstr "_Fechar sessão"
 
@@ -868,11 +900,11 @@ msgstr "_Abrir"
 msgid "_Properties"
 msgstr "_Propriedades"
 
-#: src/objects/window/page.c:389
+#: src/objects/window/page.c:365
 msgid "_Rename session"
 msgstr "Renomear sessão"
 
-#: src/objects/windows/savedesktopicon.c:111
+#: src/objects/linux/savedesktopicon.c:134
 msgid "_Save"
 msgstr "_Salvar"
 
@@ -1537,9 +1569,6 @@ msgstr "translator-credits"
 #~ msgid "Command to execute"
 #~ msgstr "Comando a executar"
 
-#~ msgid "Comment"
-#~ msgstr "Comentário"
-
 #~ msgid "Complete"
 #~ msgstr "Completo"
 
@@ -1648,6 +1677,9 @@ msgstr "translator-credits"
 
 #~ msgid "Default host URL"
 #~ msgstr "URL parão para acesso ao host"
+
+#~ msgid "Description"
+#~ msgstr "Descrição"
 
 #~ msgid "Description of the current security state"
 #~ msgstr "Descrição do estado de segurança atual"
@@ -1795,9 +1827,6 @@ msgstr "translator-credits"
 #~ msgid "File _Format"
 #~ msgstr "_Formato do arquivo"
 
-#~ msgid "File name"
-#~ msgstr "Nome do arquivo"
-
 #~ msgid "File transfer complete"
 #~ msgstr "Transferência completa"
 
@@ -1867,9 +1896,6 @@ msgstr "translator-credits"
 
 #~ msgid "GTK Version mismatch"
 #~ msgstr "Divergência de versão GTK"
-
-#~ msgid "Generic name"
-#~ msgstr "Nome genérico"
 
 #~ msgid "Get transfer queue from an external XML file"
 #~ msgstr "Obtém a fila de transferência de um arquivo XML externo"
