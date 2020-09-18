@@ -303,30 +303,6 @@
 	// Show dialog.
 	gtk_widget_show_all(dialog);
 
-
-
- 	/*
-	GtkWidget * dialog = pw3270_settings_dialog_new(
-								_("Rename session"),
-								GTK_WINDOW(gtk_widget_get_toplevel(terminal))
-							);
-
-	// https://developer.gnome.org/hig/stable/visual-layout.html.en
-	gtk_container_set_border_width(GTK_CONTAINER(content),18);
-
-
-	gtk_widget_show_all(dialog);
-
-	if(gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_APPLY) {
-
-		v3270_set_session_name(terminal, gtk_entry_get_text(GTK_ENTRY(entry)));
-		g_signal_emit_by_name(terminal,"save-settings");
-
-	}
-
-	gtk_widget_destroy(dialog);
-	*/
-
  }
 
  static gboolean terminal_popup(GtkWidget *widget, gboolean selected, gboolean online, GdkEvent *event, pw3270ApplicationWindow * window) {

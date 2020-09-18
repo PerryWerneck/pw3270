@@ -197,6 +197,7 @@ void add(GtkContainer *container, GtkWidget *widget) {
 		settings->load(widget,settings->settings);
 	}
 
+	gtk_widget_show(widget);
 	gtk_notebook_append_page(
 		GTK_PW3270_SETTINGS_DIALOG(container)->tabs,
 		widget,
@@ -211,14 +212,10 @@ void page_changed(GtkNotebook *notebook, GtkWidget G_GNUC_UNUSED(*child), guint 
 
 void switch_page(GtkNotebook *notebook, PW3270Settings *page, guint G_GNUC_UNUSED(page_num), PW3270SettingsDialog *dialog) {
 
-	if(gtk_notebook_get_n_pages(notebook) > 1) {
+	GtkWidget * header_bar = gtk_dialog_get_header_bar(GTK_DIALOG(dialog));
 
-		GtkWidget * header_bar = gtk_dialog_get_header_bar(GTK_DIALOG(dialog));
-
-		if(header_bar) {
-			gtk_header_bar_set_subtitle(GTK_HEADER_BAR(header_bar),page->title);
-		}
-
+	if(header_bar) {
+		gtk_header_bar_set_subtitle(GTK_HEADER_BAR(header_bar),page->title);
 	}
 
 }

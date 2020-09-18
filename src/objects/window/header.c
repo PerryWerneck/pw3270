@@ -112,6 +112,15 @@
 
  }
 
+ static GAction * get_action_from_name(GtkWidget *widget, const gchar *action_name) {
+
+	if(g_str_has_prefix(action_name,"app.")) {
+		return g_action_map_lookup_action(G_ACTION_MAP(g_application_get_default()),action_name+4);
+	}
+
+	return g_action_map_lookup_action(G_ACTION_MAP(widget),action_name+4);
+ }
+
  GtkWidget * pw3270_header_button_new_from_builder(GtkWidget *widget, GtkBuilder * builder, const gchar *action_name) {
 
 	GtkWidget * button = NULL;
@@ -127,44 +136,27 @@
 		gtk_menu_button_set_menu_model(GTK_MENU_BUTTON(button), G_MENU_MODEL(gtk_builder_get_object(builder, action_name+5)));
 		gtk_widget_set_visible(button,TRUE);
 
-	} else if(g_str_has_prefix(action_name,"app.")) {
-
-		// It's an application action
-
-	} else if(g_str_has_prefix(action_name,"win.")) {
-
-		// It's a window action.
-		GAction * action = g_action_map_lookup_action(G_ACTION_MAP(widget),action_name+4);
-
-		if(action) {
-
-			button = gtk_button_new_from_action(action,GTK_ICON_SIZE_BUTTON);
-
-			gtk_actionable_set_action_name(GTK_ACTIONABLE(button),action_name);
-			gtk_widget_set_visible(button,g_action_get_enabled(action));
-
-
-		} else {
-
-			g_warning("Can't find action \"%s\"",action_name+4);
-
-		}
-
-	}
-
-	if(button) {
-
-		g_signal_connect(button, "notify::sensitive", G_CALLBACK(on_sensitive), widget);
-		gtk_widget_set_focus_on_click(button,FALSE);
-		gtk_widget_set_can_focus(button,FALSE);
-		gtk_widget_set_can_default(button,FALSE);
-		gtk_widget_set_name(button,action_name);
 
 	} else {
 
-		g_warning("Can't create button for action \"%s\"",action_name);
+		GAction * action = get_action_from_name(widget,action_name);
+
+		if(!action) {
+			g_warning("Can't find action %s",action_name);
+		}
+
+		button = gtk_button_new_from_action(action,GTK_ICON_SIZE_BUTTON);
+
+		gtk_actionable_set_action_name(GTK_ACTIONABLE(button),action_name);
+		gtk_widget_set_visible(button,g_action_get_enabled(action));
 
 	}
+
+	g_signal_connect(button, "notify::sensitive", G_CALLBACK(on_sensitive), widget);
+	gtk_widget_set_focus_on_click(button,FALSE);
+	gtk_widget_set_can_focus(button,FALSE);
+	gtk_widget_set_can_default(button,FALSE);
+	gtk_widget_set_name(button,action_name);
 
 	return button;
  }

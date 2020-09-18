@@ -59,6 +59,7 @@
 		dialog
 	);
 
+
 	gtk_widget_show_all(dialog);
 
 	return dialog;
