@@ -35,14 +35,19 @@
  #include "private.h"
  #include <pw3270/actions.h>
 
- GtkWidget * gtk_button_new_from_action(GAction *action, GtkIconSize icon_size) {
+ GtkWidget * gtk_button_new_from_action(GAction *action, GtkIconSize icon_size, gboolean symbolic) {
 
 	if(!action)
 		return NULL;
 
 	g_autofree gchar * icon_name = g_action_get_icon_name(action);
-	if(icon_name)
+	if(icon_name) {
+		if(symbolic && !strstr(icon_name,"-symbolic")) {
+			g_autofree gchar * name = g_strconcat(icon_name,"-symbolic",NULL);
+			return gtk_button_new_from_icon_name(name,icon_size);
+		}
 		return gtk_button_new_from_icon_name(icon_name,icon_size);
+	}
 
 	GdkPixbuf * pixbuf = g_action_get_pixbuf(action, GTK_ICON_SIZE_BUTTON, GTK_ICON_LOOKUP_GENERIC_FALLBACK);
 

@@ -124,6 +124,8 @@
  GtkWidget * pw3270_header_button_new_from_builder(GtkWidget *widget, GtkBuilder * builder, const gchar *action_name) {
 
 	GtkWidget * button = NULL;
+	g_autoptr(GSettings) settings = pw3270_application_window_settings_new();
+	gboolean symbolic = g_settings_get_int(settings,"header-icon-type") == 1;
 
 	if(g_str_has_prefix(action_name,"menu.")) {
 
@@ -145,7 +147,7 @@
 			g_warning("Can't find action %s",action_name);
 		}
 
-		button = gtk_button_new_from_action(action,GTK_ICON_SIZE_BUTTON);
+		button = gtk_button_new_from_action(action,GTK_ICON_SIZE_BUTTON,symbolic);
 
 		gtk_actionable_set_action_name(GTK_ACTIONABLE(button),action_name);
 		gtk_widget_set_visible(button,g_action_get_enabled(action));
