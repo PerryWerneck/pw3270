@@ -284,6 +284,7 @@
 	}
 
 	widget->toolbar = GTK_TOOLBAR(pw3270_toolbar_new());
+
 	gtk_box_pack_start(container,GTK_WIDGET(widget->toolbar),FALSE,TRUE,0);
 
 	//
@@ -573,6 +574,14 @@
 			"toolbar-visible",
 			window->toolbar,
 			"visible",
+			G_SETTINGS_BIND_DEFAULT
+		);
+
+		g_settings_bind(
+			settings,
+			"toolbar-icon-type",
+			window->toolbar,
+			"icon-type",
 			G_SETTINGS_BIND_DEFAULT
 		);
 

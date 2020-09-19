@@ -121,7 +121,7 @@
 	GdkPixbuf			* g_action_get_pixbuf(GAction *action, GtkIconSize icon_size, GtkIconLookupFlags flags);
 
 	GtkWidget 			* gtk_button_new_from_action(GAction *action, GtkIconSize icon_size);
-	GtkToolItem			* gtk_tool_button_new_from_action(GAction *action, GtkIconSize icon_size);
+	GtkToolItem			* gtk_tool_button_new_from_action(GAction *action, GtkIconSize icon_size, gboolean symbolic);
 
 	G_END_DECLS
 

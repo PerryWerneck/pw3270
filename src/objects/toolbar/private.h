@@ -37,6 +37,9 @@
 		#define GETTEXT_PACKAGE PACKAGE_NAME
 	#endif
 
+	/* not really I18N-related, but also a string marker macro */
+	#define I_(string) g_intern_static_string (string)
+
 	#include <libintl.h>
 	#include <glib/gi18n.h>
 	#include <gtk/gtk.h>

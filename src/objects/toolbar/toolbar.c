@@ -90,12 +90,14 @@
 	PROP_NONE,
 	PROP_ACTION_NAMES,
 	PROP_ICON_SIZE,
+	PROP_ICON_TYPE,
 	PROP_STYLE
  };
 
  struct _pw3270ToolBar {
  	GtkToolbar parent;
 	GtkToolbarStyle style;
+	int icon_type;
 
  	/// @brief Popup Menu
  	struct {
@@ -131,9 +133,9 @@
 		object_class,
 		PROP_ACTION_NAMES,
 		g_param_spec_string (
-			"action-names",
-			N_("Action Names"),
-			N_("The name of the actions in the toolbar"),
+			I_("action-names"),
+			"Action Names",
+			_("The name of the actions in the toolbar"),
 			NULL,
 			G_PARAM_READABLE|G_PARAM_WRITABLE)
 	);
@@ -142,8 +144,8 @@
 		object_class,
 		PROP_ICON_SIZE,
 		g_param_spec_int(
-			"icon-size",
-			"icon-size",
+			I_("icon-size"),
+			"icon size",
 			_("The toolbar icon size"),
 			INT_MIN,
 			INT_MAX,
@@ -155,11 +157,24 @@
 		object_class,
 		PROP_STYLE,
 		g_param_spec_int(
-			"style",
+			I_("style"),
 			"style",
 			_("The toolbar style"),
 			INT_MIN,
 			INT_MAX,
+			0,
+			G_PARAM_READABLE|G_PARAM_WRITABLE)
+	);
+
+	g_object_class_install_property(
+		object_class,
+		PROP_ICON_TYPE,
+		g_param_spec_int(
+			I_("icon-type"),
+			I_("icon-type"),
+			_("The toolbar icon type"),
+			0,
+			1,
 			0,
 			G_PARAM_READABLE|G_PARAM_WRITABLE)
 	);
@@ -179,6 +194,10 @@
 
 	case PROP_STYLE:
 		g_value_set_int(value,pw3270_toolbar_get_style(GTK_TOOLBAR(object)));
+		break;
+
+	case PROP_ICON_TYPE:
+		g_value_set_int(value,pw3270_toolbar_get_icon_type(GTK_TOOLBAR(object)));
 		break;
 
 	default:
@@ -203,12 +222,15 @@
 		pw3270_toolbar_set_style(GTK_TOOLBAR(object),(GtkToolbarStyle) g_value_get_int(value));
 		break;
 
+	case PROP_ICON_TYPE:
+		pw3270_toolbar_set_icon_type(GTK_TOOLBAR(object),(GtkToolbarStyle) g_value_get_int(value));
+		break;
+
 	default:
 		g_assert_not_reached ();
 	}
 
  }
-
 
  static void detacher(GtkWidget *attach_widget, GtkMenu G_GNUC_UNUSED(*menu)) {
 
@@ -377,6 +399,15 @@
 
  GtkToolbarStyle pw3270_toolbar_get_style(GtkToolbar *toolbar) {
 	return PW3270_TOOLBAR(toolbar)->style;
+ }
+
+ gint pw3270_toolbar_get_icon_type(GtkToolbar *toolbar) {
+ 	return PW3270_TOOLBAR(toolbar)->icon_type;
+ }
+
+ void pw3270_toolbar_set_icon_type(GtkToolbar *toolbar, gint icon_type) {
+ 	PW3270_TOOLBAR(toolbar)->icon_type = icon_type;
+	g_object_notify(G_OBJECT(toolbar), "icon-type");
  }
 
  void pw3270_toolbar_set_icon_size(GtkToolbar *toolbar, GtkIconSize icon_size) {

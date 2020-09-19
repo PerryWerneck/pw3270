@@ -86,14 +86,14 @@
       <description></description>
     </key>
 
-    <key name="toolbar-icon-symbolic" type="b">
-      <default>false</default>
+    <key name="toolbar-icon-type" type="i">
+      <default>0</default>
       <summary>Use symbolic icons on toolbar</summary>
       <description></description>
     </key>
 
-    <key name="header-icon-symbolic" type="b">
-      <default>false</default>
+    <key name="header-icon-type" type="i">
+      <default>0</default>
       <summary>Use symbolic icons on title bar</summary>
       <description></description>
     </key>

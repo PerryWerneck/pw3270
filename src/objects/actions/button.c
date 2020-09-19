@@ -62,7 +62,7 @@
 	return NULL;
  }
 
- GtkToolItem * gtk_tool_button_new_from_action(GAction *action, GtkIconSize icon_size) {
+ GtkToolItem * gtk_tool_button_new_from_action(GAction *action, GtkIconSize icon_size, gboolean symbolic) {
 
 	if(!action)
 		return NULL;
@@ -75,14 +75,18 @@
 	}
 
 	g_autofree gchar * icon_name = g_action_get_icon_name(action);
-//	debug("%s(%s).icon_name=%s",__FUNCTION__,g_action_get_name(action),icon_name);
 
 	if(icon_name) {
 
 		// Has icon name
 		GtkToolItem * item = gtk_tool_button_new(NULL,label);
 
-		gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(item),icon_name);
+		if(symbolic && !strstr(icon_name,"-symbolic")) {
+			g_autofree gchar * symbolic_name = g_strconcat(icon_name,"-symbolic",NULL);
+			gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(item),symbolic_name);
+		} else {
+			gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(item),icon_name);
+		}
 
 		if(tooltip)
 			gtk_widget_set_tooltip_markup(GTK_WIDGET(item),tooltip);

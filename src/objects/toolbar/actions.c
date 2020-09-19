@@ -68,7 +68,6 @@
 
 			if(ptr) {
 				action = g_action_map_lookup_action(G_ACTION_MAP(window), ptr+1);
-				debug("action(%s)=%p",ptr+1,action);
 			}
 
 		}
@@ -77,7 +76,11 @@
 
 		if(action) {
 			debug("Creating button \"%s\" from action \"%s\"",name,g_action_get_name(G_ACTION(action)));
-			item = gtk_tool_button_new_from_action(action,GTK_ICON_SIZE_LARGE_TOOLBAR);
+			item = gtk_tool_button_new_from_action(
+						action,
+						GTK_ICON_SIZE_LARGE_TOOLBAR,
+						pw3270_toolbar_get_icon_type(GTK_TOOLBAR(toolbar)) == 1
+					);
 		}
 
 		if(item) {
