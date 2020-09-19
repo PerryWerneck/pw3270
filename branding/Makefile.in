@@ -109,7 +109,7 @@ $(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/%.png: \
 	@$(MKDIR) `dirname $@`
 	@$(INSTALL_DATA) $< $@
 
-$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/%.svg: \
+$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/icons/%.svg: \
 	%.svg
 
 	@echo $@ ...
@@ -142,7 +142,7 @@ install: \
 
 install-linux: \
 	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME).png \
-	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME).svg \
+	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/icons/$(PRODUCT_NAME).svg \
 	$(DESTDIR)$(datarootdir)/pixmaps/$(PRODUCT_NAME).png \
 	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME)-logo.png
 
