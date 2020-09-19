@@ -143,6 +143,26 @@
 
  static void pw3270ApplicationWindow_class_init(pw3270ApplicationWindowClass *klass) {
 
+#ifdef DEBUG
+	{
+		gtk_icon_theme_append_search_path(
+			gtk_icon_theme_get_default(),
+			"./icons"
+		);
+	}
+#else
+	{
+		lib3270_autoptr(char) path = lib3270_build_data_filename("icons",NULL);
+		if(g_file_test(path,G_FILE_TEST_IS_DIR)) {
+			gtk_icon_theme_append_search_path(
+				gtk_icon_theme_get_default(),
+				path
+			);
+		}
+	}
+#endif // DEBUG
+
+
 	{
 		GtkWidgetClass *widget = GTK_WIDGET_CLASS(klass);
 		widget->destroy = destroy;
