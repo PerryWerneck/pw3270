@@ -118,8 +118,6 @@
 
 			if(filename) {
 
-				g_message("Using \"%s\" for session properties",filename);
-
 				if(!window) {
 					window = pw3270_application_window_new(GTK_APPLICATION(application), filename);
 				} else {

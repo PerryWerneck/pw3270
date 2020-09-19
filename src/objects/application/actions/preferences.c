@@ -38,7 +38,7 @@
 
 	size_t ix;
 	GtkWindow * window = gtk_application_get_active_window(application);
-	GtkWidget * dialog = pw3270_settings_dialog_new(G_ACTION(action));
+	GtkWidget * dialog = pw3270_settings_dialog_new(G_ACTION(action),TRUE);
 
 	gtk_window_set_modal(GTK_WINDOW(dialog), TRUE);
 	gtk_window_set_attached_to(GTK_WINDOW(dialog), GTK_WIDGET(window));
@@ -75,6 +75,7 @@
  	action->name = "preferences";
  	action->label = _("Application preferences");
  	action->icon_name = "preferences-system";
+	action->tooltip = _("Change the application preferences");
 
 	return G_ACTION(action);
  }

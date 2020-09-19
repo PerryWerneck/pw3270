@@ -43,7 +43,8 @@
 
 	action->name = "session.properties";
 	action->icon_name = "preferences-other";
-	action->label = _("Session properties");
+	action->label = _("Session preferences");
+	action->tooltip = _("Change the preferences for the active session");
 
 	return G_ACTION(action);
  }

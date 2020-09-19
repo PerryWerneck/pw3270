@@ -257,10 +257,10 @@
 
  }
 
- static void open_properties(GtkMenuItem G_GNUC_UNUSED(*menuitem), GtkWidget *toolbar) {
+ static void open_preferences(GtkMenuItem G_GNUC_UNUSED(*menuitem), GtkWidget *toolbar) {
 
 	GtkWidget * window = gtk_widget_get_toplevel(toolbar);
-	GtkWidget * dialog = pw3270_settings_dialog_new(NULL);
+	GtkWidget * dialog = pw3270_settings_dialog_new(NULL,FALSE);
 
 	gtk_container_add(GTK_CONTAINER(dialog),pw3270_toolbar_settings_new());
 
@@ -268,6 +268,8 @@
 	gtk_window_set_modal(GTK_WINDOW(dialog), TRUE);
 	gtk_window_set_attached_to(GTK_WINDOW(dialog), window);
 	gtk_window_set_transient_for(GTK_WINDOW(dialog),GTK_WINDOW(window));
+
+	gtk_window_set_title(GTK_WINDOW(dialog),_("Setup toolbar"));
 
 	gtk_widget_show_all(dialog);
 
@@ -325,11 +327,11 @@
 
 	}
 
-	// Toolbar properties.
+	// Toolbar preferences.
 	{
-		GtkWidget * item = gtk_menu_item_new_with_mnemonic( _("_Properties") );
+		GtkWidget * item = gtk_menu_item_new_with_mnemonic( _("_Preferences") );
 		gtk_menu_shell_append(GTK_MENU_SHELL(widget->popup.menu),item);
-		g_signal_connect(item, "activate", G_CALLBACK(open_properties), widget);
+		g_signal_connect(item, "activate", G_CALLBACK(open_preferences), widget);
 	}
 
 	// gtk_container_set_border_width(GTK_CONTAINER(widget->popup_menu),6);

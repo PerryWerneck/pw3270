@@ -160,7 +160,7 @@
 					</item>
 
 					<item>
-						<attribute name="label" translatable="yes">Session properties</attribute>
+						<attribute name="label" translatable="yes">Session preferences</attribute>
 						<attribute name="action">win.save.session.as</attribute>
 					</item>
 

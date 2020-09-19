@@ -97,7 +97,7 @@
         if(!g_key_file_load_from_file(new_session->key_file,new_session->filename,G_KEY_FILE_NONE,error)) {
 			g_warning("Can't load \"%s\"",new_session->filename);
         } else {
-			g_message("Loading session properties from %s",new_session->filename);
+			g_message("Loading session preferences from %s",new_session->filename);
         }
 
 	} else {
@@ -109,7 +109,7 @@
 			if(!g_key_file_load_from_file(new_session->key_file,default_settings,G_KEY_FILE_NONE,error)) {
 				g_warning("Can't load \"%s\"",default_settings);
 			} else {
-				g_message("Loading session properties from %s",default_settings);
+				g_message("Loading session preferences from %s",default_settings);
 			}
 		} else {
 #ifdef DEBUG

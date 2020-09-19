@@ -49,7 +49,7 @@
 	action->name = "save.session.as";
 	action->label = _("Save As");
 	action->icon_name = "document-save-as";
-	action->tooltip = _("Save session properties");
+	action->tooltip = _("Save session preferences");
 
 	return G_ACTION(action);
 

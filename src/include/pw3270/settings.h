@@ -87,7 +87,7 @@
  typedef struct _PW3270SettingsDialogClass	PW3270SettingsDialogClass;
 
  GType		  PW3270SettingsDialog_get_type(void);
- GtkWidget	* pw3270_settings_dialog_new(GAction *action);
+ GtkWidget	* pw3270_settings_dialog_new(GAction *action, gboolean has_subtitle);
 
  G_END_DECLS
 

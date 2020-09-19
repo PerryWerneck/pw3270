@@ -95,7 +95,7 @@
 				</item>
 
 				<item>
-					<attribute name="label" translatable="yes">Session properties</attribute>
+					<attribute name="label" translatable="yes">Session preferences</attribute>
 					<attribute name="action">win.save.session.as</attribute>
 				</item>
 
@@ -381,7 +381,7 @@
 				<attribute name="label" translatable="yes">Dynamic font spacing</attribute>
 				<attribute name="action">win.dynamic-font-spacing</attribute>
 			</item>
-				
+
 			<section>
 
 					<item>
@@ -460,7 +460,7 @@
 			</item>
 
 		</section>
-	
+
 	</menu>
 
 	<menu id="popup-over-oia">
@@ -527,7 +527,7 @@
 
 		</submenu>
 
-		<submenu id="view-when-offline-placeholder"> 
+		<submenu id="view-when-offline-placeholder">
 
 			<attribute name='label' translatable='yes'>View</attribute>
 
@@ -551,7 +551,7 @@
 			</item>
 
 			<item>
-				<attribute name="label" translatable="yes">Session properties</attribute>
+				<attribute name="label" translatable="yes">Session preferences</attribute>
 				<attribute name="action">win.session.properties</attribute>
 			</item>
 
