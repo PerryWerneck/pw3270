@@ -270,7 +270,8 @@ install-application: \
 	$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@ \
 	install-locale \
 	install-schemas \
-	install-branding
+	install-branding \
+	install-icons
 
 	@$(MKDIR) \
 		$(DESTDIR)/$(bindir)
@@ -301,6 +302,15 @@ install-keypads:
 	@$(INSTALL_DATA) \
 		keypad/*.xml \
 		$(DESTDIR)/$(datarootdir)/$(PRODUCT_NAME)/keypad
+
+install-icons:
+
+	@$(MKDIR) \
+		$(DESTDIR)/$(datarootdir)/$(PRODUCT_NAME)/icons
+
+	@$(INSTALL_DATA) \
+		icons/*.svg \
+		$(DESTDIR)/$(datarootdir)/$(PRODUCT_NAME)/icons
 
 #---[ Misc Targets ]---------------------------------------------------------------------
 

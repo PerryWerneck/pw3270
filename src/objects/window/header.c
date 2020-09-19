@@ -125,7 +125,7 @@
 
 	GtkWidget * button = NULL;
 	g_autoptr(GSettings) settings = pw3270_application_window_settings_new();
-	gboolean symbolic = g_settings_get_int(settings,"header-icon-type") == 0;
+	gboolean symbolic = g_settings_get_int(settings,"header-icon-type") == 1;
 
 	if(g_str_has_prefix(action_name,"menu.")) {
 
