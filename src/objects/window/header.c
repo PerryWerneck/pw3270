@@ -145,12 +145,17 @@
 
 		if(!action) {
 			g_warning("Can't find action %s",action_name);
+			return NULL;
 		}
 
 		button = gtk_button_new_from_action(action,GTK_ICON_SIZE_BUTTON,symbolic);
 
 		gtk_actionable_set_action_name(GTK_ACTIONABLE(button),action_name);
 		gtk_widget_set_visible(button,g_action_get_enabled(action));
+
+		g_autofree gchar * tooltip = g_action_get_tooltip(action);
+		if(tooltip)
+			gtk_widget_set_tooltip_markup(GTK_WIDGET(button),tooltip);
 
 	}
 
