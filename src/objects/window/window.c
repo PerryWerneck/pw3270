@@ -272,6 +272,9 @@
 
  static void pw3270ApplicationWindow_init(pw3270ApplicationWindow *widget) {
 
+	// Get settings
+	g_autoptr(GSettings) settings = pw3270_application_window_settings_new();
+
 	// Setup defaults
 	widget->state.width = 800;
 	widget->state.height = 500;
@@ -303,18 +306,86 @@
 		gtk_notebook_set_action_widget(widget->notebook,new_tab,GTK_PACK_START);
 	}
 
-	widget->toolbar = GTK_TOOLBAR(pw3270_toolbar_new());
+	// Create boxes
+	GtkBox * hBox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL,0));
+	GtkBox * vBox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL,0));
 
-	gtk_box_pack_start(container,GTK_WIDGET(widget->toolbar),FALSE,TRUE,0);
+	gtk_widget_show(GTK_WIDGET(hBox));
+	gtk_widget_show(GTK_WIDGET(vBox));
+
+	// Create toolbar
+	{
+		widget->toolbar = GTK_TOOLBAR(pw3270_toolbar_new());
+
+		g_action_map_add_action(
+			G_ACTION_MAP(widget),
+			G_ACTION(g_property_action_new("toolbar", widget->toolbar, "visible"))
+		);
+
+		switch(g_settings_get_int(settings,"toolbar-position")) {
+		case 1:
+			gtk_orientable_set_orientation(GTK_ORIENTABLE(widget->toolbar),GTK_ORIENTATION_HORIZONTAL);
+			gtk_box_pack_end(container,GTK_WIDGET(widget->toolbar),FALSE,TRUE,0);
+			break;
+
+		case 2:
+			gtk_orientable_set_orientation(GTK_ORIENTABLE(widget->toolbar),GTK_ORIENTATION_VERTICAL);
+			gtk_box_pack_end(hBox,GTK_WIDGET(widget->toolbar),FALSE,TRUE,0);
+			break;
+
+		case 3:
+			gtk_orientable_set_orientation(GTK_ORIENTABLE(widget->toolbar),GTK_ORIENTATION_VERTICAL);
+			gtk_box_pack_start(hBox,GTK_WIDGET(widget->toolbar),FALSE,TRUE,0);
+			break;
+
+		default:
+			gtk_orientable_set_orientation(GTK_ORIENTABLE(widget->toolbar),GTK_ORIENTATION_HORIZONTAL);
+			gtk_box_pack_start(container,GTK_WIDGET(widget->toolbar),FALSE,TRUE,0);
+			break;
+
+		}
+
+		g_settings_bind(
+			settings,
+			"toolbar-visible",
+			widget->toolbar,
+			"visible",
+			G_SETTINGS_BIND_DEFAULT
+		);
+
+		g_settings_bind(
+			settings,
+			"toolbar-icon-type",
+			widget->toolbar,
+			"icon-type",
+			G_SETTINGS_BIND_DEFAULT
+		);
+
+		g_settings_bind(
+			settings,
+			"toolbar-style",
+			widget->toolbar,
+			"style",
+			G_SETTINGS_BIND_DEFAULT
+		);
+
+		g_settings_bind(
+			settings,
+			"toolbar-icon-size",
+			widget->toolbar,
+			"icon-size",
+			G_SETTINGS_BIND_DEFAULT
+		);
+
+	}
+
+	gtk_box_pack_start(container,GTK_WIDGET(hBox),TRUE,TRUE,0);
 
 	//
-	// Do we have keypads?
+	// Create and pack keypads?
 	//
-	GList * keypads = pw3270_application_get_keypad_models(g_application_get_default());
-	if(keypads) {
-
-		GtkBox * hBox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL,0));
-		GtkBox * vBox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL,0));
+	{
+		GList * keypads = pw3270_application_get_keypad_models(g_application_get_default());
 		GList * keypad;
 
 		// Add top Keypads
@@ -371,15 +442,6 @@
 			}
 		}
 
-		// Add it to the container
-		gtk_widget_show(GTK_WIDGET(hBox));
-		gtk_widget_show(GTK_WIDGET(vBox));
-		gtk_box_pack_start(container,GTK_WIDGET(hBox),TRUE,TRUE,0);
-
-	} else {
-
-		gtk_box_pack_start(container,GTK_WIDGET(widget->notebook),TRUE,TRUE,0);
-
 	}
 
 	gtk_widget_show_all(GTK_WIDGET(widget->notebook));
@@ -431,22 +493,21 @@
 	}
 
 	//
-	// Setup toolbar
+	// Bind properties
 	//
+	g_action_map_add_action(
+		G_ACTION_MAP(widget),
+		G_ACTION(g_property_action_new("menubar", widget, "show-menubar"))
+	);
 
-	{
+	g_settings_bind(
+		settings,
+		"toolbar-action-names",
+		widget->toolbar,
+		"action-names",
+		G_SETTINGS_BIND_DEFAULT
+	);
 
-		g_action_map_add_action(
-			G_ACTION_MAP(widget),
-			G_ACTION(g_property_action_new("toolbar", widget->toolbar, "visible"))
-		);
-
-		g_action_map_add_action(
-			G_ACTION_MAP(widget),
-			G_ACTION(g_property_action_new("menubar", widget, "show-menubar"))
-		);
-
-	}
 
  }
 
@@ -586,46 +647,6 @@
 			"menubar-visible",
 			window,
 			"show-menubar",
-			G_SETTINGS_BIND_DEFAULT
-		);
-
-		g_settings_bind(
-			settings,
-			"toolbar-visible",
-			window->toolbar,
-			"visible",
-			G_SETTINGS_BIND_DEFAULT
-		);
-
-		g_settings_bind(
-			settings,
-			"toolbar-icon-type",
-			window->toolbar,
-			"icon-type",
-			G_SETTINGS_BIND_DEFAULT
-		);
-
-		g_settings_bind(
-			settings,
-			"toolbar-action-names",
-			window->toolbar,
-			"action-names",
-			G_SETTINGS_BIND_DEFAULT
-		);
-
-		g_settings_bind(
-			settings,
-			"toolbar-style",
-			window->toolbar,
-			"style",
-			G_SETTINGS_BIND_DEFAULT
-		);
-
-		g_settings_bind(
-			settings,
-			"toolbar-icon-size",
-			window->toolbar,
-			"icon-size",
 			G_SETTINGS_BIND_DEFAULT
 		);
 
