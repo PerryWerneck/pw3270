@@ -94,7 +94,7 @@
 			// Create label.
 			GtkWidget * label = gtk_label_new(gettext(views[ix].label));
 			gtk_widget_set_tooltip_markup(label,gettext(views[ix].tooltip));
-			//gtk_label_set_xalign(GTK_LABEL(label),0);
+			gtk_label_set_xalign(GTK_LABEL(label),0);
 			gtk_widget_set_hexpand(label,TRUE);
 			gtk_widget_set_vexpand(label,FALSE);
 

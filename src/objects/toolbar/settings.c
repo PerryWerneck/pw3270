@@ -66,20 +66,6 @@
 
  /*--[ Implement ]------------------------------------------------------------------------------------*/
 
- static void selection_changed(GtkTreeSelection *selection, GtkWidget *button) {
-	gtk_widget_set_sensitive(button,gtk_tree_selection_count_selected_rows(selection) > 0);
- }
-
- static void toolbar_insert(GtkButton G_GNUC_UNUSED(*button), PW3270SettingsPrivate *settings) {
- 	debug("%s(%p)",__FUNCTION__,settings);
- 	pw3270_action_view_move_selected(settings->views[1],settings->views[0]);
- }
-
- static void toolbar_remove(GtkButton G_GNUC_UNUSED(*button), PW3270SettingsPrivate *settings) {
- 	debug("%s(%p)",__FUNCTION__,settings);
- 	pw3270_action_view_move_selected(settings->views[0],settings->views[1]);
- }
-
  GtkWidget * pw3270_toolbar_settings_new() {
 
  	size_t ix;
@@ -132,6 +118,7 @@
 
 			GtkWidget * box = gtk_scrolled_window_new(NULL,NULL);
 			gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(box),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
+			gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(box),GTK_SHADOW_ETCHED_IN);
 			gtk_container_add(GTK_CONTAINER(box),page->views[ix]);
 
 			gtk_grid_attach(
@@ -150,27 +137,13 @@
 		gtk_widget_set_hexpand(box,FALSE);
 		gtk_widget_set_vexpand(box,FALSE);
 
-		/*
-		page->buttons[0] = pw3270_action_view_extract_button_new(page->views[0],"go-next"),
-		page->buttons[1] = pw3270_action_view_extract_button_new(page->views[1],"go-previous"),
+		GtkWidget * buttons[] = {
+			pw3270_action_view_move_button_new(page->views[0],page->views[1],"go-next"),
+			pw3270_action_view_move_button_new(page->views[1],page->views[0],"go-previous"),
+		};
 
-		gtk_box_pack_start(GTK_BOX(box),page->buttons[0],FALSE,FALSE,0);
-		gtk_box_pack_end(GTK_BOX(box),page->buttons[1],FALSE,FALSE,0);
-
-		g_signal_connect(
-			page->buttons[0],
-			"clicked",
-			G_CALLBACK(toolbar_remove),
-			page
-		);
-
-		g_signal_connect(
-			page->buttons[1],
-			"clicked",
-			G_CALLBACK(toolbar_insert),
-			page
-		);
-		*/
+		gtk_box_pack_start(GTK_BOX(box),buttons[0],FALSE,FALSE,0);
+		gtk_box_pack_end(GTK_BOX(box),buttons[1],FALSE,FALSE,0);
 
 		gtk_grid_attach(
 			grid,
