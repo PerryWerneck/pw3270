@@ -136,6 +136,9 @@
 		<Unit filename="src/objects/os/windows/savedesktopicon.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/objects/settings/actionview.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/objects/settings/dialog.c">
 			<Option compilerVar="CC" />
 		</Unit>

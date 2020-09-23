@@ -104,7 +104,7 @@
 	void				  pw3270_action_view_move_selected(GtkWidget *from, GtkWidget *to);
 	void				  pw3270_action_view_append(GtkWidget *widget, const gchar *label, GdkPixbuf *pixbuf, const gchar *action_name, const PW3270ActionViewFlag flags);
 	gchar				* pw3270_action_view_get_action_names(GtkWidget *widget);
-	GtkWidget			* pw3270_action_view_extract_button_new(GtkWidget *widget, const gchar *icon_name);
+	GtkWidget			* pw3270_action_view_move_button_new(GtkWidget *from, GtkWidget *to, const gchar *icon_name);
 
 	Pw3270ActionList	* pw3270_action_list_new(GtkApplication *application);
 	Pw3270ActionList	* pw3270_action_list_append(Pw3270ActionList *action_list, const gchar *label, GdkPixbuf *pixbuf, const gchar *action_name, const PW3270ActionViewFlag flags);

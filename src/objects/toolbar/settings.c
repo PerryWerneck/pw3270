@@ -59,7 +59,7 @@
 
  struct _PW3270SettingsPrivate {
 	GtkWidget * views[2];
-	GtkWidget * buttons[2];
+//	GtkWidget * buttons[2];
 	GtkTreeModel * models[2];
 	GtkWidget * combos[G_N_ELEMENTS(comboboxes)];
  };
@@ -150,6 +150,7 @@
 		gtk_widget_set_hexpand(box,FALSE);
 		gtk_widget_set_vexpand(box,FALSE);
 
+		/*
 		page->buttons[0] = pw3270_action_view_extract_button_new(page->views[0],"go-next"),
 		page->buttons[1] = pw3270_action_view_extract_button_new(page->views[1],"go-previous"),
 
@@ -169,6 +170,7 @@
 			G_CALLBACK(toolbar_insert),
 			page
 		);
+		*/
 
 		gtk_grid_attach(
 			grid,

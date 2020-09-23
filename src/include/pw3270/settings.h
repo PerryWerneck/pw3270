@@ -36,6 +36,7 @@
 #endif // _WIN32
 
  #include <gtk/gtk.h>
+ #include <pw3270/actions.h>
 
  G_BEGIN_DECLS
 
@@ -90,5 +91,19 @@
  GtkWidget	* pw3270_settings_dialog_new(GAction *action, gboolean has_subtitle);
 
  G_END_DECLS
+
+/*--[ PW3270 Action List Editor ]--------------------------------------------------------------------*/
+
+ #define GTK_TYPE_PW3270_SETTINGS_ACTIONS				(PW3270SettingsActions_get_type())
+
+ typedef struct _PW3270SettingsActions			PW3270SettingsActions;
+ typedef struct _PW3270SettingsActionsClass		PW3270SettingsActionsClass;
+
+ GType				  PW3270SettingsActions_get_type(void);
+ GtkWidget			* pw3270_settings_actions_new();
+ Pw3270ActionList	* pw3270_settings_action_load(GtkWidget *widget, Pw3270ActionList *available, const gchar *value);
+
+ G_END_DECLS
+
 
 #endif // V3270SETTINGS_H_INCLUDED

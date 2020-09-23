@@ -436,16 +436,18 @@
 
  }
 
- GtkWidget * pw3270_action_view_extract_button_new(GtkWidget *widget, const gchar *icon_name) {
+ GtkWidget * pw3270_action_view_move_button_new(GtkWidget *from, GtkWidget *to, const gchar *icon_name) {
 
 	GtkWidget * button = gtk_button_new_from_icon_name(icon_name,GTK_ICON_SIZE_DND);
 
 	gtk_widget_set_focus_on_click(button,FALSE);
 	gtk_button_set_relief(GTK_BUTTON(button),GTK_RELIEF_NONE);
 	gtk_widget_set_sensitive(button,FALSE);
+	gtk_widget_set_hexpand(button,FALSE);
+	gtk_widget_set_vexpand(button,FALSE);
 
 	g_signal_connect(
-		gtk_tree_view_get_selection(GTK_TREE_VIEW(widget)),
+		gtk_tree_view_get_selection(GTK_TREE_VIEW(from)),
 		"changed",
 		G_CALLBACK(selection_changed),
 		button

@@ -40,10 +40,14 @@
 /*--[ Constants ]------------------------------------------------------------------------------------*/
 
   struct _PW3270SettingsPrivate {
+  	GtkWidget * editor;
+  	/*
 	GtkWidget * views[3];
 	GtkTreeModel * model;
+	*/
  };
 
+ /*
  static const struct _views {
 	const char * label;
 	gint left;
@@ -69,28 +73,9 @@
 		.height = 10
 	}
  };
+ */
 
  /*--[ Implement ]------------------------------------------------------------------------------------*/
-
- static void remove_from_left(GtkButton G_GNUC_UNUSED(*button), PW3270SettingsPrivate *settings) {
- 	debug("%s(%p)",__FUNCTION__,settings);
- 	pw3270_action_view_move_selected(settings->views[0],settings->views[2]);
- }
-
- static void add_to_left(GtkButton G_GNUC_UNUSED(*button), PW3270SettingsPrivate *settings) {
- 	debug("%s(%p)",__FUNCTION__,settings);
- 	pw3270_action_view_move_selected(settings->views[2],settings->views[0]);
- }
-
- static void remove_from_right(GtkButton G_GNUC_UNUSED(*button), PW3270SettingsPrivate *settings) {
- 	debug("%s(%p)",__FUNCTION__,settings);
- 	pw3270_action_view_move_selected(settings->views[1],settings->views[2]);
- }
-
- static void add_to_right(GtkButton G_GNUC_UNUSED(*button), PW3270SettingsPrivate *settings) {
- 	debug("%s(%p)",__FUNCTION__,settings);
- 	pw3270_action_view_move_selected(settings->views[2],settings->views[1]);
- }
 
  GtkWidget * pw3270_header_settings_new() {
 
@@ -106,6 +91,15 @@
 	// Create private data.
 	PW3270SettingsPrivate * page = settings->settings = g_new0(PW3270SettingsPrivate,1);
 
+	page->editor = pw3270_settings_actions_new();
+
+	gtk_grid_attach(
+		GTK_GRID(settings),
+		v3270_dialog_section_new(_("Title bar actions"), _("Change the position of the title bar icons"), page->editor),
+		0,0,4,3
+	);
+
+	/*
 	// Create dialog grid
 	GtkGrid * grid = GTK_GRID(gtk_grid_new());
 	gtk_grid_set_row_homogeneous(grid,FALSE);
@@ -222,7 +216,7 @@
 		}
 
 	}
-
+	*/
 
 	gtk_widget_show_all(GTK_WIDGET(settings));
 	return GTK_WIDGET(settings);
@@ -230,11 +224,10 @@
 
  void load(GtkWidget *widget, PW3270SettingsPrivate *page) {
 
-	size_t view, action;
-	g_autoptr(GSettings) settings = pw3270_application_window_settings_new();
+ 	g_autoptr(GSettings) settings = pw3270_application_window_settings_new();
 
- 	// Populate views
-	Pw3270ActionList * action_list = pw3270_action_list_new(GTK_APPLICATION(g_application_get_default()));
+ 	// Get avaliable actions.
+ 	Pw3270ActionList * action_list = pw3270_action_list_new(GTK_APPLICATION(g_application_get_default()));
 
 	// Add standard menus
 	{
@@ -283,6 +276,10 @@
 
 	// Load settings
     g_autofree gchar * action_names = g_settings_get_string(settings,"header-action-names");
+
+	action_list = pw3270_settings_action_load(page->editor, action_list, action_names);
+
+	/*
     gchar **views = g_strsplit(action_names,":",-1);
 
     for(view = 0; view < 2; view++) {
@@ -303,12 +300,14 @@
 
 	pw3270_action_view_set_actions(page->views[2], action_list);
 
-	pw3270_action_list_free(action_list);
+	*/
 
+	pw3270_action_list_free(action_list);
  }
 
  void apply(GtkWidget *widget, PW3270SettingsPrivate *page) {
 
+	/*
   	g_autofree gchar * left_names = pw3270_action_view_get_action_names(page->views[0]);
  	g_autofree gchar * right_names = pw3270_action_view_get_action_names(page->views[1]);
  	g_autofree gchar * action_names = g_strconcat(left_names,":",right_names,NULL);
@@ -317,6 +316,6 @@
 
 	g_autoptr(GSettings) settings = pw3270_application_window_settings_new();
 	g_settings_set_string(settings,"header-action-names",action_names);
-
+	*/
  }
 
