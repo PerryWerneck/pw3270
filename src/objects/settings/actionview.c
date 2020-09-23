@@ -115,13 +115,14 @@
 
 			GtkWidget * box = gtk_scrolled_window_new(NULL,NULL);
 			gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(box),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
+			gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW(box),GTK_SHADOW_ETCHED_IN);
 			gtk_container_add(GTK_CONTAINER(box),grid->views[ix]);
 
 			gtk_grid_attach(
 				GTK_GRID(grid),
 				box,
 				(ix*2),1,
-				1,4
+				1,5
 			);
 
 		}
@@ -137,11 +138,11 @@
 			pw3270_action_view_move_button_new(grid->views[2],grid->views[1],"go-previous")
 		};
 
-		gtk_grid_attach(GTK_GRID(grid),buttons[0],1,1,1,1);
-		gtk_grid_attach(GTK_GRID(grid),buttons[1],3,1,1,1);
+		gtk_grid_attach(GTK_GRID(grid),buttons[0],1,2,1,1);
+		gtk_grid_attach(GTK_GRID(grid),buttons[1],3,2,1,1);
 
-		gtk_grid_attach(GTK_GRID(grid),buttons[2],1,2,1,1);
-		gtk_grid_attach(GTK_GRID(grid),buttons[3],3,2,1,1);
+		gtk_grid_attach(GTK_GRID(grid),buttons[2],1,3,1,1);
+		gtk_grid_attach(GTK_GRID(grid),buttons[3],3,3,1,1);
 
  	}
 
