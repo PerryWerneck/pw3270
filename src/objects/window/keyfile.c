@@ -39,6 +39,7 @@
  #include <v3270/settings.h>
  #include <v3270/keyfile.h>
  #include <v3270/actions.h>
+ #include <lib3270/properties.h>
  #include <string.h>
  #include <stdlib.h>
 
@@ -203,7 +204,86 @@ void v3270_key_file_close(GtkWidget *terminal) {
 
  }
 
- const gchar * v3270_key_file_get_file_name(GtkWidget *terminal) {
+ /// @brief Search standard paths.
+ static gchar * v3270_get_configuration_folder(GtkWidget *terminal) {
+
+	size_t folder;
+	const gchar *folders[] = {
+		g_get_user_special_dir(G_USER_DIRECTORY_DOCUMENTS),
+		g_get_user_data_dir(),
+		g_get_user_special_dir(G_USER_DIRECTORY_DESKTOP)
+	};
+
+	size_t application;
+	const gchar *applications[] = {
+		v3270_get_session_name(terminal),
+		G_STRINGIFY(PRODUCT_NAME),
+		PACKAGE_NAME,
+		"3270",
+		"tn3270"
+	};
+
+	for(folder = 0; folder < G_N_ELEMENTS(folders); folder++) {
+
+		if(!(folders[folder] && g_file_test(folders[folder],G_FILE_TEST_IS_DIR)))
+			continue;
+
+		for(application = 0; application < G_N_ELEMENTS(applications); application++) {
+
+			gchar * appdir = g_build_filename(folder[folders],application[applications],NULL);
+
+			debug("Testing for \"%s\"",appdir);
+			if(g_file_test(appdir,G_FILE_TEST_IS_DIR)) {
+				return appdir;
+			}
+			g_free(appdir);
+
+		}
+
+	}
+
+	// Not found, try the current session path.
+	const gchar * filename = v3270_key_file_get_filename(terminal);
+	debug("Testing for \"%s\"",filename);
+	if(filename
+			&& g_file_test(filename,G_FILE_TEST_IS_REGULAR)
+			&& g_str_has_prefix(filename,g_get_user_data_dir())
+			&& !g_str_has_prefix(filename,g_get_user_config_dir())
+		) {
+		return g_path_get_dirname(filename);
+	}
+
+	debug("%s: Using standard documents folder",__FUNCTION__);
+	return g_strdup(g_get_user_special_dir(G_USER_DIRECTORY_DOCUMENTS));
+
+ }
+
+ gchar * v3270_key_file_build_filename(GtkWidget *terminal) {
+
+	const gchar * filename = v3270_key_file_get_filename(terminal);
+	if(filename && g_file_test(filename,G_FILE_TEST_IS_REGULAR) && !g_str_has_prefix(filename,g_get_user_config_dir())) {
+		return g_strdup(filename);
+	}
+
+	debug("\n\n\n%s",__FUNCTION__);
+	g_autofree gchar * folder = v3270_get_configuration_folder(terminal);
+
+	const char * hostname = lib3270_host_get_name(v3270_get_session(terminal));
+	debug("Hostname=\"%s\"",hostname);
+
+	gchar * name = g_strconcat(folder,G_DIR_SEPARATOR_S,hostname,".3270",NULL);
+	unsigned int index = 0;
+	while(g_file_test(name,G_FILE_TEST_EXISTS)) {
+		g_free(name);
+		name = g_strdup_printf("%s" G_DIR_SEPARATOR_S "%s.%u.3270",folder,hostname,++index);
+	}
+
+	debug("%s returns \"%s\"",__FUNCTION__,name);
+
+	return name;
+ }
+
+ const gchar * v3270_key_file_get_filename(GtkWidget *terminal) {
 
  	V3270KeyFile *session = v3270_get_session_descriptor(terminal);
 

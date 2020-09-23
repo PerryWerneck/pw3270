@@ -71,10 +71,8 @@
 	gtk_file_chooser_set_pw3270_filters(GTK_FILE_CHOOSER(dialog));
 
 	if(terminal) {
-		const gchar * current_file = v3270_key_file_get_file_name(terminal);
-		if(current_file && g_file_test(current_file,G_FILE_TEST_IS_REGULAR) && !g_str_has_prefix(current_file,g_get_user_config_dir())) {
-			gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog),current_file);
-		}
+		g_autofree gchar * filename = v3270_key_file_build_filename(terminal);
+		gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog),filename);
 	}
 
 	g_signal_connect(dialog,"response",G_CALLBACK(response),terminal);

@@ -45,7 +45,12 @@
 	V3270KeyFile	* v3270_key_file_open(GtkWidget *terminal, const gchar *name, GError **error);
 	void			  v3270_key_file_close(GtkWidget *terminal);
 	void			  v3270_key_file_save(GtkWidget *terminal);
-	const gchar		* v3270_key_file_get_file_name(GtkWidget *terminal);
+
+	/// @brief Get current key filename
+	const gchar		* v3270_key_file_get_filename(GtkWidget *terminal);
+
+	/// @brief Build a writable key filename
+	gchar			* v3270_key_file_build_filename(GtkWidget *terminal);
 
 	GKeyFile		* v3270_key_file_get(GtkWidget *terminal);
 

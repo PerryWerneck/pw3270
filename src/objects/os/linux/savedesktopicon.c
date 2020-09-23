@@ -279,7 +279,7 @@ X-Desktop-File-Install-Version=0.23
 			if(bytes >= 0)
 				buffer[bytes] = '\0';
 
-			g_autofree gchar * exec_line = g_strdup_printf("%s \"%s\"",buffer,v3270_key_file_get_file_name(terminal));
+			g_autofree gchar * exec_line = g_strdup_printf("%s \"%s\"",buffer,v3270_key_file_get_filename(terminal));
 			g_key_file_set_string(keyfile,"Desktop Entry","Exec",exec_line);
 
 		}
