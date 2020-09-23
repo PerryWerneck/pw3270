@@ -436,9 +436,23 @@
 
  }
 
+ struct MoveData {
+	GtkWidget *from;
+	GtkWidget *to;
+ };
+
+  static void move_clicked(GtkButton G_GNUC_UNUSED(*button), struct MoveData *args) {
+ 	pw3270_action_view_move_selected(args->from,args->to);
+ }
+
  GtkWidget * pw3270_action_view_move_button_new(GtkWidget *from, GtkWidget *to, const gchar *icon_name) {
 
 	GtkWidget * button = gtk_button_new_from_icon_name(icon_name,GTK_ICON_SIZE_DND);
+
+	struct MoveData * data = g_new0(struct MoveData,1);
+	data->from	= from;
+	data->to 	= to;
+	g_object_set_data_full(G_OBJECT(button),"move-control-data",data,g_free);
 
 	gtk_widget_set_focus_on_click(button,FALSE);
 	gtk_button_set_relief(GTK_BUTTON(button),GTK_RELIEF_NONE);
@@ -451,6 +465,13 @@
 		"changed",
 		G_CALLBACK(selection_changed),
 		button
+	);
+
+	g_signal_connect(
+		button,
+		"clicked",
+		G_CALLBACK(move_clicked),
+		data
 	);
 
 	return button;

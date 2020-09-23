@@ -129,6 +129,10 @@
 
  	}
 
+	gtk_tree_view_set_reorderable(GTK_TREE_VIEW(grid->views[0]),TRUE);
+	gtk_tree_view_set_reorderable(GTK_TREE_VIEW(grid->views[2]),TRUE);
+	pw3270_action_view_order_by_label(grid->views[1]);
+
  	// Create buttons
  	{
 		GtkWidget *buttons[] = {
@@ -157,7 +161,7 @@
 
  }
 
- Pw3270ActionList * pw3270_settings_action_load(GtkWidget *widget, Pw3270ActionList *action_list, const gchar *action_names) {
+ Pw3270ActionList * pw3270_settings_action_set(GtkWidget *widget, Pw3270ActionList *action_list, const gchar *action_names) {
 
 	PW3270SettingsActions *editor = (PW3270SettingsActions *) widget;
 
@@ -192,26 +196,12 @@
 	return action_list;
  }
 
- /*
- static void remove_from_left(GtkButton G_GNUC_UNUSED(*button), PW3270SettingsPrivate *settings) {
- 	debug("%s(%p)",__FUNCTION__,settings);
- 	pw3270_action_view_move_selected(settings->views[0],settings->views[2]);
+ gchar * pw3270_settings_action_get(GtkWidget *widget) {
+
+	PW3270SettingsActions *editor = (PW3270SettingsActions *) widget;
+
+  	g_autofree gchar * left_names = pw3270_action_view_get_action_names(editor->views[0]);
+ 	g_autofree gchar * right_names = pw3270_action_view_get_action_names(editor->views[2]);
+ 	return g_strconcat(left_names,":",right_names,NULL);
+
  }
-
- static void add_to_left(GtkButton G_GNUC_UNUSED(*button), PW3270SettingsPrivate *settings) {
- 	debug("%s(%p)",__FUNCTION__,settings);
- 	pw3270_action_view_move_selected(settings->views[2],settings->views[0]);
- }
-
- static void remove_from_right(GtkButton G_GNUC_UNUSED(*button), PW3270SettingsPrivate *settings) {
- 	debug("%s(%p)",__FUNCTION__,settings);
- 	pw3270_action_view_move_selected(settings->views[1],settings->views[2]);
- }
-
- static void add_to_right(GtkButton G_GNUC_UNUSED(*button), PW3270SettingsPrivate *settings) {
- 	debug("%s(%p)",__FUNCTION__,settings);
- 	pw3270_action_view_move_selected(settings->views[2],settings->views[1]);
- }
-
-
-*/

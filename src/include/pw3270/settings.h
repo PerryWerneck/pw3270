@@ -101,7 +101,8 @@
 
  GType				  PW3270SettingsActions_get_type(void);
  GtkWidget			* pw3270_settings_actions_new();
- Pw3270ActionList	* pw3270_settings_action_load(GtkWidget *widget, Pw3270ActionList *available, const gchar *value);
+ Pw3270ActionList	* pw3270_settings_action_set(GtkWidget *widget, Pw3270ActionList *available, const gchar *value);
+ gchar 				* pw3270_settings_action_get(GtkWidget *widget);
 
  G_END_DECLS
 

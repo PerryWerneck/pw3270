@@ -277,45 +277,16 @@
 	// Load settings
     g_autofree gchar * action_names = g_settings_get_string(settings,"header-action-names");
 
-	action_list = pw3270_settings_action_load(page->editor, action_list, action_names);
-
-	/*
-    gchar **views = g_strsplit(action_names,":",-1);
-
-    for(view = 0; view < 2; view++) {
-
-		if(!views[view])
-			break;
-
-		gchar ** actions = g_strsplit(views[view],",",-1);
-
-		for(action = 0; actions[action];action++) {
-			action_list = pw3270_action_list_move_action(action_list,actions[action],page->views[view]);
-		}
-
-		g_strfreev(actions);
-    }
-
-   	g_strfreev(views);
-
-	pw3270_action_view_set_actions(page->views[2], action_list);
-
-	*/
+	action_list = pw3270_settings_action_set(page->editor, action_list, action_names);
 
 	pw3270_action_list_free(action_list);
  }
 
  void apply(GtkWidget *widget, PW3270SettingsPrivate *page) {
 
-	/*
-  	g_autofree gchar * left_names = pw3270_action_view_get_action_names(page->views[0]);
- 	g_autofree gchar * right_names = pw3270_action_view_get_action_names(page->views[1]);
- 	g_autofree gchar * action_names = g_strconcat(left_names,":",right_names,NULL);
-
- 	debug("Header actions: [%s]",action_names);
-
+ 	g_autofree gchar * action_names = pw3270_settings_action_get(page->editor);
 	g_autoptr(GSettings) settings = pw3270_application_window_settings_new();
 	g_settings_set_string(settings,"header-action-names",action_names);
-	*/
+
  }
 
