@@ -457,16 +457,46 @@
 
  void pw3270_toolbar_set_actions(GtkWidget *toolbar, const gchar *action_names) {
 
- 	gchar ** actions = g_strsplit(action_names,",",-1);
- 	size_t ix;
+	size_t ix;
+	gint pos = 0;
+
+	gchar ** blocks = g_strsplit(action_names,":",-1);
 
  	gtk_container_remove_all(GTK_CONTAINER(toolbar));
 
-	for(ix = 0; actions[ix]; ix++) {
-		pw3270_toolbar_insert_action(toolbar,actions[ix],-1);
+	// Left block
+	{
+		gchar ** actions = g_strsplit(blocks[0],",",-1);
+
+		for(ix = 0; actions[ix]; ix++) {
+			pw3270_toolbar_insert_action(toolbar,actions[ix],pos++);
+		}
+
+		g_strfreev(actions);
+
 	}
 
- 	g_strfreev(actions);
+	// Right block
+	if(blocks[1]) {
+
+		GtkToolItem * item = gtk_separator_tool_item_new();
+
+		gtk_separator_tool_item_set_draw(GTK_SEPARATOR_TOOL_ITEM(item),FALSE);
+		gtk_tool_item_set_expand(item,TRUE);
+		gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item,pos++);
+
+		gchar ** actions = g_strsplit(blocks[1],",",-1);
+
+		for(ix = 0; actions[ix]; ix++) {
+			pw3270_toolbar_insert_action(toolbar,actions[ix],pos++);
+		}
+
+		g_strfreev(actions);
+
+	}
+
+	g_strfreev(blocks);
+
 
 	g_object_notify(G_OBJECT(toolbar), "action-names");
 
