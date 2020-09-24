@@ -301,7 +301,10 @@
 
 	// 2 = Session name
 	{
-		const gchar * session_name = v3270_get_session_name(terminal);
+		gchar * session_name = g_strdup(v3270_get_session_name(terminal));
+		gchar * ptr = strchr(session_name,':');
+		if(ptr)
+			*ptr = 0;
 
 		if(strcmp(session_name,G_STRINGIFY(PRODUCT_NAME)))
 			gtk_entry_set_text(GTK_ENTRY(inputs[2]),session_name);
