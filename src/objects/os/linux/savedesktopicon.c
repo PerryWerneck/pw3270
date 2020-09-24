@@ -37,6 +37,7 @@
  #include <pw3270/application.h>
  #include <v3270/actions.h>
  #include <v3270/keyfile.h>
+ #include <v3270/settings.h>
  #include <lib3270.h>
  #include <lib3270/log.h>
  #include <lib3270/properties.h>
@@ -333,6 +334,12 @@ X-Desktop-File-Install-Version=0.23
 
 		g_message("%s",error->message);
 		g_error_free(error);
+
+	} else {
+
+		// Set session name (after save to avoid changes on the old session file).
+		v3270_set_session_name(terminal,gtk_entry_get_text(GTK_ENTRY(inputs[2])));
+		v3270_emit_save_settings(terminal,NULL);
 
 	}
 
