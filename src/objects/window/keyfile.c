@@ -126,7 +126,7 @@
 
 	g_object_set_data_full(G_OBJECT(terminal),"session-descriptor",new_session,(GDestroyNotify) close_keyfile);
 	if(new_session->changed) {
-		v3270_key_file_save(terminal);
+		v3270_key_file_save(terminal,error);
 	}
 
 	if(!*error) {
@@ -189,7 +189,10 @@ void v3270_key_file_close(GtkWidget *terminal) {
 	return v3270_get_session_descriptor(terminal)->key_file;
  }
 
- void v3270_key_file_save_to_file(GtkWidget * terminal, const gchar *filename) {
+ void v3270_key_file_save_to_file(GtkWidget * terminal, const gchar *filename, GError **error) {
+
+	if(*error)
+		return;
 
 	V3270KeyFile * new_session = (V3270KeyFile *) g_malloc0(sizeof(struct _V3270KeyFile) + strlen(filename));
 	V3270KeyFile * old_session = g_object_get_data(G_OBJECT(terminal),"session-descriptor");
@@ -202,11 +205,11 @@ void v3270_key_file_close(GtkWidget *terminal) {
 	new_session->key_file = g_key_file_new();
 
 	g_object_set_data_full(G_OBJECT(terminal),"session-descriptor",new_session,(GDestroyNotify) close_keyfile);
-	v3270_key_file_save(terminal);
+	v3270_key_file_save(terminal,error);
 
  }
 
- void v3270_key_file_save(GtkWidget *terminal) {
+ void v3270_key_file_save(GtkWidget *terminal, GError **error) {
 
 	V3270KeyFile *session = v3270_get_session_descriptor(terminal);
 
@@ -222,7 +225,7 @@ void v3270_key_file_close(GtkWidget *terminal) {
  }
 
  /// @brief Search standard paths.
- gchar * v3270_key_file_get_default_path(GtkWidget *terminal, gboolean create) {
+ gchar * v3270_key_file_get_default_path(GtkWidget *terminal) {
 
 	size_t folder;
 	const gchar *folders[] = {
@@ -233,7 +236,6 @@ void v3270_key_file_close(GtkWidget *terminal) {
 
 	size_t application;
 	const gchar *applications[] = {
-		v3270_get_session_name(terminal),
 		G_STRINGIFY(PRODUCT_NAME),
 		PACKAGE_NAME,
 		"3270",
@@ -270,16 +272,8 @@ void v3270_key_file_close(GtkWidget *terminal) {
 		return g_path_get_dirname(filename);
 	}
 
-	if(!create) {
-		return g_strdup(g_get_user_special_dir(G_USER_DIRECTORY_DOCUMENTS));
-	}
+	return g_strdup(g_get_user_special_dir(G_USER_DIRECTORY_DOCUMENTS));
 
-	// Create folder.
-	{
-		gchar * default_dir = g_build_filename(g_get_user_special_dir(G_USER_DIRECTORY_DOCUMENTS),G_STRINGIFY(PRODUCT_NAME),NULL);
-		g_mkdir_with_parents(default_dir,0775);
-		return default_dir;
-	}
  }
 
  gchar * v3270_keyfile_get_default_filename(void) {
@@ -300,8 +294,7 @@ void v3270_key_file_close(GtkWidget *terminal) {
 		return g_strdup(filename);
 	}
 
-	debug("\n\n\n%s",__FUNCTION__);
-	g_autofree gchar * folder = v3270_key_file_get_default_path(terminal,FALSE);
+	g_autofree gchar * folder = v3270_key_file_get_default_path(terminal);
 
 	const char * hostname = lib3270_host_get_name(v3270_get_session(terminal));
 	debug("Hostname=\"%s\"",hostname);

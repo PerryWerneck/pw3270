@@ -67,20 +67,36 @@ X-Desktop-File-Install-Version=0.23
 	const gchar * tooltip;
 	const gchar * default_value;
 	gint width;
-//	gint n_chars;
 
  } entries[] = {
 
+	// 0 = Shortcut name
 	{
-		.label = N_("File name"),
+		.key = "Name",
+		.label = N_("Shortcut name"),
+		.default_value = G_STRINGIFY(PRODUCT_NAME),
+		.width = 20,
+	},
+
+	// 1 = Shortcut file
+	{
+		.label = N_("Shortcut file"),
+		.tooltip = N_("Path for the new shortcut"),
 		.width = 40,
 	},
 
+	// 2 = Session name
 	{
-		.key = "Name",
-		.label = N_("Launcher name"),
-		.default_value = G_STRINGIFY(PRODUCT_NAME),
-		.width = 20,
+		.label = N_("Session name"),
+		.tooltip = N_("The session name used in the window/tab title (empty for default)"),
+		.width = 15,
+	},
+
+	// 3 = Session file
+	{
+		.label = N_("Session file"),
+		.tooltip = N_("The file with the session preferences for this shortcut"),
+		.width = 40,
 	},
 
 	{
@@ -108,6 +124,38 @@ X-Desktop-File-Install-Version=0.23
 	action->tooltip = _("Create a desktop icon for the current session");
 
 	return G_ACTION(action);
+
+ }
+
+ static gchar * get_filename(GtkWidget *terminal) {
+
+ 	g_autofree gchar * defname = v3270_keyfile_get_default_filename();
+	const gchar * current = v3270_key_file_get_filename(terminal);
+
+	// If is not the default name, return it.
+	if(strcmp(defname,current)) {
+		return g_strdup(current);
+	}
+
+	// It's the default one, create a new one on the user_config dir
+	g_autofree gchar * config_path = v3270_key_file_get_default_path(terminal);
+
+	// Use the hostname
+	const char * hostname = lib3270_host_get_name(v3270_get_session(terminal));
+	if(!hostname) {
+		hostname = G_STRINGIFY(PRODUCT_NAME);
+	}
+
+	// Build the filename
+	gchar *filename = g_strconcat(config_path,G_DIR_SEPARATOR_S,hostname,".3270",NULL);
+
+	unsigned int index = 0;
+	while(g_file_test(filename,G_FILE_TEST_EXISTS)) {
+		g_free(filename);
+		filename = g_strdup_printf("%s" G_DIR_SEPARATOR_S "%s.%u.3270",config_path,hostname,++index);
+	}
+
+	return filename;
 
  }
 
@@ -168,8 +216,11 @@ X-Desktop-File-Install-Version=0.23
 			gtk_entry_set_text(GTK_ENTRY(inputs[ix]),gettext(entries[ix].default_value));
 		}
 
+		if(entries[ix].tooltip) {
+			gtk_widget_set_tooltip_markup(GTK_WIDGET(inputs[ix]),gettext(entries[ix].tooltip));
+		}
+
 		gtk_entry_set_width_chars(GTK_ENTRY(inputs[ix]),entries[ix].width);
-//		gtk_entry_set_max_width_chars(GTK_ENTRY(inputs[ix]),entries[ix].n_chars);
 		gtk_widget_set_hexpand(inputs[ix],FALSE);
 		gtk_widget_set_vexpand(inputs[ix],FALSE);
 
@@ -179,70 +230,30 @@ X-Desktop-File-Install-Version=0.23
 
 	g_autofree gchar * filename = g_strdup_printf("%s/" G_STRINGIFY(PRODUCT_NAME) ".desktop",g_get_user_special_dir(G_USER_DIRECTORY_DESKTOP));
 
-	gtk_entry_set_text(GTK_ENTRY(inputs[0]),filename);
+	// 1 = Shortcut filename
+	gtk_entry_set_text(GTK_ENTRY(inputs[1]),filename);
 
-	/*
-	gtk_entry_set_placeholder_text(GTK_ENTRY(inputs[1]),G_STRINGIFY(PRODUCT_NAME));
-	gtk_entry_set_text(GTK_ENTRY(inputs[1]),G_STRINGIFY(PRODUCT_NAME));
+	// 3 = Session filename
+	{
+		g_autofree gchar * session_filename = get_filename(terminal);
+		gtk_entry_set_text(GTK_ENTRY(inputs[3]),session_filename);
+	}
 
-	gtk_entry_set_placeholder_text(GTK_ENTRY(inputs[2]),G_STRINGIFY(PRODUCT_NAME));
-	gtk_entry_set_text(GTK_ENTRY(inputs[2]),G_STRINGIFY(PRODUCT_NAME));
-	*/
-
-	gtk_entry_set_placeholder_text(GTK_ENTRY(inputs[3]),v3270_get_url(terminal));
-	gtk_entry_set_text(GTK_ENTRY(inputs[3]),v3270_get_url(terminal));
-	gtk_entry_set_input_hints(GTK_ENTRY(inputs[3]),GTK_INPUT_HINT_SPELLCHECK);
+	// 4 = Generic name
+	gtk_entry_set_placeholder_text(GTK_ENTRY(inputs[4]),v3270_get_url(terminal));
+	gtk_entry_set_text(GTK_ENTRY(inputs[4]),v3270_get_url(terminal));
+	gtk_entry_set_input_hints(GTK_ENTRY(inputs[4]),GTK_INPUT_HINT_SPELLCHECK);
 
 	gtk_widget_show_all(GTK_WIDGET(grid));
 	return dialog;
  }
 
- static gchar * get_filename(GtkWidget *terminal, const gchar *session_name) {
+ static void apply(GtkWidget *dialog, GtkWidget *terminal) {
 
- 	if(!(session_name && *session_name))
-		session_name = G_STRINGIFY(PRODUCT_NAME);
+	GError * error = NULL;
+	size_t ix;
 
- 	g_autofree gchar * defname = v3270_keyfile_get_default_filename();
-	const gchar * current = v3270_key_file_get_filename(terminal);
-
-	// If is not the default name, return it.
-	if(strcmp(defname,current)) {
-		return g_strdup(current);
-	}
-
-	// It's the default one, create a new one on the user_config dir
-	g_autofree gchar * config_path = v3270_key_file_get_default_path(terminal,TRUE);
-
-	// Use the hostname
-	const char * hostname = lib3270_host_get_name(v3270_get_session(terminal));
-	if(!hostname) {
-		hostname = "session";
-	}
-
-	// Build the filename
-	gchar *filename = g_strconcat(config_path,G_DIR_SEPARATOR_S,hostname,".",session_name,".3270",NULL);
-
-	unsigned int index = 0;
-	while(g_file_test(filename,G_FILE_TEST_EXISTS)) {
-		g_free(filename);
-		filename = g_strdup_printf("%s" G_DIR_SEPARATOR_S "%s.%s.%u.3270",config_path,hostname,session_name,++index);
-	}
-
-	v3270_key_file_save_to_file(terminal,filename);
-
-	g_message("New session file create at \"%s\"",filename);
-
-	return filename;
-
- }
-
- void response(GtkWidget *dialog, gint response_id, GtkWidget *terminal) {
-
-	debug("%s(%d)",__FUNCTION__,response_id);
-
-	if(response_id == GTK_RESPONSE_APPLY) {
-
-		static const char * key_file_data =
+	static const char * key_file_data =
 		"[Desktop Entry]\n" \
 		"Icon=" G_STRINGIFY(PRODUCT_NAME) "\n"  \
 		"Terminal=false\n" \
@@ -251,68 +262,82 @@ X-Desktop-File-Install-Version=0.23
 		"Categories=GTK;GNOME;TerminalEmulator\n" \
 		"OnlyShowIn=GNOME;Unity\n";
 
-		GError * error = NULL;
-		size_t ix;
-
-		GKeyFile * keyfile = g_key_file_new();
-		g_key_file_load_from_data(keyfile,key_file_data,-1,G_KEY_FILE_NONE,NULL);
+	GKeyFile * keyfile = g_key_file_new();
+	g_key_file_load_from_data(keyfile,key_file_data,-1,G_KEY_FILE_NONE,NULL);
 
 #ifdef DEBUG
-		{
-			g_autofree gchar * dbg_data = g_key_file_to_data(keyfile,NULL,NULL);
-			debug("\n%s\n",dbg_data);
-		}
+	{
+		g_autofree gchar * dbg_data = g_key_file_to_data(keyfile,NULL,NULL);
+		debug("\n%s\n",dbg_data);
+	}
 #endif // DEBUG
 
 
-		GtkWidget ** inputs = g_object_get_data(G_OBJECT(dialog),"inputs");
-		debug("dialog=%p inputs=%p",dialog,inputs);
+	GtkWidget ** inputs = g_object_get_data(G_OBJECT(dialog),"inputs");
+	debug("dialog=%p inputs=%p",dialog,inputs);
 
-		for(ix = 0; ix < G_N_ELEMENTS(entries); ix++) {
-			if(entries[ix].key) {
-				debug("inputs[%u]=%p",(unsigned int) ix, inputs[ix]);
-				g_key_file_set_string(keyfile,"Desktop Entry",entries[ix].key,gtk_entry_get_text(GTK_ENTRY(inputs[ix])));
-			}
+	for(ix = 0; ix < G_N_ELEMENTS(entries); ix++) {
+		if(entries[ix].key) {
+			debug("inputs[%u]=%p",(unsigned int) ix, inputs[ix]);
+			g_key_file_set_string(keyfile,"Desktop Entry",entries[ix].key,gtk_entry_get_text(GTK_ENTRY(inputs[ix])));
 		}
-
-		// Get session filename
-		g_autofree gchar * filename = get_filename(terminal,NULL);
-
-		// Get program file name
-		// https://stackoverflow.com/questions/4517425/how-to-get-program-path
-		{
-			char buffer[4096];
-			g_autofree gchar * pidfile = g_strdup_printf("/proc/%d/exe", getpid());
-
-			int bytes = readlink(pidfile,buffer,4095);
-
-			if(bytes >= 0)
-				buffer[bytes] = '\0';
-
-			g_autofree gchar * exec_line = g_strdup_printf("%s \"%s\"",buffer,filename);
-			g_key_file_set_string(keyfile,"Desktop Entry","Exec",exec_line);
-
-		}
-
-		g_key_file_save_to_file(keyfile,gtk_entry_get_text(GTK_ENTRY(inputs[0])),&error);
-
-		if(error) {
-
-			g_message("%s",error->message);
-
-
-			g_error_free(error);
-
-		} else {
-
-			g_message("File \"%s\" was saved",gtk_entry_get_text(GTK_ENTRY(inputs[0])));
-
-		}
-
-
-		g_key_file_free(keyfile);
 	}
 
- 	gtk_widget_destroy(dialog);
+	// Save keyfile
+	v3270_key_file_save_to_file(
+		terminal,
+		gtk_entry_get_text(GTK_ENTRY(inputs[3])),
+		&error
+	);
+
+	// Get program file name
+	// https://stackoverflow.com/questions/4517425/how-to-get-program-path
+	if(!error) {
+		char buffer[4096];
+		g_autofree gchar * pidfile = g_strdup_printf("/proc/%d/exe", getpid());
+
+		int bytes = readlink(pidfile,buffer,4095);
+
+		if(bytes >= 0)
+			buffer[bytes] = '\0';
+
+		g_autofree gchar * exec_line =
+								g_strconcat(
+									buffer,
+									" \"",gtk_entry_get_text(GTK_ENTRY(inputs[3])),"\"",
+									NULL
+								);
+
+		g_key_file_set_string(keyfile,"Desktop Entry","Exec",exec_line);
+
+	}
+
+	// Save shortcude
+	g_key_file_save_to_file(keyfile,gtk_entry_get_text(GTK_ENTRY(inputs[1])),&error);
+
+	g_key_file_free(keyfile);
+
+	if(error) {
+
+		g_message("%s",error->message);
+		g_error_free(error);
+
+	}
+
 
 }
+
+void response(GtkWidget *dialog, gint response_id, GtkWidget *terminal) {
+
+	debug("%s(%d)",__FUNCTION__,response_id);
+
+	gtk_widget_hide(dialog);
+	if(response_id == GTK_RESPONSE_APPLY) {
+		apply(dialog,terminal);
+	}
+
+	gtk_widget_destroy(dialog);
+
+}
+
+

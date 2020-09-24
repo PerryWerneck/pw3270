@@ -43,12 +43,12 @@
 	typedef struct _V3270KeyFile V3270KeyFile;
 
 	gchar			* v3270_keyfile_get_default_filename(void);
-	gchar			* v3270_key_file_get_default_path(GtkWidget *terminal, gboolean create);
+	gchar			* v3270_key_file_get_default_path(GtkWidget *terminal);
 
 	V3270KeyFile	* v3270_key_file_open(GtkWidget *terminal, const gchar *name, GError **error);
 	void			  v3270_key_file_close(GtkWidget *terminal);
-	void			  v3270_key_file_save(GtkWidget *terminal);
-	void			  v3270_key_file_save_to_file(GtkWidget * terminal, const gchar *filename);
+	void			  v3270_key_file_save(GtkWidget *terminal, GError **error);
+	void			  v3270_key_file_save_to_file(GtkWidget * terminal, const gchar *filename, GError **error);
 
 	/// @brief Get current key filename
 	const gchar		* v3270_key_file_get_filename(GtkWidget *terminal);
