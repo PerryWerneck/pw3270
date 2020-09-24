@@ -233,6 +233,17 @@ X-Desktop-File-Install-Version=0.23
 	// 1 = Shortcut filename
 	gtk_entry_set_text(GTK_ENTRY(inputs[1]),filename);
 
+	// 2 = Session name
+	{
+		gtk_widget_set_margin_top(GTK_WIDGET(inputs[2]),12);
+
+		const gchar * session_name = v3270_get_session_name(terminal);
+
+		if(strcmp(session_name,G_STRINGIFY(PRODUCT_NAME)))
+			gtk_entry_set_text(GTK_ENTRY(inputs[2]),session_name);
+
+	}
+
 	// 3 = Session filename
 	{
 		g_autofree gchar * session_filename = get_filename(terminal);
@@ -240,6 +251,7 @@ X-Desktop-File-Install-Version=0.23
 	}
 
 	// 4 = Generic name
+	gtk_widget_set_margin_top(GTK_WIDGET(inputs[4]),12);
 	gtk_entry_set_placeholder_text(GTK_ENTRY(inputs[4]),v3270_get_url(terminal));
 	gtk_entry_set_text(GTK_ENTRY(inputs[4]),v3270_get_url(terminal));
 	gtk_entry_set_input_hints(GTK_ENTRY(inputs[4]),GTK_INPUT_HINT_SPELLCHECK);

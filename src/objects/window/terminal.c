@@ -54,7 +54,7 @@
  }
 
  static void save_settings(GtkWidget *terminal, gpointer G_GNUC_UNUSED(dunno)) {
-	v3270_key_file_save(terminal);
+	v3270_key_file_save(terminal,NULL);
  }
 
  static void print_done(GtkWidget *widget, GtkPrintOperation *operation, GtkPrintOperationResult result, gpointer G_GNUC_UNUSED(dunno)) {

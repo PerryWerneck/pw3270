@@ -47,6 +47,7 @@
 
 	V3270KeyFile	* v3270_key_file_open(GtkWidget *terminal, const gchar *name, GError **error);
 	void			  v3270_key_file_close(GtkWidget *terminal);
+
 	void			  v3270_key_file_save(GtkWidget *terminal, GError **error);
 	void			  v3270_key_file_save_to_file(GtkWidget * terminal, const gchar *filename, GError **error);
 

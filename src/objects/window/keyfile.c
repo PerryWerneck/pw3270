@@ -191,7 +191,7 @@ void v3270_key_file_close(GtkWidget *terminal) {
 
  void v3270_key_file_save_to_file(GtkWidget * terminal, const gchar *filename, GError **error) {
 
-	if(*error)
+	if(error && *error)
 		return;
 
 	V3270KeyFile * new_session = (V3270KeyFile *) g_malloc0(sizeof(struct _V3270KeyFile) + strlen(filename));
@@ -210,6 +210,9 @@ void v3270_key_file_close(GtkWidget *terminal) {
  }
 
  void v3270_key_file_save(GtkWidget *terminal, GError **error) {
+
+	if(error && *error)
+		return;
 
 	V3270KeyFile *session = v3270_get_session_descriptor(terminal);
 
