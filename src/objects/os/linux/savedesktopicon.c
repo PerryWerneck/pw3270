@@ -45,21 +45,11 @@
  static GtkWidget * factory(V3270SimpleAction *action, GtkWidget *terminal);
  static void response(GtkWidget *dialog, gint response_id, GtkWidget *terminal);
 
-/*
-
-[Desktop Entry]
-GenericName=pw3270
-Name=pw3270
-Comment=Comment
-Exec=/usr/bin/sisbb
-Icon=pw3270
-Terminal=false
-Type=Application
-StartupNotify=true
-Categories=GTK;GNOME;TerminalEmulator
-OnlyShowIn=GNOME;Unity
-X-Desktop-File-Install-Version=0.23
-*/
+ struct FileEntry {
+	const gchar * title;
+	const gchar * pattern;
+	const gchar * name;
+ };
 
  static const struct _entry {
 
@@ -67,6 +57,7 @@ X-Desktop-File-Install-Version=0.23
 	const gchar * label;
 	const gchar * tooltip;
 	const gchar * default_value;
+	gint margin_top;
 	gint width;
 
  } entries[] = {
@@ -89,6 +80,7 @@ X-Desktop-File-Install-Version=0.23
 	// 2 = Session name
 	{
 		.label = N_("Session name"),
+		.margin_top = 12,
 		.tooltip = N_("The session name used in the window/tab title (empty for default)"),
 		.width = 15,
 	},
@@ -100,8 +92,10 @@ X-Desktop-File-Install-Version=0.23
 		.width = 40,
 	},
 
+	// 4 = Generic name.
 	{
 		.key = "GenericName",
+		.margin_top = 12,
 		.label = N_("Generic name"),
 		.default_value = G_STRINGIFY(PRODUCT_NAME),
 		.width = 20,
@@ -160,6 +154,62 @@ X-Desktop-File-Install-Version=0.23
 
  }
 
+ static void icon_response(GtkDialog *dialog, int response_id, GtkEntry *entry) {
+
+	if(response_id == GTK_RESPONSE_ACCEPT) {
+		g_autofree gchar * filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+		gtk_entry_set_text(entry,filename ? filename : "");
+	}
+
+	gtk_widget_destroy(GTK_WIDGET(dialog));
+
+ }
+
+ static void icon_press(GtkWidget *entry, G_GNUC_UNUSED GtkEntryIconPosition icon_pos, G_GNUC_UNUSED GdkEvent *event, const struct FileEntry *descr) {
+
+	GtkWidget * dialog =
+					gtk_file_chooser_dialog_new(
+						gettext(descr->title),
+						GTK_WINDOW(gtk_widget_get_toplevel(entry)),
+						GTK_FILE_CHOOSER_ACTION_SAVE,
+						_("Cancel"),    GTK_RESPONSE_CANCEL,
+						_("Select"),    GTK_RESPONSE_ACCEPT,
+						NULL
+					);
+
+	{
+		GtkFileFilter *filter;
+
+		// Standard filter
+		filter = gtk_file_filter_new();
+		gtk_file_filter_add_pattern (filter, gettext(descr->pattern));
+		gtk_file_filter_set_name(filter, gettext(descr->name));
+		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog),filter);
+
+		// All files
+		filter = gtk_file_filter_new();
+		gtk_file_filter_add_pattern (filter, _("*.*"));
+		gtk_file_filter_set_name(filter, _("All files"));
+		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog),filter);
+
+	}
+
+	gtk_window_set_modal(GTK_WINDOW(dialog),TRUE);
+	gtk_window_set_deletable(GTK_WINDOW(dialog),FALSE);
+
+	const gchar *filename = gtk_entry_get_text(GTK_ENTRY(entry));
+
+	if(filename && *filename)
+		gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog),filename);
+
+	g_signal_connect(dialog,"close",G_CALLBACK(gtk_widget_destroy),NULL);
+	g_signal_connect(dialog,"response",G_CALLBACK(icon_response),entry);
+
+	gtk_widget_show_all(dialog);
+
+
+ }
+
  GtkWidget * factory(V3270SimpleAction *action, GtkWidget *terminal) {
 
 	size_t ix;
@@ -213,6 +263,11 @@ X-Desktop-File-Install-Version=0.23
 		inputs[ix] = gtk_entry_new();
 		debug("inputs[%u]=%p",(unsigned int) ix, inputs[ix]);
 
+		if(entries[ix].margin_top) {
+			gtk_widget_set_margin_top(label,entries[ix].margin_top);
+			gtk_widget_set_margin_top(inputs[ix],entries[ix].margin_top);
+		}
+
 		if(entries[ix].default_value) {
 			gtk_entry_set_text(GTK_ENTRY(inputs[ix]),gettext(entries[ix].default_value));
 		}
@@ -232,12 +287,20 @@ X-Desktop-File-Install-Version=0.23
 	g_autofree gchar * filename = g_strdup_printf("%s/" G_STRINGIFY(PRODUCT_NAME) ".desktop",g_get_user_special_dir(G_USER_DIRECTORY_DESKTOP));
 
 	// 1 = Shortcut filename
-	gtk_entry_set_text(GTK_ENTRY(inputs[1]),filename);
+	{
+		static const struct FileEntry entry = {
+			.title = N_("Save to shortcut file"),
+			.name = N_("Standard desktop files"),
+			.pattern = N_("*.desktop")
+		};
+
+		gtk_entry_set_text(GTK_ENTRY(inputs[1]),filename);
+		gtk_entry_set_icon_from_icon_name(GTK_ENTRY(inputs[1]),GTK_ENTRY_ICON_SECONDARY,"document-save");
+		g_signal_connect(inputs[1],"icon_press",G_CALLBACK(icon_press),(gpointer) &entry);
+	}
 
 	// 2 = Session name
 	{
-		gtk_widget_set_margin_top(GTK_WIDGET(inputs[2]),12);
-
 		const gchar * session_name = v3270_get_session_name(terminal);
 
 		if(strcmp(session_name,G_STRINGIFY(PRODUCT_NAME)))
@@ -247,12 +310,19 @@ X-Desktop-File-Install-Version=0.23
 
 	// 3 = Session filename
 	{
+		static const struct FileEntry entry = {
+			.title = N_("Save to session filename"),
+			.name = N_("3270 session files"),
+			.pattern = N_("*.3270")
+		};
+
 		g_autofree gchar * session_filename = get_filename(terminal);
 		gtk_entry_set_text(GTK_ENTRY(inputs[3]),session_filename);
+		gtk_entry_set_icon_from_icon_name(GTK_ENTRY(inputs[3]),GTK_ENTRY_ICON_SECONDARY,"document-save");
+		g_signal_connect(inputs[3],"icon_press",G_CALLBACK(icon_press),(gpointer) &entry);
 	}
 
 	// 4 = Generic name
-	gtk_widget_set_margin_top(GTK_WIDGET(inputs[4]),12);
 	gtk_entry_set_placeholder_text(GTK_ENTRY(inputs[4]),v3270_get_url(terminal));
 	gtk_entry_set_text(GTK_ENTRY(inputs[4]),v3270_get_url(terminal));
 	gtk_entry_set_input_hints(GTK_ENTRY(inputs[4]),GTK_INPUT_HINT_SPELLCHECK);
