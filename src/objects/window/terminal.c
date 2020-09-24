@@ -135,15 +135,9 @@
  	} else {
 
 		// No session file, use the default one.
-		g_autofree gchar * compatible = g_build_filename(g_get_user_config_dir(),G_STRINGIFY(PRODUCT_NAME) ".conf",NULL);
-		g_autofree gchar * filename = g_build_filename(g_get_user_config_dir(),"default.3270",NULL);
-
-		if(g_file_test(compatible,G_FILE_TEST_IS_REGULAR))
-		{
-			g_rename(compatible,filename);
-		}
-
+		gchar * filename = v3270_keyfile_get_default_filename();
 		v3270_key_file_open(terminal,filename,&error);
+		g_free(filename);
 
  	}
 

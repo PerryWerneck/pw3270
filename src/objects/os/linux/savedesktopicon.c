@@ -39,6 +39,7 @@
  #include <v3270/keyfile.h>
  #include <lib3270.h>
  #include <lib3270/log.h>
+ #include <lib3270/properties.h>
 
  static GtkWidget * factory(V3270SimpleAction *action, GtkWidget *terminal);
  static void response(GtkWidget *dialog, gint response_id, GtkWidget *terminal);
@@ -196,6 +197,43 @@ X-Desktop-File-Install-Version=0.23
 	return dialog;
  }
 
+ static gchar * get_filename(GtkWidget *terminal) {
+
+ 	g_autofree gchar * defname = v3270_keyfile_get_default_filename();
+	const gchar * current = v3270_key_file_get_filename(terminal);
+
+	// If is not the default name, return it.
+	if(strcmp(defname,current)) {
+		return g_strdup(current);
+	}
+
+	// It's the default one, create a new one on the user_config dir
+	g_autofree gchar * config_path = g_build_filename(g_get_user_config_dir(),G_STRINGIFY(PRODUCT_NAME),NULL);
+	g_mkdir_with_parents(config_path,0644);
+
+	// Use the hostname
+	const char * hostname = lib3270_host_get_name(v3270_get_session(terminal));
+	if(!hostname) {
+		hostname = "session";
+	}
+
+	// Build the filename
+	gchar *filename = g_strconcat(config_path,G_DIR_SEPARATOR_S,hostname,".3270",NULL);
+
+	unsigned int index = 0;
+	while(g_file_test(filename,G_FILE_TEST_EXISTS)) {
+		g_free(filename);
+		filename = g_strdup_printf("%s" G_DIR_SEPARATOR_S "%s.%u.3270",config_path,hostname,++index);
+	}
+
+	v3270_key_file_save_to_file(terminal,filename);
+
+	g_message("New session file create at \"%s\"",filename);
+
+	return filename;
+
+ }
+
  void response(GtkWidget *dialog, gint response_id, GtkWidget *terminal) {
 
 	debug("%s(%d)",__FUNCTION__,response_id);
@@ -236,37 +274,7 @@ X-Desktop-File-Install-Version=0.23
 		}
 
 		// Get session filename
-		/*
-		const gchar * session_file = v3270_get_session_filename(terminal);
-
-		if(!session_file) {
-
-			// No session file, create one.
-
-			// Check for configdir
-			g_autofree gchar * configdir = g_build_filename(g_get_user_config_dir(),G_STRINGIFY(PRODUCT_NAME),"sessions",NULL);
-			g_mkdir_with_parents(configdir,0755);
-
-			// Create a base name
-			g_autofree gchar * basename = g_path_get_basename(gtk_entry_get_text(GTK_ENTRY(inputs[0])));
-
-			gchar *ptr = strrchr(basename,'.');
-			if(ptr)
-				*ptr = 0;
-
-			ix = time(NULL);
-			gchar * new_session_file = g_strdup_printf("%s/%s.3270",configdir,basename);
-			while(!g_file_test(new_session_file,G_FILE_TEST_EXISTS)) {
-				g_free(new_session_file);
-				new_session_file = g_strdup_printf("%s/%s_%08lx.3270",configdir,basename,(unsigned long) ix++);
-			}
-
-			g_message("Saving session to %s",new_session_file);
-			v3270_set_session_filename(terminal,new_session_file);
-			g_free(new_session_file);
-
-		}
-		*/
+		g_autofree gchar * filename = get_filename(terminal);
 
 		// Get program file name
 		// https://stackoverflow.com/questions/4517425/how-to-get-program-path
@@ -279,7 +287,7 @@ X-Desktop-File-Install-Version=0.23
 			if(bytes >= 0)
 				buffer[bytes] = '\0';
 
-			g_autofree gchar * exec_line = g_strdup_printf("%s \"%s\"",buffer,v3270_key_file_get_filename(terminal));
+			g_autofree gchar * exec_line = g_strdup_printf("%s \"%s\"",buffer,filename);
 			g_key_file_set_string(keyfile,"Desktop Entry","Exec",exec_line);
 
 		}

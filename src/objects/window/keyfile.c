@@ -189,6 +189,23 @@ void v3270_key_file_close(GtkWidget *terminal) {
 	return v3270_get_session_descriptor(terminal)->key_file;
  }
 
+ void v3270_key_file_save_to_file(GtkWidget * terminal, const gchar *filename) {
+
+	V3270KeyFile * new_session = (V3270KeyFile *) g_malloc0(sizeof(struct _V3270KeyFile) + strlen(filename));
+	V3270KeyFile * old_session = g_object_get_data(G_OBJECT(terminal),"session-descriptor");
+
+ 	if(old_session) {
+		*new_session = *old_session;
+	}
+
+	strcpy(new_session->filename,filename);
+	new_session->key_file = g_key_file_new();
+
+	g_object_set_data_full(G_OBJECT(terminal),"session-descriptor",new_session,(GDestroyNotify) close_keyfile);
+	v3270_key_file_save(terminal);
+
+ }
+
  void v3270_key_file_save(GtkWidget *terminal) {
 
 	V3270KeyFile *session = v3270_get_session_descriptor(terminal);
@@ -258,6 +275,17 @@ void v3270_key_file_close(GtkWidget *terminal) {
 
  }
 
+ gchar * v3270_keyfile_get_default_filename(void) {
+
+	gchar * filename = g_build_filename(g_get_user_config_dir(),"default.3270",NULL);
+
+	g_autofree gchar * compatible = g_build_filename(g_get_user_config_dir(),G_STRINGIFY(PRODUCT_NAME) ".conf",NULL);
+	if(g_file_test(compatible,G_FILE_TEST_IS_REGULAR))
+		g_rename(compatible,filename);
+
+	return filename;
+ }
+
  gchar * v3270_key_file_build_filename(GtkWidget *terminal) {
 
 	const gchar * filename = v3270_key_file_get_filename(terminal);
@@ -271,7 +299,7 @@ void v3270_key_file_close(GtkWidget *terminal) {
 	const char * hostname = lib3270_host_get_name(v3270_get_session(terminal));
 	debug("Hostname=\"%s\"",hostname);
 
-	gchar * name = g_strconcat(folder,G_DIR_SEPARATOR_S,hostname,".3270",NULL);
+	gchar * name = g_strconcat(folder,G_DIR_SEPARATOR_S,(hostname ? hostname : "session"),".3270",NULL);
 	unsigned int index = 0;
 	while(g_file_test(name,G_FILE_TEST_EXISTS)) {
 		g_free(name);
