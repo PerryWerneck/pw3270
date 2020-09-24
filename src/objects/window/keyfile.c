@@ -222,12 +222,12 @@ void v3270_key_file_close(GtkWidget *terminal) {
  }
 
  /// @brief Search standard paths.
- static gchar * v3270_get_configuration_folder(GtkWidget *terminal) {
+ gchar * v3270_key_file_get_default_path(GtkWidget *terminal, gboolean create) {
 
 	size_t folder;
 	const gchar *folders[] = {
-		g_get_user_special_dir(G_USER_DIRECTORY_DOCUMENTS),
 		g_get_user_data_dir(),
+		g_get_user_special_dir(G_USER_DIRECTORY_DOCUMENTS),
 		g_get_user_special_dir(G_USER_DIRECTORY_DESKTOP)
 	};
 
@@ -270,9 +270,16 @@ void v3270_key_file_close(GtkWidget *terminal) {
 		return g_path_get_dirname(filename);
 	}
 
-	debug("%s: Using standard documents folder",__FUNCTION__);
-	return g_strdup(g_get_user_special_dir(G_USER_DIRECTORY_DOCUMENTS));
+	if(!create) {
+		return g_strdup(g_get_user_special_dir(G_USER_DIRECTORY_DOCUMENTS));
+	}
 
+	// Create folder.
+	{
+		gchar * default_dir = g_build_filename(g_get_user_special_dir(G_USER_DIRECTORY_DOCUMENTS),G_STRINGIFY(PRODUCT_NAME),NULL);
+		g_mkdir_with_parents(default_dir,0775);
+		return default_dir;
+	}
  }
 
  gchar * v3270_keyfile_get_default_filename(void) {
@@ -294,7 +301,7 @@ void v3270_key_file_close(GtkWidget *terminal) {
 	}
 
 	debug("\n\n\n%s",__FUNCTION__);
-	g_autofree gchar * folder = v3270_get_configuration_folder(terminal);
+	g_autofree gchar * folder = v3270_key_file_get_default_path(terminal,FALSE);
 
 	const char * hostname = lib3270_host_get_name(v3270_get_session(terminal));
 	debug("Hostname=\"%s\"",hostname);

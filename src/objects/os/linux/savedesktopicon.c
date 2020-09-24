@@ -197,7 +197,10 @@ X-Desktop-File-Install-Version=0.23
 	return dialog;
  }
 
- static gchar * get_filename(GtkWidget *terminal) {
+ static gchar * get_filename(GtkWidget *terminal, const gchar *session_name) {
+
+ 	if(!(session_name && *session_name))
+		session_name = G_STRINGIFY(PRODUCT_NAME);
 
  	g_autofree gchar * defname = v3270_keyfile_get_default_filename();
 	const gchar * current = v3270_key_file_get_filename(terminal);
@@ -208,8 +211,7 @@ X-Desktop-File-Install-Version=0.23
 	}
 
 	// It's the default one, create a new one on the user_config dir
-	g_autofree gchar * config_path = g_build_filename(g_get_user_config_dir(),G_STRINGIFY(PRODUCT_NAME),NULL);
-	g_mkdir_with_parents(config_path,0644);
+	g_autofree gchar * config_path = v3270_key_file_get_default_path(terminal,TRUE);
 
 	// Use the hostname
 	const char * hostname = lib3270_host_get_name(v3270_get_session(terminal));
@@ -218,12 +220,12 @@ X-Desktop-File-Install-Version=0.23
 	}
 
 	// Build the filename
-	gchar *filename = g_strconcat(config_path,G_DIR_SEPARATOR_S,hostname,".3270",NULL);
+	gchar *filename = g_strconcat(config_path,G_DIR_SEPARATOR_S,hostname,".",session_name,".3270",NULL);
 
 	unsigned int index = 0;
 	while(g_file_test(filename,G_FILE_TEST_EXISTS)) {
 		g_free(filename);
-		filename = g_strdup_printf("%s" G_DIR_SEPARATOR_S "%s.%u.3270",config_path,hostname,++index);
+		filename = g_strdup_printf("%s" G_DIR_SEPARATOR_S "%s.%s.%u.3270",config_path,hostname,session_name,++index);
 	}
 
 	v3270_key_file_save_to_file(terminal,filename);
@@ -274,7 +276,7 @@ X-Desktop-File-Install-Version=0.23
 		}
 
 		// Get session filename
-		g_autofree gchar * filename = get_filename(terminal);
+		g_autofree gchar * filename = get_filename(terminal,NULL);
 
 		// Get program file name
 		// https://stackoverflow.com/questions/4517425/how-to-get-program-path

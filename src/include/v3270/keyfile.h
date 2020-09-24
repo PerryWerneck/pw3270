@@ -43,6 +43,7 @@
 	typedef struct _V3270KeyFile V3270KeyFile;
 
 	gchar			* v3270_keyfile_get_default_filename(void);
+	gchar			* v3270_key_file_get_default_path(GtkWidget *terminal, gboolean create);
 
 	V3270KeyFile	* v3270_key_file_open(GtkWidget *terminal, const gchar *name, GError **error);
 	void			  v3270_key_file_close(GtkWidget *terminal);
