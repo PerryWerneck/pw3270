@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-19 12:47-0300\n"
-"PO-Revision-Date: 2020-09-19 12:49-0300\n"
+"POT-Creation-Date: 2020-09-24 17:02-0300\n"
+"PO-Revision-Date: 2020-09-24 17:09-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
 "Language: pt_BR\n"
@@ -32,6 +32,10 @@ msgstr "Linux 32 bits"
 #: src/objects/application/actions/about.c:91
 msgid "32 bits Windows"
 msgstr "Windows 32 bits"
+
+#: src/objects/os/linux/savedesktopicon.c:318
+msgid "3270 session files"
+msgstr "Arquivos de sessão TN3270"
 
 #: src/objects/application/actions/about.c:87
 #, c-format
@@ -63,7 +67,7 @@ msgstr "Nome das ações"
 msgid "Alert sound"
 msgstr "Aviso sonoro"
 
-#: src/main/tools.c:99
+#: src/objects/os/linux/savedesktopicon.c:192 src/main/tools.c:99
 msgid "All files"
 msgstr "Todos os arquivos"
 
@@ -79,7 +83,7 @@ msgstr "Versão Apple"
 msgid "Application"
 msgstr "Aplicação"
 
-#: src/objects/window/header-settings.c:248
+#: src/objects/window/header-settings.c:123
 msgid "Application menu"
 msgstr "Menu da aplicação"
 
@@ -95,7 +99,7 @@ msgstr "Aplicar"
 msgid "Auto-Reconnect"
 msgstr "Reconectar automaticamente"
 
-#: src/objects/window/header-settings.c:66 src/objects/toolbar/settings.c:114
+#: src/objects/toolbar/settings.c:100 src/objects/settings/actionview.c:73
 msgid "Available"
 msgstr "Disponível"
 
@@ -115,22 +119,22 @@ msgstr "Cursor piscante"
 msgid "Bold"
 msgstr "Negrito"
 
-#: src/objects/actions/save.c:110 src/objects/window/terminal.c:171
+#: src/objects/actions/save.c:108 src/objects/window/terminal.c:165
 msgid "Can't load session file"
 msgstr "Não foi possível carregar arquivo de sessão"
 
-#: src/objects/actions/save.c:105
+#: src/objects/actions/save.c:103
 #, c-format
 msgid "Can't open \"%s\""
 msgstr "Não foi possível abrir %s"
 
-#: src/objects/window/terminal.c:166
+#: src/objects/window/terminal.c:160
 #, c-format
 msgid "Can't use \"%s\""
 msgstr "Não posso usar %s"
 
 #: src/objects/actions/save.c:66 src/objects/application/actions/open.c:49
-#: src/objects/window/page.c:265
+#: src/objects/window/page.c:265 src/objects/os/linux/savedesktopicon.c:175
 msgid "Cancel"
 msgstr "_Cancelar"
 
@@ -141,6 +145,10 @@ msgstr "Mudar cores do terminal"
 #: src/objects/application/actions/preferences.c:78
 msgid "Change the application preferences"
 msgstr "Modificar preferências da aplicação"
+
+#: src/objects/window/header-settings.c:98
+msgid "Change the position of the title bar icons"
+msgstr "Modificar posição dos ícones da barra de título"
 
 #: src/objects/window/actions/sessionproperties.c:47
 msgid "Change the preferences for the active session"
@@ -172,7 +180,7 @@ msgstr "Fechar janela"
 msgid "Colors"
 msgstr "Cores"
 
-#: src/objects/os/linux/savedesktopicon.c:94
+#: src/objects/os/linux/savedesktopicon.c:106
 msgid "Comment"
 msgstr "Comentário"
 
@@ -188,7 +196,7 @@ msgstr "Conectar ao iniciar"
 msgid "Connect to host"
 msgstr "Conectar ao servidor"
 
-#: src/objects/window/window.c:732 src/objects/window/page.c:218
+#: src/objects/window/window.c:753 src/objects/window/page.c:218
 msgid "Connected to host"
 msgstr "Conectado no servidor"
 
@@ -208,7 +216,7 @@ msgstr "Copiar como tabela"
 msgid "Copy as text"
 msgstr "Copiar como texto"
 
-#: src/objects/os/linux/savedesktopicon.c:107
+#: src/objects/os/linux/savedesktopicon.c:119
 msgid "Create a desktop icon for the current session"
 msgstr "Criar ícone da área de trabalho para a sessão atual."
 
@@ -244,7 +252,7 @@ msgstr "Ícone da área de trabalho"
 msgid "Disconnect"
 msgstr "Desconectar"
 
-#: src/objects/window/window.c:732 src/objects/window/window.c:759
+#: src/objects/window/window.c:753 src/objects/window/window.c:780
 #: src/objects/window/page.c:207
 msgid "Disconnected from host"
 msgstr "Desconectado do servidor"
@@ -273,6 +281,10 @@ msgstr "Largura do elemento em colunas"
 msgid "Enabled"
 msgstr "Habilitado"
 
+#: src/objects/settings/actionview.c:78
+msgid "End"
+msgstr "Final"
+
 #: ui/window.xml:187 ui/window.xml:329 ui/application.xml:309
 msgid "Erase input"
 msgstr "Apagar campos"
@@ -289,10 +301,6 @@ msgstr "Apagar até o final da linha"
 msgid "Field attributes"
 msgstr "Mostra atributos de campo"
 
-#: src/objects/os/linux/savedesktopicon.c:74
-msgid "File name"
-msgstr "Nome do arquivo"
-
 #: ui/application.xml:454
 msgid "Full Screen"
 msgstr "Tela cheia"
@@ -305,7 +313,7 @@ msgstr "Tela cheia"
 msgid "Function bar"
 msgstr "Barra de funções"
 
-#: src/objects/os/linux/savedesktopicon.c:87
+#: src/objects/os/linux/savedesktopicon.c:99
 msgid "Generic name"
 msgstr "Nome genérico"
 
@@ -317,7 +325,7 @@ msgstr "Ajuda"
 msgid "Host properties"
 msgstr "Propriedades do Servidor"
 
-#: src/objects/window/window.c:491 src/objects/os/linux/savedesktopicon.c:95
+#: src/objects/window/window.c:552 src/objects/os/linux/savedesktopicon.c:107
 msgid "IBM 3270 Terminal emulator"
 msgstr "Emulador 3270"
 
@@ -357,7 +365,15 @@ msgstr "Inserção"
 msgid "Invalid or unknown property type"
 msgstr "Tipo da propriedade é inválido ou desconhecido"
 
-#: src/objects/window/header-settings.c:117 src/objects/toolbar/settings.c:108
+#: src/objects/settings/actionview.c:79
+msgid "Items packed from the end to the start"
+msgstr "Itens empacotados do final para o início"
+
+#: src/objects/settings/actionview.c:69
+msgid "Items packed from the start to the end"
+msgstr "Itens empacotados do início para o final"
+
+#: src/objects/toolbar/settings.c:94
 msgid "Itens"
 msgstr "Itens"
 
@@ -397,17 +413,13 @@ msgstr "Etiqueta"
 msgid "Large"
 msgstr "Grande"
 
-#: src/objects/os/linux/savedesktopicon.c:80
-msgid "Launcher name"
-msgstr "Nome do lançador"
-
-#: src/objects/toolbar/settings.c:189
+#: src/objects/toolbar/settings.c:164
 msgid "Layout"
 msgstr "Formato"
 
-#: src/objects/window/header-settings.c:54
-msgid "Left"
-msgstr "Esquerda"
+#: src/objects/settings/actionview.c:74
+msgid "List of the available and unpacked actions"
+msgstr "Lista de ações disponíveis ainda não empacotadas"
 
 #: ui/application.xml:71
 msgid "Main Menu"
@@ -525,6 +537,10 @@ msgstr "Colar próximo"
 msgid "Paste with left margin"
 msgstr "Colar com margem esquerda"
 
+#: src/objects/os/linux/savedesktopicon.c:76
+msgid "Path for the new shortcut"
+msgstr "Caminho para o novo atalho"
+
 #: ui/window.xml:129
 msgid "Preferences"
 msgstr "Preferências"
@@ -562,10 +578,6 @@ msgstr "Reselecionar"
 msgid "Resize on alternate screen"
 msgstr "Mudar tamanho do terminal em tela alternativa"
 
-#: src/objects/window/header-settings.c:60
-msgid "Right"
-msgstr "Direita"
-
 #: keypad/00-right.xml:34
 msgid "Right keypad"
 msgstr "Painel direito"
@@ -582,7 +594,7 @@ msgstr "Salvar"
 msgid "Save As"
 msgstr "Salvar Como"
 
-#: src/objects/os/linux/savedesktopicon.c:106
+#: src/objects/os/linux/savedesktopicon.c:118
 msgid "Save desktop icon"
 msgstr "Salvar ícone da área de trabalho"
 
@@ -598,9 +610,21 @@ msgstr "Salvar seleção"
 msgid "Save session preferences"
 msgstr "Salvar preferências da sessão"
 
+#: src/objects/os/linux/savedesktopicon.c:317
+msgid "Save to session filename"
+msgstr "Salvar para arquivo de sessão"
+
+#: src/objects/os/linux/savedesktopicon.c:292
+msgid "Save to shortcut file"
+msgstr "Salvar para atalho"
+
 #: ui/window.xml:503 ui/application.xml:400
 msgid "Screen size"
 msgstr "Tamanho da tela"
+
+#: src/objects/os/linux/savedesktopicon.c:176
+msgid "Select"
+msgstr "Selecionar"
 
 #: ui/window.xml:310 ui/application.xml:285
 msgid "Select Field"
@@ -614,15 +638,11 @@ msgstr "Selecionar tudo"
 msgid "Select by rectangles"
 msgstr "Seleção retangular"
 
-#: src/objects/window/header-settings.c:117
-msgid "Select the title bar itens"
-msgstr "Selecione itens da barra de título"
-
-#: src/objects/toolbar/settings.c:108
+#: src/objects/toolbar/settings.c:94
 msgid "Select the toolbar itens"
 msgstr "Selecione itens da barra de ferramentas"
 
-#: src/objects/toolbar/settings.c:113
+#: src/objects/toolbar/settings.c:99
 msgid "Selected"
 msgstr "Selecionado"
 
@@ -640,7 +660,7 @@ msgstr "Enviar/Receber"
 msgid "Send/Receive files"
 msgstr "Enviar/Receber arquivos"
 
-#: src/objects/toolbar/settings.c:248 src/objects/toolbar/settings.c:258
+#: src/objects/toolbar/settings.c:223 src/objects/toolbar/settings.c:233
 msgid "Separator"
 msgstr "Separador"
 
@@ -652,6 +672,10 @@ msgstr "Sessão"
 msgid "Session Trace"
 msgstr "Trace da sessão"
 
+#: src/objects/os/linux/savedesktopicon.c:90
+msgid "Session file"
+msgstr "Arquivo de sessão"
+
 #: ui/window.xml:61 ui/application.xml:126
 msgid "Session in New Tab"
 msgstr "Sessão em nova aba"
@@ -659,6 +683,10 @@ msgstr "Sessão em nova aba"
 #: ui/window.xml:56 ui/application.xml:121
 msgid "Session in new window"
 msgstr "Sessão em nova janela"
+
+#: src/objects/os/linux/savedesktopicon.c:82
+msgid "Session name"
+msgstr "Nome da sessão"
 
 #: src/objects/window/actions/sessionproperties.c:46 ui/window.xml:98
 #: ui/window.xml:554 ui/application.xml:163
@@ -673,17 +701,25 @@ msgstr "Define o tipo de interface do usuário"
 msgid "Settings"
 msgstr "Configurações"
 
-#: src/objects/toolbar/settings.c:189
+#: src/objects/toolbar/settings.c:164
 msgid "Setup the toolbar layout"
 msgstr "Configura formato da barra de ferramentas"
 
-#: src/objects/window/header-settings.c:102
+#: src/objects/window/header-settings.c:87
 msgid "Setup title bar"
 msgstr "Configurar barra de título"
 
-#: src/objects/toolbar/toolbar.c:272 src/objects/toolbar/settings.c:90
+#: src/objects/toolbar/toolbar.c:272 src/objects/toolbar/settings.c:76
 msgid "Setup toolbar"
 msgstr "Configurar barra de ferramentas"
+
+#: src/objects/os/linux/savedesktopicon.c:75
+msgid "Shortcut file"
+msgstr "Arquivo de atalho"
+
+#: src/objects/os/linux/savedesktopicon.c:68
+msgid "Shortcut name"
+msgstr "Nome do atalho"
 
 #: ui/application.xml:494
 msgid "Show Underline"
@@ -704,6 +740,14 @@ msgstr "Pequeno"
 #: ui/window.xml:388 ui/application.xml:504
 msgid "Smart paste"
 msgstr "Colar inteligente"
+
+#: src/objects/os/linux/savedesktopicon.c:293
+msgid "Standard desktop files"
+msgstr "Arquivo de atalho padrão"
+
+#: src/objects/settings/actionview.c:68
+msgid "Start"
+msgstr "Inicio"
 
 #: src/objects/actions/abstract.c:152
 msgid "State"
@@ -753,6 +797,10 @@ msgstr "A dica da ação"
 msgid "The code of the User interface type"
 msgstr "Código identificando o tipo de interface do usuário"
 
+#: src/objects/os/linux/savedesktopicon.c:91
+msgid "The file with the session preferences for this shortcut"
+msgstr "O arquivo com as preferências da sessão para esse atalho"
+
 #: src/objects/actions/abstract.c:110
 msgid "The label for the action"
 msgstr "A etiqueta da ação"
@@ -789,6 +837,12 @@ msgstr "O nome usado para ativar a ação"
 msgid "The position of the keypad"
 msgstr "A posição do painel"
 
+#: src/objects/os/linux/savedesktopicon.c:84
+msgid "The session name used in the window/tab title (empty for default)"
+msgstr ""
+"O nome da sessão usada no título da janela/aba. Vazio para usar o valor "
+"padrão"
+
 #: src/objects/actions/abstract.c:153
 msgid "The state the action is in"
 msgstr "O estado em que a ação está"
@@ -817,11 +871,15 @@ msgstr "The type of GVariant passed to activate()"
 msgid "The type of the state kept by the action"
 msgstr "O tipo do estado mantido pela ação"
 
-#: src/objects/window/header-settings.c:101
+#: src/objects/window/header-settings.c:86
 msgid "Title bar"
 msgstr "Barra de título"
 
-#: src/objects/toolbar/settings.c:89 ui/window.xml:420 ui/window.xml:535
+#: src/objects/window/header-settings.c:98
+msgid "Title bar actions"
+msgstr "Ações da barra de título"
+
+#: src/objects/toolbar/settings.c:75 ui/window.xml:420 ui/window.xml:535
 #: ui/application.xml:342
 msgid "Toolbar"
 msgstr "Barra de ferramentas"
@@ -872,7 +930,7 @@ msgstr "Janela com sessão padrão"
 msgid "_Apply"
 msgstr "_Aplicar"
 
-#: src/objects/settings/dialog.c:78 src/objects/os/linux/savedesktopicon.c:133
+#: src/objects/settings/dialog.c:78 src/objects/os/linux/savedesktopicon.c:233
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -916,7 +974,7 @@ msgstr "_Preferências"
 msgid "_Rename session"
 msgstr "Renomear sessão"
 
-#: src/objects/os/linux/savedesktopicon.c:134
+#: src/objects/os/linux/savedesktopicon.c:234
 msgid "_Save"
 msgstr "_Salvar"
 
@@ -1839,6 +1897,9 @@ msgstr "translator-credits"
 #~ msgid "File _Format"
 #~ msgstr "_Formato do arquivo"
 
+#~ msgid "File name"
+#~ msgstr "Nome do arquivo"
+
 #~ msgid "File transfer complete"
 #~ msgstr "Transferência completa"
 
@@ -2211,6 +2272,12 @@ msgstr "translator-credits"
 
 #~ msgid "Latest program message"
 #~ msgstr "Última mensagem de programa"
+
+#~ msgid "Launcher name"
+#~ msgstr "Nome do lançador"
+
+#~ msgid "Left"
+#~ msgstr "Esquerda"
 
 #~ msgid "Load"
 #~ msgstr "Load"
@@ -2719,6 +2786,9 @@ msgstr "translator-credits"
 #~ msgid "Revocation list"
 #~ msgstr "Lista de revogados"
 
+#~ msgid "Right"
+#~ msgstr "Direita"
+
 #~ msgid "SOCKS4 Proxy: client is not reachable"
 #~ msgstr "SOCKS4 Proxy: client is not reachable"
 
@@ -2874,9 +2944,6 @@ msgstr "translator-credits"
 #~ msgid "Save terminal contents"
 #~ msgstr "Salvar conteúdo da tela"
 
-#~ msgid "Save trace file"
-#~ msgstr "Salvar arquivo de trace"
-
 #~ msgid "Save trace to file"
 #~ msgstr "Salvar trace para arquivo"
 
@@ -2942,9 +3009,6 @@ msgstr "translator-credits"
 #~ msgid "Select destination file"
 #~ msgstr "Selecionar arquivo destino"
 
-#~ msgid "Select file"
-#~ msgstr "Selecionar arquivo"
-
 #~ msgid "Select file to receive"
 #~ msgstr "Selecione arquivo a receber"
 
@@ -2969,6 +3033,9 @@ msgstr "translator-credits"
 #~ msgid "Select previous file"
 #~ msgstr "Selecionar arquivo anterior"
 
+#~ msgid "Select the title bar itens"
+#~ msgstr "Selecione itens da barra de título"
+
 #~ msgid "Select() failed when processing for events."
 #~ msgstr "Select() falhou ao processar eventos."
 
@@ -2986,9 +3053,6 @@ msgstr "translator-credits"
 
 #~ msgid "Send an \"Enter\" action."
 #~ msgstr "Envia um \"Enter\"."
-
-#~ msgid "Send file"
-#~ msgstr "Enviar arquivo"
 
 #~ msgid "Send file to host"
 #~ msgstr "Enviar arquivo para o servidor"
@@ -3121,9 +3185,6 @@ msgstr "translator-credits"
 
 #~ msgid "Start upload."
 #~ msgstr "Iniciar envio."
-
-#~ msgid "Starting"
-#~ msgstr "Iniciando"
 
 #~ msgid "Starting transfer"
 #~ msgstr "Iniciando transferência"

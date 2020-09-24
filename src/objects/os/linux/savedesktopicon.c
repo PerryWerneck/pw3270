@@ -182,13 +182,13 @@
 
 		// Standard filter
 		filter = gtk_file_filter_new();
-		gtk_file_filter_add_pattern (filter, gettext(descr->pattern));
+		gtk_file_filter_add_pattern (filter, descr->pattern);
 		gtk_file_filter_set_name(filter, gettext(descr->name));
 		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog),filter);
 
 		// All files
 		filter = gtk_file_filter_new();
-		gtk_file_filter_add_pattern (filter, _("*.*"));
+		gtk_file_filter_add_pattern (filter, "*.*");
 		gtk_file_filter_set_name(filter, _("All files"));
 		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog),filter);
 
@@ -291,7 +291,7 @@
 		static const struct FileEntry entry = {
 			.title = N_("Save to shortcut file"),
 			.name = N_("Standard desktop files"),
-			.pattern = N_("*.desktop")
+			.pattern = "*.desktop"
 		};
 
 		gtk_entry_set_text(GTK_ENTRY(inputs[1]),filename);
@@ -316,7 +316,7 @@
 		static const struct FileEntry entry = {
 			.title = N_("Save to session filename"),
 			.name = N_("3270 session files"),
-			.pattern = N_("*.3270")
+			.pattern = "*.3270"
 		};
 
 		g_autofree gchar * session_filename = get_filename(terminal);
