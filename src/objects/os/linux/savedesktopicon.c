@@ -41,15 +41,10 @@
  #include <lib3270.h>
  #include <lib3270/log.h>
  #include <lib3270/properties.h>
+ #include <pw3270/tools.h>
 
  static GtkWidget * factory(V3270SimpleAction *action, GtkWidget *terminal);
  static void response(GtkWidget *dialog, gint response_id, GtkWidget *terminal);
-
- struct FileEntry {
-	const gchar * title;
-	const gchar * pattern;
-	const gchar * name;
- };
 
  static const struct _entry {
 
@@ -154,62 +149,6 @@
 
  }
 
- static void icon_response(GtkDialog *dialog, int response_id, GtkEntry *entry) {
-
-	if(response_id == GTK_RESPONSE_ACCEPT) {
-		g_autofree gchar * filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
-		gtk_entry_set_text(entry,filename ? filename : "");
-	}
-
-	gtk_widget_destroy(GTK_WIDGET(dialog));
-
- }
-
- static void icon_press(GtkWidget *entry, G_GNUC_UNUSED GtkEntryIconPosition icon_pos, G_GNUC_UNUSED GdkEvent *event, const struct FileEntry *descr) {
-
-	GtkWidget * dialog =
-					gtk_file_chooser_dialog_new(
-						gettext(descr->title),
-						GTK_WINDOW(gtk_widget_get_toplevel(entry)),
-						GTK_FILE_CHOOSER_ACTION_SAVE,
-						_("Cancel"),    GTK_RESPONSE_CANCEL,
-						_("Select"),    GTK_RESPONSE_ACCEPT,
-						NULL
-					);
-
-	{
-		GtkFileFilter *filter;
-
-		// Standard filter
-		filter = gtk_file_filter_new();
-		gtk_file_filter_add_pattern (filter, descr->pattern);
-		gtk_file_filter_set_name(filter, gettext(descr->name));
-		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog),filter);
-
-		// All files
-		filter = gtk_file_filter_new();
-		gtk_file_filter_add_pattern (filter, "*.*");
-		gtk_file_filter_set_name(filter, _("All files"));
-		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog),filter);
-
-	}
-
-	gtk_window_set_modal(GTK_WINDOW(dialog),TRUE);
-	gtk_window_set_deletable(GTK_WINDOW(dialog),FALSE);
-
-	const gchar *filename = gtk_entry_get_text(GTK_ENTRY(entry));
-
-	if(filename && *filename)
-		gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog),filename);
-
-	g_signal_connect(dialog,"close",G_CALLBACK(gtk_widget_destroy),NULL);
-	g_signal_connect(dialog,"response",G_CALLBACK(icon_response),entry);
-
-	gtk_widget_show_all(dialog);
-
-
- }
-
  GtkWidget * factory(V3270SimpleAction *action, GtkWidget *terminal) {
 
 	size_t ix;
@@ -288,15 +227,16 @@
 
 	// 1 = Shortcut filename
 	{
-		static const struct FileEntry entry = {
-			.title = N_("Save to shortcut file"),
-			.name = N_("Standard desktop files"),
-			.pattern = "*.desktop"
-		};
-
 		gtk_entry_set_text(GTK_ENTRY(inputs[1]),filename);
-		gtk_entry_set_icon_from_icon_name(GTK_ENTRY(inputs[1]),GTK_ENTRY_ICON_SECONDARY,"document-save");
-		g_signal_connect(inputs[1],"icon_press",G_CALLBACK(icon_press),(gpointer) &entry);
+		gtk_entry_bind_to_filechooser(
+			inputs[1],
+			GTK_FILE_CHOOSER_ACTION_SAVE,
+			_("Save to shortcut file"),
+			"document-save",
+			"*.desktop",
+			_("Standard desktop files")
+		);
+
 	}
 
 	// 2 = Session name
@@ -313,16 +253,18 @@
 
 	// 3 = Session filename
 	{
-		static const struct FileEntry entry = {
-			.title = N_("Save to session filename"),
-			.name = N_("3270 session files"),
-			.pattern = "*.3270"
-		};
-
 		g_autofree gchar * session_filename = get_filename(terminal);
 		gtk_entry_set_text(GTK_ENTRY(inputs[3]),session_filename);
-		gtk_entry_set_icon_from_icon_name(GTK_ENTRY(inputs[3]),GTK_ENTRY_ICON_SECONDARY,"document-save");
-		g_signal_connect(inputs[3],"icon_press",G_CALLBACK(icon_press),(gpointer) &entry);
+
+		gtk_entry_bind_to_filechooser(
+			inputs[3],
+			GTK_FILE_CHOOSER_ACTION_SAVE,
+			_("Save to session filename"),
+			"document-save",
+			"*.3270",
+			_("3270 session files")
+		);
+
 	}
 
 	// 4 = Generic name

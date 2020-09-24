@@ -40,6 +40,7 @@ SOURCES= \
 	$(wildcard src/objects/settings/*.c) \
 	$(wildcard src/objects/os/@OSNAME@/*.c) \
 	$(wildcard src/main/*.c) \
+	$(wildcard src/tools/*.c) \
 	$(wildcard src/main/@OSNAME@/*.c) \
 	$(wildcard src/main/@OSNAME@/*.rc) \
 	$(wildcard src/objects/keypad/*.c)
