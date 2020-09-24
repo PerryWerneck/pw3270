@@ -346,6 +346,14 @@ run: \
 	@G_DEBUG=fatal-warnings \
 		$(BINDBG)/$(PACKAGE_NAME)@EXEEXT@
 
+
+run-inspector: \
+	$(BINDBG)/$(PACKAGE_NAME)@EXEEXT@ \
+	gschemas.compiled
+
+	@GTK_DEBUG=interactive \
+		$(BINDBG)/$(PACKAGE_NAME)@EXEEXT@
+
 mem-check: \
 	$(BINDBG)/$(PACKAGE_NAME)@EXEEXT@
 
