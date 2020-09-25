@@ -38,6 +38,7 @@ TARGET_ARCHS="x86_64"
 GIT_URL="https://github.com/PerryWerneck"
 BUILD_UNSTABLE=0
 MAKE_ZIP=0
+CLEAR_TARGET_PATH=0
 
 PROJECTDIR=$(dirname $(dirname $(readlink -f ${0})))
 WORKDIR=$(mktemp -d)
@@ -83,7 +84,6 @@ failed()
 clone()
 {
 	echo -e "\e]2;Cloning ${1}\a"
-	echo "Cloning ${1}"
 
 	mkdir -p ${WORKDIR}/sources
 
@@ -571,7 +571,16 @@ copy_install_file() {
 	fi
 
 	if [ -d ~/public_html/win/${PRODUCT_NAME} ]; then
-		mkdir -p ~/public_html/win/${TARGET_PATH}
+
+		mkdir -p "~/public_html/win/${TARGET_PATH}"
+		if [ "$?" != "0" ]; then
+			failed "Can't create ~/public_html/win/${TARGET_PATH}"
+		fi
+
+		if [ "${CLEAR_TARGET_PATH}" == "1"]; then
+			rm -fr "~/public_html/win/${TARGET_PATH}/*"
+		fi
+
 		ln -f -v "${FILENAME}" ~/public_html/win/${TARGET_PATH}
 		if [ "$?" != "0" ]; then
 			failed "Can't link ${1} to ~/public_html/win/${TARGET_PATH}"
@@ -583,6 +592,10 @@ copy_install_file() {
 		mkdir -p "${XDG_PUBLICSHARE_DIR}/${TARGET_PATH}"	
 		if [ "$?" != "0" ]; then
 			failed "Can't create ${XDG_PUBLICSHARE_DIR}/${TARGET_PATH}"
+		fi
+
+		if [ "${CLEAR_TARGET_PATH}" == "1"]; then
+			rm -fr "${XDG_PUBLICSHARE_DIR}/${TARGET_PATH}/*"
 		fi
 
 		ln -f -v "${FILENAME}" ${XDG_PUBLICSHARE_DIR}/${TARGET_PATH}
@@ -771,13 +784,21 @@ do
 			;;
 
 		CLEAR)
-			if [ -d ~/public_html/win/${PRODUCT_NAME} ]; then
-				rm -fr ~/public_html/win/${PRODUCT_NAME}/{x86_32,x86_64}
-			fi
+			CLEAR_TARGET_PATH=1
 
-			if [ ! -z "${XDG_PUBLICSHARE_DIR}" ] && [ -d "${XDG_PUBLICSHARE_DIR}/${PRODUCT_NAME}" ]; then
-				rm -fr ${XDG_PUBLICSHARE_DIR}/${PRODUCT_NAME}/{x86_32,x86_64}
-			fi
+#			if [ ${BUILD_UNSTABLE} == "1" ]; then
+#				CLEAR_TARGET="${PRODUCT_NAME}/unstable"
+#			else
+#				CLEAR_TARGET="${PRODUCT_NAME}/stable"
+#			fi
+#
+#			if [ -d ~/public_html/win/${STORAGE_PATH} ]; then
+#				echo rm -fr ~/public_html/win/${CLEAR_TARGET}/{x86_32,x86_64}
+#			fi
+#
+#			if [ ! -z "${XDG_PUBLICSHARE_DIR}" ] && [ -d "${XDG_PUBLICSHARE_DIR}/${CLEAR_TARGET}" ]; then
+#				echo rm -fr ${XDG_PUBLICSHARE_DIR}/${CLEAR_TARGET}/{x86_32,x86_64}
+#			fi
 
 			;;
 
