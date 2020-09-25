@@ -116,7 +116,11 @@
 
  void gtk_entry_bind_to_filechooser(GtkWidget *widget, GtkFileChooserAction action, const gchar *title, const gchar *icon_name, const gchar *pattern, const gchar *name) {
 
-	gtk_entry_set_icon_from_icon_name(GTK_ENTRY(widget),GTK_ENTRY_ICON_SECONDARY,icon_name ? icon_name : "document-save");
+	gtk_entry_set_icon_from_icon_name(
+		GTK_ENTRY(widget),
+		GTK_ENTRY_ICON_SECONDARY,
+		icon_name ? icon_name : "document-open"
+	);
 
 	// Store data
 	gsize szEntry = sizeof(struct FileEntry) + strlen(title) + strlen(pattern) + strlen(name) + 4;

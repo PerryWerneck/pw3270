@@ -232,7 +232,7 @@
 			inputs[1],
 			GTK_FILE_CHOOSER_ACTION_SAVE,
 			_("Save to shortcut file"),
-			"document-save",
+			NULL,
 			"*.desktop",
 			_("Standard desktop files")
 		);
@@ -260,7 +260,7 @@
 			inputs[3],
 			GTK_FILE_CHOOSER_ACTION_SAVE,
 			_("Save to session filename"),
-			"document-save",
+			NULL,
 			"*.3270",
 			_("3270 session files")
 		);
