@@ -52,6 +52,9 @@
  #include <v3270/actions.h>
  #include <lib3270.h>
  #include <lib3270/log.h>
+ #include <pw3270/tools.h>
+ #include <v3270/keyfile.h>
+ #include <v3270/settings.h>
 
  static GtkWidget * factory(V3270SimpleAction *action, GtkWidget *terminal);
  static void response(GtkWidget *dialog, gint response_id, GtkWidget *terminal);
@@ -60,18 +63,37 @@
 
 	const gchar * label;
 	const gchar * tooltip;
+	gint margin_top;
 	gint width;
 
  } entries[] = {
 
+	// 0 - Shorcut file name
 	{
-		.label = N_("Launcher name"),
+		.label = N_("Shortcut file"),
+		.tooltip = N_("Path for the new shortcut"),
 		.width = 40,
 	},
 
+	// 1 - Shortcut description
 	{
 		.label = N_("Description"),
 		.width = 20,
+	},
+
+	// 2 = Session name
+	{
+		.label = N_("Session name"),
+		.margin_top = 12,
+		.tooltip = N_("The session name used in the window/tab title (empty for default)"),
+		.width = 15,
+	},
+
+	// 3 = Session file
+	{
+		.label = N_("Session file"),
+		.tooltip = N_("The file with the session preferences for this shortcut"),
+		.width = 40,
 	}
 
  };
@@ -141,11 +163,30 @@
 		gtk_widget_set_hexpand(inputs[ix],FALSE);
 		gtk_widget_set_vexpand(inputs[ix],FALSE);
 
+		if(entries[ix].tooltip) {
+			gtk_widget_set_tooltip_markup(GTK_WIDGET(inputs[ix]),gettext(entries[ix].tooltip));
+		}
+
+		if(entries[ix].margin_top) {
+			gtk_widget_set_margin_top(label,entries[ix].margin_top);
+			gtk_widget_set_margin_top(inputs[ix],entries[ix].margin_top);
+		}
+
 		gtk_grid_attach(grid,inputs[ix],1,ix,entries[ix].width,1);
 
 	}
 
+	// Setup short-cut name entry.
 	{
+		gtk_entry_bind_to_filechooser(
+			inputs[0],
+			GTK_FILE_CHOOSER_ACTION_SAVE,
+			_("Save to windows shortcut"),
+			NULL,
+			"*.lnk",
+			_("Windows shortcuts")
+		);
+
 		gchar * filename = g_strdup_printf(
 								"%s\\" G_STRINGIFY(PRODUCT_NAME) ".lnk",
 								g_get_user_special_dir(G_USER_DIRECTORY_DESKTOP)
@@ -168,11 +209,20 @@
 		g_free(filename);
 	}
 
+	gtk_entry_bind_to_filechooser(
+		inputs[3],
+		GTK_FILE_CHOOSER_ACTION_SAVE,
+		_("Save to session filename"),
+		NULL,
+		"*.3270",
+		_("3270 session files")
+	);
+
 	gtk_widget_show_all(GTK_WIDGET(grid));
 	return dialog;
  }
 
- static HRESULT CreateShortCut(LPSTR pszTargetfile, LPSTR pszTargetargs, LPSTR pszLinkfile, LPSTR pszDescription, int iShowmode, LPSTR pszCurdir, LPSTR pszIconfile, int iIconindex) {
+ static HRESULT CreateShortCut(const char * pszTargetfile, const char * pszTargetargs, const char * pszLinkfile, const char * pszDescription, int iShowmode, const char * pszCurdir, LPSTR pszIconfile, int iIconindex) {
 
 	// https://www.codeproject.com/Articles/11467/How-to-create-short-cuts-link-files
 	IShellLink*   pShellLink;            // IShellLink object pointer
@@ -255,16 +305,41 @@
 		// Save desktop icon
 		GtkWidget ** inputs = g_object_get_data(G_OBJECT(dialog),"inputs");
 
-		HRESULT hRes = CreateShortCut(
-							NULL,										// LPSTR pszTargetfile,
-							v3270_key_file_get_file_name(terminal),		// LPSTR pszTargetargs,
-							gtk_entry_get_text(GTK_ENTRY(inputs[0])),	// LPSTR pszLinkfile,
-							gtk_entry_get_text(GTK_ENTRY(inputs[1])),	//LPSTR pszDescription,
-							0,
-							NULL,
-							NULL,
-							0
-						);
+		// Save keyfile
+		GError * error = NULL;
+		v3270_key_file_save_to_file(
+			terminal,
+			gtk_entry_get_text(GTK_ENTRY(inputs[3])),
+			&error
+		);
+
+		if(!error) {
+
+			HRESULT hRes = CreateShortCut(
+								NULL,										// LPSTR pszTargetfile,
+								gtk_entry_get_text(GTK_ENTRY(inputs[3])),	// LPSTR pszTargetargs,
+								gtk_entry_get_text(GTK_ENTRY(inputs[0])),	// LPSTR pszLinkfile,
+								gtk_entry_get_text(GTK_ENTRY(inputs[1])),	// LPSTR pszDescription,
+								0,
+								NULL,
+								NULL,
+								0
+							);
+
+		}
+
+		if(error) {
+
+			g_message("%s",error->message);
+			g_error_free(error);
+
+		} else {
+
+			// Set session name (after save to avoid changes on the old session file).
+			v3270_set_session_name(terminal,gtk_entry_get_text(GTK_ENTRY(inputs[2])));
+			v3270_emit_save_settings(terminal,NULL);
+
+		}
 
 	}
 
