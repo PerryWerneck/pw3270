@@ -358,7 +358,6 @@
 
 	}
 
-
 }
 
 void response(GtkWidget *dialog, gint response_id, GtkWidget *terminal) {

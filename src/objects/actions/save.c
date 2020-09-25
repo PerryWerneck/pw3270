@@ -37,19 +37,44 @@
  #include <v3270/keyfile.h>
  #include <pw3270.h>
  #include <pw3270/application.h>
-
+ #include <pw3270/tools.h>
+ #include <v3270/settings.h>
 
  static GtkWidget * factory(V3270SimpleAction *action, GtkWidget *terminal);
  static void response(GtkWidget *dialog, gint response_id, GtkWidget *terminal);
 
- GAction * pw3270_action_save_session_as_new(void) {
+ static const struct Entry {
+
+	const gchar *label;
+	const gchar *tooltip;
+	const gint width;
+
+ } entries[] = {
+
+ 	// 0 = Session name
+	{
+		.label = N_("Session name"),
+		.tooltip = N_("The session name used in the window/tab title (empty for default)"),
+		.width = 15,
+	},
+
+	// 1 = Session file
+	{
+		.label = N_("Session file"),
+		.tooltip = N_("The file to save the current session preferences"),
+		.width = 40,
+	}
+
+ };
+
+ GAction * pw3270_action_save_session_preferences_new(void) {
 
 	V3270SimpleAction * action = v3270_dialog_action_new(factory);
 
-	action->name = "save.session.as";
-	action->label = _("Save As");
+	action->name = "save.session.preferences";
+	action->label = _("Save session preferences");
 	action->icon_name = "document-save-as";
-	action->tooltip = _("Save session preferences");
+	action->tooltip = _("Save current session preferences to file");
 
 	return G_ACTION(action);
 
@@ -57,64 +82,113 @@
 
  GtkWidget * factory(V3270SimpleAction *action, GtkWidget *terminal) {
 
+	// Create dialog
+	gboolean use_header;
+	g_object_get(gtk_settings_get_default(), "gtk-dialogs-use-header", &use_header, NULL);
+
 	GtkWidget *	dialog =
-		gtk_file_chooser_dialog_new(
-				action->tooltip,
-				GTK_WINDOW(gtk_widget_get_toplevel(terminal)),
-				GTK_FILE_CHOOSER_ACTION_SAVE,
-				_("Save"), GTK_RESPONSE_OK,
-				_("Cancel"),GTK_RESPONSE_CANCEL,
-				NULL
-		);
+		GTK_WIDGET(g_object_new(
+			GTK_TYPE_DIALOG,
+			"use-header-bar", (use_header ? 1 : 0),
+			NULL
+		));
+
 
 	gtk_window_set_modal(GTK_WINDOW(dialog),TRUE);
-	gtk_file_chooser_set_pw3270_filters(GTK_FILE_CHOOSER(dialog));
+	gtk_window_set_title(GTK_WINDOW(dialog),action->label);
 
-	if(terminal) {
-		g_autofree gchar * filename = v3270_key_file_build_filename(terminal);
-		gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog),filename);
+	gtk_dialog_add_buttons(
+		GTK_DIALOG(dialog),
+		_("_Cancel"), GTK_RESPONSE_CANCEL,
+		_("_Save"), GTK_RESPONSE_APPLY,
+		NULL
+	);
+
+
+	// Create entry fields
+	GtkWidget ** inputs = g_new0(GtkWidget *,G_N_ELEMENTS(entries));
+	g_object_set_data_full(G_OBJECT(dialog),"inputs",inputs,g_free);
+	debug("Dialog=%p inputs=%p",dialog,inputs);
+
+	GtkGrid * grid = GTK_GRID(gtk_grid_new());
+
+	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),GTK_WIDGET(grid),TRUE,TRUE,0);
+
+	// https://developer.gnome.org/hig/stable/visual-layout.html.en
+	gtk_container_set_border_width(GTK_CONTAINER(grid),18);
+ 	gtk_grid_set_row_spacing(GTK_GRID(grid),6);
+ 	gtk_grid_set_column_spacing(GTK_GRID(grid),12);
+
+	// https://developer.gnome.org/hig/stable/visual-layout.html.en
+	// gtk_box_set_spacing(GTK_BOX(content_area),18);
+
+	size_t ix;
+	for(ix = 0; ix < G_N_ELEMENTS(entries); ix++) {
+
+		GtkWidget * label = gtk_label_new(gettext(entries[ix].label));
+		gtk_label_set_xalign(GTK_LABEL(label),1);
+		gtk_grid_attach(grid,label,0,ix,1,1);
+
+		inputs[ix] = gtk_entry_new();
+
+		if(entries[ix].tooltip) {
+			gtk_widget_set_tooltip_markup(GTK_WIDGET(inputs[ix]),gettext(entries[ix].tooltip));
+		}
+
+		gtk_entry_set_width_chars(GTK_ENTRY(inputs[ix]),entries[ix].width);
+		gtk_widget_set_hexpand(inputs[ix],FALSE);
+		gtk_widget_set_vexpand(inputs[ix],FALSE);
+
+		gtk_grid_attach(grid,inputs[ix],1,ix,entries[ix].width,1);
+
 	}
+
+	gtk_entry_bind_to_filechooser(
+		inputs[1],
+		GTK_FILE_CHOOSER_ACTION_SAVE,
+		_("Save session preferences"),
+		NULL,
+		"*.3270",
+		_("3270 session files")
+	);
 
 	g_signal_connect(dialog,"response",G_CALLBACK(response),terminal);
 
-	gtk_widget_show_all(dialog);
+	gtk_widget_show_all(GTK_WIDGET(grid));
 	return dialog;
+
  }
 
  void response(GtkWidget *dialog, gint response_id, GtkWidget *terminal) {
 
-	debug("%s(%d)",__FUNCTION__,response_id);
+	if(response_id == GTK_RESPONSE_APPLY) {
 
-	g_autofree gchar * filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+		GtkWidget ** inputs = g_object_get_data(G_OBJECT(dialog),"inputs");
+		gtk_widget_hide(dialog);
 
-	gtk_widget_destroy(dialog);
-
-	if(response_id == GTK_RESPONSE_OK) {
 		GError * error = NULL;
-		v3270_key_file_open(terminal,filename,&error);
+		v3270_key_file_save_to_file(
+			terminal,
+			gtk_entry_get_text(GTK_ENTRY(inputs[1])),
+			&error
+		);
 
 		if(error) {
 
-			GtkWidget * dialog = gtk_message_dialog_new_with_markup(
-											GTK_WINDOW(gtk_widget_get_toplevel(terminal)),
-											GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
-											GTK_MESSAGE_ERROR,
-											GTK_BUTTONS_CANCEL,
-											_("Can't open \"%s\""),filename
-										);
-
-			gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),"%s",error->message);
-
-			gtk_window_set_title(GTK_WINDOW(dialog),_("Can't load session file"));
-
-			gtk_widget_show_all(dialog);
-
-			g_signal_connect(dialog,"close",G_CALLBACK(gtk_widget_destroy),NULL);
-			g_signal_connect(dialog,"response",G_CALLBACK(gtk_widget_destroy),NULL);
-
+			g_message("%s",error->message);
 			g_error_free(error);
+
+		} else {
+
+			// Set session name (after save to avoid changes on the old session file).
+			v3270_set_session_name(terminal,gtk_entry_get_text(GTK_ENTRY(inputs[0])));
+			v3270_emit_save_settings(terminal,NULL);
+
 		}
 
 	}
+
+
+	gtk_widget_destroy(dialog);
 
  }

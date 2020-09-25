@@ -96,7 +96,7 @@
 
 				<item>
 					<attribute name="label" translatable="yes">Session preferences</attribute>
-					<attribute name="action">win.save.session.as</attribute>
+					<attribute name="action">win.save.session.preferences</attribute>
 				</item>
 
 			</section>
