@@ -555,21 +555,25 @@ makeRuntime()
 #
 copy_install_file() {
 
-	FILENAME=${PROJECTDIR}/$(basename ${1})
-
-	rm -f "${FILENAME}"
-	cp -v "${1}" "${FILENAME}"
-	
 	if [ "$?" != "0" ]; then
 		failed "Can't copy ${1} to ${FILENAME}"
 	fi
 
 	if [ ${BUILD_UNSTABLE} == "1" ]; then
 		TARGET_PATH="/${PRODUCT_NAME}/unstable/${ARCH}"
+		FILENAME=${PROJECTDIR}/dist/unstable/${ARCH}/$(basename ${1})
 	else
 		TARGET_PATH="/${PRODUCT_NAME}/stable/${ARCH}"
+		FILENAME=${PROJECTDIR}/dist/stable/${ARCH}/$(basename ${1})
 	fi
 
+	if [ "${CLEAR_TARGET_PATH}" == "1" ]; then
+		rm -fr "$(dirname ${FILENAME})/*"
+	fi
+
+	mkdir -p $(dirname ${FILENAME})
+	ln -f -v ${1} "${FILENAME}"
+	
 	if [ -d ~/public_html/win/${PRODUCT_NAME} ]; then
 
 		mkdir -p "~/public_html/win/${TARGET_PATH}"
@@ -577,7 +581,7 @@ copy_install_file() {
 			failed "Can't create ~/public_html/win/${TARGET_PATH}"
 		fi
 
-		if [ "${CLEAR_TARGET_PATH}" == "1"]; then
+		if [ "${CLEAR_TARGET_PATH}" == "1" ]; then
 			rm -fr "~/public_html/win/${TARGET_PATH}/*"
 		fi
 
@@ -594,7 +598,7 @@ copy_install_file() {
 			failed "Can't create ${XDG_PUBLICSHARE_DIR}/${TARGET_PATH}"
 		fi
 
-		if [ "${CLEAR_TARGET_PATH}" == "1"]; then
+		if [ "${CLEAR_TARGET_PATH}" == "1" ]; then
 			rm -fr "${XDG_PUBLICSHARE_DIR}/${TARGET_PATH}/*"
 		fi
 
