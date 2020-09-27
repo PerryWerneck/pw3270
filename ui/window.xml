@@ -426,6 +426,11 @@
 				<attribute name="action">win.menubar</attribute>
 			</item>
 
+			<item>
+				<attribute name="label" translatable="yes">Session Trace</attribute>
+				<attribute name="action">win.trace</attribute>
+			</item>
+
 		</submenu>
 
 		<section>
@@ -539,6 +544,11 @@
 			<item>
 				<attribute name="label" translatable="yes">Main menu</attribute>
 				<attribute name="action">win.menubar</attribute>
+			</item>
+
+			<item>
+				<attribute name="label" translatable="yes">Session Trace</attribute>
+				<attribute name="action">win.trace</attribute>
 			</item>
 
 		</submenu>
