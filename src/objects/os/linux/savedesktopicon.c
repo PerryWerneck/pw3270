@@ -117,6 +117,7 @@
 
  }
 
+ /*
  static gchar * get_filename(GtkWidget *terminal) {
 
  	g_autofree gchar * defname = v3270_keyfile_get_default_filename();
@@ -148,6 +149,7 @@
 	return filename;
 
  }
+ */
 
  GtkWidget * factory(V3270SimpleAction *action, GtkWidget *terminal) {
 
@@ -253,7 +255,7 @@
 
 	// 3 = Session filename
 	{
-		g_autofree gchar * session_filename = get_filename(terminal);
+		g_autofree gchar * session_filename = v3270_key_file_build_filename(terminal);
 		gtk_entry_set_text(GTK_ENTRY(inputs[3]),session_filename);
 
 		gtk_entry_bind_to_filechooser(

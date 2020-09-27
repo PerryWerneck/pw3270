@@ -292,9 +292,12 @@ void v3270_key_file_close(GtkWidget *terminal) {
 
  gchar * v3270_key_file_build_filename(GtkWidget *terminal) {
 
-	const gchar * filename = v3270_key_file_get_filename(terminal);
-	if(filename && g_file_test(filename,G_FILE_TEST_IS_REGULAR) && !g_str_has_prefix(filename,g_get_user_config_dir())) {
-		return g_strdup(filename);
+  	g_autofree gchar * defname = v3270_keyfile_get_default_filename();
+	const gchar * current = v3270_key_file_get_filename(terminal);
+
+	// If is not the default name, return it.
+	if(current && *current && g_file_test(current,G_FILE_TEST_IS_REGULAR) && strcmp(defname,current)) {
+		return g_strdup(current);
 	}
 
 	g_autofree gchar * folder = v3270_key_file_get_default_path(terminal);

@@ -143,14 +143,20 @@
 
 	}
 
-	gtk_entry_bind_to_filechooser(
-		inputs[1],
-		GTK_FILE_CHOOSER_ACTION_SAVE,
-		_("Save session preferences"),
-		NULL,
-		"*.3270",
-		_("3270 session files")
-	);
+	{
+		g_autofree gchar * session_filename = v3270_key_file_build_filename(terminal);
+		gtk_entry_set_text(GTK_ENTRY(inputs[1]),session_filename);
+
+		gtk_entry_bind_to_filechooser(
+			inputs[1],
+			GTK_FILE_CHOOSER_ACTION_SAVE,
+			_("Save session preferences"),
+			NULL,
+			"*.3270",
+			_("3270 session files")
+		);
+
+	}
 
 	g_signal_connect(dialog,"response",G_CALLBACK(response),terminal);
 
