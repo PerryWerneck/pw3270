@@ -572,7 +572,10 @@ copy_install_file() {
 	fi
 
 	mkdir -p $(dirname ${FILENAME})
-	ln -f -v ${1} "${FILENAME}"
+	ln -f -v "${1}" "${FILENAME}"
+	if [ "$?" != "0" ]; then
+		cp -v "${1}" "${FILENAME}"
+	fi
 	
 	if [ -d ~/public_html/win/${PRODUCT_NAME} ]; then
 
@@ -582,7 +585,7 @@ copy_install_file() {
 		fi
 
 		if [ "${CLEAR_TARGET_PATH}" == "1" ]; then
-			rm -fr "~/public_html/win/${TARGET_PATH}/*"
+			rm -fr ~/public_html/win/${TARGET_PATH}/*
 		fi
 
 		ln -f -v "${FILENAME}" ~/public_html/win/${TARGET_PATH}
@@ -599,7 +602,7 @@ copy_install_file() {
 		fi
 
 		if [ "${CLEAR_TARGET_PATH}" == "1" ]; then
-			rm -fr "${XDG_PUBLICSHARE_DIR}/${TARGET_PATH}/*"
+			rm -fr ${XDG_PUBLICSHARE_DIR}/${TARGET_PATH}/*
 		fi
 
 		ln -f -v "${FILENAME}" ${XDG_PUBLICSHARE_DIR}/${TARGET_PATH}
