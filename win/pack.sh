@@ -814,7 +814,7 @@ do
 			;;
 
 		TARGET-ARCHS)
-			TARGET_ARCHS=${value}
+			TARGET_ARCHS=$(echo ${value} | sed "s@,@ @g")
 			;;
 
 		NO-PRE-REQS)
