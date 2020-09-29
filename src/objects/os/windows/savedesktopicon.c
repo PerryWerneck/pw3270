@@ -103,8 +103,8 @@
 	V3270SimpleAction * action = v3270_dialog_action_new(factory);
 
 	action->name = "save.launcher";
-	action->label = _("Save desktop icon");
-	action->tooltip = _("Create a desktop icon for the current session");
+	action->label = _("Save session shortcut");
+	action->tooltip = _("Create shortcut for the current session");
 
 	return G_ACTION(action);
 
@@ -209,14 +209,20 @@
 		g_free(filename);
 	}
 
-	gtk_entry_bind_to_filechooser(
-		inputs[3],
-		GTK_FILE_CHOOSER_ACTION_SAVE,
-		_("Save to session filename"),
-		NULL,
-		"*.3270",
-		_("3270 session files")
-	);
+	{
+		g_autofree gchar * session_filename = v3270_key_file_build_filename(terminal);
+		gtk_entry_set_text(GTK_ENTRY(inputs[3]),session_filename);
+
+		gtk_entry_bind_to_filechooser(
+			inputs[3],
+			GTK_FILE_CHOOSER_ACTION_SAVE,
+			_("File for session preferences"),
+			NULL,
+			"*.3270",
+			_("3270 session files")
+		);
+
+	}
 
 	gtk_widget_show_all(GTK_WIDGET(grid));
 	return dialog;

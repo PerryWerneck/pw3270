@@ -90,7 +90,7 @@
 			<section>
 
 				<item>
-					<attribute name="label" translatable="yes">Desktop icon</attribute>
+					<attribute name="label" translatable="yes">Shortcut for this session</attribute>
 					<attribute name="action">win.save.launcher</attribute>
 				</item>
 

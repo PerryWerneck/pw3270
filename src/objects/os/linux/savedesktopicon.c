@@ -110,8 +110,8 @@
 	V3270SimpleAction * action = v3270_dialog_action_new(factory);
 
 	action->name = "save.launcher";
-	action->label = _("Save desktop icon");
-	action->tooltip = _("Create a desktop icon for the current session");
+	action->label = _("Save session shortcut");
+	action->tooltip = _("Create shortcut for the current session");
 
 	return G_ACTION(action);
 
@@ -342,7 +342,7 @@
 
 	}
 
-	// Save shortcude
+	// Save shortcut
 	g_key_file_save_to_file(keyfile,gtk_entry_get_text(GTK_ENTRY(inputs[1])),&error);
 
 	g_key_file_free(keyfile);
