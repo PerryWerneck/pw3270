@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-24 17:02-0300\n"
-"PO-Revision-Date: 2020-09-24 17:09-0300\n"
+"POT-Creation-Date: 2020-09-29 09:45-0300\n"
+"PO-Revision-Date: 2020-09-29 09:47-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
 "Language: pt_BR\n"
@@ -33,7 +33,7 @@ msgstr "Linux 32 bits"
 msgid "32 bits Windows"
 msgstr "Windows 32 bits"
 
-#: src/objects/os/linux/savedesktopicon.c:318
+#: src/objects/actions/save.c:156 src/objects/os/linux/savedesktopicon.c:267
 msgid "3270 session files"
 msgstr "Arquivos de sessão TN3270"
 
@@ -63,11 +63,11 @@ msgstr "Nome da ação"
 msgid "Action Names"
 msgstr "Nome das ações"
 
-#: ui/window.xml:369 ui/window.xml:479 ui/application.xml:509
+#: ui/window.xml:369 ui/window.xml:484 ui/application.xml:509
 msgid "Alert sound"
 msgstr "Aviso sonoro"
 
-#: src/objects/os/linux/savedesktopicon.c:192 src/main/tools.c:99
+#: src/main/tools.c:99 src/tools/entry.c:88
 msgid "All files"
 msgstr "Todos os arquivos"
 
@@ -119,22 +119,17 @@ msgstr "Cursor piscante"
 msgid "Bold"
 msgstr "Negrito"
 
-#: src/objects/actions/save.c:108 src/objects/window/terminal.c:165
+#: src/objects/window/terminal.c:165
 msgid "Can't load session file"
 msgstr "Não foi possível carregar arquivo de sessão"
-
-#: src/objects/actions/save.c:103
-#, c-format
-msgid "Can't open \"%s\""
-msgstr "Não foi possível abrir %s"
 
 #: src/objects/window/terminal.c:160
 #, c-format
 msgid "Can't use \"%s\""
 msgstr "Não posso usar %s"
 
-#: src/objects/actions/save.c:66 src/objects/application/actions/open.c:49
-#: src/objects/window/page.c:265 src/objects/os/linux/savedesktopicon.c:175
+#: src/objects/application/actions/open.c:49 src/objects/window/page.c:265
+#: src/tools/entry.c:71
 msgid "Cancel"
 msgstr "_Cancelar"
 
@@ -171,8 +166,8 @@ msgstr "Fecha todas as janelas e encerra a aplicação"
 msgid "Close the window"
 msgstr "Fechar a janela"
 
-#: src/objects/window/actions/close.c:60 ui/window.xml:270 ui/window.xml:458
-#: ui/window.xml:560 ui/application.xml:216
+#: src/objects/window/actions/close.c:60 ui/window.xml:270 ui/window.xml:463
+#: ui/window.xml:570 ui/application.xml:216
 msgid "Close window"
 msgstr "Fechar janela"
 
@@ -180,7 +175,7 @@ msgstr "Fechar janela"
 msgid "Colors"
 msgstr "Cores"
 
-#: src/objects/os/linux/savedesktopicon.c:106
+#: src/objects/os/linux/savedesktopicon.c:101
 msgid "Comment"
 msgstr "Comentário"
 
@@ -200,6 +195,10 @@ msgstr "Conectar ao servidor"
 msgid "Connected to host"
 msgstr "Conectado no servidor"
 
+#: src/tools/entry.c:131
+msgid "Continue"
+msgstr "Continuar"
+
 #: src/objects/application/actions/about.c:130
 msgid "Contributors"
 msgstr "Contribuidores"
@@ -216,9 +215,9 @@ msgstr "Copiar como tabela"
 msgid "Copy as text"
 msgstr "Copiar como texto"
 
-#: src/objects/os/linux/savedesktopicon.c:119
-msgid "Create a desktop icon for the current session"
-msgstr "Criar ícone da área de trabalho para a sessão atual."
+#: src/objects/os/linux/savedesktopicon.c:114
+msgid "Create shortcut for the current session"
+msgstr "Criar atalho para a sessão atual."
 
 #: ui/window.xml:359 ui/application.xml:459
 msgid "Cross hair cursor"
@@ -244,11 +243,7 @@ msgstr "Recortar"
 msgid "Delete Field"
 msgstr "Apagar campo"
 
-#: ui/window.xml:93 ui/application.xml:158
-msgid "Desktop icon"
-msgstr "Ícone da área de trabalho"
-
-#: ui/window.xml:265 ui/window.xml:453
+#: ui/window.xml:265 ui/window.xml:458
 msgid "Disconnect"
 msgstr "Desconectar"
 
@@ -257,7 +252,7 @@ msgstr "Desconectar"
 msgid "Disconnected from host"
 msgstr "Desconectado do servidor"
 
-#: ui/window.xml:381 ui/window.xml:492 ui/application.xml:524
+#: ui/window.xml:381 ui/window.xml:497 ui/application.xml:524
 msgid "Dynamic font spacing"
 msgstr "Espaçamento dinâmico"
 
@@ -305,7 +300,7 @@ msgstr "Mostra atributos de campo"
 msgid "Full Screen"
 msgstr "Tela cheia"
 
-#: ui/window.xml:236 ui/window.xml:407 ui/window.xml:497
+#: ui/window.xml:236 ui/window.xml:407 ui/window.xml:502
 msgid "Full screen"
 msgstr "Tela cheia"
 
@@ -313,7 +308,7 @@ msgstr "Tela cheia"
 msgid "Function bar"
 msgstr "Barra de funções"
 
-#: src/objects/os/linux/savedesktopicon.c:99
+#: src/objects/os/linux/savedesktopicon.c:94
 msgid "Generic name"
 msgstr "Nome genérico"
 
@@ -325,7 +320,7 @@ msgstr "Ajuda"
 msgid "Host properties"
 msgstr "Propriedades do Servidor"
 
-#: src/objects/window/window.c:552 src/objects/os/linux/savedesktopicon.c:107
+#: src/objects/window/window.c:552 src/objects/os/linux/savedesktopicon.c:102
 msgid "IBM 3270 Terminal emulator"
 msgstr "Emulador 3270"
 
@@ -357,7 +352,7 @@ msgstr "Apenas ícones"
 msgid "If the action can be activated"
 msgstr "Se a ação pode ser ativada"
 
-#: ui/window.xml:469
+#: ui/window.xml:474
 msgid "Insert"
 msgstr "Inserção"
 
@@ -429,7 +424,7 @@ msgstr "Menu principal"
 msgid "Main Toolbar"
 msgstr "Barra de ferramentas"
 
-#: ui/window.xml:540
+#: ui/window.xml:545
 msgid "Main menu"
 msgstr "Menu principal"
 
@@ -441,19 +436,19 @@ msgstr "Mantenedores"
 msgid "Menu"
 msgstr "Menu"
 
-#: ui/window.xml:506 ui/application.xml:403
+#: ui/window.xml:511 ui/application.xml:403
 msgid "Model 2 - 80x24"
 msgstr "Modelo 2 - 80x24"
 
-#: ui/window.xml:511 ui/application.xml:408
+#: ui/window.xml:516 ui/application.xml:408
 msgid "Model 3 - 80x32"
 msgstr "Modelo 3 - 80x32"
 
-#: ui/window.xml:516 ui/application.xml:413
+#: ui/window.xml:521 ui/application.xml:413
 msgid "Model 4 - 80x43"
 msgstr "Modelo 4 - 80x43"
 
-#: ui/window.xml:521 ui/application.xml:418
+#: ui/window.xml:526 ui/application.xml:418
 msgid "Model 5 - 132x27"
 msgstr "Modelo 5 - 132x27"
 
@@ -513,7 +508,7 @@ msgstr "Abrir sessão em nova aba"
 msgid "Open session in New window"
 msgstr "Abrir sessão em nova janela"
 
-#: ui/window.xml:212 ui/window.xml:354 ui/window.xml:489 ui/application.xml:431
+#: ui/window.xml:212 ui/window.xml:354 ui/window.xml:494 ui/application.xml:431
 msgid "Options"
 msgstr "Opções"
 
@@ -537,7 +532,7 @@ msgstr "Colar próximo"
 msgid "Paste with left margin"
 msgstr "Colar com margem esquerda"
 
-#: src/objects/os/linux/savedesktopicon.c:76
+#: src/objects/os/linux/savedesktopicon.c:71
 msgid "Path for the new shortcut"
 msgstr "Caminho para o novo atalho"
 
@@ -549,7 +544,7 @@ msgstr "Preferências"
 msgid "Print"
 msgstr "Imprimir"
 
-#: ui/window.xml:439
+#: ui/window.xml:444
 msgid "Print screen"
 msgstr "Imrpimir o conteúdo da tela"
 
@@ -586,19 +581,15 @@ msgstr "Painel direito"
 msgid "S_tyle"
 msgstr "E_stilo"
 
-#: src/objects/actions/save.c:65 ui/window.xml:69 ui/application.xml:134
+#: ui/window.xml:69 ui/application.xml:134
 msgid "Save"
 msgstr "Salvar"
 
-#: src/objects/actions/save.c:50
-msgid "Save As"
-msgstr "Salvar Como"
+#: src/objects/actions/save.c:77
+msgid "Save current session preferences to file"
+msgstr "Salvar preferências da sessão para arquivo"
 
-#: src/objects/os/linux/savedesktopicon.c:118
-msgid "Save desktop icon"
-msgstr "Salvar ícone da área de trabalho"
-
-#: ui/window.xml:434
+#: ui/window.xml:439
 msgid "Save screen"
 msgstr "Salvar tela"
 
@@ -606,25 +597,25 @@ msgstr "Salvar tela"
 msgid "Save selected"
 msgstr "Salvar seleção"
 
-#: src/objects/actions/save.c:52
+#: src/objects/actions/save.c:75 src/objects/actions/save.c:153
 msgid "Save session preferences"
 msgstr "Salvar preferências da sessão"
 
-#: src/objects/os/linux/savedesktopicon.c:317
+#: src/objects/os/linux/savedesktopicon.c:113
+msgid "Save session shortcut"
+msgstr "Salvar atalho para a sessão"
+
+#: src/objects/os/linux/savedesktopicon.c:264
 msgid "Save to session filename"
 msgstr "Salvar para arquivo de sessão"
 
-#: src/objects/os/linux/savedesktopicon.c:292
+#: src/objects/os/linux/savedesktopicon.c:236
 msgid "Save to shortcut file"
 msgstr "Salvar para atalho"
 
-#: ui/window.xml:503 ui/application.xml:400
+#: ui/window.xml:508 ui/application.xml:400
 msgid "Screen size"
 msgstr "Tamanho da tela"
-
-#: src/objects/os/linux/savedesktopicon.c:176
-msgid "Select"
-msgstr "Selecionar"
 
 #: ui/window.xml:310 ui/application.xml:285
 msgid "Select Field"
@@ -655,7 +646,7 @@ msgstr "Área selecionada"
 msgid "Send/Receive"
 msgstr "Enviar/Receber"
 
-#: src/objects/window/actions/filetransfer.c:46 ui/window.xml:444
+#: src/objects/window/actions/filetransfer.c:46 ui/window.xml:449
 #: ui/application.xml:195
 msgid "Send/Receive files"
 msgstr "Enviar/Receber arquivos"
@@ -668,11 +659,11 @@ msgstr "Separador"
 msgid "Session"
 msgstr "Sessão"
 
-#: ui/application.xml:76
+#: ui/window.xml:430 ui/window.xml:550 ui/application.xml:76
 msgid "Session Trace"
 msgstr "Trace da sessão"
 
-#: src/objects/os/linux/savedesktopicon.c:90
+#: src/objects/actions/save.c:63 src/objects/os/linux/savedesktopicon.c:85
 msgid "Session file"
 msgstr "Arquivo de sessão"
 
@@ -684,12 +675,12 @@ msgstr "Sessão em nova aba"
 msgid "Session in new window"
 msgstr "Sessão em nova janela"
 
-#: src/objects/os/linux/savedesktopicon.c:82
+#: src/objects/actions/save.c:56 src/objects/os/linux/savedesktopicon.c:77
 msgid "Session name"
 msgstr "Nome da sessão"
 
 #: src/objects/window/actions/sessionproperties.c:46 ui/window.xml:98
-#: ui/window.xml:554 ui/application.xml:163
+#: ui/window.xml:564 ui/application.xml:163
 msgid "Session preferences"
 msgstr "Preferências da sessão"
 
@@ -713,11 +704,15 @@ msgstr "Configurar barra de título"
 msgid "Setup toolbar"
 msgstr "Configurar barra de ferramentas"
 
-#: src/objects/os/linux/savedesktopicon.c:75
+#: src/objects/os/linux/savedesktopicon.c:70
 msgid "Shortcut file"
 msgstr "Arquivo de atalho"
 
-#: src/objects/os/linux/savedesktopicon.c:68
+#: ui/window.xml:93 ui/application.xml:158
+msgid "Shortcut for this session"
+msgstr "Atalho para essa sessão"
+
+#: src/objects/os/linux/savedesktopicon.c:63
 msgid "Shortcut name"
 msgstr "Nome do atalho"
 
@@ -741,7 +736,7 @@ msgstr "Pequeno"
 msgid "Smart paste"
 msgstr "Colar inteligente"
 
-#: src/objects/os/linux/savedesktopicon.c:293
+#: src/objects/os/linux/savedesktopicon.c:239
 msgid "Standard desktop files"
 msgstr "Arquivo de atalho padrão"
 
@@ -797,7 +792,11 @@ msgstr "A dica da ação"
 msgid "The code of the User interface type"
 msgstr "Código identificando o tipo de interface do usuário"
 
-#: src/objects/os/linux/savedesktopicon.c:91
+#: src/objects/actions/save.c:64
+msgid "The file to save the current session preferences"
+msgstr "O arquivo com as preferências da sessão atual"
+
+#: src/objects/os/linux/savedesktopicon.c:86
 msgid "The file with the session preferences for this shortcut"
 msgstr "O arquivo com as preferências da sessão para esse atalho"
 
@@ -837,7 +836,7 @@ msgstr "O nome usado para ativar a ação"
 msgid "The position of the keypad"
 msgstr "A posição do painel"
 
-#: src/objects/os/linux/savedesktopicon.c:84
+#: src/objects/actions/save.c:57 src/objects/os/linux/savedesktopicon.c:79
 msgid "The session name used in the window/tab title (empty for default)"
 msgstr ""
 "O nome da sessão usada no título da janela/aba. Vazio para usar o valor "
@@ -879,7 +878,7 @@ msgstr "Barra de título"
 msgid "Title bar actions"
 msgstr "Ações da barra de título"
 
-#: src/objects/toolbar/settings.c:75 ui/window.xml:420 ui/window.xml:535
+#: src/objects/toolbar/settings.c:75 ui/window.xml:420 ui/window.xml:540
 #: ui/application.xml:342
 msgid "Toolbar"
 msgstr "Barra de ferramentas"
@@ -892,7 +891,7 @@ msgstr "Menu principal"
 msgid "Trace"
 msgstr "Trace"
 
-#: ui/window.xml:474 ui/application.xml:449
+#: ui/window.xml:479 ui/application.xml:449
 msgid "Track Cursor"
 msgstr "Mostrar posição do cursor"
 
@@ -913,7 +912,7 @@ msgstr "Usar teclas +/- para navegar por campos"
 msgid "Version %s-%s"
 msgstr "Versão %s-%s"
 
-#: src/objects/window/header.c:66 ui/window.xml:417 ui/window.xml:532
+#: src/objects/window/header.c:66 ui/window.xml:417 ui/window.xml:537
 #: ui/application.xml:63
 msgid "View"
 msgstr "Exibir"
@@ -930,7 +929,8 @@ msgstr "Janela com sessão padrão"
 msgid "_Apply"
 msgstr "_Aplicar"
 
-#: src/objects/settings/dialog.c:78 src/objects/os/linux/savedesktopicon.c:233
+#: src/objects/actions/save.c:102 src/objects/settings/dialog.c:78
+#: src/objects/os/linux/savedesktopicon.c:174
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -938,7 +938,7 @@ msgstr "_Cancelar"
 msgid "_Close session"
 msgstr "_Fechar sessão"
 
-#: ui/window.xml:549 ui/application.xml:368
+#: ui/window.xml:559 ui/application.xml:368
 msgid "_Connect"
 msgstr "_Conectar"
 
@@ -974,7 +974,7 @@ msgstr "_Preferências"
 msgid "_Rename session"
 msgstr "Renomear sessão"
 
-#: src/objects/os/linux/savedesktopicon.c:234
+#: src/objects/actions/save.c:103 src/objects/os/linux/savedesktopicon.c:175
 msgid "_Save"
 msgstr "_Salvar"
 
@@ -1421,6 +1421,9 @@ msgstr "translator-credits"
 #~ msgid "Can't load plugin %s"
 #~ msgstr "Não foi possível carregar plugin %s"
 
+#~ msgid "Can't open \"%s\""
+#~ msgstr "Não foi possível abrir %s"
+
 #~ msgid "Can't open CRL File"
 #~ msgstr "Não foi possível abrir arquivo CRL"
 
@@ -1753,6 +1756,9 @@ msgstr "translator-credits"
 
 #~ msgid "Description of the current security state"
 #~ msgstr "Descrição do estado de segurança atual"
+
+#~ msgid "Desktop icon"
+#~ msgstr "Ícone da área de trabalho"
 
 #~ msgid "Device type rejected"
 #~ msgstr "Tipo de dispositivo rejeitado"
@@ -2917,6 +2923,9 @@ msgstr "translator-credits"
 #~ msgid "SSLv2/v3 read server hello A"
 #~ msgstr "SSLv2/v3 read server hello A"
 
+#~ msgid "Save As"
+#~ msgstr "Salvar Como"
+
 #~ msgid "Save copied data"
 #~ msgstr "Salvar cópia"
 
@@ -2925,6 +2934,9 @@ msgstr "translator-credits"
 
 #~ msgid "Save copy to file"
 #~ msgstr "Salvar cópia para arquivo"
+
+#~ msgid "Save desktop icon"
+#~ msgstr "Salvar ícone da área de trabalho"
 
 #~ msgid "Save desktop launcher"
 #~ msgstr "Salvar lançador para área de trabalho"
@@ -3005,6 +3017,9 @@ msgstr "translator-credits"
 
 #~ msgid "Security warning"
 #~ msgstr "Alerta de segurança"
+
+#~ msgid "Select"
+#~ msgstr "Selecionar"
 
 #~ msgid "Select destination file"
 #~ msgstr "Selecionar arquivo destino"

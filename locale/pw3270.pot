@@ -6,362 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"#-#-#-#-#  view.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-24 17:02-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  save.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-24 17:02-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  abstract.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-24 17:02-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  application.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-24 17:02-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  window.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-24 17:02-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  preferences.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-24 17:02-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  open.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-24 17:02-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  about.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-24 17:02-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  window.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-24 17:02-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  terminal.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-24 17:02-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  page.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-24 17:02-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  header-settings.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-24 17:02-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  header.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-24 17:02-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  setcolors.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-24 17:02-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  sessionproperties.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-24 17:02-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  hostproperties.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-24 17:02-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  filetransfer.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-24 17:02-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  connect.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-24 17:02-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  close.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-24 17:02-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  toolbar.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-24 17:02-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  settings.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-24 17:02-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  dialog.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-24 17:02-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  actionview.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-24 17:02-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  savedesktopicon.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-24 17:04-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  tools.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-24 17:02-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  placeholders.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-24 17:02-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  model.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-24 17:02-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  element.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-24 17:02-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  attribute.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-24 17:02-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  window.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-24 17:02-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  application.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-24 17:02-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  10-bottom.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-24 17:02-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  00-right.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-24 17:02-0300\n"
+"POT-Creation-Date: 2020-09-29 09:45-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -383,7 +30,7 @@ msgstr ""
 msgid "32 bits Windows"
 msgstr ""
 
-#: src/objects/os/linux/savedesktopicon.c:318
+#: src/objects/actions/save.c:156 src/objects/os/linux/savedesktopicon.c:267
 msgid "3270 session files"
 msgstr ""
 
@@ -413,11 +60,11 @@ msgstr ""
 msgid "Action Names"
 msgstr ""
 
-#: ui/window.xml:369 ui/window.xml:479 ui/application.xml:509
+#: ui/window.xml:369 ui/window.xml:484 ui/application.xml:509
 msgid "Alert sound"
 msgstr ""
 
-#: src/objects/os/linux/savedesktopicon.c:192 src/main/tools.c:99
+#: src/main/tools.c:99 src/tools/entry.c:88
 msgid "All files"
 msgstr ""
 
@@ -469,13 +116,8 @@ msgstr ""
 msgid "Bold"
 msgstr ""
 
-#: src/objects/actions/save.c:108 src/objects/window/terminal.c:165
+#: src/objects/window/terminal.c:165
 msgid "Can't load session file"
-msgstr ""
-
-#: src/objects/actions/save.c:103
-#, c-format
-msgid "Can't open \"%s\""
 msgstr ""
 
 #: src/objects/window/terminal.c:160
@@ -483,8 +125,8 @@ msgstr ""
 msgid "Can't use \"%s\""
 msgstr ""
 
-#: src/objects/actions/save.c:66 src/objects/application/actions/open.c:49
-#: src/objects/window/page.c:265 src/objects/os/linux/savedesktopicon.c:175
+#: src/objects/application/actions/open.c:49 src/objects/window/page.c:265
+#: src/tools/entry.c:71
 msgid "Cancel"
 msgstr ""
 
@@ -521,8 +163,8 @@ msgstr ""
 msgid "Close the window"
 msgstr ""
 
-#: src/objects/window/actions/close.c:60 ui/window.xml:270 ui/window.xml:458
-#: ui/window.xml:560 ui/application.xml:216
+#: src/objects/window/actions/close.c:60 ui/window.xml:270 ui/window.xml:463
+#: ui/window.xml:570 ui/application.xml:216
 msgid "Close window"
 msgstr ""
 
@@ -530,7 +172,7 @@ msgstr ""
 msgid "Colors"
 msgstr ""
 
-#: src/objects/os/linux/savedesktopicon.c:106
+#: src/objects/os/linux/savedesktopicon.c:101
 msgid "Comment"
 msgstr ""
 
@@ -550,6 +192,10 @@ msgstr ""
 msgid "Connected to host"
 msgstr ""
 
+#: src/tools/entry.c:131
+msgid "Continue"
+msgstr ""
+
 #: src/objects/application/actions/about.c:130
 msgid "Contributors"
 msgstr ""
@@ -566,8 +212,8 @@ msgstr ""
 msgid "Copy as text"
 msgstr ""
 
-#: src/objects/os/linux/savedesktopicon.c:119
-msgid "Create a desktop icon for the current session"
+#: src/objects/os/linux/savedesktopicon.c:114
+msgid "Create shortcut for the current session"
 msgstr ""
 
 #: ui/window.xml:359 ui/application.xml:459
@@ -594,11 +240,7 @@ msgstr ""
 msgid "Delete Field"
 msgstr ""
 
-#: ui/window.xml:93 ui/application.xml:158
-msgid "Desktop icon"
-msgstr ""
-
-#: ui/window.xml:265 ui/window.xml:453
+#: ui/window.xml:265 ui/window.xml:458
 msgid "Disconnect"
 msgstr ""
 
@@ -607,7 +249,7 @@ msgstr ""
 msgid "Disconnected from host"
 msgstr ""
 
-#: ui/window.xml:381 ui/window.xml:492 ui/application.xml:524
+#: ui/window.xml:381 ui/window.xml:497 ui/application.xml:524
 msgid "Dynamic font spacing"
 msgstr ""
 
@@ -655,7 +297,7 @@ msgstr ""
 msgid "Full Screen"
 msgstr ""
 
-#: ui/window.xml:236 ui/window.xml:407 ui/window.xml:497
+#: ui/window.xml:236 ui/window.xml:407 ui/window.xml:502
 msgid "Full screen"
 msgstr ""
 
@@ -663,7 +305,7 @@ msgstr ""
 msgid "Function bar"
 msgstr ""
 
-#: src/objects/os/linux/savedesktopicon.c:99
+#: src/objects/os/linux/savedesktopicon.c:94
 msgid "Generic name"
 msgstr ""
 
@@ -675,7 +317,7 @@ msgstr ""
 msgid "Host properties"
 msgstr ""
 
-#: src/objects/window/window.c:552 src/objects/os/linux/savedesktopicon.c:107
+#: src/objects/window/window.c:552 src/objects/os/linux/savedesktopicon.c:102
 msgid "IBM 3270 Terminal emulator"
 msgstr ""
 
@@ -707,7 +349,7 @@ msgstr ""
 msgid "If the action can be activated"
 msgstr ""
 
-#: ui/window.xml:469
+#: ui/window.xml:474
 msgid "Insert"
 msgstr ""
 
@@ -779,7 +421,7 @@ msgstr ""
 msgid "Main Toolbar"
 msgstr ""
 
-#: ui/window.xml:540
+#: ui/window.xml:545
 msgid "Main menu"
 msgstr ""
 
@@ -791,19 +433,19 @@ msgstr ""
 msgid "Menu"
 msgstr ""
 
-#: ui/window.xml:506 ui/application.xml:403
+#: ui/window.xml:511 ui/application.xml:403
 msgid "Model 2 - 80x24"
 msgstr ""
 
-#: ui/window.xml:511 ui/application.xml:408
+#: ui/window.xml:516 ui/application.xml:408
 msgid "Model 3 - 80x32"
 msgstr ""
 
-#: ui/window.xml:516 ui/application.xml:413
+#: ui/window.xml:521 ui/application.xml:413
 msgid "Model 4 - 80x43"
 msgstr ""
 
-#: ui/window.xml:521 ui/application.xml:418
+#: ui/window.xml:526 ui/application.xml:418
 msgid "Model 5 - 132x27"
 msgstr ""
 
@@ -863,7 +505,7 @@ msgstr ""
 msgid "Open session in New window"
 msgstr ""
 
-#: ui/window.xml:212 ui/window.xml:354 ui/window.xml:489 ui/application.xml:431
+#: ui/window.xml:212 ui/window.xml:354 ui/window.xml:494 ui/application.xml:431
 msgid "Options"
 msgstr ""
 
@@ -887,7 +529,7 @@ msgstr ""
 msgid "Paste with left margin"
 msgstr ""
 
-#: src/objects/os/linux/savedesktopicon.c:76
+#: src/objects/os/linux/savedesktopicon.c:71
 msgid "Path for the new shortcut"
 msgstr ""
 
@@ -899,7 +541,7 @@ msgstr ""
 msgid "Print"
 msgstr ""
 
-#: ui/window.xml:439
+#: ui/window.xml:444
 msgid "Print screen"
 msgstr ""
 
@@ -936,19 +578,15 @@ msgstr ""
 msgid "S_tyle"
 msgstr ""
 
-#: src/objects/actions/save.c:65 ui/window.xml:69 ui/application.xml:134
+#: ui/window.xml:69 ui/application.xml:134
 msgid "Save"
 msgstr ""
 
-#: src/objects/actions/save.c:50
-msgid "Save As"
+#: src/objects/actions/save.c:77
+msgid "Save current session preferences to file"
 msgstr ""
 
-#: src/objects/os/linux/savedesktopicon.c:118
-msgid "Save desktop icon"
-msgstr ""
-
-#: ui/window.xml:434
+#: ui/window.xml:439
 msgid "Save screen"
 msgstr ""
 
@@ -956,24 +594,24 @@ msgstr ""
 msgid "Save selected"
 msgstr ""
 
-#: src/objects/actions/save.c:52
+#: src/objects/actions/save.c:75 src/objects/actions/save.c:153
 msgid "Save session preferences"
 msgstr ""
 
-#: src/objects/os/linux/savedesktopicon.c:317
+#: src/objects/os/linux/savedesktopicon.c:113
+msgid "Save session shortcut"
+msgstr ""
+
+#: src/objects/os/linux/savedesktopicon.c:264
 msgid "Save to session filename"
 msgstr ""
 
-#: src/objects/os/linux/savedesktopicon.c:292
+#: src/objects/os/linux/savedesktopicon.c:236
 msgid "Save to shortcut file"
 msgstr ""
 
-#: ui/window.xml:503 ui/application.xml:400
+#: ui/window.xml:508 ui/application.xml:400
 msgid "Screen size"
-msgstr ""
-
-#: src/objects/os/linux/savedesktopicon.c:176
-msgid "Select"
 msgstr ""
 
 #: ui/window.xml:310 ui/application.xml:285
@@ -1005,7 +643,7 @@ msgstr ""
 msgid "Send/Receive"
 msgstr ""
 
-#: src/objects/window/actions/filetransfer.c:46 ui/window.xml:444
+#: src/objects/window/actions/filetransfer.c:46 ui/window.xml:449
 #: ui/application.xml:195
 msgid "Send/Receive files"
 msgstr ""
@@ -1018,11 +656,11 @@ msgstr ""
 msgid "Session"
 msgstr ""
 
-#: ui/application.xml:76
+#: ui/window.xml:430 ui/window.xml:550 ui/application.xml:76
 msgid "Session Trace"
 msgstr ""
 
-#: src/objects/os/linux/savedesktopicon.c:90
+#: src/objects/actions/save.c:63 src/objects/os/linux/savedesktopicon.c:85
 msgid "Session file"
 msgstr ""
 
@@ -1034,12 +672,12 @@ msgstr ""
 msgid "Session in new window"
 msgstr ""
 
-#: src/objects/os/linux/savedesktopicon.c:82
+#: src/objects/actions/save.c:56 src/objects/os/linux/savedesktopicon.c:77
 msgid "Session name"
 msgstr ""
 
 #: src/objects/window/actions/sessionproperties.c:46 ui/window.xml:98
-#: ui/window.xml:554 ui/application.xml:163
+#: ui/window.xml:564 ui/application.xml:163
 msgid "Session preferences"
 msgstr ""
 
@@ -1063,11 +701,15 @@ msgstr ""
 msgid "Setup toolbar"
 msgstr ""
 
-#: src/objects/os/linux/savedesktopicon.c:75
+#: src/objects/os/linux/savedesktopicon.c:70
 msgid "Shortcut file"
 msgstr ""
 
-#: src/objects/os/linux/savedesktopicon.c:68
+#: ui/window.xml:93 ui/application.xml:158
+msgid "Shortcut for this session"
+msgstr ""
+
+#: src/objects/os/linux/savedesktopicon.c:63
 msgid "Shortcut name"
 msgstr ""
 
@@ -1091,7 +733,7 @@ msgstr ""
 msgid "Smart paste"
 msgstr ""
 
-#: src/objects/os/linux/savedesktopicon.c:293
+#: src/objects/os/linux/savedesktopicon.c:239
 msgid "Standard desktop files"
 msgstr ""
 
@@ -1147,7 +789,11 @@ msgstr ""
 msgid "The code of the User interface type"
 msgstr ""
 
-#: src/objects/os/linux/savedesktopicon.c:91
+#: src/objects/actions/save.c:64
+msgid "The file to save the current session preferences"
+msgstr ""
+
+#: src/objects/os/linux/savedesktopicon.c:86
 msgid "The file with the session preferences for this shortcut"
 msgstr ""
 
@@ -1187,7 +833,7 @@ msgstr ""
 msgid "The position of the keypad"
 msgstr ""
 
-#: src/objects/os/linux/savedesktopicon.c:84
+#: src/objects/actions/save.c:57 src/objects/os/linux/savedesktopicon.c:79
 msgid "The session name used in the window/tab title (empty for default)"
 msgstr ""
 
@@ -1227,7 +873,7 @@ msgstr ""
 msgid "Title bar actions"
 msgstr ""
 
-#: src/objects/toolbar/settings.c:75 ui/window.xml:420 ui/window.xml:535
+#: src/objects/toolbar/settings.c:75 ui/window.xml:420 ui/window.xml:540
 #: ui/application.xml:342
 msgid "Toolbar"
 msgstr ""
@@ -1240,7 +886,7 @@ msgstr ""
 msgid "Trace"
 msgstr ""
 
-#: ui/window.xml:474 ui/application.xml:449
+#: ui/window.xml:479 ui/application.xml:449
 msgid "Track Cursor"
 msgstr ""
 
@@ -1261,7 +907,7 @@ msgstr ""
 msgid "Version %s-%s"
 msgstr ""
 
-#: src/objects/window/header.c:66 ui/window.xml:417 ui/window.xml:532
+#: src/objects/window/header.c:66 ui/window.xml:417 ui/window.xml:537
 #: ui/application.xml:63
 msgid "View"
 msgstr ""
@@ -1278,7 +924,8 @@ msgstr ""
 msgid "_Apply"
 msgstr ""
 
-#: src/objects/settings/dialog.c:78 src/objects/os/linux/savedesktopicon.c:233
+#: src/objects/actions/save.c:102 src/objects/settings/dialog.c:78
+#: src/objects/os/linux/savedesktopicon.c:174
 msgid "_Cancel"
 msgstr ""
 
@@ -1286,7 +933,7 @@ msgstr ""
 msgid "_Close session"
 msgstr ""
 
-#: ui/window.xml:549 ui/application.xml:368
+#: ui/window.xml:559 ui/application.xml:368
 msgid "_Connect"
 msgstr ""
 
@@ -1322,7 +969,7 @@ msgstr ""
 msgid "_Rename session"
 msgstr ""
 
-#: src/objects/os/linux/savedesktopicon.c:234
+#: src/objects/actions/save.c:103 src/objects/os/linux/savedesktopicon.c:175
 msgid "_Save"
 msgstr ""
 
