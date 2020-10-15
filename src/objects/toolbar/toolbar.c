@@ -296,8 +296,39 @@
  }
 
  void pw3270_toolbar_set_icon_type(GtkToolbar *toolbar, gint icon_type) {
+
+ 	if(PW3270_TOOLBAR(toolbar)->icon_type == icon_type)
+		return;
+
  	PW3270_TOOLBAR(toolbar)->icon_type = icon_type;
+
+ 	// Redefine icon types
+ 	GList * children = gtk_container_get_children(GTK_CONTAINER(toolbar));
+ 	GList * item;
+
+ 	for(item = children;item;item = g_list_next(item)) {
+
+		if(GTK_IS_TOOL_BUTTON(item->data)) {
+
+			g_autofree gchar * icon_name = g_strdup(gtk_tool_button_get_icon_name(GTK_TOOL_BUTTON(item->data)));
+			if(g_str_has_suffix(icon_name,"-symbolic")) {
+				icon_name[strlen(icon_name)-9] = 0;
+			}
+
+			if(icon_type) {
+				g_autofree gchar * new_name = g_strconcat(icon_name,"-symbolic",NULL);
+				gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(item->data),new_name);
+			} else {
+				gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(item->data),icon_name);
+			}
+
+		}
+
+ 	}
+
+ 	g_list_free(children);
 	g_object_notify(G_OBJECT(toolbar), "icon-type");
+
  }
 
  void pw3270_toolbar_set_icon_size(GtkToolbar *toolbar, GtkIconSize icon_size) {
