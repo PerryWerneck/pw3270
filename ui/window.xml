@@ -170,6 +170,11 @@
 				</item>
 
 				<item>
+					<attribute name="label" translatable="yes">Copy as image</attribute>
+					<attribute name="action">win.copy-pixbuff</attribute>
+				</item>
+
+				<item>
 					<attribute name="label" translatable="yes">Append to copy</attribute>
 					<attribute name="action">win.copy-append</attribute>
 				</item>
