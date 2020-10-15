@@ -57,16 +57,22 @@
 	{
 		.left = 3,
 		.top = 0,
+		.name = "toolbar-icon-type",
+		.label = N_("Icon Style")
+	},
+
+	{
+		.left = 0,
+		.top = 1,
 		.name = "toolbar-style",
-		.label = N_("Style")
+		.label = N_("Toolbar Style")
 	}
 
  };
 
  struct _PW3270SettingsPrivate {
 	GtkWidget * views[2];
-//	GtkWidget * buttons[2];
-	GtkTreeModel * models[2];
+//	GtkTreeModel * models[G_N_ELEMENTS(comboboxes)];
 	GtkWidget * combos[G_N_ELEMENTS(comboboxes)];
  };
 
@@ -160,7 +166,7 @@
 	}
 
 	//
-	// Create style & icon size settings.
+	// Create Combos.
 	//
 	{
 		GtkGrid * grid = GTK_GRID(gtk_grid_new());
@@ -178,17 +184,17 @@
 
 		GtkCellRenderer * renderer	= gtk_cell_renderer_text_new();
 
-		for(ix = 0; ix < G_N_ELEMENTS(page->models); ix++) {
+		for(ix = 0; ix < G_N_ELEMENTS(page->combos); ix++) {
 
-			page->models[ix] = pw3270_model_from_name(comboboxes[ix].name);
+			GtkTreeModel *model = pw3270_model_from_name(comboboxes[ix].name);
 
 			GtkWidget * label = gtk_label_new(gettext(comboboxes[ix].label));
 			gtk_label_set_xalign(GTK_LABEL(label),1);
 
 			gtk_grid_attach(grid,label,comboboxes[ix].left,comboboxes[ix].top,1,1);
 
-			page->combos[ix] = gtk_combo_box_new_with_model(page->models[ix]);
-			gtk_widget_set_hexpand(page->combos[ix],TRUE);
+			page->combos[ix] = gtk_combo_box_new_with_model(model);
+			gtk_widget_set_hexpand(page->combos[ix],FALSE);
 
 			gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(page->combos[ix]), renderer, TRUE);
 			gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(page->combos[ix]), renderer, "text", 0, NULL);
@@ -240,7 +246,6 @@
 	pw3270_action_list_free(action_list);
 
 	GtkTreeIter	iter;
-
 	for(ix = 0; ix < G_N_ELEMENTS(page->combos); ix++) {
 
 		pw3270_model_get_iter_from_value(
@@ -260,12 +265,8 @@
 	size_t ix;
 	g_autoptr(GSettings) settings = pw3270_application_window_settings_new();
 
- 	debug("%s",__FUNCTION__);
-
  	g_autofree gchar * action_names = pw3270_action_view_get_action_names(page->views[0]);
 	g_settings_set_string(settings,"toolbar-action-names",action_names);
-
- 	debug("[%s]",action_names);
 
 	GtkTreeIter	iter;
 	for(ix = 0; ix < G_N_ELEMENTS(page->combos); ix++) {

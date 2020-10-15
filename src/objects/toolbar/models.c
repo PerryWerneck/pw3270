@@ -150,6 +150,7 @@
 
 	}
 
+	g_warning("Can't create combobox '%s'",name);
 	return NULL;
  }
 
@@ -203,15 +204,15 @@
 	}
  }
 
- static void property_changed(GObject *widget, GParamSpec *pspec, GtkContainer *menu) {
+ static void property_changed(GObject *widget, GParamSpec G_GNUC_UNUSED(*pspec), GtkContainer *menu) {
 
  	gint value = -1;
-	const gchar * name = g_object_get_data(menu, I_("pw3270_property_name"));
+	const gchar * name = g_object_get_data(G_OBJECT(menu), I_("pw3270_property_name"));
 	g_object_get(widget,name,&value,NULL);
 
 	debug("%s(%p,%s)=%d",__FUNCTION__,widget,name,value);
 
-	gtk_container_foreach(menu,set_toggle_menu_item,&value);
+	gtk_container_foreach(menu,(GtkCallback) set_toggle_menu_item,&value);
 
 
  }
@@ -235,9 +236,9 @@
 		g_object_set_data(G_OBJECT(submenu),I_("pw3270_property_name"),(gpointer) models[model].property);
 		gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu),submenu);
 
-		guint selected = (guint) -1;
+		gint selected = -1;
 		if(widget) {
-			g_object_get(G_OBJECT(widget),models[model].property,&selected);
+			g_object_get(G_OBJECT(widget),models[model].property,&selected,NULL);
 			g_autofree gchar * signame = g_strconcat("notify::",models[model].property,NULL);
 			g_signal_connect(G_OBJECT(widget),signame,G_CALLBACK(property_changed),submenu);
  		}
