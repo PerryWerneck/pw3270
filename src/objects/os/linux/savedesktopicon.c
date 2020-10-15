@@ -41,7 +41,7 @@
  #include <lib3270.h>
  #include <lib3270/log.h>
  #include <lib3270/properties.h>
- #include <pw3270/tools.h>
+ #include <v3270/tools.h>
 
  static GtkWidget * factory(V3270SimpleAction *action, GtkWidget *terminal);
  static void response(GtkWidget *dialog, gint response_id, GtkWidget *terminal);

@@ -37,7 +37,7 @@
  #include <v3270/keyfile.h>
  #include <pw3270.h>
  #include <pw3270/application.h>
- #include <pw3270/tools.h>
+ #include <v3270/tools.h>
  #include <v3270/settings.h>
 
  static GtkWidget * factory(V3270SimpleAction *action, GtkWidget *terminal);
