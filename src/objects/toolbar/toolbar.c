@@ -234,6 +234,7 @@
 	// Toolbar preferences.
 	{
 		GtkWidget * item = gtk_menu_item_new_with_mnemonic( _("_Preferences") );
+		gtk_menu_shell_append(GTK_MENU_SHELL(widget->menu),gtk_separator_menu_item_new());
 		gtk_menu_shell_append(GTK_MENU_SHELL(widget->menu),item);
 		g_signal_connect(item, "activate", G_CALLBACK(open_preferences), widget);
 	}
@@ -282,21 +283,6 @@
 	else
 		gtk_toolbar_set_style(GTK_TOOLBAR(toolbar),style);
 
-	/*
-	// Update menu
-	pw3270ToolBar * tb = PW3270_TOOLBAR(toolbar);
-	if(tb && tb->menu) {
-		size_t ix;
-		for(ix = 0; ix < G_N_ELEMENTS(styles); ix++) {
-
-			gtk_check_menu_item_set_active(
-				GTK_CHECK_MENU_ITEM(tb->popup.styles[ix]),
-				styles[ix].style == style
-			);
-		}
-	}
-	*/
-
 	g_object_notify(G_OBJECT(toolbar), "style");
 
  }
@@ -322,21 +308,6 @@
 		gtk_toolbar_unset_icon_size(GTK_TOOLBAR(toolbar));
 	else
 		gtk_toolbar_set_icon_size(GTK_TOOLBAR(toolbar),icon_size);
-
-	// Update menu
-	/*
-	pw3270ToolBar * tb = PW3270_TOOLBAR(toolbar);
-	if(tb && tb->menu) {
-		size_t ix;
-		for(ix = 0; ix < G_N_ELEMENTS(icon_sizes); ix++) {
-
-			gtk_check_menu_item_set_active(
-				GTK_CHECK_MENU_ITEM(tb->popup.icon_sizes[ix]),
-				icon_sizes[ix].icon_size == icon_size
-			);
-		}
-	}
-	*/
 
 	// Store value
 	g_object_notify(G_OBJECT(toolbar), "icon-size");
