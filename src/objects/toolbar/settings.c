@@ -41,16 +41,22 @@
  /*--[ Constants ]------------------------------------------------------------------------------------*/
 
  static const struct _comboboxes {
- 	const gchar * name;
- 	const gchar * label;
+ 	const gchar * name;			///< @brief The gsettings name.
+ 	const gchar * label;		///< @brief The combo name.
+ 	guint left;
+ 	guint top;
  } comboboxes[] = {
 
 	{
+		.left = 0,
+		.top = 0,
 		.name = "toolbar-icon-size",
 		.label = N_("Icon Size"),
 	},
 
 	{
+		.left = 3,
+		.top = 0,
 		.name = "toolbar-style",
 		.label = N_("Style")
 	}
@@ -170,17 +176,16 @@
 		gtk_grid_set_column_spacing(grid,12);
 		gtk_widget_set_hexpand(GTK_WIDGET(grid),TRUE);
 
-		page->models[0] = pw3270_toolbar_icon_size_model_new();
-		page->models[1] = pw3270_toolbar_style_model_new();
-
 		GtkCellRenderer * renderer	= gtk_cell_renderer_text_new();
 
 		for(ix = 0; ix < G_N_ELEMENTS(page->models); ix++) {
 
+			page->models[ix] = pw3270_model_from_name(comboboxes[ix].name);
+
 			GtkWidget * label = gtk_label_new(gettext(comboboxes[ix].label));
 			gtk_label_set_xalign(GTK_LABEL(label),1);
 
-			gtk_grid_attach(grid,label,(ix*3),0,1,1);
+			gtk_grid_attach(grid,label,comboboxes[ix].left,comboboxes[ix].top,1,1);
 
 			page->combos[ix] = gtk_combo_box_new_with_model(page->models[ix]);
 			gtk_widget_set_hexpand(page->combos[ix],TRUE);
@@ -188,7 +193,7 @@
 			gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(page->combos[ix]), renderer, TRUE);
 			gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(page->combos[ix]), renderer, "text", 0, NULL);
 
-			gtk_grid_attach(grid,page->combos[ix],(ix*3)+1,0,2,1);
+			gtk_grid_attach(grid,page->combos[ix],comboboxes[ix].left+1,comboboxes[ix].top,2,1);
 
 		}
 

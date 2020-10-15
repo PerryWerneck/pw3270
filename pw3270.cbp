@@ -149,6 +149,9 @@
 		<Unit filename="src/objects/toolbar/actions.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/objects/toolbar/models.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/objects/toolbar/private.h" />
 		<Unit filename="src/objects/toolbar/settings.c">
 			<Option compilerVar="CC" />

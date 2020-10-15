@@ -50,8 +50,8 @@
 	G_GNUC_INTERNAL GtkWidget 		* pw3270_tool_button_new(GAction *action);
 	G_GNUC_INTERNAL GtkWidget 		* pw3270_tool_button_new_from_action_name(const gchar * action_name);
 
-	G_GNUC_INTERNAL GtkTreeModel	* pw3270_toolbar_style_model_new();
-	G_GNUC_INTERNAL GtkTreeModel	* pw3270_toolbar_icon_size_model_new();
+	GtkTreeModel					* pw3270_model_from_name(const gchar *name);
+	GtkWidget						* pw3270_menu_item_from_name(const gchar *name);
 
 	G_GNUC_INTERNAL void			  pw3270_model_get_iter_from_value(GtkTreeModel * model, GtkTreeIter *iter, guint value);
 	G_GNUC_INTERNAL guint			  pw3270_model_get_value_from_iter(GtkTreeModel * model, GtkTreeIter *iter);
