@@ -46,19 +46,25 @@
 	PROP_STYLE
  };
 
+ enum {
+	TOOLBAR_MENU_STYLE,
+	TOOLBAR_MENU_ICON_SIZE,
+	TOOLBAR_MENU_ICON_TYPE
+ };
+
+ static const gchar * toolbar_menus[] = {
+	"toolbar-style",
+	"toolbar-icon-size",
+	"toolbar-icon-type"
+ };
 
  struct _pw3270ToolBar {
  	GtkToolbar parent;
 	GtkToolbarStyle style;
-	GtkWidget *menu;
 	int icon_type;
 
- 	/// @brief Popup Menu
-// 	struct {
-//		GtkWidget * menu;
-//		GtkWidget * styles[G_N_ELEMENTS(styles)];
-//		GtkWidget * icon_sizes[G_N_ELEMENTS(icon_sizes)];
-// 	} popup;
+	GtkWidget *menu;
+ 	GtkWidget *submenu[G_N_ELEMENTS(toolbar_menus)];
 
  };
 
@@ -193,26 +199,6 @@
 
  }
 
- /*
- static void set_icon_size(GtkCheckMenuItem *menuitem, GtkWidget *toolbar) {
-
-	if(gtk_check_menu_item_get_active(menuitem)) {
-		const struct icon_size * size = g_object_get_data(G_OBJECT(menuitem),"icon_size");
-		pw3270_toolbar_set_icon_size(GTK_TOOLBAR(toolbar), size->icon_size);
-	}
-
- }
-
- static void set_style(GtkCheckMenuItem *menuitem, GtkWidget *toolbar) {
-
-	if(gtk_check_menu_item_get_active(menuitem)) {
-		struct style * style = g_object_get_data(G_OBJECT(menuitem),"toolbar_style");
-		pw3270_toolbar_set_style(GTK_TOOLBAR(toolbar), style->style);
-	}
-
- }
- */
-
  static void open_preferences(GtkMenuItem G_GNUC_UNUSED(*menuitem), GtkWidget *toolbar) {
 
 	GtkWidget * window = gtk_widget_get_toplevel(toolbar);
@@ -233,11 +219,17 @@
 
  static void pw3270ToolBar_init(pw3270ToolBar *widget) {
 
+	size_t ix;
+
 	widget->menu = gtk_menu_new();
 
-	gtk_menu_shell_append(GTK_MENU_SHELL(widget->menu),pw3270_menu_item_from_name("toolbar-style"));
-	gtk_menu_shell_append(GTK_MENU_SHELL(widget->menu),pw3270_menu_item_from_name("toolbar-icon-size"));
-	gtk_menu_shell_append(GTK_MENU_SHELL(widget->menu),pw3270_menu_item_from_name("toolbar-icon-type"));
+	// Create menus.
+	{
+		for(ix = 0; ix < G_N_ELEMENTS(widget->submenu); ix++) {
+			widget->submenu[ix] = pw3270_menu_item_from_model(GTK_WIDGET(widget),toolbar_menus[ix]);
+			gtk_menu_shell_append(GTK_MENU_SHELL(widget->menu),widget->submenu[ix]);
+		}
+	}
 
 	// Toolbar preferences.
 	{

@@ -30,20 +30,25 @@
  #include "private.h"
  #include <pw3270/application.h>
  #include <pw3270/settings.h>
+ #include <pw3270/window.h>
 
  #define GTK_TOOLBAR_DEFAULT_STYLE ((GtkToolbarStyle) -1)
 
+ struct _contents {
+	const gchar * label;
+	int			  value;
+ };
+
  static const struct _models {
 	const gchar *name;
+	const gchar *property;
 	const gchar *label;
-	const struct _contents {
-		const gchar * label;
-		guint		  value;
-	} *contents;
+	const struct _contents *contents;
  } models[] = {
 
 	{
 		"toolbar-icon-size",
+		"icon-size",
 		N_("Icon _size"),
 		(const struct _contents[]) {
 			{
@@ -70,6 +75,7 @@
 
 	{
 		"toolbar-style",
+		"style",
 		N_("Toolbar s_tyle"),
 		(const struct _contents[]) {
 			{
@@ -98,6 +104,7 @@
 	},
 	{
 		"toolbar-icon-type",
+		"icon-type",
 		N_("Icon type"),
 		(const struct _contents[]) {
 			{
@@ -175,9 +182,44 @@
 	return iVal;
  }
 
- GtkWidget * pw3270_menu_item_from_name(const gchar *name) {
+ static void set_property(GObject *menuitem, GObject *widget) {
+
+	if(gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(menuitem))) {
+
+		const struct _contents *model = (const struct _contents *) g_object_get_data(menuitem, I_("pw3270_model_data"));
+		const char *name = (const char *) g_object_get_data(menuitem, I_("pw3270_property_name"));
+
+		debug("%s(%s,%d)",__FUNCTION__,name,model->value);
+		g_object_set(widget,name,model->value,NULL);
+
+	}
+
+ }
+
+ static void set_toggle_menu_item(GtkCheckMenuItem *item, gint *value) {
+	const struct _contents *model = (const struct _contents *) g_object_get_data(G_OBJECT(item), I_("pw3270_model_data"));
+	if(model) {
+		gtk_check_menu_item_set_active(item,model->value == *value);
+	}
+ }
+
+ static void property_changed(GObject *widget, GParamSpec *pspec, GtkContainer *menu) {
+
+ 	gint value = -1;
+	const gchar * name = g_object_get_data(menu, I_("pw3270_property_name"));
+	g_object_get(widget,name,&value,NULL);
+
+	debug("%s(%p,%s)=%d",__FUNCTION__,widget,name,value);
+
+	gtk_container_foreach(menu,set_toggle_menu_item,&value);
+
+
+ }
+
+ GtkWidget * pw3270_menu_item_from_model(GtkWidget *widget, const gchar *name) {
 
 	size_t model;
+
 
 	for(model = 0; model < G_N_ELEMENTS(models); model++) {
 
@@ -190,16 +232,29 @@
 		GtkWidget * menu = gtk_menu_item_new_with_mnemonic(gettext(models[model].label));
 
 		GtkWidget * submenu = gtk_menu_new();
+		g_object_set_data(G_OBJECT(submenu),I_("pw3270_property_name"),(gpointer) models[model].property);
 		gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu),submenu);
 
-		g_object_set_data(G_OBJECT(submenu),"model-data",(gpointer) &models[model]);
+		guint selected = (guint) -1;
+		if(widget) {
+			g_object_get(G_OBJECT(widget),models[model].property,&selected);
+			g_autofree gchar * signame = g_strconcat("notify::",models[model].property,NULL);
+			g_signal_connect(G_OBJECT(widget),signame,G_CALLBACK(property_changed),submenu);
+ 		}
 
 		for(row = 0; models[model].contents[row].label; row++) {
 
 			item = gtk_check_menu_item_new_with_mnemonic(gettext(models[model].contents[row].label));
 			gtk_check_menu_item_set_draw_as_radio(GTK_CHECK_MENU_ITEM(item),TRUE);
 
-			//g_signal_connect(item, "toggled", G_CALLBACK(set_icon_size), menu);
+			g_object_set_data(G_OBJECT(item),I_("pw3270_property_name"),(gpointer) models[model].property);
+			g_object_set_data(G_OBJECT(item),I_("pw3270_model_data"),(gpointer) &models[model].contents[row]);
+
+			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item),selected == models[model].contents[row].value);
+
+			if(widget) {
+				g_signal_connect(item, "toggled", G_CALLBACK(set_property), widget);
+			}
 
 			gtk_menu_shell_append(GTK_MENU_SHELL(submenu),item);
 
@@ -212,3 +267,10 @@
 
 	return NULL;
  }
+
+ void pw3270_menu_item_set_value(GtkWidget *menu, guint value) {
+
+	debug("%s(%p,%d)",__FUNCTION__,menu,value);
+
+ }
+

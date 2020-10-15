@@ -51,7 +51,8 @@
 	G_GNUC_INTERNAL GtkWidget 		* pw3270_tool_button_new_from_action_name(const gchar * action_name);
 
 	GtkTreeModel					* pw3270_model_from_name(const gchar *name);
-	GtkWidget						* pw3270_menu_item_from_name(const gchar *name);
+	GtkWidget						* pw3270_menu_item_from_model(GtkWidget *widget, const gchar *model_name);
+	void							  pw3270_menu_item_set_value(GtkWidget *menu, guint value);
 
 	G_GNUC_INTERNAL void			  pw3270_model_get_iter_from_value(GtkTreeModel * model, GtkTreeIter *iter, guint value);
 	G_GNUC_INTERNAL guint			  pw3270_model_get_value_from_iter(GtkTreeModel * model, GtkTreeIter *iter);
