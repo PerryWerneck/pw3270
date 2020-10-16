@@ -371,6 +371,11 @@
 					</item>
 
 					<item>
+						<attribute name="label" translatable="yes">Use +/- for field navigation</attribute>
+						<attribute name="action">win.kpalternative</attribute>
+					</item>
+
+					<item>
 						<attribute name="label" translatable="yes">Resize on alternate screen</attribute>
 						<attribute name="action">win.altscreen</attribute>
 					</item>
