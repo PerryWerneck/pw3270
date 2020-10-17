@@ -64,6 +64,7 @@ WINDRES=@WINDRES@
 AR=@AR@
 VALGRIND=@VALGRIND@
 CONVERT=@CONVERT@
+STRIP=@STRIP@
 
 #---[ Paths ]----------------------------------------------------------------------------
 
@@ -128,6 +129,11 @@ $(OBJDBG)/%.o: \
 
 	@$(CC) \
 		$(CFLAGS) \
+		-DDEBUG=1 \
+		-MM -MT $@ -MF $(patsubst %.o,%.d,$@) $<
+
+	@$(CC) \
+		$(CFLAGS) \
 		-Wall -Wextra -fstack-check \
 		-DDEBUG=1 \
 		-o $@ -c $<
@@ -155,6 +161,12 @@ $(OBJRLS)/%.o: \
 
 	@echo $< ...
 	@$(MKDIR) $(dir $@)
+
+	@$(CC) \
+		$(CFLAGS) \
+		-DNDEBUG=1 \
+		-MM -MT $@ -MF $(patsubst %.o,%.d,$@) $<
+
 	@$(CC) \
 		$(CFLAGS) \
 		-DNDEBUG=1 \
@@ -260,6 +272,10 @@ $(BINRLS)/$(PACKAGE_NAME)@EXEEXT@: \
 		$^ \
 		$(LIBS)
 
+strip: \
+	$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@
+
+	@$(STRIP) --discard-all $(BINRLS)/$(PACKAGE_NAME)@EXEEXT@
 
 #---[ Install Targets ]------------------------------------------------------------------
 
@@ -268,19 +284,11 @@ install: \
 	install-keypads
 
 install-application: \
-	$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@ \
+	install-@OSNAME@-application \
 	install-locale \
 	install-schemas \
 	install-branding \
 	install-icons
-
-	@$(MKDIR) \
-		$(DESTDIR)/$(bindir)
-
-	@$(INSTALL_PROGRAM) \
-		$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@ \
-		$(DESTDIR)/$(bindir)/$(PRODUCT_NAME)@EXEEXT@
-
 
 	@$(MKDIR) \
 		$(DESTDIR)/$(libdir)/$(PRODUCT_NAME)-plugins
@@ -294,6 +302,28 @@ install-application: \
 
 	@$(MKDIR) \
 		$(DESTDIR)/$(datarootdir)/$(PRODUCT_NAME)/keypad
+
+install-linux-application: \
+	$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@
+
+	@$(MKDIR) \
+		$(DESTDIR)/$(bindir)
+
+	@$(INSTALL_PROGRAM) \
+		$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@ \
+		$(DESTDIR)/$(bindir)/$(PRODUCT_NAME)@EXEEXT@
+
+
+install-windows-application: \
+	strip
+
+	@$(MKDIR) \
+		$(DESTDIR)/$(bindir)
+
+	@$(INSTALL_PROGRAM) \
+		$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@ \
+		$(DESTDIR)/$(bindir)/$(PRODUCT_NAME)@EXEEXT@
+
 
 install-keypads:
 
@@ -402,4 +432,6 @@ clean: \
 	cleanDebug \
 	cleanRelease
 
+-include $(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC).d)
+-include $(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SRC).d)
 
