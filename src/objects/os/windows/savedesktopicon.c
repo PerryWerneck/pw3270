@@ -52,7 +52,7 @@
  #include <v3270/actions.h>
  #include <lib3270.h>
  #include <lib3270/log.h>
- #include <pw3270/tools.h>
+ #include <v3270/tools.h>
  #include <v3270/keyfile.h>
  #include <v3270/settings.h>
 
