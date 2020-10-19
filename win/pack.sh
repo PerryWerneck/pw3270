@@ -589,9 +589,6 @@ copy_install_file() {
 		fi
 
 		ln -f -v "${FILENAME}" ~/public_html/win/${TARGET_PATH}
-		if [ "$?" != "0" ]; then
-			failed "Can't link ${1} to ~/public_html/win/${TARGET_PATH}"
-		fi
 	fi
 
 	if [ ! -z "${XDG_PUBLICSHARE_DIR}" ] && [ -d "${XDG_PUBLICSHARE_DIR}/${PRODUCT_NAME}" ]; then
@@ -606,17 +603,16 @@ copy_install_file() {
 		fi
 
 		ln -f -v "${FILENAME}" ${XDG_PUBLICSHARE_DIR}/${TARGET_PATH}
-		if [ "$?" != "0" ]; then
-			failed "Can't link ${1} to ~/${XDG_PUBLICSHARE_DIR}/${TARGET_PATH}"
-		fi
 
 	fi
 
-	if [ "${PUBLISH}" == "1" ] && [ ! -z ${WIN_PACKAGE_SERVER} ]; then
+	if [ "${PUBLISH}" == "1" ] && [ ! -z "${WIN_PACKAGE_SERVER}" ]; then
 
-		scp "${FILENAME}" ${WIN_PACKAGE_SERVER}/${TARGET_PATH}
+		scp "${FILENAME}" "${WIN_PACKAGE_SERVER}/${TARGET_PATH}/$(basename ${FILENAME})"
 		if [ "$?" != "0" ]; then
-			failed "Can't publish ${1} to ${WIN_PACKAGE_SERVER}/${TARGET_PATH}"
+			failed "Can't publish ${WIN_PACKAGE_SERVER}/${TARGET_PATH}/$(basename ${FILENAME})"
+		else
+			echo "Published to ${WIN_PACKAGE_SERVER}/${TARGET_PATH}/$(basename ${FILENAME})"
 		fi
 
 	fi
