@@ -58,7 +58,6 @@ For the supported distributions get the install repositories and instructions fr
 	```shell
 	$ pacman -S mingw-w64-x86_64-imagemagick mingw-w64-x86_64-optipng mingw-w64-x86_64-inkscape
 	```
-	Afther thist close and reopen mingw shell.
 
 2. Get pw3270 sources from git
 
