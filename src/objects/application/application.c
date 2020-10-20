@@ -173,10 +173,7 @@
 
  }
 
-
  static gboolean on_user_interface(const gchar G_GNUC_UNUSED(*option), const gchar *value, gpointer G_GNUC_UNUSED(dunno), GError **error) {
-
-	GApplication * app = g_application_get_default();
 
 	g_autoptr(GSettings) app_settings = pw3270_application_settings_new();
 	g_autoptr(GSettings) win_settings = pw3270_application_window_settings_new();
