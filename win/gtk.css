@@ -5,6 +5,6 @@
 }
 
 * {
-     gtk-key-bindings: NoKeyboardNavigation
+     -gtk-key-bindings: NoKeyboardNavigation
 }
 

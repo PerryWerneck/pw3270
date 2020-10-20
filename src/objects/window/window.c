@@ -275,6 +275,13 @@
 	// Get settings
 	g_autoptr(GSettings) settings = pw3270_application_window_settings_new();
 
+	// Override defaults
+	{
+		// https://gitlab.gnome.org/GNOME/gtk/-/blob/gtk-3-24/gtk/gtksettings.c
+		GtkSettings *settings = gtk_widget_get_settings(GTK_WIDGET (widget));
+		g_object_set(settings,"gtk-menu-bar-accel","",NULL);
+	}
+
 	// Setup defaults
 	widget->state.width = 800;
 	widget->state.height = 500;
