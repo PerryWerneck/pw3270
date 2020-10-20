@@ -25,6 +25,9 @@
 # erico.mendonca@gmail.com      (Erico Mascarenhas de Mendonça)
 #
 
+# Get myDIR
+myDIR=$(dirname $(readlink -f "${0}"))
+
 # Disable i18n
 export LANG=C
 
@@ -284,6 +287,11 @@ copy_theme() {
 	if [ "$?" != 0 ]; then
 		echo "Can´t copy ${1} theme"
 		exit -1
+	fi
+
+	echo "${myDIR}/gtk.css"
+	if [ -e "${myDIR}/gtk.css" ]; then
+		cp "${myDIR}/gtk.css" "${TARGET}/share/themes/${1}/gtk-3.0/gtk.css"
 	fi
 
 }
